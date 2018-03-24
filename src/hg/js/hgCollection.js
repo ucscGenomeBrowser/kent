@@ -542,7 +542,8 @@ var hgCollection = (function() {
 
     function getUniqueName() {
         // make sure name is unique in track hub
-        var seconds =  Math.floor( Date.now() / 1000 ) - 1520631071;
+        var releaseDateInSeconds = 1520631071;
+        var seconds =  Math.floor( Date.now() / 1000 ) - releaseDateInSeconds;
         var root = "coll" + seconds;
         if (!collectionNames[root]) {
             collectionNames[root] = 1;

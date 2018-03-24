@@ -12,16 +12,35 @@ if ($argc != 1) {
   exit 255;
 }
 
-my %optionalCheckList = ( 'extNcbiRefSeq' => 1,
-'ncbiRefSeq' => 1,
-'ncbiRefSeqCds' => 1,
-'ncbiRefSeqCurated' => 1,
-'ncbiRefSeqLink' => 1,
-'ncbiRefSeqOther' => 1,
-'ncbiRefSeqPepTable' => 1,
-'ncbiRefSeqPredicted' => 1,
-'ncbiRefSeqPsl' => 1,
-'seqNcbiRefSeq' => 1
+my %optionalCheckList = ( 'ensGene' => "Ensembl genes",
+'ensGtp' => "Ensembl genes",
+'ensPep' => "Ensembl genes",
+'ensemblSource' => "Ensembl genes",
+'ensemblToGeneName' => "Ensembl genes",
+'extNcbiRefSeq' => "NCBI RefSeq genes",
+'ncbiRefSeq' => "NCBI RefSeq genes",
+'ncbiRefSeqCds' => "NCBI RefSeq genes",
+'ncbiRefSeqCurated' => "NCBI RefSeq genes",
+'ncbiRefSeqLink' => "NCBI RefSeq genes",
+'ncbiRefSeqOther' => "NCBI RefSeq genes",
+'ncbiRefSeqPepTable' => "NCBI RefSeq genes",
+'ncbiRefSeqPredicted' => "NCBI RefSeq genes",
+'ncbiRefSeqPsl' => "NCBI RefSeq genes",
+'seqNcbiRefSeq' => "NCBI RefSeq genes",
+'chainRBestHg38' => "chainNetRBestHg38",
+'chainRBestHg38Link' => "chainNetRBestHg38",
+'chainRBestMm10' => "chainNetRBestMm10",
+'chainRBestMm10Link' => "chainNetRBestMm10",
+'chainSynHg38' => "chainNetSynHg38",
+'chainSynHg38Link' => "chainNetSynHg38",
+'chainSynMm10' => "chainNetSynMm10",
+'chainSynMm10Link' => "chainNetSynMm10",
+'netRBestHg38' => "chainNetRBestHg38",
+'netRBestMm10' => "chainNetRBestMm10",
+'netSynHg38' => "chainNetSynHg38",
+'netSynMm10' => "chainNetSynMm10",
+'tandemDups' => "tandemDups",
+'gapOverlap' => "gapOverlap"
 );
 
 my %tableCheckList = ( 'augustusGene' => 1,
@@ -29,21 +48,12 @@ my %tableCheckList = ( 'augustusGene' => 1,
 'chainHg38Link' => 1,
 'chainMm10' => 1,
 'chainMm10Link' => 1,
-'chainRBestHg38' => 1,
-'chainRBestHg38Link' => 1,
-'chainRBestMm10' => 1,
-'chainRBestMm10Link' => 1,
-'chainSynHg38' => 1,
-'chainSynHg38Link' => 1,
-'chainSynMm10' => 1,
-'chainSynMm10Link' => 1,
 'chromAlias' => 1,
 'chromInfo' => 1,
 'cpgIslandExt' => 1,
 'cpgIslandExtUnmasked' => 1,
 'cytoBandIdeo' => 1,
 'gap' => 1,
-'gapOverlap' => 1,
 'gc5BaseBw' => 1,
 'genscan' => 1,
 'genscanSubopt' => 1,
@@ -55,14 +65,9 @@ my %tableCheckList = ( 'augustusGene' => 1,
 'nestedRepeats' => 1,
 'netHg38' => 1,
 'netMm10' => 1,
-'netRBestHg38' => 1,
-'netRBestMm10' => 1,
-'netSynHg38' => 1,
-'netSynMm10' => 1,
 'rmsk' => 1,
 'simpleRepeat' => 1,
 'tableDescriptions' => 1,
-'tandemDups' => 1,
 'trackDb' => 1,
 'ucscToINSDC' => 1,
 'ucscToRefSeq' => 1,
@@ -119,6 +124,10 @@ sub checkTableExists($$) {
 
 my $db = shift;
 my $Db = ucfirst($db);
+my $dbVersion = $db;
+$dbVersion =~ s/^[a-z]+//i;
+my $dbPrefix = $db;
+$dbPrefix =~ s/[0-9]+$//;
 
 my $dbDbNames = `hgsql -N -e 'select organism,scientificName from dbDb where name="$db";' hgcentraltest`;
 chomp $dbDbNames;
@@ -142,30 +151,39 @@ my %extraTables;
 my $extraTableCount = 0;
 my $tablesFound = 0;
 my $optionalCount = 0;
+my %optionsFound;	# key is category, value is count of tables
 
 foreach my $table (sort keys %tableList) {
   if (defined($tableCheckList{$table}) || defined($gbCheckList{$table}) || defined($optionalCheckList{$table}) ) {
     ++$tablesFound;
-    $optionalCount += 1 if (defined($optionalCheckList{$table}));
+    if (defined($optionalCheckList{$table})) {
+       $optionalCount += 1;
+       $optionsFound{$optionalCheckList{$table}} += 1;
+    }
   } else {
     $extraTables{$table} = 1;
     ++$extraTableCount;
   }
 }
 
-printf STDERR "# verified %d tables, %d extra tables, %d optional tables\n", $tablesFound, $extraTableCount, $optionalCount;
+printf STDERR "# verified %d tables in database $db, %d extra tables, %d optional tables\n", $tablesFound, $extraTableCount, $optionalCount;
+if ($optionalCount > 0) {
+   foreach my $category (sort keys %optionsFound) {
+     printf "# %s\t%d optional tables\n", $category, $optionsFound{$category};
+   }
+}
 
 my $shownTables = 0;
 foreach my $table (sort keys %extraTables) {
   ++$shownTables;
   if ($extraTableCount > 10) {
     if ( ($shownTables < 5) || ($shownTables > ($extraTableCount - 4)) ) {
-       printf STDERR "# %d\t%s\n", $shownTables, $table;
+       printf STDERR "# %d\t%s\t- extra table\n", $shownTables, $table;
     } elsif ($shownTables == 5) {
        printf STDERR "# . . . etc . . .\n";
     }
   } else {
-    printf STDERR "# %d\t%s\n", $shownTables, $table;
+    printf STDERR "# %d\t%s\t- extra table\n", $shownTables, $table;
   }
 }
 
@@ -206,12 +224,12 @@ foreach my $table (sort keys %tableCheckList) {
   }
 }
 
-printf STDERR "# verified %d tables, %d missing tables\n", $tablesFound, $missingTableCount;
+printf STDERR "# verified %d required tables, %d missing tables\n", $tablesFound, $missingTableCount;
 
 my $missedOut = 0;
 foreach my $table (sort keys %missingTables) {
   ++$missedOut;
-  printf STDERR "# %d\t%s\n", $missedOut, $table;
+  printf STDERR "# %d\t%s\t- missing table\n", $missedOut, $table;
 }
 
 my @chainTypes = ("", "RBest", "Syn");
@@ -230,18 +248,49 @@ for (my $i = 0; $i < scalar(@chainTypes); ++$i) {
    }
 }
 
-__END__
-printf STDERR "# missing hg38.$chainTable\n" if (! checkTableExists("hg38", $chainTable));
-printf STDERR "# missing hg38.$chainLinkTable\n" if (! checkTableExists("hg38", $chainLinkTable));
-printf STDERR "# missing hg38.$netTable\n" if (! checkTableExists("hg38", $netTable));
-printf STDERR "# missing mm10.$chainTable\n" if (! checkTableExists("mm10", $chainTable));
-printf STDERR "# missing mm10.$chainLinkTable\n" if (! checkTableExists("mm10", $chainLinkTable));
-printf STDERR "# missing mm10.$netTable\n" if (! checkTableExists("mm10", $netTable));
+if ($dbVersion > 1) {
+  my $toOthers = `hgsql -N -e 'select fromDb,toDb from liftOverChain where fromDb = "$db" AND toDb like "${dbPrefix}%";' hgcentraltest | wc -l`;
+  chomp $toOthers;
+  my $fromOthers = `hgsql -N -e 'select fromDb,toDb from liftOverChain where fromDb like "${dbPrefix}%" AND toDb = "${db}";' hgcentraltest | wc -l`;
+  chomp $fromOthers;
+  if (($toOthers > 0) && ($fromOthers > 0)) {
+    printf STDERR "# liftOver to previous versions: $toOthers, from previous versions: $fromOthers\n";
+  } else {
+    printf STDERR "# ERROR: liftOvers to/from previous versions not complete\n";
+  }
+}
 
-chainRBestThaSir1
-chainRBestThaSir1Link
-chainSynThaSir1
-chainSynThaSir1Link
-netRBestThaSir1
-netSynThaSir1
+my $blatServers=`hgsql -N -e 'select * from blatServers where db="$db";' hgcentraltest | wc -l`;
+if ($blatServers != 2) {
+  printf STDERR "# ERROR: blat server not found in hgcentraltest.blatServers ?\n";
+}
 
+my $chainNet = 0;
+if ( $db ne "hg38" ) {
+  $chainNet = `hgsql -e 'select * from trackDb;' hg38 | egrep "^chain$Db|^net$Db" | wc -l`;
+  chomp $chainNet;
+  if ($chainNet != 2) {
+   printf STDERR "# ERROR: missing hg38.chainNet trackDb definitions for $db (found: $chainNet instead of 2)\n";
+  }
+}
+
+if ( $db ne "mm10" ) {
+  $chainNet = `hgsql -e 'select * from trackDb;' mm10 | egrep "^chain$Db|^net$Db" | wc -l`;
+  chomp $chainNet;
+  if ($chainNet != 2) {
+   printf STDERR "# ERROR: missing mm10.chainNet trackDb definitions for $db (found: $chainNet instead of 2)\n";
+  }
+}
+
+my $goldSearch = `hgsql -N -e 'select termRegex from hgFindSpec where searchTable="gold" AND searchName="gold";' $db | grep "abuz" | wc -l`;
+chomp $goldSearch;
+
+if ($goldSearch == 1) {
+  printf STDERR "# ERROR: missing specific hgFindSpec rule for gold table\n";
+}
+
+my $allJoiner = `grep $db ~/kent/src/hg/makeDb/schema/all.joiner | head -1 | wc -l`;
+chomp $allJoiner;
+if ($allJoiner != 1) {
+  printf STDERR "# ERROR missing definitions in hg/makeDb/schema/all.joiner\n";
+}

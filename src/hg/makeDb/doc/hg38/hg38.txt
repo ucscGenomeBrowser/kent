@@ -6906,4 +6906,8 @@ mv loaded/wgEncodeGencodeAttrsV27.tab.loaded loaded/wgEncodeGencodeTagV27.tab.lo
 # rebuild, getting protein ids.
 make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk loadTables >&prot-ids.log
 
+# 2018-03-19: update search to include protein id
+cd kent/src/hg/makeDb/trackDb
+../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg38 27 90 'Aug 2017'
+
 #########################################################################

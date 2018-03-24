@@ -12,7 +12,7 @@ subGroup2 name Name Basic=Basic Comprehensive=Comprehensive Pseudogenes=Pseudoge
 allButtonPair on
 sortOrder name=+ view=+
 fileSortOrder labVersion=Contents dccAccession=UCSC_Accession
-type genePred 
+type genePred
 configurable off
 wgEncodeGencodeVersion M16
 wgEncodeGencodeAttrs wgEncodeGencodeAttrsVM16
@@ -63,10 +63,10 @@ wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneVM16
              tag:Tag=3_nested_supported_extension,3_standard_supported_extension,454_RNA_Seq_supported,5_nested_supported_extension,5_standard_supported_extension,alternative_3_UTR,alternative_5_UTR,appris_alternative_1,appris_alternative_2,appris_principal_1,appris_principal_2,appris_principal_3,appris_principal_4,appris_principal_5,basic,bicistronic,CCDS,cds_end_NF,cds_start_NF,dotter_confirmed,downstream_ATG,exp_conf,fragmented_locus,inferred_exon_combination,inferred_transcript_model,low_sequence_quality,mRNA_end_NF,mRNA_start_NF,NAGNAG_splice_site,ncRNA_host,NMD_exception,NMD_likely_if_extended,non_ATG_start,non_canonical_conserved,non_canonical_genome_sequence_error,non_canonical_other,non_canonical_polymorphism,non_canonical_TEC,non_canonical_U12,non_submitted_evidence,not_best_in_genome_evidence,not_organism_supported,orphan,overlapping_locus,overlapping_uORF,pseudo_consens,readthrough_transcript,reference_genome_error,retained_intron_CDS,retained_intron_final,retained_intron_first,retrogene,RNA_Seq_supported_only,RNA_Seq_supported_partial,RP_supported_TIS,seleno,semi_processed,sequence_error,upstream_ATG,upstream_uORF \
              supportLevel:Support_Level=tsl1,tsl2,tsl3,tsl4,tsl5,tslNA
     highlightBy transcriptMethod:Transcript_Annotation_Method=manual,automatic,manual_only,automatic_only \
-                attrs.transcriptType:Transcript_Biotype=3prime_overlapping_ncRNA,antisense,bidirectional_promoter_lncRNA,IG_C_gene,IG_C_pseudogene,IG_D_gene,IG_D_pseudogene,IG_J_gene,IG_LV_gene,IG_pseudogene,IG_V_gene,IG_V_pseudogene,lincRNA,macro_lncRNA,miRNA,misc_RNA,Mt_rRNA,Mt_tRNA,nonsense_mediated_decay,non_stop_decay,polymorphic_pseudogene,processed_pseudogene,processed_transcript,protein_coding,pseudogene,retained_intron,ribozyme,rRNA,scaRNA,scRNA,sense_intronic,sense_overlapping,snoRNA,snRNA,sRNA,TEC,transcribed_processed_pseudogene,transcribed_unitary_pseudogene,transcribed_unprocessed_pseudogene,translated_processed_pseudogene,translated_unprocessed_pseudogene,TR_C_gene,TR_D_gene,TR_J_gene,TR_J_pseudogene,TR_V_gene,TR_V_pseudogene,unitary_pseudogene,unprocessed_pseudogene \
-                tag:Tag=alternative_3_UTR,alternative_5_UTR,appris_alternative_1,appris_alternative_2,appris_principal_1,appris_principal_2,appris_principal_3,appris_principal_4,appris_principal_5,basic,bicistronic,CCDS,cds_end_NF,cds_start_NF,dotter_confirmed,downstream_ATG,exp_conf,inferred_exon_combination,inferred_transcript_model,low_sequence_quality,mRNA_end_NF,mRNA_start_NF,NAGNAG_splice_site,NMD_exception,NMD_likely_if_extended,non_ATG_start,non_canonical_conserved,non_canonical_genome_sequence_error,non_canonical_other,non_canonical_polymorphism,non_canonical_TEC,non_canonical_U12,non_submitted_evidence,not_best_in_genome_evidence,not_organism_supported,overlapping_uORF,pseudo_consens,readthrough_transcript,retained_intron_CDS,retained_intron_final,retained_intron_first,RNA_Seq_supported_only,RNA_Seq_supported_partial,RP_supported_TIS,seleno,sequence_error,upstream_ATG,upstream_uORF \
+                attrs.transcriptType:Transcript_Biotype=3prime_overlapping_ncRNA,antisense_RNA,bidirectional_promoter_lncRNA,IG_C_gene,IG_C_pseudogene,IG_D_gene,IG_D_pseudogene,IG_J_gene,IG_LV_gene,IG_pseudogene,IG_V_gene,IG_V_pseudogene,lincRNA,macro_lncRNA,miRNA,misc_RNA,Mt_rRNA,Mt_tRNA,nonsense_mediated_decay,non_stop_decay,polymorphic_pseudogene,processed_pseudogene,processed_transcript,protein_coding,pseudogene,retained_intron,ribozyme,rRNA,scaRNA,scRNA,sense_intronic,sense_overlapping,snoRNA,snRNA,sRNA,TEC,transcribed_processed_pseudogene,transcribed_unitary_pseudogene,transcribed_unprocessed_pseudogene,translated_processed_pseudogene,TR_C_gene,TR_D_gene,TR_J_gene,TR_J_pseudogene,TR_V_gene,TR_V_pseudogene,unitary_pseudogene,unprocessed_pseudogene \
+                tag:Tag=3_nested_supported_extension,3_standard_supported_extension,454_RNA_Seq_supported,5_nested_supported_extension,5_standard_supported_extension,alternative_3_UTR,alternative_5_UTR,appris_alternative_1,appris_alternative_2,appris_principal_1,appris_principal_2,appris_principal_3,appris_principal_4,appris_principal_5,basic,bicistronic,CCDS,cds_end_NF,cds_start_NF,dotter_confirmed,downstream_ATG,exp_conf,fragmented_locus,inferred_exon_combination,inferred_transcript_model,low_sequence_quality,mRNA_end_NF,mRNA_start_NF,NAGNAG_splice_site,ncRNA_host,NMD_exception,NMD_likely_if_extended,non_ATG_start,non_canonical_conserved,non_canonical_genome_sequence_error,non_canonical_other,non_canonical_polymorphism,non_canonical_TEC,non_canonical_U12,non_submitted_evidence,not_best_in_genome_evidence,not_organism_supported,orphan,overlapping_locus,overlapping_uORF,pseudo_consens,readthrough_transcript,reference_genome_error,retained_intron_CDS,retained_intron_final,retained_intron_first,retrogene,RNA_Seq_supported_only,RNA_Seq_supported_partial,RP_supported_TIS,seleno,semi_processed,sequence_error,upstream_ATG,upstream_uORF \
                 supportLevel:Support_Level=tsl1,tsl2,tsl3,tsl4,tsl5,tslNA
-    
+
         track wgEncodeGencodeBasicVM16
         trackHandler wgEncodeGencode
         subTrack wgEncodeGencodeVM16ViewGenes on
@@ -75,7 +75,7 @@ wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneVM16
         longLabel Basic Gene Annotation Set from GENCODE Version M16 (Ensembl 91)
         type genePred
         priority 1
-    
+
         track wgEncodeGencodeCompVM16
         trackHandler wgEncodeGencode
         subTrack wgEncodeGencodeVM16ViewGenes off
@@ -84,18 +84,18 @@ wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneVM16
         longLabel Comprehensive Gene Annotation Set from GENCODE Version M16 (Ensembl 91)
         type genePred
         priority 2
-    
+
         track wgEncodeGencodePseudoGeneVM16
         trackHandler wgEncodeGencode
         subTrack wgEncodeGencodeVM16ViewGenes on
-        subGroups view=aGenes name=Pseudogenes 
+        subGroups view=aGenes name=Pseudogenes
         shortLabel Pseudogenes
         longLabel Pseudogene Annotation Set from GENCODE Version M16 (Ensembl 91)
         type genePred
         color 255,51,255
         priority 3
 
-    track wgEncodeGencodeVM16View2Way 
+    track wgEncodeGencodeVM16View2Way
     shortLabel 2-Way
     view b2-way
     visibility hide
@@ -112,7 +112,7 @@ wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneVM16
         type genePred
         color 255,51,255
         priority 4
-    
+
     track wgEncodeGencodeVM16ViewPolya
     shortLabel PolyA
     view cPolya
@@ -169,9 +169,18 @@ searchTable wgEncodeGencodeBasicVM16
 searchMethod prefix
 searchType genePred
 termRegex OTTMUSG[0-9.]+
-searchPriority 2.25805
+searchPriority 2.25806
 xrefTable wgEncodeGencodeAttrsVM16
 xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
+
+searchName wgEncodeGencodeBasicProtVM16
+searchTable wgEncodeGencodeBasicVM16
+searchMethod prefix
+searchType genePred
+termRegex ENSMUSP[0-9.]+
+searchPriority 2.25807
+xrefTable wgEncodeGencodeAttrsVM16
+xrefQuery select transcriptId,proteinId from %s where proteinId like '%s%%'
 
 # searches for comp
 searchName wgEncodeGencodeCompVM16
@@ -179,13 +188,13 @@ searchTable wgEncodeGencodeCompVM16
 searchMethod prefix
 searchType genePred
 termRegex ENSMUST[0-9.]+
-searchPriority 2.25806
+searchPriority 2.25808
 
 searchName wgEncodeGencodeCompGeneSymVM16
 searchTable wgEncodeGencodeCompVM16
 searchMethod exact
 searchType genePred
-searchPriority 2.25807
+searchPriority 2.25809
 query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
 
 searchName wgEncodeGencodeCompGeneVM16
@@ -193,7 +202,7 @@ searchTable wgEncodeGencodeCompVM16
 searchMethod prefix
 searchType genePred
 termRegex ENSMUSG[0-9.]+
-searchPriority 2.25808
+searchPriority 2.25810
 xrefTable wgEncodeGencodeAttrsVM16
 xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'
 
@@ -202,7 +211,7 @@ searchTable wgEncodeGencodeCompVM16
 searchMethod prefix
 searchType genePred
 termRegex OTTMUST[0-9.]+
-searchPriority 2.25809
+searchPriority 2.25811
 xrefTable wgEncodeGencodeAttrsVM16
 xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'
 
@@ -211,9 +220,18 @@ searchTable wgEncodeGencodeCompVM16
 searchMethod prefix
 searchType genePred
 termRegex OTTMUSG[0-9.]+
-searchPriority 2.25810
+searchPriority 2.25812
 xrefTable wgEncodeGencodeAttrsVM16
 xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
+
+searchName wgEncodeGencodeCompProtVM16
+searchTable wgEncodeGencodeCompVM16
+searchMethod prefix
+searchType genePred
+termRegex ENSMUSP[0-9.]+
+searchPriority 2.25813
+xrefTable wgEncodeGencodeAttrsVM16
+xrefQuery select transcriptId,proteinId from %s where proteinId like '%s%%'
 
 # searches for pseudogene
 searchName wgEncodeGencodePseudoGeneVM16
@@ -221,13 +239,13 @@ searchTable wgEncodeGencodePseudoGeneVM16
 searchMethod prefix
 searchType genePred
 termRegex ENSMUST[0-9.]+
-searchPriority 2.25811
+searchPriority 2.25814
 
 searchName wgEncodeGencodePseudoGeneGeneSymVM16
 searchTable wgEncodeGencodePseudoGeneVM16
 searchMethod exact
 searchType genePred
-searchPriority 2.25812
+searchPriority 2.25815
 query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
 
 searchName wgEncodeGencodePseudoGeneGeneVM16
@@ -235,7 +253,7 @@ searchTable wgEncodeGencodePseudoGeneVM16
 searchMethod prefix
 searchType genePred
 termRegex ENSMUSG[0-9.]+
-searchPriority 2.25813
+searchPriority 2.25816
 xrefTable wgEncodeGencodeAttrsVM16
 xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'
 
@@ -244,7 +262,7 @@ searchTable wgEncodeGencodePseudoGeneVM16
 searchMethod prefix
 searchType genePred
 termRegex OTTMUST[0-9.]+
-searchPriority 2.25814
+searchPriority 2.25817
 xrefTable wgEncodeGencodeAttrsVM16
 xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'
 
@@ -253,7 +271,7 @@ searchTable wgEncodeGencodePseudoGeneVM16
 searchMethod prefix
 searchType genePred
 termRegex OTTMUSG[0-9.]+
-searchPriority 2.25815
+searchPriority 2.25818
 xrefTable wgEncodeGencodeAttrsVM16
 xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
 
@@ -263,4 +281,4 @@ searchTable wgEncodeGencode2wayConsPseudoVM16
 searchMethod exact
 searchType genePred
 termRegex PGOMOU[0-9.]+
-searchPriority 2.25816
+searchPriority 2.25819

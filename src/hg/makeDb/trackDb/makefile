@@ -60,6 +60,7 @@ DBS = \
 	calJac1 calJac3 \
 	calMil1 \
 	canFam1 canFam2 canFamPoodle1 canFam3 \
+	casCan1 \
 	cavApe1 cavPor3 \
 	cb1 cb2 cb3 cb4 \
 	ce2 ce3 ce4 ce5 ce6 ce7 ce8 ce9 ce10 ce11 \

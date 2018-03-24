@@ -165,6 +165,9 @@ boolean maybeTouchFile(char *fileName);
 void touchFileFromFile(const char *oldFile, const char *newFile);
 /* Set access and mod time of newFile from oldFile. */
 
+boolean isDirectory(char *pathName);
+/* Return TRUE if pathName is a directory. */
+
 boolean isRegularFile(char *fileName);
 /* Return TRUE if fileName is a regular file. */
 
