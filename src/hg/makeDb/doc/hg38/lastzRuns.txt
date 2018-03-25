@@ -11278,3 +11278,89 @@ TMPDIR=/dev/shm
     # 1321240715 bases of 2517974654 (52.472%) in intersection
 
 ##############################################################################
+# Chimp Lastz run (DONE - 2018-03-24 - Hiram)
+    screen -S hg38PanTro6      # use a screen to manage this longish running job
+    mkdir /hive/data/genomes/hg38/bed/lastzPanTro6.2018-03-24
+    cd /hive/data/genomes/hg38/bed/lastzPanTro6.2018-03-24
+
+    # always set the BLASTZ program so we know what version was used
+    printf "# human vs chimp
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_M=254
+BLASTZ_K=4500
+BLASTZ_L=4500
+BLASTZ_Y=15000
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+#    A    C    G    T
+#    90 -330 -236 -356
+#  -330  100 -318 -236
+#  -236 -318  100 -330
+#  -356 -236 -330   90
+
+# TARGET: Human Hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=20000000
+SEQ1_LIMIT=50
+SEQ1_LAP=10000
+
+# QUERY: Chimp PanTro6
+SEQ2_DIR=/hive/data/genomes/panTro6/panTro6.2bit
+SEQ2_LEN=/hive/data/genomes/panTro6/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzPanTro6.2018-03-24
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > do.log 2>&1 &
+    # real    239m0.367s
+
+    cat fb.hg38.chainPanTro6Link.txt
+    # 2910625246 bases of 3049335806 (95.451%) in intersection
+    cat fb.hg38.chainSynPanTro6Link.txt
+    # 2890994068 bases of 3049335806 (94.807%) in intersection
+
+    # filter with doRecipBest.pl
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+        hg38 panTro6) > rbest.log 2>&1
+    # real    103m42.148s
+
+    cat fb.hg38.chainRBestPanTro6Link.txt
+    # 2743876160 bases of 3049335806 (89.983%) in intersection
+
+    # running the swap
+    mkdir /hive/data/genomes/panTro6/bed/blastz.hg38.swap
+    cd /hive/data/genomes/panTro6/bed/blastz.hg38.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/hg38/bed/lastzPanTro6.2018-03-24/DEF \
+        -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > swap.log 2>&1
+    # real    101m29.782s
+
+    cat fb.panTro6.chainHg38Link.txt
+    # 2814507414 bases of 3018592990 (93.239%) in intersection
+    cat fb.panTro6.chainSynHg38Link.txt
+    # 2800642800 bases of 3018592990 (92.780%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+        panTro6 hg38) > rbest.log 2>&1 &
+    # real    102m47.533s
+
+    cat fb.panTro6.chainRBestHg38Link.txt 
+    # 2748571185 bases of 3018592990 (91.055%) in intersection
+
+#############################################################################

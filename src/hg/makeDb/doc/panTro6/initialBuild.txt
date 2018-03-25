@@ -491,25 +491,6 @@ searchPriority 8
     # verify searches work in the position box
 
 #############################################################################
-# ncbiRefSeq (DONE - 2018-03-24 - Hiram)
-
-    # can be run up after ucscToRefSeq table is constructed
-    mkdir /hive/data/genomes/panTro6/bed/ncbiRefSeq
-    cd /hive/data/genomes/panTro6/bed/ncbiRefSeq
-
-    # adjust the name arguments
-    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
-      -bigClusterHub=ku -dbHost=hgwdev \
-      -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
-      refseq vertebrate_mammalian Pan_troglodytes \
-      GCF_002880755.1_Clint_PTRv2 panTro6) > do.log 2>&1
-XXX
-    # real    8m52.047s
-
-    cat fb.ncbiRefSeq.panTro6.txt
-    #  81659062 bases of 2476453204 (3.297%) in intersection
-
-#############################################################################
 # running repeat masker (DONE - 2018-03-24 - Hiram)
     mkdir /hive/data/genomes/panTro6/bed/repeatMasker
     cd /hive/data/genomes/panTro6/bed/repeatMasker
@@ -638,7 +619,35 @@ XXX
     cat fb.panTro6.rmsk.windowmaskerSdust.txt
     # 971547886 bases of 3050398082 (31.850%) in intersection
 
-##########################################################################
+#############################################################################
+# ncbiRefSeq (DONE - 2018-03-24 - Hiram)
+
+    # can be run up after ucscToRefSeq table is constructed
+    mkdir /hive/data/genomes/panTro6/bed/ncbiRefSeq
+    cd /hive/data/genomes/panTro6/bed/ncbiRefSeq
+
+    # adjust the name arguments
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev \
+      -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_mammalian Pan_troglodytes \
+      GCF_002880755.1_Clint_PTRv2 panTro6) > do.log 2>&1
+    # real    10m2.131s
+
+    # started this too early.  It needs to run after the panTro6.2bit file
+    # has been masked.  Rerunning from process step:
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -continue=process -bigClusterHub=ku -dbHost=hgwdev \
+      -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_mammalian Pan_troglodytes \
+      GCF_002880755.1_Clint_PTRv2 panTro6) > process.log 2>&1 &
+
+    # real    8m52.047s
+
+    cat fb.ncbiRefSeq.panTro6.txt
+    #  81659062 bases of 2476453204 (3.297%) in intersection
+
+#############################################################################
 # cpgIslands - (DONE - 2018-03-24 - Hiram)
     mkdir /hive/data/genomes/panTro6/bed/cpgIslands
     cd /hive/data/genomes/panTro6/bed/cpgIslands
@@ -655,24 +664,31 @@ XXX
     cd /hive/data/genomes/panTro6/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku panTro6) > do.log 2>&1 &
-XXX
-    # real    867m26.572s
-
-    # one failed job, run with 2,000,000 window::
-
-time ./runGsBig2M.csh chrE1 000 gtf/000/chrE1.gtf pep/000/chrE1.pep subopt/000/chrE1.bed
-    # real    290m18.460s
-
-    # continuing:
-    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
-      -continue=makeBed -bigClusterHub=ku panTro6) > makeBed.log 2>&1 &
-    # real    1m55.321s
+    # real    182m50.882s
 
     cat fb.panTro6.genscan.txt
-    # 60893812 bases of 2476453204 (2.459%) in intersection
+    # 53595000 bases of 3018592990 (1.775%) in intersection
 
     cat fb.panTro6.genscanSubopt.txt
-    # 51934230 bases of 2476453204 (2.097%) in intersection
+    # 51298399 bases of 3018592990 (1.699%) in intersection
+
+    bigBedInfo panTro6.genscan.bb | sed -e 's/^/# /;'
+# version: 4
+# fieldCount: 12
+# hasHeaderExtension: yes
+# isCompressed: yes
+# isSwapped: 0
+# extraIndexCount: 0
+# itemCount: 41,507
+# primaryDataSize: 2,449,724
+# primaryIndexSize: 38,244
+# zoomLevels: 8
+# chromCount: 871
+# basesCovered: 1,998,870,176
+# meanDepth (of bases covered): 1.000000
+# minDepth: 1.000000
+# maxDepth: 1.000000
+# std of depth: 0.000000
 
 #############################################################################
 # augustus gene track (DONE - 2018-03-24 - Hiram)
@@ -681,77 +697,97 @@ time ./runGsBig2M.csh chrE1 000 gtf/000/chrE1.gtf pep/000/chrE1.pep subopt/000/c
     cd /hive/data/genomes/panTro6/bed/augustus
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
      -species=human -dbHost=hgwdev -workhorse=hgwdev panTro6) > do.log 2>&1 &
-XXX
-    # real    187m51.379s
+    # real    98m3.215s
 
     cat fb.panTro6.augustusGene.txt
-    # 51863692 bases of 2476453204 (2.094%) in intersection
+    # 50421577 bases of 3018592990 (1.670%) in intersection
+
+     bigBedInfo  panTro6.augustus.bb | sed -e 's/^/# /;'
+# version: 4
+# fieldCount: 20
+# hasHeaderExtension: yes
+# isCompressed: yes
+# isSwapped: 0
+# extraIndexCount: 0
+# itemCount: 30,411
+# primaryDataSize: 2,164,577
+# primaryIndexSize: 28,960
+# zoomLevels: 7
+# chromCount: 495
+# basesCovered: 1,295,044,049
+# meanDepth (of bases covered): 1.295008
+# minDepth: 1.000000
+# maxDepth: 4.000000
+# std of depth: 0.662334
 
 #############################################################################
-# lastz/chain/net swap human/hg38 (TBD - 2018-03-14 - Hiram)
+# lastz/chain/net swap human/hg38 (DONE - 2018-03-24 - Hiram)
     # original alignment
-    cd /hive/data/genomes/hg38/bed/lastzPanTro6.2018-03-14
+    cd /hive/data/genomes/hg38/bed/lastzPanTro6.2018-03-24
 
     cat fb.hg38.chainPanTro6Link.txt
-    # 1579231929 bases of 3049335806 (51.789%) in intersection
+    # 2910625246 bases of 3049335806 (95.451%) in intersection
     cat fb.hg38.chainSynPanTro6Link.txt
-    # 1516804589 bases of 3049335806 (49.742%) in intersection
+    # 2890994068 bases of 3049335806 (94.807%) in intersection
     cat fb.hg38.chainRBestPanTro6Link.txt
-    # 1449222744 bases of 3049335806 (47.526%) in intersection
+    # 2743876160 bases of 3049335806 (89.983%) in intersection
 
-    # and for the swap:
+    # running the swap
     mkdir /hive/data/genomes/panTro6/bed/blastz.hg38.swap
     cd /hive/data/genomes/panTro6/bed/blastz.hg38.swap
-
     time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/hg38/bed/lastzPanTro6.2018-03-14/DEF \
-        -swap -chainMinScore=3000 -chainLinearGap=medium \
-          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-            -syntenicNet) > swap.log 2>&1
-    #  real    142m37.100s
+        -swap /hive/data/genomes/hg38/bed/lastzPanTro6.2018-03-24/DEF \
+        -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > swap.log 2>&1
+    # real    101m29.782s
 
     cat fb.panTro6.chainHg38Link.txt
-    # 1486134443 bases of 2476453204 (60.011%) in intersection
+    # 2814507414 bases of 3018592990 (93.239%) in intersection
     cat fb.panTro6.chainSynHg38Link.txt
-    # 1452577988 bases of 2476453204 (58.656%) in intersection
+    # 2800642800 bases of 3018592990 (92.780%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
-	panTro6 hg38) > rbest.log 2>&1 &
-    # real    623m28.676s
+        panTro6 hg38) > rbest.log 2>&1 &
+    # real    102m47.533s
 
-    cat fb.panTro6.chainRBestHg38Link.txt
-    # 1449521349 bases of 2476453204 (58.532%) in intersection
+    cat fb.panTro6.chainRBestHg38Link.txt 
+    # 2748571185 bases of 3018592990 (91.055%) in intersection
 
-#########################################################################
+#############################################################################
 # lastz/chain/net swap mouse/mm10 (TBD - 2018-03-14 - Hiram)
 
     # alignment to mouse/mm10:
-    cd /hive/data/genomes/mm10/bed/lastzPanTro6.2018-03-14
+    cd /hive/data/genomes/mm10/bed/lastzPanTro6.2018-03-24/
 
     cat fb.mm10.chainPanTro6Link.txt
-    #   801023018 bases of 2652783500 (30.196%) in intersection
-    cat fb.mm10.chainRBestPanTro6Link.txt
-    # 761411281 bases of 2652783500 (28.702%) in intersection
+    # 935720585 bases of 2652783500 (35.273%) in intersection
 
-    # and for the swap
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	mm10 panTro6) > rbest.log 2>&1 &
+XXX
+    # real    624m28.225s
 
+    # and for the swap:
     mkdir /hive/data/genomes/panTro6/bed/blastz.mm10.swap
     cd /hive/data/genomes/panTro6/bed/blastz.mm10.swap
+
     time (doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/mm10/bed/lastzPanTro6.2018-03-14/DEF \
-	-swap -syntenicNet \
-	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1 &
-    #	 real    70m51.860s
+      /hive/data/genomes/mm10/bed/lastzPanTro6.2018-03-24/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    78m57.631s
 
     cat fb.panTro6.chainMm10Link.txt
-    #   779862191 bases of 2476453204 (31.491%) in intersection
+    # 934668641 bases of 3018592990 (30.964%) in intersection
     cat fb.panTro6.chainSynMm10Link.txt
-    # 754481540 bases of 2476453204 (30.466%) in intersection
+    # 889944141 bases of 3018592990 (29.482%) in intersection
 
-    time (doRecipBest.pl -load  panTro6 mm10 -buildDir=`pwd` \
-	-workhorse=hgwdev) > rbest.log 2>&1 &
-    # real    375m4.937s
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	panTro6 mm10) > rbest.log 2>&1 &
+XXX
+    # real    560m21.432s
 
     cat fb.panTro6.chainRBestMm10Link.txt
     # 760753851 bases of 2476453204 (30.719%) in intersection
@@ -812,9 +848,9 @@ XXX
       1 70431
       1 8910
 
-    # therefore, minimum gap size of 100
+    # therefore, minimum gap size of 100, this is doing non-bridged gaps only
   gapToLift -verbose=2 -minGap=100 panTro6 jkStuff/panTro6.nonBridged.lft \
-       -bedFile=jkStuff/panTro6.nonBridged.bed
+       -bedFile=stdout | sort -k1,1 -k2,2n > jkStuff/panTro6.nonBridged.bed
 
 ##############################################################################
 # LIFTOVER TO panTro5 (DONE - 2018-03-24 - Hiram)
@@ -825,25 +861,25 @@ XXX
 	-ooc=/hive/data/genomes/panTro6/jkStuff/panTro6.11.ooc \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
          panTro6 panTro5) > do.log 2>&1
-XXX
-    # real    605m27.304s
+    # real    464m42.018s
 
     # verify the convert link on the test browser is now active from panTro6 to
     # panTro5
 
 ##############################################################################
-# GENBANK AUTO UPDATE (TBD - 2018-02-28 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2018-03-25 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # /cluster/data/genbank/data/organism.lst shows:
     # #organism      mrnaCnt   estCnt  refSeqCnt
-    # Felis catus	2446	921	419
+    # Pan troglodytes 3548    5065    2048
+    # Pan troglodytes schweinfurthii  7       0       0
+    # Pan troglodytes troglodytes     42      0       0
+    # Pan troglodytes verus   126     12315   0
 
-    # edit etc/genbank.conf to add panTro6 just before felCat8
-# Nov 2017 (GSC) at Washington University (WashU) School of Medicine
-#	Felis_catus_9.0
-# panTro6 (Cat)
+    # edit etc/genbank.conf to add panTro6 just before panTro5
+# panTro6 (chimp - Pan troglodytes - refseq GCF_002880755.1 - taxId 9598)
 panTro6.serverGenome = /hive/data/genomes/panTro6/panTro6.2bit
 panTro6.clusterGenome = /hive/data/genomes/panTro6/panTro6.2bit
 panTro6.ooc = /hive/data/genomes/panTro6/jkStuff/panTro6.11.ooc
@@ -855,14 +891,25 @@ panTro6.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCD
 panTro6.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
 panTro6.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
 panTro6.genbank.est.xeno.pslCDnaFilter    = ${finished.genbank.est.xeno.pslCDnaFilter}
-panTro6.genbank.mrna.xeno.load  = yes
 panTro6.downloadDir = panTro6
-panTro6.refseq.mrna.native.load  = yes
-panTro6.refseq.mrna.xeno.load = yes
-panTro6.refseq.mrna.xeno.loadDesc  = yes
-# panTro6.upstreamGeneTbl = refGene
-# panTro6.upstreamMaf = multiz6way
-# /hive/data/genomes/panTro6/bed/multiz6way/species.list
+# defaults yes: genbank.mrna.native.load genbank.mrna.native.loadDesc
+# yes: genbank.est.native.load refseq.mrna.native.load
+# yes: refseq.mrna.native.loadDesc refseq.mrna.xeno.load
+# yes: refseq.mrna.xeno.loadDesc
+# defaults no: genbank.mrna.xeno.load genbank.mrna.xeno.loadDesc
+# no: genbank.est.native.loadDesc genbank.est.xeno.load
+# no: genbank.est.xeno.loadDesc
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+# have been doing this for chimp too:
+panTro6.genbank.mrna.xeno.load = yes
+
+    # verify stated file paths do exist:
+    grep panTro6 etc/genbank.conf | egrep "Genome|ooc|lift" \
+	| awk '{print $NF}' | xargs ls -og
+-rw-rw-r-- 1    146968 Mar 24 20:30 /hive/data/genomes/panTro6/jkStuff/panTro6.11.ooc
+-rw-rw-r-- 1    258184 Mar 25 14:25 /hive/data/genomes/panTro6/jkStuff/panTro6.nonBridged.lft
+-rw-rw-r-- 1 795113145 Mar 24 20:22 /hive/data/genomes/panTro6/panTro6.2bit
+-rw-rw-r-- 1 795113145 Mar 24 20:22 /hive/data/genomes/panTro6/panTro6.2bit
 
     # add panTro6 to:
     #   etc/align.dbs etc/hgwdev.dbs
@@ -872,7 +919,7 @@ panTro6.refseq.mrna.xeno.loadDesc  = yes
     # update /cluster/data/genbank/:
     make etc-update
 
-    # a few days later the genbank tables will be in the database
+    # XXX a few days later the genbank tables will be in the database
 
 #############################################################################
 #  BLATSERVERS ENTRY (TBD - 2018-08-13 - Hiram)
@@ -886,43 +933,15 @@ panTro6.refseq.mrna.xeno.loadDesc  = yes
 	    hgcentraltest
     #	test it with some sequence
 
-############################################################################
-## reset default position to same as what felCat8 has
+##############################################################################
+## reset default position to same as what panTro5 has
 ##  (TBD - 2018-03-13 - Hiram)
 
     ssh hgwdev
     hgsql -e 'update dbDb set defaultPos="chrA2:53333898-53447862"
 	where name="panTro6";' hgcentraltest
 
-############################################################################
-# LIFTOVER TO felCat8 (TBD - 2018-03-19 - Hiram)
-    ssh hgwdev
-    mkdir /hive/data/genomes/panTro6/bed/blat.felCat8.2018-03-19
-    cd /hive/data/genomes/panTro6/bed/blat.felCat8.2018-03-19
-    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
-	-ooc=/hive/data/genomes/panTro6/jkStuff/panTro6.11.ooc \
-        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-         panTro6 felCat8) > do.log 2>&1 &
-    # real    192m10.105s
-
-    # verify the convert link on the test browser is now active from panTro6 to
-    # felCat8
-
-############################################################################
-# LIFTOVER TO felCat5 (TBD - 2018-03-19 - Hiram)
-    ssh hgwdev
-    mkdir /hive/data/genomes/panTro6/bed/blat.felCat5.2018-03-19
-    cd /hive/data/genomes/panTro6/bed/blat.felCat5.2018-03-19
-    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
-	-ooc=/hive/data/genomes/panTro6/jkStuff/panTro6.11.ooc \
-        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-         panTro6 felCat5) > do.log 2>&1 &
-    # real    138m37.419s
-
-    # verify the convert link on the test browser is now active from panTro6 to
-    # felCat5
-
-############################################################################
+##############################################################################
 # all.joiner update, downloads and in pushQ - (TBD - 2018-03-19 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     ~/kent/src/hg/utils/automation/verifyBrowser.pl panTro6
