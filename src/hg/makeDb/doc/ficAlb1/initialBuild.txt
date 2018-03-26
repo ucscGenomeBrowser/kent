@@ -853,3 +853,20 @@ printf "hgsql -N -e \"show table status like '"'"'%s'"'"';\" %s\n", $2, $1
 /hive/data/genomes/ficAlb1/pushQ/redmine.ficAlb1.table.list
 
 #########################################################################
+# tandemDups (DONE - 2018-02-27 - 03-14 - Hiram)
+    mkdir /hive/data/genomes/ficAlb1/bed/tandemDups
+    cd /hive/data/genomes/ficAlb1/bed/tandemDups
+
+    time (~/kent/src/hg/utils/automation/doTandemDup.pl ficAlb1) > do.log 2>&1
+    # had immense trouble in the pairedEnds step, went on for weeks
+    # made gigantic files:
+# -rw-rw-r-- 1 27432151329 Mar  9 17:00 chr1A.bed.gz
+# -rw-rw-r-- 1 30028043163 Mar 12 06:25 chr3.bed.gz
+# -rw-rw-r-- 1 41116614429 Mar 13 06:51 chr2.bed.gz
+# -rw-rw-r-- 1 36289190868 Mar 13 13:44 chr1.bed.gz
+
+    # after recovery and getting that completed, continuing:
+    time (~/kent/src/hg/utils/automation/doTandemDup.pl \
+	-continue=collapsePairedEnds ficAlb1) > collapsePairedEnds.log 2>&1 &
+
+#########################################################################
