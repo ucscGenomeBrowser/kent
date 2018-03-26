@@ -31,19 +31,20 @@ else
 if (conn == NULL)
     return NULL;
 
-struct interact *inters = NULL, *inter;
+struct interact *inters = NULL, *inter = NULL;
 char **row;
 int offset;
-char where[512];
-if (isNotEmpty(item))
-    sqlSafefFrag(where, sizeof(where), "name='%s'", item);
-struct sqlResult *sr = hRangeQuery(conn, table, chrom, start, end, where, &offset);
+struct sqlResult *sr = hRangeQuery(conn, table, chrom, start, end, NULL, &offset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     inter = interactLoad(row+offset);
+    if (inter->chromStart != start || inter->chromEnd != end)
+        continue;
+    if (isNotEmpty(item) && differentString(inter->name, item))
+        continue;
     slAddHead(&inters, inter);
     }
-slReverse(&inters);
+slSort(&inters, interactDistanceCmp);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 return inters;
@@ -55,7 +56,7 @@ static struct interact *getInteractFromFile(char *file, char *item, char *chrom,
 struct bbiFile *bbi = bigBedFileOpen(file);
 struct lm *lm = lmInit(0);
 struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
-struct interact *inters = NULL, *inter;
+struct interact *inters = NULL, *inter = NULL;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     char startBuf[16], endBuf[16];
@@ -64,10 +65,13 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     inter = interactLoad(row);
     if (inter == NULL)
         continue;
-    if (isEmpty(item) || sameString(inter->name, item))
-        slAddHead(&inters, inter);
+    if (inter->chromStart != start || inter->chromEnd != end)
+        continue;
+    if (isNotEmpty(item) && differentString(inter->name, item))
+        continue;
+    slAddHead(&inters, inter);
     }
-slReverse(&inters);
+slSort(&inters, interactDistanceCmp);
 return inters;
 }
 
@@ -84,7 +88,7 @@ else
 return inters;
 }
 
-void doInteractItemDetails(struct trackDb *tdb, struct interact *inter)
+void doInteractItemDetails(struct trackDb *tdb, struct interact *inter, char *item)
 /* Details of interaction item */
 {
 char startBuf[1024], endBuf[1024], sizeBuf[1024];
@@ -161,7 +165,14 @@ printf("<b>%s region:</b> %s&nbsp;&nbsp;"
                 "<a href='hgTracks?position=%s:%d-%d' target='_blank'>%s:%s-%s</a>",
                 region2Label, region2Name, region2Chrom, region2Start+1, region2End,
                 region2Chrom, startBuf, endBuf);
-printf("&nbsp;&nbsp;%s bp<hr>\n", sizeBuf);
+printf("&nbsp;&nbsp;%s bp<br>\n", sizeBuf);
+int distance = interactRegionDistance(inter);
+if (distance > 0)
+    {
+    // same chrom
+    sprintLongWithCommas(sizeBuf, distance);
+    printf("<b>Distance between midpoints:</b> %s bp<br>\n", sizeBuf); 
+    }
 
 #ifdef TODO /* TODO: get count and score stats of all interactions in window ?*/
 double *scores;
@@ -177,15 +188,19 @@ int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 struct interact *inter = NULL;
 struct interact *inters = getInteractions(tdb, item, chrom, start, end);
-// consider sorting by score/value so highest scored items appear first
+if (inters == NULL)
+    errAbort("Can't find interaction %s", item ? item : "");
 int count = slCount(inters);
 if (count > 1)
     printf("<b>Interactions:</b> %d<hr>", count);
-if (inters == NULL)
-    errAbort("Can't find interaction '%s'", item);
 genericHeader(tdb, item);
 for (inter = inters; inter; inter = inter->next)
-    doInteractItemDetails(tdb, inter);
+    {
+    doInteractItemDetails(tdb, inter, item);
+    printf("<hr>\n");
+    if (count > 1 && !isEmptyTextField(inter->name) && sameString(inter->name, item))
+        printf("<hr>\n");
+    }
 }
 
 

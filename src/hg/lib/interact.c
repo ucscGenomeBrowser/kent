@@ -287,3 +287,41 @@ if (inter->chromStart == inter->sourceStart)
     return cloneString(inter->targetChrom);
 return cloneString(inter->sourceChrom);
 }
+
+int interactRegionCenter(int start, int end)
+/* Return genomic location of center of region */
+{
+return ((double)(end - start + .5) / 2) + start;
+}
+
+int interactRegionDistance(struct interact *inter)
+/* Return distance between region midpoints. Return -1 for other chromosome */
+{
+if (interactOtherChrom(inter))
+    return -1;
+return abs(interactRegionCenter(inter->sourceStart, inter->sourceEnd) -
+                interactRegionCenter(inter->targetStart, inter->targetEnd));
+}
+
+int interactDistanceCmp(const void *va, const void *vb)
+/* Compare based on distance between region midpoints */
+{
+struct interact *a = *((struct interact **)va);
+struct interact *b = *((struct interact **)vb);
+
+int aDist = interactRegionDistance(a);
+int bDist = interactRegionDistance(b);
+
+// cross chromosome; always larger than same chrom
+if (aDist < 0)
+    {
+    if (bDist < 0)
+        return 0;
+    return 1;
+    }
+if (bDist < 0)
+    return -1;
+
+// same chromosome
+return aDist - bDist;
+}

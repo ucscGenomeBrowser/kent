@@ -2,7 +2,7 @@ table interact
 "Interaction between two regions"
     (
     string chrom;      "Chromosome (or contig, scaffold, etc.). For interchromosomal, use 2 records"
-    uint chromStart;   "Start position in chromosome of lower region"
+    uint chromStart;   "Start position in chromosome of lower region For interchromosomal, set to chromStart of this region"
     uint chromEnd;     "End position in chromosome of upper region. For interchromosomal, set to chromEnd of this region"
     string name;       "Name of item, for display.  Usually 'name1/name2' or empty"
     uint score;        "Score from 0-1000"

@@ -95,5 +95,14 @@ struct asObject *interactAsObj();
 char *interactOtherChrom(struct interact *inter);
 /* Get other chromosome from an interaaction. Return NULL if same chromosome */
 
+int interactRegionCenter(int start, int end);
+/* Return genomic location of center of region */
+
+int interactRegionDistance(struct interact *inter);
+/* Return distance between region midpoints. Return -1 for other chromosome */
+
+int interactDistanceCmp(const void *va, const void *vb);
+/* Compare based on distance between region midpoints */
+
 #endif /* INTERACT_H */
 

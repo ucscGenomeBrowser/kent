@@ -107,12 +107,6 @@ if (inter->value != 0.0)
 return dyStringCannibalize(&ds);
 }
 
-int regionCenter(int start, int end)
-/* Return center of genomic region */
-{
-return ((double)(end - start + .5) / 2) + start;
-}
-
 int regionFootWidth(int start, int end, double scale)
 /* Return half foot width in pixels */
 {
@@ -128,8 +122,8 @@ void interactRegionCenters(struct interact *inter, int *sourceCenter, int *targe
 {
 assert(sourceCenter);
 assert(targetCenter);
-*sourceCenter = regionCenter(inter->sourceStart, inter->sourceEnd);
-*targetCenter = regionCenter(inter->targetStart, inter->targetEnd);
+*sourceCenter = interactRegionCenter(inter->sourceStart, inter->sourceEnd);
+*targetCenter = interactRegionCenter(inter->targetStart, inter->targetEnd);
 }
 
 int interactSize(struct interact *inter)
@@ -267,7 +261,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
             height = tInfo->otherHeight/2;
             yOffOther = yOff + tInfo->sameHeight;
             }
-        unsigned r = regionCenter(inter->chromStart, inter->chromEnd);
+        unsigned r = interactRegionCenter(inter->chromStart, inter->chromEnd);
         int x = getX(r, seqStart, scale, xOff); 
         int footWidth = regionFootWidth(inter->chromStart, inter->chromEnd, scale);
         unsigned yPos = yOffOther + height;
@@ -289,12 +283,14 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
                         inter->sourceName : inter->targetName);
         if (isEmptyTextField(nameBuf))
             nameBuf = statusBuf;
-        mapBoxHgcOrHgGene(hvg, inter->chromStart, inter->chromEnd, 
+        int chromStart = inter->chromStart;
+        int chromEnd = inter->chromEnd;
+        mapBoxHgcOrHgGene(hvg, chromStart, chromEnd,
                         x - footWidth, yOffOther, footWidth * 2, 4,
                         tg->track, itemBuf, nameBuf, NULL, TRUE, NULL);
 
         // add map box to vertical
-        mapBoxHgcOrHgGene(hvg, inter->chromStart, inter->chromEnd, x - 2, yOffOther, 4, 
+        mapBoxHgcOrHgGene(hvg, chromStart, chromEnd, x - 2, yOffOther, 4, 
                             height, tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
         if (tInfo->doOtherLabels)
             {
@@ -305,7 +301,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
             int labelWidth = vgGetFontStringWidth(hvg->vg, font, buffer);
 
             // add map box to label
-            mapBoxHgcOrHgGene(hvg, inter->chromStart, inter->chromEnd, x - labelWidth/2, 
+            mapBoxHgcOrHgGene(hvg, chromStart, chromEnd, x - labelWidth/2, 
                     yPos, labelWidth, tInfo->fontHeight, tg->track, itemBuf, statusBuf, 
                     NULL, TRUE, NULL);
             }
@@ -315,13 +311,13 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
     // Draw same chromosome interaction
 
     // source region
-    unsigned s = regionCenter(inter->sourceStart, inter->sourceEnd);
+    unsigned s = interactRegionCenter(inter->sourceStart, inter->sourceEnd);
     int sX = getX(s, seqStart, scale, xOff); 
     int sWidth = regionFootWidth(inter->sourceStart, inter->sourceEnd, scale);
     boolean sOnScreen = (s >= seqStart) && (s< seqEnd);
 
     // target region
-    unsigned t = regionCenter(inter->targetStart, inter->targetEnd);
+    unsigned t = interactRegionCenter(inter->targetStart, inter->targetEnd);
     int tX = getX(t, seqStart, scale, xOff);
     int tWidth = regionFootWidth(inter->targetStart,inter->targetEnd, scale);
     boolean tOnScreen = (t >= seqStart) && (t< seqEnd);
@@ -363,6 +359,8 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         continue;
 
     // Full mode: add map boxes and draw interaction
+    int chromStart = inter->chromStart;
+    int chromEnd = inter->chromEnd;
     char *nameBuf = NULL;
     if (sOnScreen)
         {
@@ -370,7 +368,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         nameBuf = isEmptyTextField(inter->sourceName) ? statusBuf : inter->sourceName;
         hvGfxBox(hvg, sX-1, yOff, 3, 1, peakColor);
         hvGfxBox(hvg, sX, yOff, 1, 1, MG_WHITE);
-        mapBoxHgcOrHgGene(hvg, inter->chromStart, inter->chromEnd, 
+        mapBoxHgcOrHgGene(hvg, chromStart, chromEnd, 
                            sX - sWidth, yOff, sWidth * 2, 3,
                            tg->track, itemBuf, nameBuf, NULL, TRUE, NULL);
         }
@@ -380,7 +378,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         nameBuf = isEmptyTextField(inter->targetName) ? statusBuf : inter->targetName;
         hvGfxBox(hvg, tX-1, yOff, 3, 1, peakColor);
         hvGfxBox(hvg, tX, yOff, 1, 1, MG_WHITE);
-        mapBoxHgcOrHgGene(hvg, inter->chromStart, inter->chromEnd, 
+        mapBoxHgcOrHgGene(hvg, chromStart, chromEnd, 
                         tX - tWidth, yOff, tWidth * 2, 3,
                         tg->track, itemBuf, nameBuf, NULL, TRUE, NULL);
         }
@@ -409,7 +407,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         int yMap = peak-1;
         hvGfxBox(hvg, xMap, peak-1, 1, 3, peakColor);
         hvGfxBox(hvg, xMap, peak, 1, 1, MG_WHITE);
-        mapBoxHgcOrHgGene(hvg, inter->chromStart, inter->chromEnd, xMap-1, yMap, 3, 3,
+        mapBoxHgcOrHgGene(hvg, chromStart, chromEnd, xMap-1, yMap, 3, 3,
                            tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
         continue;
         }
@@ -423,7 +421,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         // draw map box on peak
         hvGfxBox(hvg, peakX-1, maxY, 3, 1, peakColor);
         hvGfxBox(hvg, peakX, maxY, 1, 1, MG_WHITE);
-        mapBoxHgcOrHgGene(hvg, inter->chromStart, inter->chromEnd, peakX, maxY, 3, 1,
+        mapBoxHgcOrHgGene(hvg, chromStart, chromEnd, peakX, maxY, 3, 1,
                        tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
         }
     else if (draw == DRAW_ELLIPSE)
@@ -436,7 +434,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         int peakX = ((upperX - lowerX + 1) / 2) + lowerX;
         hvGfxBox(hvg, peakX-1, maxY, 3, 1, peakColor);
         hvGfxBox(hvg, peakX, maxY, 1, 1, MG_WHITE);
-        mapBoxHgcOrHgGene(hvg, inter->chromStart, inter->chromEnd, peakX, maxY, 3, 1,
+        mapBoxHgcOrHgGene(hvg, chromStart, chromEnd, peakX, maxY, 3, 1,
                        tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
         }
     }
