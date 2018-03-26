@@ -154,7 +154,7 @@ DBS = \
 	petMar1 petMar2 petMar3 \
 	plasFalc3D7V12 \
 	poeRet1 \
-	ponAbe2 \
+	ponAbe2 ponAbe3 \
 	priExs1 \
 	priPac1 priPac2 priPac3 \
 	proCap1 \
