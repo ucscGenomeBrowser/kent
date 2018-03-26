@@ -3001,3 +3001,10 @@ group map
     parent tanDups on
     shortLabel Tandem Dups
     longLabel Paired exactly identical sequence survey over entire genome assembly
+
+track tantan
+shortLabel tantan Repeats
+longLabel Repeats by tantan
+group varRep
+visibility hide
+type bed 3 .
