@@ -871,7 +871,7 @@ felCat9.refseq.mrna.xeno.loadDesc  = yes
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
 	VALUES ("felCat9", "blat1c", "17900", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("felCat9", "blat1c", "17001", "0", "1");' \
+	VALUES ("felCat9", "blat1c", "17901", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
