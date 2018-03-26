@@ -112,7 +112,7 @@ sub checkTableExists($$) {
   my ($db, $table) = @_;
   my $lineCount = `hgsql -N -e 'desc $table;' $db 2> /dev/null | wc -l`;
   chomp $lineCount;
-  if ($lineCount > 3) {
+  if ($lineCount > 0) {
     return 1;
   } else {
     return 0;
@@ -232,6 +232,8 @@ foreach my $table (sort keys %missingTables) {
   printf STDERR "# %d\t%s\t- missing table\n", $missedOut, $table;
 }
 
+my %optionalChainNet;
+my %expectedChainNet;
 my @chainTypes = ("", "RBest", "Syn");
 my @otherDbs = ("hg38", "mm10");
 for (my $i = 0; $i < scalar(@chainTypes); ++$i) {
@@ -242,10 +244,26 @@ for (my $i = 0; $i < scalar(@chainTypes); ++$i) {
       next if ($db eq $otherDbs[$j]);
       # mm10 Syntenics do not exist (yet)
       next if ($otherDbs[$j] eq "mm10" && $chainTypes[$i] eq "Syn");
+      if (length($chainTypes[$i]) > 0) { # RBest and Syn are optional
+         $optionalChainNet{$otherDbs[$j]} += 1 if (checkTableExists($otherDbs[$j], $chainTable));
+         $optionalChainNet{$otherDbs[$j]} += 1 if (checkTableExists($otherDbs[$j], $chainLinkTable));
+         $optionalChainNet{$otherDbs[$j]} += 1 if (checkTableExists($otherDbs[$j], $netTable));
+      } else {
       printf STDERR "# missing $otherDbs[$j].$chainTable\n" if (! checkTableExists($otherDbs[$j], $chainTable));
       printf STDERR "# missing $otherDbs[$j].$chainLinkTable\n" if (! checkTableExists($otherDbs[$j], $chainLinkTable));
       printf STDERR "# missing $otherDbs[$j].$netTable\n" if (! checkTableExists($otherDbs[$j], $netTable));
+      $expectedChainNet{$otherDbs[$j]} += 1 if (checkTableExists($otherDbs[$j], $chainTable));
+      $expectedChainNet{$otherDbs[$j]} += 1 if (checkTableExists($otherDbs[$j], $chainLinkTable));
+      $expectedChainNet{$otherDbs[$j]} += 1 if (checkTableExists($otherDbs[$j], $netTable));
+      }
    }
+}
+
+foreach my $expected (sort keys %expectedChainNet) {
+  printf STDERR "# %s chainNet to %s found %d required tables\n", $expected, $db, $expectedChainNet{$expected};
+}
+foreach my $optional (sort keys %optionalChainNet) {
+  printf STDERR "# %s chainNet RBest and syntenic to %s found %d optional tables\n", $optional, $db, $optionalChainNet{$optional};
 }
 
 if ($dbVersion > 1) {

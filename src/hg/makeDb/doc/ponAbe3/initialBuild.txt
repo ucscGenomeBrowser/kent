@@ -1,0 +1,1006 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the ponAbe3
+
+#########################################################################
+# reuse photograph from ponAbe2 previous versions
+#    (DONE - 2018-03-25 - Hiram)
+
+mkdir /hive/data/genomes/ponAbe3
+cd /hive/data/genomes/ponAbe3
+cp -p ../ponAbe2/photoReference.txt .
+
+cat photoReference.txt
+
+photoCreditURL  http://www.genome.gov/dmd/img.cfm?node=Photos/Animals/Primates&id=79121
+photoCreditName Photo courtesy of NHGRI press photos
+
+#########################################################################
+#  Initial steps (DONE - 2018-03-25 - Hiram)
+
+# To start this initialBuild.txt document, from a previous assembly document:
+
+mkdir ~/kent/src/hg/makeDb/doc/ponAbe3
+cd ~/kent/src/hg/makeDb/doc/ponAbe3
+
+# best to use a most recent document since it has the latest features and
+# procedures:
+sed -e 's/panTro6/ponAbe3/g; s/PanTro6/PonAbe3/g; s/DONE/TBD/g;' ../panTro6/initialBuild.txt > initialBuild.txt
+
+mkdir /hive/data/genomes/ponAbe3/refseq
+cd /hive/data/genomes/ponAbe3/refseq
+
+time rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/refseq/vertebrate_mammalian/Pongo_abelii/all_assembly_versions/GCF_002880775.1_Susie_PABv2/ ./
+
+# sent 3486 bytes  received 4243601044 bytes  17943359.53 bytes/sec
+# total size is 4243070145  speedup is 1.00
+
+# real    3m56.159s
+
+# check assembly size for later reference:
+
+faSize G*_PABv2_genomic.fna.gz
+
+# 3065052215 bases (21607691 N's 3043444524 real 1807911880 upper
+#	1235532644 lower) in 5261 sequences in 1 files
+# Total size: mean 582598.8 sd 8634885.0 min 213 (NW_019938880.1)
+#	max 227913704 (NC_036903.1) median 27490
+# %40.31 masked total, %40.60 masked real
+
+# this information is from the top of
+#    ponAbe3/refseq/GCF_002880775.1_Susie_PABv2_assembly_report.txt
+
+# Assembly name:  Susie_PABv2
+# Organism name:  Pongo abelii (Sumatran orangutan)
+# Isolate:  Susie
+# Sex:  female
+# Taxid:          9601
+# BioSample:      SAMN06275555
+# BioProject:     PRJNA369439
+# Submitter:      University of Washington
+# Date:           2018-1-19
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Chromosome
+# Genome representation: full
+# WGS project:    NDHI03
+# Assembly method: Falcon v. (git hash: 91e700c4) Nov 2015; BioNano Access Hybrid Scaffolds
+# Expected final version: no
+# Genome coverage: 101.2x
+# Sequencing technology: PacBio; Illumina NextSeq 500; BioNano Saphyr (two enzyme)
+# GenBank assembly accession: GCA_002880775.3
+# RefSeq assembly accession: GCF_002880775.1
+# RefSeq assembly and GenBank assemblies identical: no
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_002880785.3      GCF_002880785.1 Primary Assembly
+##      GCF_000001585.1 non-nuclear
+
+#############################################################################
+# establish config.ra file (DONE - Hiram - 2018-03-25)
+    # arguments here are: <db> <clade> <trackDbDir> <assembly_report.txt>
+    cd /hive/data/genomes/ponAbe3
+    $HOME/kent/src/hg/utils/automation/prepConfig.pl ponAbe3 mammal \
+        orangutan ./refseq/*_assembly_report.txt > ponAbe3.config.ra
+
+    # compare to ../panTro5 to see what might need to be fixed up:
+    diff ponAbe3.config.ra ../panTro5/panTro5.config.ra  | less
+
+    # reset commonName Sumatran orangutan to: commonName Orangutan
+    # reset orderKey 19867 to: orderKey 15764
+    # reset scientificName Pongo abelii to: scientificName Pongo pygmaeus abelii
+
+    # verify it looks sane
+    cat ponAbe3.config.ra
+# config parameters for makeGenomeDb.pl:
+db ponAbe3
+clade mammal
+genomeCladePriority 35
+scientificName Pongo pygmaeus abelii
+commonName Orangutan
+assemblyDate Jan. 2018
+assemblyLabel University of Washington
+assemblyShortLabel Susie_PABv2
+orderKey 19867
+# mitochondrial sequence included in refseq release
+# mitoAcc NC_002083.1
+mitoAcc none
+fastaFiles /hive/data/genomes/ponAbe3/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/ponAbe3/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir orangutan
+photoCreditURL  http://www.genome.gov/dmd/img.cfm?node=Photos/Animals/Primates&id=79121
+photoCreditName Photo courtesy of NHGRI press photos
+ncbiGenomeId 325
+ncbiAssemblyId 1529631
+ncbiAssemblyName Susie_PABv2
+ncbiBioProject 369439
+ncbiBioSample SAMN06275555
+genBankAccessionID GCF_002880775.1
+taxId 9601
+
+#############################################################################
+# setup UCSC named files (DONE - 2018-03-25 - Hiram)
+
+    mkdir /hive/data/genomes/ponAbe3/ucsc
+    cd /hive/data/genomes/ponAbe3/ucsc
+
+    # check for duplicate sequences:
+    time faToTwoBit -noMask ../refseq/G*_PABv2_genomic.fna.gz refseq.2bit
+    #  real    1m17.672s
+
+    twoBitDup refseq.2bit
+    # no output is a good result, otherwise, would have to eliminate duplicates
+    # this refseq.2bit will be used below to extract mitochondrion sequence
+
+    time ~/kent/src/hg/utils/automation/ucscCompositeAgp.pl \
+       ../refseq/G*_PABv2_genomic.fna.gz \
+          ../refseq/G*_PABv2_assembly_structure/Primary_Assembly
+# NC_036903.1 chr1
+# NC_036904.1 chr2A
+# NC_036905.1 chr2B
+# NC_036906.1 chr3
+# NC_036907.1 chr4
+# NC_036908.1 chr5
+# NC_036909.1 chr6
+# NC_036910.1 chr7
+# NC_036911.1 chr8
+# NC_036912.1 chr9
+# NC_036913.1 chr10
+# NC_036914.1 chr11
+# NC_036915.1 chr12
+# NC_036916.1 chr13
+# NC_036917.1 chr14
+# NC_036918.1 chr15
+# NC_036919.1 chr16
+# NC_036920.1 chr17
+# NC_036921.1 chr18
+# NC_036922.1 chr19
+# NC_036923.1 chr20
+# NC_036924.1 chr21
+# NC_036925.1 chr22
+# NC_036926.1 chrX
+
+# real    15m56.405s
+
+    # unplaced sequences
+    time ~/kent/src/hg/utils/automation/unplacedWithChroms.pl \
+       ../refseq/*_assembly_structure/Primary_Assembly
+# processed 5190 sequences into chrUn.fa.gz
+# real    0m52.367s
+
+    # unlocalized sequences
+    time ~/kent/src/hg/utils/automation/unlocalizedWithChroms.pl \
+       ../refseq/*_assembly_structure/Primary_Assembly
+# 6
+# 11
+# 21
+# X
+# 3
+# 7
+# 17
+# 20
+# 14
+# 8
+# 1
+# 4
+# 2A
+# 16
+# processed 46 sequences into chr*_random.gz 14 files
+
+# real    0m10.484s
+
+    # bash syntax here
+    mitoAcc=`grep "^# mitoAcc" ../ponAbe3.config.ra | awk '{print $NF}'`
+    printf "# mitoAcc %s\n" "$mitoAcc"
+# mitoAcc NC_001643.1
+
+    zcat \
+  ../refseq/*_assembly_structure/non-nuclear/assem*/AGP/chrMT.comp.agp.gz \
+     | grep -v "^#" | sed -e "s/^$mitoAcc/chrM/;" > chrM.agp
+
+    printf ">chrM\n" > chrM.fa
+    twoBitToFa -noMask refseq.2bit:$mitoAcc stdout | grep -v "^>" >> chrM.fa
+    gzip chrM.fa
+
+    # verify fasta and AGPs agree
+    time faToTwoBit *.fa.gz test.2bit
+    # real    1m20.886s
+
+    time cat *.agp | checkAgpAndFa stdin test.2bit 2>&1 | tail -4
+    # All AGP and FASTA entries agree - both files are valid
+    # real    0m10.919s
+
+    # and no sequence lost from orginal:
+    twoBitToFa test.2bit stdout | faSize stdin
+# 3065052215 bases (21607691 N's 3043444524 real 3043444524 upper 0 lower)
+#	in 5261 sequences in 1 files
+# Total size: mean 582598.8 sd 8634885.0 min 213 (chrUn_NW_019938880v1)
+#	max 227913704 (chr1) median 27490
+
+    # same numbers as above
+# 3065052215 bases (21607691 N's 3043444524 real 1807911880 upper
+#	1235532644 lower) in 5261 sequences in 1 files
+# Total size: mean 582598.8 sd 8634885.0 min 213 (NW_019938880.1)
+#	max 227913704 (NC_036903.1) median 27490
+
+    # no longer need these temporary 2bit files
+    rm refseq.2bit test.2bit
+
+#############################################################################
+#  Initial database build (DONE - 2018-03-25 - Hiram)
+
+    cd /hive/data/genomes/ponAbe3
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp ponAbe3.config.ra) > agp.log 2>&1
+    # real    2m45.311s
+
+    # verify there was no error in that step:
+    tail agp.log
+    #  *** All done!  (through the 'agp' step)
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db ponAbe3.config.ra) > db.log 2>&1
+    # real    24m53.312s
+
+    # verify gaps are all there:
+    twoBitInfo -nBed ponAbe3.unmasked.2bit stdout | awk '{print $3-$2}' \
+	| ave stdin | sed -e 's/^/# /;'
+# Q1 100.000000
+# median 100.000000
+# Q3 24579.000000
+# average 39073.582278
+# min 7.000000
+# max 932534.000000
+# count 553
+# total 21607691.000000
+# standard deviation 101132.051836
+
+
+    hgsql -e 'select chromEnd-chromStart from gap;' ponAbe3 | ave stdin | sed -e 's/^/# /;'
+# Q1 100.000000
+# median 100.000000
+# Q3 24579.000000
+# average 39073.582278
+# min 7.000000
+# max 932534.000000
+# count 553
+# total 21607691.000000
+# standard deviation 101132.051836
+
+    # check in the trackDb files created in TemporaryTrackDbCheckout/
+    #    and add ponAbe3 to trackDb/makefile
+
+    # temporary symlink until masked sequence is available
+    cd /hive/data/genomes/ponAbe3
+    ln -s `pwd`/ponAbe3.unmasked.2bit /gbdb/ponAbe3/ponAbe3.2bit
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2018-03-25 - Hiram)
+    mkdir /hive/data/genomes/ponAbe3/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/ponAbe3/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/ponAbe3/ponAbe3.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku ponAbe3) > do.log 2>&1
+XXX - running - Sun Mar 25 23:21:14 PDT 2018
+    # real    6m17.200s
+
+    cat fb.ponAbe3.cpgIslandExtUnmasked.txt
+    # 29545528 bases of 3018592990 (0.979%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2018-03-25 - Hiram)
+    mkdir /hive/data/genomes/ponAbe3/bed/cytoBand
+    cd /hive/data/genomes/ponAbe3/bed/cytoBand
+    makeCytoBandIdeo.csh ponAbe3
+
+#############################################################################
+# gapOverlap (DONE - 2018-03-25 - Hiram)
+    mkdir /hive/data/genomes/ponAbe3/bed/gapOverlap
+    cd /hive/data/genomes/ponAbe3/bed/gapOverlap
+    time (doGapOverlap.pl \
+	-twoBit=/hive/data/genomes/ponAbe3/ponAbe3.unmasked.2bit ponAbe3 ) \
+	> do.log 2>&1
+XXX - running - Sun Mar 25 23:21:55 PDT 2018
+    # real    14m5.164s
+
+    cat fb.ponAbe3.gapOverlap.txt
+    # 6998 bases of 3050398082 (0.000%) in intersection
+
+    # only six items:
+    zcat *.bed.gz | cut -f1-5
+# chr12   113245358       113246724       chr12:113245359-113246724       633
+# chr21   18867677        18869111        chr21:18867678-18869111 667
+# chr8    127452459       127454559       chr8:127452460-127454559        1000
+# chrX    52589209        52609380        chrX:52589210-52609380  1000
+# chrY    7097196 7097619 chrY:7097197-7097619    199
+
+#############################################################################
+# tandemDups (DONE - 2018-03-25 - Hiram)
+    mkdir /hive/data/genomes/ponAbe3/bed/tandemDups
+    cd /hive/data/genomes/ponAbe3/bed/tandemDups
+    time (~/kent/src/hg/utils/automation/doTandemDup.pl \
+  -twoBit=/hive/data/genomes/ponAbe3/ponAbe3.unmasked.2bit ponAbe3) \
+	> do.log 2>&1 &
+XXX - running - Sun Mar 25 23:22:26 PDT 2018
+    # real    96m33.185s
+
+    cat fb.ponAbe3.tandemDups.txt
+    # 133769723 bases of 3050398082 (4.385%) in intersection
+
+    bigBedInfo ponAbe3.tandemDups.bb | sed -e 's/^/#  /;'
+#  version: 4
+#  fieldCount: 13
+#  hasHeaderExtension: yes
+#  isCompressed: yes
+#  isSwapped: 0
+#  extraIndexCount: 0
+#  itemCount: 2,570,600
+#  primaryDataSize: 65,661,880
+#  primaryIndexSize: 259,136
+#  zoomLevels: 9
+#  chromCount: 4134
+#  basesCovered: 1,636,830,812
+#  meanDepth (of bases covered): 12.911632
+#  minDepth: 1.000000
+#  maxDepth: 474.000000
+#  std of depth: 28.418142
+
+#############################################################################
+# run up idKeys files for chromAlias/ncbiRefSeq (DONE - 2018-03-25 - Hiram)
+    mkdir /hive/data/genomes/ponAbe3/bed/idKeys
+    cd /hive/data/genomes/ponAbe3/bed/idKeys
+
+    time (doIdKeys.pl \
+	-twoBit=/hive/data/genomes/ponAbe3/ponAbe3.unmasked.2bit \
+	-buildDir=`pwd` ponAbe3) > do.log 2>&1 &
+XXX - running - Sun Mar 25 23:22:49 PDT 2018
+    # real    3m56.622s
+
+    cat ponAbe3.keySignature.txt
+    #  d56a60e851e19f2c5b842c27bb43b990
+
+#############################################################################
+# ucscToINSDC and ucscToRefSeq table/track (TBD - 2018-03-24 - Hiram)
+    # the sequence here is working for a 'refseq' assembly
+    # beware of a chrM situation may be specific depending upon what is
+    # available in the assembly
+
+    mkdir /hive/data/genomes/ponAbe3/bed/ucscToINSDC
+    cd /hive/data/genomes/ponAbe3/bed/ucscToINSDC
+
+    join -t$'\t' ../idKeys/ponAbe3.idKeys.txt \
+	../../refseq/idKeysGenbank/genbankPonAbe3.idKeys.txt | cut -f2- \
+          | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+               | sort -k1,1 -k2,2n > ucscToINSDC.bed
+
+    join -t$'\t' ../idKeys/ponAbe3.idKeys.txt \
+	../../refseq/idKeys/refseqPonAbe3.idKeys.txt | cut -f2- \
+          | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+               | sort -k1,1 -k2,2n > ucscToRefSeq.bed
+
+    # verify line counts are the same
+    wc -l *.bed ../../chrom.sizes
+    #	4344 ucscToINSDC.bed
+    #	4346 ucscToRefSeq.bed
+    #	4346 ../../chrom.sizes
+
+    # need to find INSDC equivalents for chrY and chrM:
+    egrep "chrY|chrM" *
+ucscToRefSeq.bed:chrM   0       16554   NC_001643.1
+ucscToRefSeq.bed:chrY   0       26350515        NC_006492.4
+
+    # lookup those accessions at NCBI Entrez
+    # NC_001643.1 = D38113.1
+    # NC_006492.4 = DP000054.3
+    printf "chrM\t0\t16554\tD38113.1\n" >> ucscToINSDC.bed
+    printf "chrY\t0\t26350515\tNC_006492.4\n" >> ucscToINSDC.bed
+
+    # resort the bed file:
+    sort -k1,1 -k2,2n -o ucscToINSDC.bed ucscToINSDC.bed
+
+    # verify chrM and chrY are correct:
+    egrep "chrM|chrY" *
+ucscToINSDC.bed:chrM    0       16554   D38113.1
+ucscToINSDC.bed:chrY    0       26350515        NC_006492.4
+ucscToRefSeq.bed:chrM   0       16554   NC_001643.1
+ucscToRefSeq.bed:chrY   0       26350515        NC_006492.4
+
+    # should be same line counts throughout:
+    wc -l * ../../chrom.sizes
+    #	4346 ucscToINSDC.bed
+    #	4346 ucscToRefSeq.bed
+    #	4346 ../../chrom.sizes
+
+    export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    # 27
+    # use the $chrSize in this sed
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab ponAbe3 ucscToINSDC stdin ucscToINSDC.bed
+    # should be the same for ucscToRefSeq:
+    export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    #  27
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
+    hgLoadSqlTab ponAbe3 ucscToRefSeq ./ucscToRefSeq.sql ucscToRefSeq.bed
+
+    # checkTableCoords should be silent
+    checkTableCoords ponAbe3
+    # each should cover %100 entirely:
+    featureBits -countGaps ponAbe3 ucscToINSDC
+    # 3050398082 bases of 3050398082 (100.000%) in intersection
+
+    featureBits -countGaps ponAbe3 ucscToRefSeq
+    # 3050398082 bases of 3050398082 (100.000%) in intersection
+
+#########################################################################
+# add chromAlias table (TBD - 2018-03-24 - Hiram)
+
+    mkdir /hive/data/genomes/ponAbe3/bed/chromAlias
+    cd /hive/data/genomes/ponAbe3/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name from ucscToRefSeq;' ponAbe3 \
+        | sort -k1,1 > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name from ucscToINSDC;' ponAbe3 \
+        | sort -k1,1 > ucsc.genbank.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl ucsc.*.tab \
+	> ponAbe3.chromAlias.tab
+
+for t in refseq genbank
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t ponAbe3.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking refseq: 4346 =? 4346 OK
+# checking genbank: 4346 =? 4346 OK
+
+    hgLoadSqlTab ponAbe3 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        ponAbe3.chromAlias.tab
+
+#########################################################################
+# fixup search rule for assembly track/gold table (TBD - 2018-03-24 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/chimp/ponAbe3
+
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" ponAbe3 \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c | sed -e 's/^/#\t/;'
+#            14 AACZ.1
+#            21 AC.1
+#            90 AC.2
+#            53 AC.3
+#            22 AC.4
+#            11 AC.5
+#             3 AC.6
+#             2 BS.2
+#          5037 NBAG.1
+#             1 NC_.1
+               
+    # implies a rule: '[ABN][ACSB][ACGZ0-9_]+(\.[0-9]+)?'
+
+    # verify this rule will find them all and eliminate them all:
+    hgsql -N -e "select frag from gold;" ponAbe3 | wc -l
+    # 5254
+
+    hgsql -N -e "select frag from gold;" ponAbe3 \
+       | egrep -e '[ABN][ACSB][ACGZ0-9_]+(\.[0-9]+)?' | wc -l
+    # 5254
+
+    hgsql -N -e "select frag from gold;" ponAbe3 \
+       | egrep -v -e '[ABN][ACSB][ACGZ0-9_]+(\.[0-9]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/chicken/ponAbe3/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [ABN][ACSB][ACGZ0-9_]+(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box
+
+#############################################################################
+# running repeat masker (DONE - 2018-03-25 - Hiram)
+    mkdir /hive/data/genomes/ponAbe3/bed/repeatMasker
+    cd /hive/data/genomes/ponAbe3/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku ponAbe3) > do.log 2>&1 &
+XXX - Sun Mar 25 23:19:09 PDT 2018
+    # real    1035m8.587s
+
+    cat faSize.rmsk.txt
+    egrep "bases|Total|masked" faSize.rmsk.txt \
+	| fold -w 75 -s  | sed -e 's/^/# /;'
+# 3050398082 bases (31805092 N's 3018592990 real 1405499360 upper 1613093630 
+# lower) in 4346 sequences in 1 files
+# Total size: mean 701886.4 sd 9434013.2 min 223 (chrUn_NW_019937062v1) max 
+# 224244399 (chr1) median 29187
+# %52.88 masked total, %53.44 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;                                            *
+
+    time featureBits -countGaps ponAbe3 rmsk
+    # 1613093500 bases of 3050398082 (52.881%) in intersection
+    # real    0m35.581s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the faSize count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+    # faster way to get the same result on high contig count assemblies:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' ponAbe3 \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+    # total 1613093500.000000
+    # real    0m38.395s
+
+##########################################################################
+# running simple repeat (DONE - 2018-03-25 - Hiram)
+
+    mkdir /hive/data/genomes/ponAbe3/bed/simpleRepeat
+    cd /hive/data/genomes/ponAbe3/bed/simpleRepeat
+    # using trf409 6 here as similar size to genome (human == 6)
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        -trf409 6 ponAbe3) > do.log 2>&1 &
+XXX - running - Sun Mar 25 23:19:37 PDT 2018
+    # real    273m49.147s
+
+    cat fb.simpleRepeat
+    # 222649611 bases of 3018592990 (7.376%) in intersection
+
+    bigBedInfo *.bb | sed -e 's/^/# /;'
+# version: 4
+# fieldCount: 16
+# hasHeaderExtension: yes
+# isCompressed: yes
+# isSwapped: 0
+# extraIndexCount: 0
+# itemCount: 996,217
+# primaryDataSize: 31,637,595
+# primaryIndexSize: 202,580
+# zoomLevels: 10
+# chromCount: 4274
+# basesCovered: 222,649,611
+# meanDepth (of bases covered): 1.833462
+# minDepth: 1.000000
+# maxDepth: 88.000000
+# std of depth: 2.284835
+
+    # adding this trfMask to the other masking
+    cd /hive/data/genomes/ponAbe3
+
+    # when using the Window Masker result:
+#    twoBitMask bed/windowMasker/ponAbe3.cleanWMSdust.2bit \
+#       -add bed/simpleRepeat/trfMask.bed  ponAbe3.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    # when using Rmsk results, add to rmsk after it is done:
+    twoBitMask ponAbe3.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed ponAbe3.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    twoBitToFa ponAbe3.2bit stdout | faSize stdin > faSize.ponAbe3.2bit.txt
+    egrep "bases|Total|masked" faSize.ponAbe3.2bit.txt \
+	| fold -w 75 -s  | sed -e 's/^/# /;'
+# 3050398082 bases (31805092 N's 3018592990 real 1402090427 upper 1616502563 
+# lower) in 4346 sequences in 1 files
+# Total size: mean 701886.4 sd 9434013.2 min 223 (chrUn_NW_019937062v1) max 
+# 224244399 (chr1) median 29187
+# %52.99 masked total, %53.55 masked real
+
+    # reset the symlink
+    rm /gbdb/ponAbe3/ponAbe3.2bit
+    ln -s `pwd`/ponAbe3.2bit /gbdb/ponAbe3/ponAbe3.2bit
+
+#########################################################################
+# CREATE MICROSAT TRACK (TBD - 2018-03-24 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/ponAbe3/bed/microsat
+    cd /cluster/data/ponAbe3/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed ponAbe3 microsat microsat.bed
+    # Read 28577 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2018-03-25 - Hiram)
+
+    mkdir /hive/data/genomes/ponAbe3/bed/windowMasker
+    cd /hive/data/genomes/ponAbe3/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev ponAbe3) > do.log 2>&1
+XXX - running - Sun Mar 25 23:20:03 PDT 2018
+    # real    188m5.912s
+
+    # Masking statistics
+    cat faSize.ponAbe3.cleanWMSdust.txt
+    egrep "bases|Total|masked" faSize.ponAbe3.cleanWMSdust.txt \
+	| fold -w 75 -s  | sed -e 's/^/# /;'
+# 3050398082 bases (31805092 N's 3018592990 real 1812556664 upper 1206036326 
+# lower) in 4346 sequences in 1 files
+# Total size: mean 701886.4 sd 9434013.2 min 223 (chrUn_NW_019937062v1) max 
+# 224244399 (chr1) median 29187
+# %39.54 masked total, %39.95 masked real
+
+    cat fb.ponAbe3.rmsk.windowmaskerSdust.txt
+    # 971547886 bases of 3050398082 (31.850%) in intersection
+
+#############################################################################
+# ncbiRefSeq (TBD - 2018-03-24 - Hiram)
+
+    # can be run up after ucscToRefSeq table is constructed
+    # and the masked ponAbe2.2bit file
+    mkdir /hive/data/genomes/ponAbe3/bed/ncbiRefSeq
+    cd /hive/data/genomes/ponAbe3/bed/ncbiRefSeq
+
+    # adjust the name arguments
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev \
+      -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_mammalian Pongo_abelii \
+      GCF_002880775.1_Susie_PABv2 ponAbe3) > do.log 2>&1
+    # real    10m2.131s
+
+
+    cat fb.ncbiRefSeq.ponAbe3.txt
+    #  81659062 bases of 2476453204 (3.297%) in intersection
+
+#############################################################################
+# cpgIslands - (TBD - 2018-03-24 - Hiram)
+    mkdir /hive/data/genomes/ponAbe3/bed/cpgIslands
+    cd /hive/data/genomes/ponAbe3/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku ponAbe3) > do.log 2>&1 &
+    # real    5m35.611s
+
+    cat fb.ponAbe3.cpgIslandExt.txt
+    # 22143193 bases of 3018592990 (0.734%) in intersection
+
+##############################################################################
+# genscan - (TBD - 2018-03-24 - Hiram)
+    mkdir /hive/data/genomes/ponAbe3/bed/genscan
+    cd /hive/data/genomes/ponAbe3/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku ponAbe3) > do.log 2>&1 &
+    # real    182m50.882s
+
+    cat fb.ponAbe3.genscan.txt
+    # 53595000 bases of 3018592990 (1.775%) in intersection
+
+    cat fb.ponAbe3.genscanSubopt.txt
+    # 51298399 bases of 3018592990 (1.699%) in intersection
+
+    bigBedInfo ponAbe3.genscan.bb | sed -e 's/^/# /;'
+# version: 4
+# fieldCount: 12
+# hasHeaderExtension: yes
+# isCompressed: yes
+# isSwapped: 0
+# extraIndexCount: 0
+# itemCount: 41,507
+# primaryDataSize: 2,449,724
+# primaryIndexSize: 38,244
+# zoomLevels: 8
+# chromCount: 871
+# basesCovered: 1,998,870,176
+# meanDepth (of bases covered): 1.000000
+# minDepth: 1.000000
+# maxDepth: 1.000000
+# std of depth: 0.000000
+
+#############################################################################
+# augustus gene track (TBD - 2018-03-24 - Hiram)
+
+    mkdir /hive/data/genomes/ponAbe3/bed/augustus
+    cd /hive/data/genomes/ponAbe3/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+     -species=human -dbHost=hgwdev -workhorse=hgwdev ponAbe3) > do.log 2>&1 &
+    # real    98m3.215s
+
+    cat fb.ponAbe3.augustusGene.txt
+    # 50421577 bases of 3018592990 (1.670%) in intersection
+
+     bigBedInfo  ponAbe3.augustus.bb | sed -e 's/^/# /;'
+# version: 4
+# fieldCount: 20
+# hasHeaderExtension: yes
+# isCompressed: yes
+# isSwapped: 0
+# extraIndexCount: 0
+# itemCount: 30,411
+# primaryDataSize: 2,164,577
+# primaryIndexSize: 28,960
+# zoomLevels: 7
+# chromCount: 495
+# basesCovered: 1,295,044,049
+# meanDepth (of bases covered): 1.295008
+# minDepth: 1.000000
+# maxDepth: 4.000000
+# std of depth: 0.662334
+
+#############################################################################
+# lastz/chain/net swap human/hg38 (TBD - 2018-03-24 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/hg38/bed/lastzPonAbe3.2018-03-24
+
+    cat fb.hg38.chainPonAbe3Link.txt
+    # 2910625246 bases of 3049335806 (95.451%) in intersection
+    cat fb.hg38.chainSynPonAbe3Link.txt
+    # 2890994068 bases of 3049335806 (94.807%) in intersection
+    cat fb.hg38.chainRBestPonAbe3Link.txt
+    # 2743876160 bases of 3049335806 (89.983%) in intersection
+
+    # running the swap
+    mkdir /hive/data/genomes/ponAbe3/bed/blastz.hg38.swap
+    cd /hive/data/genomes/ponAbe3/bed/blastz.hg38.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/hg38/bed/lastzPonAbe3.2018-03-24/DEF \
+        -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > swap.log 2>&1
+    # real    101m29.782s
+
+    cat fb.ponAbe3.chainHg38Link.txt
+    # 2814507414 bases of 3018592990 (93.239%) in intersection
+    cat fb.ponAbe3.chainSynHg38Link.txt
+    # 2800642800 bases of 3018592990 (92.780%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+        ponAbe3 hg38) > rbest.log 2>&1 &
+    # real    102m47.533s
+
+    cat fb.ponAbe3.chainRBestHg38Link.txt 
+    # 2748571185 bases of 3018592990 (91.055%) in intersection
+
+#############################################################################
+# lastz/chain/net swap mouse/mm10 (TBD - 2018-03-14 - Hiram)
+
+    # alignment to mouse/mm10:
+    cd /hive/data/genomes/mm10/bed/lastzPonAbe3.2018-03-24/
+
+    cat fb.mm10.chainPonAbe3Link.txt
+    # 935720585 bases of 2652783500 (35.273%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	mm10 ponAbe3) > rbest.log 2>&1 &
+XXX
+    # real    624m28.225s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/ponAbe3/bed/blastz.mm10.swap
+    cd /hive/data/genomes/ponAbe3/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/mm10/bed/lastzPonAbe3.2018-03-24/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    78m57.631s
+
+    cat fb.ponAbe3.chainMm10Link.txt
+    # 934668641 bases of 3018592990 (30.964%) in intersection
+    cat fb.ponAbe3.chainSynMm10Link.txt
+    # 889944141 bases of 3018592990 (29.482%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	ponAbe3 mm10) > rbest.log 2>&1 &
+XXX
+    # real    560m21.432s
+
+    cat fb.ponAbe3.chainRBestMm10Link.txt
+    # 760753851 bases of 2476453204 (30.719%) in intersection
+
+##############################################################################
+# Create kluster run files (TBD - 2018-03-24 - Hiram)
+
+    cd /hive/data/genomes/ponAbe3
+    # numerator is ponAbe3 gapless bases "real" as reported by:
+    featureBits -noRandom -noHap ponAbe3 gap
+    # 28994139 bases of 2803637675 (1.034%) in intersection
+    #                   ^^^
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2803637675 / 2861349177 \) \* 1024
+    #  ( 2803637675 / 2861349177 ) * 1024 = 1003.346604
+
+    # ==> use -repMatch=1000 same as was panTro5
+    cd /hive/data/genomes/ponAbe3
+    blat ponAbe3.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/ponAbe3.11.ooc \
+        -repMatch=1000
+    #  Wrote 36740 overused 11-mers to jkStuff/ponAbe3.11.ooc
+    # panTro5 at repMatch=1000 was:
+    #  Wrote 38245 overused 11-mers to jkStuff/panTro5.11.ooc
+
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N \
+        -e 'select * from gap where bridge="no" order by size;' ponAbe3 \
+        | sort -k7,7nr | ave -col=7 stdin | sed -e 's/^/# /;'
+    # there are many at 100 bases:
+# Q1 100.000000
+# median 100.000000
+# Q3 100.000000
+# average 10930.290698
+# min 10.000000
+# max 500001.000000
+# count 86
+# total 940005.000000
+# standard deviation 56419.602180
+
+    # profile:
+    hgsql -N -e 'select * from gap where bridge="no" order by size;' ponAbe3 \
+	| cut -f7 | sort | uniq -c
+      1 10
+     74 100
+      1 10223
+      1 131931
+      1 15585
+      1 29588
+      1 32403
+      1 33521
+      1 500001
+      2 50001
+      1 70431
+      1 8910
+
+    # therefore, minimum gap size of 100, this is doing non-bridged gaps only
+  gapToLift -verbose=2 -minGap=100 ponAbe3 jkStuff/ponAbe3.nonBridged.lft \
+       -bedFile=stdout | sort -k1,1 -k2,2n > jkStuff/ponAbe3.nonBridged.bed
+
+##############################################################################
+# LIFTOVER TO panTro5 (TBD - 2018-03-24 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/ponAbe3/bed/blat.panTro5.2018-03-24
+    cd /hive/data/genomes/ponAbe3/bed/blat.panTro5.2018-03-24
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/ponAbe3/jkStuff/ponAbe3.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         ponAbe3 panTro5) > do.log 2>&1
+    # real    464m42.018s
+
+    # verify the convert link on the test browser is now active from ponAbe3 to
+    # panTro5
+
+##############################################################################
+# GENBANK AUTO UPDATE (TBD - 2018-03-25 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism      mrnaCnt   estCnt  refSeqCnt
+    # Pan troglodytes 3548    5065    2048
+    # Pan troglodytes schweinfurthii  7       0       0
+    # Pan troglodytes troglodytes     42      0       0
+    # Pan troglodytes verus   126     12315   0
+
+    # edit etc/genbank.conf to add ponAbe3 just before panTro5
+# ponAbe3 (chimp - Pan troglodytes - refseq GCF_002880755.1 - taxId 9598)
+ponAbe3.serverGenome = /hive/data/genomes/ponAbe3/ponAbe3.2bit
+ponAbe3.clusterGenome = /hive/data/genomes/ponAbe3/ponAbe3.2bit
+ponAbe3.ooc = /hive/data/genomes/ponAbe3/jkStuff/ponAbe3.11.ooc
+ponAbe3.lift = /hive/data/genomes/ponAbe3/jkStuff/ponAbe3.nonBridged.lft
+ponAbe3.perChromTables = no
+ponAbe3.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+ponAbe3.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+ponAbe3.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+ponAbe3.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+ponAbe3.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+ponAbe3.genbank.est.xeno.pslCDnaFilter    = ${finished.genbank.est.xeno.pslCDnaFilter}
+ponAbe3.downloadDir = ponAbe3
+# defaults yes: genbank.mrna.native.load genbank.mrna.native.loadDesc
+# yes: genbank.est.native.load refseq.mrna.native.load
+# yes: refseq.mrna.native.loadDesc refseq.mrna.xeno.load
+# yes: refseq.mrna.xeno.loadDesc
+# defaults no: genbank.mrna.xeno.load genbank.mrna.xeno.loadDesc
+# no: genbank.est.native.loadDesc genbank.est.xeno.load
+# no: genbank.est.xeno.loadDesc
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+# have been doing this for chimp too:
+ponAbe3.genbank.mrna.xeno.load = yes
+
+    # verify stated file paths do exist:
+    grep ponAbe3 etc/genbank.conf | egrep "Genome|ooc|lift" \
+	| awk '{print $NF}' | xargs ls -og
+-rw-rw-r-- 1    146968 Mar 24 20:30 /hive/data/genomes/ponAbe3/jkStuff/ponAbe3.11.ooc
+-rw-rw-r-- 1    258184 Mar 25 14:25 /hive/data/genomes/ponAbe3/jkStuff/ponAbe3.nonBridged.lft
+-rw-rw-r-- 1 795113145 Mar 24 20:22 /hive/data/genomes/ponAbe3/ponAbe3.2bit
+-rw-rw-r-- 1 795113145 Mar 24 20:22 /hive/data/genomes/ponAbe3/ponAbe3.2bit
+
+    # add ponAbe3 to:
+    #   etc/align.dbs etc/hgwdev.dbs
+    git commit -m 'adding ponAbe3/cat refs #21043' \
+	etc/genbank.conf etc/align.dbs etc/hgwdev.dbs
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    # XXX a few days later the genbank tables will be in the database
+
+#############################################################################
+#  BLATSERVERS ENTRY (TBD - 2018-08-13 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("ponAbe3", "blat1c", "17900", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("ponAbe3", "blat1c", "17001", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+##############################################################################
+## reset default position to same as what panTro5 has
+##  (TBD - 2018-03-13 - Hiram)
+
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chrA2:53333898-53447862"
+	where name="ponAbe3";' hgcentraltest
+
+##############################################################################
+# all.joiner update, downloads and in pushQ - (TBD - 2018-03-19 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    ~/kent/src/hg/utils/automation/verifyBrowser.pl ponAbe3
+# 65 tables in database ponAbe3 - Cat, Felis catus
+# verified 65 tables, 0 extra tables, 10 optional tables
+# 13 genbank tables found
+# verified 42 tables, 1 missing tables
+# 1     gapOverlap
+# liftOver to previous versions: 2, from previous versions: 2
+
+    # there were no gapOverlap items found
+
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=ponAbe3 -tableCoverage all.joiner
+    joinerCheck -database=ponAbe3 -times all.joiner
+    joinerCheck -database=ponAbe3 -keys all.joiner
+
+    cd /hive/data/genomes/ponAbe3
+    rm -fr TemporaryTrackDbCheckout
+
+    time (makeDownloads.pl -workhorse=hgwdev ponAbe3) > downloads.log 2>&1
+    #  real    26m28.250s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/ponAbe3/pushQ
+    cd /hive/data/genomes/ponAbe3/pushQ
+  time (makePushQSql.pl -redmineList ponAbe3) > ponAbe3.pushQ.sql 2> stderr.out
+    # remove the tandemDups from the file list:
+    sed -i -e "/tandemDups/d" redmine.ponAbe3.table.list
+    sed -i -e "/Tandem Dups/d" redmine.ponAbe3.releaseLog.txt
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: ponAbe3 does not have seq
+    # WARNING: ponAbe3 does not have extFile
+
+    # add the path names to the listing files in the redmine issue
+    # in the three appropriate entry boxes:
+
+/hive/data/genomes/ponAbe3/pushQ/redmine.ponAbe3.file.list
+/hive/data/genomes/ponAbe3/pushQ/redmine.ponAbe3.releaseLog.txt
+/hive/data/genomes/ponAbe3/pushQ/redmine.ponAbe3.table.list
+
+#########################################################################
