@@ -538,7 +538,6 @@ struct linkedFeatures *lf = linkedFeaturesFromGenePred(tg, gp, TRUE);
 if (highlightIds != NULL)
     highlightByGetColor(gp, highlightIds, highlightColor, lf);
 lf->extra = getTranscriptLabel(enabledLabels, gp, attrs);
-genePredFree(&gp);
 wgEncodeGencodeAttrsFree(&attrs);
 return lf;
 }
