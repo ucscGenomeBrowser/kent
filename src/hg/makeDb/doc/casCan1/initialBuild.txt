@@ -207,10 +207,10 @@ standard deviation 2.321342
 
     time (doIdKeys.pl -buildDir=`pwd` -twoBit=`pwd`/refseq.casCan1.2bit \
 	refseqCasCan1) > do.log 2>&1
-XXX - running - Fri Mar 16 15:25:56 PDT 2018
-    # real    7m41.207s
-    cat refseqCasCan1.keySignature.txt
-    # 7ee1e6311557786133154771c3da3ada
+    # real    15m13.836s
+
+    cat  refseqCasCan1.keySignature.txt
+    #   aabc4f017046517667db0eb1192e34e2
 
 #############################################################################
 #  Initial database build (DONE - 2018-03-16 - Hiram)
@@ -300,10 +300,31 @@ basesCovered: 6,828
     time (~/kent/src/hg/utils/automation/doTandemDup.pl \
 	-twoBit="/hive/data/genomes/casCan1/casCan1.unmasked.2bit" \
 	casCan1) > do.log 2>&1
-XXX - running - Sat Mar 17 16:13:52 PDT 2018
+    # real    58m42.975s
+
+    cat fb.casCan1.tandemDups.txt
+    # 30226302 bases of 2518306565 (1.200%) in intersection
+
+bigBedInfo casCan1.tandemDups.bb
+version: 4
+fieldCount: 13
+hasHeaderExtension: yes
+isCompressed: yes
+isSwapped: 0
+extraIndexCount: 0
+itemCount: 463,378
+primaryDataSize: 11,472,847
+primaryIndexSize: 431,732
+zoomLevels: 6
+chromCount: 13097
+basesCovered: 431,491,745
+meanDepth (of bases covered): 6.825069
+minDepth: 1.000000
+maxDepth: 2053.000000
+std of depth: 19.209676
 
 ##########################################################################
-# ucscToINSDC and ucscToRefSeq table/track (TBD - 2018-03-12 - Hiram)
+# ucscToINSDC and ucscToRefSeq table/track (DONE - 2018-03-21 - Hiram)
     # the sequence here is working for a 'refseq' assembly
     # beware of a chrM situation may be specific depending upon what is
     # available in the assembly
@@ -315,11 +336,10 @@ XXX - running - Sat Mar 17 16:13:52 PDT 2018
 
     time (doIdKeys.pl -buildDir=`pwd` -twoBit=`pwd`/genbank.casCan1.2bit \
 	genbankCasCan1) > do.log 2>&1
-XXX - running - Sat Mar 17 16:17:30 PDT 2018
-    # real    21m35.295s
+    # real    24m45.103s
 
     cat genbankCasCan1.keySignature.txt
-    #  7ee1e6311557786133154771c3da3ada
+    #  aabc4f017046517667db0eb1192e34e2
 
     mkdir /hive/data/genomes/casCan1/bed/ucscToINSDC
     cd /hive/data/genomes/casCan1/bed/ucscToINSDC
@@ -338,9 +358,9 @@ XXX - running - Sat Mar 17 16:17:30 PDT 2018
 
     # should be same line counts throughout, only one for the RefSeq:
     wc -l * ../../chrom.sizes
-    #	7930 ucscToINSDC.bed
-    #	7930 ucscToRefSeq.bed
-    #	7930 ../../chrom.sizes
+    #	21157 ucscToINSDC.bed
+    #	21157 ucscToRefSeq.bed
+    #	21157 ../../chrom.sizes
 
     export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
     echo $chrSize
@@ -361,13 +381,13 @@ XXX - running - Sat Mar 17 16:17:30 PDT 2018
 
     # each should cover %100 entirely:
     featureBits -countGaps casCan1 ucscToINSDC
-    # 1424897867 bases of 1424897867 (100.000%) in intersection
+    # 2518306565 bases of 2518306565 (100.000%) in intersection
 
     featureBits -countGaps casCan1 ucscToRefSeq
-    # 1424897867 bases of 1424897867 (100.000%) in intersection
+    # 2518306565 bases of 2518306565 (100.000%) in intersection
 
 #########################################################################
-# add chromAlias table (TBD - 2018-03-14 - Hiram)
+# add chromAlias table (DONE - 2018-03-21 - Hiram)
 
     mkdir /hive/data/genomes/casCan1/bed/chromAlias
     cd /hive/data/genomes/casCan1/bed/chromAlias
@@ -390,39 +410,48 @@ do
   fi
   printf "# checking $t: $c0 =? $c1 $ok\n"
 done
-# checking refseq: 7930 =? 7930 OK
-# checking genbank: 7930 =? 7930 OK
+# checking refseq: 21157 =? 21157 OK
+# checking genbank: 21157 =? 21157 OK
 
     hgLoadSqlTab casCan1 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
         casCan1.chromAlias.tab
 
 #########################################################################
-# fixup search rule for assembly track/gold table (TBD - 2018-03-12 - Hiram)
-    cd ~/kent/src/hg/makeDb/trackDb/reptiles/casCan1
+# fixup search rule for assembly track/gold table (DONE - 2018-03-21 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/mammal/casCan1
 
     # preview prefixes and suffixes:
     hgsql -N -e "select frag from gold;" casCan1 \
       | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c
-#  175977 LFLD.1
+#  21157 NW_v1_1
+#     15 NW_v1_10
+# ... etc ...
+#       1 NW_v1_33
+#     372 NW_v1_4
+#     219 NW_v1_5
+#     126 NW_v1_6
+#      75 NW_v1_7
+#      51 NW_v1_8
+#      28 NW_v1_9
 
-    # implies a rule: 'LFLD01[0-9]{5}p\[0-9]*(.1)?'
+    # implies a rule: 'NW_0178[0-9]{4}[0-9]*(v1_[0-9]+)?'
 
     # verify this rule will find them all and eliminate them all:
     hgsql -N -e "select frag from gold;" casCan1 | wc -l
-    # 175977
+    # 24478
 
     hgsql -N -e "select frag from gold;" casCan1 \
-       | egrep -e 'LFLD01[0-9]{5}[0-9]*(.1)?' | wc -l
-    # 175977
+       | egrep -e 'NW_0178[0-9]{4}[0-9]*(v1_[0-9]+)?' | wc -l
+    # 24478
 
     hgsql -N -e "select frag from gold;" casCan1 \
-       | egrep -v -e 'LFLD01[0-9]{5}[0-9]*(.1)?' | wc -l
+       | egrep -v -e 'NW_0178[0-9]{4}[0-9]*(v1_[0-9]+)?' | wc -l
     # 0
 
     # hence, add to trackDb/reptile/casCan1/trackDb.ra
 searchTable gold
 shortCircuit 1
-termRegex LFLD01[0-9]{5}[0-9]*(.1)?
+termRegex NW_0178[0-9]{4}[0-9]*(v1_[0-9]+)?
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
@@ -437,25 +466,41 @@ searchPriority 8
     time  (~/kent/src/hg/utils/automation/doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku casCan1) > do.log 2>&1 &
-XXX - running - Sat Mar 17 16:01:32 PDT 2018
     # real    100m48.992s
+    # one broken item:
+# RepeatMasker bug?: Undefined id, line 1145096 of input:
+#  384  30.1  7.1  6.3  NW_017870925v1  247145  247272 (1754782) +  MLT1D-int
+#     LTR/ERVL-MaLR         1233 1355   (16) 
+    mv casCan1.fa.out casCan1.fa.out.broken
+    mv casCan1.sorted.fa.out casCan1.sorted.fa.out.broken
+    grep -v "NW_017870925v1  247145  247272" casCan1.sorted.fa.out.broken \
+	> casCan1.sorted.fa.out
+    grep -v "NW_017870925v1  247145  247272" casCan1.fa.out.broken \
+	> casCan1.fa.out
+    /cluster/home/hiram/kent/src/hg/utils/automation/extractNestedRepeats.pl \
+	casCan1.fa.out | sort -k1,1 -k2,2n > casCan1.nestedRepeats.bed
+
+    time  (~/kent/src/hg/utils/automation/doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -continue=mask -smallClusterHub=ku casCan1) > mask.log 2>&1 &
+    # real    22m0.703s
 
     egrep "bases|Total|masked" faSize.rmsk.txt \
 	| fold -w 75 -s  | sed -e 's/^/# /;'
-# 1424897867 bases (302274245 N's 1122623622 real 1060000477 upper 62623145 
-# lower) in 7930 sequences in 1 files
-# Total size: mean 179684.5 sd 338299.0 min 880 (NW_013665609v1) max 3920154 
-# (NW_013657680v1) median 26526
-# %4.39 masked total, %5.58 masked real
+# 2518306565 bases (331911 N's 2517974654 real 1691459912 upper 826514742 
+# lower) in 21157 sequences in 1 files
+# Total size: mean 119029.5 sd 206582.1 min 202 (NW_017887296v1) max 4235486 
+# (NW_017869957v1) median 42406
+# %32.82 masked total, %32.82 masked real
 
     egrep -i "versi|relea" do.log
-    # RepeatMasker version open-4.0.5
-    #    January 31 2015 (open-4-0-5) version of RepeatMasker
-    # CC   RELEASE 20140131;                                            *
+#  February 01 2017 (open-4-0-7) 1.331 version of RepeatMasker
+#  CC    Dfam_Consensus RELEASE 20170127;                            *
+#  CC    RepBase RELEASE 20170127;       
 
     time featureBits -countGaps casCan1 rmsk
-    # 62634553 bases of 1424897867 (4.396%) in intersection
-    # real    0m8.743s
+    # 826515301 bases of 2518306565 (32.820%) in intersection
+    # real    0m39.362s
 
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the faSize count above
@@ -464,8 +509,8 @@ XXX - running - Sat Mar 17 16:01:32 PDT 2018
     # faster way to get the same result on high contig count assemblies:
     time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' casCan1 \
         | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
-    # total 62634553.000000
-    # real    0m5.735s
+    # total 826515301.000000
+    #  real    0m32.096s
 
 ##########################################################################
 # running simple repeat (DONE - 2018-03-17 - Hiram)
@@ -484,25 +529,24 @@ XXX - running - Sat Mar 17 16:01:32 PDT 2018
     # adding this trfMask to the other masking
     cd /hive/data/genomes/casCan1
 
-XXX - ready to go when other masking done - Sat Mar 17 16:18:39 PDT 2018
     # when using the Window Masker result:
-    twoBitMask bed/windowMasker/casCan1.cleanWMSdust.2bit \
-       -add bed/simpleRepeat/trfMask.bed  casCan1.2bit
+#    twoBitMask bed/windowMasker/casCan1.cleanWMSdust.2bit \
+#       -add bed/simpleRepeat/trfMask.bed  casCan1.2bit
     #   you can safely ignore the warning about fields >= 13
 
     # when using Rmsk results, add to rmsk after it is done:
-#    twoBitMask casCan1.rmsk.2bit \
-#        -add bed/simpleRepeat/trfMask.bed casCan1.2bit
+    twoBitMask casCan1.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed casCan1.2bit
     #   you can safely ignore the warning about fields >= 13
 
     twoBitToFa casCan1.2bit stdout | faSize stdin > faSize.casCan1.2bit.txt
     egrep "bases|Total|masked" faSize.casCan1.2bit.txt \
 	| fold -w 78 -s  | sed -e 's/^/# /;'
-# 1424897867 bases (302274245 N's 1122623622 real 736577963 upper 386045659 
-# lower) in 7930 sequences in 1 files
-# Total size: mean 179684.5 sd 338299.0 min 880 (NW_013665609v1) max 3920154 
-# (NW_013657680v1) median 26526
-# %27.09 masked total, %34.39 masked real
+# 2518306565 bases (331911 N's 2517974654 real 1690683148 upper 827291506 
+# lower) in 21157 sequences in 1 files
+# Total size: mean 119029.5 sd 206582.1 min 202 (NW_017887296v1) max 4235486 
+# (NW_017869957v1) median 42406
+# %32.85 masked total, %32.86 masked real
 
     # reset the symlink
     rm /gbdb/casCan1/casCan1.2bit
@@ -521,157 +565,156 @@ XXX - ready to go when other masking done - Sat Mar 17 16:18:39 PDT 2018
     # Read 42247 elements of size 4 from microsat.bed
 
 ##########################################################################
-## WINDOWMASKER (TBD - 2018-03-12 - Hiram)
+## WINDOWMASKER (DONE - 2018-03-17 - Hiram)
 
     mkdir /hive/data/genomes/casCan1/bed/windowMasker
     cd /hive/data/genomes/casCan1/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev casCan1) > do.log 2>&1
-    # real    156m2.988s
+    # real    154m29.883s
+
 
     # Masking statistics
     egrep "bases|Total|masked" faSize.casCan1.cleanWMSdust.txt \
 	| fold -w 78 -s  | sed -e 's/^/# /;'
-# 1424897867 bases (302274245 N's 1122623622 real 736777531 upper 385846091 
-# lower) in 7930 sequences in 1 files
-# Total size: mean 179684.5 sd 338299.0 min 880 (NW_013665609v1) max 3920154 
-# (NW_013657680v1) median 26526
-# %27.08 masked total, %34.37 masked real
+# 2518306565 bases (331911 N's 2517974654 real 1713155625 upper 804819029 
+# lower) in 21157 sequences in 1 files
+# Total size: mean 119029.5 sd 206582.1 min 202 (NW_017887296v1) max 4235486 
+# (NW_017869957v1) median 42406
+# %31.96 masked total, %31.96 masked real
 
     cat fb.casCan1.rmsk.windowmaskerSdust.txt
-    # 55835996 bases of 1424897867 (3.919%) in intersection
+    # 402462670 bases of 2518306565 (15.981%) in intersection
 
 ##########################################################################
-# cpgIslands - (TBD - 2018-03-13 - Hiram)
+# cpgIslands - (DONE - 2018-03-19 - Hiram)
     mkdir /hive/data/genomes/casCan1/bed/cpgIslands
     cd /hive/data/genomes/casCan1/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku casCan1) > do.log 2>&1 &
-    # real    3m5.988s
+    # real    5m34.044s
 
     cat fb.casCan1.cpgIslandExt.txt
-    # 10394140 bases of 1122701795 (0.926%) in intersection
+    # 16800578 bases of 2517974654 (0.667%) in intersection
 
 ##############################################################################
-# genscan - (TBD - 2018-03-13 - Hiram)
+# genscan - (DONE - 2018-03-17 - Hiram)
     mkdir /hive/data/genomes/casCan1/bed/genscan
     cd /hive/data/genomes/casCan1/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku casCan1) > do.log 2>&1 &
-    # real    27m48.117s
+    # real    32m23.411s
 
     cat fb.casCan1.genscan.txt
-    # 26205234 bases of 1122701795 (2.334%) in intersection
+    # 59378168 bases of 2517974654 (2.358%) in intersection
 
     cat fb.casCan1.genscanSubopt.txt
-    # 27408024 bases of 1122701795 (2.441%) in intersection
+    # 66045114 bases of 2517974654 (2.623%) in intersection
 
 #############################################################################
-# augustus gene track (TBD - 2018-03-13 - Hiram)
+# augustus gene track (DONE - 2018-03-17 - Hiram)
 
     mkdir /hive/data/genomes/casCan1/bed/augustus
     cd /hive/data/genomes/casCan1/bed/augustus
 
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
-     -species=chicken -dbHost=hgwdev -workhorse=hgwdev casCan1) \
+     -species=human -dbHost=hgwdev -workhorse=hgwdev casCan1) \
 	> do.log 2>&1 &
-    # real    70m5.863s
+    # real    55m59.141s
 
     cat fb.casCan1.augustusGene.txt
-    # 26140884 bases of 1122701795 (2.328%) in intersection
+    # 52082785 bases of 2517974654 (2.068%) in intersection
 
 ##############################################################################
-# lastz/chain/net swap human/hg38 (TBD - 2018-03-14 - Hiram)
+# lastz/chain/net swap human/hg38 (DONE - 2018-03-19 - Hiram)
 
     # alignment on hg38
-    cd /hive/data/genomes/hg38/bed/lastzCasCan1.2018-02-13
+    cd /hive/data/genomes/hg38/bed/lastzCasCan1.2018-02-19
+
     cat fb.hg38.chainCasCan1Link.txt
-    # 99838535 bases of 3049335806 (3.274%) in intersection
-
+    # 1440538496 bases of 3049335806 (47.241%) in intersection
     cat fb.hg38.chainSynCasCan1Link.txt
-    # 29432396 bases of 3049335806 (0.965%) in intersection
-
+    # 1348638697 bases of 3049335806 (44.227%) in intersection
     cat fb.hg38.chainRBestCasCan1Link.txt
-    # 66452884 bases of 3049335806 (2.179%) in intersection
+    # 1318039475 bases of 3049335806 (43.224%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/casCan1/bed/blastz.hg38.swap
     cd /hive/data/genomes/casCan1/bed/blastz.hg38.swap
-
     time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/hg38/bed/lastzCasCan1.2018-02-13/DEF \
-        -swap -chainMinScore=5000 -chainLinearGap=loose \
+        /hive/data/genomes/hg38/bed/lastzCasCan1.2018-03-19/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-            -syntenicNet) > swap.log 2>&1 &
-    #  real    16m52.956s
+            -swap -syntenicNet) > swap.log 2>&1 &
+    # real    141m44.555s
 
     cat fb.casCan1.chainHg38Link.txt
-    # 75915958 bases of 1122701795 (6.762%) in intersection
-
+    # 1440839903 bases of 2517974654 (57.222%) in intersection
     cat fb.casCan1.chainSynHg38Link.txt
-    # 28865261 bases of 1122701795 (2.571%) in intersection
+    # 1348477433 bases of 2517974654 (53.554%) in intersection
 
-    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` casCan1 hg38)\
-	 > rbest.log 2>&1
-    # real    269m56.160s
+    time (doRecipBest.pl -load -workhorse=hgwdev \
+	-buildDir=`pwd` casCan1 hg38) > rbest.log 2>&1 &
+    # real    1199m30.336s
 
     cat fb.casCan1.chainRBestHg38Link.txt
-    # 66545073 bases of 1122701795 (5.927%) in intersection
+    # 1321240715 bases of 2517974654 (52.472%) in intersection
 
 ##############################################################################
-# lastz/chain/net swap mouse/mm10 (TBD - 2018-03-13 - Hiram)
+# lastz/chain/net swap mouse/mm10 (DONE - 2018-03-19 - Hiram)
 
     # original alignment to mm10
-    cd /hive/data/genomes/mm10/bed/lastzCasCan1.2018-03-13
+    cd /hive/data/genomes/mm10/bed/lastzCasCan1.2018-03-19
+
     cat fb.mm10.chainCasCan1Link.txt
-    #	78464036 bases of 2652783500 (2.958%) in intersection
-
+    #	969752969 bases of 2652783500 (36.556%) in intersection
     cat fb.mm10.chainRBestCasCan1Link.txt
-    # 54099233 bases of 2652783500 (2.039%) in intersection
+    # 912108399 bases of 2652783500 (34.383%) in intersection
 
-    #	and for the swap
     mkdir /hive/data/genomes/casCan1/bed/blastz.mm10.swap
     cd /hive/data/genomes/casCan1/bed/blastz.mm10.swap
-    time (doBlastzChainNet.pl -verbose=2 -syntenicNet \
-	/hive/data/genomes/mm10/bed/lastzCasCan1.2018-03-13/DEF \
-          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-           -swap -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1 &
-    #	real    11m28.892s
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzCasCan1.2018-03-19/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    100m12.450s
 
-    cat  fb.casCan1.chainMm10Link.txt
-    #	63814138 bases of 1122701795 (5.684%) in intersection
+    cat fb.casCan1.chainMm10Link.txt
+    # 1027587643 bases of 2517974654 (40.810%) in intersection
     cat fb.casCan1.chainSynMm10Link.txt
-    # 20728394 bases of 1122701795 (1.846%) in intersection
+    # 876969229 bases of 2517974654 (34.828%) in intersection
 
-    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` casCan1 mm10) \
-	> rbest.log 2>&1 &
-    # real    234m31.934s
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` casCan1 mm10) \
+	> rbest.log 2>&1
+    # real    1280m7.127s
 
     cat fb.casCan1.chainRBestMm10Link.txt
-    # 54778217 bases of 1122701795 (4.879%) in intersection
+    # 911437520 bases of 2517974654 (36.197%) in intersection
 
 ##############################################################################
-# Create kluster run files (TBD - 2018-03-13 - Hiram)
+# Create kluster run files (DONE - 2018-03-17 - Hiram)
 
     # numerator is casCan1 gapless bases "real" as reported by:
     featureBits -noRandom -noHap casCan1 gap
-    # 302196072 bases of 1122701795 (26.917%) in intersection
+    # 331911 bases of 2517974654 (0.013%) in intersection
     #                     ^^^
 
     # denominator is hg19 gapless bases as reported by:
     #   featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 1122701795 / 2861349177 \) \* 1024
-    #  ( 1122701795 / 2861349177 ) * 1024 = 401.784811
+    calc \( 2517974654 / 2861349177 \) \* 1024
+    #  ( 2517974654 / 2861349177 ) * 1024 = 901.115483
 
-    # ==> use -repMatch=400 according to size scaled down from 1024 for human.
+    # ==> use -repMatch=900 according to size scaled down from 1024 for human.
     #   and rounded to nearest 50
     cd /hive/data/genomes/casCan1
     blat casCan1.2bit \
          /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/casCan1.11.ooc \
-        -repMatch=400
-    #   Wrote 29799 overused 11-mers to jkStuff/casCan1.11.ooc
+        -repMatch=900
+    #   Wrote 30908 overused 11-mers to jkStuff/casCan1.11.ooc
+
 
     #   check non-bridged gaps to see what the typical size is:
     # there are no non-bridged gaps in this contig assembly
@@ -691,37 +734,33 @@ XXX - ready to go when other masking done - Sat Mar 17 16:18:39 PDT 2018
 #       -bedFile=jkStuff/nonBridged.bed
 
 #########################################################################
-# GENBANK AUTO UPDATE (TBD - 2018-01-13 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2018-01-19 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # /cluster/data/genbank/data/organism.lst shows:
     # #organism             mrnaCnt   estCnt  refSeqCnt
-    # Thamnophis sirtalis     9       0       0
+    # Castor canadensis       2       0       0
 
     # edit src/lib/gbGenome.c to add thaSirNames definitions
-# static char *thaSirNames[] = {"Thamnophis sirtalis", NULL};
+# static char *casCanNames[] = {"Castor canadensis", NULL};
 #             . . .
-#     {"thaSir", thaSirNames},
+#     {"casCan", casCanNames},
 
-    git commit -m "Added casCan1/Thamnophis sirtalis/Garter snake; refs #16028" src/lib/gbGenome.c
-    git push
-    make install-server
+    # edit etc/genbank.conf to add casCan1 just before dipOrd1
 
-    # edit etc/genbank.conf to add casCan1 just after anoCar1
-
-# casCan1 (Thamnophis sirtalis/Garter snake taxId 35019 GCF_001077635.1)
-#          7930 contigs
+# casCan1 (American beaver/Castor canadensis/taxId 51338)
 casCan1.serverGenome = /hive/data/genomes/casCan1/casCan1.2bit
 casCan1.clusterGenome = /hive/data/genomes/casCan1/casCan1.2bit
-casCan1.ooc = /hive/data/genomes/jkStuff/casCan1.11.ooc
+casCan1.ooc = /hive/data/genomes/casCan1/jkStuff/casCan1.11.ooc
 casCan1.lift = no
-casCan1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
-casCan1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
-casCan1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
-casCan1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
-casCan1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
-casCan1.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaFilter}
+casCan1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+casCan1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+casCan1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+casCan1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+casCan1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+casCan1.genbank.est.xeno.pslCDnaFilter  = ${ordered.genbank.est.xeno.pslCDnaFilter}
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
 # defaults yes: genbank.mrna.native.load genbank.mrna.native.loadDesc
 # yes: genbank.est.native.load refseq.mrna.native.load
 # yes: refseq.mrna.native.loadDesc refseq.mrna.xeno.load
@@ -729,60 +768,31 @@ casCan1.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaF
 # defaults no: genbank.mrna.xeno.load genbank.mrna.xeno.loadDesc
 # no: genbank.est.native.loadDesc genbank.est.xeno.load
 # no: genbank.est.xeno.loadDesc
-# DO NOT NEED genbank.mrna.xeno except for human, mouse
+# there are zero native est or refSeq for casCan1
+casCan1.genbank.est.native.load = no
+casCan1.refseq.mrna.native.load = no
+casCan1.refseq.mrna.native.loadDesc = no
 casCan1.downloadDir = casCan1
 casCan1.perChromTables = no
-# casCan1.upstreamGeneTbl = ensGene
+
+    # enable daily alignment and update of hgwdev
+    # add casCan1 to:
+    #   etc/align.dbs etc/hgwdev.dbs
 
     git commit -m \
-     'adding casCan1 - Thamnophis sirtalis/Garter snake refs #16028' \
-	 etc/genbank.conf
-    # enable daily alignment and update of hgwdev
-    # add casCan1 to:
-    #   etc/align.dbs etc/hgwdev.dbs
-    git commit -m 'adding casCan1 to the update alignments refs #16028' etc/align.dbs etc/hgwdev.dbs
+	"Added casCan1/Castor canadensis/American beaver; refs #21116" \
+	src/lib/gbGenome.c etc/genbank.conf etc/align.dbs etc/hgwdev.dbs
+
     git push
     # update /cluster/data/genbank/:
+    make install-server
     make etc-update
 
-    # XXX wait a couple days, the automatic daily runs of genbank will pick
-    # this up and get the initial run done - Tue Mar 13 10:27:17 PDT 2018
-
-    cd /cluster/data/genbank
-
-    time ./bin/gbAlignStep -initial casCan1
-    # logFile: var/build/logs/2018.01.12-21:18:31.casCan1.initalign.log
-    #   approximately 3 hours
-
-    tail -2 var/build/logs/2018.01.12-21:18:31.casCan1.initalign.log
-    # hgwdev 2018.01.13-00:16:58 casCan1.initalign: Succeeded: casCan1
-    # hgwdev 2018.01.13-00:18:27 casCan1.initalign: finish
-
-    #   To re-do, rm the dir first:
-    #     /cluster/data/genbank/work/initial.casCan1
-
-    # load database when finished
-    ssh hgwdev
-    cd /cluster/data/genbank
-    time ./bin/gbDbLoadStep -drop -initialLoad casCan1
-    # logFile: var/dbload/hgwdev/logs/2018.01.14-00:30:59.casCan1.dbload.log
-    #  real    18m50.768s
-
-    tail -1 var/dbload/hgwdev/logs/2018.01.14-00:30:59.casCan1.dbload.log
-    #  hgwdev 2018.01.14-00:49:50 casCan1.dbload: finish
-
-    # enable daily alignment and update of hgwdev
-    cd ~/kent/src/hg/makeDb/genbank
-    git pull
-    # add casCan1 to:
-    #   etc/align.dbs etc/hgwdev.dbs
-    git add etc/align.dbs etc/hgwdev.dbs
-    git commit -m 'adding casCan1 to the update alignments refs #16028' etc/align.dbs etc/hgwdev.dbs
-    git push
-    make etc-update
+    # wait a couple days, the automatic daily runs of genbank will pick
+    # this up and get the initial run done
 
 #############################################################################
-# ncbiRefSeq (TBD - 2018-03-15 - Hiram)
+# ncbiRefSeq (DONE - 2018-03-19 - Hiram)
 #       when assembly is from refseq, can run up this track, not so genbank
 
     mkdir /hive/data/genomes/casCan1/bed/ncbiRefSeq
@@ -791,58 +801,71 @@ casCan1.perChromTables = no
     time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
       -bigClusterHub=ku -dbHost=hgwdev \
       -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
-      refseq vertebrate_other Thamnophis_sirtalis \
-      GCF_001077635.1_Thamnophis_sirtalis-6.0 casCan1) > do.log 2>&1
-    # real    2m49.739s
+      refseq vertebrate_mammalian Castor_canadensis \
+      GCF_001984765.1_C.can_genome_v1.0 casCan1) > do.log 2>&1
+    # real    24m26.335s
 
     cat fb.ncbiRefSeq.casCan1.txt
-    #  43026874 bases of 1122701795 (3.832%) in intersection
+    #  54122633 bases of 2517974654 (2.149%) in intersection
 
     # interesting to intersect with refGene track
     featureBits casCan1 -enrichment ncbiRefSeq refGene
 
 #############################################################################
-#  BLATSERVERS ENTRY (TBD - 2018-03-14 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2018-03-21 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("casCan1", "blat1c", "17902", "1", "0"); \
+	VALUES ("casCan1", "blat1d", "17896", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("casCan1", "blat1c", "17903", "0", "1");' \
+	VALUES ("casCan1", "blat1d", "17897", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
 ############################################################################
-## reset default position to NOTCH3 gene location as found by blat of the cDNA
-##  (TBD - 2018-03-14 - Hiram)
-## This gene works in concert with the FGF8/Wnt3a gradient to construct
-## the extended vertebrate with the 'somitogenesis clock'
-##  https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3394116/
+## reset default position to DSPP gene location (DONE - 2018-03-21 - Hiram)
+##  where the beaver mRNA KY286067
+##     is located.  This is the gene for dentin sialophosphoprotein
+##     https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=PubMed&term=Dspp&doptcmdl=DocSum
 
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="NW_013657986v1:596051-618240"
+    hgsql -e 'update dbDb set defaultPos="NW_017884132v1:4754-15103"
 	where name="casCan1";' hgcentraltest
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (TBD - 2018-03-14 - Hiram)
+# all.joiner update, downloads and in pushQ - (DONE - 2018-03-21 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
+
+    ~/kent/src/hg/utils/automation/verifyBrowser.pl casCan1
+# 59 tables in database casCan1 - Beaver, Castor canadensis
+# verified 58 tables, 1 extra tables, 9 optional tables
+# NCBI RefSeq genes     9 optional tables
+# 1     tantan  - extra table
+# 6 genbank tables found
+# verified 43 tables, 0 missing tables
+
     # fixup all.joiner until this is a clean output
     joinerCheck -database=casCan1 -tableCoverage all.joiner
     joinerCheck -database=casCan1 -times all.joiner
-    joinerCheck -database=casCan1 -keys all.joiner
-
+    time joinerCheck -database=casCan1 -keys all.joiner
+    # real    5m48.632s
 
     cd /hive/data/genomes/casCan1
     time (makeDownloads.pl -workhorse=hgwdev casCan1) > downloads.log 2>&1
-    #  real    9m36.528s
+    #  real    46m7.888s
 
-XXX - waiting for genbank completion
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/casCan1/pushQ
     cd /hive/data/genomes/casCan1/pushQ
   time (makePushQSql.pl -redmineList casCan1) > casCan1.pushQ.sql 2> stderr.out
-    #  real    3m59.567s
+    #  real    7m9.557s
+
+    # remove the tandemDups and gapOverlap from the listings:
+    sed -i -e "/tandemDups/d" redmine.casCan1.table.list
+    sed -i -e "/Tandem Dups/d" redmine.casCan1.releaseLog.txt
+    sed -i -e "/gapOverlap/d" redmine.casCan1.table.list
+    sed -i -e "/Gap Overlaps/d" redmine.casCan1.releaseLog.txt
 
     #   check for errors in stderr.out, some are OK, e.g.:
     # WARNING: casCan1 does not have seq
@@ -858,11 +881,11 @@ XXX - waiting for genbank completion
     # to verify the database.table list is correct, should be the same
     # line count for these two commands:
     wc -l redmine.casCan1.table.list
-    # 67 redmine.casCan1.table.list
+    # 46 redmine.casCan1.table.list
     awk -F'.' '{
 printf "hgsql -N -e \"show table status like '"'"'%s'"'"';\" %s\n", $2, $1
 }' redmine.casCan1.table.list | while read L; do eval $L; done | wc -l
-    # 67
+    # 46
 
     # enter the path names to these files in the redmine issue to
     # make QA Ready:

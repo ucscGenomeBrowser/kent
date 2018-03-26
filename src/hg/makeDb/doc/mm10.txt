@@ -15674,6 +15674,9 @@ TMPDIR=/dev/shm
       -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
     # real    307m18.396s
 
+    cat fb.mm10.chainRBestNeoSch1Link.txt
+    #   788489846 bases of 2652783500 (29.723%) in intersection
+
     mkdir /hive/data/genomes/neoSch1/bed/blastz.mm10.swap
     cd /hive/data/genomes/neoSch1/bed/blastz.mm10.swap
     time (doBlastzChainNet.pl -verbose=2 \
@@ -15691,6 +15694,9 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -load -workhorse=hgwdev neoSch1 mm10 \
       -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
     # real    242m31.157s
+
+    cat fb.neoSch1.chainRBestMm10Link.txt
+    # 787537751 bases of 2400839308 (32.803%) in intersection
 
 ##############################################################################
 # LASTZ Sooty mangabey cerAty1 (DONE - 2017-09-27 - Hiram)
@@ -16685,7 +16691,7 @@ TMPDIR=/dev/shm
     # 760753851 bases of 2476453204 (30.719%) in intersection
 
 ##############################################################################
-# LASTZ Beaver vs. mouse/Mm10 (DONE - 2018-03-19 - Hiram)
+# LASTZ Beaver casCan1 vs. mouse/Mm10 (DONE - 2018-03-19 - Hiram)
     mkdir /hive/data/genomes/mm10/bed/lastzCasCan1.2018-03-19
     cd /hive/data/genomes/mm10/bed/lastzCasCan1.2018-03-19
 
@@ -16724,11 +16730,10 @@ TMPDIR=/dev/shm
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` mm10 casCan1) \
 	> rbest.log 2>&1 &
-XXX - running - Tue Mar 20 06:50:56 PDT 2018
-    # real    439m56.601s
+    # real    981m12.451s
 
     cat fb.mm10.chainRBestCasCan1Link.txt
-    # 605074450 bases of 2652783500 (22.809%) in intersection
+    # 912108399 bases of 2652783500 (34.383%) in intersection
 
     mkdir /hive/data/genomes/casCan1/bed/blastz.mm10.swap
     cd /hive/data/genomes/casCan1/bed/blastz.mm10.swap
@@ -16746,10 +16751,77 @@ XXX - running - Tue Mar 20 06:50:56 PDT 2018
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` casCan1 mm10) \
 	> rbest.log 2>&1
-XXX - running - Tue Mar 20 09:33:12 PDT 2018
-    # real    412m53.879s
+    # real    1280m7.127s
 
     cat fb.casCan1.chainRBestMm10Link.txt
-    # 605056621 bases of 2065314047 (29.296%) in intersection
+    # 911437520 bases of 2517974654 (36.197%) in intersection
 
 ##############################################################################
+# LASTZ mouse/mm10 Chimp/panTro6 - (DONE - 2018-03-24 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzPanTro6.2018-03-24
+    cd /hive/data/genomes/mm10/bed/lastzPanTro6.2018-03-24
+
+    printf '# mouse vs chimp
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=10
+# the default matrix is:
+#       A     C     G     T
+# A    91  -114   -31  -123
+# C  -114   100  -125   -31
+# G   -31  -125   100  -114
+# T  -123   -31  -114    91
+
+# QUERY: chimp panTro6
+SEQ2_DIR=/hive/data/genomes/panTro6/panTro6.2bit
+SEQ2_LEN=/hive/data/genomes/panTro6/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=40
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzPanTro6.2018-03-24
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1 &
+    #  real    347m21.874s
+
+    cat fb.mm10.chainPanTro6Link.txt
+    # 935720585 bases of 2652783500 (35.273%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	mm10 panTro6) > rbest.log 2>&1 &
+XXX
+    # real    624m28.225s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/panTro6/bed/blastz.mm10.swap
+    cd /hive/data/genomes/panTro6/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/mm10/bed/lastzPanTro6.2018-03-24/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    78m57.631s
+
+    cat fb.panTro6.chainMm10Link.txt
+    # 934668641 bases of 3018592990 (30.964%) in intersection
+    cat fb.panTro6.chainSynMm10Link.txt
+    # 889944141 bases of 3018592990 (29.482%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	panTro6 mm10) > rbest.log 2>&1 &
+XXX
+    # real    560m21.432s
+
+#########################################################################

@@ -144,6 +144,7 @@
 #include "bedTabix.h"
 #include "knetUdc.h"
 #include "trackHub.h"
+#include "hubConnect.h"
 
 #define CHROM_COLORS 26
 
@@ -14324,11 +14325,21 @@ if (sameWord(tdb->track, "ensGene"))
     }
 else if (startsWith("ncbiRef", tdb->track))
     {
-    struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
-    if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
+    char *version = checkDataVersion(database, tdb);
+
+    // if not in that file, check the trackVersion table
+    if (version == NULL)
+	{
+	struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
+	if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
+	    {
+	    version = cloneString(trackVersion->version);
+	    }
+	}
+    if (version)
 	{
 	char longLabel[1024];
-	safef(longLabel, sizeof(longLabel), "%s - Annotation Release %s", tdb->longLabel, trackVersion->version);
+	safef(longLabel, sizeof(longLabel), "%s - Annotation Release %s", tdb->longLabel, version);
 	track->longLabel = cloneString(longLabel);
 	tdb->longLabel = cloneString(longLabel);
 	}

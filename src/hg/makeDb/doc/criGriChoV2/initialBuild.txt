@@ -744,40 +744,50 @@ liftUp /hive/data/genomes/criGriChoV2/jkStuff/ensToUcsc.lift
     # this is the big cluster job
     time (~/kent/src/hg/utils/automation/doCrispr.pl -continue=specScores \
    -stop=specScores -buildDir=`pwd` criGriChoV2 ensGene) > specScores.log 2>&1
-XXX - running - Mon Jan  8 14:02:01 PST 2018
+    # broke down due to parasol failure, continued and finished manually
 
-    # real    1110m57.233s
-# Completed: 186799 of 186799 jobs
-# CPU time in finished jobs:   12910905s  215181.76m  3586.36h  149.43d  0.409 y
-# IO & Wait Time:              47964247s  799404.11m 13323.40h  555.14d  1.521 y
-# Average job time:                 326s       5.43m     0.09h    0.00d
-# Longest finished job:             580s       9.67m     0.16h    0.01d
-# Submission to last job:         63574s    1059.57m    17.66h    0.74d
+Completed: 544739 of 1218178 jobs
+Crashed: 1790 jobs
+Other count: 671649 jobs
+CPU time in finished jobs:  213876683s 3564611.38m 59410.19h 2475.42d  6.782 y
+IO & Wait Time:             847003571s 14116726.19m 235278.77h 9803.28d 26.858 y
+Average job time:                1948s      32.46m     0.54h    0.02d
+Longest finished job:            8310s     138.50m     2.31h    0.10d
+Submission to last job:       1987720s   33128.67m   552.14h   23.01d
+
+Completed: 287759 of 287759 jobs
+CPU time in finished jobs:  188994779s 3149912.98m 52498.55h 2187.44d  5.993 y
+IO & Wait Time:             798342951s 13305715.85m 221761.93h 9240.08d 25.315 y
+Average job time:                3431s      57.19m     0.95h    0.04d
+Longest finished job:            8728s     145.47m     2.42h    0.10d
+Submission to last job:       1003359s   16722.65m   278.71h   11.61d
 
 
     time (~/kent/src/hg/utils/automation/doCrispr.pl -continue=effScores \
 	-stop=offTargets -buildDir=`pwd` criGriChoV2 ensGene) \
 	> effScores.offTargets.log 2>&1
+
     # real    251m21.154s
 # effScores
-# Completed: 1413 of 1413 jobs
-# CPU time in finished jobs:     793726s   13228.77m   220.48h    9.19d  0.025 y
-# IO & Wait Time:                 10053s     167.55m     2.79h    0.12d  0.000 y
-# Average job time:                 569s       9.48m     0.16h    0.01d
-# Longest finished job:           13440s     224.00m     3.73h    0.16d
-# Submission to last job:         14019s     233.65m     3.89h    0.16d
+# Completed: 9619 of 9619 jobs
+# CPU time in finished jobs:    5657498s   94291.64m  1571.53h   65.48d  0.179 y
+# IO & Wait Time:                 94605s    1576.75m    26.28h    1.09d  0.003 y
+# Average job time:                 598s       9.97m     0.17h    0.01d
+# Longest finished job:            6154s     102.57m     1.71h    0.07d
+# Submission to last job:         11237s     187.28m     3.12h    0.13d
 
 # offTargets
-# Completed: 9340 of 9340 jobs
-# CPU time in finished jobs:      14042s     234.03m     3.90h    0.16d  0.000 y
-# IO & Wait Time:                 37970s     632.84m    10.55h    0.44d  0.001 y
-# Average job time:                   6s       0.09m     0.00h    0.00d
-# Longest finished job:              10s       0.17m     0.00h    0.00d
-# Submission to last job:            66s       1.10m     0.02h    0.00d
+Completed: 60909 of 60909 jobs
+CPU time in finished jobs:     880799s   14679.98m   244.67h   10.19d  0.028 y
+IO & Wait Time:                860327s   14338.79m   238.98h    9.96d  0.027 y
+Average job time:                  29s       0.48m     0.01h    0.00d
+Longest finished job:              48s       0.80m     0.01h    0.00d
+Submission to last job:       1104699s   18411.65m   306.86h   12.79d
 
     time (~/kent/src/hg/utils/automation/doCrispr.pl -continue=load \
 	-stop=load -buildDir=`pwd` criGriChoV2 ensGene) \
 	> load.log 2>&1
+XXX - running - Tue Feb 27 12:27:24 PST 2018
     # real    13m52.830s
 
     featureBits -countGaps criGriChoV2 crispr10KRanges

@@ -21,9 +21,9 @@
 #include "stdlib.h"
 
 /* Tool tips */
-#define COLLECTIONTITLE  "Double-click to edit name and color"
-#define FOLDERTITLE      "Click to open node"
-#define TRACKTITLE       "Press Green Plus to add track to collection"
+#define COLLECTION_TITLE  "Double-click to edit name and color"
+#define FOLDER_TITLE      "Click to open node"
+#define TRACK_TITLE       "Press Green Plus to add track to collection"
 
 /* Global Variables */
 struct hash *oldVars = NULL;	/* The cart before new cgi stuff added. */
@@ -163,11 +163,11 @@ char *userString = "";
 char *title;
 
 if (user)
-    title = COLLECTIONTITLE;
+    title = COLLECTION_TITLE;
 else if (tdb->subtracks)
-    title = FOLDERTITLE;
+    title = FOLDER_TITLE;
 else
-    title = TRACKTITLE;
+    title = TRACK_TITLE;
 
 if (tdb->subtracks)
     userString = "icon:'../images/folderC.png',children:true,";
@@ -354,7 +354,7 @@ for(tdb = trackList; tdb; tdb = tdb->next)
 slSort(&tdbRefList, tdbRefCompare);
 if (!isEmpty(rootChildren->string))
     dyStringPrintf(rootChildren, ",");
-dyStringPrintf(rootChildren, "{icon:'../images/folderC.png',id:'visible', text:'Visible Tracks', parent:'#', li_attr:{title:'%s'} ", FOLDERTITLE);
+dyStringPrintf(rootChildren, "{icon:'../images/folderC.png',id:'visible', text:'Visible Tracks', parent:'#', li_attr:{title:'%s'} ", FOLDER_TITLE);
 if (tdbRefList != NULL)
     dyStringPrintf(rootChildren, ",children:true");
 dyStringPrintf(rootChildren, "}");
@@ -470,7 +470,7 @@ for(curGroup = groupList; curGroup;  curGroup = curGroup->next)
         continue;
     if (!isEmpty(rootChildren->string))
         dyStringPrintf(rootChildren, ",");
-    dyStringPrintf(rootChildren, "{icon:'../images/folderC.png',id:'%s', text:'%s', parent:'#', children:true,li_attr:{title:'%s'}}", curGroup->name, curGroup->label, FOLDERTITLE);
+    dyStringPrintf(rootChildren, "{icon:'../images/folderC.png',id:'%s', text:'%s', parent:'#', children:true,li_attr:{title:'%s'}}", curGroup->name, curGroup->label, FOLDER_TITLE);
     struct trackDb *tdb;
     jsInlineF("trackData['%s'] = [", curGroup->name);
     boolean first = TRUE;
@@ -492,9 +492,9 @@ for(curGroup = groupList; curGroup;  curGroup = curGroup->next)
         }
     }
 jsInlineF("trackData['#'] = [%s];", rootChildren->string);
-jsInlineF("var collectionTitle='%s';\n", COLLECTIONTITLE);
-jsInlineF("var folderTitle='%s';\n",  FOLDERTITLE);
-jsInlineF("var trackTitle='%s';\n", TRACKTITLE);
+jsInlineF("var collectionTitle='%s';\n", COLLECTION_TITLE);
+jsInlineF("var folderTitle='%s';\n",  FOLDER_TITLE);
+jsInlineF("var trackTitle='%s';\n", TRACK_TITLE);
 jsInlineF("hgCollection.init();\n");
 }
 

@@ -265,6 +265,15 @@ sub getTrackDb {
 	$settingHash{$tag} = $value;
 	&HgAutomate::verbose(2, "$i: $tag='$value'\n");
     }
+    if ($type =~ /^psl/) {
+      if ($settings =~ /pepTable\s+(\w+)/) {
+	$otherTables .= " $1";
+      }
+      if ($settings =~ /baseColorUseSequence\s+(\w+)\s+(\w+)\s+(\w+)/) {
+	$otherTables .= " $2";
+	$otherTables .= " $3";
+      }
+    }
     if ($type =~ /^wigMaf/) {
       if ($settings =~ /wiggle\s+(\w+)/) {
 	$otherTables .= " $1";
@@ -348,7 +357,11 @@ sub getTrackEntries {
       $entry{'tables'} = $table . $otherTables;
       $entry{'redmineTables'} = "$db.$table";
       if (length($otherTables)) {
-          $entry{'redmineTables'} .= "$db.$otherTables";
+          $otherTables =~ s/^ +//;
+          my @tbls = split('\s+', $otherTables);
+          foreach my $table (@tbls) {
+            $entry{'redmineTables'} .= " $db.$table";
+          }
       }
       $entry{'files'} = "";
       $entry{'redmineFiles'} = "";

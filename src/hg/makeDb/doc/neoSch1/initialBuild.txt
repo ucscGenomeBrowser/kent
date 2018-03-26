@@ -321,6 +321,25 @@ taxId 29088
     # the sequence here is working for a 'refseq' assembly with a chrM
     # situation may be specific depending upon what is available in the assembly
 
+    # refseq assembly came out after we ran this up.  Compute it ids:
+    mkdir /hive/data/genomes/neoSch1/refseq
+    cd /hive/data/genomes/neoSch1/refseq
+    time rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/refseq/vertebrate_mammalian/Neomonachus_schauinslandi/all_assembly_versions/GCF_002201575.1_ASM220157v1/ ./
+   # sent 631 bytes  received 2674936273 bytes  25597482.33 bytes/sec
+   # total size is 2674606651  speedup is 1.00
+   # real    1m44.075s
+
+    mkdir /hive/data/genomes/neoSch1/refseq/idKeys
+    cd /hive/data/genomes/neoSch1/refseq/idKeys
+
+    faToTwoBit ../GCF_002201575.1_ASM220157v1_genomic.fna.gz refseq.neoSch1.2bit
+    time (doIdKeys.pl -twoBit=`pwd`/refseq.neoSch1.2bit -buildDir=`pwd` \
+	refseqNeoSch1) > do.log 2>&1
+    # real    12m15.428s
+    cat refseqNeoSch1.keySignature.txt
+    # 693347c3f7f03f2fde19c607fe7bb4ad
+
     mkdir /hive/data/genomes/neoSch1/bed/ucscToINSDC
     cd /hive/data/genomes/neoSch1/bed/ucscToINSDC
 
@@ -389,7 +408,18 @@ ucscToRefSeq.bed:chrM   0       16754   NC_008421.1
     featureBits -countGaps neoSch1 ucscToRefSeq
     # 2400839308 bases of 2400839308 (100.000%) in intersection
 
-#########################################################################
+##########################################################################
+# run up idKeys files for chromAlias (DONE - 2018-03-15 - Hiram)
+    mkdir /hive/data/genomes/neoSch1/bed/idKeys
+    cd /hive/data/genomes/neoSch1/bed/idKeys
+
+    time (doIdKeys.pl -twoBit=/hive/data/genomes/neoSch1/neoSch1.unmasked.2bit -buildDir=`pwd` neoSch1) > do.log 2>&1 &
+    # real    12m36.636s
+
+    cat neoSch1.keySignature.txt
+    #   cbeabb8faa38538267584374b47d8f3b
+
+##########################################################################
 # add chromAlias table (DONE - 2017-09-22 - Hiram)
 
     mkdir /hive/data/genomes/neoSch1/bed/chromAlias
@@ -478,34 +508,19 @@ searchPriority 8
     # 30655113 bases of 2400839308 (1.277%) in intersection
 
 ##############################################################################
-# ncbiRefSeq gene track (TBD - 2016-05-05 - Hiram)
+# ncbiRefSeq gene track (DONE - 2018-03-15 - Hiram)
     mkdir /hive/data/genomes/neoSch1/bed/ncbiRefSeq
     cd /hive/data/genomes/neoSch1/bed/ncbiRefSeq
 
-    # working on this script, running step by step:
-    time (/cluster/home/hiram/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
-  -stop=download -buildDir=`pwd` -bigClusterHub=ku \
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+  -buildDir=`pwd` -bigClusterHub=ku \
   -fileServer=hgwdev -workhorse=hgwdev -smallClusterHub=ku -dbHost=hgwdev \
-      refseq vertebrate_mammalian Pan_paniscus \
-         GCF_000258655.2_panpan1.1 neoSch1) > download.log 2>&1
-    # real    12m36.320s
-
-    time (/cluster/home/hiram/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
-  -continue=process -stop=process -buildDir=`pwd` -bigClusterHub=ku \
-  -fileServer=hgwdev -workhorse=hgwdev -smallClusterHub=ku -dbHost=hgwdev \
-      refseq vertebrate_mammalian Pan_paniscus \
-         GCF_000258655.2_panpan1.1 neoSch1) > process.log 2>&1
-    # real    4m22.621s
-
-    time (/cluster/home/hiram/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
-  -continue=load -stop=load -buildDir=`pwd` -bigClusterHub=ku \
-  -fileServer=hgwdev -workhorse=hgwdev -smallClusterHub=ku -dbHost=hgwdev \
-      refseq vertebrate_mammalian Pan_paniscus \
-         GCF_000258655.2_panpan1.1 neoSch1) > load.log 2>&1
-    # real    0m21.690s
+      refseq vertebrate_mammalian Neomonachus_schauinslandi \
+         GCF_002201575.1_ASM220157v1 neoSch1) > do.log 2>&1
+    # real    4m37.395s
 
     cat fb.ncbiRefSeq.neoSch1.txt
-    # 74646536 bases of 2725937399 (2.738%) in intersection
+    # 45781082 bases of 2400839308 (1.907%) in intersection
 
 ##############################################################################
 # genscan - (DONE - 2017-09-25 - Hiram)
@@ -577,16 +592,17 @@ searchPriority 8
 # 	jkStuff/neoSch1.nonBridged.lft -bedFile=jkStuff/neoSch1.nonBridged.bed
 
 #########################################################################
-# lastz/chain/net swap from hg38 (DONE - 2017-09-25 - Hiram)
+# lastz/chain/net swap from hg38 (DONE - 2018-03-16 - Hiram)
     # alignment to hg38
 
     cd /hive/data/genomes/hg38/bed/lastzNeoSch1.2017-09-25
+
     cat fb.hg38.chainNeoSch1Link.txt
     # 1586260720 bases of 3049335806 (52.020%) in intersection
-
-    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hg38 neoSch1) \
-	> rbest.log 2>&1 &
-    # real    475m3.278s
+    cat fb.hg38.chainSynNeoSch1Link.txt
+    # 1515015853 bases of 3049335806 (49.683%) in intersection
+    cat fb.hg38.chainRBestNeoSch1Link.txt
+    # 1455520429 bases of 3049335806 (47.732%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/neoSch1/bed/blastz.hg38.swap
@@ -601,22 +617,25 @@ searchPriority 8
 
     cat fb.neoSch1.chainHg38Link.txt
     # 1483929997 bases of 2400839308 (61.809%) in intersection
+    cat fb.neoSch1.chainSynHg38Link.txt
+    # 1446564285 bases of 2400839308 (60.252%) in intersection
 
-    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` neoSch1 hg38) \
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` neoSch1 hg38) \
         > rbest.log 2>&1
     # real    404m14.530s
 
+    cat fb.neoSch1.chainRBestHg38Link.txt
+    # 1455431042 bases of 2400839308 (60.622%) in intersection
+
 #########################################################################
-# lastz/chain/net swap from mm10 (DONE - 2017-09-25 - Hiram)
+# lastz/chain/net swap from mm10 (DONE - 2018-03-16 - Hiram)
     # alignment on mm10
 
     cd /hive/data/genomes/mm10/bed/lastzNeoSch1.2017-09-25
     cat fb.mm10.chainNeoSch1Link.txt
     #	827926012 bases of 2652783500 (31.210%) in intersection
-
-    time (doRecipBest.pl -workhorse=hgwdev mm10 neoSch1 \
-      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
-    # real    307m18.396s
+    cat fb.mm10.chainRBestNeoSch1Link.txt
+    #   788489846 bases of 2652783500 (29.723%) in intersection
 
     mkdir /hive/data/genomes/neoSch1/bed/blastz.mm10.swap
     cd /hive/data/genomes/neoSch1/bed/blastz.mm10.swap
@@ -629,10 +648,15 @@ searchPriority 8
 
     cat fb.neoSch1.chainMm10Link.txt
     #	804021579 bases of 2400839308 (33.489%) in intersection
+    cat fb.neoSch1.chainSynMm10Link.txt
+    #   776155245 bases of 2400839308 (32.328%) in intersection
 
-    time (doRecipBest.pl -workhorse=hgwdev neoSch1 mm10 \
+    time (doRecipBest.pl -load -workhorse=hgwdev neoSch1 mm10 \
       -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
     # real    242m31.157s
+
+    cat fb.neoSch1.chainRBestMm10Link.txt
+    # 787537751 bases of 2400839308 (32.803%) in intersection
 
 ##############################################################################
 # GENBANK AUTO UPDATE (DONE - 2017-09-25 - Hiram)
@@ -733,24 +757,46 @@ etc/align.dbs etc/hgwdev.dbs
 	hgcentraltest
 
 ##############################################################################
-# all.joiner update, downloads and in pushQ - (TBD - 2017-08-03 - Hiram)
+# all.joiner update, downloads and in pushQ - (DONE - 2018-03-22 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
+
+    ~/kent/src/hg/utils/automation/verifyBrowser.pl neoSch1
+# 61 tables in database neoSch1 - Hawaiian monk seal, Neomonachus schauinslandi
+# verified 58 tables in database neoSch1, 3 extra tables, 24 optional tables
+# NCBI RefSeq genes     10 optional tables
+# chainNetRBestHg38     3 optional tables
+# chainNetRBestMm10     3 optional tables
+# chainNetSynHg38       3 optional tables
+# chainNetSynMm10       3 optional tables
+# gapOverlap    1 optional tables
+# tandemDups    1 optional tables
+# 1     chainLepWed1    - extra table
+# 2     chainLepWed1Link        - extra table
+# 3     netLepWed1      - extra table
+# 5 genbank tables found
+# verified 29 required tables, 0 missing tables
+
     # fixup all.joiner until this is a clean output
     joinerCheck -database=neoSch1 -tableCoverage all.joiner
     joinerCheck -database=neoSch1 -times all.joiner
     joinerCheck -database=neoSch1 -keys all.joiner
-XXX - running - Fri Oct  6 11:38:07 PDT 2017
 
     cd /hive/data/genomes/neoSch1
     time (makeDownloads.pl neoSch1) > downloads.log 2>&1
-    # real    17m8.716s
+    # real    16m28.321s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/neoSch1/pushQ
     cd /hive/data/genomes/neoSch1/pushQ
     time (makePushQSql.pl -redmineList neoSch1) \
 	> neoSch1.pushQ.sql 2> stderr.out
-    # real    3m46.855s
+    # real    3m53.420s
+
+    # remove the tandemDups and gapOverlap from the listings:
+    sed -i -e "/tandemDups/d" redmine.neoSch1.table.list
+    sed -i -e "/Tandem Dups/d" redmine.neoSch1.releaseLog.txt
+    sed -i -e "/gapOverlap/d" redmine.neoSch1.table.list
+    sed -i -e "/Gap Overlaps/d" redmine.neoSch1.releaseLog.txt
 
     #   check for errors in stderr.out, some are OK, e.g.:
     # writing redmine listings to
@@ -759,5 +805,26 @@ XXX - running - Fri Oct  6 11:38:07 PDT 2017
     # redmine.neoSch1.releaseLog.txt
     # WARNING: neoSch1 does not have seq
     # WARNING: neoSch1 does not have extFile
+
+    # verify the file listings are valid, should be no output to stderr:
+    cat redmine.neoSch1.file.list \
+        | while read L; do ls -ogL $L; done  > /dev/null
+
+    # to verify the database.table list is correct, should be the same
+    # line count for these two commands:
+    wc -l redmine.neoSch1.table.list
+    # 53 redmine.neoSch1.table.list
+    awk -F'.' '{
+printf "hgsql -N -e \"show table status like '"'"'%s'"'"';\" %s\n", $2, $1
+}' redmine.neoSch1.table.list | while read L; do eval $L; done | wc -l
+    # 53
+
+    # add the path names to the listing files in the redmine issue
+    # in the three appropriate entry boxes:
+    ls `pwd`/redmine*
+
+/hive/data/genomes/neoSch1/pushQ/redmine.neoSch1.file.list
+/hive/data/genomes/neoSch1/pushQ/redmine.neoSch1.releaseLog.txt
+/hive/data/genomes/neoSch1/pushQ/redmine.neoSch1.table.list
 
 #########################################################################

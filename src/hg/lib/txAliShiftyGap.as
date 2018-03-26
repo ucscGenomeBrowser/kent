@@ -1,0 +1,20 @@
+table txAliShiftyGap
+"Short gaps/indels between genome and transcript that could be shifted due to repetitive sequence"
+    (
+    string chrom;      "Reference sequence chromosome or scaffold"
+    uint   chromStart; "Start position in chromosome of ambiguous gap placement region"
+    uint   chromEnd;   "End position in chromosome of ambiguous gap placement region"
+    string name;       "Name of item"
+    uint   score;      "Optional score, nominal range 0-1000"
+    char[1] strand;    "Transcript orientation on genome: + or -"
+    uint   thickStart; "Start position of 3'-most gap location for transcript"
+    uint   thickEnd;   "End position of 3'-most gap location for transcript"
+    string txName;     "Transcript identifier"
+    uint   txStart;    "Start position in transcript of ambiguous gap placement region"
+    uint   txEnd;      "End position in transcript of ambiguous gap placement region"
+    uint   gSkipped;   "Number of bases skipped on genome, if any"
+    uint   txSkipped;  "Number of bases skipped on transcript, if any"
+    uint   shiftL;     "Number of bases that gap can be shifted left on genome"
+    uint   shiftR;     "Number of bases that gap can be shifted right on genome"
+    string hgvsPosCN;  "HGVS c./n. position range of transcript ambiguous gap placement region"
+    )

@@ -1002,7 +1002,9 @@ endCollapsibleSection();
 static boolean canDoHgvsOut(char *geneTrack)
 /* Return TRUE if we're able to make HGVS output terms for transcripts in geneTrack. */
 {
-return sameString(geneTrack, "refGene") || startsWith("ncbiRefSeq", geneTrack);
+return (sameString(geneTrack, "refGene") || startsWith("ncbiRefSeq", geneTrack) ||
+        startsWith("wgEncodeGencodeBasic", geneTrack) ||
+        startsWith("wgEncodeGencodeComp", geneTrack));
 }
 
 static void selectHgvsOut(char *geneTrack)
@@ -1034,8 +1036,8 @@ printf("For variants that involve both a deletion and insertion, "
 puts("</div>");
 printf("<div id=\"noHgvs\" style=\"display: %s;\">",
        hgvsOk ? "none" : "block");
-printf("Select RefSeq Genes in the \"Select Genes\" section above "
-       "in order to make options appear.\n");
+printf("Select RefSeq Genes or the latest official GENCODE release "
+       "in the \"Select Genes\" section above in order to make options appear.\n");
 puts("</div>");
 puts("<br>");
 endCollapsibleSection();

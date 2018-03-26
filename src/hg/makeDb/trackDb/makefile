@@ -149,12 +149,12 @@ DBS = \
 	oxyTri2 \
 	panPan1 panPan2 \
 	panRed1 \
-	panTro1 panTro2 panTro3 panTro4 panTro5 \
+	panTro1 panTro2 panTro3 panTro4 panTro5 panTro6 \
 	papHam1 papAnu2 papAnu3 papAnu4 \
 	petMar1 petMar2 petMar3 \
 	plasFalc3D7V12 \
 	poeRet1 \
-	ponAbe2 \
+	ponAbe2 ponAbe3 \
 	priExs1 \
 	priPac1 priPac2 priPac3 \
 	proCap1 \

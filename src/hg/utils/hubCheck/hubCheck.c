@@ -44,7 +44,7 @@ errAbort(
   "   -settings             - just list settings with support level\n"
   "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs.\n"
   "                                     Will create this directory if not existing\n"
-  "   -printMeta            - print the metadaa for each track\n"
+  "   -printMeta            - print the metadata for each track\n"
   "   -cacheTime=N          - set cache refresh time in seconds, default %d\n"
   "   -verbose=2            - output verbosely\n"
   , cacheTime
