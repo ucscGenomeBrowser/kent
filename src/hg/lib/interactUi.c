@@ -22,7 +22,7 @@ void interactUiMinScore(struct cart *cart, char *track, struct trackDb *tdb)
 {
 char buffer[1024];
 safef(buffer, sizeof buffer, "%s.%s", tdb->track, INTERACT_MINSCORE);
-int minScore = cartUsualInt(cart, buffer, INTERACT_DEFMINSCORE);
+int minScore = cartUsualInt(cart, buffer, 0);
 printf("<b>Minimum score:&nbsp;</b>");
 cgiMakeIntVar(buffer, minScore, 0);
 }
