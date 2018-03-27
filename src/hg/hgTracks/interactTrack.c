@@ -22,19 +22,27 @@ cartTdbFetchMinMaxPixels(cart, tg->tdb,
 return tg->height = current;
 }
 
-static Color interactItemColor(struct track *tg, void *item, struct hvGfx *hvg)
+static Color interactItemColor(struct track *tg, void *item, struct hvGfx *hvg, int scoreMin, int scoreMax)
 /* Return color to draw an interaction */
 {
 struct interact *inter = item;
 if (tg->colorShades)
+    {
+    struct bed *bed = (struct bed *)inter;
+    adjustBedScoreGrayLevel(tg->tdb, bed, scoreMin, scoreMax);
     return tg->colorShades[grayInRange(inter->score, 0, 1000)];
+    }
+/*
+ There must be a better way..., e.g.:
 
-struct rgbColor itemRgb;
-// There must be a better way...
-itemRgb.r = (inter->color & 0xff0000) >> 16;
-itemRgb.g = (inter->color & 0xff00) >> 8;
-itemRgb.b = inter->color & 0xff;
-return hvGfxFindColorIx(hvg, itemRgb.r, itemRgb.g, itemRgb.b);
+unsigned red = COLOR_32_RED(inter->color);
+unsigned green = COLOR_32_GREEN(inter->color);
+unsigned blue = COLOR_32_BLUE(inter->color);
+*/
+unsigned red = (inter->color & 0xff0000) >> 16;
+unsigned green = (inter->color & 0xff00) >> 8;
+unsigned blue = inter->color & 0xff;
+return hvGfxFindColorIx(hvg, red, green, blue);
 }
 
 void interactLoadItems(struct track *tg)
@@ -54,12 +62,10 @@ if (tg->limitedVisSet)
     return;
 }
 
-// filter and grayscale adjustment on score
+// filter on score
 char buf[1024];
 safef(buf, sizeof buf, "%s.%s", tg->tdb->track, INTERACT_MINSCORE);
-int minScore = cartUsualInt(cart, buf, INTERACT_DEFMINSCORE);
-int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(tg->tdb, "scoreMin", "0"));
-int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tg->tdb, "scoreMax", "1000"));
+int minScore = cartUsualInt(cart, buf, 0);
 struct interact *inter, *next, *filteredItems = NULL;
 int count = slCount(tg->items);
 for (inter = tg->items; inter; inter = next)
@@ -67,13 +73,9 @@ for (inter = tg->items; inter; inter = next)
     next = inter->next;
     if (inter->score < minScore)
         continue;
-    if (tg->colorShades)
-        {
-        struct bed *bed = (struct bed *)inter;
-        adjustBedScoreGrayLevel(tg->tdb, bed, scoreMin, scoreMax);
-        }
     slAddHead(&filteredItems, inter);
     }
+
 slReverse(&filteredItems);
 // consider sorting by score/value so highest scored items draw last (on top)
 if (slCount(filteredItems) != count)
@@ -231,6 +233,9 @@ char itemBuf[2048];
 // Gather info for layout
 struct interactTrackInfo *tInfo = interactGetTrackInfo(tg, seqStart, hvg, xOff, font, scale);
 
+// Get spectrum range
+int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(tg->tdb, "scoreMin", "0"));
+int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tg->tdb, "scoreMax", "1000"));
 
 // Draw items
 for (inter = (struct interact *)tg->items; inter; inter = inter->next)
@@ -240,7 +245,8 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
     char *statusBuf = interactMouseover(inter, otherChrom);
 
     // Pick colors
-    color = interactItemColor(tg, inter, hvg);
+
+    color = interactItemColor(tg, inter, hvg, scoreMin, scoreMax);
     if (vis == tvDense && otherChrom && color == MG_BLACK)
         // use highlight color for other chrom items in dense mode
         color = MG_MAGENTA;
