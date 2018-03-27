@@ -16800,8 +16800,10 @@ TMPDIR=/dev/shm
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
 	mm10 panTro6) > rbest.log 2>&1 &
-XXX
-    # real    624m28.225s
+    # real    565m15.871s
+
+    cat fb.mm10.chainRBestPanTro6Link.txt
+    # 891553355 bases of 2652783500 (33.608%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/panTro6/bed/blastz.mm10.swap
@@ -16821,7 +16823,81 @@ XXX
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
 	panTro6 mm10) > rbest.log 2>&1 &
-XXX
-    # real    560m21.432s
+    # real    504m47.811s
+
+    cat fb.panTro6.chainRBestMm10Link.txt
+    # 890065520 bases of 3018592990 (29.486%) in intersection
+
+##############################################################################
+# LASTZ mouse/mm10 Orangutan/ponAbe3 - (DONE - 2018-03-26 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzPonAbe3.2018-03-26
+    cd /hive/data/genomes/mm10/bed/lastzPonAbe3.2018-03-26
+
+    printf '# mouse vs orangutan
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+# the default matrix is:
+#       A     C     G     T
+# A    91  -114   -31  -123
+# C  -114   100  -125   -31
+# G   -31  -125   100  -114
+# T  -123   -31  -114    91
+
+# QUERY: orangutan ponAbe3
+SEQ2_DIR=/hive/data/genomes/ponAbe3/ponAbe3.2bit
+SEQ2_LEN=/hive/data/genomes/ponAbe3/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=20
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzPonAbe3.2018-03-26
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1 &
+    #  real    461m46.426s
+
+    cat fb.mm10.chainPonAbe3Link.txt
+    # 936755064 bases of 2652783500 (35.312%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	mm10 ponAbe3) > rbest.log 2>&1 &
+    # real    554m41.676s
+
+    cat fb.mm10.chainRBestPonAbe3Link.txt
+    # 892145302 bases of 2652783500 (33.631%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/ponAbe3/bed/blastz.mm10.swap
+    cd /hive/data/genomes/ponAbe3/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/mm10/bed/lastzPonAbe3.2018-03-26/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    78m29.160s
+
+    cat fb.ponAbe3.chainMm10Link.txt
+    # 929970181 bases of 3043444524 (30.557%) in intersection
+    cat fb.ponAbe3.chainSynMm10Link.txt
+    # 890801507 bases of 3043444524 (29.270%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	ponAbe3 mm10) > rbest.log 2>&1 &
+    # real    496m49.168s
+
+    cat fb.ponAbe3.chainRBestMm10Link.txt
+    # 890774155 bases of 3043444524 (29.269%) in intersection
 
 #########################################################################

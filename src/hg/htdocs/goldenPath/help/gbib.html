@@ -719,7 +719,7 @@ hg.conf.local</code> to incorporate the changes in hg.conf.local.</p>
 <p>
 In older GBiB's, there is an error in the <code>gbibAddTools</code> command. To fix this command, 
 edit the <code>/home/browser/.bashrc</code> file and change the following line:
-<pre><code>alias gbibAddTools='mkdir ~/bin -p; rsync -avP hgdownload.cse.ucsc.edu::genome/admin/exe/linux.x86_64/ ~/bin/'</code></pre>
+<pre><code>alias gbibAddTools='mkdir ~/bin -p; rsync -avP hgdownload.soe.ucsc.edu::genome/admin/exe/linux.x86_64/ ~/bin/'</code></pre>
 </p>
 <p>to:
 <pre><code>alias gbibAddTools='sudo mkdir -p /data/tools; sudo rsync -avP hgdownload.soe.ucsc.edu::genome/admin/exe/linux.x86_64/ /data/tools/ && ln -s /data/tools ~/bin'</code></pre>
