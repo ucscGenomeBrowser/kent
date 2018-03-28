@@ -149,22 +149,23 @@ if (!interactUiDirectional(tdb))
         }
     }
 
+// format and print
 sprintLongWithCommas(startBuf, region1Start + 1);
 sprintLongWithCommas(endBuf, region1End);
 sprintLongWithCommas(sizeBuf, region1End - region1Start);
 printf("<b>%s region:</b> %s&nbsp;&nbsp;"
-                "<a href='hgTracks?position=%s:%d-%d' target='_blank'>%s:%s-%s</a>",
+                "<a href='hgTracks?position=%s:%d-%d' target='_blank'>%s:%s-%s</a> %s",
                 region1Label, region1Name, region1Chrom, region1Start+1, region1End,
-                region1Chrom, startBuf, endBuf);
+                region1Chrom, startBuf, endBuf, inter->sourceStrand[0] == '.' ? "" : inter->sourceStrand);
 printf("&nbsp;&nbsp;%s bp<br>\n", sizeBuf);
 
 sprintLongWithCommas(startBuf, region2Start+1);
 sprintLongWithCommas(endBuf, region2End);
 sprintLongWithCommas(sizeBuf, region2End - region2Start);
 printf("<b>%s region:</b> %s&nbsp;&nbsp;"
-                "<a href='hgTracks?position=%s:%d-%d' target='_blank'>%s:%s-%s</a>",
+                "<a href='hgTracks?position=%s:%d-%d' target='_blank'>%s:%s-%s</a> %s",
                 region2Label, region2Name, region2Chrom, region2Start+1, region2End,
-                region2Chrom, startBuf, endBuf);
+                region2Chrom, startBuf, endBuf, inter->targetStrand[0] == '.' ? "" : inter->targetStrand);
 printf("&nbsp;&nbsp;%s bp<br>\n", sizeBuf);
 int distance = interactRegionDistance(inter);
 if (distance > 0)
