@@ -5,14 +5,12 @@
 #include "common.h"
 #include "linefile.h"
 #include "dystring.h"
-#include "asParse.h"
 #include "jksql.h"
 #include "interact.h"
 
 
 
-char *interactCommaSepFieldNames = "chrom,chromStart,chromEnd,name,score,value,exp,color,sourceChrom,sourceStart,sourceEnd,sourceName,targetChrom,targetStart,targetEnd,targetName";
-
+char *interactCommaSepFieldNames = "chrom,chromStart,chromEnd,name,score,value,exp,color,sourceChrom,sourceStart,sourceEnd,sourceName,sourceStrand,targetChrom,targetStart,targetEnd,targetName,targetStrand";
 
 void interactStaticLoad(char **row, struct interact *ret)
 /* Load a row from interact table into ret.  The contents of ret will
@@ -31,10 +29,12 @@ ret->sourceChrom = row[8];
 ret->sourceStart = sqlUnsigned(row[9]);
 ret->sourceEnd = sqlUnsigned(row[10]);
 ret->sourceName = row[11];
-ret->targetChrom = row[12];
-ret->targetStart = sqlUnsigned(row[13]);
-ret->targetEnd = sqlUnsigned(row[14]);
-ret->targetName = row[15];
+ret->sourceStrand = row[12];
+ret->targetChrom = row[13];
+ret->targetStart = sqlUnsigned(row[14]);
+ret->targetEnd = sqlUnsigned(row[15]);
+ret->targetName = row[16];
+ret->targetStrand = row[17];
 }
 
 struct interact *interactLoadByQuery(struct sqlConnection *conn, char *query)
@@ -67,8 +67,8 @@ void interactSaveToDb(struct sqlConnection *conn, struct interact *el, char *tab
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,%g,'%s',%u,'%s',%u,%u,'%s','%s',%u,%u,'%s')", 
-	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->value,  el->exp,  el->color,  el->sourceChrom,  el->sourceStart,  el->sourceEnd,  el->sourceName,  el->targetChrom,  el->targetStart,  el->targetEnd,  el->targetName);
+sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,%g,'%s',%u,'%s',%u,%u,'%s','%s','%s',%u,%u,'%s','%s')", 
+	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->value,  el->exp,  el->color,  el->sourceChrom,  el->sourceStart,  el->sourceEnd,  el->sourceName,  el->sourceStrand,  el->targetChrom,  el->targetStart,  el->targetEnd,  el->targetName,  el->targetStrand);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -92,10 +92,12 @@ ret->sourceChrom = cloneString(row[8]);
 ret->sourceStart = sqlUnsigned(row[9]);
 ret->sourceEnd = sqlUnsigned(row[10]);
 ret->sourceName = cloneString(row[11]);
-ret->targetChrom = cloneString(row[12]);
-ret->targetStart = sqlUnsigned(row[13]);
-ret->targetEnd = sqlUnsigned(row[14]);
-ret->targetName = cloneString(row[15]);
+ret->sourceStrand = cloneString(row[12]);
+ret->targetChrom = cloneString(row[13]);
+ret->targetStart = sqlUnsigned(row[14]);
+ret->targetEnd = sqlUnsigned(row[15]);
+ret->targetName = cloneString(row[16]);
+ret->targetStrand = cloneString(row[17]);
 return ret;
 }
 
@@ -105,7 +107,7 @@ struct interact *interactLoadAll(char *fileName)
 {
 struct interact *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[16];
+char *row[18];
 
 while (lineFileRow(lf, row))
     {
@@ -123,7 +125,7 @@ struct interact *interactLoadAllByChar(char *fileName, char chopper)
 {
 struct interact *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[16];
+char *row[18];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -156,10 +158,12 @@ ret->sourceChrom = sqlStringComma(&s);
 ret->sourceStart = sqlUnsignedComma(&s);
 ret->sourceEnd = sqlUnsignedComma(&s);
 ret->sourceName = sqlStringComma(&s);
+ret->sourceStrand = sqlStringComma(&s);
 ret->targetChrom = sqlStringComma(&s);
 ret->targetStart = sqlUnsignedComma(&s);
 ret->targetEnd = sqlUnsignedComma(&s);
 ret->targetName = sqlStringComma(&s);
+ret->targetStrand = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -176,8 +180,10 @@ freeMem(el->name);
 freeMem(el->exp);
 freeMem(el->sourceChrom);
 freeMem(el->sourceName);
+freeMem(el->sourceStrand);
 freeMem(el->targetChrom);
 freeMem(el->targetName);
+freeMem(el->targetStrand);
 freez(pEl);
 }
 
@@ -232,6 +238,10 @@ fprintf(f, "%s", el->sourceName);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->sourceStrand);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->targetChrom);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
@@ -242,6 +252,10 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->targetName);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->targetStrand);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
@@ -249,7 +263,7 @@ fputc(lastSep,f);
 
 static char *interactAutoSqlString =
 "table interact"
-"\"BED5+11 interaction between two regions\""
+"\"BED5+13 interaction between two regions\""
 "    ("
 "   string chrom;       \"Reference sequence chromosome or scaffold\""
 "   uint   chromStart;  \"Start position of lower region\""
@@ -264,13 +278,17 @@ static char *interactAutoSqlString =
 "   uint   sourceStart; \"Start position of source/lower region\""
 "   uint   sourceEnd;   \"End position of source/lower region\""
 "   string sourceName;  \"Identifier of source/lower region. Can be used as link to related table.\""
+"   string sourceStrand;\"Orientation of target/upper/other region: + or -.  Use . if not applicable.\""
 
 "   string targetChrom; \"Chromosome of target region (directional) or lower region\""
 "   uint   targetStart; \"Start position of target/lower region\""
 "   uint   targetEnd;   \"End position of target/lower region\""
 "   string targetName;  \"Identifier of target/lower region. Can be used as link to related table.\""
+"   string targetStrand;\"Orientation of target/lower/other region: + or -.  Use . if not applicable.\""
 "   )"
 ;
+
+#include "asParse.h"
 
 struct asObject *interactAsObj()
 /* Return asObject describing fields of interact object */
