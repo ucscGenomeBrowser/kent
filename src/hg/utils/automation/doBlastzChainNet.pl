@@ -157,7 +157,7 @@ described in the -help output, pray to the cluster gods, and all will go
 well.  :)
 
 To use this script outside the UCSC infrastructure, use options:
-    -dbHost=localhost (when there is no local genome database to load results)
+    -dbHost=noHost (when there is no local genome database to load results)
 
     -smallClusterHub=localhost -bigClusterHub=localhost -fileServer=localhost
     This assumes the process is performed on your parasol hub machine, and
@@ -441,24 +441,31 @@ sub getDbFromPath {
   my ($var) = @_;
   my $val = $defVars{$var};
   my $db;
-  if ($opt_noDbNameCheck ||
-	$val =~ m@^/\S+/($oldDbFormat|$newDbFormat)((\.2bit)|(/(\S+)?))?$@) {
-    $db = $1;
-  } else {
-    die "Error: $DEF variable $var=$val must be a full path with " .
-      "a recognizable database as one of its elements.\n"
+  my $dbFromName = basename($val);
+  $dbFromName =~ s/.2bit//;
+  if (! $opt_noDbNameCheck) {
+    if ( $val =~ m@^/\S+/($oldDbFormat|$newDbFormat)((\.2bit)|(/(\S+)?))?$@) {
+      $db = $1;
+    } else {
+      die "Error: $DEF variable $var=$val must be a full path with " .
+        "a recognizable database as one of its elements.\n"
+    }
   }
-  if (! defined($db)) {
-    if ($val =~ m#^/hive/data/genomes/#) {
+  if ($opt_noDbNameCheck) {
+    $db = $dbFromName;
+  } else {
+    if (! defined($db)) {
+      if ($val =~ m#^/hive/data/genomes/#) {
 	$val =~ s#^/hive/data/genomes/##;
 	$val =~ s#/.*##;
 	$db = $val;
 	warn "Warning: assuming database $db from /hive/data/genomes/<db>/ path\n";
-    } elsif ($val =~ m#^/scratch/data/#) {
+      } elsif ($val =~ m#^/scratch/data/#) {
 	$val =~ s#^/scratch/data/##;
 	$val =~ s#/.*##;
 	$db = $val;
 	warn "Warning: assuming database $db from /scratch/data/<db>/ path\n";
+      }
     }
   }
 return $db;
