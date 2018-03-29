@@ -6,7 +6,7 @@ body {
 body.cgi {
 	margin: 0;
 	padding: 0;
-	background: #FFF9D2;
+	background: #FFFFFF;
 }
 
 body.hgTracks {
@@ -42,11 +42,11 @@ span.inlineCode {
 }
 
 .topBlueBar {   font-family: arial, Geneva, Helvetica, sans-serif; font-size: 15px; text-decoration: none; font-weight: bold;
-                color: #D9E4F8; background-color:#2636D1; border: 1px solid black; height:28px; width:100%;
+                color: #F5E0EC; background-color:#C71585; border: 1px solid black; height:28px; width:100%;
                 text-align:center; vertical-align:middle; white-space:nowrap; padding: 0px 10px;}
 
 /* CLASS DECLARATIONS TO MAKE NETSCAPE HAPPY */
-.topbar {	font-family: arial, Geneva, Helvetica, sans-serif; font-size: 15px; text-decoration: none; font-weight: bold; color: #D9E4F8;}
+.topbar {	font-family: arial, Geneva, Helvetica, sans-serif; font-size: 15px; text-decoration: none; font-weight: bold; color: #F5E0EC;}
 .leftbar { text-decoration: none; font-family: arial, sans-serif; color: #FDFCEA; font-size: 10pt; font-weight: 600; }
 .hiddenText {background-color: silver}
 .normalText {background-color: white}
@@ -111,7 +111,7 @@ A:active IMG {  border-width: 0px; padding: 0px; margin: 0px;}
 }
 
 /* A subheading bar is the light blue bar that appears at the top of web.c section boxes */
-.subheadingBar {font-weight: bold; font-size:1.1em; color:#000000; background-color:#D9E4F8;
+.subheadingBar {font-weight: bold; font-size:1.1em; color:#000000; background-color:#F5E0EC;
                 width:100%; text-align:left; vertical-align:bottom;
                 white-space:nowrap; text-indent:10px; padding-top:2px; }
 
@@ -629,7 +629,7 @@ div#haplotypes .textAlert { color:#DC143C; } /* dark red */
 
 /* Added for Angie's React UI stuff */
 .cgiTitleBox {
-    background-color: #D9E4F8;
+    background-color: #F5E0EC;
     padding: 5px;
 }
 

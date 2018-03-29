@@ -21,7 +21,7 @@
 	width:100%;
 	min-width:1000px; /* NOTE: must cover all top menu options, else wrapping breaks menu */
 	height:32px;
-	background:#2636d1;
+	background:#C71585;
 	font-family: Arial,Helvetica,sans-serif;
 	line-height:19px;
 	font-size:13px;
@@ -371,7 +371,7 @@ span#home-link {
 	display: inline-block;
 	background-image: url("../images/homeIconSprite.png");
 	background-position: 0 -18px;
-	background-color: #2636d1;
+	background-color: #C71585;
 }
 span#hgTracks-home-link {
 	top: -2px;

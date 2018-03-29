@@ -14,12 +14,12 @@
 #define HG_COL_HEADER "D9E4F8"
 #define HG_COL_OUTSIDE "FFF9D2"
 #define HG_CL_OUTSIDE 0xFFF9D2
-#define HG_COL_INSIDE "FFFEE8"
-#define HG_CL_INSIDE 0xFFFEE8
+#define HG_COL_INSIDE "FFFFFF"
+#define HG_CL_INSIDE 0xFFFFFF
 #define HG_COL_BORDER "888888"
-#define HG_COL_TABLE "D9F8E4"
+#define HG_COL_TABLE "FFFFFF"
 #define HG_COL_LOCAL_TABLE "D9E4FF"
-#define HG_COL_TABLE_LABEL "1616D1"
+#define HG_COL_TABLE_LABEL "C71585"
 
 void hMakeGrayShades(struct hvGfx *hvg, Color *shades, int maxShade);
 /* Make up gray scale with 0 = white, and maxShade = black. 
