@@ -388,7 +388,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
                         tX - tWidth, yOff, tWidth * 2, 3,
                         tg->track, itemBuf, nameBuf, NULL, TRUE, NULL);
         }
-    if (!sOnScreen && !tOnScreen)
+    if ((s < seqStart && t < seqStart) || (s > seqEnd && t > seqEnd))
         continue;
 
     // Draw interaction and map boxes
