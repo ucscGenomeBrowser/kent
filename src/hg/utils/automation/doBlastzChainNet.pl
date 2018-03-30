@@ -157,7 +157,7 @@ described in the -help output, pray to the cluster gods, and all will go
 well.  :)
 
 To use this script outside the UCSC infrastructure, use options:
-    -dbHost=noHost (when there is no local genome database to load results)
+    -dbHost=localhost (when there is no local genome database to load results)
 
     -smallClusterHub=localhost -bigClusterHub=localhost -fileServer=localhost
     This assumes the process is performed on your parasol hub machine, and
@@ -1614,9 +1614,7 @@ too distant from the reference.  Suppressed unless -syntenicNet is included.";
   }
   my $bossScript = new HgRemoteScript("$runDir/netSynteny.csh", $workhorse,
                                     $runDir, $whatItDoes, $DEF);
-  if ($splitRef) {
-### XXX this needs to be fixed up to avoid the goldenPath business
-####### when -skipDownload
+  if ($opt_loadChainSplit && $splitRef) {
     $bossScript->add(<<_EOF_
 # filter net for synteny and create syntenic net mafs
 netFilter -syn $tDb.$qDb.net.gz  \\
@@ -1637,11 +1635,17 @@ rm -fr $runDir/synNet
 rm -fr $runDir/chain
 cd mafSynNet
 md5sum *.maf.gz > md5sum.txt
+_EOF_
+      );
+
+    if (! $opt_skipDownload) {
+       $bossScript->add(<<_EOF_
 mkdir -p $HgAutomate::goldenPath/$tDb/vs$QDb/mafSynNet
 cd $HgAutomate::goldenPath/$tDb/vs$QDb/mafSynNet
 ln -s $buildDir/mafSynNet/* .
 _EOF_
-      );
+       );
+    }
   } else {
 # scaffold-based assembly
 # filter net for synteny and create syntenic net mafs
@@ -1661,35 +1665,40 @@ _EOF_
       );
     } else {
       $bossScript->add(<<_EOF_
-hgLoadChain -test -noBin -tIndex $tDb chainSyn$QDb $tDb.$qDb.syn.chain.gz
-wget -O bigChain.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/bigChain.as'
-wget -O bigLink.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/bigLink.as'
-sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\\t"} {print \$2, \$4, \$5, \$11, 1000, \$8, \$3, \$6, \$7, \$9, \$10, \$1}' > chainSyn${QDb}.tab
-bedToBigBed -type=bed6+6 -as=bigChain.as -tab chainSyn${QDb}.tab $defVars{SEQ1_LEN} chainSyn${QDb}.bb
-awk 'BEGIN {OFS="\\t"} {print \$1, \$2, \$3, \$5, \$4}' link.tab | sort -k1,1 -k2,2n > chainSyn${QDb}Link.tab
-bedToBigBed -type=bed4+1 -as=bigLink.as -tab chainSyn${QDb}Link.tab $defVars{SEQ1_LEN} chainSyn${QDb}Link.bb
-set totalBases = `ave -col=2 $defVars{SEQ1_LEN} | grep "^total" | awk '{printf "%d", \$2}'`
-set basesCovered = `bedSingleCover.pl chainSyn${QDb}Link.tab | ave -col=4 stdin | grep "^total" | awk '{print "%d", \$2}'`
-set percentCovered = `echo \$basesCovered \$totalBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
-printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" "\$totalBases" "\$percentCovered" > ../fb.$tDb.chainSyn.${QDb}Link.txt
-rm -f link.tab
-rm -f chain.tab
+set lineCount = `zcat $tDb.$qDb.syn.chain.gz | wc -l`
+if (\$lineCount > 0) then
+  hgLoadChain -test -noBin -tIndex $tDb chainSyn$QDb $tDb.$qDb.syn.chain.gz
+  wget -O bigChain.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/bigChain.as'
+  wget -O bigLink.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/bigLink.as'
+  sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\\t"} {print \$2, \$4, \$5, \$11, 1000, \$8, \$3, \$6, \$7, \$9, \$10, \$1}' > chainSyn${QDb}.tab
+  bedToBigBed -type=bed6+6 -as=bigChain.as -tab chainSyn${QDb}.tab $defVars{SEQ1_LEN} chainSyn${QDb}.bb
+  awk 'BEGIN {OFS="\\t"} {print \$1, \$2, \$3, \$5, \$4}' link.tab | sort -k1,1 -k2,2n > chainSyn${QDb}Link.tab
+  bedToBigBed -type=bed4+1 -as=bigLink.as -tab chainSyn${QDb}Link.tab $defVars{SEQ1_LEN} chainSyn${QDb}Link.bb
+  set totalBases = `ave -col=2 $defVars{SEQ1_LEN} | grep "^total" | awk '{printf "%d", \$2}'`
+  set basesCovered = `bedSingleCover.pl chainSyn${QDb}Link.tab | ave -col=4 stdin | grep "^total" | awk '{printf "%d", \$2}'`
+  set percentCovered = `echo \$basesCovered \$totalBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
+  printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" "\$totalBases" "\$percentCovered" > ../fb.$tDb.chainSyn.${QDb}Link.txt
 netFilter -minGap=10 $tDb.$qDb.syn.net.gz \\
   | hgLoadNet -test -noBin -warn -verbose=0 $tDb netSyn$QDb stdin
 mv align.tab netSyn$QDb.tab
+endif
+rm -f link.tab
+rm -f chain.tab
 _EOF_
       );
     }
 
     $bossScript->add(<<_EOF_
-netToAxt $tDb.$qDb.syn.net.gz $tDb.$qDb.all.chain.gz \\
+if (\$lineCount > 0) then
+  netToAxt $tDb.$qDb.syn.net.gz $tDb.$qDb.all.chain.gz \\
     $defVars{'SEQ1_DIR'} $defVars{'SEQ2_DIR'} stdout \\
-  | axtSort stdin stdout \\
-  | axtToMaf -tPrefix=$tDb. -qPrefix=$qDb. stdin \\
-    $defVars{SEQ1_LEN} $defVars{SEQ2_LEN} \\
-    stdout \\
-| gzip -c > $tDb.$qDb.synNet.maf.gz
-md5sum $tDb.$qDb.syn.net.gz $tDb.$qDb.synNet.maf.gz > synNet.md5sum.txt
+    | axtSort stdin stdout \\
+    | axtToMaf -tPrefix=$tDb. -qPrefix=$qDb. stdin \\
+      $defVars{SEQ1_LEN} $defVars{SEQ2_LEN} \\
+      stdout \\
+  | gzip -c > $tDb.$qDb.synNet.maf.gz
+  md5sum $tDb.$qDb.syn.net.gz $tDb.$qDb.synNet.maf.gz > synNet.md5sum.txt
+endif
 _EOF_
       );
 
