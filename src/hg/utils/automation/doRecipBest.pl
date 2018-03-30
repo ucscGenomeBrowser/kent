@@ -330,9 +330,9 @@ sub loadRBest {
   my $runDir = "$buildDir/axtChain";
   my $QDbLink = "chainRBest$QDb" . "Link";
   # First, make sure we're starting clean.
-  if (-e "$buildDir/fb.$tDb.$QDbLink.txt") {
+  if (-e "$buildDir/fb.$tDb.chainRBest.$QDb.txt") {
     die "loadRBest looks like this was run successfully already " .
-      "(fb.$tDb.$QDbLink.txt exists).\n";
+      "(fb.$tDb.chainRBest.$QDb.txt exists).\n";
   }
   # Make sure previous stage was successful.
   my $successDir = "$runDir/$tDb.$qDb.rbest.net.gz";
@@ -368,8 +368,8 @@ netFilter -minGap=10 $tDb.$qDb.rbest.classed.net.gz \\
 | hgLoadNet -verbose=0 $tDb netRBest$QDb stdin
 
 cd $buildDir
-featureBits $tDb $QDbLink >&fb.$tDb.$QDbLink.txt
-cat fb.$tDb.$QDbLink.txt
+featureBits $tDb $QDbLink >&fb.$tDb.chainRBest.$QDb.txt
+cat fb.$tDb.chainRBest.$QDb.txt
 _EOF_
       );
   } else {
@@ -385,7 +385,7 @@ bedToBigBed -type=bed4+1 -as=bigLink.as -tab $QDbLink.tab $targetSizes $QDbLink.
 set totalBases = `ave -col=2 $targetSizes | grep "^total" | awk '{printf "%d", \$2}'`
 set basesCovered = `bedSingleCover.pl $QDbLink.tab | ave -col=4 stdin | grep "^total" | awk '{printf "%d", \$2}'`
 set percentCovered = `echo \$basesCovered \$totalBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
-printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" "\$totalBases" "\$percentCovered" > ../fb.$tDb.$QDbLink.txt
+printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" "\$totalBases" "\$percentCovered" > ../fb.$tDb.chainRBest.$QDb.txt
 rm -f link.tab
 rm -f chain.tab
 _EOF_
