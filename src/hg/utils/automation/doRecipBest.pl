@@ -27,6 +27,7 @@ use vars qw/
     $opt_query2Bit
     $opt_targetSizes
     $opt_querySizes
+    $opt_skipDownload
     /;
 
 # Specify the steps supported with -continue / -stop:
@@ -39,6 +40,8 @@ my $stepper = new HgStepManager(
 
 # Option defaults:
 my $dbHost = 'hgwdev';
+
+my ($dbExists);
 
 my $base = $0;
 $base =~ s/^(.*\/)?//;
@@ -60,6 +63,7 @@ options:
     -query2Bit path       path to query.2bit file
     -targetSizes path     path to target chrom.sizes file
     -querySizes path      path to query chrom.sizes file
+    -skipDownload         do not construct the downloads directory
 _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
@@ -103,6 +107,7 @@ sub checkOptions {
 		      'query2Bit=s',
 		      'targetSizes=s',
 		      'querySizes=s',
+                      "skipDownload",
 		      @HgAutomate::commonOptionSpec,
 		      );
   &usage(1) if (!$ok);
@@ -290,6 +295,7 @@ _EOF_
 } # makeRbestReadme
 
 sub doDownload {
+  return if ($opt_skipDownload);
   my $runDir = "$buildDir/axtChain";
   my $whatItDoes = "It makes a download (sub)dir.";
   my $bossScript = new HgRemoteScript("$runDir/doRBDownload.csh", $dbHost,
@@ -343,11 +349,12 @@ and loads the recip net table.";
 # Load reciprocal best chains:
 _EOF_
   );
-  $bossScript->add(<<_EOF_
+  if ($dbExists) {
+    $bossScript->add(<<_EOF_
 cd $runDir
 hgLoadChain -tIndex $tDb chainRBest$QDb $tDb.$qDb.rbest.chain.gz
 _EOF_
-  );
+    );
 
     $bossScript->add(<<_EOF_
 
@@ -365,6 +372,25 @@ featureBits $tDb $QDbLink >&fb.$tDb.$QDbLink.txt
 cat fb.$tDb.$QDbLink.txt
 _EOF_
       );
+  } else {
+      $bossScript->add(<<_EOF_
+cd $runDir
+hgLoadChain -test -noBin -tIndex $tDb chainRBest$QDb $tDb.$qDb.rbest.chain.gz
+wget -O bigChain.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/bigChain.as'
+wget -O bigLink.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/bigLink.as'
+sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\\t"} {print \$2, \$4, \$5, \$11, 1000, \$8, \$3, \$6, \$7, \$9, \$10, \$1}' > chainRBest${QDb}.tab
+bedToBigBed -type=bed6+6 -as=bigChain.as -tab chainRBest${QDb}.tab $targetSizes chainRBest${QDb}.bb
+awk 'BEGIN {OFS="\\t"} {print \$1, \$2, \$3, \$5, \$4}' link.tab | sort -k1,1 -k2,2n > $QDbLink.tab
+bedToBigBed -type=bed4+1 -as=bigLink.as -tab $QDbLink.tab $targetSizes $QDbLink.bb
+set totalBases = `ave -col=2 $targetSizes | grep "^total" | awk '{printf "%d", \$2}'`
+set basesCovered = `bedSingleCover.pl $QDbLink.tab | ave -col=4 stdin | grep "^total" | awk '{printf "%d", \$2}'`
+set percentCovered = `echo \$basesCovered \$totalBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
+printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" "\$totalBases" "\$percentCovered" > ../fb.$tDb.$QDbLink.txt
+rm -f link.tab
+rm -f chain.tab
+_EOF_
+      );
+  }	# else if ($dbExists)
 
   $bossScript->execute();
 }	#	sub loadRBest {}
@@ -381,6 +407,10 @@ _EOF_
 &checkOptions();
 &usage(1) if (scalar(@ARGV) != 2);
 ($tDb, $qDb) = @ARGV;
+
+# may be working on a 2bit file that does not have a database browser
+$dbExists = 0;
+$dbExists = 1 if (&HgAutomate::databaseExists($dbHost, $tDb));
 
 $QDb = ucfirst($qDb);
 
