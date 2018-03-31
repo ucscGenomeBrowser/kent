@@ -738,6 +738,10 @@ if (oldValidId == 0) // moving up here to mitigate race condition
     cdwValidFileSaveToDb(conn, vf, "cdwValidFile", 512);
     vf->id = sqlLastAutoId(conn);
     }
+else
+    {
+    vf->id = oldValidId;
+    }
 
 if (vf->format)	// We only can validate if we have something for format 
     {
@@ -914,77 +918,66 @@ if (vf->format)	// We only can validate if we have something for format
 	}
 
     /* Save record except for license plate to DB. */
-    if (oldValidId == 0)
-	{
-	cdwValidFileUpdateDb(conn, vf, vf->id);
+    cdwValidFileUpdateDb(conn, vf, vf->id);
 
-	/* Create license plate around our ID.  File in warehouse to use license plate
-	 * instead of baby-babble IDs. */
-	    {
-	    cdwMakeLicensePlate( cdwLicensePlateHead(conn), 
-		vf->id, vf->licensePlate, cdwMaxPlateSize);
+    /* Create license plate around our ID.  File in warehouse to use license plate
+     * instead of baby-babble IDs. */
+    cdwMakeLicensePlate( cdwLicensePlateHead(conn), 
+	vf->id, vf->licensePlate, cdwMaxPlateSize);
 
-	    /* Create swapped out version of cdwFileName in newName. */
-	    struct dyString *newName = dyStringNew(0);
-	    char *fileName = ef->cdwFileName;
-	    char *dirEnd = strrchr(fileName, '/');
-	    if (dirEnd == NULL)
-		dirEnd = fileName;
-	    else
-		dirEnd += 1;
-	    dyStringAppendN(newName, fileName, dirEnd - fileName);
-	    dyStringAppend(newName, vf->licensePlate);
-	    dyStringAppend(newName, suffix);
-
-	    /* Now build full path names and attempt rename in file system. */
-	    char oldPath[PATH_LEN], newPath[PATH_LEN];
-	    safef(oldPath, sizeof(oldPath), "%s%s", cdwRootDir, fileName);
-	    safef(newPath, sizeof(newPath), "%s%s", cdwRootDir, newName->string);
-
-	    char query[PATH_LEN+256];
-
-	    // rename symlink to it in submitDir
-	    sqlSafef(query, sizeof(query), "select url from cdwSubmitDir where id='%d'", ef->submitDirId);
-	    char *submitDir = sqlQuickString(conn, query);
-	    if (!submitDir)
-		errAbort("submitDir not found for id %d", ef->submitDirId);
-
-	    char *lastPath = findSubmitSymlink(ef->submitFileName, submitDir, oldPath);
-	    freeMem(submitDir);
-	    if (!lastPath)
-		noWarnAbort();
-
-	    verbose(3, "lastPath=%s newPath=%s\n", lastPath, newPath);
-	    if (unlink(lastPath) == -1)  // drop about to be invalid symlink
-		errnoAbort("unlink failure %s", lastPath);
-
-	    mustRename(oldPath, newPath);
-
-	    if (symlink(newPath, lastPath) == -1)  // replace with symlink
-		errnoAbort("symlink failure from %s to %s", lastPath, newPath);
-	    freeMem(lastPath);
-
-	    verbose(2, "Renamed %s to %s\n", oldPath, newPath);
-
-	    /* Update database with new name - small window of vulnerability here sadly 
-	     * two makeValidates running at same time stepping on each other. */
-	    sqlSafef(query, sizeof(query), "update cdwFile set cdwFileName='%s' where id=%lld",
-		newName->string, (long long)ef->id);
-	    sqlUpdate(conn, query);
-
-	    dyStringFree(&newName);
-	    }
-
-	/* Update validFile record with license plate. */
-	char query[256];
-	sqlSafef(query, sizeof(query), "update cdwValidFile set licensePlate='%s' where id=%lld", 
-	    vf->licensePlate, (long long)vf->id);
-	sqlUpdate(conn, query);
-	}
+    /* Create swapped out version of cdwFileName in newName. */
+    struct dyString *newName = dyStringNew(0);
+    char *fileName = ef->cdwFileName;
+    char *dirEnd = strrchr(fileName, '/');
+    if (dirEnd == NULL)
+	dirEnd = fileName;
     else
-        {
-	cdwValidFileUpdateDb(conn, vf, oldValidId);
-	}
+	dirEnd += 1;
+    dyStringAppendN(newName, fileName, dirEnd - fileName);
+    dyStringAppend(newName, vf->licensePlate);
+    dyStringAppend(newName, suffix);
+
+    /* Now build full path names and attempt rename in file system. */
+    char oldPath[PATH_LEN], newPath[PATH_LEN];
+    safef(oldPath, sizeof(oldPath), "%s%s", cdwRootDir, fileName);
+    safef(newPath, sizeof(newPath), "%s%s", cdwRootDir, newName->string);
+
+    char query[PATH_LEN+256];
+
+    // rename symlink to it in submitDir
+    sqlSafef(query, sizeof(query), "select url from cdwSubmitDir where id='%d'", ef->submitDirId);
+    char *submitDir = sqlQuickString(conn, query);
+    if (!submitDir)
+	errAbort("submitDir not found for id %d", ef->submitDirId);
+
+    char *lastPath = findSubmitSymlink(ef->submitFileName, submitDir, oldPath);
+    freeMem(submitDir);
+    if (!lastPath)
+	noWarnAbort();
+
+    verbose(3, "lastPath=%s newPath=%s\n", lastPath, newPath);
+    if (unlink(lastPath) == -1)  // drop about to be invalid symlink
+	errnoAbort("unlink failure %s", lastPath);
+
+    mustRename(oldPath, newPath);
+
+    if (symlink(newPath, lastPath) == -1)  // replace with symlink
+	errnoAbort("symlink failure from %s to %s", lastPath, newPath);
+    freeMem(lastPath);
+
+    verbose(2, "Renamed %s to %s\n", oldPath, newPath);
+
+    /* Update database with new name */
+    sqlSafef(query, sizeof(query), "update cdwFile set cdwFileName='%s' where id=%lld",
+	newName->string, (long long)ef->id);
+    sqlUpdate(conn, query);
+
+    dyStringFree(&newName);
+
+    /* Update validFile record with license plate. */
+    sqlSafef(query, sizeof(query), "update cdwValidFile set licensePlate='%s' where id=%lld", 
+	vf->licensePlate, (long long)vf->id);
+    sqlUpdate(conn, query);
     }
 freez(&vf);
 }
