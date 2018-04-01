@@ -6411,8 +6411,7 @@ if (sameString(name, "acembly"))
     acemblyDropDown("acembly.type", acemblyClass);
     printf("  ");
     }
-else if (startsWith("wgEncodeGencode", name)
-         || sameString("wgEncodeSangerGencode", name))
+else if (startsWith("wgEncodeGencode", name))
     {
     // new GENCODEs
     gencodeLabelControls(db, cart, tdb, name, title, boxed, parentLevel);
