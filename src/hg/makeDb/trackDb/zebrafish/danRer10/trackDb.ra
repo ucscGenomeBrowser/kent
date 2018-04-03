@@ -22,5 +22,5 @@ group varRep
 bigDataUrl /gbdb/$D/uniprot/unipMut.bb
 
 # change these two to switch to the new refSeqComposite 2018-02
-include trackDb.refGene.ra public
-include ../../refSeqComposite.ra alpha,beta
+#include trackDb.refGene.ra public
+include ../../refSeqComposite.ra
