@@ -2580,5 +2580,5 @@ bigDataUrl /gbdb/hg19/gtex/gtexTranscExpr.bb
 origAssembly hg38
 
 # change these two to switch to the new refSeqComposite 2018-02
-include trackDb.refGene.ra beta,public
-include ../../refSeqComposite.ra alpha
+include trackDb.refGene.ra public
+include ../../refSeqComposite.ra alpha,beta
