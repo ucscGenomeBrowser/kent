@@ -1195,6 +1195,16 @@ void baseColorDrawOptDropDown(struct cart *cart, struct trackDb *tdb)
 baseColorDropLists(cart, tdb, tdb->track);
 }
 
+static enum baseColorDrawOpt limitDrawOptForType(struct trackDb *tdb, enum baseColorDrawOpt drawOpt)
+/* If tdb->type is genePred, but something fancier like mRNA codons is enabled because the setting
+ * is coming from a view that also includes a PSL track, downgrade it to genomic codons to avoid
+ * drawing problems caused by the inappropriate setting. #21194 */
+{
+if (startsWith("genePred", tdb->type) && drawOpt > baseColorDrawGenomicCodons)
+    drawOpt = baseColorDrawGenomicCodons;
+return drawOpt;
+}
+
 enum baseColorDrawOpt baseColorDrawOptEnabled(struct cart *cart,
 					  struct trackDb *tdb)
 /* Query cart & trackDb to determine what drawing mode (if any) is enabled. */
@@ -1208,7 +1218,7 @@ stringVal = trackDbSettingClosestToHomeOrDefault(tdb, BASE_COLOR_DEFAULT,
 						  BASE_COLOR_DRAW_OFF);
 stringVal = cartUsualStringClosestToHome(cart, tdb, FALSE, BASE_COLOR_VAR_SUFFIX,stringVal);
 
-return baseColorDrawOptStringToEnum(stringVal);
+return limitDrawOptForType(tdb, baseColorDrawOptStringToEnum(stringVal));
 }
 
 
