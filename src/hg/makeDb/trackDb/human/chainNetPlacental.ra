@@ -978,7 +978,7 @@ priority 8
     subTrack placentalChainNet
 
         track netCavPor3
-        subTrack placentalChainNetViewnet off
+        subTrack placentalChainNetViewnet on
         subGroups view=net species=s000 clade=c00
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -1106,7 +1106,7 @@ priority 8
         otherDb micOch1
 
         track netMm10
-        subTrack placentalChainNetViewnet off
+        subTrack placentalChainNetViewnet on
         subGroups view=net species=s012 clade=c00
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -1202,7 +1202,7 @@ priority 8
         otherDb perManBai1
 
         track netRn6
-        subTrack placentalChainNetViewnet off
+        subTrack placentalChainNetViewnet on
         subGroups view=net species=s024 clade=c00
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -1282,7 +1282,7 @@ priority 8
         otherDb ailMel1
 
         track netCanFam3
-        subTrack placentalChainNetViewnet off
+        subTrack placentalChainNetViewnet on
         subGroups view=net species=s034 clade=c01
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -1570,7 +1570,7 @@ priority 8
         otherDb phyCat1
 
         track netSusScr11
-        subTrack placentalChainNetViewnet off
+        subTrack placentalChainNetViewnet on
         subGroups view=net species=s069 clade=c02
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -1874,7 +1874,7 @@ priority 8
         otherDb eleEdw1
 
         track netLoxAfr3
-        subTrack placentalChainNetViewnet off
+        subTrack placentalChainNetViewnet on
         subGroups view=net species=s107 clade=c07
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net

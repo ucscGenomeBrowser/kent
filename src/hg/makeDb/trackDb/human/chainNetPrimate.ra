@@ -442,7 +442,7 @@ priority 7
         otherDb panTro6
 
         track netPanTro5
-        subTrack primateChainNetViewnet off
+        subTrack primateChainNetViewnet on
         subGroups view=net species=s003 clade=c00
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -578,7 +578,7 @@ priority 7
         otherDb macFas5
 
         track netRheMac8
-        subTrack primateChainNetViewnet off
+        subTrack primateChainNetViewnet on
         subGroups view=net species=s021 clade=c01
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -682,7 +682,7 @@ priority 7
         otherDb aotNan1
 
         track netCalJac3
-        subTrack primateChainNetViewnet off
+        subTrack primateChainNetViewnet on
         subGroups view=net species=s034 clade=c02
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -770,7 +770,7 @@ priority 7
         otherDb micMur1
 
         track netOtoGar3
-        subTrack primateChainNetViewnet off
+        subTrack primateChainNetViewnet on
         subGroups view=net species=s045 clade=c03
         shortLabel $o_db Net
         longLabel $o_db ($o_date) Alignment Net

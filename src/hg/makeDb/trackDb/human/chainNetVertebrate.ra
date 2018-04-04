@@ -610,7 +610,7 @@ priority 9
         otherDb sarHar1
 
         track netMonDom5
-        subTrack vertebrateChainNetViewnet off
+        subTrack vertebrateChainNetViewnet on
         subGroups view=net species=s003 clade=c00
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -650,7 +650,7 @@ priority 9
         otherDb melGal1
 
         track netGalGal5
-        subTrack vertebrateChainNetViewnet off
+        subTrack vertebrateChainNetViewnet on
         subGroups view=net species=s008 clade=c01
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -690,7 +690,7 @@ priority 9
         otherDb araMac1
 
         track netGeoFor1
-        subTrack vertebrateChainNetViewnet off
+        subTrack vertebrateChainNetViewnet on
         subGroups view=net species=s013 clade=c01
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -770,7 +770,7 @@ priority 9
         otherDb pseHum1
 
         track netTaeGut2
-        subTrack vertebrateChainNetViewnet off
+        subTrack vertebrateChainNetViewnet on
         subGroups view=net species=s023 clade=c01
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -826,7 +826,7 @@ priority 9
         otherDb thaSir1
 
         track netXenTro9
-        subTrack vertebrateChainNetViewnet off
+        subTrack vertebrateChainNetViewnet on
         subGroups view=net species=s029 clade=c03
         shortLabel $o_db Net
         longLabel $o_db ($o_date) Alignment Net
@@ -938,7 +938,7 @@ priority 9
         otherDb astMex1
 
         track netDanRer11
-        subTrack vertebrateChainNetViewnet off
+        subTrack vertebrateChainNetViewnet on
         subGroups view=net species=s043 clade=c06
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -1074,7 +1074,7 @@ priority 9
         otherDb takFla1
 
         track netFr3
-        subTrack vertebrateChainNetViewnet off
+        subTrack vertebrateChainNetViewnet on
         subGroups view=net species=s060 clade=c06
         shortLabel $o_db Net
         longLabel $o_db ($o_date) Alignment Net
