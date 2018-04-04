@@ -954,7 +954,7 @@ priority 9
         otherDb danRer10
 
         track netDanRer7
-        subTrack vertebrateChainNetViewnet off
+        subTrack vertebrateChainNetViewnet on
         subGroups view=net species=s045 clade=c06
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net

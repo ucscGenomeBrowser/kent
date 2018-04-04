@@ -450,7 +450,7 @@ priority 7
         otherDb panTro5
 
         track netPanTro4
-        subTrack primateChainNetViewnet off
+        subTrack primateChainNetViewnet on
         subGroups view=net species=s004 clade=c00
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
