@@ -609,7 +609,7 @@ return rowList;
 }
 
 struct annoRow *aggvGenelessRow(struct annoGratorGpVar *self, struct variant *variant,
-                                enum soTerm term, boolean rjFail, struct lm *callerLm)
+                                boolean rjFail, struct lm *callerLm)
 /* If intergenic variants (no overlapping or nearby genes) are to be included in output,
  * make an output row with empty genePred and a gpFx that is empty except for soNumber. */
 {
@@ -624,6 +624,7 @@ for (i = 0;  i < gpColCount;  i++)
     wordsOut[i] = "";
 struct gpFx *gpFx;
 lmAllocVar(self->lm, gpFx);
+enum soTerm term = hasAltAllele(variant->alleles) ? intergenic_variant : no_sequence_alteration;
 if (term == no_sequence_alteration)
     gpFx->gAllele = variant->alleles->sequence;
 else
@@ -722,7 +723,7 @@ if (rows == NULL)
     {
     // No genePreds means that the primary variant is intergenic.
     if ((self->funcFilter == NULL || self->funcFilter->intergenic))
-	return aggvGenelessRow(self, variant, intergenic_variant, *retRJFilterFailed, callerLm);
+        return aggvGenelessRow(self, variant, *retRJFilterFailed, callerLm);
     else if (retRJFilterFailed && self->gpVarOverlapRule == agoMustOverlap)
 	*retRJFilterFailed = TRUE;
     return NULL;
