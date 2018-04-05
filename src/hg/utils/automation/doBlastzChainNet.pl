@@ -61,6 +61,7 @@ use vars qw/
     $opt_loadChainSplit
     $opt_swapDir
     $opt_skipDownload
+    $opt_trackHub
     /;
 
 # Specify the steps supported with -continue / -stop:
@@ -129,6 +130,7 @@ print STDERR <<_EOF_
     -swapDir path         directory to work in for swap, default:
                           /hive/data/genomes/qDb/bed/blastz.tDb.swap/
     -skipDownload         do not construct the downloads directory
+    -trackHub             construct big* files for track hub
 _EOF_
   ;
 print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
@@ -166,6 +168,7 @@ To use this script outside the UCSC infrastructure, use options:
 
     -swapDir=/some/path/blastz.targetDb.swap/ work directory for -swap
     -skipDownload - leaves all constructed files in the working directory
+    -trackHub - constructs bigChain and bigMaf files to use in a track hub
 ";
   # Detailed help (-help):
   print STDERR "
@@ -312,7 +315,8 @@ sub checkOptions {
                       "noLoadChainSplit",
                       "loadChainSplit",
                       "swapDir=s",
-                      "skipDownload"
+                      "skipDownload",
+                      "trackHub"
 		     );
   &usage(1) if (!$ok);
   &usage(0, 1) if ($opt_help);
@@ -1004,6 +1008,16 @@ foreach f (axtNet/*.$tDb.$qDb.net.axt.gz)
 end
 _EOF_
       );
+    if ($opt_trackHub) {
+      $bossScript->add(<<_EOF_
+mkdir -p bigMaf
+echo "##maf version=1 scoring=blastz" > bigMaf/$tDb.$qDb.net.maf
+zegrep -h -v "^#" mafNet/*.maf.gz >> bigMaf/$tDb.$qDb.net.maf
+echo "##eof maf" >> bigMaf/$tDb.$qDb.net.maf
+gzip bigMaf/$tDb.$qDb.net.maf
+_EOF_
+      );
+    }
   } else {
     $bossScript->add(<<_EOF_
 # Make axtNet for download: one .axt for all of $tDb.
@@ -1019,6 +1033,34 @@ axtToMaf -tPrefix=$tDb. -qPrefix=$qDb. ../axtNet/$tDb.$qDb.net.axt.gz \\
   $defVars{SEQ1_LEN} $defVars{SEQ2_LEN} \\
   stdout \\
 | gzip -c > ../mafNet/$tDb.$qDb.net.maf.gz
+_EOF_
+      );
+    if ($opt_trackHub) {
+      $bossScript->add(<<_EOF_
+mkdir -p ../bigMaf
+ln -s ../mafNet/$tDb.$qDb.net.maf.gz ../bigMaf
+_EOF_
+      );
+    }
+  }
+  if ($opt_trackHub) {
+    $bossScript->add(<<_EOF_
+cd $buildDir/bigMaf
+wget -O bigMaf.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/bigMaf.as'
+wget -O mafSummary.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/mafSummary.as'
+mafToBigMaf $tDb $tDb.$qDb.net.maf.gz stdout \\
+  | sort -k1,1 -k2,2n > $tDb.$qDb.net.txt
+bedToBigBed -type=bed3+1 -as=bigMaf.as -tab \\
+  $tDb.$qDb.net.txt  $defVars{SEQ1_LEN} $tDb.$qDb.net.bb
+hgLoadMafSummary -minSeqSize=1 -test $tDb $tDb.$qDb.net.summary \\
+  $tDb.$qDb.net.maf.gz
+cut -f2- $tDb.$qDb.net.summary.tab | sort -k1,1 -k2,2n \\
+  > $tDb.$qDb.net.summary.bed
+bedToBigBed -type=bed3+4 -as=mafSummary.as -tab \\
+        $tDb.$qDb.net.summary.bed $defVars{SEQ1_LEN} \\
+        $tDb.$qDb.net.summary.bb
+rm -f $tDb.$qDb.net.txt $tDb.$qDb.net.summary.tab \\
+        $tDb.$qDb.net.summary.bed
 _EOF_
       );
   }
@@ -1701,6 +1743,30 @@ if (\$lineCount > 0) then
 endif
 _EOF_
       );
+    if ($opt_trackHub) {
+      $bossScript->add(<<_EOF_
+if (\$lineCount > 0) then
+  mkdir -p ../bigMaf
+  cd ../bigMaf
+  wget -O bigMaf.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/bigMaf.as'
+  wget -O mafSummary.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/mafSummary.as'
+  mafToBigMaf $tDb ../axtChain/$tDb.$qDb.synNet.maf.gz stdout \\
+    | sort -k1,1 -k2,2n > $tDb.$qDb.synNet.txt
+  bedToBigBed -type=bed3+1 -as=bigMaf.as -tab  $tDb.$qDb.synNet.txt \\
+    $defVars{SEQ1_LEN} $tDb.$qDb.synNet.bb
+  hgLoadMafSummary -minSeqSize=1 -test $tDb $tDb.$qDb.synNet.summary \\
+        ../axtChain/$tDb.$qDb.synNet.maf.gz
+  cut -f2- $tDb.$qDb.synNet.summary.tab | sort -k1,1 -k2,2n \\
+        > $tDb.$qDb.synNet.summary.bed
+  bedToBigBed -type=bed3+4 -as=mafSummary.as -tab \\
+        $tDb.$qDb.synNet.summary.bed \\
+        $defVars{SEQ1_LEN} $tDb.$qDb.synNet.summary.bb
+  rm -f $tDb.$qDb.synNet.txt $tDb.$qDb.synNet.summary.tab \\
+        $tDb.$qDb.synNet.summary.bed
+endif
+_EOF_
+      );
+    }
 
     if (! $opt_skipDownload) {
       $bossScript->add(<<_EOF_

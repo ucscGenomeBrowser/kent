@@ -28,6 +28,7 @@ use vars qw/
     $opt_targetSizes
     $opt_querySizes
     $opt_skipDownload
+    $opt_trackHub
     /;
 
 # Specify the steps supported with -continue / -stop:
@@ -64,6 +65,7 @@ options:
     -targetSizes path     path to target chrom.sizes file
     -querySizes path      path to query chrom.sizes file
     -skipDownload         do not construct the downloads directory
+    -trackHub             construct big* files for track hub
 _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
@@ -92,7 +94,6 @@ Assumptions:
 }
 
 # Globals:
-my %defVars = ();
 # Command line args: tDb qDb
 my ($tDb, $qDb);
 # Other:
@@ -108,6 +109,7 @@ sub checkOptions {
 		      'targetSizes=s',
 		      'querySizes=s',
                       "skipDownload",
+                      "trackHub",
 		      @HgAutomate::commonOptionSpec,
 		      );
   &usage(1) if (!$ok);
@@ -229,6 +231,16 @@ foreach f (axtRBestNet/*.$tDb.$qDb.net.axt.gz)
 end
 _EOF_
     );
+    if ($opt_trackHub) {
+      $bossScript->add(<<_EOF_
+mkdir -p bigMaf
+echo "##maf version=1 scoring=blastz" > bigMaf/$tDb.$qDb.rbestNet.maf
+zegrep -h -v "^#" mafRBestNet/*.maf.gz >> bigMaf/$tDb.$qDb.rbestNet.maf
+echo "##eof maf" >> bigMaf/$tDb.$qDb.rbestNet.maf
+gzip bigMaf/$tDb.$qDb.rbestNet.maf
+_EOF_
+      );
+    }
   } else {
   $bossScript->add(<<_EOF_
 # Make rbest net axt's download
@@ -249,10 +261,39 @@ cd ../axtRBestNet
 md5sum *.axt.gz > md5sum.txt
 _EOF_
     );
+    if ($opt_trackHub) {
+      $bossScript->add(<<_EOF_
+mkdir -p ../bigMaf
+cd ../bigMaf
+ln -s ../mafRBestNet/$tDb.$qDb.rbest.maf.gz ./$tDb.$qDb.rbestNet.maf.gz
+_EOF_
+      );
+    }
   }
+  if ($opt_trackHub) {
+      $bossScript->add(<<_EOF_
+cd $buildDir/bigMaf
+wget -O bigMaf.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/bigMaf.as'
+wget -O mafSummary.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/mafSummary.as'
+mafToBigMaf $tDb $tDb.$qDb.rbestNet.maf.gz stdout \\
+  | sort -k1,1 -k2,2n > $tDb.$qDb.rbestNet.txt
+bedToBigBed -type=bed3+1 -as=bigMaf.as -tab  $tDb.$qDb.rbestNet.txt \\
+  $targetSizes $tDb.$qDb.rbestNet.bb
+hgLoadMafSummary -minSeqSize=1 -test $tDb $tDb.$qDb.rbestNet.summary \\
+        $tDb.$qDb.rbestNet.maf.gz
+cut -f2- $tDb.$qDb.rbestNet.summary.tab | sort -k1,1 -k2,2n \\
+        > $tDb.$qDb.rbestNet.summary.bed
+bedToBigBed -type=bed3+4 -as=mafSummary.as -tab \\
+        $tDb.$qDb.rbestNet.summary.bed \\
+        $targetSizes $tDb.$qDb.rbestNet.summary.bb
+rm -f $tDb.$qDb.rbestNet.txt $tDb.$qDb.rbestNet.summary.tab \\
+        $tDb.$qDb.rbestNet.summary.bed
+_EOF_
+      );
+  }
+
   $bossScript->execute();
 } # doRecipBest
-
 
 #########################################################################
 # * step: download [dbHost]
