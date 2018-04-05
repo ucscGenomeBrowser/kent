@@ -36,6 +36,7 @@ my $stepper = new HgStepManager(
     [ { name => 'recipBest',  func => \&doRecipBest },
       { name => 'download',   func => \&doDownload },
       { name => 'load',       func => \&loadRBest },
+      { name => 'cleanup',    func => \&cleanUp },
     ]
 				);
 
@@ -76,6 +77,7 @@ have already been created using doBlastzChainNet.pl.  Steps:
     recipBest: Net in both directions to get reciprocal best.
     download: Make a reciprocalBest subdir of the existing download dir.
     load:     load reciprocal best chain/net tables.
+    cleanup   remove temporary files created during this process.
 All work is done in the axtChain subdir of the build directory:
 $HgAutomate::clusterData/\$tDb/$HgAutomate::trackBuild/blastz.\$qDb unless -buildDir is given.
 ";
@@ -435,6 +437,24 @@ _EOF_
 
   $bossScript->execute();
 }	#	sub loadRBest {}
+
+sub cleanUp {
+  my $runDir = "$buildDir";
+  my $whatItDoes = "cleanup temporary files used by RBest procedure.";
+  my $bossScript = newBash HgRemoteScript("$runDir/rBestCleanUp.bash", $dbHost,
+				      $runDir, $whatItDoes);
+  $bossScript->add(<<_EOF_
+rm -fr axtChain/experiments
+rm -f axtChain/bigChain.as axtChain/bigLink.as
+rm -f bigMaf/bigMaf.as
+rm -f bigMaf/mafSummary.as
+rm -fr axtChain/rBestNet axtChain/rBestChain
+rm -f axtChain/chainRBest*.tab
+_EOF_
+  );
+
+  $bossScript->execute();
+}	#	sub cleanUp {}
 
 #########################################################################
 # main
