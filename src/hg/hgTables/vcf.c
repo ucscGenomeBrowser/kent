@@ -332,7 +332,8 @@ for (region = regionList; region != NULL && (maxOut > 0); region = region->next)
     vcfFileFree(&vcff);
     freeMem(fileName);
     }
-
+if (!printedHeader)
+    explainWhyNoResults(f);
 if (maxOut == 0)
     errAbort("Reached output limit of %d data values, please make region smaller,\n\tor set a higher output line limit with the filter settings.", bigFileMaxOutput());
 /* Clean up and exit. */
