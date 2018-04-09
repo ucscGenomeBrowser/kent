@@ -94,8 +94,8 @@ priority 7
         track chainPanPan2
         subTrack primateChainNetViewchain off
         subGroups view=chain species=s007 clade=c00
-        shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain panPan2
         otherDb panPan2
 
@@ -476,8 +476,8 @@ priority 7
         track netPanPan2
         subTrack primateChainNetViewnet off
         subGroups view=net species=s007 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign panPan2 chainPanPan2
         otherDb panPan2
 
@@ -772,8 +772,8 @@ priority 7
         track netOtoGar3
         subTrack primateChainNetViewnet on
         subGroups view=net species=s045 clade=c03
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign otoGar3 chainOtoGar3
         otherDb otoGar3
 
