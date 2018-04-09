@@ -390,8 +390,8 @@ priority 7
         track chainOtoGar3
         subTrack primateChainNetViewchain off
         subGroups view=chain species=s045 clade=c03
-        shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain otoGar3
         otherDb otoGar3
 
