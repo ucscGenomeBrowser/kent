@@ -1036,7 +1036,9 @@ printf("For variants that involve both a deletion and insertion, "
 puts("</div>");
 printf("<div id=\"noHgvs\" style=\"display: %s;\">",
        hgvsOk ? "none" : "block");
-printf("Select RefSeq Genes or the latest official GENCODE release "
+printf("Select RefSeq Genes or an official GENCODE release "
+       "(\"Basic Gene Annotation Set from GENCODE...\" "
+       "or \"Comprehensive Gene Annotation Set...\") "
        "in the \"Select Genes\" section above in order to make options appear.\n");
 puts("</div>");
 puts("<br>");
