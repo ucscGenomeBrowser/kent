@@ -94,7 +94,7 @@ genePredToMafFrames hg38 chr22_KI270731v1_random.maf bigMafFrames.txt hg38 singl
 bedToBigBed -type=bed3+8 -as=mafFrames.as -tab bigMafFrames.txt hg38.chrom.sizes bigMafFrames.bb
 
 hgLoadMafSummary -minSeqSize=1 -test hg38 bigMafSummary chr22_KI270731v1_random.maf
-cut -f 2 bigMafSummary.tab | sort -k1,1 -k2,2n &gt; bigMafSummary.bed
+cut -f2- bigMafSummary.tab | sort -k1,1 -k2,2n &gt; bigMafSummary.bed
 bedToBigBed -type=bed3+4 -as=mafSummary.as -tab bigMafSummary.bed hg38.chrom.sizes bigMafSummary.bb </code></pre>
 <p>
 <strong>Step 7.</strong> 

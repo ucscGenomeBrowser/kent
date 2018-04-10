@@ -898,6 +898,8 @@ if (txStart >= cds->start && txStart < cds->end && txEnd > cds->start &&
         struct seqWindow *pSeqWin = memSeqWindowNew(vpPep->name, pSeq);
         vpPep->rightShiftedBases = indelShift(pSeqWin, &vpPep->start, &vpPep->end,
                                               vpPep->alt, INDEL_SHIFT_NO_MAX, isdRight);
+        freeMem(vpPep->ref);
+        vpPep->ref = cloneStringZ(pSeq+vpPep->start, vpPep->end - vpPep->start);
         memSeqWindowFree(&pSeqWin);
         }
     dnaSeqFree((struct dnaSeq **)&txTrans);
@@ -999,8 +1001,25 @@ if (pslQStrand(psl) == '-')
 return dy->string;
 }
 
+static void truncateAtStopCodon(char *codingSeq)
+/* If codingSeq contains a stop codon, truncate any sequence past that. */
+{
+if (codingSeq == NULL)
+    errAbort("truncateAtStopCodon: null input");
+char *p = codingSeq;
+while (p[0] != '\0' && p[1] != '\0' && p[2] != '\0')
+    {
+    if (isStopCodon(p))
+	{
+	p[3] = '\0';
+	break;
+	}
+    p += 3;
+    }
+}
+
 static void getRefAltCodon(struct vpTx *vpTx, struct genbankCds *cds, struct dnaSeq *txSeq,
-                           struct codingChange *cc, struct lm *lm)
+                           struct codingChange *cc, boolean isFrameshift, struct lm *lm)
 /* Make an in-frame representation of modified CDS sequence. */
 {
 char *txCdsSeq = txSeq->dna + cds->start;
@@ -1015,20 +1034,35 @@ int basesBefore = cdsStart % 3;
 int codonStart = cdsStart - basesBefore;
 int cdsEnd = txEnd - cds->start - utr3Bases;
 int basesAfter = (3 - cdsEnd % 3) % 3;
-if (basesBefore + (cdsEnd - cdsStart) + basesAfter == 0 &&
-    cdsAltLen % 3 != 0)
-    // Frameshift insertion at codon boundary -- show disrupted codon instead of just ""
-    basesAfter = 3;
-int refCodonLen = cdsEnd + basesAfter - codonStart;
-cc->codonOld = lmCloneStringZ(lm, txCdsSeq + codonStart, refCodonLen);
+if (isFrameshift)
+    {
+    // Report the original remainder of CDS
+    int restOfCds = cds->end - cds->start - codonStart;
+    cc->codonOld = lmCloneStringZ(lm, txCdsSeq+codonStart, restOfCds);
+    }
+else
+    {
+    int refCodonLen = cdsEnd + basesAfter - codonStart;
+    cc->codonOld = lmCloneStringZ(lm, txCdsSeq + codonStart, refCodonLen);
+    }
+if (isFrameshift)
+    {
+    // Include the rest of the transcript sequence so we can figure out where the new stop
+    // codon will be.
+    basesAfter = txSeq->size - txEnd;
+    cdsAltLen += utr3Bases;
+    }
 size_t codonNewSize = basesBefore + cdsAltLen + basesAfter + 1;
 char *codonNew = lmAlloc(lm, codonNewSize);
 if (basesBefore > 0)
     safencpy(codonNew, codonNewSize, txCdsSeq + codonStart, basesBefore);
 if (cdsAltLen > 0)
-    safencpy(codonNew + basesBefore, codonNewSize, vpTx->txAlt + utr5Bases, cdsAltLen);
+    safencpy(codonNew+basesBefore, codonNewSize-basesBefore, vpTx->txAlt + utr5Bases, cdsAltLen);
 if (basesAfter > 0)
-    safencpy(codonNew + basesBefore + cdsAltLen, codonNewSize, txCdsSeq + cdsEnd, basesAfter);
+    safencpy(codonNew + basesBefore + cdsAltLen, codonNewSize - basesBefore - cdsAltLen,
+             txCdsSeq + cdsEnd, basesAfter);
+if (isFrameshift)
+    truncateAtStopCodon(codonNew);
 cc->codonNew = codonNew;
 }
 
@@ -1093,7 +1127,7 @@ cc->txAlt = lmCloneString(lm, vpTx->txAlt);
 cc->cdsPosition = (txStart > cds->start) ? txStart - cds->start : 0;
 cc->exonNumber = pslBlkIxToExonIx(psl, vpTx->start.aliBlkIx, MIN_INTRON);
 cc->exonCount = pslCountExons(psl, MIN_INTRON);
-getRefAltCodon(vpTx, cds, txSeq, cc, lm);
+getRefAltCodon(vpTx, cds, txSeq, cc, (fx->soNumber == frameshift_variant), lm);
 if (vpPep->cantPredict)
     {
     cc->pepPosition = cc->cdsPosition / 3;

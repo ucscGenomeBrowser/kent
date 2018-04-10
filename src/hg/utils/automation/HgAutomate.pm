@@ -669,6 +669,7 @@ sub machineHasFile {
 
 sub databaseExists {
   my ($dbHost, $db) = @_;
+  return 0 if ($dbHost =~ m/nohost/i);
   confess "Must have exactly 2 arguments" if (scalar(@_) != 2);
   my $query = "show databases like \"$db\";";
   my $line = `echo '$query' | $HgAutomate::runSSH $dbHost $centralDbSql`;

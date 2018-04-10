@@ -837,9 +837,6 @@ else
 
         if (sameString("barChart", type) || sameString("bigBarChart", type))
             requireBarChartBars(hub, genome, tdb);
-        // TODO: Consider removing requirement for this (default to no direction)
-        if (sameString("interact", type) || sameString("bigInteract", type))
-            requiredSetting(hub, genome, tdb, INTERACT_DIRECTIONAL);
         }
     }
 }

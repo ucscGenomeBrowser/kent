@@ -32604,4 +32604,88 @@ mv loaded/wgEncodeGencodeAttrsV19.tab.loaded loaded/wgEncodeGencodeTagV19.tab.lo
   SELECT count(*) FROM wgEncodeGencodeAttrsV19 WHERE transcriptClass="coding" AND proteinId = "";
   -> 0 !!! got them all
   DROP DATABASE markd_ens;
+
+# 2018-03-19: update search to include protein id
+edit kent/src/hg/makeDb/trackDb/human/hg19/wgEncodeGencodeV19.ra
+
 #############################################################################
+# LASTZ human/hg19 vs. pig/susScr11 - (DONE - 2018-04-02 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzSusScr11.2018-04-02
+    cd /hive/data/genomes/hg19/bed/lastzSusScr11.2018-04-02
+
+    printf '# human vs pig
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_M=254
+# default BLASTZ_Q score matrix:
+#       A     C     G     T
+# A    91  -114   -31  -123
+# C  -114   100  -125   -31
+# G   -31  -125   100  -114
+# T  -123   -31  -114    91
+
+# TARGET: Human hg19
+SEQ1_DIR=/hive/data/genomes/hg19/hg19.2bit
+SEQ1_LEN=/hive/data/genomes/hg19/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: pig susScr11
+SEQ2_DIR=/hive/data/genomes/susScr11/susScr11.2bit
+SEQ2_LEN=/hive/data/genomes/susScr11/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=2
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzSusScr11.2018-04-02
+TMPDIR=/dev/shm
+'> DEF
+
+    time ($HOME/kent/src/hg/utils/automation/bigBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -trackHub -syntenicNet) > do.log 2>&1
+    # real    638m46.019s
+
+    cat fb.hg19.chainSusScr11Link.txt
+    # 1427668193 bases of 2897316137 (49.276%) in intersection
+    cat fb.hg19.chainSynSusScr11Link.txt
+    # 1375005074 bases of 2897316137 (47.458%) in intersection
+
+    # testing -trackHub option
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	-trackHub hg19 susScr11) > rbest.log 2>&1 &
+    # real    691m17.717s
+
+    cat fb.hg19.chainRBest.SusScr11.txt
+    # 1342171392 bases of 2897316137 (46.325%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/susScr11/bed/blastz.hg19.swap
+    cd /hive/data/genomes/susScr11/bed/blastz.hg19.swap
+
+    # testing -trackHub option
+    time ($HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg19/bed/lastzSusScr11.2018-04-02/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -trackHub -syntenicNet) > swap.log 2>&1
+    #  real    107m7.364s
+
+    cat fb.susScr11.chainHg19Link.txt
+    # 1386496715 bases of 2472073034 (56.086%) in intersection
+    cat fb.susScr11.chainSynHg19Link.txt
+    # 1353158526 bases of 2472073034 (54.738%) in intersection
+
+    # testing -trackHub option
+    time ($HOME/kent/src/hg/utils/automation/doRecipBest.pl \
+ -load -trackHub -workhorse=hgwdev -buildDir=`pwd` susScr11 hg19) \
+	> rbest.log 2>&1
+    # real    610m45.624s
+
+    cat fb.susScr11.chainRBest.Hg19.txt
+    # 1342604720 bases of 2472073034 (54.311%) in intersection
+
+#########################################################################

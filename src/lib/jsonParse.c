@@ -371,20 +371,14 @@ if(str[pos])
 return ele;
 }
 
-char *jsonStringEscape(char *inString)
-/* backslash escape a string for use in a double quoted json string.
- * More conservative than javaScriptLiteralEncode because
- * some json parsers complain if you escape & or ' */
+int jsonStringEscapeSize(char *inString)
+/* Return the size in bytes including terminal '\0' for escaped string. */
 {
-char c;
-int outSize = 0;
-char *outString, *out, *in;
-
 if (inString == NULL)
-    return(cloneString(""));
-
-/* Count up how long it will be */
-in = inString;
+    // Empty string
+    return 1;
+int outSize = 0;
+char *in = inString, c;
 while ((c = *in++) != 0)
     {
     switch(c)
@@ -405,13 +399,27 @@ while ((c = *in++) != 0)
             outSize += 1;
         }
     }
-outString = needMem(outSize+1);
+return outSize + 1;
+}
 
+void jsonStringEscapeBuf(char *inString, char *buf, size_t bufSize)
+/* backslash escape a string for use in a double quoted json string.
+ * More conservative than javaScriptLiteralEncode because
+ * some json parsers complain if you escape & or '.
+ * bufSize must be at least jsonStringEscapeSize(inString). */
+{
+if (inString == NULL)
+    {
+    // Empty string
+    buf[0] = 0;
+    return;
+    }
 /* Encode string */
-in = inString;
-out = outString;
+char *in = inString, *out = buf, c;
 while ((c = *in++) != 0)
     {
+    if (out - buf >= bufSize-1)
+        errAbort("jsonStringEscapeBuf: insufficient buffer size");
     switch(c)
         {
         case '\"':
@@ -439,6 +447,16 @@ while ((c = *in++) != 0)
         }
     }
 *out++ = 0;
+}
+
+char *jsonStringEscape(char *inString)
+/* backslash escape a string for use in a double quoted json string.
+ * More conservative than javaScriptLiteralEncode because
+ * some json parsers complain if you escape & or ' */
+{
+int outSize = jsonStringEscapeSize(inString);
+char *outString = needMem(outSize);
+jsonStringEscapeBuf(inString, outString, outSize);
 return outString;
 }
 

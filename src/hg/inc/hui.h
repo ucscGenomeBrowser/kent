@@ -1444,5 +1444,11 @@ char *replaceInUrl(char* url, char *idInUrl, struct cart* cart, char *db, char* 
 struct slPair *buildFieldList(struct trackDb *tdb, char *trackDbVar, struct asObject *as);
 /* Build up a hash of a list of fields in an AS file. */
 
+char *checkDataVersion(char *database, struct trackDb *tdb);
+/* see if trackDb has a dataVersion setting and check that file for version */
+
 void printDataVersion(char *database, struct trackDb *tdb);
+/* If this annotation has a dataVersion setting, print it.
+ * check hgFixed.trackVersion, meta data and trackDb 'dataVersion'. */
+
 #endif /* HUI_H */

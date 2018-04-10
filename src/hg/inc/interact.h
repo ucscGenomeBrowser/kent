@@ -6,7 +6,7 @@
 #define INTERACT_H
 
 #include "jksql.h"
-#define INTERACT_NUM_COLS 16
+#define INTERACT_NUM_COLS 18
 
 extern char *interactCommaSepFieldNames;
 
@@ -15,21 +15,23 @@ struct interact
     {
     struct interact *next;  /* Next in singly linked list. */
     char *chrom;	/* Chromosome (or contig, scaffold, etc.). For interchromosomal, use 2 records */
-    unsigned chromStart;	/* Start position in chromosome of lower region. For interchromsomal, chromStart of this region */
+    unsigned chromStart;	/* Start position in chromosome of lower region. For interchromosomal, set to chromStart of this region */
     unsigned chromEnd;	/* End position in chromosome of upper region. For interchromosomal, set to chromEnd of this region */
     char *name;	/* Name of item, for display.  Usually 'name1/name2' or empty */
-    unsigned score;	/* Score from 0-1000 */
+    unsigned score;	/* Score from 0-1000. */
     double value;	/* Strength of interaction or other data value. Typically basis for score */
-    char *exp;	/* Experiment name (metadata for filtering) or empty. */
+    char *exp;	/* Experiment name (metadata for filtering). Use . if not applicable */
     unsigned color;	/* Item color, as itemRgb in bed9. Typically based on strength or filter */
-    char *sourceChrom;	/* Chromosome of source region (directional) or lower region. For interchromosomal, set to chrom of this region*/
+    char *sourceChrom;	/* Chromosome of source region (directional) or lower region. For non-directional interchromosomal, chrom of this region. */
     unsigned sourceStart;	/* Start position in chromosome of source/lower/this region */
     unsigned sourceEnd;	/* End position in chromosome of source/lower/this region */
     char *sourceName;	/* Identifier of source/lower/this region. Can be used as link to related table */
-    char *targetChrom;	/* Chromosome of target region (directional) or upper region. for interchromsomal, set to chrom of other region */
-    unsigned targetStart;	/* Start position in chromosome of target/upper/other region */
-    unsigned targetEnd;	/* End position in chromosome of target/upper/other region */
-    char *targetName;	/* Identifier of target/upper region. Can be used as link to related table */
+    char *sourceStrand;	/* Orientation of source/lower/this region: + or -.  Use . if not applicable */
+    char *targetChrom;	/* Chromosome of target region (directional) or upper region. For non-directional interchromosomal, chrom of other region */
+    unsigned targetStart;	/* Start position in chromosome of target/upper/this region */
+    unsigned targetEnd;	/* End position in chromosome of target/upper/this region */
+    char *targetName;	/* Identifier of target/upper/this region. Can be used as link to related table */
+    char *targetStrand;	/* Orientation of target/upper/this region: + or -.  Use . if not applicable */
     };
 
 void interactStaticLoad(char **row, struct interact *ret);
@@ -94,6 +96,15 @@ struct asObject *interactAsObj();
 
 char *interactOtherChrom(struct interact *inter);
 /* Get other chromosome from an interaaction. Return NULL if same chromosome */
+
+int interactRegionCenter(int start, int end);
+/* Return genomic location of center of region */
+
+int interactRegionDistance(struct interact *inter);
+/* Return distance between region midpoints. Return -1 for other chromosome */
+
+int interactDistanceCmp(const void *va, const void *vb);
+/* Compare based on distance between region midpoints */
 
 #endif /* INTERACT_H */
 

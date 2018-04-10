@@ -1,0 +1,13 @@
+#!/bin/tcsh -efx
+if ($1 == "") then
+   echo "Run all agents on a file"
+   echo "usage:  cdwQaAgent fileId"
+   exit
+endif
+cdwMakeValidFile $1 $1
+cdwMakePairedEndQa $1 $1
+cdwMakeEnrichments $1 $1
+cdwMakeReplicateQa $1 $1
+cdwMakeContaminationQa $1 $1
+cdwMakeRepeatQa $1 $1
+cdwMakeTrackViz $1 $1

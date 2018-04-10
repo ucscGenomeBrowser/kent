@@ -1195,6 +1195,16 @@ void baseColorDrawOptDropDown(struct cart *cart, struct trackDb *tdb)
 baseColorDropLists(cart, tdb, tdb->track);
 }
 
+static enum baseColorDrawOpt limitDrawOptForType(struct trackDb *tdb, enum baseColorDrawOpt drawOpt)
+/* If tdb->type is genePred, but something fancier like mRNA codons is enabled because the setting
+ * is coming from a view that also includes a PSL track, downgrade it to genomic codons to avoid
+ * drawing problems caused by the inappropriate setting. #21194 */
+{
+if (startsWith("genePred", tdb->type) && drawOpt > baseColorDrawGenomicCodons)
+    drawOpt = baseColorDrawGenomicCodons;
+return drawOpt;
+}
+
 enum baseColorDrawOpt baseColorDrawOptEnabled(struct cart *cart,
 					  struct trackDb *tdb)
 /* Query cart & trackDb to determine what drawing mode (if any) is enabled. */
@@ -1208,7 +1218,7 @@ stringVal = trackDbSettingClosestToHomeOrDefault(tdb, BASE_COLOR_DEFAULT,
 						  BASE_COLOR_DRAW_OFF);
 stringVal = cartUsualStringClosestToHome(cart, tdb, FALSE, BASE_COLOR_VAR_SUFFIX,stringVal);
 
-return baseColorDrawOptStringToEnum(stringVal);
+return limitDrawOptForType(tdb, baseColorDrawOptStringToEnum(stringVal));
 }
 
 
@@ -6370,8 +6380,32 @@ if (opened)
     }
 }
 
+static void gencodeLabelControls(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed, boolean parentLevel)
+/* generate label checkboxes for GENCODE. */
+{
+// See hgTracks/gencodeTracks.c:registerProductionTrackHandlers()
+// and hgTracks/gencodeTracks.c:assignConfiguredName()
+char *labelsNames[][2] = {
+    {"gene name", "geneName"},
+    {"gene id", "geneId"},
+    {"transcript id", "transcriptId"},
+    {NULL, NULL}
+};
+int i;
+for (i = 0; labelsNames[i][0] != NULL; i++)
+    {
+    char varName[64], varSuffix[64];
+    safef(varSuffix, sizeof(varSuffix), "label.%s", labelsNames[i][1]);
+    safef(varName, sizeof(varName), "%s.%s", name, varSuffix);
+    char *value = cartUsualStringClosestToHome(cart, tdb, parentLevel, varSuffix, NULL);
+    boolean checked = (value != NULL) && !sameString(value, "0");
+    printf("%s%s: ", (i > 0) ? "&nbsp;&nbsp;" : "", labelsNames[i][0]);
+    cgiMakeCheckBoxMore(varName, checked, NULL);
+    }
+}
+
 void genePredCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
-/* Put up gencode-specific controls */
+/* Put up genePred-specific controls */
 {
 char varName[64];
 boolean parentLevel = isNameAtParentLevel(tdb,name);
@@ -6387,10 +6421,16 @@ if (sameString(name, "acembly"))
     acemblyDropDown("acembly.type", acemblyClass);
     printf("  ");
     }
-else if (startsWith("wgEncodeGencode", name)
-     ||  sameString("wgEncodeSangerGencode", name)
+else if (startsWith("wgEncodeGencode", name))
+    {
+    // new GENCODEs
+    gencodeLabelControls(db, cart, tdb, name, title, boxed, parentLevel);
+    }
+else if (sameString("wgEncodeSangerGencode", name)
      ||  (startsWith("encodeGencode", name) && !sameString("encodeGencodeRaceFrags", name)))
     {
+    // GENCODE pilot (see hgTracks/gencodeTracks.c:registerPilotTrackHandlers()
+    // and hgTracks/simpleTracks.c:genePredAssignConfiguredName()
     printf("<B>Label:</B> ");
     safef(varName, sizeof(varName), "%s.label", name);
     cgiMakeRadioButton(varName, "gene", sameString("gene", geneLabel));
@@ -8938,9 +8978,8 @@ freeMem(scName);
 return eUrl->string;
 }
 
-void printDataVersion(char *database, struct trackDb *tdb)
-/* If this annotation has a dataVersion setting, print it.
- * check hgFixed.trackVersion, meta data and trackDb 'dataVersion'. */
+char *checkDataVersion(char *database, struct trackDb *tdb)
+/* see if trackDb has a dataVersion setting and check that file for version */
 {
 // try the metadata
 metadataForTable(database, tdb, NULL);
@@ -8964,6 +9003,15 @@ if (version != NULL)
         lineFileClose(&lf);
         }
     }
+return version;
+}
+
+void printDataVersion(char *database, struct trackDb *tdb)
+/* If this annotation has a dataVersion setting, print it.
+ * check hgFixed.trackVersion, meta data and trackDb 'dataVersion'. */
+{
+char *version = checkDataVersion(database, tdb);
+
 if (version == NULL)
     {
     // try the hgFixed.trackVersion table

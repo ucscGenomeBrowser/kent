@@ -46,6 +46,120 @@
 <!-- ============= 2018 archived news ============= -->
 <a name="2018"></a>
 
+<a name="040418"></a>
+<h2>New NCBI RefSeq tracks for human, rat, yeast, C. elegans, zebrafish, X. tropicalis and fly</h2>
+<p>
+We are pleased to announce the release of a new set of gene annotation tracks for the hg19/GRCh37, 
+hg38/GRCh38, rn6/Rnor_6.0, sacCer3/R64, ce11/WBcel235, danRer10/GRCz10, danRer11/GRCz11, 
+xenTro7/Xtropicalis_v7, xenTro9/Xenopus_tropicalis_v9.1 and dm6/Release 6 plus ISO1 MT
+assemblies based on data from NCBI's Reference Sequence Database (RefSeq). For all of these tracks,
+the alignments and coordinates are provided by RefSeq. These tracks are organized in a composite
+track that includes:</p>
+<ul>
+  <li>RefSeq All &ndash; all annotations from the curated and predicted sets
+  <li>RefSeq Curated &ndash; curated annotations beginning with NM, NR, or NP
+  <li>RefSeq Predicted &ndash; predicted annotations beginning with XM or XR
+  <li>RefSeq Other &ndash; all other RefSeq annotations not included in RefSeq All
+  <li>RefSeq Alignments &ndash; alignments of transcripts to the genome provided by RefSeq
+</ul>
+<p>
+The new composite track also includes a &quot;UCSC RefSeq&quot; track that is based on our original
+&quot;RefSeq Genes&quot; track. As with before, this UCSC track is a result of our realignments
+of RefSeq RNAs to the genome, which means that there may be some cases where the annotations
+differ from those in the new NCBI RefSeq tracks. Also note that the <em>Predictions</em> subtrack is 
+unavailable for the following assemblies: hg19, dm6, ce11, and sacCer3.</p>
+<p>
+More details about these tracks, their construction, and how to access their underlying data
+can be found on
+<a href="http://genome.ucsc.edu/blog/the-new-ncbi-refseq-tracks-and-you/"
+target="_blank">this blog post</a>.</p>
+<p>
+A huge thank you to Terence Murphy from the RefSeq group and to Hiram Clawson, Angie Hinrichs, 
+Christopher Lee and many others from the UCSC Genome Browser staff for
+bringing this track to life.</p>
+
+<a name="040318"></a>
+<h2>Mar. 21, 2018 &nbsp;&nbsp; New genome browser tool: Track Collection Builder</h2>
+<p>
+We are pleased to announce a new tool in the UCSC Genome Browser:</p>
+<p>
+The <a href="../cgi-bin/hgCollection" target="_blank">Track Collection Builder</a> (My Data &gt;
+Track Collection Builder) is a tool that allows multiple tracks to be copied and grouped together
+into one composite track or &quot;collection&quot;. A 
+<a href="../goldenPath/help/trackDb/trackDbHub.html#compositeTrack" target="_blank">
+composite track</a> can be thought of as a container for grouping a set of similar-type annotation 
+tracks. Once grouped, settings (e.g., track height, graph color, overlay views) can be applied to 
+all sub-tracks at once. Currently, <a href="../cgi-bin/hgCollection#SupportedData" target="_blank">
+supported data types</a> are limited to continuous graphing data (wiggle, bigWig, and bedGraph).</p>
+<p>
+The Track Collection Builder is pictured below - note the left and right panes. The left pane, 
+&quot;Available Tracks&quot; displays tracks that are available to add to a new collection. The 
+first folder, &quot;Visible Tracks&quot; displays all supported tracks that are currently seen in 
+the browser (i.e., not set to "hide" visibility). Below that are expandable folders which show 
+selectable tracks from all other browser categories, regardless of browser visibility. To add 
+custom tracks or tracks from hubs, first load them into the browser and then add them to a 
+collection.</p>
+<p>
+The right pane, &quot;Collected Tracks&quot; displays current collections. In the image below, two 
+tracks (which are currently visible in the browser) have been added to a new collection. In the 
+lower part of the image, the browser graphic is shown displaying this collection (highlighted 
+in green). Below the collection are the two original tracks (&quot;My Custom Track&quot; and the 
+native GC Percent track). Note that the two original tracks have been copied into the new 
+collection, where they are now grouped sub-tracks.</p>
+<p>
+Below are several new features which are detailed in the 
+<a href="../cgi-bin/hgCollection#Configure" target="_blank">detailed in the help guide</a>:</p>
+<ul>
+  <li>Sort sub-tracks in a collection by similarity</li> 
+  <li>Sort sub-tracks in a collection by magnitude</li> 
+  <li>New collection &quot;overlay&quot; to add all sub-tracks together</li> 
+  <li>New collection &quot;overlay&quot; to subtract the first (top) track from the sum of all 
+  other sub-tracks</li> 
+</ul>
+
+<p>
+See also: <a href="https://www.youtube.com/watch?v=2_RiIY07omY" target="_blank">
+Quick Demo Video of the Track Collection Builder</a></p>
+
+<p> 
+<img src="../../images/hgCollectionNewsDemo.jpg" alt="hgCollectionNewsDemo.jpg"></p>
+
+<a name="032118"></a>
+<h2>Mar. 21, 2018 &nbsp;&nbsp; New genome browser: <em>Petromyzon marinus</em>, petMar3</h2>
+<p>A genome browser is now available for the <em>Petromyzon marinus</em> assembly released in
+December 2017 by the <a href="https://ukhealthcare.uky.edu/genomics-core-laboratory"
+target="_blank">University of Kentucky</a> (Pmar_germline 1.0, UCSC version petMar3).</p>
+<h3>About the assembly:</h3>
+<ul>
+   <li><b>UCSC Genome Browser assembly ID:</b>
+      <a href="../cgi-bin/hgGateway?db=petMar3" target="_blank">petMar3</a></li>
+   <li><b>Sequencing/Assembly provider ID:</b>
+      <a href="https://ukhealthcare.uky.edu/genomics-core-laboratory" target="_blank">
+      University of Kentucky</a></li>
+   <li><b>Assembly date:</b> December 2017</li>
+   <li><b>Accession ID:</b> GCA_002833325.1</li>
+   <li><b>NCBI Genome information:</b><a href="https://www.ncbi.nlm.nih.gov/genome/287" 
+      target="_blank"> 287</a> <em>(Petromyzon marinus)</em></li>
+   <li><b>NCBI Assembly information:</b><a href="https://www.ncbi.nlm.nih.gov/assembly/1474531" 
+      target="_blank"> 1474531</a> <em> (Pmar_germline 1.0) </em></li>
+   <li><b>BioProject information:</b><a href="https://www.ncbi.nlm.nih.gov/bioproject/357048" 
+      target="_blank"> 357048</a></li>
+   <li><b>BioSample information:</b><a href="https://www.ncbi.nlm.nih.gov/biosample/SAMN06131802" 
+      target="_blank"> SAMN06131802</a></li>
+   <li><b>Contig+scaffold count:</b> 36,453</li>
+   <li><b>Total size:</b> 1,130,417,696</li>
+   <li><a href="../goldenPath/credits.html#lamprey_credits" target="_blank">Acknowledgments</a></li>
+</ul>
+<h3>Data and Downloads:</h3>
+<ul>
+   <li><a href="../goldenPath/credits.html#lamprey_use" target="_blank">
+       Data use conditions and restrictions</a></li>
+   <li><a href="../goldenPath/help/ftp.html" target="_blank">Rsync</a> and 
+       <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/petMar3/" target="_blank">FTP</a></li>
+   <li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#lamprey" target="_blank">
+       Downloads page</a></li>
+</ul>
+
 <a name="022018"></a>
 <h2>Feb. 20, 2018 &nbsp;&nbsp; New video:  Visibility control in the Browser </h2>
 <p>

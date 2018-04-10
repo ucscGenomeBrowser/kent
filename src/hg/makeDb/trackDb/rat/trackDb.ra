@@ -296,7 +296,7 @@ track genieKnown override
 visibility pack
 
 track refGene override
-release beta,public
+release public
 visibility pack
 
 track nscanGene override

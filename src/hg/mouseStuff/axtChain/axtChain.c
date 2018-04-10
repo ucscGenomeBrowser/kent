@@ -444,17 +444,21 @@ for (sp = spList; sp != NULL; sp = sp->next)
         }
     else
 	{
-        loadIfNewSeq(qNibDir, qIsTwoBit, sp->qName, sp->qStrand,
+	if (! qIsTwoBit && ! isDirectory(qNibDir))
+	    errAbort("given qNibDir argument: '%s' is not a 2bit file or a directory\n", qNibDir);
+	loadIfNewSeq(qNibDir, qIsTwoBit, sp->qName, sp->qStrand,
 		&qName, &qSeq, &qStrand);
-        }
+	}
     if (optionExists("faT"))
-        {
-        assert (tFaHash != NULL);
-        loadFaSeq(tFaHash, sp->tName, '+', &tName, &tSeq, &tStrand, tNibDir);
-        }
+	{
+	assert (tFaHash != NULL);
+	loadFaSeq(tFaHash, sp->tName, '+', &tName, &tSeq, &tStrand, tNibDir);
+	}
     else
 	{
-        loadIfNewSeq(tNibDir, tIsTwoBit, sp->tName, '+',
+	if (! tIsTwoBit && ! isDirectory(tNibDir))
+	    errAbort("given tNibDir argument: '%s' is not a 2bit file or a directory\n", tNibDir);
+	loadIfNewSeq(tNibDir, tIsTwoBit, sp->tName, '+',
 		&tName, &tSeq, &tStrand);
 	}
     chainPair(sp, qSeq, tSeq, &chainList, details);

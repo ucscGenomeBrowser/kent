@@ -11,6 +11,38 @@
 
 boolean isPopup = FALSE;
 
+boolean interactUiDirectional(struct trackDb *tdb)
+/* Determine if interactions are directional */
+{
+return trackDbSettingClosestToHomeOn(tdb, INTERACT_DIRECTIONAL);
+}
+
+void interactUiMinScore(struct cart *cart, char *track, struct trackDb *tdb)
+/* Minimum score */
+{
+char buffer[1024];
+safef(buffer, sizeof buffer, "%s.%s", tdb->track, INTERACT_MINSCORE);
+int minScore = cartUsualInt(cart, buffer, 0);
+printf("<b>Minimum score:&nbsp;</b>");
+cgiMakeIntVar(buffer, minScore, 0);
+}
+
+void interactUiTrackHeight(struct cart *cart, char *track, struct trackDb *tdb)
+/* Input box to change track height */
+{
+// track height control
+char buffer[1024];      
+int min, max, deflt, current;
+cartTdbFetchMinMaxPixels(cart, tdb, INTERACT_MINHEIGHT, INTERACT_MAXHEIGHT, 
+                                atoi(INTERACT_DEFHEIGHT),
+                                &min, &max, &deflt, &current);
+safef(buffer, sizeof buffer, "%s.%s", track, INTERACT_HEIGHT);
+printf("<br><br><b>Track height:&nbsp;</b>");
+cgiMakeIntVar(buffer, current, 3);
+printf("&nbsp;<span>pixels&nbsp;(range: %d to %d, default: %d)<span>",
+        min, max, deflt);
+}
+
 void interactUiDrawMode(struct cart *cart, char *track, struct trackDb *tdb)
 /* Radio buttons to select drawing mode */
 
@@ -28,37 +60,6 @@ cgiMakeRadioButton(cartVar, INTERACT_DRAW_LINE, sameString(INTERACT_DRAW_LINE, d
 printf("&nbsp;%s&nbsp;", "rectangle");
 }
 
-void interactUiTrackHeight(struct cart *cart, char *track, struct trackDb *tdb)
-/* Input box to change track height */
-{
-// track height control
-char buffer[1024];      
-int min, max, deflt, current;
-cartTdbFetchMinMaxPixels(cart, tdb, INTERACT_MINHEIGHT, INTERACT_MAXHEIGHT, 
-                                atoi(INTERACT_DEFHEIGHT),
-                                &min, &max, &deflt, &current);
-safef(buffer, sizeof buffer, "%s.%s", track, INTERACT_HEIGHT);
-printf("<br><b>Track height:&nbsp;</b>");
-cgiMakeIntVar(buffer, current, 3);
-printf("&nbsp;<span>pixels&nbsp;(range: %d to %d, default: %d)<span>",
-        min, max, deflt);
-}
-
-boolean interactUiDirectional(struct trackDb *tdb)
-/* Determine if interactions are directional */
-{
-boolean isDirectional = FALSE;
-char *setting = trackDbSettingClosestToHome(tdb, INTERACT_DIRECTIONAL);
-if (setting == NULL)
-    errAbort("interact track %s missing required %s setting\n", tdb->track, INTERACT_DIRECTIONAL);
-if (sameString(setting, "true"))
-    isDirectional = TRUE;
-else if (differentString(setting, "false"))
-    errAbort("interact track %s setting %s must be set true or false\n", 
-                tdb->track, INTERACT_DIRECTIONAL);
-return isDirectional;
-}
-
 void interactCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char *track,
                         char *title, boolean boxed)
 /* Configure interact track type */
@@ -70,6 +71,7 @@ if (startsWith("big", tdb->type))
     labelCfgUi(database, cart, tdb);
 //printf("\n<table id=interactControls style='font-size:%d%%' %s>\n<tr><td>",
         //isPopup ? 75 : 100, boxed ?" width='100%'":"");
+interactUiMinScore(cart, track, tdb);
 interactUiTrackHeight(cart, track, tdb);
 puts("<div>");
 interactUiDrawMode(cart, track, tdb);

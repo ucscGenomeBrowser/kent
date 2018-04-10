@@ -48,7 +48,7 @@ faSize G*_9.0_genomic.fna.gz
 # %32.80 masked total, %33.40 masked real
 
 
-# this information is from the top of 
+# this information is from the top of
 #    felCat9/refseq/GCF_000181335.3_Felis_catus_9.0_assembly_report.txt
 
 # Assembly name:  Felis_catus_9.0
@@ -273,7 +273,51 @@ taxId 9685
     cd /hive/data/genomes/felCat9/bed/cytoBand
     makeCytoBandIdeo.csh felCat9
 
-#########################################################################
+#############################################################################
+# gapOverlap (DONE - 2018-02-27 - Hiram)
+    mkdir /hive/data/genomes/felCat9/bed/gapOverlap
+    cd /hive/data/genomes/felCat9/bed/gapOverlap
+    time (doGapOverlap.pl \
+	-twoBit=/hive/data/genomes/felCat9/felCat9.unmasked.2bit felCat9 ) \
+	> do.log 2>&1
+    # real    0m54.051s
+
+    # actually failed because there were none of these items found:
+    # -rw-rw-r-- 1    0 Feb 27 15:25 felCat9.gapOverlap.bed
+
+    time (doGapOverlap.pl -continue=cleanup \
+	-twoBit=/hive/data/genomes/felCat9/felCat9.unmasked.2bit felCat9 ) \
+	> cleanup.log 2>&1
+
+#############################################################################
+# tandemDups (DONE - 2018-02-27 - Hiram)
+    mkdir /hive/data/genomes/felCat9/bed/tandemDups
+    cd /hive/data/genomes/felCat9/bed/tandemDups
+    time (~/kent/src/hg/utils/automation/doTandemDup.pl \
+  -twoBit=/hive/data/genomes/felCat9/felCat9.unmasked.2bit felCat9) \
+	> do.log 2>&1 &
+    # real    122m33.710s
+    # 53784656 bases of 2521863845 (2.133%) in intersection
+
+    bigBedInfo felCat9.tandemDups.bb | sed -e 's/^/#  /;'
+#  version: 4
+#  fieldCount: 13
+#  hasHeaderExtension: yes
+#  isCompressed: yes
+#  isSwapped: 0
+#  extraIndexCount: 0
+#  itemCount: 785,057
+#  primaryDataSize: 19,206,976
+#  primaryIndexSize: 96,344
+#  zoomLevels: 9
+#  chromCount: 1399
+#  basesCovered: 1,394,080,174
+#  meanDepth (of bases covered): 3.940832
+#  minDepth: 1.000000
+#  maxDepth: 5370.000000
+#  std of depth: 17.389426
+
+#############################################################################
 # ucscToINSDC and ucscToRefSeq table/track (DONE - 2018-02-27 - Hiram)
     # the sequence here is working for a 'refseq' assembly
     # beware of a chrM situation may be specific depending upon what is
@@ -389,7 +433,7 @@ taxId 9685
 
     # preview prefixes and suffixes:
     hgsql -N -e "select frag from gold;" felCat9 \
-      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c
 #   4989 AANG.1
 #     80 AC.1
 #      1 AC.2
@@ -426,15 +470,37 @@ searchPriority 8
     time  (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku felCat9) > do.log 2>&1 &
-XXX - running - Tue Feb 27 13:54:12 PST 2018
-    # real    752m10.908s
+    # real    1035m8.587s
+    # cluster difficulties during the cluster run, continuing:
+
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -continue=cat -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku felCat9) > cat.log 2>&1 &
+    # bad record in the felCat9.fa.out, remove it with grep:
+# RepeatMasker bug?: Undefined id, line 3670031 of input:
+#  631  27.0  1.1  1.1  chrD2     87783169 87783348 (2403312) +  L1ME2          LINE/L1               5991 6170    (9)
+    mv felCat9.fa.out felCat9.fa.out.broken
+    grep -v "631  27.0  1.1  1.1  chrD2     87783169 87783348" \
+	felCat9.fa.out.broken > felCat9.fa.out
+    # and reconstruct the sorted file:
+    mv felCat9.sorted.fa.out felCat9.sorted.fa.out.broken
+    head -3 felCat9.fa.out > felCat9.sorted.fa.out
+    tail -n +4 felCat9.fa.out | sort -k5,5 -k6,6n >> felCat9.sorted.fa.out
+    # and the nested repeats remains the same without the error:
+    /cluster/bin/scripts/extractNestedRepeats.pl felCat9.fa.out \
+	| sort -k1,1 -k2,2n > felCat9.nestedRepeats.bed
+    # continuing:
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -continue=mask -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku felCat9) > mask.log 2>&1 &
+    # real    22m39.249s
 
     cat faSize.rmsk.txt
-# 2948397226 bases (55130419 N's 2893266807 real 1378626320 upper
-#	1514640487 lower) in 63251 sequences in 1 files
-# Total size: mean 46614.2 sd 2497421.7 min 200 (chrUn_NW_003880573v1)
-#	max 220367699 (chr1) median 1416
-# %51.37 masked total, %52.35 masked real
+# 2521863845 bases (45410675 N's 2476453170 real 1408738694 upper 1067714476
+#	lower) in 4508 sequences in 1 files
+# Total size: mean 559419.7 sd 9108161.9 min 1969 (chrUn_NW_019369707v1)
+#	max 242100913 (chrA1) median 9988
+# %42.34 masked total, %43.11 masked real
 
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.5
@@ -442,8 +508,8 @@ XXX - running - Tue Feb 27 13:54:12 PST 2018
     # CC   RELEASE 20140131;                                            *
 
     time featureBits -countGaps felCat9 rmsk
-    # 1515828879 bases of 2948397226 (51.412%) in intersection
-    # real    1m14.038s
+    # 1067715717 bases of 2521863845 (42.338%) in intersection
+    # real    0m36.348s
 
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the faSize count above
@@ -452,8 +518,8 @@ XXX - running - Tue Feb 27 13:54:12 PST 2018
     # faster way to get the same result on high contig count assemblies:
     time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' felCat9 \
         | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
-    #	total 1515828879.000000
-    #	real    0m39.569s
+    #	total 1067715717.000000
+    #   real    0m36.899s
 
 ##########################################################################
 # running simple repeat (DONE - 2018-02-27 - Hiram)
@@ -464,8 +530,7 @@ XXX - running - Tue Feb 27 13:54:12 PST 2018
     time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
         -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
         -trf409 5 felCat9) > do.log 2>&1 &
-XXX - running - Tue Feb 27 13:54:45 PST 2018
-    # real    36m31.858s
+    # real    43m56.043s
 
     cat fb.simpleRepeat
     # 163817450 bases of 2893270787 (5.662%) in intersection
@@ -485,18 +550,18 @@ XXX - running - Tue Feb 27 13:54:45 PST 2018
 
     twoBitToFa felCat9.2bit stdout | faSize stdin > faSize.felCat9.2bit.txt
     cat faSize.felCat9.2bit.txt
-# 2948397226 bases (55130419 N's 2893266807 real 1377167920 upper
-#	1516098887 lower) in 63251 sequences in 1 files
-# Total size: mean 46614.2 sd 2497421.7 min 200 (chrUn_NW_003880573v1)
-#	max 220367699 (chr1) median 1416
-# %51.42 masked total, %52.40 masked real
+# 2521863845 bases (45410675 N's 2476453170 real 1407138455 upper 1069314715
+#	lower) in 4508 sequences in 1 files
+# Total size: mean 559419.7 sd 9108161.9 min 1969 (chrUn_NW_019369707v1)
+#	max 242100913 (chrA1) median 9988
+# %42.40 masked total, %43.18 masked real
 
     # reset the symlink
     rm /gbdb/felCat9/felCat9.2bit
     ln -s `pwd`/felCat9.2bit /gbdb/felCat9/felCat9.2bit
 
 #########################################################################
-# CREATE MICROSAT TRACK (TBD - 2017-06-21 - Hiram)
+# CREATE MICROSAT TRACK (DONE - 2018-02-27 - Hiram)
     ssh hgwdev
     mkdir /cluster/data/felCat9/bed/microsat
     cd /cluster/data/felCat9/bed/microsat
@@ -505,339 +570,378 @@ XXX - running - Tue Feb 27 13:54:45 PST 2018
        ../simpleRepeat/simpleRepeat.bed > microsat.bed
 
     hgLoadBed felCat9 microsat microsat.bed
-    # Read 28500 elements of size 4 from microsat.bed
+    # Read 105236 elements of size 4 from microsat.bed
 
 ##########################################################################
-## WINDOWMASKER (TBD - 2017-06-21 - Hiram)
+## WINDOWMASKER (DONE - 2018-02-28 - Hiram)
 
     mkdir /hive/data/genomes/felCat9/bed/windowMasker
     cd /hive/data/genomes/felCat9/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev felCat9) > do.log 2>&1
     # real    237m57.966s
+    # continuing after rmsk done
+    featureBits -countGaps felCat9 rmsk windowmaskerSdust \
+	> fb.felCat9.rmsk.windowmaskerSdust.txt 2>&1
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -continue=cleanup -dbHost=hgwdev felCat9) > cleanup.log 2>&1
+    # real    1m52.250s
 
     # Masking statistics
     cat faSize.felCat9.cleanWMSdust.txt
-# 2948397226 bases (55130419 N's 2893266807 real 1766616003 upper 1126650804 lower) in 63251 sequences in 1 files
-# Total size: mean 46614.2 sd 2497421.7 min 200 (chrUn_NW_003880573v1) max 220367699 (chr1) median 1416
-# %38.21 masked total, %38.94 masked real
+# 2521863845 bases (45410675 N's 2476453170 real 1636004228 upper 840448942
+#	lower) in 4508 sequences in 1 files
+# Total size: mean 559419.7 sd 9108161.9 min 1969 (chrUn_NW_019369707v1)
+#	max 242100913 (chrA1) median 9988
+# %33.33 masked total, %33.94 masked real
 
     cat fb.felCat9.rmsk.windowmaskerSdust.txt
-    # 897063458 bases of 2948397226 (30.425%) in intersection
+    # 588428058 bases of 2521863845 (23.333%) in intersection
 
 ##########################################################################
-# run up idKeys files for ncbiRefSeq (TBD - 2017-06-21 - Hiram)
+# run up idKeys files for ncbiRefSeq (DONE - 2018-02-27 - Hiram)
     mkdir /hive/data/genomes/felCat9/bed/idKeys
     cd /hive/data/genomes/felCat9/bed/idKeys
 
-    time (doIdKeys.pl -buildDir=`pwd`  felCat9) > do.log 2>&1 &
-    # real    70m22.608s
+    time (doIdKeys.pl -twoBit=/hive/data/genomes/felCat9/felCat9.unmasked.2bit -buildDir=`pwd` felCat9) > do.log 2>&1 &
+    # real    3m8.497s
 
     cat felCat9.keySignature.txt
-    #  23214ba62fc59aeee20827fb5be54544
+    #  a563ebb4989e5d9dd8e1b57698664160
 
 ##########################################################################
-# cpgIslands - (TBD - 2017-06-21 - Hiram)
+# cpgIslands - (DONE - 2018-02-28 - Hiram)
     mkdir /hive/data/genomes/felCat9/bed/cpgIslands
     cd /hive/data/genomes/felCat9/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku felCat9) > do.log 2>&1 &
-    # real    17m26.948s
+    # real    5m8.572s
 
     cat fb.felCat9.cpgIslandExt.txt
-    # 21276357 bases of 2893270787 (0.735%) in intersection
+    # 49418190 bases of 2476453204 (1.996%) in intersection
 
 ##############################################################################
-# genscan - (TBD - 2017-06-21 - Hiram)
+# genscan - (DONE - 2018-02-28 - Hiram)
     mkdir /hive/data/genomes/felCat9/bed/genscan
     cd /hive/data/genomes/felCat9/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku felCat9) > do.log 2>&1 &
-    # real    197m24.943s
+    # real    867m26.572s
+
+    # one failed job, run with 2,000,000 window::
+
+time ./runGsBig2M.csh chrE1 000 gtf/000/chrE1.gtf pep/000/chrE1.pep subopt/000/chrE1.bed
+    # real    290m18.460s
+
+    # continuing:
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -continue=makeBed -bigClusterHub=ku felCat9) > makeBed.log 2>&1 &
+    # real    1m55.321s
 
     cat fb.felCat9.genscan.txt
-    # 52318577 bases of 2893270787 (1.808%) in intersection
+    # 60893812 bases of 2476453204 (2.459%) in intersection
 
     cat fb.felCat9.genscanSubopt.txt
-    # 51120501 bases of 2893270787 (1.767%) in intersection
+    # 51934230 bases of 2476453204 (2.097%) in intersection
 
 #############################################################################
-# augustus gene track (TBD - 2017-06-21 - Hiram)
+# augustus gene track (DONE - 2018-02-28 - Hiram)
 
     mkdir /hive/data/genomes/felCat9/bed/augustus
     cd /hive/data/genomes/felCat9/bed/augustus
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
      -species=human -dbHost=hgwdev -workhorse=hgwdev felCat9) > do.log 2>&1 &
-    # real    119m13.121s
+    # real    187m51.379s
 
     cat fb.felCat9.augustusGene.txt
-    # 47314970 bases of 2893270787 (1.635%) in intersection
+    # 51863692 bases of 2476453204 (2.094%) in intersection
 
 #############################################################################
-# lastz/chain/net swap human/hg38 (TBD - 2017-06-21 - Hiram)
+# lastz/chain/net swap human/hg38 (DONE - 2018-03-14 - Hiram)
     # original alignment
-    cd /hive/data/genomes/hg38/bed/lastzFelCat9.2017-06-21
+    cd /hive/data/genomes/hg38/bed/lastzFelCat9.2018-03-14
 
     cat fb.hg38.chainFelCat9Link.txt
-    # 2632683317 bases of 3049335806 (86.336%) in intersection
+    # 1579231929 bases of 3049335806 (51.789%) in intersection
+    cat fb.hg38.chainSynFelCat9Link.txt
+    # 1516804589 bases of 3049335806 (49.742%) in intersection
+    cat fb.hg38.chainRBestFelCat9Link.txt
+    # 1449222744 bases of 3049335806 (47.526%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/felCat9/bed/blastz.hg38.swap
     cd /hive/data/genomes/felCat9/bed/blastz.hg38.swap
 
     time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/hg38/bed/lastzFelCat9.2017-06-21/DEF \
+      /hive/data/genomes/hg38/bed/lastzFelCat9.2018-03-14/DEF \
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    232m5.391s
+    #  real    142m37.100s
 
     cat fb.felCat9.chainHg38Link.txt
-    # 2501550280 bases of 2893270787 (86.461%) in intersection
+    # 1486134443 bases of 2476453204 (60.011%) in intersection
+    cat fb.felCat9.chainSynHg38Link.txt
+    # 1452577988 bases of 2476453204 (58.656%) in intersection
 
-    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` felCat9 hg38) \
-      > rbest.log 2>&1
-    # real    446m1.402s
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	felCat9 hg38) > rbest.log 2>&1 &
+    # real    623m28.676s
+
+    cat fb.felCat9.chainRBestHg38Link.txt
+    # 1449521349 bases of 2476453204 (58.532%) in intersection
 
 #########################################################################
-# lastz/chain/net swap mouse/mm10 (TBD - 2017-06-21 - Hiram)
+# lastz/chain/net swap mouse/mm10 (DONE - 2018-03-14 - Hiram)
 
     # alignment to mouse/mm10:
-    cd /hive/data/genomes/mm10/bed/lastzFelCat9.2017-06-21
+    cd /hive/data/genomes/mm10/bed/lastzFelCat9.2018-03-14
+
     cat fb.mm10.chainFelCat9Link.txt
-    #	910628118 bases of 2652783500 (34.327%) in intersection
+    #   801023018 bases of 2652783500 (30.196%) in intersection
+    cat fb.mm10.chainRBestFelCat9Link.txt
+    # 761411281 bases of 2652783500 (28.702%) in intersection
+
+    # and for the swap
 
     mkdir /hive/data/genomes/felCat9/bed/blastz.mm10.swap
     cd /hive/data/genomes/felCat9/bed/blastz.mm10.swap
     time (doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/mm10/bed/lastzFelCat9.2017-06-21/DEF \
+	/hive/data/genomes/mm10/bed/lastzFelCat9.2018-03-14/DEF \
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
-    #	real    66m35.501s
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1 &
+    #	 real    70m51.860s
 
     cat fb.felCat9.chainMm10Link.txt
-    #	897929517 bases of 2893270787 (31.035%) in intersection
+    #   779862191 bases of 2476453204 (31.491%) in intersection
+    cat fb.felCat9.chainSynMm10Link.txt
+    # 754481540 bases of 2476453204 (30.466%) in intersection
 
-    time (doRecipBest.pl -workhorse=hgwdev felCat9 mm10 \
-      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
-    # real    578m46.893s
+    time (doRecipBest.pl -load  felCat9 mm10 -buildDir=`pwd` \
+	-workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    375m4.937s
+
+    cat fb.felCat9.chainRBestMm10Link.txt
+    # 760753851 bases of 2476453204 (30.719%) in intersection
 
 ##############################################################################
-# Create kluster run files (TBD - 2017-06-21 - Hiram)
+# Create kluster run files (DONE - 2018-02-28 - Hiram)
 
+    cd /hive/data/genomes/felCat9
     # numerator is felCat9 gapless bases "real" as reported by:
     featureBits -noRandom -noHap felCat9 gap
-    # 42059064 bases of 2682285126 (1.568%) in intersection
+    # 45323781 bases of 2414945138 (1.877%) in intersection
     #                   ^^^
 
     # denominator is hg19 gapless bases as reported by:
     #   featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 2682285126 / 2861349177 \) \* 1024
-    #  ( 2682285126 / 2861349177 ) * 1024 = 959.917787
+    calc \( 2414945138 / 2861349177 \) \* 1024
+    #  ( 2414945138 / 2861349177 ) * 1024 = 864.243987
 
-    # ==> use -repMatch=1025 same as papAnu2
+    # ==> use -repMatch=800 same as felCat8
     cd /hive/data/genomes/felCat9
     blat felCat9.2bit \
          /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/felCat9.11.ooc \
-        -repMatch=1025
-    #   Wrote 29129 overused 11-mers to jkStuff/felCat9.11.ooc
-    # papAnu2 at repMatch=1025 was:
-    #   Wrote 29128 overused 11-mers to jkStuff/papAnu2.11.ooc
+        -repMatch=800
+    #  Wrote 30315 overused 11-mers to jkStuff/felCat9.11.ooc
+    # felCat8 at repMatch=800 was:
+    #  Wrote 36446 overused 11-mers to jkStuff/felCat8.11.ooc
 
     #   check non-bridged gaps to see what the typical size is:
     hgsql -N \
         -e 'select * from gap where bridge="no" order by size;' felCat9 \
         | sort -k7,7nr | ave -col=7 stdin
-# Q1 100.000000
-# median 100.000000
-# Q3 100.000000
-# average 100.000000
-# min 100.000000
-# max 100.000000
-# count 9250
-# total 925000.000000
-# standard deviation 0.000000
+    # these are all centromere's at 2 and 3 million:
+# Q1 2000000.000000
+# median 2000000.000000
+# Q3 2000000.000000
+# average 2052631.578947
+# min 2000000.000000
+# max 3000000.000000
+# count 19
+# total 39000000.000000
+# standard deviation 229415.733871
+# +----+-------+-----------+-----------+----+---+---------+------------+----+
+# | 19 | chrA1 |  88880063 |  90880063 |  6 | N | 2000000 | centromere | no |
+# |  9 | chrF2 |         0 |   2000000 |  1 | N | 2000000 | centromere | no |
+# |  9 | chrF1 |         0 |   2000000 |  1 | N | 2000000 | centromere | no |
+# |  1 | chrE2 |  23929417 |  25929417 | 22 | N | 2000000 | centromere | no |
+# |  1 | chrE1 |  24862965 |  26862965 | 10 | N | 2000000 | centromere | no |
+# | 12 | chrD4 |  31525997 |  33525997 | 18 | N | 2000000 | centromere | no |
+# | 12 | chrD3 |  30780723 |  32780723 | 32 | N | 2000000 | centromere | no |
+# | 11 | chrD2 |  19812854 |  21812854 | 14 | N | 2000000 | centromere | no |
+# |  1 | chrD1 |  32184683 |  34184683 | 20 | N | 2000000 | centromere | no |
+# |  2 | chrC2 |  75225443 |  77225443 | 10 | N | 2000000 | centromere | no |
+# | 16 | chrA2 |  60080733 |  62080733 | 32 | N | 2000000 | centromere | no |
+# | 15 | chrA3 |  50856976 |  52856976 | 18 | N | 2000000 | centromere | no |
+# | 13 | chrB1 |  38294479 |  40294479 | 10 | N | 2000000 | centromere | no |
+# | 12 | chrB2 |  29165855 |  31165855 |  8 | N | 2000000 | centromere | no |
+# | 12 | chrB3 |  28663498 |  30663498 |  6 | N | 2000000 | centromere | no |
+# | 14 | chrB4 |  43808484 |  45808484 | 12 | N | 2000000 | centromere | no |
+# |  2 | chrC1 | 107907036 | 109907036 | 24 | N | 2000000 | centromere | no |
+# | 15 |  chrX |  50521356 |  52521356 | 48 | N | 2000000 | centromere | no |
+# |  1 | chrE3 |  16733304 |  19733304 |  8 | N | 3000000 | centromere | no |
+# +----+-------+-----------+-----------+----+---+---------+------------+----+
 
-    # all these gap sizes are 100
-    gapToLift -verbose=2 -minGap=100 felCat9 jkStuff/felCat9.nonBridged.lft \
+    # therefore, minimum gap size of 2000000
+  gapToLift -verbose=2 -minGap=2000000 felCat9 jkStuff/felCat9.nonBridged.lft \
        -bedFile=jkStuff/felCat9.nonBridged.bed
 
-#########################################################################
-# LIFTOVER TO papAnu2 (TBD - 2017-06-23 - Hiram)
+##############################################################################
+# LIFTOVER TO felCat8 (DONE - 2018-02-28 - Hiram)
     ssh hgwdev
-    mkdir /hive/data/genomes/felCat9/bed/blat.papAnu2.2017-06-23
-    cd /hive/data/genomes/felCat9/bed/blat.papAnu2.2017-06-23
+    mkdir /hive/data/genomes/felCat9/bed/blat.felCat8.2018-02-28
+    cd /hive/data/genomes/felCat9/bed/blat.felCat8.2018-02-28
     time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
 	-ooc=/hive/data/genomes/felCat9/jkStuff/felCat9.11.ooc \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-         felCat9 papAnu2) > do.log 2>&1
-    # real    396m5.063s
+         felCat9 felCat8) > do.log 2>&1
+    # real    605m27.304s
 
     # verify the convert link on the test browser is now active from felCat9 to
-    # papAnu2
+    # felCat8
 
-#########################################################################
-# LIFTOVER TO papAnu4 (TBD - 2018-01-08 - Hiram)
-    ssh hgwdev
-    mkdir /hive/data/genomes/felCat9/bed/blat.papAnu4.2018-01-08
-    cd /hive/data/genomes/felCat9/bed/blat.papAnu4.2018-01-08
-    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
-	-ooc=/hive/data/genomes/felCat9/jkStuff/felCat9.11.ooc \
-        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-         felCat9 papAnu4) > do.log 2>&1 &
-    # real    579m54.169s
-
-    # verify the convert link on the test browser is now active from felCat9 to
-    # felCat9
-
-#########################################################################
-# GENBANK AUTO UPDATE (TBD - 2017-06-21 - Hiram)
+##############################################################################
+# GENBANK AUTO UPDATE (DONE - 2018-02-28 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # /cluster/data/genbank/data/organism.lst shows:
-    # #organism             mrnaCnt   estCnt  refSeqCnt
-    # Papio anubis    512     145626  505
-    # Papio anubis anubis     6       0       0
-    # Papio cynocephalus      23      0       0
-    # Papio cynocephalus x Papio anubis       3       0       0
-    # Papio hamadryas 102     0       0
-    # Papio hamadryas hamadryas       1       0       0
-    # Papio papio     10      0       0
+    # #organism      mrnaCnt   estCnt  refSeqCnt
+    # Felis catus	2446	921	419
 
-    # edit etc/genbank.conf to add felCat9 just before papAnu2
-# Baboon
-# felCat9 (baboon)
+    # edit etc/genbank.conf to add felCat9 just before felCat8
+# Nov 2017 (GSC) at Washington University (WashU) School of Medicine
+#	Felis_catus_9.0
+# felCat9 (Cat)
 felCat9.serverGenome = /hive/data/genomes/felCat9/felCat9.2bit
 felCat9.clusterGenome = /hive/data/genomes/felCat9/felCat9.2bit
 felCat9.ooc = /hive/data/genomes/felCat9/jkStuff/felCat9.11.ooc
-felCat9.lift = /hive/data/genomes/felCat9/jkStuff/felCat9.nonBridged.lift
+felCat9.lift = /hive/data/genomes/felCat9/jkStuff/felCat9.nonBridged.lft
 felCat9.perChromTables = no
-felCat9.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
-felCat9.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
-felCat9.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
-felCat9.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
-felCat9.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
-felCat9.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
+felCat9.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+felCat9.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+felCat9.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+felCat9.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+felCat9.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+felCat9.genbank.est.xeno.pslCDnaFilter    = ${finished.genbank.est.xeno.pslCDnaFilter}
+felCat9.genbank.mrna.xeno.load  = yes
 felCat9.downloadDir = felCat9
-# DO NOT NEED genbank.mrna.xeno except for human, mouse
-# defaults yes: genbank.mrna.native.load, genbank.mrna.native.loadDesc,
-# genbank.est.native.load, refseq.mrna.native.load, refseq.mrna.native.loadDesc,
-# refseq.mrna.xeno.load , refseq.mrna.xeno.loadDesc
+felCat9.refseq.mrna.native.load  = yes
+felCat9.refseq.mrna.xeno.load = yes
+felCat9.refseq.mrna.xeno.loadDesc  = yes
+# felCat9.upstreamGeneTbl = refGene
+# felCat9.upstreamMaf = multiz6way
+# /hive/data/genomes/felCat9/bed/multiz6way/species.list
 
-    git commit -m 'adding felCat9 baboon refs #19660' etc/genbank.conf
+    # add felCat9 to:
+    #   etc/align.dbs etc/hgwdev.dbs
+    git commit -m 'adding felCat9/cat refs #21043' \
+	etc/genbank.conf etc/align.dbs etc/hgwdev.dbs
     git push
     # update /cluster/data/genbank/:
     make etc-update
 
-    cd /cluster/data/genbank
-
-    time ./bin/gbAlignStep -initial felCat9
-    # logFile: var/build/logs/2017.06.21-10:02:02.felCat9.initalign.log
-    #   real    422m26.969s
-
-
-    tail -2 var/build/logs/2017.06.21-10:02:02.felCat9.initalign.log
-    # hgwdev 2017.06.21-17:01:26 felCat9.initalign: Succeeded: felCat9
-    # hgwdev 2017.06.21-17:04:29 felCat9.initalign: finish
-
-    #   To re-do, rm the dir first:
-    #     /cluster/data/genbank/work/initial.felCat9
-
-    # load database when finished
-    ssh hgwdev
-    cd /cluster/data/genbank
-    time ./bin/gbDbLoadStep -drop -initialLoad felCat9
-    # logFile: var/dbload/hgwdev/logs/2017.06.21-18:22:49.felCat9.dbload.log
-    #  real    18m30.415s
-
-    tail -1 var/dbload/hgwdev/logs/2017.06.21-18:22:49.felCat9.dbload.log
-    #  hgwdev 2017.06.21-18:41:19 felCat9.dbload: finish
-
-    # enable daily alignment and update of hgwdev
-    cd ~/kent/src/hg/makeDb/genbank
-    git pull
-    # add felCat9 to:
-    #   etc/align.dbs etc/hgwdev.dbs
-    git add etc/align.dbs etc/hgwdev.dbs
-    git commit -m 'adding felCat9 to the update alignments refs #19660' etc/align.dbs etc/hgwdev.dbs
-    git push
-    make etc-update
+    # a few days later the genbank tables will be in the database
 
 #############################################################################
-# ncbiRefSeq (TBD - 2016-05-13 - Hiram)
+# ncbiRefSeq (DONE - 2018-03-13 - Hiram)
 
     mkdir /hive/data/genomes/felCat9/bed/ncbiRefSeq
     cd /hive/data/genomes/felCat9/bed/ncbiRefSeq
-    # running step wise as this script is still under development
+
     time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
       -bigClusterHub=ku -dbHost=hgwdev \
-      -stop=download -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
-      refseq vertebrate_other Gallus_gallus \
-      GCF_000002315.4_Gallus_gallus-5.0 felCat9) > download.log 2>&1
-    # real    16m29.536s
-
-    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
-      -continue=process -bigClusterHub=ku -dbHost=hgwdev \
-      -stop=process -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
-      refseq vertebrate_other Gallus_gallus \
-      GCF_000002315.4_Gallus_gallus-5.0 felCat9) > process.log 2>&1
-    # real    3m58.858s
-
-    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
-      -continue=load -bigClusterHub=ku -dbHost=hgwdev \
-      -stop=load -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
-      refseq vertebrate_other Gallus_gallus \
-      GCF_000002315.4_Gallus_gallus-5.0 felCat9) > load.log 2>&1
-    # real    0m33.205s
+      -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_mammalian Felis_catus \
+      GCF_000181335.3_Felis_catus_9.0 felCat9) > do.log 2>&1
+    # real    8m52.047s
 
     cat fb.ncbiRefSeq.felCat9.txt
-    #  82563006 bases of 1218501075 (6.776%) in intersection
-
-    featureBits -enrichment felCat9 refGene ncbiRefSeq 
-    # refGene 1.181%, ncbiRefSeq 6.776%, both 1.175%, cover 99.49%,
-    #    enrich 14.68x
+    #  81659062 bases of 2476453204 (3.297%) in intersection
 
 #########################################################################
-#  BLATSERVERS ENTRY (TBD - 2017-06-23 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2018-08-13 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("felCat9", "blat1c", "17892", "1", "0"); \
+	VALUES ("felCat9", "blat1c", "17900", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("felCat9", "blat1c", "17893", "0", "1");' \
+	VALUES ("felCat9", "blat1c", "17901", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
 ############################################################################
-## reset default position to same as what hg38 has
-##  (TBD - 2017-06-23 - Hiram)
+## reset default position to same as what felCat8 has
+##  (DONE - 2018-03-13 - Hiram)
 
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="chr1:13964116-14118692"
+    hgsql -e 'update dbDb set defaultPos="chrA2:53333898-53447862"
 	where name="felCat9";' hgcentraltest
 
-#########################################################################
-# all.joiner update, downloads and in pushQ - (TBD - 2017-06-23 - Hiram)
+############################################################################
+# LIFTOVER TO felCat8 (DONE - 2018-03-19 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/felCat9/bed/blat.felCat8.2018-03-19
+    cd /hive/data/genomes/felCat9/bed/blat.felCat8.2018-03-19
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/felCat9/jkStuff/felCat9.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         felCat9 felCat8) > do.log 2>&1 &
+    # real    192m10.105s
+
+    # verify the convert link on the test browser is now active from felCat9 to
+    # felCat8
+
+############################################################################
+# LIFTOVER TO felCat5 (DONE - 2018-03-19 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/felCat9/bed/blat.felCat5.2018-03-19
+    cd /hive/data/genomes/felCat9/bed/blat.felCat5.2018-03-19
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/felCat9/jkStuff/felCat9.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         felCat9 felCat5) > do.log 2>&1 &
+    # real    138m37.419s
+
+    # verify the convert link on the test browser is now active from felCat9 to
+    # felCat5
+
+############################################################################
+# all.joiner update, downloads and in pushQ - (DONE - 2018-03-19 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
+    ~/kent/src/hg/utils/automation/verifyBrowser.pl felCat9
+# 65 tables in database felCat9 - Cat, Felis catus
+# verified 65 tables, 0 extra tables, 10 optional tables
+# 13 genbank tables found
+# verified 42 tables, 1 missing tables
+# 1     gapOverlap
+# liftOver to previous versions: 2, from previous versions: 2
+
+    # there were no gapOverlap items found
+
     # fixup all.joiner until this is a clean output
     joinerCheck -database=felCat9 -tableCoverage all.joiner
     joinerCheck -database=felCat9 -times all.joiner
     joinerCheck -database=felCat9 -keys all.joiner
 
     cd /hive/data/genomes/felCat9
+    rm -fr TemporaryTrackDbCheckout
+
     time (makeDownloads.pl -workhorse=hgwdev felCat9) > downloads.log 2>&1
     #  real    26m28.250s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/felCat9/pushQ
     cd /hive/data/genomes/felCat9/pushQ
-    time (makePushQSql.pl -redmineList felCat9) > felCat9.pushQ.sql 2> stderr.out
-    #  real    3m42.117s
+  time (makePushQSql.pl -redmineList felCat9) > felCat9.pushQ.sql 2> stderr.out
+    # remove the tandemDups from the file list:
+    sed -i -e "/tandemDups/d" redmine.felCat9.table.list
+    sed -i -e "/Tandem Dups/d" redmine.felCat9.releaseLog.txt
 
     #   check for errors in stderr.out, some are OK, e.g.:
     # WARNING: felCat9 does not have seq

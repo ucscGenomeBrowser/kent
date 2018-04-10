@@ -42,6 +42,8 @@ var hgva = // result of invoking:
             // if the new gene track is GENCODE, strip it down to only the version at end.
             var matchesGencode = newVal.match(/^wgEncodeGencode(Basic|Comp|PseudoGene)(V[A-Z]?[0-9]+)$/);
             var geneClass = matchesGencode ? matchesGencode[2] : newVal;
+            var canDoHgvs = (isRefSeq ||
+                             !!newVal.match(/wgEncodeGencode(Basic|Comp)(V[A-Z]?[0-9]+)$/));
             var visibleCount = 0;
             var $txStatusDivs = $("div.txStatus");
             $txStatusDivs.each(function(n, div) {
@@ -54,8 +56,8 @@ var hgva = // result of invoking:
                 }
             });
             $("div.noTxStatus").toggle(visibleCount === 0);
-            $("div#hgvsOptions").toggle(isRefSeq);
-            $("div#noHgvs").toggle(!isRefSeq);
+            $("div#hgvsOptions").toggle(canDoHgvs);
+            $("div#noHgvs").toggle(!canDoHgvs);
         },
 
         goToAddCustomTrack: function()

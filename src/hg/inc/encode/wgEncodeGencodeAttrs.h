@@ -6,6 +6,7 @@
 #define WGENCODEGENCODEATTRS_H
 
 #define WGENCODEGENCODEATTRS_NUM_COLS 14
+#define WGENCODEGENCODEATTRS_NO_PROTEIN_ID_NUM_COLS 13  // older tables
 
 extern char *wgEncodeGencodeAttrsCommaSepFieldNames;
 

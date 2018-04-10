@@ -36,6 +36,9 @@ struct annoGratorGpVar
     boolean sourceHasFrames;    // True if transcript annotations include exonFrames column
     boolean sourceIsBigGenePred;// True if transcript annotations are from bigGenePred
     boolean sourceIsPslPlus;    // True if transcript annotations are PSL+CDS+seq info
+    boolean protLookupInited;   // For looking up protein accessions in genePred-derived HGVS p.
+    char *protLookupTable;      // "
+    struct hash *protLookupHash;// "
 
     struct variant *(*variantFromRow)(struct annoGratorGpVar *self, struct annoRow *row,
 				      char *refAllele);
@@ -324,76 +327,6 @@ txSeq->size = txLen;
 return txSeq;
 }
 
-static void genePredToFakeCds(struct genePred *gp, int txSize, struct genbankCds *cds)
-/* Convert genomic cdsStart and cdsEnd into transcript start and end.
- *
- * Warning: Genbank CDS does't have the ability to represent
- * partial codons.  If we have genePreds created from GFF/GTF, they can have
- * partial codons, which is indicated in frame.  This code does not correctly handle
- * this case, or frame shifting indels.
- */
-// Adapted from MarkD's cnvGenePredCds() in hg/genePredToFakePsl/ (4e0e5a68 & earlier)
-{
-int ix, txOffset = 0;
-int txCdsStart = -1, txCdsEnd = -1;
-int exCdsStart, exCdsEnd;
-
-for (ix = 0;  ix < gp->exonCount;  ix++)
-    {
-    if (genePredCdsExon(gp, ix, &exCdsStart, &exCdsEnd))
-        {
-        if (txCdsStart < 0)
-            txCdsStart = txOffset + (exCdsStart - gp->exonStarts[ix]);
-        txCdsEnd = txOffset + (exCdsEnd - gp->exonStarts[ix]);
-        }
-    txOffset += gp->exonEnds[ix] - gp->exonStarts[ix];
-    } 
-ZeroVar(cds);
-if (txCdsStart >= 0)
-    {
-    if (gp->strand[0] == '-')
-        reverseIntRange(&txCdsStart, &txCdsEnd, txSize);
-    cds->start = txCdsStart;
-    cds->end = txCdsEnd;
-    cds->startComplete = TRUE;
-    cds->endComplete = TRUE;
-    }
-}
-
-
-struct psl *genePredToFakePslCds(struct genePred *gp, int chromSize, int txSize,
-                                 struct genbankCds *cds)
-/* Allocate and return psl constructed with simplistic assumptions:
- * - the alignment begins at the beginning of the transcript sequence
- * - no bases of the transcript sequence are skipped or repeated
- * - bases at the end of the transcript sequence may be skipped (assumed to be polyA tail)
- * If gp has a CDS region then CDS start and end within the tx sequence are stored in cds. */
-// Adapted from MarkD's fakePslFromGenePred() in hg/genePredToFakePsl/ (4e0e5a68 & earlier)
-{
-int txStart = 0; // simplistic assumption, hopefully right most of the time
-int txEnd = 0;
-int ix;
-for (ix = 0;  ix < gp->exonCount;  ix++)
-    txEnd += (gp->exonEnds[ix] - gp->exonStarts[ix]);
-if (txSize <= 0)
-    txSize = txEnd;
-struct psl *psl = pslNew(gp->name, txSize, txStart, txEnd,
-                         gp->chrom, chromSize, gp->txStart, gp->txEnd,
-                         gp->strand, gp->exonCount, 0);
-psl->blockCount = gp->exonCount;
-for (ix = 0; ix < gp->exonCount; ++ix)
-    {
-    psl->blockSizes[ix] = (gp->exonEnds[ix] - gp->exonStarts[ix]);
-    psl->qStarts[ix] = ix==0 ? 0 : psl->qStarts[ix-1] + psl->blockSizes[ix-1];
-    psl->tStarts[ix] = gp->exonStarts[ix];
-    }
-psl->match = txEnd;
-psl->tNumInsert = psl->blockCount-1;
-psl->tBaseInsert = (gp->txEnd - gp->txStart) - txSize;
-genePredToFakeCds(gp, txSize, cds);
-return psl;
-}
-
 struct dnaSeq *translateTx(struct dnaSeq *txSeq, struct genbankCds *cds)
 /* Translate txSeq into protein sequence, including 'X' for stop codon if present. */
 {
@@ -539,123 +472,28 @@ return hgvs;
 }
 
 
-static struct slPair *hgvsTermsPerAllele(struct annoGratorGpVar *self,
-                                         char *db, struct variant *variant,
-                                         struct psl *psl, struct genbankCds *cds,
-                                         struct dnaSeq *txSeq, struct dnaSeq *protSeq,
-                                         struct vpTx *vpTx, struct vpPep *vpPep)
-/* Return a list (usually length 1) of pairs {alt, struct hgvsTerms*}. */
-{
-struct slPair *list = NULL;
-char *chromAcc = NULL;
-if (self->hgvsMakeG)
-    chromAcc = hRefSeqAccForChrom(db, variant->chrom);
-struct allele *allele;
-for (allele = variant->alleles;  allele != NULL;  allele = allele->next)
-    {
-    //#*** In rare cases, the genomic reference allele is not the transcript ref allele!
-    //#*** We will be able to distinguish those when we get real PSL, CDS and sequence as input.
-
-//#*** TODO - move this loop outside of this function because we need vpTx and vpPep outside of
-//#*** this function for fx prediction
-
-    if (! allele->isReference)
-        {
-        char *alt = allele->sequence;
-        struct hgvsTerms *hgvs = getHgvsTerms(self, chromAcc, psl, cds, txSeq, protSeq,
-                                              vpTx, vpPep);
-        slPairAdd(&list, alt, hgvs);
-        }
-    }
-slReverse(&list);
-return list;
-}
-
-static struct slPair *getHgvsFromGp(struct annoGratorGpVar *self, char *db, struct variant *variant,
-                                    struct genePred *pred, struct dnaSeq *txSeq)
-{
-struct slPair *hgvsPerAllele = NULL;
-if (self->hgvsMakeG || self->hgvsMakeCN || self->hgvsMakeP)
-    {
-    //#*** TODO: get PSL, CDS and sequence the honest way !
-    struct genbankCds fakeCds;
-    struct genbankCds *cds = NULL;
-    struct psl *psl = NULL;
-    if (self->hgvsMakeCN || self->hgvsMakeP)
-        {
-        int chromSize = 0;  // unused
-        psl = genePredToFakePslCds(pred, chromSize, txSeq->size, &fakeCds);
-        cds = &fakeCds;
-        }
-    hgvsPerAllele = hgvsTermsPerAllele(self, db, variant, psl, cds, txSeq,
-                                       NULL, NULL, NULL); //#*** TODO: FIXME
-    pslFree(&psl);
-    }
-return hgvsPerAllele;
-}
-
-static struct annoRow *aggvEffectsToRows(struct annoGratorGpVar *self, struct annoRow *inRow,
-                                         struct gpFx *effects, struct slPair *hgvsPerAllele,
-                                         struct lm *callerLm)
-{
-struct annoRow *rows = NULL;
-for(; effects; effects = effects->next)
-    {
-    // Intergenic variants never pass through here so we don't have to filter them out
-    // here if self->funcFilter is null.
-    if (self->funcFilter == NULL || passesFilter(self, effects))
-	{
-        struct hgvsTerms *hgvs = slPairFindVal(hgvsPerAllele, effects->gAllele);
-	struct annoRow *row = aggvEffectToRow(self, effects, inRow, hgvs, callerLm);
-	slAddHead(&rows, row);
-	}
-    }
-slReverse(&rows);
-return rows;
-}
-
-static struct annoRow *aggvGenRowsGp(struct annoGratorGpVar *self, struct variant *variant,
-                                     struct genePred *pred, struct annoRow *inRow,
-                                     struct lm *callerLm)
-// put out annoRows for all the gpFx that arise from variant and pred
-{
-struct annoStreamer *sSelf = (struct annoStreamer *)self;
-char *db = self->grator.streamer.assembly->name;
-struct dnaSeq *transcriptSequence = genePredToGenomicSequence(pred, sSelf->assembly, self->lm);
-struct slPair *hgvsPerAllele = getHgvsFromGp(self, db, variant, pred, transcriptSequence);
-struct gpFx *effects = gpFxPredEffect(variant, pred, transcriptSequence, self->lm);
-struct annoRow *rows = aggvEffectsToRows(self, inRow, effects, hgvsPerAllele, callerLm);
-slPairFreeValsAndListExt(&hgvsPerAllele, hgvsTermsFree);
-return rows;
-}
-
-static struct annoRow *aggvGenRowsPsl(struct annoGratorGpVar *self, struct variant *variant,
-                                     struct annoRow *inRow, struct lm *callerLm)
-// put out annoRows for all the gpFx that arise from variant and transcript psl+
+static struct annoRow *aggvPredict(struct annoGratorGpVar *self, struct variant *variant,
+                                   struct psl *psl, struct genbankCds *cds,
+                                   struct dnaSeq *txSeq, struct dnaSeq *protSeq,
+                                   struct annoRow *inRow, struct lm *callerLm)
+// Project variant through psl onto transcript and predict functional effects.
 {
 struct annoRow *rowList = NULL;
-char **ppWords = inRow->data;
-struct psl *psl = pslLoad(ppWords);
-struct genbankCds cds;
-genbankCdsParse(ppWords[PSLPLUS_CDS_IX], &cds);
-struct dnaSeq *txSeq = getCachedSeq(ppWords[PSLPLUS_PATH_IX], atoll(ppWords[PSLPLUS_FILEOFFSET_IX]),
-                                    atoll(ppWords[PSLPLUS_FILESIZE_IX]), TRUE);
-struct dnaSeq *protSeq = getProtSeq(self, ppWords[PSLPLUS_PROTACC_IX], txSeq, &cds);
-struct bed3 *variantBed = (struct bed3 *)variant;
 char *db = self->grator.streamer.assembly->name;
-char *chromAcc = self->hgvsMakeG ? hRefSeqAccForChrom(db, variant->chrom): NULL;
+char *chromAcc = self->hgvsMakeG ? hRefSeqAccForChrom(db, variant->chrom) : NULL;
+struct bed3 *variantBed = (struct bed3 *)variant;
+vpExpandIndelGaps(psl, self->gSeqWin, txSeq);
 struct allele *allele;
 for (allele = variant->alleles;  allele != NULL;  allele = allele->next)
     {
     char *alt = allele->sequence;
-    vpExpandIndelGaps(psl, self->gSeqWin, txSeq);
     struct vpTx *vpTx = vpGenomicToTranscript(self->gSeqWin, variantBed, alt, psl, txSeq);
     if (!allele->isReference || vpTx->genomeMismatch)
         {
-        struct vpPep *vpPep = vpTranscriptToProtein(vpTx, &cds, txSeq, protSeq);
-        struct hgvsTerms *hgvs = getHgvsTerms(self, chromAcc, psl, &cds, txSeq, protSeq,
+        struct vpPep *vpPep = vpTranscriptToProtein(vpTx, cds, txSeq, protSeq);
+        struct hgvsTerms *hgvs = getHgvsTerms(self, chromAcc, psl, cds, txSeq, protSeq,
                                               vpTx, vpPep);
-        struct gpFx *fxList = vpTranscriptToGpFx(vpTx, psl, &cds, txSeq, vpPep, protSeq, self->lm);
+        struct gpFx *fxList = vpTranscriptToGpFx(vpTx, psl, cds, txSeq, vpPep, protSeq, self->lm);
         struct annoRow *rows = NULL;
         struct gpFx *fx;
         for(fx = fxList;  fx != NULL; fx = fx->next)
@@ -664,6 +502,8 @@ for (allele = variant->alleles;  allele != NULL;  allele = allele->next)
             // here if self->funcFilter is null.
             if (self->funcFilter == NULL || passesFilter(self, fx))
                 {
+                // Restore the original variant's alt allele
+                fx->gAllele = lmCloneString(self->lm, allele->sequence);
                 slAddHead(&rows, aggvEffectToRow(self, fx, inRow, hgvs, callerLm));
                 }
             }
@@ -674,13 +514,102 @@ for (allele = variant->alleles;  allele != NULL;  allele = allele->next)
         }
     vpTxFree(&vpTx);
     }
-pslFree(&psl);
 freeMem(chromAcc);
 return rowList;
 }
 
+static void lookupProtAcc(struct annoGratorGpVar *self, struct dnaSeq *protSeq)
+/* For Gencode, try to find the ENSP* ID associated with the ENST* ID. */
+{
+char *db = self->grator.streamer.assembly->name;
+if (! self->protLookupInited)
+    {
+    char *sourceName = self->grator.streamer.name;
+    if (strstr(sourceName, "wgEncodeGencode"))
+        {
+        char *version = strrchr(sourceName, 'V');
+        if (version)
+            {
+            if (!trackHubDatabase(db))
+                {
+                char attrsTable[512];
+                safef(attrsTable, sizeof(attrsTable), "wgEncodeGencodeAttrs%s", version);
+                if (hTableExists(db, attrsTable) && hHasField(db, attrsTable, "proteinId"))
+                    {
+                    self->protLookupHash = hashNew(0);
+                    self->protLookupTable = cloneString(attrsTable);
+                    }
+                }
+            }
+        }
+    self->protLookupInited = TRUE;
+    }
+if (self->protLookupHash != NULL)
+    {
+    char *txAcc = protSeq->name;
+    struct hashEl *hel = hashLookup(self->protLookupHash, txAcc);
+    if (hel == NULL)
+        {
+        struct sqlConnection *conn = hAllocConn(db);
+        char query[2048];
+        sqlSafef(query, sizeof(query), "select proteinId from %s where transcriptId = '%s'",
+                 self->protLookupTable, txAcc);
+        char protAccBuf[512];
+        char *protAcc = sqlQuickQuery(conn, query, protAccBuf, sizeof(protAccBuf));
+        hel = hashAdd(self->protLookupHash, txAcc, protAcc);
+        hFreeConn(&conn);
+        }
+    if (hel->val != NULL)
+        {
+        freeMem(protSeq->name);
+        protSeq->name = cloneString(hel->val);
+        }
+    }
+}
+
+static struct annoRow *aggvGenRowsGp(struct annoGratorGpVar *self, struct variant *variant,
+                                     struct genePred *pred, struct annoRow *inRow,
+                                     struct lm *callerLm)
+// put out annoRows for all the gpFx that arise from variant and pred
+{
+struct annoStreamer *sSelf = &(self->grator.streamer);
+struct genbankCds cds;
+genePredToCds(pred, &cds);
+struct dnaSeq *txSeq = genePredToGenomicSequence(pred, sSelf->assembly, self->lm);
+int chromSize = 0;  // unused
+struct psl *psl = genePredToPsl(pred, chromSize, txSeq->size);
+vpExpandIndelGaps(psl, self->gSeqWin, txSeq);
+struct dnaSeq *protSeq = NULL;
+if (cds.end > cds.start)
+    {
+    //#*** what if cds.startComplete is not true??
+    protSeq = translateTx(txSeq, &cds);
+    lookupProtAcc(self, protSeq);
+    }
+struct annoRow *rowList = aggvPredict(self, variant, psl, &cds, txSeq, protSeq, inRow, callerLm);
+pslFree(&psl);
+dnaSeqFree(&protSeq);
+return rowList;
+}
+
+static struct annoRow *aggvGenRowsPsl(struct annoGratorGpVar *self, struct variant *variant,
+                                     struct annoRow *inRow, struct lm *callerLm)
+// put out annoRows for all the gpFx that arise from variant and transcript psl+
+{
+char **ppWords = inRow->data;
+struct psl *psl = pslLoad(ppWords);
+struct genbankCds cds;
+genbankCdsParse(ppWords[PSLPLUS_CDS_IX], &cds);
+struct dnaSeq *txSeq = getCachedSeq(ppWords[PSLPLUS_PATH_IX], atoll(ppWords[PSLPLUS_FILEOFFSET_IX]),
+                                    atoll(ppWords[PSLPLUS_FILESIZE_IX]), TRUE);
+struct dnaSeq *protSeq = getProtSeq(self, ppWords[PSLPLUS_PROTACC_IX], txSeq, &cds);
+struct annoRow *rowList = aggvPredict(self, variant, psl, &cds, txSeq, protSeq, inRow, callerLm);
+pslFree(&psl);
+return rowList;
+}
+
 struct annoRow *aggvGenelessRow(struct annoGratorGpVar *self, struct variant *variant,
-                                enum soTerm term, boolean rjFail, struct lm *callerLm)
+                                boolean rjFail, struct lm *callerLm)
 /* If intergenic variants (no overlapping or nearby genes) are to be included in output,
  * make an output row with empty genePred and a gpFx that is empty except for soNumber. */
 {
@@ -695,6 +624,7 @@ for (i = 0;  i < gpColCount;  i++)
     wordsOut[i] = "";
 struct gpFx *gpFx;
 lmAllocVar(self->lm, gpFx);
+enum soTerm term = hasAltAllele(variant->alleles) ? intergenic_variant : no_sequence_alteration;
 if (term == no_sequence_alteration)
     gpFx->gAllele = variant->alleles->sequence;
 else
@@ -793,7 +723,7 @@ if (rows == NULL)
     {
     // No genePreds means that the primary variant is intergenic.
     if ((self->funcFilter == NULL || self->funcFilter->intergenic))
-	return aggvGenelessRow(self, variant, intergenic_variant, *retRJFilterFailed, callerLm);
+        return aggvGenelessRow(self, variant, *retRJFilterFailed, callerLm);
     else if (retRJFilterFailed && self->gpVarOverlapRule == agoMustOverlap)
 	*retRJFilterFailed = TRUE;
     return NULL;
@@ -865,6 +795,8 @@ if (*pSSelf != NULL)
     struct annoGratorGpVar *self = (struct annoGratorGpVar *)(*pSSelf);
     lmCleanup(&(self->lm));
     dyStringFree(&(self->dyScratch));
+    freez(&self->protLookupTable);
+    hashFree(&self->protLookupHash);
     annoGratorClose(pSSelf);
     }
 }

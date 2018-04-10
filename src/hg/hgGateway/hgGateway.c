@@ -158,9 +158,7 @@ else
         suggestTrack = assemblyGeneSuggestTrack(db);
     jsonWriteString(jw, "suggestTrack", suggestTrack);
     char *description = maybeGetDescriptionText(db);
-    //#*** TODO: move jsonStringEscape inside jsonWriteString
-    char *encoded = jsonStringEscape(description);
-    jsonWriteString(jw, "description", encoded);
+    jsonWriteString(jw, "description", description);
     listAssemblyHubs(jw);
     }
 }

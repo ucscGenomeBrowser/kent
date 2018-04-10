@@ -829,3 +829,16 @@ panTro5.genbank.mrna.xeno.load = yes
     #   sizes will set properly
 
 #########################################################################
+# LIFTOVER TO panTro6 (DONE - 2018-03-24 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/panTro5/bed/blat.panTro6.2018-03-24
+    cd /hive/data/genomes/panTro5/bed/blat.panTro6.2018-03-24
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/panTro5/jkStuff/panTro5.11.ooc \
+         panTro5 panTro6) > do.log 2>&1
+    # real    460m46.002s
+
+    # see if the liftOver menus function in the browser from panTro5 to panTro6
+
+#########################################################################

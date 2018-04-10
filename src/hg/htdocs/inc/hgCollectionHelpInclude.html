@@ -4,7 +4,7 @@
   
 <h6><a href="#Intro">Introduction</a></h6>
   <ul>
-    <li><h5><a href="#Video">Quick video demo</a></h5></li>
+<!--    <li><h5><a href="#Video">Quick video demo</a></h5></li> -->
     <li><h5><a href="#SupportedData">Supported Data Types</a></h5></li>
     <li><h5><a href="#TrackSources">Track Sources</a></h5></li>
   </ul>
@@ -27,12 +27,13 @@ track</a> or &quot;collection.&quot; A
 <a href="../goldenPath/help/trackDb/trackDbHub.html#compositeTrack" target="_blank" >composite 
 track</a> can be thought of as a container for grouping a set of similar-type annotation tracks.
 </p> 
-
+<!-- Jairo, can you double check the video url, uncomment, and publish? You'll also need to
+uncomment the 'Quick Video Demo' anchor tag above, under the Introduction section. Thx Thx Thx!
 <a name="Video"></a>
 <h3> Quick video demo</h3>
-<p>Two-minute video: <a href="https://youtu.be/yYlx2J7bapo" target="_blank">
+<p>Two-minute video: <a href="https://www.youtube.com/watch?v=2_RiIY07omY" target="_blank">
 Track Collection Builder - Demo</a></p>
-
+-->
 <a name="SupportedData"></a>
 <h3>Supported Data Types</h3> 
 <p>
@@ -73,7 +74,7 @@ The &quot;Collected Tracks&quot; top right pane displays all created collections
   subtrack colors.</li> 
     <li>See 'Step 2' below to add/remove tracks.</li>
     <li>To remove a collection: select it, right-click (or select multiple, 'command + click', 
-    'shift + click') and click 'Delete.'</li>
+    'shift + click') and click <button type="button">Delete</button>.</li>
     <li>Collection changes are saved after going to the browser window. To remove changes since the 
     last save, click <button type="button">Discard Changes</button> (upper right).
     </li> 
@@ -108,10 +109,10 @@ any collection.</p>
       <li>To add a track to a collection, click the green &quot;plus&quot; 
       <i class="jstree-icon jstree-themeicon fa fa-plus jstree-themeicon-custom"></i> symbol to the 
       left of each track, or right-click (or select multiple, 'command + click', 'shift + click') 
-      and 'Add.'</li>
+      and <button type="button">Add</button>.</li>
       <li> To remove a track from a collection, click the red &quot;minus&quot; 
       <i class="jstree-icon jstree-themeicon fa fa-minus-square jstree-themeicon-custom"></i> symbol 
-      to the left of each track, or right-click and 'Delete.'
+      to the left of each track, or right-click and <button type="button">Delete</button>.
       <li>A single track can be added/duplicated multiple times into a single collection.</li>
       <li>A single track can be added to multiple collections, where various comparison views can be 
       applied (see 'Step 4' below).</li>
@@ -125,27 +126,6 @@ any collection.</p>
 
 <a name="BrowserOptions"></a>
 <h3>Step 3: Browser viewing options</h3>
-<div class="row">
-<!-- Left column -->
-  <div class="col-md-4" >
-  <p> 
-  <img src="../../images/hgCollectionMouseOver.jpg" 
-  alt="hgCollection Mouse-over in browser window.jpg"></p>
-  </div> <!-- end left column -->
-<!-- Middle column -->
-  </br>
-  <div class="col-md-4" style="background-color:#eef0f2;">
-  <p>
-  Once a collection has been created and tracks have been added to it, click 
-  <button class="gbButtonGo" type="button">GO</button> (upper right) to view the collection in the 
-  browser window. In the browser, mouse-over the gray vertical buttons at the left window frame to 
-  see the name of each collection.</p></br>
-  </div> <!-- end middle column -->
- <!-- Right column -->
-  <div class="col-md-4">
-  <p></p>
-  </div> <!-- end right column -->
-</div> <!-- end row --></br>
 
 <p>
 When viewing collections within the browser, the following viewing options are 
@@ -167,6 +147,30 @@ available:</p>
     window, tracks within the collection will sort in order of magnitude, with the highest in 
     magnitude at the top of the subtracks in the collection.</p>
   </ul>
+<p>
+<strong>Tip:</strong> Displaying collection names in the browser:</p>
+
+<div class="row">
+<!-- Left column -->
+  <div class="col-md-4" >
+  <p> 
+  <img src="../../images/hgCollectionMouseOver.jpg" 
+  alt="hgCollection Mouse-over in browser window.jpg"></p>
+  </div> <!-- end left column -->
+<!-- Middle column -->
+  </br>
+  <div class="col-md-4" style="background-color:#eef0f2;">
+  <p>
+  Once a collection has been created and tracks have been added to it, click 
+  <button class="gbButtonGo" type="button">GO</button> (upper right) to view the collection in the 
+  browser window. In the browser, mouse-over the gray vertical buttons at the left window frame to 
+  see the name of each collection.</p></br>
+  </div> <!-- end middle column -->
+ <!-- Right column -->
+  <div class="col-md-4">
+  <p></p>
+  </div> <!-- end right column -->
+</div> <!-- end row --></br>
 
 <a name="Configure"></a>
 <h3>Step 4: Configure collection</h3>
@@ -192,6 +196,28 @@ available:</p>
     <img src="../../images/hgCollectionSetColor.jpg"  
     alt="hgCollection name, description and color pop-up editor"></p>
     <li><strong>Merge methods (aggregate/overlay graphing view options):</strong></li>
+
+    <dl>
+      <dt>None</dt>
+      <dd>Default setting; no overlay/merge is applied. Subtracks appear as individual tracks 
+      within the collection/composite.</dd>
+      <dt>Transparent</dt>
+      <dd>Subtrack graphs are merged together with transparent overlay views.</dd> 
+      <dt>Solid</dt>
+      <dd>Subtrack graphs are merged together with solid overlay views.</dd> 
+      <dt>Stacked</dt>
+      <dd>Subtrack graphs are layered horizontally with solid overlay views for each subtrack.</dd> 
+      <dt>Add</dt>
+      <dd>Subtrack graphs are layered horizontally and merged into one solid overlay color; the 
+      silhouette of 'stacked.' For this 'add' view, there is also the option to configure how 
+      missing data are treated (see section below). </dd>
+      <dt>Subtract</dt>
+      <dd>The first (top) subtrack is subtracted from the sum of the others. Note: Re-order 
+      collection subtracks in the 'Collected Tracks' pane to change which subtract is at the top. 
+      For this 'subtract' view, there is also the option to configure how missing data are treated 
+      (see section below).</dd>
+    </dl>
+    
     <div class="row">
 <!-- Left column -->
       <div class="col-md-4" >
@@ -205,43 +231,25 @@ available:</p>
       <p>Tracks in collections can be displayed with 
       <a href="/goldenpath/help/trackDb/trackDbHub.html#multiWig" target="_blank">
       multiWig aggregate/overlay</a> &quot;merge&quot; methods (stacked, transparent, etc.) as well 
-      as new add &amp; subtract options:</p></br>
+      as new add &amp; subtract options.</p></br>
       </div> <!-- end middle column -->
 <!-- Right column -->
       <div class="col-md-4">
       <p></p>
       </div> <!-- end right column -->
     </div> <!-- end row --></br>
-
-    <ul>
-      <li><strong>None</strong>&nbsp;&nbsp;>&nbsp;&nbsp;Default setting; no overlay/
-      merge is applied. Subtracks appear as individual tracks within the collection/composite.</li>
-      <li><strong>Transparent</strong>&nbsp;&nbsp;>&nbsp;&nbsp;Subtrack graphs are merged together 
-      with transparent overlay views.</li> 
-      <li><strong>Solid</strong>&nbsp;&nbsp;>&nbsp;&nbsp;Subtrack graphs are merged together with 
-      solid overlay views.</li> 
-      <li><strong>Stacked</strong>&nbsp;&nbsp;>&nbsp;&nbsp;Subtrack graphs are layered horizontally 
-      with solid overlay views for each subtrack.</li> 
-      <li><strong>Add</strong>&nbsp;&nbsp;>&nbsp;&nbsp;Subtrack graphs are layered horizontally and 
-      merged into one solid overlay color; the silhouette of 'stacked.' For this 'add' view, there 
-      is also the option to configure how missing data are treated (see section below). </li>
-      <li><strong>Subtract</strong>&nbsp;&nbsp;>&nbsp;&nbsp;The first (top) subtrack is subtracted 
-      from the sum of the others. Note: Re-order collection subtracks in the 'Collected Tracks' pane 
-      to change which subtract is at the top. For this 'subtract' view, there is also the option to 
-      configure how missing data are treated (see section below).</li>
-    </ul>
   
   <li><strong>Missing data treatment:</strong></li>  
-    <ul>
-      <li><strong>Missing=0</strong>&nbsp;&nbsp;>&nbsp;&nbsp;Default setting. Missing data are 
-      replaced with a 0 (zero). Graphing will be drawn at the zero point for the x-axis and y-axis 
-      (0,0). 
+    <dl>
+      <dt>Missing=0</dt>
+      <dd>Default setting. Missing data are replaced with a 0 (zero). Graphing will be drawn at the 
+      zero point for the x-axis and y-axis (0,0). 
       </br><i>Note: </i>Calculations (where 'Merge Method' = 'Add' or 'Subtract') will use a zero 
-      in the arithmetic.</li>
-      <li><strong>Missing=missing</strong>&nbsp;&nbsp;>&nbsp;&nbsp;Graphing will not
-      be drawn for missing data points. Where data are missing for any point in the calculation, 
-      the calculated result for that position point will be missing.</li>
-    </ul> 
+      in the arithmetic.</dd>
+      <dt>Missing=missing</dt>
+      <dd>Graphing will not be drawn for missing data points. Where data are missing for any point 
+      in the calculation, the calculated result for that position point will be missing.</dd>
+    </dl> 
   </ul>
 
 <a name="SaveAndShare"></a>
