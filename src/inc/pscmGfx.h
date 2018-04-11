@@ -68,4 +68,9 @@ void pscmTextCentered(struct pscmGfx *pscm, int x, int y,
 	int width, int height, int color, MgFont *font, char *text);
 /* Draw a line of text centered in box defined by x/y/width/height */
 
+void pscmEllipse(struct pscmGfx *pscm, 
+	int x1, int y1, int x2, int y2, int color, int mode, boolean isDashed);
+/* Draw an ellipse specified as a rectangle. Args are left-most and top-most points.
+ * Optionally draw half-ellipse (top or bottom) */
+
 #endif /* PSCMGFX_H */

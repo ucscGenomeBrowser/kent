@@ -22,10 +22,6 @@ struct hvGfx
     int clipMaxY;
 };
 
-#define ELLIPSE_FULL    0
-#define ELLIPSE_TOP     1
-#define ELLIPSE_BOTTOM  2
-
 struct hvGfx *hvGfxOpenPng(int width, int height, char *fileName, boolean useTransparency);
 /* Open up something that we'll write out as a PNG someday.
  * If useTransparency, then the first color in memgfx's colormap/palette is
@@ -241,6 +237,17 @@ if (hvg->rc)
     hvGfxRevPoly(hvg, poly);  // restore
 }
 
+INLINE void hvGfxEllipseDraw(struct hvGfx *hvg, int x1, int y1, int x2, int y2, Color color, 
+                                int mode, boolean isDashed)
+/* Draw an ellipse (or limit to top or bottom) specified by rectangle.
+ * Optionally, alternate dots.
+ * Point 0 is left, point 1 is top of rectangle.
+ */
+{
+x1 = hvGfxAdjXX(hvg, x1, &x2, &y1, &y2);
+vgEllipse(hvg->vg, x1, y1, x2, y2, color, mode, isDashed);
+}
+
 INLINE int hvGfxFindColorIx(struct hvGfx *hvg, int r, int g, int b)
 /* Find color in map if possible, otherwise create new color or
  * in a pinch a close color. */
@@ -316,12 +323,6 @@ void hvGfxEllipseDraw(struct hvGfx *hvg, int x0, int y0, int x1, int y1, Color c
 /* Draw an ellipse (or limit to top or bottom) specified by rectangle, using Bresenham algorithm.
  * Optionally, alternate dots.
  * Point 0 is left, point 1 is top of rectangle
- * Adapted trivially from code posted at http://members.chello.at/~easyfilter/bresenham.html
- */
-
-void hvGfxEllipse(struct hvGfx *hvg, int x0, int y0, int x1, int y1, Color color);
-/* Draw an ellipse using Bresenham algorithm.
- * Point 0 is left, point 1 is top
  * Adapted trivially from code posted at http://members.chello.at/~easyfilter/bresenham.html
  */
 

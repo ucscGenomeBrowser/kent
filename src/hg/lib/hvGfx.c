@@ -400,6 +400,9 @@ int hvGfxCurve(struct hvGfx *hvg, int x0, int y0, int x1, int y1, int x2, int y2
  * Return max y value. Optionally alternate dots.
  * Adapted trivially from code posted at http://members.chello.at/~easyfilter/bresenham.html
  */
+/* TODO: allow specifying a third point on the line
+ *  P(t) = (1-t)^2 * p0 + 2 * (1-t) * t * p1 + t^2 * p2
+ */
 {
    int x = x0-x1, y = y0-y1;
    double t = x0-2*x1+x2, r;
@@ -435,62 +438,4 @@ int hvGfxCurve(struct hvGfx *hvg, int x0, int y0, int x1, int y1, int x2, int y2
      yMax = yMaxRet;
    return yMax;
 }
-
-void hvGfxEllipseDraw(struct hvGfx *hvg, int x0, int y0, int x1, int y1, Color color, 
-                        int mode, boolean isDashed)
-/* Draw an ellipse (or limit to top or bottom) specified by rectangle, using Bresenham algorithm.
- * Optionally, alternate dots.
- * Point 0 is left, point 1 is top of rectangle
- * Adapted trivially from code posted at http://members.chello.at/~easyfilter/bresenham.html
- */
-{
-   int a = abs(x1-x0), b = abs(y1-y0), b1 = b&1; /* values of diameter */
-   long dx = 4*(1-a)*b*b, dy = 4*(b1+1)*a*a; /* error increment */
-   long err = dx+dy+b1*a*a, e2; /* error of 1.step */
-
-   if (x0 > x1) { x0 = x1; x1 += a; } /* if called with swapped points */
-   if (y0 > y1) y0 = y1; /* .. exchange them */
-   y0 += (b+1)/2; y1 = y0-b1;   /* starting pixel */
-   a *= 8*a; b1 = 8*b*b;
-
-   int dots = 0;
-   do {
-       if (!isDashed || (++dots % 3))
-           {
-           if (mode == ELLIPSE_BOTTOM || mode == ELLIPSE_FULL) 
-               {
-               hvGfxDot(hvg, x1, y0, color); /*   I. Quadrant */
-               hvGfxDot(hvg, x0, y0, color); /*  II. Quadrant */
-               }
-           if (mode == ELLIPSE_TOP || mode == ELLIPSE_FULL) 
-               {
-               hvGfxDot(hvg, x0, y1, color); /* III. Quadrant */
-               hvGfxDot(hvg, x1, y1, color); /*  IV. Quadrant */
-               }
-           }
-       e2 = 2*err;
-       if (e2 <= dy) { y0++; y1--; err += dy += a; }  /* y step */
-       if (e2 >= dx || 2*err > dy) { x0++; x1--; err += dx += b1; } /* x step */
-   } while (x0 <= x1);
-
-   while (y0-y1 < b) {  /* too early stop of flat ellipses a=1 */
-       if (!isDashed && (++dots % 3))
-           {
-           hvGfxDot(hvg, x0-1, y0, color); /* -> finish tip of ellipse */
-           hvGfxDot(hvg, x1+1, y0++, color);
-           hvGfxDot(hvg, x0-1, y1, color);
-           hvGfxDot(hvg, x1+1, y1--, color);
-           }
-   }
-}
-
-void hvGfxEllipse(struct hvGfx *hvg, int x0, int y0, int x1, int y1, Color color)
-/* Draw a full ellipse specified by rectangle, using Bresenham algorithm.
- * Point 0 is left, point 1 is top of rectangle
- * Adapted trivially from code posted at http://members.chello.at/~easyfilter/bresenham.html
- */
-{
-hvGfxEllipseDraw(hvg, x0, y0, x1, y1, color, ELLIPSE_FULL, FALSE);
-}
-
 

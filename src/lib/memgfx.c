@@ -1007,6 +1007,7 @@ vg->unclip = (vg_unclip)mgUnclip;
 vg->verticalSmear = (vg_verticalSmear)mgVerticalSmear;
 vg->fillUnder = (vg_fillUnder)mgFillUnder;
 vg->drawPoly = (vg_drawPoly)mgDrawPoly;
+vg->ellipse = (vg_ellipse)mgEllipse;
 vg->setHint = (vg_setHint)mgSetHint;
 vg->getHint = (vg_getHint)mgGetHint;
 vg->getFontPixelHeight = (vg_getFontPixelHeight)mgGetFontPixelHeight;

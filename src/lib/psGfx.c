@@ -358,32 +358,31 @@ else
     }
 }
 
-
-void psFillEllipse(struct psGfx *ps, double x, double y, double xrad, double yrad)
-{
-FILE *f = ps->f;
-fprintf(f, "newpath\n");
-psXyOut(ps, x, y);
-psWhOut(ps, xrad, yrad);
-psFloatOut(f, 0.0);
-psFloatOut(f, 360.0);
-fprintf(f, "ellipse\n");
-fprintf(f, "closepath\n");
-fprintf(f, "fill\n");
-}
-
 void psDrawEllipse(struct psGfx *ps, double x, double y, double xrad, double yrad,
     double startAngle, double endAngle)
+/* Draw ellipse.  Args are center point x and y, horizontal radius, vertical radius,
+        start and end angles (e.g. 0 and 180 to draw top half, 180 and 360 for bottom)
+ */
 {
 FILE *f = ps->f;
 fprintf(f, "newpath\n");
 psXyOut(ps, x, y);
 psWhOut(ps, xrad, yrad);
+//warn("ellipse: x=%d, y=%d, xrad=%d, yrad=%d. ", (int)x, (int)y, (int)xrad, (int)yrad);
 psFloatOut(f, startAngle);
 psFloatOut(f, endAngle);
 fprintf(f, "ellipse\n");
-fprintf(f, "closepath\n");
 fprintf(f, "stroke\n");
+}
+
+void psSetDash(struct psGfx *ps, boolean on)
+/* Set dashed line mode on or off. If set on, show two points marked, with one point of space */
+{
+FILE *f = ps->f;
+if (on)
+    fprintf(f, "[2 1] 0 setdash\n");
+else
+    fprintf(f, "[] 0 setdash\n");
 }
 
 char * convertEpsToPdf(char *epsFile) 

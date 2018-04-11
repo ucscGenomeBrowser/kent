@@ -80,6 +80,12 @@ struct vGfx
     	boolean filled);
     /* Draw polygon, possibly filled in color. */
 
+    void (*ellipse)(void *v, int x1, int y1, int x2, int y2, Color color,
+                    int mode, boolean isDashed); 
+    /* Draw an ellipse or half-ellipse (top or bottom),
+     * specified by left-most and top-most points on a  rectangle.
+     * Optionally draw with dashed line. */
+
     void (*setHint)(void *v, char *hint, char *value);
     /* Set hint */
 
@@ -166,6 +172,12 @@ void vgClose(struct vGfx **pVg);
 #define vgDrawPoly(v,poly,color,filled) \
 	v->drawPoly(v->data,poly,color,filled)
     /* Draw a polygon in color, optionally filled. */
+
+#define vgEllipse(v,x1,x2,y1,y2,color,mode,isDashed) \
+        v->ellipse(v->data,x1,x2,y1,y2,color,mode,isDashed)
+    /* Draw an ellipse or half-ellipse (top or bottom),
+     * specified by left-most and top-most points on a  rectangle.
+     * Optionally draw with dashed line */
 
 #define vgSetHint(v,hint,value) \
 	v->setHint(v->data,hint,value)
