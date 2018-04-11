@@ -101,6 +101,9 @@ void psPopG(struct psGfx *ps);
 void psDrawPoly(struct psGfx *ps, struct psPoly *poly, boolean filled);
 /* Draw a possibly filled polygon */
 
+void psFillEllipse(struct psGfx *ps, double x, double y, double xrad, double yrad);
+/* Draw a filled ellipse */
+
 void psDrawEllipse(struct psGfx *ps, double x, double y, double xrad, double yrad,
     double startAngle, double endAngle);
 /* Draw an ellipse outline */
