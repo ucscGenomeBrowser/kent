@@ -351,7 +351,6 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
     if (tOnScreen)
         {
 if (sOnScreen)
-    //warn("interaction: %s", inter->name);
         // draw foot of target region
         hvGfxLine(hvg, tX - tWidth, yOff, tX + tWidth, yOff, color);
         if (vis == tvDense || !sOnScreen || draw == DRAW_LINE)
@@ -439,7 +438,6 @@ if (sOnScreen)
         {
         int yLeft = yOff + peakHeight;
         int yTop = yOff - peakHeight;
-//warn("hgTracks ellipse: left point: (%d,%d), top point: (%d,%d)", lowerX, yLeft, upperX, yTop);
         hvGfxEllipseDraw(hvg, lowerX, yLeft, upperX, yTop, color, ELLIPSE_BOTTOM, isReversed);
         // draw map box on peak
         int maxY = peakHeight + yOff;
