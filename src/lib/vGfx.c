@@ -8,8 +8,6 @@
 #include "common.h"
 #include "vGfx.h"
 
-
-
 /* Most of the implementation of this is in macros in vGfx.h. */
 
 void vgClose(struct vGfx **pVg)

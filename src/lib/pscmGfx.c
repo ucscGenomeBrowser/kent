@@ -20,8 +20,6 @@ int isinf(double x) { return !finite(x) && x==x; }
 #include "vGfx.h"
 #include "vGfxPrivate.h"
 
-
-
 static struct pscmGfx *boxPscm;	 /* Used to keep from drawing the same box again
                                   * and again with no other calls between.  This
 				  * ends up cutting down the file size by 5x
@@ -100,7 +98,6 @@ int pscmFindColorIx(struct pscmGfx *pscm, int r, int g, int b)
 {
 return MAKECOLOR_32(r,g,b);
 }
-
 
 struct rgbColor pscmColorIxToRgb(struct pscmGfx *pscm, int colorIx)
 /* Return rgb value at color index. */
@@ -221,8 +218,6 @@ void pscmDot(struct pscmGfx *pscm, int x, int y, int color)
 {
 pscmBox(pscm, x, y, 1, 1, color);
 }
-
-
 
 static void pscmVerticalSmear(struct pscmGfx *pscm,
 	int xOff, int yOff, int width, int height, 
@@ -357,7 +352,6 @@ double fatPixel(double c, double center, double fat)
 {
 return center+((c-center)*fat);
 }
-
 
 void pscmPolyFatten(struct psPoly *psPoly, 
   int minX, int maxX, int minY, int maxY)
@@ -605,7 +599,6 @@ for (;;)
     if (p == q) 
 	break;
     }
-
 }
 
 void pscmDrawPoly(struct pscmGfx *pscm, struct gfxPoly *poly, Color color, 
@@ -645,8 +638,6 @@ else
 psPolyFree(&psPoly);
 }
 
-
-
 void pscmFatLine(struct pscmGfx *pscm, double x1, double y1, double x2, double y2)
 /* Draw a line from x1/y1 to x2/y2 by making a filled polygon.
  *  This also avoids some problems with stroke-width variation
@@ -667,7 +658,6 @@ x1 = fatPixel(x1,cX,fX);
 x2 = fatPixel(x2,cX,fX);
 y1 = fatPixel(y1,cY,fY);
 y2 = fatPixel(y2,cY,fY);
-
 
 /* calculate 4 corners {h,i,j,k} of the rectangle covered */
 
@@ -691,7 +681,6 @@ psPolyFree(&psPoly);
 
 }
 
-
 void pscmLine(struct pscmGfx *pscm, 
 	int x1, int y1, int x2, int y2, int color)
 /* Draw a line from one point to another. */
@@ -705,6 +694,56 @@ else
 boxPscm = NULL;
 }
 
+void pscmEllipse(struct pscmGfx *pscm, int x1, int y1, int x2, int y2, Color color, 
+                        int mode, boolean isDashed)
+/* Draw an ellipse specified as a rectangle. Args are left-most and top-most points.
+ * Optionally draw half-ellipse (top or bottom) */
+{
+pscmSetColor(pscm, color);
+if (isDashed)
+    psSetDash(pscm->ps, TRUE);
+else
+    psSetDash(pscm->ps, FALSE);
+int startAngle = 0;
+int endAngle = 360;
+if (mode == ELLIPSE_TOP)
+    endAngle = 180;
+else if (mode == ELLIPSE_BOTTOM)
+    startAngle = 180;
+int yrad = abs(y1 - y2)/2;
+int xrad = abs(x1 - x2)/2;
+x2 = x2 - xrad;
+y1 = y1 - yrad;
+psDrawEllipse(pscm->ps, (double)x2, (double)y1, (double)xrad, (double)yrad,
+                startAngle, endAngle);
+psSetDash(pscm->ps, FALSE);
+}
+
+static double bezierQuadraticToCubic(int a, int b)
+/* Derive cubic control points from quadratic control point. */
+{
+return (double)a + (2 * (b - a))/3.0;
+}
+
+void pscmCurve(struct pscmGfx *pscm, int x1, int y1, int x2, int y2, int x3, int y3, Color color,
+                        boolean isDashed)
+/* Draw Bezier curve specified by 3 points (quadratic Bezier).
+ * The points are: first (p1) and last (p3), and 1 control point (p2).
+ */ 
+{
+pscmSetColor(pscm, color);
+if (isDashed)
+    psSetDash(pscm->ps, TRUE);
+else
+    psSetDash(pscm->ps, FALSE);
+// PostScript bezier is cubic -- derive the two control points from the single quadratic control point
+double c1x = bezierQuadraticToCubic(x1, x2);
+double c1y = bezierQuadraticToCubic(y1, y2);
+double c2x = bezierQuadraticToCubic(x3, x2);
+double c2y = bezierQuadraticToCubic(y3, y2);
+psDrawCurve(pscm->ps, (double)x1, (double)y1, c1x, c1y, c2x, c2y, (double)x3, (double)y3);
+psSetDash(pscm->ps, FALSE);
+}
 
 struct vGfx *vgOpenPostScript(int width, int height, char *fileName)
 /* Open up something that will someday be a PostScript file. */
@@ -725,6 +764,8 @@ vg->unclip = (vg_unclip)pscmUnclip;
 vg->verticalSmear = (vg_verticalSmear)pscmVerticalSmear;
 vg->fillUnder = (vg_fillUnder)pscmFillUnder;
 vg->drawPoly = (vg_drawPoly)pscmDrawPoly;
+vg->ellipse = (vg_ellipse)pscmEllipse;
+vg->curve = (vg_curve)pscmCurve;
 vg->setHint = (vg_setHint)pscmSetHint;
 vg->getHint = (vg_getHint)pscmGetHint;
 vg->getFontPixelHeight = (vg_getFontPixelHeight)pscmGetFontPixelHeight;

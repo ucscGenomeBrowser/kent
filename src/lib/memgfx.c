@@ -1007,6 +1007,8 @@ vg->unclip = (vg_unclip)mgUnclip;
 vg->verticalSmear = (vg_verticalSmear)mgVerticalSmear;
 vg->fillUnder = (vg_fillUnder)mgFillUnder;
 vg->drawPoly = (vg_drawPoly)mgDrawPoly;
+vg->ellipse = (vg_ellipse)mgEllipse;
+vg->curve = (vg_curve)mgCurve;
 vg->setHint = (vg_setHint)mgSetHint;
 vg->getHint = (vg_getHint)mgGetHint;
 vg->getFontPixelHeight = (vg_getFontPixelHeight)mgGetFontPixelHeight;
@@ -1254,4 +1256,168 @@ hsv.s = min(max(hsv.s * s, 0), 1000);
 hsv.v = min(max(hsv.v * v, 0), 1000);
 return mgHsvToRgb(hsv);
 }
+
+void mgEllipse(struct memGfx *mg, int x0, int y0, int x1, int y1, Color color,
+                        int mode, boolean isDashed)
+/* Draw an ellipse (or limit to top or bottom) specified by rectangle, using Bresenham algorithm.
+ * Optionally, alternate dots.
+ * Point 0 is left, point 1 is top of rectangle
+ * Adapted trivially from code posted at http://members.chello.at/~easyfilter/bresenham.html
+ * Author: Zingl Alois, 8/22/2016
+ */
+{
+   int a = abs(x1-x0), b = abs(y1-y0), b1 = b&1; /* values of diameter */
+   long dx = 4*(1-a)*b*b, dy = 4*(b1+1)*a*a; /* error increment */
+   long err = dx+dy+b1*a*a, e2; /* error of 1.step */
+
+   if (x0 > x1) { x0 = x1; x1 += a; } /* if called with swapped points */
+   if (y0 > y1) y0 = y1; /* .. exchange them */
+   y0 += (b+1)/2; y1 = y0-b1;   /* starting pixel */
+   a *= 8*a; b1 = 8*b*b;
+
+   int dots = 0;
+   do {
+       if (!isDashed || (++dots % 3))
+           {
+           if (mode == ELLIPSE_BOTTOM || mode == ELLIPSE_FULL) 
+               {
+               mgPutDot(mg, x1, y0, color); /*   I. Quadrant */
+               mgPutDot(mg, x0, y0, color); /*  II. Quadrant */
+               }
+           if (mode == ELLIPSE_TOP || mode == ELLIPSE_FULL) 
+               {
+               mgPutDot(mg, x0, y1, color); /* III. Quadrant */
+               mgPutDot(mg, x1, y1, color); /*  IV. Quadrant */
+               }
+           }
+       e2 = 2*err;
+       if (e2 <= dy) { y0++; y1--; err += dy += a; }  /* y step */
+       if (e2 >= dx || 2*err > dy) { x0++; x1--; err += dx += b1; } /* x step */
+   } while (x0 <= x1);
+
+   while (y0-y1 < b) {  /* too early stop of flat ellipses a=1 */
+       if (!isDashed && (++dots % 3))
+           {
+           mgPutDot(mg, x0-1, y0, color); /* -> finish tip of ellipse */
+           mgPutDot(mg, x1+1, y0++, color);
+           mgPutDot(mg, x0-1, y1, color);
+           mgPutDot(mg, x1+1, y1--, color);
+           }
+   }
+}
+
+static int mgCurveSegAA(struct memGfx *mg, int x0, int y0, int x1, int y1, int x2, int y2, 
+                        Color color, boolean isDashed)
+/* Draw a segment of an anti-aliased curve within 3 points (quadratic Bezier)
+ * Return max y value. Optionally alternate dots.
+ * Adapted trivially from code posted on github and at http://members.chello.at/~easyfilter/bresenham.html */
+ /* Thanks to author  * @author Zingl Alois
+ * @date 22.08.2016 */
+{
+   int yMax = 0;
+   int sx = x2-x1, sy = y2-y1;
+   long xx = x0-x1, yy = y0-y1, xy;             /* relative values for checks */
+   double dx, dy, err, ed, cur = xx*sy-yy*sx;                    /* curvature */
+
+   assert(xx*sx <= 0 && yy*sy <= 0);      /* sign of gradient must not change */
+
+   if (sx*(long)sx+sy*(long)sy > xx*xx+yy*yy) {     /* begin with longer part */
+      x2 = x0; x0 = sx+x1; y2 = y0; y0 = sy+y1; cur = -cur;     /* swap P0 P2 */
+   }
+   if (cur != 0)
+   {                                                      /* no straight line */
+      xx += sx; xx *= sx = x0 < x2 ? 1 : -1;              /* x step direction */
+      yy += sy; yy *= sy = y0 < y2 ? 1 : -1;              /* y step direction */
+      xy = 2*xx*yy; xx *= xx; yy *= yy;             /* differences 2nd degree */
+      if (cur*sx*sy < 0) {                              /* negated curvature? */
+         xx = -xx; yy = -yy; xy = -xy; cur = -cur;
+      }
+      dx = 4.0*sy*(x1-x0)*cur+xx-xy;                /* differences 1st degree */
+      dy = 4.0*sx*(y0-y1)*cur+yy-xy;
+      xx += xx; yy += yy; err = dx+dy+xy;                   /* error 1st step */
+      int dots = 0;
+      do {
+         cur = fmin(dx+xy,-xy-dy);
+         ed = fmax(dx+xy,-xy-dy);               /* approximate error distance */
+         ed += 2*ed*cur*cur/(4*ed*ed+cur*cur);
+         if (!isDashed || (++dots % 3))
+            {
+            mixDot(mg, x0,y0, 1-fabs(err-dx-dy-xy)/ed, color);          /* plot curve */
+            if (y0 > yMax)
+                yMax = y0;
+            }
+         if (x0 == x2 || y0 == y2) break;     /* last pixel -> curve finished */
+         x1 = x0; cur = dx-err; y1 = 2*err+dy < 0;
+         if (2*err+dx > 0) {                                        /* x step */
+            if (err-dy < ed) 
+                {
+                mixDot(mg, x0,y0+sy, 1-fabs(err-dy)/ed, color);
+                if (y0 > yMax)
+                    yMax = y0;
+                }
+            x0 += sx; dx -= xy; err += dy += yy;
+         }
+         if (y1) {                                                  /* y step */
+            if (cur < ed) 
+                {
+                mixDot(mg, x1+sx,y0, 1-fabs(cur)/ed, color);
+                if (y0 > yMax)
+                    yMax = y0;
+                }
+            y0 += sy; dy -= xy; err += dx += xx;
+         }
+      } while (dy < dx);                  /* gradient negates -> close curves */
+   }
+   mgDrawLine(mg, x0,y0, x2,y2, color);                  /* plot remaining needle to end */
+   if (y0 > yMax)
+       yMax = y0;
+   return yMax;
+}
+
+int mgCurve(struct memGfx *mg, int x0, int y0, int x1, int y1, int x2, int y2, Color color,
+                        boolean isDashed)
+/* Draw a segment of an anti-aliased curve within 3 points (quadratic Bezier)
+ * Return max y value. Optionally draw curve as dashed line.
+ * Adapted trivially from code posted at http://members.chello.at/~easyfilter/bresenham.html
+ * Author: Zingl Alois, 8/22/2016
+ */
+/* TODO: allow specifying a third point on the line
+ *  P(t) = (1-t)^2 * p0 + 2 * (1-t) * t * p1 + t^2 * p2
+ */
+{
+   int x = x0-x1, y = y0-y1;
+   double t = x0-2*x1+x2, r;
+   int yMax = 0, yMaxRet = 0;
+   if ((long)x*(x2-x1) > 0) {                        /* horizontal cut at P4? */
+      if ((long)y*(y2-y1) > 0)                     /* vertical cut at P6 too? */
+         if (fabs((y0-2*y1+y2)/t*x) > abs(y)) {               /* which first? */
+            x0 = x2; x2 = x+x1; y0 = y2; y2 = y+y1;            /* swap points */
+         }                            /* now horizontal cut at P4 comes first */
+      t = (x0-x1)/t;
+      r = (1-t)*((1-t)*y0+2.0*t*y1)+t*t*y2;                       /* By(t=P4) */
+      t = (x0*x2-x1*x1)*t/(x0-x1);                       /* gradient dP4/dx=0 */
+      x = floor(t+0.5); y = floor(r+0.5);
+      r = (y1-y0)*(t-x0)/(x1-x0)+y0;                  /* intersect P3 | P0 P1 */
+      yMax = mgCurveSegAA(mg,x0,y0, x,floor(r+0.5), x,y, color, isDashed);
+      r = (y1-y2)*(t-x2)/(x1-x2)+y2;                  /* intersect P4 | P1 P2 */
+      x0 = x1 = x; y0 = y; y1 = floor(r+0.5);             /* P0 = P4, P1 = P8 */
+   }
+   if ((long)(y0-y1)*(y2-y1) > 0) {                    /* vertical cut at P6? */
+      t = y0-2*y1+y2; t = (y0-y1)/t;
+      r = (1-t)*((1-t)*x0+2.0*t*x1)+t*t*x2;                       /* Bx(t=P6) */
+      t = (y0*y2-y1*y1)*t/(y0-y1);                       /* gradient dP6/dy=0 */
+      x = floor(r+0.5); y = floor(t+0.5);
+      r = (x1-x0)*(t-y0)/(y1-y0)+x0;                  /* intersect P6 | P0 P1 */
+      yMaxRet = mgCurveSegAA(mg,x0,y0, floor(r+0.5),y, x,y, color, isDashed);
+      if (yMaxRet > yMax)
+        yMax = yMaxRet;
+      r = (x1-x2)*(t-y2)/(y1-y2)+x2;                  /* intersect P7 | P1 P2 */
+      x0 = x; x1 = floor(r+0.5); y0 = y1 = y;             /* P0 = P6, P1 = P7 */
+   }
+   yMaxRet = mgCurveSegAA(mg,x0,y0, x1,y1, x2,y2, color, isDashed); /* remaining part */
+   if (yMaxRet > yMax)
+     yMax = yMaxRet;
+   return yMax;
+}
+
 
