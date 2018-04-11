@@ -21,7 +21,7 @@ char hexToNibble(char n);
 /* convert hexidecimal character to nibble. 0-9a-f. */
 
 unsigned char hexToByte(char *hex);
-/* convert byte to hexidecimal characters. 0 <= n <= 255. */
+/* convert hexidecimal characters to unsigned char. */
 
 #endif /* HEX_H */
 

@@ -28,7 +28,6 @@
 #include "makeItemsItem.h"
 #include "bedDetail.h"
 #include "pgSnp.h"
-#include "barChartBed.h"
 #include "samAlignment.h"
 #include "trackHub.h"
 
@@ -179,7 +178,7 @@ for (in = inList; in != NULL; in = in->next)
 
     /* Scan through joining information and add tables,
      * avoiding duplicate additions. */
-    jpList = joinerRelate(joiner, in->db, in->table);
+    jpList = joinerRelate(joiner, in->db, in->table, database);
     for (jp = jpList; jp != NULL; jp = jp->next)
         {
 	safef(dtName, sizeof(dtName), "%s.%s",
@@ -940,8 +939,10 @@ static void filterControlsForTableDb(char *db, char *rootTable)
 struct sqlConnection *conn =  NULL;
 if (!trackHubDatabase(db))
     conn = hAllocConn(db);
-char *table = chromTable(conn, rootTable);
 struct trackDb *tdb = findTdbForTable(db, curTrack, rootTable, ctLookupName);
+char *table = rootTable;
+if (! (tdb && trackDbSetting(tdb, "bigDataUrl")))
+    table = chromTable(conn, rootTable);
 boolean isSmallWig = isWiggle(db, table);
 boolean isBigWig = tdb ? tdbIsBigWig(tdb) : isBigWigTable(table);
 boolean isWig = isSmallWig || isBigWig;
@@ -1037,6 +1038,7 @@ else if (type != NULL &&
         (startsWithWord("makeItems", type) || 
         sameWord("bedDetail", type) || 
         sameWord("barChart", type) || 
+        sameWord("interact", type) || 
         sameWord("pgSnp", type)))
     {
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);

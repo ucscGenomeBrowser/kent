@@ -46,7 +46,7 @@ while (my $line = <FH>) {
     if ($line =~ m/^#/) {
         print UC $line;
     } else {
-        $line =~ s/\.1//;    
+        $line =~ s/\.1//;
         printf UC "%s", $line;
     }
 }
@@ -158,7 +158,7 @@ ncbiAssemblyName OtoGar3
 	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
 	otoGar3 > do.log 2>&1 &
     #	real    11m58.743s
-    cat fb.simpleRepeat 
+    cat fb.simpleRepeat
     #	27508759 bases of 2359530453 (1.166%) in intersection
 
     # add to rmsk after it is done:
@@ -433,3 +433,1368 @@ otoGar3.genbank.est.native.load = no
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+##############################################################################
+## 3-Way Multiz (DONE - 2018-02-14 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/otoGar3/bed/multiz3way
+    cd /hive/data/genomes/otoGar3/bed/multiz3way
+
+    # from the 213-way in the source tree, select out the 3 used here:
+    /cluster/bin/phast/tree_doctor \
+        --prune-all-but hg38,otoGar3,micMur1 \
+        /cluster/home/hiram/kent/src/hg/utils/phyloTrees/213way.nh \
+          | sed -e 's/Mur1/Mur3/;' > otoGar3.3way.nh.0
+    cat otoGar3.3way.nh.0
+    # (hg38:0.130414,(micMur3:0.085600,otoGar3:0.119400):0.020520);
+
+    # using TreeGraph2 tree editor on the Mac, rearrange to get otoGar3
+    # at the top:
+
+    #	what that looks like:
+ ~/kent/src/hg/utils/phyloTrees/asciiTree.pl otoGar3.3way.nh | sed -e 's/^/# /;'
+# ((otoGar3:0.1194,
+#  micMur3:0.0856):0.02052,
+# hg38:0.130414);
+
+    # extract species list from that .nh file
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+        otoGar3.3way.nh | xargs echo | sed 's/ //g; s/,/ /g' \
+        | sed 's/[()]//g; s/,/ /g' | tr '[ ]' '[\n]' > species.list.txt
+
+    # construct db to name translation list:
+    cat species.list.txt | while read DB
+do
+hgsql -N -e "select name,organism from dbDb where name=\"${DB}\";" hgcentraltest
+done | sed -e "s/\t/->/; s/ /_/g;" | sed -e 's/$/;/' | sed -e 's/\./_/g' \
+        | sed -e 's/-nosed/_nosed/; s/-eating/_eating/;' > db.to.name.txt
+
+    # construct a common name .nh file:
+    /cluster/bin/phast/tree_doctor --rename \
+    "`cat db.to.name.txt`" otoGar3.3way.nh | sed -e 's/00*)/)/g; s/00*,/,/g' \
+       | $HOME/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+         > otoGar3.3way.commonNames.nh
+    cat otoGar3.3way.commonNames.nh | sed -e 's/^/# /;'
+# ((Bushbaby:0.1194,
+#  Mouse_lemur:0.0856):0.02052,
+# Human:0.130414);
+
+#	Use this specification in the phyloGif tool:
+#	http://genome.ucsc.edu/cgi-bin/phyloGif
+#	to obtain a png image for src/hg/htdocs/images/phylo/otoGar3_3way.png
+
+    ~/kent/src/hg/utils/phyloTrees/asciiTree.pl otoGar3.3way.nh > t.nh
+    ~/kent/src/hg/utils/phyloTrees/scientificNames.sh t.nh \
+       | $HOME/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+          > otoGar3.3way.scientificNames.nh
+    rm -f t.nh
+    cat otoGar3.3way.scientificNames.nh | sed -e 's/^/# /;'
+# ((Otolemur_garnettii:0.1194,
+#  Microcebus_murinus:0.0856):0.02052,
+# Homo_sapiens:0.130414);
+
+    /cluster/bin/phast/all_dists otoGar3.3way.nh | grep otoGar3 \
+        | sed -e "s/otoGar3.//" | sort -k2n > 3way.distances.txt
+    #	Use this output to create the table below
+    cat 3way.distances.txt | sed -e 's/^/# /;'
+# micMur3       0.205000
+# hg38  0.270334
+
+    printf '#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (FH, "<3way.distances.txt") or
+        die "can not read 3way.distances.txt";
+
+my $count = 0;
+while (my $line = <FH>) {
+    chomp $line;
+    my ($D, $dist) = split('"'"'\\s+'"'"', $line);
+    my $chain = "chain" . ucfirst($D);
+    my $B="/hive/data/genomes/otoGar3/bed/lastz.$D/fb.otoGar3." .
+        $chain . "Link.txt";
+    my $chainLinkMeasure =
+        `awk '"'"'{print \\$5}'"'"' ${B} 2> /dev/null | sed -e "s/(//; s/)//"`;
+    chomp $chainLinkMeasure;
+    $chainLinkMeasure = 0.0 if (length($chainLinkMeasure) < 1);
+    $chainLinkMeasure =~ s/\\%%//;
+    my $swapFile="/hive/data/genomes/${D}/bed/lastz.otoGar3/fb.${D}.chainOtoGar3Link.txt";
+    my $swapMeasure = "N/A";
+    if ( -s $swapFile ) {
+	$swapMeasure =
+	    `awk '"'"'{print \\$5}'"'"' ${swapFile} 2> /dev/null | sed -e "s/(//; s/)//"`;
+	chomp $swapMeasure;
+	$swapMeasure = 0.0 if (length($swapMeasure) < 1);
+	$swapMeasure =~ s/\\%%//;
+    }
+    my $orgName=
+    `hgsql -N -e "select organism from dbDb where name='"'"'$D'"'"';" hgcentraltest`;
+    chomp $orgName;
+    if (length($orgName) < 1) {
+        $orgName="N/A";
+    }
+    ++$count;
+    printf "# %%02d  %%.4f (%%%% %%06.3f) (%%%% %%06.3f) - %%s %%s\\n", $count, $dist,
+        $chainLinkMeasure, $swapMeasure, $orgName, $D;
+}
+close (FH);
+' > sizeStats.pl
+    chmod +x ./sizeStats.pl
+    ./sizeStats.pl
+
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+
+#       featureBits chainLink measures
+#               chainLink
+#  N distance  on otoGar3  on other     other species
+# 01  0.2050 (% 69.178) (% 70.702) - Mouse lemur micMur3
+# 02  0.2703 (% 64.899) (% 53.196) - Human hg38
+
+# None of this concern for distances matters in building the first step, the
+# maf files.  The distances will be better calibrated later.
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	otoGar3.3way.nh | xargs echo | sed 's/ //g; s/,/ /g' > tree.nh
+
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+    # otoGar3 micMur3 hg38
+
+    # survey N50 for each
+    for db in `cat species.list`
+do
+n50.pl /hive/data/genomes/$db/chrom.sizes
+done
+#       reading: /hive/data/genomes/otoGar3/chrom.sizes
+#       contig count: 7793, total size: 2519724550, one half size: 1259862275
+# cumulative    N50 count       contig  contig size
+1254578701      46      GL873565        13992998
+1259862275 one half size
+1268431362      47      GL873566        13852661
+#       reading: /hive/data/genomes/micMur3/chrom.sizes
+#       contig count: 7678, total size: 2487409138, one half size: 1243704569
+# cumulative    N50 count       contig  contig size
+1144871449      9       chr11   108226025
+1243704569 one half size
+1253043427      10      chr7    108171978
+#       reading: /hive/data/genomes/hg38/chrom.sizes
+#       contig count: 455, total size: 3209286105, one half size: 1604643052
+# cumulative    N50 count       contig  contig size
+1547391171      8       chrX    156040895
+1604643052 one half size
+1692529807      9       chr8    145138636
+
+    #	bash shell syntax here ...
+    cd /hive/data/genomes/otoGar3/bed/multiz3way
+    export H=/hive/data/genomes/otoGar3/bed
+    mkdir mafLinks
+    # good assemblies can use syntenic net:
+    #  hg38 micMur3
+    for G in hg38 micMur3
+    do
+      mkdir mafLinks/$G
+      echo ln -s ${H}/lastz.$G/axtChain/otoGar3.${G}.synNet.maf.gz ./mafLinks/$G
+      ln -s ${H}/lastz.$G/axtChain/otoGar3.${G}.synNet.maf.gz ./mafLinks/$G
+    done
+
+    # verify the symLinks are good:
+    ls -ogrtL mafLinks/*/* | sed -e 's/^/# /; s/-rw-rw-r-- 1//;'
+#  1076496757 Feb 23  2015 mafLinks/hg38/otoGar3.hg38.synNet.maf.gz
+#  1051295980 Feb  1 08:17 mafLinks/micMur3/otoGar3.micMur3.synNet.maf.gz
+
+    # split the maf files into a set of hashed named files
+    # this hash named split keeps the same chr/contig names in the same
+    # named hash file.
+    mkdir /hive/data/genomes/otoGar3/bed/multiz3way/mafSplit
+    cd /hive/data/genomes/otoGar3/bed/multiz3way/mafSplit
+    time for D in `sed -e "s/otoGar3 //" ../species.list`
+do
+    echo "${D}"
+    mkdir $D
+    cd $D
+    echo "mafSplit -byTarget -useHashedName=8 /dev/null . ../../mafLinks/${D}/*.maf.gz"
+    mafSplit -byTarget -useHashedName=8 /dev/null . \
+	../../mafLinks/${D}/*.maf.gz
+    cd ..
+done
+    # real    1m57.995s
+
+    # construct a list of all possible maf file names.
+    # they do not all exist in each of the species directories
+    find . -type f | wc -l
+    # 365
+    find . -type f | grep ".maf$" | xargs -L 1 basename | sort -u > maf.list
+    wc -l maf.list
+    # 200 maf.list
+
+    mkdir /hive/data/genomes/otoGar3/bed/multiz3way/splitRun
+    cd /hive/data/genomes/otoGar3/bed/multiz3way/splitRun
+    mkdir maf run
+    cd run
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/multiz penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/maf_project penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/autoMZ penn
+
+    #	verify the db and pairs settings are correct
+    printf '#!/bin/csh -ef
+set db = otoGar3
+set c = $1
+set result = $2
+set run = `/bin/pwd`
+set tmp = /dev/shm/$db/multiz.$c
+set pairs = /hive/data/genomes/otoGar3/bed/multiz3way/mafSplit
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p ../../tree.nh ../../species.list $tmp
+pushd $tmp > /dev/null
+foreach s (`/bin/sed -e "s/$db //" species.list`)
+    set in = $pairs/$s/$c
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        /bin/zcat $in.gz > $out
+        if (! -s $out) then
+            echo "##maf version=1 scoring=autoMZ" > $out
+        endif
+    else if (-e $in) then
+        /bin/ln -s $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c \
+        > /dev/null
+popd > /dev/null
+/bin/rm -f $result
+/bin/cp -p $tmp/$c $result
+/bin/rm -fr $tmp
+' > autoMultiz.csh
+
+    chmod +x autoMultiz.csh
+
+    printf '#LOOP
+./autoMultiz.csh $(file1) {check out line+ /hive/data/genomes/otoGar3/bed/multiz3way/splitRun/maf/$(root1).maf}
+#ENDLOOP
+' > template
+
+# << happy emacs
+
+    ln -s ../../mafSplit/maf.list maf.list
+    ssh ku
+    cd /hive/data/genomes/otoGar3/bed/multiz3way/splitRun/run
+    gensub2 maf.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc...
+# Completed: 200 of 200 jobs
+# CPU time in finished jobs:      16729s     278.81m     4.65h    0.19d  0.001 y
+# IO & Wait Time:                   587s       9.79m     0.16h    0.01d  0.000 y
+# Average job time:                  87s       1.44m     0.02h    0.00d
+# Longest finished job:             548s       9.13m     0.15h    0.01d
+# Submission to last job:           929s      15.48m     0.26h    0.01d
+
+    # combine into one file  (the 1>&2 redirect sends the echo to stderr)
+    cd /hive/data/genomes/otoGar3/bed/multiz3way
+    head -1 splitRun/maf/020.maf > multiz3way.maf
+    time for F in splitRun/maf/*.maf
+do
+    echo "${F}" 1>&2
+    egrep -v "^#" ${F}
+done >> multiz3way.maf
+    # real    1m0.539s
+
+    tail -1 splitRun/maf/020.maf >> multiz3way.maf
+# -rw-rw-r-- 1 5898783062 Feb 14 11:13 multiz3way.maf
+
+    # Load into database
+    ssh hgwdev
+    cd /hive/data/genomes/otoGar3/bed/multiz3way
+    mkdir /gbdb/otoGar3/multiz3way
+    ln -s `pwd`/multiz3way.maf /gbdb/otoGar3/multiz3way
+    cd /dev/shm
+    time hgLoadMaf otoGar3 multiz3way
+# Loaded 4005904 mafs in 1 files from /gbdb/otoGar3/multiz3way
+# real    1m19.025s
+
+    time hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 otoGar3 multiz3waySummary \
+	/gbdb/otoGar3/multiz3way/multiz3way.maf
+# Created 291923 summary blocks from 5776861 components and 4005904 mafs from /gbdb/otoGar3/multiz3way/multiz3way.maf
+# real    1m50.085s
+
+# -rw-rw-r--   1  205282495 Feb 14 11:14 multiz3way.tab
+# -rw-rw-r--   1   13621427 Feb 14 11:17 multiz3waySummary.tab
+
+    wc -l multiz3way*.tab
+#  4005904 multiz3way.tab
+#   291923 multiz3waySummary.tab
+
+    rm multiz3way*.tab
+
+##############################################################################
+# GAP ANNOTATE MULTIZ3WAY MAF AND LOAD TABLES (DONE - 2018-02-14 - Hiram)
+    # mafAddIRows has to be run on single chromosome maf files, it does not
+    #	function correctly when more than one reference sequence
+    #	are in a single file.  Need to split of the maf file into individual
+    #   maf files
+    mkdir -p /hive/data/genomes/otoGar3/bed/multiz3way/anno/mafSplit
+    cd /hive/data/genomes/otoGar3/bed/multiz3way/anno/mafSplit
+
+    time mafSplit -outDirDepth=2 -byTarget -useFullSequenceName \
+        /dev/null . ../../multiz3way.maf
+    #   real    1m28.273s
+
+    find . -type f | wc -l
+    #   674
+
+    # check for N.bed files everywhere:
+    cd /hive/data/genomes/otoGar3/bed/multiz3way/anno
+    for DB in `cat ../species.list`
+do
+    if [ ! -s /hive/data/genomes/${DB}/${DB}.N.bed ]; then
+        echo "MISS: ${DB}"
+#         cd /hive/data/genomes/${DB}
+#         twoBitInfo -nBed ${DB}.2bit ${DB}.N.bed
+    else
+        echo "  OK: ${DB}"
+    fi
+done
+
+    cd /hive/data/genomes/otoGar3/bed/multiz3way/anno
+    for DB in `cat ../species.list`
+do
+    echo "${DB} "
+    ln -s  /hive/data/genomes/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /hive/data/genomes/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+    # make sure they all are successful symLinks:
+    ls -ogrtL
+
+    screen -S gapAnno      # use a screen to control this longish job
+    ssh ku
+    cd /hive/data/genomes/otoGar3/bed/multiz3way/anno
+    mkdir result
+    find ./mafSplit -type d | sed -e 's#./mafSplit/##' | while read D
+do
+    echo mkdir -p result/${D}
+    mkdir -p result/${D}
+done
+    printf '#LOOP
+mafAddIRows -nBeds=nBeds mafSplit/$(path1) /hive/data/genomes/otoGar3/otoGar3.2bit {check out exists+ result/$(path1)}
+#ENDLOOP
+' > template
+
+    find ./mafSplit -type f | sed -e 's#^./mafSplit/##' > maf.list
+    gensub2 maf.list single template jobList
+    # limit jobs on a node with the ram=32g requirement because they go fast
+    para -maxJob=50 create jobList
+    para try ... check ... push ...
+# Completed: 674 of 674 jobs
+# CPU time in finished jobs:        604s      10.07m     0.17h    0.01d  0.000 y
+# IO & Wait Time:                  1759s      29.31m     0.49h    0.02d  0.000 y
+# Average job time:                   4s       0.06m     0.00h    0.00d
+# Longest finished job:              21s       0.35m     0.01h    0.00d
+# Submission to last job:           229s       3.82m     0.06h    0.00d
+
+
+    # verify all result files have some content, look for 0 size files:
+    find ./result -type f -size 0
+    # should see none
+    # or in this manner:
+    find ./result -type f | xargs ls -og | sort -k3nr | tail
+
+    # combine into one file  (the 1>&2 redirect sends the echo to stderr)
+    head -q -n 1 result/0/0/GL873755.maf > otoGar3.3way.maf
+
+    time find ./result -type f | while read F
+do
+    echo "${F}" 1>&2
+    grep -h -v "^#" ${F}
+done >> otoGar3.3way.maf
+    # real    0m59.775s
+
+    #	these maf files do not have the end marker, this does nothing:
+    #	tail -q -n 1 result/0/0/GL873755.maf >> otoGar3.3way.maf
+    # How about an official end marker:
+    echo "##eof maf" >> otoGar3.3way.maf
+    ls -og
+# -rw-rw-r--  1 7033510411 Feb 14 11:38 otoGar3.3way.maf
+
+    du -hsc otoGar3.3way.maf
+    # 6.6G     otoGar3.3way.maf
+
+    # construct symlinks to get the individual maf files into gbdb:
+    rm /gbdb/otoGar3/multiz3way/multiz3way.maf   # remove previous results
+    ln -s `pwd`/otoGar3.3way.maf /gbdb/otoGar3/multiz3way/multiz3way.maf
+
+    # Load into database
+    cd /dev/shm
+    time hgLoadMaf -pathPrefix=/gbdb/otoGar3/multiz3way otoGar3 multiz3way
+    # Loaded 5009109 mafs in 1 files from /gbdb/otoGar3/multiz3way
+    # real    1m35.595s
+
+
+    time hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 otoGar3 multiz3waySummary \
+        /gbdb/otoGar3/multiz3way/multiz3way.maf
+    # Created 44817 summary blocks from 1147493 components and 9225719 mafs from /gbdb/otoGar3/multiz3way/multiz3way.maf
+    # Created 291923 summary blocks from 5776861 components and 5009109 mafs from /gbdb/otoGar3/multiz3way/multiz3way.maf
+    # real    2m1.594s
+
+    # -rw-rw-r--   1  256766746 Feb 14 11:40 multiz3way.tab
+    # -rw-rw-r--   1   14205273 Feb 14 13:45 multiz3waySummary.tab
+
+    rm multiz3way*.tab
+
+######################################################################
+# MULTIZ3WAY MAF FRAMES (DONE - 2018-02-15 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/otoGar3/bed/multiz3way/frames
+    cd /hive/data/genomes/otoGar3/bed/multiz3way/frames
+#   survey all the genomes to find out what kinds of gene tracks they have
+    printf '#!/bin/csh -fe
+foreach db (`cat ../species.list`)
+    printf "# ${db}: "
+    set tables = `hgsql $db -N -e "show tables" | egrep "Gene|ncbiRefSeq"`
+    foreach table ($tables)
+        if ($table == "ensGene" || $table == "refGene" || \
+           $table == "ncbiRefSeq" || $table == "mgcGenes" || \
+           $table == "knownGene" || $table == "xenoRefGene" ) then
+           set count = `hgsql $db -N -e "select count(*) from $table"`
+            echo -n "${table}: ${count}, "
+        endif
+    end
+    set orgName = `hgsql hgcentraltest -N -e \
+            "select scientificName from dbDb where name='"'"'$db'"'"'"`
+    set orgId = `hgsql hgFixed -N -e \
+            "select id from organism where name='"'"'$orgName'"'"'"`
+    if ($orgId == "") then
+        echo "Mrnas: 0"
+    else
+        set count = `hgsql hgFixed -N -e "select count(*) from gbCdnaInfo where organism='"'"'$orgId'"'"'"`
+        echo "Mrnas: ${count}"
+    endif
+end
+' > showGenes.csh
+    # << happy emacs
+    chmod +x ./showGenes.csh
+    time ./showGenes.csh
+# otoGar3: ensGene: 28565, xenoRefGene: 474931, Mrnas: 194
+# micMur3: ensGene: 44018, xenoRefGene: 226990, Mrnas: 262
+# hg38: ensGene: 208239, knownGene: 196838, mgcGenes: 35329, ncbiRefSeq: 159309, refGene: 74734, xenoRefGene: 189265, Mrnas: 11510968
+
+
+    # from that summary, use these gene sets:
+    # knownGene - hg38
+    # ensGene - otoGar3,micMur3
+
+    mkdir genes
+    #   1. knownGene: hg38 mm10
+    for DB in hg38
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > genes/${DB}.gp.gz
+    printf "# ${DB}: "
+    genePredCheck -db=${DB} genes/${DB}.gp.gz
+done
+# hg38: checked: 21554 failed: 0
+
+    #   2. ensgene for otoGar3, micMur3
+    for DB in otoGar3 micMur3
+do
+hgsql -N -e "select * from ensGene" ${DB} | cut -f2- \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /dev/shm/${DB}.tmp.gz
+    mv /dev/shm/${DB}.tmp.gz genes/$DB.gp.gz
+    echo -n "# ${DB}: "
+    genePredCheck -db=${DB} genes/${DB}.gp.gz
+done
+# otoGar3: checked: 19472 failed: 0
+# micMur3: checked: 18028 failed: 0
+
+    # verify counts for genes are reasonable:
+    for T in genes/*.gz
+do
+    echo -n "# $T: "
+    zcat $T | cut -f1 | sort | uniq -c | wc -l
+done
+# genes/hg38.gp.gz: 21554
+# genes/micMur3.gp.gz: 18028
+# genes/otoGar3.gp.gz: 19472
+
+    time (cat ../anno/otoGar3.3way.maf \
+	| genePredToMafFrames otoGar3 stdin stdout \
+          `cat ../species.list.txt | xargs echo \
+            | sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g;"` \
+		| gzip > multiz3wayFrames.bed.gz)
+    # real    1m19.205s
+
+    # verify there are frames on everything, should be 5 species:
+    zcat multiz3wayFrames.bed.gz | awk '{print $4}' | sort | uniq -c \
+       | sed -e 's/^/# /;'
+#  211634 hg38
+#  196954 micMur3
+#  187521 otoGar3
+
+    #   load the resulting file
+    ssh hgwdev
+    cd /hive/data/genomes/otoGar3/bed/multiz3way/frames
+    time hgLoadMafFrames otoGar3 multiz3wayFrames multiz3wayFrames.bed.gz
+    #   real    0m6.038s
+
+    time featureBits -countGaps otoGar3 multiz3wayFrames
+    # 35194722 bases of 2519724550 (1.397%) in intersection
+    # real    0m6.593s
+
+    #   enable the trackDb entries:
+# frames multiz3wayFrames
+# irows on
+    #   appears to work OK
+
+#########################################################################
+# Phylogenetic tree from 5-way (DONE - 2018-02-15 - Hiram)
+    mkdir /hive/data/genomes/otoGar3/bed/multiz3way/4d
+    cd /hive/data/genomes/otoGar3/bed/multiz3way/4d
+
+    # using the ensGene
+    hgsql -N -e "select * from ensGene;" otoGar3 \
+      | cut -f2- | genePredSingleCover stdin stdout > otoGar3.ensGeneNR.gp
+
+    genePredCheck -db=otoGar3 otoGar3.ensGeneNR.gp
+    # checked: 19472 failed: 0
+
+    # the annotated maf is:
+    og ../anno/otoGar3.3way.maf
+# -rw-rw-r-- 1 7033510411 Feb 14 11:38 ../anno/otoGar3.3way.maf
+
+    mkdir annoSplit
+    cd annoSplit
+    time mafSplit -verbose=2 -outDirDepth=2 -byTarget -useFullSequenceName \
+	/dev/null . ../../anno/otoGar3.3way.maf
+    # real    1m49.757s
+
+
+    find . -type f | wc -l
+    #   674
+    ssh ku
+    mkdir /hive/data/genomes/otoGar3/bed/multiz3way/4d/run
+    cd /hive/data/genomes/otoGar3/bed/multiz3way/4d/run
+    mkdir ../mfa
+
+    # newer versions of msa_view have a slightly different operation
+    # the sed of the gp file inserts the reference species in the chr name
+    printf '#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set GP = otoGar3.ensGeneNR.gp
+set r = "/hive/data/genomes/otoGar3/bed/multiz3way"
+set c = $1:r
+set infile = $r/4d/annoSplit/$2
+set outDir = $r/4d/mfa/$3:h
+set outfile = $r/4d/mfa/$3
+/bin/mkdir -p $outDir
+cd /dev/shm
+/bin/awk -v C=$c '"'"'$2 == C {print}'"'"' $r/4d/$GP | sed -e "s/\\t$c\\t/\\totoGar3.$c\\t/" > $c.gp
+set NL=`wc -l $c.gp| gawk '"'"'{print $1}'"'"'`
+echo $NL
+if ("$NL" != "0") then
+    $PHASTBIN/msa_view --4d --features $c.gp -i MAF $infile -o SS > $c.ss
+    $PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $outfile
+else
+    echo "" > $outfile
+endif
+/bin/rm -f /dev/shm/$c.gp /dev/shm/$c.ss
+' > 4d.csh
+
+    chmod +x 4d.csh
+
+    find ../annoSplit -type f | sed -e "s#../annoSplit/##" > maf.list
+    wc -l maf.list
+# 674 maf.list
+
+    printf '#LOOP
+4d.csh $(file1) $(path1) {check out line+ ../mfa/$(dir1)/$(dir2)$(root1).mfa}
+#ENDLOOP
+' > template
+
+    gensub2 maf.list single template jobList
+    para -maxJob=200 create jobList
+    para try ... check
+    para time
+# Completed: 654 of 674 jobs
+# Crashed: 20 jobs
+# CPU time in finished jobs:        510s       8.50m     0.14h    0.01d  0.000 y
+# IO & Wait Time:                  1668s      27.80m     0.46h    0.02d  0.000 y
+# Average job time:                   3s       0.06m     0.00h    0.00d
+# Longest finished job:              15s       0.25m     0.00h    0.00d
+# Submission to last job:           434s       7.23m     0.12h    0.01d
+
+    # Not all results have contents, or finish successfully, that is OK
+    # it is because not all contigs have genes, only gene sequences are measured
+
+    # combine mfa files
+    ssh hgwdev
+    cd /hive/data/genomes/otoGar3/bed/multiz3way/4d
+    # remove the broken empty files, size 0 and size 1:
+    find ./mfa -type f -size 0 | xargs rm -f
+    # almost always, this does not work, don't know why
+    find ./mfa -type f -size 1 | xargs rm -f
+    # when it doesn't, use this empty list procedure
+    find ./mfa -type f | xargs ls -og | awk '$3 < 2' | awk '{print $NF}' \
+        > empty.list
+    cat empty.list | xargs rm -f
+    # see what is left:
+    ls -ogrt mfa/*/*/*.mfa | sort -k3nr | wc
+    #         414    2898   22396
+
+    # want comma-less species.list
+    time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
+	--aggregate "`cat ../species.list`" mfa/*/*/*.mfa | sed s/"> "/">"/ \
+	    > 4d.all.mfa
+    # real    0m1.029s
+
+# -rw-rw-r--  1 12014418 Feb 15 14:41 4d.all.mfa
+
+    # check they are all in there:
+    grep "^>" 4d.all.mfa | wc -l
+    # 3
+    grep "^>" 4d.all.mfa | sed -e 's/^/# /;'
+# >otoGar3
+# >micMur3
+# >hg38
+
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	../otoGar3.3way.nh | xargs echo | sed -e 's/ //g' > tree_commas.nh
+    # tree_commas.nh looks like:
+    # ((otoGar3,micMur3),hg38)
+
+    # use phyloFit to create tree model (output is phyloFit.mod)
+    time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
+	    --EM --precision MED --msa-format FASTA --subst-mod REV \
+		--tree tree_commas.nh 4d.all.mfa
+    #  real    0m0.611s
+
+    mv phyloFit.mod all.mod
+
+    grep TREE all.mod
+# TREE: ((otoGar3:0.133593,micMur3:0.0948189):0.0705856,hg38:0.0705856);
+
+    # compare these calculated lengths to the tree extracted from 213way:
+    grep TREE all.mod | sed -e 's/TREE: //' \
+       | /cluster/bin/phast/all_dists /dev/stdin | grep otoGar3 \
+          | sed -e "s/otoGar3.//;"  | sort > new.dists
+    /cluster/bin/phast/all_dists ../otoGar3.3way.nh | grep otoGar3 \
+        | sed -e "s/otoGar3.//;" | sort > old.dists
+     # printing out the 'new', the 'old' the 'difference' and percent difference
+    join new.dists old.dists | awk '{
+  printf "#\t%s\t%8.6f\t%8.6f\t%8.6f\t%8.6f\n", $1, $2, $3, $2-$3, 100*($2-$3)/$3 }' \
+      | sort -k3n
+
+#       species  otoGar3        213-way        otoGar3-213-way     percent
+#                dist est.     dist est.         difference      difference
+#       micMur3 0.228412        0.205000        0.023412        11.420488
+#       hg38    0.274764        0.270334        0.004430        1.638714
+
+#########################################################################
+# phastCons 5-way (DONE - 2018-02-15 - Hiram)
+    # split 3way mafs into 10M chunks and generate sufficient statistics
+    # files for # phastCons
+    ssh ku
+    mkdir -p /hive/data/genomes/otoGar3/bed/multiz3way/cons/SS
+    cd /hive/data/genomes/otoGar3/bed/multiz3way/cons/SS
+    mkdir result done
+
+    printf '#!/bin/csh -ef
+set d = $1
+set c = $2
+set doneDir = done/$d
+set MAF = /hive/data/genomes/otoGar3/bed/multiz3way/anno/result/$d/$c.maf
+set WINDOWS = /hive/data/genomes/otoGar3/bed/multiz3way/cons/SS/result/$d/$c
+set WC = `cat $MAF | wc -l`
+set NL = `grep "^#" $MAF | wc -l`
+if ( -s $3 ) then
+    exit 0
+endif
+if ( -s $3.running ) then
+    exit 0
+endif
+
+/bin/mkdir -p $doneDir
+/bin/date >> $3.running
+
+/bin/rm -fr $WINDOWS
+/bin/mkdir -p $WINDOWS
+pushd $WINDOWS > /dev/null
+if ( $WC != $NL ) then
+/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_split \\
+    $MAF -i MAF -o SS -r $WINDOWS/$c -w 10000000,0 -I 1000 -B 5000
+endif
+popd > /dev/null
+/bin/date >> $3
+/bin/rm -f $3.running
+' > mkSS.csh
+
+    chmod +x mkSS.csh
+
+    printf '#LOOP
+mkSS.csh $(dir1) $(root1) {check out line+ done/$(dir1)/$(root1)}
+#ENDLOOP
+' > template
+
+    find ../../anno/result -type f | sed -e "s#../../anno/result/##" > maf.list
+    wc -l maf.list
+# 674 maf.list
+
+    ssh ku
+    cd /hive/data/genomes/otoGar3/bed/multiz3way/cons/SS
+
+    gensub2 maf.list single template jobList
+    # beware overwhelming the cluster with these quick high I/O jobs
+    para create jobList
+    para try ... check ... etc
+    para -maxJob=200 push
+# Completed: 674 of 674 jobs
+# CPU time in finished jobs:        751s      12.51m     0.21h    0.01d  0.000 y
+# IO & Wait Time:                  1901s      31.69m     0.53h    0.02d  0.000 y
+# Average job time:                   4s       0.07m     0.00h    0.00d
+# Longest finished job:              25s       0.42m     0.01h    0.00d
+# Submission to last job:            71s       1.18m     0.02h    0.00d
+
+    find ./result -type f | wc -l
+    # 798
+
+    # Run phastCons
+    #	This job is I/O intensive in its output files, beware where this
+    #	takes place or do not run too many at once.
+    ssh ku
+    mkdir -p /hive/data/genomes/otoGar3/bed/multiz3way/cons/run.cons
+    cd /hive/data/genomes/otoGar3/bed/multiz3way/cons/run.cons
+
+    #	This is setup for multiple runs based on subsets, but only running
+    #   the 'all' subset here.
+    #   It triggers off of the current working directory
+    #	$cwd:t which is the "grp" in this script.  Running:
+    #	all and vertebrates
+
+    printf '#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set c = $1
+set d = $2
+set f = $3
+set len = $4
+set cov = $5
+set rho = $6
+set grp = $cwd:t
+set cons = /hive/data/genomes/otoGar3/bed/multiz3way/cons
+set tmp = $cons/tmp/${d}_${c}
+mkdir -p $tmp
+set ssSrc = $cons/SS/result
+set useGrp = "$grp.mod"
+if (-s $cons/$grp/$grp.non-inf) then
+  ln -s $cons/$grp/$grp.mod $tmp
+  ln -s $cons/$grp/$grp.non-inf $tmp
+  ln -s $ssSrc/$d/$f $tmp
+else
+  ln -s $ssSrc/$d/$f $tmp
+  ln -s $cons/$grp/$grp.mod $tmp
+endif
+pushd $tmp > /dev/null
+if (-s $grp.non-inf) then
+  $PHASTBIN/phastCons $f $useGrp \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \\
+    --not-informative `cat $grp.non-inf` \\
+    --seqname $c --idpref $c --most-conserved $c.bed --score > $c.pp
+else
+  $PHASTBIN/phastCons $f $useGrp \\
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \\
+    --seqname $c --idpref $c --most-conserved $c.bed --score > $c.pp
+endif
+popd > /dev/null
+mkdir -p pp/$d bed/$d
+sleep 4
+touch pp/$d bed/$d
+rm -f pp/$d/$c.pp
+rm -f bed/$d/$c.bed
+mv $tmp/$c.pp pp/$d
+mv $tmp/$c.bed bed/$d
+rm -fr $tmp
+rmdir --ignore-fail-on-non-empty $cons/tmp/$d:h
+' > doPhast.csh
+
+    chmod +x doPhast.csh
+
+    #	this template will serve for all runs
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    printf '#LOOP
+../run.cons/doPhast.csh $(root1) $(dir1) $(file1) 45 0.3 0.3 {check out line+ pp/$(dir1)/$(root1).pp}
+#ENDLOOP
+' > template
+
+    find ../SS/result -type f | sed -e "s#../SS/result/##" > ss.list
+    wc -l ss.list
+    #	798 ss.list
+
+    # Create parasol batch and run it
+    # run for all species
+    cd /hive/data/genomes/otoGar3/bed/multiz3way/cons
+    mkdir -p all
+    cd all
+    #	Using the .mod tree
+    cp -p ../../4d/all.mod ./all.mod
+
+    gensub2 ../run.cons/ss.list single ../run.cons/template jobList
+    para -maxJob=200 create jobList
+    para try ... check ...
+    para push
+# Completed: 798 of 798 jobs
+# CPU time in finished jobs:       4823s      80.39m     1.34h    0.06d  0.000 y
+# IO & Wait Time:                  5237s      87.28m     1.45h    0.06d  0.000 y
+# Average job time:                  13s       0.21m     0.00h    0.00d
+# Longest finished job:              30s       0.50m     0.01h    0.00d
+# Submission to last job:           136s       2.27m     0.04h    0.00d
+
+
+    # create Most Conserved track
+    cd /hive/data/genomes/otoGar3/bed/multiz3way/cons/all
+    time cut -f1 ../../../../chrom.sizes | while read C
+do
+    ls -d bed/?/?/${C} 2> /dev/null | while read D
+    do
+        echo ${D}/${C}*.bed 1>&2
+        cat ${D}/${C}*.bed
+    done | sort -k1,1 -k2,2n \
+    | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", "'${C}'", $2, $3, $5, $5;}'
+done > tmpMostConserved.bed
+    # real    1m4.518s
+
+# -rw-rw-r--  1 30417050 Apr 20 21:43 tmpMostConserved.bed
+
+    time /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed \
+         > mostConserved.bed
+    # real    0m4.135s
+
+# -rw-rw-r--  1 24209408 Feb 15 16:08 tmpMostConserved.bed
+# -rw-rw-r--  1 24855050 Feb 15 16:09 mostConserved.bed
+
+    # load into database
+    ssh hgwdev
+    cd /hive/data/genomes/otoGar3/bed/multiz3way/cons/all
+    time hgLoadBed otoGar3 phastConsElements3way mostConserved.bed
+    # Read 679835 elements of size 5 from mostConserved.bed
+    # real    0m6.296s
+
+    # on human we often try for 5% overall cov, and 70% CDS cov
+    # most bets are off here for that goal, these alignments are too few
+    #	and too far between
+    #	--rho 0.3 --expected-length 45 --target-coverage 0.3
+    time featureBits otoGar3 -enrichment ensGene:cds phastConsElements3way
+# ensGene:cds 1.342%, phastConsElements3way 5.942%, both 0.884%, cover 65.88%, enrich 11.09x
+
+    # real    0m12.058s
+
+    # Create merged posterier probability file and wiggle track data files
+    cd /hive/data/genomes/otoGar3/bed/multiz3way/cons/all
+    mkdir downloads
+
+    # the third sed fixes the chrom names, removing the partition extensions
+    time (find ./pp -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+	| sed -e 's/\.[0-9][0-9]*-[0-9][0-9]* start/ start/' \
+        | gzip -c > downloads/phastCons3way.wigFix.gz)
+    #   real    22m41.484s
+
+# -rw-rw-r-- 1 2339506199 Feb 15 16:34 phastCons3way.wigFix.gz
+
+    # check integrity of data with wigToBigWig
+    time (zcat downloads/phastCons3way.wigFix.gz \
+	| wigToBigWig -verbose=2 stdin /hive/data/genomes/otoGar3/chrom.sizes \
+	    phastCons3way.bw) > bigWig.log 2>&1
+    egrep "real|VmPeak" bigWig.log
+    # pid=26930: VmPeak:    19402388 kB
+    # real    26m11.325s
+
+    bigWigInfo phastCons3way.bw | sed -e 's/^/# /;'
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 3,649,922,417
+# primaryIndexSize: 73,998,696
+# zoomLevels: 10
+# chromCount: 674
+# basesCovered: 1,775,646,396
+# mean: 0.173928
+# min: 0.000000
+# max: 0.997000
+# std: 0.266837
+
+    #	encode those files into wiggle data
+    time (zcat downloads/phastCons3way.wigFix.gz \
+	| wigEncode stdin phastCons3way.wig phastCons3way.wib)
+    # Converted stdin, upper limit 1.00, lower limit 0.00
+    # real    10m6.822s
+
+    du -hsc *.wi?
+    # 1.7G    phastCons3way.wib
+    # 233M    phastCons3way.wig
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phastCons3way.wib /gbdb/otoGar3/multiz3way/phastCons3way.wib
+    time hgLoadWiggle -pathPrefix=/gbdb/otoGar3/multiz3way \
+	otoGar3 phastCons3way phastCons3way.wig
+    #   real    0m26.982s
+
+    # use to set trackDb.ra entries for wiggle min and max
+    # and verify table is loaded correctly
+
+    wigTableStats.sh otoGar3 phastCons3way
+# db.table             min max mean       count sumData
+# otoGar3.phastCons3way   0 0.997 0.173928 1775646396 3.08835e+08
+#    0.266837 viewLimits=0:0.997
+
+    #  Create histogram to get an overview of all the data
+    time hgWiggle -doHistogram -db=otoGar3 \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    phastCons3way > histogram.data 2>&1
+    #	real    1m38.309s
+
+    #	create plot of histogram:
+
+    printf 'set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff font \
+"/usr/share/fonts/default/Type1/n022004l.pfb"
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Bushbaby otoGar3 Histogram phastCons3way track"
+set xlabel " phastCons3way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \\
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+' | gnuplot > histo.png
+
+    display histo.png &
+
+#########################################################################
+# phyloP for 5-way (DONE - 2018-02-15 - Hiram)
+    # run phyloP with score=LRT
+    ssh ku
+    mkdir /cluster/data/otoGar3/bed/multiz3way/consPhyloP
+    cd /cluster/data/otoGar3/bed/multiz3way/consPhyloP
+
+    mkdir run.phyloP
+    cd run.phyloP
+    # Adjust model file base composition background and rate matrix to be
+    # representative of the chromosomes in play
+    grep BACKGROUND ../../4d/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.577
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
+	../../4d/all.mod 0.577 > all.mod
+    # verify, the BACKGROUND should now be paired up:
+    grep BACK all.mod
+    #   BACKGROUND: 0.218000 0.282000 0.282000 0.218000
+
+    printf '#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set f = $1
+set d = $f:h
+set file1 = $f:t
+set out = $2
+set cName = $f:t:r
+set grp = $cwd:t
+set cons = /hive/data/genomes/otoGar3/bed/multiz3way/consPhyloP
+set tmp = $cons/tmp/$grp/$f
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+set ssSrc = "/hive/data/genomes/otoGar3/bed/multiz3way/cons/SS/result/$f"
+set useGrp = "$grp.mod"
+/bin/ln -s $cons/run.phyloP/$grp.mod $tmp
+pushd $tmp > /dev/null
+$PHASTBIN/phyloP --method LRT --mode CONACC --wig-scores --chrom $cName \\
+    -i SS $useGrp $ssSrc.ss > $file1.wigFix
+popd > /dev/null
+/bin/mkdir -p $out:h
+sleep 4
+/bin/touch $out:h
+/bin/mv $tmp/$file1.wigFix $out
+/bin/rm -fr $tmp
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp/$d
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp/$d:h
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp
+' > doPhyloP.csh
+
+    chmod +x doPhyloP.csh
+
+    # Create list of chunks
+    find ../../cons/SS/result -type f | grep ".ss$" \
+	| sed -e "s/.ss$//; s#^../../cons/SS/result/##" > ss.list
+    # make sure the list looks good
+    wc -l ss.list
+    #	798 ss.list
+
+    # Create template file
+    #	file1 == $chr/$chunk/file name without .ss suffix
+    printf '#LOOP
+../run.phyloP/doPhyloP.csh $(path1) {check out line+ wigFix/$(dir1)/$(file1).wigFix}
+#ENDLOOP
+' > template
+
+    ######################   Running all species  #######################
+    # setup run for all species
+    mkdir /hive/data/genomes/otoGar3/bed/multiz3way/consPhyloP/all
+    cd /hive/data/genomes/otoGar3/bed/multiz3way/consPhyloP/all
+    rm -fr wigFix
+    mkdir wigFix
+
+    gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
+    #	beware overwhelming the cluster with these fast running high I/O jobs
+    para create jobList
+    para try ... check ... push ... etc ...
+    para -maxJob=53 push
+    para time > run.time
+# Completed: 798 of 798 jobs
+# CPU time in finished jobs:       1068s      17.81m     0.30h    0.01d  0.000 y
+# IO & Wait Time:                 11920s     198.66m     3.31h    0.14d  0.000 y
+# Average job time:                  16s       0.27m     0.00h    0.00d
+# Longest finished job:              28s       0.47m     0.01h    0.00d
+# Submission to last job:           134s       2.23m     0.04h    0.00d
+
+    mkdir downloads
+
+    time (find ./wigFix -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+	| gzip -c > downloads/phyloP3way.wigFix.gz)
+    #   real    16m4.029s
+    # -rw-rw-r-- 1 1630231812 Feb 15 18:58 phyloP3way.wigFix.gz
+
+    # check integrity of data with wigToBigWig
+    time (zcat downloads/phyloP3way.wigFix.gz \
+	| wigToBigWig -verbose=2 stdin /hive/data/genomes/otoGar3/chrom.sizes \
+	phyloP3way.bw) > bigWig.log 2>&1
+
+    egrep "real|VmPeak" bigWig.log
+    # pid=29645: VmPeak:    19402384 kB
+    # real    27m9.356s
+
+    bigWigInfo phyloP3way.bw | sed -e 's/^/# /;'
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 1,957,716,579
+# primaryIndexSize: 73,998,696
+# zoomLevels: 10
+# chromCount: 674
+# basesCovered: 1,775,646,396
+# mean: 0.057794
+# min: -1.947000
+# max: 0.447000
+# std: 0.547410
+
+    #	encode those files into wiggle data
+    time (zcat downloads/phyloP3way.wigFix.gz \
+	| wigEncode stdin phyloP3way.wig phyloP3way.wib)
+    # Converted stdin, upper limit 0.45, lower limit -1.95
+    # real    10m13.978s
+
+    du -hsc *.wi?
+    # 1.7G    phyloP3way.wib
+    # 233M    phyloP3way.wig
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phyloP3way.wib /gbdb/otoGar3/multiz3way/phyloP3way.wib
+    time hgLoadWiggle -pathPrefix=/gbdb/otoGar3/multiz3way otoGar3 \
+	phyloP3way phyloP3way.wig
+    # real    0m26.490s
+
+    # use to set trackDb.ra entries for wiggle min and max
+    # and verify table is loaded correctly
+
+    wigTableStats.sh otoGar3 phyloP3way
+# db.table             min   max   mean      count     sumData
+# otoGar3.phyloP3way -1.947 0.447 0.057794 1775646396 1.02622e+08
+#       stdDev viewLimits
+#       0.54741 viewLimits=-1.947:0.447
+
+    #	that range is: 1.947+0.447 = 2.394 for hBinSize=0.002394
+
+    #  Create histogram to get an overview of all the data
+    time hgWiggle -doHistogram \
+	-hBinSize=0.002394 -hBinCount=1000 -hMinVal=-1.947 -verbose=2 \
+	    -db=otoGar3 phyloP3way > histogram.data 2>&1
+    # real    1m45.500s
+
+
+    # find the Y range for the 2:5 graph
+    grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin \
+      | sed -e 's/^/# /;'
+# Q1 0.000043
+# median 0.000284
+# Q3 0.001097
+# average 0.002660
+# min 0.000000
+# max 0.158966
+# count 376
+# total 0.999996
+# standard deviation 0.012694
+
+    # find the X range for the 2:5 graph
+    grep "^[0-9]" histogram.data | ave -col=2 stdin \
+      | sed -e 's/^/# /;'
+# Q1 -1.203665
+# median -0.868503
+# Q3 -0.569253
+# average -0.811773
+# min -1.947000
+# max 0.447000
+# count 376
+# total -305.226594
+# standard deviation 0.631665
+
+    #	create plot of histogram:
+    printf 'set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff font \
+"/usr/share/fonts/default/Type1/n022004l.pfb"
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Malayan flying lemur otoGar3 Histogram phyloP3way track"
+set xlabel " phyloP3way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set xtics
+set xrange [-2.:0.45]
+set yrange [0:0.16]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+' | gnuplot > histo.png
+
+    display histo.png &
+    # appears to have an odd hole in the data just above X=0 ?
+
+#############################################################################
+# hgPal downloads (DONE - 2018-02-16 - Hiram)
+#   FASTA from 5-way for knownGene, refGene and knownCanonical
+
+    ssh hgwdev
+    screen -S otoGar3HgPal
+    mkdir /hive/data/genomes/otoGar3/bed/multiz3way/pal
+    cd /hive/data/genomes/otoGar3/bed/multiz3way/pal
+    cat ../species.list | tr '[ ]' '[\n]' > order.list
+
+    # this for loop takes about 2.5 hours on this large count contig assembly
+    export mz=multiz3way
+    export gp=ensGene
+    export db=otoGar3
+    export I=0
+    export D=0
+    mkdir exonAA exonNuc
+    printf '#!/bin/sh\n' > $gp.jobs
+
+    time for C in `sort -nk2 ../../../chrom.sizes | cut -f1`
+    do
+        I=`echo $I | awk '{print $1+1}'`
+        D=`echo $D | awk '{print $1+1}'`
+        dNum=`echo $D | awk '{printf "%03d", int($1/1000)}'`
+        mkdir -p exonNuc/${dNum} > /dev/null
+        mkdir -p exonAA/${dNum} > /dev/null
+	echo "mafGene -chrom=$C -exons -noTrans $db $mz $gp order.list stdout | gzip -c > exonNuc/${dNum}/$C.exonNuc.fa.gz &"
+	echo "mafGene -chrom=$C -exons $db $mz $gp order.list stdout | gzip -c > exonAA/${dNum}/$C.exonAA.fa.gz &"
+        if [ $I -gt 16 ]; then
+            echo "date"
+            echo "wait"
+            I=0
+        fi
+    done >> $gp.jobs
+    # real    1m36.615s
+
+    echo "date" >> $gp.jobs
+    echo "wait" >> $gp.jobs
+
+    chmod +x $gp.jobs
+
+    time (./$gp.jobs) > $gp.jobs.log 2>&1 &
+    # real    3m34.382s
+
+    export mz=multiz3way
+    export gp=ensGene
+    time find ./exonAA -type f | grep exonAA.fa.gz | xargs zcat \
+     | gzip -c > $gp.$mz.exonAA.fa.gz
+    #  real    0m15.179s
+
+    time find ./exonNuc -type f | grep exonNuc.fa.gz | xargs zcat \
+     | gzip -c > $gp.$mz.exonNuc.fa.gz
+    #  real    0m30.773s
+
+    # -rw-rw-r--  1 20361648 Feb 16 12:37 ensGene.multiz3way.exonAA.fa.gz
+    # -rw-rw-r--  1 30744398 Feb 16 12:38 ensGene.multiz3way.exonNuc.fa.gz
+
+    export mz=multiz3way
+    export gp=ensGene
+    export db=otoGar3
+    export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    md5sum *.fa.gz > md5sum.txt
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+    ln -s `pwd`/md5sum.txt $pd/
+
+    rm -rf exonAA exonNuc
+
+#############################################################################
+# construct download files for 5-way (DONE - 2018-02-16 - Hiram)
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/otoGar3/multiz3way
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/otoGar3/phastCons3way
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/otoGar3/phyloP3way
+    mkdir /hive/data/genomes/otoGar3/bed/multiz3way/downloads
+    cd /hive/data/genomes/otoGar3/bed/multiz3way/downloads
+    mkdir multiz3way phastCons3way phyloP3way
+    cd multiz3way
+    time cp -p ../../anno/otoGar3.3way.maf .
+    #   real    0m12.561s
+
+    # -rw-rw-r-- 1 7033510411 Feb 14 11:38 otoGar3.3way.maf
+
+    du -hsc *
+    #  6.6G    otoGar3.3way.maf
+
+    time gzip *.maf
+    #   real    28m14.980s
+
+    # -rw-rw-r-- 1 1959025342 Feb 14 11:38 otoGar3.3way.maf.gz
+
+    du -hsc *.maf.gz
+    #  1.9G    otoGar3.3way.maf.gz
+
+    ###########################################################################
+    ## create upstream refGene maf files
+    cd /hive/data/genomes/otoGar3/bed/multiz3way/downloads/multiz3way
+    # bash script
+#!/bin/sh
+export geneTbl="ensGene"
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    featureBits otoGar3 ${geneTbl}:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | /cluster/bin/$MACHTYPE/mafFrags otoGar3 multiz3way \
+                stdin stdout \
+                -orgs=/hive/data/genomes/otoGar3/bed/multiz3way/species.list \
+        | gzip -c > upstream${S}.${geneTbl}.maf.gz
+    echo "done upstream${S}.${geneTbl}.maf.gz"
+done
+    #   real    2m27.752s
+
+    md5sum *.maf.gz *.nh upstream*.gz README.txt >> md5sum.txt
+XXX
+
+    # some other symlinks were already made above
+    # obtain the README.txt from cavPor3/multiz3way and update for this
+    #   situation
+    ln -s `pwd`/upstream*.gz `pwd`/README.txt \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/otoGar3/multiz3way
+
+#############################################################################
+
+    grep TREE ../../4d/all.mod | awk '{print $NF}' \
+      | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+         > otoGar3.3way.nh
+    ~/kent/src/hg/utils/phyloTrees/commonNames.sh otoGar3.3way.nh \
+      | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+         > otoGar3.3way.commonNames.nh
+    ~/kent/src/hg/utils/phyloTrees/scientificNames.sh otoGar3.3way.nh \
+	| $HOME/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+	    > otoGar3.3way.scientificNames.nh
+    time md5sum *.nh *.maf.gz > md5sum.txt
+    #   real    0m35.144s
+
+    ln -s `pwd`/* \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/otoGar3/multiz3way
+
+    du -hsc *.maf.gz ../../anno/otoGar3.3way.maf
+    #  2.5G     otoGar3.3way.maf.gz
+    #  9.4G     ../../anno/otoGar3.3way.maf
+
+    # obtain the README.txt from tupChi1/multiz3way and update for this
+    #   situation
+
+    #####################################################################
+    cd /hive/data/genomes/otoGar3/bed/multiz3way/downloads/phastCons3way
+
+    ln -s ../../cons/all/downloads/phastCons3way.wigFix.gz \
+        ./otoGar3.phastCons3way.wigFix.gz
+    ln -s ../../cons/all/phastCons3way.bw ./otoGar3.phastCons3way.bw
+    ln -s ../../cons/all/all.mod ./otoGar3.phastCons3way.mod
+    time md5sum *.gz *.mod *.bw > md5sum.txt
+    #   real    0m24.020s
+
+    # obtain the README.txt from tupChi1/phastCons3way and update for this
+    #   situation
+    ln -s `pwd`/* \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/otoGar3/phastCons3way
+
+    #####################################################################
+    cd /hive/data/genomes/otoGar3/bed/multiz3way/downloads/phyloP3way
+
+    ln -s ../../consPhyloP/all/downloads/phyloP3way.wigFix.gz \
+        ./otoGar3.phyloP3way.wigFix.gz
+    ln -s ../../consPhyloP/run.phyloP/all.mod otoGar3.phyloP3way.mod
+    ln -s ../../consPhyloP/all/phyloP3way.bw otoGar3.phyloP3way.bw
+
+    time md5sum *.mod *.bw *.gz > md5sum.txt
+    #   real    0m15.403s
+
+    # obtain the README.txt from otoGar3/phyloP3way and update for this
+    #   situation
+    ln -s `pwd`/* \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/otoGar3/phyloP3way
+
+#############################################################################
+# wiki page for 5-way (DONE - 2018-02-16 - Hiram)
+    mkdir /hive/users/hiram/bigWays/otoGar3.3way
+    cd /hive/users/hiram/bigWays
+    echo "otoGar3" > otoGar3.3way/ordered.list
+    awk '{print $1}' /hive/data/genomes/otoGar3/bed/multiz3way/3way.distances.txt \
+       >> otoGar3.3way/ordered.list
+
+    # sizeStats.sh catches up the cached measurements required for data
+    # in the tables.  They are usually already mostly done, only new
+    # assemblies will have updates.
+    ./sizeStats.sh otoGar3.3way/ordered.list
+    # dbDb.sh constructs otoGar3.3way/OtoGar3_5-way_conservation_alignment.html
+    # may need to add new assembly references to srcReference.list and
+    # urlReference.list
+    ./sortDbDb.sh otoGar3 3way
+    # sizeStats.pl constructs otoGar3.3way/OtoGar3_5-way_Genome_size_statistics.html
+    # this requires entries in coverage.list for new sequences
+    ./sortSizeStats.pl otoGar3 3way
+
+    # defCheck.pl constructs OtoGar3_5-way_conservation_lastz_parameters.html
+    ./sortDefCheck.pl otoGar3 3way
+
+    # this constructs the html pages in otoGar3.3way/:
+# -rw-rw-r-- 1 2736 Feb 16 10:19 OtoGar3_3-way_Genome_size_statistics.html
+# -rw-rw-r-- 1 1945 Feb 16 10:39 OtoGar3_3-way_conservation_alignment.html
+# -rw-rw-r-- 1 2405 Feb 16 11:01 OtoGar3_3-way_conservation_lastz_parameters.html
+
+    # add those pages to the genomewiki.  Their page names are the
+    # names of the .html files without the .html:
+#  OtoGar3_4-way_conservation_alignment
+#  OtoGar3_4-way_Genome_size_statistics
+#  OtoGar3_4-way_conservation_lastz_parameters
+
+    # when you view the first one you enter, it will have links to the
+    # missing two.
+
+############################################################################

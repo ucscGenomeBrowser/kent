@@ -28,8 +28,6 @@
 
 <!-- Format everthing inside this narrower "pageWidth" window -->
 <div class="pageWidth">
-<IMG SRC="/images/title.jpg">
-
 
 <!--#include virtual="../../../cgi-bin/hgMenubar"-->
 
@@ -136,6 +134,7 @@ in the sections below.</I>
         <LI><A HREF="#bigBed_-_Item_or_Region_Track_Settings">bigBed</A>: Item or region tracks</LI>
         <LI><A HREF="#bigChain_-_Pairwise_Alignments">bigChain</A>: Genome-wide Pairwise Alignments</LI>
         <LI><A HREF="#bigGenePred_-_Gene_Annotations">bigGenePred</A>: Gene Annotations</LI>
+        <LI><A HREF="#bigNarrowPeak_-_Peaks">bigNarrowPeak</A>: Peaks</LI>
         <LI><A HREF="#bigMaf_-_Multiple_Alignments">bigMaf</A>: Mulitple alignments</LI>
         <LI><A HREF="#bigPsl_-_Pairwise_Alignments">bigPsl</A>: Pairwise Alignments</LI>
         <LI><A HREF="#bigWig_-_Signal_Graphing_Track_Settings">bigWig</A>:
@@ -225,9 +224,10 @@ in the sections below.</I>
     <TR VALIGN=TOP><TD class="dataVersion"><A name="dataVersion"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">dataVersion &lt;str&gt;</code></div>
     </TD></TR>
-    <TR VALIGN=TOP><TD class="directUrl_for_hubs">
+    <TR VALIGN=TOP><TD class="directUrl_for_hubs"><A name="directUrl_for_hubs"></A>
         <A name="directUrl"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">directUrl &lt;url&gt;</code></div>
+        <span class="directUrl"><code class="level-full"></code></span></div> <!-- this helps define level in TOC -->
     </TD></TR>
     <TR VALIGN=TOP><TD class="iframeUrl"><A name="iframeUrl"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">iframeUrl &lt;url&gt;</code></div>
@@ -301,10 +301,10 @@ are described below along with settings specific to their types.</P>
     <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
         <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
     </TD></TR>
-    <TR VALIGN=TOP><TD class="refUrl"><IMG class='toggle detail'>
+    <TR VALIGN=TOP><TD class="refUrl"><A name="refUrl"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">refUrl &lt;url&gt;</code></div>
     </TD></TR>
-    <TR VALIGN=TOP><TD class="bigDataIndex"><IMG class='toggle detail'>
+    <TR VALIGN=TOP><TD class="bigDataIndex"><A name="bigDataIndex"></A> <IMG class='toggle detail'>
         <div class="format"><code class="level-full">bigDataIndex &lt;url/relativePath&gt;</code></div>
     </TD></TR>
     <TR class="related1st" VALIGN=TOP><TD class="bamColorMode">
@@ -360,6 +360,9 @@ are described below along with settings specific to their types.</P>
     <TR VALIGN=TOP><TD class="showNames"><A name="showNames"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">showNames &lt;on/off&gt;</code></div>
     </TD></TR>
+    <TR VALIGN=TOP><TD class="doWiggle"><A name="doWiggle"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-new">doWiggle on</code></div>
+    </TD></TR>
     <TR VALIGN=TOP><TD>
             <P>Additional settings
             found in the "Item or region tracks" section are also
@@ -391,7 +394,7 @@ are described below along with settings specific to their types.</P>
     <div class="format"> <code>type bigBarChart</code></div>
 </td></tr>
 <tr valign=top><td class="barChartBars"><a name="barChartBars"></a><img class='toggle detail'>
-    <div class="format"> <code class="level-required">barChartBars &lt;label1 label2...&gt;</code></div>
+    <div class="format"> <code class="level-full">barChartBars &lt;label1 label2...&gt;</code></div>
 </td></tr>
 <tr valign=top><td class="bigDataUrl"><img class='toggle detail'>
     <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code>
@@ -400,26 +403,33 @@ are described below along with settings specific to their types.</P>
 <tr valign=top><td class="barChartColors"><a name="barChartColors"></a> <img class='toggle detail'>
     <div class="format"> <code class="level-full">barChartColors &lt;color1 color2...&gt;</code>
     </div>
+</td></tr>
 <tr valign=top><td class="barChartLabel"><a name="barChartLabel"></a> <img class='toggle detail'>
     <div class="format"> <code class="level-full">barChartLabel &lt;label&gt;</code>
     </div>
+</td></tr>
 <tr valign=top><td class="barChartMetric"><a name="barChartMetric"></a> <img class='toggle detail'>
     <div class="format"> <code class="level-full">barChartMetric &lt;metric&gt;</code>
     </div>
+</td></tr>
 <tr valign=top><td class="barChartUnit"><a name="barChartUnit"></a> <img class='toggle detail'>
     <div class="format"> <code class="level-full">barChartUnit &lt;unit&gt;</code>
     </div>
+</td></tr>
 <tr valign=top><td class="barChartMatrixUrl"><a name="barChartMatrixUrl"></a>
         <img class='toggle detail'>
     <div class="format"><code class="level-full">barChartMatrixUrl &lt;url/relativePath&gt;</code>
     </div>
+</td></tr>
 <tr valign=top><td class="barChartSampleUrl"><a name="barChartSampleUrl"></a>
         <img class='toggle detail'>
     <div class="format"><code class="level-full">barChartSampleUrl &lt;url/relativePath&gt;</code>
     </div>
-<tr valign=top><td class="maxLimit"><img class='toggle detail'>
+</td></tr>
+<tr valign=top><td class="maxLimit"><A name="maxLimit"></A><img class='toggle detail'>
     <div class="format"><code class="level-full">maxLimit &lt;maximum-bar-value&gt;</code>
     </div>
+</td></tr>
 <tr valign=top><td>
         <p>Additional settings defined in other sections are also
         available for displaying bigBarChart tracks.</p>
@@ -568,7 +578,7 @@ are described below along with settings specific to their types.</P>
     <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
         <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
     </TD></TR>
-    <TR VALIGN=TOP><TD class="linkDataUrl"><IMG class='toggle detail'>
+    <TR VALIGN=TOP><TD class="linkDataUrl"><A name="linkDataUrl"</A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">linkDataUrl &lt;url/relativePath&gt;</code></div>
     </TD></TR>
 </TABLE>
@@ -600,6 +610,33 @@ are described below along with settings specific to their types.</P>
 </TABLE>
 <BR><BR>
 
+<A name="bigNarrowPeak"></A>
+<TABLE class="settingsTable" id="bigNarrowPeak_-_Peaks">
+<THEAD><TR><TD><DIV ID="bigNarrowPeak_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;bigNarrowPeak  - Peaks
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="bigNarrowPeak"><IMG class='toggle detail'>
+        <div class="format">
+            <code>type bigNarrowPeak</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="Filter">
+            <A name="Filter"></A>
+            <A name="pValueFilter"></A>
+            <A name="qValueFilter"></A>
+            <A name="signalFilter"></A><IMG class='toggle detail'>
+        <div class="format">
+            <span class="pValueFilter"><code class="level-new">pValueFilter</code></span><BR>
+            <span class="qValueFilter"><code class="level-new">qValueFilter</code></span><BR>
+            <span class="signalFilter"><code class="level-new">signalFilter</code></span></div>
+            </div>
+    </TD></TR>
+</TABLE>
+<BR><BR>
+
 <A name="bigMaf"></A>
 <TABLE class="settingsTable" id="bigMaf_-_Multiple_Alignments">
 <THEAD><TR><TD><DIV ID="bigMaf_intro" class="intro"></DIV></TD></TR></THEAD>
@@ -613,13 +650,13 @@ are described below along with settings specific to their types.</P>
     <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
         <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
     </TD></TR>
-    <TR VALIGN=TOP><TD class="speciesOrder"><IMG class='toggle detail'>
+    <TR VALIGN=TOP><TD class="speciesOrder"><A name="speciesOrder"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">speciesOrder &lt;species1&gt; [species2 &hellip;]</code></div>
     </TD></TR>
-    <TR VALIGN=TOP><TD class="frames"><IMG class='toggle detail'>
+    <TR VALIGN=TOP><TD class="frames"><A name="frames"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">frames &lt;url/relativePath&gt;</code></div>
     </TD></TR>
-    <TR VALIGN=TOP><TD class="summary"><IMG class='toggle detail'>
+    <TR VALIGN=TOP><TD class="summary"><A name="summary"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">summary &lt;tableName/url&gt;</code></div>
     </TD></TR>
 </TABLE>
@@ -638,17 +675,17 @@ are described below along with settings specific to their types.</P>
     <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
         <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
     </TD></TR>
-    <TR VALIGN=TOP><TD class="baseColorUseCds"><IMG class='toggle detail'>
+    <TR VALIGN=TOP><TD class="baseColorUseCds"><A name="baseColorUseCds"><IMG class='toggle detail'>
         <div class="format"><code class="level-full">baseColorUseCds &lt;given/table &lt;table&gt;&gt;</code></div>
     </TD></TR>
-    <TR VALIGN=TOP><TD class="baseColorUseSequence"><IMG class='toggle detail'>
+    <TR VALIGN=TOP><TD class="baseColorUseSequence"><A name="baseColorUseSequence"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">baseColorUseSequence &lt; &lt;extFile {seqTable} &lt;extFile&gt; / 
                                 hgPcrResult / lfExtra / nameIsSequence / seq1Seq2 / ss &gt;</code></div>
     </TD></TR>
-    <TR VALIGN=TOP><TD class="baseColorDefault"><IMG class='toggle detail'>
+    <TR VALIGN=TOP><TD class="baseColorDefault"><A name="baseColorDefault"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">baseColorDefault &lt;diffBases/diffCodons/itemBases/itemCodons/genomicCodons&gt</code></div>
     </TD></TR>
-    <TR VALIGN=TOP><TD class="showDiffBasesAllScales"><IMG class='toggle detail'>
+    <TR VALIGN=TOP><TD class="showDiffBasesAllScales"><A name="showDiffBasesAllScales"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">showDiffBasesAllScales on</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="labelFields"><IMG class='toggle detail'>
@@ -924,8 +961,7 @@ hierarchical containers:
     </TD></TR>
     <TR VALIGN=TOP><TD class="filterComposite">
         <A name="filterComposite"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-full">filterComposite &lt;dim[A/B/C][=one]&gt;
-                                                                [dimB dimC ...]</code></div>
+        <div class="format"><code class="level-full">filterComposite &lt;dim[A/B/C][=one]&gt [dimB dimC ...]</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="dimensionAchecked">
          <A name="dimensionAchecked"></A><IMG class='toggle detail'>
@@ -959,8 +995,7 @@ hierarchical containers:
             <span class="view"><code class="level-full">view &lt;viewTag&gt;</code></span></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="parent_view"><A name="parent_view"></A><IMG class='toggle detail'>
-        <div class="format">
-            <code>subGroups view=&lt;vTag1&gt;&hellip;</code><BR>
+        <div class="format"> <code class="level-base">subGroups view=&lt;vTag1&gt;&hellip;</code><BR>
             <code>parent &lt;viewName&gt; [off/on]</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="viewUi"><A name="viewUi"></A><IMG class='toggle detail'>
@@ -986,7 +1021,7 @@ hierarchical containers:
     </TD></TR>
     <TR VALIGN=TOP><TD class="parent_container">
         <A name="parent_container"></A><IMG class='toggle detail'>
-        <div class="format"><code>parent &lt;containerTrack&gt;</code></div>
+        <div class="format"><code class="level-base">parent &lt;containerTrack&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="aggregate"><IMG class='toggle detail'>
         <div class="format"><code class="level-full">aggregate &lt;transparentOverlay/stacked/solidOverlay/none&gt;</code></div>

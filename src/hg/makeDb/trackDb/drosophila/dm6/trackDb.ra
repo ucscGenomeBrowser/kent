@@ -38,13 +38,11 @@ visibility hide
 altColor 200,150,150
 type bed 4 +
 
-track refGene override
-longLabel RefSeq Genes (by FlyBase)
-visibility pack
-
 include trackDb.27way.ra
 include flyBaseGene.ra alpha
 
 track spMut override
 group varRep
 bigDataUrl /gbdb/$D/uniprot/unipMut.bb
+
+include ../../refSeqComposite.ra

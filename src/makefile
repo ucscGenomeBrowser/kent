@@ -70,6 +70,7 @@ BLAT_APPLIST = blat gfClient gfServer
 userApps: topLibs hgLib destBin
 	cd utils/stringify && echo utils/stringify && ${MAKE}
 	cd utils && echo utils && ${MAKE} userAppsB
+	cd parasol && echo parasol && ${MAKE} userApps
 	cd hg && echo hg && ${MAKE} userApps
 	cd hg/utils && echo hg/utils && ${MAKE} userApps
 	cd hg/makeDb && echo hg/makeDb && ${MAKE} userApps

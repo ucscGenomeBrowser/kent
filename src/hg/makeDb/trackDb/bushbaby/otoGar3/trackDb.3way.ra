@@ -1,0 +1,102 @@
+track cons3way
+compositeTrack on
+shortLabel 3-way Mammal
+longLabel Multiz Alignment & Conservation (3 Species)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+dragAndDrop subTracks
+visibility full
+priority 1
+type bed 4
+group compGeno
+
+    track cons3wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons3way
+
+        track multiz3way
+        subTrack cons3wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Alignments of 3 Mammals
+        subGroups view=align
+        noInherit on
+        irows on
+        summary multiz3waySummary
+        frames multiz3wayFrames
+        color 0, 10, 100
+        altColor 0,90,10
+        type wigMaf 0.0 1.0
+        speciesCodonDefault otoGar3
+        speciesGroups Mammal
+        sGroup_Mammal micMur3 hg38
+        itemFirstCharCase noChange
+        treeImage phylo/otoGar3_3way.png
+        priority 100
+
+    # PhyloP conservation
+    track cons3wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack cons3way
+    viewLimits -2:0.5
+    viewLimitsMax -1.947:0.447
+
+        track phyloP3way
+        subTrack cons3wayViewphyloP on
+        subGroups view=phyloP
+        shortLabel 3 Mammals Cons
+        longLabel 3 mammal Basewise Conservation by PhyloP
+        noInherit on
+        configurable on
+        type wig -1.947 0.447
+        maxHeightPixels 100:50:11
+        viewLimits -1.95:0.447
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 60,60,140
+        altColor 140,60,60
+        priority 4
+
+    # phastCons conservation
+    track cons3wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility full
+    subTrack cons3way
+
+        track phastCons3way
+        subTrack cons3wayViewphastcons on
+        subGroups view=phastcons
+        shortLabel 3 Mammals Cons
+        longLabel 3 mammals conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 70,130,70
+        altColor 130,70,70
+        priority 13
+
+    # Conserved Elements (Most Conserved)
+    track cons3wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility dense
+    subTrack cons3way
+
+        track phastConsElements3way
+        subTrack cons3wayViewelements on
+        subGroups view=elements
+        shortLabel 3 Mammals El
+        longLabel 3 mammals Conserved Elements
+        noInherit on
+        color 110,10,40
+        type bed 5 .
+        priority 23

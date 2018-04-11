@@ -19,22 +19,25 @@ struct subjInfo *siList = NULL, *si;
 struct column *column = NULL;
 int colCount = 0;
 struct dyString *query = dyStringNew(256);
-char *sep="";
+boolean firstTime = TRUE;
 if (!sameString(columns->name,"subjId"))
     errAbort("subjId must be the first column in columnDb.ra");
-sqlDyStringAppend(query,"select ");
+sqlDyStringPrintf(query,"select ");
 for (column=columns;column;column=column->next)
     {
     // skip non-main table columns which have "query" setting
     // automatically add first column (subjId) whether it's on or not.
     if ((column->on || column->filterOn || column==columns) && (!column->query))  
 	{
-	dyStringPrintf(query,"%s%s\n", sep, column->name);
+	if (firstTime)
+	    firstTime = FALSE;
+	else
+	    sqlDyStringPrintf(query,",");
+	sqlDyStringPrintf(query,"%s", column->name);
 	column->colNo = colCount++;
-	sep = ",";
 	}
     }
-dyStringAppend(query," from gsidSubjInfo\n");
+sqlDyStringPrintf(query," from gsidSubjInfo\n");
 
 sr = sqlGetResult(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)

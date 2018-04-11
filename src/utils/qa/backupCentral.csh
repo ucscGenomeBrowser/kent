@@ -51,12 +51,23 @@ set devString="hgcentraltest"
 set betaString="-h $sqlbeta hgcentralbeta"
 set rrString="-h $sqlrr hgcentral" 
 
-foreach table ( blatServers clade dbDb dbDbArch defaultDb genomeClade \
-  liftOverChain namedSessionDb targetDb )
+# set contents field size limit to 10 million
+set sizeLimit=10000000
+foreach table ( namedSessionDb )
+  hgsql   $devString -N -e "select * from namedSessionDb where length(contents) < $sizeLimit" \
+    | sort >> $dirPath/$today/hgwdev.$table
+  hgsql  $betaString -N -e "select * from namedSessionDb where length(contents) < $sizeLimit" \
+    | sort >> $dirPath/$today/hgwbeta.$table
+  hgsql    $rrString -N -e "select * from namedSessionDb where length(contents) < $sizeLimit" \
+    | sort >> $dirPath/$today/rr.$table
+end
+
+foreach table ( blatServers clade dbDb defaultDb genomeClade liftOverChain targetDb )
   hgsql  $devString -N -e "SELECT * FROM $table" | sort >> $dirPath/$today/hgwdev.$table
   hgsql $betaString -N -e "SELECT * FROM $table" | sort >> $dirPath/$today/hgwbeta.$table
   hgsql   $rrString -N -e "SELECT * FROM $table" | sort >> $dirPath/$today/rr.$table
 end
+
 
 echo $urlPath
 chmod 650 $dirPath/$today/*.namedSessionDb

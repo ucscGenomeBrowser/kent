@@ -32,7 +32,7 @@ group compGeno
         type wigMaf 0.0 1.0
         speciesCodonDefault hg38
         speciesGroups Primates
-        sGroup_Primates panTro5 panPan2 gorGor5 ponAbe2 nomLeu3 nasLar1 rhiBie1 rhiRox1 colAng1 macFas5 rheMac8 papAnu3 macNem1 cerAty1 chlSab2 manLeu1 saiBol1 aotNan1 calJac3 cebCap1 tarSyr2 eulFla1 eulMac1 proCoq1 micMur3 otoGar3 mm10 canFam3 dasNov3
+sGroup_Primates panTro5 panPan2 gorGor5 ponAbe2 nomLeu3 nasLar1 rhiBie1 rhiRox1 colAng1 macFas5 rheMac8 papAnu3 macNem1 cerAty1 chlSab2 manLeu1 saiBol1 aotNan1 calJac3 cebCap1 tarSyr2 eulFla1 eulMac1 proCoq1 micMur3 otoGar3 mm10 canFam3 dasNov3        
         itemFirstCharCase noChange
         treeImage phylo/hg38_30way.png
         priority 100
@@ -47,7 +47,7 @@ group compGeno
     viewLimitsMax -14.191:1.199
 
         track phyloP30way
-        subTrack cons30wayViewphyloP off
+        subTrack cons30wayViewphyloP on
         subGroups view=phyloP
         shortLabel Cons 30 Mammals
         longLabel 30 mammals Basewise Conservation by PhyloP (27 primates)
@@ -71,7 +71,7 @@ group compGeno
     subTrack cons30way
 
         track phastCons30way
-        subTrack cons30wayViewphastcons off
+        subTrack cons30wayViewphastcons on
         subGroups view=phastcons
         shortLabel Cons 30 Mammals
         longLabel 30 mammals conservation by PhastCons (27 primates)

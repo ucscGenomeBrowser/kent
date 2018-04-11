@@ -47,7 +47,7 @@ group compGeno
         track phyloP11way
         subTrack cons11wayViewphyloP on
         subGroups view=phyloP
-        shortLabel 11 Vertebrate Cons
+        shortLabel Cons 11 Verts
         longLabel 11 vertebrate Basewise Conservation by PhyloP
         noInherit on
         configurable on
@@ -71,7 +71,7 @@ group compGeno
         track phastCons11way
         subTrack cons11wayViewphastcons on
         subGroups view=phastcons
-        shortLabel 11 Vertebrate Cons
+        shortLabel Cons 11 Verts
         longLabel 11 vertebrate conservation by PhastCons
         noInherit on
         configurable on

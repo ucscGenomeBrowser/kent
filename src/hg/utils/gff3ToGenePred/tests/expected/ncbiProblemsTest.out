@@ -1,0 +1,4 @@
+Error: genePred from GFF3: input/ncbiProblems.gff3:22: Dere\GG10940 exon 2 (NW_001956548.1:26533059-26533133) overlaps previous exon (NW_001956548.1:26532888-26533060)
+Warning: skipping: invalid genePred created: Dere\GG10940 NW_001956548.1:26531106-26534144
+Warning: skipping: invalid strand for mRNA gene25009
+2 warnings converting GFF3 file: input/ncbiProblems.gff3

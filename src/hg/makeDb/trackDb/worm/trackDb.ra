@@ -43,7 +43,7 @@ type rmsk
 canPack off
 
 track refGene override
-release beta,public
+release public
 priority 35
 visibility pack
 

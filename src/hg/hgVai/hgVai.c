@@ -666,7 +666,7 @@ struct slName *findDbNsfpTables()
 if (startsWith(hubTrackPrefix, database))
     return NULL;
 struct sqlConnection *conn = hAllocConn(database);
-struct slName *dbNsfpTables = sqlListTablesLike(conn, "LIKE 'dbNsfp%'");
+struct slName *dbNsfpTables = sqlListTablesLike(conn, "dbNsfp%");
 hFreeConn(&conn);
 return dbNsfpTables;
 }
@@ -1002,7 +1002,9 @@ endCollapsibleSection();
 static boolean canDoHgvsOut(char *geneTrack)
 /* Return TRUE if we're able to make HGVS output terms for transcripts in geneTrack. */
 {
-return sameString(geneTrack, "refGene") || startsWith("ncbiRefSeq", geneTrack);
+return (sameString(geneTrack, "refGene") || startsWith("ncbiRefSeq", geneTrack) ||
+        startsWith("wgEncodeGencodeBasic", geneTrack) ||
+        startsWith("wgEncodeGencodeComp", geneTrack));
 }
 
 static void selectHgvsOut(char *geneTrack)
@@ -1034,8 +1036,10 @@ printf("For variants that involve both a deletion and insertion, "
 puts("</div>");
 printf("<div id=\"noHgvs\" style=\"display: %s;\">",
        hgvsOk ? "none" : "block");
-printf("Select RefSeq Genes in the \"Select Genes\" section above "
-       "in order to make options appear.\n");
+printf("Select RefSeq Genes or an official GENCODE release "
+       "(\"Basic Gene Annotation Set from GENCODE...\" "
+       "or \"Comprehensive Gene Annotation Set...\") "
+       "in the \"Select Genes\" section above in order to make options appear.\n");
 puts("</div>");
 puts("<br>");
 endCollapsibleSection();
@@ -2210,14 +2214,15 @@ boolean needLeftBase = isEmpty(refAl) || sameString(refAl, "-");
 for (i = 0;  i < obsCount;  i++)
     {
     char *altAl = obsWords[i];
+    if (sameString(altAl, "-"))
+        altAl[0] = '\0';
     int altAlLen = strlen(altAl);
     if (minusStrand && isAllNt(altAl, altAlLen))
 	reverseComplement(altAl, altAlLen);
     if (differentString(altAl, refAl))
 	{
-	if (sameString(altAl, "-"))
+	if (isEmpty(altAl))
 	    {
-	    altAls[altCount] = "";
 	    needLeftBase = TRUE;
 	    }
 	else
@@ -2241,6 +2246,7 @@ for (i = 0;  i < obsCount;  i++)
 		}
 	    altAls[altCount] = altAl;
 	    }
+        altAls[altCount] = altAl;
 	altCount++;
 	}
     }

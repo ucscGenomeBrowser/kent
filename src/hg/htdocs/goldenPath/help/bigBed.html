@@ -15,7 +15,9 @@ those portions of the files needed to display a particular region are transferre
 Browser server. Because of this, bigBed has considerably faster display performance than
 regular BED when working with large data sets. The bigBed file remains on your local web-accessible 
 server (http, https, or ftp), not on the UCSC server, and only the portion that is needed for the 
-currently displayed chromosomal position is locally cached as a "sparse file".</p>
+currently displayed chromosomal position is locally cached as a "sparse file". If you do not have
+access to a web-accessible server and  need hosting space for your bigBed files, please see the
+<a href="hgTrackHubHelp.html#Hosting">Hosting</a> section of the Track Hub Help documentation.</p>
 <p>
 Additional indices can be created for the items in a bigBed file to support item search in track 
 hubs. See <a href="#Ex3">Example #3</a> below for an example of how to build an additional 
@@ -53,7 +55,9 @@ Download the <code>bedToBigBed</code> program from the
 <strong>Step 4.</strong>
 Use the <code>fetchChromSizes</code> script from the 
 <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">same directory</a> 
-to create the <em>chrom.sizes</em> file for the UCSC database you are working with (e.g., hg19).</p>
+to create the <em>chrom.sizes</em> file for the UCSC database you are working with (e.g., hg19).
+If the assembly <code>genNom</code> is hosted by UCSC, chrom.sizes can be a URL like:
+<code>http://hgdownload.soe.ucsc.edu/goldenPath/genNom/bigZips/genNom.chrom.sizes</code></p>
 <p> 
 <strong>Step 5.</strong>
 Use the <code>bedToBigBed</code> utility to create a bigBed file from your sorted BED file, using 
@@ -183,9 +187,9 @@ extra fields to be used for track item search.</p>
   Run the utility to create a bigBed output file with an index on the name field and the first 
   extra field: (<em>Step 5</em>, above):
   <pre><code>bedToBigBed -as=bedExample2.as -type=bed9+2 -extraIndex=name,geneSymbol bedExample2.bed hg18.chrom.sizes myBigBed2.bb</code></pre></li>
-  <li> 
   Place the bigBed file you just created (<em>myBigBed2.bb</em>) on a web-accessible server 
-  (<em>Step 6</em>, above).</li>
+  (<em>Step 6</em>, above).</li> <b>Note:</b> The searchIndex setting currently does not work if
+    tracks are nested in composites. 
   <li> 
   Paste the URL of the file into the custom tracks entry form, or alternatively construct a track 
   line that points to your bigBed file (<em>Step 7</em>, above). Because this bigBed file includes a

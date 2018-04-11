@@ -82,7 +82,7 @@ while (lineFileNextReal(lf, &line))
    char *val = trimSpaces(line);
    if (isEmpty(val))
        errAbort("Empty description line %d of %s", lf->lineIx, lf->fileName);
-   hashAdd(hash, tag, makeEscapedString(val, '"'));
+   hashAdd(hash, tag, val);
    }
 lineFileClose(&lf);
 return hash;

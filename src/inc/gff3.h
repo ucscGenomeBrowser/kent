@@ -210,6 +210,7 @@ extern char *gff3AttrOntologyTerm;
 
 /* commonly used features names */
 extern char *gff3FeatGene;
+extern char *gff3FeatPseudogene;
 extern char *gff3FeatMRna;
 extern char *gff3FeatNCRna;
 extern char *gff3FeatRRna;
@@ -222,7 +223,11 @@ extern char *gff3FeatStartCodon;
 extern char *gff3FeatStopCodon;
 extern char *gff3FeatTranscript;
 extern char *gff3FeatPrimaryTranscript;
+extern char *gff3FeatCGeneSegment;
+extern char *gff3FeatDGeneSegment;
+extern char *gff3FeatJGeneSegment;
 extern char *gff3FeatVGeneSegment;
+
 
 struct gff3File *gff3FileOpen(char *fileName, int maxErr, FILE *errFh);
 /* Parse a GFF3 file into a gff3File object.  If maxErr not zero, then
@@ -258,6 +263,14 @@ return ref;
 
 int gff3AnnRefLocCmp(const void *va, const void *vb);
 /* sort compare function for location of two gff3AnnRef objects */
+
+void gff3UnlinkChild(struct gff3Ann *g3a,
+                     struct gff3Ann *child);
+/* unlink the child from it's parent (do not free) */
+
+void gff3LinkChild(struct gff3Ann *g3a,
+                    struct gff3Ann *child);
+/* Add a child to a parent */
 
 INLINE int gff3PhaseToFrame(int phase)
 /* convert a phase to a frame */

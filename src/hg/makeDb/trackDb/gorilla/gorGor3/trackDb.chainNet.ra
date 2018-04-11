@@ -5,16 +5,30 @@ chainLinearGap medium
 priority 210.3
 
 track chainNetHg19 override
+shortLabel $o_db Chain/Net
 matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
 chainMinScore 5000
 chainLinearGap medium
 priority 220.3
 
+    track chainHg19 override
+    shortLabel $o_db Chain
+
+    track netHg19 override
+    shortLabel $o_db Net
+
 track chainNetHg38 override
+shortLabel $o_db Chain/Net
 matrix 16 100,-177,-41,-144,-177,93,-184,-41,-41,-184,93,-177,-144,-41,-177,100
 chainMinScore 3000
 chainLinearGap medium
 priority 220.3
+
+    track chainHg38 override
+    shortLabel $o_db Chain
+
+    track netHg38 override
+    shortLabel $o_db Net
 
 track chainNetPonAbe2 override
 matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90

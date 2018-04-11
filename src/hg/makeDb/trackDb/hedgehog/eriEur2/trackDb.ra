@@ -24,3 +24,5 @@ searchType genePred
 searchMethod prefix
 termRegex ^(AMDU|JH|chrM)[0-9_]+(\.[0-9]+)?
 searchPriority 50
+
+include ../../refSeqComposite.ra alpha

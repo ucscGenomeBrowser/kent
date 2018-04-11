@@ -216,10 +216,10 @@ while ((tdb = slPopHead(&tdbList)) != NULL)
 	{
 	/* we want to include this track, check to see if we already have it */
 	struct hashEl *hel;
+        verbose(3,"pruneRelease: adding '%s', release: '%s'\n", tdb->track, rel);
 	if ((hel = hashLookup(haveHash, tdb->track)) != NULL)
 	    errAbort("found two copies of table %s: one with release %s, the other %s\n",
 		tdb->track, (char *)hel->val, release);
-
 	hashAdd(haveHash, tdb->track, rel);
 	hashRemove(tdb->settingsHash, "release");
 	slAddHead(&relList, tdb);
@@ -292,9 +292,15 @@ tdbList= pruneRelease(tdbList);
 while ((tdb = slPopHead(&tdbList)) != NULL)
     {
     if (tdb->overrides != NULL)
+    {
+        verbose(3,"# override '%s'\n", tdb->track);
 	applyOverride(trackHash, tdb);
+    }
     else
+    {
+        verbose(3,"# track '%s'\n", tdb->track);
 	hashStore(trackHash, tdb->track)->val = tdb;
+    }
     }
 }
 
@@ -352,6 +358,7 @@ else
     safef(raFile, sizeof(raFile), "%s", raName);
 if (fileExists(raFile))
     {
+    verbose(3,"# reading '%s'\n", raFile);
     addVersionRa(strict, database, dir, raFile, trackHash);
     }
 else

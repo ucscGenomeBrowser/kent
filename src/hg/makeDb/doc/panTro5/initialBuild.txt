@@ -317,6 +317,45 @@ we use just Chimp)
     # 3231170666 bases of 3231170666 (100.000%) in intersection
 
 #########################################################################
+# add chromAlias table (DONE - 2016-10-20 - Hiram)
+
+    mkdir /hive/data/genomes/panTro5/bed/chromAlias
+    cd /hive/data/genomes/panTro5/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name from ucscToRefSeq;' panTro5 \
+        > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name from ucscToINSDC;' panTro5 \
+        > ucsc.genbank.tab
+
+    awk '{printf "%s\t%s\t%s\n", $2,$1,$3}' ucsc.genbank.tab ucsc.refseq.tab \
+        | sort > panTro5.chromAlias.tab
+
+    join -t$'\t' ../idKeys/panTro5.idKeys.txt \
+	../../ensembl/ensemblPanTro5.idKeys.txt \
+	| cut -f2,3 | sort > ucsc.ensembl.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl
+    sort -o panTro5.chromAlias.tab panTro5.chromAlias.tab
+
+for t in refseq genbank ensembl
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t panTro5.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking refseq: 44449 =? 44449 OK
+# checking genbank: 44449 =? 44449 OK
+# checking ensembl: 44449 =? 44449 OK
+
+    hgLoadSqlTab panTro5 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        panTro5.chromAlias.tab
+
+#########################################################################
+#########################################################################
 # fixup search rule for assembly track/gold table (DONE - 2016-08-01 - Hiram)
 
     cd ~/kent/src/hg/makeDb/trackDb/chimp/panTro5
@@ -788,5 +827,18 @@ panTro5.genbank.mrna.xeno.load = yes
 
     #   in that pushQ entry walk through each entry and see if the
     #   sizes will set properly
+
+#########################################################################
+# LIFTOVER TO panTro6 (DONE - 2018-03-24 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/panTro5/bed/blat.panTro6.2018-03-24
+    cd /hive/data/genomes/panTro5/bed/blat.panTro6.2018-03-24
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/panTro5/jkStuff/panTro5.11.ooc \
+         panTro5 panTro6) > do.log 2>&1
+    # real    460m46.002s
+
+    # see if the liftOver menus function in the browser from panTro5 to panTro6
 
 #########################################################################

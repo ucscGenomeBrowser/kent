@@ -38,10 +38,14 @@
     left:       0;
     height:     100%;
     width:      100%;
-    background: rgba( 255, 255, 255, .0 ) 
-                url('http://i.stack.imgur.com/FhHRx.gif') 
+    background: rgba( 255, 255, 255, 0.5 ) 
                 50% 50% 
                 no-repeat;
+}
+
+.myTitleClass .ui-dialog-titlebar {
+    color: white;
+    background: #4c759c;
 }
 
 /* When the body has the loading class, we turn
@@ -58,139 +62,128 @@ body.loading .modal {
 
 .fa-minus-square:before {
     color:      #f00;
-    }
+}
 
 .fa-plus:before {
     color:      #0f0;
-    }
+}
 </style>
 
-<form name='form' action='../cgi-bin/hgTracks'></form>
+<div class='container-fluid gbPage'>
+<form id='redirectForm' action='../cgi-bin/hgTracks'></form>
 
 <div class='row gbTrackTitleBanner'>
-    <div class='col-md-4'>
-        <span id='assembly' style='margin-left:6px' class='gbTrackName'></span>
-    </div>
-    <div class='col-md-5'>
-        <span class='gbTrackTitle'>Track Group Collections</span>
-        <a href='#INFO_SECTION' title='Jump to the track description'>
+    <div class='col-md-9'>
+        <span class='gbTrackName'>Track Collection Builder
+            <span id='assembly' class='gbAssembly'></span>
+        </span>
+        &nbsp;&nbsp;&nbsp;
+        <a href='#INFO_SECTION' title='Jump to help section'>
             <span class='gbIconSmall fa-stack'>
                 <i class='gbBlueDarkColor fa fa-circle fa-stack-2x'></i>
                 <i class='gbWhiteColor fa fa-info fa-stack-1x'></i>
             </span>
         </a>
     </div>
-    <div style='font-size:12px' class='col-md-3 text-right'>
-        <div style='font-size:10px' class='gbButtonGo' id='discardChanges'>Discard Changes</div>
-        <div class='gbButtonGoContainer text-right' title='Save and Go To Browser'>
-            <div class='gbButtonGo' id='goButton'>GO</div><i style='margin-left:3px' class='gbIconGo fa fa-play fa-2x'></i> 
+    <div class='col-md-3 text-right'>
+        <div class='gbButton' 
+             id='discardChanges'
+             title='Discard all the changes since you entered this application' >
+             Discard Changes
+        </div>
+        <div class='gbButtonGoContainer text-right' title='Save and go to the Genome Browser'>
+            <div class='gbButtonGo' id='goButton'>GO</div>
+            <i class='gbIconGo fa fa-play fa-2x'></i> 
         </div>
     </div>
 </div>
 
 <div class='row'>
     <div class='col-md-6'>
-        <div class='row mygbSectionBanner'>
-            <div class='col-md-6'>My Collections</div>
-                <div class='' style='float:right'  title='Make New Collection'>
-                    <div style='font-size:13px' id='newCollection' class='gbButton'>Make New Collection </div>
-                </div>
+        <div class='row gbSectionBanner'>
+            <div class='col-md-12'>Available Tracks</div>
         </div>
-
-        <ol id='collectionList'>
-        </ol>
+        <p> Below are all available graphing tracks that can be added to any collection. Click the 
+        arrow to the left of each folder below to show/hide tracks. Click the green "plus" 
+        <i class="jstree-icon jstree-themeicon fa fa-plus jstree-themeicon-custom"></i> symbol to 
+        add a track to any <i>selected</i> collection in the right window. See "Getting Started" 
+        below for tips. </p>
+        <p>
+        <div id='tracks' style='overflow:auto'></p>
+        </div>
     </div>
 
-    <div class='col-md-6' style="height:200px;">
-    <!-- Configuration panel -->
-        <div class='row mygbSectionBanner'>
-            <div class='col-md-8'>Set Collection Attributes</div>
-            <div class='col-md-4 text-right'> </div>
-        </div>
-
-        <!-- custom track composite widgets -->
-        <div id='CustomTrackOptions' style="display: none;">
-            <label class='gbInputLabel'  for='name'>Name:</label>
-            <input type='text' name='customName' id='customName' value='' class='text ui-widget-content ui-corner-all'>
-            <br><label class='gbInputLabel'  for='description'>Description:</label>
-            <input type='text' name='customDescription' id='customDescription' value='' class='text ui-widget-content ui-corner-all' style='width:80%'>
-            <br><label for='customVis' class='gbInputLabel'>Visibility:</label>
-            <select ID='customVis' style='width: 70px'>
-                <option>hide</option>
-                <option selectED>dense</option>
-                <option>squish</option>
-                <option>pack</option>
-                <option>full</option>
-            </select>
-
-            <div id='viewFuncDiv' style='display:none;height:20px'>
-                <br><label class='gbInputLabel'  for='viewFunc'>Function:</label>
-                <select ID='viewFunc' >
-                    <option selectED>show all</option>
-                    <option >add all</option>
-                    <option >subtract from the first</option>
-                </select>
+    <div class='col-md-6'>
+        <div class='row gbSectionBanner'>
+            <div class='col-md-3'>Collected Tracks</div>
+                <div class='col-md-3' style='float:right' title='New Collection'>
+                    <div 
+                        style='font-size:13px' id='newCollection' class='gbButton'
+                        title='Create a new collection' >
+                        Add Collection
+                    </div>
+                </div>
             </div>
-
-            <br> <p><span class='gbInputLabel'> Color:</span> <input type='text' id='customColorInput' value='0xffffff'>&nbsp;&nbsp;
-            <input id='customColorPicker'>           
-
-        </div>
+            <p>To make a new collection of tracks, click the 'Add Collection' button above. Once 
+            saved, double-click the new collection to edit the name, description, and graph color. 
+            To remove a track from a collection, click the red "minus" 
+            <i class="jstree-icon jstree-themeicon fa fa-minus-square jstree-themeicon-custom"></i> 
+            symbol to the left of each track. Click <strong>"GO"</strong> (upper right) to see 
+            collections in the browser. </p>
+            <p>
+            <strong>Note: You must <a href="../goldenPath/help/hgSessionHelp.html" target="_blank">
+            save your session</a> to preserve collections long-term.
+            </br></strong></p>
+        <div id='currentCollection' style='overflow:auto' ><div id='root'></div></div>
     </div>
-
-    <div class='col-md-6'>
-    <!-- Configuration panel -->
-        <div class='row mygbSectionBanner'>
-            <div class='col-md-6'>Collected Tracks</div>
-                <div class='' style='float:right'  title='Make New Calculated Track'>
-                    <div style='font-size:13px' id='newCalcTrackButton' class='gbButton'>Make New Calculated Track</div>
-                </div>
-        </div>
-        <div style='margin:12px; font-size:12px'> 
-        Below are tracks in <i><span id='collectedTracksTitle'></span></i>. To add tracks to this collection, drag and drop from "Available Tracks".  Right-click on the track to remove it.
-        </div>
-        <div id='currentCollection' style='overflow:auto' >
-        </div>
-    </div>
-
-    <div class='col-md-6'>
-    <!-- Configuration panel -->
-        <div class='row mygbSectionBanner'>
-            <div class='col-md-8'>Available Tracks</div>
-        </div>
-        <div>
-        <div style='margin:12px; font-size:12px'> Below are tracks are available to add to collections. To add new tracks from hubs or custom tracks, load the hub or custom track into the browser and then return to this list. </div>
-
-        </div>
-        <div id='tracks'>
-        </div>
-    </div>
-
 </div>
 
 <ul class='collectionList-menu' style='display:none'>
     <li data-action="delete">Delete</li>
 </ul>
 
-<div class='modal'></div>
+<div class='modal' style="display:block" id='workScreen'>
+    <table style='width:100%; height: 100%'>
+        <tr>
+            <td style="text-align:center;">
+                <i class="fa fa-spinner fa-spin" style="font-size:48px"></i>
+            </td>
+        </tr>
+    </table>
+</div>
 
-<div id='newCalcTrackDialog' title='Create Calculated Track' style='background:white; width:512px; display:none'>
+<div id='newCollectionDialog' class='myTitleClass' title='Create Collection' style='background:white; width:512px; display:none'>
     <p>
-    Calculated tracks are wiggle tracks that are built by performing arithmetic on a set of wiggles.
+    <label style='display:none' id='trackDialogHelp'>
+    Enter the name and description of the copied track.
+    </label>
+    <label style='display:none' id='collectionDialogHelp'>
+    Enter the name and description of the collection.
+    </label>
     </p>
 
-    <div>
-        <input type="radio" name="defaultContents" checked="checked" value="copy" > Copy current tracks in collection to calculated track. <br>
-        <input type="radio" name="defaultContents" value="move"> Move current tracks in collection to calculated track. <br>
-        <input type="radio" name="defaultContents" value="empty"> Create empty calculated track. <br>
+    <div id='CustomTrackOptions' >
+        <div>
+            <label class='gbInputLabel'  for='name'>Name:</label>
+            <input type='text' name='customName' id='customName' value='' class='text ui-widget-content ui-corner-all'>
+        </div>
+        <div>
+            <br><label class='gbInputLabel'  for='description'>Description:</label>
+            <input type='text' name='customDescription' id='customDescription' value='' class='text ui-widget-content ui-corner-all' style='width:80%'>
+        </div>
+
+        <div>
+            <br> <p><span class='gbInputLabel'> Color:</span> <input type='text' id='customColorInput' value='0xffffff'>&nbsp;&nbsp;
+            <input id='customColorPicker'>           
+        </div>
+
     </div>
 
-    <div style="padding: 5px; border: 1px solid black; margin: 10px" value="Missing Data">
-        <input type="radio" name="missingData" value="missing" checked="checked" > math with missing values results in missing values<br>
-        <input type="radio" name="missingData" value="zero" > treat missing data as a zero<br>
-    </div>
-
     <div>
-        <input id="newCalcTrack" type="submit" value="Go!"   tabindex="-1" >
+        <input class='gbButton'  id="doNewCollection" type="submit" value="Save"   >
     </div>
 </div>
+
+<label style='display:none' id='emptyCollectionText'>Empty Collection. Add tracks from &quot;Available Tracks&quot; (left pane).</label>
+<label style='display:none' id='addWithoutCollectionText'>You have no collections. Press 'New Collection' button in 'Collected Tracks' pane</label>
+

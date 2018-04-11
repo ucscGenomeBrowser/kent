@@ -14,7 +14,6 @@
 #include "obscure.h"
 #include "jsonWrite.h"
 #include "tagSchema.h"
-#include "csv.h"
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
@@ -27,69 +26,80 @@ errAbort("freen - test some hairbrained thing.\n"
          "usage:  freen input\n");
 }
 
-static boolean matchAndExtractIndexes(char *dottedName, struct slName *objArrayPieces,
-    struct dyString *scratch, char **retIndexes, boolean *retMatchEnd)
-/* Dotted name is something like this.that.12.more.2.ok
- * The objArrayPieces is something like "this.that." ".more." ".notOk"
- * Crucially it holds at least two elements, some of which may be ""
- * This function will return TRUE if all but maybe the last of the objArrayPieces is
- * found in the dottedName.  If this is the case it will put something like .12.2 in
- * scratch and *retIndexes.  If the last one matches it will set *retMatchEnd.
- * Sort of a complex routine but it plays a key piece in checking required array
- * elements */
+static int nonDotSize(char *s)
+/* Return number of chars up to next dot or end of string */
 {
-dyStringClear(scratch);
-struct slName *piece = objArrayPieces;
-char *pos = dottedName;
+char c;
+int size = 0;
 for (;;)
     {
-    /* Check to see if we match next piece, and return FALSE if not */
-    char *pieceString = piece->name;
-    int pieceLen = strlen(pieceString);
-    if (pieceLen != 0 && memcmp(pieceString, pos, pieceLen) != 0)
-        return FALSE;
-    pos += pieceLen;
-
-    /* Put the number into scratch with a leading dot separator. */
-    int digits = tagSchemaDigitsUpToDot(pos);
-    assert(digits >= 0);
-    dyStringAppendC(scratch, '.');
-    dyStringAppendN(scratch, pos, digits);
-    pos += digits;
-
-    /* Go to next piece,saving last piece for outside of the loop. */
-    piece = piece->next;
-    if (piece->next == NULL)
-        break;
+    c = *s++;
+    if (c == '.' || c == 0)
+       return size;
+    ++size;
     }
-
-/* One more special case, where last piece needs to agree on emptiness at least in
- * terms of matching */
-if (isEmpty(piece->name) != isEmpty(pos))
-    return FALSE;
-
-/* Otherwise both have something.  We return true/false depending on whether it matches */
-*retMatchEnd = (strcmp(piece->name, pos) == 0);
-*retIndexes = scratch->string;
-return TRUE;
 }
 
-static struct slName *makeObjArrayPieces(char *name)
-/* Given something like this.[].that return a list of "this." ".that".  That is
- * return a list of all strings before between and after the []'s Other
- * examples:
- *        [] returns "" ""
- *        this.[] return "this." ""
- *        [].that returns "" ".that"
- *        this.[].that.and.[].more returns "this." ".that.and." ".more" */
+int tagSchemaParseIndexes(char *input, int indexes[], int maxIndexCount)
+/* This will parse out something that looks like:
+ *     this.array.2.subfield.subarray.3.name
+ * into
+ *     2,3   
+ * Where input is what we parse,   indexes is an array maxIndexCount long
+ * where we put the numbers. */
 {
-struct slName *list = NULL;	// Result list goes here
-char *pos = name;
+char dot = '.';
+char *s = input;
+int indexCount = 0;
+int maxMinusOne = maxIndexCount - 1;
+for (;;)
+    {
+    /* Check for end of string */
+    char firstChar = *s;
+    if (firstChar == 0)
+        break;
+
+    /* If leading char is a dot and if so skip it. */
+    boolean startsWithDot = (firstChar == dot);
+    if (startsWithDot)
+       ++s;
+
+    int numSize = tagSchemaDigitsUpToDot(s);
+    if (numSize > 0)
+        {
+	if (indexCount > maxMinusOne)
+	    errAbort("Too many array indexes in %s, maxIndexCount is %d",
+		input, maxIndexCount);
+	indexes[indexCount] = atoi(s);
+	indexCount += 1;
+	s += numSize;
+	}
+    else
+        {
+	int partSize = nonDotSize(s);
+	s += partSize;
+	}
+    }
+return indexCount;
+}
+
+char *tagSchemaInsertIndexes(char *bracketed, int indexes[], int indexCount,
+    struct dyString *scratch)
+/* Convert something that looks like:
+ *     this.array.[].subfield.subarray.[].name and 2,3
+ * into
+ *     this.array.2.subfield.subarray.3.name
+ * The scratch string holds the return value. */
+{
+char *pos = bracketed;
+int indexPos = 0;
+dyStringClear(scratch);
 
 /* Handle special case of leading "[]" */
-if (startsWith("[]", name))
+if (startsWith("[]", pos))
      {
-     slNameAddHead(&list, "");
+     dyStringPrintf(scratch, "%d", indexes[indexPos]);
+     ++indexPos;
      pos += 2;
      }
 
@@ -99,51 +109,50 @@ for (;;)
     aStart = strchr(pos, '[');
     if (aStart == NULL)
         {
-	slNameAddHead(&list, pos);
+	dyStringAppend(scratch, pos);
 	break;
 	}
     else
         {
-	struct slName *el = slNameNewN(pos, aStart-pos);
-	slAddHead(&list, el);
+	if (indexPos >= indexCount)
+	    errAbort("Expecting %d '[]' in %s, got more.", indexCount, bracketed);
+	dyStringAppendN(scratch, pos, aStart-pos);
+	dyStringPrintf(scratch, "%d", indexes[indexPos]);
+	++indexPos;
 	pos = aStart + 2;
 	}
     }
-slReverse(&list);
-return list;
-}
-
-void checkIt(char *bracketed, char *numbered)
-/* Test something */
-{
-struct dyString *scratch = dyStringNew(0);
-
-printf("%s    %s :\n", bracketed, numbered);
-struct slName *el, *list = makeObjArrayPieces(bracketed);
-for (el = list; el != NULL; el = el->next)
-    printf("\t'%s'\n", el->name);
-char *index;
-boolean fullMatch = FALSE;
-if (matchAndExtractIndexes(numbered, list, scratch, &index, &fullMatch))
-    {
-    printf("index %s, fullMatch %d\n", index, fullMatch);
-    }
-else
-    printf("No match\n");
-printf("--------------\n");
+return scratch->string;
 }
 
 void freen(char *input)
 /* Test something */
 {
-checkIt("this.[].that.[].more.so", "this.1.that.2.more.so");
-checkIt("this.[].that.[].more.so", "this.3.that.1.more.notSo");
-checkIt("this.[].that.[].more.so", "other.3.that.1.more.notSo");
-checkIt("[].name", "3.name");
-checkIt("[].name", "3.fancy");
-checkIt("name.[]", "3");
-checkIt("[].name", "3");
-// checkIt("[]", "abba");
+struct dyString *withBrackets = dyStringNew(0);
+tagSchemaFigureArrayName(input, withBrackets);
+int maxIndexCount = 10;
+int indexes[maxIndexCount];
+int indexCount = tagSchemaParseIndexes(input, indexes, maxIndexCount);
+{
+uglyf("Got index count of %d, values:", indexCount);
+int i;
+for (i=0; i<indexCount; ++i)
+    uglyf(" %d", indexes[i]);
+uglyf("\n");
+}
+
+if (indexCount > 0)
+    {
+    int i;
+    for (i=0; i<indexCount; ++i)
+	indexes[i] += 1;
+    struct dyString *withIncs = dyStringNew(0);
+    char *incString = tagSchemaInsertIndexes(withBrackets->string, 
+	indexes, indexCount, withIncs);
+    printf("%s -> %s\n", input, incString);
+    }
+else
+    printf("%s has no array index subfields\n", input);
 }
 
 int main(int argc, char *argv[])

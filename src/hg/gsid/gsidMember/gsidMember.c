@@ -195,7 +195,7 @@ void appendSqlField(struct dyString* dy, char *varName, struct cgiVar *cgiVars)
 {
 boolean isFirstField = dy->stringSize == 0;
 if (isFirstField)
-    sqlDyStringAppend(dy,"insert into transactions set ");
+    sqlDyStringPrintf(dy,"insert into transactions set ");
 
 sqlDyStringPrintf(dy,"%-s%s='%s'",
     isFirstField ? "" : ", ",

@@ -255,7 +255,7 @@ int makeNewEmptySubmitRecord(struct sqlConnection *conn, char *submitUrl, unsign
 /* Create a submit record around URL and return it's id. */
 {
 struct dyString *query = dyStringNew(0);
-sqlDyStringAppend(query, "insert cdwSubmit (url, startUploadTime, userId, wrangler) ");
+sqlDyStringPrintf(query, "insert cdwSubmit (url, startUploadTime, userId, wrangler) ");
 sqlDyStringPrintf(query, "VALUES('%s', %lld,  %d, '%s')", submitUrl, cdwNow(), 
 	    userId, getenv("USER"));
 sqlUpdate(conn, query->string);
@@ -269,8 +269,8 @@ int makeNewEmptyFileRecord(struct sqlConnection *conn, unsigned userId,
 /* Make a new, largely empty, record around file and submit info. */
 {
 struct dyString *query = dyStringNew(0);
-sqlDyStringAppend(query, "insert cdwFile (submitId, submitDirId, userId, submitFileName, size) ");
-dyStringPrintf(query, "VALUES(%u, %u, %u, '%s', %lld)", 
+sqlDyStringPrintf(query, "insert cdwFile (submitId, submitDirId, userId, submitFileName, size) ");
+sqlDyStringPrintf(query, "VALUES(%u, %u, %u, '%s', %lld)", 
     submitId, submitDirId, userId, submitFileName, size);
 sqlUpdate(conn, query->string);
 dyStringFree(&query);
@@ -397,7 +397,8 @@ ef->startUploadTime = cdwNow();
 verbose(3, "cdwFile=%s\n", cdwFile);
 verbose(3, "copyFile submitFileName=%s to cdwPath=%s\n", ef->submitFileName, cdwPath);
 copyFile(ef->submitFileName, cdwPath);
-// and owner can chmod it
+// and owner can touch and chmod it
+touchFileFromFile(ef->submitFileName, cdwPath); // preserve mtime.
 chmod(cdwPath, 0444);
 
 // save space by finding the last real file in symlinks chain
@@ -429,9 +430,8 @@ sqlDyStringPrintf(dy, "update cdwFile set "
        , ef->cdwFileName, ef->startUploadTime, ef->endUploadTime
        , ef->md5, ef->size, ef->updateTime, ef->metaTagsId
        , ef->userAccess, ef->groupAccess, ef->allAccess);
-dyStringAppend(dy, ", tags='");
-dyStringAppend(dy, ef->tags);
-dyStringPrintf(dy, "' where id=%d", ef->id);
+sqlDyStringPrintf(dy, ", tags='%s'", ef->tags);
+sqlDyStringPrintf(dy, " where id=%d", ef->id);
 sqlUpdate(conn, dy->string);
 
 /* We also will add file to the group */
@@ -501,7 +501,8 @@ if (!isEmpty(tagsString))
 
 
 char **row;
-struct sqlResult *sr = sqlGetResult(conn, NOSQLINJ "select * from cdwSubscriber order by runOrder,id");
+sqlSafef(query, sizeof(query), "select * from cdwSubscriber order by runOrder,id");
+struct sqlResult *sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct cdwSubscriber *subscriber = cdwSubscriberLoad(row);
@@ -574,7 +575,7 @@ if (startsWith("bed_", format))
 return cdwIsSupportedBigBedFormat(format);
 }
 
-void prefetchChecks(char *format, char *fileName)
+void prefetchChecks(char *format, char *fileName, char *submitDir)
 /* Perform some basic format checks. */
 {
 if (sameString(format, "fastq") || sameString(format, "vcf"))
@@ -582,6 +583,19 @@ if (sameString(format, "fastq") || sameString(format, "vcf"))
     if (!cdwIsGzipped(fileName))
         errAbort("%s file %s must be gzipped", format, fileName);
     }
+
+// Aborts early if fileName points to a file already under cdwRootDir
+char *path = testOriginalSymlink(fileName, submitDir);  
+
+// check if parent dir is writable, needed for symlinking
+char dir[PATH_LEN];
+splitPath(path, dir, NULL, NULL);
+if (sameString(dir, ""))
+    safecpy(dir, PATH_LEN, ".");
+if (access(dir, R_OK | W_OK) == -1)
+    errnoAbort("%s directory must be writable to enable symlinking.", dir);
+
+freeMem(path);
 }
 
 void getSubmittedFile(struct sqlConnection *conn, char *format,
@@ -602,7 +616,7 @@ if (errCatchStart(errCatch))
     int fd = cdwOpenAndRecordInDir(conn, submitDir, ef->submitFileName, submitUrl,
 	&hostId, &submitDirId);
 
-    prefetchChecks(format, ef->submitFileName);
+    prefetchChecks(format, ef->submitFileName, submitDir);
     verbose(1, "copying %s\n", ef->submitFileName);
     int fileId = cdwFileFetch(conn, ef, fd, submitDir, submitUrl, submitId, submitDirId, hostId, user,
 	table, row, metaIx, metaHash);
@@ -857,6 +871,7 @@ char cdwFile[PATH_LEN] = "", cdwPath[PATH_LEN];
 cdwMakeFileNameAndPath(fileId, submitFileName,  cdwFile, cdwPath);
 long long startUploadTime = cdwNow();
 copyFile(submitFileName, cdwPath);
+touchFileFromFile(submitFileName, cdwPath);
 chmod(cdwPath, 0444);
 long long endUploadTime = cdwNow();
 
@@ -952,9 +967,7 @@ int metaTagsId = sqlQuickNum(conn, query->string);
 if (metaTagsId == 0)
     {
     dyStringClear(query);
-    sqlDyStringAppend(query, "insert cdwMetaTags (tags,md5) values('");
-    dyStringAppend(query, cgi->string);
-    dyStringPrintf(query, "', '%s')", md5);
+    sqlDyStringPrintf(query, "insert cdwMetaTags (tags,md5) values('%s','%s')", cgi->string, md5);
     sqlUpdate(conn, query->string);
     metaTagsId = sqlLastAutoId(conn);
     }

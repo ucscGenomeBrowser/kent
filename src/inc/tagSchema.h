@@ -41,6 +41,22 @@ char *tagSchemaFigureArrayName(char *tagName, struct dyString *scratch);
  *      person.12.cars.1 becomes person.[].cars.[]
  */
 
+int tagSchemaParseIndexes(char *input, int indexes[], int maxIndexCount);
+/* This will parse out something that looks like:
+ *     this.array.2.subfield.subarray.3.name
+ * into
+ *     2,3   
+ * Where input is what we parse,   indexes is an array maxIndexCount long
+ * where we put the numbers. */
+
+char *tagSchemaInsertIndexes(char *bracketed, int indexes[], int indexCount,
+    struct dyString *scratch);
+/* Convert something that looks like:
+ *     this.array.[].subfield.subarray.[].name and 2,3
+ * into
+ *     this.array.2.subfield.subarray.3.name
+ * The scratch string holds the return value. */
+
 #endif /* TAGSCHEMA_H */
 
 

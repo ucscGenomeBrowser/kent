@@ -241,7 +241,7 @@ int makeNewEmptySubmitRecord(struct sqlConnection *conn, char *submitUrl, unsign
 /* Create a submit record around URL and return it's id. */
 {
 struct dyString *query = dyStringNew(0);
-sqlDyStringAppend(query, "insert edwSubmit (url, startUploadTime, userId) ");
+sqlDyStringPrintf(query, "insert edwSubmit (url, startUploadTime, userId) ");
 sqlDyStringPrintf(query, "VALUES('%s', %lld,  %d)", submitUrl, edwNow(), userId);
 sqlUpdate(conn, query->string);
 dyStringFree(&query);
@@ -253,8 +253,8 @@ int makeNewEmptyFileRecord(struct sqlConnection *conn, unsigned submitId, unsign
 /* Make a new, largely empty, record around file and submit info. */
 {
 struct dyString *query = dyStringNew(0);
-sqlDyStringAppend(query, "insert edwFile (submitId, submitDirId, submitFileName, size) ");
-dyStringPrintf(query, "VALUES(%u, %u, '%s', %lld)", submitId, submitDirId, submitFileName, size);
+sqlDyStringPrintf(query, "insert edwFile (submitId, submitDirId, submitFileName, size) ");
+sqlDyStringPrintf(query, "VALUES(%u, %u, '%s', %lld)", submitId, submitDirId, submitFileName, size);
 sqlUpdate(conn, query->string);
 dyStringFree(&query);
 return sqlLastAutoId(conn);

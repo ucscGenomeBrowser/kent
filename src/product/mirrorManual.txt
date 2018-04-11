@@ -9,6 +9,7 @@
 * MySQL development system and libraries - <http://dev.mysql.com/>
 * libpng runtime and development packages - <http://www.libpng.org/>
 * libssl runtime and development packages - <http://www.openssl.org/>
+* Universally Unique Identifier library - <http://e2fsprogs.sourceforge.net/>
 
 Optional:
 
@@ -21,8 +22,8 @@ Optional:
 It is best to install these packages with your standard operating
 system package management tools:
 
-* Debian/Ubuntu: `apt-get install ghostscript apache2 mysql-server gmt r-base`
-* Redhat/Fedora/CentOS: `yum install libpng12 httpd ghostscript GMT hdf5 R`
+* Debian/Ubuntu: `apt-get install ghostscript apache2 mysql-server gmt r-base uuid-dev`
+* Redhat/Fedora/CentOS: `yum install libpng12 httpd ghostscript GMT hdf5 R libuuid-devel`
 
 # Hardware and disk space requirements
 

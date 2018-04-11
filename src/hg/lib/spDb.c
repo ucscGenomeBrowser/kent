@@ -465,7 +465,7 @@ struct spFeature *list = NULL, *el;
 char **row;
 struct sqlResult *sr;
 
-sqlDyStringAppend(dy, 
+sqlDyStringPrintf(dy, 
 	"select start,end,featureClass,featureType,softEndBits from feature ");
 sqlDyStringPrintf(dy, 
         "where acc = '%s'", acc);

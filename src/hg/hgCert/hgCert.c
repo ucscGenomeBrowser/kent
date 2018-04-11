@@ -35,7 +35,6 @@ char *doLine(char *lineType, char *lineIn)
 
 char *doLine2(char *lineIn, char *lineType)
     {
-    char *result;
     char *chp;
     char line[1000];
 
@@ -58,14 +57,11 @@ char *doLine2(char *lineIn, char *lineType)
 
 int main(int argc, char *argv[])
 {
-char **p;
-char *arg0, *infileName;
+char *infileName;
 
 FILE *inf, *outf;
-char line[1000], line2[1000];
+char line[1000];
 
-char *id;
-char *chp;
 
 char *content;
 char *contact="";
@@ -92,7 +88,7 @@ else
     infileName = argv[1];
 
     fprintf(stdout, "<HTML><HEAD><TITLE>Non-standard Join Certificates</TITLE>\n");
-    fprintf(stdout, "<META http-equiv=Content-Type content=\"text/html; charset=windows-1252\">\n");
+    fprintf(stdout, "<META http-equiv=Content-Type content=\"text/html; charset=iso-8859-1\">\n");
     fprintf(stdout, "<META content=\"MSHTML 6.00.2800.1106\" name=GENERATOR></HEAD>\n");
     fprintf(stdout, "<BODY><span style='font-family:Arial;'>\n");
 

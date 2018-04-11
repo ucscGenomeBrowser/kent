@@ -7,6 +7,7 @@ DIFF = diff -u
 hg38Genome = /hive/data/genomes/hg38/hg38.2bit
 
 test: refSeqTest refSeqSuffixTest includeStopTest starForInframeStopsTest translateSelnoTest combinedStopOptionsTest
+	${MAKE} clean
 
 refSeqTest: mkout
 	${genePredToProt} input/refseq.grch38.gp ${hg38Genome} output/$@.prot.fa -cdsFa=output/$@.cds.fa

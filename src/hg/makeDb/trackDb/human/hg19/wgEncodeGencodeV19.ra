@@ -178,6 +178,15 @@ searchPriority 2.27805
 xrefTable wgEncodeGencodeAttrsV19
 xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
 
+searchName wgEncodeGencodeBasicProtV19
+searchTable wgEncodeGencodeBasicV19
+searchMethod prefix
+searchType genePred
+termRegex ENSP[0-9.]+
+searchPriority 2.27007
+xrefTable wgEncodeGencodeAttrsV19
+xrefQuery select transcriptId,proteinId from %s where proteinId like '%s%%'
+
 # searchs for comp
 searchName wgEncodeGencodeCompV19
 searchTable wgEncodeGencodeCompV19
@@ -219,6 +228,15 @@ termRegex OTTHUMG[0-9.]+
 searchPriority 2.27810
 xrefTable wgEncodeGencodeAttrsV19
 xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
+
+searchName wgEncodeGencodeCompProtV19
+searchTable wgEncodeGencodeCompV19
+searchMethod prefix
+searchType genePred
+termRegex ENSP[0-9.]+
+searchPriority 2.27013
+xrefTable wgEncodeGencodeAttrsV19
+xrefQuery select transcriptId,proteinId from %s where proteinId like '%s%%'
 
 # searchs for pseudogene
 searchName wgEncodeGencodePseudoGeneV19

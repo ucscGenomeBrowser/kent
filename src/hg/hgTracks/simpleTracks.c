@@ -144,6 +144,7 @@
 #include "bedTabix.h"
 #include "knetUdc.h"
 #include "trackHub.h"
+#include "hubConnect.h"
 
 #define CHROM_COLORS 26
 
@@ -9253,92 +9254,6 @@ struct linkedFeatures *lf = item;
 return getSeqColorDefault(lf->name, hvg, tg->ixColor);
 }
 
-Color interactionColor(struct track *tg, void *item, struct hvGfx *hvg)
-{
-struct linkedFeatures *lf = item;
-return  tg->colorShades[lf->grayIx];
-
-#ifdef NOTNOW  // leaving this in the code in case we want chrom color again
-
-char *name = tg->itemName(tg, item);
-struct linkedFeatures *lf = item;
-if (slCount(lf->components) == 2)
-    return MG_BLACK;
-return getSeqColorDefault(name, hvg, tg->ixColor);
-#endif
-}
-
-void interactionLeftLabels(struct track *tg, int seqStart, int seqEnd,
-	struct hvGfx *hvg, int xOff, int yOff, int width, int height,
-	boolean withCenterLabels, MgFont *font, Color color,
-	enum trackVisibility vis)
-{
-/*
-struct linkedFeatures *lf, *lfList = track->items;
-for (lf = lfList; lf != NULL; lf = lf->next)
-    {
-    if (tg->itemLabelColor != NULL)
-	color = tg->itemLabelColor(track, lf, hvg);
-    int itemHeight = tg->itemHeight(track, lf);
-    hvGfxTextRight(hvg, xOff, y, width - 1,
-	itemHeight, color, font, tg->itemName(tg, lf));
-    }
-    track->bigBedraLeftLabels = bigBedLeftLabels;
-    */
-}
-
-void interactionLoad(struct track *tg)
-{
-loadGappedBed(tg);
-}
-
-char *interactionName(struct track *tg, void *item)
-{
-struct linkedFeatures *lf = item;
-if (slCount(lf->components) == 2)
-    return "";
-
-char buffer[10 * 1024], *name = buffer;
-safef(buffer, sizeof buffer, "%s", lf->name);
-char *ptr;
-
-if (startsWith(chromName, buffer))
-    {
-    name = strchr(buffer,'-');
-    name++;
-    ptr = strchr(name,':');
-    *ptr = 0;
-    }
-else
-    {
-    ptr = strchr(buffer,':');
-    *ptr = 0;
-    }
-
-return cloneString(name);
-}
-
-void interactionMethods(struct track *tg)
-{
-tg->freeItems = linkedFeaturesFreeItems;
-tg->drawItems = linkedFeaturesDraw;
-tg->drawItemAt = linkedFeaturesDrawAt;
-tg->mapItemName = linkedFeaturesName;
-tg->totalHeight = tgFixedTotalHeightNoOverflow;
-tg->itemHeight = tgFixedItemHeight;
-tg->itemStart = linkedFeaturesItemStart;
-tg->itemEnd = linkedFeaturesItemEnd;
-tg->itemNameColor = linkedFeaturesNameColor;
-tg->nextPrevExon = linkedFeaturesNextPrevItem;
-tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
-tg->loadItems = interactionLoad;
-tg->itemName = interactionName;
-tg->itemColor = interactionColor;
-tg->itemNameColor = linkedFeaturesNameColor;
-//tg->drawLeftLabels = interactionLeftLabels;
-tg->canPack = TRUE;
-}
-
 #ifndef GBROWSE
 void loadRnaGene(struct track *tg)
 /* Load up rnaGene from database table to track items. */
@@ -13849,6 +13764,7 @@ else if (sameWord(type, "longTabix"))
     char *words[2];
     words[0] = type;
     words[1] = "5";
+    knetUdcInstall();
     complexBedMethods(track, tdb, FALSE, 2, words);
     longRangeMethods(track, tdb);
     if (trackShouldUseAjaxRetrieval(tg))
@@ -13883,6 +13799,11 @@ else if (sameWord(type, "bigBarChart"))
     tdb->canPack = TRUE;
     track->isBigBed = TRUE;
     barChartMethods(track);
+    }
+else if (sameWord(type, "bigInteract"))
+    {
+    track->isBigBed = TRUE;
+    interactMethods(track);
     }
 else if (sameWord(type, "bigNarrowPeak"))
     {
@@ -14105,10 +14026,6 @@ else if (sameWord(type, "bamWig"))
     {
     bamWigMethods(track, tdb, wordCount, words);
     }
-else if (sameWord(type, "interaction"))
-    {
-    interactionMethods(track);
-    }
 else if (sameWord(type, "gvf"))
     {
     gvfMethods(track);
@@ -14116,6 +14033,10 @@ else if (sameWord(type, "gvf"))
 else if (sameWord(type, "barChart"))
     {
     barChartMethods(track);
+    }
+else if (sameWord(type, "interact"))
+    {
+    interactMethods(track);
     }
 /* add handlers for wildcard */
 if (startsWith("peptideAtlas", track->track))
@@ -14189,12 +14110,27 @@ const struct track *b = *((struct track **)vb);
 return (a->priority - b->priority);
 }
 
-void buildMathWig(struct trackDb *tdb)
-/* Turn a mathWig view into a mathWig track. */
-{
-char *viewFunc =  trackDbSetting(tdb, "viewFunc");
 
-if ((viewFunc == NULL) || sameString("show all", viewFunc))
+static bool isSubtrackVisibleTdb(struct cart *cart, struct trackDb *tdb)
+/* Has this subtrack not been deselected in hgTrackUi or declared with
+ *  * "subTrack ... off"?  -- assumes composite track is visible. */
+{
+boolean overrideComposite = (NULL != cartOptionalString(cart, tdb->track));
+bool enabledInTdb = TRUE; // assume that this track is enabled in tdb
+char option[1024];
+safef(option, sizeof(option), "%s_sel", tdb->track);
+boolean enabled = cartUsualBoolean(cart, option, enabledInTdb);
+if (overrideComposite)
+    enabled = TRUE;
+return enabled;
+}
+
+void buildMathWig(struct trackDb *tdb)
+/* Turn a mathWig composite into a mathWig track. */
+{
+char *aggregateFunc = cartOrTdbString(cart, tdb, "aggregate" , FALSE);
+
+if ((aggregateFunc == NULL) || !(sameString("add", aggregateFunc) || sameString("subtract", aggregateFunc)))
     return;
 
 struct trackDb *subTracks = tdb->subtracks;
@@ -14204,23 +14140,45 @@ tdb->type = "mathWig";
 
 struct dyString *dy = newDyString(1024);
 
-if (sameString("add all", viewFunc))
+if (sameString("add", aggregateFunc))
     dyStringPrintf(dy, "+ ");
-else
+else // subtract
     dyStringPrintf(dy, "- ");
 struct trackDb *subTdb;
 for (subTdb=subTracks; subTdb; subTdb = subTdb->next)
     {
+    if (!isSubtrackVisibleTdb(cart, subTdb) )
+        continue;
+
     char *bigDataUrl = trackDbSetting(subTdb, "bigDataUrl");
+    char *useDb;
+    char *table;
     if (bigDataUrl != NULL)
         dyStringPrintf(dy, "%s ",bigDataUrl);
-    else // native tracks are prepended with '$'
-        dyStringPrintf(dy, "$%s ",subTdb->track);
+    else 
+        {
+        if (isCustomTrack(trackHubSkipHubName(subTdb->track)))
+            {
+            useDb = CUSTOM_TRASH;
+            table = trackDbSetting(subTdb, "dbTableName");
+            }
+        else
+            {
+            useDb = database;
+            table = trackDbSetting(subTdb, "table");
+            }
+
+        if (startsWith("bedGraph", subTdb->type))
+            dyStringPrintf(dy, "^%s.%s ",useDb, table);
+        else
+            dyStringPrintf(dy, "$%s.%s ",useDb, table);
+        }
     }
 
 hashAdd(tdb->settingsHash, "mathDataUrl", dy->string);
 }
 
+#ifdef NOTNOW   /// for the moment, mathWigs are made at the composite level.  Since we may go back to having them at the view level I'm leaving this in
 void fixupMathWigs(struct trackDb *tdb)
 /* Look through a container to see if it has a mathWig view and convert it. */
 {
@@ -14238,12 +14196,13 @@ for(subTdb = tdb->subtracks; subTdb; subTdb = subTdb->next)
         }
     }
 }
+#endif
 
 void makeCompositeTrack(struct track *track, struct trackDb *tdb)
 /* Construct track subtrack list from trackDb entry.
  * Sets up color gradient in subtracks if requested */
 {
-fixupMathWigs(tdb);
+buildMathWig(tdb);
 unsigned char finalR = track->color.r, finalG = track->color.g,
                             finalB = track->color.b;
 unsigned char altR = track->altColor.r, altG = track->altColor.g,
@@ -14366,11 +14325,21 @@ if (sameWord(tdb->track, "ensGene"))
     }
 else if (startsWith("ncbiRef", tdb->track))
     {
-    struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
-    if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
+    char *version = checkDataVersion(database, tdb);
+
+    // if not in that file, check the trackVersion table
+    if (version == NULL)
+	{
+	struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
+	if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
+	    {
+	    version = cloneString(trackVersion->version);
+	    }
+	}
+    if (version)
 	{
 	char longLabel[1024];
-	safef(longLabel, sizeof(longLabel), "%s - Annotation Release %s", tdb->longLabel, trackVersion->version);
+	safef(longLabel, sizeof(longLabel), "%s - Annotation Release %s", tdb->longLabel, version);
 	track->longLabel = cloneString(longLabel);
 	tdb->longLabel = cloneString(longLabel);
 	}

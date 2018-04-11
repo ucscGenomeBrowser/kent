@@ -48,6 +48,7 @@
 #include "htmshell.h"
 #include "bigBedFind.h"
 #include "customComposite.h"
+#include "interactUi.h"
 
 static struct hash *hubCladeHash;  // mapping of clade name to hub pointer
 static struct hash *hubAssemblyHash; // mapping of assembly name to genome struct
@@ -362,7 +363,7 @@ if (groupFileName == NULL)
     return NULL;
 struct hash *ra;
 struct grp *list = NULL;
-struct lineFile *lf = udcWrapShortLineFile(groupFileName, NULL, 16*1024*1024);
+struct lineFile *lf = udcWrapShortLineFile(groupFileName, NULL, MAX_HUB_GROUP_FILE_SIZE);
 while ((ra = raNextRecord(lf)) != NULL)
     {
     struct grp *grp;
@@ -486,7 +487,7 @@ static struct trackHubGenome *trackHubGenomeReadRa(char *url, struct trackHub *h
 /* Read in a genome.ra format url and return it as a list of trackHubGenomes. 
  * Also add it to hash, which is keyed by genome. */
 {
-struct lineFile *lf = udcWrapShortLineFile(url, NULL, 64*1024*1024);
+struct lineFile *lf = udcWrapShortLineFile(url, NULL, MAX_HUB_GENOME_FILE_SIZE);
 struct trackHubGenome *list = NULL, *el;
 struct hash *hash = hub->genomeHash;
 
@@ -615,7 +616,7 @@ struct trackHub *hub = grabHashedHub(hubName);
 if (hub != NULL)
     return hub;
 
-struct lineFile *lf = udcWrapShortLineFile(url, NULL, 256*1024);
+struct lineFile *lf = udcWrapShortLineFile(url, NULL, MAX_HUB_TRACKDB_FILE_SIZE);
 struct hash *hubRa = raNextRecord(lf);
 if (hubRa == NULL)
     errAbort("empty %s in trackHubOpen", url);
@@ -800,7 +801,7 @@ else
     {
     /* Check type field. */
     char *type = requiredSetting(hub, genome, tdb, "type");
-    if (!( isCustomComposite(tdb) && (startsWithWord("wig", type) ||  startsWithWord("bedGraph", type))))
+    if (! isCustomComposite(tdb))
         {
         if (startsWithWord("mathWig", type) )
             {
@@ -824,6 +825,7 @@ else
                   startsWithWord("bigNarrowPeak", type) ||
                   startsWithWord("bigChain", type) ||
                   startsWithWord("bigBarChart", type) ||
+                  startsWithWord("bigInteract", type) ||
                   startsWithWord("bam", type)))
                     {
                     errAbort("Unsupported type '%s' in hub %s genome %s track %s", type,
@@ -850,7 +852,11 @@ struct trackDb *tdb;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     if (hashLookup(hash, tdb->track))
-        errAbort("Track %s appears more than once in genome %s.", tdb->track, genome->name);
+        errAbort("Track %s appears more than once in genome %s. " 
+                "Track identifiers have to be unique. Please check your track hub files, "
+                "especially the 'track' lines. "
+                "The most likely reason for this error is that you duplicated a "
+                "'track' identifier.", tdb->track, genome->name);
     hashAdd(hash, tdb->track, tdb);
     }
 
@@ -911,7 +917,7 @@ struct trackDb *trackHubTracksForGenome(struct trackHub *hub, struct trackHubGen
 /* Get list of tracks associated with genome.  Check that it only is composed of legal
  * types.  Do a few other quick checks to catch errors early. */
 {
-struct lineFile *lf = udcWrapShortLineFile(genome->trackDbFile, NULL, 64*1024*1024);
+struct lineFile *lf = udcWrapShortLineFile(genome->trackDbFile, NULL, MAX_HUB_TRACKDB_FILE_SIZE);
 struct trackDb *tdbList = trackDbFromOpenRa(lf, NULL);
 lineFileClose(&lf);
 

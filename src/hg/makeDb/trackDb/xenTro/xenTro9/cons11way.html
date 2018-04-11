@@ -73,8 +73,8 @@ The species aligned for this track include 11 genome sequences.
     Mar. 2015 (BGI_ZX_2015/nanPar1)</td><td><a href="../cgi-bin/hgTracks?db=nanPar1"
     target=_blank>Mar. 2015 (BGI_ZX_2015/nanPar1)</a></td><td>Reciprocal Best Net</td></tr>
 <tr align=left><td>Painted turtle</td><td>Chrysemys picta bellii</td><td>
-    Mar. 2014 (v3.0.3/chrPic2)</td><td><a href="../cgi-bin/hgTracks?db=chrPic2"
-    target=_blank>Mar. 2014 (v3.0.3/chrPic2)</a></td><td>Reciprocal Best Net</td></tr>
+    Mar. 2014 (v3.0.3/chrPic2)</td><td><a href="http://genome-preview.soe.ucsc.edu/cgi-bin/hgTracks?db=chrPic2"
+    target=_blank>Mar. 2014 (v3.0.3/chrPic2)</a>(Preview Browser)</td><td>Reciprocal Best Net</td></tr>
 <tr align=left><td>Chicken</td><td>Gallus gallus</td><td>
     Dec 2015 (Gallus_gallus-5.0/galGal5)</td><td><a href="../cgi-bin/hgTracks?db=galGal5"
     target=_blank>Dec 2015 (Gallus_gallus-5.0/galGal5)</a></td><td>Syntenic Net</td></tr>
@@ -225,7 +225,7 @@ Pairwise alignments were then linked into chains using a dynamic programming
 algorithm that finds maximally scoring chains of gapless subsections
 of the alignments organized in a kd-tree.
 All pairwise alignment and chaining parameters are the same for all pairs.
-See also: <a href="http://genomewiki.ucsc.edu/index.php/XenTro9-11-way_Genome_size_statistics"
+See also: <a href="http://genomewiki.ucsc.edu/index.php/XenTro9_11-way_Genome_size_statistics"
 target=_blank>X. tropicalis 11-way alignment</a> parameters.
 High-scoring chains were then placed along the genome, with
 gaps filled by lower-scoring chains, to produce an alignment net.
@@ -256,7 +256,7 @@ branch lengths representing evolutionary distance at neutrally
 evolving sites, the background distribution of nucleotides, and a substitution
 rate matrix.  The 
 <a href="http://hgdownload.soe.ucsc.edu/goldenPath/xenTro9/phastCons11way/xenTro9.phastCons11way.mod"
-target=_blank>nematode tree model</a> for this track was
+target=_blank>tree model</a> for this track was
 generated using the <em>phyloFit</em> program from the PHAST package  
 (REV model, EM algorithm, medium precision) using multiple alignments of 
 4-fold degenerate sites extracted from the 11-way alignment
@@ -287,7 +287,7 @@ phastCons can be found in Siepel <em>et al</em>. 2005.</p>
 The phastCons parameters were tuned to produce approximately 70% conserved
 elements in the $Organism NCBI RefSeq gene coding regions.
 This parameter set (expected-length=45, target-coverage=0.3, rho=0.3) was
-then used to generate the nematode and caenorhabditis conservation scoring.</p>
+then used to generate the conservation scoring.</p>
 
 <h3> PhyloP Conservation </h3>
 <p>
@@ -337,8 +337,6 @@ by Richard Burhans, Penn State; genePredToMafFrames by Mark Diekhans, UCSC
 <li> Conservation track display: Kate Rosenbloom, Hiram Clawson (wiggle 
 display), and Brian Raney (gap annotation and codon framing) at UCSC
 </ul>
-</p>
-<p>The phylogenetic tree is based on Kiontke <em>et al</em>. (2007).
 </p>
 
 <h2>References</h2>
@@ -437,13 +435,4 @@ target="_blank">Human-mouse alignments with BLASTZ</a>.
 <em>Genome Res</em>. 2003 Jan;13(1):103-7.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/12529312" target="_blank">12529312</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC430961/" target="_blank">PMC430961</a>
-</p>
-
-<h3>Phylogenetic Tree:</h3>
-<p>
-Kiontke K, Barri&#232;re A, Kolotuev I, Podbilewicz B, Sommer R, Fitch DH, F&#233;lix MA.
-<a href="http://www.sciencedirect.com/science/article/pii/S0960982207021938" target="_blank">
-Trends, stasis, and drift in the evolution of nematode vulva development</a>.
-<em>Curr Biol</em>. 2007 Nov 20;17(22):1925-37.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/18024125" target="_blank">18024125</a>
 </p>

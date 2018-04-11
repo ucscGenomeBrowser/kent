@@ -49,6 +49,7 @@
 #include "gtexUi.h"
 #include "genbank.h"
 #include "botDelay.h"
+#include "customComposite.h"
     
 #ifdef USE_HAL 
 #include "halBlockViz.h"
@@ -3154,14 +3155,23 @@ if (sameWord(tdb->track,"ensGene"))
     }
 else if (sameWord(tdb->track, "refSeqComposite"))
     {
-    struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
     char longLabel[1024];
-    if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
+    char *version = checkDataVersion(database, tdb);
+
+    if (version)
 	{
-	safef(longLabel, sizeof(longLabel), "%s - Annotation Release %s", tdb->longLabel, trackVersion->version);
+	safef(longLabel, sizeof(longLabel), "%s - Annotation Release %s", tdb->longLabel, version);
 	}
     else
-        safef(longLabel, sizeof(longLabel), "%s", tdb->longLabel);
+	{
+	struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
+	if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
+	    {
+	    safef(longLabel, sizeof(longLabel), "%s - Annotation Release %s", tdb->longLabel, trackVersion->version);
+	    }
+	else
+	    safef(longLabel, sizeof(longLabel), "%s", tdb->longLabel);
+	}
     printf("<B style='font-size:200%%;'>%s%s</B>\n", longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
     }
 else
@@ -3280,6 +3290,11 @@ if (!tdbIsDownloadsOnly(tdb))
 	    jsOnEventByIdF("click", "htui_reset",
                    "setVarAndPostForm('%s','1','mainForm'); return false;", setting);
 	    }
+        if ( isCustomComposite(tdb))
+            {
+            printf("\n&nbsp;&nbsp;<a href='%s' >Go to Track Collection Builder</a>\n", hgCollectionName());
+            }
+
         }
 
     if (ct)

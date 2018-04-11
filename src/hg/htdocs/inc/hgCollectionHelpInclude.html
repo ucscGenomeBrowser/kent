@@ -1,0 +1,281 @@
+<!-- This file appears as an 'include' in hgCollectionHelp.html -->
+
+<h2>Contents</h2>
+  
+<h6><a href="#Intro">Introduction</a></h6>
+  <ul>
+    <li><h5><a href="#Video">Quick video demo</a></h5></li>
+    <li><h5><a href="#SupportedData">Supported Data Types</a></h5></li>
+    <li><h5><a href="#TrackSources">Track Sources</a></h5></li>
+  </ul>
+<h6><a href="#GetStarted">Getting Started</a></h6>
+  <ul>
+      <li><a href="#AddCollection">Create a new collection</a></li>
+      <li><a href="#AddTracks">Add tracks to a collection</a></li>
+      <li><a href="#BrowserOptions">Browser viewing options</a></li>
+      <li><a href="#Configure">Configure collection</a></li>
+      <li><a href="#SaveAndShare">Saving and sharing collections</a></li>
+  </ul>
+<h6><a href="#Support">Resources and Support</a></h6>
+
+<a name="Intro"></a>	
+<h2>Introduction</h2> 
+
+<p>The <a href="../cgi-bin/hgCollection">Track Collection Builder</a> (My Data > Track Collection 
+Builder) is a tool that allows multiple tracks to be copied and grouped together into one composite 
+track</a> or &quot;collection.&quot; A 
+<a href="../goldenPath/help/trackDb/trackDbHub.html#compositeTrack" target="_blank" >composite 
+track</a> can be thought of as a container for grouping a set of similar-type annotation tracks.
+</p> 
+<a name="Video"></a>
+<h3> Quick video demo</h3>
+<p>Two-minute video: <a href="https://www.youtube.com/watch?v=2_RiIY07omY" target="_blank">
+Track Collection Builder - Demo</a></p>
+<a name="SupportedData"></a>
+<h3>Supported Data Types</h3> 
+<p>
+Only the following continuous-value graphing track types can be added to a collection:</p>
+  <ul>
+    <li><a href="../goldenpath/help/wiggle.html" target="_blank">Wiggle Track Format (WIG)</a></li>
+    <li><a href="../goldenpath/help/bigWig.html" target="_blank">bigWig Track Format</a></li>
+    <li><a href="../goldenpath/help/bedgraph.html" target="_blank">bedGraph Track Format</a></li>
+  </ul>
+
+<a name="TrackSources"></a>
+<h3>Track Sources</h3>
+<p>
+Supported tracks from the following sources can be added to a <i>single</i> genome browser:</p>
+  <ul>
+    <li>Native tracks (tracks natively hosted by the UCSC Genome Browser).</li>
+    <li><a href="/goldenpath/help/customTrack.html" target="_blank">Custom tracks </a>
+    (user-generated).</li>
+    <li><a href="/goldenPath/help/hgTrackHubHelp.html#Intro" target="_blank">Hub tracks</a>
+    from your own <a href="/goldenPath/help/hgTrackHubHelp.html#View" target="_blank">
+    unlisted hub</a>.</li>
+    <li><a href="/goldenPath/help/hgTrackHubHelp.html#Intro" target="_blank">Hub tracks</a>
+    from any <a href="../cgi-bin/hgHubConnect" target="_blank">public hub</a>.</li>
+  </ul>
+          
+<a name="GetStarted"></a>
+<h2>Getting Started</h2>
+
+<a name="AddCollection"></a>
+<h3>Step 1: Create a new collection</h3>  
+<p>
+The &quot;Collected Tracks&quot; top right pane displays all created collections.</p>
+  <ul>
+    <li>Click the <button type="button">Add Collection</button> button to make a new collection.
+    </li> 
+    <li>On creation, enter a name, description and optional graph color in the pop-up box. </li>
+    <li>Once saved, double-click a collection's folder icon to edit the name, description, and 
+  subtrack colors.</li> 
+    <li>See 'Step 2' below to add/remove tracks.</li>
+    <li>To remove a collection: select it, right-click (or select multiple, 'command + click', 
+    'shift + click') and click <button type="button">Delete</button>.</li>
+    <li>Collection changes are saved after going to the browser window. To remove changes since the 
+    last save, click <button type="button">Discard Changes</button> (upper right).
+    </li> 
+    <li>Click <button class="gbButtonGo" type="button">GO</button> (upper right) to see collections 
+    in the browser.</li>
+    <li>From the browser, right-click to configure the collection (see 'Step 3' below).</li>
+  </ul>
+
+<a name="AddTracks"></a>
+<h3>Step 2: Add tracks to a collection</h3> 
+<p>
+The 'Available Tracks' top left pane displays all available graphing tracks that can be added to 
+any collection.</p>
+  <ul>
+    <li>Available Tracks (left window pane)</li>
+    <ul>
+      <li>Click the small arrow to the left of folder icons to expand/contract tracks.</li>
+      <li>'Visible Tracks' folder: Lists tracks that are visible (not set to 'hide') in the browser.
+      </li>
+      <li>Folders below 'Visible Tracks': Lists <i>all</i> available tracks, regardless of 
+      visibility, by browser category.</li>
+    </ul>    
+  <li>Load external tracks: custom tracks &amp; hub tracks</li>
+      <ul>
+        <li>Load supported <a href="/goldenpath/help/customTrack.html" target="_blank">custom 
+        tracks</a> into the browser and select them from the 'Available Tracks' pane.</li>
+        <li>To add a track from a hub, load the hub first, and then select the track from 'Available
+        Tracks'. Collections must contain subtracks that all belong to the same assembly.</li>
+      </ul>  
+  <li>Add & remove tracks</li>
+    <ul>
+      <li>To add a track to a collection, click the green &quot;plus&quot; 
+      <i class="jstree-icon jstree-themeicon fa fa-plus jstree-themeicon-custom"></i> symbol to the 
+      left of each track, or right-click (or select multiple, 'command + click', 'shift + click') 
+      and <button type="button">Add</button>.</li>
+      <li> To remove a track from a collection, click the red &quot;minus&quot; 
+      <i class="jstree-icon jstree-themeicon fa fa-minus-square jstree-themeicon-custom"></i> symbol 
+      to the left of each track, or right-click and <button type="button">Delete</button>.
+      <li>A single track can be added/duplicated multiple times into a single collection.</li>
+      <li>A single track can be added to multiple collections, where various comparison views can be 
+      applied (see 'Step 4' below).</li>
+      <li>Drag and drop to reorder tracks within a collection.</li>
+      <li>To add tracks directly from the browser, right click on the track to see options. 
+      <p> 
+      <img src="../../images/hgCollectionRtClickAddFromBrowser.jpg" 
+      alt="hgCollectionRtClickAddFromBrowser.jpg"></p>
+      </ul>
+  </ul>
+
+<a name="BrowserOptions"></a>
+<h3>Step 3: Browser viewing options</h3>
+
+<p>
+When viewing collections within the browser, the following viewing options are 
+available:</p>
+  <ul>
+    <li><strong>Re-order collections within the browser</strong></li>
+    <p>
+    Drag and drop collections (composite tracks) <i>within the browser</i> to rearrange the order 
+    in which they appear in the browser.</p> 
+    <li><strong>Sorting by similarity</strong></li>
+    <p>
+    To sort by similarity, right-click the collection in the browser window and select 
+    <button type="button">Sort by Similarity</button>. For the given region visible in the browser 
+    window, tracks within the collection will sort in order of similarity.</p> 
+    <li><strong>Sorting by magnitude</strong></li>
+    <p>
+    To sort by magnitude, right-click the collection in the browser window and select 
+    <button type="button">Sort by Magnitude</button>. For the given region visible in the browser 
+    window, tracks within the collection will sort in order of magnitude, with the highest in 
+    magnitude at the top of the subtracks in the collection.</p>
+  </ul>
+<p>
+<strong>Tip:</strong> Displaying collection names in the browser:</p>
+
+<div class="row">
+<!-- Left column -->
+  <div class="col-md-4" >
+  <p> 
+  <img src="../../images/hgCollectionMouseOver.jpg" 
+  alt="hgCollection Mouse-over in browser window.jpg"></p>
+  </div> <!-- end left column -->
+<!-- Middle column -->
+  </br>
+  <div class="col-md-4" style="background-color:#eef0f2;">
+  <p>
+  Once a collection has been created and tracks have been added to it, click 
+  <button class="gbButtonGo" type="button">GO</button> (upper right) to view the collection in the 
+  browser window. In the browser, mouse-over the gray vertical buttons at the left window frame to 
+  see the name of each collection.</p></br>
+  </div> <!-- end middle column -->
+ <!-- Right column -->
+  <div class="col-md-4">
+  <p></p>
+  </div> <!-- end right column -->
+</div> <!-- end row --></br>
+
+<a name="Configure"></a>
+<h3>Step 4: Configure collection</h3>
+  <ul>
+    <li><strong>Track Color:</strong></li>
+    <p>
+    Track color for all subtracks in a collection can be set by double-clicking the collection 
+    folder in the right window of the Track Collection Builder, which will display a pop-up dialog 
+    box. In the pop-up, a color can be set for the subtracks in the collection. Color will be 
+    applied as a gradient to subtracks in the collection (e.g., if red is selected, the 
+    subtrack graphs will appear in varied shades of red within the browser window).</p>
+    <p>
+    To revert back to the original track color, change the color picker to '#000000'. To change the 
+    track color to black rather than any non-black original color, set the color picker to any shade 
+    of black besides '#000000', such as '#000001'. For example, if a track's original color is 
+    green, you can change it to red with the color picker. To change this track back to the original 
+    color (green), set the color picker to '#000000'. If you instead want to change that track to 
+    black, select any shade of black in the color picker, such as '#000001'.</p>
+    <p> 
+    <img src="../../images/hgCollectionClickToEditColor.jpg"  
+    alt="hgCollection double click folder icon to edit color"></p>
+    <p> 
+    <img src="../../images/hgCollectionSetColor.jpg"  
+    alt="hgCollection name, description and color pop-up editor"></p>
+    <li><strong>Merge methods (aggregate/overlay graphing view options):</strong></li>
+
+    <dl>
+      <dt>None</dt>
+      <dd>Default setting; no overlay/merge is applied. Subtracks appear as individual tracks 
+      within the collection/composite.</dd>
+      <dt>Transparent</dt>
+      <dd>Subtrack graphs are merged together with transparent overlay views.</dd> 
+      <dt>Solid</dt>
+      <dd>Subtrack graphs are merged together with solid overlay views.</dd> 
+      <dt>Stacked</dt>
+      <dd>Subtrack graphs are layered horizontally with solid overlay views for each subtrack.</dd> 
+      <dt>Add</dt>
+      <dd>Subtrack graphs are layered horizontally and merged into one solid overlay color; the 
+      silhouette of 'stacked.' For this 'add' view, there is also the option to configure how 
+      missing data are treated (see section below). </dd>
+      <dt>Subtract</dt>
+      <dd>The first (top) subtrack is subtracted from the sum of the others. Note: Re-order 
+      collection subtracks in the 'Collected Tracks' pane to change which subtract is at the top. 
+      For this 'subtract' view, there is also the option to configure how missing data are treated 
+      (see section below).</dd>
+    </dl>
+    
+    <div class="row">
+<!-- Left column -->
+      <div class="col-md-4" >
+      <p> 
+      <img src="../../images/hgCollectionMergeMethod.jpg" 
+      alt="hgCollection drop-down options for Merge Method "></p>
+      </div> <!-- end left column -->
+<!-- Middle column -->
+      </br>
+      <div class="col-md-4" style="background-color:#eef0f2;">
+      <p>Tracks in collections can be displayed with 
+      <a href="/goldenpath/help/trackDb/trackDbHub.html#multiWig" target="_blank">
+      multiWig aggregate/overlay</a> &quot;merge&quot; methods (stacked, transparent, etc.) as well 
+      as new add &amp; subtract options.</p></br>
+      </div> <!-- end middle column -->
+<!-- Right column -->
+      <div class="col-md-4">
+      <p></p>
+      </div> <!-- end right column -->
+    </div> <!-- end row --></br>
+  
+  <li><strong>Missing data treatment:</strong></li>  
+    <dl>
+      <dt>Missing=0</dt>
+      <dd>Default setting. Missing data are replaced with a 0 (zero). Graphing will be drawn at the 
+      zero point for the x-axis and y-axis (0,0). 
+      </br><i>Note: </i>Calculations (where 'Merge Method' = 'Add' or 'Subtract') will use a zero 
+      in the arithmetic.</dd>
+      <dt>Missing=missing</dt>
+      <dd>Graphing will not be drawn for missing data points. Where data are missing for any point 
+      in the calculation, the calculated result for that position point will be missing.</dd>
+    </dl> 
+  </ul>
+
+<a name="SaveAndShare"></a>
+<h3>Step 5: Saving and sharing collections</h3>
+<p>
+Collections will be available 48 hours before expiring. You must 
+<a href="../goldenPath/help/hgSessionHelp.html#Create" target="_blank">save your session</a> to 
+preserve collections long-term and to allow 
+<a href="../goldenPath/help/hgSessionHelp.html#Share" target="_blank">sharing</a>. 
+Even after saving collections and their configurations in a session, it is still highly recommended 
+to keep local back-ups of your session contents and any associated custom tracks.</p> 
+
+<a name="Support"></a>
+<h2>Resources & Support</h2> 
+  <ul>
+    <li>Questions? <a href="../contacts.html" target="_blank">Contact us!</a> </li> 
+    <li>Learn more about composite tracks: 
+    <a href="/goldenpath/help/hubQuickStartGroups.html#composite" target="_blank">
+    Quick Start Guide to Hubs</a> &amp; 
+    <a href="/goldenpath/help/trackDb/trackDbHub.html#Composite_Track_Settings"
+    target="_blank"> Hub Track Database Definition guide</a>.</li> 
+    <li>Credit to Dr. Bar-Joseph for assisting with wiggle sorting development: Bar-Joseph Z, 
+    Demaine ED, Gifford DK, Srebro N, Hamel AM, Jaakkola TS.
+    <a href="https://www.ncbi.nlm.nih.gov/pubmed/12801867" target="_blank">
+    K-ary clustering with optimal leaf ordering for gene expression data</a>.
+    <em>Bioinformatics</em>. 2003 Jun 12;19(9):1070-8.
+    PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/12801867" target="_blank">12801867</a>
+    </li>
+  </ul>
+
+
+

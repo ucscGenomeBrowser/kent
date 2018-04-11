@@ -719,7 +719,7 @@ hg.conf.local</code> to incorporate the changes in hg.conf.local.</p>
 <p>
 In older GBiB's, there is an error in the <code>gbibAddTools</code> command. To fix this command, 
 edit the <code>/home/browser/.bashrc</code> file and change the following line:
-<pre><code>alias gbibAddTools='mkdir ~/bin -p; rsync -avP hgdownload.cse.ucsc.edu::genome/admin/exe/linux.x86_64/ ~/bin/'</code></pre>
+<pre><code>alias gbibAddTools='mkdir ~/bin -p; rsync -avP hgdownload.soe.ucsc.edu::genome/admin/exe/linux.x86_64/ ~/bin/'</code></pre>
 </p>
 <p>to:
 <pre><code>alias gbibAddTools='sudo mkdir -p /data/tools; sudo rsync -avP hgdownload.soe.ucsc.edu::genome/admin/exe/linux.x86_64/ /data/tools/ && ln -s /data/tools ~/bin'</code></pre>
@@ -800,9 +800,8 @@ GBiB terminal's home directory, which can also be accessed via
 <a name="License"></a>
 <h2>Licensing information</h2>
 <p>
-GBiB is free for non-commercial use by non-profit organizations, academic institutions, and for 
-personal use. Corporate use requires a license, setup fee and annual payment. To purchase a license 
-or download the GBiB, visit the <a href="//genome-store.ucsc.edu/" target="_blank">Genome Browser 
-store</a>.</p>
+GBiB is free for non-profit academic research and for personal use. Corporate use requires a 
+license, setup fee and annual payment. To purchase a license or download the GBiB, visit the 
+<a href="//genome-store.ucsc.edu/" target="_blank">Genome Browser store</a>.</p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

@@ -124,7 +124,7 @@ if (submitDirId <= 0)
 sqlSafef(query, sizeof(query), 
     "select id from cdwFile "
     "where submitFileName='%s' and submitDirId = %d and errorMessage = '' and deprecated=''"
-    " and (endUploadTime > startUploadTime or startUploadTime < %lld) "
+    " and (endUploadTime >= startUploadTime or startUploadTime < %lld) "
     "order by submitId desc limit 1"
     , submitFileName, submitDirId
     , (long long)cdwNow() - cdwSingleFileTimeout);
@@ -822,15 +822,14 @@ void cdwUpdateFileTags(struct sqlConnection *conn, long long fileId, struct dySt
 /* Update tags field in cdwFile with given value */
 {
 struct dyString *query = dyStringNew(0);
-sqlDyStringAppend(query, "update cdwFile set tags='");
-dyStringAppend(query, tags->string);
-dyStringPrintf(query, "' where id=%lld", fileId);
+sqlDyStringPrintf(query, "update cdwFile set tags='%s' ", tags->string);
+sqlDyStringPrintf(query, " where id=%lld", fileId);
 sqlUpdate(conn, query->string);
 dyStringFree(&query);
 }
 
 struct cdwFile *cdwGetLocalFile(struct sqlConnection *conn, char *localAbsolutePath, 
-    char *symLinkMd5Sum)
+    char *givenMd5Sum)
 /* Get record of local file from database, adding it if it doesn't already exist.
  * Can make it a symLink rather than a copy in which case pass in valid MD5 sum
  * for symLinkM5dSum. */
@@ -873,16 +872,18 @@ cdwMakeFileNameAndPath(fileId, localAbsolutePath, cdwFile, cdwPath);
 char *md5;
 
 /* Do copy or symbolic linking of file into warehouse managed dir. */
-if (symLinkMd5Sum)
+if (givenMd5Sum)
     {
-    md5 = symLinkMd5Sum;
-    makeSymLink(localAbsolutePath, cdwPath);  
+    md5 = givenMd5Sum;
     }
 else
     {
-    copyFile(localAbsolutePath, cdwPath);
     md5 = md5HexForFile(localAbsolutePath);
     }
+copyFile(localAbsolutePath, cdwPath);
+touchFileFromFile(localAbsolutePath, cdwPath);
+chmod(cdwPath, 0444);
+replaceOriginalWithSymlink(localAbsolutePath, "", cdwPath);
 
 /* Update file record. */
 sqlSafef(query, sizeof(query), 
@@ -1384,34 +1385,34 @@ void cdwValidFileUpdateDb(struct sqlConnection *conn, struct cdwValidFile *el, l
  * id. */
 {
 struct dyString *dy = newDyString(512);
-sqlDyStringAppend(dy, "update cdwValidFile set ");
+sqlDyStringPrintf(dy, "update cdwValidFile set ");
 // omit id and licensePlate fields - one autoupdates and the other depends on this
 // also omit fileId which also really can't change.
-dyStringPrintf(dy, " format='%s',", el->format);
-dyStringPrintf(dy, " outputType='%s',", el->outputType);
-dyStringPrintf(dy, " experiment='%s',", el->experiment);
-dyStringPrintf(dy, " replicate='%s',", el->replicate);
-dyStringPrintf(dy, " enrichedIn='%s',", el->enrichedIn);
-dyStringPrintf(dy, " ucscDb='%s',", el->ucscDb);
-dyStringPrintf(dy, " itemCount=%lld,", (long long)el->itemCount);
-dyStringPrintf(dy, " basesInItems=%lld,", (long long)el->basesInItems);
-dyStringPrintf(dy, " sampleCount=%lld,", (long long)el->sampleCount);
-dyStringPrintf(dy, " basesInSample=%lld,", (long long)el->basesInSample);
-dyStringPrintf(dy, " sampleBed='%s',", el->sampleBed);
-dyStringPrintf(dy, " mapRatio=%g,", el->mapRatio);
-dyStringPrintf(dy, " sampleCoverage=%g,", el->sampleCoverage);
-dyStringPrintf(dy, " depth=%g,", el->depth);
-dyStringPrintf(dy, " singleQaStatus=0,");
-dyStringPrintf(dy, " replicateQaStatus=0,");
-dyStringPrintf(dy, " part='%s',", el->part);
-dyStringPrintf(dy, " pairedEnd='%s',", el->pairedEnd);
-dyStringPrintf(dy, " qaVersion='%d',", el->qaVersion);
-dyStringPrintf(dy, " uniqueMapRatio=%g,", el->uniqueMapRatio);
-dyStringPrintf(dy, " lane='%s'", el->lane);
+sqlDyStringPrintf(dy, " format='%s',", el->format);
+sqlDyStringPrintf(dy, " outputType='%s',", el->outputType);
+sqlDyStringPrintf(dy, " experiment='%s',", el->experiment);
+sqlDyStringPrintf(dy, " replicate='%s',", el->replicate);
+sqlDyStringPrintf(dy, " enrichedIn='%s',", el->enrichedIn);
+sqlDyStringPrintf(dy, " ucscDb='%s',", el->ucscDb);
+sqlDyStringPrintf(dy, " itemCount=%lld,", (long long)el->itemCount);
+sqlDyStringPrintf(dy, " basesInItems=%lld,", (long long)el->basesInItems);
+sqlDyStringPrintf(dy, " sampleCount=%lld,", (long long)el->sampleCount);
+sqlDyStringPrintf(dy, " basesInSample=%lld,", (long long)el->basesInSample);
+sqlDyStringPrintf(dy, " sampleBed='%s',", el->sampleBed);
+sqlDyStringPrintf(dy, " mapRatio=%g,", el->mapRatio);
+sqlDyStringPrintf(dy, " sampleCoverage=%g,", el->sampleCoverage);
+sqlDyStringPrintf(dy, " depth=%g,", el->depth);
+sqlDyStringPrintf(dy, " singleQaStatus=0,");
+sqlDyStringPrintf(dy, " replicateQaStatus=0,");
+sqlDyStringPrintf(dy, " part='%s',", el->part);
+sqlDyStringPrintf(dy, " pairedEnd='%s',", el->pairedEnd);
+sqlDyStringPrintf(dy, " qaVersion='%d',", el->qaVersion);
+sqlDyStringPrintf(dy, " uniqueMapRatio=%g,", el->uniqueMapRatio);
+sqlDyStringPrintf(dy, " lane='%s'", el->lane);
 #if (CDWVALIDFILE_NUM_COLS != 24)
    #error "Please update this routine with new column"
 #endif
-dyStringPrintf(dy, " where id=%lld\n", (long long)id);
+sqlDyStringPrintf(dy, " where id=%lld\n", (long long)id);
 sqlUpdate(conn, dy->string);
 freeDyString(&dy);
 }
@@ -1491,69 +1492,14 @@ sqlSafef(query, sizeof(query),
 sqlUpdate(conn, query);
 }
 
-static char *mustReadSymlink(char *path, struct stat *sb)
-/* Read symlink or abort. FreeMem the returned value. */
-{
-ssize_t nbytes, bufsiz;
-// determine whether the buffer returned was truncated.
-bufsiz = sb->st_size + 1;
-char *symPath = needMem(bufsiz);
-nbytes = readlink(path, symPath, bufsiz);
-if (nbytes == -1) 
-    errnoAbort("readlink failure on symlink %s", path);
-if (nbytes == bufsiz)
-    errAbort("readlink returned buffer truncated\n");
-return symPath;
-}
-
-void replaceOriginalWithSymlink(char *submitFileName, char *submitDir, char *cdwPath)
-/* For a file that was just copied, remove original and symlink to new one instead
- * to save space. Follows symlinks if any to the real file and replaces it with a symlink */
-{
-struct stat sb;
-
-char *path = mustExpandRelativePath(submitDir, submitFileName);
-
-int symlinkLevels = 0;
-while (TRUE)
-    {
-    if (lstat(path, &sb) == -1) 
-	errnoAbort("stat failure on %s", path);
-    if ((sb.st_mode & S_IFMT) != S_IFLNK)
-	break;
-
-    // follow the symlink
-    ++symlinkLevels;
-    if (symlinkLevels > 10)
-	errAbort("Too many symlinks followed: %d symlinks. Probably a symlink loop.", symlinkLevels);
-
-    // read the symlink
-    char *symPath = mustReadSymlink(path, &sb);
-
-    // apply symPath to path
-    char *newPath = mustPathRelativeToFile(path, symPath);
-    freeMem(path);
-    freeMem(symPath);
-    path = newPath;
-    }
-if ((sb.st_mode & S_IFMT) != S_IFREG)
-    errAbort("Expecting regular file. Followed symlinks to %s but it is not a regular file.", path);
-if (startsWith(cdwRootDir, path))
-    errAbort("Unexpected operation. The path %s should not point to a file under cdwRoot %s", path, cdwRootDir);
-if (unlink(path) == -1)  // save space
-    errnoAbort("unlink failure %s", path);
-if (symlink(cdwPath, path) == -1)  // replace with symlink
-    errnoAbort("symlink failure from %s to %s", path, cdwPath);
-verbose(1, "%s converted to symlink to %s\n", path, cdwPath);
-freeMem(path);
-}
-
-
-char *findSubmitSymlink(char *submitFileName, char *submitDir, char *oldPath)
-/* Find the last symlink in the chain from submitDir/submitFileName.
+int findSubmitSymlinkExt(char *submitFileName, char *submitDir, char **pPath, char **pLastPath, int *pSymlinkLevels)
+/* Find the last symlink and real file in the chain from submitDir/submitFileName.
  * This is useful for when target of symlink in cdw/ gets renamed 
- * (e.g. license plate after passes validation), or removed (e.g. cdwReallyRemove* commands). */
+ * (e.g. license plate after passes validation), or removed (e.g. cdwReallyRemove* commands). 
+ * Returns 0 for success. /
+ * Returns -1 if path does not exist. */
 {
+int result = 0;
 struct stat sb;
 char *lastPath = NULL;
 char *path = mustExpandRelativePath(submitDir, submitFileName);
@@ -1563,11 +1509,12 @@ while (TRUE)
     {
     if (!fileExists(path))
 	{
-	warn("path=[%s] does not exist following submitDir/submitFileName through symlinks.", path);
-	return NULL;
+	//path=does not exist
+	result = -1;
+	break;
 	}
     if (lstat(path, &sb) == -1)
-	errnoAbort("stat failure on %s", path);
+	errnoAbort("lstat failure on %s", path);
     if ((sb.st_mode & S_IFMT) != S_IFLNK)
 	break;
 
@@ -1577,7 +1524,7 @@ while (TRUE)
 	errAbort("Too many symlinks followed: %d symlinks. Probably a symlink loop.", symlinkLevels);
 
     // read the symlink
-    char *symPath = mustReadSymlink(path, &sb);
+    char *symPath = mustReadSymlinkExt(path, &sb);
 
     // apply symPath to path
     char *newPath = mustPathRelativeToFile(path, symPath);
@@ -1586,8 +1533,66 @@ while (TRUE)
     freeMem(symPath);
     path = newPath;
     }
-if ((sb.st_mode & S_IFMT) != S_IFREG)
+if (result == 0 && ((sb.st_mode & S_IFMT) != S_IFREG))
     errAbort("Expecting regular file. Followed symlinks to %s but it is not a regular file.", path);
+
+*pPath = path;
+*pLastPath = lastPath;
+*pSymlinkLevels = symlinkLevels;
+return result;
+}
+
+char *testOriginalSymlink(char *submitFileName, char *submitDir)
+/* Follows submitted symlinks to real file.
+ * Aborts if real file path starts with cdwRootDir
+ * since it should not point to a file already under cdwRoot. */
+{
+char *lastPath = NULL;
+char *path = NULL;
+int symlinkLevels = 0;
+
+int result = findSubmitSymlinkExt(submitFileName, submitDir, &path, &lastPath, &symlinkLevels);
+if (result == -1)  // path does not exist
+    {
+    errAbort("path=[%s] does not exist following submitDir/submitFileName through symlinks.", path);
+    }
+if (startsWith(cdwRootDir, path))
+    errAbort("Unexpected operation. The symlink %s points to %s. It should not point to a file already under cdwRoot %s", 
+	submitFileName, path, cdwRootDir);
+freeMem(lastPath);
+return path;
+}
+
+
+void replaceOriginalWithSymlink(char *submitFileName, char *submitDir, char *cdwPath)
+/* For a file that was just copied, remove original and symlink to new one instead
+ * to save space. Follows symlinks if any to the real file and replaces it with a symlink */
+{
+char *path = testOriginalSymlink(submitFileName, submitDir);
+if (unlink(path) == -1)  // save space
+    errnoAbort("unlink failure %s", path);
+makeSymLink(cdwPath, path);
+verbose(1, "%s converted to symlink to %s\n", path, cdwPath);
+freeMem(path);
+}
+
+
+
+char *findSubmitSymlink(char *submitFileName, char *submitDir, char *oldPath)
+/* Find the last symlink in the chain from submitDir/submitFileName.
+ * This is useful for when target of symlink in cdw/ gets renamed 
+ * (e.g. license plate after passes validation), or removed (e.g. cdwReallyRemove* commands). */
+{
+char *lastPath = NULL;
+char *path = NULL;
+int symlinkLevels = 0;
+
+int result = findSubmitSymlinkExt(submitFileName, submitDir, &path, &lastPath, &symlinkLevels);
+if (result == -1)  // path does not exist
+    {
+    warn("path=[%s] does not exist following submitDir/submitFileName through symlinks.", path);
+    return NULL;
+    }
 if (symlinkLevels < 1)
     {
     warn("Too few symlinks followed: %d symlinks. Where is the symlink created by cdwSubmit?", symlinkLevels);
@@ -1604,28 +1609,31 @@ return lastPath;
 }
 
 
-void cdwReallyRemoveFile(struct sqlConnection *conn, char *submitDir, long long fileId, boolean really)
-/* Remove all records of file from database and from Unix file system if 
+void cdwReallyRemoveFile(struct sqlConnection *conn, char *submitDir, long long fileId, boolean unSymlinkOnly, boolean really)
+/* If unSymlinkOnly is NOT specified, removes all records of file from database and from Unix file system if 
  * the really flag is set.  Otherwise just print some info on the file.
  * Tries to find original submitdir and replace symlink with real file to restore it. */
 {
 struct cdwFile *ef = cdwFileFromId(conn, fileId);
 char *path = cdwPathForFileId(conn, fileId);
-verbose(1, "removing id=%u, submitFileName=%s, path=%s\n", 
-    ef->id, ef->submitFileName, path);
+verbose(1, "%s id=%u, submitFileName=%s, path=%s\n", 
+    unSymlinkOnly ? "unlocking" : "removing", ef->id, ef->submitFileName, path);
 if (really)
     {
     char query[1024];
     struct cdwSubmit *es = cdwSubmitFromId(conn, ef->submitId);
 
-    cdwRemoveQaRecords(conn, fileId);
-    sqlSafef(query, sizeof(query),
-	"delete from cdwGroupFile where fileId=%lld", fileId);
-    sqlUpdate(conn, query);
-    sqlSafef(query, sizeof(query), "delete from cdwValidFile where fileId=%lld", fileId);
-    sqlUpdate(conn, query);
-    sqlSafef(query, sizeof(query), "delete from cdwFile where id=%lld", fileId);
-    sqlUpdate(conn, query);
+    if (!unSymlinkOnly)
+	{
+	cdwRemoveQaRecords(conn, fileId);
+	sqlSafef(query, sizeof(query),
+	    "delete from cdwGroupFile where fileId=%lld", fileId);
+	sqlUpdate(conn, query);
+	sqlSafef(query, sizeof(query), "delete from cdwValidFile where fileId=%lld", fileId);
+	sqlUpdate(conn, query);
+	sqlSafef(query, sizeof(query), "delete from cdwFile where id=%lld", fileId);
+	sqlUpdate(conn, query);
+	}
 
     char *lastPath = NULL;
     // skip symlink check if meta or manifest which do not get validated or license plate or symlink
@@ -1637,11 +1645,13 @@ if (really)
 	if (unlink(lastPath) == -1)  // drop about to be invalid symlink
 	    errnoAbort("unlink failure %s", lastPath);
 	copyFile(path, lastPath);
+	touchFileFromFile(path, lastPath);
 	chmod(lastPath, 0664);
 	freeMem(lastPath);
 	}
 
-    mustRemove(path);
+    if (!unSymlinkOnly)
+	mustRemove(path);
     }
 freez(&path);
 cdwFileFree(&ef);

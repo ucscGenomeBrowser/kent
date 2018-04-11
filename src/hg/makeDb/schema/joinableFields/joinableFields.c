@@ -32,7 +32,7 @@ void joinableFields(char *joinerFile, char *database, char *table)
 struct joiner *joiner = joinerRead(joinerFile);
 struct joinerPair *jpList, *jp;
 
-jpList = joinerRelate(joiner, database, table);
+jpList = joinerRelate(joiner, database, table, NULL);
 for (jp = jpList; jp != NULL; jp = jp->next)
     {
     printf("%s\t%s\t%s\t%s\t%s\t%s\n", 

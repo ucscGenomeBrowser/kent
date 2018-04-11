@@ -23,6 +23,9 @@
 
 #include "dystring.h"
 
+#define MAX_HUB_TRACKDB_FILE_SIZE    64*1024*1024
+#define MAX_HUB_GROUP_FILE_SIZE     16*1024*1024
+#define MAX_HUB_GENOME_FILE_SIZE    64*1024*1024
 
 struct trackHub 
 /* A track hub. */

@@ -308,7 +308,7 @@ html crispr
     track crisprTargets
     shortLabel CRISPR Targets
     longLabel CRISPR/Cas9 -NGG Targets
-    visibility pack
+    visibility dense
     type bigBed 9 +
     itemRgb on
     parent crispr
@@ -347,8 +347,7 @@ html crispors
     itemRgb on
     priority 2
 
-## including later
-## include crispr10K.ra
+include crispr10K.ra
 
 track augustus
 shortLabel Augustus
@@ -1030,16 +1029,14 @@ exonArrows on
 type bed 6 .
 
 track refSeqFuncElems
-release alpha
 shortLabel RefSeq Func Elems
 longLabel NCBI RefSeq Functional Elements 
-type bigBed 8 +
+type bigBed 9 +
+noScoreFilter .
+itemRgb on
 bigDataUrl /gbdb/$D/ncbiRefSeq/refSeqFuncElems.bb
-labelFields soTerm
 group regulation
-url https://www.ncbi.nlm.nih.gov/gene?cmd=Retrieve&dopt=full_report&list_uids=$$
-urlLabel Gene ID: 
-urls pubMedIds=https://www.ncbi.nlm.nih.gov/pubmed/$$ soTerm=http://www.sequenceontology.org/browser/obob.cgi?rm=term_list&release=current_svn&obo_query=$$
+urls geneIds=https://www.ncbi.nlm.nih.gov/gene?cmd=Retrieve&dopt=full_report&list_uids=$$ pubMedIds=https://www.ncbi.nlm.nih.gov/pubmed/$$ soTerm=http://www.sequenceontology.org/browser/obob.cgi?rm=term_list&release=current_svn&obo_query=$$
 mouseOverField _mouseOver
 
 track snp148Common
@@ -3004,3 +3001,10 @@ group map
     parent tanDups on
     shortLabel Tandem Dups
     longLabel Paired exactly identical sequence survey over entire genome assembly
+
+track tantan
+shortLabel tantan Repeats
+longLabel Repeats by tantan
+group varRep
+visibility hide
+type bed 3 .

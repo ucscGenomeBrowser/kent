@@ -18,6 +18,7 @@ UTIL_DIRS = \
 	cdwCheckValidation \
 	cdwCorrectFileTags \
     cdwCreateUser \
+    cdwCreateGroup \
     cdwDumpManiFiles \
     cdwFakeManifestFromSubmit \
     cdwFindSymlinkable \
@@ -31,6 +32,7 @@ UTIL_DIRS = \
     cdwMakeReplicateQa \
     cdwMakeTrackViz \
     cdwMakeValidFile \
+    cdwQaAgent \
     cdwQaEvaluate \
     cdwPublicSubset \
     cdwReallyRemoveFiles \
@@ -46,6 +48,7 @@ UTIL_DIRS = \
     cdwTextForIndex \
     cdwUndeprecate \
     cdwUnlockSubmittedFile \
+    cdwUnlockSubmittedFiles \
     utils/cdwFastqPolyFilter \
     utils/cdwVcfStats
 

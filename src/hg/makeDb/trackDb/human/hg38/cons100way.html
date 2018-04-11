@@ -19,9 +19,9 @@ PHAST package</a>, for all species.
 The multiple alignments were generated using multiz and
 other tools in the UCSC/<a href="http://www.bx.psu.edu/miller_lab/"
 target=_blank>Penn State Bioinformatics</a>
-comparative genomics alignment pipeline. 
+comparative genomics alignment pipeline.
 Conserved elements identified by phastCons are also displayed in
-this track. 
+this track.
 PHAST/Multiz are built from chains ("alignable") and nets ("syntenic"),                                                                                        see the documentation of the Chain/Net tracks for a description of the complete
 alignment process.
 </p>
@@ -54,6 +54,12 @@ and 1.
 Both phastCons and phyloP treat alignment gaps and unaligned nucleotides as
 missing data, and both were run with the same parameters.
 </p>
+<P>
+See also: <A HREF="http://genomewiki.ucsc.edu/index.php/Hg38_100-way_conservation_alignment"
+TARGET=_blank>lastz parameters</A> and other details
+and chain <A HREF="http://genomewiki.ucsc.edu/index.php/Hg38_100-way_Genome_size_statistics"
+TARGET=_blank>minimum score and gap</A> parameters used in these alignments.
+</P>
 
 <p>
 UCSC has repeatmasked and aligned all genome assemblies, and
@@ -337,7 +343,7 @@ on a tree model containing the tree topology, branch lengths representing
 evolutionary distance at neutrally evolving sites, the background distribution
 of nucleotides, and a substitution rate matrix.
 The
-<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons100way/hg38.100way.phastCons.mod"
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons100way/hg38.phastCons100way.mod"
 target=_blank>all-species tree model</a> for this track was
 generated using the <em>phyloFit</em> program from the PHAST package
 (REV model, EM algorithm, medium precision) using multiple alignments of
@@ -349,8 +355,8 @@ set, filtered to select single-coverage long transcripts.
 This same tree model was used in the phyloP calculations; however, the
 background frequencies were modified to maintain reversibility.
 The resulting tree model:
-<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP100way/hg38.100way.phyloP100way.mod"
-target=_blank>all species</a>,
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP100way/hg38.phyloP100way.mod"
+target=_blank>all species</a>.
 </p>
 <h3> PhastCons Conservation </h3>
 <p>

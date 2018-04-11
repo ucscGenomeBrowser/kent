@@ -59,6 +59,9 @@ use vars qw/
     $opt_inclHap
     $opt_noLoadChainSplit
     $opt_loadChainSplit
+    $opt_swapDir
+    $opt_skipDownload
+    $opt_trackHub
     /;
 
 # Specify the steps supported with -continue / -stop:
@@ -124,6 +127,10 @@ print STDERR <<_EOF_
     -noDbNameCheck        ignore Db name format
     -inclHap              include haplotypes *_hap* in chain/net, default not
     -loadChainSplit       load split chain tables, default is not split tables
+    -swapDir path         directory to work in for swap, default:
+                          /hive/data/genomes/qDb/bed/blastz.tDb.swap/
+    -skipDownload         do not construct the downloads directory
+    -trackHub             construct big* files for track hub
 _EOF_
   ;
 print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
@@ -151,6 +158,17 @@ certain files, and what will be in the DEF vars.  Stick to the conventions
 described in the -help output, pray to the cluster gods, and all will go
 well.  :)
 
+To use this script outside the UCSC infrastructure, use options:
+    -dbHost=localhost (when there is no local genome database to load results)
+
+    -smallClusterHub=localhost -bigClusterHub=localhost -fileServer=localhost
+    This assumes the process is performed on your parasol hub machine, and
+    thus all the references to 'localhost' are this parasol hub machine.
+    Verify your .ssh keys are correct: 'ssh localhost' should function OK.
+
+    -swapDir=/some/path/blastz.targetDb.swap/ work directory for -swap
+    -skipDownload - leaves all constructed files in the working directory
+    -trackHub - constructs bigChain and bigMaf files to use in a track hub
 ";
   # Detailed help (-help):
   print STDERR "
@@ -250,7 +268,7 @@ BLASTZ_Q=$HgAutomate::clusterData/blastz/HoxD55.q
 # Globals:
 my %defVars = ();
 my ($DEF, $tDb, $qDb, $QDb, $isSelf, $selfSplit, $buildDir, $fileServer);
-my ($swapDir, $splitRef, $inclHap, $secondsStart, $secondsEnd);
+my ($swapDir, $splitRef, $inclHap, $secondsStart, $secondsEnd, $dbExists);
 
 sub isInDirList {
   # Return TRUE if $dir is under (begins with) something in dirList.
@@ -268,11 +286,14 @@ sub enforceClusterNoNo {
       join (' or ', @clusterNoNo) . " so please choose a different " .
       "$desc instead of $dir .\n\n";
   }
-  my $testFileServer = `$getFileServer $dir/`;
-  if (scalar(grep /^$testFileServer$/, @fileServerNoNo)) {
-    die "\ncluster outputs are forbidden to go to fileservers " .
-      join (' or ', @fileServerNoNo) . " so please choose a different " .
-      "$desc instead of $dir (which is hosted on $testFileServer).\n\n";
+  # use this only if it exists, this is UCSC infrastructure:
+  if ( -e $getFileServer ) {
+    my $testFileServer = `$getFileServer $dir/`;
+    if (scalar(grep /^$testFileServer$/, @fileServerNoNo)) {
+      die "\ncluster outputs are forbidden to go to fileservers " .
+        join (' or ', @fileServerNoNo) . " so please choose a different " .
+        "$desc instead of $dir (which is hosted on $testFileServer).\n\n";
+    }
   }
 }
 
@@ -292,13 +313,17 @@ sub checkOptions {
                       "noDbNameCheck",
                       "inclHap",
                       "noLoadChainSplit",
-                      "loadChainSplit"
+                      "loadChainSplit",
+                      "swapDir=s",
+                      "skipDownload",
+                      "trackHub"
 		     );
   &usage(1) if (!$ok);
   &usage(0, 1) if ($opt_help);
   &HgAutomate::processCommonOptions();
   my $err = $stepper->processOptions();
   usage(1) if ($err);
+  $dbHost = $opt_dbHost if ($opt_dbHost);
   if ($opt_swap) {
     if ($opt_continue) {
       if ($stepper->stepPrecedes($opt_continue, 'net')) {
@@ -420,24 +445,31 @@ sub getDbFromPath {
   my ($var) = @_;
   my $val = $defVars{$var};
   my $db;
-  if ($opt_noDbNameCheck ||
-	$val =~ m@^/\S+/($oldDbFormat|$newDbFormat)((\.2bit)|(/(\S+)?))?$@) {
-    $db = $1;
-  } else {
-    die "Error: $DEF variable $var=$val must be a full path with " .
-      "a recognizable database as one of its elements.\n"
+  my $dbFromName = basename($val);
+  $dbFromName =~ s/.2bit//;
+  if (! $opt_noDbNameCheck) {
+    if ( $val =~ m@^/\S+/($oldDbFormat|$newDbFormat)((\.2bit)|(/(\S+)?))?$@) {
+      $db = $1;
+    } else {
+      die "Error: $DEF variable $var=$val must be a full path with " .
+        "a recognizable database as one of its elements.\n"
+    }
   }
-  if (! defined($db)) {
-    if ($val =~ m#^/hive/data/genomes/#) {
+  if ($opt_noDbNameCheck) {
+    $db = $dbFromName;
+  } else {
+    if (! defined($db)) {
+      if ($val =~ m#^/hive/data/genomes/#) {
 	$val =~ s#^/hive/data/genomes/##;
 	$val =~ s#/.*##;
 	$db = $val;
 	warn "Warning: assuming database $db from /hive/data/genomes/<db>/ path\n";
-    } elsif ($val =~ m#^/scratch/data/#) {
+      } elsif ($val =~ m#^/scratch/data/#) {
 	$val =~ s#^/scratch/data/##;
 	$val =~ s#/.*##;
 	$db = $val;
 	warn "Warning: assuming database $db from /scratch/data/<db>/ path\n";
+      }
     }
   }
 return $db;
@@ -604,9 +636,11 @@ sub doBlastzClusterRun {
   my $whatItDoes = "It sets up and performs the big cluster blastz run.";
   my $bossScript = new HgRemoteScript("$runDir/doClusterRun.csh", $paraHub,
 				      $runDir, $whatItDoes, $DEF);
+  my $paraRun = &HgAutomate::paraRun();
+  my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
-$HgAutomate::gensub2 $targetList $queryList gsub jobList
-$HgAutomate::paraRun
+$gensub2 $targetList $queryList gsub jobList
+$paraRun
 _EOF_
     );
   $bossScript->execute();
@@ -655,13 +689,15 @@ _EOF_
 each subdirectory of $outRoot into a per-target-chunk file.";
   my $bossScript = new HgRemoteScript("$runDir/doCatRun.csh", $paraHub,
 				      $runDir, $whatItDoes, $DEF);
+  my $paraRun = &HgAutomate::paraRun();
+  my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
 (cd $outRoot; find . -maxdepth 1 -type d | grep '^./') \\
         | sed -e 's#/\$##; s#^./##' > tParts.lst
 chmod a+x cat.csh
-$HgAutomate::gensub2 tParts.lst single gsub jobList
+$gensub2 tParts.lst single gsub jobList
 mkdir ../pslParts
-$HgAutomate::paraRun
+$paraRun
 _EOF_
     );
   $bossScript->execute();
@@ -782,11 +818,13 @@ _EOF_
 to each target sequence.";
   my $bossScript = new HgRemoteScript("$runDir/doChainRun.csh", $paraHub,
 				      $runDir, $whatItDoes, $DEF);
+  my $paraRun = &HgAutomate::paraRun();
+  my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
 chmod a+x chain.csh
-$HgAutomate::gensub2 pslParts.lst single gsub jobList
+$gensub2 pslParts.lst single gsub jobList
 mkdir chain liftedChain
-$HgAutomate::paraRun
+$paraRun
 rmdir liftedChain
 _EOF_
   );
@@ -970,6 +1008,16 @@ foreach f (axtNet/*.$tDb.$qDb.net.axt.gz)
 end
 _EOF_
       );
+    if ($opt_trackHub) {
+      $bossScript->add(<<_EOF_
+mkdir -p bigMaf
+echo "##maf version=1 scoring=blastz" > bigMaf/$tDb.$qDb.net.maf
+zegrep -h -v "^#" mafNet/*.maf.gz >> bigMaf/$tDb.$qDb.net.maf
+echo "##eof maf" >> bigMaf/$tDb.$qDb.net.maf
+gzip bigMaf/$tDb.$qDb.net.maf
+_EOF_
+      );
+    }
   } else {
     $bossScript->add(<<_EOF_
 # Make axtNet for download: one .axt for all of $tDb.
@@ -985,6 +1033,34 @@ axtToMaf -tPrefix=$tDb. -qPrefix=$qDb. ../axtNet/$tDb.$qDb.net.axt.gz \\
   $defVars{SEQ1_LEN} $defVars{SEQ2_LEN} \\
   stdout \\
 | gzip -c > ../mafNet/$tDb.$qDb.net.maf.gz
+_EOF_
+      );
+    if ($opt_trackHub) {
+      $bossScript->add(<<_EOF_
+mkdir -p ../bigMaf
+ln -s ../mafNet/$tDb.$qDb.net.maf.gz ../bigMaf
+_EOF_
+      );
+    }
+  }
+  if ($opt_trackHub) {
+    $bossScript->add(<<_EOF_
+cd $buildDir/bigMaf
+wget -O bigMaf.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/bigMaf.as'
+wget -O mafSummary.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/mafSummary.as'
+mafToBigMaf $tDb $tDb.$qDb.net.maf.gz stdout \\
+  | sort -k1,1 -k2,2n > $tDb.$qDb.net.txt
+bedToBigBed -type=bed3+1 -as=bigMaf.as -tab \\
+  $tDb.$qDb.net.txt  $defVars{SEQ1_LEN} $tDb.$qDb.net.bb
+hgLoadMafSummary -minSeqSize=1 -test $tDb $tDb.$qDb.net.summary \\
+  $tDb.$qDb.net.maf.gz
+cut -f2- $tDb.$qDb.net.summary.tab | sort -k1,1 -k2,2n \\
+  > $tDb.$qDb.net.summary.bed
+bedToBigBed -type=bed3+4 -as=mafSummary.as -tab \\
+        $tDb.$qDb.net.summary.bed $defVars{SEQ1_LEN} \\
+        $tDb.$qDb.net.summary.bb
+rm -f $tDb.$qDb.net.txt $tDb.$qDb.net.summary.tab \\
+        $tDb.$qDb.net.summary.bed
 _EOF_
       );
   }
@@ -1020,6 +1096,9 @@ and loads the net table.";
 _EOF_
     );
   if ($opt_loadChainSplit && $splitRef) {
+### XXX to be done: fixup this loop to make the bigBed files for the chain
+####### instead of this database loading table (split table code could be
+####### eliminated . . . )
     $bossScript->add(<<_EOF_
 cd $runDir/chain
 foreach c (`awk '{print \$1;}' $defVars{SEQ1_LEN}`)
@@ -1033,11 +1112,31 @@ end
 _EOF_
       );
   } else {
-    $bossScript->add(<<_EOF_
+    if ($dbExists) {
+      $bossScript->add(<<_EOF_
 cd $runDir
 hgLoadChain -tIndex $tDb chain$QDb $tDb.$qDb.all.chain.gz
 _EOF_
       );
+    } else {
+      $bossScript->add(<<_EOF_
+cd $runDir
+hgLoadChain -test -noBin -tIndex $tDb chain$QDb $tDb.$qDb.all.chain.gz
+wget -O bigChain.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/bigChain.as'
+wget -O bigLink.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/bigLink.as'
+sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\\t"} {print \$2, \$4, \$5, \$11, 1000, \$8, \$3, \$6, \$7, \$9, \$10, \$1}' > chain${QDb}.tab
+bedToBigBed -type=bed6+6 -as=bigChain.as -tab chain${QDb}.tab $defVars{SEQ1_LEN} chain${QDb}.bb
+awk 'BEGIN {OFS="\\t"} {print \$1, \$2, \$3, \$5, \$4}' link.tab | sort -k1,1 -k2,2n > chain${QDb}Link.tab
+bedToBigBed -type=bed4+1 -as=bigLink.as -tab chain${QDb}Link.tab $defVars{SEQ1_LEN} chain${QDb}Link.bb
+set totalBases = `ave -col=2 $defVars{SEQ1_LEN} | grep "^total" | awk '{printf "%d", \$2}'`
+set basesCovered = `bedSingleCover.pl chain${QDb}Link.tab | ave -col=4 stdin | grep "^total" | awk '{printf "%d", \$2}'`
+set percentCovered = `echo \$basesCovered \$totalBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
+printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" "\$totalBases" "\$percentCovered" > ../fb.$tDb.chain.${QDb}Link.txt
+rm -f link.tab
+rm -f chain.tab
+_EOF_
+      );
+    }
   }
   if (! $isSelf) {
   my $tRepeats = $opt_tRepeats ? "-tRepeats=$opt_tRepeats" : $defaultTRepeats;
@@ -1046,7 +1145,8 @@ _EOF_
     $tRepeats = $opt_qRepeats ? "-tRepeats=$opt_qRepeats" : $defaultQRepeats;
     $qRepeats = $opt_tRepeats ? "-qRepeats=$opt_tRepeats" : $defaultTRepeats;
   }
-    $bossScript->add(<<_EOF_
+    if ($dbExists) {
+      $bossScript->add(<<_EOF_
 
 # Add gap/repeat stats to the net file using database tables:
 cd $runDir
@@ -1054,13 +1154,22 @@ netClass -verbose=0 $tRepeats $qRepeats -noAr noClass.net $tDb $qDb $tDb.$qDb.ne
 
 # Load nets:
 netFilter -minGap=10 $tDb.$qDb.net \\
-| hgLoadNet -verbose=0 $tDb net$QDb stdin
+  | hgLoadNet -verbose=0 $tDb net$QDb stdin
 
 cd $buildDir
 featureBits $tDb $QDbLink >&fb.$tDb.$QDbLink.txt
 cat fb.$tDb.$QDbLink.txt
 _EOF_
       );
+    } else {
+      $bossScript->add(<<_EOF_
+cp -p noClass.net $tDb.$qDb.net
+netFilter -minGap=10 noClass.net \\
+  | hgLoadNet -test -noBin -warn -verbose=0 $tDb net$QDb stdin
+mv align.tab net$QDb.tab
+_EOF_
+      );
+    }
   }
   $bossScript->execute();
 # maybe also peek in trackDb and see if entries need to be added for chain/net
@@ -1075,6 +1184,7 @@ sub makeDownloads {
     &HgAutomate::run("$HgAutomate::runSSH $fileServer nice " .
 	 "gzip $runDir/$tDb.$qDb.net");
   }
+  return if ($opt_skipDownload);
   # Make an md5sum.txt file.
   my $net = $isSelf ? "" : "$tDb.$qDb.net.gz";
   my $whatItDoes =
@@ -1394,7 +1504,8 @@ Res. 2003 Jan;13(1):103-7.
 
 
 sub installDownloads {
-  # Load chains; add repeat/gap stats to net; load nets.
+  # construct symlinks for released files to download directory
+  # load liftOver chains into hgcentral
   my $runDir = "$buildDir/axtChain";
   # Make sure previous stage was successful.
   my $successFile = $isSelf ? "$runDir/$tDb.$qDb.all.chain.gz" :
@@ -1465,6 +1576,7 @@ sub doDownloads {
   # Create compressed files for download and make links from test server's
   # goldenPath/ area.
   &makeDownloads();
+  return if ($opt_skipDownload);
   &installDownloads();
 }
 
@@ -1544,7 +1656,7 @@ too distant from the reference.  Suppressed unless -syntenicNet is included.";
   }
   my $bossScript = new HgRemoteScript("$runDir/netSynteny.csh", $workhorse,
                                     $runDir, $whatItDoes, $DEF);
-  if ($splitRef) {
+  if ($opt_loadChainSplit && $splitRef) {
     $bossScript->add(<<_EOF_
 # filter net for synteny and create syntenic net mafs
 netFilter -syn $tDb.$qDb.net.gz  \\
@@ -1565,24 +1677,99 @@ rm -fr $runDir/synNet
 rm -fr $runDir/chain
 cd mafSynNet
 md5sum *.maf.gz > md5sum.txt
+_EOF_
+      );
+
+    if (! $opt_skipDownload) {
+       $bossScript->add(<<_EOF_
 mkdir -p $HgAutomate::goldenPath/$tDb/vs$QDb/mafSynNet
 cd $HgAutomate::goldenPath/$tDb/vs$QDb/mafSynNet
 ln -s $buildDir/mafSynNet/* .
 _EOF_
-      );
+       );
+    }
   } else {
 # scaffold-based assembly
 # filter net for synteny and create syntenic net mafs
     $bossScript->add(<<_EOF_
 netFilter -syn $tDb.$qDb.net.gz | gzip -c > $tDb.$qDb.syn.net.gz
-netToAxt $tDb.$qDb.syn.net.gz $tDb.$qDb.all.chain.gz \\
+netChainSubset -verbose=0 $tDb.$qDb.syn.net.gz $tDb.$qDb.all.chain.gz stdout \\
+  | chainStitchId stdin stdout | gzip -c > $tDb.$qDb.syn.chain.gz
+_EOF_
+      );
+
+    if ($dbExists) {
+      $bossScript->add(<<_EOF_
+hgLoadChain -tIndex $tDb chainSyn$QDb $tDb.$qDb.syn.chain.gz
+netFilter -minGap=10 $tDb.$qDb.syn.net.gz \\
+  | hgLoadNet -verbose=0 $tDb netSyn$QDb stdin
+_EOF_
+      );
+    } else {
+      $bossScript->add(<<_EOF_
+set lineCount = `zcat $tDb.$qDb.syn.chain.gz | wc -l`
+if (\$lineCount > 0) then
+  hgLoadChain -test -noBin -tIndex $tDb chainSyn$QDb $tDb.$qDb.syn.chain.gz
+  wget -O bigChain.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/bigChain.as'
+  wget -O bigLink.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/bigLink.as'
+  sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\\t"} {print \$2, \$4, \$5, \$11, 1000, \$8, \$3, \$6, \$7, \$9, \$10, \$1}' > chainSyn${QDb}.tab
+  bedToBigBed -type=bed6+6 -as=bigChain.as -tab chainSyn${QDb}.tab $defVars{SEQ1_LEN} chainSyn${QDb}.bb
+  awk 'BEGIN {OFS="\\t"} {print \$1, \$2, \$3, \$5, \$4}' link.tab | sort -k1,1 -k2,2n > chainSyn${QDb}Link.tab
+  bedToBigBed -type=bed4+1 -as=bigLink.as -tab chainSyn${QDb}Link.tab $defVars{SEQ1_LEN} chainSyn${QDb}Link.bb
+  set totalBases = `ave -col=2 $defVars{SEQ1_LEN} | grep "^total" | awk '{printf "%d", \$2}'`
+  set basesCovered = `bedSingleCover.pl chainSyn${QDb}Link.tab | ave -col=4 stdin | grep "^total" | awk '{printf "%d", \$2}'`
+  set percentCovered = `echo \$basesCovered \$totalBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
+  printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" "\$totalBases" "\$percentCovered" > ../fb.$tDb.chainSyn.${QDb}Link.txt
+netFilter -minGap=10 $tDb.$qDb.syn.net.gz \\
+  | hgLoadNet -test -noBin -warn -verbose=0 $tDb netSyn$QDb stdin
+mv align.tab netSyn$QDb.tab
+endif
+rm -f link.tab
+rm -f chain.tab
+_EOF_
+      );
+    }
+
+    $bossScript->add(<<_EOF_
+if (\$lineCount > 0) then
+  netToAxt $tDb.$qDb.syn.net.gz $tDb.$qDb.all.chain.gz \\
     $defVars{'SEQ1_DIR'} $defVars{'SEQ2_DIR'} stdout \\
-  | axtSort stdin stdout \\
-  | axtToMaf -tPrefix=$tDb. -qPrefix=$qDb. stdin \\
-    $defVars{SEQ1_LEN} $defVars{SEQ2_LEN} \\
-    stdout \\
-| gzip -c > $tDb.$qDb.synNet.maf.gz
-md5sum $tDb.$qDb.syn.net.gz $tDb.$qDb.synNet.maf.gz > synNet.md5sum.txt
+    | axtSort stdin stdout \\
+    | axtToMaf -tPrefix=$tDb. -qPrefix=$qDb. stdin \\
+      $defVars{SEQ1_LEN} $defVars{SEQ2_LEN} \\
+      stdout \\
+  | gzip -c > $tDb.$qDb.synNet.maf.gz
+  md5sum $tDb.$qDb.syn.net.gz $tDb.$qDb.synNet.maf.gz > synNet.md5sum.txt
+endif
+_EOF_
+      );
+    if ($opt_trackHub) {
+      $bossScript->add(<<_EOF_
+if (\$lineCount > 0) then
+  mkdir -p ../bigMaf
+  cd ../bigMaf
+  wget -O bigMaf.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/bigMaf.as'
+  wget -O mafSummary.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/mafSummary.as'
+  mafToBigMaf $tDb ../axtChain/$tDb.$qDb.synNet.maf.gz stdout \\
+    | sort -k1,1 -k2,2n > $tDb.$qDb.synNet.txt
+  bedToBigBed -type=bed3+1 -as=bigMaf.as -tab  $tDb.$qDb.synNet.txt \\
+    $defVars{SEQ1_LEN} $tDb.$qDb.synNet.bb
+  hgLoadMafSummary -minSeqSize=1 -test $tDb $tDb.$qDb.synNet.summary \\
+        ../axtChain/$tDb.$qDb.synNet.maf.gz
+  cut -f2- $tDb.$qDb.synNet.summary.tab | sort -k1,1 -k2,2n \\
+        > $tDb.$qDb.synNet.summary.bed
+  bedToBigBed -type=bed3+4 -as=mafSummary.as -tab \\
+        $tDb.$qDb.synNet.summary.bed \\
+        $defVars{SEQ1_LEN} $tDb.$qDb.synNet.summary.bb
+  rm -f $tDb.$qDb.synNet.txt $tDb.$qDb.synNet.summary.tab \\
+        $tDb.$qDb.synNet.summary.bed
+endif
+_EOF_
+      );
+    }
+
+    if (! $opt_skipDownload) {
+      $bossScript->add(<<_EOF_
 mkdir -p $HgAutomate::goldenPath/$tDb/vs$QDb
 cd $HgAutomate::goldenPath/$tDb/vs$QDb
 ln -s $runDir/$tDb.$qDb.syn.net.gz .
@@ -1593,6 +1780,16 @@ cat tmp.sum > md5sum.txt
 rm -f tmp.sum
 _EOF_
       );
+    }
+
+    if ($dbExists) {
+      $bossScript->add(<<_EOF_
+cd "$buildDir"
+featureBits $tDb chainSyn${QDb}Link >&fb.$tDb.chainSyn${QDb}Link.txt
+cat fb.$tDb.chainSyn${QDb}Link.txt
+_EOF_
+      );
+    }
   }
   $bossScript->execute();
 }
@@ -1642,7 +1839,11 @@ if ($opt_swap) {
     die "-swap: Can't find $buildDir/axtChain/[$tDb.$qDb.]all.chain[.gz]\n" .
         "which is required for -swap.\n";
   }
-  $swapDir = "$HgAutomate::clusterData/$qDb/$HgAutomate::trackBuild/blastz.$tDb.swap";
+  if ($opt_swapDir) {
+    $swapDir = $opt_swapDir;
+  } else {
+    $swapDir = "$HgAutomate::clusterData/$qDb/$HgAutomate::trackBuild/blastz.$tDb.swap";
+  }
   &HgAutomate::mustMkdir("$swapDir/axtChain");
   $splitRef = $seq2IsSplit;
   &HgAutomate::verbose(1, "Swapping from $buildDir/axtChain/$inChain\n" .
@@ -1665,6 +1866,10 @@ if (! -e "$buildDir/DEF") {
 }
 
 $fileServer = &HgAutomate::chooseFileServer($opt_swap ? $swapDir : $buildDir);
+
+# may be working on a 2bit file that does not have a database browser
+$dbExists = 0;
+$dbExists = 1 if (&HgAutomate::databaseExists($dbHost, $tDb));
 
 # When running -swap, swapGlobals() happens at the end of the chainMerge step.
 # However, if we also use -continue with some step later than chainMerge, we

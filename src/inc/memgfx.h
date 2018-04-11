@@ -15,7 +15,6 @@
 
 typedef unsigned int Color;
 
-
 #if defined(__sgi__) || defined(__sgi) || defined(__powerpc__) || defined(sparc) || defined(__ppc__) || defined(__s390__) || defined(__s390x__)
 
 // BIGENDIAN machines:
@@ -337,6 +336,31 @@ void mgCircle(struct memGfx *mg, int xCen, int yCen, int rad,
 void mgDrawPoly(struct memGfx *mg, struct gfxPoly *poly, Color color,
 	boolean filled);
 /* Draw polygon, possibly filled in color. */
+
+void mgEllipse(struct memGfx *mg, int x0, int y0, int x1, int y1, Color color,
+                        int mode, boolean isDashed);
+/* Draw an ellipse (or limit to top or bottom) specified by rectangle, using Bresenham algorithm.
+ * Optionally, alternate dots.
+ * Point 0 is left, point 1 is top of rectangle
+ * Adapted trivially from code posted at http://members.chello.at/~easyfilter/bresenham.html
+ * Author: Zingl Alois, 8/22/2016
+ */
+
+/* Ellipse drawing modes */
+#define ELLIPSE_FULL    0
+#define ELLIPSE_TOP     1
+#define ELLIPSE_BOTTOM  2
+
+int mgCurve(struct memGfx *mg, int x0, int y0, int x1, int y1, int x2, int y2, Color color,
+                        boolean isDashed);
+/* Draw a segment of an anti-aliased curve within 3 points (quadratic Bezier)
+ * Return max y value. Optionally draw curve as dashed line.
+ * Adapted trivially from code posted at http://members.chello.at/~easyfilter/bresenham.html
+ * Author: Zingl Alois, 8/22/2016
+ */
+/* TODO: allow specifying a third point on the line
+ *  P(t) = (1-t)^2 * p0 + 2 * (1-t) * t * p1 + t^2 * p2
+ */
 
 struct hslColor mgRgbToHsl(struct rgbColor rgb);
 /* Convert RGB to HSL colorspace (see http://en.wikipedia.org/wiki/HSL_and_HSV) 

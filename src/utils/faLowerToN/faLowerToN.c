@@ -24,7 +24,7 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-void lowerToN(char *s)
+static void lowerToN(char *s)
 /* Convert lower case letters to N's. */
 {
 char c;

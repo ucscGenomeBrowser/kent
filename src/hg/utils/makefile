@@ -71,6 +71,8 @@ DIRS = ${buildRefresh} \
 	hgvsToVcf \
 	makeTrackIndex \
 	mysqlSecurityCheck \
+	pslFixCdsJoinGap \
+	pslMismatchGapToBed \
 	pslUniq \
 	refSeqGet \
 	safePush \

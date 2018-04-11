@@ -350,7 +350,7 @@
     <P>The setting is either the full URL (including <code>http:</code> or another protocol)
     or it is relative to the directory in which the trackDb file containing this setting
     is located.  The file must be in one of
-    the supported remote data file formats: bam/cram, bigBarChart, bigBed, bigChain, bigMaf, bigPsl, bigGenePred,  bigWig or
+    the supported remote data file formats: bam/cram, bigBarChart, bigBed, bigChain, bigMaf, bigPsl, bigGenePred, bigNarrowPeak, bigWig or
     vcfTabix.  Note that bam/cram and vcfTabix types require a separate
     index file that must have the same name as the data file plus a
     standard suffix (".bai" and ".tbi" respectively), unless <A
@@ -358,7 +358,7 @@
     All occurrences of the  string <code>$D</code> in the URL will be
     substituted with the genome assembly database name.  This allows a
     trackDb entry to be used with for multiple assemblies.  <code>$D</code>
-    substitution is not implement for track hubs.
+    substitution is not implemented for track hubs.
 
     </P> <P><B>Example:</B></P>
     <pre>   bigDataUrl http://vizhub.wustl.edu/VizHub/hg19/biBrainH3K4me1.bb</pre>
@@ -860,7 +860,7 @@
     </pre>
 </DIV>
 
-<DIV class="skipEmptyFields"><span class="types bigBed bigPsl bigGenePred bigMaf bigChain"></span>
+<DIV class="skipEmptyFields"><span class="types bigBed bigPsl bigGenePred bigNarrowPeak bigMaf bigChain"></span>
     <div class="format">
         <code>skipEmptyFields on</code><BR>
     </div>
@@ -870,7 +870,7 @@
     fields but only few of them have a value.</P> 
 </DIV>
 
-<DIV class="skipFields"><span class="types bigBed bigPsl bigGenePred bigMaf bigChain"></span>
+<DIV class="skipFields"><span class="types bigBed bigPsl bigGenePred bigNarrowPeak bigMaf bigChain"></span>
     <div class="format">
         <code>skipFields &lt;fieldName1&gt;="&lt;url1&gt;" &lt;fieldName2&gt;="&lt;url2&gt;" ...</code><BR>
     </div>
@@ -884,7 +884,7 @@
     </pre>
 </DIV>
 
-<DIV class="sepFields"><span class="types bigBed bigPsl bigGenePred bigMaf bigChain"></span>
+<DIV class="sepFields"><span class="types bigBed bigPsl bigGenePred bigNarrowPeak bigMaf bigChain"></span>
     <div class="format">
         <code>sepFields &lt;fieldName1&gt;="&lt;url1&gt;" &lt;fieldName2&gt;="&lt;url2&gt;" ...</code><BR>
     </div>
@@ -977,6 +977,16 @@
     <A HREF="../bigGenePred.html">bigGenePred help page</A>.</P>
 </DIV>
 
+<DIV class="bigNarrowPeak_intro">
+<H3>bigNarrowPeak: Peaks</H3>
+    <P>
+    The bigNarrowPeak format stores peaks over a range with a single basepair central peak. bigNarrowPeak files are based on the bigBed format.  The first six fields are the same as bed.  The other four include three scores, and the base-pair offset of the central peak.
+
+    bigNarrowPeak files are created using the program bedToBigBed with a special AutoSQL file that defines the fields of the bigNarrowPeak. The resulting bigBed files are in an indexed binary format. The main advantage of the bigBed files is that only portions of the files needed to display a particular region are transferred to UCSC. So for large data sets, bigBed is considerably faster than regular BED files. The bigBed file remains on your web accessible server (http, https, or ftp), not on the UCSC server. Only the portion that is needed for the chromosomal position you are currently viewing is locally cached as a "sparse file".
+    For complete bigNarrowPeak format definitions please see the
+    <A HREF="../bigNarrowPeak.html">bigNarrowPeak help page</A>.</P>
+</DIV>
+
 <DIV class="bigMaf_intro">
 <H3>bigMaf: Multiple Alignments</H3>
     <P>
@@ -1052,6 +1062,12 @@ There are no extra options that can appear on the type bigPsl line.
 <div class="format">
     <code>type bigChain</code></div>
 There are no extra options that can appear on the type bigChain line.
+</DIV>
+
+<DIV class="bigNarrowPeak"><span class="types bigNarrowPeak"></span>
+<div class="format">
+    <code>type bigNarrowPeak</code></div>
+There are no extra options that can appear on the type bigNarrowPeak line.
 </DIV>
 
 <DIV class="bigGenePred"><span class="types bigGenePred"></span>
@@ -1220,7 +1236,6 @@ There are no extra options that can appear on the type bigBarChart line.
     <code>&lt;column&gt;FilterLimits &lt;low&gt;[:&lt;high&gt;]</code><BR>
     <code>&lt;column&gt;FilterByRange &lt;off/on&gt;</code>
     </div>
-    <P><I>NOT FOR HUBS.  Not yet supported by bigBeds</I></P>
     <P>A number of
     numerical filters are available for bed tracks.  These are
     conveniently named by the field that is filtered on.  The most
@@ -1519,8 +1534,7 @@ There are no extra options that can appear on the type bigBarChart line.
     <pre>
     spectrum on
     scoreMin 700
-    scoreMax 900
-    color 0,0,128    </pre>
+    scoreMax 900</pre>
     <P>In this example, the track description will be
     displayed in blue, but the track will remain a gray scale.
     Items with scores less than or equal to 700 will be shown in very
@@ -1538,6 +1552,8 @@ There are no extra options that can appear on the type bigBarChart line.
     browser, or if there are more than one matches of that string, 
     will be give a list of the positions to choose from. See <A HREF="../bigBed.html#Ex3">HERE</A>
     for instructions on how to build an index for a bigBed file.
+    <b>Note:</b> The searchIndex setting currently does not work if
+    tracks are nested in composites.
     <P><B>Example:</B></P>
     <pre>   searchIndex name</pre>
 </DIV>
@@ -1601,7 +1617,7 @@ There are no extra options that can appear on the type bigBarChart line.
     <pre>   bedNameLabel Gene Id</pre>
 </DIV>
 
-<DIV class="scoreLabel"><span class="types bed bigBed bigPsl bigGenePred"></span>
+<DIV class="scoreLabel"><span class="types bed bigBed bigPsl bigGenePred bigNarrowPeak"></span>
 <div class="format"><code>scoreLabel &lt;label&gt;</code></div>
     <P>When a user clicks on a track item in the Browser image, 
     the item detail page is shown. This setting specifies an 
@@ -2712,6 +2728,20 @@ There are no extra options that can appear on the type bigBarChart line.
     <pre>   showNames off</pre>
 </DIV>
 
+<div class="doWiggle"><span class="types bam"></span>
+<div class="format"><code>doWiggle on</code></div>
+    <p>The doWiggle setting enables the BAM data to be displayed as a bar graph where the
+    height is proportional to the number of reads mapped to each genomic position. Through
+    dynamic calculation of items in the current window, this feature plots a line similar
+    to a wiggle graph that can be customized with a number of graph-based configuration options
+    such as drawing indicator lines, smoothing plots, adjusting graph height and vertical range,
+    and switching from bars to points. Please note that the feature is best displayed with
+    &quot;Display mode&quot; set to full and that the default &quot;Data view scaling&quot;
+    is &quot;auto-scale to data view.&quot;</p>
+    <p><b>Example:</b></p>
+    <pre>   doWiggle on</pre>
+</div>
+
 <DIV class="bam_example"><span class="types bam"></span>
 <div class="format"><B>Example of a bam track</B></div>
     <pre>
@@ -3683,19 +3713,19 @@ There are no extra options that can appear on the type bigBarChart line.
     </P>
 </DIV>
 
-<DIV class="labelFields"><span class="types bigBarChart bigBed bigGenePred bigPsl"></span>
+<DIV class="labelFields"><span class="types bigBarChart bigBed bigGenePred bigNarrowPeak bigPsl"></span>
 <div class="format"><code>labelFields &lt;<EM>fieldName[,fieldName]</EM>&gt;</code></div>
     <P>A list of fields from the bigBed based file that can be used as a label. The special value <B>none</B> can be specified if no labels are desired.
     </P>
 </DIV>
 
-<DIV class="defaultLabelFields"><span class="types bigBarChart bigBed bigGenePred bigPsl"></span>
+<DIV class="defaultLabelFields"><span class="types bigBarChart bigBed bigGenePred bigNarrowPeak bigPsl"></span>
 <div class="format"><code>defaultLabelFields &lt;<EM>fieldName[,fieldName]</EM>&gt;</code></div>
     <P>A list of fields from the bigBed based file that should be used as a label by default.  Only applicable if <B>labelFields</B> is set.  If <B>defaultLabelFields</B> is not specified, the first field in labelFields is used as the default. The special value <B>none</B> can be specified if no label should be the default.
     </P>
 </DIV>
 
-<DIV class="labelSeparator"><span class="types bigBed bigGenePred bigPsl"></span>
+<DIV class="labelSeparator"><span class="types bigBed bigGenePred bigNarrowPeak bigPsl"></span>
 <div class="format"><code>labelSeparator &lt;<EM>text</EM>&gt;</code></div>
     <P>One or more characters to use as the field separator between multiple labels.  A slash (/) by default, this string can have double quotes around it if it should have white spaces in it.
     </P>
@@ -4453,7 +4483,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
 <div class="format"><B>Example of a Supertrack</B></div>
     <pre>
     track myFolder
-    superTrack on
+    superTrack on show
     group regulation
     shortLabel My Folder
     longLabel My folder keeps my tracks together
@@ -4471,7 +4501,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     <P>The supertrack called "My Folder"
     contains two children.  All will be grouped under 
     "regulation".  Notice that the first track is visible by
-    default (if the supertrack itself is visible), but the second
+    default (if the supertrack itself is visible by adding &quot;show&quot;), but the second
     track is not.</P>
 </DIV>
 

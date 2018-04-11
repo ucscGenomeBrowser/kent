@@ -133,7 +133,9 @@ puts(" Data must be formatted in\n"
 " Data in the bigBed, bigWig, bigGenePred, BAM and VCF formats can be provided via only a URL or embedded in a track\n"
 " line in the box below.\n"
 " Examples are\n"
-" <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#EXAMPLE1'>here</A>.\n <br><br>"
+" <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#EXAMPLE1'>here</A>.\n"
+" If you do not have web-accessible data storage available, please see the\n"
+" <A TARGET=_BLANK HREF='../goldenPath/help/hgTrackHubHelp.html#Hosting'>Hosting</A> section of the Track Hub Help documentation.\n<br><br>"
 " Please note a much more efficient way to load data is to use\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/hgTrackHubHelp.html'>Track Hubs</A>, which are loaded\n" 
 " from the <A HREF='hgHubConnect'>Track Hubs Portal</A> found in the menu under My Data.\n"
@@ -220,8 +222,19 @@ puts("<P>");
 
 /* row for error message */
 if (isNotEmpty(err))
+    {
     printf("<P><B>&nbsp;&nbsp;&nbsp;&nbsp;<span style='color:RED; font-style:italic;'>"
            "Error</span>&nbsp;%s</B><P>", err);
+    /* send two lines of the message to the apache error log also: */
+    char *tmpString = cloneString(err);
+    char *lineBreak = strchr(tmpString, '\n');
+    if (lineBreak)  /* first line break becomes a blank */
+        *lineBreak = ' ';
+    lineBreak = strchr(tmpString, '\n');
+    if (lineBreak)  /* second one becomes end of string */
+        *lineBreak = (char) 0;
+    fprintf(stderr, "hgCustom load error: %s\n", tmpString);
+    }
 
 cgiSimpleTableStart();
 

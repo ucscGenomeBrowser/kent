@@ -6797,39 +6797,47 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` danRer11 hg38) \
        > rbest.log 2>&1 &
     # real	638m45.337s
-
+_EOF_
 #########################################################################
-# refSeqFuncElems NCBI refSeq functional elements, DONE 2017-08-01 Chris
-mkdir /hive/data/outside/refSeqFuncElems
-cd /hive/data/outside/refSeqFuncElems
+# refSeqFuncElems NCBI refSeq functional elements, REDONE 2017-11-29 Angie
+# previously done 2017-08-01 by Chris E
 
-# Get the data from their ftp server
-wget ftp://ftp.ncbi.nlm.nih.gov/genomes/H_sapiens/GFF_interim/interim_GRCh38.p10_top_level_2017-05-03.gff3.gz
-gunzip interim_GRCh38.p10_top_level_2017-05-03.gff3.gz
+mkdir /hive/data/genomes/hg38/bed/refSeqFuncElems.2017-11-29
+cd /hive/data/genomes/hg38/bed/refSeqFuncElems.2017-11-29
 
-# Get a table to map refSeq chrom names to our chrom names
-hgsql hg38 -e "select * from ucscToRefSeq" | cut -f 1,4 ucscToRefSeq.tsv | awk '{print $2"\t"$1}' > refSeqToUcsc.tsv
+# NOTE FOR NEXT TIME: instead of using interim GFF, in the future these annotations might be
+# folded into the same main release GFF3 from which the ncbiRefSeq* tables are extracted by
+# doNcbiRefSeq.pl.
+wget ftp://ftp.ncbi.nlm.nih.gov/genomes/H_sapiens/GFF_interim/interim_GRCh38.p11_top_level_2017-06-27.gff3.gz
 
-# Drop the header lines
-tail -3610666 ../interim_GRCh38.p11_top_level_2017-06-27.gff3 | sort > foo2
-join foo2 <(sort refSeqToUcsc.tsv) -t $'\t' > join.foo
+# Get mapping of RefSeq NC_* chromosome accs (and NT_*, NW_*) to hg38 chrom names
+hgsql hg38 -NBe 'select alias, chrom from chromAlias where source = "refseq" order by alias' \
+> refSeqToChrom.tab
+cut -f 2 refSeqToChrom.tab | sed -e 's/^/^/' > chrom.tab
 
-# Join with the ucscToRefSeq table to get UCSC chromosomes
-join <(tail -3610666 interim_GRCh38.p11_top_level_2017-06-27.gff3 | sort) <(sort refSeqToUcsc.tsv) -t $'\t' > join.foo
+# Use Terence Murphy's list of feature types (and the multi-type attribute regulatory_class)
+# to identify Functional Elements and swap in hg38 chrom names.
+# Use subColumn -miss so it doesn't quit when it sees a patch contig that doesn't map to an
+# hg38 chrom.  Use grep -f chrom.tab to filter out patch contig annotations.
+zcat interim_GRCh38.p11_top_level_2017-06-27.gff3.gz \
+| grep -P "(\t(CAAT_signal|GC_rich_promoter_region|TATA_box|enhancer|insulator|locus_control_region|mobile_genetic_element|origin_of_replication|promoter|protein_binding_site|recombination_feature|regulatory_region|repeat_region|sequence_feature|sequence_secondary_structure|silencer|stem_loop)\t|regulatory_class=)" \
+| subColumn -miss=/dev/null 1 stdin refSeqToChrom.tab stdout \
+| grep -f chrom.tab > funcElems.gff
+wc -l funcElems.gff
+#5756 funcElems.gff
 
-# Python script to grab just the functional elements from this list (given to us by Terence),
-# move things into a bed order and subtract 1 from the chr start coordinates provided.
-./parseRefSeqFuncElems join.foo bed 108.20170627
+# Transform GFF to BED+
+~/kent/src/hg/utils/automation/parseRefSeqFuncElems funcElems.gff /dev/stdout \
+| sort -k1,1 -k2n,2n > refSeqFuncElems.bed
+wc -l refSeqFuncElems.bed
+#5756 refSeqFuncElems.bed
 
-sort -k1,1 -k2,2n bed > sorted.bed
+# Make bigBed and link from /gbdb
+bedToBigBed -tab -type=bed9+7 -as=$HOME/kent/src/hg/lib/refSeqFuncElems.as \
+  refSeqFuncElems.bed /hive/data/genomes/hg38/chrom.sizes refSeqFuncElems.bb
+rm -f /gbdb/hg38/ncbiRefSeq/refSeqFuncElems.bb
+ln -s `pwd`/refSeqFuncElems.bb /gbdb/hg38/ncbiRefSeq/
 
-#wc sorted.bed
-#6188  159382 1763350 sorted.bed
-
-bedToBigBed -type=bed8+8 -as=refSeqFuncElems.as sorted.bed /hive/data/genomes/hg38/chrom.sizes refSeqFuncElems.bb -tab
-
-cd /gbdb/hg38/ncbiRefSeq
-ln -s /hive/data/outside/refSeqFuncElems/refSeqFuncElems.bb .
 ###################################################################
 # cosmicRegions (DONE 2017-08-03 Chris)
 # Make a new COSCMIC track for hg38 v82
@@ -6885,3 +6893,21 @@ ln -s /hive/data/outside/cosmic/hg38/v82/cosMutHg38V82.bb .
     make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
 
     # commit all
+
+#########################################################################
+2018-03-07: update UCSC GENCODE V27 to include protein id (for VAI) and fix PAR tag
+
+# save existing data, move a
+mkdir -p prev/pre-proteinId
+mv data/gencode.tab prev/pre-proteinId/
+mv tables/wgEncodeGencodeAttrsV27.tab tables/wgEncodeGencodeTagV27.tab prev/pre-proteinId/
+mv loaded/wgEncodeGencodeAttrsV27.tab.loaded loaded/wgEncodeGencodeTagV27.tab.loaded prev/pre-proteinId/
+
+# rebuild, getting protein ids.
+make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk loadTables >&prot-ids.log
+
+# 2018-03-19: update search to include protein id
+cd kent/src/hg/makeDb/trackDb
+../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg38 27 90 'Aug 2017'
+
+#########################################################################

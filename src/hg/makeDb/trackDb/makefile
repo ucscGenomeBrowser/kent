@@ -35,7 +35,7 @@ DBS = \
 	amaVit1 geoFor1 melUnd1 \
 	ancCey1 \
 	anoCar1 anoCar2 \
-	anoGam1 \
+	anoGam1 anoGam3 \
 	aotNan1 \
 	apiMel1 \
 	apiMel2	\
@@ -60,6 +60,8 @@ DBS = \
 	calJac1 calJac3 \
 	calMil1 \
 	canFam1 canFam2 canFamPoodle1 canFam3 \
+	casCan1 \
+	cavApe1 cavPor3 \
 	cb1 cb2 cb3 cb4 \
 	ce2 ce3 ce4 ce5 ce6 ce7 ce8 ce9 ce10 ce11 \
 	cebCap1 \
@@ -73,10 +75,10 @@ DBS = \
 	ci1 ci2 ci3 cioSav2 \
 	cioSav1 \
 	colAng1 \
-	criGri1 \
+	criGri1 criGriChoV1 criGriChoV2 \
 	danRer3 danRer4 danRer5 danRer6 danRer7 danRer10 danRer11 \
 	dasNov1 dasNov2 dasNov3 \
-	dipOrd1 proCap1 \
+	dipOrd1 dipOrd2 \
 	dirImm1 \
 	dm1 dm2 dm3 dm6 \
 	dp2 dp3 \
@@ -97,8 +99,10 @@ DBS = \
 	eulFla1 \
 	eulMac1 \
 	falciparum \
-	felCat3 felCat4 felCat5  felCat8 \
+	felCat3 felCat4 felCat5 felCat8 felCat9 \
+	ficAlb1 \
 	fr1 fr2 fr3 \
+	fukDam1 \
 	gadMor1 \
 	galGal2 galGal3 galGal4 galGal5 \
 	galVar1 \
@@ -145,14 +149,15 @@ DBS = \
 	oxyTri2 \
 	panPan1 panPan2 \
 	panRed1 \
-	panTro1 panTro2 panTro3 panTro4 panTro5 \
-	papHam1 papAnu2 papAnu3 \
-	petMar1 petMar2 \
+	panTro1 panTro2 panTro3 panTro4 panTro5 panTro6 \
+	papHam1 papAnu2 papAnu3 papAnu4 \
+	petMar1 petMar2 petMar3 \
 	plasFalc3D7V12 \
 	poeRet1 \
-	ponAbe2 \
+	ponAbe2 ponAbe3 \
 	priExs1 \
 	priPac1 priPac2 priPac3 \
+	proCap1 \
 	proCoq1 \
 	pteVam1 tarSyr1 tarSyr2 \
 	repeats2 \
@@ -166,7 +171,7 @@ DBS = \
 	sarHar1 \
 	sc1 \
 	sorAra1 sorAra2 \
-	speTri1 speTri2 cavPor3 \
+	speTri1 speTri2 \
 	strPur1 strPur2 strPur4 \
 	strRat1 strRat2 \
 	susScr1 susScr2 susScr3 susScr11 \

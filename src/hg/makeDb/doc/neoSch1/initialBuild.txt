@@ -157,7 +157,7 @@ rsync://ftp.ncbi.nlm.nih.gov/genomes/refseq/vertebrate_mammalian/Neomonachus_sch
     # establish the config.ra file:
     ~/kent/src/hg/utils/automation/prepConfig.pl neoSch1 mammal seal \
        refseq/*_assembly_report.txt > neoSch1.config.ra
-    
+
     # verify this looks OK:
 
     cat neoSch1.config.ra
@@ -321,6 +321,25 @@ taxId 29088
     # the sequence here is working for a 'refseq' assembly with a chrM
     # situation may be specific depending upon what is available in the assembly
 
+    # refseq assembly came out after we ran this up.  Compute it ids:
+    mkdir /hive/data/genomes/neoSch1/refseq
+    cd /hive/data/genomes/neoSch1/refseq
+    time rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/refseq/vertebrate_mammalian/Neomonachus_schauinslandi/all_assembly_versions/GCF_002201575.1_ASM220157v1/ ./
+   # sent 631 bytes  received 2674936273 bytes  25597482.33 bytes/sec
+   # total size is 2674606651  speedup is 1.00
+   # real    1m44.075s
+
+    mkdir /hive/data/genomes/neoSch1/refseq/idKeys
+    cd /hive/data/genomes/neoSch1/refseq/idKeys
+
+    faToTwoBit ../GCF_002201575.1_ASM220157v1_genomic.fna.gz refseq.neoSch1.2bit
+    time (doIdKeys.pl -twoBit=`pwd`/refseq.neoSch1.2bit -buildDir=`pwd` \
+	refseqNeoSch1) > do.log 2>&1
+    # real    12m15.428s
+    cat refseqNeoSch1.keySignature.txt
+    # 693347c3f7f03f2fde19c607fe7bb4ad
+
     mkdir /hive/data/genomes/neoSch1/bed/ucscToINSDC
     cd /hive/data/genomes/neoSch1/bed/ucscToINSDC
 
@@ -389,7 +408,18 @@ ucscToRefSeq.bed:chrM   0       16754   NC_008421.1
     featureBits -countGaps neoSch1 ucscToRefSeq
     # 2400839308 bases of 2400839308 (100.000%) in intersection
 
-#########################################################################
+##########################################################################
+# run up idKeys files for chromAlias (DONE - 2018-03-15 - Hiram)
+    mkdir /hive/data/genomes/neoSch1/bed/idKeys
+    cd /hive/data/genomes/neoSch1/bed/idKeys
+
+    time (doIdKeys.pl -twoBit=/hive/data/genomes/neoSch1/neoSch1.unmasked.2bit -buildDir=`pwd` neoSch1) > do.log 2>&1 &
+    # real    12m36.636s
+
+    cat neoSch1.keySignature.txt
+    #   cbeabb8faa38538267584374b47d8f3b
+
+##########################################################################
 # add chromAlias table (DONE - 2017-09-22 - Hiram)
 
     mkdir /hive/data/genomes/neoSch1/bed/chromAlias
@@ -417,7 +447,7 @@ ucscToRefSeq.bed:chrM   0       16754   NC_008421.1
     cd ~/kent/src/hg/makeDb/trackDb/seal/neoSch1
     # preview prefixes and suffixes:
     hgsql -N -e "select frag from gold;" neoSch1 \
-      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c
       1 NC_.1
    7871 NINY.1
 
@@ -478,34 +508,19 @@ searchPriority 8
     # 30655113 bases of 2400839308 (1.277%) in intersection
 
 ##############################################################################
-# ncbiRefSeq gene track (TBD - 2016-05-05 - Hiram)
+# ncbiRefSeq gene track (DONE - 2018-03-15 - Hiram)
     mkdir /hive/data/genomes/neoSch1/bed/ncbiRefSeq
     cd /hive/data/genomes/neoSch1/bed/ncbiRefSeq
 
-    # working on this script, running step by step:
-    time (/cluster/home/hiram/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
-  -stop=download -buildDir=`pwd` -bigClusterHub=ku \
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+  -buildDir=`pwd` -bigClusterHub=ku \
   -fileServer=hgwdev -workhorse=hgwdev -smallClusterHub=ku -dbHost=hgwdev \
-      refseq vertebrate_mammalian Pan_paniscus \
-         GCF_000258655.2_panpan1.1 neoSch1) > download.log 2>&1
-    # real    12m36.320s
-
-    time (/cluster/home/hiram/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
-  -continue=process -stop=process -buildDir=`pwd` -bigClusterHub=ku \
-  -fileServer=hgwdev -workhorse=hgwdev -smallClusterHub=ku -dbHost=hgwdev \
-      refseq vertebrate_mammalian Pan_paniscus \
-         GCF_000258655.2_panpan1.1 neoSch1) > process.log 2>&1
-    # real    4m22.621s
-
-    time (/cluster/home/hiram/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
-  -continue=load -stop=load -buildDir=`pwd` -bigClusterHub=ku \
-  -fileServer=hgwdev -workhorse=hgwdev -smallClusterHub=ku -dbHost=hgwdev \
-      refseq vertebrate_mammalian Pan_paniscus \
-         GCF_000258655.2_panpan1.1 neoSch1) > load.log 2>&1
-    # real    0m21.690s
+      refseq vertebrate_mammalian Neomonachus_schauinslandi \
+         GCF_002201575.1_ASM220157v1 neoSch1) > do.log 2>&1
+    # real    4m37.395s
 
     cat fb.ncbiRefSeq.neoSch1.txt
-    # 74646536 bases of 2725937399 (2.738%) in intersection
+    # 45781082 bases of 2400839308 (1.907%) in intersection
 
 ##############################################################################
 # genscan - (DONE - 2017-09-25 - Hiram)
@@ -513,14 +528,19 @@ searchPriority 8
     cd /hive/data/genomes/neoSch1/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku neoSch1) > do.log 2>&1
-XXX - running - Mon Sep 25 10:19:05 PDT 2017
-    # real    737m1.735s
+    # five were broken at window size of 2400000, they all worked at 2000000
+    # real    18m8.224s
+
+    # continuing:
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -continue=makeBed -bigClusterHub=ku neoSch1) > makeBed.log 2>&1
+    # real    1m43.328s
 
     cat fb.neoSch1.genscan.txt
-    #   55049663 bases of 2472073034 (2.227%) in intersection
+    #   53956919 bases of 2400839308 (2.247%) in intersection
 
     cat fb.neoSch1.genscanSubopt.txt
-    #   48834412 bases of 2472073034 (1.975%) in intersection
+    #   50754244 bases of 2400839308 (2.114%) in intersection
 
 #############################################################################
 # augustus gene track (DONE - 2017-09-25 - Hiram)
@@ -530,14 +550,13 @@ XXX - running - Mon Sep 25 10:19:05 PDT 2017
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
         -species=human -dbHost=hgwdev \
            -workhorse=hgwdev neoSch1) > do.log 2>&1
-XXX - running - Mon Sep 25 10:19:42 PDT 2017
-    # real    207m36.088s
+    # real    207m34.747s
 
     cat fb.neoSch1.augustusGene.txt
-    # 47127389 bases of 2472073034 (1.906%) in intersection
+    # 47279177 bases of 2400839308 (1.969%) in intersection
 
 #############################################################################
-# Create kluster run files (TBD - 2017-07-27 - Hiram)
+# Create kluster run files (DONE - 2017-09-25 - Hiram)
 
     # obtain 'real' numbers of this assembly:
     cd /hive/data/genomes/neoSch1
@@ -573,56 +592,74 @@ XXX - running - Mon Sep 25 10:19:42 PDT 2017
 # 	jkStuff/neoSch1.nonBridged.lft -bedFile=jkStuff/neoSch1.nonBridged.bed
 
 #########################################################################
-# lastz/chain/net swap from hg38 (TBD - 2017-08-02 - Hiram)
+# lastz/chain/net swap from hg38 (DONE - 2018-03-16 - Hiram)
     # alignment to hg38
-    cd /hive/data/genomes/hg38/bed/lastzNeoSch1.2017-07-31
+
+    cd /hive/data/genomes/hg38/bed/lastzNeoSch1.2017-09-25
 
     cat fb.hg38.chainNeoSch1Link.txt
-    # 1463754915 bases of 3049335806 (48.002%) in intersection
+    # 1586260720 bases of 3049335806 (52.020%) in intersection
+    cat fb.hg38.chainSynNeoSch1Link.txt
+    # 1515015853 bases of 3049335806 (49.683%) in intersection
+    cat fb.hg38.chainRBestNeoSch1Link.txt
+    # 1455520429 bases of 3049335806 (47.732%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/neoSch1/bed/blastz.hg38.swap
     cd /hive/data/genomes/neoSch1/bed/blastz.hg38.swap
 
     time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/hg38/bed/lastzNeoSch1.2017-07-31/DEF \
+      /hive/data/genomes/hg38/bed/lastzNeoSch1.2017-09-25/DEF \
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    107m7.364s
+    #  real    108m21.523s
 
     cat fb.neoSch1.chainHg38Link.txt
-    # 1387973267 bases of 2472073034 (56.146%) in intersection
+    # 1483929997 bases of 2400839308 (61.809%) in intersection
+    cat fb.neoSch1.chainSynHg38Link.txt
+    # 1446564285 bases of 2400839308 (60.252%) in intersection
 
-    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` neoSch1 hg38) \
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` neoSch1 hg38) \
         > rbest.log 2>&1
-    # real    598m8.675s
+    # real    404m14.530s
+
+    cat fb.neoSch1.chainRBestHg38Link.txt
+    # 1455431042 bases of 2400839308 (60.622%) in intersection
 
 #########################################################################
-# lastz/chain/net swap from mm10 (TBD - 2017-08-02 - Hiram)
+# lastz/chain/net swap from mm10 (DONE - 2018-03-16 - Hiram)
     # alignment on mm10
-    cd /hive/data/genomes/mm10/bed/lastzNeoSch1.2017-07-31
+
+    cd /hive/data/genomes/mm10/bed/lastzNeoSch1.2017-09-25
     cat fb.mm10.chainNeoSch1Link.txt
-    #	731012356 bases of 2652783500 (27.556%) in intersection
+    #	827926012 bases of 2652783500 (31.210%) in intersection
+    cat fb.mm10.chainRBestNeoSch1Link.txt
+    #   788489846 bases of 2652783500 (29.723%) in intersection
 
     mkdir /hive/data/genomes/neoSch1/bed/blastz.mm10.swap
     cd /hive/data/genomes/neoSch1/bed/blastz.mm10.swap
     time (doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/mm10/bed/lastzNeoSch1.2017-07-31/DEF \
+	/hive/data/genomes/mm10/bed/lastzNeoSch1.2017-09-25/DEF \
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
 	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
-    #	real    61m6.153s
+    #	real    59m27.809s
 
     cat fb.neoSch1.chainMm10Link.txt
-    #	715277290 bases of 2472073034 (28.934%) in intersection
+    #	804021579 bases of 2400839308 (33.489%) in intersection
+    cat fb.neoSch1.chainSynMm10Link.txt
+    #   776155245 bases of 2400839308 (32.328%) in intersection
 
-    time (doRecipBest.pl -workhorse=hgwdev neoSch1 mm10 \
+    time (doRecipBest.pl -load -workhorse=hgwdev neoSch1 mm10 \
       -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
-    # real    358m15.340s
+    # real    242m31.157s
+
+    cat fb.neoSch1.chainRBestMm10Link.txt
+    # 787537751 bases of 2400839308 (32.803%) in intersection
 
 ##############################################################################
-# GENBANK AUTO UPDATE (TBD - 2017-07-29 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2017-09-25 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -669,13 +706,12 @@ neoSch1.perChromTables = no
 
     time ./bin/gbAlignStep -initial neoSch1
     #  logFile: var/build/logs/2017.09.25-10:31:15.neoSch1.initalign.log
-XXX - running - Mon Sep 25 10:31:26 PDT 2017
+    #   real    112m27.766s
 
-    #   real    1486m19.233s
 
-    tail -2 var/build/logs/2017.07.27-20:49:34.neoSch1.initalign.log
-# hgwdev 2017.07.28-21:20:42 neoSch1.initalign: Succeeded: neoSch1
-# hgwdev 2017.07.28-21:35:53 neoSch1.initalign: finish
+    tail -2 var/build/logs/2017.09.25-10:31:15.neoSch1.initalign.log
+# hgwdev 2017.09.25-12:22:10 neoSch1.initalign: Succeeded: neoSch1
+# hgwdev 2017.09.25-12:23:43 neoSch1.initalign: finish
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.neoSch1
@@ -684,11 +720,11 @@ XXX - running - Mon Sep 25 10:31:26 PDT 2017
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad neoSch1
-    # logFile: var/dbload/hgwdev/logs/2017.07.29-07:05:26.neoSch1.dbload.log
-    # real    81m41.107s
+    # logFile: var/dbload/hgwdev/logs/2017.09.25-13:09:18.neoSch1.dbload.log
+    # real    5m1.448s
 
-    tail -1 var/dbload/hgwdev/logs/2017.07.29-07:05:26.neoSch1.dbload.log
-    # hgwdev 2017.07.29-08:27:07 neoSch1.dbload: finish
+    tail -1 var/dbload/hgwdev/logs/2017.09.25-13:09:18.neoSch1.dbload.log
+    # hgwdev 2017.09.25-13:14:20 neoSch1.dbload: finish
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -696,32 +732,50 @@ XXX - running - Mon Sep 25 10:31:26 PDT 2017
     # add neoSch1 to:
     #   etc/align.dbs etc/hgwdev.dbs
     git add etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added neoSch1 - pig refs #19859" etc/align.dbs etc/hgwdev.dbs
+    git commit -m \
+"Added neoSch1 - Hawaiian monk seal - Neomonachus schauinslandi refs #19883" \
+etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
 ##############################################################################
-#  BLATSERVERS ENTRY (TBD - 2017-08-03 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2017-10-06 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("neoSch1", "blat1b", "17880", "1", "0"); \
+	VALUES ("neoSch1", "blat1c", "17880", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("neoSch1", "blat1b", "17881", "0", "1");' \
+	VALUES ("neoSch1", "blat1c", "17881", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
 ##############################################################################
-# set default position to OPN1SW gene displays  (TBD - 2017-08-03 - Hiram)
-# same as susScr3:
+# set default position to similar location as hg38 (DONE - 2017-10-06 - Hiram)
     hgsql -e \
-'update dbDb set defaultPos="chr18:19836295-19840119" where name="neoSch1";' \
+'update dbDb set defaultPos="NW_018734295v1:8131879-8151536" where name="neoSch1";' \
 	hgcentraltest
 
 ##############################################################################
-# all.joiner update, downloads and in pushQ - (TBD - 2017-08-03 - Hiram)
+# all.joiner update, downloads and in pushQ - (DONE - 2018-03-22 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
+
+    ~/kent/src/hg/utils/automation/verifyBrowser.pl neoSch1
+# 61 tables in database neoSch1 - Hawaiian monk seal, Neomonachus schauinslandi
+# verified 58 tables in database neoSch1, 3 extra tables, 24 optional tables
+# NCBI RefSeq genes     10 optional tables
+# chainNetRBestHg38     3 optional tables
+# chainNetRBestMm10     3 optional tables
+# chainNetSynHg38       3 optional tables
+# chainNetSynMm10       3 optional tables
+# gapOverlap    1 optional tables
+# tandemDups    1 optional tables
+# 1     chainLepWed1    - extra table
+# 2     chainLepWed1Link        - extra table
+# 3     netLepWed1      - extra table
+# 5 genbank tables found
+# verified 29 required tables, 0 missing tables
+
     # fixup all.joiner until this is a clean output
     joinerCheck -database=neoSch1 -tableCoverage all.joiner
     joinerCheck -database=neoSch1 -times all.joiner
@@ -729,14 +783,20 @@ XXX - running - Mon Sep 25 10:31:26 PDT 2017
 
     cd /hive/data/genomes/neoSch1
     time (makeDownloads.pl neoSch1) > downloads.log 2>&1
-    # real    17m8.716s
+    # real    16m28.321s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/neoSch1/pushQ
     cd /hive/data/genomes/neoSch1/pushQ
     time (makePushQSql.pl -redmineList neoSch1) \
 	> neoSch1.pushQ.sql 2> stderr.out
-    # real    3m46.855s
+    # real    3m53.420s
+
+    # remove the tandemDups and gapOverlap from the listings:
+    sed -i -e "/tandemDups/d" redmine.neoSch1.table.list
+    sed -i -e "/Tandem Dups/d" redmine.neoSch1.releaseLog.txt
+    sed -i -e "/gapOverlap/d" redmine.neoSch1.table.list
+    sed -i -e "/Gap Overlaps/d" redmine.neoSch1.releaseLog.txt
 
     #   check for errors in stderr.out, some are OK, e.g.:
     # writing redmine listings to
@@ -745,5 +805,26 @@ XXX - running - Mon Sep 25 10:31:26 PDT 2017
     # redmine.neoSch1.releaseLog.txt
     # WARNING: neoSch1 does not have seq
     # WARNING: neoSch1 does not have extFile
+
+    # verify the file listings are valid, should be no output to stderr:
+    cat redmine.neoSch1.file.list \
+        | while read L; do ls -ogL $L; done  > /dev/null
+
+    # to verify the database.table list is correct, should be the same
+    # line count for these two commands:
+    wc -l redmine.neoSch1.table.list
+    # 53 redmine.neoSch1.table.list
+    awk -F'.' '{
+printf "hgsql -N -e \"show table status like '"'"'%s'"'"';\" %s\n", $2, $1
+}' redmine.neoSch1.table.list | while read L; do eval $L; done | wc -l
+    # 53
+
+    # add the path names to the listing files in the redmine issue
+    # in the three appropriate entry boxes:
+    ls `pwd`/redmine*
+
+/hive/data/genomes/neoSch1/pushQ/redmine.neoSch1.file.list
+/hive/data/genomes/neoSch1/pushQ/redmine.neoSch1.releaseLog.txt
+/hive/data/genomes/neoSch1/pushQ/redmine.neoSch1.table.list
 
 #########################################################################
