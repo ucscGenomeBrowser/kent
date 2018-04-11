@@ -105,6 +105,11 @@ void psDrawEllipse(struct psGfx *ps, double x, double y, double xrad, double yra
     double startAngle, double endAngle);
 /* Draw an ellipse outline */
 
+void psDrawCurve(struct psGfx *ps, double x1, double y1, double x2, double y2,
+                        double x3, double y3, double x4, double y4);
+/* Draw Bezier curve specified by 4 points: first (p1) and last (p4)
+ *      and 2 control points (p2, p3) */
+
 void psSetDash(struct psGfx *ps, boolean on);
 /* Set dashed line mode on or off. If set on, show two points marked, with one point of space */
 

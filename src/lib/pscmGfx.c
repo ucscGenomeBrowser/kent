@@ -694,8 +694,8 @@ else
 boxPscm = NULL;
 }
 
-void pscmEllipse(struct pscmGfx *pscm, 
-	int x1, int y1, int x2, int y2, int color, int mode, boolean isDashed)
+void pscmEllipse(struct pscmGfx *pscm, int x1, int y1, int x2, int y2, Color color, 
+                        int mode, boolean isDashed)
 /* Draw an ellipse specified as a rectangle. Args are left-most and top-most points.
  * Optionally draw half-ellipse (top or bottom) */
 {
@@ -710,9 +710,38 @@ if (mode == ELLIPSE_TOP)
     endAngle = 180;
 else if (mode == ELLIPSE_BOTTOM)
     startAngle = 180;
-psDrawEllipse(pscm->ps, (double)x2, 0.0, (double)x2 - (double)x1, (double)y2, 
+int yrad = abs(y1 - y2)/2;
+int xrad = abs(x1 - x2)/2;
+x2 = x2 - xrad;
+y1 = y1 - yrad;
+psDrawEllipse(pscm->ps, (double)x2, (double)y1, (double)xrad, (double)yrad,
                 startAngle, endAngle);
-//warn("drawing ellipse: center: (%d,%d), xrad: %d, yrad=%d", x2, 0, x2-x1, y2);
+psSetDash(pscm->ps, FALSE);
+}
+
+static double bezierQuadraticToCubic(int a, int b)
+/* Derive cubic control points from quadratic control point. */
+{
+return (double)a + (2 * (b - a))/3.0;
+}
+
+void pscmCurve(struct pscmGfx *pscm, int x1, int y1, int x2, int y2, int x3, int y3, Color color,
+                        boolean isDashed)
+/* Draw Bezier curve specified by 3 points (quadratic Bezier).
+ * The points are: first (p1) and last (p3), and 1 control point (p2).
+ */ 
+{
+pscmSetColor(pscm, color);
+if (isDashed)
+    psSetDash(pscm->ps, TRUE);
+else
+    psSetDash(pscm->ps, FALSE);
+// PostScript bezier is cubic -- derive the two control points from the single quadratic control point
+double c1x = bezierQuadraticToCubic(x1, x2);
+double c1y = bezierQuadraticToCubic(y1, y2);
+double c2x = bezierQuadraticToCubic(x3, x2);
+double c2y = bezierQuadraticToCubic(y3, y2);
+psDrawCurve(pscm->ps, (double)x1, (double)y1, c1x, c1y, c2x, c2y, (double)x3, (double)y3);
 psSetDash(pscm->ps, FALSE);
 }
 
@@ -736,6 +765,7 @@ vg->verticalSmear = (vg_verticalSmear)pscmVerticalSmear;
 vg->fillUnder = (vg_fillUnder)pscmFillUnder;
 vg->drawPoly = (vg_drawPoly)pscmDrawPoly;
 vg->ellipse = (vg_ellipse)pscmEllipse;
+vg->curve = (vg_curve)pscmCurve;
 vg->setHint = (vg_setHint)pscmSetHint;
 vg->getHint = (vg_getHint)pscmGetHint;
 vg->getFontPixelHeight = (vg_getFontPixelHeight)pscmGetFontPixelHeight;

@@ -359,7 +359,7 @@ else
 }
 
 void psDrawEllipse(struct psGfx *ps, double x, double y, double xrad, double yrad,
-    double startAngle, double endAngle)
+                                        double startAngle, double endAngle)
 /* Draw ellipse.  Args are center point x and y, horizontal radius, vertical radius,
         start and end angles (e.g. 0 and 180 to draw top half, 180 and 360 for bottom)
  */
@@ -368,10 +368,24 @@ FILE *f = ps->f;
 fprintf(f, "newpath\n");
 psXyOut(ps, x, y);
 psWhOut(ps, xrad, yrad);
-//warn("ellipse: x=%d, y=%d, xrad=%d, yrad=%d. ", (int)x, (int)y, (int)xrad, (int)yrad);
 psFloatOut(f, startAngle);
 psFloatOut(f, endAngle);
 fprintf(f, "ellipse\n");
+fprintf(f, "stroke\n");
+}
+
+void psDrawCurve(struct psGfx *ps, double x1, double y1, double x2, double y2,
+                                        double x3, double y3, double x4, double y4)
+/* Draw Bezier curve specified by 4 points: first (p1) and last (p4)
+ *      and 2 control points (p2, p3) */
+{
+FILE *f = ps->f;
+psXyOut(ps, x1, y1);
+fprintf(f, "moveto\n");
+psXyOut(ps, x2, y2);
+psXyOut(ps, x3, y3);
+psXyOut(ps, x4, y4);
+fprintf(f, "curveto\n");
 fprintf(f, "stroke\n");
 }
 
