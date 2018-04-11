@@ -3,7 +3,7 @@ compositeTrack on
 shortLabel Primate Chain/Net
 longLabel Primate Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species s000=Human s001=Human s002=J._Craig_Venter s0025=Chimp s003=Chimp s004=Chimp s005=Chimp s006=Chimp s007=Bonobo s008=Bonobo s009=Gorilla s010=Gorilla s011=Gorilla s012=Gorilla s013=Orangutan s014=Gibbon s015=Gibbon s016=Proboscis_monkey s017=Black_snub-nosed_monkey s018=Golden_snub-nosed_monkey s019=Angolan_colobus s020=Crab-eating_macaque s021=Rhesus s022=Rhesus s023=Rhesus s024=Baboon s025=Baboon s026=Baboon s027=Pig-tailed_macaque s028=Sooty_mangabey s029=Green_monkey s030=Green_monkey s031=Drill s032=Squirrel_monkey s033=Ma's_night_monkey s034=Marmoset s035=Marmoset s036=White-faced_sapajou s037=Tarsier s038=Tarsier s039=Sclater's_lemur s040=Black_lemur s041=Coquerel's_sifaka s042=Mouse_lemur s043=Mouse_lemur s044=Mouse_lemur s045=Bushbaby s046=Bushbaby
+subGroup2 species Species s000=Human s001=Human s002=J._Craig_Venter s0025=Chimp s003=Chimp s004=Chimp s005=Chimp s006=Chimp s007=Bonobo s008=Bonobo s009=Gorilla s010=Gorilla s011=Gorilla s012=Gorilla s013a=Orangutan s013b=Orangutan s014=Gibbon s015=Gibbon s016=Proboscis_monkey s017=Black_snub-nosed_monkey s018=Golden_snub-nosed_monkey s019=Angolan_colobus s020=Crab-eating_macaque s021=Rhesus s022=Rhesus s023=Rhesus s024=Baboon s025=Baboon s026=Baboon s027=Pig-tailed_macaque s028=Sooty_mangabey s029=Green_monkey s030=Green_monkey s031=Drill s032=Squirrel_monkey s033=Ma's_night_monkey s034=Marmoset s035=Marmoset s036=White-faced_sapajou s037=Tarsier s038=Tarsier s039=Sclater's_lemur s040=Black_lemur s041=Coquerel's_sifaka s042=Mouse_lemur s043=Mouse_lemur s044=Mouse_lemur s045=Bushbaby s046=Bushbaby
 subGroup3 clade Clade c00=hominidae c01=cercopithecinae c02=haplorrhini c03=strepsirrhini
 dragAndDrop subTracks
 visibility hide
@@ -94,8 +94,8 @@ priority 7
         track chainPanPan2
         subTrack primateChainNetViewchain off
         subGroups view=chain species=s007 clade=c00
-        shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain panPan2
         otherDb panPan2
 
@@ -131,9 +131,17 @@ priority 7
         type chain gorGor3
         otherDb gorGor3
 
+        track chainPonAbe3
+        subTrack primateChainNetViewchain off
+        subGroups view=chain species=s013a clade=c00
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain ponAbe3
+        otherDb ponAbe3
+
         track chainPonAbe2
         subTrack primateChainNetViewchain off
-        subGroups view=chain species=s013 clade=c00
+        subGroups view=chain species=s013b clade=c00
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain ponAbe2
@@ -390,8 +398,8 @@ priority 7
         track chainOtoGar3
         subTrack primateChainNetViewchain off
         subGroups view=chain species=s045 clade=c03
-        shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain otoGar3
         otherDb otoGar3
 
@@ -442,7 +450,7 @@ priority 7
         otherDb panTro6
 
         track netPanTro5
-        subTrack primateChainNetViewnet off
+        subTrack primateChainNetViewnet on
         subGroups view=net species=s003 clade=c00
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -450,7 +458,7 @@ priority 7
         otherDb panTro5
 
         track netPanTro4
-        subTrack primateChainNetViewnet off
+        subTrack primateChainNetViewnet on
         subGroups view=net species=s004 clade=c00
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -476,8 +484,8 @@ priority 7
         track netPanPan2
         subTrack primateChainNetViewnet off
         subGroups view=net species=s007 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign panPan2 chainPanPan2
         otherDb panPan2
 
@@ -513,9 +521,17 @@ priority 7
         type netAlign gorGor3 chainGorGor3
         otherDb gorGor3
 
+        track netPonAbe3
+        subTrack primateChainNetViewnet off
+        subGroups view=net species=s013a clade=c00
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign ponAbe3 chainPonAbe3
+        otherDb ponAbe3
+
         track netPonAbe2
         subTrack primateChainNetViewnet off
-        subGroups view=net species=s013 clade=c00
+        subGroups view=net species=s013b clade=c00
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign ponAbe2 chainPonAbe2
@@ -578,7 +594,7 @@ priority 7
         otherDb macFas5
 
         track netRheMac8
-        subTrack primateChainNetViewnet off
+        subTrack primateChainNetViewnet on
         subGroups view=net species=s021 clade=c01
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -682,7 +698,7 @@ priority 7
         otherDb aotNan1
 
         track netCalJac3
-        subTrack primateChainNetViewnet off
+        subTrack primateChainNetViewnet on
         subGroups view=net species=s034 clade=c02
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -770,10 +786,10 @@ priority 7
         otherDb micMur1
 
         track netOtoGar3
-        subTrack primateChainNetViewnet off
+        subTrack primateChainNetViewnet on
         subGroups view=net species=s045 clade=c03
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign otoGar3 chainOtoGar3
         otherDb otoGar3
 
