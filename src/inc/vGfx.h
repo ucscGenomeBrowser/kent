@@ -80,10 +80,21 @@ struct vGfx
     	boolean filled);
     /* Draw polygon, possibly filled in color. */
 
+    void (*ellipse)(void *v, int x1, int y1, int x2, int y2, Color color,
+                    int mode, boolean isDashed); 
+    /* Draw an ellipse or half-ellipse (top or bottom),
+     * specified by left-most and top-most points on a  rectangle.
+     * Optionally draw with dashed line. */
+
+    int (*curve)(void *v, int x1, int y1, int x2, int y2, int x3, int y3, Color color,
+                    boolean isDashed); 
+    /* Draw a segment of an anti-aliased curve within 3 points (quadratic Bezier)
+     * Return max y value. Optionally draw curve as dashed line. */
+
     void (*setHint)(void *v, char *hint, char *value);
     /* Set hint */
 
-    char * (*getHint)(void *v, char *hint);
+    char *(*getHint)(void *v, char *hint);
     /* Get hint */
 
     int (*getFontPixelHeight)(void *v, void *font);
@@ -166,6 +177,19 @@ void vgClose(struct vGfx **pVg);
 #define vgDrawPoly(v,poly,color,filled) \
 	v->drawPoly(v->data,poly,color,filled)
     /* Draw a polygon in color, optionally filled. */
+
+#define vgEllipse(v,x1,y1,x2,y2,color,mode,isDashed) \
+        v->ellipse(v->data,x1,y1,x2,y2,color,mode,isDashed)
+    /* Draw an ellipse or half-ellipse (top or bottom),
+     * specified by left-most and top-most points on a  rectangle.
+     * Optionally draw with dashed line */
+
+#define vgCurve(v,x1,y1,x2,y2,x3,y3,color,isDashed) \
+        v->curve(v->data,x1,y1,x2,y2,x3,y3,color,isDashed)
+/* Draw a segment of an anti-aliased curve within 3 points (quadratic Bezier)
+ * Return max y value. Optionally draw curve as dashed line.
+ * Adapted trivially from code posted at http://members.chello.at/~easyfilter/bresenham.html
+ * Author: Zingl Alois, 8/22/2016 */
 
 #define vgSetHint(v,hint,value) \
 	v->setHint(v->data,hint,value)
