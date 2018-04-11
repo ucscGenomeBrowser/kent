@@ -852,7 +852,11 @@ struct trackDb *tdb;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     if (hashLookup(hash, tdb->track))
-        errAbort("Track %s appears more than once in genome %s.", tdb->track, genome->name);
+        errAbort("Track %s appears more than once in genome %s. " 
+                "Track identifiers have to be unique. Please check your track hub files, "
+                "especially the 'track' lines. "
+                "The most likely reason for this error is that you duplicated a "
+                "'track' identifier.", tdb->track, genome->name);
     hashAdd(hash, tdb->track, tdb);
     }
 

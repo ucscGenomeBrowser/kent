@@ -755,7 +755,7 @@ searchPriority 8
     # 2748571185 bases of 3018592990 (91.055%) in intersection
 
 #############################################################################
-# lastz/chain/net swap mouse/mm10 (TBD - 2018-03-14 - Hiram)
+# lastz/chain/net swap mouse/mm10 (DONE - 2018-03-24 - Hiram)
 
     # alignment to mouse/mm10:
     cd /hive/data/genomes/mm10/bed/lastzPanTro6.2018-03-24/
@@ -763,10 +763,8 @@ searchPriority 8
     cat fb.mm10.chainPanTro6Link.txt
     # 935720585 bases of 2652783500 (35.273%) in intersection
 
-    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
-	mm10 panTro6) > rbest.log 2>&1 &
-XXX
-    # real    624m28.225s
+    cat fb.mm10.chainRBestPanTro6Link.txt
+    # 891553355 bases of 2652783500 (33.608%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/panTro6/bed/blastz.mm10.swap
@@ -786,11 +784,10 @@ XXX
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
 	panTro6 mm10) > rbest.log 2>&1 &
-XXX
-    # real    560m21.432s
+    # real    504m47.811s
 
     cat fb.panTro6.chainRBestMm10Link.txt
-    # 760753851 bases of 2476453204 (30.719%) in intersection
+    # 890065520 bases of 3018592990 (29.486%) in intersection
 
 ##############################################################################
 # Create kluster run files (DONE - 2018-03-24 - Hiram)
@@ -922,37 +919,45 @@ panTro6.genbank.mrna.xeno.load = yes
     # XXX a few days later the genbank tables will be in the database
 
 #############################################################################
-#  BLATSERVERS ENTRY (TBD - 2018-08-13 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2018-08-26 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("panTro6", "blat1c", "17900", "1", "0"); \
+	VALUES ("panTro6", "blat1c", "17904", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("panTro6", "blat1c", "17001", "0", "1");' \
+	VALUES ("panTro6", "blat1c", "17905", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
 ##############################################################################
-## reset default position to same as what panTro5 has
-##  (TBD - 2018-03-13 - Hiram)
+## reset default position to same as what panTro5 has: FOXP2
+##  (DONE - 2018-04-09 - Hiram)
 
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="chrA2:53333898-53447862"
+    hgsql -e 'update dbDb set defaultPos="chr7:111311998-111585728"
 	where name="panTro6";' hgcentraltest
 
 ##############################################################################
-# all.joiner update, downloads and in pushQ - (TBD - 2018-03-19 - Hiram)
+# all.joiner update, downloads and in pushQ - (DONE - 2018-04-09 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     ~/kent/src/hg/utils/automation/verifyBrowser.pl panTro6
-# 65 tables in database panTro6 - Cat, Felis catus
-# verified 65 tables, 0 extra tables, 10 optional tables
+# 66 tables in database panTro6 - Chimp, Pan troglodytes
+# verified 66 tables in database panTro6, 0 extra tables, 24 optional tables
+# NCBI RefSeq genes     10 optional tables
+# chainNetRBestHg38     3 optional tables
+# chainNetRBestMm10     3 optional tables
+# chainNetSynHg38       3 optional tables
+# chainNetSynMm10       3 optional tables
+# gapOverlap    1 optional tables
+# tandemDups    1 optional tables
 # 13 genbank tables found
-# verified 42 tables, 1 missing tables
-# 1     gapOverlap
-# liftOver to previous versions: 2, from previous versions: 2
-
-    # there were no gapOverlap items found
+# verified 29 required tables, 0 missing tables
+# hg38 chainNet to panTro6 found 3 required tables
+# mm10 chainNet to panTro6 found 3 required tables
+# hg38 chainNet RBest and syntenic to panTro6 found 6 optional tables
+# mm10 chainNet RBest and syntenic to panTro6 found 3 optional tables
+# liftOver to previous versions: 1, from previous versions: 1
 
     # fixup all.joiner until this is a clean output
     joinerCheck -database=panTro6 -tableCoverage all.joiner
@@ -960,18 +965,22 @@ panTro6.genbank.mrna.xeno.load = yes
     joinerCheck -database=panTro6 -keys all.joiner
 
     cd /hive/data/genomes/panTro6
+    # clean up obsolete trackDb work, assuming you have already checked in
+    # these trackDb files into the source tree
     rm -fr TemporaryTrackDbCheckout
 
     time (makeDownloads.pl -workhorse=hgwdev panTro6) > downloads.log 2>&1
-    #  real    26m28.250s
+    #  real    25m49.888s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/panTro6/pushQ
     cd /hive/data/genomes/panTro6/pushQ
   time (makePushQSql.pl -redmineList panTro6) > panTro6.pushQ.sql 2> stderr.out
-    # remove the tandemDups from the file list:
+    # remove the tandemDups and gapOverlap from the file list:
     sed -i -e "/tandemDups/d" redmine.panTro6.table.list
     sed -i -e "/Tandem Dups/d" redmine.panTro6.releaseLog.txt
+    sed -i -e "/gapOverlap/d" redmine.panTro6.table.list
+    sed -i -e "/Gap Overlaps/d" redmine.panTro6.releaseLog.txt
 
     #   check for errors in stderr.out, some are OK, e.g.:
     # WARNING: panTro6 does not have seq

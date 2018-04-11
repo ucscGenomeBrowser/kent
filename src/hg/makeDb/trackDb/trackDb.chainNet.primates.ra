@@ -847,6 +847,112 @@ html chainNet
         html chainNet
 
 ################################################################
+# ponAbe3 - Bonobo - Pongo pygmaeus abelii - primate - taxId 9601
+################################################################
+track chainNetPonAbe3
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 498
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+matrixHeader A, C, G, T
+otherDb ponAbe3
+chainMinScore 3000
+chainLinearGap medium
+html chainNet
+
+    track chainNetPonAbe3Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetPonAbe3
+    spectrum on
+
+        track chainPonAbe3
+        parent chainNetPonAbe3Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain ponAbe3
+        html chainNet
+
+    track chainNetPonAbe3Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetPonAbe3
+
+        track netPonAbe3
+        parent chainNetPonAbe3Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment net
+        type netAlign ponAbe3 chainPonAbe3
+        html chainNet
+
+################################################################
+# ponAbe2 - Bonobo - Pongo pygmaeus abelii - primate - taxId 9601
+################################################################
+track chainNetPonAbe2
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 498
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+matrixHeader A, C, G, T
+otherDb ponAbe2
+chainMinScore 3000
+chainLinearGap medium
+html chainNet
+
+    track chainNetPonAbe2Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetPonAbe2
+    spectrum on
+
+        track chainPonAbe2
+        parent chainNetPonAbe2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain ponAbe2
+        html chainNet
+
+    track chainNetPonAbe2Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetPonAbe2
+
+        track netPonAbe2
+        parent chainNetPonAbe2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment net
+        type netAlign ponAbe2 chainPonAbe2
+        html chainNet
+
+################################################################
 # saiBol1 - Squirrel monkey - Saimiri boliviensis - primate - primate - 395
 ################################################################
 track chainNetSaiBol1

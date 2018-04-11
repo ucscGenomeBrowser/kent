@@ -8,6 +8,15 @@ set -eEu -o pipefail
 #       current login requires the user be braney
 umask 002
 
+trap reportErr ERR
+
+function reportErr
+{
+    echo "ERROR: DECIPHER pipeline failed"
+    exit 1;
+}
+
+
 WORKDIR="/hive/data/outside/otto/decipher"
 export WORKDIR
 
@@ -53,6 +62,8 @@ then
     echo "DECIPHER Installed `date`" 
 
     cp -p $FN ../lastUpdate
+else
+    echo "No update"
 fi
 
 rm decipher-*
