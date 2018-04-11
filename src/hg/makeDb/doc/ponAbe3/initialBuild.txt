@@ -469,7 +469,7 @@ done
         ponAbe3.chromAlias.tab
 
 #########################################################################
-# fixup search rule for assembly track/gold table (TBD - 2018-03-24 - Hiram)
+# fixup search rule for assembly track/gold table (DONE - 2018-03-26 - Hiram)
     cd ~/kent/src/hg/makeDb/trackDb/orangutan/ponAbe3
 
     # preview prefixes and suffixes:
@@ -649,17 +649,16 @@ searchPriority 8
     mkdir /hive/data/genomes/ponAbe3/bed/ncbiRefSeq
     cd /hive/data/genomes/ponAbe3/bed/ncbiRefSeq
 
-    # adjust the name arguments
+    # adjust the name arguments from previous copies
     time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
       -bigClusterHub=ku -dbHost=hgwdev \
       -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
       refseq vertebrate_mammalian Pongo_abelii \
       GCF_002880775.1_Susie_PABv2 ponAbe3) > do.log 2>&1
-XXX - running - Mon Mar 26 15:40:22 PDT 2018
-    # real    10m2.131s
+    # real    7m54.135s
 
     cat fb.ncbiRefSeq.ponAbe3.txt
-    #  81659062 bases of 2476453204 (3.297%) in intersection
+    #  70499327 bases of 3043444524 (2.316%) in intersection
 
 #############################################################################
 # cpgIslands - (DONE - 2018-03-26 - Hiram)
@@ -830,7 +829,7 @@ XXX - running - Mon Mar 26 15:40:22 PDT 2018
     # 890774155 bases of 3043444524 (29.269%) in intersection
 
 ##############################################################################
-# Create kluster run files (TBD - 2018-03-24 - Hiram)
+# Create kluster run files (DONE - 2018-03-25 - Hiram)
 
     cd /hive/data/genomes/ponAbe3
     # numerator is ponAbe3 gapless bases "real" as reported by:
@@ -888,14 +887,13 @@ XXX - running - Mon Mar 26 15:40:22 PDT 2018
 	-ooc=/hive/data/genomes/ponAbe3/jkStuff/ponAbe3.11.ooc \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
          ponAbe3 ponAbe2) > do.log 2>&1
-XXX - running - Mon Mar 26 11:07:35 PDT 2018
-    # real    464m42.018s
+    # real    766m55.498s
 
     # verify the convert link on the test browser is now active from ponAbe3 to
     # ponAbe2
 
 ##############################################################################
-# GENBANK AUTO UPDATE (TBD - 2018-03-25 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2018-03-26 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -944,7 +942,7 @@ ponAbe3.downloadDir = ponAbe3
     # update /cluster/data/genbank/:
     make etc-update
 
-    # XXX a few days later the genbank tables will be in the database
+    # a few days later the genbank tables will be in the database
 
 #############################################################################
 #  BLATSERVERS ENTRY (DONE - 2018-08-26 - Hiram)
@@ -959,31 +957,31 @@ ponAbe3.downloadDir = ponAbe3
     #	test it with some sequence
 
 ##############################################################################
-## reset default position to same as what panTro5 has
-##  (TBD - 2018-03-13 - Hiram)
-
-chrX:147,374,044-147,379,064
-chrX:152,496,083-152,501,081
-chrX:147,374,044-152,501,081
-
-chrX:152,299,762-152,501,081
+## reset default position to same as what ponAbe2 has
+##  (DONE - 2018-04-10 - Hiram)
 
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="chrA2:53333898-53447862"
+    hgsql -e 'update dbDb set defaultPos="chrX:147374044-147574286"
 	where name="ponAbe3";' hgcentraltest
 
 ##############################################################################
-# all.joiner update, downloads and in pushQ - (TBD - 2018-03-19 - Hiram)
+# all.joiner update, downloads and in pushQ - (DONE - 2018-04-09 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     ~/kent/src/hg/utils/automation/verifyBrowser.pl ponAbe3
-# 65 tables in database ponAbe3 - Cat, Felis catus
-# verified 65 tables, 0 extra tables, 10 optional tables
-# 13 genbank tables found
-# verified 42 tables, 1 missing tables
-# 1     gapOverlap
-# liftOver to previous versions: 2, from previous versions: 2
-
-    # there were no gapOverlap items found
+# 54 tables in database ponAbe3 - Orangutan, Pongo pygmaeus abelii
+# verified 54 tables in database ponAbe3, 0 extra tables, 13 optional tables
+# chainNetRBestHg38     3 optional tables
+# chainNetRBestMm10     3 optional tables
+# chainNetSynHg38       3 optional tables
+# chainNetSynMm10       3 optional tables
+# tandemDups    1 optional tables
+# 12 genbank tables found
+# verified 29 required tables, 0 missing tables
+# hg38 chainNet to ponAbe3 found 3 required tables
+# mm10 chainNet to ponAbe3 found 3 required tables
+# hg38 chainNet RBest and syntenic to ponAbe3 found 6 optional tables
+# mm10 chainNet RBest and syntenic to ponAbe3 found 3 optional tables
+# liftOver to previous versions: 1, from previous versions: 1
 
     # fixup all.joiner until this is a clean output
     joinerCheck -database=ponAbe3 -tableCoverage all.joiner
@@ -991,18 +989,26 @@ chrX:152,299,762-152,501,081
     joinerCheck -database=ponAbe3 -keys all.joiner
 
     cd /hive/data/genomes/ponAbe3
+    # clean up obsolete trackDb work, assuming you have already checked in
+    # these trackDb files into the source tree
     rm -fr TemporaryTrackDbCheckout
 
     time (makeDownloads.pl -workhorse=hgwdev ponAbe3) > downloads.log 2>&1
-    #  real    26m28.250s
+    #  real    26m7.143s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/ponAbe3/pushQ
     cd /hive/data/genomes/ponAbe3/pushQ
   time (makePushQSql.pl -redmineList ponAbe3) > ponAbe3.pushQ.sql 2> stderr.out
-    # remove the tandemDups from the file list:
+    # real    3m49.756s
+
+    # remove the tandemDups and gapOverlap from the file list:
     sed -i -e "/tandemDups/d" redmine.ponAbe3.table.list
     sed -i -e "/Tandem Dups/d" redmine.ponAbe3.releaseLog.txt
+
+    # gapOverlap was not created
+    sed -i -e "/gapOverlap/d" redmine.panTro6.table.list
+    sed -i -e "/Gap Overlaps/d" redmine.panTro6.releaseLog.txt
 
     #   check for errors in stderr.out, some are OK, e.g.:
     # WARNING: ponAbe3 does not have seq
