@@ -358,6 +358,19 @@ else
     }
 }
 
+void psFillEllipse(struct psGfx *ps, double x, double y, double xrad, double yrad)
+{
+FILE *f = ps->f;
+fprintf(f, "newpath\n");
+psXyOut(ps, x, y);
+psWhOut(ps, xrad, yrad);
+psFloatOut(f, 0.0);
+psFloatOut(f, 360.0);
+fprintf(f, "ellipse\n");
+fprintf(f, "closepath\n");
+fprintf(f, "fill\n");
+}
+
 void psDrawEllipse(struct psGfx *ps, double x, double y, double xrad, double yrad,
                                         double startAngle, double endAngle)
 /* Draw ellipse.  Args are center point x and y, horizontal radius, vertical radius,
