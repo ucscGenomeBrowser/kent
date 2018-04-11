@@ -2519,7 +2519,7 @@ while (lineFileNextReal(lf, &term))
         }
     else
         {
-        if (!regexMatch(term, "^[A-Z_]+\\.[0-9]+[: ]"))
+        if (!regexMatch(term, "^[A-Z_0-9]+\\.[0-9]+[: ]"))
             notVersionedAcc = TRUE;
 	slNameAddHead(&failedTerms, dyStringContents(dyError));
         }
