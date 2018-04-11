@@ -162,7 +162,7 @@ if (useSubmitFname)
 else
     {
     char *formatExt = fileExtFromFormat(vf->format);
-    if (sameWord(vf->format, "unknown") && ef && ef->submitFileName && endsWith(ef->submitFileName, ".tar.gz"))
+    if (vf->format && sameWord(vf->format, "unknown") && ef && ef->submitFileName && endsWith(ef->submitFileName, ".tar.gz"))
         formatExt = cloneString(".tar.gz");
     safef(suggestName, sizeof(suggestName), "%s%s%s", vf->licensePlate, formatExt, addExt);
     freez(&formatExt);

@@ -47,6 +47,9 @@
 #define REFSEQ_STATUS_DOC_URL "\"https://www.ncbi.nlm.nih.gov/books/NBK21091/table/ch18.T.refseq_status_codes\""
 #define APPRIS_DOC_URL "\"http://appris.bioinfo.cnio.es/#/help/database\""
 
+#define HGVS_MUST_USE_ACC "Note: HGVS terms must use versioned transcript or genomic accessions " \
+    "(e.g. NM_000023.3, NC_000012.11, ENST00000000233.9), not gene symbols."
+
 /* Global Variables */
 struct cart *cart;		/* CGI and other variables */
 struct hash *oldVars = NULL;	/* The cart before new cgi stuff added. */
@@ -271,7 +274,7 @@ cartSaveSession(cart);
 printf("</FORM>\n");
 
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" ID=\"mainForm\" METHOD=%s>\n",
-	cgiScriptName(), cartUsualString(cart, "formMethod", "GET"));
+	cgiScriptName(), cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
 
 //#*** ------------------ end verbatim ---------------
@@ -505,7 +508,8 @@ printf("</SELECT><BR>\n");
 printf("<div id='"hgvaHgvsPasteContainer"'%s>\n",
        differentString(selected, hgvaUseHgvs) ? " style='display: none;'" : "");
 printf("Enter HGVS terms: one term per line; blank lines and comment lines beginning with '#' "
-       "are ignored.<BR>\n");
+       "are ignored.<BR>\n"
+       HGVS_MUST_USE_ACC"<br>\n");
 char *oldPasted = cartUsualString(cart, hgvaHgvs, "");
 cgiMakeTextArea(hgvaHgvs, oldPasted, 10, 70);
 puts("</div>");
@@ -2492,6 +2496,7 @@ struct slName *failedTerms = NULL;
 struct dyString *dyError = dyStringNew(0);
 struct lineFile *lf = lineFileOnString("user-provided HGVS terms", TRUE, cloneString(hgvsTerms));
 char *term = NULL;
+boolean notVersionedAcc = FALSE;
 while (lineFileNextReal(lf, &term))
     {
     eraseTrailingSpaces(term);
@@ -2513,7 +2518,11 @@ while (lineFileNextReal(lf, &term))
         slAddHead(&recList, vcfRecordFromRow(vcff, row));
         }
     else
+        {
+        if (!regexMatch(term, "^[A-Z_]+\\.[0-9]+[: ]"))
+            notVersionedAcc = TRUE;
 	slNameAddHead(&failedTerms, dyStringContents(dyError));
+        }
     }
 if (failedTerms != NULL)
     {
@@ -2522,6 +2531,8 @@ if (failedTerms != NULL)
     struct dyString *dy = dyStringCreate("%d HGVS terms could not be parsed and/or mapped to %s, "
                                          "e.g. %s",
 					 slCount(failedTerms), assembly->name, firstUnknownIds);
+    if (notVersionedAcc)
+        dyStringAppend(dy, ".  " HGVS_MUST_USE_ACC);
     slAddTail(pCommentList, slNameNew(dy->string));
     freeMem(firstUnknownIds);
     dyStringFree(&dy);
