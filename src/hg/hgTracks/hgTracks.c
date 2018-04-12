@@ -1470,7 +1470,6 @@ int portX = fullInsideX;
 // If a portal was established, then set the portal dimensions
 long portalStart,chromStart;
 double basesPerPixel;
-// TODO GALT need to tweak it still for virtchrom stuff, e.g. maybe change some var names or types to long
 if (theImgBox
 && imgBoxPortalDimensions(theImgBox,&chromStart,NULL,NULL,NULL,&portalStart,NULL,
                           &portWidth,&basesPerPixel))
@@ -4734,7 +4733,9 @@ for(window=windows;window;window=window->next)
     for (track = trackList; track != NULL; track = track->next)
 	{
 	if (tdbIsCompositeChild(track->tdb)) // When single track is requested via AJAX,
+	    {
 	    limitedVisFromComposite(track);  // it could be a subtrack
+	    }
 	else
 	    {
 	    limitVisibility(track);
@@ -5362,8 +5363,6 @@ if (withCenterLabels)
 	    { 
 	    int savey = y; // GALT
             y = doCenterLabels(track, track, hvg, font, y, fullInsideWidth); // calls track height
-	    // TODO GALT why do I just pass track here instead of parentTrack? Did I lose something?
-	    // have to look at old code to see.
 	    y = savey + flatTrack->maxHeight;
 	    }
         }
@@ -5481,7 +5480,6 @@ if (withCenterLabels)
 /* if a track can draw its left labels, now is the time since it
  *  knows what exactly happened during drawItems
  */
-// TODO GALT Parellelize or not?
 if (withLeftLabels)
     {
     y = yAfterRuler;
@@ -5493,7 +5491,6 @@ if (withLeftLabels)
         if (theImgBox)
             {
             // side label slice of tracks
-            // ORIG sliceHeight      = trackPlusLabelHeight(track, fontHeight);
 	    sliceHeight      = flatTrack->maxHeight;
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
@@ -5511,13 +5508,12 @@ if (withLeftLabels)
     #else ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
         else if (track->drawLeftLabels != NULL)
     #endif ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
-	    {  // TODO parallelize?
+	    {
 	    setGlobalsFromWindow(windows);
             y = doOwnLeftLabels(track, hvgSide, font, y);
 	    setGlobalsFromWindow(windows); // first window
 	    }
         else
-            // ORIG y += trackPlusLabelHeight(track, fontHeight);
 	    y += flatTrack->maxHeight;
         }
     }
@@ -5535,17 +5531,14 @@ for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
         if (theImgBox)
             {
             // Set imgTrack in case any map items will be set
-            // ORIG sliceHeight      = trackPlusLabelHeight(track, fontHeight);
 	    sliceHeight      = flatTrack->maxHeight;
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
             }
 
-	// TODO Parallelize?
 	setGlobalsFromWindow(windows); // first window
         doTrackMap(track, hvg, y, fontHeight, trackPastTabX, trackPastTabWidth);
 
-        // ORIG y += trackPlusLabelHeight(track, fontHeight);
 	y += flatTrack->maxHeight;
         }
     }
@@ -6757,7 +6750,6 @@ else
         paddedLabel[i+1] = label[i];
     }
 hButtonWithOnClick(var, paddedLabel, NULL, "return imageV2.navigateButtonClick(this);");
-// TODO GALT could consider trying to give these all the same class and then attach handlers at the class level.
 }
 
 void limitSuperTrackVis(struct track *track)
@@ -7489,6 +7481,30 @@ for (window=windows->next; window; window=window->next)
 return FALSE;
 }
 
+static void setSharedLimitedVisAcrossWindows(struct track *track)
+/* Look for lowest limitedVis across all windows
+ * if found, set all windows to same lowest limited vis. */
+{
+enum trackVisibility sharedVis = 99;
+struct track *tg;
+for (tg=track; tg; tg=tg->nextWindow)
+    {
+    if (tg->limitedVisSet)
+	{
+	if (tg->limitedVis < sharedVis)
+	    sharedVis = tg->limitedVis;
+	}
+    }
+if (sharedVis != 99)
+    {
+    for (tg=track; tg; tg=tg->nextWindow)
+	{
+	tg->limitedVis = sharedVis;
+	tg->limitedVisSet = TRUE;
+	}
+    }
+}
+
 static void setSharedErrorsAcrossWindows(struct track *track)
 /* Look for network errors across all windows
  * if found, set all windows to same errMsg and set bigWarn track handlers. */
@@ -7849,7 +7865,6 @@ for (window=windows; window; window=window->next)
 
     if (ptMax > 0)
 	{
-	// TODO GALT parallel actually not sure if anything to worry about here
 	/* wait for remote parallel load to finish */
 	remoteParallelLoadWait(atoi(cfgOptionDefault("parallelFetch.timeout", "90")));  // wait up to default 90 seconds.
 	if (measureTiming)
@@ -7862,6 +7877,18 @@ trackLoadingInProgress = FALSE;
 setGlobalsFromWindow(windows); // first window // restore globals
 trackList = windows->trackList;  // restore track list
 
+// Some loadItems() calls will have already set limitedVis.
+// Look for lowest limitedVis across all windows
+// if found, set all windows to same lowest limitedVis 
+for (track = trackList; track != NULL; track = track->next)
+    {
+    setSharedLimitedVisAcrossWindows(track);
+    struct track *sub;
+    for (sub=track->subtracks; sub; sub=sub->next)
+	{
+	setSharedLimitedVisAcrossWindows(sub);
+	}
+    }
 
 // Look for network errors across all windows
 // if found, set all windows to same errMsg and set bigWarn track handlers.
@@ -8462,7 +8489,6 @@ if (!hideControls)
 	     * determine if they have visible member tracks */
 	    groupTrackListAddSuper(cart, group);
 
-	    // TODO GALT probably nothing to do here
 	    /* Display track controls */
 	    for (tr = group->trackList; tr != NULL; tr = tr->next)
 		{
@@ -9385,7 +9411,6 @@ position = cloneString(newPos);
 cartSetString(cart, "position", position);
 cartSetString(cart, "oldPosition", position);
 //cartSetString(cart, "lastPosition", position);  // this is set in cart.c
-// TODO GALT is it possible and worthwhile to just use lastPosition instead of oldPosition?
 
 cartSetBoolean(cart, "virtMode", virtMode);
 cartSetString(cart, "virtModeType", virtModeType); 
