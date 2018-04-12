@@ -398,6 +398,7 @@ fi
 pslSort dirs stdout \\
  ./tmpdir \$db.psl.gz \$db.someRecords.psl \\
    | (pslCheck -quiet -db=\$db -pass=stdout -fail=\$asmId.\$db.fail.psl stdin || true) \\
+    | pslPosTarget stdin stdout \\
     | pslRecalcMatch -ignoreQMissing stdin $dbTwoBit \$downloadDir/\$asmId.rna.fa.gz stdout \\
      | sort -k14,14 -k16,16n | gzip -c > \$asmId.\$db.psl.gz
 rm -fr ./tmpdir
