@@ -554,8 +554,7 @@ if (self->protLookupHash != NULL)
         char query[2048];
         sqlSafef(query, sizeof(query), "select proteinId from %s where transcriptId = '%s'",
                  self->protLookupTable, txAcc);
-        char protAccBuf[512];
-        char *protAcc = sqlQuickQuery(conn, query, protAccBuf, sizeof(protAccBuf));
+        char *protAcc = sqlQuickString(conn, query);
         hel = hashAdd(self->protLookupHash, txAcc, protAcc);
         hFreeConn(&conn);
         }
