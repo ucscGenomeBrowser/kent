@@ -73,6 +73,7 @@ _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
 						'workhorse' => '',
+						'fileServer' => '',
 						'bigClusterHub' => '');
   print STDERR "
 Automates UCSC's same-species liftOver (blat/chain/net) pipeline, based on
@@ -107,8 +108,8 @@ my $localTmp = "/scratch/tmp";	# UCSC default cluster temporary I/O
 
 # Other:
 my ($buildDir);
-my ($tSeq, $tSizes, $qSeq, $qSizes, $QDb);
-my ($liftOverChainDir, $liftOverChainFile, $liftOverChainPath);
+my ($tSeq, $tSizes, $qSeq, $qSizes, $QDb, $fileServer);
+my ($liftOverChainDir, $liftOverChainFile, $liftOverChainPath, $dbExists);
 
 sub checkOptions {
   # Make sure command line options are valid/supported.
@@ -128,6 +129,7 @@ sub checkOptions {
   my $err = $stepper->processOptions();
   usage(1) if ($err);
   $dbHost = $opt_dbHost if ($opt_dbHost);
+  $localTmp = $opt_localTmp ? $opt_localTmp : $localTmp;
 }
 
 
@@ -509,7 +511,9 @@ sub doLoad {
 chains file, and calls hgAddLiftOverChain to register the $HgAutomate::gbdb location.";
   my $bossScript = new HgRemoteScript("$runDir/doLoad.csh", $dbHost,
 				      $runDir, $whatItDoes);
-  $bossScript->add(<<_EOF_
+
+  if ($dbExists) {
+    $bossScript->add(<<_EOF_
 # Link to standardized location of liftOver files:
 mkdir -p $liftOverChainDir
 rm -f $liftOverChainPath
@@ -534,7 +538,24 @@ ln -s $liftOverChainPath $HgAutomate::gbdb/$tDb/liftOver/
 # ~/.hg.conf) so that hgLiftOver will know that this is available:
 hgAddLiftOverChain $tDb $qDb
 _EOF_
-  );
+    );
+  } else {
+    $bossScript->add(<<_EOF_
+hgLoadChain -test -noBin -tIndex $tDb chain$QDb $buildDir/$liftOverChainFile
+wget -O bigChain.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/bigChain.as'
+wget -O bigLink.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/bigLink.as'
+sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\\t"} {print \$2, \$4, \$5, \$11, 1000, \$8, \$3, \$6, \$7, \$9, \$10, \$1}' > chain${QDb}.tab
+bedToBigBed -type=bed6+6 -as=bigChain.as -tab chain${QDb}.tab $tSizes chain${QDb}.bb
+awk 'BEGIN {OFS="\\t"} {print \$1, \$2, \$3, \$5, \$4}' link.tab | sort -k1,1 -k2,2n > chain${QDb}Link.tab
+bedToBigBed -type=bed4+1 -as=bigLink.as -tab chain${QDb}Link.tab $tSizes chain${QDb}Link.bb
+set totalBases = `ave -col=2 $tSizes | grep "^total" | awk '{printf "%d", \$2}'`
+set basesCovered = `bedSingleCover.pl chain${QDb}Link.tab | ave -col=4 stdin | grep "^total" | awk '{printf "%d", \$2}'`
+set percentCovered = `echo \$basesCovered \$totalBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
+printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" "\$totalBases" "\$percentCovered" > fb.$tDb.chain.${QDb}Link.txt
+rm -f link.tab chain.tab bigChain.as bigLink.as chain${QDb}.tab chain${QDb}Link.tab
+_EOF_
+    );
+  }
   $bossScript->execute();
 } # doLoad
 
@@ -544,7 +565,7 @@ _EOF_
 sub doCleanup {
   my $runDir = "$buildDir";
   my $whatItDoes = "It cleans up or compresses intermediate files.";
-  my $fileServer = &HgAutomate::chooseFileServer($runDir);
+  $fileServer = &HgAutomate::chooseFileServer($runDir);
   my $bossScript = new HgRemoteScript("$runDir/doCleanup.csh", $fileServer,
 				      $runDir, $whatItDoes);
   my $pslDir = "run.blat/psl";
@@ -627,7 +648,9 @@ sub getSeqAndSizes {
 &usage(1) if (scalar(@ARGV) != 2);
 ($tDb, $qDb) = @ARGV;
 
-$localTmp = $opt_localTmp ? $opt_localTmp : $localTmp;
+# may be working on a 2bit file that does not have a database browser
+$dbExists = 0;
+$dbExists = 1 if (&HgAutomate::databaseExists($dbHost, $tDb));
 
 &getSeqAndSizes();
 $QDb = ucfirst($qDb);
