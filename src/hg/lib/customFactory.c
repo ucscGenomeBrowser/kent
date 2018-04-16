@@ -1338,7 +1338,7 @@ AllocVar(bed);
 loadAndValidateBed(row, 5, INTERACT_NUM_COLS-5, lf, bed, NULL, TRUE);
 
 // Load as interact and validate custom fields
-struct interact *inter = interactLoad(row);
+struct interact *inter = interactLoadAndValidate(row);
 if (!inter)
     lineFileAbort(lf, "Invalid interact row");
 

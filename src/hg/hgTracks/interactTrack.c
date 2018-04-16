@@ -48,7 +48,7 @@ return hvGfxFindColorIx(hvg, red, green, blue);
 void interactLoadItems(struct track *tg)
 /* Load all interact items in region */
 {
-loadSimpleBedWithLoader(tg, (bedItemLoader)interactLoad);
+loadSimpleBedWithLoader(tg, (bedItemLoader)interactLoadAndValidate);
 
 if (tg->limitedVisSet)
     {
@@ -350,7 +350,6 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         }
     if (tOnScreen)
         {
-if (sOnScreen)
         // draw foot of target region
         hvGfxLine(hvg, tX - tWidth, yOff, tX + tWidth, yOff, color);
         if (vis == tvDense || !sOnScreen || draw == DRAW_LINE)
