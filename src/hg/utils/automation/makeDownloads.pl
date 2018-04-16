@@ -282,7 +282,7 @@ sub compressScaffoldFiles {
   my $hgFakeAgpDir = "$HgAutomate::trackBuild/hgFakeAgp";
   my $agpFile = &mustFindOne("$db.agp", 'scaffolds.agp',
 			     "$hgFakeAgpDir/$db.agp",
-			     "$hgFakeAgpDir/scaffolds.agp");
+			     "$hgFakeAgpDir/scaffolds.agp", "ucsc/$db.agp");
   my $outFile = &mustFindOne("$db.fa.out", 'scaffolds.out', "bed/repeatMasker/$db.fa.out");
   my $trfFile = &mustFindOne("$trfRunDirRel/trfMask.bed",
 			     "$trfRunDirRel/scaffolds.bed");
