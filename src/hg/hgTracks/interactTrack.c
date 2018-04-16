@@ -343,7 +343,6 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         hvGfxLine(hvg, sX - sWidth, yOff, sX + sWidth, yOff, color);
         if (vis == tvDense || !tOnScreen || draw == DRAW_LINE || hvg->rc)
             {
-            uglyf("sX: %d, peak: %d, color: %u. ", sX, peak, color);
             // draw vertical
             if (isReversed)
                 hvGfxDottedLine(hvg, sX, yOff, sX, peak, color, TRUE);
