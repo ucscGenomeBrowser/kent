@@ -8,7 +8,7 @@ by advanced students in science and medicine. While the LOVD database is
 open to the public, users seeking information about a personal medical or
 genetic condition are urged to consult with a qualified physician for
 diagnosis and for answers to personal questions.  Further, please be
-sure to visit the <a href = "http://lovd.nl"
+sure to visit the <a href = "http://www.lovd.nl/3.0/home"
 target="_blank">LOVD web site</a> for the very latest, as they are continually 
 updating data.</p>
 
@@ -23,11 +23,12 @@ for a list of database installations and the respective curators. </p></div>
 <p>
 This track shows the genomic positions of all <b>public</b> entries in public
 installations of the Leiden Open Variation Database system (<a
-href="http://www.lovd.nl/" target="_blank">LOVD</a>).  
-UCSC does not host any further information.  To get details on a mutation
+href="http://www.lovd.nl/" target="_blank">LOVD</a>) and the effect of the 
+variant, if annotated.  
+UCSC does not host any further information.  To get details on a variant
 (bibliographic reference, phenotype, disease, patient, etc.), follow the
 &quot;Link to LOVD&quot; to the central server at Leiden, which will then redirect you
-to the details page on the particular LOVD server for the variant you selected.
+to the details page on the particular LOVD server reporting this variant.
 </p>
 
 <p>
@@ -35,10 +36,12 @@ LOVD is a flexible, freely-available tool for gene-centered collection and
 display of DNA variations.  It is not a database itself, but rather a platform
 where curators store and analyze data.  While the LOVD team and the biggest LOVD
 sites are run at the Leiden University Medical Center, LOVD installations and their
-curators are spread over the whole world.
+curators are spread over the whole world. Most LOVD databases report at least 
+some of their content back to Leiden to allow global cross-database search, which
+is, among others, exported to this UCSC Genome Browser track every month.
 </p>
 <p>A few LOVD databases are entirely missing from this track. Reasons include configuration issues and 
-intentionally blocked data exports. During the last check in June 2015, the following databases did not export any variants:
+intentionally blocked data search. During the last check in June 2015, the following databases did not export any variants:
 http://www.ucl.ac.uk/ldlr/Current/,
 http://brca.iarc.fr/LOVD/,
 http://bioinf4.fcm.unicamp.br/LOVD/,
@@ -58,12 +61,12 @@ http://mitodyn.org/. Curators who want to share data in their database so it is 
 
 <h2>Batch queries</h2>
 <p>The LOVD data is not available for download or for batch queries in the Table Browser. 
-However, it is available for programmatic access via the <a href="http://ga4gh.org/#/beacon">Global
+However, it is available for programmatic access via the <a href="https://ga4gh.org/#/beacon">Global
 Alliance Beacon API</a>, a web service that accepts queries in the form
 (genome, chromosome, position, allele) and returns "true" or "false" depending on whether there
 is information about this allele in the database. For more details see our 
 <a href="hgBeacon">Beacon Server</a>. </p>
-<p>To find all LOVD databases that contain variants of a given gene, you can get a list of databases by constructing a url in the format geneSymbol.lovd.nl, for example, <a href="http://tp53.lovd.nl">tp53.lovd.nl</a>. You can then use the LOVD API to retrieve more detailed information from a particular database. See the <a href="http://www.lovd.nl/3.0/faq#FAQ15">LOVD FAQ</a>. 
+<p>To find all LOVD databases that contain variants of a given gene, you can get a list of databases by constructing a url in the format geneSymbol.lovd.nl, for example, <a href="http://grenada.lumc.nl/LSDB_list/lsdbs/TP53">tp53.lovd.nl</a>. You can then use the LOVD API to retrieve more detailed information from a particular database. See the <a href="http://www.lovd.nl/3.0/faq#FAQ15">LOVD FAQ</a>. 
 </p>
 <h2>Display Conventions and Configuration</h2>
 
@@ -73,6 +76,15 @@ and the description of the mutation according to <a
 href="http://www.hgvs.org/mutnomen/" target="_blank">Human Gene Variation Society
 standards</a>. For instance, the label AGRN:c.172G&gt;A means that the cDNA of AGRN is
 mutated from G to A at position 172.
+</p>
+
+<p>
+Since October 2017, the functional effect for variants is shown on the
+details page, if annotated. The possible
+values are: notClassified, functionAffected, notThisDisease, notAnyDisease,
+functionProbablyAffected, functionProbablyNotAffected, functionNotAffected
+unknown. LOVD does not use the term "pathogenic", please see the <a
+href="http://varnomen.hgvs.org/bg-material/basics/">HGVS Terminology page</a> for more details.
 </p>
 
 <p>
@@ -89,7 +101,7 @@ The mappings displayed in this track were provided by LOVD.
 <h2>Credits</h2>
 
 <p>
-Thanks to the LOVD team, Ivo Fokkema, Peter Taschner, Johan den Dunnen, and all LOVD curators for permission to 
+Thanks to the LOVD team, Ivo Fokkema, Peter Taschner, Johan den Dunnen, and all LOVD curators who gave permission to 
 show their data.
 </p>
 
@@ -100,5 +112,5 @@ Fokkema IF, Taschner PE, Schaafsma GC, Celli J, Laros JF, den Dunnen JT.
 <a href="http://onlinelibrary.wiley.com/doi/10.1002/humu.21438/abstract" target="_blank">
 LOVD v.2.0: the next generation in gene variant databases</a>.
 <em>Hum Mutat</em>. 2011 May;32(5):557-63.
-PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/21520333" target="_blank">21520333</a>
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/21520333" target="_blank">21520333</a>
 </p>

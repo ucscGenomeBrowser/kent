@@ -39,6 +39,7 @@ char *organism = NULL;
 struct hubOutputStructure
     {
     struct hubOutputStructure *next;
+    struct dyString *metaTags;
     struct dyString *descriptionMatch;
     struct genomeOutputStructure *genomes;
     int genomeCount;
@@ -49,6 +50,7 @@ struct genomeOutputStructure
     {
     struct genomeOutputStructure *next;
     struct dyString *shortLabel;
+    struct dyString *metaTags;
     struct dyString *descriptionMatch;
     struct tdbOutputStructure *tracks;
     struct dyString *assemblyLink;
@@ -63,6 +65,7 @@ struct tdbOutputStructure
     {
     struct tdbOutputStructure *next;
     struct dyString *shortLabel;
+    struct dyString *metaTags;
     struct dyString *descriptionMatch;
     struct dyString *configUrl;
     struct tdbOutputStructure *children;
@@ -291,7 +294,7 @@ for(hub = unlistedHubList; hub; hub = hub->next)
     puts("<tr>");
 
     ourCellStart();
-    safef(id, sizeof id, "hubDisconnectButton%d", count);
+    safef(id, sizeof id, "hubDisconnectButtonU%d", count);
     printf("<input name=\"hubDisconnectButton\" id='%s' "
 	"class=\"hubDisconnectButton\" type=\"button\" value=\"Disconnect\">\n", id);
     jsOnEventByIdF("click", id, 
@@ -587,7 +590,7 @@ if (id != 0)
     safef(hubName, sizeof(hubName), "%s%u", hgHubConnectHubVarPrefix, id);
     if (cartUsualBoolean(cart, hubName, FALSE))
         {
-        safef(jsId, sizeof jsId, "hubDisconnectButton%d", count);
+        safef(jsId, sizeof jsId, "hubDisconnectButtonP%d", count);
         printf("<input name=\"hubDisconnectButton\" id='%s' "
             "class=\"hubDisconnectButton\" type=\"button\" value=\"Disconnect\">\n", jsId);
         jsOnEventByIdF("click", jsId, 
@@ -660,10 +663,13 @@ printf("<li configLink='%s' nodeType='track'>\n", dyStringContents(tdbOut->confi
 printf("%s", dyStringContents(tdbOut->shortLabel));
 if (tdbOut->childCount > 0)
     printf(" (%d subtrack%s)", tdbOut->childCount, tdbOut->childCount==1?"":"s");
-printf("<br>\n");
+if (isNotEmpty(dyStringContents(tdbOut->metaTags)))
+    {
+    printf("<br><span class='descriptionMatch'><em>Metadata: %s</em></span>\n", dyStringContents(tdbOut->metaTags));
+    }
 if (isNotEmpty(dyStringContents(tdbOut->descriptionMatch)))
     {
-    printf("<span class='descriptionMatch'><em>%s</em></span>\n", dyStringContents(tdbOut->descriptionMatch));
+    printf("<br><span class='descriptionMatch'><em>Description: %s</em></span>\n", dyStringContents(tdbOut->descriptionMatch));
     }
 if (tdbOut->children != NULL)
     {
@@ -689,6 +695,10 @@ printf("<li assemblyLink='%s' nodeType='assembly'>%s",
 if (genomeOut->trackCount > 0)
     printf(" (%d track%s)", genomeOut->trackCount, genomeOut->trackCount==1?"":"s");
 
+if (isNotEmpty(dyStringContents(genomeOut->metaTags)))
+    {
+    printf("<br><span class='descriptionMatch'><em>%s</em></span>\n", dyStringContents(genomeOut->metaTags));
+    }
 if (isNotEmpty(dyStringContents(genomeOut->descriptionMatch)))
     {
     printf("<br>\n<em>Assembly Description:</em> %s\n", dyStringContents(genomeOut->descriptionMatch));
@@ -743,6 +753,7 @@ if (tdbOut == NULL)
     genomeOut->trackCount++;
     AllocVar(tdbOut);
     tdbOut->shortLabel = dyStringNew(0);
+    tdbOut->metaTags = dyStringNew(0);
     tdbOut->descriptionMatch = dyStringNew(0);
     tdbOut->configUrl = dyStringNew(0);
     struct trackDb *trackInfo = (struct trackDb *) hashFindVal(tdbHash, track);
@@ -751,7 +762,12 @@ if (tdbOut == NULL)
         // Some tracks are prefixed with the hub name; try that
         char withHubName[4096];
         safef(withHubName, sizeof(withHubName), "%s_%s", hub->name, track);
-        trackInfo = hashMustFindVal(tdbHash, withHubName);
+        trackInfo = hashFindVal(tdbHash, withHubName);
+        if (trackInfo == NULL)
+            {
+            warn("Error: Unable to locate info for matching track '%s'.  Skipping ...\n", withHubName);
+            return NULL;
+            }
         }
     if (isNotEmpty(trackInfo->longLabel))
         dyStringPrintf(tdbOut->shortLabel, "%s", trackInfo->longLabel);
@@ -776,10 +792,24 @@ if (tdbOut == NULL)
         {
         struct trackDb *parent = trackInfo->parent;
         struct tdbOutputStructure *parentOut = addOrUpdateTrackOut(parent->track, genomeOut, tdbHash, hub);
-        slAddTail(&(parentOut->children), tdbOut);
-        parentOut->childCount++;
+        if (parentOut != NULL)
+            {
+            // addOrUpdateTrackOut only returns NULL if it can't find the parent here.
+            // This probably means the trackDb is corrupted, which should have already
+            // generated a fatal error.  All the same ...
+            slAddTail(&(parentOut->children), tdbOut);
+            parentOut->childCount++;
+            }
+        else
+            {
+            // If we can't find the track's rightful parent, we can't report its position
+            // in the track hierarchy accurately.  Time to abort.  A warning will already
+            // have been generated by addOrUpdateTrackOut(parent) failing.
+            return NULL;
+            }
         }
     else
+        // No parent track, so add it to the root level track list for output
         slAddTail(&(genomeOut->tracks), tdbOut);
     hashAdd(genomeOut->tdbOutHash, track, tdbOut);
     }
@@ -830,8 +860,10 @@ struct hubOutputStructure *buildHubSearchOutputStructure(struct trackHub *hub,
         struct hubSearchText *searchResults)
 /* Build a structure that contains the data for writing out the hub search results for this hub */
 {
+struct hash *missingGenomes = hashNew(0);
 struct hubOutputStructure *hubOut = NULL;
 AllocVar(hubOut);
+hubOut->metaTags = dyStringNew(0);
 hubOut->descriptionMatch = dyStringNew(0);
 hubOut->genomeOutHash = newHash(5);
 
@@ -847,23 +879,39 @@ for (hst = searchResults; hst != NULL; hst = hst->next)
             {
             dyStringPrintf(hubOut->descriptionMatch, "%s", hst->text);
             }
+        else if (hst->textLength == hubSearchTextMeta)
+            {
+            if (isNotEmpty(dyStringContents(hubOut->metaTags)))
+                dyStringPrintf(hubOut->metaTags, ", %s", hst->text);
+            else
+                dyStringPrintf(hubOut->metaTags, "%s", hst->text);
+            }
         continue;
         }
 
     char *db = cloneString(hst->db);
+    if (hashLookup(missingGenomes, db) != NULL)
+        continue;
     struct trackHubGenome *genome = hashFindVal(hub->genomeHash, db);
     if (genome == NULL)
         {
         // assembly hub genomes are stored with a prefix; try that
         char withHubName[4096];
         safef(withHubName, sizeof(withHubName), "%s_%s", hub->name, db);
-        genome = hashMustFindVal(hub->genomeHash, withHubName);
+        genome = hashFindVal(hub->genomeHash, withHubName);
+        if (genome == NULL)
+            {
+            hashStoreName(missingGenomes, db);
+            warn("Error: Unable to find info for matching assembly '%s'.  Skipping ...\n", withHubName);
+            continue;
+            }
         }
     struct genomeOutputStructure *genomeOut = hashFindVal(hubOut->genomeOutHash, db);
     if (genomeOut == NULL)
         {
         AllocVar(genomeOut);
         genomeOut->tdbOutHash = newHash(5);
+        genomeOut->metaTags = dyStringNew(0);
         genomeOut->descriptionMatch = dyStringNew(0);
         genomeOut->shortLabel = dyStringNew(0);
         genomeOut->assemblyLink = dyStringNew(0);
@@ -882,10 +930,17 @@ for (hst = searchResults; hst != NULL; hst = hst->next)
         slAddTail(&(hubOut->genomes), genomeOut);
         hubOut->genomeCount++;
         }
-    if (isEmpty(hst->track) && hst->textLength == hubSearchTextLong)
+    if (isEmpty(hst->track))
         {
-        // Genome description match
-        dyStringPrintf(genomeOut->descriptionMatch, "%s", hst->text);
+        if (hst->textLength == hubSearchTextLong) // Genome description match
+            dyStringPrintf(genomeOut->descriptionMatch, "%s", hst->text);
+        else if (hst->textLength == hubSearchTextMeta)
+            {
+            if (isNotEmpty(dyStringContents(genomeOut->metaTags)))
+                dyStringPrintf(genomeOut->metaTags, ", %s", hst->text);
+            else
+                dyStringPrintf(genomeOut->metaTags, "%s", hst->text);
+            }
         }
 
     if (isNotEmpty(hst->track))
@@ -903,8 +958,18 @@ for (hst = searchResults; hst != NULL; hst = hst->next)
             buildTdbHash(tdbHash, tdbList);
             }
         struct tdbOutputStructure *tdbOut = addOrUpdateTrackOut(hst->track, genomeOut, tdbHash, hub);
-        if (hst->textLength == hubSearchTextLong)
-            dyStringPrintf(tdbOut->descriptionMatch, "%s", hst->text);
+        if (tdbOut != NULL)
+            {
+            if (hst->textLength == hubSearchTextLong)
+                dyStringPrintf(tdbOut->descriptionMatch, "%s", hst->text);
+            else if (hst->textLength == hubSearchTextMeta)
+                {
+                if (isNotEmpty(dyStringContents(tdbOut->metaTags)))
+                    dyStringPrintf(tdbOut->metaTags, ", %s", hst->text);
+                else
+                    dyStringPrintf(tdbOut->metaTags, "%s", hst->text);
+                }
+            }
         }
     }
 return hubOut;
@@ -1085,9 +1150,13 @@ if (searchEnabled && !isEmpty(hubSearchTerms))
             hashAdd(searchResultHash, hst->hubUrl, hst);
             }
         else
-            slAddTail(&(hubHashEnt->val), hst);
+            slAddHead(&(hubHashEnt->val), hst);
         hst = nextHst;
         }
+    struct hashEl *hel;
+    struct hashCookie cookie = hashFirst(searchResultHash);
+    while ((hel = hashNext(&cookie)) != NULL)
+        slReverse(&(hel->val));
     }
 else
     {
@@ -1289,6 +1358,7 @@ if (cartVarExists(cart, hgHubDoRedirect))
     }
 
 cartWebStart(cart, NULL, "%s", pageTitle);
+
 printf(
 "<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.4/themes/default/style.min.css\" />\n"
 "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js\"></script>\n"
@@ -1307,7 +1377,8 @@ printf("<div id=\"hgHubConnectUI\"> <div id=\"description\"> \n");
 printf(
     "<P>Track data hubs are collections of external tracks that can be imported into the UCSC Genome Browser. "
     "Hub tracks show up under the hub's own blue label bar on the main browser page, "
-    "as well as on the configure page. For more information, see the "
+    "as well as on the configure page. For more information, including where to "
+    "<A HREF=\"../goldenPath/help/hgTrackHubHelp.html#Hosting\">host</A> your track hub, see the "
     "<A HREF=\"../goldenPath/help/hgTrackHubHelp.html\" TARGET=_blank>"
     "User's Guide</A>."
     "To import a public hub click its \"Connect\" button below.</P>"

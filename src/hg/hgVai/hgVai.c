@@ -38,13 +38,18 @@
 #include "annoFormatVep.h"
 #include "annoStreamBigBed.h"
 #include "annoStreamDb.h"
+#include "windowsToAscii.h"
+#include "obscure.h"
 
 #include "libifyMe.h"
 
 #define GENCODE_TAG_DOC_URL "\"http://www.gencodegenes.org/gencode_tags.html\""
 #define GENCODE_BASIC_DOC_URL "\"http://www.gencodegenes.org/faq.html\""
-#define REFSEQ_STATUS_DOC_URL "\"http://www.ncbi.nlm.nih.gov/books/NBK21091/table/ch18.T.refseq_status_codes\""
+#define REFSEQ_STATUS_DOC_URL "\"https://www.ncbi.nlm.nih.gov/books/NBK21091/table/ch18.T.refseq_status_codes\""
 #define APPRIS_DOC_URL "\"http://appris.bioinfo.cnio.es/#/help/database\""
+
+#define HGVS_MUST_USE_ACC "Note: HGVS terms must use versioned transcript or genomic accessions " \
+    "(e.g. NM_000023.3, NC_000012.11, ENST00000000233.9), not gene symbols."
 
 /* Global Variables */
 struct cart *cart;		/* CGI and other variables */
@@ -270,7 +275,7 @@ cartSaveSession(cart);
 printf("</FORM>\n");
 
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" ID=\"mainForm\" METHOD=%s>\n",
-	cgiScriptName(), cartUsualString(cart, "formMethod", "GET"));
+	cgiScriptName(), cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
 
 //#*** ------------------ end verbatim ---------------
@@ -504,7 +509,8 @@ printf("</SELECT><BR>\n");
 printf("<div id='"hgvaHgvsPasteContainer"'%s>\n",
        differentString(selected, hgvaUseHgvs) ? " style='display: none;'" : "");
 printf("Enter HGVS terms: one term per line; blank lines and comment lines beginning with '#' "
-       "are ignored.<BR>\n");
+       "are ignored.<BR>\n"
+       HGVS_MUST_USE_ACC"<br>\n");
 char *oldPasted = cartUsualString(cart, hgvaHgvs, "");
 cgiMakeTextArea(hgvaHgvs, oldPasted, 10, 70);
 puts("</div>");
@@ -559,7 +565,25 @@ printf("<BR>\n");
 if (! gotGP)
     return NULL;
 char *firstTrack = ((struct trackDb *)(trackRefList->val))->track;
-char *selected = cartUsualString(cart, "hgva_geneTrack", firstTrack);
+char *cartGeneTrack = cartOptionalString(cart, "hgva_geneTrack");
+if (isNotEmpty(cartGeneTrack))
+    {
+    // Make sure it's actually in trackRefList (might have been carried over from other db)
+    boolean exists = FALSE;
+    struct slRef *ref;
+    for (ref = trackRefList;  ref != NULL;  ref = ref->next)
+        {
+        struct trackDb *tdb = ref->val;
+        if (sameString(cartGeneTrack, tdb->track))
+            {
+            exists = TRUE;
+            break;
+            }
+        }
+    if (!exists)
+        cartGeneTrack = NULL;
+    }
+char *selected = isNotEmpty(cartGeneTrack) ? cartGeneTrack : firstTrack;
 //#*** should show more info about each track... button to pop up track desc?
 
 if (gotGP)
@@ -627,7 +651,7 @@ else if (sameString(tableName, "dbNsfpLrt"))
 			  "Likelihood ratio test (LRT)",
 			  "(D = deleterious, N = Neutral, U = unknown)", doHtml);
 else if (sameString(tableName, "dbNsfpVest"))
-    return formatDesc("http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3665549/",
+    return formatDesc("https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3665549/",
                       "Variant Effect Scoring Tool (VEST)",
                       "(scores [0-1] predict confidence that a change is deleterious", doHtml);
 else if (sameString(tableName, "dbNsfpGerpNr"))
@@ -647,7 +671,7 @@ struct slName *findDbNsfpTables()
 if (startsWith(hubTrackPrefix, database))
     return NULL;
 struct sqlConnection *conn = hAllocConn(database);
-struct slName *dbNsfpTables = sqlListTablesLike(conn, "LIKE 'dbNsfp%'");
+struct slName *dbNsfpTables = sqlListTablesLike(conn, "dbNsfp%");
 hFreeConn(&conn);
 return dbNsfpTables;
 }
@@ -768,7 +792,7 @@ if (!gotSnp)
     return;
 startCollapsibleSection("dbSnp", "Known variation", TRUE);
 cartMakeCheckBox(cart, "hgva_rsId", TRUE);
-printf("Include <A HREF='http://www.ncbi.nlm.nih.gov/projects/SNP/' TARGET=_BLANK>dbSNP</A> "
+printf("Include <A HREF='https://www.ncbi.nlm.nih.gov/projects/SNP/' TARGET=_BLANK>dbSNP</A> "
        "rs# ID if one exists<BR>\n");
 puts("<BR>");
 endCollapsibleSection();
@@ -780,7 +804,7 @@ struct slName *getGencodeTagVersions()
 /* Return a list of version strings from the ends of wgEncodeGencodeTag% tables. */
 {
 static struct slName *tagVersions = NULL;
-if (tagVersions == NULL)
+if (tagVersions == NULL && !startsWith(hubTrackPrefix, database))
     {
     struct sqlConnection *conn = hAllocConn(database);
     struct slName *tagTables = sqlQuickList(conn,
@@ -980,6 +1004,52 @@ puts("<BR>");
 endCollapsibleSection();
 }
 
+static boolean canDoHgvsOut(char *geneTrack)
+/* Return TRUE if we're able to make HGVS output terms for transcripts in geneTrack. */
+{
+return (sameString(geneTrack, "refGene") || startsWith("ncbiRefSeq", geneTrack) ||
+        startsWith("wgEncodeGencodeBasic", geneTrack) ||
+        startsWith("wgEncodeGencodeComp", geneTrack));
+}
+
+static void selectHgvsOut(char *geneTrack)
+/* Offer HGVS output choices if RefSeq Genes are selected */
+{
+startCollapsibleSection("hgvsOut", "HGVS variant nomenclature", TRUE);
+printf("The <a href='http://www.hgvs.org/' target=_blank>Human Genome Variation Society (HGVS)</a> "
+       "has established a "
+       "<a href='http://varnomen.hgvs.org/' target=_blank>sequence variant nomenclature</a>, "
+       "an international standard used to report variation in "
+       "genomic, transcript and protein sequences.<br>\n");
+boolean hgvsOk = canDoHgvsOut(geneTrack);
+printf("<div id=\"hgvsOptions\" style=\"display: %s;\">", hgvsOk ? "block" : "none");
+cartMakeCheckBox(cart, "hgva_hgvsG", FALSE);
+printf("Include HGVS genomic (g.) terms in output<br>\n");
+cartMakeCheckBox(cart, "hgva_hgvsCN", FALSE);
+printf("Include HGVS coding (c.) terms if applicable, otherwise noncoding (n.) terms, in output"
+       "<br>\n");
+cartMakeCheckBox(cart, "hgva_hgvsP", FALSE);
+printf("Include HGVS protein (p.) terms (if applicable) in output<br>\n");
+cartMakeCheckBox(cart, "hgva_hgvsPAddParens", FALSE);
+printf("When including HGVS protein (p.) terms, add parentheses around changes to emphasize "
+       "that they are predictions<br>\n");
+cartMakeCheckBox(cart, "hgva_hgvsBreakDelIns", FALSE);
+printf("For variants that involve both a deletion and insertion, "
+       "including multi-nucleotide variants, "
+       "include the deleted sequence (e.g. show \"delAGinsTT\" instead of only \"delinsTT\")"
+       "<br>\n");
+puts("</div>");
+printf("<div id=\"noHgvs\" style=\"display: %s;\">",
+       hgvsOk ? "none" : "block");
+printf("Select RefSeq Genes or an official GENCODE release "
+       "(\"Basic Gene Annotation Set from GENCODE...\" "
+       "or \"Comprehensive Gene Annotation Set...\") "
+       "in the \"Select Genes\" section above in order to make options appear.\n");
+puts("</div>");
+puts("<br>");
+endCollapsibleSection();
+}
+
 boolean isHg19RegulatoryTrack(struct trackDb *tdb, void *filterData)
 /* For now, just look for a couple specific tracks by tableName. */
 {
@@ -1129,6 +1199,7 @@ printf("<div class='sectionLiteHeader'>Select More Annotations (optional)</div>\
 puts("<TABLE border=0 cellspacing=5 cellpadding=0 style='padding-left: 10px;'>");
 selectDbNsfp(dbNsfpTables);
 selectTxStatus(hasTxStat, geneTrack);
+selectHgvsOut(geneTrack);
 selectDbSnp(gotSnp);
 trackCheckBoxSection("Cosmic", "COSMIC", cosmicTrackRefList);
 trackCheckBoxSection("ConsEl", "Conserved elements", elTrackRefList);
@@ -1344,7 +1415,7 @@ jsReloadOnBackButton(cart);
 webNewSection("Using the Variant Annotation Integrator");
 webIncludeHelpFileSubst("hgVaiHelpText", cart, FALSE);
 jsIncludeFile("jquery-ui.js", NULL);
-jsIncludeFile("hgVarAnnogrator.js", NULL);
+jsIncludeFile("hgVai.js", NULL);
 jsIncludeFile("ui.dropdownchecklist.js", NULL);
 jsIncludeFile("ddcl.js", NULL);
 }
@@ -1408,6 +1479,28 @@ aggvFuncFilter.splice = cartUsualBoolean(cart, "hgva_include_splice", TRUE);
 aggvFuncFilter.nonCodingExon = cartUsualBoolean(cart, "hgva_include_nonCodingExon", TRUE);
 aggvFuncFilter.noVariation = cartUsualBoolean(cart, "hgva_include_noVariation", TRUE);
 annoGratorGpVarSetFuncFilter(gpVarGrator, &aggvFuncFilter);
+}
+
+static void setHgvsOutOptions(struct annoGrator *gpVarGrator, char *geneTrack,
+                              struct annoFormatter *vepOut)
+/* Use cart variables to configure gpVarGrator's HGVS output. */
+{
+uint hgvsOutOptions = 0;
+if (canDoHgvsOut(geneTrack))
+    {
+    if (cartUsualBoolean(cart, "hgva_hgvsG", FALSE))
+        hgvsOutOptions |= HGVS_OUT_G;
+    if (cartUsualBoolean(cart, "hgva_hgvsCN", FALSE))
+        hgvsOutOptions |= HGVS_OUT_CN;
+    if (cartUsualBoolean(cart, "hgva_hgvsP", FALSE))
+        hgvsOutOptions |= HGVS_OUT_P;
+    if (cartUsualBoolean(cart, "hgva_hgvsPAddParens", FALSE))
+        hgvsOutOptions |= HGVS_OUT_P_ADD_PARENS;
+    if (cartUsualBoolean(cart, "hgva_hgvsBreakDelIns", FALSE))
+        hgvsOutOptions |= HGVS_OUT_BREAK_DELINS;
+    }
+annoGratorGpVarSetHgvsOutOptions(gpVarGrator, hgvsOutOptions);
+annoFormatVepSetHgvsOutOptions(vepOut, hgvsOutOptions);
 }
 
 struct annoGrator *gratorForSnpBed4(struct hash *gratorsByName, char *suffix,
@@ -1763,7 +1856,7 @@ if (cartUsualBoolean(cart, "hgva_require_consEl", FALSE))
 static void getCartPosOrDie(char **retChrom, uint *retStart, uint *retEnd)
 /* Get chrom:start-end from cart, errAbort if any problems. */
 {
-char *position = cartString(cart, hgvaRange);
+char *position = windowsToAscii(cartString(cart, hgvaRange));
 if (! parsePosition(position, retChrom, retStart, retEnd))
     errAbort("Expected position to be chrom:start-end but got '%s'", position);
 }
@@ -2098,9 +2191,9 @@ return stringOut;
 // for example "LARGEDELETION", "LARGE DELETION", "... DELETED", "... DEL":
 static const char *dbSnpDelRegex = "^\\(.*(DELET.*| DEL)\\)$";
 
-static char **parseDbSnpAltAlleles(char *refAl, char *obsAls, boolean minusStrand,
-				   int *retAltAlCount, boolean *retNeedLeftBase)
-/* Given a non-symbolic reference allele and slash-sep observed alleles from dbSNP,
+static char **altAlsFromObserved(char *refAl, int obsCount, char **obsWords, boolean minusStrand,
+                                 int *retAltAlCount, boolean *retNeedLeftBase)
+/* Given a non-symbolic reference allele and an array of observed alleles,
  * return an array of +-strand alleles that are not the same as the reference.
  * If any allele is "-" (deleted, zero-length), then set retNeedLeftBase to TRUE
  * because in this case VCF requires that the reference base to the left of the indel
@@ -2108,9 +2201,6 @@ static char **parseDbSnpAltAlleles(char *refAl, char *obsAls, boolean minusStran
  * Also, if any alt allele is symbolic, padding is required.
  * Note: this trashes obsAls.  Resulting array can be freed but not its contents. */
 {
-int obsCount = countChars(obsAls, '/') + 1;
-char *obsWords[obsCount];
-chopByChar(obsAls, '/', obsWords, obsCount);
 boolean obsHasDeletion = FALSE;
 int i;
 for (i = 0;  i < obsCount;  i++)
@@ -2126,14 +2216,15 @@ boolean needLeftBase = isEmpty(refAl) || sameString(refAl, "-");
 for (i = 0;  i < obsCount;  i++)
     {
     char *altAl = obsWords[i];
+    if (sameString(altAl, "-"))
+        altAl[0] = '\0';
     int altAlLen = strlen(altAl);
     if (minusStrand && isAllNt(altAl, altAlLen))
 	reverseComplement(altAl, altAlLen);
     if (differentString(altAl, refAl))
 	{
-	if (sameString(altAl, "-"))
+	if (isEmpty(altAl))
 	    {
-	    altAls[altCount] = "";
 	    needLeftBase = TRUE;
 	    }
 	else
@@ -2157,12 +2248,46 @@ for (i = 0;  i < obsCount;  i++)
 		}
 	    altAls[altCount] = altAl;
 	    }
+        altAls[altCount] = altAl;
 	altCount++;
 	}
     }
 *retAltAlCount = altCount;
 *retNeedLeftBase = needLeftBase;
 return altAls;
+}
+
+static char **parseDbSnpAltAlleles(char *refAl, char *obsAls, int alleleFreqCount, char *alleles,
+				   boolean minusStrand,
+                                   int *retAltAlCount, boolean *retNeedLeftBase)
+/* Given a non-symbolic reference allele and slash-sep observed alleles from dbSNP,
+ * return an array of +-strand alleles that are not the same as the reference.
+ * If obsAls is "lengthTooLong" but alleleFreqCount is at least 2 and alleles is a comma-sep
+ * list of nucleotide bases, use alleles instead.
+ * If any allele is "-" (deleted, zero-length), then set retNeedLeftBase to TRUE
+ * because in this case VCF requires that the reference base to the left of the indel
+ * must be added to all alleles, and the start coord also moves one base to the left.
+ * Also, if any alt allele is symbolic, padding is required.
+ * Note: this trashes obsAls.  Resulting array can be freed but not its contents. */
+{
+int obsCount = 0;
+int maxWords = 1000;
+char *obsWords[maxWords];
+if (sameString(obsAls, "lengthTooLong") && alleleFreqCount > 1)
+    {
+    obsCount = countChars(alleles, ',');
+    if (obsCount > maxWords)
+        errAbort("parseDbSnpAltAlleles: too many alleles (%d) in observed column", obsCount);
+    chopByChar(alleles, ',', obsWords, obsCount);
+    }
+else
+    {
+    obsCount = countChars(obsAls, '/') + 1;
+    if (obsCount > maxWords)
+        errAbort("parseDbSnpAltAlleles: too many alleles (%d) in observed column", obsCount);
+    chopByChar(obsAls, '/', obsWords, obsCount);
+    }
+return altAlsFromObserved(refAl, obsCount, obsWords, minusStrand, retAltAlCount, retNeedLeftBase);
 }
 
 char *firstNCommaSep(struct slName *nameList, int n)
@@ -2185,7 +2310,7 @@ static const char *rsIdRegex = "^rs[0-9]+$";
 
 static void rsIdsToVcfRecords(struct annoAssembly *assembly, struct slName *rsIds,
 			      struct vcfFile *vcff, struct vcfRecord **pRecList,
-			      struct slName **pCommentList)
+                              FILE *warnF)
 /* If possible, look up coordinates and alleles of dbSNP rs IDs. */
 {
 if (rsIds == NULL)
@@ -2196,7 +2321,8 @@ if (tdb == NULL)
 struct sqlConnection *conn = hAllocConn(assembly->name);
 // Build a 'name in (...)' query, and build a hash of IDs so we can test whether all were found
 struct dyString *dq = sqlDyStringCreate("select chrom, chromStart, chromEnd, name, strand, "
-					"refUCSC, observed from %s where name in (",
+					"refUCSC, observed, alleleFreqCount, alleles "
+                                        "from %s where name in (",
 					tdb->table);
 struct hash *idHash = hashNew(0);
 struct slName *id;
@@ -2237,11 +2363,36 @@ while ((row = sqlNextRow(sr)) != NULL)
 	dnaSeqFree(&seq);
 	}
     char *obsAls = row[6];
+    int alFCount = atoi(row[7]);
+    char *alFAls = row[8];
     int altAlCount = 0;
     boolean needLeftBase = FALSE;
-    char **altAls = parseDbSnpAltAlleles(refAl, obsAls, sameString(strand, "-"),
+    char **altAls = parseDbSnpAltAlleles(refAl, obsAls, alFCount, alFAls, sameString(strand, "-"),
 					 &altAlCount, &needLeftBase);
     needLeftBase |= (chromStart == chromEnd);  // should be redundant, but just in case.
+    // variantProjector doesn't accept symbolic alleles (aside from VCF <DEL>),
+    // so filter those out and warn:
+    int j = 0;
+    struct dyString *noSym = NULL;
+    char *filteredAltAls[altAlCount];
+    for (i = 0;  i < altAlCount;  i++)
+        {
+        if (!isAllNt(altAls[i], strlen(altAls[i])))
+            {
+            if (noSym == NULL)
+                noSym = dyStringCreate("%s has symbolic allele(s) e.g. '%s', ignoring.  ",
+                                       name, altAls[i]);
+            }
+        else
+            filteredAltAls[j++] = altAls[i];
+        }
+    if (noSym != NULL)
+        {
+        fputs(noSym->string, warnF);
+        dyStringFree(&noSym);
+        }
+    altAlCount = j;
+    altAls = filteredAltAls;
     hashRemove(idHash, name);
     uint vcfStart = chromStart + 1;
     dyStringClear(dyAltAlStr);
@@ -2263,10 +2414,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    if (i > 0)
 		dyStringAppendC(dyAltAlStr, ',');
-	    if (isAllNt(altAls[i], strlen(altAls[i])))
-		dyStringPrintf(dyAltAlStr, "%c%s", leftBase, altAls[i]);
-	    else
-		dyStringAppend(dyAltAlStr, altAls[i]);
+            dyStringPrintf(dyAltAlStr, "%c%s", leftBase, altAls[i]);
 	    }
 	}
     else
@@ -2279,6 +2427,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    dyStringAppend(dyAltAlStr, altAls[i]);
 	    }
 	}
+    if (altAlCount == 0)
+        dyStringAppendC(dyAltAlStr, '.');
     char vcfStartStr[64];
     safef(vcfStartStr, sizeof(vcfStartStr), "%d", vcfStart);
     vcfRow[0] = chrom;
@@ -2295,17 +2445,15 @@ struct slName *notFoundIds = hashListNames(idHash);
 if (notFoundIds != NULL)
     {
     char *namesNotFound = firstNCommaSep(notFoundIds, 5);
-    struct dyString *dy = dyStringCreate("%d rs# IDs not found, e.g. %s",
-					 slCount(notFoundIds), namesNotFound);
-    slAddTail(pCommentList, slNameNew(dy->string));
+    fprintf(warnF, "%d rs# IDs not found, e.g. %s",
+            slCount(notFoundIds), namesNotFound);
     freeMem(namesNotFound);
-    dyStringFree(&dy);
     }
 slNameFreeList(&notFoundIds);
 }
 
 static struct vcfRecord *parseVariantIds(struct annoAssembly *assembly, char *variantIdText,
-					 struct slName **pCommentList)
+					 FILE *warnF)
 /* Return a sorted list of minimal vcfRecords (coords, name, ref and alt alleles)
  * corresponding to each pasted variant. */
 {
@@ -2313,25 +2461,29 @@ struct vcfRecord *recList = NULL;
 char *p = cloneString(variantIdText), *id;
 struct slName *rsIds = NULL, *unknownIds = NULL;
 subChar(p, ',', ' ');
-while ((id = nextWord(&p)) != NULL)
+struct lineFile *lf = lineFileOnString("rs# IDs", TRUE, p);
+char *line = NULL;
+while (lineFileNextReal(lf, &line))
     {
-    if (regexMatchNoCase(id, rsIdRegex))
-	slNameAddHead(&rsIds, id);
-    else
-	slNameAddHead(&unknownIds, id);
+    while ((id = nextWord(&line)) != NULL)
+        {
+        if (regexMatchNoCase(id, rsIdRegex))
+            slNameAddHead(&rsIds, id);
+        else
+            slNameAddHead(&unknownIds, id);
+        }
     }
+lineFileClose(&lf);
 if (unknownIds != NULL)
     {
     slReverse(&unknownIds);
     char *firstUnknownIds = firstNCommaSep(unknownIds, 5);
-    struct dyString *dy = dyStringCreate("%d variant identifiers are unrecognized, e.g. %s",
-					 slCount(unknownIds), firstUnknownIds);
-    slAddTail(pCommentList, slNameNew(dy->string));
+    fprintf(warnF, "%d variant identifiers are unrecognized, e.g. %s.  ",
+            slCount(unknownIds), firstUnknownIds);
     freeMem(firstUnknownIds);
-    dyStringFree(&dy);
     }
 struct vcfFile *vcff = vcfFileNew();
-rsIdsToVcfRecords(assembly, rsIds, vcff, &recList, pCommentList);
+rsIdsToVcfRecords(assembly, rsIds, vcff, &recList, warnF);
 slSort(&recList, vcfRecordCmp);
 slNameFreeList(&rsIds);
 slNameFreeList(&unknownIds);
@@ -2367,6 +2519,18 @@ if (pChrom != NULL && *pChrom != NULL && recList != NULL)
     }
 }
 
+static void slAddFileContentsTail(struct slName **pSlNameList, char *filename)
+/* If filename exists and is nonempty, add its contents as a new slName at end of list. */
+{
+char *contents = NULL;
+size_t contentSize = 0;
+if (fileExists(filename))
+    readInGulp(filename, &contents, &contentSize);
+if (isNotEmpty(contents))
+    slAddTail(pSlNameList, slNameNew(contents));
+freeMem(contents);
+}
+
 static struct annoStreamer *makeVariantIdStreamer(struct annoAssembly *assembly, int maxOutRows,
 						  char **pChrom, uint *pStart, uint *pEnd,
 						  struct slName **pCommentList)
@@ -2377,10 +2541,13 @@ static struct annoStreamer *makeVariantIdStreamer(struct annoAssembly *assembly,
 // Hash variant text to get trash filename.  Use if exists, otherwise build it.
 char *variantIds = cartString(cart, hgvaVariantIds);
 char *varFile = md5TrashPath(assembly, variantIds);
+char warnFile[strlen(varFile)+6];
+safef(warnFile, sizeof(warnFile), "%s.warn", varFile);
 boolean forceRebuild = cartUsualBoolean(cart, "hgva_rebuildVariantIds", FALSE);
 if (! fileExists(varFile) || forceRebuild)
     {
-    struct vcfRecord *varList = parseVariantIds(assembly, variantIds, pCommentList);
+    FILE *warnF = mustOpen(warnFile, "w");
+    struct vcfRecord *varList = parseVariantIds(assembly, variantIds, warnF);
 //#*** If no variants were recognized, we should probably show main page with a warning.
     adjustRangeForVariants(varList, pChrom, pStart, pEnd);
     FILE *f = mustOpen(varFile, "w");
@@ -2389,12 +2556,14 @@ if (! fileExists(varFile) || forceRebuild)
     for (var = varList;  var != NULL;  var = var->next)
 	writeMinimalVcfRow(f, var);
     carefulClose(&f);
+    carefulClose(&warnF);
     }
+slAddFileContentsTail(pCommentList, warnFile);
 return annoStreamVcfNew(varFile, NULL, FALSE, assembly, maxOutRows);
 }
 
 static struct vcfRecord *parseHgvs(struct vcfFile *vcff, struct annoAssembly *assembly,
-                                   char *hgvsTerms, struct slName **pCommentList)
+                                   char *hgvsTerms, FILE *warnF)
 /* Return a sorted list of vcfRecords . */
 {
 struct vcfRecord *recList = NULL;
@@ -2402,6 +2571,7 @@ struct slName *failedTerms = NULL;
 struct dyString *dyError = dyStringNew(0);
 struct lineFile *lf = lineFileOnString("user-provided HGVS terms", TRUE, cloneString(hgvsTerms));
 char *term = NULL;
+boolean notVersionedAcc = FALSE;
 while (lineFileNextReal(lf, &term))
     {
     eraseTrailingSpaces(term);
@@ -2423,18 +2593,21 @@ while (lineFileNextReal(lf, &term))
         slAddHead(&recList, vcfRecordFromRow(vcff, row));
         }
     else
+        {
+        if (!regexMatch(term, "^[A-Z_0-9]+\\.[0-9]+[: ]"))
+            notVersionedAcc = TRUE;
 	slNameAddHead(&failedTerms, dyStringContents(dyError));
+        }
     }
 if (failedTerms != NULL)
     {
     slReverse(&failedTerms);
     char *firstUnknownIds = firstNCommaSep(failedTerms, 5);
-    struct dyString *dy = dyStringCreate("%d HGVS terms could not be parsed and/or mapped to %s, "
-                                         "e.g. %s",
-					 slCount(failedTerms), assembly->name, firstUnknownIds);
-    slAddTail(pCommentList, slNameNew(dy->string));
+    fprintf(warnF, "%d HGVS terms could not be parsed and/or mapped to %s, e.g. %s.  ",
+            slCount(failedTerms), assembly->name, firstUnknownIds);
+    if (notVersionedAcc)
+        fputs(HGVS_MUST_USE_ACC, warnF);
     freeMem(firstUnknownIds);
-    dyStringFree(&dy);
     }
 slSort(&recList, vcfRecordCmp);
 slNameFreeList(&failedTerms);
@@ -2453,12 +2626,15 @@ static struct annoStreamer *makeHgvsStreamer(struct annoAssembly *assembly, int 
 // Hash HGVS input to get trash filename.  Use if exists, otherwise build it.
 char *hgvsTerms = cartString(cart, hgvaHgvs);
 char *varFile = md5TrashPath(assembly, hgvsTerms);
+char warnFile[strlen(varFile)+6];
+safef(warnFile, sizeof(warnFile), "%s.warn", varFile);
 boolean forceRebuild = cartUsualBoolean(cart, "hgva_rebuildHgvs", FALSE);
 if (! fileExists(varFile) || forceRebuild)
     {
     char *headerString = makeMinimalVcfHeader(assembly->name, HGVS_VCF_HEADER_DEFS);
     struct vcfFile *vcff = vcfFileFromHeader("hgVaiHgvs", headerString, VCF_IGNORE_ERRS);
-    struct vcfRecord *varList = parseHgvs(vcff, assembly, hgvsTerms, pCommentList);
+    FILE *warnF = mustOpen(warnFile, "w");
+    struct vcfRecord *varList = parseHgvs(vcff, assembly, hgvsTerms, warnF);
 //#*** If no HGVS terms could be mapped, we should probably show main page with a warning.
     adjustRangeForVariants(varList, pChrom, pStart, pEnd);
     FILE *f = mustOpen(varFile, "w");
@@ -2467,8 +2643,10 @@ if (! fileExists(varFile) || forceRebuild)
     for (var = varList;  var != NULL;  var = var->next)
 	writeMinimalVcfRow(f, var);
     carefulClose(&f);
+    carefulClose(&warnF);
     vcfFileFree(&vcff);
     }
+slAddFileContentsTail(pCommentList, warnFile);
 return annoStreamVcfNew(varFile, NULL, FALSE, assembly, maxOutRows);
 }
 
@@ -2782,6 +2960,7 @@ addTxStatusExtras(vepOut, geneTrack, gpVarGrator, txStatusExtras);
 boolean haveRegulatory = FALSE;
 addOutputTracks(&gratorList, gratorsByName, vepOut, assembly, chrom, doHtml, &haveRegulatory);
 adjustGpVarOverlapRule(gpVarGrator, haveRegulatory);
+setHgvsOutOptions(gpVarGrator, geneTdb->track, vepOut);
 
 addFilterTracks(&gratorList, gratorsByName, assembly, chrom);
 

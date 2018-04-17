@@ -784,7 +784,7 @@ def getPos (db, gene, pos):
     " print position as link "
     chrom, start, end = pos
     if (chrom!="" and start!=""):
-        return """ located at <A title="link to Genome Browser" HREF="../cgi-bin/hgTracks?db=%s&position=%s:%d-%s">%s:%s-%s</A><BR>""" % \
+        return """(<A title="link to Genome Browser" HREF="../cgi-bin/hgTracks?db=%s&position=%s:%d-%s">%s:%s-%s</A>)""" % \
             (db, chrom, start, end, chrom, start, end)
     else:
         return ""
@@ -1373,9 +1373,8 @@ def showGraphBrowser():
     #litLink = '<a target=_blank href="http://literome.azurewebsites.net/Network?gene1=%s">(Literome)</a>' % (gene)
     #title = "Top %d genes that interact with %s %s %s" % (geneCount, hgGeneLink, litLink, posLink)
 
-    title = "Top %d genes that interact with %s %s" % (geneCount, hgGeneLink, posLink)
+    title = "%s: top %d interacting genes %s" % (hgGeneLink, geneCount, posLink)
     printHgcSection(title, "")
-    #print("<h3>Top %d genes that interact with %s mentioned in more than %d articles</h3>" % (gene, minAbsCount))
 
     # print the interaction graph as an image map 
     printGraph(conn, weightedLinks, alg, addNeighbors, gene, "png")
@@ -1407,7 +1406,7 @@ def docLink(pmid, text=None, mouseOver=None):
     return linkStr
 
 def pubmedLink(pmid, text=None):
-    url = "http://www.ncbi.nlm.nih.gov/pubmed/%s" % pmid
+    url = "https://www.ncbi.nlm.nih.gov/pubmed/%s" % pmid
     if text==None:
         text = "PMID: %s" % str(pmid)
     linkStr = '<a href="%s">%s</a>' % (url, text)

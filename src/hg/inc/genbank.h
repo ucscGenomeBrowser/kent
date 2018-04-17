@@ -97,4 +97,7 @@ extern char *refSeqSummaryTable;
 void initGenbankTableNames(char *database);
 /* read hg.conf to get alternate table names */
 
+boolean isGenbankPatentAccession(char *acc);
+/* Is this an accession prefix allocated to patent sequences. */
+
 #endif

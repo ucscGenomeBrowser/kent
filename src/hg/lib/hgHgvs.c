@@ -5,9 +5,12 @@
  * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "hgHgvs.h"
+#include "bPlusTree.h"
 #include "chromInfo.h"
 #include "genbank.h"
 #include "hdb.h"
+#include "indelShift.h"
+#include "lrg.h"
 #include "pslTransMap.h"
 #include "regexHelper.h"
 #include "trackHub.h"
@@ -25,11 +28,21 @@ if (pHgvs && *pHgvs)
     }
 }
 
-// Regular expressions for HGVS-recognized sequence accessions: LRG or versioned RefSeq:
-#define lrgTranscriptExp "(LRG_[0-9]+t[0-9+])"
-#define lrgRegionExp "(LRG_[0-9+])"
+// Regular expressions for HGVS-recognized sequence accessions: LRG, ENS* or versioned RefSeq:
+#define lrgTranscriptExp "(LRG_[0-9]+t[0-9]+)"
+#define lrgProteinExp "(LRG_[0-9]+p[0-9]+)"
+#define lrgRegionExp "(LRG_[0-9]+)"
 
-// NC = RefSeq reference assembly chromosome
+#define ensTranscriptExp "(ENS([A-Z]{3})?T[0-9]+\\.[0-9]+)"
+//      0.....................................  whole matching string
+//      1.....................................  ENS transcript ID including optional lift suffix
+//         2...                                 optional non-human species code e.g. MUS for mouse
+#define ensProteinExp "(ENS([A-Z]{3})?P[0-9]+\\.[0-9]+)"
+//      0.....................................  whole matching string
+//      1.....................................  ENS protein ID
+//         2...                                 optional non-human species code e.g. MUS for mouse
+
+// NC = RefSeq reference assembly chromosome (NT = contig (e.g. alt), NW = patch)
 // NG = RefSeq incomplete genomic region (e.g. gene locus)
 // NM = RefSeq curated mRNA
 // NP = RefSeq curated protein
@@ -41,11 +54,11 @@ if (pHgvs && *pHgvs)
 //                                              ...........       optional dot version
 //                                                         ...... optional gene symbol in ()s
 //                                                          ....  optional gene symbol
-#define versionedRefSeqNCExp versionedAccPrefixExp("NC")
-#define versionedRefSeqNGExp versionedAccPrefixExp("NG")
-#define versionedRefSeqNMExp versionedAccPrefixExp("NM")
-#define versionedRefSeqNPExp versionedAccPrefixExp("NP")
-#define versionedRefSeqNMRExp versionedAccPrefixExp("N[MR]")
+#define versionedRefSeqNCExp versionedAccPrefixExp("[NX][CTW]")
+#define versionedRefSeqNGExp versionedAccPrefixExp("[NX]G")
+#define versionedRefSeqNMExp versionedAccPrefixExp("[NX]M")
+#define versionedRefSeqNPExp versionedAccPrefixExp("[NX]P")
+#define versionedRefSeqNMRExp versionedAccPrefixExp("[NX][MR]")
 
 // Nucleotide position regexes
 // (c. = CDS, g. = genomic, m. = mitochondrial, n.= non-coding RNA, r. = RNA)
@@ -84,14 +97,14 @@ if (pHgvs && *pHgvs)
 #define aa3Exp "Ala|Arg|Asn|Asp|Cys|Gln|Glu|Gly|His|Ile|Leu|Lys|Met|Phe|Pro|Ser|Thr|Trp|Tyr|Val|Ter"
 #define hgvsAminoAcidExp "[ARNDCQEGHILKMFPSTWYVX*]|" aa3Exp
 #define hgvsAminoAcidSubstExp "(" hgvsAminoAcidExp ")" posIntExp "(" hgvsAminoAcidExp "|=)"
-#define hgvsPDotSubstExp "p\\." hgvsAminoAcidSubstExp
+#define hgvsPDotSubstExp "p\\.\\(?" hgvsAminoAcidSubstExp "\\)?"
 //                                 ...                                  // original sequence
 //                                              ......                  // 1-based position
 //                                                           ...        // replacement sequence
 
 // Protein range (or just single pos) regex
 #define hgvsAaRangeExp "(" hgvsAminoAcidExp ")" posIntExp "(_(" hgvsAminoAcidExp ")" posIntExp ")?(.*)"
-#define hgvsPDotRangeExp "p\\." hgvsAaRangeExp
+#define hgvsPDotRangeExp "p\\.\\(?" hgvsAaRangeExp "\\)?"
 //  original start AA           ...
 //  1-based start position                       ...
 //  optional range sep and AA+pos                          .....................................
@@ -102,14 +115,26 @@ if (pHgvs && *pHgvs)
 // Complete HGVS term regexes combining sequence identifiers and change operations
 #define hgvsFullRegex(seq, op) "^" seq "[ :]+" op
 
+#define hgvsLrgGDotPosExp hgvsFullRegex(lrgRegionExp, hgvsGMDotPosExp)
+#define hgvsLrgGDotExp hgvsLrgGDotPosExp "(.*)"
+// substring numbering:
+//      0.....................................  whole matching string
+//      1.......................                LRG region
+//                              2.              g or m
+//                                3..           1-based start position
+//                                   4...       optional range separator and end position
+//                                     5..      1-based end position
+//                                        6...  change description
+
+
 #define hgvsRefSeqNCGDotPosExp hgvsFullRegex(versionedRefSeqNCExp, hgvsGMDotPosExp)
 #define hgvsRefSeqNCGDotExp hgvsRefSeqNCGDotPosExp "(.*)"
 // substring numbering:
 //      0.....................................  whole matching string
 //      1.................                      accession and optional dot version
 //               2........                      optional dot version
-//                       3......                (n/a) optional gene symbol in ()s
-//                        4....                 (n/a) optional gene symbol
+//                       3......                optional gene symbol in ()s
+//                        4....                 optional gene symbol
 //                              5.              g or m
 //                                6..           1-based start position
 //                                   7...       optional range separator and end position
@@ -120,7 +145,7 @@ if (pHgvs && *pHgvs)
 #define hgvsLrgCDotExp hgvsLrgCDotPosExp "(.*)"
 // substring numbering:
 //      0.....................................................  whole matching string
-//      1...................                                    LRG transcript
+//      1.............                                          LRG transcript
 //                   2...                                       optional UTR anchor "-" or "*"
 //                       3...                                   mandatory first number
 //                           4.......                           optional offset separator and offset
@@ -133,6 +158,25 @@ if (pHgvs && *pHgvs)
 //                                          11...               offset separator
 //                                              12...           offset number
 //                                                  13........  sequence change
+
+#define hgvsEnsCDotPosExp hgvsFullRegex(ensTranscriptExp, hgvsCDotPosExp)
+#define hgvsEnsCDotExp hgvsEnsCDotPosExp "(.*)"
+// substring numbering:
+//      0.....................................................  whole matching string
+//      1............                                           ENS transcript ID
+//         2...                                                 optional non-human species code
+//                   3...                                       optional UTR anchor "-" or "*"
+//                       4...                                   mandatory first number
+//                           5.......                           optional offset separator and offset
+//                           6...                               offset separator
+//                               7...                           offset number
+//                                   8...............           optional range sep and complex num
+//                                   9...                       optional UTR anchor "-" or "*"
+//                                      10...                   first number
+//                                          11.......           optional offset separator and offset
+//                                          12...               offset separator
+//                                              13...           offset number
+//                                                  14........  sequence change
 
 #define hgvsRefSeqNMCDotPosExp hgvsFullRegex(versionedRefSeqNMExp, hgvsCDotPosExp)
 #define hgvsRefSeqNMCDotExp hgvsRefSeqNMCDotPosExp "(.*)"
@@ -158,19 +202,37 @@ if (pHgvs && *pHgvs)
 #define hgvsLrgNDotExp hgvsFullRegex(lrgTranscriptExp, hgvsNDotPosExp) "(.*)"
 // substring numbering:
 //      0.....................................................  whole matching string
-//      1...................                                    LRG transcript
-//                   2...                                       n/a 4 n.: UTR anchor "-" or "*"
+//      1.............                                          LRG transcript
+//                   2...                                       UTR anchor "-" or "*"
 //                       3...                                   mandatory first number
 //                           4.......                           optional offset separator and offset
 //                           5...                               offset separator
 //                               6...                           offset number
 //                                   7...............           optional range sep and complex num
-//                                   8...                       n/a 4 n.: UTR anchor "-" or "*"
+//                                   8...                       UTR anchor "-" or "*"
 //                                       9...                   first number
 //                                          10.......           optional offset separator and offset
 //                                          11...               offset separator
 //                                              12...           offset number
 //                                                  13........  sequence change
+
+#define hgvsEnsNDotExp hgvsFullRegex(ensTranscriptExp, hgvsNDotPosExp) "(.*)"
+// substring numbering:
+//      0.....................................................  whole matching string
+//      1............                                           ENS transcript ID
+//         2...                                                 optional non-human species code
+//                   3...                                       UTR anchor "-" or "*"
+//                       4...                                   mandatory first number
+//                           5.......                           optional offset separator and offset
+//                           6...                               offset separator
+//                               7...                           offset number
+//                                   8...............           optional range sep and complex num
+//                                   9...                       UTR anchor "-" or "*"
+//                                      10...                   first number
+//                                          11.......           optional offset separator and offset
+//                                          12...               offset separator
+//                                              13...           offset number
+//                                                  14........  sequence change
 
 #define hgvsRefSeqNMRNDotExp hgvsFullRegex(versionedRefSeqNMRExp, hgvsNDotPosExp) "(.*)"
 // substring numbering:
@@ -179,18 +241,35 @@ if (pHgvs && *pHgvs)
 //             2........                                                  optional dot version
 //                       3.....                                           optional gene sym in ()s
 //                        4...                                            optional gene symbol
-//                              5...                                      n/a 4 n.: UTR anchor
+//                              5...                                      UTR anchor
 //                                  6...                                  mandatory first number
 //                                      7.......                          optional offset
 //                                      8...                              offset separator
 //                                          9...                          offset number
 //                                             10...............          optional range
-//                                             11...                      n/a 4 n.: UTR anchor
+//                                             11...                      UTR anchor
 //                                                12...                   first number
 //                                                     13.......          optional offset
 //                                                     14...              offset separator
 //                                                         15...          offset number
 //                                                             16........ sequence change
+
+#define hgvsLrgPDotSubstExp hgvsFullRegex(lrgProteinExp, hgvsPDotSubstExp)
+// substring numbering:
+//      0.....................................................  whole matching string
+//      1............................                           LRG protein
+//                                   2.....                     original sequence
+//                                           3......            1-based position
+//                                                     4......  replacement sequence
+
+#define hgvsEnsPDotSubstExp hgvsFullRegex(ensProteinExp, hgvsPDotSubstExp)
+// substring numbering:
+//      0.....................................................  whole matching string
+//      1...........................                            ENS protein ID
+//         2...                                                 optional non-human species code
+//                                   3.....                     original sequence
+//                                           4......            1-based position
+//                                                     5......  replacement sequence
 
 #define hgvsRefSeqNPPDotSubstExp hgvsFullRegex(versionedRefSeqNPExp, hgvsPDotSubstExp)
 // substring numbering:
@@ -202,6 +281,29 @@ if (pHgvs && *pHgvs)
 //                                   5.....                     original sequence
 //                                           6......            1-based position
 //                                                     7......  replacement sequence
+
+#define hgvsLrgPDotRangeExp hgvsFullRegex(lrgProteinExp, hgvsPDotRangeExp)
+// substring numbering:
+//      0.....................................................  whole matching string
+//      1..........................                             accession and optional dot version
+//                                 2...                         original start AA
+//                                       3...                   1-based start position
+//                                          4.................  optional range sep and AA+pos
+//                                            5...              original end AA
+//                                                 6...         1-based end position
+//                                                     7......  change description
+
+#define hgvsEnsPDotRangeExp hgvsFullRegex(ensProteinExp, hgvsPDotRangeExp)
+// substring numbering:
+//      0.....................................................  whole matching string
+//      1...........................                            ENS protein ID
+//         2...                                                 optional non-human species code
+//                                 3...                         original start AA
+//                                       4...                   1-based start position
+//                                          5.................  optional range sep and AA+pos
+//                                            6...              original end AA
+//                                                 7...         1-based end position
+//                                                     8......  change description
 
 #define hgvsRefSeqNPPDotRangeExp hgvsFullRegex(versionedRefSeqNPExp, hgvsPDotRangeExp)
 // substring numbering:
@@ -229,8 +331,10 @@ if (pHgvs && *pHgvs)
 //                              5.....          1-based end position
 //                                    6....     change description
 
+
 // Sometimes users give an NM_ accession, but a protein change.
-#define pseudoHgvsNMPDotSubstExp "^" versionedRefSeqNMExp "[ :]+p?\\.?" hgvsAminoAcidSubstExp
+#define maybePDot "[ :]+p?\\.?\\(?"
+#define pseudoHgvsNMPDotSubstExp "^" versionedRefSeqNMExp maybePDot hgvsAminoAcidSubstExp "\\)?"
 // substring numbering:
 //      0.....................................................  whole matching string
 //      1...............                                        acc & optional dot version
@@ -241,7 +345,8 @@ if (pHgvs && *pHgvs)
 //                                           6......            1-based position
 //                                                     7......  replacement sequence
 
-#define pseudoHgvsNMPDotRangeExp "^" versionedRefSeqNMExp "[ :]+p?\\.?" hgvsAaRangeExp
+#define pseudoHgvsNMPDotRangeExp "^" versionedRefSeqNMExp maybePDot hgvsAaRangeExp "\\)?"
+
 // substring numbering:
 //      0.....................................................  whole matching string
 //      1...............                                        acc & optional dot version
@@ -256,14 +361,14 @@ if (pHgvs && *pHgvs)
 //                                                      10....  change description
 
 // Common: gene symbol followed by space and/or punctuation followed by protein change
-#define pseudoHgvsGeneSymbolProtSubstExp "^" geneSymbolExp "[ :]+p?\\.?" hgvsAminoAcidSubstExp
+#define pseudoHgvsGeneSymbolProtSubstExp "^" geneSymbolExp maybePDot hgvsAminoAcidSubstExp "\\)?"
 //      0.....................................................  whole matching string
 //      1...................                                    gene symbol
 //                                   2.....                     original sequence
 //                                           3......            1-based position
 //                                                     4......  replacement sequence
 
-#define pseudoHgvsGeneSymbolProtRangeExp "^" geneSymbolExp "[ :]+p?\\.?" hgvsAaRangeExp
+#define pseudoHgvsGeneSymbolProtRangeExp "^" geneSymbolExp maybePDot hgvsAaRangeExp "\\)?"
 //      0.....................................................  whole matching string
 //      1...................                                    gene symbol
 //                                 2...                         original start AA
@@ -274,7 +379,7 @@ if (pHgvs && *pHgvs)
 //                                                       7.....  change description
 
 // As above but omitting the protein change
-#define pseudoHgvsGeneSymbolProtPosExp "^" geneSymbolExp "[ :]+p?\\.?" posIntExp
+#define pseudoHgvsGeneSymbolProtPosExp "^" geneSymbolExp maybePDot posIntExp "\\)?"
 //      0..........................                             whole matching string
 //      1...................                                    gene symbol
 //                           2.....                             1-based position
@@ -291,13 +396,26 @@ static struct hgvsVariant *hgvsParseGDotPos(char *term)
 /* If term is parseable as an HGVS NC_...g. term, return the parsed representation, else NULL. */
 {
 struct hgvsVariant *hgvs = NULL;
+int accIx = 1;
+int startPosIx = 3;
+int endPosIx = 5;
+int changeIx = 6;
+boolean matches = FALSE;
 regmatch_t substrs[17];
-if (regexMatchSubstr(term, hgvsRefSeqNCGDotExp, substrs, ArraySize(substrs)))
+if (regexMatchSubstr(term, hgvsLrgGDotExp, substrs, ArraySize(substrs)))
+    matches = TRUE;
+else if (regexMatchSubstr(term, hgvsRefSeqNCGDotExp, substrs, ArraySize(substrs)))
     {
-    int accIx = 1;
-    int startPosIx = 6;
-    int endPosIx = 8;
-    int changeIx = 9;
+    matches = TRUE;
+    // The LRG accession regex has only one substring but the RefSeq acc regex has 4, so that
+    // affects all substring offsets after the accession.
+    int refSeqExtra = 3;
+    startPosIx += refSeqExtra;
+    endPosIx += refSeqExtra;
+    changeIx += refSeqExtra;
+    }
+if (matches)
+    {
     AllocVar(hgvs);
     // HGVS recommendation May 2017: replace m. with g. since mitochondrion is genomic too
     hgvs->type = hgvstGenomic;
@@ -351,9 +469,9 @@ int startAnchorIx = 2;
 int endAnchorIx = 8;
 int endPosIx = 9;
 int changeIx = 13;
-// The LRG accession regex has only one substring but the RefSeq acc regex has 4, so that
-// affects all substring offsets after the accession.
-int refSeqExtra = 3;
+// The LRG accession regex has only one substring but the RefSeq acc regex has 4 and ENS has 2,
+// so that affects all substring offsets after the accession.
+int ixExtra = 0;
 int geneSymbolIx = -1;
 regmatch_t substrs[17];
 if (regexMatchSubstr(term, hgvsLrgCDotExp, substrs, ArraySize(substrs)) ||
@@ -361,15 +479,25 @@ if (regexMatchSubstr(term, hgvsLrgCDotExp, substrs, ArraySize(substrs)) ||
     {
     matches = TRUE;
     }
+else if (regexMatchSubstr(term, hgvsEnsCDotExp, substrs, ArraySize(substrs)) ||
+    (isNoncoding = regexMatchSubstr(term, hgvsEnsNDotExp, substrs, ArraySize(substrs))))
+    {
+    matches = TRUE;
+    ixExtra = 1;
+    }
 else if (regexMatchSubstr(term, hgvsRefSeqNMCDotExp, substrs, ArraySize(substrs)) ||
          (isNoncoding = regexMatchSubstr(term, hgvsRefSeqNMRNDotExp, substrs, ArraySize(substrs))))
     {
     matches = TRUE;
+    ixExtra = 3;
     geneSymbolIx = 4;
-    startAnchorIx += refSeqExtra;
-    endAnchorIx += refSeqExtra;
-    endPosIx += refSeqExtra;
-    changeIx += refSeqExtra;
+    }
+if (ixExtra > 0)
+    {
+    startAnchorIx += ixExtra;
+    endAnchorIx += ixExtra;
+    endPosIx += ixExtra;
+    changeIx += ixExtra;
     }
 if (matches)
     {
@@ -413,14 +541,37 @@ static struct hgvsVariant *hgvsParsePDotSubst(char *term)
  * otherwise NULL. */
 {
 struct hgvsVariant *hgvs = NULL;
+boolean matches = FALSE;
+int accIx = 1;
+int refIx = 2;
+int posIx = 3;
+int altIx = 4;
+int geneSymbolIx = -1;
+// The LRG accession regex has only one substring but the RefSeq acc regex has 4 and ENS has 2,
+// so that affects all substring offsets after the accession.
+int ixExtra = 0;
 regmatch_t substrs[8];
-if (regexMatchSubstr(term, hgvsRefSeqNPPDotSubstExp, substrs, ArraySize(substrs)))
+if (regexMatchSubstr(term, hgvsLrgPDotSubstExp, substrs, ArraySize(substrs)))
+    matches = TRUE;
+else if (regexMatchSubstr(term, hgvsEnsPDotSubstExp, substrs, ArraySize(substrs)))
     {
-    int accIx = 1;
-    int geneSymbolIx = 4;
-    int refIx = 5;
-    int posIx = 6;
-    int altIx = 7;
+    ixExtra = 1;
+    matches = TRUE;
+    }
+else if (regexMatchSubstr(term, hgvsRefSeqNPPDotSubstExp, substrs, ArraySize(substrs)))
+    {
+    matches = TRUE;
+    ixExtra = 3;
+    geneSymbolIx = 4;
+    }
+if (ixExtra > 0)
+    {
+    refIx += ixExtra;
+    posIx += ixExtra;
+    altIx += ixExtra;
+    }
+if (matches)
+    {
     AllocVar(hgvs);
     hgvs->type = hgvstProtein;
     hgvs->seqAcc = regexSubstringClone(term, substrs[accIx]);
@@ -430,7 +581,7 @@ if (regexMatchSubstr(term, hgvsRefSeqNPPDotSubstExp, substrs, ArraySize(substrs)
     char change[len+1];
     safencpy(change, sizeof(change), term+changeStart, len);
     hgvs->changes = cloneString(change);
-    if (regexSubstrMatched(substrs[geneSymbolIx]))
+    if (geneSymbolIx >= 0 && regexSubstrMatched(substrs[geneSymbolIx]))
         hgvs->seqGeneSymbol = regexSubstringClone(term, substrs[geneSymbolIx]);
     hgvs->start1 = regexSubstringInt(term, substrs[posIx]);
     hgvs->end = hgvs->start1;
@@ -443,15 +594,39 @@ static struct hgvsVariant *hgvsParsePDotRange(char *term)
  * otherwise NULL. */
 {
 struct hgvsVariant *hgvs = NULL;
+boolean matches = FALSE;
+int accIx = 1;
+int startRefIx = 2;
+int startPosIx = 3;
+int endPosIx = 6;
+int changeIx = 7;
+int geneSymbolIx = -1;
+// The LRG accession regex has only one substring but the RefSeq acc regex has 4 and ENS has 2,
+// so that affects all substring offsets after the accession.
+int ixExtra = 0;
 regmatch_t substrs[11];
-if (regexMatchSubstr(term, hgvsRefSeqNPPDotRangeExp, substrs, ArraySize(substrs)))
+if (regexMatchSubstr(term, hgvsLrgPDotRangeExp, substrs, ArraySize(substrs)))
+    matches = TRUE;
+else if (regexMatchSubstr(term, hgvsEnsPDotRangeExp, substrs, ArraySize(substrs)))
     {
-    int accIx = 1;
-    int geneSymbolIx = 4;
-    int startRefIx = 5;
-    int startPosIx = 6;
-    int endPosIx = 9;
-    int changeIx = 10;
+    matches = TRUE;
+    ixExtra = 1;
+    }
+else if (regexMatchSubstr(term, hgvsRefSeqNPPDotRangeExp, substrs, ArraySize(substrs)))
+    {
+    matches = TRUE;
+    ixExtra = 3;
+    geneSymbolIx = 4;
+    }
+if (ixExtra > 0)
+    {
+    startRefIx += ixExtra;
+    startPosIx += ixExtra;
+    endPosIx += ixExtra;
+    changeIx += ixExtra;
+    }
+if (matches)
+    {
     AllocVar(hgvs);
     hgvs->type = hgvstProtein;
     hgvs->seqAcc = regexSubstringClone(term, substrs[accIx]);
@@ -461,7 +636,7 @@ if (regexMatchSubstr(term, hgvsRefSeqNPPDotRangeExp, substrs, ArraySize(substrs)
     char change[len+1];
     safencpy(change, sizeof(change), term+changeStart, len);
     hgvs->changes = cloneString(change);
-    if (regexSubstrMatched(substrs[geneSymbolIx]))
+    if (geneSymbolIx >= 0 && regexSubstrMatched(substrs[geneSymbolIx]))
         hgvs->seqGeneSymbol = regexSubstringClone(term, substrs[geneSymbolIx]);
     hgvs->start1 = regexSubstringInt(term, substrs[startPosIx]);
     if (regexSubstrMatched(substrs[endPosIx]))
@@ -486,22 +661,11 @@ if (hgvs == NULL)
 return hgvs;
 }
 
-static boolean dbHasNcbiRefSeq(char *db)
-/* Test whether NCBI's RefSeq alignments are available in db. */
-{
-// hTableExists() caches results so this shouldn't make for loads of new SQL queries if called
-// more than once.
-return (hTableExists(db, "ncbiRefSeq") && hTableExists(db, "ncbiRefSeqPsl") &&
-        hTableExists(db, "ncbiRefSeqCds") && hTableExists(db, "ncbiRefSeqLink") &&
-        hTableExists(db, "ncbiRefSeqPepTable") &&
-        hTableExists(db, "seqNcbiRefSeq") && hTableExists(db, "extNcbiRefSeq"));
-}
-
 static char *npForGeneSymbol(char *db, char *geneSymbol)
 /* Given a gene symbol, look up and return its NP_ accession; if not found return NULL. */
 {
 char query[2048];
-if (dbHasNcbiRefSeq(db))
+if (hDbHasNcbiRefSeq(db))
     {
     sqlSafef(query, sizeof(query), "select protAcc from ncbiRefSeqLink where name = '%s' "
              "and protAcc != 'n/a' and protAcc != '' "
@@ -531,7 +695,7 @@ if (trackHubDatabase(db))
     return NULL;
 char query[2048];
 char *geneTable = NULL;
-if (dbHasNcbiRefSeq(db))
+if (hDbHasNcbiRefSeq(db))
     geneTable = "ncbiRefSeq";
 else if (hTableExists(db, "refGene"))
     geneTable = "refGene";
@@ -551,7 +715,7 @@ static char *npForNm(char *db, char *nmAcc)
 if (trackHubDatabase(db))
     return NULL;
 char query[2048];
-if (dbHasNcbiRefSeq(db))
+if (hDbHasNcbiRefSeq(db))
     {
     // ncbiRefSeq tables use versioned NM_ accs, but the user might have passed in a
     // versionless NM_, so adjust query accordingly:
@@ -577,26 +741,120 @@ hFreeConn(&conn);
 return npAcc;
 }
 
+static char *lrgProteinToTx(char *db, char *protAcc)
+/* Return the LRG_ transcript accession for protAcc.  Each LRG_NpM has a corresponding LRG_NtM. */
+{
+int accLen = strlen(protAcc);
+char txAcc[accLen+1];
+safecpy(txAcc, sizeof(txAcc), protAcc);
+char *p = strrchr(txAcc, 'p');
+if (p)
+    *p = 't';
+return cloneString(txAcc);
+}
+
+static char *gencodeProteinToTx(char *db, char *protAcc)
+/* Return the ENS*T transcript accession for protAcc, or NULL if not found. */
+{
+char *txAcc = NULL;
+struct sqlConnection *conn = hAllocConn(db);
+char *attrsTable = hFindLatestGencodeTableConn(conn, "Attrs");
+if (attrsTable && hHasField(db, attrsTable, "proteinId"))
+    {
+    char query[2048];
+    sqlSafef(query, sizeof(query), "select transcriptId from %s where proteinId = '%s'",
+             attrsTable, protAcc);
+    txAcc = sqlQuickString(conn, query);
+    }
+hFreeConn(&conn);
+return txAcc;
+}
+
+static struct genePred *getGencodeGp(char *db, char *acc)
+/* Return the genePred for acc in the latest wgEncodeGencodeCompV* table, or NULL if not found. */
+{
+struct genePred *gp = NULL;
+struct sqlConnection *conn = hAllocConn(db);
+char *gencodeTable = hFindLatestGencodeTableConn(conn, "Comp");
+if (gencodeTable)
+    {
+    int hasBin = 1;
+    char query[2048];
+    sqlSafef(query, sizeof(query), "select * from %s where name = '%s'", gencodeTable, acc);
+    struct sqlResult *sr = sqlGetResult(conn, query);
+    char **row;
+    if ((row = sqlNextRow(sr)) != NULL)
+        gp = genePredExtLoad(row+hasBin, GENEPREDX_NUM_COLS);
+    sqlFreeResult(&sr);
+    }
+hFreeConn(&conn);
+return gp;
+}
+
+static char *txProtFromGp(char *db, struct genePred *gp)
+/* Return a string containing the translated CDS portion of gp using genomic sequence. */
+{
+int cdsLen = 0;
+int i, eCdsStart, eCdsEnd;
+for (i = 0;  i < gp->exonCount;  i++)
+    {
+    if (genePredCdsExon(gp, i, &eCdsStart, &eCdsEnd))
+        cdsLen += (eCdsEnd - eCdsStart);
+    }
+char cdsSeq[cdsLen+1];
+int offset = 0;
+for (i = 0;  i < gp->exonCount;  i++)
+    {
+    if (genePredCdsExon(gp, i, &eCdsStart, &eCdsEnd))
+        {
+        struct dnaSeq *exonSeq = hChromSeq(db, gp->chrom, eCdsStart, eCdsEnd);
+        safencpy(cdsSeq+offset, cdsLen+1-offset, exonSeq->dna, exonSeq->size);
+        offset += exonSeq->size;
+        dnaSeqFree(&exonSeq);
+        }
+    }
+if (gp->strand[0] == '-')
+    reverseComplement(cdsSeq, cdsLen);
+char *seq = needMem(cdsLen+1);
+dnaTranslateSome(cdsSeq, seq, cdsLen+1);
+return seq;
+}
+
 static char *getProteinSeq(char *db, char *acc)
 /* Return amino acid sequence for acc, or NULL if not found. */
 {
 if (trackHubDatabase(db))
     return NULL;
 char *seq = NULL;
-if (startsWith("LRG_", acc))
+if (startsWith("ENS", acc))
+    {
+    char *txAcc = gencodeProteinToTx(db, acc);
+    if (txAcc)
+        {
+        struct genePred *gp = getGencodeGp(db, txAcc);
+        if (gp)
+            seq = txProtFromGp(db, gp);
+        genePredFree(&gp);
+        freeMem(txAcc);
+        }
+    }
+else if (startsWith("LRG_", acc))
     {
     if (hTableExists(db, "lrgPep"))
         {
         char query[2048];
-        sqlSafef(query, sizeof(query), "select seq from lrgPep where name = '%s'", acc);
+        // lrgPep is indexed by transcript ID not protein ID
+        char *txAcc = lrgProteinToTx(db, acc);
+        sqlSafef(query, sizeof(query), "select seq from lrgPep where name = '%s'", txAcc);
         struct sqlConnection *conn = hAllocConn(db);
         seq = sqlQuickString(conn, query);
         hFreeConn(&conn);
+        freeMem(txAcc);
         }
     }
 else
     {
-    if (dbHasNcbiRefSeq(db))
+    if (hDbHasNcbiRefSeq(db))
         {
         char query[2048];
         sqlSafef(query, sizeof(query), "select seq from ncbiRefSeqPepTable "
@@ -612,7 +870,6 @@ else
             seq = aaSeq->dna;
         }
     }
-
 return seq;
 }
 
@@ -741,6 +998,51 @@ else if (regexMatchSubstr(term, pseudoHgvsChrGDotExp, substrs, ArraySize(substrs
 return hgvs;
 }
 
+static struct bbiFile *getLrgBbi(char *db)
+/* Return bbiFile for LRG regions or NULL if not found. */
+{
+struct bbiFile *bbi = NULL;
+// I don't think this will be called often enough to warrant caching open bbi file (and index?).
+// I expect it to be called a couple times when the user enters a LRG genomic HGVS pos/search term.
+// It would be cleaner to get fileName from tdb or db -- but this is much quicker & easier:
+char fileName[1024];
+safef(fileName, sizeof(fileName), "/gbdb/%s/bbi/lrg.bb", db);
+char *fileNameRep = hReplaceGbdb(fileName);
+if (fileExists(fileNameRep))
+    bbi = bigBedFileOpen(fileNameRep);
+freeMem(fileNameRep);
+return bbi;
+}
+
+static struct lrg *loadLrgByName(char *db, char *lrgId)
+/* Retrieve lrg data from bigBed. */
+{
+struct lrg *lrg = NULL;
+struct bbiFile *bbi = getLrgBbi(db);
+if (bbi)
+    {
+    int fieldIx = 0;
+    struct bptFile *index = bigBedOpenExtraIndex(bbi, "name", &fieldIx);
+    if (index)
+        {
+        struct lm *lm = lmInit(0);
+        struct bigBedInterval *bb = bigBedNameQuery(bbi, index, fieldIx, lrgId, lm);
+        if (bb)
+            {
+            char *fields[bbi->fieldCount];
+            char chrom[512], startBuf[16], endBuf[16];
+            bigBedIntervalToRowLookupChrom(bb, NULL, bbi, chrom, sizeof(chrom),
+                                           startBuf, endBuf, fields, bbi->fieldCount);
+            lrg = lrgLoad(fields);
+            }
+        lmCleanup(&lm);
+        }
+    // Don't bptFileClose(&index) -- index shares pointers with bbi!
+    }
+bigBedFileClose(&bbi);
+return lrg;
+}
+
 static char refBaseFromNucSubst(char *change)
 /* If sequence change is a nucleotide substitution, return the reference base, else null char. */
 {
@@ -769,32 +1071,54 @@ if (retEnd)
 static boolean hgvsValidateGenomic(char *db, struct hgvsVariant *hgvs,
                                    char **retFoundAcc, int *retFoundVersion,
                                    char **retDiffRefAllele)
-/* Return TRUE if hgvs->seqAcc can be mapped to a chrom in db and coords are legal for the chrom.
+/* Return TRUE if hgvs->seqAcc can be mapped to a chrom/LRG in db and coords are in range.
  * If retFoundAcc is non-NULL, set it to the versionless seqAcc if chrom is found, else NULL.
- * If retFoundVersion is non-NULL, set it to seqAcc's version if chrom is found, else NULL.
+ * If retFoundVersion is non-NULL, set to seqAcc's version if chrom is found, -1 for LRG, else NULL.
  * If retDiffRefAllele is non-NULL and hgvs specifies a reference allele then compare it to
  * the genomic sequence at that location; set *retDiffRefAllele to NULL if they match, or to
  * genomic sequence if they differ. */
 {
 boolean coordsOK = FALSE;
+char hgvsBase = '\0';
 if (retDiffRefAllele)
+    {
+    hgvsBase = refBaseFromNucSubst(hgvs->changes);
     *retDiffRefAllele = NULL;
+    }
 if (retFoundAcc)
     *retFoundAcc = NULL;
 if (retFoundVersion)
     *retFoundVersion = 0;
-char *chrom = hgOfficialChromName(db, hgvs->seqAcc);
-if (isNotEmpty(chrom))
+int start, end;
+hgvsStartEndToZeroBasedHalfOpen(hgvs, &start, &end);
+if (startsWith("LRG_", hgvs->seqAcc))
     {
-    struct chromInfo *ci = hGetChromInfo(db, chrom);
-    int start, end;
-    hgvsStartEndToZeroBasedHalfOpen(hgvs, &start, &end);
-    if (start >= 0 && start < ci->size && end > 0 && end < ci->size)
+    struct lrg *lrg = loadLrgByName(db, hgvs->seqAcc);
+    if (lrg && start >= 0 && start < lrg->lrgSize && end > 0 && end <= lrg->lrgSize)
         {
         coordsOK = TRUE;
-        if (retDiffRefAllele)
+        if (hgvsBase != '\0')
             {
-            char hgvsBase = refBaseFromNucSubst(hgvs->changes);
+            struct dnaSeq *lrgSeq = lrgReconstructSequence(lrg, db);
+            lrgSeq->dna[start] = toupper(lrgSeq->dna[start]);
+            if (lrgSeq->dna[start] != hgvsBase)
+                *retDiffRefAllele = cloneStringZ(lrgSeq->dna+start, 1);
+            dnaSeqFree(&lrgSeq);
+            }
+        if (retFoundAcc)
+            *retFoundAcc = cloneString(hgvs->seqAcc);
+        }
+    lrgFree(&lrg);
+    }
+else
+    {
+    char *chrom = hgOfficialChromName(db, hgvs->seqAcc);
+    if (isNotEmpty(chrom))
+        {
+        struct chromInfo *ci = hGetChromInfo(db, chrom);
+        if (start >= 0 && start < ci->size && end > 0 && end <= ci->size)
+            {
+            coordsOK = TRUE;
             if (hgvsBase != '\0')
                 {
                 struct dnaSeq *refBase = hFetchSeq(ci->fileName, chrom, start, end);
@@ -804,32 +1128,51 @@ if (isNotEmpty(chrom))
                 dnaSeqFree(&refBase);
                 }
             }
+        // Since we found hgvs->seqAcc, split it into versionless and version parts.
+        if (retFoundAcc)
+            *retFoundAcc = cloneFirstWordByDelimiter(hgvs->seqAcc, '.');
+        if (retFoundVersion)
+            {
+            char *p = strchr(hgvs->seqAcc, '.');
+            if (p)
+                *retFoundVersion = atoi(p+1);
+            }
+        // Don't free chromInfo, it's cached!
         }
-    // Since we found hgvs->seqAcc, split it into versionless and version parts.
-    if (retFoundAcc)
-        *retFoundAcc = cloneFirstWordByDelimiter(hgvs->seqAcc, '.');
-    if (retFoundVersion)
-        {
-        char *p = strchr(hgvs->seqAcc, '.');
-        if (p)
-            *retFoundVersion = atoi(p+1);
-        }
-    // Don't free chromInfo, it's cached!
     }
 return coordsOK;
 }
 
-static char *dnaSeqCannibalize(struct dnaSeq **pDnaSeq)
-/* Return the already-allocated dna string and free the dnaSeq container. */
+static char *txSeqFromGp(char *db, struct genePred *gp)
+/* Return transcribed-from-genome sequence for gp */
+{
+int seqLen = 0;
+int i;
+for (i = 0;  i < gp->exonCount;  i++)
+    seqLen += (gp->exonEnds[i] - gp->exonStarts[i]);
+char *seq = needMem(seqLen+1);
+int offset = 0;
+for (i = 0;  i < gp->exonCount;  i++)
+    {
+    int exonStart = gp->exonStarts[i];
+    int exonEnd = gp->exonEnds[i];
+    struct dnaSeq *exonSeq = hChromSeq(db, gp->chrom, exonStart, exonEnd);
+    safencpy(seq+offset, seqLen+1-offset, exonSeq->dna, exonSeq->size);
+    offset += exonSeq->size;
+    dnaSeqFree(&exonSeq);
+    }
+if (gp->strand[0] == '-')
+    reverseComplement(seq, seqLen);
+return seq;
+}
+
+static char *getGencodeSeq(char *db, char *acc)
+/* Return transcribed-from-genome sequence for acc, or NULL if not found. */
 {
 char *seq = NULL;
-if (pDnaSeq && *pDnaSeq)
-    {
-    struct dnaSeq *dnaSeq = *pDnaSeq;
-    seq = dnaSeq->dna;
-    dnaSeq->dna = NULL;
-    dnaSeqFree(pDnaSeq);
-    }
+struct genePred *gp = getGencodeGp(db, acc);
+if (gp)
+    seq = txSeqFromGp(db, gp);
 return seq;
 }
 
@@ -850,10 +1193,15 @@ if (startsWith("LRG_", acc))
         hFreeConn(&conn);
         }
     }
+else if (startsWith("ENS", acc ))
+    {
+    // Construct it from the genome I guess?
+    seq = getGencodeSeq(db, acc);
+    }
 else
     {
     struct dnaSeq *cdnaSeq = NULL;
-    if (dbHasNcbiRefSeq(db))
+    if (hDbHasNcbiRefSeq(db))
         cdnaSeq = hDnaSeqGet(db, acc, "seqNcbiRefSeq", "extNcbiRefSeq");
     else
         cdnaSeq = hGenBankGetMrna(db, acc, NULL);
@@ -864,28 +1212,42 @@ return seq;
 }
 
 static boolean getCds(char *db, char *acc, struct genbankCds *retCds)
-/* Get the CDS info for genbank or LRG acc; return FALSE if not found or not applicable. */
+/* Get the CDS info for genbank/LRG/ENS acc; return FALSE if not found or not applicable. */
 {
 if (trackHubDatabase(db))
     return FALSE;
 boolean gotCds = FALSE;
+char *cdsStr = NULL;
 char query[1024];
-if (startsWith("LRG_", acc))
-    sqlSafef(query, sizeof(query),
-             "select cds from lrgCds where id = '%s'", acc);
-else if (dbHasNcbiRefSeq(db) &&
-         // This is a hack to allow us to fall back on refSeqAli if ncbiRefSeqPsl is incomplete:
-         strchr(acc, '.'))
-    sqlSafef(query, sizeof(query),
-             "select cds from ncbiRefSeqCds where id = '%s'", acc);
+if (startsWith("ENS", acc))
+    {
+    // Infer CDS from genePred coords
+    struct genePred *gp = getGencodeGp(db, acc);
+    if (gp)
+        {
+        genePredToCds(gp, retCds);
+        gotCds = (retCds->end > retCds->start);
+        }
+    }
 else
-    sqlSafef(query, sizeof(query),
-             "SELECT c.name FROM %s as c, %s as g WHERE (g.acc = '%s') AND "
-             "(g.cds != 0) AND (g.cds = c.id)", cdsTable, gbCdnaInfoTable, acc);
-struct sqlConnection *conn = hAllocConn(db);
-char cdsBuf[2048];
-char *cdsStr = sqlQuickQuery(conn, query, cdsBuf, sizeof(cdsBuf));
-hFreeConn(&conn);
+    {
+    if (startsWith("LRG_", acc))
+        sqlSafef(query, sizeof(query),
+                 "select cds from lrgCds where id = '%s'", acc);
+    else if (hDbHasNcbiRefSeq(db) &&
+             // This is a hack to allow us to fall back on refSeqAli if ncbiRefSeqPsl is incomplete:
+             strchr(acc, '.'))
+        sqlSafef(query, sizeof(query),
+                 "select cds from ncbiRefSeqCds where id = '%s'", acc);
+    else
+        sqlSafef(query, sizeof(query),
+                 "SELECT c.name FROM %s as c, %s as g WHERE (g.acc = '%s') AND "
+                 "(g.cds != 0) AND (g.cds = c.id)", cdsTable, gbCdnaInfoTable, acc);
+    struct sqlConnection *conn = hAllocConn(db);
+    char cdsBuf[2048];
+    cdsStr = sqlQuickQuery(conn, query, cdsBuf, sizeof(cdsBuf));
+    hFreeConn(&conn);
+    }
 if (isNotEmpty(cdsStr))
     gotCds = (genbankCdsParse(cdsStr, retCds) &&
               retCds->startComplete && retCds->start != retCds->end);
@@ -964,6 +1326,7 @@ return version;
 
 static char *normalizeVersion(char *db, char *acc, int *retFoundVersion)
 /* LRG accessions don't have versions, so just return the same acc and set *retFoundVersion to 0.
+ * ENS accessions must have versions.
  * The user may give us a RefSeq accession with or without a .version.
  * If ncbiRefSeq tables are present, return acc with version, looking up version if necessary.
  * If we look it up and can't find it, this returns NULL.
@@ -978,7 +1341,14 @@ if (startsWith("LRG_", acc))
     {
     normalizedAcc = cloneString(acc);
     }
-else if (dbHasNcbiRefSeq(db))
+else if (startsWith("ENS", acc))
+    {
+    normalizedAcc = cloneString(acc);
+    char *p = strchr(acc, '.');
+    if (p)
+        foundVersion = atoi(p+1);
+    }
+else if (hDbHasNcbiRefSeq(db))
     {
     // ncbiRefSeq tables need versioned accessions.
     if (strchr(acc, '.'))
@@ -1038,18 +1408,24 @@ if (accSeq)
         {
         struct genbankCds cds;
         coordsOK = getCds(db, acc, &cds);
-        if (coordsOK && retDiffRefAllele)
+        if (coordsOK)
             {
             start += (hgvs->startIsUtr3 ? cds.end : cds.start);
-            if (hgvs->startOffset == 0 && start >= 0 && start < seqLen)
+            end += (hgvs->endIsUtr3 ? cds.end : cds.start);
+            if (start > end)
+                coordsOK = FALSE;
+            else if (retDiffRefAllele && hgvs->startOffset == 0 && start >= 0 && start <= seqLen)
                 checkRefAllele(hgvs, start, accSeq, retDiffRefAllele);
             }
         }
     else
         {
-        coordsOK = TRUE;
-        if (retDiffRefAllele && hgvs->startOffset == 0 && start >= 0 && start < seqLen)
-            checkRefAllele(hgvs, start, accSeq, retDiffRefAllele);
+        if (start <= end)
+            {
+            coordsOK = TRUE;
+            if (retDiffRefAllele && hgvs->startOffset == 0 && start >= 0 && start < seqLen)
+                checkRefAllele(hgvs, start, accSeq, retDiffRefAllele);
+            }
         }
     }
 freeMem(accSeq);
@@ -1090,6 +1466,39 @@ bed6->strand[0] = strand;
 return bed6;
 }
 
+static int pslMapQStartToT(struct psl *psl, int qStartIn)
+/* Map a query start coord to a target start coord; return -1 if qStart is not in the alignment. */
+{
+int t = -1, qStart = qStartIn, ix;
+boolean isRc = pslQStrand(psl) == '-';
+if (isRc)
+    {
+    int qEnd = qStart + 1;
+    qStart = psl->qSize - qEnd;
+    }
+for (ix = 0;  ix < psl->blockCount;  ix++)
+    {
+    int qOffset = qStart - pslQStart(psl, ix);
+    if (qOffset >= 0 && qStart < pslQEnd(psl, ix))
+        {
+        t = pslTStart(psl, ix) + qOffset;
+        break;
+        }
+    }
+return t;
+}
+
+static int pslMapQEndToT(struct psl *psl, int qEnd)
+/* Map a query end coord to a target end coord; return -1 if qEnd is not in the alignment. */
+{
+int tEnd = -1;
+int qStart = qEnd - 1;
+int tStart = pslMapQStartToT(psl, qStart);
+if (tStart >= 0)
+    tEnd = tStart + 1;
+return tEnd;
+}
+
 boolean hgvsIsInsertion(struct hgvsVariant *hgvs)
 /* Return TRUE if hgvs is an insertion (end == start1+1, change starts with "ins"). */
 {
@@ -1108,15 +1517,31 @@ if (hgvsIsInsertion(hgvs))
 }
 
 static struct bed *hgvsMapGDotToGenome(char *db, struct hgvsVariant *hgvs, char **retPslTable)
-/* Given an NC_*g. term, if we can map NC_ to chrom then return the region, else NULL. */
+/* Given an NC_*g. or LRG_*g. term, if we can map to chrom then return the region, else NULL. */
 {
 struct bed *region = NULL;
-char *chrom = hgOfficialChromName(db, hgvs->seqAcc);
-if (isNotEmpty(chrom) && hgvs->start1 > 0)
+if (startsWith("LRG_", hgvs->seqAcc))
     {
-    region = bed6New(chrom, hgvs->start1 - 1, hgvs->end, "", 0, '+');
-    adjustInsStartEnd(hgvs, &region->chromStart, &region->chromEnd);
+    struct lrg *lrg = loadLrgByName(db, hgvs->seqAcc);
+    if (lrg)
+        {
+        uint chromSize = hChromSize(db, lrg->chrom);
+        struct psl *psl = lrgToPsl(lrg, chromSize);
+        int start = pslMapQStartToT(psl, hgvs->start1 - 1);
+        int end = pslMapQEndToT(psl, hgvs->end);
+        if (start >= 0 && end >= 0)
+            region = bed6New(lrg->chrom, start, end, "", 0, '+');
+        pslFree(&psl);
+        }
     }
+else
+    {
+    char *chrom = hgOfficialChromName(db, hgvs->seqAcc);
+    if (isNotEmpty(chrom) && hgvs->start1 > 0)
+        region = bed6New(chrom, hgvs->start1 - 1, hgvs->end, "", 0, '+');
+    }
+if (region)
+    adjustInsStartEnd(hgvs, &region->chromStart, &region->chromEnd);
 if (retPslTable)
     *retPslTable = NULL;
 return region;
@@ -1321,49 +1746,36 @@ return NULL;
 }
 
 
-static struct psl *mapPsl(char *db, struct hgvsVariant *hgvs, char *pslTable, char *acc,
+static struct psl *mapPsl(struct hgvsVariant *hgvs, char *acc, struct psl *txAli,
                           struct genbankCds *cds, int *retUpstream, int *retDownstream)
-/* If acc is found in pslTable, use pslTransMap to map hgvs onto the genome. */
+/* Use pslTransMap to map hgvs onto the genome. */
 {
-struct psl *mappedToGenome = NULL;
-char query[2048];
-sqlSafef(query, sizeof(query), "select * from %s where qName = '%s'", pslTable, acc);
-struct sqlConnection *conn = hAllocConn(db);
-struct sqlResult *sr = sqlGetResult(conn, query);
-char **row;
-if (sr && (row = sqlNextRow(sr)))
-    {
-    int bin = 1; // All PSL tables used here, and any made in the future, use the bin column.
-    struct psl *txAli = pslLoad(row+bin);
-    // variantPsl contains the anchor if a non-cdsStart anchor is used because
-    // the actual position might be outside the bounds of the transcript sequence (intron/UTR)
-    struct psl *variantPsl = pslFromHgvsNuc(hgvs, acc, txAli->qSize, txAli->qEnd, cds,
-                                            retUpstream, retDownstream);
-    mappedToGenome = pslTransMap(pslTransMapNoOpts, variantPsl, txAli);
-    // If there is a deletion in the genome / insertion in the transcript then pslTransMap cannot
-    // map those bases to the genome.  In that case take a harder look and return the deletion
-    // coords.
-    if (mappedToGenome == NULL)
-        mappedToGenome = mapToDeletion(variantPsl, txAli);
-    pslFree(&variantPsl);
-    pslFree(&txAli);
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
+// variantPsl contains the anchor if a non-cdsStart anchor is used because
+// the actual position might be outside the bounds of the transcript sequence (intron/UTR)
+struct psl *variantPsl = pslFromHgvsNuc(hgvs, acc, txAli->qSize, txAli->qEnd, cds,
+                                        retUpstream, retDownstream);
+struct psl *mappedToGenome = pslTransMap(pslTransMapNoOpts, variantPsl, txAli);
+// If there is a deletion in the genome / insertion in the transcript then pslTransMap cannot
+// map those bases to the genome.  In that case take a harder look and return the deletion
+// coords.
+if (mappedToGenome == NULL)
+    mappedToGenome = mapToDeletion(variantPsl, txAli);
+pslFree(&variantPsl);
 return mappedToGenome;
 }
 
 static char *pslTableForAcc(char *db, char *acc)
-/* Based on acc (and whether db has NCBI RefSeq alignments), pick a PSL table where
- * acc should be found (table may or may not exist).  Don't free the returned string. */
+/* Based on acc (and whether db has NCBI RefSeq alignments), pick a PSL (or genePred for GENCODE)
+ * table where acc should be found (table may or may not exist).  Don't free the returned string. */
 {
 char *pslTable = NULL;
 if (startsWith("LRG_", acc))
     pslTable = "lrgTranscriptAli";
-else if (startsWith("NM_", acc) || startsWith("NR_", acc))
+else if (startsWith("NM_", acc) || startsWith("NR_", acc) ||
+         startsWith("XM_", acc) || startsWith("XR_", acc))
     {
     // Use NCBI's alignments if they are available
-    if (dbHasNcbiRefSeq(db))
+    if (hDbHasNcbiRefSeq(db))
         pslTable = "ncbiRefSeqPsl";
     else
         pslTable = "refSeqAli";
@@ -1412,6 +1824,80 @@ limitToRange(region->chromEnd, 0, psl->tSize);
 return region;
 }
 
+static struct psl *pslForQName(char *db, char *pslTable, char *acc)
+/* Look up acc in pslTable's qName column; return psl or NULL if not found. */
+{
+struct psl *psl = NULL;
+char query[2048];
+struct sqlConnection *conn = hAllocConn(db);
+char **row;
+sqlSafef(query, sizeof(query), "select * from %s where qName = '%s'", pslTable, acc);
+struct sqlResult *sr = sqlGetResult(conn, query);
+if (sr && (row = sqlNextRow(sr)))
+    {
+    // All PSL tables used here, and any made in the future, use the bin column.
+    int bin = 1;
+    psl = pslLoad(row+bin);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return psl;
+}
+
+static struct psl *getPslAndCds(char *db, struct hgvsVariant *hgvs, char **pAcc,
+                                struct genbankCds *cds, char **retPslTable)
+/* Get PSL and cds (if applicable) for acc. */
+{
+struct psl *txAli = NULL;
+cds->start = cds->end = -1;
+cds->startComplete = cds->endComplete = cds->complement = FALSE;
+char *acc = *pAcc;
+if (startsWith("ENS", acc))
+    {
+    struct genePred *gp = getGencodeGp(db, acc);
+    if (gp)
+        {
+        int qSize = 0; // infer -- no polyAs in Gencode because it's genome-based
+        txAli = genePredToPsl(gp, hChromSize(db, gp->chrom), qSize);
+        genePredToCds(gp, cds);
+        if (retPslTable)
+            {
+            // Well, it's not PSL but it's the track table:
+            struct sqlConnection *conn = hAllocConn(db);
+            *retPslTable = hFindLatestGencodeTableConn(conn, "Comp");
+            hFreeConn(&conn);
+            }
+        }
+    }
+else
+    {
+    char *pslTable = pslTableForAcc(db, acc);
+    if (pslTable && hTableExists(db, pslTable))
+        {
+        if (hgvs->type == hgvstCoding)
+            getCds(db, acc, cds);
+        txAli = pslForQName(db, pslTable, acc);
+        }
+    // As of 9/26/16, ncbiRefSeqPsl is missing some items (#13673#note-443) -- so fall back
+    // on UCSC alignments.
+    if (!txAli && sameString(pslTable, "ncbiRefSeqPsl") && hTableExists(db, "refSeqAli"))
+        {
+        char *accNoVersion = cloneFirstWordByDelimiter(acc, '.');
+        if (hgvs->type == hgvstCoding)
+            getCds(db, accNoVersion, cds);
+        txAli = pslForQName(db, "refSeqAli", accNoVersion);
+        if (txAli)
+            {
+            pslTable = "refSeqAli";
+            *pAcc = accNoVersion;
+            }
+        }
+    if (txAli && retPslTable != NULL)
+        *retPslTable = pslTable;
+    }
+return txAli;
+}
+
 static struct bed *hgvsMapNucToGenome(char *db, struct hgvsVariant *hgvs, char **retPslTable)
 /* Return a bed6 with the variant's span on the genome and strand, or NULL if unable to map.
  * If successful and retPslTable is not NULL, set it to the name of the PSL table used. */
@@ -1422,33 +1908,20 @@ char *acc = normalizeVersion(db, hgvs->seqAcc, NULL);
 if (isEmpty(acc))
     return NULL;
 struct bed *region = NULL;
-char *pslTable = pslTableForAcc(db, acc);
+char *pslTable = NULL;
 struct genbankCds cds;
-boolean gotCds = (hgvs->type == hgvstCoding) ? getCds(db, acc, &cds) : FALSE;
-if (pslTable && (hgvs->type != hgvstCoding || gotCds) && hTableExists(db, pslTable))
+struct psl *txAli = getPslAndCds(db, hgvs, &acc, &cds, &pslTable);
+boolean gotCds = (cds.end > cds.start);
+if (txAli && (hgvs->type != hgvstCoding || gotCds))
     {
     int upstream = 0, downstream = 0;
-    struct psl *mappedToGenome = mapPsl(db, hgvs, pslTable, acc, &cds, &upstream, &downstream);
-    // As of 9/26/16, ncbiRefSeqPsl is missing some items (#13673#note-443) -- so fall back
-    // on UCSC alignments.
-    if (!mappedToGenome && sameString(pslTable, "ncbiRefSeqPsl") && hTableExists(db, "refSeqAli"))
-        {
-        char *accNoVersion = cloneFirstWordByDelimiter(acc, '.');
-        gotCds = (hgvs->type == hgvstCoding) ? getCds(db, accNoVersion, &cds) : FALSE;
-        if (hgvs->type != hgvstCoding || gotCds)
-            mappedToGenome = mapPsl(db, hgvs, "refSeqAli", accNoVersion, &cds,
-                                    &upstream, &downstream);
-        if (mappedToGenome)
-            {
-            pslTable = "refSeqAli";
-            acc = accNoVersion;
-            }
-        }
+    struct psl *mappedToGenome = mapPsl(hgvs, acc, txAli, &cds, &upstream, &downstream);
     if (mappedToGenome)
         {
         region = pslAndFriendsToRegion(mappedToGenome, hgvs, upstream, downstream);
         pslFree(&mappedToGenome);
         }
+    pslFree(&txAli);
     }
 if (region)
     {
@@ -1463,14 +1936,20 @@ static struct bed *hgvsMapPDotToGenome(char *db, struct hgvsVariant *hgvs, char 
 /* Return a bed6 with the variant's span on the genome and strand, or NULL if unable to map.
  * If successful and retPslTable is not NULL, set it to the name of the PSL table used. */
 {
-struct bed *region = NULL;
 char *acc = normalizeVersion(db, hgvs->seqAcc, NULL);
-if (acc && startsWith("NP_", acc))
+if (isEmpty(acc))
+    return NULL;
+struct bed *region = NULL;
+char *txAcc = NULL;
+if (startsWith("LRG_", acc))
+    txAcc = lrgProteinToTx(db, acc);
+else if (startsWith("ENS", acc))
+    txAcc = gencodeProteinToTx(db, acc);
+else if (startsWith("NP_", acc) || startsWith("XP_", acc))
     {
-    // Translate the NP_*:p. to NM_*:c. and map NM_*:c. to the genome.
     struct sqlConnection *conn = hAllocConn(db);
     char query[2048];
-    if (dbHasNcbiRefSeq(db))
+    if (hDbHasNcbiRefSeq(db))
         sqlSafef(query, sizeof(query), "select mrnaAcc from ncbiRefSeqLink where protAcc = '%s'",
                  acc);
     else if (hTableExists(db, "refGene"))
@@ -1478,20 +1957,21 @@ if (acc && startsWith("NP_", acc))
                  "where l.protAcc = '%s' and r.name = l.mrnaAcc", refLinkTable, acc);
     else
         return NULL;
-    char *nmAcc = sqlQuickString(conn, query);
+    txAcc = sqlQuickString(conn, query);
     hFreeConn(&conn);
-    if (nmAcc)
-        {
-        struct hgvsVariant cDot;
-        zeroBytes(&cDot, sizeof(cDot));
-        cDot.type = hgvstCoding;
-        cDot.seqAcc = nmAcc;
-        cDot.start1 = ((hgvs->start1 - 1) * 3) + 1;
-        cDot.end = ((hgvs->end - 1) * 3) + 3;
-        cDot.changes = hgvs->changes;
-        region = hgvsMapNucToGenome(db, &cDot, retPslTable);
-        freeMem(nmAcc);
-        }
+    }
+if (txAcc)
+    {
+    // Translate the p. to c. and map c. to the genome.
+    struct hgvsVariant cDot;
+    zeroBytes(&cDot, sizeof(cDot));
+    cDot.type = hgvstCoding;
+    cDot.seqAcc = txAcc;
+    cDot.start1 = ((hgvs->start1 - 1) * 3) + 1;
+    cDot.end = ((hgvs->end - 1) * 3) + 3;
+    cDot.changes = hgvs->changes;
+    region = hgvsMapNucToGenome(db, &cDot, retPslTable);
+    freeMem(txAcc);
     }
 return region;
 }
@@ -1812,135 +2292,6 @@ if (refLen > 0 && altLen >= 2*refLen &&
 return dupToIns;
 }
 
-static void updateSeq(struct dnaSeq *seq, char *db, char *chrom, int start, int end)
-/* Free and reallocate seq's contents with the new sequence range. */
-// BEWARE: newDnaSeq does not clone dna so original seq->dna was allocated elsewhere!
-// In this case I'm assuming that seq comes from a prior call to hChromSeq, which
-// passes control of seq over to the caller (there's no stale pointer to cause trouble).
-{
-struct dnaSeq *newSeq = hChromSeq(db, chrom, start, end);
-touppers(newSeq->dna);
-freeMem(seq->dna);
-freeMem(seq->name);
-memcpy(seq, newSeq, sizeof(*seq));
-freeMem(newSeq);
-}
-
-static boolean shiftAndFetchMoreSeq(char *db, int altLen, struct dnaSeq *genomicSeq,
-                                    int *pLeftShiftOffset, struct bed *mapping,
-                                    int *pTotalBasesShifted, int *pStart)
-/* We need to fetch more genomic sequence to the left; update genomicSeq and remaining args
- * with the distance that we have shifted so far, and fetch a larger block of sequence.
- * Return TRUE if we have shifted all the way to the beginning of the chromosome. */
-{
-// Adjust mapping->chrom{Start,End} and totalBasesShifted
-mapping->chromStart -= *pLeftShiftOffset;
-mapping->chromEnd -= *pLeftShiftOffset;
-*pTotalBasesShifted += *pLeftShiftOffset;
-// Double the size of our left-shifting buffer (but don't underflow chrom)
-*pLeftShiftOffset = min(mapping->chromStart, *pLeftShiftOffset * 2);
-// Update genomicSeq and start offset
-int genomicSeqStart = mapping->chromStart - *pLeftShiftOffset;
-int genomicSeqEnd = mapping->chromEnd + altLen;
-if (genomicSeqEnd > genomicSeqStart)
-    updateSeq(genomicSeq, db, mapping->chrom, genomicSeqStart, genomicSeqEnd);
-*pStart = *pLeftShiftOffset;
-return (mapping->chromStart == 0);
-}
-
-static int leftShift(boolean isRc, char *db, struct dnaSeq *genomicSeq, int *pLeftShiftOffset,
-                     char *genomicRef, char *genomicRefFwd, char *hgvsSeqRef, char *hgvsSeqAlt,
-                     char pLeftBase[1], struct bed *mapping)
-/* HGVS requires right-shifting ambiguous alignments while VCF requires left-shifting.
- * If it's possible to left-shift this ref/alt, then change pLeftBase and mapping.
- * Return */
-{
-int totalBasesShifted = 0;
-if (sameString(genomicRef, hgvsSeqRef))
-    {
-    int refLen = mapping->chromEnd - mapping->chromStart;
-    int altLen = strlen(hgvsSeqAlt);
-    if ((refLen == 0 && altLen > 0) ||
-        (refLen > 0 && altLen == 0))
-        {
-        char *genomeChunk = genomicSeq->dna;
-        int start = *pLeftShiftOffset;
-        boolean done = FALSE;
-        // If insertion, first compare inserted seq to genomic seq to the left of insertion point.
-        char hgvsSeqAltFwd[altLen+1];
-        copyMaybeRc(hgvsSeqAltFwd, sizeof(hgvsSeqAltFwd), hgvsSeqAlt, isRc);
-        int ix;
-        for (ix = altLen-1;  !done && ix >= 0 && start > 0;  ix--)
-            {
-            if (genomeChunk[start-1] == hgvsSeqAltFwd[ix])
-                {
-                start--;
-                if (start == 0)
-                    {
-                    // We have hit the beginning of genomeChunk and are not done; fetch more seq.
-                    done = shiftAndFetchMoreSeq(db, altLen, genomicSeq, pLeftShiftOffset,
-                                                mapping, &totalBasesShifted, &start);
-                    genomeChunk = genomicSeq->dna;
-                    }
-                }
-            else
-                done = TRUE;
-            }
-        // If we're not done, keep trying to shift left.
-        while (!done && start > 0)
-            {
-            if (genomeChunk[start-1] == genomeChunk[start-1+refLen+altLen])
-                {
-                start--;
-                if (start == 0)
-                    {
-                    // We have hit the beginning of genomeChunk and are not done; fetch more seq.
-                    done = shiftAndFetchMoreSeq(db, altLen, genomicSeq, pLeftShiftOffset,
-                                                mapping, &totalBasesShifted, &start);
-                    genomeChunk = genomicSeq->dna;
-                    }
-                }
-            else
-                done = TRUE;
-            }
-        // Done shifting; update mapping coords and ref/alt sequences if we shifted.
-        int basesShifted = (*pLeftShiftOffset - start);
-        totalBasesShifted += basesShifted;
-        if (totalBasesShifted > 0)
-            {
-            mapping->chromStart -= basesShifted;
-            mapping->chromEnd -= basesShifted;
-            if (altLen > 0)
-                {
-                // Insertion: ref is still "", update hgvsSeqAlt.
-                if (totalBasesShifted < altLen)
-                    {
-                    // The beginning of hgvsSeqAlt is from genomic sequence. The remainder is a
-                    // shifted portion of the original.  Do the shifting first, then the copying
-                    // from genome.
-                    memmove(hgvsSeqAltFwd+totalBasesShifted, hgvsSeqAltFwd,
-                            (altLen - totalBasesShifted));
-                    memcpy(hgvsSeqAltFwd, genomeChunk+start, totalBasesShifted);
-                    }
-                else
-                    safencpy(hgvsSeqAltFwd, sizeof(hgvsSeqAltFwd), genomeChunk+start, altLen);
-                copyMaybeRc(hgvsSeqAlt, altLen+1, hgvsSeqAltFwd, isRc);
-                *pLeftBase = (start > 0) ? genomeChunk[start-1] : genomeChunk[0];
-                }
-            if (refLen > 0)
-                {
-                // Deletion: update ref from genome, alt is still "".
-                safencpy(genomicRefFwd, refLen+1, genomeChunk+start, refLen);
-                copyMaybeRc(genomicRef, refLen+1, genomicRefFwd, isRc);
-                safecpy(hgvsSeqRef, refLen+1, genomicRef);
-                *pLeftBase = (start > 0) ? genomeChunk[start-1] : genomeChunk[0];
-                }
-            }
-        }
-    }
-return totalBasesShifted;
-}
-
 static char *makeVcfAlt(char *genomicRef, char *hgvsSeqRef, char *hgvsSeqAlt, struct bed *mapping,
                         boolean isRc, char leftBase, boolean leftBaseRight, boolean *retIsIndel)
 /* Based on comparing the three possibly differing alleles (genomic, hgvs ref, hgvs alt),
@@ -2100,15 +2451,15 @@ static struct vcfRow *vcfFromHgvs(char *db, char *term, struct bed *mapping,
 // Include some genomic sequence to the left (if possible) in case we need to left-shift
 // an ambiguous mapping and/or include the base to the left of an indel.
 int genomicRefLen = mapping->chromEnd - mapping->chromStart;
-int leftShiftOffset = min(mapping->chromStart,
-                          max(128, 4*genomicRefLen));
-int genomicSeqStart = mapping->chromStart - leftShiftOffset;
-struct dnaSeq *genomicSeq = hChromSeq(db, mapping->chrom, genomicSeqStart, mapping->chromEnd);
-touppers(genomicSeq->dna);
+uint winStart, winEnd;
+indelShiftRangeForVariant(mapping->chromStart, genomicRefLen, strlen(hgvs->changes),
+                          &winStart, &winEnd);
+struct seqWindow *seqWin = chromSeqWindowNew(db, mapping->chrom, winStart, winEnd);
+int varWinStart = mapping->chromStart - seqWin->start;
 int indelOffset = (mapping->chromStart == 0) ? 0 : 1;
-char leftBase = genomicSeq->dna[leftShiftOffset-indelOffset];
+char leftBase = seqWin->seq[varWinStart-indelOffset];
 char genomicRefFwd[genomicRefLen+1];
-safencpy(genomicRefFwd, sizeof(genomicRefFwd), genomicSeq->dna + leftShiftOffset, genomicRefLen);
+safencpy(genomicRefFwd, sizeof(genomicRefFwd), seqWin->seq + varWinStart, genomicRefLen);
 // VCF is always on '+' (Fwd) strand of reference.  HGVS sequences may be on the '-' strand.
 // Make a version of the genome assembly allele for comparison to HGVS sequences.
 boolean isRc = (mapping->strand[0] == '-');
@@ -2132,13 +2483,31 @@ if (hgvsSeqAlt == NULL)
     return NULL;
     }
 char *filter = makeHgvsToVcfFilter(genomicRef, hgvsSeqRef, hgvsTermRef);
-// These two VCF-normalization functions may modify the contents of their arguments:
-boolean dupToIns = doDupToIns(isRc, &leftShiftOffset, genomicRef, genomicRefFwd,
+// doDupToIns and indelShift may modify the contents of their arguments:
+boolean dupToIns = doDupToIns(isRc, &varWinStart, genomicRef, genomicRefFwd,
                               hgvsSeqRef, hgvsSeqAlt, &leftBase, mapping);
+if (dupToIns)
+    genomicRefLen = strlen(genomicRef);
 int basesShifted = 0;
-if (doLeftShift)
-    basesShifted = leftShift(isRc, db, genomicSeq, &leftShiftOffset, genomicRef, genomicRefFwd,
-                             hgvsSeqRef, hgvsSeqAlt, &leftBase, mapping);
+if (doLeftShift &&
+    sameString(genomicRef, hgvsSeqRef))
+    {
+    int altLen = strlen(hgvsSeqAlt);
+    char hgvsSeqAltFwd[altLen+1];
+    copyMaybeRc(hgvsSeqAltFwd, sizeof(hgvsSeqAltFwd), hgvsSeqAlt, isRc);
+    basesShifted = indelShift(seqWin, &mapping->chromStart, &mapping->chromEnd,
+                              hgvsSeqAltFwd, INDEL_SHIFT_NO_MAX, isdLeft);
+    if (basesShifted)
+        {
+        varWinStart = mapping->chromStart - seqWin->start;
+        int leftBaseOffset = max(0, varWinStart - 1);
+        leftBase = seqWin->seq[leftBaseOffset];
+        copyMaybeRc(hgvsSeqAlt, altLen+1, hgvsSeqAltFwd, isRc);
+        safencpy(genomicRefFwd, sizeof(genomicRefFwd), seqWin->seq+varWinStart, genomicRefLen);
+        copyMaybeRc(genomicRef, sizeof(genomicRef), genomicRefFwd, isRc);
+        safecpy(hgvsSeqRef, genomicRefLen+1, genomicRef);
+        }
+    }
 // VCF special case for indel at beginning of chromosome: there is no left base, so instead
 // put the first base of the chromosome to the right!
 // See https://samtools.github.io/hts-specs/VCFv4.2.pdf 1.4.1.4 REF and discussion at
@@ -2173,7 +2542,7 @@ row->filter = filter;
 row->info = info;
 freeMem(hgvsSeqRef);
 freeMem(hgvsSeqAlt);
-dnaSeqFree(&genomicSeq);
+chromSeqWindowFree(&seqWin);
 return row;
 }
 
@@ -2245,4 +2614,538 @@ else
 bedFree(&mapping);
 dyStringFree(&dyWarn);
 return row;
+}
+
+static int allNCount(char *seq)
+/* If seq is entirely N's, return its length, otherwise 0. */
+{
+int nLen = 0;
+for (nLen = 0;  seq[nLen] != '\0';  nLen++)
+    if (seq[nLen] != 'N')
+        return 0;
+return nLen;
+}
+
+// HGVS allows terms to specify deleted or duplicated bases if there are "several bases".
+// Search for "NOTE: it is allowed" here:
+//   http://varnomen.hgvs.org/recommendations/DNA/variant/deletion/
+//   http://varnomen.hgvs.org/recommendations/DNA/variant/duplication/
+// It does not say how many "several" can be.  It doesn't specify for inv, but common
+// practice is to include bases and I don't see why it should be different from del or dup.
+// If somebody complains about hardcoding then I guess we could make it a parameter of
+// hgvsAppendChangesFromNucRefAlt.
+#define HGVS_SEVERAL 30
+
+static void hgvsAppendChangesFromNucRefAlt(struct dyString *dy, char *ref, char *alt, int dupLen,
+                                           boolean breakDelIns)
+/* Translate reference allele and alternate allele into an HGVS change description, append to dy.
+ * If breakDelIns, then show deleted bases (e.g. show 'delAGinsTT' instead of 'delinsTT').
+ * Note: this forces ref and alt to uppercase.
+ * No support for con or repeats at this point, just {=, >, del, dup, ins, inv}. */
+{
+touppers(ref);
+touppers(alt);
+if (sameString(ref, alt))
+    dyStringPrintf(dy, "%s=", ref);
+else
+    {
+    int refLen = strlen(ref);
+    int altLen = strlen(alt);
+    char refInv[refLen+1];
+    safencpy(refInv, sizeof(refInv), ref, refLen);
+    reverseComplement(refInv, refLen);
+    if (refLen == 1 && altLen == 1)
+        dyStringPrintf(dy, "%c>%c", ref[0], alt[0]);
+    else if (dupLen > 0)
+        {
+        dyStringAppend(dy, "dup");
+        if (dupLen <= HGVS_SEVERAL)
+            dyStringAppendN(dy, alt, dupLen);
+        // Could be a pure duplication followed by insertion:
+        if (altLen > dupLen)
+            dyStringPrintf(dy, "ins%s", alt+dupLen);
+        }
+    else if (refLen == 0)
+        {
+        int allNLen = allNCount(alt);
+        if (allNLen)
+            dyStringPrintf(dy, "ins%d", allNLen);
+        else
+            dyStringPrintf(dy, "ins%s", alt);
+        }
+    else if (altLen == 0)
+        {
+        dyStringAppend(dy, "del");
+        if (refLen <= HGVS_SEVERAL)
+            dyStringAppendN(dy, ref, refLen);
+        }
+    else if (refLen == altLen && refLen > 1 && sameString(refInv, alt))
+        {
+        dyStringAppend(dy, "inv");
+        if (refLen <= HGVS_SEVERAL)
+            dyStringAppendN(dy, ref, refLen);
+        }
+    else
+        {
+        dyStringAppend(dy, "del");
+        if (breakDelIns && refLen <= HGVS_SEVERAL)
+            dyStringAppendN(dy, ref, refLen);
+        int allNLen = allNCount(alt);
+        if (allNLen)
+            dyStringPrintf(dy, "ins%d", allNLen);
+        else
+            dyStringPrintf(dy, "ins%s", alt);
+        }
+    }
+}
+
+void hgvsAppendChangesFromPepRefAlt(struct dyString *dy, char *ref, char *alt, int dupLen)
+/* Translate reference allele and alternate allele into an HGVS change description, append to dy.
+ * ref and alt must be sequences of single-letter IUPAC amino acid codes.
+ * Note: this forces ref and alt to uppercase. */
+{
+touppers(ref);
+touppers(alt);
+if (sameString(ref, alt))
+    dyStringAppendC(dy, '=');
+else
+    {
+    int refLen = strlen(ref);
+    int altLen = strlen(alt);
+    char altAbbr[3*altLen+1];
+    int ix;
+    for (ix = 0;  ix < altLen;  ix++)
+        aaToAbbr(alt[ix], altAbbr+3*ix, sizeof(altAbbr)-3*ix);
+    if (refLen == 1 && altLen == 1)
+        // Simple substitution
+        dyStringAppend(dy, altAbbr);
+    else if (dupLen > 0)
+        {
+        dyStringAppend(dy, "dup");
+        // Could be a pure duplication followed by insertion:
+        if (altLen > dupLen)
+            dyStringPrintf(dy, "ins%s", altAbbr+(dupLen*3));
+        }
+    else if (refLen == 0)
+        dyStringPrintf(dy, "ins%s", altAbbr);
+    else if (altLen == 0)
+        {
+        dyStringAppend(dy, "del");
+        }
+    else
+        {
+        dyStringPrintf(dy, "delins%s", altAbbr);
+        }
+    }
+}
+
+char *hgvsGFromVariant(struct seqWindow *gSeqWin, struct bed3 *variantBed, char *alt, char *acc,
+                       boolean breakDelIns)
+/* Return an HGVS g. string representing the genomic variant at the position of variantBed with
+ * reference allele from gSeqWin and alternate allele alt.  3'-shift indels if applicable.
+ * If acc is non-NULL it is used instead of variantBed->chrom.
+ * If breakDelIns, then show deleted bases (eg show 'delAGinsTT' instead of 'delinsTT'). */
+{
+struct dyString *dy = dyStringCreate("%s:g.", acc ? acc : variantBed->chrom);
+uint vStart = variantBed->chromStart, vEnd = variantBed->chromEnd;
+assert (vEnd >= vStart);
+gSeqWin->fetch(gSeqWin, variantBed->chrom, vStart, vEnd);
+int refLen = vEnd - vStart;
+char ref[refLen+1];
+seqWindowCopy(gSeqWin, vStart, refLen, ref, sizeof(ref));
+int altLen = strlen(alt);
+char altCpy[altLen+1];
+safecpy(altCpy, sizeof(altCpy), alt);
+if (differentString(ref, altCpy))
+    // Trim identical bases from start and end -- unless this is an assertion that there is
+    // no change, in which case it's good to keep the range on which that assertion was made.
+    trimRefAlt(ref, altCpy, &vStart, &vEnd, &refLen, &altLen);
+if (indelShiftIsApplicable(refLen, altLen) &&
+    indelShift(gSeqWin, &vStart, &vEnd, altCpy, INDEL_SHIFT_NO_MAX, isdRight))
+    // update ref
+    seqWindowCopy(gSeqWin, vStart, refLen, ref, sizeof(ref));
+int dupLen = 0;
+if (refLen == 1)
+    // Single base: single 1-based coordinate
+    dyStringPrintf(dy, "%d", vStart+1);
+else if (refLen == 0)
+    {
+    // Insertion or duplication
+    if (altLen > 0 && altLen <= vStart)
+        {
+        // Detect duplicated sequence
+        uint seqStart = vStart - altLen;
+        char precedingRef[altLen+1];
+        seqWindowCopy(gSeqWin, seqStart, altLen, precedingRef, sizeof(precedingRef));
+        if (sameString(altCpy, precedingRef))
+            dupLen = altLen;
+        }
+    if (dupLen > 0)
+        {
+        if (dupLen == 1)
+            // Single-base duplication
+            dyStringPrintf(dy, "%d", vStart); // - dupLen + 1 cancel each other out
+        else
+            // Multi-base duplication: range is the dupLen bases preceding vStart
+            dyStringPrintf(dy, "%d_%d", vStart - dupLen + 1, vStart);
+        }
+    else
+        // Insertion: two-base range enclosing zero-base insertion point
+        dyStringPrintf(dy, "%d_%d", vStart, vEnd+1);
+    }
+else
+    // Deletion or MNV
+    dyStringPrintf(dy, "%d_%d", vStart+1, vEnd);
+hgvsAppendChangesFromNucRefAlt(dy, ref, altCpy, dupLen, breakDelIns);
+return dyStringCannibalize(&dy);
+}
+
+static int findDup(char *alt, struct seqWindow *seqWin, uint refPoint, boolean isRc)
+/* Given that the variant is an insertion of alt at refPoint (minding isRc), if alt looks
+ * like a duplicate of the sequence before refPoint, return the length of duplicated sequence. */
+{
+int altLen = strlen(alt);
+// Don't underflow the sequence:
+if (!isRc && altLen > refPoint)
+    return 0;
+uint seqStart = refPoint - (isRc ? 0 : altLen);
+uint minEnd = seqStart + altLen;
+if (seqWin->start > seqStart || seqWin->end < minEnd)
+    seqWin->fetch(seqWin, seqWin->seqName,
+                  min(seqStart, seqWin->start),
+                  max(seqWin->end, minEnd));
+// Get sequence, reverse-complement if necessary
+char precedingRef[altLen+1];
+seqWindowCopy(seqWin, seqStart, altLen, precedingRef, sizeof(precedingRef));
+if (isRc)
+    reverseComplement(precedingRef, altLen);
+if (sameString(alt, precedingRef))
+    return altLen;
+else
+    {
+    // Detect an insertion plus a few slop bases at the end, like "dupinsTAT" where
+    // alt starts with precedingRef[3..] followed by new "TAT".  Then dupLen is altLen-3.
+    // Unfortunately, indelShift can actually shift far enough to prevent a perfect match. :(
+    // Example: ClinVar NM_000179.2(MSH6):c.1573_3439-429dupinsTAT -- the insertion is right-
+    // shifted by 1 and then there's no longer a perfect dup. :b  We would have to do dup-aware
+    // indel shifting!!
+    int searchLimit = 5;
+    int offset;
+    for (offset = 1;  offset < searchLimit;  offset++)
+        {
+        if (sameStringN(alt, precedingRef+offset, altLen-offset))
+            return altLen-offset;
+        }
+    }
+return 0;
+}
+
+static int tweakInsDup(struct vpTxPosition *startPos, struct vpTxPosition *endPos, char *alt,
+                       struct seqWindow *gSeqWin, struct psl *txAli, struct dnaSeq *txSeq)
+/* If this variant is an insertion, HGVS needs the 2-base range surrounding the insertion point.
+ * However, if an inserted sequence happens to be identical to the preceding sequence then
+ * HGVS calls it a dup on the range of preceding sequence.  If this is a dup, return the length of
+ * duplicated sequence (else return 0).
+ * This modifies startPos and endPos if the variant is an insertion/dup.
+ * For non-exonic insertions, the preceding reference sequence is from the genome not tx.
+ * Note: this doesn't yet detect "dupins", where most of the inserted sequence (starting from the
+ * beginning of the inserted sequence) matches the previous ref sequence */
+{
+int dupLen = 0;
+int isIns = vpTxPosIsInsertion(startPos, endPos);
+if (isIns)
+    {
+    // Yes, this is a zero-length insertion point -- see if it happens to be a duplication.
+    // "insTCA" is preferable to "dupTinsCA"... where to draw the line for when dup is worth it??
+    // For now, just say half of altLen... but an argument could be made for some small constant too
+    int minDup = strlen(alt) / 2;
+    // Fetch preceding sequence from tx if exonic, otherwise from genome.
+    if (startPos->region == vpExon && endPos->region == vpExon)
+        {
+        struct seqWindow *txSeqWin = memSeqWindowNew(txSeq->name, txSeq->dna);
+        dupLen = findDup(alt, txSeqWin, startPos->txOffset, FALSE);
+        if (dupLen > minDup)
+            {
+            // Since txSeqWin was used to find dup, the new startPos must also be exonic.
+            // In case startPos was looking forward from the boundary between an exon and an intron
+            // or downstream, adjust its other fields to be exonic now:
+            startPos->region = vpExon;
+            startPos->txOffset -= dupLen;
+            startPos->gDistance = startPos->intron3TxOffset = startPos->intron3Distance = 0;
+            }
+        else
+            dupLen = 0;
+        memSeqWindowFree(&txSeqWin);
+        }
+    else
+        {
+        boolean isRc = (pslQStrand(txAli) == '-');
+        dupLen = findDup(alt, gSeqWin, startPos->gOffset, isRc);
+        if (dupLen > minDup)
+            {
+            uint newGOffset = startPos->gOffset + (isRc ? dupLen : -dupLen);
+            vpPosGenoToTx(newGOffset, txAli, startPos, FALSE);
+            }
+        else
+            dupLen = 0;
+        }
+    }
+if (dupLen == 0 && isIns)
+    {
+    // Expand insertion point to 2-base region around insertion point for HGVS.
+    // startPos = base to left of endPos whose region looks left/5';
+    // endPos = base to right of startPos whose region looks right/3'.
+    struct vpTxPosition newStart = *endPos;
+    vpTxPosSlideInSameRegion(&newStart, -1);
+    struct vpTxPosition newEnd = *startPos;
+    vpTxPosSlideInSameRegion(&newEnd, 1);
+    *startPos = newStart;
+    *endPos = newEnd;
+    }
+return dupLen;
+}
+
+uint hgvsTxToCds(uint txOffset, struct genbankCds *cds, boolean isStart, char pPrefix[2])
+/* Return the cds-relative HGVS coord and prefix corresponding to 0-based txOffset & cds. */
+{
+// Open end adjustment for determining CDS/UTR region:
+int endCmp = isStart ? 0 : 1;
+// For adjusting non-negative coords to HGVS's positive 1-based closed:
+int oneBased = isStart ? 1 : 0;
+// For adjusting negative coords to HGVS's negative 0-based closed:
+int closedEnd = isStart ? 0 : 1;
+pPrefix[1] = '\0';
+uint cdsCoord = 0;
+if (txOffset - endCmp < cds->start)
+    {
+    // 5'UTR: coord is negative distance from cdsStart
+    pPrefix[0] = '-';
+    cdsCoord = cds->start - txOffset + closedEnd;
+    }
+else if (txOffset - endCmp < cds->end)
+    {
+    // CDS: coord is positive distance from cdsStart
+    pPrefix[0] = '\0';
+    cdsCoord = txOffset - cds->start + oneBased;
+    }
+else
+    {
+    // 3'UTR: coord is positive distance from cdsEnd
+    pPrefix[0] = '*';
+    cdsCoord = txOffset - cds->end + oneBased;
+    }
+return cdsCoord;
+}
+
+static void appendHgvsNucPos(struct dyString *dy, struct vpTxPosition *txPos, boolean isStart,
+                             struct genbankCds *cds)
+/* Translate txPos (start or end) into an HGVS position (coding if cds is non-NULL). */
+{
+// Open end adjustment for determining region:
+int endCmp = isStart ? 0 : 1;
+// For adjusting non-negative coords to HGVS's positive 1-based closed:
+int oneBased = isStart ? 1 : 0;
+// For adjusting negative coords to HGVS's negative 0-based closed:
+int closedEnd = isStart ? 0 : 1;
+if (txPos->region == vpUpstream)
+    {
+    uint distance = txPos->gDistance;
+    if (cds)
+        distance += cds->start;
+    dyStringPrintf(dy, "-%u", distance + closedEnd);
+    }
+else if (txPos->region == vpDownstream)
+    {
+    uint distance = txPos->txOffset + txPos->gDistance;
+    if (cds)
+        dyStringPrintf(dy, "*%u", distance - cds->end + oneBased);
+    else
+        dyStringPrintf(dy, "%u", distance + oneBased);
+    }
+else if (txPos->region == vpExon)
+    {
+    char cdsPrefix[2];
+    cdsPrefix[0] = '\0';
+    uint hgvsCoord = cds ? hgvsTxToCds(txPos->txOffset, cds, isStart, cdsPrefix) :
+                           txPos->txOffset + oneBased;
+    dyStringPrintf(dy, "%s%u", cdsPrefix, hgvsCoord);
+    }
+else if (txPos->region == vpIntron)
+    {
+    // If intron length is odd, bias toward picking the 5' exon (middle base has positive offset).
+    char cdsPrefix[2];
+    cdsPrefix[0] = '\0';
+    char direction;
+    uint exonAnchor, intronOffset;
+    boolean anchorIsStart;
+    if (txPos->gDistance - endCmp < txPos->intron3Distance)
+        {
+        exonAnchor = txPos->txOffset;
+        direction = '+';
+        intronOffset = txPos->gDistance + oneBased;
+        anchorIsStart = FALSE;
+        }
+    else
+        {
+        exonAnchor = txPos->intron3TxOffset;
+        direction = '-';
+        intronOffset = txPos->intron3Distance + closedEnd;
+        anchorIsStart = TRUE;
+        }
+    exonAnchor = cds ? hgvsTxToCds(exonAnchor, cds, anchorIsStart, cdsPrefix) :
+                       exonAnchor + (anchorIsStart ? oneBased : 0);
+    dyStringPrintf(dy, "%s%u%c%u", cdsPrefix, exonAnchor, direction, intronOffset);
+    }
+else
+    errAbort("appendHgvsNucPos: unrecognized vpTxRegion value %d", txPos->region);
+}
+
+char *hgvsNFromVpTx(struct vpTx *vpTx, struct seqWindow *gSeqWin, struct psl *txAli,
+                    struct dnaSeq *txSeq, boolean breakDelIns)
+/* Return an HGVS n. (noncoding transcript) term for a variant projected onto a transcript.
+ * gSeqWin must already have at least the correct seqName if not the surrounding sequence.
+ * If breakDelIns, then show deleted bases (eg show 'delAGinsTT' instead of 'delinsTT'). */
+{
+struct dyString *dy = dyStringCreate("%s:n.", vpTx->txName);
+// Make local copies of vpTx->{start,end} -- we may need to modify them for HGVS ins/dup.
+struct vpTxPosition startPos = vpTx->start, endPos = vpTx->end;
+int dupLen = tweakInsDup(&startPos, &endPos, vpTx->txAlt, gSeqWin, txAli, txSeq);
+appendHgvsNucPos(dy, &startPos, TRUE, NULL);
+if (!vpTxPosRangeIsSingleBase(&startPos, &endPos))
+    {
+    dyStringAppendC(dy, '_');
+    appendHgvsNucPos(dy, &endPos, FALSE, NULL);
+    }
+char *ref = vpTxGetRef(vpTx);
+hgvsAppendChangesFromNucRefAlt(dy, ref, vpTx->txAlt, dupLen, breakDelIns);
+return dyStringCannibalize(&dy);
+}
+
+
+char *hgvsCFromVpTx(struct vpTx *vpTx, struct seqWindow *gSeqWin, struct psl *txAli,
+                    struct genbankCds *cds,  struct dnaSeq *txSeq, boolean breakDelIns)
+/* Return an HGVS c. (coding transcript) term for a variant projected onto a transcript w/cds.
+ * gSeqWin must already have at least the correct seqName if not the surrounding sequence.
+ * If breakDelIns, then show deleted bases (eg show 'delAGinsTT' instead of 'delinsTT'). */
+{
+struct dyString *dy = dyStringCreate("%s:c.", vpTx->txName);
+// Make local copies of vpTx->{start,end} -- we may need to modify them for HGVS ins/dup.
+struct vpTxPosition startPos = vpTx->start, endPos = vpTx->end;
+int dupLen = tweakInsDup(&startPos, &endPos, vpTx->txAlt, gSeqWin, txAli, txSeq);
+appendHgvsNucPos(dy, &startPos, TRUE, cds);
+if (!vpTxPosRangeIsSingleBase(&startPos, &endPos))
+    {
+    dyStringAppendC(dy, '_');
+    appendHgvsNucPos(dy, &endPos, FALSE, cds);
+    }
+char *ref = vpTxGetRef(vpTx);
+hgvsAppendChangesFromNucRefAlt(dy, ref, vpTx->txAlt, dupLen, breakDelIns);
+return dyStringCannibalize(&dy);
+}
+
+static boolean isStartLoss(struct vpPep *vpPep)
+/* Return TRUE if vpPep shows that the start codon has been lost. */
+{
+return (vpPep->start == 0 &&
+        isNotEmpty(vpPep->ref) && vpPep->ref[0] == 'M' &&
+        (isEmpty(vpPep->alt) || vpPep->alt[0] != 'M'));
+}
+
+char *hgvsPFromVpPep(struct vpPep *vpPep, struct dnaSeq *protSeq, boolean addParens)
+/* Return an HGVS p. (protein) term for a variant projected into protein space.
+ * Strict HGVS compliance requires parentheses around predicted protein changes, but
+ * nobody seems to do that in practice.
+ * Return NULL if an input is NULL. */
+{
+if (vpPep == NULL || protSeq == NULL)
+    return NULL;
+struct dyString *dy = dyStringCreate("%s:p.", vpPep->name);
+if (addParens)
+    dyStringAppendC(dy, '(');
+int refLen = vpPep->end - vpPep->start;
+// When predicting frameshift/extension, the length of ref may be different from refLen
+int refExtLen = vpPep->ref ? strlen(vpPep->ref) : refLen;
+int altLen = vpPep->alt ? strlen(vpPep->alt) : 0;
+char refStartAbbr[4];
+if (vpPep->ref)
+    aaToAbbr(vpPep->ref[0], refStartAbbr, sizeof(refStartAbbr));
+else
+    // If ref is null then we should be writing just '=' or '?' but prevent garbage just in case:
+    safecpy(refStartAbbr, sizeof(refStartAbbr), "?");
+// protSeq may or may not end with X, so treat protSeq->size accordingly
+boolean hitsStopCodon = (vpPep->end > protSeq->size ||
+                         ((protSeq->dna[protSeq->size-1] == 'X') && vpPep->end == protSeq->size));
+if (vpPep->cantPredict || isStartLoss(vpPep))
+    dyStringAppend(dy, "?");
+else if (vpPep->frameshift)
+    {
+    dyStringPrintf(dy, "%s%d", refStartAbbr, vpPep->start+1);
+    if (altLen == 1)
+        dyStringAppend(dy, "Ter");
+    else
+        {
+        char altStartAbbr[4];
+        aaToAbbr(vpPep->alt[0], altStartAbbr, sizeof(altStartAbbr));
+        // For stop-loss extension, make it "ext*"
+        if (hitsStopCodon && altLen > refExtLen)
+            dyStringPrintf(dy, "%sext*%d", altStartAbbr, altLen - refExtLen);
+        else
+            dyStringPrintf(dy, "%sfsTer%d", altStartAbbr, altLen);
+        }
+    }
+else if (hitsStopCodon && altLen > refExtLen)
+    {
+    // Stop loss extension from something that doesn't disrupt frame
+    char altStartAbbr[4];
+    aaToAbbr(vpPep->alt[0], altStartAbbr, sizeof(altStartAbbr));
+    dyStringPrintf(dy, "%s%d%sext*%d", refStartAbbr, vpPep->start+1,
+                   altStartAbbr, altLen - refExtLen);
+    }
+else
+    {
+    int dupLen = 0;
+    if (refLen == 0 && altLen > 0)
+        {
+        // It's an insertion; is it a duplication?
+        struct seqWindow *pSeqWin = memSeqWindowNew(protSeq->name, protSeq->dna);
+        dupLen = findDup(vpPep->alt, pSeqWin, vpPep->start, FALSE);
+        memSeqWindowFree(&pSeqWin);
+        }
+    if (refLen == 1)
+        dyStringPrintf(dy, "%s%d", refStartAbbr, vpPep->start+1);
+    else
+        {
+        int rangeStart = vpPep->start, rangeEnd = vpPep->end;
+        char *pSeq = protSeq->dna;
+        if (dupLen > 0)
+            {
+            // Duplication; position range changes to preceding bases.
+            rangeEnd = rangeStart;
+            rangeStart -= dupLen;
+            aaToAbbr(pSeq[rangeStart], refStartAbbr, sizeof(refStartAbbr));
+            }
+        else if (refLen == 0)
+            {
+            // Insertion; expand to two-AA range around insertion point
+            rangeStart--;
+            aaToAbbr(pSeq[rangeStart], refStartAbbr, sizeof(refStartAbbr));
+            rangeEnd++;
+            }
+        hitsStopCodon = (rangeEnd > protSeq->size ||
+                         ((protSeq->dna[protSeq->size-1] == 'X') && rangeEnd == protSeq->size));
+        char refLastAbbr[4];
+        if (hitsStopCodon)
+            aaToAbbr('X', refLastAbbr, sizeof(refLastAbbr));
+        else
+            aaToAbbr(pSeq[rangeEnd-1], refLastAbbr, sizeof(refLastAbbr));
+        if (dupLen == 1)
+            dyStringPrintf(dy, "%s%d", refStartAbbr, rangeStart+1);
+        else
+            dyStringPrintf(dy, "%s%d_%s%d", refStartAbbr, rangeStart+1, refLastAbbr, rangeEnd);
+        }
+    hgvsAppendChangesFromPepRefAlt(dy, vpPep->ref, vpPep->alt, dupLen);
+    }
+if (addParens)
+    dyStringAppendC(dy, ')');
+return dyStringCannibalize(&dy);
 }

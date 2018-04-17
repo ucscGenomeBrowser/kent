@@ -5,6 +5,15 @@ from collections import defaultdict
 from os.path import join, basename, dirname, isfile, abspath
 from datetime import date, datetime, timedelta
 
+dbToUrl = {
+    "dbVar": "https://www.ncbi.nlm.nih.gov/dbvar/variants/%s/",
+    "UniProtKB (variants)" : "http://www.uniprot.org/uniprot/%s",
+    "OMIM Allelic Variant" : "http://www.omim.org/entry/%s",
+    "MedGen": "https://www.ncbi.nlm.nih.gov/medgen/%s",
+    "OMIM" : "http://www.omim.org/entry/%s",
+    "Orphanet" : "http://www.orpha.net/consor/cgi-bin/OC_Exp.php?lng=EN&Expert=%s"
+}
+
 # === COMMAND LINE INTERFACE, OPTIONS AND HELP ===
 parser = optparse.OptionParser("""usage: %prog [options] summaryFname varAllFname hgvsFname - check and convert the three main clinVar tab-sep files to four bed files, split into CNV and shorter mutations, for both hg19 and hg38 and convert all to bigBed
 
@@ -27,43 +36,63 @@ clinvarExpectHeaders = "#AlleleID	Type	Name	GeneID	GeneSymbol	HGNC_ID	ClinicalSi
 # ==== FUNCTIONs =====
 
 def shortenName(name):
-    "make the clinvar name shorter "
+    "make the clinvar name shorter and keep a long version for the mouse over "
     cnvMatch = cnvRe.match(name)
-    hgvsMatch = hgvsRe.match(name)
+    #hgvsMatch = hgvsRe.match(name)
+
+    if ":" in name and not "chr" in name:
+        longName = name.split(":")[0]
+    else:
+        longName = name
+
+    shortName = name
+
     if cnvMatch != None:
         # some names include the original assembly as a prefix
         band, copy = cnvMatch.groups()
         if copy == None:
             copy = ""
-        name = band+copy
-    #elif hgvsMatch != None:
-        # some names include the whole hgvs desc, we strip the gene name + acc
-        #name = hgvsMatch.groups()[2]
+        shortName = band+copy
     elif name.startswith("GRCh"):
         print name
         assert False # name that starts with GRCh but does not match our regex should not happen
+    #elif "del" in name:
+        #shortName = "del"
+    #elif "ins" in name:
+        #shortName = "ins"
+    #elif "dup" in name:
+        #shortName = "dup"
     elif "." in name:
         # many names look like NM_000274.3(OAT):c.550_552delGCT (p.Ala184del)
         # so we remove the gene and the protein description
         if ":" in name:
             name = name.split(":")[1]
-        name = name.split(" ")[0]
+            longName = name.split(" ")[0]
+        name = name.split(" ")[0].split("[")[0].split("(")[0]
+        shortName = name
 
-        delMatch = delRe.match(name)
-        if delMatch!=None:
-            return name[-3:]
+        #delMatch = delRe.match(name)
+        #if delMatch!=None:
+            #shortName = name[-3:] # just the type: del,ins or dup
+        if name.endswith("del"):
+            shortName = "del"
+        elif name.endswith("ins"):
+            shortName = "ins"
+        elif name.endswith("dup"):
+            shortName = "dup"
+        else:
+            posMatch = posRe.match(name)
+            if posMatch!=None:
+                pos, dupDelIns, change = posMatch.groups()
+                if dupDelIns==None:
+                    dupDelIns= ""
 
-        posMatch = posRe.match(name)
-        if posMatch!=None:
-            dup, dele, ins, pos = posMatch.groups()[-4:]
-            if dup==None:
-                dup= ""
-            if dele==None:
-                dele = ""
-            if ins==None:
-                ins = ""
-            name = dup+dele+ins+pos
-    return name
+                if change==None or change=="":
+                    shortName = pos+dupDelIns
+                else:
+                    shortName = dupDelIns+change
+
+    return shortName, longName
 
 def lastMonth(d,x=1):
     """ returns same day as this month, but last month, e.g. for 2013-01-01 
@@ -170,15 +199,6 @@ def accListToHtml(inStr):
     given a string of a list of db:acc tuples, like "dbVar:nssv578901, omim:12343", convert the accessions
     to HTML links to the databases
     """
-    dbToUrl = {
-    "dbVar": "https://www.ncbi.nlm.nih.gov/dbvar/variants/%s/",
-    "UniProtKB (variants)" : "http://www.uniprot.org/uniprot/%s",
-    "OMIM Allelic Variant" : "http://www.omim.org/entry/%s",
-    "MedGen": "https://www.ncbi.nlm.nih.gov/medgen/%s",
-    "OMIM" : "http://www.omim.org/entry/%s",
-    "Orphanet" : "http://www.orpha.net/consor/cgi-bin/OC_Exp.php?lng=EN&Expert=%s"
-    }
-
     newParts = []
     for part in inStr.split(","):
         fields = part.split(":")
@@ -193,7 +213,7 @@ def accListToHtml(inStr):
             if "OMIM" in db:
                 accForUrl = accForUrl.replace(".", "#")
             url = (dbToUrl[db] % accForUrl)
-            newPart = "<a href='%s'>%s:%s</a>" % (url, db, acc)
+            newPart = "<a target=_blank href='%s'>%s:%s</a>" % (url, db, acc)
         else:
             newPart = part
         newParts.append(newPart)
@@ -241,7 +261,8 @@ def reviewStatusToHtmlStars(reviewStatus):
     htmlStr = "".join(htmlList)
     htmlStr += "&nbsp;&nbsp;<small>based on: %s</small>" % reviewStatus
 
-    return htmlStr
+    asciiDesc = "%d stars" % starCount
+    return htmlStr, asciiDesc, starCount
 
 # ----------- MAIN --------------
 if args==[] and not options.auto:
@@ -254,20 +275,20 @@ if options.auto:
     today = date.today().isoformat()
     outSuffix = "%s." % today
     
-    url = "http://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz"
+    url = "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz"
     outFname = "archive/variant_summary.%s.txt.gz" % today
     logging.info("Downlading %s to %s" % (url, outFname))
     open(outFname, "w").write(urllib2.urlopen(url).read())
     filename = outFname
 
     # get the new variant allele file
-    varUrl = "http://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variation_allele.txt.gz"
+    varUrl = "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variation_allele.txt.gz"
     varFname = join(dirname(filename), "variation_allele.%s.txt.gz" % today)
     logging.info("Downlading %s to %s" % (varUrl, varFname))
     open(varFname, "w").write(urllib2.urlopen(varUrl).read())
 
     # get the new hgvs allele file
-    hgvsUrl = "http://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/hgvs4variation.txt.gz"
+    hgvsUrl = "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/hgvs4variation.txt.gz"
     hgvsFname = join(dirname(filename), "hgvs4variation.%s.txt.gz" % today)
     logging.info("Downlading %s to %s" % (hgvsUrl, hgvsFname))
     open(hgvsFname, "w").write(urllib2.urlopen(hgvsUrl).read())
@@ -287,15 +308,16 @@ cnvRe = re.compile(r'GRCh[0-9]*/hg[0-9]* ([XY0-9pq.-]+)\([XYa-z_:0-9.-]+\)(x[0-9
 
 hgvsRe = re.compile(r'(N[RPCGM]_[0-9.]+)(\([a-zA-Z0-9_-]+\))?:([+0-9c.ACTG>a-z_()-]+)')
 
-# e.g.(13359800_13371688)_(13371779_13505931)del
-delRe = re.compile(r'g.\([?0-9()_-]+(del|dup|ins)')
+# e.g. g.(13359800_13371688)_(13371779_13505931)del
+# or c.340+11600_340+16200del
+# delRe = re.compile(r'[gc]\.\(?[?0-9()_+-]+\)?(del|dup|ins)')
 
 # e.g.
 # c.80_83delGGATinsTGCTGTAAACTGTAACTGTAAA
 # c.80A>T
 # c.740+356C>T
 # c.3839_3855del17
-posRe = re.compile(r'[mgcpdrn]\.[*0-9_+-]+(dup)?(del)?(ins)?([>ACTG0-9]+)')
+posRe = re.compile(r'^([mgcpdrn]\.[*0-9_?+-]+)(delins|dup|del|ins|inv)?([>~ACTG0-9]*)$')
 
 ifh = gzip.open(filename)
 
@@ -345,10 +367,14 @@ for line in ifh:
     if chrom=="chrMT": # why does NCBI use chrMT but we use chrM ?
         chrom = "chrM"
 
-    shortName = shortenName(name)
-    if len(shortName)>17:
-        shortName = shortName[:15]+"..."
+    shortName, longName = shortenName(name)
+
+    if len(shortName)>20:
+        shortName = shortName[:17]+"..."
         longCount+=1
+
+    if len(longName)>60:
+        longName = longName[:60]+"..."
 
     if start=="" or end=="":
         print "undefined start or end coordinate. record %s"% irvcAcc
@@ -373,7 +399,10 @@ for line in ifh:
     blockSizes = str(int(end)-int(start))
     blockStarts = "0"
 
-    if dbVarAcc.startswith("nsv") or "copy number" in allType:
+    # used until Oct 2017
+    # if dbVarAcc.startswith("nsv") or "copy number" in allType:
+    # now using just size on genome, see #20268
+    if (int(end)-int(start))>100:
         isCnv = True
     else:
         isCnv = False
@@ -397,26 +426,38 @@ for line in ifh:
             itemRgb = "200,200,200"
 
     geneStr = geneSymbol
-    #print "XX", geneId, geneSymbol
     if geneId.isdigit() and geneId!="-1":
-        #print "adding pipe"
         geneStr = geneId+"|"+geneSymbol
     if len(geneStr)>250:
-        #print "shortening"
         geneStr = "not shown, too many genes"
         
+    if name=="":
+        name = "No display name was provided by ClinVar for this variant"
+        shortName = "NoName"
+
+    if len(name)>90:
+        name = name[:90]+"..."
     name = varId+"|"+name
+
+    if len(hgvsProt) > 90:
+        hgvsProt = hgvsProt[:90]+"..."
+    if len(hgvsCod) > 90:
+        hgvsCod = hgvsCod[:90]+"..."
+
     otherIds = accListToHtml(otherIds)
 
     phenotypeIds = accListToHtml(phenotypeIds)
 
-    starRatingHtml = reviewStatusToHtmlStars(reviewStatus)
+    starRatingHtml, asciiStars, starCount = reviewStatusToHtmlStars(reviewStatus)
 
-    row = [chrom, start, end, shortName, score, strand, thickStart, thickEnd, itemRgb, \
+    mouseOverParts = [longName, clinSign, asciiStars]
+    mouseOver = ", ".join(mouseOverParts)
+
+    row = [chrom, start, end, shortName, str(starCount), strand, thickStart, thickEnd, itemRgb, \
         blockCount, blockSizes, blockStarts,
         name, clinSign, starRatingHtml, allType, geneStr,
         snpAcc, dbVarAcc, irvcAcc, inGtr, phenotypeList, phenotypeIds, origin, assembly, cytogenetic,
-        hgvsCod, hgvsProt, numberSubmitters, lastEval, guidelines, otherIds]
+        hgvsCod, hgvsProt, numberSubmitters, lastEval, guidelines, otherIds, mouseOver]
 
     # replace clinvar's placeholders with real empty fields
     newRow = []

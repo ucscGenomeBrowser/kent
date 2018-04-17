@@ -9,9 +9,10 @@ CREATE TABLE hubSearchText (
     db varchar(255),	# Assembly name (UCSC format) for Assembly and Track descriptions, NULL for hub descriptions
     track varchar(255),	# Track name for track descriptions, NULL for others
     label varchar(255),	# Name to display in search results
-    textLength enum("Short", "Long"),	# Length of text (short for labels, long for description pages)
+    textLength enum("Short", "Long", "Meta"),	# Length of text (short for labels, long for description pages, meta for metadata)
     text longtext,	# Description text
               #Indices
     KEY (textLength),
+    INDEX (track),
     FULLTEXT INDEX (text)
 );

@@ -5,15 +5,15 @@
 
 #Metadata for NCBI RefSeq tracks
 CREATE TABLE ncbiRefSeqLink (
-    id varchar(255) not null,	# id for this gene or curated item
+    id varchar(255) not null,		# id for this gene or curated item
     status varchar(255) not null,	# Inferred, Model, Predicted, Provisional, Reviewed, Validated, Unknown
-    name varchar(255) not null,	# gene name
+    name varchar(255) not null,		# gene name
     product varchar(255) not null,	# product
     mrnaAcc varchar(255) not null,	# transcript_id
     protAcc varchar(255) not null,	# protein_id
     locusLinkId varchar(255) not null,	# locus link identifier, from Dbxref
     omimId varchar(255) not null,	# OMIM identifier, from Dbxref
-    hgnc varchar(255) not null,	# HGNC identifier, from Dbxref
+    hgnc varchar(255) not null,		# HGNC identifier, from Dbxref
     genbank varchar(255) not null,	# genbank identifier from Dbxref
     pseudo varchar(255) not null,	# 'true' if pseudo gene, or n/a
     gbkey varchar(255) not null,	# genbank key: Gene, mRNA, ncRNA, rRNA, tRNA, etc...
@@ -21,8 +21,9 @@ CREATE TABLE ncbiRefSeqLink (
     gene_biotype varchar(255) not null,	# bio type: protein_coding, pseudogene, C_region, J_segment_pseudogene, other
     gene_synonym varchar(255) not null,	# list of synonym names
     ncrna_class varchar(255) not null,	# type of RNA: miRNA, lncRNA, snoRNA, etc...
-    note longblob not null,	        # other notes from genbank record
+    note longblob not null,		# other notes from genbank record
     description longblob not null,	# description from rna gbff record via gbProcess
+    externalId varchar(255) not null,	# for outside URL link, WormBase, FlyBase, RGD, SGD, etc... from Dbxref
               #Indices
     PRIMARY KEY(id),
     index(name),

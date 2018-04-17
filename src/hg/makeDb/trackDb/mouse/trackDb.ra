@@ -102,7 +102,7 @@ visibility hide
 color 155,0,125
 type genePred acemblyPep acemblyMrna
 autoTranslate 0
-url http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=mouse&l=$$
+url https://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=mouse&l=$$
 itemClassTbl acemblyClass
 geneClasses main putative
 gClass_main 128,0,125
@@ -771,7 +771,7 @@ shortLabel Common SNPs(142)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 142) Found in >= 1% of Samples
 group varRep
 visibility dense
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 snpSeq snp142Seq
 snpExceptionDesc snp142ExceptionDesc
@@ -787,7 +787,7 @@ shortLabel Mult. SNPs(142)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 142) That Map to Multiple Genomic Loci
 group varRep
 visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 snpSeq snp142Seq
 snpExceptionDesc snp142ExceptionDesc
@@ -803,7 +803,7 @@ shortLabel All SNPs(142)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 142)
 group varRep
 visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 defaultGeneTracks knownGene
 maxWindowToDraw 10000000

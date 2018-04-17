@@ -8,6 +8,7 @@ pslCheck=${DESTBINDIR}/pslCheck
 all::
 
 test: example1 example2
+	${MAKE} clean
 
 example1: mkdirs
 	@${chainToPsl} input/$@.chain.gz /dev/null /dev/null \
@@ -16,6 +17,7 @@ example1: mkdirs
 	@${pslCheck} -targetSizes=output/hg19.chrM.sizes \
 		-querySizes=output/susScr3.chrM.sizes -verbose=0 \
 		output/$@.psl
+	@rm -f output/$@.psl.gz
 	@gzip output/$@.psl
 	@zdiff expected/$@.psl.gz output/$@.psl.gz
 
@@ -26,6 +28,7 @@ example2: mkdirs
 	@${pslCheck} -targetSizes=output/hg19.chrM.sizes \
 		-querySizes=output/susScr3.chrM.sizes -verbose=0 \
 		output/$@.psl
+	@rm -f output/$@.psl.gz
 	@gzip output/$@.psl
 	@zdiff expected/$@.psl.gz output/$@.psl.gz
 

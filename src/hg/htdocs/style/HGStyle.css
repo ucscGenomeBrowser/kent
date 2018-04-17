@@ -416,6 +416,15 @@ span.disabled   { opacity: 0.5; filters.alpha.opacity:50;  }
         border: gray 1px solid;
 }
 
+.pennantIconText {
+    text-decoration: none;
+    text-transform: capitalize;
+    font-size: 70%;
+    font-style: italic;
+    font-weight: bold;
+    vertical-align: text-top;
+}
+
 /*
    Styles for hgHubConnect (formerly in separate .css)
    by Greg Roe
@@ -425,6 +434,18 @@ span.disabled   { opacity: 0.5; filters.alpha.opacity:50;  }
 #tabs {
 	font-size: 100%;
 	margin-top: 5px;
+}
+
+table.dataTable.compact thead th, table.dataTable.compact thead td
+{
+    padding: 4px 4px 4px 17px !important;
+}
+
+table.dataTable thead .sorting,
+table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc,
+table.dataTable thead .sorting_asc_disabled, table.dataTable thead .sorting_desc_disabled
+{
+    background-position: center left !important;
 }
 
 .hubList table {

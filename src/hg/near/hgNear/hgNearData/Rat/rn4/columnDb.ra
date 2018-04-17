@@ -112,7 +112,7 @@ priority 2.2
 visibility off
 type lookup rgdGene2ToRefSeq name value
 search exact
-itemUrl http://www.ncbi.nlm.nih.gov/nuccore/%s?report=GenBank
+itemUrl https://www.ncbi.nlm.nih.gov/nuccore/%s?report=GenBank
 
 name ensembl
 shortLabel Ensembl
@@ -129,7 +129,7 @@ longLabel GenBank mRNA Accession
 priority 2.31
 visibility off
 type lookup rgdGene2ToGenbank name value
-itemUrl http://www.ncbi.nlm.nih.gov/nuccore/%s?report=GenBank
+itemUrl https://www.ncbi.nlm.nih.gov/nuccore/%s?report=GenBank
 
 name entrezGene
 shortLabel Entrez Gene
@@ -137,7 +137,7 @@ longLabel NCBI Entrez Gene/LocusLink ID
 priority 2.25
 visibility off
 type lookup rgdGene2ToLocusLink name value
-itemUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%s
+itemUrl https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%s
 
 name kegg
 shortLabel KEGG
@@ -174,7 +174,7 @@ priority 7.81
 # queryFull select name,value from rgdGene2ToCdsSnp
 # queryOne select value,value from rgdGene2ToCdsSnp where name = '%s'
 # invQueryOne select name from rgdGene2ToCdsSnp where value = '%s'
-# itemUrl http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s
+# itemUrl https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s
 
 name affyExonTissuesGs
 shortLabel Affy Exons

@@ -12,8 +12,14 @@ track chainNetRn3 override
 priority 210.3
 shortLabel $o_db override
 
+track chainNetDipOrd2 override
+priority 220.3
+
 track chainNetDipOrd1 override
 priority 220.3
+
+track chainNetCasCan1 override
+priority 223.63
 
 track chainNetCavPor3 override
 priority 230.3
@@ -320,6 +326,11 @@ priority 590.3
 
 track chainNetLatCha1 override
 priority 595.3
+
+track chainNetDanRer11 override
+priority 600.3
+chainLinearGap medium
+chainMinScore 3000
 
 track chainNetDanRer7 override
 priority 600.3

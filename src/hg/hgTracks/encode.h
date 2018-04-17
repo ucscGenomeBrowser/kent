@@ -37,4 +37,6 @@ void encodePeakMethods(struct track *tg);
 void encodePeakMethodsCt(struct track *tg);
 /* Methods for ENCODE peak track uses mostly linkedFeatures. */
 
+void bigNarrowPeakLoadItems(struct track *tg);
+/* Load a set of narrowPeaks from a bigNarrowPeak file. */
 #endif /* ENCODE_H */

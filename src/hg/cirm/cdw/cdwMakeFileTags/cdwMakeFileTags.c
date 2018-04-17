@@ -11,7 +11,6 @@
 #include "tagStorm.h"
 #include "tagToSql.h"
 
-
 void usage()
 /* Explain usage and exit. */
 {
@@ -21,6 +20,8 @@ errAbort(
   "   cdwMakeFileTags now\n"
   "options:\n"
   "   -table=tableName What table to store results in, default cdwFileTags\n"
+  "   -facets=tableName What table to store faceting columns in\n"
+  "   -fields=comma,separated,list,of,field,names to put in cdwFileFacets\n"
   "   -database=databaseName What database to store results in, default cdw\n"
   "   -types=fileName Dump list of types to file\n"
   );
@@ -29,7 +30,9 @@ errAbort(
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"table", OPTION_STRING},
+   {"facets", OPTION_STRING},
    {"database", OPTION_STRING},
+   {"fields", OPTION_STRING},
    {"types", OPTION_STRING},
    {NULL, 0},
 };
@@ -58,13 +61,13 @@ while ((row = sqlNextRow(sr)) != NULL)
      if (!hashLookup(hash, id))
          {
 	 if (deleteAny)
-	     dyStringAppendC(dy, ',');
+	     sqlDyStringPrintf(dy, ",");
 	 else
 	     deleteAny = TRUE;
-	 dyStringAppend(dy, id);
+	 sqlDyStringPrintf(dy, "'%s'", id);
 	 }
      }
-dyStringPrintf(dy, ")");
+sqlDyStringPrintf(dy, ")");
 sqlFreeResult(&sr);
 
 if (deleteAny)
@@ -72,10 +75,19 @@ if (deleteAny)
 dyStringFree(&dy);
 }
 
-void cdwMakeFileTags(char *database, char *table)
+void cdwMakeFileTags(char *database, char *fullTable, char *facetTable, char *facetFieldsCsv)
 /* cdwMakeFileTags - Create cdwFileTags table from tagStorm on same database.. */
 {
+/* Create facets table, a subset of the earlier table.  Note this may be mySQL specific */
+int facetCount = chopByChar(facetFieldsCsv, ',', NULL, 0);
+if (facetCount <= 0)
+    errAbort("Comma separated facet field list is empty: %s", facetFieldsCsv);
+
+// See if somebody is already running this utility. Should only happen rarely.
 struct sqlConnection *conn = cdwConnect(database);
+if (sqlIsLocked(conn, "makeFileTags"))
+    errAbort("Another user is already running cdwMakeFileTags. Advisory lock found."); sqlGetLockWithTimeout(conn, "makeFileTags", 1);
+
 removeUnusedMetaTags(conn);
 
 /* Get tagStorm and make sure that all tags are unique in case insensitive way */
@@ -108,11 +120,14 @@ static char *keyFields[] =  {
 };
 
 struct dyString *query = dyStringNew(0);
+// Functions in src/lib/tabToSql.c cannot use functions like sqlSafef
+// since they are in src/hg/lib/ which is not available. 
+// That is why we see NOSQLINJ exposed here.
 dyStringAppend(query, NOSQLINJ);
-tagStormToSqlCreate(tagStorm, table, ttiList, ttiHash, 
+tagStormToSqlCreate(tagStorm, fullTable, ttiList, ttiHash, 
     keyFields, ArraySize(keyFields), query);
 verbose(2, "%s\n", query->string);
-sqlRemakeTable(conn, table, query->string);
+sqlRemakeTable(conn, fullTable, query->string);
 
 /* Do insert statements for each accessioned file in the system */
 struct slRef *stanzaList = tagStanzasMatchingQuery(tagStorm, "select * from files where accession");
@@ -122,12 +137,23 @@ for (stanzaRef = stanzaList; stanzaRef != NULL; stanzaRef = stanzaRef->next)
     struct tagStanza *stanza = stanzaRef->val;
     dyStringClear(query);
     dyStringAppend(query, NOSQLINJ);
-    tagStanzaToSqlInsert(stanza, table, query);
+    tagStanzaToSqlInsert(stanza, fullTable, query);
     sqlUpdate(conn, query->string);
     }
-dyStringFree(&query);
 slFreeList(&stanzaList);
+
+/* Make facetTable as a subset of fullTable */
+verbose(2, "making %s table for faceting\n", facetTable);
+struct dyString *facetCreate = dyStringNew(0);
+sqlDyStringPrintf(facetCreate, "create table %s as select %-s from %s", facetTable, sqlCkIl(facetFieldsCsv), fullTable);
+sqlRemakeTable(conn, facetTable, facetCreate->string);
+dyStringFree(&facetCreate);
+
+
+/* Release lock, clean up, go home */
+sqlReleaseLock(conn, "makeFileTags");
 sqlDisconnect(&conn);
+dyStringFree(&query);
 }
 
 int main(int argc, char *argv[])
@@ -138,6 +164,9 @@ if (argc != 2)
     usage();
 char *database = optionVal("database", "cdw");
 char *table = optionVal("table", "cdwFileTags");
-cdwMakeFileTags(database, table);
+char *facets = optionVal("facets", "cdwFileFacets");
+char *fields = optionVal("fields", "assay,data_set_id,lab,format,read_size,sample_label,species");
+
+cdwMakeFileTags(database, table, facets, fields);
 return 0;
 }

@@ -1,3 +1,20 @@
+
+
+
+gorGor3 Gorilla gorilla gorilla Gorilla
+hg38    Homo sapiens    Human
+rheMac2 Macaca mulatta  Rhesus
+susScr11        Sus scrofa      Pig
+
+
+
+
+
+
+
+
+
+
 #	$Id: vertebrates.txt,v 1.1 2010/04/05 19:09:43 hiram Exp $
 
 #  Common to all:	Eukaryota; Metazoa; Chordata; Craniata; Vertebrata;
@@ -16,6 +33,9 @@ monDom	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Mammalia; Theria; Metath
 
 # Platypus Ornithorhynchus anatinus
 ornAna	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Mammalia; Prototheria; Monotremata; Ornithorhynchidae; Ornithorhynchus
+
+# Tibetan ground-tit - Pseudopodoces humilis
+pseHum	Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sauropsida; Sauria; Archelosauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Passeriformes; Paridae; Pseudopodoces
 
 # Rock pigeon - Columba livia
 colLiv	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Columbiformes; Columbidae; Columba
@@ -50,7 +70,7 @@ cotJap	Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sa
 ficAlb	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Passeriformes; Muscicapidae; Ficedula
 
 # Tibetan ground jay - Pseudopodoces humilis
-pseHum	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Passeriformes; Paridae; Pseudopodoces
+pseHum	Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sauropsida; Sauria; Archelosauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Passeriformes; Paridae; Pseudopodoces
 
 # White-throated sparrow Zonotrichia albicollis
 zonAlb	Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sauropsida; Sauria; Testudines + Archosauria group; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Passeriformes; Passeroidea; Fringillidae; Emberizinae; Emberizini; Zonotrichia
@@ -94,17 +114,24 @@ pytBiv	Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sa
 # Lizard Anolis carolinensis
 anoCar	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Lepidosauria; Squamata; Iguania; Iguanidae; Polychrotinae; Anolis
 
+
+# Green seaturtle -Chelonia mydas
+cheMyd	Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sauropsida; Sauria; Archelosauria; Testudines; Cryptodira; Durocryptodira; Americhelydia; Chelonioidea; Cheloniidae; Chelonia
+
+#  Spiny softshell turtle - Apalone spinifera
+apaSpi	Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sauropsida; Sauria; Archelosauria; Testudines; Cryptodira; Trionychia; Trionychidae; Apalone
+
 # green seaturtle - Chelonia mydas
 cheMyd	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Testudines; Cryptodira; Chelonioidea; Cheloniidae; Chelonia
 
-# Soft-shell Turtle - Pelodiscus sinensis
-pelSin	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Testudines; Cryptodira; Trionychoidea; Trionychidae; Pelodiscus
+# Chinese softshell turtle - Pelodiscus sinensis
+pelSin	Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sauropsida; Sauria; Archelosauria; Testudines; Cryptodira; Trionychia; Trionychidae; Pelodiscus
 
 # spiny softshell turtle - Apalone spinifera
 apaSpi	Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sauropsida; Sauria; Testudines + Archosauria group; Testudines; Cryptodira; Trionychoidea; Trionychidae; Apalone
 
-# Western painted turtle Chrysemys picta bellii
-chrPic	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Testudines; Cryptodira; Testudinoidea; Emydidae; Chrysemys; Chrysemys picta
+# Western Painted turtle - Chrysemys picta bellii
+chrPic	Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sauropsida; Sauria; Archelosauria; Testudines; Cryptodira; Durocryptodira; Testudinoidea; Emydidae; Chrysemys; Chrysemys picta
 
 # Tibetan frog - Nanorana parkeri
 nanPar	Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amphibia; Batrachia; Anura; Neobatrachia; Ranoidea; Dicroglossidae; Dicroglossinae; Nanorana
@@ -130,11 +157,17 @@ gasAcu	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanth
 # medaka Oryzias latipes
 oryLat	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Smegmamorpha; Atherinomorpha; Beloniformes; Adrianichthyoidei; Adrianichthyidae; Oryziinae; Oryzias
 
-# southern platyfish Xiphophorus maculatus
-xipMac	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Smegmamorpha; Atherinomorpha; Cyprinodontiformes; Cyprinodontoidei; Poeciliidae; Poeciliinae; Xiphophorus
+# Southern platyfish - Xiphophorus maculatus
+xipMac	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Teleostei; Osteoglossocephalai; Clupeocephala; Euteleosteomorpha; Neoteleostei; Eurypterygia; Ctenosquamata; Acanthomorphata; Euacanthomorphacea; Percomorphaceae; Ovalentaria; Atherinomorphae; Cyprinodontiformes; Cyprinodontoidei; Poeciliidae; Poeciliinae; Xiphophorus
 
 # Amazon molly - Poecilia formosa
 poeFor	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Smegmamorpha; Atherinomorpha; Cyprinodontiformes; Cyprinodontoidei; Poeciliidae; Poeciliinae; Poecilia
+
+# Spotted gar - Lepisosteus oculatus
+lepOcu	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Holostei; Semionotiformes; Lepisosteidae; Lepisosteus
+
+# Mexican tetra (cavefish) - Astyanax mexicanus
+astMex	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Teleostei; Osteoglossocephalai; Clupeocephala; Otomorpha; Ostariophysi; Otophysi; Characiphysae; Characiformes; Characoidei; Characidae; Characidae incertae sedis; Astyanax clade; Astyanax
 
 # guppy - Poecilia reticulata
 poeRet	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Teleostei; Osteoglossocephalai; Clupeocephala; Euteleosteomorpha; Neoteleostei; Eurypterygia; Ctenosquamata; Acanthomorphata; Euacanthomorphacea; Percomorphaceae; Ovalentaria; Atherinomorphae; Cyprinodontiformes; Cyprinodontoidei; Poeciliidae; Poeciliinae; Poecilia
@@ -142,31 +175,26 @@ poeRet	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Teleostei; Osteog
 # tongue sole fish Cynoglossus semilaevis
 cynSem	 Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Pleuronectiformes; Soleoidei; Cynoglossidae; Cynoglossinae; Cynoglossus
 
-# (cichlid) Neolamprologus brichardi
-neoBri	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Perciformes; Labroidei; Cichlidae; African cichlids; Pseudocrenilabrinae; Lamprologini; Neolamprologus
+# Princess of Burundi - Neolamprologus brichardi
+neoBri	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Teleostei; Osteoglossocephalai; Clupeocephala; Euteleosteomorpha; Neoteleostei; Eurypterygia; Ctenosquamata; Acanthomorphata; Euacanthomorphacea; Percomorphaceae; Ovalentaria; Cichlomorphae; Cichliformes; Cichlidae; African cichlids; Pseudocrenilabrinae; Lamprologini; Neolamprologus
 
-# (cichlid) Haplochromis burtoni
-hapBur	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Perciformes; Labroidei; Cichlidae; African cichlids; Pseudocrenilabrinae; Haplochromini; Haplochromis
+# Burton's mouthbreeder - Haplochromis burtoni
+hapBur	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Teleostei; Osteoglossocephalai; Clupeocephala; Euteleosteomorpha; Neoteleostei; Eurypterygia; Ctenosquamata; Acanthomorphata; Euacanthomorphacea; Percomorphaceae; Ovalentaria; Cichlomorphae; Cichliformes; Cichlidae; African cichlids; Pseudocrenilabrinae; Haplochromini; Haplochromis
 
-# zebra mbuna Maylandia zebra
-mayZeb	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Perciformes; Labroidei; Cichlidae; African cichlids; Pseudocrenilabrinae; Haplochromini; Maylandia; Maylandia zebra complex
+# Zebra mbuna - Maylandia zebra
+mayZeb	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Teleostei; Osteoglossocephalai; Clupeocephala; Euteleosteomorpha; Neoteleostei; Eurypterygia; Ctenosquamata; Acanthomorphata; Euacanthomorphacea; Percomorphaceae; Ovalentaria; Cichlomorphae; Cichliformes; Cichlidae; African cichlids; Pseudocrenilabrinae; Haplochromini; Maylandia; Maylandia zebra complex
 
-# (cichlid) Pundamilia nyererei
-punNye	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Perciformes; Labroidei; Cichlidae; African cichlids; Pseudocrenilabrinae; Haplochromini; Pundamilia
+# Pundamilia nyererei - Pundamilia nyererei
+punNye	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Teleostei; Osteoglossocephalai; Clupeocephala; Euteleosteomorpha; Neoteleostei; Eurypterygia; Ctenosquamata; Acanthomorphata; Euacanthomorphacea; Percomorphaceae; Ovalentaria; Cichlomorphae; Cichliformes; Cichlidae; African cichlids; Pseudocrenilabrinae; Haplochromini; Pundamilia
 
-# Nile tilapia Oreochromis niloticus
-oreNil	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Perciformes; Labroidei; Cichlidae; African cichlids; Pseudocrenilabrinae; Tilapiini; Oreochromis
+# Nile tilapia - Oreochromis niloticus
+oreNil	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Teleostei; Osteoglossocephalai; Clupeocephala; Euteleosteomorpha; Neoteleostei; Eurypterygia; Ctenosquamata; Acanthomorphata; Euacanthomorphacea; Percomorphaceae; Ovalentaria; Cichlomorphae; Cichliformes; Cichlidae; African cichlids; Pseudocrenilabrinae; Oreochromini; Oreochromis
 
-
-# sansaifugu Yellowbelly puffer fish - Takifugu flavidus
-takFla	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Tetraodontiformes; Tetraodontoidei; Tetradontoidea; Tetraodontidae; Takifugu
+# Yellowbelly pufferfish - Takifugu flavidus
+takFla	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Teleostei; Osteoglossocephalai; Clupeocephala; Euteleosteomorpha; Neoteleostei; Eurypterygia; Ctenosquamata; Acanthomorphata; Euacanthomorphacea; Percomorphaceae; Eupercaria; Tetraodontiformes; Tetraodontoidei; Tetradontoidea; Tetraodontidae; Takifugu
 
 # tiger puffer Fugu Takifugu rubripes
 fr	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Tetraodontiformes; Tetraodontoidei; Tetradontoidea; Tetraodontidae; Takifugu
-
-# Spotted Gar - Lepisosteus oculatus
-lepOcu	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Semionotiformes; Lepisosteidae; Lepisosteus
-
 
 # spotted green pufferfish Tetraodon nigroviridis
 tetNig	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Tetraodontiformes; Tetraodontoidei; Tetradontoidea; Tetraodontidae; Tetraodon

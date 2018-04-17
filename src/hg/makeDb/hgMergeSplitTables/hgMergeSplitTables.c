@@ -750,7 +750,7 @@ static void cleanupSplitTables(struct sqlConnection *conn)
 /* replace split with merge tables. */
 {
 char tableLike[512];
-safef(tableLike, sizeof(tableLike), "LIKE \"%%\\%s\"", OLD_TABLE_EXT);
+safef(tableLike, sizeof(tableLike), "%%\\%s", OLD_TABLE_EXT);
 struct slName *oldSplitTables = sqlListTablesLike(conn, tableLike);
 struct slName *oldSplitTable;
 for (oldSplitTable = oldSplitTables; oldSplitTable != NULL; oldSplitTable = oldSplitTable->next)

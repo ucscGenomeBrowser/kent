@@ -43,6 +43,7 @@ UTILS_APPLIST = \
 	chopFaLines \
 	colTransform \
 	countChars \
+	endsInLf \
 	faAlign \
 	fastqToFa \
 	fastqStatsAndSubsample \
@@ -111,7 +112,6 @@ UCSC_APPS = \
 	ccCp \
 	convolve \
 	detab \
-	endsInLf \
 	faFlyBaseToUcsc \
 	faGapLocs \
 	faGapSizes \
@@ -147,7 +147,8 @@ UCSC_APPS = \
 
 USER_APP_SCRIPTS = \
 	bedJoinTabOffset \
-	expMatrixToBarchartBed
+	expMatrixToBarchartBed \
+	webSync
 
 SCRIPT_FILES = \
 	agpToLift \
@@ -168,11 +169,10 @@ SCRIPT_FILES = \
 	pslProtCnv \
 	pslSameGene \
 	tabRepl \
-	uniprotLift \
 	uniprotToTab \
 	ggTables \
 	ggGeneClasses \
-	ggGpmlToTag \
+	ggGpmlToTab \
 	ggKgmlToTab \
 	ggMsrToTab \
 	ggPidToTab \
@@ -182,6 +182,7 @@ SCRIPT_FILES = \
 	bedBestTranscript \
 	genePredToBed \
 	cgiSmokeTest \
+	phegenToBed \
 	${USER_APP_SCRIPTS}
 
 # List of all directories to build

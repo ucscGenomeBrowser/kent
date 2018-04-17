@@ -9,6 +9,9 @@
 #define HGHGVS_H
 
 #include "bed.h"
+#include "dnaseq.h"
+#include "seqWindow.h"
+#include "variantProjector.h"
 
 /* The full nomenclature is extremely complicated, able to encode things such as gene fusions and
  * advanced clinical info (e.g. "=/" for somatic mosaicism, "=//" for chimerism).  UCSC supports
@@ -153,6 +156,21 @@ struct hgvsChange
     union hgvsChangeValue value;       // the actual sequences changed (possibly complex)
     };
 
+//
+// HGVS output option bit flags
+//
+// Output an HGVS genomic (g.) term:
+#define HGVS_OUT_G  0x01
+// Output either an HGVS coding (c.) term if applicable, otherwise noncoding (n.) term:
+#define HGVS_OUT_CN 0x02
+// Output an HGVS protein (p.) term if applicable:
+#define HGVS_OUT_P  0x04
+// Add parentheses around predicted protein (p.) changes e.g. p.(Arg159del):
+#define HGVS_OUT_P_ADD_PARENS 0x10
+// Add deleted sequence to delins changes (e.g. show 'delAGinsTT' instead of 'delinsTT'):
+#define HGVS_OUT_BREAK_DELINS 0x20
+
+
 void hgvsVariantFree(struct hgvsVariant **pHgvs);
 // Free *pHgvs and its contents, and set *pHgvs to NULL.
 
@@ -233,5 +251,33 @@ struct vcfRow *hgvsToVcfRow(char *db, char *term, boolean doLeftShift, struct dy
 /* Convert HGVS to a row of VCF suitable for sorting & printing.  If unable, return NULL and
  * put the reason in dyError.  Protein terms are ambiguous at the nucleotide level so they are
  * not supported at this point. */
+
+uint hgvsTxToCds(uint txOffset, struct genbankCds *cds, boolean isStart, char pPrefix[2]);
+/* Return the cds-relative HGVS coord and prefix corresponding to 0-based txOffset & cds. */
+
+char *hgvsGFromVariant(struct seqWindow *gSeqWin, struct bed3 *variantBed, char *alt, char *acc,
+                       boolean breakDelIns);
+/* Return an HGVS g. string representing the genomic variant at the position of variantBed with
+ * reference allele from gSeqWin and alternate allele alt.  If acc is non-NULL it is used
+ * instead of variantBed->chrom.
+ * If breakDelIns, then show deleted bases (eg show 'delAGinsTT' instead of 'delinsTT'). */
+
+char *hgvsNFromVpTx(struct vpTx *vpTx, struct seqWindow *gSeqWin, struct psl *txAli,
+                    struct dnaSeq *txSeq, boolean breakDelIns);
+/* Return an HGVS n. (noncoding transcript) term for a variant projected onto a transcript.
+ * gSeqWin must already have at least the correct seqName if not the surrounding sequence.
+ * If breakDelIns, then show deleted bases (eg show 'delAGinsTT' instead of 'delinsTT'). */
+
+char *hgvsCFromVpTx(struct vpTx *vpTx, struct seqWindow *gSeqWin, struct psl *txAli,
+                    struct genbankCds *cds,  struct dnaSeq *txSeq, boolean breakDelIns);
+/* Return an HGVS c. (coding transcript) term for a variant projected onto a transcript w/cds.
+ * gSeqWin must already have at least the correct seqName (chrom) if not the surrounding sequence.
+ * If breakDelIns, then show deleted bases (eg show 'delAGinsTT' instead of 'delinsTT'). */
+
+char *hgvsPFromVpPep(struct vpPep *vpPep, struct dnaSeq *protSeq, boolean addParens);
+/* Return an HGVS p. (protein) term for a variant projected into protein space.
+ * Strict HGVS compliance requires parentheses around predicted protein changes (addParens=TRUE),
+ * but nobody seems to do that in practice.
+ * Return NULL if an input is NULL. */
 
 #endif /* HGHGVS_H */

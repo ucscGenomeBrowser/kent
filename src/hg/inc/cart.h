@@ -317,8 +317,11 @@ void cartSaveSession(struct cart *cart);
 void cartDump(struct cart *cart);
 /* Dump contents of cart. */
 
+void cartDumpNoEncode(struct cart *cart);
+/* Dump contents of cart without HTML encoding. */
+
 #define CART_DUMP_AS_TABLE "cartDumpAsTable"
-void cartDumpList(struct hashEl *elList,boolean asTable);
+void cartDumpList(struct hashEl *elList,boolean asTable, boolean doHtmlEncode);
 /* Dump list of cart variables optionally as a table with ajax update support. */
 
 void cartDumpPrefix(struct cart *cart, char *prefix);
@@ -578,6 +581,9 @@ boolean cartTdbTreeCleanupOverrides(struct trackDb *tdb,struct cart *newCart,str
 /* When composite/view settings changes, remove subtrack specific settings
    Returns TRUE if any cart vars are removed */
 
+void cartCopyCustomComposites(struct cart *cart);
+/* Find any custom composite hubs and copy them so they can be modified. */
+
 void cartCopyCustomTracks(struct cart *cart);
 /* If cart contains any live custom tracks, save off a new copy of them,
  * to prevent clashes by multiple uses of the same session.  */
@@ -614,6 +620,13 @@ char *cartGetPosition(struct cart *cart, char *database, struct cart **pLastDbPo
 
 void cartSetDbPosition(struct cart *cart, char *database, struct cart *lastDbPosCart);
 /* Set the 'position.db' variable in the cart.*/
+
+void cartTdbFetchMinMaxPixels(struct cart *theCart, struct trackDb *tdb,
+                                int defaultMin, int defaultMax, int defaultDefault,
+                                int *retMin, int *retMax, int *retDefault, int *retCurrent);
+/* Configure maximum track height for variable height tracks (e.g. wiggle, barchart)
+ *      Initial height and limits may be defined in trackDb with the maxHeightPixels string,
+ *      Or user requested limits are defined in the cart. */
 
 #endif /* CART_H */
 

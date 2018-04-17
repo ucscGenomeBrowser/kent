@@ -35,13 +35,13 @@ barChartMetric barChart bigBarChart
 barChartSampleUrl barChart bigBarChart
 barChartUnit barChart bigBarChart
 baseColorDefault *
-baseColorTickColor bed bigBed
+baseColorTickColor bed bigBed bigPsl
 baseColorUseCds bed psl genePred bigPsl
 baseColorUseSequence *
 baseQualRange bam
 bedFilter bed
 bedNameLabel bed barChart bigBarChart
-bigDataUrl customTracks bigBed bigWig bam vcfTabix bigPsl halSnake bigBarChart
+bigDataUrl customTracks bigBed bigWig bam vcfTabix bigPsl halSnake bigBarChart gtexTranscExpr
 bigGeneDataUrl genePred
 blastRef psl bigPsl
 boxedCfg *
@@ -84,6 +84,8 @@ dataVersion *
 dateSubmitted bedGraph bed
 dateUnrestricted bed
 db *
+dbPrefixUrls bigBed bed bigPsl genePred psl
+dbPrefixLabels bigBed bed bigPsl genePred psl
 dbProfile *
 dbTrackType customTracks
 detailsTabUrls bigBed bigGenePred bigPsl
@@ -213,6 +215,7 @@ interTableKind encodeFiveC
 inputTracksSubgroupDisplay bed factorSource
 inputTrackTable bed factorSource
 inputTableFieldDisplay bed factorSource
+interactDirectional interact bigInteract
 intronGap psl genePred bigPsl
 irows wigMaf
 isGencode genePred
@@ -225,7 +228,7 @@ itemCount customTracks
 itemDetailsHtmlTable genePred psl bed bigPsl
 itemFirstCharCase wigMafProt wigMaf
 itemImagePath bed
-itemRgb bedDetail bedGraph bed bedLogR bigBed
+itemRgb bedDetail bedGraph bed bedLogR bigBed bigPsl
 lfPslTable bed
 linesAt chromGraph
 linkIdInName bed bigBed
@@ -253,7 +256,7 @@ maxScore broadPeak narrowPeak
 maxWindowToDraw bam rmsk joinedRmsk bed narrowPeak broadPeak bigWig bedlogR genepred vcf vcfTabix factorSource
 maxWindowToQuery bigWig bed bedlogR
 metadata *
-mouseOverField bigBed
+mouseOverField bigBed bigPsl
 mgiUrl bed
 mgiUrlLabel bed
 minFreq vcf vcfTabix
@@ -275,7 +278,7 @@ nextItemButton *
 noColorTag bam
 noInherit *
 nonBedFieldsLabel bigBed
-noScoreFilter bedGraph bed bedLogR gvf bedDetail bigBed
+noScoreFilter bedGraph bed bedLogR gvf bedDetail bigBed bigPsl
 notNCBI bed
 ococci bed
 offset customTracks
@@ -312,53 +315,58 @@ release *
 refUrl bam
 ucscRetroInfo psl bigPsl
 ucscRetroParentTables *
-sGroup_Birds wigMaf
-sGroup_Chimp wigMaf
-sGroup_Glires wigMaf
-sGroup_Euarchontoglires wigMaf
-sGroup_Human wigMaf
-sGroup_Placental_Mammal wigMaf
-sGroup_Placental wigMaf
-sGroup_Primate wigMaf
-sGroup_Primates wigMaf
-sGroup_Laurasiatheria wigMaf
 sGroup_Afrotheria wigMaf
-sGroup_Mammal wigMaf
 sGroup_Aves wigMaf
-sGroup_Sarcopterygii wigMaf
-sGroup_Vertebrate wigMaf
 sGroup_bird wigMaf
+sGroup_Birds wigMaf
+sGroup_Bundibugyo_2007 wigMaf
+sGroup_Caenorhabditis wigMaf
+sGroup_Chimp wigMaf
+sGroup_DRC_2007 wigMaf
+sGroup_Drosophila wigMaf
+sGroup_Ebola_2014 wigMaf
+sGroup_Euarchontoglires wigMaf
 sGroup_fish wigMaf
 sGroup_Fish wigMaf
-sGroup_hiv wigMafProt wigMaf
-sGroup_Virus wigMaf
-sGroup_Ebola_2014 wigMaf
-sGroup_Bundibugyo_2007 wigMaf
-sGroup_Sudan_1976-9 wigMaf
-sGroup_Reston_1989-90 wigMaf
-sGroup_DRC_2007 wigMaf
-sGroup_Zaire(DRC)_1976-7 wigMaf
-sGroup_Marburg_1987 wigMaf
-sGroup_Zaire wigMaf
 sGroup_Gabon wigMaf
+sGroup_Glires wigMaf
+sGroup_hiv wigMafProt wigMaf
+sGroup_Human wigMaf
+sGroup_Laurasiatheria wigMaf
+sGroup_Mammal wigMaf
 sGroup_mammal wigMaf
-sGroup_placental wigMaf
-sGroup_primate wigMaf
-sGroup_vertebrate wigMaf
-sGroup_worm wigMaf
-sGroup_Caenorhabditis wigMaf
+sGroup_Mammals wigMaf
+sGroup_Marburg_1987 wigMaf
 sGroup_Nematode wigMaf
-sGroup_Drosophila wigMaf
+sGroup_Nematodes wigMaf
 sGroup_Others wigMaf
+sGroup_placental wigMaf
+sGroup_Placental wigMaf
+sGroup_Placental_Mammal wigMaf
+sGroup_Placental_Mammals wigMaf
+sGroup_Primate wigMaf
+sGroup_Primates wigMaf
+sGroup_primate wigMaf
+sGroup_Primates wigMaf
+sGroup_Reston_1989-90 wigMaf
+sGroup_Sarcopterygii wigMaf
+sGroup_Sudan_1976-9 wigMaf
+sGroup_vertebrate wigMaf
+sGroup_Vertebrate wigMaf
+sGroup_Vertebrates wigMaf
+sGroup_Virus wigMaf
+sGroup_worm wigMaf
+sGroup_Zaire wigMaf
+sGroup_Zaire(DRC)_1976-7 wigMaf
 *Filter bed narrowPeak broadPeak
 *FilterLimits bed narrowPeak broadPeak
 *FilterByRange bed narrowPeak broadPeak
-scoreFilter broadPeak narrowPeak bed interaction bedlogR peptideMapping bigBed
-scoreFilterByRange bed peptideMapping bigBed
-scoreFilterLimits broadPeak narrowPeak bed interaction bedlogR peptideMapping bigBed
-scoreFilterMax bed bedlogR peptideMapping bigBed
-scoreMax bed bedlogR interaction peptideMapping narrowPeak bigBed
-scoreMin broadPeak narrowPeak bed bedlogR interaction peptideMapping bigBed
+scoreFilter broadPeak narrowPeak bed interaction bedlogR peptideMapping bigBed bigPsl
+scoreFilterByRange bed peptideMapping bigBed bigPsl
+scoreFilterLimits broadPeak narrowPeak bed interaction bedlogR peptideMapping bigBed bigPsl
+scoreFilterMax bed bedlogR peptideMapping bigBed bigPsl
+scoreMax bed bedlogR interaction peptideMapping narrowPeak bigBed bigPsl
+scoreMin broadPeak narrowPeak bed bedlogR interaction peptideMapping bigBed bigPsl
 scoreLabel bed bigBed bigPsl bigGenePred
 searchIndex bigBed bigPsl bigGenePred
 searchTrix bigBed bigPsl bigGenePred
@@ -440,7 +448,7 @@ url2 bed genePred
 url2Label bed genePred
 urlLabel *
 urlName genePred psl bigPsl
-urls bigBed bed
+urls bigBed bed bigPsl genePred psl
 useScore *
 view *
 viewLimits *

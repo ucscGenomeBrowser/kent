@@ -4,21 +4,41 @@
  * See README in this or parent directory for licensing information. */
 
 #include "annoGratorGpVar.h"
+#include "annoStreamDbPslPlus.h"
+#include "fa.h"
+#include "genbank.h"
 #include "genePred.h"
+#include "hdb.h"
+#include "hgHgvs.h"
 #include "pgSnp.h"
 #include "vcf.h"
 #include "variant.h"
 #include "gpFx.h"
+#include "seqWindow.h"
+#include "trackHub.h"
 #include "twoBit.h"
+#include "variantProjector.h"
 #include "annoGratorQuery.h"
 
 struct annoGratorGpVar
-    {
+{
     struct annoGrator grator;	// external annoGrator/annoStreamer interface
     struct lm *lm;		// localmem scratch storage
     struct dyString *dyScratch;	// dyString for local temporary use
     struct annoGratorGpVarFuncFilter *funcFilter; // Which categories of effect should we output?
     enum annoGratorOverlap gpVarOverlapRule;	  // Should we set RJFail if no overlap?
+    struct seqWindow *gSeqWin;  // means of fetching genomic sequence for HGVS term generation
+    boolean hgvsMakeG;          // Generate genomic (g.) HGVS terms only if this is set
+    boolean hgvsMakeCN;         // Generate transcript (n. / c.) HGVS terms only if this is set
+    boolean hgvsMakeP;          // Generate protein (p.) HGVS terms only if this is set
+    boolean hgvsAddParensToP;   // Add parentheses around predicted protein changes (strict HGVS)
+    boolean hgvsBreakDelIns;    // Include deleted sequence (not only ins) e.g. delGGinsAT
+    boolean sourceHasFrames;    // True if transcript annotations include exonFrames column
+    boolean sourceIsBigGenePred;// True if transcript annotations are from bigGenePred
+    boolean sourceIsPslPlus;    // True if transcript annotations are PSL+CDS+seq info
+    boolean protLookupInited;   // For looking up protein accessions in genePred-derived HGVS p.
+    char *protLookupTable;      // "
+    struct hash *protLookupHash;// "
 
     struct variant *(*variantFromRow)(struct annoGratorGpVar *self, struct annoRow *row,
 				      char *refAllele);
@@ -44,6 +64,12 @@ static char *aggvAutoSqlStringEnd =
 "string  detail5;            \"detail column (per detailType) 5\""
 "string  detail6;            \"detail column (per detailType) 6\""
 "string  detail7;            \"detail column (per detailType) 7\""
+"string  detail8;            \"detail column (per detailType) 8\""
+"string  detail9;            \"detail column (per detailType) 9\""
+"string  detail10;           \"detail column (per detailType) 10\""
+"string  hgvsG;              \"HGVS g. term\""
+"string  hgvsCN;             \"HGVS c. or n. term\""
+"string  hgvsP;              \"HGVS p. term\""
 ")";
 
 struct asObject *annoGpVarAsObj(struct asObject *sourceAsObj)
@@ -88,7 +114,9 @@ if (filt->intron && (term == intron_variant || term == complex_transcript_varian
     return TRUE;
 if (filt->upDownstream && (term == upstream_gene_variant || term == downstream_gene_variant))
     return TRUE;
-if (filt->exonLoss && (term == exon_loss))
+if (filt->exonLoss && (term == exon_loss_variant))
+    return TRUE;
+if ((filt->exonLoss || filt->cdsNonSyn) && term == transcript_ablation)
     return TRUE;
 if (filt->utr && (term == _5_prime_UTR_variant || term == _3_prime_UTR_variant))
     return TRUE;
@@ -128,24 +156,33 @@ static void aggvStringifyGpFx(char **words, struct gpFx *effect, struct lm *lm)
 {
 int count = 0;
 
-words[count++] = lmCloneString(lm, effect->allele);
+words[count++] = lmCloneString(lm, effect->gAllele);
 words[count++] = lmCloneString(lm, blankIfNull(effect->transcript));
 words[count++] = uintToString(lm, effect->soNumber);
 words[count++] = uintToString(lm, effect->detailType);
 int gpFxNumCols = 4;
 
 if (effect->detailType == intron)
+    {
     words[count++] = uintToString(lm, effect->details.intron.intronNumber);
+    words[count++] = uintToString(lm, effect->details.intron.intronCount);
+    }
 else if (effect->detailType == nonCodingExon)
     {
     words[count++] = uintToString(lm, effect->details.nonCodingExon.exonNumber);
+    words[count++] = uintToString(lm, effect->details.nonCodingExon.exonCount);
     words[count++] = uintToString(lm, effect->details.nonCodingExon.cDnaPosition);
+    words[count++] = lmCloneString(lm, effect->details.nonCodingExon.txRef);
+    words[count++] = lmCloneString(lm, effect->details.nonCodingExon.txAlt);
     }
 else if (effect->detailType == codingChange)
     {
     struct codingChange *cc = &(effect->details.codingChange);
     words[count++] = uintToString(lm, cc->exonNumber);
+    words[count++] = uintToString(lm, cc->exonCount);
     words[count++] = uintToString(lm, cc->cDnaPosition);
+    words[count++] = lmCloneString(lm, cc->txRef);
+    words[count++] = lmCloneString(lm, cc->txAlt);
     words[count++] = uintToString(lm, cc->cdsPosition);
     words[count++] = uintToString(lm, cc->pepPosition);
     words[count++] = strUpper(lmCloneString(lm, blankIfNull(cc->aaOld)));
@@ -157,7 +194,7 @@ else if (effect->detailType != none)
     errAbort("annoGratorGpVar: unknown effect type %d", effect->detailType);
 
 // Add max number of columns added in any if clause above
-gpFxNumCols += 8;
+gpFxNumCols += 9;
 
 while (count < gpFxNumCols)
     words[count++] = "";
@@ -177,22 +214,31 @@ struct annoGrator *gSelf = (struct annoGrator *)sSelf;
 char **words = (char **)(row->data);
 int count = gSelf->mySource->numCols;
 
-effect->allele = lmCloneString(lm, words[count++]);
+effect->gAllele = lmCloneString(lm, words[count++]);
 effect->transcript = lmCloneString(lm, words[count++]);
 effect->soNumber = atol(words[count++]);
 effect->detailType = atol(words[count++]);
 
 if (effect->detailType == intron)
+    {
     effect->details.intron.intronNumber = atol(words[count++]);
+    effect->details.intron.intronCount = atol(words[count++]);
+    }
 else if (effect->detailType == nonCodingExon)
     {
     effect->details.nonCodingExon.exonNumber = atol(words[count++]);
+    effect->details.nonCodingExon.exonCount = atol(words[count++]);
     effect->details.nonCodingExon.cDnaPosition = atol(words[count++]);
+    effect->details.nonCodingExon.txRef = lmCloneString(lm, words[count++]);
+    effect->details.nonCodingExon.txAlt = lmCloneString(lm, words[count++]);
     }
 else if (effect->detailType == codingChange)
     {
     effect->details.codingChange.exonNumber = atol(words[count++]);
+    effect->details.codingChange.exonCount = atol(words[count++]);
     effect->details.codingChange.cDnaPosition = atol(words[count++]);
+    effect->details.codingChange.txRef = lmCloneString(lm, words[count++]);
+    effect->details.codingChange.txAlt = lmCloneString(lm, words[count++]);
     effect->details.codingChange.cdsPosition = atol(words[count++]);
     effect->details.codingChange.pepPosition = atol(words[count++]);
     effect->details.codingChange.aaOld = lmCloneString(lm, words[count++]);
@@ -205,8 +251,29 @@ else if (effect->detailType != none)
 return effect;
 }
 
+// Container for optional HGVS terms
+struct hgvsTerms
+    {
+    char *hgvsG;     // HGVS g. term or NULL
+    char *hgvsCN;    // HGVS c. or n. term or NULL
+    char *hgvsP;     // HGVS p. term or NULL
+    };
+
+static  void hgvsTermsFree(struct hgvsTerms *hgvs)
+/* Free struct hgvsTerms and its members. */
+{
+if (hgvs)
+    {
+    freez(&hgvs->hgvsG);
+    freez(&hgvs->hgvsCN);
+    freez(&hgvs->hgvsP);
+    freeMem(hgvs);
+    }
+}
+
 static struct annoRow *aggvEffectToRow(struct annoGratorGpVar *self, struct gpFx *effect,
-				       struct annoRow *rowIn, struct lm *callerLm)
+				       struct annoRow *rowIn, struct hgvsTerms *hgvs,
+                                       struct lm *callerLm)
 // convert a single genePred annoRow and gpFx record to an augmented genePred annoRow;
 {
 struct annoGrator *gSelf = &(self->grator);
@@ -223,6 +290,11 @@ memcpy(wordsOut, wordsIn, sizeof(char *) * gpColCount);
 
 // stringify the gpFx structure 
 aggvStringifyGpFx(&wordsOut[gpColCount], effect, callerLm);
+
+// Final columns: optional HGVS terms
+wordsOut[sSelf->numCols-3] = lmCloneString(callerLm, hgvs && hgvs->hgvsG ? hgvs->hgvsG : "");
+wordsOut[sSelf->numCols-2] = lmCloneString(callerLm, hgvs && hgvs->hgvsCN ? hgvs->hgvsCN : "");
+wordsOut[sSelf->numCols-1] = lmCloneString(callerLm, hgvs && hgvs->hgvsP ? hgvs->hgvsP : "");
 
 return annoRowFromStringArray(rowIn->chrom, rowIn->start, rowIn->end, rowIn->rightJoinFail,
 			      wordsOut, sSelf->numCols, callerLm);
@@ -255,33 +327,288 @@ txSeq->size = txLen;
 return txSeq;
 }
 
-static struct annoRow *aggvGenRows( struct annoGratorGpVar *self, struct variant *variant,
-				    struct genePred *pred, struct annoRow *inRow,
-				    struct lm *callerLm)
+struct dnaSeq *translateTx(struct dnaSeq *txSeq, struct genbankCds *cds)
+/* Translate txSeq into protein sequence, including 'X' for stop codon if present. */
+{
+struct dnaSeq *protSeq = translateSeq(txSeq, cds->start, FALSE);
+aaSeqZToX(protSeq);
+return protSeq;
+}
+
+static struct udcFile *getCachedUdcFile(char *fileOrUrl)
+/* Return an open UDC file handle for fileOrUrl; cache open connections.  errAbort if can't open. */
+{
+static struct hash *hash = NULL;
+if (hash == NULL)
+    hash = hashNew(0);
+struct udcFile *udcf = hashFindVal(hash, fileOrUrl);
+if (udcf == NULL)
+    {
+    char *realFileOrUrl = hReplaceGbdb(fileOrUrl);
+    udcf = udcFileOpen(realFileOrUrl, NULL);
+    hashAdd(hash, fileOrUrl, udcf);
+    freeMem(realFileOrUrl);
+    }
+return udcf;
+}
+
+static struct dnaSeq *getCachedSeq(char *fileOrUrl, off_t offset, size_t size, boolean isDna)
+/* Parse FASTA in file fileOrUrl at offset and return a cached dnaSeq. */
+{
+static struct hash *hash = NULL;
+if (hash == NULL)
+    hash = hashNew(0);
+char key[4096];
+safef(key, sizeof(key), "%s_%lld_%lld", fileOrUrl, (long long)offset, (long long)size);
+struct dnaSeq *seq = hashFindVal(hash, key);
+if (seq == NULL)
+    {
+    char *buf = needMem(size+1);
+    struct udcFile *udcf = getCachedUdcFile(fileOrUrl);
+    udcSeek(udcf, offset);
+    udcRead(udcf, buf, size);
+    seq = faSeqFromMemText(buf, isDna);
+    toUpperN(seq->dna, seq->size);
+    hashAdd(hash, key, seq);
+    }
+return seq;
+}
+
+struct dnaSeq *getProtSeq(struct annoGratorGpVar *self, char *protAcc,
+                          struct dnaSeq *txSeq, struct genbankCds *cds)
+/* If protAcc is NULL, translate txSeq+cds; else look up protAcc. */
+{
+static struct hash *hash = NULL;
+if (hash == NULL)
+    hash = hashNew(0);
+struct dnaSeq *accSeq = NULL;
+if (isEmpty(protAcc))
+    {
+    accSeq = hashFindVal(hash, txSeq->name);
+    if (accSeq == NULL)
+        {
+        accSeq = translateTx(txSeq, cds);
+        hashAdd(hash, txSeq->name, accSeq);
+        }
+    }
+else
+    {
+    accSeq = hashFindVal(hash, protAcc);
+    char *db = self->grator.streamer.assembly->name;
+    char query[1024];
+    struct sqlConnection *conn = hAllocConn(db);
+    //#*** Using presence or absence of dot-version is an ugly hack, but it will do for now;
+    //#*** otherwise there's new config to pass in & store...
+    if (strchr(protAcc, '.'))
+        {
+        // Use ncbiRefSeqPepTable
+        sqlSafef(query, sizeof(query), "select seq from ncbiRefSeqPepTable where name = '%s'",
+                 protAcc);
+        char *seq = sqlQuickString(conn, query);
+        if (seq)
+            accSeq = newDnaSeq(seq, strlen(seq), protAcc);
+        }
+    else
+        {
+        // Get GenBank versioned acc and seq
+        sqlSafef(query, sizeof(query),
+                 "select path,file_offset,file_size from %s,%s "
+                 "where acc = '%s' and gbExtFile.id = gbExtFile",
+                 gbSeqTable, gbExtFileTable, protAcc);
+        char **row;
+        struct sqlResult *sr = sqlGetResult(conn, query);
+        if ((row = sqlNextRow(sr)) != NULL)
+            accSeq = getCachedSeq(row[0], atoll(row[1]), atoll(row[2]), FALSE);
+        sqlFreeResult(&sr);
+        }
+    if (accSeq == NULL)
+        // Store a dnaSeq with NULL name and seq so we don't waste time sql querying this again.
+        accSeq = newDnaSeq(NULL, 0, NULL);
+    hashAdd(hash, protAcc, accSeq);
+    hFreeConn(&conn);
+    }
+return (accSeq->name == NULL) ? NULL : accSeq;
+}
+
+static struct hgvsTerms *getHgvsTerms(struct annoGratorGpVar *self, char *chromAcc,
+                                      struct psl *psl, struct genbankCds *cds,
+                                      struct dnaSeq *txSeq, struct dnaSeq *protSeq,
+                                      struct vpTx *vpTx, struct vpPep *vpPep)
+/* Return HGVS terms for a variant allele projected onto the genome. */
+{
+struct hgvsTerms *hgvs;
+AllocVar(hgvs);
+struct bed3 variantBed;
+variantBed.chrom = psl->tName;
+variantBed.chromStart = min(vpTx->start.gOffset, vpTx->end.gOffset);
+variantBed.chromEnd = max(vpTx->start.gOffset, vpTx->end.gOffset);
+if (self->hgvsMakeG)
+    {
+    int gAltLen = strlen(vpTx->gAlt);
+    char gAlt[gAltLen+1];
+    safecpy(gAlt, sizeof(gAlt), vpTx->gAlt);
+    if (pslQStrand(psl) == '-')
+        reverseComplement(gAlt, gAltLen);
+    hgvs->hgvsG = hgvsGFromVariant(self->gSeqWin, &variantBed, gAlt, chromAcc,
+                                   self->hgvsBreakDelIns);
+    }
+if ((self->hgvsMakeCN || self->hgvsMakeP) && txSeq)
+    {
+    if (cds->start != cds->end && cds->start >= 0)
+        {
+        if (self->hgvsMakeCN)
+            hgvs->hgvsCN = hgvsCFromVpTx(vpTx, self->gSeqWin, psl, cds, txSeq,
+                                         self->hgvsBreakDelIns);
+        if (self->hgvsMakeP)
+            {
+            hgvs->hgvsP = hgvsPFromVpPep(vpPep, protSeq, self->hgvsAddParensToP);
+            }
+        }
+    else if (self->hgvsMakeCN)
+        hgvs->hgvsCN = hgvsNFromVpTx(vpTx, self->gSeqWin, psl, txSeq,
+                                     self->hgvsBreakDelIns);
+    }
+return hgvs;
+}
+
+
+static struct annoRow *aggvPredict(struct annoGratorGpVar *self, struct variant *variant,
+                                   struct psl *psl, struct genbankCds *cds,
+                                   struct dnaSeq *txSeq, struct dnaSeq *protSeq,
+                                   struct annoRow *inRow, struct lm *callerLm)
+// Project variant through psl onto transcript and predict functional effects.
+{
+struct annoRow *rowList = NULL;
+char *db = self->grator.streamer.assembly->name;
+char *chromAcc = self->hgvsMakeG ? hRefSeqAccForChrom(db, variant->chrom) : NULL;
+struct bed3 *variantBed = (struct bed3 *)variant;
+vpExpandIndelGaps(psl, self->gSeqWin, txSeq);
+struct allele *allele;
+for (allele = variant->alleles;  allele != NULL;  allele = allele->next)
+    {
+    char *alt = allele->sequence;
+    struct vpTx *vpTx = vpGenomicToTranscript(self->gSeqWin, variantBed, alt, psl, txSeq);
+    if (!allele->isReference || vpTx->genomeMismatch)
+        {
+        struct vpPep *vpPep = vpTranscriptToProtein(vpTx, cds, txSeq, protSeq);
+        struct hgvsTerms *hgvs = getHgvsTerms(self, chromAcc, psl, cds, txSeq, protSeq,
+                                              vpTx, vpPep);
+        struct gpFx *fxList = vpTranscriptToGpFx(vpTx, psl, cds, txSeq, vpPep, protSeq, self->lm);
+        struct annoRow *rows = NULL;
+        struct gpFx *fx;
+        for(fx = fxList;  fx != NULL; fx = fx->next)
+            {
+            // Intergenic variants never pass through here so we don't have to filter them out
+            // here if self->funcFilter is null.
+            if (self->funcFilter == NULL || passesFilter(self, fx))
+                {
+                // Restore the original variant's alt allele
+                fx->gAllele = lmCloneString(self->lm, allele->sequence);
+                slAddHead(&rows, aggvEffectToRow(self, fx, inRow, hgvs, callerLm));
+                }
+            }
+        slReverse(&rows);
+        rowList = slCat(rows, rowList);
+        hgvsTermsFree(hgvs);
+        vpPepFree(&vpPep);
+        }
+    vpTxFree(&vpTx);
+    }
+freeMem(chromAcc);
+return rowList;
+}
+
+static void lookupProtAcc(struct annoGratorGpVar *self, struct dnaSeq *protSeq)
+/* For Gencode, try to find the ENSP* ID associated with the ENST* ID. */
+{
+char *db = self->grator.streamer.assembly->name;
+if (! self->protLookupInited)
+    {
+    char *sourceName = self->grator.streamer.name;
+    if (strstr(sourceName, "wgEncodeGencode"))
+        {
+        char *version = strrchr(sourceName, 'V');
+        if (version)
+            {
+            if (!trackHubDatabase(db))
+                {
+                char attrsTable[512];
+                safef(attrsTable, sizeof(attrsTable), "wgEncodeGencodeAttrs%s", version);
+                if (hTableExists(db, attrsTable) && hHasField(db, attrsTable, "proteinId"))
+                    {
+                    self->protLookupHash = hashNew(0);
+                    self->protLookupTable = cloneString(attrsTable);
+                    }
+                }
+            }
+        }
+    self->protLookupInited = TRUE;
+    }
+if (self->protLookupHash != NULL)
+    {
+    char *txAcc = protSeq->name;
+    struct hashEl *hel = hashLookup(self->protLookupHash, txAcc);
+    if (hel == NULL)
+        {
+        struct sqlConnection *conn = hAllocConn(db);
+        char query[2048];
+        sqlSafef(query, sizeof(query), "select proteinId from %s where transcriptId = '%s'",
+                 self->protLookupTable, txAcc);
+        char *protAcc = sqlQuickString(conn, query);
+        hel = hashAdd(self->protLookupHash, txAcc, protAcc);
+        hFreeConn(&conn);
+        }
+    if (hel->val != NULL)
+        {
+        freeMem(protSeq->name);
+        protSeq->name = cloneString(hel->val);
+        }
+    }
+}
+
+static struct annoRow *aggvGenRowsGp(struct annoGratorGpVar *self, struct variant *variant,
+                                     struct genePred *pred, struct annoRow *inRow,
+                                     struct lm *callerLm)
 // put out annoRows for all the gpFx that arise from variant and pred
 {
-struct annoStreamer *sSelf = (struct annoStreamer *)self;
-struct dnaSeq *transcriptSequence = genePredToGenomicSequence(pred, sSelf->assembly, self->lm);
-struct gpFx *effects = gpFxPredEffect(variant, pred, transcriptSequence, self->lm);
-struct annoRow *rows = NULL;
-
-for(; effects; effects = effects->next)
+struct annoStreamer *sSelf = &(self->grator.streamer);
+struct genbankCds cds;
+genePredToCds(pred, &cds);
+struct dnaSeq *txSeq = genePredToGenomicSequence(pred, sSelf->assembly, self->lm);
+int chromSize = 0;  // unused
+struct psl *psl = genePredToPsl(pred, chromSize, txSeq->size);
+vpExpandIndelGaps(psl, self->gSeqWin, txSeq);
+struct dnaSeq *protSeq = NULL;
+if (cds.end > cds.start)
     {
-    // Intergenic variants never pass through here so we don't have to filter them out
-    // here if self->funcFilter is null.
-    if (self->funcFilter == NULL || passesFilter(self, effects))
-	{
-	struct annoRow *row = aggvEffectToRow(self, effects, inRow, callerLm);
-	slAddHead(&rows, row);
-	}
+    //#*** what if cds.startComplete is not true??
+    protSeq = translateTx(txSeq, &cds);
+    lookupProtAcc(self, protSeq);
     }
-slReverse(&rows);
+struct annoRow *rowList = aggvPredict(self, variant, psl, &cds, txSeq, protSeq, inRow, callerLm);
+pslFree(&psl);
+dnaSeqFree(&protSeq);
+return rowList;
+}
 
-return rows;
+static struct annoRow *aggvGenRowsPsl(struct annoGratorGpVar *self, struct variant *variant,
+                                     struct annoRow *inRow, struct lm *callerLm)
+// put out annoRows for all the gpFx that arise from variant and transcript psl+
+{
+char **ppWords = inRow->data;
+struct psl *psl = pslLoad(ppWords);
+struct genbankCds cds;
+genbankCdsParse(ppWords[PSLPLUS_CDS_IX], &cds);
+struct dnaSeq *txSeq = getCachedSeq(ppWords[PSLPLUS_PATH_IX], atoll(ppWords[PSLPLUS_FILEOFFSET_IX]),
+                                    atoll(ppWords[PSLPLUS_FILESIZE_IX]), TRUE);
+struct dnaSeq *protSeq = getProtSeq(self, ppWords[PSLPLUS_PROTACC_IX], txSeq, &cds);
+struct annoRow *rowList = aggvPredict(self, variant, psl, &cds, txSeq, protSeq, inRow, callerLm);
+pslFree(&psl);
+return rowList;
 }
 
 struct annoRow *aggvGenelessRow(struct annoGratorGpVar *self, struct variant *variant,
-                                enum soTerm term, boolean rjFail, struct lm *callerLm)
+                                boolean rjFail, struct lm *callerLm)
 /* If intergenic variants (no overlapping or nearby genes) are to be included in output,
  * make an output row with empty genePred and a gpFx that is empty except for soNumber. */
 {
@@ -296,15 +623,27 @@ for (i = 0;  i < gpColCount;  i++)
     wordsOut[i] = "";
 struct gpFx *gpFx;
 lmAllocVar(self->lm, gpFx);
+enum soTerm term = hasAltAllele(variant->alleles) ? intergenic_variant : no_sequence_alteration;
 if (term == no_sequence_alteration)
-    gpFx->allele = variant->alleles->sequence;
+    gpFx->gAllele = variant->alleles->sequence;
 else
-    gpFx->allele = firstAltAllele(variant->alleles);
-if (isAllNt(gpFx->allele, strlen(gpFx->allele)))
-    touppers(gpFx->allele);
+    gpFx->gAllele = firstAltAllele(variant->alleles);
+if (isAllNt(gpFx->gAllele, strlen(gpFx->gAllele)))
+    touppers(gpFx->gAllele);
 gpFx->soNumber = term;
 gpFx->detailType = none;
 aggvStringifyGpFx(&wordsOut[gpColCount], gpFx, self->lm);
+if (self->hgvsMakeG)
+    {
+    // Add HGVS genomic term
+    struct bed3 *variantBed = (struct bed3 *)variant;
+    char *chromAcc = hRefSeqAccForChrom(sSelf->assembly->name, variant->chrom);
+    char *hgvsG = hgvsGFromVariant(self->gSeqWin, variantBed, gpFx->gAllele, chromAcc,
+                                   self->hgvsBreakDelIns);
+    wordsOut[sSelf->numCols-3] = lmCloneString(callerLm, hgvsG);
+    freeMem(chromAcc);
+    freeMem(hgvsG);
+    }
 return annoRowFromStringArray(variant->chrom, variant->chromStart, variant->chromEnd, rjFail,
 			      wordsOut, sSelf->numCols, callerLm);
 }
@@ -368,14 +707,6 @@ annoAssemblyGetSeq(sSelf->assembly, primaryRow->chrom, primaryRow->start, primar
 		   refAllele, sizeof(refAllele));
 struct variant *variant = self->variantFromRow(self, primaryRow, refAllele);
 
-if (! hasAltAllele(variant->alleles))
-    {
-    // "variant" is actually a null variant (no variation, just a way to include some info about
-    // sequencing quality in VCF), so don't bother with predicting effects on particular genes.
-    if (self->funcFilter == NULL || self->funcFilter->noVariation)
-        return aggvGenelessRow(self, variant, no_sequence_alteration, *retRJFilterFailed, callerLm);
-    }
-
 // Temporarily tweak primaryRow's start and end to find upstream/downstream overlap:
 int pStart = primaryRow->start, pEnd = primaryRow->end;
 if (primaryRow->start <= GPRANGE)
@@ -391,7 +722,7 @@ if (rows == NULL)
     {
     // No genePreds means that the primary variant is intergenic.
     if ((self->funcFilter == NULL || self->funcFilter->intergenic))
-	return aggvGenelessRow(self, variant, intergenic_variant, *retRJFilterFailed, callerLm);
+        return aggvGenelessRow(self, variant, *retRJFilterFailed, callerLm);
     else if (retRJFilterFailed && self->gpVarOverlapRule == agoMustOverlap)
 	*retRJFilterFailed = TRUE;
     return NULL;
@@ -401,32 +732,37 @@ if (retRJFilterFailed && *retRJFilterFailed)
 
 struct annoRow *outRows = NULL;
 
-boolean isBig = (asColumnFindIx(gSelf->mySource->asObj->columnList, "chromStart") >= 0);
-int hasFrames = (asColumnFindIx(gSelf->mySource->asObj->columnList, "exonFrames") >= 0);
-
 for(; rows; rows = rows->next)
     {
-    struct genePred *gp;
-    if (isBig)
-        gp = (struct genePred *)genePredFromBigGenePredRow(rows->data);
+    struct annoRow *outRow = NULL;
+    if (self->sourceIsPslPlus)
+        {
+        outRow = aggvGenRowsPsl(self, variant, rows, callerLm);
+        }
     else
         {
-        // work around genePredLoad's trashing its input
-        char **inWords = rows->data;
-        char *saveExonStarts = lmCloneString(self->lm, inWords[8]);
-        char *saveExonEnds = lmCloneString(self->lm, inWords[9]);
-        gp = hasFrames ? genePredExtLoad(inWords, GENEPREDX_NUM_COLS) :
-                         genePredLoad(inWords);
-        inWords[8] = saveExonStarts;
-        inWords[9] = saveExonEnds;
+        struct genePred *gp;
+        if (self->sourceIsBigGenePred)
+            gp = (struct genePred *)genePredFromBigGenePredRow(rows->data);
+        else
+            {
+            // work around genePredLoad's trashing its input
+            char **inWords = rows->data;
+            char *saveExonStarts = lmCloneString(self->lm, inWords[8]);
+            char *saveExonEnds = lmCloneString(self->lm, inWords[9]);
+            gp = self->sourceHasFrames ? genePredExtLoad(inWords, GENEPREDX_NUM_COLS) :
+                                         genePredLoad(inWords);
+            inWords[8] = saveExonStarts;
+            inWords[9] = saveExonEnds;
+            }
+        outRow = aggvGenRowsGp(self, variant, gp, rows, callerLm);
+        genePredFree(&gp);
         }
-    struct annoRow *outRow = aggvGenRows(self, variant, gp, rows, callerLm);
     if (outRow != NULL)
-	{
-	slReverse(&outRow);
-	outRows = slCat(outRow, outRows);
-	}
-    genePredFree(&gp);
+        {
+        slReverse(&outRow);
+        outRows = slCat(outRow, outRows);
+        }
     }
 slReverse(&outRows);
 // If all rows failed the filter, and we must overlap, set *retRJFilterFailed.
@@ -458,6 +794,8 @@ if (*pSSelf != NULL)
     struct annoGratorGpVar *self = (struct annoGratorGpVar *)(*pSSelf);
     lmCleanup(&(self->lm));
     dyStringFree(&(self->dyScratch));
+    freez(&self->protLookupTable);
+    hashFree(&self->protLookupHash);
     annoGratorClose(pSSelf);
     }
 }
@@ -480,6 +818,12 @@ sSelf->close = aggvClose;
 // integrate by adding gpFx fields
 gSelf->integrate = annoGratorGpVarIntegrate;
 self->dyScratch = dyStringNew(0);
+self->sourceHasFrames = (asColumnFindIx(mySource->asObj->columnList, "exonFrames") >= 0);
+self->sourceIsBigGenePred = (asColumnFindIx(mySource->asObj->columnList, "chromStart") >= 0);
+self->sourceIsPslPlus = (asColumnFindIx(mySource->asObj->columnList, "tStart") >= 0);
+char *db = sSelf->assembly->name;
+self->gSeqWin = chromSeqWindowNew(db, NULL, 0, 0);
+
 return gSelf;
 }
 
@@ -499,3 +843,18 @@ if (funcFilter != NULL)
 gSelf->setOverlapRule(gSelf, self->gpVarOverlapRule);
 }
 
+void annoGratorGpVarSetHgvsOutOptions(struct annoGrator *gSelf, uint hgvsOutOptions)
+/* Import the HGVS output options described in hgHgvs.h */
+{
+struct annoGratorGpVar *self = (struct annoGratorGpVar *)gSelf;
+if (hgvsOutOptions & HGVS_OUT_G)
+    self->hgvsMakeG = TRUE;
+if (hgvsOutOptions & HGVS_OUT_CN)
+    self->hgvsMakeCN = TRUE;
+if (hgvsOutOptions & HGVS_OUT_P)
+    self->hgvsMakeP = TRUE;
+if (hgvsOutOptions & HGVS_OUT_P_ADD_PARENS)
+    self->hgvsAddParensToP = TRUE;
+if (hgvsOutOptions & HGVS_OUT_BREAK_DELINS)
+    self->hgvsBreakDelIns = TRUE;
+}

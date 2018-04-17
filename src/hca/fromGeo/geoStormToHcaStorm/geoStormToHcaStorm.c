@@ -53,74 +53,74 @@ char *weeds[] =
     "series.sample_id",
     "series.sample_taxid",
     "series.type",
+    "series.status", 
+    "sample.status",
     };
 
 
 char *substitutions[][2] = 
 /* Tags we'll rename */
 {
-    {"platform.organism", "sample.donor.species"},
-    {"platform.taxid", "sample.donor.ncbi_taxon"},
+    {"platform.organism", "sample.donor.species.text"},
+    {"platform.taxid", "sample.donor.species.ontology"},
     {"sample.characteristics_age", "sample.donor.age"},
     {"sample.characteristics_bmi", "sample.donor.body_mass_index"},
-    {"sample.characteristics_cell_type", "cell.type"},
+    {"sample.characteristics_cell_type", "sample.well.cell_type.text"},
     {"sample.characteristics_developmental_stage", "sample.donor.life_stage"},
-    {"sample.characteristics_ethnicity", "sample.donor.ethnicity"},
+    {"sample.characteristics_ethnicity", "sample.donor.ancestry.1.text"},
     {"sample.characteristics_genotype", "sample.donor.genotype"},
     {"sample.characteristics_exome_capture", "assay.genome.method"},
     {"sample.characteristics_sex", "sample.donor.sex"},
     {"sample.characteristics_Sex", "sample.donor.sex"},
-    {"sample.characteristics_strain", "sample.donor.strain"},
-    {"sample.characteristics_tissue", "sample.body_part.name"},
-    {"sample.contact_address", "project.contact.street_address"},
-    {"sample.contact_city", "project.contact.city"},
-    {"sample.contact_country", "project.contact.country"},
+    {"sample.characteristics_strain", "sample.donor.strain.1.text"},
+    {"sample.characteristics_tissue", "sample.body_part.text"},
+    {"sample.contact_address", "project.submitter.street_address"},
+    {"sample.contact_city", "project.submitter.city"},
+    {"sample.contact_country", "project.submitter.country"},
     {"sample.contact_department", "project.contact.department"},
-    {"sample.contact_email", "project.contact.email"},
-    {"sample.contact_institute", "project.contact.institute"},
-    {"sample.contact_laboratory", "project.contact.laboratory"},
-    {"sample.contact_name", "project.contact.name"},
+    {"sample.contact_email", "project.submitter.email"},
+    {"sample.contact_institute", "project.submitter.institution"},
+    {"sample.contact_laboratory", "project.submitter.laboratory"},
+    {"sample.contact_name", "project.submitter.name"},
     {"sample.contact_phone", "project.contact.phone"},
-    {"sample.contact_state", "project.contact.state"},
+    {"sample.contact_state", "project.submitter.country_division"},
     {"sample.contact_zip/postal_code", "project.contact.postal_code"},
     {"sample.contributor", "project.contributor"},
-    {"sample.description", "sample.short_label"},
+    {"sample.description", "sample.name"},
     {"sample.geo_accession", "sample.geo_sample"},
-    {"sample.instrument_model", "assay.seq.machine"},
-    {"sample.last_update_date sample.last_update_date"},
+    {"sample.instrument_model", "assay.seq.instrument_model"},
+    {"sample.update_date sample.update_date"},
     {"sample.library_selection", "assay.rna.primer"},
-    {"sample.library_source", "assay.rna.prep"},
-    {"sample.library_strategy", "assay.seq.prep"},
+    {"sample.library_source", "assay.rna.library_construction"},
+    {"sample.library_strategy", "assay.seq.library_construction"},
     {"sample.molecule", "assay.seq.molecule"},
-    {"sample.organism", "sample.donor.species"},
-    {"sample.source_name", "sample.body_part.name"},
-    {"sample.status", "project.release_status"},
-    {"sample.submission_date", "sample.submission_date"},
-    {"sample.taxid", "sample.donor.ncbi_taxon"},
-    {"sample.title", "sample.long_label"},
+    {"sample.organism", "sample.donor.species.text"},
+    {"sample.source_name", "sample.body_part.text"},
+    {"sample.submit_date", "sample.submit_date"},
+    {"sample.taxid", "sample.donor.species.ontology"},
+    {"sample.title", "sample.title"},
     {"series.contact_address", "project.contact.street_address"},
-    {"series.contact_city", "project.contact.city"},
-    {"series.contact_country", "project.contact.country"},
+    {"series.contact_city", "project.submitter.city"},
+    {"series.contact_country", "project.submitter.country"},
     {"series.contact_department", "project.contact.department"},
-    {"series.contact_email", "project.contact.email"},
-    {"series.contact_institute", "project.contact.institute"},
-    {"series.contact_laboratory", "project.contact.laboratory"},
-    {"series.contact_name", "project.contact.name"},
+    {"series.contact_email", "project.submitter.email"},
+    {"series.contact_institute", "project.submitter.institution"},
+    {"series.contact_laboratory", "project.submitter.laboratory"},
+    {"series.contact_name", "project.submitter.name"},
     {"series.contact_phone", "project.contact.phone"},
-    {"series.contact_state", "project.contact.state"},
+    {"series.contact_state", "project.submitter.country_division"},
     {"series.contact_zip/postal_code", "project.contact.postal_code"},
     {"series.contributor", "project.contributor"},
     {"series.geo_accession", "project.geo_series"},
-    {"series.last_update_date", "project.last_update_date"},
-    {"series.organism", "sample.donor.species"},
-    {"series.overall_design", "project.overall_design"},
-    {"series.pubmed_id", "project.pmid"},
+    {"series.last_update_date", "project.update_date"},
+    {"series.organism", "sample.donor.species.text"},
+    {"series.overall_design", "project.experimental_design.1.text"},
+    {"series.pubmed_id", "project.publications.1.pmid"},
     {"series.relation_SubSeries_of", "project.geo_parent_series"},
-    {"series.status", "project.release_status"},
-    {"series.submission_date", "project.submission_date"},
-    {"series.summary", "project.summary"},
+    {"series.submission_date", "project.submit_date"},
+    {"series.summary", "project.description"},
     {"series.supplementary_file", "project.supplementary_files"},
-    {"series.taxid", "sample.donor.ncbi_taxon"},
+    {"series.taxid", "sample.donor.species.ontology"},
     {"series.title", "project.title"},
 };
 
@@ -197,7 +197,7 @@ for (pair = stanza->tagList; pair != NULL; pair = pair->next)
         {
 	/* Convert something like https://www.ncbi.nlm.nih.gov/sra?term=SRX229786
 	 * to SRX229786 */
-	pair->name = "assay.sra_experiment";
+	pair->name = "assay.seq.sra_experiment";
 	char *srx = accFromEnd(pair->val, '=', "SRX", "SRA");
 	pair->val = srx;
 
@@ -224,7 +224,7 @@ for (pair = stanza->tagList; pair != NULL; pair = pair->next)
 
 if (srrDy->stringSize > 0)
     {
-    tagStanzaAppend(storm, stanza, "assay.sra_run", srrDy->string);
+    tagStanzaAppend(storm, stanza, "assay.seq.sra_run", srrDy->string);
     }
 dyStringFree(&srrDy);
 
@@ -292,7 +292,7 @@ if (dy->stringSize == 0)
     mergeAddress(stanza, dy, sampleComponents, ArraySize(sampleComponents));
     }
 if (dy->string != 0)
-    tagStanzaAppend(storm, stanza, "project.contact.address", dy->string);
+    tagStanzaAppend(storm, stanza, "project.submitter.address", dy->string);
 dyStringFree(&dy);
 }
 

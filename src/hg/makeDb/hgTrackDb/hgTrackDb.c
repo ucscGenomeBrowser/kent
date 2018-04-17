@@ -166,7 +166,7 @@ slReverse(&newList);
 return newList;
 }
 
-unsigned buildReleaseBits(char *rel)
+unsigned buildReleaseBits(char *rel, char *track)
 /* unpack the comma separated list of possible release tags */
 {
 if (rel == NULL)
@@ -189,7 +189,8 @@ while(rel)
     else if (sameString(rel, "public"))
 	bits |= RELEASE_PUBLIC;
     else
-	errAbort("track with release %s must have a release combination of alpha, beta, and public", oldString);
+	errAbort("track %s with release %s must have a release combination of alpha, beta, and public", 
+                        track, oldString);
 
     rel = end;
     }
@@ -209,16 +210,16 @@ struct hash *haveHash = hashNew(3);
 while ((tdb = slPopHead(&tdbList)) != NULL)
     {
     char *rel = trackDbSetting(tdb, "release");
-    unsigned trackRelBits = buildReleaseBits(rel);
+    unsigned trackRelBits = buildReleaseBits(rel, tdb->track);
 
     if (trackRelBits & releaseBit)
 	{
 	/* we want to include this track, check to see if we already have it */
 	struct hashEl *hel;
+        verbose(3,"pruneRelease: adding '%s', release: '%s'\n", tdb->track, rel);
 	if ((hel = hashLookup(haveHash, tdb->track)) != NULL)
 	    errAbort("found two copies of table %s: one with release %s, the other %s\n",
 		tdb->track, (char *)hel->val, release);
-
 	hashAdd(haveHash, tdb->track, rel);
 	hashRemove(tdb->settingsHash, "release");
 	slAddHead(&relList, tdb);
@@ -291,9 +292,15 @@ tdbList= pruneRelease(tdbList);
 while ((tdb = slPopHead(&tdbList)) != NULL)
     {
     if (tdb->overrides != NULL)
+    {
+        verbose(3,"# override '%s'\n", tdb->track);
 	applyOverride(trackHash, tdb);
+    }
     else
+    {
+        verbose(3,"# track '%s'\n", tdb->track);
 	hashStore(trackHash, tdb->track)->val = tdb;
+    }
     }
 }
 
@@ -351,6 +358,7 @@ else
     safef(raFile, sizeof(raFile), "%s", raName);
 if (fileExists(raFile))
     {
+    verbose(3,"# reading '%s'\n", raFile);
     addVersionRa(strict, database, dir, raFile, trackHash);
     }
 else
@@ -450,7 +458,7 @@ char* val = (char*)el->val;
 /* Only some attribute support variable substitution, at least for now
  * Just leak memory when doing substitution.
  */
-if (sameString(el->name, "bigDataUrl"))
+if (sameString(el->name, "bigDataUrl") || sameString(el->name, "searchTrix"))
     {
     val = replaceChars(val, "$D", database);
     }

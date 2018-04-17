@@ -24,6 +24,7 @@ var TextInput = React.createClass({
     onBlur: function(e) {
         // When user is done changing the input, notify model.
         var newValue = e.target.value.trim();
+        newValue = newValue.replace(/\u2013|\u2014/g, '-');
         if (newValue !== this.props.value) {
             this.props.update(this.props.path, newValue);
         }

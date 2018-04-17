@@ -1,8 +1,12 @@
 lab lab_1
+i.1.core.2.id	88
 assay RNA-seq
 access all
 organ brain
 user_kent_note foo on you
+contributor.1.id 1234
+1.id 8
+2.id 9
 
     donor 000
     age 5
@@ -10,6 +14,7 @@ user_kent_note foo on you
     life_stage embryo
     sex male,female
     biosample_date 2015-01-00
+    contributor.1.name Johanna
 
         organ brain
         lab_kent_disassociation_protocol fetal_brain_digest.pdf
@@ -92,6 +97,12 @@ lab lab_2
 assay RNA-seq
 access all
 organ brain
+contributor.1.id 2
+contributor.1.name Jeremy
+contributor.2.id 3
+contributor.2.name Sam
+1.id 8
+1.title Really no id here
 
     donor 000
     age 5
@@ -103,6 +114,7 @@ organ brain
         organ brain
         lab_kent_disassociation_protocol fetal_brain_digest.pdf
         lab_kent_quality 0
+	i.1.core.1.id	89
 
             file ex01do00or00fa00.fq.gz
             format fastq
@@ -121,6 +133,7 @@ organ brain
             part 4
 
         organ liver
+	i.1.core.1.id	99
         lab_kent_disassociation_protocol fetal_liver_digest.pdf
         lab_kent_quality 0.01
 
@@ -141,6 +154,7 @@ organ brain
             part 4
 
         organ liver
+	i.1.core.1.id	99.1
         lab_kent_disassociation_protocol fetal_liver_digest.pdf
         lab_kent_quality 0.04
 

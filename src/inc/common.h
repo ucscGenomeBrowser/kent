@@ -548,7 +548,7 @@ boolean slNameInListUseCase(struct slName *list, char *string);
 
 void *slNameFind(void *list, char *string);
 /* Return first element of slName list (or any other list starting
- * with next/name fields) that matches string. */
+ * with next/name fields) that matches string. This is case insensitive. */
 
 int slNameFindIx(struct slName *list, char *string);
 /* Return index of first element of slName list (or any other
@@ -646,6 +646,10 @@ void slPairFreeVals(struct slPair *list);
 
 void slPairFreeValsAndList(struct slPair **pList);
 /* Free up all values on list and list itself */
+
+void slPairFreeValsAndListExt(struct slPair **pList, void (*freeFunc)());
+/* Free up all values on list using freeFunc and list itself.  freeFunc should take a simple
+ * pointer to free an item, and can be NULL. */
 
 struct slPair *slPairFind(struct slPair *list, char *name);
 /* Return list element of given name, or NULL if not found. */
@@ -779,6 +783,9 @@ int differentStringNullOk(char *a, char *b);
 
 #define isEmpty(string) ((string) == NULL || (string)[0] == 0)
 #define isNotEmpty(string) (! isEmpty(string))
+
+boolean isEmptyTextField(char *s);
+/* Recognize empty string or dot as empty text */
 
 int cmpStringsWithEmbeddedNumbers(const char *a, const char *b);
 /* Compare strings such as gene names that may have embedded numbers,

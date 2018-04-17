@@ -97,7 +97,7 @@ struct hash *hash = newHash(6);
 sr = sqlGetResult(conn, versionQuery);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    struct wgEncodeGencodeAttrs *wga = wgEncodeGencodeAttrsLoad(row);
+    struct wgEncodeGencodeAttrs *wga = wgEncodeGencodeAttrsLoad(row, sqlCountColumns(sr));
     hashAdd(hash, wga->transcriptId, wga);
     }
 sqlFreeResult(&sr);

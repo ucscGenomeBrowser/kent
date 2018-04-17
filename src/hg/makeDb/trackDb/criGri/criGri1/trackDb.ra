@@ -1,4 +1,4 @@
-include trackDb.chainNet.ra
+include trackDb.chainNet.ra alpha,beta
 
 # Local declaration so that local gold.html is picked up.
 track gold override
@@ -7,6 +7,7 @@ html gold
 # Local declaration so that local crispr.html is picked up.
 track crispr override
 html crispr
+scoreFilterLimits 0:100
 
 # Local declaration so that local gap.html is picked up.
 track gap override

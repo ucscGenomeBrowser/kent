@@ -391,6 +391,9 @@ void customMafClick(struct sqlConnection *conn,
 	struct sqlConnection *conn2, struct trackDb *tdb);
 /* handle clicks on a custom maf */
 
+void doBigEncodePeak(struct trackDb *tdb, struct customTrack *cti, char *item);
+/*  details for encodePeak type tracks.  */
+
 void doEncodePeak(struct trackDb *tdb, struct customTrack *cti, char *item);
 /*  details for encodePeak type tracks.  */
 
@@ -491,7 +494,7 @@ int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int 
 // sr may be null for bigBeds.
 // Returns number of extra fields actually printed.
 
-#define NUCCORE_SEARCH "http://www.ncbi.nlm.nih.gov/sites/entrez?db=nuccore&cmd=search&term="
+#define NUCCORE_SEARCH "https://www.ncbi.nlm.nih.gov/sites/entrez?db=nuccore&cmd=search&term="
 
 void doJRepeat (struct trackDb *tdb, char *repeat);
 /* New RepeatMasker Visualization defined in joinedRmskClick.c */
@@ -501,5 +504,8 @@ INLINE char* strOrNbsp(char* val)
 {
 return isEmpty(val) ? "&nbsp;" : val;
 }
+
+void doInteractDetails(struct trackDb *tdb, char *item);
+/* Details of interaction item */
 
 #endif

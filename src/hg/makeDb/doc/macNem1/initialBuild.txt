@@ -322,6 +322,36 @@ taxId 9545
     hgLoadSqlTab macNem1 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
         macNem1.chromAlias.tab
 
+    # add ensembl names: 2017-12-14
+    mkdir previous
+    mv *.tab previous
+    join -t$'\t' ../idKeys/macNem1.idKeys.txt \
+	../../ensembl/ensemblMacNem1.idKeys.txt \
+	| cut -f2,3 | sort > ucsc.ensembl.tab
+
+   cut -f1,2 previous/ucsc.refseq.tab | sort > ucsc.refseq.tab
+   cut -f1,2 previous/ucsc.genbank.tab | sort > ucsc.genbank.tab
+
+   ~/kent/src/hg/utils/automation/chromAlias.pl
+   sort -o macNem1.chromAlias.tab macNem1.chromAlias.tab
+
+for t in refseq genbank ensembl
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t macNem1.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking refseq: 9734 =? 9734 OK
+# checking genbank: 9734 =? 9734 OK
+# checking ensembl: 9733 =? 9733 OK
+
+    hgLoadSqlTab macNem1 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        macNem1.chromAlias.tab
+
 #########################################################################
 # fixup search rule for assembly track/gold table (DONE - 2017-02-23 - Hiram)
     cd ~/kent/src/hg/makeDb/trackDb/macaca/macNem1
@@ -706,14 +736,14 @@ macNem1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDna
     #    enrich 14.68x
 
 #########################################################################
-#  BLATSERVERS ENTRY (TBD - 2017-01-17 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2017-11-17 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("macNem1", "blat1d", "17878", "1", "0"); \
+	VALUES ("macNem1", "blat1a", "17884", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("macNem1", "blat1d", "17879", "0", "1");' \
+	VALUES ("macNem1", "blat1a", "17885", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 

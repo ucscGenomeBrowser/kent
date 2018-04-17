@@ -1,0 +1,79 @@
+track cons6way
+compositeTrack on
+shortLabel Conservation
+longLabel Multiz Alignment & Conservation (6 nematodes)
+subGroup1 view Views align=Multiz_Alignments  phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+dragAndDrop subTracks
+visibility full
+priority 104.2
+type bed 4
+group compGeno
+html multiz6way
+
+    track cons6wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons6way
+
+        track multiz6way
+        subTrack cons6wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Alignments of 6 Nematodes
+        subGroups view=align
+        noInherit on
+        summary multiz6waySummary
+#        frames multiz6wayFrames
+#        irows on
+        color 0, 10, 100
+        altColor 0,90,10
+        type wigMaf 0.0 1.0
+        speciesCodonDefault ce6
+        speciesGroups Nematode
+        sGroup_Nematode caeRem3 cb3 caePb2 caeJap1 priPac1
+        itemFirstCharCase noChange
+        treeImage phylo/ce6_6way.gif
+        priority 100
+
+    # phastCons conservation
+    track cons6wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility full
+    subTrack cons6way
+
+
+        track phastCons6way
+        subTrack cons6wayViewphastcons on
+        subGroups view=phastcons
+        shortLabel 6 Nematode Cons
+        longLabel 6 nematode conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 70,130,70
+        altColor 130,70,70
+        priority 13
+
+    # Conserved Elements (Most Conserved)
+    track cons6wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility dense
+    subTrack cons6way
+
+        track phastConsElements6way
+        subTrack cons6wayViewelements on
+        subGroups view=elements
+        shortLabel 6 nematode El
+        longLabel 6 nematode Conserved Elements
+        noInherit on
+        color 110,10,40
+        type bed 5 .
+        priority 23
+        html phastConsElements6way

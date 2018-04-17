@@ -1,0 +1,11 @@
+##fileformat=VCFv4.2
+##reference=hg38
+##source=hgvsToVcf hg38 stdin
+##FILTER=<ID=HgvsRefAssertedMismatch,Description="Asserted reference sequence in HGVS term does not match actual reference sequence">
+##FILTER=<ID=HgvsRefGenomicMismatch,Description="HGVS reference sequence does not match genomic sequence; HGVS reference sequence is included in ALT">
+##INFO=<ID=DupToIns,Number=0,Type=Flag,Description="HGVS dup (duplication) was converted to insertion">
+##INFO=<ID=BasesShifted,Number=1,Type=Integer,Description="Position of HGVS variant was shifted this number of bases to the left">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+chr1	156134875	NM_005572.3:c.711_734delinsCCCC	TTGAGAGCCGGCTGGCGGATGCGCT	TCCCC	.	PASS	END=156134899
+chr11	64727300	NM_001098671:c.1828_1831del	TATTA	T	.	PASS	END=64727304
+chr11	64727304	NM_001098671:c.1828T>A	A	T	.	PASS	.

@@ -1,5 +1,5 @@
 
-include ../../refSeqComposite.ra alpha
+include ../../refSeqComposite.ra
 
 # chainNet tracks
 include trackDb.gliresChainNet.ra
@@ -34,7 +34,7 @@ visibility hide
 colorByStrand 150,100,30 100,50,0
 type bed 6
 urlLabel NCBI Nucleotide:
-url http://www.ncbi.nlm.nih.gov/nuccore/$$
+url https://www.ncbi.nlm.nih.gov/nuccore/$$
 
 # different type of gold search here so the fragments can be found with
 #	or without their trailing .1
@@ -347,26 +347,7 @@ pennantIcon 9.jpg ../goldenPath/help/liftOver.html "These data were converted vi
 track rmskJoinedBaseline override
 group varRep
 
-# GENCODE
-track wgEncodeGencodeSuper
-superTrack on show
-group genes
-shortLabel GENCODE (Ensembl)
-longLabel GENCODE Gene Annotations (Ensembl)
-priority 2
-
-# doen't set wgEncode attribute here, since newer GENCODEs are not ENCODE
-include wgEncodeGencodeVM2.ra
-include wgEncodeGencodeVM3.ra
-include wgEncodeGencodeVM4.ra
-include wgEncodeGencodeVM7.ra
-include wgEncodeGencodeVM8.ra
-include wgEncodeGencodeVM9.ra
-include wgEncodeGencodeVM10.ra
-include wgEncodeGencodeVM11.ra
-include wgEncodeGencodeVM12.ra
-include wgEncodeGencodeVM13.ra
-include wgEncodeGencodeVM14.ra
+include trackDb.gencode.ra
 
 include defaultPriority.ra
 
@@ -411,3 +392,7 @@ priority 16
 track windowmaskerSdust override
 group varRep
 priority 17
+
+track spMut override
+group pub
+bigDataUrl /gbdb/$D/uniprot/unipMut.bb

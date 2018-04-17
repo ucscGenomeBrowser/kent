@@ -162,7 +162,8 @@ for (i = 0;  i < termCount;  i++)
     if (hgp == NULL || hgp->posCount == 0)
 	{
 	jsonWriteStringf(jw, "error",
-			 "Sorry, couldn't locate %s in genome database", htmlEncode(terms[i]));
+			 "Sorry, couldn't locate %s in %s %s", htmlEncode(terms[i]),
+                         trackHubSkipHubName(hOrganism(db)), hFreezeDate(db));
 	if (multiTerm)
 	    jsonWriteStringf(jw, "error",
 			     "%s not uniquely determined -- can't do multi-position search.",
@@ -282,10 +283,7 @@ for (var = varList;  var != NULL;  var = var->next)
 	{
 	// Regular single-value variable (or not in the cart):
 	char *val = cartOptionalString(cj->cart, var->name);
-	//#*** TODO: move jsonStringEscape inside jsonWriteString
-	char *encoded = jsonStringEscape(val);
-	jsonWriteString(cj->jw, var->name, encoded);
-	freeMem(encoded);
+	jsonWriteString(cj->jw, var->name, val);
 	}
     }
 slFreeList(&varList);
@@ -331,11 +329,7 @@ if (tdb->settingsHash)
     while ((hel = hashNext(&cookie)) != NULL)
         {
         if (! nameIsTdbField(hel->name) && fieldOk(hel->name, fieldHash))
-            {
-            //#*** TODO: move jsonStringEscape inside jsonWriteString
-            char *encoded = jsonStringEscape((char *)hel->val);
-            jsonWriteString(jw, hel->name, encoded);
-            }
+            jsonWriteString(jw, hel->name, (char *)hel->val);
         }
     if (fieldOk("noGenome", fieldHash))
         {
@@ -618,8 +612,7 @@ jsonWriteString(cj->jw, "db", db);
 jsonWriteString(cj->jw, "commonName", hGenome(db));
 jsonWriteString(cj->jw, "scientificName", hScientificName(db));
 jsonWriteString(cj->jw, "dbLabel", hFreezeDate(db));
-//#*** TODO: move jsonStringEscape inside jsonWriteString
-jsonWriteString(cj->jw, "assemblyDescription", jsonStringEscape(hAssemblyDescription(db)));
+jsonWriteString(cj->jw, "assemblyDescription", hAssemblyDescription(db));
 }
 
 static void getHasCustomTracks(struct cartJson *cj, struct hash *paramHash)
@@ -742,9 +735,7 @@ if (isEmpty(tag))
     tag = "html";
 char *file = cartJsonRequiredParam(paramHash, "file", cj->jw, "getStaticHtml");
 char *html = hFileContentsOrWarning(file);
-//#*** TODO: move jsonStringEscape inside jsonWriteString
-char *encoded = jsonStringEscape(html);
-jsonWriteString(cj->jw, tag, encoded);
+jsonWriteString(cj->jw, tag, html);
 }
 
 void cartJsonRegisterHandler(struct cartJson *cj, char *command, CartJsonHandler *handler)
@@ -832,12 +823,7 @@ static void cartJsonPrintWarnings(struct jsonWrite *jw)
 /* If there are warnings, write them out as JSON: */
 {
 if (dyWarn && dyStringLen(dyWarn) > 0)
-    {
-    //#*** TODO: move jsonStringEscape inside jsonWriteString
-    char *encoded = jsonStringEscape(dyWarn->string);
-    jsonWriteString(jw, "warning", encoded);
-    freeMem(encoded);
-    }
+    jsonWriteString(jw, "warning", dyWarn->string);
 }
 
 static void cartJsonAbort()
@@ -900,9 +886,7 @@ if (commandJson)
     if (errCatch->gotError)
         {
         jsonWritePopToLevel(cj->jw, 1);
-        //#*** TODO: move jsonStringEscape inside jsonWriteString
-        char *encoded = jsonStringEscape(errCatch->message->string);
-        jsonWriteString(cj->jw, "error", encoded);
+        jsonWriteString(cj->jw, "error", errCatch->message->string);
         }
     errCatchFree(&errCatch);
     }

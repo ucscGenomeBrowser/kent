@@ -183,7 +183,7 @@ if (list != NULL)
 	hPrintf("<TD>");
 	hPrintf("<A HREF=\"http://www.rcsb.org/pdb/cgi/explore.cgi?pdbId=%s\" TARGET=_blank>", row[0]);
 	if (rowCount < 1)
-	    hPrintf("<IMG SRC=\"http://www.rcsb.org/pdb/images/%s_asym_r_250.jpe\"><BR>", row[0]);
+	    hPrintf("<IMG SRC=\"http://www.rcsb.org/pdb/images/%s_asym_r_250.jpg\"><BR>", row[0]);
         hPrintf("%s</A> - %s ", row[0], row[1]);
         // include links LS-SNP and to launch viewer in PDB chimera
         struct tempName chimerax;

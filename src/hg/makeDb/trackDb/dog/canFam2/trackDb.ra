@@ -1,3 +1,4 @@
+include trackDb.4way.ra
 include trackDb.chainNet.ra
 
 track quality override
@@ -41,32 +42,6 @@ longLabel Human(hg17) proteins mapped by chained tBLASTn
 priority 51
 pred hg17.blastKGPep02
 blastRef hg17.blastKGRef02
-
-track multiz4way
-shortLabel Conservation
-longLabel Dog/Human/Mouse/Rat Multiz Alignments & phastCons Scores
-group compGeno
-priority 105.1
-visibility pack
-type wigMaf 0.0 1.0
-maxHeightPixels 100:40:11
-wiggle phastCons4way
-yLineOnOff Off
-autoScale Off
-windowingFunction mean
-summary multiz4waySummary
-speciesOrder hg17 mm6 rn3
-treeImage phylo/canFam2_4way.gif
-
-track phastConsElements4way
-shortLabel Most Conserved
-longLabel PhastCons Conserved Elements (Dog/Human/Mouse/Rat)
-group compGeno
-priority 105.2
-visibility hide
-exonArrows off
-showTopScorers 200
-type bed 5 .
 
 track uncertified
 shortLabel Uncertified

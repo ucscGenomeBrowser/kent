@@ -1,6 +1,24 @@
 # for emacs: -*- mode: sh; -*-
 
-# This file describes the construction of NCBI RefSeq track
+# This file describes the construction of NCBI RefSeq track -- latest first
+
+#########################################################################
+# ncbiRefSeq.p11 Genes (DONE - 2018-01-09 - Angie)
+# Previously done 2017-09-28; redone 11-16 to include mito "rna" from chrM genomic seq;
+# redone 2018-01-09 to pick up changes in NCBI download files from 2017-12-22
+    mkdir /hive/data/genomes/hg38/bed/ncbiRefSeq.p11.2018-01-09
+    cd /hive/data/genomes/hg38/bed/ncbiRefSeq.p11.2018-01-09
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      refseq vertebrate_mammalian Homo_sapiens \
+      GCF_000001405.37_GRCh38.p11 hg38) > do.log 2>&1 & tail -f do.log
+    # *** All done !  Elapsed time: 23m51s
+    # real    23m51.091s
+
+    cat fb.ncbiRefSeq.hg38.txt
+    # 129593530 bases of 3049335806 (4.250%) in intersection
+
+#########################################################################
 
 #########################################################################
 # ncbiRefSeq.p8 Genes (DONE - 2016-08-18 - Hiram)

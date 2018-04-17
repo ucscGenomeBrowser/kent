@@ -350,7 +350,7 @@
     <P>The setting is either the full URL (including <code>http:</code> or another protocol)
     or it is relative to the directory in which the trackDb file containing this setting
     is located.  The file must be in one of
-    the supported remote data file formats: bam/cram, bigBarChart, bigBed, bigChain, bigMaf, bigPsl, bigGenePred,  bigWig or
+    the supported remote data file formats: bam/cram, bigBarChart, bigBed, bigChain, bigMaf, bigPsl, bigGenePred, bigNarrowPeak, bigWig or
     vcfTabix.  Note that bam/cram and vcfTabix types require a separate
     index file that must have the same name as the data file plus a
     standard suffix (".bai" and ".tbi" respectively), unless <A
@@ -358,7 +358,7 @@
     All occurrences of the  string <code>$D</code> in the URL will be
     substituted with the genome assembly database name.  This allows a
     trackDb entry to be used with for multiple assemblies.  <code>$D</code>
-    substitution is not implement for track hubs.
+    substitution is not implemented for track hubs.
 
     </P> <P><B>Example:</B></P>
     <pre>   bigDataUrl http://vizhub.wustl.edu/VizHub/hg19/biBrainH3K4me1.bb</pre>
@@ -477,7 +477,9 @@
     useful to declare the current version of the track.  Use
     this setting to display a version statement on the track
     configuration page and item details page of a track.  The string
-    will support limited HTML.</P>
+    will support limited HTML. For native tracks, not track hubs, 
+    this setting can also be a local absolute filename to read the version 
+    string from.</P>
     <P><B>Example:</B></P>
     <pre>   dataVersion May 2011 &lt;em&gt;beta&lt;/em&gt;</pre>
 </DIV>
@@ -552,7 +554,7 @@
 
     <P><B>Examples:</B></P>
     <pre>
-    iframeUrl http://www.ncbi.nlm.nih.gov/nuccore/$$
+    iframeUrl https://www.ncbi.nlm.nih.gov/nuccore/$$
     iframeOptions height='600' width='1024'</pre>
 </DIV>
 
@@ -649,22 +651,25 @@
 </DIV>
 
 <DIV class="pennantIcon"><span class="types all"></span>
-<div class="format"><code>pennantIcon &lt;icon&gt; [html [tip]]</code></div>
-    <P>Certain tracks can be visually flagged in the Browser by use of an icon and
-    a link to a description of the icon's meaning.  The icon is displayed next to the track's
+<div class="format"><code>pennantIcon &lt;iconFile&gt;/&lt;text color&gt; [html [tip]]</code></div>
+    <P>Certain tracks can be visually flagged in the Browser menu by use of an icon or text label 
+    and a link to a description of the flags meaning.  The icon is displayed next to the track's
     short label in the track groups section below the Browser image, and on the track's 
     description and configuration pages.
     This setting has three parts:</P>
     <UL>
     <LI>icon -  Can be fully qualified URL (http, https, ftp) to an image file,  or the name of an image in the Browser's images directory in the 
     Browser source tree.</LI>
+    <LI>text - A single word label. Case is ignored; the label is displayed capitalized lower case.</LI>
+    <LI>color - An HTML color name to color the text label</LI>
     <LI>html - A relative or full html path to a description document explaining the
     icon's meaning.  This page displays when the user clicks on the icon.</LI>
-    <LI>Tip - A "quoted string" tip that will be seen
+    <LI>tip - A "quoted string" tip that will be seen
     when the user's mouse pointer hovers over the icon.</LI>
     </UL>
-    <P><B>Example:</B></P>
+    <P><B>Examples:</B></P>
     <pre>    pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"</pre>
+    <pre>    pennantIcon New red ../goldenPath/releaseLog.html "Released October 19, 2017"</pre>
 </DIV>
 
 <DIV class="priority"><span class="types all"></span>
@@ -781,7 +786,7 @@
     the obscure setting for them. -->
     <P><B>Example:</B></P>
     <pre>
-    url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&amp;db=n&amp;term=$$
+    url https://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&amp;db=n&amp;term=$$
     urlLabel NCBI Details:
     idInUrlSql select name from sibTxGraph where id=%s    </pre>
 </DIV>
@@ -819,7 +824,7 @@
     </P>
     <P><B>Example:</B></P>
     <pre>
-    url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&amp;db=n&amp;term=$$
+    url https://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&amp;db=n&amp;term=$$
     urlLabel NCBI Details:    </pre>
 </DIV>
 
@@ -846,16 +851,16 @@
     replace the $$ wildcard and the part after it as the label. This is similar
     to how Wikpedia markup encodes links. In the example below, a value for the
     field pmid of "115330|Doe, J. et al" would create a link with the URL
-    http://www.ncbi.nlm.nih.gov/pubmed/115330 and the label "Doe, J. et al" .
+    https://www.ncbi.nlm.nih.gov/pubmed/115330 and the label "Doe, J. et al" .
     </P>
 
     <P><B>Example:</B></P>
     <pre>
-    urls pmid="http://www.ncbi.nlm.nih.gov/pubmed/$$" spId="http://www.uniprot.org/uniprot/$$"
+    urls pmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" spId="http://www.uniprot.org/uniprot/$$"
     </pre>
 </DIV>
 
-<DIV class="skipEmptyFields"><span class="types bigBed bigPsl bigGenePred bigMaf bigChain"></span>
+<DIV class="skipEmptyFields"><span class="types bigBed bigPsl bigGenePred bigNarrowPeak bigMaf bigChain"></span>
     <div class="format">
         <code>skipEmptyFields on</code><BR>
     </div>
@@ -865,7 +870,7 @@
     fields but only few of them have a value.</P> 
 </DIV>
 
-<DIV class="skipFields"><span class="types bigBed bigPsl bigGenePred bigMaf bigChain"></span>
+<DIV class="skipFields"><span class="types bigBed bigPsl bigGenePred bigNarrowPeak bigMaf bigChain"></span>
     <div class="format">
         <code>skipFields &lt;fieldName1&gt;="&lt;url1&gt;" &lt;fieldName2&gt;="&lt;url2&gt;" ...</code><BR>
     </div>
@@ -879,7 +884,7 @@
     </pre>
 </DIV>
 
-<DIV class="sepFields"><span class="types bigBed bigPsl bigGenePred bigMaf bigChain"></span>
+<DIV class="sepFields"><span class="types bigBed bigPsl bigGenePred bigNarrowPeak bigMaf bigChain"></span>
     <div class="format">
         <code>sepFields &lt;fieldName1&gt;="&lt;url1&gt;" &lt;fieldName2&gt;="&lt;url2&gt;" ...</code><BR>
     </div>
@@ -972,6 +977,16 @@
     <A HREF="../bigGenePred.html">bigGenePred help page</A>.</P>
 </DIV>
 
+<DIV class="bigNarrowPeak_intro">
+<H3>bigNarrowPeak: Peaks</H3>
+    <P>
+    The bigNarrowPeak format stores peaks over a range with a single basepair central peak. bigNarrowPeak files are based on the bigBed format.  The first six fields are the same as bed.  The other four include three scores, and the base-pair offset of the central peak.
+
+    bigNarrowPeak files are created using the program bedToBigBed with a special AutoSQL file that defines the fields of the bigNarrowPeak. The resulting bigBed files are in an indexed binary format. The main advantage of the bigBed files is that only portions of the files needed to display a particular region are transferred to UCSC. So for large data sets, bigBed is considerably faster than regular BED files. The bigBed file remains on your web accessible server (http, https, or ftp), not on the UCSC server. Only the portion that is needed for the chromosomal position you are currently viewing is locally cached as a "sparse file".
+    For complete bigNarrowPeak format definitions please see the
+    <A HREF="../bigNarrowPeak.html">bigNarrowPeak help page</A>.</P>
+</DIV>
+
 <DIV class="bigMaf_intro">
 <H3>bigMaf: Multiple Alignments</H3>
     <P>
@@ -1047,6 +1062,12 @@ There are no extra options that can appear on the type bigPsl line.
 <div class="format">
     <code>type bigChain</code></div>
 There are no extra options that can appear on the type bigChain line.
+</DIV>
+
+<DIV class="bigNarrowPeak"><span class="types bigNarrowPeak"></span>
+<div class="format">
+    <code>type bigNarrowPeak</code></div>
+There are no extra options that can appear on the type bigNarrowPeak line.
 </DIV>
 
 <DIV class="bigGenePred"><span class="types bigGenePred"></span>
@@ -1215,7 +1236,6 @@ There are no extra options that can appear on the type bigBarChart line.
     <code>&lt;column&gt;FilterLimits &lt;low&gt;[:&lt;high&gt;]</code><BR>
     <code>&lt;column&gt;FilterByRange &lt;off/on&gt;</code>
     </div>
-    <P><I>NOT FOR HUBS.  Not yet supported by bigBeds</I></P>
     <P>A number of
     numerical filters are available for bed tracks.  These are
     conveniently named by the field that is filtered on.  The most
@@ -1514,8 +1534,7 @@ There are no extra options that can appear on the type bigBarChart line.
     <pre>
     spectrum on
     scoreMin 700
-    scoreMax 900
-    color 0,0,128    </pre>
+    scoreMax 900</pre>
     <P>In this example, the track description will be
     displayed in blue, but the track will remain a gray scale.
     Items with scores less than or equal to 700 will be shown in very
@@ -1533,6 +1552,8 @@ There are no extra options that can appear on the type bigBarChart line.
     browser, or if there are more than one matches of that string, 
     will be give a list of the positions to choose from. See <A HREF="../bigBed.html#Ex3">HERE</A>
     for instructions on how to build an index for a bigBed file.
+    <b>Note:</b> The searchIndex setting currently does not work if
+    tracks are nested in composites.
     <P><B>Example:</B></P>
     <pre>   searchIndex name</pre>
 </DIV>
@@ -1596,7 +1617,7 @@ There are no extra options that can appear on the type bigBarChart line.
     <pre>   bedNameLabel Gene Id</pre>
 </DIV>
 
-<DIV class="scoreLabel"><span class="types bed bigBed bigPsl bigGenePred"></span>
+<DIV class="scoreLabel"><span class="types bed bigBed bigPsl bigGenePred bigNarrowPeak"></span>
 <div class="format"><code>scoreLabel &lt;label&gt;</code></div>
     <P>When a user clicks on a track item in the Browser image, 
     the item detail page is shown. This setting specifies an 
@@ -2488,7 +2509,7 @@ There are no extra options that can appear on the type bigBarChart line.
     classes.  Note the base level coloring option.</P>
     <pre>
     type genePred . mrna
-    url http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=hg17&amp;l=$$
+    url https://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=hg17&amp;l=$$
     urlLabel AceView Gene Summary:    </pre>
     <P>This gene prediction
     track has associated representative mRNAs found in the "mrna"
@@ -2706,6 +2727,20 @@ There are no extra options that can appear on the type bigBarChart line.
     <P><B>Example:</B></P>
     <pre>   showNames off</pre>
 </DIV>
+
+<div class="doWiggle"><span class="types bam"></span>
+<div class="format"><code>doWiggle on</code></div>
+    <p>The doWiggle setting enables the BAM data to be displayed as a bar graph where the
+    height is proportional to the number of reads mapped to each genomic position. Through
+    dynamic calculation of items in the current window, this feature plots a line similar
+    to a wiggle graph that can be customized with a number of graph-based configuration options
+    such as drawing indicator lines, smoothing plots, adjusting graph height and vertical range,
+    and switching from bars to points. Please note that the feature is best displayed with
+    &quot;Display mode&quot; set to full and that the default &quot;Data view scaling&quot;
+    is &quot;auto-scale to data view.&quot;</p>
+    <p><b>Example:</b></p>
+    <pre>   doWiggle on</pre>
+</div>
 
 <DIV class="bam_example"><span class="types bam"></span>
 <div class="format"><B>Example of a bam track</B></div>
@@ -3461,7 +3496,7 @@ There are no extra options that can appear on the type bigBarChart line.
     <P><I>NOT FOR HUBS.  Nor are any of the settings in this section.</I></P>
     <P>This particular variant of bed 6, identified by table name,
     is for UCSC's subset of
-    <A HREF="http://www.ncbi.nlm.nih.gov/projects/SNP/" TARGET=_BLANK>dbSNP</A>,
+    <A HREF="https://www.ncbi.nlm.nih.gov/projects/SNP/" TARGET=_BLANK>dbSNP</A>,
     NCBI's database of short genetic variants.</P>
 </DIV>
 
@@ -3595,7 +3630,7 @@ There are no extra options that can appear on the type bigBarChart line.
     group varRep
     priority 99.0911
     visibility dense
-    url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+    url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
     urlLabel dbSNP: 
     snpSeq snp135Seq
     snpExceptionDesc snp135ExceptionDesc
@@ -3678,19 +3713,19 @@ There are no extra options that can appear on the type bigBarChart line.
     </P>
 </DIV>
 
-<DIV class="labelFields"><span class="types bigBarChart bigBed bigGenePred bigPsl"></span>
+<DIV class="labelFields"><span class="types bigBarChart bigBed bigGenePred bigNarrowPeak bigPsl"></span>
 <div class="format"><code>labelFields &lt;<EM>fieldName[,fieldName]</EM>&gt;</code></div>
     <P>A list of fields from the bigBed based file that can be used as a label. The special value <B>none</B> can be specified if no labels are desired.
     </P>
 </DIV>
 
-<DIV class="defaultLabelFields"><span class="types bigBarChart bigBed bigGenePred bigPsl"></span>
+<DIV class="defaultLabelFields"><span class="types bigBarChart bigBed bigGenePred bigNarrowPeak bigPsl"></span>
 <div class="format"><code>defaultLabelFields &lt;<EM>fieldName[,fieldName]</EM>&gt;</code></div>
     <P>A list of fields from the bigBed based file that should be used as a label by default.  Only applicable if <B>labelFields</B> is set.  If <B>defaultLabelFields</B> is not specified, the first field in labelFields is used as the default. The special value <B>none</B> can be specified if no label should be the default.
     </P>
 </DIV>
 
-<DIV class="labelSeparator"><span class="types bigBed bigGenePred bigPsl"></span>
+<DIV class="labelSeparator"><span class="types bigBed bigGenePred bigNarrowPeak bigPsl"></span>
 <div class="format"><code>labelSeparator &lt;<EM>text</EM>&gt;</code></div>
     <P>One or more characters to use as the field separator between multiple labels.  A slash (/) by default, this string can have double quotes around it if it should have white spaces in it.
     </P>
@@ -3869,7 +3904,7 @@ There are no extra options that can appear on the type bigBarChart line.
     track microattrLoci
     type bedDetail 14
     itemRgb on
-    url http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=nucleotide&amp;sendto=t&amp;extrafeatpresent=1&amp;list_uids=$$
+    url https://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=nucleotide&amp;sendto=t&amp;extrafeatpresent=1&amp;list_uids=$$
       ...    </pre>
     <P>This bedDetail contains details for each item
     formatted for HTML display.  In addition each item has an "id" as
@@ -4448,7 +4483,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
 <div class="format"><B>Example of a Supertrack</B></div>
     <pre>
     track myFolder
-    superTrack on
+    superTrack on show
     group regulation
     shortLabel My Folder
     longLabel My folder keeps my tracks together
@@ -4466,7 +4501,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     <P>The supertrack called "My Folder"
     contains two children.  All will be grouped under 
     "regulation".  Notice that the first track is visible by
-    default (if the supertrack itself is visible), but the second
+    default (if the supertrack itself is visible by adding &quot;show&quot;), but the second
     track is not.</P>
 </DIV>
 
@@ -4670,7 +4705,8 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     "abc") can be declared with this setting as dimA, dimB, etc.</P>  
     <P>Note that the order of the subgroups in a dimension is exactly the same as 
     the order they appear in the <code>subGroup#</code> setting, regardless of whether
-    the subtrack list is sorted by tags.</P>
+    the subtrack list is sorted by tags. Please also note that if a hub is not going to use
+    the X,Y matrix, dimX should be the first dimension defined rather than dimA.</P>
 </DIV>
 
 <DIV class="filterComposite"><span class="types subGroups"></span>
@@ -4691,7 +4727,8 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     adding the "<code>=one</code>" option to the filter box definition.
     This might make sense when there are only 2 choices.  The choice
     of "all" is always available, while choosing nothing is an invalid
-    case.</P>
+    case. Please note that if a hub is not going to use the X,Y matrix,
+    then dimX should be the first dimension defined rather than dimA.</P>
 </DIV>
 
 <DIV class="dimensionAchecked"><span class="types subGroups"></span>
@@ -4769,7 +4806,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     compositeTrack on
     subGroup1 cellLine Cell_Line \
             A1GM12=GM12878 \
-            CD14=CD14&amp;#43; &hellip;
+            CD14=CD14+ &hellip;
     subGroup2 ab Antibody \
             H3K04ME3=H3K4me3 \
             H3K36ME3=H3K36me3 &hellip;
@@ -4799,7 +4836,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     compositeTrack on
     subGroup1 cellLine Cell_Line \
             A1GM12=GM12878 \
-            CD14=CD14&amp;#43; &hellip;
+            CD14=CD14+ &hellip;
     subGroup2 ab Antibody \
             H3K04ME3=H3K4me3 \
             H3K36ME3=H3K36me3 &hellip;
@@ -4873,7 +4910,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     compositeTrack on
     subGroup1 cellLine Cell_Line \
             A1GM12=GM12878 \
-            CD14=CD14&amp;#43; &hellip;
+            CD14=CD14+ &hellip;
     subGroup2 ab Antibody \
             H3K04ME3=H3K4me3 \
             H3K36ME3=H3K36me3 &hellip;
@@ -4903,7 +4940,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     compositeTrack on
     subGroup1 cellLine Cell_Line \
             A1GM12=GM12878 \
-            CD14=CD14&amp;#43; &hellip;
+            CD14=CD14+ &hellip;
     subGroup2 ab Antibody \
             H3K04ME3=H3K4me3 \
             H3K36ME3=H3K36me3 &hellip;
@@ -5059,7 +5096,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     subGroup1 view Views PK=Peaks SIG=Signals
     subGroup2 cell Cell_Line \
             A1GM12=GM12878 \
-            CD14=CD14&amp;#43; &hellip;
+            CD14=CD14+ &hellip;
     subGroup3 ab Antibody \
             H3K04ME3=H3K4me3 \
             H3K36ME3=H3K36me3 &hellip;

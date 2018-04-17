@@ -357,10 +357,16 @@ void sqlCopyTable(struct sqlConnection *sc, char *table1, char *table2);
 void sqlDropTable(struct sqlConnection *sc, char *table);
 /* Drop table if it exists. */
 
+void sqlGetLockWithTimeout(struct sqlConnection *sc, char *name, int wait);
+/* Tries to get an advisory lock on the process, waiting for wait seconds. */
+/* Blocks another client from obtaining a lock with the same name. */
+
 void sqlGetLock(struct sqlConnection *sc, char *name);
-/* Sets an advisory lock on the process for 1000s returns 1 if successful,*/
-/* 0 if name already locked or NULL if error occurred */
-/* blocks another client from obtaining a lock with the same name */
+/* Gets an advisory lock created by GET_LOCK in sqlGetLock. Waits up to 1000 seconds. */
+
+boolean sqlIsLocked(struct sqlConnection *sc, char *name);
+/* Tests if an advisory lock on the given name has been set. 
+ * Returns true if lock has been set, otherwise returns false. */
 
 void sqlReleaseLock(struct sqlConnection *sc, char *name);
 /* Releases an advisory lock created by GET_LOCK in sqlGetLock */
@@ -686,17 +692,20 @@ __attribute__((format(printf, 3, 4)))
 void vaSqlDyStringPrintfExt(struct dyString *ds, boolean isFrag, char *format, va_list args);
 /* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.  
- * NOSLQINJ tag is added to beginning if it is a new empty string and isFrag is FALSE. */
+ * NOSLQINJ tag is added to beginning if it is a new empty string and isFrag is FALSE.
+ * Appends to existing string. */
 
 void vaSqlDyStringPrintf(struct dyString *ds, char *format, va_list args);
 /* Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.  
- * NOSLQINJ tag is added to beginning if it is a new empty string. */
+ * NOSLQINJ tag is added to beginning if it is a new empty string.
+ * Appends to existing string. */
 
 void sqlDyStringPrintf(struct dyString *ds, char *format, ...)
 /* Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.  
- * NOSLQINJ tag is added to beginning if it is a new empty string. */
+ * NOSLQINJ tag is added to beginning if it is a new empty string.
+ * Appends to existing string. */
 #ifdef __GNUC__
 __attribute__((format(printf, 2, 3)))
 #endif
@@ -706,23 +715,19 @@ void vaSqlDyStringPrintfFrag(struct dyString *ds, char *format, va_list args);
 /* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.
  * NOSLQINJ tag is NOT added to beginning since it is assumed to be just a fragment of
- * the entire sql string. */
+ * the entire sql string. Appends to existing string. */
 
 void sqlDyStringPrintfFrag(struct dyString *ds, char *format, ...)
 /* Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.
  * NOSLQINJ tag is NOT added to beginning since it is assumed to be just a fragment of
- * the entire sql string. */
+ * the entire sql string. Appends to existing string. */
 #ifdef __GNUC__
 __attribute__((format(printf, 2, 3)))
 #endif
 ;
 
 #define NOSQLINJ "NOSQLINJ "
-
-void sqlDyStringAppend(struct dyString *ds, char *string);
-/* Append zero terminated string to end of dyString.
- * Adds the NOSQLINJ prefix if dy string is empty. */
 
 struct dyString *sqlDyStringCreate(char *format, ...)
 /* Create a dyString with a printf style initial content
@@ -731,6 +736,12 @@ struct dyString *sqlDyStringCreate(char *format, ...)
 __attribute__((format(printf, 1, 2)))
 #endif
 ;
+
+void sqlDyStringPrintIdList(struct dyString *ds, char *fields);
+/* Append a comma-separated list of field identifiers. Aborts if invalid characters in list. */
+
+void sqlDyStringPrintValuesList(struct dyString *ds, struct slName *values);
+/* Append a comma-separated, quoted and escaped list of values. */
 
 void sqlCheckError(char *format, ...)
 /* A sql injection error has occurred. Check for settings and respond

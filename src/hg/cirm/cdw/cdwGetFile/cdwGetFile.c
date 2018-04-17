@@ -30,6 +30,7 @@ void errExit(char *msg, char *field)
 /* print http header + message and exit. msg can contain %s */
 {
 printf("Content-Type: text/html\n\n");
+puts("ERROR: ");
 if (!field)
     puts(msg);
 else
@@ -78,7 +79,7 @@ void sendFile(char *format, char *filePath, char *suggestFileName)
 /* format is one of "fastq", "fasta", defined in cdw.as. if format is NULL, use file extension. */
 /* send file to user via Apache, using X-Sendfile or stdout, as needed */
 {
-if (format==NULL)
+if (format==NULL || sameWord(format, "unknown"))
 {
     char ext[FILEEXT_LEN];
     splitPath(filePath, NULL, NULL, ext);
@@ -136,7 +137,7 @@ char* filePath = cdwPathForFileId(conn, vf->fileId);
 if (addExt != NULL)
     {
     if (! (sameWord(addExt, ".bai") || sameWord(addExt, ".tbi")))
-        errAbort("The addExt argument to cdwGetFile can only be .bai or .tbi. No other values are allowed.");
+        errAbort("ERROR: The addExt argument to cdwGetFile can only be .bai or .tbi. No other values are allowed.");
     if ((endsWith(filePath, ".vcf") || endsWith(filePath, ".VCF")) && sameWord(addExt, ".tbi"))
         // the .tbi files of .vcf files are actually named .vcf.gz.tbi
         filePath = catTwoStrings(filePath, ".gz.tbi");
@@ -161,6 +162,8 @@ if (useSubmitFname)
 else
     {
     char *formatExt = fileExtFromFormat(vf->format);
+    if (vf->format && sameWord(vf->format, "unknown") && ef && ef->submitFileName && endsWith(ef->submitFileName, ".tar.gz"))
+        formatExt = cloneString(".tar.gz");
     safef(suggestName, sizeof(suggestName), "%s%s%s", vf->licensePlate, formatExt, addExt);
     freez(&formatExt);
     }

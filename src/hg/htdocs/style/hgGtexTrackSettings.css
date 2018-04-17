@@ -46,19 +46,20 @@
     font-size: 12px;
 }
 
+.gbmTissueTableWithSamples {
+    margin-left: 11px;
+}
+
+.gbmTissueSampleCount {
+    text-align: right;
+    font-size: 10px;
+    color: gray;
+}
+
 /* Miscellany -- candidates for generic CSS but still a little rough so keeping here */
 
 .gbInputScore {         /* TODO: add hooks for this to C/JS */
     width: 3em !important;
-}
-
-.gbSectionBanner {
-    padding: 3px;
-    margin-top: 6px;
-    background-color: #4c759c;  /* light blue */
-    color: white;
-    font-weight: bold;
-    font-size: 15px;
 }
 
 .gbSectionInfo {
@@ -67,6 +68,10 @@
     font-size: 13px;
     font-style: italic;
     text-align: right;
+}
+
+.gbPage p {
+    margin-top: 10px;
 }
 
 .gbmCredit {

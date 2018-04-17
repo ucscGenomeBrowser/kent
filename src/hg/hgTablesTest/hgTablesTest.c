@@ -290,13 +290,20 @@ int countNoncommentLines(char *s)
 /* Count number of lines in s that don't start with # */
 {
 int count = 0;
-s = skipLeadingSpaces(s);
+// beware, skipLeadingSpaces skips '\n' (isspace) so it skips blank lines.  Check for '\n' first.
+if (s && *s != '\n')
+    s = skipLeadingSpaces(s);
 while (s != NULL && s[0] != 0)
     {
     if (s[0] != '#')
 	++count;
     s = strchr(s, '\n');
-    s = skipLeadingSpaces(s);
+    if (s != NULL)
+        {
+        s++;
+        if (*s != '\n')
+            s = skipLeadingSpaces(s);
+        }
     }
 return count;
 }
@@ -341,7 +348,10 @@ void checkExpectedSimpleRows(struct htmlPage *outPage, int expectedRows)
 {
 if (outPage != NULL)
     {
-    int rowCount = countNoncommentLines(outPage->htmlText);
+    char *results = outPage->htmlText;
+    if (startsWith(NO_RESULTS, results))
+        results += strlen(NO_RESULTS);
+    int rowCount = countNoncommentLines(results);
     if (rowCount != expectedRows)
 	qaStatusSoftError(tablesTestList->status, 
 		"Got %d rows, expected %d", rowCount, expectedRows);
@@ -817,6 +827,8 @@ struct htmlFormVar *trackVar;
 struct slName *track;
 int trackIx;
 
+if (groupPage == NULL)
+    errAbort("Error when changing group to %s", group);
 if ((mainForm = htmlFormGet(groupPage, "mainForm")) == NULL)
     errAbort("Couldn't get main form on groupPage");
 if ((trackVar = htmlFormVarGet(mainForm, hgtaTrack)) == NULL)

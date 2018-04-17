@@ -28,6 +28,23 @@ are then mapped to the transcripts themselves using the
 pslMap utility</a>.
 </p>
 
+<p>
+Of the several options for filtering out false positives, the &quot;Trusted cutoff (TC)&quot;
+threshold method is used in this track to determine significance. For more information regarding
+thresholds and scores, see the HMMER 
+<a href="http://eddylab.org/software/hmmer3/3.1b2/Userguide.pdf#page=73" target="_blank">documentation</a> 
+and
+<a href="https://hmmer-web-docs.readthedocs.io/en/latest/result.html#profile-hmm-matches" target="_blank">results interpretation</a> 
+pages.
+</p>
+
+<p>
+Note: There is currently an undocumented but known HMMER problem which results in lessened 
+sensitivity and possible missed searches for some zinc finger domains. Until a fix is released for 
+HMMER /PFAM thresholds, please also consult the "UniProt Domains" subtrack of the UniProt track for 
+more comprehensive zinc finger annotations.
+</p>
+
 <h2>Credits</h2>
 
 <p>
@@ -39,9 +56,9 @@ pslMap was written by Mark Diekhans at UCSC.
 <p>
 Finn RD, Mistry J, Tate J, Coggill P, Heger A, Pollington JE, Gavin OL, Gunasekaran P, Ceric G,
 Forslund K <em>et al</em>.
-<a href="http://nar.oxfordjournals.org/content/38/suppl_1/D211.long" target="_blank">
-The Pfam protein families database</a>.
+<a href="https://academic.oup.com/nar/article/38/suppl_1/D211/3112325/The-Pfam-protein-families-
+database" target="_blank">The Pfam protein families database</a>.
 <em>Nucleic Acids Res</em>. 2010 Jan;38(Database issue):D211-22.
-PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/19920124" target="_blank">19920124</a>; PMC: <a
-href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2808889/" target="_blank">PMC2808889</a>
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/19920124" target="_blank">19920124</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2808889/" target="_blank">PMC2808889</a>
 </p>

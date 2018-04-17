@@ -1,0 +1,176 @@
+######################################################################
+
+# Building the drBlastTab for the Ensembl v89 release
+# (DONE - 217-09-07 - Hiram)
+
+######################################################################
+######################################################################
+
+Going to run up all the alignments even though only three tables are
+needed in the end
+
+######################################################################
+# setup the protein faa files:
+
+mkdir /hive/data/genomes/danRer10/bed/ensGene.89/blastTab
+cd /hive/data/genomes/danRer10/bed/ensGene.89/blastTab
+
+ln -s /hive/data/genomes/ce11/bed/ws245Genes/ws245Pep.faa ce11.ws245Pep.faa
+ln -s /hive/data/genomes/danRer10/bed/ensGene.86/ensembl.faa danRer10.ensembl.faa
+ln -s /hive/data/genomes/dm6/bed/ensGene.86/ensembl.faa dm6.ensembl.faa
+ln -s /hive/data/genomes/mm10/bed/ucsc.16.1/ucscGenes.faa mm10.ucscGenes.faa
+ln -s /hive/data/genomes/rn6/bed/ensGene.86/ensembl.faa rn6.ensembl.faa
+ln -s /hive/data/genomes/sacCer3/bed/sgdAnnotations/blastTab/sacCer3.sgd.faa sacCer3.sgd.faa
+ln -s /cluster/data/hg38/bed/ucsc.18.1/ucscGenes.faa hg38.ucscGenes.faa
+
+######################################################################
+# setup each sub-directory for each database that alignments for the
+#	proteins are going to be done
+
+############# rn6 #########################
+for D in rn6
+do
+mkdir -p $D
+ln -s ../${D}.ensembl.faa ./${D}
+echo "targetGenesetPrefix ensGene
+targetDb $D" > ${D}/${D}.config.ra
+echo "queryDbs danRer10" >> ${D}/${D}.config.ra
+echo "${D}Fa ${runDir}/${D}.ensembl.faa
+danRer10Fa ${runDir}/danRer10.ensembl.faa
+buildDir ${runDir}/${D}
+scratchDir ${runDir}/${D}/tmp" >> ${D}/${D}.config.ra
+
+echo "#!/bin/bash
+set -beEu -o pipefail
+cd \"${runDir}/${D}\"
+time (doHgNearBlastp.pl -noLoad -workhorse=hgwdev \
+        -noSelf -clusterHub=ku ${D}.config.ra) > do.log 2>&1
+" > ${D}/run.${D}.sh
+chmod +x ${D}/run.${D}.sh
+
+done
+
+############# sacCer3 #########################
+
+# sgd gene tables
+for D in sacCer3
+do
+mkdir -p $D
+echo "targetGenesetPrefix sgd
+targetDb $D
+queryDbs danRer10
+${D}Fa ${runDir}/${D}.sgd.faa
+danRer10Fa ${runDir}/danRer10.ensembl.faa
+buildDir ${runDir}/${D}
+scratchDir ${runDir}/${D}/tmp" > ${D}/${D}.config.ra
+
+echo "#!/bin/bash
+set -beEu -o pipefail
+cd \"${runDir}/${D}\"
+time (doHgNearBlastp.pl -noLoad -workhorse=hgwdev \
+        -noSelf -clusterHub=ku ${D}.config.ra) > do.log 2>&1
+" > ${D}/run.${D}.sh
+chmod +x ${D}/run.${D}.sh
+
+done
+
+############# hg38, mm10 #########################
+
+# ucscGenes gene tables
+for D in hg38 mm10
+do
+mkdir -p $D
+echo "targetGenesetPrefix ucscGenes
+targetDb $D" > ${D}/${D}.config.ra
+echo "queryDbs danRer10" >> ${D}/${D}.config.ra
+echo "${D}Fa ${runDir}/${D}.ucscGenes.faa
+danRer10Fa ${runDir}/danRer10.ensembl.faa
+buildDir ${runDir}/${D}
+scratchDir ${runDir}/${D}/tmp" >> ${D}/${D}.config.ra
+
+echo "#!/bin/bash
+set -beEu -o pipefail
+cd \"${runDir}/${D}\"
+time (doHgNearBlastp.pl -noLoad -workhorse=hgwdev \
+        -noSelf -clusterHub=ku ${D}.config.ra) > do.log 2>&1
+" > ${D}/run.${D}.sh
+chmod +x ${D}/run.${D}.sh
+
+done
+
+############# ce11 #########################
+
+# ws245 table
+for D in ce11
+do
+mkdir -p $D
+echo "targetGenesetPrefix ws245
+targetDb $D
+queryDbs danRer10
+${D}Fa ${runDir}/${D}.ws245Pep.faa
+danRer10Fa ${runDir}/danRer10.ensembl.faa
+buildDir ${runDir}/${D}
+scratchDir ${runDir}/${D}/tmp" > ${D}/${D}.config.ra
+
+echo "#!/bin/bash
+set -beEu -o pipefail
+cd \"${runDir}/${D}\"
+time (doHgNearBlastp.pl -noLoad -workhorse=hgwdev \
+        -noSelf -clusterHub=ku ${D}.config.ra) > do.log 2>&1
+" > ${D}/run.${D}.sh
+chmod +x ${D}/run.${D}.sh
+
+done
+
+############# dm6 #########################
+
+# ensembl table
+for D in dm6
+do
+mkdir -p $D
+echo "targetGenesetPrefix ensembl
+targetDb $D
+queryDbs danRer10
+${D}Fa ${runDir}/${D}.ensembl.faa
+danRer10Fa ${runDir}/danRer10.ensembl.faa
+buildDir ${runDir}/${D}
+scratchDir ${runDir}/${D}/tmp" > ${D}/${D}.config.ra
+
+echo "#!/bin/bash
+set -beEu -o pipefail
+cd \"${runDir}/${D}\"
+time (doHgNearBlastp.pl -noLoad -workhorse=hgwdev \
+        -noSelf -clusterHub=ku ${D}.config.ra) > do.log 2>&1
+" > ${D}/run.${D}.sh
+chmod +x ${D}/run.${D}.sh
+done
+
+######################################################################
+# run up the protein alignments
+
+for db in ce11 dm6 hg38 mm10 rn6 sacCer3
+do
+  cd /hive/data/genomes/danRer10/bed/ensGene.89/blastTab/${db}
+  ./run.${db}.sh
+  tail do.log
+done
+
+ce11/do.log
+real    65m9.385s
+
+dm6/do.log
+real    101m12.864s
+
+hg38/do.log
+real    241m19.969s
+
+mm10/do.log
+real    161m18.066s
+
+rn6/do.log
+real    102m2.132s
+
+sacCer3/do.log
+real    19m21.203s
+
+######################################################################

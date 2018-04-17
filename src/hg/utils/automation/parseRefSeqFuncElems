@@ -1,0 +1,162 @@
+#!/usr/bin/env python2.7
+"""Parse out the functional elements from a RefSeq gff3 file."""
+import os
+import sys
+import argparse
+import re
+import urllib
+
+# Terence Murphy's list of feature types for functional elements
+# (plus region, if attributes include regulatory_class)
+funcElems = ["CAAT_signal", "GC_rich_promoter_region", "TATA_box", "enhancer", "insulator",
+"locus_control_region", "mobile_genetic_element", "origin_of_replication", "promoter",
+"protein_binding_site", "recombination_feature", "region", "regulatory_region", "repeat_region",
+"sequence_feature", "sequence_secondary_structure", "silencer", "stem_loop"]
+
+# Colors to more or less match NCBI's color scheme:
+rgbBlack = "0,0,0"
+rgbRed = "192,0,0"
+rgbBlue = "0,0,192"
+rgbMagenta = "192,0,192"
+rgbTeal = "0,128,128"
+rgbBrown = "160,82,45"
+
+
+def parseArgs(args):
+	"""
+	Parse the command line arguments.
+	"""
+	parser= argparse.ArgumentParser(description= __doc__)
+	parser.add_argument ("gff3File",
+		help = " NCBI RefSeq GFF3 file. ",
+		type = argparse.FileType("r"))
+	parser.add_argument ("bedOutFile",
+		help = " BED 9 + file. ",
+		type =argparse.FileType("w"))
+
+	if (len(sys.argv) == 1):
+		parser.print_help()
+		exit(1)
+	options = parser.parse_args()
+	return options
+
+def decodeCgi(text):
+    """
+    Return a CGI-decoded version of text
+    """
+    return urllib.unquote(text)
+
+def flatten(listOfLists):
+    """
+    Return a list containing all values in listOfLists (one level, not recursive).
+    """
+    # https://stackoverflow.com/questions/11264684/flatten-list-of-lists
+    return [val for subList in listOfLists for val in subList]
+
+def removeEmpties(listWithEmpties):
+    """
+    Return a list with all non-empty values from listWithEmpties.
+    """
+    return filter(bool, listWithEmpties)
+
+def uniquify(listWithDupes):
+    """
+    Return a list with unique values from listWithDupes.
+    """
+    return list(set(listWithDupes))
+
+def chopAtFirstSemicolon(text):
+    """
+    Return text truncated at first ";".
+    """
+    return text.split(";")[0]
+
+def main(args):
+    """
+    Initialize options and write one line of BED+ per functional element in gff3File
+    """
+    options = parseArgs(args)
+    pmidRe = re.compile("PMID:(\d+)")
+    geneIdRe = re.compile("GeneID:(\d+)")
+    for line in options.gff3File:
+        if line.startswith("#"):
+            continue
+        splitLine = line.strip("\n").split("\t")
+        if len(splitLine) is not 9:
+            print ("Expected gff3File to have 9 columns, got " + str(len(splitLine)) + ".")
+            exit(1)
+        (chrom, source, gffType, chrStart, chrEnd, score, strand, frame, attrGlom) = splitLine
+        if gffType not in funcElems:
+            continue
+        chrStart = str(int(chrStart) -1)
+        name = gffType
+        if "." == score:
+            score = '0'
+        attributesEnc = [x.split("=") for x in attrGlom.split(";")]
+        attributes = dict((key, decodeCgi(val)) for key, val in attributesEnc)
+        if (gffType == "region" and not attributes["regulatory_class"]):
+            continue
+        geneIds = geneIdRe.findall(attributes.get("Dbxref", ""))
+        geneIds = [x + "|GeneID:" + x for x in geneIds]
+        note = attributes.get("Note", "")
+        experiment = attributes.get("experiment", "")
+        function = attributes.get("function", "")
+        gbkey = attributes.get("gbkey")
+        # Uniquify pubMedIds (and remove empty strings)
+        pubMedIds = flatten([pmidRe.findall(x) for x in [note, experiment, function]])
+        pubMedIds = uniquify(removeEmpties(pubMedIds))
+        pubMedIds.sort(key=int)
+        pubMedIds = [x + "|PMID:" + x for x in pubMedIds]
+        mouseOver = " | ".join(removeEmpties([note, function]))
+        if mouseOver == "":
+            mouseOver = gffType
+        # Match NCBI's color and label scheme
+        color = rgbBlack
+        regClass = attributes.get("regulatory_class");
+        if (regClass):
+            color = rgbTeal
+            name = regClass
+        elif gffType == "protein_binding_site":
+            color = rgbRed
+            boundMoiety = attributes.get("bound_moiety")
+            if gbkey and boundMoiety:
+                name = gbkey + ": " + boundMoiety
+            # bound_moiety is sometimes too long to display properly as a label,
+            # so add it to mouseOver.
+            if boundMoiety:
+                if mouseOver != "":
+                    mouseOver += " | "
+                mouseOver += boundMoiety
+        elif gffType == "recombination_feature":
+            color = rgbBrown
+            reClass = attributes.get("recombination_class")
+            if reClass:
+                name = reClass
+            else:
+                stdName = attributes.get("standard_name")
+                if gbkey and stdName:
+                        name = gbkey + ": " + stdName
+        elif gffType == "mobile_genetic_element":
+            color = rgbBlue
+            name = attributes.get("mobile_element_type", name)
+        elif gffType == "repeat_region":
+            color = rgbBlue
+            name = attributes.get("rpt_type", name)
+        elif gffType == "sequence_feature":
+            color = rgbMagenta
+            name = attributes.get("feat_class", attributes.get("standard_name", note))
+        else:
+            color = rgbBlack
+            if gbkey and note:
+                name = gbkey + ": " + chopAtFirstSemicolon(note)
+
+        # Write BED9+
+        options.bedOutFile.write("\t".join(
+                [chrom, chrStart, chrEnd, name, score, strand,
+                 chrStart, chrEnd, color, \
+                 gffType, note, ",".join(geneIds), ",".join(pubMedIds), experiment, \
+                 function, mouseOver]) + "\n")
+    
+
+if __name__ == "__main__" : 
+    sys.exit(main(sys.argv))

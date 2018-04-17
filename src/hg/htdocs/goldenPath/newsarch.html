@@ -12,26 +12,27 @@
   <div class="row">
   <div class="col-sm-4">
 <ul>
+  <li><a href="#2018">2018 News</a></li>
   <li><a href="#2017">2017 News</a></li>
   <li><a href="#2016">2016 News</a></li>
   <li><a href="#2015">2015 News</a></li>
   <li><a href="#2014">2014 News</a></li>
   <li><a href="#2013">2013 News</a></li>
-  <li><a href="#2012">2012 News</a></li>
 </ul>
 </div>
   <div class="col-sm-4">
 <ul>
+  <li><a href="#2012">2012 News</a></li>
   <li><a href="#2011">2011 News</a></li>
   <li><a href="#2010">2010 News</a></li>
   <li><a href="#2009">2009 News</a></li>
   <li><a href="#2008">2008 News</a></li>
   <li><a href="#2007">2007 News</a></li>
-  <li><a href="#2006">2006 News</a></li>
 </ul>
 </div>
   <div class="col-sm-4">
 <ul>
+  <li><a href="#2006">2006 News</a></li>
   <li><a href="#2005">2005 News</a></li>
   <li><a href="#2004">2004 News</a></li>
   <li><a href="#2003">2003 News</a></li>
@@ -42,8 +43,1078 @@
 </div>
 </div>
 
+<!-- ============= 2018 archived news ============= -->
+<a name="2018"></a>
+
+<a name="040418"></a>
+<h2>New NCBI RefSeq tracks for human, rat, yeast, C. elegans, zebrafish, X. tropicalis and fly</h2>
+<p>
+We are pleased to announce the release of a new set of gene annotation tracks for the hg19/GRCh37, 
+hg38/GRCh38, rn6/Rnor_6.0, sacCer3/R64, ce11/WBcel235, danRer10/GRCz10, danRer11/GRCz11, 
+xenTro7/Xtropicalis_v7, xenTro9/Xenopus_tropicalis_v9.1 and dm6/Release 6 plus ISO1 MT
+assemblies based on data from NCBI's Reference Sequence Database (RefSeq). For all of these tracks,
+the alignments and coordinates are provided by RefSeq. These tracks are organized in a composite
+track that includes:</p>
+<ul>
+  <li>RefSeq All &ndash; all annotations from the curated and predicted sets
+  <li>RefSeq Curated &ndash; curated annotations beginning with NM, NR, or NP
+  <li>RefSeq Predicted &ndash; predicted annotations beginning with XM or XR
+  <li>RefSeq Other &ndash; all other RefSeq annotations not included in RefSeq All
+  <li>RefSeq Alignments &ndash; alignments of transcripts to the genome provided by RefSeq
+</ul>
+<p>
+The new composite track also includes a &quot;UCSC RefSeq&quot; track that is based on our original
+&quot;RefSeq Genes&quot; track. As with before, this UCSC track is a result of our realignments
+of RefSeq RNAs to the genome, which means that there may be some cases where the annotations
+differ from those in the new NCBI RefSeq tracks. Also note that the <em>Predictions</em> subtrack is 
+unavailable for the following assemblies: hg19, dm6, ce11, and sacCer3.</p>
+<p>
+More details about these tracks, their construction, and how to access their underlying data
+can be found on
+<a href="http://genome.ucsc.edu/blog/the-new-ncbi-refseq-tracks-and-you/"
+target="_blank">this blog post</a>.</p>
+<p>
+A huge thank you to Terence Murphy from the RefSeq group and to Hiram Clawson, Angie Hinrichs, 
+Christopher Lee and many others from the UCSC Genome Browser staff for
+bringing this track to life.</p>
+
+<a name="040318"></a>
+<h2>Mar. 21, 2018 &nbsp;&nbsp; New genome browser tool: Track Collection Builder</h2>
+<p>
+We are pleased to announce a new tool in the UCSC Genome Browser:</p>
+<p>
+The <a href="../cgi-bin/hgCollection" target="_blank">Track Collection Builder</a> (My Data &gt;
+Track Collection Builder) is a tool that allows multiple tracks to be copied and grouped together
+into one composite track or &quot;collection&quot;. A 
+<a href="../goldenPath/help/trackDb/trackDbHub.html#compositeTrack" target="_blank">
+composite track</a> can be thought of as a container for grouping a set of similar-type annotation 
+tracks. Once grouped, settings (e.g., track height, graph color, overlay views) can be applied to 
+all sub-tracks at once. Currently, <a href="../cgi-bin/hgCollection#SupportedData" target="_blank">
+supported data types</a> are limited to continuous graphing data (wiggle, bigWig, and bedGraph).</p>
+<p>
+The Track Collection Builder is pictured below - note the left and right panes. The left pane, 
+&quot;Available Tracks&quot; displays tracks that are available to add to a new collection. The 
+first folder, &quot;Visible Tracks&quot; displays all supported tracks that are currently seen in 
+the browser (i.e., not set to "hide" visibility). Below that are expandable folders which show 
+selectable tracks from all other browser categories, regardless of browser visibility. To add 
+custom tracks or tracks from hubs, first load them into the browser and then add them to a 
+collection.</p>
+<p>
+The right pane, &quot;Collected Tracks&quot; displays current collections. In the image below, two 
+tracks (which are currently visible in the browser) have been added to a new collection. In the 
+lower part of the image, the browser graphic is shown displaying this collection (highlighted 
+in green). Below the collection are the two original tracks (&quot;My Custom Track&quot; and the 
+native GC Percent track). Note that the two original tracks have been copied into the new 
+collection, where they are now grouped sub-tracks.</p>
+<p>
+Below are several new features which are detailed in the 
+<a href="../cgi-bin/hgCollection#Configure" target="_blank">detailed in the help guide</a>:</p>
+<ul>
+  <li>Sort sub-tracks in a collection by similarity</li> 
+  <li>Sort sub-tracks in a collection by magnitude</li> 
+  <li>New collection &quot;overlay&quot; to add all sub-tracks together</li> 
+  <li>New collection &quot;overlay&quot; to subtract the first (top) track from the sum of all 
+  other sub-tracks</li> 
+</ul>
+
+<p>
+See also: <a href="https://www.youtube.com/watch?v=2_RiIY07omY" target="_blank">
+Quick Demo Video of the Track Collection Builder</a></p>
+
+<p> 
+<img src="../../images/hgCollectionNewsDemo.jpg" alt="hgCollectionNewsDemo.jpg"></p>
+
+<a name="032118"></a>
+<h2>Mar. 21, 2018 &nbsp;&nbsp; New genome browser: <em>Petromyzon marinus</em>, petMar3</h2>
+<p>A genome browser is now available for the <em>Petromyzon marinus</em> assembly released in
+December 2017 by the <a href="https://ukhealthcare.uky.edu/genomics-core-laboratory"
+target="_blank">University of Kentucky</a> (Pmar_germline 1.0, UCSC version petMar3).</p>
+<h3>About the assembly:</h3>
+<ul>
+   <li><b>UCSC Genome Browser assembly ID:</b>
+      <a href="../cgi-bin/hgGateway?db=petMar3" target="_blank">petMar3</a></li>
+   <li><b>Sequencing/Assembly provider ID:</b>
+      <a href="https://ukhealthcare.uky.edu/genomics-core-laboratory" target="_blank">
+      University of Kentucky</a></li>
+   <li><b>Assembly date:</b> December 2017</li>
+   <li><b>Accession ID:</b> GCA_002833325.1</li>
+   <li><b>NCBI Genome information:</b><a href="https://www.ncbi.nlm.nih.gov/genome/287" 
+      target="_blank"> 287</a> <em>(Petromyzon marinus)</em></li>
+   <li><b>NCBI Assembly information:</b><a href="https://www.ncbi.nlm.nih.gov/assembly/1474531" 
+      target="_blank"> 1474531</a> <em> (Pmar_germline 1.0) </em></li>
+   <li><b>BioProject information:</b><a href="https://www.ncbi.nlm.nih.gov/bioproject/357048" 
+      target="_blank"> 357048</a></li>
+   <li><b>BioSample information:</b><a href="https://www.ncbi.nlm.nih.gov/biosample/SAMN06131802" 
+      target="_blank"> SAMN06131802</a></li>
+   <li><b>Contig+scaffold count:</b> 36,453</li>
+   <li><b>Total size:</b> 1,130,417,696</li>
+   <li><a href="../goldenPath/credits.html#lamprey_credits" target="_blank">Acknowledgments</a></li>
+</ul>
+<h3>Data and Downloads:</h3>
+<ul>
+   <li><a href="../goldenPath/credits.html#lamprey_use" target="_blank">
+       Data use conditions and restrictions</a></li>
+   <li><a href="../goldenPath/help/ftp.html" target="_blank">Rsync</a> and 
+       <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/petMar3/" target="_blank">FTP</a></li>
+   <li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#lamprey" target="_blank">
+       Downloads page</a></li>
+</ul>
+
+<a name="022018"></a>
+<h2>Feb. 20, 2018 &nbsp;&nbsp; New video:  Visibility control in the Browser </h2>
+<p>
+We have released a new video demonstrating the
+<a href="https://www.youtube.com/watch?v=jKix2B3hwnw&list=UUQnUJepyNOw0p8s2otX4RYQ"
+   target=_blank>visibility controls</a> in the Browser.
+ In our Browser <a href = "http://bit.ly/ucscTraining" target = _blank>training
+ workshops</a> we are often asked about the meaning of the track controls:
+ squish, dense, pack and full.  In this tutorial we describe the controls for
+ BED, wiggle and conservation tracks.  There is also a discussion of visibility 
+ control in composite tracks (2-level nesting) and supertracks (3-level).
+
+ This brings to 16 the number of video tutorials available on our 
+ <a href="https://www.youtube.com/channel/UCQnUJepyNOw0p8s2otX4RYQ/videos" 
+   target="_blank"> YouTube channel</a>.  Most are accompanied by a transcript,
+ via a link on the video itself and from our <a href = "../../training/">training 
+ page</a>.
+</p>
+<p>
+ We thank Robert Kuhn and David Gibson for video production.
+</p>
+
+
+<a name="021618"></a>
+<h2>Feb. 16, 2018 &nbsp;&nbsp; New search support for chromosome aliases</h2>
+<p>
+Have you ever wanted to use 1 instead of chr1 to search for a chromosome position?</p>
+<p>
+The following assemblies now support a new feature for matching different chromosome aliases.
+Equivalent entries only exist in the new table, chromAlias, when an exact sequence match has been
+verified. This feature is limited to searching coordinates, it is not yet supported for custom
+tracks.</p>
+<p>
+<div class="container">
+  <div class="row">
+  <div class="col-sm-4">
+    <ul>
+      <li>American alligator <a href="../cgi-bin/hgGateway?db=allMis1"
+      target="_blank">(allMis1)</a></li>
+      <li>Armadillo <a href="../cgi-bin/hgGateway?db=dasNov3"
+      target="_blank">(dasNov3)</a></li>
+      <li>Baboon <a href="../cgi-bin/hgGateway?db=papAnu2"
+      target="_blank">(papAnu2)</a></li>
+      <li>Bonobo <a href="../cgi-bin/hgGateway?db=panPan1"
+      target="_blank">(panPan1)</a></li>
+      <li>Budgerigar <a href="../cgi-bin/hgGateway?db=melUnd1"
+      target="_blank">(melUnd1)</a></li>
+      <li>Bushbaby <a href="../cgi-bin/hgGateway?db=otoGar3"
+      target="_blank">(otoGar3)</a></li>
+      <li>C. elegans <a href="../cgi-bin/hgGateway?db=ce11"
+      target="_blank">(ce11)</a></li>
+      <li>Cat <a href="../cgi-bin/hgGateway?db=felCat5"
+      target="_blank">(felCat5)</a></li>
+      <li>Cat <a href="../cgi-bin/hgGateway?db=felCat8"
+      target="_blank">(felCat8)</a></li>
+      <li>Chicken <a href="../cgi-bin/hgGateway?db=galGal4"
+      target="_blank">(galGal4)</a></li>
+      <li>Chimp <a href="../cgi-bin/hgGateway?db=panTro4"
+      target="_blank">(panTro4)</a></li>
+      <li>Chimp <a href="../cgi-bin/hgGateway?db=panTro5"
+      target="_blank">(panTro5)</a></li>
+      <li>Coelacanth <a href="../cgi-bin/hgGateway?db=latCha1"
+      target="_blank">(latCha1)</a></li>
+      <li>Cow <a href="../cgi-bin/hgGateway?db=bosTau8"
+      target="_blank">(bosTau8)</a></li>
+      <li>Crab-eating macaque <a href="../cgi-bin/hgGateway?db=macFas5"
+      target="_blank">(macFas5)</a></li>
+      <li>D. melanogaster <a href="../cgi-bin/hgGateway?db=dm6"
+      target="_blank">(dm6)</a></li>
+    </ul></div>
+  <div class="col-sm-4">
+    <ul>
+      <li>D. persimilis <a href="../cgi-bin/hgGateway?db=droPer1"
+      target="_blank">(droPer1)</a></li>
+      <li>Dog <a href="../cgi-bin/hgGateway?db=canFam3"
+      target="_blank">(canFam3)</a></li>
+      <li>Elephant shark <a href="../cgi-bin/hgGateway?db=calMil1"
+      target="_blank">(calMil1)</a></li>
+      <li>Fugu <a href="../cgi-bin/hgGateway?db=fr3"
+      target="_blank">(fr3)</a></li>
+      <li>Green monkey <a href="../cgi-bin/hgGateway?db=chlSab2"
+      target="_blank">(chlSab2)</a></li>
+      <li>Guinea pig <a href="../cgi-bin/hgGateway?db=cavPor3"
+      target="_blank">(cavPor3)</a></li>
+      <li>Hedgehog <a href="../cgi-bin/hgGateway?db=eriEur2"
+      target="_blank">(eriEur2)</a></li>
+      <li>Lizard <a href="../cgi-bin/hgGateway?db=anoCar2"
+      target="_blank">(anoCar2)</a></li>
+      <li>Malayan flying lemur <a href="../cgi-bin/hgGateway?db=galVar1"
+      target="_blank">(galVar1)</a></li>
+      <li>Manatee <a href="../cgi-bin/hgGateway?db=triMan1"
+      target="_blank">(triMan1)</a></li>
+      <li>Marmoset <a href="../cgi-bin/hgGateway?db=calJac3"
+      target="_blank">(calJac3)</a></li>
+      <li>Medium ground finch <a href="../cgi-bin/hgGateway?db=geoFor1"
+      target="_blank">(geoFor1)</a></li>
+      <li>Microbat <a href="../cgi-bin/hgGateway?db=myoLuc2"
+      target="_blank">(myoLuc2)</a></li>
+      <li>Minke whale <a href="../cgi-bin/hgGateway?db=balAcu1"
+      target="_blank">(balAcu1)</a></li>
+      <li>Naked mole-rat <a href="../cgi-bin/hgGateway?db=hetGla2"
+      target="_blank">(hetGla2)</a></li>
+      <li>Nile tilapia <a href="../cgi-bin/hgGateway?db=oreNil2"
+      target="_blank">(oreNil2)</a></li>
+    </ul></div>
+  <div class="col-sm-4">
+    <ul>
+      <li>Panda <a href="../cgi-bin/hgGateway?db=ailMel1"
+      target="_blank">(ailMel1)</a></li>
+      <li>Pig <a href="../cgi-bin/hgGateway?db=susScr3"
+      target="_blank">(susScr3)</a></li>
+      <li>Rhesus <a href="../cgi-bin/hgGateway?db=rheMac8"
+      target="_blank">(rheMac8)</a></li>
+      <li>Sheep <a href="../cgi-bin/hgGateway?db=oviAri3"
+      target="_blank">(oviAri3)</a></li>
+      <li>Shrew <a href="../cgi-bin/hgGateway?db=sorAra2"
+      target="_blank">(sorAra2)</a></li>
+      <li>Squirrel <a href="../cgi-bin/hgGateway?db=speTri2"
+      target="_blank">(speTri2)</a></li>
+      <li>Tarsier <a href="../cgi-bin/hgGateway?db=tarSyr2"
+      target="_blank">(tarSyr2)</a></li>
+      <li>Tasmanian devil <a href="../cgi-bin/hgGateway?db=sarHar1"
+      target="_blank">(sarHar1)</a></li>
+      <li>Tenrec <a href="../cgi-bin/hgGateway?db=echTel2"
+      target="_blank">(echTel2)</a></li>
+      <li>Turkey <a href="../cgi-bin/hgGateway?db=melGal5"
+      target="_blank">(melGal5)</a></li>
+      <li>White rhinoceros <a href="../cgi-bin/hgGateway?db=cerSim1"
+      target="_blank">(cerSim1)</a></li>
+      <li>X. tropicalis <a href="../cgi-bin/hgGateway?db=xenTro7"
+      target="_blank">(xenTro7)</a></li>
+      <li>Zebra finch <a href="../cgi-bin/hgGateway?db=taeGut2"
+      target="_blank">(taeGut2)</a></li>
+      <li>Zebrafish <a href="../cgi-bin/hgGateway?db=danRer7"
+      target="_blank">(danRer7)</a></li>
+    </ul></div>
+</div></div></p>
+<p>
+For example, for <a href="../cgi-bin/hgTracks?db=felCat8" target="_blank">felCat8</a>, aliases that
+now map to chrA2 are NC_018724.2, CM001379.2, and A2. Search terms such as
+<code>CM001379.2 133,978,000 134,105,980</code> will be equivalent to
+<code>chrA2 133,978,000 134,105,980</code>.
+</p>
+
+<a name="020818"></a>
+<h2>Feb. 08, 2018 &nbsp;&nbsp; New video:  in-silico PCR (isPCR)</h2>
+<p>
+We have released a new video demonstrating the
+<a href="https://youtu.be/U8_QYwmdGYU?feature=player_detailpage&v=8ATcoDTOc0g&list=UUQnUJepyNOw0p8s2otX4RYQ"
+   target=_blank>in-silico PCR tool</a> (isPCR).
+ This tutorial shows how to use a pair of primers to amplify either DNA or RNA 
+ templates for human or mouse genomes and to visualize the results on the Genome 
+ Browser.
+ For other genomes, only DNA may serve as a template.  This brings to 15 the
+ number of video tutorials available on our 
+ <a href="https://www.youtube.com/channel/UCQnUJepyNOw0p8s2otX4RYQ/videos" 
+   target="_blank"> YouTube channel</a>.  Most are accompanied by a transcript,
+ via a link on the video itself and from our <a href = "../../training/">training page</a>.
+</p>
+<p>
+ We thank Robert Kuhn and David Gibson for video production.
+</p>
+
+<a name="020118"></a>
+<h2>Feb. 01, 2018 &nbsp;&nbsp; New Ensembl gene tracks for 66 assemblies</h2>
+<p>
+The UCSC Genome Browser has released updated
+<a href="http://www.ensembl.org/info/genome/genebuild/genome_annotation.html" target="_blank">
+Ensembl gene annotation</a> tracks, from <strong>v89 to v90</strong>, for the
+following assemblies:
+<ul>
+    <li>Baboon <a href="../cgi-bin/hgTrackUi?db=papAnu2&g=ensGene"
+    target="_blank">(papAnu2)</a></li>
+    <li>Cat <a href="../cgi-bin/hgTrackUi?db=felCat5&g=ensGene"
+    target="_blank">(felCat5)</a></li>
+    <li>Chimp <a href="../cgi-bin/hgTrackUi?db=panTro4&g=ensGene"
+    target="_blank">(panTro4)</a></li>
+    <li>Gibbon <a href="../cgi-bin/hgTrackUi?db=nomLeu1&g=ensGene"
+    target="_blank">(nomLeu1)</a></li>
+    <li>Gorilla <a href="../cgi-bin/hgTrackUi?db=gorGor3&g=ensGene"
+    target="_blank">(gorGor3)</a></li>
+    <li>Mouse lemur <a href="../cgi-bin/hgTrackUi?db=micMur2&g=ensGene"
+    target="_blank">(micMur2)</a></li>
+    <li>Tarsier <a href="../cgi-bin/hgTrackUi?db=tarSyr1&g=ensGene"
+    target="_blank">(tarSyr1)</a></li>
+</ul></p>
+
+<p>
+The UCSC Genome Browser has also released updated
+<a href="http://www.ensembl.org/info/genome/genebuild/genome_annotation.html" target="_blank">
+Ensembl gene annotation tracks</a>, from <strong>v89 to v91</strong>, for the
+following assemblies:
+<ul>
+    <li>Alpaca <a href="../cgi-bin/hgTrackUi?db=vicPac1&g=ensGene"
+    target="_blank">(vicPac1)</a></li>
+    <li>Armadillo <a href="../cgi-bin/hgTrackUi?db=dasNov3&g=ensGene"
+    target="_blank">(dasNov3)</a></li>
+    <li>Atlantic cod <a href="../cgi-bin/hgTrackUi?db=gadMor1&g=ensGene"
+    target="_blank">(gadMor1)</a></li>
+    <li>Bushbaby <a href="../cgi-bin/hgTrackUi?db=otoGar3&g=ensGene"
+    target="_blank">(otoGar3)</a></li>
+    <li>C. elegans <a href="../cgi-bin/hgTrackUi?db=ce11&g=ensGene"
+    target="_blank">(ce11)</a></li>
+    <li>Cat <a href="../cgi-bin/hgTrackUi?db=felCat8&g=ensGene"
+    target="_blank">(felCat8)</a></li>
+    <li>Chicken <a href="../cgi-bin/hgTrackUi?db=galGal5&g=ensGene"
+    target="_blank">(galGal5)</a></li>
+    <li>Chimp <a href="../cgi-bin/hgTrackUi?db=panTro5&g=ensGene"
+    target="_blank">(panTro5)</a></li>
+    <li>Chinese hamster <a href="../cgi-bin/hgTrackUi?db=criGriChoV1&g=ensGene"
+    target="_blank">(criGriChoV1)</a></li>
+    <li>Coelacanth <a href="../cgi-bin/hgTrackUi?db=latCha1&g=ensGene"
+    target="_blank">(latCha1)</a></li>
+    <li>Cow <a href="../cgi-bin/hgTrackUi?db=bosTau6&g=ensGene"
+    target="_blank">(bosTau6)</a></li>
+    <li>Crab-eating macaque <a href="../cgi-bin/hgTrackUi?db=macFas5&g=ensGene"
+    target="_blank">(macFas5)</a></li>
+    <li>D. melanogaster <a href="../cgi-bin/hgTrackUi?db=dm6&g=ensGene"
+    target="_blank">(dm6)</a></li>
+    <li>Dog <a href="../cgi-bin/hgTrackUi?db=canFam3&g=ensGene"
+    target="_blank">(canFam3)</a></li>
+    <li>Elephant <a href="../cgi-bin/hgTrackUi?db=loxAfr3&g=ensGene"
+    target="_blank">(loxAfr3)</a></li>
+    <li>Ferret <a href="../cgi-bin/hgTrackUi?db=musFur1&g=ensGene"
+    target="_blank">(musFur1)</a></li>
+    <li>Fugu <a href="../cgi-bin/hgTrackUi?db=fr2&g=ensGene"
+    target="_blank">(fr2)</a></li>
+    <li>Gibbon <a href="../cgi-bin/hgTrackUi?db=nomLeu3&g=ensGene"
+    target="_blank">(nomLeu3)</a></li>
+    <li>Golden snub-nosed monkey <a href="../cgi-bin/hgTrackUi?db=rhiRox1&g=ensGene"
+    target="_blank">(rhiRox1)</a></li>
+    <li>Gorilla <a href="../cgi-bin/hgTrackUi?db=gorGor4&g=ensGene"
+    target="_blank">(gorGor4)</a></li>
+    <li>Green monkey <a href="../cgi-bin/hgTrackUi?db=chlSab2&g=ensGene"
+    target="_blank">(chlSab2)</a></li>
+    <li>Guinea pig <a href="../cgi-bin/hgTrackUi?db=cavPor3&g=ensGene"
+    target="_blank">(cavPor3)</a></li>
+    <li>Hedgehog <a href="../cgi-bin/hgTrackUi?db=eriEur1&g=ensGene"
+    target="_blank">(eriEur1)</a></li>
+    <li>Horse <a href="../cgi-bin/hgTrackUi?db=equCab2&g=ensGene"
+    target="_blank">(equCab2)</a></li>
+    <li>Lamprey <a href="../cgi-bin/hgTrackUi?db=petMar2&g=ensGene"
+    target="_blank">(petMar2)</a></li>
+    <li>Lizard <a href="../cgi-bin/hgTrackUi?db=anoCar2&g=ensGene"
+    target="_blank">(anoCar2)</a></li>
+    <li>Marmoset <a href="../cgi-bin/hgTrackUi?db=calJac3&g=ensGene"
+    target="_blank">(calJac3)</a></li>
+    <li>Medaka <a href="../cgi-bin/hgTrackUi?db=oryLat2&g=ensGene"
+    target="_blank">(oryLat2)</a></li>
+    <li>Megabat <a href="../cgi-bin/hgTrackUi?db=pteVam1&g=ensGene"
+    target="_blank">(pteVam1)</a></li>
+    <li>Microbat <a href="../cgi-bin/hgTrackUi?db=myoLuc2&g=ensGene"
+    target="_blank">(myoLuc2)</a></li>
+    <li>Naked mole-rat <a href="../cgi-bin/hgTrackUi?db=hetGla1&g=ensGene"
+    target="_blank">(hetGla1)</a></li>
+    <li>Naked mole-rat <a href="../cgi-bin/hgTrackUi?db=hetGla2&g=ensGene"
+    target="_blank">(hetGla2)</a></li>
+    <li>Opossum <a href="../cgi-bin/hgTrackUi?db=monDom5&g=ensGene"
+    target="_blank">(monDom5)</a></li>
+    <li>Orangutan <a href="../cgi-bin/hgTrackUi?db=ponAbe2&g=ensGene"
+    target="_blank">(ponAbe2)</a></li>
+    <li>Panda <a href="../cgi-bin/hgTrackUi?db=ailMel1&g=ensGene"
+    target="_blank">(ailMel1)</a></li>
+    <li>Pig <a href="../cgi-bin/hgTrackUi?db=susScr11&g=ensGene"
+    target="_blank">(susScr11)</a></li>
+    <li>Pika <a href="../cgi-bin/hgTrackUi?db=ochPri2&g=ensGene"
+    target="_blank">(ochPri2)</a></li>
+    <li>Platypus <a href="../cgi-bin/hgTrackUi?db=ornAna1&g=ensGene"
+    target="_blank">(ornAna1)</a></li>
+    <li>Platypus <a href="../cgi-bin/hgTrackUi?db=ornAna2&g=ensGene"
+    target="_blank">(ornAna2)</a></li>
+    <li>Rabbit <a href="../cgi-bin/hgTrackUi?db=oryCun2&g=ensGene"
+    target="_blank">(oryCun2)</a></li>
+    <li>Rat <a href="../cgi-bin/hgTrackUi?db=rn6&g=ensGene"
+    target="_blank">(rn6)</a></li>
+    <li>Rhesus <a href="../cgi-bin/hgTrackUi?db=rheMac8&g=ensGene"
+    target="_blank">(rheMac8)</a></li>
+    <li>Rock hyrax <a href="../cgi-bin/hgTrackUi?db=proCap1&g=ensGene"
+    target="_blank">(proCap1)</a></li>
+    <li>S. cerevisiae <a href="../cgi-bin/hgTrackUi?db=sacCer3&g=ensGene"
+    target="_blank">(sacCer3)</a></li>
+    <li>Sheep <a href="../cgi-bin/hgTrackUi?db=oviAri3&g=ensGene"
+    target="_blank">(oviAri3)</a></li>
+    <li>Shrew <a href="../cgi-bin/hgTrackUi?db=sorAra1&g=ensGene"
+    target="_blank">(sorAra1)</a></li>
+    <li>Sloth <a href="../cgi-bin/hgTrackUi?db=choHof1&g=ensGene"
+    target="_blank">(choHof1)</a></li>
+    <li>Squirrel monkey <a href="../cgi-bin/hgTrackUi?db=saiBol1&g=ensGene"
+    target="_blank">(saiBol1)</a></li>
+    <li>Squirrel <a href="../cgi-bin/hgTrackUi?db=speTri2&g=ensGene"
+    target="_blank">(speTri2)</a></li>
+    <li>Stickleback <a href="../cgi-bin/hgTrackUi?db=gasAcu1&g=ensGene"
+    target="_blank">(gasAcu1)</a></li>
+    <li>Tarsier <a href="../cgi-bin/hgTrackUi?db=tarSyr2&g=ensGene"
+    target="_blank">(tarSyr2)</a></li>
+    <li>Tasmanian devil <a href="../cgi-bin/hgTrackUi?db=sarHar1&g=ensGene"
+    target="_blank">(sarHar1)</a></li>
+    <li>Tenrec <a href="../cgi-bin/hgTrackUi?db=echTel1&g=ensGene"
+    target="_blank">(echTel1)</a></li>
+    <li>Tetraodon <a href="../cgi-bin/hgTrackUi?db=tetNig2&g=ensGene"
+    target="_blank">(tetNig2)</a></li>
+    <li>Tree shrew <a href="../cgi-bin/hgTrackUi?db=tupBel1&g=ensGene"
+    target="_blank">(tupBel1)</a></li>
+    <li>Turkey <a href="../cgi-bin/hgTrackUi?db=melGal1&g=ensGene"
+    target="_blank">(melGal1)</a></li>
+    <li>X. tropicalis <a href="../cgi-bin/hgTrackUi?db=xenTro3&g=ensGene"
+    target="_blank">(xenTro3)</a></li>
+    <li>Zebra finch <a href="../cgi-bin/hgTrackUi?db=taeGut1&g=ensGene"
+    target="_blank">(taeGut1)</a></li>
+    <li>Zebrafish <a href="../cgi-bin/hgTrackUi?db=danRer10&g=ensGene"
+    target="_blank">(danRer10)</a></li>
+</ul></p>
+
+<a name="011518"></a>
+<h2>Jan. 15, 2018 &nbsp;&nbsp; New hg38 comparative genomics track: 30 mammals (27 primates) multiz 
+alignment &amp; conservation </h2>
+<p>
+A new <a href="../../cgi-bin/hgTrackUi?db=hg38&g=cons30way" target="_blank">30-way 
+comparative genomics track</a> has been added to the 
+<a href="../../cgi-bin/hgGateway?db=hg38" target="_blank">human GRCh38/hg38 browser</a>. This 
+composite track displays multiple alignments (Multiz) and measurements of evolutionary conservation 
+(phastCons and phyloP) for 30 species (27 primates). Developer: Hiram Clawson, UCSC Genome Browser.
+</p>
+<h3>Tracks</h3>
+<ul>
+<li>Multiz Alignments</li> 
+<li>Basewise Conservation by PhyloP</li>
+<li>Element Conservation by PhastCons</li>
+<li>Conserved Elements</li> 
+
+</ul>
+<h3>Species</h3>
+<p>
+Please see the <a href="../../cgi-bin/hgTrackUi?db=hg38&g=cons30way" target="_blank">
+30-way Multiz &amp; Conservation track description page</a> for assembly details of participating 
+assemblies: </p>
+<p>
+Human, chimp, bonobo, gorilla, orangutan, gibbon, rhesus, crab-eating macaque, pig-tailed macaque,
+ sooty mangabey, baboon, green monkey, drill, proboscis monkey, angolan colobus, 
+ golden snub-nosed monkey, black snub-nosed monkey, marmoset, squirrel monkey, white-faced sapajou,
+ ma's night monkey, tarsier, mouse lemur, coquerel's sifaka, black lemur, sclater's lemur, bushbaby,
+  mouse, dog, and armadillo.</p>
+
+<p>
+<a name="010518"></a>
+<h2>Jan. 05, 2018 &nbsp;&nbsp; New mappability data for human, hg38</h2>
+<p>
+We are pleased to announce the release of a new set of annotations from the
+<a href="https://hoffmanlab.org/" target="_blank">Hoffman Lab</a> that contains mappability data for
+both the reference genome and bisulfite-converted genome of
+<a href="../../cgi-bin/hgGateway?db=hg38" target="_blank">hg38/GRCh38</a>. These tracks indicate
+regions with uniquely mappable reads of particular lengths before and after bisulfite conversion.
+</p>
+
+<p>
+The <a href="../../cgi-bin/hgTrackUi?db=hg38&g=mappability" target="_blank">Mappability</a>
+supertrack contains two composite tracks, <a href="../../cgi-bin/hgTrackUi?db=hg38&g=mappability"
+target="_blank">Bismap</a> and <a href="../../cgi-bin/hgTrackUi?db=hg38&g=mappability"
+target="_blank">Umap</a>. Both Umap and Bismap tracks contain single-read and multi-read mappability
+tracks for four different read lengths: 24 bp, 36 bp, 50 bp, and 100 bp. You can use these tracks
+for many purposes, including filtering unreliable signal from sequencing assays. The Bismap track
+can help filter unreliable signal from sequencing assays involving bisulfite conversion, such as
+whole-genome bisulfite sequencing or reduced representation bisulfite sequencing.</p>
+
+<p>
+For greater detail and explanatory diagrams, see the
+<a href="https://www.biorxiv.org/content/early/2016/12/20/095463" target="_blank">preprint</a>,
+the <a href="http://bismap.hoffmanlab.org/" target="_blank">Umap and Bismap project website</a>,
+or the <a href="https://bitbucket.org/hoffmanlab/umap" target="_blank">Umap and Bismap software
+documentation</a>.</p>
+<p>
+A huge thank you to <a href="https://sites.google.com/site/anshulkundaje/"
+target="_blank">Anshul Kundaje</a> (Stanford University) who created the original Umap software in
+MATLAB and Mehran Karimzadeh (<a href="https://hoffmanlab.org/" target="_blank">Michael Hoffman
+lab</a>, Princess Margaret Cancer Centre) who implemented the Python version of Umap and added
+features, including Bismap. Thanks to Hiram Clawson, Chris Eisenhart, and Jairo Navarro of the UCSC
+Genome Browser.
+
 <!-- ============= 2017 archived news ============= -->
 <a name="2017"></a>
+
+<a name="121917"></a>
+<h2>Dec. 19, 2017 &nbsp;&nbsp; New genome browser: <em>Pan paniscus</em>, panPan2</h2>
+<p>A genome browser is now available for the <em>Pan paniscus</em> assembly released in August
+2015 by the <a href="http://www.eva.mpg.de/index.html">Max-Planck Institute for Evoluntionary
+Anthropology</a> (MPI-EVA panpan1.1, UCSC version panPan2).</p>
+<h3>About the assembly:</h3>
+<ul>
+<li><b>UCSC Genome Browser assembly ID:</b> panPan2</li>
+<li><b>Sequencing/Assembly provider ID:</b> <a href="http://www.eva.mpg.de/index.html">Max-Planck
+Institute for Evolutionary Anthropology</a></li>
+<li><b>Assembly date:</b> August 2015</li>
+<li><b>Accession ID:</b> GCF_000258655.2</li>
+<li><b>NCBI Genome information:</b><a href="https://www.ncbi.nlm.nih.gov/genome/10729" 
+target="_blank" > NCBI genome/10729</a> <em>(Pan paniscus)</em></li>
+<li><b>NCBI Assembly information:</b><a href="https://www.ncbi.nlm.nih.gov/assembly/474211" 
+target="_blank" >  NCBI assembly/474211 (panpan1.1) </a></li>
+<li><b>BioProject information:</b><a href="https://www.ncbi.nlm.nih.gov/bioproject/169343" 
+target="_blank" > NCBI Bioproject: 169343</a></li>
+<li><b>BioSample information:</b><a href="https://www.ncbi.nlm.nih.gov/biosample/SAMEA1029457" 
+target="_blank" > NCBI Biosample: SAMEA1029457</a></li>
+<li><b>Contig+scaffold count:</b> 132,340</li>
+<li><b>Total size:</b> 3,286,643,896</li>
+<li><a href="../goldenPath/credits.html#bonobo_credits" 
+target="_blank">Acknowledgments</a></li>
+</ul>
+<h3>Data and Downloads:</h3>
+<ul>
+<li><a href="../goldenPath/credits.html#bonobo_use" 
+target="_blank">Data use conditions and restrictions</a></li>
+<li><a href="../goldenPath/help/ftp.html" 
+target="_blank">Rsync</a> and 
+<a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/panPan2/" 
+target="_blank">FTP</a></li>
+<li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#bonobo"
+target="_blank">Downloads page</a></li>
+</ul>
+
+<a name="121317"></a>
+<h2>Dec. 13, 2017 &nbsp;&nbsp; New NCBI RefSeq Functional Elements tracks for human and mouse</h2>
+<p>
+We are pleased to announce the release of a new set of 
+<a href="https://www.ncbi.nlm.nih.gov/refseq/functionalelements/" target="_blank">functional
+regulatory elements</a> for the <a href="../cgi-bin/hgTrackUi?db=hg38&g=refSeqFuncElems"
+target="_blank">hg38/GRCh38</a> and <a href="../cgi-bin/hgTrackUi?db=mm10&g=refSeqFuncElems"
+target="_blank">mm10/GRCm38</a> assemblies. NCBI is now providing
+<a href="https://www.ncbi.nlm.nih.gov/refseq/" target="_blank">RefSeq</a> and
+<a href="https://www.ncbi.nlm.nih.gov/gene/" target="_blank">Gene</a> records for non-genic
+functional elements that have been described in the literature and are experimentally validated.
+Elements in scope include experimentally-verified gene regulatory regions, known structural
+elements, well-characterized DNA replication origins, and clinically-significant sites of DNA
+recombination and genomic instability.</p>
+<p>
+Functional elements are colored by <a href="http://www.sequenceontology.org/"
+                                      target=_blank>Sequence Ontology (SO)</a> term
+using the same scheme as NCBI's Genome Data Viewer:
+  <ul>
+    <li><span style="color: #008080"><b>Regulatory elements</b></span>
+      (items labeled by <a href="http://www.insdc.org/controlled-vocabulary-regulatoryclass"
+                           target=_blank>INSDC regulatory class</a>)
+    <li><span style="color: #b00000"><b>Protein binding sites</b></span>
+      (items labeled by bound moiety)
+    <li><span style="color: #0000b0"><b>Mobile elements</b></span>
+    <li><span style="color: #a0522d"><b>Recombination features</b></span>
+    <li><span style="color: #b000b0"><b>Sequence features</b></span>
+    <li><span style="color: #000000"><b>Other</b></span>
+  </ul>
+</p>
+<p>
+A huge thank you to Terence Murphy from the RefSeq group, Angie Hinrichs, and many others from the
+UCSC Genome Browser staff for bringing this track to life.</p>
+
+<a name="121117"></a>
+<h2>Dec. 11, 2017 &nbsp;&nbsp;New bigNarrowPeak track format</h2>
+<p>
+We're happy to announce support for a new binary indexed track type called
+<a href="help/bigNarrowPeak.html">bigNarrowPeak</a>. This new track type joins
+the ranks of other recent &quot;big&quot; track types: bigMaf, bigChain, bigPsl,
+bigBarChart and bigGenePred</p>
+<p>
+With bigNarrowPeak, any narrowPeak files that were previously already made into bigBeds
+in the past with the bedToBigBed utility and the proper narrowPeak.as definitions should
+now display just as though they were narrowPeak custom tracks. For example here is a file
+from the ENCODE 2012 AWG Hub that can be pasted into the
+<a href="../../cgi-bin/hgCustom?db=hg19" target="_blank">Custom Tracks page</a> with
+<code>type=bigNarrowPeak</code> instead of <code>type=bigBed</code> used previously:</p>
+<pre><code>track type=bigNarrowPeak visibility=full db=hg19 name="nPk" description="AWG ENCODE narrowPeak Example" bigDataUrl=http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/byDataType/peaks/jan2011/spp/optimal/hub/spp.optimal.wgEncodeOpenChromChipGm12878Pol2AlnRep0_VS_wgEncodeOpenChromChipGm12878InputAln.bb
+</pre></code>
+<p>
+These tracks also support additional filter options for their additional fields,
+see more with this illustrated <a href="help/bigNarrowPeak.html#example3">example</a>.</p>
+
+<a name="120817"></a>
+<h2>Dec. 8, 2017 &nbsp;&nbsp;BLAT directly from the search box</h2>
+<p>
+Did you know you could BLAT from the search box?</p>
+<p>
+If you have short sequences (less than 2000 characters) you can directly search
+for them when Browsing without first visiting the BLAT tool to input the sequence.
+You can <a href ="#050417">also output your BLAT results as a custom track</a>,
+giving the results a name and description, and then save special results into Sessions
+allowing you to return to those findings when you wish to see them at a later date.</p>
+
+<a name="120617"></a>
+<h2>Dec. 6, 2017 &nbsp;&nbsp; New genome browser: <em>Xenopus tropicalis</em>, xenTro9</h2>
+<p>A genome browser is now available for the <em>X. tropicalis</em> assembly released in July
+2016 by the <a href="http://genome.jgi.doe.gov/">US DOE Joint Genome Institute</a> (JGI v9.1,
+UCSC version xenTro9).</p>
+<h3>About the assembly:</h3>
+<ul>
+<li><b>UCSC Genome Browser assembly ID:</b> xenTro9</li>
+<li><b>Sequencing/Assembly provider ID:</b> <a href="http://genome.jgi.doe.gov/">US DOE Joint 
+Genome Institute</a></li>
+<li><b>Assembly date:</b> July 2016</li>
+<li><b>Accession ID:</b> GCF_000004195.3</li>
+<li><b>NCBI Genome information:</b><a href="https://www.ncbi.nlm.nih.gov/genome/80" 
+target="_blank" > NCBI genome/80</a> <em>(Xenopus tropicalis)</em></li>
+<li><b>NCBI Assembly information:</b><a href="https://www.ncbi.nlm.nih.gov/assembly/768701" 
+target="_blank" >  NCBI assembly/768701 (US DOE Joint Genome Institute) </a></li>
+<li><b>BioProject information:</b><a href="https://www.ncbi.nlm.nih.gov/bioproject/12348" 
+target="_blank" > NCBI Bioproject: 12348</a></li>
+<li><b>BioSample information:</b><a href="https://www.ncbi.nlm.nih.gov/biosample/SAMN00000117" 
+target="_blank" > NCBI Biosample: SAMN00000117</a></li>
+<li><b>Contig+scaffold count:</b> 68,152</li>
+<li><b>Total size:</b> 1,440,398,454</li>
+<li><a href="../goldenPath/credits.html#xentro_credits" 
+target="_blank" >Acknowledgments</a></li>
+</ul>
+<h3>Data and Downloads:</h3>
+<ul>
+<li><a href="../goldenPath/credits.html#xentro_use" 
+target="_blank" >Data use conditions and restrictions</a></li>
+<li><a href="../goldenPath/help/ftp.html" 
+target="_blank" >Rsync</a> and 
+<a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/xenTro9/" 
+target="_blank" >FTP</a></li>
+<li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#xentro"
+target="_blank" >Downloads page</a></li>
+</ul>
+
+<a name="112117"></a>
+<h2>Nov. 21, 2017 &nbsp;&nbsp; New NCBI RefSeq tracks for mouse, mm10</h2>
+<p>
+We are pleased to announce the release of a new set of gene annotation tracks for the mm10/GRCm38
+assembly based on data from NCBI's Reference Sequence Database (RefSeq). For all of these tracks,
+the alignments and coordinates are provided by RefSeq. These tracks are organized in a composite
+track that includes:</p>
+<ul>
+  <li>RefSeq All &ndash; all annotations from the curated and predicted sets
+  <li>RefSeq Curated &ndash; curated annotations beginning with NM, NR, or NP
+  <li>RefSeq Predicted &ndash; predicted annotations beginning with XM or XR
+  <li>RefSeq Other &ndash; all other RefSeq annotations not included in RefSeq All
+  <li>RefSeq Alignments &ndash; alignments of transcripts to the genome provided by RefSeq
+</ul>
+<p>
+The new composite track also includes a &quot;UCSC RefSeq&quot; track that is based on our original
+&quot;RefSeq Genes&quot; track. As with before, this UCSC track is a result of our realignments
+of RefSeq RNAs to the genome, which means that there may be some cases where the annotations
+differ from those in the new NCBI RefSeq tracks.</p>
+<p>
+More details about these tracks, their construction, and how to access their underlying data
+can be found on
+<a href="http://genome.ucsc.edu/blog/the-new-ncbi-refseq-tracks-and-you/"
+target="_blank">this blog</a>
+or the <a href="../../cgi-bin/hgTrackUi?db=mm10&g=refSeqComposite">track description page</a>.</p>
+<p>
+A huge thank you to Terence Murphy from the RefSeq group and to Hiram Clawson, Brian Raney,
+Mark Diekhans, Angie Hinrichs, Jairo Navarro and many others from the UCSC Genome Browser staff for
+bringing this track to life.</p>
+
+<a name="111517"></a>
+<h2>Nov. 15, 2017 &nbsp;&nbsp; New genome browser: African clawed frog, xenLae2 <em>
+(Xenopus laevis)</em> </h2>
+<p>Please welcome <a href="../cgi-bin/hgGateway?db=xenLae2" target="_blank" 
+>xenLae2</a>, the 192nd genome assembly in the UCSC Genome Browser. This is the first assembly for
+the African clawed frog <em>(Xenopus laevis)</em>.</p>
+<h3>About the assembly:</h3>
+<ul>
+<li><b>UCSC Genome Browser assembly ID:</b> xenLae2</li>
+<li><b>Sequencing/Assembly provider ID:</b> International Xenopus Sequencing Consortium</li>
+<li><b>Assembly date:</b> Aug. 2016</li>
+<li><b>Accession ID:</b> GCF_001663975.1</li>
+<li><b>NCBI Genome information:</b><a href="https://www.ncbi.nlm.nih.gov/genome/81" 
+target="_blank" > NCBI genome/81</a> <em>(Xenopus laevis)</em></li>
+<li><b>NCBI Assembly information:</b><a href="https://www.ncbi.nlm.nih.gov/assembly/779791" 
+target="_blank" >  NCBI assembly/779791 (International Xenopus Sequencing Consortium) </a></li>
+<li><b>BioProject information:</b><a href="https://www.ncbi.nlm.nih.gov/bioproject/338693" 
+target="_blank" > NCBI Bioproject: 338693</a></li>
+<li><b>BioSample information:</b><a href="https://www.ncbi.nlm.nih.gov/biosample/SAMN04518361" 
+target="_blank" > NCBI Biosample: SAMN04518361</a></li>
+<li><b>Contig/scaffold count: </b>108,033</li>
+<li><b>Total size:</b> 2,718,433,805</li>
+<li><a href="../goldenPath/credits.html#african_clawed_frog_credits" 
+target="_blank" >Acknowledgments</a></li>
+</ul>
+<h3>Data and Downloads:</h3>
+<ul>
+<li><a href="../goldenPath/credits.html#african_clawed_frog_use" 
+target="_blank" >Data use conditions and restrictions</a></li>
+<li><a href="../goldenPath/help/ftp.html" 
+target="_blank" >Rsync</a> and 
+<a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/xenLae2/" 
+target="_blank" >FTP</a></li>
+<li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#african_clawed_frog" 
+target="_blank" >Downloads page</a></li>
+</ul>
+
+
+<a name="111317"></a>
+<h2>Nov. 13, 2017 &nbsp;&nbsp; New genome browser: Pig, susScr11 <em>(Sus scrofa)</em> </h2>
+<p>Please welcome <a href="../cgi-bin/hgGateway?db=susScr11" target="_blank" 
+>susScr11</a>, the 191st genome assembly in the UCSC Genome Browser. This is the third assembly in
+the browser for pig <em>(Sus scrofa)</em> .</p>
+<h3>About the assembly:</h3>
+<ul>
+<li><b>UCSC Genome Browser assembly ID:</b> susScr11</li>
+<li><b>Sequencing/Assembly provider ID:</b> The Swine Genome Sequencing Consortium (SGSC) 
+Sscrofa11.1</li>
+<li><b>Assembly date:</b> Feb. 2017</li>
+<li><b>Accession ID:</b>GCF_000003025.6</li>
+<li><b>NCBI Genome ID:</b><a href="https://www.ncbi.nlm.nih.gov/genome/84" 
+target="_blank" > 84</a> <em>(Sus scrofa)</em></li>
+<li><b>NCBI Assembly ID:</b><a href="https://www.ncbi.nlm.nih.gov/assembly/1004191" 
+target="_blank" > 1004191 </a><em>(Sus scrofa)</em></li>
+<li><b>BioProject ID:</b><a href="https://www.ncbi.nlm.nih.gov/bioproject/13421" 
+target="_blank" > 13421</a></li>
+<li><b>BioSample ID:</b><a href="https://www.ncbi.nlm.nih.gov/biosample/SAMN02953785" 
+target="_blank" > SAMN02953785</a></li>
+<li><b>Contig/scaffold count: </b>613</li>
+<li><b>Total size:</b> 2,501,912,388</li>
+<li><a href="../goldenPath/credits.html#pig_credits" 
+target="_blank" >Acknowledgments</a></li>
+</ul>
+<h3>Data and Downloads:</h3>
+<ul>
+<li><a href="../goldenPath/credits.html#pig_use" 
+target="_blank" >Data use conditions and restrictions</a></li>
+<li><a href="../goldenPath/help/ftp.html" 
+target="_blank" >Rsync</a> and 
+<a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/susScr11/" 
+target="_blank" >FTP</a></li>
+<li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#pig" 
+target="_blank" >Downloads page</a></li>
+</ul>
+
+<a name="110717"></a>
+<h2>Nov. 07, 2017 &nbsp;&nbsp; New genome browser: Chinese hamster <em>(Cricetulus griseus)</em> 
+ovary cell line, CHO-K1</h2>
+<p>Please welcome <a href="../cgi-bin/hgGateway?db=criGriChoV1" target="_blank" 
+>criGriChoV1</a>, the 190th genome assembly in the UCSC Genome Browser. This assembly marks the 
+first cell line to reside in the browser; the Chinese hamster <em>(Cricetulus griseus)</em> ovary 
+cell line, CHO-K1.</p>
+<h3>About the assembly:</h3>
+<ul>
+<li><b>UCSC Genome Browser assembly ID:</b> criGriChoV1</li>
+<li><b>Sequencing/Assembly provider ID:</b> Beijing Genomics Institute CriGri_1.0</li>
+<li><b>Assembly date:</b> Aug. 2011</li>
+<li><b>Accession ID:</b> GCF_000223135.1</li>
+<li><b>NCBI Genome ID:</b><a href="https://www.ncbi.nlm.nih.gov/genome/2791" 
+target="_blank" > 2791</a> (Cricetulus griseus)</li>
+<li><b>NCBI Assembly ID:</b><a href="https://www.ncbi.nlm.nih.gov/assembly/309608" 
+target="_blank" > 309608</a> (CriGri_1.0)</li>
+<li><b>BioProject ID:</b><a href="https://www.ncbi.nlm.nih.gov/bioproject/69991" 
+target="_blank" > 69991</a></li>
+<li><b>BioSample ID:</b><a href="https://www.ncbi.nlm.nih.gov/biosample/SAMN02981352" 
+target="_blank" > SAMN02981352</a></li>
+<li><b>Contig/scaffold count: </b>109,152</li>
+<li><b>Total size:</b> 2,399,786,748</li>
+<li><a href="../goldenPath/credits.html#chinese_hamster_credits" 
+target="_blank" >Acknowledgments</a></li>
+</ul>
+<h3>Data and Downloads:</h3>
+<ul>
+<li><a href="../goldenPath/credits.html#chinese_hamster_use" 
+target="_blank" >Data use conditions and restrictions</a></li>
+<li><a href="../goldenPath/help/ftp.html" 
+target="_blank" >Rsync</a> and 
+<a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/criGriChoV1/" 
+target="_blank" >FTP</a></li>
+<li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#chinese_hamster" 
+target="_blank" >Downloads page</a></li>
+</ul>
+
+<a name='110217'></a>
+<h2>Nov. 2, 2017 &nbsp;&nbsp; New Zebrafish assembly danRer11 available!</h2>
+<p>
+A genome browser is now available for the Zebrafish (<em>Danio rerio</em>) assembly released in
+May 2017 by The Genome Reference Consortium. For more information and statistics
+about this assembly, see the <a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000002035.6/">
+NCBI assembly record</a> for GRCz11. There are 20,680 contigs and 2,848 scaffolds in this assembly 
+with a total size of 1,679,203,469 bases.
+</p>
+
+<p>
+Bulk downloads of the sequence and annotation data may be obtained from the <a
+href="ftp://hgdownload.soe.ucsc.edu/goldenPath/danRer11">Genome Browser FTP
+server</a> or the <a href="http://hgdownload.soe.ucsc.edu/downloads.html#zebrafish">Downloads
+page</a>. Please observe the <a href="https://genome.ucsc.edu/FAQ/FAQdownloads.html#download2">
+conditions for use</a> when accessing and using these data sets. The annotation tracks for this 
+browser were generated by UCSC and collaborators worldwide. See the 
+<a href="credits.html#zebrafish_credits">Credits page</a> for a detailed list of the 
+organizations and individuals who contributed to this release.
+</p>
+
+<a name="102717"></a>
+<h2>Oct. 27, 2017 &nbsp;&nbsp; Public European UCSC MySQL server now available!</h2>
+<p>
+We are pleased to announce that a public MySQL server of UCSC Genome Browser
+data is now available in Europe! This should speed up programmatic access to
+the underlying MySQL databases for users in Europe. Connect to this new MySQL
+server using the command:</p>
+<pre><code> mysql --user=genome --host=genome-euro-mysql.soe.ucsc.edu -A</code></pre>
+
+<p>
+More information about connecting to our public MySQL servers can be found on our
+<a href="help/mysql.html">MySQL access</a> page.</p>
+
+<p>
+Additionally, we have configured both the <a href="help/gbib.html">Genome Browser in a Box</a>
+(GBiB) and <a href="help/gbic.html"> Genome Browser in the Cloud</a> (GBiC) to
+take advantage of this new server. If you are in Europe and have auto-updates
+enabled for your GBiB, it should automatically switch to using this new server
+the next time it updates. The GBiC will only auto-configure this
+connection when first created, otherwise, you will need to manually configure
+which MySQL server you want your mirror to use.</p>
+
+<a name="101817"></a>
+<h2>Oct. 18, 2017 &nbsp;&nbsp; New GTEx eQTL 44 tissues and summary tracks on hg19</h2>
+<p>
+We are pleased to announce two new GTEx eQTL tracks in the GRCh37/hg19 browser within 
+the &quot;Regulation&quot; track category. These tracks show genetic variants associated with and
+likely causal for differences in gene expression in 44 human tissues from the 
+<a href="https://www.genome.gov/27543767/" target="_blank">Genotype-Tissue Expression (GTEx)</a> 
+V6 data release. The data items displayed are gene expression quantitative trait loci within 1MB 
+of gene transcription start sites (cis-eQTLs), significantly associated with gene expression and 
+in the credible set of variants for the gene at a high confidence level (95%).</p>
+
+<p>
+<b><a href="../cgi-bin/hgGtexTrackSettings?db=hg19&g=gtexEqtlCluster"
+target="_blank">hg19: GTEx Combined eQTL</a></b></br>
+This "all in one" track displays all cis-eQTL's from the 44 tissues, collapsed into a single track
+for a summary view in the browser display. Gene/variant pairs occurring in multiple tissues are
+combined into a single item in the display. The item label shows the number of tissues where the
+eQTL was identified, or the tissue name and the GTEx-convention tissue color if the eQTL was
+identified solely in one tissue. Mouseover lists all tissues affected and the effect size. The item
+color reflects the largest effect size in any tissue (red for positive, blue for negative).
+Click-through on a combined eQTL shows for each tissue the significance of the association, effect
+size on gene expression, and the probability the eQTL belongs to the the 95% credible set. Track
+configuration supports filtering by gene, effect size, or probability. Tissues can be selected via
+checkboxes or from the UCSC GTEx Body Map graphic. </p>
+
+<p>
+<b><a href="../cgi-bin/hgTrackUi?db=hg19&g=gtexEqtlTissue" target="_blank">hg19: GTEx Tissue eQTL
+</a></b></br>This track is a composite track containing 44 subtracks representing the GTEx eQTL 
+tissues. Each subtrack contains all eQTLs identified for that tissue. Filtering is available for 
+all 44 subtracks.</p>
+
+<p>
+These two tracks join the previously released GTEx data tracks and track hubs in the UCSC Genome
+Browser:
+<ul>
+<li><a href="../cgi-bin/hgGtexTrackSettings?db=hg19&g=gtexGene"
+target="_blank">GTEx Gene</a></li>
+<li><a href="../cgi-bin/hgTrackUi?db=hg19&g=gtexTranscExpr" target="_blank">
+GTEx Transcript</a></li>
+<li><a href="http://hgdownload.soe.ucsc.edu/hubs/gtex/gtexHub.html" target="_blank">
+GTEx RNA-Seq Signal Hub</a> on <a href="
+../cgi-bin/hgTracks?db=hg38&hubUrl=http://hgdownload.soe.ucsc.edu/hubs/gtex/hub.txt" 
+target="_blank">hg19</a> and 
+<a href="../cgi-bin/hgTracks?db=hg38&hubUrl=http://hgdownload.soe.ucsc.edu/hubs/gtex/hub.txt" 
+target="_blank">hg38</a>.</li>
+<li><a href="http://hgdownload.soe.ucsc.edu/hubs/gtexAnalysis/gtexAse.html" target="_blank">
+GTEx Analysis Hub: Allele-Specific Expression</a> on <a href="
+../cgi-bin/hgTracks?db=hg38&hubUrl=
+http://hgdownload.soe.ucsc.edu/hubs/gtexAnalysis/gtexAnalysisHub.html" target="_blank">hg19</a> and 
+<a href="../cgi-bin/hgTracks?db=hg38&hubUrl=http://hgdownload.soe.ucsc.edu/hubs/gtexAnalysis/gtexAnalysisHub.html" 
+target="_blank">hg38</a>.</li>
+</ul>
+
+<p>
+Please see the related October 11, 2017 publication in <i>Nature</i>,
+&quot;<a href="https://www.nature.com/nature/journal/v550/n7675/full/nature24277.html" 
+target="_blank">Genetic effects on gene expression across human tissues</a>&quot; for an in-depth 
+article about these data.</p>
+
+<p>
+Acknowledgements to UCSC Genome Browser engineer, Kate Rosenbloom, for creating these tracks.
+</p>
+
+<a name="092917"></a>
+<h2>Sep. 29, 2017 &nbsp;&nbsp; VAI tool can now output HGVS terms</h2>
+<p>
+The UCSC Genome Browser has <a href="help/query.html#HGVS" target="_blank">continued to expand</a>
+the support for Human Genome Variation Society (HGVS) nomenclature. We have recently enhanced our
+<a href="/cgi-bin/hgVai" target="_blank">Variant Annotation Integrator (VAI) tool</a> to allow 
+output of HGVS terms from inputed variants when the gene prediction source is set to annotate on 
+RefSeq genes.</p>
+<p>
+For a quick experience click the &quot;Get results&quot; button in this
+<a href="http://genome.ucsc.edu/cgi-bin/hgVai?hgS_doOtherUser=submit&hgS_otherUserName=brianlee&hgS_otherUserSessionName=hg38.exampleVAI"
+target="_blank">example session</a>. This session is loaded with an artifical input of variants
+on the human hg38 assembly with NCBI RefSeq Genes track (curated NM_*, NR_*, and YP_* subset)
+filtered for coding exons and splice site roles and on DNase regulatory elements with output
+in HTML Variant Effect Predictor format where the &quot;Extra&quot; column will include
+HGVS notation. Please note that a semi-colon &quot;;&quot; will separate results in
+that field (HGVSG=NC_000010.11:g.27005592_27005594delAGA;
+HGVSCN=NM_014915.2:c.5129_5131delTCT; EXON=34/34).</p>
+<p>
+Credit goes to Angie Hinrichs and Christopher Lee for the implementation and testing of
+this feature.
+</p>
+
+<a name="092617"></a>
+<h2>Sep. 26, 2017 &nbsp;&nbsp; dbSNP video released</h2>
+<p>
+Announcing the release of a new addition to our <a href =
+"https://www.youtube.com/channel/UCQnUJepyNOw0p8s2otX4RYQ/videos">
+YouTube</a> channel.</p>
+<p>
+Our new tutorial describes the <a href =
+"https://youtu.be/d4XrkjnydN8?feature=player_detailpage&v=8ATcoDTOc0g&list=UUQnUJepyNOw0p8s2otX4RYQ">dbSNP
+resources </a> in the Genome Browser, including display conventions and the
+subdivision of the data into several useful subset tracks, especially the
+Common SNPs. There is also a discussion about changes to the genome assemblies
+from one version to another and of two ways to navigate between different
+assemblies of the human genome in the Browser.
+
+<p>Principal engineering on the dbSNP integration by Angie Hinrichs, quality
+assurance by Cath Tyner and Christopher Lee, with other contributions from
+the rest of the Genome Browser staff.  Video production by Robert Kuhn and
+David Gibson.</p>
+</p>
+
+<a name="091917"></a>
+<h2>Sep. 19, 2017 &nbsp;&nbsp; Data Integrator video released</h2>
+<p>
+We are pleased to announce the release of a new <a href =
+"https://www.youtube.com/watch?feature=player_detailpage&v=8ATcoDTOc0g&list=UUQnUJepyNOw0p8s2otX4RYQ"
+target = _blank>video</a> to the UCSC Genome Browser <a href =
+"https://www.youtube.com/channel/UCQnUJepyNOw0p8s2otX4RYQ/videos"
+target = _blank>YouTube channel</a>.  This video demonstrates the Data Integrator,
+a tool that allows data from up to five primary table to be exported.  The tables
+do not have to share a common data field, but are intersected using the
+coordinate footprint of the annotations in the first selected dataset.</p>
+
+<p>For example, even though the variants in the Common SNPs table share no
+identifiers with the genes in the UCSC Genes track of the human genome assembly
+hg19, it is possible to export a list of genes and all the Common SNPs that map
+to the chosen set of genes.  This functionality extends the reach of data mining
+beyond what is possible with the Table Browser.</p>
+
+<p>Principal engineering on the Data Integrator by Angie Hinrichs, quality 
+assurance by Matt Speir, with other contributions from the rest of the Genome 
+Browser staff.  Video production by Robert Kuhn and David Gibson.</p>
+
+
+<a name="091217"></a>
+<h2>Sep. 12, 2017 &nbsp;&nbsp; GTEx Transcript Expression tracks now available for human</h2>
+<p>
+We are pleased to announce the release of the GTEx Transcript Expression track available on the two
+most recent human assemblies, <a href="../cgi-bin/hgTrackUi?db=hg38&g=gtexTranscExpr"
+target="_blank">GRCh38/hg38</a> and <a href="../cgi-bin/hgTrackUi?db=hg19&g=gtexTranscExpr"
+target="_blank">GRCh37/hg19</a>. This track provides additional analysis of the same data as the
+existing GTEx Gene track and displays median transcript expression levels in 53 tissues, based on
+RNA-seq data from the GTEx midpoint milestone data release (V6, October 2015).
+Data for this track were computed at UCSC from GTEx RNA-seq sequence data using the
+<a href="http://toil.ucsc-cgl.org/" target="_blank">Toil</a> pipeline running the kallisto
+transcript-level quantification tool.</p>
+<p>
+The data in the <a href="../cgi-bin/hgTrackUi?db=hg19&g=gtexTranscExpr"
+target="_blank">GRCh37/hg19</a> version of this track was generated by coordinate converting the
+<a href="../cgi-bin/hgTrackUi?db=hg38&g=gtexTranscExpr" target="_blank">GRCh38/hg38</a>
+track data. Of the 189,615 BED entries from the original hg38 track, 176,220 were mapped
+over by transcript name to hg19 using wgEncodeGencodeCompV24lift37 (~93% coverage).
+</p>
+<p>
+Samples were collected by the GTEx Consortium. RNA-seq was performed by the GTEx Laboratory, Data
+Analysis and Coordinating Center (LDACC) at the Broad Institute. John Vivian, Melissa Cline, and
+Benedict Paten of the UCSC Computational Genomics lab were responsible for the sequence read
+quantification used to produce this track. Thanks to Kate Rosenbloom, Chris Eisenhart, and Jairo
+Navarro of the UCSC Genome Browser group for their work in creating and releasing these tracks.</p>
+
+<a name="090717"></a>
+<h2>Sep. 07, 2017 &nbsp;&nbsp; New Ensembl v89 gene tracks for 7 assemblies</h2>
+<p>
+The UCSC Genome Browser has released updated
+<a href="http://www.ensembl.org/info/genome/genebuild/genome_annotation.html"
+target="_blank">Ensembl gene annotation</a> tracks, from v86 to v89, for the 
+following assemblies:</p>  
+<ul>
+<li>Zebrafish <a href="../cgi-bin/hgTrackUi?db=danRer10&g=ensGene" 
+target="_blank">(danRer10)</a></li>
+<li>Chicken <a href="../cgi-bin/hgTrackUi?db=galGal5&g=ensGene" 
+target="_blank">(galGal5)</a></li>
+<li>Mouse Lemur <a href="../cgi-bin/hgTrackUi?db=micMur2&g=ensGene" 
+target="_blank">(micMur2)</a></li>
+<li>Opossum <a href="../cgi-bin/hgTrackUi?db=monDom5&g=ensGene" 
+target="_blank">(monDom5)</a></li>
+<li>Platypus <a href="../cgi-bin/hgTrackUi?db=ornAna1&g=ensGene" 
+target="_blank">(ornAna1</a> 
+and <a href="../cgi-bin/hgTrackUi?db=ornAna2&g=ensGene" 
+target="_blank">ornAna2)</a></li>
+<li> Rat <a href="../cgi-bin/hgTrackUi?db=rn6&g=ensGene" 
+target="_blank">(rn6)</a></li>
+</ul>
+</p>
+
+<a name="082517"></a>
+<h2>Aug. 23, 2017 &nbsp;&nbsp; New dbSNP build 150 tracks now available for hg19 and hg38</h2>
+<p>
+We are pleased to announce the release of our &quot;SNP&quot; tracks derived from
+<a href="https://www.ncbi.nlm.nih.gov/SNP/" target="_blank"> NCBI&#39;s dbSNP Human Build 150 
+data</a>, available on the two most recent human assemblies, 
+<a href="../cgi-bin/hgTrackUi?db=hg38&g=snp150" target="_blank">GRCh38/hg38</a> and 
+<a href="../cgi-bin/hgTrackUi?db=hg19&g=snp150" target="_blank">GRCh37/hg19</a>.
+NCBI's dbSNP database is a collection which includes a range of molecular variation, such as single 
+nucleotide polymorphisms and small insertions/deletions (indels). This release 
+<a href="https://ncbiinsights.ncbi.nlm.nih.gov/2017/05/08/dbsnps-human-build-150-has-
+doubled-the-amount-of-refsnp-records/" target="_blank">
+nearly doubles</a> the number of SNP records compared to the previous 147 release (now over 300
+million for hg38, and over 200 million for hg19). </p>
+
+<p>
+There are four SNP tracks available as part of this release:
+<ul>
+ <li>
+All SNPs (150): containing all mappings of reference SNPs to the human assembly. The tracks below
+are subsets of <i>All SNPs (150)</i>.</li>
+<li>
+Common SNPs (150): uniquely mapped variants that appear in at least 1% of the population or are
+100% non-reference.</li>
+<li>
+Flagged SNPs (150): uniquely mapped variants, excluding Common SNPs, that have been flagged by dbSNP
+as &quot;clinically associated.&quot;</li>
+<li>
+Mult. SNPs (150): variants that have been mapped to more than one genomic location. This track has
+been shrinking over the course of the last few releases as dbSNP now excludes most SNPs whose
+flanking sequences map to multiple locations in the genome.</li>
+</ul>
+<p>
+By default, only the <i>Common SNPs (150)</i> are visible in the browser; other tracks must be made
+visible using the track controls. <i>All SNPs (150)</i> tracks reside in the &quot;Variation&quot;
+group category for the hg19 and hg38 browsers.</p>
+<p>
+These tracks were produced at UCSC by Angie Hinrichs and checked for quality by Cath Tyner. 
+We'd like to thank the dbSNP group at NCBI for providing access to these data.</p>
+
+<a name="081717"></a>
+<h2>Aug. 17, 2017 &nbsp;&nbsp; New CRISPR track for Chinese hamster</h2>
+<p>
+A new <a href="../cgi-bin/hgTrackUi?db=criGri1&g=crispr" target="_blank">CRISPR/Cas9</a> track is 
+now available for the Chinese hamster (C_griseus_v1.0/<a href="../cgi-bin/hgGateway?db=criGri1"
+target="_blank">criGri1</a>) assembly.</p>
+<p>
+This track shows regions of the genome within 200 bp of transcribed regions and DNA sequences 
+targetable by CRISPR RNA guides using the Cas9 enzyme from S. pyogenes (PAM: NGG). CRISPR target 
+sites were annotated with predicted specificity (off-target effects) and predicted efficiency 
+(on-target cleavage) by various algorithms using the <a href="http://crispor.tefor.net/"
+target="_blank">CRISPOR</a> tool.</p>
+<p>
+The details page for each target contains a wealth of information related to the target, such as the
+<a href="http://dx.doi.org/10.1038/nbt.2647" target="_blank">MIT Specificity score</a>, 
+<a href="http://dx.doi.org/10.1038/nmeth.3543"
+target="_blank">Moreno-Mateos Efficiency Score</a>, 
+<a href="http://dx.doi.org/10.1038/nbt.3437"
+target="_blank">Doench/Fusi Efficiency Score</a>, and any off-targets.</p> 
+<p>
+If you would like us to generate this track for another assembly, please notify us at
+<a
+href="mailto:&#103;e&#110;&#111;&#109;e&#64;&#115;&#111;&#101;.&#117;&#99;&#115;c.&#101;d&#117;">&#103;e&#110;&#111;&#109;e&#64;&#115;&#111;&#101;.&#117;&#99;&#115;c.&#101;d&#117;</a>.</p>
+<!-- above address is genome at soe.ucsc.edu --> 
+<p>
+We would like to thank Hiram Clawson, Maximilian Haeussler, Christopher Lee, and Jairo Navarro for
+the development and release of these tracks.</p>
+
 <a name="071417"></a>
 <h2>Jul. 14, 2017 &nbsp;&nbsp; New alternative mouse strain hub and strain-specific annotations</h3>
 <p>
@@ -63,8 +1134,8 @@ relative to the reference mouse genome (GRCm38/mm10).</p>
 <p>
 Special thanks to Joel Armstrong, Ian Fiddles, and Benedict Paten for the alignment generation, as
 well as Thomas Keane and the <a href="http://www.sanger.ac.uk/science/data/mouse-genomes-project"
-target="_blank">Mouse Genomes Project</a> for providing the genome assemblies. Thanks to Hiram Clawson
-and Jairo Navarro for the development and release of this track and hub.</p>
+target="_blank">Mouse Genomes Project</a> for providing the genome assemblies. Thanks to Hiram 
+Clawson and Jairo Navarro for the development and release of this track and hub.</p>
 
 <a name="2017-07-14"></a>
 <h2>Jul. 14, 2017 &nbsp;&nbsp; New Video:  Multi-Region mode for viewing 
@@ -131,9 +1202,9 @@ genome assembly, the data will always be based on human sources.</p>
 <p>
 A huge thank you to the many
 <a href="help/hgGeneGraph.html#credits" target="_blank">collaborators and contributors</a>
-who helped by providing their databases and expertise, notably Hoifung Poon and Chris Quirk at Microsoft Research who provided text mining data.
-Thank you to Max Haeussler and Matthew Speir at the UCSC Genome Browser for all of their efforts in
-the creation and release of these new resources.
+who helped by providing their databases and expertise, notably Hoifung Poon and Chris Quirk at 
+Microsoft Research who provided text mining data. Thank you to Max Haeussler and Matthew Speir at 
+the UCSC Genome Browser for all of their efforts in the creation and release of these new resources.
 </p>
 
 <a name="061317"></a>
@@ -297,7 +1368,8 @@ Main features in drag-and-select menu:</p>
   zoom with shift+select. If selected, re-enable via 'View - Configure Browser' (keyboard shortcut
   : c then f).</li>
   <li>
-  A &quot;color picker&quot; option allows for easy color selection of each highlight; you can also  create multiple highlights (each with various colors if desired).</li>
+  A &quot;color picker&quot; option allows for easy color selection of each highlight; you can also 
+  create multiple highlights (each with various colors if desired).</li>
   <li>
   Hold Shift+drag to show the menu (or click+drag).</li>
   <li>
@@ -331,8 +1403,8 @@ height="602"></p>
 <a name="042117"></a>
 <h2>Apr. 21, 2017 &nbsp;&nbsp; New Genome Browser available for Chinese pangolin</h2>
 <p>
-A Genome Browser is now available for the Chinese pangolin (<em>Manis pentadactyla</em>) assembly released
-in August 2014 by Washington University. For more information and statistics about this
+A Genome Browser is now available for the Chinese pangolin (<em>Manis pentadactyla</em>) assembly 
+released in August 2014 by Washington University. For more information and statistics about this
 assembly, see the NCBI assembly record for
 <a href="https://www.ncbi.nlm.nih.gov/assembly/GCA_000738955.1/" target="_blank">M_pentadactyla-1.1.1</a>.
 There are 230,930 contigs and 92,772 scaffolds in this assembly with a total size of
@@ -512,7 +1584,7 @@ bringing this track to life.</p>
 Please welcome the newest additions to the UCSC Genome Browser keyboard shortcuts menu, 
 now providing over 40 shortcuts. To view a menu of shortcuts, simply press the &quot;?&quot; 
 key on your keyboard while on an assembly&apos;s browser display page (e.g., 
-<a href="../cgi-bin/hgTracks?db=hg38" target=_blank">GRCh38/hg38 assembly display</a>). 
+<a href="../cgi-bin/hgTracks?db=hg38" target="_blank">GRCh38/hg38 assembly display</a>). 
 The new shortcut set utilizes the keyboard keys 1 - 6 to provide six levels of zoom views 
 for tracks in the browser display, as listed below:</p>
 <ul>
@@ -554,9 +1626,9 @@ versatile. For most purposes, the GBiC essentially replaces the manual installat
 mirroring the UCSC Genome Browser in multiple environments (cloud servers, dedicated servers, or 
 even a laptop).</p>
 <p>
-GBiC is free to noncommercial users such as non-profit organizations, academic institutions, and 
-individuals. Corporate use requires a license, a one-time setup fee of $2,000 and annual payment 
-of $1,000 per instance. GBiC is available exclusively at the UCSC Genome Browser 
+GBiC is free for non-profit academic research and for personal use. Corporate use requires a 
+license, a one-time setup fee of $2,000 and annual payment of $1,000 per instance. GBiC is 
+available exclusively at the UCSC Genome Browser 
 <a href="https://genome-store.ucsc.edu" target="_blank">store</a>.</p>
 <p>
 For an installation demonstration, see the <a href="https://www.youtube.com/watch?v=dcJERBVnjio"
@@ -599,7 +1671,8 @@ The Genome Reference Consortium has released many alternate haplotypes as part o
 human genome assembly, hg38 (GRCh38). Our new <a href="http://bit.ly/ucscAlts" 
 target="_blank">video tutorial</a>, shows how to use the Genome Browser's multi-region viewing mode 
 to substitute these sequences, along with their annotations, into the main chromosomes of
-this assembly, as well as other genome assemblies with alternate haplotypes. The video was produced by Robert Kuhn and David Gibson.</p> 
+this assembly, as well as other genome assemblies with alternate haplotypes. The video was produced 
+by Robert Kuhn and David Gibson.</p> 
 <p> 
 See our <a href="../training/vids">video page</a> for a full list of our video offerings.</p>
 
@@ -648,7 +1721,7 @@ such as CM000663.2 16,560,000 16,615,000 will be equivalent to chr1 16,560,000 1
 A Genome Browser is now available for the Chimp (<em>Pan troglodytes</em>)
 assembly released in May 2016 by the Chimpanzee Sequencing and Analysis Consortium.
 For more information and statistics about this assembly, see the NCBI assembly record
-for <a href="http://www.ncbi.nlm.nih.gov/assembly/733711" target="_blank">Pan_tro 3.0</a>.
+for <a href="https://www.ncbi.nlm.nih.gov/assembly/733711" target="_blank">Pan_tro 3.0</a>.
 There are 26 different chromosomes along with 72,326 contigs and 45,511 scaffolds in this assembly
 with a total size of 3,231,170,666 bases.</p>
 <p>
@@ -664,7 +1737,7 @@ individuals who contributed to this release.</p>
 A Genome Browser is now available for the Green Monkey (<em>Chlorocebus sabaeus</em>)
 assembly released in March 2014 by the Vervet Genomics Consortium.
 For more information and statistics about this assembly, see the NCBI assembly record for 
-<a href="http://www.ncbi.nlm.nih.gov/assembly/132581" target="_blank">Chlorocebus_sabeus 1.1</a>.
+<a href="https://www.ncbi.nlm.nih.gov/assembly/132581" target="_blank">Chlorocebus_sabeus 1.1</a>.
 There are 32 different chromosomes along with 162,724 contigs and 2,022 scaffolds in this assembly
 with a total size of 2,789,656,328 bases.</p>
 <p>
@@ -680,7 +1753,7 @@ organizations and individuals who contributed to this release.</p>
 A Genome Browser is now available for the Gorilla (<em>Gorilla gorilla gorilla</em>)
 assembly released in March 2016 by the University of Washington.
 For more information and statistics about this assembly, see the NCBI assembly record
-for <a href="http://www.ncbi.nlm.nih.gov/assembly/705391" target="_blank">GSMRT3</a>.
+for <a href="https://www.ncbi.nlm.nih.gov/assembly/705391" target="_blank">GSMRT3</a>.
 There are 15,997 contigs, Contig N50 of 10,016,017 in this assembly
 with a total size of 3,080,414,926 bases.</p>
 <p>
@@ -717,7 +1790,7 @@ intron and UTR coordinates as well as insertions, deletions and duplications.  <
 A Genome Browser is now available for the Chicken (<em>Gallus gallus</em>)
 assembly released December 2015 by the International Chicken Genome Consortium (ICGC).
 For more information and statistics about this assembly, see the NCBI assembly record
-for <a href="http://www.ncbi.nlm.nih.gov/assembly/595851" target="_blank">Gallus_gallus-5.0</a>.
+for <a href="https://www.ncbi.nlm.nih.gov/assembly/595851" target="_blank">Gallus_gallus-5.0</a>.
 There are 36 different chromosomes along with 23,439 contigs/scaffolds in this assembly
 with a total size of 1,230,258,557 bases.</p>
 <p>
@@ -759,7 +1832,7 @@ data.</p>
 <h2>Aug. 16, 2016 &nbsp;&nbsp; dbSNP 147 available for hg19 and hg38</h2>
 <p>
 We are pleased to announce the release of four tracks derived from NCBI 
-<a href="http://www.ncbi.nlm.nih.gov/SNP/"> dbSNP</a> Build 147 data, available on the two most 
+<a href="https://www.ncbi.nlm.nih.gov/SNP/"> dbSNP</a> Build 147 data, available on the two most 
 recent human assemblies GRCh37/hg19 and GRCh38/hg38. NCBI's dbSNP database is a collection of 
 &quot;simple nucleotide polymorphisms&quot; (SNPs), which are a class of genetic variations
 that include single nucleotide polymorphisms and small insertions/deletions (indels). This immense 
@@ -785,7 +1858,8 @@ By default, only the Common SNPs (147) are visible; other tracks must be made vi
 track controls. You will find the other SNPs (147) tracks on both of GRCh37/hg19 and GRCh38/hg38 
 browsers in the &quot;Variation&quot; group.</p>
 <p>
-The tracks were produced at UCSC by Angie Hinrichs and Christopher Lee. We'd like to thank the dbSNPgroup at NCBI for providing access to these data.</p>
+The tracks were produced at UCSC by Angie Hinrichs and Christopher Lee. We'd like to thank the dbSNP
+group at NCBI for providing access to these data.</p>
 
 <a name="081216"></a>
 <h2>Aug. 12, 2016 &nbsp;&nbsp; Genome Browser for Malayan flying lemur now available</h2>
@@ -795,7 +1869,7 @@ assembly released June 2014 by
 <a href="http://genome.wustl.edu/genomes/detail/galeopterus-variegatus/"
 target="_blank">The Genome Institute at Washington University</a>. For more information and 
 statistics about this assembly, see the NCBI assembly record for 
-<a href="http://www.ncbi.nlm.nih.gov/assembly/182621" target="_blank"> G_variegatus-3.0.2</a>. There
+<a href="https://www.ncbi.nlm.nih.gov/assembly/182621" target="_blank"> G_variegatus-3.0.2</a>. There
 are 179,514 scaffolds with a total size of 3,187,660,572 bases.</p>
 <p>
 Bulk downloads of the sequence and annotation data may be obtained from the Genome Browser
@@ -1101,7 +2175,7 @@ feature.</p>
 <h2>Apr. 15, 2016 &nbsp;&nbsp; dbSNP 146 available for hg19 and hg38</h2>
 <p>
 We are pleased to announce the release of four tracks derived from NCBI 
-<a href="http://www.ncbi.nlm.nih.gov/SNP/"> dbSNP</a> Build 146 data, available on the two most
+<a href="https://www.ncbi.nlm.nih.gov/SNP/"> dbSNP</a> Build 146 data, available on the two most
 recent human assemblies GRCh37/hg19 and GRCh38/hg38. NCBI's dbSNP database is a collection of 
 &quot;simple nucleotide polymorphisms&quot; (SNPs), which are a class of genetic variations
 that include single nucleotide polymorphisms and small insertions/deletions (indels). This immense 
@@ -1137,7 +2211,7 @@ group at NCBI for providing access to these data.</p>
 A Genome Browser is now available for the gorilla (<em>Gorilla gorilla gorilla</em>) assembly 
 released December 2014 by the Wellcome Trust Sanger Institute. For more information and statistics
 about this assembly, see the NCBI assembly record for 
-<a href="http://www.ncbi.nlm.nih.gov/assembly/503571" target="_blank">gorGor4</a>.  
+<a href="https://www.ncbi.nlm.nih.gov/assembly/503571" target="_blank">gorGor4</a>.  
 There are 25 complete chromosomes alongside 40,667 scaffolds with a total size of 3,063,362,754 
 bases.</p>
 <p>
@@ -1156,7 +2230,7 @@ released November 2015 by the
 <a href="https://www.hgsc.bcm.edu/non-human-primates/rhesus-monkey-genome-project"
 target="_blank">Baylor College of Medicine Human Genome Sequencing Center</a>. 
 For more information and statistics about this assembly, see the NCBI assembly record for 
-<a href="http://www.ncbi.nlm.nih.gov/assembly/2715158" target="_blank"> Mmul_8.0.1</a>. There are 
+<a href="https://www.ncbi.nlm.nih.gov/assembly/2715158" target="_blank"> Mmul_8.0.1</a>. There are 
 23 complete chromosomes alongside 284,705 scaffolds with a total size of 3,236,224,332 bases.</p>
 <p>
 Bulk downloads of the sequence and annotation data may be obtained from the Genome Browser
@@ -1172,7 +2246,7 @@ A Genome Browser is now available for the crab-eating macaque (<em>Macaca fascic
 assembly released June 2013 by the
 <a href="http://genome.wustl.edu/genomes/detail/macaca-fascicularis/"
 target="_blank">Genome Sequencing Center at Washington University, St. Louis</a>. For more 
-information about this assembly, see <a href="http://www.ncbi.nlm.nih.gov/assembly/704988"
+information about this assembly, see <a href="https://www.ncbi.nlm.nih.gov/assembly/704988"
 target="_blank">Macaca_fascicularis_5.0</a> in the NCBI Assembly database. There are 22 complete 
 chromosomes alongside 7,579 scaffolds with a total size of 2,946,843,737 bases.</p>
 <p>
@@ -1239,7 +2313,7 @@ available</h2>
 A Genome Browser is now available for the <em>Caenorhabditis elegans</em> assembly released February
 2013 by the C. elegans Sequencing Consortium (C. elegans Sequencing Consortium version WBcel235, 
 UCSC version ce11). For more information and statistics about this assembly, see the NCBI assembly 
-record for <a href="http://www.ncbi.nlm.nih.gov/assembly/554278" target="_blank">WBcel235</a>.
+record for <a href="https://www.ncbi.nlm.nih.gov/assembly/554278" target="_blank">WBcel235</a>.
 There are 7 complete chromosomes with a total size of 100,286,401 bases.</p>
 <p>
 Bulk downloads of the sequence and annotation data may be obtained from the Genome Browser
@@ -1255,7 +2329,7 @@ A Genome Browser is now available for the brown kiwi (<em>Apteryx australis</em>
 June 2015 by the <a href="http://www.eva.mpg.de/index.html"
 target="_blank">Max-Plank Institute for Evolutionary Anthropology</a> (MPI-EVA version AptMan0,
 UCSC version aptMan1). For more information and statistics about this assembly, see
-<a href="http://www.ncbi.nlm.nih.gov/assembly/GCF_001039765.1"
+<a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001039765.1"
 target="_blank">AptMant0</a> in the NCBI Assembly database. There are
 24,719 scaffolds with a total size of 1,523,986,457 bases.</p>
 <p>
@@ -1319,7 +2393,7 @@ target="_blank">The Broad Institute</a> and the
 <a href="https://www.hgsc.bcm.edu/non-human-primates/mouse-lemur-genome-project"
 target="_blank">Baylor College of Medicine Human Genome Sequencing Center</a>. 
 For more information and statistics about this assembly, see the NCBI assembly record
-for <a href="http://www.ncbi.nlm.nih.gov/assembly/329621" target="_blank"> Mmur_2.0</a>.  
+for <a href="https://www.ncbi.nlm.nih.gov/assembly/329621" target="_blank"> Mmur_2.0</a>.  
 There are 10,311 scaffolds with a total size of 2,438,804,424 bases.</p>
 <p>
 Bulk downloads of the sequence and annotation data may be obtained from the Genome Browser
@@ -1335,7 +2409,7 @@ A Genome Browser is now available for the platypus (<em>Ornithorhynchus anatinus
 released February 2007 by the 
 <a href="http://genome.wustl.edu/genomes/detail/ornithorhynchus-anatinus/"
 target="_blank">Genome Sequencing Center at Washington University, St. Louis</a>. For more information
-about this assembly, see <a href="http://www.ncbi.nlm.nih.gov/assembly/237598/" target="_blank">
+about this assembly, see <a href="https://www.ncbi.nlm.nih.gov/assembly/237598/" target="_blank">
 Ornithorhynchus_anatinus-5.0.1</a> in the NCBI Assembly database. There are 201,525 scaffolds with 
 a total size of 1,996,826,513 bases.</p>
 <p>
@@ -1366,7 +2440,7 @@ By default, only the Common SNPs (142) are visible. The other tracks can be made
 track controls. These three SNPs (142) tracks can be found on the Mouse Dec. 2011 (mm10/GRCm38) 
 browser in the Variation and Repeats group.</p>
 <p>
-Thank you to the <a href="http://www.ncbi.nlm.nih.gov/SNP/" target="_blank">dbSNP</a> group at NCBI 
+Thank you to the <a href="https://www.ncbi.nlm.nih.gov/SNP/" target="_blank">dbSNP</a> group at NCBI 
 for making these data publicly available. The tracks were produced at UCSC by Brian Raney, Angie 
 Hinrichs and Matthew Speir.</p>
 
@@ -1375,7 +2449,7 @@ Hinrichs and Matthew Speir.</p>
 <h2>Jan. 8, 2016 &nbsp;&nbsp; dbSNP 144 available for hg19 and hg38</h2>
 <p>
 We are pleased to announce the release of four tracks derived from NCBI 
-<a href="http://www.ncbi.nlm.nih.gov/SNP/" target ="_blank">dbSNP</a> Build 144 data, available on 
+<a href="https://www.ncbi.nlm.nih.gov/SNP/" target ="_blank">dbSNP</a> Build 144 data, available on 
 the two most recent human assemblies GRCh37/hg19 and GRCh38/hg38.</p>
 <p>
 There are four SNP tracks available as part of this release. One is a track containing all mappings 
@@ -1408,7 +2482,7 @@ dbSNP group at NCBI for providing access to these data.</p>
 A Genome Browser is now available for the frog (<em>Xenopus tropicalis</em>) assembly released 
 Sept. 2012 by the <a href="http://genome.jgi.doe.gov/" target="_blank">US DOE Joint Genome Institute
 (JGI-PGF)</a> (JGI v7.0, UCSC version xenTro7). For more information and statistics about this 
-assembly, see the NCBI assembly record for <a href="http://www.ncbi.nlm.nih.gov/assembly/515038" 
+assembly, see the NCBI assembly record for <a href="https://www.ncbi.nlm.nih.gov/assembly/515038" 
 target="_blank">Xtropicalis_v7</a>. There are 7,728 scaffolds with a total size of 1,437,530,879
 bases.</p>
 <p>
@@ -1424,7 +2498,7 @@ organizations and individuals who contributed to this release.</p>
 A Genome Browser is now available for the cat (<em>Felis catus</em>) assembly released Nov. 2014 by 
 the International Cat Genome Sequencing Consortium (ICGSC version Felis_catus_8.0, UCSC version 
 felCat8). For more information and statistics about this assembly, see the NCBI assembly record
-for <a href="http://www.ncbi.nlm.nih.gov/assembly/1373248" target="_blank">Felis_catus_8.0</a>. 
+for <a href="https://www.ncbi.nlm.nih.gov/assembly/1373248" target="_blank">Felis_catus_8.0</a>. 
 There are 267,625 scaffolds with a total size of 2,641,342,258 bases.</p>
 <p>
 Bulk downloads of the sequence and annotation data may be obtained from the Genome Browser
@@ -1453,7 +2527,7 @@ Lastly, at the bottom of the section for each selected track, you will see a dro
 labeled "Related tables" which allows you to select and add various tables to your output.
 <p>
 <img src="../images/hgIntegratorRelatedTablesAnnouncement.png" alt="hgIntegrator related
-tables"" width="684" height="418"></p>
+tables" width="684" height="418"></p>
 <p>
 For more information about using the Data Integrator, please see the 
 <a href="help/hgIntegratorHelp.html">User Guide</a>.</p>
@@ -1651,7 +2725,8 @@ window or downloaded to an optionally gzip-compressed file. Look for &quot;Data 
 in the Genome Browser Tools menu (top blue bar) if you'd like to try it out. </p>
 <p>
 For more information about the Data Integrator's capabilities and usage, see the
-user's guide: <a href="http://genome.ucsc.edu/goldenPath/help/hgIntegratorHelp.html">http://genome.ucsc.edu/goldenPath/help/hgIntegratorHelp.html</a>.
+user's guide: <a href="http://genome.ucsc.edu/goldenPath/help/hgIntegratorHelp.html">
+http://genome.ucsc.edu/goldenPath/help/hgIntegratorHelp.html</a>.
 As always, we welcome questions and feedback on our public mailing list:
 <a href="mailto:&#103;&#101;&#110;&#111;&#109;e&#64;&#115;&#111;&#101;.uc&#115;c.&#101;&#100;&#117;">&#103;&#101;&#110;&#111;&#109;e&#64;&#115;&#111;&#101;.uc&#115;c.&#101;&#100;&#117;</a>
 <!-- above address is genome at soe.ucsc.edu --> </p>
@@ -1725,7 +2800,7 @@ bigGenePred, please see our
 <a href="help/bigGenePred.html">bigGenePred Track Format help page</a>.</p>
 
 <a name="040215b"></a>
-<h2>Apr. 2, 2015 `&nbsp;&nbsp; New tarsier (tarSyr2) assembly now available in the Genome
+<h2>Apr. 2, 2015 &nbsp;&nbsp; New tarsier (tarSyr2) assembly now available in the Genome
 Browser</h2>
 <p>
 We are pleased to announce the release of a Genome Browser for the Sep. 2013 assembly of tarsier, 
@@ -1754,7 +2829,7 @@ See our <a href="../training/index.html" target="_blank">training page</a> or ou
 <p>
 The most recent zebrafish assembly -- GRCz10 (UCSC version danRer10, Sep. 2014) -- is now
 available in the UCSC Genome Browser. This is the first zebrafish release by the
-<a href="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/zebrafish/"
+<a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/zebrafish/"
 target="_blank">Genome Reference Consortium</a>, who took over the improvement and
 maintenance of the zebrafish genome assembly.</p>
 <p>
@@ -1763,9 +2838,9 @@ mapping to fill gaps with new clone sequence and improve the positioning of asse
 components.  This has also been supplemented with a new whole genome shotgun assembly
 WGS31. The result is an assembly with a sequence length of 1.3 Gb in 26 chromosomes and
 1,035 scaffolds.  For more details about the GRCz10 assembly, see the
-<a href="http://www.ncbi.nlm.nih.gov/assembly/210611"
+<a href="https://www.ncbi.nlm.nih.gov/assembly/210611"
 target="_blank">GRCz10 assembly page</a> or the official
-<a href="http://www.ncbi.nlm.nih.gov/news/10-08-2014-zebrafish-grcz10-annotated/"
+<a href="https://www.ncbi.nlm.nih.gov/news/10-08-2014-zebrafish-grcz10-annotated/"
 target="_blank">GRCz10 announcement</a>.</p>
 <p>
 The danRer10 sequence and annotation data can be downloaded from the UCSC Genome Browser
@@ -1901,7 +2976,7 @@ Hubs</a>.</p>
 <h2>Feb. 11, 2015 &nbsp;&nbsp; dbSNP 142 available for hg19 and hg38</h2>
 <p>
 We are pleased to announce the release of four tracks derived from NCBI 
-<a href="http://www.ncbi.nlm.nih.gov/SNP/" target="_blank">dbSNP</a> Build 142 data, available on 
+<a href="https://www.ncbi.nlm.nih.gov/SNP/" target="_blank">dbSNP</a> Build 142 data, available on 
 the two most recent human assemblies GRCh37/hg19 and GRCh38/hg38. The new tracks contain a 
 substantial amount of additional annotation data not included in previous dbSNP tracks, with 
 corresponding coloring and filtering options in the Genome Browser.</p>
@@ -2043,10 +3118,9 @@ Genome Browser. GBiB runs inside of Oracle's free VirtualBox virtual machine. It
 functionality as the UCSC Genome Browser, but keeps your data private and local to your own 
 computer.</p>
 <p>
-GBiB is free for non-commercial use by non-profit organizations, academic institutions, and for 
-personal use. Commercial use requires purchase of a license with setup fee and annual payment. 
-Download or purchase GBiB in our secure online 
-<a href="https://genome-store.ucsc.edu/">store</a>.</p>
+GBiB is free for non-profit academic research and for personal use. Commercial use requires 
+purchase of a license with setup fee and annual payment. Download or purchase GBiB in our secure 
+online <a href="https://genome-store.ucsc.edu/">store</a>.</p>
 <p>
 You can read more about GBiB on our 
 <a href="http://genome.ucsc.edu/blog/genome-browser-in-a-box-gbib-origins/">blog</a> or in
@@ -2056,7 +3130,7 @@ our <a href="help/gbib.html">documentation</a>.</p>
 <h2>Oct. 20, 2014 &nbsp;&nbsp; dbSNP 141 available for hg19 and hg38</h2>
 <p>
 We are pleased to announce the release of four tracks derived from NCBI
-<a href="http://www.ncbi.nlm.nih.gov/SNP/" target="_blank">dbSNP</a> Build 141 data, available on 
+<a href="https://www.ncbi.nlm.nih.gov/SNP/" target="_blank">dbSNP</a> Build 141 data, available on 
 the two most recent human assemblies GRCh37/hg19 and GRCh38/hg38. The new tracks contain additional 
 annotation data not included in previous dbSNP tracks, with corresponding coloring and filtering 
 options in the Genome Browser.</p>
@@ -2111,15 +3185,15 @@ If you have a suggestion for a blog post topic, please let us know via our
 <p>
 We are excited to announce the release of a Genome Browser and information portal for the 
 Jun. 2014 assembly of the Ebola virus (UCSC version eboVir3, GenBank accession 
-<a href="http://www.ncbi.nlm.nih.gov/nuccore/KM034562" target="_blank">KM034562</a>) 
+<a href="https://www.ncbi.nlm.nih.gov/nuccore/KM034562" target="_blank">KM034562</a>) 
 submitted by the Broad Institute. We have worked closely with the Pardis Sabeti lab at 
 the Broad Institute and other Ebola experts throughout the world to incorporate
 annotations that will be useful to those studying Ebola. Annotation tracks included in this
-initial release include genes from <a href="http://www.ncbi.nlm.nih.gov/"
+initial release include genes from <a href="https://www.ncbi.nlm.nih.gov/"
 target="_blank">NCBI</a>, B- and T-cell epitopes from the <a href="http://www.iedb.org/"
 target="_blank">IEDB</a>, structural annotations from <a href="http://www.uniprot.org/"
 target="_blank">UniProt</a> and a wealth of SNP data from the
-<a href="http://www.ncbi.nlm.nih.gov/pubmed/25214632" target="_blank">2014 publication</a>
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/25214632" target="_blank">2014 publication</a>
 by the Sabeti lab. This initial release also contains a 160-way alignment
 comprising 158 Ebola virus sequences from various African outbreaks and 2 Marburg virus sequences.
 You can find links to the Ebola virus Genome Browser and more information on the Ebola virus
@@ -2281,8 +3355,8 @@ this track.</p>
 <h2>May 27, 2014 &nbsp;&nbsp; New Roadmap Epigenomics Integrative Analysis Hub now available</h2>
 <p>
 We are pleased to announce the addition of the
-<a href="../cgi-bin/hgTracks?db=hg19&hubUrl=http://vizhub.wustl.edu/VizHub/RoadmapIntegrative.txt">Roadmap Epigenomics Integrative Analysis Hub</a> 
-to our list of publicly available track hubs.
+<a href="../cgi-bin/hgTracks?db=hg19&hubUrl=http://vizhub.wustl.edu/VizHub/RoadmapIntegrative.txt">
+Roadmap Epigenomics Integrative Analysis Hub</a> to our list of publicly available track hubs.
 This new hub, produced by <a href="http://vizhub.wustl.edu/" target="blank">VizHub</a> at 
 Washington University in St. Louis (WUSTL), contains hundreds of tracks that cover the wide 
 range of epigenomic data available from the <a href="http://www.roadmapepigenomics.org/" 
@@ -2301,7 +3375,8 @@ gateway page</a> and select both the Roadmap Epigenomics Integrative Analysis Hu
 Epigenomics Data Complete Collection Hub from the Public Hubs list.</p>
 <p>
 Any queries about the data should be directed to
-<a href="mailto:&#116;w&#97;&#110;&#103;&#64;&#103;&#101;&#110;&#101;t&#105;&#99;&#115;.&#119;&#117;&#115;&#116;&#108;.&#101;d&#117;">Ting Wang</a> from VizHub.
+<a href="mailto:&#116;w&#97;&#110;&#103;&#64;&#103;&#101;&#110;&#101;t&#105;&#99;&#115;.&#119;&#117;&#115;&#116;&#108;.&#101;d&#117;">
+Ting Wang</a> from VizHub.
 <!-- above address is twang at genetics.wustl.edu -->
 </p>
 
@@ -2337,7 +3412,7 @@ A Genome Browser is now available for the Chinese hamster (<em>Cricetulus griseu
 released July 2013 by the <a href="http://www.genomics.cn/en/index" target="_blank">Beijing Genomics
 Institution-Shenzhen</a> (BGI version C_griseus_v1.0, UCSC version criGri1). For more information 
 and statistics about this assembly, see the NCBI assembly record for 
-<a href="http://www.ncbi.nlm.nih.gov/assembly/40911" target="_blank">C_griseus_v1.0</a>. There are 
+<a href="https://www.ncbi.nlm.nih.gov/assembly/40911" target="_blank">C_griseus_v1.0</a>. There are 
 52,711 scaffolds with a total size of 2,360,146,428 bases.</p>
 <p>
 Bulk downloads of the sequence and annotation data may be obtained from the Genome Browser
@@ -2352,7 +3427,7 @@ a detailed list of the organizations and individuals who contributed to this rel
 A Genome Browser is now available for the hedgehog (<em>Erinaceus europaeus</em>) assembly released 
 May 2012 by the <a href="http://www.broadinstitute.org/" target="_blank">Broad Institute</a>
 (Broad version EriEur2.0, UCSC version eriEur2). For more information and statistics about this 
-assembly, see the NCBI assembly record for <a href="http://www.ncbi.nlm.nih.gov/assembly/426148" 
+assembly, see the NCBI assembly record for <a href="https://www.ncbi.nlm.nih.gov/assembly/426148" 
 target="_blank">EriEur2.0</a>. There are 5,802 scaffolds with a total size of 2,715,720,925 
 bases.</p>
 <p>
@@ -2369,7 +3444,7 @@ A Genome Browser is now available for the zebra finch (<em>Taeniopygia guttata</
 released February 2013 by <a href="http://genome.wustl.edu/genomes/detail/taeniopygia-guttata/"
 target="_blank">The Genome Institute at Washington University</a> (WUSTL version 
 Taeniopygia_guttata-3.2.4, UCSC version taeGut2). For more information and statistics about this 
-assembly, see the NCBI assembly record for <a href="http://www.ncbi.nlm.nih.gov/assembly/524908" 
+assembly, see the NCBI assembly record for <a href="https://www.ncbi.nlm.nih.gov/assembly/524908" 
 target="_blank">Taeniopygia_guttata-3.2.4</a>. There are 37,096 scaffolds with a total size of 
 1,232,135,591 bases.</p>
 <p>
@@ -2388,7 +3463,7 @@ A Genome Browser is now available for the elephant shark (<em>Callorhinchus mili
 assembly released December 2013 by the <a href="http://www.imcb.a-star.edu.sg/"
 target="_blank">Singapore Institute of Molecular and Cell Biology</a> (IMCB version 
 Callorhinchus_milii-6.1.3, UCSC version calMil1). For more information and statistics about this 
-assembly, see the NCBI assembly record for <a href="http://www.ncbi.nlm.nih.gov/assembly/85971" 
+assembly, see the NCBI assembly record for <a href="https://www.ncbi.nlm.nih.gov/assembly/85971" 
 target="_blank"> Callorhinchus_milii-6.1.3</a>. There are 21,204 scaffolds with a total size of 
 974,498,586 bases.</p>
 <p>
@@ -2471,7 +3546,7 @@ A Genome Browser is now available for the minke whale (Balaenoptera acutorostrat
 assembly released October 2013 by the <a href="http://eng.kiost.ac/kordi_eng/main/" target="_BLANK">
 Korea Ocean Research &amp; Development Institute</a> (KORDI version BalAcu1.0, UCSC version 
 balAcu1). For more information and statistics about this assembly, see the NCBI assembly record for
-<a href="http://www.ncbi.nlm.nih.gov/assembly/78761" target="_blank">BalAcu1.0</a>. There are
+<a href="https://www.ncbi.nlm.nih.gov/assembly/78761" target="_blank">BalAcu1.0</a>. There are
 10,776 scaffolds with a total size of 2,431,687,698 bases.</p>
 <p>
 Bulk downloads of the sequence and annotation data may be obtained from the Genome Browser
@@ -2511,7 +3586,7 @@ Many thanks to Brian Raney and Steve Heitner for their work on this track.</p>
 <a name="030614"></a>
 <h2>Mar. 6, 2014 &nbsp;&nbsp; The new GRCh38 Human Genome Browser is here</h2>
 <p>
-In the final days of 2013, the <a href="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/" 
+In the final days of 2013, the <a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/" 
 target="_blank">Genome Reference Consortium</a> (GRC) released the eagerly awaited GRCh38 
 human genome assembly, the first major revision of the human genome in more than four years. During 
 the past two months, the UCSC team has been hard at work building a browser that will let our users 
@@ -2576,7 +3651,7 @@ unlocalized contigs. For more details about this, see the
 For more information about the files included in the GRCh38 GenBank submission, see the
 <a href="ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh38/README"
 target="_blank">GRCh38 README</a>. The GRCh38 GenBank record provides a detailed array of 
-<a href="http://www.ncbi.nlm.nih.gov/assembly/883148/#/st_Primary-Assembly"
+<a href="https://www.ncbi.nlm.nih.gov/assembly/883148/#/st_Primary-Assembly"
 target="_blank">statistics about this assembly</a>. Bulk downloads of the sequence and annotation 
 data may be obtained from the Genome Browser 
 <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg38/">FTP server</a> or the
@@ -2720,7 +3795,7 @@ target="_blank">Job #1304619</a> on the UCSC Staff Employment website.</p>
 <h2>Oct. 23, 2013 &nbsp;&nbsp; dbSNP 138 available for hg19</h2>
 <p>
 We are pleased to announce the release of four tracks derived from NCBI
-<a href="http://www.ncbi.nlm.nih.gov/SNP/" target="_blank">dbSNP</a> Build 138 data, available on 
+<a href="https://www.ncbi.nlm.nih.gov/SNP/" target="_blank">dbSNP</a> Build 138 data, available on 
 the human assembly (GRCh37/hg19). The new tracks contain additional annotation data not included in 
 previous dbSNP tracks, with corresponding coloring and filtering options in the Genome Browser.</p>
 <p>
@@ -2764,9 +3839,9 @@ site for the new and improved site. For more background on DGV's changes, please
 A Genome Browser is now available for the American alligator (<em>Alligator mississippiensis</em>) 
 assembly released August 2012 by the International Crocodilian Genomes Working Group (version 
 allMis0.2, UCSC version allMis1). Please note the 
-<a href="http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AKHW01" target="_blank">assembly construction 
+<a href="https://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AKHW01" target="_blank">assembly construction 
 details</a>. For more information and statistics about this assembly, see the NCBI assembly record 
-for <a href="http://www.ncbi.nlm.nih.gov/assembly/406428/" target="_blank">allMis0.2</a>. There are 
+for <a href="https://www.ncbi.nlm.nih.gov/assembly/406428/" target="_blank">allMis0.2</a>. There are 
 14,645 scaffolds with a total size of 2,174,259,888 bases.</p>
 <p>
 Bulk downloads of the sequence and annotation data may be obtained from the Genome Browser 
@@ -2998,9 +4073,9 @@ our mailing lists. You may reach the suggestion box from the
 <p>
 A Genome Browser is now available for the ferret (<em>Mustela putorius furo</em>) assembly released 
 by the Ferret Genome Sequencing Consortium April 2011 (version MusPutFur1.0, UCSC version musFur1).
-Please note the <a href="http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AEYP01"
+Please note the <a href="https://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AEYP01"
 target="_blank">assembly construction details</a>. For more information and statistics about this 
-assembly, see the NCBI assembly record for <a href="http://www.ncbi.nlm.nih.gov/assembly/286418/"
+assembly, see the NCBI assembly record for <a href="https://www.ncbi.nlm.nih.gov/assembly/286418/"
 target="_blank">MusPutFur1.0</a>.</p>
 <p>
 Bulk downloads of the sequence and annotation data may be obtained from the Genome Browser 
@@ -3016,9 +4091,9 @@ organizations and individuals who contributed to this release.</p>
 <p>
 A Genome Browser is now available for the Gibbon (<em>Nomascus leucogenys</em>) assembly released by
 the Gibbon Genome Sequencing Consortium Oct. 2012 (version Nleu_3.0, UCSC version nomLeu3). Please 
-note the <a href="http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ADFV01" target="_blank">assembly 
+note the <a href="https://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ADFV01" target="_blank">assembly 
 construction details</a>. For more information and statistics about this assembly, see the NCBI 
-assembly record for <a href="http://www.ncbi.nlm.nih.gov/assembly/506498/"
+assembly record for <a href="https://www.ncbi.nlm.nih.gov/assembly/506498/"
 target="_blank">Nleu_3.0</a>.</p>
 <p>
 Bulk downloads of the sequence and annotation data may be obtained from the Genome Browser 
@@ -3082,7 +4157,7 @@ The tracks were produced at UCSC by Angie Hinrichs and Luvina Guruvadoo.</p>
 <h2>Feb. 11, 2013 &nbsp;&nbsp; Denisova tracks released on hg19 browser</h2>
 <p>
 In conjunction with the publication of the paper by Meyer <em>et al.</em>
-<a href="http://www.ncbi.nlm.nih.gov/pubmed/22936568">A High-Coverage Genome Sequence from an 
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/22936568">A High-Coverage Genome Sequence from an 
 Archaic Denisovan Individual</a> the UCSC Genome Browser is hosting a set of new tracks. Briefly, 
 Meyer <em>et al.</em> applied a novel single-stranded DNA library preparation method to DNA 
 previously extracted from 40mg of a phalanx bone excavated from Denisova Cave in the Altai Mountains
@@ -3116,7 +4191,7 @@ A Genome Browser is now available for the Southern White Rhinoceros
 version cerSimSim1.0, UCSC version cerSim1). This genome was sequenced and assembled at the Broad 
 Institute using samples provided by Dr. Oliver Ryder at the San Diego Zoo Institute for Conservation
 Research. For more information and statistics about this assembly, see the NCBI assembly record for 
-<a href="http://www.ncbi.nlm.nih.gov/assembly/406328/" target="_blank">CerSimSim1.0</a>.</p>
+<a href="https://www.ncbi.nlm.nih.gov/assembly/406328/" target="_blank">CerSimSim1.0</a>.</p>
 <p>
 Bulk downloads of the sequence and annotation data may be obtained from the Genome Browser 
 <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/cerSim1/">FTP server</a> or the
@@ -3391,7 +4466,7 @@ The initial Medium ground finch genome assembly (GeoFor_1.0, UCSC version geoFor
 of a collaboration between the Genome 10K project and Beijing Genomics Institute (BGI) to sequence 
 100 vertebrate species, and is the first to be released in the UCSC Genome Browser. For more 
 information about the <em>G. fortis</em> genome, see the 
-<a href="http://www.ncbi.nlm.nih.gov/genome/13302" target="_blank">NCBI website</a>.</p>
+<a href="https://www.ncbi.nlm.nih.gov/genome/13302" target="_blank">NCBI website</a>.</p>
 <p>
 Bulk downloads of the sequence and annotation data are available via the Genome Browser 
 <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/geoFor1/">FTP server</a> or the 
@@ -3643,7 +4718,7 @@ release</a>.</p>
 <a name="041812"></a>
 <h2>Apr. 18, 2012  &nbsp;&nbsp; GRC planning phase for GRCh38 human reference assembly</h2> 
 <p> 
-The <a href="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/" target="_blank">Genome 
+The <a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/" target="_blank">Genome 
 Reference Consortium</a> (GRC) plans to update the human reference assembly to GRCh38 in the summer 
 of 2013. This revision is aimed at addressing issues found with the current model for representing 
 genome assemblies, which uses a single, preferred tiling path to produce a single consensus 
@@ -3653,14 +4728,14 @@ GRC is working to create assemblies that better represent this diversity and pro
 substrates for genome analysis.</p> 
 <p>
 If you have questions, concerns or feedback about the plans for the GRCh38 assembly, the GRC would 
-<a href="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/contact.shtml" 
+<a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/contact.shtml" 
 target="_blank">like your input</a>.</p>
 
 <a name="030712"></a>
 <h2>Mar. 7, 2012  &nbsp;&nbsp; New mouse browser available</h2> 
 <p> 
 We have released the latest Genome Browser for the Dec. 2011 mouse genome assembly produced by the 
-<a href="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/mouse/" target="_blank">Mouse 
+<a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/mouse/" target="_blank">Mouse 
 Genome Reference Consortium</a> (Genome Reference Consortium GRCm38, UCSC version mm10). This 
 version, which includes approximately 2.6 Gb of sequence, is considered to be &quot;essentially 
 complete&quot;. The assembly includes chromosomes 1-19, X, Y, M (mitochondrial DNA) and chr*_random 
@@ -4058,7 +5133,7 @@ input will help us to make this data more accessible to the scientific community
 <h2>Apr. 18, 2011  &nbsp;&nbsp; dbSNP 132 available for hg19</h2> 
 <p> 
 We are pleased to announce the release of four tracks derived from 
-<a href="http://www.ncbi.nlm.nih.gov/projects/SNP/" target="_blank">dbSNP</a> build 132, available 
+<a href="https://www.ncbi.nlm.nih.gov/projects/SNP/" target="_blank">dbSNP</a> build 132, available 
 on the human assembly (GRCh37/hg19). dbSNP build 132 is available at NCBI. The new tracks contain 
 additional annotation data not included in previous dbSNP tracks, with corresponding coloring and 
 filtering options in the Genome Browser.</p> 
@@ -4122,7 +5197,7 @@ The tracks were produced at UCSC by Angie Hinrichs, Brooke Rhead, Bob Kuhn, and 
 <p>
 We are happy to announce a Genome Browser for the initial release of sheep (<em>Ovis aries</em>) 
 genome. The Feb. 2010 <em>Ovis aries</em> draft assembly (NCBI project 
-<a href="http://www.ncbi.nlm.nih.gov/sites/entrez?Db=genomeprj&cmd=ShowDetailView&TermToSearch=10709" 
+<a href="https://www.ncbi.nlm.nih.gov/sites/entrez?Db=genomeprj&cmd=ShowDetailView&TermToSearch=10709" 
 target="_blank">10709</a>, 
 <a href="ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Ovis_aries/Ovis_aries_1.0/" 
 target="_blank">GCA_000005525.1</a>) was produced by the <a href="http://www.sheephapmap.org/" 
@@ -4186,13 +5261,13 @@ chimpanzee from the Yerkes Primate Research Center in Atlanta, GA, USA. The sequ
 assembled and organized by the Washington University Genome Center. The underlying whole genome 
 shotgun data were generated at the Washington University School of Medicine and the Broad Institute.
 For detailed information about the assembly process, see the sequencing and analysis discussion in 
-the <a href="http://www.ncbi.nlm.nih.gov/nuccore/AACZ00000000" target="_blank">GenBank accession 
+the <a href="https://www.ncbi.nlm.nih.gov/nuccore/AACZ00000000" target="_blank">GenBank accession 
 record</a>.</p> 
 <p> 
 Bulk downloads of the sequence and annotation data are available via the Genome Browser 
 <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/panTro3/">FTP server</a> or the 
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#chimp">Downloads</a> page. The complete set 
-of sequence reads is available at the <a href="http://www.ncbi.nlm.nih.gov/Traces" 
+of sequence reads is available at the <a href="https://www.ncbi.nlm.nih.gov/Traces" 
 target="_blank">NCBI trace archive</a>. These data have <a href="credits.html#chimp_use">specific 
 conditions for use</a>.</p> 
 <p> 
@@ -4352,7 +5427,7 @@ and NIH Intramural Sequencing Center, Maryland; Agencourt Bioscience Corporation
 NCI Laboratory of Genomic Diversity, Maryland; and Hill's Pet Nutrition, Inc, Kansas. The 
 mitochondrial genome was sequenced by NCI Laboratory of Genomic Diversity. For detailed sequencing 
 and assembly information, see the NCBI Felis catus  
-<a href="http://www.ncbi.nlm.nih.gov/sites/entrez?Db=genomeprj&cmd=ShowDetailView&TermToSearch=10703" 
+<a href="https://www.ncbi.nlm.nih.gov/sites/entrez?Db=genomeprj&cmd=ShowDetailView&TermToSearch=10703" 
 target="_blank">assembly page</a>.</p> 
 <p> 
 Downloads of the Cat data and annotations may be obtained from the 
@@ -4459,7 +5534,7 @@ PLoS Comput Biol 4(7): e1000101.</font></p>
 <p> 
 We are pleased to announce the release of dbSNP build 131, available from on the human assembly 
 (GRCh37/hg19). The dbSNP build 131 is available at 
-<a href="http://www.ncbi.nlm.nih.gov/projects/SNP" target="_blank">NCBI</a>. The SNPs (131) track 
+<a href="https://www.ncbi.nlm.nih.gov/projects/SNP" target="_blank">NCBI</a>. The SNPs (131) track 
 contains 26,033,053 mappings of 23,445,889 reference SNPs that have been mapped to the reference 
 genome by dbSNP. This is a significant increase from the provisional hg19 mappings of build 130 
 (18,404,149 mappings of 17,512,501 SNPs).</p>
@@ -4497,7 +5572,7 @@ and individuals who contributed to this release.</p>
 <h2>May 12, 2010  &nbsp;&nbsp; Pig Genome Browser released</h2> 
 <p> 
 We have released a Genome Browser for the pig, Sus scrofa.  This assembly (SGSC Sscrofa9.2 
-(<a href="http://www.ncbi.nlm.nih.gov/sites/entrez?Db=genomeprj&cmd=ShowDetailView&TermToSearch=10718" 
+(<a href="https://www.ncbi.nlm.nih.gov/sites/entrez?Db=genomeprj&cmd=ShowDetailView&TermToSearch=10718" 
 target="_blank">NCBI project 10718</a>, 
 <a href="ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Sus_scrofa/Sscrofa9.2/" 
 target="_blank">GCA_000003025.2</a>)) was produced by the <a href="http://piggenome.org/" 
@@ -4945,13 +6020,13 @@ We are pleased to announce the release of the February 2009 human genome browser
 hg19.</p> 
 <p> 
 Starting with this assembly, the human genome sequence is now provided by the 
-<a href="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/" target="_blank">Genome Reference 
+<a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/" target="_blank">Genome Reference 
 Consortium</a>, whose goal is to correct the small number of regions in the reference that are 
 currently misrepresented, to close as many remaining gaps as possible and to produce alternative 
 assemblies of structurally variant loci when necessary. The hg19 browser corresponds to GRCh37.</p>
 <p> 
 Statistics for the GRCh37 build assembly can be found on the NCBI 
-<a href="http://www.ncbi.nlm.nih.gov/mapview/stats/BuildStats.cgi?taxid=9606&build=37&ver=1" 
+<a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000001405.13/"
 target="_blank">Build 37.1 Statistics</a> web page.</p>  
 <p> 
 The hg19 browser contains 9 haplotypes. See the <a href="http://www.sanger.ac.uk/HGP/Chr6/MHC/" 
@@ -5658,7 +6733,7 @@ essentially finished.</p>
 The Build 37.1 assembly includes approximately 2.6 Gb of sequence on chromosomes 1-19, X, Y, M 
 (mitochondrial DNA) and Un (unmapped clone contigs). In-depth information about this assembly will 
 become available on the 
-<a href="http://www.ncbi.nlm.nih.gov/mapview/stats/BuildStats.cgi?taxid=10090&build=37&ver=1" 
+<a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000001635.16/"
 target="_blank">NCBI website</a>. On chromosome Y in this assembly, only the short arm has reliable 
 mapping data; therefore, most of the contigs on the Y chromosome are unplaced.</p> 
 <p> 
@@ -5838,7 +6913,7 @@ diseases.&quot;</p>
 <p> 
 The main portal for the ENCODE data is the UCSC ENCODE Genome Browser. The analysis effort has been 
 coordinated by <a href="http://wwww.ensembl.org/" target="_blank">Ensembl</a>. Much of the primary 
-data have been deposited in the <a href="http://www.ncbi.nlm.nih.gov/projects/geo/info/ENCODE.html" 
+data have been deposited in the <a href="https://www.ncbi.nlm.nih.gov/projects/geo/info/ENCODE.html" 
 target="_blank">NCBI GEO</a> and <a href="http://www.ebi.ac.uk/arrayexpress/" target="_blank">EBI 
 ArrayExpress</a> databases. To access the UCSC Genome Browser ENCODE portal, click the 
 <a href="../ENCODE/">ENCODE</a> link in the left sidebar menu on the Genome Browser home page.</p> 
@@ -6389,7 +7464,7 @@ have been placed in chr*_random, and 50 Mb remain in chrUn.</p>
 A major difference between this assembly and the previous Nov. 2003 version is the chromosomal 
 numbering scheme, which  has been changed to reflect a new standard that preserves orthology with 
 human chromomes. Proposed by 
-<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=pubmed&cmd=Retrieve&dopt=Abstract&list_uids=15218271&query_hl=1&itool=pubmed_docsum" 
+<a href="https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=pubmed&cmd=Retrieve&dopt=Abstract&list_uids=15218271&query_hl=1&itool=pubmed_docsum" 
 target="_blank">E.H. McConkey</a> in 2004, the new numbering convention was subsequently endorsed by
 the International Chimpanzee Sequencing and Analysis Consortium. This standard assigns the 
 identifiers &quot;2a&quot; and &quot;2b&quot; to the two chimp chromosomes that fused in the human 
@@ -6399,7 +7474,7 @@ Browser retains the older numbering scheme, in which these chromosomes are numbe
 Bulk downloads of the sequence and annotation data are available via the Genome Browser 
 <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/panTro2/">FTP server</a> or the 
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#chimp">Downloads</a> page. The complete set 
-of sequence reads is available at the <a href="http://www.ncbi.nlm.nih.gov/Traces" 
+of sequence reads is available at the <a href="https://www.ncbi.nlm.nih.gov/Traces" 
 target="_blank">NCBI trace archive</a>. These data have <a href="credits.html#chimp_use">specific 
 conditions for use</a>.</p> 
 <p> 
@@ -6557,7 +7632,7 @@ chrY:57443438-57772954. These sequences were taken from the corresponding region
 chromosome and are exact duplications of the X chromosome sequences.</p> 
 <p> 
 For further information on NCBI Build 36.1, see the NCBI 
-<a href="http://www.ncbi.nlm.nih.gov/genome/guide/human/release_notes.html" 
+<a href="https://www.ncbi.nlm.nih.gov/genome/guide/human/release_notes.html" 
 target="_blank">Build 36.1 release notes</a>.</p> 
 <p> 
 Bulk downloads of the data are available from the UCSC downloads server via 
@@ -6807,7 +7882,7 @@ version mm7), is now available in the UCSC Genome Browser.</p>
 The Build 35 assembly includes approximately 2.6 Gb of sequence, of which about 2.2 Gb is finished 
 sequence. Chromosomes 2, 4, 11 and X are finished in this build. To review in-depth statistics on 
 the assembly, see the NCBI 
-<a href="http://www.ncbi.nlm.nih.gov/genome/guide/mouse/contig/Build35.html" 
+<a href="https://www.ncbi.nlm.nih.gov/genome/guide/mouse/contig/Build35.html" 
 target="_blank">Build 35 Data</a> web page. Please note that the UCSC mm7 database contains only the
 reference strain C57BL/6J.</p> 
 <p> 
@@ -6841,7 +7916,7 @@ The initial release of VisiGene includes the following image collections:</p>
   Transcription factors in mouse embryos from the Mahoney Center for Neuro-Oncology</li> 
   <li>
   Mouse head and brain <em>in situ</em> images from NCBI's 
-  <a href="http://www.ncbi.nlm.nih.gov/projects/gensat/" target="_blank">Gene Expression Nervous 
+  <a href="https://www.ncbi.nlm.nih.gov/projects/gensat/" target="_blank">Gene Expression Nervous 
   System Atlas</a> (GENSAT) database</li>
   <li>
   <em>Xenopus laevis in situ</em> images from the <a href="http://www.nibb.ac.jp/en/" 
@@ -7025,7 +8100,7 @@ For more information about the ci2 assembly, see the JGI
 <a href="http://genome.jgi-psf.org/ciona4/ciona4.info.html" target="_blank"><em>C. intestinalis</em>
 project page</a>. Additional information and an analysis of the euchromatic regions of this genome 
 may be found in Dehal, P.  <em>et al.</em> 
-<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=12481130&query_hl=1" 
+<a href="https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=12481130&query_hl=1" 
 target="_blank">The draft genome of Ciona intestinalis: insights into chordate and vertebrate 
 origins</a>. <em>Science</em> <B>298</B>(5601), 2157-67 (2002).<p> 
 <p>
@@ -7174,7 +8249,7 @@ server</a>.</p>
 The Build 34 assembly has an assembled length of approximately 2.6 Gb, of which about 1.9 Gb is 
 finished sequence. Chromosomes 2, 4, 11 and X are finished in this build. To review in-depth 
 statistics on the assembly, see the NCBI 
-<a href="http://www.ncbi.nlm.nih.gov/genome/guide/mouse/contig/Build34.html" 
+<a href="https://www.ncbi.nlm.nih.gov/genome/guide/mouse/contig/Build34.html" 
 target="_blank">Build 34 Data</a> web page. NOTE: In the Genome Browser mm6 assembly, chrY_random 
 erroneously contains a region duplicated from chrY. For more information about this issue, see the 
 Genome Browser <a href="../FAQ/FAQdownloads.html#download30">FAQ</a>. Please also note that the 
@@ -7233,7 +8308,7 @@ are consistently annotated and of high quality.</p>
 The initial CCDS data set, containing nearly 15,000 transcripts, has been posted on three Internet 
 sites: the <a href="../cgi-bin/hgTracks?db=hg17">UCSC Genome Browser</a>, the 
 <a href="http://www.ensembl.org/" target="_blank">Ensembl Browser</a> and the 
-<a href="http://www.ncbi.nlm.nih.gov/CCDS/" target="_blank">NCBI CCDS Database</a> website. The 
+<a href="https://www.ncbi.nlm.nih.gov/CCDS/" target="_blank">NCBI CCDS Database</a> website. The 
 genes may be viewed on the UCSC hg17 (May 2004) Human Genome Browser in the CCDS annotation track 
 located in the Genes and Gene Prediction Tracks section.</p> 
 <p> 
@@ -7242,7 +8317,7 @@ The CCDS gene set is built by consensus among the following collaborating organi
   <li> 
   <a href="http://www.ebi.ac.uk/" target="_blank">European Bioinformatics Institute</a> (EBI)</li> 
   <li> 
-  <a href ="http://www.ncbi.nlm.nih.gov/" target="_blank">National Center for Biotechnology 
+  <a href ="https://www.ncbi.nlm.nih.gov/" target="_blank">National Center for Biotechnology 
   Information</a> (NCBI)</li> 
   <li> 
   <a href="http://www.cbse.ucsc.edu/" target="_blank">University of California Santa Cruz</a>
@@ -7260,7 +8335,7 @@ relevant NCBI RefSeq and Entrez Gene records.</p>
 <p> 
 Gene structure information is obtained from both curated and automated genes sources. The primary 
 curation groups are the <a href="http://www.sanger.ac.uk/HGP/havana/" target="_blank">Havana</a> 
-team at the WTSI and the <a href="http://www.ncbi.nlm.nih.gov/RefSeq/" target="_blank">RefSeq</a> 
+team at the WTSI and the <a href="https://www.ncbi.nlm.nih.gov/RefSeq/" target="_blank">RefSeq</a> 
 annotation group at NCBI. In addition, manually curated information on chr14 (Genoscope) and Chr7 
 (WUSTL) has been included from the <a href="http://vega.sanger.ac.uk/" target="_blank">Vega</a> 
 database. The <a href="http://www.ensembl.org/" target="_blank">Ensembl</a> group and the RefSeq 
@@ -7558,9 +8633,11 @@ restrictions are also available on the Genome Browser <a href="/goldenPath/credi
 page.</p> 
 <p>
 We'd like to thank Agencourt Bioscience Corporation, TIGR, and other institutions who contributed
-to the sequencing and mapping effort for these assemblies. The UCSC Drosophila browsers were produced by Angie Hinrichs, Brian Raney, Heather Trumbower, Robert Kuhn, Galt Barber, Jennifer Jackson, 
-Ali Sultan-Qurraie, and Donna Karolchik. The UCSC Genome Bioinformatics Group generated the initial set of annotation tracks. See the <a href="/goldenPath/credits.html">credits</a> page for a detailed
-list of the organizations and individuals who contributed to this release.</p>
+to the sequencing and mapping effort for these assemblies. The UCSC Drosophila browsers were 
+produced by Angie Hinrichs, Brian Raney, Heather Trumbower, Robert Kuhn, Galt Barber, Jennifer 
+Jackson, Ali Sultan-Qurraie, and Donna Karolchik. The UCSC Genome Bioinformatics Group generated 
+the initial set of annotation tracks. See the <a href="/goldenPath/credits.html">credits</a> page 
+for a detailed list of the organizations and individuals who contributed to this release.</p>
 
 <a name="120304"></a>
 <h2>Dec. 3, 2004 &nbsp;&nbsp; SNP track for Build 35 (hg17) assembly released</h2> 
@@ -7626,7 +8703,8 @@ UCSC has released v1.1 of the UCSC Proteome Browser. This updated version includ
 major enhancements:</p> 
 <ul> 
   <li>
-  direct access to a Proteome Browser gateway via the &quot;Proteome Browser&quot; menu link on the   Genome Browser home page. The Proteome Browser gateway page prompts the user for a protein ID or 
+  direct access to a Proteome Browser gateway via the &quot;Proteome Browser&quot; menu link on the 
+  Genome Browser home page. The Proteome Browser gateway page prompts the user for a protein ID or 
   gene symbol, then directly starts up the Proteome Browser, eliminating the multiple Genome Browser
   steps required by the previous release.</li>
   <li>
@@ -7695,7 +8773,8 @@ upcoming weeks to include examples of many common Table Browser queries generate
 <p> 
 The new version of the Table Browser was produced by Jim Kent, Donna Karolchik, Heather Trumbower, 
 Hiram Clawson, and Robert Kuhn, and incorporates code from the previous version written by Angie 
-Hinrichs. We'd like to thank Mary Mangan and others on the OpenHelix staff for their feedback on early versions of this software.  <p>
+Hinrichs. We'd like to thank Mary Mangan and others on the OpenHelix staff for their feedback on 
+early versions of this software.  <p>
 		    The older version of the Table Browser will remain available
 		    for a limited time at 
 		    http://genome.ucsc.edu/cgi-bin/hgText. Please send feedback and questions to our
@@ -7917,9 +8996,9 @@ build: the slight increase in coverage gained by using this would have been offs
 in build errors.</p> 
 <p> 
 More information about Build 33 will be available soon in the NCBI 
-<a href="http://www.ncbi.nlm.nih.gov/genome/seq/NCBIContigInfo.html" target="_blank">assembly 
+<a href="https://www.ncbi.nlm.nih.gov/genome/seq/NCBIContigInfo.html" target="_blank">assembly 
 notes</a> and 
-<a href="http://www.ncbi.nlm.nih.gov/mapview/stats/BuildStats.cgi?taxid=10090&build=33&ver=1" 
+<a href="https://www.ncbi.nlm.nih.gov/mapview/stats/BuildStats.cgi?taxid=10090&build=33&ver=1" 
 target="_blank">Build 33 statistics</a>.</p>  
 <p> 
 The mm5 sequence and annotation data may be downloaded from the Genome Browser 
@@ -7977,7 +9056,7 @@ genomes of humans and other mammals. The boxer breed was selected for the initia
 based on the lower variation rate in its genome relative to other breeds. In addition to the boxer, 
 samples from nine other dog breeds, four wolves and a coyote are being used to generate an initial 
 set of single nucleotide polymorphisms (SNPs) to facilitate disease studies. The SNPs should be 
-available soon from <a href="http://www.ncbi.nlm.nih.gov/SNP/" target="_blank">dbSNP</a>.</p> 
+available soon from <a href="https://www.ncbi.nlm.nih.gov/SNP/" target="_blank">dbSNP</a>.</p> 
 <p> 
 For more information about the dog draft assembly, see the 
 <a href="http://www.genome.gov/12511476" target="_blank">NHGRI press release</a>.</p> 
@@ -8145,7 +9224,8 @@ accessible from the Genome Browser via the &quot;Proteome Browser&quot; link on 
 any gene in the Known Genes track. The initial release is available only on Human Build 34 (hg16); 
 Proteome Browsers for the latest mouse and rat assemblies will follow.</p> 
 <p> 
-For each protein, the browser displays the corresponding genomic exon structure and its amino acid sequence. Several protein property tracks are aligned to the sequence to help a user pinpoint regions
+For each protein, the browser displays the corresponding genomic exon structure and its amino acid 
+sequence. Several protein property tracks are aligned to the sequence to help a user pinpoint regions
 of interest.  Additional properties are plotted with histograms against genome-wide protein data to 
 highlight significant trends and anomalies.</p> 
 <p> 
@@ -8167,8 +9247,9 @@ and UCSF ModBase, and pathway maps of KEGG, BioCarta (CGAP), and BioCyc.</p>
 <p> 
 We'd like to thank SwissProt for sharing their high quality protein data and the pI calculation 
 algorithm, as well as the other external data sites linked to by the Proteome Browser. We'd also 
-like to acknowledge the hard work of Fan Hsu, lead engineer on the project, and Jim Kent, Tom Pringle, Donna Karolchik, and Robert Kuhn. The project received technical input, review and support from 
-several other members of the UCSC Bioinformatics group.</p>
+like to acknowledge the hard work of Fan Hsu, lead engineer on the project, and Jim Kent, Tom 
+Pringle, Donna Karolchik, and Robert Kuhn. The project received technical input, review and support 
+from several other members of the UCSC Bioinformatics group.</p>
 
 <a name="030104"></a>
 <h2>Mar. 1, 2004 - Chicken draft genome added to Genome Browser</h2> 
@@ -8249,12 +9330,13 @@ human genomes.  More comparative annotations will be added in upcoming weeks.</p
 Bulk downloads of the chimp sequence and annotations may be obtained from the Genome Browser 
 <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/panTro1/">FTP server</a> or 
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#chimp">Downloads</a> page. The complete set 
-of sequence reads is available at the <a href="http://www.ncbi.nlm.nih.gov/Traces" 
+of sequence reads is available at the <a href="https://www.ncbi.nlm.nih.gov/Traces" 
 target="_blank">NCBI trace archive</a>. Blat searches on chrUn_random are not supported in the 
 initial release, but will be available soon.</p>  
 <p> 
 We'd like to thank NHGRI, the Broad Institute at MIT/Harvard, and Washington University at St. Louis
-School of Medicine for providing this sequence, and LaDeana Hillier, Washington University School ofMedicine, and the Broad Institute for their work on the alignments. The chimpanzee browser 
+School of Medicine for providing this sequence, and LaDeana Hillier, Washington University School of
+Medicine, and the Broad Institute for their work on the alignments. The chimpanzee browser 
 annotation tracks were generated by UCSC and collaborators worldwide.</p> 
 <p> 
 The UCSC team who worked on this release consisted of Kate Rosenbloom, Jim Kent, Hiram Clawson, 
@@ -8380,9 +9462,9 @@ contains only the reference strain C57BL/6J.</p>
 <p> 
 Build 32 includes 2.6 gigabases of sequence, 1.2 Gb of which is finished. We estimate that 90-96 
 percent of the mouse genome is present in the assembly. For more information about this version, 
-see the NCBI <a href="http://www.ncbi.nlm.nih.gov/genome/seq/NCBIContigInfo.html" 
+see the NCBI <a href="https://www.ncbi.nlm.nih.gov/genome/seq/NCBIContigInfo.html" 
 target="_blank">assembly notes</a> and 
-<a href="http://www.ncbi.nlm.nih.gov/mapview/stats/BuildStats.cgi?taxid=10090&build=32&ver=1" 
+<a href="https://www.ncbi.nlm.nih.gov/mapview/stats/BuildStats.cgi?taxid=10090&build=32&ver=1" 
 target="_blank">Build 32 statistics</a>.</p>  
 <p> 
 The mm4 sequence and annotation data may be downloaded from the UCSC Genome Browser 
@@ -8888,7 +9970,7 @@ the past month.</p>
 To take full advantage of the new display features in this release, we recommend that you reset your
 browser to the new default settings. NOTE: you may not want to reset your browser if you have 
 customized settings that you wish to preserve. You can reset your browser by clicking the
-&quot;Click here to reset" link on the Browser Gateway page.</p>  
+&quot;Click here to reset&quot; link on the Browser Gateway page.</p>  
 <p> 
 We hope this new release facilitates your work with the UCSC Genome Browser. If you have any 
 questions or comments about the new release, send email to 
@@ -8903,7 +9985,7 @@ questions or comments about the new release, send email to
 We're pleased to announce the release of the latest human genome assembly, Build 31 (UCSC version 
 hg13). This assembly was produced at NCBI based on sequence information submitted into GenBank as of
 Nov. 14, 2002.  Release notes for this assembly are available from the 
-<a href="http://www.ncbi.nlm.nih.gov/genome/guide/human/release_notes.html" target="_blank">NCBI web
+<a href="https://www.ncbi.nlm.nih.gov/genome/guide/human/release_notes.html" target="_blank">NCBI web
 site</a>. Because UCSC now obtains its assembly directly from NCBI, the UCSC Build 31 data is 
 identical to that of NCBI and Ensembl.</p>  
 <p> 
@@ -8943,7 +10025,7 @@ effort. The assembly process resulted in a 6.5-fold coverage of the rat genome, 
 to be approximately 2.8 Gigabases in size.</p> 
 <p> 
 Downloads of the rat data and annotations are available through our 
-ftp site at <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/rn1" target="_blank:>downloads 
+ftp site at <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/rn1" target="_blank">downloads 
 server</a>. This data contains <a href="credits.html#rat_use">specific conditions for use</a>. The 
 sequence is also available from the <a href="http://www.hgsc.bcm.tmc.edu/projects/rat" 
 target="_blank">Rat Genome Project website</a> for the Human Genome Sequencing Center at Baylor 
@@ -9085,7 +10167,7 @@ now functional.</p>
 We're pleased to announce the pre-release of a browser for human genome assembly Build 30 from NCBI 
 (UCSC version hg12). This assembly was produced at NCBI based on sequence information submitted into
 GenBank as of Jun. 28, 2002. Build 30 release notes and statistics will soon be available from the 
-<a href="http://www.ncbi.nlm.nih.gov/genome/guide/human/" target="_blank">NCBI web site</a>.</p>  
+<a href="https://www.ncbi.nlm.nih.gov/genome/guide/human/" target="_blank">NCBI web site</a>.</p>  
 <p> 
 Build 30 is an excellent high-quality assembly. It contains nearly 87% finished sequence, and 
 94%-97% coverage. The sequence coverage of this build is much higher than in previous releases, and 
@@ -9152,9 +10234,9 @@ server</a>.</p>
 We've just released a browser and BLAT server on the latest Build 29 human genome assembly from NCBI
 (UCSC version hg11). This assembly is based on sequence information submitted into GenBank as of 
 Apr. 5 2002. As with the Dec. 2001 (hg10) release, this assembly was produced at NCBI rather than at
-UCSC. Consult NCBI's <a href="http://www.ncbi.nlm.nih.gov/genome/guide/human/release_notes.html" 
+UCSC. Consult NCBI's <a href="https://www.ncbi.nlm.nih.gov/genome/guide/human/release_notes.html" 
 target="_blank">Build 29 release notes</a> and 
-<a href="http://www.ncbi.nlm.nih.gov/genome/guide/human/HsStats.html" target="_blank">statistics</a>
+<a href="https://www.ncbi.nlm.nih.gov/genome/guide/human/HsStats.html" target="_blank">statistics</a>
 for more information about this release. This assembly contains nearly 75% finished sequence. 
 Currently, the human genome project appears to be on track to achieve the goal of finishing at least
 95% of the human genome (using Bermuda standards) by Apr. 2003.</p> 
@@ -9184,7 +10266,7 @@ them and the Mouse Genome Sequencing Consortium for providing this assembly, whi
 <a href="credits.html#mouserestrict">specific conditions for use</a>. Bulk downloads of the data 
 should be available in approximately one week. Coordination with mouse genome data access at 
 <a href="http://www.ensembl.org/Mus_musculus/">Ensembl</a> and 
-<a href="http://www.ncbi.nlm.nih.gov/genome/guide/mouse/">NCBI</a> is in progress. We'd also like to
+<a href="https://www.ncbi.nlm.nih.gov/genome/guide/mouse/">NCBI</a> is in progress. We'd also like to
 acknowledge the UCSC team that produced this release: Jim Kent, Terry Furey, Matt Schwartz, Fan Hsu,
 Yontao Lu, Donna Karolchik, Chuck Sugnet, and Ryan Weber.</p>
 
@@ -9210,7 +10292,7 @@ thank them and the Mouse Genome Sequencing Consortium for providing this assembl
 <a href="credits.html#mouserestrict">specific conditions for use</a>. Bulk downloads of the data 
 will be available in approximately one week. Coordination with mouse genome data access at 
 <a href="http://www.ensembl.org/Mus_musculus/">Ensembl</a> and 
-<a href="http://www.ncbi.nlm.nih.gov/genome/guide/mouse/">NCBI</a> is in progress. We'd also like to
+<a href="https://www.ncbi.nlm.nih.gov/genome/guide/mouse/">NCBI</a> is in progress. We'd also like to
 acknowledge the UCSC team that produced this release: Jim Kent, Terry Furey, Matt Schwartz, Fan Hsu,
 Yontao Lu, and Donna Karolchik.</p>
 
@@ -9393,7 +10475,7 @@ makes sure that the sequences are in the same order, orientation, and have the c
 between them.</p> 
 <p>
 Chuck has also implemented a SAGE/Unigene track in the browser. This track displays data from the 
-<a href="http://www.ncbi.nlm.nih.gov/SAGE/" target="_blank">SAGEMap project at NCBI</a>. UniGene 
+<a href="https://www.ncbi.nlm.nih.gov/SAGE/" target="_blank">SAGEMap project at NCBI</a>. UniGene 
 cluster sequences are displayed in the browser and colored according to their average SAGE counts 
 over a series of experiments. Selecting one of the UniGene representative sequences displays the 
 SAGE results for UniGene sequences.</p>

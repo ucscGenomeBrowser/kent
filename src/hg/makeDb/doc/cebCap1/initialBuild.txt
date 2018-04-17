@@ -1,0 +1,757 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the cebCap1
+# White-faced sapajou - Cebus capucinus imitator
+
+# Assembly name:  Cebus_imitator-1.0
+# Organism name:  Cebus capucinus imitator (white-faced sapajou)
+# Isolate:  Cc_AM_T3
+# Sex:  male
+# Taxid:          1737458
+# BioSample:      SAMN04522148
+# BioProject:     PRJNA328123
+# Submitter:      McDonnell Genome Institute - Washington University School of Medicine
+# Date:           2016-4-4
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Scaffold
+# Genome representation: full
+# WGS project:    LVWQ01
+# Assembly method: AllPaths-LG v. October 2015
+# Genome coverage: 81x
+# Sequencing technology: Illumina
+# RefSeq category: Representative Genome
+# GenBank assembly accession: GCA_001604975.1
+# RefSeq assembly accession: GCF_001604975.1
+# RefSeq assembly and GenBank assemblies identical: yes
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_001604985.1      GCF_001604985.1 Primary Assembly
+
+#############################################################################
+## There is *NO* mitochondrion assembly available
+#############################################################################
+
+#############################################################################
+# photo (DONE - 2017-02-14 - Hiram)
+    mkdir /hive/data/genomes/cebCap1/photo
+    cd /hive/data/genomes/cebCap1/photo
+
+    wget -O photoFile "https://upload.wikimedia.org/wikipedia/commons/1/18/Cebus_capucinus_at_the_Bronx_Zoo_002.jpg"
+convert -sharpen 0 -normalize -geometry 400x400 -quality 80 photoFile Cebus_capucinus_imitator.jpg
+
+    cd /hive/data/genomes/cebCap1
+printf "photoCreditURL\thttps://commons.wikimedia.org/wiki/User:Postdlf
+photoCreditName\tWikiMedia Commons: Postdlf
+" > photoReference.txt
+
+    # check that Cebus_capucinus_imitator.jpg file into source tree
+    # src/hg/htdocs/images/ and copy to /usr/local/apache/htdocs/images/
+
+#############################################################################
+# fetch sequence from new style download directory (DONE - 2017-09-27 - Hiram)
+    mkdir -p /hive/data/genomes/cebCap1/refseq
+    cd /hive/data/genomes/cebCap1/refseq
+
+    rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/refseq/vertebrate_mammalian/Cebus_capucinus/all_assembly_versions/GCF_001604975.1_Cebus_imitator-1.0/ ./
+    # sent 489 bytes  received 3109975066 bytes  20260427.07 bytes/sec
+    # total size is 3109592947  speedup is 1.00
+
+    # real    2m33.504s
+
+    # measure what we have here:
+    faSize G*0_genomic.fna.gz
+
+# 2717703182 bases (107204088 N's 2610499094 real 1709405542 upper
+#	901093552 lower) in 7156 sequences in 1 files
+# Total size: mean 379779.7 sd 1528147.6 min 910 (NW_016114470.1)
+#	max 21314971 (NW_016107315.1) median 1694
+# %33.16 masked total, %34.52 masked real
+
+#############################################################################
+# fixup to UCSC naming scheme (DONE - 2017-09-27 - Hiram)
+    mkdir /hive/data/genomes/cebCap1/ucsc
+    cd /hive/data/genomes/cebCap1/ucsc
+
+    # verify no duplicate sequences:
+    faToTwoBit ../refseq/G*0_genomic.fna.gz refseq.2bit
+    twoBitDup refseq.2bit
+    # should be silent
+
+    # verify all names are .1:
+    twoBitInfo refseq.2bit  stdout | awk '{print $1}' \
+	| sed -e 's/_[0-9]\+//;' | sort | uniq -c
+    #	   7156 NW.1
+
+    # since they are all .1, change the names to be v1:
+    zcat ../refseq/G*0_assembly_structure/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+       | grep -v "^#" | sed -e 's/\.1/v1/;' > chrUn.cebCap1.agp
+
+    zcat ../refseq/G*0_assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz \
+       | sed -e 's/.1 Cebus .*/v1/;' | gzip -c > chrUn.cebCap1.fa.gz
+
+    # verify these two files are compatible:
+    faToTwoBit chrUn.cebCap1.fa.gz test.2bit
+    checkAgpAndFa chrUn.cebCap1.agp test.2bit 2>&1 | tail
+    # All AGP and FASTA entries agree - both files are valid
+
+    # no longer need these
+    rm -f test.2bit refseq.2bit
+
+#############################################################################
+#  Initial database build (DONE - 2017-09-27 - Hiram)
+
+    cd /hive/data/genomes/cebCap1
+    ~/kent/src/hg/utils/automation/prepConfig.pl cebCap1 mammal primate \
+       refseq/*_assembly_report.txt > cebCap1.config.ra
+    # going to need a mitoAcc ?
+    # there is no chrM for this species, change
+mitoAcc notFound
+    # to
+mitoAcc none
+
+    # verify it looks sane:
+    cat *.ra
+
+# config parameters for makeGenomeDb.pl:
+db cebCap1
+clade mammal
+genomeCladePriority 35
+scientificName Cebus capucinus imitator
+commonName White-faced sapajou
+assemblyDate Apr. 2016
+assemblyLabel McDonnell Genome Institute - Washington University School of Medicine
+assemblyShortLabel Cebus_imitator-1.0
+orderKey 23272
+mitoAcc none
+fastaFiles /hive/data/genomes/cebCap1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/cebCap1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir primate
+photoCreditURL  https://commons.wikimedia.org/wiki/User:Postdlf
+photoCreditName WikiMedia Commons: Postdlf
+ncbiGenomeId 44416
+ncbiAssemblyId 716501
+ncbiAssemblyName Cebus_imitator-1.0
+ncbiBioProject 328123
+ncbiBioSample SAMN04522148
+genBankAccessionID GCF_001604975.1
+taxId 1737458
+
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp cebCap1.config.ra) > agp.log 2>&1
+    # *** All done!  (through the 'agp' step)
+    # real    2m23.724s
+
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db cebCap1.config.ra) > db.log 2>&1
+    # real    20m40.367s
+
+    # check in the trackDb files created and add to trackDb/makefile
+    # then, clean up:
+    rm -fr TemporaryTrackDbCheckout/
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2017-09-27 - Hiram)
+    mkdir /hive/data/genomes/cebCap1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/cebCap1/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/cebCap1/cebCap1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku cebCap1) > do.log 2>&1
+    # real    11m24.754s
+
+    cat fb.cebCap1.cpgIslandExtUnmasked.txt
+    # 22587021 bases of 2610518382 (0.865%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2017-09-27 - Hiram)
+    mkdir /hive/data/genomes/cebCap1/bed/cytoBand
+    cd /hive/data/genomes/cebCap1/bed/cytoBand
+    makeCytoBandIdeo.csh cebCap1
+
+#############################################################################
+# running repeat masker (DONE - 2017-09-27 - Hiram)
+    # the full species name confuses RM, it doesn't know about that,
+    # so specify a species it does know:
+    mkdir /hive/data/genomes/cebCap1/bed/repeatMasker
+    cd /hive/data/genomes/cebCap1/bed/repeatMasker
+    time (doRepeatMasker.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+       -species="cebus capucinus" -smallClusterHub=ku cebCap1) > do.log 2>&1
+    # real    433m34.406s
+
+    # XXX one failure:
+RepeatMasker bug?: Undefined id, line 3899171 of input:
+ 1380  22.2  6.4  3.6  NW_016107688v1  204489  205226 (2001481) +  LTR39-int      LTR/ERV1              5225 5612 (3432)
+
+    mv cebCap1.fa.out broken.cebCap1.fa.out
+    mv cebCap1.sorted.fa.out broken.cebCap1.sorted.fa.out
+
+    grep -v "NW_016107688v1  204489  205226" broken.cebCap1.fa.out > cebCap1.fa.out
+    grep -v "NW_016107688v1  204489  205226" broken.cebCap1.sorted.fa.out > cebCap1.sorted.fa.out
+
+    # and then finish the 'cat' step:
+    time /cluster/bin/scripts/extractNestedRepeats.pl cebCap1.fa.out \
+	| sort -k1,1 -k2,2n > cebCap1.nestedRepeats.bed
+    # real    1m56.610s
+
+    # and continuing:
+    time (doRepeatMasker.pl -buildDir=`pwd` \
+      -continue=mask -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+       -species="cebus capucinus" -smallClusterHub=ku cebCap1) > mask.log 2>&1
+    # real    28m4.913s
+
+    cat faSize.rmsk.txt
+# 2717703182 bases (107204088 N's 2610499094 real 1377098465 upper
+#	1233400629 lower) in 7156 sequences in 1 files
+# Total size: mean 379779.7 sd 1528147.6 min 910 (NW_016114470v1)
+#	max 21314971 (NW_016107315v1) median 1694
+# %45.38 masked total, %47.25 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;
+
+    time featureBits -countGaps cebCap1 rmsk
+    # 1234802261 bases of 2717703182 (45.436%) in intersection
+    # real    0m33.743s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2017-09-27 - Hiram)
+
+    mkdir /hive/data/genomes/cebCap1/bed/simpleRepeat
+    cd /hive/data/genomes/cebCap1/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        -trf409 5 cebCap1) > do.log 2>&1
+    # real    12m30.019s
+
+    cat fb.simpleRepeat
+    # 89300635 bases of 2721424086 (3.281%) in intersection
+
+    # using the rmsk result
+    cd /hive/data/genomes/cebCap1
+    twoBitMask bed/repeatMasker/cebCap1.rmsk.2bit \
+      -add bed/simpleRepeat/trfMask.bed  cebCap1.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    # if using windowMasker result:
+#     twoBitMask bed/windowMasker/cebCap1.cleanWMSdust.2bit \
+#       -add bed/simpleRepeat/trfMask.bed  cebCap1.2bit
+
+    twoBitToFa cebCap1.2bit stdout | faSize stdin > faSize.cebCap1.2bit.txt
+    cat faSize.cebCap1.2bit.txt
+# 2717703182 bases (107204088 N's 2610499094 real 1376007011 upper
+#	1234492083 lower) in 7156 sequences in 1 files
+# Total size: mean 379779.7 sd 1528147.6 min 910 (NW_016114470v1)
+#	max 21314971 (NW_016107315v1) median 1694
+# %45.42 masked total, %47.29 masked real
+
+    # reset the gbdb symlink:
+    rm /gbdb/cebCap1/cebCap1.2bit
+    ln -s `pwd`/cebCap1.2bit /gbdb/cebCap1/cebCap1.2bit
+
+##########################################################################
+# CREATE MICROSAT TRACK (DONE - 2017-09-28 - Hiram)
+     ssh hgwdev
+     mkdir /cluster/data/cebCap1/bed/microsat
+     cd /cluster/data/cebCap1/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed
+    hgLoadBed cebCap1 microsat microsat.bed
+    #	Read 48607 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2017-09-28 - Hiram)
+
+    mkdir /hive/data/genomes/cebCap1/bed/windowMasker
+    cd /hive/data/genomes/cebCap1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev cebCap1) > do.log 2>&1
+    # real    203m23.464s
+
+    # Masking statistics
+    cat faSize.cebCap1.cleanWMSdust.txt
+# 2717703182 bases (107204088 N's 2610499094 real 1694065033 upper
+#	916434061 lower) in 7156 sequences in 1 files
+# Total size: mean 379779.7 sd 1528147.6 min 910 (NW_016114470v1)
+#	max 21314971 (NW_016107315v1) median 1694
+# %33.72 masked total, %35.11 masked real
+
+    cat fb.cebCap1.rmsk.windowmaskerSdust.txt
+    # 671222370 bases of 2717703182 (24.698%) in intersection
+
+##########################################################################
+# run up idKeys files for ncbiRefSeq/chromAlias (DONE - 2017-12-12 - Hiram)
+    mkdir /hive/data/genomes/cebCap1/bed/idKeys
+    cd /hive/data/genomes/cebCap1/bed/idKeys
+
+    time (doIdKeys.pl -buildDir=`pwd` cebCap1) > do.log 2>&1 &
+    # real    12m20.939s
+
+    cat cebCap1.keySignature.txt
+    #   8ae219619932349bebc17364408bf9d0
+
+##########################################################################
+# cpgIslands - (DONE - 2017-09-28 - Hiram)
+    mkdir /hive/data/genomes/cebCap1/bed/cpgIslands
+    cd /hive/data/genomes/cebCap1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku cebCap1) > do.log 2>&1 &
+    # real    5m13.827s
+
+    cat fb.cebCap1.cpgIslandExt.txt
+    # 20355911 bases of 2610518382 (0.780%) in intersection
+
+##############################################################################
+# augustus - (DONE - 2017-09-28 - Hiram)
+    mkdir /hive/data/genomes/cebCap1/bed/augustus
+    cd /hive/data/genomes/cebCap1/bed/augustus
+
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+      -species=human -dbHost=hgwdev -utr -workhorse=hgwdev cebCap1) \
+	> do.log 2>&1
+    # real    82m5.907s
+
+    cat fb.cebCap1.augustusGene.txt
+    #  48980303 bases of 2610518382 (1.876%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2017-09-28 - Hiram)
+    mkdir /hive/data/genomes/cebCap1/bed/genscan
+    cd /hive/data/genomes/cebCap1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku cebCap1) > do.log 2>&1 &
+    # real    16m46.752s
+
+    cat fb.cebCap1.genscan.txt
+    #   53492194 bases of 2610518382 (2.049%) in intersection
+
+    cat fb.cebCap1.genscanSubopt.txt
+    #   53952589 bases of 2610518382 (2.067%) in intersection
+
+#########################################################################
+# ucscToINSDC table/track (DONE - 2017-09-28 - Hiram)
+    mkdir /hive/data/genomes/cebCap1/bed/ucscToINSDC
+    cd /hive/data/genomes/cebCap1/bed/ucscToINSDC
+
+    # check for chrM accession:
+    grep chrM ../../cebCap1.agp
+# there is no chrM in this assembly
+
+    # would us that accession as an argument to this command
+
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+         ../../refseq/*0_assembly_structure/Primary_Assembly
+
+    # this is actually ucscToRefSeq since this is a RefSeq assembly:
+    sort -k2 ucscToINSDC.txt > ucscToRefSeq.txt
+    rm -f ucscToINSDC.txt
+
+    awk '{printf "%s\t%s\n", $2, $1}' ucscToRefSeq.txt | sort > refseqToUcsc.txt
+
+
+    grep -v "^#" ../../refseq/GCF*_assembly_report.txt | cut -f5,7 \
+      | awk '{printf "%s\t%s\n", $2, $1}' | sort > refseq.insdc.txt
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+
+    join -2 2 refseq.insdc.txt ucscToRefSeq.txt | tr '[ ]' '[\t]' | sort -k3 \
+       | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-3,5 \
+           > ucscToINSDC.bed
+
+    join -2 2 refseq.insdc.txt ucscToRefSeq.txt | tr '[ ]' '[\t]' | sort -k3 \
+       | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-4 \
+           > ucscToRefSeq.bed
+
+    # verify all names are coming through, should be same line count:
+    wc -l *
+    #	7156 name.coordinate.tab
+    #	7156 refseq.insdc.txt
+    #	7156 refseqToUcsc.txt
+    #	7156 ucscToINSDC.bed
+    #	7156 ucscToRefSeq.bed
+    #	7156 ucscToRefSeq.txt
+
+    # verify chrM is correct:
+    grep chrM *.bed
+# there is no chrM in this assembly
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab cebCap1 ucscToINSDC stdin ucscToINSDC.bed
+
+    cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab cebCap1 ucscToRefSeq stdin ucscToRefSeq.bed
+
+    # checkTableCoords should be silent for no errors:
+    checkTableCoords cebCap1
+
+    # should cover %100 entirely:
+    featureBits -countGaps cebCap1 ucscToINSDC
+    # 2717703182 bases of 2717703182 (100.000%) in intersection
+    featureBits -countGaps cebCap1 ucscToRefSeq
+    # 2717703182 bases of 2717703182 (100.000%) in intersection
+
+#########################################################################
+# add chromAlias table (DONE - 2017-09-28 - Hiram)
+
+    mkdir /hive/data/genomes/cebCap1/bed/chromAlias
+    cd /hive/data/genomes/cebCap1/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name,"refseq" from ucscToRefSeq;' cebCap1 \
+        > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name,"genbank" from ucscToINSDC;' cebCap1 \
+        > ucsc.genbank.tab
+
+    # verify chrM is correct:
+    grep chrM *
+# there is no chrM in this assembly
+
+    awk '{printf "%s\t%s\t%s\n", $2,$1,$3}' ucsc.genbank.tab ucsc.refseq.tab \
+        | sort > cebCap1.chromAlias.tab
+
+    hgLoadSqlTab cebCap1 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        cebCap1.chromAlias.tab
+
+    # adding ensembl names 2017-12-13
+    cd /hive/data/genomes/cebCap1/bed/chromAlias
+    mkdir previous
+    mv *.tab previous
+    cut -f1,2 previous/ucsc.genbank.tab| sort > ucsc.genbank.tab
+    cut -f1,2 previous/ucsc.refseq.tab| sort > ucsc.refseq.tab
+
+    join -t$'\t' ../idKeys/cebCap1.idKeys.txt \
+	../../ensembl/ensemblCebCap1.idKeys.txt | cut -f2,3 \
+	| sort > ucsc.ensembl.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl
+    sort -o cebCap1.chromAlias.tab cebCap1.chromAlias.tab
+
+    for t in refseq genbank ensembl
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t cebCap1.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking refseq: 7156 =? 7156 OK
+# checking genbank: 7156 =? 7156 OK
+# checking ensembl: 7156 =? 7156 OK
+
+    hgLoadSqlTab cebCap1 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        cebCap1.chromAlias.tab
+
+#########################################################################
+# Create kluster run files (DONE - 2017-09-28 - Hiram)
+
+    cd /hive/data/genomes/cebCap1
+    # numerator is cebCap1 gapless bases "real" as reported by:
+    head -1 faSize.cebCap1.2bit.txt
+# 2717703182 bases (107204088 N's 2610499094 real 1376007011 upper
+#	1234492083 lower) in 7156 sequences in 1 files
+
+    # numerator is 'real' base count
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2610499094 / 2861349177 \) \* 1024
+    # ( 2610499094 / 2861349177 ) * 1024 = 934.227494
+
+    # ==> use -repMatch=900 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/cebCap1
+    time blat cebCap1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/cebCap1.11.ooc \
+        -repMatch=900
+    # Wrote 29768 overused 11-mers to jkStuff/cebCap1.11.ooc
+    # real    0m58.237s
+
+    # there are no non-bridged gaps, do not need to do this
+    #   check non-bridged gaps to see what the typical size is:
+#     hgsql -N -e 'select * from gap where bridge="no" order by size;' cebCap1
+#       | ave -tableOut -col=7 stdin
+# # min Q1 median Q3 max mean N sum stddev
+# 50076 58368.8 70128 100495 1.07816e+07 178173 670 1.19376e+08 672006
+
+    # note the minimum non-bridged gap size is 50,076
+
+#  gapToLift -verbose=2 -minGap=50000 cebCap1 jkStuff/cebCap1.nonBridged.lft \
+#         -bedFile=jkStuff/cebCap1.nonBridged.bed
+
+#    hgsql -N \
+#        -e 'select * from gap where bridge="no" order by size;' cebCap1 \
+#        | ave -col=7 stdin
+
+    # not needed:
+#    gapToLift -verbose=2 -minGap=100 bosTau7 jkStuff/nonBridged.lft \
+#        -bedFile=jkStuff/nonBridged.bed
+
+    # survey sizes:
+    n50.pl chrom.sizes
+#       reading: chrom.sizes
+#       contig count: 7156, total size: 2717703182, one half size: 1358851591
+# cumulative    N50 count       contig  contig size
+# 1355472936      148     NW_016107450v1  5279821
+# 1358851591 one half size
+# 1360747048      149     NW_016107451v1  5274112
+
+#############################################################################
+# GENBANK AUTO UPDATE (DONE - 2017-09-28 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+
+    # /cluster/data/genbank/data/organism.lst shows one mRNA, three refSeq:
+    # organism       mrnaCnt estCnt  refSeqCnt
+    # Cebus albifrons 57      0       0
+    # Cebus capucinus 5       0       0
+    # Cebus sp.       2       0       0
+
+    # edit etc/genbank.conf to add cebCap1 just after aotNan1
+
+# cebCap1 (White-faced sapajou - Cebus capucinus imitator) taxId 1737458
+cebCap1.serverGenome = /hive/data/genomes/cebCap1/cebCap1.2bit
+cebCap1.clusterGenome = /hive/data/genomes/cebCap1/cebCap1.2bit
+cebCap1.ooc = /hive/data/genomes/cebCap1/jkStuff/cebCap1.11.ooc
+cebCap1.lift = no
+cebCap1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+cebCap1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+cebCap1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+cebCap1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+cebCap1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+cebCap1.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaFilter}
+cebCap1.downloadDir = cebCap1
+cebCap1.refseq.mrna.native.load  = yes
+cebCap1.refseq.mrna.xeno.load = yes
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+cebCap1.genbank.mrna.xeno.load = no
+cebCap1.genbank.mrna.native.load = no
+cebCap1.genbank.est.native.load = no
+cebCap1.perChromTables = no
+
+    # And edit src/lib/gbGenome.c to add new species.  Adding lines:
+# static char *cebCapNames[] = {"Cebus capucinus imitator", "Cebus capucinus", NULL};
+#    {"cebCap", cebCapNames},
+
+
+    git commit -m "Added cebCap1/Cebus capucinus; refs #20237" \
+	etc/genbank.conf src/lib/gbGenome.c
+    git push
+
+    # update /cluster/data/genbank/:
+    make etc-update
+    make install-server
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial cebCap1
+    # logFile: var/build/logs/2017.09.28-16:04:28.cebCap1.initalign.log
+    # real    40m33.266s
+
+    tail -2 var/build/logs/2017.09.28-16:04:28.cebCap1.initalign.log
+# hgwdev 2017.09.28-16:42:32 cebCap1.initalign: Succeeded: cebCap1
+# hgwdev 2017.09.28-16:45:01 cebCap1.initalign: finish
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.cebCap1
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad cebCap1
+    # logFile: var/dbload/hgwdev/logs/2017.09.28-17:06:53.cebCap1.dbload.log
+    # real    4m43.696s
+
+    tail -1 var/dbload/hgwdev/logs/2017.09.28-17:06:53.cebCap1.dbload.log
+# hgwdev 2017.09.28-17:11:37 cebCap1.dbload: finish
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add cebCap1 to:
+    #   vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added cebCap1 - White-faced sapajou/Cebus capucinus imitator refs #20237" \
+      etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2017-09-28 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/primate/cebCap1
+
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" cebCap1 \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c
+#   140597 LVWQ.1
+
+    # implies a rule: 'LVWQ[0-9]+(\.[0-9]+)?'
+
+    # verify this rule will find them all and eliminate them all:
+    hgsql -N -e "select frag from gold;" cebCap1 | wc -l
+    # 140597
+
+    hgsql -N -e "select frag from gold;" cebCap1 \
+       | egrep -e 'LVWQ[0-9]+(\.[0-9]+)?' | wc -l
+    # 140597
+
+    hgsql -N -e "select frag from gold;" cebCap1 \
+       | egrep -v -e 'LVWQ[0-9]+(\.[0-9]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/chicken/cebCap1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex LVWQ[0-9]+(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box, check full accession name,
+    # accession name without .1
+    # truncated accession name produces multiple results
+    # and the two chrM accessions, with and without the .1 and partial name
+    # use: accessionName:n-m to display locations n to m on that accession
+
+    git commit -m 'add gold/assembly track search rule refs #20237' *.ra
+    git push
+
+#########################################################################
+# lastz/chain/net swap from hg38 (DONE - 2017-09-28 - Hiram)
+
+    # alignment to hg38
+    cd /hive/data/genomes/hg38/bed/lastzCebCap1.2017-09-28
+    cat fb.hg38.chainCebCap1Link.txt
+    # 2155370668 bases of 3049335806 (70.683%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/cebCap1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/cebCap1/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzCebCap1.2017-09-28/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    76m58.704s
+
+    cat fb.cebCap1.chainHg38Link.txt
+    # 2053319068 bases of 2610518382 (78.656%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` cebCap1 hg38) \
+	> rbest.log 2>&1
+    # real    227m7.064s
+
+#########################################################################
+# lastz/chain/net swap from mm10 (TBD - 2017-09-28 - Hiram)
+    # alignment on mm10
+
+    cd /hive/data/genomes/mm10/bed/lastzCebCap1.2017-09-28
+    cat fb.mm10.chainCebCap1Link.txt
+    #	882776669 bases of 2652783500 (33.277%) in intersection
+
+    mkdir /hive/data/genomes/cebCap1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/cebCap1/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzCebCap1.2017-09-28/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    63m12.596s
+
+    cat fb.cebCap1.chainMm10Link.txt
+    #	871126707 bases of 2610518382 (33.370%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` cebCap1 mm10) \
+	> rbest.log 2>&1
+    # real    299m3.923s
+
+##############################################################################
+#  BLATSERVERS ENTRY (DONE - 2017-10-04 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+Starting trans gfServer for cebCap1 on host blat1c, port 17896
+Starting untrans gfServer for cebCap1 on host blat1c, port 17897
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("cebCap1", "blat1c", "17896", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("cebCap1", "blat1c", "17897", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## reset default position to similar location as hg38 default
+##  (DONE - 2017-10-04 - Hiram)
+
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="NW_016107330v1:2404857-2424533"
+	where name="cebCap1";' hgcentraltest
+
+############################################################################
+# all.joiner update, downloads and in pushQ - (DONE - 2017-10-19 - Hiram)
+
+    cd $HOME/kent/src/hg/makeDb/schema
+
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=cebCap1 -tableCoverage all.joiner
+    joinerCheck -database=cebCap1 -times all.joiner
+    joinerCheck -database=cebCap1 -keys all.joiner
+
+    git commit -m "Added cebCap1 - White-faced sapajou/Cebus capucinus imitator refs #20237" \
+       all.joiner
+    git push
+    # to get this installed, run a 'make alpha' in the hgTables directory
+    # in a clean source tree that has been fully constructed
+
+    cd /hive/data/genomes/cebCap1
+    time (makeDownloads.pl cebCap1) > downloads.log 2>&1
+    # real    18m21.149s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/cebCap1/pushQ
+    cd /hive/data/genomes/cebCap1/pushQ
+    time (makePushQSql.pl -redmineList cebCap1) \
+	> cebCap1.pushQ.sql 2> stderr.out
+    # real    3m51.068s
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # writing redmine listings to
+    # redmine.cebCap1.file.list
+    # redmine.cebCap1.table.list
+    # redmine.cebCap1.releaseLog.txt
+    # WARNING: cebCap1 does not have seq
+    # WARNING: cebCap1 does not have extFile
+    # WARNING: cebCap1 does not have estOrientInfo
+
+    # Enter the full path names of these listing files:
+
+# /hive/data/genomes/cebCap1/pushQ/redmine.cebCap1.file.list
+# /hive/data/genomes/cebCap1/pushQ/redmine.cebCap1.releaseLog.txt
+# /hive/data/genomes/cebCap1/pushQ/redmine.cebCap1.table.list
+
+    # into the Redmine #20237 and set to QA Ready.
+
+#########################################################################

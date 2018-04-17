@@ -1,0 +1,84 @@
+track cons7way
+compositeTrack on
+shortLabel Conservation
+longLabel Multiz Alignment & Conservation (7 Species)
+subGroup1 view Views align=Multiz_Alignments  phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+dragAndDrop subTracks
+visibility full
+priority 104.2
+type bed 4
+group compGeno
+html multiz7way
+
+    track cons7wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons7way
+
+        track multiz7way
+        subTrack cons7wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Alignments of 7 Species
+        subGroups view=align
+        noInherit on
+        summary multiz7waySummary
+#        frames multiz7wayFrames
+#        irows on
+        color 0, 10, 100
+        altColor 0,90,10
+        type wigMaf 0.0 1.0
+        speciesCodonDefault xenTro2
+        speciesGroups Mammals Vertebrates Birds
+        sGroup_Mammals monDom4 hg18 mm8 rn4
+        sGroup_Vertebrates danRer4
+        sGroup_Birds galGal2
+        speciesDefaultOff rn4
+        itemFirstCharCase noChange
+        treeImage phylo/xenTro2_7way.gif
+        priority 100
+
+    # phastCons conservation
+    track cons7wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility full
+    subTrack cons7way
+
+
+        track phastCons7way
+        subTrack cons7wayViewphastcons on
+        subGroups view=phastcons
+        shortLabel 7 Species Cons
+        longLabel 7 Species Conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 70,130,70
+        altColor 130,70,70
+        priority 13
+
+    # Conserved Elements (Most Conserved)
+    track cons7wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility dense
+    subTrack cons7way
+
+        track phastConsElements7way
+        subTrack cons7wayViewelements on
+        subGroups view=elements
+        shortLabel 7 Species El
+        longLabel 7 Species Conserved Elements
+        noInherit on
+        color 110,10,40
+        type bed 5 .
+        priority 23
+        html phastConsElements7way
+
+

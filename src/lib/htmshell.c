@@ -375,7 +375,8 @@ do
 	    char *pf = prefix;
 	    while ((x = *pf++) != 0)
 		*out++ = x;
-	    char h1 = (c >> 4 ) + 0x30; if (h1 > 0x39) h1 += 7;
+	    // use (unsigned char) to shift without sign-extension. We want zeros to be added on left side.
+	    char h1 = ((unsigned char) c >> 4 ) + 0x30; if (h1 > 0x39) h1 += 7; 
 	    *out++ = h1;
 	    char h2 = (c & 0xF) + 0x30; if (h2 > 0x39) h2 += 7;
 	    *out++ = h2;
@@ -737,7 +738,6 @@ if (!initted && !errorsNoHeader)
     initted = TRUE;
     }
 printf("%s", htmlWarnStartPattern());
-// old way htmlVaParagraph(format,args); cannot use without XSS-protections
 fputs("<P>", stdout);
 htmlVaEncodeErrorText(format,args);
 fputs("</P>\n", stdout);
@@ -951,7 +951,7 @@ dyStringAppend(policy, "default-src 'self';");
 dyStringAppend(policy, "  child-src 'self';");
 */
 
-dyStringAppend(policy, " script-src 'self'");
+dyStringAppend(policy, " script-src 'self' blob:");
 // Trick for backwards compatibility with browsers that understand CSP1 but not nonces (CSP2).
 dyStringAppend(policy, " 'unsafe-inline'");
 // For browsers that DO understand nonces and CSP2, they ignore 'unsafe-inline' in script if nonce is present.
@@ -1079,7 +1079,7 @@ fputs("<HEAD>\n", f);
 // CSP header
 generateCspMetaHeader(f);
 
-fputs(head, f); // TODO "head" var. not XSS safe
+fputs(head, f);
 htmlFprintf(f,"<TITLE>%s</TITLE>\n", title); 
 if (endsWith(title,"Login - UCSC Genome Browser")) 
     fprintf(f,"\t<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html;CHARSET=iso-8859-1\">\n");

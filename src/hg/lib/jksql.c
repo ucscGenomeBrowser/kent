@@ -901,7 +901,7 @@ if (likeExpr==NULL)
     sqlSafef(query, sizeof(query), "SELECT DISTINCT tableName FROM %s ORDER BY tableName", tableList);
 else
     sqlSafef(query, sizeof(query), 
-        "SELECT DISTINCT tableName FROM %s WHERE tableName %s ORDER BY tableName", tableList, likeExpr);
+        "SELECT DISTINCT tableName FROM %s WHERE tableName LIKE '%s' ORDER BY tableName", tableList, likeExpr);
 
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
@@ -923,7 +923,7 @@ char query[256];
 if (likeExpr == NULL)
     safef(query, sizeof(query), NOSQLINJ "SHOW TABLES");
 else
-    safef(query, sizeof(query), NOSQLINJ "SHOW TABLES %s", likeExpr);
+    safef(query, sizeof(query), NOSQLINJ "SHOW TABLES LIKE '%s'", likeExpr);
 
 struct slName *list = NULL, *el;
 
@@ -1533,28 +1533,64 @@ sqlSafef(query, sizeof(query), "insert into %s select * from  %s", table2, table
 sqlUpdate(sc, query);
 }
 
-void sqlGetLock(struct sqlConnection *sc, char *name)
-/* Sets an advisory lock on the process for 1000s returns 1 if successful,*/
-/* 0 if name already locked or NULL if error occurred */
-/* blocks another client from obtaining a lock with the same name */
+void sqlGetLockWithTimeout(struct sqlConnection *sc, char *name, int wait)
+/* Tries to get an advisory lock on the process, waiting for wait seconds. */
+/* Blocks another client from obtaining a lock with the same name. */
 {
 char query[256];
 struct sqlResult *res;
 char **row = NULL;
 
-sqlSafef(query, sizeof(query), "select get_lock('%s', 1000)", name);
+sqlSafef(query, sizeof(query), "select get_lock('%s', %d)", name, wait);
 res = sqlGetResult(sc, query);
 while ((row=sqlNextRow(res)))
     {
-    if (sameWord(*row, "1"))
+    if (sameWord(*row, "1")) // success
         break;
-    else if (sameWord(*row, "0"))
+    else if (sameWord(*row, "0"))  // timed out
         errAbort("Attempt to GET_LOCK timed out.\nAnother client may have locked this name, %s\n.", name);
-    else if (*row == NULL)
+    else if (*row == NULL) // other error
         errAbort("Attempt to GET_LOCK of name, %s, caused an error\n", name);
     }
 sqlFreeResult(&res);
 }
+
+void sqlGetLock(struct sqlConnection *sc, char *name)
+/* Gets an advisory lock created by GET_LOCK in sqlGetLock. Waits up to 1000 seconds. */
+{
+sqlGetLockWithTimeout(sc, name, 1000);
+}
+
+boolean sqlIsLocked(struct sqlConnection *sc, char *name)
+/* Tests if an advisory lock on the given name has been set. 
+ * Returns true if lock has been set, otherwise returns false. */
+{
+char query[256];
+struct sqlResult *res;
+char **row = NULL;
+boolean result = FALSE;
+
+sqlSafef(query, sizeof(query), "select is_free_lock('%s')", name);
+res = sqlGetResult(sc, query);
+while ((row=sqlNextRow(res)))
+    {
+    if (sameWord(*row, "1")) // lock is free (not locked)
+	{
+	result = FALSE;
+        break;
+	}
+    else if (sameWord(*row, "0"))  // lock is not free (locked)
+	{
+	result = TRUE;
+        break;
+	}
+    else if (*row == NULL) // other error
+        errAbort("Attempt to GET_LOCK of name, %s, caused an error\n", name);
+    }
+sqlFreeResult(&res);
+return result;
+}
+
 
 void sqlReleaseLock(struct sqlConnection *sc, char *name)
 /* Releases an advisory lock created by GET_LOCK in sqlGetLock */
@@ -1684,18 +1720,30 @@ struct sqlConnection *cacheConn = sqlTableCacheFindConn(sc);
 if (cacheConn)
     return sqlTableCacheTableExists(cacheConn, table);
 
+char *err;
+unsigned int errNo;
+const int tableNotFoundCode = 1146;
+
 sqlSafef(query, sizeof(query), "SELECT 1 FROM %-s LIMIT 0", sqlCkIl(table));  
-if ((sr = sqlUseOrStore(sc, query, DEFAULTGETTER, FALSE)) == NULL)
+
+if ((sr = sqlGetResultExt(sc, query, &errNo, &err)) == NULL)
     {
-    if (!sc->failoverConn)
+    if (errNo == tableNotFoundCode)
         return FALSE;
-    // if not found but we have a main connection, check the main connection, too
-    else if ((sr = sqlUseOrStore(sc->failoverConn, query, DEFAULTGETTER, FALSE)) == NULL)
-        return FALSE;
+    if (sc->failoverConn)
+	{
+	// if not found but we have a main connection, check the main connection, too
+	if ((sr = sqlGetResultExt(sc->failoverConn, query, &errNo, &err)) == NULL)
+	    {
+	    if (errNo == tableNotFoundCode)
+		return FALSE;
+	    }
+	}
     }
-// TODO consider using sqlGetResultExt or something that would
-// allow you to abort on all errors except the actual table not found:
-// ERROR 1146 (42S02): Table 'hg19.chr_est' doesn't exist
+
+if (!sr)
+    errAbort("Mysql error during sqlTableExists(%s) %d: %s", table, errNo, err);
+
 sqlFreeResult(&sr);
 return TRUE;
 }
@@ -1844,7 +1892,7 @@ sqlFreeResult(&sr);
 }
 
 int sqlUpdateRows(struct sqlConnection *conn, char *query, int* matched)
-/* Execute an update query, returning the number of rows change.  If matched
+/* Execute an update query, returning the number of rows changed.  If matched
  * is not NULL, it gets the total number matching the query. */
 {
 int numChanged = 0;
@@ -3504,18 +3552,10 @@ while((c = *s++) != 0)
     {
     if (disAllowed[c])
 	{
-	// DEBUG REMOVE Temporary for trying to track down some weird error 
-	//  because the stackdump should appear but does not.
-	//if (sameOk(cfgOption("noSqlInj.dumpStack"), "on"))
-	//    dumpStack("character %c disallowed in sql string part %s\n", c, sOriginal);  // DEBUG REMOVE GALT 
-
-	// TODO for some reason the warn stack is messed up sometimes very eary. -- happening in hgTables position search on brca
-	//warn("character %c disallowed in sql string part %s", c, sOriginal);
-
 	// just using this as a work-around
 	// until the problem with early errors and warn/abort stacks has been fixed.
-	char *noSqlInjLevel = cfgOption("noSqlInj.level");
-	if (noSqlInjLevel && !sameString(noSqlInjLevel, "ignore"))
+	char *noSqlInjLevel = cfgOptionDefault("noSqlInj.level", "abort");
+	if (!sameString(noSqlInjLevel, "ignore"))
 	    {
     	    fprintf(stderr, "character %c disallowed in sql string part %s\n", c, sOriginal);  
 	    fflush(stderr);
@@ -3601,6 +3641,8 @@ if (!init)
     // NOTE it is important for security that no other characters be allowed here
     init = TRUE;
     }
+if (sameString(identifiers, "*"))  // exception allowed
+    return identifiers;
 if (!sqlCheckAllowedChars(identifiers, allowed))
     {
     sqlCheckError("Illegal character found in identifier list %s", identifiers);
@@ -4082,7 +4124,8 @@ while (TRUE)
 void vaSqlDyStringPrintf(struct dyString *ds, char *format, va_list args)
 /* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.  
- * NOSLQINJ tag is added to beginning if it is a new empty string. */
+ * NOSLQINJ tag is added to beginning if it is a new empty string.
+ * Appends to existing string. */
 {
 vaSqlDyStringPrintfExt(ds, FALSE, format, args);
 }
@@ -4090,7 +4133,8 @@ vaSqlDyStringPrintfExt(ds, FALSE, format, args);
 void sqlDyStringPrintf(struct dyString *ds, char *format, ...)
 /* Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.  
- * NOSLQINJ tag is added to beginning if it is a new empty string. */
+ * NOSLQINJ tag is added to beginning if it is a new empty string. 
+ * Appends to existing string. */
 {
 va_list args;
 va_start(args, format);
@@ -4102,7 +4146,7 @@ void vaSqlDyStringPrintfFrag(struct dyString *ds, char *format, va_list args)
 /* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.
  * NOSLQINJ tag is NOT added to beginning since it is assumed to be just a fragment of
- * the entire sql string. */
+ * the entire sql string. Appends to existing string. */
 {
 vaSqlDyStringPrintfExt(ds, TRUE, format, args);
 }
@@ -4111,23 +4155,13 @@ void sqlDyStringPrintfFrag(struct dyString *ds, char *format, ...)
 /* Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.
  * NOSLQINJ tag is NOT added to beginning since it is assumed to be just a fragment of
- * the entire sql string. */
+ * the entire sql string. Appends to existing string. */
 
 {
 va_list args;
 va_start(args, format);
 vaSqlDyStringPrintfFrag(ds, format, args);
 va_end(args);
-}
-
-
-void sqlDyStringAppend(struct dyString *ds, char *string)
-/* Append zero terminated string to end of dyString.
- * Adds the NOSQLINJ prefix if dy string is empty. */
-{
-if (ds->stringSize == 0)
-    dyStringAppend(ds, NOSQLINJ "");
-dyStringAppendN(ds, string, strlen(string));
 }
 
 
@@ -4144,6 +4178,24 @@ va_end(args);
 return ds;
 }
 
+void sqlDyStringPrintIdList(struct dyString *ds, char *fields)
+/* Append a comma-separated list of field identifiers. Aborts if invalid characters in list. */
+{
+sqlDyStringPrintf(ds, "%-s", sqlCkIl(fields));
+}
+
+
+void sqlDyStringPrintValuesList(struct dyString *ds, struct slName *list)
+/* Append a comma-separated, quoted and escaped list of values. */
+{
+struct slName *el;
+for (el = list; el != NULL; el = el->next)
+    {
+    if (el != list)
+	sqlDyStringPrintf(ds, ",");
+    sqlDyStringPrintf(ds, "'%s'", el->name);
+    }
+}
 
 void sqlCheckError(char *format, ...)
 /* A sql injection error has occurred. Check for settings and respond
@@ -4153,48 +4205,32 @@ void sqlCheckError(char *format, ...)
 va_list args;
 va_start(args, format);
 
-char *noSqlInjLevel = cfgOption("noSqlInj.level");
+char *noSqlInjLevel = cfgOptionDefault("noSqlInj.level", "abort");
 char *noSqlInjDumpStack = cfgOption("noSqlInj.dumpStack");
-// I tried to incorporate this setting so as to avoid duplicate dumpStacks
-// but it is not working that well, and I would rather have two than zero dumps.
-//char *browserDumpStack = cfgOption("browser.dumpStack");
-//char *scriptName = cgiScriptName();
 
-if (noSqlInjLevel)
-    { 
-    // don't dump if if we are going to do it during errAbort anyway
-    if (sameOk(noSqlInjDumpStack, "on"))
-	/* && (!(sameString(noSqlInjLevel, "abort") 
-	      && cgiIsOnWeb() 
-	      && sameOk(browserDumpStack, "on"))
-	    || endsWith(scriptName, "hgSuggest")
-           ) // note: this doesn't work for hgSuggest because it doesn't set the dumpStack handler.
-               // TODO find or add a better method to tell if it would already dumpStack on abort.
-       )
-        */
-	{
-	va_list dump_args;
-    	va_copy(dump_args, args);
-	vaDumpStack(format, dump_args);
-	va_end(dump_args);
-	}
+if (sameOk(noSqlInjDumpStack, "on"))
+    {
+    va_list dump_args;
+    va_copy(dump_args, args);
+    vaDumpStack(format, dump_args);
+    va_end(dump_args);
+    }
 
-    if (sameString(noSqlInjLevel, "logOnly"))
-	{
-	vfprintf(stderr, format, args);
-	fprintf(stderr, "\n");
-	fflush(stderr);
-	}
+if (sameString(noSqlInjLevel, "logOnly"))
+    {
+    vfprintf(stderr, format, args);
+    fprintf(stderr, "\n");
+    fflush(stderr);
+    }
 
-    if (sameString(noSqlInjLevel, "warn"))
-	{
-	vaWarn(format, args);
-	}
+if (sameString(noSqlInjLevel, "warn"))
+    {
+    vaWarn(format, args);
+    }
 
-    if (sameString(noSqlInjLevel, "abort"))
-	{
-	vaErrAbort(format, args);
-	}
+if (sameString(noSqlInjLevel, "abort"))
+    {
+    vaErrAbort(format, args);
     }
 
 va_end(args);

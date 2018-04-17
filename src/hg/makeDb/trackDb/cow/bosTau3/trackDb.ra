@@ -23,7 +23,7 @@ longLabel Simple Nucleotide Polymorphisms (dbSNP build 127)
 group varRep
 priority 100
 visibility dense
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 type bed 6 +
 

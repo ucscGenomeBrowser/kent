@@ -65,7 +65,7 @@ __attribute__((format(printf, 1, 2)))
 void webNewEmptySection();
 /* create a new section on the web page to maintain table layout */
 
-void webNewSectionHeaderStart(boolean hasTitle);
+void webNewSectionHeaderStart();
 /* Start a new collapsible section on the web page, with +- control.
    Allows use of jsBeginCollapsibleSection() */
 

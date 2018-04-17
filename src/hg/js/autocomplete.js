@@ -59,6 +59,7 @@ var suggestBox = {
         // clickCallback(position): called when the user clicks on positionDisplay
         this.initialized = true;
         var lastSelected = null; // this is the last value entered by the user via a suggestion (used to distinguish manual entry in the same field)
+        var $posInput = $('#positionInput');
         var waterMark;
         if (assemblySupportsGeneSuggest) {
             if (db.match(/^hg[0-9]+/)) {
@@ -71,8 +72,12 @@ var suggestBox = {
         } else {
             waterMark = "enter position or search terms";
         }
-        $('#positionInput').val("");
-        $('#positionInput').Watermark(waterMark, '#686868');
+
+        if ($posInput[0] !== document.activeElement) {
+            // Reset value before adding watermark -- only if user is not already typing here
+            $posInput.val("");
+        }
+        $posInput.Watermark(waterMark, '#686868');
         if (assemblySupportsGeneSuggest) {
             $('#positionInput').autocomplete({
                 delay: 500,
@@ -117,6 +122,8 @@ var suggestBox = {
                 // handles case where users zeroes out positionInput; in that case we revert to currently displayed position
                 if (!val || val.length === 0 || val === waterMark)
                     val = $('#positionDisplay').text();
+                else
+                    val = val.replace(/\u2013|\u2014/g, "-");  // replace en-dash and em-dash with hyphen
                 $('#position').val(val);
                 suggestBox.clearFindMatches();
             }

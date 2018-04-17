@@ -17,6 +17,7 @@ table ncbiRefSeqLink
     string gene_biotype;        "bio type: protein_coding, pseudogene, C_region, J_segment_pseudogene, other"
     string gene_synonym;        "list of synonym names"
     string ncrna_class;         "type of RNA: miRNA, lncRNA, snoRNA, etc..."
-    lstring note;               "other notes from genbank record"
+    lstring note;		"other notes from genbank record"
     lstring description;        "description from rna gbff record via gbProcess"
+    string externalId;          "for outside URL link, WormBase, FlyBase, RGD, SGD, etc... from Dbxref"
     )

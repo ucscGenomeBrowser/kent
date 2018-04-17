@@ -16,7 +16,10 @@ those portions of the file needed to display a particular region are transferred
 Browser server. Because of this, bigWig files have considerably faster display performance than 
 regular wiggle files when working with large data sets. The bigWig file remains on your local 
 web-accessible server (http, https or ftp), not on the UCSC server, and only the portion needed for 
-the currently displayed chromosomal position is locally cached as a &quot;sparse file&quot;.</p>
+the currently displayed chromosomal position is locally cached as a &quot;sparse file&quot;. If you
+do not have access to a web-accessible server and need hosting space for your bigWig files,
+please see the <a href="hgTrackHubHelp.html#Hosting">Hosting</a> section of the Track Hub Help
+documentation.</p>
 <p>
 Wiggle data must be continuous and consist of equally sized elements. If your data is sparse or 
 contains elements of varying sizes, use the <a href="bedgraph.html">bedGraph</a> format instead of 
@@ -52,7 +55,9 @@ Download the <code>wigToBigWig</code> program from the
 <strong>Step 4.</strong> 
 Use the <code>fetchChromSizes</code> script from the 
 <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">same directory</a> to create the 
-<em>chrom.sizes</em> file for the UCSC database with which you are working (e.g., hg19).</p> 
+<em>chrom.sizes</em> file for the UCSC database with which you are working (e.g., hg19).
+If the assembly <code>genNom</code> is hosted by UCSC, chrom.sizes can be a URL like:
+<code>http://hgdownload.soe.ucsc.edu/goldenPath/genNom/bigZips/genNom.chrom.sizes</code></p> 
 <p> 
 <strong>Step 5.</strong> 
 Use the <code>wigToBigWig</code> utility to create the bigWig file from your wig file:</p> 
@@ -181,7 +186,9 @@ To create a bigWig track from a bedGraph file, follow these steps:</p>
   <li> 
   Use the <code>fetchChromSizes</code> script from the 
   <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">same directory</a> to create the 
-  <em>chrom.sizes</em> file for the UCSC database with which you are working (e.g., hg19). </li>
+  <em>chrom.sizes</em> file for the UCSC database with which you are working (e.g., hg19).
+  If the assembly <code>genNom</code> is hosted by UCSC, chrom.sizes can be a URL like
+  <code>http://hgdownload.soe.ucsc.edu/goldenPath/genNom/bigZips/genNom.chrom.sizes</code></li>
   <li> 
   Use the <code>bedGraphToBigWig</code> utility to create a bigWig file from your bedGraph file:
   <pre><code><strong>bedGraphToBigWig</strong> in.bedGraph chrom.sizes myBigWig.bw</code></pre>

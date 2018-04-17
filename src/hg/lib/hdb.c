@@ -44,6 +44,7 @@
 #include "net.h"
 #include "udc.h"
 #include "paraFetch.h"
+#include "regexHelper.h"
 #include "filePath.h"
 #include "wikiLink.h"
 #include "cheapcgi.h"
@@ -577,6 +578,67 @@ struct sqlConnection *conn = hAllocConn(db);
 int count = sqlQuickNum(conn, NOSQLINJ "select count(*) from chromInfo");
 hFreeConn(&conn);
 return count;
+}
+
+// This maps db names to the latest NCBI RefSeq assembly+annotation GCF_ IDs as of
+// 12/19/2017.
+struct dbToGcf
+    {
+    char *db;
+    char *gcf;
+    };
+static struct dbToGcf dbToGcf[] =
+    {
+    { "hg38", "GCF_000001405.37" },
+    { "hg19", "GCF_000001405.25" },
+    { "mm10", "GCF_000001635.26" },
+    { "danRer11", "GCF_000002035.6" },
+    { "galGal5", "GCF_000002315.4" },
+    { "canFam3", "GCF_000002285.3" },
+    { "rheMac8", "GCF_000772875.2" },
+    { "panTro5", "GCF_000001515.7" },
+    { "bosTau8", "GCF_000003055.6" },
+    { "rn6", "GCF_000001895.5" },
+    { "xenTro9", "GCF_000004195.3" },
+    { "susScr11", "GCF_000003025.6" },
+    { "equCab2", "GCF_000002305.2" },
+    { NULL, NULL }
+    };
+
+char *hNcbiGcfId(char *db)
+/* Return the NCBI RefSeq assembly+annotations ID (GCF_...) for db, or NULL if we don't know it. */
+{
+char *gcf = NULL;
+int i;
+for (i = 0;  dbToGcf[i].db != NULL;  i++)
+    if (sameString(db, dbToGcf[i].db))
+        {
+        gcf = cloneString(dbToGcf[i].gcf);
+        break;
+        }
+return gcf;
+}
+
+char *hNcbiGcaId(char *db)
+/* Return the NCBI GenBank assembly id (GCA_...) for db, or NULL if we don't know it. */
+{
+char *gca = NULL;
+if (! trackHubDatabase(db))
+    {
+    struct sqlConnection *conn = hConnectCentral();
+    char query[1024];
+    sqlSafef(query, sizeof(query), "select sourceName from dbDb where name = '%s'", db);
+    char sourceName[2048];
+    sqlQuickQuery(conn, query, sourceName, sizeof(sourceName));
+    regmatch_t substrs[2];
+    if (isNotEmpty(sourceName) &&
+        regexMatchSubstr(sourceName, "GCA_[0-9]+\\.[0-9]+", substrs, ArraySize(substrs)))
+        {
+        gca = regexSubstringClone(sourceName, substrs[0]);
+        }
+    hDisconnectCentral(&conn);
+    }
+return gca;
 }
 
 struct sqlConnection *hAllocConn(char *db)
@@ -3237,37 +3299,6 @@ if ((hti = hashFindVal(hash, rootName)) == NULL)
 return hti;
 }
 
-struct hTableInfo *hFindBigWigTrackInfo(char *db, char *chrom, char *rootName)
-/* Get track information on a big* file that has no table */
-{
-struct sqlConnection *conn;
-conn = hAllocConn(db);
-static struct hash *dbHash = NULL; 
-struct hash *hash;
-struct hTableInfo *hti;
-char fullName[HDB_MAX_TABLE_STRING];
-chrom = hDefaultChrom(db);
-dbHash = newHash(8);
-hash = hashFindVal(dbHash, db);
-if (hash == NULL)
-    {
-    hash = newHash(8);
-    hashAdd(dbHash, db, hash);
-    }
-if ((hti = hashFindVal(hash, rootName)) == NULL)
-    {
-    safecpy(fullName, sizeof(fullName), rootName);
-    safef(fullName, sizeof(fullName), "%s_%s", chrom, rootName);
-    AllocVar(hti);
-    hashAddSaveName(hash, rootName, hti, &hti->rootName);
-    hti->isSplit = FALSE;
-    hFreeConn(&conn);
-    return hti; 
-    }
-hFreeConn(&conn);
-return hti; 
-}
-
 int hTableInfoBedFieldCount(struct hTableInfo *hti)
 /* Return number of BED fields needed to save hti. */
 {
@@ -3572,7 +3603,7 @@ int rowOffset = 0;
 if (fields == NULL) fields = "*";
 if (hti == NULL)
     {
-    warn("table %s doesn't exist or hFindTableInfoDb failed", rootTable);
+    warn("table %s doesn't exist in %s database, or hFindTableInfoDb failed", rootTable, db);
     }
 else
     {
@@ -3810,6 +3841,10 @@ else
     {
     // we now allow references to native tracks in track hubs
     tdb->table = trackHubSkipHubName(tdb->table);
+
+    // if it's copied from a custom track, wait to find data later
+    if (isCustomTrack(tdb->table))
+        return TRUE; 
     return (hTableForTrack(database, tdb->table) != NULL);
     }
 }
@@ -5497,7 +5532,7 @@ char *bbiNameFromSettingOrTableChrom(struct trackDb *tdb, struct sqlConnection *
 char *fileName = hReplaceGbdb(trackDbSetting(tdb, "bigDataUrl"));
 if (fileName == NULL)
     fileName = hReplaceGbdb(trackDbSetting(tdb, "bigGeneDataUrl"));
-if (fileName == NULL)
+if ((fileName == NULL) && (conn != NULL))
     fileName = bbiNameFromTableChrom(conn, table, seqName);
 return fileName;
 }
@@ -5515,7 +5550,7 @@ static struct slName *hListSnpNNNTables(struct sqlConnection *conn, char *suffix
  * suffix may be NULL to get the 'All SNPs' table (as opposed to Common, Flagged, Mult). */
 {
 char likeExpr[64];
-safef(likeExpr, sizeof(likeExpr), "LIKE 'snp___%s'", suffix ? suffix : "");
+safef(likeExpr, sizeof(likeExpr), "snp___%s", suffix ? suffix : "");
 struct slName *snpNNNTables = sqlListTablesLike(conn, likeExpr);
 slReverse(&snpNNNTables);
 // Trim non-snpNNN tables e.g. snpSeq in hg17, hg18:
@@ -5558,4 +5593,99 @@ for (table = snpNNNTables;  table != NULL;  table = table->next)
         return tdb;
     }
 return NULL;
+}
+
+static int getGencodeVersion(const char *name)
+/* If name ends in VM?[0-9]+, return the number, else 0. */
+{
+int version = 0;
+char *p = strrchr(name, 'V');
+if (p)
+    {
+    char *versionStr = p + 1;
+    // GENCODE mouse versions begin with "VM", skip the M if present.
+    if (isalpha(*versionStr))
+        versionStr++;
+    if (isAllDigits(versionStr))
+        version = atoi(versionStr);
+    }
+return version;
+}
+
+static int cmpVDesc(const void *va, const void *vb)
+/* Compare by version number, descending, e.g. tableV2 < tableV1. */
+{
+const struct slName *a = *((struct slName **)va);
+const struct slName *b = *((struct slName **)vb);
+int aVersion = getGencodeVersion(a->name);
+int bVersion = getGencodeVersion(b->name);
+int dif = bVersion - aVersion;
+if (dif == 0)
+    dif = strcmp(b->name, a->name);
+return dif;
+}
+
+static struct slName *hListGencodeTables(struct sqlConnection *conn, char *suffix)
+/* Return a list of 'wgEncodeGencode<suffix>V<version>' tables, if any, highest version first.
+ * If suffix is NULL, it defaults to Basic. */
+{
+char likeExpr[128];
+safef(likeExpr, sizeof(likeExpr), "wgEncodeGencode%sV%%", suffix ? suffix : "Basic");
+struct slName *gencodeTables = sqlListTablesLike(conn, likeExpr);
+slSort(&gencodeTables, cmpVDesc);
+return gencodeTables;
+}
+
+char *hFindLatestGencodeTableConn(struct sqlConnection *conn, char *suffix)
+/* Return the 'wgEncodeGencode<suffix>V<version>' table with the highest version number, if any.
+ * If suffix is NULL, it defaults to Basic. */
+{
+char *tableName = NULL;
+struct slName *gencodeTables = hListGencodeTables(conn, suffix);
+if (gencodeTables)
+    tableName = cloneString(gencodeTables->name);
+slNameFreeList(&gencodeTables);
+return tableName;
+}
+
+boolean hDbHasNcbiRefSeq(char *db)
+/* Return TRUE if db has NCBI's RefSeq alignments and annotations. */
+{
+// hTableExists() caches results so this shouldn't make for loads of new SQL queries if called
+// more than once.
+return (hTableExists(db, "ncbiRefSeq") && hTableExists(db, "ncbiRefSeqPsl") &&
+        hTableExists(db, "ncbiRefSeqCds") && hTableExists(db, "ncbiRefSeqLink") &&
+        hTableExists(db, "ncbiRefSeqPepTable") &&
+        hTableExists(db, "seqNcbiRefSeq") && hTableExists(db, "extNcbiRefSeq"));
+}
+
+char *hRefSeqAccForChrom(char *db, char *chrom)
+/* Return the RefSeq NC_000... accession for chrom if we can find it, else just chrom.
+ * db must never change. */
+{
+static char *firstDb = NULL;
+static struct hash *accHash = NULL;
+static boolean checkExistence = TRUE;
+if (firstDb && !sameString(firstDb, db))
+    errAbort("hRefSeqAccForChrom: only works for one db.  %s was passed in earlier, now %s.",
+             firstDb, db);
+char *seqAcc = NULL;
+if (checkExistence && !trackHubDatabase(db) && hTableExists(db, "chromAlias"))
+    // Will there be a chromAlias for hubs someday??
+    {
+    firstDb = db;
+    struct sqlConnection *conn = hAllocConn(db);
+    accHash = sqlQuickHash(conn,
+                           NOSQLINJ "select chrom, alias from chromAlias where source = 'refseq'");
+    if (hashNumEntries(accHash) == 0)
+        // No RefSeq accessions -- make accHash NULL
+        hashFree(&accHash);
+    hFreeConn(&conn);
+    checkExistence = FALSE;
+    }
+if (accHash)
+    seqAcc = cloneString(hashFindVal(accHash, chrom));
+if (seqAcc == NULL)
+    seqAcc = cloneString(chrom);
+return seqAcc;
 }

@@ -18,6 +18,7 @@
 <h6><a href="#Session">Displaying Track Hubs by URL and in sessions</a></h6>
 <h6><a href="#Register">Registering a Track Hub with UCSC</a></h6>
 <h6><a href="#Compatibility">Testing hub compatibility between genome browsers</a></h6>
+<h6><a href="#Hosting">Where to host your data</a></h6>
 <hr>
 <p>
 <strong>Additional resources</strong></p> 
@@ -79,7 +80,7 @@ and viewed with associated data.</p>
 <p>
 The data underlying the tracks and optional sequence in a hub reside on the remote server of the 
 data provider rather than at UCSC. Genomic annotations are stored in compressed binary indexed 
-files in bigBed, bigBarChart, bigGenePred, bigPsl, bigChain, bigMaf, bigWig, BAM, CRAM, HAL or VCF 
+files in bigBed, bigBarChart, bigGenePred, bigNarrowPeak, bigPsl, bigChain, bigMaf, bigWig, BAM, CRAM, HAL or VCF 
 format that contain the data at several resolutions. In the case of assemblies that UCSC does not 
 support, genomic sequence is stored in the efficient twoBit format. When a hub track is displayed 
 in the Genome Browser, only the relevant data needed to support the view of the current genomic 
@@ -187,7 +188,7 @@ To create your own hub you will need:</p>
 <ul>
   <li>
   one or more data sets formatted in one of the compressed binary index formats supported by the 
-  Genome Browser: bigBed, bigBarChart, bigGenePred, bigPsl, bigChain, bigMaf, bigWig, BAM, CRAM, 
+  Genome Browser: bigBed, bigBarChart, bigGenePred, bigNarrowPeak, bigPsl, bigChain, bigMaf, bigWig, BAM, CRAM, 
   HAL or VCF</li>
   <li>
   a set of text files that specify properties for the track hub and for each of the data tracks 
@@ -249,6 +250,7 @@ supported by the Genome Browser:
 <a href="bigBed.html">bigBed</a>,
 <a href="bigGenePred.html">bigGenePred</a>,
 <a href="bigChain.html">bigChain</a>, 
+<a href="bigNarrowPeak.html">bigNarrowPeak</a>,
 <a href="barChart.html">bigBarChart</a>,
 <a href="bigPsl.html">bigPsl</a>, 
 <a href="bigMaf.html">bigMaf</a>,
@@ -271,6 +273,13 @@ on&quot; tagged tracks. For information on creating and configuring bigWig track
 name and (optionally) a color and a score with one or more related regions on the same chromosome, 
 such as all the exons of a gene. See the <a href="bigBed.html">bigBed Track Format</a> help page for
 information on creating and configuring bigBed tracks.</p> 
+<p>
+<em>bigNarrowPeak</em> - BigNarrowPeak files are binary indexed versions of Browser Extensible Data 
+(<a href="../../FAQ/FAQformat.html#format1">BED</a>) files with first six fields being the same as bed,
+and an extra four fields that contain various scores and the offset of the base within the block that is 
+the peak.
+ See the <a href="bigNarrowPeak.html">bigNarrowPeak Track
+Format</a> help page for information on creating and configuring bigNarrowPeak tracks.</p>
 <p>
 <em>bigGenePred</em> - BigGenePred files are binary indexed versions of Browser Extensible Data 
 (<a href="../../FAQ/FAQformat.html#format1">BED</a>) files with an extra eight fields that are 
@@ -508,7 +517,7 @@ configuration and track settings, and on the details pages. Suggested maximum le
 characters.</p>
 <p>
 <em>type</em> - the format of the file specified by bigDataUrl. Must be either <em>bigWig</em>, 
-<em>bigBed</em>, <em>bigBarChart</em>, <em>bigGenePred</em>, <em>bigChain</em>, <em>bigPsl</em>, 
+<em>bigBed</em>, <em>bigBarChart</em>, <em>bigGenePred</em>, <em>bigNarrowPeak</em>, <em>bigChain</em>, <em>bigPsl</em>, 
 <em>bigMaf</em>, <em>bam</em>, <em>halSnake</em> or <em>vcfTabix</em> (Note: use <em> type bam</em> 
 for CRAM files). If the type is <em>bigBed</em>, it may be followed by an optional number denoting 
 the number of fields in the bigBed file (e.g., &quot;type bigBed 12&quot; for a file with 12 fields). 
@@ -795,4 +804,144 @@ trackDb settings, you would then specify this extra settings file on the command
 (Note: The settings listed here in the &quot;extra&quot; file are
 just examples and do not represent real trackDb variables for hubs at Ensembl.)
 
+<!-- ========== Where to host your data ============================== -->
+<a name="Hosting"></a>
+<h2>Where to host your data?</h2> 
+<p>
+As stated in <a href="#Intro">What Are Track Hubs?</a>, track hubs files must be located
+in web-accessible locations that support byte-range requests. If your institution does not
+provide web hosting space for you, we know of at least the following sites where you can host
+your data and configuration files:</p>
+<ul>
+  <li><a href="https://de.cyverse.org/de/">CyVerse Discovery Environment</a></li>
+  <!--<li><a href="https://usegalaxy.org/">Galaxy</a></li>-->
+  <li><a href="https://github.com/">Github</a></li>
+  <li><a href="https://figshare.com/">Figshare</a></li>
+</ul>
+<p>
+Each of the providers above has a slightly different approach to hosting data for
+compatibility with the UCSC Genome Browser, and may have different advantages and disadvantages,
+such as size limitations, usage statistics, and version control integration. Additionally, as 
+previously mentioned, any provider that supports byte-range access will work for hub hosting, 
+and you are not limited to the above sites. Below is a summarized guide for each of the providers 
+mentioned above.</p>
+
+<h3>Hosting Hubs on CyVerse</h3>
+<p>
+<a href="http://www.cyverse.org/">CyVerse</a>, previously known as the iPlant Collaborative, is 
+an NSF funded site created for assisting data scientists with their data storage and compute 
+needs. CyVerse supports free data hosting and byte-range access to hosted data, making them 
+perfect for hosting the binary data required for track hubs.</p>
+
+<p>In order to host your data on CyVerse, you first must create an account and then use their
+<a href="https://de.cyverse.org/de">Discovery Environment</a> to upload data. After creating an 
+account, use the &quot;Upload&quot; and &quot;Simple Upload&quot; buttons to upload files 
+individually as shown below:
+<div class="text-center">
+  <img height="400px" src="../../images/cyverseUploadButton.png">
+</div>
+<p>
+You can also use the command line utility
+<a href="https://pods.iplantcollaborative.org/wiki/display/DS/Setting+Up+iCommands">iCommands</a> 
+to facilitate bulk transfer of data (best used for large files in the 2-100GB range), or use 
+<a href="https://pods.iplantcollaborative.org/wiki/display/DS/Using+Cyberduck+for+Uploading+and+Downloading+to+the+Data+Store">
+Cyberduck</a> to bulk transfer up to 80GB of data in one go.</p>
+
+<p>
+After uploading some data, check the &quot;Info-Type&quot; of your BAM, bigWig, bigBed, etc. files.
+If an Info-Type has not been selected automatically or if it is incorrect, make sure it 
+is correct. If uploading an assembly hub, assign the Info-Type &quot;bed&quot; to the 2bit file, as
+well as any text files, like your trackDb.txt, groups.txt, or description.html.
+</p>
+
+<p>
+After giving an appropriate type (like &quot;bam&quot;) to your binary files, you must update any
+text files to point to CyVerse locations. For example, your <em>hub.txt</em> will contain a line
+like:
+<pre><code>genomesFile genomes.txt</code></pre>
+<p>Which must be edited to point to a CyVerse URL such as:</p>
+<pre><code>genomesFile https://de.cyverse.org/anon-files/iplant/home/...</code></pre>
+<p>Luckily, CyVerse allows you to edit these text files after uploading them, so you can create a 
+&quot;Send To: Genome Browser&quot; link:</p>
+<div class="text-center">
+  <img height="400px" src="../../images/cyverseSendToGenomeBrowser.png">
+</div>
+<p>And then edit the fields of your <em>hub.txt</em>, <em>genomes.txt</em>, and <em>trackDb.txt</em> 
+files like so:</p>
+<div class="text-center">
+  <img height="500px" width="1000px" src="../../images/cyverseEditedPaths.png">
+</div>
+<p>To get the correct links to bigData files, again be sure to use the &quot;Send To: Genome 
+Browser&quot; links in the menu.
+</p>
+
+<p>
+Please see the <a href="https://wiki.cyverse.org/wiki/display/DEmanual/Viewing+Genome+Files+in+a+Genome+Browser">
+Viewing Genome Files in a Genome Browser</a> wiki page on the CyVerse wiki for more information
+(please note the difference of the Data Commons for final curated publication material,
+and the Discovery Envirnoment for developing data).
+Please direct any questions about CyVerse or the Discovery Environment to their 
+<a href="http://www.cyverse.org/learning-center/ask-cyverse">Ask CyVerse</a> page or contact
+Cyverse support staff directly via the blue Intercom button on the bottom right of the
+Discovery Environment page.
+<!-- Galaxy stub
+<h3>Hosting Hubs on Galaxy</h3>
+<p>
+Galaxy is 
+</p>
+-->
+<h3>Hosting Hubs on Github</h3>
+<p>
+<a href="https://github.com">Github</a> supports byte-range access to files when they are accessed
+via the <em><b>raw.githubusercontent.com</b></em> style URLs. To obtain a raw URL to a file already 
+uploaded on Github, click on a file in your repository and click the <em>Raw</em> button:</p>
+<div class="text-center">
+  <img height="275px" width="55%" src="../../images/githubRawLink.png" alt="Location of the Raw button for generating a plaintext URL to a file hosted on Github.">
+</div>
+<p>
+The "Raw" button results in a plain text page like the following:</p>
+<div class="text-center">
+  <img width="65%" height="150px"  src="../../images/githubRawUrl.png" alt="Example of URL to a file on github">
+</div>
+<P>
+The <em>bigDataUrl</em> field (and any other statement pointing to a URL like 
+<em>bigDataIndex</em>, <em>refUrl</em>, <em>barChartMatrixUrl</em>, etc.) of your trackDb.txt file
+should use the "raw.githubusercontent.com" style URL as shown above.</p>
+<p>
+Note that
+similar to CyVerse, you will need to update your <em>trackDb.txt</em> <em>bigDataUrl</em> lines to
+point to their correct <em>raw.githubusercontent.com</em> addresses. Please also note that HTML 
+does not render properly from this address, and so you if you are also hosting your hub's 
+description page here, you will want to use a site like <a href="https://rawgit.com/">RawGit</a> to 
+point to your <em>descriptionUrl</em>. The advantage to hosting your data on Github is the built in
+version control of the site, meaning you can view previous hub configurations and keep backups and
+history of your work automatically. The disadvantage of hosting on github is the 
+<a href="https://help.github.com/articles/what-is-my-disk-quota/">relatively small</a> file size 
+upload limit compared to other hosting providers.
+</p>
+
+<p>
+For an example public hub hosted on Github, please see the 
+<a href="https://raw.githubusercontent.com/mhalushka/UCSC_miRNA_barchart/master/hub.txt">Human cellular microRNAome barChart</a>
+hub.</p>
+
+<p>
+For more information about moving files to Github, please see Github's 
+<a href="https://help.github.com/">help pages</a>. Please direct any questions about Github
+to their <a href="https://github.com/contact">help desk</a>.
+</p>
+
+<h3>Hosting hubs on figshare</h3>
+<p>
+<a href="https://figshare.com/">Figshare</a> is a site for researchers and institutions to upload
+and collect usage statistics on their data, as well as make their data shareable and discoverable. 
+The process for uploading a hub to Figshare is similar to the process involved at CyVerse, where
+one must first create an account, upload the <em>bigDataUrl</em> files, create shareable links,
+and then edit your <em>hub.txt</em>, <em>genomes.txt</em>, and <em>trackDb.txt</em> appropriately. One advantage to using
+Figshare is their emphasis on usage statistics, so institutional accounts can see how often
+their hubs and tracks are being accessed by others.</p>
+
+<p>
+For more information on using Figshare, please see their 
+<a href="Support Portal">https://support.figshare.com/support/home</a>.</p>
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

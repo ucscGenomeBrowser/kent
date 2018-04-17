@@ -46,10 +46,11 @@
 #include "genbank.h"
 #include "htmlPage.h"
 #include "longRange.h"
-#include "tagRepo.h"
-#include "fieldedTable.h"
 #include "barChartUi.h"
+#include "interactUi.h"
 #include "customComposite.h"
+#include "trackVersion.h"
+#include "hubConnect.h"
 
 #define SMALLBUF 256
 #define MAX_SUBGROUP 9
@@ -154,7 +155,9 @@ boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label)
 #define SCHEMA_LINKED "<A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s" \
 		  "&hgta_table=%s&hgta_doSchema=describe+table+schema\" " \
 		  "TARGET=ucscSchema%s>%s</A>"
-if (!trackHubDatabase(db) && hTableOrSplitExists(db, tdb->table))
+if (trackDataAccessible(db, tdb) && differentString("longTabix", tdb->type))
+    // FIXME: hgTables.showSchmaLongTabix is a currently a dummy routine, so let's not got here
+    // until it's implemented
     {
     char *tbOff = trackDbSetting(tdb, "tableBrowser");
     if (isNotEmpty(tbOff) && sameString(nextWord(&tbOff), "off"))
@@ -195,64 +198,9 @@ freeMem(encValue);
 return dyStringCannibalize(&dyLink);
 }
 
-char *tabSepMetaAsHtmlTable(char *tabSepMeta, struct trackDb *tdb,boolean showLongLabel,boolean showShortLabel)
-/* Return a string which is an HTML table of the tags for this track which are stored as a fielded table. */
-{
-// If there's no file, there's no data.
-if (tabSepMeta == NULL)
-    return "";
-
-// If the trackDb entry doesn't have a foreign key, there's no data.
-char *metaTag = trackDbSetting(tdb, "meta");
-if (metaTag == NULL)
-    return "";
-
-static char *cachedTableName = NULL;
-static struct hash *cachedHash = NULL;
-static struct fieldedTable *cachedTable = NULL;
-
-// Cache this table because there's a good chance we'll get called again with it.
-if ((cachedTableName == NULL) || differentString(tabSepMeta, cachedTableName))
-    {
-    char *requiredFields[] = {"meta"};
-    cachedTable = fieldedTableFromTabFile(tabSepMeta, NULL, requiredFields, sizeof requiredFields / sizeof (char *));
-    cachedHash = fieldedTableUniqueIndex(cachedTable, requiredFields[0]);
-    cachedTableName = cloneString(tabSepMeta);
-    }
-
-// Look for this tag in the metadata.
-struct fieldedRow *fr = hashFindVal(cachedHash, metaTag);
-if (fr == NULL)
-    return "";
-
-struct dyString *dyTable = dyStringCreate("<table style='display:inline-table;'>");
-if (showLongLabel)
-    dyStringPrintf(dyTable,"<tr valign='bottom'><td colspan=2 nowrap>%s</td></tr>",tdb->longLabel);
-if (showShortLabel)
-    dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>shortLabel:</i></td>"
-			   "<td nowrap>%s</td></tr>",tdb->shortLabel);
-
-int ii;
-for(ii=0; ii < cachedTable->fieldCount; ii++)
-    {
-    char *fieldName = cachedTable->fields[ii];
-    char *fieldVal = fr->row[ii];
-    if (!sameString(fieldName, "meta")  && !isEmpty(fieldVal))
-        dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>%s:</i></td>"
-                           "<td nowrap>%s</td></tr>",fieldName, fieldVal);
-    }
-dyStringAppend(dyTable,"</table>");
-return dyStringCannibalize(&dyTable);
-}
-
-char *tagStormAsHtmlTable(char *tagStormFile, struct trackDb *tdb,boolean showLongLabel,boolean showShortLabel)
+char *pairsAsHtmlTable( struct slPair *pairs, struct trackDb *tdb, boolean showLongLabel,boolean showShortLabel)
 /* Return a string which is an HTML table of the tags for this track. */
 {
-char *metaTag = trackDbSetting(tdb, "meta");
-if (metaTag == NULL)
-    return "";
-struct slPair *pairs = tagRepoPairs(tagStormFile, "meta", metaTag);
-
 if (pairs == NULL)
     return "";
 
@@ -277,15 +225,10 @@ return dyStringCannibalize(&dyTable);
 char *metadataAsHtmlTable(char *db,struct trackDb *tdb,boolean showLongLabel,boolean showShortLabel)
 // If metadata from metaDb exists, return string of html with table definition
 {
-char *tabSepMeta = trackDbSetting(tdb, "metaTab");
+struct slPair *pairs = NULL;
 
-if (tabSepMeta)
-    return tabSepMetaAsHtmlTable(tabSepMeta, tdb, showLongLabel, showShortLabel);
-
-char *tagStormFile = trackDbSetting(tdb, "metaDb");
-
-if (tagStormFile)
-    return tagStormAsHtmlTable(tagStormFile, tdb, showLongLabel, showShortLabel);
+if ((pairs = trackDbMetaPairs(tdb)) != NULL)
+    return pairsAsHtmlTable(pairs, tdb, showLongLabel, showShortLabel);
 
 const struct mdbObj *safeObj = metadataForTable(db,tdb,NULL);
 if (safeObj == NULL || safeObj->vars == NULL)
@@ -394,16 +337,13 @@ return TRUE;
 void extraUiLinks(char *db,struct trackDb *tdb)
 // Show metadata, and downloads, schema links where appropriate
 {
-char *tagStormFile = trackDbSetting(tdb, "metaDb");
-char *tabSepFile = trackDbSetting(tdb, "metaTab");
-boolean hasMetadata = (tagStormFile != NULL) || (tabSepFile != NULL) || (!tdbIsComposite(tdb) && !trackHubDatabase(db)
-                        && metadataForTable(db, tdb, NULL) != NULL);
-if (hasMetadata)
+struct slPair *pairs = trackDbMetaPairs(tdb);
+if (pairs != NULL)
+    printf("<b>Metadata:</b><br>%s\n", pairsAsHtmlTable( pairs, tdb, FALSE, FALSE));
+else if (!tdbIsComposite(tdb) && !trackHubDatabase(db) && (metadataForTable(db, tdb, NULL) != NULL))
     printf("<b>Metadata:</b><br>%s\n", metadataAsHtmlTable(db, tdb, FALSE, FALSE));
 
-boolean schemaLink = (!tdbIsDownloadsOnly(tdb) && !trackHubDatabase(db)
-	      && isCustomTrack(tdb->table) == FALSE)
-	      && (hTableOrSplitExists(db, tdb->table));
+boolean schemaLink = trackDataAccessible(db, tdb);
 boolean downloadLink = (trackDbSetting(tdb, "wgEncode") != NULL && !tdbIsSuperTrack(tdb));
 int links = 0;
 if (schemaLink)
@@ -416,7 +356,9 @@ if (links > 0)
 if (links > 1)
     printf("<table><tr><td nowrap>View table: ");
 
-if (schemaLink)
+if (schemaLink && differentString("longTabix", tdb->type) && !isCustomComposite(tdb))
+    // FIXME: hgTables.showSchmaLongTabix is a currently a dummy routine, so let's not got here
+    // until it's implemented
     {
     makeSchemaLink(db,tdb,(links > 1 ? "schema":"View table schema"));
     if (downloadLink)
@@ -1233,8 +1175,7 @@ else if (gotCds)
     if (curOpt == baseColorDrawOff)
         disabled = "disabled";
     printf("<br /><b><span id='%sCodonNumberingLabel' %s>Show codon numbering</b>:</span>\n", 
-                name, curOpt == baseColorDrawOff ? "class='disabled'" : "");
-    cgiMakeCheckBoxMore(buf, cartUsualBooleanClosestToHome(cart, tdb, FALSE, CODON_NUMBERING_SUFFIX, TRUE), disabled);
+                name, curOpt == baseColorDrawOff ? "class='disabled'" : "");    cgiMakeCheckBoxMore(buf, cartUsualBooleanClosestToHome(cart, tdb, FALSE, CODON_NUMBERING_SUFFIX, TRUE), disabled);
     }
 else if (gotSeq)
     {
@@ -1254,6 +1195,16 @@ void baseColorDrawOptDropDown(struct cart *cart, struct trackDb *tdb)
 baseColorDropLists(cart, tdb, tdb->track);
 }
 
+static enum baseColorDrawOpt limitDrawOptForType(struct trackDb *tdb, enum baseColorDrawOpt drawOpt)
+/* If tdb->type is genePred, but something fancier like mRNA codons is enabled because the setting
+ * is coming from a view that also includes a PSL track, downgrade it to genomic codons to avoid
+ * drawing problems caused by the inappropriate setting. #21194 */
+{
+if (startsWith("genePred", tdb->type) && drawOpt > baseColorDrawGenomicCodons)
+    drawOpt = baseColorDrawGenomicCodons;
+return drawOpt;
+}
+
 enum baseColorDrawOpt baseColorDrawOptEnabled(struct cart *cart,
 					  struct trackDb *tdb)
 /* Query cart & trackDb to determine what drawing mode (if any) is enabled. */
@@ -1267,7 +1218,7 @@ stringVal = trackDbSettingClosestToHomeOrDefault(tdb, BASE_COLOR_DEFAULT,
 						  BASE_COLOR_DRAW_OFF);
 stringVal = cartUsualStringClosestToHome(cart, tdb, FALSE, BASE_COLOR_VAR_SUFFIX,stringVal);
 
-return baseColorDrawOptStringToEnum(stringVal);
+return limitDrawOptForType(tdb, baseColorDrawOptStringToEnum(stringVal));
 }
 
 
@@ -1830,6 +1781,42 @@ void aggregateDropDown(char *var, char *curVal)
 {
 cgiMakeDropListFull(var, aggregateLabels, aggregateValues,
     ArraySize(aggregateValues), curVal, NULL, NULL);
+}
+
+static char *viewFuncLabels[] =
+{
+"show all",
+"add all",
+"subtract from the first",
+};
+
+static char *viewFuncValues[] =
+{
+WIG_VIEWFUNC_SHOW_ALL,
+WIG_VIEWFUNC_ADD_ALL,
+WIG_VIEWFUNC_SUBTRACT_ALL,
+};
+
+char *wiggleViewFuncEnumToString(enum wiggleViewFuncEnum x)
+/* Convert from enum to string representation. */
+{
+return viewFuncLabels[x];
+}
+
+enum wiggleViewFuncEnum wiggleViewFuncStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, viewFuncValues);
+if (x < 0)
+    errAbort("hui::wiggleViewFuncStringToEnum() - Unknown option %s", string);
+return x;
+}
+
+void viewFuncDropDown(char *var, char *curVal)
+/* Make drop down of options. */
+{
+cgiMakeDropListFull(var, viewFuncLabels, viewFuncValues,
+ArraySize(viewFuncValues), curVal, NULL, NULL);
 }
 
 static char *wiggleTransformFuncOptions[] = 
@@ -3566,7 +3553,7 @@ if (colonPairToStrings(colonPair,&a,&b))
 return FALSE;
 }
 
-static boolean colonPairToDoubles(char * colonPair,double *first,double *second)
+boolean colonPairToDoubles(char * colonPair,double *first,double *second)
 { // Non-destructive. Only sets values if found. No colon: value goes to *first
 char *a=NULL;
 char *b=NULL;
@@ -4119,8 +4106,9 @@ void cfgByCfgType(eCfgType cType,char *db, struct cart *cart, struct trackDb *td
 if (configurableByAjax(tdb,cType) > 0) // Only if subtrack's configurable by ajax do we
     {                                  // consider this option
     if (tdbIsComposite(tdb)                       // called for the composite
-    && !tdbIsCompositeView(tdb->subtracks)        // and there is no view level
-    && slCount(tdb->subtracks) == 1)              // and there is only one subtrack
+        && !isCustomComposite(tdb)
+        && !tdbIsCompositeView(tdb->subtracks)        // and there is no view level
+        && slCount(tdb->subtracks) == 1)              // and there is only one subtrack
 	{
 	tdb = tdb->subtracks; // show subtrack cfg instead
 	prefix = tdb->track;
@@ -4180,6 +4168,8 @@ switch(cType)
     case cfgPsl:        pslCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;
     case cfgBarChart:   barChartCfgUi(db,cart,tdb,prefix,title,boxed);
+                        break;
+    case cfgInteract:   interactCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;
     default:            warn("Track type is not known to multi-view composites. type is: %d ",
 			     cType);
@@ -5023,11 +5013,10 @@ void wigOption(struct cart *cart, char *name, char *title, struct trackDb *tdb)
 /* let the user choose to see the track in wiggle mode */
 {
 printf("<BR><BR><B>Display data as a density graph:</B> ");
+boolean option = cartOrTdbBoolean(cart, tdb, "doWiggle", FALSE);
+
 char varName[1024];
 safef(varName, sizeof(varName), "%s.doWiggle", name);
-boolean parentLevel = isNameAtParentLevel(tdb,varName);
-boolean option = cartUsualBooleanClosestToHome(cart, tdb, parentLevel,"doWiggle", FALSE);
-
 cgiMakeCheckBox(varName, option);
 printf("<BR>\n");
 char *style = option ? "display:block" : "display:none";
@@ -5093,7 +5082,6 @@ double minY;        /*  from trackDb or cart    */
 double maxY;        /*  from trackDb or cart    */
 double tDbMinY;     /*  data range limits from trackDb type line */
 double tDbMaxY;     /*  data range limits from trackDb type line */
-int defaultHeight;  /*  pixels per item */
 char *horizontalGrid = NULL;    /*  Grid lines, off by default */
 char *transformFunc = NULL;    /* function to transform data points */
 char *alwaysZero = NULL;    /* Always include 0 in range */
@@ -5105,6 +5093,7 @@ char *yLineMarkOnOff;   /*  user defined Y marker line to draw */
 double yLineMark;       /*  from trackDb or cart    */
 int maxHeightPixels = atoi(DEFAULT_HEIGHT_PER);
 int minHeightPixels = MIN_HEIGHT_PER;
+int defaultHeight = maxHeightPixels;  /*  pixels per item */
 
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 
@@ -5137,9 +5126,17 @@ if (parentLevel)
     if (aggregate != NULL && parentLevel)
         {
         char *aggregateVal = cartOrTdbString(cart, tdb->parent, "aggregate", NULL);
-        printf("<TR valign=center><th align=right>Overlay method:</th><td align=left>");
         safef(option, sizeof(option), "%s.%s", name, AGGREGATE);
-        aggregateDropDown(option, aggregateVal);
+        if (isCustomComposite(tdb))
+            {
+            printf("<TR valign=center><th align=right>Merge method:</th><td align=left>");
+            aggregateExtraDropDown(option, aggregateVal);
+            }
+        else
+            {
+            printf("<TR valign=center><th align=right>Overlay method:</th><td align=left>");
+            aggregateDropDown(option, aggregateVal);
+            }
         puts("</td></TR>");
 
 	if (sameString(aggregateVal, WIG_AGGREGATE_STACKED)  &&
@@ -5149,6 +5146,26 @@ if (parentLevel)
 	    }
 
 	didAggregate = TRUE;
+        }
+    if (isCustomComposite(tdb))
+        {
+        /*
+        char *viewFuncVal = cartOrTdbString(cart, tdb->parent, "viewFunc", NULL);
+        printf("<TR valign=center><th align=right>Math method:</th><td align=left>");
+        safef(option, sizeof(option), "%s.%s", name, VIEWFUNC);
+        viewFuncDropDown(option, viewFuncVal);
+        */
+
+        printf("<TR valign=center><th align=right>Missing data treatment:</th><td align=left>");
+        char *missingMethodVal = cartOrTdbString(cart, tdb->parent, "missingMethod", NULL);
+        boolean missingIsZero = (missingMethodVal == NULL) ||  differentString(missingMethodVal, "missing");
+        char buffer[1024];
+        safef(buffer, sizeof buffer, "%s.missingMethod",name);
+
+        cgiMakeOnEventRadioButtonWithClass(buffer, "zero", missingIsZero, "allOrOnly", "click", NULL);
+        puts("missing is zero&nbsp;&nbsp;");
+        cgiMakeOnEventRadioButtonWithClass(buffer, "missing", !missingIsZero, "allOrOnly", "click", NULL);
+        printf("math with missing values is missing</B>");
         }
     }
 
@@ -5185,8 +5202,9 @@ cgiMakeDoubleVarWithLimits(option, minY, "Range min", 0, NO_VALUE, NO_VALUE);
 printf("</td><td align=leftv colspan=2>max:&nbsp;");
 safef(option, sizeof(option), "%s.%s", name, MAX_Y );
 cgiMakeDoubleVarWithLimits(option, maxY, "Range max", 0, NO_VALUE, NO_VALUE);
-printf("&nbsp;(range: %g to %g)",
-       tDbMinY, tDbMaxY);
+if (!isCustomComposite(tdb))
+    printf("&nbsp;(range: %g to %g)",
+           tDbMinY, tDbMaxY);
 puts("</TD></TR>");
 
 printf("<TR valign=center><th align=right>Transform function:</th><td align=left>");
@@ -5293,6 +5311,15 @@ endControlGrid(&cg);
 cfgEndBox(boxed);
 }
 
+void genbankShowPatentControl(struct cart *cart, struct trackDb *tdb, char *prefix)
+/* controls for enabling display of GENBANK RNA patent sequences */
+{
+char name[256];
+safef(name, sizeof(name), "%s.%s", prefix, SHOW_PATENT_SEQUENCES_SUFFIX);
+printf("<P><B>Show patent sequences</B>:");
+cgiMakeCheckBox(name, cartUsualBoolean(cart, name, FALSE));
+}
+
 void mrnaCfgUi(struct cart *cart, struct trackDb *tdb, char *prefix, char *title, boolean boxed)
 /* Put up UI for an mRNA (or EST) track. */
 {
@@ -5328,6 +5355,8 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
 endControlGrid(&cg);
 baseColorDrawOptDropDown(cart, tdb);
 indelShowOptions(cart, tdb);
+if (sameString(tdb->track, "mrna") || sameString(tdb->track, "xenoMrna"))
+    genbankShowPatentControl(cart, tdb, prefix);
 wigOption(cart, prefix, title, tdb);
 cfgEndBox(boxed);
 }
@@ -5501,7 +5530,7 @@ if (max && limitMin
 && *limitMin != NO_VALUE &&                      *max < *limitMin)  *max = *limitMin;
 }
 
-static void getScoreFloatRangeFromCart(struct cart *cart, struct trackDb *tdb, boolean parentLevel,
+void getScoreFloatRangeFromCart(struct cart *cart, struct trackDb *tdb, boolean parentLevel,
                          char *scoreName, double *limitMin,double *limitMax,double*min,double*max)
 // gets an double score range from the cart, but the limits from trackDb
 // for any of the pointers provided, will return a value found, if found, else it's contents
@@ -5825,7 +5854,8 @@ if (scoreFilterOk)
         }
     else
         {
-        printf("<b>Show only items with score at or above:</b> ");
+        char* scoreLabel = trackDbSettingClosestToHomeOrDefault(tdb, SCORE_LABEL, "score");
+        printf("<b>Show only items with %s at or above:</b> ", scoreLabel);
         safef(option, sizeof(option), "%s.%s", name,SCORE_FILTER);
         cgiMakeIntVarWithLimits(option, minVal, "Minimum score",0, minLimit,maxLimit);
         printf("&nbsp;&nbsp;(range: %d to %d)\n", minLimit, maxLimit);
@@ -6278,6 +6308,7 @@ boolean encodePeakHasCfgUi(struct trackDb *tdb)
 {
 if (sameWord("narrowPeak",tdb->type)
 ||  sameWord("broadPeak", tdb->type)
+||  sameWord("bigNarrowPeak", tdb->type)
 ||  sameWord("encodePeak",tdb->type)
 ||  sameWord("gappedPeak",tdb->type))
     {
@@ -6349,8 +6380,32 @@ if (opened)
     }
 }
 
+static void gencodeLabelControls(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed, boolean parentLevel)
+/* generate label checkboxes for GENCODE. */
+{
+// See hgTracks/gencodeTracks.c:registerProductionTrackHandlers()
+// and hgTracks/gencodeTracks.c:assignConfiguredName()
+char *labelsNames[][2] = {
+    {"gene name", "geneName"},
+    {"gene id", "geneId"},
+    {"transcript id", "transcriptId"},
+    {NULL, NULL}
+};
+int i;
+for (i = 0; labelsNames[i][0] != NULL; i++)
+    {
+    char varName[64], varSuffix[64];
+    safef(varSuffix, sizeof(varSuffix), "label.%s", labelsNames[i][1]);
+    safef(varName, sizeof(varName), "%s.%s", name, varSuffix);
+    char *value = cartUsualStringClosestToHome(cart, tdb, parentLevel, varSuffix, NULL);
+    boolean checked = (value != NULL) && !sameString(value, "0");
+    printf("%s%s: ", (i > 0) ? "&nbsp;&nbsp;" : "", labelsNames[i][0]);
+    cgiMakeCheckBoxMore(varName, checked, NULL);
+    }
+}
+
 void genePredCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
-/* Put up gencode-specific controls */
+/* Put up genePred-specific controls */
 {
 char varName[64];
 boolean parentLevel = isNameAtParentLevel(tdb,name);
@@ -6366,10 +6421,16 @@ if (sameString(name, "acembly"))
     acemblyDropDown("acembly.type", acemblyClass);
     printf("  ");
     }
-else if (startsWith("wgEncodeGencode", name)
-     ||  sameString("wgEncodeSangerGencode", name)
+else if (startsWith("wgEncodeGencode", name))
+    {
+    // new GENCODEs
+    gencodeLabelControls(db, cart, tdb, name, title, boxed, parentLevel);
+    }
+else if (sameString("wgEncodeSangerGencode", name)
      ||  (startsWith("encodeGencode", name) && !sameString("encodeGencodeRaceFrags", name)))
     {
+    // GENCODE pilot (see hgTracks/gencodeTracks.c:registerPilotTrackHandlers()
+    // and hgTracks/simpleTracks.c:genePredAssignConfiguredName()
     printf("<B>Label:</B> ");
     safef(varName, sizeof(varName), "%s.label", name);
     cgiMakeRadioButton(varName, "gene", sameString("gene", geneLabel));
@@ -7606,8 +7667,8 @@ if (membersForAll->members[dimX] == NULL && membersForAll->members[dimY] == NULL
     #define PM_BUTTON_FILTER_COMP "<input type='button' class='inOutButton' id='%s' value='%c'>"
     #define PM_BUTTON_FILTER_COMP_JS "waitOnFunction(filterCompositeSet,this,%s);return false;"
     #define MAKE_PM_BUTTON_FILTER_COMP(tf,fc,plmi) \
+    safef(id, sizeof id, "btn_%s", (fc)); \
     printf(PM_BUTTON_FILTER_COMP, id, (plmi)); \
-    safef(id, sizeof id, "'btn_%s", (fc)); \
     safef(javascript, sizeof javascript, PM_BUTTON_FILTER_COMP_JS, (tf)); \
     jsOnEventById("click", id, javascript);
 
@@ -7993,7 +8054,7 @@ for (i = 0; i < MAX_SUBGROUP; i++)
         if (formName)
             {
 	    char id[256];
-	    safef(id, sizeof id, "cpmUiNoMtx_but_%d", i);
+	    safef(id, sizeof id, "cpmUiNoMtx_but_%d_%d", i, j);
             makeAddClearButtonPair(id, name,"</TD><TD>");
             }
         else
@@ -8393,109 +8454,105 @@ webPrintLinkTableEnd();
 printf("Total: %d\n", count);
 }
 
-boolean printPennantIconNote(struct trackDb *tdb)
-// Returns TRUE and prints out the "pennantIcon" and note when found.
-//This is used by hgTrackUi and hgc before printing out trackDb "html"
+static char *makePennantIcon(struct trackDb *tdb, char **hintRet)
+// Builds a string with pennantIcon HTML and returns it. Also returns hint. */
 {
-char * setting = trackDbSetting(tdb, "pennantIcon");
-if (setting != NULL)
+char *setting = trackDbSetting(tdb, "pennantIcon");
+if (setting == NULL)
+    return FALSE;
+
+setting = cloneString(setting);
+char *icon = nextWord(&setting);
+char buffer[4096];
+char *src = NULL;
+char *url = NULL, *hint = NULL, *color = NULL;
+
+boolean isTextIcon = FALSE;
+if (!(endsWith(icon, ".jpg") || endsWith(icon, ".png")))
     {
-    setting = cloneString(setting);
-    char *icon = nextWord(&setting);
-    char buffer[4096];
-    char *src = NULL;
-    
-    if (startsWith("http://", icon) || startsWith("ftp://", icon) ||
-        startsWith("https://", icon))
-        src = htmlEncode(icon);
-    else
-        {
-        safef(buffer, sizeof buffer, "../images/%s", icon);
-        src = htmlEncode(buffer);
-        }
-
-    char *url = NULL;
-    if (setting != NULL)
-	url = nextWord(&setting);
-    char *hint = NULL;
-    if (setting != NULL)
-	hint = htmlEncode(stripEnclosingDoubleQuotes(setting));
-
-    if (!isEmpty(url))
-        {
-	if (isEmpty(hint))
-	    printf("<P><a href='%s' TARGET=ucscHelp><img height='16' width='16' "
-		   "src='%s'></a>",url,src);
-	else
-	    {
-	    printf("<P><a title='%s' href='%s' TARGET=ucscHelp><img height='16' width='16' "
-		   "src='%s'></a>",hint,url,src);
-
-	    // Special case for liftOver from hg17 or hg18, but this should probably be generalized.
-	    if (sameString(icon,"18.jpg") && startsWithWord("lifted",hint))
-		printf("&nbsp;Note: these data have been converted via liftOver from the Mar. 2006 "
-		       "(NCBI36/hg18) version of the track.");
-	    else if (sameString(icon,"17.jpg") && startsWithWord("lifted",hint))
-		printf("&nbsp;Note: these data have been converted via liftOver from the May 2004 "
-		       "(NCBI35/hg17) version of the track.");
-	    else 
-		printf("&nbsp;Note: %s.",hint);
-	    printf("</P>\n");
-	    }
-	}
-    else
-        printf("<BR><img height='16' width='16' src='%s'>\n",src);
-    return TRUE;
+    isTextIcon = TRUE;
+    color = nextWord(&setting);
+    src = strLower(icon);
     }
-return FALSE;
+else if (startsWith("http://", icon) || startsWith("https://", icon) ||
+        startsWith("ftp://", icon))
+            src = htmlEncode(icon);
+else
+    {
+    safef(buffer, sizeof buffer, "../images/%s", icon);
+    src = htmlEncode(buffer);
+    }
+
+if (setting)
+    {
+    url = nextWord(&setting);
+    if (setting)
+        {
+        hint = htmlEncode(stripEnclosingDoubleQuotes(setting));
+        }
+    }
+struct dyString *ds = dyStringNew(0);
+
+// generate markup
+if (url)
+    dyStringPrintf(ds, "<a class='pennantIconText' href='%s' target='ucscHelp' ", url);
+else if (isTextIcon)
+    dyStringAppend(ds, "<span class='pennantIconText' ");
+if (isTextIcon)
+    dyStringPrintf(ds, "style='color: %s;' ", color);
+if (hint)
+    dyStringPrintf(ds, "title='%s' ", hint);
+if (url || isTextIcon)
+    dyStringAppend(ds, ">");
+
+// add text or image
+if (isTextIcon) 
+    dyStringPrintf(ds, "%s", src);
+else
+    dyStringPrintf(ds, "<img height='16' width='16' src='%s'>", src);
+
+// close tags
+if (url)
+   dyStringAppend(ds, "</a>");
+else if (isTextIcon)
+    dyStringAppend(ds, "</span>");
+dyStringAppend(ds, "\n");
+
+if (hint && hintRet)
+    *hintRet = cloneString(hint);
+return dyStringCannibalize(&ds);
 }
+
 
 boolean hPrintPennantIcon(struct trackDb *tdb)
 // Returns TRUE and prints out the "pennantIcon" when found.
 // Example: ENCODE tracks in hgTracks config list.
 {
-char *setting = trackDbSetting(tdb, "pennantIcon");
-if (setting != NULL)
-    {
-    setting = cloneString(setting);
-    char buffer[4096];
-    char *src = NULL;
-    char *icon = nextWord(&setting);
-    if (startsWith("http://", icon) || startsWith("ftp://", icon) ||
-        startsWith("https://", icon))
-        src = htmlEncode(icon);
-    else
-        {
-        safef(buffer, sizeof buffer, "../images/%s", icon);
-        src = htmlEncode(buffer);
-        }
-
-    if (setting)
-        {
-        char *url = nextWord(&setting);
-        if (setting)
-            {
-            char *hint = htmlEncode(stripEnclosingDoubleQuotes(setting));
-            hPrintf("<a title='%s' href='%s' TARGET=ucscHelp><img height='16' width='16' "
-                    "src='%s'></a>\n",hint,url,src);
-            freeMem(hint);
-            }
-        else
-            hPrintf("<a href='%s' TARGET=ucscHelp><img height='16' width='16' "
-                    "src='%s'></a>\n",url,src);
-        }
-    else
-        hPrintf("<img height='16' width='16' src='%s'>\n",icon);
-    freeMem(icon);
-    return TRUE;
-    }
-else if (trackDbSetting(tdb, "wgEncode") != NULL)
+if (trackDbSetting(tdb, "wgEncode") != NULL)
     {
     hPrintf("<a title='encode project' href='../ENCODE'><img height='16' width='16' "
             "src='../images/encodeThumbnail.jpg'></a>\n");
     return TRUE;
     }
-return FALSE;
+char *pennantIcon = makePennantIcon(tdb, NULL);
+if (!pennantIcon)
+    return FALSE;
+hPrintf("%s\n", pennantIcon);
+return TRUE;
+}
+
+boolean printPennantIconNote(struct trackDb *tdb)
+// Returns TRUE and prints out the "pennantIcon" and note when found.
+//This is used by hgTrackUi and hgc before printing out trackDb "html"
+{
+char *hintRet;
+char *pennantIcon = makePennantIcon(tdb, &hintRet);
+if (!pennantIcon)
+    return FALSE;
+printf("<br>%s\n", pennantIcon);
+if (hintRet)
+    printf("<b>Note:</b> %s\n", hintRet);
+return TRUE;
 }
 
 void printUpdateTime(char *database, struct trackDb *tdb,
@@ -8738,6 +8795,8 @@ else if (sameWord("pgSnp", tdb->type))
     asObj = pgSnpAsObj();
 else if (sameWord("barChart", tdb->type))
     asObj = asParseText(barChartAutoSqlString);
+else if (sameWord("interact", tdb->type))
+    asObj = asParseText(barChartAutoSqlString);
 else
     asObj = asFromTableDescriptions(conn, tdb->table);
 return asObj;
@@ -8891,7 +8950,7 @@ if (stringIn(":", idInUrl)) {
 // URL may now contain item boundaries
 ins[9] = "${";
 ins[10] = "$}";
-if (cartOptionalString(cart, "o") && cartOptionalString(cart, "t"))
+if (cart!=NULL && cartOptionalString(cart, "o") && cartOptionalString(cart, "t"))
     {
     char *itemBeg = cartString(cart, "o"); // unexpected commas?
     char *itemEnd = cartString(cart, "t");
@@ -8917,5 +8976,54 @@ freeDyString(&uUrl);
 freeMem(eItem);
 freeMem(scName);
 return eUrl->string;
+}
+
+char *checkDataVersion(char *database, struct trackDb *tdb)
+/* see if trackDb has a dataVersion setting and check that file for version */
+{
+// try the metadata
+metadataForTable(database, tdb, NULL);
+char *version = (char *)metadataFindValue(tdb, "dataVersion");
+
+// try trackDb itself, this automatically will go up the hierarchy
+if (version == NULL)
+    version = trackDbSetting(tdb, "dataVersion");
+
+if (version != NULL)
+    {
+    // dataVersion can also be the path to a local file, for otto tracks
+    if (!trackHubDatabase(database) && !isHubTrack(tdb->table) && startsWith("/", version))
+        {
+        char *path = replaceInUrl(version, "", NULL, database, "", 0, 0, tdb->track, FALSE);
+        struct lineFile* lf = lineFileMayOpen(path, TRUE);
+        if (lf)
+            version = lineFileReadAll(lf);
+        else
+            version = NULL;
+        lineFileClose(&lf);
+        }
+    }
+return version;
+}
+
+void printDataVersion(char *database, struct trackDb *tdb)
+/* If this annotation has a dataVersion setting, print it.
+ * check hgFixed.trackVersion, meta data and trackDb 'dataVersion'. */
+{
+char *version = checkDataVersion(database, tdb);
+
+if (version == NULL)
+    {
+    // try the hgFixed.trackVersion table
+    struct trackVersion *trackVersion = getTrackVersion(database, tdb->track);
+    // try trackVersion table with parent, for composites/superTracks
+    if (trackVersion == NULL && tdb->parent != NULL)
+        trackVersion = getTrackVersion(database, tdb->parent->track);
+    if (trackVersion != NULL)
+        version = trackVersion->version;
+    }
+
+if (isNotEmpty(version))
+    printf("<B>Data version:</B> %s <BR>\n", version);
 }
 

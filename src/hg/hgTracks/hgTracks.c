@@ -475,6 +475,11 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
 if (subtrack == NULL)
     return FALSE;
 
+for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    {
+    subtrack->mapsSelf = FALSE;	/* Round about way to tell wig not to do own mapping. */
+    }
+
 multiWigContainerMethods(track);
 //struct wigCartOptions *wigCart = wigCartOptionsNew(cart, track->tdb, 0, NULL);
 //track->wigCartData = (void *) wigCart;
@@ -1465,7 +1470,6 @@ int portX = fullInsideX;
 // If a portal was established, then set the portal dimensions
 long portalStart,chromStart;
 double basesPerPixel;
-// TODO GALT need to tweak it still for virtchrom stuff, e.g. maybe change some var names or types to long
 if (theImgBox
 && imgBoxPortalDimensions(theImgBox,&chromStart,NULL,NULL,NULL,&portalStart,NULL,
                           &portWidth,&basesPerPixel))
@@ -4519,6 +4523,8 @@ if (
 || sameWord(type, "psl")
 || sameWord(type, "barChart")
 || sameWord(type, "bigBarChart")
+|| sameWord(type, "interact")
+|| sameWord(type, "bigInteract")
 //|| track->loadItems == loadSimpleBed
 //|| track->bedSize >= 3 // should pick up several ENCODE BED-Plus types.
 ) 
@@ -4727,7 +4733,9 @@ for(window=windows;window;window=window->next)
     for (track = trackList; track != NULL; track = track->next)
 	{
 	if (tdbIsCompositeChild(track->tdb)) // When single track is requested via AJAX,
+	    {
 	    limitedVisFromComposite(track);  // it could be a subtrack
+	    }
 	else
 	    {
 	    limitVisibility(track);
@@ -4774,7 +4782,17 @@ if ((sortTrack = cgiOptionalString( "sortExp")) != NULL)
     }
 
 if (wigOrder != NULL)
+    {
     orderedWiggles = slNameListFromString(wigOrder, ' ');
+    struct slName *name = orderedWiggles;
+    // if we're sorting, remove existing sort order for this composite
+    for(; name; name = name->next)
+        {
+        char buffer[1024];
+        safef(buffer, sizeof buffer,  "%s_imgOrd", name->name);
+        cartRemove(cart, buffer);
+        }
+    }
 
 // Construct flatTracks 
 for (track = trackList; track != NULL; track = track->next)
@@ -4808,6 +4826,18 @@ for (track = trackList; track != NULL; track = track->next)
     }
 flatTracksSort(&flatTracks); // Now we should have a perfectly good flat track list!
 
+if (orderedWiggles)
+    {
+    // save order to cart
+    struct flatTracks *ft;
+    char buffer[4096];
+    int count = 1;
+    for(ft = flatTracks; ft; ft = ft->next)
+        {
+        safef(buffer, sizeof buffer, "%s_imgOrd", ft->track->track);
+        cartSetInt(cart, buffer, count++);
+        }
+    }
 
 // for each track, figure out maximum height needed from all windows
 for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
@@ -5333,8 +5363,6 @@ if (withCenterLabels)
 	    { 
 	    int savey = y; // GALT
             y = doCenterLabels(track, track, hvg, font, y, fullInsideWidth); // calls track height
-	    // TODO GALT why do I just pass track here instead of parentTrack? Did I lose something?
-	    // have to look at old code to see.
 	    y = savey + flatTrack->maxHeight;
 	    }
         }
@@ -5452,7 +5480,6 @@ if (withCenterLabels)
 /* if a track can draw its left labels, now is the time since it
  *  knows what exactly happened during drawItems
  */
-// TODO GALT Parellelize or not?
 if (withLeftLabels)
     {
     y = yAfterRuler;
@@ -5464,7 +5491,6 @@ if (withLeftLabels)
         if (theImgBox)
             {
             // side label slice of tracks
-            // ORIG sliceHeight      = trackPlusLabelHeight(track, fontHeight);
 	    sliceHeight      = flatTrack->maxHeight;
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
@@ -5482,13 +5508,12 @@ if (withLeftLabels)
     #else ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
         else if (track->drawLeftLabels != NULL)
     #endif ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
-	    {  // TODO parallelize?
+	    {
 	    setGlobalsFromWindow(windows);
             y = doOwnLeftLabels(track, hvgSide, font, y);
 	    setGlobalsFromWindow(windows); // first window
 	    }
         else
-            // ORIG y += trackPlusLabelHeight(track, fontHeight);
 	    y += flatTrack->maxHeight;
         }
     }
@@ -5506,17 +5531,14 @@ for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
         if (theImgBox)
             {
             // Set imgTrack in case any map items will be set
-            // ORIG sliceHeight      = trackPlusLabelHeight(track, fontHeight);
 	    sliceHeight      = flatTrack->maxHeight;
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
             }
 
-	// TODO Parallelize?
 	setGlobalsFromWindow(windows); // first window
         doTrackMap(track, hvg, y, fontHeight, trackPastTabX, trackPastTabWidth);
 
-        // ORIG y += trackPlusLabelHeight(track, fontHeight);
 	y += flatTrack->maxHeight;
         }
     }
@@ -6084,7 +6106,10 @@ else if (sameString(type, "bigWig"))
     if (trackShouldUseAjaxRetrieval(tg))
         tg->loadItems = dontLoadItems;
     }
-else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") || sameString(type, "bigPsl") || sameString(type, "bigMaf")|| sameString(type, "bigChain") || sameString(type, "bigBarChart"))
+else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") || 
+        sameString(type, "bigNarrowPeak") || sameString(type, "bigPsl") || 
+        sameString(type, "bigMaf")|| sameString(type, "bigChain") || 
+        sameString(type, "bigBarChart") || sameString(type, "bigInteract"))
     {
     struct bbiFile *bbi = ct->bbiFile;
 
@@ -6093,6 +6118,8 @@ else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") || sameStr
     char typeBuf[64];
     if (sameString(type, "bigGenePred"))
 	safef(typeBuf, sizeof(typeBuf), "bigGenePred");
+    else if (sameString(type, "bigNarrowPeak"))
+	safef(typeBuf, sizeof(typeBuf), "bigNarrowPeak");
     else if (sameString(type, "bigChain"))
 	safef(typeBuf, sizeof(typeBuf), "bigChain");
     else if (sameString(type, "bigMaf"))
@@ -6101,6 +6128,8 @@ else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") || sameStr
 	safef(typeBuf, sizeof(typeBuf), "bigPsl");
     else if (sameString(type, "bigBarChart"))
 	safef(typeBuf, sizeof(typeBuf), "bigBarChart");
+    else if (sameString(type, "bigInteract"))
+	safef(typeBuf, sizeof(typeBuf), "bigInteract");
     else
 	safef(typeBuf, sizeof(typeBuf), "bigBed %d %c", bbi->definedFieldCount, extra);
     tdb->type = cloneString(typeBuf);
@@ -6250,6 +6279,12 @@ else if (sameString(type, "barChart"))
     {
     tg = trackFromTrackDb(tdb);
     barChartCtMethods(tg);
+    tg->customPt = ct;
+    }
+else if (sameString(type, "interact"))
+    {
+    tg = trackFromTrackDb(tdb);
+    interactCtMethods(tg);
     tg->customPt = ct;
     }
 else
@@ -6715,7 +6750,6 @@ else
         paddedLabel[i+1] = label[i];
     }
 hButtonWithOnClick(var, paddedLabel, NULL, "return imageV2.navigateButtonClick(this);");
-// TODO GALT could consider trying to give these all the same class and then attach handlers at the class level.
 }
 
 void limitSuperTrackVis(struct track *track)
@@ -7060,6 +7094,7 @@ return (startsWithWord("bigWig"  , track->tdb->type)
      || startsWithWord("mathWig"  , track->tdb->type)
      || startsWithWord("bigBed"  , track->tdb->type)
      || startsWithWord("bigPsl"  , track->tdb->type)
+     || startsWithWord("bigNarrowPeak"  , track->tdb->type)
      || startsWithWord("bigGenePred"  , track->tdb->type)
      || startsWithWord("bigChain"  , track->tdb->type)
      || startsWithWord("bam"     , track->tdb->type)
@@ -7446,6 +7481,30 @@ for (window=windows->next; window; window=window->next)
 return FALSE;
 }
 
+static void setSharedLimitedVisAcrossWindows(struct track *track)
+/* Look for lowest limitedVis across all windows
+ * if found, set all windows to same lowest limited vis. */
+{
+enum trackVisibility sharedVis = 99;
+struct track *tg;
+for (tg=track; tg; tg=tg->nextWindow)
+    {
+    if (tg->limitedVisSet)
+	{
+	if (tg->limitedVis < sharedVis)
+	    sharedVis = tg->limitedVis;
+	}
+    }
+if (sharedVis != 99)
+    {
+    for (tg=track; tg; tg=tg->nextWindow)
+	{
+	tg->limitedVis = sharedVis;
+	tg->limitedVisSet = TRUE;
+	}
+    }
+}
+
 static void setSharedErrorsAcrossWindows(struct track *track)
 /* Look for network errors across all windows
  * if found, set all windows to same errMsg and set bigWarn track handlers. */
@@ -7472,6 +7531,37 @@ if (sharedErrMsg)
 }
 
 
+void outCollectionsToJson()
+/* Output the current collections to the hgTracks JSON block. */
+{
+struct grp *groupList = NULL;
+char buffer[4096];
+safef(buffer, sizeof buffer, "%s-%s", customCompositeCartName, database);
+char *hubFile = cartOptionalString(cart, buffer);
+
+if (hubFile != NULL)
+    {
+    char *hubName = hubNameFromUrl(hubFile);
+    struct trackDb *hubTdbs = hubCollectTracks( database,  &groupList);
+    struct trackDb *tdb;
+    struct jsonElement *jsonList = NULL;
+    for(tdb = hubTdbs; tdb;  tdb = tdb->next)
+        {
+        if (sameString(tdb->grp, hubName))
+            {
+            if (jsonList == NULL)
+                jsonList = newJsonList(NULL);
+
+            struct jsonElement *collection = newJsonObject(newHash(4));
+            jsonObjectAdd(collection, "track", newJsonString(tdb->track));
+            jsonObjectAdd(collection, "shortLabel", newJsonString(tdb->shortLabel));
+            jsonListAdd(jsonList, collection);
+            }
+        }
+    if (jsonList != NULL)
+        jsonObjectAdd(jsonForClient, "collections", jsonList);
+    }
+}
 
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
@@ -7775,7 +7865,6 @@ for (window=windows; window; window=window->next)
 
     if (ptMax > 0)
 	{
-	// TODO GALT parallel actually not sure if anything to worry about here
 	/* wait for remote parallel load to finish */
 	remoteParallelLoadWait(atoi(cfgOptionDefault("parallelFetch.timeout", "90")));  // wait up to default 90 seconds.
 	if (measureTiming)
@@ -7788,6 +7877,18 @@ trackLoadingInProgress = FALSE;
 setGlobalsFromWindow(windows); // first window // restore globals
 trackList = windows->trackList;  // restore track list
 
+// Some loadItems() calls will have already set limitedVis.
+// Look for lowest limitedVis across all windows
+// if found, set all windows to same lowest limitedVis 
+for (track = trackList; track != NULL; track = track->next)
+    {
+    setSharedLimitedVisAcrossWindows(track);
+    struct track *sub;
+    for (sub=track->subtracks; sub; sub=sub->next)
+	{
+	setSharedLimitedVisAcrossWindows(sub);
+	}
+    }
 
 // Look for network errors across all windows
 // if found, set all windows to same errMsg and set bigWarn track handlers.
@@ -7842,6 +7943,7 @@ if (theImgBox)
 /* Center everything from now on. */
 hPrintf("<CENTER>\n");
 
+outCollectionsToJson();
 
 jsonObjectAdd(jsonForClient, "winStart", newJsonNumber(virtWinStart));
 jsonObjectAdd(jsonForClient, "winEnd", newJsonNumber(virtWinEnd));
@@ -8338,7 +8440,7 @@ if (!hideControls)
 
             if (isHubTrack(group->name))
 		{
-                if (strstr(group->label, "Composite"))
+                if (strstr(group->label, "Collections"))
                     {
                     safef(idText, sizeof idText, "%s_edit", group->name);
                     hPrintf("<input name=\"hubEditButton\" id='%s'"
@@ -8387,7 +8489,6 @@ if (!hideControls)
 	     * determine if they have visible member tracks */
 	    groupTrackListAddSuper(cart, group);
 
-	    // TODO GALT probably nothing to do here
 	    /* Display track controls */
 	    for (tr = group->trackList; tr != NULL; tr = tr->next)
 		{
@@ -9017,10 +9118,10 @@ if (!startsWith("virt:", position) && (virtualSingleChrom()))
 
      // try to find the nearest match
     if (!(chromName && findNearestVirtMatch(chromName, winStart, winEnd, findNearest, &virtWinStart, &virtWinEnd)))
-	{ // create 1k window near middle of vchrom
-	warn("Unable to find any region near the position on the chromosome in the multi-regions. Now using middle of view.");
+	{ // create 10k window near middle of vchrom
+	warn("Your new regions are not near previous location. Using middle of new coordinates.");
 	virtWinStart = virtSeqBaseCount / 2;
-	virtWinEnd = virtWinStart + 1000;
+	virtWinEnd = virtWinStart + 10000;
 	if (virtWinEnd > virtSeqBaseCount)
 	    virtWinEnd = virtSeqBaseCount;
 	}
@@ -9111,10 +9212,10 @@ else
 	    // trying to find best vchrom location corresponding to chromName, winStart, winEnd);
 	    // try to find the nearest match
 	    if (!(chromName && findNearestVirtMatch(chromName, winStart, winEnd, findNearest, &virtWinStart, &virtWinEnd))) 
-		{ // create 1k window near middle of vchrom
-		warn("Unable to find any region near the position on the chromosome in the multi-regions. Now using middle of view.");
+		{ // create 10k window near middle of vchrom
+		warn("Your new regions are not near previous location. Using middle of new coordinates.");
 		virtWinStart = virtSeqBaseCount / 2;
-		virtWinEnd = virtWinStart + 1000;
+		virtWinEnd = virtWinStart + 10000;
 		if (virtWinEnd > virtSeqBaseCount)
 		    virtWinEnd = virtSeqBaseCount;
 		}
@@ -9310,7 +9411,6 @@ position = cloneString(newPos);
 cartSetString(cart, "position", position);
 cartSetString(cart, "oldPosition", position);
 //cartSetString(cart, "lastPosition", position);  // this is set in cart.c
-// TODO GALT is it possible and worthwhile to just use lastPosition instead of oldPosition?
 
 cartSetBoolean(cart, "virtMode", virtMode);
 cartSetString(cart, "virtModeType", virtModeType); 
@@ -9396,7 +9496,7 @@ for (chromPtr = chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     unsigned size = hChromSize(database, chromPtr->name);
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
-    printf("<A HREF=\"%s?%s=%s&position=%s\">%s</A>",
+    htmlPrintf("<A HREF=\"%s|none|?%s|url|=%s|url|&position=%s|url|\">%s</A>",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart),
            chromPtr->name, chromPtr->name);
     cgiTableFieldEnd();
@@ -9445,7 +9545,7 @@ for(;count-- && (chromInfo != NULL); chromInfo = chromInfo->next)
     unsigned size = chromInfo->size;
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
-    printf("<A HREF=\"%s?%s=%s&position=%s\">%s</A>",
+    htmlPrintf("<A HREF=\"%s|none|?%s|url|=%s|url|&position=%s|url|\">%s</A>",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart),
            chromInfo->chrom,chromInfo->chrom);
     cgiTableFieldEnd();
@@ -9535,7 +9635,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     unsigned size = sqlUnsigned(row[1]);
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
-    printf("<A HREF=\"%s?%s=%s&position=%s\">%s</A>",
+    htmlPrintf("<A HREF=\"%s|none|?%s|url|=%s|url|&position=%s|url|\">%s</A>",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart),
            row[0], row[0]);
     cgiTableFieldEnd();
@@ -9725,6 +9825,7 @@ dyStringPrintf(dy,"Mousetrap.bind('d t', function() { $('input[name=\"hgt.reset\
 dyStringPrintf(dy,"Mousetrap.bind('d o', function() { $('input[name=\"hgt.defaultImgOrder\"]').click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('c t', function() { document.customTrackForm.submit();return false; }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('t h', function() { document.trackHubForm.submit();return false; }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('t c', function() { document.editHubForm.submit();return false; }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('r s', function() { $('input[name=\"hgt.setWidth\"]').click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('r f', function() { $('input[name=\"hgt.refresh\"]').click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('r v', function() { $('input[name=\"hgt.toggleRevCmplDisp\"]').click() }); \n");
@@ -9771,6 +9872,7 @@ hPrintf("<tr><td> left 1/2 screen</td><td class=\"hotkey\">j</td>   <td> default
 hPrintf("<tr><td> left one screen</td><td class=\"hotkey\">J</td>   <td> default order</td><td class=\"hotkey\">d then o</td>              </tr>\n");
 hPrintf("<tr><td> right 10&#37;</td><td class=\"hotkey\">ctrl+l</td><td> hide all</td><td class=\"hotkey\">h then a</td>                   </tr>\n"); // percent sign
 hPrintf("<tr><td> right 1/2 screen</td><td class=\"hotkey\">l</td>  <td> custom tracks</td><td class=\"hotkey\">c then t</td>              </tr>\n");
+hPrintf("<tr><td> right one screen</td><td class=\"hotkey\">L</td>  <td> track collections</td><td class=\"hotkey\">t then c</td>                 </tr>\n");
 hPrintf("<tr><td> right one screen</td><td class=\"hotkey\">L</td>  <td> track hubs</td><td class=\"hotkey\">t then h</td>                 </tr>\n");
 hPrintf("<tr><td> zoom in 1.5x</td><td class=\"hotkey\">ctrl+i</td> <td> configure</td><td class=\"hotkey\">c then f</td>                  </tr>\n"); 
 hPrintf("<tr><td> zoom in 3x</td><td class=\"hotkey\">i</td>        <td> reverse</td><td class=\"hotkey\">r then v</td>                    </tr>\n");
@@ -9794,6 +9896,30 @@ hPrintf("<tr><td>Highlight all (mark)</td><td class=\"hotkey\">h then m</td><td>
 hPrintf("</table>\n");
 hPrintf("<img style=\"margin:8px\" src=\"../images/shortcutHelp.png\">");
 hPrintf("</div>\n");
+}
+
+static void checkAddHighlight()
+/* If the cart variable addHighlight is set, merge it into the highlight variable. */
+{
+char *newHighlight = cartOptionalString(cart, "addHighlight");
+if (newHighlight)
+    {
+    char *existing = cartOptionalString(cart, "highlight");
+    if (isNotEmpty(existing))
+        {
+        // Add region only if it is not already in the existing highlight setting.
+        char *alreadyIn = strstr(existing, newHighlight);
+        int len = strlen(newHighlight);
+        if (! (alreadyIn && (alreadyIn[len] == '|' || alreadyIn[len] == '\0')))
+            {
+            struct dyString *dy = dyStringCreate("%s|%s", newHighlight, existing);
+            cartSetString(cart, "highlight", dy->string);
+            }
+        }
+    else
+        cartSetString(cart, "highlight", newHighlight);
+    cartRemove(cart, "addHighlight");
+    }
 }
 
 void doMiddle(struct cart *theCart)
@@ -9850,6 +9976,8 @@ initTl();
 
 char *configPageCall = cartCgiUsualString(cart, "hgTracksConfigPage", "notSet");
 char *configMultiRegionPageCall = cartCgiUsualString(cart, "hgTracksConfigMultiRegionPage", "notSet");
+
+checkAddHighlight();
 
 /* Do main display. */
 
@@ -9991,6 +10119,7 @@ if (cartVarExists(cart, "hgt.convertChromToVirtChrom"))
 
 jsonObjectAdd(jsonForClient, "measureTiming", newJsonBoolean(measureTiming));
 // js code needs to know if a highlightRegion is defined for this db
+checkAddHighlight(); // call again in case tracksDisplay's call to findGenomePos changed vars
 char *highlightDef = cartOptionalString(cart, "highlight");
 if (highlightDef && startsWith(database,highlightDef) && highlightDef[strlen(database)] == '.')
     jsonObjectAdd(jsonForClient, "highlight", newJsonString(highlightDef));

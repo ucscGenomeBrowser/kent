@@ -313,9 +313,13 @@ var genomePos = {
             // http://www.ensembl.org/Homo_sapiens/contigview?chr=21&start=33031934&end=33041241
             genomePos.linkFixup(pos, "ensemblLink", new RegExp("(.+start=)[0-9]+"), "end");
 
-            // Example NCBI link:
-            // http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=21&BEG=33031934&END=33041241
+            // Example NCBI Map Viewer link (obsolete):
+            // https://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=21&BEG=33031934&END=33041241
             genomePos.linkFixup(pos, "ncbiLink", new RegExp("(.+BEG=)[0-9]+"), "END");
+
+            // Example NCBI Genome Data Viewer link
+            // https://www.ncbi.nlm.nih.gov/genome/gdv/browser/?id=GCF_000001405.37&chr=4&from=45985744&to=45991655&context=genome
+            genomePos.linkFixup(pos, "ncbiLink", new RegExp("(.+from=)[0-9]+"), "to");
 
             // Example medaka link: 
             // http://utgenome.org/medakabrowser_ens_jump.php?revision=version1.0&chr=chromosome18&start=14435198&end=14444829
@@ -378,6 +382,14 @@ var genomePos = {
         var mult = width / imgWidth;   // mult is bp/pixel multiplier
         var startDelta;   // startDelta is how many bp's to the right/left
         var x1;
+
+        // The magic number three appear at another place in the code 
+        // as LEFTADD. It was originally annotated as "borders or cgi item calc
+        // ?" by Larry. It has to be used when going any time when converting 
+        // between pixels and coordinates.
+        selStart -= 3;
+        selEnd -= 3;
+
         if (hgTracks.revCmplDisp) {
             x1 = Math.min(imgWidth, selStart);
             startDelta = Math.floor(mult * (imgWidth - x1));
@@ -2534,6 +2546,7 @@ var rightClick = {
         var row = null;
         var rows = null;
         var selectUpdated = null;
+                function mySuccess() {}
         if (menuObject.shown) {
             // warn("Spinning: menu is still shown");
             setTimeout(function() { rightClick.hitFinish(menuItemClicked, menuObject, cmd); }, 10);
@@ -2694,8 +2707,41 @@ var rightClick = {
             }
             location.assign(url);
 
-        } else if ((cmd === 'sortExp') || (cmd === 'sortSim')) {
+        } else if (cmd === 'newCollection') {
+            $.ajax({
+                type: "PUT",
+                async: false,
+                url: "../cgi-bin/hgCollection",
+                data:  "cmd=newCollection&track=" + id + "&hgsid=" + getHgsid(),
+                trueSuccess: mySuccess,
+                success: catchErrorOrDispatch,
+                error: errorHandler,
+            });
 
+            imageV2.fullReload();
+        } else if (cmd === 'addCollection') {
+            var shortLabel = $(menuItemClicked).text().substring(9).slice(0,-1); 
+            var ii;
+            var collectionName;
+            for(ii=0; ii < hgTracks.collections.length; ii++) {
+                if ( hgTracks.collections[ii].shortLabel === shortLabel) {
+                    collectionName = hgTracks.collections[ii].track;
+                    break;
+                }
+            }
+
+            $.ajax({
+                type: "PUT",
+                async: false,
+                url: "../cgi-bin/hgCollection",
+                data: "cmd=addTrack&track=" + id + "&collection=" + collectionName + "&hgsid=" + getHgsid(),
+                trueSuccess: mySuccess,
+                success: catchErrorOrDispatch,
+                error: errorHandler,
+            });
+
+            imageV2.fullReload();
+        } else if ((cmd === 'sortExp') || (cmd === 'sortSim')) {
             url = "hgTracks?hgsid=" + getHgsid() + "&" + cmd + "=";
             rec = hgTracks.trackDb[id];
             if (tdbHasParent(rec) && tdbIsLeaf(rec))
@@ -3223,11 +3269,36 @@ var rightClick = {
                 }
             }
 
+            if (rec.isCustomComposite)
+                {
+                // add delete from composite
+                }
+            else if ((!rec.type.startsWith("wigMaf")) &&
+                (rec.type.startsWith("bigWig") || rec.type.startsWith("multiWig") || rec.type.startsWith("wig") || rec.type.startsWith("bedGraph"))) {
+                o = {};
+                o[" Make a New Collection with \"" + rec.shortLabel + "\""] = {
+                    onclick: rightClick.makeHitCallback("newCollection")
+                };  
+                menu.push(o);
+
+                if (hgTracks.collections) {
+                    var ii;
+                    for(ii=0; ii < hgTracks.collections.length; ii++) {
+                        o = {};
+                        o[" Add to \"" + hgTracks.collections[ii].shortLabel + "\""] = {
+                            onclick: rightClick.makeHitCallback("addCollection")
+                        };  
+                        menu.push(o);
+                    }
+                }
+                menu.push($.contextMenu.separator);
+            }
+
             // add sort options if this is a custom composite
-            if (rec.isCustomComposite) {
+            if (rec.isCustomComposite && tdbHasParent(rec) && tdbIsLeaf(rec)) {
 
                 o = {};
-                o[" Sort by Expression "] = {
+                o[" Sort by Magnitude "] = {
                     onclick: function(menuItemClicked, menuObject) {
                         rightClick.hit(menuItemClicked, menuObject, "sortExp");
                         return true; }
@@ -3518,6 +3589,9 @@ function addKeyboardHelpEntries() {
 
     html = '<span class="shortcut">c t</span>';
     $('#customTracksMenuLink').after(html);
+
+    html = '<span class="shortcut">t c</span>';
+    $('#customCompositeMenuLink').after(html);
 
     html = '<span class="shortcut">t h</span>';
     $('#trackHubsMenuLink').after(html);

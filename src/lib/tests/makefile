@@ -14,7 +14,7 @@ BIN_DIR = bin/${MACHTYPE}
 test: errCatchTest htmlPageTest htmlExpandUrlTest pipelineTests dyStringTest \
     mimeTests base64Tests quotedPTests safeTest hashTest fetchUrlTest gff3Test \
     ${TABIX_TESTS} hacTreeTest testSumDoubles
-	rm -r output fetchUrlTest 
+	rm -r output fetchUrlTest testSumDoubles
 	@echo tested all
 
 
@@ -313,6 +313,11 @@ ${BIN_DIR}/hacTreeTest: hacTreeTest.o ${MYLIBS}
 udcTest: udcTest.o ${MYLIBS} mkdirs
 	${CC} ${COPT} -o ${BIN_DIR}/udcTest udcTest.o ${MYLIBS} ${L}
 	${BIN_DIR}/udcTest
+
+# udc (not part of the top-level test target at this point):
+udcCacheSizesCheck: udcCacheSizesCheck.o ${MYLIBS} mkdirs
+	${CC} ${COPT} -o ${BIN_DIR}/udcCacheSizesCheck udcCacheSizesCheck.o ${MYLIBS} ${L}
+	${BIN_DIR}/udcCacheSizesCheck
 
 testOutOfMem: testOutOfMem.o ${MYLIBS} mkdirs
 	${CC} ${COPT} -o ${BIN_DIR}/testOutOfMem testOutOfMem.o ${MYLIBS} ${L}

@@ -362,7 +362,7 @@ hashAdd(uniqHash, trackTable, NULL);
 if (useJoiner)
     {
     struct joinerPair *jpList, *jp;
-    jpList = joinerRelate(allJoiner, database, trackTable);
+    jpList = joinerRelate(allJoiner, database, trackTable, NULL);
     for (jp = jpList; jp != NULL; jp = jp->next)
         {
         struct joinerDtf *dtf = jp->b;

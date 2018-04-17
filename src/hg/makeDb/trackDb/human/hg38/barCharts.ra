@@ -1,3 +1,25 @@
+track nowakowskiGeneExp
+release alpha
+type bigBarChart
+maxLimit 8000
+barChartLabel Cell types
+barChartUnit GPM
+# Get the barChartLabels from the last line in the bed file.
+barChartBars \
+		IPC1 IPC2 IPC3 IPC4 IPC5 NiN1 NiN2 NiN3 NiN4 NiN5 RG1 RG2 RG3 RG4 RG5 \
+		RG6 RG7 VP1 VP2 VP3 VP4 VP5 VP6 eN1 eN2 eN3 eN4 eN5 eN6 eN7 eN8 eN9 iN1 \
+		iN2 iN3 iN4 iN5 other1 other10 other2 other3 other4 other5 other6 other7 \
+		other8 other9
+barChartDataUrl /gbdb/hgFixed/human/expMatrix/nowakowskiMatrix.tsv
+barChartSampleUrl /gbdb/hgFixed/human/expMatrix/pollenSamples2.tsv
+shortLabel Nowakowski brain cell types
+longLabel Nowakowski gene expression (Gencode 23) in brain by cell type
+defaultLabelFields name2
+labelFields name2, name
+group expression
+spectrum on
+bigDataUrl /gbdb/hgFixed/human/expMatrix/nowakowskiGeneExp2.bb
+
 track quakeExpr
 release alpha
 superTrack on 
@@ -51,153 +73,4 @@ html quakeExpr
 	visibility pack
 	bigDataUrl /gbdb/hgFixed/human/expMatrix/quakeGeneExpr.bb
 	html quakeExpr
-
-track tcgaExpr
-release alpha
-superTrack on 
-type bigBarChart
-group phenDis
-shortLabel TCGA Expression
-longLabel Expression of 33 TCGA Cancer Tissues (GENCODE v23)
-
-	track tcgaTranscExpr
-	parent tcgaExpr
-	release alpha
-	type bigBarChart
-	visibility full
-	maxLimit 8000
-	barChartLabel Cancer types
-	barChartUnit TPM
-	# Get the barChartLabels from the last line in the bed file.
-	barChartBars \
-			Adrenocortical_carcinoma Pheochromocytoma_and_Paraganglioma Bladder_Urothelial_Carcinoma \
-			Brain_Lower_Grade_Glioma Glioblastoma_multiforme Breast_invasive_carcinoma \
-			Cervical_squamous_cell_carcinoma_and_endocervical_adenocarcinoma Colon_adenocarcinoma \
-			Rectum_adenocarcinoma Kidney_Chromophobe Kidney_renal_clear_cell_carcinoma \
-			Kidney_renal_papillary_cell_carcinoma Liver_hepatocellular_carcinoma Lung_adenocarcinoma \
-			Lung_squamous_cell_carcinoma Mesothelioma Ovarian_serous_cystadenocarcinoma \
-			Pancreatic_adenocarcinoma Prostate_adenocarcinoma Skin_Cutaneous_Melanoma \
-			Lymphoid_Neoplasm_Diffuse_Large_B-cell_Lymphoma Stomach_adenocarcinoma \
-			Testicular_Germ_Cell_Tumors Thymoma Thyroid_carcinoma Uterine_Carcinosarcoma \
-			Uterine_Corpus_Endometrioid_Carcinoma Cholangiocarcinoma Esophageal_carcinoma \
-			Head_and_Neck_squamous_cell_carcinoma Sarcoma Uveal_Melanoma
-	barChartColors \
-			\#8FBC8F #8FBC8F #CDB79E #EEEE00 #EEEE00 #00CDCD #EED5D2 \
-			\#CDB79E #CDB79E #CDB79E #CDB79E #CDB79E #CDB79E #9ACD32 #9ACD32 #9ACD32 \
-			\#FFB6C1 #CD9B1D #D9D9D9 #1E90FF #CDB79E #FFD39B #A6A6A6 #008B45 #008B45 \
-			\#EED5D2 #EED5D2 #ff0000 #ff8d00 #ffdb00 #00d619 #009fff
-	barChartMatrixUrl /gbdb/hgFixed/human/expMatrix/tcgaMatrix.tab
-	barChartSampleUrl /gbdb/hgFixed/human/expMatrix/tcgaLargeSamples.tab
-	barChartMetric median
-	shortLabel TCGA transcExpr
-	longLabel TCGA Transcript Expression (GENCODE v23)
-	defaultLabelFields name2
-	labelFields name2, name
-	group expression
-	bigDataUrl /gbdb/hgFixed/human/expMatrix/tcgaTransExp.bb
-
-	track tcgaGeneExpr
-	parent tcgaExpr
-	visibility full
-	release alpha
-	type bigBarChart
-	maxLimit 8000
-	barChartLabel Cancer types
-	barChartUnit GPM
-	# Get the barChartLabels from the last line in the bed file.
-	barChartBars \
-			Adrenocortical_carcinoma Pheochromocytoma_and_Paraganglioma Bladder_Urothelial_Carcinoma \
-			Brain_Lower_Grade_Glioma Glioblastoma_multiforme Breast_invasive_carcinoma \
-			Cervical_squamous_cell_carcinoma_and_endocervical_adenocarcinoma Colon_adenocarcinoma \
-			Rectum_adenocarcinoma Kidney_Chromophobe Kidney_renal_clear_cell_carcinoma \
-			Kidney_renal_papillary_cell_carcinoma Liver_hepatocellular_carcinoma Lung_adenocarcinoma \
-			Lung_squamous_cell_carcinoma Mesothelioma Ovarian_serous_cystadenocarcinoma \
-			Pancreatic_adenocarcinoma Prostate_adenocarcinoma Skin_Cutaneous_Melanoma \
-			Lymphoid_Neoplasm_Diffuse_Large_B-cell_Lymphoma Stomach_adenocarcinoma \
-			Testicular_Germ_Cell_Tumors Thymoma Thyroid_carcinoma Uterine_Carcinosarcoma \
-			Uterine_Corpus_Endometrioid_Carcinoma Cholangiocarcinoma Esophageal_carcinoma \
-			Head_and_Neck_squamous_cell_carcinoma Sarcoma Uveal_Melanoma
-	barChartColors \
-			\#8FBC8F #8FBC8F #CDB79E #EEEE00 #EEEE00 #00CDCD #EED5D2 \
-			\#CDB79E #CDB79E #CDB79E #CDB79E #CDB79E #CDB79E #9ACD32 #9ACD32 #9ACD32 \
-			\#FFB6C1 #CD9B1D #D9D9D9 #1E90FF #CDB79E #FFD39B #A6A6A6 #008B45 #008B45 \
-			\#EED5D2 #EED5D2 #ff0000 #ff8d00 #ffdb00 #00d619 #009fff
-	barChartMatrixUrl /gbdb/hgFixed/human/expMatrix/tcgaGeneMatrix.tab
-	barChartSampleUrl /gbdb/hgFixed/human/expMatrix/tcgaLargeSamples.tab
-	barChartMetric median
-	shortLabel TCGA geneExpr
-	longLabel TCGA Gene Expression (GENCODE v23)
-	defaultLabelFields name2
-	labelFields name2, name
-	bigDataUrl /gbdb/hgFixed/human/expMatrix/tcgaGeneExp.bb
-
-track gtexExpr
-release alpha
-superTrack on show 
-type bigBarChart
-group expression
-priority 1
-shortLabel GTEx
-longLabel Expression of 53 tissues from GTEx RNA-seq of 8555 samples (570 donors)
-
-	track gtexGene
-	superTrack gtexExpr pack
-	release alpha
-	parent gtexExpr
-	type bed 6 +
-	shortLabel GTEx Gene
-	longLabel Gene Expression in 53 tissues from GTEx RNA-seq of 8555 samples (570 donors)
-	html gtexExpr
-	group expression
-	visibility pack
-	priority 1
-	maxItems 200
-
-	searchTable gtexGene
-	query select chrom, chromStart, chromEnd, geneId from %s where geneId like '%s%%'
-	termRegex gtex:ENSG[0-9]+(\.[0-9]+)?
-	termPrefix gtex:
-	shortCircuit 1
-
-	# Gtex transcription expression by median  
-	track gtexTranscExpr
-	parent gtexExpr
-	release alpha
-	type bigBarChart
-	maxLimit 8000
-	barChartLabel Tissue types
-	barChartUnit TPM
-	# Get the barChartLabels from the last line in the bed file.  
-	barChartBars \
-			Adipose-Subcutaneous Adipose-Visceral_(Omentum) Adrenal_Gland Artery-Aorta \
-			Artery-Coronary Artery-Tibial Bladder Brain-Amygdala Brain-Anterior_cingulate_cortex_(BA24) \
-			Brain-Caudate_(basal_ganglia) Brain-Cerebellar_Hemisphere Brain-Cerebellum Brain-Cortex \
-			Brain-Frontal_Cortex_(BA9) Brain-Hippocampus Brain-Hypothalamus \
-			Brain-Nucleus_accumbens_(basal_ganglia) Brain-Putamen_(basal_ganglia) \
-			Brain-Spinal_cord_(cervical_c-1) Brain-Substantia_nigra Breast-Mammary_Tissue \
-			Cells-EBV-transformed_lymphocytes Cells-Transformed_fibroblasts Cervix-Ectocervix \
-			Cervix-Endocervix Colon-Sigmoid Colon-Transverse Esophagus-Gastroesophageal_Junction \
-			Esophagus-Mucosa Esophagus-Muscularis Fallopian_Tube Heart-Atrial_Appendage \
-			Heart-Left_Ventricle Kidney-Cortex Liver Lung Minor_Salivary_Gland Muscle-Skeletal \
-			Nerve-Tibial Ovary Pancreas Pituitary Prostate Skin-Not_Sun_Exposed_(Suprapubic) \
-			Skin-Sun_Exposed_(Lower_leg) Small_Intestine-Terminal_Ileum Spleen Stomach Testis \
-			Thyroid Uterus Vagina Whole_Blood 
-	barChartColors \
-			\#FFA54F #EE9A00 #8FBC8F #8B1C62 #EE6A50 #FF0000 #CDB79E #EEEE00 \
-			\#EEEE00 #EEEE00 #EEEE00 #EEEE00 #EEEE00 #EEEE00 #EEEE00 #EEEE00 \
-			\#EEEE00 #EEEE00 #EEEE00 #EEEE00 #00CDCD #EE82EE #9AC0CD #EED5D2 \
-			\#EED5D2 #CDB79E #EEC591 #8B7355 #8B7355 #CDAA7D #EED5D2 #B452CD \
-			\#7A378B #CDB79E #CDB79E #9ACD32 #CDB79E #7A67EE #FFD700 #FFB6C1 \
-			\#CD9B1D #B4EEB4 #D9D9D9 #3A5FCD #1E90FF #CDB79E #CDB79E #FFD39B \
-			\#A6A6A6 #008B45 #EED5D2 #EED5D2 #FF00FF 
-	barChartMatrixUrl /gbdb/hgFixed/human/expMatrix/cleanGtexMatrix.tab
-	barChartSampleUrl /gbdb/hgFixed/human/expMatrix/cleanGtexSamples.tab
-	barChartMetric median
-	shortLabel GTEx Transc
-	longLabel Transcript Expression in 53 tissues from GTEx RNA-seq of 8555 samples (570 donors)
-	defaultLabelFields name2
-	priority 2
-	labelFields name2, name
-	group expression
-	bigDataUrl /gbdb/hgFixed/human/expMatrix/gtexTranscExpr.bb 
 

@@ -38,7 +38,7 @@ foreach $grBed(@geneReviews) {
       $details .= "-----------------------------------------------------------";
       $details .= "----------------------------------<BR>";
       }
-      $details .= "<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/" . $f5[0] . "\" TARGET=_blank><B>" . $f5[0] . "</B></A>";
+      $details .= "<A HREF=\"https://www.ncbi.nlm.nih.gov/books/n/gene/" . $f5[0] . "\" TARGET=_blank><B>" . $f5[0] . "</B></A>";
       if (length($f5[0]) <= 15) {
         for ($j = 0; $j <  15-length($f5[0]); $j ++ )
            {
@@ -46,7 +46,7 @@ foreach $grBed(@geneReviews) {
            }
          }
        $details .=  $f5[1] . "       ";
-       $details .= "<A HREF=\"http://www.ncbi.nlm.nih.gov/sites/GeneTests/review/disease/" . $f5[2] . "?db=genetests&search_param==begins_with\" TARGET=_blank>" . $f5[2]  ."<BR>";
+       $details .= "<A HREF=\"https://www.ncbi.nlm.nih.gov/sites/GeneTests/review/disease/" . $f5[2] . "?db=genetests&search_param==begins_with\" TARGET=_blank>" . $f5[2]  ."<BR>";
      }
        $details .= "</TT></PRE><BR>";
        print $col[0], "\t", $col[1], "\t", $col[2], "\t", $col[3], "\t", $details, "\n";

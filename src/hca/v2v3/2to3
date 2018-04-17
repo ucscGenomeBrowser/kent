@@ -1,0 +1,135 @@
+HANDADD	assay.core.id
+RENAME	assay.ena_experiment	assay.seq.ena_experiment
+RENAME	assay.ena_run	assay.seq.ena_run
+MODIFY	assay.files	assay.seq.lane_REFORMAT_NEEDED
+RENAME	assay.rna.prep	assay.rna.library_construction
+KEEP	assay.rna.primer	assay.rna.primer
+KEEP	assay.rna.spike_in	assay.rna.spike_in
+KEEP	assay.rna.spike_in_dilution	assay.rna.spike_in_dilution
+KEEP	assay.rna.strand	assay.rna.strand
+HANDADD	assay.rna.end_bias
+RENAME	assay.seq.machine	assay.seq.instrument_model
+HANDADD	assay.instrument_platform
+KEEP	assay.seq.molecule	assay.seq.molecule
+KEEP	assay.seq.paired_ends	assay.seq.paired_ends
+RENAME	assay.seq.prep	assay.seq.library_construction
+KEEP	assay.seq.umi_barcode_offset	assay.seq.umi_barcode_offset
+KEEP	assay.seq.umi_barcode_read	assay.seq.umi_barcode_read
+KEEP	assay.seq.umi_barcode_size	assay.seq.umi_barcode_size
+RENAME	assay.single_cell.cell_barcode_offset	assay.single_cell.barcode_offset
+RENAME	assay.single_cell.cell_barcode_read	assay.single_cell.barcode_read
+RENAME	assay.single_cell.cell_barcode_size	assay.single_cell.barcode_size
+RENAME	assay.single_cell.method	assay.single_cell.cell_handling
+RENAME	assay.sra_experiment	assay.seq.sra_experiment
+RENAME	assay.sra_run	assay.seq.sra_run
+DELETE	assay.submitted_file_names
+RENAME	cell.cell_cycle	sample.cell_cycle.text
+RENAME	cell.characteristics_cd10	sample.characteristics_cd10
+RENAME	cell.characteristics_cd135	sample.characteristics_cd135
+RENAME	cell.characteristics_cd34	sample.characteristics_cd34
+RENAME	cell.characteristics_cd38	sample.characteristics_cd38
+RENAME	cell.characteristics_cd45ra	sample.characteristics_cd45ra
+RENAME	cell.characteristics_cd49f	sample.characteristics_cd49f
+RENAME	cell.characteristics_cd7	sample.characteristics_cd7
+RENAME	cell.characteristics_cd90	sample.characteristics_cd90
+RENAME	cell.characteristics_facs_time	sample.characteristics_facs_time
+RENAME	cell.characteristics_fsc_a	sample.characteristics_fsc_a
+RENAME	cell.characteristics_fsc_h	sample.characteristics_fsc_h
+RENAME	cell.characteristics_fsc_w	sample.characteristics_fsc_w
+RENAME	cell.characteristics_lin	sample.characteristics_lin
+RENAME	cell.characteristics_ssc-w	sample.characteristics_ssc-w
+RENAME	cell.characteristics_ssc_a	sample.characteristics_ssc_a
+RENAME	cell.characteristics_ssc_h	sample.characteristics_ssc_h
+RENAME	cell.id	sample.well.core.id
+RENAME	cell.ontology	sample.well.cell_type.ontology
+RENAME	cell.type	sample.well.cell_type.text
+RENAME	cell.well_quality	sample.well.quality
+RENAME	project.array_express.accession	project.array_express_investigation
+DELETE	project.array_express.experiment_type
+RENAME	project.array_express.related_experiment project.related_projects
+DELETE	project.array_express.term_source_file
+DELETE	project.array_express.term_source_name
+RENAME	project.contact.address	project.submitter.address
+RENAME	project.contact.city	project.submitter.city
+RENAME	project.contact.country	project.submitter.country
+DELETE	project.contact.department
+RENAME	project.contact.email	project.submitter.email
+RENAME	project.contact.institute	project.submitter.institution
+RENAME	project.contact.laboratory	project.submitter.laboratory
+RENAME	project.contact.name	project.submitter.name
+DELETE	project.contact.phone
+DELETE	project.contact.postal_code
+RENAME	project.contact.state	project.submitter.country_division
+DELETE	project.contact.street_address
+MODIFY	project.contributor	project.contributors
+RENAME	project.ddjb_trace_project	project.ddjb_trace
+KEEP	project.experimental_factor_name	project.experimental_factor_name
+DELETE	project.geo_doc_id
+DELETE  project.geo_parent_series
+RENAME	project.array_express.related_experiment project.related_projects
+KEEP	project.geo_series	project.geo_series
+RENAME	project.id	project.core.id
+RENAME	project.last_update_date	project.update_date
+DELETE	project.mage_tab_version	project.mage_tab_version
+KEEP	project.ncbi_bioproject	project.ncbi_bioproject
+RENAME	project.overall_design	project.experimental_design.1.text
+RENAME	project.pmid	project.publications.1.pmid
+RENAME	project.publication_author_list	project.publications.1.author_list
+DELETE	project.release_status
+KEEP	project.sra_project	project.sra_project
+RENAME	project.submission_date	project.submit_date
+RENAME	project.summary	project.description
+KEEP	project.supplementary_files	project.supplementary_files
+KEEP	project.title	project.title
+DELETE	project.uuid
+KEEP	sample.biosd_sample	sample.biosd_sample
+RENAME	sample.body_part.cell_count	sample.total_estimated_cells
+RENAME	sample.body_part.name	sample.body_part.text
+RENAME	sample.body_part.ontology	sample.body_part.ontology
+RENAME	sample.body_part.organ	sample.organ.text
+RENAME	sample.body_part.organ_ontology	sample.organ.ontology
+DELETE	sample.body_part.source
+RENAME	sample.cell_line	sample.cell_line.name.text
+KEEP	sample.characteristics_c1_chip_id	sample.characteristics_c1_chip_id
+KEEP	sample.characteristics_cef	sample.characteristics_cef
+KEEP	sample.characteristics_clone.info	sample.characteristics_clone.info
+KEEP	sample.characteristics_cross	sample.characteristics_cross
+KEEP	sample.characteristics_donor_age	sample.characteristics_donor_age
+KEEP	sample.characteristics_experiment_sample_name	sample.characteristics_experiment_sample_name
+KEEP	sample.characteristics_facs_gating	sample.characteristics_facs_gating
+KEEP	sample.characteristics_inferred_cell_type	sample.characteristics_inferred_cell_type
+KEEP	sample.characteristics_plate	sample.characteristics_plate
+KEEP	sample.characteristics_time	sample.characteristics_time
+DELETE	sample.data_processing
+KEEP	sample.donor.age	sample.donor.age
+KEEP	sample.donor.age_unit	sample.donor.age_unit.text
+KEEP	sample.donor.body_mass_index	sample.donor.body_mass_index
+RENAME	sample.donor.development_stage	sample.donor.development_stage.text
+RENAME	sample.donor.disease	sample.donor.disease.1.text
+RENAME	sample.donor.ethnicity	sample.donor.ancestry.1.text
+KEEP	sample.donor.genotype	sample.donor.genotype
+RENAME	sample.donor.id	sample.donor.submitted_id
+KEEP	sample.donor.life_stage sample.donor.life_stage
+RENAME	sample.donor.medication	sample.donor.medication.1.text
+RENAME	sample.donor.ncbi_taxon	sample.donor.species.ontology
+KEEP	sample.donor.sex	sample.donor.sex
+RENAME	sample.donor.species	sample.donor.species.text
+RENAME	sample.donor.strain	sample.donor.strain.1.text
+RENAME	sample.donor.uuid	sample.donor.core.id
+KEEP	sample.ena_sample	sample.ena_sample
+KEEP	sample.geo_sample	sample.geo_sample
+RENAME	sample.id	sample.submitter_id
+RENAME	sample.last_update_date	sample.update_date
+RENAME	sample.long_label	sample.title
+KEEP	sample.ncbi_biosample	sample.ncbi_biosample
+RENAME	sample.passage_number	sample.cell_line.passage_number
+MODIFY	sample.protocol_types	project.protocols.1.type
+MODIFY	sample.protocols	project.protocols.1.description
+RENAME	sample.short_label	sample.name
+RENAME	sample.storage	sample.preservation.storage_protocol.description
+RENAME	sample.submission_date	sample.submit_date
+KEEP	sample.supplementary_files	sample.supplementary_files
+RENAME	sample.treatment.culture_type	sample.culture_type
+RENAME	sample.treatment.enrichment	sample.enrichment.markers
+RENAME	sample.treatment.enrichment_method	sample.enrichment.protocol.text
+RENAME	sample.uuid	sample.core.id

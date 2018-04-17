@@ -148,6 +148,8 @@ boolean ctDbTableExists(struct sqlConnection *conn, char *table)
 boolean status = sqlTableExists(conn, table);
 ctTouchLastUse(conn, table, status);
 return status;
+/* NOTE: the function customFactoryTestExistence() in customFactory.c
+ * is depending on this ctTouchLastUse() operation here, do not delete this */
 }
 
 boolean ctDbUseAll()
@@ -513,7 +515,7 @@ if (tdb->colorR != def->colorR || tdb->colorG != def->colorG || tdb->colorB != d
     fprintf(f, "\t%s='%d,%d,%d'", "color", tdb->colorR, tdb->colorG, tdb->colorB);
 hashMayRemove(tdb->settingsHash, "color");
 if (tdb->altColorR != def->altColorR || tdb->altColorG != def->altColorG
-	|| tdb->altColorB != tdb->altColorB)
+	|| tdb->altColorB != def->altColorB)
     fprintf(f, "\t%s='%d,%d,%d'", "altColor", tdb->altColorR, tdb->altColorG, tdb->altColorB);
 hashMayRemove(tdb->settingsHash, "altColor");
 

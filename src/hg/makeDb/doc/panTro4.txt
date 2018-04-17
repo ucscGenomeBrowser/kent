@@ -1212,3 +1212,82 @@ TMPDIR=/dev/shm
     # real    148m7.108s
 
 #########################################################################
+# LASTZ chimp/panTro4 Orangutan/ponAbe2 - (DONE - 2018-02-14 - Hiram)
+    mkdir /hive/data/genomes/panTro4/bed/lastzPonAbe2.2018-02-14
+    cd /hive/data/genomes/panTro4/bed/lastzPonAbe2.2018-02-14
+
+    printf '# chimp vs orangutan
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+#       A     C     G     T
+# A    90  -330  -236  -356
+# C  -330   100  -318  -236
+# G  -236  -318   100  -330
+# T  -356  -236  -330    90
+
+# TARGET: Chimp PanTro4
+SEQ1_DIR=/hive/data/genomes/panTro4/panTro4.2bit
+SEQ1_LEN=/hive/data/genomes/panTro4/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=200
+
+# QUERY: orangutan PonAbe2
+SEQ2_DIR=/hive/data/genomes/ponAbe2/ponAbe2.2bit
+SEQ2_LEN=/hive/data/genomes/ponAbe2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/panTro4/bed/lastzPonAbe2.2018-02-14
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    141m47.089s
+
+    cat fb.panTro4.chainPonAbe2Link.txt
+    # 2598435357 bases of 2902338967 (89.529%) in intersection
+    cat  fb.panTro4.chainSynPonAbe2Link.txt
+    # 2496865923 bases of 2902338967 (86.029%) in intersection
+
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	panTro4 ponAbe2) > rbest.log 2>&1 &
+    # real    318m18.574s
+
+    cat fb.panTro4.chainRBestPonAbe2Link.txt
+    # 2481241682 bases of 2902338967 (85.491%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/ponAbe2/bed/blastz.panTro4.swap
+    cd /hive/data/genomes/ponAbe2/bed/blastz.panTro4.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/panTro4/bed/lastzPonAbe2.2018-02-14/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    85m37.535s
+
+    cat fb.ponAbe2.chainPanTro4Link.txt
+    # 2713148032 bases of 3093572278 (87.703%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	ponAbe2 panTro4) > rbest.log 2>&1
+    # real    502m37.175s
+
+    cat fb.ponAbe2.chainRBestPanTro4Link.txt
+    # 2485372112 bases of 3093572278 (80.340%) in intersection
+
+#########################################################################

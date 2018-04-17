@@ -28,6 +28,7 @@
 #include "bedDetail.h"
 #include "pgSnp.h"
 #include "barChartBed.h"
+#include "interact.h"
 #include "hubConnect.h"
 #include "errCatch.h"
 
@@ -141,9 +142,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    hPrintf("<A HREF=\"%s", getScriptName());
 	    hPrintf("?%s", cartSidUrlString(cart));
-	    hPrintf("&%s=%s", hgtaDatabase, db);
-	    hPrintf("&%s=%s", hgtaHistoTable, table);
-	    hPrintf("&%s=%s", hgtaDoValueHistogram, row[0]);
+	    hPrintf("&amp;%s=%s", hgtaDatabase, db);
+	    hPrintf("&amp;%s=%s", hgtaHistoTable, table);
+	    hPrintf("&amp;%s=%s", hgtaDoValueHistogram, row[0]);
 	    hPrintf("\">");
 	    hPrintf("values");
 	    hPrintf("</A>");
@@ -152,9 +153,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    hPrintf("<A HREF=\"%s", getScriptName());
 	    hPrintf("?%s", cartSidUrlString(cart));
-	    hPrintf("&%s=%s", hgtaDatabase, db);
-	    hPrintf("&%s=%s", hgtaHistoTable, table);
-	    hPrintf("&%s=%s", hgtaDoValueRange, row[0]);
+	    hPrintf("&amp;%s=%s", hgtaDatabase, db);
+	    hPrintf("&amp;%s=%s", hgtaHistoTable, table);
+	    hPrintf("&amp;%s=%s", hgtaDoValueRange, row[0]);
 	    hPrintf("\">");
 	    hPrintf("range");
 	    hPrintf("</A>");
@@ -354,7 +355,7 @@ if (tdb != NULL && isNotEmpty(tdb->html))
 	// like details pages in which HR's bottom margin melts into H2's top margin:
 	char *s = skipLeadingSpaces(tdb->html);
 	if (startsWith("<H2>", s) || startsWith("<h2>", s))
-	    printf("<span style='position:relative; top:-1.2em; margin-bottom:0em;'>%s\n</span>",
+	    printf("<div style='position:relative; top:-1.2em; margin-bottom:0em;'>%s\n</div>",
 		   tdb->html);
 	else
 	    puts(tdb->html);
@@ -398,7 +399,7 @@ if (tdbForConn != NULL)
 	       "<A HREF=\"/goldenPath/help/bigWig.html\" TARGET=_BLANK>"
 	       "BigWig</A> format.<BR>\n");
     }
-jpList = joinerRelate(joiner, db, table);
+jpList = joinerRelate(joiner, db, table, NULL);
 
 /* sort and unique list */
 slUniqify(&jpList, joinerPairCmpOnAandB, joinerPairFree);
@@ -619,6 +620,12 @@ else if (sameWord("pgSnp", type))
 else if (sameWord("barChart", type))
     {
     struct asObject *asObj = barChartAsObj();
+    showSchemaWithAsObj(db, table, ct, asObj);
+    asObjectFree(&asObj);
+    }
+else if (sameWord("interact", type))
+    {
+    struct asObject *asObj = interactAsObj();
     showSchemaWithAsObj(db, table, ct, asObj);
     asObjectFree(&asObj);
     }

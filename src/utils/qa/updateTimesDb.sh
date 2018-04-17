@@ -33,7 +33,7 @@ outputFiles=false
 showHelp() {
 cat << EOF
 
-Usage: $0 [-hf] [-d DATABASE DEV] [-b DATABASE BETA]
+Usage: `basename $0` [-hf] [-d DATABASE DEV] [-b DATABASE BETA]
 
 	-h                  Display this help and exit
 	-d DATABASE DEV     Database to check on Dev, e.g. hg19 or hg38.
@@ -131,6 +131,9 @@ tablesSortedUnique=$(echo "$(echo ${tablesDev[@]} ${tablesBeta[@]})" | \
 	tr ' ' '\n' | sort -u | grep -v 'hgFindSpec\|trackDb' | tr '\n' ' ')
 
 output=". DEV BETA\ntableName $dbDev $dbBeta\n"
+
+# if there's errors, the *** is causing wildcard expansion, so disable globbing
+set -f
 
 for tbl in $(echo ${tablesSortedUnique[@]})
 do

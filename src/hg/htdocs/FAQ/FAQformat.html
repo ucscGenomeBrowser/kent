@@ -24,6 +24,7 @@
       <li><a href="#format9.2">bigPsl table format</a></li>
       <li><a href="#format9.3">bigMaf table format</a></li>
       <li><a href="#format9.4">bigChain table format</a></li>
+      <li><a href="#format9.5">bigNarrowPeak table format</a></li>
       <li><a href="#format6.1">bigWig format</a></li>
       <li><a href="../goldenPath/help/chain.html">Chain format</a></li>
     </ul>
@@ -315,7 +316,7 @@ within a PSL file:</p>
   <li>
   <strong>qName</strong> - Query sequence name</li>
   <li>
-  <strong>qSize</strong> - Query sequence size</li>
+  <strong>qSize</strong> - Query sequence size.</li>
   <li>
   <strong>qStart</strong> - Alignment start position in query</li>
   <li>
@@ -331,7 +332,7 @@ within a PSL file:</p>
   <li>
   <strong>blockCount</strong> - Number of blocks in the alignment (a block contains no gaps)</li>
   <li>
-  <strong>blockSizes</strong> - Comma-separated list of sizes of each block</li>
+  <strong>blockSizes</strong> - Comma-separated list of sizes of each block. If the query is a protein and the target the genome, blockSizes are in amino acids. See below for more information on protein query PSLs.</li>
   <li>
   <strong>qStarts</strong> - Comma-separated list of starting positions of each block in query</li>
   <li>
@@ -1146,6 +1147,18 @@ format supported using the <a href="FAQformat.html#format1.5">bigBed</a> format,
 efficiently accessed over a network.</p> 
 <p>
 Click <a href="../goldenPath/help/bigChain.html">here</a> for more information on the bigChain 
+format.</p>
+
+<a name="format9.5"></a>
+<h2>bigNarrowPeak format</h2>
+<p>
+bigNarrowPeak is a format used to provide called peaks of signal enrichment based on pooled, normalized 
+(interpreted) data. It is a BED6+4 format.
+bigNarrowPeak format is equivalent to the <a href="FAQformat.html#format12">narrowPeak</a> text-based 
+format supported using the <a href="FAQformat.html#format1.5">bigBed</a> format, so it can be 
+efficiently accessed over a network.</p> 
+<p>
+Click <a href="../goldenPath/help/bigNarrowPeak.html">here</a> for more information on the bigNarrowPeak
 format.</p>
 
 <a name="format10"></a>

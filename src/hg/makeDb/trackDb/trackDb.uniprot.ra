@@ -1,0 +1,192 @@
+track uniprot
+shortLabel UniProt
+longLabel UniProt SwissProt/TrEMBL Protein Annotations
+group genes
+visibility hide
+type bigBed 12 +
+exonNumbers off
+compositeTrack on
+mouseOverField comments
+urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+scoreLabel Minimum Score (1000=SwissProt, 0=Trembl)
+scoreFilter 0
+itemRgb on
+dataVersion /gbdb/$D/uniprot/version.txt
+
+        track unipAliSwissprot
+        shortLabel SwissProt Aln.
+        longLabel UCSC alignment of SwissProt proteins to genome
+        priority 1
+        parent uniprot
+        visibility hide
+        type bigPsl
+        bigDataUrl /gbdb/$D/uniprot/unipAliSwissprot.bb
+        searchIndex name,acc
+        urls acc="http://www.uniprot.org/uniprot/$$" hgncId="https://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" 
+        labelFields acc,uniprotName,geneName,hgncSym,refSeq,refSeqProt,ensProt,uniprotName
+        mouseOverField protFullNames
+        itemRgb off
+        color 2,12,120
+        indelDoubleInsert on
+        indelQueryInsert on
+        baseColorTickColor contrastingColor
+
+        track unipAliTrembl
+        shortLabel TrEMBL Aln.
+        longLabel UCSC alignment of TrEMBL proteins to genome
+        priority 2
+        parent uniprot off
+        visibility hide
+        type bigPsl
+        bigDataUrl /gbdb/$D/uniprot/unipAliTrembl.bb
+        searchIndex name,acc
+        urls acc="http://www.uniprot.org/uniprot/$$" hgncId="https://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" 
+        labelFields acc,uniprotName,geneName,hgncSym,refSeq,refSeqProt,ensProt,uniprotName
+        mouseOverField protFullNames
+        itemRgb off
+        color 0,150,250
+        indelDoubleInsert on
+        indelQueryInsert on
+        baseColorTickColor contrastingColor
+
+        track unipLocSignal
+        shortLabel Signal Peptide
+        longLabel UniProt Signal Peptides
+        priority 3
+        parent uniprot
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl /gbdb/$D/uniprot/unipLocSignal.bb
+        color 255,0,150
+        itemRgb off
+
+        track unipLocExtra
+        shortLabel Extracellular
+        longLabel UniProt Extracellular Domain
+        priority 4
+        parent uniprot
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl /gbdb/$D/uniprot/unipLocExtra.bb
+        color 0,150,255
+        itemRgb off
+
+        track unipLocTransMemb
+        shortLabel Transmembrane
+        longLabel UniProt Transmembrane Domains
+        priority 5
+        parent uniprot
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl /gbdb/$D/uniprot/unipLocTransMemb.bb
+        color 0,150,0
+        itemRgb off
+
+        track unipLocCytopl
+        shortLabel Cytoplasmic
+        longLabel UniProt Cytoplasmic Domains
+        priority 6
+        parent uniprot
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl /gbdb/$D/uniprot/unipLocCytopl.bb
+        color 255,150,0
+        itemRgb off
+
+        track unipChain
+        shortLabel Chains
+        longLabel UniProt Polypeptide Chains
+        priority 7
+        parent uniprot
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl /gbdb/$D/uniprot/unipChain.bb
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#ptm_processing" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+
+        track unipDomain
+        shortLabel Domains
+        longLabel UniProt Domains
+        priority 8
+        parent uniprot
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl /gbdb/$D/uniprot/unipDomain.bb
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+
+        track unipDisulfBond
+        shortLabel Disulf. Bonds
+        longLabel UniProt Disulfide Bonds
+        priority 8
+        parent uniprot
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl /gbdb/$D/uniprot/unipDisulfBond.bb
+
+        track unipModif
+        shortLabel AA Modifications
+        longLabel UniProt Amino Acid Modifications
+        priority 9
+        parent uniprot
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl /gbdb/$D/uniprot/unipModif.bb
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#aaMod_section" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+
+        track unipMut
+        shortLabel Mutations
+        longLabel UniProt Amino Acid Mutations
+        priority 10
+        parent uniprot
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl /gbdb/$D/uniprot/unipMut.bb
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#pathology_and_biotech" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$" variationId="http://www.uniprot.org/uniprot/$$"
+
+        track unipStruct
+        shortLabel Structure
+        longLabel UniProt Protein Primary/Secondary Structure Annotations
+        priority 11
+        parent uniprot
+        group genes
+        visibility hide
+        type bigBed 12 +
+        bigDataUrl /gbdb/$D/uniprot/unipStruct.bb
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#structure" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+
+        track unipOther
+        shortLabel Other Annot.
+        longLabel UniProt Other Annotations
+        priority 11
+        parent uniprot
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl /gbdb/$D/uniprot/unipOther.bb
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+
+        track unipRepeat
+        shortLabel Repeats
+        longLabel UniProt Repeats
+        priority 12
+        parent uniprot
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl /gbdb/$D/uniprot/unipRepeat.bb
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+
+        track unipConflict
+        shortLabel Seq. Conflicts
+        longLabel UniProt Sequence Conflicts
+        priority 13
+        parent uniprot off
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl /gbdb/$D/uniprot/unipConflict.bb
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#Sequence_conflict_section" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+
+searchTable unipAliSwissprot
+searchType bigBed
+searchDescription SwissProt Proteins mapped to the genome by UCSC
+
+searchTable unipAliTrembl
+searchType bigBed
+searchDescription TrEMBL Proteins mapped to the genome by UCSC

@@ -157,7 +157,10 @@ else if (tg->isBigBed)
         {
         bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
         bed = loader(bedRow);
-        bed->label = makeLabel(tg, bb);
+        // FIXME BRANEY: either disable for all tracks with NUM_FIELDS > label field or better,
+        // fix how label is stored so it doesn't trash custom bed field
+        if (differentString(tg->tdb->type, "bigInteract"))
+            bed->label = makeLabel(tg, bb);
         if (scoreFilter == NULL || bed->score >= minScore)
             slAddHead(&list, bed);
         }

@@ -43,14 +43,14 @@ name entrezGene
 shortLabel Entrez Gene
 tables rgdGene2ToLocusLink
 idSql select value from rgdGene2ToLocusLink where name= '%s'
-url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%s
+url https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%s
 priority 10
 
 name pubMed
 shortLabel PubMed
 tables rgdGene2Xref
 idSql select info from rgdGene2Xref where rgdGeneId='%s' and infoType='Name'
-url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=PubMed&term=%s&doptcmdl=DocSum&tool=genome.ucsc.edu
+url https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=PubMed&term=%s&doptcmdl=DocSum&tool=genome.ucsc.edu
 priority 10
 
 name gepis

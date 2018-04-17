@@ -1,0 +1,50 @@
+##fileformat=VCFv4.1
+##fileDate=201600825								
+##reference=hs37d5/GRCh37									
+##resource_version=v1.0.8
+##phasing=partial									
+##source=JenniferYen
+##source=A_variant_by_any_name:quantifying_annotation_discordance_across_tools_and_clinical_databases
+##source=Modified_by_AngieHinrichs_for_UCSC_testing
+##updates=https://github.com/personalis/hgvslib
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	NA00001
+# ASH Unfortunately hg19 does not have these patch sequences:
+# ASH HG536_PATCH	10391	PTV116:NM_005247.2:c.616delG	AC	A	56	PASS	.	GT:GATK:AD:DP:GQ	0/1:0/1:3,2:5:54
+# ASH HG865_PATCH	33547	PTV117:NM_012309.3:c.2566C>T	G	A	.	PASS	.	GT:GATK:AD:DP:GQ	0/1:0/1:10,11:5:20
+# ASH HG865_PATCH	569441	PTV118:NM_012309.3:c.960C>A	G	T	77	PASS	.	GT:GATK:AD:DP:GQ	0/1:0/1:3,2:5:55
+# ASH HG865_PATCH	574546	PTV119:NM_012309.3:c.899A>G	C	T	75	PASS	.	GT:GATK:AD:DP:GQ	0/1:0/1:3,2:5:88
+# ASH HSCHR1_1_CTG31	133178	PTV120:NM_020699.2:c.1254_1255delGC	TAG	T	109	PASS	.	GT:GATK:AD:DP:GQ	0/1:0/1:3,2:5:109
+# ASH PTV021: I believe the 'exception 3' rule' applies to exon->intron boundaries only but
+# the authors are applying it to an intron->exon boundary:
+12	103234292	PTV021:NM_000277.1:c.1200-1delG	TC	T	80	PASS	.	GT:GATK:AD:DP:GQ	0/1:0/1:3,2,2:7:102
+# ASH PTV035: No-change asserted at would-be insertion point instead of single base.
+15	72105929	PTV035:NM_014249.3:c.951C=	CC	C	107	PASS	.	GT:GATK:AD:DP:GQ	0/1:0/1:3,2:5:109
+# ASH PTV051: They shift a delinsT -- but the insertion of the T makes it incorrect to shift
+# the deleted part.
+16	89613064	PTV051:NM_003119.2:c.1454_1462delinsT	AGGAGAGGCG	AT	77	PASS	.	GT:GATK:AD:DP:GQ	0/1:0/1:3,2:5:40
+# ASH PTV069: The reference genome has a deleted G, so this "variant" means no change to NM_003573.
+# Personalis reports c.3125G= instead of c.3125dupG.  I report c.3125_3126= because the variant is
+# reported as an insertion.  6 of one, half dozen of the other?
+19	41123094	PTV069:NM_003573.2:c.3125G=	G	GG	106	PASS	.	GT:GATK:AD:DP:GQ	0/1:0/1:3,2:5:106
+# ASH PTV083: SHANK3 has 42 coding bases that don't map well to the reference assembly, and
+# there is a big chunk of genome to skip over so it looks like an intron unless you see the
+# double-sided gap lines in the PSL alignments.  Ugh!  We should do better but I think the
+# "1307_1309delGTT" is wrong because 1307_1309 is CGA not GTT.  1307 may be mapped to G by
+# some aligners but the next two genomic bases (TT deleted) are skipped over in the RefSeq
+# alignment, not part of the transcript.
+22	51135988	PTV083:NM_033517.1:c.1307_1309delGTT	GGTT	G	.	PASS	.	GT:GATK:AD:DP:GQ	1/.:1/1:0,11:20
+# ASH PTV099: in this case, the older refSeq differed from the reference genome but the
+# latest version (NM_000535.6) matches the genome (even though genome allele is minor allele).
+7	6026775	PTV099:NM_000535.5:c.1621G=	T	C	.	PASS	.	GT:GATK:AD:DP:GQ	0/1:0/1:10,10:5:20
+# ASH PTV101: Detecting a dup is possible if using genomic sequence -- however, that gives the
+# false impression of affecting a splice region, when in the reality the c. effect is an insertion.
+# Why not leave the dup-calling to the g. HGVS?  I wonder what the HGVS authors would say here.
+# I guess in HGVS c. they don't require it to map directly to functional effect, for example
+# keeping a c. change in the correct exon even if it could be 3'-shifted.  Then when computing
+# the p. they do seem to want to be consistent with the functional change, so the p. does not
+# necessarily correspond to the c.
+7	55248992	PTV101:NM_005228.3:c.2284-5_2290dupTCCAGGAAGCCT	T	TTCCAGGAAGCCT	.	PASS	.	GT:GATK:AD:DP:GQ	0/1:0/1:3,2:5:53
+# ASH PTV106 and PTV107: they have the sophistication to use phased genotypes to combine
+# adjacent SNVs into an MNV but I don't:
+7	140453136	PTV106:NM_004333.4:c.1798_1799delinsAG	A	T	96	PASS	.	GT:GATK:AD:DP:GQ	0/1:0/1:3,2:5:86
+7	140453137	PTV107:NM_004333.4:c.1798_1799delinsAG	C	T	96	PASS	.	GT:GATK:AD:DP:GQ	0/1:0/1:3,2:5:86

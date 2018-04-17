@@ -38,5 +38,26 @@ boolean iupacMatchStart(char *iupacPrefix, char *dnaString);
 char *iupacIn(char *needle, char *haystack);
 /* Return first place in haystack (DNA) that matches needle that may contain IUPAC codes. */
 
+INLINE boolean isIupacAmbiguous(char c)
+/* Return TRUE if c is an IUPAC ambiguity code. */
+{
+switch (tolower(c))
+    {
+    case 'r':
+    case 'y':
+    case 's':
+    case 'w':
+    case 'k':
+    case 'm':
+    case 'b':
+    case 'd':
+    case 'h':
+    case 'v':
+    case 'n':
+        return TRUE;
+    }
+return FALSE;
+}
+
 #endif /* IUPAC_H */
 

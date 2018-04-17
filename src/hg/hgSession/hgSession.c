@@ -786,6 +786,7 @@ if (sqlTableExists(conn, namedSessionTable))
     dyStringFree(&dy);
 
     /* Prevent modification of custom tracks just saved to namedSessionDb: */
+    cartCopyCustomComposites(cart);
     cartCopyCustomTracks(cart);
 
     if (useCount > INITIAL_USE_COUNT)
@@ -988,6 +989,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     struct sqlConnection *conn2 = hConnectCentral();
     cartLoadUserSession(conn2, userName, sessionName, tmpCart, NULL, NULL);
     hDisconnectCentral(&conn2);
+    hubConnectLoadHubs(tmpCart);
     cartCheckForCustomTracks(tmpCart, dyMessage);
 
     if (gotSettings)
@@ -1132,9 +1134,10 @@ if (hel != NULL)
 		   getSessionLink(encUserName, encSessionName),
 		   getSessionEmailLink(encUserName, encSessionName));
     cartLoadUserSession(conn, userName, sessionName, cart, NULL, wildStr);
-    cartHideDefaultTracks(cart);
+    cartCopyCustomComposites(cart);
     hubConnectLoadHubs(cart);
     cartCopyCustomTracks(cart);
+    cartHideDefaultTracks(cart);
     cartCheckForCustomTracks(cart, dyMessage);
     didSomething = TRUE;
     }
@@ -1187,9 +1190,10 @@ dyStringPrintf(dyMessage,
 	       getSessionLink(otherUser, encSessionName),
 	       getSessionEmailLink(encOtherUser, encSessionName));
 cartLoadUserSession(conn, otherUser, sessionName, cart, NULL, actionVar);
-cartHideDefaultTracks(cart);
+cartCopyCustomComposites(cart);
 hubConnectLoadHubs(cart);
 cartCopyCustomTracks(cart);
+cartHideDefaultTracks(cart);
 cartCheckForCustomTracks(cart, dyMessage);
 hDisconnectCentral(&conn);
 return dyStringCannibalize(&dyMessage);
@@ -1204,7 +1208,8 @@ char *compressType = cartString(cart, hgsSaveLocalFileCompress);
 struct pipeline *compressPipe = textOutInit(fileName, compressType, NULL);
 
 cleanHgSessionFromCart(cart);
-cartDump(cart);
+
+cartDumpNoEncode(cart);
 
 // Now add all the default visibilities to output.
 outDefaultTracks(cart, NULL);
@@ -1290,9 +1295,10 @@ else
 if (lf != NULL)
     {
     cartLoadSettings(lf, cart, NULL, actionVar);
-    cartHideDefaultTracks(cart);
+    cartCopyCustomComposites(cart);
     hubConnectLoadHubs(cart);
     cartCopyCustomTracks(cart);
+    cartHideDefaultTracks(cart);
     cartCheckForCustomTracks(cart, dyMessage);
     lineFileClose(&lf);
     }

@@ -710,7 +710,7 @@ return FALSE;
 
 void *slNameFind(void *list, char *string)
 /* Return first element of slName list (or any other list starting
- * with next/name fields) that matches string. */
+ * with next/name fields) that matches string. This is case insensitive. */
 {
 struct slName *el;
 for (el = list; el != NULL; el = el->next)
@@ -990,12 +990,33 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
-void slPairFreeVals(struct slPair *list)
-/* Free up all values on list. */
+void slPairFreeValsExt(struct slPair *list, void (*freeFunc)())
+/* Free up all values on list using freeFunc.
+ * freeFunc should take a simple pointer to free an item, and can be NULL. */
 {
 struct slPair *el;
 for (el = list; el != NULL; el = el->next)
-    freez(&el->val);
+    {
+    if (freeFunc)
+        freeFunc(el->val);
+    else
+        freez(&el->val);
+    }
+}
+
+void slPairFreeVals(struct slPair *list)
+/* Free up all values on list. */
+{
+slPairFreeValsExt(list, NULL);
+}
+
+void slPairFreeValsAndListExt(struct slPair **pList, void (*freeFunc)())
+/* Free up all values on list using freeFunc and list itself.
+ * freeFunc should take a simple pointer to free an item, and can be NULL. */
+{
+if (pList)
+    slPairFreeValsExt(*pList, freeFunc);
+slPairFreeList(pList);
 }
 
 void slPairFreeValsAndList(struct slPair **pList)
@@ -1353,6 +1374,12 @@ else if (b == NULL)
     return 1;
 else
     return strcmp(a,b) != 0;
+}
+
+boolean isEmptyTextField(char *s)
+/* Recognize NULL or dot as empty text */
+{
+return (isEmpty(s) || sameString(".", s));
 }
 
 boolean startsWith(const char *start, const char *string)

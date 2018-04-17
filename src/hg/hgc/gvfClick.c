@@ -87,7 +87,7 @@ for (i = 0;  i < ba->attrCount;  i++)
     else if (sameString(tag, "Parent"))
 	{
 	printf("<B>Variant region:</B> "
-	       "<A HREF=\"http://www.ncbi.nlm.nih.gov/dbvar/variants/%s/\" "
+	       "<A HREF=\"https://www.ncbi.nlm.nih.gov/dbvar/variants/%s/\" "
 	       "TARGET=_BLANK>%s</A><BR>\n", ba->attrVals[i], htmlEncode(ba->attrVals[i]));
 	}
     else if (sameString(tag, "Name"))

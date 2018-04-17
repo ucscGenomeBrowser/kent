@@ -42,14 +42,14 @@ name refSeq
 shortLabel RefSeq
 tables flyBaseToRefSeq
 idSql select value from flyBaseToRefSeq where name = '%s'
-url http://www.ncbi.nlm.nih.gov/nuccore/%s?report=GenBank
+url https://www.ncbi.nlm.nih.gov/nuccore/%s?report=GenBank
 priority 10
 
 name pubMed
 shortLabel PubMed
 tables flyBase2004Xref
 idSql select symbol from flyBase2004Xref where name = '%s' and symbol != name
-url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=PubMed&term=%s&doptcmdl=DocSum&tool=genome.ucsc.edu
+url https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=PubMed&term=%s&doptcmdl=DocSum&tool=genome.ucsc.edu
 priority 10
 
 name geneCards

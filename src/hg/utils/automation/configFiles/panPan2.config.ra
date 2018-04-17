@@ -10,7 +10,7 @@ assemblyShortLabel MPI-EVA panpan1.1
 orderKey 2624
 # mitochondrial sequence included in refseq release
 # mitoAcc NC_001644.1
-# http://www.ncbi.nlm.nih.gov/bioproject/PRJNA11815
+# https://www.ncbi.nlm.nih.gov/bioproject/PRJNA11815
 mitoAcc none
 fastaFiles /hive/data/genomes/panPan2/ucsc/*.fa.gz
 agpFiles /hive/data/genomes/panPan2/ucsc/*.agp

@@ -55,7 +55,7 @@ Genome assembly procedures are covered in the NCBI
 <a href="https://www.ncbi.nlm.nih.gov/assembly/basics/"
 target=_blank>assembly documentation</a>.<BR>
 NCBI also provides
-<a href="http://www.ncbi.nlm.nih.gov/assembly/$ncbiAssemblyId"
+<a href="https://www.ncbi.nlm.nih.gov/assembly/$ncbiAssemblyId"
 target="_blank">specific information about this assembly</a>.
 </p>
 <p>

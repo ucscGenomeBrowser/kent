@@ -1,6 +1,5 @@
 track wgEncodeGisDnaPet
 compositeTrack on
-priority 13
 shortLabel GIS DNA PET
 longLabel ENCODE Genome Institute of Singapore DNA Paired-End Ditags
 group varRep

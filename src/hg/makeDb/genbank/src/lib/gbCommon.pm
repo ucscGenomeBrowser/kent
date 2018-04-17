@@ -823,7 +823,7 @@ sub loadConf() {
 # get a configuration value, or undef if not defined.
 sub findConf($) {
     my($name) = @_;
-    if (!defined(%gbCommon::conf)) {
+    if (!(%gbCommon::conf)) {
         loadConf();
     }
     return $gbCommon::conf{$name};

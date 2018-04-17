@@ -12,12 +12,12 @@
 
 // define external URLs used
 #define  RGD_GENE_URL   "http://rgd.mcw.edu/tools/genes/genes_view.cgi?id="
-#define  PUBMED_URL	"http://www.ncbi.nlm.nih.gov/pubmed/"
-#define  GBNK_PROT_URL	"http://www.ncbi.nlm.nih.gov/protein/"
-#define  GBNK_DNA_URL	"http://www.ncbi.nlm.nih.gov/nuccore/"
-#define  ENTREZ_URL	"http://www.ncbi.nlm.nih.gov/sites/entrez?db=gene&cmd=retrieve&list_uids="
+#define  PUBMED_URL	"https://www.ncbi.nlm.nih.gov/pubmed/"
+#define  GBNK_PROT_URL	"https://www.ncbi.nlm.nih.gov/protein/"
+#define  GBNK_DNA_URL	"https://www.ncbi.nlm.nih.gov/nuccore/"
+#define  ENTREZ_URL	"https://www.ncbi.nlm.nih.gov/sites/entrez?db=gene&cmd=retrieve&list_uids="
 #define  UNIPROT_URL	"http://www.uniprot.org/uniprot/"
-#define  UNIGENE_URL	"http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Rn&CID="
+#define  UNIGENE_URL	"https://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Rn&CID="
 #define  ENSEMBL_URL	"http://www.ensembl.org/Rattus_norvegicus/Gene/Summary?g="
 #define  TIGR_URL	"http://compbio.dfci.harvard.edu/tgi/cgi-bin/tgi/tc_report.pl?gudb=rat&tc="
 #define  SSLP_URL	"http://rgd.mcw.edu/objectSearch/sslpReport.jsp?rgd_id="

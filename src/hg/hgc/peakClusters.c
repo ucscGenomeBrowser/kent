@@ -518,7 +518,7 @@ if (inputTableFieldDisplay != NULL)
             inputTrackTable, fieldList, FALSE, vocab);
     webPrintLinkTableEnd();
 
-    webNewSectionHeaderStart(TRUE);
+    webNewSectionHeaderStart();
     char sectionTitle[128];
     safef(sectionTitle, 
             sizeof(sectionTitle),"Assays for %s Without Hits in Cluster", cluster->name);
@@ -536,7 +536,7 @@ else
     errAbort("Missing required trackDb setting %s for track %s",
         "inputTableFieldDisplay", tdb->track);
     }
-webNewSectionHeaderStart(TRUE);
+webNewSectionHeaderStart();
 jsBeginCollapsibleSectionOldStyle(cart, tdb->track, "cellSources", "Cell Abbreviations", FALSE);
 webNewSectionHeaderEnd();
 hPrintFactorSourceAbbrevTable(conn, tdb);

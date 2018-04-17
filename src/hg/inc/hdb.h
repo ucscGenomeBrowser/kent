@@ -120,6 +120,12 @@ char *hDefaultChrom(char *db);
 int hChromCount(char *db);
 /* Return the number of chromosomes (scaffolds etc.) in the given db. */
 
+char *hNcbiGcfId(char *db);
+/* Return the NCBI RefSeq assembly+annotations ID (GCF_...) for db, or NULL if we don't know it. */
+
+char *hNcbiGcaId(char *db);
+/* Return the NCBI GenBank assembly id (GCA_...) for db, or NULL if we don't know it. */
+
 struct sqlConnection *hAllocConn(char *db);
 /* Get free connection if possible. If not allocate a new one. */
 
@@ -550,9 +556,6 @@ struct trackDb *hCompositeTrackDbForSubtrack(char *db, struct trackDb *sTdb);
  * return the trackDb for the composite track if we can find it, else NULL.
  * Note: if the composite trackDb is found and returned, then its subtracks
  * member will contain a newly allocated tdb like sTdb (but not ==). */
-
-struct hTableInfo *hFindBigWigTrackInfo(char *db, char *chrom, char *rootName); 
-/* Get track information on a big* file that has no table */
 
 struct hTableInfo *hFindTableInfoWithConn(struct sqlConnection *conn, char *chrom, char *rootName);
 /* Find table information, with conn as part of input parameters.  Return NULL if no table.  */
@@ -1004,5 +1007,16 @@ struct trackDb *hFindLatestSnpTrack(char *db, char *suffix, struct trackDb **pFu
 char *hFindLatestSnpTableConn(struct sqlConnection *conn, char *suffix);
 /* Return the name of the 'snp1__<suffix>' table with the highest build number, if any.
  * suffix may be NULL to get the 'All SNPs' table (as opposed to Common, Flagged, Mult). */
+
+char *hFindLatestGencodeTableConn(struct sqlConnection *conn, char *suffix);
+/* Return the 'wgEncodeGencode<suffix>V<version>' table with the highest version number, if any.
+ * If suffix is NULL, it defaults to Basic. */
+
+boolean hDbHasNcbiRefSeq(char *db);
+/* Return TRUE if db has NCBI's RefSeq alignments and annotations. */
+
+char *hRefSeqAccForChrom(char *db, char *chrom);
+/* Return the RefSeq NC_000... accession for chrom if we can find it, else just chrom.
+ * db must never change. */
 
 #endif /* HDB_H */

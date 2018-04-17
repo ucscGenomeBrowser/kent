@@ -6,6 +6,7 @@
 #ifndef HUI_H
 #define HUI_H
 
+#include "common.h"
 #include "cart.h"
 #include "trackDb.h"
 #include "customTrack.h"
@@ -592,6 +593,22 @@ char *wiggleGridEnumToString(enum wiggleGridOptEnum x);
 void wiggleGridDropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
+#define WIG_VIEWFUNC_SHOW_ALL "showAll"
+#define WIG_VIEWFUNC_ADD_ALL "addAll"
+#define WIG_VIEWFUNC_SUBTRACT_ALL "subtractAll"
+
+/*	Wiggle track aggregate option	*/
+enum wiggleViewFuncEnum {
+   wiggleViewFuncShowAll = 0,
+   wiggleViewFuncAddAll = 1,
+   wiggleViewFuncSubtractAll = 2,
+};
+
+char *wiggleViewFuncEnumToString(enum wiggleViewFuncEnum x);
+/* Convert from enum to string representation. */
+
+enum wiggleViewFuncEnum wiggleViewFuncStringToEnum(char *string);
+
 #define WIG_AGGREGATE_NONE "none"
 #define WIG_AGGREGATE_TRANSPARENT "transparentOverlay"
 #define WIG_AGGREGATE_SOLID "solidOverlay"
@@ -696,6 +713,9 @@ enum baseColorDrawOpt
 #define GENEPRED_CLASS_NAME_COLUMN_DEFAULT "name"
 #define GENEPRED_CLASS_CLASS_COLUMN "itemClassClassColumn"
 #define GENEPRED_CLASS_CLASS_COLUMN_DEFAULT "class"
+
+/* genbank track cart variable suffixes: */
+#define SHOW_PATENT_SEQUENCES_SUFFIX "showPatentSequences"
 
 void baseColorDrawOptDropDown(struct cart *cart, struct trackDb *tdb);
 /* Make appropriately labeled drop down of options if any are applicable.*/
@@ -1045,6 +1065,7 @@ void labelCfgUi(char *db, struct cart *cart, struct trackDb *tdb);
 
 #define NO_SCORE_FILTER  "noScoreFilter"
 #define  SCORE_FILTER      "scoreFilter"
+#define  SCORE_LABEL      "scoreLabel"
 #define SIGNAL_FILTER      "signalFilter"
 #define PVALUE_FILTER      "pValueFilter"
 #define QVALUE_FILTER      "qValueFilter"
@@ -1056,6 +1077,15 @@ void labelCfgUi(char *db, struct cart *cart, struct trackDb *tdb);
 #define  SCORE_MIN         "scoreMin"
 #define  GRAY_LEVEL_SCORE_MIN SCORE_MIN
 #define  MIN_GRAY_LEVEL  "minGrayLevel"
+
+boolean colonPairToDoubles(char * colonPair,double *first,double *second);
+// Non-destructive. Only sets values if found. No colon: value goes to *first
+
+void getScoreFloatRangeFromCart(struct cart *cart, struct trackDb *tdb, boolean parentLevel,
+                         char *scoreName, double *limitMin,double *limitMax,double*min,double*max);
+// gets an double score range from the cart, but the limits from trackDb
+// for any of the pointers provided, will return a value found, if found, else it's contents
+// are undisturbed (use NO_VALUE to recognize unavaliable values)
 
 void filterButtons(char *filterTypeVar, char *filterTypeVal, boolean none);
 /* Put up some filter buttons. */
@@ -1413,4 +1443,12 @@ char *replaceInUrl(char* url, char *idInUrl, struct cart* cart, char *db, char* 
 
 struct slPair *buildFieldList(struct trackDb *tdb, char *trackDbVar, struct asObject *as);
 /* Build up a hash of a list of fields in an AS file. */
+
+char *checkDataVersion(char *database, struct trackDb *tdb);
+/* see if trackDb has a dataVersion setting and check that file for version */
+
+void printDataVersion(char *database, struct trackDb *tdb);
+/* If this annotation has a dataVersion setting, print it.
+ * check hgFixed.trackVersion, meta data and trackDb 'dataVersion'. */
+
 #endif /* HUI_H */

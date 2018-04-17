@@ -402,7 +402,7 @@ void wigLoadItems(struct track *tg)
 struct sqlConnection *conn = NULL ;
 
 // if this is a custom track we don't need an SQL connection to the database
-if (!(isCustomTrack(tg->table) && tg->customPt))
+if (!isCustomTrack(tg->table))
     conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
@@ -437,6 +437,14 @@ if (isCustomTrack(tg->table) && tg->customPt)
     ct = tg->customPt;
     dbTableName = ct->dbTableName;
     tdb = ct->tdb;
+    }
+else if (isCustomTrack(tg->table) )
+    {
+    // we can get custom tracks through track hubs that don't have customPt
+    hFreeConn(&conn);
+    conn = hAllocConn(CUSTOM_TRASH);
+    dbTableName = trackDbSetting(tg->tdb, "dbTableName");
+    tdb = tg->tdb;
     }
 else
 #endif /* GBROWSE */
@@ -882,6 +890,14 @@ for (x1 = 0; x1 < width; ++x1)
 	 */
 	double dataValue = p->smooth;
 
+        /* save a number that represents how many pixels that would be set if we were drawing bars.
+         * This may used for sorting later on */
+        int iy0 = graphUpperLimit * scaleFactor;
+        int iy1 = (graphUpperLimit - dataValue)*scaleFactor;
+        int boxHeight = max(1,abs(iy1 - iy0));
+        *bitCount += boxHeight;
+
+
 	/*	The graphing coordinate conversion situation is:
 	 *	graph coordinate y = 0 is graphUpperLimit data space
 	 *	and total graph height is h which is graphRange in data space
@@ -901,7 +917,7 @@ for (x1 = 0; x1 < width; ++x1)
         if (vis == tvFull || vis == tvPack)
             {
 #define scaleHeightToPixels(val) (min(BIGNUM,(scaleFactor * (graphUpperLimit - (val)) + yOff)))
-#define doLine(image, x, y, height, color) {vLine(image, x, y, height, color); *bitCount += height;}
+#define doLine(image, x, y, height, color) {vLine(image, x, y, height, color); }
 	    if (lineBar == wiggleGraphBar)
 		{
 		if (whiskers)
@@ -1002,7 +1018,7 @@ for (x1 = 0; x1 < width; ++x1)
 
 		    // negative data value exactly equal to top pixel
 		    // make sure it draws something
-		    if ((boxTop+boxHeight) == 0)
+		    if (((boxTop+boxHeight) == 0) && !isnan(dataValue))
 			boxHeight += 1;
 		    doLine(image,x, yOff+boxTop, boxHeight, drawColor);
 		    }

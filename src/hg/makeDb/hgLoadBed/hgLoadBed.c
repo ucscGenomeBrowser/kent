@@ -41,6 +41,7 @@ boolean trimSqlTable = FALSE;   /* If we're loading fewer columns than defined *
                                 /* in the SQL table, trim off extra columns */
 int maxChromNameLength = 0;	/* specify to avoid chromInfo */
 int dotIsNull = -1;             /* if > 0, then a dot in this field should be replaced with -1 */
+int lineLimit = -1;             /* limit input file to this number of lines */
 char *tmpDir = (char *)NULL;	/* location to create a temporary file */
 boolean nameIx = TRUE;	        /* FALSE == do not create the name index */
 boolean ignoreEmpty = FALSE;	/* TRUE == empty input files are not an error */
@@ -89,6 +90,7 @@ static struct optionSpec optionSpecs[] = {
     {"customTrackLoader", OPTION_BOOLEAN},
     {"fillInScore", OPTION_STRING},
     {"dotIsNull", OPTION_INT},
+    {"lineLimit", OPTION_INT},
     {NULL, 0}
 };
 
@@ -145,6 +147,7 @@ errAbort(
   "   -minScore=N - minimum value for score field for -fillInScore option (default 100)\n"
   "   -verbose=N - verbose level for extra information to STDERR\n"
   "   -dotIsNull=N - if the specified field is a '.' the replace it with -1\n"
+  "   -lineLimit=N - limit input file to this number of lines\n"
   );
 }
 
@@ -323,6 +326,12 @@ AllocVar(validateBed);
 verbose(1, "Reading %s\n", lf->fileName);
 while (lineFileNextReal(lf, &line))
     {
+    if (customTrackLoader && lineLimit > 0 && lf->lineIx > lineLimit)
+	{
+        char commaString[256];
+        sprintLongWithCommas(commaString, lineLimit);
+	errAbort("ERROR: number of input data lines over limit: %s\n\nSee also:\n<a href='/goldenPath/help/bigWig.html' target=_blank>bigWig help</a> for converting large bedGraph files using bedGraphToBigWig\n<a href='/goldenPath/help/bigBed.html' target=_blank>bigBed help</a> for converting large bed files using bedToBigBed\n<a href='/goldenPath/help/hgTrackHubHelp.html#Hosting' target=_blank>trackHub help</a> for bigDataUrl data hosting solutions", commaString);
+	}
     if (hasBin)
 	nextWord(&line);
     dupe = cloneString(line);
@@ -804,6 +813,7 @@ notItemRgb = optionExists("notItemRgb");
 if (notItemRgb) itemRgb = FALSE;
 maxChromNameLength = optionInt("maxChromNameLength",0);
 dotIsNull = optionInt("dotIsNull",dotIsNull);
+lineLimit = optionInt("lineLimit",lineLimit);
 noStrict = optionExists("noStrict") || optionExists("nostrict");
 allowStartEqualEnd = optionExists("allowStartEqualEnd");
 tmpDir = optionVal("tmpDir", tmpDir);

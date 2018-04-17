@@ -13,6 +13,7 @@ use Carp;
 use vars qw(@ISA @EXPORT_OK);
 use Exporter;
 use File::Basename;
+use File::Spec;
 
 @ISA = qw(Exporter);
 
@@ -31,11 +32,11 @@ use File::Basename;
       ),
     # General-purpose utility routines:
     qw( checkCleanSlate checkExistsUnlessDebug closeStdin
-	getAssemblyInfo getSpecies machineHasFile databaseExists
-	makeGsub mustMkdir mustOpen nfsNoodge run verbose
+	getAssemblyInfo getSpecies gensub2 machineHasFile databaseExists
+	makeGsub mustMkdir mustOpen nfsNoodge paraRun run verbose
       ),
     # Hardcoded paths/commands/constants:
-    qw( $gensub2 $para $paraRun $centralDbSql $git
+    qw( $centralDbSql $git
 	$clusterData $trackBuild $goldenPath $images $gbdb
 	$splitThreshold $runSSH $setMachtype
       ),
@@ -48,8 +49,14 @@ use File::Basename;
 
 use vars qw( %cluster %clusterFilesystem $defaultDbHost );
 
+
+sub readMainCluster(); # forward declaration to keep code order
+
+# the name of the cluster is in a separate text file, so it's easier to
+# use from bash scripts
+
 %cluster =
-    ( 'ku' =>
+    ( readMainCluster() =>
         { 'enabled' => 1, 'gigaHz' => 1.4, 'ram' => 8,
 	  'hostCount' => 512, },
     );
@@ -93,6 +100,20 @@ my %obsoleteClusterFilesystem =
     );
 
 $defaultDbHost = 'hgwdev';
+
+sub readMainCluster() {
+    # return the first line of the file cluster.txt in same directory as
+    # HgAutomate.pm. This file is easy to parse from bash scripts and
+    # other languages, easier than to have the value in this .pm file
+    #
+    my ($volume, $directory, $file) = File::Spec->splitpath(__FILE__);
+    my $mainClusterFname = $directory."cluster.txt";
+    open (my $clusterFile, '<', $mainClusterFname) || die "Couldn't open \"$mainClusterFname\": $!\n";
+    my $mainCluster = <$clusterFile>; 
+    close $clusterFile;
+    chomp $mainCluster;
+    return $mainCluster;
+}
 
 sub choosePermanentStorage {
   # Return the disk drive with the most available space.
@@ -487,18 +508,12 @@ sub processCommonOptions {
 #	These items should come from a configuration file so this
 #	business can be easily set up in other environments.
 # Hardcoded paths/command sequences:
-use vars qw( 	$gensub2 $para $paraRun $centralDbSql $git
+use vars qw( 	$centralDbSql $git
 		$clusterData $trackBuild $goldenPath $images $gbdb
 		$splitThreshold $runSSH $setMachtype
 	   );
-use vars qw( $gensub2 $para $paraRun $clusterData $trackBuild
+use vars qw( $clusterData $trackBuild
 	     $goldenPath $gbdb $centralDbSql $splitThreshold $runSSH );
-$gensub2 = '/parasol/bin/gensub2';
-$para = '/parasol/bin/para';
-$paraRun = ("$para make jobList\n" .
-	    "$para check\n" .
-	    "$para time > run.time\n" .
-	    'cat run.time');
 $centralDbSql = "hgsql -h localhost -A -N hgcentraltest";
 $git = "/usr/bin/git";
 
@@ -567,6 +582,27 @@ sub checkExistsUnlessDebug {
   exit 1 if ($problem);
 }
 
+sub paraRun {
+ my $para = '/parasol/bin/para';
+ if ( ! -e "$para" ) {
+    # allow PATH to find the para command
+    $para = "para";
+  }
+ return ("$para make jobList\n" .
+"$para check\n" .
+"$para time > run.time\n" .
+'cat run.time');
+}
+
+sub gensub2 {
+ my $answer = '/parasol/bin/gensub2';
+ if ( ! -s "$answer" ) {
+    # allow PATH to find the gensub2 command
+    $answer = "gensub2";
+  }
+ return $answer;
+}
+
 sub closeStdin {
   # If we don't do this, the script can hang ("Suspended (tty input)")
   # when it is run backgrounded (&) and then something is typed into the
@@ -633,6 +669,7 @@ sub machineHasFile {
 
 sub databaseExists {
   my ($dbHost, $db) = @_;
+  return 0 if ($dbHost =~ m/nohost/i);
   confess "Must have exactly 2 arguments" if (scalar(@_) != 2);
   my $query = "show databases like \"$db\";";
   my $line = `echo '$query' | $HgAutomate::runSSH $dbHost $centralDbSql`;

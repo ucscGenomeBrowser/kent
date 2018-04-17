@@ -259,6 +259,41 @@ taxId 336983
     # 2970124662 bases of 2970124662 (100.000%) in intersection
 
 #########################################################################
+# add chromAlias table (DONE - 2017-12-13 - Hiram)
+
+    mkdir /hive/data/genomes/colAng1/bed/chromAlias
+    cd /hive/data/genomes/colAng1/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name from ucscToRefSeq;' colAng1 \
+        > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name from ucscToINSDC;' colAng1 \
+        | grep -v chrM > ucsc.genbank.tab
+
+    join -t$'\t' ../idKeys/colAng1.idKeys.txt \
+	../../ensembl/ensemblColAng1.idKeys.txt \
+	| cut -f2,3 | sort > ucsc.ensembl.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl
+    sort -o colAng1.chromAlias.tab colAng1.chromAlias.tab
+
+for t in refseq genbank ensembl
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t colAng1.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking refseq: 13124 =? 13124 OK
+# checking genbank: 13124 =? 13124 OK
+# checking ensembl: 13124 =? 13124 OK
+
+    hgLoadSqlTab colAng1 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        colAng1.chromAlias.tab
+
+#########################################################################
 # fixup search rule for assembly track/gold table (DONE - 2017-02-01 - Hiram)
 
     cd ~/kent/src/hg/makeDb/trackDb/oldWorldMonkeys/colAng1
@@ -654,14 +689,14 @@ colAng1.downloadDir = colAng1
     # real    296m19.689s
 
 #############################################################################
-#  BLATSERVERS ENTRY (TBD - 2016-06-02 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2017-11-17 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("colAng1", "blat1a", "17862", "1", "0"); \
+	VALUES ("colAng1", "blat1a", "17882", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("colAng1", "blat1a", "17863", "0", "1");' \
+	VALUES ("colAng1", "blat1a", "17883", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 

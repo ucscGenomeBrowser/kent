@@ -27,7 +27,7 @@ dataLinkCol	- This tells you which column in the dataSql query result
 Examples:
 
 name OMIM
-url http://www.ncbi.nlm.nih.gov/entrez/dispomim.cgi?id=%s
+url https://www.ncbi.nlm.nih.gov/entrez/dispomim.cgi?id=%s
 label OMIM
 acc yes
 

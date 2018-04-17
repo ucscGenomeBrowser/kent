@@ -33,6 +33,7 @@
 #include "wikiLink.h"
 #include "cdwFlowCharts.h"
 #include "cdwStep.h"
+#include "facetField.h"
 
 /* Global vars */
 struct cart *cart;	// User variables saved from click to click
@@ -603,25 +604,25 @@ slReverse(&fieldList);
 
 /* Build up sql query to fetch all our fields */
 struct dyString *query = dyStringNew(0);
-sqlDyStringPrintf(query, "%s", "");   // Get header correct
-char *separator = "select ";  // This will get printed before first one
+sqlDyStringPrintf(query, "select ");
 for (field = fieldList; field != NULL; field = field->next)
     {
-    dyStringPrintf(query, "%s%s", separator, field->name);
-    separator = ",";
+    if (field != fieldList) // not first one
+	sqlDyStringPrintf(query, ",");
+    sqlDyStringPrintf(query, "%s", field->name);
     }
 
 /* Put where on it to limit it to accessible files */
-dyStringPrintf(query, " from cdwFileTags where file_id in (");
+sqlDyStringPrintf(query, " from cdwFileTags where file_id in (");
 
 struct cdwFile *ef;
-separator = "";
 for (ef = efList; ef != NULL; ef = ef->next)
     {
-    dyStringPrintf(query, "%s%u", separator, ef->id);
-    separator = ",";
+    if (ef != efList) // not first one
+	sqlDyStringPrintf(query, ",");
+    sqlDyStringPrintf(query, "%u", ef->id);
     }
-dyStringPrintf(query, ")");
+sqlDyStringPrintf(query, ")");
 
 struct sqlResult *sr = sqlGetResult(conn, query->string);
 char **row;
@@ -735,19 +736,19 @@ if (!isEmpty(searchString))
  * if any. */
 struct dyString *where = dyStringNew(0);
 if (!isEmpty(initialWhere))
-     dyStringPrintf(where, "(%s) and ", initialWhere);
-dyStringPrintf(where, "file_id in (0");	 // initial 0 never found, just makes code smaller
+     sqlDyStringPrintfFrag(where, "(%-s) and ", initialWhere); // trust
+sqlDyStringPrintfFrag(where, "file_id in (0");	 // initial 0 never found, just makes code smaller
 int accessCount = 0;
 struct cdwFile *ef;
 for (ef = efList; ef != NULL; ef = ef->next)
     {
     if (searchPassTree == NULL || intValTreeFind(searchPassTree, ef->id) != NULL)
 	{
-	dyStringPrintf(where, ",%u", ef->id);
+	sqlDyStringPrintf(where, ",%u", ef->id);
 	++accessCount;
 	}
     }
-dyStringAppendC(where, ')');
+sqlDyStringPrintf(where, ")");
 
 rbTreeFree(&searchPassTree);
 
@@ -774,15 +775,13 @@ struct dyString *filteredWhere;
 webTableBuildQuery(cart, "cdwFileTags", accWhere->string, "cdwBrowseFiles", FILETABLEFIELDS, TRUE, &dummy, &filteredWhere);
 
 // get their fileIds
-struct dyString *tagQuery = dyStringNew(0);
-dyStringAppend(tagQuery, NOSQLINJ "SELECT file_id from cdwFileTags "); // XX ask Jim is secure query needed / how to do.
-dyStringAppend(tagQuery, filteredWhere->string);
+struct dyString *tagQuery = sqlDyStringCreate("SELECT file_id from cdwFileTags %-s", filteredWhere->string); // trust
 struct slName *fileIds = sqlQuickList(conn, tagQuery->string);
 
 // retrieve the cdwFiles objects for these
-char *idListStr = slNameListToString(fileIds, ',');
-struct dyString *fileQuery = dyStringNew(0);
-dyStringPrintf(fileQuery, NOSQLINJ "SELECT * FROM cdwFile WHERE id IN (%s) ", idListStr);
+struct dyString *fileQuery = sqlDyStringCreate("SELECT * FROM cdwFile WHERE id IN (");
+sqlDyStringPrintValuesList(fileQuery, fileIds);
+sqlDyStringPrintf(fileQuery, ")");
 return cdwFileLoadByQuery(conn, fileQuery->string);
 }
 
@@ -1023,6 +1022,7 @@ puts("Name files as submitted and put into subdirectories<p>");
 cgiMakeSubmitButton();
 printf("</FORM>\n");
 
+boolean isPublic = cfgOptionBooleanDefault("isCirmPublicSite", FALSE);
 
 jsInline 
     (
@@ -1036,10 +1036,22 @@ puts("To download the files:\n");
 puts("<ul>\n");
 puts("<li>With Firefox and <a href=\"https://addons.mozilla.org/en-US/firefox/addon/downthemall/\">DownThemAll</a>: Click Tools - DownThemAll! - Manager. Right click - Advanced - Import from file. Right-click - Select All. Right-click - Toogle All\n");
 puts("<li>With Chrome and <a href=\"https://chrome.google.com/webstore/detail/tab-save/lkngoeaeclaebmpkgapchgjdbaekacki\">TabToSave</a>: Click the T/S icon next to the URL bar, click the edit button at the bottom of the screen and paste the file contents\n");
-puts("<li>OSX/Linux: With curl and a single thread: <tt>xargs -n1 curl -JO --user YOUREMAIL:YOURPASS < fileUrls.txt</tt>\n");
-puts("<li>Linux: With wget and a single thread: <tt>wget --content-disposition -i fileUrls.txt --user YOUREMAIL --password YOURPASS</tt>\n");
-puts("<li>With wget and 4 threads: <tt>xargs -n 1 -P 4 wget --content-disposition -q --user YOUREMAIL --password YOURPASS < fileUrls.txt</tt>\n");
-puts("<li>With aria2c, 16 threads and two threads per file: <tt>aria2c --http-user YOUREMAIL --http-password YOURPASS -x 16 -s 2 -i fileUrls.txt</tt>\n");
+
+if (isPublic)
+    {
+    puts("<li>OSX/Linux: With curl and a single thread: <tt>xargs -n1 curl -JO < fileUrls.txt</tt>\n");
+    puts("<li>Linux: With wget and a single thread: <tt>wget --content-disposition -i fileUrls.txt</tt>\n");
+    puts("<li>With wget and 4 threads: <tt>xargs -n 1 -P 4 wget --content-disposition -q < fileUrls.txt</tt>\n");
+    puts("<li>With aria2c, 16 threads and two threads per file: <tt>aria2c -x 16 -s 2 -i fileUrls.txt</tt>\n");
+    }
+else 
+    {
+    puts("<li>OSX/Linux: With curl and a single thread: <tt>xargs -n1 curl -JO --user YOUREMAIL:YOURPASS < fileUrls.txt</tt>\n");
+    puts("<li>Linux: With wget and a single thread: <tt>wget --content-disposition -i fileUrls.txt --user YOUREMAIL --password YOURPASS</tt>\n");
+    puts("<li>With wget and 4 threads: <tt>xargs -n 1 -P 4 wget --content-disposition -q --user YOUREMAIL --password YOURPASS < fileUrls.txt</tt>\n");
+    puts("<li>With aria2c, 16 threads and two threads per file: <tt>aria2c --http-user YOUREMAIL --http-password YOURPASS -x 16 -s 2 -i fileUrls.txt</tt>\n");
+    }
+
 puts("</ul>\n");
 puts("</div>\n");
 
@@ -1119,7 +1131,8 @@ printf("</FORM>\n");
 struct hash* loadDatasetDescs(struct sqlConnection *conn)
 /* Load cdwDataset table and return hash with name -> cdwDataset */
 {
-char* query = NOSQLINJ "SELECT * FROM cdwDataset;";
+char query[256];
+sqlSafef(query, sizeof query, "SELECT * FROM cdwDataset");
 struct sqlResult *sr = sqlGetResult(conn, query);
 struct hash *descs = hashNew(7);
 char **row;
@@ -1427,6 +1440,54 @@ for (jointDataset = datasetList; jointDataset != NULL; jointDataset = jointDatas
 cdwJointDatasetFree(&datasetList);
 }
 
+void facetSummaryRow(struct fieldedTable *table, struct facetField *ff)
+/* Print out row in a high level tag counting table */
+{
+struct facetVal *fv;
+int total = 0; // Col 4, 'files'
+char valValueString[PATH_LEN], valCountString[32]; // Col 3, 'popular values (files)...' and col 2, 'vals' 
+valValueString[0]= '\0'; 
+strcat(valValueString, " "); 
+safef(valCountString, sizeof(valCountString), "%d", slCount(ff->valList)); 
+bool hairpin = TRUE; 
+for (fv = ff->valList; fv != NULL; fv = fv->next)
+    {
+    total += fv->useCount;
+    if (hairpin == FALSE) continue; 
+
+    char temp[4*1024]; 
+    // Make a new name value pair which may get added to the existing string. 
+    safef(temp, sizeof(temp),"%s (%d)", fv->val, fv->useCount); 
+    int newStringLen = ((int) strlen(valValueString))+((int) strlen(temp));
+    if (newStringLen >= 107) // Check if the new string is acceptable size. 
+	{
+	// The hairpin is set to false once the full line is made, this stops the line from growing. 
+	if (hairpin) 
+	    //Remove the comma and append '...'.
+	    {
+	    valValueString[strlen(valValueString)-2] = '\0';
+	    strcat(valValueString, "..."); 
+	    hairpin = FALSE;
+	    }
+	}
+    else{ // Append the name:value pair to the string.  
+	strcat(valValueString, temp); 
+	if (fv->next != NULL)
+	    strcat(valValueString, ", "); 
+	}
+    }
+char trueTotal[PATH_LEN]; 
+safef(trueTotal, sizeof(trueTotal), "%d", total); 
+
+/* Add data to fielded table */
+char *row[4];
+row[0] = cloneString(ff->fieldName);
+row[1] = cloneString(valCountString);
+row[2] = cloneString(valValueString);
+row[3] = cloneString(trueTotal);
+fieldedTableAdd(table, row, ArraySize(row), 0);
+}
+
 void tagSummaryRow(struct fieldedTable *table, struct sqlConnection *conn, char *tag)
 /* Print out row in a high level tag counting table */
 {
@@ -1482,7 +1543,25 @@ row[3] = cloneString(trueTotal);
 fieldedTableAdd(table, row, ArraySize(row), 0);
 }
 
-void drawPrettyPieGraph(struct slPair *data, char *id, char *title, char *subtitle)
+struct tagCount
+/* A tag name and how many things are associated with it. */
+    {
+    struct tagCount *next;
+    char *tag;
+    long count;	
+    };
+
+struct tagCount *tagCountNew(char *tag, int count)
+/* Return fresh new tag */
+{
+struct tagCount *tc;
+AllocVar(tc);
+tc->tag = cloneString(tag);
+tc->count = count;
+return tc;
+}
+
+void drawPrettyPieGraph(struct facetVal *fvList, char *id, char *title, char *subtitle)
 /* Draw a pretty pie graph using D3. Import D3 and D3pie before use. */
 {
 // Some D3 administrative stuff, the title, subtitle, sizing etc. 
@@ -1509,17 +1588,16 @@ dyStringPrintf(dy,"\"font\": \"open sans\",");
 dyStringPrintf(dy,"\"location\": \"bottom-left\",},\n");
 dyStringPrintf(dy,"\"size\": { \"canvasWidth\": 270, \"canvasHeight\": 220},\n");
 dyStringPrintf(dy,"\"data\": { \"sortOrder\": \"value-desc\", \"content\": [\n");
-struct slPair *start = NULL;
+struct facetVal *fv = NULL;
 float colorOffset = 1;
-int totalFields =  slCount(data);
-for (start=data; start!=NULL; start=start->next)
+int totalFields =  slCount(fvList);
+for (fv=fvList; fv!=NULL; fv=fv->next)
     {
     float currentColor = colorOffset/totalFields;
     struct rgbColor color = saturatedRainbowAtPos(currentColor);
-    char *temp = start->val;
-    dyStringPrintf(dy,"\t{\"label\": \"%s\",\n\t\"value\": %s,\n\t\"color\": \"rgb(%i,%i,%i)\"}", 
-	start->name, temp, color.r, color.b, color.g);
-    if (start->next!=NULL) 
+    dyStringPrintf(dy,"\t{\"label\": \"%s\",\n\t\"value\": %d,\n\t\"color\": \"rgb(%i,%i,%i)\"}", 
+	fv->val, fv->useCount, color.r, color.b, color.g);
+    if (fv->next!=NULL) 
 	dyStringPrintf(dy,",\n");
     ++colorOffset;
     }
@@ -1541,14 +1619,31 @@ jsInline(dy->string);
 dyStringFree(&dy);
 }
 
-void pieOnTag(struct sqlConnection *conn, char *tag, char *divId)
+#ifdef OLD
+struct tagCount *tagCountListFromQuery(struct sqlConnection *conn, char *query)
+/* Return a tagCount list from a query that had tag/count values */
+{
+struct tagCount *list = NULL, *tc;
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    tc = tagCountNew(row[0], sqlUnsigned(row[1]));
+    slAddHead(&list, tc);
+    }
+sqlFreeResult(&sr);
+slReverse(&list);
+return list;
+}
+#endif /* OLD */
+
+void pieOnFacet(struct facetField *ff, char *divId)
 /* Write a pie chart base on the values of given tag in storm */
 {
-char query[PATH_LEN]; 
-sqlSafef(query, sizeof(query), "select %s, count(*) as count from cdwFileTags where %s is not NULL group by %s order by count desc", tag, tag, tag); 
-struct slPair *pairList = sqlQuickPairList(conn, query);
-drawPrettyPieGraph(pairList, divId, tag, NULL);
+struct facetVal *majorTags = facetValMajorPlusOther(ff->valList, 0.01);
+drawPrettyPieGraph(majorTags, divId, ff->fieldName, NULL);
 }
+
 
 char *tagPopularityFields[] = { "tag name", "vals", "popular values (files)...", "files",};
 
@@ -1569,10 +1664,18 @@ sqlSafef(query, sizeof(query),
 long long totalBytes = sqlQuickLongLong(conn, query);
 printWithGreekByte(stdout, totalBytes);
 printf(" of data in ");
+#ifdef OLD
 sqlSafef(query, sizeof(query),
     "select count(*) from cdwFile,cdwValidFile where cdwFile.id=cdwValidFile.fileId "
     " and (errorMessage = '' or errorMessage is null)"
     );
+#endif /* OLD */
+
+/* Using a query that is faster than the table join but gives the same result 
+ * (0.2 sec vs. 0.8 sec) */
+sqlSafef(query, sizeof(query), 
+    "select count(*) from cdwFile where (errorMessage = '' || errorMessage is null)"
+    " and cdwFileName like '%%/%s%%'",  cdwLicensePlateHead(conn) );
 
 long long fileCount = sqlQuickLongLong(conn, query);
 printLongWithCommas(stdout, fileCount);
@@ -1581,26 +1684,27 @@ sqlSafef(query, sizeof(query),
     "select count(*) from cdwLab "
     );
 long long labCount = sqlQuickLongLong(conn, query);  
-printf(" from %llu labs. ", labCount); 
-printf("You have access to ");
-printLongWithCommas(stdout, cdwCountAccessible(conn, user));
-printf(" files.<BR>\n");
+printf(" from %llu labs.<BR>\n", labCount); 
+
 printf("Try using the browse menu on files or tracks. ");
 printf("The query link allows simple SQL-like queries of the metadata.");
 printf("<BR>\n");
 
+
 /* Print out some pie charts on important fields */
 static char *pieTags[] = 
     {"lab", "format", "assay", };
+struct facetField *pieFacetList = facetFieldsFromSqlTable(conn, "cdwFileFacets", 
+						    pieTags, ArraySize(pieTags), "N/A", NULL, NULL, NULL);
+struct facetField *ff;
 int i;
 printf("<TABLE style=\"display:inline\"><TR>\n");
-for (i=0; i<ArraySize(pieTags); ++i)
+for (i=0, ff = pieFacetList; i<ArraySize(pieTags); ++i, ff = ff->next)
     {
-    char *field = pieTags[i];
     char pieDivId[64];
     safef(pieDivId, sizeof(pieDivId), "pie_%d", i);
     printf("<TD id=\"%s\"><TD>", pieDivId);
-    pieOnTag(conn, field, pieDivId); 
+    pieOnFacet(ff, pieDivId); 
     }
 printf("</TR></TABLE>\n");
 printf("<CENTER><I>charts are based on proportion of files in each category</I></CENTER>\n");
@@ -1610,11 +1714,13 @@ printf("</td></tr></table>\n");
 static char *highLevelTags[] = 
     {"data_set_id", "lab", "assay", "format", "read_size",
     "sample_label", "species"};
+struct facetField *highFacetList = facetFieldsFromSqlTable(conn, "cdwFileFacets", 
+						highLevelTags, ArraySize(highLevelTags), NULL, NULL, NULL, NULL);
 
 struct fieldedTable *table = fieldedTableNew("Important tags", tagPopularityFields, 
     ArraySize(tagPopularityFields));
-for (i=0; i<ArraySize(highLevelTags); ++i)
-    tagSummaryRow(table, conn, highLevelTags[i]); 
+for (ff = highFacetList; ff != NULL; ff = ff->next)
+    facetSummaryRow(table, ff);
 
 char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?%s", cartSidUrlString(cart) );
@@ -1656,6 +1762,26 @@ void doHelp(struct sqlConnection *conn)
 puts(
 #include "cdwHelp.h"
 );
+}
+
+void doTestPage(struct sqlConnection *conn)
+/* Put up test page */
+{
+printf("testing 1 2 3...<BR>\n");
+static char *fields[] = 
+    {"data_set_id", "lab", "assay", "format", "read_size", "species", "organ"};
+uglyTime(NULL);
+struct facetField *fieldList = facetFieldsFromSqlTable(conn, "cdwFileTags", 
+						fields, ArraySize(fields), NULL, NULL, NULL, NULL);
+uglyTime("listing facets");
+printf("got info on %d fields<BR>\n", slCount(fieldList));
+struct facetField *field;
+for (field = fieldList; field != NULL; field = field->next)
+    {
+    printf("<div>\n");
+    printf("<b>%s</b> has %d values\n", field->fieldName, slCount(field->valList));
+    printf("</div>\n");
+    }
 }
 
 void dispatch(struct sqlConnection *conn)
@@ -1726,6 +1852,10 @@ else if (sameString(command, "dataSetMetaTree"))
     {
     doDataSetMetaTree(conn);
     }
+else if (sameString(command, "test"))
+    {
+    doTestPage(conn);
+    }
 else
     {
     printf("unrecognized command %s<BR>\n", command);
@@ -1793,7 +1923,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Data Browser V0.54");
+localWebStartWrapper("CIRM Stem Cell Hub Data Browser V0.57");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();

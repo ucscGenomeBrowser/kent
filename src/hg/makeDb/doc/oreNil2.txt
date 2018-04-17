@@ -588,3 +588,23 @@ oreNil2.perChromTables = no
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+##############################################################################
+
+##############################################################################
+# LIFTOVER TO oreNil3 (DONE - 2017-07-27 - Hiram )
+    mkdir /hive/data/genomes/oreNil2/bed/blat.oreNil3.2017-07-27
+    cd /hive/data/genomes/oreNil2/bed/blat.oreNil3.2017-07-27
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -debug \
+        -ooc /hive/data/genomes/oreNil2/jkStuff/oreNil2.11.ooc \
+	   oreNil2 oreNil3
+    # Real run:
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -ooc /hive/data/genomes/oreNil2/jkStuff/oreNil2.11.ooc \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+	 oreNil2 oreNil3) > do.log 2>&1 &
+    #   real    331m53.848s
+
+    # verify this functions in the genome browser from oreNil2 to oreNil3
+
+########################################################################

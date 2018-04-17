@@ -97,6 +97,8 @@ ssh -n qateam@hgdownload "rm /mirrordata/apache/htdocs/admin/hgcentral.sql"
 scp -p hgcentral.sql qateam@hgdownload:/mirrordata/apache/htdocs/admin/
 ssh -n qateam@hgdownload-sd "rm /mirrordata/apache/htdocs/admin/hgcentral.sql"
 scp -p hgcentral.sql qateam@hgdownload-sd:/mirrordata/apache/htdocs/admin/
+ssh -n qateam@genome-euro "rm /mirrordata/apache/htdocs/admin/hgcentral.sql"
+scp -p hgcentral.sql qateam@genome-euro:/mirrordata/apache/htdocs/admin/
 
 echo
 echo "A new hgcentral.sql file should now be present at:"

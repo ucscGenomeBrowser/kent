@@ -49,6 +49,7 @@
 #include "gtexUi.h"
 #include "genbank.h"
 #include "botDelay.h"
+#include "customComposite.h"
     
 #ifdef USE_HAL 
 #include "halBlockViz.h"
@@ -1850,28 +1851,33 @@ baseColorDrawOptDropDown(cart, tdb);
 void refGeneUI(struct trackDb *tdb)
 /* Put up refGene or xenoRefGene gene ID track controls, with checkboxes */
 {
-/* Figure out if OMIM database is available. */
-int omimAvail = 0;
-if (sameString(tdb->track, "refGene"))
+// Show label options only if top-level track; ncbiRefSeqUI (for refSeqComposite) shows
+// label options for all subtracks.
+if (tdb->parent == NULL)
     {
-    struct sqlConnection *conn = hAllocConn(database);
-    char query[128];
-    sqlSafef(query, sizeof(query), "select r.omimId from %s r, refGene where r.mrnaAcc = refGene.name and r.omimId != 0 limit 1", refLinkTable);
-    omimAvail = sqlQuickNum(conn, query);
-    hFreeConn(&conn);
-    }
+    /* Figure out if OMIM database is available. */
+    int omimAvail = 0;
+    if (sameString(tdb->track, "refGene"))
+        {
+        struct sqlConnection *conn = hAllocConn(database);
+        char query[128];
+        sqlSafef(query, sizeof(query), "select r.omimId from %s r, refGene where r.mrnaAcc = refGene.name and r.omimId != 0 limit 1", refLinkTable);
+        omimAvail = sqlQuickNum(conn, query);
+        hFreeConn(&conn);
+        }
 
-/* Put up label line  - boxes for gene, accession or maybe OMIM. */
-printf("<BR><B>Label:</B> ");
-labelMakeCheckBox(tdb, "gene", "gene", TRUE);
-labelMakeCheckBox(tdb, "acc", "accession", FALSE);
-if (omimAvail != 0)
-    {
-    char sym[32];
-    safef(sym, sizeof(sym), "omim%s", cartString(cart, "db"));
-    labelMakeCheckBox(tdb, sym, "OMIM ID", FALSE);
+    /* Put up label line  - boxes for gene, accession or maybe OMIM. */
+    printf("<BR><B>Label:</B> ");
+    labelMakeCheckBox(tdb, "gene", "gene", TRUE);
+    labelMakeCheckBox(tdb, "acc", "accession", FALSE);
+    if (omimAvail != 0)
+        {
+        char sym[32];
+        safef(sym, sizeof(sym), "omim%s", cartString(cart, "db"));
+        labelMakeCheckBox(tdb, sym, "OMIM ID", FALSE);
+        }
+    printf("<BR>\n");
     }
-printf("<BR>\n");
 
 /* Put up noncoding option and codon coloring stuff. */
 hideNoncodingOpt(tdb);
@@ -1910,29 +1916,21 @@ baseColorDrawOptDropDown(cart, tdb);
 void ncbiRefSeqUI(struct trackDb *tdb)
 /* Put up gene ID track controls */
 {
-struct sqlConnection *conn = hAllocConn(database);
-char query[256];
-char *omimAvail = NULL;
-if (sqlTableExists(conn, "kgXref"))
-    {
-    sqlSafef(query, sizeof(query), "select kgXref.kgID from kgXref,%s r where kgXref.refseq = r.mrnaAcc and r.omimId != 0 limit 1", refLinkTable);
-    omimAvail = sqlQuickString(conn, query);
-    }
-else if (sqlTableExists(conn, "ncbiRefSeqLink"))
-    omimAvail = "yes";
-
-char varName[64];
+char varName[256];
 safef(varName, sizeof(varName), "%s.label", tdb->track);
 printf("<br><b>Label:</b> ");
 labelMakeCheckBox(tdb, "gene", "gene symbol", TRUE);
 labelMakeCheckBox(tdb, "acc", "accession", FALSE);
+struct sqlConnection *conn = hAllocConn(database);
+boolean omimAvail = sqlQuickNum(conn,
+                                NOSQLINJ"select 1 from ncbiRefSeqLink where omimId != 0 limit 1");
 if (omimAvail)
     {
     char sym[32];
     safef(sym, sizeof(sym), "omim%s", cartString(cart, "db"));
     labelMakeCheckBox(tdb, sym, "OMIM ID", FALSE);
     }
-printf("&nbsp;&nbsp;(select gene symbol(s) to display)<br>");
+hFreeConn(&conn);
 }
 
 void ensGeneUI(struct trackDb *tdb)
@@ -2667,7 +2665,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *pmId = row[1];
     char label[512];
     safef(label, sizeof(label),
-	  "<A HREF=\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed"
+	  "<A HREF=\"https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed"
 	  "&list_uids=%s&dopt=Abstract&tool=genome.ucsc.edu\" TARGET=_BLANK>%s</A>", pmId, ref);
     labelArr[refCount] = cloneString(label);
     valueArr[refCount++] = cloneString(pmId);
@@ -2788,9 +2786,9 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
         }
     printf("</TD>\n");
     printf("<TD>%s", tdb->longLabel);
-    char *dataVersion = trackDbSetting(tdb, "dataVersion");
-    if (dataVersion)
-        printf("&nbsp&nbsp;<EM style='color:#666666; font-size:smaller;'>%s</EM>", dataVersion);
+
+    printDataVersion(database, tdb);
+    //printf("&nbsp&nbsp;<EM style='color:#666666; font-size:smaller;'>%s</EM>", dataVersion);
     printf("</TD></TR>");
     }
 printf("</TABLE>");
@@ -3157,14 +3155,23 @@ if (sameWord(tdb->track,"ensGene"))
     }
 else if (sameWord(tdb->track, "refSeqComposite"))
     {
-    struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
     char longLabel[1024];
-    if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
+    char *version = checkDataVersion(database, tdb);
+
+    if (version)
 	{
-	safef(longLabel, sizeof(longLabel), "%s - Annotation Release %s", tdb->longLabel, trackVersion->version);
+	safef(longLabel, sizeof(longLabel), "%s - Annotation Release %s", tdb->longLabel, version);
 	}
     else
-        safef(longLabel, sizeof(longLabel), "%s", tdb->longLabel);
+	{
+	struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
+	if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
+	    {
+	    safef(longLabel, sizeof(longLabel), "%s - Annotation Release %s", tdb->longLabel, trackVersion->version);
+	    }
+	else
+	    safef(longLabel, sizeof(longLabel), "%s", tdb->longLabel);
+	}
     printf("<B style='font-size:200%%;'>%s%s</B>\n", longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
     }
 else
@@ -3283,6 +3290,11 @@ if (!tdbIsDownloadsOnly(tdb))
 	    jsOnEventByIdF("click", "htui_reset",
                    "setVarAndPostForm('%s','1','mainForm'); return false;", setting);
 	    }
+        if ( isCustomComposite(tdb))
+            {
+            printf("\n&nbsp;&nbsp;<a href='%s' >Go to Track Collection Builder</a>\n", hgCollectionName());
+            }
+
         }
 
     if (ct)
@@ -3365,18 +3377,12 @@ if (ct)
 
 if (!ct)
     {
-    /* Print data version trackDB setting, if any */
-    struct trackVersion *trackVersion = getTrackVersion(database, tdb->track);
-    char *version = trackVersion == NULL ? trackDbSetting(tdb, "dataVersion")
-                                         : trackVersion->version;
-    if (version)
-        {
-        cgiDown(0.7);
-        printf("<B>Data version:</B> %s <BR>\n", version);
-        }
+    /* Print data version setting, if any */
+    cgiDown(0.7);
+    printDataVersion(database, tdb);
 
-   /* Print lift information from trackDb, if any */
-   trackDbPrintOrigAssembly(tdb, database);
+    /* Print lift information from trackDb, if any */
+    trackDbPrintOrigAssembly(tdb, database);
 
     printUpdateTime(database, tdb, NULL);
     }

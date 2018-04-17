@@ -353,6 +353,37 @@ taxId 9597
     hgLoadSqlTab panPan2 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
         panPan2.chromAlias.tab
 
+    cd /hive/data/genomes/panPan2/bed/chromAlias
+    # add ensembl names 2017-12-14
+    mkdir previous
+    mv *.tab previous
+    join -t$'\t' ../idKeys/panPan2.idKeys.txt \
+	../../ensembl/ensemblPanPan2.idKeys.txt \
+	| cut -f2,3 | sort > ucsc.ensembl.tab
+
+    cut -f1,2 previous/ucsc.refseq.tab > ucsc.refseq.tab
+    cut -f1,2 previous/ucsc.genbank.tab > ucsc.genbank.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl
+    sort -o panPan2.chromAlias.tab panPan2.chromAlias.tab
+
+for t in refseq genbank ensembl
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t panPan2.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking refseq: 10274 =? 10274 OK
+# checking genbank: 10274 =? 10274 OK
+# checking ensembl: 10274 =? 10274 OK
+
+    hgLoadSqlTab panPan2 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        panPan2.chromAlias.tab
+
 #########################################################################
 # fixup search rule for assembly track/gold table (DONE - 2016-04-19 - Hiram)
 

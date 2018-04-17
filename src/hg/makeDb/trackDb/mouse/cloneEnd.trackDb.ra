@@ -19,7 +19,7 @@ sortOrder source=+
     colorByStrand 0,0,128 0,128,0
     type bed 12
     visibility pack
-    url http://www.ncbi.nlm.nih.gov/clone/?term=$$
+    url https://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
     priority 1
 
@@ -31,7 +31,7 @@ sortOrder source=+
     colorByStrand 0,0,128 0,128,0
     type bed 12
     visibility hide
-    url http://www.ncbi.nlm.nih.gov/clone/?term=$$
+    url https://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
     priority 2
 
@@ -43,7 +43,7 @@ sortOrder source=+
     colorByStrand 0,0,128 0,128,0
     type bed 12
     visibility hide
-    url http://www.ncbi.nlm.nih.gov/clone/?term=$$
+    url https://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
     priority 3
 
@@ -55,7 +55,7 @@ sortOrder source=+
     colorByStrand 0,0,128 0,128,0
     type bed 12
     visibility hide
-    url http://www.ncbi.nlm.nih.gov/clone/?term=$$
+    url https://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
     priority 4
 
@@ -67,7 +67,7 @@ sortOrder source=+
     colorByStrand 0,0,128 0,128,0
     type bed 12
     visibility hide
-    url http://www.ncbi.nlm.nih.gov/clone/?term=$$
+    url https://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
     priority 5
 
@@ -79,7 +79,7 @@ sortOrder source=+
     colorByStrand 0,0,128 0,128,0
     type bed 12
     visibility hide
-    url http://www.ncbi.nlm.nih.gov/clone/?term=$$
+    url https://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
     priority 6
 
@@ -91,7 +91,7 @@ sortOrder source=+
     colorByStrand 0,0,128 0,128,0
     type bed 12
     visibility hide
-    url http://www.ncbi.nlm.nih.gov/clone/?term=$$
+    url https://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
     priority 7
 
@@ -103,7 +103,7 @@ sortOrder source=+
     colorByStrand 0,0,128 0,128,0
     type bed 12
     visibility hide
-    url http://www.ncbi.nlm.nih.gov/clone/?term=$$
+    url https://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
     priority 8
 
@@ -115,7 +115,7 @@ sortOrder source=+
     colorByStrand 0,0,128 0,128,0
     type bed 12
     visibility hide
-    url http://www.ncbi.nlm.nih.gov/clone/?term=$$
+    url https://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
     priority 9
 
@@ -127,7 +127,7 @@ sortOrder source=+
     colorByStrand 0,0,128 0,128,0
     type bed 12
     visibility hide
-    url http://www.ncbi.nlm.nih.gov/clone/?term=$$
+    url https://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
     priority 10
 
@@ -139,7 +139,7 @@ sortOrder source=+
     colorByStrand 0,0,128 0,128,0
     type bed 12
     visibility hide
-    url http://www.ncbi.nlm.nih.gov/clone/?term=$$
+    url https://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
     priority 11
 
@@ -151,7 +151,7 @@ sortOrder source=+
     colorByStrand 0,0,128 0,128,0
     type bed 12
     visibility hide
-    url http://www.ncbi.nlm.nih.gov/clone/?term=$$
+    url https://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
     priority 12
 
@@ -163,7 +163,7 @@ sortOrder source=+
     colorByStrand 0,0,128 0,128,0
     type bed 12
     visibility hide
-    url http://www.ncbi.nlm.nih.gov/clone/?term=$$
+    url https://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
     priority 13
 

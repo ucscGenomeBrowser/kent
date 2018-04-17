@@ -238,6 +238,8 @@ _EOF_
     );
   }
 
+  my $paraRun = &HgAutomate::paraRun();
+  my $gensub2 = &HgAutomate::gensub2();
   if ($opt_unmaskedSeq) {
     $bossScript->add(<<_EOF_
 chmod a+x TrfRun.csh
@@ -245,11 +247,13 @@ chmod a+x TrfRun.csh
 rm -rf $partDir
 $Bin/simplePartition.pl $clusterSeq $chunkSize $partDir
 
-$HgAutomate::gensub2 $partDir/partitions.lst single gsub jobList
-$HgAutomate::paraRun
+$gensub2 $partDir/partitions.lst single gsub jobList
+$paraRun
 _EOF_
     );
   } else {
+  my $paraRun = &HgAutomate::paraRun();
+  my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
 chmod a+x TrfRun.csh
 
@@ -258,8 +262,8 @@ $Bin/simplePartition.pl $clusterSeq $chunkSize $partDir
 rm -f $buildDir/TrfPart
 ln -s $partDir $buildDir/TrfPart
 
-$HgAutomate::gensub2 $partDir/partitions.lst single gsub jobList
-$HgAutomate::paraRun
+$gensub2 $partDir/partitions.lst single gsub jobList
+$paraRun
 _EOF_
   );
   }
@@ -416,6 +420,10 @@ _EOF_
 &usage(1) if (scalar(@ARGV) != 1);
 ($db) = @ARGV;
 
+if (! $opt_trf409 ) {
+  die "Error: must supply -trf409 argument, e.g.: -trf409=6\n";
+}
+
 # Now that we know the $db, figure out our paths:
 my $date = `date +%Y-%m-%d`;
 chomp $date;
@@ -423,6 +431,7 @@ $buildDir = $opt_buildDir ? $opt_buildDir :
   "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/simpleRepeat.$date";
 $unmaskedSeq = $opt_unmaskedSeq ? $opt_unmaskedSeq :
   "$HgAutomate::clusterData/$db/$db.unmasked.2bit";
+
 $trf409 = $opt_trf409 ? $opt_trf409 : "";
 
 if (! -e $unmaskedSeq) {

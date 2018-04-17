@@ -46,6 +46,7 @@ my $asmDate = "notFound";
 my $asmName = "notFound";
 my $sciName = "notFound";
 my $commonName = "notFound";
+my $mySqlCommonName = "notFound";
 my $submitter = "notFound";
 my $genBankAccessionID = "notFound";
 my $taxId = "notFound";
@@ -62,7 +63,7 @@ while (my $line = <FH>) {
   if ($line =~ m/^#\s+Assembly name:/i) {
     $asmName = $line;
     $asmName =~ s/.*y name:\s+//i;
-    $ncbiAssemblyId = `wget -O /dev/stdout "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=assembly&term=$asmName" 2> /dev/null | grep "<Id>" | head -1 | sed -e 's/[<>Id/]//g;'`;
+    $ncbiAssemblyId = `wget -O /dev/stdout "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=assembly&term=$asmName" 2> /dev/null | grep "<Id>" | head -1 | sed -e 's/[<>Id/]//g;'`;
     chomp $ncbiAssemblyId;
   } elsif ($line =~ m/^#\s+Organism name:/) {
     if ($line =~ m/\s+\(/) {
@@ -70,6 +71,8 @@ while (my $line = <FH>) {
        $commonName =~ s/.*\(//;
        $commonName =~ s/\)//;
        $commonName = ucfirst($commonName);
+       $mySqlCommonName = $commonName;
+       $mySqlCommonName =~ s/'/_/g;   # effective escape ' characters for MySQL
     }
     $sciName = $line;
     $sciName =~ s/.*m name:\s+//;
@@ -86,7 +89,13 @@ while (my $line = <FH>) {
     $genBankAccessionID = $line;
     $genBankAccessionID =~ s/.*ccession:\s+//;
     $genBankAccessionID =~ s/ .*//;
-  } elsif ($line =~ m/^#\s+Taxid:/) {
+  } elsif ($line =~ m/^#\s+GenBank assembly accession:/i) {
+    if ($genBankAccessionID =~ m/notFound/) {
+      $genBankAccessionID = $line;
+      $genBankAccessionID =~ s/.*ccession:\s+//;
+      $genBankAccessionID =~ s/ .*//;
+    }
+  } elsif ($line =~ m/^#\s+Taxid:/i) {
     $taxId = $line;
     $taxId =~ s/.*Taxid:\s+//;
   } elsif ($line =~ m/^#\s+BioSample:/) {
@@ -95,7 +104,7 @@ while (my $line = <FH>) {
   } elsif ($line =~ m/^#\s+BioProject:/) {
     $ncbiBioProject = $line;
     $ncbiBioProject =~ s/.*BioProject:\s+//;
-    $ncbiGenomeId = `wget -O /dev/stdout "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=genome&term=$ncbiBioProject" 2> /dev/null | grep "<Id>" |  sed -e 's/[<>Id/]//g;'`;
+    $ncbiGenomeId = `wget -O /dev/stdout "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=genome&term=$ncbiBioProject" 2> /dev/null | grep "<Id>" |  sed -e 's/[<>Id/]//g;'`;
     $ncbiBioProject =~ s/PRJNA//;
     chomp $ncbiGenomeId;
   }
@@ -103,11 +112,11 @@ while (my $line = <FH>) {
 
 close (FH);
 
-my $previousOrder = `hgsql -N -e 'select orderKey from dbDb where organism="$commonName";' hgcentraltest | wc -l`;
+my $previousOrder = `hgsql -N -e 'select orderKey from dbDb where organism="$mySqlCommonName";' hgcentraltest | wc -l`;
 chomp $previousOrder;
 my $orderKey = 0;
 if ($previousOrder > 0) {
-  $orderKey = `hgsql -N -e 'select min(orderKey) from dbDb where organism="$commonName";' hgcentraltest | awk '{printf "%d", \$1-1}'`;
+  $orderKey = `hgsql -N -e 'select min(orderKey) from dbDb where organism="$mySqlCommonName";' hgcentraltest | awk '{printf "%d", \$1-1}'`;
 } else {
   $orderKey = `(printf "%s\t%s\n" "$db" "$commonName"; hgsql -N -e 'select name,organism,orderKey from dbDb order by orderKey;' hgcentraltest) | sort -k2 | grep -C 1 "$commonName" | cut -f3 | xargs echo | awk '{printf "%d", \$1+(\$2-\$1)/2}'`;
 }
@@ -122,7 +131,7 @@ if ( -s $mitoChr2Acc ) {
 }
 
 # do not need a genomeCladePriority if it already exists for this organism
-my $genomeCladeExists = `hgsql -N -e 'select genome from genomeClade where genome="$commonName";' hgcentraltest | wc -l`;
+my $genomeCladeExists = `hgsql -N -e 'select genome from genomeClade where genome="$mySqlCommonName";' hgcentraltest | wc -l`;
 chomp $genomeCladeExists;
 # if does not exist, use the most common value for this clade
 if ( $genomeCladeExists != 1 ) {
@@ -133,7 +142,7 @@ if ( $genomeCladeExists != 1 ) {
 if ($ncbiGenomeId eq "notFound") {
   my $searchTerm = $sciName;
   $searchTerm =~ s/ /+/g;
-  $ncbiGenomeId = `wget -O /dev/stdout "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=genome&term=$searchTerm" 2> /dev/null | grep "<Id>" |  sed -e 's/[<>Id/]//g;'`;
+  $ncbiGenomeId = `wget -O /dev/stdout "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=genome&term=$searchTerm" 2> /dev/null | grep "<Id>" |  sed -e 's/[<>Id/]//g;'`;
   chomp $ncbiGenomeId;
 }
 

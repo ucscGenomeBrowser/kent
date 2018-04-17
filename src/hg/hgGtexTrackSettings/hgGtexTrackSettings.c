@@ -67,6 +67,7 @@ puts(
 "                   <i class='gbWhiteColor fa fa-info fa-stack-1x'></i>\n"
 "               </span></a>\n"
 );
+
 if (tdb->parent)
     {
     // link to supertrack
@@ -125,7 +126,7 @@ puts(
 "        <!-- row 1 -->\n"
 "        <div class='row'>\n"
 "            <div class='gbControl col-md-12'>\n");
-gtexEqtlGene(cart, track, tdb);
+gtexEqtlUiGene(cart, track, tdb);
 puts(
 "            </div>\n"
 "        </div>\n");
@@ -133,7 +134,7 @@ puts(
 "        <!-- row 2 -->\n"
 "        <div class='row'>\n"
 "            <div class='gbControl col-md-12'>\n");
-gtexEqtlEffectSize(cart, track, tdb);
+gtexEqtlUiEffectSize(cart, track, tdb);
 puts(
 "            </div>\n"
 "        </div>\n");
@@ -141,7 +142,9 @@ puts(
 "        <!-- row 3 -->\n"
 "        <div class='row'>\n"
 "            <div class='gbControl col-md-12'>\n");
-gtexEqtlProbability(cart, track, tdb);
+gtexEqtlUiProbability(cart, track, tdb);
+puts("&nbsp;&nbsp;&nbsp;&nbsp;");
+gtexEqtlUiTissueColor(cart, track, tdb);
 puts(
 "            </div>\n"
 "        </div>\n");
@@ -238,17 +241,25 @@ int cols = 2;
 int last = count/2 + 1;
 
 puts(
- " <!-- Tissue list -->\n"
- "<div class='row gbSectionBanner'>\n"
- "  <div class='col-md-1'>Tissues</div>\n"
- "  <div class='col-md-7 gbSectionInfo'>\n"
- "      Click label below or in Body Map to set or clear a tissue\n"
- "  </div>\n"
- "  <div class='col-md-4 gbButtonContainer text-right'>\n"
- "      <div id='setAll' class='gbButtonSetClear gbButton'>set all</div>\n"
- "      <div id='clearAll' class='gbButtonSetClear gbButton'>clear all</div>\n"
- "  </div>\n"
- "</div>\n"
+" <!-- Tissue list -->\n"
+"<div class='row gbSectionBanner'>\n"
+"  <div class='col-md-2'>Tissues\n"
+"    <!-- Info icon built from stacked fa icons -->\n"
+"    <span id='showSampleCount' title='Show sample counts'>\n"
+"      <span class='gbIconSmall fa-stack'>\n"
+"        <i class='gbBlueDarkColor fa fa-circle fa-stack-2x'></i>\n"
+"        <i class='gbWhiteColor fa fa-info fa-stack-1x'></i>\n"
+"      </span></a>\n"
+"    </span>\n"
+"  </div>\n"
+"  <div class='col-md-6 gbSectionInfo'>\n"
+"      Click below or in Body Map to change tissues\n"
+"  </div>\n"
+"  <div class='col-md-4 gbButtonContainer text-right'>\n"
+"    <div id='setAll' class='gbButtonSetClear gbButton'>set all</div>\n"
+"    <div id='clearAll' class='gbButtonSetClear gbButton'>clear all</div>\n"
+"  </div>\n"
+"</div>\n"
 );
 
 puts(
@@ -264,10 +275,14 @@ for (tis = tissues; tis != NULL; tis = tis->next)
     tisTable[i] = tis;
     }
 boolean all = (hashNumEntries(selectedHash) == 0) ? TRUE : FALSE;
+struct hash *tscHash = gtexGetTissueSampleCount(version);
 for (i=0; i<count; i++)
     {
     tis = tisTable[i];
     boolean isChecked = all || (hashLookup(selectedHash, tis->name) != NULL);
+    printf(
+            "<td class='gbmTissueSampleCount'>%s%d</td>\n ", 
+                i == 0 ? "N= ":"", hashIntValDefault(tscHash, tis->name, 0));
     printf(
             "<td class='gbmTissueColorPatch %s' "
                 "data-tissueColor=#%06X ",

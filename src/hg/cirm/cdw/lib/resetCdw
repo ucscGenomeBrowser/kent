@@ -1,35 +1,43 @@
 #!/bin/tcsh -efx
 
+# TODO GALT add a section or method for unlocking stuff submitted from valData
+# so that it will not be lost.
+# must do this before we lose the db so that cdwUnlockSubmittedFile will work
+./resetValData
+
 # Kill any running daemons
 killall cdwRunDaemon
 
+# I currently have it saved to /data/cirm/hgwdevRestore/dbDump
 # Destroy current cdw and make a fresh one
 hgsql cdw -e "drop database cdw"
 
-# Create fifos for submission daemon.  Write 'hi' to
+# Create fifo for qa agent daemon.  Write 'hi' to
 # is so that it'll notice that the database is gone and kill itself
 # if it is already running
-set subFifo = /usr/local/apache/userdata/cdwSubmit.fifo
-if (! -e $subFifo) then
-    mkfifo $subFifo
-    chmod a+x $subFifo
-endif
-echo hi > $subFifo &
+
+# Actually, this is NOT used in CIRM.
+#set subFifo = /usr/local/apache/userdata/cdwSubmit.fifo
+#if (! -e $subFifo) then
+#    mkfifo $subFifo
+#    chmod a+x $subFifo
+#endif
+#echo hi > $subFifo &
 
 # Do same thing for QA agent daemon.
 set qaFifo = /usr/local/apache/userdata/cdwQaAgent.fifo
 if (! -e $qaFifo) then
     mkfifo $qaFifo
     chmod a+x $qaFifo
-    echo hi > $qaFifo &
 endif
 echo hi > $qaFifo &
 
 # Do the often time consuming removal of all data.
-rm -rf /hive/groups/cirm/data/cdw
+# I currently have it saved to /data/cirm/hgwdevRestore/cdw
+rm -rf /data/cirm/cdw
 
 # Make new data directory.
-mkdir -p /hive/groups/cirm/data/cdw
+mkdir -p /data/cirm/cdw
 
 # Create database and populate it with empty tables.
 hgsql hgFixed -e "create database cdw"
@@ -40,17 +48,19 @@ hgsql -e "insert into cdwSettings (name,val) values ('prefix', 'SCHb')" cdw
 
 # Create users
 cdwCreateUser kent@soe.ucsc.edu
+cdwCreateUser galt@soe.ucsc.edu
 hgsql -e "update cdwUser set isAdmin=1 where email='kent@soe.ucsc.edu'" cdw
+hgsql -e "update cdwUser set isAdmin=1 where email='galt@soe.ucsc.edu'" cdw
 cdwCreateUser cdw@cirm-01
 cdwCreateUser brianlee@soe.ucsc.edu
-cdwAddAssembly 9606 hg19 hg19 /data/cirm/valData/hg19/hg19.2bit -symLink=bcdbfbe9da62f19bee88b74dabef8cd3
-cdwAddAssembly 9606 hg38 hg38 /data/cirm/valData/hg38/hg38.2bit -symLink=dcc3ea27079aa6dc3f9deccd7275e0f8
-cdwAddAssembly 10090 mm9 mm9 /data/cirm/valData/mm9/mm9.2bit -symLink=e47354d24b9d95e832c337d42b9f8f71
-cdwAddAssembly 10090 mm10 mm10 /data/cirm/valData/mm10/mm10.2bit -symLink=fcfcc276799031793a513e2e9c07adad
-cdwAddAssembly 10116 rn4 rn4 /data/cirm/valData/rn4/rn4.2bit -symLink=9f0ed3cd87ab900be5e8157dbeaee12e
-cdwAddAssembly 7227 dm6 dm6 /data/cirm/valData/dm6/dm6.2bit -symLink=a2855251bb81479b1742dbbbd575fdcc
-cdwAddAssembly 559292 sacCer3 sacCer3 /data/cirm/valData/sacCer3/sacCer3.2bit -symLink=880201a7d1ec95c0185b0b4783c80411
-cdwAddAssembly 6239 ce10 ce10 /data/cirm/valData/ce10/ce10.2bit -symLink=3d0bab4bc255fc5b3276a476e13d230c
+cdwAddAssembly 9606 hg19 hg19 /data/cirm/valData/hg19/hg19.2bit -givenMd5=bcdbfbe9da62f19bee88b74dabef8cd3
+cdwAddAssembly 9606 hg38 hg38 /data/cirm/valData/hg38/hg38.2bit -givenMd5=8c0d7fe26540718c381a8d458274f270
+cdwAddAssembly 10090 mm9 mm9 /data/cirm/valData/mm9/mm9.2bit -givenMd5=e47354d24b9d95e832c337d42b9f8f71
+cdwAddAssembly 10090 mm10 mm10 /data/cirm/valData/mm10/mm10.2bit -givenMd5=fcfcc276799031793a513e2e9c07adad
+cdwAddAssembly 10116 rn4 rn4 /data/cirm/valData/rn4/rn4.2bit -givenMd5=9f0ed3cd87ab900be5e8157dbeaee12e
+cdwAddAssembly 7227 dm6 dm6 /data/cirm/valData/dm6/dm6.2bit -givenMd5=a2855251bb81479b1742dbbbd575fdcc
+cdwAddAssembly 559292 sacCer3 sacCer3 /data/cirm/valData/sacCer3/sacCer3.2bit -givenMd5=880201a7d1ec95c0185b0b4783c80411
+cdwAddAssembly 6239 ce10 ce10 /data/cirm/valData/ce10/ce10.2bit -givenMd5=3d0bab4bc255fc5b3276a476e13d230c
 cdwAddAssembly 562 escCol1 escCol1 /data/cirm/valData/escCol1/escCol1.2bit
 cdwAddQaEnrichTarget open hg19 /data/cirm/valData/hg19/regions/open.bb
 cdwAddQaEnrichTarget exon hg19 /data/cirm/valData/hg19/regions/exon.bb
@@ -108,8 +118,8 @@ cdwAddQaContamTarget ce10
 cdwAddQaContamTarget rn4
 cdwAddQaContamTarget sacCer3
 hgsql cdw -e 'insert cdwLab (name,pi,institution,url) values ("quake", "Stephen Quake", "Stanford University", "http://thebigone.stanford.edu")'
-hgsql cdw -e 'insert cdwLab (name,pi,institution,url) values ("snyder", "Michael Snyder", "Stanford University", "http://snyderlab.stanford.edu")'
-hgsql cdw -e 'insert cdwLab (name,pi,institution,url) values ("stam", "John Stamatoyannopoulus", "University of Washington", "http://stamlab.org")'
+#hgsql cdw -e 'insert cdwLab (name,pi,institution,url) values ("snyder", "Michael Snyder", "Stanford University", "http://snyderlab.stanford.edu")'
+#hgsql cdw -e 'insert cdwLab (name,pi,institution,url) values ("stam", "John Stamatoyannopoulus", "University of Washington", "http://stamlab.org")'
 hgsql cdw -e 'insert cdwLab (name,pi,institution,url) values ("kent", "W. James Kent", "UC Santa Cruz", "http://users.soe.ucsc.edu/~kent")'
 hgsql cdw -e 'create view enrichedFiles as select f.id,v.format,v.enrichedIn,e.enrichment,left(f.submitFileName,70) submitFileName from cdwQaEnrich e,cdwValidFile v,cdwFile f,cdwQaEnrichTarget t where e.fileId=f.id and v.fileId=f.id and t.id=e.qaEnrichTargetId and v.enrichedIn=t.name;'
 hgsql cdw -e 'create view crossEnrichments as select e.id aId,e.cdwFileName aFileName,y.id bId,y.cdwFileName bFileName,ev.enrichedIn enrich,sampleSampleEnrichment xEnrichment from cdwFile e,cdwQaPairSampleOverlap p, cdwFile y,cdwValidFile ev where e.id=p.elderFileId and y.id=p.youngerFileId and ev.fileId = e.id'
@@ -127,5 +137,11 @@ hgsql cdw -e 'create view xf as select fileId,submitId,submitFileName,cdwFileNam
 #hgsql cdw < ../../eap/lib/eapDb.sql
 #../../eap/lib/addSoftware
 
+# TODO !!! There are 4 tables starting with cdwStep that are not created by the script.
+# TODO Check out cdwStep.sql in this directory
+
 # Relaunch cdwRunDaemons.  Send them initial wake up message
-restartDeamons
+if (-e cdwQaAgent.log ) then
+    rm cdwQaAgent.log
+endif
+restartDaemons

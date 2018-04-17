@@ -41,7 +41,7 @@ struct slInt *fileIdList = sqlQuickNumList(conn, query);
 verbose(1, "%d files in %s\n", slCount(fileIdList), submitDir);
 struct slInt *el;
 for (el = fileIdList; el != NULL; el = el->next)
-    cdwReallyRemoveFile(conn, el->val, really);
+    cdwReallyRemoveFile(conn, submitDir, el->val, FALSE, really); 
 
 sqlSafef(query, sizeof(query), "delete from cdwSubmit where submitDirId = %d", submitDirId);
 if (really)
@@ -52,7 +52,9 @@ sqlSafef(query, sizeof(query), "delete from cdwSubmitDir where id = %d", submitD
 if (really)
     sqlUpdate(conn, query);
 
-verbose(1, "Please remove dataset from cdwDataSet table and run cdwMakeFileTags as well\n");
+verbose(1, "Please remove dataset from cdwDataset table and run cdwMakeFileTags as well\n");
+if (!really)
+    verbose(1, "-really was not specified. Dry run only.\n");
 }
 
 int main(int argc, char *argv[])

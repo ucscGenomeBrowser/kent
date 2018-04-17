@@ -13,7 +13,7 @@ of the same gene; the VAI will return the predicted functional effect
 for each transcript.  The VAI can optionally add several other
 types of relevant information: the dbSNP identifier if the variant
 is found in
-<A HREF="http://www.ncbi.nlm.nih.gov/projects/SNP/"
+<A HREF="https://www.ncbi.nlm.nih.gov/projects/SNP/"
 TARGET=_BLANK>dbSNP</A>,
 protein damage scores for missense variants from the
 <A HREF="https://sites.google.com/site/jpopgen/dbNSFP"
@@ -142,6 +142,13 @@ spans an exon/intron border or a coding sequence/UTR border.</TD></TR>
 <TR><TD><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001792"
 TARGET=_BLANK>non_coding_exon_variant</A></TD>
 <TD>A sequence variant that changes exon sequence of a non-coding gene.</TD></TR>
+<TR><TD><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0002073"
+TARGET=_BLANK>no_sequence_alteration</A></TD>
+<TD>A variant that causes no change to the transcript sequence and/or
+specifies only the reference allele, no alternate allele.
+In rare cases when the transcript sequence (e.g. from RefSeq) differs from the
+reference genome assembly, a difference from the reference genome may restore
+the transcript sequence instead of altering it.</TD></TR>
 </TABLE>
 </P>
 
@@ -179,7 +186,7 @@ missense variant would damage a protein's structure and function:
     to predict whether an amino acid substitution affects protein function.
     Scores less than 0.05 are classified as Damaging (&quot;D&quot; in output);
     higher scores are classified as Tolerated (&quot;T&quot;).
-    (<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/12824425"
+    (<A HREF="https://www.ncbi.nlm.nih.gov/pubmed/12824425"
     TARGET=_BLANK>Ng and Henikoff, 2003</A>)
     </LI>
 <LI><B><A HREF="http://genetics.bwh.harvard.edu/pph2/"
@@ -203,7 +210,7 @@ missense variant would damage a protein's structure and function:
     &quot;probably damaging&quot; (&quot;D&quot;) for scores in [0.909, 1];
     &quot;possibly damaging&quot; (&quot;P&quot;) for scores in [0.447, 0.908];
     &quot;benign&quot; (&quot;B&quot;) for scores in [0, 0.446].
-    (<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/20354512"
+    (<A HREF="https://www.ncbi.nlm.nih.gov/pubmed/20354512"
     TARGET=_BLANK>Adzhubei <em>et al.</em>, 2010</A>)
     </LI>
 <LI><B><A HREF="http://www.mutationtaster.org/"
@@ -227,7 +234,7 @@ missense variant would damage a protein's structure and function:
     the prediction; probabilities close to 0 for an automatic prediction
     (&quot;A&quot; or &quot;P&quot;)
     can indicate that the classifier predicted a different outcome.
-    (<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/20676075"
+    (<A HREF="https://www.ncbi.nlm.nih.gov/pubmed/20676075"
     TARGET=_BLANK>Schwarz <em>et al.</em>, 2010</A>)
     </LI>
 <LI><B><A HREF="http://mutationassessor.org/"
@@ -240,7 +247,7 @@ missense variant would damage a protein's structure and function:
     A prediction of &quot;high&quot; or &quot;medium&quot; indicates that the
     variant probably has some functional impact, while &quot;low&quot; or
     &quot;neutral&quot; indicate that the variant is probably function-neutral.
-    (<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/21727090"
+    (<A HREF="https://www.ncbi.nlm.nih.gov/pubmed/21727090"
     TARGET=_BLANK>Reva <em>et al.</em>, 2011</A>)
     </LI>
 <LI><B><A HREF="http://www.genetics.wustl.edu/jflab/lrt_query.html"
@@ -249,7 +256,7 @@ missense variant would damage a protein's structure and function:
     amino acids.
     Variants are predicted to be deleterious (&quot;D&quot;), neutral (&quot;N&quot;)
     or unknown (&quot;U&quot;).
-    (<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/19602639"
+    (<A HREF="https://www.ncbi.nlm.nih.gov/pubmed/19602639"
     TARGET=_BLANK>Chun and Fay, 2009</A>)
     </LI>
 <LI><B><A HREF="http://karchinlab.org/apps/appVest.html"
@@ -258,7 +265,7 @@ missense variant would damage a protein's structure and function:
     uses a classifier that was trained with ~45,000 disease mutations from HGMD
     and ~45,000 high frequency missense variants (putatively neutral) from the
     Exome Sequencing Project.
-    (<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/23819870"
+    (<A HREF="https://www.ncbi.nlm.nih.gov/pubmed/23819870"
     TARGET=_BLANK>Carter <em>et al.</em>, 2013</A>)
 </LI>
 </UL>
@@ -267,12 +274,12 @@ missense variant would damage a protein's structure and function:
 In addition, dbNSFP provides
 <A HREF="http://www.ebi.ac.uk/interpro/"
 TARGET=_BLANK>InterPro</A> protein domains where available
-(<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/22096229"
+(<A HREF="https://www.ncbi.nlm.nih.gov/pubmed/22096229"
 TARGET=_BLANK>Hunter <em>et al.</em>, 2012</A>) and two measures
 of conservation computed by
 <A HREF="http://mendel.stanford.edu/SidowLab/downloads/gerp/index.html"
 TARGET=_BLANK>GERP++</A>
-(<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/21152010"
+(<A HREF="https://www.ncbi.nlm.nih.gov/pubmed/21152010"
 TARGET=_BLANK>Davydov <em>et al.</em>, 2010</A>).
 </P>
 
@@ -294,7 +301,7 @@ TARGET=_BLANK>Davydov <em>et al.</em>, 2010</A>).
     <li><b>RefSeq status:</b>
       when RefSeq Genes are selected in the "Select Genes" section,
       the transcript's
-      <A HREF="http://www.ncbi.nlm.nih.gov/books/NBK21091/table/ch18.T.refseq_status_codes"
+      <A HREF="https://www.ncbi.nlm.nih.gov/books/NBK21091/table/ch18.T.refseq_status_codes"
          TARGET=_BLANK>status</A> can be included in output.
     </li>
     <li><b>Canonical UCSC transcripts:</b>
@@ -311,7 +318,7 @@ TARGET=_BLANK>Davydov <em>et al.</em>, 2010</A>).
 <h3>Known variation</h3>
 <P>
 If the selected genome assembly has a SNPs track (derived from
-<A HREF="http://www.ncbi.nlm.nih.gov/projects/SNP/" TARGET=_BLANK>dbSNP</A>),
+<A HREF="https://www.ncbi.nlm.nih.gov/projects/SNP/" TARGET=_BLANK>dbSNP</A>),
 when a variant has the same start and end coordinates as a variant in
 dbSNP,
 the VAI includes the reference SNP (rs#) identifier in the output.

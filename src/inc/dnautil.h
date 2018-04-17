@@ -261,14 +261,18 @@ int maskHeadPolyT(DNA *dna, int size);
 boolean isDna(char *poly, int size);
 /* Return TRUE if letters in poly are at least 90% ACGTNU- */
 
-boolean isAllDna(char *poly, int size);
-/* Return TRUE if size is great than 1 and all letters in poly are 100% ACGTNU- */
-
 boolean isAllNt(char *seq, int size);
 /* Return TRUE if all letters in seq are ACGTNU-. */
 
 char aaAbbrToLetter(char *abbr);
 /* Convert an AA abbreviation such as "Ala", "Asp" etc., to its single letter code
  * such as "A", "D" etc.  Return the null char '\0' if abbr is not found. */
+
+void aaToAbbr(char aa, char *abbrBuf, size_t abbrBufSize);
+/* Convert an AA single letter such as "A", "D" etc. to its abbreviation such as "Ala", "Asp" etc.
+ * abbrBufSize must be at least 4.  If aa is not found, "?%c?",aa is written into abbrBuf. */
+
+void trimRefAlt(char *ref, char *alt, uint *pStart, uint *pEnd, int *pRefLen, int *pAltLen);
+/* If ref and alt have identical bases at beginning and/or end, trim those & update all params. */
 
 #endif /* DNAUTIL_H */

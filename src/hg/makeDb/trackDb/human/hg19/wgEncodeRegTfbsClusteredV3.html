@@ -3,7 +3,8 @@
 This track shows regions of transcription factor binding derived from a large collection
 of ChIP-seq experiments performed by the ENCODE project, together with DNA binding motifs 
 identified within these regions by the ENCODE
-<a target="_blank" href="http://www.factorbook.org/mediawiki/index.php/Welcome_to_factorbook">Factorbook</a> repository.</p>
+<a target="_blank" href="http://v1.factorbook.org/mediawiki/index.php/Welcome_to_factorbook">
+Factorbook</a> repository.</p>
 <p>
 Transcription factors (TFs) are proteins that bind to DNA and interact with RNA polymerases to
 regulate gene expression.  Some TFs contain a DNA binding domain and can bind directly to 
@@ -47,8 +48,8 @@ The cell lines where signal was detected for the factor are identified by single
 abbreviations shown to the right of the cluster.  
 The darkness of each letter is proportional to the signal strength observed in the cell line. 
 Abbreviations starting with capital letters designate
-<a target="_blank" href="http://encodeproject.org/ENCODE/cellTypes.html">ENCODE cell types</a>
-identified for intensive study - Tier 1 and Tier 2 - 
+<a href="https://www.encodeproject.org/search/?type=Biosample&organism.scientific_name=Homo+sapiens"
+target="_blank">ENCODE cell types</a> identified for intensive study - Tier 1 and Tier 2 - 
 while those starting with lowercase letters designate Tier 3 cell lines.</p>
 <p>
 Click on a peak cluster to see more information about the TF/cell assays contributing to the
@@ -72,11 +73,12 @@ but assigning all above to the maximum score.
 The cluster score is the highest score for any peak contributing to the cluster.</p>  
 <p>
 The Factorbook motif discovery and annotation pipeline uses
-the MEME-ChIP and FIMO tools from the <a target=_blank href="http://meme.nbcr.net/meme/">MEME</a>
-software suite in conjunction with machine learning methods and
+the MEME-ChIP and FIMO tools from the <a href="http://meme-suite.org/doc/overview.html"
+target="_blank">MEME</a> software suite in conjunction with machine learning methods and
 manual curation to merge discovered motifs with known motifs reported in 
 <a target="blank" href="http://jaspar.genereg.net/">Jaspar</a> and
-<a target="blank" href="http://www.biobase-international.com/product/transcription-factor-binding-sites">TransFac</a>.
+<a href="https://portal.biobase-international.com/build_t/idb/1.0/html/bkldoc/source/bkl/transfac%20suite/transfac/tf_intro.html"
+target="_blank">TransFac</a>.
 Motif identifications reported in Wang et al. 2012 (below) were supplemented in this track
 with more recent data (derived from newer ENCODE datasets - Jan 2011 through Mar 2012 freezes),
 provided by the Factorbook team.  Motif identifications from all datasets were merged, with
@@ -119,7 +121,7 @@ for this track also contains a BED file,
 </p>
 <p>
 The <a target=_blank
-href="http://www.factorbook.org/mediawiki/index.php/Welcome_to_factorbook">Factorbook</a>
+href="http://v1.factorbook.org/mediawiki/index.php/Welcome_to_factorbook">Factorbook</a>
 motif positions that display as green boxes on the track come from an additional table
 called <em>factorbookMotifPos</em>, and are supported by additional metadata tables such as
 <em>factorbookMotifCanonical</em> that connects different terms used
@@ -136,7 +138,7 @@ target="_blank">public MySQL server</a> and as files on our
 <h2>Credits</h2>
 <p>
 This track shows ChIP-seq data from the <a href='http://archive.hudsonalpha.org/myers-lab'
-target="_blank">Myers Lab</a> at the <a href='http://hudsonalpha.org/'
+target="_blank">Myers Lab</a> at the <a href="https://hudsonalpha.org/"
 target="_blank">HudsonAlpha Institute for Biotechnology</a> and by the labs of
 <a href="http://snyderlab.stanford.edu/" target="_blank">Michael Snyder</a>,
 <a href="http://bioinfo.mbb.yale.edu/" target="_blank">Mark Gerstein</a>,
@@ -155,18 +157,18 @@ developed by
 The clustering of the uniform peaks was performed by UCSC.
 The Factorbook motif identifications and localizations (and valuable assistance with 
 interpretation) were provided by Jie Wang, Bong Hyun Kim and Jiali Zhuang of the 
-<a target=_blank href="http://www.umassmed.edu/zlab/">Zlab (Weng Lab)</a> at UMass Medical School.
-</p>
+<a target="_blank" href="https://www.umassmed.edu/zlab/">Zlab (Weng Lab)</a> at UMass Medical
+School.</p>
 
 <h2>References</h2>
 
 <p>
 Gerstein MB, Kundaje A, Hariharan M, Landt SG, Yan KK, Cheng C, Mu XJ, Khurana E, Rozowsky J,
 Alexander R <em>et al</em>.
-<a href="http://www.nature.com/nature/journal/v489/n7414/abs/nature11245.html" target="_blank">
+<a href="https://www.nature.com/articles/nature11245" target="_blank">
 Architecture of the human regulatory network derived from ENCODE data</a>.
 <em>Nature</em>. 2012 Sep 6;489(7414):91-100.
-PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/22955619" target="_blank">22955619</a>
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/22955619" target="_blank">22955619</a>
 </p>
 <p>
 Wang J, Zhuang J, Iyer S, Lin X, Whitfield TW, Greven MC, Pierce BG, Dong X, Kundaje A, Cheng Y
@@ -175,18 +177,18 @@ Wang J, Zhuang J, Iyer S, Lin X, Whitfield TW, Greven MC, Pierce BG, Dong X, Kun
 Sequence features and chromatin structure around the genomic regions bound by 119 human
 transcription factors</a>.
 <em>Genome Res</em>. 2012 Sep;22(9):1798-812.
-PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/22955990" target="_blank">22955990</a>; PMC: <a
-href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3431495/" target="_blank">PMC3431495</a>
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/22955990" target="_blank">22955990</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3431495/" target="_blank">PMC3431495</a>
 </p>
 <p>
 Wang J, Zhuang J, Iyer S, Lin XY, Greven MC, Kim BH, Moore J, Pierce BG, Dong X, Virgil D <em>et
 al</em>.
-<a href="http://nar.oxfordjournals.org/content/41/D1/D171.long" target="_blank">
+<a href="https://academic.oup.com/nar/article/41/D1/D171/1069417" target="_blank">
 Factorbook.org: a Wiki-based database for transcription factor-binding data generated by the ENCODE
 consortium</a>.
 <em>Nucleic Acids Res</em>. 2013 Jan;41(Database issue):D171-6.
-PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/23203885" target="_blank">23203885</a>; PMC: <a
-href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3531197/" target="_blank">PMC3531197</a>
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/23203885" target="_blank">23203885</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3531197/" target="_blank">PMC3531197</a>
 </p>
 
 <h2>Data Release Policy</h2>

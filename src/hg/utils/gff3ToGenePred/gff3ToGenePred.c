@@ -28,6 +28,7 @@ errAbort(
   "   name2 column\n"
   "  -attrsOut=file - output attributes of mRNA record to file.  These are per-genePred row,\n"
   "   not per-GFF3 record. Thery are derived from GFF3 attributes, not the attributes themselves.\n"
+  "  -processAllGeneChildren - output genePred for all children of a gene regardless of feature\n"
   "  -unprocessedRootsOut=file - output GFF3 root records that were not used.  This will not be a\n"
   "   valid GFF3 file.  It's expected that many non-root records will not be used and they are not\n"
   "   reported.\n"
@@ -44,6 +45,9 @@ errAbort(
   "   transcripts which contain exons.  If this option is specified, genes with exons\n"
   "   as direct children of genes and stand alone genes with no exon or transcript\n"
   "   children will be converted.\n"
+  "  -refseqHacks - enable various hacks to make RefSeq conversion work:\n"
+  "     This turns on -useName, -allowMinimalGenes, and -processAllGeneChildren.\n"
+  "     It try harder to find an accession in attributes\n"
   "\n"
   "This converts:\n"
   "   - top-level gene records with RNA records\n"
@@ -79,6 +83,8 @@ static struct optionSpec options[] = {
     {"allowMinimalGenes", OPTION_BOOLEAN},
     {"attrsOut", OPTION_STRING},
     {"bad", OPTION_STRING},
+    {"processAllGeneChildren", OPTION_BOOLEAN},
+    {"refseqHacks", OPTION_BOOLEAN},
     {"unprocessedRootsOut", OPTION_STRING},
     {NULL, 0},
 };
@@ -89,20 +95,61 @@ static boolean warnAndContinue = FALSE;
 static boolean honorStartStopCodons = FALSE;
 static boolean defaultCdsStatusToUnknown = FALSE;
 static boolean allowMinimalGenes = FALSE;
+static boolean processAllGeneChildren = FALSE;
+static boolean refseqHacks = FALSE;
 static int maxParseErrors = 50;  // maximum number of errors during parse
 static int maxConvertErrors = 50;  // maximum number of errors during conversion
 static int convertErrCnt = 0;  // number of convert errors
 
-static FILE *outGeneMetaFp = NULL;
+static FILE *outAttrsFp = NULL;
 static FILE *outBadFp = NULL;
 static FILE *outUnprocessedRootsFp = NULL;
+
+static char **cdsFeatures[] = {
+    &gff3FeatCDS,
+    NULL
+};
+static char **cdsExonFeatures[] = {
+    &gff3FeatExon,
+    &gff3FeatCDS,
+    NULL
+};
+static char **cdjvFeatures[] = {
+    &gff3FeatCGeneSegment,
+    &gff3FeatDGeneSegment,
+    &gff3FeatJGeneSegment,
+    &gff3FeatVGeneSegment,
+    NULL
+};
+static char** geneFeatures[] = {
+    &gff3FeatGene,
+    &gff3FeatPseudogene,
+    NULL
+};
+static char** transFeatures[] = {
+    &gff3FeatMRna,
+    &gff3FeatNCRna,
+    &gff3FeatCDS,
+    &gff3FeatRRna,
+    &gff3FeatTRna,
+    &gff3FeatCGeneSegment,
+    &gff3FeatDGeneSegment,
+    &gff3FeatJGeneSegment,
+    &gff3FeatVGeneSegment,
+    &gff3FeatTranscript,
+    &gff3FeatPrimaryTranscript,
+    NULL
+};
 
 static void cnvError(char *format, ...)
 /* print a GFF3 to gene conversion error.  This will return.  Code must check
  * for error count to be exceeded and unwind to the top level to print a usefull
  * error message and abort. */
 {
-fputs("Error: ", stderr);
+if (warnAndContinue)
+    fputs("Warning: skipping: ", stderr);
+else
+    fputs("Error: ", stderr);
 va_list args;
 va_start(args, format);
 vfprintf(stderr, format, args);
@@ -140,18 +187,6 @@ if (gff3File->errCnt > 0)
 return gff3File;
 }
 
-static boolean haveChildFeature(struct gff3Ann *parent, char *featName)
-/* does a child feature of the specified they exist as a child */
-{
-struct gff3AnnRef *child;
-for (child = parent->children; child != NULL; child = child->next)
-    {
-    if (sameString(child->ann->type, featName))
-        return TRUE;
-    }
-return FALSE;
-}
-
 static struct gff3AnnRef *getChildFeatures(struct gff3Ann *parent, char *featName)
 /* build sorted list of the specified children */
 {
@@ -163,6 +198,48 @@ for (child = parent->children; child != NULL; child = child->next)
     }
 slSort(&feats, gff3AnnRefLocCmp);
 return feats;
+}
+
+static boolean featTypeMatch(char *type, char** types[])
+/* check if type is in NULL terminated list of feature type name.
+ * This has one extra level of indirection to allow initializing
+ * from GFF3 feature definitions (gff3FeatCds, etc). */
+{
+int i;
+for (i = 0; types[i] != NULL; i++)
+    if (sameString(type, *(types[i])))
+        return TRUE;
+return FALSE;
+}
+
+static struct gff3Ann *findChildTypeMatch(struct gff3Ann *node, struct gff3AnnRef *prevChildRef, char** types[])
+/* Find the first or next child of node of one of the particular types.  The prevChild arg should
+ * be NULL on the first call */
+{
+struct gff3AnnRef *child;
+for (child = ((prevChildRef == NULL) ? node->children : prevChildRef);
+     child != NULL; child = child->next)
+    if (featTypeMatch(child->ann->type, types))
+        return child->ann;
+return NULL;
+}
+
+static boolean haveChildTypeMatch(struct gff3Ann *node, char** types[])
+/* Does the node have a child matching one of the types. */
+{
+return findChildTypeMatch(node, NULL, types) != NULL;
+}
+
+static boolean haveChildFeature(struct gff3Ann *parent, char *featName)
+/* does a child feature of the specified they exist as a child */
+{
+struct gff3AnnRef *child;
+for (child = parent->children; child != NULL; child = child->next)
+    {
+    if (sameString(child->ann->type, featName))
+        return TRUE;
+    }
+return FALSE;
 }
 
 static void setCdsStatFromCodons(struct genePred *gp, struct gff3Ann *mrna)
@@ -180,6 +257,29 @@ else
     }
 }
 
+static boolean isGeneWithCdsChildCase(struct gff3Ann* mrna)
+/* is this one of the refseq gene with a direct CDS child? */
+{
+return sameString(mrna->type, gff3FeatGene) && (mrna->children != NULL)
+    && (sameString(mrna->children->ann->type, gff3FeatCDS));
+}
+
+static char* refSeqHacksFindName(struct gff3Ann* mrna)
+/* return the value to use for the genePred name field under refSeqHacks
+ * rules. */
+{
+// if this is a gene with CDS child, the get the id out of the CDS if it looks like
+// a refseq accession
+if (isGeneWithCdsChildCase(mrna))
+    {
+    // is name something like YP_203370.1 (don't try too hard)
+    struct gff3Ann *cds = mrna->children->ann;
+    if ((strlen(cds->name) > 4) && isupper(cds->name[0]) && isupper(cds->name[1])
+        && (cds->name[2] == '_') && isdigit(cds->name[3]))
+        return cds->name;
+    }
+return NULL;
+}
 
 static char* getRnaName(struct gff3Ann* mrna)
 /* return the value to use for the genePred name field */
@@ -191,6 +291,8 @@ if (rnaNameAttr != NULL)
     if (attr != NULL)
         name = attr->vals->name;
     }
+if (isEmpty(name) && refseqHacks)
+    name = refSeqHacksFindName(mrna);
 if (isEmpty(name))
     name = (useName ? mrna->name : mrna->id);
 if (isEmpty(name))
@@ -209,8 +311,10 @@ if (geneNameAttr != NULL)
     if (attr != NULL)
         name2 = attr->vals->name;
     }
+if (isEmpty(name2) && useName)
+    name2 = gene->name;
 if (isEmpty(name2))
-    name2 = (useName ? gene->name : gene->id);
+    name2 = gene->id;
 return name2;
 }
 
@@ -256,11 +360,22 @@ return gp;
 }
 
 
-static void doOutGeneMeta(FILE *outGeneMetaFp, struct genePred *gp, struct gff3Ann *parent)
+static void doOutAttrs(FILE *outAttrsFp, char *name, struct gff3Ann *ann)
+/* Write attributes for -attrsOut */
 {
 struct gff3Attr *attr;
-for(attr=parent->attrs; attr; attr=attr->next)
-    fprintf(outGeneMetaFp, "%s\t%s\t%s\n",gp->name, attr->tag, attr->vals->name);
+for(attr=ann->attrs; attr; attr=attr->next)
+    {
+    fprintf(outAttrsFp, "%s\t%s\t", name, attr->tag);
+    struct slName *val;
+    for (val = attr->vals; val; val = val->next)
+        {
+        if (val != attr->vals)
+            fputc(',', outAttrsFp);
+        fprintf(outAttrsFp, "%s", val->name);
+        }
+    fputc('\n', outAttrsFp);
+    }
 }
 
 static void outputGenePred(struct gff3Ann *mrna, FILE *gpFh, struct genePred *gp)
@@ -274,29 +389,17 @@ safef(description, sizeof(description), "genePred from GFF3: %s:%d",
       ((mrna->file != NULL) ? mrna->file->fileName : "<unknown>"),
       mrna->lineNum);
 int ret = genePredCheck(description, stderr, -1, gp);
-if (warnAndContinue)
+if (ret == 0)
     {
-    if (ret == 0)
-	{
-	genePredTabOut(gp, gpFh);
-	if (outGeneMetaFp)
-	    doOutGeneMeta(outGeneMetaFp, gp,  mrna);
-	}
-    else
-	{
-	warn("dropping invalid genePred: %s %s:%d-%d", gp->name, gp->chrom, gp->txStart, gp->txEnd);
-	if (outBadFp)
-	    genePredTabOut(gp, outBadFp);
-	}
+    genePredTabOut(gp, gpFh);
+    if (outAttrsFp)
+        doOutAttrs(outAttrsFp, gp->name,  mrna);
     }
 else
     {
-    // output before checking so it can be examined
-    genePredTabOut(gp, gpFh);
-    if (outGeneMetaFp)
-	doOutGeneMeta(outGeneMetaFp, gp,  mrna);
-    if (ret != 0)
-	cnvError("invalid genePred created: %s %s:%d-%d", gp->name, gp->chrom, gp->txStart, gp->txEnd);
+    if (outBadFp)
+        genePredTabOut(gp, outBadFp);
+    cnvError("invalid genePred created: %s %s:%d-%d", gp->name, gp->chrom, gp->txStart, gp->txEnd);
     }
 }
 
@@ -522,22 +625,44 @@ if (gp != NULL)
 return gp;  // NULL if error above
 }
 
+static boolean isNcbiLikeSegmentGene(struct gff3Ann *gene)
+/* NCBI annotates [CDJV]_gene_segment genes as a gene with a CDJV]_gene_segment
+ * child with exon children. However the CDS features are direct children of the gene
+ * rather than the [CDJV]_gene_segment.  This is different than all other
+ * transcript for some reason.  This will find NCBI annotations and imitations.   */
+{
+return haveChildTypeMatch(gene, cdsFeatures)
+    && haveChildTypeMatch(gene, cdjvFeatures);
+}
+
+static void fixNcbiLikeSegmentGene(struct gff3Ann *gene)
+/* adjust gene structure (see above) dropping CDS annotation and keeping
+ * [CDJV]_gene_segment features as `transcripts' along with their exons.
+ * Sometimes the CDS extends outside of exon bounds.  For multi-transcript
+ * genes it is hard to figure out where to put the CDS. */
+{
+// Drop CDS, always starting search from start due to removing
+warn("Warning: dropping CDS from %s %s at %s:%d-%d as we are unable to convert this form of annotation to genePred",
+     gene->type, getGeneName(gene), gene->seqid, gene->start, gene->end);
+struct gff3Ann *cdsAnn;
+while ((cdsAnn = findChildTypeMatch(gene, NULL, cdsFeatures)) != NULL)
+    gff3UnlinkChild(gene, cdsAnn);
+}
+
 static boolean shouldProcessAsTranscript(struct gff3Ann *node)
 /* Decide if we should process this feature as a transcript and turn it into a
  * genePred. */
 {
-return sameString(node->type, gff3FeatMRna) 
-    || sameString(node->type, gff3FeatNCRna)
-    || sameString(node->type, gff3FeatCDS)
-    || sameString(node->type, gff3FeatRRna)
-    || sameString(node->type, gff3FeatTRna)
-    || sameString(node->type, gff3FeatVGeneSegment)
-    || sameString(node->type, gff3FeatTranscript)
-    || sameString(node->type, gff3FeatPrimaryTranscript);
+char *parentType = node->parents ? node->parents->ann->type : NULL;
+return (processAllGeneChildren
+        && (node->parents != NULL)
+        && featTypeMatch(parentType, geneFeatures))
+    || featTypeMatch(node->type, transFeatures);
 }
 
 static boolean shouldProcessGeneAsStandard(struct gff3Ann *gene)
-/* does a gene have the standard structure of transcript children? */
+/* does a gene have the standard structure of transcript or transcript-related
+   annotations (like CDS) children? */
 {
 struct gff3AnnRef *child;
 for (child = gene->children; child != NULL; child = child->next)
@@ -552,10 +677,11 @@ static boolean shouldProcessGeneAsTranscript(struct gff3Ann *gene)
 /* should this gene be processed as a transcripts? */
 {
 // check for any exon children
-return allowMinimalGenes && haveChildFeature(gene, gff3FeatExon);
+return allowMinimalGenes && haveChildTypeMatch(gene, cdsExonFeatures);
 }
 
-static void processMRna(FILE *gpFh, struct gff3Ann *gene, struct gff3Ann *mrna, struct hash *processed)
+static void processTranscript(FILE *gpFh, struct gff3Ann *gene, struct gff3Ann *mrna,
+                              struct hash *processed)
 /* process a mRNA/transcript node in the tree; gene can be NULL. Error count
    increment on error and genePred discarded */
 {
@@ -572,13 +698,15 @@ if (gp != NULL)
 static void processGeneTranscripts(FILE *gpFh, struct gff3Ann *gene, struct hash *processed)
 /* process transcript records of a gene */
 {
+if (outAttrsFp)
+    doOutAttrs(outAttrsFp, gene->id,  gene);
 struct gff3AnnRef *child;
 for (child = gene->children; child != NULL; child = child->next)
     {
     if (shouldProcessAsTranscript(child->ann) 
         && !isProcessed(processed, child->ann))
-        processMRna(gpFh, gene, child->ann, processed);
-    if (convertErrCnt >= maxConvertErrors)
+        processTranscript(gpFh, gene, child->ann, processed);
+    if ((convertErrCnt >= maxConvertErrors) && !warnAndContinue)
         break;
     }
 }
@@ -598,9 +726,11 @@ static void processGene(FILE *gpFh, struct gff3Ann *gene, struct hash *processed
 /* process a gene node in the tree.  Stop process if maximum errors reached */
 {
 recProcessed(processed, gene);
+if (isNcbiLikeSegmentGene(gene))
+    fixNcbiLikeSegmentGene(gene);
 
 if (shouldProcessGeneAsTranscript(gene))
-    processMRna(gpFh, NULL, gene, processed);
+    processTranscript(gpFh, NULL, gene, processed);
 else if (shouldProcessGeneAsStandard(gene))
     processGeneTranscripts(gpFh, gene, processed);
 else if (allowMinimalGenes)
@@ -610,10 +740,10 @@ else if (allowMinimalGenes)
 static void processRoot(FILE *gpFh, struct gff3Ann *node, struct hash *processed)
 /* process a root node in the tree */
 {
-if (sameString(node->type, gff3FeatGene))
+if (sameString(node->type, gff3FeatGene) || sameString(node->type, gff3FeatPseudogene))
     processGene(gpFh, node, processed);
 else if (shouldProcessAsTranscript(node))
-    processMRna(gpFh, NULL, node, processed);
+    processTranscript(gpFh, NULL, node, processed);
 }
 
 static void processRoots(FILE *gpFh, struct gff3AnnRef *roots, struct hash *processed)
@@ -654,7 +784,12 @@ carefulClose(&gpFh);
 if (outUnprocessedRootsFp != NULL)
     writeUnprocessedRoots(gff3File->roots,  processed);
 if (convertErrCnt > 0)
-    errAbort("%d errors converting GFF3 file: %s", convertErrCnt, inGff3File); 
+    {
+    if (warnAndContinue)
+        warn("%d warnings converting GFF3 file: %s", convertErrCnt, inGff3File);
+    else
+        errAbort("%d errors converting GFF3 file: %s", convertErrCnt, inGff3File);
+    }
 
 #if LEAK_CHECK  // free memory for leak debugging if 1
 gff3FileFree(&gff3File);
@@ -684,18 +819,26 @@ defaultCdsStatusToUnknown = optionExists("defaultCdsStatusToUnknown");
 if (honorStartStopCodons && defaultCdsStatusToUnknown)
     errAbort("can't specify both -honorStartStopCodons and -defaultCdsStatusToUnknown");
 allowMinimalGenes = optionExists("allowMinimalGenes");
+processAllGeneChildren = optionExists("processAllGeneChildren");
+refseqHacks = optionExists("refseqHacks");
+if (refseqHacks)
+    {
+    useName = TRUE;
+    allowMinimalGenes = TRUE;
+    processAllGeneChildren = TRUE;
+    }
 char *bad = optionVal("bad", NULL);
 if (bad != NULL)
     outBadFp = mustOpen(bad, "w");
 char *attrsOut = optionVal("attrsOut", NULL);
 if (attrsOut != NULL)
-    outGeneMetaFp = mustOpen(attrsOut, "w");
+    outAttrsFp = mustOpen(attrsOut, "w");
 char *unprocessedRootsOut = optionVal("unprocessedRootsOut", NULL);
 if (unprocessedRootsOut != NULL)
     outUnprocessedRootsFp = mustOpen(unprocessedRootsOut, "w");
 gff3ToGenePred(argv[1], argv[2]);
 carefulClose(&outBadFp);
-carefulClose(&outGeneMetaFp);
+carefulClose(&outAttrsFp);
 carefulClose(&outUnprocessedRootsFp);
 return 0;
 }

@@ -4,8 +4,10 @@
 #include "hash.h"
 #include "obscure.h"
 #include "options.h"
+#include "tagSchema.h"
 #include "tagStorm.h"
 #include "tagToSql.h"
+#include "csv.h"
 
 /* Global vars. */
 boolean anySchema;
@@ -55,11 +57,14 @@ struct tagInfo
     struct hash *tagVals;   /* Hash of tag values, integer valued */
     };
 
-void tagInfoAdd(struct tagInfo *tagInfo, char *tagVal)
+void tagInfoAdd(struct tagInfo *tagInfo, char *tagVal, struct dyString *scratch)
 /* Add information about tag to tagInfo */
 {
 tagInfo->useCount += 1;
-hashIncInt(tagInfo->tagVals, tagVal);
+char *pos = tagVal;
+char *val;
+while ((val = csvParseNext(&pos, scratch)) != NULL)
+    hashIncInt(tagInfo->tagVals, val);
 }
 
 struct tagInfo *tagInfoNew(char *tagName)
@@ -72,8 +77,8 @@ tagInfo->tagVals = hashNew(0);
 return tagInfo;
 }
 
-void rFillInStats(struct tagStanza *list, int expansion, struct hash *tagHash,
-    long *retStanzaCount, long *retTagCount, long *retExpandedCount, 
+void rFillInStats(struct tagStanza *list, int expansion, struct hash *tagHash, 
+    struct dyString *scratch, long *retStanzaCount, long *retTagCount, long *retExpandedCount, 
     int depth, int *retMaxDepth)
 /* Recursively traverse stanza tree filling in values */
 {
@@ -87,7 +92,7 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     int stanzaSize = 0;
     for (pair = stanza->tagList; pair != NULL; pair = pair->next)
         {
-	char *tagName = pair->name;
+	char *tagName = tagSchemaFigureArrayName(pair->name, scratch);
 	if (clTag == NULL || sameString(tagName, clTag))
 	    {
 	    stanzaSize += 1;
@@ -98,12 +103,12 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 		 tagInfo = tagInfoNew(tagName);
 		 hashAdd(tagHash, tagName, tagInfo);
 		 }
-	    tagInfoAdd(tagInfo, pair->val);
+	    tagInfoAdd(tagInfo, pair->val, scratch);
 	    }
 	}
     *retTagCount += stanzaSize;
     if (stanza->children != NULL)
-	rFillInStats(stanza->children, expansion + stanzaSize, tagHash,
+	rFillInStats(stanza->children, expansion + stanzaSize, tagHash, scratch,
 	    retStanzaCount, retTagCount, retExpandedCount, depth, retMaxDepth);
     }
 }
@@ -115,7 +120,8 @@ struct tagStorm *tags = tagStormFromFile(inputTags);
 struct hash *tagHash = hashNew(0);
 long stanzaCount = 0, tagCount = 0, expandedTagCount = 0;
 int maxDepth = 0;
-rFillInStats(tags->forest, 0, tagHash, &stanzaCount, &tagCount, &expandedTagCount, 0, &maxDepth);
+struct dyString *scratch = dyStringNew(0);
+rFillInStats(tags->forest, 0, tagHash, scratch, &stanzaCount, &tagCount, &expandedTagCount, 0, &maxDepth);
 
 /* Do we do something fancy? */
 if (clCounts || clVals > 0 || anySchema)

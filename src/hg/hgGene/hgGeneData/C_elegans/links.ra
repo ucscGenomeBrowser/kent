@@ -41,7 +41,7 @@ name refSeq
 shortLabel RefSeq
 tables sangerToRefSeq
 idSql select value from sangerToRefSeq where name = '%s'
-url http://www.ncbi.nlm.nih.gov/nuccore/%s?report=GenBank
+url https://www.ncbi.nlm.nih.gov/nuccore/%s?report=GenBank
 priority 10
 
 name locusLink
@@ -54,7 +54,7 @@ name pubMed
 shortLabel PubMed
 tables orfToGene
 idSql select value from orfToGene where name = '%s'
-url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=PubMed&term=%s&doptcmdl=DocSum&tool=genome.ucsc.edu
+url https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=PubMed&term=%s&doptcmdl=DocSum&tool=genome.ucsc.edu
 priority 10
 
 name geneCards
@@ -74,4 +74,4 @@ shortLabel AceView
 tables kgXref
 idSql select geneSymbol from kgXref where kgID = '%s'
 priority 10
-url http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=worm&l=%s
+url https://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=worm&l=%s

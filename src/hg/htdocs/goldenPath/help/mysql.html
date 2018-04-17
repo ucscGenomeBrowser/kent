@@ -8,13 +8,17 @@
 <h1>Downloading Data using MySQL</h1>
 
 <p>
-We have a MySQL database for public access at <strong>genome-mysql.soe.ucsc.edu</strong>.</p> 
+We have two  MySQL databases for public access:
+<ul>
+  <li><strong>genome-mysql.soe.ucsc.edu</strong> (located on the US west coast)</li>
+  <li><strong>genome-euro-mysql.soe.ucsc.edu</strong> (located in Europe)</li>
+</ul></p>
 <p>
-This server allows MySQL access to the same set of data currently available on our public
+These servers allow MySQL access to the same set of data currently available on our public
 Genome Browser site. The data are synchronized weekly with the main databases on our public site.
 During synchronization, the MySQL server can be intermittently out of sync with the main website for
 a short period of time. The weekly synchronization takes place on Monday mornings from 4:00 am to
-9:00 am Pacific Time (GMT -7:00).</p>
+9:00 am Pacific Time (GMT -7:00 in summer, GMT -8:00 in winter).</p>
 	
 <h2>Connecting</h2> 
 <p>
@@ -22,8 +26,10 @@ You must have MySQL client libraries installed on your computer. We recommend us
 version of the <a href="http://dev.mysql.com/downloads/mysql/5.0.html" target="_blank">v5.0 MySQL 
 clients</a>.</p>
 <p>
-Connect to the MySQL server using the command:</p> 
-<pre><code>mysql --user=genome --host=genome-mysql.soe.ucsc.edu -A</code></pre> 
+You can connect to the US MySQL server using the command:</p>
+<pre><code>mysql --user=genome --host=genome-mysql.soe.ucsc.edu -A -P 3306</code></pre> 
+<p>Or the European MySQl server with this command:</p>
+<pre><code>mysql --user=genome --host=genome-euro-mysql.soe.ucsc.edu -A -P 3306</code></pre>
 <p>
 The <em>-A</em> flag is optional but is recommended for speed.</p> 
 <p>
@@ -50,14 +56,25 @@ The MySQL database can also be used by the numerous utilities in the
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads">Genome Browser source</a> 
 tree. Some of these utilities require a password, so you will need to add the following 
 specifications to your $HOME/.hg.conf file (remember to chmod your .hg.conf file to 600 
-permissions):</p> 
-<pre><code>db.host=genome-mysql.soe.ucsc.edu
+permissions) if you would like to access the US public MySQL server:</p>
+<pre><code>#US MySQL server
+db.host=genome-mysql.soe.ucsc.edu
 db.user=genomep
 db.password=password
 central.db=hgcentral
 central.host=genome-mysql.soe.ucsc.edu
 central.user=genomep
-central.password=password </code></pre> 
+central.password=password</code></pre>
+<p>
+Or these lines if you'd like to access the European MySQL server:</p>
+<pre><code>#European MySQL server
+db.host=genome-euro-mysql.soe.ucsc.edu
+db.user=genomep
+db.password=password
+central.db=hgcentral
+central.host=genome-euro-mysql.soe.ucsc.edu
+central.user=genomep
+central.password=password</code></pre>
 
 <p>
 If you have set up your .hg.conf file as above, you can use the <code>hgsql</code> utility,

@@ -80,7 +80,7 @@ static char *requiredItemFields[] = {"fileName", "submitId"};
 static char *requiredSetFields[] = {"contributor"};
 static char *requiredFields[] = {"fullDir", "screenDir", "thumbDir", "taxon", "isEmbryo", "age", "bodyPart", 
 	"sliceType", "imageType", };
-static char *optionalFields[] = {"sectionSet", "sectionIx", "gene", "locusLink", "refSeq", "genbank", };
+//static char *optionalFields[] = {"sectionSet", "sectionIx", "gene", "locusLink", "refSeq", "genbank", };
 
 char *hashValOrDefault(struct hash *hash, char *key, char *defaultVal)
 /* Lookup key in hash and return value, or return default if it doesn't exist. */
@@ -295,9 +295,9 @@ while (lineFileNextRowTab(lf, words, rowSize))
 	}
 
     dyStringClear(dy);
-    sqlDyStringAppend(dy, "select id from image ");
-    dyStringPrintf(dy, "where fileName = '%s' ", fileName);
-    dyStringPrintf(dy, "and fullLocation = %d",  fullDir);
+    sqlDyStringPrintf(dy, "select id from image ");
+    sqlDyStringPrintf(dy, "where fileName = '%s' ", fileName);
+    sqlDyStringPrintf(dy, "and fullLocation = %d",  fullDir);
     oldId = sqlQuickNum(conn, dy->string);
     if (oldId != 0)
         {
@@ -313,28 +313,28 @@ while (lineFileNextRowTab(lf, words, rowSize))
 	}
 
     dyStringClear(dy);
-    sqlDyStringAppend(dy, "insert into image set\n");
-    dyStringPrintf(dy, " id = default,\n");
-    dyStringPrintf(dy, " fileName = '%s',\n", fileName);
-    dyStringPrintf(dy, " fullLocation = %d,\n", fullDir);
-    dyStringPrintf(dy, " screenLocation = %d,\n", screenDir);
-    dyStringPrintf(dy, " thumbLocation = %d,\n", thumbDir);
-    dyStringPrintf(dy, " submissionSet = %d,\n", submissionSetId);
-    dyStringPrintf(dy, " sectionSet = %d,\n", sectionId);
-    dyStringPrintf(dy, " sectionIx = %s,\n", sectionIx);
-    dyStringPrintf(dy, " submitId = '%s',\n", submitId);
-    dyStringPrintf(dy, " gene = '%s',\n", gene);
-    dyStringPrintf(dy, " locusLink = '%s',\n", locusLink);
-    dyStringPrintf(dy, " refSeq = '%s',\n", refSeq);
-    dyStringPrintf(dy, " genbank = '%s',\n", genbank);
-    dyStringPrintf(dy, " priority = %s,\n", priority);
-    dyStringPrintf(dy, " taxon = %s,\n", taxon);
-    dyStringPrintf(dy, " isEmbryo = %s,\n", isEmbryo);
-    dyStringPrintf(dy, " age = %s,\n", age);
-    dyStringPrintf(dy, " bodyPart = %d,\n", bodyPart);
-    dyStringPrintf(dy, " sliceType = %d,\n", sliceType);
-    dyStringPrintf(dy, " imageType = %d,\n", imageType);
-    dyStringPrintf(dy, " treatment = %d\n", treatment);
+    sqlDyStringPrintf(dy, "insert into image set\n");
+    sqlDyStringPrintf(dy, " id = default,\n");
+    sqlDyStringPrintf(dy, " fileName = '%s',\n", fileName);
+    sqlDyStringPrintf(dy, " fullLocation = %d,\n", fullDir);
+    sqlDyStringPrintf(dy, " screenLocation = %d,\n", screenDir);
+    sqlDyStringPrintf(dy, " thumbLocation = %d,\n", thumbDir);
+    sqlDyStringPrintf(dy, " submissionSet = %d,\n", submissionSetId);
+    sqlDyStringPrintf(dy, " sectionSet = %d,\n", sectionId);
+    sqlDyStringPrintf(dy, " sectionIx = '%s',\n", sectionIx);
+    sqlDyStringPrintf(dy, " submitId = '%s',\n", submitId);
+    sqlDyStringPrintf(dy, " gene = '%s',\n", gene);
+    sqlDyStringPrintf(dy, " locusLink = '%s',\n", locusLink);
+    sqlDyStringPrintf(dy, " refSeq = '%s',\n", refSeq);
+    sqlDyStringPrintf(dy, " genbank = '%s',\n", genbank);
+    sqlDyStringPrintf(dy, " priority = '%s',\n", priority);
+    sqlDyStringPrintf(dy, " taxon = '%s',\n", taxon);
+    sqlDyStringPrintf(dy, " isEmbryo = '%s',\n", isEmbryo);
+    sqlDyStringPrintf(dy, " age = '%s',\n", age);
+    sqlDyStringPrintf(dy, " bodyPart = %d,\n", bodyPart);
+    sqlDyStringPrintf(dy, " sliceType = %d,\n", sliceType);
+    sqlDyStringPrintf(dy, " imageType = %d,\n", imageType);
+    sqlDyStringPrintf(dy, " treatment = %d\n", treatment);
 
     sqlUpdate(conn, dy->string);
     }

@@ -1,6 +1,7 @@
 #	"$Id: trackDb.ra,v 1.79 2010/03/15 21:42:25 ann Exp $";
 
 include trackDb.chainNet.ra
+include trackDb.7way.ra
 
 track quality override
 type wig 0 97
@@ -30,33 +31,7 @@ group rna
 priority 70
 visibility hide
 type psl . 
-url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=unigene&term=$$[ClusterID]
-
-track multiz7way
-shortLabel Conservation
-longLabel Chicken/Human/Mouse/Opossum/Frog/Zebrafish/Tetraodon Multiz Alignments & Cons.
-group compGeno
-priority 100
-visibility pack
-type wigMaf 0.0 1.0
-maxHeightPixels 100:40:11
-wiggle phastCons7way
-yLineOnOff Off
-autoScale Off
-windowingFunction mean
-pairwise netBlastz
-speciesOrder hg17 mm5 monDom1 xenTro1 danRer2 tetNig1
-treeImage phylo/galGal2_7way.gif
-
-track phastConsElements7way
-shortLabel Most Conserved
-longLabel PhastCons Conserved Elements
-group compGeno
-priority 105.1
-visibility hide
-exonArrows off
-showTopScorers 200
-type bed 5 .
+url https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=unigene&term=$$[ClusterID]
 
 track blatFr1
 #replaces record blatFr1 in parent dir missing/extra colorChromDefault
