@@ -489,7 +489,7 @@ sub printTableSpecificUsage {
   my $gotConditions = 0;
 
   if (&dbHasTable($dbHost, $db, 'softBerryGene')) {
-    &printSomeHaveConditions() if (! $gotConditions);
+    &printSomeHaveConditions($fh) if (! $gotConditions);
     $gotConditions = 1;
     print $fh <<_EOF_
    softberryGene.txt and softberryPep.txt -  Free for academic
@@ -501,7 +501,7 @@ _EOF_
   }
 
   if (&dbHasTable($dbHost, $db, 'knownGene')) {
-    &printSomeHaveConditions() if (! $gotConditions);
+    &printSomeHaveConditions($fh) if (! $gotConditions);
     $gotConditions = 1;
     print $fh <<_EOF_
    Swiss-Prot/UniProt data in knownGene.txt -
