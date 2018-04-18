@@ -9,8 +9,8 @@ table interact
 
     double value;      "Strength of interaction or other data value. Typically basis for score"
     string exp;        "Experiment name (metadata for filtering). Use . if not applicable"
-    uint color;        "Item color, as itemRgb in bed9. Typically based on strength or filter"
-
+    string color;      "Item color.  Specified as r,g,b or hexadecimal #RRGGBB or html color name,
+                                as in //www.w3.org/TR/css3-color/#html4."
     string sourceChrom;  "Chromosome of source region (directional) or lower region. For non-directional interchromosomal, chrom of this region."
     uint sourceStart;  "Start position in chromosome of source/lower/this region"
     uint sourceEnd;    "End position in chromosome of source/lower/this region"

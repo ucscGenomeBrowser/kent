@@ -37,7 +37,7 @@ int offset;
 struct sqlResult *sr = hRangeQuery(conn, table, chrom, start, end, NULL, &offset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    inter = interactLoad(row+offset);
+    inter = interactLoadAndValidate(row+offset);
     if (inter->chromStart != start || inter->chromEnd != end)
         continue;
     if (isNotEmpty(item) && differentString(inter->name, item))
@@ -62,7 +62,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     char startBuf[16], endBuf[16];
     char *row[32];
     bigBedIntervalToRow(bb, chrom, startBuf, endBuf, row, ArraySize(row));
-    inter = interactLoad(row);
+    inter = interactLoadAndValidate(row);
     if (inter == NULL)
         continue;
     if (inter->chromStart != start || inter->chromEnd != end)

@@ -20,6 +20,11 @@ use vars @HgStepManager::optionVars;
 use vars qw/
     $opt_buildDir
     $opt_ooc
+    $opt_target2Bit
+    $opt_targetSizes
+    $opt_query2Bit
+    $opt_querySizes
+    $opt_localTmp
     /;
 
 # Specify the steps supported with -continue / -stop:
@@ -59,10 +64,16 @@ options:
     -ooc /path/11.ooc     Use this instead of the default
                           /hive/data/genomes/fromDb/11.ooc
                           Can be "none".
+    -target2Bit /path/target.2bit  Full path to target sequence
+    -targetSizes /path/query.2bit  Full path to query sequence
+    -query2Bit  /path/target.chrom.sizes  Full path to target chrom.sizes
+    -querySizes  /path/query.chrom.sizes  Full path to query chrom.sizes
+    -localTmp  /dev/shm  Full path to temporary storage for heavy I/O usage
 _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
 						'workhorse' => '',
+						'fileServer' => '',
 						'bigClusterHub' => '');
   print STDERR "
 Automates UCSC's same-species liftOver (blat/chain/net) pipeline, based on
@@ -93,16 +104,23 @@ Assumptions:
 # Globals:
 # Command line args: tDb=fromDb, qDb=toDb
 my ($tDb, $qDb);
+my $localTmp = "/scratch/tmp";	# UCSC default cluster temporary I/O
+
 # Other:
 my ($buildDir);
-my ($tSeq, $tSizes, $qSeq, $qSizes, $QDb);
-my ($liftOverChainDir, $liftOverChainFile, $liftOverChainPath);
+my ($tSeq, $tSizes, $qSeq, $qSizes, $QDb, $fileServer);
+my ($liftOverChainDir, $liftOverChainFile, $liftOverChainPath, $dbExists);
 
 sub checkOptions {
   # Make sure command line options are valid/supported.
   my $ok = GetOptions(@HgStepManager::optionSpec,
 		      'buildDir=s',
 		      'ooc=s',
+		      'target2Bit=s',
+		      'targetSizes=s',
+		      'query2Bit=s',
+		      'querySizes=s',
+		      'localTmp=s',
 		      @HgAutomate::commonOptionSpec,
 		      );
   &usage(1) if (!$ok);
@@ -111,6 +129,7 @@ sub checkOptions {
   my $err = $stepper->processOptions();
   usage(1) if ($err);
   $dbHost = $opt_dbHost if ($opt_dbHost);
+  $localTmp = $opt_localTmp ? $opt_localTmp : $localTmp;
 }
 
 
@@ -119,37 +138,48 @@ sub getClusterSeqs {
   # cluster-scratch storage.  Exit with an error message if we can't find them.
   my $paraHub = $opt_bigClusterHub ? $opt_bigClusterHub :
     &HgAutomate::chooseClusterByBandwidth();
-  my @okFilesystems =
-    &HgAutomate::chooseFilesystemsForCluster($paraHub, 'in');
   my ($tSeqScratch, $qSeqScratch);
-  if ( -e "/scratch/data/$tDb/$tDb.2bit" ) {
-      $tSeqScratch = "/scratch/data/$tDb/$tDb.2bit";
+  if ($opt_target2Bit) {
+    $tSeqScratch = $opt_target2Bit
   } else {
-    foreach my $fs (@okFilesystems) {
-&HgAutomate::verbose(1, "checking $fs/$tDb/$tDb.2bit\n");
-      if (&HgAutomate::machineHasFile($paraHub, "$fs/$tDb/$tDb.2bit")) {
-        $tSeqScratch = "$fs/$tDb/$tDb.2bit";
-        last;
+    my @okFilesystems =
+      &HgAutomate::chooseFilesystemsForCluster($paraHub, 'in');
+    if ( -e "/scratch/data/$tDb/$tDb.2bit" ) {
+        $tSeqScratch = "/scratch/data/$tDb/$tDb.2bit";
+    } else {
+      foreach my $fs (@okFilesystems) {
+  &HgAutomate::verbose(1, "checking $fs/$tDb/$tDb.2bit\n");
+        if (&HgAutomate::machineHasFile($paraHub, "$fs/$tDb/$tDb.2bit")) {
+          $tSeqScratch = "$fs/$tDb/$tDb.2bit";
+          last;
+        }
       }
     }
-  }
-  if (! defined $tSeqScratch) {
-    die "align: can't find $tDb/$tDb.2bit in " .
-      join("/, ", @okFilesystems) . "/ -- please distribute.\n";
-  }
-  if ( -e "/scratch/data/$qDb/$qDb.2bit" ) {
-      $qSeqScratch = "/scratch/data/$qDb/$qDb.2bit";
-  } else {
-    foreach my $fs (@okFilesystems) {
-      if (&HgAutomate::machineHasFile($paraHub, "$fs/$qDb/$qDb.2bit")) {
-        $qSeqScratch = "$fs/$qDb/$qDb.2bit";
-        last;
-      }
+    if (! defined $tSeqScratch) {
+     die "align: can't find $tDb/$tDb.2bit in " .
+       join("/, ", @okFilesystems) . "/ -- please distribute.\n";
     }
   }
-  if (! defined $qSeqScratch) {
-    die "align: can't find $qDb/$qDb.2bit in " .
-      join("/, ", @okFilesystems) . "/ -- please distribute.\n";
+
+  if ($opt_query2Bit) {
+        $qSeqScratch = $opt_query2Bit;
+  } else {
+    my @okFilesystems =
+      &HgAutomate::chooseFilesystemsForCluster($paraHub, 'in');
+    if ( -e "/scratch/data/$qDb/$qDb.2bit" ) {
+        $qSeqScratch = "/scratch/data/$qDb/$qDb.2bit";
+    } else {
+      foreach my $fs (@okFilesystems) {
+        if (&HgAutomate::machineHasFile($paraHub, "$fs/$qDb/$qDb.2bit")) {
+          $qSeqScratch = "$fs/$qDb/$qDb.2bit";
+          last;
+        }
+      }
+    }
+    if (! defined $qSeqScratch) {
+      die "align: can't find $qDb/$qDb.2bit in " .
+        join("/, ", @okFilesystems) . "/ -- please distribute.\n";
+    }
   }
   &HgAutomate::verbose(1, "Using $paraHub, $tSeqScratch and $qSeqScratch\n");
   return ($paraHub, $tSeqScratch, $qSeqScratch);
@@ -198,7 +228,7 @@ if (\$queryListIn:e == "lst") set queryListIn = $runDir/\$queryListIn
 
 # Use local disk for output, and move the final result to \$outPsl
 # when done, to minimize I/O.
-set tmpDir = `mktemp -d -p /scratch/tmp doSame.blat.XXXXXX`
+set tmpDir = `mktemp -d -p $localTmp doSame.blat.XXXXXX`
 pushd \$tmpDir
 
 # We might get a .lst or a 2bit spec here -- convert to (list of) 2bit spec:
@@ -377,7 +407,7 @@ sub doChain {
 set inPattern = \$1
 set outChain = \$2
 
-set tmpOut = `mktemp -p /scratch/tmp doSame.chain.XXXXXX`
+set tmpOut = `mktemp -p $localTmp doSame.chain.XXXXXX`
 
 cat $pslDir/\$inPattern* \\
 | axtChain -verbose=0 -linearGap=medium -psl stdin \\
@@ -431,7 +461,7 @@ liftOver chains.";
   my $lump = $chromBased ? "" : "-lump=100";
   $bossScript->add(<<_EOF_
 # Use local scratch disk... this can be quite I/O intensive:
-set tmpDir = `mktemp -d -p /scratch/tmp doSame.blat.XXXXXX`
+set tmpDir = `mktemp -d -p $localTmp doSame.blat.XXXXXX`
 
 # Merge up the hierarchy and assign unique chain IDs:
 mkdir \$tmpDir/chainMerged
@@ -481,7 +511,9 @@ sub doLoad {
 chains file, and calls hgAddLiftOverChain to register the $HgAutomate::gbdb location.";
   my $bossScript = new HgRemoteScript("$runDir/doLoad.csh", $dbHost,
 				      $runDir, $whatItDoes);
-  $bossScript->add(<<_EOF_
+
+  if ($dbExists) {
+    $bossScript->add(<<_EOF_
 # Link to standardized location of liftOver files:
 mkdir -p $liftOverChainDir
 rm -f $liftOverChainPath
@@ -506,7 +538,24 @@ ln -s $liftOverChainPath $HgAutomate::gbdb/$tDb/liftOver/
 # ~/.hg.conf) so that hgLiftOver will know that this is available:
 hgAddLiftOverChain $tDb $qDb
 _EOF_
-  );
+    );
+  } else {
+    $bossScript->add(<<_EOF_
+hgLoadChain -test -noBin -tIndex $tDb chain$QDb $buildDir/$liftOverChainFile
+wget -O bigChain.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/bigChain.as'
+wget -O bigLink.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/bigLink.as'
+sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\\t"} {print \$2, \$4, \$5, \$11, 1000, \$8, \$3, \$6, \$7, \$9, \$10, \$1}' > chain${QDb}.tab
+bedToBigBed -type=bed6+6 -as=bigChain.as -tab chain${QDb}.tab $tSizes chain${QDb}.bb
+awk 'BEGIN {OFS="\\t"} {print \$1, \$2, \$3, \$5, \$4}' link.tab | sort -k1,1 -k2,2n > chain${QDb}Link.tab
+bedToBigBed -type=bed4+1 -as=bigLink.as -tab chain${QDb}Link.tab $tSizes chain${QDb}Link.bb
+set totalBases = `ave -col=2 $tSizes | grep "^total" | awk '{printf "%d", \$2}'`
+set basesCovered = `bedSingleCover.pl chain${QDb}Link.tab | ave -col=4 stdin | grep "^total" | awk '{printf "%d", \$2}'`
+set percentCovered = `echo \$basesCovered \$totalBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
+printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" "\$totalBases" "\$percentCovered" > fb.$tDb.chain.${QDb}Link.txt
+rm -f link.tab chain.tab bigChain.as bigLink.as chain${QDb}.tab chain${QDb}Link.tab
+_EOF_
+    );
+  }
   $bossScript->execute();
 } # doLoad
 
@@ -516,7 +565,7 @@ _EOF_
 sub doCleanup {
   my $runDir = "$buildDir";
   my $whatItDoes = "It cleans up or compresses intermediate files.";
-  my $fileServer = &HgAutomate::chooseFileServer($runDir);
+  $fileServer = &HgAutomate::chooseFileServer($runDir);
   my $bossScript = new HgRemoteScript("$runDir/doCleanup.csh", $fileServer,
 				      $runDir, $whatItDoes);
   my $pslDir = "run.blat/psl";
@@ -534,27 +583,47 @@ _EOF_
 
 
 sub getSeqAndSizes {
-  # Test assumptions about 2bit and chrom.sizes files.
-  $tSeq = "/scratch/data/$tDb/$tDb.2bit";
-  if (! -e $tSeq) {
-    # allow it to exist here too:
-    my $fs = "$HgAutomate::clusterData";
-&HgAutomate::verbose(1, "checking $fs/$tDb/$tDb.2bit\n");
-      if (-e "$fs/$tDb/$tDb.2bit") {
-        $tSeq = "$fs/$tDb/$tDb.2bit";
-      }
+  if ($opt_target2Bit) {
+    $tSeq = $opt_target2Bit
+  } else {
+    # Test assumptions about 2bit and chrom.sizes files.
+    $tSeq = "/scratch/data/$tDb/$tDb.2bit";
+    if (! -e $tSeq) {
+      # allow it to exist here too:
+      my $fs = "$HgAutomate::clusterData";
+  &HgAutomate::verbose(1, "checking $fs/$tDb/$tDb.2bit\n");
+        if (-e "$fs/$tDb/$tDb.2bit") {
+          $tSeq = "$fs/$tDb/$tDb.2bit";
+        }
+    }
   }
-  $tSizes = "$HgAutomate::clusterData/$tDb/chrom.sizes";
-  $qSeq = "/scratch/data/$qDb/$qDb.2bit";
-  if (! -e $qSeq) {
-    # allow it to exist here too:
-    my $fs = "$HgAutomate::clusterData";
-&HgAutomate::verbose(1, "checking $fs/$qDb/$qDb.2bit\n");
-      if (-e "$fs/$qDb/$qDb.2bit") {
-        $qSeq = "$fs/$qDb/$qDb.2bit";
-      }
+
+  if ($opt_targetSizes) {
+    $tSizes = $opt_targetSizes;
+  } else {
+    $tSizes = "$HgAutomate::clusterData/$tDb/chrom.sizes";
   }
-  $qSizes = "$HgAutomate::clusterData/$qDb/chrom.sizes";
+
+  if ($opt_query2Bit) {
+    $qSeq = $opt_query2Bit;
+  } else {
+    $qSeq = "/scratch/data/$qDb/$qDb.2bit";
+    if (! -e $qSeq) {
+      # allow it to exist here too:
+      my $fs = "$HgAutomate::clusterData";
+  &HgAutomate::verbose(1, "checking $fs/$qDb/$qDb.2bit\n");
+        if (-e "$fs/$qDb/$qDb.2bit") {
+          $qSeq = "$fs/$qDb/$qDb.2bit";
+        }
+    }
+  }
+
+  if ($opt_querySizes) {
+    $qSizes = $opt_querySizes;
+  } else {
+    $qSizes = "$HgAutomate::clusterData/$qDb/chrom.sizes";
+  }
+
   my $problem = 0;
   foreach my $file ($tSeq, $tSizes, $qSeq, $qSizes) {
     if (! -e $file) {
@@ -578,6 +647,10 @@ sub getSeqAndSizes {
 
 &usage(1) if (scalar(@ARGV) != 2);
 ($tDb, $qDb) = @ARGV;
+
+# may be working on a 2bit file that does not have a database browser
+$dbExists = 0;
+$dbExists = 1 if (&HgAutomate::databaseExists($dbHost, $tDb));
 
 &getSeqAndSizes();
 $QDb = ucfirst($qDb);

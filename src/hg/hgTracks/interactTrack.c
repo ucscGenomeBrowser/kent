@@ -48,7 +48,7 @@ return hvGfxFindColorIx(hvg, red, green, blue);
 void interactLoadItems(struct track *tg)
 /* Load all interact items in region */
 {
-loadSimpleBedWithLoader(tg, (bedItemLoader)interactLoad);
+loadSimpleBedWithLoader(tg, (bedItemLoader)interactLoadAndValidate);
 
 if (tg->limitedVisSet)
     {
@@ -335,11 +335,13 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
     if (vis == tvDense)
         peak = yOff + tg->height;
 
+    // NOTE: until time permits, force to rectangle when in reversed strand mode.
+
     if (sOnScreen)
         {
         // draw foot of source region
         hvGfxLine(hvg, sX - sWidth, yOff, sX + sWidth, yOff, color);
-        if (vis == tvDense || !tOnScreen || draw == DRAW_LINE)
+        if (vis == tvDense || !tOnScreen || draw == DRAW_LINE || hvg->rc)
             {
             // draw vertical
             if (isReversed)
@@ -350,11 +352,9 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         }
     if (tOnScreen)
         {
-if (sOnScreen)
-    //warn("interaction: %s", inter->name);
         // draw foot of target region
         hvGfxLine(hvg, tX - tWidth, yOff, tX + tWidth, yOff, color);
-        if (vis == tvDense || !sOnScreen || draw == DRAW_LINE)
+        if (vis == tvDense || !sOnScreen || draw == DRAW_LINE || hvg->rc)
             {
             // draw vertical
             if (isReversed)
@@ -405,7 +405,7 @@ if (sOnScreen)
         lowerX = tOnScreen ? tX : xOff;
         upperX = sOnScreen ? sX : xOff + width;
         }
-    if (draw == DRAW_LINE || !sOnScreen || !tOnScreen)
+    if (draw == DRAW_LINE || !sOnScreen || !tOnScreen || hvg->rc)
         {
         // draw horizontal line between region centers at 'peak' height
         if (isReversed)
@@ -439,7 +439,6 @@ if (sOnScreen)
         {
         int yLeft = yOff + peakHeight;
         int yTop = yOff - peakHeight;
-//warn("hgTracks ellipse: left point: (%d,%d), top point: (%d,%d)", lowerX, yLeft, upperX, yTop);
         hvGfxEllipseDraw(hvg, lowerX, yLeft, upperX, yTop, color, ELLIPSE_BOTTOM, isReversed);
         // draw map box on peak
         int maxY = peakHeight + yOff;

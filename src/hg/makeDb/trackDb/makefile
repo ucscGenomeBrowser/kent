@@ -145,7 +145,7 @@ DBS = \
 	oryCun1 oryCun2 \
 	oryLat1 oryLat2 \
 	otoGar1 otoGar3 \
-	oviAri1 oviAri3 \
+	oviAri1 oviAri3 oviAri4 \
 	oxyTri2 \
 	panPan1 panPan2 \
 	panRed1 \
