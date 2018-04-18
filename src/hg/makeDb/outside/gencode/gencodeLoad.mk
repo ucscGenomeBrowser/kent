@@ -33,8 +33,8 @@ mach = $(shell uname -m)
 # BEGIN EDIT THESE EACH RELEASE
 ##
 #db = mm10
-db = hg38
-#db = hg19
+#db = hg38
+db = hg19
 ifeq (${db},mm10)
     grcRefAssembly = GRCm38
     ver = M17
@@ -66,7 +66,7 @@ else ifeq (${db},hg19)
     verBase = 28
     ver = ${verBase}lift37
     ftpReleaseSubdir = release_${verBase}/GRCh37_mapping
-    prevVer = 19
+    prevVer = 27lift37
     gencodeOrg = Gencode_human
     annGtfTypeName = annotation
     ensemblVer = 74_37
@@ -269,7 +269,7 @@ ${tablePolyAGp}: ${polyAGtf} ${ensemblToUcscChain}
 	${gencodePolyaGxfToGenePred} ${skipPatchSeqOpts} $< ${ensemblToUcscChain} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
-${tableUniProtTab}: ${tableSwissProtMeta} ${tableTrEMBLMeta}
+${tableUniProtTab}: ${tableSwissProtMeta} ${tableTrEMBLMeta} ${gencodeTsv}
 	@mkdir -p $(dir $@)
 	((${metaFilterCmdGz} ${tableSwissProtMeta} | tawk '{print $$0,"SwissProt"}') && (${metaFilterCmdGz}  ${tableTrEMBLMeta} | tawk '{print $$0,"TrEMBL"}')) | sort -k 1,1 > $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
@@ -326,7 +326,7 @@ ${tablePolyAFeatureTab}: ${tablePolyAFeatureMeta}
 	@mkdir -p $(dir $@)
 	zcat $< | tawk '{print $$1,$$2-1,$$3,$$4,$$5-1,$$6,$$7,$$8}' | sort -k 4,4 -k 5,5n > $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
-${tableAnnotationRemarkTab}: ${tableAnnotationRemarkMeta}
+${tableAnnotationRemarkTab}: ${tableAnnotationRemarkMeta} ${gencodeTsv}
 	@mkdir -p $(dir $@)
 	${metaFilterCmdGz} $<  | tawk '{print $$1,gensub("\\\\n|\\\\","","g",$$2)}' | sort -k 1,1 > $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
