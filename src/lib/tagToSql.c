@@ -192,7 +192,7 @@ for (tti = ttiList; tti != NULL; tti = tti->next)
     char *sqlType = NULL;
     char sqlTypeBuf[256];
     if (!isSymbolString(tti->name))
-        errAbort("Error - database needs work. Somehow symbol %s got in field list\n", tti->name);
+	errAbort("Error - tagStorm not SQL compliant. Somehow symbol %s got in field list", tti->name);
     if (sqlReservedCheck(reservedHash, tti->name))
         errAbort("Error - field '%s' is a SQL reserved word", tti->name);
     if (tti->isUnsigned)
