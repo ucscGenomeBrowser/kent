@@ -2265,6 +2265,7 @@ jsInline(
 "}\n");
 printf("<input name='%s' id='%s' size=\"%d\" value=\"%s\" type=\"TEXT\">", 
     oligoMatchVar, oligoMatchVar, 45, oligo);
+puts("<br>Examples: TATAWAAR, AAAAA");
 jsOnEventById("input", oligoMatchVar, "packTrack();");
 }
 
