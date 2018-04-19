@@ -1,67 +1,60 @@
+kentSrc = ..
+include $(kentSrc)/inc/userApp.mk
 
-all:    
-	cd tagStormHoist && ${MAKE}
-	cd tagStormReformat && ${MAKE}
-	cd tagStormFromTab && ${MAKE}
-	cd jsonToTagStorm && ${MAKE}
-	cd tagStormInfo && ${MAKE}
-	cd tagStormJoinTab && ${MAKE}
-	cd tagStormToHtml && ${MAKE}
-	cd tagStormToJson && ${MAKE}
-	cd tagStormDeleteTags && ${MAKE}
-	cd tagStormRenameTags && ${MAKE}
-	cd tagStormRenameVals && ${MAKE}
-	cd tagStormToTab && ${MAKE}
-	cd tagStormToSql && ${MAKE}
-	cd tagStormCheck && ${MAKE}
-	cd tagStormArrayToCsv && ${MAKE}
+UTIL_DIRS = \
+    tagStormHoist \
+    tagStormReformat \
+    tagStormFromTab \
+    jsonToTagStorm \
+    tagStormInfo \
+    tagStormJoinTab \
+    tagStormToHtml \
+    tagStormToJson \
+    tagStormDeleteTags \
+    tagStormRenameTags \
+    tagStormRenameVals \
+    tagStormToCsv \
+    tagStormToTab \
+    tagStormToSql \
+    tagStormCheck \
+    tagStormArrayToCsv
 
-alpha: all
+utils:
+	${MAKE} buildUtils
 
-compile:
-	cd tagStormHoist && ${MAKE} compile
-	cd tagStormReformat && ${MAKE} compile
-	cd tagStormFromTab && ${MAKE} compile
-	cd jsonToTagStorm && ${MAKE} compile
-	cd tagStormInfo && ${MAKE} compile
-	cd tagStormJoinTab && ${MAKE} compile
-	cd tagStormToJson && ${MAKE} compile
-	cd tagStormDeleteTags && ${MAKE} compile
-	cd tagStormRenameTags && ${MAKE} compile
-	cd tagStormRenameVals && ${MAKE} compile
-	cd tagStormToTab && ${MAKE} compile
-	cd tagStormToSql && ${MAKE} compile
-	cd tagStormCheck && ${MAKE} compile
-	cd tagStormArrayToCsv && ${MAKE} compile
+buildUtils: $(UTIL_DIRS:%=%.buildUtils)
+%.buildUtils:
+	cd $* && $(MAKE)
 
-test:
-	cd tagStormHoist && ${MAKE} test
-	cd tagStormReformat && ${MAKE} test
-	cd tagStormFromTab && ${MAKE} test
-	cd jsonToTagStorm && ${MAKE} test
-	cd tagStormInfo && ${MAKE} test
-	cd tagStormJoinTab && ${MAKE} test
-	cd tagStormToJson && ${MAKE} test
-	cd tagStormDeleteTags && ${MAKE} test
-	cd tagStormRenameTags && ${MAKE} test
-	cd tagStormRenameVals && ${MAKE} test
-	cd tagStormToTab && ${MAKE} test
-	cd tagStormToSql && ${MAKE} test
-	cd tagStormCheck && ${MAKE} test
-	cd tagStormArrayToCsv && ${MAKE} test
+test::	${UTIL_DIRS:%=%.test}
+%.test:
+	cd $* && ${MAKE} test
+
+clean:: $(UTIL_DIRS:%=%.clean)
+	- find . -name '*.o' -exec rm {} +
+%.clean:
+	(cd $* && ${MAKE} clean)
 
 
-clean::
-	cd tagStormHoist && ${MAKE} clean
-	cd tagStormReformat && ${MAKE} clean
-	cd tagStormFromTab && ${MAKE} clean
-	cd tagStormInfo && ${MAKE} clean
-	cd tagStormJoinTab && ${MAKE} clean
-	cd tagStormToJson && ${MAKE} clean
-	cd tagStormDeleteTags && ${MAKE} clean
-	cd tagStormRenameTags && ${MAKE} clean
-	cd tagStormRenameVals && ${MAKE} clean
-	cd tagStormToTab && ${MAKE} clean
-	cd tagStormToSql && ${MAKE} clean
-	cd tagStormCheck && ${MAKE} clean
-	cd tagStormArrayToCsv && ${MAKE} clean
+# Used by cdw webworks
+CGI_DIRS = \
+    tagStormToCsv \
+    tagStormToHtml \
+    tagStormToTab
+
+cgi:: $(CGI_DIRS:%=%.cgi)
+%.cgi: 
+	(cd $* && ${MAKE} compile)
+	chmod a+rx $*/$*${EXE}
+	rm -f ${CGI_BIN}-${USER}/$*
+	mv $*/$*${EXE} ${CGI_BIN}-${USER}/$*
+
+alpha:: $(CGI_DIRS:%=%.alpha)
+%.alpha:
+	(cd $* && ${MAKE} compile)
+	${STRIP} $*/$*${EXE}
+	chmod g+w $*/$*${EXE}
+	chmod a+rx $*/$*${EXE}
+	rm -f ${CGI_BIN}/$*
+	mv $*/$*${EXE} ${CGI_BIN}/$*
+
