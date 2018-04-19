@@ -1,5 +1,3 @@
-kentSrc = ..
-include $(kentSrc)/inc/userApp.mk
 
 UTIL_DIRS = \
     tagStormHoist \
@@ -19,6 +17,12 @@ UTIL_DIRS = \
     tagStormCheck \
     tagStormArrayToCsv
 
+# Used by cdw webworks, these will get copied to CGI_BIN dir to be run by CGIs
+CGI_DIRS = \
+    tagStormToCsv \
+    tagStormToHtml \
+    tagStormToTab
+
 utils:
 	${MAKE} buildUtils
 
@@ -35,13 +39,9 @@ clean:: $(UTIL_DIRS:%=%.clean)
 %.clean:
 	(cd $* && ${MAKE} clean)
 
-
-# Used by cdw webworks
-CGI_DIRS = \
-    tagStormToCsv \
-    tagStormToHtml \
-    tagStormToTab
-
+# have to include down here or it will mess up the default target
+kentSrc = ..
+include $(kentSrc)/inc/userApp.mk
 cgi:: $(CGI_DIRS:%=%.cgi)
 %.cgi: 
 	(cd $* && ${MAKE} compile)
