@@ -6,6 +6,7 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
+#include "basicBed.h"
 #include "interact.h"
 
 
@@ -342,4 +343,33 @@ if (bDist < 0)
 
 // same chromosome
 return aDist - bDist;
+}
+
+struct interact *interactLoadAndValidate(char **row)
+/* Load a interact from row fetched with select * from interact
+ * from database, validating fields.  Dispose of this with interactFree(). */
+// TODO: more validating
+{
+struct interact *ret;
+
+AllocVar(ret);
+ret->chrom = cloneString(row[0]);
+ret->chromStart = sqlUnsigned(row[1]);
+ret->chromEnd = sqlUnsigned(row[2]);
+ret->name = cloneString(row[3]);
+ret->score = sqlUnsigned(row[4]);
+ret->value = sqlDouble(row[5]);
+ret->exp = cloneString(row[6]);
+ret->color = bedParseColor(row[7]);
+ret->sourceChrom = cloneString(row[8]);
+ret->sourceStart = sqlUnsigned(row[9]);
+ret->sourceEnd = sqlUnsigned(row[10]);
+ret->sourceName = cloneString(row[11]);
+ret->sourceStrand = cloneString(row[12]);
+ret->targetChrom = cloneString(row[13]);
+ret->targetStart = sqlUnsigned(row[14]);
+ret->targetEnd = sqlUnsigned(row[15]);
+ret->targetName = cloneString(row[16]);
+ret->targetStrand = cloneString(row[17]);
+return ret;
 }

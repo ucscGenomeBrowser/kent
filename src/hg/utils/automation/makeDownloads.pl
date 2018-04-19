@@ -282,7 +282,7 @@ sub compressScaffoldFiles {
   my $hgFakeAgpDir = "$HgAutomate::trackBuild/hgFakeAgp";
   my $agpFile = &mustFindOne("$db.agp", 'scaffolds.agp',
 			     "$hgFakeAgpDir/$db.agp",
-			     "$hgFakeAgpDir/scaffolds.agp");
+			     "$hgFakeAgpDir/scaffolds.agp", "ucsc/$db.agp");
   my $outFile = &mustFindOne("$db.fa.out", 'scaffolds.out', "bed/repeatMasker/$db.fa.out");
   my $trfFile = &mustFindOne("$trfRunDirRel/trfMask.bed",
 			     "$trfRunDirRel/scaffolds.bed");
@@ -489,7 +489,7 @@ sub printTableSpecificUsage {
   my $gotConditions = 0;
 
   if (&dbHasTable($dbHost, $db, 'softBerryGene')) {
-    &printSomeHaveConditions() if (! $gotConditions);
+    &printSomeHaveConditions($fh) if (! $gotConditions);
     $gotConditions = 1;
     print $fh <<_EOF_
    softberryGene.txt and softberryPep.txt -  Free for academic
@@ -501,7 +501,7 @@ _EOF_
   }
 
   if (&dbHasTable($dbHost, $db, 'knownGene')) {
-    &printSomeHaveConditions() if (! $gotConditions);
+    &printSomeHaveConditions($fh) if (! $gotConditions);
     $gotConditions = 1;
     print $fh <<_EOF_
    Swiss-Prot/UniProt data in knownGene.txt -
