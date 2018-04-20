@@ -978,11 +978,6 @@ for (ef = efList; ef != NULL; ef = ef->next)
 void doDownloadFileConfirmation(struct sqlConnection *conn)
 /* show overview page of download files */
 {
-if (user==NULL)
-    {
-    printf("Sorry, you have to log in before you can download files.");
-    return;
-    }
 
 printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
 cartSaveSession(cart);
