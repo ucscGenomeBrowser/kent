@@ -24,7 +24,7 @@ errAbort(
   "   count - just count table size\n"
   "   failed - list failed jobs\n"
   "   running - list running jobs\n"
-  "   fihished - list finished (but not failed) jobs\n"
+  "   finished - list finished (but not failed) jobs\n"
   "options:\n"
   "   -database=<mysql database> default %s\n"
   "   -table=<mysql table> default %s\n"
