@@ -918,6 +918,15 @@ void doDownloadUrls()
 struct sqlConnection *conn = sqlConnect(cdwDatabase);
 setCdwUser(conn);
 
+// on non-public cirm (and development vhosts) users must be logged in to use download tokens. 
+if (user==NULL && !isPublicSite)
+    {
+    // this should never happen through normal UI use
+    puts("Content-type: text/html\n\n");
+    puts("Error: user is not logged in");
+    return;
+    }
+
 // on public cirm we have users not logged in. user=NULL and download tokens are not required
 char *token = NULL;
 if (!isPublicSite)
@@ -985,6 +994,11 @@ for (ef = efList; ef != NULL; ef = ef->next)
 void doDownloadFileConfirmation(struct sqlConnection *conn)
 /* show overview page of download files */
 {
+if (user==NULL && !isPublicSite)
+    {
+    printf("Sorry, you have to log in before you can download files.");
+    return;
+    }
 
 printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
 cartSaveSession(cart);
