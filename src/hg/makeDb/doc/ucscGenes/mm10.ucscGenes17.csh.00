@@ -1349,13 +1349,14 @@ ssh $cpuFarm "cd $dir/pfam; para make jobList"
 ssh $cpuFarm "cd $dir/pfam; para time > run.time"
 cat run.time
 
-# Completed: 9670 of 9670 jobs
-# CPU time in finished jobs:    1949502s   32491.70m   541.53h   22.56d  0.062 y
-# IO & Wait Time:                869029s   14483.81m   241.40h   10.06d  0.028 y
-# Average job time:                 291s       4.86m     0.08h    0.00d
-# Longest finished job:             411s       6.85m     0.11h    0.00d
-# Submission to last job:         10040s     167.33m     2.79h    0.12d
+# Completed: 9669 of 9669 jobs
+# CPU time in finished jobs:    1902713s   31711.88m   528.53h   22.02d  0.060 y
+# IO & Wait Time:               1158512s   19308.54m   321.81h   13.41d  0.037 y
+# Average job time:                 317s       5.28m     0.09h    0.00d
+# Longest finished job:             764s      12.73m     0.21h    0.01d
+# Submission to last job:         14274s     237.90m     3.96h    0.17d
 
+#  NEXT TIME USE hg38 method with pvalue included
 # Make up pfamDesc.tab by converting pfam to a ra file first
 cat << '_EOF_' > makePfamRa.awk
 /^NAME/ {print}
@@ -1379,18 +1380,8 @@ awk '{printf("%s\t%s\n", $2, gensub(/\.[0-9]+/, "", "g", $1));}' pfam/pfamDesc.t
 cut -f 1,4 pfam/ucscPfam.tab | subColumn 2 stdin sub.tab stdout | sort -u > knownToPfam.tab
 rm -f sub.tab
 hgLoadSqlTab -notOnServer $tempDb knownToPfam $kent/src/hg/lib/knownTo.sql knownToPfam.tab
-tawk '{print gensub(/\.[0-9]+/, "", "g", $1), $2, $3}' pfam/pfamDesc.tab| hgLoadSqlTab -notOnServer $tempDb pfamDesc $kent/src/hg/lib/pfamDesc.sql stdin
+hgLoadSqlTab -notOnServer $tempDb pfamDesc $kent/src/hg/lib/pfamDesc.sql pfam/pfamDesc.tab
 hgsql $tempDb -e "delete k from knownToPfam k, kgXref x where k.name = x.kgID and x.geneSymbol = 'abParts'"
-
-cd $dir/pfam
-genePredToFakePsl $tempDb knownGene knownGene.psl cdsOut.tab
-sort cdsOut.tab | sed 's/\.\./   /' > sortCdsOut.tab
-sort ucscPfam.tab> sortPfam.tab
-awk '{print $10, $11}' knownGene.psl > gene.sizes
-join sortCdsOut.tab sortPfam.tab |  awk '{print $1, $2 - 1 + 3 * $4, $2 - 1 + 3 * $5, $6}' | bedToPsl gene.sizes stdin domainToGene.psl
-pslMap domainToGene.psl knownGene.psl stdout | pslToBed stdin stdout | bedOrBlocks -useName stdin domainToGenome.bed
-hgLoadBed $tempDb ucscGenePfam domainToGenome.bed
-
 
 # Do scop run. Takes about 6 hours
 mkdir -p $dir/scop
@@ -1416,12 +1407,12 @@ ssh $cpuFarm "cd $dir/scop; para make jobList"
 ssh $cpuFarm "cd $dir/scop; para time > run.time"
 cat run.time
 
-# Completed: 9670 of 9670 jobs
-# CPU time in finished jobs:    2224534s   37075.57m   617.93h   25.75d  0.071 y
-# IO & Wait Time:                563802s    9396.69m   156.61h    6.53d  0.018 y
-# Average job time:                 288s       4.81m     0.08h    0.00d
-# Longest finished job:            3515s      58.58m     0.98h    0.04d
-# Submission to last job:          4347s      72.45m     1.21h    0.05d
+# Completed: 9669 of 9669 jobs
+# CPU time in finished jobs:    2113562s   35226.04m   587.10h   24.46d  0.067 y
+# IO & Wait Time:                 18280s     304.66m     5.08h    0.21d  0.001 y
+# Average job time:                 220s       3.67m     0.06h    0.00d
+# Longest finished job:             415s       6.92m     0.12h    0.00d
+# Submission to last job:          5252s      87.53m     1.46h    0.06d
 
 # Convert scop output to tab-separated files
 cd $dir
@@ -1456,14 +1447,24 @@ rm kgSpAlias_0.tmp
 
 hgLoadSqlTab -notOnServer $tempDb kgSpAlias $kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
 
+# build ucscGenePfam track
+cd $dir/pfam
+genePredToFakePsl mm10 knownGene knownGene.psl cdsOut.tab
+sort cdsOut.tab | sed 's/\.\./   /' > sortCdsOut.tab
+sort ucscPfam.tab> sortPfam.tab
+awk '{print $10, $11}' knownGene.psl > gene.sizes
+join sortCdsOut.tab sortPfam.tab |  awk '{print $1, $2 - 1 + 3 * $4, $2 - 1 + 3 * $5, $6}' | bedToPsl gene.sizes stdin domainToGene.psl
+pslMap domainToGene.psl knownGene.psl stdout | pslToBed stdin stdout | bedOrBlocks -useName stdin domainToGenome.bed 
+hgLoadBed $tempDb ucscGenePfam domainToGenome.bed
+
 # Do BioCyc Pathways build (needs ensembl genes)
     mkdir -p $dir/bioCyc
     cd $dir/bioCyc
     grep -v '^#' $bioCycPathways > pathways.tab
     grep -v '^#' $bioCycGenes > genes.tab
-    kgBioCyc1 genes.tab pathways.tab $db bioCycPathway.tab bioCycMapDesc.tab
-    hgLoadSqlTab -notOnServer $db bioCycPathway $kent/src/hg/lib/bioCycPathway.sql ./bioCycPathway.tab
-    hgLoadSqlTab -notOnServer $db bioCycMapDesc $kent/src/hg/lib/bioCycMapDesc.sql ./bioCycMapDesc.tab
+    kgBioCyc1 genes.tab pathways.tab $tempDb bioCycPathway.tab bioCycMapDesc.tab
+    hgLoadSqlTab -notOnServer $tempDb bioCycPathway $kent/src/hg/lib/bioCycPathway.sql ./bioCycPathway.tab
+    hgLoadSqlTab -notOnServer $tempDb bioCycMapDesc $kent/src/hg/lib/bioCycMapDesc.sql ./bioCycMapDesc.tab
 
 # Do KEGG Pathways build (borrowing Fan Hus's strategy from hg19.txt)
     mkdir -p $dir/kegg
@@ -1563,12 +1564,12 @@ echo "insert into kgXrefOld$lastVer select * from   $db.kgXref" | hgsql $tempDb
 echo "show tables" | hgsql $tempDb | tail -n +2 > tablesInKnownGene.lst
 
 # Create backup database
-hgsqladmin create ${db}Backup3
+hgsqladmin create ${db}Backup2
 
 # Swap in new tables, moving old tables to backup database.
 # LOOK AT ~kent/bin/swapInMysqlTempDb (from hg38 doc)
 foreach i (`cat tablesInKnownGene.lst`)
-echo "rename table $db.$i to ${db}Backup3.$i;" | hgsql $db;
+echo "rename table $db.$i to ${db}Backup2.$i;" | hgsql $db;
 end
 foreach i (`cat tablesInKnownGene.lst`)
 echo "rename table $tempDb.$i to ${db}.$i;"  | hgsql $db

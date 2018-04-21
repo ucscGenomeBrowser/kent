@@ -93,7 +93,7 @@ for (bed = bedList; bed != NULL; bed = bed->next)
 	if (pick->uniProt[0])
 	    uniSeq = hashMustFindVal(uniProtHash, pick->uniProt);
 	if (pick->refProt[0])
-	    refPep = hashMustFindVal(refProtHash, pick->refProt);
+	    refPep = hashFindVal(refProtHash, pick->refProt);
 
 	/* First we look for an exact match between the ucsc protein and
 	 * something from swissProt/uniProt. */
