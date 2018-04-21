@@ -1,4 +1,4 @@
-/* cdwGetFile - given a file ID and a security token, send the file using Apache */
+/* cdwGetFile - given a file ID and a security token (skipped for public cirm site), send the file using Apache */
 
 /* Copyright (C) 2016 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
@@ -6,6 +6,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "hgConfig.h"
 #include "cheapcgi.h"
 #include "sqlSanity.h"
 #include "htmshell.h"
@@ -41,6 +42,9 @@ exit(0);
 void mustHaveAccess(struct sqlConnection *conn, struct cdwFile *ef)
 /* exit with error message if user does not have access to file ef */
 {
+boolean isPublic = cfgOptionBooleanDefault("cdw.siteIsPublic", FALSE);
+if (isPublic)
+    return;
 if (cdwCheckAccess(conn, ef, user, cdwAccessRead))
     return;
 else

@@ -1732,7 +1732,7 @@ if ((sr = sqlGetResultExt(sc, query, &errNo, &err)) == NULL)
         return FALSE;
     if (sc->failoverConn)
 	{
-	// if not found but we have a main connection, check the main connection, too
+	// if not found but we have a failover connection, check on it, too
 	if ((sr = sqlGetResultExt(sc->failoverConn, query, &errNo, &err)) == NULL)
 	    {
 	    if (errNo == tableNotFoundCode)
