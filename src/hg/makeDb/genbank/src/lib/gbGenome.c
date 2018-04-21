@@ -16,6 +16,7 @@ struct dbToSpecies
 };
 
 static char *hgNames[] = {"Homo sapiens", NULL};
+static char *grcNames[] = {"Homo sapiens", NULL};
 static char *mmNames[] = {"Mus musculus", "Mus sp.", 
                           "Mus musculus bactrianus",
                           "Mus musculus castaneus",
@@ -176,6 +177,7 @@ static char *staAurNames[] = {"Staphylococcus", "Staphylococcus aureus", "Staphy
 static char *endNames[] = {NULL};
 
 static struct dbToSpecies dbToSpeciesMap[] = {
+    {"grcHhh", grcNames},
     {"hg", hgNames},
     {"mm", mmNames},
     {"rn", rnNames},
