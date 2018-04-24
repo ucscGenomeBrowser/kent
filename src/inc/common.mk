@@ -34,6 +34,10 @@ ifeq (${IS_HGWDEV},yes)
   FULLWARN = yes
 endif
 
+ifeq (${HOSTNAME},cirm-01)
+  FULLWARN = yes
+endif
+
 ifeq (${PTHREADLIB},)
   PTHREADLIB=-lpthread
 endif
