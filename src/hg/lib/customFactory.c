@@ -1296,7 +1296,7 @@ struct customFactory barChartFactory =
 /* Interact and bigInteract tracks */
 
 static boolean rowIsInteract (char **row, int wordCount, char *db)
-/* return TRUE if row looks like an interact row. BED 5+11 */
+/* return TRUE if row looks like an interact row. BED 5+ */
 {
 char *type = "interact";
 if (!rowIsBed(row, 5, db))
@@ -1308,7 +1308,9 @@ static boolean interactRecognizer(struct customFactory *fac, struct customPp *cp
                                         struct customTrack *track)
 /* Return TRUE if looks like we're handling an interact track */
 {
-if (type != NULL && !sameType(type, fac->name))
+if (type == NULL)
+    return FALSE;
+if (!sameType(type, fac->name))
     return FALSE;
 char *line = customFactoryNextRealTilTrack(cpp);
 if (line == NULL)
@@ -1341,7 +1343,6 @@ loadAndValidateBed(row, 5, INTERACT_NUM_COLS-5, lf, bed, NULL, TRUE);
 struct interact *inter = interactLoadAndValidate(row);
 if (!inter)
     lineFileAbort(lf, "Invalid interact row");
-
 hashStoreName(chromHash, inter->chrom);
 customFactoryCheckChromNameDb(db, inter->chrom, lf);
 int chromSize = hChromSize(db, inter->chrom);
@@ -1467,7 +1468,7 @@ return interactFinish(track, itemList);
 
 struct customFactory interactFactory =
 /* Factory for interact tracks */
-    {
+{
     NULL,
     "interact",
     interactRecognizer,
