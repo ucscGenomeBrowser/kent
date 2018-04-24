@@ -107,13 +107,13 @@ void getNameDescrFromRefSeq(char *refseq, struct sqlConnection *gConn, char **ge
 {    
 char query[256];
 struct sqlResult *sr;
-sqlSafef(query, sizeof(query), "select name,product from refLink where mrnaAcc='%s'", refseq);
+sqlSafef(query, sizeof(query), "select name,product from hgFixed.refLink where mrnaAcc='%s'", refseq);
 sr = sqlGetResult(gConn, query);
 char **row = sqlNextRow(sr);
 if (row != NULL)
     *geneSymbol = cloneString(row[0]);
 sqlFreeResult(&sr);
-sqlSafef(query, sizeof(query), "select d.name from gbCdnaInfo g, description d where g.description = d.id and g.acc = '%s'", refseq);
+sqlSafef(query, sizeof(query), "select d.name from hgFixed.gbCdnaInfo g, hgFixed.description d where g.description = d.id and g.acc = '%s'", refseq);
 sr = sqlGetResult(gConn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
@@ -127,9 +127,9 @@ static void getSymbolAndDescription(char *acc, struct sqlConnection *gConn, char
 
 char query[1024];
 sqlSafef(query, sizeof(query),
-    "select geneName.name, description.name from gbCdnaInfo,geneName,description "
-    "where description.id=gbCdnaInfo.description "
-    "and geneName.id=gbCdnaInfo.geneName and gbCdnaInfo.acc = '%s'", acc);
+    "select geneName.name, description.name from hgFixed.gbCdnaInfo,hgFixed.geneName,hgFixed.description "
+    "where hgFixed.description.id=hgFixed.gbCdnaInfo.description "
+    "and hgFixed.geneName.id=hgFixed.gbCdnaInfo.geneName and hgFixed.gbCdnaInfo.acc = '%s'", acc);
 
 
 struct sqlResult *sr = sqlGetResult(gConn, query);

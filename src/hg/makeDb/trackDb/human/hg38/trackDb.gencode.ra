@@ -15,5 +15,5 @@ include wgEncodeGencodeV24.ra
 include wgEncodeGencodeV25.ra
 include wgEncodeGencodeV26.ra
 include wgEncodeGencodeV27.ra
-include wgEncodeGencodeV28.ra
+include wgEncodeGencodeV28.ra alpha
 

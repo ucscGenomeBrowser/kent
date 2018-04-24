@@ -537,7 +537,10 @@ struct wgEncodeGencodeAttrs *attrs = gencodeQueryAttrs(gencodeQuery, row);  // m
 struct linkedFeatures *lf = linkedFeaturesFromGenePred(tg, gp, TRUE);
 if (highlightIds != NULL)
     highlightByGetColor(gp, highlightIds, highlightColor, lf);
-lf->extra = getTranscriptLabel(enabledLabels, gp, attrs);
+if (gencodeQuery->isGenePredX)
+    lf->extra = getTranscriptLabel(enabledLabels, gp, attrs);
+else
+    lf->extra = cloneString(gp->name);
 wgEncodeGencodeAttrsFree(&attrs);
 return lf;
 }

@@ -1,7 +1,8 @@
 input.form-control { width: 300px; }
 textarea.form-control { width: 500px; height: 200px;}
 
-/* Colors */
+/* Label colors */
+/* This will be retired soon in favor of generic background coloring classes below */
 .label-cescg
 {
     background-color: #FF8C00 /* orange */
@@ -27,27 +28,82 @@ textarea.form-control { width: 500px; height: 200px;}
     background-color: #5cb85c /* lime green */
 }
 
-/*
-.header
+/* Generic background coloring */
+.back-orange
 {
-    background-color: #aaaaaa // light gray
-}
-*/
-
-.footer
-{
-    width: 90%;
-    margin: 0% 5%;
-    background-color: #eaeaea;
+    /* orange */
+    background-color: #FF8C00
 }
 
-/* Styling for title bar and text */
+.back-dark-blue
+{
+    /* gray blue */
+    background-color: #4682B4
+}
+
+.back-dark-pink
+{
+    /* magenta */
+    background-color: #C71585
+}
+
+.back-light-blue
+{
+    /* smurf blue */
+    background-color: #1E90FF
+}
+
+.back-light-green
+{
+    /* lime green */
+    background-color: #5cb85c
+}
+
+.back-gray
+{
+    /* light gray */
+    background-color: #aaaaaa
+}
+
+/* Generic text coloring */
+.text-pink
+{
+/*formerly .singlecell*/
+    color: #ed217c;
+}
+.text-light-blue
+{
+/*formerly .transcriptome*/
+    color: #1E90FF;
+}
+.text-dark-pink
+{
+/*formerly .genome*/
+    color: #C71585;
+}
+.text-light-green
+{
+/*formerly .epigenome*/
+    color: #5cb85c;
+}
+.text-orange
+{
+/*formerly .otherome*/
+    color: #FF8C00;
+}
+
+/* Styling for parts of page body */
 .cirm-page-title
 {
     padding-left: 5px;
     margin-top: 10px;
     width: 100%;
     border-radius: 5px;
+}
+
+.title-bottom-pad
+{
+    margin-bottom: 10px;
 }
 
 .cirm-page-title-text
@@ -60,6 +116,13 @@ textarea.form-control { width: 500px; height: 200px;}
 {
     width: 90%;
     margin: 0% 5%;
+}
+
+.footer
+{
+    width: 90%;
+    margin: 0% 5%;
+    background-color: #eaeaea;
 }
 
 /* Styling for text + links */
@@ -103,6 +166,25 @@ textarea.form-control { width: 500px; height: 200px;}
     color: #ffffff;
     text-decoration: none !important;
     background-color: #1E90FF;
+}
+
+.white-link
+{
+    color: white;
+}
+
+.navbar-nav>li>a
+{
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+}
+
+.nav>li>a:focus,
+.nav>li>a:hover
+{
+    color: white;
+    text-decoration: none;
+    background-color: transparent !important;
 }
 
 .nopadding
@@ -159,29 +241,11 @@ textarea.form-control { width: 500px; height: 200px;}
 }
 */
 
-
-/* Coloring for experiments types on Projects page */
-.singlecell
+/* Table styling */
+.cirm-table
 {
-    color: #ed217c;
+    margin: 0% 1%
 }
-.transcriptome
-{
-    color: #1E90FF;
-}
-.genome
-{
-    color: #C71585;
-}
-.epigenome
-{
-    color: #5cb85c;
-}
-.otherome
-{
-    color: #FF8C00;
-}
-
 
 /*Styling for Projects page table*/
 .table-header-rotated th.row-header

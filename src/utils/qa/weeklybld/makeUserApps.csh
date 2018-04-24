@@ -54,16 +54,16 @@ if ("$HOST" == "hgwdev") then
 	case ${DESTDIR}${BINDIR}/gfServer:
 	    ssh -n qateam@hgdownload "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t"
 	    scp -p $f qateam@hgdownload:/mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t
-	    ssh -n qateam@hgdownload-sd "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t"
-	    scp -p $f qateam@hgdownload-sd:/mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t
+###	    ssh -n qateam@hgdownload-sd "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t"
+###	    scp -p $f qateam@hgdownload-sd:/mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t
 	    ssh -n qateam@genome-euro "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t"
 	    scp -p $f qateam@genome-euro:/mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t
 	    breaksw
 	default:
 	    ssh -n qateam@hgdownload "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t"
 	    scp -p $f qateam@hgdownload:/mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t
-	    ssh -n qateam@hgdownload-sd "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t"
-	    scp -p $f qateam@hgdownload-sd:/mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t
+###	    ssh -n qateam@hgdownload-sd "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t"
+###	    scp -p $f qateam@hgdownload-sd:/mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t
 	    ssh -n qateam@genome-euro "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t"
 	    scp -p $f qateam@genome-euro:/mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t
 	    breaksw

@@ -133,6 +133,30 @@ else
 return result;
 }
 
+char *findSubmitSymlinkExtra(char *submitFileName, char *submitDir, char *oldPath, char **pPath)
+/* Find the last symlink in the chain from submitDir/submitFileName.
+ * This is useful for when target of symlink in cdw/ gets renamed 
+ * (e.g. license plate after passes validation), or removed (e.g. cdwReallyRemove* commands). */
+{
+char *lastPath = NULL;
+char *path = NULL;
+int symlinkLevels = 0;
+
+int result = findSubmitSymlinkExt(submitFileName, submitDir, &path, &lastPath, &symlinkLevels);
+if (result == -1)  // path does not exist
+    {
+    warn("path=[%s] does not exist following submitDir/submitFileName through symlinks.", path);
+    return NULL;
+    }
+if (symlinkLevels < 1)
+    {
+    warn("Too few symlinks followed: %d symlinks. Where is the symlink created by cdwSubmit?", symlinkLevels);
+    return NULL;
+    }
+*pPath = path;   // WE RETURN THIS EXTRA INFO
+return lastPath;
+}
+
 void cdwFindSymlinkable()
 /* Find files that have not been symlinked to cdw/ yet to save space. */
 {
@@ -269,12 +293,37 @@ for (sel = submitIdList; sel != NULL; sel = sel->next)
 
         // test for already-symlinked case
 	char *lastPath = NULL;
-	lastPath = findSubmitSymlink(ef->submitFileName, ed->url, path);
+	char *actualTarget = NULL;
+	lastPath = findSubmitSymlinkExtra(ef->submitFileName, ed->url, path, &actualTarget);
 	if (lastPath)
 	    {
-	    verbose(1, "Already symlinked to file under cdw/ lastPath=%s path=%s\n", lastPath, path);
-	    freeMem(lastPath);
-	    continue;
+	    if (!sameString(actualTarget, path))
+		{
+		// check if file was edited and newer submission of it exists.
+		char query4[256];
+		sqlSafef(query4, sizeof query4, "select count(*) from cdwFile"
+		    " where submitDirId=%d"
+		    " and submitFileName='%s'"
+		    " and cdwFileName='%s'"
+		    " and id > %d"
+		    , ef->submitDirId, ef->submitFileName, ef->cdwFileName, ef->submitId);
+		if (sqlQuickNum(conn, query4) > 0) 
+		    {
+		    verbose(1, "skipping %s since it was modified and re-submitted.\n", newPath);
+		    continue;
+		    }
+		else
+		    {
+		    warn("Found symlinks point to %s, expecting to find symlink pointing to old path %s", actualTarget, path);
+		    }
+
+		}
+	    else
+		{
+		verbose(1, "Already symlinked to file under cdw/ lastPath=%s path=%s\n", lastPath, path);
+		freeMem(lastPath);
+		continue;
+		}
 	    }
 
 	// Check that the target is not already a symlink.

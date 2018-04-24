@@ -79,6 +79,13 @@ static char *makeUniqueName(struct hash *nameHash, char *name)
 // Make the name of this track unique.
 {
 char *skipHub = trackHubSkipHubName(name);
+
+if (hashLookup(nameHash, skipHub) == NULL)
+    {
+    hashStore(nameHash, skipHub);
+    return skipHub;
+    }
+
 char base[4096];
 safef(base, sizeof base, "%s_%lx",skipHub, time(NULL) - 1520629086);
 
