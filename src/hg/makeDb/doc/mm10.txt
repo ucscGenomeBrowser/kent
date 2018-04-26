@@ -16938,8 +16938,23 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1 &
-XXX - running now
-    # real    75m27.412s
+    # Command failed:
+    # ssh -x -o 'StrictHostKeyChecking = no' -o 'BatchMode = yes' hgwdev \
+    #   nice /hive/data/genomes/mm10/bed/lastzOviAri4.2018-04-25/axtChain/netSynteny.csh
+    #
+    # real    237m24.916s
+
+    # used the wrong version of doBlastzChainNet.pl which failed at the
+    # syntenic net step. Clean up and re-try with the fixed up script:
+    rm mm10.oviAri4.syn.chain.gz
+    rm mm10.oviAri4.syn.net.gz
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -continue=syntenicNet \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) >> do.log 2>&1 &
+XXX -stopped here
 
     cat fb.mm10.chainOviAri4Link.txt
     # 432006690 bases of 2652783500 (16.285%) in intersection
