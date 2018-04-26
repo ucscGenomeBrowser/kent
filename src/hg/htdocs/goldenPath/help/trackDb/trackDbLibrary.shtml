@@ -1552,6 +1552,11 @@ There are no extra options that can appear on the type bigBarChart line.
     browser, or if there are more than one matches of that string, 
     will be give a list of the positions to choose from. See <A HREF="../bigBed.html#Ex3">HERE</A>
     for instructions on how to build an index for a bigBed file.
+    The searchIndex setting requires the input BED data to be
+    case-senstive sorted (<code>sort -k1,1 -k2,2n</code>), where
+    newer versions of the tool bedToBigBed (available
+    <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">here</a>)
+    are enhanced to catch improper input.
     <b>Note:</b> The searchIndex setting currently does not work if
     tracks are nested in composites.
     <P><B>Example:</B></P>
