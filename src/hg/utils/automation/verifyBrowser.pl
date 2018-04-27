@@ -307,7 +307,7 @@ if ($goldSearch == 1) {
   printf STDERR "# ERROR: missing specific hgFindSpec rule for gold table\n";
 }
 
-my $allJoiner = `grep $db ~/kent/src/hg/makeDb/schema/all.joiner | head -1 | wc -l`;
+my $allJoiner = `grep $db /usr/local/apache/cgi-bin/all.joiner | head -1 | wc -l`;
 chomp $allJoiner;
 if ($allJoiner != 1) {
   printf STDERR "# ERROR missing definitions in hg/makeDb/schema/all.joiner\n";
