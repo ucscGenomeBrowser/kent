@@ -459,9 +459,9 @@ awk -F"\t" '\$6 != \$7 {print \$1;}' process/\$db.ncbiRefSeq.gp \\
 join -t'\t' coding.cds.name.list process/\$asmId.rna.cds \\
   | hgLoadSqlTab \$db ncbiRefSeqCds ~/kent/src/hg/lib/cdsSpec.sql stdin
 
-# loading the cross reference data -- substitute empty string for "n/a" (hgc expects "")
-sed -e 's!n/a!!g;' process/\$asmId.\$db.ncbiRefSeqLink.tab \\
-  | hgLoadSqlTab \$db ncbiRefSeqLink ~/kent/src/hg/lib/ncbiRefSeqLink.sql stdin
+# loading the cross reference data
+hgLoadSqlTab \$db ncbiRefSeqLink ~/kent/src/hg/lib/ncbiRefSeqLink.sql \\
+  process/\$asmId.\$db.ncbiRefSeqLink.tab
 
 # prepare Pep table, select only those peptides that match loaded items
 hgsql -N -e 'select protAcc from ncbiRefSeqLink;' \$db | grep . \\
@@ -478,7 +478,7 @@ hgLoadSqlTab \$db ncbiRefSeqPepTable ~/kent/src/hg/lib/pepPred.sql \\
 # and load the fasta peptides, again, only those for items that exist
 pslCat -nohead process/\$asmId.\$db.psl.gz | cut -f10 \\
    | sort -u > \$db.psl.used.rna.list
-cut -f5 process/\$asmId.\$db.ncbiRefSeqLink.tab | grep -v "n/a" | sort -u > \$db.mrnaAcc.name.list
+cut -f5 process/\$asmId.\$db.ncbiRefSeqLink.tab | grep . | sort -u > \$db.mrnaAcc.name.list
 sort -u \$db.psl.used.rna.list \$db.mrnaAcc.name.list > \$db.rna.select.list
 cut -f1 process/\$db.ncbiRefSeq.gp | sort -u > \$db.gp.name.list
 comm -12 \$db.rna.select.list \$db.gp.name.list > \$db.toLoad.rna.list
