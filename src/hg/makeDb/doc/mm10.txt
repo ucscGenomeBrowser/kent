@@ -16970,7 +16970,8 @@ XXX -stopped here
       /hive/data/genomes/mm10/bed/lastzOviAri4.2018-04-25/DEF \
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-            -syntenicNet) > swap.log 2>&1
+            -syntenicNet) > swap.log 2>&1 &
+XXX - stopped here
     #  real    31m27.481s
 
     cat fb.oviAri4.chainMm10Link.txt
