@@ -16954,13 +16954,14 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) >> do.log 2>&1 &
-XXX -stopped here
+    # real  18m40.051s
 
     cat fb.mm10.chainOviAri4Link.txt
-    # 432006690 bases of 2652783500 (16.285%) in intersection
+    # 693504453 bases of 2652783500 (26.143%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` mm10 oviAri4) > rbest.log 2>&1 &
     # real    17m24.577s
+XXX - running now
 
     # and for the swap:
     mkdir /hive/data/genomes/oviAri4/bed/blastz.mm10.swap
