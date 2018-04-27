@@ -16972,12 +16972,12 @@ XXX - running now
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1 &
-XXX - stopped here
-    #  real    31m27.481s
+    #  real    63m12.935s
 
     cat fb.oviAri4.chainMm10Link.txt
-    #422549165 bases of 2534335866 (16.673%) in intersection
+    # 680117358 bases of 2587515673 (26.285%) in intersection
 
-    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` oviAri4 mm10) > rbest.log 2>&1
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` oviAri4 mm10) > rbest.log 2>&1 &
+XXX - running now
     # real    16m45.956s
 
