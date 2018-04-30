@@ -114,6 +114,14 @@ html chainNet
         type chain bosTau8
         otherDb bosTau8
 
+        track chainOviAri4
+        subTrack placentalChainNetViewchain off
+        subGroups view=chain species=kSheep clade=cLaura
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain oviAri4
+        otherDb oviAri4
+
         track chainOviAri1
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=kSheep clade=cLaura
@@ -303,6 +311,14 @@ html chainNet
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign bosTau8 chainBosTau8
         otherDb bosTau8
+
+        track netOviAri4
+        subTrack placentalChainNetViewnet off
+        subGroups view=net species=kSheep clade=cLaura
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign oviAri4 chainOviAri1
+        otherDb oviAri4
 
         track netOviAri1
         subTrack placentalChainNetViewnet off
