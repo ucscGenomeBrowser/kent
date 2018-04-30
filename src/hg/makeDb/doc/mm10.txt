@@ -16960,8 +16960,7 @@ TMPDIR=/dev/shm
     # 693504453 bases of 2652783500 (26.143%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` mm10 oviAri4) > rbest.log 2>&1 &
-    # real    17m24.577s
-XXX - running now
+    # real    485m29.546s
 
     # and for the swap:
     mkdir /hive/data/genomes/oviAri4/bed/blastz.mm10.swap
@@ -16978,6 +16977,5 @@ XXX - running now
     # 680117358 bases of 2587515673 (26.285%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` oviAri4 mm10) > rbest.log 2>&1 &
-XXX - running now
-    # real    16m45.956s
+    # real    437m1.637s
 
