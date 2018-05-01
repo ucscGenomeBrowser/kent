@@ -77,7 +77,7 @@ type bed 3
 sortOrder view=+
 matrix 16 72,-127,-29,-142,-127,100,-120,-29,-29,-120,100,-127,-142,-29,-127,72
 matrixHeader A, C, G, T
-otherDb oviAri3
+otherDb oviAri4
 chainMinScore 3000
 chainLinearGap medium
 spectrum on
@@ -97,7 +97,7 @@ html chainNet
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain oviAri3
+        type chain oviAri4
         html chainNet
 
     track chainNetOviAri4Viewnet
@@ -113,7 +113,7 @@ html chainNet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign oviAri3 chainOviAri4
+        type netAlign oviAri4 chainOviAri4
         html chainNet
 
 ################################################################
