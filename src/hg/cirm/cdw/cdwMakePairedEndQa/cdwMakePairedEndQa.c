@@ -196,6 +196,54 @@ mustSystem(cmd);
 cdwFastqFileFree(&fqf);
 }
 
+void sampleTrimAndAlign(struct sqlConnection *conn, struct cdwValidFile *vf1, struct cdwValidFile *vf2, 
+        char *genoFile, char *assay, char *tmpSam)
+/* Given a fastq file, make a subsample of it 10k reads long and align it with
+ * bwa mem producing a sam file of given name. */
+{
+/* Get fastq record 1 */
+long long fileId = vf1->fileId;
+struct cdwFastqFile *fqf1 = cdwFastqFileFromFileId(conn, fileId);
+if (fqf1 == NULL)
+    errAbort("No cdwFastqFile record for file id %lld", fileId);
+
+/* Get fastq record 2 */
+fileId = vf2->fileId;
+struct cdwFastqFile *fqf2 = cdwFastqFileFromFileId(conn, fileId);
+if (fqf2 == NULL)
+    errAbort("No cdwFastqFile record for file id %lld", fileId);
+
+char sampleFastqName1[PATH_LEN], sampleFastqName2[PATH_LEN];
+char trimmedPath1[PATH_LEN], trimmedPath2[PATH_LEN];
+
+/* Create downsampled fastq1 in temp directory - downsampled more than default even. */
+cdwMakeTempFastqSample(fqf1->sampleFileName, FASTQ_SAMPLE_SIZE, sampleFastqName1);
+verbose(1, "downsampled %s into %s\n", vf1->licensePlate, sampleFastqName1);
+
+/* Create downsampled fastq2 in temp directory - downsampled more than default even. */
+cdwMakeTempFastqSample(fqf2->sampleFileName, FASTQ_SAMPLE_SIZE, sampleFastqName2);
+verbose(1, "downsampled %s into %s\n", vf1->licensePlate, sampleFastqName2);
+
+/* Trim long-RNA-seq files to ensure no poly-A tails remain*/
+cdwTrimReadsForAssay(sampleFastqName1, trimmedPath1, assay); 
+cdwTrimReadsForAssay(sampleFastqName2, trimmedPath2, assay); 
+
+/* Do alignment */
+char cmd[3*PATH_LEN];
+//also see comments in cdwLib on bowtie on background about the bwa -> bowtie change
+//safef(cmd, sizeof(cmd), "bwa mem -t 3 %s %s %s > %s", genoFile, trimmedPath1, trimmedPath2, tmpSam);
+safef(cmd, sizeof(cmd), "bowtie -L 40 -n 1 %s --threads 4 --mm -1 %s -2 %s -S > %s", genoFile, trimmedPath1, trimmedPath2, tmpSam);
+mustSystem(cmd);
+
+/* Save return variables, clean up,  and go home. */
+cdwCleanupTrimReads(sampleFastqName1, trimmedPath1); 
+cdwCleanupTrimReads(sampleFastqName2, trimmedPath2); 
+remove(sampleFastqName1);
+remove(sampleFastqName2);
+cdwFastqFileFree(&fqf1);
+cdwFastqFileFree(&fqf2);
+}
+
 void pairedEndQa(struct sqlConnection *conn, struct cdwFile *ef, struct cdwValidFile *vf)
 /* Look for other end,  do a pairwise alignment, and save results in database. */
 {
@@ -219,30 +267,19 @@ if (pair != NULL)
 struct cdwAssembly *assembly = cdwAssemblyForUcscDb(conn, vf->ucscDb);
 assert(assembly != NULL);
 char genoFile[PATH_LEN];
-safef(genoFile, sizeof(genoFile), "%s%s/bwaData/%s.fa", 
-    cdwValDataDir, assembly->ucscDb, assembly->ucscDb);
+cdwIndexPath(assembly, genoFile);
 
 verbose(1, "aligning subsamples on %u vs. %u paired reads\n", vf1->fileId, vf2->fileId);
 
 /* Make alignments of subsamples. */
-char *sample1 = NULL, *sample2 = NULL, *sai1 = NULL, *sai2 = NULL;
-char fastqPath1[PATH_LEN],trimmedPath1[PATH_LEN],fastqPath2[PATH_LEN],trimmedPath2[PATH_LEN];
 struct cgiParsedVars *tags = cdwMetaVarsList(conn, ef);
 char *assay = cdwLookupTag(tags, "assay");
-makeTmpSai(conn, vf1, genoFile, &sample1, &sai1, assay, fastqPath1, trimmedPath1);
-makeTmpSai(conn, vf2, genoFile, &sample2, &sai2, assay, fastqPath2, trimmedPath2);
 
-
-
-/* Make paired end alignment */
 char *tmpSam = cloneString(rTempName(cdwTempDir(), "cdwPairSample", ".sam"));
-char command[6*PATH_LEN];
-safef(command, sizeof(command),
-   "bwa sampe -n 1 -N 1 -f %s %s %s %s %s %s"
-   , tmpSam, genoFile, sai1, sai2, sample1, sample2);
-mustSystem(command);
+sampleTrimAndAlign(conn, vf1, vf2, genoFile, assay, tmpSam);
 
 /* Make ra file with pairing statistics */
+char command[6*PATH_LEN];
 char *tmpRa = cloneString(rTempName(cdwTempDir(), "cdwPairSample", ".ra"));
 safef(command, sizeof(command), 
     "edwSamPairedEndStats -maxInsert=%d %s %s", maxInsert, tmpSam, tmpRa);
@@ -265,22 +302,11 @@ sqlDisconnect(&freshConn);
 
 /* Clean up and go home. */
 cdwValidFileFree(&otherVf);
-remove(sample1);
-remove(sample2);
-remove(sai1);
-remove(sai2);
 remove(tmpSam);
 remove(tmpRa);
-#ifdef SOON
-#endif /* SOON */
-freez(&sample1);
-freez(&sample2);
-freez(&sai1);
-freez(&sai2);
+
 freez(&tmpSam);
 freez(&tmpRa);
-cdwCleanupTrimReads(fastqPath1, trimmedPath1); 
-cdwCleanupTrimReads(fastqPath2, trimmedPath2); 
 cdwQaPairedEndFastqFree(&pe);
 cdwValidFileFree(&otherVf);
 }
