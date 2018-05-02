@@ -32717,7 +32717,13 @@ TMPDIR=/dev/shm
 
     # commit all
 
-
+    # 2018-05-01 markd
+    # fix bug in wgEncodeGencodeEntrezGeneV28lift37 with change in gencodeLoad.mk.  Reload the table.
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV28lift37
+    rm tables/wgEncodeGencodeEntrezGeneV28lift37.tab 
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.3.out&
+                                                                                 
+                                                                                 
 #########################################################################
 # DBSNP B151 / SNP151 (DONE 4/16/18 angie)
     # Redmine #21010
