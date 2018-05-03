@@ -1239,6 +1239,7 @@ else if (isCustomTrack(table))
             startsWithWord("makeItems", type) || 
             sameWord("bedDetail", type) || 
             sameWord("barChart", type) || 
+            sameWord("interact", type) || 
             sameWord("pgSnp", type))
 	        fieldList = sqlListFields(conn, ct->dbTableName);
 	hFreeConn(&conn);

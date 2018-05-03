@@ -54,9 +54,14 @@ def trackDbTemplateGen(params):
     yield forBoth(params, (
         "track wgEncodeGencodeV{gencodeVer}",
         "compositeTrack on",
-        "superTrack wgEncodeGencodeSuper pack",
+        "superTrack wgEncodeGencodeSuper pack",))
+    yield forStd(params, (
         "shortLabel All GENCODE V{gencodeVer}",
-        "longLabel All GENCODE annotations from V{gencodeVer} (Ensembl {ensemblVer})",
+        "longLabel All GENCODE annotations from V{gencodeVer} (Ensembl {ensemblVer})",))
+    yield forLift(params, (
+        "shortLabel GENCODE V{gencodeVer}",
+        "longLabel GENCODE lifted annotations from V{gencodeVer} (Ensembl {ensemblVer})",))
+    yield forBoth(params, (
         "group genes",
         "dragAndDrop subTracks",
         "priority {superTrackPriority:.3f}",

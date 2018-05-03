@@ -292,6 +292,11 @@ if (offset != 0)
 /* If necessary load database */
 if (dbRequested)
     {
+    if (! fileExists("loader/hgLoadBed") )
+	{
+	errAbort("loading custom tracks: can not find "
+		"'cgi-bin/loader/hgLoadBed' command\n");
+	}
     customFactorySetupDbTrack(track);
     struct pipeline *dataPipe = bedLoaderPipe(track);
     FILE *out = pipelineFile(dataPipe);
@@ -611,8 +616,8 @@ static struct pipeline *encodePeakLoaderPipe(struct customTrack *track)
  *		-maxChromNameLength=${nameLength} customTrash tableName stdin
  */
 struct dyString *tmpDy = newDyString(0);
-char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader", "-sqlTable=loader/encodePeak.sql", 
-                "-renameSqlTable", "-trimSqlTable", "-notItemRgb", 
+char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader", "-sqlTable=loader/encodePeak.sql",
+                "-renameSqlTable", "-trimSqlTable", "-notItemRgb",
                 NULL, NULL, NULL, NULL, NULL, NULL};
 char *tmpDir = cfgOptionDefault("customTracks.tmpdir", "/data/tmp");
 struct stat statBuf;
@@ -1096,7 +1101,7 @@ char *buf[BAR_CHART_MAX_CATEGORIES];
 int expScoresCount = chopCommas(cloneString(row[BARCHART_EXPSCORES_COLUMN_IX]), buf);
 int expCount = sqlUnsigned(row[BARCHART_EXPCOUNT_COLUMN_IX]);
 if (expCount != expScoresCount)
-    errAbort("Error line 1 of custom track, type is %s, but found %d expScores (expecting %d)", 
+    errAbort("Error line 1 of custom track, type is %s, but found %d expScores (expecting %d)",
                 type, expScoresCount, expCount);
 return TRUE;
 }
@@ -1139,11 +1144,11 @@ customPpReuse(cpp, line);
 return isBarChart;
 }
 
-static struct barChartBed *customTrackBarChart(struct customTrack *track, char *db, 
+static struct barChartBed *customTrackBarChart(struct customTrack *track, char *db,
                                     char **row, struct hash *chromHash, struct lineFile *lf)
 /* Convert a row of strings to barChart. */
 {
-// Validate first 6 standard bed fields 
+// Validate first 6 standard bed fields
 struct bed *bed;
 AllocVar(bed);
 loadAndValidateBed(row, 6, BARCHARTBED_NUM_COLS-6, lf, bed, NULL, TRUE);
@@ -1156,7 +1161,7 @@ if (!barChart)
 int count;
 sqlFloatDynamicArray(row[BARCHART_EXPSCORES_COLUMN_IX], &barChart->expScores, &count);
 if (count != barChart->expCount)
-    lineFileAbort(lf, "expecting %d elements in expScores list (field %d)", 
+    lineFileAbort(lf, "expecting %d elements in expScores list (field %d)",
                         barChart->expCount, BARCHART_EXPSCORES_COLUMN_IX+1);
 // TODO: check offset and len
 
@@ -1184,7 +1189,7 @@ if (stat(tmpDir,&statBuf))
 	"create directory or specify in hg.conf customTracks.tmpdir", tmpDir);
 
 char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader", NULL,
-	        "-renameSqlTable", "-trimSqlTable", "-notItemRgb", "-noBin", 
+	        "-renameSqlTable", "-trimSqlTable", "-notItemRgb", "-noBin",
                 NULL, NULL, NULL, NULL, NULL, NULL};
 
 char *schemaFile = "barChartBed.sql";
@@ -1195,7 +1200,7 @@ cmd1[2] = dyStringCannibalize(&ds);
 int index = 7;
 ds = newDyString(0);
 dyStringPrintf(ds, "-tmpDir=%s", tmpDir);
-cmd1[index++] = dyStringCannibalize(&ds); 
+cmd1[index++] = dyStringCannibalize(&ds);
 
 ds = newDyString(0);
 dyStringPrintf(ds, "-maxChromNameLength=%d", track->maxChromName);
@@ -1296,7 +1301,7 @@ struct customFactory barChartFactory =
 /* Interact and bigInteract tracks */
 
 static boolean rowIsInteract (char **row, int wordCount, char *db)
-/* return TRUE if row looks like an interact row. BED 5+11 */
+/* return TRUE if row looks like an interact row. BED 5+ */
 {
 char *type = "interact";
 if (!rowIsBed(row, 5, db))
@@ -1308,7 +1313,9 @@ static boolean interactRecognizer(struct customFactory *fac, struct customPp *cp
                                         struct customTrack *track)
 /* Return TRUE if looks like we're handling an interact track */
 {
-if (type != NULL && !sameType(type, fac->name))
+if (type == NULL)
+    return FALSE;
+if (!sameType(type, fac->name))
     return FALSE;
 char *line = customFactoryNextRealTilTrack(cpp);
 if (line == NULL)
@@ -1328,20 +1335,19 @@ customPpReuse(cpp, line);
 return isInteract;
 }
 
-static struct interact *customTrackInteract(struct customTrack *track, char *db, 
+static struct interact *customTrackInteract(struct customTrack *track, char *db,
                                     char **row, struct hash *chromHash, struct lineFile *lf)
 /* Convert a row of strings to interact format. */
 {
-// Validate first 5 standard bed fields 
+// Validate first 5 standard bed fields
 struct bed *bed;
 AllocVar(bed);
 loadAndValidateBed(row, 5, INTERACT_NUM_COLS-5, lf, bed, NULL, TRUE);
 
 // Load as interact and validate custom fields
-struct interact *inter = interactLoad(row);
+struct interact *inter = interactLoadAndValidate(row);
 if (!inter)
     lineFileAbort(lf, "Invalid interact row");
-
 hashStoreName(chromHash, inter->chrom);
 customFactoryCheckChromNameDb(db, inter->chrom, lf);
 int chromSize = hChromSize(db, inter->chrom);
@@ -1378,7 +1384,7 @@ cmd1[2] = dyStringCannibalize(&ds);
 int index = 6;
 ds = newDyString(0);
 dyStringPrintf(ds, "-tmpDir=%s", tmpDir);
-cmd1[index++] = dyStringCannibalize(&ds); 
+cmd1[index++] = dyStringCannibalize(&ds);
 
 ds = newDyString(0);
 dyStringPrintf(ds, "-maxChromNameLength=%d", track->maxChromName);
@@ -1467,7 +1473,7 @@ return interactFinish(track, itemList);
 
 struct customFactory interactFactory =
 /* Factory for interact tracks */
-    {
+{
     NULL,
     "interact",
     interactRecognizer,
@@ -1969,6 +1975,12 @@ struct hash *settings = track->tdb->settingsHash;
 if (!dbRequested)
     errAbort("Maf files have to be in database");
 
+if (! fileExists("loader/hgLoadMaf") )
+    {
+    errAbort("loading custom tracks: can not find "
+	"'cgi-bin/loader/hgLoadMaf' command\n");
+    }
+
 track->dbTrackType = cloneString(fac->name);
 track->wiggle = TRUE;
 
@@ -2164,6 +2176,16 @@ int span = 1;
 /* Load database if requested */
 if (dbRequested)
     {
+    if (! fileExists("loader/hgLoadWiggle") )
+	{
+	errAbort("loading custom tracks: can not find "
+		"'cgi-bin/loader/hgLoadWiggle' command\n");
+	}
+    if (! fileExists("loader/wigEncode") )
+	{
+	errAbort("loading custom tracks: can not find "
+		"'cgi-bin/loader/wigEncode' command\n");
+	}
     /* TODO: see if can avoid extra file copy in this case. */
     customFactorySetupDbTrack(track);
 
@@ -2394,8 +2416,8 @@ if (hashLookup(settings, "viewLimits") == NULL)
 }
 
 boolean isValidBigDataUrl(char *url, boolean doAbort)
-/* return True if the URL is a valid bigDataUrl. 
- * It can be a local filename if this is allowed by udc.localDir 
+/* return True if the URL is a valid bigDataUrl.
+ * It can be a local filename if this is allowed by udc.localDir
  */
 {
 if ((startsWith("http://", url)
@@ -2421,7 +2443,7 @@ if (!startsWith(prefix, url))
         errAbort("bigDataUrl '%s' on local file system has to start with '%s' (see udc.localDir directive in cgi-bin/hg.conf)", url, prefix);
     return FALSE;
     }
-        
+
 return TRUE;
 }
 
@@ -3818,9 +3840,9 @@ if (dbTrack)
      * if we want to make the warning visible, have to extend behavior of customTrack.c */
     }
 
-setUdcCacheDir();  // Need to set udc cache dir here because this whole cust trk parse routine 
-                   // gets called very early in CGI life by cart.c when processing saved-sessions. 
-                   // It is not specific to just hgCustom and hgTracks since any CGI that uses the cart 
+setUdcCacheDir();  // Need to set udc cache dir here because this whole cust trk parse routine
+                   // gets called very early in CGI life by cart.c when processing saved-sessions.
+                   // It is not specific to just hgCustom and hgTracks since any CGI that uses the cart
                    // may need this.
 
 int ptMax = atoi(cfgOptionDefault("parallelFetch.threads", "20"));  // default number of threads for parallel fetch.
@@ -3957,7 +3979,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
             dataUrl = cloneString(lf->fileName);
 	if (bigDataUrl && (ptMax > 0)) // handle separately in parallel so long timeouts don't accrue serially
                                        //  (unless ptMax == 0 which means turn parallel loading off)
-	    { 
+	    {
 	    struct paraFetchData *pfd;
 	    AllocVar(pfd);
 	    pfd->track = track;  // need pointer to be stable
@@ -3986,7 +4008,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
     }
 
 // Call the fac loader in parallel on all the bigDataUrl custom tracks
-// using pthreads to avoid long serial timeouts 
+// using pthreads to avoid long serial timeouts
 pthread_t *threads = NULL;
 if (ptMax > 0)     // parallelFetch.threads=0 to disable parallel fetch
     {

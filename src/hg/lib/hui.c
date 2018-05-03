@@ -48,6 +48,7 @@
 #include "longRange.h"
 #include "barChartUi.h"
 #include "interactUi.h"
+#include "interact.h"
 #include "customComposite.h"
 #include "trackVersion.h"
 #include "hubConnect.h"
@@ -8796,7 +8797,7 @@ else if (sameWord("pgSnp", tdb->type))
 else if (sameWord("barChart", tdb->type))
     asObj = asParseText(barChartAutoSqlString);
 else if (sameWord("interact", tdb->type))
-    asObj = asParseText(barChartAutoSqlString);
+    asObj = interactAsObj();
 else
     asObj = asFromTableDescriptions(conn, tdb->table);
 return asObj;

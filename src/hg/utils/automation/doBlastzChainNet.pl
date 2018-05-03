@@ -1700,9 +1700,12 @@ _EOF_
 
     if ($dbExists) {
       $bossScript->add(<<_EOF_
-hgLoadChain -tIndex $tDb chainSyn$QDb $tDb.$qDb.syn.chain.gz
-netFilter -minGap=10 $tDb.$qDb.syn.net.gz \\
-  | hgLoadNet -verbose=0 $tDb netSyn$QDb stdin
+set lineCount = `zcat $tDb.$qDb.syn.chain.gz | wc -l`
+if (\$lineCount > 0) then
+  hgLoadChain -tIndex $tDb chainSyn$QDb $tDb.$qDb.syn.chain.gz
+  netFilter -minGap=10 $tDb.$qDb.syn.net.gz \\
+    | hgLoadNet -verbose=0 $tDb netSyn$QDb stdin
+endif
 _EOF_
       );
     } else {

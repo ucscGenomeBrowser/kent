@@ -40,6 +40,7 @@ struct cart *cart;	// User variables saved from click to click
 struct hash *oldVars;	// Previous cart, before current round of CGI vars folded in
 struct cdwUser *user;	// Our logged in user if any
 static char *accessibleFilesToken = NULL;  // Token for file access if any
+boolean isPublicSite = FALSE;
 
 
 char *excludeVars[] = {"cdwCommand", "submit", "DownloadFormat", NULL};
@@ -917,7 +918,8 @@ void doDownloadUrls()
 struct sqlConnection *conn = sqlConnect(cdwDatabase);
 setCdwUser(conn);
 
-if (user==NULL)
+// on non-public cirm (and development vhosts) users must be logged in to use download tokens. 
+if (user==NULL && !isPublicSite)
     {
     // this should never happen through normal UI use
     puts("Content-type: text/html\n\n");
@@ -925,7 +927,12 @@ if (user==NULL)
     return;
     }
 
-char *token = createTokenForUser();
+// on public cirm we have users not logged in. user=NULL and download tokens are not required
+char *token = NULL;
+if (!isPublicSite)
+    {
+    token = createTokenForUser();
+    }
 
 // if we recreate the submission dir structure, we need to create a shell script
 boolean createSubdirs = FALSE;
@@ -966,19 +973,28 @@ for (ef = efList; ef != NULL; ef = ef->next)
         if ( (submitFname!=NULL) && (!isEmpty(submitFname)) && (*submitFname=='/') )
             submitFname += 1;
 
-        printf("curl --netrc-file cirm_credentials 'https://%s/cgi-bin/cdwGetFile?acc=%s&token=%s' --create-dirs -o %s\n", \
-            host, vf->licensePlate, token, submitFname);
+        printf("curl ");
+	if (!isPublicSite)
+	    printf("--netrc-file cirm_credentials ");
+        printf("'https://%s/cgi-bin/cdwGetFile?acc=%s",
+            host, vf->licensePlate); 
+	if (!isPublicSite)
+	    printf("&token=%s", token);
+	printf("' --create-dirs -o %s\n", 
+	    submitFname);
         }
     else
-        printf("https://%s/cgi-bin/cdwGetFile?acc=%s&token=%s%s\n", \
-            host, vf->licensePlate, token, optArg);
+        printf("https://%s/cgi-bin/cdwGetFile?acc=%s", host, vf->licensePlate);
+	if (!isPublicSite)
+	    printf("&token=%s", token);
+	printf("%s\n", optArg);
     }
 }
 
 void doDownloadFileConfirmation(struct sqlConnection *conn)
 /* show overview page of download files */
 {
-if (user==NULL)
+if (user==NULL && !isPublicSite)
     {
     printf("Sorry, you have to log in before you can download files.");
     return;
@@ -1022,8 +1038,6 @@ puts("Name files as submitted and put into subdirectories<p>");
 cgiMakeSubmitButton();
 printf("</FORM>\n");
 
-boolean isPublic = cfgOptionBooleanDefault("isCirmPublicSite", FALSE);
-
 jsInline 
     (
     "$('.scriptButton').change( function() {$('#urlListDoc').hide(); $('#scriptDoc').show()} );\n"
@@ -1037,7 +1051,7 @@ puts("<ul>\n");
 puts("<li>With Firefox and <a href=\"https://addons.mozilla.org/en-US/firefox/addon/downthemall/\">DownThemAll</a>: Click Tools - DownThemAll! - Manager. Right click - Advanced - Import from file. Right-click - Select All. Right-click - Toogle All\n");
 puts("<li>With Chrome and <a href=\"https://chrome.google.com/webstore/detail/tab-save/lkngoeaeclaebmpkgapchgjdbaekacki\">TabToSave</a>: Click the T/S icon next to the URL bar, click the edit button at the bottom of the screen and paste the file contents\n");
 
-if (isPublic)
+if (isPublicSite)
     {
     puts("<li>OSX/Linux: With curl and a single thread: <tt>xargs -n1 curl -JO < fileUrls.txt</tt>\n");
     puts("<li>Linux: With wget and a single thread: <tt>wget --content-disposition -i fileUrls.txt</tt>\n");
@@ -1058,8 +1072,11 @@ puts("</div>\n");
 puts("<div id='scriptDoc' style='display:none'>\n");
 puts("When you click 'submit', a shell script that runs curl will get downloaded.\n");
 puts("The URLs are valid for one week.<p>\n");
-puts("Before you start the download, create a file called cirm_credentials with your username and password like this:<br>\n");
-puts("<tt>echo 'default login <i>user@university.edu</i> password <i>mypassword</i>' > cirm_credentials</tt><p>\n");
+if (!isPublicSite)
+    {
+    puts("Before you start the download, create a file called cirm_credentials with your username and password like this:<br>\n");
+    puts("<tt>echo 'default login <i>user@university.edu</i> password <i>mypassword</i>' > cirm_credentials</tt><p>\n");
+    }
 puts("Then, to download the files:\n");
 puts("<ul>\n");
 puts("<li>Linux/OSX: With curl and a single thread: <tt>sh downloadCirm.sh</tt>\n");
@@ -1941,6 +1958,7 @@ if (!isFromWeb && !cgiSpoof(&argc, argv))
 dnaUtilOpen();
 oldVars = hashNew(0);
 char *cdwCmd = cgiOptionalString("cdwCommand");
+isPublicSite = cfgOptionBooleanDefault("cdw.siteIsPublic", FALSE);
 if (sameOk(cdwCmd, "downloadUrls"))
     doDownloadUrls();
 else if (sameOk(cdwCmd, "menubar"))

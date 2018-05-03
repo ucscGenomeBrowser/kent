@@ -54,10 +54,10 @@ UTIL_DIRS = \
 
 CGI_DIRS = \
     cdwGetFile \
+    cdwServeTagStorm \
     cdwWebBrowse 
 
-TEST_DIRS = \
-	encode2BedDoctor 
+TEST_DIRS = 
 
 utils: cdwLib
 	${MAKE} buildUtils
@@ -79,16 +79,23 @@ clean:: $(USE_DIRS:%=%.clean)
 %.clean:
 	(cd $* && ${MAKE} clean)
 
-cgi:: cdwLib
+cgi:: cdwLib tagStormCgi
 	${MAKE} buildCgi
 
 buildCgi:: $(CGI_DIRS:%=%.buildCgi)
 %.buildCgi:
 	cd $* && ${MAKE}
 
-alpha:: cdwLib
+alpha:: cdwLib tagStormAlpha
 	${MAKE} buildAlpha
 
 buildAlpha:: $(CGI_DIRS:%=%.buildAlpha)
 %.buildAlpha:
 	(cd $* && ${MAKE} alpha)
+
+tagStormCgi:
+	cd ../../../tagStorm && ${MAKE} cgi
+
+tagStormAlpha:
+	cd ../../../tagStorm && ${MAKE} alpha
+

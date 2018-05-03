@@ -6,6 +6,7 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
+#include "basicBed.h"
 #include "interact.h"
 
 
@@ -265,26 +266,24 @@ static char *interactAutoSqlString =
 "table interact"
 "\"BED5+13 interaction between two regions\""
 "    ("
-"   string chrom;       \"Reference sequence chromosome or scaffold\""
-"   uint   chromStart;  \"Start position of lower region\""
-"   uint   chromEnd;    \"End position of upper region. For interchromsomal, set to chromStart+1.\""
+"   string chrom;       \"Chromosome (or contig, scaffold, etc.). For interchromosomal, use 2 records\""
+"   uint   chromStart;  \"Start position of lower region. For chromosomal, set to chromStart of this region\""
+"   uint   chromEnd;    \"End position of upper region. For interchromsomal, set to chromEnd of this region\""
 "   string name;        \"Name or ID of item. Usually name1/name2 or name1/name2/exp or empty\""
 "   uint   score;       \"Score from 0-1000, typically derived from value\""
 "   double value;       \"Strength of interaction or other data value\""
-"   string exp;         \"Experiment name for filtering, or empty\""
+"   string exp;         \"Experiment name for filtering. Use . if not applicable\""
 "   uint   color;       \"Item color, as itemRgb in bed9.  Typically based on value or exp\""
-
-"   string sourceChrom; \"Chromosome of source region (directional) or lower region\""
-"   uint   sourceStart; \"Start position of source/lower region\""
-"   uint   sourceEnd;   \"End position of source/lower region\""
-"   string sourceName;  \"Identifier of source/lower region. Can be used as link to related table.\""
-"   string sourceStrand;\"Orientation of target/upper/other region: + or -.  Use . if not applicable.\""
-
-"   string targetChrom; \"Chromosome of target region (directional) or lower region\""
-"   uint   targetStart; \"Start position of target/lower region\""
-"   uint   targetEnd;   \"End position of target/lower region\""
-"   string targetName;  \"Identifier of target/lower region. Can be used as link to related table.\""
-"   string targetStrand;\"Orientation of target/lower/other region: + or -.  Use . if not applicable.\""
+"   string sourceChrom; \"Chromosome of source region (directional) or lower region. For non-directional interchromosomal, chrom of this region\""
+"   uint   sourceStart; \"Start position of source/lower/this region\""
+"   uint   sourceEnd;   \"End position of source/lower/this region\""
+"   string sourceName;  \"Identifier of source/lower/this region. Can be used as link to related table.\""
+"   string sourceStrand;\"Orientation of source/lower/this region: + or -.  Use . if not applicable.\""
+"   string targetChrom; \"Chromosome of target region (directional) or upper region. For non-directional interchromosomal, chrom of other region\""
+"   uint   targetStart; \"Start position of target/upper/this region\""
+"   uint   targetEnd;   \"End position of target/upper/this region\""
+"   string targetName;  \"Identifier of target/upper/this region. Can be used as link to related table.\""
+"   string targetStrand;\"Orientation of target/upper/this region: + or -.  Use . if not applicable.\""
 "   )"
 ;
 
@@ -342,4 +341,33 @@ if (bDist < 0)
 
 // same chromosome
 return aDist - bDist;
+}
+
+struct interact *interactLoadAndValidate(char **row)
+/* Load a interact from row fetched with select * from interact
+ * from database, validating fields.  Dispose of this with interactFree(). */
+// TODO: more validating
+{
+struct interact *ret;
+
+AllocVar(ret);
+ret->chrom = cloneString(row[0]);
+ret->chromStart = sqlUnsigned(row[1]);
+ret->chromEnd = sqlUnsigned(row[2]);
+ret->name = cloneString(row[3]);
+ret->score = sqlUnsigned(row[4]);
+ret->value = sqlDouble(row[5]);
+ret->exp = cloneString(row[6]);
+ret->color = bedParseColor(row[7]);
+ret->sourceChrom = cloneString(row[8]);
+ret->sourceStart = sqlUnsigned(row[9]);
+ret->sourceEnd = sqlUnsigned(row[10]);
+ret->sourceName = cloneString(row[11]);
+ret->sourceStrand = cloneString(row[12]);
+ret->targetChrom = cloneString(row[13]);
+ret->targetStart = sqlUnsigned(row[14]);
+ret->targetEnd = sqlUnsigned(row[15]);
+ret->targetName = cloneString(row[16]);
+ret->targetStrand = cloneString(row[17]);
+return ret;
 }

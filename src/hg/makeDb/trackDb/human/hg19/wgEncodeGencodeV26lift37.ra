@@ -1,8 +1,8 @@
 track wgEncodeGencodeV26lift37
 compositeTrack on
 superTrack wgEncodeGencodeSuper pack
-shortLabel All GENCODE V26lift37
-longLabel All GENCODE annotations from V26lift37 (Ensembl 88)
+shortLabel GENCODE V26lift37
+longLabel GENCODE annotations from V26lift37 (Ensembl 88)
 group genes
 dragAndDrop subTracks
 priority 34.179

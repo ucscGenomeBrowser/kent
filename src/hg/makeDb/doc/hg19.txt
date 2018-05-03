@@ -32689,3 +32689,131 @@ TMPDIR=/dev/shm
     # 1342604720 bases of 2472073034 (54.311%) in intersection
 
 #########################################################################
+2018-04-17: import of UCSC GENCODE group processing of GENCODE V28lift37 (markd)
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV28lift37
+    pushd /hive/data/genomes/hg19/bed/gencodeV28lift37
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg19 28lift37 92 'Apr 2018'
+
+    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release. [ONLY if it's going to be pushed]
+
+    # edit human/hg19/trackDb.wgEncode.ra to add new .ra file include
+    make DBS=hg19
+
+    # edit  all.joiner to add ~/tmp/gencodeV28lift37.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg19/bed/gencodeV28lift37
+    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # commit all
+
+    # 2018-05-01 markd
+    # fix bug in wgEncodeGencodeEntrezGeneV28lift37 with change in gencodeLoad.mk.  Reload the table.
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV28lift37
+    rm tables/wgEncodeGencodeEntrezGeneV28lift37.tab 
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.3.out&
+                                                                                 
+                                                                                 
+#########################################################################
+# DBSNP B151 / SNP151 (DONE 4/16/18 angie)
+    # Redmine #21010
+    mkdir -p /hive/data/outside/dbSNP/151/human_hg19
+    cd /hive/data/outside/dbSNP/151/human_hg19
+    # Look at the directory listing of ftp://ftp.ncbi.nih.gov/snp/organisms/
+    # to find the subdir name to use as orgDir below (human_9606_b151_GRCh37p13 in this case).
+    # Go to that subdirectory, then to database/organism_data/ and look for files
+    # whose names start with b151_* and may or may not end with a suffix that identifies
+    # the build assembly version or some annotation version.  If there is a suffix shared
+    # by all b151_* files, add that to config.ra as the "buildAssembly".
+    # Since this build is on GRCh37.p13 like b144 above, use the liftUp.lft file
+    # and ignoreDbSnpContigsFile constructed for b144.
+    cat > config.ra <<EOF
+db hg19
+orgDir human_9606_b151_GRCh37p13
+build 151
+buildAssembly 105
+liftUp ../../144/human_hg19/liftUp.lft
+refAssemblyLabel GRCh37.p13
+ignoreDbSnpContigsFile ../../144/human_hg19/patchContigs.txt
+EOF
+    # dbSNP does not make a complete set of download files for hg19 anymore, so
+    # do a "debug" run and link some files from hg38 before running the script.
+    # (hard link so wget doesn't get confused)
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -debug
+    ln ../human_hg38/data/{S*,B*} data/
+    # Edit the download script: put if(0) around download files that dbSNP doesn't dump.
+    vi ../download_human_hg19_151.csh
+    # Run the edited script manually:
+    csh -efx ../download_human_hg19_151.csh >& do.log & tail -f do.log
+    # Now continue the usual way at the next step after download:
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue loadDbSnp >>& do.log &
+    tail -f do.log
+
+    # While that's running, compare rs IDs in rs_fasta with b147_SNPContigLoc_105 to see
+    # which IDs (if any) were omitted from the rs_fasta dump.
+    zcat rs_fasta/rs*.fas.gz \
+    | perl -wne 'if (/^>/) { s/^>gnl\|dbSNP\|(rs\d+) .*/$1/ || die; print; }' \
+    | sort -u > rsFastaIds.txt
+    zcat data/b151_SNPContigLoc_105.bcp.gz \
+    | awk '{print "rs" $2;}' \
+    | sort -u > contigLocIds.txt
+    wc -l rsFastaIds.txt contigLocIds.txt
+#  611582085 rsFastaIds.txt
+#  648992551 contigLocIds.txt
+    comm -13 rsFastaIds.txt contigLocIds.txt > missingFromRsFasta.txt
+    wc -l missingFromRsFasta.txt
+#49191042 missingFromRsFasta.txt
+    # Doh!  Way too many for a batch request.  So weird... hg19 rs_fasta download files
+    # are dated more recently (March 4-6) than hg38 (Feb 22-24).
+    # Looks like I should use the hg38 fasta, it has only 45 missing (see hg38/variation.txt):
+    comm -13 ../human_hg38/rsFastaIds.txt contigLocIds.txt | wc -l
+#45
+    mv rs_fasta rs_fasta_missing_49M
+    mkdir rs_fasta
+    ln ../human_hg38/rs_fasta/* rs_fasta
+    tail -f do.log
+    # A mysql load command in the loadDbSnp step failed, so I edited loadDbSnp.csh to continue
+    # from the failed command.
+    csh -efx loadDbSnp.csh >> & do.log & tail -f do.log
+    # Continue from next step:
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue addToDbSnp >>& do.log &
+    tail -f do.log
+    # Yay, script completed:
+# *** All done!  (through the 'bigBed' step)
+
+
+##############################################################################
+# SNP151 ORTHOLOGOUS ALLELES IN CHIMP, ORANG, MACAQUE (DONE 4/18/18 angie)
+    # Redmine #21010
+    screen -S ortho -t ortho
+    ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg19 151 -debug
+# *** Steps were performed in /hive/data/genomes/hg19/bed/snp151Ortho.2018-04-17
+    cd /hive/data/genomes/hg19/bed/snp151Ortho.2018-04-17
+    ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg19 151 \
+      >>& do.log & tail -f do.log
+# *** All done!
+
+
+##############################################################################
+# SNPMASKED SEQUENCE FOR SNP151 (DONE 4/17/18 angie)
+    # Redmine #21010
+    screen -S mask -t mask
+    ~/kent/src/hg/utils/automation/doDbSnpMaskSequence.pl hg19 151 -debug
+# *** Steps were performed in /hive/data/genomes/hg19/snp151Mask.2018-04-17
+    cd /hive/data/genomes/hg19/snp151Mask.2018-04-17
+    ~/kent/src/hg/utils/automation/doDbSnpMaskSequence.pl hg19 151 \
+      >>& do.log & tail -f do.log
+# *** All done!
+
+
+##############################################################################
