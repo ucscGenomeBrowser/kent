@@ -2,6 +2,7 @@ track wgEncodeGencodeSuper
 superTrack on
 trackHandler wgEncodeGencode
 group genes
+pennantIcon Updated red ../goldenPath/newsarch.html#050318 "Released May 03, 2018"
 shortLabel All GENCODE
 longLabel All GENCODE transcripts, including comprehensive set and previous version
 # doen't set wgEncode attribute here, since newer GENCODEs are not ENCODE

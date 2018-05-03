@@ -1,6 +1,7 @@
 track wgEncodeGencodeSuper
 superTrack on
 group genes
+pennantIcon Updated red ../goldenPath/newsarch.html#050318 "Released May 03, 2018"
 shortLabel GENCODE
 longLabel GENCODE Gene Annotation 
 # doen't set wgEncode attribute here, since newer GENCODEs are not ENCODE
