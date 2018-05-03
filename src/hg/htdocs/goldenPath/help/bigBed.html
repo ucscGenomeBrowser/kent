@@ -169,7 +169,10 @@ well as examples of <em>.as</em> files in
 <a href="http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/hg/lib"
 target="_blank">this directory</a>. 
 This example also demonstrates how to create extra indices on the name field, and the first of the 
-extra fields to be used for track item search.</p>
+extra fields to be used for track item search. The searchIndex setting requires the input BED data to be
+case-senstive sorted (<code>sort -k1,1 -k2,2n</code>), where newer versions of the tool bedToBigBed
+(available <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">here</a>) are enhanced to catch
+improper input.</p>
 <ol>
   <li> 
   Save the BED file <a href="examples/bedExample2.bed"><em>bedExample2.bed</em></a> to your computer

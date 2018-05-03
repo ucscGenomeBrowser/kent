@@ -393,7 +393,8 @@ var gtexTrackSettings = (function() {
         tissues.forEach(animateTissue);
     }
 
-    function initSvg(svgEl) {
+    function initSvg() {
+        var svgEl = document.getElementById('bodyMapSvg');
         _svgDoc = svgEl.contentDocument;
         _svgRoot = _svgDoc.documentElement;
         initBodyMap();
@@ -404,17 +405,8 @@ var gtexTrackSettings = (function() {
         // cart.setCgi('gtexTrackSettings');
 
         $(function() {
-            // After page load, tweak layout and initialize event handlers
-            // Check if SVG is loaded, if wait for the event
-            var svgEl = document.getElementById('bodyMapSvg');
-            if (svgEl.getSVGDocument()) {
-                initSvg(svgEl);
-            } else {
-                // Wait for SVG to load
-                svgEl.addEventListener('load', function() {
-                    initSvg(svgEl);
-                }, false);
-            }
+            // After SVG load, tweak layout and initialize event handlers
+            document.getElementById('bodyMapSvg').addEventListener('load', initSvg, false);
             $('.gbButtonGoContainer').click(submitForm);
 
             // hide/show of sample counts

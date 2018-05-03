@@ -22,7 +22,21 @@ HG_INC+=-I../inc -I../../inc -I../../../inc -I../../../../inc -I../../../../../i
 # to check for Mac OSX Darwin specifics:
 UNAME_S := $(shell uname -s)
 # to check for builds on hgwdev
-FULLWARN = $(shell uname -n)
+HOSTNAME = $(shell uname -n)
+
+ifeq (${HOSTNAME},hgwdev)
+  IS_HGWDEV = yes
+else
+  IS_HGWDEV = no
+endif
+
+ifeq (${IS_HGWDEV},yes)
+  FULLWARN = yes
+endif
+
+ifeq (${HOSTNAME},cirm-01)
+  FULLWARN = yes
+endif
 
 ifeq (${PTHREADLIB},)
   PTHREADLIB=-lpthread
@@ -63,7 +77,7 @@ ifneq (${SSL_DIR}, "/usr/include/openssl")
     HG_INC+=-I${SSL_DIR}/include
 endif
 # on hgwdev, already using the static library with mysqllient.
-ifeq (${FULLWARN},hgwdev)
+ifeq (${IS_HGWDEV},yes)
    L+=/usr/lib64/libssl.a /usr/lib64/libcrypto.a -lkrb5
 else
    L+=-lssl -lcrypto
@@ -119,7 +133,7 @@ endif
 # do not need to do this during 'clean' target (this is very slow for 'clean')
 ifneq ($(MAKECMDGOALS),clean)
   # on hgwdev, use the static library.
-  ifeq (${FULLWARN},hgwdev)
+  ifeq (${IS_HGWDEV},yes)
     MYSQLINC=/usr/include/mysql
     MYSQLLIBS=/usr/lib64/libssl.a /usr/lib64/libcrypto.a /usr/lib64/mysql/libmysqlclient.a -lkrb5
   endif
@@ -221,7 +235,7 @@ endif
 
 # OK to add -lstdc++ to all MYSQLLIBS just in case it is
 #    MySQL version 5.6 libraries, but no 'librt' on Mac OSX
-ifeq (${FULLWARN},hgwdev)
+ifeq (${IS_HGWDEV},yes)
   MYSQLLIBS += /usr/lib/gcc/x86_64-redhat-linux/4.4.4/libstdc++.a /usr/lib/debug/usr/lib64/librt.a
 else
   ifeq ($(UNAME_S),Darwin)
@@ -270,7 +284,7 @@ ifeq (${HG_WARN},)
       HG_WARN = -Wall -Wformat -Wimplicit -Wreturn-type
       HG_WARN_UNINIT=-Wuninitialized
     else
-      ifeq (${FULLWARN},hgwdev)
+      ifeq (${FULLWARN},yes)
         HG_WARN = -Wall -Werror -Wformat -Wformat-security -Wimplicit -Wreturn-type -Wempty-body -Wunused-but-set-variable
         HG_WARN_UNINIT=-Wuninitialized
       else

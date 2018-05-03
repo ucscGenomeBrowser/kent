@@ -1,5 +1,3 @@
-pmid is an array with at least 3 vals
-file is an array with at least 2 vals
 access $ *
 age # 1 100
 age_units $ *
