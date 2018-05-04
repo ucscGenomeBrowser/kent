@@ -704,7 +704,7 @@ identifier knownGeneRetro dependency
     hg38.ucscRetroInfo9.kgName minCheck=0.96 exclude=noKg chopAfter=.
     mm9.ucscRetroInfo1.kgName minCheck=0.94 exclude=noKg chopAfter=.
     mm10.ucscRetroInfo2.kgName minCheck=0.96 exclude=noKg chopAfter=.
-    mm10.ucscRetroInfo6.kgName minCheck=0.96 exclude=noKg chopAfter=.
+    mm10.ucscRetroInfo6.kgName minCheck=0.90 exclude=noKg chopAfter=.
 
 identifier ucscRetroInfo[1,2,4,5,6,9] dependency
 "Link together Ucsc Retrogenes and ucsc retroGene alignments"
