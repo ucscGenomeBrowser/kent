@@ -960,6 +960,13 @@ if (hashLookup(tableListProfChecked, key) == NULL)
 boolean hTableExists(char *db, char *table)
 /* Return TRUE if a table exists in db. */
 {
+if (sameWord(db, CUSTOM_TRASH))
+    {
+    struct sqlConnection *conn = hAllocConn(db);
+    boolean toBeOrNotToBe = sqlTableExists(conn, table);
+    hFreeConn(&conn);
+    return toBeOrNotToBe;
+    }
 struct hash *hash = tableListGetDbHash(db);
 struct slName *tableNames = NULL, *tbl = NULL;
 char trackName[HDB_MAX_TABLE_STRING];

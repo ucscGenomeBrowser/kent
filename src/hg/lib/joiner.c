@@ -985,7 +985,9 @@ char *s, *e;
 struct joinerDtf *dtf;
 AllocVar(dtf);
 s = triple;
-e = strchr(s, '.');
+e = strstr(s, ".hub_");
+if (e == NULL)
+    e = strchr(s, '.');
 if (e == NULL)
    notTriple(triple);
 dtf->database = cloneStringZ(s, e-s);

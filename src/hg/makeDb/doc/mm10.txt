@@ -16938,14 +16938,29 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1 &
-XXX - running now
-    # real    75m27.412s
+    # Command failed:
+    # ssh -x -o 'StrictHostKeyChecking = no' -o 'BatchMode = yes' hgwdev \
+    #   nice /hive/data/genomes/mm10/bed/lastzOviAri4.2018-04-25/axtChain/netSynteny.csh
+    #
+    # real    237m24.916s
+
+    # used the wrong version of doBlastzChainNet.pl which failed at the
+    # syntenic net step. Clean up and re-try with the fixed up script:
+    rm mm10.oviAri4.syn.chain.gz
+    rm mm10.oviAri4.syn.net.gz
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -continue=syntenicNet \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) >> do.log 2>&1 &
+    # real  18m40.051s
 
     cat fb.mm10.chainOviAri4Link.txt
-    # 432006690 bases of 2652783500 (16.285%) in intersection
+    # 693504453 bases of 2652783500 (26.143%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` mm10 oviAri4) > rbest.log 2>&1 &
-    # real    17m24.577s
+    # real    485m29.546s
 
     # and for the swap:
     mkdir /hive/data/genomes/oviAri4/bed/blastz.mm10.swap
@@ -16955,12 +16970,12 @@ XXX - running now
       /hive/data/genomes/mm10/bed/lastzOviAri4.2018-04-25/DEF \
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-            -syntenicNet) > swap.log 2>&1
-    #  real    31m27.481s
+            -syntenicNet) > swap.log 2>&1 &
+    #  real    63m12.935s
 
     cat fb.oviAri4.chainMm10Link.txt
-    #422549165 bases of 2534335866 (16.673%) in intersection
+    # 680117358 bases of 2587515673 (26.285%) in intersection
 
-    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` oviAri4 mm10) > rbest.log 2>&1
-    # real    16m45.956s
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` oviAri4 mm10) > rbest.log 2>&1 &
+    # real    437m1.637s
 

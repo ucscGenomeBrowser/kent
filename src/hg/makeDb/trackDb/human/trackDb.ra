@@ -108,8 +108,8 @@ prevExonText Left edge
 nextExonText Right edge
 
 track phegeni
-shortLabel dbGap SNPs
-longLabel dbGap GWAS SNPs from the Phenotype-Genotype Integrator
+shortLabel PheGenI SNPs
+longLabel NCBI Phenotype-Genotype Integrator SNPs
 group phenDis
 visibility hide
 color 0,100,0
@@ -117,7 +117,7 @@ type bigBed 9 +
 release alpha
 mouseOverField trait
 bigDataUrl /gbdb/$D/bbi/phegeni.bb
-urls studyId=https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=$$ geneId1=https://www.ncbi.nlm.nih.gov/gene/?term=$$%5Buid%5D geneId2=https://www.ncbi.nlm.nih.gov/gene/?term=$$%5Buid%5D
+urls studyId=https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=$$ geneId1=https://www.ncbi.nlm.nih.gov/gene/?term=$$%5Buid%5D geneId2=https://www.ncbi.nlm.nih.gov/gene/?term=$$%5Buid%5D analysisId=https://www.ncbi.nlm.nih.gov/projects/SNP/gViewer/gView.cgi?aid=$$ catalogId=https://www.ebi.ac.uk/gwas/search?query=$$
 
 track caseControl
 compositeTrack on

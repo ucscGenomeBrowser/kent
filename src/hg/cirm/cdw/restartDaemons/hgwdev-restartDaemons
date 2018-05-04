@@ -1,0 +1,16 @@
+#!/bin/tcsh -x
+
+echo Rsyncing bowtie indexes to /dev/shm
+rsync -apv /data/cirm/valData/ramdisk/ /dev/shm/btData/
+
+# Relaunch cdwRunDaemons.  Send them initial wake up message
+killall cdwRunDaemon
+set qaFifo = /usr/local/apache/userdata/cdwQaAgent.fifo
+cdwRunDaemon cdw cdwJob 3 $qaFifo -log=cdwQaAgent.log
+echo hi > $qaFifo
+
+# NOT USED BY CIRM
+#set subFifo = /usr/local/apache/userdata/cdwSubmit.fifo
+#cdwRunDaemon cdw cdwSubmitJob 2 $subFifo -log=cdwSubmit.log
+#echo hi > $subFifo
+

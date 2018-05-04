@@ -333,7 +333,7 @@ ${tableAnnotationRemarkTab}: ${tableAnnotationRemarkMeta} ${gencodeTsv}
 # drop ENSTR entries that are a hack to support PAR sequences in GTF
 ${tableEntrezGeneTab}: ${tableEntrezGeneMeta}
 	@mkdir -p $(dir $@)
-	zcat $< | tawk '$$1!~/^ENSTR/' | sort -k 1,1 > $@.${tmpExt}
+	zcat $< | tawk '$$1!~/^ENSTR/' | sort -k 1,1 | ${metaFilterCmd} /dev/stdin > $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
 ##

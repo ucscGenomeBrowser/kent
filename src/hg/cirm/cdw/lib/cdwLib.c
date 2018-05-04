@@ -37,6 +37,7 @@
 #include "cdwLib.h"
 #include "trashDir.h"
 #include "wikiLink.h"
+#include "hgConfig.h"
 
 
 /* System globals - just a few ... for now.  Please seriously not too many more. */
@@ -1755,12 +1756,12 @@ if (fchmod(fd, 0664) == -1)
 mustCloseFd(&fd);
 }
 
-void cdwBwaIndexPath(struct cdwAssembly *assembly, char indexPath[PATH_LEN])
-/* Fill in path to BWA index. */
+void cdwIndexPath(struct cdwAssembly *assembly, char indexPath[PATH_LEN])
+/* Fill in path to BWA/Bowtie index. */
 {
-safef(indexPath, PATH_LEN, "%s%s/bwaData/%s.fa", 
-    cdwValDataDir, assembly->ucscDb, assembly->ucscDb);
+safef(indexPath, PATH_LEN, "/dev/shm/btData/%s", assembly->ucscDb);
 }
+
 
 void cdwAsPath(char *format, char path[PATH_LEN])
 /* Convert something like "narrowPeak" in format to full path involving
@@ -1805,27 +1806,36 @@ void cdwAlignFastqMakeBed(struct cdwFile *ef, struct cdwAssembly *assembly,
     char *fastqPath, struct cdwValidFile *vf, FILE *bedF,
     double *retMapRatio,  double *retDepth,  double *retSampleCoverage, 
     double *retUniqueMapRatio, char *assay)
-/* Take a sample fastq and run bwa on it, and then convert that file to a bed. 
+/* Take a sample fastq, run the aligner on it and then convert that file to a bed. 
  * bedF and all the ret parameters can be NULL. */
 {
 // Figure out BWA index
 char genoFile[PATH_LEN];
-cdwBwaIndexPath(assembly, genoFile);
+cdwIndexPath(assembly, genoFile);
 
 // Trim reads if need be
 char trimmedFile[PATH_LEN];
 cdwTrimReadsForAssay(fastqPath, trimmedFile, assay);
 
-// Run BWA alignment
-char cmd[3*PATH_LEN], *saiName, *samName;
-saiName = cloneString(rTempName(cdwTempDir(), "cdwSample1", ".sai"));
-safef(cmd, sizeof(cmd), "bwa aln -t 3 %s %s > %s", genoFile, trimmedFile, saiName);
-mustSystem(cmd);
-
+char *samName;
 samName = cloneString(rTempName(cdwTempDir(), "ewdSample1", ".sam"));
-safef(cmd, sizeof(cmd), "bwa samse %s %s %s > %s", genoFile, saiName, trimmedFile, samName);
+
+char cmd[3*PATH_LEN];
+// We used to use bwa backtrack here ("bwa aln"), but this mode does not allow mmap indices
+// BWA mem allows preloaded mmap'ed indices, but it is very slow to start, like bowtie2
+// Also BWA mem and bowtie2 are local aligners, so their stats are very different and they do not seem
+// to have a "require 99% identity option", which is very, very strange.
+// So bowtie seemed like the best of both worlds, mmap and also global alignment
+// Max did various comparisons with 80 sample fastq files and the count of aligned reads were very very similar
+// for those files that have enough reads in them. Plots were in email to Jim/Clay.
+
+// -l 40 is seed length. Makes it a lot faster. Today's reads should be longer than 40 bp
+// -n 1 is the number of mismatches in the seed. lower this to 1 makes it a lot faster.
+// -mm activates mmap for the index, which is now in ramdisk
+// -S is for SAM output (so no more useless .sai temp files)
+// these options require a decently recent bowtie version, I used 1.2.2
+safef(cmd, sizeof(cmd), "bowtie -l 40 -n 1 --mm --threads 3 %s %s -S > %s", genoFile, trimmedFile, samName);
 mustSystem(cmd);
-remove(saiName);
 
 /* Scan sam file to calculate vf->mapRatio, vf->sampleCoverage and vf->depth. 
  * and also to produce little bed file for enrichment step. */

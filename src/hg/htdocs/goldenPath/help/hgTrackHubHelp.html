@@ -639,7 +639,8 @@ created on any field of the bed. Free-text searches can also be enabled by creat
 file that maps id's in the track to free-text metadata.</p>
 <p>
 See the searchIndex and searchTrix fields in the Hub Track Database Definition document for 
-information on how to set up your bigBed to enable searching. See an example 
+information on how to set up your bigBed to enable searching. The searchIndex setting requires
+the input BED data to be case-senstive sorted (<code>sort -k1,1 -k2,2n</code>). See an example 
 <a href="examples/hubExamples/hubIndexedBigBedSearchable/" target="_blank">searchable hub</a>.</p>
 
 <!-- ========== Displaying Track Hubs by URL and in Sessions ============================== -->
@@ -824,7 +825,7 @@ compatibility with the UCSC Genome Browser, and may have different advantages an
 such as size limitations, usage statistics, and version control integration. Additionally, as 
 previously mentioned, any provider that supports byte-range access will work for hub hosting, 
 and you are not limited to the above sites. Below is a summarized guide for each of the providers 
-mentioned above.</p>
+mentioned above. <b>Please note these services are external to UCSC and may change.</b></p>
 
 <h3>Hosting Hubs on CyVerse</h3>
 <p>

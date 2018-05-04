@@ -59,8 +59,12 @@ when troubleshooting the CDW,  the first thing to do is use 'ps' to determine if
 
 If not, go to:
 
-        production: /data/cirm/cdw/startup
-        test: /cluster/home/kent/kent/src/hg/cirm/cdw/lib
+        cd kent/src/hg/cirm/cdw/restartDaemons
+
+        production: cirm01-restartDaemons
+        test: hgwdev-restartDaemons
+
+        (A copy of these scripts is also in this repo, in kent/src/hg/cirm/cdw/restartDaemons)
 
 and run
         ./restartDaemons
