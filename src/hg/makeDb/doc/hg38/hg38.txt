@@ -6940,3 +6940,30 @@ cd kent/src/hg/makeDb/trackDb
     # commit all
 
 #########################################################################
+# RepeatMasker Visualization track update (TBD - 2018-05-04 - ChrisL)
+    screen -S rmskJoined.2018-05-04
+    mkdir /hive/data/genomes/hg38/bed/rmskJoined.2018-05-04
+    cd /hive/data/genomes/hg38/bed/rmskJoined.2018-05-04
+
+    ln -s ../repeatMasker/hg38.sorted.fa.out .
+    ln -s ../repeatMasker/hg38.fa.align.gz .
+
+    # this script points to the most recent RepeatMasker version:
+    time (/scratch/data/RepeatMasker/util/rmToUCSCTables.pl \
+        -out hg38.sorted.fa.out -align hg38.fa.align.gz) > do.log 2>&1 &
+XXX -stopped here
+
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/rmskJoined.sql \
+        -renameSqlTable -verbose=4 -tab \
+            -type=bed4+9 -as=$HOME/kent/src/hg/lib/rmskJoined.as hg38 \
+                rmskJoinedBaseline hg38.sorted.fa.join.bed \
+                    > loadJoined.log 2>&1
+
+    hgLoadSqlTab hg38 rmskAlignBaseline \
+        /cluster/home/chmalee/kent/src/hg/lib/rmskAlign.sql \
+            hg38.fa.align.tsv > loadAlign.log 2>&1
+
+    hgLoadOutJoined -verbose=2 hg38 hg38.sorted.fa.out > loadOut.log 2>&1
+
+    featureBits -countGaps hg38 rmskJoinedBaseline
+    #    2716777279 bases of 3209286105 (84.654%) in intersection
