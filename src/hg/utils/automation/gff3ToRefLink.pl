@@ -95,7 +95,8 @@ sub parseGff3($) {
     my $id = $tags{id};
     if (exists($gff{$id})) {
       # So weird that NCBI's GFF has unique IDs for exons but not CDS.
-      die "Encountered a second record with ID=$id" unless ($id =~ /^cds/);
+      # And non-uniq IDs for a few sequence_feature, even primary_transcript mir-8199 in ce11...
+      warn "Encountered a second record with ID=$id" unless ($id =~ /^cds/);
       next;
     }
     $gff{$id} = \%tags;
