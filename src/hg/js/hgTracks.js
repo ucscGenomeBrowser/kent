@@ -23,6 +23,14 @@ var debug = false;
  * Object trackDb         // hash of trackDb entries for tracks which are visible on current page
  */
 
+/* IE11 compatibility - IE doesn't have string startsWith and never will */
+if (!String.prototype.startsWith) {
+  String.prototype.startsWith = function(searchString, position) {
+    position = position || 0;
+    return this.indexOf(searchString, position) === position;
+  };
+}
+
 function initVars()
 {  // There are various entry points, so we call initVars in several places to make sure all is well
     if (typeof(hgTracks) !== "undefined" && !genomePos.original) {
