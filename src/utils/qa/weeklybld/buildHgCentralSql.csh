@@ -100,6 +100,11 @@ scp -p hgcentral.sql qateam@hgdownload-sd:/mirrordata/apache/htdocs/admin/
 ssh -n qateam@genome-euro "rm /mirrordata/apache/htdocs/admin/hgcentral.sql"
 scp -p hgcentral.sql qateam@genome-euro:/mirrordata/apache/htdocs/admin/
 
+# archive
+set dateStamp = `date "+%FT%T"`
+cp -p hgcentral.sql /hive/groups/browser/centralArchive/hgcentral.$dateStamp.sql
+gzip /hive/groups/browser/centralArchive/hgcentral.$dateStamp.sql
+
 echo
 echo "A new hgcentral.sql file should now be present at:"
 echo "  http://hgdownload.cse.ucsc.edu/admin/"

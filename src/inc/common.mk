@@ -1,4 +1,5 @@
-CC=gcc
+# if CC is undefined, set it to gcc
+CC?=gcc
 # to build on sundance: CC=gcc -mcpu=v9 -m64
 ifeq (${COPT},)
     COPT=-O -g
@@ -72,7 +73,9 @@ endif
 # libssl: disabled by default
 ifneq (${SSL_DIR}, "/usr/include/openssl")
   ifneq ($(UNAME_S),Darwin)
-    L+=-L${SSL_DIR}/lib
+    ifneq ($(wildcard ${SSL_DIR}),)
+      L+=-L${SSL_DIR}/lib
+    endif
   endif
     HG_INC+=-I${SSL_DIR}/include
 endif
