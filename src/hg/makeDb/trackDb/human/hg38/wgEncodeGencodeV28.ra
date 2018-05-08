@@ -4,7 +4,7 @@ superTrack wgEncodeGencodeSuper pack
 shortLabel All GENCODE V28
 longLabel All GENCODE annotations from V28 (Ensembl 92)
 group genes
-pennantIcon Updated red ../goldenPath/newsarch.html#050318 "Released May 03, 2018"
+pennantIcon Updated red ../goldenPath/newsarch.html#050318 "All GENCODE V28 released May 03, 2018"
 dragAndDrop subTracks
 priority 34.177
 visibility pack
