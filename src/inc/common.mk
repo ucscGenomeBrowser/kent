@@ -72,7 +72,9 @@ endif
 # libssl: disabled by default
 ifneq (${SSL_DIR}, "/usr/include/openssl")
   ifneq ($(UNAME_S),Darwin)
-    L+=-L${SSL_DIR}/lib
+    ifneq ($(wildcard ${SSL_DIR}),)
+      L+=-L${SSL_DIR}/lib
+    endif
   endif
     HG_INC+=-I${SSL_DIR}/include
 endif
