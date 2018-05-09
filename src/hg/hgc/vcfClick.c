@@ -486,6 +486,14 @@ if (sameString(tdb->track, "exacVariants"))
            skipChr(rec->chrom), rec->chromStart+1, rec->alleles[0], rec->alleles[1],
            skipChr(rec->chrom), rec->chromStart+1, rec->alleles[0], rec->alleles[1]);
     }
+if (sameString(tdb->track, "gnomadVariants"))
+    {
+    printf("<b>gnomAD:</b> "
+           "<a href=\"http://gnomad.broadinstitute.org/variant/%s-%d-%s-%s\" "
+           "target=_blank>%s:%d %s/%s</a><br>\n",
+           skipChr(rec->chrom), rec->chromStart+1, rec->alleles[0], rec->alleles[1],
+           skipChr(rec->chrom), rec->chromStart+1, rec->alleles[0], rec->alleles[1]);
+    }
 // Since these are variants, if it looks like a dbSNP or dbVar ID, provide a link:
 if (regexMatch(rec->name, "^rs[0-9]+$"))
     {

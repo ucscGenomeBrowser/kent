@@ -2788,6 +2788,7 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
     printf("</TD>\n");
     printf("<TD>%s", tdb->longLabel);
 
+    printf("&nbsp&nbsp;");
     printDataVersion(database, tdb);
     //printf("&nbsp&nbsp;<EM style='color:#666666; font-size:smaller;'>%s</EM>", dataVersion);
     printf("</TD></TR>");
