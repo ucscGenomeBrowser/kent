@@ -6940,7 +6940,7 @@ cd kent/src/hg/makeDb/trackDb
     # commit all
 
 #########################################################################
-# RepeatMasker Visualization track update (TBD - 2018-05-04 - ChrisL)
+# RepeatMasker Visualization track update (DONE - 2018-05-04 - ChrisL)
     screen -S rmskJoined.2018-05-04
     mkdir /hive/data/genomes/hg38/bed/rmskJoined.2018-05-04
     cd /hive/data/genomes/hg38/bed/rmskJoined.2018-05-04
@@ -6951,12 +6951,63 @@ cd kent/src/hg/makeDb/trackDb
     # this script points to the most recent RepeatMasker version:
     time (/scratch/data/RepeatMasker/util/rmToUCSCTables.pl \
         -out hg38.sorted.fa.out -align hg38.fa.align.gz) > do.log 2>&1 &
-XXX -stopped here
+
+    # no differences, forgot to remake rmsk files
+    # so instead remake the rmsk track and try again
+    mkdir /hive/data/genomes/hg38/bed/repeatMasker.2018-05-04
+    cd /hive/data/genomes/hg38/bed/repeatMasker.2018-05-04
+
+    # remake the sorted.fa.out and fa.align.gz, stop after masking
+    # so rmsk table isn't overwritten
+    time (doRepeatMasker.pl -stop=mask -useHMMER -bigClusterHub=ku \
+       -workhorse=hgwdev -dbHost=hgwdev -buildDir=`pwd` hg38) > mask.log 2>&1 &
+    # RepeatMasker bug?: Undefined id, line 1440295 of input:
+    #    10  26.1  0.0  0.0  chr13     114292339 114292382   (71946) C  L1P4           LINE/L1               (17) 6149   6106
+    # RepeatMasker bug?: Undefined id, line 3529762 of input:
+    #   992   2.3  0.5  0.0  chr3      180461254 180462048 (17833511) C  L1PA3          LINE/L1                (3) 6152   5354
+    # RepeatMasker bug?: Undefined id, line 3529763 of input:
+    #  1153   3.2  0.2  0.0  chr3      180462043 180463006 (17832553) +  L1PA3          LINE/L1               4392 5357  (789)
+    # RepeatMasker bug?: Undefined id, line 5303571 of input:
+    #   220  22.5  0.0 17.7  chr9      105798076 105799127 (32595590) C  SATR2          Satellite              (4)  866      1
+    # real    643m17.617s
+
+    # get rid of the missing id items:
+    grep -v "114292339 114292382\|180461254 180462048\|180462043 180463006\|105798076 105799127" \
+        hg38.fa.out > clean.hg38.fa.out
+    mv clean.hg38.fa.out hg38.fa.out
+
+    # finish the last step of doCat.csh:
+    /cluster/bin/scripts/extractNestedRepeats.pl hg38.fa.out | sort -k1,1 -k2,2n > hg38.nestedRepeats.bed
+
+    cd /hive/data/genomes/hg38/bed/rmskJoined.2018-05-04
+
+    rm hg38.sorted.fa.out
+    rm hg38.fa.align.gz
+    rm *.tsv
+    ln -s ../repeatMasker.2018-05-04/hg38.sorted.fa.out .
+    ln -s ../repeatMasker.2018-05-04/hg38.fa.align .
+
+    # and then re-run
+    time (/scratch/data/RepeatMasker/util/rmToUCSCTables.pl \
+        -out hg38.sorted.fa.out -align hg38.fa.align.gz) > rerun.log 2>&1 &
+    # real    141m7.268s
+
+    # confirm the counts are different from the previous version:
+    # wc -l ../rmskJoined/hg38.fa.align.tsv ../rmskJoined/hg38.sorted.fa.join.bed ../rmskJoined/hg38.sorted.fa.out.tsv
+   7203858 ../rmskJoined/hg38.fa.align.tsv
+   4607727 ../rmskJoined/hg38.sorted.fa.join.bed
+   5520118 ../rmskJoined/hg38.sorted.fa.out.tsv
+  17331703 total
+    # wc -l *.tsv
+   7227245 hg38.fa.align.tsv
+   4828114 hg38.sorted.fa.join.tsv
+   5916189 hg38.sorted.fa.out.tsv
+  17971548 total
 
     hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/rmskJoined.sql \
         -renameSqlTable -verbose=4 -tab \
             -type=bed4+9 -as=$HOME/kent/src/hg/lib/rmskJoined.as hg38 \
-                rmskJoinedBaseline hg38.sorted.fa.join.bed \
+                rmskJoinedBaseline hg38.sorted.fa.join.tsv \
                     > loadJoined.log 2>&1
 
     hgLoadSqlTab hg38 rmskAlignBaseline \
@@ -6966,4 +7017,4 @@ XXX -stopped here
     hgLoadOutJoined -verbose=2 hg38 hg38.sorted.fa.out > loadOut.log 2>&1
 
     featureBits -countGaps hg38 rmskJoinedBaseline
-    #    2716777279 bases of 3209286105 (84.654%) in intersection
+    # 2796899855 bases of 3209286105 (87.150%) in intersection
