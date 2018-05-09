@@ -7239,6 +7239,7 @@ tablesIgnored hg19
     bacEndPairsBad
     bamAllNumtSSorted
     coriellDelDup
+    gnomadVariants
     lincRNAsCTAdipose
     lincRNAsCTAdrenal
     lincRNAsCTBrain

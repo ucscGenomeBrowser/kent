@@ -1,0 +1,9 @@
+# required db variable
+db panTro5
+# specific lifting to translate names:
+liftUp /hive/data/genomes/panTro5/jkStuff/ensToUcsc.lift
+
+skipInvalid yes
+# ENSPTRT00000103531.1 txEnd 10764 >= chromSize 10756
+# ENSPTRT00000079867.1 txEnd 1416 >= chromSize 1400
+# ENSPTRT00000096982.1 txEnd 1326 >= chromSize 1310

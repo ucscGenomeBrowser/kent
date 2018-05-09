@@ -1,0 +1,7 @@
+# required db variable
+db proCoq1
+# specific lifting to translate names:
+liftUp /hive/data/genomes/proCoq1/jkStuff/ensToUcsc.lift
+
+skipInvalid yes
+# ENSPCOT00000008378.1 txEnd 14532 >= chromSize 14529

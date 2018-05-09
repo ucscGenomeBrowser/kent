@@ -32891,4 +32891,124 @@ TMPDIR=/dev/shm
     cat fb.panPan2.chainRBest.Hg19.txt
     # 2661021780 bases of 2725937399 (97.619%) in intersection
 
-#########################################################################
+##############################################################################
+# GNOMAD VARIANTS AND COVERAGE PLOTS (DONE - 2018-05-09 - Jonathan)
+# Redmine #18951
+
+# Fetch supporting files from gnomad.broadinstitute.org/downloads.
+FETCHDIR=/hive/data/outside/gnomad
+mkdir -p $FETCHDIR
+cd $FETCHDIR
+GNOMADVER=2.0.2
+gsutil -m cp -r gs://gnomad-public/release/$GNOMADVER/vcf .
+gsutil -m cp -r gs://gnomad-public/release/$GNOMADVER/coverage .
+
+# Start with the VCF files
+cd vcf/genomes
+WORKDIR=/hive/data/genomes/hg19/bed/gnomad
+mkdir -p $WORKDIR
+
+# Some things misbehave with the .bgz extension (zcat command-line autocompletion for one),
+# so renaming the soft links as .gz when we create them.
+# Leaving the WORKDIR link creation in place for the moment, but it's a bit pointless.
+# Only the gbdb links are used in the end.
+mkdir -p /gbdb/hg19/gnomAD/vcf
+mkdir -p $WORKDIR/vcf
+for fil in `ls $FETCHDIR/vcf/genomes/gnomad.genomes.r$GNOMADVER.sites.chr*.vcf.bgz`;
+    do BASE=`basename $fil .bgz`; ln -s $fil $WORKDIR/vcf/$BASE.gz; ln -s $fil.tbi $WORKDIR/vcf/$BASE.gz.tbi;
+    ln -s $fil /gbdb/hg19/gnomAD/vcf/$BASE.gz; ln -s $fil.tbi /gbdb/hg19/gnomAD/vcf/$BASE.gz.tbi; done
+
+# Dumping a list of annotated chromosomes for the gnomadVariants table
+ls /gbdb/hg19/gnomAD/vcf/*.sites.chr*.gz | perl -pe 'chomp; s/^.*sites\.(chr\w+)\.vcf.*$/$_\t$1\n/' > $WORKDIR/chrList
+hgLoadSqlTab hg19 gnomadVariants ~/kent/src/hg/lib/bbiChroms.sql $WORKDIR/chrList
+
+# Now to make the coverage wig files
+mkdir -p $WORKDIR/coverage
+cd $FETCHDIR/coverage/genomes
+
+# makeWigs.pl is a short script to split coverage files into a collection of wiggles.
+# The script appends to these wiggle files because coverage is provided per-chromosome,
+# so makeWigs is run separately on each per-chrom coverage file and the results must be
+# joined together.
+
+cat > $WORKDIR/coverage/makeWigs.pl << EOF
+#!/bin/env perl
+use strict;
+use warnings;
+
+my \$version = shift;
+my \$chrom = shift;
+my \$sourceDir = shift;
+my \$destDir = shift;
+
+open IN, "zcat \$sourceDir/gnomad.genomes.r\$version.\$chrom.coverage.txt.gz |" ||
+    die "Could not open coverage file on chromosome \$chrom";
+open (OUTMEAN, ">>", "\$destDir/gnomad.coverage.mean.wig");
+open (OUTMEDIAN, ">>", "\$destDir/gnomad.coverage.median.wig");
+open (OUT1, ">>", "\$destDir/gnomad.coverage.depth1.wig");
+open (OUT5, ">>", "\$destDir/gnomad.coverage.depth5.wig");
+open (OUT10, ">>", "\$destDir/gnomad.coverage.depth10.wig");
+open (OUT15, ">>", "\$destDir/gnomad.coverage.depth15.wig");
+open (OUT20, ">>", "\$destDir/gnomad.coverage.depth20.wig");
+open (OUT25, ">>", "\$destDir/gnomad.coverage.depth25.wig");
+open (OUT30, ">>", "\$destDir/gnomad.coverage.depth30.wig");
+open (OUT50, ">>", "\$destDir/gnomad.coverage.depth50.wig");
+open (OUT100, ">>", "\$destDir/gnomad.coverage.depth100.wig");
+
+my \$skipHeader = <IN>;
+my \$prevPos = -10;
+while (my \$line = <IN>)
+{
+    chomp(\$line);
+    my @a = split /\s+/, \$line;
+    my \$pos = \$a[1];
+    if (\$pos != \$prevPos + 1)
+    {
+        print OUTMEAN "fixedStep chrom=\$chrom start=\$pos step=1\n";
+        print OUTMEDIAN "fixedStep chrom=\$chrom start=\$pos step=1\n";
+        print OUT1 "fixedStep chrom=\$chrom start=\$pos step=1\n";
+        print OUT5 "fixedStep chrom=\$chrom start=\$pos step=1\n";
+        print OUT10 "fixedStep chrom=\$chrom start=\$pos step=1\n";
+        print OUT15 "fixedStep chrom=\$chrom start=\$pos step=1\n";
+        print OUT20 "fixedStep chrom=\$chrom start=\$pos step=1\n";
+        print OUT25 "fixedStep chrom=\$chrom start=\$pos step=1\n";
+        print OUT30 "fixedStep chrom=\$chrom start=\$pos step=1\n";
+        print OUT50 "fixedStep chrom=\$chrom start=\$pos step=1\n";
+        print OUT100 "fixedStep chrom=\$chrom start=\$pos step=1\n";
+    }
+    printf OUTMEAN "%s\n", \$a[2];
+    printf OUTMEDIAN "%s\n", \$a[3];
+    printf OUT1   "%s\n", \$a[4];
+    printf OUT5   "%s\n", \$a[5];
+    printf OUT10  "%s\n", \$a[6];
+    printf OUT15  "%s\n", \$a[7];
+    printf OUT20  "%s\n", \$a[8];
+    printf OUT25  "%s\n", \$a[9];
+    printf OUT30  "%s\n", \$a[10];
+    printf OUT50  "%s\n", \$a[11];
+    printf OUT100 "%s\n", \$a[12];
+}
+EOF
+
+chmod +x $WORKDIR/coverage/makeWigs.pl
+
+for CHR in `cut -f 2 $WORKDIR/chrList`;
+    do $WORKDIR/coverage/makeWigs.pl $GNOMADVER $CHR `pwd` $WORKDIR/coverage;
+    done
+
+# Convert to bigWigs
+for WIG in `ls $WORKDIR/coverage/*.wig`;
+    do wigToBigWig $WIG /hive/data/genomes/hg19/chrom.sizes $WORKDIR/coverage/`basename $WIG .wig`.bw;
+    done
+
+# No need to keep the wigs after the bigWigs are built
+for WIG in `ls $WORKDIR/coverage/*.wig`;
+    do if [ -e $WORKDIR/coverage/`basename $WIG .wig`.bw ]; then rm $WIG; fi
+    done
+
+mkdir -p /gbdb/hg19/gnomAD/coverage
+for BW in `ls $WORKDIR/coverage/*.bw`;
+    do ln -s $BW /gbdb/hg19/gnomAD/coverage/`basename $BW`;
+    done
+
+##############################################################################

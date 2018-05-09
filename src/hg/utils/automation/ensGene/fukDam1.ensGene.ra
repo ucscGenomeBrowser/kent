@@ -1,0 +1,12 @@
+# required db variable
+db fukDam1
+# specific lifting to translate names:
+liftUp /hive/data/genomes/fukDam1/jkStuff/ensToUcsc.lift
+
+# Ensembl appears to have a chrom MT
+nameTranslation "/^MT/d"
+
+skipInvalid yes
+# ENSFDAT00000001669.1 txEnd 301 >= chromSize 295
+# ENSFDAT00000026393.1 txEnd 223 >= chromSize 221
+# checked: 41630 failed: 2

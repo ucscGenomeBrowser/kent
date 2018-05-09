@@ -1,0 +1,7 @@
+# required db variable
+db macFas5
+# specific lifting to translate names:
+liftUp /hive/data/genomes/macFas5/jkStuff/ensToUcsc.lift
+
+skipInvalid yes
+# ENSMFAT00000049321.1 txEnd 5011 >= chromSize 5009
