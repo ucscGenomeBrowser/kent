@@ -1,0 +1,10 @@
+# required db variable
+db octDeg1
+# specific lifting to translate names:
+liftUp /hive/data/genomes/octDeg1/jkStuff/ensToUcsc.lift
+
+# a duplicate contig in the Ensembl release, not in UCSC sequence:
+nameTranslation "/^AJSA01251499/d"
+
+skipInvalid yes
+# ENSODET00000030480.1 txEnd 10465 >= chromSize 10456

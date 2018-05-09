@@ -1,0 +1,15 @@
+# required db variable
+db felCat8
+# specific lifting to translate names:
+liftUp /hive/data/genomes/felCat8/jkStuff/ensToUcsc.lift
+
+skipInvalid yes
+# ENSFCAT00000040388.1 txEnd 851 >= chromSize 830
+# ENSFCAT00000022232.2 txEnd 778 >= chromSize 777
+# ENSFCAT00000046539.1 txEnd 618 >= chromSize 615
+# ENSFCAT00000038331.1 txEnd 621 >= chromSize 602
+# ENSFCAT00000042688.1 txEnd 616 >= chromSize 602
+# ENSFCAT00000042073.1 txEnd 561 >= chromSize 559
+# ENSFCAT00000035557.1 txEnd 538 >= chromSize 533
+# ENSFCAT00000042534.1 txEnd 536 >= chromSize 533
+

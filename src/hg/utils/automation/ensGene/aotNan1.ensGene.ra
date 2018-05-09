@@ -1,0 +1,11 @@
+# required db variable
+db aotNan1
+# specific lifting to translate names:
+liftUp /hive/data/genomes/aotNan1/jkStuff/ensToUcsc.lift
+
+skipInvalid yes
+# ENSANAT00000008002.1 txEnd 21157 >= chromSize 21156
+# ENSANAT00000018995.1 txEnd 11710 >= chromSize 11706
+# ENSANAT00000001044.1 txEnd 9860 >= chromSize 9850
+# ENSANAT00000005144.1 txEnd 3639 >= chromSize 3636
+

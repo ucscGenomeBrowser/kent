@@ -1,0 +1,4 @@
+# required db variable
+db macNem1
+# specific lifting to translate names:
+liftUp /hive/data/genomes/macNem1/jkStuff/ensToUcsc.lift

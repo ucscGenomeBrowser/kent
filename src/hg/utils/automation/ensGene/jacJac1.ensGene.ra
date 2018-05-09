@@ -1,0 +1,9 @@
+# required db variable
+db jacJac1
+# specific lifting to translate names:
+liftUp /hive/data/genomes/jacJac1/jkStuff/ensToUcsc.lift
+
+skipInvalid yes
+# ENSJJAT00000007476.1 txEnd 4410 >= chromSize 4389
+# ENSJJAT00000002946.1 txEnd 1935 >= chromSize 1923
+

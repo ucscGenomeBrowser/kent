@@ -1,0 +1,7 @@
+# required db variable
+db papAnu4
+# specific lifting to translate names:
+liftUp /hive/data/genomes/papAnu4/jkStuff/ensToUcsc.lift
+
+skipInvalid yes
+# ENSPANT00000043361.1 txEnd 1439 >= chromSize 1433
