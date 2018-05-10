@@ -1345,6 +1345,7 @@ shortLabel gnomAD
 longLabel Genome Aggregation Database (gnomAD) - Variants and Coverage
 group varRep
 dataVersion Release 2.0.2
+release alpha
 type bed 3
 
 track gnomadVariants
