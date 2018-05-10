@@ -136,13 +136,19 @@ available:</p>
     <p>
     To sort by similarity, right-click the collection in the browser window and select 
     <button type="button">Sort by Similarity</button>. For the given region visible in the browser 
-    window, tracks within the collection will sort in order of similarity.</p> 
+    window, tracks within the collection will sort in order of similarity. Sorting by similarity
+    counts the number of pixels set in each column and then uses matrices to build a neighbor
+    joined tree, which then has its leaves sorted to make an optimal ordering. The source of the
+    optimal leaf sorting algorithm is credited below.
+    </p>
     <li><strong>Sorting by magnitude</strong></li>
     <p>
     To sort by magnitude, right-click the collection in the browser window and select 
     <button type="button">Sort by Magnitude</button>. For the given region visible in the browser 
     window, tracks within the collection will sort in order of magnitude, with the highest in 
-    magnitude at the top of the subtracks in the collection.</p>
+    magnitude at the top of the subtracks in the collection where magnitude reflects the
+    total number of pixels set when drawing each track.
+</p>
   </ul>
 <p>
 <strong>Tip:</strong> Displaying collection names in the browser:</p>
