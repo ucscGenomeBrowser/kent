@@ -546,6 +546,9 @@ void cgiMakeResetButton();
 void cgiMakeClearButton(char *form, char *field);
 /* Make button to clear a text field. */
 
+void cgiMakeClearButtonNoSubmit(char *form, char *field);
+/* Make button to clear a text field, without resubmitting the form. */
+
 void cgiMakeFileEntry(char *name);
 /* Make file entry box/browser */
 
