@@ -785,7 +785,7 @@ if (securityColumnsInTable)
 	{
 	if (!isEmpty(where->string))
 	    sqlDyStringPrintf(where, " and ");
-	sqlDyStringPrintfFrag(where, "and allAccess > 0");
+	sqlDyStringPrintfFrag(where, "allAccess > 0");
 	}
     }
 
