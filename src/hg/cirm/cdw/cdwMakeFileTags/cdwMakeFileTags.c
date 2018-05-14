@@ -75,6 +75,67 @@ if (deleteAny)
 dyStringFree(&dy);
 }
 
+void makeCdwGroupFileTemp(char *database)
+/* Make temporary table converting multiple groupIds per file into a comma-separated list */
+{
+struct sqlConnection *conn = cdwConnect(database);
+struct sqlConnection *conn2 = cdwConnect(database);
+char query2[256];
+sqlSafef(query2, sizeof(query2), 
+    "CREATE TABLE `cdwGroupFileTemp` ("
+    "  `fileId` int(10) unsigned DEFAULT '0',"
+    "  `groupIds` varchar(255) DEFAULT '',"
+    "  KEY `fileId` (`fileId`)"
+    ") ENGINE=MyISAM DEFAULT CHARSET=latin1"
+    );
+sqlRemakeTable(conn, "cdwGroupFileTemp", query2);
+
+sqlSafef(query2, sizeof(query2), "select fileId, groupId from cdwGroupFile order by fileId, groupId");
+struct sqlResult *sr = sqlGetResult(conn, query2);
+char **row;
+int lastFileId = -1;
+struct dyString *query = dyStringNew(0);
+struct dyString *groupList = dyStringNew(0);
+int fileId = 0;
+int groupId = 0;
+do
+    {
+    row = sqlNextRow(sr);
+    if (row)
+	{	
+	fileId = sqlUnsigned(row[0]);
+	groupId = sqlUnsigned(row[1]);
+	}
+    else
+	{
+	fileId = -2;  // eof
+	groupId = 0;
+	}
+    if (fileId == lastFileId)
+	{
+	sqlDyStringPrintf(groupList, ",");
+	}
+    else
+	{
+	if (!isEmpty(groupList->string))
+	    {
+	    dyStringClear(query);
+	    sqlDyStringPrintf(query, "insert into cdwGroupFileTemp values (%u, '%s')", lastFileId, groupList->string);
+	    sqlUpdate(conn2, query->string);
+	    }
+	dyStringClear(groupList);
+	lastFileId = fileId;
+	}
+    dyStringPrintf(groupList, "%u", groupId);
+    }
+while (fileId != -2);
+sqlFreeResult(&sr);
+sqlDisconnect(&conn);
+sqlDisconnect(&conn2);
+dyStringFree(&query);
+dyStringFree(&groupList);
+}
+
 void cdwMakeFileTags(char *database, char *fullTable, char *facetTable, char *facetFieldsCsv)
 /* cdwMakeFileTags - Create cdwFileTags table from tagStorm on same database.. */
 {
@@ -150,6 +211,61 @@ sqlRemakeTable(conn, facetTable, facetCreate->string);
 dyStringFree(&facetCreate);
 
 
+/* add columns to facilitate group and allAccess filtering */
+verbose(2, "adding group and allAccess fields\n");
+dyStringClear(query);
+sqlDyStringPrintf(query,
+    "ALTER TABLE %s " 
+    "ADD `allAccess` tinyint(4) DEFAULT '0',"
+    "ADD  `groupIds` varchar(255) DEFAULT ''"  // total rowsize cannot exceed 65k
+    , facetTable);
+sqlUpdate(conn, query->string);
+
+// allAccess
+verbose(2, "setting allAccess field values\n");
+dyStringClear(query);
+sqlDyStringPrintf(query,
+    "update %s t1 "
+    "inner join cdwFile t2 on t2.id = t1.file_id "
+    "set t1.allAccess = t2.allAccess"
+    , facetTable);
+sqlUpdate(conn, query->string);
+
+// groupIds
+verbose(2, "making table cdwFileGroupTemp\n");
+makeCdwGroupFileTemp(database);
+
+verbose(2, "setting groupIds from cdwFileGroupTemp\n");
+dyStringClear(query);
+sqlDyStringPrintf(query,
+    "update %s t1 "
+    "inner join cdwGroupFileTemp t2 on t2.fileId = t1.file_id "
+    "set t1.groupIds = t2.groupIds"
+    , facetTable);
+sqlUpdate(conn, query->string);
+
+sqlDropTable(conn, "cdwGroupFileTemp");
+
+// set any unset default groupIds value to 0
+dyStringClear(query);
+sqlDyStringPrintf(query,
+    "update %s "
+    "set groupIds = '0' "
+    "where groupIds = ''"
+    , facetTable);
+sqlUpdate(conn, query->string);
+
+/* OLD WAY
+dyStringClear(query);
+sqlDyStringPrintf(query,
+    "update %s t1 "
+    "inner join cdwFile t2 on t2.id = t1.file_id "
+    "inner join cdwUser t3 on t3.id = t2.userId "
+    "set t1.groupId = t3.primaryGroup"
+    , facetTable);
+sqlUpdate(conn, query->string);
+*/
+
 /* Release lock, clean up, go home */
 sqlReleaseLock(conn, "makeFileTags");
 sqlDisconnect(&conn);
@@ -165,7 +281,7 @@ if (argc != 2)
 char *database = optionVal("database", "cdw");
 char *table = optionVal("table", "cdwFileTags");
 char *facets = optionVal("facets", "cdwFileFacets");
-char *fields = optionVal("fields", "assay,data_set_id,lab,format,read_size,sample_label,species");
+char *fields = optionVal("fields", "file_id,file_name,file_size,ucsc_db,output,assay,data_set_id,lab,format,read_size,sample_label,species");
 
 cdwMakeFileTags(database, table, facets, fields);
 return 0;
