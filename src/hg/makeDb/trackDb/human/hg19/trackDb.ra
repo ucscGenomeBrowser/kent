@@ -1360,6 +1360,7 @@ showHardyWeinberg on
 configureByPopup off
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 html gnomad
+release alpha
 
 track gnomadAvgCoverage
 parent gnomad
@@ -1374,6 +1375,7 @@ viewLimits 0:50
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX
 visibility full
 html gnomad
+release alpha
 
 track gnomadMeanCoverage
 shortLabel Mean Coverage
@@ -1381,6 +1383,7 @@ longLabel gnomAD Mean Sample Coverage
 parent gnomadAvgCoverage off
 color 255,0,0
 bigDataUrl /gbdb/hg19/gnomAD/coverage/gnomad.coverage.mean.bw
+release alpha
 
 track gnomadMedianCoverage
 shortLabel Median Coverage
@@ -1388,6 +1391,7 @@ longLabel gnomAD Median Sample Coverage
 parent gnomadAvgCoverage on
 color 0,0,255
 bigDataUrl /gbdb/hg19/gnomAD/coverage/gnomad.coverage.median.bw
+release alpha
 
 track gnomadReadDepthPct
 parent gnomad
@@ -1402,6 +1406,7 @@ viewLimits 0:1
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX
 visibility hide
 html gnomad
+release alpha
 
 track gnomad1XPercentage
 shortLabel % of Samples > 1X
@@ -1410,6 +1415,7 @@ parent gnomadReadDepthPct off
 color 255,0,0
 bigDataUrl /gbdb/hg19/gnomAD/coverage/gnomad.coverage.depth1.bw
 priority 1
+release alpha
 
 track gnomad5XPercentage
 shortLabel % of Samples > 5X
@@ -1418,6 +1424,7 @@ parent gnomadReadDepthPct off
 color 225,0,30
 bigDataUrl /gbdb/hg19/gnomAD/coverage/gnomad.coverage.depth5.bw
 priority 2
+release alpha
 
 track gnomad10XPercentage
 shortLabel % of Samples > 10X
@@ -1426,6 +1433,7 @@ parent gnomadReadDepthPct on
 color 195,0,60
 bigDataUrl /gbdb/hg19/gnomAD/coverage/gnomad.coverage.depth10.bw
 priority 3
+release alpha
 
 track gnomad15XPercentage
 shortLabel % of Samples > 15X
@@ -1434,6 +1442,7 @@ parent gnomadReadDepthPct off
 color 165,0,90
 bigDataUrl /gbdb/hg19/gnomAD/coverage/gnomad.coverage.depth15.bw
 priority 4
+release alpha
 
 track gnomad20XPercentage
 shortLabel % of Samples > 20X
@@ -1442,6 +1451,7 @@ parent gnomadReadDepthPct on
 color 135,0,120
 bigDataUrl /gbdb/hg19/gnomAD/coverage/gnomad.coverage.depth20.bw
 priority 5
+release alpha
 
 track gnomad25XPercentage
 shortLabel % of Samples > 25X
@@ -1450,6 +1460,7 @@ parent gnomadReadDepthPct off
 color 105,0,150
 bigDataUrl /gbdb/hg19/gnomAD/coverage/gnomad.coverage.depth25.bw
 priority 6
+release alpha
 
 track gnomad30XPercentage
 shortLabel % of Samples > 30X
@@ -1458,6 +1469,7 @@ parent gnomadReadDepthPct on
 color 75,0,180
 bigDataUrl /gbdb/hg19/gnomAD/coverage/gnomad.coverage.depth30.bw
 priority 7
+release alpha
 
 track gnomad50XPercentage
 shortLabel % of Samples > 50X
@@ -1466,6 +1478,7 @@ parent gnomadReadDepthPct off
 color 45,0,210
 bigDataUrl /gbdb/hg19/gnomAD/coverage/gnomad.coverage.depth50.bw
 priority 8
+release alpha
 
 track gnomad100XPercentage
 shortLabel % of Samples > 100X
@@ -1474,6 +1487,7 @@ parent gnomadReadDepthPct off
 color 15,0,240
 bigDataUrl /gbdb/hg19/gnomAD/coverage/gnomad.coverage.depth100.bw
 priority 9
+release alpha
 
 track exac
 compositeTrack on
