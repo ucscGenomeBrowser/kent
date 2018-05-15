@@ -16979,3 +16979,64 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` oviAri4 mm10) > rbest.log 2>&1 &
     # real    437m1.637s
 
+#########################################################################
+# RepeatMasker Visualization track update (TBD - 2018-05-15 - ChrisL)
+
+    screen -S rmskJoined.2018-05-15
+
+    # if this is an update to an already existing rmsk build, re-run
+    # masking with new libraries. Otherwise skip to rmskJoined below
+    mkdir /hive/data/genomes/mm10/bed/repeatMasker.2018-05-15
+    cd /hive/data/genomes/mm10/bed/repeatMasker.2018-05-15
+
+    time (doRepeatMasker.pl -stop=mask -bigClusterHub=ku \
+       -workhorse=hgwdev -dbHost=hgwdev -buildDir=`pwd` mm10) > mask.log 2>&1 &
+
+    # fill in grep to get rid of the missing id items:
+    grep -v "" \
+        mm10.fa.out > clean.mm10.fa.out
+    mv clean.mm10.fa.out mm10.fa.out
+
+    # finish the last step of doCat.csh:
+    /cluster/bin/scripts/extractNestedRepeats.pl mm10.fa.out | sort -k1,1 -k2,2n > mm10.nestedRepeats.bed
+
+    # rmskJoinedCurrent steps
+    mkdir /hive/data/genomes/mm10/bed/rmskJoined.2018-05-15
+    cd /hive/data/genomes/mm10/bed/rmskJoined.2018-05-15
+
+    ln -s ../repeatMasker.2018-05-15/mm10.sorted.fa.out .
+    ln -s ../repeatMasker.2018-05-15/mm10.fa.align .
+
+    time (/scratch/data/RepeatMasker/util/rmToUCSCTables.pl \
+        -out mm10.sorted.fa.out -align mm10.fa.align.gz) > run.log 2>&1 &
+    # real    141m7.268s
+
+    # confirm the counts are different from the previous version:
+    # wc -l ../rmskJoined/mm10.fa.align.tsv ../rmskJoined/mm10.sorted.fa.join.bed ../rmskJoined/mm10.sorted.fa.out.tsv
+   7203858 ../rmskJoined/mm10.fa.align.tsv
+   4607727 ../rmskJoined/mm10.sorted.fa.join.bed
+   5520118 ../rmskJoined/mm10.sorted.fa.out.tsv
+  17331703 total
+    # wc -l *.tsv
+   7227245 mm10.fa.align.tsv
+   4828114 mm10.sorted.fa.join.tsv
+   5916189 mm10.sorted.fa.out.tsv
+  17971548 total
+
+    # sub rmskJoinedBaseline for rmskJoinedCurrent if this is the first version for this assembly
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/rmskJoined.sql \
+        -renameSqlTable -verbose=4 -tab \
+            -type=bed4+9 -as=$HOME/kent/src/hg/lib/rmskJoined.as mm10 \
+                rmskJoinedCurrent mm10.sorted.fa.join.tsv \
+                    > loadJoined.log 2>&1
+
+    # sub rmskAlignBaseline for rmskAlignCurrent if this is the first version for this assembly
+    hgLoadSqlTab mm10 rmskAlignCurrent \
+        /cluster/home/chmalee/kent/src/hg/lib/rmskAlign.sql \
+            mm10.fa.align.tsv > loadAlign.log 2>&1
+
+    # sub rmskOutBaseline for rmskOutCurrent if this is the first version for this assembly
+    hgLoadOutJoined -verbose=2 -table=rmskOutCurrent mm10 mm10.sorted.fa.out > loadOut.log 2>&1
+
+    featureBits -countGaps mm10 rmskJoinedCurrent
+    # 2796899855 bases of 3209286105 (87.150%) in intersection

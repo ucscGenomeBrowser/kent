@@ -39,8 +39,19 @@ void facetFieldTest(char *selectedFields)
 char *db = "cdw";
 char *table = "cdwFileFacets";
 char *fields[] = 
-    {"data_set_id", "lab", "assay", "format", "read_size",
-    "sample_label", "species"};
+    {
+    "file_name",
+    "file_size",
+    "ucsc_db",
+
+    "data_set_id", 
+    "lab", 
+    "assay", 
+    "format", 
+    "read_size",
+    "sample_label", 
+    "species"
+    };
 int fieldCount = ArraySize(fields);
 /* Print out high level tags table */
 

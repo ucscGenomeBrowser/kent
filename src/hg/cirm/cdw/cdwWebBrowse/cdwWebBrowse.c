@@ -699,17 +699,23 @@ slFreeList(&nameList);
 return dyStringCannibalize(&dy);
 }
 
-void searchFilesWithAccess(struct sqlConnection *conn, char *searchString, char *allFields, \
-    char* initialWhere, struct cdwFile **retList, struct dyString **retWhere, char **retFields)
+void searchFilesWithAccess(struct sqlConnection *conn, char *searchString, char *allFields, 
+    char* initialWhere, struct cdwFile **retList, struct dyString **retWhere, char **retFields,
+    boolean securityColumnsInTable)
 {
 /* Get list of files that we are authorized to see and that match searchString in the trix file
  * Returns: retList of matching files, retWhere with sql where expression for these files, retFields
  * If nothing to see, retList is NULL
  * */
 char *fields = filterFieldsToJustThoseInTable(conn, allFields, "cdwFileTags");
-struct cdwFile *efList = cdwAccessibleFileList(conn, user);
 
-if (efList == NULL)
+struct cdwFile *efList = NULL;
+if (!securityColumnsInTable)
+    efList = cdwAccessibleFileList(conn, user);
+
+struct cdwFile *ef;
+
+if (!securityColumnsInTable && !efList)
     {
     *retList = NULL;
     return;
@@ -728,28 +734,75 @@ if (!isEmpty(searchString))
     struct trixSearchResult *tsr, *tsrList = trixSearch(trix, wordCount, words, tsmExpand);
     for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
         {
-	intValTreeAdd(searchPassTree, sqlUnsigned(tsr->itemId), tsr);
+	if (securityColumnsInTable) // creates a list with all found items file ids on it.
+	    {
+	    AllocVar(ef);
+	    ef->id = sqlUnsigned(tsr->itemId);
+	    slAddHead(&efList, ef);
+	    }
+	else
+	    {
+	    intValTreeAdd(searchPassTree, sqlUnsigned(tsr->itemId), tsr);
+	    }
 	}
+    if (securityColumnsInTable)
+	slReverse(&efList);
     }
+
 
 /* Loop through all files constructing a SQL where clause that restricts us
  * to just the ones that we're authorized to hit, and that also pass initial where clause
  * if any. */
 struct dyString *where = dyStringNew(0);
 if (!isEmpty(initialWhere))
-     sqlDyStringPrintfFrag(where, "(%-s) and ", initialWhere); // trust
-sqlDyStringPrintfFrag(where, "file_id in (0");	 // initial 0 never found, just makes code smaller
-int accessCount = 0;
-struct cdwFile *ef;
-for (ef = efList; ef != NULL; ef = ef->next)
+    sqlDyStringPrintfFrag(where, "(%-s)", initialWhere); // trust
+if (securityColumnsInTable)
     {
-    if (searchPassTree == NULL || intValTreeFind(searchPassTree, ef->id) != NULL)
+    if (user)
 	{
-	sqlDyStringPrintf(where, ",%u", ef->id);
-	++accessCount;
+	// get all groupIds belonging to this user
+	char query[256];
+	if (!user->isAdmin)
+	    {
+	    sqlSafef(query, sizeof(query), 
+		"select groupId from cdwGroupUser "
+		" where cdwGroupUser.userId = %d", user->id);
+	    struct sqlResult *sr = sqlGetResult(conn, query);
+	    char **row;
+	    if (!isEmpty(where->string))
+		sqlDyStringPrintf(where, " and ");
+	    sqlDyStringPrintfFrag(where, "(FIND_IN_SET('0', groupIds)");	 // initial 0 makes code smaller
+	    while ((row = sqlNextRow(sr)) != NULL)
+		{
+		int groupId = sqlUnsigned(row[0]);
+		sqlDyStringPrintf(where, " or FIND_IN_SET('%u', groupIds)", groupId);
+		}
+	    sqlFreeResult(&sr);
+	    sqlDyStringPrintf(where, ")");
+	    }
+	}
+    else
+	{
+	if (!isEmpty(where->string))
+	    sqlDyStringPrintf(where, " and ");
+	sqlDyStringPrintfFrag(where, "allAccess > 0");
 	}
     }
-sqlDyStringPrintf(where, ")");
+
+if (efList)
+    {
+    if (!isEmpty(where->string))
+	sqlDyStringPrintf(where, " and ");
+    sqlDyStringPrintfFrag(where, "file_id in (0");	 // initial 0 never found, just makes code smaller
+    for (ef = efList; ef != NULL; ef = ef->next)
+	{
+	if (searchPassTree == NULL || securityColumnsInTable || intValTreeFind(searchPassTree, ef->id) != NULL)
+	    {
+	    sqlDyStringPrintf(where, ",%u", ef->id);
+	    }
+	}
+    sqlDyStringPrintf(where, ")");
+    }
 
 rbTreeFree(&searchPassTree);
 
@@ -768,15 +821,39 @@ struct cdwFile* findDownloadableFiles(struct sqlConnection *conn, struct cart *c
 struct cdwFile *efList = NULL;
 struct dyString *accWhere;
 char *fields;
-searchFilesWithAccess(conn, searchString, FILETABLEFIELDS, initialWhere, &efList, &accWhere, &fields);
+searchFilesWithAccess(conn, searchString, FILETABLEFIELDS, initialWhere, &efList, &accWhere, &fields, FALSE);
 
 // reduce query to those that match our filters
 struct dyString *dummy;
 struct dyString *filteredWhere;
-webTableBuildQuery(cart, "cdwFileTags", accWhere->string, "cdwBrowseFiles", FILETABLEFIELDS, TRUE, &dummy, &filteredWhere);
+char *table = "cdwFileFacets";
+webTableBuildQuery(cart, table, accWhere->string, "cdwBrowseFiles", FILETABLEFIELDS, TRUE, &dummy, &filteredWhere);
+
+// Selected Facet Values Filtering
+char *selectedFacetValues=cartUsualString(cart, "cdwSelectedFieldValues", "");
+struct facetField *selectedList = deLinearizeFacetValString(selectedFacetValues);
+struct facetField *sff = NULL;
+struct dyString *facetedWhere = dyStringNew(1024);
+for (sff = selectedList; sff; sff=sff->next)
+    {
+    if (slCount(sff->valList)>0)
+	{
+	sqlDyStringPrintfFrag(facetedWhere, " and ");  // use Frag to prevent NOSQLINJ tag
+	sqlDyStringPrintf(facetedWhere, "%s in (", sff->fieldName);
+	struct facetVal *el;
+	for (el=sff->valList; el; el=el->next)
+	    {
+	    sqlDyStringPrintf(facetedWhere, "'%s'", el->val);
+	    if (el->next)
+		sqlDyStringPrintf(facetedWhere, ",");
+	    }
+	sqlDyStringPrintfFrag(facetedWhere, ")");
+	}
+    }
 
 // get their fileIds
-struct dyString *tagQuery = sqlDyStringCreate("SELECT file_id from cdwFileTags %-s", filteredWhere->string); // trust
+struct dyString *tagQuery = sqlDyStringCreate("SELECT file_id from %s %-s", table, filteredWhere->string); // trust
+dyStringPrintf(tagQuery,  "%-s", facetedWhere->string); // trust because it was created safely
 struct slName *fileIds = sqlQuickList(conn, tagQuery->string);
 
 // retrieve the cdwFiles objects for these
@@ -848,14 +925,15 @@ void accessibleFilesTable(struct cart *cart, struct sqlConnection *conn,
     char *searchString, char *allFields, char *from, char *initialWhere,  
     char *returnUrl, char *varPrefix, int maxFieldWidth, 
     struct hash *tagOutWrappers, void *wrapperContext,
-    boolean withFilters, char *itemPlural, int pageSize)
+    boolean withFilters, char *itemPlural, int pageSize,
+    char *visibleFacetList, boolean securityColumnsInTable)
 {
 struct cdwFile *efList = NULL;
 struct dyString *where;
 char *fields;
-searchFilesWithAccess(conn, searchString, allFields, initialWhere, &efList, &where, &fields);
+searchFilesWithAccess(conn, searchString, allFields, initialWhere, &efList, &where, &fields, securityColumnsInTable);
 
-if (efList == NULL)
+if (!securityColumnsInTable && !efList)
     {
     if (user != NULL && user->isAdmin)
 	printf("<BR>The file database is empty.");
@@ -868,10 +946,12 @@ if (user!=NULL)
     accessibleFilesToken = createTokenForUser();
 
 /* Let the sql system handle the rest.  Might be one long 'in' clause.... */
-struct hash *suggestHash = accessibleSuggestHash(conn, fields, efList);
+struct hash *suggestHash = NULL;
+if (!securityColumnsInTable)
+    suggestHash = accessibleSuggestHash(conn, fields, efList);
 
 webFilteredSqlTable(cart, conn, fields, from, where->string, returnUrl, varPrefix, maxFieldWidth,
-    tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize, suggestHash, makeDownloadAllButtonForm);
+    tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize, suggestHash, visibleFacetList, makeDownloadAllButtonForm);
 
 /* Clean up and go home. */
 cdwFileFreeList(&efList);
@@ -1093,6 +1173,37 @@ printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
 cartSaveSession(cart);
 cgiMakeHiddenVar("cdwCommand", "browseFiles");
 
+// DEBUG REMOVE
+//char *varName = "cdwSelectedFieldValues";
+//char *varVal = cartUsualString(cart, varName, "");
+//warn("varName=[%s] varVal=[%s]", varName, varVal); // DEBUG REMOVE
+
+char *selOp = cartOptionalString(cart, "browseFiles_facet_op");
+if (selOp)
+    {
+    char *selFieldName = cartOptionalString(cart, "browseFiles_facet_fieldName");
+    char *selFieldVal = cartOptionalString(cart, "browseFiles_facet_fieldVal");
+    if (selFieldName && selFieldVal)
+	{
+	char *selectedFacetValues=cartUsualString(cart, "cdwSelectedFieldValues", "");
+	//warn("selectedFacetValues=[%s] selFieldName=%s selFieldVal=%s selOp=%s", 
+	    //selectedFacetValues, selFieldName, selFieldVal, selOp); // DEBUG REMOVE
+	struct facetField *selList = deLinearizeFacetValString(selectedFacetValues);
+	selectedListFacetValUpdate(&selList, selFieldName, selFieldVal, selOp);
+	char *newSelectedFacetValues = linearizeFacetVals(selList);
+	//warn("newSelectedFacetValues=[%s]", newSelectedFacetValues); // DEBUG REMOVE
+	cartSetString(cart, "cdwSelectedFieldValues", newSelectedFacetValues);
+	cartRemove(cart, "browseFiles_facet_op");
+	cartRemove(cart, "browseFiles_facet_fieldName");
+	cartRemove(cart, "browseFiles_facet_fieldVal");
+	}
+    }
+
+// DEBUG REMOVE
+//varVal = cartUsualString(cart, varName, "");  // get a fresh value
+//htmlPrintf("Selected Fields String <input name='%s|attr|' type='text' id='%s|attr|' value='%s|attr|' size=60><br>\n", 
+//    varName, varName, varVal);
+
 printf("<B>Files</B> - search, filter, and sort files. ");
 printf("Click on file's name to see full metadata.");
 printf(" Links in ucsc_db go to the Genome Browser. <BR>\n");
@@ -1111,11 +1222,14 @@ struct hash *wrappers = hashNew(0);
 hashAdd(wrappers, "file_name", wrapFileName);
 hashAdd(wrappers, "ucsc_db", wrapTrackNearFileName);
 hashAdd(wrappers, "format", wrapFormat);
+char *visibleFacetFields = "lab,assay,data_set_id,output,format,read_size,sample_label";  // TODO config GALT
+
 accessibleFilesTable(cart, conn, searchString,
   FILETABLEFIELDS,
-  "cdwFileTags", where, 
+  "cdwFileFacets",
+  where, 
   returnUrl, "cdwBrowseFiles",
-  18, wrappers, conn, TRUE, "files", 100);
+  18, wrappers, conn, FALSE, "files", 100, visibleFacetFields, TRUE);
 printf("</FORM>\n");
 }
 
@@ -1141,7 +1255,7 @@ accessibleFilesTable(cart, conn, searchString,
     "enriched_in,sample_label,submit_file_name",
     "cdwFileTags,cdwTrackViz", where, 
     returnUrl, "cdw_track_filter", 
-    22, wrappers, conn, TRUE, "tracks", 100);
+    22, wrappers, conn, TRUE, "tracks", 100, NULL, FALSE);
 printf("</FORM>\n");
 }
 
@@ -1952,6 +2066,7 @@ printf("</BODY></HTML>\n");
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+long enteredMainTime = clock1000();
 boolean isFromWeb = cgiIsOnWeb();
 if (!isFromWeb && !cgiSpoof(&argc, argv))
     usage();
@@ -1965,6 +2080,7 @@ else if (sameOk(cdwCmd, "menubar"))
     doSendMenubar();
 else
     cartEmptyShell(localWebWrap, hUserCookie(), excludeVars, oldVars);
+cgiExitTime("cdwWebBrowse", enteredMainTime);
 return 0;
 }
 

@@ -22,6 +22,7 @@ UTIL_DIRS = \
     cdwDumpManiFiles \
     cdwFakeManifestFromSubmit \
     cdwFindSymlinkable \
+    cdwGroupFile \
     cdwGroupUser \
     cdwJob \
     cdwMakeContaminationQa \
