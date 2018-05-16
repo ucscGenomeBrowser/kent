@@ -15379,6 +15379,46 @@ TMPDIR=/scratch/tmp
       -stop=load -buildDir=`pwd` mm10 ensGene
     # real    235m41.378s
 
+    ##########################################################################
+    # FIXUP broken files (working - Max and Hiram - 2018-04,05)
+
+    # Max generated a new specScores.tab, add in the chrM specScores
+    # and make a unique set in a new specScores.tab file
+
+    cd /hive/data/genomes/mm10/bed/crispr.10K/uniqSpecScores
+
+    printf "targetSeq\tmitSpecScore\tofftargetCount\ttargetGenomeGeneLocus\n" \
+	> max.withChrM.specScores.tab
+
+    grep -h -v targetSeq ../specScores.max.tab ../addChrM/specScores.tab \
+	| $HOME/bin/x86_64/gnusort -S100G --parallel=32 -u \
+	>> max.withChrM.specScores.tab
+    # real    1m39.468s
+
+    # this new file is much larger than before:
+# -rw-rw-r-- 1 3616703851 Jul 31  2017 withChrM.specScores.tab
+# -rw-rw-r-- 1 5580638498 May 15 14:55 max.withChrM.specScores.tab
+
+    # Now generate a new crispr.bed and crispr.bb file
+
+    mkdir  /hive/data/genomes/mm10/bed/crispr.10K/maxBed
+    cd  /hive/data/genomes/mm10/bed/crispr.10K/maxBed
+    # setup new inputs:
+    ln -s ../addChrM/withChrM.allGuides.bed withChrM.allGuides.bed
+    ln -s ../uniqSpecScores/max.withChrM.specScores.tab max.withChrM.specScores.tab
+    ln -s ../addChrM/withChrM.effScores.tab withChrM.effScores.tab
+    ln -s ../addChrM/withChrM.offtargets.offsets.tab withChrM.offtargets.offsets.tab
+    ln -s ../addChrM/offTargets ./offTargets
+
+    time (/cluster/software/bin/python \
+      /hive/data/outside/crisprTrack/scripts/createBigBed.py mm10 \
+	withChrM.allGuides.bed max.withChrM.specScores.tab \
+     withChrM.effScores.tab withChrM.offtargets.offsets.tab) > newBed.log 2>&1
+    # real    232m5.379s
+
+# -rw-rw-r-- 1 27947769791 May 15 17:55 crispr.bed
+# -rw-rw-r-- 1  6911180170 May 15 18:42 crispr.bb
+
 ##############################################################################
 # LASTZ Gorilla gorGor5 (DONE - 2017-08-04 - Hiram)
     #	establish a screen to control this job
