@@ -3868,6 +3868,12 @@ for (sf = components; sf != NULL; sf = sf->next)
                && (sf->end   >= winEnd   || sf->end   == lf->end)))
                 {
                 Color barbColor = hvGfxContrastingColor(hvg, color);
+                // This scaling of bases to an image window occurs in several places.
+                // It should really be broken out into a function.
+                if (s < winStart)
+                    s = winStart;
+                if (e > winEnd)
+                    e = winEnd;
                 x1 = round((double)((int)s-winStart)*scale) + xOff;
                 x2 = round((double)((int)e-winStart)*scale) + xOff;
                 w = x2-x1;
