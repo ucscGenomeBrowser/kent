@@ -17031,14 +17031,15 @@ TMPDIR=/dev/shm
 
     time (doRepeatMasker.pl -stop=mask -bigClusterHub=ku \
        -workhorse=hgwdev -dbHost=hgwdev -buildDir=`pwd` mm10) > mask.log 2>&1 &
+    # real    705m12.538s
 
-    # fill in grep to get rid of the missing id items:
-    grep -v "" \
-        mm10.fa.out > clean.mm10.fa.out
-    mv clean.mm10.fa.out mm10.fa.out
+    # fill in grep to get rid of the missing id items (not necessary this run):
+    # grep -v "" \
+    #     mm10.fa.out > clean.mm10.fa.out
+    # mv clean.mm10.fa.out mm10.fa.out
 
-    # finish the last step of doCat.csh:
-    /cluster/bin/scripts/extractNestedRepeats.pl mm10.fa.out | sort -k1,1 -k2,2n > mm10.nestedRepeats.bed
+    # finish the last step of doCat.csh, if necessary:
+    # /cluster/bin/scripts/extractNestedRepeats.pl mm10.fa.out | sort -k1,1 -k2,2n > mm10.nestedRepeats.bed
 
     # rmskJoinedCurrent steps
     mkdir /hive/data/genomes/mm10/bed/rmskJoined.2018-05-15
@@ -17049,6 +17050,7 @@ TMPDIR=/dev/shm
 
     time (/scratch/data/RepeatMasker/util/rmToUCSCTables.pl \
         -out mm10.sorted.fa.out -align mm10.fa.align.gz) > run.log 2>&1 &
+XXX - stopped here
     # real    141m7.268s
 
     # confirm the counts are different from the previous version:
