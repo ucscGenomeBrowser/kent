@@ -1557,8 +1557,6 @@ There are no extra options that can appear on the type bigBarChart line.
     newer versions of the tool bedToBigBed (available
     <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">here</a>)
     are enhanced to catch improper input.
-    <b>Note:</b> The searchIndex setting currently does not work if
-    tracks are nested in composites.
     <P><B>Example:</B></P>
     <pre>   searchIndex name</pre>
 </DIV>

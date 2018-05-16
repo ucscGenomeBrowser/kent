@@ -5434,8 +5434,8 @@ struct trackDb *findTdbForTable(char *db,struct trackDb *parent,char *table, str
 if(isEmpty(table))
     return parent;
 
-// hub tracks aren't in the trackDb hash, just use the parent tdb
-if (isHubTrack(table))
+// hub tracks and custom tracks on hubs aren't in the trackDb hash, just use the parent tdb
+if (isHubTrack(table) || isHubTrack(db))
     return parent;
 
 struct trackDb *tdb = NULL;
