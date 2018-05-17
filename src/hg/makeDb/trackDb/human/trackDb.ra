@@ -97,8 +97,8 @@ type bed 4
 url http://geneticassociationdb.nih.gov/cgi-bin/tableview.cgi?table=allview&cond=gene=
 
 track decipher
-shortLabel DECIPHER
-longLabel DECIPHER: Chromosomal Imbalance and Phenotype in Humans
+shortLabel DECIPHER CNVs
+longLabel DECIPHER: Chromosomal Imbalance and Phenotype in Humans (CNVs)
 group phenDis
 visibility hide
 color 0,0,0
@@ -106,6 +106,18 @@ type bed 4
 tableBrowser off decipherRaw knownToDecipher knownCanonToDecipher
 prevExonText Left edge
 nextExonText Right edge
+
+track decipherSnvs
+shortLabel DECIPHER SNVs
+longLabel DECIPHER: Chromosomal Imbalance and Phenotype in Humans (SNVs)
+group phenDis
+visibility hide
+color 0,0,0
+type bed 4
+tableBrowser off decipherSnvsRaw
+prevExonText Left edge
+nextExonText Right edge
+html decipher
 
 track phegeni
 shortLabel PheGenI SNPs
@@ -4501,6 +4513,12 @@ include phastBias.ra
 
 searchName decipherId
 searchTable decipher
+termRegex [0-9]+
+searchType bed
+searchPriority 50
+
+searchName decipherSnvsId
+searchTable decipherSnvs
 termRegex [0-9]+
 searchType bed
 searchPriority 50

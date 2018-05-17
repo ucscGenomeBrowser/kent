@@ -14,8 +14,8 @@ sed -e 's/chr\t/chr/' |sort >j.tmp
 cp j.tmp decipherNew.bed
 # fix some out of range of entries
 #cat j.tmp|sed -e 's/243000000/242951149/' |\
-#sed -e 's/115090019/114142980/' >decipher.bed
-#rm j.tmp
+#sed -e 's/115090019/114142980/' >decipherNew.bed
+rm j.tmp
 
 # Load decipher table
 hgLoadBed hg19 decipherNew decipherNew.bed
@@ -38,3 +38,15 @@ hgsql hg19 -e 'create table knownCanonToDecipherNew select * from knownCanonToDe
 hgsql hg19 -e 'load data local infile "knownCanonToDecipherNew.tab" into table knownCanonToDecipherNew'
 
 
+# SNVs pipeline
+
+sort $2| grep -v '#' | uniq >  decipherSnvsRawNew.txt
+
+hgsql hg19 -e 'drop table if exists decipherSnvsRawNew'
+hgLoadSqlTab hg19 decipherSnvsRawNew ../decipherSnvsRaw.sql decipherSnvsRawNew.txt
+
+hgsql hg19 -N -e 'select "chr", chr, start-1, end, id from decipherSnvsRawNew ' |\
+sed -e 's/chr\t/chr/' |sort > decipherSnvsNew.bed
+
+# Load decipher snvs table
+hgLoadBed hg19 decipherSnvsNew decipherSnvsNew.bed
