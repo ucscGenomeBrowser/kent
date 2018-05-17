@@ -40,7 +40,7 @@ hgsql hg19 -e 'load data local infile "knownCanonToDecipherNew.tab" into table k
 
 # SNVs pipeline
 
-sort $2| grep -v '#' | uniq >  decipherSnvsRawNew.txt
+sort $2| grep -v '#' | uniq | awk -v OFS='\t' -F'\t' '{if ($2=="MT") $2="M"; print $0;}' >  decipherSnvsRawNew.txt
 
 hgsql hg19 -e 'drop table if exists decipherSnvsRawNew'
 hgLoadSqlTab hg19 decipherSnvsRawNew ../decipherSnvsRaw.sql decipherSnvsRawNew.txt
