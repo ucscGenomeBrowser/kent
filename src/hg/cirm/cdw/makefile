@@ -55,6 +55,7 @@ UTIL_DIRS = \
 
 CGI_DIRS = \
     cdwGetFile \
+    cdwGetMetadataAsFile \
     cdwServeTagStorm \
     cdwWebBrowse 
 
