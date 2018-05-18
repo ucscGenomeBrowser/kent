@@ -536,9 +536,8 @@ if (useCart)
 "\"nonconserved\" sites according to phastCons.  The numbers are significant\n"
 "to two or three figures.<br>\n"
 "<br>\n"
-"6. Wrap-in-html is useful when the browser automatically shinks a large image.\n"
+"6. Wrap-in-html is useful when the browser automatically shrinks a large image.\n"
 "This option keeps the image view full in the browser automatically.\n"
-"However, do not use with IE6 when performing save-as.\n"
 "<br>"
 	    );
 	cartWebEnd();

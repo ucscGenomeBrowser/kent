@@ -3663,11 +3663,16 @@ identifier mrnaBlastzName
     hg16.pseudoMrna.qName minCheck=0.76
 
 identifier decipherId
-"DECIPHER ID"
+"DECIPHER CNVs ID"
 $hg.decipher.name dupeOk
 $hg.decipherRaw.id
 $hg.knownToDecipher.value
 $hg.knownCanonToDecipher.value
+
+identifier decipherSnvsId
+"DECIPHER SNVs ID"
+$hg.decipherSnvs.name dupeOk
+$hg.decipherSnvsRaw.id
 
 # Microarray stuff.
 
