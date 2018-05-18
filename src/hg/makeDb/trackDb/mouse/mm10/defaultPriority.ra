@@ -3,7 +3,6 @@
 track knownGene override
 bigGeneDataUrl /gbdb/mm10/knownGene.bb
 priority 1
-release alpha,beta
 
 track ensGene override
 visibility hide
