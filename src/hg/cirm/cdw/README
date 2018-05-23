@@ -121,7 +121,7 @@ cdwChangeAccess - Change access to files.
 usage:
    cdwChangeAccess code ' boolean query in rql'
 where code is three letters encode who, direction, and access in the same fashion
-more modern versions of the unix chmod functino does.  The who can be either
+more modern versions of the unix chmod function does.  The who can be either
    a - for all
    g - for group
    u - for user

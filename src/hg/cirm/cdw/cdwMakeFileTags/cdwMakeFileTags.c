@@ -136,6 +136,59 @@ dyStringFree(&query);
 dyStringFree(&groupList);
 }
 
+void addGroupAndAllAcessFields(char *database, char *table)
+/* add groupIds and allAccess columns to table */
+{
+verbose(2, "adding group and allAccess fields to %s\n", table);
+struct sqlConnection *conn = cdwConnect(database);
+struct dyString *query = dyStringNew(0);
+dyStringClear(query);
+sqlDyStringPrintf(query,
+    "ALTER TABLE %s " 
+    "ADD `allAccess` tinyint(4) DEFAULT '0',"
+    "ADD  `groupIds` varchar(255) DEFAULT ''"  // total rowsize cannot exceed 65k
+    , table);
+sqlUpdate(conn, query->string);
+
+// allAccess
+verbose(2, "setting allAccess field values\n");
+dyStringClear(query);
+sqlDyStringPrintf(query,
+    "update %s t1 "
+    "inner join cdwFile t2 on t2.id = t1.file_id "
+    "set t1.allAccess = t2.allAccess"
+    , table);
+sqlUpdate(conn, query->string);
+dyStringFree(&query);
+sqlDisconnect(&conn);
+}
+
+void setGroupIdsFromTemp(char *database, char *table)
+/* set groupIds from temp table */
+{
+verbose(2, "setting %s.groupIds from cdwFileGroupTemp\n", table);
+struct sqlConnection *conn = cdwConnect(database);
+struct dyString *query = dyStringNew(0);
+dyStringClear(query);
+sqlDyStringPrintf(query,
+    "update %s t1 "
+    "inner join cdwGroupFileTemp t2 on t2.fileId = t1.file_id "
+    "set t1.groupIds = t2.groupIds"
+    , table);
+sqlUpdate(conn, query->string);
+
+// set any unset default groupIds value to 0
+dyStringClear(query);
+sqlDyStringPrintf(query,
+    "update %s "
+    "set groupIds = '0' "
+    "where groupIds = ''"
+    , table);
+sqlUpdate(conn, query->string);
+dyStringFree(&query);
+sqlDisconnect(&conn);
+}
+
 void cdwMakeFileTags(char *database, char *fullTable, char *facetTable, char *facetFieldsCsv)
 /* cdwMakeFileTags - Create cdwFileTags table from tagStorm on same database.. */
 {
@@ -212,48 +265,17 @@ dyStringFree(&facetCreate);
 
 
 /* add columns to facilitate group and allAccess filtering */
-verbose(2, "adding group and allAccess fields\n");
-dyStringClear(query);
-sqlDyStringPrintf(query,
-    "ALTER TABLE %s " 
-    "ADD `allAccess` tinyint(4) DEFAULT '0',"
-    "ADD  `groupIds` varchar(255) DEFAULT ''"  // total rowsize cannot exceed 65k
-    , facetTable);
-sqlUpdate(conn, query->string);
-
-// allAccess
-verbose(2, "setting allAccess field values\n");
-dyStringClear(query);
-sqlDyStringPrintf(query,
-    "update %s t1 "
-    "inner join cdwFile t2 on t2.id = t1.file_id "
-    "set t1.allAccess = t2.allAccess"
-    , facetTable);
-sqlUpdate(conn, query->string);
+addGroupAndAllAcessFields(database, fullTable);
+addGroupAndAllAcessFields(database, facetTable);
 
 // groupIds
 verbose(2, "making table cdwFileGroupTemp\n");
 makeCdwGroupFileTemp(database);
 
-verbose(2, "setting groupIds from cdwFileGroupTemp\n");
-dyStringClear(query);
-sqlDyStringPrintf(query,
-    "update %s t1 "
-    "inner join cdwGroupFileTemp t2 on t2.fileId = t1.file_id "
-    "set t1.groupIds = t2.groupIds"
-    , facetTable);
-sqlUpdate(conn, query->string);
+setGroupIdsFromTemp(database, fullTable);
+setGroupIdsFromTemp(database, facetTable);
 
 sqlDropTable(conn, "cdwGroupFileTemp");
-
-// set any unset default groupIds value to 0
-dyStringClear(query);
-sqlDyStringPrintf(query,
-    "update %s "
-    "set groupIds = '0' "
-    "where groupIds = ''"
-    , facetTable);
-sqlUpdate(conn, query->string);
 
 /* OLD WAY
 dyStringClear(query);

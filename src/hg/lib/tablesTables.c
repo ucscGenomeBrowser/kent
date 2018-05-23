@@ -80,11 +80,14 @@ if (largerContext != NULL)  // Need to page?
 cgiMakeButton("submit", "search");
 
 printf("&nbsp&nbsp;");
-cgiMakeOnClickButton("clearButton",
+
+cgiMakeOnClickButton("clearButton", 
 "$(':input').not(':button, :submit, :reset, :hidden, :checkbox, :radio').val('');\n"
 "$('[name=cdwBrowseFiles_page]').val('1');\n"
-"$('#submit').click();\n"
-, "clear search");
+"$('[name=clearSearch]').val('1');\n"
+"$('#submit').click();\n",
+"clear search");
+
 printf("<br>");
 
 printf("%d&nbsp;%s&nbsp;found. ", matchCount, itemPlural);
