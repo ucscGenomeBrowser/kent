@@ -10,10 +10,11 @@
 #include "fa.h"
 
 
-int minContigGap = 25;
-int minScaffoldGap = 50000;
+static int minContigGap = 25;
+static int minScaffoldGap = 50000;
+static boolean singleContigs = FALSE;
 
-void usage()
+static void usage()
 /* Explain usage and exit. */
 {
 errAbort(
@@ -23,6 +24,8 @@ errAbort(
   "options:\n"
   "   -minContigGap=N Minimum size for a gap between contigs.  Default %d\n"
   "   -minScaffoldGap=N Min size for a gap between scaffolds. Default %d\n"
+  "   -singleContigs - when a full sequence has no gaps, maintain contig\n"
+  "\tname without adding index extension.\n"
   , minContigGap, minScaffoldGap
   );
 }
@@ -30,10 +33,12 @@ errAbort(
 static struct optionSpec options[] = {
    {"minContigGap", OPTION_INT},
    {"minScaffoldGap", OPTION_INT},
+   {"singleContigs", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
-void agpContigLine(FILE *f, char *name, int seqStart, int seqEnd, int lineIx, int contigIx)
+static void agpContigLine(FILE *f, char *name, int seqStart, int seqEnd,
+    int lineIx, int contigIx, boolean noIx)
 /* Output AGP line for contig. */
 {
 fprintf(f, "%s\t", name);
@@ -41,13 +46,16 @@ fprintf(f, "%d\t", seqStart + 1);
 fprintf(f, "%d\t", seqEnd);
 fprintf(f, "%d\t", lineIx);
 fprintf(f, "%c\t", 'D');
-fprintf(f, "%s_%d\t", name, contigIx);
+if (noIx)
+    fprintf(f, "%s\t", name);
+else
+    fprintf(f, "%s_%d\t", name, contigIx);
 fprintf(f, "1\t");
 fprintf(f, "%d\t", seqEnd - seqStart);
 fprintf(f, "+\n");
 }
 
-char *strNotChar(char *s, char c)
+static char *strNotChar(char *s, char c)
 /* Return pointer to first character in s that is *not* c, or NULL
  * if none such. */
 {
@@ -63,7 +71,7 @@ for (;;)
    }
 }
 
-void agpGapLine(FILE *f, char *name, int seqStart, int seqEnd, int gapSize, int lineIx)
+static void agpGapLine(FILE *f, char *name, int seqStart, int seqEnd, int gapSize, int lineIx)
 /* Write out agp line for gap. */
 {
 fprintf(f, "%s\t", name);
@@ -78,7 +86,7 @@ else
     fprintf(f, "contig\tyes\n");
 }
 
-void fakeAgpFromSeq(struct dnaSeq *seq, FILE *f)
+static void fakeAgpFromSeq(struct dnaSeq *seq, FILE *f)
 /* Look through sequence and produce agp file. */
 {
 static int lineIx = 0;
@@ -95,7 +103,7 @@ for (;;)
    if (gapStart == NULL)
        {
        agpContigLine(f, seq->name, contigStart - seqStart, seqEnd - seqStart, 
-       		++lineIx, ++contigIx);
+		++lineIx, ++contigIx, singleContigs);
        break;
        }
    gapEnd = strNotChar(gapStart, 'n');
@@ -105,8 +113,8 @@ for (;;)
    if (gapSize >= minContigGap || gapEnd == seqEnd)
        {
        if (gapStart != contigStart)
-           agpContigLine(f, seq->name, contigStart - seqStart, gapStart - seqStart, 
-	   	++lineIx, ++contigIx);
+           agpContigLine(f, seq->name, contigStart - seqStart,
+		gapStart - seqStart, ++lineIx, ++contigIx, FALSE);
        agpGapLine(f, seq->name, gapStart - seqStart, gapEnd - seqStart, gapSize, ++lineIx);
        if (gapEnd == seqEnd)
            break;
@@ -140,6 +148,7 @@ if (argc != 3)
     usage();
 minContigGap = optionInt("minContigGap", minContigGap);
 minScaffoldGap = optionInt("minScaffoldGap", minScaffoldGap);
+singleContigs = optionExists("singleContigs");
 hgFakeAgp(argv[1], argv[2]);
 return 0;
 }
