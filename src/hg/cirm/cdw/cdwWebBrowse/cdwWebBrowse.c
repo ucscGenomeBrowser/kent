@@ -144,7 +144,7 @@ void wrapTagValueInFiles(struct fieldedTable *table, struct fieldedRow *row,
 printf("<A HREF=\"../cgi-bin/cdwWebBrowse?cdwCommand=browseFiles&%s&",
     cartSidUrlString(cart));
 char query[2*PATH_LEN];
-safef(query, sizeof(query), "%s = '%s'", field, val);
+safef(query, sizeof(query), "%s = '%s'&cdwBrowseFiles_page=1", field, val);
 char *escapedQuery = cgiEncode(query);
 printf("%s=%s", "cdwFile_filter", escapedQuery);
 freez(&escapedQuery);
@@ -789,7 +789,8 @@ if (securityColumnsInTable)
 	}
     }
 
-if (efList)
+if (efList 
+    || (securityColumnsInTable && (!isEmpty(searchString)))) // have search terms but nothing was found
     {
     if (!isEmpty(where->string))
 	sqlDyStringPrintf(where, " and ");
@@ -826,7 +827,8 @@ searchFilesWithAccess(conn, searchString, FILETABLEFIELDS, initialWhere, &efList
 // reduce query to those that match our filters
 struct dyString *dummy;
 struct dyString *filteredWhere;
-char *table = "cdwFileFacets";
+char *table = isEmpty(initialWhere) ?  "cdwFileFacets" : "cdwFileTags";
+
 webTableBuildQuery(cart, table, accWhere->string, "cdwBrowseFiles", FILETABLEFIELDS, TRUE, &dummy, &filteredWhere);
 
 // Selected Facet Values Filtering
@@ -922,7 +924,7 @@ return token;
 }
 
 void accessibleFilesTable(struct cart *cart, struct sqlConnection *conn, 
-    char *searchString, char *allFields, char *from, char *initialWhere,  
+    char *searchString, char *allFields, char *fromTable, char *initialWhere,  
     char *returnUrl, char *varPrefix, int maxFieldWidth, 
     struct hash *tagOutWrappers, void *wrapperContext,
     boolean withFilters, char *itemPlural, int pageSize,
@@ -931,6 +933,7 @@ void accessibleFilesTable(struct cart *cart, struct sqlConnection *conn,
 struct cdwFile *efList = NULL;
 struct dyString *where;
 char *fields;
+
 searchFilesWithAccess(conn, searchString, allFields, initialWhere, &efList, &where, &fields, securityColumnsInTable);
 
 if (!securityColumnsInTable && !efList)
@@ -950,7 +953,7 @@ struct hash *suggestHash = NULL;
 if (!securityColumnsInTable)
     suggestHash = accessibleSuggestHash(conn, fields, efList);
 
-webFilteredSqlTable(cart, conn, fields, from, where->string, returnUrl, varPrefix, maxFieldWidth,
+webFilteredSqlTable(cart, conn, fields, fromTable, where->string, returnUrl, varPrefix, maxFieldWidth,
     tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize, suggestHash, visibleFacetList, makeDownloadAllButtonForm);
 
 /* Clean up and go home. */
@@ -1064,10 +1067,12 @@ for (ef = efList; ef != NULL; ef = ef->next)
 	    submitFname);
         }
     else
+	{
         printf("https://%s/cgi-bin/cdwGetFile?acc=%s", host, vf->licensePlate);
 	if (!isPublicSite)
 	    printf("&token=%s", token);
 	printf("%s\n", optArg);
+	}
     }
 }
 
@@ -1173,6 +1178,13 @@ printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
 cartSaveSession(cart);
 cgiMakeHiddenVar("cdwCommand", "browseFiles");
 
+cgiMakeHiddenVar("clearSearch", "0");
+char *clearSearch = cartOptionalString(cart, "clearSearch");
+if (clearSearch && sameString(clearSearch,"1"))
+    {
+    cartSetString(cart, "cdwFile_filter", "");  // reset file filter to empty string
+    }
+
 // DEBUG REMOVE
 //char *varName = "cdwSelectedFieldValues";
 //char *varVal = cartUsualString(cart, varName, "");
@@ -1226,7 +1238,7 @@ char *visibleFacetFields = "lab,assay,data_set_id,output,format,read_size,sample
 
 accessibleFilesTable(cart, conn, searchString,
   FILETABLEFIELDS,
-  "cdwFileFacets",
+  isEmpty(where) ?  "cdwFileFacets" : "cdwFileTags",
   where, 
   returnUrl, "cdwBrowseFiles",
   18, wrappers, conn, FALSE, "files", 100, visibleFacetFields, TRUE);
@@ -1239,6 +1251,7 @@ void doBrowseTracks(struct sqlConnection *conn)
 printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
 cartSaveSession(cart);
 cgiMakeHiddenVar("cdwCommand", "browseTracks");
+cgiMakeHiddenVar("clearSearch", "0");
 
 printf("<B>Tracks</B> - Click on ucsc_db to open Genome Browser. ");
 printf("The accession link shows more metadata.<BR>");

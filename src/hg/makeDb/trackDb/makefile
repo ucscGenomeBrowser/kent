@@ -93,8 +93,7 @@ DBS = \
 	droYak1 droYak2 \
 	eboVir3 eboVir2 eboVir1 bunEbo1 sudEbo1 resEbo1 taiEbo1 zaiEbo1 \
 	echTel1 echTel2 \
-	equCab1 \
-	equCab2 \
+	equCab1 equCab2 equCab3 \
 	eriEur1 eriEur2 \
 	eulFla1 \
 	eulMac1 \
