@@ -14,18 +14,18 @@ the subtrack list will be the order in which they display in the browser.</P>
 <P>
 The query sequences in the SAM/BAM alignment representation 
 are normalized to the + strand of the reference genome
-(see the <A HREF="http://samtools.sourceforge.net/SAM1.pdf#page=4"
+(see the <A HREF="http://samtools.github.io/hts-specs/SAMv1.pdf#page=4"
 TARGET=_blank>SAM Format Specification</A>
 for more information on the SAM/BAM file format). If a query sequence was
 originally the reverse of what has been stored and aligned, it will have the
 following
-<A HREF="http://samtools.sourceforge.net/SAM1.pdf#page=5"
+<A HREF="http://samtools.github.io/hts-specs/SAMv1.pdf#page=5"
 TARGET=_blank>flag</A>:
 <PRE>
 (0x10) Read is on '-' strand.
 </PRE></P>
 <P>
-BAM/SAM alignment representations also have <A HREF="http://samtools.sourceforge.net/SAM1.pdf#page=6"
+BAM/SAM alignment representations also have <A HREF="http://samtools.github.io/hts-specs/SAMv1.pdf#page=6"
 TARGET=_blank>tags</A>. Some tags are predefined and others (those beginning
 with X, Y or Z) are defined by the aligner or data submitter.
 The following is a list of the tags associated with this track. For this 
@@ -35,11 +35,11 @@ TARGET=_blank>Burrows-Wheeler Aligner (BWA)</A>.
 <UL>
 <LI><A HREF="http://bio-bwa.sourceforge.net/bwa.shtml"
 TARGET=_blank><B>XT</B></A>: Type: Unique/Repeat/N/Mate-sw</LI>
-<LI><A HREF="http://samtools.sourceforge.net/SAM1.pdf#page=7"
+<LI><A HREF="http://samtools.github.io/hts-specs/SAMv1.pdf#page=7"
 TARGET=_blank><B>NM</B></A>: Number of nucleotide differences (i.e. edit distance to the reference sequence)</LI>
-<LI><A HREF="http://samtools.sourceforge.net/SAM1.pdf#page=7"
+<LI><A HREF="http://samtools.github.io/hts-specs/SAMv1.pdf#page=7"
 TARGET=_blank><B>SM</B></A>: Mapping quality if the read is mapped as a single read rather than as a read pair</LI>
-<LI><A HREF="http://samtools.sourceforge.net/SAM1.pdf#page=7"
+<LI><A HREF="http://samtools.github.io/hts-specs/SAMv1.pdf#page=7"
 TARGET=_blank><B>AM</B></A>: Smaller single-end mapping quality of the two reads in a pair</LI>
 <LI><A HREF="http://bio-bwa.sourceforge.net/bwa.shtml"
 TARGET=_blank><B>X0</B></A>: Number of best hits</LI>
@@ -51,7 +51,7 @@ TARGET=_blank><B>XM</B></A>: Number of mismatches in the alignment</LI>
 TARGET=_blank><B>XO</B></A>: Number of gap opens</LI>
 <LI><A HREF="http://bio-bwa.sourceforge.net/bwa.shtml"
 TARGET=_blank><B>XG</B></A>: Number of gap extentions</LI>
-<LI><A HREF="http://samtools.sourceforge.net/SAM1.pdf#page=7"
+<LI><A HREF="http://samtools.github.io/hts-specs/SAMv1.pdf#page=7"
 TARGET=_blank><B>MD</B></A>: String for mismatching positions in the format of [0-9]+(([ACGTN]|\^[ACGTN]+)[0-9]+)*</LI>
        </UL>
         </LI>
@@ -128,7 +128,7 @@ TARGET=_BLANK>Ed Green</A>.
 <P>
 Green RE, Krause J, Briggs AW, Maricic T, Stenzel U, Kircher M, Patterson N,
 Li H, Zhai W, Fritz MH  <em>et al.</em>
-<A HREF="http://www.sciencemag.org/cgi/content/full/328/5979/710"
+<A HREF="http://science.sciencemag.org/content/328/5979/710.full"
 TARGET=_BLANK>A Draft Sequence of the Neandertal Genome</A>.
 <em>Science</em>. 2010 7 May;328(5979):710-22.
 </P>

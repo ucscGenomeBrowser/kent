@@ -6600,8 +6600,8 @@ if (vis == tvFull)
     }
 }
 
-static char *decipherPhenotypeList(char *name)
-/* Return list of diseases associated with a DECIPHER entry */
+static char *decipherCnvsPhenotypeList(char *name)
+/* Return list of diseases associated with a DECIPHER CNVs entry */
 {
 char query[256];
 static char list[4096];
@@ -6632,14 +6632,14 @@ hFreeConn(&conn);
 return list;
 }
 
-void decipherLoad(struct track *tg)
-/* Load DECIPHER items with extra labels from decipherPhenotypeList. */
+void decipherCnvsLoad(struct track *tg)
+/* Load DECIPHER CNVs items with extra labels from decipherPhenotypeList. */
 {
-bedPlusLabelLoad(tg, decipherPhenotypeList);
+bedPlusLabelLoad(tg, decipherCnvsPhenotypeList);
 }
 
-Color decipherColor(struct track *tg, void *item, struct hvGfx *hvg)
-/* Return color to draw DECIPHER entry */
+Color decipherCnvsColor(struct track *tg, void *item, struct hvGfx *hvg)
+/* Return color to draw DECIPHER CNVs entry */
 {
 struct bed *bed = item;
 int col = tg->ixColor;
@@ -6658,6 +6658,7 @@ if (startsWithNoCase("chr", bed->chrom))
 /* color scheme:
 	RED:	If the entry is a deletion (mean ratio < 0)
 	BLUE:	If the entry is a duplication (mean ratio > 0)
+	GREY:	If the entry was not provided with a mean ratio value (or it's 0)
 */
 sqlSafefFrag(cond_str, sizeof(cond_str),"name='%s' ", bed->name);
 decipherId = sqlGetField(database, "decipher", "name", cond_str);
@@ -6666,13 +6667,17 @@ if (decipherId != NULL)
     if (hTableExists(database, "decipherRaw"))
         {
         sqlSafef(query, sizeof(query),
-              "select mean_ratio > 0 from decipherRaw where id = '%s' and "
+              "select mean_ratio from decipherRaw where id = '%s' and "
               "chr = '%s' and start = %d and end = %d",
 	          decipherId, decipherChrom, bed->chromStart+1, bed->chromEnd);
 	sr = sqlGetResult(conn, query);
         if ((row = sqlNextRow(sr)) != NULL)
             {
-	    if (sameWord(row[0], "1"))
+            if (isEmpty(row[0]) || (atof(row[0]) == 0.0))
+                {
+                col = MG_GRAY;
+                }
+	    else if (atof(row[0]) > 0)
                 {
                 col = MG_BLUE;
                 }
@@ -6682,20 +6687,98 @@ if (decipherId != NULL)
 		}
 	    }
 	sqlFreeResult(&sr);
-        /* add more logic here to check for mean_ratio = 0
-           (which is a problem to be fixed by DECIPHER */
+	}
+    }
+hFreeConn(&conn);
+return(col);
+}
 
-        sqlSafef(query, sizeof(query),
-	       "select mean_ratio = 0 from decipherRaw where id = '%s' and "
-           "chr = '%s' and start = %d and end = %d",
-           decipherId, decipherChrom, bed->chromStart+1, bed->chromEnd);
-        sr = sqlGetResult(conn, query);
+static char *decipherSnvsPhenotypeList(char *name)
+/* Return list of diseases associated with a DECIPHER SNVs entry */
+{
+char query[256];
+static char list[4096];
+struct sqlConnection *conn = hAllocConn(database);
+if (sqlFieldIndex(conn, "decipherSnvsRaw", "phenotypes") >= 0)
+    {
+    list[0] = '\0';
+    sqlSafef(query, sizeof(query),
+        "select phenotypes from decipherSnvsRaw where id='%s'", name);
+    struct sqlResult *sr = sqlMustGetResult(conn, query);
+    char **row = sqlNextRow(sr);
+    if ((row != NULL) && strlen(row[0]) >= 1)
+        {
+        char *prettyResult = replaceChars(row[0], "|", "; ");
+        safecpy(list, sizeof(list), prettyResult);
+        // freeMem(prettyResult);
+        }
+    sqlFreeResult(&sr);
+    }
+else
+    {
+    sqlSafef(query, sizeof(query),
+        "select distinct phenotype from decipherSnvsRaw where id='%s' order by phenotype", name);
+    hFreeConn(&conn);
+    return collapseRowsFromQuery(query, "; ", 20);
+    }
+hFreeConn(&conn);
+return list;
+}
+
+void decipherSnvsLoad(struct track *tg)
+/* Load DECIPHER SNVs items with extra labels from decipherSnvsPhenotypeList. */
+{
+bedPlusLabelLoad(tg, decipherSnvsPhenotypeList);
+}
+
+Color decipherSnvsColor(struct track *tg, void *item, struct hvGfx *hvg)
+/* Return color to draw DECIPHER SNV entry */
+{
+struct bed *bed = item;
+int col = tg->ixColor;
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlResult *sr;
+char **row;
+char query[256];
+char cond_str[256];
+char *decipherId = NULL;
+
+/* So far, we can just remove "chr" from UCSC chrom names to get DECIPHER names */
+char *decipherChrom = bed->chrom;
+if (startsWithNoCase("chr", bed->chrom))
+    decipherChrom += 3;
+
+/* color scheme:
+    BLACK:      If the entry is likely or definitely pathogenic
+    DARK GRAY:  If the entry is uncertain or unknown
+    LIGHT GRAY: If the entry is likely or definitely benign
+*/
+
+sqlSafefFrag(cond_str, sizeof(cond_str),"name='%s' ", bed->name);
+decipherId = sqlGetField(database, "decipherSnvs", "name", cond_str);
+
+if (decipherId != NULL)
+    {
+    if (hTableExists(database, "decipherSnvsRaw"))
+        {
+        sqlSafef(query, sizeof(query), "select pathogenicity from decipherSnvsRaw where "
+            "id = '%s' and chr = '%s' and start = '%d' and end = '%d'",
+            decipherId, decipherChrom, bed->chromStart+1, bed->chromEnd);
+	sr = sqlGetResult(conn, query);
+        col = MG_GRAY;
         if ((row = sqlNextRow(sr)) != NULL)
             {
-	    if (sameWord(row[0], "1"))
+            char *ucPathogenicity = cloneString(row[0]);
+            strUpper(ucPathogenicity);
+	    if (endsWith(ucPathogenicity, "PATHOGENIC"))
                 {
-                col = MG_GRAY;
+                col = MG_BLACK;
                 }
+	    else if (endsWith(ucPathogenicity, "BENIGN"))
+		{
+                col = MAKECOLOR_32(200,200,200);
+		}
+            // freeMem(ucPathogenicity);
 	    }
 	sqlFreeResult(&sr);
 	}
@@ -6704,12 +6787,23 @@ hFreeConn(&conn);
 return(col);
 }
 
-void decipherMethods(struct track *tg)
-/* Methods for DECIPHER track. */
+void decipherCnvsMethods(struct track *tg)
+/* Methods for DECIPHER CNVs track. */
 {
-tg->loadItems   = decipherLoad;
-tg->itemColor   = decipherColor;
-tg->itemNameColor = decipherColor;
+tg->loadItems   = decipherCnvsLoad;
+tg->itemColor   = decipherCnvsColor;
+tg->itemNameColor = decipherCnvsColor;
+tg->drawItemAt  = bedPlusLabelDrawAt;
+tg->mapItem     = bedPlusLabelMapItem;
+tg->nextPrevExon = simpleBedNextPrevEdge;
+}
+
+void decipherSnvsMethods(struct track *tg)
+/* Methods for DECIPHER SNVs track. */
+{
+tg->loadItems   = decipherSnvsLoad;
+tg->itemColor   = decipherSnvsColor;
+tg->itemNameColor = decipherSnvsColor;
 tg->drawItemAt  = bedPlusLabelDrawAt;
 tg->mapItem     = bedPlusLabelMapItem;
 tg->nextPrevExon = simpleBedNextPrevEdge;
@@ -14624,7 +14718,8 @@ registerTrackHandler("hg17Kg", hg17KgMethods);
 registerTrackHandler("superfamily", superfamilyMethods);
 registerTrackHandler("gad", gadMethods);
 registerTrackHandler("rdmr", rdmrMethods);
-registerTrackHandler("decipher", decipherMethods);
+registerTrackHandler("decipher", decipherCnvsMethods);
+registerTrackHandler("decipherSnvs", decipherSnvsMethods);
 registerTrackHandler("rgdQtl", rgdQtlMethods);
 registerTrackHandler("rgdRatQtl", rgdQtlMethods);
 registerTrackHandler("refGene", refGeneMethods);

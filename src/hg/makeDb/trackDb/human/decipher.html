@@ -7,10 +7,10 @@
  genetic condition are urged to consult with a qualified physician for
  diagnosis and for answers to personal questions.
  </P>
- <P>Because the UCSC Genes mappings are based on associations from RefSeq and
- UniProt, they are dependent on any interpretations from those sources.
- Furthermore, because many DECIPHER records refer to multiple gene names,
- or syndromes not tightly mapped to individual genes, the associations
+ <P>Because the UCSC Genes mappings for CNVs are based on associations from
+ RefSeq and UniProt, they are dependent on any interpretations from those
+ sources.  Furthermore, because many DECIPHER records refer to multiple gene
+ names, or syndromes not tightly mapped to individual genes, the associations
  in this track should be treated with skepticism and any conclusions
  based on them should be carefully scrutinized using independent
  resources.
@@ -59,10 +59,17 @@ to create a simple BED track to annotate the genomic regions associated
 with individual patients.  
 </P>
 <P>
-The entries are colored <B><FONT COLOR = RED>red</FONT></B> for deletions 
+For the CNVs track, the entries are colored <B><FONT COLOR = RED>red</FONT></B> for deletions 
 (mean log ratio &lt; 0) and <B><FONT COLOR = BLUE>blue</FONT></B> for duplications 
-(mean log ratio &gt; 0).
-<BR>Note that the color scheme changed in March 2011.
+(mean log ratio &gt; 0).  Entries where no mean ratio is available are colored
+<b><font color="#888">grey</font></b>.
+<br>
+For the SNVs track, the entries are colored according to the estimated pathogenicity of the
+variant.  Entries are colored <b><font color="black">black for likely or definitely
+pathogenic</font></b>, <b><font color="#888">dark grey for uncertain or
+unknown</font></b>, and <b><font color="#c8c8c8">light grey for likely or definitely
+benign</font></b>.
+</p>
 
 <H2>Contact</H2>
 <P>
@@ -77,7 +84,7 @@ a&#99;.
 <p>
 Firth HV, Richards SM, Bevan AP, Clayton S, Corpas M, Rajan D, Van Vooren S, Moreau Y, Pettett RM,
 Carter NP.
-<a href="http://www.cell.com/ajhg/abstract/S0002-9297(09)00107-4" target="_blank">
+<a href="https://www.cell.com/ajhg/abstract/S0002-9297(09)00107-4" target="_blank">
 DECIPHER: Database of Chromosomal Imbalance and Phenotype in Humans Using Ensembl Resources</a>.
 <em>Am J Hum Genet</em>. 2009 Apr;84(4):524-33.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/19344873" target="_blank">19344873</a>; PMC: <a

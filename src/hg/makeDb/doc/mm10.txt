@@ -17049,21 +17049,20 @@ TMPDIR=/dev/shm
     ln -s ../repeatMasker.2018-05-15/mm10.fa.align .
 
     time (/scratch/data/RepeatMasker/util/rmToUCSCTables.pl \
-        -out mm10.sorted.fa.out -align mm10.fa.align.gz) > run.log 2>&1 &
-XXX - stopped here
-    # real    141m7.268s
+        -out mm10.sorted.fa.out -align mm10.fa.align.gz) > rerun.log 2>&1 &
+    # real    102m53.576s
 
     # confirm the counts are different from the previous version:
     # wc -l ../rmskJoined/mm10.fa.align.tsv ../rmskJoined/mm10.sorted.fa.join.bed ../rmskJoined/mm10.sorted.fa.out.tsv
-   7203858 ../rmskJoined/mm10.fa.align.tsv
-   4607727 ../rmskJoined/mm10.sorted.fa.join.bed
-   5520118 ../rmskJoined/mm10.sorted.fa.out.tsv
-  17331703 total
+   5918456 ../rmskJoined/mm10.fa.align.tsv
+   4657599 ../rmskJoined/mm10.sorted.fa.join.bed
+   5249545 ../rmskJoined/mm10.sorted.fa.out.tsv
+  15825600 total
     # wc -l *.tsv
-   7227245 mm10.fa.align.tsv
-   4828114 mm10.sorted.fa.join.tsv
-   5916189 mm10.sorted.fa.out.tsv
-  17971548 total
+   5888031 mm10.fa.align.tsv
+   4646880 mm10.sorted.fa.join.tsv
+   5235053 mm10.sorted.fa.out.tsv
+  15769964 total
 
     # sub rmskJoinedBaseline for rmskJoinedCurrent if this is the first version for this assembly
     hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/rmskJoined.sql \
@@ -17071,6 +17070,15 @@ XXX - stopped here
             -type=bed4+9 -as=$HOME/kent/src/hg/lib/rmskJoined.as mm10 \
                 rmskJoinedCurrent mm10.sorted.fa.join.tsv \
                     > loadJoined.log 2>&1
+    # Error line 1028733 of mm10.sorted.fa.join.tsv:
+    # chromStart after chromEnd (21000277 > 21000266)
+    # is it  the only one ?
+    awk -F'\t' '{if ($2 > $3) sum+=1} END {print sum}' mm10.sorted.fa.join.tsv
+    # 1
+
+    # remove it and run above hgLoadBed again:
+    awk -F'\t' '{if ($2 < $3) print;}' mm10.sorted.fa.join.tsv  > mm10.sorted.fa.join.cleaned
+    mv mm10.sorted.fa.join.cleaned mm10.sorted.fa.join.tsv
 
     # sub rmskAlignBaseline for rmskAlignCurrent if this is the first version for this assembly
     hgLoadSqlTab mm10 rmskAlignCurrent \
@@ -17080,5 +17088,7 @@ XXX - stopped here
     # sub rmskOutBaseline for rmskOutCurrent if this is the first version for this assembly
     hgLoadOutJoined -verbose=2 -table=rmskOutCurrent mm10 mm10.sorted.fa.out > loadOut.log 2>&1
 
+    featureBits -countGaps mm10 rmskJoinedBaseline
+    # 2243948952 bases of 2730871774 (82.170%) in intersection
     featureBits -countGaps mm10 rmskJoinedCurrent
-    # 2796899855 bases of 3209286105 (87.150%) in intersection
+    # 2249729653 bases of 2730871774 (82.381%) in intersection
