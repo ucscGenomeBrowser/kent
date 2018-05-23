@@ -94,6 +94,7 @@ int contigIx = 0;
 char *gapStart, *gapEnd, *contigStart;
 char *dna, *seqStart, *seqEnd;
 int gapSize;
+boolean maintainNames = singleContigs;
 
 dna = seqStart = contigStart = seq->dna;
 seqEnd = seqStart + seq->size;
@@ -103,9 +104,10 @@ for (;;)
    if (gapStart == NULL)
        {
        agpContigLine(f, seq->name, contigStart - seqStart, seqEnd - seqStart, 
-		++lineIx, ++contigIx, singleContigs);
+		++lineIx, ++contigIx, maintainNames);
        break;
        }
+   maintainNames = FALSE;
    gapEnd = strNotChar(gapStart, 'n');
    if (gapEnd == NULL)
        gapEnd = seqEnd;
