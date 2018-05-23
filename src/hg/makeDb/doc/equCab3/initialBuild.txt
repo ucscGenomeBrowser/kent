@@ -370,6 +370,32 @@ XXX - running - Wed May 23 14:20:49 PDT 2018
 
 #############################################################################
 # run up idKeys files for chromAlias/ncbiRefSeq (DONE - 2018-05-23 - Hiram)
+
+    # will need the refseq keys:
+    mkdir /hive/data/genomes/equCab3/refseq/idKeys
+    cd /hive/data/genomes/equCab3/refseq/idKeys
+    faToTwoBit ../GCF_000001405.31_GRCh38.p5_genomic.fna.gz refseqEquCab3.2bit
+    time (doIdKeys.pl \
+	-twoBit=`pwd`/refseqEquCab3.2bit \
+	-buildDir=`pwd` refseqEquCab3) > do.log 2>&1 &
+    # real    3m23.365s
+    cat refseqEquCab3.keySignature.txt
+    #  9b81a6e3c94602c13436189783aadda8
+
+    # and the genbank keys:
+    mkdir /hive/data/genomes/equCab3/refseq/idKeys/genbank
+    cd /hive/data/genomes/equCab3/refseq/idKeys/genbank
+    ln -s /hive/data/outside/ncbi/genomes/genbank/vertebrate_mammalian/Equus_caballus/all_assembly_versions/GCA_002863925.1_EquCab3.0/GCA_002863925.1_EquCab3.0_genomic.fna.gz .
+    faToTwoBit GCA_002863925.1_EquCab3.0_genomic.fna.gz genbankEquCab3.2bit
+    time (doIdKeys.pl \
+	-twoBit=`pwd`/genbankEquCab3.2bit \
+	-buildDir=`pwd` genbankEquCab3) > do.log 2>&1 &
+    # real    3m25.325s
+
+    cat genbankEquCab3.keySignature.txt
+    #  ea8c3522e6ac4dc1bec438c4f70043da
+
+    # and the UCSC keys:
     mkdir /hive/data/genomes/equCab3/bed/idKeys
     cd /hive/data/genomes/equCab3/bed/idKeys
 
@@ -382,7 +408,7 @@ XXX - running - Wed May 23 14:20:49 PDT 2018
     #  9b81a6e3c94602c13436189783aadda8
 
 #############################################################################
-# ucscToINSDC and ucscToRefSeq table/track (TBD - 2018-03-24 - Hiram)
+# ucscToINSDC and ucscToRefSeq table/track (DONE - 2018-05-23 - Hiram)
     # the sequence here is working for a 'refseq' assembly
     # beware of a chrM situation may be specific depending upon what is
     # available in the assembly
@@ -391,7 +417,7 @@ XXX - running - Wed May 23 14:20:49 PDT 2018
     cd /hive/data/genomes/equCab3/bed/ucscToINSDC
 
     join -t$'\t' ../idKeys/equCab3.idKeys.txt \
-	../../refseq/idKeysGenbank/genbankEquCab3.idKeys.txt | cut -f2- \
+	../../refseq/idKeys/genbank/genbankEquCab3.idKeys.txt | cut -f2- \
           | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
             | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
                | sort -k1,1 -k2,2n > ucscToINSDC.bed
@@ -404,36 +430,31 @@ XXX - running - Wed May 23 14:20:49 PDT 2018
 
     # verify line counts are the same
     wc -l *.bed ../../chrom.sizes
-    #	4344 ucscToINSDC.bed
-    #	4346 ucscToRefSeq.bed
-    #	4346 ../../chrom.sizes
+    #	4700 ucscToINSDC.bed
+    #	4701 ucscToRefSeq.bed
+    #	4701 ../../chrom.sizes
 
-    # need to find INSDC equivalents for chrY and chrM:
-    egrep "chrY|chrM" *
-ucscToRefSeq.bed:chrM   0       16554   NC_001643.1
-ucscToRefSeq.bed:chrY   0       26350515        NC_006492.4
+    # need to find INSDC equivalents for chrM:
+    egrep "chrM" *
+ucscToRefSeq.bed:chrM   0       16660   NC_001640.1
 
     # lookup those accessions at NCBI Entrez
-    # NC_001643.1 = D38113.1
-    # NC_006492.4 = DP000054.3
-    printf "chrM\t0\t16554\tD38113.1\n" >> ucscToINSDC.bed
-    printf "chrY\t0\t26350515\tNC_006492.4\n" >> ucscToINSDC.bed
+    # NC_001640.1 = X79547.1
+    printf "chrM\t0\t16660\tX79547.1\n" >> ucscToINSDC.bed
 
     # resort the bed file:
     sort -k1,1 -k2,2n -o ucscToINSDC.bed ucscToINSDC.bed
 
-    # verify chrM and chrY are correct:
-    egrep "chrM|chrY" *
-ucscToINSDC.bed:chrM    0       16554   D38113.1
-ucscToINSDC.bed:chrY    0       26350515        NC_006492.4
-ucscToRefSeq.bed:chrM   0       16554   NC_001643.1
-ucscToRefSeq.bed:chrY   0       26350515        NC_006492.4
+    # verify chrM is correct:
+    egrep "chrM" *
+# ucscToINSDC.bed:chrM    0       16660   X79547.1
+# ucscToRefSeq.bed:chrM   0       16660   NC_001640.1
 
     # should be same line counts throughout:
     wc -l * ../../chrom.sizes
-    #	4346 ucscToINSDC.bed
-    #	4346 ucscToRefSeq.bed
-    #	4346 ../../chrom.sizes
+    #	4701 ucscToINSDC.bed
+    #	4701 ucscToRefSeq.bed
+    #	4701 ../../chrom.sizes
 
     export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
     echo $chrSize
@@ -444,7 +465,7 @@ ucscToRefSeq.bed:chrY   0       26350515        NC_006492.4
     # should be the same for ucscToRefSeq:
     export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
     echo $chrSize
-    #  27
+    #  20
     sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
        | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
     hgLoadSqlTab equCab3 ucscToRefSeq ./ucscToRefSeq.sql ucscToRefSeq.bed
@@ -453,13 +474,13 @@ ucscToRefSeq.bed:chrY   0       26350515        NC_006492.4
     checkTableCoords equCab3
     # each should cover %100 entirely:
     featureBits -countGaps equCab3 ucscToINSDC
-    # 3050398082 bases of 3050398082 (100.000%) in intersection
+    # 2506966135 bases of 2506966135 (100.000%) in intersection
 
     featureBits -countGaps equCab3 ucscToRefSeq
-    # 3050398082 bases of 3050398082 (100.000%) in intersection
+    # 2506966135 bases of 2506966135 (100.000%) in intersection
 
 #########################################################################
-# add chromAlias table (TBD - 2018-03-24 - Hiram)
+# add chromAlias table (DONE - 2018-05-23 - Hiram)
 
     mkdir /hive/data/genomes/equCab3/bed/chromAlias
     cd /hive/data/genomes/equCab3/bed/chromAlias
@@ -482,8 +503,8 @@ do
   fi
   printf "# checking $t: $c0 =? $c1 $ok\n"
 done
-# checking refseq: 4346 =? 4346 OK
-# checking genbank: 4346 =? 4346 OK
+# checking refseq: 4701 =? 4701 OK
+# checking genbank: 4701 =? 4701 OK
 
     hgLoadSqlTab equCab3 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
         equCab3.chromAlias.tab
