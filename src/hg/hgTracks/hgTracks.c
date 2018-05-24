@@ -7720,6 +7720,7 @@ for (window=windows; window->next; window=window->next)
     struct track *newTrackList = NULL;
     for (track = trackList; track != NULL; track = track->next)
 	{
+        isCompositeInAggregate(track); // allow track to recognize its true self
 	track->nextWindow = NULL;
 	//if (track->visibility != tvHide)  // Unable to use this optimization at present
 	    {
