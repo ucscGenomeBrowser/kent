@@ -923,7 +923,7 @@ void printCustomUrlWithLabel(struct trackDb *tdb, char *itemName, char *itemLabe
 char urlLabelSetting[32];
 
 // replace the $$ and other wildchards with the url given in tdb 
-char *url = getUrlSetting(tdb, "url");
+char *url = getUrlSetting(tdb, urlSetting);
 //char* eUrl = constructUrl(tdb, url, itemName, encode);
 if (url==NULL || isEmpty(url))
     return;
