@@ -364,14 +364,14 @@ static boolean checkAttrTag(struct gff3Ann *g3a, char *tag)
 {
 // FIXME: spec is not clear on what is a valid tag.
 char *tc = tag;
-boolean isOk = isalpha(*tc);
+boolean isOk = (isalnum(*tc) || (*tc == '-') || (*tc == '_'));
 for (tc++; isOk && (*tc != '\0'); tc++)
     {
     if (!((*tc == '-') || (*tc == '_') || isalnum(*tc)))
         isOk = FALSE;
     }
 if (!isOk)
-    gff3AnnErr(g3a, "invalid attribute tag, must start with an alphabetic character and be composed of alphanumeric, dash, or underscore characters: %s", tag);
+    gff3AnnErr(g3a, "invalid attribute tag, must be only alphanumeric, dash or underscore: %s", tag);
 return isOk;
 }
 
