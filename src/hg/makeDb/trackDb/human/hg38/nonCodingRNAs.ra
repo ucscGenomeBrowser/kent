@@ -28,10 +28,27 @@ longLabel RNA sequences that do not code for a protein
     url http://www-snorna.biotoul.fr/plus.php?id=$$
     url2Label miRBase:
     #url2 http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
-    url2 http://www.mirbase.org/cgi-bin/query.pl?terms=$$
+    url2 http://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=$$
     dataVersion miRBase Release 13.0 (March 2009) and snoRNABase Version 3
     pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
     origAssembly hg19
+
+    track wgRnaNew
+    superTrack nonCodingRNAs pack
+    shortLabel sno/miRNA
+    longLabel C/D and H/ACA Box snoRNAs, scaRNAs, and microRNAs from snoRNABase and miRBase
+    group genes
+    visibility hide
+    color 200,80,0
+    type bed 8 +
+    noScoreFilter .
+    urlLabel Laboratoire de Biologie Moleculaire Eucaryote:
+    url http://www-snorna.biotoul.fr/plus.php?id=$$
+    urlLabel2 miRBase:
+    url2 http://www.mirbase.org/cgi-bin/query.pl?terms=$$
+    dataVersion miRBase Release 22 (March 2018) and snoRNABase Version 3
+    html ../wgRna.html
+    pennantIcon New red ../goldenPath/releaseLog.html  "Updated May 25, 2018"
 
     track lincRNAsTranscripts
     superTrack nonCodingRNAs pack
@@ -261,4 +278,10 @@ searchType genePred
 semiShortCircuit 1
 termRegex TCONS_.*
 dontCheck H19
+searchPriority 50
+
+searchTable wgRnaNew
+searchMethod exact
+searchType bed
+semiShortCircuit 1
 searchPriority 50

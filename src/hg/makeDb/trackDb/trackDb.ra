@@ -794,7 +794,7 @@ visibility hide
 useScore 1
 color 255,64,64
 type bed 8 .
-url http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
+url http://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=$$
 urlLabel miRBase:
 
 track allenBrainAli
