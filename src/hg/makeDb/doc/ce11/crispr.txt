@@ -1,0 +1,3 @@
+# See ../../crisprTrack/README.txt (Done. 2018-05-25 max)
+./doCrispr.sh ce11 ws245Genes
+doLocusName ce11 ws245Genes
