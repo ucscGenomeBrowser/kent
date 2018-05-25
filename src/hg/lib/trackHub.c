@@ -750,6 +750,8 @@ expandOneUrl(tdb->settingsHash, genome->trackDbFile, "frames");
 expandOneUrl(tdb->settingsHash, genome->trackDbFile, "summary");
 expandOneUrl(tdb->settingsHash, genome->trackDbFile, "linkDataUrl");
 expandOneUrl(tdb->settingsHash, genome->trackDbFile, "searchTrix");
+expandOneUrl(tdb->settingsHash, genome->trackDbFile, "barChartSampleUrl");
+expandOneUrl(tdb->settingsHash, genome->trackDbFile, "barChartMatrixUrl");
 }
 
 struct trackHubGenome *trackHubFindGenome(struct trackHub *hub, char *genomeName)
