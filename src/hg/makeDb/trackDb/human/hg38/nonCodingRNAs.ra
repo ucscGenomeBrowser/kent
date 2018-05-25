@@ -44,7 +44,7 @@ longLabel RNA sequences that do not code for a protein
     noScoreFilter .
     urlLabel Laboratoire de Biologie Moleculaire Eucaryote:
     url http://www-snorna.biotoul.fr/plus.php?id=$$
-    urlLabel2 miRBase:
+    url2Label miRBase:
     url2 http://www.mirbase.org/cgi-bin/query.pl?terms=$$
     dataVersion miRBase Release 22 (March 2018) and snoRNABase Version 3
     html ../wgRna.html
