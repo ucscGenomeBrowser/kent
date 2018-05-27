@@ -11,7 +11,7 @@ all::
 test:: geneMRnaTest noGeneMRnaTest geneMRnaHonorTest discontinuousTest multCdsOutOfExonTest \
 	noIdTest errCases1Test bogusQuotesTest noExonsTest geneTranscriptTest transcriptCdsParentTest \
 	minimalGenesTest geneDefaultStatusUnknownTest useNameTest nameAttrIdTest nameAttrNameTest \
-	frameShiftTest mm10GencodeTest ncbiSegmentsTest ncbiProblemsTest
+	frameShiftTest mm10GencodeTest ncbiSegmentsTest ncbiProblemsTest makeBadTest
 
 geneMRnaTest: mkout
 	${gff3ToGenePred} input/geneMRna.gff3 output/$@.gp
@@ -108,6 +108,14 @@ ncbiSegmentsTest: mkout
 # various NCBI problem cases
 ncbiProblemsTest: mkout
 	${gff3ToGenePred} -warnAndContinue -geneNameAttr=gene -refseqHacks -attrsOut=output/$@.attrs input/ncbiProblems.gff3 output/$@.gp > output/$@.out 2>&1
+	diff expected/$@.gp output/$@.gp
+	diff expected/$@.attrs output/$@.attrs
+	diff expected/$@.out output/$@.out
+
+# -warnAndContinue on maker file with missing gene/mrna records.  This test this option on
+# GFF3 parse tests, not just genePred conversion
+makeBadTest:  mkout
+	${gff3ToGenePred} -warnAndContinue -attrsOut=output/$@.attrs input/makerBad.gff3 output/$@.gp > output/$@.out 2>&1
 	diff expected/$@.gp output/$@.gp
 	diff expected/$@.attrs output/$@.attrs
 	diff expected/$@.out output/$@.out

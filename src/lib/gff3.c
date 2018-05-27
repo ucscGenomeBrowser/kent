@@ -69,45 +69,51 @@ static bool gff3FileStopDueToErrors(struct gff3File *g3f)
 return g3f->errCnt > g3f->maxErr;
 }
 
-static void gff3FileErr(struct gff3File *g3f, char *format, ...)
+static void gff3FileErr(struct gff3File *g3f, bool canWarn, char *format, ...)
 #if defined(__GNUC__)
-__attribute__((format(printf, 2, 3)))
+__attribute__((format(printf, 3, 4)))
 #endif
 ;
 
-static void gff3AnnErr(struct gff3Ann *g3a, char *format, ...)
+static void gff3AnnErr(struct gff3Ann *g3a, bool canWarn, char *format, ...)
 #if defined(__GNUC__)
-__attribute__((format(printf, 2, 3)))
+__attribute__((format(printf, 3, 4)))
 #endif
 ;
 
-static void vaGff3FileErr(struct gff3File *g3f, char *format, va_list args)
+static void vaGff3FileErr(struct gff3File *g3f, bool canWarn, char *format, va_list args)
 /* Print error message to error file, abort if max errors have been reached */
 {
+bool isWarning = canWarn && (g3f->flags & GFF3_WARN_WHEN_POSSIBLE);
 if (g3f->lf != NULL)
     fprintf(g3f->errFh, "%s:%d: ", g3f->lf->fileName, g3f->lf->lineIx);
+if (isWarning)
+    fprintf(g3f->errFh, "WARNING: ");
 vfprintf(g3f->errFh, format, args);
 fprintf(g3f->errFh, "\n");
-g3f->errCnt++;
-if (gff3FileStopDueToErrors(g3f))
-    errAbort("GFF3: %d parser errors", g3f->errCnt);
+if (!isWarning)
+    {
+    g3f->errCnt++;
+    if (gff3FileStopDueToErrors(g3f))
+        errAbort("GFF3: %d parser errors", g3f->errCnt);
+    }
 }
 
-static void gff3FileErr(struct gff3File *g3f, char *format, ...)
+static void gff3FileErr(struct gff3File *g3f, bool canWarn, char *format, ...)
 /* Print error message and abort */
 {
 va_list args;
 va_start(args, format);
-vaGff3FileErr(g3f, format, args);
+vaGff3FileErr(g3f, canWarn, format, args);
 va_end(args);
 }
 
-static void gff3AnnErr(struct gff3Ann *g3a, char *format, ...)
+static void gff3AnnErr(struct gff3Ann *g3a, bool canWarn, char *format, ...)
 /* Print error message abort */
 {
 va_list args;
 va_start(args, format);
-vaGff3FileErr(g3a->file, format, args);
+vaGff3FileErr(g3a->file, canWarn, format, args);
 va_end(args);
 }
 
@@ -117,7 +123,7 @@ static int gff3FileStrToInt(struct gff3File *g3f, char *str)
 char *end;
 long val = strtol(str, &end, 0);
 if ((end == str) || (*end != '\0'))
-    gff3FileErr(g3f, "invalid integer: %s", str);
+    gff3FileErr(g3f, FALSE, "invalid integer: %s", str);
 return (int)val;
 }
 
@@ -127,7 +133,7 @@ static float gff3FileStrToFloat(struct gff3File *g3f, char *str)
 char *end;
 double val = strtod(str, &end);
 if ((end == str) || (*end != '\0'))
-    gff3FileErr(g3f, "invalid float: %s", str);
+    gff3FileErr(g3f, FALSE, "invalid float: %s", str);
 return (float)val;
 }
 
@@ -164,7 +170,7 @@ static char **dynChopStringWhite(struct gff3File *g3f, char *str, int minWords, 
 int numWords = chopByWhite(str, NULL, 0);
 if ((numWords < minWords) || (numWords > maxWords))
     {
-    gff3FileErr(g3f, "expected %s, got \"%s\"", desc, str);
+    gff3FileErr(g3f, FALSE, "expected %s, got \"%s\"", desc, str);
     return NULL;
     }
 // allocate buffer for both array and string
@@ -212,7 +218,7 @@ return NULL;
 static void raiseInvalidEscape(struct gff3Ann *g3a, char *str)
 /* raise an error about an invalid escape in a string */
 {
-gff3AnnErr(g3a, "invalid GFF escape sequence in string: %s", str);
+gff3AnnErr(g3a, TRUE, "invalid GFF escape sequence in string: %s", str);
 }
 
 static char convertEscape(struct gff3Ann *g3a, char *esc, char *src)
@@ -220,13 +226,19 @@ static char convertEscape(struct gff3Ann *g3a, char *esc, char *src)
  * in the form `%09' */
 {
 if (!(isxdigit(esc[1]) && isxdigit(esc[2])))
+    {
     raiseInvalidEscape(g3a, src);
+    return '_';  // something
+    }
 char num[3], *end;
 strncpy(num, esc+1, 2);
 num[2] = '\0';
 long val = strtol(num, &end, 16);
 if ((end == num) || (*end != '\0'))
+    {
     raiseInvalidEscape(g3a, src);
+    return '_';
+    }
 return (char)val;
 }
 
@@ -314,7 +326,10 @@ else if (sameString(strand, "-"))
 else if (sameString(strand, "?"))
     return "?";
 else
-    gff3AnnErr(g3a, "invalid strand: '%s'", strand);
+    {
+    gff3AnnErr(g3a, TRUE, "invalid strand: '%s'", strand);
+    return NULL;
+    }
 return NULL;
 }
 
@@ -325,7 +340,10 @@ if (sameString(str, "."))
     return -1;
 int phase = gff3FileStrToInt(g3a->file, str);
 if ((phase < 0) || (phase  > 2))
-    gff3AnnErr(g3a, "invalid phase: %d", phase);
+    {
+    gff3AnnErr(g3a, TRUE, "invalid phase: %d", phase);
+    return -1;
+    }
 return phase;
 }
 
@@ -347,14 +365,14 @@ g3a->phase = parsePhase(g3a, words[7]);
 if (sameString(g3a->type, "CDS"))
     {
     if (g3a->phase < 0)
-	gff3AnnErr(g3a, "CDS feature must have phase");
+	gff3AnnErr(g3a, TRUE, "CDS feature must have phase");
     }
 else
     {
 #if 0 // spec unclear; bug report filed
     // spec currently doesn't restrict phase, unclear if it's allowed on start/stop codon features
     if (g3a->phase >= 0)
-        gff3AnnErr(g3a, "phase only allowed on CDS features");
+        gff3AnnErr(g3a, TRUE, "phase only allowed on CDS features");
 #endif
     }
 }
@@ -371,7 +389,11 @@ for (tc++; isOk && (*tc != '\0'); tc++)
         isOk = FALSE;
     }
 if (!isOk)
-    gff3AnnErr(g3a, "invalid attribute tag, must be only alphanumeric, dash or underscore: %s", tag);
+    {
+    gff3AnnErr(g3a, TRUE, "invalid attribute tag, must be only alphanumeric, dash or underscore: %s", tag);
+    if (g3a->file->flags & GFF3_WARN_WHEN_POSSIBLE)
+        return TRUE;
+    }
 return isOk;
 }
 
@@ -411,7 +433,7 @@ static void parseAttr(struct gff3Ann *g3a, char *attrStr)
 {
 char *eq = strchr(attrStr, '=');
 if ((eq == NULL) || (eq == attrStr))
-    gff3AnnErr(g3a, "expected name=value: %s", attrStr);
+    gff3AnnErr(g3a, FALSE, "expected name=value: %s", attrStr);
 else
     {
     char *tag = attrStr;
@@ -443,7 +465,7 @@ static void checkSingleValAttr(struct gff3Ann *g3a, struct gff3Attr *attr)
 /* validate that an attribute has only one value */
 {
 if (attr->vals->next != NULL)
-    gff3AnnErr(g3a, "attribute %s must have a single value, found multiple comma-separated values", attr->tag);
+    gff3AnnErr(g3a, FALSE, "attribute %s must have a single value, found multiple comma-separated values", attr->tag);
 }
 
 static void parseIDAttr(struct gff3Ann *g3a, struct gff3Attr *attr)
@@ -564,7 +586,7 @@ else if (sameString(attr->tag, gff3AttrDbxref))
 else if (sameString(attr->tag, gff3AttrOntologyTerm))
     parseOntologyTermAttr(g3a, attr);
 else
-    gff3AnnErr(g3a, "unknown standard attribute, user defined attributes must start with a lower-case letter: %s", attr->tag);
+    gff3AnnErr(g3a, TRUE, "unknown standard attribute, user defined attributes must start with a lower-case letter: %s", attr->tag);
 }
 
 static void parseStdAttrs(struct gff3Ann *g3a)
@@ -587,7 +609,7 @@ static void parseAnn(struct gff3File *g3f, char *line)
 char *words[gffNumCols+1];
 int numWords = chopString(line, "\t", words, gffNumCols+1);
 if (numWords != gffNumCols)
-    gff3FileErr(g3f, "expected %d tab-separated columns: %s", gffNumCols, line);
+    gff3FileErr(g3f, FALSE, "expected %d tab-separated columns: %s", gffNumCols, line);
 else
     {
     struct gff3Ann *g3a = gff3FileAlloc(g3f, sizeof(struct gff3Ann));
@@ -706,7 +728,7 @@ if (g3f->seqRegionMap == NULL)
     g3f->seqRegionMap = hashNew(0);
 struct hashEl *hel = hashStore(g3f->seqRegionMap, sr->seqid);
 if (hel->val != NULL)
-    gff3FileErr(g3f, "duplicate ##sequence-region for %s", sr->seqid);
+    gff3FileErr(g3f, TRUE, "duplicate ##sequence-region for %s", sr->seqid);
 else
     {
     hel->val = sr;
@@ -803,7 +825,10 @@ static void parseGenomeBuild(struct gff3File *g3f, char *line)
 /* parse ##genome-build source buildName */
 {
 if (g3f->genomeBuildSource != NULL)
-    gff3FileErr(g3f, "multiple ##genome-build records");
+    {
+    gff3FileErr(g3f, TRUE, "multiple ##genome-build records");
+    return;  // skip
+    }
 char **words = dynChopStringWhite(g3f, line, 3, 3, NULL,
                                   "\"##genome-build source buildName\"");
 if (words == NULL)
@@ -847,7 +872,7 @@ else if (startsWithWord("##gff-spec-version", line) ||
          startsWithWord("##Type", line))
     ;  /* FIXME: silently ignore these.  Mark says. */
 else
-    gff3FileErr(g3f, "invalid meta line: %s", line);
+    gff3FileErr(g3f, TRUE, "invalid meta line: %s", line);
 }
 
 static void parseLine(struct gff3File *g3f, char *line)
@@ -864,7 +889,7 @@ static void parseHeader(struct gff3File *g3f)
 {
 char *line;
 if (!lineFileNext(g3f->lf, &line, NULL))
-    gff3FileErr(g3f, "empty GFF file, must have header");
+    gff3FileErr(g3f, FALSE, "empty GFF file, must have header");
 char *ver = skipToSpaces(line);
 if (*ver != '\0')
     {
@@ -872,7 +897,7 @@ if (*ver != '\0')
     ver = trimSpaces(ver);
     }
 if (!(sameString(line, "##gff-version") && sameString(ver, "3")))
-    gff3FileErr(g3f, "invalid GFF3 header");
+    gff3FileErr(g3f, TRUE, "invalid GFF3 header");
 }
 
 static void parseFile(struct gff3File *g3f)
@@ -907,7 +932,7 @@ struct gff3Ann *g3a2;
 for (g3a2 = g3a->nextPart; (g3a2 != NULL) && !gff3FileStopDueToErrors(g3a->file); g3a2 = g3a2->nextPart)
     {
     if (!sameString(g3a->type, g3a2->type))
-        gff3AnnErr(g3a, "Annotation records for discontinuous features with ID=\"%s\" do not have the same type, found \"%s\" and \"%s\"", g3a->id, g3a->type, g3a2->type);
+        gff3AnnErr(g3a, FALSE, "Annotation records for discontinuous features with ID=\"%s\" do not have the same type, found \"%s\" and \"%s\"", g3a->id, g3a->type, g3a2->type);
     }
 }
 
@@ -978,7 +1003,7 @@ static struct gff3Ann *resolveRef(struct gff3Ann *g3a, char *id, char *attr)
 {
 struct gff3Ann *ann = gff3FileFindAnn(g3a->file, id);
 if (ann == NULL)
-    gff3AnnErr(g3a, "Can't find annotation record \"%s\" referenced by \"%s\" %s attribute", id, g3a->id, attr);
+    gff3AnnErr(g3a, TRUE, "Can't find annotation record \"%s\" referenced by \"%s\" %s attribute", id, g3a->id, attr);
 return ann;
 }
 
@@ -1001,7 +1026,11 @@ static void resolveAnn(struct gff3Ann *g3a)
 {
 g3a->parents = resolveRefs(g3a, g3a->parentIds, gff3AttrParent);
 if (g3a->parents == NULL)
-    slSafeAddHead(&g3a->file->roots, gff3AnnRefAlloc(g3a));
+    {
+    // is droppped if there here ignored errors resolving reference
+    if (g3a->parentIds == NULL)
+        slSafeAddHead(&g3a->file->roots, gff3AnnRefAlloc(g3a));
+    }
 else
     {
     struct gff3AnnRef *par;
@@ -1045,7 +1074,7 @@ g3f->pool = hashNew(0);
 return g3f;
 }
 
-struct gff3File *gff3FileOpen(char *fileName, int maxErr, FILE *errFh)
+struct gff3File *gff3FileOpen(char *fileName, int maxErr, unsigned flags, FILE *errFh)
 /* Parse a GFF3 file into a gff3File object.  If maxErr not zero, then
  * continue to parse until this number of error have been reached.  A maxErr
  * less than zero does not stop reports all errors. Write errors to errFh,
@@ -1053,6 +1082,7 @@ struct gff3File *gff3FileOpen(char *fileName, int maxErr, FILE *errFh)
 {
 struct gff3File *g3f = gff3FileNew();
 g3f->fileName = gff3FileCloneStr(g3f, fileName);
+g3f->flags = flags;
 g3f->errFh = (errFh != NULL) ? errFh : stderr;
 g3f->maxErr = (maxErr < 0) ? INT_MAX : maxErr;
 parseFile(g3f);
