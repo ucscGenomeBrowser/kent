@@ -11,7 +11,7 @@
 
 <ul>
 <li><a href="#blat1">Blat vs. Blast</a></li>
-<li><a href="#blat1b">Blat cannot find a sequence</a></li>
+<li><a href="#blat1b">Blat cannot find a sequence at all or not all expected matches</a></li>
 <li><a href="#blat2">Blat use restrictions</a></li>
 <li><a href="#blat3">Downloading Blat source and documentation</a></li>
 <li><a href="#blat5">Replicating web-based Blat parameters in command-line version</a></li>
@@ -68,7 +68,7 @@ structure of an mRNA, but expert users can run large batch jobs and make interna
 sensitivity changes by installing command line Blat on their own Linux server.</p>
 
 <a name="blat1b"></a>
-<h2>Blat can't find a sequence</h2>
+<h2>Blat can't find a sequence or not all expected matches</h2>
 <h6>I can't find a sequence with Blat although I'm sure it is in the genome. Am I doing 
 something wrong?</h6>
 <p>
@@ -83,11 +83,18 @@ the In-Silico PCR tool is more sensitive and should be preferred for pairs of pr
 <p>
 If you have verified that you are using the correct genome and that the sequence is indeed there, 
 for example by using the "Short match" track, the problem may be a result of Blat's query-masking. 
+This happens if your input sequence is part of a repeat and present thousands of times in the genome.
 The online version of Blat masks 11mers from the query that occur more than 1024 times in the 
 genome. This is done to improve speed, but may result in missed hits when you are searching for 
 sequences in repeats.</p>
 <p>
-To find these matches using the online version of Blat, you can add more flanking sequence to your 
+If your input sequence is not one of the very repetitive sequences, but still
+present a few dozen times on a chromsome, note that BLAT results are limited
+ito 16 results per chromosome and per strand. This means that at most 32 locations
+per chromosome are returned.
+</p>
+<p>
+To find all matches for repetitive sequences with the online version of Blat, you can add more flanking sequence to your 
 query. If this is not possible, the only alternative is to download the executables of Blat and the 
 .2bit file of a genome to your own machine and use blat on the command line. See 
 <a href="#blat3">Downloading Blat source and documentation</a> for more information.</p>
