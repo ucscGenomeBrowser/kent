@@ -4794,6 +4794,14 @@ var trackSearch = {
 ///////////////
 $(document).ready(function()
 {
+    // on Safari the back button doesn't call the ready function.  Reload the page if
+    // the back button was pressed.
+    $(window).bind("pageshow", function(event) {
+        if (event.originalEvent.persisted) {
+                window.location.reload() ;
+        }
+    });
+
     // The page may be reached via browser history (back button)
     // If so, then this code should detect if the image has been changed via js/ajax
     // and will reload the image if necessary.
