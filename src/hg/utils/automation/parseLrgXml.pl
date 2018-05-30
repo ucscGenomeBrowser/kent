@@ -74,6 +74,8 @@ sub parseOneLrg {
   }
 
   my $lrgName = $dom->findvalue('/lrg/fixed_annotation/id');
+  my $lrgSeq = $dom->findvalue('/lrg/fixed_annotation/sequence');
+  my $lrgSize = length($lrgSeq);
   # HGNC id & symbol
   my $hgncId = $dom->findvalue('/lrg/fixed_annotation/hgnc_id');
   my $hgncSymbol = $dom->findvalue('/lrg/updatable_annotation/annotation_set/lrg_locus[@source="HGNC"]');
@@ -105,8 +107,14 @@ sub parseOneLrg {
     die 'Unusual number of mapping_spans' if (@mappingSpans != 1);
     my $span = $mappingSpans[0];
     my $lrgStart = $span->findvalue('@lrg_start') - 1;
-    die "$xmlIn: Unexpected $assemblyPrefix mapping_span lrgStart $lrgStart" if ($lrgStart != 0);
     my $lrgEnd = $span->findvalue('@lrg_end');
+    if ($lrgSize < $lrgEnd) {
+      die "$xmlIn: length of sequence is $lrgSize but $assemblyPrefix lrg_end is $lrgEnd";
+    }
+    my $name = $lrgName;
+    if ($lrgStart != 0 || $lrgEnd != $lrgSize) {
+      $name .= ":". ($lrgStart+1) . "-$lrgEnd";
+    }
     my $strand = $span->findvalue('@strand');
     $strand = ($strand == 1 ? '+' : '-');
 
@@ -153,9 +161,9 @@ sub parseOneLrg {
     my $mismatchesStr = join(',', @mismatches);
     my $indelsStr = join(',', @indels);
 
-    print $bedF join("\t", $seq, $start, $end, $lrgName, 0, $strand, $start, $end, 0,
+    print $bedF join("\t", $seq, $start, $end, $name, 0, $strand, $start, $end, 0,
                      $blockCount, $blockSizesStr, $blockStartsStr,
-                     $mismatchesStr, $indelsStr, $lrgEnd,
+                     $mismatchesStr, $indelsStr, $lrgSize,
                      $hgncId, $hgncSymbol, $lrgNcbiAcc,
                      $lrgSource, $lrgSourceUrl, $creationDate) . "\n";
   } # each refMapping

@@ -347,32 +347,37 @@ return min(tLen, qLen);
 struct psl *lrgToPsl(struct lrg *lrg, uint chromSize)
 /* Use lrg's mismatches and indels to make a PSL. */
 {
-struct psl *psl;
-AllocVar(psl);
 struct lrgDiff *mismatches = lrgParseMismatches(lrg), *indels = lrgParseIndels(lrg);
+int lrgStart = 0, lrgEnd = lrg->lrgSize;
+char *lrgName = lrg->name;
+char lrgNameBuf[strlen(lrgName)+1];
+if (strchr(lrgName, ':'))
+    {
+    // Parse lrgStart and lrgEnd out of name field (LRG_*:start-end)
+    safecpy(lrgNameBuf, sizeof(lrgNameBuf), lrgName);
+    char *p = strchr(lrgNameBuf, ':');
+    // Chop at : (after name)
+    *p++ = '\0';
+    char *num = p;
+    p = strchr(num, '-');
+    if (p == NULL)
+        errAbort("Error parsing LRG name:start-end '%s' -- no '-' following ':'", lrg->name);
+    *p++ = '\0';
+    lrgStart = atoi(num) - 1;
+    num = p;
+    lrgEnd = atoi(num);
+    lrgName = lrgNameBuf;
+    }
+int blockCount = slCount(indels) + 1;
+unsigned opts = 0;
+struct psl *psl = pslNew(lrgName, lrg->lrgSize, lrgStart, lrgEnd,
+                         lrg->chrom, chromSize, lrg->chromStart, lrg->chromEnd,
+                         lrg->strand, blockCount, opts);
+psl->blockCount = blockCount;
 psl->misMatch = slCount(mismatches);
-psl->repMatch = 0;
-psl->nCount = 0;
-psl->qNumInsert = 0;
-psl->qBaseInsert = 0;
-psl->tNumInsert = 0;
-psl->tBaseInsert = 0;
-psl->strand[0] = lrg->strand[0];
-psl->qName = cloneString(lrg->name);
-psl->qSize = lrg->lrgSize;
-psl->qStart = 0;
-psl->qEnd = lrg->lrgSize;
-psl->tName = cloneString(lrg->chrom);
-psl->tSize = chromSize;
-psl->tStart = lrg->chromStart;
-psl->tEnd = lrg->chromEnd;
-psl->blockCount = slCount(indels) + 1;
-AllocArray(psl->blockSizes, psl->blockCount);
-AllocArray(psl->qStarts, psl->blockCount);
-AllocArray(psl->tStarts, psl->blockCount);
 boolean isRc = (lrg->strand[0] == '-');
 // Translate gap coords from indels into block coords:
-psl->qStarts[0] = 0;
+psl->qStarts[0] = isRc ? (lrg->lrgSize - lrgEnd) : lrgStart;
 psl->tStarts[0] = lrg->chromStart;
 int alignedBaseCount = 0;
 int blockIx = 1;
