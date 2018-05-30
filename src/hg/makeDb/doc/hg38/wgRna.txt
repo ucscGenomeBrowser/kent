@@ -50,3 +50,6 @@
     # miRNA   1918
     # scaRna  21 
 
+    # this track is probably not going to make it to the rr, if so, some code needs to be added
+    # to hgTracks to get color-coding right for the different rna's, so this track matches the 
+    # old style.
