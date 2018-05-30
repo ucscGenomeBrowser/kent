@@ -1,0 +1,52 @@
+# miRNA/snoRNA tracks for hg38 / GRCh38
+
+##############################################################################
+#   Update from v13 to v22 mirbase data in the wgRNA table for hg38
+#   The snoRNA data hasn't been updated in forever so that is staying the same
+
+    mkdir /hive/data/genomes/hg38/bed/wgRna
+    cd /hive/data/genomes/hg38/bed/wgRna
+
+    # download  data from mirbase, the current points to v22:
+    wget ftp://mirbase.org/pub/mirbase/CURRENT/genomes/hsa.gff3
+
+    # Only select the primary transcripts, make coords 0-based so they match gencode
+    # and refseq tracks, and remove ID and Alias entries in column 9:
+    grep -c "miRNA_primary_transcript" hsa.gff3 
+    # 1919
+    tawk '{if ($3 == "miRNA_primary_transcript") {$4-=1; print;}}' hsa.gff3 \
+        | grep -v '^#' | tr ';' '\t' | tr '=' '\t' | cut -f1-8,14 > hsa.primaryCleaned.gff3 
+    wc -l hsa.primaryCleaned.gff3
+    # 1918
+
+    # now get into bed format, with type="miRNA"
+    tawk '{print $1, $4, $5, $9, 0, $7, 0, 0, "miRNA";}' hsa.primaryCleaned.gff3 > miRNA.bed
+
+    # get snoRNA entries from current wgRNA table:
+    hgsql -Ne "select * from wgRna where type != 'miRNA'" hg38 | cut -f2- > wgRna.other.bed 
+
+    # combine and load:
+    cat miRNA.bed wgRna.other.bed > wgRna052518.bed
+    hgLoadBed -tab -renameSqlTable -verbose=4 \
+        -sqlTable=$HOME/kent/src/hg/lib/wgRna.sql \
+        -as=$HOME/kent/src/hg/lib/wgRna.as hg38 wgRnaNew wgRna052518.bed
+    # ### kent source version 365 ###
+    # Reading wgRna052518.bed
+    # Read 2320 elements of size 9 from wgRna052518.bed
+    # Sorted
+    # Creating table definition for wgRnaNew from sql: /cluster/home/chmalee/kent/src/hg/lib/wgRna.sql
+    # Saving bed.tab
+    # Loading hg38
+
+    # compare old and new tables:
+    hgsql -Ne "select type, count(*) from wgRna group by type" hg38
+    # CDBox   269
+    # HAcaBox 112
+    # miRNA   938
+    # scaRna  21
+    hgsql -Ne "select type, count(*) from wgRnaNew group by type" hg38
+    # CDBox   269
+    # HAcaBox 112
+    # miRNA   1918
+    # scaRna  21 
+
