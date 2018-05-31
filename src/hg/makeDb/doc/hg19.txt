@@ -28722,9 +28722,9 @@ cp clinvarCnv.bb /hive/data/genomes/hg19/bed/clinvar/
 
 _EOF_
 #########################################################################
-# LOCUS REFERENCE GENOMIC (LRG) REGIONS AND TRANSCRIPTS (DONE 9/9/16 angie)
-# Redmine #13359
-# previously done 7/7/14
+# LOCUS REFERENCE GENOMIC (LRG) REGIONS AND TRANSCRIPTS (DONE 5/30/18 angie)
+# Redmine #13359 -- otto-mate To Do #17877
+# previously done 7/7/14, 9/9/16
     screen -S lrg -t lrg
     set today = `date +%Y_%m_%d`
     mkdir -p /hive/data/genomes/hg19/bed/lrg/$today
@@ -28737,14 +28737,18 @@ _EOF_
     # Run script to convert LRG*.xml files to BED+ for regions and genePredExt+fa for transcripts:
     ~/kent/src/hg/utils/automation/parseLrgXml.pl GRCh37
     genePredCheck lrgTranscriptsUnmapped.gp
-#Error: lrgTranscriptsUnmapped.gp:680: LRG_7t1 no exonFrame on CDS exon 46
-#checked: 805 failed: 1
+#Error: lrgTranscriptsUnmapped.gp:765: LRG_7t1 no exonFrame on CDS exon 46
+#checked: 917 failed: 1
     # If there are complaints e.g. about exonFrame, look for inconsistencies in the
     # affected transcript's coding_region/coordinates vs. exon/intron info in xml.
     # Contact Variation team leader Fiona Cunningham @EBI to resolve in the background
     # (missing exonFrame info doesn't affect our track representation because we end up using
     # psl).  We agreed to disagree about exon 46 of LRG_7t1 because that last coding exon
     # portion is only the stop codon.
+
+    # Filter out alts and patches not (yet) included in hg19:
+    mv lrg.bed lrg.allSeqs.bed
+    cut -f 1 ../../../chrom.sizes | grep -Fwf - lrg.allSeqs.bed > lrg.bed
 
     # Load LRG regions:
     bedToBigBed lrg.bed /hive/data/genomes/hg19/chrom.sizes lrg.bb \
@@ -28756,7 +28760,7 @@ _EOF_
     # Map LRG fixed_annotation transcripts from LRG coords to hg19 coords (HT MarkD):
     lrgToPsl lrg.bed /hive/data/genomes/hg19/chrom.sizes lrg.psl
     pslCheck lrg.psl
-#checked: 666 failed: 0 errors: 0
+#checked: 781 failed: 0 errors: 0
     awk '{print $10 "\t" $11;}' lrg.psl > lrg.sizes
     genePredToFakePsl -chromSize=lrg.sizes placeholder \
       lrgTranscriptsUnmapped.gp lrgTranscriptsFakePsl.psl lrgTranscripts.cds
@@ -28769,12 +28773,6 @@ _EOF_
     grep -l NR_ LRG_163.xml LRG_347.xml
 #LRG_163.xml
 #LRG_347.xml
-    # The resulting genePredExt from that process is missing the name2 column from
-    # the original; add it back:
-    cut -f 1,12 lrgTranscriptsUnmapped.gp > txName2
-    join -j 1 -a 1 -t'	' \
-      -o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,1.10,1.11,2.2,1.13,1.14,1.15 \
-      lrgTranscriptsHg19NoName2.gp txName2 > lrgTranscriptsHg19.gp
 
     # Load PSL, CDS and sequences.
     hgLoadPsl hg19 -table=lrgTranscriptAli lrgTranscriptsHg19.psl
@@ -28792,11 +28790,17 @@ _EOF_
     # sophisticated handling of exonFrames and indels.  Also, liftOver carries over exonFrames
     # as-is without regard to strand, so they end up being reversed for LRG's on the - strand.
     # That's why we're using MarkD's method above!
+    # The resulting genePredExt from that process is missing the name2 column from
+    # the original; add it back:
+    cut -f 1,12 lrgTranscriptsUnmapped.gp > txName2
+    join -j 1 -a 1 -t'	' \
+      -o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,1.10,1.11,2.2,1.13,1.14,1.15 \
+      lrgTranscriptsHg19NoName2.gp txName2 > lrgTranscriptsHg19.gp
     # Ignore exonFrames and compare:
     awk '$1 != "#" {print $1;}' noMap
-    cut -f 1-14 lrgTranscriptsHg19.gp > t1
+    cut -f 1-14 lrgTranscriptsHg19.gp | sed -re 's/unk/none/g;' > t1
     cut -f 1-14 lrgTLiftOver.gp > t2
-    diff t1 t2 | awk '{print $1, $2;}'
+    diff t1 t2 | awk '{print $1, $2;}' | uniq
     # Hopefully there won't be differences aside from the ones liftOver couldn't map.
     rm t1 t2
 
