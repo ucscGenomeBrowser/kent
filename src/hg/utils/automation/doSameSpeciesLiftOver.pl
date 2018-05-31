@@ -411,7 +411,8 @@ set tmpOut = `mktemp -p $localTmp doSame.chain.XXXXXX`
 
 cat $pslDir/\$inPattern* \\
 | axtChain -verbose=0 -linearGap=medium -psl stdin \\
-    $tSeqScratch $qSeqScratch \\
+    $tSeqScratch $qSeqScratch stdout \\
+| chainBridge -linearGap=medium stdin $tSeqScratch $qSeqScratch \\
     \$tmpOut
 mv \$tmpOut \$outChain
 chmod 664 \$outChain
@@ -446,7 +447,7 @@ _EOF_
 # * step: net [workhorse]
 sub doNet {
   my $runDir = "$buildDir/run.chain";
-  my @outs = ("$runDir/$tDb.$qDb.all.chain/gz",
+  my @outs = ("$runDir/$tDb.$qDb.all.chain.gz",
 	      "$runDir/$tDb.$qDb.noClass.net.gz");
   &HgAutomate::checkCleanSlate('net', 'load', @outs);
   &HgAutomate::checkExistsUnlessDebug('chain', 'net', "$runDir/chainRaw/");
