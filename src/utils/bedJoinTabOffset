@@ -96,7 +96,8 @@ def bedJoinTabOffset(inTab, inBed, outBed, options):
         offset, lineLen = offLen
         newLine = "%s\t%s\t%s\n" % (line.rstrip("\n"), offset, lineLen)
         bedOfh.write(newLine)
-        allKeys.remove(key)
+        if key in allKeys:
+            allKeys.remove(key)
 
     bedOfh.close()
     logging.info("Wrote %s" % outBed)
