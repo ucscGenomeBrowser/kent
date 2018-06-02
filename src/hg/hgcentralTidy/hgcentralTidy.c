@@ -27,7 +27,8 @@ struct sqlConnection *conn = NULL;
 
 int chunkSize = 1000;
 int chunkWait = 0;
-int squealSize = 14;   /* complain if table data_length is bigger than squealSize GB */
+int squealSize = 20;  /* complain if table data_length is bigger than squealSize GB */
+ // was 14 until 2018-06-02  
 
 int purgeStart = -1;  /* manual specify purge range in days ago */
 int purgeEnd = -1;
