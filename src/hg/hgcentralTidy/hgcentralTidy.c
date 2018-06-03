@@ -110,7 +110,7 @@ if ((dataLength / (1024 * 1024 * 1024)) >= squealSize)
     {
     char msg[256];
     char cmdLine[256];
-    char *emailList = "cluster-admin galt kuhn";
+    char *emailList = "cluster-admin@soe.ucsc.edu galt@soe.ucsc.edu kuhn@soe.ucsc.edu";
     safef(msg, sizeof(msg), "BIG HGCENTRAL TABLE %s data_length: %lld data_free: %lld\n"
 	, table, dataLength, dataFree);
     printf("%s", msg);
