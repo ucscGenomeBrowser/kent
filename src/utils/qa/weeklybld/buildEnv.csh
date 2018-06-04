@@ -16,7 +16,7 @@ setenv baseSubversion                  # empty string unless mistake, otherwise 
 
 setenv BUILDHOME /hive/groups/browser/newBuild
 setenv WEEKLYBLD ${BUILDHOME}/kent/src/utils/qa/weeklybld
-setenv REPLYTO ann@soe.ucsc.edu
+setenv REPLYTO azweig@ucsc.edu
 
 setenv GITSHAREDREPO hgwdev.cse.ucsc.edu:/data/git/kent.git
 
