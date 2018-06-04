@@ -120,7 +120,7 @@ def condenseMatrixIntoBedCols(matrix, groupOrder, sampleToGroup, validTpms, bedL
     # Go through the matrix line by line. The first line is used to build an index mapping columns 
     # to group blocks, then for each line with TPM values merge the values based on group blocks.  
     for line in matrix:
-        splitLine = line.strip("\n").split() 
+        splitLine = line.strip("\n").split("\t")
 
         # The first line is the word 'transcript' followed by a list of the sample names. 
         if firstLine: 
@@ -238,7 +238,7 @@ def expMatrixToBarchartBed(options):
     count = 0 
     for item in options.sampleFile:
         count +=1 
-        splitLine = item.strip("\n").split()
+        splitLine = item.strip("\n").split("\t")
         if (len(splitLine) is not 2):
             print ("There was an error reading the sample file at line " + str(count))
             exit(1)
@@ -292,7 +292,7 @@ def expMatrixToBarchartBed(options):
     # Also assign a scaled score 0 - 1000 to each tpm value. 
     bedFile = tempfile.NamedTemporaryFile(mode="w+", bufsize=1)
     for line in joinedFile:
-        splitLine = line.strip("\n").split()
+        splitLine = line.strip("\n").split("\t")
         if ("_" in splitLine[0]): 
             sys.stderr.write("This transcript " + splitLine[0] + " was dropped for having a '_' in the name.\n") 
             continue # Ignore alt sequences.  
