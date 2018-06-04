@@ -1,6 +1,6 @@
 # set for preview 1: move date and vNNN from REVIEWDAY to LASTREVIEWDAY
-setenv REVIEWDAY 2018-05-14             # v366 preview
-setenv LASTREVIEWDAY 2018-04-23         # v365 preview
+setenv REVIEWDAY 2018-06-04             # v367 preview
+setenv LASTREVIEWDAY 2018-05-14         # v366 preview
 setenv previewSubversion       # empty string unless mistake, otherwise .1 etc
 
 # set for preview 2: move date and vNNN from REVIEW2DAY to LASTREVIEW2DAY
@@ -16,7 +16,7 @@ setenv baseSubversion                  # empty string unless mistake, otherwise 
 
 setenv BUILDHOME /hive/groups/browser/newBuild
 setenv WEEKLYBLD ${BUILDHOME}/kent/src/utils/qa/weeklybld
-setenv REPLYTO ann@soe.ucsc.edu
+setenv REPLYTO azweig@ucsc.edu
 
 setenv GITSHAREDREPO hgwdev.cse.ucsc.edu:/data/git/kent.git
 

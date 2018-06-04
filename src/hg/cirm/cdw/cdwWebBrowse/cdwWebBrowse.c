@@ -829,7 +829,7 @@ struct dyString *dummy;
 struct dyString *filteredWhere;
 char *table = isEmpty(initialWhere) ?  "cdwFileFacets" : "cdwFileTags";
 
-webTableBuildQuery(cart, table, accWhere->string, "cdwBrowseFiles", FILETABLEFIELDS, TRUE, &dummy, &filteredWhere);
+webTableBuildQuery(cart, table, accWhere->string, "cdwBrowseFiles", FILETABLEFIELDS, FALSE, &dummy, &filteredWhere);
 
 // Selected Facet Values Filtering
 char *selectedFacetValues=cartUsualString(cart, "cdwSelectedFieldValues", "");
@@ -887,6 +887,7 @@ void makeDownloadAllButtonForm()
 {
 printf("<A HREF=\"cdwWebBrowse?hgsid=%s&cdwCommand=downloadFiles", cartSessionId(cart));
 
+/* old way 
 char *fieldNames[128];
 char *fileTableFields = cloneString(FILETABLEFIELDS); // cannot modify string literals
 int fieldCount = chopString(fileTableFields, ",", fieldNames, ArraySize(fieldNames));
@@ -897,6 +898,7 @@ for (i = 0; i<fieldCount; i++)
     safef(varName, sizeof(varName), "cdwBrowseFiles_f_%s", fieldNames[i]);
     printf("&%s=%s", varName, cartCgiUsualString(cart, varName, ""));
     }
+*/
 
 printf("&cdwFileSearch=%s", cartCgiUsualString(cart, "cdwFileSearch", ""));
 printf("&cdwFile_filter=%s", cartCgiUsualString(cart, "cdwFile_filter", ""));

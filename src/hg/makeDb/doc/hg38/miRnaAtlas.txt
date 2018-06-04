@@ -1,0 +1,95 @@
+# miRNA Tissue Atlas Track for hg38
+
+##############################################################################
+#  miRna tissue expression atlas from https://ccb-web.cs.uni-saarland.de/tissueatlas/
+#  expression data from 61 tissues across two individuals
+
+    mkdir /hive/data/genomes/hg38/bed/miRnaAtlas
+    cd /hive/data/genomes/hg38/bed/miRnaAtlas
+
+    wget https://ccb-web.cs.uni-saarland.de/tissueatlas/static/data/expression_data.zip
+    mkdir expressionData
+    unzip -d expressionData expression_data.zip
+
+    # some miRNAs (especially mature miRNAs) from this set are not in the current mirbase version
+    hgsql -Ne "select name from wgRna where type='miRNA'" hg38 > mirbaseV22Names.txt
+    tail -n +2 expression_data/data_matrix_quantile.txt | cut -f1 > atlasNames.txt
+    comm -23 <(sort atlasNames.txt) <(sort mirbaseV22Names.txt) | wc -l
+    # 1364
+
+    # use mirbase v21 gff for coordinates instead
+    wget ftp://mirbase.org/pub/mirbase/21/genomes/hsa.gff3 -O mirbaseV21.gff3
+
+    # everything is there:
+    tail -n +14 mirbaseV21.gff3 | tr ';' '\t' | tr '=' '\t' | cut -f14 > mirbaseV21.names
+    comm -23 <(sort atlasNames.txt) <(sort mirbaseV21Names.gff3) | wc -l
+    # 0
+
+    # get gff lines of interest, and miRNA precursor if applicable
+    tail -n +14 mirbaseV21.gff3 | tr ';' '\t' | tr '=' '\t' | tawk '{print $1,$4,$5,$14,$6,$7,$16}' > mirbaseV21.bed6Plus
+
+    # make autoSql file for bigBed:
+    cat << EOF > miRnaAtlas.as
+table miRnaAtlas
+"BED6+5 with additional fields for category count and median values, and sample matrix fields"
+    (
+    string chrom;       "Reference sequence chromosome or scaffold"
+    uint   chromStart;  "Start position in chromosome"
+    uint   chromEnd;    "End position in chromosome"
+    string name;        "Mirbase v21 name"
+    uint   score;       "Score from 0-1000, typically derived from total of median value from all categories"
+    char[1] strand;     "+ or - for strand. Use . if not applicable"
+    string name2;       "Precursor miRna from Mirbase if applicable"
+    uint expCount;      "Number of categories"
+    float[expCount] expScores; "Comma separated list of category values"
+    bigint _dataOffset; "Offset of sample data in data matrix file, for boxplot on details page"
+    int _dataLen;       "Length of sample data row in data matrix file"
+    )
+EOF
+
+    grep -Fwf atlasNames.txt mirbaseV21.bed6Plus > atlasCoordinates.bed6Plus
+    wc -l atlasCoordinates.bed6Plus
+    # 1501
+    # some of these miRna's are present in the genome twice, like hsa-mir-392, which is present
+    # in two places with a single base mismatch
+
+    # use expMatrixToBarChartBed to make final barChart, first we need a sample mapping:
+    head -1 expression_data/data_matrix_quantile.txt | tr '\t' '\n' > tissues.txt
+    head -1 expression_data/data_matrix_quantile.txt | tr '\t' '\n' | \
+        sed -e 's/\._/\./' | sed -e 's/.$//' | tr -s '.' | rev | sed -e 's/\./\t/' | rev | \
+        tawk '{print $2,$1}' | sed -e 's/\t/ - /' | tr '.' ' ' > samplesCleaned.txt
+    paste tissues.txt samplesCleaned.txt > atlasSamples.txt
+    head -2 atlasSamples.txt
+    # adipocyte.1.    1 - adipocyte
+    # arachnoid_mater.1.      1 - arachnoid_mater
+
+    # cleanup matrix file
+    sed -e 's/,/\./g' expression_data/data_matrix_quantile.txt > data_matrix_decimals.txt
+
+    expMatrixToBarChartBed atlasSamples.txt data_matrix_decimals.txt atlasCoordinates.bed6Plus miRnaAtlas.bed
+    # this is only writing two bed lines, I believe because of duplicates.
+    # fixed by commit: 87a97a71
+
+    # turn into a bigBed
+    chromSizes=../../chrom.sizes
+    sort -k1,1 -k2,2n miRnaAtlas.bed > miRnaAtlas.bed.sorted
+    bedToBigBed -as=miRnaAtlas.as -tab -type=bed6+5 miRnaAtlas.bed.sorted $chromSizes miRnaAtlas.bb
+    bigBedInfo miRnaAtlas.bb
+    # version: 4
+    # fieldCount: 11
+    # hasHeaderExtension: yes
+    # isCompressed: yes
+    # isSwapped: 0
+    # extraIndexCount: 0
+    # itemCount: 1,501
+    # primaryDataSize: 240,529
+    # primaryIndexSize: 6,388
+    # zoomLevels: 10
+    # chromCount: 24
+    # basesCovered: 30,327
+    # meanDepth (of bases covered): 1.014838
+    # minDepth: 1.000000
+    # maxDepth: 2.000000
+    # std of depth: 0.120907
+
+    ln -s /hive/data/genomes/hg38/bed/miRnaAtlas/miRnaAtlas.bb /gbdb/hg38/bbi/miRnaAtlas.bb

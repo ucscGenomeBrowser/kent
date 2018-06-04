@@ -27,7 +27,8 @@ struct sqlConnection *conn = NULL;
 
 int chunkSize = 1000;
 int chunkWait = 0;
-int squealSize = 14;   /* complain if table data_length is bigger than squealSize GB */
+int squealSize = 20;  /* complain if table data_length is bigger than squealSize GB */
+ // was 14 until 2018-06-02  
 
 int purgeStart = -1;  /* manual specify purge range in days ago */
 int purgeEnd = -1;
@@ -109,7 +110,7 @@ if ((dataLength / (1024 * 1024 * 1024)) >= squealSize)
     {
     char msg[256];
     char cmdLine[256];
-    char *emailList = "cluster-admin galt kuhn";
+    char *emailList = "cluster-admin@soe.ucsc.edu galt@soe.ucsc.edu kuhn@soe.ucsc.edu";
     safef(msg, sizeof(msg), "BIG HGCENTRAL TABLE %s data_length: %lld data_free: %lld\n"
 	, table, dataLength, dataFree);
     printf("%s", msg);
