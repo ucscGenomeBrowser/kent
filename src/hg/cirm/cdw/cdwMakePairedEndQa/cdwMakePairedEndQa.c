@@ -232,7 +232,7 @@ cdwTrimReadsForAssay(sampleFastqName2, trimmedPath2, assay);
 char cmd[3*PATH_LEN];
 //also see comments in cdwLib on bowtie on background about the bwa -> bowtie change
 //safef(cmd, sizeof(cmd), "bwa mem -t 3 %s %s %s > %s", genoFile, trimmedPath1, trimmedPath2, tmpSam);
-safef(cmd, sizeof(cmd), "bowtie -L 40 -n 1 %s --threads 4 --mm -1 %s -2 %s -S > %s", genoFile, trimmedPath1, trimmedPath2, tmpSam);
+safef(cmd, sizeof(cmd), "bowtie -l 40 -n 1 %s --threads 3 --mm -1 %s -2 %s -S > %s", genoFile, trimmedPath1, trimmedPath2, tmpSam);
 mustSystem(cmd);
 
 /* Save return variables, clean up,  and go home. */
