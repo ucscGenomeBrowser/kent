@@ -57,14 +57,14 @@ EOF
     head -1 expression_data/data_matrix_quantile.txt | tr '\t' '\n' > tissues.txt
     head -1 expression_data/data_matrix_quantile.txt | tr '\t' '\n' | \
         sed -e 's/\._/\./' | sed -e 's/.$//' | tr -s '.' | rev | sed -e 's/\./\t/' | rev | \
-        tawk '{print $2,$1}' | sed -e 's/\t/ - /' | tr '.' ' ' > samplesCleaned.txt
-    paste tissues.txt samplesCleaned.txt > atlasSamples.txt
-    head -2 atlasSamples.txt
-    # adipocyte.1.    1 - adipocyte
-    # arachnoid_mater.1.      1 - arachnoid_mater
+        tawk '{print $2,$1}' | sed -e 's/\t/-/' | tr '.' '_' > samplesCleaned2.txt
+    paste tissues.txt samplesCleaned2.txt > atlasSamples2.txt
+    head -2 atlasSamples2.txt
+    # adipocyte.1.    1-adipocyte
+    # arachnoid_mater.1.      1-arachnoid_mater
 
     # cleanup matrix file
-    sed -e 's/,/\./g' expression_data/data_matrix_quantile.txt > data_matrix_decimals.txt
+    sed -e '1s/^/\#gene\t/' expression_data/data_matrix_quantile.txt | sed -e 's/,/\./g' > data_matrix_decimals.txt
 
     expMatrixToBarChartBed atlasSamples.txt data_matrix_decimals.txt atlasCoordinates.bed6Plus miRnaAtlas.bed
     # this is only writing two bed lines, I believe because of duplicates.
@@ -82,7 +82,7 @@ EOF
     # isSwapped: 0
     # extraIndexCount: 0
     # itemCount: 1,501
-    # primaryDataSize: 240,529
+    # primaryDataSize: 240,503
     # primaryIndexSize: 6,388
     # zoomLevels: 10
     # chromCount: 24
