@@ -7,17 +7,96 @@ include hoffMap.ra
 include cancerExpr.ra
 
 track miRnaAtlas
+compositeTrack on
 release alpha
 shortLabel miRNA Tissue Expression
 longLabel miRNA Tissue Specific Expression from Two Individuals
 type bigBarChart
-bigDataUrl /gbdb/hg38/bbi/miRnaAtlas.bb
-barChartMatrixUrl /gbdb/hgFixed/human/expMatrix/miRnaAtlasMatrix.txt
-barChartSampleUrl /gbdb/hgFixed/human/expMatrix/miRnaAtlasSamples.txt
-barChartBars 1-adipocyte 1-arachnoid_mater 1-artery 1-bladder 1-bone 1-brain 1-colon 1-dura_mater 1-epididymis 1-fascia 1-gallbladder 1-kidney 1-liver 1-lung 1-muscle 1-myocardium 1-nerve_nervus_intercostalis 1-skin 1-small_intestine 1-spleen 1-stomach 1-testis 1-thyroid 1-tunica_albuginea 2-adipocyte 2-artery 2-bone_marrow 2-brain_cerebellum 2-brain_cerebral_cortex_frontal 2-brain_cerebral_cortex_occipital 2-brain_cerebral_cortex_temporal 2-brain_gray_matter 2-brain_nucleus_caudatus 2-brain_pituitary_gland 2-brain_thalamus 2-brain_white_matter 2-colon 2-dura_mater 2-esophagus 2-kidney 2-kidney_cortex_renalis 2-kidney_glandula_suprarenalis 2-kidney_medulla_renalis 2-liver 2-lung 2-lymph_node 2-muscle 2-myocardium 2-nerve_not_specified 2-pancreas 2-pleura 2-prostate 2-skin 2-small_intestine_duodenum 2-small_intestine_jejunum 2-spinal_cord 2-spleen 2-stomach 2-testis 2-thyroid 2-vein
 group expression
 maxLimit 52000
 barChartLabel Tissue
+
+    track miRnaAtlasCombined
+    release alpha
+    parent miRnaAtlas
+    shortLabel Combined
+    longLabel Combined miRna Expression
+    bigDataUrl /gbdb/hg38/bbi/miRnaAtlas.bb
+    barChartMatrixUrl /gbdb/hgFixed/human/expMatrix/miRnaAtlasMatrix.txt
+    barChartSampleUrl /gbdb/hgFixed/human/expMatrix/miRnaAtlasSamples.txt
+    barChartBars 1-adipocyte 1-arachnoid_mater 1-artery 1-bladder 1-bone 1-brain 1-colon \
+        1-dura_mater 1-epididymis 1-fascia 1-gallbladder 1-kidney 1-liver 1-lung 1-muscle \
+        1-myocardium 1-nerve_nervus_intercostalis 1-skin 1-small_intestine 1-spleen 1-stomach \
+        1-testis 1-thyroid 1-tunica_albuginea 2-adipocyte 2-artery 2-bone_marrow \
+        2-brain_cerebellum 2-brain_cerebral_cortex_frontal 2-brain_cerebral_cortex_occipital \
+        2-brain_cerebral_cortex_temporal 2-brain_gray_matter 2-brain_nucleus_caudatus \
+        2-brain_pituitary_gland 2-brain_thalamus 2-brain_white_matter 2-colon 2-dura_mater \
+        2-esophagus 2-kidney 2-kidney_cortex_renalis 2-kidney_glandula_suprarenalis \
+        2-kidney_medulla_renalis 2-liver 2-lung 2-lymph_node 2-muscle 2-myocardium \
+        2-nerve_not_specified 2-pancreas 2-pleura 2-prostate 2-skin 2-small_intestine_duodenum \
+        2-small_intestine_jejunum 2-spinal_cord 2-spleen 2-stomach 2-testis 2-thyroid 2-vein
+    barChartColors #F7A028 #86BF10 #F73528 #CDB79E #BD34D7 #EEEE00 #DEBE98 \
+        \#86BF80 #A6F6A1 #4C7CD7 #CDA7FE #CDB79E #CDB79E #9ACD32 #7A67AE \
+        \#9745AC #FFD700 #1E90FF #CDB79E #CDB79E #FFD39B \
+        \#A6A6A6 #008B45 #A6CEA4 #F7A028 #F73528 #BD3487 \
+        \#EEEE00 #EEEE00 #EEEE00 \
+        \#EEEE00 #EEEE00 #EEEE00 \
+        \#EEEE00 #EEEE00 #EEEE00 #DEBE98 #86BF80 \
+        \#AC8F69 #CDB79E #CDB79E #CDB79E \
+        \#CDB79E #CDB79E #9ACD32 #EE82EE #7A67AE #9745AC \
+        \#F7E300 #CD9B1D #73A585 #D9D9D9 #1E90FF #CDB79E \
+        \#CDB79E #EEEE00 #CDB79E #FFD39B #A6A6A6 #008B45 #FF00FF
+    group expression
+    maxLimit 52000
+    barChartLabel Tissue
+
+    track miRnaAtlasSample1
+    release alpha
+    parent miRnaAtlas
+    shortLabel Sample1
+    longLabel Sample1 miRna Expression
+    bigDataUrl /gbdb/hg38/bbi/miRnaAtlasSample1.bb
+    barChartMatrixUrl /gbdb/hgFixed/human/expMatrix/miRnaAtlasSample1Matrix.txt
+    barChartSampleUrl /gbdb/hgFixed/human/expMatrix/miRnaAtlasSamples.txt
+    barChartBars 1-adipocyte 1-artery 1-colon 1-dura_mater 1-kidney 1-liver 1-lung \
+        1-muscle 1-myocardium 1-skin 1-spleen 1-stomach 1-testis 1-thyroid 1-arachnoid_mater \
+        1-small_intestine 1-brain 1-bladder 1-bone 1-gallbladder 1-fascia 1-epididymis \
+        1-nerve_nervus_intercostalis 1-tunica_albuginea
+    barChartColors #F7A028 #F73528 #DEBE98 #86BF80 #CDB79E #CDB79E #9ACD32 \
+        \#7A67AE #9745AC #1E90FF #CDB79E #FFD39B #A6A6A6 #008B45 #86BF10 \
+        \#CDB79E #EEEE00 #CDB79E #BD34D7 #CDA7FE #4C7CD7 \
+        \#A6F6A1 #FFD700 #A6CEA4
+    group expression
+    maxLimit 52000
+    barChartLabel Tissue
+
+    track miRnaAtlasSample2
+    release alpha
+    parent miRnaAtlas
+    shortLabel Sample2
+    longLabel Sample2 miRna Expression
+    bigDataUrl /gbdb/hg38/bbi/miRnaAtlasSample2.bb
+    barChartMatrixUrl /gbdb/hgFixed/human/expMatrix/miRnaAtlasSample2Matrix.txt
+    barChartSampleUrl /gbdb/hgFixed/human/expMatrix/miRnaAtlasSamples.txt
+    barChartBars 2-adipocyte 2-artery 2-colon 2-dura_mater 2-kidney 2-liver 2-lung \
+        2-muscle 2-myocardium 2-skin 2-spleen 2-stomach 2-testis 2-thyroid \
+        2-small_intestine_duodenum 2-pancreas 2-small_intestine_jejunum \
+        2-kidney_glandula_suprarenalis 2-brain_thalamus 2-bone_marrow 2-spinal_cord 2-pleura \
+        2-brain_pituitary_gland 2-kidney_cortex_renalis 2-nerve_not_specified 2-esophagus \
+        2-prostate 2-brain_white_matter 2-brain_nucleus_caudatus 2-kidney_medulla_renalis \
+        2-brain_gray_matter 2-lymph_node 2-brain_cerebral_cortex_temporal \
+        2-brain_cerebral_cortex_frontal 2-brain_cerebral_cortex_occipital 2-vein 2-brain_cerebellum
+    barChartColors #F7A028 #F73528 #DEBE98 #86BF80 #CDB79E #CDB79E #9ACD32 \
+        \#7A67AE #9745AC #1E90FF #CDB79E #FFD39B #A6A6A6 #008B45 \
+        \#CDB79E #CD9B1D #CDB79E \
+        \#CDB79E #EEEE00 #BD3487 #EEEE00 #73A585 \
+        \#EEEE00 #CDB79E #F7E300 #AC8F69 \
+        \#D9D9D9 #EEEE00 #EEEE00 #CDB79E \
+        \#EEEE00 #EE82EE #EEEE00 #EEEE00 \
+        \#EEEE00 #FF00FF #EEEE00
+    group expression
+    maxLimit 52000
+    barChartLabel Tissue
 
 track cosmicRegions
 shortLabel COSMIC Regions
