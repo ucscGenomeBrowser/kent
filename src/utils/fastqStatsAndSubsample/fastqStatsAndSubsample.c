@@ -41,7 +41,7 @@ errAbort(
   "fastqStatsAndSubsample v2 - Go through a fastq file doing sanity checks and collecting stats\n"
   "and also producing a smaller fastq out of a sample of the data.  The fastq input may be\n"
   "compressed with gzip or bzip2.\n"
-  "Paired-end samples: run on both files, the seed is fixed so it will chose the paired reads\n")
+  "Paired-end samples: run on both files, the seed is fixed so it will chose the paired reads\n"
   "usage:\n"
   "   fastqStatsAndSubsample in.fastq out.stats out.fastq\n"
   "options:\n"
