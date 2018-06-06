@@ -42,6 +42,7 @@ wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLeve
     visibility pack
     subTrack wgEncodeGencodeV17
     type genePred
+    idXref wgEncodeGencodeAttrsV17 transcriptId geneId
     itemClassTbl wgEncodeGencodeAttrsV17
     itemClassNameColumn transcriptId
     itemClassClassColumn transcriptClass
