@@ -1,2 +1,27 @@
 # See ../../crisprTrack/README.txt (Done. 2016-09-15 max)
 doCrispr.sh hg38 knownGene
+
+###############################################################################
+# with 10K shoulders (working - 2018-06-06 - Hiram)
+
+mkdir /hive/data/genomes/hg38/bed/crispr.10K
+cd /hive/data/genomes/hg38/bed/crispr.10K
+
+time (/cluster/home/hiram/kent/src/hg/utils/automation/doCrispr.pl \
+   -buildDir=`pwd` -bigClusterHub=ku -smallClusterHub=ku \
+        -workhorse=hgwdev -stop=ranges hg38 knownGene) > ranges.log 2>&1
+# real    0m52.339s
+
+time (/cluster/home/hiram/kent/src/hg/utils/automation/doCrispr.pl \
+   -buildDir=`pwd` -bigClusterHub=ku -smallClusterHub=ku \
+        -continue=guides -stop=guides -workhorse=hgwdev hg38 knownGene) \
+	> guides.log 2>&1
+# real    12m40.910s
+
+time (/cluster/home/hiram/kent/src/hg/utils/automation/doCrispr.pl \
+   -buildDir=`pwd` -bigClusterHub=ku -smallClusterHub=ku \
+        -continue=specScores -stop=specScores -workhorse=hgwdev hg38 \
+	knownGene) > specScores.log 2>&1
+XXX - running - Wed Jun  6 11:32:23 PDT 2018
+
+###############################################################################
