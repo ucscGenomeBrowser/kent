@@ -11,7 +11,6 @@
 #include "hCommon.h"
 #include "htmshell.h"
 #include "hash.h"
-#include "liftOver.h"
 #include "wikiLink.h"
 #include "web.h"
 #include "geoMirror.h"

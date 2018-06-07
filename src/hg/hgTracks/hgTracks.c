@@ -49,7 +49,6 @@
 #include "hubConnect.h"
 #include "cytoBand.h"
 #include "ensFace.h"
-#include "liftOver.h"
 #include "pcrResult.h"
 #include "jsHelper.h"
 #include "mafTrack.h"

@@ -19,6 +19,7 @@ int ends = 0;
 bool fudgeThick = FALSE;
 bool errorHelp = FALSE;
 bool multiple = FALSE;
+bool noSerial = FALSE;
 bool hasBin = FALSE;
 bool tabSep = FALSE;
 char *chainTable = NULL;
@@ -38,6 +39,7 @@ static struct optionSpec optionSpecs[] = {
     {"minSizeQ", OPTION_INT},
     {"minSizeT", OPTION_INT},
     {"multiple", OPTION_BOOLEAN},
+    {"noSerial", OPTION_BOOLEAN},
     {"positions", OPTION_BOOLEAN},
     {"pslT", OPTION_BOOLEAN},
     {"sample", OPTION_BOOLEAN},
@@ -86,6 +88,7 @@ errAbort(
   "                  use the closest mapped base.  Recommended if using \n"
   "                  -minBlocks.\n"
   "   -multiple               Allow multiple output regions\n"
+  "   -noSerial               In -multiple mode, do not put a serial number in the 5th BED column\n"
   "   -minChainT, -minChainQ  Minimum chain size in target/query, when mapping\n" 
   "                           to multiple output regions (default 0, 0)\n"
   "   -minSizeT               deprecated synonym for -minChainT (ENCODE compat.)\n"
@@ -99,7 +102,7 @@ errAbort(
 
 void liftOver(char *oldFile, char *mapFile, double minMatch, 
                 double minBlocks, int minSizeT, int minSizeQ,
-                int minChainT, int minChainQ, bool multiple, char *chainTable, 
+                int minChainT, int minChainQ, bool multiple, bool noSerial, char *chainTable,
                 char *newFile, char *unmappedFile)
 /* liftOver - Move annotations from one assembly to another. */
 {
@@ -130,12 +133,12 @@ else if (optionExists("pslT"))
 else if (optionExists("ends"))
     liftOverBedPlusEnds(oldFile, chainHash, minMatch, minBlocks, 
                 minSizeT, minSizeQ, 
-                minChainT, minChainQ, fudgeThick, mapped, unmapped, multiple, 
+                minChainT, minChainQ, fudgeThick, mapped, unmapped, multiple, noSerial,
 		chainTable, bedPlus, hasBin, tabSep, ends, &errCt);
 else if (optionExists("bedPlus"))
     liftOverBedPlus(oldFile, chainHash, minMatch, minBlocks, 
                 minSizeT, minSizeQ, 
-                minChainT, minChainQ, fudgeThick, mapped, unmapped, multiple, 
+                minChainT, minChainQ, fudgeThick, mapped, unmapped, multiple, noSerial,
 		chainTable, bedPlus, hasBin, tabSep, &errCt);
 else if (optionExists("positions"))
     liftOverPositions(oldFile, chainHash, minMatch, minBlocks, minSizeT, minSizeQ, 
@@ -143,7 +146,7 @@ else if (optionExists("positions"))
 		chainTable, &errCt);
 else
     liftOverBed(oldFile, chainHash, minMatch, minBlocks, minSizeT, minSizeQ, 
-                minChainT, minChainQ, fudgeThick, mapped, unmapped, multiple, 
+                minChainT, minChainQ, fudgeThick, mapped, unmapped, multiple, noSerial,
 		chainTable, &errCt);
 if (!optionExists("positions"))
 /* I guess liftOverPositions closes these files.  This is a little akward though. */
@@ -168,10 +171,11 @@ minMatch = optionFloat("minMatch", minMatch);
 minBlocks = optionFloat("minBlocks", minBlocks);
 fudgeThick = optionExists("fudgeThick");
 multiple = optionExists("multiple");
+noSerial = optionExists("noSerial");
 if ((!multiple) && (optionExists("minSizeT")  || optionExists("minSizeQ") ||
 		    optionExists("minChainT") || optionExists("minChainQ") ||
-		    optionExists("chainTable")))
-    errAbort("minSizeT/Q, minChainT/Q and chainTable can only be used with -multiple.");
+		    optionExists("chainTable") || optionExists("noSerial")))
+    errAbort("minSizeT/Q, minChainT/Q, noSerial and chainTable can only be used with -multiple.");
 if (optionExists("minSizeT") && optionExists("minChainT"))
     errAbort("minSizeT is currently a deprecated synonym for minChainT. Can't set both.");
 minSizeT = optionInt("minSizeT", minChainT); /* note: we're setting minChainT */
@@ -190,6 +194,6 @@ if (optionExists("errorHelp"))
 if (argc != 5)
     usage();
 liftOver(argv[1], argv[2], minMatch, minBlocks, minSizeT, minSizeQ, 
-	 minChainT, minChainQ, multiple, chainTable, argv[3], argv[4]);
+	 minChainT, minChainQ, multiple, noSerial, chainTable, argv[3], argv[4]);
 return 0;
 }
