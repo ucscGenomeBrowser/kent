@@ -36,6 +36,7 @@ wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneV27lift37
     visibility pack
     subTrack wgEncodeGencodeV27lift37
     type genePred
+    idXref wgEncodeGencodeAttrsV27lift37 transcriptId geneId
     itemClassTbl wgEncodeGencodeAttrsV27lift37
     itemClassNameColumn transcriptId
     itemClassClassColumn transcriptClass

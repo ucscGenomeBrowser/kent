@@ -358,6 +358,7 @@ i.e. if you take dupes and chrM into account, our data agrees with their raw dat
     cd /cluster/data/equCab2
     blat equCab2.2bit /dev/null /dev/null -tileSize=11 \
 	-makeOoc=equCab2.11.ooc -repMatch=825
+    # Wrote 25375 overused 11-mers to equCab2.11.ooc
 
 #########################################################################
 #	make equCab2.chrUn.lift, chrUn.fa and equCab2.UnScaffolds.2bit
@@ -2806,4 +2807,27 @@ http://genome.crg.es/genepredictions/E.caballus/equCab2/geneid_v1.4/equCab2.gene
     time (doRecipBest.pl -buildDir=`pwd` equCab2 hg38) > rbest.log 2>&1
     # real    43m47.647s
 
-#########################################################################
+#############################################################################
+# LIFTOVER TO equCab3 (DONE - 2018-05-25 - Hiram )
+    mkdir /hive/data/genomes/equCab2/bed/blat.equCab3.2018-05-25
+    cd /hive/data/genomes/equCab2/bed/blat.equCab3.2018-05-25
+    # -debug run to create run dir and scripts
+    doSameSpeciesLiftOver.pl -debug -buildDir=`pwd` -bigClusterHub=ku \
+       -dbHost=hgwdev -workhorse=hgwdev \
+          -ooc=/hive/data/genomes/equCab2/equCab2.11.ooc equCab2 equCab3
+    # Then, can be run for real:
+    doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=ku \
+       -dbHost=hgwdev -workhorse=hgwdev \
+          -ooc=/hive/data/genomes/equCab2/equCab2.11.ooc equCab2 equCab3 > do.log 2>&1
+    # about 4 days ?
+    # kluster run problem interrupted that, to continue:
+    time (doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=ku \
+       -continue=chain -dbHost=hgwdev -workhorse=hgwdev \
+          -ooc=/hive/data/genomes/equCab2/equCab2.11.ooc equCab2 equCab3) \
+	 > chain.log 2>&1
+    # real    3m48.593s
+
+    # verify the convert link on the browser is now active and functions
+    # from equCab2 to equCab3
+
+#############################################################################

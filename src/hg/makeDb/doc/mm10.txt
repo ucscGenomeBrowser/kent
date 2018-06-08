@@ -17092,3 +17092,73 @@ TMPDIR=/dev/shm
     # 2243948952 bases of 2730871774 (82.170%) in intersection
     featureBits -countGaps mm10 rmskJoinedCurrent
     # 2249729653 bases of 2730871774 (82.381%) in intersection
+
+#########################################################################
+# LASTZ mouse/mm10 horse/equCab3 - (DONE - 2018-05-25 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzEquCab3.2018-05-25
+    cd /hive/data/genomes/mm10/bed/lastzEquCab3.2018-05-25
+
+    printf '# mouse vs horse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_M=254
+# default BLASTZ_Q score matrix:
+#       A     C     G     T
+# A    91  -114   -31  -123
+# C  -114   100  -125   -31
+# G   -31  -125   100  -114
+# T  -123   -31  -114    91
+
+# TARGET: mouse mm10
+SEQ1_DIR=/hive/data/genomes/mm10/mm10.2bit
+SEQ1_LEN=/hive/data/genomes/mm10/chrom.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=2
+SEQ1_LAP=10000
+
+# QUERY: horse equCab3
+SEQ2_DIR=/hive/data/genomes/equCab3/equCab3.2bit
+SEQ2_LEN=/hive/data/genomes/equCab3/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=10
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzEquCab3.2018-05-25
+TMPDIR=/dev/shm
+' > DEF
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1 &
+    # real    605m50.368s
+
+    cat fb.mm10.chainEquCab3Link.txt
+    # 921489718 bases of 2652783500 (34.737%) in intersection
+
+    cat fb.mm10.chainSynEquCab3Link.txt
+    # 876836391 bases of 2652783500 (33.053%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` mm10 equCab3) > rbest.log 2>&1 &
+XXX - running - Wed Jun  6 09:25:52 PDT 2018
+    # real    485m29.546s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/equCab3/bed/blastz.mm10.swap
+    cd /hive/data/genomes/equCab3/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/mm10/bed/lastzEquCab3.2018-05-25/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1 &
+XXX - running - Wed Jun  6 09:25:52 PDT 2018
+    #  real    63m12.935s
+
+    cat fb.equCab3.chainMm10Link.txt
+    # 680117358 bases of 2587515673 (26.285%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` equCab3 mm10) > rbest.log 2>&1 &
+    # real    437m1.637s
+
+#########################################################################

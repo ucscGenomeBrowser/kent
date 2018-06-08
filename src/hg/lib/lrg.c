@@ -337,6 +337,34 @@ for (diff = *pDiff;  diff != NULL;  diff = diff->next)
 slFreeList(pDiff);
 }
 
+static boolean lrgNameParseRange(char *lrgName, int lrgSize, char *buf, size_t bufSize,
+                                 int *retStart, int *retEnd)
+/* If lrgName is of the format name:start-end, write the name into buf, set retStart and retEnd
+ * and return TRUE.  Otherwise leave inputs alone and return FALSE. */
+{
+if (strchr(lrgName, ':'))
+    {
+    // Parse lrgStart and lrgEnd out of name field (LRG_*:start-end)
+    safecpy(buf, bufSize, lrgName);
+    char *p = strchr(buf, ':');
+    // Chop at : (after name)
+    *p++ = '\0';
+    char *num = p;
+    p = strchr(num, '-');
+    if (p == NULL)
+        errAbort("Error parsing LRG name:start-end '%s' -- no '-' following ':'", lrgName);
+    *p++ = '\0';
+    *retStart = atoi(num) - 1;
+    num = p;
+    *retEnd = atoi(num);
+    if (*retStart < 0 || *retStart >= *retEnd || *retEnd < 0 || *retEnd > lrgSize)
+        errAbort("lrgNameParseRange: got bad coords (%d, %d) from '%s' size %d",
+                 *retStart, *retEnd, lrgName, lrgSize);
+    return TRUE;
+    }
+return FALSE;
+}
+
 static int calcBlockSize(uint nextTStart, uint nextQStart, struct psl *psl, int blockIx)
 {
 int tLen = nextTStart - psl->tStarts[blockIx];
@@ -351,23 +379,8 @@ struct lrgDiff *mismatches = lrgParseMismatches(lrg), *indels = lrgParseIndels(l
 int lrgStart = 0, lrgEnd = lrg->lrgSize;
 char *lrgName = lrg->name;
 char lrgNameBuf[strlen(lrgName)+1];
-if (strchr(lrgName, ':'))
-    {
-    // Parse lrgStart and lrgEnd out of name field (LRG_*:start-end)
-    safecpy(lrgNameBuf, sizeof(lrgNameBuf), lrgName);
-    char *p = strchr(lrgNameBuf, ':');
-    // Chop at : (after name)
-    *p++ = '\0';
-    char *num = p;
-    p = strchr(num, '-');
-    if (p == NULL)
-        errAbort("Error parsing LRG name:start-end '%s' -- no '-' following ':'", lrg->name);
-    *p++ = '\0';
-    lrgStart = atoi(num) - 1;
-    num = p;
-    lrgEnd = atoi(num);
+if (lrgNameParseRange(lrgName, lrg->lrgSize, lrgNameBuf, sizeof(lrgNameBuf), &lrgStart, &lrgEnd))
     lrgName = lrgNameBuf;
-    }
 int blockCount = slCount(indels) + 1;
 unsigned opts = 0;
 struct psl *psl = pslNew(lrgName, lrg->lrgSize, lrgStart, lrgEnd,
@@ -431,17 +444,32 @@ struct dnaSeq *lrgReconstructSequence(struct lrg *lrg, char *db)
 {
 struct lrgDiff *diff, *indels = lrgParseIndels(lrg);
 int refSize = lrg->chromEnd - lrg->chromStart;
-// Fetch genomic sequence plus extra headroom for insertions (if any):
-int seqSize = refSize + sumInsertions(indels);
-struct dnaSeq *lrgSeq = hDnaFromSeq(db, lrg->chrom, lrg->chromStart, lrg->chromStart+seqSize,
-				    dnaUpper);
-char *lrgSeqDna = lrgSeq->dna;
-if (seqSize > refSize)
-    zeroBytes(lrgSeqDna+refSize, seqSize-refSize);
+// Fetch genomic sequence:
+struct dnaSeq *lrgSeq = hDnaFromSeq(db, lrg->chrom, lrg->chromStart, lrg->chromEnd, dnaUpper);
 boolean isRc = (lrg->strand[0] == '-');
 if (isRc)
-    reverseComplement(lrgSeqDna, refSize);
-// Go through indels backwards w.r.t. genome assembly so we move sequence to the right
+    reverseComplement(lrgSeq->dna, refSize);
+// If this was only a partial mapping of the LRG, pad N's at the beginning and/or end to get
+// the correct size.
+int lrgStart = 0, lrgEnd = lrg->lrgSize;
+char lrgNameBuf[strlen(lrg->name)+1];
+lrgNameParseRange(lrg->name, lrg->lrgSize, lrgNameBuf, sizeof(lrgNameBuf), &lrgStart, &lrgEnd);
+// Replace lrgSeq->dna with a larger version that has room for genomic sequence plus inserted bases
+// as well as possible padding at start and end for partial LRG mappings
+int addedBases = sumInsertions(indels);
+int paddedSize = refSize + lrgStart + (lrg->lrgSize - lrgEnd) + addedBases + 1;
+char *lrgSeqDna = needMem(paddedSize);
+if (lrgStart > 0)
+    memset(lrgSeqDna, 'N', lrgStart);
+// Copy in the genomic data
+safencpy(lrgSeqDna+lrgStart, paddedSize-lrgStart, lrgSeq->dna, refSize);
+refSize += lrgStart;
+// If the LRG has inserted bases, zero out some extra bytes after genomic seq
+if (addedBases)
+    zeroBytes(lrgSeqDna+refSize, addedBases);
+freeMem(lrgSeq->dna);
+lrgSeq->dna = lrgSeqDna;
+// Go through indels backwards w.r.t. LRG so we move sequence to the right
 // while not changing coords to the left:
 if (!isRc)
     slReverse(&indels);
@@ -449,27 +477,31 @@ for (diff = indels;  diff != NULL;  diff = diff->next)
     {
     int lrgLen = diff->lrgEnd - diff->lrgStart;
     int refLen = diff->chromEnd - diff->chromStart;
-    int refStart = diff->chromStart - lrg->chromStart;
+    int refStart = diff->chromStart - lrg->chromStart + lrgStart;
     if (isRc)
 	refStart = refSize - (refStart + refLen);
     if (lrgLen > refLen)
 	{
 	// LRG inserts sequence: shift the rest of the sequence to the right
 	int insSize = lrgLen - refLen;
-	int moveSize = seqSize - refStart - insSize;
+	int moveSize = refSize + addedBases - refStart - insSize;
 	memmove(lrgSeqDna+refStart+insSize, lrgSeqDna+refStart, moveSize);
 	}
     else
 	{
 	// LRG deletes sequence: shift the rest of the sequence to the left
 	int delSize = refLen - lrgLen;
-	int moveSize = seqSize - refStart - delSize + 1; // '\0' at end too
+	int moveSize = refSize + addedBases - refStart - delSize + 1; // '\0' at end too
 	memmove(lrgSeqDna+refStart, lrgSeqDna+refStart+delSize, moveSize);
 	}
     // If there is LRG sequence, copy it in.
     if (lrgLen > 0)
 	memcpy(lrgSeqDna+refStart, diff->lrgSeq, lrgLen);
     }
+int len = strlen(lrgSeqDna);
+if (len != lrgEnd)
+    errAbort("lrgReconstructSequence: expected sequence length to be lrgEnd %d, got %d",
+             lrgEnd, len);
 // Now that indels have been resolved, use LRG coords to substitute mismatches:
 struct lrgDiff *mismatches = lrgParseMismatches(lrg);
 for (diff = mismatches;  diff != NULL;  diff = diff->next)
@@ -480,8 +512,16 @@ for (diff = mismatches;  diff != NULL;  diff = diff->next)
     int size = diff->lrgEnd - diff->lrgStart;
     memcpy(lrgSeqDna+diff->lrgStart, diff->lrgSeq, size);
     }
-if (strlen(lrgSeqDna) != lrg->lrgSize)
-    errAbort("maybeGetSeqUpper: Error applying LRG indels for '%s'", lrg->name);
+// Add padding N's at end if applicable
+if (lrgEnd < lrg->lrgSize)
+    {
+    memset(lrgSeqDna+lrgEnd, 'N', lrg->lrgSize - lrgEnd);
+    lrgSeqDna[lrg->lrgSize] = '\0';
+    }
+len = strlen(lrgSeqDna);
+if (len != lrg->lrgSize)
+    errAbort("lrgReconstructSequence: Error applying LRG indels for '%s': expected size %d, got %d",
+             lrg->name, lrg->lrgSize, len);
 lrgSeq->size = lrg->lrgSize;
 return lrgSeq;
 }

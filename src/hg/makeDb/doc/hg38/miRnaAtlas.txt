@@ -53,20 +53,20 @@ EOF
     # some of these miRna's are present in the genome twice, like hsa-mir-392, which is present
     # in two places with a single base mismatch
 
-    # use expMatrixToBarChartBed to make final barChart, first we need a sample mapping:
+    # use expMatrixToBarchartBed to make final barChart, first we need a sample mapping:
     head -1 expression_data/data_matrix_quantile.txt | tr '\t' '\n' > tissues.txt
     head -1 expression_data/data_matrix_quantile.txt | tr '\t' '\n' | \
         sed -e 's/\._/\./' | sed -e 's/.$//' | tr -s '.' | rev | sed -e 's/\./\t/' | rev | \
-        tawk '{print $2,$1}' | sed -e 's/\t/ - /' | tr '.' ' ' > samplesCleaned.txt
-    paste tissues.txt samplesCleaned.txt > atlasSamples.txt
-    head -2 atlasSamples.txt
-    # adipocyte.1.    1 - adipocyte
-    # arachnoid_mater.1.      1 - arachnoid_mater
+        tawk '{print $2,$1}' | sed -e 's/\t/-/' | tr '.' '_' > samplesCleaned2.txt
+    paste tissues.txt samplesCleaned2.txt > atlasSamples2.txt
+    head -2 atlasSamples2.txt
+    # adipocyte.1.    1-adipocyte
+    # arachnoid_mater.1.      1-arachnoid_mater
 
     # cleanup matrix file
-    sed -e 's/,/\./g' expression_data/data_matrix_quantile.txt > data_matrix_decimals.txt
+    sed -e '1s/^/\#gene\t/' expression_data/data_matrix_quantile.txt | sed -e 's/,/\./g' > data_matrix_decimals.txt
 
-    expMatrixToBarChartBed atlasSamples.txt data_matrix_decimals.txt atlasCoordinates.bed6Plus miRnaAtlas.bed
+    expMatrixToBarchartBed atlasSamples.txt data_matrix_decimals.txt atlasCoordinates.bed6Plus miRnaAtlas.bed
     # this is only writing two bed lines, I believe because of duplicates.
     # fixed by commit: 87a97a71
 
@@ -82,7 +82,7 @@ EOF
     # isSwapped: 0
     # extraIndexCount: 0
     # itemCount: 1,501
-    # primaryDataSize: 240,529
+    # primaryDataSize: 240,503
     # primaryIndexSize: 6,388
     # zoomLevels: 10
     # chromCount: 24
@@ -93,3 +93,35 @@ EOF
     # std of depth: 0.120907
 
     ln -s /hive/data/genomes/hg38/bed/miRnaAtlas/miRnaAtlas.bb /gbdb/hg38/bbi/miRnaAtlas.bb
+
+##############################################################################
+# make composite track one for each individual
+##############################################################################
+
+    cd /hive/data/genomes/hg38/bed/miRnaAtlas
+    mkdir /hive/data/genomes/hg38/bed/miRnaAtlas/composite
+    cd /hive/data/genomes/hg38/bed/miRnaAtlas/composite
+
+    grep '1-' samplesCleaned2.txt | cut -d'-' -f2 | sort > person1Tissues.txt
+    grep '2-' ../samplesCleaned2.txt | cut -d'-' -f2 | sort > person2Tissues.txt
+    grep -Fwf person1Tissues.txt person2Tissues.txt  | wc -l
+    # 14
+    wc -l person1Tissues.txt person2Tissues.txt
+    # 24 person1Tissues.txt
+    # 37 person2Tissues.txt
+    # 61 total
+    # about half of first individuals samples were sampled in individual 2, so 14 bars
+    # will have shared colors for easy comparison
+
+    # cut matrix into person1 and person2 matrices:
+    head -1 ../data_matrix_decimals2.txt | tl
+    cut -f1-25 ../data_matrix_decimals2.txt > person1.matrix
+    cut -f1,26- ../data_matrix_decimals2.txt > person2.matrix
+
+    expMatrixToBarchartBed ../atlasSamples2.txt person1.matrix ../atlasCoordinates.bed6Plus person1.bed &> person1.log
+    expMatrixToBarchartBed ../atlasSamples2.txt person2.matrix ../atlasCoordinates.bed6Plus person2.bed &> person2.log
+    chromSizes=../../chrom.sizes
+    sort -k1,1 -k2,2n person1.bed > person1.bed.sorted
+    sort -k1,1 -k2,2n person2.bed > person2.bed.sorted
+    bedToBigBed -as=../miRnaAtlas.as -tab -type=bed6+5 person1.bed.sorted $chromSizes sample1.bb
+    bedToBigBed -as=../miRnaAtlas.as -tab -type=bed6+5 person2.bed.sorted $chromSizes sample2.bb
