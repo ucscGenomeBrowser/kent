@@ -34,21 +34,23 @@ cd "${WORKDIR}"
 
 perl login.perl > /dev/null 2>&1
 
-if test decipher-* -nt lastUpdate
+if test decipher-variants*.gpg -nt lastUpdate
 then
     today=`date +%F`
     mkdir -p $today
 
-    FN=decipher-*.gpg
-    cp -p $FN $today
+    CNV=decipher-cnvs*.gpg
+    SNV=decipher-snvs*.gpg
+    cp -p $CNV $SNV $today
 
     cd $today
 
     # unpack the gpg encrypted file
-    gpg --batch --passphrase-file "../gpg.pwd" ${FN}
+    gpg --batch --passphrase-file "../gpg.pwd" ${CNV}
+    gpg --batch --passphrase-file "../gpg.pwd" ${SNV}
 
     # build the new DECIPHER track tables
-    ../buildDecipher `basename $FN .gpg`
+    ../buildDecipher `basename $CNV .gpg` `basename $SNV .gpg`
     ../validateDecipher.sh hg19
 
     # now install
@@ -61,7 +63,9 @@ then
 
     echo "DECIPHER Installed `date`" 
 
-    cp -p $FN ../lastUpdate
+    # Variants BED will be updated for both CNV and SNV updates
+    cd ..
+    cp -p decipher-var*.gpg ../lastUpdate
 else
     echo "No update"
 fi

@@ -68,18 +68,16 @@ set curVer = 10
 # but not the one you're rebuilding if you're rebuilding. (Use tempDb instead).
 set vgTextDbs = (mm9 hg38 $tempDb)
 
-#ifdef NOTNOW
 # Proteins in various species
 # When not already present, these files were created by running pepPredToFa
 # e.g., pepPredToFa dm6 ensPep ensembl.faa
 set tempFa = $dir/ucscGenes.faa
-set xdbFa = $genomes/$xdb/bed/ucsc.18.1/ucscGenes.faa
+set xdbFa = $genomes/$xdb/bed/ucsc.17.1/ucscGenes.faa
 set ratFa = $genomes/$ratDb/bed/ensGene.91/ensembl.faa
 set fishFa = $genomes/$fishDb/bed/ensGene.91/ensembl.faa
 set flyFa = $genomes/$flyDb/bed/ensGene.91/ensembl.faa
 set wormFa = $genomes/$wormDb/bed/ws245Genes/ws245Pep.faa
 set yeastFa = $genomes/$yeastDb/bed/sgdAnnotations/blastTab/sacCer3.sgd.faa
-#endif
 
 # Other files needed
 
@@ -1118,10 +1116,10 @@ cat << _EOF_ > config.ra
 # mouse, rat, zebrafish, worm, yeast, fly
 
 targetGenesetPrefix known
-targetDb $tempDb
+targetDb $db
 queryDbs $xdb $ratDb $fishDb $flyDb $wormDb $yeastDb
 
-${tempDb}Fa $tempFa
+${db}Fa $tempFa
 ${xdb}Fa $xdbFa
 ${ratDb}Fa $ratFa
 ${fishDb}Fa $fishFa
@@ -1177,26 +1175,17 @@ ln -s $genomes/$db/bed/liftOver/${db}To${Xdb}.over.chain.gz \
 # delete non-syntenic genes from rat and human blastp tables
 cd $dir/hgNearBlastp
 synBlastp.csh $tempDb $xdb
-# old number of unique query values: 45400
-# old number of unique target values 22939
-# new number of unique query values: 41995
-# new number of unique target values 22413
-
-hgsql -e "select  count(*) from hgBlastTab\G" $db | tail -n +2
-# count(*): 50279
-hgsql -e "select  count(*) from hgBlastTab\G" $tempDb | tail -n +2
-# count(*): 41995
+#old number of unique query values: 45347
+#old number of unique target values 23000
+#new number of unique query values: 41335
+#new number of unique target values 22131
 
 synBlastp.csh $tempDb $ratDb knownGene ensGene
-# old number of unique query values: # 45644
-# old number of unique target values # 20426
-# new number of unique query values: # 42118
-# new number of unique target values # 19693
+# old number of unique query values: 45559
+# old number of unique target values 20410
+# new number of unique query values: 42166
+# new number of unique target values 19708
 
-hgsql -e "select  count(*) from rnBlastTab\G" $db | tail -n +2
-# count(*): 18755
-hgsql -e "select  count(*) from rnBlastTab\G" $tempDb | tail -n +2
-# count(*): 42118
 
 # Make reciprocal best subset for the blastp pairs that are too
 # Far for synteny to help
@@ -1210,10 +1199,6 @@ cat $bToA/out/*.tab > $bToA/all.tab
 blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.tab
 hgLoadBlastTab $tempDb drBlastTab $aToB/recipBest.tab
 #hgLoadBlastTab $fishDb tfBlastTab $bToA/recipBest.tab
-hgsql -e "select  count(*) from drBlastTab\G" $db | tail -n +2
-# count(*): 12905
-hgsql -e "select  count(*) from drBlastTab\G" $tempDb | tail -n +2
-# count(*): 13109
 
 # Us vs. fly
 cd $dir/hgNearBlastp
@@ -1224,10 +1209,6 @@ cat $bToA/out/*.tab > $bToA/all.tab
 blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.tab
 hgLoadBlastTab $tempDb dmBlastTab $aToB/recipBest.tab
 # hgLoadBlastTab $flyDb tfBlastTab $bToA/recipBest.tab
-hgsql -e "select  count(*) from dmBlastTab\G" $db | tail -n +2
-# count(*): 5950
-hgsql -e "select  count(*) from dmBlastTab\G" $tempDb | tail -n +2
-# count(*): 5996
 
 # Us vs. worm
 cd $dir/hgNearBlastp
@@ -1238,10 +1219,6 @@ cat $bToA/out/*.tab > $bToA/all.tab
 blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.tab
 hgLoadBlastTab $tempDb ceBlastTab $aToB/recipBest.tab
 #hgLoadBlastTab $wormDb tfBlastTab $bToA/recipBest.tab
-hgsql -e "select  count(*) from ceBlastTab\G" $db | tail -n +2
-# count(*): 4964
-hgsql -e "select  count(*) from ceBlastTab\G" $tempDb | tail -n +2
-# count(*): 4412
 
 # Us vs. yeast
 cd $dir/hgNearBlastp
@@ -1599,11 +1576,11 @@ ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
 # 4. On hgwdev, insert new records into blatServers and targetDb, using the 
 # host (field 2) and port (field 3) specified by cluster-admin.  Identify the
 # blatServer by the keyword "$db"Kg with the version number appended
-hgsql hgcentraltest -e 'INSERT into blatServers values ("mm10KgSeq9", "blat1d", 17865, 0, 1);'
+hgsql hgcentraltest -e 'INSERT into blatServers values ("mm10KgSeq10", "blat1d", 17899, 0, 1);'
 hgsql hgcentraltest -e \                                                    
-      'INSERT into targetDb values("mm10KgSeq9", "UCSC Genes", \
+      'INSERT into targetDb values("mm10KgSeq10", "UCSC Genes", \
          "mm10", "kgTargetAli", "", "", \
-         "/gbdb/mm10/targetDb/kgTargetSeq9.2bit", 1, now(), "");'
+         "/gbdb/mm10/targetDb/kgTargetSeq10.2bit", 1, now(), "");'
 
 cd $dir
 
@@ -1621,16 +1598,16 @@ hgLoadBlastTab -maxPer=1 $yeastDb $blastTab run.$yeastDb.$tempDb/recipBest.tab
 
 # Do synteny on mouse/human/rat
 synBlastp.csh $xdb $db
-# old number of unique query values: # 87307
-# old number of unique target values # 23965
-# new number of unique query values: # 81564
-# new number of unique target values # 23309
+#old number of unique query values: 88204
+#old number of unique target values 24045
+#new number of unique query values: 81755
+#new number of unique target values 23316
 
 synBlastp.csh $ratDb $db ensGene knownGene
-# old number of unique query values: # 28103
-# old number of unique target values # 20267
-# new number of unique query values: # 25348
-# new number of unique target values # 19766
+#old number of unique query values: 28426
+#old number of unique target values 20286
+#new number of unique query values: 25637
+#new number of unique target values 19799
 
 # Clean up
 rm -r run.*/out
@@ -1647,7 +1624,7 @@ rm -r run.*/out
 
 # make bigKnownGene.bb
 set genomes = /hive/data/genomes
-set dir = $genomes/mm10/bed/ucsc.16.1
+set dir = $genomes/mm10/bed/ucsc.17.2
 cd $dir
 makeBigKnown mm10
 rm -f /gbdb/mm10/knownGene.bb

@@ -1,0 +1,10 @@
+# required db variable
+db dipOrd2
+# specific lifting to translate names:
+liftUp /hive/data/genomes/dipOrd2/jkStuff/ensToUcsc.lift
+
+skipInvalid yes
+# ENSDORT00000021579.2 txEnd 43903 >= chromSize 43893
+# ENSDORT00000020465.2 txEnd 13704 >= chromSize 13697
+# ENSDORT00000034132.1 txEnd 1251 >= chromSize 1244
+# checked: 27593 failed: 3

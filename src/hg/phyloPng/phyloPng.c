@@ -454,19 +454,13 @@ if (useCart)
 	if (NULL == phyloData || phyloData[0] == '\0' || cgiVarExists("phyloPng_restore"))
 	    {
 	    puts(
-"(((((((((\n"
-"(human_hg18:0.00669,chimp_panTro1:0.00757):0.0243,\n"
-"  macaque_rheMac2:0.0592):0.0240,\n"
-"    ((rat_rn4:0.0817,mouse_mm8:0.0770):0.229,\n"
-"          rabbit_oryCun1:0.207):0.107):0.0230,\n"
-"          (cow_bosTau2:0.159,dog_canFam2:0.148):0.0394):0.0285,\n"
-"          armadillo_dasNov1:0.150):0.0160,\n"
-"          (elephant_loxAfr1:0.105,tenrec_echTel1:0.260):0.0404):0.218,\n"
-"          monodelphis_monDom4:0.371):0.189,\n"
-"          chicken_galGal2:0.455):0.123,\n"
-"          xenopus_xenTro1:0.782):0.156,\n"
-"          ((tetraodon_tetNig1:0.199,fugu_fr1:0.239):0.493,\n"
-"              zebrafish_danRer3:0.783):0.156);"
+"(((((Human:0.00655,\n"
+"    Chimp:0.00684):0.027424,\n"
+"   Rhesus:0.037601):0.109934,\n"
+"  (Mouse:0.084509,\n"
+"  Rat:0.091589):0.271974):0.020593,\n"
+" Dog:0.165928):0.258392,\n"
+"Opossum:0.340786);\n"
 		);
 	    }
 	else
@@ -477,6 +471,7 @@ if (useCart)
 	puts("</td></tr>");
 	puts("<tr><td>&nbsp;</td><td>");
 	puts("<INPUT type=\"submit\" name=\"phyloPng_submit\" value=\"submit\">");
+	cgiMakeClearButtonNoSubmit("mainForm", "phyloPng_tree");
 	puts("</td></tr>");
 	puts("</table>");
 	puts("</form>");
@@ -541,9 +536,8 @@ if (useCart)
 "\"nonconserved\" sites according to phastCons.  The numbers are significant\n"
 "to two or three figures.<br>\n"
 "<br>\n"
-"6. Wrap-in-html is useful when the browser automatically shinks a large image.\n"
+"6. Wrap-in-html is useful when the browser automatically shrinks a large image.\n"
 "This option keeps the image view full in the browser automatically.\n"
-"However, do not use with IE6 when performing save-as.\n"
 "<br>"
 	    );
 	cartWebEnd();
@@ -583,6 +577,7 @@ if (htmlPageWrapper)
     freez(&phyloData);
     return 0;
     }
+
 
 
 
@@ -632,20 +627,20 @@ errCatchFree(&errCatch);
 if (errMsg)
     {
     if (onWeb)
-	{
-	printf("Content-type: text/html\r\n");
-	printf("\r\n");
-	puts("<html><head><title>PhyloTree parse error</title></head><body><pre>");
-	/* we dont think the specific error message coming back are correct or useful
-	 * so supply a generic err msg */
-    	htmlPrintf("Original input tree:\n[%s]\n\n",cgiString("phyloPng_tree"));
-    	htmlPrintf("Input tree as passed to parser:\n[%s]\n\n",phyloData);
-    	printf("Parser syntax error:\n%s",errMsg);
-    	puts("</pre></body></html>");
-	}
+        {
+        printf("Content-type: text/html\r\n");
+        printf("\r\n");
+        puts("<html><head><title>PhyloTree parse error</title></head><body><pre>");
+        /* we dont think the specific error message coming back are correct or useful
+        * so supply a generic err msg */
+        htmlPrintf("Original input tree:\n[%s]\n\n",cgiString("phyloPng_tree"));
+        htmlPrintf("Input tree as passed to parser:\n[%s]\n\n",phyloData);
+        printf("Parser syntax error:\n%s",errMsg);
+        puts("</pre></body></html>");
+        }
     else
 	{
-    	warn("%s", errMsg);
+	warn("%s", errMsg);
 	}
     freez(&errMsg);    
     freez(&phyloData);

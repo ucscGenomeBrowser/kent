@@ -11,9 +11,10 @@ export sshCmd="ssh -x -o 'StrictHostKeyChecking = no' -o 'BatchMode = yes'"
 
 # the 1>&2 makes the printf output to stderr
 
-if [ $# -ne 1 ]; then
-  printf "usage: ./startParaHub.sh <hubId>\n" 1>&2
+if [ $# -ne 2 ]; then
+  printf "usage: ./startParaHub.sh <hubId> <ssh-key-name>\n" 1>&2
   printf "where <hubId> is something simple like: 0 1 2 ...\n" 1>&2
+  printf "and <ssh-key-name> is a key pair name you created\n" 1>&2
   printf "you can run more than one parasol hub if you like, but that is\n" 1>&2
   printf "not the normal situation.  More for experiments than anything\n" 1>&2
   printf "else.  Only one parasol hub is needed.\n" 1>&2
@@ -21,6 +22,7 @@ if [ $# -ne 1 ]; then
 fi
 
 export hubId=$1
+export keyName=$2
 
 function dividingLine {
   dateTag=`date "+%s %F %T"`
@@ -98,7 +100,7 @@ dividingLine > ${logFile}
 
 printf "### openstack server create ${hostName} \
    --image "${imageId}" \
-   --flavor ${flavor} --key-name macRetina1T \
+   --flavor ${flavor} --key-name ${keyName} \
    --user-data ${startScript}\n" >> ${logFile}
 
 #########################################################################
@@ -108,7 +110,7 @@ dividingLine >> ${logFile}
 
 openstack server create ${hostName} \
    --image "${imageId}" \
-   --flavor ${flavor} --key-name macRetina1T \
+   --flavor ${flavor} --key-name ${keyName} \
    --user-data ${startScript} >> ${logFile}
 
 #########################################################################

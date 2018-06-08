@@ -1,0 +1,6 @@
+# required db variable
+db hetGla1
+
+# remove the first .1 from the contig names in the Ensembl GTF file
+# the ENS names being dropped have illegal coordinates
+nameTranslation "s/\.1//; s/^MT/chrM/; /ENSHGLT00100030844/d; /ENSHGLT00100031497/d; /ENSHGLT00100031744/d; /ENSHGLT00100029130/d;"

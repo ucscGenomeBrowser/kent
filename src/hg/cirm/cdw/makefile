@@ -22,6 +22,7 @@ UTIL_DIRS = \
     cdwDumpManiFiles \
     cdwFakeManifestFromSubmit \
     cdwFindSymlinkable \
+    cdwGroupFile \
     cdwGroupUser \
     cdwJob \
     cdwMakeContaminationQa \
@@ -49,11 +50,13 @@ UTIL_DIRS = \
     cdwUndeprecate \
     cdwUnlockSubmittedFile \
     cdwUnlockSubmittedFiles \
+    cdwUpdateIx \
     utils/cdwFastqPolyFilter \
     utils/cdwVcfStats
 
 CGI_DIRS = \
     cdwGetFile \
+    cdwGetMetadataAsFile \
     cdwServeTagStorm \
     cdwWebBrowse 
 

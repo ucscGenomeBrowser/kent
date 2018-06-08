@@ -923,7 +923,7 @@ void printCustomUrlWithLabel(struct trackDb *tdb, char *itemName, char *itemLabe
 char urlLabelSetting[32];
 
 // replace the $$ and other wildchards with the url given in tdb 
-char *url = getUrlSetting(tdb, "url");
+char *url = getUrlSetting(tdb, urlSetting);
 //char* eUrl = constructUrl(tdb, url, itemName, encode);
 if (url==NULL || isEmpty(url))
     return;
@@ -9952,7 +9952,125 @@ printCosmicDetails(tdb, item);
 printTrackHtml(tdb);
 }
 
-void printDecipherDetails(struct trackDb *tdb, char *itemName, boolean encode)
+void printDecipherSnvsDetails(struct trackDb *tdb, char *itemName, boolean encode)
+/* Print details of a DECIPHER entry. */
+{
+struct sqlConnection *conn = hAllocConn(database);
+char query[256];
+struct sqlResult *sr;
+char **row;
+char *strand={"+"};
+int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
+char *chrom = cartString(cart, "c");
+
+/* So far, we can just remove "chr" from UCSC chrom names to get DECIPHER names */
+char *decipherChrom = chrom;
+if (startsWithNoCase("chr", decipherChrom))
+    decipherChrom += 3;
+
+printf("<H3>Patient %s </H3>", itemName);
+
+/* print phenotypes and other information, if available */
+if (sqlFieldIndex(conn, "decipherSnvsRaw", "phenotypes") >= 0)
+    {
+    sqlSafef(query, sizeof(query),
+        "select phenotypes, refAllele, altAllele, transcript, gene, genotype, "
+        "inheritance, pathogenicity, contribution "
+        "from decipherSnvsRaw where id = '%s' and chr = '%s' and start = %d and end = %d",
+        itemName, decipherChrom, start+1, end);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if ((row != NULL) && strlen(row[0]) >= 1)
+        {
+        char *phenoString = replaceChars(row[0], "|", "</li>\n<li>");
+        printf("<b>Phenotypes:</b>\n<ul>\n"
+               "<li>%s</li>\n"
+               "</ul>\n", phenoString);
+        // freeMem(phenoString);
+        }
+    if (row != NULL)
+        {
+        char *hgsidString = cartSidUrlString(cart);
+        if (isNotEmpty(row[1]))
+            {
+            printf("<b>Ref Allele:</b> %s\n<br>\n", row[1]);
+            }
+        if (isNotEmpty(row[2]))
+            {
+            printf("<b>Alt Allele:</b> %s\n<br>\n", row[2]);
+            }
+        if (isNotEmpty(row[3]))
+            {
+            printf("<b>Transcript:</b> <a href='../cgi-bin/hgTracks?%s&position=%s'>%s</a>\n<br>\n",
+                hgsidString, row[3], row[3]);
+            }
+        if (isNotEmpty(row[4]))
+            {
+            printf("<b>Gene:</b> <a href='../cgi-bin/hgTracks?%s&position=%s'>%s</a>\n<br>\n",
+                hgsidString, row[4], row[4]);
+            }
+        if (isNotEmpty(row[5]))
+            {
+            printf("<b>Genotype:</b> %s\n<br>\n", row[5]);
+            }
+        if (isNotEmpty(row[6]))
+            {
+            printf("<b>Inheritance:</b> %s\n<br>\n", row[5]);
+            }
+        if (isNotEmpty(row[7]))
+            {
+            printf("<b>Pathogenicity:</b> %s\n<br>\n", row[5]);
+            }
+        if (isNotEmpty(row[8]))
+            {
+            printf("<b>Contribution:</b> %s\n<br>\n", row[5]);
+            }
+        }
+    sqlFreeResult(&sr);
+    }
+else
+    {
+    sqlSafef(query, sizeof(query),
+          "select distinct phenotype from decipherSnvsRaw where id ='%s' order by phenotype", itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if ((row != NULL) && strlen(row[0]) >= 1)
+        {
+        printf("<B>Phenotype: </B><UL>");
+        while (row != NULL)
+            {
+        printf("<LI>");
+        printf("%s\n", row[0]);
+        row = sqlNextRow(sr);
+            }
+        printf("</UL>");
+        }
+    sqlFreeResult(&sr);
+    }
+
+/* link to Ensembl DECIPHER Patient View page */
+printf("<B>Patient View: </B>\n");
+printf("More details on patient %s at ", itemName);
+printf("<A HREF=\"%s%s\" target=_blank>",
+       "https://decipher.sanger.ac.uk/patient/", itemName);
+printf("DECIPHER</A>.<BR><BR>");
+
+/* print position info */
+printPosOnChrom(chrom, start, end, strand, TRUE, itemName);
+
+hFreeConn(&conn);
+}
+
+void doDecipherSnvs(struct trackDb *tdb, char *item, char *itemForUrl)
+/* Put up DECIPHER track info. */
+{
+genericHeader(tdb, item);
+printDecipherSnvsDetails(tdb, item, FALSE);
+printTrackHtml(tdb);
+}
+
+void printDecipherCnvsDetails(struct trackDb *tdb, char *itemName, boolean encode)
 /* Print details of a DECIPHER entry. */
 {
 struct sqlConnection *conn = hAllocConn(database);
@@ -10077,11 +10195,11 @@ hFreeConn(&conn);
 hFreeConn(&conn2);
 }
 
-void doDecipher(struct trackDb *tdb, char *item, char *itemForUrl)
+void doDecipherCnvs(struct trackDb *tdb, char *item, char *itemForUrl)
 /* Put up DECIPHER track info. */
 {
 genericHeader(tdb, item);
-printDecipherDetails(tdb, item, FALSE);
+printDecipherCnvsDetails(tdb, item, FALSE);
 printTrackHtml(tdb);
 }
 
@@ -25507,7 +25625,11 @@ else if (sameWord(table, "gad"))
     }
 else if (sameWord(table, "decipher"))
     {
-    doDecipher(tdb, item, NULL);
+    doDecipherCnvs(tdb, item, NULL);
+    }
+else if (sameWord(table, "decipherSnvs"))
+    {
+    doDecipherSnvs(tdb, item, NULL);
     }
 else if (sameWord(table, "omimGene"))
     {

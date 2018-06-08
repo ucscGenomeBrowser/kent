@@ -181,7 +181,10 @@ hashAdd(processed, mkAnnAddrKey(ann), ann);
 static struct gff3File *loadGff3(char *inGff3File)
 /* load GFF3 into memory */
 {
-struct gff3File *gff3File = gff3FileOpen(inGff3File, maxParseErrors, NULL);
+unsigned flags = 0;
+if (warnAndContinue)
+    flags |= GFF3_WARN_WHEN_POSSIBLE;
+struct gff3File *gff3File = gff3FileOpen(inGff3File, maxParseErrors, flags, NULL);
 if (gff3File->errCnt > 0)
     errAbort("%d errors parsing GFF3 file: %s", gff3File->errCnt, inGff3File); 
 return gff3File;

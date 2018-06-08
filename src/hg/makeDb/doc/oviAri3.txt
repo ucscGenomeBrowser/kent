@@ -806,4 +806,26 @@ mysql>  LOAD DATA LOCAL INFILE "oviAri3.cytoBand" INTO TABLE cytoBandIdeo;
     time (doRecipBest.pl -buildDir=`pwd` oviAri3 equCab2) > rbest.log 2>&1
     # real    40m15.262s
 
-#########################################################################
+############################################################################
+# construct liftOver to oviAri4 (DONE - 2018-04-30 - ChrisL)
+    screen -S oviAri4	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/oviAri3/bed/blat.oviAri3.2018-04-30
+    cd /hive/data/genomes/oviAri3/bed/blat.oviAri3.2018-08-30
+
+    # check it with -debug first to see if it is going to work:
+    doSameSpeciesLiftOver.pl -debug -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/oviAri3/jkStuff/oviAri3.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         oviAri3 oviAri4 > do.log 2>&1
+
+    # if that is OK, then run it:
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/oviAri3/jkStuff/oviAri3.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         oviAri3 oviAri4) > do.log 2>&1 &
+
+    #	real    109m42.711s
+
+    # verify this file exists:
+    #	/gbdb/oviAri3/liftOver/oviAri3ToOviAri4.over.chain.gz
+    # and try out the conversion on genome-test from oviAri1 to oviAri3

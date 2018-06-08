@@ -9,14 +9,15 @@ export sshCmd="ssh -x -o 'StrictHostKeyChecking = no' -o 'BatchMode = yes'"
 
 # the 1>&2 makes the printf output to stderr
 
-if [ $# -ne 2 ]; then
-  printf "usage: ./startParaNode.sh <internal IP for paraHub> <id number 0-9>\n" 1>&2
-  printf "e.g: ./startParaNode.sh 10.109.0.40 3\n" 1>&2
+if [ $# -ne 3 ]; then
+  printf "usage: ./startParaNode.sh <internal IP for paraHub> <id number 0-9> <ssh-key-name>\n" 1>&2
+  printf "e.g: ./startParaNode.sh 10.109.0.40 3 keyName\n" 1>&2
   exit 255;
 fi
 
 export paraHub=$1
 export nodeId=$2
+export keyName=$3
 
 printf "# setting up for hub: %s\n" "${paraHub}" 1>&2
 
@@ -98,14 +99,14 @@ dividingLine > ${logFile}
 
 printf "### openstack server create ${hostName} \
    --image "${imageId}" \
-   --flavor ${flavor} --key-name macRetina1T \
+   --flavor ${flavor} --key-name ${keyName} \
    --user-data ${startScript}\n" >> ${logFile}
 #########################################################################
 dividingLine >> ${logFile}
 
 openstack server create ${hostName} \
    --image "${imageId}" \
-   --flavor ${flavor} --key-name macRetina1T \
+   --flavor ${flavor} --key-name ${keyName} \
    --user-data ${startScript} >> ${logFile}
 
 #########################################################################

@@ -1,0 +1,7 @@
+# required db variable
+db manLeu1
+# specific lifting to translate names:
+liftUp /hive/data/genomes/manLeu1/jkStuff/ensToUcsc.lift
+
+skipInvalid yes
+# ENSMLET00000030838.1 txEnd 35289 >= chromSize 35264

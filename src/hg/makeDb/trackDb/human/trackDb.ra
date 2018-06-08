@@ -97,8 +97,8 @@ type bed 4
 url http://geneticassociationdb.nih.gov/cgi-bin/tableview.cgi?table=allview&cond=gene=
 
 track decipher
-shortLabel DECIPHER
-longLabel DECIPHER: Chromosomal Imbalance and Phenotype in Humans
+shortLabel DECIPHER CNVs
+longLabel DECIPHER: Chromosomal Imbalance and Phenotype in Humans (CNVs)
 group phenDis
 visibility hide
 color 0,0,0
@@ -107,9 +107,21 @@ tableBrowser off decipherRaw knownToDecipher knownCanonToDecipher
 prevExonText Left edge
 nextExonText Right edge
 
+track decipherSnvs
+shortLabel DECIPHER SNVs
+longLabel DECIPHER: Chromosomal Imbalance and Phenotype in Humans (SNVs)
+group phenDis
+visibility hide
+color 0,0,0
+type bed 4
+tableBrowser off decipherSnvsRaw
+prevExonText Left edge
+nextExonText Right edge
+html decipher
+
 track phegeni
-shortLabel dbGap SNPs
-longLabel dbGap GWAS SNPs from the Phenotype-Genotype Integrator
+shortLabel PheGenI SNPs
+longLabel NCBI Phenotype-Genotype Integrator SNPs
 group phenDis
 visibility hide
 color 0,100,0
@@ -117,7 +129,7 @@ type bigBed 9 +
 release alpha
 mouseOverField trait
 bigDataUrl /gbdb/$D/bbi/phegeni.bb
-urls studyId=https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=$$ geneId1=https://www.ncbi.nlm.nih.gov/gene/?term=$$%5Buid%5D geneId2=https://www.ncbi.nlm.nih.gov/gene/?term=$$%5Buid%5D
+urls studyId=https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=$$ geneId1=https://www.ncbi.nlm.nih.gov/gene/?term=$$%5Buid%5D geneId2=https://www.ncbi.nlm.nih.gov/gene/?term=$$%5Buid%5D analysisId=https://www.ncbi.nlm.nih.gov/projects/SNP/gViewer/gView.cgi?aid=$$ catalogId=https://www.ebi.ac.uk/gwas/search?query=$$
 
 track caseControl
 compositeTrack on
@@ -4501,6 +4513,12 @@ include phastBias.ra
 
 searchName decipherId
 searchTable decipher
+termRegex [0-9]+
+searchType bed
+searchPriority 50
+
+searchName decipherSnvsId
+searchTable decipherSnvs
 termRegex [0-9]+
 searchType bed
 searchPriority 50

@@ -960,6 +960,13 @@ if (hashLookup(tableListProfChecked, key) == NULL)
 boolean hTableExists(char *db, char *table)
 /* Return TRUE if a table exists in db. */
 {
+if (sameWord(db, CUSTOM_TRASH))
+    {
+    struct sqlConnection *conn = hAllocConn(db);
+    boolean toBeOrNotToBe = sqlTableExists(conn, table);
+    hFreeConn(&conn);
+    return toBeOrNotToBe;
+    }
 struct hash *hash = tableListGetDbHash(db);
 struct slName *tableNames = NULL, *tbl = NULL;
 char trackName[HDB_MAX_TABLE_STRING];
@@ -5427,8 +5434,8 @@ struct trackDb *findTdbForTable(char *db,struct trackDb *parent,char *table, str
 if(isEmpty(table))
     return parent;
 
-// hub tracks aren't in the trackDb hash, just use the parent tdb
-if (isHubTrack(table))
+// hub tracks and custom tracks on hubs aren't in the trackDb hash, just use the parent tdb
+if (isHubTrack(table) || isHubTrack(db))
     return parent;
 
 struct trackDb *tdb = NULL;

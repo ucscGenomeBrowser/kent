@@ -41,6 +41,7 @@ wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneV24
     visibility pack
     subTrack wgEncodeGencodeV24
     type genePred
+    idXref wgEncodeGencodeAttrsV24 transcriptId geneId
     itemClassTbl wgEncodeGencodeAttrsV24
     itemClassNameColumn transcriptId
     itemClassClassColumn transcriptClass

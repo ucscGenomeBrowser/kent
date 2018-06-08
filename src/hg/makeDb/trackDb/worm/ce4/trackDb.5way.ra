@@ -23,8 +23,8 @@ html multiz5way
         longLabel Multiz Alignments of 5 Nematodes
         subGroups view=align
         noInherit on
-        summary multiz6waySummary
-#        frames multiz6wayFrames
+        summary multiz5waySummary
+#        frames multiz5wayFrames
 #        irows on
         color 0, 10, 100
         altColor 0,90,10

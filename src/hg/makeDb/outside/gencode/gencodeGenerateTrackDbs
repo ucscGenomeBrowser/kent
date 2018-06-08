@@ -98,6 +98,7 @@ def trackDbTemplateGen(params):
         "    visibility pack",
         "    subTrack wgEncodeGencodeV{gencodeVer}",
         "    type genePred",
+        "    idXref wgEncodeGencodeAttrsV{gencodeVer} transcriptId geneId",
         "    itemClassTbl wgEncodeGencodeAttrsV{gencodeVer}",
         "    itemClassNameColumn transcriptId",
         "    itemClassClassColumn transcriptClass",

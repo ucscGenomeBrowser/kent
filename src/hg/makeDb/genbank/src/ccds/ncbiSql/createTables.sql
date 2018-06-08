@@ -14,7 +14,8 @@ CREATE TABLE [dbo].[Accessions] (
 	[prot_version] [int] NULL ,
 	[prot_gi] [bigint] NULL ,
 	[organization_uid] [int] NOT NULL ,
-	[alive] [bit] NOT NULL 
+	[alive] [bit] NOT NULL ,
+	[review_status] [int] NULL 
 ) ON [PRIMARY]
 go
 

@@ -3,6 +3,8 @@ db dm6
 # optional nameTranslation, the sed command that will transform
 #	Ensemble names to UCSC names.  With quotes just to make sure.
 # The dm6 from Ensembl has a different chrM sequence, remove it from here
-nameTranslation "/^dmel_mitochondrion_genome/d"
+# in v91 the name became mitochondrion_genome even though their sequence
+# fasta still has dmel_mitochondrion_genome
+nameTranslation "/^dmel_mitochondrion_genome/d; /^mitochondrion_genome/d"
 # this liftUp will translate all the other names
 liftUp /hive/data/genomes/dm6/jkStuff/ensToUcsc.lift

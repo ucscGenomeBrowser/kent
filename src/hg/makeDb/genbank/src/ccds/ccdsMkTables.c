@@ -19,6 +19,18 @@
 #include <sys/types.h>
 #include <regex.h>
 
+/*
+ * Notes:
+ * - Can't use sqlSafef because original code is formatting table names as
+ *   well as values. Also need to deal with dynamically building a vector of
+ *   values on in-clauses, which is a pain in C.  It is an internal program,
+ *   so we really don't have to worry about injection.
+ * - Much more could be done in SQL.  Lack of subselect and performance issues
+ *   in MySQL 4 caused a lot to be moved into C.  Not really worth fixing unless
+ *   the database changes.
+ */
+
+
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -250,7 +262,8 @@ static char *mkCommonWhere(struct genomeInfo *genome, struct sqlConnection *conn
                            boolean inclStatus)
 /* Get the common clause.  This is the where clause that selects GroupVersions
  * and CcdsUids that are currently selected by organism, build, and optionally status
- * values. WARNING: static return. */
+ * values.  The result will still need to have taxonId, ccdsBuildId, and optionally 
+WARNING: static return. */
 {
 static char clause[1025];
 safef(clause, sizeof(clause),
@@ -289,8 +302,8 @@ static void findPartialMatches(struct sqlConnection *conn, struct genomeInfo *ge
 {
 verbose(2, "begin findPartialMatches\n");
 char select[4096];
-sqlSafef(select, sizeof(select),
-      "SELECT "
+safef(select, sizeof(select),
+      NOSQLINJ "SELECT "
       "CcdsUids.ccds_uid, GroupVersions.ccds_version "
       "FROM %s, CcdsStatusVals, Interpretations, InterpretationSubtypes "
       "WHERE %s "
@@ -321,8 +334,8 @@ static void findReplaced(struct sqlConnection *conn, struct genomeInfo *genome,
 {
 verbose(2, "begin findReplaced\n");
 static char select[4096];
-sqlSafef(select, sizeof(select),
-      "SELECT "
+safef(select, sizeof(select),
+      NOSQLINJ "SELECT "
       "CcdsUids.ccds_uid, GroupVersions.ccds_version "
       "FROM %s, Interpretations, InterpretationSubtypes "
       "WHERE %s "
@@ -366,8 +379,8 @@ static char *mkCcdsInfoSelect(struct genomeInfo *genome, struct sqlConnection *c
 {
 static char select[4096];
 boolean inclStatus = selectByStatus();
-sqlSafef(select, sizeof(select),
-      "SELECT "
+safef(select, sizeof(select),
+      NOSQLINJ "SELECT "
       "CcdsUids.ccds_uid, GroupVersions.ccds_version, "
       "Organizations.name, "
       "Accessions.nuc_acc, Accessions.nuc_version, "
@@ -519,8 +532,8 @@ static char select[4096];
  */
 boolean inclStatus = selectByStatus();
 
-sqlSafef(select, sizeof(select),
-      "SELECT "
+safef(select, sizeof(select),
+      NOSQLINJ "SELECT "
       "Interpretations.ccds_uid, Interpretations.integer_val, date_format(Interpretations.date_time, \"%%Y-%%m-%%d\"), Interpretations.comment "
       "FROM %s, Interpretations, InterpretationSubtypes "
       "WHERE %s "
@@ -530,8 +543,8 @@ sqlSafef(select, sizeof(select),
       "AND (InterpretationSubtypes.interpretation_subtype = \"Public note\")",
       mkCommonFrom(inclStatus), mkCommonWhere(genome, conn, inclStatus));
 #else
-sqlSafef(select, sizeof(select),
-      "SELECT "
+safef(select, sizeof(select),
+      NOSQLINJ "SELECT "
       "Interpretations.ccds_uid, Interpretations.integer_val, date_format(Interpretations.date_time, \"%%Y-%%m-%%d\"), Interpretations.comment "
       "FROM Interpretations, InterpretationSubtypes "
       "WHERE "
@@ -612,8 +625,8 @@ static char *mkCcdsGeneSelect(struct genomeInfo *genome, struct sqlConnection *c
 {
 boolean inclStatus = selectByStatus();
 static char select[4096];
-sqlSafef(select, sizeof(select),
-      "SELECT "
+safef(select, sizeof(select),
+      NOSQLINJ "SELECT "
       "CcdsUids.ccds_uid, GroupVersions.ccds_version, "
       "Locations_GroupVersions.chromosome, "
       "Groups.orientation, "

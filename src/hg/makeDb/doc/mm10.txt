@@ -15379,6 +15379,46 @@ TMPDIR=/scratch/tmp
       -stop=load -buildDir=`pwd` mm10 ensGene
     # real    235m41.378s
 
+    ##########################################################################
+    # FIXUP broken files (working - Max and Hiram - 2018-04,05)
+
+    # Max generated a new specScores.tab, add in the chrM specScores
+    # and make a unique set in a new specScores.tab file
+
+    cd /hive/data/genomes/mm10/bed/crispr.10K/uniqSpecScores
+
+    printf "targetSeq\tmitSpecScore\tofftargetCount\ttargetGenomeGeneLocus\n" \
+	> max.withChrM.specScores.tab
+
+    grep -h -v targetSeq ../specScores.max.tab ../addChrM/specScores.tab \
+	| $HOME/bin/x86_64/gnusort -S100G --parallel=32 -u \
+	>> max.withChrM.specScores.tab
+    # real    1m39.468s
+
+    # this new file is much larger than before:
+# -rw-rw-r-- 1 3616703851 Jul 31  2017 withChrM.specScores.tab
+# -rw-rw-r-- 1 5580638498 May 15 14:55 max.withChrM.specScores.tab
+
+    # Now generate a new crispr.bed and crispr.bb file
+
+    mkdir  /hive/data/genomes/mm10/bed/crispr.10K/maxBed
+    cd  /hive/data/genomes/mm10/bed/crispr.10K/maxBed
+    # setup new inputs:
+    ln -s ../addChrM/withChrM.allGuides.bed withChrM.allGuides.bed
+    ln -s ../uniqSpecScores/max.withChrM.specScores.tab max.withChrM.specScores.tab
+    ln -s ../addChrM/withChrM.effScores.tab withChrM.effScores.tab
+    ln -s ../addChrM/withChrM.offtargets.offsets.tab withChrM.offtargets.offsets.tab
+    ln -s ../addChrM/offTargets ./offTargets
+
+    time (/cluster/software/bin/python \
+      /hive/data/outside/crisprTrack/scripts/createBigBed.py mm10 \
+	withChrM.allGuides.bed max.withChrM.specScores.tab \
+     withChrM.effScores.tab withChrM.offtargets.offsets.tab) > newBed.log 2>&1
+    # real    232m5.379s
+
+# -rw-rw-r-- 1 27947769791 May 15 17:55 crispr.bed
+# -rw-rw-r-- 1  6911180170 May 15 18:42 crispr.bb
+
 ##############################################################################
 # LASTZ Gorilla gorGor5 (DONE - 2017-08-04 - Hiram)
     #	establish a screen to control this job
@@ -16954,13 +16994,13 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) >> do.log 2>&1 &
-XXX -stopped here
+    # real  18m40.051s
 
     cat fb.mm10.chainOviAri4Link.txt
-    # 432006690 bases of 2652783500 (16.285%) in intersection
+    # 693504453 bases of 2652783500 (26.143%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` mm10 oviAri4) > rbest.log 2>&1 &
-    # real    17m24.577s
+    # real    485m29.546s
 
     # and for the swap:
     mkdir /hive/data/genomes/oviAri4/bed/blastz.mm10.swap
@@ -16970,12 +17010,155 @@ XXX -stopped here
       /hive/data/genomes/mm10/bed/lastzOviAri4.2018-04-25/DEF \
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-            -syntenicNet) > swap.log 2>&1
-    #  real    31m27.481s
+            -syntenicNet) > swap.log 2>&1 &
+    #  real    63m12.935s
 
     cat fb.oviAri4.chainMm10Link.txt
-    #422549165 bases of 2534335866 (16.673%) in intersection
+    # 680117358 bases of 2587515673 (26.285%) in intersection
 
-    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` oviAri4 mm10) > rbest.log 2>&1
-    # real    16m45.956s
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` oviAri4 mm10) > rbest.log 2>&1 &
+    # real    437m1.637s
 
+#########################################################################
+# RepeatMasker Visualization track update (TBD - 2018-05-15 - ChrisL)
+
+    screen -S rmskJoined.2018-05-15
+
+    # if this is an update to an already existing rmsk build, re-run
+    # masking with new libraries. Otherwise skip to rmskJoined below
+    mkdir /hive/data/genomes/mm10/bed/repeatMasker.2018-05-15
+    cd /hive/data/genomes/mm10/bed/repeatMasker.2018-05-15
+
+    time (doRepeatMasker.pl -stop=mask -bigClusterHub=ku \
+       -workhorse=hgwdev -dbHost=hgwdev -buildDir=`pwd` mm10) > mask.log 2>&1 &
+    # real    705m12.538s
+
+    # fill in grep to get rid of the missing id items (not necessary this run):
+    # grep -v "" \
+    #     mm10.fa.out > clean.mm10.fa.out
+    # mv clean.mm10.fa.out mm10.fa.out
+
+    # finish the last step of doCat.csh, if necessary:
+    # /cluster/bin/scripts/extractNestedRepeats.pl mm10.fa.out | sort -k1,1 -k2,2n > mm10.nestedRepeats.bed
+
+    # rmskJoinedCurrent steps
+    mkdir /hive/data/genomes/mm10/bed/rmskJoined.2018-05-15
+    cd /hive/data/genomes/mm10/bed/rmskJoined.2018-05-15
+
+    ln -s ../repeatMasker.2018-05-15/mm10.sorted.fa.out .
+    ln -s ../repeatMasker.2018-05-15/mm10.fa.align .
+
+    time (/scratch/data/RepeatMasker/util/rmToUCSCTables.pl \
+        -out mm10.sorted.fa.out -align mm10.fa.align.gz) > rerun.log 2>&1 &
+    # real    102m53.576s
+
+    # confirm the counts are different from the previous version:
+    # wc -l ../rmskJoined/mm10.fa.align.tsv ../rmskJoined/mm10.sorted.fa.join.bed ../rmskJoined/mm10.sorted.fa.out.tsv
+   5918456 ../rmskJoined/mm10.fa.align.tsv
+   4657599 ../rmskJoined/mm10.sorted.fa.join.bed
+   5249545 ../rmskJoined/mm10.sorted.fa.out.tsv
+  15825600 total
+    # wc -l *.tsv
+   5888031 mm10.fa.align.tsv
+   4646880 mm10.sorted.fa.join.tsv
+   5235053 mm10.sorted.fa.out.tsv
+  15769964 total
+
+    # sub rmskJoinedBaseline for rmskJoinedCurrent if this is the first version for this assembly
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/rmskJoined.sql \
+        -renameSqlTable -verbose=4 -tab \
+            -type=bed4+9 -as=$HOME/kent/src/hg/lib/rmskJoined.as mm10 \
+                rmskJoinedCurrent mm10.sorted.fa.join.tsv \
+                    > loadJoined.log 2>&1
+    # Error line 1028733 of mm10.sorted.fa.join.tsv:
+    # chromStart after chromEnd (21000277 > 21000266)
+    # is it  the only one ?
+    awk -F'\t' '{if ($2 > $3) sum+=1} END {print sum}' mm10.sorted.fa.join.tsv
+    # 1
+
+    # remove it and run above hgLoadBed again:
+    awk -F'\t' '{if ($2 < $3) print;}' mm10.sorted.fa.join.tsv  > mm10.sorted.fa.join.cleaned
+    mv mm10.sorted.fa.join.cleaned mm10.sorted.fa.join.tsv
+
+    # sub rmskAlignBaseline for rmskAlignCurrent if this is the first version for this assembly
+    hgLoadSqlTab mm10 rmskAlignCurrent \
+        /cluster/home/chmalee/kent/src/hg/lib/rmskAlign.sql \
+            mm10.fa.align.tsv > loadAlign.log 2>&1
+
+    # sub rmskOutBaseline for rmskOutCurrent if this is the first version for this assembly
+    hgLoadOutJoined -verbose=2 -table=rmskOutCurrent mm10 mm10.sorted.fa.out > loadOut.log 2>&1
+
+    featureBits -countGaps mm10 rmskJoinedBaseline
+    # 2243948952 bases of 2730871774 (82.170%) in intersection
+    featureBits -countGaps mm10 rmskJoinedCurrent
+    # 2249729653 bases of 2730871774 (82.381%) in intersection
+
+#########################################################################
+# LASTZ mouse/mm10 horse/equCab3 - (DONE - 2018-05-25 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzEquCab3.2018-05-25
+    cd /hive/data/genomes/mm10/bed/lastzEquCab3.2018-05-25
+
+    printf '# mouse vs horse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_M=254
+# default BLASTZ_Q score matrix:
+#       A     C     G     T
+# A    91  -114   -31  -123
+# C  -114   100  -125   -31
+# G   -31  -125   100  -114
+# T  -123   -31  -114    91
+
+# TARGET: mouse mm10
+SEQ1_DIR=/hive/data/genomes/mm10/mm10.2bit
+SEQ1_LEN=/hive/data/genomes/mm10/chrom.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=2
+SEQ1_LAP=10000
+
+# QUERY: horse equCab3
+SEQ2_DIR=/hive/data/genomes/equCab3/equCab3.2bit
+SEQ2_LEN=/hive/data/genomes/equCab3/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=10
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzEquCab3.2018-05-25
+TMPDIR=/dev/shm
+' > DEF
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1 &
+    # real    605m50.368s
+
+    cat fb.mm10.chainEquCab3Link.txt
+    # 921489718 bases of 2652783500 (34.737%) in intersection
+
+    cat fb.mm10.chainSynEquCab3Link.txt
+    # 876836391 bases of 2652783500 (33.053%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` mm10 equCab3) > rbest.log 2>&1 &
+XXX - running - Wed Jun  6 09:25:52 PDT 2018
+    # real    485m29.546s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/equCab3/bed/blastz.mm10.swap
+    cd /hive/data/genomes/equCab3/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/mm10/bed/lastzEquCab3.2018-05-25/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1 &
+XXX - running - Wed Jun  6 09:25:52 PDT 2018
+    #  real    63m12.935s
+
+    cat fb.equCab3.chainMm10Link.txt
+    # 680117358 bases of 2587515673 (26.285%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` equCab3 mm10) > rbest.log 2>&1 &
+    # real    437m1.637s
+
+#########################################################################

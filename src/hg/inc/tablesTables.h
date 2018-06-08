@@ -5,6 +5,8 @@
 #ifndef TABLESTABLES_H
 #define TABLESTABLES_H
 
+#include "facetField.h"
+
 void webTableBuildQuery(struct cart *cart, char *from, char *initialWhere, 
     char *varPrefix, char *fields, boolean withFilters, 
     struct dyString **retQuery, struct dyString **retWhere);
@@ -38,6 +40,7 @@ void webFilteredFieldedTable(struct cart *cart, struct fieldedTable *table,
     int maxLenField, struct hash *tagOutputWrappers, void *wrapperContext,
     boolean withFilters, char *itemPlural, 
     int pageSize, struct fieldedTableSegment *largerContext, struct hash *suggestHash, 
+    struct facetField **ffArray, char *visibleFacetList,
     void (*addFunc)(void) );
 /* Show a fielded table that can be sorted by clicking on column labels and optionally
  * that includes a row of filter controls above the labels .
@@ -49,7 +52,7 @@ void webFilteredSqlTable(struct cart *cart, struct sqlConnection *conn,
     char *fields, char *from, char *initialWhere,  
     char *returnUrl, char *varPrefix, int maxFieldWidth, 
     struct hash *tagOutWrappers, void *wrapperContext,
-    boolean withFilters, char *itemPlural, int pageSize, struct hash *suggestHash, void (*addFunc)(void) );
+    boolean withFilters, char *itemPlural, int pageSize, struct hash *suggestHash, char *visibleFacetList, void (*addFunc)(void) );
 /* Given a query to the database in conn that is basically a select query broken into
  * separate clauses, construct and display an HTML table around results. This HTML table has
  * column names that will sort the table, and optionally (if withFilters is set)

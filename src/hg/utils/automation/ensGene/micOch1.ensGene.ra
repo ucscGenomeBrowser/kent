@@ -1,0 +1,7 @@
+# required db variable
+db micOch1
+# specific lifting to translate names:
+liftUp /hive/data/genomes/micOch1/jkStuff/ensToUcsc.lift
+
+# UCSC does not have the chrM sequence:
+nameTranslation "/^MT/d"

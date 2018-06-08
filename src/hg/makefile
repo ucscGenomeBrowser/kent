@@ -127,6 +127,7 @@ UTIL_DIRS = \
 	agpCloneCheck \
 	agpCloneList \
 	agpAllToFaFile \
+	agpMergeChromScaf \
 	agpToFa \
 	agpToGl \
 	altSplice \

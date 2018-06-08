@@ -47,6 +47,7 @@ wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkV9
     visibility full
     subTrack wgEncodeGencodeV9
     type genePred
+    idXref wgEncodeGencodeAttrsV9 transcriptId geneId
     itemClassTbl wgEncodeGencodeAttrsV9
     itemClassNameColumn transcriptId
     itemClassClassColumn transcriptClass

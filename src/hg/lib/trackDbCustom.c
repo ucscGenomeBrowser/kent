@@ -888,7 +888,10 @@ if (tdbIsCompositeView(tdb))
     if (viewName)
         {
         *viewName = trackDbLocalSetting(tdb, "view");
-        assert(*viewName != NULL);
+        if (*viewName == NULL)
+            errAbort("track '%s' appears to be a view but does not have a "
+                     "<a href=\"../goldenpath/help/trackDb/trackDbHub.html#view\" target=_blank"
+                     ">view setting</a>.", tdb->track);
         }
     return TRUE;
     }

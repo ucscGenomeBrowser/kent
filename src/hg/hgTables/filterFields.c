@@ -511,12 +511,14 @@ char *ptr = NULL;
 
 /* Extract just the db.table part of db.table.field as well as db and table separately */
 safef(dbTable, sizeof(dbTable), "%s", dbTableField);
-ptr = strchr(dbTable, '.');
+ptr = strstr(dbTable, ".hub_");
+if (ptr == NULL)
+    ptr = strchr(dbTable, '.');
 if (ptr == NULL)
     errAbort("Expected 3 .-separated words in %s but can't find first .",
 	     dbTableField);
 safencpy(db, sizeof(db), dbTable, ptr-dbTable);
-char *p2 = strchr(ptr+1, '.');
+char *p2 = strrchr(ptr+1, '.');
 if (p2 == NULL)
     errAbort("Expected 3 .-separated words in %s but can't find second .",
 	     dbTableField);

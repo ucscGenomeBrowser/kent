@@ -1,0 +1,5 @@
+# required db variable
+db hetGla2
+
+# remove the first .1 from the contig names in the Ensembl GTF file
+nameTranslation "s/\.1//; s/^MT/chrM/;"

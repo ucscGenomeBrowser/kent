@@ -23,6 +23,14 @@ var debug = false;
  * Object trackDb         // hash of trackDb entries for tracks which are visible on current page
  */
 
+/* IE11 compatibility - IE doesn't have string startsWith and never will */
+if (!String.prototype.startsWith) {
+  String.prototype.startsWith = function(searchString, position) {
+    position = position || 0;
+    return this.indexOf(searchString, position) === position;
+  };
+}
+
 function initVars()
 {  // There are various entry points, so we call initVars in several places to make sure all is well
     if (typeof(hgTracks) !== "undefined" && !genomePos.original) {
@@ -4786,6 +4794,14 @@ var trackSearch = {
 ///////////////
 $(document).ready(function()
 {
+    // on Safari the back button doesn't call the ready function.  Reload the page if
+    // the back button was pressed.
+    $(window).bind("pageshow", function(event) {
+        if (event.originalEvent.persisted) {
+                window.location.reload() ;
+        }
+    });
+
     // The page may be reached via browser history (back button)
     // If so, then this code should detect if the image has been changed via js/ajax
     // and will reload the image if necessary.

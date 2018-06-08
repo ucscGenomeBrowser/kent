@@ -44,6 +44,10 @@ echo "Building src utils. on $HOST [${0}: `date`]"
 cd $base/kent/src
 echo "Before make utils on $HOST [${0}: `date`]"
     make -j 32 $MAKEPARAMS utils >& make.utils.log
+# parasol is special since it was added to the userApps
+cd $base/kent/src/parasol
+    make -j 32 $MAKEPARAMS userApps >>& ../make.utils.log
+cd $base/kent/src
 echo "After make utils on $HOST [${0}: `date`]"
 make $MAKEPARAMS blatSuite >>& make.utils.log
 echo "After make blatSuite on $HOST [${0}: `date`]"
