@@ -50,6 +50,7 @@ UTIL_DIRS = \
     cdwUndeprecate \
     cdwUnlockSubmittedFile \
     cdwUnlockSubmittedFiles \
+    cdwUpdateIx \
     utils/cdwFastqPolyFilter \
     utils/cdwVcfStats
 

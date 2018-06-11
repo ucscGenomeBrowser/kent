@@ -4,7 +4,6 @@ superTrack wgEncodeGencodeSuper hide
 shortLabel GENCODE V28lift37
 longLabel GENCODE lifted annotations from V28lift37 (Ensembl 92)
 group genes
-pennantIcon New red ../goldenPath/newsarch.html#050318 "Released May 03, 2018"
 dragAndDrop subTracks
 priority 34.177
 visibility pack
@@ -37,6 +36,7 @@ wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneV28lift37
     visibility pack
     subTrack wgEncodeGencodeV28lift37
     type genePred
+    idXref wgEncodeGencodeAttrsV28lift37 transcriptId geneId
     itemClassTbl wgEncodeGencodeAttrsV28lift37
     itemClassNameColumn transcriptId
     itemClassClassColumn transcriptClass

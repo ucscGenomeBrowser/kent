@@ -74,7 +74,7 @@ while (lineFileNext(lf, &line, NULL))
     else
 	{
 	if (!sameString(readName, lastReadName))
-	    errAbort("%s is not sorted by read name %s != %s on line %d", lf->fileName,
+	    errAbort("error in %s: reads do not come in pairs, %s != %s on line %d", lf->fileName,
 		readName, lastReadName, lf->lineIx);
 	       
 	if (lastCigarGood && cigar[0] != '*')   // Both sides align, yea!

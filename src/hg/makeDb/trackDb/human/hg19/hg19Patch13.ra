@@ -1,0 +1,117 @@
+track hg19Patch13
+compositeTrack on
+shortLabel GRC Patch Release
+longLabel GRCh37 patch release 13, alternate sequences and reference sequence patches
+subGroup1 view Views location=Patch/Haplotype psl=Alignment chain=Chain net=Net
+dragAndDrop subTracks
+# sortOrder view=+
+visibility hide
+type bed 4
+noInherit on
+group map
+chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr19,chr20,chr21,chr22,chrX
+otherDb hg19Patch13
+chainMinScore 2000
+chainLinearGap medium
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+matrixHeader A, C, G, T
+html hg19Patch13
+dataVersion GRCh37 Patch 13 update, Jun. 2013
+
+    track hg19Patch13Location
+    shortLabel Patch/Haplotype
+    view location
+    visibility pack
+    parent hg19Patch13
+    noScoreFilter .
+
+	track hg19Patch13Haplotypes
+        parent hg19Patch13Location
+        subGroups view=location
+	color 32,32,190
+	shortLabel Haplotypes
+	longLabel Haplotypes to GRCh37 Reference Sequence
+	html hg19Patch13
+	priority 1
+	urlLabel NCBI Entrez Nucleotide record (GRCh37.p13):
+	url https://www.ncbi.nlm.nih.gov/nuccore/$$?report=genbank
+
+	track hg19Patch13Patches
+        parent hg19Patch13Location
+        subGroups view=location
+	color 190,32,32
+	shortLabel Patches
+	longLabel Patches to GRCh37 Reference Sequence
+	html hg19Patch13
+	priority 2
+	urlLabel NCBI Entrez Nucleotide record (GRCh37.p13):
+	url https://www.ncbi.nlm.nih.gov/nuccore/$$?report=genbank
+
+    track hg19Patch13Align
+    shortLabel Alignment
+    view psl
+    visibility hide
+    parent hg19Patch13
+    type psl
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    showCdsMaxZoom 10000.0
+    showCdsAllScales .
+    baseColorDefault itemBases
+    pslSequence no
+    baseColorUseSequence extFile seqHg19Patch13 extHg19Patch13
+
+	track altSeqLiftOverPslP13
+        parent hg19Patch13Align
+        subGroups view=psl
+	shortLabel Alignment
+	longLabel Alignments of the patch 13 sequences to the reference GRCh37
+	html hg19Patch13
+	priority 3
+
+    track hg19Patch13Chain
+    shortLabel Chain
+    view chain
+    visibility hide
+    parent hg19Patch13
+    spectrum on
+
+        track chainHg19Patch13
+        parent hg19Patch13Chain
+        subGroups view=chain
+        shortLabel Chain
+        longLabel GRCh37 patch 13 Sequence Chained Alignments
+        type chain hg19Patch13
+        html chainNet
+	priority 4
+
+    track hg19Patch13Net
+    shortLabel Net
+    view net
+    visibility hide
+    parent hg19Patch13
+
+        track netHg19Patch13
+        parent hg19Patch13Net
+        subGroups view=net
+        shortLabel Net
+        longLabel GRCh37 patch 13 Sequence Alignment Net
+        type netAlign hg19Patch13 chainHg19Patch13
+        html chainNet
+	priority 5
+
+searchTable hg19Patch13Patches
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex [gjk][behl][0-9]\+(\.[0-9]+)?
+searchPriority 18
+
+searchTable hg19Patch13Haplotypes
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex [gjk][bhl][0-9]\+(\.[0-9]+)?
+searchPriority 18

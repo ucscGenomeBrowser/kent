@@ -198,6 +198,8 @@ def readEffScores(masks):
     effScores = dict()
     for mask in masks:
         for fname in glob.glob(mask):
+            #fileScoreNames = None
+            #if fileScoreNames==None:
             headers = open(fname).readline().strip().split('\t')
 
             excessFields = set(headers) - set(skipScores) - set(scoreNames)
@@ -211,6 +213,8 @@ def readEffScores(masks):
             removeHeaders = [headers.index(x) for x in skipScores]
             scoreColumns = [headers.index(x) for x in scoreNames]
             scoreColumns = [x for x in scoreColumns if x not in removeHeaders]
+            #assert(-1 not in scoreColumns) # a score is missing from the effScores.tab file
+            #assert(len(scoreColumns)==len(removeHeaders)+len(scoreNames)) # a score is missing from the scoreNames variable
 
             print "parsing %s" % fname
             headerDone = False
@@ -218,6 +222,10 @@ def readEffScores(masks):
                 fs = line.rstrip("\n").split()
                 guideId = fs[0]
 
+                #chrom, startEnd, strand = fs[0].split(":")
+                #start, end = startEnd.split("-")
+                #guideId = "%s:%s:%s" % (chrom, start, strand)
+                #startPam = start+50
                 scores = [fs[i] for i in scoreColumns]
                 scores = tuple(scores)
                 effScores[guideId] = scores
