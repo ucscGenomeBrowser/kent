@@ -11593,8 +11593,10 @@ TMPDIR=/dev/shm
     # 1642798373 bases of 3049335806 (53.874%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` hg38 equCab3) > rbest.log 2>&1 &
-XXX - running - Wed Jun  6 09:21:51 PDT 2018
-    # real    612m50.394s
+    # real    553m32.545s
+
+    cat fb.hg38.chainRBest.EquCab3.txt
+    # 1563820848 bases of 3049335806 (51.284%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/equCab3/bed/blastz.hg38.swap
@@ -11605,13 +11607,16 @@ XXX - running - Wed Jun  6 09:21:51 PDT 2018
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1 &
-XXX - running - Wed Jun  6 09:21:51 PDT 2018
-    #  real    104m31.748s
+    #  real    122m26.771s
 
     cat fb.equCab3.chainHg38Link.txt
-    # 1319553403 bases of 2587515673 (50.997%) in intersection
-    # replacing the previous tuned version:
-    # 1193048482 bases of 2534335866 (47.075%) in intersection
+    # 1666879638 bases of 2497530654 (66.741%) in intersection
+
+    cat fb.equCab3.chainSynHg38Link.txt
+    # 1624977128 bases of 2497530654 (65.063%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` equCab3 hg38) > rbest.log 2>&1 &
-    # real    638m15.603s
+    # real    473m11.347s
+
+    cat fb.equCab3.chainRBest.Hg38.txt
+    # 1563886386 bases of 2497530654 (62.617%) in intersection
