@@ -161,6 +161,7 @@
     <A onclick="return jumpTo(this);" HREF="#">bedRnaElements</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigBarChart</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigBed</A>,
+    <A onclick="return jumpTo(this);" HREF="#">bigInteract</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigPsl</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigChain</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigMaf</A>,
@@ -207,6 +208,7 @@
     <A onclick="return jumpTo(this);" HREF="#">bigBarChart</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigBed</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigChain</A>,
+    <A onclick="return jumpTo(this);" HREF="#">bigInteract</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigMaf</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigPsl</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigWig</A>,
@@ -341,7 +343,7 @@
     <P>The location of a remote data file containing the chain link data.</P>
 </DIV>
 
-<DIV class="bigDataUrl"><span class="types bigBarChart bigBed bigChain bigMaf bigPsl bigWig bam vcfTabix"></span>
+<DIV class="bigDataUrl"><span class="types bigBarChart bigBed bigChain bigInteract bigMaf bigPsl bigWig bam vcfTabix"></span>
 <div class="format"><code>bigDataUrl &lt;url/relativePath&gt;</code></div>
     <P class="isRequired">Required: <span class="red">For Hubs</span></P>
     <P>The location of a remote data file containing the bulk of the data for the track.
@@ -350,7 +352,7 @@
     <P>The setting is either the full URL (including <code>http:</code> or another protocol)
     or it is relative to the directory in which the trackDb file containing this setting
     is located.  The file must be in one of
-    the supported remote data file formats: bam/cram, bigBarChart, bigBed, bigChain, bigMaf, bigPsl, bigGenePred, bigNarrowPeak, bigWig or
+    the supported remote data file formats: bam/cram, bigBarChart, bigBed, bigChain, bigInteract, bigMaf, bigPsl, bigGenePred, bigNarrowPeak, bigWig or
     vcfTabix.  Note that bam/cram and vcfTabix types require a separate
     index file that must have the same name as the data file plus a
     standard suffix (".bai" and ".tbi" respectively), unless <A
@@ -1086,6 +1088,12 @@ There are no extra options that can appear on the type bigMaf line.
 <div class="format">
     <code>type bigBarChart</code></div>
 There are no extra options that can appear on the type bigBarChart line.
+</DIV>
+
+<DIV class="bigInteract"><span class="types bigInteract"></span>
+<div class="format">
+    <code>type bigInteract</code></div>
+There are no extra options that can appear on the type bigInteract line.
 </DIV>
 
 <DIV class="bed_flavors"><span class="types bed5FloatScore bedRnaElements broadPeak coloredExon gvf ld2 narrowPeak peptideMapping"></span>
@@ -2082,7 +2090,7 @@ There are no extra options that can appear on the type bigBarChart line.
     <pre>   graphTypeDefault points</pre>
 </DIV>
 
-<DIV class="maxHeightPixels"><span class="types wig bigWig bedGraph"></span>
+<DIV class="maxHeightPixels"><span class="types wig bigWig bedGraph bigInteract"></span>
 <div class="format"><code>maxHeightPixels &lt;max:default:min&gt;</code></div>
     <P>The amount of
     vertical viewing space for your signal track should be declared,
@@ -4301,6 +4309,37 @@ for each cell associated with the particular TF binding location.</P>
     when it is aligned to the human genome.
     </P>
 </DIV>
+
+<!-- - - - - - - - bigInteract settings - - - - - - - -->
+<DIV class="bigInteract_intro">
+<H3>bigInteract: Pairwise interactions</H3>
+    <P>
+    The bigInteract format stores interactions between pairs of regions in the genome.
+BigInteract files are created using the program bedToBigBed with a special 
+AutoSQL file that defines the fields.  The resulting files are in an indexed binary format
+that supports efficient remote access, so the file can be hosted on your web accessible server
+and displayed at UCSC.
+For the complete bigInteract format definitions please see the
+    <A HREF="../interact.html">bigInteract help page</A>.</P>
+</DIV>
+
+<DIV class="interactDirectional"><span class="types bigInteract"></span>
+<div class="format"><code>interactDirectional true</code></div>
+    <P>This setting will display dashed lines when the target region precedes the source region 
+(reverse direction) in the genome.
+    </P>
+</DIV>
+
+<DIV class="interact_example"><span class="types bigInteract"></span>
+<div class="format"><B>Example of an interact/bigInteract track</B></div>
+    <pre>
+    track snpGeneInteractions
+    type bigInteract
+    interactDirectional true
+    maxHeightPixels 300:150:20
+    bigDataUrl http://...
+    </pre>
+</div>
 
 <!-- - - - - - - - bigBarChart settings - - - - - - - -->
 <DIV class="bigBarChart_intro">
