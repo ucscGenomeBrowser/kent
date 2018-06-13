@@ -29146,6 +29146,13 @@ pubMap bing load
     mkdir /hive/data/genomes/hg19/bed/cnvDevDelay
     cd /hive/data/genomes/hg19/bed/cnvDevDelay
 
+# NOTE FOR NEXT TIME: dbVar reorganized their ftp directories.  Should there be a next time,
+# the files are now at
+# ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/gvf/nstd100.GRCh37.variant_call.gvf.gz
+# ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/gvf/nstd100.GRCh37.variant_region.gvf.gz
+# ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/gvf/nstd54.GRCh37.variant_call.gvf.gz
+# ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/gvf/nstd54.GRCh37.variant_region.gvf.gz
+
 wget --timestamping 'ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd100_Coe_et_al_2014/gvf/nstd100_Coe_et_al_2014.GRCh37.remap.all.germline.ucsc.gvf.gz'
 wget --timestamping 'ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd54_Cooper_et_al_2011/gvf/nstd54_Cooper_et_al_2011.GRCh37.remap.all.germline.ucsc.gvf.gz'
 

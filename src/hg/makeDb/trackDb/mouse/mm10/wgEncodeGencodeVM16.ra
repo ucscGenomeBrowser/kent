@@ -37,6 +37,7 @@ wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneVM16
     visibility pack
     subTrack wgEncodeGencodeVM16
     type genePred
+    idXref wgEncodeGencodeAttrsVM16 transcriptId geneId
     itemClassTbl wgEncodeGencodeAttrsVM16
     itemClassNameColumn transcriptId
     itemClassClassColumn transcriptClass

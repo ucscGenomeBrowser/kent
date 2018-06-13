@@ -98,6 +98,9 @@ char *gtexTrackUiName();
 void gtexPortalLink(char *geneId);
 /* print URL to GTEX portal gene expression page using Ensembl Gene Id*/
 
+void gtexBodyMapLink();
+/* print URL to GTEX body map HTML page */
+
 boolean gtexGeneBoxplot(char *geneId, char *geneName, char *version, 
                                 boolean doLogTransform, struct tempName *pngTn);
 /* Create a png temp file with boxplot of GTEx expression values for this gene. 
@@ -142,5 +145,6 @@ void gtexEqtlClusterUi(struct cart *cart, struct trackDb *tdb, char *track, char
                         boolean boxed);
 /* GTEx (Genotype Tissue Expression) eQTL clusters. Use this on right-click,
  * (when hgGtexTrackSettings can't be) */
+
 
 #endif /* GTEXUI_H */

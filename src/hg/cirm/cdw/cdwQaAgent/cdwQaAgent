@@ -5,9 +5,9 @@ if ($1 == "") then
    exit
 endif
 cdwMakeValidFile $1 $1
-cdwMakePairedEndQa $1 $1
 cdwMakeEnrichments $1 $1
 cdwMakeReplicateQa $1 $1
 cdwMakeContaminationQa $1 $1
 cdwMakeRepeatQa $1 $1
+cdwMakePairedEndQa $1 $1
 cdwMakeTrackViz $1 $1
