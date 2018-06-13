@@ -512,10 +512,9 @@ sub checkDef {
   }
 }
 
-
 sub doPartition {
   # Partition the sequence up before blastz.
-  my $paraHub = $bigClusterHub;
+  my $paraHub = $opt_blastzOutRoot ? $bigClusterHub : $workhorse;
   my $runDir = "$buildDir/run.blastz";
   my $targetList = "$tDb.lst";
   my $queryList = $isSelf ? $targetList :
