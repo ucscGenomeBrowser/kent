@@ -562,9 +562,9 @@ searchPriority 8
 
     egrep "bases|Total|masked" faSize.rmsk.txt \
 	| fold -w 75 -s  | sed -e 's/^/# /;'
-# 2506966135 bases (9435481 N's 2497530654 real 1386909673 upper 1110620981 
+# 2506966135 bases (9435481 N's 2497530654 real 1386909673 upper 1110620981
 # lower) in 4701 sequences in 1 files
-# Total size: mean 533283.6 sd 6827354.4 min 2669 (chrUn_NW_019642362v1) max 
+# Total size: mean 533283.6 sd 6827354.4 min 2669 (chrUn_NW_019642362v1) max
 # 188260577 (chr1) median 6592
 # %44.30 masked total, %44.47 masked real
 
@@ -636,9 +636,9 @@ searchPriority 8
     twoBitToFa equCab3.2bit stdout | faSize stdin > faSize.equCab3.2bit.txt
     egrep "bases|Total|masked" faSize.equCab3.2bit.txt \
 	| fold -w 75 -s  | sed -e 's/^/# /;'
-# 2506966135 bases (9435481 N's 2497530654 real 1386367759 upper 1111162895 
+# 2506966135 bases (9435481 N's 2497530654 real 1386367759 upper 1111162895
 # lower) in 4701 sequences in 1 files
-# Total size: mean 533283.6 sd 6827354.4 min 2669 (chrUn_NW_019642362v1) max 
+# Total size: mean 533283.6 sd 6827354.4 min 2669 (chrUn_NW_019642362v1) max
 # 188260577 (chr1) median 6592
 # %44.32 masked total, %44.49 masked real
 
@@ -671,9 +671,9 @@ searchPriority 8
     cat faSize.equCab3.cleanWMSdust.txt
     egrep "bases|Total|masked" faSize.equCab3.cleanWMSdust.txt \
 	| fold -w 75 -s  | sed -e 's/^/# /;'
-# 3050398082 bases (31805092 N's 3018592990 real 1812556664 upper 1206036326 
+# 3050398082 bases (31805092 N's 3018592990 real 1812556664 upper 1206036326
 # lower) in 4346 sequences in 1 files
-# Total size: mean 701886.4 sd 9434013.2 min 223 (chrUn_NW_019937062v1) max 
+# Total size: mean 701886.4 sd 9434013.2 min 223 (chrUn_NW_019937062v1) max
 # 224244399 (chr1) median 29187
 # %39.54 masked total, %39.95 masked real
 
@@ -799,71 +799,68 @@ searchPriority 8
     cd /hive/data/genomes/hg38/bed/lastzEquCab3.2018-05-25
 
     cat fb.hg38.chainEquCab3Link.txt
-    # 2910625246 bases of 3049335806 (95.451%) in intersection
+    # 1705190736 bases of 3049335806 (55.920%) in intersection
     cat fb.hg38.chainSynEquCab3Link.txt
-    # 2890994068 bases of 3049335806 (94.807%) in intersection
-    cat fb.hg38.chainRBestEquCab3Link.txt
-    # 2743876160 bases of 3049335806 (89.983%) in intersection
+    # 1642798373 bases of 3049335806 (53.874%) in intersection
+    cat fb.hg38.chainRBest.EquCab3.txt
+    # 1563820848 bases of 3049335806 (51.284%) in intersection
 
-    # running the swap
+    # and for the swap:
     mkdir /hive/data/genomes/equCab3/bed/blastz.hg38.swap
     cd /hive/data/genomes/equCab3/bed/blastz.hg38.swap
+
     time (doBlastzChainNet.pl -verbose=2 \
-        -swap /hive/data/genomes/hg38/bed/lastzEquCab3.2018-03-24/DEF \
-        -chainMinScore=5000 -chainLinearGap=medium \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-        -syntenicNet) > swap.log 2>&1
-    # real    101m29.782s
+      /hive/data/genomes/hg38/bed/lastzEquCab3.2018-05-25/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1 &
+    #  real    122m26.771s
 
     cat fb.equCab3.chainHg38Link.txt
-    # 2814507414 bases of 3018592990 (93.239%) in intersection
+    # 1666879638 bases of 2497530654 (66.741%) in intersection
     cat fb.equCab3.chainSynHg38Link.txt
-    # 2800642800 bases of 3018592990 (92.780%) in intersection
+    # 1624977128 bases of 2497530654 (65.063%) in intersection
 
-    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
-        equCab3 hg38) > rbest.log 2>&1 &
-    # real    102m47.533s
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` equCab3 hg38) > rbest.log 2>&1 &
+    # real    473m11.347s
 
-    cat fb.equCab3.chainRBestHg38Link.txt 
-    # 2748571185 bases of 3018592990 (91.055%) in intersection
+    cat fb.equCab3.chainRBest.Hg38.txt
+    # 1563886386 bases of 2497530654 (62.617%) in intersection
 
 #############################################################################
-# lastz/chain/net swap mouse/mm10 (TBD - 2018-03-14 - Hiram)
+# lastz/chain/net swap mouse/mm10 (DONE - 2018-05-25 - Hiram)
 
     # alignment to mouse/mm10:
-    cd /hive/data/genomes/mm10/bed/lastzEquCab3.2018-03-24/
+    cd /hive/data/genomes/mm10/bed/lastzEquCab3.2018-05-25
 
     cat fb.mm10.chainEquCab3Link.txt
-    # 935720585 bases of 2652783500 (35.273%) in intersection
-
-    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
-	mm10 equCab3) > rbest.log 2>&1 &
-XXX
-    # real    624m28.225s
+    # 921489718 bases of 2652783500 (34.737%) in intersection
+    cat fb.mm10.chainSynEquCab3Link.txt
+    # 876836391 bases of 2652783500 (33.053%) in intersection
+    cat fb.mm10.chainRBest.EquCab3.txt
+    # 876785778 bases of 2652783500 (33.052%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/equCab3/bed/blastz.mm10.swap
     cd /hive/data/genomes/equCab3/bed/blastz.mm10.swap
 
     time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/mm10/bed/lastzEquCab3.2018-03-24/DEF \
+      /hive/data/genomes/mm10/bed/lastzEquCab3.2018-05-25/DEF \
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-            -syntenicNet) > swap.log 2>&1
-    #  real    78m57.631s
+            -syntenicNet) > swap.log 2>&1 &
+    #  real    83m14.250s
 
     cat fb.equCab3.chainMm10Link.txt
-    # 934668641 bases of 3018592990 (30.964%) in intersection
+    # 930516778 bases of 2497530654 (37.257%) in intersection
     cat fb.equCab3.chainSynMm10Link.txt
-    # 889944141 bases of 3018592990 (29.482%) in intersection
+    # 897238830 bases of 2497530654 (35.925%) in intersection
 
-    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
-	equCab3 mm10) > rbest.log 2>&1 &
-XXX
-    # real    560m21.432s
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` equCab3 mm10) > rbest.log 2>&1 &
+    # real    318m40.520s
 
-    cat fb.equCab3.chainRBestMm10Link.txt
-    # 760753851 bases of 2476453204 (30.719%) in intersection
+    cat fb.equCab3.chainRBest.Mm10.txt
+    # 875954606 bases of 2497530654 (35.073%) in intersection
 
 ##############################################################################
 # Create kluster run files (DONE - 2018-05-25 - Hiram)
@@ -935,14 +932,13 @@ XXX
 	-ooc=/hive/data/genomes/equCab3/jkStuff/equCab3.11.ooc \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
          equCab3 equCab2) > do.log 2>&1
-XXX - running - Fri May 25 09:37:20 PDT 2018
     # real    439m22.186s
 
     # verify the convert link on the test browser is now active from equCab3 to
     # equCab2
 
 ##############################################################################
-# GENBANK AUTO UPDATE (TBD - 2018-03-25 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2018-03-25 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -1011,17 +1007,25 @@ equCab3.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDna
 	where name="equCab3";' hgcentraltest
 
 ##############################################################################
-# all.joiner update, downloads and in pushQ - (TBD - 2018-03-19 - Hiram)
+# all.joiner update, downloads and in pushQ - (DONE - 2018-06-11 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     ~/kent/src/hg/utils/automation/verifyBrowser.pl equCab3
-# 65 tables in database equCab3 - Cat, Felis catus
-# verified 65 tables, 0 extra tables, 10 optional tables
-# 13 genbank tables found
-# verified 42 tables, 1 missing tables
-# 1     gapOverlap
-# liftOver to previous versions: 2, from previous versions: 2
-
-    # there were no gapOverlap items found
+# 56 tables in database equCab3 - Horse, Equus caballus
+# verified 55 tables in database equCab3, 1 extra tables, 14 optional tables
+# chainNetRBestHg38     3 optional tables
+# chainNetRBestMm10     3 optional tables
+# chainNetSynHg38       3 optional tables
+# chainNetSynMm10       3 optional tables
+# gapOverlap    1 optional tables
+# tandemDups    1 optional tables
+# 1     splitOverlap    - extra table
+# 12 genbank tables found
+# verified 29 required tables, 0 missing tables
+# hg38 chainNet to equCab3 found 3 required tables
+# mm10 chainNet to equCab3 found 3 required tables
+# hg38 chainNet RBest and syntenic to equCab3 found 6 optional tables
+# mm10 chainNet RBest and syntenic to equCab3 found 3 optional tables
+# liftOver to previous versions: 1, from previous versions: 1
 
     # fixup all.joiner until this is a clean output
     joinerCheck -database=equCab3 -tableCoverage all.joiner
@@ -1032,15 +1036,20 @@ equCab3.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDna
     rm -fr TemporaryTrackDbCheckout
 
     time (makeDownloads.pl -workhorse=hgwdev equCab3) > downloads.log 2>&1
-    #  real    26m28.250s
+    #  real    23m53.926s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/equCab3/pushQ
     cd /hive/data/genomes/equCab3/pushQ
   time (makePushQSql.pl -redmineList equCab3) > equCab3.pushQ.sql 2> stderr.out
-    # remove the tandemDups from the file list:
+XXX - running - Mon Jun 11 15:32:33 PDT 2018
+    # real    4m3.493s
+
+    # remove the tandemDups and gapOverlaps from the file list:
     sed -i -e "/tandemDups/d" redmine.equCab3.table.list
     sed -i -e "/Tandem Dups/d" redmine.equCab3.releaseLog.txt
+    sed -i -e "/gapOverlap/d" redmine.equCab3.table.list
+    sed -i -e "/Gap Overlaps/d" redmine.equCab3.releaseLog.txt
 
     #   check for errors in stderr.out, some are OK, e.g.:
     # WARNING: equCab3 does not have seq

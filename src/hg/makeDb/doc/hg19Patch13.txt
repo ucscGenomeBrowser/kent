@@ -329,22 +329,28 @@ calc 3234834689 - 3234818120
 
 # construct locations file:
 ~/kent/src/hg/makeDb/doc/hg38/regionScan.pl extract.new.list \
-   genbank/GCA_000001405.14_GRCh37.p13_assembly_regions.txt \
-     > patchLocations.bed
+  genbank/GCA_000001405.14_GRCh37.p13_assembly_regions.txt \
+    > ncbi.patchLocations.bed
 
 # verify correct number of locations, measured 204 before:
-wc -l patchLocations.bed 
-#   204 patchLocations.bed
+wc -l ncbi.patchLocations.bed 
+#   204 ncbi.patchLocations.bed
 
 #  separate haplotypes from fix patches for two tracks:
-grep -v fix patchLocations.bed | sed -e 's/_alt//;' \
+grep -v fix ncbi.patchLocations.bed | sed -e 's/_alt//;' \
    | sed -e 's/\tchr.*_/\t/;' | sed -e 's/v/./;' > hg19Patch13Haplotypes.bed
 
-grep fix patchLocations.bed | sed -e 's/_fix//;' \
+grep fix ncbi.patchLocations.bed | sed -e 's/_fix//;' \
    | sed -e 's/\tchr.*_/\t/;' | sed -e 's/v\([0-9]\)$/.\1/;' \
      > hg19Patch13Patches.bed
 
-# verify nothing lost, should be 123:
+# for the kluster run below, need to have these names the same as
+# would be for UCSC, lower case accession, no .N extension:
+~/kent/src/hg/makeDb/doc/hg38/regionScan.pl extract.new.list \
+  genbank/GCA_000001405.14_GRCh37.p13_assembly_regions.txt \
+    | tr 'A-Z' 'a-z' | sed -e 's/chrx/chrX/g; s/v[0-9]//;' > patchLocations.bed
+
+# verify nothing lost, total should be 204:
 wc -l hg19*.bed
 #   73 hg19Patch13Haplotypes.bed
 #  131 hg19Patch13Patches.bed
@@ -450,61 +456,65 @@ VALUES ("GRCh37.p13", "haplotypes", 136);'
     time (doRepeatMasker.pl -bigClusterHub=ku \
        -workhorse=hgwdev -dbHost=hgwdev -buildDir=`pwd` hg19Patch13) \
           > do.log 2>&1
-XXX - running - Fri May 25 15:24:52 PDT 2018
-    # real    53m35.937s
+    # real    144m51.181s
 
     cat faSize.rmsk.txt
-# 44562299 bases (1398372 N's 43163927 real 20846957 upper 22316970 lower)
-#	in 123 sequences in 1 files
-# Total size: mean 362295.1 sd 750382.1 min 14347 (chr10_KN538365v1_fix)
-#	max 6367528 (chr8_KZ208915v1_fix) median 186494
-# %50.08 masked total, %51.70 masked real
+# 97673427 bases (3295737 N's 94377690 real 42827860 upper 51549830 lower)
+#	in 204 sequences in 1 files
+# Total size: mean 478791.3 sd 848169.0 min 22394 (chr9_jh806577_fix)
+#	max 7283150 (chr1_jh636052_fix) median 240775
+# %52.78 masked total, %54.62 masked real
 
     mkdir /hive/data/genomes/hg19Patch13/bed/simpleRepeat
     cd /hive/data/genomes/hg19Patch13/bed/simpleRepeat
     time (doSimpleRepeat.pl -bigClusterHub=ku -workhorse=hgwdev \
         -trf409=6 -smallClusterHub=ku -buildDir=`pwd` hg19Patch13) > do.log 2>&1
-XXX - running - Fri May 25 15:25:51 PDT 2018
-    # real    5m36.925s
+    # real    12m56.760s
 
     cat fb.simpleRepeat
-    # 2049146 bases of 43164255 (4.747%) in intersection
+    # 4006366 bases of 94378040 (4.245%) in intersection
 
     # the simpleRepeat procedure fails in the cleanup step since there
     # is no TrfPart directory
+
+    mkdir /hive/data/genomes/hg19Patch13/bed/microsat
+    cd /hive/data/genomes/hg19Patch13/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed hg19Patch13 microsat microsat.bed
+    # Read 10322 elements of size 4 from microsat.bed
 
     mkdir /hive/data/genomes/hg19Patch13/bed/windowMasker
     cd /hive/data/genomes/hg19Patch13/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev hg19Patch13) > do.log 2>&1 &
-    # real    2m7.148s
+    # real    4m22.407s
 
     cat faSize.hg19Patch13.cleanWMSdust.txt
-
-# 44562299 bases (1398372 N's 43163927 real 31289187 upper 11874740 lower)
-#	in 123 sequences in 1 files
-# Total size: mean 362295.1 sd 750382.1 min 14347 (chr10_KN538365v1_fix)
-#	max 6367528 (chr8_KZ208915v1_fix) median 186494
-# %26.65 masked total, %27.51 masked real
+# 97673427 bases (3295737 N's 94377690 real 64868273 upper 29509417 lower)
+#	in 204 sequences in 1 files
+# Total size: mean 478791.3 sd 848169.0 min 22394 (chr9_jh806577_fix)
+#	max 7283150 (chr1_jh636052_fix) median 240775
+# %30.21 masked total, %31.27 masked real
 
     cat fb.hg19Patch13.rmsk.windowmaskerSdust.txt
-# 9423450 bases of 44562299 (21.147%) in intersection
+# 24560088 bases of 97673427 (25.145%) in intersection
 
     cd /hive/data/genomes/hg19Patch13
     twoBitMask hg19Patch13.rmsk.2bit \
         -add bed/simpleRepeat/trfMask.bed hg19Patch13.2bit
     twoBitToFa hg19Patch13.2bit stdout | faSize stdin
 
-# 44562299 bases (1398372 N's 43163927 real 20794645 upper 22369282 lower)
-#	in 123 sequences in 1 files
-# Total size: mean 362295.1 sd 750382.1 min 14347 (chr10_KN538365v1_fix)
-#	max 6367528 (chr8_KZ208915v1_fix) median 186494
-# %50.20 masked total, %51.82 masked real
+# 97673427 bases (3295737 N's 94377690 real 42661912 upper 51715778 lower) in 204 sequences in 1 files
+# Total size: mean 478791.3 sd 848169.0 min 22394 (chr9_jh806577_fix)
+#	max 7283150 (chr1_jh636052_fix) median 240775
+# %52.95 masked total, %54.80 masked real
 
     # same size as above in original source:
 
-# 44562299 bases (1398372 N's 43163927 real 27133515 upper 16030412 lower)
-#	in 123 sequences in 1 files
+#  97673427 bases (3295737 N's 94377690 real 94377690 upper 0 lower)
 
     ln -s `pwd`/hg19Patch13.2bit /gbdb/hg19Patch13
 
@@ -516,10 +526,10 @@ XXX - running - Fri May 25 15:25:51 PDT 2018
     time (doIdKeys.pl \
       -twoBit=/hive/data/genomes/hg19Patch13/hg19Patch13.unmasked.2bit \
         -buildDir=`pwd`  hg19Patch13) > do.log 2>&1
-    # real    0m18.300s
+    # real    0m22.713s
 
     cat hg19Patch13.keySignature.txt
-    #   74497a30967b27ea68a7fad40cc01de5
+    #   e0db188c467e4861a9b74fb4675f62da
 
 #########################################################################
 # ncbiRefSeq Genes (TBD - 2016-05-19 - Hiram)
@@ -559,19 +569,16 @@ XXX - running - Fri May 25 15:25:51 PDT 2018
     mkdir /hive/data/genomes/hg19Patch13/bed/ucscToINSDC
     cd /hive/data/genomes/hg19Patch13/bed/ucscToINSDC
 
-    # special script to get the names directly out of the assembly report:
-    ./processReport.pl  | sort > ucscToINSDC.txt
+    # special script to get the names directly out of the
+    # ncbi.patchLocations.bed file:
+    ./mkTab.sh | sort > ucscToINSDC.txt
 
     awk '{printf "%s\t%s\n", $2, $1}' ucscToINSDC.txt | sort > insdcToUcsc.txt
-    # there is no name for chrM/NC_001323.1 sequence, there is no such
-    #  sequence with an INSDC name
-    grep -v "^#" /hive/data/genomes/hg19/bed/hg19Patch13/genbank/GCA_000001405.14_GRCh37.p13_assembly_report.txt | cut -f5,7 \
-      | sed -e 's/na\b/notAvailable/;' | awk '{printf "%s\t%s\n", $1, $2}' \
-         | sort > insdc.genbank.txt
-    # the sed \b means to match word
 
     awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
          | sort > name.coordinate.tab
+    join -t$'\t' name.coordinate.tab ucscToINSDC.txt > ucscToINSDC.bed
+
     join insdc.genbank.txt insdcToUcsc.txt | tr '[ ]' '[\t]' | sort -k3 \
        | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-3,5 \
            > ucscToINSDC.bed
@@ -610,7 +617,7 @@ XXX - running - Fri May 25 15:25:51 PDT 2018
     # 23260605 bases of 23260605 (100.000%) in intersection
 
 ##############################################################################
-# cpgIslands on UNMASKED sequence (DONE - 2016-12-05 - Hiram)
+# cpgIslands on UNMASKED sequence (DONE - 2018-06-06 - Hiram)
 
     mkdir /hive/data/genomes/hg19Patch13/bed/cpgIslandsUnmasked
     cd /hive/data/genomes/hg19Patch13/bed/cpgIslandsUnmasked
@@ -619,46 +626,34 @@ XXX - running - Fri May 25 15:25:51 PDT 2018
        -tableName=cpgIslandExtUnmasked \
           -maskedSeq=/hive/data/genomes/hg19Patch13/hg19Patch13.unmasked.2bit \
              -workhorse=hgwdev -smallClusterHub=ku hg19Patch13) > do.log 2>&1
-    # real    1m9.904s
+    # real    1m15.312s
 
     cat fb.hg19Patch13.cpgIslandExtUnmasked.txt
-    # 390840 bases of 27757875 (1.408%) in intersection
+    # 1737836 bases of 94378040 (1.841%) in intersection
 
 ##########################################################################
-# cpgIslands - (DONE - 2017-08-09 - Hiram)
+# cpgIslands - (DONE - 2018-06-06 - Hiram)
     mkdir /hive/data/genomes/hg19Patch13/bed/cpgIslands
     cd /hive/data/genomes/hg19Patch13/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku hg19Patch13) > do.log 2>&1
-    # real    0m43.302s
+    # real    2m0.923s
 
     cat fb.hg19Patch13.cpgIslandExt.txt
-    # 267468 bases of 27757875 (1.360%) in intersection
+    # 1278964 bases of 94378040 (1.355%) in intersection
 
 ##############################################################################
-# cytoBandIdeo - (DONE - 2016-12-05 - Hiram)
+# cytoBandIdeo - (DONE - 2018-06-06 - Hiram)
     mkdir /hive/data/genomes/hg19Patch13/bed/cytoBand
     cd /hive/data/genomes/hg19Patch13/bed/cytoBand
     makeCytoBandIdeo.csh hg19Patch13
 
-#########################################################################
-# CREATE MICROSAT TRACK (DONE - 2016-04-19 - Hiram)
-    ssh hgwdev
-    mkdir /hive/data/genomes/hg19Patch13/bed/microsat
-    cd /hive/data/genomes/hg19Patch13/bed/microsat
-
-    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
-       ../simpleRepeat/simpleRepeat.bed > microsat.bed
-
-    hgLoadBed hg19Patch13 microsat microsat.bed
-    # Read 312 elements of size 4 from microsat.bed
-
 #############################################################################
-# lastz alignments to hg19 (DONE - 2017-08-09 - Hiram)
+# lastz alignments to hg19 (DONE - 2018-06-07 - Hiram)
 #############################################################################
 
-mkdir /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19.2017-08-09
-cd /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19.2017-08-09
+mkdir /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19.2018-06-06
+cd /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19.2018-06-06
 
 # prepare bits of hg19 sequence to lastz align to the patches,
 # this is selecting out the specific section of hg19 where the patch
@@ -667,8 +662,10 @@ cd /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19.2017-08-09
 rm -fr hg19Bits run.blastz run.blastz/tParts run.blastz/qParts psl \
    hg19Bits.lift
 mkdir -p hg19Bits run.blastz run.blastz/tParts run.blastz/qParts psl
+
 cut -f4 ../patchLocations.bed | while read FIX
 do
+  printf "# working: ${FIX}\n" 1>&2
   chr=`grep "${FIX}" ../patchLocations.bed | cut -f1`
   start=`grep "${FIX}" ../patchLocations.bed | cut -f2`
   end=`grep "${FIX}" ../patchLocations.bed | cut -f3`
@@ -681,8 +678,8 @@ do
   fixName=`head -1 hg19Bits/${FIX}.fa | sed -e 's/>//;'`
   printf "${start}\t${fixName}\t${fixSize}\t${chr}\t${chrSize}\n" 1>&2
   printf "${start}\t${fixName}\t${fixSize}\t${chr}\t${chrSize}\n" >> hg19Bits.lift
-  printf "/hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19.2017-08-09/hg19Bits.2bit:${fixName}:0-${bitSize}\n" 1>&2
-  printf "/hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19.2017-08-09/hg19Bits.2bit:${fixName}:0-${bitSize}\n" > run.blastz/qParts/${fixName}.lst
+  printf "/hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19.2018-06-06/hg19Bits.2bit:${fixName}:0-${bitSize}\n" 1>&2
+  printf "/hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19.2018-06-06/hg19Bits.2bit:${fixName}:0-${bitSize}\n" > run.blastz/qParts/${fixName}.lst
   printf "/hive/data/genomes/hg19/bed/hg19Patch13/hg19Patch13.unmasked.2bit:${FIX}:0-${fixSize}\n" > run.blastz/tParts/${fixName}.lst
   printf "/cluster/bin/scripts/blastz-run-ucsc -outFormat psl tParts/${fixName}.lst qParts/${fixName}.lst ../DEF {check out exists ../psl/${fixName}.psl}\n" 1>&2
   printf "/cluster/bin/scripts/blastz-run-ucsc -outFormat psl tParts/${fixName}.lst qParts/${fixName}.lst ../DEF {check out exists ../psl/${fixName}.psl}\n" >> run.blastz/jobList
@@ -691,7 +688,7 @@ done
 faToTwoBit hg19Bits/*.fa hg19Bits.2bit
 twoBitInfo hg19Bits.2bit stdout | sort -k2nr > hg19Bits.chrom.sizes
 
-    printf 'BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+    printf 'BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
 # human vs human
 # maximum M allowed with lastz is only 254
 BLASTZ_M=254
@@ -716,53 +713,53 @@ SEQ1_LIMIT=1
 #SEQ2_DIR=/scratch/data/hg19/hg19.2bit
 SEQ2_DIR=/hive/data/genomes/hg19/hg19.unmasked.2bit
 SEQ2_LEN=/scratch/data/hg19/chrom.sizes
-SEQ2_CTGDIR=/hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19.2017-08-09/hg19Bits.2bit
-SEQ2_CTGLEN=/hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19.2017-08-09/hg19Bits.chrom.sizes
-SEQ2_LIFT=/hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19.2017-08-09/hg19Bits.lift
+SEQ2_CTGDIR=/hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19.2018-06-06/hg19Bits.2bit
+SEQ2_CTGLEN=/hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19.2018-06-06/hg19Bits.chrom.sizes
+SEQ2_LIFT=/hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19.2018-06-06/hg19Bits.lift
 SEQ2_CHUNK=10000000
 SEQ2_LAP=0
 SEQ2_IN_CONTIGS=0
 SEQ2_LIMIT=1
 
-BASE=/hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19.2017-08-09
+BASE=/hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19.2018-06-06
 TMPDIR=/dev/shm
 ' > DEF
 
 ssh ku
-cd /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19.2017-08-09/run.blastz
+cd /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19.2018-06-06/run.blastz
 para create jobList
 para try ... check ... push ... etc
 para time > run.time
-# Completed: 123 of 123 jobs
-# CPU time in finished jobs:        164s       2.73m     0.05h    0.00d  0.000 y
-# IO & Wait Time:                   330s       5.51m     0.09h    0.00d  0.000 y
-# Average job time:                   4s       0.07m     0.00h    0.00d
-# Longest finished job:              28s       0.47m     0.01h    0.00d
-# Submission to last job:            46s       0.77m     0.01h    0.00d
+# Completed: 204 of 204 jobs
+# CPU time in finished jobs:       9873s     164.54m     2.74h    0.11d  0.000 y
+# IO & Wait Time:                   729s      12.16m     0.20h    0.01d  0.000 y
+# Average job time:                  52s       0.87m     0.01h    0.00d
+# Longest finished job:            4859s      80.98m     1.35h    0.06d
+# Submission to last job:          4891s      81.52m     1.36h    0.06d
 
 # put together the individual results
-cd /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19.2017-08-09
+cd /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19.2018-06-06
 mkdir pslParts
 cat psl/chr*.psl | gzip -c > pslParts/hg19Patch13.hg19.psl.gz
 
 #   constructing a chain from those results
-mkdir -p /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19.2017-08-09/axtChain/run
-cd /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19.2017-08-09/axtChain/run
+mkdir -p /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19.2018-06-06/axtChain/run
+cd /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19.2018-06-06/axtChain/run
 time zcat ../../pslParts/hg19Patch13.hg19.psl.gz \
 | axtChain -psl -verbose=0 -scoreScheme=/scratch/data/blastz/human_chimp.v2.q -minScore=2000 -linearGap=medium stdin \
     /hive/data/genomes/hg19/bed/hg19Patch13/hg19Patch13.unmasked.2bit \
-    /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19.2017-08-09/hg19Bits.2bit \
+    /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19.2018-06-06/hg19Bits.2bit \
     stdout \
 | chainAntiRepeat /hive/data/genomes/hg19/bed/hg19Patch13/hg19Patch13.unmasked.2bit \
-    /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19.2017-08-09/hg19Bits.2bit  \
+    /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19.2018-06-06/hg19Bits.2bit  \
     stdin hg19Patch13.hg19.preLift.chain
-    #   real    0m10.588s
+    #   real    14m25.476s
 
 liftUp -chainQ hg19Patch13.hg19.lifted.chain \
     ../../hg19Bits.lift carry hg19Patch13.hg19.preLift.chain
 
 # constructing the net files:
-cd /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19.2017-08-09/axtChain
+cd /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19.2018-06-06/axtChain
 
 chainMergeSort run/hg19Patch13.hg19.lifted.chain \
         | gzip -c > hg19Patch13.hg19.all.chain.gz
@@ -775,13 +772,13 @@ time chainPreNet hg19Patch13.hg19.all.chain.gz \
     | chainNet  stdin -minSpace=1 ../../hg19Patch13.chrom.sizes \
         /hive/data/genomes/hg19/chrom.sizes stdout /dev/null \
     | netSyntenic stdin noClass.net
-    #   real    0m0.605s
+    #   real    0m5.751s
 
 hgLoadChain -tIndex hg19Patch13 chainHg19 hg19Patch13.hg19.all.chain.gz
-# Loading 25196 chains into hg19Patch13.chainHg19
+# Loading 1291769 chains into hg19Patch13.chainHg19
 
 featureBits hg19Patch13 chainHg19Link
-# 42087519 bases of 43164255 (97.505%) in intersection
+# 90517278 bases of 94378040 (95.909%) in intersection
 
 netClass -verbose=0 -noAr noClass.net hg19Patch13 hg19 hg19Patch13.hg19.net
 
@@ -818,10 +815,10 @@ end
 
 #############################################################################
 # run this same business with hg19 as target, Patch13 sequence as query
-#  (DONE - 2017-08-09 - Hiram)
+#  (DONE - 2018-06-07 - Hiram)
 
-mkdir /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19Patch13.2017-08-09
-cd /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19Patch13.2017-08-09
+mkdir /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19Patch13.2018-06-07
+cd /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19Patch13.2018-06-07
 
 rm -fr hg19Bits run.blastz psl hg19Bits.lift
 mkdir -p hg19Bits run.blastz/tParts run.blastz/qParts psl
@@ -838,7 +835,7 @@ do
     | sed -e "s/${chr}:/${FIX}_/g"  > hg19Bits/${FIX}.fa
   fixName=`head -1 hg19Bits/${FIX}.fa | sed -e 's/>//;'`
   echo -e "${start}\t${fixName}\t${fixSize}\t${chr}\t${chrSize}" >> hg19Bits.lift
-  echo -e "/hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19Patch13.2017-08-09/hg19Bits.2bit:${fixName}:0-${bitSize}" > run.blastz/tParts/${FIX}.lst
+  echo -e "/hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19Patch13.2018-06-07/hg19Bits.2bit:${fixName}:0-${bitSize}" > run.blastz/tParts/${FIX}.lst
   echo -e "/hive/data/genomes/hg19/bed/hg19Patch13/hg19Patch13.unmasked.2bit:${FIX}:0-${fixSize}" > run.blastz/qParts/${FIX}.lst
   echo -e "/cluster/bin/scripts/blastz-run-ucsc -outFormat psl tParts/${FIX}.lst qParts/${FIX}.lst ../DEF {check out exists ../psl/${FIX}.psl}" >> run.blastz/jobList
 done
@@ -846,7 +843,7 @@ done
 faToTwoBit hg19Bits/*.fa hg19Bits.2bit
 twoBitInfo hg19Bits.2bit stdout | sort -k2n > hg19Bits.chrom.sizes
 
-    printf 'BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+    printf 'BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
 # human vs human
 # maximum M allowed with lastz is only 254
 BLASTZ_M=254
@@ -862,9 +859,9 @@ BLASTZ_T=2
 # TARGET: Human Hg19
 SEQ1_DIR=/hive/data/genomes/hg19/hg19.unmasked.2bit
 SEQ1_LEN=/scratch/data/hg19/chrom.sizes
-SEQ1_CTGDIR=/hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19Patch13.2017-08-09/hg19Bits.2bit
-SEQ1_CTGLEN=/hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19Patch13.2017-08-09/hg19Bits.chrom.sizes
-SEQ1_LIFT=/hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19Patch13.2017-08-09/hg19Bits.lift
+SEQ1_CTGDIR=/hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19Patch13.2018-06-07/hg19Bits.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19Patch13.2018-06-07/hg19Bits.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19Patch13.2018-06-07/hg19Bits.lift
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
 SEQ1_IN_CONTIGS=0
@@ -878,56 +875,57 @@ SEQ2_LAP=0
 SEQ2_IN_CONTIGS=0
 SEQ2_LIMIT=1
 
-BASE=/hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19Patch13.2017-08-09
+BASE=/hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19Patch13.2018-06-07
 TMPDIR=/dev/shm
 ' > DEF
 
 ssh ku
-cd /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19Patch13.2017-08-09/run.blastz
+cd /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19Patch13.2018-06-07/run.blastz
 para create jobList
 para try ... check ... push ... etc
 para time > run.time
+
 sed -e 's/^/# /;' run.time
-# Completed: 123 of 123 jobs
-# CPU time in finished jobs:        160s       2.66m     0.04h    0.00d  0.000 y
-# IO & Wait Time:                   330s       5.51m     0.09h    0.00d  0.000 y
-# Average job time:                   4s       0.07m     0.00h    0.00d
-# Longest finished job:              27s       0.45m     0.01h    0.00d
-# Submission to last job:            44s       0.73m     0.01h    0.00d
+# Completed: 204 of 204 jobs
+# CPU time in finished jobs:      10063s     167.72m     2.80h    0.12d  0.000 y
+# IO & Wait Time:                   779s      12.98m     0.22h    0.01d  0.000 y
+# Average job time:                  53s       0.89m     0.01h    0.00d
+# Longest finished job:            4902s      81.70m     1.36h    0.06d
+# Submission to last job:          4952s      82.53m     1.38h    0.06d
 
 # put together the individual results
-cd /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19Patch13.2017-08-09
+cd /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19Patch13.2018-06-07
 mkdir pslParts
 cat psl/chr*.psl | gzip -c > pslParts/hg19.hg19Patch13.psl.gz
 
 #   constructing a chain from those results
-mkdir -p /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19Patch13.2017-08-09/axtChain/run
-cd /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19Patch13.2017-08-09/axtChain/run
+mkdir -p /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19Patch13.2018-06-07/axtChain/run
+cd /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19Patch13.2018-06-07/axtChain/run
 
 time zcat ../../pslParts/hg19.hg19Patch13.psl.gz \
 | axtChain -psl -verbose=0 -scoreScheme=/scratch/data/blastz/human_chimp.v2.q -minScore=2000 -linearGap=medium stdin \
-    /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19Patch13.2017-08-09/hg19Bits.2bit \
+    /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19Patch13.2018-06-07/hg19Bits.2bit \
     /hive/data/genomes/hg19/bed/hg19Patch13/hg19Patch13.unmasked.2bit \
     stdout \
-     | chainAntiRepeat /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19Patch13.2017-08-09/hg19Bits.2bit \
+     | chainAntiRepeat /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19Patch13.2018-06-07/hg19Bits.2bit \
      /hive/data/genomes/hg19/bed/hg19Patch13/hg19Patch13.unmasked.2bit \
     stdin hg19.hg19Patch13.preLift.chain
-    #   real    0m7.347s
+    #   real    8m36.023s
 
 liftUp hg19.hg19Patch13.lifted.chain \
     ../../hg19Bits.lift carry hg19.hg19Patch13.preLift.chain
 
 # constructing the net files:
-cd /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19Patch13.2017-08-09/axtChain
+cd /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19Patch13.2018-06-07/axtChain
 
 chainMergeSort run/hg19.hg19Patch13.lifted.chain \
         | gzip -c > hg19.hg19Patch13.all.chain.gz
 
 hgLoadChain -tIndex hg19 chainHg19Patch13 hg19.hg19Patch13.all.chain.gz
-# Loading 25108 chains into hg19.chainHg19Patch13
+# Loading 1297891 chains into hg19.chainHg19Patch13
 
 featureBits hg19 chainHg19Patch13Link
-# 38662499 bases of 3049335806 (1.268%) in intersection
+# 86001495 bases of 2897316137 (2.968%) in intersection
 
 chainSplit chain hg19.hg19Patch13.all.chain.gz
 # Make nets ("noClass", i.e. without rmsk/class stats which are added later):
@@ -937,14 +935,14 @@ time chainPreNet hg19.hg19Patch13.all.chain.gz \
     | chainNet  stdin -minSpace=1 /hive/data/genomes/hg19/chrom.sizes \
         ../../hg19Patch13.chrom.sizes stdout /dev/null \
     | netSyntenic stdin noClass.net
-    #   real    0m0.564s
+#  real    0m4.868s
 
 time netClass -verbose=0 -noAr noClass.net hg19 hg19Patch13 hg19.hg19Patch13.net
-#  real    0m19.909s
+#   real    0m27.676s
 
 time netFilter -minGap=10 hg19.hg19Patch13.net \
   | hgLoadNet -verbose=0 hg19 netHg19Patch13 stdin
-#  real    0m0.112s
+#  real    0m0.222s
 
 # Make liftOver chains:
 netChainSubset -verbose=0 noClass.net hg19.hg19Patch13.all.chain.gz stdout \
@@ -974,7 +972,7 @@ foreach f (axtNet/*.hg19.hg19Patch13.net.axt.gz)
   | gzip -c > mafNet/$f:t:r:r:r:r:r.maf.gz
 end
 
-cd /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19Patch13.2017-08-09/axtChain
+cd /hive/data/genomes/hg19/bed/hg19Patch13/lastzHg19Patch13.2018-06-07/axtChain
 mkdir -p queryChains
 chainSplit -q queryChains hg19.hg19Patch13.all.chain.gz
 
@@ -1001,7 +999,7 @@ done
 # put the chains together into one file
 chainMergeSort singleLiftOver/chr*.chain | gzip -c \
         > hg19.hg19Patch13.single.over.chain.gz
-# -rw-rw-r-- 1  43719 Aug  9 09:17 hg19.hg19Patch13.single.over.chain.gz
+# -rw-rw-r-- 1   550369 Jun  7 14:35 hg19.hg19Patch13.single.over.chain.gz
 
  # construct psl files from those chains
 chainToPsl hg19.hg19Patch13.single.over.chain.gz \
@@ -1012,16 +1010,20 @@ chainToPsl hg19.hg19Patch13.single.over.chain.gz \
         hg19.hg19Patch13.over.psl
 # pslCheck reports no errors
 pslCheck -db=hg19 hg19.hg19Patch13.over.psl
-# checked: 565 failed: 0 errors: 0
+# checked: 10890 failed: 0 errors: 0
 
 # pslRecalcMatch doesn't change anything
-# pslRecalcMatch hg19.hg19Patch13.over.psl \
-#    /hive/data/genomes/hg19/hg19.unmasked.2bit \
-#      ../../hg19Patch13.unmasked.2bit hg19.hg19Patch13.recalc.over.psl
+pslRecalcMatch hg19.hg19Patch13.over.psl \
+   /hive/data/genomes/hg19/hg19.unmasked.2bit \
+     ../../hg19Patch13.unmasked.2bit hg19.hg19Patch13.recalc.over.psl
+sum *.psl
+07674  2809 hg19.hg19Patch13.over.psl
+07674  2809 hg19.hg19Patch13.recalc.over.psl
+
 
 # load this PSL track
 #     this table name prefix altSeqLiftOverPsl is recognized in hgc clicks
-hgLoadPsl hg19 -table=altSeqLiftOverPslP11 hg19.hg19Patch13.over.psl
+hgLoadPsl hg19 -table=altSeqLiftOverPslP13 hg19.hg19Patch13.over.psl
 
 mkdir /hive/data/genomes/hg19/bed/hg19Patch13/seqExt
 cd /hive/data/genomes/hg19/bed/hg19Patch13/seqExt
@@ -1034,20 +1036,20 @@ hgLoadSeq -drop -seqTbl=seqHg19Patch13 -extFileTbl=extHg19Patch13 hg19 \
 
 #############################################################################
 # wrap up scripts and file editing (trackDb, hgdownload)
-#  (DONE - 2017-08-09 - Hiram)
+#  (DONE - 2018-06-07 - Hiram)
 
-# edit ${HOME}/kent/src/hg/makeDb/doc/hg19/patchDescr.pl to reflect this most
+# edit ${HOME}/kent/src/hg/makeDb/doc/hg19PatchDescr.pl to reflect this most
 # recent patch version.
 
 cd /hive/data/genomes/hg19/bed/hg19Patch13
-# edit patchDescr.pl to update to this patch level
-${HOME}/kent/src/hg/makeDb/doc/hg19/patchDescr.pl \
+# edit hg19PatchDescr.pl to update to this patch level
+${HOME}/kent/src/hg/makeDb/doc/hg19PatchDescr.pl \
     > ${HOME}/kent/src/hg/makeDb/trackDb/human/hg19/hg19Patch13.html
 
 # copy README.txt from previous patch and edit as needed - replace the
 # patch description lines with the output of running
 cd /hive/data/genomes/hg19/bed/hg19Patch13
-cp -p ../hg19Patch9/readmeLines.pl .
+cp -p /hive/data/genomes/hg38/bed/hg38Patch11/readmeLines.pl .
 ./readmeLines.pl genbank/GCA_000001405.14_GRCh37.p13_assembly_report.txt \
     genbank/GCA_000001405.14_GRCh37.p13_assembly_regions.txt \
       patchLocations.bed new.sequences.list > add.to.README.txt
@@ -1055,7 +1057,7 @@ cp -p ../hg19Patch9/readmeLines.pl .
 mkdir /hive/data/genomes/hg19/bed/hg19Patch13/downloads
 cd /hive/data/genomes/hg19/bed/hg19Patch13/downloads
 #This README.txt file needs to be edited, and add the lines ../add.to.README.txt
-cp -p /hive/data/genomes/hg19/bed/hg19Patch9/downloads/README.txt .
+cp -p /hive/data/genomes/hg38/bed/hg38Patch11/downloads/README.txt .
 ln -s ../hg19Patch13.unmasked.2bit hg19Patch13.2bit
 ln -s ../hg19Patch13.agp
 ln -s ../hg19Patch13.fa.gz

@@ -17140,8 +17140,10 @@ TMPDIR=/dev/shm
     # 876836391 bases of 2652783500 (33.053%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` mm10 equCab3) > rbest.log 2>&1 &
-XXX - running - Wed Jun  6 09:25:52 PDT 2018
-    # real    485m29.546s
+    # real    398m20.685s
+
+    cat fb.mm10.chainRBest.EquCab3.txt
+    # 876785778 bases of 2652783500 (33.052%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/equCab3/bed/blastz.mm10.swap
@@ -17152,13 +17154,17 @@ XXX - running - Wed Jun  6 09:25:52 PDT 2018
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1 &
-XXX - running - Wed Jun  6 09:25:52 PDT 2018
-    #  real    63m12.935s
+    #  real    83m14.250s
 
     cat fb.equCab3.chainMm10Link.txt
-    # 680117358 bases of 2587515673 (26.285%) in intersection
+    # 930516778 bases of 2497530654 (37.257%) in intersection
+    cat fb.equCab3.chainSynMm10Link.txt
+    # 897238830 bases of 2497530654 (35.925%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` equCab3 mm10) > rbest.log 2>&1 &
-    # real    437m1.637s
+    # real    318m40.520s
+
+    cat fb.equCab3.chainRBest.Mm10.txt
+    # 875954606 bases of 2497530654 (35.073%) in intersection
 
 #########################################################################

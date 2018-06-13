@@ -11593,8 +11593,10 @@ TMPDIR=/dev/shm
     # 1642798373 bases of 3049335806 (53.874%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` hg38 equCab3) > rbest.log 2>&1 &
-XXX - running - Wed Jun  6 09:21:51 PDT 2018
-    # real    612m50.394s
+    # real    553m32.545s
+
+    cat fb.hg38.chainRBest.EquCab3.txt
+    # 1563820848 bases of 3049335806 (51.284%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/equCab3/bed/blastz.hg38.swap
@@ -11605,13 +11607,97 @@ XXX - running - Wed Jun  6 09:21:51 PDT 2018
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1 &
-XXX - running - Wed Jun  6 09:21:51 PDT 2018
-    #  real    104m31.748s
+    #  real    122m26.771s
 
     cat fb.equCab3.chainHg38Link.txt
-    # 1319553403 bases of 2587515673 (50.997%) in intersection
-    # replacing the previous tuned version:
-    # 1193048482 bases of 2534335866 (47.075%) in intersection
+    # 1666879638 bases of 2497530654 (66.741%) in intersection
+
+    cat fb.equCab3.chainSynHg38Link.txt
+    # 1624977128 bases of 2497530654 (65.063%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` equCab3 hg38) > rbest.log 2>&1 &
-    # real    638m15.603s
+    # real    473m11.347s
+
+    cat fb.equCab3.chainRBest.Hg38.txt
+
+#############################################################################
+# LASTZ human/hg38 vs. Minke whale/balAcu1 - (DONE - 2018-06-11 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/lastzBalAcu1.2018-06-11
+    cd /hive/data/genomes/hg38/bed/lastzBalAcu1.2018-06-11
+
+    printf '# human vs Minke whale
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_M=254
+# default BLASTZ_Q score matrix:
+#       A     C     G     T
+# A    91  -114   -31  -123
+# C  -114   100  -125   -31
+# G   -31  -125   100  -114
+# T  -123   -31  -114    91
+
+# TARGET: human hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=5
+SEQ1_LAP=10000
+
+# QUERY: Minke whale balAcu1
+SEQ2_DIR=/hive/data/genomes/balAcu1/balAcu1.2bit
+SEQ2_LEN=/hive/data/genomes/balAcu1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=40
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzBalAcu1.2018-06-11
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    226m14.103s
+
+    cat fb.hg38.chainBalAcu1Link.txt
+    # 1571134497 bases of 3049335806 (51.524%) in intersection
+
+    cat fb.hg38.chainSynBalAcu1Link.txt
+    # 1509091721 bases of 3049335806 (49.489%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` hg38 balAcu1) > rbest.log 2>&1 &
+    # real    426m33.828s
+
+    cat fb.hg38.chainRBest.BalAcu1.txt
+    # 1443423443 bases of 3049335806 (47.336%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/balAcu1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/balAcu1/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzBalAcu1.2018-06-11/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1 &
+    #  real    105m38.443s
+
+    cat fb.balAcu1.chainHg38Link.txt
+    # 1485701363 bases of 2286657046 (64.973%) in intersection
+
+    cat fb.balAcu1.chainSynHg38Link.txt
+    # 1444079345 bases of 2286657046 (63.152%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` balAcu1 hg38) > rbest.log 2>&1 &
+    # real    422m43.817s
+
+    cat fb.balAcu1.chainRBest.Hg38.txt
+    # 1443200492 bases of 2286657046 (63.114%) in intersection
+
+#############################################################################
