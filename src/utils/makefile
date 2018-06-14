@@ -44,6 +44,7 @@ UTILS_APPLIST = \
 	colTransform \
 	countChars \
 	endsInLf \
+	cpgIslandExt \
 	faAlign \
 	fastqToFa \
 	fastqStatsAndSubsample \
