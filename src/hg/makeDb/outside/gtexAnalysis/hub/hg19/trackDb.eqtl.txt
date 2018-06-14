@@ -1,0 +1,11 @@
+track gtexAwgTransEqtl
+type bigInteract
+shortLabel Trans eQTL
+longLabel Distant variants affecting gene expression (trans-eQTLs), from GTEx V6 Analysis
+interactDirectional true
+maxHeightPixels 300:150:20
+bigDataUrl gtexAwgTransEqtl.inter.bb
+itemRgb on
+html ../gtexTransEqtl.html
+visibility full
+priority 1
