@@ -14,7 +14,6 @@
 ./hg19/gtexAwgAseAdiposeVisceral.bb
 ./hg19/gtexAwgAseProstate.bb
 ./hg19/gtexAwgAseBrainSpinalcord.bb
-./hg19/trackDb.txt
 ./hg19/gtexAwgAseVagina.bb
 ./hg19/gtexAwgAseMinorSalivGland.bb
 ./hg19/gtexAwgAseBrainFrontCortex.bb
@@ -53,6 +52,10 @@
 ./hg19/gtexAwgAseEsophagusMuscular.bb
 ./hg19/gtexAwgAseArteryAorta.bb
 ./hg19/gtexAwgAsePituitary.bb
+./hg19/gtexAwgTransEqtl.inter.bb
+./hg19/trackDb.txt
+./hg19/trackDb.ase.txt
+./hg19/trackDb.eqtl.txt
 ./gtexAnalysisHub.html
 ./hub.txt
 ./genomes.txt
