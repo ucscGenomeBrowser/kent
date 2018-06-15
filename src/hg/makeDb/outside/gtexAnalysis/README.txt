@@ -3,7 +3,7 @@ GTEx Analysis hub.  The first analysis dataset, on which this hub is based
 is Allele-Specific Expression, from NY Genome Center.
 
 Subdirs and files are:
-    buildNotes.txt      Process for building hub
+    buildNotes.*.txt    Process for building hub
     hub/                Source controlled version of hub configuration files
 
 The hub is here:

@@ -88,6 +88,7 @@ if (boxPlot) {
     text(1:count, y1 - adjust, cex=size, labels=labels, srt=rot, xpd=TRUE, adj=c(1,.5),
             col=colorsHex)
 } else {
+    df <- df[(order(match(df$category, colorDf$category))),]
     exprPlot <- barplot(df$value, ylab=yLabel, ylim=yLimit,
                         main=title,
                         col=colorsHex, border=c(darkgray),
