@@ -1139,8 +1139,8 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     # has various holes in the data
 
 #############################################################################
-# hgPal downloads (DONE - 2016-05-09,11 - Hiram)
-#   FASTA from 3-way for knownGene, refGene and knownCanonical
+# hgPal downloads (DONE - 2018-06-15 - Hiram)
+#   FASTA from 3-way for ensGene
 
     ssh hgwdev
     screen -S micMur3HgPal
@@ -1181,21 +1181,20 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     chmod +x ensGene.jobs 
 
     time (./$gp.jobs) > $gp.jobs.log 2>&1 &
-XXX - running - Fri Jun 15 15:37:01 PDT 2018
     # real    14m50.750s
 
     export mz=multiz3way
     export gp=ensGene
     time find ./exonAA -type f | grep exonAA.fa.gz | xargs zcat \
      | gzip -c > $gp.$mz.exonAA.fa.gz
-    #  real    4m20.026s
+    #  real    0m12.859s
 
     time find ./exonNuc -type f | grep exonNuc.fa.gz | xargs zcat \
      | gzip -c > $gp.$mz.exonNuc.fa.gz
-    #   real    4m45.761s
+    #  real    0m32.792s
 
-  #  -rw-rw-r--   1 36201970 May 11 11:25 ensGene.multiz3way.exonAA.fa.gz
-  #  -rw-rw-r--   1 59404213 May 11 11:30 ensGene.multiz3way.exonNuc.fa.gz
+  # -rw-rw-r--  1 26057469 Jun 15 16:41 ensGene.multiz3way.exonAA.fa.gz
+  # -rw-rw-r--  1 38863651 Jun 15 16:42 ensGene.multiz3way.exonNuc.fa.gz
 
     export mz=multiz3way
     export gp=ensGene
@@ -1209,8 +1208,11 @@ XXX - running - Fri Jun 15 15:37:01 PDT 2018
 
     rm -rf exonAA exonNuc
 
+    # verify the /multiz3way/README.txt file mentions these alignments
+    # add it if not there
+
 #############################################################################
-# construct download files for 3-way (DONE - 2017-03-28 - Hiram)
+# construct download files for 3-way (DONE - 2018-06-15 - Hiram)
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/micMur3/multiz3way
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/micMur3/phastCons3way
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/micMur3/phyloP3way
@@ -1304,13 +1306,12 @@ do
         | gzip -c > upstream${S}.${geneTbl}.maf.gz
     echo "done upstream${S}.${geneTbl}.maf.gz"
 done
-    #   about 20 minutes
+    #   real    6m0.388s
 
     md5sum *.maf.gz *.nh upstream*.gz README.txt >> md5sum.txt
 
     # some other symlinks were already made above
-    # obtain the README.txt from cavPor3/multiz3way and update for this
-    #   situation
+    # verify the README.txt has note about upstream files, add if not there
     ln -s `pwd`/upstream*.gz `pwd`/README.txt \
         /usr/local/apache/htdocs-hgdownload/goldenPath/micMur3/multiz3way
 
