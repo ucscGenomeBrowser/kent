@@ -518,7 +518,7 @@ done
     #   appears to work OK
 
 #########################################################################
-# Phylogenetic tree from 4-way (DONE - 2018-06-14 - Hiram)
+# Phylogenetic tree from 3-way (DONE - 2018-06-14 - Hiram)
     mkdir /hive/data/genomes/micMur3/bed/multiz3way/4d
     cd /hive/data/genomes/micMur3/bed/multiz3way/4d
 
@@ -662,7 +662,7 @@ endif
      # doesn't work so well with such different trees
 
 #########################################################################
-# phastCons 4-way (DONE - 2018-06-14 - Hiram)
+# phastCons 3-way (DONE - 2018-06-14 - Hiram)
     # split 3way mafs into 10M chunks and generate sufficient statistics
     # files for # phastCons
     ssh ku
@@ -862,63 +862,61 @@ done > tmpMostConserved.bed
 	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
 	| sed -e 's/\.[0-9][0-9]*-[0-9][0-9]* start/ start/' \
         | gzip -c > downloads/phastCons3way.wigFix.gz)
-XXX - running - Thu Jun 14 18:23:21 PDT 2018
-    #   real    22m23.698s
-# -rw-rw-r-- 1 1435543282 Mar 27 12:43 phastCons3way.wigFix.gz
+    #   real    23m48.045s
+# -rw-rw-r-- 1 2417131021 Jun 14 18:34 phastCons3way.wigFix.gz
 
     # check integrity of data with wigToBigWig
     time (zcat downloads/phastCons3way.wigFix.gz \
 	| wigToBigWig -verbose=2 stdin /hive/data/genomes/micMur3/chrom.sizes \
 	    phastCons3way.bw) > bigWig.log 2>&1
     egrep "real|VmPeak" bigWig.log
-    # pid=27147: VmPeak:    17331584 kB
-    # real    27m36.577s
+    # pid=23258: VmPeak:    19028104 kB
+    # real    25m38.455s
 
     bigWigInfo phastCons3way.bw | sed -e 's/^/# /;'
 # version: 4
 # isCompressed: yes
 # isSwapped: 0
-# primaryDataSize: 2,282,195,304
-# primaryIndexSize: 91,414,468
+# primaryDataSize: 3,801,574,234
+# primaryIndexSize: 74,859,628
 # zoomLevels: 10
-# chromCount: 2102
-# basesCovered: 1,597,890,632
-# mean: 0.051877
+# chromCount: 69
+# basesCovered: 1,732,608,342
+# mean: 0.199336
 # min: 0.000000
-# max: 0.998000
-# std: 0.155699
+# max: 0.997000
+# std: 0.269823
 
     #	encode those files into wiggle data
     time (zcat downloads/phastCons3way.wigFix.gz \
 	| wigEncode stdin phastCons3way.wig phastCons3way.wib)
     # Converted stdin, upper limit 1.00, lower limit 0.00
-    # real    9m51.462s
-
+    # real    9m45.235s
 
     du -hsc *.wi?
-    #	1.5G    phastCons3way.wib
-    #	277M    phastCons3way.wig
+    #	1.7G    phastCons3way.wib
+    #   226M    phastCons3way.wig
 
     # Load gbdb and database with wiggle.
     ln -s `pwd`/phastCons3way.wib /gbdb/micMur3/multiz3way/phastCons3way.wib
     time hgLoadWiggle -pathPrefix=/gbdb/micMur3/multiz3way \
 	micMur3 phastCons3way phastCons3way.wig
-    #   real    0m32.602s
+    #   real    0m26.607s
 
     # use to set trackDb.ra entries for wiggle min and max
     # and verify table is loaded correctly
 
     wigTableStats.sh micMur3 phastCons3way
-    # micMur3.phastCons3way 0 0.998 0.0518772 1597890632 8.28941e+07 \
+    # micMur3.phastCons3way    0 0.997 0.199336 1732608342 3.45371e+08
     # db.table              min max mean count sumData stdDev viewLimits
 #     stdDev  viewLimits
-    # 0.155699 viewLimits=0:0.830373
+    # 0.269823 viewLimits=0:0.997
 
     #  Create histogram to get an overview of all the data
     time hgWiggle -doHistogram -db=micMur3 \
 	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
 	    phastCons3way > histogram.data 2>&1
-    #	real    2m37.641s
+    #	real    1m40.570s
 
     #	create plot of histogram:
 
@@ -928,7 +926,7 @@ set size 1.4, 0.8
 set key left box
 set grid noxtics
 set grid ytics
-set title " Chinese tree shrew micMur3 Histogram phastCons3way track"
+set title " Mouse lemur Microcebus murinus micMur3 Histogram phastCons3way track"
 set xlabel " phastCons3way score"
 set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
@@ -943,7 +941,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \\
     display histo.png &
 
 #########################################################################
-# phyloP for 4-way (DONE - 2017-03-27 - Hiram)
+# phyloP for 3-way (DONE - 2018-06-15 - Hiram)
     # run phyloP with score=LRT
     ssh ku
     mkdir /cluster/data/micMur3/bed/multiz3way/consPhyloP
@@ -954,12 +952,12 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \\
     # Adjust model file base composition background and rate matrix to be
     # representative of the chromosomes in play
     grep BACKGROUND ../../4d/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
-    #	0.513
+    #	0.569
     /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
-	../../4d/all.mod 0.513 > all.mod
+	../../4d/all.mod 0.569 > all.mod
     # verify, the BACKGROUND should now be paired up:
     grep BACK all.mod
-    #   BACKGROUND: 0.243500 0.256500 0.256500 0.243500 
+    #   BACKGROUND: 0.215500 0.284500 0.284500 0.215500 
 
     printf '#!/bin/csh -fe
 set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
@@ -998,7 +996,7 @@ sleep 4
 	| sed -e "s/.ss$//; s#^../../cons/SS/result/##" > ss.list
     # make sure the list looks good
     wc -l ss.list
-    #	2122 ss.list
+    #	294 ss.list
 
     # Create template file
     #	file1 == $chr/$chunk/file name without .ss suffix
@@ -1020,100 +1018,100 @@ sleep 4
     para try ... check ... push ... etc ...
     para -maxJob=64 push
     para time > run.time
-# Completed: 2122 of 2122 jobs
-# CPU time in finished jobs:       1490s      24.84m     0.41h    0.02d  0.000 y
-# IO & Wait Time:                 14030s     233.83m     3.90h    0.16d  0.000 y
-# Average job time:                   7s       0.12m     0.00h    0.00d
-# Longest finished job:              15s       0.25m     0.00h    0.00d
-# Submission to last job:         24429s     407.15m     6.79h    0.28d
+# Completed: 294 of 294 jobs
+# CPU time in finished jobs:       1024s      17.07m     0.28h    0.01d  0.000 y
+# IO & Wait Time:                  2589s      43.14m     0.72h    0.03d  0.000 y
+# Average job time:                  12s       0.20m     0.00h    0.00d
+# Longest finished job:              17s       0.28m     0.00h    0.00d
+# Submission to last job:           262s       4.37m     0.07h    0.00d
 
     mkdir downloads
 
     time (find ./wigFix -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
 	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
 	| gzip -c > downloads/phyloP3way.wigFix.gz)
-    #   real    13m25.127s
+    #   real    13m57.387s
 
     # check integrity of data with wigToBigWig
     time (zcat downloads/phyloP3way.wigFix.gz \
 	| wigToBigWig -verbose=2 stdin /hive/data/genomes/micMur3/chrom.sizes \
 	phyloP3way.bw) > bigWig.log 2>&1
     egrep "real|VmPeak" bigWig.log
-    # pid=17051: VmPeak:    17331552 kB
-    # real    158m29.481s
+    # pid=43080: VmPeak:    19028104 kB
+    # real    25m52.899s
 
     bigWigInfo phyloP3way.bw | sed -e 's/^/# /;'
 # version: 4
 # isCompressed: yes
 # isSwapped: 0
-# primaryDataSize: 2,115,913,016
-# primaryIndexSize: 91,414,468
+# primaryDataSize: 1,687,583,334
+# primaryIndexSize: 74,859,628
 # zoomLevels: 10
-# chromCount: 2102
-# basesCovered: 1,597,890,632
-# mean: -0.092541
-# min: -2.913000
-# max: 0.476000
-# std: 0.631158
+# chromCount: 69
+# basesCovered: 1,732,608,342
+# mean: 0.073093
+# min: -1.989000
+# max: 0.434000
+# std: 0.511784
 
     #	encode those files into wiggle data
     time (zcat downloads/phyloP3way.wigFix.gz \
 	| wigEncode stdin phyloP3way.wig phyloP3way.wib)
-    # Converted stdin, upper limit 0.48, lower limit -2.91
-    # real    7m27.578s
+    # Converted stdin, upper limit 0.43, lower limit -1.99
+    # real    9m52.929s
 
     du -hsc *.wi?
-    # 1.5G    phyloP3way.wib
-    # 284M    phyloP3way.wig
+    # 1.7G    phyloP3way.wib
+    # 224M    phyloP3way.wig
 
     # Load gbdb and database with wiggle.
     ln -s `pwd`/phyloP3way.wib /gbdb/micMur3/multiz3way/phyloP3way.wib
     time hgLoadWiggle -pathPrefix=/gbdb/micMur3/multiz3way micMur3 \
 	phyloP3way phyloP3way.wig
-    # real    0m34.676s
+    # real    0m25.308s
 
     # use to set trackDb.ra entries for wiggle min and max
     # and verify table is loaded correctly
 
     wigTableStats.sh micMur3 phyloP3way
 # db.table      min max mean count sumData
-# micMur3.phyloP3way      -2.913 0.476 -0.0925405 1597890632 -1.4787e+08
+# micMur3.phyloP3way -1.989 0.434 0.0730935 1732608342 1.26642e+08
 #       stdDev viewLimits
-#     0.631158 viewLimits=-2.913:0.476
+#     0.511784 viewLimits=-1.989:0.434
 
-    #	that range is: 0.476+2.913 = 3.389 for hBinSize=0.003389
+    #	that range is: 0.434+1.989 = 2.423 for hBinSize=0.002423
 
     #  Create histogram to get an overview of all the data
     time hgWiggle -doHistogram \
-	-hBinSize=0.003389 -hBinCount=1000 -hMinVal=-2.913 -verbose=2 \
+	-hBinSize=0.002423 -hBinCount=1000 -hMinVal=-1.989 -verbose=2 \
 	    -db=micMur3 phyloP3way > histogram.data 2>&1
-    # real    2m37.794s
+    # real    1m39.574s
 
     # find the Y range for the 2:5 graph
     grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin \
       | sed -e 's/^/# /;'
-# Q1 0.000053
-# median 0.000167
-# Q3 0.000663
-# average 0.001337
+# Q1 0.000051
+# median 0.000240
+# Q3 0.001269
+# average 0.003040
 # min 0.000000
-# max 0.136823
-# count 748
-# total 0.999999
-# standard deviation 0.007009
+# max 0.104443
+# count 329
+# total 1.000009
+# standard deviation 0.010154
 
     # find the X range for the 2:5 graph
     grep "^[0-9]" histogram.data | ave -col=2 stdin \
       | sed -e 's/^/# /;'
-# Q1 -1.979335
-# median -1.345585
-# Q3 -0.711844
-# average -1.311897
-# min -2.913000
-# max 0.455666
-# count 748
-# total -981.299078
-# standard deviation 0.856840
+# Q1 -1.194260
+# median -0.891381
+# Q3 -0.617582
+# average -0.858939
+# min -1.989000
+# max 0.431577
+# count 329
+# total -282.590953
+# standard deviation 0.633148
 
     #	create plot of histogram:
     printf 'set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff font \
@@ -1122,26 +1120,27 @@ set size 1.4, 0.8
 set key left box
 set grid noxtics
 set grid ytics
-set title " Guinea pig micMur3 Histogram phyloP3way track"
+set title " Mouse lemur Microcebus murinus micMur3 Histogram phyloP3way track"
 set xlabel " phyloP3way score"
 set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
 set y2range [0:1]
 set y2tics
 set xtics
-set xrange [-3:0.46]
-set yrange [0:0.04]
+set xrange [-2:0.5]
+set yrange [0:0.15]
 
 plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
         "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
 ' | gnuplot > histo.png
 
     display histo.png &
-    # appears to have an odd hole in the data near X=0 ?
+    # this is a very choppy graph compared the the larger N-way alignments
+    # has various holes in the data
 
 #############################################################################
 # hgPal downloads (DONE - 2016-05-09,11 - Hiram)
-#   FASTA from 4-way for knownGene, refGene and knownCanonical
+#   FASTA from 3-way for knownGene, refGene and knownCanonical
 
     ssh hgwdev
     screen -S micMur3HgPal
@@ -1149,9 +1148,10 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     cd /hive/data/genomes/micMur3/bed/multiz3way/pal
     cat ../species.list | tr '[ ]' '[\n]' > order.list
 
-    # this for loop takes about 2.5 hours on this large count contig assembly
+    # BEWARE: high count contig assemblies can take hours to run this simple
+    # preparation script
     export mz=multiz3way
-    export gp=ncbiRefSeq
+    export gp=ensGene
     export db=micMur3
     export I=0
     export D=0
@@ -1173,19 +1173,19 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
             I=0
         fi
     done >> $gp.jobs
-    # real    115m16.333s
-
+    # real    1m32.374s
 
     echo "date" >> $gp.jobs
     echo "wait" >> $gp.jobs
 
-    chmod +x  ncbiRefSeq.jobs 
+    chmod +x ensGene.jobs 
 
     time (./$gp.jobs) > $gp.jobs.log 2>&1 &
+XXX - running - Fri Jun 15 15:37:01 PDT 2018
     # real    14m50.750s
 
     export mz=multiz3way
-    export gp=ncbiRefSeq
+    export gp=ensGene
     time find ./exonAA -type f | grep exonAA.fa.gz | xargs zcat \
      | gzip -c > $gp.$mz.exonAA.fa.gz
     #  real    4m20.026s
@@ -1194,11 +1194,11 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
      | gzip -c > $gp.$mz.exonNuc.fa.gz
     #   real    4m45.761s
 
-  #  -rw-rw-r--   1 36201970 May 11 11:25 ncbiRefSeq.multiz3way.exonAA.fa.gz
-  #  -rw-rw-r--   1 59404213 May 11 11:30 ncbiRefSeq.multiz3way.exonNuc.fa.gz
+  #  -rw-rw-r--   1 36201970 May 11 11:25 ensGene.multiz3way.exonAA.fa.gz
+  #  -rw-rw-r--   1 59404213 May 11 11:30 ensGene.multiz3way.exonNuc.fa.gz
 
     export mz=multiz3way
-    export gp=ncbiRefSeq
+    export gp=ensGene
     export db=micMur3
     export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
     mkdir -p $pd
@@ -1210,7 +1210,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     rm -rf exonAA exonNuc
 
 #############################################################################
-# construct download files for 4-way (DONE - 2017-03-28 - Hiram)
+# construct download files for 3-way (DONE - 2017-03-28 - Hiram)
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/micMur3/multiz3way
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/micMur3/phastCons3way
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/micMur3/phyloP3way
@@ -1219,19 +1219,20 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     mkdir multiz3way phastCons3way phyloP3way
     cd multiz3way
     time cp -p ../../anno/micMur3.3way.maf .
-    #   real    0m15.628s
+    #   real    0m10.690s
 
-    # -rw-rw-r-- 1 9321834217 Mar 27 10:12 micMur3.3way.maf
+    # -rw-rw-r-- 1 6567442730 Jun 14 17:08 micMur3.3way.maf
 
     du -hsc *
-    #  8.7G    micMur3.3way.maf
+    #  6.2G    micMur3.3way.maf
 
     time gzip *.maf
+    # real    23m23.610s
 
-    # -rw-rw-r-- 1 2409820297 Mar 27 10:12 micMur3.3way.maf.gz
+    # -rw-rw-r-- 1 1789293002 Jun 14 17:08 micMur3.3way.maf.gz
 
     du -hsc *.maf.gz
-    #  2.3G    micMur3.3way.maf.gz
+    #  1.7G    micMur3.3way.maf.gz
 
     grep TREE ../../4d/all.mod | awk '{print $NF}' \
       | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
@@ -1243,16 +1244,16 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 	| $HOME/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
 	    > micMur3.3way.scientificNames.nh
     time md5sum *.nh *.maf.gz > md5sum.txt
-    #   real    0m35.144s
+    #   real    0m6.058s
 
     ln -s `pwd`/* \
         /usr/local/apache/htdocs-hgdownload/goldenPath/micMur3/multiz3way
 
     du -hsc *.maf.gz ../../anno/micMur3.3way.maf
-    #  3.0G     micMur3.3way.maf.gz
-    #  13G     ../../anno/micMur3.3way.maf
+    #  1.7G    micMur3.3way.maf.gz
+    #  6.2G    ../../anno/micMur3.3way.maf
 
-    # obtain the README.txt from cavPor3/multiz3way and update for this
+    # obtain the README.txt from otoGar3/multiz3way and update for this
     #   situation
 
     #####################################################################
@@ -1263,9 +1264,9 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     ln -s ../../cons/all/phastCons3way.bw ./micMur3.phastCons3way.bw
     ln -s ../../cons/all/all.mod ./micMur3.phastCons3way.mod
     time md5sum *.gz *.mod *.bw > md5sum.txt
-    #   real    0m20.354s
+    #   real    0m24.680s
 
-    # obtain the README.txt from otoGar3/phastCons5way and update for this
+    # obtain the README.txt from otoGar3/phastCons3way and update for this
     #   situation
     ln -s `pwd`/* \
       /usr/local/apache/htdocs-hgdownload/goldenPath/micMur3/phastCons3way
@@ -1279,9 +1280,9 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     ln -s ../../consPhyloP/all/phyloP3way.bw micMur3.phyloP3way.bw
 
     time md5sum *.mod *.bw *.gz > md5sum.txt
-    #   real    0m29.662s
+    #   real    0m13.555s
 
-    # obtain the README.txt from micMur3/phyloP17way and update for this
+    # obtain the README.txt from otoGar3/phyloP3way and update for this
     #   situation
     ln -s `pwd`/* \
       /usr/local/apache/htdocs-hgdownload/goldenPath/micMur3/phyloP3way
@@ -1291,7 +1292,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     cd /hive/data/genomes/micMur3/bed/multiz3way/downloads/multiz3way
     # bash script
 #!/bin/sh
-export geneTbl="ncbiRefSeq"
+export geneTbl="ensGene"
 for S in 1000 2000 5000
 do
     echo "making upstream${S}.maf"
@@ -1314,71 +1315,7 @@ done
         /usr/local/apache/htdocs-hgdownload/goldenPath/micMur3/multiz3way
 
 #############################################################################
-# hgPal downloads (DONE - 2016-05-11 - Hiram)
-#   FASTA from 4-way for knownGene, refGene and knownCanonical
-
-    ssh hgwdev
-    screen -S micMur3HgPal
-    mkdir /hive/data/genomes/micMur3/bed/multiz3way/pal
-    cd /hive/data/genomes/micMur3/bed/multiz3way/pal
-    cat ../species.list | tr '[ ]' '[\n]' > order.list
-
-    # this for loop takes about 2.5 hours on this large count contig assembly
-    export mz=multiz3way
-    export gp=ensGene
-    export db=micMur3
-    export I=0
-    export D=0
-    mkdir exonAA exonNuc
-    for C in `sort -nk2 ../../../chrom.sizes | cut -f1`
-    do
-        I=`echo $I | awk '{print $1+1}'`
-        D=`echo $D | awk '{print $1+1}'`
-        dNum=`echo $D | awk '{printf "%03d", int($1/1000)}'`
-        mkdir -p exonNuc/${dNum} > /dev/null
-        mkdir -p exonAA/${dNum} > /dev/null
-	echo "mafGene -chrom=$C -exons -noTrans $db $mz $gp order.list stdout | gzip -c > exonNuc/${dNum}/$C.exonNuc.fa.gz &"
-	echo "mafGene -chrom=$C -exons $db $mz $gp order.list stdout | gzip -c > exonAA/${dNum}/$C.exonAA.fa.gz &"
-        if [ $I -gt 16 ]; then
-            echo "date"
-            echo "wait"
-            I=0
-        fi
-    done > $gp.jobs
-    echo "date" >> $gp.jobs
-    echo "wait" >> $gp.jobs
-
-    time sh -x ./$gp.jobs > $gp.jobs.log 2>&1 &
-    # real    175m50.376s
-
-
-    export mz=multiz3way
-    export gp=xenoRefGene
-    time find ./exonAA -type f | grep exonAA.fa.gz | xargs zcat \
-     | gzip -c > $gp.$mz.exonAA.fa.gz
-    # real    10m29.500s
-
-    time find ./exonNuc -type f | grep exonNuc.fa.gz | xargs zcat \
-     | gzip -c > $gp.$mz.exonNuc.fa.gz
-    #   real    15m9.974s
-
-  # -rw-rw-r--   1 611281544 Apr 15 20:37 xenoRefGene.multiz3way.exonAA.fa.gz
-  # -rw-rw-r--   1 955571425 Apr 15 21:06 xenoRefGene.multiz3way.exonNuc.fa.gz
-
-    export mz=multiz3way
-    export gp=xenoRefGene
-    export db=micMur3
-    export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
-    mkdir -p $pd
-    md5sum *.fa.gz > md5sum.txt
-    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
-    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
-    ln -s `pwd`/md5sum.txt $pd/
-
-    rm -rf exonAA exonNuc
-
-#############################################################################
-# wiki page for 4-way (DONE - 2016-05-11 - Hiram)
+# wiki page for 3-way (DONE - 2018-06-15 - Hiram)
     mkdir /hive/users/hiram/bigWays/micMur3.3way
     cd /hive/users/hiram/bigWays
     echo "micMur3" > micMur3.3way/ordered.list
@@ -1389,26 +1326,26 @@ done
     # in the tables.  They are usually already mostly done, only new
     # assemblies will have updates.
     ./sizeStats.sh micMur3.3way/ordered.list
-    # dbDb.sh constructs micMur3.3way/MicMur3_4-way_conservation_alignment.html
+    # dbDb.sh constructs micMur3.3way/MicMur3_3-way_conservation_alignment.html
     # may need to add new assembly references to srcReference.list and
     # urlReference.list
     ./dbDb.sh micMur3 3way
-    # sizeStats.pl constructs micMur3.3way/MicMur3_4-way_Genome_size_statistics.html
+    # sizeStats.pl constructs micMur3.3way/MicMur3_3-way_Genome_size_statistics.html
     # this requires entries in coverage.list for new sequences
     ./sizeStats.pl micMur3 3way
 
-    # defCheck.pl constructs MicMur3_4-way_conservation_lastz_parameters.html
+    # defCheck.pl constructs MicMur3_3-way_conservation_lastz_parameters.html
     ./defCheck.pl micMur3 3way
 
     # this constructs the html pages in micMur3.3way/:
-# -rw-rw-r-- 1 3317 May 11 11:08 MicMur3_4-way_conservation_alignment.html
-# -rw-rw-r-- 1 4827 May 11 11:08 MicMur3_4-way_Genome_size_statistics.html
-# -rw-rw-r-- 1 3308 May 11 11:08 MicMur3_4-way_conservation_lastz_parameters.html
+# -rw-rw-r-- 1 2325 Jun 15 15:38 MicMur3_3-way_conservation_alignment.html
+# -rw-rw-r-- 1 3644 Jun 15 15:38 MicMur3_3-way_Genome_size_statistics.html
+# -rw-rw-r-- 1 2716 Jun 15 15:38 MicMur3_3-way_conservation_lastz_parameters.html
     # add those pages to the genomewiki.  Their page names are the
     # names of the .html files without the .html:
-#  MicMur3_4-way_conservation_alignment
-#  MicMur3_4-way_Genome_size_statistics
-#  MicMur3_4-way_conservation_lastz_parameters
+#  MicMur3_3-way_conservation_alignment
+#  MicMur3_3-way_Genome_size_statistics
+#  MicMur3_3-way_conservation_lastz_parameters
 
     # when you view the first one you enter, it will have links to the
     # missing two.
