@@ -42,7 +42,7 @@ group compGeno
     visibility full
     subTrack cons3way
     viewLimits -2:0.5
-    viewLimitsMax -1.947:0.447
+    viewLimitsMax -1.989:0.434
 
         track phyloP3way
         subTrack cons3wayViewphyloP on
@@ -51,9 +51,9 @@ group compGeno
         longLabel 3 mammal Basewise Conservation by PhyloP
         noInherit on
         configurable on
-        type wig -1.947 0.447
+        type wig -1.989 0.434
         maxHeightPixels 100:50:11
-        viewLimits -1.95:0.447
+        viewLimits -1.989:0.434
         autoScale off
         spanList 1
         windowingFunction mean
