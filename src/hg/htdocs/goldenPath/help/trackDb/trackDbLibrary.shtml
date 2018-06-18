@@ -830,7 +830,7 @@
     urlLabel NCBI Details:    </pre>
 </DIV>
 
-<DIV class="urls"><span class="types bigBed"></span>
+<DIV class="urls"><span class="types bigBed bigBarChart"></span>
     <div class="format">
         <code>urls &lt;fieldName1&gt;="&lt;url1&gt;" &lt;fieldName2&gt;="&lt;url2&gt;" ...</code><BR>
     </div>
