@@ -486,7 +486,7 @@ if (sameString(tdb->track, "exacVariants"))
            skipChr(rec->chrom), rec->chromStart+1, rec->alleles[0], rec->alleles[1],
            skipChr(rec->chrom), rec->chromStart+1, rec->alleles[0], rec->alleles[1]);
     }
-if (sameString(tdb->track, "gnomadVariants"))
+if (sameString(tdb->track, "gnomadGenomesVariants") || sameString(tdb->track, "gnomadExomesVariants"))
     {
     printf("<b>gnomAD:</b> "
            "<a href=\"http://gnomad.broadinstitute.org/variant/%s-%d-%s-%s\" "
