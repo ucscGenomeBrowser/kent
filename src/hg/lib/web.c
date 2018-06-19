@@ -1421,7 +1421,7 @@ if(scriptName)
                     cartOptionalString(cart, "g")));
     if (track && cart && db &&
         (endsWith(scriptName, "hgc") || endsWith(scriptName, "hgTrackUi") ||
-         endsWith(scriptName, "hgGene")))
+         endsWith(scriptName, "hgGtexTrackSettings") || endsWith(scriptName, "hgGene")))
         {
         struct trackDb *tdb = hTrackDbForTrack(db, track);
         if (tdb)
