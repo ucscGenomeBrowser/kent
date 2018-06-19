@@ -93,28 +93,58 @@ BED or other format file to display the source and target region labels.</p>
 <a name="example1"></a>
 <h6>Example #1</h6>
 <p>
-In this example, you will create an interact custom track using example data.
+In this example, you will create an interact custom track using example SNP/gene interaction data.
+This example uses the interaction coloring and directionality features of the interact track type.
 <ol>
    <li>Paste the following track line into the 
        <a href="../../cgi-bin/hgCustom?db=hg19">custom track management 
    page</a> for the human assembly hg19.
+
    <pre><code>
-track type=interact name=&quot;interact Example One&quot; description=&quot;An interact file&quot; visibility=full
-browser position chr1:1353698-41973449
-chr1    1353798 1357149 rs7017533/ANKRD65/skinExposed   0       10.123  skinExposed     2003199 chr8    60572958        60572959        rs7017533       .       chr1    1353798 1357149 ANKRD65 -
-chr1    1477052 41973349        rs3738577/SSU72/thyroid 0       7.318   thyroid 35653   chr1    41973348        41973349        rs3738577       .       chr1    1477052 1510249 SSU72   -
+track type=interact name=&quot;interact Example One&quot; description=&quot;An interact file&quot; interactDirectional=true maxHeightPixels=50:100:200 visibility=full
+browser position chr12:40,560,500-40,660,499 
+chr12    40572709      40618813        rs7974522/LRRK2/muscleSkeletal  0       0.624   muscleSkeletal  #7A67EE  chr12 40572709        40572710  rs7974522       .       chr12   40618812        40618813  LRRK2   +
+chr12    40579899      40618813        rs17461492/LRRK2/muscleSkeletal  0       0.624   muscleSkeletal  #7A67EE chr12 40579899        40579900  rs17461492       .       chr12   40618812        40618813  LRRK2   +
+chr12    40614433      40618813        rs76904798/LRRK2/nerveTibial  0       0.625   nerveTibial  #FFD700       chr12 40614433        40614434  rs76904798       .       chr12   40618812        40618813  LRRK2   +
+chr12    40618812      40652520        rs2723264/LRRK2/lung  0       1.839   lung     #9ACD32  chr12      40652519        40652520  rs76904798       .       chr12   40618812        40618813  LRRK2   +
    </code></pre></li>  
+
    <li>Click the &quot;submit&quot; button.</li> 
 </ol>
 </p>
 <p>
-After the file loads in the Genome Browser, you should see a curved interaction displayed.
-Hovering the mouse over an end or the curve peak of an  interaction will display the interaction name and value. Clicking at one of the hoverable regions will show the details page for the 
-interaction.
+After the file loads in the Genome Browser, you should see four interactions displayed.
+Hovering the mouse over an end or the curve peak of an  interaction will display the interaction name and value and experiment name (in this example, the tissue). Clicking at one of the hoverable regions will show the details page for the 
+interaction.  The interactDirectional setting causes reverse direction interactions (where target precedes source) to be displayed as dashed lines.  In this example, the lung (green) interaction is
+in the reverse direction.
 </p>
 
 <a name="example2"></a>
 <h6>Example #2</h6>
+<p>
+In this example, you will create an interact custom track using example chromatin interaction data.
+This type of data is non-directional and commonly would represent a single experiment, with the 
+interaction score being of interest.  The settings below display using the gray-scale coloring feature, where
+the darkness of the interaction is based on the score.
+<ol>
+   <li>Paste the following track line into the 
+       <a href="../../cgi-bin/hgCustom?db=hg19">custom track management 
+   page</a> for the human assembly hg19.
+
+   <pre><code>
+track type=interact name=&quot;interact Example Two&quot; description=&quot;Chromatin interactions example&quot; spectrum=true maxHeightPixels=50:100:200 visibility=full
+   </code></pre></li>  
+
+   <li>Click the &quot;submit&quot; button.</li> 
+</ol>
+</p>
+<p>
+After the file loads in the Genome Browser, you should see four interactions displayed, with
+the darkness of the interaction indicating strength of the interaction.
+</p>
+
+<a name="example3"></a>
+<h6>Example #3</h6>
 <p>
 In this example, you will create a bigInteract track out of an existing bigInteract format file,
 located on the UCSC Genome Browser http server. This file contains data for the hg19 assembly.
@@ -125,7 +155,7 @@ To create a custom track using this file:
 <ol>
    <li>Construct a track line referencing the file:
    <pre><code>
-track type=bigInteract name=&quot;bigInteract Example Two&quot; description=&quot;A bigInteract file&quot; visibility=full bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/interact/interactExample2.chiaPet.hg19.inter.bb
+track type=bigInteract name=&quot;bigInteract Example Two&quot; description=&quot;A bigInteract file&quot; visibility=full bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/interact/interactExample3.chiaPet.hg19.inter.bb
    </code></pre></li>
    <li>Paste the track line into the <a href="../../cgi-bin/hgCustom?db=hg19">custom track management 
    page</a> for the human assembly hg19. </li>
@@ -137,15 +167,15 @@ After the file loads in the Genome Browser, you should see a number of curved in
 colored black.
 </p>
 
-<a name="example3"></a>
-<h6>Example #3</h6>
+<a name="example4"></a>
+<h6>Example #4</h6>
 <p>
 In this example, you will use an example bed file to create a bigInteract file,
 allowing the data to be remotely accessed and exist within a track hub.  The track settings for 
 bigInteract on a hub can be viewed <a href="./trackDb/trackDbHub.html#bigInteract">here</a>.
 </p>
 <ol>
-   <li>Download the example file <a href="examples/interact/interactExample3.chiaPet.hg19.inter.bed">here</a> </li>
+   <li>Download the example file <a href="examples/interact/interactExample4.chiaPet.hg19.inter.bed">here</a> </li>
    <li>Download the <em>fetchChromSizes</em> and <em>bedToBigBed</em> programs from the
    <a href="http://hgdownload.soe.ucsc.edu/admin/exe">utilities directory</a> appropriate to your
    operating system.
