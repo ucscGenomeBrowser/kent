@@ -377,8 +377,8 @@ int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 struct asObject *as = NULL;
 char *extraFields[256];
-int extraFieldCount;
-int numColumns;
+int extraFieldCount = 0;
+int numColumns = 0;
 struct barChartBed *chartItem = getBarChart(tdb, item, seqName, start, end, &as, extraFields, &extraFieldCount);
 if (chartItem == NULL)
     errAbort("Can't find item %s in barChart table/file %s\n", item, tdb->table);
