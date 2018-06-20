@@ -62,6 +62,7 @@ my %autoSqlIgnore = ( "hg/autoSql/tests/input/polyTest.as" => "",
 		      "lib/pslWScore.as" => "",
 		      "utils/bedToBigBed/tests/input/itemRgb.as" => "",
 		      "utils/expMatrixToBarchartBed/tests/test.as" => "",
+		      "utils/expMatrixToBarchartBed/tests/test2.as" => "",
 		    );
 
 my $basename      = $0;  $basename =~ s@.*/@@;
