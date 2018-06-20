@@ -24,17 +24,39 @@ if [ -z "${DB}" ]; then
     usage
 fi
 
-WGET=`type wget 2> /dev/null | sed -e "s/.* is //"`
-MYSQL=`type mysql 2> /dev/null | sed -e "s/.* is //"`
-FTP=`type ftp 2> /dev/null | sed -e "s/.* is //"`
+CURL=`type -p curl 2> /dev/null`
+WGET=`type -p wget 2> /dev/null`
+MYSQL=`type -p mysql 2> /dev/null`
+FTP=`type -p ftp 2> /dev/null`
 
-if [ -z "${WGET}" -a -z "${MYSQL}" -a -z "${FTP}" ]; then
-    printf "ERROR: can not find any of the commands: wget mysql or ftp\n" 1>&2
+if [ -z "${CURL}" -a -z "${WGET}" -a -z "${MYSQL}" -a -z "${FTP}" ]; then
+    printf "ERROR: can not find any of the commands: curl wget mysql or ftp\n" 1>&2
     usage
 fi
 
 DONE=0
 export DONE
+
+if [ -n "${CURL}" ]; then
+    url="http://hgdownload.cse.ucsc.edu/goldenPath/${DB}/bigZips/${DB}.chrom.sizes"
+    printf "INFO: trying CURL ${CURL} for database ${DB}\n" 1>&2
+    printf "url: %s\n" "${url}" 1>&2
+    tmpResult=${DB}.tmp.sizes
+    ${CURL} ${url} \
+    -s > ${tmpResult} 2> /dev/null
+    if [ $? -ne 0 -o ! -s "${tmpResult}" ]; then
+    printf "WARNING: curl command failed\n" 1>&2
+    rm -f "${tmpResult}"
+    else
+    cat ${tmpResult}
+    rm -f "${tmpResult}"
+    DONE=1
+    fi
+fi
+
+if [ "${DONE}" -eq 1 ]; then
+    exit 0
+fi
 
 if [ -n "${WGET}" ]; then
     url="http://hgdownload.cse.ucsc.edu/goldenPath/${DB}/bigZips/${DB}.chrom.sizes"
