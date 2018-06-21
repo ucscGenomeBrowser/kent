@@ -51,6 +51,8 @@ barChartLabel Tissue
     barChartLabel Tissue
 
     track miRnaAtlasSample1
+    url2 http://www.mirbase.org/cgi-bin/query.pl?terms=$$
+    url2Label miRBase v21 Precursor:
     release alpha
     parent miRnaAtlas
     shortLabel Sample1 Expression
@@ -70,6 +72,8 @@ barChartLabel Tissue
     html miRnaAtlas
 
     track miRnaAtlasSample2
+    url2 http://www.mirbase.org/cgi-bin/query.pl?terms=$$
+    url2Label miRBase v21 Precursor:
     release alpha
     parent miRnaAtlas
     shortLabel Sample2 Expression
