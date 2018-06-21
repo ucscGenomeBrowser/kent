@@ -7,6 +7,7 @@ dataVersion Release 2.0.2
 configureByPopup off
 type vcfTabix
 html gnomad
+pennantIcon New red ../goldenPath/newsarch.html#062118 "Released Jun. 21, 2018"
 
 track gnomadGenomesVariants
 parent gnomadVariants
