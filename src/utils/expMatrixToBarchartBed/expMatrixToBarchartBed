@@ -218,7 +218,7 @@ def condenseMatrixIntoBedCols(matrix, groupOrder, autoSql, sampleToGroup, validT
             else:
                 for key, value in sorted(groupAverages.iteritems()):
                     groups += key + " "
-            if autoSql:
+            if autoSql and len(autoSql) != 11: # parseExtraFields requires first 11 fields to be standard
                 bedInfo += groups[:-1] + "\t_offset\t_lineLength\t" + "\t".join(autoSql[11:])
             else:
                 bedInfo += groups[:-1] + "\t_offset\t_lineLength"
@@ -337,19 +337,21 @@ def expMatrixToBarchartBed(options):
             sys.stderr.write("This transcript: " + splitLine[0] + " was dropped since chr end, " + \
                     splitLine[2] + ", is smaller than chr start, " + splitLine[1] + ".\n")
             continue
+        score = str(determineScore(tpmCutoffs, float(splitLine[-3])))
         if autoSql:
-            score = str(determineScore(tpmCutoffs, float(splitLine[-3])))
-            #skip the 4th field since we recalculate it
-            bedLine = "\t".join(splitLine[:4] + [score] + splitLine[5:]) + "\n"
+            #skip the 4th field since we recalculated it
+            #need a different ordering to account for possible extraFields
+            bedLine = "\t".join(splitLine[:4] + [score] + splitLine[5:7] + splitLine[-2:] + splitLine[7:-3]) + "\n"
         else:
-            bedLine = "\t".join(splitLine[:4] + [str(determineScore(tpmCutoffs, float(splitLine[-3])))] + \
-                splitLine[5:7] + splitLine[8:]) + "\n"
+            #skip the 4th field since we recalculate it
+            bedLine = "\t".join(splitLine[:4] + [score] + splitLine[5:7] + splitLine[8:]) + "\n"
 
         bedFile.write(bedLine)
 
     # Run Max's indexing script: TODO: add verbose options
     indexedBedFile = tempfile.NamedTemporaryFile(mode="w+", bufsize=1)
     cmd = "bedJoinTabOffset " + options.matrixFile.name + " " + bedFile.name + " " + indexedBedFile.name
+    if not options.verbose: cmd += " &>/dev/null"
     os.system(cmd)
 
     # Prepend the bed info to the start of the file.
@@ -359,12 +361,13 @@ def expMatrixToBarchartBed(options):
     # any extra fields must come after the fields added by bedJoinTabOffset
     if autoSql:
         reorderedBedFile = tempfile.NamedTemporaryFile(mode="w+", bufsize=1)
-        # standard bed6+5 barChart fields
+        # first print the standard bed6+3 barChart fields
+        # then print the two fields added by bedJoinTabOffset
         # then any extra fields at the end:
         cmd = "awk -F'\\t' -v \"OFS=\\t\" '" + \
-                "{for (i = 1; i < 8; i++) {if (i > 1) printf \"\\t\"; printf \"%s\", $i;}; " + \
-                "for (i = NF-3; i <= NF; i++) {printf \"\\t%s\", $i;} " + \
-                "for (i = 8; i < NF - 4; i++) {printf \"\\t%s\", $i;} " + \
+                "{for (i = 1; i < 10; i++) {if (i > 1) printf \"\\t\"; printf \"%s\", $i;}; " + \
+                "for (i = NF-1; i <= NF; i++) {printf \"\\t%s\", $i;} " + \
+                "for (i = 10; i < NF - 1; i++) {printf \"\\t%s\", $i;} " + \
                 "printf \"\\n\";}' " + indexedBedFile.name + " > " + reorderedBedFile.name
         os.system(cmd)
         cmd = "cat " + reorderedBedFile.name + " >> " + options.outputFile.name

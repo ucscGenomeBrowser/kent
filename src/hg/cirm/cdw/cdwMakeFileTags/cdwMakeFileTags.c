@@ -189,6 +189,34 @@ dyStringFree(&query);
 sqlDisconnect(&conn);
 }
 
+char *facetFieldFilter(char *facetFieldsCsv, char *database, char *fullTable)
+/* filter facet fields against fields in current full tags table */
+{
+struct sqlConnection *conn = sqlConnect(database);
+struct slName *fNames = sqlFieldNames(conn, fullTable);
+sqlDisconnect(&conn);
+
+struct dyString *dy = newDyString(128);
+char *fieldNames[128];
+char *tempFileTableFields = cloneString(facetFieldsCsv);
+int fieldCount = chopString(tempFileTableFields, ",", fieldNames, ArraySize(fieldNames));
+int i;
+for (i = 0; i<fieldCount; i++)
+    {
+    if (slNameInList(fNames, fieldNames[i]))
+	{
+	if (dy->stringSize > 0)
+	    dyStringAppendC(dy, ',');
+	dyStringAppend(dy, fieldNames[i]);
+	}
+    else
+	{
+	warn("Skipping facet field [%s] which is not available in table %s", fieldNames[i], fullTable);
+	}
+    }
+return dyStringCannibalize(&dy);
+}
+
 void cdwMakeFileTags(char *database, char *fullTable, char *facetTable, char *facetFieldsCsv)
 /* cdwMakeFileTags - Create cdwFileTags table from tagStorm on same database.. */
 {
@@ -257,6 +285,10 @@ for (stanzaRef = stanzaList; stanzaRef != NULL; stanzaRef = stanzaRef->next)
 slFreeList(&stanzaList);
 
 /* Make facetTable as a subset of fullTable */
+
+// strip facets that are not available in the tags table
+facetFieldsCsv = facetFieldFilter(facetFieldsCsv, database, fullTable);
+
 verbose(2, "making %s table for faceting\n", facetTable);
 struct dyString *facetCreate = dyStringNew(0);
 sqlDyStringPrintf(facetCreate, "create table %s as select %-s from %s", facetTable, sqlCkIl(facetFieldsCsv), fullTable);
@@ -277,17 +309,6 @@ setGroupIdsFromTemp(database, facetTable);
 
 sqlDropTable(conn, "cdwGroupFileTemp");
 
-/* OLD WAY
-dyStringClear(query);
-sqlDyStringPrintf(query,
-    "update %s t1 "
-    "inner join cdwFile t2 on t2.id = t1.file_id "
-    "inner join cdwUser t3 on t3.id = t2.userId "
-    "set t1.groupId = t3.primaryGroup"
-    , facetTable);
-sqlUpdate(conn, query->string);
-*/
-
 /* Release lock, clean up, go home */
 sqlReleaseLock(conn, "makeFileTags");
 sqlDisconnect(&conn);
@@ -303,7 +324,7 @@ if (argc != 2)
 char *database = optionVal("database", "cdw");
 char *table = optionVal("table", "cdwFileTags");
 char *facets = optionVal("facets", "cdwFileFacets");
-char *fields = optionVal("fields", "file_id,file_name,file_size,ucsc_db,output,assay,data_set_id,lab,format,read_size,sample_label,species");
+char *fields = optionVal("fields", "file_id,file_name,file_size,ucsc_db,output,assay,data_set_id,lab,format,read_size,sample_label,species,biosample_cell_type");
 
 cdwMakeFileTags(database, table, facets, fields);
 return 0;

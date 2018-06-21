@@ -1,4 +1,4 @@
-table barChartBed
+table barChartBedPlus
 "bed6+5 plus additional fields"
     (
     string chrom;               "Reference sequence chromosome or scaffold"
