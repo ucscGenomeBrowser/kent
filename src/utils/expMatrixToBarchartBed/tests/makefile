@@ -15,6 +15,6 @@ test::
 	 diff foo allOptions.output
 	 rm foo
 	 @printf "\ntest5: autoSql supplied but no actual extraFields\n"
-	 expMatrixToBarchartBed test.meta test.matrix noExtraFields.coords foo --verbose --groupOrder test.groupOrder --useMean --autoSql test2.as
+	 expMatrixToBarchartBed test.meta test.matrix noExtraFields.coords foo --verbose --groupOrder test.groupOrder --useMean --autoSql ../../../hg/lib/barChartBed.as
 	 diff foo allOptions2.output
 	 rm foo

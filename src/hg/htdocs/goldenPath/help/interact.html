@@ -93,7 +93,7 @@ BED or other format file to display the source and target region labels.</p>
 <a name="example1"></a>
 <h6>Example #1</h6>
 <p>
-In this example, you will create an interact custom track using example SNP/gene interaction data.
+In this example, you will create an interact custom track using example SNP/gene interaction data in multiple tissues.
 This example uses the interaction coloring and directionality features of the interact track type.
 <ol>
    <li>Paste the following track line into the 
@@ -112,11 +112,16 @@ chr12    40618812      40652520        rs2723264/LRRK2/lung  0       1.839   lun
    <li>Click the &quot;submit&quot; button.</li> 
 </ol>
 </p>
+<ol>
+<img width="1080" height="148" src="../../images/interactExample1.png">
+</ol>
 <p>
-After the file loads in the Genome Browser, you should see four interactions displayed.
-Hovering the mouse over an end or the curve peak of an  interaction will display the interaction name and value and experiment name (in this example, the tissue). Clicking at one of the hoverable regions will show the details page for the 
-interaction.  The interactDirectional setting causes reverse direction interactions (where target precedes source) to be displayed as dashed lines.  In this example, the lung (green) interaction is
-in the reverse direction.
+After the file loads in the Genome Browser, you should see four interactions displayed; four variants interacting with the
+same gene (LRRK2).
+Hovering the mouse over the curve peak of an  interaction will display the interaction name (SNP/gene/tissue). 
+Hovering over an interaction end will show the name of the end region (e.g. SNP or gene).
+Clicking at one of the hoverable regions will show the details page for the interaction.  
+The interactDirectional setting causes reverse direction interactions (where target precedes source) to be displayed as dashed lines. In this example, the green (lung) interaction is in the reverse direction.
 </p>
 
 <a name="example2"></a>
@@ -124,23 +129,33 @@ in the reverse direction.
 <p>
 In this example, you will create an interact custom track using example chromatin interaction data.
 This type of data is non-directional and commonly would represent a single experiment, with the 
-interaction score being of interest.  The settings below display using the gray-scale coloring feature, where
-the darkness of the interaction is based on the score.
+interaction score being of interest.  
+The settings below display using the gray-scale coloring feature, where the darkness of the interaction is based on the score.
 <ol>
    <li>Paste the following track line into the 
        <a href="../../cgi-bin/hgCustom?db=hg19">custom track management 
    page</a> for the human assembly hg19.
 
    <pre><code>
-track type=interact name=&quot;interact Example Two&quot; description=&quot;Chromatin interactions example&quot; spectrum=true maxHeightPixels=50:100:200 visibility=full
+track type=interact name=&quot;interact Example Two&quot; description=&quot;Chromatin interactions&quot; useScore=on maxHeightPixels=50:100:200 visibility=full
+browser position chr3:64,562,440-64,642,288
+chr3    64496901        64584378        .       375     3       .       0       chr3    64496901        64498901        .       .       chr3    64581378        64584378        .       .
+chr3    64568052        64569134        .       400     3       .       0       chr20   52552477        52556062        .       .       chr3    64098052        64101134        .       .
+chr3    64596901        64615378        .       175     3       .       0       chr3    64596901        64600855        .       .       chr3    64612677        64615378        .       .
+chr3    64623042        64636663        .       800     4       .       0       chr3    64623042        64625153        .       .       chr3    64632961        64636663        .       .
    </code></pre></li>  
 
    <li>Click the &quot;submit&quot; button.</li> 
 </ol>
 </p>
+<ol>
+<img width="1080" height="148" src="../../images/interactExample2.png">
+</ol>
 <p>
-After the file loads in the Genome Browser, you should see four interactions displayed, with
-the darkness of the interaction indicating strength of the interaction.
+After the file loads in the Genome Browser, you should see four interactions displayed on chromosome 3.  Two of the interactions
+have both interacting regions in the browser view, and two have a single region. One of these interacts across chromosomes (with
+a region on chromosome 20), and the other with a region outside of the browser window (indicated by rectangular connector).
+the darkness of the interaction indicates the strength of the interaction.
 </p>
 
 <a name="example3"></a>
@@ -153,9 +168,10 @@ located on the UCSC Genome Browser http server. This file contains data for the 
 <p>
 To create a custom track using this file:
 <ol>
-   <li>Construct a track line referencing the file:
+   <li>Construct a track line referencing the file and set the browser position to show region of interest in the file:
    <pre><code>
-track type=bigInteract name=&quot;bigInteract Example Two&quot; description=&quot;A bigInteract file&quot; visibility=full bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/interact/interactExample3.chiaPet.hg19.inter.bb
+track type=bigInteract name=&quot;interact Example Three&quot; description=&quot;A bigInteract file&quot; useScore=true visibility=full bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/interact/interactExample3.inter.bb
+browser position chr3:63,820,967-63,880,091
    </code></pre></li>
    <li>Paste the track line into the <a href="../../cgi-bin/hgCustom?db=hg19">custom track management 
    page</a> for the human assembly hg19. </li>
@@ -191,13 +207,14 @@ bigInteract on a hub can be viewed <a href="./trackDb/trackDbHub.html#bigInterac
    <li>Edit the .as file to change the 'source' fields to 'region1' and the 'target' fields to 'region2'.
    <li>Run bedToBigBed to create the bigInteract file:
    <pre><code>
-bedToBigBed -as=interact.as -type=bed5+13 interactExample3.chiaPet.hg19.inter.bed hg19.chrom.sizes interactExample3.chiaPet.hg19.inter.bb
+bedToBigBed -as=interact.as -type=bed5+13 interactExample4.inter.bed hg19.chrom.sizes interactExample4.inter.bb
    </code></pre></li>
    <li>Move the newly constructed bigInteract file to a web accessible http, https, or ftp location.</li>
    <li>Construct a custom track line with a bigDataUrl parameter pointing to the newly created
    bigInteract file.
    <pre><code>
-track type=bigInteract name="bigInteract Example One" description="A bigInteract file" bigDataUrl=<your URL>/interactExample3.chiaPet.hg19.inter.bb visibility=pack 
+track type=bigInteract name="interact Example Four" description="A bigInteract file" useScore=true bigDataUrl=<your URL>/interactExample4.inter.bb visibility=pack 
+browser position chr3:63,820,967-63,880,091
    </code></pre>
    <li>To fully take advantage of creating a bigInteract file, create a <a href="hgTrackHubHelp.html">Track Hub</a> and
    use a stanza such as the following:
@@ -210,7 +227,7 @@ longLabel Example interact track
 spectrum on
 scoreMin 175
 maxHeightPixels 300:150:20
-bigDataUrl interactExample3.chiaPet.hg19.inter.bb
+bigDataUrl interactExample4.inter.bb
    </code></pre>
 </ol>
 
