@@ -17168,3 +17168,78 @@ TMPDIR=/dev/shm
     # 875954606 bases of 2497530654 (35.073%) in intersection
 
 #########################################################################
+# LASTZ mouse/mm10 Minke whale/balAcu1 - (DONE - 2018-06-13 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzBalAcu1.2018-06-13
+    cd /hive/data/genomes/mm10/bed/lastzBalAcu1.2018-06-13
+
+    printf '# mouse vs Minke whale
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_M=254
+# default BLASTZ_Q score matrix:
+#       A     C     G     T
+# A    91  -114   -31  -123
+# C  -114   100  -125   -31
+# G   -31  -125   100  -114
+# T  -123   -31  -114    91
+
+# TARGET: mouse mm10
+SEQ1_DIR=/hive/data/genomes/mm10/mm10.2bit
+SEQ1_LEN=/hive/data/genomes/mm10/chrom.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=2
+SEQ1_LAP=10000
+
+# QUERY: Minke whale balAcu1
+SEQ2_DIR=/hive/data/genomes/balAcu1/balAcu1.2bit
+SEQ2_LEN=/hive/data/genomes/balAcu1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=40
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzBalAcu1.2018-06-13
+TMPDIR=/dev/shm
+' > DEF
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1 &
+    # real    190m45.265s
+
+    cat fb.mm10.chainBalAcu1Link.txt
+    # 851790136 bases of 2652783500 (32.109%) in intersection
+
+    cat fb.mm10.chainSynBalAcu1Link.txt
+    # 806407823 bases of 2652783500 (30.399%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` mm10 balAcu1) > rbest.log 2>&1 &
+    # real    287m58.329s
+
+    cat fb.mm10.chainRBest.BalAcu1.txt
+    # 811435554 bases of 2652783500 (30.588%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/balAcu1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/balAcu1/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/mm10/bed/lastzBalAcu1.2018-06-13/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1 &
+    #  real    67m0.560s
+
+    cat fb.balAcu1.chainMm10Link.txt
+    # 832845143 bases of 2286657046 (36.422%) in intersection
+
+    cat fb.balAcu1.chainSynMm10Link.txt
+    # 802734600 bases of 2286657046 (35.105%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` balAcu1 mm10) > rbest.log 2>&1 &
+    # real    241m51.110s
+
+    cat fb.balAcu1.chainRBest.Mm10.txt
+    # 810427625 bases of 2286657046 (35.442%) in intersection
+
+#########################################################################

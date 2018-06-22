@@ -444,11 +444,11 @@ treeImage wigMaf
 txInfo genePred
 type *
 url *
-url2 bed genePred
-url2Label bed genePred
+url2 bed genePred bigBarChart
+url2Label bed genePred bigBarChart
 urlLabel *
 urlName genePred psl bigPsl
-urls bigBed bed bigPsl genePred psl
+urls bigBed bed bigPsl genePred psl bigBarChart
 useScore *
 view *
 viewLimits *

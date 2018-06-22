@@ -32904,10 +32904,11 @@ TMPDIR=/dev/shm
 
 ##############################################################################
 # GNOMAD VARIANTS AND COVERAGE PLOTS (DONE - 2018-05-09 - Jonathan)
+# (Amended to add exome parsing 2018-06-18)
 # Redmine #18951
 
 # Fetch supporting files from gnomad.broadinstitute.org/downloads.
-FETCHDIR=/hive/data/outside/gnomad
+FETCHDIR=/hive/data/outside/gnomAD
 mkdir -p $FETCHDIR
 cd $FETCHDIR
 GNOMADVER=2.0.2
@@ -32929,9 +32930,16 @@ for fil in `ls $FETCHDIR/vcf/genomes/gnomad.genomes.r$GNOMADVER.sites.chr*.vcf.b
     do BASE=`basename $fil .bgz`; ln -s $fil $WORKDIR/vcf/$BASE.gz; ln -s $fil.tbi $WORKDIR/vcf/$BASE.gz.tbi;
     ln -s $fil /gbdb/hg19/gnomAD/vcf/$BASE.gz; ln -s $fil.tbi /gbdb/hg19/gnomAD/vcf/$BASE.gz.tbi; done
 
-# Dumping a list of annotated chromosomes for the gnomadVariants table
-ls /gbdb/hg19/gnomAD/vcf/*.sites.chr*.gz | perl -pe 'chomp; s/^.*sites\.(chr\w+)\.vcf.*$/$_\t$1\n/' > $WORKDIR/chrList
-hgLoadSqlTab hg19 gnomadVariants ~/kent/src/hg/lib/bbiChroms.sql $WORKDIR/chrList
+for fil in `ls $FETCHDIR/vcf/exomes/gnomad.exomes.r$GNOMADVER.sites.vcf.bgz`;
+    do BASE=`basename $fil .bgz`; ln -s $fil $WORKDIR/vcf/$BASE.gz; ln -s $fil.tbi $WORKDIR/vcf/$BASE.gz.tbi;
+    ln -s $fil /gbdb/hg19/gnomAD/vcf/$BASE.gz; ln -s $fil.tbi /gbdb/hg19/gnomAD/vcf/$BASE.gz.tbi; done
+
+# Dumping a list of annotated chromosomes for the gnomadGenomeVariants table.  exome variants, all being
+# in a single file, are just handled via a bigDataUrl in trackDb.  We still need an exomesChrList for
+# building the coverage wigs though.
+ls /gbdb/hg19/gnomAD/vcf/*.sites.chr*.gz | perl -pe 'chomp; s/^.*sites\.(chr\w+)\.vcf.*$/$_\t$1\n/' > $WORKDIR/genomesChrList
+hgLoadSqlTab hg19 gnomadGenomesVariants ~/kent/src/hg/lib/bbiChroms.sql $WORKDIR/genomesChrList
+ls $FETCHDIR/coverage/exomes/*.coverage.txt.gz | perl -pe 'chomp; s/^.*\.(chr\w+)\.coverage\.txt\.gz$/$_\t$1\n/' > $WORKDIR/exomesChrList
 
 # Now to make the coverage wig files
 mkdir -p $WORKDIR/coverage
@@ -32951,20 +32959,21 @@ my \$version = shift;
 my \$chrom = shift;
 my \$sourceDir = shift;
 my \$destDir = shift;
+my \$genomesOrExomes = shift;
 
-open IN, "zcat \$sourceDir/gnomad.genomes.r\$version.\$chrom.coverage.txt.gz |" ||
+open IN, "zcat \$sourceDir/gnomad.\$genomesOrExomes.r\$version.\$chrom.coverage.txt.gz |" ||
     die "Could not open coverage file on chromosome \$chrom";
-open (OUTMEAN, ">>", "\$destDir/gnomad.coverage.mean.wig");
-open (OUTMEDIAN, ">>", "\$destDir/gnomad.coverage.median.wig");
-open (OUT1, ">>", "\$destDir/gnomad.coverage.depth1.wig");
-open (OUT5, ">>", "\$destDir/gnomad.coverage.depth5.wig");
-open (OUT10, ">>", "\$destDir/gnomad.coverage.depth10.wig");
-open (OUT15, ">>", "\$destDir/gnomad.coverage.depth15.wig");
-open (OUT20, ">>", "\$destDir/gnomad.coverage.depth20.wig");
-open (OUT25, ">>", "\$destDir/gnomad.coverage.depth25.wig");
-open (OUT30, ">>", "\$destDir/gnomad.coverage.depth30.wig");
-open (OUT50, ">>", "\$destDir/gnomad.coverage.depth50.wig");
-open (OUT100, ">>", "\$destDir/gnomad.coverage.depth100.wig");
+open (OUTMEAN, ">>", "\$destDir/gnomad.\$genomesOrExomes.coverage.mean.wig");
+open (OUTMEDIAN, ">>", "\$destDir/gnomad.\$genomesOrExomes.coverage.median.wig");
+open (OUT1, ">>", "\$destDir/gnomad.\$genomesOrExomes.coverage.depth1.wig");
+open (OUT5, ">>", "\$destDir/gnomad.\$genomesOrExomes.coverage.depth5.wig");
+open (OUT10, ">>", "\$destDir/gnomad.\$genomesOrExomes.coverage.depth10.wig");
+open (OUT15, ">>", "\$destDir/gnomad.\$genomesOrExomes.coverage.depth15.wig");
+open (OUT20, ">>", "\$destDir/gnomad.\$genomesOrExomes.coverage.depth20.wig");
+open (OUT25, ">>", "\$destDir/gnomad.\$genomesOrExomes.coverage.depth25.wig");
+open (OUT30, ">>", "\$destDir/gnomad.\$genomesOrExomes.coverage.depth30.wig");
+open (OUT50, ">>", "\$destDir/gnomad.\$genomesOrExomes.coverage.depth50.wig");
+open (OUT100, ">>", "\$destDir/gnomad.\$genomesOrExomes.coverage.depth100.wig");
 
 my \$skipHeader = <IN>;
 my \$prevPos = -10;
@@ -33003,8 +33012,13 @@ EOF
 
 chmod +x $WORKDIR/coverage/makeWigs.pl
 
-for CHR in `cut -f 2 $WORKDIR/chrList`;
-    do $WORKDIR/coverage/makeWigs.pl $GNOMADVER $CHR `pwd` $WORKDIR/coverage;
+for CHR in `cut -f 2 $WORKDIR/genomesChrList`;
+    do $WORKDIR/coverage/makeWigs.pl $GNOMADVER $CHR `pwd` $WORKDIR/coverage genomes;
+    done
+
+cd $FETCHDIR/coverage/exomes
+for CHR in `cut -f 2 $WORKDIR/exomesChrList`;
+    do $WORKDIR/coverage/makeWigs.pl $GNOMADVER $CHR `pwd` $WORKDIR/coverage exomes;
     done
 
 # Convert to bigWigs

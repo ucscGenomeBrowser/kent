@@ -80,7 +80,7 @@ and viewed with associated data.</p>
 <p>
 The data underlying the tracks and optional sequence in a hub reside on the remote server of the 
 data provider rather than at UCSC. Genomic annotations are stored in compressed binary indexed 
-files in bigBed, bigBarChart, bigGenePred, bigNarrowPeak, bigPsl, bigChain, bigMaf, bigWig, BAM, CRAM, HAL or VCF 
+files in bigBed, bigBarChart, bigGenePred, bigNarrowPeak, bigPsl, bigChain, bigInteract, bigMaf, bigWig, BAM, CRAM, HAL or VCF 
 format that contain the data at several resolutions. In the case of assemblies that UCSC does not 
 support, genomic sequence is stored in the efficient twoBit format. When a hub track is displayed 
 in the Genome Browser, only the relevant data needed to support the view of the current genomic 
@@ -188,7 +188,7 @@ To create your own hub you will need:</p>
 <ul>
   <li>
   one or more data sets formatted in one of the compressed binary index formats supported by the 
-  Genome Browser: bigBed, bigBarChart, bigGenePred, bigNarrowPeak, bigPsl, bigChain, bigMaf, bigWig, BAM, CRAM, 
+  Genome Browser: bigBed, bigBarChart, bigGenePred, bigNarrowPeak, bigPsl, bigChain, bigInteract, bigMaf, bigWig, BAM, CRAM, 
   HAL or VCF</li>
   <li>
   a set of text files that specify properties for the track hub and for each of the data tracks 
@@ -252,6 +252,7 @@ supported by the Genome Browser:
 <a href="bigChain.html">bigChain</a>, 
 <a href="bigNarrowPeak.html">bigNarrowPeak</a>,
 <a href="barChart.html">bigBarChart</a>,
+<a href="bigInteract.html">bigInteract</a>,
 <a href="bigPsl.html">bigPsl</a>, 
 <a href="bigMaf.html">bigMaf</a>,
 <a href="bigWig.html">bigWig</a>, 
@@ -294,6 +295,12 @@ Format</a> help page for information on creating and configuring bigGenePred tra
 bringing barChart display into track hubs, and supports schema customization and label configuration
 that is not supported for regular barChart format. See the <a href="barChart.html">barChart Track
 Format</a> help page for information on creating and configuring bigBarChart tracks.</p> 
+<p>
+<em>bigInteract</em> - BigInteract files are binary indexed versions of 
+<a href="../../FAQ/FAQformat.html#format22">interact</a> files. BigInteract format is useful for
+bringing interacdt display into track hubs, and supports schema customization and label configuration
+that is not supported for regular interact format. See the <a href="interact.html">interact Track
+Format</a> help page for information on creating and configuring bigInteract tracks.</p> 
 <p>
 <em>bigPsl</em> - BigPsl files are binary indexed versions of 
 <a href="../../FAQ/FAQformat.html#format2">PSL</a> files. BigPsl format is useful for large data 
@@ -520,7 +527,7 @@ configuration and track settings, and on the details pages. Suggested maximum le
 characters.</p>
 <p>
 <em>type</em> - the format of the file specified by bigDataUrl. Must be either <em>bigWig</em>, 
-<em>bigBed</em>, <em>bigBarChart</em>, <em>bigGenePred</em>, <em>bigNarrowPeak</em>, <em>bigChain</em>, <em>bigPsl</em>, 
+<em>bigBed</em>, <em>bigBarChart</em>, <em>bigGenePred</em>, <em>bigInteract</em>, <em>bigNarrowPeak</em>, <em>bigChain</em>, <em>bigPsl</em>, 
 <em>bigMaf</em>, <em>bam</em>, <em>halSnake</em> or <em>vcfTabix</em> (Note: use <em> type bam</em> 
 for CRAM files). If the type is <em>bigBed</em>, it may be followed by an optional number denoting 
 the number of fields in the bigBed file (e.g., &quot;type bigBed 12&quot; for a file with 12 fields). 

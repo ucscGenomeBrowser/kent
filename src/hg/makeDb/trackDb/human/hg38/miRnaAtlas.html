@@ -1,0 +1,96 @@
+<h2>Description</h2>
+<p>
+The <a href="https://ccb-web.cs.uni-saarland.de/tissueatlas/">Human miRNA tissue atlas</a> is a
+catalogue of miRNA tissue specific expression across 62 various tissues. This track contains
+quantile normalized miRNA expression data sampled from two individuals mapped to
+<a href="http://mirbase.org">miRBase v21</a> coordinates. The track contains two subtracks, one
+for each individual sampled.</p>
+
+<p>
+The Tissue Specificity Index (TSI) is analagous to the &quot;tau&quot; value for mRNA expression,
+and is calculated as described in the
+<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gkw116">
+associated publication</a>. Values closer to 0 indicate miRNAs expressed in many or all tissues,
+while values closer to 1 indiciate miRNAs expressed only in a specific tissue or tissues. To
+browse miRNAs by TSI value, please see the
+<a href="https://ccb-web.cs.uni-saarland.de/tissueatlas/mirna-tsi">miRNA tissue atlas</a>.</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+This track is formatted as a <a href="../../goldenPath/help/barChart.html">barChart</a> track,
+similar to the <a href="../../cgi-bin/hgGtexTrackSettings?g=gtexGene">GTEx</a> or the
+<a href="../../cgi-bin/hgTrackUi?g=cancerExpr">TCGA Cancer Expression</a> tracks, where the
+heights of each bar indicate the expression value for the miRNA in a specific tissue. The tissues
+sampled are described in the table below:
+</p>
+<table class="stdTbl">
+  <tr><td>Bar Color</td><td>Individual 1</td><td>Individual 2</td>
+<tr><td style="width:50px; background-color:#F7A028"></td><td>Adipocyte</td><td>Adipocyte</td>
+<tr><td style="width:50px; background-color:#F73528"></td><td>Artery</td><td>Artery</td>
+<tr><td style="width:50px; background-color:#DEBE98"></td><td>Colon</td><td>Colon</td>
+<tr><td style="width:50px; background-color:#86BF80"></td><td>Dura mater</td><td>Dura mater</td>
+<tr><td style="width:50px; background-color:#CDB79E"></td><td>Kidney</td><td>Kidney</td>
+<tr><td style="width:50px; background-color:#CDB79E"></td><td>Liver</td><td>Liver</td>
+<tr><td style="width:50px; background-color:#9ACD32"></td><td>Lung</td><td>Lung</td>
+<tr><td style="width:50px; background-color:#7A67AE"></td><td>Muscle</td><td>Muscle</td>
+<tr><td style="width:50px; background-color:#9745AC"></td><td>Myocardium</td><td>Myocardium</td>
+<tr><td style="width:50px; background-color:#1E90FF"></td><td>Skin</td><td>Skin</td>
+<tr><td style="width:50px; background-color:#CDB79E"></td><td>Spleen</td><td>Spleen</td>
+<tr><td style="width:50px; background-color:#FFD39B"></td><td>Stomach</td><td>Stomach</td>
+<tr><td style="width:50px; background-color:#A6A6A6"></td><td>Testis</td><td>Testis</td>
+<tr><td style="width:50px; background-color:#8B45"></td><td>Thyroid</td><td>Thyroid</td>
+<tr><td style="width:50px; background-color:#86BF10"></td><td>Arachnoid mater</td><td></td>
+<tr><td style="width:50px; background-color:#CDB79E"></td><td>Small intestine</td><td></td>
+<tr><td style="width:50px; background-color:#EEEE00"></td><td>Brain</td><td></td>
+<tr><td style="width:50px; background-color:#CDB79E"></td><td>Bladder</td><td></td>
+<tr><td style="width:50px; background-color:#BD34D7"></td><td>Bone</td><td></td>
+<tr><td style="width:50px; background-color:#CDA7FE"></td><td>Gallbladder</td><td></td>
+<tr><td style="width:50px; background-color:#4C7CD7"></td><td>Fascia</td><td></td>
+<tr><td style="width:50px; background-color:#A6F6A1"></td><td>Epididymis</td><td></td>
+<tr><td style="width:50px; background-color:#FFD700"></td><td>Nervus intercostalis</td><td></td>
+<tr><td style="width:50px; background-color:#A6CEA4"></td><td>Tunica albuginea</td><td></td>
+<tr><td style="width:50px; background-color:#CDB79E"></td><td></td><td>Small intestine duodenum</td>
+<tr><td style="width:50px; background-color:#CD9B1D"></td><td></td><td>Pancreas</td>
+<tr><td style="width:50px; background-color:#CDB79E"></td><td></td><td>Small intestine jejunum</td>
+<tr><td style="width:50px; background-color:#CDB79E"></td><td></td><td>Kidney glandula suprarenalis</td>
+<tr><td style="width:50px; background-color:#EEEE00"></td><td></td><td>Thalamus</td>
+<tr><td style="width:50px; background-color:#BD3487"></td><td></td><td>Bone marrow</td>
+<tr><td style="width:50px; background-color:#EEEE00"></td><td></td><td>Spinal cord</td>
+<tr><td style="width:50px; background-color:#73A585"></td><td></td><td>Pleura</td>
+<tr><td style="width:50px; background-color:#EEEE00"></td><td></td><td>Pituitary gland</td>
+<tr><td style="width:50px; background-color:#CDB79E"></td><td></td><td>Kidney cortex renalis</td>
+<tr><td style="width:50px; background-color:#F7E300"></td><td></td><td>Nerve not specified</td>
+<tr><td style="width:50px; background-color:#AC8F69"></td><td></td><td>Esophagus</td>
+<tr><td style="width:50px; background-color:#D9D9D9"></td><td></td><td>Prostate</td>
+<tr><td style="width:50px; background-color:#EEEE00"></td><td></td><td>Brain white matter</td>
+<tr><td style="width:50px; background-color:#EEEE00"></td><td></td><td>Nucleus caudatus</td>
+<tr><td style="width:50px; background-color:#CDB79E"></td><td></td><td>Kidney medulla renalis</td>
+<tr><td style="width:50px; background-color:#EEEE00"></td><td></td><td>Brain gray_matter</td>
+<tr><td style="width:50px; background-color:#EE82EE"></td><td></td><td>Lymph node</td>
+<tr><td style="width:50px; background-color:#EEEE00"></td><td></td><td>Cerebral cortex temporal</td>
+<tr><td style="width:50px; background-color:#EEEE00"></td><td></td><td>Cerebral cortex frontal</td>
+<tr><td style="width:50px; background-color:#EEEE00"></td><td></td><td>Cerebral cortex occipital</td>
+<tr><td style="width:50px; background-color:#FF00FF"></td><td></td><td>Vein</td>
+<tr><td style="width:50px; background-color:#EEEE00"></td><td></td><td>Cerebellum</td>
+</table>
+<p>
+The 14 shared tissues sampled across both individuals are presented in the same order for easier comparison.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The underlying expression matrix and TSI values can be obtained from the
+<a href="https://ccb-web.cs.uni-saarland.de/tissueatlas/">miRNA tissue atlas</a> website, in the
+<em>data_matrix_quantile.txt</em> and <em>tsi_quantile.csv</em> files.
+</p>
+
+<h2>References</h2>
+<p>
+Ludwig N, Leidinger P, Becker K, Backes C, Fehlmann T, Pallasch C, Rheinheimer S, Meder B,
+St&#228;hler C, Meese E <em>et al</em>.
+<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gkw116" target="_blank">
+Distribution of miRNA expression across human tissues</a>.
+<em>Nucleic Acids Res</em>. 2016 May 5;44(8):3865-77.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26921406" target="_blank">26921406</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4856985/" target="_blank">PMC4856985</a>
+</p>

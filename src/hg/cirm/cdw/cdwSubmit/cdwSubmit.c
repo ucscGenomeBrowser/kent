@@ -31,6 +31,7 @@
 
 boolean doUpdate = FALSE;
 boolean noRevalidate = FALSE;
+boolean noBackup = FALSE;
 boolean justTest = FALSE;
 
 void usage()
@@ -49,6 +50,7 @@ errAbort(
   "   -update  If set, will update metadata on file it already has. The default behavior is to\n"
   "            report an error if metadata doesn't match.\n"
   "   -noRevalidate - if set don't run revalidator on update\n"
+  "   -noBackup - if set don't backup database first\n"
   "   -md5=md5sum.txt Take list of file MD5s from output of md5sum command on list of files\n"
   "   -test This will look at the manifest and meta, but not actually load the database\n");
 }
@@ -60,6 +62,7 @@ struct hash *md5Hash;
 static struct optionSpec options[] = {
    {"update", OPTION_BOOLEAN},
    {"noRevalidate", OPTION_BOOLEAN},
+   {"noBackup", OPTION_BOOLEAN},
    {"md5", OPTION_STRING},
    {"test", OPTION_BOOLEAN},
    {NULL, 0},
@@ -1065,10 +1068,13 @@ if (justTest)
 int submitId = makeNewEmptySubmitRecord(conn, submitUrl, user->id);
 
 /* Create a backup of the previous submission */
-char cmd[PATH_LEN];
-if (getenv("CIRM") == NULL) errAbort("Please set up your CIRM environment variable."); 
-safef(cmd, sizeof(cmd), "cdwBackup %scdw/db.backups/cdwSubmit.%i", getenv("CIRM"), submitId -1);  
-mustSystem(cmd); 
+if (!noBackup)
+    {
+    char cmd[PATH_LEN];
+    if (getenv("CIRM") == NULL) errAbort("Please set up your CIRM environment variable."); 
+    safef(cmd, sizeof(cmd), "cdwBackup %scdw/db.backups/cdwSubmit.%i", getenv("CIRM"), submitId -1);  
+    mustSystem(cmd); 
+    }
 
 /* Put our manifest and metadata files */
 char *access = tagFindLocalVal(tagStorm->forest, "access");
@@ -1209,6 +1215,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 doUpdate = optionExists("update");
 noRevalidate = optionExists("noRevalidate");
+noBackup = optionExists("noBackup");
 justTest = optionExists("test");
 if (optionExists("md5"))
     {

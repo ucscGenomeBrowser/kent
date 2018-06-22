@@ -1,0 +1,11 @@
+#chr	chromStart	chromEnd	name	score	strand	name2	expCount	expScores;A B C D	_offset	_lineLength	extra1	extra2
+chr1	100	175	t1	444	+	gene1	4	5.5,0.0,0.0,0.0	36	19	exp1	exp2
+chr1	80	95	t10	999	-	gene7	4	0.0,0.0,0.0,10.0	211	22	exp5	exp6
+chr2	100	325	t2	666	-	gene1	4	0.0,7.5,0.0,0.0	55	19	exp1	exp2
+chr2	900	1000	t3	222	+	gene2	4	0.0,0.0,2.0,0.0	74	19	exp3	exp4
+chr3	820	900	t4	999	+	gene2	4	0.0,0.0,0.0,10.0	93	21	exp3	exp4
+chr1	175	400	t5	444	-	gene3	4	5.5,0.0,0.0,0.0	114	19	exp5	exp6
+chr2	800	980	t6	666	+	gene4	4	0.0,7.5,0.0,0.0	133	19	exp1	exp2
+chr3	10	180	t7	222	-	gene5	4	0.0,0.0,2.0,0.0	152	19	exp3	exp4
+chr1	80	90	t8	999	+	gene6	4	0.0,0.0,0.0,10.0	171	21	exp3	exp4
+chr2	9	19	t9	222	+	gene6	4	0.0,0.0,2.0,0.0	192	19	exp2	exp5
