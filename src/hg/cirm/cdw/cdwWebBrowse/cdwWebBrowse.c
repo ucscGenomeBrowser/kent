@@ -147,9 +147,9 @@ void wrapTagValueInFiles(struct fieldedTable *table, struct fieldedRow *row,
 printf("<A HREF=\"../cgi-bin/cdwWebBrowse?cdwCommand=browseFiles&%s&",
     cartSidUrlString(cart));
 char query[2*PATH_LEN];
-safef(query, sizeof(query), "%s = '%s'&cdwBrowseFiles_page=1", field, val);
+safef(query, sizeof(query), "%s = '%s'", field, val);
 char *escapedQuery = cgiEncode(query);
-printf("%s=%s", "cdwFile_filter", escapedQuery);
+printf("%s=%s&cdwBrowseFiles_page=1", "cdwFile_filter", escapedQuery);
 freez(&escapedQuery);
 printf("\">%s</A>", shortVal);
 }
