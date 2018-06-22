@@ -399,12 +399,13 @@ shown in <em>Example 1</em>.</p>
 Create a genomes.txt file within the track hub directory that contains a two-line stanza that must 
 be separated by a line for each genome assembly that is supported by the hub data. Each stanza shows
 the location of the trackDb file that defines display properties for each track in that
-assembly.</p>
+assembly, as well as an optional metadata storage file</p>
 <pre><code><strong>genome</strong> <em>assembly_database_1</em>
 <strong>trackDb</strong> <em>assembly_1_path/trackDb.txt</em>
-<br>
-<strong>genome</strong> <em>assembly_database_2</em>
-<strong>trackDb</strong> <em>assembly_2_path/trackDb.txt</em> </code></pre>
+<strong>metaTab</strong> <em>assembly_1_path/tabSeparatedFile.txt</em> </code></pre>
+<pre><strong>genome</strong> <em>assembly_database_2</em>
+<strong>trackDb</strong> <em>assembly_2_path/trackDb.txt</em> </code>
+<strong>metaDb</strong> <em>assembly_2_path/tagStormFile.txt</em> </code></pre>
 <p>
 <em>genome</em> - a valid UCSC database name. Each stanza must begin with this tag and each stanza 
 must be separated by an empty line.</p> 
@@ -412,6 +413,8 @@ must be separated by an empty line.</p>
 <em>trackDb</em> - the relative path of the trackDb file for the assembly designated by the 
 <em>genome</em> tag. By convention, the trackDb file is located in a subdirectory of the hub 
 directory. However, the trackDb tag may also specify a complete URL.</p>
+<p><em>metaDb</em> - the path to an optional tagStorm file that has the metadata for each track. Each track with metadata should have a "meta" tag specified in the trackDb stanza for that track and a "meta" tag in the tagStorm file.</p>
+<p><em>metaTab</em> - the path to an optional tab separated file that has the metadata for each track. Each track with metadata should have a "meta" tag specified in the trackDb stanza for that track and a "meta" tag  in the tab separated file. The first line of the TSV file should start with a '#' and have the field names for each column, one of them being "meta"</p>
 <p>
 If this genomes.txt file is for an assembly that does not have native support in the browser, the 
 following fields must also be present:</p>
