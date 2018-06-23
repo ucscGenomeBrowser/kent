@@ -37,6 +37,17 @@ boolean loginUseHttps();
 boolean loginUseBasicAuth();
 /* Return TRUE if login.basicAuth is on in hg.conf . */
 
+char* getHttpBasicToken();
+/* Return HTTP Basic Auth Token or NULL. Result has to be freed. */
+
+void basicAuthUserPassword(char *token, char **pUser, char **pPassword);
+/* get the HTTP Header 'Authorization', which is just the b64 encoded username:password,
+ * and return the username and password. Results should be freed. */
+
+char *basicAuthUser(char *token);
+/* get the HTTP Header 'Authorization', which is just the b64 encoded username:password,
+ * and return the username. Result should be freed. */
+
 struct slName *loginLoginUser(char *userName, uint idx);
 /* Return cookie strings to set for user so we'll recognize that user is logged in.
  * Call this after validating userName's password. */

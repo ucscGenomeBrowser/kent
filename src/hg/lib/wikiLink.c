@@ -348,11 +348,10 @@ while ((c = *s++) != 0)
 return TRUE;
 }
 
-char *basicAuthUser(char *token)
+void basicAuthUserPassword(char *token, char **pUser, char **pPassword)
 /* get the HTTP Header 'Authorization', which is just the b64 encoded username:password,
- * and return the username. Result has to be freed. */
+ * and return the username and password. Results should be freed. */
 {
-
 // username:password is b64 encrypted 
 char *tokenPlain = base64Decode(token, 0);
 
@@ -361,8 +360,19 @@ char *words[2];
 int wordCount = chopString(tokenPlain, ":", words, ArraySize(words));
 if (wordCount!=2)
     errAbort("wikiLink/basicAuthUser: got illegal basic auth token");
-char *user = words[0];
+if (pUser)
+    *pUser = cloneString(words[0]);
+if (pPassword)
+    *pPassword = cloneString(words[1]);
+freeMem(tokenPlain);
+}
 
+char *basicAuthUser(char *token)
+/* get the HTTP Header 'Authorization', which is just the b64 encoded username:password,
+ * and return the username. Result should be freed. */
+{
+char *user = NULL;
+basicAuthUserPassword(token, &user, NULL);
 return user;
 }
 
