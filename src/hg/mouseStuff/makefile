@@ -61,6 +61,7 @@ DIRS = \
 	axtToBed \
 	axtToChain \
 	calcGap \
+	chainBridge \
 	chainDbToFile \
 	gcForBed \
 	knownVsBlat \

@@ -33037,3 +33037,17 @@ for BW in `ls $WORKDIR/coverage/*.bw`;
     done
 
 ##############################################################################
+# TEST SAME-SPECIES LIFTOVER (IN PROGRESS 6/1/18 angie)
+
+    mkdir /hive/data/genomes/hg19/bed/blat.hg38.2018-06-01
+    cd /hive/data/genomes/hg19/bed/blat.hg38.2018-06-01
+    # Stop before the load step -- I just want to compare the chain & net results with
+    # chainBridge in the mix.
+    $HOME/kent/src/hg/utils/automation/doSameSpeciesLiftOver.pl \
+      -stop=net -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+      -ooc=/hive/data/genomes/hg19/11.ooc hg19 hg38 >>& do.log & tail -f do.log
+#TODO: compare results with original.
+
+
+##############################################################################
