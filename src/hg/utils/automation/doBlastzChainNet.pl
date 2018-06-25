@@ -439,6 +439,7 @@ sub requireNum {
 
 my $oldDbFormat = '[a-z][a-z](\d+)?';
 my $newDbFormat = '[a-z][a-z][a-z][A-Z][a-z][a-z0-9](\d+)?';
+my $patchDbFormat = 'grc[A-Z][0-9]+P[0-9]+';
 sub getDbFromPath {
   # Require that $val is a full path that contains a recognizable db as
   # one of its elements (possibly the last one).
@@ -448,7 +449,7 @@ sub getDbFromPath {
   my $dbFromName = basename($val);
   $dbFromName =~ s/.2bit//;
   if (! $opt_noDbNameCheck) {
-    if ( $val =~ m@^/\S+/($oldDbFormat|$newDbFormat)((\.2bit)|(/(\S+)?))?$@) {
+    if ( $val =~ m@^/\S+/($oldDbFormat|$newDbFormat|$patchDbFormat)((\.2bit)|(/(\S+)?))?$@) {
       $db = $1;
     } else {
       die "Error: $DEF variable $var=$val must be a full path with " .
@@ -512,10 +513,9 @@ sub checkDef {
   }
 }
 
-
 sub doPartition {
   # Partition the sequence up before blastz.
-  my $paraHub = $bigClusterHub;
+  my $paraHub = $opt_blastzOutRoot ? $bigClusterHub : $workhorse;
   my $runDir = "$buildDir/run.blastz";
   my $targetList = "$tDb.lst";
   my $queryList = $isSelf ? $targetList :

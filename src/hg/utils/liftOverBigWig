@@ -1,0 +1,34 @@
+#!/bin/env tcsh
+
+# Convert bigWig to bedGraph, liftOver the bedGraph, clean up results and regenerate bigWig.
+
+set bigWigIn = $1
+set liftOverFile = $2
+set chromSizes = $3
+set bigWigOut = $4
+
+if ($bigWigOut == "" || $5 != "") then
+  echo "usage:"
+  echo "$0 input.srcDb.bw srcDbToDestDb.over.chain.gz destDb.chrom.sizes output.destDb.bw"
+  echo ""
+  echo "Convert input.srcDb.bw to bedGraph, liftOver, clean up results and convert to output.destDb.bw"
+  exit 1
+endif
+
+set tmpFile = `mktemp --tmpdir liftOverBigWig.XXXXXX`
+
+if ($status) exit
+
+bigWigToBedGraph $bigWigIn stdout \
+| liftOver stdin $liftOverFile stdout /dev/null \
+| sort -k1,1 -k2,2n \
+| bedRemoveOverlap stdin stdout \
+| bedGraphPack stdin $tmpFile
+
+if ($status) exit
+
+bedGraphToBigWig $tmpFile $chromSizes $bigWigOut
+
+if ($status) exit
+
+rm $tmpFile

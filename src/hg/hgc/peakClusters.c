@@ -69,9 +69,8 @@ if (sqlTableExists(conn, table))  // Table might be withdrawn from data thrash
 	sum += sqlDouble(row[signalCol]);
 	}
     sqlFreeResult(&sr);
-    hFreeConn(&conn);
     }
-
+hFreeConn(&conn);
 if (count > 0)
     return sum/count;
 else

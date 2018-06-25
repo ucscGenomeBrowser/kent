@@ -64,6 +64,31 @@ void usage (void)
   fprintf(stderr, "usage:\n    cpglh <sequence.fa>\n") ;
   fprintf(stderr, "where <sequence.fa> is fasta sequence, must be more than\n");
   fprintf(stderr, "   200 bases of legitimate sequence, not all N's\n");
+  fprintf(stderr, "\nTo process the output into the UCSC bed file format:\n\n"
+"cpglh fastaInput.fa \\\n"
+" | awk '{$2 = $2 - 1; width = $3 - $2;\n"
+"   printf(\"%%s\\t%%d\\t%%s\\t%%s %%s\\t%%s\\t%%s\\t%%0.0f\\t%%0.1f\\t%%s\\t%%s\\n\",\n"
+"    $1, $2, $3, $5, $6, width, $6, width*$7*0.01, 100.0*2*$6/width, $7, $9);}' \\\n" \
+"     | sort -k1,1 -k2,2n > output.bed\n");
+
+  fprintf(stderr, "\nThe original cpg.c was written by Gos Miklem from the Sanger Center.\n"
+"LaDeana Hillier added some modifications --> cpg_lh.c, and UCSC hass\n"
+"added some further modifications to cpg_lh.c, so that its expected\n"
+"number of CpGs in an island is calculated as described in\n"
+"  Gardiner-Garden, M. and M. Frommer, 1987\n"
+"  CpG islands in vertebrate genomes. J. Mol. Biol. 196:261-282\n"
+"\n"
+"    Expected = (Number of C's * Number of G's) / Length\n"
+"\n"
+"Instead of a sliding-window search for CpG islands, this cpg program\n"
+"uses a running-sum score where a 'C' followed by a 'G' increases the\n"
+"score by 17 and anything else decreases the score by 1.  When the\n"
+"score transitions from positive to 0 (and at the end of the sequence),\n"
+"the sequence in the current span is evaluated to see if it qualifies\n"
+"as a CpG island (>200 bp length, >50%% GC, >0.6 ratio of observed CpG\n"
+"to expected).  Then the search recurses on the span from the position\n"
+"with the max running score up to the current position.\n");
+
   exit (-1);
 }
 /*------------------------------------------------------*/

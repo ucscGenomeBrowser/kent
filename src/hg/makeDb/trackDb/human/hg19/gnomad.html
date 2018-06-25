@@ -1,58 +1,53 @@
 <h2>Description</h2>
 <p>
-This track shows variants from 123,136 exomes and 15,496 whole
-genomes of unrelated individuals sequenced as part of various population genetic 
-and disease-specific 
-<a href="http://gnomad.broadinstitute.org/about" target="_blank">studies</a>
-collected by the
-<a href="http://gnomad.broadinstitute.org/" target="_blank">Genome Aggregation Database (gnomAD)</a>,
-release 2.0.2.
+The gnomAD tracks show variants from 123,136 exomes and 15,496 whole genomes of unrelated individuals
+sequenced as part of various population-genetic and disease-specific <a target="_blank"
+href="http://gnomad.broadinstitute.org/about">studies</a> collected by the <a target="_blank"
+href="http://gnomad.broadinstitute.org/">Genome Aggregation Database (gnomAD)</a>, release 2.0.2.
 Raw data from all studies have been reprocessed through a unified pipeline and jointly
-variant-called to increase consistency across projects.
-For more information on the processing pipeline and population annotations,
-see the following
-<a href="https://macarthurlab.org/2017/02/27/the-genome-aggregation-database-gnomad" target="_blank">blog post</a>
-and the 2.0.2
-<a href="https://storage.googleapis.com/gnomad-public/release/2.0.2/README.txt" target="_blank">README</a>.
-</p>
+variant-called to increase consistency across projects. For more information on the processing
+pipeline and population annotations, see the following <a target="_blank"
+href="https://macarthurlab.org/2017/02/27/the-genome-aggregation-database-gnomad">blog post</a>
+and the 2.0.2 <a href="https://storage.googleapis.com/gnomad-public/release/2.0.2/README.txt"
+target="_blank">README</a>.</p>
 
 <h2>Display Conventions</h2>
-<p>
-For the coverage subtracks, the Average graphs display the mean and median read depth of the samples
-at each position.  The nX Percentage graphs the percentage of samples whose read
-depth is at least 1X, 5X, 10X, 15X, 20X, 25X, 30X, 50X, and 100X.
-</p>
-<p>
-For the variants subtrack,
-in &quot;dense&quot; mode, a vertical line is drawn at the position of each variant.
-In &quot;pack&quot; mode, ref and alt alleles are displayed to the left of a vertical
-line with colored portions corresponding to allele counts.  Hovering the mouse pointer
-over a variant pops up a display of alleles and counts.
-</p>
+<dl>
+  <dt>For the <strong>Coverage</strong> subtracks:</dt>
+  <dd><li>The <strong>Average Sample Coverage</strong> graphs display the mean and median read depth of the samples
+    at each position.</li>
+  <li>The <strong>nX Coverage Percentage</strong> graphs display the percentage of samples whose read
+    depth is at least 1X, 5X, 10X, 15X, 20X, 25X, 30X, 50X, and 100X.</li></dd>
+<br>
+  <dt>For the <strong>Variants</strong> subtracks:</dt>
+  <dd><li>In <button type="button">dense</button> mode, a vertical line is drawn at the position of
+    each variant.</li>
+  <li>In <button type="button">pack</button> mode, &quot;ref&quot; and &quot;alt&quot; alleles are
+    displayed to the left of a vertical line with colored portions corresponding to allele counts.
+    Hovering the mouse pointer over a variant pops up a display of alleles and counts.</li></dd>
+</dl>
 
 <h2>Data Access</h2>
 
 <p>
-The raw data can be explored interactively with the 
-<a href="../cgi-bin/hgTables">Table Browser</a>, or the
-<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
-For automated analysis, the genome annotation is stored in files that can be downloaded from our
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/gnomad/" target="_blank">download server</a>, subject
-to the conditions set forth by the gnomAD consortium (see below).  Mean and median coverage values for
-the genome are in <a href="../goldenPath/help/bigWig.html">bigWig</a> files in the coverage/ subdirectory.
-Variant VCFs can be found in the vcf/ subdirectory.
+The raw data can be explored interactively with the <a target="_blank" href="../cgi-bin/hgTables">
+Table Browser</a>, or the <a target="_blank" href="../cgi-bin/hgIntegrator">Data Integrator</a>. For
+automated analysis, the genome annotation is stored in files that can be downloaded from our <a
+href="http://hgdownload.soe.ucsc.edu/gbdb/$db/gnomad/" target="_blank">download server</a>, subject
+to the conditions set forth by the gnomAD consortium (see below).  Coverage values
+for the genome are in <a target="_blank" href="../goldenPath/help/bigWig.html">bigWig</a> files in
+the coverage/ subdirectory. Variant VCFs can be found in the vcf/ subdirectory.
 <br>
-Please refer to our <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>
-for questions, or our <a href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more information. 
-</p>
+Please refer to our <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome"
+target="_blank">mailing list archives</a> for questions, or our <a target="_blank"
+href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more information.</p>
 
 <h2>Credits</h2>
 <p>
-Thanks to the
-<a href="http://gnomad.broadinstitute.org/about" target="_blank">Genome Aggregation Database Consortium</a>
-for making these data available.  The data are released under the
-<a href="http://opendatacommons.org/licenses/odbl/1.0/" target="_blank">ODC Open Database License (OBdL)</a>
-as described <a href="http://gnomad.broadinstitute.org/terms" target="_blank">here</a>.
+Thanks to the <a href="http://gnomad.broadinstitute.org/about" target="_blank">Genome Aggregation
+Database Consortium</a> for making these data available. The data are released under the <a
+href="http://opendatacommons.org/licenses/odbl/1.0/" target="_blank">ODC Open Database License
+(OBdL)</a> as described <a href="http://gnomad.broadinstitute.org/terms" target="_blank">here</a>.
 </p>
 
 <h2>References</h2>
@@ -60,9 +55,8 @@ as described <a href="http://gnomad.broadinstitute.org/terms" target="_blank">he
 <p>
 Lek M, Karczewski KJ, Minikel EV, Samocha KE, Banks E, Fennell T, O'Donnell-Luria AH, Ware JS, Hill
 AJ, Cummings BB <em>et al</em>.
-<a href="https://www.nature.com/articles/nature19057" target="_blank">
-Analysis of protein-coding genetic variation in 60,706 humans</a>.
-<em>Nature</em>. 2016 Aug 17;536(7616):285-91.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27535533" target="_blank">27535533</a>; PMC: <a
-href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5018207/" target="_blank">PMC5018207</a>
+<a href="https://www.nature.com/articles/nature19057" target="_blank">Analysis of protein-coding
+genetic variation in 60,706 humans</a>. <em>Nature</em>. 2016 Aug 17;536(7616):285-91.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27535533" target="_blank">27535533</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5018207/" target="_blank">PMC5018207</a>
 </p>

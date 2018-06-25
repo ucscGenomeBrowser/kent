@@ -80,7 +80,7 @@ and viewed with associated data.</p>
 <p>
 The data underlying the tracks and optional sequence in a hub reside on the remote server of the 
 data provider rather than at UCSC. Genomic annotations are stored in compressed binary indexed 
-files in bigBed, bigBarChart, bigGenePred, bigNarrowPeak, bigPsl, bigChain, bigMaf, bigWig, BAM, CRAM, HAL or VCF 
+files in bigBed, bigBarChart, bigGenePred, bigNarrowPeak, bigPsl, bigChain, bigInteract, bigMaf, bigWig, BAM, CRAM, HAL or VCF 
 format that contain the data at several resolutions. In the case of assemblies that UCSC does not 
 support, genomic sequence is stored in the efficient twoBit format. When a hub track is displayed 
 in the Genome Browser, only the relevant data needed to support the view of the current genomic 
@@ -188,7 +188,7 @@ To create your own hub you will need:</p>
 <ul>
   <li>
   one or more data sets formatted in one of the compressed binary index formats supported by the 
-  Genome Browser: bigBed, bigBarChart, bigGenePred, bigNarrowPeak, bigPsl, bigChain, bigMaf, bigWig, BAM, CRAM, 
+  Genome Browser: bigBed, bigBarChart, bigGenePred, bigNarrowPeak, bigPsl, bigChain, bigInteract, bigMaf, bigWig, BAM, CRAM, 
   HAL or VCF</li>
   <li>
   a set of text files that specify properties for the track hub and for each of the data tracks 
@@ -252,6 +252,7 @@ supported by the Genome Browser:
 <a href="bigChain.html">bigChain</a>, 
 <a href="bigNarrowPeak.html">bigNarrowPeak</a>,
 <a href="barChart.html">bigBarChart</a>,
+<a href="bigInteract.html">bigInteract</a>,
 <a href="bigPsl.html">bigPsl</a>, 
 <a href="bigMaf.html">bigMaf</a>,
 <a href="bigWig.html">bigWig</a>, 
@@ -294,6 +295,12 @@ Format</a> help page for information on creating and configuring bigGenePred tra
 bringing barChart display into track hubs, and supports schema customization and label configuration
 that is not supported for regular barChart format. See the <a href="barChart.html">barChart Track
 Format</a> help page for information on creating and configuring bigBarChart tracks.</p> 
+<p>
+<em>bigInteract</em> - BigInteract files are binary indexed versions of 
+<a href="../../FAQ/FAQformat.html#format22">interact</a> files. BigInteract format is useful for
+bringing interacdt display into track hubs, and supports schema customization and label configuration
+that is not supported for regular interact format. See the <a href="interact.html">interact Track
+Format</a> help page for information on creating and configuring bigInteract tracks.</p> 
 <p>
 <em>bigPsl</em> - BigPsl files are binary indexed versions of 
 <a href="../../FAQ/FAQformat.html#format2">PSL</a> files. BigPsl format is useful for large data 
@@ -399,12 +406,13 @@ shown in <em>Example 1</em>.</p>
 Create a genomes.txt file within the track hub directory that contains a two-line stanza that must 
 be separated by a line for each genome assembly that is supported by the hub data. Each stanza shows
 the location of the trackDb file that defines display properties for each track in that
-assembly.</p>
+assembly, as well as an optional metadata storage file</p>
 <pre><code><strong>genome</strong> <em>assembly_database_1</em>
 <strong>trackDb</strong> <em>assembly_1_path/trackDb.txt</em>
-<br>
-<strong>genome</strong> <em>assembly_database_2</em>
-<strong>trackDb</strong> <em>assembly_2_path/trackDb.txt</em> </code></pre>
+<strong>metaTab</strong> <em>assembly_1_path/tabSeparatedFile.txt</em> </code></pre>
+<pre><strong>genome</strong> <em>assembly_database_2</em>
+<strong>trackDb</strong> <em>assembly_2_path/trackDb.txt</em> </code>
+<strong>metaDb</strong> <em>assembly_2_path/tagStormFile.txt</em> </code></pre>
 <p>
 <em>genome</em> - a valid UCSC database name. Each stanza must begin with this tag and each stanza 
 must be separated by an empty line.</p> 
@@ -412,6 +420,8 @@ must be separated by an empty line.</p>
 <em>trackDb</em> - the relative path of the trackDb file for the assembly designated by the 
 <em>genome</em> tag. By convention, the trackDb file is located in a subdirectory of the hub 
 directory. However, the trackDb tag may also specify a complete URL.</p>
+<p><em>metaDb</em> - the path to an optional tagStorm file that has the metadata for each track. Each track with metadata should have a "meta" tag specified in the trackDb stanza for that track and a "meta" tag in the tagStorm file.</p>
+<p><em>metaTab</em> - the path to an optional tab separated file that has the metadata for each track. Each track with metadata should have a "meta" tag specified in the trackDb stanza for that track and a "meta" tag  in the tab separated file. The first line of the TSV file should start with a '#' and have the field names for each column, one of them being "meta"</p>
 <p>
 If this genomes.txt file is for an assembly that does not have native support in the browser, the 
 following fields must also be present:</p>
@@ -517,7 +527,7 @@ configuration and track settings, and on the details pages. Suggested maximum le
 characters.</p>
 <p>
 <em>type</em> - the format of the file specified by bigDataUrl. Must be either <em>bigWig</em>, 
-<em>bigBed</em>, <em>bigBarChart</em>, <em>bigGenePred</em>, <em>bigNarrowPeak</em>, <em>bigChain</em>, <em>bigPsl</em>, 
+<em>bigBed</em>, <em>bigBarChart</em>, <em>bigGenePred</em>, <em>bigInteract</em>, <em>bigNarrowPeak</em>, <em>bigChain</em>, <em>bigPsl</em>, 
 <em>bigMaf</em>, <em>bam</em>, <em>halSnake</em> or <em>vcfTabix</em> (Note: use <em> type bam</em> 
 for CRAM files). If the type is <em>bigBed</em>, it may be followed by an optional number denoting 
 the number of fields in the bigBed file (e.g., &quot;type bigBed 12&quot; for a file with 12 fields). 

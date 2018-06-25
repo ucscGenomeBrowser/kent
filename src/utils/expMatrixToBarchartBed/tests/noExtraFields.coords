@@ -1,0 +1,10 @@
+chr1	100	175	t1	0	+	gene1
+chr2	100	325	t2	0	-	gene1
+chr2	900	1000	t3	0	+	gene2
+chr3	820	900	t4	0	+	gene2
+chr1	175	400	t5	0	-	gene3
+chr2	800	980	t6	0	+	gene4
+chr3	10	180	t7	0	-	gene5
+chr1	80	90	t8	0	+	gene6
+chr2	9	19	t9	0	+	gene6
+chr1	80	95	t10	0	-	gene7

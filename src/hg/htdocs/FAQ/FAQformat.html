@@ -37,6 +37,7 @@
       <li><a href="#format3">GFF format</a></li>
       <li><a href="#format4">GTF format</a></li>
       <li><a href="#format20">HAL format</a></li>
+      <li><a href="#format22">interact and bigInteract format</a></li>
       <li><a href="#format5">MAF format</a></li>
       <li><a href="#format6.5">Microarray format</a></li>
       <li><a href="../goldenPath/help/net.html">Net format</a></li>
@@ -523,6 +524,19 @@ generation.</p>
 HAL is the native output format of the Progressive Cactus alignment pipeline, and is included in 
 the <a href="https://github.com/glennhickey/progressiveCactus" 
 target="_blank">Progressive Cactus</a> installation package.</p>
+
+<a name="format22"></a>
+<h2>interact format</h2>
+<p>
+The interact (and bigInteract) track format displays pairwise interactions as arcs or half-rectangles connecting two genomic regions on the same chromosome.
+Cross-chromosomal interactions can also be represented in this format.
+This format is useful for displaying functional element interactions such
+as SNP/gene interactions, and is also suitable for low-density chromatin interactions,
+such as ChiaPet, and other use cases with a limited number of interactions on the genome.  
+It is not suitable for high-density chromatin data such as Hi-C.</p>
+<p>
+Click <a href="../goldenPath/help/interact.html">here</a> for more information on the interact and
+bigInteract formats.</p>
 
 <a name="format5"></a>
 <h2>MAF format</h2> 

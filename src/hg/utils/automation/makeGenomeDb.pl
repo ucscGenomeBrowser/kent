@@ -110,6 +110,8 @@ ncbiAssemblyName xxxxxrr
   - The assembly name used in the ftp path such as \"catChrV17e\" in  
     ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Felis_catus/catChrV17e/
     It is identical to the name returned from the NCBI Assembly query mention above. 
+    NOTE: this is NOT an NCBI identifier, this name was supplied by the
+    assembly provider.
 
 ncbiBioProject nnnnn
   - The NCBI bioproject number to construct the URL:
@@ -226,7 +228,7 @@ use vars qw/
     /;
 
 # Required config parameters:
-my ($db, $scientificName, $assemblyDate, $assemblyLabel, $assemblyShortLabel, $orderKey, $photoCreditURL, $photoCreditName, $ncbiGenomeId, $ncbiAssemblyName, $ncbiAssemblyId, $ncbiBioProject, $ncbiBioSample, $genBankAccessionID,
+my ($db, $scientificName, $assemblyDate, $assemblyLabel, $assemblyShortLabel, $orderKey, $photoCreditURL, $photoCreditName, $ncbiGenomeId, $providerAssemblyName, $ncbiAssemblyId, $ncbiBioProject, $ncbiBioSample, $genBankAccessionID,
     $mitoAcc, $fastaFiles, $dbDbSpeciesDir, $taxId);
 # Conditionally required config parameters:
 my ($fakeAgpMinContigGap, $fakeAgpMinScaffoldGap,
@@ -308,7 +310,7 @@ sub parseConfig {
   $photoCreditURL = &requireVar('photoCreditURL', \%config);
   $photoCreditName = &requireVar('photoCreditName', \%config);
   $ncbiGenomeId = &requireVar('ncbiGenomeId', \%config);
-  $ncbiAssemblyName = &requireVar('ncbiAssemblyName', \%config);
+  $providerAssemblyName = &requireVar('ncbiAssemblyName', \%config);
   $ncbiAssemblyId = &requireVar('ncbiAssemblyId', \%config);
   $ncbiBioProject = &requireVar('ncbiBioProject', \%config);
   $ncbiBioSample = &requireVar('ncbiBioSample', \%config);
@@ -1020,13 +1022,13 @@ sub makeDescription {
 
 <P>
 <B>UCSC Genome Browser assembly ID:</B> $db<BR>
-<B>Sequencing/Assembly provider ID:</B> $assemblyLabel $ncbiAssemblyName<BR>
+<B>Sequencing/Assembly provider ID:</B> $assemblyLabel $providerAssemblyName<BR>
 <B>Assembly date:</B> $assemblyDate<BR>
 <B>Accession ID:</B> $genBankAccessionID<BR>
 <B>NCBI Genome ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/genome/$ncbiGenomeId"
 TARGET="_blank">$ncbiGenomeId</A> ($scientificName)<BR>
 <B>NCBI Assembly ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/assembly/$ncbiAssemblyId"
-TARGET="_blank">$ncbiAssemblyId</A> ($ncbiAssemblyName)<BR>
+TARGET="_blank">$ncbiAssemblyId</A><BR>
 <B>NCBI BioProject ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioProject"
 TARGET="_blank">$ncbiBioProject</A><BR>
 <B>NCBI BioSample ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/biosample/$ncbiBioSample"

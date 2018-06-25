@@ -134,6 +134,7 @@ in the sections below.</I>
         <LI><A HREF="#bigBed_-_Item_or_Region_Track_Settings">bigBed</A>: Item or region tracks</LI>
         <LI><A HREF="#bigChain_-_Pairwise_Alignments">bigChain</A>: Genome-wide Pairwise Alignments</LI>
         <LI><A HREF="#bigGenePred_-_Gene_Annotations">bigGenePred</A>: Gene Annotations</LI>
+        <LI><A HREF="#bigInteract">bigInteract</A>: Pairwise interactions</LI>
         <LI><A HREF="#bigNarrowPeak_-_Peaks">bigNarrowPeak</A>: Peaks</LI>
         <LI><A HREF="#bigMaf_-_Multiple_Alignments">bigMaf</A>: Mulitple alignments</LI>
         <LI><A HREF="#bigPsl_-_Pairwise_Alignments">bigPsl</A>: Pairwise Alignments</LI>
@@ -191,6 +192,9 @@ in the sections below.</I>
     </TD></TR>
     <TR VALIGN=TOP><TD class="visibility"><A name="visibility"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-base">visibility</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="meta"><A name="meta"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">meta</code></div>
     </TD></TR>
 </TABLE>
 <BR>
@@ -435,6 +439,9 @@ are described below along with settings specific to their types.</P>
         available for displaying bigBarChart tracks.</p>
         <a onclick="return jumpTo(this);" HREF="#">labelFields</a>,
         <a onclick="return jumpTo(this);" HREF="#">defaultLabelFields</a>
+        <a onclick="return jumpTo(this);" HREF="#">url</a>
+        <a onclick="return jumpTo(this);" HREF="#">urlLabel</a>
+        <a onclick="return jumpTo(this);" HREF="#">urls</a>
 </td></tr>
 <tr class="examples" valign=top><td class="bigBarChart_example"><img class='toggle detail'>
     <div class="format"><b>Example of a bigBarChart track</b></div>
@@ -610,6 +617,69 @@ are described below along with settings specific to their types.</P>
 </TABLE>
 <BR><BR>
 
+<a name="bigInteract"></a>
+<style>
+.dot {
+    display: inline-block; 
+    height: 10px; 
+    width: 10px; 
+    margin-right: 2px;
+    border-radius: 50%;
+}
+</style>
+<table class="settingsTable" id="bigInteract">
+<thead><tr><td><div ID="bigInteract_intro" class="intro"></div></td></tr></thead>
+<tr valign=top><th><img class='toggle oneSection'>
+    &nbsp;bigInteract - Pairwise interaction display"
+</th></tr>
+<tr valign=top><td class="bigInteract"><img class='toggle detail'>
+    <div class="format"> <code>type bigInteract</code></div>
+</td></tr>
+<tr valign=top><td class="bigDataUrl"><img class='toggle detail'>
+    <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code>
+    </div>
+</td></tr>
+<tr valign=top><td class="interactDirectional"><a name="interactDirectional"></a> <img class='toggle detail'>
+    <div class="format"> <code class="level-full">interactDirectional &lt;true/false&gt;</code>
+    </div>
+<tr valign=top><td>
+        <p>Additional settings defined in other sections are also
+        available for displaying bigInteract tracks.</p>
+        <a onclick="return jumpTo(this);" HREF="#">maxHeightPixels</a>
+        <a onclick="return jumpTo(this);" HREF="#">scoreMin</a>
+        <a onclick="return jumpTo(this);" HREF="#">spectrum</a>,
+</td></tr>
+<tr class="examples" valign=top><td class="interact_example"><img class='toggle detail'>
+    <div class="format"><b>Example of a bigInteract track</b></div>
+</td></tr>
+</table>
+<br><br>
+
+<A name="bigMaf"></A>
+<TABLE class="settingsTable" id="bigMaf_-_Multiple_Alignments">
+<THEAD><TR><TD><DIV ID="bigMaf_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;bigMaf - Multiple alignments
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="bigMaf"><IMG class='toggle detail'>
+        <div class="format">
+            <code>type bigMaf</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="speciesOrder"><A name="speciesOrder"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">speciesOrder &lt;species1&gt; [species2 &hellip;]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="frames"><A name="frames"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">frames &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="summary"><A name="summary"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">summary &lt;tableName/url&gt;</code></div>
+    </TD></TR>
+</TABLE>
+<BR><BR>
+
 <A name="bigNarrowPeak"></A>
 <TABLE class="settingsTable" id="bigNarrowPeak_-_Peaks">
 <THEAD><TR><TD><DIV ID="bigNarrowPeak_intro" class="intro"></DIV></TD></TR></THEAD>
@@ -633,31 +703,6 @@ are described below along with settings specific to their types.</P>
             <span class="qValueFilter"><code class="level-new">qValueFilter</code></span><BR>
             <span class="signalFilter"><code class="level-new">signalFilter</code></span></div>
             </div>
-    </TD></TR>
-</TABLE>
-<BR><BR>
-
-<A name="bigMaf"></A>
-<TABLE class="settingsTable" id="bigMaf_-_Multiple_Alignments">
-<THEAD><TR><TD><DIV ID="bigMaf_intro" class="intro"></DIV></TD></TR></THEAD>
-    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
-        &nbsp;bigMaf - Multiple alignments
-    </TH></TR>
-    <TR VALIGN=TOP><TD class="bigMaf"><IMG class='toggle detail'>
-        <div class="format">
-            <code>type bigMaf</code></div>
-    </TD></TR>
-    <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
-        <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
-    </TD></TR>
-    <TR VALIGN=TOP><TD class="speciesOrder"><A name="speciesOrder"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-full">speciesOrder &lt;species1&gt; [species2 &hellip;]</code></div>
-    </TD></TR>
-    <TR VALIGN=TOP><TD class="frames"><A name="frames"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-full">frames &lt;url/relativePath&gt;</code></div>
-    </TD></TR>
-    <TR VALIGN=TOP><TD class="summary"><A name="summary"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-full">summary &lt;tableName/url&gt;</code></div>
     </TD></TR>
 </TABLE>
 <BR><BR>

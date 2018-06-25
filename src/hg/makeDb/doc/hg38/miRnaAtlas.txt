@@ -53,7 +53,7 @@ EOF
     # some of these miRna's are present in the genome twice, like hsa-mir-392, which is present
     # in two places with a single base mismatch
 
-    # use expMatrixToBarChartBed to make final barChart, first we need a sample mapping:
+    # use expMatrixToBarchartBed to make final barChart, first we need a sample mapping:
     head -1 expression_data/data_matrix_quantile.txt | tr '\t' '\n' > tissues.txt
     head -1 expression_data/data_matrix_quantile.txt | tr '\t' '\n' | \
         sed -e 's/\._/\./' | sed -e 's/.$//' | tr -s '.' | rev | sed -e 's/\./\t/' | rev | \
@@ -66,7 +66,7 @@ EOF
     # cleanup matrix file
     sed -e '1s/^/\#gene\t/' expression_data/data_matrix_quantile.txt | sed -e 's/,/\./g' > data_matrix_decimals.txt
 
-    expMatrixToBarChartBed atlasSamples.txt data_matrix_decimals.txt atlasCoordinates.bed6Plus miRnaAtlas.bed
+    expMatrixToBarchartBed atlasSamples.txt data_matrix_decimals.txt atlasCoordinates.bed6Plus miRnaAtlas.bed
     # this is only writing two bed lines, I believe because of duplicates.
     # fixed by commit: 87a97a71
 
@@ -93,3 +93,63 @@ EOF
     # std of depth: 0.120907
 
     ln -s /hive/data/genomes/hg38/bed/miRnaAtlas/miRnaAtlas.bb /gbdb/hg38/bbi/miRnaAtlas.bb
+
+##############################################################################
+# make composite track one for each individual
+##############################################################################
+
+    cd /hive/data/genomes/hg38/bed/miRnaAtlas
+    mkdir /hive/data/genomes/hg38/bed/miRnaAtlas/composite
+    cd /hive/data/genomes/hg38/bed/miRnaAtlas/composite
+
+    grep '1-' ../samplesCleaned2.txt | cut -d'-' -f2 | sort > person1Tissues.txt
+    grep '2-' ../samplesCleaned2.txt | cut -d'-' -f2 | sort > person2Tissues.txt
+    grep -Fwf person1Tissues.txt person2Tissues.txt  | wc -l
+    # 14
+    wc -l person1Tissues.txt person2Tissues.txt
+    # 24 person1Tissues.txt
+    # 37 person2Tissues.txt
+    # 61 total
+    # about half of first individuals samples were sampled in individual 2, so 14 bars
+    # will have shared colors for easy comparison
+
+    grep "2-" ../atlasSamples2.txt | tr '-' '\t' | cut -f1,3  > person2Samples.txt
+    grep "1-" ../atlasSamples2.txt | tr '-' '\t' | cut -f1,3  > person1Samples.txt
+
+    # cut matrix into person1 and person2 matrices:
+    head -1 ../data_matrix_decimals2.txt | tl
+    cut -f1-25 ../data_matrix_decimals2.txt > person1.matrix
+    cut -f1,26- ../data_matrix_decimals2.txt > person2.matrix
+
+    # download TSI values and incorporate into the bed file
+    wget https://ccb-web.cs.uni-saarland.de/tissueatlas/static/data/tsi_values.csv
+    tail -n +2 tsi_values.csv | cut -f1,5 | sort -k1 > tsi_quantiles_person1.txt
+    tail -n +2 tsi_values.csv | cut -f1,6 | sort -k1 > tsi_quantiles_person2.txt
+    sort -k4 ../atlasCoordinates.bed6Plus > atlasSortedByName.bed
+    join -t $'\t' -1 4 -2 1 atlasSortedByName.bed tsi_quantiles_person1.txt \
+        | tawk '{print $2,$3,$4,$1,$5,$6,$7,$8}' > atlasCoordsPlusTSIPerson1.bed
+    join -t $'\t' -1 4 -2 1 atlasSortedByName.bed tsi_quantiles_person2.txt \
+        | tawk '{print $2,$3,$4,$1,$5,$6,$7,$8}' > atlasCoordsPlusTSIPerson2.bed
+
+    expMatrixToBarchartBed --autoSql miRnaAtlasReordered.as --groupOrderFile person1.order2 person1Samples.txt person1.matrix atlasCoordsPlusTSIPerson1.bed person1.bed1 &> person1.log1
+    expMatrixToBarchartBed --autoSql miRnaAtlasReordered.as --groupOrderFile person2.order2 person2Samples.txt person2.matrix atlasCoordsPlusTSIPerson2.bed person2.bed1 &> person2.log1
+    # column order person1:
+    adipocyte artery colon dura_mater kidney liver lung muscle myocardium skin spleen stomach testis thyroid small_intestine bone gallbladder fascia bladder epididymis tunica_albuginea nerve_nervus_intercostalis arachnoid_mater brain
+    # column order person2:
+    adipocyte artery colon dura_mater kidney liver lung muscle myocardium skin spleen stomach testis thyroid small_intestine_duodenum small_intestine_jejunum pancreas kidney_glandula_suprarenalis kidney_cortex_renalis esophagus prostate bone_marrow vein lymph_node nerve_not_specified pleura brain_pituitary_gland spinal_cord brain_thalamus brain_white_matter brain_nucleus_caudatus kidney_medulla_renalis brain_gray_matter brain_cerebral_cortex_temporal brain_cerebral_cortex_frontal brain_cerebral_cortex_occipital brain_cerebellum
+
+    # to get corresponding colors for trackDb:
+    grep -Fwf person1.order2 allTissueNames.txt  | cut -f2 | tr '\n' ' '; echo
+    grep -Fwf person2.order2 allTissueNames.txt  | cut -f2 | tr '\n' ' '; echo
+
+    chromSizes=../../../chrom.sizes
+    sort -k1,1 -k2,2n person1.bed1 > person1.bed1.sorted
+    sort -k1,1 -k2,2n person2.bed1 > person2.bed1.sorted
+    bedToBigBed -as=miRnaAtlasReordered.as -tab -type=bed6+6 person1.bed1.sorted $chromSizes sample1.bb
+    bedToBigBed -as=miRnaAtlasReordered.as -tab -type=bed6+6 person2.bed1.sorted $chromSizes sample2.bb
+
+    # get right sample mapping/matrices into gbdb for hgc pages:
+    ln -s /hive/data/genomes/hg38/bed/miRnaAtlas/composite/person1Samples.txt /gbdb/hgFixed/human/expMatrix/miRnaAtlasSample1.txt
+    ln -s /hive/data/genomes/hg38/bed/miRnaAtlas/composite/person2Samples.txt /gbdb/hgFixed/human/expMatrix/miRnaAtlasSample2.txt
+    ln -s /hive/data/genomes/hg38/bed/miRnaAtlas/composite/person1Matrix.txt /gbdb/hgFixed/human/expMatrix/miRnaAtlasSample1Matrix.txt
+    ln -s /hive/data/genomes/hg38/bed/miRnaAtlas/composite/person2Matrix.txt /gbdb/hgFixed/human/expMatrix/miRnaAtlasSample2Matrix.txt
