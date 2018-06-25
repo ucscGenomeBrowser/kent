@@ -510,3 +510,79 @@ grcHhh38.perChromTables = no
 
 
 #############################################################################
+# adding ucscToINSDC, ucscToRefSeq and chromAlias (DONE - Hiram - 2018-06-15)
+
+    # need to have idKeys for the genbank and refseq assemblies:
+    mkdir -p /hive/data/genomes/grcHhh38/bed/ucscToINSDC/genbankP11
+    cd /hive/data/genomes/grcHhh38/bed/ucscToINSDC/genbankP11
+    ln -s /hive/data/outside/ncbi/genomes/genbank/vertebrate_mammalian/Homo_sapiens/all_assembly_versions/GCA_000001405.26_GRCh38.p11/GCA_000001405.26_GRCh38.p11_genomic.fna.gz .
+    faToTwoBit GCA_000001405.26_GRCh38.p11_genomic.fna.gz genbankP11.2bit
+    time (doIdKeys.pl -buildDir=`pwd` -twoBit=genbankP11.2bit genbankP11) \
+       > do.log 2>&1
+    # real    1m22.060s
+
+    mkdir /hive/data/genomes/grcHhh38/bed/ucscToINSDC/refseq
+    cd /hive/data/genomes/grcHhh38/bed/ucscToINSDC/refseq
+    ln -s /hive/data/outside/ncbi/genomes/refseq/vertebrate_mammalian/Homo_sapiens/all_assembly_versions/GCF_000001405.37_GRCh38.p11/GCF_000001405.37_GRCh38.p11_genomic.fna.gz ./
+    faToTwoBit GCF_000001405.37_GRCh38.p11_genomic.fna.gz refseqP11.2bit
+    time (doIdKeys.pl -buildDir=`pwd` -twoBit=refseqP11.2bit refseqP11) \
+        > do.log 2>&1
+
+    # with the three idKeys available, join them to make the table bed files:
+    cd /hive/data/genomes/grcHhh38/bed/ucscToINSDC
+ join -t$'\t' ../idKeys/grcHhh38.idKeys.txt genbankP11/genbankP11.idKeys.txt \
+    | cut -f2- | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+     | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+        | sort -k1,1 -k2,2n > ucscToINSDC.bed
+
+  join -t$'\t' ../idKeys/grcHhh38.idKeys.txt refseq/refseqP11.idKeys.txt \
+    | cut -f2- | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+     | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+        | sort -k1,1 -k2,2n > ucscToRefSeq.bed
+
+    # loading tables:
+    export db=grcHhh38
+
+    export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
+   sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+        | hgLoadSqlTab ${db} ucscToINSDC stdin ucscToINSDC.bed
+
+   export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+     | sed -e 's/INSDC/RefSeq/g;' \
+       | hgLoadSqlTab ${db} ucscToRefSeq stdin ucscToRefSeq.bed
+
+    # must be exactly 100% coverage
+
+    featureBits -countGaps ${db} ucscToINSDC
+    # 3253848404 bases of 3253848404 (100.000%) in intersection
+
+    featureBits -countGaps ${db} ucscToRefSeq
+    # 3253848404 bases of 3253848404 (100.000%) in intersection
+
+    # construct chromAlias, already done by Angie, this is a verification:
+    cd /hive/data/genomes/grcHhh38/bed/chromAlias
+    hgsql -N -e 'select chrom,name from ucscToRefSeq;' ${db} \
+        | sort -k1,1 > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name from ucscToINSDC;' ${db} \
+        | sort -k1,1 > ucsc.genbank.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl ucsc.*.tab \
+        > ${db}.chromAlias.tab
+
+    # verify all there:
+    for t in refseq genbank
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t grcHhh38.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+
+  # checking refseq: 578 =? 578 OK
+  # checking genbank: 578 =? 578 OK
+
+#############################################################################
