@@ -369,57 +369,18 @@ sqlFreeResult(&sr);
 sqlDisconnect(&conn2);
 }
 
-void addOneBasicAuth(struct dyString *dy)
-/* add basic auth to url if using it */
-{
-if (loginUseBasicAuth())
-    {
-    char *token = getHttpBasicToken();
-    // This warning was copied from hg/lib/wikiLink.c
-    //XX The following should be uncommented for security reasons
-    //if (!token) 
-        //printTokenErrorAndExit();
-    // May 2017: Allowing normal login even when HTTP Basic is enabled. This may be insecure. 
-    // Keeping it insecure pending Jim's/Clay's approval, for backwards compatibility.
-    if (token) 
-	{
-	char *user = NULL;
-	char *password = NULL;
-	basicAuthUserPassword(token, &user, &password);
-	htmlDyStringPrintf(dy, "%s|url|:%s|url|@", user, password);
-	freeMem(user);
-	freeMem(password);
-	}
-    }
-}
-
-void appendGetFileLink(struct dyString *dy, char *varName, char *indexExt, char *label)
-/* make a link for cdwGetFile */
-{
-char *host = hHttpHost();
-dyStringPrintf(dy, "%s=http", varName);
-if (sameOk(getenv("HTTPS"),"on"))
-    dyStringPrintf(dy, "s");
-dyStringPrintf(dy, "://");
-addOneBasicAuth(dy);
-dyStringPrintf(dy, "%s/cgi-bin/cdwGetFile?", host);
-if (indexExt)
-    dyStringPrintf(dy, "addExt=%s&", indexExt);
-dyStringPrintf(dy, "acc=%s", label);
-if (accessibleFilesToken != NULL)
-    dyStringPrintf(dy, "&token=%s", accessibleFilesToken);
-dyStringPrintf(dy, " ");
-}
-
 struct dyString *customTextForFile(struct sqlConnection *conn, struct cdwTrackViz *viz)
 /* Create custom track text */
 {
 struct dyString *dy = dyStringNew(0);
 dyStringPrintf(dy, "track name=\"%s\" ", viz->shortLabel);
 dyStringPrintf(dy, "description=\"%s\" ", viz->longLabel);
-
-appendGetFileLink(dy, "bigDataUrl", NULL, viz->shortLabel);
-
+char *host = hHttpHost();
+dyStringPrintf(dy, "bigDataUrl=http://%s/cgi-bin/cdwGetFile?acc=%s", host, viz->shortLabel);
+if (accessibleFilesToken != NULL)
+    dyStringPrintf(dy, "&token=%s", accessibleFilesToken);
+dyStringPrintf(dy, " ");
+    
 char *indexExt = NULL;
 if (sameWord(viz->type, "bam"))
     indexExt = ".bai";
@@ -428,10 +389,12 @@ else if (sameWord(viz->type, "vcfTabix"))
 
 if (indexExt != NULL)
     {
-    appendGetFileLink(dy, "bigDataIndex", indexExt, viz->shortLabel);
+    dyStringPrintf(dy, "bigDataIndex=http://%s/cgi-bin/cdwGetFile?addExt=%s&acc=%s", host, indexExt, viz->shortLabel);
+    if (accessibleFilesToken != NULL)
+        dyStringPrintf(dy, "&token=%s", accessibleFilesToken);
     }
 
-dyStringPrintf(dy, "type=%s", viz->type);
+dyStringPrintf(dy, " type=%s", viz->type);
 return dy;
 }
 
