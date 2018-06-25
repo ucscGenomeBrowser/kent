@@ -373,13 +373,9 @@ char *wikiLinkUserName()
 if (loginUseBasicAuth())
     {
     char *token = getHttpBasicToken();
-    //XX The following should be uncommented for security reasons
-    //if (!token) 
-        //printTokenErrorAndExit();
-    // May 2017: Allowing normal login even when HTTP Basic is enabled. This may be insecure. 
-    // Keeping it insecure pending Jim's/Clay's approval, for backwards compatibility.
-    if (token) 
-        return basicAuthUser(token);
+    if (!token) 
+        printTokenErrorAndExit();
+    return basicAuthUser(token);
     }
 
 if (loginSystemEnabled())
