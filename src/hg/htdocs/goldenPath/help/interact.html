@@ -8,7 +8,8 @@
 <h1>interact and bigInteract Track Format</h1> 
 <p>
 <p>
-The interact (and bigInteract) track format displays pairwise interactions as arcs or half-rectangles connecting two genomic regions on the same chromosome. 
+The interact (and bigInteract) track format displays pairwise interactions as arcs or 
+half-rectangles connecting two genomic regions on the same chromosome. 
 Cross-chromosomal interactions can also be represented in this format; the display shows
 the region on the currently viewed chromosome, with a vertical bar, labeled with 
 the chromosome of the connected region (space permitting).
@@ -86,14 +87,16 @@ fields with 'snpName', etc, and 'targetName' and related fields with 'geneName',
 editing the field descriptions to reflect the changes you make.  For non-directional data
 such as ChiaPet, one could use 'region1' and 'region2'.</p>
 <p>
-As the browser display of this format only shows the paired region labels on mouseover, we recommend including a 
+As the browser display of this format only shows the paired region labels on mouseover, we 
+recommend including a 
 BED or other format file to display the source and target region labels.</p>
 
 <h2>Creating interact and bigInteract custom tracks</h2>
 <a name="example1"></a>
 <h6>Example #1</h6>
 <p>
-In this example, you will create an interact custom track using example SNP/gene interaction data in multiple tissues.
+In this example, you will create an interact custom track using example SNP/gene interaction 
+data in multiple tissues.
 This example uses the interaction coloring and directionality features of the interact track type.
 <ol>
    <li>Paste the following track line into the 
@@ -116,12 +119,15 @@ chr12    40618812      40652520        rs2723264/LRRK2/lung  0       1.839   lun
 <img width="1080" height="148" src="../../images/interactExample1.png">
 </ol>
 <p>
-After the file loads in the Genome Browser, you should see four interactions displayed; four variants interacting with the
-same gene (LRRK2).
-Hovering the mouse over the curve peak of an  interaction will display the interaction name (SNP/gene/tissue). 
+After the file loads in the Genome Browser, you should see four interactions displayed; 
+four variants interacting with the same gene (LRRK2).
+Hovering the mouse over the curve peak of an  interaction will display the interaction name 
+(SNP/gene/tissue). 
 Hovering over an interaction end will show the name of the end region (e.g. SNP or gene).
 Clicking at one of the hoverable regions will show the details page for the interaction.  
-The interactDirectional setting causes reverse direction interactions (where target precedes source) to be displayed as dashed lines. In this example, the green (lung) interaction is in the reverse direction.
+The interactDirectional setting causes reverse direction interactions (where target precedes 
+source) to be displayed as dashed lines. In this example, the green (lung) interaction is in 
+the reverse direction.
 </p>
 
 <a name="example2"></a>
@@ -130,7 +136,8 @@ The interactDirectional setting causes reverse direction interactions (where tar
 In this example, you will create an interact custom track using example chromatin interaction data.
 This type of data is non-directional and commonly would represent a single experiment, with the 
 interaction score being of interest.  
-The settings below display using the gray-scale coloring feature, where the darkness of the interaction is based on the score.
+The settings below display using the gray-scale coloring feature, where the darkness of the 
+interaction is based on the score.
 <ol>
    <li>Paste the following track line into the 
        <a href="../../cgi-bin/hgCustom?db=hg19">custom track management 
@@ -152,9 +159,11 @@ chr3    64623042        64636663        .       800     4       .       0       
 <img width="1080" height="148" src="../../images/interactExample2.png">
 </ol>
 <p>
-After the file loads in the Genome Browser, you should see four interactions displayed on chromosome 3.  Two of the interactions
-have both interacting regions in the browser view, and two have a single region. One of these interacts across chromosomes (with
-a region on chromosome 20), and the other with a region outside of the browser window (indicated by rectangular connector).
+After the file loads in the Genome Browser, you should see four interactions displayed on 
+chromosome 3.  Two of the interactions
+have both interacting regions in the browser view, and two have a single region. One of these 
+interacts across chromosomes (with a region on chromosome 20), and the other with a region 
+outside of the browser window (indicated by rectangular connector).
 the darkness of the interaction indicates the strength of the interaction.
 </p>
 
@@ -168,7 +177,8 @@ located on the UCSC Genome Browser http server. This file contains data for the 
 <p>
 To create a custom track using this file:
 <ol>
-   <li>Construct a track line referencing the file and set the browser position to show region of interest in the file:
+   <li>Construct a track line referencing the file and set the browser position to show region 
+       of interest in the file:
    <pre><code>
 track type=bigInteract name=&quot;interact Example Three&quot; description=&quot;A bigInteract file&quot; useScore=true visibility=full bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/interact/interactExample3.inter.bb
 browser position chr3:63,820,967-63,880,091
@@ -233,8 +243,8 @@ bigDataUrl interactExample4.inter.bb
 
 <h2>Sharing your data with others</h2>
 <p>
-If you would like to share your interact/bigInteract data track with a colleague, learn how to create a URL by 
-looking at Example 11 on <a href="customTrack.html#EXAMPLE11">this page</a>.</p>
+If you would like to share your interact/bigInteract data track with a colleague, learn how to 
+create a URL by looking at Example 11 on <a href="customTrack.html#EXAMPLE11">this page</a>.</p>
 
 <h2>Extracting data from the bigInteract format</h2>
 <p>
