@@ -2,11 +2,12 @@
 CC?=gcc
 # to build on sundance: CC=gcc -mcpu=v9 -m64
 ifeq (${COPT},)
-    COPT=-O -g
+    COPT=-O2 -g
 endif
-ifeq (${CFLAGS},)
-    CFLAGS=
-endif
+CFLAGS?=-O2 -g
+# ifeq (${CFLAGS},)
+#     CFLAGS=
+# endif
 ifeq (${MACHTYPE},)
     MACHTYPE:=$(shell uname -m)
 #    $(info MACHTYPE was empty, set to: ${MACHTYPE})
