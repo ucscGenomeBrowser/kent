@@ -18,10 +18,10 @@ displayed as a dashed line or curve.</p>
 <p>
 This format is useful for displaying functional element interactions such 
 as SNP/gene interactions, and is also suitable for low-density chromatin interactions, 
-such as ChiaPet, and other use cases with a limited number of interactions on the genome. 
+such as ChIA-PET, and other use cases with a limited number of interactions on the genome. 
 It is not suitable for high-density chromatin data such as Hi-C.</p>
 <p>
-The interact format is available as a standalone plain text bed5+13 format 
+The interact format is available as a standalone plain text <code>bed5+13</code> format 
 for use with smaller datasets as a custom track, and as a binary indexed format (bigInteract) 
 suitable for track hubs and custom tracks.
 The bigInteract format provides more track customization
@@ -85,7 +85,7 @@ and (for users who download files), from the -as option of the bigBedInfo tool.<
 As an example, if the dataset represents SNP/gene interactions, replace 'sourceName' and related 
 fields with 'snpName', etc, and 'targetName' and related fields with 'geneName', etc.,
 editing the field descriptions to reflect the changes you make.  For non-directional data
-such as ChiaPet, one could use 'region1' and 'region2'.</p>
+such as ChIA-PET, one could use 'region1' and 'region2'.</p>
 <p>
 As the browser display of this format only shows the paired region labels on mouseover, we 
 recommend including a 
@@ -125,9 +125,9 @@ Hovering the mouse over the curve peak of an  interaction will display the inter
 (SNP/gene/tissue). 
 Hovering over an interaction end will show the name of the end region (e.g. SNP or gene).
 Clicking at one of the hoverable regions will show the details page for the interaction.  
-The interactDirectional setting causes reverse direction interactions (where target precedes 
-source) to be displayed as dashed lines. In this example, the green (lung) interaction is in 
-the reverse direction.
+The <code>interactDirectional</code> setting causes reverse direction interactions (where 
+target precedes source) to be displayed as dashed lines. In this example, the green (lung) 
+interaction is in the reverse direction.
 </p>
 
 <a name="example2"></a>
@@ -164,7 +164,7 @@ chromosome 3.  Two of the interactions
 have both interacting regions in the browser view, and two have a single region. One of these 
 interacts across chromosomes (with a region on chromosome 20), and the other with a region 
 outside of the browser window (indicated by rectangular connector).
-the darkness of the interaction indicates the strength of the interaction.
+The darkness of the interaction indicates the strength of the interaction.
 </p>
 
 <a name="example3"></a>
@@ -196,12 +196,12 @@ colored black.
 <a name="example4"></a>
 <h6>Example #4</h6>
 <p>
-In this example, you will use an example bed file to create a bigInteract file,
+In this example, you will use an example BED file to create a bigInteract file,
 allowing the data to be remotely accessed and exist within a track hub.  The track settings for 
 bigInteract on a hub can be viewed <a href="./trackDb/trackDbHub.html#bigInteract">here</a>.
 </p>
 <ol>
-   <li>Download the example file <a href="examples/interact/interactExample4.chiaPet.hg19.inter.bed">here</a> </li>
+   <li>Download the example file <a href="examples/interact/interactExample4.chiaPet.hg19.inter.bed">here</a>. </li>
    <li>Download the <em>fetchChromSizes</em> and <em>bedToBigBed</em> programs from the
    <a href="http://hgdownload.soe.ucsc.edu/admin/exe">utilities directory</a> appropriate to your
    operating system.
