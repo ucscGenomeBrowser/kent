@@ -420,8 +420,14 @@ must be separated by an empty line.</p>
 <em>trackDb</em> - the relative path of the trackDb file for the assembly designated by the 
 <em>genome</em> tag. By convention, the trackDb file is located in a subdirectory of the hub 
 directory. However, the trackDb tag may also specify a complete URL.</p>
-<p><em>metaDb</em> - the path to an optional tagStorm file that has the metadata for each track. Each track with metadata should have a "meta" tag specified in the trackDb stanza for that track and a "meta" tag in the tagStorm file.</p>
-<p><em>metaTab</em> - the path to an optional tab separated file that has the metadata for each track. Each track with metadata should have a "meta" tag specified in the trackDb stanza for that track and a "meta" tag  in the tab separated file. The first line of the TSV file should start with a '#' and have the field names for each column, one of them being "meta"</p>
+<p><em>metaDb</em> - the path to an optional tagStorm file that has the metadata for each track. 
+Each track with metadata should have a &quot;meta&quot; tag specified in the trackDb stanza for 
+that track and a &quot;meta&quot; tag in the tagStorm file.</p>
+<p><em>metaTab</em> - the path to an optional tab separated file that has the metadata for each 
+track. Each track with metadata should have a &quot;meta&quot; tag specified in the trackDb stanza 
+for that track and a &quot;meta&quot; tag  in the tab separated file. The first line of the TSV 
+file should start with a '#' and have the field names for each column, one of them being 
+&quot;meta&quot;.</p>
 <p>
 If this genomes.txt file is for an assembly that does not have native support in the browser, the 
 following fields must also be present:</p>
