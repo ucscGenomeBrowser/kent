@@ -535,7 +535,7 @@ class GencodeParams(object):
                  ensemblProtIdRegex, twoWayPseudoIdRegex):
         self.orgName = orgName
         self.orgHgDb = orgHgDb
-        if orgHgDb == "hg38":
+        if (orgHgDb == "hg38") or (orgHgDb == "grcHhh38"):
             self.orgGrcRel = "GRCh38"
         elif orgHgDb == "hg19":
             self.orgGrcRel = "GRCh37"
@@ -643,7 +643,7 @@ def getMouseGencodeParams(orgHgDb, gencodeVer, ensemblVer, gencodeDate):
 
 def getGencodeParams(orgHgDb, gencodeVer, ensemblVer, gencodeDate):
     "create GencodeParams object for a single"
-    if orgHgDb == "hg38":
+    if (orgHgDb == "hg38") or (orgHgDb == "grcHhh38"):
         return getHumanGencodeParams(orgHgDb, gencodeVer, ensemblVer, gencodeDate)
     elif orgHgDb == "hg19":
         return getHumanBackmapGencodeParams(orgHgDb, gencodeVer, ensemblVer, gencodeDate)

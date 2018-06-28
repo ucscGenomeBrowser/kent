@@ -8,7 +8,8 @@
 <h1>interact and bigInteract Track Format</h1> 
 <p>
 <p>
-The interact (and bigInteract) track format displays pairwise interactions as arcs or half-rectangles connecting two genomic regions on the same chromosome. 
+The interact (and bigInteract) track format displays pairwise interactions as arcs or 
+half-rectangles connecting two genomic regions on the same chromosome. 
 Cross-chromosomal interactions can also be represented in this format; the display shows
 the region on the currently viewed chromosome, with a vertical bar, labeled with 
 the chromosome of the connected region (space permitting).
@@ -17,10 +18,10 @@ displayed as a dashed line or curve.</p>
 <p>
 This format is useful for displaying functional element interactions such 
 as SNP/gene interactions, and is also suitable for low-density chromatin interactions, 
-such as ChiaPet, and other use cases with a limited number of interactions on the genome. 
+such as ChIA-PET, and other use cases with a limited number of interactions on the genome. 
 It is not suitable for high-density chromatin data such as Hi-C.</p>
 <p>
-The interact format is available as a standalone plain text bed5+13 format 
+The interact format is available as a standalone plain text <code>bed5+13</code> format 
 for use with smaller datasets as a custom track, and as a binary indexed format (bigInteract) 
 suitable for track hubs and custom tracks.
 The bigInteract format provides more track customization
@@ -84,16 +85,18 @@ and (for users who download files), from the -as option of the bigBedInfo tool.<
 As an example, if the dataset represents SNP/gene interactions, replace 'sourceName' and related 
 fields with 'snpName', etc, and 'targetName' and related fields with 'geneName', etc.,
 editing the field descriptions to reflect the changes you make.  For non-directional data
-such as ChiaPet, one could use 'region1' and 'region2'.</p>
+such as ChIA-PET, one could use 'region1' and 'region2'.</p>
 <p>
-As the browser display of this format only shows the paired region labels on mouseover, we recommend including a 
+As the browser display of this format only shows the paired region labels on mouseover, we 
+recommend including a 
 BED or other format file to display the source and target region labels.</p>
 
 <h2>Creating interact and bigInteract custom tracks</h2>
 <a name="example1"></a>
 <h6>Example #1</h6>
 <p>
-In this example, you will create an interact custom track using example SNP/gene interaction data in multiple tissues.
+In this example, you will create an interact custom track using example SNP/gene interaction 
+data in multiple tissues.
 This example uses the interaction coloring and directionality features of the interact track type.
 <ol>
    <li>Paste the following track line into the 
@@ -116,12 +119,15 @@ chr12    40618812      40652520        rs2723264/LRRK2/lung  0       1.839   lun
 <img width="1080" height="148" src="../../images/interactExample1.png">
 </ol>
 <p>
-After the file loads in the Genome Browser, you should see four interactions displayed; four variants interacting with the
-same gene (LRRK2).
-Hovering the mouse over the curve peak of an  interaction will display the interaction name (SNP/gene/tissue). 
+After the file loads in the Genome Browser, you should see four interactions displayed; 
+four variants interacting with the same gene (LRRK2).
+Hovering the mouse over the curve peak of an  interaction will display the interaction name 
+(SNP/gene/tissue). 
 Hovering over an interaction end will show the name of the end region (e.g. SNP or gene).
 Clicking at one of the hoverable regions will show the details page for the interaction.  
-The interactDirectional setting causes reverse direction interactions (where target precedes source) to be displayed as dashed lines. In this example, the green (lung) interaction is in the reverse direction.
+The <code>interactDirectional</code> setting causes reverse direction interactions (where 
+target precedes source) to be displayed as dashed lines. In this example, the green (lung) 
+interaction is in the reverse direction.
 </p>
 
 <a name="example2"></a>
@@ -130,7 +136,8 @@ The interactDirectional setting causes reverse direction interactions (where tar
 In this example, you will create an interact custom track using example chromatin interaction data.
 This type of data is non-directional and commonly would represent a single experiment, with the 
 interaction score being of interest.  
-The settings below display using the gray-scale coloring feature, where the darkness of the interaction is based on the score.
+The settings below display using the gray-scale coloring feature, where the darkness of the 
+interaction is based on the score.
 <ol>
    <li>Paste the following track line into the 
        <a href="../../cgi-bin/hgCustom?db=hg19">custom track management 
@@ -152,10 +159,12 @@ chr3    64623042        64636663        .       800     4       .       0       
 <img width="1080" height="148" src="../../images/interactExample2.png">
 </ol>
 <p>
-After the file loads in the Genome Browser, you should see four interactions displayed on chromosome 3.  Two of the interactions
-have both interacting regions in the browser view, and two have a single region. One of these interacts across chromosomes (with
-a region on chromosome 20), and the other with a region outside of the browser window (indicated by rectangular connector).
-the darkness of the interaction indicates the strength of the interaction.
+After the file loads in the Genome Browser, you should see four interactions displayed on 
+chromosome 3.  Two of the interactions
+have both interacting regions in the browser view, and two have a single region. One of these 
+interacts across chromosomes (with a region on chromosome 20), and the other with a region 
+outside of the browser window (indicated by rectangular connector).
+The darkness of the interaction indicates the strength of the interaction.
 </p>
 
 <a name="example3"></a>
@@ -168,7 +177,8 @@ located on the UCSC Genome Browser http server. This file contains data for the 
 <p>
 To create a custom track using this file:
 <ol>
-   <li>Construct a track line referencing the file and set the browser position to show region of interest in the file:
+   <li>Construct a track line referencing the file and set the browser position to show region 
+       of interest in the file:
    <pre><code>
 track type=bigInteract name=&quot;interact Example Three&quot; description=&quot;A bigInteract file&quot; useScore=true visibility=full bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/interact/interactExample3.inter.bb
 browser position chr3:63,820,967-63,880,091
@@ -186,12 +196,12 @@ colored black.
 <a name="example4"></a>
 <h6>Example #4</h6>
 <p>
-In this example, you will use an example bed file to create a bigInteract file,
+In this example, you will use an example BED file to create a bigInteract file,
 allowing the data to be remotely accessed and exist within a track hub.  The track settings for 
 bigInteract on a hub can be viewed <a href="./trackDb/trackDbHub.html#bigInteract">here</a>.
 </p>
 <ol>
-   <li>Download the example file <a href="examples/interact/interactExample4.chiaPet.hg19.inter.bed">here</a> </li>
+   <li>Download the example file <a href="/help/examples/interact/interactExample4.inter.bed">here</a>. </li>
    <li>Download the <em>fetchChromSizes</em> and <em>bedToBigBed</em> programs from the
    <a href="http://hgdownload.soe.ucsc.edu/admin/exe">utilities directory</a> appropriate to your
    operating system.
@@ -233,8 +243,8 @@ bigDataUrl interactExample4.inter.bb
 
 <h2>Sharing your data with others</h2>
 <p>
-If you would like to share your interact/bigInteract data track with a colleague, learn how to create a URL by 
-looking at Example 11 on <a href="customTrack.html#EXAMPLE11">this page</a>.</p>
+If you would like to share your interact/bigInteract data track with a colleague, learn how to 
+create a URL by looking at Example 11 on <a href="customTrack.html#EXAMPLE11">this page</a>.</p>
 
 <h2>Extracting data from the bigInteract format</h2>
 <p>

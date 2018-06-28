@@ -585,4 +585,14 @@ done
   # checking refseq: 578 =? 578 OK
   # checking genbank: 578 =? 578 OK
 
+#########################################################################
+2018-06-19: import of UCSC GENCODE group processing of GENCODE V28 (markd)
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/grcHhh38/bed/gencodeV28
+    pushd /hive/data/genomes/grcHhh38/bed/gencodeV28
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # other steps skipped, as trackDb files linked from grch38
 #############################################################################

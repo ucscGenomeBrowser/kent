@@ -10016,15 +10016,15 @@ if (sqlFieldIndex(conn, "decipherSnvsRaw", "phenotypes") >= 0)
             }
         if (isNotEmpty(row[6]))
             {
-            printf("<b>Inheritance:</b> %s\n<br>\n", row[5]);
+            printf("<b>Inheritance:</b> %s\n<br>\n", row[6]);
             }
         if (isNotEmpty(row[7]))
             {
-            printf("<b>Pathogenicity:</b> %s\n<br>\n", row[5]);
+            printf("<b>Pathogenicity:</b> %s\n<br>\n", row[7]);
             }
         if (isNotEmpty(row[8]))
             {
-            printf("<b>Contribution:</b> %s\n<br>\n", row[5]);
+            printf("<b>Contribution:</b> %s\n<br>\n", row[8]);
             }
         }
     sqlFreeResult(&sr);
