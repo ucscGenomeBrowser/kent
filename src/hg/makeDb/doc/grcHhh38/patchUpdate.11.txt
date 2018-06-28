@@ -54,6 +54,8 @@
       | gzip -c \
       > grcHhh38.p11.gc5Base.wigVarStep.gz)
 #real    8m12.516s
+    mv grcHhh38.gc5Base.wigVarStep.gz grcHhh38.pre.p11.gc5Base.wigVarStep.gz
+    ln -s grcHhh38.p11.gc5Base.wigVarStep.gz grcHhh38.gc5Base.wigVarStep.gz
     # Make a new gc5BaseBw.bw
     time wigToBigWig grcHhh38.p11.gc5Base.wigVarStep.gz ../../chrom.sizes.p11 \
       grcHhh38.p11.gc5Base.bw
