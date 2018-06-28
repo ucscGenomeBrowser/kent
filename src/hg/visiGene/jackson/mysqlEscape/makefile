@@ -7,7 +7,7 @@ XINC = -I$(MYSQLINC)
 
 A = mysqlEscape
 
-L += $(MYSQLLIBS) -lm
+L = ${kentSrc}/htslib/libhts.a ${MYSQLLIBS}
 MYLIBS = $(JKLIBDIR)/jkhgap.a $(JKLIBDIR)/jkweb.a 
 
 

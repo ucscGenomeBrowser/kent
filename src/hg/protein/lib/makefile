@@ -2,7 +2,7 @@ kentSrc = ../../..
 XINC = -I${MYSQLINC}
 include ../../../inc/common.mk
 
-L += -lm ${MYSQLLIBS}
+L = ${kentSrc}/htslib/libhts.a ${MYSQLLIBS}
 
 O = pbUtil.o doStamps.o doTracks.o domains.o spKgMap.o doSam.o uniref.o unirefTbl.o spMapper.o
 

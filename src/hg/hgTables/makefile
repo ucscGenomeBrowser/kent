@@ -1,9 +1,9 @@
 kentSrc = ../..
 include ../../inc/common.mk
 
-L += ${HALLIBS} ${MYSQLLIBS} -lm
+#L += ${HALLIBS} ${MYSQLLIBS} -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
+MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ${MYSQLLIBS}
 
 A = hgTables
 
@@ -87,8 +87,7 @@ correlate.o:	hgTables.h correlate.h
 correlatePlot.o:	hgTables.h correlate.h
 
 compiletest: $T
-	${CC} -Wall $T ${MYLIBS} ${L}
+	${CC} -Wall $T ${MYLIBS} #${L}
 
 compileLists: listFiles.o
-	${CC} -Wall listFiles.o ${MYLIBS} ${L}
-
+	${CC} -Wall listFiles.o ${MYLIBS} #${L}

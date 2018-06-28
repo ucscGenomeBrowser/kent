@@ -1,5 +1,5 @@
 
-L += $(MYSQLLIBS) -lm 
+L = ${kentSrc}/htslib/libhts.a ${MYSQLLIBS} 
 MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a ../lib/$(MACHTYPE)/libSpliceGraph.a
 

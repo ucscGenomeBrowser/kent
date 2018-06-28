@@ -3,7 +3,7 @@ include ../../../inc/common.mk
 
 MYLIBDIR = ${KENTROOT}/lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
-L += ${MYSQLLIBS} -lm
+L = ${kentSrc}/htslib/libhts.a ${MYSQLLIBS}
 
 A = pbToAlleleCounts
 O = ${A}.o

@@ -1,9 +1,9 @@
 kentSrc = ../..
 include ../../inc/common.mk
 
-L += ${HALLIBS} ${MYSQLLIBS} -lm
+#L += ${HALLIBS} ${MYSQLLIBS} -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ${MYLIBDIR}/optimalLeaf.a
+MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ${MYLIBDIR}/optimalLeaf.a ../../htslib/libhts.a -lm ${MYSQLLIBS} -lpng
 
 A = hgRenderTracks
 
@@ -20,4 +20,4 @@ mgsc: strip
 	mv $A ${CGI_BIN}/$A
 
 compile: $O
-	${CC} ${CFLAGS} -o $A $O ${MYLIBS} ${L}
+	${CC} ${CFLAGS} -o $A $O ${MYLIBS}

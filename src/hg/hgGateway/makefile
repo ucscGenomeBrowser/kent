@@ -3,9 +3,9 @@ include ../../inc/common.mk
 
 HG_WARN=-Wall
 
-L += -lm ${MYSQLLIBS}
+L = ${kentSrc}/htslib/libhts.a ${MYSQLLIBS}
 MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
+MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ${MYSQLLIBS} ../../htslib/libhts.a
 
 A = hgGateway
 
@@ -24,5 +24,5 @@ clean::
 	rm -f hgGateway.html.h
 
 compile:: $O
-	${CC} $O ${MYLIBS} ${L}
+	${CC} $O ${MYLIBS}
 	mv ${AOUT} $A${EXE}

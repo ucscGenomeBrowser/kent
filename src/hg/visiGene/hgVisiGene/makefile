@@ -1,9 +1,9 @@
 kentSrc = ../../..
 include ../../../inc/common.mk
 
-L += ${MYSQLLIBS} -lm
+L = ${kentSrc}/htslib/libhts.a ${MYSQLLIBS}
 MYLIBDIR = ../../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
+MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ../../../htslib/libhts.a ${MYSQLLIBS}
 
 A = hgVisiGene
 
@@ -15,8 +15,8 @@ include ../../../inc/cgi_build_rules.mk
 XINC=-DVISIGENE='"visiGene"'
 
 compile: $O 
-	${CC} $O ${MYLIBS} ${L}
+	${CC} $O ${MYLIBS} #${L}
 	mv ${AOUT} $A${EXE}
 
 testVisiSearch:  visiSearch.o testVisiSearch.o
-	${CC} -o testVisiSearch visiSearch.o testVisiSearch.o ${MYLIBS} ${L}
+	${CC} -o testVisiSearch visiSearch.o testVisiSearch.o ${MYLIBS} #${L}

@@ -1,20 +1,21 @@
 kentSrc = ../../..
 include ../../../inc/common.mk
 
-L += -lm ${MYSQLLIBS}
+L = ${kentSrc}/htslib/libhts.a ${MYSQLLIBS}
 MYLIBDIR = ../../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
+MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ../../../htslib/libhts.a
+
 SQL_FILES = ../../lib/encode/encodePeak.sql ../../lib/pgSnp.sql ../../lib/bedDetail.sql ../../lib/bigPsl.as ../../lib/barChartBed.sql ../../lib/interact.sql
 
 O = hgLoadBed.o
 A = hgLoadBed
 
 hgLoadBed: $O ${MYLIBS}
-	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} $L
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${MYSQLLIBS} #$L
 	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
 compile:       ${O} ${MYLIBS}
-	${CC} ${COPT} ${CFLAGS} -o ${A} $O ${MYLIBS} $L
+	${CC} ${COPT} ${CFLAGS} -o ${A} $O ${MYLIBS} ${MYSQLLIBS} #$L
 
 cgi:: compile
 	chmod a+rx $A${EXE}
@@ -71,7 +72,7 @@ install::  strip
 	done
 
 debug:: $O
-	${CC} $O ${MYLIBS} ${L}
+	${CC} $O ${MYLIBS} #${L}
 	mv ${AOUT} $A${EXE}
 
 clean::

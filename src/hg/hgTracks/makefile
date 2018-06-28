@@ -2,9 +2,9 @@ kentSrc = ../..
 include ../../inc/common.mk
 
 HG_INC += -I../../optimalLeaf
-L += ${HALLIBS} ${MYSQLLIBS}
+#L += ${HALLIBS} ${MYSQLLIBS}
 MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ${MYLIBDIR}/optimalLeaf.a
+MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ${MYLIBDIR}/optimalLeaf.a ../../htslib/libhts.a ${MYSQLLIBS} -lpng
 
 A = hgTracks
 RENDERA = hgRenderTracks
@@ -49,7 +49,7 @@ mgsc: strip
 compile: compileMain ${RENDERA}
 
 compileMain: $O
-	${CC} ${CFLAGS} -o $A $O ${MYLIBS} ${L}
+	${CC} ${CFLAGS} -o $A $O ${MYLIBS} #${L}
 	cp extTools.ra ${CGI-BIN_DEST}
 
 ${RENDERA}: ${RENDERO}

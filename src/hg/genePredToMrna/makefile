@@ -2,7 +2,7 @@ kentSrc = ../..
 include ../../inc/common.mk
 
 MYLIBDIR = ../../lib/$(MACHTYPE)
-L += $(MYSQLLIBS) -lm
+L = ${kentSrc}/htslib/libhts.a ${MYSQLLIBS}
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = genePredToMrna.o

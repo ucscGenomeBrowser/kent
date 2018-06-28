@@ -4,7 +4,7 @@ include ../../inc/common.mk
 JKSRCDIR = ../..
 JKLIBDIR = $(JKSRCDIR)/lib/$(MACHTYPE)
 
-L += $(MYSQLLIBS) -lm 
+L = ${kentSrc}/htslib/libhts.a ${MYSQLLIBS} 
 MYLIBS =  $(JKLIBDIR)/jkhgap.a $(JKLIBDIR)/jkweb.a
 
 O = makeSeqs.o

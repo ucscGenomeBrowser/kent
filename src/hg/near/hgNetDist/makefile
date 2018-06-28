@@ -1,7 +1,7 @@
 kentSrc = ../../..
 include ../../../inc/common.mk
 
-L += $(MYSQLLIBS) -lm
+L = ../../../htslib/libhts.a $(MYSQLLIBS)
 MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
@@ -55,20 +55,18 @@ yeast:
 		/cluster/data/sacCer1/p2p/yeastP2P.tab \
 		/cluster/data/sacCer1/p2p/yeastP2P.pathLengths
 	hgLoadNetDist /cluster/data/sacCer1/p2p/yeastP2P.pathLengths sacCer1 yeastP2P
-	
+
 fly:
 	hgNetDist -verbose=2 -skipFirst -threshold=2 \
 		/cluster/data/dm2/p2p/flyP2P.tab \
 		/cluster/data/dm2/p2p/flyP2P.pathLengths 
 	hgLoadNetDist /cluster/data/dm2/p2p/flyP2P.pathLengths dm2 flyP2P \
 		-sqlRemap="select fbgn,name from flyBase2004Xref"
-	
-	
-worm:	
+worm:
 	hgNetDist -skipFirst -threshold=2 \
 		/cluster/data/ce2/p2p/wormP2P.tab \
 		/cluster/data/ce2/p2p/wormP2P.pathLengths
 	hgLoadNetDist /cluster/data/ce2/p2p/wormP2P.pathLengths ce2 wormP2P
-	
+
 clean::
 	rm -f $O hprdP2p.o

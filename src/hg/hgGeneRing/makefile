@@ -7,7 +7,7 @@ include ../../inc/common.mk
 
 A = hgGeneRing
 
-L += $(MYSQLLIBS) -lm -lcrypt
+L = ${kentSrc}/htslib/libhts.a ${MYSQLLIBS} -lcrypt
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS = $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a 
 

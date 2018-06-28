@@ -9,7 +9,7 @@ LIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ./${MACHTYPE}/libSpliceGraph.a
 %Test: %Test.c 
 	${CC} ${OPT} -I../inc -I../../inc -I../../../inc -I${MYSQLINC}  -o $@ ${addsuffix .c,$@} ${LIBS} 
 
-L += -lm ${MYSQLLIBS}
+L = ${kentSrc}/htslib/libhts.a ${MYSQLLIBS}
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a 
 

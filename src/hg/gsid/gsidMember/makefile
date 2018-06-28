@@ -4,7 +4,7 @@ include ../../../inc/common.mk
 #CC = gcc34
 
 XINC = -I/usr/include
-L += $(MYSQLLIBS) -lm -lcrypt -lssl
+L = ${kentSrc}/htslib/libhts.a ${MYSQLLIBS} -lcrypt -lssl
 MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 A = gsidMember

@@ -2,7 +2,7 @@ kentSrc = ../../..
 
 include ../../../inc/common.mk
 
-L += $(MYSQLLIBS) -lm 
+L = ${kentSrc}/htslib/libhts.a ${MYSQLLIBS} 
 MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  ../lib/$(MACHTYPE)/libSpliceGraph.a  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a 
 GNUSL = /cluster/home/sugnet/local

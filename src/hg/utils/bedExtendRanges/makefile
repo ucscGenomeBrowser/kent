@@ -1,7 +1,7 @@
 kentSrc = ../../..
 include ../../../inc/common.mk
 
-L += -lm ${MYSQLLIBS}
+L = ${kentSrc}/htslib/libhts.a ${MYSQLLIBS} ${MYSQLLIBS}
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
@@ -21,7 +21,6 @@ clean::
 	rm -f $(O) ${A}
 
 test: good
-	
 
 good:
 	@for good in $(GOODFILES); do \

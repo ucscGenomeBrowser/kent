@@ -1,9 +1,9 @@
 kentSrc = ../..
 include ../../inc/common.mk
 
-L += -lm ${MYSQLLIBS} 
+L = ${kentSrc}/htslib/libhts.a ${MYSQLLIBS} 
 MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
+MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ../../htslib/libhts.a ${MYSQLLIBS} -lpng
 
 A = hgc
 
@@ -23,7 +23,7 @@ mgsc: compile
 	mv $A ${CGI_BIN}-mgsc/$A
 
 compile: $O 
-	${CC} ${CFLAGS} $O ${F64} ${MYLIBS} ${L}
+	${CC} ${CFLAGS} $O ${F64} ${MYLIBS} #${L}
 	mv ${AOUT} $A${EXE}
 
 my::

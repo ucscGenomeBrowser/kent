@@ -1,9 +1,9 @@
 kentSrc = ../../..
 include ../../../inc/common.mk
 
-L += $(MYSQLLIBS) -lm 
+L = ${kentSrc}/htslib/libhts.a ${MYSQLLIBS}
 MYLIBDIR = ../../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
+MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a ../../../htslib/libhts.a
 A = hgNear
 
 O = $A.o advFilter.o afiAli.o association.o colTemplate.o configure.o \
@@ -36,7 +36,7 @@ beta::
 	chmod -R a+rX ${CGI_BIN}-beta/hgNearData
 
 compile: $O $(MYLIBS)
-	${CC} ${COPT} -o $A $O $(MYLIBS) $L
+	${CC} ${COPT} -o $A $O $(MYLIBS) $(MYSQLLIBS) -lpng #${L}
 
 test:
 	$(CGI_BIN)-$(USER)/hgNear

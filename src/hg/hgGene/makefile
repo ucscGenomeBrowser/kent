@@ -1,9 +1,9 @@
 kentSrc = ../..
 include ../../inc/common.mk
 
-L += $(MYSQLLIBS) -lm
+#L = ${kentSrc}/htslib/libhts.a ${MYSQLLIBS}
 MYLIBDIR = ../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
+MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a ../../htslib/libhts.a $(MYSQLLIBS) -lpng
 
 A = hgGene
 
@@ -38,8 +38,8 @@ beta::
 	chmod -R g+w ${CGI_BIN}-beta/hgGeneData
 	chmod -R a+rX ${CGI_BIN}-beta/hgGeneData
 
-compile: $O 
-	${CC} $O ${MYLIBS} ${L}
+compile: $O
+	${CC} $O ${MYLIBS}
 	mv ${AOUT} $A${EXE}
 
 test:
