@@ -41,7 +41,7 @@ if [ -n "${CURL}" ]; then
     url="http://hgdownload.cse.ucsc.edu/goldenPath/${DB}/bigZips/${DB}.chrom.sizes"
     printf "INFO: trying CURL ${CURL} for database ${DB}\n" 1>&2
     printf "url: %s\n" "${url}" 1>&2
-    tmpResult=${DB}.tmp.sizes
+    tmpResult=${DB}.tmp.sizes$$
     ${CURL} ${url} \
     -s > ${tmpResult} 2> /dev/null
     if [ $? -ne 0 -o ! -s "${tmpResult}" ]; then
@@ -62,7 +62,7 @@ if [ -n "${WGET}" ]; then
     url="http://hgdownload.cse.ucsc.edu/goldenPath/${DB}/bigZips/${DB}.chrom.sizes"
     printf "INFO: trying WGET ${WGET} for database ${DB}\n" 1>&2
     printf "url: %s\n" "${url}" 1>&2
-    tmpResult=${DB}.tmp.sizes
+    tmpResult=${DB}.tmp.sizes$$
     ${WGET} ${url} \
 	-O ${tmpResult} 2> /dev/null
     if [ $? -ne 0 -o ! -s "${tmpResult}" ]; then

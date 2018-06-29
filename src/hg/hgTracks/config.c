@@ -117,7 +117,7 @@ for (group = groupList; group != NULL; group = group->next)
     hPrintf("<input type=hidden name='%s' id='%s' value=%d>",
             collapseGroupVar(group->name),collapseGroupVar(group->name), (isOpen?0:1));
     char idText[256];
-    safef(idText, sizeof idText, "%s_togBut", group->name);
+    safef(idText, sizeof idText, "%s_button", group->name);
     hPrintf("<IMG class='toggleButton' "
             "id='%s' src='%s' alt='%s' title='%s this group'>&nbsp;&nbsp;",
             idText, indicatorImg, indicator,isOpen?"Collapse":"Expand");
