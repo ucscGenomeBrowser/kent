@@ -21,6 +21,7 @@ use vars qw/
     $opt_allowMissedTrfs
     $opt_noChromRoot
     $opt_ignoreRepeatMasker
+    $opt_noChromFiles
     /;
 
 # Specify the steps supported with -continue / -stop:
@@ -65,6 +66,8 @@ options:
     -allowMissedTrfs      tolerate missing trfMaskChrom/*.bed files
     -noChromRoot          find RM .out files for chr*_hap in actual hap chrom name
     -ignoreRepeatMasker   do not look for RM .out files
+    -noChromFiles         even if the assembly has <= $HgAutomate::splitThreshold sequences, don't make
+                          per-chromosome FA and AGP files.
 
 Automates generation of assembly download files for genome database \$db:
     compress: Create compressed download files, md5sum.txt and README.txt in
@@ -105,6 +108,7 @@ sub checkOptions {
 		      'allowMissedTrfs',
 		      'noChromRoot',
 		      'ignoreRepeatMasker',
+		      'noChromFiles',
 		      @HgAutomate::commonOptionSpec,
 		      );
   &usage(1) if (!$ok);
@@ -1254,7 +1258,7 @@ if (! -e "$topDir/chrom.sizes") {
   die "Sorry, this script requires $topDir/chrom.sizes.\n";
 }
 @chroms = split("\n", `awk '{print \$1;}' $topDir/chrom.sizes`);
-$chromBased = (scalar(@chroms) <= $HgAutomate::splitThreshold);
+$chromBased = (scalar(@chroms) <= $HgAutomate::splitThreshold) && ! $opt_noChromFiles;
 if ($chromBased) {
   foreach my $chr (@chroms) {
     my $chrRoot = $chr;
