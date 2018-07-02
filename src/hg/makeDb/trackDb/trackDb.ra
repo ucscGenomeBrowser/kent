@@ -348,7 +348,8 @@ html crispors
     priority 2
 
 include crispr10K.ra beta,public
-include nullModelCrispr10K.ra alpha
+# prospective testing of crispr 10K on hg38
+# include nullModelCrispr10K.ra alpha
 
 track augustus
 shortLabel Augustus
