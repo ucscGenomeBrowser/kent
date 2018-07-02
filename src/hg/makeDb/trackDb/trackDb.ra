@@ -341,13 +341,14 @@ html crispors
     track crisprKmers
     parent crispors
     shortLabel kMer Crisprs
-    longLabel kMer crispr locations
+    longLabel kMer Crisprs 10K shoulders
     visibility squish
     type bigBed 9 .
     itemRgb on
     priority 2
 
-include crispr10K.ra
+include crispr10K.ra beta,public
+include nullModelCrispr10K.ra alpha
 
 track augustus
 shortLabel Augustus
