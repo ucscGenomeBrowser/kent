@@ -324,7 +324,7 @@ if (argc != 2)
 char *database = optionVal("database", "cdw");
 char *table = optionVal("table", "cdwFileTags");
 char *facets = optionVal("facets", "cdwFileFacets");
-char *fields = optionVal("fields", "file_id,file_name,file_size,ucsc_db,output,assay,data_set_id,lab,format,read_size,sample_label,species,biosample_cell_type");
+char *fields = optionVal("fields", "file_id,file_name,file_size,ucsc_db,output,assay,data_set_id,lab,format,read_size,sample_label,species,biosample_cell_type,organ_anatomical_name,");
 
 cdwMakeFileTags(database, table, facets, fields);
 return 0;

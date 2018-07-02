@@ -13,7 +13,6 @@
 "	<ul style=\"display: none; visibility: hidden;\">\n"
 "	<li class=\"first\"><a href=\"../cgi-bin/cdwWebBrowse?cdwCommand=browseFiles&cdwFile_filter=\">Files</a></li>\n"
 "	<li><a href=\"../cgi-bin/cdwWebBrowse?cdwCommand=browseTracks\">Tracks</a></li>\n"
-"	<li><a href=\"../cgi-bin/cdwWebBrowse?cdwCommand=browseTags\">Tags</a></li>\n"
 "	<li><a href=\"../cgi-bin/cdwWebBrowse?cdwCommand=browseLabs\">Labs</a></li>\n"
 "	<li><a href=\"../cgi-bin/cdwWebBrowse?cdwCommand=browseDataSets\">Data Sets</a></li>\n"
 "	<li><a href=\"../cgi-bin/cdwWebBrowse?cdwCommand=browseFormats\">Formats</a></li>\n"

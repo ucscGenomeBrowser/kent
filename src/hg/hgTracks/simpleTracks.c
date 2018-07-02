@@ -2677,7 +2677,7 @@ and which are within some limit (1MB?) of each other. */
 int mergeLimit = 1024*1024;
 struct window *w = windows;
 struct window *resultList = NULL;
-struct window *mergedW;
+struct window *mergedW = NULL;
 if (!windows)
     errAbort("Unexpected error: windows list NULL in makeMergedWindowList()");
 boolean doNew = TRUE;

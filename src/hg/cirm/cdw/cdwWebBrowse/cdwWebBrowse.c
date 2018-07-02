@@ -69,7 +69,7 @@ hashElFreeList(&list);
 char *fileTableFields = NULL;
 char *visibleFacetFields = NULL;
 #define FILEFIELDS "file_name,file_size,ucsc_db"
-#define FILEFACETFIELDS "lab,data_set_id,species,assay,format,output,biosample_cell_type,read_size,sample_label"
+#define FILEFACETFIELDS "lab,data_set_id,species,assay,format,output,organ_anatomical_name,biosample_cell_type,read_size,sample_label"
 
 struct dyString *printPopularTags(struct hash *hash, int maxSize)
 /* Get all hash elements, sorted by count, and print all the ones that fit */
@@ -1885,32 +1885,9 @@ printf("</TR></TABLE>\n");
 printf("<CENTER><I>charts are based on proportion of files in each category</I></CENTER>\n");
 printf("</td></tr></table>\n");
 
-/* Print out high level tags table */
-static char *highLevelTags[] = 
-    {"data_set_id", "lab", "assay", "format", "read_size",
-    "sample_label", "species"};
-struct facetField *highFacetList = facetFieldsFromSqlTable(conn, getCdwTableSetting("cdwFileFacets"), 
-						highLevelTags, ArraySize(highLevelTags), NULL, NULL, NULL, NULL);
-
-struct fieldedTable *table = fieldedTableNew("Important tags", tagPopularityFields, 
-    ArraySize(tagPopularityFields));
-for (ff = highFacetList; ff != NULL; ff = ff->next)
-    facetSummaryRow(table, ff);
-
-char returnUrl[PATH_LEN*2];
-safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?%s", cartSidUrlString(cart) );
-webSortableFieldedTable(cart, table, returnUrl, "cdwHome", 0, NULL, NULL);
-
-printf("This table is a summary of important metadata tags and number of files they ");
-printf("are attached to. Use browse tags menu to see all tags.");
-
-printf("<BR>\n\n\n\n\n\n");
-printf("<TABLE><TR>");
-printf("<a href=\"cdwGetFile/jointCirmBrain1/summary/index.html\"><img " 
-	"src=\"../images/cdwImages/qbg_krgSeurat.png\" width=%d height=%d border=5 style=\"border-width:medium\" > </a>\n", 800, 600);
-printf("</TR></TABLE>");
 }
 
+#ifdef OLD
 void doBrowseTags(struct sqlConnection *conn)
 /* Put up browse tags page */
 {
@@ -1930,6 +1907,7 @@ struct hash *outputWrappers = hashNew(0);
 webSortableFieldedTable(cart, table, returnUrl, "cdwBrowseTags", 0, outputWrappers, NULL);
 tagStormFree(&tags);
 }
+#endif /* OLD */
 
 void doHelp(struct sqlConnection *conn)
 /* Put up help page */
@@ -1995,10 +1973,12 @@ else if (sameString(command, "browseTracks"))
     {
     doBrowseTracks(conn);
     }
+#ifdef OLD
 else if (sameString(command, "browseTags"))
     {
     doBrowseTags(conn);
     }
+#endif /* OLD */
 else if (sameString(command, "browseLabs"))
     {
     doBrowseLabs(conn);
@@ -2098,7 +2078,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Data Browser V0.57");
+localWebStartWrapper("CIRM Stem Cell Hub Data Browser V0.58");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
