@@ -20,6 +20,8 @@
 #include "barChartSample.h"
 #include "barChartUi.h"
 
+#define EXTRA_FIELDS_SIZE 256
+
 struct barChartItemData
 /* Measured value for a sample and the sample category at a locus.
  * Used for barChart track details (boxplot) */
@@ -74,9 +76,11 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         continue;
     if (sameString(barChart->name, item))
         {
-        char *restFields[256];
+        char *restFields[EXTRA_FIELDS_SIZE];
         int restCount = chopTabs(rest, restFields);
         int restBedFields = (6 + (hasOffsets ? 2 : 0));
+        if ((restCount - restBedFields) > EXTRA_FIELDS_SIZE)
+            errAbort("More than %d extraFields in barChart file %s\n", EXTRA_FIELDS_SIZE, tdb->table);
         if (restCount > restBedFields)
             {
             int i;
@@ -376,7 +380,7 @@ void doBarChartDetails(struct trackDb *tdb, char *item)
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 struct asObject *as = NULL;
-char *extraFields[256];
+char *extraFields[EXTRA_FIELDS_SIZE];
 int extraFieldCount = 0;
 int numColumns = 0;
 struct barChartBed *chartItem = getBarChart(tdb, item, seqName, start, end, &as, extraFields, &extraFieldCount);
@@ -424,7 +428,7 @@ printf("<b>Genomic position: "
 printf("<b>Strand: </b> %s\n", chartItem->strand); 
 
 // print any remaining extra fields
-if (numColumns > 11)
+if (numColumns > 0)
     {
     extraFieldsPrint(tdb, NULL, extraFields, extraFieldCount);
     }

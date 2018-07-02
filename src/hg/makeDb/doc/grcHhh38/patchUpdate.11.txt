@@ -54,6 +54,8 @@
       | gzip -c \
       > grcHhh38.p11.gc5Base.wigVarStep.gz)
 #real    8m12.516s
+    mv grcHhh38.gc5Base.wigVarStep.gz grcHhh38.pre.p11.gc5Base.wigVarStep.gz
+    ln -s grcHhh38.p11.gc5Base.wigVarStep.gz grcHhh38.gc5Base.wigVarStep.gz
     # Make a new gc5BaseBw.bw
     time wigToBigWig grcHhh38.p11.gc5Base.wigVarStep.gz ../../chrom.sizes.p11 \
       grcHhh38.p11.gc5Base.bw
@@ -460,7 +462,7 @@ EOF
 
 
 ##############################################################################
-# Extend wgEncodeReg bigWig tracks (DONE 18-06-18 angie)
+# Extend wgEncodeReg bigWig tracks (DONE 18-06-28 angie)
     # I haven't copied the hg38 files to grcHhh38/bed, just use as they are:
 #NOTE: this has not been liftOver'd to original alts!
     foreach dir (/hive/data/genomes/hg38/bed/hg19MassiveLift/wgEncodeReg/{*Mark*,*Txn})
@@ -473,45 +475,45 @@ EOF
             ~/kent/src/hg/utils/liftOverBigWigToPatches $f \
               /hive/data/genomes/grcHhh38/jkStuff/grcHhh38.mainToPatch.p11.over.chain \
               /hive/data/genomes/grcHhh38/chrom.sizes \
-              $f:t:r.plusPatches.bigWig &
+              $f:t:r.plusP11.bigWig &
         end
         wait
         mkdir -p  /gbdb/grcHhh38/bbi/wgEncodeReg/$composite
         foreach f ($origFiles)
-           ln -sf `pwd`/$f:t:r.plusPatches.bigWig /gbdb/grcHhh38/bbi/wgEncodeReg/$composite/$f:t
+           ln -sf `pwd`/$f:t:r.plusP11.bigWig /gbdb/grcHhh38/bbi/wgEncodeReg/$composite/$f:t
         end
     end
 
 
 ##############################################################################
-# Extend wgEncodeRegDnase (DONE 18-06-21 angie)
+# Extend wgEncodeRegDnase (DONE 18-06-28 angie)
 #NOTE: this has not been liftOver'd to original alts!
     mkdir /hive/data/genomes/grcHhh38/bed/wgEncodeRegDnase
     cd /hive/data/genomes/grcHhh38/bed/wgEncodeRegDnase
     set origFile = /hive/data/genomes/hg38/bed/wgEncodeRegDnase/clusters/uwEnc2DnaseClustered.bed
     liftOver -multiple -bedPlus=5 -noSerial $origFile \
       /hive/data/genomes/grcHhh38/jkStuff/grcHhh38.mainToPatch.p11.over.chain \
-      wgEncodeRegDnaseClustered.patches.bed /dev/null
-    sort -k1,1 -k2n,2n $origFile wgEncodeRegDnaseClustered.patches.bed \
-      > wgEncodeRegDnaseClustered.plusPatches.bed
+      wgEncodeRegDnaseClustered.p11.bed /dev/null
+    sort -k1,1 -k2n,2n $origFile wgEncodeRegDnaseClustered.p11.bed \
+      > wgEncodeRegDnaseClustered.plusP11.bed
     hgLoadBed -type=bed5+ -sqlTable=$HOME/kent/src/hg/lib/bed5SourceVals.sql -renameSqlTable \
       grcHhh38 wgEncodeRegDnaseClustered \
-      wgEncodeRegDnaseClustered.plusPatches.bed
+      wgEncodeRegDnaseClustered.plusP11.bed
 
 
 ##############################################################################
-# Extend wgEncodeRegTfbsClusteredV3 (DONE 18-06-21 angie)
+# Extend wgEncodeRegTfbsClusteredV3 (DONE 18-06-28 angie)
 #NOTE: this has not been liftOver'd to original alts!
     mkdir /hive/data/genomes/grcHhh38/bed/wgEncodeRegTfbsClusteredV3
     cd /hive/data/genomes/grcHhh38/bed/wgEncodeRegTfbsClusteredV3
     set origFile = /hive/data/genomes/hg38/bed/hg19MassiveLift/wgEncodeReg/wgEncodeRegTfbsClusteredV3/hg38.wgEncodeRegClusteredV3.bed
     liftOver -multiple -bedPlus=5 -noSerial $origFile \
       /hive/data/genomes/grcHhh38/jkStuff/grcHhh38.mainToPatch.p11.over.chain \
-      wgEncodeRegTfbsClusteredV3.bed /dev/null
-    sort -k1,1 -k2n,2n $origFile wgEncodeRegTfbsClusteredV3.bed \
-      > wgEncodeRegTfbsClusteredV3.plusPatches.bed
+      wgEncodeRegTfbsClusteredV3.p11.bed /dev/null
+    sort -k1,1 -k2n,2n $origFile wgEncodeRegTfbsClusteredV3.p11.bed \
+      > wgEncodeRegTfbsClusteredV3.plusP11.bed
     hgLoadBed -type=bed5+ -sqlTable=$HOME/kent/src/hg/lib/bed5SourceVals.sql -renameSqlTable \
-      grcHhh38 wgEncodeRegTfbsClusteredV3 wgEncodeRegTfbsClusteredV3.plusPatches.bed
+      grcHhh38 wgEncodeRegTfbsClusteredV3 wgEncodeRegTfbsClusteredV3.plusP11.bed
 
 
 ##############################################################################
