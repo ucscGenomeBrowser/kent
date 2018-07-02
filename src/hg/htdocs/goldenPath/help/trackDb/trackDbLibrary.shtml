@@ -250,6 +250,16 @@
     <pre>   longLabel Human mRNAs from GenBank</pre>
 </DIV>
 
+<DIV class="meta"><span class="types all"></span>
+<div class="format"><code>meta</code></div>
+    <P class="isRequired">Required: No</P>
+    <P> Meta specifies the metadata tag for this track. This tag is a key into the metadata 
+    table specified in either metaDb or metaTab in the genomes.txt file. The meta tag can be 
+    any alphanumeric string. Each meta tag should appear in a trackDb stanza AND in either the 
+    tab-separated file specified by metaTab, or tagStorm file specified by metaDb in the 
+    hub's genomes.txt file.
+</DIV>
+
 <DIV class="visibility"><span class="types all"></span>
 <div class="format"><code>visibility</code></div>
     <P class="isRequired">Required: No</P>

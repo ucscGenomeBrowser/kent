@@ -17243,3 +17243,36 @@ TMPDIR=/dev/shm
     # 810427625 bases of 2286657046 (35.442%) in intersection
 
 #########################################################################
+2018-07-01: import of UCSC GENCODE group processing of GENCODE VM17 (markd)
+    # not being push to the RR
+
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM17
+    pushd /hive/data/genomes/mm10/bed/gencodeVM17
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    ##  gencode-cmp.tsv check to see if sizes make sense
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs mm10 M17 92 'Mar 2018'
+
+    ## only if being pushed to RR:
+    # Update mouse/mm10/wgEncodeGencodeSuper.html
+    # Update 'Release Notes' to describe new release.
+
+    # edit mouse/mm10/trackDb.gencode.ra to add new .ra file include
+    make DBS=mm10
+
+    ## only if being pushed to RR:
+    # edit  all.joiner to add ~/tmp/gencodeVM17.joiner
+    # verify with:
+    pushd /hive/data/genomes/mm10/bed/gencodeVM17
+    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck db=mm10
+
+    # commit all and make push request, the file tables.lst will have the
+    # list of tables for the push request.
+
+##############################################################################

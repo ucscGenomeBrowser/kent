@@ -49,7 +49,6 @@
 #include "hubConnect.h"
 #include "cytoBand.h"
 #include "ensFace.h"
-#include "liftOver.h"
 #include "pcrResult.h"
 #include "jsHelper.h"
 #include "mafTrack.h"
@@ -3312,18 +3311,11 @@ struct virtRegion *after = virtRegionList;
 virtRegionList = NULL;
 struct sqlResult *sr;
 char **row;
-char *table = NULL;
-if (sameString(database,"hg17"))
-    table = "altLocations"; // was haplotypeLocations which I made with BLAT and self-chains ;  // bin+bed4
-else if (sameString(database,"hg18"))
-    table = "altLocations"; // was haplotypeLocationsEnsembl which got renamed;  // bin+bed4
-else if (sameString(database,"hg19"))
-    table = "altLocations"; // created from hapRegions, was "altSeqHaplotypes";  // was bin+bed6, now bin+bed4
-else if (sameString(database,"hg38"))
-    table = "altLocations";  // bin+bed4
-else
+char *table = endsWith(haplotypeId, "_fix") ? "fixLocations" : "altLocations";
+if (! hTableExists(database, table))
     {
-    warn("initSingleAltHaplotype() was expecting database to be hg17, hg18, hg19, or hg38");
+    warn("initSingleAltHaplotype: table '%s' not found in database %s, "
+         "can't find %s", table, database, haplotypeId);
     return FALSE;
     }
 
@@ -3334,7 +3326,7 @@ sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (!row)
     {
-    warn("no haplotype found for [%s]", haplotypeId);
+    warn("no haplotype found for [%s] in %s", haplotypeId, table);
     return FALSE;
     }
 char *haploChrom = cloneString(row[0]);
@@ -4412,7 +4404,8 @@ else if (sameString(virtModeType, "singleAltHaplo"))
 	virtRegionList = NULL;
 	return FALSE; // return to default mode
 	}
-    virtModeShortDescr = "alt haplo";  // was "single haplo" but that might confuse some users.
+    // was "single haplo" but that might confuse some users.
+    virtModeShortDescr = endsWith(singleAltHaploId, "_fix") ? "fix patch" : "alt haplo";
     dySaveCartSetting(dy, "singleAltHaploId", TRUE);
     }
 else if (sameString(virtModeType, "allChroms"))

@@ -253,13 +253,14 @@ for (chain = chainsHit; chain != NULL; chain = next)
 	strand = otherStrand(qStrand);
     else
        	strand = qStrand;
+    int mappedThickStart = thickStart, mappedThickEnd = thickEnd;
     if (useThick)
 	{
 	struct chain *subChain2 = NULL;
 	struct chain *toFree2 = NULL;
-	if (!mapThroughChain(chain, minRatio, &thickStart, &thickEnd,
+	if (!mapThroughChain(chain, minRatio, &mappedThickStart, &mappedThickEnd,
 		&subChain2, &toFree2))
-	    thickStart = thickEnd = start;
+	    mappedThickStart = mappedThickEnd = start;
 	chainFree(&toFree2);
 	}
     verbose(3, "mapped %s:%d-%d\n", chain->qName, start, end);
@@ -282,8 +283,8 @@ for (chain = chainsHit; chain != NULL; chain = next)
     bed->strand[1] = 0;
     if (useThick)
 	{
-	bed->thickStart = thickStart;
-	bed->thickEnd = thickEnd;
+	bed->thickStart = mappedThickStart;
+	bed->thickEnd = mappedThickEnd;
 	}
     slAddHead(&bedList, bed);
     if (tStart < subChain->tStart)
@@ -380,10 +381,10 @@ if (wordCount <= 0)
 return wordCount;
 }
 
-static int bedOverSmallEnds(struct lineFile *lf, int fieldCount, 
+static int bedOverSmallEnds(struct lineFile *lf,
                         struct hash *chainHash, double minMatch, int minSizeT, 
                         int minSizeQ, int minChainT, int minChainQ, 
-			FILE *mapped, FILE *unmapped, bool multiple, 
+                        FILE *mapped, FILE *unmapped, bool multiple, bool noSerial,
                         char *chainTable, int bedPlus, bool hasBin, 
 			bool tabSep, int ends, int *errCt)
 /* Do a bed without a block-list.
@@ -408,6 +409,7 @@ int totalUnmappedAll = 0;
 int totalBases = 0;
 double mappedRatio;
 char *region = NULL;   /* region name from BED file-- used with  -multiple */
+char regionBuf[2048];
 char *db = NULL, *chainTableName = NULL;
 
 if (chainTable)
@@ -434,9 +436,13 @@ while ((wordCount =
 	    lf->lineIx, lf->fileName, chrom, s, e);
     if (multiple)
         {
-        if (wordCount < 4 || wordCount > 6)
-            errAbort("Can only lift BED4, BED5, BED6 to multiple regions");
-        region = words[3];
+        if (wordCount > 3)
+            region = words[3];
+        else
+            {
+            safef(regionBuf, sizeof(regionBuf), "%s:%d-%d", words[0], s+1, e);
+            region = regionBuf;
+            }
         }
     if (wordCount >= 6 && (bedPlus == 0 || bedPlus >= 6))
 	strand = words[5][0];
@@ -517,30 +523,33 @@ while ((wordCount =
                         binFromRange(bed->chromStart, bed->chromEnd));
             fprintf(f, "%s\t%d\t%d", bed->chrom, 
                                     bed->chromStart, bed->chromEnd);
-            if (multiple)
+            if (wordCount < 4 && multiple)
                 {
-                /* region name and part number */
-                fprintf(f, "\t%s\t%d", region, ix++);
-                if (wordCount == 6)
-                    fprintf(f, "\t%c", bed->strand[0]);
+                fprintf(f, "\t%s", region);
+                if (!noSerial)
+                    fprintf(f, "\t%d", ix++);
                 }
-            else
+            for (i=3; i<wordCount; ++i)
                 {
-                for (i=3; i<wordCount; ++i)
+                if (i == 5 && (bedPlus == 0 || bedPlus >= 6))
+                    /* get strand from remap */
+                    fprintf(f, "\t%c", bed->strand[0]);
+                else if (i == 6 && useThick)
+                    /* get thickStart from remap */
+                    fprintf(f, "\t%d", bed->thickStart);
+                else if (i == 7 && useThick)
+                    /* get thickEnd from remap */
+                    fprintf(f, "\t%d", bed->thickEnd);
+                else if (i == 3 && multiple && !noSerial)
                     {
-                    if (i == 5 && (bedPlus == 0 || bedPlus >= 6))
-                        /* get strand from remap */
-                        fprintf(f, "\t%c", bed->strand[0]);
-		    else if (i == 6 && useThick)
-                        /* get thickStart from remap */
-                        fprintf(f, "\t%d", bed->thickStart);
-		    else if (i == 7 && useThick)
-                        /* get thickEnd from remap */
-                        fprintf(f, "\t%d", bed->thickEnd);
-                    else
-                        /* everything else just passed through */
-                        fprintf(f, "\t%s", words[i]);
+                    fprintf(f, "\t%s\t%d", region, ix++);
+                    // Skip the score field if there is one
+                    if (bedPlus == 0 || bedPlus > 4)
+                        i++;
                     }
+                else
+                    /* everything else just passed through */
+                    fprintf(f, "\t%s", words[i]);
                 }
             fprintf(f, "\n");
             next = bed->next;
@@ -584,24 +593,6 @@ if (errCt)
 mappedRatio = (totalBases - totalUnmappedAll)*100.0 / totalBases;
 verbose(2, "Mapped bases: \t%5.0f%%\n", mappedRatio);
 return ct;
-}
-
-static int bedOverSmall(struct lineFile *lf, int fieldCount, 
-                        struct hash *chainHash, double minMatch, int minSizeT, 
-                        int minSizeQ, int minChainT, int minChainQ, 
-			FILE *mapped, FILE *unmapped, bool multiple, 
-                        char *chainTable, int bedPlus, bool hasBin, 
-                        bool tabSep, int *errCt)
-/* Do a bed without a block-list.
- * NOTE: it would be preferable to have all of the lift
- * functions work at the line level, rather than the file level.
- * Multiple option can be used with bed3 -- it will write a list of
- * regions as a bed4, where score is the "part #". This is used for
- * ENCODE region mapping */  
-{
-return bedOverSmallEnds(lf, fieldCount, chainHash, minMatch, 
-                        minSizeT, minSizeQ, minChainT, minChainQ, mapped, unmapped, 
-			multiple, chainTable, bedPlus, hasBin, tabSep, 0, errCt);
 }
 
 static void shortGffLine(struct lineFile *lf)
@@ -1008,59 +999,28 @@ for (range = rangeList; range != NULL; range = range->next)
 return rangeList;
 }
 
-static char *remapBlockedBed(struct hash *chainHash, struct bed *bed, 
-                            double minMatch, double minBlocks, bool fudgeThick)
-/* Remap blocks in bed, and also chromStart/chromEnd.  
- * Return NULL on success, an error string on failure. */
+static void remapOneBlockedBed(struct chain *chain, struct bed *bed, int bedSize,
+                               double minMatch, double minBlocks, boolean fudgeThick,
+                               struct liftRange **pRangeList, char **retError)
+/* If there is an error, set retError; otherwise, modify bed to contain coordinates mapped
+ * through chain.  This nulls out *pRangelist after modifying and freeing the contents. */
 {
-struct chain *chainList = NULL,  *chain;
-int bedSize = sumBedBlocks(bed);
-struct binElement *binList;
-struct binElement *el;
-struct liftRange *rangeList, *badRanges = NULL, *range;
-char *error = NULL;
-int i, start, end = 0;
-int thickStart = bed->thickStart;
-int thickEnd = bed->thickEnd;
-
-binList = findRange(chainHash, bed->chrom, bed->chromStart, bed->chromEnd);
-if (binList == NULL)
-    return "Deleted in new";
-
-/* Convert bed blocks to range list. */
-rangeList = bedToRangeList(bed);
-
-/* Evaluate all intersecting chains and sort so best is on top. */
-for (el = binList; el != NULL; el = el->next)
-    {
-    chain = el->val;
-    chain->score = chainRangeIntersection(chain, rangeList);
-    slAddHead(&chainList, chain);
-    }
-slSort(&chainList, chainCmpScore);
-
-/* See if duplicated. */
-chain = chainList->next;
-if (chain != NULL && chain->score == chainList->score)
-    error = "Duplicated in new";
-chain = chainList;
-
+*retError = NULL;
 /* See if best one is good enough. */
 if (chain->score  < minMatch * bedSize)
-    error = "Partially deleted in new";
+    *retError = "Partially deleted in new";
 
-
-/* Call subroutine to remap range list. */
-if (error == NULL)
-    {
-    remapRangeList(chain, &rangeList, &thickStart, &thickEnd, 
-                        minBlocks, fudgeThick,
-    	                &rangeList, &badRanges, &error);
-    }
+struct liftRange *rangeList = *pRangeList, *badRanges = NULL, *range;
+int thickStart = bed->thickStart;
+int thickEnd = bed->thickEnd;
+if (*retError == NULL)
+    remapRangeList(chain, &rangeList, &thickStart, &thickEnd, minBlocks, fudgeThick,
+                   &rangeList, &badRanges, retError);
 
 /* Convert rangeList back to bed blocks.  Also calculate start and end. */
-if (error == NULL)
+if (*retError == NULL)
     {
+    int i, start, end = 0;
     if (chain->qStrand == '-')
 	{
 	rangeList = reverseRangeList(rangeList, chain->qSize);
@@ -1086,14 +1046,100 @@ if (error == NULL)
     }
 slFreeList(&rangeList);
 slFreeList(&badRanges);
+*pRangeList = NULL;
+}
+
+static char *remapBlockedBed(struct hash *chainHash, struct bed *bed, 
+                             double minMatch, double minBlocks, bool fudgeThick,
+                             bool multiple, char *db, char *chainTable)
+/* Remap blocks in bed, and also chromStart/chromEnd.  If multiple, then bed->next may be
+ * changed to point to additional newly allocated mapped beds, and bed's pointer members may
+ * be free'd so be sure to pass in a properly allocated bed.
+ * Return NULL on success, an error string on failure. */
+{
+char *error = NULL;
+
+struct binElement *binList = findRange(chainHash, bed->chrom, bed->chromStart, bed->chromEnd);
+if (binList == NULL)
+    return "Deleted in new";
+
+/* Convert bed blocks to range list. */
+struct liftRange *rangeList = bedToRangeList(bed);
+
+/* Evaluate all intersecting chains and sort so best is on top. */
+struct chain *chainList = NULL, *chain;
+struct binElement *el;
+for (el = binList; el != NULL; el = el->next)
+    {
+    chain = el->val;
+    chain->score = chainRangeIntersection(chain, rangeList);
+    slAddHead(&chainList, chain);
+    }
+slSort(&chainList, chainCmpScore);
+
+/* See if duplicated. */
+chain = chainList->next;
+if (chain != NULL && chain->score == chainList->score && !multiple)
+    error = "Duplicated in new";
+chain = chainList;
+if (db)
+    {
+    /* use full chain, not the possibly truncated chain from the net */
+    chain = chainLoadIdRange(db, chainTable, bed->chrom, bed->chromStart, bed->chromEnd, chain->id);
+    }
+// bed will be overwritten, so if we're mapping through multiple chains we need to save a backup:
+struct bed *bedCopy = multiple ? cloneBed(bed) : NULL;
+int bedSize = sumBedBlocks(bed);
+remapOneBlockedBed(chain, bed, bedSize, minMatch, minBlocks, fudgeThick, &rangeList, &error);
+
+if (multiple)
+    {
+    struct bed *bedList = NULL;
+    // Repeat for other chains
+    for (chain = chainList->next;  chain != NULL;  chain = chain->next)
+        {
+        // Make a new bed to be mapped from the original coordinates
+        struct bed *newBed = cloneBed(bedCopy);
+        rangeList = bedToRangeList(newBed);
+        char *newError = NULL;
+        remapOneBlockedBed(chain, newBed, bedSize, minMatch, minBlocks, fudgeThick, &rangeList,
+                           &newError);
+        if (newError)
+            bedFree(&newBed);
+        else
+            slAddHead(&bedList, newBed);
+        }
+    if (bedList != NULL)
+        {
+        slReverse(&bedList);
+        bed->next = bedList;
+        }
+    if (error && bed->next)
+        {
+        // The first chain gave an error; replace the first bed with the first successfully
+        // mapped bed.
+        struct bed *splicedBed = bed->next;
+        freez(&bed->chrom);
+        freez(&bed->name);
+        freez(&bed->blockSizes);
+        freez(&bed->chromStarts);
+        freez(&bed->expIds);
+        freez(&bed->expScores);
+        freez(&bed->label);
+        memcpy(bed, splicedBed, sizeof(struct bed));
+        freez(&splicedBed);
+        error = NULL;
+        }
+    }
+bedFree(&bedCopy);
 slFreeList(&binList);
 return error;
 }
 
 static int bedOverBig(struct lineFile *lf, int refCount, 
                     struct hash *chainHash, double minMatch, double minBlocks,
-                    bool fudgeThick, FILE *mapped, FILE *unmapped, int bedPlus,
-                    bool hasBin, bool tabSep, int *errCt)
+                    bool fudgeThick, FILE *mapped, FILE *unmapped, bool multiple, char *chainTable,
+                    int bedPlus, bool hasBin, bool tabSep, int *errCt)
 /* Do a bed with block-list. */
 {
 int wordCount, bedCount;
@@ -1102,7 +1148,14 @@ char *whyNot = NULL;
 int ct = 0;
 int errs = 0;
 int i;
+char *db = NULL, *chainTableName = NULL;
 
+if (chainTable)
+    {
+    chainTableName = chopPrefix(chainTable);
+    db = chainTable;
+    chopSuffix(chainTable);
+    }
 while (lineFileNextReal(lf, &line))
     {
     struct bed *bed;
@@ -1113,17 +1166,23 @@ while (lineFileNextReal(lf, &line))
         bedPlus = 0;    /* no extra fields */
     bedCount = (bedPlus ? bedPlus : wordCount);
     bed = bedLoadN(words, bedCount);
-    whyNot = remapBlockedBed(chainHash, bed, minMatch, minBlocks, fudgeThick);
+    whyNot = remapBlockedBed(chainHash, bed, minMatch, minBlocks, fudgeThick,
+                             multiple, db, chainTableName);
     if (whyNot == NULL)
 	{
-        if (hasBin)
-            fprintf(mapped, "%d\t", 
+        struct bed *bedList = bed;
+        for (;  bed != NULL;  bed = bed->next)
+            {
+            if (hasBin)
+                fprintf(mapped, "%d\t", 
                         binFromRange(bed->chromStart, bed->chromEnd));
-	bedOutputN(bed, bedCount, mapped, '\t', 
-                (bedCount != wordCount) ? '\t':'\n');
-        /* print extra "non-bed" fields in line */
-        for (i = bedCount; i < wordCount; i++)
-            fprintf(mapped, "%s%c", words[i], (i == wordCount-1) ? '\n':'\t');
+            bedOutputN(bed, bedCount, mapped, '\t', 
+                       (bedCount != wordCount) ? '\t':'\n');
+            /* print extra "non-bed" fields in line */
+            for (i = bedCount; i < wordCount; i++)
+                fprintf(mapped, "%s%c", words[i], (i == wordCount-1) ? '\n':'\t');
+            }
+        bedFreeList(&bedList);
         ct++;
 	}
     else
@@ -1149,7 +1208,7 @@ return ct;
 int liftOverBedPlusEnds(char *fileName, struct hash *chainHash, double minMatch,  
                     double minBlocks, int minSizeT, int minSizeQ, int minChainT,
                     int minChainQ, bool fudgeThick, FILE *f, FILE *unmapped, 
-                    bool multiple, char *chainTable, int bedPlus, bool hasBin, 
+                    bool multiple, bool noSerial, char *chainTable, int bedPlus, bool hasBin,
                     bool tabSep, int ends, int *errCt)
 /* Lift bed N+ file.
  * Return the number of records successfully converted */
@@ -1178,20 +1237,16 @@ if (lineFileNextReal(lf, &line))
         bedFieldCount = wordCount;
     if (bedFieldCount <= 10)
 	{
-	if (ends)
-	    ct = bedOverSmallEnds(lf, wordCount, chainHash, minMatch, 
-                        minSizeT, minSizeQ, minChainT, minChainQ, f, unmapped, 
-			multiple, chainTable, bedPlus, hasBin, tabSep, ends, errCt);
-	else
-	 ct = bedOverSmall(lf, wordCount, chainHash, minMatch, 
-                        minSizeT, minSizeQ, minChainT, minChainQ, f, unmapped, 
-                        multiple, chainTable, bedPlus, hasBin, tabSep, errCt);
+        ct = bedOverSmallEnds(lf, chainHash, minMatch,
+                              minSizeT, minSizeQ, minChainT, minChainQ, f, unmapped, 
+                              multiple, noSerial, chainTable, bedPlus, hasBin, tabSep, ends, errCt);
 	}
     else if (ends)
 	errAbort("Cannot use -ends with blocked BED\n");
     else
 	 ct = bedOverBig(lf, wordCount, chainHash, minMatch, minBlocks, 
-                        fudgeThick, f, unmapped, bedPlus, hasBin, tabSep, errCt);
+                         fudgeThick, f, unmapped, multiple, chainTable,
+                         bedPlus, hasBin, tabSep, errCt);
     }
 lineFileClose(&lf);
 return ct;
@@ -1200,14 +1255,14 @@ return ct;
 int liftOverBedPlus(char *fileName, struct hash *chainHash, double minMatch,  
                     double minBlocks, int minSizeT, int minSizeQ, int minChainT,
                     int minChainQ, bool fudgeThick, FILE *f, FILE *unmapped, 
-                    bool multiple, char *chainTable, int bedPlus, bool hasBin, 
+                    bool multiple, bool noSerial, char *chainTable, int bedPlus, bool hasBin,
                     bool tabSep, int *errCt)
 /* Lift bed N+ file.
  * Return the number of records successfully converted */
 {
 return liftOverBedPlusEnds(fileName, chainHash, minMatch, minBlocks,
                         minSizeT, minSizeQ, minChainT, minChainQ,
-                        fudgeThick, f, unmapped, multiple, chainTable,
+                        fudgeThick, f, unmapped, multiple, noSerial, chainTable,
 			bedPlus, hasBin, tabSep, 0, errCt);
 }
 
@@ -1216,13 +1271,13 @@ int liftOverBed(char *fileName, struct hash *chainHash,
                         int minSizeT, int minSizeQ,
                         int minChainT, int minChainQ,
                         bool fudgeThick, FILE *f, FILE *unmapped, 
-                        bool multiple, char *chainTable, int *errCt)
+                        bool multiple, bool noSerial, char *chainTable, int *errCt)
 /* Open up file, decide what type of bed it is, and lift it. 
  * Return the number of records successfully converted */
 {
 return liftOverBedPlus(fileName, chainHash, minMatch, minBlocks,
                         minSizeT, minSizeQ, minChainT, minChainQ,
-                        fudgeThick, f, unmapped, multiple, chainTable,
+                        fudgeThick, f, unmapped, multiple, noSerial, chainTable,
                         0, FALSE, FALSE, errCt);
 }
 
@@ -1277,8 +1332,9 @@ makeTempName(&mappedBedTn, LIFTOVER_FILE_PREFIX, ".bedmapped");
 makeTempName(&unmappedBedTn, LIFTOVER_FILE_PREFIX, ".bedunmapped");
 mappedBed = mustOpen(mappedBedTn.forCgi, "w");
 unmappedBed = mustOpen(unmappedBedTn.forCgi, "w");
-ct = liftOverBed(bedTn.forCgi, chainHash, minMatch, minBlocks, minSizeT, minSizeQ, minChainT, minChainQ, fudgeThick, 
-                        mappedBed, unmappedBed, multiple, chainTable, errCt);
+ct = liftOverBed(bedTn.forCgi, chainHash, minMatch, minBlocks,
+                 minSizeT, minSizeQ, minChainT, minChainQ, fudgeThick,
+                 mappedBed, unmappedBed, multiple, TRUE, chainTable, errCt);
 carefulClose(&mappedBed);
 chmod(mappedBedTn.forCgi, 0666);
 carefulClose(&unmappedBed);
@@ -1362,7 +1418,7 @@ int liftOverBedOrPositions(char *fileName, struct hash *chainHash,
                         int minSizeT, int minSizeQ,
                         int minChainT, int minChainQ,
 		        bool fudgeThick, FILE *mapped, FILE *unmapped, 
-		        bool multiple, char *chainTable, int *errCt)
+                        bool multiple, bool noSerial, char *chainTable, int *errCt)
 /* Sniff the first line of the file, and determine whether it's a */
 /* bed, a positions file, or neither. */
 {
@@ -1374,7 +1430,7 @@ if (lft == positions)
 if (lft == bed)
     return liftOverBed(fileName, chainHash, minMatch, minBlocks, minSizeT, 
 			     minSizeQ, minChainT, minChainQ, fudgeThick, mapped, unmapped,
-			     multiple, chainTable, errCt);
+                             multiple, noSerial, chainTable, errCt);
 return -1;
 }
 
@@ -1528,6 +1584,10 @@ void liftOverGenePred(char *fileName, struct hash *chainHash,
                         FILE *mapped, FILE *unmapped)
 /* Lift over file in genePred format. */
 {
+//#*** TODO make multiple an argument; could also add db and chainTable args.
+bool multiple = FALSE;
+char *db = NULL, *chainTable = NULL;
+
 struct bed *bed;
 struct genePred *gp = NULL;
 char *error;
@@ -1538,7 +1598,8 @@ for (gp = gpList ; gp != NULL ; gp = gp->next)
     // uglyf("%s %s %d %d %s\n", gp->name, gp->chrom, gp->txStart, gp->txEnd, gp->strand);
     f = mapped;
     bed = genePredToBed(gp);
-    error = remapBlockedBed(chainHash, bed, minMatch, minBlocks, fudgeThick);
+    error = remapBlockedBed(chainHash, bed, minMatch, minBlocks, fudgeThick,
+                            multiple, db, chainTable);
     if (error)
 	{
 	f = unmapped;
@@ -1568,90 +1629,6 @@ for (gp = gpList ; gp != NULL ; gp = gp->next)
 //    genePredFree(&gp);
     }
 }
-
-#ifdef example
-static char *remapBlockedBed(struct hash *chainHash, struct bed *bed)
-/* Remap blocks in bed, and also chromStart/chromEnd.  
- * Return NULL on success, an error string on failure. */
-{
-struct chain *chainList = NULL,  *chain, *subChain;
-int bedSize = sumBedBlocks(bed);
-struct binElement *binList, *el;
-struct liftRange *rangeList, *badRanges = NULL, *range;
-char *error = NULL;
-int i, start, end = 0;
-int thickStart = bed->thickStart;
-int thickEnd = bed->thickEnd;
-
-binList = findRange(chainHash, bed->chrom, bed->chromStart, bed->chromEnd);
-if (binList == NULL)
-    return "Deleted in new";
-
-/* Convert bed blocks to range list. */
-rangeList = bedToRangeList(bed);
-
-/* Evaluate all intersecting chains and sort so best is on top. */
-for (el = binList; el != NULL; el = el->next)
-    {
-    chain = el->val;
-    chain->score = chainRangeIntersection(chain, rangeList);
-    slAddHead(&chainList, chain);
-    }
-slSort(&chainList, chainCmpScore);
-
-/* See if duplicated. */
-chain = chainList->next;
-if (chain != NULL && chain->score == chainList->score)
-    error = "Duplicated in new";
-chain = chainList;
-
-/* See if best one is good enough. */
-if (chain->score  < minMatch * bedSize)
-    error = "Partially deleted in new";
-
-
-/* Call subroutine to remap range list. */
-if (error == NULL)
-    {
-    remapRangeList(chain, &rangeList, &thickStart, &thickEnd, minBlocks,
-    	                &rangeList, &badRanges, &error);
-    }
-
-/* Convert rangeList back to bed blocks.  Also calculate start and end. */
-if (error == NULL)
-    {
-    if (chain->qStrand == '-')
-	{
-	struct liftRange *range;
-	slReverse(&rangeList);
-	for (range = rangeList; range != NULL; range = range->next)
-	    reverseIntRange(&range->start, &range->end, chain->qSize);
-	reverseIntRange(&thickStart, &thickEnd, chain->qSize);
-	bed->strand[0] = otherStrand(bed->strand[0]);
-	}
-    bed->chromStart = start = rangeList->start;
-    bed->blockCount = slCount(rangeList);
-    for (i=0, range = rangeList; range != NULL; range = range->next, ++i)
-	{
-	end = range->end;
-	bed->blockSizes[i] = end - range->start;
-	bed->chromStarts[i] = range->start - start;
-	}
-    if (!sameString(chain->qName, chain->tName))
-	{
-	freeMem(bed->chrom);
-	bed->chrom = cloneString(chain->qName);
-	}
-    bed->chromEnd = end;
-    bed->thickStart = thickStart;
-    bed->thickEnd = thickEnd;
-    }
-slFreeList(&rangeList);
-slFreeList(&badRanges);
-slFreeList(&binList);
-return error;
-}
-#endif
 
 static struct liftRange *sampleToRangeList(struct sample *sample, int sizeOne)
 /* Make a range list corresponding to sample. */

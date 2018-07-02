@@ -1,0 +1,591 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes how grcHhh38 was extended with patch sequences and annotations from grcH38P12,
+# after having been extended with grcH38P11 (see patchUpdate.11.txt).
+
+##############################################################################
+# Extend main database 2bit, chrom.sizes, chromInfo (DONE - 2018-06-26 - Angie)
+
+    cd /hive/data/genomes/grcHhh38
+    # main 2bit
+    time faToTwoBit <(twoBitToFa grcHhh38.2bit stdout) \
+           <(twoBitToFa /hive/data/genomes/grcH38P12/grcH38P12.2bit stdout) \
+           grcHhh38.p12.2bit
+#real    4m9.009s
+    mv grcHhh38.2bit grcHhh38.pre.p12.2bit
+    ln -s grcHhh38.p12.2bit grcHhh38.2bit
+    twoBitInfo grcHhh38.2bit  stdout | wc -l
+#595
+    # unmasked 2bit
+    twoBitMask -type=.bed grcHhh38.2bit /dev/null grcHhh38.p12.unmasked.2bit
+    mv grcHhh38.unmasked.2bit grcHhh38.pre.p12.unmasked.2bit
+    ln -s grcHhh38.p12.unmasked.2bit grcHhh38.unmasked.2bit
+    # chrom.sizes
+    sort -k2nr,2nr chrom.sizes /hive/data/genomes/grcH38P12/chrom.sizes > chrom.sizes.p12
+    mv chrom.sizes chrom.sizes.pre.p12
+    ln -s chrom.sizes.p12 chrom.sizes
+    wc -l chrom.sizes
+#595 chrom.sizes
+    # chromInfo
+    cd /hive/data/genomes/grcHhh38/bed/chromInfo
+    awk '{print $1 "\t" $2 "\t/gbdb/grcHhh38/grcHhh38.2bit";}' ../../chrom.sizes.p12 \
+      > chromInfo.p12.tab
+    wc -l chromInfo.p12.tab
+#  595 chromInfo.p12.tab
+
+    hgLoadSqlTab grcHhh38 chromInfo chromInfo.sql chromInfo.p12.tab
+
+
+##############################################################################
+# Extend main database tables for fileless tracks (DONE - 2018-06-26 - Angie)
+
+    # Just add the patch table rows to the main database tables
+    for table in gap gold rmsk simpleRepeat windowmaskerSdust cpgIslandExt genscan augustusGene; do
+      echo $table
+      hgsql grcHhh38 -e "insert into grcHhh38.$table select * from grcH38P12.$table"
+    done
+
+
+##############################################################################
+# Extend main database gc5BaseBw.bw (DONE - 2018-06-26 - Angie)
+
+    cd /hive/data/genomes/grcHhh38/bed/gc5Base/
+    # Concatenate original assembly results with grcH38P12 results
+    time (zcat grcHhh38.gc5Base.wigVarStep.gz \
+        /hive/data/genomes/grcH38P12/bed/gc5Base/grcH38P12.gc5Base.wigVarStep.gz \
+      | gzip -c \
+      > grcHhh38.p12.gc5Base.wigVarStep.gz)
+#real    8m6.509s
+    mv grcHhh38.gc5Base.wigVarStep.gz grcHhh38.pre.p12.gc5Base.wigVarStep.gz
+    ln -s grcHhh38.p12.gc5Base.wigVarStep.gz grcHhh38.gc5Base.wigVarStep.gz
+    # Make a new gc5BaseBw.bw
+    time wigToBigWig grcHhh38.p12.gc5Base.wigVarStep.gz ../../chrom.sizes.p12 \
+      grcHhh38.p12.gc5Base.bw
+#real    20m44.483s
+    bigWigInfo grcHhh38.p12.gc5Base.bw | grep chromCount
+#chromCount: 595
+    mv grcHhh38.gc5Base.bw grcHhh38.pre.p12.gc5Base.bw
+    ln -s grcHhh38.p12.gc5Base.bw grcHhh38.gc5Base.bw
+
+
+##############################################################################
+# Extend main database download files (DONE - 2018-06-27 - Angie)
+
+    cd /hive/data/genomes/grcHhh38/goldenPath/bigZips
+    # grcH38P12.2bit and grcH38P12.chrom.sizes were already extended above
+    # AGP:
+    zcat grcHhh38.agp.gz \
+         /hive/data/genomes/grcH38P12/goldenPath/bigZips/grcH38P12.agp.gz \
+    | grep -v ^# \
+    | gzip -c > grcHhh38.p12.agp.gz
+    mv grcHhh38.agp.gz grcHhh38.pre.p12.agp.gz && ln -s grcHhh38.p12.agp.gz grcHhh38.agp.gz
+    zcat grcHhh38.agp.gz | cut -f 1 | sort -u | wc -l
+#595
+
+    # FASTA (from already-extended 2bit):
+    twoBitToFa grcHhh38.2bit stdout \
+    | gzip -c > grcHhh38.p12.fa.gz
+    mv grcHhh38.fa.gz grcHhh38.pre.p12.fa.gz && ln -s grcHhh38.p12.fa.gz grcHhh38.fa.gz
+    faSize grcHhh38.fa.gz
+#3257347282 bases (161368694 N's 3095978588 real 1483113183 upper 1612865405 lower) in 595 sequences in 1 files
+#Total size: mean 5474533.2 sd 27729929.3 min 970 (chrUn_KI270394v1) max 248956422 (chr1) median 166200
+
+    twoBitToFa grcHhh38.2bit stdout \
+    | maskOutFa stdin hard stdout \
+    | gzip -c > grcHhh38.p12.fa.masked.gz
+    mv grcHhh38.fa.masked.gz grcHhh38.pre.p12.fa.masked.gz
+    ln -s grcHhh38.p12.fa.masked.gz grcHhh38.fa.masked.gz
+
+    # RepeatMasker (don't include header of patch file):
+    cat <(zcat grcHhh38.fa.out.gz) \
+        <(zcat /hive/data/genomes/grcH38P12/goldenPath/bigZips/grcH38P12.fa.out.gz | tail -n +4) \
+    | gzip -c > grcHhh38.p12.fa.out.gz
+    zcat grcHhh38.p12.fa.out.gz | tail -n +4 | awk '{print $5;}' | sort -u | wc -l
+#595
+    mv grcHhh38.fa.out.gz grcHhh38.pre.p12.fa.out.gz
+    ln -s grcHhh38.p12.fa.out.gz grcHhh38.fa.out.gz
+
+    # SimpleRepeats/TRF:
+    zcat grcHhh38.trf.bed.gz \
+         /hive/data/genomes/grcH38P12/goldenPath/bigZips/grcH38P12.trf.bed.gz \
+    | gzip -c > grcHhh38.p12.trf.bed.gz
+    # We don't expect a complete set of chroms to have simpleRepeats, but at least an increase:
+    zcat grcHhh38.trf.bed.gz | cut -f 1 | uniq | wc -l
+#485
+    zcat grcHhh38.p12.trf.bed.gz | cut -f 1 | uniq | wc -l
+#502
+    mv grcHhh38.trf.bed.gz grcHhh38.pre.p12.trf.bed.gz
+    ln -s grcHhh38.p12.trf.bed.gz grcHhh38.trf.bed.gz
+
+    # hg38 files that are not built by makeDownloads.pl because hg38 is treated as 'scaffold-based':
+    # Per-chrom soft-masked FASTA:
+    rm -rf chroms
+    tar xvzf grcHhh38.chromFa.tar.gz
+    faSplit byname /hive/data/genomes/grcH38P12/goldenPath/bigZips/grcH38P12.fa.gz chroms/
+    ls -1 chroms | wc -l
+#595
+    tar cvzf grcHhh38.p12.chromFa.tar.gz ./chroms
+    mv grcHhh38.chromFa.tar.gz grcHhh38.pre.p12.chromFa.tar.gz
+    ln -s grcHhh38.p12.chromFa.tar.gz grcHhh38.chromFa.tar.gz
+    rm -rf chroms
+
+    # Per-chrom hard-masked FASTA:
+    rm -rf maskedChroms
+    tar xvzf grcHhh38.chromFaMasked.tar.gz
+    faSplit byname /hive/data/genomes/grcH38P12/goldenPath/bigZips/grcH38P12.fa.masked.gz \
+      maskedChroms/
+    ls -1 maskedChroms | wc -l
+#595
+    tar cvzf grcHhh38.p12.chromFaMasked.tar.gz ./maskedChroms
+    mv grcHhh38.chromFaMasked.tar.gz grcHhh38.pre.p12.chromFaMasked.tar.gz
+    ln -s grcHhh38.p12.chromFaMasked.tar.gz grcHhh38.chromFaMasked.tar.gz
+    rm -rf maskedChroms
+
+    # RepeatMasker .align files:
+    zcat grcHhh38.fa.align.gz /hive/data/genomes/grcH38P12/bed/repeatMasker/grcH38P12.fa.align.gz \
+    | gzip -c > grcHhh38.p12.fa.align.gz
+    mv grcHhh38.fa.align.gz grcHhh38.pre.p12.fa.align.gz
+    ln -s grcHhh38.p12.fa.align.gz grcHhh38.fa.align.gz
+
+    # Update md5sum.txt
+    md5sum grcHhh38.2bit grcHhh38.agp.gz grcHhh38.chrom.sizes grcHhh38.chromFa.tar.gz \
+      grcHhh38.chromFaMasked.tar.gz grcHhh38.fa.align.gz grcHhh38.fa.gz grcHhh38.fa.masked.gz \
+      grcHhh38.fa.out.gz grcHhh38.trf.bed.gz \
+      > md5sum.txt
+
+
+#########################################################################
+# Regenerate idKeys with extended grcHhh38 (DONE - 2018-06-27 - Angie)
+
+    mv /hive/data/genomes/grcHhh38/bed/idKeys{,.pre.p12}
+    mkdir /hive/data/genomes/grcHhh38/bed/idKeys
+    cd /hive/data/genomes/grcHhh38/bed/idKeys
+
+    time ($HOME/kent/src/hg/utils/automation/doIdKeys.pl \
+      -twoBit=/hive/data/genomes/grcHhh38/grcHhh38.unmasked.2bit \
+        -buildDir=`pwd`  grcHhh38) > do.log 2>&1 &
+    tail -f do.log
+#real    1m47.076s
+
+    cat grcHhh38.keySignature.txt
+#c9c5d621a52f96886fa9cd785c99248f
+
+
+#########################################################################
+# ncbiRefSeq.p12 Genes (DONE - 2018-06-27 - Angie)
+
+    mkdir /hive/data/genomes/grcHhh38/bed/ncbiRefSeq.p12.2018-06-27
+    cd /hive/data/genomes/grcHhh38/bed/ncbiRefSeq.p12.2018-06-27
+
+    # Adding the -toGpWarnOnly flag because there are a handful of cases of CDS extending
+    # beyond exon coordinates.  Terence Murphy says they'll eventually fix it but not soon.
+    # So, make sure to check do.log for warnings from gff3ToGenePred:
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -toGpWarnOnly \
+      refseq vertebrate_mammalian Homo_sapiens \
+      GCF_000001405.38_GRCh38.p12 grcHhh38) > do.log 2>&1 & tail -f do.log
+    # gff3ToGenePred warnings:
+#Warning: skipping: no exon in id1912382 contains CDS 555851-556197
+#Warning: skipping: no exon in id1790907 contains CDS 22922593-22922913
+#Warning: skipping: no exon in id1790877 contains CDS 22906341-22906661
+#Warning: skipping: no exon in id1790824 contains CDS 22822981-22823289
+#Warning: skipping: no exon in id1365744 contains CDS 106088082-106088428
+#5 warnings converting GFF3 file: stdin
+
+# *** All done !  Elapsed time: 23m16s
+#real    23m16.023s
+
+    cat fb.ncbiRefSeq.grcHhh38.txt
+#134109466 bases of 3095998939 (4.332%) in intersection
+
+
+##############################################################################
+# main database haplotypes, patches (DONE - 2018-06-27 - Angie)
+
+    # NOTE FOR NEXT TIME -- instead of using extract.new.list, extract all (cumulative)
+    # patch release sequences since the initial assembly release.  Then we won't need
+    # the hgsql commands at the end.
+    # Also, the patches themselves should have patch track entries that point back
+    # to their main chrom locations.
+    mkdir /hive/data/genomes/grcHhh38/bed/hg38Patch12Locations
+    cd /hive/data/genomes/grcHhh38/bed/hg38Patch12Locations
+
+    # construct locations file:
+    ~/kent/src/hg/makeDb/doc/hg38/regionScan.pl \
+      /hive/data/genomes/grcH38P12/ucsc/extract.new.list \
+      /hive/data/genomes/grcH38P12/genbank/GCA_000001405.27_GRCh38.p12_assembly_regions.txt \
+      > patchLocations.bed
+
+    # verify correct number of locations:
+    wc -l patchLocations.bed 
+#17 patchLocations.bed
+
+    #  separate haplotypes from fix patches for two tracks:
+    grep -v fix patchLocations.bed \
+    | sed -e 's/_alt//; s/\tchr.*_/\t/; s/v/./;' \
+      > hg38Patch12Haplotypes.bed
+
+    grep fix patchLocations.bed \
+    | sed -e 's/_fix//; s/\tchr.*_/\t/;' | sed -e 's/v\([0-9]\)$/.\1/;' \
+      > hg38Patch12Patches.bed
+
+    # verify nothing lost, should be 17:
+    wc -l hg38*.bed
+# 11 hg38Patch12Haplotypes.bed
+#  6 hg38Patch12Patches.bed
+# 17 total
+
+    hgLoadBed -type=bed4 grcHhh38 hg38Patch12Haplotypes hg38Patch12Haplotypes.bed 
+#Read 11 elements of size 4 from hg38Patch12Haplotypes.bed
+
+    hgLoadBed -type=bed4 grcHhh38 hg38Patch12Patches hg38Patch12Patches.bed 
+#Read 6 elements of size 4 from hg38Patch12Patches.bed
+
+    # Actually we want those to be cumulative... pull in rows from the corresponding Patch11 tables
+    hgsql grcHhh38 -e 'insert into hg38Patch12Haplotypes select * from hg38Patch11Haplotypes;'
+    hgsql grcHhh38 -e 'insert into hg38Patch12Patches select * from hg38Patch11Patches;'
+
+
+############################################################################
+# altLocations and patchLocations (DONE - 2018-06-27 - Angie)
+    # indicate corresponding locations between haplotypes and reference
+    mkdir /hive/data/genomes/grcHhh38/bed/altLocations.p12
+    cd /hive/data/genomes/grcHhh38/bed/altLocations.p12
+    ~/kent/src/hg/utils/automation/altScaffoldPlacementToBed.pl \
+      /hive/data/genomes/grcH38P12/genbank/GCA_000001405.27_GRCh38.p12_assembly_structure/{ALT_*,PATCHES}/alt_scaffolds/alt_scaffold_placement.txt \
+    | sort -k1,1 -k2n,2n \
+      > altAndFixLocations.bed
+    wc -l altAndFixLocations.bed
+#802 altAndFixLocations.bed
+    grep _alt altAndFixLocations.bed > altLocations.bed
+    grep _fix altAndFixLocations.bed > fixLocations.bed
+    hgLoadBed grcHhh38 altLocations{,.bed}
+#Read 664 elements of size 4 from altLocations.bed
+    hgLoadBed grcHhh38 fixLocations{,.bed}
+#Read 140 elements of size 4 from fixLocations.bed
+    featureBits -countGaps grcHhh38 altLocations
+#200094386 bases of 3257347282 (6.143%) in intersection
+    featureBits -countGaps grcHhh38 fixLocations
+#63654955 bases of 3257347282 (1.954%) in intersection
+
+
+#############################################################################
+# Check for new chrX alts/patches to add to par (DONE 2018-06-27 angie)
+
+# Thanks to Hiram for pointing out that intersecting chrX positions in
+# altLocations and par shows whether a chrX alt overlaps a PAR.
+    mkdir /hive/data/genomes/grcHhh38/bed/par
+    cd /hive/data/genomes/grcHhh38/bed/par
+    hgsql grcHhh38 -e 'select * from altLocations where chrom like "chrX%"'
+#+-----+---------------------+------------+----------+------------------------+
+#| bin | chrom               | chromStart | chromEnd | name                   |
+#+-----+---------------------+------------+----------+------------------------+
+#|  73 | chrX                |     319337 |   601516 | chrX_KI270880v1_alt    |
+#|  73 | chrX                |     326487 |   601516 | chrX_KI270913v1_alt    |
+#|  77 | chrX                |    4950956 |  5129468 | chrX_KV766199v1_alt    |
+#| 149 | chrX                |   79965153 | 80097082 | chrX_KI270881v1_alt    |
+#|  73 | chrX_KI270880v1_alt |          0 |   284869 | chrX:319338-601516     |
+#|  73 | chrX_KI270881v1_alt |          0 |   144206 | chrX:79965154-80097082 |
+#|  73 | chrX_KI270913v1_alt |          0 |   274009 | chrX:326488-601516     |
+#|  73 | chrX_KV766199v1_alt |          0 |   188004 | chrX:4950957-5129468   |
+#+-----+---------------------+------------+----------+------------------------+
+
+    hgsql grcHhh38 -e 'select * from par where chrom like "chrX%"'
+#+-----+---------------------+------------+-----------+------+
+#| bin | chrom               | chromStart | chromEnd  | name |
+#+-----+---------------------+------------+-----------+------+
+#|   9 | chrX                |      10000 |   2781479 | PAR1 |
+#| 221 | chrX                |  155701382 | 156030895 | PAR2 |
+#|  73 | chrX_KI270880v1_alt |          0 |    284869 | PAR1 |
+#|  73 | chrX_KI270913v1_alt |          0 |    274009 | PAR1 |
+#+-----+---------------------+------------+-----------+------+
+    # chrX_KI270881v1_alt and chrX_KV766199v1_alt are not in either PAR.
+    # chrX_KI270880v1_alt and chrX_KI270913v1_alt are entirely contained in PAR1 --
+    # and are already in the PAR table, so nothing to add.
+
+
+#############################################################################
+# adding ucscToINSDC, ucscToRefSeq and chromAlias (DONE - Angie - 2018-06-27)
+
+    # need to have idKeys for the genbank and refseq assemblies:
+    mkdir -p /hive/data/genomes/grcHhh38/bed/ucscToINSDC/genbankP12
+    cd /hive/data/genomes/grcHhh38/bed/ucscToINSDC/genbankP12
+    ln -s /hive/data/outside/ncbi/genomes/genbank/vertebrate_mammalian/Homo_sapiens/all_assembly_versions/GCA_000001405.27_GRCh38.p12/GCA_000001405.27_GRCh38.p12_genomic.fna.gz .
+    faToTwoBit GCA_000001405.27_GRCh38.p12_genomic.fna.gz genbankP12.2bit
+    time ($HOME/kent/src/hg/utils/automation/doIdKeys.pl -buildDir=`pwd` -twoBit=genbankP12.2bit genbankP12) \
+       > do.log 2>&1
+#real    1m50.109s
+
+    mkdir /hive/data/genomes/grcHhh38/bed/ucscToINSDC/refseqP12
+    cd /hive/data/genomes/grcHhh38/bed/ucscToINSDC/refseqP12
+    ln -s /hive/data/outside/ncbi/genomes/refseq/vertebrate_mammalian/Homo_sapiens/all_assembly_versions/GCF_000001405.38_GRCh38.p12/GCF_000001405.38_GRCh38.p12_genomic.fna.gz ./
+    faToTwoBit GCF_000001405.38_GRCh38.p12_genomic.fna.gz refseqP12.2bit
+    time ($HOME/kent/src/hg/utils/automation/doIdKeys.pl -buildDir=`pwd` -twoBit=refseqP12.2bit refseqP12) \
+        > do.log 2>&1
+#real    1m47.878s
+
+    # with the three idKeys available, join them to make the table bed files:
+    cd /hive/data/genomes/grcHhh38/bed/ucscToINSDC
+    join -t$'\t' ../idKeys/grcHhh38.idKeys.txt genbankP12/genbankP12.idKeys.txt \
+    | cut -f2- | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+    | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+    | sort -k1,1 -k2,2n > ucscToINSDC.p12.bed
+
+    join -t$'\t' ../idKeys/grcHhh38.idKeys.txt refseqP12/refseqP12.idKeys.txt \
+    | cut -f2- | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+    | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+    | sort -k1,1 -k2,2n > ucscToRefSeq.p12.bed
+
+    # loading tables:
+    export db=grcHhh38
+
+    export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+    | hgLoadSqlTab ${db} ucscToINSDC stdin ucscToINSDC.p12.bed
+
+    export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+    | sed -e 's/INSDC/RefSeq/g;' \
+    | hgLoadSqlTab ${db} ucscToRefSeq stdin ucscToRefSeq.p12.bed
+
+    # must be exactly 100% coverage
+
+    featureBits -countGaps ${db} ucscToINSDC
+#3257347282 bases of 3257347282 (100.000%) in intersection
+
+    featureBits -countGaps ${db} ucscToRefSeq
+#3257319537 bases of 3257347282 (99.999%) in intersection
+    # uh-oh!  not 100%
+    featureBits -countGaps ${db} \!ucscToRefSeq -bed=stdout
+#chrUn_KI270752v1        0       27745   chrUn_KI270752v1.1
+    grep KI270752 \
+      /hive/data/outside/ncbi/genomes/refseq/vertebrate_mammalian/Homo_sapiens/latest_assembly_versions/GCF_000001405.38_GRCh38.p12/GCF_000001405.38_GRCh38.p12_assembly_report.txt
+#HSCHRUN_RANDOM_CTG29    unplaced-scaffold       na      na      KI270752.1      <>      na      Primary Assembly        27745   chrUn_KI270752v1
+    # Yep, no RefSeq accession there.  Guess it was dropped from the RefSeq p12 assembly???
+    # Will ask Hiram and probably Terence.
+
+    # construct chromAlias:
+    cd /hive/data/genomes/grcHhh38/bed/chromAlias
+    hgsql -N -e 'select chrom,name from ucscToRefSeq;' ${db} \
+    | sort -k1,1 > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name from ucscToINSDC;' ${db} \
+    | sort -k1,1 > ucsc.genbank.tab
+    # add NCBI sequence names from assembly report
+    grep -v ^# \
+      /hive/data/genomes/grcH38P12/genbank/GCA_000001405.27_GRCh38.p12_assembly_report.txt \
+    | tawk '{print $5, $1;}' | sort \
+      > genbankToAssembly.txt
+    tawk '{print $2, $1;}' ucsc.genbank.tab | sort \
+    | join -t$'\t' -o 1.2,2.2 - genbankToAssembly.txt \
+    | sort -k1,1 > ucsc.assembly.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl ucsc.*.tab \
+        > ${db}.chromAlias.tab
+
+    # verify all there:
+    for t in refseq genbank assembly
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t grcHhh38.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking refseq: 594 =? 594 OK
+# checking genbank: 595 =? 595 OK
+# checking assembly: 595 =? 595 OK
+    # Note how there's one fewer refseq, consistent with featureBits above.
+
+    hgLoadSqlTab grcHhh38 chromAlias $HOME/kent/src/hg/lib/chromAlias.sql ${db}.chromAlias.tab
+
+
+##############################################################################
+# altSeqLiftOver (DONE 18-06-27 Angie)
+
+    mkdir /hive/data/genomes/grcHhh38/bed/altSeqLiftOver.p12
+    cd /hive/data/genomes/grcHhh38/bed/altSeqLiftOver.p12
+    # Eventually these will be under the /hive/data/genomes/.../genbank/... directory
+    # that points to /hive/data/outside/ncbi/genomes/... but at the moment the contents
+    # of the alignments/ directories are not included in the sync.  So for now,
+    # manually download them here.
+    # Original alts:
+    # NOTE FOR NEXT TIME: don't redownload these, link to prior build dir's initialAlts
+    mkdir initialAlts
+    cd initialAlts
+    for d in /hive/data/genomes/grcH38P12/genbank/GCA_000001405.27_GRCh38.p12_assembly_structure/ALT*/alt_scaffolds/alignments ;
+    do
+      subdir=`echo $d | sed -re 's@^/hive/data/genomes/grcH38P12/genbank/@@;'`
+      wget --timestamping --no-verbose \
+        ftp://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_mammalian/Homo_sapiens/all_assembly_versions/GCA_000001405.27_GRCh38.p12/$subdir/\*.gff
+    done
+    # New alts and patches too:
+    mkdir ../patches
+    cd ../patches
+    wget --timestamping --no-verbose\
+      ftp://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_mammalian/Homo_sapiens/all_assembly_versions/GCA_000001405.27_GRCh38.p12/GCA_000001405.27_GRCh38.p12_assembly_structure/PATCHES/alt_scaffolds/alignments/\*.gff
+    cd ..
+    # Use chromAlias to make a .sed file to substitute Genbank accessions to UCSC names
+    hgsql grcHhh38 -NBe 'select alias,chrom from chromAlias where find_in_set("genbank", source);' \
+    | awk '{print "s@" $1 "@" $2 "@;";}' > gbToUcsc.sed
+    cp /dev/null altToChrom.noScore.psl
+    for f in initialAlts/*.gff patches/*.gff;
+    do
+      e=`basename $f .gff | sed -e 's/_/|/g;'`
+      s=`grep -E $e gbToUcsc.sed`
+      sed -re "$s" $f | gff3ToPsl ../../chrom.sizes{,} stdin stdout \
+      | pslPosTarget stdin stdout \
+        >> altToChrom.noScore.psl
+    done
+    pslCheck altToChrom.noScore.psl
+#checked: 421 failed: 0 errors: 0
+    pslRecalcMatch altToChrom.noScore.psl ../../grcHhh38.2bit{,} altToChrom.psl
+#202.461u 1.836s 3:24.46 99.9%   0+0k 0+0io 0pf+0w
+    pslSwap altToChrom.psl stdout | pslPosTarget stdin chromToAlt.psl
+    sort -k14,14 -k16n,16n -k10,10 -k12n,12n altToChrom.psl chromToAlt.psl \
+      > altAndPatches.psl
+    grep _alt altAndPatches.psl > altSeqLiftOver.psl
+    grep _fix altAndPatches.psl > fixSeqLiftOver.psl
+
+    # Load tables
+    hgLoadPsl grcHhh38 -table=altSeqLiftOverPsl altSeqLiftOver.psl
+    hgLoadPsl grcHhh38 -table=fixSeqLiftOverPsl fixSeqLiftOver.psl
+
+    # Make chrom-to-alt PSL file for genbank process.
+    ln -f -s `pwd`/chromToAlt.psl \
+      /hive/data/genomes/grcHhh38/jkStuff/grcHhh38.p12.alt.psl
+
+    # Make a liftOver chain file for mapping annotations on main chroms to new patch sequences
+    # exclude alts that were already in grcHhh38 before p12
+    cut -f 1 ../../chrom.sizes.pre.p12 | grep _ \
+    | grep -vwf - chromToAlt.psl \
+    | pslToChain stdin stdout \
+    | chainScore stdin ../../grcHhh38.2bit{,} ../../jkStuff/grcHhh38.mainToPatch.p12.over.chain
+#52.068u 1.626s 0:54.43 98.6%    0+0k 15952+0io 2pf+0w
+
+    # Make bigPsl so we don't have to bother with seq* and ext* tables?  takes many hours...
+    twoBitToFa /hive/data/genomes/grcHhh38/grcHhh38.2bit stdout \
+    | pslToBigPsl -fa=stdin altSeqLiftOver.psl stdout \
+    | sort -k1,1 -k2n,2n > altSeqLiftOver.bigPslInput
+#122.847u 338.099s 8:50.12 86.9% 0+0k 67303264+247358392io 1pf+0w
+    bedToBigBed -type=bed12+13 -tab -as=$HOME/kent/src/hg/lib/bigPsl.as \
+      altSeqLiftOver.bigPslInput /hive/data/genomes/grcHhh38/chrom.sizes \
+      altSeqLiftOver.bb
+#14435.151u 103.362s 4:03:04.77 99.6%    0+0k 8+0io 0pf+0w
+    # Yikes, four hours!!
+    ln -sf `pwd`/altSeqLiftOver.bb /gbdb/grcHhh38/bbi/altSeqLiftOver.bb
+    # Clean up giant intermediate file
+    rm altSeqLiftOver.bigPslInput
+
+
+##############################################################################
+# Extend wgEncodeReg bigWig tracks (DONE 18-06-28 angie)
+#NOTE: this has not been liftOver'd to original alts!
+    # Use existing /gbdb/ bigWig files (which have already had p11 added):
+    for dir in /gbdb/grcHhh38/bbi/wgEncodeReg/{*Mark*,*Txn}; do
+        composite=`basename $dir`
+        echo $composite
+        mkdir -p /hive/data/genomes/grcHhh38/bed/$composite
+        cd /hive/data/genomes/grcHhh38/bed/$composite
+        for f in $dir/wg*.bigWig; do
+            track=`basename $f .bigWig`
+            ~/kent/src/hg/utils/liftOverBigWigToPatches $f \
+              /hive/data/genomes/grcHhh38/jkStuff/grcHhh38.mainToPatch.p12.over.chain \
+              /hive/data/genomes/grcHhh38/chrom.sizes \
+               $track.plusP12.bigWig &
+        done
+        wait
+        mkdir -p  /gbdb/grcHhh38/bbi/wgEncodeReg/$composite
+        for f in $dir/wg*.bigWig; do
+            track=`basename $f .bigWig`
+            ln -sf `pwd`/$track.plusP12.bigWig \
+              /gbdb/grcHhh38/bbi/wgEncodeReg/$composite/$track.bigWig
+        done
+    done
+
+
+##############################################################################
+# Extend wgEncodeRegDnase (DONE 18-06-28 angie)
+#NOTE: this has not been liftOver'd to original alts!
+    cd /hive/data/genomes/grcHhh38/bed/wgEncodeRegDnase
+    origFile=/hive/data/genomes/hg38/bed/wgEncodeRegDnase/clusters/uwEnc2DnaseClustered.bed
+    liftOver -multiple -bedPlus=5 -noSerial $origFile \
+      /hive/data/genomes/grcHhh38/jkStuff/grcHhh38.mainToPatch.p12.over.chain \
+      wgEncodeRegDnaseClustered.p12.bed /dev/null
+    hgLoadBed -oldTable -type=bed5+ grcHhh38 wgEncodeRegDnaseClustered \
+      wgEncodeRegDnaseClustered.p12.bed
+
+
+##############################################################################
+# Extend wgEncodeRegTfbsClusteredV3 (DONE 18-06-28 angie)
+#NOTE: this has not been liftOver'd to original alts!
+    cd /hive/data/genomes/grcHhh38/bed/wgEncodeRegTfbsClusteredV3
+    origFile=/hive/data/genomes/hg38/bed/hg19MassiveLift/wgEncodeReg/wgEncodeRegTfbsClusteredV3/hg38.wgEncodeRegClusteredV3.bed
+    liftOver -multiple -bedPlus=5 -noSerial $origFile \
+      /hive/data/genomes/grcHhh38/jkStuff/grcHhh38.mainToPatch.p12.over.chain \
+      wgEncodeRegTfbsClusteredV3.p12.bed /dev/null
+    hgLoadBed -oldTable -type=bed5+ grcHhh38 wgEncodeRegTfbsClusteredV3 \
+      wgEncodeRegTfbsClusteredV3.p12.bed
+
+
+##############################################################################
+# Extend GTEX GENE (DONE 18-06-28 angie)
+# I'm not really sure what file(s) are the true source of the latest hg38 GTEX Gene tables,
+# so I'll just work from the tables.
+    mkdir /hive/data/genomes/grcHhh38/bed/gtex.p12
+    cd /hive/data/genomes/grcHhh38/bed/gtex.p12
+    # There is actually no bin column in gtexGene.
+    hgsql grcHhh38 -NBe 'select * from gtexGene' > gtexGene.main.bed
+    liftOver -multiple -bedPlus=6 -noSerial gtexGene.main.bed \
+      /hive/data/genomes/grcHhh38/jkStuff/grcHhh38.mainToPatch.p12.over.chain \
+      gtexGene.p12.bed /dev/null
+    sort -k1,1 -k2n,2n gtexGene.main.bed gtexGene.p12.bed \
+    | hgLoadBed -noBin -type=bed6+ -sqlTable=$HOME/kent/src/hg/lib/gtexGeneBed.sql -renameSqlTable \
+        grcHhh38 gtexGene stdin
+    # gtexGeneModel does have a bin.
+    hgsql grcHhh38 -NBe 'select * from gtexGeneModel' | cut -f 2- > gtexGeneModel.main.gp
+    liftOver -multiple -genePred gtexGeneModel.main.gp \
+      /hive/data/genomes/grcHhh38/jkStuff/grcHhh38.mainToPatch.p12.over.chain \
+      gtexGeneModel.p12.gp /dev/null
+    sort -k2,2 -k3n,3n gtexGeneModel.main.gp gtexGeneModel.p12.gp \
+    | hgLoadGenePred grcHhh38 gtexGeneModel stdin
+
+
+#############################################################################
+# Extend cytoBand{,Ideo} (DONE 18-06-28 angie)
+    mkdir /hive/data/genomes/grcHhh38/bed/cytoBand.p12
+    cd /hive/data/genomes/grcHhh38/bed/cytoBand.p12
+    tawk '{print $1, 0, $2, "", "gneg";}' /hive/data/genomes/grcH38P12/chrom.sizes \
+      > cytoBand.p12.tab
+    hgLoadSqlTab -oldTable grcHhh38 cytoBand - cytoBand.p12.tab
+    hgLoadSqlTab -oldTable grcHhh38 cytoBandIdeo - cytoBand.p12.tab
+
+
+##############################################################################
+# OMIM tracks (TODO 18-06-? angie)
+# the otto process builds the omim* tables; edit otto/omim/buildOmimTracks.sh to make sure
+# the most recent dbSNP version is listed for the db.  After the snpNNN table is updated to
+# include patch sequences, the next otto update will include patches.
+# omimGene2 is still using refGene, but I think it would be better if it used ncbiRefSeqCurated
+# if it exists.  At least, we would get more mappings :)  e.g. KAT6B is mapped to fix by
+# ncbi but not blat.
+
+# TODO: OMIM Genes needs liftOver to new alts and fixes (or redo from ncbiRefSeq).
+# OMIM Phenotypes needs liftOvers to all alts and fixes.  Sometimes it spans a region larger
+# than an alt/fix, so maybe lower the percentage that has to map?
+
+
+#############################################################################
+# DBSNP B151 / SNP151 (TODO 18-? angie)
+# b151 is for GRCh38.p7 (orgDir human_9606_b151_GRCh38p7) so it doesn't have
+# sequences adding in p8 and later.
+
+    # Make a liftOver chain from main chromosomes to patches added after p7.
+
+
+    # Do the liftOver for all positional snp151* tables, load with -oldTable
+
+
+
+#############################################################################

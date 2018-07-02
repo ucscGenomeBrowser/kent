@@ -147,9 +147,9 @@ void wrapTagValueInFiles(struct fieldedTable *table, struct fieldedRow *row,
 printf("<A HREF=\"../cgi-bin/cdwWebBrowse?cdwCommand=browseFiles&%s&",
     cartSidUrlString(cart));
 char query[2*PATH_LEN];
-safef(query, sizeof(query), "%s = '%s'&cdwBrowseFiles_page=1", field, val);
+safef(query, sizeof(query), "%s = '%s'", field, val);
 char *escapedQuery = cgiEncode(query);
-printf("%s=%s", "cdwFile_filter", escapedQuery);
+printf("%s=%s&cdwBrowseFiles_page=1", "cdwFile_filter", escapedQuery);
 freez(&escapedQuery);
 printf("\">%s</A>", shortVal);
 }
@@ -375,8 +375,8 @@ struct dyString *customTextForFile(struct sqlConnection *conn, struct cdwTrackVi
 struct dyString *dy = dyStringNew(0);
 dyStringPrintf(dy, "track name=\"%s\" ", viz->shortLabel);
 dyStringPrintf(dy, "description=\"%s\" ", viz->longLabel);
-char *host = hHttpHost();
-dyStringPrintf(dy, "bigDataUrl=http://%s/cgi-bin/cdwGetFile?acc=%s", host, viz->shortLabel);
+//char *host = hHttpHost();
+dyStringPrintf(dy, "bigDataUrl=http://localhost/cgi-bin/cdwGetFile?acc=%s", viz->shortLabel);
 if (accessibleFilesToken != NULL)
     dyStringPrintf(dy, "&token=%s", accessibleFilesToken);
 dyStringPrintf(dy, " ");
@@ -389,7 +389,7 @@ else if (sameWord(viz->type, "vcfTabix"))
 
 if (indexExt != NULL)
     {
-    dyStringPrintf(dy, "bigDataIndex=http://%s/cgi-bin/cdwGetFile?addExt=%s&acc=%s", host, indexExt, viz->shortLabel);
+    dyStringPrintf(dy, "bigDataIndex=http://localhost/cgi-bin/cdwGetFile?addExt=%s&acc=%s", indexExt, viz->shortLabel);
     if (accessibleFilesToken != NULL)
         dyStringPrintf(dy, "&token=%s", accessibleFilesToken);
     }

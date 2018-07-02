@@ -513,7 +513,7 @@ if (!refreshOnly && userData != NULL && userData[0] != '\0')
 	ct = liftOverBed(oldTn.forCgi, chainHash, 
 			minMatch, minBlocks, 0, minSizeQ,
 			minChainT, 0,
-			fudgeThick, mapped, unmapped, multiple, NULL, &errCt);
+                        fudgeThick, mapped, unmapped, multiple, FALSE, NULL, &errCt);
     else if (lft == positions)
 	ct = liftOverPositions(oldTn.forCgi, chainHash, 
 			minMatch, minBlocks, 0, minSizeQ,
