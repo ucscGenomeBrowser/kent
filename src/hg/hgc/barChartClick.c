@@ -79,8 +79,6 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         char *restFields[EXTRA_FIELDS_SIZE];
         int restCount = chopTabs(rest, restFields);
         int restBedFields = (6 + (hasOffsets ? 2 : 0));
-        if ((restCount - restBedFields) > EXTRA_FIELDS_SIZE)
-            errAbort("More than %d extraFields in barChart file %s\n", EXTRA_FIELDS_SIZE, tdb->table);
         if (restCount > restBedFields)
             {
             int i;
