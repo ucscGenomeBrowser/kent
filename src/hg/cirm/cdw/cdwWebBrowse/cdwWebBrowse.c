@@ -69,7 +69,7 @@ hashElFreeList(&list);
 char *fileTableFields = NULL;
 char *visibleFacetFields = NULL;
 #define FILEFIELDS "file_name,file_size,ucsc_db"
-#define FILEFACETFIELDS "lab,data_set_id,species,assay,format,output,biosample_cell_type,read_size,sample_label"
+#define FILEFACETFIELDS "lab,data_set_id,species,assay,format,output,organ_anatomical_name,biosample_cell_type,read_size,sample_label"
 
 struct dyString *printPopularTags(struct hash *hash, int maxSize)
 /* Get all hash elements, sorted by count, and print all the ones that fit */
@@ -1905,10 +1905,6 @@ printf("This table is a summary of important metadata tags and number of files t
 printf("are attached to. Use browse tags menu to see all tags.");
 
 printf("<BR>\n\n\n\n\n\n");
-printf("<TABLE><TR>");
-printf("<a href=\"cdwGetFile/jointCirmBrain1/summary/index.html\"><img " 
-	"src=\"../images/cdwImages/qbg_krgSeurat.png\" width=%d height=%d border=5 style=\"border-width:medium\" > </a>\n", 800, 600);
-printf("</TR></TABLE>");
 }
 
 void doBrowseTags(struct sqlConnection *conn)
@@ -2098,7 +2094,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Data Browser V0.57");
+localWebStartWrapper("CIRM Stem Cell Hub Data Browser V0.58");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();

@@ -20,3 +20,7 @@
      slices smaller than 2% of data to help clean up charts.
 0.56 Nov 22 2017
    - Optimizing so that code that fetches data for pie charts and metadata tags is faster.
+0.57 May 2019
+   - Adding facets to Browse/Files
+0.58 July 2 2018
+   - Adding organ_anatomical_name facet
