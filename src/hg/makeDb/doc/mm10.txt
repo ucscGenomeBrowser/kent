@@ -17259,10 +17259,9 @@ TMPDIR=/dev/shm
     pushd ~/kent/src/hg/makeDb/trackDb
     ../../makeDb/outside/gencode/gencodeGenerateTrackDbs mm10 M17 92 'Mar 2018'
 
-    # Update mouse/mm10/wgEncodeGencodeSuper.html
-
     ## only if being pushed to RR:
-    # update 'Release Notes' to describe new release.
+    # Update mouse/mm10/wgEncodeGencodeSuper.html
+    # Update 'Release Notes' to describe new release.
 
     # edit mouse/mm10/trackDb.gencode.ra to add new .ra file include
     make DBS=mm10
