@@ -24,3 +24,6 @@
    - Adding facets to Browse/Files
 0.58 July 2 2018
    - Adding organ_anatomical_name facet
+   - Removing browse/tags
+   - Removing tag table and brain joint analysis graphics from cdwWebBrowse default page.
+
