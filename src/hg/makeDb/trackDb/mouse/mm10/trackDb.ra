@@ -1,6 +1,8 @@
 
 include ../../refSeqComposite.ra
 
+include ../../crispr10K.ra alpha
+
 # chainNet tracks
 include trackDb.gliresChainNet.ra
 include trackDb.euarchontoglireChainNet.ra
