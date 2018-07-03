@@ -1630,7 +1630,7 @@ include altSeqComposite5.ra alpha
 
 include altSeqComposite9.ra alpha
 
-include altSeqComposite10.ra alpha,beta,public
+include altSeqComposite10.ra alpha,public
 
 include hg19Patch13.ra alpha,beta
 
