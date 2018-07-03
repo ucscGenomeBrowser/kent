@@ -2505,7 +2505,7 @@ int termCount = 0;
 int i = 0;
 boolean multiTerm = FALSE;
 char *chrom = NULL;
-int start = BIGNUM;
+int start = INT_MAX;
 int end = 0;
 
 termCount = chopByChar(cloneString(spec), ';', terms, ArraySize(terms));
