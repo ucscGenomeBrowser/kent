@@ -1632,7 +1632,7 @@ include altSeqComposite9.ra alpha
 
 include altSeqComposite10.ra alpha,beta,public
 
-include hg19Patch13.ra alpha
+include hg19Patch13.ra alpha,beta
 
 track vistaEnhancers override
 url http://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&experiment_id=$$&organism_id=1
