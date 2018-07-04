@@ -14,6 +14,7 @@ include $(kentSrc)/inc/cgi_build_rules.mk
 compile: $O 
 	${CC} $O ${MYLIBS} ${L} 
 	mv ${AOUT} $A${EXE}
+	cp cirm-motd.html ${CGI_BIN}/
 
 $O: tagDescriptions.h cdwHelp.h
 
