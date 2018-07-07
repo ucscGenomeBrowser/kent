@@ -33,6 +33,7 @@ DBS = \
 	ailMel1 \
 	allMis1 \
 	amaVit1 geoFor1 melUnd1 \
+	ambMex1 \
 	ancCey1 \
 	anoCar1 anoCar2 \
 	anoGam1 anoGam3 \
