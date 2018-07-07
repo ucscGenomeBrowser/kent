@@ -9577,7 +9577,6 @@ else
 	total += chromInfo->size;
 
     unsigned scafCount = seqCount;
-    unsigned totalSize = total;
     cgiTableRowEnd();
     safef(msg1, sizeof(msg1), "contig/scaffold<BR>count:");
     safef(msg2, sizeof(msg2), "total size:");
@@ -9594,7 +9593,7 @@ else
     printLongWithCommas(stdout, scafCount);
     cgiTableFieldEnd();
     cgiSimpleTableFieldStart();
-    printLongWithCommas(stdout, totalSize);
+    printLongWithCommas(stdout, total);
     cgiTableFieldEnd();
     cgiTableRowEnd();
     }
@@ -9669,7 +9668,7 @@ else
     if ((row = sqlNextRow(sr)) != NULL)
 	{
 	unsigned scafCount = sqlUnsigned(row[0]);
-	unsigned totalSize = sqlUnsigned(row[1]);
+	long long totalSize = sqlLongLong(row[1]);
 	cgiTableRowEnd();
 	safef(msg1, sizeof(msg1), "contig/scaffold<BR>count:");
 	safef(msg2, sizeof(msg2), "total size:");
