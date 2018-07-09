@@ -246,11 +246,14 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
 
     // Pick colors
 
+    #define MG_LIGHT_MAGENTA    0xffffbbff
+    #define MG_LIGHT_GRAY       0xffbbbbbb
     color = interactItemColor(tg, inter, hvg, scoreMin, scoreMax);
     if (vis == tvDense && otherChrom && color == MG_BLACK)
         // use highlight color for other chrom items in dense mode
-        color = MG_MAGENTA;
-    int peakColor = (color == MG_BLACK || tg->colorShades) ? MG_MAGENTA : MG_GRAY;
+        color = MG_LIGHT_MAGENTA;
+    int peakColor = (color == MG_BLACK || tg->colorShades) ? MG_LIGHT_MAGENTA : MG_LIGHT_GRAY;
+
     
     if (otherChrom)
         {
@@ -374,20 +377,20 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         {
         // add map box to source region
         nameBuf = isEmptyTextField(inter->sourceName) ? statusBuf : inter->sourceName;
-        hvGfxBox(hvg, sX-1, yOff, 3, 1, peakColor);
+        hvGfxBox(hvg, sX-1, yOff, 3, 2, peakColor);
         hvGfxBox(hvg, sX, yOff, 1, 1, MG_WHITE);
         mapBoxHgcOrHgGene(hvg, chromStart, chromEnd, 
-                           sX - sWidth, yOff, sWidth * 2, 3,
+                           sX - sWidth, yOff, sWidth * 2, 4,
                            tg->track, itemBuf, nameBuf, NULL, TRUE, NULL);
         }
     if (tOnScreen)
         {
         // add map box to target region
         nameBuf = isEmptyTextField(inter->targetName) ? statusBuf : inter->targetName;
-        hvGfxBox(hvg, tX-1, yOff, 3, 1, peakColor);
+        hvGfxBox(hvg, tX-1, yOff, 3, 2, peakColor);
         hvGfxBox(hvg, tX, yOff, 1, 1, MG_WHITE);
         mapBoxHgcOrHgGene(hvg, chromStart, chromEnd, 
-                        tX - tWidth, yOff, tWidth * 2, 3,
+                        tX - tWidth, yOff, tWidth * 2, 4,
                         tg->track, itemBuf, nameBuf, NULL, TRUE, NULL);
         }
     if ((s < seqStart && t < seqStart) || (s > seqEnd && t > seqEnd))
@@ -416,9 +419,9 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         // map box on mid-point of horizontal line
         int xMap = lowerX + (double)(upperX-lowerX)/2;
         int yMap = peak-1;
-        hvGfxBox(hvg, xMap, peak-1, 1, 3, peakColor);
+        hvGfxBox(hvg, xMap-1, peak-1, 3, 3, peakColor);
         hvGfxBox(hvg, xMap, peak, 1, 1, MG_WHITE);
-        mapBoxHgcOrHgGene(hvg, chromStart, chromEnd, xMap-1, yMap, 3, 3,
+        mapBoxHgcOrHgGene(hvg, chromStart, chromEnd, xMap-1, yMap-1, 3, 3,
                            tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
         continue;
         }
@@ -430,9 +433,9 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         int maxY = hvGfxCurve(hvg, lowerX, yOff, peakX, peakY, upperX, yOff, color, isReversed);
         // curve drawer does not use peakY as expected, so it returns actual max Y used
         // draw map box on peak
-        hvGfxBox(hvg, peakX-1, maxY, 3, 1, peakColor);
+        hvGfxBox(hvg, peakX-1, maxY-1, 3, 3, peakColor);
         hvGfxBox(hvg, peakX, maxY, 1, 1, MG_WHITE);
-        mapBoxHgcOrHgGene(hvg, chromStart, chromEnd, peakX, maxY, 3, 1,
+        mapBoxHgcOrHgGene(hvg, chromStart, chromEnd, peakX-1, maxY-1, 3, 3,
                        tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
         }
     else if (draw == DRAW_ELLIPSE)
@@ -443,9 +446,9 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         // draw map box on peak
         int maxY = peakHeight + yOff;
         int peakX = ((upperX - lowerX + 1) / 2) + lowerX;
-        hvGfxBox(hvg, peakX-1, maxY, 3, 1, peakColor);
+        hvGfxBox(hvg, peakX-1, maxY-1, 3, 3, peakColor);
         hvGfxBox(hvg, peakX, maxY, 1, 1, MG_WHITE);
-        mapBoxHgcOrHgGene(hvg, chromStart, chromEnd, peakX, maxY, 3, 1,
+        mapBoxHgcOrHgGene(hvg, chromStart, chromEnd, peakX-1, maxY-1, 3, 3,
                        tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
         }
     }
