@@ -651,6 +651,10 @@ maxSeqCount = 200;
 #else
 maxSeqCount = 25;
 #endif
+char *optionMaxSeqCount = cfgOptionDefault("hgBlat.maxSequenceCount", NULL);
+
+if (isNotEmpty(optionMaxSeqCount))
+   maxSeqCount = sqlSigned(optionMaxSeqCount);
 
 /* Create temporary file to store sequence. */
 trashDirFile(&faTn, "hgSs", "hgSs", ".fa");
@@ -701,8 +705,8 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	hgBotDelayFrac(0.5);
     if (++seqCount > maxSeqCount)
         {
-	warn("More than 25 input sequences, stopping at %s.",
-	    seq->name);
+	warn("More than %d input sequences, stopping at %s<br>(see also: cgi-bin/hg.conf hgBlat.maxSequenceCount setting).",
+	    maxSeqCount, seq->name);
 	break;
 	}
     if (oneSize > maxSingleSize)
