@@ -822,6 +822,14 @@ ambMex1.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaF
     make etc-update
     make install-server
 
+    # add ambMex1 to:
+    #   etc/align.dbs etc/hgwdev.dbs
+    git commit -m 'adding ambMex1/axolotl refs #21715' \
+	etc/align.dbs etc/hgwdev.dbs
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
     # XXX a few days later the genbank tables will be in the database
 
 ##############################################################################
