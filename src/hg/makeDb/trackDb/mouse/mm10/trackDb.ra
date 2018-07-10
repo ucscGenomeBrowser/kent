@@ -1,7 +1,7 @@
 
 include ../../refSeqComposite.ra
 
-include ../../crispr10K.ra alpha,beta
+include ../../crispr10K.ra
 
 # chainNet tracks
 include trackDb.gliresChainNet.ra
