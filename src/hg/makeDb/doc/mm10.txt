@@ -17276,3 +17276,86 @@ TMPDIR=/dev/shm
     # list of tables for the push request.
 
 ##############################################################################
+# LASTZ mouse/mm10 Axolotl/ambMex1 - (DONE - 2018-07-09 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzAmbMex1.2018-07-09
+    cd /hive/data/genomes/mm10/bed/lastzAmbMex1.2018-07-09
+
+    printf '# mouse vs Axolotl
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_M=254
+# default BLASTZ_Q score matrix:
+#       A     C     G     T
+# A    91  -114   -31  -123
+# C  -114   100  -125   -31
+# G   -31  -125   100  -114
+# T  -123   -31  -114    91
+
+# TARGET: mouse mm10
+SEQ1_DIR=/hive/data/genomes/mm10/mm10.2bit
+SEQ1_LEN=/hive/data/genomes/mm10/chrom.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=2
+SEQ1_LAP=10000
+
+# QUERY: Axolotl ambMex1
+SEQ2_DIR=/hive/data/genomes/ambMex1/ambMex1.2bit
+SEQ2_LEN=/hive/data/genomes/ambMex1/chrom.sizes
+SEQ2_CHUNK=80000000
+SEQ2_LIMIT=800
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzAmbMex1.2018-07-09
+TMPDIR=/dev/shm
+' > DEF
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1 &
+    # real    881m7.910s
+
+    cat fb.mm10.chainAmbMex1Link.txt
+    # 52143617 bases of 2652783500 (1.966%) in intersection
+
+    cat fb.mm10.chainSynAmbMex1Link.txt
+    # 2686570 bases of 2652783500 (0.101%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` mm10 ambMex1) > rbest.log 2>&1 &
+    # real    478m39.331s
+
+    # something odd went haywire at the download step
+    time (doRecipBest.pl -load -continue=download -workhorse=hgwdev -buildDir=`pwd` mm10 ambMex1) > download.log 2>&1 &
+    # real    1m42.883s
+
+    cat fb.mm10.chainRBest.AmbMex1.txt
+    # 36938030 bases of 2652783500 (1.392%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/ambMex1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/ambMex1/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/mm10/bed/lastzAmbMex1.2018-07-09/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1 &
+    #  real    39m28.757s
+
+    cat fb.ambMex1.chainMm10Link.txt
+    # 87124587 bases of 28366694468 (0.307%) in intersection
+
+    cat fb.ambMex1.chainSynMm10Link.txt
+    # 2893381 bases of 28366694468 (0.010%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` ambMex1 mm10) > rbest.log 2>&1 &
+    # real    568m10.621s
+
+    # something odd went haywire at the download step
+    time (doRecipBest.pl -load -continue=download -workhorse=hgwdev -buildDir=`pwd` ambMex1 mm10) > download.log 2>&1 &
+    # real    3m16.404s
+
+    cat fb.ambMex1.chainRBest.Mm10.txt
+    # 38584422 bases of 28366694468 (0.136%) in intersection
+
+##############################################################################
