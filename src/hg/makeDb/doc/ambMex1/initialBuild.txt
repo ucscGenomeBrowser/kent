@@ -711,9 +711,8 @@ runWM.sh $(path1)
     cat fb.hg38.chainSynAmbMex1Link.txt
     # 3343407 bases of 3049335806 (0.110%) in intersection
 
-XXX - running - Mon Jul  9 20:34:33 PDT 2018
     cat fb.hg38.chainRBest.AmbMex1.txt
-    # 1443423443 bases of 3049335806 (47.336%) in intersection
+    # 37383183 bases of 3049335806 (1.226%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/ambMex1/bed/blastz.hg38.swap
@@ -733,42 +732,51 @@ XXX - running - Mon Jul  9 20:34:33 PDT 2018
     # 3456707 bases of 28366694468 (0.012%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` ambMex1 hg38) > rbest.log 2>&1 &
-XXX - running - Mon Jul  9 22:31:53 PDT 2018
-    # real    422m43.817s
+    #  real    555m51.873s
 
     cat fb.ambMex1.chainRBest.Hg38.txt
-    # 1443200492 bases of 2286657046 (63.114%) in intersection
+    # 38573370 bases of 28366694468 (0.136%) in intersection
 
 #############################################################################
-# lastz/chain/net swap from mm10 (TBD - 2018-03-16 - Hiram)
-    # alignment on mm10
+# lastz/chain/net swap from mm10 (DONE - 2018-06-10 - Hiram)
 
-    cd /hive/data/genomes/mm10/bed/lastzAmbMex1.2017-09-25
+    # alignment to mm10
+    cd /hive/data/genomes/mm10/bed/lastzAmbMex1.2018-07-09
     cat fb.mm10.chainAmbMex1Link.txt
-    #	827926012 bases of 2652783500 (31.210%) in intersection
-    cat fb.mm10.chainRBestAmbMex1Link.txt
-    #   788489846 bases of 2652783500 (29.723%) in intersection
+    # 52143617 bases of 2652783500 (1.966%) in intersection
 
+    cat fb.mm10.chainSynAmbMex1Link.txt
+    # 2686570 bases of 2652783500 (0.101%) in intersection
+
+    cat fb.mm10.chainRBest.AmbMex1.txt
+    # 36938030 bases of 2652783500 (1.392%) in intersection
+
+    # and for the swap:
     mkdir /hive/data/genomes/ambMex1/bed/blastz.mm10.swap
     cd /hive/data/genomes/ambMex1/bed/blastz.mm10.swap
+
     time (doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/mm10/bed/lastzAmbMex1.2017-09-25/DEF \
-	-swap -syntenicNet \
-	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
-    #	real    59m27.809s
+      /hive/data/genomes/mm10/bed/lastzAmbMex1.2018-07-09/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1 &
+    #  real    39m28.757s
 
     cat fb.ambMex1.chainMm10Link.txt
-    #	804021579 bases of 2400839308 (33.489%) in intersection
+    # 87124587 bases of 28366694468 (0.307%) in intersection
+
     cat fb.ambMex1.chainSynMm10Link.txt
-    #   776155245 bases of 2400839308 (32.328%) in intersection
+    # 2893381 bases of 28366694468 (0.010%) in intersection
 
-    time (doRecipBest.pl -load -workhorse=hgwdev ambMex1 mm10 \
-      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
-    # real    242m31.157s
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` ambMex1 mm10) > rbest.log 2>&1 &
+    # real    568m10.621s
 
-    cat fb.ambMex1.chainRBestMm10Link.txt
-    # 787537751 bases of 2400839308 (32.803%) in intersection
+    # something odd went haywire at the download step
+    time (doRecipBest.pl -load -continue=download -workhorse=hgwdev -buildDir=`pwd` ambMex1 mm10) > download.log 2>&1 &
+    # real    3m16.404s
+
+    cat fb.ambMex1.chainRBest.Mm10.txt
+    # 38584422 bases of 28366694468 (0.136%) in intersection
 
 ##############################################################################
 # GENBANK AUTO UPDATE (DONE - 2018-07-10 - Hiram)
