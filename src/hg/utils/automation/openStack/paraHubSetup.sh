@@ -61,6 +61,30 @@ if [ -s "${homeDir}/.bashrc" ]; then
   printf "set -o vi\n" >> "${homeDir}/.bashrc"
   printf "set background=dark\n" >> "${homeDir}/.vimrc"
 
+  # setup NFS exports
+  export privateIp=`ifconfig -a | grep broadcast | head -1 | awk '{print $2}'`
+  export subNet=`ifconfig -a | grep broadcast | head -1 | awk '{print $2}' | awk -F'.' '{printf "%s.%s.%s.0", $1,$2,$3}'`
+
+  # special case OpenStack /mnt setups (temporary work around for difficulties)
+  if [ "${nativeUser}" = "centos" ]; then
+    umount /mnt >> "${logFile}" 2>&1
+    parted -s /dev/vdb mklabel gpt >> "${logFile}" 2>&1
+    parted -s /dev/vdb mkpart primary 2048s 100% >> "${logFile}" 2>&1
+    mkfs -t xfs /dev/vdb1 >> "${logFile}" 2>&1
+    sed --in-place=.bak -e 's#/dev/vdb#/dev/vdb1#; s/auto/xfs/;' /etc/fstab >> "${logFile}" 2>&1
+    mount /mnt
+    printf "/mnt/data    ${subNet}/24(rw)\n" >> /etc/exports
+    mkdir /mnt/data
+    chmod 777 /mnt/data
+    rsync -a /data/ /mnt/data/
+    rmdir /data
+    ln -s /mnt/data /data
+  else
+    printf "/data    ${subNet}/24(rw)\n" > /etc/exports
+  fi
+
+  exportfs -a >> "${logFile}" 2>&1
+
   # install the wget command right away so the wgets can get done
   yum -y install wget >> "${logFile}" 2>&1
   # and the kent command line utilities into /data/bin/
@@ -112,24 +136,6 @@ if [ -s "${homeDir}/.bashrc" ]; then
       --exclude='kent/src/hg/utils/automation/openStack' >> "${logFile}" 2>&1
 
   chown -R ${nativeUser}:${nativeUser} /data/scripts >> "${logFile}" 2>&1
-
-  # setup NFS exports
-  export privateIp=`ifconfig -a | grep broadcast | head -1 | awk '{print $2}'`
-  export subNet=`ifconfig -a | grep broadcast | head -1 | awk '{print $2}' | awk -F'.' '{printf "%s.%s.%s.0", $1,$2,$3}'`
-  printf "/data    ${subNet}/24(rw)\n" > /etc/exports
-
-  # special case OpenStack /mnt setups (temporary work around for difficulties)
-  if [ "${nativeUser}" = "centos" ]; then
-    umount /mnt >> "${logFile}" 2>&1
-    parted -s /dev/vdb mklabel gpt >> "${logFile}" 2>&1
-    parted -s /dev/vdb mkpart primary 2048s 100% >> "${logFile}" 2>&1
-    mkfs -t xfs /dev/vdb1 >> "${logFile}" 2>&1
-    sed --in-place=.bak -e 's#/dev/vdb#/dev/vdb1#; s/auto/xfs/;' /etc/fstab >> "${logFile}" 2>&1
-    mount /mnt
-    printf "/mnt    ${subNet}/24(rw)\n" >> /etc/exports
-  fi
-
-  exportfs -a >> "${logFile}" 2>&1
 
   export endTime=`date "+%s"`
   export et=`echo $endTime $startTime | awk '{printf "%d", $1-$2}'`
