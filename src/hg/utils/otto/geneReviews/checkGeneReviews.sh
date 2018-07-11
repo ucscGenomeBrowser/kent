@@ -30,7 +30,7 @@ if [ ! -d "${WORKDIR}" ]; then
 fi
 
 cd "${WORKDIR}"
-wget --timestamping ftp://ftp.ncbi.nih.gov/pub/GeneReviews/*.txt
+wget -q --timestamping ftp://ftp.ncbi.nih.gov/pub/GeneReviews/*.txt
 chmod 660 *.txt
 if test NBKid_shortname_genesymbol.txt -nt lastUpdate
 then
