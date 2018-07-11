@@ -8,11 +8,39 @@ Nucleotide Polymorphisms &mdash; from
 <A HREF="https://www.ncbi.nlm.nih.gov/SNP/" target=_blank>dbSNP</A>
 build 150, available from
 <A HREF="ftp://ftp.ncbi.nlm.nih.gov/snp/organisms" target=_blank>ftp.ncbi.nlm.nih.gov/snp</A>.
-Only SNPs that have a minor allele frequency of at least 1% and
+Only SNPs that have a minor allele frequency (MAF) of at least 1% and
 are mapped to a single location in the reference genome assembly are
 included in this subset.  Frequency data are not available for all SNPs,
 so this subset is incomplete.
-</P>
+Allele counts from all submissions that include frequency data are combined
+when determining MAF, so for example the allele counts from
+the 1000 Genomes Project and an independent submitter may be combined for the
+same variant.
+</p>
+<p>
+dbSNP provides
+<a href="ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606/VCF/"
+target=_blank>download files</a>
+in the
+<a href="https://samtools.github.io/hts-specs/VCFv4.1.pdf"
+target=_blank>Variant Call Format (VCF)</a>
+that include a "COMMON" flag in the INFO column.  That is determined by a different method,
+and is generally a superset of the UCSC Common set.
+dbSNP uses frequency data from the
+<a href="http://www.internationalgenome.org/" target=_blank>1000 Genomes Project</a>
+only, and considers a variant COMMON if it has a MAF of at least 0.01 in any of the five
+super-populations:
+<ul>
+  <li>African (AFR)</li>
+  <li>Admixed American (AMR)</li>
+  <li>East Asian (EAS)</li>
+  <li>European (EUR)</li>
+  <li>South Asian (SAS)</li>
+</ul>
+In build 151 (which has replaced build 150 on the dbSNP web and download site),
+dbSNP marks approximately 38M variants as COMMON; 23M of those have a
+global MAF < 0.01.  The remainder should be in agreement with UCSC's Common subset.
+</p>
 <P>
 The selection of SNPs with a minor allele frequency of 1% or greater
 is an attempt to identify variants that appear to be reasonably common

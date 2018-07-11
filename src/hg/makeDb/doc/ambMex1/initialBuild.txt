@@ -55,8 +55,6 @@ cd ~/kent/src/hg/makeDb/doc/ambMex1
 
 sed -e 's/neoSch1/ambMex1/g; s/NeoSch1/AmbMex1/g; s/DONE/TBD/g;' ../neoSch1/initialBuild.txt
 
-sed -e 's/panTro6/equCab3/g; s/PanTro6/EquCab3/g; s/DONE/TBD/g;' ../panTro6/initialBuild.txt > initialBuild.txt
-
 #############################################################################
 # fetch sequence from new style download directory (DONE - 2018-07-05 - Hiram)
     mkdir -p /hive/data/genomes/ambMex1/genbank
@@ -219,27 +217,21 @@ taxId 8296
     time (~/kent/src/hg/utils/automation/makeGenomeDb.pl -workhorse=hgwdev \
        -dbHost=hgwdev -fileServer=hgwdev -continue=db \
            ambMex1.config.ra ) > db.log 2>&1
-XXX - running - Fri Jul  6 12:57:07 PDT 2018
-    # real    18m51.114s
-
-    # incorrect name on the photo file, continuing:
-    time (makeGenomeDb.pl -workhorse=hgwdev \
-       -dbHost=hgwdev -fileServer=hgwdev -continue=trackDb \
-           ambMex1.config.ra ) > trackDb.log 2>&1
-    # real    0m7.484s
+    # real    222m22.739s
 
     # check in the trackDb files created and add to trackDb/makefile
     # temporary symlink until after masking
     ln -s `pwd`/ambMex1.unmasked.2bit /gbdb/ambMex1/ambMex1.2bit
 
 #############################################################################
-# cytoBandIdeo - (TBD - 2017-09-22 - Hiram)
+# cytoBandIdeo - (DONE - 2018-07-06 - Hiram)
     mkdir /hive/data/genomes/ambMex1/bed/cytoBand
     cd /hive/data/genomes/ambMex1/bed/cytoBand
-    makeCytoBandIdeo.csh ambMex1
+    time makeCytoBandIdeo.csh ambMex1
+    # real    0m4.110s
 
 ##############################################################################
-# cpgIslands on UNMASKED sequence (TBD - 2017-09-22 - Hiram)
+# cpgIslands on UNMASKED sequence (DONE - 2018-07-06 - Hiram)
     mkdir /hive/data/genomes/ambMex1/bed/cpgIslandsUnmasked
     cd /hive/data/genomes/ambMex1/bed/cpgIslandsUnmasked
 
@@ -247,25 +239,26 @@ XXX - running - Fri Jul  6 12:57:07 PDT 2018
        -tableName=cpgIslandExtUnmasked \
           -maskedSeq=/hive/data/genomes/ambMex1/ambMex1.unmasked.2bit \
              -workhorse=hgwdev -smallClusterHub=ku ambMex1) > do.log 2>&1
-    # real    4m45.112s
+    # real    68m7.460s
 
     cat fb.ambMex1.cpgIslandExtUnmasked.txt
-    # 34820932 bases of 2400839308 (1.450%) in intersection
+    # 1497260787 bases of 28366694468 (5.278%) in intersection
 
 #############################################################################
-# running repeat masker (TBD - 2017-09-22 - Hiram)
+# running repeat masker (DONE - 2018-07-06 - Hiram)
     mkdir /hive/data/genomes/ambMex1/bed/repeatMasker
     cd /hive/data/genomes/ambMex1/bed/repeatMasker
     time  (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku ambMex1) > do.log 2>&1 &
-    # RepeatMasker does not recognize the name: Neomonachus schauinslandi
-
-    # try using the "Phocidae" name, the 'true seals' taxon:
-    time  (doRepeatMasker.pl -buildDir=`pwd` -species="Phocidae" \
-        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-        -smallClusterHub=ku ambMex1) > do.log 2>&1 &
-    # real    255m45.612s
+    # curiously, ran very fast ?  There are hardly any repeats in the templates
+    # used by RM
+# Completed: 71471 of 71471 jobs
+# CPU time in finished jobs:    7334652s  122244.20m  2037.40h   84.89d  0.233 y
+# IO & Wait Time:                217376s    3622.93m    60.38h    2.52d  0.007 y
+# Average job time:                 106s       1.76m     0.03h    0.00d
+# Longest finished job:             512s       8.53m     0.14h    0.01d
+# Submission to last job:         11477s     191.28m     3.19h    0.13d
 
     cat faSize.rmsk.txt
 # 2400839308 bases (53716773 N's 2347122535 real 1331243472 upper
@@ -294,37 +287,43 @@ XXX - running - Fri Jul  6 12:57:07 PDT 2018
     # real    0m36.665s
 
 ##########################################################################
-# running simple repeat (TBD - 2017-09-22 - Hiram)
+# running simple repeat (DONE - 2018-07-06 - Hiram)
 
     mkdir /hive/data/genomes/ambMex1/bed/simpleRepeat
     cd /hive/data/genomes/ambMex1/bed/simpleRepeat
     time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
         -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
         -trf409=5 ambMex1) > do.log 2>&1 &
-    # real    7m57.685s
+    # real    26m16.578s
 
     cat fb.simpleRepeat
-    # 26133283 bases of 2400839308 (1.089%) in intersection
+    # 1399128075 bases of 28366694468 (4.932%) in intersection
 
-    # add to this simple repeat to rmsk:
+    # add to this simple repeat to windowMasker:
     cd /hive/data/genomes/ambMex1
-    twoBitMask ambMex1.rmsk.2bit \
-        -add bed/simpleRepeat/trfMask.bed ambMex1.2bit
-    #   you can safely ignore the warning about fields >= 13
+    /cluster/home/hiram/kent/src/hg/utils/twoBitMask/twoBitMask -add \
+       bed/windowMasker/splitFa/ambMex1.cleanWMSdust.2bit \
+          bed/simpleRepeat/trfMask.bed ambMex1.2bit
+
     twoBitToFa ambMex1.2bit stdout | faSize stdin > faSize.ambMex1.2bit.txt
+
+    # real    9m59.223s
+
     cat faSize.ambMex1.2bit.txt
-# 2400839308 bases (53716773 N's 2347122535 real 1330493216 upper
-#	1016629319 lower) in 7872 sequences in 1 files
-# Total size: mean 304984.7 sd 3152710.5 min 1000 (NW_018732762v1)
-#	max 84771923 (NW_018734349v1) median 1998
-# %42.34 masked total, %43.31 masked real
+    egrep "bases|Total|masked" faSize.ambMex1.2bit.txt \
+	| fold -w 75 -s  | sed -e 's/^/# /;'
+# 32393605577 bases (4026911109 N's 28366694468 real 18209209746 upper 
+# 10157484722 lower) in 125724 sequences in 1 files
+# Total size: mean 257656.5 sd 973486.9 min 1033 (PGSH01113832v1) max 
+# 21669615 (PGSH01077959v1) median 47471
+# %31.36 masked total, %35.81 masked real
 
     # reset symlink
     rm /gbdb/ambMex1/ambMex1.2bit
     ln -s `pwd`/ambMex1.2bit /gbdb/ambMex1/ambMex1.2bit
 
 #############################################################################
-# CREATE MICROSAT TRACK (TBD - 2017-09-22 - Hiram)
+# CREATE MICROSAT TRACK (DONE - 2018-07-08 - Hiram)
     ssh hgwdev
     mkdir /cluster/data/ambMex1/bed/microsat
     cd /cluster/data/ambMex1/bed/microsat
@@ -333,161 +332,105 @@ XXX - running - Fri Jul  6 12:57:07 PDT 2018
        ../simpleRepeat/simpleRepeat.bed > microsat.bed
 
     hgLoadBed ambMex1 microsat microsat.bed
-    # Read 23191 elements of size 4 from microsat.bed
+    # Read 56937 elements of size 4 from microsat.bed
 
 #############################################################################
-# ucscToINSDC table/track (TBD - 2017-09-22 - Hiram)
-    # the sequence here is working for a 'refseq' assembly with a chrM
-    # situation may be specific depending upon what is available in the assembly
+# ucscToINSDC table/track (DONE - 2018-07-10 - Hiram)
+    # this is simple since there isn't any RefSeq assembly, and the
+    # names used here are different from INSDC only due to the .1 -> v1 switch
 
-    # refseq assembly came out after we ran this up.  Compute it ids:
-    mkdir /hive/data/genomes/ambMex1/refseq
-    cd /hive/data/genomes/ambMex1/refseq
-    time rsync -L -a -P \
-rsync://ftp.ncbi.nlm.nih.gov/genomes/refseq/vertebrate_mammalian/Neomonachus_schauinslandi/all_assembly_versions/GCF_002201575.1_ASM220157v1/ ./
-   # sent 631 bytes  received 2674936273 bytes  25597482.33 bytes/sec
-   # total size is 2674606651  speedup is 1.00
-   # real    1m44.075s
-
-    mkdir /hive/data/genomes/ambMex1/refseq/idKeys
-    cd /hive/data/genomes/ambMex1/refseq/idKeys
-
-    faToTwoBit ../GCF_002201575.1_ASM220157v1_genomic.fna.gz refseq.ambMex1.2bit
-    time (doIdKeys.pl -twoBit=`pwd`/refseq.ambMex1.2bit -buildDir=`pwd` \
-	refseqAmbMex1) > do.log 2>&1
-    # real    12m15.428s
-    cat refseqAmbMex1.keySignature.txt
-    # 693347c3f7f03f2fde19c607fe7bb4ad
-
-    mkdir /hive/data/genomes/ambMex1/bed/ucscToINSDC
     cd /hive/data/genomes/ambMex1/bed/ucscToINSDC
 
-    # find accession for chrM
-    grep chrM ../../ambMex1.agp
-# chrM    1       16754   1       O       NC_008421.1     1       16754   +
+    cut -f1 ../../chrom.sizes | awk '{printf "%s\t%s\n", $1, $1};' \
+       | sed -e 's/v1/.1/;' | awk '{printf "%s\t%s\n", $2, $1}' \
+          | sort > ucsc.insdc.txt
 
-    # use that accession here:
-    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
-        ../../refseq/GCF_*structure/Primary_Assembly NC_008421.1
-    # this is actually ucscToRefSeq
-
-    # remove the duplicate contig name:
-    grep -v NW_018729921 ucscToINSDC.txt | sort -k2,2 > ucscToRefSeq.txt
-    rm -f ucscToINSDC.txt
-
-    awk '{printf "%s\t%s\n", $2, $1}' ucscToRefSeq.txt | sort > refseqToUcsc.txt
-
-    # again, remove the duplicate contig name, and substitute
-    #  the INSDC name for the mito sequence
-    grep -v "^#" ../../refseq/GCF*_assembly_report.txt | cut -f5,7 \
-      | grep -v NW_018729921 | sed -e 's/na\b/AM181022.1/;' \
-        | awk '{printf "%s\t%s\n", $2, $1}' \
-           | sort > refseq.insdc.txt
-    # the sed \b means match word
-
-    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
-         | sort > name.coordinate.tab
-
-    # the tr commands avoid the problem of trying to use the -t argument
-    # to the join command which doesn't accept -t'\t' but instead has
-    # to use the unseen/can not copy command ctrl-v i
-    join -2 2 refseq.insdc.txt ucscToRefSeq.txt | tr '[ ]' '[\t]' | sort -k3 \
-       | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-3,5 \
-           > ucscToINSDC.bed
-    join -2 2 refseq.insdc.txt ucscToRefSeq.txt | tr '[ ]' '[\t]' | sort -k3 \
-       | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-4 \
-           > ucscToRefSeq.bed
-
-    # verify chrM is correct:
-    grep chrM *.bed
-ucscToINSDC.bed:chrM    0       16754   AM181022.1
-ucscToRefSeq.bed:chrM   0       16754   NC_008421.1
-
-    # should be same line counts throughout:
-    wc -l *
-    #	7872 name.coordinate.tab
-    #	7872 refseq.insdc.txt
-    #	7872 refseqToUcsc.txt
-    #	7872 ucscToINSDC.bed
-    #	7872 ucscToRefSeq.bed
-    #	7872 ucscToRefSeq.txt
+    join -t$'\t' <(sort -k1,1 ../../chrom.sizes) ucsc.insdc.txt \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+               | sort -k1,1 -k2,2n > ucscToINSDC.bed
 
     cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
-    # 26
-    # use the 26 in this sed
-    sed -e "s/21/26/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
          | hgLoadSqlTab ambMex1 ucscToINSDC stdin ucscToINSDC.bed
-    cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1
-    sed -e "s/21/26/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
-         | hgLoadSqlTab ambMex1 ucscToRefSeq stdin ucscToRefSeq.bed
-    checkTableCoords ambMex1
+
     # should cover %100 entirely:
-    featureBits -countGaps ambMex1 ucscToINSDC
-    # 2400839308 bases of 2400839308 (100.000%) in intersection
-    featureBits -countGaps ambMex1 ucscToRefSeq
-    # 2400839308 bases of 2400839308 (100.000%) in intersection
+    time featureBits -countGaps ambMex1 ucscToINSDC
+    # 32393605577 bases of 32393605577 (100.000%) in intersection
+    # real    0m47.018s
 
 ##########################################################################
-# run up idKeys files for chromAlias (TBD - 2018-03-15 - Hiram)
+# run up idKeys files for chromAlias (DONE - 2018-07-08 - Hiram)
     mkdir /hive/data/genomes/ambMex1/bed/idKeys
     cd /hive/data/genomes/ambMex1/bed/idKeys
 
     time (doIdKeys.pl -twoBit=/hive/data/genomes/ambMex1/ambMex1.unmasked.2bit -buildDir=`pwd` ambMex1) > do.log 2>&1 &
-    # real    12m36.636s
+    # real    60m51.086s
 
     cat ambMex1.keySignature.txt
-    #   cbeabb8faa38538267584374b47d8f3b
+    #   5c21fa448b2fcbcd8249a2b5d84bf460
 
 ##########################################################################
-# add chromAlias table (TBD - 2017-09-22 - Hiram)
+# add chromAlias table (DONE - 2018-07-10 - Hiram)
 
     mkdir /hive/data/genomes/ambMex1/bed/chromAlias
     cd /hive/data/genomes/ambMex1/bed/chromAlias
 
-    hgsql -N -e 'select chrom,name,"refseq" from ucscToRefSeq;' ambMex1 \
-        > ucsc.refseq.tab
     hgsql -N -e 'select chrom,name,"genbank" from ucscToINSDC;' ambMex1 \
         > ucsc.genbank.tab
 
-    # verify chrM is correct:
-    grep chrM *
-# ucsc.genbank.tab:chrM   AM181022.1      genbank
-# ucsc.refseq.tab:chrM    NC_008421.1     refseq
+    ~/kent/src/hg/utils/automation/chromAlias.pl ucsc.*.tab \
+	> ambMex1.chromAlias.tab
 
-    awk '{printf "%s\t%s\t%s\n", $2,$1,$3}' ucsc.genbank.tab ucsc.refseq.tab \
-        | sort > ambMex1.chromAlias.tab
+for t in genbank
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t ambMex1.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking genbank: 125724 =? 125724 OK
+
 
     hgLoadSqlTab ambMex1 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
         ambMex1.chromAlias.tab
 
 #########################################################################
-# fixup search rule for assembly track/gold table (TBD - 2017-09-23 - Hiram)
+# fixup search rule for assembly track/gold table (DONE - 2018-07-10 - Hiram)
 
-    cd ~/kent/src/hg/makeDb/trackDb/seal/ambMex1
+    cd ~/kent/src/hg/makeDb/trackDb/axolotl/ambMex1
     # preview prefixes and suffixes:
     hgsql -N -e "select frag from gold;" ambMex1 \
       | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c
-      1 NC_.1
-   7871 NINY.1
+    # sample of output:
+#  114752 PGSHv1
+#   10972 PGSHv1_1
+#    8870 PGSHv1_10
+    # ... etc ...
 
-    # implies a search rule of: 'N[CI][NY0-9_]+(\.[0-9]+)?'
+PGSH
+    # implies a search rule of: 'PGSH[0-9]+(v1_[0-9]+)?'
 
     # verify this rule will find them all or eliminate them all:
     hgsql -N -e "select frag from gold;" ambMex1 | wc -l
-    # 7872
+    # 892108
 
     hgsql -N -e "select frag from gold;" ambMex1 \
-       | egrep -e 'N[CI][NY0-9_]+(\.[0-9]+)?' | wc -l
-    # 7872
+       | egrep -e 'PGSH[0-9]+(v1_[0-9]+)?' | wc -l
+    # 892108
 
     hgsql -N -e "select frag from gold;" ambMex1 \
-       | egrep -v -e 'N[CI][NY0-9_]+(\.[0-9]+)?' | wc -l
+       | egrep -v -e 'PGSH[0-9]+(v1_[0-9]+)?' | wc -l
     # 0
 
     # hence, add to trackDb/rhesus/ambMex1/trackDb.ra
 searchTable gold
 shortCircuit 1
-termRegex N[CI][NY0-9_]+(\.[0-9]+)?
+termRegex PGSH[0-9]+(v1_[0-9]+)?
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
@@ -496,35 +439,142 @@ searchPriority 8
     # verify searches work in the position box
 
 ##########################################################################
-## WINDOWMASKER (TBD - 2017-09-22 - Hiram)
+## WINDOWMASKER (DONE - 2018-07-06 - Hiram)
 
     mkdir /hive/data/genomes/ambMex1/bed/windowMasker
     cd /hive/data/genomes/ambMex1/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev ambMex1) > do.log 2>&1
-    # real    159m30.920s
+    # real    2857m15.802s
+
+    # broke down due to broken twoBitMask situation
+    # this procedure was carried out on a split setup of sequences
+    mkdir  /hive/data/genomes/ambMex1/bed/windowMasker/splitFa
+    cd  /hive/data/genomes/ambMex1/bed/windowMasker/splitFa
+    # generate lists of contigs up to 2Gb in size
+    ~/kent/src/hg/makeDb/doc/ambMex1/twoGbChunks.pl
+    # turning to fasta done in a small cluster job on hgwdev
+    printf '#!/bin/bash
+# input is one of chunkN.list
+export c=$1
+export chunk=`echo $c | sed -e 's/.list//;'`
+
+fa="$chunk/$chunk.fa.gz"
+mkdir -p $chunk
+# echo $c $fa
+faSomeRecords ambMex1.fa $c stdout | gzip -c > ${fa}
+' > mkChunkFa.sh
+    chmod +x mkChunkFa.sh
+
+    printf '#LOOP
+./mkChunkFa.sh $(path1)
+#ENDLOOP
+' > split.template
+    ls chunk*.list > run.list
+    gensub2 run.list single split.template jobList
+    para create jobList
+    para push
+    cat run.time
+# Completed: 16 of 16 jobs
+# CPU time in finished jobs:      11256s     187.59m     3.13h    0.13d  0.000 y
+# IO & Wait Time:                     0s       0.00m     0.00h    0.00d  0.000 y
+# Average job time:                 679s      11.31m     0.19h    0.01d
+# Longest finished job:             790s      13.17m     0.22h    0.01d
+# Submission to last job:           795s      13.25m     0.22h    0.01d
+    # then turn those fasta into 2bit files:
+    ls -d chunk[0-9] chunk1[0-9] | while read D
+do
+  ls -ld ${D}/*.fa.gz
+  echo faToTwoBit ${D}/${D}.fa.gz ${D}/${D}.2bit
+  faToTwoBit ${D}/${D}.fa.gz ${D}/${D}.2bit &
+done
+wait
+    #  Then, a second batch to run WM on each chunk
+    printf '#!/bin/bash
+
+set -beEu -o pipefail
+
+export chunk=$1
+
+cd /hive/data/genomes/ambMex1/bed/windowMasker/splitFa/${chunk}
+time (doWindowMasker.pl -buildDir=`pwd` -unmaskedSeq=`pwd`/${chunk}.2bit \
+   -stop=twobit -workhorse=hgwdev ambMex1) > do.log 2>&1
+' > runWM.sh
+    chmod +x runWM.sh
+
+    printf '#LOOP
+runWM.sh $(path1)
+#ENDLOOP
+' > wm.template
+
+    ls -d chunk[0-9] chunk1[0-9] > sm.list
+    gensub2 wm.list single wm.template wm.jobList
+    para create jobList
+    para push
+# Completed: 16 of 16 jobs
+# CPU time in finished jobs:          3s       0.04m     0.00h    0.00d  0.000 y
+# IO & Wait Time:                173439s    2890.66m    48.18h    2.01d  0.005 y
+# Average job time:               10840s     180.67m     3.01h    0.13d
+# Longest finished job:           13596s     226.60m     3.78h    0.16d
+# Submission to last job:         13601s     226.68m     3.78h    0.16d
+
+    # all results together:
+    cat chunk*/*.sdust.bed > /dev/shm/ambMex1.sdust.bed
+    $HOME/bin/x86_64/gnusort -S100G --parallel=32 -k1,1 -k2,2n \
+         /dev/shm/ambMex1.sdust.bed > ambMex1.windowmasker.sdust.bed
+
+    # temporary fixed twoBitMask
+    /cluster/home/hiram/kent/src/hg/utils/twoBitMask/twoBitMask \
+        /hive/data/genomes/ambMex1/ambMex1.unmasked.2bit \
+            ambMex1.windowmasker.sdust.bed ambMex1.wmsk.sdust.2bit
+    twoBitToFa ambMex1.wmsk.sdust.2bit stdout | faSize stdin \
+        > faSize.ambMex1.wmsk.sdust.txt 2>&1
 
     # Masking statistics
     cat faSize.ambMex1.cleanWMSdust.txt
-# 2400839308 bases (53716773 N's 2347122535 real 1552520352 upper
-#	794602183 lower) in 7872 sequences in 1 files
-# Total size: mean 304984.7 sd 3152710.5 min 1000 (NW_018732762v1)
-#	max 84771923 (NW_018734349v1) median 1998
-# %33.10 masked total, %33.85 masked real
+# 32393605577 bases (4026911109 N's 28366694468 real 18214135230
+#	upper 10152559238 lower) in 125724 sequences in 1 files
+# Total size: mean 257656.5 sd 973486.9 min 1033 (PGSH01113832v1)
+#	max 21669615 (PGSH01077959v1) median 47471
+# %31.34 masked total, %35.79 masked real
 
+    hgLoadBed ambMex1 windowmaskerSdust ambMex1.windowmasker.sdust.bed
+    featureBits -countGaps ambMex1 windowmaskerSdust \
+	> fb.ambMex1.windowmaskerSdust.beforeClean.txt 2>&1
+    featureBits ambMex1 -not gap -bed=notGap.bed
+    featureBits ambMex1 windowmaskerSdust notGap.bed -bed=stdout \
+	| gzip -c > cleanWMask.bed.gz
+    hgLoadBed ambMex1 windowmaskerSdust cleanWMask.bed.gz
+    featureBits -countGaps ambMex1 windowmaskerSdust \
+	> fb.ambMex1.windowmaskerSdust.clean.txt 2>&1
+
+    zcat cleanWMask.bed.gz \
+	| /cluster/home/hiram/kent/src/hg/utils/twoBitMask/twoBitMask \
+	    /hive/data/genomes/ambMex1/ambMex1.unmasked.2bit stdin \
+		-type=.bed ambMex1.cleanWMSdust.2bit
+
+    twoBitToFa ambMex1.cleanWMSdust.2bit stdout \
+	| faSize stdin > faSize.ambMex1.cleanWMSdust.txt 2>&1
+    featureBits -countGaps ambMex1 rmsk windowmaskerSdust \
+	> fb.ambMex1.rmsk.windowmaskerSdust.txt 2>&1
+
+    cat fb.ambMex1.windowmaskerSdust.clean.txt
+    # 10152559238 bases of 32393605577 (31.341%) in intersection
+
+    # rmsk is so sparse, it doesn't even overlap any of this
     cat fb.ambMex1.rmsk.windowmaskerSdust.txt
-    # 545954348 bases of 2400839308 (22.740%) in intersection
+    # 0 bases of 32393605577 (0.000%) in intersection
 
 ##########################################################################
-# cpgIslands - (TBD - 2017-09-25 - Hiram)
+# cpgIslands - (DONE - 2018-07-08 - Hiram)
     mkdir /hive/data/genomes/ambMex1/bed/cpgIslands
     cd /hive/data/genomes/ambMex1/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku ambMex1) > do.log 2>&1
-    # real    4m51.761s
+    # real    100m4.369s
 
     cat fb.ambMex1.cpgIslandExt.txt
-    # 30655113 bases of 2400839308 (1.277%) in intersection
+    # 352400331 bases of 28366694468 (1.242%) in intersection
 
 ##############################################################################
 # ncbiRefSeq gene track (TBD - 2018-03-15 - Hiram)
@@ -542,46 +592,52 @@ searchPriority 8
     # 45781082 bases of 2400839308 (1.907%) in intersection
 
 ##############################################################################
-# genscan - (TBD - 2017-09-25 - Hiram)
+# genscan - (DONE - 2018-07-08 - Hiram)
     mkdir /hive/data/genomes/ambMex1/bed/genscan
     cd /hive/data/genomes/ambMex1/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku ambMex1) > do.log 2>&1
-    # five were broken at window size of 2400000, they all worked at 2000000
-    # real    18m8.224s
+    # fifty-six were broken at window size of 2400000,
+    #     they all worked at 2000000
+    # real    162m46.438s
 
     # continuing:
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -continue=makeBed -bigClusterHub=ku ambMex1) > makeBed.log 2>&1
-    # real    1m43.328s
+    # real    75m28.038s
 
     cat fb.ambMex1.genscan.txt
-    #   53956919 bases of 2400839308 (2.247%) in intersection
+    #   896393757 bases of 28366694468 (3.160%) in intersection
 
     cat fb.ambMex1.genscanSubopt.txt
-    #   50754244 bases of 2400839308 (2.114%) in intersection
+    #   978384685 bases of 28366694468 (3.449%) in intersection
 
 #############################################################################
-# augustus gene track (TBD - 2017-09-25 - Hiram)
+# augustus gene track (DONE - 2018-07-08 - Hiram)
 
     mkdir /hive/data/genomes/ambMex1/bed/augustus
     cd /hive/data/genomes/ambMex1/bed/augustus
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
-        -species=human -dbHost=hgwdev \
+        -species=zebrafish -dbHost=hgwdev \
            -workhorse=hgwdev ambMex1) > do.log 2>&1
-    # real    207m34.747s
+    # real    443m58.621s
+
+    # continuing after removing some broken items:
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=zebrafish -dbHost=hgwdev \
+           -continue=load -workhorse=hgwdev ambMex1) > load.log 2>&1
 
     cat fb.ambMex1.augustusGene.txt
-    # 47279177 bases of 2400839308 (1.969%) in intersection
+    # 828245083 bases of 28366694468 (2.920%) in intersection
 
 #############################################################################
-# Create kluster run files (TBD - 2017-09-25 - Hiram)
+# Create kluster run files (DONE - 2018-07-10 - Hiram)
 
     # obtain 'real' numbers of this assembly:
     cd /hive/data/genomes/ambMex1
     head -1 faSize.ambMex1.2bit.txt
-# 2400839308 bases (53716773 N's 2347122535 real 1330493216 upper
-#	1016629319 lower) in 7872 sequences in 1 files
+# 32393605577 bases (4026911109 N's 28366694468 real 18209209746 upper
+#	10157484722 lower) in 125724 sequences in 1 files
 
     # numerator is ambMex1 gapless bases "real"
 
@@ -589,64 +645,101 @@ searchPriority 8
     #   featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 2347122535 / 2861349177 \) \* 1024
-    # ( 2347122535 / 2861349177 ) * 1024 = 839.972100
+    calc \( 28366694468 / 2861349177 \) \* 1024
+    # ( 28366694468 / 2861349177 ) * 1024 = 10151.677876
 
-    # ==> use -repMatch=800 according to size scaled down from 1024 for human.
+    # tried repMatch=10000, but it didn't make many
+    # ==> use -repMatch=10000 according to size scaled down from 1024 for human.
     #   and rounded down to nearest 100
     cd /hive/data/genomes/ambMex1
     time blat ambMex1.2bit \
          /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/ambMex1.11.ooc \
-        -repMatch=800
-    #   Wrote 30552 overused 11-mers to jkStuff/ambMex1.11.ooc
-    #	real    0m42.284s
+        -repMatch=10000
+    # Wrote 6435 overused 11-mers to jkStuff/ambMex1.11.ooc
+    # real    9m44.626s
 
-    #	there are no non-bridged gaps
+    # at repMatch=1000 it makes many more:
+    # Wrote 1885128 overused 11-mers to jkStuff/ambMex1.11.ooc
+
+    # at repMatch=2000
+    # real    9m18.200s
+    # Wrote 740741 overused 11-mers to jkStuff/ambMex1.11.ooc
+
+    # at repMatch=4000
+    # Wrote 125201 overused 11-mers to jkStuff/ambMex1.11.ooc
+    # real    8m38.816s
+
+    # going to use 3000 since this makes about 10X more than in human
+    # at repMatch=3000
+    # Wrote 286064 overused 11-mers to jkStuff/ambMex1.11.ooc
+    # real    9m7.973s
+
+    #	there are no non-bridged gaps since these are all fake gaps,
+    #   However, there are near 100,000 gaps over 10,000 bases,
+    # going to use those gaps as 'non-bridged' gaps
+    # Size survey:
+    hgsql -N -e 'select size from gap;' ambMex1 | ave stdin
+# Q1 1701.000000
+# median 3331.000000
+# Q3 6422.000000
+# average 5254.430036
+# min 1.000000
+# max 289789.000000
+# count 766384
+# total 4026911109.000000
+
     #   check non-bridged gaps to see what the typical size is:
 #     hgsql -N \
 #         -e 'select * from gap where bridge="no" order by size;' ambMex1 \
 #         | sort -k7,7nr
-    #   minimum size is 50000
+    #   minimum size is 10000, added allowBridged option to allow this
+     ~/kent/src/hg/utils/gapToLift/gapToLift -allowBridged -verbose=2 \
+	-minGap=10000 ambMex1 \
+ 	jkStuff/ambMex1.10Kgaps.lft -bedFile=jkStuff/ambMex1.10Kgaps.bed
+
 #     gapToLift -verbose=2 -minGap=50000 ambMex1 \
 # 	jkStuff/ambMex1.nonBridged.lft -bedFile=jkStuff/ambMex1.nonBridged.bed
 
 #########################################################################
-# lastz/chain/net swap from hg38 (TBD - 2018-03-16 - Hiram)
-    # alignment to hg38
+# lastz/chain/net swap from hg38 (DONE - 2018-08-09 - Hiram)
 
-    cd /hive/data/genomes/hg38/bed/lastzAmbMex1.2017-09-25
-
+    # alignment to hg38:
+    cd /hive/data/genomes/hg38/bed/lastzAmbMex1.2018-07-09
     cat fb.hg38.chainAmbMex1Link.txt
-    # 1586260720 bases of 3049335806 (52.020%) in intersection
+    # 54520910 bases of 3049335806 (1.788%) in intersection
+
     cat fb.hg38.chainSynAmbMex1Link.txt
-    # 1515015853 bases of 3049335806 (49.683%) in intersection
-    cat fb.hg38.chainRBestAmbMex1Link.txt
-    # 1455520429 bases of 3049335806 (47.732%) in intersection
+    # 3343407 bases of 3049335806 (0.110%) in intersection
+
+XXX - running - Mon Jul  9 20:34:33 PDT 2018
+    cat fb.hg38.chainRBest.AmbMex1.txt
+    # 1443423443 bases of 3049335806 (47.336%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/ambMex1/bed/blastz.hg38.swap
     cd /hive/data/genomes/ambMex1/bed/blastz.hg38.swap
 
     time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/hg38/bed/lastzAmbMex1.2017-09-25/DEF \
-        -swap -chainMinScore=3000 -chainLinearGap=medium \
+      /hive/data/genomes/hg38/bed/lastzAmbMex1.2018-07-09/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-            -syntenicNet) > swap.log 2>&1
-    #  real    108m21.523s
+            -syntenicNet) > swap.log 2>&1 &
+    #  real    105m38.443s
 
     cat fb.ambMex1.chainHg38Link.txt
-    # 1483929997 bases of 2400839308 (61.809%) in intersection
+    # 59846443 bases of 28366694468 (0.211%) in intersection
+
     cat fb.ambMex1.chainSynHg38Link.txt
-    # 1446564285 bases of 2400839308 (60.252%) in intersection
+    # 3456707 bases of 28366694468 (0.012%) in intersection
 
-    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` ambMex1 hg38) \
-        > rbest.log 2>&1
-    # real    404m14.530s
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` ambMex1 hg38) > rbest.log 2>&1 &
+XXX - running - Mon Jul  9 22:31:53 PDT 2018
+    # real    422m43.817s
 
-    cat fb.ambMex1.chainRBestHg38Link.txt
-    # 1455431042 bases of 2400839308 (60.622%) in intersection
+    cat fb.ambMex1.chainRBest.Hg38.txt
+    # 1443200492 bases of 2286657046 (63.114%) in intersection
 
-#########################################################################
+#############################################################################
 # lastz/chain/net swap from mm10 (TBD - 2018-03-16 - Hiram)
     # alignment on mm10
 
@@ -678,84 +771,66 @@ searchPriority 8
     # 787537751 bases of 2400839308 (32.803%) in intersection
 
 ##############################################################################
-# GENBANK AUTO UPDATE (TBD - 2017-09-25 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2018-07-10 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # /cluster/data/genbank/data/organism.lst shows:
-    # organism       mrnaCnt estCnt  refSeqCnt
-    # Neomonachus schauinslandi   (there are no entries for this name)
+    # organism           mrnaCnt estCnt  refSeqCnt
+    # Ambystoma mexicanum   7705  43326      0
 
-    # edit etc/genbank.conf to add ambMex1 just after manLeu1
+    # edit etc/genbank.conf to add ambMex1 just before nanPar1
 
-# ambMex1 (Hawaiian monk seal - Neomonachus schauinslandi) taxId 29088
+# ambMex1 (Axolotl - Ambystoma mexicanum) 125724 scaffolds N50 3052786 - 30Gb total
 ambMex1.serverGenome = /hive/data/genomes/ambMex1/ambMex1.2bit
 ambMex1.clusterGenome = /hive/data/genomes/ambMex1/ambMex1.2bit
 ambMex1.ooc = /hive/data/genomes/ambMex1/jkStuff/ambMex1.11.ooc
-ambMex1.lift = no
-ambMex1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+ambMex1.lift = /hive/data/genomes/ambMex1/jkStuff/ambMex1.10Kgaps.lft
+ambMex1.perChromTables = no
+ambMex1.downloadDir = ambMex1
 ambMex1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+ambMex1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
 ambMex1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
 ambMex1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
 ambMex1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
 ambMex1.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaFilter}
-ambMex1.downloadDir = ambMex1
-ambMex1.refseq.mrna.native.load  = no
-ambMex1.refseq.mrna.xeno.load = yes
+# defaults yes: genbank.mrna.native.load genbank.mrna.native.loadDesc
+# yes: genbank.est.native.load refseq.mrna.native.load
+# yes: refseq.mrna.native.loadDesc refseq.mrna.xeno.load
+# yes: refseq.mrna.xeno.loadDesc
+# defaults no: genbank.mrna.xeno.load genbank.mrna.xeno.loadDesc
+# no: genbank.est.native.loadDesc genbank.est.xeno.load
+# no: genbank.est.xeno.loadDesc
 # DO NOT NEED genbank.mrna.xeno except for human, mouse
-ambMex1.genbank.mrna.xeno.load = no
-ambMex1.genbank.mrna.native.load = no
-ambMex1.genbank.est.native.load = no
-ambMex1.perChromTables = no
+# ambMex1.upstreamGeneTbl = ensGene
+# ambMex1.upstreamMaf = multiz6way /hive/data/genomes/ambMex1/bed/multiz6way/species.list
 
 # And edit src/lib/gbGenome.c to add new species
-#	static char *neoSchNames[] = {"Neomonachus schauinslandi", NULL};
-#	    {"neoSch", neoSchNames},
+#  static char *ambMexNames[] = {"Ambystoma mexicanum", NULL};
 
-    git commit -m \
-  "Added ambMex1 Hawaiian monk seal/Neomonachus schauinslandi; refs #19883" \
-       etc/genbank.conf src/lib/gbGenome.c
+    git commit -m 'adding ambMex1 Axolotl - Ambystoma mexicanum' src/lib/gbGenome.c etc/genbank.conf
     git push
+
+    # verify stated file paths do exist:
+    grep ambMex1 etc/genbank.conf | egrep "Genome|ooc|lift" \
+	| awk '{print $NF}' | grep -v -w no | xargs ls -og
+-rw-rw-r-- 1 9104343295 Jul  8 19:32 /hive/data/genomes/ambMex1/ambMex1.2bit
+-rw-rw-r-- 1   11166819 Jul 10 10:45 /hive/data/genomes/ambMex1/jkStuff/ambMex1.10Kgaps.lft
+-rw-rw-r-- 1    1144264 Jul 10 10:00 /hive/data/genomes/ambMex1/jkStuff/ambMex1.11.ooc
+
     # update /cluster/data/genbank/:
     make etc-update
     make install-server
 
-    screen      #  control this business with a screen since it takes a while
-    cd /cluster/data/genbank
-
-    time ./bin/gbAlignStep -initial ambMex1
-    #  logFile: var/build/logs/2017.09.25-10:31:15.ambMex1.initalign.log
-    #   real    112m27.766s
-
-
-    tail -2 var/build/logs/2017.09.25-10:31:15.ambMex1.initalign.log
-# hgwdev 2017.09.25-12:22:10 ambMex1.initalign: Succeeded: ambMex1
-# hgwdev 2017.09.25-12:23:43 ambMex1.initalign: finish
-
-    #   To re-do, rm the dir first:
-    #     /cluster/data/genbank/work/initial.ambMex1
-
-    # load database when finished
-    ssh hgwdev
-    cd /cluster/data/genbank
-    time ./bin/gbDbLoadStep -drop -initialLoad ambMex1
-    # logFile: var/dbload/hgwdev/logs/2017.09.25-13:09:18.ambMex1.dbload.log
-    # real    5m1.448s
-
-    tail -1 var/dbload/hgwdev/logs/2017.09.25-13:09:18.ambMex1.dbload.log
-    # hgwdev 2017.09.25-13:14:20 ambMex1.dbload: finish
-
-    # enable daily alignment and update of hgwdev
-    cd ~/kent/src/hg/makeDb/genbank
-    git pull
     # add ambMex1 to:
     #   etc/align.dbs etc/hgwdev.dbs
-    git add etc/align.dbs etc/hgwdev.dbs
-    git commit -m \
-"Added ambMex1 - Hawaiian monk seal - Neomonachus schauinslandi refs #19883" \
-etc/align.dbs etc/hgwdev.dbs
+    git commit -m 'adding ambMex1/axolotl refs #21715' \
+	etc/align.dbs etc/hgwdev.dbs
     git push
+    # update /cluster/data/genbank/:
     make etc-update
+
+    # XXX a few days later the genbank tables will be in the database
 
 ##############################################################################
 #  BLATSERVERS ENTRY (TBD - 2017-10-06 - Hiram)
