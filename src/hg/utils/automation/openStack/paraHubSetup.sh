@@ -65,6 +65,7 @@ if [ -s "${homeDir}/.bashrc" ]; then
   export privateIp=`ifconfig -a | grep broadcast | head -1 | awk '{print $2}'`
   export subNet=`ifconfig -a | grep broadcast | head -1 | awk '{print $2}' | awk -F'.' '{printf "%s.%s.%s.0", $1,$2,$3}'`
 
+  export dataDir="/data"
   # special case OpenStack /mnt setups (temporary work around for difficulties)
   if [ "${nativeUser}" = "centos" ]; then
     umount /mnt >> "${logFile}" 2>&1
@@ -77,8 +78,9 @@ if [ -s "${homeDir}/.bashrc" ]; then
     mkdir /mnt/data
     chmod 777 /mnt/data
     rsync -a /data/ /mnt/data/
-    rmdir /data
+    rm -fr /data
     ln -s /mnt/data /data
+    dataDir="/mnt/data"
   else
     printf "/data    ${subNet}/24(rw)\n" > /etc/exports
   fi
@@ -98,7 +100,7 @@ if [ -s "${homeDir}/.bashrc" ]; then
   # bedSingleCover.pl for use in running featureBits like measurements
   wget -O /data/scripts/bedSingleCover.pl 'http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/utils/bedSingleCover.pl' >> "${logFile}" 2>&1
   chmod +x /data/scripts/bedSingleCover.pl
-  chown -R ${nativeUser}:${nativeUser} /data "${homeDir}/bin" "${homeDir}/.vimrc"
+  chown -R ${nativeUser}:${nativeUser} "${dataDir}" "${homeDir}/bin" "${homeDir}/.vimrc"
 
   # and now can start the rest of yum installs, these take a while
   # useful to have the 'host' command, 'traceroute' and nmap ('nc')
