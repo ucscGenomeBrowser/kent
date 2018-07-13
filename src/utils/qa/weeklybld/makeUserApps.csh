@@ -39,7 +39,7 @@ $WEEKLYBLD/configureSandbox.csh . $WEEKLYBLD/downloadBuildSettings.mk
 
 cd kent/src 
 make BINDIR=$BINDIR DESTDIR=$DESTDIR userApps > make.log
-./utils/userApps/mkREADME.sh $DESTDIR$BINDIR FOOTER
+./utils/userApps/mkREADME.sh $DESTDIR$BINDIR FOOTER.txt
 cd ../..
 
 # copy everything if 64 bit
