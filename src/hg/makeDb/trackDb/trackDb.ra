@@ -821,7 +821,6 @@ superTrack on
 shortLabel CpG Islands
 longLabel CpG Islands (Islands < 300 Bases are Light Green)
 group regulation
-visibility show
 color 0,100,0
 altColor 128,228,128
 type bed 4 +
