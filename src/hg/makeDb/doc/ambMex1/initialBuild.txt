@@ -853,46 +853,56 @@ ambMex1.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaF
     #	test it with some sequence
 
 ##############################################################################
-# set default position to similar location as hg38 (TBD - 2017-10-06 - Hiram)
+# set default position to the PAX3 gene (DONE - 2018-07-11 - Hiram)
+#  as found via UCSC 'Other refseq' track
+
     hgsql -e \
-'update dbDb set defaultPos="NW_018734295v1:8131879-8151536" where name="ambMex1";' \
+'update dbDb set defaultPos="PGSH01084259v1:1812985-2038932" where name="ambMex1";' \
 	hgcentraltest
 
 ##############################################################################
-# all.joiner update, downloads and in pushQ - (TBD - 2018-03-22 - Hiram)
+# all.joiner update, downloads and in pushQ - (DONE - 2018-07-13 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
 
     ~/kent/src/hg/utils/automation/verifyBrowser.pl ambMex1
-# 61 tables in database ambMex1 - Hawaiian monk seal, Neomonachus schauinslandi
-# verified 58 tables in database ambMex1, 3 extra tables, 24 optional tables
-# NCBI RefSeq genes     10 optional tables
+# 40 tables in database ambMex1 - Axolotl, Ambystoma mexicanum
+# verified 40 tables in database ambMex1, 0 extra tables, 12 optional tables
 # chainNetRBestHg38     3 optional tables
 # chainNetRBestMm10     3 optional tables
 # chainNetSynHg38       3 optional tables
 # chainNetSynMm10       3 optional tables
-# gapOverlap    1 optional tables
-# tandemDups    1 optional tables
-# 1     chainLepWed1    - extra table
-# 2     chainLepWed1Link        - extra table
-# 3     netLepWed1      - extra table
-# 5 genbank tables found
-# verified 29 required tables, 0 missing tables
+# ERROR: no genbank tables found
+# verified 28 required tables, 1 missing tables
+# 1     ucscToRefSeq    - missing table
+# hg38 chainNet to ambMex1 found 3 required tables
+# mm10 chainNet to ambMex1 found 3 required tables
+# hg38 chainNet RBest and syntenic to ambMex1 found 6 optional tables
+# mm10 chainNet RBest and syntenic to ambMex1 found 3 optional tables
+# ERROR: blat server not found in hgcentraltest.blatServers ?
 
     # fixup all.joiner until this is a clean output
     joinerCheck -database=ambMex1 -tableCoverage all.joiner
     joinerCheck -database=ambMex1 -times all.joiner
     joinerCheck -database=ambMex1 -keys all.joiner
 
+    # need to specify workhorse so it will not overload ku
+    # and this procedure fails on ku due to limited memory for the
+    # maskOutFa step
     cd /hive/data/genomes/ambMex1
-    time (makeDownloads.pl ambMex1) > downloads.log 2>&1
-    # real    16m28.321s
+    time (makeDownloads.pl -workhorse=hgwdev ambMex1) > downloads.log 2>&1
+    # real    117m17.756s
+
+    # continue after broken 'compress' step manually completed:
+    time (makeDownloads.pl -continue=install -workhorse=hgwdev ambMex1) \
+	> downloadsInstall.log 2>&1
+    # real    0m4.786s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/ambMex1/pushQ
     cd /hive/data/genomes/ambMex1/pushQ
     time (makePushQSql.pl -redmineList ambMex1) \
 	> ambMex1.pushQ.sql 2> stderr.out
-    # real    3m53.420s
+    # real    4m11.149s
 
     # remove the tandemDups and gapOverlap from the listings:
     sed -i -e "/tandemDups/d" redmine.ambMex1.table.list
@@ -915,13 +925,13 @@ ambMex1.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaF
     # to verify the database.table list is correct, should be the same
     # line count for these two commands:
     wc -l redmine.ambMex1.table.list
-    # 53 redmine.ambMex1.table.list
+    # 41 redmine.ambMex1.table.list
     awk -F'.' '{
 printf "hgsql -N -e \"show table status like '"'"'%s'"'"';\" %s\n", $2, $1
 }' redmine.ambMex1.table.list | while read L; do eval $L; done | wc -l
-    # 53
+    # 41
 
-    # add the path names to the listing files in the redmine issue
+# add the path names to the listing files in the redmine issue
     # in the three appropriate entry boxes:
     ls `pwd`/redmine*
 
