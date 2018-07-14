@@ -165,7 +165,7 @@ for (;;)
 	    usage = usage->next;
 	    assert(usage != NULL);
             if (!sameString(row[0], usage->name))
-                errAbort("read %s, expecting %s on line %d in file %s\n", 
+                errAbort("Error - read %s, expecting %s on line %d in file %s\n", 
                     row[0], usage->name, lf->lineIx, lf->fileName);
 	    assert(sameString(row[0], usage->name));
 	    lastB = NULL;
@@ -182,13 +182,13 @@ for (;;)
 
     /* Verify that inputs meets our assumption - that it is a sorted bedGraph file. */
     if (start > end)
-        errAbort("Start (%u) after end (%u) line %d of %s", start, end, lf->lineIx, lf->fileName);
+        errAbort("Error - start (%u) after end (%u) line %d of %s", start, end, lf->lineIx, lf->fileName);
     if (lastB != NULL)
         {
 	if (lastB->start > start)
-	    errAbort("BedGraph not sorted on start line %d of %s", lf->lineIx, lf->fileName);
+	    errAbort("Error - bedGraph not sorted on start line %d of %s", lf->lineIx, lf->fileName);
 	if (lastB->end > start)
-	    errAbort("Overlapping regions in bedGraph line %d of %s", lf->lineIx, lf->fileName);
+	    errAbort("Error - overlapping regions in bedGraph line %d of %s", lf->lineIx, lf->fileName);
 	}
 
 

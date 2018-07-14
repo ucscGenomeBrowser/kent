@@ -23,7 +23,13 @@ track genscan override
 visibility pack
 
 track cpgIslandSuper override
-visibility show
+superTrack on show
+
+    track cpgIslandExt override
+    parent cpgIslandSuper hide
+
+    track cpgIslandExtUnmasked override
+    parent cpgIslandSuper pack
 
 track xenoRefGene override
 visibility pack
