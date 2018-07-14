@@ -808,10 +808,9 @@ int nwords = chopByWhite(specCopy, words, ArraySize(words));
 
 char acc[512];
 
-/* Print start of HTML. */
-writeFramesetType();
-puts("<HTML>");
-printf("<HEAD>\n<TITLE>%s vs Genomic [%s]</TITLE>\n</HEAD>\n\n", mi->seqId, track);
+char title[1024];
+safef(title, sizeof title, "%s vs Genomic [%s]", mi->seqId, track);
+htmlFramesetStart(title);
 
 /* Look up alignment and sequence in database.  Always get sequence
  * from defaultDb */

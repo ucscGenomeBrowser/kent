@@ -602,6 +602,17 @@ void writeFramesetType()
 fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Frameset//EN\">\n", stdout);
 }
 
+void htmlFramesetStart(char *title)
+/* Write DOCTYPE HTML and HEAD sections for framesets. */
+{
+/* Print start of HTML. */
+writeFramesetType();
+puts("<HTML>");
+char *meta = getCspMetaHeader();
+printf("<HEAD>\n%s<TITLE>%s</TITLE>\n</HEAD>\n\n", meta, title);
+freeMem(meta);
+}
+
 boolean clipToChrom(int *pStart, int *pEnd)
 /* Clip start/end coordinates to fit in chromosome. */
 {
@@ -7179,9 +7190,6 @@ int start;
 unsigned int cdsStart = 0, cdsEnd = 0;
 
 
-/* Print start of HTML. */
-writeFramesetType();
-puts("<HTML>");
 aliTable = cartString(cart, "aliTable");
 if (isCustomTrack(aliTable))
     {
@@ -7190,7 +7198,9 @@ if (isCustomTrack(aliTable))
     }
 else
     tdb = hashFindVal(trackHash, aliTable);
-printf("<HEAD>\n<TITLE>%s vs Genomic [%s]</TITLE>\n</HEAD>\n\n", acc, aliTable);
+char title[1024];
+safef(title, sizeof title, "%s vs Genomic [%s]", acc, aliTable);
+htmlFramesetStart(title);
 
 /* Get some environment vars. */
 start = cartInt(cart, "l");
@@ -7243,9 +7253,6 @@ char *aliTable;
 int start;
 unsigned int cdsStart = 0, cdsEnd = 0;
 
-/* Print start of HTML. */
-writeFramesetType();
-puts("<HTML>");
 aliTable = cartString(cart, "aliTable");
 if (isCustomTrack(aliTable))
     {
@@ -7254,7 +7261,9 @@ if (isCustomTrack(aliTable))
     }
 else
     tdb = hashFindVal(trackHash, aliTable);
-printf("<HEAD>\n<TITLE>%s vs Genomic [%s]</TITLE>\n</HEAD>\n\n", acc, aliTable);
+char title[1024];
+safef(title, sizeof title, "%s vs Genomic [%s]", acc, aliTable);
+htmlFramesetStart(title);
 
 /* Get some environment vars. */
 start = cartInt(cart, "l");
@@ -7332,11 +7341,10 @@ char accChopped[512] ;
 safef(accChopped, sizeof(accChopped), "%s",acc);
 chopSuffix(accChopped);
 
-/* Print start of HTML. */
-writeFramesetType();
-puts("<HTML>");
 aliTable = cartString(cart, "aliTable");
-printf("<HEAD>\n<TITLE>%s vs Genomic [%s]</TITLE>\n</HEAD>\n\n", accChopped, aliTable);
+char title[1024];
+safef(title, sizeof title, "%s vs Genomic [%s]", accChopped, aliTable);
+htmlFramesetStart(title);
 
 /* Get some environment vars. */
 start = cartInt(cart, "o");
@@ -7422,11 +7430,9 @@ chopSuffix(accChopped);
 aliTable = cartString(cart, "aliTable");
 start = cartInt(cart, "o");
 
-/* Print start of HTML. */
-writeFramesetType();
-puts("<HTML>");
-printf("<HEAD>\n<TITLE>%s vs Genomic [%s]</TITLE>\n</HEAD>\n\n",
-       accChopped, aliTable);
+char title[1024];
+safef(title, sizeof title, "%s vs Genomic [%s]", accChopped, aliTable);
+htmlFramesetStart(title);
 
 conn = hAllocConn(database);
 getCdsStartAndStop(conn, accChopped, aliTable, &cdsStart, &cdsEnd);
@@ -7587,10 +7593,10 @@ else
     qSeq = loadGenomePart(otherDb, psl->qName, psl->qStart, psl->qEnd);
     safef(name, sizeof name, "%s.%s", otherOrg, psl->qName);
     }
-writeFramesetType();
-puts("<HTML>");
-printf("<HEAD>\n<TITLE>%s %s vs %s %s </TITLE>\n</HEAD>\n\n",
+char title[1024];
+safef(title, sizeof title, "%s %s vs %s %s ",
        (otherOrg == NULL ? "" : otherOrg), psl->qName, org, psl->tName );
+htmlFramesetStart(title);
 showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name, 0, 0);
 }
 
@@ -7644,10 +7650,10 @@ else
     qSeq = loadGenomePart(otherDb, psl->qName, psl->qStart, psl->qEnd);
     safef(name, sizeof name, "%s.%s", otherOrg, psl->qName);
     }
-writeFramesetType();
-puts("<HTML>");
-printf("<HEAD>\n<TITLE>%s %s vs %s %s </TITLE>\n</HEAD>\n\n",
+char title[1024];
+safef(title, sizeof title, "%s %s vs %s %s ",
        (otherOrg == NULL ? "" : otherOrg), psl->qName, org, psl->tName );
+htmlFramesetStart(title);
 /*showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name, 0, 0); */
 showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name, cdsStart, cdsEnd);
 }
@@ -7663,10 +7669,9 @@ int start;
 enum gfType tt, qt;
 boolean isProt;
 
-/* Print start of HTML. */
-writeFramesetType();
-puts("<HTML>");
-printf("<HEAD>\n<TITLE>User Sequence vs Genomic</TITLE>\n</HEAD>\n\n");
+char title[1024];
+safef(title, sizeof title, "User Sequence vs Genomic");
+htmlFramesetStart(title);
 
 start = cartInt(cart, "o");
 parseSs(fileNames, &pslName, &faName, &qName);
@@ -7707,10 +7712,9 @@ char buffer[256];
 int addp = 0;
 char *pred = NULL;
 
-/* Print start of HTML. */
-writeFramesetType();
-puts("<HTML>");
-printf("<HEAD>\n<TITLE>Protein Sequence vs Genomic</TITLE>\n</HEAD>\n\n");
+char title[1024];
+safef(title, sizeof title, "Protein Sequence vs Genomic");
+htmlFramesetStart(title);
 
 addp = cartUsualInt(cart, "addp",0);
 pred = cartUsualString(cart, "pred",NULL);
@@ -7772,10 +7776,9 @@ char query[256], **row;
 char fullTable[64];
 boolean hasBin;
 
-/* Print start of HTML. */
-writeFramesetType();
-puts("<HTML>");
-printf("<HEAD>\n<TITLE>Sequence %s</TITLE>\n</HEAD>\n\n", readName);
+char title[1024];
+safef(title, sizeof title, "Sequence %s", readName);
+htmlFramesetStart(title);
 
 start = cartInt(cart, "o");
 hFindSplitTable(database, seqName, table, fullTable, &hasBin);
@@ -8120,10 +8123,10 @@ char *seqTable = cgiUsualString("seqTable", "illuminaProbesSeq");
 char *probeName = item;
 char *probeString;
 int rowOffset = hOffsetPastBin(database, seqName, pslTable);
-/* Print start of HTML. */
-writeFramesetType();
-puts("<HTML>");
-printf("<HEAD>\n<TITLE>Sequence %s</TITLE>\n</HEAD>\n\n", probeName);
+
+char title[1024];
+safef(title, sizeof title, "Sequence %s", probeName);
+htmlFramesetStart(title);
 start = cartInt(cart, "o");
 /* get psl */
 sqlSafef(query, sizeof(query), "select * from %s where qName = '%s' and tName = '%s' and tStart=%d",
@@ -14235,9 +14238,9 @@ psl = pslTrimToTargetRange(psl, winStart, winEnd);
 
 qSeq = loadGenomePart(otherDb, qChrom, psl->qStart, psl->qEnd);
 snprintf(name, sizeof(name), "%s.%s", otherOrg, qChrom);
-writeFramesetType();
-puts("<HTML>");
-printf("<HEAD>\n<TITLE>%s %dk</TITLE>\n</HEAD>\n\n", name, psl->qStart/1000);
+char title[1024];
+safef(title, sizeof title, "%s %dk", name, psl->qStart/1000);
+htmlFramesetStart(title);
 showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name, 0, 0);
 }
 
@@ -20315,7 +20318,7 @@ void chuckHtmlStart(char *title)
  * easier maintaince
  */
 {
-printf("<HTML>\n<HEAD>\n");
+printf("<HTML>\n<HEAD>\n%s", getCspMetaHeader());
 // FIXME blueStyle should not be absolute to genome-test and should be called by:
 //       webIncludeResourceFile("blueStyle.css");
 printf("<LINK REL=STYLESHEET TYPE=\"text/css\" href=\"http://genome-test.cse.ucsc.edu/style/blueStyle.css\" title=\"Chuck Style\">\n");
@@ -22657,7 +22660,7 @@ else
     sqlSafef(query, sizeof(query), "select * from cutters where name=\'%s\'", getBed);
 cut = cutterLoadByQuery(conn, query);
 bedList = matchEnzymes(cut, winDna, s);
-puts("<HTML>\n<HEAD><TITLE>Enzyme Output</TITLE></HEAD>\n<BODY><PRE><TT>");
+printf("<HTML>\n<HEAD>\n%s<TITLE>Enzyme Output</TITLE></HEAD>\n<BODY><PRE><TT>", getCspMetaHeader());
 for (oneBed = bedList; oneBed != NULL; oneBed = oneBed->next)
     {
     freeMem(oneBed->chrom);
@@ -23092,9 +23095,10 @@ else
     }
 qSeq = loadGenomePart(db, psl->qName, psl->qStart, psl->qEnd);
 safef(name, sizeof name, "%s in %s(%d-%d)", item,psl->qName, psl->qStart, psl->qEnd);
-writeFramesetType();
-puts("<HTML>");
-printf("<HEAD>\n<TITLE>%s %dk</TITLE>\n</HEAD>\n\n", name, psl->qStart/1000);
+
+char title[1024];
+safef(title, sizeof title, "%s %dk", name, psl->qStart/1000);
+htmlFramesetStart(title);
 showSomeAlignment2(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name, item, "", psl->qStart, psl->qEnd);
 }
 
