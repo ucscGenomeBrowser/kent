@@ -118,7 +118,6 @@ tableBrowser off decipherSnvsRaw
 prevExonText Left edge
 nextExonText Right edge
 html decipher
-release alpha,beta
 
 track phegeni
 shortLabel PheGenI SNPs
