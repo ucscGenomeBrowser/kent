@@ -83,12 +83,16 @@ return line;
 }
 
 void customFactoryCheckChromNameDb(char *genomeDb, char *word, struct lineFile *lf)
-/* Make sure it's a chromosome or a contig.  Well, at the moment,
- * just make sure it's a chromosome. */
+/* Abort if word is not a valid sequence name for genomeDb.  If word is a recognizable alias
+ * or case-sensitive variant of a valid sequence, suggest that to the user. */
 {
-if (!hgIsOfficialChromName(genomeDb, word))
-    lineFileAbort(lf, "%s not a recognized sequence (note: sequence names are case sensitive)",
-		  word);
+char *officialChrom = hgOfficialChromName(genomeDb, word);
+if (! officialChrom)
+    lineFileAbort(lf, "'%s' is not a valid sequence name in %s", word, genomeDb);
+else if (differentString(word, officialChrom))
+    lineFileAbort(lf, "'%s' is not a valid sequence name in %s (perhaps you mean '%s'?)",
+                  word, genomeDb, officialChrom);
+freeMem(officialChrom);
 }
 
 void customFactorySetupDbTrack(struct customTrack *track)
@@ -141,12 +145,52 @@ return same;
 
 /*** BED Factory ***/
 
-static boolean rowIsBed(char **row, int wordCount, char *db)
-/* Return TRUE if row is consistent with BED format. */
+static boolean rowIsBed(char **row, int wordCount, char *db, struct dyString *reason)
+/* Return TRUE if row is consistent with BED format.  If it's not BED and reason is not NULL,
+ * append reason for failure. */
 {
-return wordCount >= 3 && wordCount <= bedKnownFields
-	&& hgIsOfficialChromName(db, row[0])
-	&& isdigit(row[1][0]) && isdigit(row[2][0]);
+if (wordCount < 3)
+    {
+    if (reason)
+        dyStringAppend(reason, "Too few fields (need at least 3)");
+    return FALSE;
+    }
+if (wordCount > bedKnownFields)
+    {
+    if (reason)
+        dyStringPrintf(reason, "Too many fields (expected at most %d, got %d)",
+                       bedKnownFields, wordCount);
+    return FALSE;
+    }
+char *officialChrom = hgOfficialChromName(db, row[0]);
+if (! officialChrom)
+    {
+    if (reason)
+        dyStringPrintf(reason, "'%s' is not a valid sequence name in %s", row[0], db);
+    return FALSE;
+    }
+else if (differentString(row[0], officialChrom))
+    {
+    if (reason)
+        dyStringPrintf(reason, "'%s' is not a valid sequence name in %s (perhaps you mean '%s'?)",
+                       row[0], db, officialChrom);
+    freeMem(officialChrom);
+    return FALSE;
+    }
+freeMem(officialChrom);
+if (! isAllDigits(row[1]))
+    {
+    if (reason)
+        dyStringPrintf(reason, "Second column needs to be a number but is '%s'", row[1]);
+    return FALSE;
+    }
+if (! isAllDigits(row[2]))
+    {
+    if (reason)
+        dyStringPrintf(reason, "Third column needs to be a number but is '%s'", row[2]);
+    return FALSE;
+    }
+return TRUE;
 }
 
 static boolean bedRecognizer(struct customFactory *fac,
@@ -163,7 +207,7 @@ char *dupe = cloneString(line);
 char *row[bedKnownFields+1];
 int wordCount = chopLine(dupe, row);
 char *ctDb = ctGenomeOrCurrent(track);
-boolean isBed = rowIsBed(row, wordCount, ctDb);
+boolean isBed = rowIsBed(row, wordCount, ctDb, NULL);
 freeMem(dupe);
 if (isBed)
     track->fieldCount = wordCount;
@@ -756,7 +800,7 @@ track->fieldCount = wordCount;
 /* bed 4 + so is first part bed? */
 char *ctDb = ctGenomeOrCurrent(track);
 int bedCount = wordCount -2;
-boolean isBed = rowIsBed(row, bedCount, ctDb);
+boolean isBed = rowIsBed(row, bedCount, ctDb, NULL);
 freeMem(dupe);
 customPpReuse(cpp, line);
 return (isBed);
@@ -899,13 +943,19 @@ static struct customFactory bedDetailFactory =
 static boolean rowIsPgSnp (char **row, char *db, char *type)
 /* return TRUE if row looks like a pgSnp row */
 {
-boolean isPgSnp = rowIsBed(row, 3, db);
 if (type != NULL && !sameWord(type, "pgSnp"))
     return FALSE;
+struct dyString *whyNotBed = dyStringNew(0);
+boolean isPgSnp = rowIsBed(row, 3, db, whyNotBed);
 if (!isPgSnp && type == NULL)
+    {
+    dyStringFree(&whyNotBed);
     return FALSE;
+    }
 else if (!isPgSnp)
-    errAbort("Error line 1 of custom track, type is pgSnp but first 3 fields are not BED");
+    errAbort("Error line 1 of custom track, type is pgSnp but first 3 fields are not BED: %s",
+             whyNotBed->string);
+dyStringFree(&whyNotBed);
 if (!isdigit(row[4][0]) && type == NULL)
     return FALSE;
 else if (!isdigit(row[4][0]))
@@ -1095,8 +1145,11 @@ static boolean rowIsBarChart (char **row, int wordCount, char *db)
 /* return TRUE if row looks like a barChart row. BED 6+5 */
 {
 char *type = "barChart";
-if (!rowIsBed(row, 6, db))
-    errAbort("Error line 1 of custom track, type is %s but first 6 fields are not BED", type);
+struct dyString *whyNotBed = dyStringNew(0);
+if (!rowIsBed(row, 6, db, whyNotBed))
+    errAbort("Error line 1 of custom track, type is %s but first 6 fields are not BED: %s",
+             type, whyNotBed->string);
+dyStringFree(&whyNotBed);
 char *buf[BAR_CHART_MAX_CATEGORIES];
 int expScoresCount = chopCommas(cloneString(row[BARCHART_EXPSCORES_COLUMN_IX]), buf);
 int expCount = sqlUnsigned(row[BARCHART_EXPCOUNT_COLUMN_IX]);
@@ -1304,8 +1357,11 @@ static boolean rowIsInteract (char **row, int wordCount, char *db)
 /* return TRUE if row looks like an interact row. BED 5+ */
 {
 char *type = "interact";
-if (!rowIsBed(row, 5, db))
-    errAbort("Error line 1 of custom track, type is %s but first 5 fields are not BED", type);
+struct dyString *whyNotBed = dyStringNew(0);
+if (!rowIsBed(row, 5, db, whyNotBed))
+    errAbort("Error line 1 of custom track, type is %s but first 5 fields are not BED: %s",
+             type, whyNotBed->string);
+dyStringFree(&whyNotBed);
 return TRUE;
 }
 
