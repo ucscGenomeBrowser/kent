@@ -4,6 +4,7 @@
  * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "hCommon.h"
+#include "htmshell.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -87,7 +88,7 @@ else
     {
     infileName = argv[1];
 
-    fprintf(stdout, "<HTML><HEAD><TITLE>Non-standard Join Certificates</TITLE>\n");
+    fprintf(stdout, "<HTML><HEAD>\n%s<TITLE>Non-standard Join Certificates</TITLE>\n", getCspMetaHeader());
     fprintf(stdout, "<META http-equiv=Content-Type content=\"text/html; charset=iso-8859-1\">\n");
     fprintf(stdout, "<META content=\"MSHTML 6.00.2800.1106\" name=GENERATOR></HEAD>\n");
     fprintf(stdout, "<BODY><span style='font-family:Arial;'>\n");
