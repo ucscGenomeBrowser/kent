@@ -86,6 +86,9 @@ struct trackDb *tdbForTableArg();
 void writeFramesetType();
 /* Write document type that shows a frame set, rather than regular HTML. */
 
+void htmlFramesetStart(char *title);
+/* Write DOCTYPE HTML and HEAD sections for framesets. */
+
 struct psl *getAlignments(struct sqlConnection *conn, char *table, char *acc);
 /* get the list of alignments for the specified acc */
 

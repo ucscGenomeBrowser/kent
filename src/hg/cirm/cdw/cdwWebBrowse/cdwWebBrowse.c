@@ -796,6 +796,7 @@ if (securityColumnsInTable)
 		sqlDyStringPrintf(where, " or FIND_IN_SET('%u', groupIds)", groupId);
 		}
 	    sqlFreeResult(&sr);
+	    sqlDyStringPrintfFrag(where, "or allAccess > 0");
 	    sqlDyStringPrintf(where, ")");
 	    }
 	}
@@ -1819,6 +1820,16 @@ struct facetVal *majorTags = facetValMajorPlusOther(ff->valList, 0.01);
 drawPrettyPieGraph(majorTags, divId, ff->fieldName, NULL);
 }
 
+void printFile(char *fname) 
+/* print file to stdout. Do nothing if file does not exist. */
+{
+FILE *fh = fopen(fname, "r");
+if (fh==NULL)
+    return;
+char buf[1000];
+while (fgets(buf, 1000, fh) != NULL)
+    puts(buf);
+}
 
 char *tagPopularityFields[] = { "tag name", "vals", "popular values (files)...", "files",};
 
@@ -1884,6 +1895,8 @@ for (i=0, ff = pieFacetList; i<ArraySize(pieTags); ++i, ff = ff->next)
 printf("</TR></TABLE>\n");
 printf("<CENTER><I>charts are based on proportion of files in each category</I></CENTER>\n");
 printf("</td></tr></table>\n");
+
+printFile("cirm-motd.html");
 
 }
 

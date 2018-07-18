@@ -11701,3 +11701,83 @@ TMPDIR=/dev/shm
     # 1443200492 bases of 2286657046 (63.114%) in intersection
 
 #############################################################################
+# LASTZ human/hg38 vs. Axolotl/ambMex1 - (DONE - 2018-07-09 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/lastzAmbMex1.2018-07-09
+    cd /hive/data/genomes/hg38/bed/lastzAmbMex1.2018-07-09
+
+    printf '# human vs Axolotl
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_M=254
+# default BLASTZ_Q score matrix:
+#       A     C     G     T
+# A    91  -114   -31  -123
+# C  -114   100  -125   -31
+# G   -31  -125   100  -114
+# T  -123   -31  -114    91
+
+# TARGET: human hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=5
+SEQ1_LAP=10000
+
+# QUERY: Axolotl ambMex1
+SEQ2_DIR=/hive/data/genomes/ambMex1/ambMex1.2bit
+SEQ2_LEN=/hive/data/genomes/ambMex1/chrom.sizes
+SEQ2_CHUNK=80000000
+SEQ2_LIMIT=800
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzAmbMex1.2018-07-09
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    226m14.103s
+
+    cat fb.hg38.chainAmbMex1Link.txt
+    # 54520910 bases of 3049335806 (1.788%) in intersection
+
+    cat fb.hg38.chainSynAmbMex1Link.txt
+    # 3343407 bases of 3049335806 (0.110%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` hg38 ambMex1) > rbest.log 2>&1 &
+    # real    497m40.060s
+
+    cat fb.hg38.chainRBest.AmbMex1.txt
+    # 37383183 bases of 3049335806 (1.226%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/ambMex1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/ambMex1/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzAmbMex1.2018-07-09/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1 &
+    #  real    39m37.460s
+
+    cat fb.ambMex1.chainHg38Link.txt
+    # 59846443 bases of 28366694468 (0.211%) in intersection
+
+    cat fb.ambMex1.chainSynHg38Link.txt
+    # 3456707 bases of 28366694468 (0.012%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` ambMex1 hg38) > rbest.log 2>&1 &
+    #  real    555m51.873s
+
+    cat fb.ambMex1.chainRBest.Hg38.txt
+    # 38573370 bases of 28366694468 (0.136%) in intersection
+
+#############################################################################

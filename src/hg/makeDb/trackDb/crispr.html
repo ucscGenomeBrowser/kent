@@ -131,14 +131,31 @@ The raw data can be explored interactively with the <a href="../cgi-bin/hgTables
 For automated analysis, the genome annotation is stored in a bigBed file that
 can be downloaded from
 <a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/${track}/" target="_blank">our download server</a>.
-The files for this track are called <tt>crispr.bb</tt> and <tt>crisprDetails.tab</tt>. Individual
+The files for this track are called <tt>crispr.bb</tt> and <tt>crisprDetails.tab</tt> and are located in the <a href="http://hgdownload.soe.ucsc.edu/gbdb/${db}/crispr/">/gbdb/${db}/crispr</a> directory of our downloads server. Individual
 regions or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>,
 which can be compiled from the source code or downloaded as a precompiled
 binary for your system. Instructions for downloading source code and binaries can be found
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>. The tool
 can also be used to obtain only features within a given range, e.g. <tt>bigBedToBed
-http://hgdownload.soe.ucsc.edu/gbdb/${db}/${track}/crispr.bb -chrom=chr21
--start=0 -end=1000000 stdout</tt> </p>
+http://hgdownload.soe.ucsc.edu/gbdb/hg19/${track}/crispr.bb -chrom=chr21
+-start=0 -end=10000000 stdout</tt> </p>
+
+<p>
+The file crisprDetails.tab includes the details of the off-targets. The last
+column of the bigBed file is the offset of the respective line in
+crisprDetails.tab.  E.g. if the last column is 14227033723, then the following
+command will extract the line with the corresponding off-target details:
+<tt>curl -s -r 14227033723-14227043723 http://hgdownload.soe.ucsc.edu/gbdb/hg19/crispr/crisprDetails.tab | head -n1</tt>. The off-target details can currently not be joined with the table
+browser.</p>
+
+<p>
+The file crisprDetails.tab is a tab-separated text file with two fields. The
+first field contains the numbers of off-targets for each mismatch, e.g. "0,0,1,3,49" 
+means 0 off-targets at zero mismatches, 1 at two mismatches, 3 at three and 49
+off-targets at four mismatches. The second field is a pipe-separated list of
+semicolon-separated tuples with the genome coordinates and the CFD score. E.g.
+"chr10;123376795+;42|chr5;148353274-;39" describes two off-targets, with the
+first at chr1:123376795 on the positive strand and a CFD score 0.42</p>
 
 <h2>Credits</h2>
 

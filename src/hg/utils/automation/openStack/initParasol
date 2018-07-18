@@ -82,13 +82,18 @@ stop()
 resurrect()
 {
 	echo -n $"Resurrect dead parasol nodes:"
-	rm dead.list
+	rm -f dead.list
         ${binDir}/parasol list machines | grep dead | awk '{print $1}' | sort -u | while read ip
 do
  cat nodeInfo/$ip.ms
+ ${binDir}/parasol remove machine "${ip}" "dead machine" > /dev/null 2>&1
 done > dead.list
 	printf "${binDir}/paraNodeStart ${RSH} dead.list -hub=${parasolHub} -log=$logFile -umask=002 -userPath=bin -sysPath=. -exe=${binDir}/paraNode\n" 1>&2
 	${binDir}/paraNodeStart ${RSH} dead.list -hub=${parasolHub} -log=$logFile -umask=002 -userPath=bin -sysPath=. -exe=${binDir}/paraNode
+        awk '{print $1}' dead.list | while read ms
+do
+  sudo ${binDir}/parasol add machine `cat "nodeInfo/${ms}.ms"`
+done
 }
 
 case "$1" in

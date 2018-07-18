@@ -17,6 +17,7 @@ UTILS_APPLIST = \
 	axtToPsl \
 	bedCoverage \
 	chainAntiRepeat \
+	chainBridge \
 	chainFilter \
 	chainMergeSort \
 	chainNet \
@@ -61,7 +62,6 @@ DIRS = \
 	axtToBed \
 	axtToChain \
 	calcGap \
-	chainBridge \
 	chainDbToFile \
 	gcForBed \
 	knownVsBlat \

@@ -3251,7 +3251,7 @@ void doWiki(char *track, struct trackDb *tdb, char *itemName)
 {
   char strand[2];
 
-  printf("<HEAD>");
+  printf("<HEAD>%s", getCspMetaHeader());
 
   if(startsWith("Make", itemName))
   {

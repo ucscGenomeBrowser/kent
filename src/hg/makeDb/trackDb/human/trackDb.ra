@@ -118,6 +118,7 @@ tableBrowser off decipherSnvsRaw
 prevExonText Left edge
 nextExonText Right edge
 html decipher
+pennantIcon New red ../goldenPath/newsarch.html#071718 "Released Jul. 17, 2018"
 
 track phegeni
 shortLabel PheGenI SNPs

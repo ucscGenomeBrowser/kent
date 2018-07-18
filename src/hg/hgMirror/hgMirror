@@ -308,9 +308,11 @@ def getTrackVis(settings):
         if opts[0]=="on":
             isSuperTrack = True
             if len(opts)==1:
-                trackVis= "hide"
+                trackVis = "hide"
             elif opts[1]=="show":
-                trackVis= "full"
+                trackVis = "full"
+            elif opts[1]=="hide":
+                trackVis = "hide"
             else:
                 assert(False)
         elif len(opts)==2:
