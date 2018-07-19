@@ -329,7 +329,7 @@ else
     if (sameWord(genome, "C. elegans"))
 	hPrintf("<B>WormBase ID:</B> %s<BR>", id);
     else
-	hPrintf("<B>UCSC ID:</B> %s<BR>", id);
+	hPrintf("<B>UCSC ID:</B> %s<BR>", isGencode2 ? curAlignId : curGeneId );
     }
     
 if (refSeqAcc[0] != 0)
