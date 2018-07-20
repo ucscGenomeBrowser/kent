@@ -190,8 +190,6 @@ struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, winSta
 int fieldCount = 10;
 char *bedRow[fieldCount];
 char startBuf[16], endBuf[16];
-struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, tg->tdb) ;
-#ifdef NOTNOW
 struct bigBedFilter *filters = NULL;
 struct bigBedFilter *filter;
 
@@ -203,7 +201,6 @@ if ((filter = bigBedMakeFilter(cart, bbi, tg->tdb, PVALUE_FILTER, NULL, "pValue"
     slAddHead(&filters, filter);
 if ((filter = bigBedMakeFilter(cart, bbi, tg->tdb, QVALUE_FILTER, NULL, "qValue")) != NULL)
     slAddHead(&filters, filter);
-#endif
 
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
