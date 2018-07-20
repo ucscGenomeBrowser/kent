@@ -1719,7 +1719,7 @@ char *omimAvail = NULL;
 sqlSafef(query, sizeof(query), "select kgXref.kgID from kgXref,%s r where kgXref.refseq = r.mrnaAcc and r.omimId != 0 limit 1", refLinkTable);
 omimAvail = sqlQuickString(conn, query);
 hFreeConn(&conn);
-char *isGencode = trackDbSetting(tdb, "isGencode");
+boolean isGencode = trackDbSettingOn(tdb, "isGencode") || trackDbSettingOn(tdb, "isGencode2");
 
 printf("<B>Label:</B> ");
 labelMakeCheckBox(tdb, "gene", "gene symbol", FALSE);
