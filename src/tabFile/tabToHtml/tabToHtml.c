@@ -3,6 +3,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "htmshell.h"
 #include "fieldedTable.h"
 
 char *clTitle = NULL;	    // Title from command line
@@ -35,12 +36,13 @@ void writeHtml(struct fieldedTable *table, FILE *f)
 {
 if (!clEmbed)
     {
-    fputs(
+    fprintf(f,
     "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">\n"
     "<HTML>\n"
     "<HEAD>\n"
+    "%s"
     "    <META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html;CHARSET=iso-8859-1\">\n"
-    , f);
+    , getCspMetaHeader());
     if (clTitle)
 	fprintf(f, "    <TITLE>%s</TITLE>\n", clTitle);
     else

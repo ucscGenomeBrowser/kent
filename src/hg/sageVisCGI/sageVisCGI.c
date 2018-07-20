@@ -132,7 +132,7 @@ return ret;
  */
 void chuckHtmlStart(char *title)
 {
-printf("<html><head>");
+printf("<html><head>\n%s", getCspMetaHeader());
 //FIXME blueStyle should not be absolute to genome-test and should bae called by:
 // webIncludeResourceFile("blueStyle.css");
 printf("<LINK REL=STYLESHEET TYPE=\"text/css\" href=\"http://genome-test.cse.ucsc.edu/style/blueStyle.css\" title=\"Chuck Style\">\n");

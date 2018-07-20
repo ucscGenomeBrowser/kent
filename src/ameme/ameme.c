@@ -3235,7 +3235,7 @@ else
 /* Print out html header.  Make background color brilliant white. */
 if (isFromWeb)
     puts("Content-Type:text/html\n");
-fprintf(htmlOut, "<HEAD>\n<TITLE>%s Results</TITLE>\n</HEAD>\n\n", programName);
+fprintf(htmlOut, "<HEAD>\n%s<TITLE>%s Results</TITLE>\n</HEAD>\n\n", getCspMetaHeader(), programName);
 fprintf(htmlOut, "<BODY BGCOLOR='#FFFFFF'>\n\n");
 
 /* Wrap error handling et. around doMiddle. */
