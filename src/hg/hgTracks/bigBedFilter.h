@@ -11,7 +11,7 @@ double value1, value2;
 struct hash *valueHash;
 };
 
-struct bigBedFilter *bigBedMakeFilter(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *filter, char *defaultLimits,  char *field);
+struct bigBedFilter *bigBedMakeNumberFilter(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *filter, char *defaultLimits,  char *field);
 /* Add a bigBed filter using a trackDb filterBy statement. */
 
 boolean bigBedFilterInterval(char **bedRow, struct bigBedFilter *filters);
