@@ -9851,6 +9851,9 @@ dyStringPrintf(dy,"Mousetrap.bind('e v', function() { window.location.href='%s?%
 dyStringPrintf(dy,"Mousetrap.bind('d v', function() { window.location.href='%s?%s=%s&virtModeType=default'; });  \n",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart));
 
+dyStringPrintf(dy,"Mousetrap.bind('v s', function() { window.location.href='%s?chromInfoPage=&%s=%s'; });  \n",
+           hgTracksName(), cartSessionVarName(), cartSessionId(cart));
+
 // links to a few tools
 dyStringPrintf(dy,"Mousetrap.bind('t b', function() { $('#blatMenuLink')[0].click()});\n");
 dyStringPrintf(dy,"Mousetrap.bind('t i', function() { $('#ispMenuLink')[0].click()});\n");
@@ -9894,6 +9897,7 @@ hPrintf("<tr><td> &nbsp;50kbp (4 zeros)</td><td class=\"hotkey\">4</td><td>Tools
 hPrintf("<tr><td> &nbsp;500kbp (5 zeros)</td><td class=\"hotkey\">5</td><td>My Sessions</td><td class='hotkey'>s then s</td></tr>\n");
 hPrintf("<tr><td> &nbsp;5Mbp (6 zeros)</td><td class=\"hotkey\">6</td><td>Public Sessions</td><td class='hotkey'>p then s</td></tr>\n");
 hPrintf("<tr><td>Highlight all (mark)</td><td class=\"hotkey\">h then m</td><td>Clear all Highlights</td><td class='hotkey'>h then c</td></tr>\n");
+hPrintf("<tr><td>View chrom names</td><td class=\"hotkey\">v then s</td><td></td><td class='hotkey'></td></tr>\n");
 hPrintf("</table>\n");
 hPrintf("<img style=\"margin:8px\" src=\"../images/shortcutHelp.png\">");
 hPrintf("</div>\n");
