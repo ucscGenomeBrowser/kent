@@ -1594,6 +1594,7 @@ hgLoadBlastTab -maxPer=1 $xdb $blastTab run.$xdb.$tempDb/out/*.tab
 hgLoadBlastTab -maxPer=1 $ratDb $blastTab run.$ratDb.$tempDb/out/*.tab 
 hgLoadBlastTab -maxPer=1 $flyDb $blastTab run.$flyDb.$tempDb/recipBest.tab
 hgLoadBlastTab -maxPer=1 $wormDb $blastTab run.$wormDb.$tempDb/recipBest.tab
+hgLoadBlastTab -maxPer=1 $fishDb $blastTab run.$fishDb.$tempDb/recipBest.tab
 hgLoadBlastTab -maxPer=1 $yeastDb $blastTab run.$yeastDb.$tempDb/recipBest.tab
 
 # Do synteny on mouse/human/rat

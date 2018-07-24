@@ -33,8 +33,10 @@ char *genome;		/* Name of genome - mouse, human, etc. */
 char *curGeneId;	/* Current Gene Id. */
 char *curGeneName;		/* Biological name of gene. */
 char *curGeneChrom;	/* Chromosome current gene is on. */
-char *curAlignId;
+char *curAlignId;       /* Align id from knownGene genePred */
 struct genePred *curGenePred;	/* Current gene prediction structure. */
+boolean isGencode;              /* is this based on the Gencode models */
+boolean isGencode2;             /* is this based on the Gencode models and use ensembl id as primary id */
 int curGeneStart,curGeneEnd;	/* Position in chromosome. */
 struct sqlConnection *spConn;	/* Connection to SwissProt database. */
 char *swissProtAcc;		/* SwissProt accession (may be NULL). */
@@ -267,11 +269,10 @@ freez(&description);
 /* print genome position and size */
 char buffer[1024];
 char *commaPos;
-char *isGencode = trackDbSetting(tdb, "isGencode");
    
-if (isGencode)
+if (isGencode || isGencode2)
     {
-    hPrintf("<B>Gencode Transcript:</B> %s<br>\n", curAlignId);
+    hPrintf("<B>Gencode Transcript:</B> %s<br>\n", isGencode2 ? curGeneId : curAlignId);;
     char buffer[1024];
     hPrintf("<B>Gencode Gene:</B> %s<br>\n", getGencodeGeneId(conn, curGeneId, buffer, sizeof buffer));
     }
@@ -561,12 +562,11 @@ printf("<b>total = %d\n", total);
 printf("</p>");
 }
 
-void webMain(struct sqlConnection *conn)
+void webMain(struct sqlConnection *conn, struct trackDb *tdb)
 /* Set up fancy web page with hotlinks bar and
  * sections. */
 {
 struct section *sectionList = NULL;
-struct trackDb *tdb = hTrackDbForTrack(database, genomeSetting("knownGene"));
 printDescription(curGeneId, conn, tdb);
 sectionList = loadSectionList(conn);
 printIndex(sectionList);
@@ -746,9 +746,12 @@ else
 	{
 	/* Default case - start fancy web page. */
 	measureTiming =  isNotEmpty(cartOptionalString(cart, "measureTiming"));
+        struct trackDb *tdb = hTrackDbForTrack(database, genomeSetting("knownGene"));
+        isGencode = trackDbSettingOn(tdb, "isGencode");
+        isGencode2 = trackDbSettingOn(tdb, "isGencode2");
 	cartWebStart(cart, database, "%s Gene %s (%s) Description and Page Index",
-	    genome, curGeneName, curAlignId);
-	webMain(conn);
+	    genome, curGeneName, isGencode2 ? curGeneId : curAlignId);
+	webMain(conn, tdb);
 	cartWebEnd();
 	}
     hFreeConn(&spConn);

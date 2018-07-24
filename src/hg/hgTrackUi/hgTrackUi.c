@@ -1719,7 +1719,7 @@ char *omimAvail = NULL;
 sqlSafef(query, sizeof(query), "select kgXref.kgID from kgXref,%s r where kgXref.refseq = r.mrnaAcc and r.omimId != 0 limit 1", refLinkTable);
 omimAvail = sqlQuickString(conn, query);
 hFreeConn(&conn);
-char *isGencode = trackDbSetting(tdb, "isGencode");
+boolean isGencode = trackDbSettingOn(tdb, "isGencode") || trackDbSettingOn(tdb, "isGencode2");
 
 printf("<B>Label:</B> ");
 labelMakeCheckBox(tdb, "gene", "gene symbol", FALSE);
@@ -1750,13 +1750,22 @@ safef(varName, sizeof(varName), "%s.show.spliceVariants", tdb->track);
 option = cartUsualBoolean(cart, varName, TRUE);
 cgiMakeCheckBox(varName, option);
 printf(" %s&nbsp;&nbsp;&nbsp;", "splice variants");
-char *isGencode = trackDbSetting(tdb, "isGencode");
-if (isGencode != NULL)
+boolean isGencode = trackDbSettingOn(tdb, "isGencode");
+boolean isGencode2 = trackDbSettingOn(tdb, "isGencode2");
+if (isGencode || isGencode2)
     {
     safef(varName, sizeof(varName), "%s.show.comprehensive", tdb->track);
     option = cartUsualBoolean(cart, varName, FALSE);
     cgiMakeCheckBox(varName, option);
     printf(" %s&nbsp;&nbsp;&nbsp;", "show comprehensive set");
+
+    if (isGencode2)
+        {
+        safef(varName, sizeof(varName), "%s.show.pseudo", tdb->track);
+        option = cartUsualBoolean(cart, varName, FALSE);
+        cgiMakeCheckBox(varName, option);
+        printf(" %s&nbsp;&nbsp;&nbsp;", "show pseudogenes");
+        }
     }
 printf("<BR>\n");
 }

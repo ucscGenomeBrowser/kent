@@ -796,6 +796,7 @@ if (securityColumnsInTable)
 		sqlDyStringPrintf(where, " or FIND_IN_SET('%u', groupIds)", groupId);
 		}
 	    sqlFreeResult(&sr);
+	    sqlDyStringPrintfFrag(where, "or allAccess > 0");
 	    sqlDyStringPrintf(where, ")");
 	    }
 	}

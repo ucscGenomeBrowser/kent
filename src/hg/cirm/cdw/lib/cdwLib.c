@@ -1249,7 +1249,7 @@ printf("Content-Type:text/html\r\n");
 printf("\r\n\r\n");
 puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" "
 	      "\"http://www.w3.org/TR/html4/loose.dtd\">");
-printf("<HTML><HEAD><TITLE>%s</TITLE>\n", "CIRM Data Warehouse");
+printf("<HTML><HEAD>\n%s<TITLE>%s</TITLE>\n", getCspMetaHeader(), "CIRM Data Warehouse");
 puts("<meta http-equiv='X-UA-Compatible' content='IE=Edge'>");
 
 // Use CIRM3 CSS for common look

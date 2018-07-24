@@ -5749,6 +5749,20 @@ if (classTable != NULL && hTableExists(database, classTable))
 return TRUE;
 }
 
+boolean knownGencodePseudoFilter(struct track *tg, void *item)
+/* return TRUE is the user wants to see gencode pseudo genes. */
+{
+struct linkedFeatures *lf = item;
+char buffer[1024];
+
+safef(buffer, sizeof buffer, "kgId=\"%s\" and transcriptClass=\"pseudo\"", lf->name);
+char *class = sqlGetField(database, "knownAttrs", "transcriptClass", buffer);
+
+if (class != NULL)
+    return TRUE;
+return FALSE;
+}
+
 boolean knownGencodeClassFilter(struct track *tg, void *item)
 {
 struct linkedFeatures *lf = item;
@@ -5801,6 +5815,8 @@ void loadKnownGencode(struct track *tg)
 char varName[SMALLBUF];
 safef(varName, sizeof(varName), "%s.show.comprehensive", tg->tdb->track);
 boolean showComprehensive = cartUsualBoolean(cart, varName, FALSE);
+safef(varName, sizeof(varName), "%s.show.pseudo", tg->tdb->track);
+boolean showPseudo = cartUsualBoolean(cart, varName, FALSE);
 
 struct sqlConnection *conn = hAllocConn(database);
 tg->items = connectedLfFromGenePredInRangeExtra(tg, conn, tg->table,
@@ -5809,6 +5825,9 @@ tg->items = connectedLfFromGenePredInRangeExtra(tg, conn, tg->table,
 /* filter items on selected criteria if filter is available */
 if (!showComprehensive)
     filterItems(tg, knownGencodeClassFilter, "include");
+
+if (!showPseudo)
+    filterItems(tg, knownGencodePseudoFilter, "exclude");
 
 /* if we're close enough to see the codon frames, we better load them! */
 if (zoomedToCdsColorLevel)
@@ -6049,9 +6068,10 @@ safef(str2, sizeof(str2), "%s&hgg_prot=%s", lf->name, ((struct knownGenesExtra *
 return(cloneString(str2));
 }
 
-void lookupKnownGeneNames(struct linkedFeatures *lfList, boolean isBigGenePred)
+void lookupKnownGeneNames(struct track *tg, boolean isBigGenePred)
 /* This converts the known gene ID to a gene symbol */
 {
+struct linkedFeatures *lfList = tg->items;
 struct linkedFeatures *lf;
 struct sqlConnection *conn = hAllocConn(database);
 char *geneSymbol;
@@ -6059,6 +6079,7 @@ char *protDisplayId;
 char *gencodeId;
 char *mimId;
 char cond_str[256];
+boolean isGencode2 = trackDbSettingOn(tg->tdb, "isGencode2");
 
 boolean useGeneSymbol= FALSE;
 boolean useKgId      = FALSE;
@@ -6135,12 +6156,17 @@ if (hTableExists(database, "kgXref"))
             else labelStarted = TRUE;
             if ( isBigGenePred )
                 {
-                gencodeId = gp->name2;
+                gencodeId = isGencode2 ? gp->name : gp->name2;
                 }
             else
                 {
-                sqlSafefFrag(cond_str, sizeof(cond_str), "name='%s'", lf->name);
-                gencodeId = sqlGetField(database, "knownGene", "alignID", cond_str);
+                if (isGencode2)
+                    gencodeId = lf->name;
+                else
+                    {
+                    sqlSafefFrag(cond_str, sizeof(cond_str), "name='%s'", lf->name);
+                    gencodeId = sqlGetField(database, "knownGene", "alignID", cond_str);
+                    }
                 }
 	    dyStringAppend(name, gencodeId);
 	    }
@@ -6148,8 +6174,15 @@ if (hTableExists(database, "kgXref"))
             {
             if (labelStarted) dyStringAppendC(name, '/');
             else labelStarted = TRUE;
-            dyStringAppend(name, lf->name);
-	    }
+            if (isGencode2)
+                {
+                sqlSafefFrag(cond_str, sizeof(cond_str), "name='%s'", lf->name);
+                char *ucId = sqlGetField(database, "knownGene", "alignID", cond_str);
+                dyStringAppend(name, ucId);
+                }
+            else
+                dyStringAppend(name, lf->name);
+            }
         if (useProtDisplayId)
             {
             if (labelStarted) dyStringAppendC(name, '/');
@@ -6273,7 +6306,7 @@ void loadKnownGene(struct track *tg)
 /* Load up known genes. */
 {
 struct trackDb *tdb = tg->tdb;
-char *isGencode = trackDbSetting(tdb, "isGencode");
+boolean isGencode = trackDbSettingOn(tdb, "isGencode") || trackDbSettingOn(tdb, "isGencode2");
 char *bigGenePred = trackDbSetting(tdb, "bigGeneDataUrl");
 struct udcFile *file;
 boolean isBigGenePred = FALSE;
@@ -6282,9 +6315,9 @@ if ((bigGenePred != NULL) && ((file = udcFileMayOpen(bigGenePred, udcDefaultDir(
     {
     isBigGenePred = TRUE;
     udcFileClose(&file);
-    loadKnownBigGenePred(tg, isGencode != NULL);
+    loadKnownBigGenePred(tg, isGencode);
     }
-else if (isGencode == NULL)
+else if (!isGencode)
     loadGenePredWithName2(tg);
 else
     loadKnownGencode(tg);
@@ -6327,7 +6360,7 @@ if (!showSpliceVariants)
             }
         }
     }
-lookupKnownGeneNames(tg->items, isBigGenePred);
+lookupKnownGeneNames(tg, isBigGenePred);
 limitVisibility(tg);
 }
 

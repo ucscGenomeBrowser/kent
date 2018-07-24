@@ -5795,39 +5795,35 @@ void scoreCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, ch
 char option[256];
 boolean parentLevel = isNameAtParentLevel(tdb,name);
 boolean skipScoreFilter = FALSE;
-boolean bigBed = startsWith("bigBed",tdb->type);
 
-if (!bigBed)  // bigBed filters are limited!
+// Numeric filters are first
+boolean isBoxOpened = FALSE;
+if (numericFiltersShowAll(db, cart, tdb, &isBoxOpened, boxed, parentLevel, name, title) > 0)
+    skipScoreFilter = TRUE;
+
+// Add any multi-selects next
+filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
+if (filterBySet != NULL)
     {
-    // Numeric filters are first
-    boolean isBoxOpened = FALSE;
-    if (numericFiltersShowAll(db, cart, tdb, &isBoxOpened, boxed, parentLevel, name, title) > 0)
-        skipScoreFilter = TRUE;
+    if (!tdbIsComposite(tdb) && cartOptionalString(cart, "ajax") == NULL)
+        jsIncludeFile("hui.js",NULL);
 
-    // Add any multi-selects next
-    filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
-    if (filterBySet != NULL)
-        {
-        if (!tdbIsComposite(tdb) && cartOptionalString(cart, "ajax") == NULL)
-            jsIncludeFile("hui.js",NULL);
+    if (!isBoxOpened)   // Note filterBy boxes are not double "boxed",
+        printf("<BR>"); // if there are no other filters
+    filterBySetCfgUi(cart,tdb,filterBySet,TRUE);
+    filterBySetFree(&filterBySet);
+    skipScoreFilter = TRUE;
+    }
 
-        if (!isBoxOpened)   // Note filterBy boxes are not double "boxed",
-            printf("<BR>"); // if there are no other filters
-        filterBySetCfgUi(cart,tdb,filterBySet,TRUE);
-        filterBySetFree(&filterBySet);
-        skipScoreFilter = TRUE;
-        }
+// For no good reason scoreFilter is incompatible with filterBy and or numericFilters
+// FIXME scoreFilter should be implemented inside numericFilters and is currently specificly
+//       excluded to avoid unexpected changes
+if (skipScoreFilter)
+    {
+    if (isBoxOpened)
+        cfgEndBox(boxed);
 
-    // For no good reason scoreFilter is incompatible with filterBy and or numericFilters
-    // FIXME scoreFilter should be implemented inside numericFilters and is currently specificly
-    //       excluded to avoid unexpected changes
-    if (skipScoreFilter)
-        {
-        if (isBoxOpened)
-            cfgEndBox(boxed);
-
-        return; // Cannot have both '*filter' and 'scoreFilter'
-        }
+    return; // Cannot have both '*filter' and 'scoreFilter'
     }
 
 boolean scoreFilterOk = (trackDbSettingClosestToHome(tdb, NO_SCORE_FILTER) == NULL);
@@ -5843,7 +5839,7 @@ if (scoreFilterOk)
                                                                &minVal,  &maxVal);
 
     boolean filterByRange = trackDbSettingClosestToHomeOn(tdb, SCORE_FILTER _BY_RANGE);
-    if (!bigBed && filterByRange)
+    if (filterByRange)
         {
         puts("<B>Filter score range:  min:</B>");
         safef(option, sizeof(option), "%s.%s", name,SCORE_FILTER _MIN);
@@ -5870,35 +5866,32 @@ if (scoreFilterOk)
 if (glvlScoreMin)
     scoreGrayLevelCfgUi(cart, tdb, name, maxScore);
 
-if (!bigBed)
+// filter top-scoring N items in track
+char *scoreCtString = trackDbSettingClosestToHome(tdb, "filterTopScorers");
+if (scoreCtString != NULL)
     {
-    // filter top-scoring N items in track
-    char *scoreCtString = trackDbSettingClosestToHome(tdb, "filterTopScorers");
-    if (scoreCtString != NULL)
-        {
-        // show only top-scoring items. This option only displayed if trackDb
-        // setting exists.  Format:  filterTopScorers <on|off> <count> <table>
-        char *words[2];
-        char *scoreFilterCt = NULL;
-        chopLine(cloneString(scoreCtString), words);
-        safef(option, sizeof(option), "%s.filterTopScorersOn", name);
-        bool doScoreCtFilter =
-            cartUsualBooleanClosestToHome(cart, tdb, parentLevel, "filterTopScorersOn",
-                                          sameString(words[0], "on"));
-        puts("<P>");
-        cgiMakeCheckBox(option, doScoreCtFilter);
-        safef(option, sizeof(option), "%s.filterTopScorersCt", name);
-        scoreFilterCt = cartUsualStringClosestToHome(cart, tdb, parentLevel, "filterTopScorersCt",
-                                                     words[1]);
+    // show only top-scoring items. This option only displayed if trackDb
+    // setting exists.  Format:  filterTopScorers <on|off> <count> <table>
+    char *words[2];
+    char *scoreFilterCt = NULL;
+    chopLine(cloneString(scoreCtString), words);
+    safef(option, sizeof(option), "%s.filterTopScorersOn", name);
+    bool doScoreCtFilter =
+        cartUsualBooleanClosestToHome(cart, tdb, parentLevel, "filterTopScorersOn",
+                                      sameString(words[0], "on"));
+    puts("<P>");
+    cgiMakeCheckBox(option, doScoreCtFilter);
+    safef(option, sizeof(option), "%s.filterTopScorersCt", name);
+    scoreFilterCt = cartUsualStringClosestToHome(cart, tdb, parentLevel, "filterTopScorersCt",
+                                                 words[1]);
 
-        puts("&nbsp; <B> Show only items in top-scoring </B>");
-        cgiMakeIntVarWithLimits(option,atoi(scoreFilterCt),"Top-scoring count",0,1,100000);
-        //* Only check size of table if track does not have subtracks */
-        if ( !parentLevel && hTableExists(db, tdb->table))
-            printf("&nbsp; (range: 1 to 100,000 total items: %d)\n",getTableSize(db, tdb->table));
-        else
-            printf("&nbsp; (range: 1 to 100,000)\n");
-        }
+    puts("&nbsp; <B> Show only items in top-scoring </B>");
+    cgiMakeIntVarWithLimits(option,atoi(scoreFilterCt),"Top-scoring count",0,1,100000);
+    //* Only check size of table if track does not have subtracks */
+    if ( !parentLevel && hTableExists(db, tdb->table))
+        printf("&nbsp; (range: 1 to 100,000 total items: %d)\n",getTableSize(db, tdb->table));
+    else
+        printf("&nbsp; (range: 1 to 100,000)\n");
     }
 cfgEndBox(boxed);
 }
