@@ -46,10 +46,11 @@ struct annoStreamDbPslPlus
     // Private members
     char *gpTable;                      // Associated genePred (refGene, ncbiRefSeqCurated etc)
     struct annoStreamer *mySource;	// Internal source of PSL+CDS+seq info
+    struct hash *idHash;		// Used to restrict PSL query result to curated/predicted
     };
 
 // select p.*, c.cds, l.protAcc, l.name, e.path, s.file_offset, s.file_size 
-//   from (((ncbiRefSeqPsl p join ncbiRefSeqCurated n on p.qName = n.name)
+//   from (((ncbiRefSeqPsl p // NOT ANYMORE (#21770): join ncbiRefSeqCurated n on p.qName = n.name)
 //          left join ncbiRefSeqCds c on p.qName = c.id)
 //         join ncbiRefSeqLink l on p.qName = l.mrnaAcc)
 //        left join (seqNcbiRefSeq s left join extNcbiRefSeq e on s.extFile = e.id) on p.qName = s.acc
@@ -59,7 +60,6 @@ struct annoStreamDbPslPlus
 
 static char *ncbiRefSeqConfigJsonFormat =
     "{ \"naForMissing\": false,"
-    "  \"rightJoinTable\": \"%s\","
     "  \"relatedTables\": [ { \"table\": \"ncbiRefSeqCds\","
     "                         \"fields\": [\"cds\"] },"
     "                       { \"table\": \"ncbiRefSeqLink\","
@@ -119,7 +119,11 @@ boolean rightJoinFail = FALSE;
 while ((ppRow = self->mySource->nextRow(self->mySource, minChrom, minEnd, lm)) != NULL)
     {
     ppWords = ppRow->data;
-    // If there are filters on experiment attributes, apply them, otherwise just return aRow.
+    // If self->idHash is non-NULL, check PSL qName; skip this row if qName not found.
+    char *qName = ppWords[9];
+    if (self->idHash && ! hashLookup(self->idHash, qName))
+        continue;
+    // If there are filters, apply them, otherwise just return aRow.
     if (sSelf->filters)
 	{
 	boolean fails = annoFilterRowFails(sSelf->filters, ppWords, sSelf->numCols,
@@ -230,6 +234,15 @@ self->mySource = annoStreamDbNew(aa->name, pslTable, aa, maxOutRows, config);
 struct asObject *asObj = annoStreamDbPslPlusAsObj();
 if (extraConfig)
     asObjAppendExtraColumns(asObj, self->mySource->asObj);
+if (sameString("ncbiRefSeqCurated", gpTable) || sameString("ncbiRefSeqPredicted", gpTable))
+    {
+    // Load up an ID hash to restrict PSL query results to the curated/predicted subset:
+    struct sqlConnection *conn = hAllocConn(aa->name);
+    char query[1024];
+    sqlSafef(query, sizeof(query), "select name, 1 from %s", gpTable);
+    self->idHash = sqlQuickHash(conn, query);
+    hFreeConn(&conn);
+    }
 // Set up external streamer interface
 struct annoStreamer *streamer = &(self->streamer);
 annoStreamerInit(streamer, aa, asObj, pslTable);
