@@ -14,6 +14,7 @@
 #include "cds.h"
 #include "bedTabix.h"
 #include "obscure.h"
+#include "bigBedFilter.h"
 
 #define SEQ_DELIM '~'
 
@@ -140,14 +141,12 @@ if (startsWith("bedTabix", tg->tdb->type ) || startsWith("longTabix", tg->tdb->t
     }
 else if (tg->isBigBed)
     { // avoid opening an unneeded db connection for bigBed; required not to use mysql for parallel fetch tracks
-    char *scoreFilter = cartOrTdbString(cart, tg->tdb, "scoreFilter", NULL);
     struct lm *lm = lmInit(0);
     struct bigBedInterval *bb, *bbList = bigBedSelectRange(tg, chromName, winStart, winEnd, lm);
     char *bedRow[32];
     char startBuf[16], endBuf[16];
-    int minScore = 0;
-    if (scoreFilter)
-	minScore = atoi(scoreFilter);
+    struct bbiFile *bbi = fetchBbiForTrack(tg);
+    struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, tg->tdb);
 
      if (tg->itemName == bedName && !trackDbSettingClosestToHomeOn(tg->tdb, "linkIdInName"))
         tg->itemName = bigBedItemName;
@@ -156,13 +155,15 @@ else if (tg->isBigBed)
     for (bb = bbList; bb != NULL; bb = bb->next)
         {
         bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+        if (!bigBedFilterInterval(bedRow, filters))
+            continue;
         bed = loader(bedRow);
         // FIXME BRANEY: either disable for all tracks with NUM_FIELDS > label field or better,
         // fix how label is stored so it doesn't trash custom bed field
         if (differentString(tg->tdb->type, "bigInteract"))
             bed->label = makeLabel(tg, bb);
-        if (scoreFilter == NULL || bed->score >= minScore)
-            slAddHead(&list, bed);
+
+        slAddHead(&list, bed);
         }
     lmCleanup(&lm);
     }

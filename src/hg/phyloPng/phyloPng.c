@@ -551,7 +551,7 @@ if (htmlPageWrapper)
     {
     printf("Content-type: text/html\r\n");
     printf("\r\n");
-    puts("<html><head><title>Phylogenetic Tree</title></head><body>");
+    printf("<html><head>\n%s<title>Phylogenetic Tree</title></head><body>",getCspMetaHeader());
     printf("<IMAGE SRC=\"http://%s%s"
 	    "?phyloPng_width=%d"
 	    "&phyloPng_height=%d"
@@ -630,7 +630,7 @@ if (errMsg)
         {
         printf("Content-type: text/html\r\n");
         printf("\r\n");
-        puts("<html><head><title>PhyloTree parse error</title></head><body><pre>");
+        printf("<html><head>\n%s<title>PhyloTree parse error</title></head><body><pre>",getCspMetaHeader());
         /* we dont think the specific error message coming back are correct or useful
         * so supply a generic err msg */
         htmlPrintf("Original input tree:\n[%s]\n\n",cgiString("phyloPng_tree"));
@@ -677,7 +677,7 @@ if (phyloTree)
 	    {
 	    printf("Content-type: text/html\r\n");
 	    printf("\r\n");
-	    puts("<html><head><title>PhyloTree error</title></head><body><pre>");
+	    printf("<html><head>\n%s<title>PhyloTree error</title></head><body><pre>",getCspMetaHeader());
 	    printf("input tree: [%s]\n\n%s",cgiString("phyloPng_tree"),layoutErrMsg);
 	    puts("</pre></body></html>");
 	    }

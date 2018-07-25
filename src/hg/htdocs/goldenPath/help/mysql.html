@@ -64,7 +64,10 @@ db.password=password
 central.db=hgcentral
 central.host=genome-mysql.soe.ucsc.edu
 central.user=genomep
-central.password=password</code></pre>
+central.password=password
+gbdbLoc1=http://hgdownload.cse.ucsc.edu/gbdb/
+forceTwoBit=on
+</code></pre>
 <p>
 Or these lines if you'd like to access the European MySQL server:</p>
 <pre><code>#European MySQL server
@@ -74,7 +77,16 @@ db.password=password
 central.db=hgcentral
 central.host=genome-euro-mysql.soe.ucsc.edu
 central.user=genomep
-central.password=password</code></pre>
+central.password=password
+gbdbLoc1=http://hgdownload.cse.ucsc.edu/gbdb/
+forceTwoBit=on
+</code></pre>
+
+<p>
+The <code>db.*</code> and <code>central.*</code> settings tell our utilities how to connect to the public MySQL server.
+The <code>gbdbLoc1</code> setting tells our utilities where to find data files.
+The <code>forceTwoBit</code> setting is necessary for utilities that retrieve genomic sequence.
+</p>
 
 <p>
 If you have set up your .hg.conf file as above, you can use the <code>hgsql</code> utility,

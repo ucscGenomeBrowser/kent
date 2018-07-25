@@ -21362,6 +21362,7 @@ if (blastRef != NULL)
 		prot = row[1];
 		pos = row[2];
 		}
+	    sqlFreeResult(&sr);
 	    }
         }
     }
@@ -21509,7 +21510,6 @@ for (isClicked = 1; isClicked >= 0; isClicked -= 1)
     printf("</PRE></TT>");
     /* Add description */
     printTrackHtml(tdb);
-    sqlFreeResult(&sr);
     hFreeConn(&conn);
 }
 
