@@ -970,7 +970,7 @@ safef(pattern, sizeof(pattern), "^[ACTG-]+(\\/[ACTG-]+){%d}$", count - 1);
 if (! regexMatchNoCase(row[3], pattern) && type == NULL)
     return FALSE;
 else if (! regexMatchNoCase(row[3], pattern))
-    errAbort("Error line 1 of custom track, type is pgSnp with a count of %d but allele is invalid %s", count, row[3]);
+    errAbort("Error line 1 of custom track, type is pgSnp with a count of %d but allele is invalid (%s)", count, row[3]);
 safef(pattern, sizeof(pattern), "^[0-9]+(,[0-9]+){%d}$", count - 1);
 if (! regexMatchNoCase(row[5], pattern) && type == NULL)
     return FALSE;
@@ -1005,6 +1005,9 @@ if (wordCount == 7)
     char *ctDb = ctGenomeOrCurrent(track);
     isPgSnp = rowIsPgSnp(row, ctDb, type);
     }
+else if (type != NULL && sameType(type, fac->name))
+    errAbort("Error line 1 of custom track, type is pgSnp so it must have 7 fields but has %d",
+             wordCount);
 freeMem(dupe);
 customPpReuse(cpp, line);
 return (isPgSnp);
