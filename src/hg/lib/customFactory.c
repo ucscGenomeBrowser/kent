@@ -940,7 +940,7 @@ static struct customFactory bedDetailFactory =
 
 /*** pgSnp Factory - allow pgSnp(personal genome SNP) custom tracks ***/
 
-static boolean rowIsPgSnp (char **row, char *db, char *type)
+static boolean rowIsPgSnp (char **row, char *db, char *type, struct lineFile *lf)
 /* return TRUE if row looks like a pgSnp row */
 {
 if (type != NULL && !sameWord(type, "pgSnp"))
@@ -953,34 +953,34 @@ if (!isPgSnp && type == NULL)
     return FALSE;
     }
 else if (!isPgSnp)
-    errAbort("Error line 1 of custom track, type is pgSnp but first 3 fields are not BED: %s",
+    lineFileAbort(lf, "type is pgSnp but first 3 fields are not BED: %s",
              whyNotBed->string);
 dyStringFree(&whyNotBed);
 if (!isdigit(row[4][0]) && type == NULL)
     return FALSE;
 else if (!isdigit(row[4][0]))
-    errAbort("Error line 1 of custom track, type is pgSnp but count is not an integer (%s)", row[4]);
+    lineFileAbort(lf, "type is pgSnp but count is not an integer (%s)", row[4]);
 int count = atoi(row[4]);
 if (count < 1 && type == NULL)
     return FALSE;
 else if (count < 1)
-    errAbort("Error line 1 of custom track, type is pgSnp but count is less than 1");
+    lineFileAbort(lf, "type is pgSnp but count is less than 1");
 char pattern[128]; /* include count in pattern */
 safef(pattern, sizeof(pattern), "^[ACTG-]+(\\/[ACTG-]+){%d}$", count - 1);
 if (! regexMatchNoCase(row[3], pattern) && type == NULL)
     return FALSE;
 else if (! regexMatchNoCase(row[3], pattern))
-    errAbort("Error line 1 of custom track, type is pgSnp with a count of %d but allele is invalid (%s)", count, row[3]);
+    lineFileAbort(lf, "type is pgSnp with a count of %d but allele is invalid (%s)", count, row[3]);
 safef(pattern, sizeof(pattern), "^[0-9]+(,[0-9]+){%d}$", count - 1);
 if (! regexMatchNoCase(row[5], pattern) && type == NULL)
     return FALSE;
 else if (! regexMatchNoCase(row[5], pattern))
-    errAbort("Error line 1 of custom track, type is pgSnp with a count of %d but frequency is invalid (%s)", count, row[5]);
+    lineFileAbort(lf, "type is pgSnp with a count of %d but frequency is invalid (%s)", count, row[5]);
 safef(pattern, sizeof(pattern), "^[0-9.]+(,[0-9.]+){%d}$", count - 1);
 if (! regexMatchNoCase(row[6], pattern) && type == NULL)
     return FALSE;
 else if (! regexMatchNoCase(row[6], pattern))
-    errAbort("Error line 1 of custom track, type is pgSnp with a count of %d but score is invalid (%s)", count, row[6]);
+    lineFileAbort(lf, "type is pgSnp with a count of %d but score is invalid (%s)", count, row[6]);
 /* if get here must be pgSnp format */
 return TRUE;
 }
@@ -999,15 +999,16 @@ char *dupe = cloneString(line);
 char *row[7+3];
 int wordCount = chopLine(dupe, row);
 boolean isPgSnp = FALSE;
+struct lineFile *lf = cpp->fileStack;
 if (wordCount == 7)
     {
     track->fieldCount = wordCount;
     char *ctDb = ctGenomeOrCurrent(track);
-    isPgSnp = rowIsPgSnp(row, ctDb, type);
+    isPgSnp = rowIsPgSnp(row, ctDb, type, lf);
     }
 else if (type != NULL && sameType(type, fac->name))
-    errAbort("Error line 1 of custom track, type is pgSnp so it must have 7 fields but has %d",
-             wordCount);
+    lineFileAbort(lf, "type is pgSnp so it must have 7 fields but has %d",
+                  wordCount);
 freeMem(dupe);
 customPpReuse(cpp, line);
 return (isPgSnp);
@@ -1144,20 +1145,20 @@ static struct customFactory pgSnpFactory =
 
 /* BarChart and bigBarChart tracks */
 
-static boolean rowIsBarChart (char **row, int wordCount, char *db)
+static boolean rowIsBarChart (char **row, int wordCount, char *db, struct lineFile *lf)
 /* return TRUE if row looks like a barChart row. BED 6+5 */
 {
 char *type = "barChart";
 struct dyString *whyNotBed = dyStringNew(0);
 if (!rowIsBed(row, 6, db, whyNotBed))
-    errAbort("Error line 1 of custom track, type is %s but first 6 fields are not BED: %s",
+    lineFileAbort(lf, "type is %s but first 6 fields are not BED: %s",
              type, whyNotBed->string);
 dyStringFree(&whyNotBed);
 char *buf[BAR_CHART_MAX_CATEGORIES];
 int expScoresCount = chopCommas(cloneString(row[BARCHART_EXPSCORES_COLUMN_IX]), buf);
 int expCount = sqlUnsigned(row[BARCHART_EXPCOUNT_COLUMN_IX]);
 if (expCount != expScoresCount)
-    errAbort("Error line 1 of custom track, type is %s, but found %d expScores (expecting %d)",
+    lineFileAbort(lf, "type is %s, but found %d expScores (expecting %d)",
                 type, expScoresCount, expCount);
 return TRUE;
 }
@@ -1188,12 +1189,13 @@ char *dupe = cloneString(line);
 char *row[BARCHARTBED_NUM_COLS+1];
 int wordCount = chopLine(dupe, row);
 boolean isBarChart = FALSE;
+struct lineFile *lf = cpp->fileStack;
 if (wordCount == BARCHARTBED_NUM_COLS ||
         wordCount == BARCHARTBED_NUM_COLS-2)    // don't require dataOffset/dataLen
     {
     track->fieldCount = wordCount;
     char *ctDb = ctGenomeOrCurrent(track);
-    isBarChart = rowIsBarChart(row, wordCount, ctDb);
+    isBarChart = rowIsBarChart(row, wordCount, ctDb, lf);
     }
 freeMem(dupe);
 customPpReuse(cpp, line);
@@ -1356,14 +1358,13 @@ struct customFactory barChartFactory =
 /************************************/
 /* Interact and bigInteract tracks */
 
-static boolean rowIsInteract (char **row, int wordCount, char *db)
+static boolean rowIsInteract (char **row, int wordCount, char *db, struct lineFile *lf)
 /* return TRUE if row looks like an interact row. BED 5+ */
 {
 char *type = "interact";
 struct dyString *whyNotBed = dyStringNew(0);
 if (!rowIsBed(row, 5, db, whyNotBed))
-    errAbort("Error line 1 of custom track, type is %s but first 5 fields are not BED: %s",
-             type, whyNotBed->string);
+    lineFileAbort(lf, "type is %s but first 5 fields are not BED: %s", type, whyNotBed->string);
 dyStringFree(&whyNotBed);
 return TRUE;
 }
@@ -1383,11 +1384,12 @@ char *dupe = cloneString(line);
 char *row[INTERACT_NUM_COLS+1];
 int wordCount = chopLine(dupe, row);
 boolean isInteract = FALSE;
+struct lineFile *lf = cpp->fileStack;
 if (wordCount == INTERACT_NUM_COLS)
     {
     track->fieldCount = wordCount;
     char *ctDb = ctGenomeOrCurrent(track);
-    isInteract = rowIsInteract(row, wordCount, ctDb);
+    isInteract = rowIsInteract(row, wordCount, ctDb, lf);
     }
 freeMem(dupe);
 customPpReuse(cpp, line);
