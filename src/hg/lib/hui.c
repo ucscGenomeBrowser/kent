@@ -5679,7 +5679,9 @@ if (filterSettings)
 #ifdef EXTRA_FIELDS_SUPPORT
     struct extraField *extras = extraFieldsGet(db,tdb);
 #else///ifndef EXTRA_FIELDS_SUPPORT
-    struct sqlConnection *conn = hAllocConnTrack(db, tdb);
+    struct sqlConnection *conn = NULL;
+    if (!isHubTrack(db))
+        conn = hAllocConnTrack(db, tdb);
     struct asObject *as = asForTdb(conn, tdb);
     hFreeConn(&conn);
 #endif///ndef EXTRA_FIELDS_SUPPORT
