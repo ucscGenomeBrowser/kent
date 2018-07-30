@@ -207,7 +207,12 @@ char *dupe = cloneString(line);
 char *row[bedKnownFields+1];
 int wordCount = chopLine(dupe, row);
 char *ctDb = ctGenomeOrCurrent(track);
-boolean isBed = rowIsBed(row, wordCount, ctDb, NULL);
+struct dyString *whyNotBed = dyStringNew(0);
+boolean isBed = rowIsBed(row, wordCount, ctDb, whyNotBed);
+struct lineFile *lf = cpp->fileStack;
+if (!isBed && type != NULL)
+    lineFileAbort(lf, "%s", whyNotBed->string);
+dyStringFree(&whyNotBed);
 freeMem(dupe);
 if (isBed)
     track->fieldCount = wordCount;
