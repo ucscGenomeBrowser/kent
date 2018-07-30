@@ -234,9 +234,9 @@ self->mySource = annoStreamDbNew(aa->name, pslTable, aa, maxOutRows, config);
 struct asObject *asObj = annoStreamDbPslPlusAsObj();
 if (extraConfig)
     asObjAppendExtraColumns(asObj, self->mySource->asObj);
-if (sameString("ncbiRefSeqCurated", gpTable) || sameString("ncbiRefSeqPredicted", gpTable))
+if (startsWith("ncbiRefSeq", gpTable) && differentString("ncbiRefSeq", gpTable))
     {
-    // Load up an ID hash to restrict PSL query results to the curated/predicted subset:
+    // Load up an ID hash to restrict PSL query results to the subset in gpTable:
     struct sqlConnection *conn = hAllocConn(aa->name);
     char query[1024];
     sqlSafef(query, sizeof(query), "select name, 1 from %s", gpTable);
