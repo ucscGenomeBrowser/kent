@@ -3531,7 +3531,7 @@ if (colonPair != NULL)
 return FALSE;
 }
 
-static boolean colonPairToInts(char * colonPair,int *first,int *second)
+boolean colonPairToInts(char * colonPair,int *first,int *second)
 { // Non-destructive. Only sets values if found. No colon: value goes to *first
 char *a=NULL;
 char *b=NULL;
@@ -5479,7 +5479,7 @@ if (defaults != NULL && ((min && *min == NULL) || (max && *max == NULL)))
 return FALSE;
 }
 
-static void getScoreIntRangeFromCart(struct cart *cart, struct trackDb *tdb, boolean parentLevel,
+void getScoreIntRangeFromCart(struct cart *cart, struct trackDb *tdb, boolean parentLevel,
                                  char *scoreName, int *limitMin, int *limitMax,int *min,int *max)
 // gets an integer score range from the cart, but the limits from trackDb
 // for any of the pointers provided, will return a value found, if found, else it's contents
@@ -5686,8 +5686,8 @@ if (filterSettings)
 
     while ((filter = slPopHead(&filterSettings)) != NULL)
         {
-        if (differentString(filter->name,NO_SCORE_FILTER)
-        &&  differentString(filter->name,SCORE_FILTER)) // TODO: scoreFilter could be included
+        if (differentString(filter->name,NO_SCORE_FILTER))
+        //&&  differentString(filter->name,SCORE_FILTER)) // TODO: scoreFilter could be included
             {
             // Determine floating point or integer
             char *setting = trackDbSetting(tdb, filter->name);

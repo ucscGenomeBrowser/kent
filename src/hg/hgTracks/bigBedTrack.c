@@ -34,12 +34,40 @@ char *setting = trackDbSettingClosestToHome(tdb, filter);
 int fieldNum =  bbExtraFieldIndex(bbi, field) + 3;
 if (setting)
     {
+    struct asObject *as = bigBedAsOrDefault(bbi);
+    // All this isFloat conditional code is here because the cart
+    // variables used for floats are different than those used for ints
+    // in ../lib/hui.c so we have to use the correct getScore*() routine
+    // to access them..    We're doomed.
+    boolean isFloat = FALSE;
+    struct asColumn *asCol = asColumnFind(as, field);
+    if (asCol != NULL)
+        isFloat = asTypesIsFloating(asCol->lowType->type);
     boolean invalid = FALSE;
     double minValueTdb = 0,maxValueTdb = NO_VALUE;
-    colonPairToDoubles(setting,&minValueTdb,&maxValueTdb);
-    double minLimit=NO_VALUE,maxLimit=NO_VALUE,min=minValueTdb,max=maxValueTdb;
-    colonPairToDoubles(defaultLimits,&minLimit,&maxLimit);
-    getScoreFloatRangeFromCart(cart,tdb,FALSE,filter,&minLimit,&maxLimit,&min,&max);
+    double minLimit=NO_VALUE,maxLimit=NO_VALUE,min = minValueTdb,max = maxValueTdb;
+    if (!isFloat)
+        {
+        int minValueTdbInt = 0,maxValueTdbInt = NO_VALUE;
+        colonPairToInts(setting,&minValueTdbInt,&maxValueTdbInt);
+        int minLimitInt=NO_VALUE,maxLimitInt=NO_VALUE,minInt=minValueTdbInt,maxInt=maxValueTdbInt;
+        colonPairToInts(defaultLimits,&minLimitInt,&maxLimitInt);
+        getScoreIntRangeFromCart(cart,tdb,FALSE,filter,&minLimitInt,&maxLimitInt,&minInt,&maxInt);
+
+        // copy all the ints over to the doubles (sigh)
+        min = minInt;
+        max = maxInt;
+        minLimit = minLimitInt;
+        maxLimit = maxLimitInt;
+        minValueTdb = minValueTdbInt;
+        maxValueTdb = maxValueTdbInt;
+        }
+    else
+        {
+        colonPairToDoubles(setting,&minValueTdb,&maxValueTdb);
+        colonPairToDoubles(defaultLimits,&minLimit,&maxLimit);
+        getScoreFloatRangeFromCart(cart,tdb,FALSE,filter,&minLimit,&maxLimit,&min,&max);
+        }
     if ((int)minLimit != NO_VALUE || (int)maxLimit != NO_VALUE)
         {
         // assume tdb default values within range!

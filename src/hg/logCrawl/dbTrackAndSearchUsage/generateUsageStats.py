@@ -75,13 +75,15 @@ def parseTrackLog(line):
     # [Sun Mar 05 04:11:27 2017] [error] [client ###.###.###.##] trackLog 0 hg38 hgsid_### cytoBandIdeo:1,cloneEndCTD:2
     ####
     
-    splitLine = line.strip().split(' ')
-    month = splitLine[1]
-    year = splitLine[4].replace("]","")
-    db = splitLine[10]
-    hgsid = splitLine[11]
-    if len(splitLine) > 12:
-        activeTracks = splitLine[12]
+    splitLine = line.strip().split('trackLog')
+    prefix = splitLine[0].split()
+    month = prefix[1]
+    year = prefix[4].replace("]","")
+    suffix = splitLine[1].split()
+    db = suffix[1]
+    hgsid = suffix[2]
+    if len(suffix) > 3:
+        activeTracks = suffix[3]
         tracks = activeTracks.split(",")
     else:
         tracks = []
