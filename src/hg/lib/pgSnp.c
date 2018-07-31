@@ -717,7 +717,9 @@ item->alleleCount = lineFileNeedNum(lf, row, 4);
 char alleles[128]; /* pattern to match alleles */
 safef(alleles, sizeof(alleles), "^[ACTG-]+(\\/[ACTG-]+){%d}$", item->alleleCount - 1);
 if (! regexMatchNoCase(row[3], alleles))
-    lineFileAbort(lf, "invalid alleles %s", row[3]);
+    lineFileAbort(lf, "invalid alleles (%s)"
+                  " - must be slash-separated nucleotide(s) with correct number of alleles (%d)",
+                  row[3], item->alleleCount);
 /* read count, comma separated list of numbers with above # of items */
 item->alleleFreq = cloneString(row[5]);
 char pattern[128];
