@@ -40,7 +40,9 @@ Create a BED format file following the directions
 <a href="../../FAQ/FAQformat.html#format1">here</a>. When converting a BED file to a bigBed file, 
 you are limited to one track of data in your input file; therefore, you must create a separate BED 
 file for each data track. Your BED file must be sorted first on the <code>chrom</code> field, and 
-secondarily on the <code>chromStart</code> field. You can use the following UNIX <code>sort</code> 
+secondarily on the <code>chromStart</code> field. You can use utility <code>bedSort</code>
+available <a href="http://hgdownload.soe.ucsc.edu/admin/exe/" target="_blank">here</a>
+or the following UNIX <code>sort</code>
 command to do this: </p>
 <pre><code>sort -k1,1 -k2,2n unsorted.bed &gt; input.bed</code></pre>
 <p> 
