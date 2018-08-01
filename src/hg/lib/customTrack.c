@@ -626,6 +626,7 @@ cgiDecode(fileName, fileNameDecoded, strlen(fileName));
 boolean result = 
     (endsWith(fileNameDecoded,".gz") || 
      endsWith(fileNameDecoded,".Z")  ||
+     endsWith(fileNameDecoded,".zip")  ||
      endsWith(fileNameDecoded,".bz2"));
 freeMem(fileNameDecoded);
 return result;

@@ -1081,6 +1081,15 @@ void labelCfgUi(char *db, struct cart *cart, struct trackDb *tdb);
 boolean colonPairToDoubles(char * colonPair,double *first,double *second);
 // Non-destructive. Only sets values if found. No colon: value goes to *first
 
+boolean colonPairToInts(char * colonPair,int *first,int *second);
+// Non-destructive. Only sets values if found. No colon: value goes to *first
+
+void getScoreIntRangeFromCart(struct cart *cart, struct trackDb *tdb, boolean parentLevel,
+                                 char *scoreName, int *limitMin, int *limitMax,int *min,int *max);
+// gets an integer score range from the cart, but the limits from trackDb
+// for any of the pointers provided, will return a value found, if found, else it's contents
+// are undisturbed (use NO_VALUE to recognize unavaliable values)
+//
 void getScoreFloatRangeFromCart(struct cart *cart, struct trackDb *tdb, boolean parentLevel,
                          char *scoreName, double *limitMin,double *limitMax,double*min,double*max);
 // gets an double score range from the cart, but the limits from trackDb

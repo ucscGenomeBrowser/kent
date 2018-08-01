@@ -32,7 +32,7 @@ if options.debug:
 else:
     logging.basicConfig(level=logging.INFO)
 
-clinvarExpectHeaders = "#AlleleID	Type	Name	GeneID	GeneSymbol	HGNC_ID	ClinicalSignificance	ClinSigSimple	LastEvaluated	RS# (dbSNP)	nsv/esv (dbVar)	RCVaccession	PhenotypeIDS	PhenotypeList	Origin	OriginSimple	Assembly	ChromosomeAccession	Chromosome	Start	Stop	ReferenceAllele	AlternateAllele	Cytogenetic	ReviewStatus	NumberSubmitters	Guidelines	TestedInGTR	OtherIDs	SubmitterCategories\n"
+clinvarExpectHeaders = "#AlleleID	Type	Name	GeneID	GeneSymbol	HGNC_ID	ClinicalSignificance	ClinSigSimple	LastEvaluated	RS# (dbSNP)	nsv/esv (dbVar)	RCVaccession	PhenotypeIDS	PhenotypeList	Origin	OriginSimple	Assembly	ChromosomeAccession	Chromosome	Start	Stop	ReferenceAllele	AlternateAllele	Cytogenetic	ReviewStatus	NumberSubmitters	Guidelines	TestedInGTR	OtherIDs	SubmitterCategories	VariationID\n"
 # ==== FUNCTIONs =====
 
 def shortenName(name):
@@ -236,6 +236,8 @@ def reviewStatusToHtmlStars(reviewStatus):
     revStatus = reviewStatus.strip().lower().replace(" ", "")
     starCount = None
 
+    if revStatus == "nointerpretationforthesinglevariant":
+        starCount = 0
     if revStatus=="criteriaprovided,conflictinginterpretations":
         starCount = 1
     if revStatus=="criteriaprovided,multiplesubmitters,noconflicts":
@@ -298,7 +300,7 @@ else:
     varFname = args[1]
     hgvsFname = args[2]
 
-allToVar = parseVariationAlleleFile(varFname)
+#allToVar = parseVariationAlleleFile(varFname)
 allToHgvs = parseHgvsFile(hgvsFname)
 
 # e.g. GRCh38/hg38 1p36.33-36.31(chr1:1181847-5507243)x1
@@ -348,12 +350,13 @@ for line in ifh:
     alleleId, allType, name, geneId, geneSymbol, hgncId, clinSign, clinSignSimple, lastEval, snpAcc, dbVarAcc, \
       irvcAcc, phenotypeIds, phenotypeList, origin, originSimple, assembly, chromAcc, chrom, start, end, \
       refAll, varAll, cytogenetic, reviewStatus, numberSubmitters, guidelines, inGtr, otherIds, \
-      submCategories = row
+      submCategories, varId = row
 
-    if alleleId not in allToVar:
-        logging.warn("No variantID for alleleId %s, %s" % (alleleId, irvcAcc))
-        continue
-    varId = allToVar[alleleId]
+    # changed in July 2018 when the "varId" was merged into this table. It used to be 
+    # in allToVar
+    if varId=="":
+        logging.warn("empty variantID for alleleId %s, %s" % (alleleId, irvcAcc))
+
     hgvsCod, hgvsProt =  allToHgvs.get(alleleId, ("", ""))
 
     if chrom=="" or assembly=="" or assembly=="NCBI36":
@@ -418,12 +421,15 @@ for line in ifh:
             isPat = True
         if "benign" in clinSign.lower():
             isBen = True
+
         if (isPat==True and isBen==True) or (isPat==False and isBen==False):
             itemRgb = "128,128,128"
         elif isPat==True:
-            itemRgb = "0,0,0"
-        else: # is benign
-            itemRgb = "200,200,200"
+            itemRgb = "210,0,0"
+        elif isBen==True:
+            itemRgb = "0,210,0"
+        else:
+            assert(False)# should never happen
 
     geneStr = geneSymbol
     if geneId.isdigit() and geneId!="-1":

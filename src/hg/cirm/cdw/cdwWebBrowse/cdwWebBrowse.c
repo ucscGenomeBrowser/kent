@@ -789,14 +789,13 @@ if (securityColumnsInTable)
 	    char **row;
 	    if (!isEmpty(where->string))
 		sqlDyStringPrintf(where, " and ");
-	    sqlDyStringPrintfFrag(where, "(FIND_IN_SET('0', groupIds)");	 // initial 0 makes code smaller
+	    sqlDyStringPrintfFrag(where, "(allAccess > 0");
 	    while ((row = sqlNextRow(sr)) != NULL)
 		{
 		int groupId = sqlUnsigned(row[0]);
 		sqlDyStringPrintf(where, " or FIND_IN_SET('%u', groupIds)", groupId);
 		}
 	    sqlFreeResult(&sr);
-	    sqlDyStringPrintfFrag(where, "or allAccess > 0");
 	    sqlDyStringPrintf(where, ")");
 	    }
 	}
@@ -859,7 +858,7 @@ for (sff = selectedList; sff; sff=sff->next)
     if (slCount(sff->valList)>0)
 	{
 	sqlDyStringPrintfFrag(facetedWhere, " and ");  // use Frag to prevent NOSQLINJ tag
-	sqlDyStringPrintf(facetedWhere, "%s in (", sff->fieldName);
+	sqlDyStringPrintf(facetedWhere, "ifnull(%s,'n/a') in (", sff->fieldName);
 	struct facetVal *el;
 	for (el=sff->valList; el; el=el->next)
 	    {
@@ -873,7 +872,7 @@ for (sff = selectedList; sff; sff=sff->next)
 
 // get their fileIds
 struct dyString *tagQuery = sqlDyStringCreate("SELECT file_id from %s %-s", table, filteredWhere->string); // trust
-dyStringPrintf(tagQuery,  "%-s", facetedWhere->string); // trust because it was created safely
+sqlDyStringPrintf(tagQuery,  "%-s", facetedWhere->string); // trust because it was created safely
 struct slName *fileIds = sqlQuickList(conn, tagQuery->string);
 
 // retrieve the cdwFiles objects for these

@@ -6,9 +6,10 @@ struct bigBedFilter
 {
 struct bigBedFilter *next;
 int fieldNum;   // the field number
-enum {COMPARE_LESS, COMPARE_MORE, COMPARE_BETWEEN, COMPARE_HASH} comparisonType;  // the type of the comparison
+enum {COMPARE_LESS, COMPARE_MORE, COMPARE_BETWEEN, COMPARE_HASH, COMPARE_REGEXP} comparisonType;  // the type of the comparison
 double value1, value2;
 struct hash *valueHash;
+regex_t regEx;
 };
 
 struct bigBedFilter *bigBedMakeNumberFilter(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *filter, char *defaultLimits,  char *field);

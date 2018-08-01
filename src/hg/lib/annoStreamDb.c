@@ -67,8 +67,6 @@ struct annoStreamDb
     boolean hasLeftJoin;		// If we have to use 'left join' we'll have to 'order by'.
     boolean naForMissing;		// If true, insert "n/a" for missing related table values
 					// to match hgTables.
-    struct joinerDtf *rightJoinDtf;	// If non-null, join with this table to limit output rows
-    char *rightJoinMainField;		// Field of main table corresponding to rightJoinDtf
 
     struct rowBuf
     // Temporary storage for rows from chunked query
@@ -283,14 +281,6 @@ else
     appendOneTable(self, self->joinMixer->sqlRouteList->a, query);
     appendJoin(self, self->joinMixer->sqlRouteList, query);
     hasLeftJoin = TRUE;
-    }
-if (self->rightJoinDtf)
-    {
-    sqlDyStringPrintf(query, " join ");
-    appendOneTable(self, self->rightJoinDtf, query);
-    char rjField[PATH_LEN];
-    joinerDtfToSqlFieldString(self->rightJoinDtf, self->db, rjField, sizeof(rjField));
-    sqlDyStringPrintf(query, " on %s = %s.%s", rjField, self->table, self->rightJoinMainField);
     }
 return hasLeftJoin;
 }
@@ -1216,21 +1206,6 @@ if (configEl != NULL)
     struct jsonElement *naForMissingEl = hashFindVal(config, "naForMissing");
     if (naForMissingEl != NULL)
         self->naForMissing = jsonBooleanVal(naForMissingEl, "naForMissing");
-    struct jsonElement *rightJoinDtfEl = hashFindVal(config, "rightJoinDtf");
-    if (rightJoinDtfEl != NULL)
-        {
-        char *rjd = jsonStringVal(rightJoinDtfEl, "rightJoinDtf");
-        if (isNotEmpty(rjd))
-            {
-            self->rightJoinDtf = joinerDtfFromDottedTriple(rjd);
-            struct jsonElement *rjMainFieldEl = hashFindVal(config, "rightJoinMainField");
-            if (! rjMainFieldEl)
-                errAbort("annoStreamDb (%s): rightJoinMainField must be provided "
-                         "along with rightJoinDtf (%s)",
-                         self->table, rjd);
-            self->rightJoinMainField = jsonStringVal(rjMainFieldEl, "rightJoinMainField");
-            }
-        }
     }
 return asObj;
 }

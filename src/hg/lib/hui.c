@@ -3531,7 +3531,7 @@ if (colonPair != NULL)
 return FALSE;
 }
 
-static boolean colonPairToInts(char * colonPair,int *first,int *second)
+boolean colonPairToInts(char * colonPair,int *first,int *second)
 { // Non-destructive. Only sets values if found. No colon: value goes to *first
 char *a=NULL;
 char *b=NULL;
@@ -5479,7 +5479,7 @@ if (defaults != NULL && ((min && *min == NULL) || (max && *max == NULL)))
 return FALSE;
 }
 
-static void getScoreIntRangeFromCart(struct cart *cart, struct trackDb *tdb, boolean parentLevel,
+void getScoreIntRangeFromCart(struct cart *cart, struct trackDb *tdb, boolean parentLevel,
                                  char *scoreName, int *limitMin, int *limitMax,int *min,int *max)
 // gets an integer score range from the cart, but the limits from trackDb
 // for any of the pointers provided, will return a value found, if found, else it's contents
@@ -5679,15 +5679,17 @@ if (filterSettings)
 #ifdef EXTRA_FIELDS_SUPPORT
     struct extraField *extras = extraFieldsGet(db,tdb);
 #else///ifndef EXTRA_FIELDS_SUPPORT
-    struct sqlConnection *conn = hAllocConnTrack(db, tdb);
+    struct sqlConnection *conn = NULL;
+    if (!isHubTrack(db))
+        conn = hAllocConnTrack(db, tdb);
     struct asObject *as = asForTdb(conn, tdb);
     hFreeConn(&conn);
 #endif///ndef EXTRA_FIELDS_SUPPORT
 
     while ((filter = slPopHead(&filterSettings)) != NULL)
         {
-        if (differentString(filter->name,NO_SCORE_FILTER)
-        &&  differentString(filter->name,SCORE_FILTER)) // TODO: scoreFilter could be included
+        if (differentString(filter->name,NO_SCORE_FILTER))
+        //&&  differentString(filter->name,SCORE_FILTER)) // TODO: scoreFilter could be included
             {
             // Determine floating point or integer
             char *setting = trackDbSetting(tdb, filter->name);
@@ -5788,6 +5790,30 @@ return FALSE;
 }
 
 
+void textFiltersShowAll(char *db, struct cart *cart, struct trackDb *tdb)
+/* Show all the text filters for this track. */
+{
+struct slName *filter, *filterSettings = trackDbSettingsWildMatch(tdb, "*FilterText");
+if (filterSettings)
+    {
+    while ((filter = slPopHead(&filterSettings)) != NULL)
+        {
+        char *setting = trackDbSetting(tdb, filter->name);
+        char *value = cartUsualStringClosestToHome(cart, tdb, FALSE, filter->name, setting);
+        char *field = cloneString(filter->name);
+        int ix = strlen(field) - strlen("FilterText");
+        assert(ix > 0);
+        field[ix] = '\0';
+
+        printf("<P><B>Filter items by regular expression in '%s' field: ", field);
+
+        char cgiVar[128];
+        safef(cgiVar,sizeof(cgiVar),"%s.%s",tdb->track,filter->name);
+        cgiMakeTextVar(cgiVar, value, 45);
+        }
+    }
+}
+
 void scoreCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title,
                 int maxScore, boolean boxed)
 // Put up UI for filtering bed track based on a score
@@ -5800,6 +5826,8 @@ boolean skipScoreFilter = FALSE;
 boolean isBoxOpened = FALSE;
 if (numericFiltersShowAll(db, cart, tdb, &isBoxOpened, boxed, parentLevel, name, title) > 0)
     skipScoreFilter = TRUE;
+
+textFiltersShowAll(db, cart, tdb);
 
 // Add any multi-selects next
 filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);

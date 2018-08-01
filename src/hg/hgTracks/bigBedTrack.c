@@ -34,12 +34,40 @@ char *setting = trackDbSettingClosestToHome(tdb, filter);
 int fieldNum =  bbExtraFieldIndex(bbi, field) + 3;
 if (setting)
     {
+    struct asObject *as = bigBedAsOrDefault(bbi);
+    // All this isFloat conditional code is here because the cart
+    // variables used for floats are different than those used for ints
+    // in ../lib/hui.c so we have to use the correct getScore*() routine
+    // to access them..    We're doomed.
+    boolean isFloat = FALSE;
+    struct asColumn *asCol = asColumnFind(as, field);
+    if (asCol != NULL)
+        isFloat = asTypesIsFloating(asCol->lowType->type);
     boolean invalid = FALSE;
     double minValueTdb = 0,maxValueTdb = NO_VALUE;
-    colonPairToDoubles(setting,&minValueTdb,&maxValueTdb);
-    double minLimit=NO_VALUE,maxLimit=NO_VALUE,min=minValueTdb,max=maxValueTdb;
-    colonPairToDoubles(defaultLimits,&minLimit,&maxLimit);
-    getScoreFloatRangeFromCart(cart,tdb,FALSE,filter,&minLimit,&maxLimit,&min,&max);
+    double minLimit=NO_VALUE,maxLimit=NO_VALUE,min = minValueTdb,max = maxValueTdb;
+    if (!isFloat)
+        {
+        int minValueTdbInt = 0,maxValueTdbInt = NO_VALUE;
+        colonPairToInts(setting,&minValueTdbInt,&maxValueTdbInt);
+        int minLimitInt=NO_VALUE,maxLimitInt=NO_VALUE,minInt=minValueTdbInt,maxInt=maxValueTdbInt;
+        colonPairToInts(defaultLimits,&minLimitInt,&maxLimitInt);
+        getScoreIntRangeFromCart(cart,tdb,FALSE,filter,&minLimitInt,&maxLimitInt,&minInt,&maxInt);
+
+        // copy all the ints over to the doubles (sigh)
+        min = minInt;
+        max = maxInt;
+        minLimit = minLimitInt;
+        maxLimit = maxLimitInt;
+        minValueTdb = minValueTdbInt;
+        maxValueTdb = maxValueTdbInt;
+        }
+    else
+        {
+        colonPairToDoubles(setting,&minValueTdb,&maxValueTdb);
+        colonPairToDoubles(defaultLimits,&minLimit,&maxLimit);
+        getScoreFloatRangeFromCart(cart,tdb,FALSE,filter,&minLimit,&maxLimit,&min,&max);
+        }
     if ((int)minLimit != NO_VALUE || (int)maxLimit != NO_VALUE)
         {
         // assume tdb default values within range!
@@ -101,6 +129,20 @@ if (setting)
 return ret;
 }
 
+struct bigBedFilter *bigBedMakeFilterText(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *filterName, char *field)
+/* Add a bigBed filter using a trackDb filterText statement. */
+{
+struct bigBedFilter *filter;
+char *setting = trackDbSettingClosestToHome(tdb, filterName);
+char *value = cartUsualStringClosestToHome(cart, tdb, FALSE, filterName, setting);
+
+AllocVar(filter);
+filter->fieldNum =  bbExtraFieldIndex(bbi, field) + 3;
+filter->comparisonType = COMPARE_REGEXP;
+regcomp(&filter->regEx, value, REG_NOSUB);
+
+return filter;
+}
 
 struct bigBedFilter *bigBedMakeFilterBy(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *field, struct slName *choices)
 /* Add a bigBed filter using a trackDb filterBy statement. */
@@ -132,6 +174,16 @@ for(; filterSettings; filterSettings = filterSettings->next)
         slAddHead(&filters, filter);
     }
 
+filterSettings = trackDbSettingsWildMatch(tdb, "*FilterText");
+
+for(; filterSettings; filterSettings = filterSettings->next)
+    {
+    char *fieldName = cloneString(filterSettings->name);
+    fieldName[strlen(fieldName) - sizeof "FilterText" + 1] = 0;
+    if ((filter = bigBedMakeFilterText(cart, bbi, tdb, filterSettings->name,  fieldName)) != NULL)
+        slAddHead(&filters, filter);
+    }
+
 filterBy_t *filterBySet = filterBySetGet(tdb, cart,NULL);
 filterBy_t *filterBy = filterBySet;
 for (;filterBy != NULL; filterBy = filterBy->next)
@@ -157,6 +209,10 @@ for(filter = filters; filter; filter = filter->next)
 
     switch(filter->comparisonType)
         {
+        case COMPARE_REGEXP:
+            if (regexec(&filter->regEx,bedRow[filter->fieldNum], 0, NULL,0 ) != 0)
+                return FALSE;
+            break;
         case COMPARE_HASH:
             if (!hashLookup(filter->valueHash, bedRow[filter->fieldNum]))
                 return FALSE;
