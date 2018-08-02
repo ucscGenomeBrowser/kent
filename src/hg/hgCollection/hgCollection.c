@@ -477,7 +477,7 @@ for(curGroup = groupList; curGroup;  curGroup = curGroup->next)
         continue;
     if (!isEmpty(rootChildren->string))
         dyStringPrintf(rootChildren, ",");
-    dyStringPrintf(rootChildren, "{icon:'../images/folderC.png',id:'%s', text:'%s', parent:'#', children:true,li_attr:{title:'%s'}}", curGroup->name, curGroup->label, FOLDER_TITLE);
+    dyStringPrintf(rootChildren, "{icon:'../images/folderC.png',id:'%s', text:'%s', parent:'#', children:true,li_attr:{title:'%s'}}", curGroup->name, escapeLabel(curGroup->label), FOLDER_TITLE);
     struct trackDb *tdb;
     jsInlineF("trackData['%s'] = [", curGroup->name);
     boolean first = TRUE;

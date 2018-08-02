@@ -40,8 +40,8 @@ sys.path.append(join(dirname(__file__), "pyLib"))
 try:
     from hgLib import cgiArgs, cgiSetup, cgiString, printContentType, printMenuBar, \
             sqlConnect, sqlQuery, errAbort, cfgOption, runCmd, cgiGetAll, printHgcHeader, \
-            printHgcSection, webStartGbNoBanner, htmlPageEnd, hConnectCentral, sqlTableExists, \
-            readSmallFile
+            printHgcSection, getNonce, getCspMetaHeader, jsOnEventById, jsInlineFinish, webStartGbNoBanner, htmlPageEnd, hConnectCentral, sqlTableExists, \
+            readSmallFil
 except:
     print("Content-type: text/html\n")
     print("Cannot find the directory cgi-bin/pyLib in Apache. This is an installation error.")
@@ -145,7 +145,7 @@ def printInlineAndStyles():
 
 
     print("""
-<script type="text/javascript">
+<script type="text/javascript" nonce='%s'>
   $(function() {
     //$( document ).uitooltip();
     //$( document ).uitooltip();
@@ -215,11 +215,11 @@ ul { padding-left: 15px; margin: 0px; padding-top:3px;}
 
 </style>
 
-    """)
+    """ % getNonce())
 
 def htmlHeader():
     " print start of page "
-    webStartGbNoBanner("", "Genome Browser Gene Interaction Graph")
+    webStartGbNoBanner(getCspMetaHeader(), "Genome Browser Gene Interaction Graph")
 
     print('<body class="hgc cgi">')
     printMenuBar()
@@ -898,12 +898,14 @@ def printHttpHead(format):
         print "Content-Disposition: attachment; filename=%s" % fname
     print
 
-def printCheckbox(name, isChecked, addAttr):
+def printCheckbox(name, isChecked, event, codeStr):
     " print a html checkbox "
     addStr = ""
     if isChecked:
         addStr = 'checked="true" '
-    print '<input type="checkbox" name="%s" value="on" %s%s />' % (name, addStr, addAttr)
+    print '<input type="checkbox" id="%s" name="%s" value="on" %s />' % (name, name, addStr)
+    if event != "":
+	jsOnEventById(event, name, codeStr)
 
 def getFilterStatus():
     """ return a set of the support tags that should be shown, based on the CGI var 'supportLevel'.
@@ -916,16 +918,18 @@ def getFilterStatus():
         tagSet.add("text")
     return tagSet
 
-def printDropdown(cgiArgName, selectedName, options, addStr=""):
+def printDropdown(cgiArgName, selectedName, options, event="", codeStr=""):
     " print a html dropdown <select> box. "
-    print("<select name='%s'%s>" % (cgiArgName, addStr))
+    print("<select id='%s' name='%s'>" % (cgiArgName, cgiArgName))
     for name, label in options:
         addStr = ""
         if name==selectedName:
             addStr = " selected"
-
         print('<option value="%s"%s>%s</option>' % (name, addStr, label))
     print("</select>")
+    if event != "":
+	jsOnEventById(event, cgiArgName, codeStr)
+
 
 def printFilterMenu(targetGene, addNeighbors):
     # form to filter by type
@@ -942,9 +946,10 @@ def printFilterMenu(targetGene, addNeighbors):
     if supportLevel not in ["text", "pwy", "ppi"]:
         errAbort("Illegal value for the supportLevel argument. Can only be text,pwy or ppi.")
 
-    onChangeAttr = '''onchange="document.forms['filterForm'].submit();"'''
+    event = "change"
+    codeStr = "document.forms['filterForm'].submit();"
 
-    printDropdown("supportLevel", supportLevel, [("text", "Show all interactions, even only text-mining support"), ("ppi", "Show only interactions with some database support"), ("pwy", "Show only interactions with pathway database support")], addStr=onChangeAttr )
+    printDropdown("supportLevel", supportLevel, [("text", "Show all interactions, even only text-mining support"), ("ppi", "Show only interactions with some database support"), ("pwy", "Show only interactions with pathway database support")], event, codeStr )
 
     #filterTags = getFilterStatus()
     #printCheckbox("pwy", "pwy" in filterTags, onChangeAttr)
@@ -966,7 +971,7 @@ def printFilterMenu(targetGene, addNeighbors):
         #print("Only %s interactions are shown (%s)<br>" % (targetGene, addNeighborLink))
     #print(addNeighborLink)
     hideIndirectStatus = (getCgiVar("hideIndirect")=="on")
-    printCheckbox("hideIndirect", hideIndirectStatus, onChangeAttr)
+    printCheckbox("hideIndirect", hideIndirectStatus, event, codeStr)
     print '<span style="font-weight:bold">Hide non-%s interactions</span>' % targetGene
     print "&nbsp;&nbsp;&nbsp;"
 
@@ -2019,6 +2024,7 @@ def main():
     htmlHeader()
     printInlineAndStyles()
     htmlMiddle()
+    jsInlineFinish()
     htmlPageEnd()
 
 main()
