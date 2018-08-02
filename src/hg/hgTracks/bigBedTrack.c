@@ -129,6 +129,20 @@ if (setting)
 return ret;
 }
 
+struct bigBedFilter *bigBedMakeFilterText(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *filterName, char *field)
+/* Add a bigBed filter using a trackDb filterText statement. */
+{
+struct bigBedFilter *filter;
+char *setting = trackDbSettingClosestToHome(tdb, filterName);
+char *value = cartUsualStringClosestToHome(cart, tdb, FALSE, filterName, setting);
+
+AllocVar(filter);
+filter->fieldNum =  bbExtraFieldIndex(bbi, field) + 3;
+filter->comparisonType = COMPARE_REGEXP;
+regcomp(&filter->regEx, value, REG_NOSUB);
+
+return filter;
+}
 
 struct bigBedFilter *bigBedMakeFilterBy(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *field, struct slName *choices)
 /* Add a bigBed filter using a trackDb filterBy statement. */
@@ -160,6 +174,16 @@ for(; filterSettings; filterSettings = filterSettings->next)
         slAddHead(&filters, filter);
     }
 
+filterSettings = trackDbSettingsWildMatch(tdb, "*FilterText");
+
+for(; filterSettings; filterSettings = filterSettings->next)
+    {
+    char *fieldName = cloneString(filterSettings->name);
+    fieldName[strlen(fieldName) - sizeof "FilterText" + 1] = 0;
+    if ((filter = bigBedMakeFilterText(cart, bbi, tdb, filterSettings->name,  fieldName)) != NULL)
+        slAddHead(&filters, filter);
+    }
+
 filterBy_t *filterBySet = filterBySetGet(tdb, cart,NULL);
 filterBy_t *filterBy = filterBySet;
 for (;filterBy != NULL; filterBy = filterBy->next)
@@ -185,6 +209,10 @@ for(filter = filters; filter; filter = filter->next)
 
     switch(filter->comparisonType)
         {
+        case COMPARE_REGEXP:
+            if (regexec(&filter->regEx,bedRow[filter->fieldNum], 0, NULL,0 ) != 0)
+                return FALSE;
+            break;
         case COMPARE_HASH:
             if (!hashLookup(filter->valueHash, bedRow[filter->fieldNum]))
                 return FALSE;
