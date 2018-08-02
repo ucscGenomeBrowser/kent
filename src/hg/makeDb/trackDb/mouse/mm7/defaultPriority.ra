@@ -15,10 +15,10 @@ visibility pack
 priority 2
 
 track xenoRefGene override
-priority 3
+priority 4
 
 track refGene override
-priority 4
+priority 3
 
 # mRNA and EST
 
