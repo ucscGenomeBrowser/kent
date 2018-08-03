@@ -5689,7 +5689,6 @@ if (filterSettings)
     while ((filter = slPopHead(&filterSettings)) != NULL)
         {
         if (differentString(filter->name,NO_SCORE_FILTER))
-        //&&  differentString(filter->name,SCORE_FILTER)) // TODO: scoreFilter could be included
             {
             // Determine floating point or integer
             char *setting = trackDbSetting(tdb, filter->name);
