@@ -3540,6 +3540,97 @@ identifier wgEncodeGencodeExonSupportVM16
 
 # end Gencode VM16
 
+# begin Gencode VM18
+
+# gencode genePred tables with no associations
+# wgEncodeGencodePolyaVM18
+# wgEncodeGencode2wayConsPseudoVM18
+
+# gencode genePred tables with joining through wgEncodeGencodeAttrsVM18
+identifier wgEncodeGencodeBasicAttrsVM18
+"Link together Gencode Basic Table with Attributes table"
+    mm10.wgEncodeGencodeAttrsVM18.transcriptId
+    mm10.wgEncodeGencodeBasicVM18.name
+
+identifier wgEncodeGencodeCompAttrsVM18
+"Link together Gencode Comprehensive Table with Attributes table"
+    mm10.wgEncodeGencodeAttrsVM18.transcriptId
+    mm10.wgEncodeGencodeCompVM18.name
+
+identifier wgEncodeGencodePseudoGeneAttrsVM18
+"Link together Gencode PseudoGene Table with Attributes table"
+    mm10.wgEncodeGencodeAttrsVM18.transcriptId
+    mm10.wgEncodeGencodePseudoGeneVM18.name
+
+# gencode association tables (joined through wgEncodeGencodeAttrsVM18)
+identifier wgEncodeGencodeGeneSourceVM18
+"Link together Gencode Gene Source table with Attributes table"
+    mm10.wgEncodeGencodeGeneSourceVM18.geneId
+    mm10.wgEncodeGencodeAttrsVM18.geneId
+
+identifier wgEncodeGencodePdbVM18
+"Link together Gencode Pdb table with Attributes table"
+    mm10.wgEncodeGencodePdbVM18.transcriptId dupeOk
+    mm10.wgEncodeGencodeAttrsVM18.transcriptId minCheck=0.015
+
+identifier wgEncodeGencodePubMedVM18
+"Link together Gencode Pubmed table with Attributes table"
+    mm10.wgEncodeGencodePubMedVM18.transcriptId dupeOk
+    mm10.wgEncodeGencodeAttrsVM18.transcriptId  minCheck=0.63
+
+identifier wgEncodeGencodeRefSeqVM18
+"Link together Gencode RefSeq table with Attributes table"
+    mm10.wgEncodeGencodeRefSeqVM18.transcriptId dupeOk
+    mm10.wgEncodeGencodeAttrsVM18.transcriptId minCheck=0.05
+
+identifier wgEncodeGencodeRefSeqToRefGeneVM18
+"Link together Gencode RefSeq table with refGene track"
+    mm10.wgEncodeGencodeRefSeqVM18.rnaAcc dupeOk chopAfter=.
+    mm10.refGene.name minCheck=0.77
+
+identifier wgEncodeGencodeTagVM18
+"Link together Gencode Tag table with Attributes table"
+    mm10.wgEncodeGencodeTagVM18.transcriptId dupeOk
+    mm10.wgEncodeGencodeAttrsVM18.transcriptId minCheck=0.373378
+    mm10.wgEncodeGencodeRefSeqVM18.transcriptId minCheck=0.9
+
+identifier wgEncodeGencodeTranscriptSourceVM18
+"Link together Gencode Transcript Source table with Attributes table"
+    mm10.wgEncodeGencodeTranscriptSourceVM18.transcriptId
+    mm10.wgEncodeGencodeAttrsVM18.transcriptId
+
+identifier wgEncodeGencodeTranscriptSupportVM18
+"Link together Gencode Transcript Support table with Attributes table"
+    mm10.wgEncodeGencodeTranscriptSupportVM18.transcriptId dupeOk
+    mm10.wgEncodeGencodeAttrsVM18.transcriptId minCheck=0.20
+
+identifier wgEncodeGencodeTranscriptionSupportLevelVM18
+"Link together Gencode Transcription Support Level table with Attributes table"
+    mm10.wgEncodeGencodeTranscriptionSupportLevelVM18.transcriptId dupeOk
+    mm10.wgEncodeGencodeAttrsVM18.transcriptId minCheck=0.30
+
+identifier wgEncodeGencodeUniProtVM18
+"Link together Gencode UniProt Support table with Attributes table"
+    mm10.wgEncodeGencodeUniProtVM18.transcriptId dupeOk
+    mm10.wgEncodeGencodeAttrsVM18.transcriptId minCheck=0.358209
+
+identifier wgEncodeGencodeAnnotationRemarkVM18
+"Link together Gencode Annotation Remark table with Attributes table"
+    mm10.wgEncodeGencodeAnnotationRemarkVM18.transcriptId dupeOk
+    mm10.wgEncodeGencodeAttrsVM18.transcriptId minCheck=0.10
+
+identifier wgEncodeGencodeEntrezGeneVM18
+"Link together Gencode UniProt Support table with Attributes table"
+    mm10.wgEncodeGencodeEntrezGeneVM18.transcriptId dupeOk
+    mm10.wgEncodeGencodeEntrezGeneVM18.transcriptId minCheck=0.358209
+
+identifier wgEncodeGencodeExonSupportVM18
+"Link together Gencode Exon Support table with Attributes table"
+    mm10.wgEncodeGencodeExonSupportVM18.transcriptId dupeOk
+    mm10.wgEncodeGencodeAttrsVM18.transcriptId minCheck=0.95
+
+# end Gencode VM18
+
 identifier wgEncodeGencodeClassesV3Hg19
 "Link together Gencode gene model (Known) and class for July 2009 Data Version"
     hg19.wgEncodeGencodeClassesV3.name
