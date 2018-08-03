@@ -839,7 +839,7 @@ def jsOnEventByIdF(eventName, idText, format, *args):
     " Add js mapping for inline event with printf formatting "
     checkValidEvent(eventName)
     jsInlineF("document.getElementById('%s').on%s = function(event) {if (!event) {event=window.event}; ", idText, eventName)
-    jsInlineF(format, args)
+    jsInlineF(format, *args)
     jsInlineF("};\n")
 
 #============ END of javascript inline-separation routines ===============

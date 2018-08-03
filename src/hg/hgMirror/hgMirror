@@ -45,6 +45,20 @@ from collections import defaultdict, namedtuple
 from os.path import *
 from distutils import spawn
 
+# import the UCSC-specific library
+sys.path.append(join(dirname(__file__), "pyLib"))
+try:
+    from hgLib import getNonce, getCspMetaHeader, jsOnEventByIdF, jsInlineFinish 
+	    # cgiArgs, cgiSetup, cgiString, printContentType, printMenuBar, \
+            # sqlConnect, sqlQuery, errAbort, cfgOption, runCmd, cgiGetAll, printHgcHeader, \
+            # printHgcSection, 
+	    # webStartGbNoBanner, htmlPageEnd, hConnectCentral, sqlTableExists, \
+            # readSmallFile
+except:
+    print("Content-type: text/html\n")
+    print("Cannot find the directory cgi-bin/pyLib in Apache. This is an installation error.")
+    print("All all parts of cgi-bin installed? Did you do 'make' in kent/src/hg/pyLib?")
+
 defaultDb = "hg19"
 
 # the mysqldb module has to be installed with one of these commands:
@@ -406,6 +420,7 @@ def htmlHeader():
     print """
 <html>
 <head>
+%s
 <title>UCSC Genome Browser mirror tool</title>
 
 <script type='text/javascript' SRC='../js/jquery.js'></script>
@@ -415,7 +430,7 @@ def htmlHeader():
 
 </head>
 <body>
-    """
+    """ % (getCspMetaHeader())
     print open("../htdocs/inc/globalNavBar.inc").read()
     sys.stdout.flush()
 
@@ -693,7 +708,9 @@ def htmlDropBox(selName, elList, selKey):
     if selName=="org" or selName=="clade":
         addStr += "document.orgForm.db.value = 0; "
 
-    print '''<SELECT NAME="%s" onchange="document.orgForm.%s.value = document.mainForm.%s.options[document.mainForm.%s.selectedIndex].value; %s document.orgForm.submit();">''' % (selName, selName, selName, selName, addStr)
+    print '''<SELECT id='%s' NAME="%s" >''' % (selName, selName)
+
+    jsOnEventByIdF("change", selName, "document.orgForm.%s.value = document.mainForm.%s.options[document.mainForm.%s.selectedIndex].value; %s document.orgForm.submit();", selName, selName, selName, addStr)
 
     for row in elList:
         elKey, desc = row
@@ -1230,12 +1247,12 @@ def refreshPage(paramStr, delay=5, addNote=False):
     " refresh current CGI page using javascript "
     newUrl = basename(__file__)+"?"+paramStr
     print """
-    <script type="text/javascript">
+    <script type="text/javascript" nonce='%s'>
     function Redirect()
         { window.location="%s"; }
     setTimeout('Redirect()', %d);
     </script>
-    """ % (newUrl, delay)
+    """ % (getNonce(), newUrl, delay)
 
     if addNote:
         print("""Redirecting to <a href="%s">%s</a>"""  % (newUrl, newUrl))
@@ -1673,11 +1690,11 @@ def postRsyncChanges(db, localSizes):
 
 def reloadPage():
     " trigger page reload with javascript "
-    print ("""
-    <script type="text/javascript">
+    print """
+    <script type="text/javascript" nonce='%s'>
     location.reload()
     </script>
-    </html>""")
+    </html>""" % (getNonce())
     sys.stdout.flush()
     sys.exit(0)
 
@@ -1913,6 +1930,7 @@ def main():
 
     htmlHeader()
     htmlMiddle(args)
+    jsInlineFinish()
     htmlFooter()
 
 main()
