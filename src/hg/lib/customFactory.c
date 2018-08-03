@@ -3876,10 +3876,11 @@ return errCount;
 
 static struct customTrack *customFactoryParseOptionalDb(char *genomeDb, char *text,
 	boolean isFile, struct slName **retBrowserLines,
-	boolean mustBeCurrentDb)
+	boolean mustBeCurrentDb, boolean doParallelLoad)
 /* Parse text into a custom set of tracks.  Text parameter is a
  * file name if 'isFile' is set.  If mustBeCurrentDb, die if custom track
- * is for some database other than genomeDb. */
+ * is for some database other than genomeDb. 
+ * If doParallelLoad is true, load the big tracks */
 {
 struct customTrack *trackList = NULL, *track = NULL;
 char *line = NULL;
@@ -4045,14 +4046,17 @@ while ((line = customPpNextReal(cpp)) != NULL)
             dataUrl = cloneString(lf->fileName);
 	if (bigDataUrl && (ptMax > 0)) // handle separately in parallel so long timeouts don't accrue serially
                                        //  (unless ptMax == 0 which means turn parallel loading off)
-	    {
-	    struct paraFetchData *pfd;
-	    AllocVar(pfd);
-	    pfd->track = track;  // need pointer to be stable
-	    pfd->fac = fac;
-	    slAddHead(&pfdList, pfd);
-    	    oneList = track;
-	    }
+            {
+            if (doParallelLoad)
+                {
+                struct paraFetchData *pfd;
+                AllocVar(pfd);
+                pfd->track = track;  // need pointer to be stable
+                pfd->fac = fac;
+                slAddHead(&pfdList, pfd);
+                }
+            oneList = track;
+            }
 	else
     	    oneList = fac->loader(fac, chromHash, cpp, track, dbTrack);
 
@@ -4076,7 +4080,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
 // Call the fac loader in parallel on all the bigDataUrl custom tracks
 // using pthreads to avoid long serial timeouts
 pthread_t *threads = NULL;
-if (ptMax > 0)     // parallelFetch.threads=0 to disable parallel fetch
+if (doParallelLoad && (ptMax > 0))     // parallelFetch.threads=0 to disable parallel fetch
     {
     /* launch parallel threads */
     ptMax = min(ptMax, slCount(pfdList));
@@ -4094,7 +4098,7 @@ if (ptMax > 0)     // parallelFetch.threads=0 to disable parallel fetch
 	    }
 	}
     }
-if (ptMax > 0)
+if (doParallelLoad && (ptMax > 0))
     {
     /* wait for remote parallel load to finish */
     remoteParallelLoadWait(atoi(cfgOptionDefault("parallelFetch.timeout", "90")));  // wait up to default 90 seconds.
@@ -4148,15 +4152,16 @@ struct customTrack *customFactoryParse(char *genomeDb, char *text, boolean isFil
 /* Parse text into a custom set of tracks.  Text parameter is a
  * file name if 'isFile' is set.  Die if the track is not for genomeDb. */
 {
-return customFactoryParseOptionalDb(genomeDb, text, isFile, retBrowserLines, TRUE);
+return customFactoryParseOptionalDb(genomeDb, text, isFile, retBrowserLines, TRUE, TRUE);
 }
 
 struct customTrack *customFactoryParseAnyDb(char *genomeDb, char *text, boolean isFile,
-					    struct slName **retBrowserLines)
+					    struct slName **retBrowserLines, boolean doParallelLoad)
 /* Parse text into a custom set of tracks.  Text parameter is a
- * file name if 'isFile' is set.  Track does not have to be for hGetDb(). */
+ * file name if 'isFile' is set.  Track does not have to be for hGetDb(). 
+ * If doParallelLoad is true, load the big tracks */
 {
-return customFactoryParseOptionalDb(genomeDb, text, isFile, retBrowserLines, FALSE);
+return customFactoryParseOptionalDb(genomeDb, text, isFile, retBrowserLines, FALSE, doParallelLoad);
 }
 
 static boolean testFileSettings(struct trackDb *tdb, char *ctFileName)

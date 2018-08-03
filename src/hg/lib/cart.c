@@ -390,7 +390,7 @@ for (el = elList; el != NULL; el = el->next)
 	struct customTrack *ctList = NULL;
 	char *ctFileName = (char *)(el->val);
 	if (fileExists(ctFileName))
-	    ctList = customFactoryParseAnyDb(db, ctFileName, TRUE, &browserLines);
+	    ctList = customFactoryParseAnyDb(db, ctFileName, TRUE, &browserLines, FALSE);
         /* Save off only if the custom tracks are live -- if none are live,
          * leave cart variables in place so hgSession can detect and inform
          * the user. */
