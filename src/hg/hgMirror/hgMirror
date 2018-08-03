@@ -762,7 +762,7 @@ def getOrgInfo(validDbs):
     # dict of clade -> list (orgName, orgName)
     cladeToOrgs = defaultdict(list)
     #cur.execute('SELECT clade, genome FROM genomeClade ORDER BY genome')
-    cur.execute('SELECT clade, genomeClade.genome, name FROM genomeClade, dbDb where dbDb.genome=genomeClade.genome ORDER BY orderKey;')
+    cur.execute('SELECT clade, genomeClade.genome, name FROM genomeClade, dbDb where dbDb.genome=genomeClade.genome AND active=1 ORDER BY orderKey;')
     doneOrgs = set()
     for row in cur.fetchall():
         clade, genome, name = row
@@ -792,7 +792,7 @@ def getOrgInfo(validDbs):
     # SELECT genome, name FROM dbDb order by orderKey;
     # dict of db -> description
     orgToDbs = defaultdict(list)
-    cur.execute('SELECT genome, name, description FROM dbDb order by orderKey;')
+    cur.execute('SELECT genome, name, description FROM dbDb WHERE active=1 order by orderKey;')
     for row in cur.fetchall():
         rowDb = row[1]
         if rowDb not in validDbs:

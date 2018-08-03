@@ -14239,7 +14239,12 @@ int trackPriCmp(const void *va, const void *vb)
 const struct track *a = *((struct track **)va);
 const struct track *b = *((struct track **)vb);
 
-return (a->priority - b->priority);
+double diff = a->priority - b->priority;
+if (diff > 0)
+    return 1;
+else if (diff < 0)
+    return -1;
+return 0;
 }
 
 

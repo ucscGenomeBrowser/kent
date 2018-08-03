@@ -17,10 +17,10 @@ track blastHg18KG override
 priority 3
 
 track xenoRefGene override
-priority 4
+priority 5
 
 track refGene override
-priority 5
+priority 4
 
 # Literature
 

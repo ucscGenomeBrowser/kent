@@ -56,9 +56,9 @@ div.jwBanner {
     padding-left: 20px;
 }
 
-div.jwUcscLogoWrapper {
+.jwUcscLogoWrapper {
     display: inline-block;
-    width: 172px;
+    width: 272px;
     height: 55px;
 }
 
