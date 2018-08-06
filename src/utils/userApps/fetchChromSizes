@@ -24,95 +24,80 @@ if [ -z "${DB}" ]; then
     usage
 fi
 
-CURL=`type -p curl 2> /dev/null`
-WGET=`type -p wget 2> /dev/null`
-MYSQL=`type -p mysql 2> /dev/null`
-FTP=`type -p ftp 2> /dev/null`
-
-if [ -z "${CURL}" -a -z "${WGET}" -a -z "${MYSQL}" -a -z "${FTP}" ]; then
-    printf "ERROR: can not find any of the commands: curl wget mysql or ftp\n" 1>&2
-    usage
-fi
-
 DONE=0
 export DONE
 
-if [ -n "${CURL}" ]; then
-    url="http://hgdownload.cse.ucsc.edu/goldenPath/${DB}/bigZips/${DB}.chrom.sizes"
-    printf "INFO: trying CURL ${CURL} for database ${DB}\n" 1>&2
-    printf "url: %s\n" "${url}" 1>&2
-    tmpResult=${DB}.tmp.sizes$$
-    ${CURL} ${url} \
-    -s > ${tmpResult} 2> /dev/null
-    if [ $? -ne 0 -o ! -s "${tmpResult}" ]; then
+url="http://hgdownload.cse.ucsc.edu/goldenPath/${DB}/bigZips/${DB}.chrom.sizes"
+printf "INFO: trying CURL ${CURL} for database ${DB}\n" 1>&2
+printf "url: %s\n" "${url}" 1>&2
+tmpResult=${DB}.tmp.sizes$$
+curl ${url} \
+-s > ${tmpResult} 2> /dev/null
+if [ $? -ne 0 -o ! -s "${tmpResult}" ]; then
     printf "WARNING: curl command failed\n" 1>&2
     rm -f "${tmpResult}"
-    else
+else
     cat ${tmpResult}
     rm -f "${tmpResult}"
     DONE=1
-    fi
 fi
 
 if [ "${DONE}" -eq 1 ]; then
     exit 0
 fi
 
-if [ -n "${WGET}" ]; then
-    url="http://hgdownload.cse.ucsc.edu/goldenPath/${DB}/bigZips/${DB}.chrom.sizes"
-    printf "INFO: trying WGET ${WGET} for database ${DB}\n" 1>&2
-    printf "url: %s\n" "${url}" 1>&2
-    tmpResult=${DB}.tmp.sizes$$
-    ${WGET} ${url} \
-	-O ${tmpResult} 2> /dev/null
-    if [ $? -ne 0 -o ! -s "${tmpResult}" ]; then
-	printf "WARNING: wget command failed\n" 1>&2
-	rm -f "${tmpResult}"
-    else
-	cat ${tmpResult}
-	rm -f "${tmpResult}"
-	DONE=1
-    fi
+printf "INFO: trying WGET ${WGET} for database ${DB}\n" 1>&2
+printf "url: %s\n" "${url}" 1>&2
+tmpResult=${DB}.tmp.sizes$$
+wget ${url} \
+-O ${tmpResult} 2> /dev/null
+if [ $? -ne 0 -o ! -s "${tmpResult}" ]; then
+    printf "WARNING: wget command failed\n" 1>&2
+    rm -f "${tmpResult}"
+else
+    cat ${tmpResult}
+    rm -f "${tmpResult}"
+    DONE=1
 fi
 
 if [ "${DONE}" -eq 1 ]; then
     exit 0
 fi
 
-if [ -n "${MYSQL}" ]; then
-    printf "INFO: trying MySQL ${MYSQL} for database ${DB}\n" 1>&2
-    ${MYSQL} -N --user=genome --host=genome-mysql.cse.ucsc.edu -A -e \
-	"SELECT chrom,size FROM chromInfo ORDER BY size DESC;" ${DB}
-    if [ $? -ne 0 ]; then
-	printf "WARNING: mysql command failed\n" 1>&2
-    else
-	DONE=1
-    fi
+printf "INFO: trying MySQL ${MYSQL} for database ${DB}\n" 1>&2
+mysql -N --user=genome --host=genome-mysql.cse.ucsc.edu -A -e \
+"SELECT chrom,size FROM chromInfo ORDER BY size DESC;" ${DB}
+if [ $? -ne 0 ]; then
+    printf "WARNING: mysql command failed\n" 1>&2
+else
+    DONE=1
 fi
 
 if [ "${DONE}" -eq 1 ]; then
     exit 0
 fi
 
-if [ -n "${FTP}" ]; then
-    printf "INFO: trying FTP ${FTP} for database ${DB}\n" 1>&2
-    url="ftp://hgdownload.cse.ucsc.edu/goldenPath/${DB}/database/chromInfo.txt.gz"
-    printf "url: %s\n" "${url}" 1>&2
-    tmpResult="chromInfo.txt.gz"
-    tmpFtpRsp=fetchTemp.$$
-    printf "user anonymous fetchChromSizes@
+printf "INFO: trying FTP ${FTP} for database ${DB}\n" 1>&2
+url="ftp://hgdownload.cse.ucsc.edu/goldenPath/${DB}/database/chromInfo.txt.gz"
+printf "url: %s\n" "${url}" 1>&2
+tmpResult="chromInfo.txt.gz"
+tmpFtpRsp=fetchTemp.$$
+printf "user anonymous fetchChromSizes@
 cd goldenPath/${DB}/database
 get chromInfo.txt.gz ${tmpResult}
 bye\n" > ${tmpFtpRsp}
-    ${FTP} -n -i hgdownload.cse.ucsc.edu < ${tmpFtpRsp} > /dev/null 2>&1
-    if [ $? -ne 0 -o ! -s "${tmpResult}" ]; then
-	printf "ERROR: ftp command failed\n" 1>&2
-	rm -f "${tmpFtpRsp}" "${tmpResult}"
-    else
-	cat ${tmpResult} | zcat | cut -f1,2 | sort -k2nr
-	rm -f "${tmpFtpRsp}" "${tmpResult}"
-	DONE=1
-    fi
+ftp -n -i hgdownload.cse.ucsc.edu < ${tmpFtpRsp} > /dev/null 2>&1
+if [ $? -ne 0 -o ! -s "${tmpResult}" ]; then
+    printf "ERROR: ftp command failed\n" 1>&2
+    rm -f "${tmpFtpRsp}" "${tmpResult}"
+else
+    cat ${tmpResult} | zcat | cut -f1,2 | sort -k2nr
+    rm -f "${tmpFtpRsp}" "${tmpResult}"
+    DONE=1
+fi
+
+if [ "${DONE}" -eq 1 ]; then
+    exit 0
 fi
 
 if [ "${DONE}" -eq 0 ]; then
