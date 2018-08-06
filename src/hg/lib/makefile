@@ -108,7 +108,7 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     tigrCmrGene.o tigrOperon.o tilingPath.o traceInfo.o trackDb.o \
     trackDbCustom.o trackHub.o trackLayout.o trackTable.o trackVersion.o trashDir.o \
     transRegCode.o transRegCodeCondition.o \
-    transRegCodeProbe.o txCluster.o txCommon.o txEdgeBed.o \
+    transRegCodeProbe.o txAliDiff.o txCluster.o txCommon.o txEdgeBed.o \
     txEdgeOrtho.o txGraph.o txInfo.o txRnaAccs.o ucscRetroInfo.o ucscRetroOrtho.o \
     validateGisaid.o variant.o variantProjector.o vcfUi.o \
     vegaInfo.o vegaInfoZfish.o visiGene.o vntr.o \
