@@ -1334,8 +1334,6 @@ return cdwCheckAccessFromFileId(conn, fileId, user, cdwAccessRead);
 void doServeTagStorm(struct sqlConnection *conn, char *dataSet)
 /* Put up meta data tree associated with data set. */
 {
-char metaFileName[PATH_LEN];
-safef(metaFileName, sizeof(metaFileName), "%s/%s", dataSet, "meta.txt");
 printf(", <A HREF=\"cdwServeTagStorm?format=text&cdwDataSet=%s&%s\"",
 	dataSet, cartSidUrlString(cart)); 
 printf(">text</A>");
@@ -1379,11 +1377,17 @@ for (dataset = datasetList; dataset != NULL; dataset = dataset->next)
 	printf("%s (<A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwBrowseFiles_f_data_set_id=%s&%s\"",
 		desc, datasetId, cartSidUrlString(cart)); 
 	printf(">%lld files</A>)",fileCount);
-	printf(" (metadata: <A HREF=\"cdwWebBrowse?cdwCommand=dataSetMetaTree&cdwDataSet=%s&%s\"",
-		datasetId, cartSidUrlString(cart)); 
-	printf(">html</A>");
-	doServeTagStorm(conn, datasetId);
 
+	char metaFileName[PATH_LEN];
+	safef(metaFileName, sizeof(metaFileName), "%s/%s", datasetId, "meta.txt");
+	int fileId = cdwFileIdFromPathSuffix(conn, metaFileName);
+	if (cdwCheckFileAccess(conn, fileId, user))
+	    {
+	    printf(" (metadata: <A HREF=\"cdwWebBrowse?cdwCommand=dataSetMetaTree&cdwDataSet=%s&%s\"",
+		    datasetId, cartSidUrlString(cart)); 
+	    printf(">html</A>");
+	    doServeTagStorm(conn, datasetId);
+	    }
 	}
     else // Otherwise print a label and description. 
 	{
@@ -1404,7 +1408,7 @@ char metaFileName[PATH_LEN];
 safef(metaFileName, sizeof(metaFileName), "%s/%s", dataSet, "meta.txt");
 int fileId = cdwFileIdFromPathSuffix(conn, metaFileName);
 if (!cdwCheckFileAccess(conn, fileId, user))
-   errAbort("Unauthorized access to %s", metaFileName);
+    errAbort("Unauthorized access to %s", metaFileName);
 printf("<H2>Metadata tree for %s</H2>\n", dataSet);
 char *path = cdwPathForFileId(conn, fileId);
 char command[3*PATH_LEN];
@@ -1580,10 +1584,16 @@ for (jointDataset = datasetList; jointDataset != NULL; jointDataset = jointDatas
 		getCdwTableSetting("cdwFileTags"), datasetId);  
 	//long long fileCount = sqlQuickLongLong(conn, query);
 	printf("%s", desc); 
-	printf(" (metadata: <A HREF=\"cdwWebBrowse?cdwCommand=dataSetMetaTree&cdwDataSet=%s&%s\"",
-		datasetId, cartSidUrlString(cart)); 
-	printf(">html</A>");
-	doServeTagStorm(conn, datasetId);
+	char metaFileName[PATH_LEN];
+	safef(metaFileName, sizeof(metaFileName), "%s/%s", datasetId, "meta.txt");
+	int fileId = cdwFileIdFromPathSuffix(conn, metaFileName);
+	if (cdwCheckFileAccess(conn, fileId, user))
+	    {
+	    printf(" (metadata: <A HREF=\"cdwWebBrowse?cdwCommand=dataSetMetaTree&cdwDataSet=%s&%s\"",
+		    datasetId, cartSidUrlString(cart)); 
+	    printf(">html</A>");
+	    doServeTagStorm(conn, datasetId);
+	    }
 	    
 	struct slName *dataset, *dataSetNames=charSepToSlNames(jointDataset->childrenNames, *",");
 	printf("("); 
