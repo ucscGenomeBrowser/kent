@@ -87,6 +87,18 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         color 0,0,0
         pepTable ncbiRefSeqPepTable
 
+        track ncbiRefSeqGenomicDiff
+        subGroups view=aNcbiRefSeq
+        priority 6
+        type bigBed 9 +
+        skipEmptyFields on
+        shortLabel RefSeq Diffs
+        longLabel Differences between NCBI RefSeq Transcripts and the Reference Genome
+        parent ncbiRefSeqView off
+        bigDataUrl /gbdb/hg38/ncbiRefSeq/ncbiRefSeqGenomicDiff.bb
+        itemRgb on
+        release alpha
+
     track ucscRefSeqView
     parent refSeqComposite off
     shortLabel UCSC RefSeq Genes
