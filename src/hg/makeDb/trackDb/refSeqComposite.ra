@@ -95,9 +95,8 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         shortLabel RefSeq Diffs
         longLabel Differences between NCBI RefSeq Transcripts and the Reference Genome
         parent ncbiRefSeqView off
-        bigDataUrl /gbdb/hg38/ncbiRefSeq/ncbiRefSeqGenomicDiff.bb
+        bigDataUrl /gbdb/$D/ncbiRefSeq/ncbiRefSeqGenomicDiff.bb
         itemRgb on
-        release alpha
 
     track ucscRefSeqView
     parent refSeqComposite off
