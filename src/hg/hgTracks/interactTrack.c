@@ -247,7 +247,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
     // Pick colors
 
     #define MG_LIGHT_MAGENTA    0xffffbbff
-    #define MG_LIGHT_GRAY       0xffbbbbbb
+    #define MG_LIGHT_GRAY         0xff909090
     color = interactItemColor(tg, inter, hvg, scoreMin, scoreMax);
     if (vis == tvDense && otherChrom && color == MG_BLACK)
         // use highlight color for other chrom items in dense mode
@@ -275,8 +275,8 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         int footWidth = regionFootWidth(inter->chromStart, inter->chromEnd, scale);
         unsigned yPos = yOffOther + height;
 
-        // draw the foot
-        hvGfxLine(hvg, x - footWidth, yOffOther, x + footWidth, yOffOther, color);
+        // draw the foot (2 pixels high)
+        hvGfxBox(hvg, x - footWidth, yOffOther, footWidth + footWidth + 1, 2, color);
 
         // draw the vertical
         if (tInfo->isDirectional && differentString(inter->chrom, inter->sourceChrom))
@@ -342,8 +342,8 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
 
     if (sOnScreen)
         {
-        // draw foot of source region
-        hvGfxLine(hvg, sX - sWidth, yOff, sX + sWidth, yOff, color);
+        // draw foot of source region (2 pixels high)
+        hvGfxBox(hvg, sX - sWidth, yOff, sWidth + sWidth + 1, 2, color);
         if (vis == tvDense || !tOnScreen || draw == DRAW_LINE || hvg->rc)
             {
             // draw vertical
@@ -355,8 +355,8 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         }
     if (tOnScreen)
         {
-        // draw foot of target region
-        hvGfxLine(hvg, tX - tWidth, yOff, tX + tWidth, yOff, color);
+        // draw foot of target region (2 pixels high)
+        hvGfxBox(hvg, tX - tWidth, yOff, tWidth + tWidth + 1, 2, color);
         if (vis == tvDense || !sOnScreen || draw == DRAW_LINE || hvg->rc)
             {
             // draw vertical
