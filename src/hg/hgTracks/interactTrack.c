@@ -50,7 +50,7 @@ void interactLoadItems(struct track *tg)
 {
 loadSimpleBedWithLoader(tg, (bedItemLoader)interactLoadAndValidate);
 
-if (tg->limitedVisSet)
+if (slCount(tg->items) == 0 && tg->limitedVisSet)
     {
     // too many items to display
     // borrowed behaviors in bamTrack and vcfTrack
