@@ -14,7 +14,17 @@ boolean isPopup = FALSE;
 boolean interactUiDirectional(struct trackDb *tdb)
 /* Determine if interactions are directional */
 {
-return trackDbSettingClosestToHomeOn(tdb, INTERACT_DIRECTIONAL);
+return isNotEmpty(trackDbSetting(tdb, INTERACT_DIRECTIONAL));
+}
+
+boolean interactUiOffset(struct trackDb *tdb)
+/* Determine if interactions are directional:
+ *      setting: interactDirectional offset */
+{
+char *directional = trackDbSetting(tdb, INTERACT_DIRECTIONAL);
+if (directional)
+    return sameString(INTERACT_OFFSET, firstWordInLine(directional));
+return FALSE;
 }
 
 void interactUiMinScore(struct cart *cart, char *track, struct trackDb *tdb)

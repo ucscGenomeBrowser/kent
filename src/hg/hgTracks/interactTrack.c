@@ -180,7 +180,8 @@ return ((double)(pos - seqStart + .5) * scale) + xOff;
 }
 
 struct interactTrackInfo {
-    boolean isDirectional;
+    boolean isDirectional; // source and target are distinct item types
+    boolean isOffset;   // source and target ends are on different horizontals
     boolean doOtherLabels;  // true to suppress labels on other chrom items (prevent overlap)
     int maxSize;        // longest interaction (midpoint to midpoint) in bp
     int fontHeight;
@@ -197,6 +198,7 @@ struct interactTrackInfo *tInfo = NULL;
 AllocVar(tInfo);
 tInfo->doOtherLabels = TRUE;
 tInfo->isDirectional = interactUiDirectional(tg->tdb);
+tInfo->isOffset = interactUiOffset(tg->tdb);
 
 char *otherChrom = NULL;
 int prevLabelEnd = 0, prevLabelStart = 0;
@@ -388,23 +390,25 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
                 hvGfxLine(hvg, sX, yOff, sX, peak, color);
             }
         }
+    int yOffTarget = (tInfo->isOffset ? yOff + tg->height/20 + 1 : yOff);
     if (tOnScreen)
         {
         // draw foot of target region (2 pixels high)
-        hvGfxBox(hvg, tX - tWidth, yOff, tWidth + tWidth + 1, 2, color);
+        hvGfxBox(hvg, tX - tWidth, yOffTarget, tWidth + tWidth + 1, 2, color);
         if (vis == tvDense || !sOnScreen || draw == DRAW_LINE || hvg->rc)
             {
             // draw vertical
             if (isReversed)
-                hvGfxDottedLine(hvg, tX, yOff, tX, peak, color, TRUE);
+                hvGfxDottedLine(hvg, tX, yOffTarget, tX, peak, color, TRUE);
             else
-                hvGfxLine(hvg, tX, yOff, tX, peak, color);
+                hvGfxLine(hvg, tX, yOffTarget, tX, peak, color);
             }
         }
     if (vis == tvDense)
         continue;
 
     // Full mode: add map boxes and draw interaction
+    int highlightColor = MG_WHITE;
     int chromStart = inter->chromStart;
     int chromEnd = inter->chromEnd;
     char *nameBuf = NULL;
@@ -412,8 +416,9 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         {
         // add map box to source region
         nameBuf = isEmptyTextField(inter->sourceName) ? statusBuf : inter->sourceName;
+        //hvGfxBox(hvg, sX-1, yOff-1, 3, 3, peakColor); // needed ?
         hvGfxBox(hvg, sX-1, yOff, 3, 2, peakColor);
-        hvGfxBox(hvg, sX, yOff, 1, 1, MG_WHITE);
+        hvGfxBox(hvg, sX, yOff, 1, 1, highlightColor);
         mapBoxHgcOrHgGene(hvg, chromStart, chromEnd, 
                            sX - sWidth, yOff, sWidth * 2, 4,
                            tg->track, itemBuf, nameBuf, NULL, TRUE, NULL);
@@ -422,10 +427,12 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         {
         // add map box to target region
         nameBuf = isEmptyTextField(inter->targetName) ? statusBuf : inter->targetName;
-        hvGfxBox(hvg, tX-1, yOff, 3, 2, peakColor);
-        hvGfxBox(hvg, tX, yOff, 1, 1, MG_WHITE);
+        //hvGfxBox(hvg, tX-1, yOffTarget-1, 3, 3, tInfo->isDirectional ? MG_MAGENTA : peakColor);
+        hvGfxBox(hvg, tX-1, yOffTarget, 3, 2, tInfo->isDirectional ? MG_MAGENTA : peakColor);
+        hvGfxBox(hvg, tX, yOffTarget, 1, 1, highlightColor);
         mapBoxHgcOrHgGene(hvg, chromStart, chromEnd, 
-                        tX - tWidth, yOff, tWidth * 2, 4,
+                        //tX - tWidth, yOffTarget, tWidth * 2, 4,
+                        tX - tWidth, yOffTarget, tWidth * 2, 3,
                         tg->track, itemBuf, nameBuf, NULL, TRUE, NULL);
         }
     if ((s < seqStart && t < seqStart) || (s > seqEnd && t > seqEnd))
@@ -455,7 +462,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         int xMap = lowerX + (double)(upperX-lowerX)/2;
         int yMap = peak-1;
         hvGfxBox(hvg, xMap-1, peak-1, 3, 3, peakColor);
-        hvGfxBox(hvg, xMap, peak, 1, 1, MG_WHITE);
+        hvGfxBox(hvg, xMap, peak, 1, 1, highlightColor);
         mapBoxHgcOrHgGene(hvg, chromStart, chromEnd, xMap-1, yMap-1, 3, 3,
                            tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
         continue;
@@ -465,24 +472,26 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         {
         int peakX = ((upperX - lowerX + 1) / 2) + lowerX;
         int peakY = peak + 30; // admittedly a hack (obscure how to define ypeak of curve)
-        int maxY = hvGfxCurve(hvg, lowerX, yOff, peakX, peakY, upperX, yOff, color, isReversed);
+        int maxY = hvGfxCurve(hvg, lowerX, 
+                                (isReversed ? yOffTarget : yOff), peakX, peakY, upperX, 
+                                (isReversed ? yOff : yOffTarget), color, isReversed);
         // curve drawer does not use peakY as expected, so it returns actual max Y used
         // draw map box on peak
         hvGfxBox(hvg, peakX-1, maxY-1, 3, 3, peakColor);
-        hvGfxBox(hvg, peakX, maxY, 1, 1, MG_WHITE);
+        hvGfxBox(hvg, peakX, maxY, 1, 1, highlightColor);
         mapBoxHgcOrHgGene(hvg, chromStart, chromEnd, peakX-1, maxY-1, 3, 3,
                        tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
         }
     else if (draw == DRAW_ELLIPSE)
         {
-        int yLeft = yOff + peakHeight;
-        int yTop = yOff - peakHeight;
+        int yLeft = yOffTarget + peakHeight;
+        int yTop = yOffTarget - peakHeight;
         hvGfxEllipseDraw(hvg, lowerX, yLeft, upperX, yTop, color, ELLIPSE_BOTTOM, isReversed);
         // draw map box on peak
-        int maxY = peakHeight + yOff;
+        int maxY = peakHeight + yOffTarget;
         int peakX = ((upperX - lowerX + 1) / 2) + lowerX;
         hvGfxBox(hvg, peakX-1, maxY-1, 3, 3, peakColor);
-        hvGfxBox(hvg, peakX, maxY, 1, 1, MG_WHITE);
+        hvGfxBox(hvg, peakX, maxY, 1, 1, highlightColor);
         mapBoxHgcOrHgGene(hvg, chromStart, chromEnd, peakX-1, maxY-1, 3, 3,
                        tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
         }

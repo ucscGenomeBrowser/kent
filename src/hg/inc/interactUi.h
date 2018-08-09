@@ -13,6 +13,10 @@
 #define INTERACT_MINSCORE "minScore"
 
 #define INTERACT_DIRECTIONAL    "interactDirectional"
+#define INTERACT_OFFSET         "offset"
+// trackDb settings:
+//      interactDirectional on          use dashes for reverse direction
+//      interactDirectional offset      use dashes for reverse direction, and offset sources and targets
 
 #define INTERACT_DRAW           "draw"
 #define INTERACT_DRAW_LINE      "line"
@@ -32,5 +36,9 @@ void interactCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char 
 
 boolean interactUiDirectional(struct trackDb *tdb);
 /* Determine if interactions are directional */
+
+boolean interactUiOffset(struct trackDb *tdb);
+/* Determine if interactions are directional:
+ *      setting: interactDirectional offset */
 
 #endif
