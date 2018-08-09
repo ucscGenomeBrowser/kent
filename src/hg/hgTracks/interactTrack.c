@@ -45,6 +45,20 @@ unsigned blue = inter->color & 0xff;
 return hvGfxFindColorIx(hvg, red, green, blue);
 }
 
+boolean interactSourceInWindow(struct interact *inter)
+/* True if midpoint of source is on screen */
+{
+unsigned s = interactRegionCenter(inter->sourceStart, inter->sourceEnd);
+return (s >= winStart) && (s < winEnd);
+}
+
+boolean interactTargetInWindow(struct interact *inter)
+/* True if midpoint of target is on screen */
+{
+unsigned t = interactRegionCenter(inter->targetStart, inter->targetEnd);
+return (t >= winStart) && (t < winEnd);
+}
+
 void interactLoadItems(struct track *tg)
 /* Load all interact items in region */
 {
@@ -62,17 +76,38 @@ if (slCount(tg->items) == 0 && tg->limitedVisSet)
     return;
 }
 
-// filter on score
+// filters
+
+// score filter
 char buf[1024];
 safef(buf, sizeof buf, "%s.%s", tg->tdb->track, INTERACT_MINSCORE);
 int minScore = cartUsualInt(cart, buf, 0);
 struct interact *inter, *next, *filteredItems = NULL;
 int count = slCount(tg->items);
+
+// exclude if missing endpoint(s) in window
+char *endsVisible = cartUsualStringClosestToHome(cart, tg->tdb, FALSE,
+                            INTERACT_ENDS_VISIBLE, INTERACT_ENDS_VISIBLE_DEFAULT);
 for (inter = tg->items; inter; inter = next)
     {
     next = inter->next;
     if (inter->score < minScore)
         continue;
+    if (differentString(endsVisible, INTERACT_ENDS_VISIBLE_ANY))
+        {
+        boolean sOnScreen = interactSourceInWindow(inter);
+        boolean tOnScreen = interactTargetInWindow(inter);
+        if (sameString(endsVisible, INTERACT_ENDS_VISIBLE_TWO))
+            {
+            if (!(sOnScreen && tOnScreen))
+                continue;
+            }
+        if (sameString(endsVisible, INTERACT_ENDS_VISIBLE_ONE))
+            {
+            if (!(sOnScreen || tOnScreen))
+                continue;
+            }
+        }
     slAddHead(&filteredItems, inter);
     }
 
