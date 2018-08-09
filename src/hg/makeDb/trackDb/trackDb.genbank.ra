@@ -27,6 +27,7 @@ showDiffBasesAllScales .
 indelDoubleInsert on
 indelQueryInsert on
 indelPolyA on
+priority 1
 
 track tightMrna
 shortLabel Tight mRNAS
@@ -56,6 +57,7 @@ showDiffBasesAllScales .
 indelDoubleInsert on
 indelQueryInsert on
 maxItems 300
+priority 2
 
 track est
 table all_est
