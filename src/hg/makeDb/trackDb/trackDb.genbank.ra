@@ -11,6 +11,7 @@ color 12,12,120
 type genePred refPep refMrna
 idXref hgFixed.refLink mrnaAcc name
 baseColorUseCds given
+priority 2
 
 track mrna
 table all_mrna
@@ -126,6 +127,7 @@ group genes
 visibility dense
 color 12,12,120
 type genePred xenoRefPep xenoRefMrna
+priority 3
 
 track mgcFullMrna
 shortLabel MGC Genes
