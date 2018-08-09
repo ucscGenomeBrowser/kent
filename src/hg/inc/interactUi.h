@@ -38,7 +38,7 @@ boolean interactUiDirectional(struct trackDb *tdb);
 /* Determine if interactions are directional */
 
 boolean interactUiOffset(struct trackDb *tdb);
-/* Determine if interactions are directional:
+/* Determine if interactions should show source and target offset horizontally.
  *      setting: interactDirectional offset */
 
 #endif
