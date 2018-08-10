@@ -628,7 +628,10 @@ boolean anyFilter()
 {
 char *filterTable = cartOptionalString(cart, hgtaFilterTable);
 if (filterTable == NULL)
+    {
+    removeFilterVars();  // sometimes these get left around due to the back button being used
     return FALSE;
+    }
 else
     {
     char *dbTable = getDbTable(database, curTable);

@@ -5,6 +5,7 @@ html gold
 # Local declaration so that local gap.html is picked up.
 track gap override
 html gap
+priority 2
 
 searchTable gold
 shortCircuit 1

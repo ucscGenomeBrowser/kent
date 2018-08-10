@@ -1490,6 +1490,7 @@ spectrum on
 type rmsk
 maxWindowToDraw 10000000
 canPack off
+priority 1
 
 track nestedRepeats
 shortLabel Interrupted Rpts

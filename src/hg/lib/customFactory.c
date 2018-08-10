@@ -1011,7 +1011,7 @@ if (wordCount == 7)
     char *ctDb = ctGenomeOrCurrent(track);
     isPgSnp = rowIsPgSnp(row, ctDb, type, lf);
     }
-else if (type != NULL && sameType(type, fac->name))
+else if (type != NULL)
     lineFileAbort(lf, "type is pgSnp so it must have 7 fields but has %d",
                   wordCount);
 freeMem(dupe);

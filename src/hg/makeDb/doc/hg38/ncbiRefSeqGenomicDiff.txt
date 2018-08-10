@@ -1,0 +1,99 @@
+#########################################################################
+# ncbiRefSeq Anomamlies Tracks (DONE - 2018-08-07 - ChrisL)
+
+    mkdir /hive/data/genomes/hg38/bed/ncbiRefSeqAnomalies
+    cd /hive/data/genomes/hg38/bed/ncbiRefSeqAnomalies
+
+    db=hg38
+    pre=ncbiRefSeqGenomicDiff
+    buildDir=/hive/data/genomes/hg38/bed/ncbiRefSeq.p11.2018-01-09
+    asmId=GCF_000001405.37_GRCh38.p11
+    
+    time (zcat $buildDir/process/$asmId.rna.cds.gz \
+        | egrep '[0-9]+\.\.[0-9]+' \
+        | pslMismatchGapToBed -cdsFile=stdin -db=$db -ignoreQNamePrefix=X \
+            $buildDir/process/$asmId.$db.psl.gz \
+            /hive/data/genomes/$db/$db.2bit \
+            $buildDir/$db.rna.fa \
+            $pre)
+    # real    0m32.676s
+
+    # do some checking
+    cut -f1 *.bed | sort | uniq -c | grep -v "alt" | awk '{sum+=$1}END{print sum}'
+    # 6727
+    wc -l *.bed | grep total
+    # 24013
+    calc \(6726 \/ 24013\) \* 100
+    # (6726 / 24013) * 100 = 28.009828
+    # so roughly 72% of the anomalies are on alt chromosomes, good or bad?
+    
+    bedToBigBed -tab -type=bed4+ -as=$HOME/kent/src/hg/lib/txAliMismatch.as \
+      $pre.mismatch.bed /hive/data/genomes/$db/chrom.sizes $pre.mismatch.bb
+    bedToBigBed -tab -type=bed4+ -as=$HOME/kent/src/hg/lib/txAliShortGap.as \
+      $pre.shortGap.bed /hive/data/genomes/$db/chrom.sizes $pre.shortGap.bb
+    bedToBigBed -tab -type=bed8+ -as=$HOME/kent/src/hg/lib/txAliShiftyGap.as \
+      $pre.shiftyGap.bed /hive/data/genomes/$db/chrom.sizes $pre.shiftyGap.bb
+    bedToBigBed -tab -type=bed4+ -as=$HOME/kent/src/hg/lib/txAliDoubleGap.as \
+      $pre.doubleGap.bed /hive/data/genomes/$db/chrom.sizes $pre.doubleGap.bb
+    bedToBigBed -tab -type=bed4+ -as=$HOME/kent/src/hg/lib/txAliQSkipped.as \
+      $pre.qSkipped.bed /hive/data/genomes/$db/chrom.sizes $pre.qSkipped.bb
+    
+XXX - stopped here because of big track reformatting. See below for more information.
+    ln -s `pwd`/*.bb /gbdb/hg38/ncbiRefSeq/
+
+#########################################################################
+# re-format after feedback from MarkD
+
+    # figure out unique fields from the 5 .as files, and manually put them in the right order:
+    # for file in txAli*.as; do tail -n +4 $file | head -n -1 | cut -d';' -f1; done | sort -u
+cat << EOF > txAliDiff.as
+table txAliDiff
+"Differences between reference genome and transcript sequences"
+    (   
+    string chrom;       "Reference sequence chromosome or scaffold"
+    uint   chromStart;  "Start position in chromosome of ambiguous gap placement region"
+    uint   chromEnd;    "End position in chromosome of ambiguous gap placement region"
+    string name;        "Name of item"
+    uint   score;       "Not used"
+    char[1] strand;     "Transcript orientation on genome: + or -"
+    uint   thickStart;  "Start position of 3'-most location for gaps that can shift position without introducing mismatches"
+    uint   thickEnd;    "End position of 3'-most gap location for gaps that can shift position without introducing mismatches"
+    uint reserved;         "RGB color of this item"
+    string txName;      "Transcript identifier"
+    uint   txStart;     "Start position in transcript (of ambiguous gap placement region where applicable)"
+    uint   txEnd;       "End position in transcript (of ambiguous gap placement region where applicable)"
+    uint gSkipped;    "Number of bases skipped on genome, if any"
+    uint txSkipped;   "Number of bases skipped on transcript, if any"
+    uint shiftL;      "Number of bases that gap can be shifted left on genome with no mismatches"
+    uint shiftR;      "Number of bases that gap can be shifted right on genome with no mismatches" 
+    lstring hgvsG;      "HGVS g. notation of genome change to match transcript"
+    lstring hgvsCN;     "HGVS c./n. notation of part of transcript not matched in genome"
+    lstring hgvsN;      "HGVS c./n. notation of transcript change to match genome"
+    lstring hgvsPosCN;  "HGVS c./n. position range of transcript ambiguous gap placement region"
+    )
+EOF
+
+    # fix up pslMismatchGapToBed according to feedback from #21079: 
+    # git show 9ed6f979a8ec95ac934e5e8fef028d188b76a035
+
+    # re-run:
+    
+    cd /hive/data/genomes/hg38/bed/ncbiRefSeqAnomalies
+
+    db=hg38
+    pre=ncbiRefSeqGenomicDiff
+    buildDir=/hive/data/genomes/hg38/bed/ncbiRefSeq.p11.2018-01-09
+    asmId=GCF_000001405.37_GRCh38.p11
+
+    time (zcat $buildDir/process/$asmId.rna.cds.gz \
+        | egrep '[0-9]+\.\.[0-9]+' \
+        | pslMismatchGapToBed -cdsFile=stdin -db=$db -ignoreQNamePrefix=X \
+            $buildDir/process/$asmId.$db.psl.gz \
+            /hive/data/genomes/$db/$db.2bit \
+            $buildDir/$db.rna.fa \
+            $pre)
+    # real    0m31.944s
+    
+    bedToBigBed -type=bed9+ -tab -as=$HOME/kent/src/hg/lib/txAliDiff.as $pre.bed \
+        /hive/data/genomes/$db/chrom.sizes $pre.bb
+    ln -s `pwd`/$pre.bb /gbdb/hg38/ncbiRefSeq/$pre.bb

@@ -11,6 +11,7 @@ color 12,12,120
 type genePred refPep refMrna
 idXref hgFixed.refLink mrnaAcc name
 baseColorUseCds given
+priority 2
 
 track mrna
 table all_mrna
@@ -26,6 +27,7 @@ showDiffBasesAllScales .
 indelDoubleInsert on
 indelQueryInsert on
 indelPolyA on
+priority 1
 
 track tightMrna
 shortLabel Tight mRNAS
@@ -55,6 +57,7 @@ showDiffBasesAllScales .
 indelDoubleInsert on
 indelQueryInsert on
 maxItems 300
+priority 2
 
 track est
 table all_est
@@ -126,6 +129,7 @@ group genes
 visibility dense
 color 12,12,120
 type genePred xenoRefPep xenoRefMrna
+priority 3
 
 track mgcFullMrna
 shortLabel MGC Genes
