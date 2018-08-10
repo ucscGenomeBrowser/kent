@@ -177,7 +177,7 @@ switch (type)
 	break;
     case vcfInfoString:
         if (startsWith("http", datum.datString))
-            fprintf(f, "<a href='%s'>%s</a>", datum.datString, datum.datString);
+            fprintf(f, "<a target=_blank href='%s'>%s</a>", datum.datString, datum.datString);
         else
             fprintf(f, "%s", datum.datString);
 	break;
