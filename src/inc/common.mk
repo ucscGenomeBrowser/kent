@@ -138,7 +138,7 @@ ifneq ($(MAKECMDGOALS),clean)
   # on hgwdev, use the static library.
   ifeq (${IS_HGWDEV},yes)
     MYSQLINC=/usr/include/mysql
-    MYSQLLIBS=/usr/lib64/libssl.a /usr/lib64/libcrypto.a /usr/lib64/mysql/libmysqlclient.a -lkrb5
+    MYSQLLIBS=/usr/lib64/libssl.a /usr/lib64/libcrypto.a /usr/lib64/libmysqlclient.a -lkrb5
   endif
   # this does *not* work on Mac OSX with the dynamic libraries
   ifneq ($(UNAME_S),Darwin)
@@ -239,7 +239,7 @@ endif
 # OK to add -lstdc++ to all MYSQLLIBS just in case it is
 #    MySQL version 5.6 libraries, but no 'librt' on Mac OSX
 ifeq (${IS_HGWDEV},yes)
-  MYSQLLIBS += /usr/lib/gcc/x86_64-redhat-linux/4.4.4/libstdc++.a /usr/lib/debug/usr/lib64/librt.a
+  MYSQLLIBS += /usr/lib/gcc/x86_64-redhat-linux/4.8.5/libstdc++.a /usr/lib/x86_64-redhat-linux6E/lib64/librt.a
 else
   ifeq ($(UNAME_S),Darwin)
     MYSQLLIBS += -lstdc++
