@@ -18,7 +18,7 @@ return isNotEmpty(trackDbSetting(tdb, INTERACT_DIRECTIONAL));
 }
 
 boolean interactUiOffset(struct trackDb *tdb)
-/* Determine if interactions are directional:
+/* Determine if interactions should be displayed with source/targets offset horizontally.
  *      setting: interactDirectional offset */
 {
 char *directional = trackDbSetting(tdb, INTERACT_DIRECTIONAL);
