@@ -377,32 +377,41 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
 
     // NOTE: until time permits, force to rectangle when in reversed strand mode.
 
+    int yTarget = yOff;
+    int ySource = yOff;
+    if (tInfo->offset && draw != DRAW_ELLIPSE)
+        // ellipse code doesn't support assymetrical ends
+        {
+        int yOffset = tg->height/20 + 1;
+        if (sameString(tInfo->offset, INTERACT_OFFSET_TARGET))
+            yTarget = yOff + yOffset;
+        else if (sameString(tInfo->offset, INTERACT_OFFSET_SOURCE))
+            ySource = yOff + yOffset;
+        }
     if (sOnScreen)
         {
         // draw foot of source region (2 pixels high)
-        hvGfxBox(hvg, sX - sWidth, yOff, sWidth + sWidth + 1, 2, color);
+        hvGfxBox(hvg, sX - sWidth, ySource, sWidth + sWidth + 1, 2, color);
         if (vis == tvDense || !tOnScreen || draw == DRAW_LINE || hvg->rc)
             {
             // draw vertical
             if (isReversed)
-                hvGfxDottedLine(hvg, sX, yOff, sX, peak, color, TRUE);
+                hvGfxDottedLine(hvg, sX, ySource, sX, peak, color, TRUE);
             else
-                hvGfxLine(hvg, sX, yOff, sX, peak, color);
+                hvGfxLine(hvg, sX, ySource, sX, peak, color);
             }
         }
-    int yOffTarget = (tInfo->offset && sameString(tInfo->offset, INTERACT_OFFSET_TARGET)? 
-                        yOff + tg->height/20 + 1 : yOff);
     if (tOnScreen)
         {
         // draw foot of target region (2 pixels high)
-        hvGfxBox(hvg, tX - tWidth, yOffTarget, tWidth + tWidth + 1, 2, color);
+        hvGfxBox(hvg, tX - tWidth, yTarget, tWidth + tWidth + 1, 2, color);
         if (vis == tvDense || !sOnScreen || draw == DRAW_LINE || hvg->rc)
             {
             // draw vertical
             if (isReversed)
-                hvGfxDottedLine(hvg, tX, yOffTarget, tX, peak, color, TRUE);
+                hvGfxDottedLine(hvg, tX, yTarget, tX, peak, color, TRUE);
             else
-                hvGfxLine(hvg, tX, yOffTarget, tX, peak, color);
+                hvGfxLine(hvg, tX, yTarget, tX, peak, color);
             }
         }
     if (vis == tvDense)
@@ -418,22 +427,22 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         // add map box to source region
         nameBuf = isEmptyTextField(inter->sourceName) ? statusBuf : inter->sourceName;
         //hvGfxBox(hvg, sX-1, yOff-1, 3, 3, peakColor); // needed ?
-        hvGfxBox(hvg, sX-1, yOff, 3, 2, peakColor);
-        hvGfxBox(hvg, sX, yOff, 1, 1, highlightColor);
+        hvGfxBox(hvg, sX-1, ySource, 3, 2, peakColor);
+        hvGfxBox(hvg, sX, ySource, 1, 1, highlightColor);
         mapBoxHgcOrHgGene(hvg, chromStart, chromEnd, 
-                           sX - sWidth, yOff, sWidth * 2, 4,
+                           sX - sWidth, ySource, sWidth * 2, 4,
                            tg->track, itemBuf, nameBuf, NULL, TRUE, NULL);
         }
     if (tOnScreen)
         {
         // add map box to target region
         nameBuf = isEmptyTextField(inter->targetName) ? statusBuf : inter->targetName;
-        //hvGfxBox(hvg, tX-1, yOffTarget-1, 3, 3, tInfo->isDirectional ? MG_MAGENTA : peakColor);
-        hvGfxBox(hvg, tX-1, yOffTarget, 3, 2, tInfo->isDirectional ? MG_MAGENTA : peakColor);
-        hvGfxBox(hvg, tX, yOffTarget, 1, 1, highlightColor);
+        //hvGfxBox(hvg, tX-1, yTarget-1, 3, 3, tInfo->isDirectional ? MG_MAGENTA : peakColor);
+        hvGfxBox(hvg, tX-1, yTarget, 3, 2, tInfo->isDirectional ? MG_MAGENTA : peakColor);
+        hvGfxBox(hvg, tX, yTarget, 1, 1, highlightColor);
         mapBoxHgcOrHgGene(hvg, chromStart, chromEnd, 
-                        //tX - tWidth, yOffTarget, tWidth * 2, 4,
-                        tX - tWidth, yOffTarget, tWidth * 2, 3,
+                        //tX - tWidth, yTarget, tWidth * 2, 4,
+                        tX - tWidth, yTarget, tWidth * 2, 3,
                         tg->track, itemBuf, nameBuf, NULL, TRUE, NULL);
         }
     if ((s < seqStart && t < seqStart) || (s > seqEnd && t > seqEnd))
@@ -474,8 +483,8 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         int peakX = ((upperX - lowerX + 1) / 2) + lowerX;
         int peakY = peak + 30; // admittedly a hack (obscure how to define ypeak of curve)
         int maxY = hvGfxCurve(hvg, lowerX, 
-                                (isReversed ? yOffTarget : yOff), peakX, peakY, upperX, 
-                                (isReversed ? yOff : yOffTarget), color, isReversed);
+                                (isReversed ? yTarget : ySource), peakX, peakY, upperX, 
+                                (isReversed ? ySource : yTarget), color, isReversed);
         // curve drawer does not use peakY as expected, so it returns actual max Y used
         // draw map box on peak
         hvGfxBox(hvg, peakX-1, maxY-1, 3, 3, peakColor);
@@ -485,11 +494,12 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         }
     else if (draw == DRAW_ELLIPSE)
         {
-        int yLeft = yOffTarget + peakHeight;
-        int yTop = yOffTarget - peakHeight;
+        // can not support offsets
+        int yLeft = yOff + peakHeight;
+        int yTop = yOff - peakHeight;
         hvGfxEllipseDraw(hvg, lowerX, yLeft, upperX, yTop, color, ELLIPSE_BOTTOM, isReversed);
         // draw map box on peak
-        int maxY = peakHeight + yOffTarget;
+        int maxY = peakHeight + yOff;
         int peakX = ((upperX - lowerX + 1) / 2) + lowerX;
         hvGfxBox(hvg, peakX-1, maxY-1, 3, 3, peakColor);
         hvGfxBox(hvg, peakX, maxY, 1, 1, highlightColor);
