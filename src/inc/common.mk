@@ -138,7 +138,7 @@ ifneq ($(MAKECMDGOALS),clean)
   # on hgwdev, use the static library.
   ifeq (${IS_HGWDEV},yes)
     MYSQLINC=/usr/include/mysql
-    MYSQLLIBS=/usr/lib64/libssl.a /usr/lib64/libcrypto.a /usr/lib64/libmysqlclient.a -lkrb5
+    MYSQLLIBS=-lssl -lcrypto /usr/lib64/libmysqlclient.a -lkrb5
   endif
   # this does *not* work on Mac OSX with the dynamic libraries
   ifneq ($(UNAME_S),Darwin)
