@@ -176,7 +176,10 @@ switch (type)
 	fprintf(f, "%c", datum.datChar);
 	break;
     case vcfInfoString:
-	fprintf(f, "%s", datum.datString);
+        if (startsWith("http", datum.datString))
+            fprintf(f, "<a target=_blank href='%s'>%s</a>", datum.datString, datum.datString);
+        else
+            fprintf(f, "%s", datum.datString);
 	break;
     default:
 	errAbort("vcfPrintDatum: Unrecognized type %d", type);
