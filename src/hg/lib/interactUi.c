@@ -17,13 +17,16 @@ boolean interactUiDirectional(struct trackDb *tdb)
 return isNotEmpty(trackDbSetting(tdb, INTERACT_DIRECTIONAL));
 }
 
-boolean interactUiOffset(struct trackDb *tdb)
-/* Determine if interactions should be displayed with source/targets offset horizontally.
- *      setting: interactDirectional offset */
+char *interactUiOffset(struct trackDb *tdb)
+/* Determine whether to offset source or target (or neither if NULL) */
 {
 char *directional = trackDbSetting(tdb, INTERACT_DIRECTIONAL);
 if (directional)
-    return sameString(INTERACT_OFFSET, firstWordInLine(directional));
+    {
+    if (sameString(directional, INTERACT_OFFSET_TARGET) ||
+         sameString(directional, INTERACT_OFFSET_SOURCE))
+                return directional;
+    }
 return FALSE;
 }
 

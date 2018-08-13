@@ -181,7 +181,7 @@ return ((double)(pos - seqStart + .5) * scale) + xOff;
 
 struct interactTrackInfo {
     boolean isDirectional; // source and target are distinct item types
-    boolean isOffset;   // source and target ends are on different horizontals
+    char *offset;          // which end to draw offset (source or target)
     boolean doOtherLabels;  // true to suppress labels on other chrom items (prevent overlap)
     int maxSize;        // longest interaction (midpoint to midpoint) in bp
     int fontHeight;
@@ -198,7 +198,7 @@ struct interactTrackInfo *tInfo = NULL;
 AllocVar(tInfo);
 tInfo->doOtherLabels = TRUE;
 tInfo->isDirectional = interactUiDirectional(tg->tdb);
-tInfo->isOffset = interactUiOffset(tg->tdb);
+tInfo->offset = interactUiOffset(tg->tdb);
 
 char *otherChrom = NULL;
 int prevLabelEnd = 0, prevLabelStart = 0;
@@ -390,7 +390,8 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
                 hvGfxLine(hvg, sX, yOff, sX, peak, color);
             }
         }
-    int yOffTarget = (tInfo->isOffset ? yOff + tg->height/20 + 1 : yOff);
+    int yOffTarget = (tInfo->offset && sameString(tInfo->offset, INTERACT_OFFSET_TARGET)? 
+                        yOff + tg->height/20 + 1 : yOff);
     if (tOnScreen)
         {
         // draw foot of target region (2 pixels high)
