@@ -81,7 +81,7 @@ ifneq (${SSL_DIR}, "/usr/include/openssl")
 endif
 # on hgwdev, already using the static library with mysqllient.
 ifeq (${IS_HGWDEV},yes)
-   L+=/usr/lib64/libssl.a /usr/lib64/libcrypto.a -lkrb5
+   L+=-lssl -lcrypto -lkrb5 -ldl
 else
    L+=-lssl -lcrypto
 endif
@@ -89,7 +89,7 @@ endif
 # autodetect where libm is installed
 ifeq (${MLIB},)
   ifneq ($(wildcard /usr/lib64/libm.a),)
-      MLIB=/usr/lib64/libm.a
+      MLIB=-lm
   endif
 endif
 ifeq (${MLIB},)
