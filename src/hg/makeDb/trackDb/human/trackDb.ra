@@ -97,8 +97,8 @@ type bed 4
 url http://geneticassociationdb.nih.gov/cgi-bin/tableview.cgi?table=allview&cond=gene=
 
 track decipher
-shortLabel DECIPHER
-longLabel DECIPHER: Chromosomal Imbalance and Phenotype in Humans
+shortLabel DECIPHER CNVs
+longLabel DECIPHER: Chromosomal Imbalance and Phenotype in Humans (CNVs)
 group phenDis
 visibility hide
 color 0,0,0
@@ -106,6 +106,31 @@ type bed 4
 tableBrowser off decipherRaw knownToDecipher knownCanonToDecipher
 prevExonText Left edge
 nextExonText Right edge
+
+track decipherSnvs
+shortLabel DECIPHER SNVs
+longLabel DECIPHER: Chromosomal Imbalance and Phenotype in Humans (SNVs)
+group phenDis
+visibility hide
+color 0,0,0
+type bed 4
+tableBrowser off decipherSnvsRaw
+prevExonText Left edge
+nextExonText Right edge
+html decipher
+pennantIcon New red ../goldenPath/newsarch.html#071718 "Released Jul. 17, 2018"
+
+track phegeni
+shortLabel PheGenI SNPs
+longLabel NCBI Phenotype-Genotype Integrator SNPs
+group phenDis
+visibility hide
+color 0,100,0
+type bigBed 9 +
+release alpha
+mouseOverField trait
+bigDataUrl /gbdb/$D/bbi/phegeni.bb
+urls studyId=https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=$$ geneId1=https://www.ncbi.nlm.nih.gov/gene/?term=$$%5Buid%5D geneId2=https://www.ncbi.nlm.nih.gov/gene/?term=$$%5Buid%5D analysisId=https://www.ncbi.nlm.nih.gov/projects/SNP/gViewer/gView.cgi?aid=$$ catalogId=https://www.ebi.ac.uk/gwas/search?query=$$
 
 track caseControl
 compositeTrack on
@@ -1406,7 +1431,6 @@ hapmapPhase III
 codingAnnotations snp150CodingDbSnp,
 priority 13
 
-
 track snp150Mult
 shortLabel Mult. SNPs(150)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 150) That Map to Multiple Genomic Loci
@@ -1429,7 +1453,6 @@ hapmapPhase III
 codingAnnotations snp150CodingDbSnp,
 priority 19
 
-
 track snp150
 shortLabel All SNPs(150)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 150)
@@ -1448,6 +1471,89 @@ macaqueDb rheMac8
 hapmapPhase III
 codingAnnotations snp150CodingDbSnp,
 priority 7
+
+
+track snp151Common
+shortLabel Common SNPs(151)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 151) Found in >= 1% of Samples
+group varRep
+visibility dense
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+snpSeq snp151Seq
+snpExceptionDesc snp151ExceptionDesc
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+trackHandler snp125
+chimpOrangMacOrthoTable snp151OrthoPt5Pa2Rm8
+chimpDb panTro5
+orangDb ponAbe2
+macaqueDb rheMac8
+hapmapPhase III
+codingAnnotations snp151CodingDbSnp,
+priority 0.9
+
+track snp151Flagged
+shortLabel Flagged SNPs(151)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 151) Flagged by dbSNP as Clinically Assoc
+group varRep
+visibility hide
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+snpSeq snp151Seq
+snpExceptionDesc snp151ExceptionDesc
+defaultGeneTracks knownGene
+type bed 6 +
+trackHandler snp125
+chimpOrangMacOrthoTable snp151OrthoPt5Pa2Rm8
+chimpDb panTro5
+orangDb ponAbe2
+macaqueDb rheMac8
+hapmapPhase III
+codingAnnotations snp151CodingDbSnp,
+priority 12.9
+
+track snp151Mult
+shortLabel Mult. SNPs(151)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 151) That Map to Multiple Genomic Loci
+group varRep
+visibility hide
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+snpSeq snp151Seq
+snpExceptionDesc snp151ExceptionDesc
+defaultGeneTracks knownGene
+defaultMaxWeight 3
+maxWindowToDraw 10000000
+type bed 6 +
+trackHandler snp125
+chimpOrangMacOrthoTable snp151OrthoPt5Pa2Rm8
+chimpDb panTro5
+orangDb ponAbe2
+macaqueDb rheMac8
+hapmapPhase III
+codingAnnotations snp151CodingDbSnp,
+priority 18.9
+
+track snp151
+shortLabel All SNPs(151)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 151)
+group varRep
+visibility hide
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+trackHandler snp125
+chimpOrangMacOrthoTable snp151OrthoPt5Pa2Rm8
+chimpDb panTro5
+orangDb ponAbe2
+macaqueDb rheMac8
+hapmapPhase III
+codingAnnotations snp151CodingDbSnp,
+priority 6.9
 
 
 track hgdpGeo
@@ -3314,12 +3420,14 @@ shortLabel HGMD Variants
 longLabel Human Gene Mutation Database Public Variants
 group phenDis
 visibility hide
-type bigBed 8 .
+itemRgb on
+type bigBed 9 .
 url http://www.hgmd.cf.ac.uk/ac/gene.php?gene=$P&accession=$p
-urlLabel Link to HGMD:
+urlLabel Link to HGMD
 mouseOverField variantType
 tableBrowser off hgmd
 noScoreFilter on
+maxItems 1000
 
 track snpedia
 shortLabel SNPedia
@@ -4410,6 +4518,12 @@ termRegex [0-9]+
 searchType bed
 searchPriority 50
 
+searchName decipherSnvsId
+searchTable decipherSnvs
+termRegex [0-9]+
+searchType bed
+searchPriority 50
+
 searchTable ensGene
 searchType genePred
 termRegex ENS([A-Z]{3})?T[0-9]+(\.[0-9]+)?
@@ -4896,7 +5010,7 @@ searchMethod exact
 searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
-searchPriority 12.952
+searchPriority 12.9841
 padding 250
 
 searchTable snp150
@@ -4904,7 +5018,7 @@ searchMethod exact
 searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
-searchPriority 12.9841
+searchPriority 12.951
 padding 250
 
 searchTable snp150Flagged
@@ -4921,6 +5035,38 @@ searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9843
+padding 250
+
+searchTable snp151Common
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9837
+padding 250
+
+searchTable snp151Flagged
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9838
+padding 250
+
+searchTable snp151Mult
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9839
+padding 250
+
+searchTable snp151
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.950
 padding 250
 
 include cloneEnd.trackDb.ra

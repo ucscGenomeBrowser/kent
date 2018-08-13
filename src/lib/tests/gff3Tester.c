@@ -18,7 +18,7 @@ errAbort(
 static void gff3Tester(char *gff3InFile, char *gff3OutFile)
 /* tester for GFF3 objects */
 {
-struct gff3File *g3f = gff3FileOpen(gff3InFile, -1, NULL);
+struct gff3File *g3f = gff3FileOpen(gff3InFile, -1, 0, NULL);
 gff3FileWrite(g3f, gff3OutFile);
 gff3FileFree(&g3f);
 }

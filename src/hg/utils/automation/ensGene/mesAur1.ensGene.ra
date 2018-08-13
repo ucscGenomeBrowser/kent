@@ -1,0 +1,8 @@
+# required db variable
+db mesAur1
+# specific lifting to translate names:
+liftUp /hive/data/genomes/mesAur1/jkStuff/ensToUcsc.lift
+
+skipInvalid yes
+# ENSMAUT00000008954.1 txEnd 18377 >= chromSize 18369
+# ENSMAUT00000008838.1 txEnd 1152 >= chromSize 1150

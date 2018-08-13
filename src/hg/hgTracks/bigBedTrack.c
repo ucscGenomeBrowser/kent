@@ -24,6 +24,216 @@
 #include "trackHub.h"
 #include "net.h"
 #include "bigPsl.h"
+#include "bigBedFilter.h"
+
+struct bigBedFilter *bigBedMakeNumberFilter(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *filter, char *defaultLimits,  char *field)
+/* Make a filter on this column if the trackDb or cart wants us to. */
+{
+struct bigBedFilter *ret = NULL;
+char *setting = trackDbSettingClosestToHome(tdb, filter);
+int fieldNum =  bbExtraFieldIndex(bbi, field) + 3;
+if (setting)
+    {
+    struct asObject *as = bigBedAsOrDefault(bbi);
+    // All this isFloat conditional code is here because the cart
+    // variables used for floats are different than those used for ints
+    // in ../lib/hui.c so we have to use the correct getScore*() routine
+    // to access them..    We're doomed.
+    boolean isFloat = FALSE;
+    struct asColumn *asCol = asColumnFind(as, field);
+    if (asCol != NULL)
+        isFloat = asTypesIsFloating(asCol->lowType->type);
+    boolean invalid = FALSE;
+    double minValueTdb = 0,maxValueTdb = NO_VALUE;
+    double minLimit=NO_VALUE,maxLimit=NO_VALUE,min = minValueTdb,max = maxValueTdb;
+    if (!isFloat)
+        {
+        int minValueTdbInt = 0,maxValueTdbInt = NO_VALUE;
+        colonPairToInts(setting,&minValueTdbInt,&maxValueTdbInt);
+        int minLimitInt=NO_VALUE,maxLimitInt=NO_VALUE,minInt=minValueTdbInt,maxInt=maxValueTdbInt;
+        colonPairToInts(defaultLimits,&minLimitInt,&maxLimitInt);
+        getScoreIntRangeFromCart(cart,tdb,FALSE,filter,&minLimitInt,&maxLimitInt,&minInt,&maxInt);
+
+        // copy all the ints over to the doubles (sigh)
+        min = minInt;
+        max = maxInt;
+        minLimit = minLimitInt;
+        maxLimit = maxLimitInt;
+        minValueTdb = minValueTdbInt;
+        maxValueTdb = maxValueTdbInt;
+        }
+    else
+        {
+        colonPairToDoubles(setting,&minValueTdb,&maxValueTdb);
+        colonPairToDoubles(defaultLimits,&minLimit,&maxLimit);
+        getScoreFloatRangeFromCart(cart,tdb,FALSE,filter,&minLimit,&maxLimit,&min,&max);
+        }
+    if ((int)minLimit != NO_VALUE || (int)maxLimit != NO_VALUE)
+        {
+        // assume tdb default values within range!
+        // (don't give user errors that have no consequence)
+        if ((min != minValueTdb && (((int)minLimit != NO_VALUE && min < minLimit)
+                                || ((int)maxLimit != NO_VALUE && min > maxLimit)))
+        ||  (max != maxValueTdb && (((int)minLimit != NO_VALUE && max < minLimit)
+                                || ((int)maxLimit != NO_VALUE && max > maxLimit))))
+            {
+            invalid = TRUE;
+            char value[64];
+            if ((int)max == NO_VALUE) // min only is allowed, but max only is not
+                safef(value, sizeof(value), "entered minimum (%g)", min);
+            else
+                safef(value, sizeof(value), "entered range (min:%g and max:%g)", min, max);
+            char limits[64];
+            if ((int)minLimit != NO_VALUE && (int)maxLimit != NO_VALUE)
+                safef(limits, sizeof(limits), "violates limits (%g to %g)", minLimit, maxLimit);
+            else if ((int)minLimit != NO_VALUE)
+                safef(limits, sizeof(limits), "violates lower limit (%g)", minLimit);
+            else //if ((int)maxLimit != NO_VALUE)
+                safef(limits, sizeof(limits), "violates uppper limit (%g)", maxLimit);
+            warn("invalid filter by %s: %s %s for track %s", field, value, limits, tdb->track);
+            }
+        }
+    if (invalid)
+        {
+        char filterLimitName[64];
+        safef(filterLimitName, sizeof(filterLimitName), "%s%s", filter, _MIN);
+        cartRemoveVariableClosestToHome(cart,tdb,FALSE,filterLimitName);
+        safef(filterLimitName, sizeof(filterLimitName), "%s%s", filter, _MAX);
+        cartRemoveVariableClosestToHome(cart,tdb,FALSE,filterLimitName);
+        }
+    else if (((int)min != NO_VALUE && ((int)minLimit == NO_VALUE || minLimit != min))
+         ||  ((int)max != NO_VALUE && ((int)maxLimit == NO_VALUE || maxLimit != max)))
+         // Assumes min==NO_VALUE or min==minLimit is no filter
+         // Assumes max==NO_VALUE or max==maxLimit is no filter!
+        {
+        AllocVar(ret);
+        ret->fieldNum = fieldNum;
+        if ((int)max == NO_VALUE || ((int)maxLimit != NO_VALUE && maxLimit == max))
+            {
+            ret->comparisonType = COMPARE_MORE;
+            ret->value1 = min;
+            }
+        else if ((int)min == NO_VALUE || ((int)minLimit != NO_VALUE && minLimit == min))
+            {
+            ret->comparisonType = COMPARE_LESS;
+            ret->value1 = max;
+            }
+        else
+            {
+            ret->comparisonType = COMPARE_BETWEEN;
+            ret->value1 = min;
+            ret->value2 = max;
+            }
+        }
+    }
+return ret;
+}
+
+struct bigBedFilter *bigBedMakeFilterText(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *filterName, char *field)
+/* Add a bigBed filter using a trackDb filterText statement. */
+{
+struct bigBedFilter *filter;
+char *setting = trackDbSettingClosestToHome(tdb, filterName);
+char *value = cartUsualStringClosestToHome(cart, tdb, FALSE, filterName, setting);
+
+AllocVar(filter);
+filter->fieldNum =  bbExtraFieldIndex(bbi, field) + 3;
+filter->comparisonType = COMPARE_REGEXP;
+regcomp(&filter->regEx, value, REG_NOSUB);
+
+return filter;
+}
+
+struct bigBedFilter *bigBedMakeFilterBy(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *field, struct slName *choices)
+/* Add a bigBed filter using a trackDb filterBy statement. */
+{
+struct bigBedFilter *filter;
+
+AllocVar(filter);
+filter->fieldNum =  bbExtraFieldIndex(bbi, field) + 3;
+filter->comparisonType = COMPARE_HASH;
+filter->valueHash = newHash(5);
+
+for(; choices; choices = choices->next)
+    hashStore(filter->valueHash, choices->name);
+
+return filter;
+}
+
+struct bigBedFilter *bigBedBuildFilters(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb)
+/* Build all the numeric and filterBy filters for a bigBed */
+{
+struct bigBedFilter *filters = NULL, *filter;
+struct slName *filterSettings = trackDbSettingsWildMatch(tdb, "*Filter");
+
+for(; filterSettings; filterSettings = filterSettings->next)
+    {
+    char *fieldName = cloneString(filterSettings->name);
+    fieldName[strlen(fieldName) - sizeof "Filter" + 1] = 0;
+    if ((filter = bigBedMakeNumberFilter(cart, bbi, tdb, filterSettings->name, NULL, fieldName)) != NULL)
+        slAddHead(&filters, filter);
+    }
+
+filterSettings = trackDbSettingsWildMatch(tdb, "*FilterText");
+
+for(; filterSettings; filterSettings = filterSettings->next)
+    {
+    char *fieldName = cloneString(filterSettings->name);
+    fieldName[strlen(fieldName) - sizeof "FilterText" + 1] = 0;
+    if ((filter = bigBedMakeFilterText(cart, bbi, tdb, filterSettings->name,  fieldName)) != NULL)
+        slAddHead(&filters, filter);
+    }
+
+filterBy_t *filterBySet = filterBySetGet(tdb, cart,NULL);
+filterBy_t *filterBy = filterBySet;
+for (;filterBy != NULL; filterBy = filterBy->next)
+    {
+    if (filterBy->slChoices && differentString(filterBy->slChoices->name, "All")) 
+        {
+        if ((filter = bigBedMakeFilterBy(cart, bbi, tdb, filterBy->column, filterBy->slChoices)) != NULL)
+            slAddHead(&filters, filter);
+        }
+    }
+
+return filters;
+}
+
+
+boolean bigBedFilterInterval(char **bedRow, struct bigBedFilter *filters)
+/* Go through a row and filter based on filters.  Return TRUE if all filters are passed. */
+{
+struct bigBedFilter *filter;
+for(filter = filters; filter; filter = filter->next)
+    {
+    double val = atof(bedRow[filter->fieldNum]);
+
+    switch(filter->comparisonType)
+        {
+        case COMPARE_REGEXP:
+            if (regexec(&filter->regEx,bedRow[filter->fieldNum], 0, NULL,0 ) != 0)
+                return FALSE;
+            break;
+        case COMPARE_HASH:
+            if (!hashLookup(filter->valueHash, bedRow[filter->fieldNum]))
+                return FALSE;
+            break;
+        case COMPARE_LESS:
+            if (!(val <= filter->value1))
+                return FALSE;
+            break;
+        case COMPARE_MORE:
+            if (!(val >= filter->value1))
+                return FALSE;
+            break;
+        case COMPARE_BETWEEN:
+            if (!((val >= filter->value1) && (val <= filter->value2)))
+                return FALSE;
+            break;
+        }
+    }
+return TRUE;
+}
+
 
 struct bbiFile *fetchBbiForTrack(struct track *track)
 /* Fetch bbiFile from track, opening it if it is not already open. */
@@ -184,12 +394,12 @@ if (sameString(track->tdb->type, "bigPsl"))
 
 int mouseOverIdx = bbExtraFieldIndex(bbi, mouseOverField);
 
-bbiFileClose(&bbi);
 track->bbiFile = NULL;
 
+struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, track->tdb) ;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
-    struct linkedFeatures *lf;
+    struct linkedFeatures *lf = NULL;
     if (sameString(track->tdb->type, "bigPsl"))
 	{
 	char *seq, *cds;
@@ -211,10 +421,16 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         char *bedRow[32];
 
         bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
-	struct bed *bed = bedLoadN(bedRow, fieldCount);
-	lf = bedMungToLinkedFeatures(&bed, tdb, fieldCount,
-	    scoreMin, scoreMax, useItemRgb);
+        if (bigBedFilterInterval(bedRow, filters))
+            {
+            struct bed *bed = bedLoadN(bedRow, fieldCount);
+            lf = bedMungToLinkedFeatures(&bed, tdb, fieldCount,
+                scoreMin, scoreMax, useItemRgb);
+            }
 	}
+
+    if (lf == NULL)
+        continue;
 
     lf->label = makeLabel(track,  bb);
     if (sameString(track->tdb->type, "bigGenePred") || startsWith("genePred", track->tdb->type))
@@ -232,6 +448,7 @@ lmCleanup(&lm);
 
 if (!trackDbSettingClosestToHomeOn(track->tdb, "linkIdInName"))
     track->itemName = bigLfItemName;
+bbiFileClose(&bbi);
 }
 
 

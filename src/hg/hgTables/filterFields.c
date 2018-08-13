@@ -28,7 +28,6 @@
 #include "makeItemsItem.h"
 #include "bedDetail.h"
 #include "pgSnp.h"
-#include "barChartBed.h"
 #include "samAlignment.h"
 #include "trackHub.h"
 
@@ -179,7 +178,7 @@ for (in = inList; in != NULL; in = in->next)
 
     /* Scan through joining information and add tables,
      * avoiding duplicate additions. */
-    jpList = joinerRelate(joiner, in->db, in->table);
+    jpList = joinerRelate(joiner, in->db, in->table, database);
     for (jp = jpList; jp != NULL; jp = jp->next)
         {
 	safef(dtName, sizeof(dtName), "%s.%s",
@@ -512,12 +511,14 @@ char *ptr = NULL;
 
 /* Extract just the db.table part of db.table.field as well as db and table separately */
 safef(dbTable, sizeof(dbTable), "%s", dbTableField);
-ptr = strchr(dbTable, '.');
+ptr = strstr(dbTable, ".hub_");
+if (ptr == NULL)
+    ptr = strchr(dbTable, '.');
 if (ptr == NULL)
     errAbort("Expected 3 .-separated words in %s but can't find first .",
 	     dbTableField);
 safencpy(db, sizeof(db), dbTable, ptr-dbTable);
-char *p2 = strchr(ptr+1, '.');
+char *p2 = strrchr(ptr+1, '.');
 if (p2 == NULL)
     errAbort("Expected 3 .-separated words in %s but can't find second .",
 	     dbTableField);
@@ -627,7 +628,10 @@ boolean anyFilter()
 {
 char *filterTable = cartOptionalString(cart, hgtaFilterTable);
 if (filterTable == NULL)
+    {
+    removeFilterVars();  // sometimes these get left around due to the back button being used
     return FALSE;
+    }
 else
     {
     char *dbTable = getDbTable(database, curTable);
@@ -1039,6 +1043,7 @@ else if (type != NULL &&
         (startsWithWord("makeItems", type) || 
         sameWord("bedDetail", type) || 
         sameWord("barChart", type) || 
+        sameWord("interact", type) || 
         sameWord("pgSnp", type)))
     {
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);

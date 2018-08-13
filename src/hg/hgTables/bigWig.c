@@ -215,7 +215,7 @@ int mathWigOutRegion(struct trackDb *track, char *table, struct sqlConnection *c
 int resultCount = 0;
 struct dataVector *dv = dataVectorNew(region->chrom, region->end - region->start);
 char *equation = cloneString(trackDbSetting(track, "mathDataUrl"));
-double *values = mathWigGetValues(equation, region->chrom, region->start, region->end);
+double *values = mathWigGetValues(database, equation, region->chrom, region->start, region->end, TRUE);
 valuesToVector(values, dv, region->start);
 resultCount = wigPrintDataVectorOut(dv, wigOutType, maxOut, NULL);
 dataVectorFree(&dv);

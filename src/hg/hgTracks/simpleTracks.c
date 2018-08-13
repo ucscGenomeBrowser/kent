@@ -107,7 +107,6 @@
 #include "retroGene.h"
 #include "switchGear.h"
 #include "dless.h"
-#include "liftOver.h"
 #include "hgConfig.h"
 #include "gv.h"
 #include "gvUi.h"
@@ -144,6 +143,7 @@
 #include "bedTabix.h"
 #include "knetUdc.h"
 #include "trackHub.h"
+#include "hubConnect.h"
 
 #define CHROM_COLORS 26
 
@@ -2677,7 +2677,7 @@ and which are within some limit (1MB?) of each other. */
 int mergeLimit = 1024*1024;
 struct window *w = windows;
 struct window *resultList = NULL;
-struct window *mergedW;
+struct window *mergedW = NULL;
 if (!windows)
     errAbort("Unexpected error: windows list NULL in makeMergedWindowList()");
 boolean doNew = TRUE;
@@ -3867,6 +3867,12 @@ for (sf = components; sf != NULL; sf = sf->next)
                && (sf->end   >= winEnd   || sf->end   == lf->end)))
                 {
                 Color barbColor = hvGfxContrastingColor(hvg, color);
+                // This scaling of bases to an image window occurs in several places.
+                // It should really be broken out into a function.
+                if (s < winStart)
+                    s = winStart;
+                if (e > winEnd)
+                    e = winEnd;
                 x1 = round((double)((int)s-winStart)*scale) + xOff;
                 x2 = round((double)((int)e-winStart)*scale) + xOff;
                 w = x2-x1;
@@ -5743,6 +5749,20 @@ if (classTable != NULL && hTableExists(database, classTable))
 return TRUE;
 }
 
+boolean knownGencodePseudoFilter(struct track *tg, void *item)
+/* return TRUE is the user wants to see gencode pseudo genes. */
+{
+struct linkedFeatures *lf = item;
+char buffer[1024];
+
+safef(buffer, sizeof buffer, "kgId=\"%s\" and transcriptClass=\"pseudo\"", lf->name);
+char *class = sqlGetField(database, "knownAttrs", "transcriptClass", buffer);
+
+if (class != NULL)
+    return TRUE;
+return FALSE;
+}
+
 boolean knownGencodeClassFilter(struct track *tg, void *item)
 {
 struct linkedFeatures *lf = item;
@@ -5795,6 +5815,8 @@ void loadKnownGencode(struct track *tg)
 char varName[SMALLBUF];
 safef(varName, sizeof(varName), "%s.show.comprehensive", tg->tdb->track);
 boolean showComprehensive = cartUsualBoolean(cart, varName, FALSE);
+safef(varName, sizeof(varName), "%s.show.pseudo", tg->tdb->track);
+boolean showPseudo = cartUsualBoolean(cart, varName, FALSE);
 
 struct sqlConnection *conn = hAllocConn(database);
 tg->items = connectedLfFromGenePredInRangeExtra(tg, conn, tg->table,
@@ -5803,6 +5825,9 @@ tg->items = connectedLfFromGenePredInRangeExtra(tg, conn, tg->table,
 /* filter items on selected criteria if filter is available */
 if (!showComprehensive)
     filterItems(tg, knownGencodeClassFilter, "include");
+
+if (!showPseudo)
+    filterItems(tg, knownGencodePseudoFilter, "exclude");
 
 /* if we're close enough to see the codon frames, we better load them! */
 if (zoomedToCdsColorLevel)
@@ -6043,9 +6068,10 @@ safef(str2, sizeof(str2), "%s&hgg_prot=%s", lf->name, ((struct knownGenesExtra *
 return(cloneString(str2));
 }
 
-void lookupKnownGeneNames(struct linkedFeatures *lfList, boolean isBigGenePred)
+void lookupKnownGeneNames(struct track *tg, boolean isBigGenePred)
 /* This converts the known gene ID to a gene symbol */
 {
+struct linkedFeatures *lfList = tg->items;
 struct linkedFeatures *lf;
 struct sqlConnection *conn = hAllocConn(database);
 char *geneSymbol;
@@ -6053,6 +6079,7 @@ char *protDisplayId;
 char *gencodeId;
 char *mimId;
 char cond_str[256];
+boolean isGencode2 = trackDbSettingOn(tg->tdb, "isGencode2");
 
 boolean useGeneSymbol= FALSE;
 boolean useKgId      = FALSE;
@@ -6129,12 +6156,17 @@ if (hTableExists(database, "kgXref"))
             else labelStarted = TRUE;
             if ( isBigGenePred )
                 {
-                gencodeId = gp->name2;
+                gencodeId = isGencode2 ? gp->name : gp->name2;
                 }
             else
                 {
-                sqlSafefFrag(cond_str, sizeof(cond_str), "name='%s'", lf->name);
-                gencodeId = sqlGetField(database, "knownGene", "alignID", cond_str);
+                if (isGencode2)
+                    gencodeId = lf->name;
+                else
+                    {
+                    sqlSafefFrag(cond_str, sizeof(cond_str), "name='%s'", lf->name);
+                    gencodeId = sqlGetField(database, "knownGene", "alignID", cond_str);
+                    }
                 }
 	    dyStringAppend(name, gencodeId);
 	    }
@@ -6142,8 +6174,15 @@ if (hTableExists(database, "kgXref"))
             {
             if (labelStarted) dyStringAppendC(name, '/');
             else labelStarted = TRUE;
-            dyStringAppend(name, lf->name);
-	    }
+            if (isGencode2)
+                {
+                sqlSafefFrag(cond_str, sizeof(cond_str), "name='%s'", lf->name);
+                char *ucId = sqlGetField(database, "knownGene", "alignID", cond_str);
+                dyStringAppend(name, ucId);
+                }
+            else
+                dyStringAppend(name, lf->name);
+            }
         if (useProtDisplayId)
             {
             if (labelStarted) dyStringAppendC(name, '/');
@@ -6267,7 +6306,7 @@ void loadKnownGene(struct track *tg)
 /* Load up known genes. */
 {
 struct trackDb *tdb = tg->tdb;
-char *isGencode = trackDbSetting(tdb, "isGencode");
+boolean isGencode = trackDbSettingOn(tdb, "isGencode") || trackDbSettingOn(tdb, "isGencode2");
 char *bigGenePred = trackDbSetting(tdb, "bigGeneDataUrl");
 struct udcFile *file;
 boolean isBigGenePred = FALSE;
@@ -6276,9 +6315,9 @@ if ((bigGenePred != NULL) && ((file = udcFileMayOpen(bigGenePred, udcDefaultDir(
     {
     isBigGenePred = TRUE;
     udcFileClose(&file);
-    loadKnownBigGenePred(tg, isGencode != NULL);
+    loadKnownBigGenePred(tg, isGencode);
     }
-else if (isGencode == NULL)
+else if (!isGencode)
     loadGenePredWithName2(tg);
 else
     loadKnownGencode(tg);
@@ -6321,7 +6360,7 @@ if (!showSpliceVariants)
             }
         }
     }
-lookupKnownGeneNames(tg->items, isBigGenePred);
+lookupKnownGeneNames(tg, isBigGenePred);
 limitVisibility(tg);
 }
 
@@ -6593,8 +6632,8 @@ if (vis == tvFull)
     }
 }
 
-static char *decipherPhenotypeList(char *name)
-/* Return list of diseases associated with a DECIPHER entry */
+static char *decipherCnvsPhenotypeList(char *name)
+/* Return list of diseases associated with a DECIPHER CNVs entry */
 {
 char query[256];
 static char list[4096];
@@ -6625,14 +6664,14 @@ hFreeConn(&conn);
 return list;
 }
 
-void decipherLoad(struct track *tg)
-/* Load DECIPHER items with extra labels from decipherPhenotypeList. */
+void decipherCnvsLoad(struct track *tg)
+/* Load DECIPHER CNVs items with extra labels from decipherPhenotypeList. */
 {
-bedPlusLabelLoad(tg, decipherPhenotypeList);
+bedPlusLabelLoad(tg, decipherCnvsPhenotypeList);
 }
 
-Color decipherColor(struct track *tg, void *item, struct hvGfx *hvg)
-/* Return color to draw DECIPHER entry */
+Color decipherCnvsColor(struct track *tg, void *item, struct hvGfx *hvg)
+/* Return color to draw DECIPHER CNVs entry */
 {
 struct bed *bed = item;
 int col = tg->ixColor;
@@ -6651,6 +6690,7 @@ if (startsWithNoCase("chr", bed->chrom))
 /* color scheme:
 	RED:	If the entry is a deletion (mean ratio < 0)
 	BLUE:	If the entry is a duplication (mean ratio > 0)
+	GREY:	If the entry was not provided with a mean ratio value (or it's 0)
 */
 sqlSafefFrag(cond_str, sizeof(cond_str),"name='%s' ", bed->name);
 decipherId = sqlGetField(database, "decipher", "name", cond_str);
@@ -6659,13 +6699,17 @@ if (decipherId != NULL)
     if (hTableExists(database, "decipherRaw"))
         {
         sqlSafef(query, sizeof(query),
-              "select mean_ratio > 0 from decipherRaw where id = '%s' and "
+              "select mean_ratio from decipherRaw where id = '%s' and "
               "chr = '%s' and start = %d and end = %d",
 	          decipherId, decipherChrom, bed->chromStart+1, bed->chromEnd);
 	sr = sqlGetResult(conn, query);
         if ((row = sqlNextRow(sr)) != NULL)
             {
-	    if (sameWord(row[0], "1"))
+            if (isEmpty(row[0]) || (atof(row[0]) == 0.0))
+                {
+                col = MG_GRAY;
+                }
+	    else if (atof(row[0]) > 0)
                 {
                 col = MG_BLUE;
                 }
@@ -6675,20 +6719,98 @@ if (decipherId != NULL)
 		}
 	    }
 	sqlFreeResult(&sr);
-        /* add more logic here to check for mean_ratio = 0
-           (which is a problem to be fixed by DECIPHER */
+	}
+    }
+hFreeConn(&conn);
+return(col);
+}
 
-        sqlSafef(query, sizeof(query),
-	       "select mean_ratio = 0 from decipherRaw where id = '%s' and "
-           "chr = '%s' and start = %d and end = %d",
-           decipherId, decipherChrom, bed->chromStart+1, bed->chromEnd);
-        sr = sqlGetResult(conn, query);
+static char *decipherSnvsPhenotypeList(char *name)
+/* Return list of diseases associated with a DECIPHER SNVs entry */
+{
+char query[256];
+static char list[4096];
+struct sqlConnection *conn = hAllocConn(database);
+if (sqlFieldIndex(conn, "decipherSnvsRaw", "phenotypes") >= 0)
+    {
+    list[0] = '\0';
+    sqlSafef(query, sizeof(query),
+        "select phenotypes from decipherSnvsRaw where id='%s'", name);
+    struct sqlResult *sr = sqlMustGetResult(conn, query);
+    char **row = sqlNextRow(sr);
+    if ((row != NULL) && strlen(row[0]) >= 1)
+        {
+        char *prettyResult = replaceChars(row[0], "|", "; ");
+        safecpy(list, sizeof(list), prettyResult);
+        // freeMem(prettyResult);
+        }
+    sqlFreeResult(&sr);
+    }
+else
+    {
+    sqlSafef(query, sizeof(query),
+        "select distinct phenotype from decipherSnvsRaw where id='%s' order by phenotype", name);
+    hFreeConn(&conn);
+    return collapseRowsFromQuery(query, "; ", 20);
+    }
+hFreeConn(&conn);
+return list;
+}
+
+void decipherSnvsLoad(struct track *tg)
+/* Load DECIPHER SNVs items with extra labels from decipherSnvsPhenotypeList. */
+{
+bedPlusLabelLoad(tg, decipherSnvsPhenotypeList);
+}
+
+Color decipherSnvsColor(struct track *tg, void *item, struct hvGfx *hvg)
+/* Return color to draw DECIPHER SNV entry */
+{
+struct bed *bed = item;
+int col = tg->ixColor;
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlResult *sr;
+char **row;
+char query[256];
+char cond_str[256];
+char *decipherId = NULL;
+
+/* So far, we can just remove "chr" from UCSC chrom names to get DECIPHER names */
+char *decipherChrom = bed->chrom;
+if (startsWithNoCase("chr", bed->chrom))
+    decipherChrom += 3;
+
+/* color scheme:
+    BLACK:      If the entry is likely or definitely pathogenic
+    DARK GRAY:  If the entry is uncertain or unknown
+    LIGHT GRAY: If the entry is likely or definitely benign
+*/
+
+sqlSafefFrag(cond_str, sizeof(cond_str),"name='%s' ", bed->name);
+decipherId = sqlGetField(database, "decipherSnvs", "name", cond_str);
+
+if (decipherId != NULL)
+    {
+    if (hTableExists(database, "decipherSnvsRaw"))
+        {
+        sqlSafef(query, sizeof(query), "select pathogenicity from decipherSnvsRaw where "
+            "id = '%s' and chr = '%s' and start = '%d' and end = '%d'",
+            decipherId, decipherChrom, bed->chromStart+1, bed->chromEnd);
+	sr = sqlGetResult(conn, query);
+        col = MG_GRAY;
         if ((row = sqlNextRow(sr)) != NULL)
             {
-	    if (sameWord(row[0], "1"))
+            char *ucPathogenicity = cloneString(row[0]);
+            strUpper(ucPathogenicity);
+	    if (endsWith(ucPathogenicity, "PATHOGENIC"))
                 {
-                col = MG_GRAY;
+                col = MG_BLACK;
                 }
+	    else if (endsWith(ucPathogenicity, "BENIGN"))
+		{
+                col = MAKECOLOR_32(200,200,200);
+		}
+            // freeMem(ucPathogenicity);
 	    }
 	sqlFreeResult(&sr);
 	}
@@ -6697,12 +6819,23 @@ hFreeConn(&conn);
 return(col);
 }
 
-void decipherMethods(struct track *tg)
-/* Methods for DECIPHER track. */
+void decipherCnvsMethods(struct track *tg)
+/* Methods for DECIPHER CNVs track. */
 {
-tg->loadItems   = decipherLoad;
-tg->itemColor   = decipherColor;
-tg->itemNameColor = decipherColor;
+tg->loadItems   = decipherCnvsLoad;
+tg->itemColor   = decipherCnvsColor;
+tg->itemNameColor = decipherCnvsColor;
+tg->drawItemAt  = bedPlusLabelDrawAt;
+tg->mapItem     = bedPlusLabelMapItem;
+tg->nextPrevExon = simpleBedNextPrevEdge;
+}
+
+void decipherSnvsMethods(struct track *tg)
+/* Methods for DECIPHER SNVs track. */
+{
+tg->loadItems   = decipherSnvsLoad;
+tg->itemColor   = decipherSnvsColor;
+tg->itemNameColor = decipherSnvsColor;
 tg->drawItemAt  = bedPlusLabelDrawAt;
 tg->mapItem     = bedPlusLabelMapItem;
 tg->nextPrevExon = simpleBedNextPrevEdge;
@@ -9251,92 +9384,6 @@ Color lfChromColor(struct track *tg, void *item, struct hvGfx *hvg)
 {
 struct linkedFeatures *lf = item;
 return getSeqColorDefault(lf->name, hvg, tg->ixColor);
-}
-
-Color interactionColor(struct track *tg, void *item, struct hvGfx *hvg)
-{
-struct linkedFeatures *lf = item;
-return  tg->colorShades[lf->grayIx];
-
-#ifdef NOTNOW  // leaving this in the code in case we want chrom color again
-
-char *name = tg->itemName(tg, item);
-struct linkedFeatures *lf = item;
-if (slCount(lf->components) == 2)
-    return MG_BLACK;
-return getSeqColorDefault(name, hvg, tg->ixColor);
-#endif
-}
-
-void interactionLeftLabels(struct track *tg, int seqStart, int seqEnd,
-	struct hvGfx *hvg, int xOff, int yOff, int width, int height,
-	boolean withCenterLabels, MgFont *font, Color color,
-	enum trackVisibility vis)
-{
-/*
-struct linkedFeatures *lf, *lfList = track->items;
-for (lf = lfList; lf != NULL; lf = lf->next)
-    {
-    if (tg->itemLabelColor != NULL)
-	color = tg->itemLabelColor(track, lf, hvg);
-    int itemHeight = tg->itemHeight(track, lf);
-    hvGfxTextRight(hvg, xOff, y, width - 1,
-	itemHeight, color, font, tg->itemName(tg, lf));
-    }
-    track->bigBedraLeftLabels = bigBedLeftLabels;
-    */
-}
-
-void interactionLoad(struct track *tg)
-{
-loadGappedBed(tg);
-}
-
-char *interactionName(struct track *tg, void *item)
-{
-struct linkedFeatures *lf = item;
-if (slCount(lf->components) == 2)
-    return "";
-
-char buffer[10 * 1024], *name = buffer;
-safef(buffer, sizeof buffer, "%s", lf->name);
-char *ptr;
-
-if (startsWith(chromName, buffer))
-    {
-    name = strchr(buffer,'-');
-    name++;
-    ptr = strchr(name,':');
-    *ptr = 0;
-    }
-else
-    {
-    ptr = strchr(buffer,':');
-    *ptr = 0;
-    }
-
-return cloneString(name);
-}
-
-void interactionMethods(struct track *tg)
-{
-tg->freeItems = linkedFeaturesFreeItems;
-tg->drawItems = linkedFeaturesDraw;
-tg->drawItemAt = linkedFeaturesDrawAt;
-tg->mapItemName = linkedFeaturesName;
-tg->totalHeight = tgFixedTotalHeightNoOverflow;
-tg->itemHeight = tgFixedItemHeight;
-tg->itemStart = linkedFeaturesItemStart;
-tg->itemEnd = linkedFeaturesItemEnd;
-tg->itemNameColor = linkedFeaturesNameColor;
-tg->nextPrevExon = linkedFeaturesNextPrevItem;
-tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
-tg->loadItems = interactionLoad;
-tg->itemName = interactionName;
-tg->itemColor = interactionColor;
-tg->itemNameColor = linkedFeaturesNameColor;
-//tg->drawLeftLabels = interactionLeftLabels;
-tg->canPack = TRUE;
 }
 
 #ifndef GBROWSE
@@ -13885,6 +13932,11 @@ else if (sameWord(type, "bigBarChart"))
     track->isBigBed = TRUE;
     barChartMethods(track);
     }
+else if (sameWord(type, "bigInteract"))
+    {
+    track->isBigBed = TRUE;
+    interactMethods(track);
+    }
 else if (sameWord(type, "bigNarrowPeak"))
     {
     tdb->canPack = TRUE;
@@ -14106,10 +14158,6 @@ else if (sameWord(type, "bamWig"))
     {
     bamWigMethods(track, tdb, wordCount, words);
     }
-else if (sameWord(type, "interaction"))
-    {
-    interactionMethods(track);
-    }
 else if (sameWord(type, "gvf"))
     {
     gvfMethods(track);
@@ -14117,6 +14165,10 @@ else if (sameWord(type, "gvf"))
 else if (sameWord(type, "barChart"))
     {
     barChartMethods(track);
+    }
+else if (sameWord(type, "interact"))
+    {
+    interactMethods(track);
     }
 /* add handlers for wildcard */
 if (startsWith("peptideAtlas", track->track))
@@ -14187,15 +14239,35 @@ int trackPriCmp(const void *va, const void *vb)
 const struct track *a = *((struct track **)va);
 const struct track *b = *((struct track **)vb);
 
-return (a->priority - b->priority);
+double diff = a->priority - b->priority;
+if (diff > 0)
+    return 1;
+else if (diff < 0)
+    return -1;
+return 0;
+}
+
+
+static bool isSubtrackVisibleTdb(struct cart *cart, struct trackDb *tdb)
+/* Has this subtrack not been deselected in hgTrackUi or declared with
+ *  * "subTrack ... off"?  -- assumes composite track is visible. */
+{
+boolean overrideComposite = (NULL != cartOptionalString(cart, tdb->track));
+bool enabledInTdb = TRUE; // assume that this track is enabled in tdb
+char option[1024];
+safef(option, sizeof(option), "%s_sel", tdb->track);
+boolean enabled = cartUsualBoolean(cart, option, enabledInTdb);
+if (overrideComposite)
+    enabled = TRUE;
+return enabled;
 }
 
 void buildMathWig(struct trackDb *tdb)
 /* Turn a mathWig composite into a mathWig track. */
 {
-char *viewFunc =  trackDbSetting(tdb, "viewFunc");
+char *aggregateFunc = cartOrTdbString(cart, tdb, "aggregate" , FALSE);
 
-if ((viewFunc == NULL) || sameString("show all", viewFunc))
+if ((aggregateFunc == NULL) || !(sameString("add", aggregateFunc) || sameString("subtract", aggregateFunc)))
     return;
 
 struct trackDb *subTracks = tdb->subtracks;
@@ -14205,18 +14277,39 @@ tdb->type = "mathWig";
 
 struct dyString *dy = newDyString(1024);
 
-if (sameString("add all", viewFunc))
+if (sameString("add", aggregateFunc))
     dyStringPrintf(dy, "+ ");
-else
+else // subtract
     dyStringPrintf(dy, "- ");
 struct trackDb *subTdb;
 for (subTdb=subTracks; subTdb; subTdb = subTdb->next)
     {
+    if (!isSubtrackVisibleTdb(cart, subTdb) )
+        continue;
+
     char *bigDataUrl = trackDbSetting(subTdb, "bigDataUrl");
+    char *useDb;
+    char *table;
     if (bigDataUrl != NULL)
         dyStringPrintf(dy, "%s ",bigDataUrl);
-    else // native tracks are prepended with '$'
-        dyStringPrintf(dy, "$%s ",subTdb->track);
+    else 
+        {
+        if (isCustomTrack(trackHubSkipHubName(subTdb->track)))
+            {
+            useDb = CUSTOM_TRASH;
+            table = trackDbSetting(subTdb, "dbTableName");
+            }
+        else
+            {
+            useDb = database;
+            table = trackDbSetting(subTdb, "table");
+            }
+
+        if (startsWith("bedGraph", subTdb->type))
+            dyStringPrintf(dy, "^%s.%s ",useDb, table);
+        else
+            dyStringPrintf(dy, "$%s.%s ",useDb, table);
+        }
     }
 
 hashAdd(tdb->settingsHash, "mathDataUrl", dy->string);
@@ -14369,11 +14462,21 @@ if (sameWord(tdb->track, "ensGene"))
     }
 else if (startsWith("ncbiRef", tdb->track))
     {
-    struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
-    if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
+    char *version = checkDataVersion(database, tdb);
+
+    // if not in that file, check the trackVersion table
+    if (version == NULL)
+	{
+	struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
+	if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
+	    {
+	    version = cloneString(trackVersion->version);
+	    }
+	}
+    if (version)
 	{
 	char longLabel[1024];
-	safef(longLabel, sizeof(longLabel), "%s - Annotation Release %s", tdb->longLabel, trackVersion->version);
+	safef(longLabel, sizeof(longLabel), "%s - Annotation Release %s", tdb->longLabel, version);
 	track->longLabel = cloneString(longLabel);
 	tdb->longLabel = cloneString(longLabel);
 	}
@@ -14652,7 +14755,8 @@ registerTrackHandler("hg17Kg", hg17KgMethods);
 registerTrackHandler("superfamily", superfamilyMethods);
 registerTrackHandler("gad", gadMethods);
 registerTrackHandler("rdmr", rdmrMethods);
-registerTrackHandler("decipher", decipherMethods);
+registerTrackHandler("decipher", decipherCnvsMethods);
+registerTrackHandler("decipherSnvs", decipherSnvsMethods);
 registerTrackHandler("rgdQtl", rgdQtlMethods);
 registerTrackHandler("rgdRatQtl", rgdQtlMethods);
 registerTrackHandler("refGene", refGeneMethods);

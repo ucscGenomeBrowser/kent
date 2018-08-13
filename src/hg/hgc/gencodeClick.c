@@ -42,6 +42,7 @@ static char *gencodeBiotypesUrl = "http://www.gencodegenes.org/gencode_biotypes.
 static char *gencodeTagsUrl = "http://www.gencodegenes.org/gencode_tags.html";
 static char *ensemblTranscriptIdUrl = "http://www.ensembl.org/%s/Transcript/Summary?db=core;t=%s";
 static char *ensemblGeneIdUrl = "http://www.ensembl.org/%s/Gene/Summary?db=core;t=%s";
+static char *ensemblProteinIdUrl = "http://www.ensembl.org/%s/Transcript/ProteinSummary?db=core;t=%s";
 static char *ensemblSupportingEvidUrl = "http://www.ensembl.org/%s/Transcript/SupportingEvidence?db=core;t=%s";
 static char *vegaTranscriptIdUrl = "http://vega.sanger.ac.uk/%s/Transcript/Summary?db=core;t=%s";
 static char *vegaGeneIdUrl = "http://vega.sanger.ac.uk/%s/Gene/Summary?db=core;g=%s";
@@ -115,11 +116,20 @@ return transAnno;
 }
 
 static struct wgEncodeGencodeAttrs *transAttrsLoad(struct trackDb *tdb, struct sqlConnection *conn, char *gencodeId)
-/* load the gencode class information */
+/* load the gencode attributes */
 {
-return sqlQueryObjs(conn, (sqlLoadFunc)wgEncodeGencodeAttrsLoad, sqlQuerySingle|sqlQueryMust,
-                    "select * from %s where transcriptId = \"%s\"",
-                    getGencodeTable(tdb, "wgEncodeGencodeAttrs"), gencodeId);
+char query[1024];
+sqlSafef(query, sizeof(query), "select * from %s where transcriptId = \"%s\"",
+         getGencodeTable(tdb, "wgEncodeGencodeAttrs"), gencodeId);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row = sqlNextRow(sr);
+if (row == NULL)
+    errAbort("gencode transcript %s not found in %s", gencodeId,
+             getGencodeTable(tdb, "wgEncodeGencodeAttrs"));
+// older version don't have proteinId column.
+struct wgEncodeGencodeAttrs *transAttrs = wgEncodeGencodeAttrsLoad(row, sqlCountColumns(sr));
+sqlFreeResult(&sr);
+return transAttrs;
 }
 
 static void getGeneBounds(struct trackDb *tdb, struct sqlConnection *conn, struct genePred *transAnno,
@@ -351,10 +361,22 @@ printf("<table class=\"hgcCcds\" style=\"white-space: nowrap;\"><thead>\n");
 printf("<tr><th><th>Transcript<th>Gene</tr>\n");
 printf("</thead><tbody>\n");
 
-printf("<tr><th>Gencode id");
+printf("<tr><th>GENCODE id");
 prTdEnsIdAnchor(transAttrs->transcriptId, ensemblTranscriptIdUrl);
 prTdEnsIdAnchor(transAttrs->geneId, ensemblGeneIdUrl);
 printf("</tr>\n");
+
+if (transAttrs->proteinId != NULL)
+    {
+    // protein id in database, maybe not this transcript
+    printf("<tr><th>Protein id");
+    if (strlen(transAttrs->proteinId) > 0)
+        prTdEnsIdAnchor(transAttrs->proteinId, ensemblProteinIdUrl);
+    else
+        printf("<td>&nbsp;");
+    printf("<td>");
+    printf("</tr>\n");
+    }
 
 printf("<tr><th>HAVANA manual id");
 prTdEnsIdAnchor(transAttrs->havanaTranscriptId, vegaTranscriptIdUrl);

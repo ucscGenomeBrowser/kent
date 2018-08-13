@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
+# DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makeGenomeDb.pl instead.
 
 # $Id: makeGenomeDb.pl,v 1.30 2010/04/13 23:18:44 hiram Exp $
@@ -103,13 +103,15 @@ ncbiGenomeId nnnnn
 ncbiAssemblyId nnnnn
   - A numeric NCBI identifier for the assembly. To determine this, do an
     NCBI Assembly query at https://www.ncbi.nlm.nih.gov/assembly/,
-    using the scientific name \"Xxxxxx yyyyyy\" and choose a project ID that 
+    using the scientific name \"Xxxxxx yyyyyy\" and choose a project ID that
     match the assembly name.
 
 ncbiAssemblyName xxxxxrr
-  - The assembly name used in the ftp path such as \"catChrV17e\" in  
+  - The assembly name used in the ftp path such as \"catChrV17e\" in
     ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Felis_catus/catChrV17e/
-    It is identical to the name returned from the NCBI Assembly query mention above. 
+    It is identical to the name returned from the NCBI Assembly query mention above.
+    NOTE: this is NOT an NCBI identifier, this name was supplied by the
+    assembly provider.
 
 ncbiBioProject nnnnn
   - The NCBI bioproject number to construct the URL:
@@ -198,10 +200,10 @@ qualFiles [/path/to/downloaded.qual | /path/to/qacAgpLift-ed.qac]
 mitoSize N
   - to override the internal default of max size for mitochondrial
     sequence of $maxMitoSize e.g. for yeast: mitoSize 90000
-    
-subsetLittleIds Y      
+
+subsetLittleIds Y
   - ok if agp little ids (col6) are a subset of fasta sequences
-    rather than requiring an exact match 
+    rather than requiring an exact match
 
 doNotCheckDuplicates Y
   - do not stop build if duplicate sequences are found in genome
@@ -226,7 +228,7 @@ use vars qw/
     /;
 
 # Required config parameters:
-my ($db, $scientificName, $assemblyDate, $assemblyLabel, $assemblyShortLabel, $orderKey, $photoCreditURL, $photoCreditName, $ncbiGenomeId, $ncbiAssemblyName, $ncbiAssemblyId, $ncbiBioProject, $ncbiBioSample, $genBankAccessionID,
+my ($db, $scientificName, $assemblyDate, $assemblyLabel, $assemblyShortLabel, $orderKey, $photoCreditURL, $photoCreditName, $ncbiGenomeId, $providerAssemblyName, $ncbiAssemblyId, $ncbiBioProject, $ncbiBioSample, $genBankAccessionID,
     $mitoAcc, $fastaFiles, $dbDbSpeciesDir, $taxId);
 # Conditionally required config parameters:
 my ($fakeAgpMinContigGap, $fakeAgpMinScaffoldGap,
@@ -308,7 +310,7 @@ sub parseConfig {
   $photoCreditURL = &requireVar('photoCreditURL', \%config);
   $photoCreditName = &requireVar('photoCreditName', \%config);
   $ncbiGenomeId = &requireVar('ncbiGenomeId', \%config);
-  $ncbiAssemblyName = &requireVar('ncbiAssemblyName', \%config);
+  $providerAssemblyName = &requireVar('ncbiAssemblyName', \%config);
   $ncbiAssemblyId = &requireVar('ncbiAssemblyId', \%config);
   $ncbiBioProject = &requireVar('ncbiBioProject', \%config);
   $ncbiBioSample = &requireVar('ncbiBioSample', \%config);
@@ -453,7 +455,7 @@ sub makeUnmasked2bit {
   my $fcat = "cat";
   my $sli = "";
   if (defined $subsetLittleIds && $subsetLittleIds eq "Y") {
-    $sli = "-1 ";  
+    $sli = "-1 ";
   }
   foreach my $file (`ls $fastaFiles 2> /dev/null`) {
     if ($file =~ m/\.gz$/) {
@@ -488,16 +490,27 @@ set diffLittleCount = `comm $sli-3 \$fastaIds \$agpLittleIds | wc -l`
 
 # If AGP "big" IDs match sequence IDs, use sequence as-is.
 # If AGP "little" IDs match sequence IDs, or are a subset, assemble sequence with agpToFa.
+set bigGenome = ""
+#   big genomes are over 4Gb: 4*1024*1024*1024 = 4294967296
+# requires -long argument to faToTwoBit
 if (\$diffLittleCount == 0) then
   set agpTmp = `mktemp -p /tmp makeGenomeDb.agp.XXXXXX`
   $acat $agpFiles | grep -v '^#' > \$agpTmp
+  set genomeSize = `$fcat $fastaFiles | sed -e 's/^>.*gb\|/>/; s/\|.*//' | agpToFa -simpleMultiMixed \$agpTmp all stdout stdin | faSize stdin | grep -w bases | awk '{print \$1}'`
+  if ( \$genomeSize > 4294967295 ) then
+    set bigGenome = "-long"
+  endif
   $fcat $fastaFiles | sed -e 's/^>.*gb\|/>/; s/\|.*//' \\
   | agpToFa -simpleMultiMixed \$agpTmp all stdout stdin \\
-  | faToTwoBit -noMask stdin $chrM $db.unmasked.2bit
+  | faToTwoBit \$bigGenome -noMask stdin $chrM $db.unmasked.2bit
   rm -f \$agpTmp
 else if (\$diffBigCount == 0) then
+  set genomeSize = `$fcat $fastaFiles | sed -e 's/^>.*gb\|/>/; s/\|.*//' | faSize stdin | grep -w bases | awk '{print \$1}'`
+  if ( \$genomeSize > 4294967295 ) then
+    set bigGenome = "-long"
+  endif
   $fcat $fastaFiles | sed -e 's/^>.*gb\|/>/; s/\|.*//' \\
-  | faToTwoBit -noMask stdin $chrM $db.unmasked.2bit
+  | faToTwoBit \$bigGenome -noMask stdin $chrM $db.unmasked.2bit
 else
   echo "Error: IDs in fastaFiles ($fastaFiles)"
   echo "do not perfectly match IDs in either the first or sixth columns of"
@@ -514,8 +527,15 @@ _EOF_
   } else {
     # No AGP -- just make an unmasked 2bit.
     $bossScript->add(<<_EOF_
+set bigGenome = ""
+#   big genomes are over 4Gb: 4*1024*1024*1024 = 4294967296
+# requires -long argument to faToTwoBit
+set genomeSize = `$fcat $fastaFiles | sed -e 's/^>.*gb\|/>/; s/\|.*//' | faSize stdin | grep -w bases | awk '{print \$1}'`
+if ( \$genomeSize > 4294967295 ) then
+  set bigGenome = "-long"
+endif
 $fcat $fastaFiles | sed -e 's/^>.*gb\|/>/; s/\|.*//' | \\
-    faToTwoBit -noMask stdin $chrM $db.unmasked.2bit
+    faToTwoBit \$bigGenome -noMask stdin $chrM $db.unmasked.2bit
 _EOF_
     );
   }
@@ -748,7 +768,7 @@ _EOF_
 mkdir -p $bedDir/gc5Base
 cd $bedDir/gc5Base
 hgGcPercent -wigOut -doGaps -file=stdout -win=5 -verbose=0 $db \\
-  $topDir/$db.unmasked.2bit | gzip -c > $db.gc5Base.wigVarStep.gz 
+  $topDir/$db.unmasked.2bit | gzip -c > $db.gc5Base.wigVarStep.gz
 wigToBigWig $db.gc5Base.wigVarStep.gz ../../chrom.sizes $db.gc5Base.bw
 _EOF_
   );
@@ -1008,10 +1028,10 @@ sub makeDescription {
     <A HREF="https://www.ncbi.nlm.nih.gov/genome/$ncbiGenomeId" TARGET=_blank>
     <IMG SRC="../images/$sciUnderscore.$imgExtn" WIDTH=$width HEIGHT=$height ALT="$genome"></A>
   </TD></TR>
-  <TR><TD ALIGN=RIGHT> 
-    <FONT SIZE=-1><em>$scientificName</em><BR> 
+  <TR><TD ALIGN=RIGHT>
+    <FONT SIZE=-1><em>$scientificName</em><BR>
     </FONT>
-    <FONT SIZE=-2> 
+    <FONT SIZE=-2>
       (<A HREF="$photoCreditURL"
       TARGET=_blank>$photoCreditName</A>)
     </FONT>
@@ -1020,13 +1040,13 @@ sub makeDescription {
 
 <P>
 <B>UCSC Genome Browser assembly ID:</B> $db<BR>
-<B>Sequencing/Assembly provider ID:</B> $assemblyLabel $ncbiAssemblyName<BR>
+<B>Sequencing/Assembly provider ID:</B> $assemblyLabel $providerAssemblyName<BR>
 <B>Assembly date:</B> $assemblyDate<BR>
 <B>Accession ID:</B> $genBankAccessionID<BR>
 <B>NCBI Genome ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/genome/$ncbiGenomeId"
 TARGET="_blank">$ncbiGenomeId</A> ($scientificName)<BR>
 <B>NCBI Assembly ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/assembly/$ncbiAssemblyId"
-TARGET="_blank">$ncbiAssemblyId</A> ($ncbiAssemblyName)<BR>
+TARGET="_blank">$ncbiAssemblyId</A><BR>
 <B>NCBI BioProject ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioProject"
 TARGET="_blank">$ncbiBioProject</A><BR>
 <B>NCBI BioSample ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/biosample/$ncbiBioSample"
@@ -1045,7 +1065,7 @@ keywords from the GenBank description of an mRNA.
 queries.
 <LI>
 <B>By gene name: </B> Type a gene name into the &quot;search term&quot; box,
-choose your gene from the drop-down list, then press &quot;submit&quot; to go 
+choose your gene from the drop-down list, then press &quot;submit&quot; to go
 directly to the assembly location associated with that gene.
 <A HREF="../goldenPath/help/geneSearchBox.html">More information</A>.
 <LI>
@@ -1148,9 +1168,9 @@ TARGET=_blank>AGP Specification</A> describes the format of the AGP file.
 <P>
 Gaps are represented as black boxes in this track.
 If the relative order and orientation of the contigs on either side
-of the gap is supported by read pair data, 
-it is a <em>bridged</em> gap and a white line is drawn 
-through the black box representing the gap. 
+of the gap is supported by read pair data,
+it is a <em>bridged</em> gap and a white line is drawn
+through the black box representing the gap.
 </P>
 <P>This assembly contains the following principal types of gaps:
 <UL>
@@ -1195,7 +1215,7 @@ finishing process.
 <P>
 Gaps are represented as black boxes in this track.
 If the relative order and orientation of the contigs on either side
-of the gap is known, it is a <em>bridged</em> gap and a white line is drawn 
+of the gap is known, it is a <em>bridged</em> gap and a white line is drawn
 through the black box representing the gap.
 </P>
 <P>
@@ -1207,7 +1227,7 @@ plasmids and fosmids of various sizes.
 
 Overlapping reads were merged into contigs,
 and pairing information was then used to join the contigs into scaffolds.
-The gap sizes are estimated from the size of the 
+The gap sizes are estimated from the size of the
 
 plasmids and fosmids,
 
@@ -1248,9 +1268,9 @@ TARGET=_blank>AGP file</A> delivered with the sequence.  The NCBI document
 TARGET=_blank>AGP Specification</A> describes the format of the AGP file.
 </P>
 <P>
-In dense mode, this track depicts the contigs that make up the 
-currently viewed scaffold. 
-Contig boundaries are distinguished by the use of alternating gold and brown 
+In dense mode, this track depicts the contigs that make up the
+currently viewed scaffold.
+Contig boundaries are distinguished by the use of alternating gold and brown
 coloration. Where gaps
 exist between contigs, spaces are shown between the gold and brown
 blocks.  The relative order and orientation of the contigs
@@ -1295,7 +1315,7 @@ of the $em\$organism$noEm genome.
 
   *** Developer: check if this is accurate:
 
-Whole-genome shotgun reads were assembled into contigs.  When possible, 
+Whole-genome shotgun reads were assembled into contigs.  When possible,
 contigs were grouped into scaffolds (also known as &quot;supercontigs&quot;).
 The order, orientation and gap sizes between contigs within a scaffold are
 based on paired-end read evidence. </P>
@@ -1306,16 +1326,16 @@ was assumed to be a gap between scaffolds, and a run of Ns between
 $fakeAgpMinContigGap and $fakeAgpMinScaffoldGap was assumed to be a gap
 between contigs.</P>
 <P>
-In dense mode, this track depicts the contigs that make up the 
-currently viewed scaffold. 
-Contig boundaries are distinguished by the use of alternating gold and brown 
+In dense mode, this track depicts the contigs that make up the
+currently viewed scaffold.
+Contig boundaries are distinguished by the use of alternating gold and brown
 coloration. Where gaps
 exist between contigs, spaces are shown between the gold and brown
 blocks.  The relative order and orientation of the contigs
 within a scaffold is always known; therefore, a line is drawn in the graphical
 display to bridge the blocks.</P>
 <P>
-All components within this track are of fragment type &quot;W&quot;: 
+All components within this track are of fragment type &quot;W&quot;:
 whole genome shotgun contig. </P>
 _EOF_
     ;
@@ -1369,6 +1389,7 @@ src/hg/makeDb/trackDb/joinedRmsk.ra \\
 src/hg/makeDb/trackDb/trackDb.genbank.ra \\
 src/hg/makeDb/trackDb/trackDb.genbank.new.ra \\
 src/hg/makeDb/trackDb/trackDb.uniprot.ra \\
+src/hg/makeDb/trackDb/crispr10K.ra \\
 src/hg/makeDb/trackDb/tagTypes.tab \\
 src/hg/lib/trackDb.sql \\
 src/hg/lib/hgFindSpec.sql \\
@@ -1462,7 +1483,7 @@ if ($endNotes) {
   #*** Does mail work on all of our machines??  Even if it works on one,
   #*** we can ssh it.  Should be in an HgAutomate routine.
   HgAutomate::verbose(0,
-		      "\n\nNOTES -- STUFF THAT YOU WILL HAVE TO DO --\n\n" . 
+		      "\n\nNOTES -- STUFF THAT YOU WILL HAVE TO DO --\n\n" .
 		      "$endNotes\n");
 }
 

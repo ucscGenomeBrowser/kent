@@ -432,9 +432,9 @@ struct genbankCds cds;
 if (isEmpty(bag->meta->oCDS) || !genbankCdsParse(bag->meta->oCDS, &cds))
     ZeroVar(&cds);  /* can't get or parse CDS, so zero it */
 
-writeFramesetType();
-puts("<HTML>");
-printf("<HEAD>\n<TITLE>%s vs Genomic</TITLE>\n</HEAD>\n\n", mappedId);
+char title[1024];
+safef(title, sizeof title, "%s vs Genomic", mappedId);
+htmlFramesetStart(title);
 showSomeAlignment(bag->psl, seq, gftDna, 0, seq->size, NULL, cds.start, cds.end);
 dnaSeqFree(&seq);
 transMapBagFree(&bag);

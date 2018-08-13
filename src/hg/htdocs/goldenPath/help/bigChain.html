@@ -99,7 +99,8 @@ bedToBigBed -type=bed6+6 -as=bigChain.as -tab chr22_KI270731v1_random.hg38.mm10.
 <strong>Step 7.</strong> 
 To display your date in the Genome Browser, you must also create a binary indexed link file to 
 accompany your bigChain file:</p> 
-<pre><code>awk 'BEGIN {OFS="\t"} {print $1, $2, $3, $5, $4}' link.tab | sort -k1,1 -k2,2n &gt; bigChain.bigLink bedToBigBed -type=bed4+1 -as=bigLink.as -tab bigChain.bigLink hg38.chrom.sizes bigChain.link.bb </code></pre>
+<pre><code>awk 'BEGIN {OFS="\t"} {print $1, $2, $3, $5, $4}' link.tab | sort -k1,1 -k2,2n &gt; bigChain.bigLink
+bedToBigBed -type=bed4+1 -as=bigLink.as -tab bigChain.bigLink hg38.chrom.sizes bigChain.link.bb </code></pre>
 <p>
 <strong>Step 8.</strong> 
 Move the newly created bigChain (<em>bigChain.bb</em>) and bigLink (<em>bigChain.link.bb</em>)

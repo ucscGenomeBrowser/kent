@@ -1,4 +1,5 @@
-CC=gcc
+# if CC is undefined, set it to gcc
+CC?=gcc
 # to build on sundance: CC=gcc -mcpu=v9 -m64
 ifeq (${COPT},)
     COPT=-O -g
@@ -22,7 +23,21 @@ HG_INC+=-I../inc -I../../inc -I../../../inc -I../../../../inc -I../../../../../i
 # to check for Mac OSX Darwin specifics:
 UNAME_S := $(shell uname -s)
 # to check for builds on hgwdev
-FULLWARN = $(shell uname -n)
+HOSTNAME = $(shell uname -n)
+
+ifeq (${HOSTNAME},hgwdev)
+  IS_HGWDEV = yes
+else
+  IS_HGWDEV = no
+endif
+
+ifeq (${IS_HGWDEV},yes)
+  FULLWARN = yes
+endif
+
+ifeq (${HOSTNAME},cirm-01)
+  FULLWARN = yes
+endif
 
 ifeq (${PTHREADLIB},)
   PTHREADLIB=-lpthread
@@ -58,13 +73,15 @@ endif
 # libssl: disabled by default
 ifneq (${SSL_DIR}, "/usr/include/openssl")
   ifneq ($(UNAME_S),Darwin)
-    L+=-L${SSL_DIR}/lib
+    ifneq ($(wildcard ${SSL_DIR}),)
+      L+=-L${SSL_DIR}/lib
+    endif
   endif
     HG_INC+=-I${SSL_DIR}/include
 endif
 # on hgwdev, already using the static library with mysqllient.
-ifeq (${FULLWARN},hgwdev)
-   L+=/usr/lib64/libssl.a /usr/lib64/libcrypto.a -lkrb5
+ifeq (${IS_HGWDEV},yes)
+   L+=-lssl -lcrypto -lkrb5 -ldl
 else
    L+=-lssl -lcrypto
 endif
@@ -72,7 +89,7 @@ endif
 # autodetect where libm is installed
 ifeq (${MLIB},)
   ifneq ($(wildcard /usr/lib64/libm.a),)
-      MLIB=/usr/lib64/libm.a
+      MLIB=-lm
   endif
 endif
 ifeq (${MLIB},)
@@ -119,9 +136,9 @@ endif
 # do not need to do this during 'clean' target (this is very slow for 'clean')
 ifneq ($(MAKECMDGOALS),clean)
   # on hgwdev, use the static library.
-  ifeq (${FULLWARN},hgwdev)
+  ifeq (${IS_HGWDEV},yes)
     MYSQLINC=/usr/include/mysql
-    MYSQLLIBS=/usr/lib64/libssl.a /usr/lib64/libcrypto.a /usr/lib64/mysql/libmysqlclient.a -lkrb5
+    MYSQLLIBS=-lssl -lcrypto /usr/lib64/libmysqlclient.a ${ZLIB} -lkrb5
   endif
   # this does *not* work on Mac OSX with the dynamic libraries
   ifneq ($(UNAME_S),Darwin)
@@ -221,8 +238,8 @@ endif
 
 # OK to add -lstdc++ to all MYSQLLIBS just in case it is
 #    MySQL version 5.6 libraries, but no 'librt' on Mac OSX
-ifeq (${FULLWARN},hgwdev)
-  MYSQLLIBS += /usr/lib/gcc/x86_64-redhat-linux/4.4.4/libstdc++.a /usr/lib/debug/usr/lib64/librt.a
+ifeq (${IS_HGWDEV},yes)
+  MYSQLLIBS += /usr/lib/gcc/x86_64-redhat-linux/4.8.5/libstdc++.a /usr/lib/x86_64-redhat-linux6E/lib64/librt.a
 else
   ifeq ($(UNAME_S),Darwin)
     MYSQLLIBS += -lstdc++
@@ -244,7 +261,7 @@ endif
 #global external libraries
 L += $(kentSrc)/htslib/libhts.a
 
-L+=${PNGLIB} ${ZLIB} ${MLIB}
+L+=${PNGLIB} ${MLIB} ${ZLIB}
 HG_INC+=${PNGINCL}
 
 # pass through COREDUMP
@@ -270,7 +287,7 @@ ifeq (${HG_WARN},)
       HG_WARN = -Wall -Wformat -Wimplicit -Wreturn-type
       HG_WARN_UNINIT=-Wuninitialized
     else
-      ifeq (${FULLWARN},hgwdev)
+      ifeq (${FULLWARN},yes)
         HG_WARN = -Wall -Werror -Wformat -Wformat-security -Wimplicit -Wreturn-type -Wempty-body -Wunused-but-set-variable
         HG_WARN_UNINIT=-Wuninitialized
       else

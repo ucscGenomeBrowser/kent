@@ -1339,6 +1339,8 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr
 url http://evs.gs.washington.edu/EVS/PopStatsServlet?searchBy=rsOrChrom&target=$$&chromosome=$s&chromoStart=${&chromoEnd=$}&x=0&y=0
 urlLabel Exome Variant Server:
 
+include trackDb.gnomad.ra
+
 track exac
 compositeTrack on
 shortLabel ExAC
@@ -1628,7 +1630,9 @@ include altSeqComposite5.ra alpha
 
 include altSeqComposite9.ra alpha
 
-include altSeqComposite10.ra alpha,beta,public
+include altSeqComposite10.ra alpha
+
+include hg19Patch13.ra
 
 track vistaEnhancers override
 url http://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&experiment_id=$$&organism_id=1
@@ -2579,3 +2583,6 @@ track gtexTranscExpr override
 bigDataUrl /gbdb/hg19/gtex/gtexTranscExpr.bb
 origAssembly hg38
 
+# change these two to switch to the new refSeqComposite 2018-02
+#include trackDb.refGene.ra public
+include ../../refSeqComposite.ra

@@ -1,5 +1,14 @@
+#track gtexTransEqtl1Mb
+track gtexTransEqtl
+type interact
+shortLabel GTEx Trans eQTL
+longLabel Distant SNP-Gene Interactions (Trans eQTLs) from GTEx Analysis
+interactDirectional true
+maxHeightPixels 300:100:20
+group regulation
+color 100, 0, 0
+
 track gtexEqtlCluster
-pennantIcon new red ../goldenPath/releaseLog.html "Released October 19, 2017"
 type bed 5 +
 shortLabel GTEx Combined eQTL
 longLabel Combined Expression QTLs from 44 Tissues from GTEx (midpoint release, V6)
@@ -10,7 +19,6 @@ dataVersion GTEx Analysis V6p (https://www.gtexportal.org/home/datasets)
 priority 2
 
 track gtexEqtlTissue
-pennantIcon new red ../goldenPath/releaseLog.html "Released October 19, 2017"
 type bed 9 +
 compositeTrack on
 allButtonPair on

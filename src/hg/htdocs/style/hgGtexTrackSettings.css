@@ -70,6 +70,10 @@
     text-align: right;
 }
 
+.gbPage p {
+    margin-top: 10px;
+}
+
 .gbmCredit {
     margin-right: 70px;
     color: #003a72;     /* dark blue */

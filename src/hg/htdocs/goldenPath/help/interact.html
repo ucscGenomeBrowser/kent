@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<!--#set var="TITLE" value="interact and bigInteract Track Format" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
+
+<h1>interact and bigInteract Track Format</h1> 
+<p>
+<p>
+The interact (and bigInteract) track format displays pairwise interactions as arcs or 
+half-rectangles connecting two genomic regions on the same chromosome. 
+Cross-chromosomal interactions can also be represented in this format; the display shows
+the region on the currently viewed chromosome, with a vertical bar, labeled with 
+the chromosome of the connected region (space permitting).
+For directional interactions such as SNP/gene, the interactions in the reverse direction are 
+displayed as a dashed line or curve.</p>
+<p>
+This format is useful for displaying functional element interactions such 
+as SNP/gene interactions, and is also suitable for low-density chromatin interactions, 
+such as ChIA-PET, and other use cases with a limited number of interactions on the genome. 
+It is not suitable for high-density chromatin data such as Hi-C.</p>
+<p>
+The interact format is available as a standalone plain text <code>bed5+13</code> format 
+for use with smaller datasets as a custom track, and as a binary indexed format (bigInteract) 
+suitable for track hubs and custom tracks.
+The bigInteract format provides more track customization
+features (i.e. schema customization), and
+is recommended for users who can use command-line tools and have web-accessible data storage. If
+you do not have web-accessible data storage, please see the <a href="hgTrackHubHelp.html#Hosting">
+Hosting</a> section of the Track Hub Help documentation.
+Interact format files are converted to bigInteract files using the program 
+<code>bedToBigBed</code>, run with the <code>-as</code> option to pull in a special 
+<a href="http://www.linuxjournal.com/article/5949" target="_blank">autoSql</a> (<em>.as</em>) 
+schema file defining the fields of the bigInteract.
+</p>
+
+<a name=interact></a>
+<h2>interact format definition</h2>
+<p>
+The following autoSql definition illustrates the basic schema supporting interact (and 
+bigInteract) tracks.</p>
+
+<pre><code>table interact
+"interaction between two regions"
+    ( 
+    string chrom;        "Chromosome (or contig, scaffold, etc.). For interchromosomal, use 2 records" 
+    uint chromStart;     "Start position of lower region. For interchromosomal, set to chromStart of this region" 
+    uint chromEnd;       "End position of upper region. For interchromosomal, set to chromEnd of this region"
+    string name;         "Name of item, for display.  Usually 'sourceName/targetName/exp' or empty"
+    uint score;          "Score (0-1000)"
+    double value;        "Strength of interaction or other data value. Typically basis for score"
+    string exp;          "Experiment name (metadata for filtering). Use . if not applicable"
+    string color;        "Item color.  Specified as r,g,b or hexadecimal #RRGGBB or html color name, as in //www.w3.org/TR/css3-color/#html4. Use 0 and spectrum setting to shade by score"
+    string sourceChrom;  "Chromosome of source region (directional) or lower region. For non-directional interchromosomal, chrom of this region."
+    uint sourceStart;    "Start position in chromosome of source/lower/this region"
+    uint sourceEnd;      "End position in chromosome of source/lower/this region"
+    string sourceName;   "Identifier of source/lower/this region"
+    string sourceStrand; "Orientation of source/lower/this region: + or -.  Use . if not applicable"
+    string targetChrom;  "Chromosome of target region (directional) or upper region. For non-directional interchromosomal, chrom of other region"
+    uint targetStart;    "Start position in chromosome of target/upper/this region"
+    uint targetEnd;      "End position in chromosome of target/upper/this region"
+    string targetName;   "Identifier of target/upper/this region"
+    string targetStrand; "Orientation of target/upper/this region: + or -.  Use . if not applicable"
+
+    )
+</code></pre>
+
+<a name="columnDefinition"></a>
+<h6>Column Explanations</h6>
+<p>
+The first 5 fields of the interact format are the same as the first 5 fields of the standard
+<a href="../../FAQ/FAQformat#format1">BED</a> format.
+</p>
+<p>
+When creating bigInteract files, we encourage you to customize the title and field
+descriptions of the prototype autoSql schema to better describe your data. 
+Customizing this file will make your data more easily interpreted by users, who will
+see the field descriptions when accessing the track data from 
+the Table Browser, 
+when viewing items on the Genome Browser details
+pages (via the "view table schema" link),
+and (for users who download files), from the -as option of the bigBedInfo tool.</p>
+<p>
+As an example, if the dataset represents SNP/gene interactions, replace 'sourceName' and related 
+fields with 'snpName', etc, and 'targetName' and related fields with 'geneName', etc.,
+editing the field descriptions to reflect the changes you make.  For non-directional data
+such as ChIA-PET, one could use 'region1' and 'region2'.</p>
+<p>
+As the browser display of this format only shows the paired region labels on mouseover, we 
+recommend including a 
+BED or other format file to display the source and target region labels.</p>
+
+<h2>Creating interact and bigInteract custom tracks</h2>
+<a name="example1"></a>
+<h6>Example #1</h6>
+<p>
+In this example, you will create an interact custom track using example SNP/gene interaction 
+data in multiple tissues.
+This example uses the interaction coloring and directionality features of the interact track type.
+<ol>
+   <li>Paste the following track line into the 
+       <a href="../../cgi-bin/hgCustom?db=hg19">custom track management 
+   page</a> for the human assembly hg19.
+
+   <pre><code>
+track type=interact name=&quot;interact Example One&quot; description=&quot;An interact file&quot; interactDirectional=true maxHeightPixels=50:100:200 visibility=full
+browser position chr12:40,560,500-40,660,499 
+chr12    40572709      40618813        rs7974522/LRRK2/muscleSkeletal  0       0.624   muscleSkeletal  #7A67EE  chr12 40572709        40572710  rs7974522       .       chr12   40618812        40618813  LRRK2   +
+chr12    40579899      40618813        rs17461492/LRRK2/muscleSkeletal  0       0.624   muscleSkeletal  #7A67EE chr12 40579899        40579900  rs17461492       .       chr12   40618812        40618813  LRRK2   +
+chr12    40614433      40618813        rs76904798/LRRK2/nerveTibial  0       0.625   nerveTibial  #FFD700       chr12 40614433        40614434  rs76904798       .       chr12   40618812        40618813  LRRK2   +
+chr12    40618812      40652520        rs2723264/LRRK2/lung  0       1.839   lung     #9ACD32  chr12      40652519        40652520  rs76904798       .       chr12   40618812        40618813  LRRK2   +
+   </code></pre></li>  
+
+   <li>Click the &quot;submit&quot; button.</li> 
+</ol>
+</p>
+<ol>
+<img width="1080" height="148" src="../../images/interactExample1.png">
+</ol>
+<p>
+After the file loads in the Genome Browser, you should see four interactions displayed; 
+four variants interacting with the same gene (LRRK2).
+Hovering the mouse over the curve peak of an  interaction will display the interaction name 
+(SNP/gene/tissue). 
+Hovering over an interaction end will show the name of the end region (e.g. SNP or gene).
+Clicking at one of the hoverable regions will show the details page for the interaction.  
+The <code>interactDirectional</code> setting causes reverse direction interactions (where 
+target precedes source) to be displayed as dashed lines. In this example, the green (lung) 
+interaction is in the reverse direction.
+</p>
+
+<a name="example2"></a>
+<h6>Example #2</h6>
+<p>
+In this example, you will create an interact custom track using example chromatin interaction data.
+This type of data is non-directional and commonly would represent a single experiment, with the 
+interaction score being of interest.  
+The settings below display using the gray-scale coloring feature, where the darkness of the 
+interaction is based on the score.
+<ol>
+   <li>Paste the following track line into the 
+       <a href="../../cgi-bin/hgCustom?db=hg19">custom track management 
+   page</a> for the human assembly hg19.
+
+   <pre><code>
+track type=interact name=&quot;interact Example Two&quot; description=&quot;Chromatin interactions&quot; useScore=on maxHeightPixels=50:100:200 visibility=full
+browser position chr3:64,562,440-64,642,288
+chr3    64496901        64584378        .       375     3       .       0       chr3    64496901        64498901        .       .       chr3    64581378        64584378        .       .
+chr3    64568052        64569134        .       400     3       .       0       chr20   52552477        52556062        .       .       chr3    64098052        64101134        .       .
+chr3    64596901        64615378        .       175     3       .       0       chr3    64596901        64600855        .       .       chr3    64612677        64615378        .       .
+chr3    64623042        64636663        .       800     4       .       0       chr3    64623042        64625153        .       .       chr3    64632961        64636663        .       .
+   </code></pre></li>  
+
+   <li>Click the &quot;submit&quot; button.</li> 
+</ol>
+</p>
+<ol>
+<img width="1080" height="148" src="../../images/interactExample2.png">
+</ol>
+<p>
+After the file loads in the Genome Browser, you should see four interactions displayed on 
+chromosome 3.  Two of the interactions
+have both interacting regions in the browser view, and two have a single region. One of these 
+interacts across chromosomes (with a region on chromosome 20), and the other with a region 
+outside of the browser window (indicated by rectangular connector).
+The darkness of the interaction indicates the strength of the interaction.
+</p>
+
+<a name="example3"></a>
+<h6>Example #3</h6>
+<p>
+In this example, you will create a bigInteract track out of an existing bigInteract format file,
+located on the UCSC Genome Browser http server. This file contains data for the hg19 assembly.
+</p>
+
+<p>
+To create a custom track using this file:
+<ol>
+   <li>Construct a track line referencing the file and set the browser position to show region 
+       of interest in the file:
+   <pre><code>
+track type=bigInteract name=&quot;interact Example Three&quot; description=&quot;A bigInteract file&quot; useScore=true visibility=full bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/interact/interactExample3.inter.bb
+browser position chr3:63,820,967-63,880,091
+   </code></pre></li>
+   <li>Paste the track line into the <a href="../../cgi-bin/hgCustom?db=hg19">custom track management 
+   page</a> for the human assembly hg19. </li>
+   <li>Click the &quot;submit&quot; button.</li>
+</ol>
+</p>
+<p>
+After the file loads in the Genome Browser, you should see a number of curved interactions, 
+colored black.
+</p>
+
+<a name="example4"></a>
+<h6>Example #4</h6>
+<p>
+In this example, you will use an example BED file to create a bigInteract file,
+allowing the data to be remotely accessed and exist within a track hub.  The track settings for 
+bigInteract on a hub can be viewed <a href="./trackDb/trackDbHub.html#bigInteract">here</a>.
+</p>
+<ol>
+   <li>Download the example file <a href="examples/interact/interactExample4.inter.bed">here</a>. </li>
+   <li>Download the <em>fetchChromSizes</em> and <em>bedToBigBed</em> programs from the
+   <a href="http://hgdownload.soe.ucsc.edu/admin/exe">utilities directory</a> appropriate to your
+   operating system.
+   <li>Use <em>fetchChromSizes</em> to create a <em>chrom.sizes</em> file for the UCSC database you
+   are working with (hg19 for these examples). Alternatively, you can download the 
+   <em>chrom.sizes</em> file for any assembly hosted at UCSC from
+   our <a href="http://hgdownload.soe.ucsc.edu/downloads.html">downloads</a> page (click on &quot;Full
+   data set&quot; for any assembly). For example, the <em>hg19.chrom.sizes</em> file for the hg19
+   database is located at
+   <a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.chrom.sizes" 
+   target="_blank">http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.chrom.sizes</a>.</li>
+   <li>Save the autoSql file <a href="examples/interact/interact.as">interact.as</a> to your computer.</li>
+   <li>Edit the .as file to change the 'source' fields to 'region1' and the 'target' fields to 'region2'.
+   <li>Run bedToBigBed to create the bigInteract file:
+   <pre><code>
+bedToBigBed -as=interact.as -type=bed5+13 interactExample4.inter.bed hg19.chrom.sizes interactExample4.inter.bb
+   </code></pre></li>
+   <li>Move the newly constructed bigInteract file to a web accessible http, https, or ftp location.</li>
+   <li>Construct a custom track line with a bigDataUrl parameter pointing to the newly created
+   bigInteract file.
+   <pre><code>
+track type=bigInteract name="interact Example Four" description="A bigInteract file" useScore=true bigDataUrl=<your URL>/interactExample4.inter.bb visibility=pack 
+browser position chr3:63,820,967-63,880,091
+   </code></pre>
+   <li>To fully take advantage of creating a bigInteract file, create a <a href="hgTrackHubHelp.html">Track Hub</a> and
+   use a stanza such as the following:
+   <pre><code>
+track exampleInteractTrack
+type bigInteract
+visibility full
+shortLabel exInteract
+longLabel Example interact track
+spectrum on
+scoreMin 175
+maxHeightPixels 300:150:20
+bigDataUrl interactExample4.inter.bb
+   </code></pre>
+</ol>
+
+<h2>Sharing your data with others</h2>
+<p>
+If you would like to share your interact/bigInteract data track with a colleague, learn how to 
+create a URL by looking at Example 11 on <a href="customTrack.html#EXAMPLE11">this page</a>.</p>
+
+<h2>Extracting data from the bigInteract format</h2>
+<p>
+Because bigInteract files are an extension of bigBed files, which are indexed binary files, it can 
+be difficult to extract data from them. UCSC has developed the following programs to assist
+in working with bigBed formats, available from the 
+<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
+<ul>
+  <li>
+  <code>bigBedToBed</code> &mdash; converts a bigBed file to ASCII BED format.</li>
+  <li>
+  <code>bigBedSummary</code> &mdash; extracts summary information from a bigBed file.</li>
+  <li>
+  <code>bigBedInfo</code> &mdash; prints out information about a bigBed file. Use the -as option to see the file field descriptions.</li>
+</ul>
+<p>
+As with all UCSC Genome Browser programs, simply type the program name (with no parameters) at the 
+command line to view the usage statement.</p>
+
+<h2>Troubleshooting</h2>
+<p>
+If you encounter an error when you run the <code>bedToBigBed</code> program, check your input 
+file for data coordinates that extend past the end of the chromosome. If these are present, run 
+the <code>bedClip</code> program 
+(<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">available here</a>) to remove the problematic
+row(s) in your input file before running the <code>bedToBigBed</code> program.</p> 
+
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

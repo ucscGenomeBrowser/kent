@@ -23,6 +23,14 @@ var debug = false;
  * Object trackDb         // hash of trackDb entries for tracks which are visible on current page
  */
 
+/* IE11 compatibility - IE doesn't have string startsWith and never will */
+if (!String.prototype.startsWith) {
+  String.prototype.startsWith = function(searchString, position) {
+    position = position || 0;
+    return this.indexOf(searchString, position) === position;
+  };
+}
+
 function initVars()
 {  // There are various entry points, so we call initVars in several places to make sure all is well
     if (typeof(hgTracks) !== "undefined" && !genomePos.original) {
@@ -3273,12 +3281,32 @@ var rightClick = {
                 {
                 // add delete from composite
                 }
+            else if ((!rec.type.startsWith("wigMaf")) &&
+                (rec.type.startsWith("bigWig") || rec.type.startsWith("multiWig") || rec.type.startsWith("wig") || rec.type.startsWith("bedGraph"))) {
+                o = {};
+                o[" Make a New Collection with \"" + rec.shortLabel + "\""] = {
+                    onclick: rightClick.makeHitCallback("newCollection")
+                };  
+                menu.push(o);
+
+                if (hgTracks.collections) {
+                    var ii;
+                    for(ii=0; ii < hgTracks.collections.length; ii++) {
+                        o = {};
+                        o[" Add to \"" + hgTracks.collections[ii].shortLabel + "\""] = {
+                            onclick: rightClick.makeHitCallback("addCollection")
+                        };  
+                        menu.push(o);
+                    }
+                }
+                menu.push($.contextMenu.separator);
+            }
 
             // add sort options if this is a custom composite
-            if (rec.isCustomComposite) {
+            if (rec.isCustomComposite && tdbHasParent(rec) && tdbIsLeaf(rec)) {
 
                 o = {};
-                o[" Sort by Expression "] = {
+                o[" Sort by Magnitude "] = {
                     onclick: function(menuItemClicked, menuObject) {
                         rightClick.hit(menuItemClicked, menuObject, "sortExp");
                         return true; }
@@ -3569,6 +3597,9 @@ function addKeyboardHelpEntries() {
 
     html = '<span class="shortcut">c t</span>';
     $('#customTracksMenuLink').after(html);
+
+    html = '<span class="shortcut">t c</span>';
+    $('#customCompositeMenuLink').after(html);
 
     html = '<span class="shortcut">t h</span>';
     $('#trackHubsMenuLink').after(html);
@@ -4763,6 +4794,14 @@ var trackSearch = {
 ///////////////
 $(document).ready(function()
 {
+    // on Safari the back button doesn't call the ready function.  Reload the page if
+    // the back button was pressed.
+    $(window).bind("pageshow", function(event) {
+        if (event.originalEvent.persisted) {
+                window.location.reload() ;
+        }
+    });
+
     // The page may be reached via browser history (back button)
     // If so, then this code should detect if the image has been changed via js/ajax
     // and will reload the image if necessary.

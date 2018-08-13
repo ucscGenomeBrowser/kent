@@ -10,18 +10,8 @@ if ($argc < 1) {
   printf STDERR "must have at least one of these input files, others when available\n";
   printf STDERR "the names of the input files must be of this pattern so\n";
   printf STDERR "the name of the alias can be identified\n";
-  printf STDERR "expecting to find ../../chrom.sizes\n";
   exit 255;
 }
-
-my %chromSizes;  # key is UCSC chrom name, value is size
-open (CS, "<../../chrom.sizes") or die "can not read ../../chrom.sizes";
-while (my $cs = <CS>) {
-  chomp $cs;
-  my ($chr, $size) = split('\s', $cs);
-  $chromSizes{$chr} = $size;
-}
-close (CS);
 
 my %names;  # key is name identifier (refseq, genbank, ensembl, flybase, etc...)
 		#  value is a hash with key identifer name, value ucsc chr name
@@ -59,19 +49,24 @@ foreach my $chr (sort keys %chrNames) {
   my %outNames;	# key is other identifier, value is csv list of sources
   foreach my $name (sort keys %names) {
     my $namePtr = $names{$name};
-    my $otherId = $namePtr->{$chr};
-    my @a;
-    if ($otherId =~ m/\t/) {
-	@a = split('\t', $otherId);
-    } else {
-	$a[0] = $otherId;
-    }
-    for (my $i = 0; $i < scalar(@a); ++$i) {
-       if (exists($outNames{$a[$i]})) {
-	  $outNames{$a[$i]} = sprintf("%s,%s", $outNames{$a[$i]}, $name);
-       } else {
-	  $outNames{$a[$i]} = $name;
-       }
+    if (exists($namePtr->{$chr})) {
+      my $otherId = $namePtr->{$chr};
+      if (! $otherId) {
+        die "namePtr->chr exists but is |$otherId| for chr |$chr| (tab-sep?)";
+      }
+      my @a;
+      if ($otherId =~ m/\t/) {
+	  @a = split('\t', $otherId);
+      } else {
+	  $a[0] = $otherId;
+      }
+      for (my $i = 0; $i < scalar(@a); ++$i) {
+         if (exists($outNames{$a[$i]})) {
+	    $outNames{$a[$i]} = sprintf("%s,%s", $outNames{$a[$i]}, $name);
+         } else {
+	    $outNames{$a[$i]} = $name;
+         }
+      }
     }
   }
   foreach my $otherName (sort keys %outNames) {

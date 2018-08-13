@@ -46,6 +46,9 @@ contentLineDone = False
 
 jksqlTrace = False
 
+def warn(format, *args):
+    print (format % args)
+
 def errAbort(msg):
     " show msg and abort. Like errAbort.c "
     if not contentLineDone:
@@ -302,12 +305,12 @@ def getGbHeader():
 <!-- BEGIN added for gene interactions page -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="//code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
-<script> /*** Handle jQuery plugin naming conflict between jQuery UI and Bootstrap ***/
+<script nonce='%s'> /*** Handle jQuery plugin naming conflict between jQuery UI and Bootstrap ***/
 $.widget.bridge('uibutton', $.ui.button); $.widget.bridge('uitooltip', $.ui.tooltip);
 </script>
 <script type='text/javascript' src='../js/jquery.plugins.js'></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js"></script>
-<script>
+<script nonce='%s'>
 $.fn.bsTooltip = $.fn.tooltip.noConflict();
 </script>
 <!-- END added for gene interactions page -->
@@ -316,7 +319,7 @@ $.fn.bsTooltip = $.fn.tooltip.noConflict();
 
 def webStartGbNoBanner(prefix, title):
     " output the <head> part, largely copied from web.c / webStartGbNoBanner "
-    print (getGbHeader() % (prefix, title))
+    print (getGbHeader() % (prefix, title, getNonce(), getNonce()))
 
 def runCmd(cmd, mustRun=True):
     " wrapper around system() that prints error messages. cmd preferably a list, not just a string. "
@@ -559,6 +562,287 @@ def makeRandomKey(numBits=128+33):
     binaryString = f.read(numBytes)
     f.close()
     return base64.b64encode(binaryString, "Aa") # replace + and / with characters that are URL-friendly.
+
+
+# ============ Nonce and CSP functions =============
+
+nonce = None;
+
+def getNonce():
+    " make nonce one-use-per-page "
+    global nonce
+    if nonce:
+        return nonce
+    nonce = makeRandomKey(128+33) # at least 128 bits of protection, 33 for the world population size.
+    return nonce
+
+def getNoncePolicy():
+    " get nonce policy clause "
+    return "'nonce-" + getNonce() + "'" 
+
+def getCspPolicyString():
+    " get the policy string "
+    # example "default-src 'self'; child-src 'none'; object-src 'none'"
+    policy = ""
+    policy += "default-src *;"
+
+    '''
+    # more secure method not used yet 
+    policy += "default-src 'self';"
+    policy += "  child-src 'self';"
+    '''
+
+    policy += " script-src 'self' blob:"
+    # Trick for backwards compatibility with browsers that understand CSP1 but not nonces (CSP2).
+    policy += " 'unsafe-inline'"
+    # For browsers that DO understand nonces and CSP2, they ignore 'unsafe-inline' in script if nonce is present.
+    policy += " " + getNoncePolicy()
+    policy += " code.jquery.com"      # used by hgIntegrator jsHelper and others
+    policy += " www.google-analytics.com" # used by google analytics
+    #cirm cdw lib and web browse
+    policy += " www.samsarin.com/project/dagre-d3/latest/dagre-d3.js"
+    policy += " cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js"
+    policy += " cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"
+    policy += " cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"
+    policy += " cdnjs.cloudflare.com/ajax/libs/bowser/1.6.1/bowser.min.js"
+    policy += " cdnjs.cloudflare.com/ajax/libs/jstree/3.3.4/jstree.min.js"
+    policy += " login.persona.org/include.js"
+    # expMatrix
+    policy +=  " ajax.googleapis.com/ajax"
+    policy += " maxcdn.bootstrapcdn.com/bootstrap"
+    policy += " d3js.org/d3.v3.min.js"
+    # jsHelper
+    policy += " cdn.datatables.net"
+
+    # hgGeneGraph
+    policy += " https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"
+    policy += " http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js"
+    policy += " http://cdn.rawgit.com/jedfoster/Readmore.js/master/readmore.min.js"
+
+    policy += ";"
+
+
+    policy += " style-src * 'unsafe-inline';"
+
+    '''
+    # more secure method not used yet 
+    policy += " style-src 'self' 'unsafe-inline'"
+    policy += " code.jquery.com"         # used by hgIntegrator
+    policy += " netdna.bootstrapcdn.com" # used by hgIntegrator
+    policy += " fonts.googleapis.com"    # used by hgGateway
+    policy += " maxcdn.bootstrapcdn.com" # used by hgGateway
+    policy += ";"
+    '''
+
+    # The data: protocol is used by popular browser extensions.
+    # It seems to be safe and it is too bad that it must be explicitly included.
+    policy += " font-src * data:;"
+
+    '''
+    /* more secure method not used yet 
+    policy += " font-src 'self'"
+    policy += " netdna.bootstrapcdn.com" # used by hgIntegrator
+    policy += " maxcdn.bootstrapcdn.com" # used by hgGateway
+    policy += " fonts.gstatic.com"       # used by hgGateway
+    policy += ";"
+
+    dyStringAppend(policy, " object-src 'none';");
+
+    '''
+
+    policy += " img-src * data:;"  
+
+    '''
+    # more secure method not used yet 
+    policy += " img-src 'self'"
+    # used by hgGene for modbaseimages in hg/hgc/lowelab.c hg/protein/lib/domains.c hg/hgGene/domains.c
+    policy += " modbase.compbio.ucsf.edu");  
+    policy += " hgwdev.cse.ucsc.edu"); # used by visiGene
+    policy += " genome.ucsc.edu");     # used by visiGene
+    policy += " code.jquery.com");          # used by hgIntegrator
+    policy += " www.google-analytics.com"); # used by google analytics
+    policy += " stats.g.doubleclick.net");  # used by google analytics
+    policy += ";"
+    '''
+
+    return policy
+
+def getCspMetaString(policy):
+    " get the policy string as an html header meta tag "
+    # use double quotes around policy because it contains single-quoted values.
+    return "<meta http-equiv='Content-Security-Policy' content=\"" + policy + "\">\n" 
+
+def getCspMetaResponseHeader(policy):
+    " get the policy string as an http response header "
+    return "Content-Security-Policy: " + policy + "\n"
+
+def getCspMetaHeader():
+    " return meta CSP header string "
+    return getCspMetaString(getCspPolicyString())
+
+#============ javascript inline-separation routines ===============
+
+'''
+// One of the main services that CSP (Content Security Policy) provides
+// is protecting from reflected and stored XSS attacks by disabling all inline javacript,
+// both in script tags, and in inline event handlers.  The separated javascript 
+// can be either added back to the end of the html page with a nonce or sha hashid,
+// or it can be saved to a temp file in trash and then included as a non-inline, off-page .js.
+'''
+
+jsInlineLines = ""
+
+def jsInline(javascript):
+    " Add javascript text to output file or memory structure "
+    global jsInlineLines
+    jsInlineLines += javascript
+
+def jsInlineF(format, *args):
+    " Add javascript text to output file or memory structure "
+    jsInline(format % args)
+
+jsInlineFinishCalled = False;
+
+def jsInlineFinish():
+    " finish outputting accumulated inline javascript "
+    global jsInlineFinishCalled
+    global jsInlineLines
+    if jsInlineFinishCalled:
+	# jsInlineFinish can be called multiple times when generating framesets or genomeSpace.
+	warn("jsInlineFinish() called already.")
+    print "<script type='text/javascript' nonce='%s'>\n%s</script>\n" % (getNonce(), jsInlineLines)
+    jsInlineLines = ""
+    jsInlineFinishCalled = True
+
+def jsInlineReset():
+    " used by genomeSpace to repeatedly output multiple pages to stdout "
+    global jsInlineFinishCalled
+    jsInlineFinishCalled = False
+
+jsEvents = [ 
+"abort",
+"activate",
+"afterprint",
+"afterupdate",
+"beforeactivate",
+"beforecopy",
+"beforecut",
+"beforedeactivate",
+"beforeeditfocus",
+"beforepaste",
+"beforeprint",
+"beforeunload",
+"beforeupdate",
+"blur",
+"bounce",
+"cellchange",
+"change",
+"click",
+"contextmenu",
+"controlselect",
+"copy",
+"cut",
+"dataavailable",
+"datasetchanged",
+"datasetcomplete",
+"dblclick",
+"deactivate",
+"drag",
+"dragend",
+"dragenter",
+"dragleave",
+"dragover",
+"dragstart",
+"drop",
+"error",
+"errorupdate",
+"filterchange",
+"finish",
+"focus",
+"focusin",
+"focusout",
+"hashchange",
+"help",
+"input",
+"keydown",
+"keypress",
+"keyup",
+"load",
+"losecapture",
+"message",
+"mousedown",
+"mouseenter",
+"mouseleave",
+"mousemove",
+"mouseout",
+"mouseover",
+"mouseup",
+"mousewheel",
+"move",
+"moveend",
+"movestart",
+"offline",
+"line",
+"online",
+"paste",
+"propertychange",
+"readystatechange",
+"reset",
+"resize",
+"resizeend",
+"resizestart",
+"rowenter",
+"rowexit",
+"rowsdelete",
+"rowsinserted",
+"scroll",
+"search",
+"select",
+"selectionchange",
+"selectstart",
+"start",
+"stop",
+"submit",
+"unload"
+ ]
+
+jsEventDic = None
+
+def findJsEvent(event):
+    " see if it is in the list "
+    global jsEventDic
+    # init event dic
+    if jsEventDic == None:
+	jsEventDic = {}
+	for w in jsEvents:
+	    jsEventDic[w] = True
+    if jsEventDic[event]:
+	return True
+    return False
+
+def checkValidEvent(event):
+    " check if it is lowercase and a known valid event name "
+    # TODO GALT
+    temp = event.lower()
+    if temp != event:
+	warn("jsInline: javascript event %s should be given in lower-case", event)
+    event = temp; 
+    if not findJsEvent(event):
+	warn("jsInline: unknown javascript event %s", event)
+
+def jsOnEventById(eventName, idText, jsText):
+    " Add js mapping for inline event "
+    checkValidEvent(eventName)
+    jsInlineF("document.getElementById('%s').on%s = function(event) {if (!event) {event=window.event}; %s};\n", idText, eventName, jsText)
+
+def jsOnEventByIdF(eventName, idText, format, *args):
+    " Add js mapping for inline event with printf formatting "
+    checkValidEvent(eventName)
+    jsInlineF("document.getElementById('%s').on%s = function(event) {if (!event) {event=window.event}; ", idText, eventName)
+    jsInlineF(format, *args)
+    jsInlineF("};\n")
+
+#============ END of javascript inline-separation routines ===============
 
 def cartDbLoadFromId(conn, table, cartId, oldCart):
     " Like src/hg/lib/cart.c, opens cart table and parses cart contents given a cartId of the format 123123_csctac "

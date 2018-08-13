@@ -585,3 +585,17 @@ felCat8.refseq.mrna.xeno.loadDesc  = yes
     #   sizes will set properly
 
 #########################################################################
+# LIFTOVER TO felCat9 (DONE - 2018-02-28 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/felCat8/bed/blat.felCat9.2018-02-28
+    cd /hive/data/genomes/felCat8/bed/blat.felCat9.2018-02-28
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/felCat8/jkStuff/felCat8.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         felCat8 felCat9) > do.log 2>&1 &
+    # real    1047m54.841s
+
+    # verify the convert link on the test browser is now active from felCat8 to
+    # felCat9
+
+#########################################################################

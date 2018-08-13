@@ -308,7 +308,7 @@ html crispr
     track crisprTargets
     shortLabel CRISPR Targets
     longLabel CRISPR/Cas9 -NGG Targets
-    visibility pack
+    visibility dense
     type bigBed 9 +
     itemRgb on
     parent crispr
@@ -341,14 +341,15 @@ html crispors
     track crisprKmers
     parent crispors
     shortLabel kMer Crisprs
-    longLabel kMer crispr locations
+    longLabel kMer Crisprs 10K shoulders
     visibility squish
     type bigBed 9 .
     itemRgb on
     priority 2
 
-## including later
-## include crispr10K.ra
+include crispr10K.ra beta,public
+# prospective testing of crispr 10K on hg38
+# include nullModelCrispr10K.ra alpha
 
 track augustus
 shortLabel Augustus
@@ -795,7 +796,7 @@ visibility hide
 useScore 1
 color 255,64,64
 type bed 8 .
-url http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
+url http://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=$$
 urlLabel miRBase:
 
 track allenBrainAli
@@ -820,7 +821,6 @@ superTrack on
 shortLabel CpG Islands
 longLabel CpG Islands (Islands < 300 Bases are Light Green)
 group regulation
-visibility show
 color 0,100,0
 altColor 128,228,128
 type bed 4 +
@@ -1037,7 +1037,6 @@ noScoreFilter .
 itemRgb on
 bigDataUrl /gbdb/$D/ncbiRefSeq/refSeqFuncElems.bb
 group regulation
-pennantIcon New red ../goldenPath/releaseLog.html "Released December 13, 2017"
 urls geneIds=https://www.ncbi.nlm.nih.gov/gene?cmd=Retrieve&dopt=full_report&list_uids=$$ pubMedIds=https://www.ncbi.nlm.nih.gov/pubmed/$$ soTerm=http://www.sequenceontology.org/browser/obob.cgi?rm=term_list&release=current_svn&obo_query=$$
 mouseOverField _mouseOver
 
@@ -1491,6 +1490,7 @@ spectrum on
 type rmsk
 maxWindowToDraw 10000000
 canPack off
+priority 1
 
 track nestedRepeats
 shortLabel Interrupted Rpts
@@ -3003,3 +3003,10 @@ group map
     parent tanDups on
     shortLabel Tandem Dups
     longLabel Paired exactly identical sequence survey over entire genome assembly
+
+track tantan
+shortLabel tantan Repeats
+longLabel Repeats by tantan
+group varRep
+visibility hide
+type bed 3 .

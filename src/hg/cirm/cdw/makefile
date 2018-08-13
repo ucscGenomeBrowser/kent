@@ -18,9 +18,11 @@ UTIL_DIRS = \
 	cdwCheckValidation \
 	cdwCorrectFileTags \
     cdwCreateUser \
+    cdwCreateGroup \
     cdwDumpManiFiles \
     cdwFakeManifestFromSubmit \
     cdwFindSymlinkable \
+    cdwGroupFile \
     cdwGroupUser \
     cdwJob \
     cdwMakeContaminationQa \
@@ -31,6 +33,7 @@ UTIL_DIRS = \
     cdwMakeReplicateQa \
     cdwMakeTrackViz \
     cdwMakeValidFile \
+    cdwQaAgent \
     cdwQaEvaluate \
     cdwPublicSubset \
     cdwReallyRemoveFiles \
@@ -47,15 +50,17 @@ UTIL_DIRS = \
     cdwUndeprecate \
     cdwUnlockSubmittedFile \
     cdwUnlockSubmittedFiles \
+    cdwUpdateIx \
     utils/cdwFastqPolyFilter \
     utils/cdwVcfStats
 
 CGI_DIRS = \
     cdwGetFile \
+    cdwGetMetadataAsFile \
+    cdwServeTagStorm \
     cdwWebBrowse 
 
-TEST_DIRS = \
-	encode2BedDoctor 
+TEST_DIRS = 
 
 utils: cdwLib
 	${MAKE} buildUtils
@@ -77,16 +82,23 @@ clean:: $(USE_DIRS:%=%.clean)
 %.clean:
 	(cd $* && ${MAKE} clean)
 
-cgi:: cdwLib
+cgi:: cdwLib tagStormCgi
 	${MAKE} buildCgi
 
 buildCgi:: $(CGI_DIRS:%=%.buildCgi)
 %.buildCgi:
 	cd $* && ${MAKE}
 
-alpha:: cdwLib
+alpha:: cdwLib tagStormAlpha
 	${MAKE} buildAlpha
 
 buildAlpha:: $(CGI_DIRS:%=%.buildAlpha)
 %.buildAlpha:
 	(cd $* && ${MAKE} alpha)
+
+tagStormCgi:
+	cd ../../../tagStorm && ${MAKE} cgi
+
+tagStormAlpha:
+	cd ../../../tagStorm && ${MAKE} alpha
+

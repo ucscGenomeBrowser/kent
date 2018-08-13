@@ -236,7 +236,9 @@ sqlSafef(query, sizeof(query),
 "   expCount int unsigned not null,	# Number of experiment values\n"
 "   expScores longblob not null,	# Comma separated list of experiment scores\n"
           "#Indices\n"
-"   PRIMARY KEY(geneId)\n"
+"   PRIMARY KEY(chrom,geneId)\n"
+"   INDEX(geneId)\n"
+"   INDEX(chrom,chromStart)\n"
 ")\n",
     table);
 sqlRemakeTable(conn, table, query);

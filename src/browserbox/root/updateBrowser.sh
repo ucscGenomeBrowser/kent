@@ -221,7 +221,7 @@ if apt-cache policy virtualbox-guest-dkms | grep "Installed: .none." > /dev/null
 fi
 
 # install R for the gtex tracks
-if apt-cache policy r-base | grep "Installed: .none." > /dev/null; then
+if apt-cache policy r-base-core | grep "Installed: .none." > /dev/null; then
    echo - Installing R
    apt-get update
    apt-get --no-install-recommends install -y r-base-core
@@ -477,16 +477,20 @@ fi
 
 # Sept 2017: check if genome-euro mysql server is closer
 if [ ! -f /usr/local/apache/trash/registration.txt ]; then
-   echo comparing latency: genome.ucsc.edu Vs. genome-euro.ucsc.edu
-   euroSpeed=$( (time -p (for i in `seq 10`; do curl -sSI genome-euro.ucsc.edu > /dev/null; done )) 2>&1 | grep real | cut -d' ' -f2 )
-   ucscSpeed=$( (time -p (for i in `seq 10`; do curl -sSI genome.ucsc.edu /dev/null; done )) 2>&1 | grep real | cut -d' ' -f2 )
-   if [[ $(awk '{if ($1 <= $2) print 1;}' <<< "$euroSpeed $ucscSpeed") -eq 1 ]]; then
-      echo genome-euro seems to be closer
-      echo modifying gbib to pull data from genome-euro instead of genome
-      sed -i s/slow-db.host=genome-mysql.cse.ucsc.edu/slow-db.host=genome-euro-mysql.soe.ucsc.edu/ /usr/local/apache/cgi-bin/hg.conf
-   else
-      echo genome.ucsc.edu seems to be closer
-      echo not modifying /usr/local/apache/cgi-bin/hg.conf
+   # Mar 2018:  check if we can connect to genome-euro before checking what is closest
+   curl -sSI genome-euro.ucsc.edu 2>&1 > /dev/null
+   if [[ $? -eq 0 ]]; then
+      echo comparing latency: genome.ucsc.edu Vs. genome-euro.ucsc.edu
+      euroSpeed=$( (time -p (for i in `seq 10`; do curl -sSI genome-euro.ucsc.edu > /dev/null; done )) 2>&1 | grep real | cut -d' ' -f2 )
+      ucscSpeed=$( (time -p (for i in `seq 10`; do curl -sSI genome.ucsc.edu > /dev/null; done )) 2>&1 | grep real | cut -d' ' -f2 )
+      if [[ $(awk '{if ($1 <= $2) print 1;}' <<< "$euroSpeed $ucscSpeed") -eq 1 ]]; then
+         echo genome-euro seems to be closer
+         echo modifying gbib to pull data from genome-euro instead of genome
+         sed -i s/slow-db.host=genome-mysql.cse.ucsc.edu/slow-db.host=genome-euro-mysql.soe.ucsc.edu/ /usr/local/apache/cgi-bin/hg.conf
+      else
+         echo genome.ucsc.edu seems to be closer
+         echo not modifying /usr/local/apache/cgi-bin/hg.conf
+      fi
    fi
 fi
 

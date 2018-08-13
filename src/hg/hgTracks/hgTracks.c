@@ -49,7 +49,6 @@
 #include "hubConnect.h"
 #include "cytoBand.h"
 #include "ensFace.h"
-#include "liftOver.h"
 #include "pcrResult.h"
 #include "jsHelper.h"
 #include "mafTrack.h"
@@ -706,7 +705,7 @@ else
         doIdeo = FALSE;
     }
 // TODO use DIV in future (can update entire div at once in hgTracks.js)
-//hPrintf("<DIV id='chromIdeoDiv'>\n"); 
+//hPrintf("<DIV id='chromIdeoDiv'>\n");
 // FYI from testing, I see that there is code that inserts warning error messages
 //  right before ideoMap, so any changes to that name or adding the DIV would require
 //  updating the warning-insertion target name.
@@ -752,7 +751,7 @@ if(doIdeo)
         safef(title, sizeof(title), "%s (%s-%s)", chromName, startBand, endBand);
     textWidth = mgFontStringWidth(font, title);
     hvGfxTextCentered(hvg, 2, gfxBorder, textWidth, ideoTrack->height, MG_BLACK, font, title);
-    // cytoBandDrawAt() clips x based on insideX+insideWidth, 
+    // cytoBandDrawAt() clips x based on insideX+insideWidth,
     // but in virtMode we may be in a window that is smaller than the ideo width
     // so temporarily set them to the actual ideo graphic offset and width
     int saveInsideX = insideX;
@@ -775,7 +774,7 @@ if(doIdeo)
     }
 
 // create an empty hidden-map place holder which can change dynamically with ajax callbacks.
-if (!doIdeo && !psOutput) 
+if (!doIdeo && !psOutput)
     {
     hPrintf("<MAP Name=%s>\n", mapName);
     hPrintf("</MAP>\n");
@@ -1106,10 +1105,10 @@ return stringIn(needle, haystack);
 }
 
 void oligoMatchLoad(struct track *tg)
-/* Create track of perfect matches to oligo on either strand. 
+/* Create track of perfect matches to oligo on either strand.
  *
- * Note that if you are extending this code, there is also a parallel copy 
- * in src/hg/utils/oligoMatch/ that should be kept up to date! 
+ * Note that if you are extending this code, there is also a parallel copy
+ * in src/hg/utils/oligoMatch/ that should be kept up to date!
  *
  */
 {
@@ -1470,7 +1469,6 @@ int portX = fullInsideX;
 // If a portal was established, then set the portal dimensions
 long portalStart,chromStart;
 double basesPerPixel;
-// TODO GALT need to tweak it still for virtchrom stuff, e.g. maybe change some var names or types to long
 if (theImgBox
 && imgBoxPortalDimensions(theImgBox,&chromStart,NULL,NULL,NULL,&portalStart,NULL,
                           &portWidth,&basesPerPixel))
@@ -1514,7 +1512,7 @@ mapBoxToggleVis(hvg, portX + arrowButtonWidth, y + 1, portWidth - (2 * arrowButt
                 insideHeight, (theImgBox ? track : parentTrack));
 #endif///ndef IMAGEv2_SHORT_TOGGLE
 
-// use the last window globals instead of the first 
+// use the last window globals instead of the first
 struct window *w=windows;
 while(w->next)
     w = w->next;
@@ -1550,7 +1548,7 @@ if (track->limitedVis != tvHide)
             if (tdbComposite != NULL)
                 {
                 label = tdbComposite->longLabel;
-                labelColor = hvGfxFindColorIx(hvg, tdbComposite->colorR, 
+                labelColor = hvGfxFindColorIx(hvg, tdbComposite->colorR,
                                                 tdbComposite->colorG, tdbComposite->colorB);
                 }
             }
@@ -1872,7 +1870,7 @@ return newWinWidth;
 }
 
 static void drawScaleBar(
-    struct hvGfx *hvg, 
+    struct hvGfx *hvg,
     MgFont *font,
     int fontHeight,
     int yAfterRuler,
@@ -2191,7 +2189,7 @@ struct highlightVar *hlList = parseHighlightInfo();
 if(hlList && theImgBox == NULL) // Only highlight region when imgBox is not used. (pdf and show-image)
     {
     struct highlightVar *h;
-    for (h=hlList; h; h=h->next) 
+    for (h=hlList; h; h=h->next)
         {
         if (virtualSingleChrom()) // DISGUISE VMODE
             {
@@ -2205,7 +2203,7 @@ if(hlList && theImgBox == NULL) // Only highlight region when imgBox is not used
                     {
                     parseVPosition(newPosition, &h->chrom, &h->chromStart, &h->chromEnd);
                     }
-                }	    
+                }
             }
 
         if ((h->db && sameString(h->db, database))
@@ -2246,22 +2244,22 @@ rAddToTrackHash(trackHash, trackList);
 return trackHash;
 }
 
-//void domAddMenu(char *afterMenuId, char *newMenuId, char *label) 
+//void domAddMenu(char *afterMenuId, char *newMenuId, char *label)
 ///* Append a new drop down menu after a given menu, by changing the DOM with jquery  */
 //{
 //printf("$('#%s').last().after('<li class=\"menuparent\" id=\"%s\"><span>%s</span>"
-//    "<ul style=\"display: none; visibility: hidden;\"></ul></li>');\n", 
+//    "<ul style=\"display: none; visibility: hidden;\"></ul></li>');\n",
 //    afterMenuId, newMenuId, label);
 //}
 //
-//void domAppendToMenu(char *menuId, char *url, char *label) 
+//void domAppendToMenu(char *menuId, char *url, char *label)
 ///* Add an entry to a drop down menu, by changing the DOM with jquery  */
 //{
 ////printf("$('#%s ul').last().after('<li><a target=\"_BLANK\" href=\"%s\">%s</a></li>');\n", menuId, url, label);
 //printf("$('#%s ul').append('<li><a target=\"_BLANK\" href=\"%s\">%s</a></li>');\n", menuId, url, label);
 //}
 
-//void menuBarAppendExtTools() 
+//void menuBarAppendExtTools()
 ///* printf a little javascript that adds entries to a menu */
 //{
 //    char url[SMALLBUF];
@@ -2488,14 +2486,14 @@ dyStringPrintf(dy, "nextExonButtonable: %d\n", track->nextExonButtonable);
     //boolean nextExonButtonable; /* Use the next-exon buttons? */
 dyStringPrintf(dy, "nextItemButtonable: %d\n", track->nextItemButtonable);
     //boolean nextItemButtonable; /* Use the next-gene buttons? */
-    
+
 dyStringPrintf(dy, "itemAttrTbl: %lu\n", (unsigned long)track->itemAttrTbl);
     //struct itemAttrTbl *itemAttrTbl;  /* relational attributes for specific items (color) */
 
     /* fill in left label drawing area */
 dyStringPrintf(dy, "labelColor: %u\n", track->labelColor);
     //Color labelColor;   /* Fixed color for the track label (optional) */
-    
+
     //void (*drawLeftLabels)(struct track *tg, int seqStart, int seqEnd,
     //                       struct hvGfx *hvg, int xOff, int yOff, int width, int height,
     //                       boolean withCenterLabels, MgFont *font,
@@ -2647,9 +2645,9 @@ if (!dash)
 
 char *disguisePositionVirtSingleChrom(char *position) // DISGUISE VMODE
 /* Hide the virt position, convert to real single chrom span.
- * position should be virt chrom span. 
+ * position should be virt chrom span.
  * Can handle anything in the virt single chrom. */
-{   
+{
 /* parse Virt position */
 char *chrom = NULL;
 long start = 0;
@@ -2682,9 +2680,9 @@ return cloneString(nvPos);
 
 char *undisguisePosition(char *position) // UN-DISGUISE VMODE
 /* Find the virt position
- * position should be real chrom span. 
+ * position should be real chrom span.
  * Limitation: can only convert things in the current windows set. */
-{   
+{
 /* parse NonVirt position */
 char *chrom = NULL;
 int start = 0;
@@ -2709,8 +2707,8 @@ for (w = windows; w; w=w->next)
 	return position; // return original
 	}
     // overlap with position?
-    //  if intersection, 
-    if (w->winEnd > start && end > w->winStart) 
+    //  if intersection,
+    if (w->winEnd > start && end > w->winStart)
 	{
 	int s = max(start, w->winStart);
 	int e = min(end, w->winEnd);
@@ -2723,7 +2721,7 @@ for (w = windows; w; w=w->next)
     lastW = w;
    }
 if (newStart == -1) // none of the windows intersected with the position
-    return position; // return original  
+    return position; // return original
 //  return new virt undisguised position as a string
 char newPos[1024];
 safef (newPos, sizeof newPos, "virt:%ld-%ld", (newStart+1), newEnd);
@@ -2762,14 +2760,14 @@ void padVirtRegions(int windowPadding)
 
  * DONE make it handle multiple chromosomes
  *
- * TODO what about just modifying the original list directly? 
+ * TODO what about just modifying the original list directly?
 
- * I do not know if this is handling merging correctly. 
+ * I do not know if this is handling merging correctly.
  * DONE Maybe I should just add the padding directly into the exon-fetch-merge code.
  * I have looked at that earlier, and it should work easily.
  * It might also have the advantage of not having to create a duplicate list?
  *
- * TODO how do I test that the output is correct. 
+ * TODO how do I test that the output is correct.
  *  if the input has ordered non-duplicate regions, then the output should be likewise.
  * */
 {
@@ -2804,7 +2802,7 @@ for(virtRegion=virtRegionList; virtRegion; virtRegion = virtRegion->next)
 	int distToNextRegion = virtRegion->next->start - virtRegion->end;
 	if (distToNextRegion < (2*windowPadding))
 	    {
-	    rightWindowPadding = (distToNextRegion+1)/2; 
+	    rightWindowPadding = (distToNextRegion+1)/2;
 	    // +1 to balance for odd number of bases between, arbitrarily adding it to right side
 	    }
 	}
@@ -2822,7 +2820,7 @@ for(virtRegion=virtRegionList; virtRegion; virtRegion = virtRegion->next)
     ++regionCount;
     }
 slReverse(&newList);
-virtRegionList = newList; // update new list -- 
+virtRegionList = newList; // update new list --
 // TODO should the old one be freed? if so, the chrom name should use cloneString
 }
 
@@ -2955,7 +2953,7 @@ if (virtIndexEnd == -1)
 struct window *windows = NULL;
 long i = virtIndexStart;
 int winCount = 0;
-long basesInWindows = 0; // TODO not actually using this variable 
+long basesInWindows = 0; // TODO not actually using this variable
 for(i=virtIndexStart; i <= virtIndexEnd; ++i)
     {
     struct window *w;
@@ -3052,15 +3050,15 @@ return cloneString(nvPos);
 }
 
 void allocPixelsToWindows()
-/* Allocate pixels to windows, sets insideWidth and insideX 
+/* Allocate pixels to windows, sets insideWidth and insideX
  *
- * TODO currently uses a strategy that places a window at a pixel location 
+ * TODO currently uses a strategy that places a window at a pixel location
  * directly, because of round-off and missing small windows this can occasionally
- * lead to gaps not covered by any pixel.  Consider replacing it with something 
- * that tries not to leave many gaps -- but how to do it without distortion of some window sizes? 
+ * lead to gaps not covered by any pixel.  Consider replacing it with something
+ * that tries not to leave many gaps -- but how to do it without distortion of some window sizes?
  * */
 {
-double pixelsPerBase = (double)fullInsideWidth / virtWinBaseCount; 
+double pixelsPerBase = (double)fullInsideWidth / virtWinBaseCount;
 long basesUsed = 0;
 int windowsTooSmall = 0;
 struct window **pWindows = &windows;
@@ -3068,7 +3066,7 @@ struct window *window;
 int winCount = slCount(windows);
 for(window=windows;window;window=window->next)
     {
-    int basesInWindow = window->winEnd - window->winStart; 
+    int basesInWindow = window->winEnd - window->winStart;
     int pixelsInWindow = 0.5 + (double)basesInWindow * pixelsPerBase; // should this round up ? + 0.5?
     window->insideWidth = pixelsInWindow;
     window->insideX = fullInsideX + basesUsed * pixelsPerBase;
@@ -3091,7 +3089,7 @@ struct positionMatch *virtChromSearchForPosition(char *chrom, int start, int end
 /* Search the virtual chrom for the query chrom, start, end position
  *
  * TODO GALT: Intially this can be a simple brute-force search of the entire virtChrom array.
- * 
+ *
  * However, this will need to be upgraded to using a rangeTree or similar structure
  * to rapidly return multiple regions that overlap the query position.
  * */
@@ -3173,11 +3171,11 @@ return -1;
 }
 
 void matchSortOnVPos(struct positionMatch **pList)
-/* Sort positions by virtPos 
+/* Sort positions by virtPos
  * pList will be sorted by chrom, start, end but we want it ordered by vPos
  */
 {
-slSort(pList, matchVPosCompare); 
+slSort(pList, matchVPosCompare);
 }
 
 
@@ -3194,7 +3192,7 @@ long mergeStart = -1;
 long mergeEnd = -1;
 if (!list)
     return NULL;
-for(m=list; 1; m=m->next) 
+for(m=list; 1; m=m->next)
 // special loop condition allows it to stop AFTER it goes thru the loop once as m=NULL.
 // this flushes out the last value.
     {
@@ -3202,10 +3200,10 @@ for(m=list; 1; m=m->next)
 	{
 	if (m && m->virtStart == lastEnd)
 	    {
-	    // continue merging, do nothing. 
+	    // continue merging, do nothing.
 	    // maybe could be freeing a skipped node here.
 	    }
-	else  
+	else
 	    {
 	    inMerge = FALSE;
 	    mergeEnd = lastEnd;
@@ -3310,21 +3308,14 @@ struct sqlConnection *conn = hAllocConn(database);
 if (!virtRegionList) // this should already contain allchroms.
     errAbort("unexpected error in initSingleAltHaplotype: virtRegionList is NULL, should contain all chroms");
 struct virtRegion *after = virtRegionList;
-virtRegionList = NULL; 
+virtRegionList = NULL;
 struct sqlResult *sr;
 char **row;
-char *table = NULL;
-if (sameString(database,"hg17"))
-    table = "altLocations"; // was haplotypeLocations which I made with BLAT and self-chains ;  // bin+bed4
-else if (sameString(database,"hg18"))
-    table = "altLocations"; // was haplotypeLocationsEnsembl which got renamed;  // bin+bed4
-else if (sameString(database,"hg19"))
-    table = "altLocations"; // created from hapRegions, was "altSeqHaplotypes";  // was bin+bed6, now bin+bed4
-else if (sameString(database,"hg38"))
-    table = "altLocations";  // bin+bed4
-else
+char *table = endsWith(haplotypeId, "_fix") ? "fixLocations" : "altLocations";
+if (! hTableExists(database, table))
     {
-    warn("initSingleAltHaplotype() was expecting database to be hg17, hg18, hg19, or hg38");
+    warn("initSingleAltHaplotype: table '%s' not found in database %s, "
+         "can't find %s", table, database, haplotypeId);
     return FALSE;
     }
 
@@ -3335,7 +3326,7 @@ sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (!row)
     {
-    warn("no haplotype found for [%s]", haplotypeId);
+    warn("no haplotype found for [%s] in %s", haplotypeId, table);
     return FALSE;
     }
 char *haploChrom = cloneString(row[0]);
@@ -3501,7 +3492,7 @@ while (1)
 	lastEnd = end;
 	}
 
-    
+
     }
 sqlFreeResult(&sr);
 slReverse(&virtRegionList);
@@ -3561,13 +3552,13 @@ gene->exonCount = 1;
 
 void initVirtRegionsFromEMGeneTableExons(boolean showNoncoding, char *knownCanonical, char *knownToTag, boolean geneMostly)
 /* Create a regionlist from knownGene exons. */
-// Merge exon regions that overlap. 
+// Merge exon regions that overlap.
 
 // DONE Jim indicated that he would prefer it to include all transcripts, not just knownCanonical.
 
 // DONE Jim also suggested that we might want to handle padding right here in this step.
 // After thinking about it, I do not think it would be very hard because we are merging already.
-// Basically, just take the record from the db table row, add padding to start and end, 
+// Basically, just take the record from the db table row, add padding to start and end,
 // and clip for chromosome size.
 
 // TODO If we keep it at full genome level (instead of single chrom), then there is an apparent
@@ -3634,7 +3625,7 @@ if (virtualSingleChrom())
 // TODO GALT may have to change this to in-memory sorting?
 // refGene is out of order because of genbank continuous loading
 // also, using where chrom= causes it to use indexes which disturb order returned.
-sqlSafefAppend(query, sizeof(query), " order by chrom, txStart");  
+sqlSafefAppend(query, sizeof(query), " order by chrom, txStart");
 sr = sqlGetResult(conn, query);
 
 char chrom[256] = "";
@@ -3736,7 +3727,7 @@ while (1)
     boolean printIt = FALSE;
 
     if (kceList)
-	{	    
+	{
 
 	safecpy(chrom, sizeof chrom, bestKce->gene->chrom);
 	start = bestKce->gene->exonStarts[bestKce->exonNumber];
@@ -3784,7 +3775,7 @@ while (1)
 	    v->strand[0] = '.';  // TODO we should probably just remove the strand field
 	    v->strand[1] = 0;
 	    slAddHead(&virtRegionList, v);
-	    
+
 	    }
 	}
 
@@ -3808,7 +3799,7 @@ while (1)
 	    kceList = bestKce->next;
 	freeMem(bestKce);
 	}
-    
+
     }
 sqlFreeResult(&sr);
 slReverse(&virtRegionList);
@@ -3819,7 +3810,7 @@ hFreeConn(&conn);
 
 
 void testRegionList()
-/* check if it is ascending non-overlapping regions. 
+/* check if it is ascending non-overlapping regions.
 (this is not always a requirement in the most general case, i.e. user-regions)
 */
 {
@@ -3882,7 +3873,7 @@ for(i=0;i<winCount;++i)
 slReverse(&virtRegionList);
 //if (winCount >= 2)
 //    withNextExonArrows = FALSE;	/* Display next exon navigation buttons near center labels? */
-//warn("winCount=%d, exonSize=%d, intronSize=%d", winCount, exonSize, intronSize); 
+//warn("winCount=%d, exonSize=%d, intronSize=%d", winCount, exonSize, intronSize);
 }
 
 void initAllChroms()
@@ -3975,7 +3966,7 @@ if (sameString(multiRegionsBedUrl,""))
     oldType = empty;
 else if (strstr(multiRegionsBedUrl,"://"))
     oldType = url;
-else 
+else
     oldType = trashFile;
 if ((oldType == trashFile) && !(fileExists(multiRegionsBedUrl) && fileExists(multiRegionsBedUrlSha1Name)))
     {  // if the trash files no longer exists, reset to empty string default value.
@@ -4014,7 +4005,7 @@ int lineCount = 0;
 while (lineFileNext(lf, &line, &lineSize))
     {
     ++lineCount;
-    if (lineCount==1 && 
+    if (lineCount==1 &&
 	(startsWithNoCase("http://" ,line)
       || startsWithNoCase("https://",line)
       || startsWithNoCase("ftp://"  ,line)))
@@ -4067,7 +4058,7 @@ if (newType==trashFile && (!(oldType==trashFile && filesAreSame) ))
     FILE *f = mustOpen(bedTn.forCgi, "w");
     mustWrite(f, dyInput->string, dyInput->stringSize);
     carefulClose(&f);
-    // new value is a trash file. 
+    // new value is a trash file.
     newMultiRegionsBedUrl = cloneString(bedTn.forCgi);
     // save new input sha1 to trash file.
     safef(multiRegionsBedUrlSha1Name, sizeof multiRegionsBedUrlSha1Name, "%s.sha1", bedTn.forCgi);
@@ -4139,7 +4130,7 @@ while (lineFileNext(lf, &line, &lineSize))
 	    char *dbFromBed = line+strlen("#database ");
 	    if (!sameString(database,dbFromBed))
 		{
-		warn("Multi-Region BED URL error: The database (%s) specified in input does not match current database %s", 
+		warn("Multi-Region BED URL error: The database (%s) specified in input does not match current database %s",
 		   dbFromBed, database);
 		return FALSE;
 		}
@@ -4238,7 +4229,7 @@ return TRUE;
 }
 
 void restoreSavedVirtPosition()
-/* Set state from lastDbPosCart. 
+/* Set state from lastDbPosCart.
  * This involves parsing the extra state that was saved.*/
 {
 
@@ -4250,7 +4241,7 @@ for (el = elList; el != NULL; el = el->next)
     if (cartVal)
 	{
 	/* do we need this feature?
-	if (sameString(cartVal,"(null)")) 
+	if (sameString(cartVal,"(null)"))
 	    cartRemove(cart, cartVar);
 	else
         */	
@@ -4291,7 +4282,7 @@ lastDbPosCart = cartOfNothing();  // USED to store and restore cart settings rel
 struct dyString *dy = dyStringNew(256);  // used to build virtModeExtraState
 
 if (sameString(virtModeType, "default"))
-    { 
+    {
     // Single window same as normal window
     // mostly good to test nothing was broken with single window
     AllocVar(v);
@@ -4378,7 +4369,7 @@ else if (sameString(virtModeType, "exonMostly")
     }
 else if (sameString(virtModeType, "kcGenes")) // TODO obsolete
     {
-    initVirtRegionsFromKnownCanonicalGenes("knownCanonical"); 
+    initVirtRegionsFromKnownCanonicalGenes("knownCanonical");
     virtModeShortDescr = "genes";
     }
 else if (sameString(virtModeType, "customUrl"))
@@ -4395,7 +4386,7 @@ else if (sameString(virtModeType, "customUrl"))
     }
 else if (sameString(virtModeType, "singleTrans"))
     {
-    singleTransId = cartUsualString(cart, "singleTransId", singleTransId); 
+    singleTransId = cartUsualString(cart, "singleTransId", singleTransId);
     if (sameString(singleTransId, ""))
 	{
 	warn("Single transcript Id should not be blank");
@@ -4413,7 +4404,8 @@ else if (sameString(virtModeType, "singleAltHaplo"))
 	virtRegionList = NULL;
 	return FALSE; // return to default mode
 	}
-    virtModeShortDescr = "alt haplo";  // was "single haplo" but that might confuse some users.
+    // was "single haplo" but that might confuse some users.
+    virtModeShortDescr = endsWith(singleAltHaploId, "_fix") ? "fix patch" : "alt haplo";
     dySaveCartSetting(dy, "singleAltHaploId", TRUE);
     }
 else if (sameString(virtModeType, "allChroms"))
@@ -4485,7 +4477,7 @@ return TRUE;
 }
 
 boolean isLimitedVisHiddenForAllWindows(struct track *track)
-/* Check if track limitedVis == hidden for all windows. 
+/* Check if track limitedVis == hidden for all windows.
  * Return true if all are hidden */
 {
 boolean result = TRUE;
@@ -4524,9 +4516,11 @@ if (
 || sameWord(type, "psl")
 || sameWord(type, "barChart")
 || sameWord(type, "bigBarChart")
+|| sameWord(type, "interact")
+|| sameWord(type, "bigInteract")
 //|| track->loadItems == loadSimpleBed
 //|| track->bedSize >= 3 // should pick up several ENCODE BED-Plus types.
-) 
+)
 && track->canPack
    )
     {
@@ -4538,7 +4532,7 @@ return FALSE;
 
 boolean isTypeUseItemNameAsKey(struct track *track)
 /* Check if track type is like expRatio and key is just item name. */
-{ 
+{
 char *typeLine = track->tdb->type, *words[8], *type;
 int wordCount;
 if (typeLine == NULL)
@@ -4718,7 +4712,7 @@ if (rulerMode != tvHide)
 // I might need to trigger a track-height check here
 // since it is after all items are loaded for all windows
 // but before things are checked for overflow or limitedVis?
-// The fixed non-overflow tracks like knownGene used to initialize 
+// The fixed non-overflow tracks like knownGene used to initialize
 // ss and track height during loadItems(). That was delayed
 // because we now need all windows to be fully loaded before
 // calculating their joint ss layout and height.
@@ -4732,7 +4726,9 @@ for(window=windows;window;window=window->next)
     for (track = trackList; track != NULL; track = track->next)
 	{
 	if (tdbIsCompositeChild(track->tdb)) // When single track is requested via AJAX,
+	    {
 	    limitedVisFromComposite(track);  // it could be a subtrack
+	    }
 	else
 	    {
 	    limitVisibility(track);
@@ -4791,7 +4787,7 @@ if (wigOrder != NULL)
         }
     }
 
-// Construct flatTracks 
+// Construct flatTracks
 for (track = trackList; track != NULL; track = track->next)
     {
     if (tdbIsComposite(track->tdb))
@@ -4847,7 +4843,7 @@ for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
 	}
 
     setFlatTrackMaxHeight(flatTrack, fontHeight);
-    
+
     }
 
 
@@ -5177,11 +5173,19 @@ if (withLeftLabels)
         #endif ///def IMAGEv2_NO_LEFTLABEL_ON_FULL
 		{
 		setGlobalsFromWindow(windows); // use GLOBALS from first window
-		int ynew = doLeftLabels(track, hvgSide, font, y);
+		int ynew = 0;
+		/* rmskJoined tracks are non-standard in FULL mode
+		   they are just their track height, not per-item height
+                 */
+		if (startsWith("rmskJoined", track->track))
+		    ynew = flatTrack->maxHeight + y;
+		else
+		    ynew = doLeftLabels(track, hvgSide, font, y);
+
 		y += flatTrack->maxHeight;
 		if ((ynew - y) > flatTrack->maxHeight)
 		    { // TODO should be errAbort?
-		    warn("doLeftLabels(y=%d) returned new y value %d that is too high - should be %d at most.", 
+		    warn("doLeftLabels(y=%d) returned new y value %d that is too high - should be %d at most.",
 			y, ynew, flatTrack->maxHeight);
 		    }
 		}
@@ -5209,7 +5213,7 @@ if (withGuidelines)
         char base[64];
 	if (virtMode) // window separators
 	    {
-	    safecpy(base,sizeof(base),"winSeparators");  // non-reusable temp file 
+	    safecpy(base,sizeof(base),"winSeparators");  // non-reusable temp file
 	    trashDirFile(&gifBg, "hgt", base, ".png");
 	    exists = FALSE;
 	    }
@@ -5305,8 +5309,8 @@ if (rulerMode != tvHide)
 		safef(position, sizeof position, "%s:%d-%d", window->chromName, window->winStart+1, window->winEnd);
 		int x = window->insideX;
 		if (revCmplDisp)
-		    x = tl.picWidth - (x + window->insideWidth); 
-		imgTrackAddMapItem(curImgTrack, "#", position, 
+		    x = tl.picWidth - (x + window->insideWidth);
+		imgTrackAddMapItem(curImgTrack, "#", position,
 		    x, sliceOffsetY, x+window->insideWidth, sliceOffsetY+sliceHeight, RULER_TRACK_NAME);
 		}
 
@@ -5357,11 +5361,9 @@ if (withCenterLabels)
             y += REMOTE_TRACK_HEIGHT;
 	    }
         else
-	    { 
+	    {
 	    int savey = y; // GALT
             y = doCenterLabels(track, track, hvg, font, y, fullInsideWidth); // calls track height
-	    // TODO GALT why do I just pass track here instead of parentTrack? Did I lose something?
-	    // have to look at old code to see.
 	    y = savey + flatTrack->maxHeight;
 	    }
         }
@@ -5375,7 +5377,7 @@ if (withCenterLabels)
 /* Draw tracks. */
 
     { // brace allows local vars
-    
+
     long lastTime = 0;
     y = yAfterRuler;
     if (measureTiming)
@@ -5412,7 +5414,7 @@ if (withCenterLabels)
         if (trackShouldUseAjaxRetrieval(track))
             y += REMOTE_TRACK_HEIGHT;
         else
-	    { 
+	    {
 	    int savey = y;
 	    struct track *winTrack;
 
@@ -5454,7 +5456,7 @@ if (withCenterLabels)
 		    {
 		    int ynew = doDrawItems(winTrack, hvg, font, y, &lastTime);
 		    if ((ynew-y) > flatTrack->maxHeight)  // so compiler does not complain ynew is not used.
-			errAbort("oops track too high!"); 
+			errAbort("oops track too high!");
 		    }
 		}
 	    setGlobalsFromWindow(windows); // first window
@@ -5479,7 +5481,6 @@ if (withCenterLabels)
 /* if a track can draw its left labels, now is the time since it
  *  knows what exactly happened during drawItems
  */
-// TODO GALT Parellelize or not?
 if (withLeftLabels)
     {
     y = yAfterRuler;
@@ -5491,7 +5492,6 @@ if (withLeftLabels)
         if (theImgBox)
             {
             // side label slice of tracks
-            // ORIG sliceHeight      = trackPlusLabelHeight(track, fontHeight);
 	    sliceHeight      = flatTrack->maxHeight;
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
@@ -5509,13 +5509,12 @@ if (withLeftLabels)
     #else ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
         else if (track->drawLeftLabels != NULL)
     #endif ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
-	    {  // TODO parallelize?
+	    {
 	    setGlobalsFromWindow(windows);
             y = doOwnLeftLabels(track, hvgSide, font, y);
 	    setGlobalsFromWindow(windows); // first window
 	    }
         else
-            // ORIG y += trackPlusLabelHeight(track, fontHeight);
 	    y += flatTrack->maxHeight;
         }
     }
@@ -5533,17 +5532,14 @@ for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
         if (theImgBox)
             {
             // Set imgTrack in case any map items will be set
-            // ORIG sliceHeight      = trackPlusLabelHeight(track, fontHeight);
 	    sliceHeight      = flatTrack->maxHeight;
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
             }
 
-	// TODO Parallelize?
 	setGlobalsFromWindow(windows); // first window
         doTrackMap(track, hvg, y, fontHeight, trackPastTabX, trackPastTabWidth);
 
-        // ORIG y += trackPlusLabelHeight(track, fontHeight);
 	y += flatTrack->maxHeight;
         }
     }
@@ -6111,7 +6107,10 @@ else if (sameString(type, "bigWig"))
     if (trackShouldUseAjaxRetrieval(tg))
         tg->loadItems = dontLoadItems;
     }
-else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred")|| sameString(type, "bigNarrowPeak") || sameString(type, "bigPsl") || sameString(type, "bigMaf")|| sameString(type, "bigChain") || sameString(type, "bigBarChart"))
+else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") ||
+        sameString(type, "bigNarrowPeak") || sameString(type, "bigPsl") ||
+        sameString(type, "bigMaf")|| sameString(type, "bigChain") ||
+        sameString(type, "bigBarChart") || sameString(type, "bigInteract"))
     {
     struct bbiFile *bbi = ct->bbiFile;
 
@@ -6130,6 +6129,8 @@ else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred")|| sameStri
 	safef(typeBuf, sizeof(typeBuf), "bigPsl");
     else if (sameString(type, "bigBarChart"))
 	safef(typeBuf, sizeof(typeBuf), "bigBarChart");
+    else if (sameString(type, "bigInteract"))
+	safef(typeBuf, sizeof(typeBuf), "bigInteract");
     else
 	safef(typeBuf, sizeof(typeBuf), "bigBed %d %c", bbi->definedFieldCount, extra);
     tdb->type = cloneString(typeBuf);
@@ -6279,6 +6280,12 @@ else if (sameString(type, "barChart"))
     {
     tg = trackFromTrackDb(tdb);
     barChartCtMethods(tg);
+    tg->customPt = ct;
+    }
+else if (sameString(type, "interact"))
+    {
+    tg = trackFromTrackDb(tdb);
+    interactCtMethods(tg);
     tg->customPt = ct;
     }
 else
@@ -6744,7 +6751,6 @@ else
         paddedLabel[i+1] = label[i];
     }
 hButtonWithOnClick(var, paddedLabel, NULL, "return imageV2.navigateButtonClick(this);");
-// TODO GALT could consider trying to give these all the same class and then attach handlers at the class level.
 }
 
 void limitSuperTrackVis(struct track *track)
@@ -7363,7 +7369,7 @@ void initTrackList()
 /* need to init tracklist, sometimes early */
 {
 if (!trackList)
-    { 
+    {
     if (measureTiming)
 	measureTime("Time before getTrackList");
     boolean defaultTracks = cgiVarExists("hgt.reset");
@@ -7408,7 +7414,7 @@ if ((track != NULL) && (track->nextPrevItem != NULL))
     {
     // custom track big* tracks have pre-opened handle which we should not use
     // because that same bbiFile will get used later in the full track list
-    track->bbiFile = NULL; 
+    track->bbiFile = NULL;
     track->nextPrevItem(track, goNext);
     }
 }
@@ -7424,8 +7430,8 @@ if (trackHubDatabase(database)) // assembly hub? not supported yet
     return; // any table-name matches might just be coincidence in an assembly hub
             // although the hub_ prefix on the track name would help prevent name collisions.
 
-char *orderedTables[] = 
-{"knownGene", "refGene", "ensGene", 
+char *orderedTables[] =
+{"knownGene", "refGene", "ensGene",
  "flybaseGene", "sangerGene", "augustusGene", "genscan"};
 int i, len;
 for(i=0, len=ArraySize(orderedTables); i <len; ++i)
@@ -7447,19 +7453,19 @@ void setEMGeneTrack()
 if (emGeneTable) // we already have it!
     return;
 if (trackHubDatabase(database)) // assembly hub? not supported yet
-    return; 
+    return;
 emGeneTable = cloneString(cartOptionalString(cart, "emGeneTable"));
 if (emGeneTable)
     {
     struct track *myTrackList = getTrackListForOneTrack(emGeneTable);
     emGeneTrack = rFindTrackWithTable(emGeneTable, myTrackList);
     }
-if (!emGeneTable || !emGeneTrack) 
+if (!emGeneTable || !emGeneTrack)
     {
     cartRemove(cart, "emGeneTable");
     // It is preferable not to create a complete track list early on,
     //  but now we need one to find the best default emGeneTable and track.
-    initTrackList(); 
+    initTrackList();
     findBestEMGeneTable(trackList);
     }
 }
@@ -7474,6 +7480,30 @@ for (window=windows->next; window; window=window->next)
 	return TRUE;
     }
 return FALSE;
+}
+
+static void setSharedLimitedVisAcrossWindows(struct track *track)
+/* Look for lowest limitedVis across all windows
+ * if found, set all windows to same lowest limited vis. */
+{
+enum trackVisibility sharedVis = 99;
+struct track *tg;
+for (tg=track; tg; tg=tg->nextWindow)
+    {
+    if (tg->limitedVisSet)
+	{
+	if (tg->limitedVis < sharedVis)
+	    sharedVis = tg->limitedVis;
+	}
+    }
+if (sharedVis != 99)
+    {
+    for (tg=track; tg; tg=tg->nextWindow)
+	{
+	tg->limitedVis = sharedVis;
+	tg->limitedVisSet = TRUE;
+	}
+    }
 }
 
 static void setSharedErrorsAcrossWindows(struct track *track)
@@ -7655,7 +7685,7 @@ if (sameString(cfgOptionDefault("trackLog", "off"), "on"))
 /////////////////
 
 // NEED TO LOAD ALL WINDOWS NOW
-// 
+//
 //   Need to load one window at a time!
 //
 //   The use of the global values for a window
@@ -7672,7 +7702,7 @@ if (sameString(cfgOptionDefault("trackLog", "off"), "on"))
 // of subtracks from hide to visible, I am forced to remove the optimization
 // of cloning ONLY non-hidden tracks and subtracks.  If the offending code
 // can be identified and moved into a step proceding the track cloning,
-// then we can return to that optimization. 
+// then we can return to that optimization.
 //	if (track->visibility != tvHide)
 //		if (subtrack->visibility != tvHide)
 
@@ -7683,6 +7713,7 @@ for (window=windows; window->next; window=window->next)
     struct track *newTrackList = NULL;
     for (track = trackList; track != NULL; track = track->next)
 	{
+        isCompositeInAggregate(track); // allow track to recognize its true self
 	track->nextWindow = NULL;
 	//if (track->visibility != tvHide)  // Unable to use this optimization at present
 	    {
@@ -7726,7 +7757,7 @@ trackList = windows->trackList;  // restore original track list
 // Loop over each window loading all tracks
 trackLoadingInProgress = TRUE;
 
-// LOAD OPTIMIZATION HACK GALT 
+// LOAD OPTIMIZATION HACK GALT
 // This is an attempt to try to optimize loading by having multiple regions
 // treated as a single span.  The hack just grabs the dimensions of the first and last windows
 // and uses the loader in the first window to load them, then copies the results to all tracks.
@@ -7739,7 +7770,7 @@ trackLoadingInProgress = TRUE;
 // to handle all of the virtmodes properly, this would have be be done differently.
 // Instead of just lumping them all into a single range, you would have to cluster together
 // ranges that are close together and on the same chromosome.
-// Clearly this was just to test an idea for optimizing. 
+// Clearly this was just to test an idea for optimizing.
 // NOT FINISHED.
 bool loadHack = FALSE; //TRUE;  // probably should only be tried on non-wiggle tracks
 //warn ("loadHack = %d", loadHack); // TODO
@@ -7836,7 +7867,6 @@ for (window=windows; window; window=window->next)
 
     if (ptMax > 0)
 	{
-	// TODO GALT parallel actually not sure if anything to worry about here
 	/* wait for remote parallel load to finish */
 	remoteParallelLoadWait(atoi(cfgOptionDefault("parallelFetch.timeout", "90")));  // wait up to default 90 seconds.
 	if (measureTiming)
@@ -7849,6 +7879,18 @@ trackLoadingInProgress = FALSE;
 setGlobalsFromWindow(windows); // first window // restore globals
 trackList = windows->trackList;  // restore track list
 
+// Some loadItems() calls will have already set limitedVis.
+// Look for lowest limitedVis across all windows
+// if found, set all windows to same lowest limitedVis
+for (track = trackList; track != NULL; track = track->next)
+    {
+    setSharedLimitedVisAcrossWindows(track);
+    struct track *sub;
+    for (sub=track->subtracks; sub; sub=sub->next)
+	{
+	setSharedLimitedVisAcrossWindows(sub);
+	}
+    }
 
 // Look for network errors across all windows
 // if found, set all windows to same errMsg and set bigWarn track handlers.
@@ -7884,7 +7926,7 @@ for (group = groupList; group != NULL; group = group->next)
             {
             boolean isOpen = !isCollapsedGroup(group);
             char buf[1000];
-            safef(buf, sizeof(buf), "<input type='hidden' name=\"%s\" id=\"%s_%d\" value=\"%s\">\n", 
+            safef(buf, sizeof(buf), "<input type='hidden' name=\"%s\" id=\"%s_%d\" value=\"%s\">\n",
 		collapseGroupVar(group->name), collapseGroupVar(group->name), looper, isOpen ? "0" : "1");
             dyStringAppend(looper == 1 ? trackGroupsHidden1 : trackGroupsHidden2, buf);
             }
@@ -7987,7 +8029,7 @@ safef(dbPosKey, sizeof(dbPosKey), "position.%s", database);
 jsonObjectAdd(jsonForClient, "lastDbPos", newJsonString(cartString(cart, dbPosKey)));
 
 // hide chromIdeo
-if ((trackImgOnly && !ideogramToo) 
+if ((trackImgOnly && !ideogramToo)
 || (sameString(virtModeType, "customUrl") && windowsHaveMultipleChroms()) // Special case hide by request
 )
     {
@@ -8002,7 +8044,7 @@ if ((trackImgOnly && !ideogramToo)
 	}
     }
 
-if (trackImgOnly && !ideogramToo) 
+if (trackImgOnly && !ideogramToo)
     {
     makeActiveImage(trackList, psOutput);
     fflush(stdout);
@@ -8155,11 +8197,11 @@ boolean nukeIdeoFromList = FALSE;
 for(window=windows;window;window=window->next)
     {
     setGlobalsFromWindow(window);
-   
+
     if (window == windows) // first window
 	{	
 	/* Make chromosome ideogram gif and map. */
-	nukeIdeoFromList = makeChromIdeoImage(&trackList, psOutput, ideoTn);  
+	nukeIdeoFromList = makeChromIdeoImage(&trackList, psOutput, ideoTn);
 	window->trackList = trackList;  // the variable may have been updated.
 	// TODO make this not just be centered over the entire image,
 	// but rather centered over the individual chromosome.
@@ -8309,7 +8351,7 @@ if (!hideControls)
     hButtonWithMsg("hgTracksConfigPage", "configure","Configure image and track selection");
     hPrintf(" ");
 
-    hButtonWithOnClick("hgTracksConfigMultiRegionPage", 
+    hButtonWithOnClick("hgTracksConfigMultiRegionPage",
 	"multi-region", "Configure multi-region display options", "popUpHgt.hgTracks('multi-region config'); return false;");
     hPrintf(" ");
 
@@ -8400,7 +8442,7 @@ if (!hideControls)
 
             if (isHubTrack(group->name))
 		{
-                if (strstr(group->label, "Composite"))
+                if (strstr(group->label, "Collections"))
                     {
                     safef(idText, sizeof idText, "%s_edit", group->name);
                     hPrintf("<input name=\"hubEditButton\" id='%s'"
@@ -8449,7 +8491,6 @@ if (!hideControls)
 	     * determine if they have visible member tracks */
 	    groupTrackListAddSuper(cart, group);
 
-	    // TODO GALT probably nothing to do here
 	    /* Display track controls */
 	    for (tr = group->trackList; tr != NULL; tr = tr->next)
 		{
@@ -8657,7 +8698,7 @@ if (revCmplDisp)
 if (start)
     {
     virtWinStart += dinkAmount;
-    if (virtWinStart < 0) 
+    if (virtWinStart < 0)
 	virtWinStart = 0;
     }
 else
@@ -8797,9 +8838,9 @@ withPriorityOverride = cartUsualBoolean(cart, configPriorityOverride, FALSE);
 fullInsideX = trackOffsetX();
 fullInsideWidth = tl.picWidth-gfxBorder-fullInsideX;
 }
-    
+
 void parseVirtPosition(char *position)
-/* parse virtual position 
+/* parse virtual position
  *  TODO this is just temporary */
 {
 if (!position)
@@ -8841,7 +8882,7 @@ winEnd = atol(dash+1);
 }
 
 boolean findNearestVirtMatch(char *chrom, int start, int end, boolean findNearest, long *retVirtStart, long *retVirtEnd)
-/* find nearest match on virt chrom. 
+/* find nearest match on virt chrom.
  * findNearest flag means of no direct hits found, take the closest miss. */
 {
 // search for one or more overlapping windows
@@ -8859,7 +8900,7 @@ struct positionMatch *p, *best = NULL;
 long bigSpan = 0;
 for (p=mList; p; p=p->next)
     {
-    long span = p->virtEnd - p->virtStart; 
+    long span = p->virtEnd - p->virtStart;
     if (span > bigSpan)
 	{
 	bigSpan = span;
@@ -8873,7 +8914,7 @@ if (best) // TODO do something better
     *retVirtEnd   = best->virtEnd;
     }
 else
-    { 
+    {
     return FALSE;
     }
 return TRUE;
@@ -8991,38 +9032,38 @@ if (positionIsVirt && virtualSingleChrom())
 
 // TODO GALT do we need to add in other types that now depend on emGeneTable too? maybe singleTrans?
 //   OR maybe this code should just be part of initRegionList()
-if (sameString(virtModeType, "exonMostly") || sameString(virtModeType, "geneMostly")) 
+if (sameString(virtModeType, "exonMostly") || sameString(virtModeType, "geneMostly"))
     {
     setEMGeneTrack();
     if (!emGeneTable) // there is no available gene table, undo exonMostly or geneMostly
 	{
 	//warn("setEMGeneTrack unable to find default gene track");
 	virtModeType = "default";
-	cartSetString(cart, "virtModeType", virtModeType); 
+	cartSetString(cart, "virtModeType", virtModeType);
 	}
     }
 
-lastVirtModeType = cartUsualString(cart, "lastVirtModeType", lastVirtModeType); 
+lastVirtModeType = cartUsualString(cart, "lastVirtModeType", lastVirtModeType);
 
 while(TRUE)
     {
     if (sameString(virtModeType, "default") && !(sameString(lastVirtModeType, "default")))
 	{ // RETURNING TO DEFAULT virtModeType
 	virtModeType = "default";
-	cartSetString(cart, "virtModeType", virtModeType); 
+	cartSetString(cart, "virtModeType", virtModeType);
 	findNearest = TRUE;
 	if (positionIsVirt)
 	    position = cartUsualString(cart, "nonVirtPosition", "");
 	char *nvh = cartUsualString(cart, "nonVirtHighlight", NULL);
 	if (nvh)
-	    cartSetString(cart, "highlight", nvh); 
+	    cartSetString(cart, "highlight", nvh);
 	if (!sameString(position,""))
 	    parseNonVirtPosition(position);
 	}
 
     if (initRegionList())   // initialize the region list, sets virtModeExtraState
 	{
-	break;  
+	break;
 	}
     else
 	{ // virt mode failed, forced to return to default
@@ -9037,7 +9078,7 @@ while(TRUE)
     }
 
 // PAD padding of exon regions is now being done inside the fetch/merge.
-//if (emPadding > 0) 
+//if (emPadding > 0)
     //padVirtRegions(emPadding); // this old routine does not handle multiple chroms yet
 
 //testRegionList(); // check if it is ascending non-overlapping regions. (this is not the case with custom user-defined-regions)
@@ -9047,7 +9088,7 @@ makeVirtChrom();
 //testVirtChromBinarySearch();
 
 // ajax callback to convert chrom position to virt chrom position
-if (cartVarExists(cart, "hgt.convertChromToVirtChrom")) 
+if (cartVarExists(cart, "hgt.convertChromToVirtChrom"))
     {
     position = cartString(cart, "hgt.convertChromToVirtChrom");
     char nvh[256];
@@ -9069,7 +9110,7 @@ if (cartVarExists(cart, "hgt.convertChromToVirtChrom"))
     return;
     }
 
-lastVirtModeExtraState = cartUsualString(cart, "lastVirtModeExtraState", lastVirtModeExtraState); 
+lastVirtModeExtraState = cartUsualString(cart, "lastVirtModeExtraState", lastVirtModeExtraState);
 
 // DISGUISED POSITION
 if (!startsWith("virt:", position) && (virtualSingleChrom()))
@@ -9079,17 +9120,17 @@ if (!startsWith("virt:", position) && (virtualSingleChrom()))
 
      // try to find the nearest match
     if (!(chromName && findNearestVirtMatch(chromName, winStart, winEnd, findNearest, &virtWinStart, &virtWinEnd)))
-	{ // create 1k window near middle of vchrom
-	warn("Unable to find any region near the position on the chromosome in the multi-regions. Now using middle of view.");
+	{ // create 10k window near middle of vchrom
+	warn("Your new regions are not near previous location. Using middle of new coordinates.");
 	virtWinStart = virtSeqBaseCount / 2;
-	virtWinEnd = virtWinStart + 1000;
+	virtWinEnd = virtWinStart + 10000;
 	if (virtWinEnd > virtSeqBaseCount)
 	    virtWinEnd = virtSeqBaseCount;
 	}
     virtMode = TRUE;
     }
 
-// when changing modes (or state like padding), first try to revert to plain non-virt position 
+// when changing modes (or state like padding), first try to revert to plain non-virt position
 if (!sameString(virtModeType, "default")
  && !sameString(lastVirtModeType, "default")
  && !(sameString(virtModeType, lastVirtModeType) && sameString(virtModeExtraState, lastVirtModeExtraState)))
@@ -9097,7 +9138,7 @@ if (!sameString(virtModeType, "default")
     virtChromChanged = TRUE;    // virtChrom changed
     lastVirtModeType = "default";
     cartSetString(cart, "lastVirtModeType", lastVirtModeType); // I think I do not need this
-    lastVirtModeExtraState = ""; 
+    lastVirtModeExtraState = "";
     findNearest = TRUE;
     position = cartUsualString(cart, "nonVirtPosition", "");
     if (!sameString(position,""))
@@ -9105,7 +9146,7 @@ if (!sameString(virtModeType, "default")
     char *nvh = cartUsualString(cart, "nonVirtHighlight", "");
     if (!sameString(nvh, "")) // REMOVE? not needed probably
 	{
-	cartSetString(cart, "highlight", nvh); 
+	cartSetString(cart, "highlight", nvh);
 	}
     }
 
@@ -9129,7 +9170,7 @@ if (sameString(virtModeType, lastVirtModeType)
 		if (!findNearestVirtMatch(chromName, winStart, winEnd, findNearest, &virtWinStart, &virtWinEnd))
 		    {
 		    // errAbort has kind of harsh behavior, and does not work well with ajax anyways
-		    warn("Location not found in Multi-Region View. " 
+		    warn("Location not found in Multi-Region View. "
 		    "To return to default view at that location, "
 		    "click <a href=%s?%s=%s&position=%s:%d-%d&virtModeType=default>here</a>.\n"
 		    , hgTracksName(), cartSessionVarName(), cartSessionId(cart), chromName, winStart+1, winEnd);
@@ -9172,11 +9213,11 @@ else
 	    {
 	    // trying to find best vchrom location corresponding to chromName, winStart, winEnd);
 	    // try to find the nearest match
-	    if (!(chromName && findNearestVirtMatch(chromName, winStart, winEnd, findNearest, &virtWinStart, &virtWinEnd))) 
-		{ // create 1k window near middle of vchrom
-		warn("Unable to find any region near the position on the chromosome in the multi-regions. Now using middle of view.");
+	    if (!(chromName && findNearestVirtMatch(chromName, winStart, winEnd, findNearest, &virtWinStart, &virtWinEnd)))
+		{ // create 10k window near middle of vchrom
+		warn("Your new regions are not near previous location. Using middle of new coordinates.");
 		virtWinStart = virtSeqBaseCount / 2;
-		virtWinEnd = virtWinStart + 1000;
+		virtWinEnd = virtWinStart + 10000;
 		if (virtWinEnd > virtSeqBaseCount)
 		    virtWinEnd = virtSeqBaseCount;
 		}
@@ -9197,7 +9238,7 @@ else
 	    // check if virtRegionCount > 4000?
 	    }
 
-	remapHighlightPos(); 
+	remapHighlightPos();
 
 	}
 
@@ -9206,7 +9247,7 @@ else
 if (virtMode)
     virtChromName = "virt";
 else
-    virtChromName = chromName; 
+    virtChromName = chromName;
 
 virtWinBaseCount = virtWinEnd - virtWinStart;
 
@@ -9309,7 +9350,7 @@ if (!cartUsualBoolean(cart, "hgt.psOutput", FALSE)
 
     // TODO GALT Guidelines broken on virtChrom for 3X.
     //  works in demo0 or real chrom. Only the guidelines seem to be messed up.
-    //  Other stuff works. 1X works too. 
+    //  Other stuff works. 1X works too.
     // Since we are not using 3X for now, I will leave this for a future fix.
     // To test 3X, do make clean; make CFLAGS=-DIMAGEv2_DRAG_SCROLL_SZ=3
 
@@ -9372,25 +9413,24 @@ position = cloneString(newPos);
 cartSetString(cart, "position", position);
 cartSetString(cart, "oldPosition", position);
 //cartSetString(cart, "lastPosition", position);  // this is set in cart.c
-// TODO GALT is it possible and worthwhile to just use lastPosition instead of oldPosition?
 
 cartSetBoolean(cart, "virtMode", virtMode);
-cartSetString(cart, "virtModeType", virtModeType); 
+cartSetString(cart, "virtModeType", virtModeType);
 virtModeType = cartString(cart, "virtModeType"); // refresh the pointer after changing hash
 
 
 lastVirtModeType=virtModeType;
 cartSetString(cart, "lastVirtModeType", lastVirtModeType);
-lastVirtModeType = cartString(cart, "lastVirtModeType"); // refresh 
+lastVirtModeType = cartString(cart, "lastVirtModeType"); // refresh
 
 lastVirtModeExtraState=virtModeExtraState;
 cartSetString(cart, "lastVirtModeExtraState", lastVirtModeExtraState);
-lastVirtModeExtraState = cartString(cart, "lastVirtModeExtraState"); // refresh 
+lastVirtModeExtraState = cartString(cart, "lastVirtModeExtraState"); // refresh
 
 
 // save a quick position to use if user leaves virtMode.
 if (virtMode)
-    cartSetString(cart, "nonVirtPosition", nonVirtPositionFromWindows());  
+    cartSetString(cart, "nonVirtPosition", nonVirtPositionFromWindows());
 else
     cartRemove(cart, "nonVirtPosition");
 
@@ -9399,7 +9439,7 @@ char *nvh = NULL;
 if (virtMode)
    nvh = nonVirtPositionFromHighlightPos();
 if (virtMode && nvh)
-    cartSetString(cart, "nonVirtHighlight", nvh);  
+    cartSetString(cart, "nonVirtHighlight", nvh);
 else
     cartRemove(cart, "nonVirtHighlight");
 
@@ -9458,7 +9498,7 @@ for (chromPtr = chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     unsigned size = hChromSize(database, chromPtr->name);
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
-    printf("<A HREF=\"%s?%s=%s&position=%s\">%s</A>",
+    htmlPrintf("<A HREF=\"%s|none|?%s|url|=%s|url|&position=%s|url|\">%s</A>",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart),
            chromPtr->name, chromPtr->name);
     cgiTableFieldEnd();
@@ -9507,7 +9547,7 @@ for(;count-- && (chromInfo != NULL); chromInfo = chromInfo->next)
     unsigned size = chromInfo->size;
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
-    printf("<A HREF=\"%s?%s=%s&position=%s\">%s</A>",
+    htmlPrintf("<A HREF=\"%s|none|?%s|url|=%s|url|&position=%s|url|\">%s</A>",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart),
            chromInfo->chrom,chromInfo->chrom);
     cgiTableFieldEnd();
@@ -9537,7 +9577,6 @@ else
 	total += chromInfo->size;
 
     unsigned scafCount = seqCount;
-    unsigned totalSize = total;
     cgiTableRowEnd();
     safef(msg1, sizeof(msg1), "contig/scaffold<BR>count:");
     safef(msg2, sizeof(msg2), "total size:");
@@ -9554,7 +9593,7 @@ else
     printLongWithCommas(stdout, scafCount);
     cgiTableFieldEnd();
     cgiSimpleTableFieldStart();
-    printLongWithCommas(stdout, totalSize);
+    printLongWithCommas(stdout, total);
     cgiTableFieldEnd();
     cgiTableRowEnd();
     }
@@ -9597,7 +9636,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     unsigned size = sqlUnsigned(row[1]);
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
-    printf("<A HREF=\"%s?%s=%s&position=%s\">%s</A>",
+    htmlPrintf("<A HREF=\"%s|none|?%s|url|=%s|url|&position=%s|url|\">%s</A>",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart),
            row[0], row[0]);
     cgiTableFieldEnd();
@@ -9629,7 +9668,7 @@ else
     if ((row = sqlNextRow(sr)) != NULL)
 	{
 	unsigned scafCount = sqlUnsigned(row[0]);
-	unsigned totalSize = sqlUnsigned(row[1]);
+	long long totalSize = sqlLongLong(row[1]);
 	cgiTableRowEnd();
 	safef(msg1, sizeof(msg1), "contig/scaffold<BR>count:");
 	safef(msg2, sizeof(msg2), "total size:");
@@ -9787,6 +9826,7 @@ dyStringPrintf(dy,"Mousetrap.bind('d t', function() { $('input[name=\"hgt.reset\
 dyStringPrintf(dy,"Mousetrap.bind('d o', function() { $('input[name=\"hgt.defaultImgOrder\"]').click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('c t', function() { document.customTrackForm.submit();return false; }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('t h', function() { document.trackHubForm.submit();return false; }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('t c', function() { document.editHubForm.submit();return false; }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('r s', function() { $('input[name=\"hgt.setWidth\"]').click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('r f', function() { $('input[name=\"hgt.refresh\"]').click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('r v', function() { $('input[name=\"hgt.toggleRevCmplDisp\"]').click() }); \n");
@@ -9811,6 +9851,9 @@ dyStringPrintf(dy,"Mousetrap.bind('e v', function() { window.location.href='%s?%
 dyStringPrintf(dy,"Mousetrap.bind('d v', function() { window.location.href='%s?%s=%s&virtModeType=default'; });  \n",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart));
 
+dyStringPrintf(dy,"Mousetrap.bind('v s', function() { window.location.href='%s?chromInfoPage=&%s=%s'; });  \n",
+           hgTracksName(), cartSessionVarName(), cartSessionId(cart));
+
 // links to a few tools
 dyStringPrintf(dy,"Mousetrap.bind('t b', function() { $('#blatMenuLink')[0].click()});\n");
 dyStringPrintf(dy,"Mousetrap.bind('t i', function() { $('#ispMenuLink')[0].click()});\n");
@@ -9833,12 +9876,13 @@ hPrintf("<tr><td> left 1/2 screen</td><td class=\"hotkey\">j</td>   <td> default
 hPrintf("<tr><td> left one screen</td><td class=\"hotkey\">J</td>   <td> default order</td><td class=\"hotkey\">d then o</td>              </tr>\n");
 hPrintf("<tr><td> right 10&#37;</td><td class=\"hotkey\">ctrl+l</td><td> hide all</td><td class=\"hotkey\">h then a</td>                   </tr>\n"); // percent sign
 hPrintf("<tr><td> right 1/2 screen</td><td class=\"hotkey\">l</td>  <td> custom tracks</td><td class=\"hotkey\">c then t</td>              </tr>\n");
+hPrintf("<tr><td> right one screen</td><td class=\"hotkey\">L</td>  <td> track collections</td><td class=\"hotkey\">t then c</td>                 </tr>\n");
 hPrintf("<tr><td> right one screen</td><td class=\"hotkey\">L</td>  <td> track hubs</td><td class=\"hotkey\">t then h</td>                 </tr>\n");
-hPrintf("<tr><td> zoom in 1.5x</td><td class=\"hotkey\">ctrl+i</td> <td> configure</td><td class=\"hotkey\">c then f</td>                  </tr>\n"); 
+hPrintf("<tr><td> zoom in 1.5x</td><td class=\"hotkey\">ctrl+i</td> <td> configure</td><td class=\"hotkey\">c then f</td>                  </tr>\n");
 hPrintf("<tr><td> zoom in 3x</td><td class=\"hotkey\">i</td>        <td> reverse</td><td class=\"hotkey\">r then v</td>                    </tr>\n");
 hPrintf("<tr><td> zoom in 10x</td><td class=\"hotkey\">I</td>       <td> resize</td><td class=\"hotkey\">r then s</td>                     </tr>\n");
 hPrintf("<tr><td> zoom in base level</td><td class=\"hotkey\">b</td><td> refresh</td><td class=\"hotkey\">r then f</td>                    </tr>\n");
-hPrintf("<tr><td> zoom out 1.5x</td><td class=\"hotkey\">ctrl+k</td><td> jump to position box</td><td class=\"hotkey\">/</td>              </tr>\n"); 
+hPrintf("<tr><td> zoom out 1.5x</td><td class=\"hotkey\">ctrl+k</td><td> jump to position box</td><td class=\"hotkey\">/</td>              </tr>\n");
 hPrintf("<tr><td> zoom out 3x</td><td class=\"hotkey\">k</td>");
 if (gotExtTools)
     hPrintf("<td>send to external tool</td><td class=\"hotkey\">s then t</td>");
@@ -9853,9 +9897,34 @@ hPrintf("<tr><td> &nbsp;50kbp (4 zeros)</td><td class=\"hotkey\">4</td><td>Tools
 hPrintf("<tr><td> &nbsp;500kbp (5 zeros)</td><td class=\"hotkey\">5</td><td>My Sessions</td><td class='hotkey'>s then s</td></tr>\n");
 hPrintf("<tr><td> &nbsp;5Mbp (6 zeros)</td><td class=\"hotkey\">6</td><td>Public Sessions</td><td class='hotkey'>p then s</td></tr>\n");
 hPrintf("<tr><td>Highlight all (mark)</td><td class=\"hotkey\">h then m</td><td>Clear all Highlights</td><td class='hotkey'>h then c</td></tr>\n");
+hPrintf("<tr><td>View chrom names</td><td class=\"hotkey\">v then s</td><td></td><td class='hotkey'></td></tr>\n");
 hPrintf("</table>\n");
 hPrintf("<img style=\"margin:8px\" src=\"../images/shortcutHelp.png\">");
 hPrintf("</div>\n");
+}
+
+static void checkAddHighlight()
+/* If the cart variable addHighlight is set, merge it into the highlight variable. */
+{
+char *newHighlight = cartOptionalString(cart, "addHighlight");
+if (newHighlight)
+    {
+    char *existing = cartOptionalString(cart, "highlight");
+    if (isNotEmpty(existing))
+        {
+        // Add region only if it is not already in the existing highlight setting.
+        char *alreadyIn = strstr(existing, newHighlight);
+        int len = strlen(newHighlight);
+        if (! (alreadyIn && (alreadyIn[len] == '|' || alreadyIn[len] == '\0')))
+            {
+            struct dyString *dy = dyStringCreate("%s|%s", newHighlight, existing);
+            cartSetString(cart, "highlight", dy->string);
+            }
+        }
+    else
+        cartSetString(cart, "highlight", newHighlight);
+    cartRemove(cart, "addHighlight");
+    }
 }
 
 void doMiddle(struct cart *theCart)
@@ -9912,6 +9981,8 @@ initTl();
 
 char *configPageCall = cartCgiUsualString(cart, "hgTracksConfigPage", "notSet");
 char *configMultiRegionPageCall = cartCgiUsualString(cart, "hgTracksConfigMultiRegionPage", "notSet");
+
+checkAddHighlight();
 
 /* Do main display. */
 
@@ -10053,6 +10124,7 @@ if (cartVarExists(cart, "hgt.convertChromToVirtChrom"))
 
 jsonObjectAdd(jsonForClient, "measureTiming", newJsonBoolean(measureTiming));
 // js code needs to know if a highlightRegion is defined for this db
+checkAddHighlight(); // call again in case tracksDisplay's call to findGenomePos changed vars
 char *highlightDef = cartOptionalString(cart, "highlight");
 if (highlightDef && startsWith(database,highlightDef) && highlightDef[strlen(database)] == '.')
     jsonObjectAdd(jsonForClient, "highlight", newJsonString(highlightDef));

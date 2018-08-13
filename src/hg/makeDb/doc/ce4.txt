@@ -3624,3 +3624,16 @@ printf "%s\t%d\t%d\t%d\t1\t%s\t%d\t%d\t%s\n", $1, $2, $3, NR, $6, $7, $8, $9
     # verify it works on genome-test
 
 #############################################################################
+# cytoBandIdeo - (DONE - 2018-05-09 - Hiram)
+    mkdir /hive/data/genomes/ce4/bed/cytoBand
+    cd /hive/data/genomes/ce4/bed/cytoBand
+    makeCytoBandIdeo.csh ce4
+    # complains about no gaps:
+    awk '{printf "%s\t0\t%d\t\tgneg\n", $1, $2}' ce4.chroms > ce4.cytoBand
+
+    cp -p ~/kent/src/hg/lib/cytoBandIdeo.sql .
+    # edit the index chrom size change from 25 to 6
+
+    hgLoadSqlTab ce4 cytoBandIdeo *.sql *.cytoBand
+
+#########################################################################

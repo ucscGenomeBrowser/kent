@@ -1,4 +1,4 @@
-/* cdwGetFile - given a file ID and a security token, send the file using Apache */
+/* cdwGetFile - given a file ID and a security token (skipped for public cirm site), send the file using Apache */
 
 /* Copyright (C) 2016 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
@@ -6,6 +6,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "hgConfig.h"
 #include "cheapcgi.h"
 #include "sqlSanity.h"
 #include "htmshell.h"
@@ -30,6 +31,7 @@ void errExit(char *msg, char *field)
 /* print http header + message and exit. msg can contain %s */
 {
 printf("Content-Type: text/html\n\n");
+puts("ERROR: ");
 if (!field)
     puts(msg);
 else
@@ -40,6 +42,9 @@ exit(0);
 void mustHaveAccess(struct sqlConnection *conn, struct cdwFile *ef)
 /* exit with error message if user does not have access to file ef */
 {
+boolean isPublic = cfgOptionBooleanDefault("cdw.siteIsPublic", FALSE);
+if (isPublic)
+    return;
 if (cdwCheckAccess(conn, ef, user, cdwAccessRead))
     return;
 else
@@ -136,7 +141,7 @@ char* filePath = cdwPathForFileId(conn, vf->fileId);
 if (addExt != NULL)
     {
     if (! (sameWord(addExt, ".bai") || sameWord(addExt, ".tbi")))
-        errAbort("The addExt argument to cdwGetFile can only be .bai or .tbi. No other values are allowed.");
+        errAbort("ERROR: The addExt argument to cdwGetFile can only be .bai or .tbi. No other values are allowed.");
     if ((endsWith(filePath, ".vcf") || endsWith(filePath, ".VCF")) && sameWord(addExt, ".tbi"))
         // the .tbi files of .vcf files are actually named .vcf.gz.tbi
         filePath = catTwoStrings(filePath, ".gz.tbi");
@@ -161,7 +166,7 @@ if (useSubmitFname)
 else
     {
     char *formatExt = fileExtFromFormat(vf->format);
-    if (sameWord(vf->format, "unknown") && ef && ef->submitFileName && endsWith(ef->submitFileName, ".tar.gz"))
+    if (vf->format && sameWord(vf->format, "unknown") && ef && ef->submitFileName && endsWith(ef->submitFileName, ".tar.gz"))
         formatExt = cloneString(".tar.gz");
     safef(suggestName, sizeof(suggestName), "%s%s%s", vf->licensePlate, formatExt, addExt);
     freez(&formatExt);

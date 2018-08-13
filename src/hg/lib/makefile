@@ -7,7 +7,7 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     affyOffset.o affyPairs.o agp.o agpFrag.o agpGap.o alignSeqSizes.o altGraph.o \
     altGraphX.o ancientRref.o \
     annoFormatVep.o annoGratorGpVar.o annoGrateWigDb.o \
-    annoStreamDb.o annoStreamDbFactorSource.o annoStreamWig.o \
+    annoStreamDb.o annoStreamDbFactorSource.o annoStreamDbPslPlus.o annoStreamWig.o \
     api.o atomDb.o autoUpgrade.o axtInfo.o axtLib.o bactigPos.o hgBam.o \
     barChartBed.o barChartCategory.o barChartUi.o barChartData.o barChartSample.o \
     baseMaskCommon.o bdgpExprLink.o bdgpGeneInfo.o \
@@ -70,7 +70,7 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     hgFindSpec.o hgFindSpecCustom.o hgHgvs.o hgHgvsParse.o \
     hgGene.o hgMaf.o hgRelate.o hgSeq.o hgdpGeo.o hPrint.o hVarSubst.o hvGfx.o \
     HInv.o hubConnect.o hubSearchText.o hui.o humanParalog.o \
-    imageClone.o indelShift.o isochores.o ispyTables.o \
+    imageClone.o indelShift.o interact.o interactUi.o isochores.o ispyTables.o \
     itemAttr.o itemConf.o itemDetailsHtml.o jalview.o \
     jaxOrtholog.o jaxQTL.o jaxQTL3.o jksql.o joiner.o jsHelper.o kg1ToKg2.o \
     jgiGene.o joinMixer.o \
@@ -108,7 +108,7 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     tigrCmrGene.o tigrOperon.o tilingPath.o traceInfo.o trackDb.o \
     trackDbCustom.o trackHub.o trackLayout.o trackTable.o trackVersion.o trashDir.o \
     transRegCode.o transRegCodeCondition.o \
-    transRegCodeProbe.o txCluster.o txCommon.o txEdgeBed.o \
+    transRegCodeProbe.o txAliDiff.o txCluster.o txCommon.o txEdgeBed.o \
     txEdgeOrtho.o txGraph.o txInfo.o txRnaAccs.o ucscRetroInfo.o ucscRetroOrtho.o \
     validateGisaid.o variant.o variantProjector.o vcfUi.o \
     vegaInfo.o vegaInfoZfish.o visiGene.o vntr.o \

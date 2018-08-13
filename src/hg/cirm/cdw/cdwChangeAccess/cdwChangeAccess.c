@@ -20,7 +20,7 @@ errAbort(
   "usage:\n"
   "   cdwChangeAccess code ' boolean query in rql'\n"
   "where code is three letters encode who, direction, and access in the same fashion\n"
-  "more modern versions of the unix chmod functino does.  The who can be either\n"
+  "more modern versions of the unix chmod function does.  The who can be either\n"
   "   a - for all\n"
   "   g - for group\n"
   "   u - for user\n"

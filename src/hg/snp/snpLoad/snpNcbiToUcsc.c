@@ -1959,7 +1959,7 @@ void stripHapSuffix(struct coords *map, char chromBase[], size_t size)
  * strip any _hap or _alt suffix. */
 {
 safecpy(chromBase, size, idChrs[map->chrId]);
-if (strstr(chromBase, "_hap") || endsWith(chromBase, "_alt"))
+if (strstr(chromBase, "_hap") || endsWith(chromBase, "_alt") || endsWith(chromBase, "_fix"))
     {
     char *p = strchr(chromBase, '_');
     *p = '\0';

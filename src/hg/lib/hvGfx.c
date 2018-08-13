@@ -233,4 +233,63 @@ gfxPolyFree(&t1);
 gfxPolyFree(&t2);
 }
 
-
+void hvGfxDottedLine(struct hvGfx *hvg, int x1, int y1, int x2, int y2, Color color, boolean isDash)
+/* Brezenham line algorithm, alternating dots, by 1 pixel or two (isDash true) */
+{   
+int duty_cycle;
+int incy;
+int delta_x, delta_y;
+int dots;
+int dotFreq = (isDash ? 3 : 2);
+delta_y = y2-y1;
+delta_x = x2-x1;
+if (delta_y < 0)  
+    {   
+    delta_y = -delta_y;
+    incy = -1; 
+    }   
+else
+    {   
+    incy = 1;
+    }   
+if (delta_x < 0)  
+    {   
+    delta_x = -delta_x;
+    incy = -incy;
+    x1 = x2; 
+    y1 = y2; 
+    }   
+duty_cycle = (delta_x - delta_y)/2;
+if (delta_x >= delta_y)
+    {   
+    dots = delta_x+1;
+    while (--dots >= 0)
+        {   
+        if (dots % dotFreq)
+            hvGfxDot(hvg,x1,y1,color);
+        duty_cycle -= delta_y;
+        x1 += 1;
+        if (duty_cycle < 0)
+            {   
+            duty_cycle += delta_x;        /* update duty cycle */
+            y1+=incy;
+            }   
+        }   
+    }   
+else
+    {   
+    dots = delta_y+1;
+    while (--dots >= 0)
+        {   
+        if (dots % dotFreq)
+            hvGfxDot(hvg,x1,y1,color);
+        duty_cycle += delta_x;
+        y1+=incy;
+        if (duty_cycle > 0)
+            {   
+            duty_cycle -= delta_y;        /* update duty cycle */
+            x1 += 1;
+            }   
+        }   
+    }   
+}   

@@ -44,7 +44,7 @@ return n - ( n <= '9' ? '0' : ('a'-10) );
 
 
 unsigned char hexToByte(char *hex)
-/* convert byte to hexidecimal characters. 0 <= n <= 255. */
+/* convert hexidecimal characters to unsigned char. */
 {
 unsigned char n = hexToNibble(*hex++);
 n <<= 4;

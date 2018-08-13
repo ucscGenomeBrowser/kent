@@ -28,6 +28,7 @@
 #include "bedDetail.h"
 #include "pgSnp.h"
 #include "barChartBed.h"
+#include "interact.h"
 #include "hubConnect.h"
 #include "errCatch.h"
 
@@ -398,7 +399,7 @@ if (tdbForConn != NULL)
 	       "<A HREF=\"/goldenPath/help/bigWig.html\" TARGET=_BLANK>"
 	       "BigWig</A> format.<BR>\n");
     }
-jpList = joinerRelate(joiner, db, table);
+jpList = joinerRelate(joiner, db, table, NULL);
 
 /* sort and unique list */
 slUniqify(&jpList, joinerPairCmpOnAandB, joinerPairFree);
@@ -619,6 +620,12 @@ else if (sameWord("pgSnp", type))
 else if (sameWord("barChart", type))
     {
     struct asObject *asObj = barChartAsObj();
+    showSchemaWithAsObj(db, table, ct, asObj);
+    asObjectFree(&asObj);
+    }
+else if (sameWord("interact", type))
+    {
+    struct asObject *asObj = interactAsObj();
     showSchemaWithAsObj(db, table, ct, asObj);
     asObjectFree(&asObj);
     }

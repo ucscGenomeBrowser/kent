@@ -74,6 +74,7 @@ UTILS_APPLIST = \
 	encode3/validateManifest \
 	estOrient \
 	featureBits \
+	geneBounds/clusterGenes \
 	genePredHisto \
 	genePredSingleCover \
 	genePredToBed \
@@ -104,6 +105,7 @@ UTILS_APPLIST = \
 	pslRecalcMatch \
 	pslReps \
 	pslSelect \
+	pslSomeRecords \
 	pslSort \
 	pslStats \
 	pslSwap \
@@ -125,6 +127,7 @@ UTIL_DIRS = \
 	agpCloneCheck \
 	agpCloneList \
 	agpAllToFaFile \
+	agpMergeChromScaf \
 	agpToFa \
 	agpToGl \
 	altSplice \

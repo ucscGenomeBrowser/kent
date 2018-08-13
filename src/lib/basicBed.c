@@ -20,6 +20,7 @@
 #include "rangeTree.h"
 #include "binRange.h"
 #include "asParse.h"
+#include "htmlColor.h"
 #include "basicBed.h"
 
 
@@ -1042,6 +1043,21 @@ if ((wordCount != 3) || (!isdigit(row[0][0]) ||
 return ( ((atoi(row[0]) & 0xff) << 16) |
         ((atoi(row[1]) & 0xff) << 8) |
         (atoi(row[2]) & 0xff) );
+}
+
+int bedParseColor(char *colorSpec)
+/* Parse an HTML color string, a  string of 3 comma-sep unsigned color values 0-255, 
+ * or a 6-digit hex string  preceded by #. 
+ * O/w return unsigned integer value.  Return -1 on error */
+{
+if (strchr(colorSpec,','))
+    return bedParseRgb(colorSpec);
+unsigned rgb;
+if (htmlColorForCode(colorSpec, &rgb))
+    return rgb;
+if (htmlColorForName(colorSpec, &rgb))
+    return rgb;
+return sqlUnsigned(colorSpec);
 }
 
 long long bedTotalSize(struct bed *bedList)

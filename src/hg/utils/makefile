@@ -58,6 +58,7 @@ SCRIPT_FILES = \
 	dumpDb.pl \
 	mergeOverlapBed4.pl \
 	mergeSortedBed3Plus.pl \
+	mysqlRowSizes.pl \
 	${USER_APP_SCRIPTS}
 
 APP_SCRIPTS = ${SCRIPT_FILES}
@@ -71,6 +72,8 @@ DIRS = ${buildRefresh} \
 	hgvsToVcf \
 	makeTrackIndex \
 	mysqlSecurityCheck \
+	pslFixCdsJoinGap \
+	pslMismatchGapToBed \
 	pslUniq \
 	refSeqGet \
 	safePush \

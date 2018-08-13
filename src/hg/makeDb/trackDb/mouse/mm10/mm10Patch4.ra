@@ -5,7 +5,8 @@ longLabel GRCm38 patch release 4, alternate sequences and reference sequence pat
 subGroup1 view Views location=Patch/Haplotype psl=Alignment chain=Chain net=Net
 dragAndDrop subTracks
 # sortOrder view=+
-visibility hide
+visibility show
+priority 2
 type bed 4
 noInherit on
 group map

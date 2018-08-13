@@ -195,14 +195,14 @@ struct joinerDtf *dtf;
 for (dtf = fieldList;  dtf != NULL;  dtf = dtf->next)
     {
     if (dtf != fieldList)
-        dyStringAppendC(query, ',');
+        sqlDyStringPrintf(query, ",");
     if (useSplitTable(self, dtf))
-        dyStringPrintf(query, "%s.%s", self->table, dtf->field);
+        sqlDyStringPrintf(query, "%s.%s", self->table, dtf->field);
     else
         {
         char dtfString[PATH_LEN];
         joinerDtfToSqlFieldString(dtf, self->db, dtfString, sizeof(dtfString));
-        dyStringAppend(query, dtfString);
+        sqlDyStringPrintf(query, "%s", dtfString);
         }
     }
 }
@@ -238,6 +238,37 @@ else
     joinerDtfToSqlFieldString(dtf, self->db, fieldName, fieldNameSize);
 }
 
+static void appendJoin(struct annoStreamDb *self, struct joinerPair *routeList,
+                       struct dyString *query)
+/* Append join statement(s) for a possibly tree-structured routeList. */
+{
+struct joinerPair *jp;
+for (jp = routeList;  jp != NULL;  jp = jp->next)
+    {
+    struct joinerField *jfB = joinerSetFindField(jp->identifier, jp->b);
+    if (! jfB->full)
+        dyStringAppend(query, " left");
+    dyStringAppend(query, " join ");
+    if (jp->child)
+        {
+        dyStringAppendC(query, '(');
+        appendOneTable(self, jp->child->a, query);
+        appendJoin(self, jp->child, query);
+        dyStringAppendC(query, ')');
+        }
+    else
+        appendOneTable(self, jp->b, query);
+    char fieldA[PATH_LEN], fieldB[PATH_LEN];
+    splitOrDtfToSqlField(self, jp->a, fieldA, sizeof(fieldA));
+    splitOrDtfToSqlField(self, jp->b, fieldB, sizeof(fieldB));
+    struct joinerField *jfA = joinerSetFindField(jp->identifier, jp->a);
+    if (sameOk(jfA->separator, ","))
+        dyStringPrintf(query, " on find_in_set(%s, %s)", fieldB, fieldA);
+    else
+        dyStringPrintf(query, " on %s = %s", fieldA, fieldB);
+    }
+}
+
 static boolean appendTableList(struct annoStreamDb *self, struct dyString *query)
 /* Append SQL table list to query, including tables used for output, filtering and joining. */
 {
@@ -248,21 +279,8 @@ else
     {
     // Use both a and b of the first pair and only b of each subsequent pair
     appendOneTable(self, self->joinMixer->sqlRouteList->a, query);
-    struct joinerPair *jp;
-    for (jp = self->joinMixer->sqlRouteList;  jp != NULL;  jp = jp->next)
-        {
-        dyStringAppend(query, " left join ");
-        appendOneTable(self, jp->b, query);
-        char fieldA[PATH_LEN], fieldB[PATH_LEN];
-        splitOrDtfToSqlField(self, jp->a, fieldA, sizeof(fieldA));
-        splitOrDtfToSqlField(self, jp->b, fieldB, sizeof(fieldB));
-        struct joinerField *jfA = joinerSetFindField(jp->identifier, jp->a);
-        if (sameOk(jfA->separator, ","))
-            dyStringPrintf(query, " on find_in_set(%s, %s)", fieldB, fieldA);
-        else
-            dyStringPrintf(query, " on %s = %s", fieldA, fieldB);
-        hasLeftJoin = TRUE;
-        }
+    appendJoin(self, self->joinMixer->sqlRouteList, query);
+    hasLeftJoin = TRUE;
     }
 return hasLeftJoin;
 }
@@ -301,6 +319,7 @@ if (self->relatedDtfList)
     int expectedRows = sqlRowCount(self->conn, self->table);
     self->joinMixer = joinMixerNew(self->joiner, self->db, self->table, outputFieldList,
                                    expectedRows, self->naForMissing);
+    joinerPairListToTree(self->joinMixer->sqlRouteList);
     self->sqlRowSize = slCount(self->joinMixer->sqlFieldList);
     self->bigRowSize = self->joinMixer->bigRowSize;
     joinerDtfFreeList(&outputFieldList);
@@ -318,7 +337,7 @@ static void asdUpdateBaselineQuery(struct annoStreamDb *self)
 {
 struct dyString *query = sqlDyStringCreate("select ");
 appendFieldList(self, query);
-dyStringAppend(query, " from ");
+sqlDyStringPrintf(query, " from ");
 self->hasLeftJoin = appendTableList(self, query);
 boolean hasWhere = FALSE;
 self->baselineQuery = dyStringCannibalize(&query);
@@ -350,14 +369,17 @@ static void addRangeToQuery(struct annoStreamDb *self, struct dyString *query,
                             char *chrom, uint start, uint end, boolean hasWhere)
 /* Add position constraints to query. */
 {
-sqlDyStringAppend(query, hasWhere ? " and " : " where ");
+if (hasWhere)
+    sqlDyStringPrintf(query, " and ");
+else
+    sqlDyStringPrintf(query, " where ");
 sqlDyStringPrintf(query, "%s.%s='%s'", self->table, self->chromField, chrom);
 uint chromSize = annoAssemblySeqSize(self->streamer.assembly, chrom);
 boolean addStartConstraint = (start > 0);
 boolean addEndConstraint = (end < chromSize);
 if (addStartConstraint || addEndConstraint)
     {
-    sqlDyStringAppend(query, "and ");
+    sqlDyStringPrintf(query, "and ");
     if (self->hasBin)
         addBinToQuery(self, start, end, query);
     if (addStartConstraint)
@@ -374,7 +396,7 @@ if (addStartConstraint || addEndConstraint)
     if (addEndConstraint)
         {
         if (addStartConstraint)
-            sqlDyStringAppend(query, "and ");
+            sqlDyStringPrintf(query, "and ");
         // Make sure to include insertions at end:
         sqlDyStringPrintf(query, "(%s.%s < %u or (%s.%s = %s.%s and %s.%s = %u)) ",
                           self->table, self->startField, end,

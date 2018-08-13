@@ -17,6 +17,7 @@ UTILS_APPLIST = \
 	axtToPsl \
 	bedCoverage \
 	chainAntiRepeat \
+	chainBridge \
 	chainFilter \
 	chainMergeSort \
 	chainNet \

@@ -257,6 +257,7 @@
 #include "trix.h"
 #include "bPlusTree.h"
 #include "customFactory.h"
+#include "iupac.h"
 
 static char *rootDir = "hgcData";
 
@@ -601,6 +602,17 @@ void writeFramesetType()
 fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Frameset//EN\">\n", stdout);
 }
 
+void htmlFramesetStart(char *title)
+/* Write DOCTYPE HTML and HEAD sections for framesets. */
+{
+/* Print start of HTML. */
+writeFramesetType();
+puts("<HTML>");
+char *meta = getCspMetaHeader();
+printf("<HEAD>\n%s<TITLE>%s</TITLE>\n</HEAD>\n\n", meta, title);
+freeMem(meta);
+}
+
 boolean clipToChrom(int *pStart, int *pEnd)
 /* Clip start/end coordinates to fit in chromosome. */
 {
@@ -806,95 +818,6 @@ printPos(bed->chrom, bed->chromStart, bed->chromEnd, strand, TRUE, bed->name);
 
 }
 
-void interactionPrintPos( struct bed *bed, int bedSize, struct trackDb *tdb)
-/* Print first bedSize fields of a bed type structure in
- * standard format. */
-{
-
-if (bed->blockCount == 2)
-    {
-    printf("<B>Intrachromosomal interaction:</B> <br>\n");
-    printf("<B>Positions:</B><br> ");
-    printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
-           hgTracksPathAndSettings(), database, bed->chrom,
-           bed->chromStarts[0]+bed->chromStart,
-	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0]);
-    printf("%s:%d-%d</A>    \n",
-	   bed->chrom,
-           bed->chromStarts[0]+bed->chromStart,
-	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0]);
-    printf("Size: %d   \n", bed->blockSizes[0]);
-    printBand( bed->chrom, bed->chromStarts[0]+bed->chromStart,
-	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0], FALSE);
-
-    //printf("<BR>\n");
-    printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
-           hgTracksPathAndSettings(), database, bed->chrom,
-           bed->chromStarts[1]+bed->chromStart,
-	   bed->chromStarts[1]+bed->chromStart + bed->blockSizes[1]);
-    printf("%s:%d-%d</A>     \n",
-	   bed->chrom,
-           bed->chromStarts[1]+bed->chromStart,
-	   bed->chromStarts[1]+bed->chromStart + bed->blockSizes[1]);
-    printf("Size: %d   \n", bed->blockSizes[0]);
-    printBand( bed->chrom, bed->chromStarts[0]+bed->chromStart,
-	   bed->chromStarts[1]+bed->chromStart + bed->blockSizes[1], FALSE);
-
-    printf("<BR>\n");
-    printf("<B>Distance apart:</B>\n");
-    printLongWithCommas(stdout,
-	bed->chromStarts[1] - bed->chromStarts[0] + bed->blockSizes[0]);
-
-    printf("bp<BR>\n");
-    }
-else
-    {
-    printf("<B>Interchromosomal interaction:</B> <br>\n");
-    printf("<B>Positions:</B><br> ");
-    printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
-           hgTracksPathAndSettings(), database, bed->chrom,
-           bed->chromStarts[0]+bed->chromStart,
-	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0]);
-    printf("%s:%d-%d</A>    \n",
-	   bed->chrom,
-           bed->chromStarts[0]+bed->chromStart,
-	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0]);
-    printf("Size: %d   \n", bed->blockSizes[0]);
-    printBand( bed->chrom, bed->chromStarts[0]+bed->chromStart,
-	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0], FALSE);
-
-    char buffer[10 * 1024], *otherChrom = buffer;
-    safef(buffer, sizeof buffer, "%s", bed->name);
-    char *ptr;
-    int otherStart, otherEnd;
-
-    if (startsWith(bed->chrom, buffer))
-	{
-	otherChrom = strchr(buffer,'-');
-	otherChrom++;
-	}
-
-    ptr = strchr(otherChrom,':');
-    *ptr++ = 0;
-    otherStart = atoi(ptr);
-    ptr = strchr(ptr,'.');
-    ptr++;
-    ptr++;
-    otherEnd = atoi(ptr);
-    //printf("<BR>\n");
-    printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
-	   hgTracksPathAndSettings(), database, otherChrom,
-	   otherStart, otherEnd);
-    printf("%s:%d-%d</A>     \n",
-	   otherChrom, otherStart, otherEnd);
-    printf("Size: %d   \n", otherEnd - otherStart);
-    printBand( otherChrom, otherStart, otherEnd, FALSE);
-
-    printf("<BR>\n");
-    }
-}
-
-
 void genericHeader(struct trackDb *tdb, char *item)
 /* Put up generic track info. */
 {
@@ -1011,7 +934,7 @@ void printCustomUrlWithLabel(struct trackDb *tdb, char *itemName, char *itemLabe
 char urlLabelSetting[32];
 
 // replace the $$ and other wildchards with the url given in tdb 
-char *url = getUrlSetting(tdb, "url");
+char *url = getUrlSetting(tdb, urlSetting);
 //char* eUrl = constructUrl(tdb, url, itemName, encode);
 if (url==NULL || isEmpty(url))
     return;
@@ -1535,7 +1458,7 @@ int extraFieldsStart(struct trackDb *tdb, int fieldCount, struct asObject *as)
 int start = 0;
 char *type = cloneString(tdb->type);
 char *word = nextWord(&type);
-if (word && (sameWord(word,"bed") || sameWord(word,"bigBed") || sameWord(word,"bigGenePred") || sameWord(word,"bigPsl")))
+if (word && (sameWord(word,"bed") || sameWord(word,"bigBed") || sameWord(word,"bigGenePred") || sameWord(word,"bigPsl")  || sameWord(word,"bigBarChart")))
     {
     if (NULL != (word = nextWord(&type)))
         start = sqlUnsigned(word);
@@ -1590,7 +1513,7 @@ if (as == NULL)
 int start = extraFieldsStart(tdb, fieldCount, as);
 
 struct asColumn *col = as->columnList;
-char *urlsStr = trackDbSetting(tdb, "urls");
+char *urlsStr = trackDbSettingClosestToHomeOrDefault(tdb, "urls", NULL);
 struct hash* fieldToUrl = hashFromString(urlsStr);
 boolean skipEmptyFields = trackDbSettingOn(tdb, "skipEmptyFields");
 
@@ -1713,12 +1636,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
 	htmlHorizontalLine();
     bed = bedLoadN(row+hasBin, bedSize);
-    if ((tdb->type != NULL) && sameString(tdb->type, "interaction"))
-	{
-	interactionPrintPos( bed, bedSize, tdb);
-        }
-    else
-        bedPrintPos(bed, bedSize, tdb);
+    bedPrintPos(bed, bedSize, tdb);
 
     extraFieldsPrint(tdb,sr,row,sqlCountColumns(sr));
 
@@ -4155,20 +4073,6 @@ if (container == NULL && wordCount > 0)
         headerItem = NULL;
     }
 
-// doNcbiRefSeq
-if (sameWord(tdb->table, "ncbiRefSeqOther"))
-    {
-    struct dyString *dy = newDyString(1024);
-    dyStringPrintf(dy, "%s", item);
-
-    struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
-    if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
-        dyStringPrintf(dy, " - Release %s", trackVersion->version);
-
-    cartWebStart(cart, database, "%s (%s)", tdb->longLabel, dyStringCannibalize(&dy));
-    headerItem = cloneString("ncbiRefSeqOther");
-    }
-
 /* Print header. */
 genericHeader(tdb, headerItem);
 
@@ -4337,6 +4241,8 @@ else if (wordCount > 0)
 	doBamDetails(tdb, item);
     else if ( startsWith("longTabix", type))
 	doLongTabix(tdb, item);
+    else if (sameWord("interact", type) || sameWord("bigInteract", type))
+	doInteractDetails(tdb, item);
     }
 if (imagePath)
     {
@@ -5751,7 +5657,7 @@ struct gbWarn *gbWarn = checkGbWarn(conn, acc);
  *
  * Uses the gbSeq table if available, otherwise use seq for older databases.
  */
-sqlDyStringAppend(dy,
+sqlDyStringPrintf(dy,
                "select g.type,g.direction,"
                "so.name,o.name,l.name,m.name,"
                "se.name,t.name,dev.name,ce.name,cd.name,"
@@ -5761,7 +5667,7 @@ sqlDyStringAppend(dy,
 /* If the gbCdnaInfoTAble table has a "version" column then will show it */
 if (hasVersion)
     {
-    dyStringAppend(dy,
+    sqlDyStringPrintf(dy,
                    ", g.version ");
     }
 
@@ -5770,7 +5676,7 @@ sqlDyStringPrintf(dy,
                "%s dev,%s ce,%s cd,%s des,%s a,%s gene,%s p"
                " where g.acc = '%s' and g.id = gbS.id ",
                gbCdnaInfoTable,seqTbl, sourceTable, organismTable, libraryTable, mrnaCloneTable, sexTable, tissueTable, developmentTable, cellTable, cdsTable, descriptionTable, authorTable, geneNameTable, productNameTable,  acc);
-dyStringAppend(dy,
+sqlDyStringPrintf(dy,
                "and g.source = so.id and g.organism = o.id "
                "and g.library = l.id and g.mrnaClone = m.id "
                "and g.sex = se.id and g.tissue = t.id "
@@ -7284,9 +7190,6 @@ int start;
 unsigned int cdsStart = 0, cdsEnd = 0;
 
 
-/* Print start of HTML. */
-writeFramesetType();
-puts("<HTML>");
 aliTable = cartString(cart, "aliTable");
 if (isCustomTrack(aliTable))
     {
@@ -7295,7 +7198,9 @@ if (isCustomTrack(aliTable))
     }
 else
     tdb = hashFindVal(trackHash, aliTable);
-printf("<HEAD>\n<TITLE>%s vs Genomic [%s]</TITLE>\n</HEAD>\n\n", acc, aliTable);
+char title[1024];
+safef(title, sizeof title, "%s vs Genomic [%s]", acc, aliTable);
+htmlFramesetStart(title);
 
 /* Get some environment vars. */
 start = cartInt(cart, "l");
@@ -7348,9 +7253,6 @@ char *aliTable;
 int start;
 unsigned int cdsStart = 0, cdsEnd = 0;
 
-/* Print start of HTML. */
-writeFramesetType();
-puts("<HTML>");
 aliTable = cartString(cart, "aliTable");
 if (isCustomTrack(aliTable))
     {
@@ -7359,7 +7261,9 @@ if (isCustomTrack(aliTable))
     }
 else
     tdb = hashFindVal(trackHash, aliTable);
-printf("<HEAD>\n<TITLE>%s vs Genomic [%s]</TITLE>\n</HEAD>\n\n", acc, aliTable);
+char title[1024];
+safef(title, sizeof title, "%s vs Genomic [%s]", acc, aliTable);
+htmlFramesetStart(title);
 
 /* Get some environment vars. */
 start = cartInt(cart, "l");
@@ -7437,11 +7341,10 @@ char accChopped[512] ;
 safef(accChopped, sizeof(accChopped), "%s",acc);
 chopSuffix(accChopped);
 
-/* Print start of HTML. */
-writeFramesetType();
-puts("<HTML>");
 aliTable = cartString(cart, "aliTable");
-printf("<HEAD>\n<TITLE>%s vs Genomic [%s]</TITLE>\n</HEAD>\n\n", accChopped, aliTable);
+char title[1024];
+safef(title, sizeof title, "%s vs Genomic [%s]", accChopped, aliTable);
+htmlFramesetStart(title);
 
 /* Get some environment vars. */
 start = cartInt(cart, "o");
@@ -7527,11 +7430,9 @@ chopSuffix(accChopped);
 aliTable = cartString(cart, "aliTable");
 start = cartInt(cart, "o");
 
-/* Print start of HTML. */
-writeFramesetType();
-puts("<HTML>");
-printf("<HEAD>\n<TITLE>%s vs Genomic [%s]</TITLE>\n</HEAD>\n\n",
-       accChopped, aliTable);
+char title[1024];
+safef(title, sizeof title, "%s vs Genomic [%s]", accChopped, aliTable);
+htmlFramesetStart(title);
 
 conn = hAllocConn(database);
 getCdsStartAndStop(conn, accChopped, aliTable, &cdsStart, &cdsEnd);
@@ -7692,10 +7593,10 @@ else
     qSeq = loadGenomePart(otherDb, psl->qName, psl->qStart, psl->qEnd);
     safef(name, sizeof name, "%s.%s", otherOrg, psl->qName);
     }
-writeFramesetType();
-puts("<HTML>");
-printf("<HEAD>\n<TITLE>%s %s vs %s %s </TITLE>\n</HEAD>\n\n",
+char title[1024];
+safef(title, sizeof title, "%s %s vs %s %s ",
        (otherOrg == NULL ? "" : otherOrg), psl->qName, org, psl->tName );
+htmlFramesetStart(title);
 showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name, 0, 0);
 }
 
@@ -7749,10 +7650,10 @@ else
     qSeq = loadGenomePart(otherDb, psl->qName, psl->qStart, psl->qEnd);
     safef(name, sizeof name, "%s.%s", otherOrg, psl->qName);
     }
-writeFramesetType();
-puts("<HTML>");
-printf("<HEAD>\n<TITLE>%s %s vs %s %s </TITLE>\n</HEAD>\n\n",
+char title[1024];
+safef(title, sizeof title, "%s %s vs %s %s ",
        (otherOrg == NULL ? "" : otherOrg), psl->qName, org, psl->tName );
+htmlFramesetStart(title);
 /*showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name, 0, 0); */
 showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name, cdsStart, cdsEnd);
 }
@@ -7768,10 +7669,9 @@ int start;
 enum gfType tt, qt;
 boolean isProt;
 
-/* Print start of HTML. */
-writeFramesetType();
-puts("<HTML>");
-printf("<HEAD>\n<TITLE>User Sequence vs Genomic</TITLE>\n</HEAD>\n\n");
+char title[1024];
+safef(title, sizeof title, "User Sequence vs Genomic");
+htmlFramesetStart(title);
 
 start = cartInt(cart, "o");
 parseSs(fileNames, &pslName, &faName, &qName);
@@ -7812,10 +7712,9 @@ char buffer[256];
 int addp = 0;
 char *pred = NULL;
 
-/* Print start of HTML. */
-writeFramesetType();
-puts("<HTML>");
-printf("<HEAD>\n<TITLE>Protein Sequence vs Genomic</TITLE>\n</HEAD>\n\n");
+char title[1024];
+safef(title, sizeof title, "Protein Sequence vs Genomic");
+htmlFramesetStart(title);
 
 addp = cartUsualInt(cart, "addp",0);
 pred = cartUsualString(cart, "pred",NULL);
@@ -7877,10 +7776,9 @@ char query[256], **row;
 char fullTable[64];
 boolean hasBin;
 
-/* Print start of HTML. */
-writeFramesetType();
-puts("<HTML>");
-printf("<HEAD>\n<TITLE>Sequence %s</TITLE>\n</HEAD>\n\n", readName);
+char title[1024];
+safef(title, sizeof title, "Sequence %s", readName);
+htmlFramesetStart(title);
 
 start = cartInt(cart, "o");
 hFindSplitTable(database, seqName, table, fullTable, &hasBin);
@@ -8225,10 +8123,10 @@ char *seqTable = cgiUsualString("seqTable", "illuminaProbesSeq");
 char *probeName = item;
 char *probeString;
 int rowOffset = hOffsetPastBin(database, seqName, pslTable);
-/* Print start of HTML. */
-writeFramesetType();
-puts("<HTML>");
-printf("<HEAD>\n<TITLE>Sequence %s</TITLE>\n</HEAD>\n\n", probeName);
+
+char title[1024];
+safef(title, sizeof title, "Sequence %s", probeName);
+htmlFramesetStart(title);
 start = cartInt(cart, "o");
 /* get psl */
 sqlSafef(query, sizeof(query), "select * from %s where qName = '%s' and tName = '%s' and tStart=%d",
@@ -9031,7 +8929,15 @@ if (sameString(ensemblIdUrl, "http://www.ensembl.org") && archive != NULL)
     safef(ensUrl, sizeof(ensUrl), "http://%s.archive.ensembl.org/%s",
             archive, genomeStrEnsembl);
 else
-    safef(ensUrl, sizeof(ensUrl), "%s/%s", ensemblIdUrl, genomeStrEnsembl);
+    {
+    /* trackDb ensemblIdUrl might be more than just top level URL,
+     * simply take it as given, e.g. criGriChoV1
+     */
+    if (countChars(ensemblIdUrl, '/') > 2)
+      safef(ensUrl, sizeof(ensUrl), "%s", ensemblIdUrl);
+    else
+      safef(ensUrl, sizeof(ensUrl), "%s/%s", ensemblIdUrl, genomeStrEnsembl);
+    }
 
 char query[512];
 char *geneName = NULL;
@@ -10049,7 +9955,125 @@ printCosmicDetails(tdb, item);
 printTrackHtml(tdb);
 }
 
-void printDecipherDetails(struct trackDb *tdb, char *itemName, boolean encode)
+void printDecipherSnvsDetails(struct trackDb *tdb, char *itemName, boolean encode)
+/* Print details of a DECIPHER entry. */
+{
+struct sqlConnection *conn = hAllocConn(database);
+char query[256];
+struct sqlResult *sr;
+char **row;
+char *strand={"+"};
+int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
+char *chrom = cartString(cart, "c");
+
+/* So far, we can just remove "chr" from UCSC chrom names to get DECIPHER names */
+char *decipherChrom = chrom;
+if (startsWithNoCase("chr", decipherChrom))
+    decipherChrom += 3;
+
+printf("<H3>Patient %s </H3>", itemName);
+
+/* print phenotypes and other information, if available */
+if (sqlFieldIndex(conn, "decipherSnvsRaw", "phenotypes") >= 0)
+    {
+    sqlSafef(query, sizeof(query),
+        "select phenotypes, refAllele, altAllele, transcript, gene, genotype, "
+        "inheritance, pathogenicity, contribution "
+        "from decipherSnvsRaw where id = '%s' and chr = '%s' and start = %d and end = %d",
+        itemName, decipherChrom, start+1, end);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if ((row != NULL) && strlen(row[0]) >= 1)
+        {
+        char *phenoString = replaceChars(row[0], "|", "</li>\n<li>");
+        printf("<b>Phenotypes:</b>\n<ul>\n"
+               "<li>%s</li>\n"
+               "</ul>\n", phenoString);
+        // freeMem(phenoString);
+        }
+    if (row != NULL)
+        {
+        char *hgsidString = cartSidUrlString(cart);
+        if (isNotEmpty(row[1]))
+            {
+            printf("<b>Ref Allele:</b> %s\n<br>\n", row[1]);
+            }
+        if (isNotEmpty(row[2]))
+            {
+            printf("<b>Alt Allele:</b> %s\n<br>\n", row[2]);
+            }
+        if (isNotEmpty(row[3]))
+            {
+            printf("<b>Transcript:</b> <a href='../cgi-bin/hgTracks?%s&position=%s'>%s</a>\n<br>\n",
+                hgsidString, row[3], row[3]);
+            }
+        if (isNotEmpty(row[4]))
+            {
+            printf("<b>Gene:</b> <a href='../cgi-bin/hgTracks?%s&position=%s'>%s</a>\n<br>\n",
+                hgsidString, row[4], row[4]);
+            }
+        if (isNotEmpty(row[5]))
+            {
+            printf("<b>Genotype:</b> %s\n<br>\n", row[5]);
+            }
+        if (isNotEmpty(row[6]))
+            {
+            printf("<b>Inheritance:</b> %s\n<br>\n", row[6]);
+            }
+        if (isNotEmpty(row[7]))
+            {
+            printf("<b>Pathogenicity:</b> %s\n<br>\n", row[7]);
+            }
+        if (isNotEmpty(row[8]))
+            {
+            printf("<b>Contribution:</b> %s\n<br>\n", row[8]);
+            }
+        }
+    sqlFreeResult(&sr);
+    }
+else
+    {
+    sqlSafef(query, sizeof(query),
+          "select distinct phenotype from decipherSnvsRaw where id ='%s' order by phenotype", itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if ((row != NULL) && strlen(row[0]) >= 1)
+        {
+        printf("<B>Phenotype: </B><UL>");
+        while (row != NULL)
+            {
+        printf("<LI>");
+        printf("%s\n", row[0]);
+        row = sqlNextRow(sr);
+            }
+        printf("</UL>");
+        }
+    sqlFreeResult(&sr);
+    }
+
+/* link to Ensembl DECIPHER Patient View page */
+printf("<B>Patient View: </B>\n");
+printf("More details on patient %s at ", itemName);
+printf("<A HREF=\"%s%s\" target=_blank>",
+       "https://decipher.sanger.ac.uk/patient/", itemName);
+printf("DECIPHER</A>.<BR><BR>");
+
+/* print position info */
+printPosOnChrom(chrom, start, end, strand, TRUE, itemName);
+
+hFreeConn(&conn);
+}
+
+void doDecipherSnvs(struct trackDb *tdb, char *item, char *itemForUrl)
+/* Put up DECIPHER track info. */
+{
+genericHeader(tdb, item);
+printDecipherSnvsDetails(tdb, item, FALSE);
+printTrackHtml(tdb);
+}
+
+void printDecipherCnvsDetails(struct trackDb *tdb, char *itemName, boolean encode)
 /* Print details of a DECIPHER entry. */
 {
 struct sqlConnection *conn = hAllocConn(database);
@@ -10174,11 +10198,11 @@ hFreeConn(&conn);
 hFreeConn(&conn2);
 }
 
-void doDecipher(struct trackDb *tdb, char *item, char *itemForUrl)
+void doDecipherCnvs(struct trackDb *tdb, char *item, char *itemForUrl)
 /* Put up DECIPHER track info. */
 {
 genericHeader(tdb, item);
-printDecipherDetails(tdb, item, FALSE);
+printDecipherCnvsDetails(tdb, item, FALSE);
 printTrackHtml(tdb);
 }
 
@@ -11834,14 +11858,7 @@ char **row;
 char query[256];
 struct ncbiRefSeqLink *nrl;
 
-struct dyString *dy = newDyString(1024);
-dyStringPrintf(dy, "%s - %s ", tdb->longLabel, itemName);
-
-struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
-if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
-    dyStringPrintf(dy, "- Release %s\n", trackVersion->version);
-
-cartWebStart(cart, database, "%s", dy->string);
+cartWebStart(cart, database, "%s - %s ", tdb->longLabel, itemName);
 
 /* get refLink entry */
 sqlSafef(query, sizeof(query), "select * from ncbiRefSeqLink where id = '%s'", itemName);
@@ -11909,17 +11926,56 @@ if (differentWord(nrl->protAcc, ""))
     printf("<a href='https://www.ncbi.nlm.nih.gov/protein/%s' target=_blank>", nrl->protAcc);
     printf("%s</a><br>\n", nrl->protAcc);
     }
-if (startsWith("MGI", nrl->hgnc))
-    {
-    printf("<b>MGI:</b> "
+
+if (differentWord(nrl->hgnc, ""))
+    {  /* legacy support of mm10 override of hgnc column until this table
+        * is updated on the RR */
+    if (startsWith("MGI", nrl->hgnc))
+        {
+        printf("<b>MGI:</b> "
            "<a href=\"http://www.informatics.jax.org/marker/%s\" target=_blank>%s</a><br>\n",
            nrl->hgnc, nrl->hgnc);
+        }
+    else
+        {
+         printf("<b>HGNC:</b> ");
+         printf("<a href='http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=HGNC:%s' target=_blank>", nrl->hgnc);
+
+         printf("%s</a><br>\n", nrl->hgnc);
+        }
     }
-else if (differentWord(nrl->hgnc, ""))
+
+if (sqlColumnExists(conn, "ncbiRefSeqLink", "externalId"))
     {
-    printf("<b>HGNC:</b> ");
-    printf("<a href='http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=HGNC:%s' target=_blank>", nrl->hgnc);
-    printf("%s</a><br>\n", nrl->hgnc);
+    if (differentWord(nrl->externalId, ""))
+	{
+	char *urlsStr = trackDbSetting(tdb, "dbPrefixUrls");
+	struct hash* dbToUrl = hashFromString(urlsStr);
+	char *labelsStr = trackDbSetting(tdb, "dbPrefixLabels");
+	struct hash* dbToLabel = hashFromString(labelsStr);
+	if (dbToUrl)
+	    {
+	    if (!dbToLabel)
+	        errAbort("can not find trackDb dbPrefixLabels to correspond with dbPrefixUrls\n");
+	    char *databasePrefix = cloneString(database);
+	    while (strlen(databasePrefix) && isdigit(lastChar(databasePrefix)))
+	        trimLastChar(databasePrefix);
+	    struct hashEl *hel = hashLookup(dbToUrl, databasePrefix);
+	    if (hel)
+		{
+		struct hashEl *label = hashLookup(dbToLabel, databasePrefix);
+		if (!label)
+		    errAbort("missing trackDb dbPrefixLabels for database prefix: '%s'\n", databasePrefix);
+		char *url = (char *)hel->val;
+		char *labelStr = (char *)label->val;
+		char *idUrl = replaceInUrl(url, nrl->externalId, cart, database,
+		    nrl->externalId, winStart, winEnd, tdb->track, TRUE);
+		printf("<b>%s:</b> ", labelStr);
+		printf("<a href='%s' target='_blank'>%s</a><br>\n",
+		    idUrl, nrl->externalId);
+                }
+	    }
+	}
     }
 
 if (differentWord(nrl->locusLinkId, ""))
@@ -11941,11 +11997,6 @@ if (differentWord(nrl->name,""))
         printf("%s</a><br>\n", nrl->name);
         }
     }
-if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
-    {
-    printf("<B>Annotation Release:</B> <A href='%s' TARGET=_blank> %s <BR></A>", trackVersion->comment, trackVersion->version);
-    }
-
 htmlHorizontalLine();
 if (differentWord("", nrl->description))
     {
@@ -14187,9 +14238,9 @@ psl = pslTrimToTargetRange(psl, winStart, winEnd);
 
 qSeq = loadGenomePart(otherDb, qChrom, psl->qStart, psl->qEnd);
 snprintf(name, sizeof(name), "%s.%s", otherOrg, qChrom);
-writeFramesetType();
-puts("<HTML>");
-printf("<HEAD>\n<TITLE>%s %dk</TITLE>\n</HEAD>\n\n", name, psl->qStart/1000);
+char title[1024];
+safef(title, sizeof title, "%s %dk", name, psl->qStart/1000);
+htmlFramesetStart(title);
 showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name, 0, 0);
 }
 
@@ -16207,12 +16258,10 @@ char *variation = NULL;
 
 char *line;
 struct lineFile *lf = NULL;
-int lineSize;
 static int maxFlank = 1000;
 static int lineWidth = 100;
 
 boolean gotVar = FALSE;
-boolean isNucleotide = TRUE;
 boolean leftFlankTrimmed = FALSE;
 boolean rightFlankTrimmed = FALSE;
 
@@ -16229,7 +16278,6 @@ struct dnaSeq *dnaSeqDbSnp3 = NULL;
 struct dnaSeq *seqDbSnp = NULL;
 struct dnaSeq *seqNib = NULL;
 
-int spaces = 0;
 int len5 = 0;
 int len3 = 0;
 int start = 0;
@@ -16249,31 +16297,26 @@ if (offset == -1)
 lf = lineFileOpen(fileName, TRUE);
 lineFileSeek(lf, offset, SEEK_SET);
 /* skip the header line */
-lineFileNext(lf, &line, &lineSize);
+lineFileNext(lf, &line, NULL);
 if (!startsWith(">rs", line))
     errAbort("Expected FASTA header, got this line:\n%s\nat offset %lld "
 	     "in file %s", line, (long long)offset, fileName);
 
-while (lineFileNext(lf, &line, &lineSize))
+while (lineFileNext(lf, &line, NULL))
     {
-    spaces = countChars(line, ' ');
     stripString(line, " ");
-    lineSize = lineSize - spaces;
-    if (sameString(line, "N"))
-        isNucleotide = FALSE;
-    else
-        isNucleotide = isAllDna(line, lineSize);
-    if (lineSize > 2 && gotVar)
-        dyStringAppend(seqDbSnp3,line);
-    else if (lineSize > 2 && !gotVar)
-        dyStringAppend(seqDbSnp5,line);
-    else if (lineSize == 2 && !isNucleotide)
+    int len = strlen(line);
+    if (len == 0)
+        break;
+    else if (len == 1 && isIupacAmbiguous(line[0]))
         {
 	gotVar = TRUE;
 	variation = cloneString(line);
 	}
-    else if (lineSize == 1)
-        break;
+    else if (gotVar)
+        dyStringAppend(seqDbSnp3, line);
+    else
+        dyStringAppend(seqDbSnp5, line);
     }
 lineFileClose(&lf);
 
@@ -20275,7 +20318,7 @@ void chuckHtmlStart(char *title)
  * easier maintaince
  */
 {
-printf("<HTML>\n<HEAD>\n");
+printf("<HTML>\n<HEAD>\n%s", getCspMetaHeader());
 // FIXME blueStyle should not be absolute to genome-test and should be called by:
 //       webIncludeResourceFile("blueStyle.css");
 printf("<LINK REL=STYLESHEET TYPE=\"text/css\" href=\"http://genome-test.cse.ucsc.edu/style/blueStyle.css\" title=\"Chuck Style\">\n");
@@ -21150,6 +21193,8 @@ else if (sameWord(type, "bigBed") || sameWord(type, "bigGenePred"))
     bigBedCustomClick(ct->tdb);
 else if (sameWord(type, "bigBarChart") || sameWord(type, "barChart"))
     doBarChartDetails(ct->tdb, item);
+else if (sameWord(type, "bigInteract") || sameWord(type, "interact"))
+    doInteractDetails(ct->tdb, item);
 else if (sameWord(type, "bam"))
     doBamDetails(ct->tdb, itemName);
 else if (sameWord(type, "vcfTabix"))
@@ -21317,6 +21362,7 @@ if (blastRef != NULL)
 		prot = row[1];
 		pos = row[2];
 		}
+	    sqlFreeResult(&sr);
 	    }
         }
     }
@@ -21464,7 +21510,6 @@ for (isClicked = 1; isClicked >= 0; isClicked -= 1)
     printf("</PRE></TT>");
     /* Add description */
     printTrackHtml(tdb);
-    sqlFreeResult(&sr);
     hFreeConn(&conn);
 }
 
@@ -22615,7 +22660,7 @@ else
     sqlSafef(query, sizeof(query), "select * from cutters where name=\'%s\'", getBed);
 cut = cutterLoadByQuery(conn, query);
 bedList = matchEnzymes(cut, winDna, s);
-puts("<HTML>\n<HEAD><TITLE>Enzyme Output</TITLE></HEAD>\n<BODY><PRE><TT>");
+printf("<HTML>\n<HEAD>\n%s<TITLE>Enzyme Output</TITLE></HEAD>\n<BODY><PRE><TT>", getCspMetaHeader());
 for (oneBed = bedList; oneBed != NULL; oneBed = oneBed->next)
     {
     freeMem(oneBed->chrom);
@@ -23050,9 +23095,10 @@ else
     }
 qSeq = loadGenomePart(db, psl->qName, psl->qStart, psl->qEnd);
 safef(name, sizeof name, "%s in %s(%d-%d)", item,psl->qName, psl->qStart, psl->qEnd);
-writeFramesetType();
-puts("<HTML>");
-printf("<HEAD>\n<TITLE>%s %dk</TITLE>\n</HEAD>\n\n", name, psl->qStart/1000);
+
+char title[1024];
+safef(title, sizeof title, "%s %dk", name, psl->qStart/1000);
+htmlFramesetStart(title);
 showSomeAlignment2(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name, item, "", psl->qStart, psl->qEnd);
 }
 
@@ -24202,13 +24248,15 @@ if ((row = sqlNextRow(sr)) != NULL)
         printf("<tr><td>%s</td><td>%s</td><td>%s</td></tr>", all[i], freq[i], score[i]);
         }
     printf("</table>");
-    printPgDbLink(database, tdb, el);
+    if (!trackHubDatabase(database))
+        printPgDbLink(database, tdb, el);
     if (siftTab != NULL)
         printPgSiftPred(database, siftTab, el);
     if (polyTab != NULL)
         printPgPolyphenPred(database, polyTab, el);
     char *genePredTable = "knownGene";
-    printSeqCodDisplay(database, el, genePredTable);
+    if (!trackHubDatabase(database))
+        printSeqCodDisplay(database, el, genePredTable);
     }
 sqlFreeResult(&sr);
 printTrackHtml(tdb);
@@ -25581,7 +25629,11 @@ else if (sameWord(table, "gad"))
     }
 else if (sameWord(table, "decipher"))
     {
-    doDecipher(tdb, item, NULL);
+    doDecipherCnvs(tdb, item, NULL);
+    }
+else if (sameWord(table, "decipherSnvs"))
+    {
+    doDecipherSnvs(tdb, item, NULL);
     }
 else if (sameWord(table, "omimGene"))
     {

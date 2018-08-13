@@ -1,5 +1,6 @@
 # required db variable
 db ficAlb1
+# specific lifting to translate names:
+liftUp /hive/data/genomes/ficAlb1/jkStuff/ensToUcsc.lift
 
-# remove the first .1 from the contig names in the Ensembl GTF file
-nameTranslation "s/\.1//; s/MT/chrM/;"
+# skipInvalid yes

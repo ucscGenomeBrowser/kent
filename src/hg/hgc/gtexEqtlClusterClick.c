@@ -9,6 +9,7 @@
 #include "gtexTissue.h"
 #include "gtexInfo.h"
 #include "gtexEqtlCluster.h"
+#include "gtexUi.h"
 #include "hgc.h"
 
 static struct gtexEqtlCluster *getGtexEqtl(char *item, char *chrom, int start, int end, char *table)
@@ -170,12 +171,15 @@ printf("<br><b>Score:</b> %d\n", eqtl->score);
 
 printEqtlRegion(eqtl, tdb->table, conn);
 printf("<br><b>Number of tissues with this eQTL:</b> %d\n", eqtl->expCount);
+hFreeConn(&conn);
 
 // print link to GTEx portal
 printf("<br><a target='_blank' href='https://www.gtexportal.org/home/bubbleHeatmapPage/%s'>"
         "View eQTL Visualizer for this gene at the GTEx Portal<a>\n", 
                 geneName);
-hFreeConn(&conn);
+
+hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;");
+gtexBodyMapLink();
 
 printClusterDetails(eqtl, tdb->table);
 

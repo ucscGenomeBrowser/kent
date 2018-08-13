@@ -1,7 +1,9 @@
 kentSrc = ../../..
 include ../../../inc/common.mk
 
-HG_WARN = ${HG_WARN_ERR}
+#This was making warnings not happen
+#HG_WARN = ${HG_WARN_ERR}
+
 AUTOSQL = ${DESTBINDIR}/autoSql
 AUTOSQLJSON = ${AUTOSQL} -json
 DIFF = diff -u

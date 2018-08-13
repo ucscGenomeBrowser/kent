@@ -1,0 +1,69 @@
+#!/bin/tcsh -efx
+# hgwdev.
+
+set DBDATE=180404
+set DB=sp$DBDATE
+
+# Set up working directory
+mkdir -p /hive/data/outside/uniProt/$DBDATE/build
+
+# Download uniProt. This will take about 12 hours
+cd /hive/data/outside/uniProt/$DBDATE/build
+wget ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.dat.gz
+# 561,414,525 4.86M/s   in 4m 14s 
+wget ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_trembl.dat.gz
+# 71,962,781,334 9.84M/s   in 6h 17m
+wget ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot_varsplic.fasta.gz
+# 8,226,500   2.01M/s   in 3.9s
+
+# Turn flat file into relational tab-separated files.
+# strip out evidence tags
+zcat *.dat.gz | /cluster/home/jcasper/bin/x86_64/stripEvidence stdin stdout |  /cluster/home/jcasper/bin/x86_64/spToDb stdin ../tabFiles
+
+cd ../tabFiles
+wc -l *.txt | awk '{print $2,$1}' | sort > counts
+cd ../..
+
+#join 150225/tabFiles/counts 160229/tabFiles/counts | awk '{print $1, $3/$2}' | awk '{if (($2 > 2) || ($2 < 0.5)) print}'
+join 170510/tabFiles/counts 180404/tabFiles/counts | awk '{print $1, $3/$2}' | awk '{if (($2 > 2) || ($2 < 0.5)) print}'
+
+# feature.txt 2.33141
+# featureId.txt 3.20125
+
+# Create the database.  
+hgsql mm10 -e "create database sp$DBDATE"
+
+# Load it up with table definitions from source directory
+hgsql sp$DBDATE < ~/kent/src/hg/protein/spToDb/spDb.sql
+
+# Load up the data from tab files.  This takes about an hour.
+set s=`date +%s`
+cd /hive/data/outside/uniProt/$DBDATE/tabFiles
+foreach i (*.txt)
+  hgsqlimport --local sp$DBDATE $i
+end
+
+set e=`date +%s`
+expr $e - $s
+
+# 23006
+
+# Add varsplice info 
+zcat ../build/uniprot_sprot_varsplic.fasta.gz | spDbAddVarSplice sp$DBDATE stdin .
+hgLoadSqlTab sp$DBDATE -notOnServer -append varProtein /dev/null varProtein.txt
+hgLoadSqlTab sp$DBDATE -notOnServer -append protein /dev/null varProtein.txt
+hgLoadSqlTab sp$DBDATE -notOnServer -append varAcc /dev/null varAcc.txt
+hgLoadSqlTab sp$DBDATE -notOnServer -append displayId /dev/null varDisplayId.txt
+hgLoadSqlTab sp$DBDATE -notOnServer -append accToTaxon /dev/null varAccToTaxon.txt
+hgLoadSqlTab sp$DBDATE -notOnServer -append geneLogic /dev/null varGeneLogic.txt
+tawk '{$(NF+1) = "0"; print}' varGene.txt | hgLoadSqlTab sp$DBDATE -notOnServer -append gene /dev/null stdin
+hgLoadSqlTab sp$DBDATE -notOnServer -append description /dev/null varDescription.txt
+
+# Add table descriptions
+makeTableDescriptions sp$DBDATE ~/kent/src/hg/protein/spToDb/spDbTables.as
+
+# Zip up tab files for people who prefer them to database.
+gzip *.txt
+
+# Don't forget to ask the admins to update the database softlink - "uniProt"
+# should go to this newest version of the sp* database.

@@ -6,9 +6,6 @@ html gold
 track gap override
 html gap
 
-track refGene override
-visibility pack
-
 track xenoRefGene override
 visibility pack
 
@@ -25,3 +22,7 @@ searchType genePred
 searchMethod prefix
 termRegex ^(AJFE|JH|chrM)[0-9_]+(\.[0-9]+)?
 searchPriority 50
+
+# change these two to switch to the new refSeqComposite 2018-02
+include trackDb.refGene.ra beta,public
+include ../../refSeqComposite.ra alpha

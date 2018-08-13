@@ -9141,12 +9141,12 @@ http://genome.crg.es/~tderrien/UCSC_Tracks/H.sapiens.genome.hg19.main.mappabilit
     mkdir /hive/data/gbdb/hg19/RNA-img
     cp -p * /hive/data/gbdb/hg19/RNA-img
 
-# tRNAs track (2015-10-04, Chris RE-BUILD WITH UPDATED DATA FROM TODD LOWE) 
+# tRNAs track (2015-10-04, Chris RE-BUILD WITH UPDATED DATA FROM TODD LOWE)
     cd /hive/data/genomes/hg19/bed/tRNAs
     cp /hive/users/pchan/gtrnadb2/Eukaryota/hg19/hg19-tRNAs.bed hg19-tRNAs2.bed
     hgsql hg19 -e 'drop table if exists tRNAs'
     hgLoadBed -tab hg19 tRNAs hg19-tRNAs2.bed -sqlTable=$HOME/kent/src/hg/lib/tRNAs.sql
-    mv gif gif.old 
+    mv gif gif.old
     mkdir gif
     cp -p /hive/users/pchan/gtrnadb2/Eukaryota/hg19/images/* gif
 
@@ -21098,37 +21098,6 @@ retroFinder/trunk/src/pipeline/ucscStep6.sh DEF
 # to /hive/data/genomes/hg19/bed/retro/
 
 ############################################################################
-# HGMD Variants track (updated 2014-11-21 - Max)
-# Got tsv file from Frank.Schacherer@biobase-international.com
-# HGMD seems to use 1-based coordinates
-# for insertions, this will also make 2bp features that go over the insert
-# position
-cd /hive/data/genomes/hg19/bed/hgmd/
-cat << '_EOF_' > hgmd.as
-table Bed8Hgmd
-"Browser extensible data (8 fields) plus information about hgmd mutation"
-    (
-    string chrom;        "Chromosome (or contig, scaffold, etc.)"
-    uint   chromStart;   "Start position in chromosome"
-    uint   chromEnd;     "End position in chromosome"
-    string name;         "Name of item"
-    uint   score;        "not used for HGMD"
-    char[1] strand;    "+ or -"
-    uint   thickStart;   "not used for HGMD"
-    uint   thickEnd;     "not used for HGMD"
-    lstring gene;        "Annotated Gene"
-    lstring accession;   "Accession of Variant"
-    lstring variantType; "Type of Variant"
-    )
-'_EOF_'
-
-# create an extended bigbed file
-cat /hive/data/outside/hgmd/2014.2-hgmd-public.tsv | grep -v \# | tawk '{if ($5=="I") {start=$4-2; end=$4} else {start=$4-1; end=$4} print "chr"$3,start,end,$2":"$1,0,"",start,end,$2,$1,$5}' | sed -e 's/M$/substitution/' | sed -e 's/I$/insertion (between the two basepairs, sequence not provided by HGMD)/' | sed -e 's/D$/deletion (endpoint not provided by HGMD)/' | sed -e 's/X$/insertion-deletion (endpoint not provided by HGMD)/' | sed -e 's/R$/regulatory variant/' | sed -e 's/S$/splicing variant/' | sort -k1,1 -k2,2n > hgmd.bed
-bedToBigBed hgmd.bed /hive/data/genomes/hg19/chrom.sizes hgmd.bb -type=bed4+2 -as=hgmd.as -tab
-ln -s /hive/data/genomes/hg19/bed/hgmd/hgmd.bb /gbdb/hg19/bbi/hgmd.bb
-hgBbiDbLink hg19 hgmd /gbdb/hg19/bbi/hgmd.bb
-
-##############################################################################
 2013-06-02: import of UCSC GENCODE group processing of GENCODE V16 (markd)
     # Due to UCSC Genome Browser using the NC_001807 mitochondrial genome sequence
     # (chrM) and GENCODE annotating the NC_012920 mitochondrial sequence, the
@@ -26610,7 +26579,7 @@ TMPDIR=/dev/shm
 
 #########################################################################
 # NCBI ClinVar (new version -DONE - 2014-11-08 - Max)
-# Note that since Jan 2015, ClinVar is on otto update mode. 
+# Note that since Jan 2015, ClinVar is on otto update mode.
 # for the procedure, see ~/kent/src/hg/utils/otto/clinvar/
 
 mkdir /hive/data/genomes/hg19/bed/clinvar
@@ -26713,10 +26682,9 @@ TMPDIR=/scratch/tmp
 	/hive/data/genomes/hg19/bed/lastzLetCam1.2013-09-19/DEF \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
-XXX - running - Thu Sep 19 15:58:25 PDT 2013
-    #   real    15m22.099s
+    #    Elapsed time: 123m9s
     cat  fb.letCam1.chainHg19Link.txt
-    #	21515660 bases of 647368134 (3.324%) in intersection
+    #	30587683 bases of 853455384 (3.584%) in intersection
 
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/letCam1/bed
@@ -28616,7 +28584,6 @@ done
 
     time sh -x $gp.$mz.jobs > $gp.$mz.job.log 2>&1
     # real    1033m6.639s
-XXXX
 
     rm *.known.bed
     mz=multiz100way
@@ -28755,9 +28722,9 @@ cp clinvarCnv.bb /hive/data/genomes/hg19/bed/clinvar/
 
 _EOF_
 #########################################################################
-# LOCUS REFERENCE GENOMIC (LRG) REGIONS AND TRANSCRIPTS (DONE 9/9/16 angie)
-# Redmine #13359
-# previously done 7/7/14
+# LOCUS REFERENCE GENOMIC (LRG) REGIONS AND TRANSCRIPTS (DONE 5/30/18 angie)
+# Redmine #13359 -- otto-mate To Do #17877
+# previously done 7/7/14, 9/9/16
     screen -S lrg -t lrg
     set today = `date +%Y_%m_%d`
     mkdir -p /hive/data/genomes/hg19/bed/lrg/$today
@@ -28770,14 +28737,18 @@ _EOF_
     # Run script to convert LRG*.xml files to BED+ for regions and genePredExt+fa for transcripts:
     ~/kent/src/hg/utils/automation/parseLrgXml.pl GRCh37
     genePredCheck lrgTranscriptsUnmapped.gp
-#Error: lrgTranscriptsUnmapped.gp:680: LRG_7t1 no exonFrame on CDS exon 46
-#checked: 805 failed: 1
+#Error: lrgTranscriptsUnmapped.gp:765: LRG_7t1 no exonFrame on CDS exon 46
+#checked: 917 failed: 1
     # If there are complaints e.g. about exonFrame, look for inconsistencies in the
     # affected transcript's coding_region/coordinates vs. exon/intron info in xml.
     # Contact Variation team leader Fiona Cunningham @EBI to resolve in the background
     # (missing exonFrame info doesn't affect our track representation because we end up using
     # psl).  We agreed to disagree about exon 46 of LRG_7t1 because that last coding exon
     # portion is only the stop codon.
+
+    # Filter out alts and patches not (yet) included in hg19:
+    mv lrg.bed lrg.allSeqs.bed
+    cut -f 1 ../../../chrom.sizes | grep -Fwf - lrg.allSeqs.bed > lrg.bed
 
     # Load LRG regions:
     bedToBigBed lrg.bed /hive/data/genomes/hg19/chrom.sizes lrg.bb \
@@ -28789,7 +28760,7 @@ _EOF_
     # Map LRG fixed_annotation transcripts from LRG coords to hg19 coords (HT MarkD):
     lrgToPsl lrg.bed /hive/data/genomes/hg19/chrom.sizes lrg.psl
     pslCheck lrg.psl
-#checked: 666 failed: 0 errors: 0
+#checked: 781 failed: 0 errors: 0
     awk '{print $10 "\t" $11;}' lrg.psl > lrg.sizes
     genePredToFakePsl -chromSize=lrg.sizes placeholder \
       lrgTranscriptsUnmapped.gp lrgTranscriptsFakePsl.psl lrgTranscripts.cds
@@ -28802,12 +28773,6 @@ _EOF_
     grep -l NR_ LRG_163.xml LRG_347.xml
 #LRG_163.xml
 #LRG_347.xml
-    # The resulting genePredExt from that process is missing the name2 column from
-    # the original; add it back:
-    cut -f 1,12 lrgTranscriptsUnmapped.gp > txName2
-    join -j 1 -a 1 -t'	' \
-      -o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,1.10,1.11,2.2,1.13,1.14,1.15 \
-      lrgTranscriptsHg19NoName2.gp txName2 > lrgTranscriptsHg19.gp
 
     # Load PSL, CDS and sequences.
     hgLoadPsl hg19 -table=lrgTranscriptAli lrgTranscriptsHg19.psl
@@ -28825,11 +28790,17 @@ _EOF_
     # sophisticated handling of exonFrames and indels.  Also, liftOver carries over exonFrames
     # as-is without regard to strand, so they end up being reversed for LRG's on the - strand.
     # That's why we're using MarkD's method above!
+    # The resulting genePredExt from that process is missing the name2 column from
+    # the original; add it back:
+    cut -f 1,12 lrgTranscriptsUnmapped.gp > txName2
+    join -j 1 -a 1 -t'	' \
+      -o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,1.10,1.11,2.2,1.13,1.14,1.15 \
+      lrgTranscriptsHg19NoName2.gp txName2 > lrgTranscriptsHg19.gp
     # Ignore exonFrames and compare:
     awk '$1 != "#" {print $1;}' noMap
-    cut -f 1-14 lrgTranscriptsHg19.gp > t1
+    cut -f 1-14 lrgTranscriptsHg19.gp | sed -re 's/unk/none/g;' > t1
     cut -f 1-14 lrgTLiftOver.gp > t2
-    diff t1 t2 | awk '{print $1, $2;}'
+    diff t1 t2 | awk '{print $1, $2;}' | uniq
     # Hopefully there won't be differences aside from the ones liftOver couldn't map.
     rm t1 t2
 
@@ -29174,6 +29145,13 @@ pubMap bing load
 
     mkdir /hive/data/genomes/hg19/bed/cnvDevDelay
     cd /hive/data/genomes/hg19/bed/cnvDevDelay
+
+# NOTE FOR NEXT TIME: dbVar reorganized their ftp directories.  Should there be a next time,
+# the files are now at
+# ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/gvf/nstd100.GRCh37.variant_call.gvf.gz
+# ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/gvf/nstd100.GRCh37.variant_region.gvf.gz
+# ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/gvf/nstd54.GRCh37.variant_call.gvf.gz
+# ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/gvf/nstd54.GRCh37.variant_region.gvf.gz
 
 wget --timestamping 'ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd100_Coe_et_al_2014/gvf/nstd100_Coe_et_al_2014.GRCh37.remap.all.germline.ucsc.gvf.gz'
 wget --timestamping 'ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd54_Cooper_et_al_2011/gvf/nstd54_Cooper_et_al_2011.GRCh37.remap.all.germline.ucsc.gvf.gz'
@@ -31414,8 +31392,8 @@ EOF
 
 # first prep the meta data
 cd /hive/data/genomes/hg19/bed/patents/data/
-sort sequence_details.csv -S10G -k7,7 -t$'\t' --parallel=20 > sequence_details.csv.s7 
-sort patent_details -S10G -k1b,1 -t$'\t' --parallel=20 > patent_details.csv.s1 
+sort sequence_details.csv -S10G -k7,7 -t$'\t' --parallel=20 > sequence_details.csv.s7
+sort patent_details -S10G -k1b,1 -t$'\t' --parallel=20 > patent_details.csv.s1
 join -1 7 -2 1 sequence_details.csv.s7 patent_details.csv.s1 -t $'\t' -o '1.1 1.2 1.3 1.4 1.5 1.6 1.7 2.2 2.3 2.4 2.5' > seqAndPatentJoined.tab &
 sort --parallel=40 seqAndPatentJoined.tab -k1,1 -S10G > seqAndPatentJoined.s1.tab
 
@@ -31446,8 +31424,8 @@ time sort -k4,4 -S10G --parallel=20 hg19.bed > hg19.s4.bed
 # convert the hg19 bed to bigBed
 cd /hive/data/genomes/hg19/bed/patents/hg19
 join -t $'\t' -1 4 -2 1 ../data/hg19.s4.bed ../data/seqAndPatentSummary.tab -o '1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 1.10 1.11 1.12 2.2 2.3 2.4 2.5 2.6 2.7 2.8 2.9 2.10 2.11 2.12' | patSeqFilterBulkAndAnnotate ../data/htPatents.txt patBulk.bed patNonBulk.bed -c ../data/seqCounts.tab
-bedSort patNonBulk.bed patNonBulk.bed 
-bedSort patBulk.bed patBulk.bed 
+bedSort patNonBulk.bed patNonBulk.bed
+bedSort patBulk.bed patBulk.bed
 bedToBigBed patNonBulk.bed /cluster/data/genomes/hg19/chrom.sizes patNonBulk.bb -tab -as=../patSummary.as -type=bed12+
 bedToBigBed patBulk.bed /cluster/data/genomes/hg19/chrom.sizes patBulk.bb -tab -as=../patSummary.as -type=bed12+
 hgBbiDbLink hg19 patBulk /gbdb/hg19/bbi/patBulk.bb
@@ -31655,7 +31633,7 @@ EOF
     hgsql hg19snp147 -e 'alter table b147_SNPContigLoc_105 add index (snp_id);'
 
     # Now continue with business as usual at the addToDbSnp step.
-    cd /hive/data/outside/dbSNP/147/human_hg19 
+    cd /hive/data/outside/dbSNP/147/human_hg19
     ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra --continue addToDbSnp >>& do.log &
     tail -f do.log
 
@@ -31936,24 +31914,24 @@ cd /hive/data/outside/cosmic/hg19/v81
 
 # Get the new data
 sftp ceisenha@ucsc.edu@sftp-cancer.sanger.ac.uk
-# Login to SFTP server then run these commands 
+# Login to SFTP server then run these commands
 get /files/grch37/cosmic/v81/CosmicMutantExport.tsv.gz
 
 # Get the schema from V80
-cp ~/kent/src/hg/lib/cosmicNew.as . 
+cp ~/kent/src/hg/lib/cosmicNew.as .
 
-# Remove the 'NS' fields, search for the \t after to exclude the E'NS'ST transcripts. 
+# Remove the 'NS' fields, search for the \t after to exclude the E'NS'ST transcripts.
 zcat CosmicMutantExport.tsv.gz | sed 's/NS\t/\t/g' > cosMut.tsv
 
 # Use a script to convert to bed format.
 cosmicToBed cosMut.tsv cosMut.bed
-# This many lines were skipped, 126756, for not having genomic coordinates. 
+# This many lines were skipped, 126756, for not having genomic coordinates.
 
-# Sort and convert to big bed using the .as file.  
-sort -k1,1 -k2,2n cosMut.bed > sCosMut.bed 
+# Sort and convert to big bed using the .as file.
+sort -k1,1 -k2,2n cosMut.bed > sCosMut.bed
 bedToBigBed -type=bed4+31 -as=cosmicNew.as sCosMut.bed /hive/data/genomes/hg19/chrom.sizes cosMutHg19V80.bb -tab
 
-# Link it up so the outside world can see it. 
+# Link it up so the outside world can see it.
 cd /gbdb/hg19/cosmic/
 ln -s /hive/data/outside/cosmic/hg19/v81/cosMutHg19V81.bb .
 
@@ -32033,16 +32011,16 @@ TMPDIR=/dev/shm
     # real    279m26.262s
 
 #############################################################################
-# Interactions track, 
+# Interactions track,
 cd /hive/data/genomes/hg19/bed/interactions/
 
 # convert the protein interaction databases
 cd ppi
 
 cd iref
-# sorry don't know how exactly I downloaded this file. 
+# sorry don't know how exactly I downloaded this file.
 # they are available on http://irefindex.org/wiki/index.php?title=README_MITAB2.6_for_iRefIndex
-psiMtabToTab iref 9606.mitab.08122013.txt > ../iref.tab 
+psiMtabToTab iref 9606.mitab.08122013.txt > ../iref.tab
 cat All.mitab.08122013.txt | cut -f9 | sed -e 's/pubmed://g' | tr '|' '\n' | grep -v pmids | grep -v ^-$ | uniq | sort | uniq > allPmids.txt
 
 cd ../argdb
@@ -32101,7 +32079,7 @@ mysql hg19 -NBe 'select distinct name, name2 from wgEncodeGencodePseudoGeneV19' 
 bedBestTranscript -m gencodePseudo19.bed gencodePseudo19.names.tab > gencodePseudo19.best.bed
 
 # now take the first line for each gene from all files, in this order
-bedNamePickFirst gencode19.best.bed refGene.best.bed gencodeComp19.best.bed knownCanon.best.bed gencodePseudo19.bed | cut -f-4 | bedSort stdin stdout > bestGenes.hg19.bed 
+bedNamePickFirst gencode19.best.bed refGene.best.bed gencodeComp19.best.bed knownCanon.best.bed gencodePseudo19.bed | cut -f-4 | bedSort stdin stdout > bestGenes.hg19.bed
 
 # == END GENE LOCATIONS ==
 
@@ -32275,10 +32253,10 @@ wget http://www.snpedia.com/files/gbrowse/SNPedia.gff
 python download.py
 python filterPages.py > goodPages.txt
 python makeBed.py
-hgLoadBed hg19 snpedia snpedia.bed 
-hgLoadSqlTab hg19 snpediaHtml snpediaHtml.sql snpedia.htmlTab 
+hgLoadBed hg19 snpedia snpedia.bed
+hgLoadSqlTab hg19 snpediaHtml snpediaHtml.sql snpedia.htmlTab
 ##############################################################################
-# Gtex transcript track hg38->hg19 coordinate conversion (DONE - 2017-07-27 - Chris) 
+# Gtex transcript track hg38->hg19 coordinate conversion (DONE - 2017-07-27 - Chris)
 mkdir /hive/data/outside/gtex/barChartTrack/hg19backLift
 cd /hive/data/outside/gtex/barChartTrack/hg19backLift
 
@@ -32293,7 +32271,7 @@ cut -f 4 sortedGtexTransExp.bed > foo6
 cut -f 5- sortedGtexTransExp.bed > foo7
 paste foo6 foo5 > foo8
 paste foo8 foo7 > foo9
- 
+
 
 join <(sort foo4) <(sort foo9) > foo10
 
@@ -32301,7 +32279,7 @@ cat foo10 | awk '{print $4"\t"$2"\t"$3"\t"$1"\t"$8"\t"$9"\t"$10"\t"$11"\t"$12"\t
 
 # Copy over the header line from sortedGtexTransExp.bed
 
-# Sort and convert into a bigBed file. 
+# Sort and convert into a bigBed file.
 sort -k1,1 -k2,2n foo11 > sortedGtexTransExpHg19.bed
 bedToBigBed -as=$HOME/kent/src/hg/lib/barChartTranscExp.as -type=bed6+5 sortedGtexTransExpHg19.bed /hive/data/genomes/hg19/chrom.sizes gtexTranscExprHg19.bb
 
@@ -32311,8 +32289,8 @@ cd /gbdb/hg19/gtex
 ln -s /hive/data/outside/gtex/barChartTrack/hg19backLift/gtexTranscExprHg19.bb gtexTranscExpr.bb
 
 ##############################################################################
-# cosmicRegions (DONE - 2017-08-03 - Chris)  
-# Make a new COSCMIC track for hg19 v82 
+# cosmicRegions (DONE - 2017-08-03 - Chris)
+# Make a new COSCMIC track for hg19 v82
 mkdir /hive/data/outside/cosmic/hg19/v82
 cd /hive/data/outside/cosmic/hg19/v82
 
@@ -32322,24 +32300,24 @@ sftp ceisenha@ucsc.edu@sftp-cancer.sanger.ac.uk
 get /files/grch37/cosmic/v82/CosmicMutantExport.tsv.gz
 
 # Get the schema from V81
-cp ../v81/cosmicNew.as . 
+cp ../v81/cosmicNew.as .
 
-# Remove the 'NS' fields, search for the \t after to exclude the E'NS'ST transcripts. 
+# Remove the 'NS' fields, search for the \t after to exclude the E'NS'ST transcripts.
 zcat CosmicMutantExport.tsv.gz | sed 's/NS\t/\t/g' > cosMut.tsv
 
 # Use a script to convert to bed format.
 cosmicToBed cosMut.tsv cosMut.bed
 # This many lines were skipped, 128966 for not having genomic coordinate
 
-# Sort and convert to big bed using the .as file.  
-sort -k1,1 -k2,2n cosMut.bed > sCosMut.bed 
+# Sort and convert to big bed using the .as file.
+sort -k1,1 -k2,2n cosMut.bed > sCosMut.bed
 bedToBigBed -type=bed8+31 -as=cosmicNew.as sCosMut.bed /hive/data/genomes/hg19/chrom.sizes cosMutHg19V82.bb -tab -extraIndex=name,cosmLabel
 
-# Link it up so the outside world can see it. 
+# Link it up so the outside world can see it.
 cd /gbdb/hg19/cosmic/
 ln -s /hive/data/outside/cosmic/hg19/v82/cosMutHg19V82.bb .
 ##############################################################################
-# snpedia (DONE - 2017-09-06 - Max)  
+# snpedia (DONE - 2017-09-06 - Max)
 # see ../hg38/snpedia.txt
 ##############################################################################
 2017-09-14: import of UCSC GENCODE group processing of GENCODE V27lift37 (markd)
@@ -32587,7 +32565,489 @@ chr21   45650008        45650008        rs145424134     8       ENSG00000160223.
 csh $bin/getxEqtlLoadTissues.csh UCSC_output >&! loadTissuesV2.log &
 
 #NOTE: V2 was a second release that followed immediately after first release (which was timed to coincide
-#  with Nature paper pub.  V2 revised schema (added ensembl gene ID, additional summary fields) 
+#  with Nature paper pub.  V2 revised schema (added ensembl gene ID, additional summary fields)
 # and color conventions.
 
 ###########################################################################
+# HGMD (updated 01/25/18 max)
+# got hgmd 2017 from Frank Schacherer Frank.Schacherer@qiagen.com and Rupert Yip Rupert.Yip@qiagen.com
+# see also the file hg38/hgmd.txt
+cd /hive/data/genomes/hg19/bed/hgmd
+cat /hive/data/outside/hgmd/2017.4-hgmd-public.tsv | grep -v \# | tawk '{if ($5=="I") {start=$4-1; end=$4+1; col="100,100,100"} else if ($5=="D") {start=$4-1; end=$4; col="170,170,170"} else {start=$4-1; end=$4; col="0,0,0"}; print "chr"$3,start,end,$2":"$1,0,".",start,end,col,$2,$1,$5}' | sed -e 's/M$/substitution/' | sed -e 's/I$/insertion (between the two basepairs, sequence not provided by HGMD)/' | sed -e 's/D$/deletion (endpoint not provided by HGMD)/' | sed -e 's/X$/insertion-deletion (endpoint not provided by HGMD)/' | sed -e 's/R$/regulatory variant/' | sed -e 's/S$/splicing variant/' | sort -k1,1 -k2,2n > hgmd.bed
+bedToBigBed hgmd.bed /hive/data/genomes/hg19/chrom.sizes hgmd.bb -type=bed9+ -as=hgmd.as -tab
+ln -s /hive/data/genomes/hg19/bed/hgmd/hgmd.bb /gbdb/hg19/bbi/hgmd.bb
+hgBbiDbLink hg19 hgmd /gbdb/hg19/bbi/hgmd.bb
+
+###########################################################################
+2018-03-08: update UCSC GENCODE V19 to include protein id (for VAI)
+
+cd /hive/data/genomes/hg19/bed/gencodeV19/
+# move tables that need to be rebuilt
+mkdir -p prev/pre-proteinId
+mv tables/wgEncodeGencodeAttrsV19.tab tables/wgEncodeGencodeTagV19.tab prev/pre-proteinId/
+mv loaded/wgEncodeGencodeAttrsV19.tab.loaded loaded/wgEncodeGencodeTagV19.tab.loaded prev/pre-proteinId/
+
+
+# V19 didn't have protein ids in GTF, need to get from ensembl database
+ cd ~/hive/tmp
+ ftp://ftp.ensembl.org/pub/release-74/mysql/homo_sapiens_core_74_37/homo_sapiens_core_74_37.sql.gz
+ ftp://ftp.ensembl.org/pub/release-74/mysql/homo_sapiens_core_74_37/transcript.txt.gz
+ ftp://ftp.ensembl.org/pub/release-74/mysql/homo_sapiens_core_74_37/translation.txt.gz
+
+ # load small subset
+ hgsql -e 'create database markd_ens'
+ zcat homo_sapiens_core_74_37.sql.gz |hgsql markd_ens
+ gunzip trans*
+ hgsqlimport markd_ens $(pwd)/transcript.txt $(pwd)/translation.txt
+ # add proteinId column to wgEncodeGencodeAttrsV19
+ hgsql
+ CREATE table markd_ens.trans_prot
+ SELECT concat(trans.stable_id, ".", CAST(trans.version AS CHAR)) transcriptId,
+        concat(prot.stable_id,  ".", CAST(prot.version AS CHAR)) proteinId
+     FROM markd_ens.transcript trans, markd_ens.translation prot
+     WHERE prot.transcript_id = trans.transcript_id;
+  CREATE INDEX transcriptId ON markd_ens.trans_prot(transcriptId);
+  UPDATE hg19.wgEncodeGencodeAttrsV19 as attr
+  INNER JOIN markd_ens.trans_prot as tp  ON attr.transcriptId = tp.transcriptId
+  SET attr.proteinId = tp.proteinId;
+  SELECT count(*) FROM wgEncodeGencodeAttrsV19 WHERE transcriptClass="coding" AND proteinId = "";
+  -> 0 !!! got them all
+  DROP DATABASE markd_ens;
+
+# 2018-03-19: update search to include protein id
+edit kent/src/hg/makeDb/trackDb/human/hg19/wgEncodeGencodeV19.ra
+
+#############################################################################
+# LASTZ human/hg19 vs. pig/susScr11 - (DONE - 2018-04-02 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzSusScr11.2018-04-02
+    cd /hive/data/genomes/hg19/bed/lastzSusScr11.2018-04-02
+
+    printf '# human vs pig
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_M=254
+# default BLASTZ_Q score matrix:
+#       A     C     G     T
+# A    91  -114   -31  -123
+# C  -114   100  -125   -31
+# G   -31  -125   100  -114
+# T  -123   -31  -114    91
+
+# TARGET: Human hg19
+SEQ1_DIR=/hive/data/genomes/hg19/hg19.2bit
+SEQ1_LEN=/hive/data/genomes/hg19/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: pig susScr11
+SEQ2_DIR=/hive/data/genomes/susScr11/susScr11.2bit
+SEQ2_LEN=/hive/data/genomes/susScr11/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=2
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzSusScr11.2018-04-02
+TMPDIR=/dev/shm
+'> DEF
+
+    time ($HOME/kent/src/hg/utils/automation/bigBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -trackHub -syntenicNet) > do.log 2>&1
+    # real    638m46.019s
+
+    cat fb.hg19.chainSusScr11Link.txt
+    # 1427668193 bases of 2897316137 (49.276%) in intersection
+    cat fb.hg19.chainSynSusScr11Link.txt
+    # 1375005074 bases of 2897316137 (47.458%) in intersection
+
+    # testing -trackHub option
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	-trackHub hg19 susScr11) > rbest.log 2>&1 &
+    # real    691m17.717s
+
+    cat fb.hg19.chainRBest.SusScr11.txt
+    # 1342171392 bases of 2897316137 (46.325%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/susScr11/bed/blastz.hg19.swap
+    cd /hive/data/genomes/susScr11/bed/blastz.hg19.swap
+
+    # testing -trackHub option
+    time ($HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg19/bed/lastzSusScr11.2018-04-02/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -trackHub -syntenicNet) > swap.log 2>&1
+    #  real    107m7.364s
+
+    cat fb.susScr11.chainHg19Link.txt
+    # 1386496715 bases of 2472073034 (56.086%) in intersection
+    cat fb.susScr11.chainSynHg19Link.txt
+    # 1353158526 bases of 2472073034 (54.738%) in intersection
+
+    # testing -trackHub option
+    time ($HOME/kent/src/hg/utils/automation/doRecipBest.pl \
+ -load -trackHub -workhorse=hgwdev -buildDir=`pwd` susScr11 hg19) \
+	> rbest.log 2>&1
+    # real    610m45.624s
+
+    cat fb.susScr11.chainRBest.Hg19.txt
+    # 1342604720 bases of 2472073034 (54.311%) in intersection
+
+#########################################################################
+2018-04-17: import of UCSC GENCODE group processing of GENCODE V28lift37 (markd)
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV28lift37
+    pushd /hive/data/genomes/hg19/bed/gencodeV28lift37
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg19 28lift37 92 'Apr 2018'
+
+    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release. [ONLY if it's going to be pushed]
+
+    # edit human/hg19/trackDb.wgEncode.ra to add new .ra file include
+    make DBS=hg19
+
+    # edit  all.joiner to add ~/tmp/gencodeV28lift37.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg19/bed/gencodeV28lift37
+    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # commit all
+
+    # 2018-05-01 markd
+    # fix bug in wgEncodeGencodeEntrezGeneV28lift37 with change in gencodeLoad.mk.  Reload the table.
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV28lift37
+    rm tables/wgEncodeGencodeEntrezGeneV28lift37.tab 
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.3.out&
+                                                                                 
+
+#########################################################################
+# DBSNP B151 / SNP151 (DONE 4/16/18 angie)
+    # Redmine #21010
+    mkdir -p /hive/data/outside/dbSNP/151/human_hg19
+    cd /hive/data/outside/dbSNP/151/human_hg19
+    # Look at the directory listing of ftp://ftp.ncbi.nih.gov/snp/organisms/
+    # to find the subdir name to use as orgDir below (human_9606_b151_GRCh37p13 in this case).
+    # Go to that subdirectory, then to database/organism_data/ and look for files
+    # whose names start with b151_* and may or may not end with a suffix that identifies
+    # the build assembly version or some annotation version.  If there is a suffix shared
+    # by all b151_* files, add that to config.ra as the "buildAssembly".
+    # Since this build is on GRCh37.p13 like b144 above, use the liftUp.lft file
+    # and ignoreDbSnpContigsFile constructed for b144.
+    cat > config.ra <<EOF
+db hg19
+orgDir human_9606_b151_GRCh37p13
+build 151
+buildAssembly 105
+liftUp ../../144/human_hg19/liftUp.lft
+refAssemblyLabel GRCh37.p13
+ignoreDbSnpContigsFile ../../144/human_hg19/patchContigs.txt
+EOF
+    # dbSNP does not make a complete set of download files for hg19 anymore, so
+    # do a "debug" run and link some files from hg38 before running the script.
+    # (hard link so wget doesn't get confused)
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -debug
+    ln ../human_hg38/data/{S*,B*} data/
+    # Edit the download script: put if(0) around download files that dbSNP doesn't dump.
+    vi ../download_human_hg19_151.csh
+    # Run the edited script manually:
+    csh -efx ../download_human_hg19_151.csh >& do.log & tail -f do.log
+    # Now continue the usual way at the next step after download:
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue loadDbSnp >>& do.log &
+    tail -f do.log
+
+    # While that's running, compare rs IDs in rs_fasta with b147_SNPContigLoc_105 to see
+    # which IDs (if any) were omitted from the rs_fasta dump.
+    zcat rs_fasta/rs*.fas.gz \
+    | perl -wne 'if (/^>/) { s/^>gnl\|dbSNP\|(rs\d+) .*/$1/ || die; print; }' \
+    | sort -u > rsFastaIds.txt
+    zcat data/b151_SNPContigLoc_105.bcp.gz \
+    | awk '{print "rs" $2;}' \
+    | sort -u > contigLocIds.txt
+    wc -l rsFastaIds.txt contigLocIds.txt
+#  611582085 rsFastaIds.txt
+#  648992551 contigLocIds.txt
+    comm -13 rsFastaIds.txt contigLocIds.txt > missingFromRsFasta.txt
+    wc -l missingFromRsFasta.txt
+#49191042 missingFromRsFasta.txt
+    # Doh!  Way too many for a batch request.  So weird... hg19 rs_fasta download files
+    # are dated more recently (March 4-6) than hg38 (Feb 22-24).
+    # Looks like I should use the hg38 fasta, it has only 45 missing (see hg38/variation.txt):
+    comm -13 ../human_hg38/rsFastaIds.txt contigLocIds.txt | wc -l
+#45
+    mv rs_fasta rs_fasta_missing_49M
+    mkdir rs_fasta
+    ln ../human_hg38/rs_fasta/* rs_fasta
+    tail -f do.log
+    # A mysql load command in the loadDbSnp step failed, so I edited loadDbSnp.csh to continue
+    # from the failed command.
+    csh -efx loadDbSnp.csh >> & do.log & tail -f do.log
+    # Continue from next step:
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue addToDbSnp >>& do.log &
+    tail -f do.log
+    # Yay, script completed:
+# *** All done!  (through the 'bigBed' step)
+
+
+##############################################################################
+# SNP151 ORTHOLOGOUS ALLELES IN CHIMP, ORANG, MACAQUE (DONE 4/18/18 angie)
+    # Redmine #21010
+    screen -S ortho -t ortho
+    ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg19 151 -debug
+# *** Steps were performed in /hive/data/genomes/hg19/bed/snp151Ortho.2018-04-17
+    cd /hive/data/genomes/hg19/bed/snp151Ortho.2018-04-17
+    ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg19 151 \
+      >>& do.log & tail -f do.log
+# *** All done!
+
+
+##############################################################################
+# SNPMASKED SEQUENCE FOR SNP151 (DONE 4/17/18 angie)
+    # Redmine #21010
+    screen -S mask -t mask
+    ~/kent/src/hg/utils/automation/doDbSnpMaskSequence.pl hg19 151 -debug
+# *** Steps were performed in /hive/data/genomes/hg19/snp151Mask.2018-04-17
+    cd /hive/data/genomes/hg19/snp151Mask.2018-04-17
+    ~/kent/src/hg/utils/automation/doDbSnpMaskSequence.pl hg19 151 \
+      >>& do.log & tail -f do.log
+# *** All done!
+
+
+##############################################################################
+# LASTZ human/hg19 vs. pig/panPan2 - (DONE - 2018-05-01 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzPanPan2.2018-05-01
+    cd /hive/data/genomes/hg19/bed/lastzPanPan2.2018-05-01
+
+    printf '# human vs bonobo
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_M=254
+# default BLASTZ_Q score matrix:
+#       A     C     G     T
+# A    91  -114   -31  -123
+# C  -114   100  -125   -31
+# G   -31  -125   100  -114
+# T  -123   -31  -114    91
+
+# TARGET: Human hg19
+SEQ1_DIR=/hive/data/genomes/hg19/hg19.2bit
+SEQ1_LEN=/hive/data/genomes/hg19/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: bonobo panPan2
+SEQ2_DIR=/hive/data/genomes/panPan2/panPan2.2bit
+SEQ2_LEN=/hive/data/genomes/panPan2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzPanPan2.2018-05-01
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -trackHub -syntenicNet) > do.log 2>&1
+    # real    638m46.019s
+
+    cat fb.hg19.chainPanPan2Link.txt
+    # 2771380606 bases of 2897316137 (95.653%) in intersection
+    cat fb.hg19.chainSynPanPan2Link.txt
+    # 2730967003 bases of 2897316137 (94.259%) in intersection
+
+    # testing -trackHub option
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	hg19 panPan2) > rbest.log 2>&1 &
+    # real    157m46.388s
+
+    cat fb.hg19.chainRBest.PanPan2.txt
+    # 2657287479 bases of 2897316137 (91.715%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/panPan2/bed/blastz.hg19.swap
+    cd /hive/data/genomes/panPan2/bed/blastz.hg19.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg19/bed/lastzPanPan2.2018-05-01/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -trackHub -syntenicNet) > swap.log 2>&1
+    #  real    181m44.494s
+
+    cat fb.panPan2.chainHg19Link.txt
+    # 2671932133 bases of 2725937399 (98.019%) in intersection
+    cat fb.panPan2.chainSynHg19Link.txt
+    # 2657217983 bases of 2725937399 (97.479%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev \
+	-buildDir=`pwd` panPan2 hg19) > rbest.log 2>&1
+    # real    132m52.206s
+
+    cat fb.panPan2.chainRBest.Hg19.txt
+    # 2661021780 bases of 2725937399 (97.619%) in intersection
+
+##############################################################################
+# GNOMAD VARIANTS AND COVERAGE PLOTS (DONE - 2018-05-09 - Jonathan)
+# (Amended to add exome parsing 2018-06-18)
+# Redmine #18951
+
+# Fetch supporting files from gnomad.broadinstitute.org/downloads.
+FETCHDIR=/hive/data/outside/gnomAD
+mkdir -p $FETCHDIR
+cd $FETCHDIR
+GNOMADVER=2.0.2
+gsutil -m cp -r gs://gnomad-public/release/$GNOMADVER/vcf .
+gsutil -m cp -r gs://gnomad-public/release/$GNOMADVER/coverage .
+
+# Start with the VCF files
+cd vcf/genomes
+WORKDIR=/hive/data/genomes/hg19/bed/gnomad
+mkdir -p $WORKDIR
+
+# Some things misbehave with the .bgz extension (zcat command-line autocompletion for one),
+# so renaming the soft links as .gz when we create them.
+# Leaving the WORKDIR link creation in place for the moment, but it's a bit pointless.
+# Only the gbdb links are used in the end.
+mkdir -p /gbdb/hg19/gnomAD/vcf
+mkdir -p $WORKDIR/vcf
+for fil in `ls $FETCHDIR/vcf/genomes/gnomad.genomes.r$GNOMADVER.sites.chr*.vcf.bgz`;
+    do BASE=`basename $fil .bgz`; ln -s $fil $WORKDIR/vcf/$BASE.gz; ln -s $fil.tbi $WORKDIR/vcf/$BASE.gz.tbi;
+    ln -s $fil /gbdb/hg19/gnomAD/vcf/$BASE.gz; ln -s $fil.tbi /gbdb/hg19/gnomAD/vcf/$BASE.gz.tbi; done
+
+for fil in `ls $FETCHDIR/vcf/exomes/gnomad.exomes.r$GNOMADVER.sites.vcf.bgz`;
+    do BASE=`basename $fil .bgz`; ln -s $fil $WORKDIR/vcf/$BASE.gz; ln -s $fil.tbi $WORKDIR/vcf/$BASE.gz.tbi;
+    ln -s $fil /gbdb/hg19/gnomAD/vcf/$BASE.gz; ln -s $fil.tbi /gbdb/hg19/gnomAD/vcf/$BASE.gz.tbi; done
+
+# Dumping a list of annotated chromosomes for the gnomadGenomeVariants table.  exome variants, all being
+# in a single file, are just handled via a bigDataUrl in trackDb.  We still need an exomesChrList for
+# building the coverage wigs though.
+ls /gbdb/hg19/gnomAD/vcf/*.sites.chr*.gz | perl -pe 'chomp; s/^.*sites\.(chr\w+)\.vcf.*$/$_\t$1\n/' > $WORKDIR/genomesChrList
+hgLoadSqlTab hg19 gnomadGenomesVariants ~/kent/src/hg/lib/bbiChroms.sql $WORKDIR/genomesChrList
+ls $FETCHDIR/coverage/exomes/*.coverage.txt.gz | perl -pe 'chomp; s/^.*\.(chr\w+)\.coverage\.txt\.gz$/$_\t$1\n/' > $WORKDIR/exomesChrList
+
+# Now to make the coverage wig files
+mkdir -p $WORKDIR/coverage
+cd $FETCHDIR/coverage/genomes
+
+# makeWigs.pl is a short script to split coverage files into a collection of wiggles.
+# The script appends to these wiggle files because coverage is provided per-chromosome,
+# so makeWigs is run separately on each per-chrom coverage file and the results must be
+# joined together.
+
+cat > $WORKDIR/coverage/makeWigs.pl << EOF
+#!/bin/env perl
+use strict;
+use warnings;
+
+my \$version = shift;
+my \$chrom = shift;
+my \$sourceDir = shift;
+my \$destDir = shift;
+my \$genomesOrExomes = shift;
+
+open IN, "zcat \$sourceDir/gnomad.\$genomesOrExomes.r\$version.\$chrom.coverage.txt.gz |" ||
+    die "Could not open coverage file on chromosome \$chrom";
+open (OUTMEAN, ">>", "\$destDir/gnomad.\$genomesOrExomes.coverage.mean.wig");
+open (OUTMEDIAN, ">>", "\$destDir/gnomad.\$genomesOrExomes.coverage.median.wig");
+open (OUT1, ">>", "\$destDir/gnomad.\$genomesOrExomes.coverage.depth1.wig");
+open (OUT5, ">>", "\$destDir/gnomad.\$genomesOrExomes.coverage.depth5.wig");
+open (OUT10, ">>", "\$destDir/gnomad.\$genomesOrExomes.coverage.depth10.wig");
+open (OUT15, ">>", "\$destDir/gnomad.\$genomesOrExomes.coverage.depth15.wig");
+open (OUT20, ">>", "\$destDir/gnomad.\$genomesOrExomes.coverage.depth20.wig");
+open (OUT25, ">>", "\$destDir/gnomad.\$genomesOrExomes.coverage.depth25.wig");
+open (OUT30, ">>", "\$destDir/gnomad.\$genomesOrExomes.coverage.depth30.wig");
+open (OUT50, ">>", "\$destDir/gnomad.\$genomesOrExomes.coverage.depth50.wig");
+open (OUT100, ">>", "\$destDir/gnomad.\$genomesOrExomes.coverage.depth100.wig");
+
+my \$skipHeader = <IN>;
+my \$prevPos = -10;
+while (my \$line = <IN>)
+{
+    chomp(\$line);
+    my @a = split /\s+/, \$line;
+    my \$pos = \$a[1];
+    if (\$pos != \$prevPos + 1)
+    {
+        print OUTMEAN "fixedStep chrom=\$chrom start=\$pos step=1\n";
+        print OUTMEDIAN "fixedStep chrom=\$chrom start=\$pos step=1\n";
+        print OUT1 "fixedStep chrom=\$chrom start=\$pos step=1\n";
+        print OUT5 "fixedStep chrom=\$chrom start=\$pos step=1\n";
+        print OUT10 "fixedStep chrom=\$chrom start=\$pos step=1\n";
+        print OUT15 "fixedStep chrom=\$chrom start=\$pos step=1\n";
+        print OUT20 "fixedStep chrom=\$chrom start=\$pos step=1\n";
+        print OUT25 "fixedStep chrom=\$chrom start=\$pos step=1\n";
+        print OUT30 "fixedStep chrom=\$chrom start=\$pos step=1\n";
+        print OUT50 "fixedStep chrom=\$chrom start=\$pos step=1\n";
+        print OUT100 "fixedStep chrom=\$chrom start=\$pos step=1\n";
+    }
+    printf OUTMEAN "%s\n", \$a[2];
+    printf OUTMEDIAN "%s\n", \$a[3];
+    printf OUT1   "%s\n", \$a[4];
+    printf OUT5   "%s\n", \$a[5];
+    printf OUT10  "%s\n", \$a[6];
+    printf OUT15  "%s\n", \$a[7];
+    printf OUT20  "%s\n", \$a[8];
+    printf OUT25  "%s\n", \$a[9];
+    printf OUT30  "%s\n", \$a[10];
+    printf OUT50  "%s\n", \$a[11];
+    printf OUT100 "%s\n", \$a[12];
+}
+EOF
+
+chmod +x $WORKDIR/coverage/makeWigs.pl
+
+for CHR in `cut -f 2 $WORKDIR/genomesChrList`;
+    do $WORKDIR/coverage/makeWigs.pl $GNOMADVER $CHR `pwd` $WORKDIR/coverage genomes;
+    done
+
+cd $FETCHDIR/coverage/exomes
+for CHR in `cut -f 2 $WORKDIR/exomesChrList`;
+    do $WORKDIR/coverage/makeWigs.pl $GNOMADVER $CHR `pwd` $WORKDIR/coverage exomes;
+    done
+
+# Convert to bigWigs
+for WIG in `ls $WORKDIR/coverage/*.wig`;
+    do wigToBigWig $WIG /hive/data/genomes/hg19/chrom.sizes $WORKDIR/coverage/`basename $WIG .wig`.bw;
+    done
+
+# No need to keep the wigs after the bigWigs are built
+for WIG in `ls $WORKDIR/coverage/*.wig`;
+    do if [ -e $WORKDIR/coverage/`basename $WIG .wig`.bw ]; then rm $WIG; fi
+    done
+
+mkdir -p /gbdb/hg19/gnomAD/coverage
+for BW in `ls $WORKDIR/coverage/*.bw`;
+    do ln -s $BW /gbdb/hg19/gnomAD/coverage/`basename $BW`;
+    done
+
+##############################################################################
+# TEST SAME-SPECIES LIFTOVER (IN PROGRESS 6/1/18 angie)
+
+    mkdir /hive/data/genomes/hg19/bed/blat.hg38.2018-06-01
+    cd /hive/data/genomes/hg19/bed/blat.hg38.2018-06-01
+    # Stop before the load step -- I just want to compare the chain & net results with
+    # chainBridge in the mix.
+    $HOME/kent/src/hg/utils/automation/doSameSpeciesLiftOver.pl \
+      -stop=net -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+      -ooc=/hive/data/genomes/hg19/11.ooc hg19 hg38 >>& do.log & tail -f do.log
+#TODO: compare results with original.
+
+
+##############################################################################

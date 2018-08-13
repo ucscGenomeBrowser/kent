@@ -728,6 +728,17 @@ void touchFileFromFile(const char *oldFile, const char *newFile)
 	errnoAbort("utime failed on %s", newFile);
 }
 
+boolean isDirectory(char *pathName)
+/* Return TRUE if pathName is a directory. */
+{
+struct stat st;
+
+if (stat(pathName, &st) < 0)
+    return FALSE;
+if (S_ISDIR(st.st_mode))
+    return TRUE;
+return FALSE;
+}
 
 boolean isRegularFile(char *fileName)
 /* Return TRUE if fileName is a regular file. */

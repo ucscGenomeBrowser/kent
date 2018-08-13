@@ -339,8 +339,8 @@ void cdwReserveTempFile(char *path);
 /* Call mkstemp on path.  This will fill in terminal XXXXXX in path with file name
  * and create an empty file of that name.  Generally that empty file doesn't stay empty for long. */
 
-void cdwBwaIndexPath(struct cdwAssembly *assembly, char indexPath[PATH_LEN]);
-/* Fill in path to BWA index. */
+void cdwIndexPath(struct cdwAssembly *assembly, char indexPath[PATH_LEN]);
+/* Fill in path to a bowtie index (originally bwa index). */
 
 void cdwAsPath(char *format, char path[PATH_LEN]);
 /* Convert something like "narrowPeak" in format to full path involving

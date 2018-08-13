@@ -20,3 +20,22 @@ $O: tagDescriptions.h cdwHelp.h
 cdwHelp.h: cdwHelp.html
 	stringify cdwHelp.html > cdwHelp.h
 
+my::
+	rm -f ${CGI_BIN}-${USER}/cirm-motd.html
+	cp cirm-motd.html ${CGI_BIN}-${USER}
+	chmod a+r ${CGI_BIN}-${USER}/cirm-motd.html
+
+alpha::
+	rm -f ${CGI_BIN}/cirm-motd.html
+	cp cirm-motd.html ${CGI_BIN}
+	chmod a+r ${CGI_BIN}/cirm-motd.html
+
+beta::
+	rm -f ${CGI_BIN}-beta/cirm-motd.html
+	cp cirm-motd.html ${CGI_BIN}-beta
+	chmod a+r ${CGI_BIN}-beta/cirm-motd.html
+
+install::
+	rm -f ${DESTDIR}${CGI_BIN}/cirm-motd.html
+	cp cirm-motd.html ${DESTDIR}${CGI_BIN}
+	chmod a+r ${DESTDIR}${CGI_BIN}/cirm-motd.html

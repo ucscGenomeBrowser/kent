@@ -86,6 +86,9 @@ struct trackDb *tdbForTableArg();
 void writeFramesetType();
 /* Write document type that shows a frame set, rather than regular HTML. */
 
+void htmlFramesetStart(char *title);
+/* Write DOCTYPE HTML and HEAD sections for framesets. */
+
 struct psl *getAlignments(struct sqlConnection *conn, char *table, char *acc);
 /* get the list of alignments for the specified acc */
 
@@ -423,6 +426,16 @@ void printOtherSnpMappings(char *table, char *name, int start,
 void printCustomUrl(struct trackDb *tdb, char *itemName, boolean encode);
 /* Wrapper to call printCustomUrlWithLabel using the url setting in trackDb */
 
+void printOtherCustomUrl(struct trackDb *tdb, char *itemName, char* urlSetting, boolean encode);
+/* Wrapper to call printCustomUrlWithLabel to use another url setting other than url in trackDb e.g. url2, this allows the use of multiple urls for a track
+ *  to be set in trackDb. */
+
+void printIdOrLinks(struct asColumn *col, struct hash *fieldToUrl, struct trackDb *tdb, char *idList);
+/* if trackDb does not contain a "urls" entry for current column name, just print idList as it is.
+ *  * Otherwise treat idList as a comma-sep list of IDs and print one row per id, with a link to url,
+ *   * ($$ in url is OK, wildcards like $P, $p, are also OK)
+ *    * */
+
 void printDbSnpRsUrl(char *rsId, char *labelFormat, ...)
 /* Print a link to dbSNP's report page for an rs[0-9]+ ID. */
 #ifdef __GNUC__
@@ -504,5 +517,8 @@ INLINE char* strOrNbsp(char* val)
 {
 return isEmpty(val) ? "&nbsp;" : val;
 }
+
+void doInteractDetails(struct trackDb *tdb, char *item);
+/* Details of interaction item */
 
 #endif

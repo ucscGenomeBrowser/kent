@@ -1,0 +1,84 @@
+#!/bin/bash
+
+# this script ends up in:
+#	/var/lib/cloud/instance/scripts/part-001
+# running as the 'root' user and is run during first start up of the machine
+
+# start a log file to record some information from the operation of this script:
+export logFile="/tmp/startUpScript.log.$$"
+
+# record environment to find out the operating conditions of this script
+
+printf "#### begin start up script log %s\n" "`date '+%s %F %T'`" > "${logFile}"
+printf "#### uname -a\n" >> "${logFile}"
+uname -a >> "${logFile}" 2>&1
+## printf "#### df -h\n" >> "${logFile}"
+## df -h >> "${logFile}" 2>&1
+printf "#### env\n" >> "${logFile}"
+env >> "${logFile}" 2>&1
+printf "#### set\n" >> "${logFile}"
+set >> "${logFile}" 2>&1
+printf "#### arp -a\n" >> "${logFile}"
+arp -a >> "${logFile}" 2>&1
+printf "#### ifconfig -a\n" >> "${logFile}"
+ifconfig -a >> "${logFile}" 2>&1
+
+if [ -s /home/centos/.bashrc ]; then
+  printf "## parasol node machine started install %s\n" "`date '+%s %F %T'`" >> /etc/motd
+  mkdir -p /data /home/centos/bin /hive /cluster/bin /scratch
+  chmod 777 /data /scratch /hive /cluster /cluster/bin
+  ln -s /data/bedtools /cluster/bin/bedtools
+  ln -s /data /hive/data
+  ln -s /dev/shm /scratch/tmp
+  chmod 755 /home/centos
+  chown -R centos:centos /data /home/centos/bin
+  # these additions to .bashrc should protect themselves from repeating
+  printf "export PATH=/data/bin:/data/bin/blat:/home/centos/bin:\$PATH\n" >> /home/centos/.bashrc
+  printf "export LANG=C\n" >> /home/centos/.bashrc
+  printf "alias og='ls -ogrt'\n" >> /home/centos/.bashrc
+  printf "alias plb='parasol list batches'\n" >> /home/centos/.bashrc
+  printf "alias vi='vim'\n" >> /home/centos/.bashrc
+  printf "set -o vi\n" >> /home/centos/.bashrc
+  printf "set background=dark\n" >> /home/centos/.vimrc
+  printf "#### before yum install %s\n" "`date '+%s %F %T'`" >> "${logFile}"
+  # useful to have the 'host' command, 'traceroute' and nmap ('nc')
+  # to investigate the network, and wget for fetching, tcsh for csh shell
+  #  bc for math calcs, perl-core installs 112 packages, vim for editing
+  # convenience
+  yum -y install bind-utils traceroute nmap-ncat wget tcsh perl-core vim-X11 vim-common vim-enhanced vim-minimal bc >> "${logFile}" 2>&1
+  yum -y install epel-release > "${logFile}" 2>&1
+  yum repolist > "${logFile}" 2>&1
+  yum -y update > "${logFile}" 2>&1
+  yum -y install python-pip gcc gcc-c++ zlib-devel python-devel tkinter libpng12 > "${logFile}" 2>&1
+  pip install --ignore-installed pytabix pandas twobitreader scipy matplotlib numpy > "${logFile}" 2>&1
+  pip install scikit-learn==0.16.1 Biopython xlwt > "${logFile}" 2>&1
+  printf "#### after yum install %s\n" "`date '+%s %F %T'`" >> "${logFile}"
+
+  # fixup the /mnt filesystem
+  umount /mnt >> "${logFile}" 2>&1
+  parted -s /dev/vdb mklabel gpt >> "${logFile}" 2>&1
+  parted -s /dev/vdb mkpart primary 2048s 100% >> "${logFile}" 2>&1
+  mkfs -t xfs /dev/vdb1 >> "${logFile}" 2>&1
+  sed --in-place=.bak -e 's#/dev/vdb#/dev/vdb1#; s/auto/xfs/;' /etc/fstab >> "${logFile}" 2>&1
+  mount /mnt
+
+  # this P A R A H U B will be sed changed to have the IP address of
+  # the parasol hub machine
+  mount -t nfs PARAHUB:/mnt/data /data >> "${logFile}" 2>&1
+  # wait for NFS to work
+  sleep 15
+  # parasol uses the full exact path when running jobs on /data/genomes/...
+  # therefor must have the /mnt/data/ patch existing too
+  ln -s /data /mnt/data
+  # wake up NFS, ensure the files are here
+  touch /data/parasol/nodeInfo >> "${logFile}" 2>&1
+  cat /data/parasol/nodeInfo/id_rsa.pub > /home/centos/.ssh/id_rsa.pub
+  # adding id_rsa.pub to authorized_keys will allow all machines in this
+  # parasol system to ssh to each other without prompts, including localhost
+  cat /home/centos/.ssh/id_rsa.pub >> /home/centos/.ssh/authorized_keys
+  chmod 644 /home/centos/.ssh/id_rsa.pub
+  chown -R centos:centos /home/centos/.ssh /home/centos/.vimrc
+  printf "## parasol node machine finished install %s\n" "`date '+%s %F %T'`" >> /etc/motd
+  date '+%s %F %T' > /tmp/node.machine.ready.signal
+fi
+printf "#### end start up script log %s\n" "`date '+%s %F %T'`" >> "${logFile}"

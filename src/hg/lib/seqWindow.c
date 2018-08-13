@@ -139,3 +139,75 @@ if (pSw && *pSw)
     freez(pSw);
     }
 }
+
+struct twoBitSeqWindow
+/* seqWindow for twoBit file */
+    {
+    struct seqWindow sw;     // generic interface
+    struct twoBitFile *tbf;  // twoBitFile from which this can fetch sequence
+    };
+
+#define TWOBITSEQ_CACHE_FUDGE 4096
+
+static void twoBitSeqFetch(struct seqWindow *seqWin, char *chrom, uint start, uint end)
+/* seqWindow fetch method for updating window with new location & sequence if window does not
+ * already cover the requested location. */
+{
+struct twoBitSeqWindow *tsw = (struct twoBitSeqWindow *)seqWin;
+boolean sameChrom = sameOk(seqWin->seqName, chrom);
+if (!sameChrom || start < seqWin->start || end > seqWin->end)
+    {
+    // We must fetch new sequence. Expand range by CHROMSEQ_CACHE_FUDGE so if we get
+    // successive requests for nearby sequences, we won't have to fetch sequence as often.
+    int chromSize = twoBitSeqSize(tsw->tbf, chrom);
+    if (start > chromSize)
+        errAbort("twoBitSeqFetch: start (%u) is out of range for %s %s (length %d)",
+                 start, tsw->tbf->fileName, chrom, chromSize);
+    if (start == 0 && end == 0)
+        end = chromSize;
+    uint bufStart = (start > CHROMSEQ_CACHE_FUDGE) ? start - CHROMSEQ_CACHE_FUDGE : 0;
+    uint bufEnd = end + CHROMSEQ_CACHE_FUDGE;
+    // Tolerate & clip ranges that extend past the end of the sequence
+    if (bufEnd > chromSize)
+        bufEnd = chromSize;
+    struct dnaSeq *dnaSeq = twoBitReadSeqFragLower(tsw->tbf, chrom, bufStart, bufEnd);
+    if (dnaSeq)
+        {
+        bufEnd = bufStart + dnaSeq->size;  // should be unnecessary but just in case
+        seqWindowUpdateRangeAndSeq(seqWin, chrom, bufStart, bufEnd, dnaSeqCannibalize(&dnaSeq));
+        }
+    else
+        {
+        // No sequence for chrom
+        errAbort("twoBitSeqFetch: unable to get sequence for %s [%d,%d)", chrom, start, end);
+        }
+    }
+}
+
+struct seqWindow *twoBitSeqWindowNew(char *twoBitFileName, char *chrom, uint start, uint end)
+/* Return a new seqWindow that can fetch uppercase sequence from twoBitFileName.
+ * If chrom is non-NULL and end > start then load sequence from that range; if chrom is non-NULL
+ * and start == end == 0 then fetch entire chrom. */
+{
+struct twoBitSeqWindow *tsw;
+AllocVar(tsw);
+tsw->sw.fetch = twoBitSeqFetch;
+tsw->tbf = twoBitOpen(twoBitFileName);
+if (start > end)
+    errAbort("twoBitSeqWindowNew: start (%u) should be <= end (%u)", start, end);
+if (chrom != NULL)
+    twoBitSeqFetch((struct seqWindow *)tsw, chrom, start, end);
+return (struct seqWindow *)tsw;
+}
+
+void twoBitSeqWindowFree(struct seqWindow **pSw)
+/* Free a twoBitSeqWindow. */
+{
+if (pSw && *pSw)
+    {
+    seqWindowFreeShared(pSw);
+    struct twoBitSeqWindow *tsw = (struct twoBitSeqWindow *)*pSw;
+    twoBitClose(&tsw->tbf);
+    freez(pSw);
+    }
+}

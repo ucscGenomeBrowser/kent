@@ -46,7 +46,7 @@ my $asmDate = "notFound";
 my $asmName = "notFound";
 my $sciName = "notFound";
 my $commonName = "notFound";
-my $MySQLCommonName = "notFound";
+my $mySqlCommonName = "notFound";
 my $submitter = "notFound";
 my $genBankAccessionID = "notFound";
 my $taxId = "notFound";
@@ -71,8 +71,8 @@ while (my $line = <FH>) {
        $commonName =~ s/.*\(//;
        $commonName =~ s/\)//;
        $commonName = ucfirst($commonName);
-       $MySQLCommonName = $commonName;
-       $MySQLCommonName =~ s/'/_/g;   # effective escape ' characters for MySQL
+       $mySqlCommonName = $commonName;
+       $mySqlCommonName =~ s/'/_/g;   # effective escape ' characters for MySQL
     }
     $sciName = $line;
     $sciName =~ s/.*m name:\s+//;
@@ -89,7 +89,13 @@ while (my $line = <FH>) {
     $genBankAccessionID = $line;
     $genBankAccessionID =~ s/.*ccession:\s+//;
     $genBankAccessionID =~ s/ .*//;
-  } elsif ($line =~ m/^#\s+Taxid:/) {
+  } elsif ($line =~ m/^#\s+GenBank assembly accession:/i) {
+    if ($genBankAccessionID =~ m/notFound/) {
+      $genBankAccessionID = $line;
+      $genBankAccessionID =~ s/.*ccession:\s+//;
+      $genBankAccessionID =~ s/ .*//;
+    }
+  } elsif ($line =~ m/^#\s+Taxid:/i) {
     $taxId = $line;
     $taxId =~ s/.*Taxid:\s+//;
   } elsif ($line =~ m/^#\s+BioSample:/) {
@@ -106,11 +112,11 @@ while (my $line = <FH>) {
 
 close (FH);
 
-my $previousOrder = `hgsql -N -e 'select orderKey from dbDb where organism="$MySQLCommonName";' hgcentraltest | wc -l`;
+my $previousOrder = `hgsql -N -e 'select orderKey from dbDb where organism="$mySqlCommonName";' hgcentraltest | wc -l`;
 chomp $previousOrder;
 my $orderKey = 0;
 if ($previousOrder > 0) {
-  $orderKey = `hgsql -N -e 'select min(orderKey) from dbDb where organism="$MySQLCommonName";' hgcentraltest | awk '{printf "%d", \$1-1}'`;
+  $orderKey = `hgsql -N -e 'select min(orderKey) from dbDb where organism="$mySqlCommonName";' hgcentraltest | awk '{printf "%d", \$1-1}'`;
 } else {
   $orderKey = `(printf "%s\t%s\n" "$db" "$commonName"; hgsql -N -e 'select name,organism,orderKey from dbDb order by orderKey;' hgcentraltest) | sort -k2 | grep -C 1 "$commonName" | cut -f3 | xargs echo | awk '{printf "%d", \$1+(\$2-\$1)/2}'`;
 }
@@ -125,7 +131,7 @@ if ( -s $mitoChr2Acc ) {
 }
 
 # do not need a genomeCladePriority if it already exists for this organism
-my $genomeCladeExists = `hgsql -N -e 'select genome from genomeClade where genome="$MySQLCommonName";' hgcentraltest | wc -l`;
+my $genomeCladeExists = `hgsql -N -e 'select genome from genomeClade where genome="$mySqlCommonName";' hgcentraltest | wc -l`;
 chomp $genomeCladeExists;
 # if does not exist, use the most common value for this clade
 if ( $genomeCladeExists != 1 ) {

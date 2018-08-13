@@ -1,0 +1,10 @@
+# required db variable
+db tarSyr2
+# specific lifting to translate names:
+liftUp /hive/data/genomes/tarSyr2/jkStuff/ensToUcsc.lift
+
+skipInvalid yes
+# ENSTSYT00000036298.1 txEnd 9974 >= chromSize 9960
+# ENSTSYT00000025862.1 txEnd 865 >= chromSize 863
+# ENSTSYT00000041648.1 txEnd 480 >= chromSize 479
+# ENSTSYT00000046606.1 txEnd 454 >= chromSize 452

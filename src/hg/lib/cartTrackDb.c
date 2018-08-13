@@ -392,7 +392,7 @@ if (useJoiner)
     if (allJoiner == NULL)
         allJoiner = joinerRead("all.joiner");
     struct joinerPair *jpList, *jp;
-    jpList = joinerRelate(allJoiner, db, trackTable);
+    jpList = joinerRelate(allJoiner, db, trackTable, db);
     for (jp = jpList; jp != NULL; jp = jp->next)
 	{
 	struct joinerDtf *dtf = jp->b;

@@ -37,6 +37,7 @@ wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneVM13
     visibility pack
     subTrack wgEncodeGencodeVM13
     type genePred
+    idXref wgEncodeGencodeAttrsVM13 transcriptId geneId
     itemClassTbl wgEncodeGencodeAttrsVM13
     itemClassNameColumn transcriptId
     itemClassClassColumn transcriptClass

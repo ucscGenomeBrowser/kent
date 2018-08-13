@@ -12,12 +12,15 @@
 #include "hui.h"
 #include "asParse.h"
 #include "hgc.h"
+#include "trackHub.h"
 
 #include "barChartBed.h"
 #include "barChartCategory.h"
 #include "barChartData.h"
 #include "barChartSample.h"
 #include "barChartUi.h"
+
+#define EXTRA_FIELDS_SIZE 256
 
 struct barChartItemData
 /* Measured value for a sample and the sample category at a locus.
@@ -48,27 +51,23 @@ return categoryHash;
 
 static struct barChartBed *getBarChartFromFile(struct trackDb *tdb, char *file, 
                                                 char *item, char *chrom, int start, int end, 
-                                                struct asObject **retAs)
+                                                struct asObject **retAs, char **extraFieldsRet,
+                                                int *extraFieldsCountRet)
 /* Retrieve barChart BED item from big file */
 {
-struct sqlConnection *conn = hAllocConnTrack(database, tdb);
-struct asObject *as = NULL;
 boolean hasOffsets = TRUE;
-if (conn != NULL)
-    {
-    as = asForTdb(conn, tdb);
-    if (retAs != NULL)
-        *retAs = as;
-    hasOffsets = (
-        asColumnFind(as, BARCHART_OFFSET_COLUMN) != NULL && 
-        asColumnFind(as, BARCHART_LEN_COLUMN) != NULL);
-    hFreeConn(&conn);
-    }
 struct bbiFile *bbi = bigBedFileOpen(file);
+struct asObject *as = bigBedAsOrDefault(bbi);
+if (retAs != NULL)
+    *retAs = as;
+hasOffsets = (
+    asColumnFind(as, BARCHART_OFFSET_COLUMN) != NULL && 
+    asColumnFind(as, BARCHART_LEN_COLUMN) != NULL);
 struct lm *lm = lmInit(0);
 struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
+    char *rest = cloneString(bb->rest);
     char startBuf[16], endBuf[16];
     char *row[32];
     bigBedIntervalToRow(bb, chrom, startBuf, endBuf, row, ArraySize(row));
@@ -76,7 +75,19 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     if (barChart == NULL)
         continue;
     if (sameString(barChart->name, item))
+        {
+        char *restFields[EXTRA_FIELDS_SIZE];
+        int restCount = chopTabs(rest, restFields);
+        int restBedFields = (6 + (hasOffsets ? 2 : 0));
+        if (restCount > restBedFields)
+            {
+            int i;
+            for (i = 0; i < restCount - restBedFields; i++)
+                extraFieldsRet[i] = restFields[restBedFields + i];
+            *extraFieldsCountRet = (restCount - restBedFields);
+            }
         return barChart;
+        }
     }
 return NULL;
 }
@@ -121,13 +132,13 @@ return barChart;
 }
 
 static struct barChartBed *getBarChart(struct trackDb *tdb, char *item, char *chrom, int start, int end,
-                                        struct asObject **retAs)
+                                        struct asObject **retAs, char **extraFieldsReg, int *extraFieldsCountRet)
 /* Retrieve barChart BED item from track */
 {
 struct barChartBed *barChart = NULL;
 char *file = trackDbSetting(tdb, "bigDataUrl");
 if (file != NULL)
-    barChart = getBarChartFromFile(tdb, file, item, chrom, start, end, retAs);
+    barChart = getBarChartFromFile(tdb, file, item, chrom, start, end, retAs, extraFieldsReg, extraFieldsCountRet);
 else
     barChart = getBarChartFromTable(tdb, tdb->table, item, chrom, start, end);
 return barChart;
@@ -204,6 +215,9 @@ static struct sqlConnection *getConnectionAndTable(struct trackDb *tdb, char *su
 /* Look for <table><suffix> in database or hgFixed and set up connection */
 {
 char table[256];
+if (trackHubDatabase(database))
+    return NULL;
+
 assert(retTable);
 safef(table, sizeof(table), "%s%s", tdb->table, suffix);
 *retTable = cloneString(table);
@@ -364,7 +378,10 @@ void doBarChartDetails(struct trackDb *tdb, char *item)
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 struct asObject *as = NULL;
-struct barChartBed *chartItem = getBarChart(tdb, item, seqName, start, end, &as);
+char *extraFields[EXTRA_FIELDS_SIZE];
+int extraFieldCount = 0;
+int numColumns = 0;
+struct barChartBed *chartItem = getBarChart(tdb, item, seqName, start, end, &as, extraFields, &extraFieldCount);
 if (chartItem == NULL)
     errAbort("Can't find item %s in barChart table/file %s\n", item, tdb->table);
 
@@ -372,17 +389,26 @@ genericHeader(tdb, item);
 
 // get name and name2 from trackDb, .as file, or use defaults
 struct asColumn *nameCol = NULL, *name2Col = NULL;
+//struct asColumn *name2Col;
 char *nameLabel = NULL, *name2Label = NULL;
 if (as != NULL)
     {
+    numColumns = slCount(as->columnList);
     nameCol = asFindColByIx(as, BARCHART_NAME_COLUMN_IX);
     name2Col = asFindColByIx(as, BARCHART_NAME2_COLUMN_IX);
     }
-nameLabel = trackDbSettingClosestToHomeOrDefault(tdb, "bedNameLabel", nameCol ? nameCol->comment : "Item"),
-printf("<b>%s: </b>%s<br>\n", nameLabel, chartItem->name);
+nameLabel = trackDbSettingClosestToHomeOrDefault(tdb, "bedNameLabel", nameCol ? nameCol->comment : "Item");
+if (trackDbSettingClosestToHomeOrDefault(tdb, "url", NULL) != NULL)
+    printCustomUrl(tdb, item, TRUE);
+else
+    printf("<b>%s: </b>%s<br>\n", nameLabel, chartItem->name);
 name2Label = name2Col ? name2Col->comment : "Alternative name";
-if (differentString(chartItem->name2, ""))
-    printf("<b>%s: </b> %s<br>\n", name2Label, chartItem->name2);
+if (differentString(chartItem->name2, "")) {
+    if (trackDbSettingClosestToHomeOrDefault(tdb, "url2", NULL) != NULL)
+        printOtherCustomUrl(tdb, chartItem->name2, "url2", TRUE);
+    else
+        printf("<b>%s: </b> %s<br>\n", name2Label, chartItem->name2);
+}
 
 int categId;
 float highLevel = barChartMaxValue(chartItem, &categId);
@@ -398,6 +424,13 @@ printf("<b>Genomic position: "
                     chartItem->chrom, chartItem->chromStart+1, chartItem->chromEnd,
                     chartItem->chrom, chartItem->chromStart+1, chartItem->chromEnd);
 printf("<b>Strand: </b> %s\n", chartItem->strand); 
+
+// print any remaining extra fields
+if (numColumns > 0)
+    {
+    extraFieldsPrint(tdb, NULL, extraFields, extraFieldCount);
+    }
+
 char *matrixUrl = NULL, *sampleUrl = NULL;
 struct barChartItemData *vals = getSampleVals(tdb, chartItem, &matrixUrl, &sampleUrl);
 if (vals != NULL)

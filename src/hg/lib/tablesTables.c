@@ -11,8 +11,10 @@
 #include "sqlSanity.h"
 #include "fieldedTable.h"
 #include "cheapcgi.h"
+#include "htmshell.h"
 #include "web.h"
 #include "cart.h"
+#include "facetField.h"
 #include "tablesTables.h"
 
 struct fieldedTable *fieldedTableFromDbQuery(struct sqlConnection *conn, char *query)
@@ -30,8 +32,43 @@ sqlFreeResult(&sr);
 return table;
 }
 
+struct fieldedTable *fieldedTableAndCountsFromDbQuery(struct sqlConnection *conn, char *query, int limit, int offset, 
+    char *selectedFields, struct facetField ***pFfArray, int *pResultCount)
+/* Return fieldedTable from a database query and also fetch use and select counts */
+{
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **fields;
+int fieldCount = sqlResultFieldArray(sr, &fields);
+struct facetField **ffArray;
+AllocArray(ffArray, fieldCount);
+struct fieldedTable *table = fieldedTableNew(query, fields, fieldCount);
+
+struct facetField *ffList = facetFieldsFromSqlTableInit(fields, fieldCount, selectedFields, ffArray);
+
+char **row;
+int i = 0;
+int id = 0;
+char *nullVal = "n/a"; // TODO what do we want here? 
+/* Scan through result saving it in list. */
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (perRowFacetFields(fieldCount, row, nullVal, ffArray))
+	{
+	if ((i >= offset) && (i < offset+limit))
+	    fieldedTableAdd(table, row, fieldCount, ++id);
+	++i;
+	}
+    }
+facetFieldsFromSqlTableFinish(ffList, facetValCmpSelectCountDesc);
+sqlFreeResult(&sr);
+*pFfArray = ffArray;
+*pResultCount = i;
+return table;
+}
+
 static void showTableFilterInstructionsEtc(struct fieldedTable *table, 
-    char *itemPlural, struct  fieldedTableSegment *largerContext, void (*addFunc)(void))
+    char *itemPlural, struct  fieldedTableSegment *largerContext, void (*addFunc)(void),
+    char *visibleFacetList)
 /* Print instructional text, and basic summary info on who passes filter, and a submit
  * button just in case user needs it */
 {
@@ -43,11 +80,14 @@ if (largerContext != NULL)  // Need to page?
 cgiMakeButton("submit", "search");
 
 printf("&nbsp&nbsp;");
-cgiMakeOnClickButton("clearButton",
+
+cgiMakeOnClickButton("clearButton", 
 "$(':input').not(':button, :submit, :reset, :hidden, :checkbox, :radio').val('');\n"
 "$('[name=cdwBrowseFiles_page]').val('1');\n"
-"$('#submit').click();\n"
-, "clear search");
+"$('[name=clearSearch]').val('1');\n"
+"$('#submit').click();\n",
+"clear search");
+
 printf("<br>");
 
 printf("%d&nbsp;%s&nbsp;found. ", matchCount, itemPlural);
@@ -55,10 +95,13 @@ printf("%d&nbsp;%s&nbsp;found. ", matchCount, itemPlural);
 if (addFunc)
     addFunc();
 
-printf("<BR>\n");
-printf("You can further filter search results field by field below. ");    
-printf("Wildcard * and ? characters are allowed in text fields. ");
-printf("&GT;min or &LT;max are allowed in numerical fields.<BR>\n");
+if (!visibleFacetList)
+    {
+    printf("<BR>\n");
+    printf("You can further filter search results field by field below. ");    
+    printf("Wildcard * and ? characters are allowed in text fields. ");
+    printf("&GT;min or &LT;max are allowed in numerical fields.<BR>\n");
+    }
 }
 
 static void printSuggestScript(char *id, struct slName *suggestList)
@@ -366,7 +409,8 @@ void webFilteredFieldedTable(struct cart *cart, struct fieldedTable *table,
     int maxLenField, struct hash *tagOutputWrappers, void *wrapperContext,
     boolean withFilters, char *itemPlural, 
     int pageSize, struct fieldedTableSegment *largerContext, struct hash *suggestHash, 
-    void (*addFunc)(void) )
+    struct facetField **ffArray, char *visibleFacetList,
+    void (*addFunc)(void))
 /* Show a fielded table that can be sorted by clicking on column labels and optionally
  * that includes a row of filter controls above the labels .
  * The maxLenField is maximum character length of field before truncation with ...
@@ -375,9 +419,14 @@ void webFilteredFieldedTable(struct cart *cart, struct fieldedTable *table,
 if (strchr(returnUrl, '?') == NULL)
      errAbort("Expecting returnUrl to include ? in showFieldedTable\nIt's %s", returnUrl);
 
-if (withFilters)
-    showTableFilterInstructionsEtc(table, itemPlural, largerContext, addFunc);
+if (withFilters || visibleFacetList)
+    showTableFilterInstructionsEtc(table, itemPlural, largerContext, addFunc, visibleFacetList);
 
+printf("<div style='position:relative;'>"); // parent container
+
+int facetMargin = 280;
+// right column
+printf("<DIV style='position:absolute; top:0; left:%dpx;'>\n", visibleFacetList ? facetMargin : 0);
 /* Set up our table within table look. */
 webPrintLinkTableStart();
 
@@ -393,6 +442,150 @@ webPrintLinkTableEnd();
 
 if (largerContext != NULL)
     showTablePaging(table, cart, varPrefix, largerContext, pageSize);
+printf("</div>");
+
+if (visibleFacetList)  // facet desired?
+    {
+    // left column
+    printf("<DIV style='position:absolute; top:2px; left:0; width: %dpx; background-color:#FFFFCC; "
+	"padding-top:20px; padding-bottom:20px; border: 1px solid grey;'>\n", facetMargin);
+
+    // reset all facet value selections
+    char *color = "#FFFFCC";
+    char *op = "resetAll";
+    htmlPrintf("<a href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
+	    "&browseFiles_facet_op=%s|url|"
+	    "&browseFiles_facet_fieldName=%s|url|"
+	    "&browseFiles_facet_fieldVal=%s|url|"
+	    "&cdwBrowseFiles_page=1' "
+	    "style='display:inline; position:relative; background-color:%s|none|; margin-left:5px;'"
+	    ">%s</a><br>\n",
+	cartSessionVarName(), cartSessionId(cart),
+	op, "", "",
+	color,
+	"<Clear All"
+	);
+
+    int valIndent = 20;
+    struct slName *nameList = slNameListFromComma(visibleFacetList);
+    int f;
+    for (f = 0; f < table->fieldCount; ++f) 
+	{
+	struct facetField *field = ffArray[f];
+	if (slNameInListUseCase(nameList, field->fieldName)) // is this field a visible facet?
+	    {
+	    htmlPrintf("<span style='display:inline; font-weight:bold; margin-left:5px'>%s</span><br>\n", 
+		field->fieldName); // (%d), slCount(field->valList));
+	    struct facetVal *val;
+
+	    if (!field->allSelected)  // add reset facet link
+		{
+		char *color = "#FFFFCC";
+		char *op = "reset";
+		htmlPrintf("<a href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
+			"&browseFiles_facet_op=%s|url|"
+			"&browseFiles_facet_fieldName=%s|url|"
+			"&browseFiles_facet_fieldVal=%s|url|"
+			"&cdwBrowseFiles_page=1' "
+			"style='display:inline; position:relative; background-color:%s|none|; margin-left:5px;'"
+			">%s</a><br>\n",
+		    cartSessionVarName(), cartSessionId(cart),
+		    op, field->fieldName, "",
+		    color,
+		    "<Clear"
+		    );
+		}
+
+	    int valuesShown = 0;
+	    for (val = field->valList; val; val=val->next)
+		{
+		boolean specificallySelected = (val->selected && !field->allSelected);
+		if ((val->selectCount > 0 && (field->showAllValues || valuesShown < FacetFieldLimit))
+		    || specificallySelected)
+		    {
+		    ++valuesShown;
+		    char *color = "#FFFFCC";
+		    if (val->selected)
+			color = "#CCFFFF";
+		    char *op = "add";
+		    if (specificallySelected)
+			op = "remove";
+		    printf("<DIV style='position:relative; left:%dpx; width: %dpx; background-color:#FFFFCC;'>\n",
+			valIndent, (facetMargin-valIndent));
+		    htmlPrintf(
+			    "<span "
+			    "style='display:inline; position:relative; background-color:%s|none|;'>"
+			    "<input type=checkbox value=%s class=cdwFSCheckBox %s></span>",
+			color,
+			specificallySelected ? "true" : "false", 
+			specificallySelected ? "checked" : "");
+		    htmlPrintf("<a href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
+			    "&browseFiles_facet_op=%s|url|"
+			    "&browseFiles_facet_fieldName=%s|url|"
+			    "&browseFiles_facet_fieldVal=%s|url|"
+                            "&cdwBrowseFiles_page=1' "
+			    "style='display:inline; position:relative; background-color:%s|none|;'"
+			    ">",
+			cartSessionVarName(), cartSessionId(cart),
+			op, field->fieldName, val->val,
+		        color);
+		    htmlPrintf("%s(%d)</a>\n", val->val, val->selectCount);
+		    printf("</div>\n");
+		    }
+		}
+
+	    // show See More link when facet has lots of values
+	    if (!(field->showAllValues || valuesShown < FacetFieldLimit))
+		{
+		char *color = "#FFFFCC";
+		char *op = "showAllValues";
+		htmlPrintf("<a href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
+			"&browseFiles_facet_op=%s|url|"
+			"&browseFiles_facet_fieldName=%s|url|"
+			"&browseFiles_facet_fieldVal=%s|url|"
+			"&cdwBrowseFiles_page=1' "
+			"style='display:inline; position:relative; background-color:%s|none|; margin-left:5px;'"
+			">%s</a><br>\n",
+		    cartSessionVarName(), cartSessionId(cart),
+		    op, field->fieldName, "",
+		    color,
+		    "See More"
+		    );
+		}
+
+	    // show See Less link when facet has lots of values
+	    if (field->showAllValues && valuesShown >= FacetFieldLimit)
+		{
+		char *color = "#FFFFCC";
+		char *op = "showSomeValues";
+		htmlPrintf("<a href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
+			"&browseFiles_facet_op=%s|url|"
+			"&browseFiles_facet_fieldName=%s|url|"
+			"&browseFiles_facet_fieldVal=%s|url|"
+			"&cdwBrowseFiles_page=1' "
+			"style='display:inline; position:relative; background-color:%s|none|; margin-left:5px;'"
+			">%s</a><br>\n",
+		    cartSessionVarName(), cartSessionId(cart),
+		    op, field->fieldName, "",
+		    color,
+		    "See Fewer"
+		    );
+		}
+
+
+	    }
+	}
+    printf("</div>\n");
+    jsInlineF(
+	"$(function () {\n"
+	"  $('.cdwFSCheckBox').click(function() {\n"
+	"    this.parentElement.nextSibling.click();\n"
+	"  });\n"
+	"});\n");
+    }
+
+printf("</div>\n");
+
 }
 
 void webSortableFieldedTable(struct cart *cart, struct fieldedTable *table, 
@@ -405,7 +598,7 @@ void webSortableFieldedTable(struct cart *cart, struct fieldedTable *table,
 webFilteredFieldedTable(cart, table, returnUrl, varPrefix, 
     maxLenField, tagOutputWrappers, wrapperContext,
     FALSE, NULL, 
-    slCount(table->rowList), NULL, NULL, NULL);
+    slCount(table->rowList), NULL, NULL, NULL, NULL, NULL);
 }
 
 
@@ -419,11 +612,10 @@ struct dyString *query = dyStringNew(0);
 struct dyString *where = dyStringNew(0);
 struct slName *field, *fieldList = commaSepToSlNames(fields);
 boolean gotWhere = FALSE;
-sqlDyStringPrintf(query, "%s", ""); // TODO check with Galt on how to get reasonable checking back.
-dyStringPrintf(query, "select %s from %s", fields, from);
+sqlDyStringPrintf(query, "select %-s from %-s", sqlCkIl(fields), sqlCkIl(from));
 if (!isEmpty(initialWhere))
     {
-    dyStringPrintf(where, " where ");
+    sqlDyStringPrintfFrag(where, " where ");
     sqlSanityCheckWhere(initialWhere, where);
     gotWhere = TRUE;
     }
@@ -439,44 +631,51 @@ if (withFilters)
 	if (!isEmpty(val))
 	    {
 	    if (gotWhere)
-		dyStringPrintf(where, " and ");
+		sqlDyStringPrintf(where, " and ");
 	    else
 		{
-	        dyStringPrintf(where, " where ");
+	        sqlDyStringPrintf(where, " where ");
 		gotWhere = TRUE;
 		}
 	    if (anyWild(val))
-	         {
-		 char *converted = sqlLikeFromWild(val);
-		 char *escaped = makeEscapedString(converted, '"');
-		 dyStringPrintf(where, "%s like \"%s\"", field->name, escaped);
-		 freez(&escaped);
-		 freez(&converted);
-		 }
+		{
+		char *converted = sqlLikeFromWild(val);
+		sqlDyStringPrintf(where, "%s like '%s'", field->name, converted);
+		freez(&converted);
+		}
 	    else if (val[0] == '>' || val[0] == '<')
-	         {
-		 char *remaining = val+1;
-		 if (remaining[0] == '=')
-		     remaining += 1;
-		 remaining = skipLeadingSpaces(remaining);
-		 if (isNumericString(remaining))
-		     dyStringPrintf(where, "%s %s", field->name, val);
-		 else
-		     {
-		     warn("Filter for %s doesn't parse:  %s", field->name, val);
-		     dyStringPrintf(where, "%s is not null", field->name); // Let query continue
-		     }
-		 }
+		{
+		char *remaining = val+1;
+		if (remaining[0] == '=')
+		    {
+		    remaining += 1;
+		    }
+		remaining = skipLeadingSpaces(remaining);
+		if (isNumericString(remaining))
+		    {
+		    sqlDyStringPrintf(where, "%s ", field->name);
+		    if (val[0] == '>')
+			sqlDyStringPrintf(where, ">");
+		    if (val[0] == '<')
+			sqlDyStringPrintf(where, "<");
+		    if (val[1] == '=')
+			sqlDyStringPrintf(where, "=");
+		    sqlDyStringPrintf(where, "%s", remaining);
+		    }
+		else
+		    {
+		    warn("Filter for %s doesn't parse:  %s", field->name, val);
+		    sqlDyStringPrintf(where, "%s is not null", field->name); // Let query continue
+		    }
+		}
 	    else
-	         {
-		 char *escaped = makeEscapedString(val, '"');
-		 dyStringPrintf(where, "%s = \"%s\"", field->name, escaped);
-		 freez(&escaped);
-		 }
+		{
+		sqlDyStringPrintf(where, "%s = '%s'", field->name, val);
+		}
 	    }
 	}
     }
-dyStringAppend(query, where->string);
+sqlDyStringPrintf(query, "%-s", where->string);  // trust
 
 /* We do order here so as to keep order when working with tables bigger than a page. */
 char orderVar[256];
@@ -485,9 +684,9 @@ char *orderFields = cartUsualString(cart, orderVar, "");
 if (!isEmpty(orderFields))
     {
     if (orderFields[0] == '-')
-	dyStringPrintf(query, " order by %s desc", orderFields+1);
+	sqlDyStringPrintf(query, " order by %s desc", orderFields+1);
     else
-	dyStringPrintf(query, " order by %s", orderFields);
+	sqlDyStringPrintf(query, " order by %s", orderFields);
     }
 
 // return query and where expression
@@ -499,7 +698,7 @@ void webFilteredSqlTable(struct cart *cart, struct sqlConnection *conn,
     char *fields, char *from, char *initialWhere,  
     char *returnUrl, char *varPrefix, int maxFieldWidth, 
     struct hash *tagOutWrappers, void *wrapperContext,
-    boolean withFilters, char *itemPlural, int pageSize, struct hash *suggestHash, void (*addFunc)(void) )
+    boolean withFilters, char *itemPlural, int pageSize, struct hash *suggestHash, char *visibleFacetList, void (*addFunc)(void) )
 /* Given a query to the database in conn that is basically a select query broken into
  * separate clauses, construct and display an HTML table around results. This HTML table has
  * column names that will sort the table, and optionally (if withFilters is set)
@@ -513,33 +712,49 @@ struct dyString *query;
 struct dyString *where;
 webTableBuildQuery(cart, from, initialWhere, varPrefix, fields, withFilters, &query, &where);
 
-/* Figure out size of query result */
-struct dyString *countQuery = dyStringNew(0);
-sqlDyStringPrintf(countQuery, "%s", ""); // TODO check with Galt on how to get reasonable checking back.
-dyStringPrintf(countQuery, "select count(*) from %s", from);
-dyStringAppend(countQuery, where->string);
-int resultsSize = sqlQuickNum(conn, countQuery->string);
-dyStringFree(&countQuery);
+char *selectedFacetValues=cartUsualString(cart, "cdwSelectedFieldValues", "");
+
+struct facetField **ffArray = NULL;
+struct fieldedTable *table = NULL;
 
 char pageVar[64];
 safef(pageVar, sizeof(pageVar), "%s_page", varPrefix);
 int page = 0;
-struct fieldedTableSegment context = { .tableSize=resultsSize};
-if (resultsSize > pageSize)
+struct fieldedTableSegment context;
+page = cartUsualInt(cart, pageVar, 0) - 1;
+if (page < 0)
+    page = 0;
+context.tableOffset = page * pageSize;
+
+if (visibleFacetList)
     {
-    page = cartUsualInt(cart, pageVar, 0) - 1;
-    if (page < 0)
-        page = 0;
-    int lastPage = (resultsSize-1)/pageSize;
+    table = fieldedTableAndCountsFromDbQuery(conn, query->string, pageSize, context.tableOffset, selectedFacetValues, &ffArray, &context.tableSize);
+    }
+else
+    {
+    /* Figure out size of query result */
+    struct dyString *countQuery = sqlDyStringCreate("select count(*) from %-s", sqlCkIl(from));
+    sqlDyStringPrintf(countQuery, "%-s", where->string);   // trust
+    context.tableSize = sqlQuickNum(conn, countQuery->string);
+    dyStringFree(&countQuery);
+    }
+
+if (context.tableSize > pageSize)
+    {
+    int lastPage = (context.tableSize-1)/pageSize;
     if (page > lastPage)
         page = lastPage;
     context.tableOffset = page * pageSize;
-    dyStringPrintf(query, " limit %d offset %d", pageSize, context.tableOffset);
     }
 
-struct fieldedTable *table = fieldedTableFromDbQuery(conn, query->string);
+if (!visibleFacetList)
+    {
+    sqlDyStringPrintf(query, " limit %d offset %d", pageSize, context.tableOffset);
+    table = fieldedTableFromDbQuery(conn, query->string);
+    }
+
 webFilteredFieldedTable(cart, table, returnUrl, varPrefix, maxFieldWidth, 
-    tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize, &context, suggestHash, addFunc);
+    tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize, &context, suggestHash, ffArray, visibleFacetList, addFunc);
 fieldedTableFree(&table);
 
 dyStringFree(&query);

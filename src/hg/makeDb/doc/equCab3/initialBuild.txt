@@ -1,0 +1,1065 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the equCab3
+
+#########################################################################
+# reuse photograph from equCab2 previous versions
+#    (DONE - 2018-04-03 - Hiram)
+
+mkdir /hive/data/genomes/equCab3
+cd /hive/data/genomes/equCab3
+cp -p ../equCab2/photoReference.txt .
+
+cat photoReference.txt
+
+photoCreditURL  http://www.genome.gov/dmd/img.cfm?node=Photos/Animals/Horse&id=79086
+photoCreditName NHGRI press photos
+
+#########################################################################
+#  Initial steps (DONE - 2018-04-03 - Hiram)
+
+# To start this initialBuild.txt document, from a previous assembly document:
+
+mkdir ~/kent/src/hg/makeDb/doc/equCab3
+cd ~/kent/src/hg/makeDb/doc/equCab3
+
+# best to use a most recent document since it has the latest features and
+# procedures:
+sed -e 's/panTro6/equCab3/g; s/PanTro6/EquCab3/g; s/DONE/TBD/g;' ../panTro6/initialBuild.txt > initialBuild.txt
+
+mkdir /hive/data/genomes/equCab3/refseq
+cd /hive/data/genomes/equCab3/refseq
+
+time rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/refseq/vertebrate_mammalian/Equus_caballus/all_assembly_versions/GCF_002863925.1_EquCab3.0/ ./
+
+# sent 3683 bytes  received 3757064597 bytes  12544468.38 bytes/sec
+# total size is 3756592842  speedup is 1.00
+
+# real    4m59.002s
+
+# check assembly size for later reference:
+
+faSize G*.0_genomic.fna.gz
+
+# 2506966135 bases (9435481 N's 2497530654 real 1761185522 upper
+#	736345132 lower) in 4701 sequences in 1 files
+# Total size: mean 533283.6 sd 6827354.4 min 2669 (NW_019642362.1)
+#	max 188260577 (NC_009144.3) median 6592
+# %29.37 masked total, %29.48 masked real
+
+
+# this information is from the top of
+#    equCab3/refseq/GCF_002863925.1_EquCab3.0_assembly_report.txt
+
+# Assembly name:  EquCab3.0
+# Organism name:  Equus caballus (horse)
+# Infraspecific name:  breed=thoroughbred
+# Isolate:  Twilight
+# Sex:  female
+# Taxid:          9796
+# BioSample:      SAMN02953672
+# BioProject:     PRJNA421018
+# Submitter:      University of Louisville
+# Date:           2018-1-5
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Chromosome
+# Genome representation: full
+# WGS project:    PJAA01
+# Assembly method: Celera Assembler v. 2017; HiRise v. 2017
+# Expected final version: yes
+# Reference guided assembly: de-novo
+# Genome coverage: 88.0x
+# Sequencing technology: Sanger; Illumina HiSeq; PacBio
+# RefSeq category: Representative Genome
+# GenBank assembly accession: GCA_002863925.1
+# RefSeq assembly accession: GCF_002863925.1
+# RefSeq assembly and GenBank assemblies identical: no
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_002863935.1      GCF_002863935.1 Primary Assembly
+##      GCF_000215765.1 non-nuclear
+
+#############################################################################
+# establish config.ra file (DONE - Hiram - 2018-04-03)
+    # arguments here are: <db> <clade> <trackDbDir> <assembly_report.txt>
+    cd /hive/data/genomes/equCab3
+    $HOME/kent/src/hg/utils/automation/prepConfig.pl equCab3 mammal \
+        horse ./refseq/*_assembly_report.txt > equCab3.config.ra
+
+    # compare to ../equCab2 to see what might need to be fixed up:
+    diff equCab3.config.ra ../equCab2/equCab2.config.ra  | less
+    # note, equCab2 is quite old and doesn't match well at all
+
+    # verify it looks sane
+    cat equCab3.config.ra
+# config parameters for makeGenomeDb.pl:
+db equCab3
+clade mammal
+scientificName Equus caballus
+commonName Horse
+assemblyDate Jan. 2018
+assemblyLabel University of Louisville
+assemblyShortLabel EquCab3.0
+orderKey 8683
+# mitochondrial sequence included in refseq release
+# mitoAcc NC_001640.1
+mitoAcc none
+fastaFiles /hive/data/genomes/equCab3/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/equCab3/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir horse
+photoCreditURL  http://www.genome.gov/dmd/img.cfm?node=Photos/Animals/Horse&id=79086
+photoCreditName NHGRI press photos
+ncbiGenomeId 145
+ncbiAssemblyId 1512011
+ncbiAssemblyName EquCab3.0
+ncbiBioProject 421018
+ncbiBioSample SAMN02953672
+genBankAccessionID GCF_002863925.1
+taxId 9796
+
+#############################################################################
+# setup UCSC named files (DONE - 2018-05-23 - Hiram)
+
+    # NOTE: new procedure here to manage these unmarked gaps
+    # required changes to hgFakeAgp program
+
+    mkdir /hive/data/genomes/equCab3/ucsc
+    cd /hive/data/genomes/equCab3/ucsc
+
+    # check for duplicate sequences:
+    time faToTwoBit -noMask ../refseq/G*.0_genomic.fna.gz refseq.2bit
+    #  real    1m1.796s
+
+    twoBitDup refseq.2bit
+    # no output is a good result, otherwise, would have to eliminate duplicates
+    # the scripts creating the fasta here will be using this refseq.2bit file
+
+    # unfortunately the gaps are not annotated in this assembly
+    # will construct a fake agp below
+    time ~/kent/src/hg/utils/automation/ucscCompositeAgp.pl \
+       ../refseq/G*.0_genomic.fna.gz \
+          ../refseq/G*.0_assembly_structure/Primary_Assembly
+# NC_009144.3 chr1
+# NC_009145.3 chr2
+# NC_009146.3 chr3
+# NC_009147.3 chr4
+# NC_009148.3 chr5
+# NC_009149.3 chr6
+# NC_009150.3 chr7
+# NC_009151.3 chr8
+# NC_009152.3 chr9
+# NC_009153.3 chr10
+# NC_009154.3 chr11
+# NC_009155.3 chr12
+# NC_009156.3 chr13
+# NC_009157.3 chr14
+# NC_009158.3 chr15
+# NC_009159.3 chr16
+# NC_009160.3 chr17
+# NC_009161.3 chr18
+# NC_009162.3 chr19
+# NC_009163.3 chr20
+# NC_009164.3 chr21
+# NC_009165.3 chr22
+# NC_009166.3 chr23
+# NC_009167.3 chr24
+# NC_009168.3 chr25
+# NC_009169.3 chr26
+# NC_009170.3 chr27
+# NC_009171.3 chr28
+# NC_009172.3 chr29
+# NC_009173.3 chr30
+# NC_009174.3 chr31
+# NC_009175.3 chrX
+
+# real    14m26.256s
+
+    # unplaced sequences
+    time ~/kent/src/hg/utils/automation/unplacedWithChroms.pl \
+       ../refseq/*_assembly_structure/Primary_Assembly
+# processed 4668 sequences into chrUn.fa.gz
+# real    0m43.355s
+
+    # there are no unlocalized sequences
+    time ~/kent/src/hg/utils/automation/unlocalizedWithChroms.pl \
+       ../refseq/*_assembly_structure/Primary_Assembly
+
+    # bash syntax here
+    mitoAcc=`grep "^# mitoAcc" ../equCab3.config.ra | awk '{print $NF}'`
+    printf "# mitoAcc %s\n" "$mitoAcc"
+# mitoAcc NC_001640.1
+
+    zcat \
+  ../refseq/*_assembly_structure/non-nuclear/assem*/AGP/chrMT.comp.agp.gz \
+     | grep -v "^#" | sed -e "s/^$mitoAcc/chrM/;" > chrM.agp
+
+    printf ">chrM\n" > chrM.fa
+    twoBitToFa -noMask refseq.2bit:$mitoAcc stdout | grep -v "^>" >> chrM.fa
+    gzip chrM.fa
+
+    # the agp's constructed above were useless with no gaps
+    rm -f *.agp
+
+    # create a fake agp to annotate gaps, added new argument to hgFakeAgp
+    # to better name these things::
+    hgFakeAgp -singleContigs -minContigGap=1 \
+	../refseq/GCF_002863925.1_EquCab3.0_genomic.fna.gz refseq.fake.agp
+
+    # need to fix up the names to ucsc names:
+    grep -v "^#" \
+        ../refseq/GCF_002863925.1_EquCab3.0_assembly_structure/Primary_Assembly/assembled_chromosomes/chr2acc \
+	| awk '{printf "s/^%s/chr%s/;\n", $2, $1}' > refseqToUcsc.sed
+
+    # this will maintain the contig names for chrUn from that AGP file
+    zcat ../refseq/GCF_002863925.1_EquCab3.0_assembly_structure/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+	| grep -v "^#" | awk '{printf "s/\\t%s/\\t%s/;\n", $1,$6}' \
+	> chrUnContigs.sed
+
+    cat refseq.fake.agp | sed -f refseqToUcsc.sed \
+	| sed -e 's/^NW_\([0-9]\+\).\([0-9]\+\)/chrUn_NW_\1v\2/;' \
+	| sed -e 's/^NC_[0-9]\+.[0-9]\+/chrM/;' \
+        | sed -f chrUnContigs.sed > equCab3.ucsc.agp
+
+    # verify this agp will match the fasta
+    time faToTwoBit *.fa.gz test.2bit
+    # real    1m10.237s
+
+    checkAgpAndFa equCab3.ucsc.agp test.2bit 2>&1 | tail -4
+    # All AGP and FASTA entries agree - both files are valid
+    # real    0m8.925s
+
+    # and no sequence lost from orginal:
+    twoBitToFa test.2bit stdout | faSize stdin
+# 2506966135 bases (9435481 N's 2497530654 real 2497530654 upper 0 lower)
+#	in 4701 sequences in 1 files
+# Total size: mean 533283.6 sd 6827354.4 min 2669 (chrUn_NW_019642362v1)
+#	max 188260577 (chr1) median 6592
+
+    # same numbers as above
+# 2506966135 bases (9435481 N's 2497530654 real 1761185522 upper
+#	736345132 lower) in 4701 sequences in 1 files
+# Total size: mean 533283.6 sd 6827354.4 min 2669 (NW_019642362.1)
+#	max 188260577 (NC_009144.3) median 6592
+
+    # no longer need these temporary 2bit files
+    rm refseq.2bit test.2bit
+
+#############################################################################
+#  Initial database build (DONE - 2018-05-23 - Hiram)
+
+    cd /hive/data/genomes/equCab3
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp equCab3.config.ra) > agp.log 2>&1
+    # real    2m21.544s
+
+    # verify there was no error in that step:
+    tail agp.log
+    #  *** All done!  (through the 'agp' step)
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db equCab3.config.ra) > db.log 2>&1
+    # real    20m46.511s
+
+    # verify gaps are all there:
+    twoBitInfo -nBed equCab3.unmasked.2bit stdout | awk '{print $3-$2}' \
+	| ave stdin | sed -e 's/^/# /;'
+# Q1 20.000000
+# median 1000.000000
+# Q3 2172.000000
+# average 1499.123133
+# min 1.000000
+# max 34650.000000
+# count 6294
+# total 9435481.000000
+# standard deviation 2806.197972
+
+    hgsql -e 'select chromEnd-chromStart from gap;' equCab3 | ave stdin | sed -e 's/^/# /;'
+# Q1 20.000000
+# median 1000.000000
+# Q3 2172.000000
+# average 1499.123133
+# min 1.000000
+# max 34650.000000
+# count 6294
+# total 9435481.000000
+# standard deviation 2806.197972
+
+    # check in the trackDb files created in TemporaryTrackDbCheckout/
+    #    and add equCab3 to trackDb/makefile
+
+    # temporary symlink until masked sequence is available
+    cd /hive/data/genomes/equCab3
+    ln -s `pwd`/equCab3.unmasked.2bit /gbdb/equCab3/equCab3.2bit
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2018-05-23 - Hiram)
+    mkdir /hive/data/genomes/equCab3/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/equCab3/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/equCab3/equCab3.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku equCab3) > do.log 2>&1
+    # real    5m36.146s
+
+    cat fb.equCab3.cpgIslandExtUnmasked.txt
+    # 43639817 bases of 2497530654 (1.747%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2018-05-23 - Hiram)
+    mkdir /hive/data/genomes/equCab3/bed/cytoBand
+    cd /hive/data/genomes/equCab3/bed/cytoBand
+    makeCytoBandIdeo.csh equCab3
+
+#############################################################################
+# gapOverlap (DONE - 2018-05-23 - Hiram)
+    mkdir /hive/data/genomes/equCab3/bed/gapOverlap
+    cd /hive/data/genomes/equCab3/bed/gapOverlap
+    time (doGapOverlap.pl \
+	-twoBit=/hive/data/genomes/equCab3/equCab3.unmasked.2bit equCab3 ) \
+	> do.log 2>&1
+    # real    2m49.728s
+
+    cat fb.equCab3.gapOverlap.txt
+    # 48566 bases of 2506966135 (0.002%) in intersection
+
+    # only six items:
+    zcat *.bed.gz | cut -f1-5
+# chr12   113245358       113246724       chr12:113245359-113246724       633
+# chr21   18867677        18869111        chr21:18867678-18869111 667
+# chr8    127452459       127454559       chr8:127452460-127454559        1000
+# chrX    52589209        52609380        chrX:52589210-52609380  1000
+# chrY    7097196 7097619 chrY:7097197-7097619    199
+
+#############################################################################
+# tandemDups (DONE - 2018-05-23 - Hiram)
+    mkdir /hive/data/genomes/equCab3/bed/tandemDups
+    cd /hive/data/genomes/equCab3/bed/tandemDups
+    time (~/kent/src/hg/utils/automation/doTandemDup.pl \
+  -twoBit=/hive/data/genomes/equCab3/equCab3.unmasked.2bit equCab3) \
+	> do.log 2>&1 &
+    # real    108m30.433s
+
+    cat fb.equCab3.tandemDups.txt
+    # 26366982 bases of 2506966135 (1.052%) in intersection
+
+    bigBedInfo equCab3.tandemDups.bb | sed -e 's/^/#  /;'
+#  version: 4
+#  fieldCount: 13
+#  hasHeaderExtension: yes
+#  isCompressed: yes
+#  isSwapped: 0
+#  extraIndexCount: 0
+#  itemCount: 354,039
+#  primaryDataSize: 9,521,689
+#  primaryIndexSize: 136,692
+#  zoomLevels: 9
+#  chromCount: 3648
+#  basesCovered: 449,107,941
+#  meanDepth (of bases covered): 5.195798
+#  minDepth: 1.000000
+#  maxDepth: 233.000000
+#  std of depth: 14.418242
+
+#############################################################################
+# run up idKeys files for chromAlias/ncbiRefSeq (DONE - 2018-05-23 - Hiram)
+
+    # will need the refseq keys:
+    mkdir /hive/data/genomes/equCab3/refseq/idKeys
+    cd /hive/data/genomes/equCab3/refseq/idKeys
+    faToTwoBit ../GCF_000001405.31_GRCh38.p5_genomic.fna.gz refseqEquCab3.2bit
+    time (doIdKeys.pl \
+	-twoBit=`pwd`/refseqEquCab3.2bit \
+	-buildDir=`pwd` refseqEquCab3) > do.log 2>&1 &
+    # real    3m23.365s
+    cat refseqEquCab3.keySignature.txt
+    #  9b81a6e3c94602c13436189783aadda8
+
+    # and the genbank keys:
+    mkdir /hive/data/genomes/equCab3/refseq/idKeys/genbank
+    cd /hive/data/genomes/equCab3/refseq/idKeys/genbank
+    ln -s /hive/data/outside/ncbi/genomes/genbank/vertebrate_mammalian/Equus_caballus/all_assembly_versions/GCA_002863925.1_EquCab3.0/GCA_002863925.1_EquCab3.0_genomic.fna.gz .
+    faToTwoBit GCA_002863925.1_EquCab3.0_genomic.fna.gz genbankEquCab3.2bit
+    time (doIdKeys.pl \
+	-twoBit=`pwd`/genbankEquCab3.2bit \
+	-buildDir=`pwd` genbankEquCab3) > do.log 2>&1 &
+    # real    3m25.325s
+
+    cat genbankEquCab3.keySignature.txt
+    #  ea8c3522e6ac4dc1bec438c4f70043da
+
+    # and the UCSC keys:
+    mkdir /hive/data/genomes/equCab3/bed/idKeys
+    cd /hive/data/genomes/equCab3/bed/idKeys
+
+    time (doIdKeys.pl \
+	-twoBit=/hive/data/genomes/equCab3/equCab3.unmasked.2bit \
+	-buildDir=`pwd` equCab3) > do.log 2>&1 &
+    # real    3m17.147s
+
+    cat equCab3.keySignature.txt
+    #  9b81a6e3c94602c13436189783aadda8
+
+#############################################################################
+# ucscToINSDC and ucscToRefSeq table/track (DONE - 2018-05-23 - Hiram)
+    # the sequence here is working for a 'refseq' assembly
+    # beware of a chrM situation may be specific depending upon what is
+    # available in the assembly
+
+    mkdir /hive/data/genomes/equCab3/bed/ucscToINSDC
+    cd /hive/data/genomes/equCab3/bed/ucscToINSDC
+
+    join -t$'\t' ../idKeys/equCab3.idKeys.txt \
+	../../refseq/idKeys/genbank/genbankEquCab3.idKeys.txt | cut -f2- \
+          | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+               | sort -k1,1 -k2,2n > ucscToINSDC.bed
+
+    join -t$'\t' ../idKeys/equCab3.idKeys.txt \
+	../../refseq/idKeys/refseqEquCab3.idKeys.txt | cut -f2- \
+          | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+               | sort -k1,1 -k2,2n > ucscToRefSeq.bed
+
+    # verify line counts are the same
+    wc -l *.bed ../../chrom.sizes
+    #	4700 ucscToINSDC.bed
+    #	4701 ucscToRefSeq.bed
+    #	4701 ../../chrom.sizes
+
+    # need to find INSDC equivalents for chrM:
+    egrep "chrM" *
+ucscToRefSeq.bed:chrM   0       16660   NC_001640.1
+
+    # lookup those accessions at NCBI Entrez
+    # NC_001640.1 = X79547.1
+    printf "chrM\t0\t16660\tX79547.1\n" >> ucscToINSDC.bed
+
+    # resort the bed file:
+    sort -k1,1 -k2,2n -o ucscToINSDC.bed ucscToINSDC.bed
+
+    # verify chrM is correct:
+    egrep "chrM" *
+# ucscToINSDC.bed:chrM    0       16660   X79547.1
+# ucscToRefSeq.bed:chrM   0       16660   NC_001640.1
+
+    # should be same line counts throughout:
+    wc -l * ../../chrom.sizes
+    #	4701 ucscToINSDC.bed
+    #	4701 ucscToRefSeq.bed
+    #	4701 ../../chrom.sizes
+
+    export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    # 27
+    # use the $chrSize in this sed
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab equCab3 ucscToINSDC stdin ucscToINSDC.bed
+    # should be the same for ucscToRefSeq:
+    export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    #  20
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
+    hgLoadSqlTab equCab3 ucscToRefSeq ./ucscToRefSeq.sql ucscToRefSeq.bed
+
+    # checkTableCoords should be silent
+    checkTableCoords equCab3
+    # each should cover %100 entirely:
+    featureBits -countGaps equCab3 ucscToINSDC
+    # 2506966135 bases of 2506966135 (100.000%) in intersection
+
+    featureBits -countGaps equCab3 ucscToRefSeq
+    # 2506966135 bases of 2506966135 (100.000%) in intersection
+
+#########################################################################
+# add chromAlias table (DONE - 2018-05-23 - Hiram)
+
+    mkdir /hive/data/genomes/equCab3/bed/chromAlias
+    cd /hive/data/genomes/equCab3/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name from ucscToRefSeq;' equCab3 \
+        | sort -k1,1 > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name from ucscToINSDC;' equCab3 \
+        | sort -k1,1 > ucsc.genbank.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl ucsc.*.tab \
+	> equCab3.chromAlias.tab
+
+for t in refseq genbank
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t equCab3.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking refseq: 4701 =? 4701 OK
+# checking genbank: 4701 =? 4701 OK
+
+    hgLoadSqlTab equCab3 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        equCab3.chromAlias.tab
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2018-05-23 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/horse/equCab3
+
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" equCab3 \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c | sed -e 's/^/#\t/;'
+#             1 NC_.1
+#            32 NC_.3_1
+#            32 NC_.3_10
+#            16 NC_.3_100
+#            14 NC_.3_101
+#            ...
+#          2985 PJAA.1
+#          1683 PJAA.1_1
+#             9 PJAA.1_10
+#             8 PJAA.1_11
+#             7 PJAA.1_12
+
+
+    # implies a rule: '[NP][CJ][A_][A0-9]+(\.[0-9]+[0-9_]*)?'
+
+    # verify this rule will find them all and eliminate them all:
+    hgsql -N -e "select frag from gold;" equCab3 | wc -l
+    # 10995
+
+    hgsql -N -e "select frag from gold;" equCab3 \
+       | egrep -e '[NP][CJ][A_][A0-9]+(\.[0-9]+[0-9_]*)?' | wc -l
+    # 10995
+
+    hgsql -N -e "select frag from gold;" equCab3 \
+       | egrep -v -e '[NP][CJ][A_][A0-9]+(\.[0-9]+[0-9_]*)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/chicken/equCab3/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [NP][CJ][A_][A0-9]+(\.[0-9]+[0-9_]*)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box
+
+#############################################################################
+# running repeat masker (DONE - 2018-05-23 - Hiram)
+    mkdir /hive/data/genomes/equCab3/bed/repeatMasker
+    cd /hive/data/genomes/equCab3/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku equCab3) > do.log 2>&1 &
+    # real    827m18.308s
+
+    egrep "bases|Total|masked" faSize.rmsk.txt \
+	| fold -w 75 -s  | sed -e 's/^/# /;'
+# 2506966135 bases (9435481 N's 2497530654 real 1386909673 upper 1110620981
+# lower) in 4701 sequences in 1 files
+# Total size: mean 533283.6 sd 6827354.4 min 2669 (chrUn_NW_019642362v1) max
+# 188260577 (chr1) median 6592
+# %44.30 masked total, %44.47 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.7
+    #    February 01 2017 (open-4-0-7) 1.331 version of RepeatMasker
+    # CC    Dfam_Consensus RELEASE 20170127;                            *
+    # CC    RepBase RELEASE 20170127;                                   *
+
+    time featureBits -countGaps equCab3 rmsk
+    # 1110729430 bases of 2506966135 (44.306%) in intersection
+    # real    0m34.031s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the faSize count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+    # faster way to get the same result on high contig count assemblies:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' equCab3 \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+    # total 1110729430.000000
+    # real    0m29.699s
+
+##########################################################################
+# running simple repeat (DONE - 2018-05-23 - Hiram)
+
+    mkdir /hive/data/genomes/equCab3/bed/simpleRepeat
+    cd /hive/data/genomes/equCab3/bed/simpleRepeat
+    # using trf409 6 here as similar size to genome (human == 6)
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        -trf409 6 equCab3) > do.log 2>&1 &
+    # real    27m10.606s
+
+    cat fb.simpleRepeat
+    # 36058802 bases of 2497530654 (1.444%) in intersection
+
+    bigBedInfo *.bb | sed -e 's/^/# /;'
+# version: 4
+# fieldCount: 16
+# hasHeaderExtension: yes
+# isCompressed: yes
+# isSwapped: 0
+# extraIndexCount: 0
+# itemCount: 395,037
+# primaryDataSize: 13,549,643
+# primaryIndexSize: 161,088
+# zoomLevels: 10
+# chromCount: 4141
+# basesCovered: 36,058,802
+# meanDepth (of bases covered): 1.649509
+# minDepth: 1.000000
+# maxDepth: 21.000000
+# std of depth: 1.069993
+
+    # adding this trfMask to the other masking
+    cd /hive/data/genomes/equCab3
+
+    # when using the Window Masker result:
+#    twoBitMask bed/windowMasker/equCab3.cleanWMSdust.2bit \
+#       -add bed/simpleRepeat/trfMask.bed  equCab3.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    # when using Rmsk results, add to rmsk after it is done:
+    twoBitMask equCab3.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed equCab3.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    twoBitToFa equCab3.2bit stdout | faSize stdin > faSize.equCab3.2bit.txt
+    egrep "bases|Total|masked" faSize.equCab3.2bit.txt \
+	| fold -w 75 -s  | sed -e 's/^/# /;'
+# 2506966135 bases (9435481 N's 2497530654 real 1386367759 upper 1111162895
+# lower) in 4701 sequences in 1 files
+# Total size: mean 533283.6 sd 6827354.4 min 2669 (chrUn_NW_019642362v1) max
+# 188260577 (chr1) median 6592
+# %44.32 masked total, %44.49 masked real
+
+    # reset the symlink
+    rm /gbdb/equCab3/equCab3.2bit
+    ln -s `pwd`/equCab3.2bit /gbdb/equCab3/equCab3.2bit
+
+#########################################################################
+# CREATE MICROSAT TRACK (DONE - 2018-05-24 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/equCab3/bed/microsat
+    cd /cluster/data/equCab3/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed equCab3 microsat microsat.bed
+    # Read 10322 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2018-05-23 - Hiram)
+
+    mkdir /hive/data/genomes/equCab3/bed/windowMasker
+    cd /hive/data/genomes/equCab3/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev equCab3) > do.log 2>&1
+    # real    188m5.912s
+
+    # Masking statistics
+    cat faSize.equCab3.cleanWMSdust.txt
+    egrep "bases|Total|masked" faSize.equCab3.cleanWMSdust.txt \
+	| fold -w 75 -s  | sed -e 's/^/# /;'
+# 3050398082 bases (31805092 N's 3018592990 real 1812556664 upper 1206036326
+# lower) in 4346 sequences in 1 files
+# Total size: mean 701886.4 sd 9434013.2 min 223 (chrUn_NW_019937062v1) max
+# 224244399 (chr1) median 29187
+# %39.54 masked total, %39.95 masked real
+
+    cat fb.equCab3.rmsk.windowmaskerSdust.txt
+    # 519201765 bases of 2506966135 (20.710%) in intersection
+
+    # since this was run at the same time of RM, failed at the end
+    # of the load step with the featureBits measurement, therefore
+    # continue with cleanup:
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -continue=cleanup -dbHost=hgwdev equCab3) > cleanup.log 2>&1
+    # real    1m59.683s
+
+#############################################################################
+# ncbiRefSeq (TBD - 2018-03-24 - Hiram)
+
+    # can be run up after ucscToRefSeq table is constructed
+    mkdir /hive/data/genomes/equCab3/bed/ncbiRefSeq
+    cd /hive/data/genomes/equCab3/bed/ncbiRefSeq
+
+    # adjust the name arguments
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev \
+      -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_mammalian Pan_troglodytes \
+      GCF_002880755.1_Clint_0 equCab3) > do.log 2>&1
+    # real    10m2.131s
+
+    # started this too early.  It needs to run after the equCab3.2bit file
+    # has been masked.  Rerunning from process step:
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -continue=process -bigClusterHub=ku -dbHost=hgwdev \
+      -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_mammalian Pan_troglodytes \
+      GCF_002880755.1_Clint_0 equCab3) > process.log 2>&1 &
+
+    # real    8m52.047s
+
+    cat fb.ncbiRefSeq.equCab3.txt
+    #  81659062 bases of 2476453204 (3.297%) in intersection
+
+#############################################################################
+# cpgIslands - (DONE - 2018-05-24 - Hiram)
+    mkdir /hive/data/genomes/equCab3/bed/cpgIslands
+    cd /hive/data/genomes/equCab3/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku equCab3) > do.log 2>&1 &
+    # real    6m39.343s
+
+    cat fb.equCab3.cpgIslandExt.txt
+    # 27798148 bases of 2497530654 (1.113%) in intersection
+
+##############################################################################
+# genscan - (DONE - 2018-05-24 - Hiram)
+    mkdir /hive/data/genomes/equCab3/bed/genscan
+    cd /hive/data/genomes/equCab3/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku equCab3) > do.log 2>&1 &
+    # real    61m35.362s
+    # two broken jobs run with window size 2,000,000 to complete
+    # real    69m43.551s
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -continue=makeBed -bigClusterHub=ku equCab3) > makeBed.log 2>&1 &
+    # real    1m20.373s
+
+    cat fb.equCab3.genscan.txt
+    # 57690912 bases of 2497530654 (2.310%) in intersection
+
+    cat fb.equCab3.genscanSubopt.txt
+    # 53358129 bases of 2497530654 (2.136%) in intersection
+
+    bigBedInfo equCab3.genscan.bb | sed -e 's/^/# /;'
+# version: 4
+# fieldCount: 12
+# hasHeaderExtension: yes
+# isCompressed: yes
+# isSwapped: 0
+# extraIndexCount: 0
+# itemCount: 45,631
+# primaryDataSize: 2,718,247
+# primaryIndexSize: 53,748
+# zoomLevels: 8
+# chromCount: 1263
+# basesCovered: 1,755,228,037
+# meanDepth (of bases covered): 1.000000
+# minDepth: 1.000000
+# maxDepth: 1.000000
+# std of depth: -nan
+
+#############################################################################
+# augustus gene track (DONE - 2018-05-24 - Hiram)
+
+    mkdir /hive/data/genomes/equCab3/bed/augustus
+    cd /hive/data/genomes/equCab3/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+     -species=human -dbHost=hgwdev -workhorse=hgwdev equCab3) > do.log 2>&1 &
+    # real    128m42.217s
+
+    cat fb.equCab3.augustusGene.txt
+    # 53699750 bases of 2497530654 (2.150%) in intersection
+
+    bigBedInfo  equCab3.augustus.bb | sed -e 's/^/# /;'
+# version: 4
+# fieldCount: 20
+# hasHeaderExtension: yes
+# isCompressed: yes
+# isSwapped: 0
+# extraIndexCount: 0
+# itemCount: 31,777
+# primaryDataSize: 2,271,720
+# primaryIndexSize: 28,912
+# zoomLevels: 7
+# chromCount: 490
+# basesCovered: 1,282,501,964
+# meanDepth (of bases covered): 1.249708
+# minDepth: 1.000000
+# maxDepth: 5.000000
+# std of depth: 0.619201
+
+#############################################################################
+# lastz/chain/net swap human/hg38 (DONE - 2018-05-25 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/hg38/bed/lastzEquCab3.2018-05-25
+
+    cat fb.hg38.chainEquCab3Link.txt
+    # 1705190736 bases of 3049335806 (55.920%) in intersection
+    cat fb.hg38.chainSynEquCab3Link.txt
+    # 1642798373 bases of 3049335806 (53.874%) in intersection
+    cat fb.hg38.chainRBest.EquCab3.txt
+    # 1563820848 bases of 3049335806 (51.284%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/equCab3/bed/blastz.hg38.swap
+    cd /hive/data/genomes/equCab3/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzEquCab3.2018-05-25/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1 &
+    #  real    122m26.771s
+
+    cat fb.equCab3.chainHg38Link.txt
+    # 1666879638 bases of 2497530654 (66.741%) in intersection
+    cat fb.equCab3.chainSynHg38Link.txt
+    # 1624977128 bases of 2497530654 (65.063%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` equCab3 hg38) > rbest.log 2>&1 &
+    # real    473m11.347s
+
+    cat fb.equCab3.chainRBest.Hg38.txt
+    # 1563886386 bases of 2497530654 (62.617%) in intersection
+
+#############################################################################
+# lastz/chain/net swap mouse/mm10 (DONE - 2018-05-25 - Hiram)
+
+    # alignment to mouse/mm10:
+    cd /hive/data/genomes/mm10/bed/lastzEquCab3.2018-05-25
+
+    cat fb.mm10.chainEquCab3Link.txt
+    # 921489718 bases of 2652783500 (34.737%) in intersection
+    cat fb.mm10.chainSynEquCab3Link.txt
+    # 876836391 bases of 2652783500 (33.053%) in intersection
+    cat fb.mm10.chainRBest.EquCab3.txt
+    # 876785778 bases of 2652783500 (33.052%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/equCab3/bed/blastz.mm10.swap
+    cd /hive/data/genomes/equCab3/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/mm10/bed/lastzEquCab3.2018-05-25/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1 &
+    #  real    83m14.250s
+
+    cat fb.equCab3.chainMm10Link.txt
+    # 930516778 bases of 2497530654 (37.257%) in intersection
+    cat fb.equCab3.chainSynMm10Link.txt
+    # 897238830 bases of 2497530654 (35.925%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` equCab3 mm10) > rbest.log 2>&1 &
+    # real    318m40.520s
+
+    cat fb.equCab3.chainRBest.Mm10.txt
+    # 875954606 bases of 2497530654 (35.073%) in intersection
+
+##############################################################################
+# Create kluster run files (DONE - 2018-05-25 - Hiram)
+
+    cd /hive/data/genomes/equCab3
+    # numerator is equCab3 gapless bases "real" as reported by:
+    featureBits -noRandom -noHap equCab3 gap
+    # 3324287 bases of 2405835607 (0.138%) in intersection
+    #                   ^^^
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2405835607 / 2861349177 \) \* 1024
+    #  ( 2405835607 / 2861349177 ) * 1024 = 860.983931
+
+    # ==> use -repMatch=800, was 825 equCab2
+    cd /hive/data/genomes/equCab3
+    blat equCab3.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/equCab3.11.ooc \
+        -repMatch=800
+    #  Wrote 29317 overused 11-mers to jkStuff/equCab3.11.ooc
+    # equCab2 at repMatch=825 was:
+    #  Wrote 25375 overused 11-mers to equCab2.11.ooc
+
+    # There are no non-bridged gaps in this assembly
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N \
+        -e 'select * from gap where bridge="no" order by size;' equCab3 \
+        | sort -k7,7nr | ave -col=7 stdin | sed -e 's/^/# /;'
+    # there are many at 100 bases:
+# Q1 100.000000
+# median 100.000000
+# Q3 100.000000
+# average 10930.290698
+# min 10.000000
+# max 500001.000000
+# count 86
+# total 940005.000000
+# standard deviation 56419.602180
+
+    # profile:
+    hgsql -N -e 'select * from gap where bridge="no" order by size;' equCab3 \
+	| cut -f7 | sort | uniq -c
+      1 10
+     74 100
+      1 10223
+      1 131931
+      1 15585
+      1 29588
+      1 32403
+      1 33521
+      1 500001
+      2 50001
+      1 70431
+      1 8910
+
+    # therefore, minimum gap size of 100, this is doing non-bridged gaps only
+  gapToLift -verbose=2 -minGap=100 equCab3 jkStuff/equCab3.nonBridged.lft \
+       -bedFile=stdout | sort -k1,1 -k2,2n > jkStuff/equCab3.nonBridged.bed
+
+##############################################################################
+# LIFTOVER TO equCab2 (DONE - 2018-05-25 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/equCab3/bed/blat.equCab2.2018-05-25
+    cd /hive/data/genomes/equCab3/bed/blat.equCab2.2018-05-25
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/equCab3/jkStuff/equCab3.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         equCab3 equCab2) > do.log 2>&1
+    # real    439m22.186s
+
+    # verify the convert link on the test browser is now active from equCab3 to
+    # equCab2
+
+##############################################################################
+# GENBANK AUTO UPDATE (DONE - 2018-03-25 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism      mrnaCnt   estCnt  refSeqCnt
+    # Equus caballus  29381   37758   1146
+
+    # edit etc/genbank.conf to add equCab3 just before equCab2
+# equCab3 (Equus caballus)
+equCab3.serverGenome = /hive/data/genomes/equCab3/equCab3.2bit
+equCab3.clusterGenome = /scratch/data/equCab3/equCab3.2bit
+equCab3.ooc = /hive/data/genomes/equCab3/jkStuff/equCab3.11.ooc
+equCab3.lift = no
+equCab3.downloadDir = equCab3
+equCab3.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+equCab3.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+equCab3.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+equCab3.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+equCab3.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+# defaults yes: genbank.mrna.native.load genbank.mrna.native.loadDesc
+# yes: genbank.est.native.load refseq.mrna.native.load
+# yes: refseq.mrna.native.loadDesc refseq.mrna.xeno.load
+# yes: refseq.mrna.xeno.loadDesc
+# defaults no: genbank.mrna.xeno.load genbank.mrna.xeno.loadDesc
+# no: genbank.est.native.loadDesc genbank.est.xeno.load
+# no: genbank.est.xeno.loadDesc
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+# equCab3.upstreamGeneTbl = refGene
+# equCab3.upstreamMaf = multiz6way /hive/data/genomes/equCab3/bed/multiz6way/species.list
+
+    # verify stated file paths do exist:
+    grep equCab3 etc/genbank.conf | egrep "Genome|ooc|lift" \
+	| awk '{print $NF}' | grep -v -w no | xargs ls -og
+-rw-rw-r-- 1 653547323 May 24 16:07 /hive/data/genomes/equCab3/equCab3.2bit
+-rw-rw-r-- 1 653547323 May 24 16:07 /hive/data/genomes/equCab3/equCab3.2bit
+-rw-rw-r-- 1    117276 May 25 09:33 /hive/data/genomes/equCab3/jkStuff/equCab3.11.ooc
+
+    # add equCab3 to:
+    #   etc/align.dbs etc/hgwdev.dbs
+    git commit -m 'adding equCab3/horse refs #21223' \
+	etc/genbank.conf etc/align.dbs etc/hgwdev.dbs
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    # XXX a few days later the genbank tables will be in the database
+
+#############################################################################
+#  BLATSERVERS ENTRY (DONE - 2018-05-29 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("equCab3", "blat1d", "17900", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("equCab3", "blat1d", "17901", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+##############################################################################
+## reset default position to same as what equCab2 has
+##  (DONE - 2018-05-29 - Hiram)
+
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chr11:53320263-53382039"
+	where name="equCab3";' hgcentraltest
+
+##############################################################################
+# all.joiner update, downloads and in pushQ - (DONE - 2018-06-11 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    ~/kent/src/hg/utils/automation/verifyBrowser.pl equCab3
+# 56 tables in database equCab3 - Horse, Equus caballus
+# verified 55 tables in database equCab3, 1 extra tables, 14 optional tables
+# chainNetRBestHg38     3 optional tables
+# chainNetRBestMm10     3 optional tables
+# chainNetSynHg38       3 optional tables
+# chainNetSynMm10       3 optional tables
+# gapOverlap    1 optional tables
+# tandemDups    1 optional tables
+# 1     splitOverlap    - extra table
+# 12 genbank tables found
+# verified 29 required tables, 0 missing tables
+# hg38 chainNet to equCab3 found 3 required tables
+# mm10 chainNet to equCab3 found 3 required tables
+# hg38 chainNet RBest and syntenic to equCab3 found 6 optional tables
+# mm10 chainNet RBest and syntenic to equCab3 found 3 optional tables
+# liftOver to previous versions: 1, from previous versions: 1
+
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=equCab3 -tableCoverage all.joiner
+    joinerCheck -database=equCab3 -times all.joiner
+    joinerCheck -database=equCab3 -keys all.joiner
+
+    cd /hive/data/genomes/equCab3
+    rm -fr TemporaryTrackDbCheckout
+
+    time (makeDownloads.pl -workhorse=hgwdev equCab3) > downloads.log 2>&1
+    #  real    23m53.926s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/equCab3/pushQ
+    cd /hive/data/genomes/equCab3/pushQ
+  time (makePushQSql.pl -redmineList equCab3) > equCab3.pushQ.sql 2> stderr.out
+XXX - running - Mon Jun 11 15:32:33 PDT 2018
+    # real    4m3.493s
+
+    # remove the tandemDups and gapOverlaps from the file list:
+    sed -i -e "/tandemDups/d" redmine.equCab3.table.list
+    sed -i -e "/Tandem Dups/d" redmine.equCab3.releaseLog.txt
+    sed -i -e "/gapOverlap/d" redmine.equCab3.table.list
+    sed -i -e "/Gap Overlaps/d" redmine.equCab3.releaseLog.txt
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: equCab3 does not have seq
+    # WARNING: equCab3 does not have extFile
+
+    # add the path names to the listing files in the redmine issue
+    # in the three appropriate entry boxes:
+
+/hive/data/genomes/equCab3/pushQ/redmine.equCab3.file.list
+/hive/data/genomes/equCab3/pushQ/redmine.equCab3.releaseLog.txt
+/hive/data/genomes/equCab3/pushQ/redmine.equCab3.table.list
+
+#########################################################################

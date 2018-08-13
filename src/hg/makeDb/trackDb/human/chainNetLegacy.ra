@@ -109,13 +109,13 @@ html chainNet
 
 #include chainNetTarSyr1 alpha
 
-        track chainLoxAfr2
-        subTrack legacyChainNetViewchain on
-        subGroups view=chain species=zfElephant clade=gAfro
-        shortLabel $o_db Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain loxAfr2
-        otherDb loxAfr2
+#         track chainLoxAfr2
+#         subTrack legacyChainNetViewchain on
+#         subGroups view=chain species=zfElephant clade=gAfro
+#         shortLabel $o_db Chain
+#         longLabel $o_Organism ($o_date) Chained Alignments
+#         type chain loxAfr2
+#         otherDb loxAfr2
 
         track chainFelCat3
         subTrack legacyChainNetViewchain on
@@ -149,45 +149,45 @@ html chainNet
         type chain canFam2
         otherDb canFam2
 
-        track chainTurTru1
-        subTrack legacyChainNetViewchain on
-        subGroups view=chain species=sDolphin clade=fLaura
-        shortLabel $o_db Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain turTru1
-        otherDb turTru1
+#        track chainTurTru1
+#        subTrack legacyChainNetViewchain on
+#        subGroups view=chain species=sDolphin clade=fLaura
+#        shortLabel $o_db Chain
+#        longLabel $o_Organism ($o_date) Chained Alignments
+#        type chain turTru1
+#        otherDb turTru1
 
-        track chainOviAri1
-        subTrack legacyChainNetViewchain on
-        subGroups view=chain species=tSheep clade=fLaura
-        shortLabel $o_db Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain oviAri1
-        otherDb oviAri1
+#        track chainOviAri1
+#        subTrack legacyChainNetViewchain on
+#        subGroups view=chain species=tSheep clade=fLaura
+#        shortLabel $o_db Chain
+#        longLabel $o_Organism ($o_date) Chained Alignments
+#        type chain oviAri1
+#        otherDb oviAri1
 
-        track chainBosTau6
-        subTrack legacyChainNetViewchain on
-        subGroups view=chain species=uCow clade=fLaura
-        shortLabel $o_db Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain bosTau6
-        otherDb bosTau6
+#        track chainBosTau6
+#        subTrack legacyChainNetViewchain on
+#        subGroups view=chain species=uCow clade=fLaura
+#        shortLabel $o_db Chain
+#        longLabel $o_Organism ($o_date) Chained Alignments
+#        type chain bosTau6
+#        otherDb bosTau6
 
-        track chainBosTau4
-        subTrack legacyChainNetViewchain on
-        subGroups view=chain species=uCow clade=fLaura
-        shortLabel $o_db Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain bosTau4
-        otherDb bosTau4
+#        track chainBosTau4
+#        subTrack legacyChainNetViewchain on
+#        subGroups view=chain species=uCow clade=fLaura
+#        shortLabel $o_db Chain
+#        longLabel $o_Organism ($o_date) Chained Alignments
+#        type chain bosTau4
+#        otherDb bosTau4
 
-        track chainSusScr2
-        subTrack legacyChainNetViewchain on
-        subGroups view=chain species=vPig clade=fLaura
-        shortLabel $o_db Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain susScr2
-        otherDb susScr2
+#        track chainSusScr2
+#        subTrack legacyChainNetViewchain on
+#        subGroups view=chain species=vPig clade=fLaura
+#        shortLabel $o_db Chain
+#        longLabel $o_Organism ($o_date) Chained Alignments
+#        type chain susScr2
+#        otherDb susScr2
 
         track chainSusScr1
         subTrack legacyChainNetViewchain on
@@ -197,13 +197,13 @@ html chainNet
         type chain susScr1
         otherDb susScr1
 
-        track chainVicPac1
-        subTrack legacyChainNetViewchain on
-        subGroups view=chain species=rAlpaca clade=fLaura
-        shortLabel $o_db Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain vicPac1
-        otherDb vicPac1
+#        track chainVicPac1
+#        subTrack legacyChainNetViewchain on
+#        subGroups view=chain species=rAlpaca clade=fLaura
+#        shortLabel $o_db Chain
+#        longLabel $o_Organism ($o_date) Chained Alignments
+#        type chain vicPac1
+#        otherDb vicPac1
 
         track chainOryCun1
         subTrack legacyChainNetViewchain on
@@ -237,13 +237,13 @@ html chainNet
         type chain rn5
         otherDb rn5
 
-        track chainEchTel1
-        subTrack legacyChainNetViewchain on
-        subGroups view=chain species=zhTenrec clade=gAfro
-        shortLabel $o_db Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain echTel1
-        otherDb echTel1
+#        track chainEchTel1
+#        subTrack legacyChainNetViewchain on
+#        subGroups view=chain species=zhTenrec clade=gAfro
+#        shortLabel $o_db Chain
+#        longLabel $o_Organism ($o_date) Chained Alignments
+#        type chain echTel1
+#        otherDb echTel1
 
         track chainGalGal3
         subTrack legacyChainNetViewchain on
@@ -396,13 +396,13 @@ html chainNet
         type netAlign calJac1 chainCalJac1
         otherDb calJac1
 
-        track netLoxAfr2
-        subTrack legacyChainNetViewnet on
-        subGroups view=net species=zfElephant clade=gAfro
-        shortLabel $o_db Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign loxAfr2 chainLoxAfr2
-        otherDb loxAfr2
+#         track netLoxAfr2
+#         subTrack legacyChainNetViewnet on
+#         subGroups view=net species=zfElephant clade=gAfro
+#         shortLabel $o_db Net
+#         longLabel $o_Organism ($o_date) Alignment Net
+#         type netAlign loxAfr2 chainLoxAfr2
+#         otherDb loxAfr2
 
         track netFelCat3
         subTrack legacyChainNetViewnet on
@@ -436,45 +436,45 @@ html chainNet
         type netAlign canFam2 chainCanFam2
         otherDb canFam2
 
-        track netTurTru1
-        subTrack legacyChainNetViewnet on
-        subGroups view=net species=sDolphin clade=fLaura
-        shortLabel $o_db Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign turTru1 chainTurTru1
-        otherDb turTru1
+#        track netTurTru1
+#        subTrack legacyChainNetViewnet on
+#        subGroups view=net species=sDolphin clade=fLaura
+#        shortLabel $o_db Net
+#        longLabel $o_Organism ($o_date) Alignment Net
+#        type netAlign turTru1 chainTurTru1
+#        otherDb turTru1
 
-        track netOviAri1
-        subTrack legacyChainNetViewnet on
-        subGroups view=net species=tSheep clade=fLaura
-        shortLabel $o_db Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign oviAri1 chainOviAri1
-        otherDb oviAri1
+#        track netOviAri1
+#        subTrack legacyChainNetViewnet on
+#        subGroups view=net species=tSheep clade=fLaura
+#        shortLabel $o_db Net
+#        longLabel $o_Organism ($o_date) Alignment Net
+#        type netAlign oviAri1 chainOviAri1
+#        otherDb oviAri1
 
-        track netBosTau6
-        subTrack legacyChainNetViewnet on
-        subGroups view=net species=uCow clade=fLaura
-        shortLabel $o_db Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign bosTau6 chainBosTau6
-        otherDb bosTau6
+#        track netBosTau6
+#        subTrack legacyChainNetViewnet on
+#        subGroups view=net species=uCow clade=fLaura
+#        shortLabel $o_db Net
+#        longLabel $o_Organism ($o_date) Alignment Net
+#        type netAlign bosTau6 chainBosTau6
+#        otherDb bosTau6
 
-        track netBosTau4
-        subTrack legacyChainNetViewnet on
-        subGroups view=net species=uCow clade=fLaura
-        shortLabel $o_db Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign bosTau4 chainBosTau4
-        otherDb bosTau4
+#        track netBosTau4
+#        subTrack legacyChainNetViewnet on
+#        subGroups view=net species=uCow clade=fLaura
+#        shortLabel $o_db Net
+#        longLabel $o_Organism ($o_date) Alignment Net
+#        type netAlign bosTau4 chainBosTau4
+#        otherDb bosTau4
 
-        track netSusScr2
-        subTrack legacyChainNetViewnet on
-        subGroups view=net species=vPig clade=fLaura
-        shortLabel $o_db Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign susScr2 chainSusScr2
-        otherDb susScr2
+#        track netSusScr2
+#        subTrack legacyChainNetViewnet on
+#        subGroups view=net species=vPig clade=fLaura
+#        shortLabel $o_db Net
+#        longLabel $o_Organism ($o_date) Alignment Net
+#        type netAlign susScr2 chainSusScr2
+#        otherDb susScr2
 
         track netSusScr1
         subTrack legacyChainNetViewnet on
@@ -484,13 +484,13 @@ html chainNet
         type netAlign susScr1 chainSusScr1
         otherDb susScr1
 
-        track netVicPac1
-        subTrack legacyChainNetViewnet on
-        subGroups view=net species=rAlpaca clade=fLaura
-        shortLabel $o_db Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign vicPac1 chainVicPac1
-        otherDb vicPac1
+#        track netVicPac1
+#        subTrack legacyChainNetViewnet on
+#        subGroups view=net species=rAlpaca clade=fLaura
+#        shortLabel $o_db Net
+#        longLabel $o_Organism ($o_date) Alignment Net
+#        type netAlign vicPac1 chainVicPac1
+#        otherDb vicPac1
 
         track netOryCun1
         subTrack legacyChainNetViewnet on
@@ -524,13 +524,13 @@ html chainNet
         type netAlign rn5 chainRn5
         otherDb rn5
 
-        track netEchTel1
-        subTrack legacyChainNetViewnet on
-        subGroups view=net species=zhTenrec clade=gAfro
-        shortLabel $o_db Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign echTel1 chainEchTel1
-        otherDb echTel1
+#        track netEchTel1
+#        subTrack legacyChainNetViewnet on
+#        subGroups view=net species=zhTenrec clade=gAfro
+#        shortLabel $o_db Net
+#        longLabel $o_Organism ($o_date) Alignment Net
+#        type netAlign echTel1 chainEchTel1
+#        otherDb echTel1
 
         track netGalGal3
         subTrack legacyChainNetViewnet on

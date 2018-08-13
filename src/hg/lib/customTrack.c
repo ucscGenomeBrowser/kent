@@ -515,7 +515,7 @@ if (tdb->colorR != def->colorR || tdb->colorG != def->colorG || tdb->colorB != d
     fprintf(f, "\t%s='%d,%d,%d'", "color", tdb->colorR, tdb->colorG, tdb->colorB);
 hashMayRemove(tdb->settingsHash, "color");
 if (tdb->altColorR != def->altColorR || tdb->altColorG != def->altColorG
-	|| tdb->altColorB != tdb->altColorB)
+	|| tdb->altColorB != def->altColorB)
     fprintf(f, "\t%s='%d,%d,%d'", "altColor", tdb->altColorR, tdb->altColorG, tdb->altColorB);
 hashMayRemove(tdb->settingsHash, "altColor");
 
@@ -626,6 +626,7 @@ cgiDecode(fileName, fileNameDecoded, strlen(fileName));
 boolean result = 
     (endsWith(fileNameDecoded,".gz") || 
      endsWith(fileNameDecoded,".Z")  ||
+     endsWith(fileNameDecoded,".zip")  ||
      endsWith(fileNameDecoded,".bz2"));
 freeMem(fileNameDecoded);
 return result;

@@ -48,11 +48,23 @@
                s/Zaire ebolavirus/Ebola virus/;' \
     | sort -k2 | uniq  > taxIdGenome.txt
 
+    # compare this result with previous ../someDate/taxIdGenome.txt
+    # to verity it isn't going crazy
+
     # Look in taxIdGenome.rr.txt for cases of same genome value, different species
     # (aside from Baboon).  Example failure:
     cut -f1 taxIdGenome.txt | sort | uniq -c | sort -rn | head
       2 186538
     # That was two names for the same thing: Zaire ebolavirus == Ebola virus
+    # There are cases where there are two entries for the same name with
+    # different taxIds:
+    cut -f2 taxIdGenome.txt | sort | uniq -c | sort -rn | head
+    # 2 S. cerevisiae
+    # 2 D. pseudoobscura
+    # 2 A. gambiae
+
+    # this seems to be harmless and the taxIds can not be reconciled, they
+    # are actually different assemblies for the same species
 
     # Run a script to create the Javascript file:
     ~/kent/src/hg/utils/dbDbTaxonomy.pl taxIdGenome.txt nodes.dmp names.dmp \

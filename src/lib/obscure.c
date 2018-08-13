@@ -255,6 +255,23 @@ for (;;)
 freeMem(buf);
 }
 
+void *charToPt(char c)
+/* Convert char to pointer. Use when really want to store
+ * a char in a pointer field. */
+{
+char *pt = NULL;
+return pt+c;
+}
+
+char ptToChar(void *pt)
+/* Convert pointer to char.  Use when really want to store a
+ * pointer in a char. */
+{
+char *a = NULL, *b = pt;
+return b - a;
+}
+
+
 void *intToPt(int i)
 /* Convert integer to pointer. Use when really want to store an
  * int in a pointer field. */

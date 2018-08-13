@@ -11,7 +11,7 @@ urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https
 scoreLabel Minimum Score (1000=SwissProt, 0=Trembl)
 scoreFilter 0
 itemRgb on
-#dataVersion /gbdb/$D/uniprot/version.txt
+dataVersion /gbdb/$D/uniprot/version.txt
 
         track unipAliSwissprot
         shortLabel SwissProt Aln.

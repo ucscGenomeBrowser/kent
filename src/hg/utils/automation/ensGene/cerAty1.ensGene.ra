@@ -1,0 +1,4 @@
+# required db variable
+db cerAty1
+# specific lifting to translate names:
+liftUp /hive/data/genomes/cerAty1/jkStuff/ensToUcsc.lift

@@ -1,6 +1,8 @@
 
 include ../../refSeqComposite.ra
 
+include ../../crispr10K.ra
+
 # chainNet tracks
 include trackDb.gliresChainNet.ra
 include trackDb.euarchontoglireChainNet.ra
@@ -57,7 +59,7 @@ visibility hide
 color 20,20,170
 type bed 12
 
-track knownGeneOld8
+track knownGeneOld9
 shortLabel Old UCSC Genes
 longLabel Previous Version of UCSC Genes
 group genes
@@ -65,12 +67,12 @@ visibility hide
 color 82,82,160
 type genePred
 hgsid on
-oldToNew kg8ToKg9
+oldToNew kg9ToKg10
 baseColorUseCds given
 baseColorDefault genomicCodons
 
-searchName knownGeneOld8
-searchTable knownGeneOld8
+searchName knownGeneOld9
+searchTable knownGeneOld9
 searchDescription Previous Version of UCSC Genes
 searchMethod fuzzy
 query select chrom, txStart,txEnd, name from %s where name like '%%%s%%'

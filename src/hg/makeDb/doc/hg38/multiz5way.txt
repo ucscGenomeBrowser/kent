@@ -1426,7 +1426,7 @@ done
     rm -rf exonAA exonNuc
 
 #############################################################################
-# wiki page for 5-way (TBD - 2016-05-11 - Hiram)
+# wiki page for 5-way (DONE - 2017-12-18 - Hiram)
     mkdir /hive/users/hiram/bigWays/hg38.5way
     cd /hive/users/hiram/bigWays
     echo "hg38" > hg38.5way/ordered.list
@@ -1449,9 +1449,10 @@ done
     ./defCheck.pl hg38 5way
 
     # this constructs the html pages in hg38.5way/:
-# -rw-rw-r-- 1 3317 May 11 11:08 Hg38_5-way_conservation_alignment.html
-# -rw-rw-r-- 1 4827 May 11 11:08 Hg38_5-way_Genome_size_statistics.html
-# -rw-rw-r-- 1 3308 May 11 11:08 Hg38_5-way_conservation_lastz_parameters.html
+# -rw-rw-r--    3270 Dec 18 13:57 Hg38_5-way_conservation_alignment.html
+# -rw-rw-r--    4831 Dec 18 13:57 Hg38_5-way_Genome_size_statistics.html
+# -rw-rw-r--    3289 Dec 18 13:57 Hg38_5-way_conservation_lastz_parameters.html
+
     # add those pages to the genomewiki.  Their page names are the
     # names of the .html files without the .html:
 #  Hg38_5-way_conservation_alignment

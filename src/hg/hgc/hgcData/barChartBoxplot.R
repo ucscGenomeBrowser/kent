@@ -6,6 +6,63 @@
 #               sample  category  value
 #       outFile is filename suitable for writing graphic (e.g. in PNG format)
 
+drawBoxPlot <- function(df) {
+    exprPlot <- boxplot(value ~ df$category, data=df, ylab=yLabel, ylim=yLimit,
+                        main=title,
+                        col=colorsHex, border=c(darkgray),
+                        # medians
+                        medcol="black", medlwd=2,
+                        # outliers
+                        outcex=.5, outcol=darkgray,
+                        # whiskers
+                        whisklty=1, whiskcol=gray, 
+                        # 'staples'
+                        staplecol=gray, staplecex=1.3, staplewex=.8,
+                        # erase X axis labels (add later rotated)
+                        names=rep(c(""), count))
+    # draw sample count twice (once in color, once in black) to make light colors readable
+    y1 <- par("usr")[3]
+    size <- .8
+    adjust <- .4*abs(y1)
+    text(.4, y1 + adjust, "N=", cex=size, xpd=TRUE)
+    text(1:count, y1 + adjust, exprPlot$n, cex=size, col="black")
+    text(1:count, y1 + adjust, exprPlot$n, cex=size, col=colorsHex)
+
+    # add sample (X axis) labels at 45 degree angle
+    rot <- 45
+    size <- 1
+    adjust <- .7 * abs(y1)
+    text(1:count, y1 - adjust, cex=size, labels=labels, srt=rot, xpd=TRUE, adj=c(1,.5), col="black")
+    text(1:count, y1 - adjust, cex=size, labels=labels, srt=rot, xpd=TRUE, adj=c(1,.5),
+            col=colorsHex)
+}
+
+drawBarPlot <- function(df) {
+    df <- df[(order(match(df$category, colorDf$category))),]
+    exprPlot <- barplot(df$value, ylab=yLabel, ylim=yLimit,
+                        main=title,
+                        col=colorsHex, border=c(darkgray),
+                        # erase X axis labels (add later rotated)
+                        names.arg=rep(c(""), count))
+    limits <- par("usr")
+    xmin <- limits[1]
+    xmax <- limits[2]
+    ymin <- limits[3]
+    ymax <- limits[4]
+    adjust <- abs(ymin)
+
+    # draw box around bargraph
+    rect(xmin, ymin + adjust, xmax, ymax, border=c(darkgray), lwd=2, xpd=TRUE)
+
+    # add sample (X axis) labels at 45 degree angle
+    rot <- 45
+    size <- 1
+    text(exprPlot, ymin - adjust, cex=size, labels=labels, srt=rot, xpd=TRUE,
+        adj=c(1,.5), col="black")
+    text(exprPlot, ymin - adjust, cex=size, labels=labels, srt=rot, xpd=TRUE,
+        adj=c(1,.5), col=colorsHex)
+}
+
 args <- commandArgs(TRUE)
 locus <- args[1]
 units <- args[2]
@@ -40,8 +97,10 @@ darkgray <- "#737373"
 marBottom <- 10;
 marLeft <- 4;
 if (max(nchar(labels)) > 30) {
-    marBottom <- 16;
-    marLeft <- 5;
+    # change margins to appropriately fit longest label name
+    # left * .45 + 1 accounts for final rotation and length / 3 for length to margins ratio
+    marBottom <- max(nchar(labels))/3;
+    marLeft <- marLeft + (marLeft * .45 + 1);
 }
 par(mar=c(marBottom,marLeft,3,1) + 0.1, mgp=c(2,1,0), font.main=1)
 yLabel <- units
@@ -50,36 +109,11 @@ yLimit <- c(-(max*.02), max+ (max*.03))
 title <- locus
 if (name2 != "n/a")
     title <- paste(locus, " (", name2, ")", sep="")
-exprPlot <- boxplot(value ~ df$category, data=df, ylab=yLabel, ylim=yLimit,
-                        main=title,
-                        col=colorsHex, border=c(darkgray),
-                        # medians
-                        medcol="black", medlwd=2,
-                        # outliers
-                        outcex=.5, outcol=darkgray,
-                        # whiskers
-                        whisklty=1, whiskcol=gray, 
-                        # 'staples'
-                        staplecol=gray, staplecex=1.3, staplewex=.8,
-                        # erase X axis labels (add later rotated)
-                        names=rep(c(""), count))
 
-# display sample count
-y1 <- par("usr")[3]
-size <- .8
-adjust <- .4*abs(y1)
-text(.4, y1 + adjust, "N=", cex=size)
-
-# draw sample count twice (once in color, once in black) to make light colors readable
-text(1:count, y1 + adjust, exprPlot$n, cex=size, col="black")
-text(1:count, y1 + adjust, exprPlot$n, cex=size, col=colorsHex)
-
-# add sample (X axis) labels at 45 degree angle
-rot <- 45
-size <- 1
-adjust <- .7*abs(y1)
-text(1:count, y1 - adjust, cex=size, labels=labels, srt=rot, xpd=TRUE, adj=c(1,.5), col="black")
-text(1:count, y1 - adjust, cex=size, labels=labels, srt=rot, xpd=TRUE, adj=c(1,.5), 
-        col=colorsHex)
+if (length(unique(df$category)) == length(df$category)) {
+    drawBarPlot(df)
+} else {
+    drawBoxPlot(df)
+}
 
 graphics.off()

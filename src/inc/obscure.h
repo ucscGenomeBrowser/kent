@@ -53,6 +53,14 @@ void copyOpenFile(FILE *inFh, FILE *outFh);
 void cpFile(int s, int d);
 /* Copy from source file to dest until reach end of file. */
 
+void *charToPt(char c);
+/* Convert char to pointer. Use when really want to store
+ * a char in a pointer field. */
+
+char ptToChar(void *pt);
+/* Convert pointer to char.  Use when really want to store a
+ * pointer in a char. */
+
 void *intToPt(int i);
 /* Convert integer to pointer. Use when really want to store an
  * int in a pointer field. */

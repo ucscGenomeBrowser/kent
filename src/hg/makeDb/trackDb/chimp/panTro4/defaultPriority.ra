@@ -13,9 +13,6 @@ priority 1
 track xenoRefGene override
 priority 2
 
-track refGene override
-priority 3
-
 # mRNA and EST
 
 track mrna override

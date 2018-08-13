@@ -27,7 +27,6 @@
 #include "regexHelper.h"
 #include "suggest.h"
 #include "trackHub.h"
-#include "trix.h"
 #include "web.h"
 
 /* Global Variables */
@@ -159,9 +158,7 @@ else
         suggestTrack = assemblyGeneSuggestTrack(db);
     jsonWriteString(jw, "suggestTrack", suggestTrack);
     char *description = maybeGetDescriptionText(db);
-    //#*** TODO: move jsonStringEscape inside jsonWriteString
-    char *encoded = jsonStringEscape(description);
-    jsonWriteString(jw, "description", encoded);
+    jsonWriteString(jw, "description", description);
     listAssemblyHubs(jw);
     }
 }
@@ -692,11 +689,37 @@ match->aDb = cloneString(aDb);
 return match;
 }
 
-static struct aHubMatch *filterTrixSearchMatches(struct dbDb *dbDbList,
-                                                 struct trixSearchResult *tsrList)
-/* Collect the assembly hub matches (not track hub matches) from a search in hub trix files. */
+static struct hash *unpackHubDbUrlList(struct slName *hubDbUrlList)
+/* hubDbUrlList contains strings like "db,hubUrl" -- split on comma and return a hash of
+ * hubUrl to one or more dbs. */
 {
-if (tsrList == NULL)
+struct hash *hubToDb = hashNew(0);
+struct slName *hubDbUrl;
+for (hubDbUrl = hubDbUrlList;  hubDbUrl != NULL;  hubDbUrl = hubDbUrl->next)
+    {
+    char *comma = strchr(hubDbUrl->name, ',');
+    if (comma)
+        {
+        char *db = hubDbUrl->name;
+        *comma = '\0';
+        char *hubUrl = comma+1;
+        struct hashEl *hel = hashLookup(hubToDb, hubUrl);
+        struct slName *dbList = hel ? hel->val : NULL;
+        slAddHead(&dbList, slNameNew(db));
+        if (hel == NULL)
+            hashAdd(hubToDb, hubUrl, dbList);
+        else
+            hel->val = dbList;
+        }
+    }
+return hubToDb;
+}
+
+static struct aHubMatch *filterHubSearchTextMatches(struct dbDb *dbDbList,
+                                                    struct slName *hubDbUrlList)
+/* Collect the assembly hub matches (not track hub matches) from a search in hubSearchText. */
+{
+if (hubDbUrlList == NULL)
     return NULL;
 struct aHubMatch *aHubMatchList = NULL;
 // Make a hash of local dbs so we can tell which hub dbs must be assembly hubs
@@ -705,17 +728,21 @@ struct hash *localDbs = hashNew(0);
 struct dbDb *dbDb;
 for (dbDb = dbDbList;  dbDb != NULL;  dbDb = dbDb->next)
     hashStore(localDbs, dbDb->name);
-
-// tsrList gives hub URLs which we can then look up in hubPublic.
+struct hash *hubToDb = unpackHubDbUrlList(hubDbUrlList);
+// Build up a query to find shortLabel and dbList for each hubUrl.
 struct dyString *query = sqlDyStringCreate("select shortLabel,hubUrl,dbList from %s "
                                            "where hubUrl in (",
                                            hubPublicTableName());
-struct trixSearchResult *tsr;
-for (tsr = tsrList;  tsr != NULL; tsr = tsr->next)
+struct hashEl *hel;
+struct hashCookie cookie = hashFirst(hubToDb);
+boolean isFirst = TRUE;
+while ((hel = hashNext(&cookie)) != NULL)
     {
-    if (tsr != tsrList)
+    if (isFirst)
+        isFirst = FALSE;
+    else
         dyStringAppend(query, ", ");
-    dyStringPrintf(query, "'%s'", tsr->itemId);
+    dyStringPrintf(query, "'%s'", hel->name);
     }
 dyStringAppendC(query, ')');
 struct sqlConnection *conn = hConnectCentral();
@@ -725,12 +752,22 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     char *shortLabel = row[0];
     char *hubUrl = row[1];
-    struct slName *dbName, *dbList = slNameListFromComma(row[2]);
-    for (dbName = dbList;  dbName != NULL;  dbName = dbName->next)
-        if (! hashLookup(localDbs, dbName->name))
-            {
-            slAddHead(&aHubMatchList, aHubMatchNew(shortLabel, hubUrl, dbName->name));
-            }
+    struct slName *dbName, *matchDbList = hashFindVal(hubToDb, hubUrl);
+    struct slName *hubDbList = slNameListFromComma(row[2]);
+    if (slCount(matchDbList) == 1 && isEmpty(matchDbList->name))
+        {
+        // top-level hub match, no specific db match; add all of hub's assembly dbs
+        for (dbName = hubDbList;  dbName != NULL;  dbName = dbName->next)
+            if (! hashLookup(localDbs, dbName->name))
+                slAddHead(&aHubMatchList, aHubMatchNew(shortLabel, hubUrl, dbName->name));
+        }
+    else
+        {
+        // Add matching assembly dbs that are found in hubDbList
+        for (dbName = matchDbList;  dbName != NULL;  dbName = dbName->next)
+            if (! hashLookup(localDbs, dbName->name) && slNameInList(hubDbList, dbName->name))
+                slAddHead(&aHubMatchList, aHubMatchNew(shortLabel, hubUrl, dbName->name));
+        }
     }
 slReverse(&aHubMatchList);
 hDisconnectCentral(&conn);
@@ -760,24 +797,32 @@ for (aHubMatch = aHubMatchList;  aHubMatch != NULL;  aHubMatch = aHubMatch->next
 }
 
 static struct aHubMatch *searchPublicHubs(struct dbDb *dbDbList, char *term)
-/* Search for term in public hub trix files -- return a list of matches to assembly hubs
+/* Search for term in public hubs -- return a list of matches to assembly hubs
  * (i.e. hubs that host an assembly with 2bit etc as opposed to only providing tracks.) */
 {
 struct aHubMatch *aHubMatchList = NULL;
-char *trixFile = cfgOptionEnvDefault("HUBSEARCHTRIXFILE", "hubSearchTrixFile",
-                                     hReplaceGbdb("/gbdb/hubs/public.ix"));
-if (fileExists(trixFile))
+char *hubSearchTableName = cfgOptionDefault("hubSearchTextTable", "hubSearchText");
+struct sqlConnection *conn = hConnectCentral();
+if (sqlTableExists(conn, hubSearchTableName))
     {
-    struct trix *trix = trixOpen(trixFile);
-    char termCopy[strlen(term)+1];
-    safecpy(termCopy, sizeof(termCopy), term);
-    tolowers(termCopy);
-    char *words[512];
-    int wordCount = chopByWhite(termCopy, words, ArraySize(words));
-    struct trixSearchResult *tsrList = trixSearch(trix, wordCount, words, tsmFirstFive);
-    aHubMatchList = filterTrixSearchMatches(dbDbList, tsrList);
-    trixClose(&trix);
+    char query[1024];
+    sqlSafef(query, sizeof(query), "select distinct(concat(db, concat(',', hubUrl))) from %s "
+             "where track = '' and "
+             "(db like '%s%%' or label like '%%%s%%' or text like '%s%%')",
+             hubSearchTableName, term, term, term);
+    struct slName *hubDbUrlList = sqlQuickList(conn, query);
+    aHubMatchList = filterHubSearchTextMatches(dbDbList, hubDbUrlList);
+    if (aHubMatchList == NULL)
+        {
+        // Try a looser query
+        sqlSafef(query, sizeof(query), "select distinct(concat(db, concat(',', hubUrl))) from %s "
+                 "where track = '' and text like '%% %s%%'",
+                 hubSearchTableName, term);
+        hubDbUrlList = sqlQuickList(conn, query);
+        aHubMatchList = filterHubSearchTextMatches(dbDbList, hubDbUrlList);
+        }
     }
+hDisconnectCentral(&conn);
 return aHubMatchList;
 }
 

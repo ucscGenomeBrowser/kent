@@ -1265,7 +1265,8 @@ char *linkFull = dyStringCannibalize(&linkWithTimestamp);
 char *link = linkFull;
 if (docRoot != NULL)
     {
-    link = cloneString(linkFull + strlen(docRoot) + 1);
+    struct dyString *relativeLink = dyStringCreate("../%s", linkFull + strlen(docRoot) + 1);
+    link = dyStringCannibalize(&relativeLink);
     freeMem(linkFull);
     }
 
@@ -1273,11 +1274,11 @@ if (wrapInHtml) // wrapped for christmas
     {
     struct dyString *wrapped = dyStringNew(0);
     if (js)
-        dyStringPrintf(wrapped,"<script type='text/javascript' SRC='../%s'></script>\n", link);
+        dyStringPrintf(wrapped,"<script type='text/javascript' SRC='%s'></script>\n", link);
     else if (style)
-        dyStringPrintf(wrapped,"<link rel='stylesheet' href='../%s' type='text/css'>\n", link);
+        dyStringPrintf(wrapped,"<link rel='stylesheet' href='%s' type='text/css'>\n", link);
     else // Will be image, since these are the only three choices allowed
-        dyStringPrintf(wrapped,"<IMG src='../%s' />\n", link);
+        dyStringPrintf(wrapped,"<IMG src='%s' />\n", link);
     freeMem(link);
     link = dyStringCannibalize(&wrapped);
     }
@@ -1420,7 +1421,7 @@ if(scriptName)
                     cartOptionalString(cart, "g")));
     if (track && cart && db &&
         (endsWith(scriptName, "hgc") || endsWith(scriptName, "hgTrackUi") ||
-         endsWith(scriptName, "hgGene")))
+         endsWith(scriptName, "hgGtexTrackSettings") || endsWith(scriptName, "hgGene")))
         {
         struct trackDb *tdb = hTrackDbForTrack(db, track);
         if (tdb)

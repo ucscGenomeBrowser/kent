@@ -11,7 +11,6 @@
 #include "hCommon.h"
 #include "htmshell.h"
 #include "hash.h"
-#include "liftOver.h"
 #include "wikiLink.h"
 #include "web.h"
 #include "geoMirror.h"
@@ -329,13 +328,13 @@ if (differentWord(database,"susScr2"))
     }
 hFreeConn(&conn);
 
-char *gcfId = hNcbiGcfId(database);
-if (isNotEmpty(gcfId))
+char *gcaId = hNcbiGcaId(database);
+if (isNotEmpty(gcaId))
     {
     safef(buf, sizeof(buf),
           "https://www.ncbi.nlm.nih.gov/genome/gdv/browser/"
-          "?id=%s&chr=%s&from=%d&to=%d&context=genome",
-          gcfId, skipChr(chromName), winStart+1, winEnd);
+          "?context=genome&acc=%s&chr=%s&from=%d&to=%d",
+          gcaId, skipChr(chromName), winStart+1, winEnd);
     appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
     }
 else if (startsWith("oryLat", database))

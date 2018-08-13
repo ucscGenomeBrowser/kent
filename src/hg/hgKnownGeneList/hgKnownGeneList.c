@@ -7,6 +7,7 @@
 #include "dbDb.h"
 #include "hCommon.h"
 #include "web.h"
+#include "htmshell.h"
 
 #define LINKSPERPAGE 30
 #define MAXPAGES 3000
@@ -41,7 +42,7 @@ errAbort(
 void printHtmlHead(FILE *outf)
 {
 fprintf(outf, "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
-fprintf(outf, "<HTML><HEAD>");
+fprintf(outf, "<HTML><HEAD>\n%s",getCspMetaHeader());
 fprintf(outf, "<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html;CHARSET=iso-8859-1\">\n");
 fprintf(outf, "<META http-equiv=\"Content-Script-Type\" content=\"text/javascript\">\n");
 fprintf(outf, "<TITLE>UCSC Known Genes Description and Page Index</TITLE>\n");

@@ -21,6 +21,7 @@ use vars qw/
     $opt_allowMissedTrfs
     $opt_noChromRoot
     $opt_ignoreRepeatMasker
+    $opt_noChromFiles
     /;
 
 # Specify the steps supported with -continue / -stop:
@@ -65,6 +66,8 @@ options:
     -allowMissedTrfs      tolerate missing trfMaskChrom/*.bed files
     -noChromRoot          find RM .out files for chr*_hap in actual hap chrom name
     -ignoreRepeatMasker   do not look for RM .out files
+    -noChromFiles         even if the assembly has <= $HgAutomate::splitThreshold sequences, don't make
+                          per-chromosome FA and AGP files.
 
 Automates generation of assembly download files for genome database \$db:
     compress: Create compressed download files, md5sum.txt and README.txt in
@@ -105,6 +108,7 @@ sub checkOptions {
 		      'allowMissedTrfs',
 		      'noChromRoot',
 		      'ignoreRepeatMasker',
+		      'noChromFiles',
 		      @HgAutomate::commonOptionSpec,
 		      );
   &usage(1) if (!$ok);
@@ -282,7 +286,7 @@ sub compressScaffoldFiles {
   my $hgFakeAgpDir = "$HgAutomate::trackBuild/hgFakeAgp";
   my $agpFile = &mustFindOne("$db.agp", 'scaffolds.agp',
 			     "$hgFakeAgpDir/$db.agp",
-			     "$hgFakeAgpDir/scaffolds.agp");
+			     "$hgFakeAgpDir/scaffolds.agp", "ucsc/$db.agp");
   my $outFile = &mustFindOne("$db.fa.out", 'scaffolds.out', "bed/repeatMasker/$db.fa.out");
   my $trfFile = &mustFindOne("$trfRunDirRel/trfMask.bed",
 			     "$trfRunDirRel/scaffolds.bed");
@@ -489,7 +493,7 @@ sub printTableSpecificUsage {
   my $gotConditions = 0;
 
   if (&dbHasTable($dbHost, $db, 'softBerryGene')) {
-    &printSomeHaveConditions() if (! $gotConditions);
+    &printSomeHaveConditions($fh) if (! $gotConditions);
     $gotConditions = 1;
     print $fh <<_EOF_
    softberryGene.txt and softberryPep.txt -  Free for academic
@@ -501,7 +505,7 @@ _EOF_
   }
 
   if (&dbHasTable($dbHost, $db, 'knownGene')) {
-    &printSomeHaveConditions() if (! $gotConditions);
+    &printSomeHaveConditions($fh) if (! $gotConditions);
     $gotConditions = 1;
     print $fh <<_EOF_
    Swiss-Prot/UniProt data in knownGene.txt -
@@ -1254,7 +1258,7 @@ if (! -e "$topDir/chrom.sizes") {
   die "Sorry, this script requires $topDir/chrom.sizes.\n";
 }
 @chroms = split("\n", `awk '{print \$1;}' $topDir/chrom.sizes`);
-$chromBased = (scalar(@chroms) <= $HgAutomate::splitThreshold);
+$chromBased = (scalar(@chroms) <= $HgAutomate::splitThreshold) && ! $opt_noChromFiles;
 if ($chromBased) {
   foreach my $chr (@chroms) {
     my $chrRoot = $chr;

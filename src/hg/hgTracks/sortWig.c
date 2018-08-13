@@ -40,19 +40,27 @@ else
 return sortGroup;
 }
 
-
 struct trackSum
     {
     char *name;
     unsigned long long sum;
     };
 
+int nameCompare(const void *vone, const void *vtwo)
+/* Compares two trackBins by their track name */
+{
+struct trackBins *one = *((struct trackBins **)vone);
+struct trackBins *two = *((struct trackBins **)vtwo);
+
+return strcmp(one->name, two->name);
+}
+
 int sumCompare(const void *vone, const void *vtwo)
 {
 struct trackSum *one = (struct trackSum *)vone;
 struct trackSum *two = (struct trackSum *)vtwo;
 
-return one->sum - two->sum;
+return two->sum - one->sum;
 }
 
 void calcWiggleOrdering(struct cart *cart, struct flatTracks *flatTracks)
@@ -86,9 +94,6 @@ while ((hel = hashNext(&cookie)) != NULL)
     {
     struct sortGroup *sg = hel->val;
     int numRows = slCount(sg->trackBins);
-    if (numRows < 3)
-        continue;
-
     int numCols = sg->trackBins->bin->binCount;
     float **rows;
     AllocArray(rows, numRows);
@@ -96,6 +101,10 @@ while ((hel = hashNext(&cookie)) != NULL)
     AllocArray(wigNames, numRows);
 
     struct trackBins *tb = sg->trackBins;
+    
+    // make sure initial state is always the same.
+    slSort(&tb, nameCompare);
+
     int ii, jj;
     struct trackSum *sums;
     AllocArray(sums, numRows);
@@ -126,13 +135,20 @@ while ((hel = hashNext(&cookie)) != NULL)
     dyStringClear(dy);
 
     safef(group, sizeof group, "simOrder_%s", hel->name);
-    int *order = optimalLeafOrder(numRows, numCols, 0, rows, wigNames, NULL, NULL);
+    int *order;
+    if (numRows < 3)  // optimal leaf order crashes with 2 or 1
+        {
+        AllocArray(order, numRows);
+        int ii;
+        for(ii=0; ii < numRows; ii++)
+            order[ii] = ii + 1;
+        }
+    else
+        order = optimalLeafOrder(numRows, numCols, 0, rows, wigNames, NULL, NULL);
     for(ii=0; ii < numRows; ii++)
         dyStringPrintf(dy, "%s ", wigNames[order[ii] - 1]);
 
     cartSetString(cart, group, dy->string);
-
-    //printf("%s\n",buffer);
     }
 }
 

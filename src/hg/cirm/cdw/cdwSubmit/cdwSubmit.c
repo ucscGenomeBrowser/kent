@@ -31,6 +31,7 @@
 
 boolean doUpdate = FALSE;
 boolean noRevalidate = FALSE;
+boolean noBackup = FALSE;
 boolean justTest = FALSE;
 
 void usage()
@@ -49,6 +50,7 @@ errAbort(
   "   -update  If set, will update metadata on file it already has. The default behavior is to\n"
   "            report an error if metadata doesn't match.\n"
   "   -noRevalidate - if set don't run revalidator on update\n"
+  "   -noBackup - if set don't backup database first\n"
   "   -md5=md5sum.txt Take list of file MD5s from output of md5sum command on list of files\n"
   "   -test This will look at the manifest and meta, but not actually load the database\n");
 }
@@ -60,6 +62,7 @@ struct hash *md5Hash;
 static struct optionSpec options[] = {
    {"update", OPTION_BOOLEAN},
    {"noRevalidate", OPTION_BOOLEAN},
+   {"noBackup", OPTION_BOOLEAN},
    {"md5", OPTION_STRING},
    {"test", OPTION_BOOLEAN},
    {NULL, 0},
@@ -255,7 +258,7 @@ int makeNewEmptySubmitRecord(struct sqlConnection *conn, char *submitUrl, unsign
 /* Create a submit record around URL and return it's id. */
 {
 struct dyString *query = dyStringNew(0);
-sqlDyStringAppend(query, "insert cdwSubmit (url, startUploadTime, userId, wrangler) ");
+sqlDyStringPrintf(query, "insert cdwSubmit (url, startUploadTime, userId, wrangler) ");
 sqlDyStringPrintf(query, "VALUES('%s', %lld,  %d, '%s')", submitUrl, cdwNow(), 
 	    userId, getenv("USER"));
 sqlUpdate(conn, query->string);
@@ -269,8 +272,8 @@ int makeNewEmptyFileRecord(struct sqlConnection *conn, unsigned userId,
 /* Make a new, largely empty, record around file and submit info. */
 {
 struct dyString *query = dyStringNew(0);
-sqlDyStringAppend(query, "insert cdwFile (submitId, submitDirId, userId, submitFileName, size) ");
-dyStringPrintf(query, "VALUES(%u, %u, %u, '%s', %lld)", 
+sqlDyStringPrintf(query, "insert cdwFile (submitId, submitDirId, userId, submitFileName, size) ");
+sqlDyStringPrintf(query, "VALUES(%u, %u, %u, '%s', %lld)", 
     submitId, submitDirId, userId, submitFileName, size);
 sqlUpdate(conn, query->string);
 dyStringFree(&query);
@@ -430,9 +433,8 @@ sqlDyStringPrintf(dy, "update cdwFile set "
        , ef->cdwFileName, ef->startUploadTime, ef->endUploadTime
        , ef->md5, ef->size, ef->updateTime, ef->metaTagsId
        , ef->userAccess, ef->groupAccess, ef->allAccess);
-dyStringAppend(dy, ", tags='");
-dyStringAppend(dy, ef->tags);
-dyStringPrintf(dy, "' where id=%d", ef->id);
+sqlDyStringPrintf(dy, ", tags='%s'", ef->tags);
+sqlDyStringPrintf(dy, " where id=%d", ef->id);
 sqlUpdate(conn, dy->string);
 
 /* We also will add file to the group */
@@ -502,7 +504,8 @@ if (!isEmpty(tagsString))
 
 
 char **row;
-struct sqlResult *sr = sqlGetResult(conn, NOSQLINJ "select * from cdwSubscriber order by runOrder,id");
+sqlSafef(query, sizeof(query), "select * from cdwSubscriber order by runOrder,id");
+struct sqlResult *sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct cdwSubscriber *subscriber = cdwSubscriberLoad(row);
@@ -967,9 +970,7 @@ int metaTagsId = sqlQuickNum(conn, query->string);
 if (metaTagsId == 0)
     {
     dyStringClear(query);
-    sqlDyStringAppend(query, "insert cdwMetaTags (tags,md5) values('");
-    dyStringAppend(query, cgi->string);
-    dyStringPrintf(query, "', '%s')", md5);
+    sqlDyStringPrintf(query, "insert cdwMetaTags (tags,md5) values('%s','%s')", cgi->string, md5);
     sqlUpdate(conn, query->string);
     metaTagsId = sqlLastAutoId(conn);
     }
@@ -1067,10 +1068,13 @@ if (justTest)
 int submitId = makeNewEmptySubmitRecord(conn, submitUrl, user->id);
 
 /* Create a backup of the previous submission */
-char cmd[PATH_LEN];
-if (getenv("CIRM") == NULL) errAbort("Please set up your CIRM environment variable."); 
-safef(cmd, sizeof(cmd), "cdwBackup %scdw/db.backups/cdwSubmit.%i", getenv("CIRM"), submitId -1);  
-mustSystem(cmd); 
+if (!noBackup)
+    {
+    char cmd[PATH_LEN];
+    if (getenv("CIRM") == NULL) errAbort("Please set up your CIRM environment variable."); 
+    safef(cmd, sizeof(cmd), "cdwBackup %scdw/db.backups/cdwSubmit.%i", getenv("CIRM"), submitId -1);  
+    mustSystem(cmd); 
+    }
 
 /* Put our manifest and metadata files */
 char *access = tagFindLocalVal(tagStorm->forest, "access");
@@ -1211,6 +1215,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 doUpdate = optionExists("update");
 noRevalidate = optionExists("noRevalidate");
+noBackup = optionExists("noBackup");
 justTest = optionExists("test");
 if (optionExists("md5"))
     {

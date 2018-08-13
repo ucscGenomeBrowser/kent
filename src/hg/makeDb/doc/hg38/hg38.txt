@@ -3645,9 +3645,9 @@ TMPDIR=/dev/shm
 
 _EOF_
 #############################################################################
-# LOCUS REFERENCE GENOMIC (LRG) REGIONS AND TRANSCRIPTS (DONE 9/9/16 angie)
-# Redmine #13359
-# previously done 7/7/14
+# LOCUS REFERENCE GENOMIC (LRG) REGIONS AND TRANSCRIPTS (DONE 5/30/18 angie)
+# Redmine #13359 -- otto-mate To Do #17877
+# previously done 7/7/14, 9/9/16
     set today = `date +%Y_%m_%d`
     mkdir -p /hive/data/genomes/hg38/bed/lrg/$today
     cd /hive/data/genomes/hg38/bed/lrg/$today
@@ -3657,14 +3657,18 @@ _EOF_
     # Run script to convert LRG*.xml files to BED+ for regions and genePredExt+fa for transcripts:
     ~/kent/src/hg/utils/automation/parseLrgXml.pl GRCh38
     genePredCheck lrgTranscriptsUnmapped.gp
-#Error: lrgTranscriptsUnmapped.gp:680: LRG_7t1 no exonFrame on CDS exon 46
-#checked: 805 failed: 1
+#Error: lrgTranscriptsUnmapped.gp:765: LRG_7t1 no exonFrame on CDS exon 46
+#checked: 917 failed: 1
     # If there are complaints e.g. about exonFrame, look for inconsistencies in the
     # affected transcript's coding_region/coordinates vs. exon/intron info in xml.
     # Contact Variation team leader Fiona Cunningham @EBI to resolve in the background
     # (missing exonFrame info doesn't affect our track representation because we end up using
     # psl).  We agreed to disagree about exon 46 of LRG_7t1 because that last coding exon
     # portion is only the stop codon.
+
+    # Filter out alts and patches not (yet) included in hg38:
+    mv lrg.bed lrg.allSeqs.bed
+    cut -f 1 ../../../chrom.sizes | grep -Fwf - lrg.allSeqs.bed > lrg.bed
 
     # Load LRG regions:
     bedToBigBed lrg.bed /hive/data/genomes/hg38/chrom.sizes lrg.bb \
@@ -3676,7 +3680,7 @@ _EOF_
     # Map LRG fixed_annotation transcripts from LRG coords to hg38 coords (HT MarkD):
     lrgToPsl lrg.bed /hive/data/genomes/hg38/chrom.sizes lrg.psl
     pslCheck lrg.psl
-#checked: 666 failed: 0 errors: 0
+#checked: 802 failed: 0 errors: 0
     awk '{print $10 "\t" $11;}' lrg.psl > lrg.sizes
     genePredToFakePsl -chromSize=lrg.sizes placeholder \
       lrgTranscriptsUnmapped.gp lrgTranscriptsFakePsl.psl lrgTranscripts.cds
@@ -3689,12 +3693,6 @@ _EOF_
     grep -l NR_ LRG_163.xml LRG_347.xml
 #LRG_163.xml
 #LRG_347.xml
-    # The resulting genePredExt from that process is missing the name2 column from
-    # the original; add it back:
-    cut -f 1,12 lrgTranscriptsUnmapped.gp > txName2
-    join -j 1 -a 1 -t'	' \
-      -o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,1.10,1.11,2.2,1.13,1.14,1.15 \
-      lrgTranscriptsHg38NoName2.gp txName2 > lrgTranscriptsHg38.gp
 
     # Load PSL, CDS and sequences.
     hgLoadPsl hg38 -table=lrgTranscriptAli lrgTranscriptsHg38.psl
@@ -6893,3 +6891,128 @@ ln -s /hive/data/outside/cosmic/hg38/v82/cosMutHg38V82.bb .
     make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
 
     # commit all
+
+#########################################################################
+2018-03-07: update UCSC GENCODE V27 to include protein id (for VAI) and fix PAR tag
+
+# save existing data, move a
+mkdir -p prev/pre-proteinId
+mv data/gencode.tab prev/pre-proteinId/
+mv tables/wgEncodeGencodeAttrsV27.tab tables/wgEncodeGencodeTagV27.tab prev/pre-proteinId/
+mv loaded/wgEncodeGencodeAttrsV27.tab.loaded loaded/wgEncodeGencodeTagV27.tab.loaded prev/pre-proteinId/
+
+# rebuild, getting protein ids.
+make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk loadTables >&prot-ids.log
+
+# 2018-03-19: update search to include protein id
+cd kent/src/hg/makeDb/trackDb
+../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg38 27 90 'Aug 2017'
+
+#########################################################################
+2018-04-11: import of UCSC GENCODE group processing of GENCODE V28 (markd)
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg38/bed/gencodeV28
+    pushd /hive/data/genomes/hg38/bed/gencodeV28
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg38 28 92 'Apr 2018'
+
+    # Update human/hg38/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release. [ONLY if it's going to be pushed]
+
+    # edit human/hg38/trackDb.wgEncode.ra to add new .ra file include
+    make DBS=hg38
+
+    # edit  all.joiner to add ~/tmp/gencodeV28.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg38/bed/gencodeV28
+    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # commit all
+
+#########################################################################
+# RepeatMasker Visualization track update (DONE - 2018-05-04 - ChrisL)
+    screen -S rmskJoined.2018-05-04
+    mkdir /hive/data/genomes/hg38/bed/rmskJoined.2018-05-04
+    cd /hive/data/genomes/hg38/bed/rmskJoined.2018-05-04
+
+    ln -s ../repeatMasker/hg38.sorted.fa.out .
+    ln -s ../repeatMasker/hg38.fa.align.gz .
+
+    # this script points to the most recent RepeatMasker version:
+    time (/scratch/data/RepeatMasker/util/rmToUCSCTables.pl \
+        -out hg38.sorted.fa.out -align hg38.fa.align.gz) > do.log 2>&1 &
+
+    # no differences, forgot to remake rmsk files
+    # so instead remake the rmsk track and try again
+    mkdir /hive/data/genomes/hg38/bed/repeatMasker.2018-05-04
+    cd /hive/data/genomes/hg38/bed/repeatMasker.2018-05-04
+
+    # remake the sorted.fa.out and fa.align.gz, stop after masking
+    # so rmsk table isn't overwritten
+    time (doRepeatMasker.pl -stop=mask -useHMMER -bigClusterHub=ku \
+       -workhorse=hgwdev -dbHost=hgwdev -buildDir=`pwd` hg38) > mask.log 2>&1 &
+    # RepeatMasker bug?: Undefined id, line 1440295 of input:
+    #    10  26.1  0.0  0.0  chr13     114292339 114292382   (71946) C  L1P4           LINE/L1               (17) 6149   6106
+    # RepeatMasker bug?: Undefined id, line 3529762 of input:
+    #   992   2.3  0.5  0.0  chr3      180461254 180462048 (17833511) C  L1PA3          LINE/L1                (3) 6152   5354
+    # RepeatMasker bug?: Undefined id, line 3529763 of input:
+    #  1153   3.2  0.2  0.0  chr3      180462043 180463006 (17832553) +  L1PA3          LINE/L1               4392 5357  (789)
+    # RepeatMasker bug?: Undefined id, line 5303571 of input:
+    #   220  22.5  0.0 17.7  chr9      105798076 105799127 (32595590) C  SATR2          Satellite              (4)  866      1
+    # real    643m17.617s
+
+    # get rid of the missing id items:
+    grep -v "114292339 114292382\|180461254 180462048\|180462043 180463006\|105798076 105799127" \
+        hg38.fa.out > clean.hg38.fa.out
+    mv clean.hg38.fa.out hg38.fa.out
+
+    # finish the last step of doCat.csh:
+    /cluster/bin/scripts/extractNestedRepeats.pl hg38.fa.out | sort -k1,1 -k2,2n > hg38.nestedRepeats.bed
+
+    cd /hive/data/genomes/hg38/bed/rmskJoined.2018-05-04
+
+    rm hg38.sorted.fa.out
+    rm hg38.fa.align.gz
+    rm *.tsv
+    ln -s ../repeatMasker.2018-05-04/hg38.sorted.fa.out .
+    ln -s ../repeatMasker.2018-05-04/hg38.fa.align .
+
+    # and then re-run
+    time (/scratch/data/RepeatMasker/util/rmToUCSCTables.pl \
+        -out hg38.sorted.fa.out -align hg38.fa.align.gz) > rerun.log 2>&1 &
+    # real    141m7.268s
+
+    # confirm the counts are different from the previous version:
+    # wc -l ../rmskJoined/hg38.fa.align.tsv ../rmskJoined/hg38.sorted.fa.join.bed ../rmskJoined/hg38.sorted.fa.out.tsv
+   7203858 ../rmskJoined/hg38.fa.align.tsv
+   4607727 ../rmskJoined/hg38.sorted.fa.join.bed
+   5520118 ../rmskJoined/hg38.sorted.fa.out.tsv
+  17331703 total
+    # wc -l *.tsv
+   7227245 hg38.fa.align.tsv
+   4828114 hg38.sorted.fa.join.tsv
+   5916189 hg38.sorted.fa.out.tsv
+  17971548 total
+
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/rmskJoined.sql \
+        -renameSqlTable -verbose=4 -tab \
+            -type=bed4+9 -as=$HOME/kent/src/hg/lib/rmskJoined.as hg38 \
+                rmskJoinedCurrent hg38.sorted.fa.join.tsv \
+                    > loadJoined.log 2>&1
+
+    hgLoadSqlTab hg38 rmskAlignCurrent \
+        /cluster/home/chmalee/kent/src/hg/lib/rmskAlign.sql \
+            hg38.fa.align.tsv > loadAlign.log 2>&1
+
+    hgLoadOutJoined -verbose=2 -table=rmskOutCurrent hg38 hg38.sorted.fa.out > loadOut.log 2>&1
+
+    featureBits -countGaps hg38 rmskJoinedCurrent
+    # 2796899855 bases of 3209286105 (87.150%) in intersection

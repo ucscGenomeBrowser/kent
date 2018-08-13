@@ -901,7 +901,7 @@ if (likeExpr==NULL)
     sqlSafef(query, sizeof(query), "SELECT DISTINCT tableName FROM %s ORDER BY tableName", tableList);
 else
     sqlSafef(query, sizeof(query), 
-        "SELECT DISTINCT tableName FROM %s WHERE tableName %s ORDER BY tableName", tableList, likeExpr);
+        "SELECT DISTINCT tableName FROM %s WHERE tableName LIKE '%s' ORDER BY tableName", tableList, likeExpr);
 
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
@@ -923,7 +923,7 @@ char query[256];
 if (likeExpr == NULL)
     safef(query, sizeof(query), NOSQLINJ "SHOW TABLES");
 else
-    safef(query, sizeof(query), NOSQLINJ "SHOW TABLES %s", likeExpr);
+    safef(query, sizeof(query), NOSQLINJ "SHOW TABLES LIKE '%s'", likeExpr);
 
 struct slName *list = NULL, *el;
 
@@ -1732,7 +1732,7 @@ if ((sr = sqlGetResultExt(sc, query, &errNo, &err)) == NULL)
         return FALSE;
     if (sc->failoverConn)
 	{
-	// if not found but we have a main connection, check the main connection, too
+	// if not found but we have a failover connection, check on it, too
 	if ((sr = sqlGetResultExt(sc->failoverConn, query, &errNo, &err)) == NULL)
 	    {
 	    if (errNo == tableNotFoundCode)
@@ -1892,7 +1892,7 @@ sqlFreeResult(&sr);
 }
 
 int sqlUpdateRows(struct sqlConnection *conn, char *query, int* matched)
-/* Execute an update query, returning the number of rows change.  If matched
+/* Execute an update query, returning the number of rows changed.  If matched
  * is not NULL, it gets the total number matching the query. */
 {
 int numChanged = 0;
@@ -3552,18 +3552,10 @@ while((c = *s++) != 0)
     {
     if (disAllowed[c])
 	{
-	// DEBUG REMOVE Temporary for trying to track down some weird error 
-	//  because the stackdump should appear but does not.
-	//if (sameOk(cfgOption("noSqlInj.dumpStack"), "on"))
-	//    dumpStack("character %c disallowed in sql string part %s\n", c, sOriginal);  // DEBUG REMOVE GALT 
-
-	// TODO for some reason the warn stack is messed up sometimes very eary. -- happening in hgTables position search on brca
-	//warn("character %c disallowed in sql string part %s", c, sOriginal);
-
 	// just using this as a work-around
 	// until the problem with early errors and warn/abort stacks has been fixed.
-	char *noSqlInjLevel = cfgOption("noSqlInj.level");
-	if (noSqlInjLevel && !sameString(noSqlInjLevel, "ignore"))
+	char *noSqlInjLevel = cfgOptionDefault("noSqlInj.level", "abort");
+	if (!sameString(noSqlInjLevel, "ignore"))
 	    {
     	    fprintf(stderr, "character %c disallowed in sql string part %s\n", c, sOriginal);  
 	    fflush(stderr);
@@ -3649,6 +3641,8 @@ if (!init)
     // NOTE it is important for security that no other characters be allowed here
     init = TRUE;
     }
+if (sameString(identifiers, "*"))  // exception allowed
+    return identifiers;
 if (!sqlCheckAllowedChars(identifiers, allowed))
     {
     sqlCheckError("Illegal character found in identifier list %s", identifiers);
@@ -4130,7 +4124,8 @@ while (TRUE)
 void vaSqlDyStringPrintf(struct dyString *ds, char *format, va_list args)
 /* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.  
- * NOSLQINJ tag is added to beginning if it is a new empty string. */
+ * NOSLQINJ tag is added to beginning if it is a new empty string.
+ * Appends to existing string. */
 {
 vaSqlDyStringPrintfExt(ds, FALSE, format, args);
 }
@@ -4138,7 +4133,8 @@ vaSqlDyStringPrintfExt(ds, FALSE, format, args);
 void sqlDyStringPrintf(struct dyString *ds, char *format, ...)
 /* Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.  
- * NOSLQINJ tag is added to beginning if it is a new empty string. */
+ * NOSLQINJ tag is added to beginning if it is a new empty string. 
+ * Appends to existing string. */
 {
 va_list args;
 va_start(args, format);
@@ -4150,7 +4146,7 @@ void vaSqlDyStringPrintfFrag(struct dyString *ds, char *format, va_list args)
 /* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.
  * NOSLQINJ tag is NOT added to beginning since it is assumed to be just a fragment of
- * the entire sql string. */
+ * the entire sql string. Appends to existing string. */
 {
 vaSqlDyStringPrintfExt(ds, TRUE, format, args);
 }
@@ -4159,23 +4155,13 @@ void sqlDyStringPrintfFrag(struct dyString *ds, char *format, ...)
 /* Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.
  * NOSLQINJ tag is NOT added to beginning since it is assumed to be just a fragment of
- * the entire sql string. */
+ * the entire sql string. Appends to existing string. */
 
 {
 va_list args;
 va_start(args, format);
 vaSqlDyStringPrintfFrag(ds, format, args);
 va_end(args);
-}
-
-
-void sqlDyStringAppend(struct dyString *ds, char *string)
-/* Append zero terminated string to end of dyString.
- * Adds the NOSQLINJ prefix if dy string is empty. */
-{
-if (ds->stringSize == 0)
-    dyStringAppend(ds, NOSQLINJ "");
-dyStringAppendN(ds, string, strlen(string));
 }
 
 
@@ -4192,6 +4178,24 @@ va_end(args);
 return ds;
 }
 
+void sqlDyStringPrintIdList(struct dyString *ds, char *fields)
+/* Append a comma-separated list of field identifiers. Aborts if invalid characters in list. */
+{
+sqlDyStringPrintf(ds, "%-s", sqlCkIl(fields));
+}
+
+
+void sqlDyStringPrintValuesList(struct dyString *ds, struct slName *list)
+/* Append a comma-separated, quoted and escaped list of values. */
+{
+struct slName *el;
+for (el = list; el != NULL; el = el->next)
+    {
+    if (el != list)
+	sqlDyStringPrintf(ds, ",");
+    sqlDyStringPrintf(ds, "'%s'", el->name);
+    }
+}
 
 void sqlCheckError(char *format, ...)
 /* A sql injection error has occurred. Check for settings and respond
@@ -4201,48 +4205,32 @@ void sqlCheckError(char *format, ...)
 va_list args;
 va_start(args, format);
 
-char *noSqlInjLevel = cfgOption("noSqlInj.level");
+char *noSqlInjLevel = cfgOptionDefault("noSqlInj.level", "abort");
 char *noSqlInjDumpStack = cfgOption("noSqlInj.dumpStack");
-// I tried to incorporate this setting so as to avoid duplicate dumpStacks
-// but it is not working that well, and I would rather have two than zero dumps.
-//char *browserDumpStack = cfgOption("browser.dumpStack");
-//char *scriptName = cgiScriptName();
 
-if (noSqlInjLevel)
-    { 
-    // don't dump if if we are going to do it during errAbort anyway
-    if (sameOk(noSqlInjDumpStack, "on"))
-	/* && (!(sameString(noSqlInjLevel, "abort") 
-	      && cgiIsOnWeb() 
-	      && sameOk(browserDumpStack, "on"))
-	    || endsWith(scriptName, "hgSuggest")
-           ) // note: this doesn't work for hgSuggest because it doesn't set the dumpStack handler.
-               // TODO find or add a better method to tell if it would already dumpStack on abort.
-       )
-        */
-	{
-	va_list dump_args;
-    	va_copy(dump_args, args);
-	vaDumpStack(format, dump_args);
-	va_end(dump_args);
-	}
+if (sameOk(noSqlInjDumpStack, "on"))
+    {
+    va_list dump_args;
+    va_copy(dump_args, args);
+    vaDumpStack(format, dump_args);
+    va_end(dump_args);
+    }
 
-    if (sameString(noSqlInjLevel, "logOnly"))
-	{
-	vfprintf(stderr, format, args);
-	fprintf(stderr, "\n");
-	fflush(stderr);
-	}
+if (sameString(noSqlInjLevel, "logOnly"))
+    {
+    vfprintf(stderr, format, args);
+    fprintf(stderr, "\n");
+    fflush(stderr);
+    }
 
-    if (sameString(noSqlInjLevel, "warn"))
-	{
-	vaWarn(format, args);
-	}
+if (sameString(noSqlInjLevel, "warn"))
+    {
+    vaWarn(format, args);
+    }
 
-    if (sameString(noSqlInjLevel, "abort"))
-	{
-	vaErrAbort(format, args);
-	}
+if (sameString(noSqlInjLevel, "abort"))
+    {
+    vaErrAbort(format, args);
     }
 
 va_end(args);

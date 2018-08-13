@@ -119,6 +119,9 @@ struct trackDb *tdb;
 boolean found = FALSE;
 for(tdb=tdbList; tdb; tdb = tdb->next)
     {
+    if (tdb->subtracks)
+        found = findBigBedPosInTdbList(db, tdbList->subtracks, term, hgp, hfs) || found;
+
     char *indexField = trackDbSetting(tdb, "searchIndex");
     char *fileName = NULL;
 

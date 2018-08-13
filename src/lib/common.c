@@ -710,7 +710,7 @@ return FALSE;
 
 void *slNameFind(void *list, char *string)
 /* Return first element of slName list (or any other list starting
- * with next/name fields) that matches string. */
+ * with next/name fields) that matches string. This is case insensitive. */
 {
 struct slName *el;
 for (el = list; el != NULL; el = el->next)
@@ -1374,6 +1374,12 @@ else if (b == NULL)
     return 1;
 else
     return strcmp(a,b) != 0;
+}
+
+boolean isEmptyTextField(char *s)
+/* Recognize NULL or dot as empty text */
+{
+return (isEmpty(s) || sameString(".", s));
 }
 
 boolean startsWith(const char *start, const char *string)

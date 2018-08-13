@@ -1011,7 +1011,7 @@ function mysqlChangeRootPwd ()
 
    # generate a random char string
    # OSX's tr is quite picky with unicode, so change LC_ALL temporarily
-   MYSQLROOTPWD=`cat /dev/urandom | LC_ALL=C tr -dc A-Z-a-z-0-9 | head -c8` || true
+   MYSQLROOTPWD=`cat /dev/urandom | LC_ALL=C tr -dc A-Za-z0-9 | head -c8` || true
    # paranoia check
    if [[ "$MYSQLROOTPWD" == "" ]]; then
        echo2 Error: could not generate a random Mysql root password

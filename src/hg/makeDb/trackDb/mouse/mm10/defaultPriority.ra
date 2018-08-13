@@ -2,6 +2,7 @@
 
 track knownGene override
 bigGeneDataUrl /gbdb/mm10/knownGene.bb
+pennantIcon Updated red ../goldenPath/newsarch.html#052318 "Updated May 23, 2018"
 priority 1
 
 track ensGene override

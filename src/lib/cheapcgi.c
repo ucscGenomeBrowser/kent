@@ -1482,6 +1482,17 @@ safef(javascript, sizeof(javascript),
 cgiMakeOnClickButton(id, javascript, " Clear  ");
 }
 
+void cgiMakeClearButtonNoSubmit(char *form, char *field)
+/* Make button to clear a text field, without resubmitting the form. */
+{
+char id[256];
+safef(id, sizeof id, "%s_clear", field);
+char javascript[1024];
+safef(javascript, sizeof javascript,
+        "document.%s.%s.value = '';", form, field);
+cgiMakeOnClickButton(id, javascript, " Clear ");
+}
+
 void cgiMakeButtonWithMsg(char *name, char *value, char *msg)
 /* Make 'submit' type button. Display msg on mouseover, if present*/
 {
