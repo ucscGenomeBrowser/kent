@@ -138,7 +138,7 @@ ifneq ($(MAKECMDGOALS),clean)
   # on hgwdev, use the static library.
   ifeq (${IS_HGWDEV},yes)
     MYSQLINC=/usr/include/mysql
-    MYSQLLIBS=-lssl -lcrypto /usr/lib64/libmysqlclient.a -lkrb5
+    MYSQLLIBS=-lssl -lcrypto /usr/lib64/libmysqlclient.a ${ZLIB} -lkrb5
   endif
   # this does *not* work on Mac OSX with the dynamic libraries
   ifneq ($(UNAME_S),Darwin)
@@ -261,7 +261,7 @@ endif
 #global external libraries
 L += $(kentSrc)/htslib/libhts.a
 
-L+=${PNGLIB} ${ZLIB} ${MLIB}
+L+=${PNGLIB} ${MLIB} ${ZLIB}
 HG_INC+=${PNGINCL}
 
 # pass through COREDUMP
