@@ -72,6 +72,11 @@ different types of queries that can be performed.
     <td>20p13</td>
     <td>Displays the region for band p13 on chromosome 20</td></tr> 
   <tr>
+  <tr>
+    <td>GTATGTAGCCACGGAGCACCATTACCTGTCACCATTACCTGAATGGCTA</td>
+    <td>Displays the first best match to this DNA sequence, e.g. chr21:33034835-33034883 for hg19</td>
+  </tr> 
+  <tr>
     <td>374180</td>
     <td>Displays the region containing Entrez Gene identifier 374180</td></tr> 
   <tr>
@@ -104,6 +109,8 @@ different types of queries that can be performed.
     NM_006172.3(NPPA):c.456_*1delAA<br> MYH11:c.503-14_503-12del<br> 
     NM_198576.3(AGRN):c.1057C&gt;T<br> NM_198056.2:c.1654G&gt;T<br> NP_002993.1:p.Asp92Glu<br> 
     NP_002993.1:p.D92E<br> BRCA1 Ala744Cys<br> BRCA1 A744C<br> LRG_100t1:c.4G>A<br> LRG_100t1:n.1<br>
+    LRG_456p1:p.Ser190Leu<br>LRG_321:g.16409_16461del<br>ENST00000002596.5:c.-108-6848A&gt;G<br>
+    ENSP00000005178.5:p.Val20Gly<br>
     chrX:g.31500000_31600000del<br> NR_111987:n.-1 <br> NM_015102.4:n.3086-2<br>
     NM_033517:c.1307_1309del</td> 
     <td>Displays the region containing <a href="http://varnomen.hgvs.org/" target="_blank">HGVS</a> 
@@ -117,6 +124,10 @@ different types of queries that can be performed.
     <td>rs1042522;rs1800370</td> 
     <td>such as between uniquely determined ESTs, mRNAs, refSeqs, etc.</td></tr> 
 --> 
+  <tr>
+    <td>chr1 0 1000</td>
+    <td>When entered without ":" and "-", uses 0-based, half-open coordinates (like custom tracks and internal table coordinates), so displays chr1:1-1000</td>
+  </tr> 
   <tr>
     <td>pseudogene mRNA</td> 
     <td>Lists transcribed pseudogenes, but not cDNAs</td></tr> 
