@@ -120,8 +120,8 @@ void writeRa(char *fileName)
 {
 FILE *f = mustOpen(fileName, "w");
 fprintf(f, "submitSet abaMouse1\n");
-fprintf(f, "fullDir http://hgwdev.cse.ucsc.edu/visiGene/full/inSitu/Mouse/allenBrain\n");
-fprintf(f, "thumbDir http://hgwdev.cse.ucsc.edu/visiGene/200/inSitu/Mouse/allenBrain\n");
+fprintf(f, "fullDir http://hgwdev.gi.ucsc.edu/visiGene/full/inSitu/Mouse/allenBrain\n");
+fprintf(f, "thumbDir http://hgwdev.gi.ucsc.edu/visiGene/200/inSitu/Mouse/allenBrain\n");
 fprintf(f, "itemUrl http://www.brain-map.org/search.do?queryText=%%s\n");
 fprintf(f, "priority 1200\n");
 fprintf(f, "sliceType sagittal\n");

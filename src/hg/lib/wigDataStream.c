@@ -484,7 +484,7 @@ if (resolution > 0.0)
     fprintf (fh, "#\t(Worst case: %g)  The original source data\n",
 	resolution);
     fprintf (fh, "#\t(before querying and compression) is available at \n"
-	"#\t\thttp://hgdownload.cse.ucsc.edu/downloads.html\n");
+	"#\t\thttp://hgdownload.soe.ucsc.edu/downloads.html\n");
 }
 
 static void showResolutionNoDownloads(double resolution, FILE *fh)

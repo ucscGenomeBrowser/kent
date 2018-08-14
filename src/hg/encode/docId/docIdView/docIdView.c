@@ -25,8 +25,8 @@ struct hash *oldVars = NULL;
 char *database = "encpipeline_prod";
 char *docIdTable = DEFAULT_DOCID_TABLE;
 //char *docIdDir = "/hive/groups/encode/dcc/pipeline/downloads/docId";
-char *docIdDir = "http://hgdownload-test.cse.ucsc.edu/goldenPath/docId";
-char *docIdDirBeta = "http://hgdownload-test.cse.ucsc.edu/goldenPath/betaDocId";
+char *docIdDir = "http://hgdownload-test.soe.ucsc.edu/goldenPath/docId";
+char *docIdDirBeta = "http://hgdownload-test.soe.ucsc.edu/goldenPath/betaDocId";
 
 void addValue(struct dyString *str, char *value)
 {

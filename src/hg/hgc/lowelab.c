@@ -3257,11 +3257,11 @@ void doWiki(char *track, struct trackDb *tdb, char *itemName)
   {
     strand[0] = itemName[strlen(itemName)-1];
     strand[1] = 0;
-    printf("<META HTTP-EQUIV=\"REFRESH\" content=\"0; URL=http://lowelabwiki.cse.ucsc.edu/index.php/BED:%s:%s:%d-%d:%s\"</META>", database, seqName, winStart, winEnd, strand);
+    printf("<META HTTP-EQUIV=\"REFRESH\" content=\"0; URL=http://lowelabwiki.soe.ucsc.edu/index.php/BED:%s:%s:%d-%d:%s\"</META>", database, seqName, winStart, winEnd, strand);
   }
   else
   {
-    printf("<META HTTP-EQUIV=\"REFRESH\" content=\"0; URL=http://lowelabwiki.cse.ucsc.edu/index.php/BED:%s:%s:%s\"</META>", database, seqName, itemName);
+    printf("<META HTTP-EQUIV=\"REFRESH\" content=\"0; URL=http://lowelabwiki.soe.ucsc.edu/index.php/BED:%s:%s:%s\"</META>", database, seqName, itemName);
   }
 
   printf("</HEAD>");
@@ -3451,6 +3451,7 @@ void doloweOrthologs(struct trackDb *tdb, char *itemName)
     {
         infoload = bedLoadN(row+rowOffset, bedSize);
     printf("<B>Name:</B> %s\n", infoload->name);
+    // archdev-holmes no longer exists, but what should this be?
     printf(" <A HREF=\"http://archdev-holmes.cse.ucsc.edu/cgi-bin/hgFrame?track=loweOrthologs&refseq=1&db=%s&name=%s\">List of Orthologs</A><BR>",database,infoload->name);
     printf("<B>Position:</B> "
                  "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",

@@ -1239,7 +1239,7 @@ char *cbrWabaMap = cartUsualString(cart, "cbrWaba.type", fcoeEnumToString(0));
 int start = cartInt(cart, "cbrWaba.start");
 int end = cartInt(cart, "cbrWaba.end");
 printf(
-"<P><A HREF=\"http://genome-test.cse.ucsc.edu/cgi-bin/tracks.exe?where=%s%%3A%d-%d\"> Temporary Intronerator link: %s:%d-%d</A> <I>for testing purposes only</I> \n</P>", chromosome+3, start, end, chromosome+3, start, end );
+"<P><A HREF=\"http://genome-test.gi.ucsc.edu/cgi-bin/tracks.exe?where=%s%%3A%d-%d\"> Temporary Intronerator link: %s:%d-%d</A> <I>for testing purposes only</I> \n</P>", chromosome+3, start, end, chromosome+3, start, end );
 */
 }
 

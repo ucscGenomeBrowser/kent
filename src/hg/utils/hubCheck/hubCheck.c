@@ -712,7 +712,7 @@ if (argc != 2 && !optionExists("settings"))
 struct trackHubCheckOptions *checkOptions = NULL;
 AllocVar(checkOptions);
 
-checkOptions->specHost = (optionExists("test") ? "genome-test.cse.ucsc.edu" : "genome.ucsc.edu");
+checkOptions->specHost = (optionExists("test") ? "genome-test.soe.ucsc.edu" : "genome.ucsc.edu");
 checkOptions->specHost = optionVal("specHost", checkOptions->specHost);
 
 checkOptions->printMeta = optionExists("printMeta");

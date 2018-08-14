@@ -39,13 +39,13 @@ char *chrom = ag->tName;
 static int c =0;
 if(c == 0)
     {
-    fprintf(html, "<tr><td>%s</td><td><font size=-3>%s</font></td><td>%.2f</td><td>%d</td><td><a href=\"http://genome-test.cse.ucsc.edu/cgi-bin/hgTracks?db=%s&position=%s:%d-%d\">%s:%d-%d</a><br>\n</td></tr>",
+    fprintf(html, "<tr><td>%s</td><td><font size=-3>%s</font></td><td>%.2f</td><td>%d</td><td><a href=\"http://genome-test.gi.ucsc.edu/cgi-bin/hgTracks?db=%s&position=%s:%d-%d\">%s:%d-%d</a><br>\n</td></tr>",
 	id, info, ave, count, db, ag->tName, start, end, ag->tName, start, end);
     c =1;
     }
 else 
     {
-    fprintf(html, "<tr bgcolor=\"#eaefef\"><td>%s</td><td><font size=-3>%s</font></td><td>%.2f</td><td>%d</td><td><a href=\"http://genome-test.cse.ucsc.edu/cgi-bin/hgTracks?db=%s&position=%s:%d-%d\">%s:%d-%d</a><br>\n</td></tr>",
+    fprintf(html, "<tr bgcolor=\"#eaefef\"><td>%s</td><td><font size=-3>%s</font></td><td>%.2f</td><td>%d</td><td><a href=\"http://genome-test.gi.ucsc.edu/cgi-bin/hgTracks?db=%s&position=%s:%d-%d\">%s:%d-%d</a><br>\n</td></tr>",
 	id, info, ave, count, db, ag->tName, start, end, ag->tName, start, end);
     c =0;
     }
