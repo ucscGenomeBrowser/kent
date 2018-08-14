@@ -396,7 +396,7 @@ return cfgOptionDefault("central.cookie", "hguid");
 char *hDownloadsServer()
 /* get the downloads server from hg.conf or the default */
 {
-return cfgOptionDefault("downloads.server", "hgdownload.cse.ucsc.edu");
+return cfgOptionDefault("downloads.server", "hgdownload.soe.ucsc.edu");
 }
 
 void setUdcTimeout(struct cart *cart)

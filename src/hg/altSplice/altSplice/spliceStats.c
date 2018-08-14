@@ -63,7 +63,7 @@ void writeBrowserLink(FILE *html, struct altGraphX *ag, float conf, int eIx)
 int start = ag->vPositions[ag->edgeStarts[eIx]];
 int end = ag->vPositions[ag->edgeEnds[eIx]];
 char *chrom = ag->tName;
-fprintf(html, "<a href=\"http://genome-test.cse.ucsc.edu/cgi-bin/hgTracks?db=%s&position=%s:%d-%d\">%f     %s:%d-%d</a><br>\n",
+fprintf(html, "<a href=\"http://genome-test.gi.ucsc.edu/cgi-bin/hgTracks?db=%s&position=%s:%d-%d\">%f     %s:%d-%d</a><br>\n",
 	db, ag->tName, start, end, conf, ag->tName, start, end);
 }
 

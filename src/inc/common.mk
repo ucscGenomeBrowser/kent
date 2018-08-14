@@ -239,7 +239,7 @@ endif
 # OK to add -lstdc++ to all MYSQLLIBS just in case it is
 #    MySQL version 5.6 libraries, but no 'librt' on Mac OSX
 ifeq (${IS_HGWDEV},yes)
-  MYSQLLIBS += /usr/lib/gcc/x86_64-redhat-linux/4.8.5/libstdc++.a /usr/lib/x86_64-redhat-linux6E/lib64/librt.a
+  MYSQLLIBS += /usr/lib/gcc/x86_64-redhat-linux/4.8.5/libstdc++.a /usr/lib64/librt.a
 else
   ifeq ($(UNAME_S),Darwin)
     MYSQLLIBS += -lstdc++

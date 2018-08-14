@@ -123,7 +123,7 @@ dasHelp("UCSC DAS Server.\n"
     "Note that DAS is an inefficient protocol which does not support\n"
     "all types of annotation in our database.  We recommend you\n"
     "access the UCSC database by downloading the tab-separated files in\n"
-    "the downloads section (http://hgdownload.cse.ucsc.edu/downloads.html)\n"
+    "the downloads section (http://hgdownload.soe.ucsc.edu/downloads.html)\n"
     "or by using the Table Browser (http://genome.ucsc.edu/cgi-bin/hgTables)\n"
     "instead of DAS in most circumstances.");
 exit(0);
@@ -586,7 +586,7 @@ for (db = dbList; db != NULL; db = db->next)
     printf("     <SOURCE id=\"%s\" version=\"%s\">%s at UCSC</SOURCE>\n", 
     	db->name, version, freeze);
     printf("     <DESCRIPTION>%s %s Genome at UCSC</DESCRIPTION>\n", organism, freeze);
-    printf("     <MAPMASTER>http://genome.cse.ucsc.edu:80/cgi-bin/das/%s</MAPMASTER>\n",
+    printf("     <MAPMASTER>http://genome.ucsc.edu:80/cgi-bin/das/%s</MAPMASTER>\n",
         db->name);
     printf("   </DSN>\n");
     }

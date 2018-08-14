@@ -50,7 +50,7 @@ outputs a detailed annotation of the repeats that are present in the
 query sequence (represented by this track), as well as a modified version
 of the query sequence in which all the annotated repeats have been masked
 (generally available on the
-<a href="http://hgdownload.cse.ucsc.edu/downloads.html"
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html"
 target=_blank>Downloads</a> page). RepeatMasker uses the
 <a href="http://www.girinst.org/repbase/update/index.html"
 target=_blank>Repbase Update</a> library of repeats from the

@@ -325,8 +325,8 @@ fprintf(ra, "acknowledgement Thanks to the Gene Expression Database group at "
 	    "directly at <A HREF='http://www.informatics.jax.org' target='_blank'>MGI.</A>\n");
 fprintf(ra, "submitSet jax%s\n", ref);
 fprintf(ra, "taxon 10090\n");	/* Mus musculus taxon */
-fprintf(ra, "fullDir http://hgwdev.cse.ucsc.edu/visiGene/full/inSitu/Mouse/jax\n");
-fprintf(ra, "thumbDir http://hgwdev.cse.ucsc.edu/visiGene/200/inSitu/Mouse/jax\n");
+fprintf(ra, "fullDir http://hgwdev.gi.ucsc.edu/visiGene/full/inSitu/Mouse/jax\n");
+fprintf(ra, "thumbDir http://hgwdev.gi.ucsc.edu/visiGene/200/inSitu/Mouse/jax\n");
 fprintf(ra, "setUrl http://www.informatics.jax.org/\n");
 fprintf(ra, "itemUrl http://www.informatics.jax.org/searches/image.cgi?%%s\n");
 fprintf(ra, "abUrl http://www.informatics.jax.org/searches/antibody.cgi?%%s\n");

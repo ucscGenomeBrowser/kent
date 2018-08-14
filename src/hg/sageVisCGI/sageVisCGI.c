@@ -15,7 +15,7 @@ which specifies a maximum tag count to go up to, default is 50.
 <br><pre><code>
 sageVisCGI md=20 u=202 u=122566 > out.html
 </code></pre>
-or http://genome-test.cse.ucsc.edu/cgi-bin/sageVisCGI?md=20&u=202&u=122566 .
+or http://genome-test.soe.ucsc.edu/cgi-bin/sageVisCGI?md=20&u=202&u=122566 .
 
 \sa sageVisCGI.c
 
@@ -135,7 +135,7 @@ void chuckHtmlStart(char *title)
 printf("<html><head>\n%s", getCspMetaHeader());
 //FIXME blueStyle should not be absolute to genome-test and should bae called by:
 // webIncludeResourceFile("blueStyle.css");
-printf("<LINK REL=STYLESHEET TYPE=\"text/css\" href=\"http://genome-test.cse.ucsc.edu/style/blueStyle.css\" title=\"Chuck Style\">\n");
+printf("<LINK REL=STYLESHEET TYPE=\"text/css\" href=\"http://genome-test.soe.ucsc.edu/style/blueStyle.css\" title=\"Chuck Style\">\n");
 printf("<title>%s</title>\n</head><body bgcolor=\"#f3f3ff\">",title);
 }
 

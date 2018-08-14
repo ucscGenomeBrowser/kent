@@ -313,7 +313,7 @@ cgiParagraph(
 "To lift genome annotations locally on Linux systems, download the "
 "<A HREF=\"https://genome-store.ucsc.edu\">" 
 "<I>liftOver</I></A> executable and the appropriate "
-"<A HREF=\"http://hgdownload.cse.ucsc.edu/downloads.html#liftover\">"
+"<A HREF=\"http://hgdownload.soe.ucsc.edu/downloads.html#liftover\">"
 "chain file</A>."
 " Run <I>liftOver</I> with no arguments to see the usage message.\n");
 }

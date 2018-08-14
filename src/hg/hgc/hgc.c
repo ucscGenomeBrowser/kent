@@ -1299,17 +1299,17 @@ printf("<THEAD>");
 printf("<TBODY>");
 printf("<TR><TH>");
 printf("Suh Trees<BR>\n");
-printf("<IMG src=http://hgwdev.cse.ucsc.edu/~braney/suhTrees/%s.tt.png><BR>",item);
-printf("<TD><IMG src=http://hgwdev.cse.ucsc.edu/~braney/suhTrees/%s.gt.png><BR>",item);
+printf("<IMG src=http://hgwdev.gi.ucsc.edu/~braney/suhTrees/%s.tt.png><BR>",item);
+printf("<TD><IMG src=http://hgwdev.gi.ucsc.edu/~braney/suhTrees/%s.gt.png><BR>",item);
 printf("<TR><TH>");
 printf("NJ Trees<BR>\n");
-printf("<IMG src=http://hgwdev.cse.ucsc.edu/~braney/njTrees/%s.tt.png><BR>",item);
-printf("<TD><IMG src=http://hgwdev.cse.ucsc.edu/~braney/njTrees/%s.gt.png><BR>",item);
+printf("<IMG src=http://hgwdev.gi.ucsc.edu/~braney/njTrees/%s.tt.png><BR>",item);
+printf("<TD><IMG src=http://hgwdev.gi.ucsc.edu/~braney/njTrees/%s.gt.png><BR>",item);
 printf("<TR><TH>");
 /*
 printf("Gap UPGMA Trees<BR>\n");
-printf("<IMG src=http://hgwdev.cse.ucsc.edu/~braney/gap992Trees/%s.tt.png><BR>",item);
-printf("<TD><IMG src=http://hgwdev.cse.ucsc.edu/~braney/gap992Trees/%s.gt.png><BR>",item);
+printf("<IMG src=http://hgwdev.gi.ucsc.edu/~braney/gap992Trees/%s.tt.png><BR>",item);
+printf("<TD><IMG src=http://hgwdev.gi.ucsc.edu/~braney/gap992Trees/%s.gt.png><BR>",item);
 printf("</TABLE>");
 
 */
@@ -13944,7 +13944,7 @@ printf("<B>Browser window size:</B> %d<BR>\n", winEnd - winStart);
 
 safef(anotherString, sizeof anotherString, "%s",otherOrg);
 toUpperN(anotherString,1);
-printf("Link to <a href=\"http://hgwdev-tcbruen.cse.ucsc.edu/cgi-bin/hgTracks?db=zoo%s1&position=chr1:%d-%d\">%s database</a><BR>\n",
+printf("Link to <a href=\"http://hgwdev-tcbruen.gi.ucsc.edu/cgi-bin/hgTracks?db=zoo%s1&position=chr1:%d-%d\">%s database</a><BR>\n",
        anotherString, psl->qStart, psl->qEnd, otherOrg);
 
 safef(otherString, sizeof otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTable=%s", psl->tStart,
@@ -20321,7 +20321,7 @@ void chuckHtmlStart(char *title)
 printf("<HTML>\n<HEAD>\n%s", getCspMetaHeader());
 // FIXME blueStyle should not be absolute to genome-test and should be called by:
 //       webIncludeResourceFile("blueStyle.css");
-printf("<LINK REL=STYLESHEET TYPE=\"text/css\" href=\"http://genome-test.cse.ucsc.edu/style/blueStyle.css\" title=\"Chuck Style\">\n");
+printf("<LINK REL=STYLESHEET TYPE=\"text/css\" href=\"http://genome-test.gi.ucsc.edu/style/blueStyle.css\" title=\"Chuck Style\">\n");
 printf("<title>%s</title>\n</head><body bgcolor=\"#f3f3ff\">",title);
 }
 
