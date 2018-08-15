@@ -10,6 +10,7 @@ UTILS_APPLIST = \
 	hgBbiDbLink \
 	hgFakeAgp \
 	hgFindSpec \
+	hgGoldGapGl \
 	hgLoadBed \
 	hgLoadChain \
 	hgLoadMaf \
@@ -36,7 +37,6 @@ DIRS = \
 	hgGeneBands \
 	hgGenericMicroarray \
 	hgPar \
-	hgGoldGapGl \
 	hgKgGetText \
 	hgKgMrna \
 	hgKnownMore \
