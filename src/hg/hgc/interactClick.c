@@ -11,7 +11,8 @@
 #include "interact.h"
 #include "interactUi.h"
 
-static struct interact *getInteractFromTable(struct trackDb *tdb, char *chrom, int start, int end)
+static struct interact *getInteractFromTable(struct trackDb *tdb, char *chrom, int start, int end,
+                                                char *foot)
 /* Retrieve interact items at this position from track table */
 {
 struct sqlConnection *conn = NULL;
@@ -46,7 +47,7 @@ hFreeConn(&conn);
 return inters;
 }
 
-static struct interact *getInteractFromFile(char *file, char *chrom, int start, int end)
+static struct interact *getInteractFromFile(char *file, char *chrom, int start, int end, char *foot)
 /* Retrieve interact items at this position from big file */
 {
 struct bbiFile *bbi = bigBedFileOpen(file);
@@ -68,15 +69,15 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 return inters;
 }
 
-static struct interact *getInteractions(struct trackDb *tdb, char *chrom, int start, int end)
-/* Retrieve interact items at this position */
+static struct interact *getInteractions(struct trackDb *tdb, char *chrom, int start, int end, char *foot)
+/* Retrieve interact items at this position. Also any others with the same endpoint, if endpoint clicked on*/
 {
 struct interact *inters = NULL;
 char *file = trackDbSetting(tdb, "bigDataUrl");
 if (file != NULL)
-    inters = getInteractFromFile(file, chrom, start, end);
+    inters = getInteractFromFile(file, chrom, start, end, foot);
 else
-    inters = getInteractFromTable(tdb, chrom, start, end);
+    inters = getInteractFromTable(tdb, chrom, start, end, foot);
 slSort(&inters, bedCmpScore);
 slReverse(&inters);
 return inters;
@@ -188,8 +189,9 @@ void doInteractDetails(struct trackDb *tdb, char *item)
 char *chrom = cartString(cart, "c");
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
+char *foot = cartString(cart, "foot");
 struct interact *inter = NULL;
-struct interact *inters = getInteractions(tdb, chrom, start, end);
+struct interact *inters = getInteractions(tdb, chrom, start, end, foot);
 if (inters == NULL)
     errAbort("Can't find interaction %s", item ? item : "");
 int count = slCount(inters);
