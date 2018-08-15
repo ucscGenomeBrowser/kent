@@ -123,7 +123,11 @@ int tGapSize = tGapEnd - tGapStart;
 int qGapSize = qGapEnd - qGapStart;
 int smaller = (tGapSize < qGapSize) ? tGapSize : qGapSize;
 if (smaller == 0)
-    return 0;
+    {
+    *retFromStart = 0;
+    *retFromEnd = 0;
+    return FALSE;
+    }
 else if (smaller < 0)
     errAbort("Negative gap length found: chain %d, t %s[%d,%d) q %s[%d,%d)",
              chain->id, chain->tName, tGapStart, tGapEnd, chain->qName, qGapStart, qGapEnd);
