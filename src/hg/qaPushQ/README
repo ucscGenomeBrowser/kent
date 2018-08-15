@@ -32,7 +32,7 @@ update users set password='' where user='theuser';
 To empty the pseudo-cart:
 update users set content='' where user='theuser';
 
-(NOTE: since qapushq cookie was expanded to .cse.ucsc.edu,
+(NOTE: since qapushq cookie was expanded to .soe.ucsc.edu,
 the following trick should not be required)
 Now that we are using the qaPushQ cgi on hgwdev
 in a hack that lets us read the files on dev even from beta,

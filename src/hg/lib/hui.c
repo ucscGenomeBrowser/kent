@@ -396,7 +396,7 @@ return cfgOptionDefault("central.cookie", "hguid");
 char *hDownloadsServer()
 /* get the downloads server from hg.conf or the default */
 {
-return cfgOptionDefault("downloads.server", "hgdownload.cse.ucsc.edu");
+return cfgOptionDefault("downloads.server", "hgdownload.soe.ucsc.edu");
 }
 
 void setUdcTimeout(struct cart *cart)
@@ -3577,11 +3577,123 @@ if (colonPairToStrings(colonPair,&a,&b))
 return FALSE;
 }
 
+static void chopUpValues(filterBy_t *filterBy)
+/* Chop up strings in filterBy or <column>FilterValues statement.   We look for optional labels
+ * and optional CSS inside curly braces.
+ */
+{
+struct slName *val = filterBy->slValues;
+for (;val!=NULL;val=val->next)
+    {
+    // chip the style off the end of value or value|label
+    char *chipper = strrchr(val->name,'{');
+    if (chipper != NULL)
+        {
+        if (val == filterBy->slValues) // First one
+            {
+            filterBy->styleFollows = (lastChar(chipper) == '}');
+            if (filterBy->styleFollows == FALSE) // Must be closed at the end of the string or
+                filterBy->styleFollows = (*(chipper + 1) == '#'); // Legacy: color only
+            }
+        if (filterBy->styleFollows == FALSE)
+            errAbort("filterBy values either all end in {CSS style} or none do.");
+        *chipper++ = 0;  // delimit by null
+        char *end = chipper + (strlen(chipper) - 1);
+        if (*end == '}')
+            *end = 0;
+        else if (*(chipper + 1) != '#') // Legacy: Could be color only definition
+            errAbort("filterBy values ending in style must be enclosed in {curly brackets}.");
+        }
+    else if (filterBy->styleFollows)
+        errAbort("filterBy values either all end in {CSS style} or none do.");
+
+    if (filterBy->useIndex)
+        strSwapChar(val->name,'_',' '); // value is a label so swap underscores
+    else
+        {
+        // now chip the label off the end of value name
+        chipper =strchr(val->name,'|');
+        if (chipper != NULL)
+            {
+            if (val == filterBy->slValues) // First one
+                filterBy->valueAndLabel = TRUE;
+            if (filterBy->valueAndLabel == FALSE)
+                errAbort("filterBy values either all have labels (as value|label) "
+                         "or none do.");
+            *chipper++ = 0;  // The label is found inside filters->svValues as the next string
+            strSwapChar(chipper,'_',' '); // Title does not have underscores
+            }
+        else if (filterBy->valueAndLabel)
+            errAbort("filterBy values either all have labels in form of value|label "
+                     "or none do.");
+        }
+    }
+}
+
+filterBy_t *buildFilterBy(struct trackDb *tdb, struct cart *cart, struct asObject *as, char *filterName)
+/* Build a filterBy_t structure from a <column>FilterValues statement. */
+{
+char *setting = trackDbSetting(tdb, filterName);
+char *value = cartUsualStringClosestToHome(cart, tdb, FALSE, filterName, setting);
+char *field = cloneString(filterName);
+int ix = strlen(field) - strlen("FilterValues");
+assert(ix > 0);
+field[ix] = '\0';
+
+filterBy_t *filterBy;
+AllocVar(filterBy);
+filterBy->column = field;
+filterBy->title = field; ///  title should come from AS file, or trackDb variable
+struct asColumn *asCol = asColumnFind(as, field);
+if (asCol != NULL)
+    filterBy->title = asCol->comment;
+filterBy->useIndex = FALSE;
+filterBy->slValues = slNameListFromComma(value);
+chopUpValues(filterBy);
+if (cart != NULL)
+    {
+    char suffix[256];
+    safef(suffix, sizeof(suffix), "%s.%s", "filterBy", filterBy->column);
+    boolean parentLevel = isNameAtParentLevel(tdb,tdb->track);
+    if (cartLookUpVariableClosestToHome(cart,tdb,parentLevel,suffix,&(filterBy->htmlName)))
+        {
+        filterBy->slChoices = cartOptionalSlNameList(cart,filterBy->htmlName);
+        freeMem(filterBy->htmlName);
+        }
+    }
+
+// Note: cannot use found name above because that may be at a higher (composite/view) level
+int len = strlen(tdb->track) + strlen(filterBy->column) + 15;
+filterBy->htmlName = needMem(len);
+safef(filterBy->htmlName, len, "%s.%s.%s", tdb->track,"filterBy",filterBy->column);
+freeMem(setting);
+
+return filterBy;
+}
+
+filterBy_t *filterByValues(struct trackDb *tdb, struct cart *cart, struct slName *filterValues)
+/* Build a filterBy_t list from tdb variables of the form *FilterValues */
+{
+struct asObject *as = asForTdb(NULL, tdb);
+filterBy_t *filterByList = NULL, *filter;
+struct slName *fieldFilter;
+while ((fieldFilter = slPopHead(&filterValues)) != NULL)
+    {
+    if ((filter = buildFilterBy(tdb, cart, as, fieldFilter->name)) != NULL)
+        slAddHead(&filterByList, filter);
+    }
+return filterByList;
+}
+
 filterBy_t *filterBySetGetGuts(struct trackDb *tdb, struct cart *cart, char *name, char *subName, char *settingName)
 // Gets one or more "filterBy" settings (ClosestToHome).  returns NULL if not found
 {
-filterBy_t *filterBySet = NULL;
+// first check to see if this tdb is using "new" FilterValues cart variables
+struct slName *filterValues = trackDbSettingsWildMatch(tdb, "*FilterValues");
+if (filterValues)
+    return filterByValues(tdb, cart, filterValues);
 
+filterBy_t *filterBySet = NULL;
 char *setting = trackDbSettingClosestToHome(tdb, settingName);
 if(setting == NULL)
     return NULL;
@@ -3624,52 +3736,8 @@ for (ix=0;ix<filterCount;ix++)
     // the slName list will have the 3 parts delimited by null value\0label\0style\0
     stripString(filter, "\"");  // Remove any double quotes now and chop by commmas
     filterBy->slValues = slNameListFromComma(filter);
-    struct slName *val = filterBy->slValues;
-    for (;val!=NULL;val=val->next)
-	{
-	// chip the style off the end of value or value|label
-	char *chipper = strrchr(val->name,'{');
-	if (chipper != NULL)
-	    {
-	    if (val == filterBy->slValues) // First one
-		{
-		filterBy->styleFollows = (lastChar(chipper) == '}');
-		if (filterBy->styleFollows == FALSE) // Must be closed at the end of the string or
-		    filterBy->styleFollows = (*(chipper + 1) == '#'); // Legacy: color only
-		}
-	    if (filterBy->styleFollows == FALSE)
-		errAbort("filterBy values either all end in {CSS style} or none do.");
-	    *chipper++ = 0;  // delimit by null
-	    char *end = chipper + (strlen(chipper) - 1);
-	    if (*end == '}')
-		*end = 0;
-	    else if (*(chipper + 1) != '#') // Legacy: Could be color only definition
-		errAbort("filterBy values ending in style must be enclosed in {curly brackets}.");
-	    }
-	else if (filterBy->styleFollows)
-	    errAbort("filterBy values either all end in {CSS style} or none do.");
 
-	if (filterBy->useIndex)
-	    strSwapChar(val->name,'_',' '); // value is a label so swap underscores
-	else
-	    {
-	    // now chip the label off the end of value name
-	    chipper =strchr(val->name,'|');
-	    if (chipper != NULL)
-		{
-		if (val == filterBy->slValues) // First one
-		    filterBy->valueAndLabel = TRUE;
-		if (filterBy->valueAndLabel == FALSE)
-		    errAbort("filterBy values either all have labels (as value|label) "
-			     "or none do.");
-		*chipper++ = 0;  // The label is found inside filters->svValues as the next string
-		strSwapChar(chipper,'_',' '); // Title does not have underscores
-		}
-	    else if (filterBy->valueAndLabel)
-		errAbort("filterBy values either all have labels in form of value|label "
-			 "or none do.");
-	    }
-	}
+    chopUpValues(filterBy);
 
     slAddTail(&filterBySet,filterBy); // Keep them in order (only a few)
 

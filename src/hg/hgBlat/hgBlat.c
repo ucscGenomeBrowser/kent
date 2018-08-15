@@ -317,7 +317,7 @@ else
         char *trackDescription = NULL;
         getCustomName(database, cart, pslList, &trackName, &trackDescription);
         psl = pslList;
-        printf( "<DIV STYLE=\"display:block;\"><TABLE><FORM ACTION=\"%s\"  METHOD=\"POST\" NAME=\"customTrackForm\">\n", hgcUrl);
+        printf( "<DIV STYLE=\"display:block;\"><FORM ACTION=\"%s\"  METHOD=\"POST\" NAME=\"customTrackForm\">\n", hgcUrl);
         printf("<INPUT TYPE=\"hidden\" name=\"o\" value=\"%d\" />\n",psl->tStart);
         printf("<INPUT TYPE=\"hidden\" name=\"t\" value=\"%d\" />\n",psl->tEnd);
         printf("<INPUT TYPE=\"hidden\" name=\"g\" value=\"%s\" />\n","buildBigPsl");
@@ -329,18 +329,18 @@ else
         if (pslIsProtein(psl))
             printf("<INPUT TYPE=\"hidden\" name=\"isProt\" value=\"on\" />\n");
 
-        printf("<TABLE><TR>Custom track name: ");
+        printf("<TABLE><TR><TD>Custom track name: ");
         cgiMakeTextVar( "trackName", trackName, 30);
         printf("</TD></TR>");
 
-        printf("<TR> Custom track description: ");
+        printf("<TR><TD> Custom track description: ");
         cgiMakeTextVar( "trackDescription", trackDescription,50);
         printf("</TD></TR>");
         printf("<TR><TD><INPUT TYPE=SUBMIT NAME=Submit VALUE=\"Build a custom track with these results\"></TD></TR>\n");
-        printf("</FORM></TT></DIV>");
+        printf("</TABLE></FORM></DIV>");
         }
 
-    printf("<DIV STYLE=\"display:block;\"><TABLE><PRE>");
+    printf("<DIV STYLE=\"display:block;\"><PRE>");
     printf("   ACTIONS      QUERY           SCORE START  END QSIZE IDENTITY CHRO STRAND  START    END      SPAN\n");
     printf("---------------------------------------------------------------------------------------------------\n");
     for (psl = pslList; psl != NULL; psl = psl->next)
@@ -364,7 +364,7 @@ else
 	    skipChr(psl->tName), psl->strand, psl->tStart+1, psl->tEnd,
 	    psl->tEnd - psl->tStart);
 	}
-    printf("</PRE></TT>\n");
+    printf("</PRE>\n");
     puts("<P style=\"text-align:right\"><SMALL><A HREF=\"../FAQ/FAQblat.html#blat1b\">Missing a match?</A></SMALL></P>\n");
     puts("</DIV>\n");
     }

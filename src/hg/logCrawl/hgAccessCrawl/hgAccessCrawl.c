@@ -391,7 +391,7 @@ for (i=0; i<logCount; ++i)
 			    ++fromOtherBlat;
 			else if (ll->referrer != NULL 
 				&& !startsWith("http://genome.ucsc.edu", ll->referrer)
-				&& !startsWith("http://genome.cse.ucsc.edu", ll->referrer))
+				&& !startsWith("http://genome.soe.ucsc.edu", ll->referrer))
 			    ++fromOutside;
 			else if (cgiCount == 2 
 			    && hashLookup(cgiHash, "position") 

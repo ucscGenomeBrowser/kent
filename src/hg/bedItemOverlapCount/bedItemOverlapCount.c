@@ -64,7 +64,7 @@ errAbort(
   " bedGraphToBigWig bedFile.bedGraph chrom.sizes bedFile.bw\n"
   "   where the chrom.sizes is obtained with the script: fetchChromSizes\n"
   "   See also:\n"
-  " http://genome-test.cse.ucsc.edu/~kent/src/unzipped/utils/userApps/fetchChromSizes\n"
+  " http://genome-test.gi.ucsc.edu/~kent/src/unzipped/utils/userApps/fetchChromSizes\n"
   "options:\n"
   "   -zero      add blocks with zero count, normally these are ommitted\n"
   "   -bed12     expect bed12 and count based on blocks\n"

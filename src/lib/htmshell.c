@@ -1010,7 +1010,7 @@ dyStringAppend(policy, " img-src * data:;");
 dyStringAppend(policy, " img-src 'self'");
 // used by hgGene for modbaseimages in hg/hgc/lowelab.c hg/protein/lib/domains.c hg/hgGene/domains.c
 dyStringAppend(policy, " modbase.compbio.ucsf.edu");  
-dyStringAppend(policy, " hgwdev.cse.ucsc.edu"); // used by visiGene
+dyStringAppend(policy, " hgwdev.gi.ucsc.edu"); // used by visiGene
 dyStringAppend(policy, " genome.ucsc.edu"); // used by visiGene
 dyStringAppend(policy, " code.jquery.com");          // used by hgIntegrator
 dyStringAppend(policy, " www.google-analytics.com"); // used by google analytics
