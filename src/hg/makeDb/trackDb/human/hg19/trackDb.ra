@@ -29,6 +29,7 @@ group phenDis
 visibility hide
 type vcfTabix
 bigDataUrl /gbdb/hg19/bbi/mastermind_open_variant_file_preview.vcf.gz
+release alpha
 
 # chainNet tracks
 include trackDb.chainNet.ra
