@@ -255,7 +255,7 @@ char *cdwAllowedTags[] = {
     "chrom",
     "clone",
     "concentration",
-    "condition",
+    "experimental_condition",
     "consent",
     "control_association",
     "control_type",
