@@ -22,6 +22,14 @@ searchPriority 2.07207
 searchType bigBed
 searchDescription COSMIC Regions
 
+track mastermind
+shortLabel Mastermind Variants
+longLabel Mastermind Variants extracted from fulltext publications
+group phenDis
+visibility hide
+type vcfTabix
+bigDataUrl /gbdb/hg19/bbi/mastermind_open_variant_file_preview.vcf.gz
+
 # chainNet tracks
 include trackDb.chainNet.ra
 include trackDb.wgEncode.ra
