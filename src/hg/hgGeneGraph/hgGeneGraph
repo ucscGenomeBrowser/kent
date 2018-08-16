@@ -35,13 +35,17 @@ from sys import exit
 from collections import defaultdict, namedtuple
 from os.path import *
 
+import cgitb
+cgitb.enable()
+
 # import the UCSC-specific library
 sys.path.append(join(dirname(__file__), "pyLib"))
 try:
     from hgLib import cgiArgs, cgiSetup, cgiString, printContentType, printMenuBar, \
             sqlConnect, sqlQuery, errAbort, cfgOption, runCmd, cgiGetAll, printHgcHeader, \
-            printHgcSection, getNonce, getCspMetaHeader, jsOnEventById, jsInlineFinish, webStartGbNoBanner, htmlPageEnd, hConnectCentral, sqlTableExists, \
-            readSmallFil
+            printHgcSection, getNonce, getCspMetaHeader, jsOnEventById, \
+            jsInlineFinish, webStartGbNoBanner, htmlPageEnd, hConnectCentral, \
+            sqlTableExists, readSmallFile
 except:
     print("Content-type: text/html\n")
     print("Cannot find the directory cgi-bin/pyLib in Apache. This is an installation error.")
@@ -668,7 +672,10 @@ def writeDot(allGenes, links, fname, targetGene, geneDescs, annotLabel, geneAnno
     geneSnips are added to mouseovers.
     """
 
-    ofh = open(fname, "w")
+    try:
+        ofh = open(fname, "w")
+    except:
+        errAbort("Error writing %s, this is an installation error. Please make sure that the trash directory has the correct permissions." % fname)
     ofh.write("digraph test {\n")
     ofh.write("graph [bgcolor=transparent; esep=0.4];\n")
     #ofh.write("rankdir=LR;\n")

@@ -203,7 +203,7 @@ BUILD_TRIX = ./buildTrix
 HIVE_TRIX = /hive/data/inside/trix
 DATA_TRIX = /data/trix
 ALPHA_MACHINE = hgwdev.gi.ucsc.edu
-BETA_MACHINE = qateam@hgwbeta.cse.ucsc.edu
+BETA_MACHINE = qateam@hgwbeta.soe.ucsc.edu
 
 update: ${DBS:%=%_update}
 	${MKDIR} ${CGI_BIN}-${USER}/encode

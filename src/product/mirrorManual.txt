@@ -16,14 +16,15 @@ Optional:
 * 'ghostscript' ps to pdf converter - <http://ghostscript.com>
 * 'git' source code management: <http://git-scm.com/downloads>
 * 'gmt' map plotting tools <http://www.soest.hawaii.edu/gmt/>
-* 'pstack' for stack traces 
+* 'pstack' for stack traces
 * 'R' for the GTex track
+* 'python-mysqldb' for the gene interactions track
 
 It is best to install these packages with your standard operating
 system package management tools:
 
-* Debian/Ubuntu: `apt-get install ghostscript apache2 mysql-server gmt r-base uuid-dev`
-* Redhat/Fedora/CentOS: `yum install libpng12 httpd ghostscript GMT hdf5 R libuuid-devel`
+* Debian/Ubuntu: `apt-get install ghostscript apache2 mysql-server gmt r-base uuid-dev python-mysqldb`
+* Redhat/Fedora/CentOS: `yum install libpng12 httpd ghostscript GMT hdf5 R libuuid-devel MySQL-python`
 
 # Hardware and disk space requirements
 

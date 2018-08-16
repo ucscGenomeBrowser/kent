@@ -33,7 +33,6 @@ int size = 0;
 // Local copy (reference file) and URL for testing:
 #define THOUSAND_HIVE "/hive/data/outside/1000genomes/ncbi/ftp-trace.ncbi.nih.gov/1000genomes/"
 #define THOUSAND_FTP "ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/pilot_data/data/"
-#define CHR3_SLX_BAM "NA12878/alignment/NA12878.chrom3.SLX.maq.SRP000032.2009_07.bam"
 #define CHR4_SLX_BAM "NA12878/alignment/NA12878.chrom4.SLX.maq.SRP000032.2009_07.bam"
 
 // Use typical size range of bgzip-compressed data blocks:
