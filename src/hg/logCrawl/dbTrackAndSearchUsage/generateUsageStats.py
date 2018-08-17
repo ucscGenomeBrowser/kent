@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import subprocess, os, gzip, argparse, sys, json, operator
+import subprocess, os, gzip, argparse, sys, json, operator, datetime
 from collections import Counter, defaultdict
 
 #####
@@ -53,7 +53,7 @@ publicHubs = dict()
 # Use hgsql to grab hub ID from hubStatus table and shortLabel from hubPublic
 # for each hub in hubPublic table
 cmd = ["hgsql", "hgcentral", "-h", "genome-centdb", "-Ne", "select s.id,p.hubUrl,p.shortLabel\
-       from hubPublic p, hubStatus s where s.hubUrl=p.hubUrl", ]
+       from hubPublic p join hubStatus s where s.hubUrl=p.hubUrl", ]
 p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 cmdout, cmderr = p.communicate()
 hubs = cmdout.decode("ASCII")
@@ -155,41 +155,33 @@ def modDicts(db, year, month, hgsid, tracks, perMonth=False):
                         else:
                             trackUsersHubsMonth[hubId][db][year][month][hubTrack][hgsid] += 1
 
-def processFile(fileName, gzipped=False, perMonth=False):
+def processFile(fileName, perMonth=False):
     """Process a file line by line using the function parseTrackLog and record usage information using
        the function modDicts"""
-    if gzipped == True:
-        for line in gzip.open(fileName, "r"):
-            # convert lines from binary into ASCII for processing, only needed for gzip
-            line = line.decode("ASCII")
-            # Process "trackLog" lines
-            if "trackLog" in line:
-                db, year, month, hgsid, tracks = parseTrackLog(line)
-                modDicts(db, year, month, hgsid, tracks, perMonth)
-                # Keep track of month/years covered
-                monthYear = month + " " + year
-                monthYearSet.add(monthYear)
-        
+    if fileName.endswith(".gz"):
+        ifh = gzip.open(fileName, "r")
     else:
-        for line in open(fileName, "r"):
-            # Process "trackLog" lines
-            if "trackLog" in line:
-                db, year, month, hgsid, tracks = parseTrackLog(line)
-                # record information from trackLog line
-                modDicts(db, year, month, hgsid, tracks, perMonth)
-                # Keep track of month/years covered
-                monthYear = month + " " + year
-                monthYearSet.add(monthYear)
+        ifh = open(fileName, "r")
+    for line in ifh:
+        if "str" not in str(type(line)):
+            line = line.decode("ASCII")
+        if "trackLog" in line:
+            db, year, month, hgsid, tracks = parseTrackLog(line)
+            modDicts(db, year, month, hgsid, tracks, perMonth)
+            # Keep track of month/years covered
+            monthYear = month + " " + year
+            monthYearSet.add(monthYear)
 
-def processDir(dirName, gzipped=False, perMonth=False):
+def processDir(dirName, perMonth=False):
     """Process files in a directory using processFile function"""
     fileNames = os.listdir(dirName)
     for log in fileNames:
-        processFile(dirName + log, gzipped, perMonth)
+        fileName = os.path.join(dirName, log)
+        processFile(fileName, perMonth)
 
-def dumpToJson(data, outputFile):
+def dumpToJson(data, outputFile, outputDir):
     """output data to named outputFile"""
-    jsonOut = open(outputFile, "w")
+    jsonOut = open(os.path.join(outputDir, outputFile), "w")
     json.dump(data, jsonOut)
     jsonOut.close()
 
@@ -204,8 +196,6 @@ must be space-separated Apache error_log file')
     parser.add_argument("-d","--dirName", type=str , help='input directory \
 name, files must be space-separated error_log files. No other files should be \
 present in this directory.')
-    parser.add_argument("-g","--gzipped", action='store_true', help='indicates \
-that input files are gzipped (.gz)')
     parser.add_argument("-p","--perMonth", action='store_true', help='output \
 file containing info on db/track/hub track use per month')
     parser.add_argument("-m","--monthYear", action='store_true', help='output \
@@ -214,24 +204,53 @@ file containing month/year pairs (e.g. "Mar 2017")')
 json files for summary dictionaries')
     parser.add_argument("-t","--outputDefaults", action='store_true',
 help='output file containing info on default track usage for top 15 most used assemblies')
+    parser.add_argument("-o","--outDir", type=str, help='directory in which to place output files')
     args = parser.parse_args()
+
+    # Print help message if no arguments are supplied
+    if len(sys.argv) == 1:
+        parser.print_help(sys.stderr)
+        sys.exit(1)
 
     # File and directory options can't be used together. Catch this and exit.
     if args.fileName != None and args.dirName != None:
         print("-f/--fileName and -d/--dirName cannot be used together. Choose one and re-run.")
         sys.exit(1)
 
+    # Catch it early if input file/directory doesn't exist and exit.
+    if args.fileName:
+        if not os.path.exists(args.fileName):
+            print(args.fileName, "doesn't exist. Please run on a valid file.")
+            exit(1)
+    elif args.dirName:
+        if not os.path.exists(args.dirName):
+            print(args.dirName, "doesn't exist. Please run on a valid directory.")
+            exit(1)
+
+    # Setup output directory
+    if args.outDir == None:
+        # If an output directory is unspecified, then a new one with the current date/time is made
+        currDateTime = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        os.makedirs(currDateTime)
+        outDir = currDateTime
+    else:
+        # Otherwise, user supplied a output directory name
+        outDir = args.outDir
+        if not os.path.exists(outDir):
+	    # If specied output directory doesn't exist, create it
+            os.makedirs(outDir)
+
     # Process input to create dictionaries containing info about users per db/track/hub track
     if args.fileName:
-        processFile(args.fileName, args.gzipped, args.perMonth)
+        processFile(args.fileName, args.perMonth)
     elif args.dirName:
-        processDir(args.dirName, args.gzipped, args.perMonth)
+        processDir(args.dirName, args.perMonth)
 
     ##### Output files of summaries of db/track/hub track usage information
 
     # Output files of db users and db use
-    dbCountsFile = open("dbCounts.tsv", "w")
-    dbUsersFile = open("dbUsers.tsv", "w")
+    dbCountsFile = open(os.path.join(outDir, "dbCounts.tsv"), "w")
+    dbUsersFile = open(os.path.join(outDir, "dbUsers.tsv"), "w")
     # Set of nested for loops to go through dictionary level by level and
     # output and summarize results into appropriate counts dictionary
     for db in dbUsers:
@@ -251,8 +270,8 @@ help='output file containing info on default track usage for top 15 most used as
     dbUsersFile.close()
 
     # Output files of track users and track use
-    trackCountsFile = open("trackCounts.tsv", "w")
-    trackUsersFile = open("trackUsers.tsv", "w")
+    trackCountsFile = open(os.path.join(outDir, "trackCounts.tsv"), "w")
+    trackUsersFile = open(os.path.join(outDir, "trackUsers.tsv"), "w")
     # Set of nested for loops to go through dictionary level by level and
     # output and summarize results into appropriate counts dictionary
     for db in trackUsers:
@@ -275,8 +294,8 @@ help='output file containing info on default track usage for top 15 most used as
     trackUsersFile.close()
 
     # Output files of hub track users and hub track use
-    trackUsersHubsFile = open("trackUsersHubs.tsv", "w")
-    trackCountsHubsFile = open("trackCountsHubs.tsv", "w")
+    trackUsersHubsFile = open(os.path.join(outDir, "trackUsersHubs.tsv"), "w")
+    trackCountsHubsFile = open(os.path.join(outDir, "trackCountsHubs.tsv"), "w")
     # Set of nested for loops to go through dictionary level by level and
     # output and summarize results into appropriate counts dictionary
     for hubId in trackUsersHubs:
@@ -304,15 +323,15 @@ help='output file containing info on default track usage for top 15 most used as
 
     # Output file containing info on month/years covered by stats if indicated
     if args.monthYear == True:
-        monthYearFile = open("monthYear.tsv", "w")
+        monthYearFile = open(os.path.join(outDir, "monthYear.tsv"), "w")
         for pair in monthYearSet:
             monthYearFile.write(pair + "\n")
         monthYearFile.close()
 
     ##### Output data per month when indicated
     if args.perMonth == True:
-        dbUsersMonthFile = open("dbUsers.perMonth.tsv", "w")
-        dbCountsMonthFile = open("dbCounts.perMonth.tsv", "w")
+        dbUsersMonthFile = open(os.path.join(outDir, "dbUsers.perMonth.tsv"), "w")
+        dbCountsMonthFile = open(os.path.join(outDir, "dbCounts.perMonth.tsv"), "w")
         # Set of nested for loops to go through dictionary level by level and
         # output and summarize results into appropriate counts dictionary
         for db in dbUsersMonth:
@@ -335,8 +354,8 @@ help='output file containing info on default track usage for top 15 most used as
         dbCountsMonthFile.close()
 
         # Summarize user dictionaries to create counts per db/track/hub track
-        trackUsersMonthFile = open("trackUsers.perMonth.tsv", "w")
-        trackCountsMonthFile = open("trackCounts.perMonth.tsv", "w")
+        trackUsersMonthFile = open(os.path.join(outDir, "trackUsers.perMonth.tsv"), "w")
+        trackCountsMonthFile = open(os.path.join(outDir, "trackCounts.perMonth.tsv"), "w")
         # Set of nested for loops to go through dictionary level by level and
         # output and summarize results into appropriate counts dictionary
         for db in trackUsersMonth:
@@ -358,8 +377,8 @@ help='output file containing info on default track usage for top 15 most used as
         trackCountsMonthFile.close()
 
         # Summarize user dictionaries to create counts per db/track/hub track
-        trackUsersHubsMonthFile = open("trackUsersHubs.perMonth.tsv", "w")
-        trackCountsHubsMonthFile = open("trackCountsHubs.perMonth.tsv", "w")
+        trackUsersHubsMonthFile = open(os.path.join(outDir, "trackUsersHubs.perMonth.tsv"), "w")
+        trackCountsHubsMonthFile = open(os.path.join(outDir, "trackCountsHubs.perMonth.tsv"), "w")
         # Set of nested for loops to go through dictionary level by level and
         # output and summarize results into appropriate counts dictionary
         for hubId in trackUsersHubsMonth:
@@ -388,14 +407,14 @@ help='output file containing info on default track usage for top 15 most used as
     ##### Output json files if indicated #####
 
     if args.jsonOut == True:
-        dumpToJson(dbCounts, "dbCounts.json")
-        dumpToJson(trackCounts, "trackCounts.json")
-        dumpToJson(trackCountsHubs, "trackCountsHubs.json")
+        dumpToJson(dbCounts, "dbCounts.json", outDir)
+        dumpToJson(trackCounts, "trackCounts.json", outDir)
+        dumpToJson(trackCountsHubs, "trackCountsHubs.json", outDir)
 
         if args.perMonth == True:
-            dumpToJson(dbCountsMonth, "dbCounts.perMonth.json")
-            dumpToJson(trackCountsMonth, "trackCounts.perMonth.json")
-            dumpToJson(trackCountsHubsMonth, "trackCountsHubs.perMonth.json")
+            dumpToJson(dbCountsMonth, "dbCounts.perMonth.json", outDir)
+            dumpToJson(trackCountsMonth, "trackCounts.perMonth.json", outDir)
+            dumpToJson(trackCountsHubsMonth, "trackCountsHubs.perMonth.json", outDir)
 
         #if args.monthYear == True:
         #    dumpToJson(monthYearSet, "monthYearSet.json")
@@ -409,7 +428,7 @@ help='output file containing info on default track usage for top 15 most used as
         dbCountsSorted = sorted(dbCounts.items(), key=operator.itemgetter(1))
         dbCountsSorted.reverse()
 
-        defaultCountsFile = open("defaultCounts.tsv", "w")
+        defaultCountsFile = open(os.path.join(outDir, "defaultCounts.tsv"), "w")
         for x in range(0, 15): # Will only output the default track stats for the 15 most popular assemblies
             db = dbCountsSorted[x][0]
             dbOpt = "db=" + db
