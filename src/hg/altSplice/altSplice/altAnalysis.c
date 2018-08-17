@@ -1530,7 +1530,7 @@ bedFree(&bed);
 void htmlLinkOut(char *db, struct altSpliceSite *as, FILE *out)
 {
 fprintf(out,"<tr><td><a target=\"browser\" "
-	"href=\"http://hgwdev-sugnet.cse.ucsc.edu/cgi-bin/hgTracks?db=%s&position=%s:%d-%d&altGraphXCon=full\">",
+	"href=\"http://hgwdev-sugnet.gi.ucsc.edu/cgi-bin/hgTracks?db=%s&position=%s:%d-%d&altGraphXCon=full\">",
        db, as->chrom, as->chromStart-50, maxInArray(as->altStarts, as->altCount)+50);
 fprintf(out,"%s (%d)</a></td>", as->agName, as->altCount-1);
 fprintf(out,"<td>%s</td>", nameForType(as));
@@ -1545,7 +1545,7 @@ void writeOutFrames(FILE *htmlOut, char *fileName, char *db)
 fprintf(htmlOut, "<html><head><title>Human Alt Splicing Conserved in Mouse</title></head>\n"
      "<frameset cols=\"18%%,82%%\">\n"
      "<frame name=\"_list\" src=\"./%s\">\n"
-     "<frame name=\"browser\" src=\"http://hgwdev-sugnet.cse.ucsc.edu/cgi-bin/hgTracks?db=%s&position=NM_005487&altGraphXCon=full\">\n"
+     "<frame name=\"browser\" src=\"http://hgwdev-sugnet.gi.ucsc.edu/cgi-bin/hgTracks?db=%s&position=NM_005487&altGraphXCon=full\">\n"
      "</frameset>\n"
      "</html>\n", fileName, db);
 }

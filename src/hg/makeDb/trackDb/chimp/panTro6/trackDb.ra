@@ -7,6 +7,10 @@ track gap override
 html gap
 priority 2
 
+track chainNetHg38 override
+chainMinScore 5000
+chainLinearGap medium
+
 searchTable gold
 shortCircuit 1
 termRegex [ABN][ACSB][ACGZ0-9_]+(\.[0-9]+)?

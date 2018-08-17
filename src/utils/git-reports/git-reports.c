@@ -681,9 +681,9 @@ void doUserFiles(char *u, struct commit *commits)
 /* process one user's files-view (or all if u is NULL) */
 {
 
-// http://hgwdev.cse.ucsc.edu/cvs-reports/branch/user/galt/index-by-file.html
+// http://hgwdev.gi.ucsc.edu/cvs-reports/branch/user/galt/index-by-file.html
 // if u is NULL
-// http://hgwdev.cse.ucsc.edu/cvs-reports/branch/file/index.html
+// http://hgwdev.gi.ucsc.edu/cvs-reports/branch/file/index.html
 char userPath[1024];
 if (u)
     safef(userPath, sizeof(userPath), "%s/%s/%s/%s/index-by-file.html", outDir, outPrefix, "user", u);

@@ -49,7 +49,7 @@ errAbort(
   "hgTablesTest - Test hgTables web page\n"
   "usage:\n"
   "   hgTablesTest url log\n"
-  "Where url is something like hgwbeta.cse.ucsc.edu/cgi-bin/hgTables\n"
+  "Where url is something like hgwbeta.soe.ucsc.edu/cgi-bin/hgTables\n"
   "and log is a file where error messages and statistics will be written\n"
   "options:\n"
   "   -org=Human - Restrict to Human (or Mouse, Fruitfly, etc.)\n"

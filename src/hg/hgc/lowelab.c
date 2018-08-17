@@ -3257,11 +3257,11 @@ void doWiki(char *track, struct trackDb *tdb, char *itemName)
   {
     strand[0] = itemName[strlen(itemName)-1];
     strand[1] = 0;
-    printf("<META HTTP-EQUIV=\"REFRESH\" content=\"0; URL=http://lowelabwiki.cse.ucsc.edu/index.php/BED:%s:%s:%d-%d:%s\"</META>", database, seqName, winStart, winEnd, strand);
+    printf("<META HTTP-EQUIV=\"REFRESH\" content=\"0; URL=http://lowelabwiki.soe.ucsc.edu/index.php/BED:%s:%s:%d-%d:%s\"</META>", database, seqName, winStart, winEnd, strand);
   }
   else
   {
-    printf("<META HTTP-EQUIV=\"REFRESH\" content=\"0; URL=http://lowelabwiki.cse.ucsc.edu/index.php/BED:%s:%s:%s\"</META>", database, seqName, itemName);
+    printf("<META HTTP-EQUIV=\"REFRESH\" content=\"0; URL=http://lowelabwiki.soe.ucsc.edu/index.php/BED:%s:%s:%s\"</META>", database, seqName, itemName);
   }
 
   printf("</HEAD>");
@@ -3451,7 +3451,8 @@ void doloweOrthologs(struct trackDb *tdb, char *itemName)
     {
         infoload = bedLoadN(row+rowOffset, bedSize);
     printf("<B>Name:</B> %s\n", infoload->name);
-    printf(" <A HREF=\"http://archdev-holmes.cse.ucsc.edu/cgi-bin/hgFrame?track=loweOrthologs&refseq=1&db=%s&name=%s\">List of Orthologs</A><BR>",database,infoload->name);
+    // archdev-holmes no longer exists, but what should this be?
+    printf(" <A HREF=\"http://archdev-holmes.soe.ucsc.edu/cgi-bin/hgFrame?track=loweOrthologs&refseq=1&db=%s&name=%s\">List of Orthologs</A><BR>",database,infoload->name);
     printf("<B>Position:</B> "
                  "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
                  hgTracksPathAndSettings(), database, infoload->chrom, infoload->chromStart + 1, infoload->chromEnd);
@@ -3563,12 +3564,12 @@ void domegablastInfo(struct trackDb *tdb, char *itemName)
     printf("<B>Description:</B> %s<BR>\n", infoload->fullname);
     printf("<B>E-value:</B> %0.0e", infoload->evalue);
     #ifdef LISTUI
-    printf(" <A HREF=\"http://archdev-holmes.cse.ucsc.edu/cgi-bin/hgList?track=megablastInfo&order=evalue&db=%s\">Sort by E-value</A>",database);
+    printf(" <A HREF=\"http://archdev-holmes.soe.ucsc.edu/cgi-bin/hgList?track=megablastInfo&order=evalue&db=%s\">Sort by E-value</A>",database);
     #endif
     printf("<BR>\n");
     printf("<B>Protein Identity:</B> %u%%\n", infoload->percentident);
     #ifdef LISTUI
-    printf(" <A HREF=\"http://archdev-holmes.cse.ucsc.edu/cgi-bin/hgList?track=megablastInfo&order=percentident&db=%s\">Sort by Percent Identity</A>",database);
+    printf(" <A HREF=\"http://archdev-holmes.soe.ucsc.edu/cgi-bin/hgList?track=megablastInfo&order=percentident&db=%s\">Sort by Percent Identity</A>",database);
     #endif
     printf("<BR>\n");
           printf("<B>Position:</B> "

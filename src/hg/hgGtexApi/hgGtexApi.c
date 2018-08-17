@@ -3,7 +3,7 @@
 
 /* hgGtexApi - a web API to selected GTEx resources
  *
- * usage:  http://hgwdev-kate.cse.ucsc.edu/cgi-bin/hgGtexApi?gene=ENSG00000223972.4
+ * usage:  http://hgwdev-kate.gi.ucsc.edu/cgi-bin/hgGtexApi?gene=ENSG00000223972.4
  *
  * returns JSON in the format:
  *      { "id": <donor>, "tissue": <tissue>, "rpkm": <rpkm> }

@@ -1951,7 +1951,7 @@ if (cigar == NULL)
     }
 else
     {
-    char cigarSpec[strlen(cigar+1)];  // copy since parsing is destructive
+    char cigarSpec[strlen(cigar)+1];  // copy since parsing is destructive
     strcpy(cigarSpec, cigar);
     char *cigarNext = cigarSpec;
     if (strand[1] == '-')

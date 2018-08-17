@@ -1033,7 +1033,7 @@ void makeJunctMdbGenericLink(struct junctSet *js, struct dyString *buff, char *n
 int offSet = 100;
 int i = 0;
 dyStringClear(buff);
-dyStringPrintf(buff, "<a target=\"plots\" href=\"http://mdb1-sugnet.cse.ucsc.edu/cgi-bin/mdbSpliceGraph?mdbsg.calledSelf=on&coordString=%s:%c:%s:%d-%d&mdbsg.cs=%d&mdbsg.ce=%d&mdbsg.expName=%s&mdbsg.probeSummary=on&mdbsg.toScale=on%s\">", 
+dyStringPrintf(buff, "<a target=\"plots\" href=\"http://mdb1-sugnet.gi.ucsc.edu/cgi-bin/mdbSpliceGraph?mdbsg.calledSelf=on&coordString=%s:%c:%s:%d-%d&mdbsg.cs=%d&mdbsg.ce=%d&mdbsg.expName=%s&mdbsg.probeSummary=on&mdbsg.toScale=on%s\">", 
 	       "mm2", js->strand[0], js->chrom, js->chromStart, js->chromEnd, 
 	       js->chromStart - offSet, js->chromEnd + offSet, "AffyMouseSplice1-02-2004", suffix);
 dyStringPrintf(buff, "%s", name);
@@ -1079,7 +1079,7 @@ void makeJunctExpressedLink(struct junctSet *js, struct dyString *buff, int junc
 int offSet = 100;
 int i = 0;
 dyStringClear(buff);
-dyStringPrintf(buff, "<a target=\"plots\" href=\"http://mdb1-sugnet.cse.ucsc.edu/cgi-bin/mdbSpliceGraph?mdbsg.calledSelf=on&coordString=%s:%c:%s:%d-%d&mdbsg.cs=%d&mdbsg.ce=%d&mdbsg.expName=%s&mdbsg.probeSummary=on&mdbsg.toScale=on\">", 
+dyStringPrintf(buff, "<a target=\"plots\" href=\"http://mdb1-sugnet.gi.ucsc.edu/cgi-bin/mdbSpliceGraph?mdbsg.calledSelf=on&coordString=%s:%c:%s:%d-%d&mdbsg.cs=%d&mdbsg.ce=%d&mdbsg.expName=%s&mdbsg.probeSummary=on&mdbsg.toScale=on\">", 
 	       "mm2", js->strand[0], js->chrom, js->chromStart, js->chromEnd, 
 	       js->chromStart - offSet, js->chromEnd + offSet, "AffyMouseSplice1-02-2004");
 for(i = 0; i < probM->colCount; i++)
@@ -1118,7 +1118,7 @@ void makeJunctMdbLink(struct junctSet *js, struct hash *bedHash,
 int offSet = 100;
 int i = 0;
 dyStringClear(buff);
-dyStringPrintf(buff, "<a target=\"plots\" href=\"http://mdb1-sugnet.cse.ucsc.edu/cgi-bin/mdbSpliceGraph?mdbsg.calledSelf=on&coordString=%s:%c:%s:%d-%d&mdbsg.cs=%d&mdbsg.ce=%d&mdbsg.expName=%s&mdbsg.probeSummary=on&mdbsg.toScale=on\">", 
+dyStringPrintf(buff, "<a target=\"plots\" href=\"http://mdb1-sugnet.gi.ucsc.edu/cgi-bin/mdbSpliceGraph?mdbsg.calledSelf=on&coordString=%s:%c:%s:%d-%d&mdbsg.cs=%d&mdbsg.ce=%d&mdbsg.expName=%s&mdbsg.probeSummary=on&mdbsg.toScale=on\">", 
 	       "mm2", js->strand[0], js->chrom, js->chromStart, js->chromEnd, 
 	       js->chromStart - offSet, js->chromEnd + offSet, "AffyMouseSplice1-02-2004");
 dyStringPrintf(buff, "%s", js->junctUsed[junctIx]);
@@ -1138,7 +1138,7 @@ void makeGbCoordLink(struct junctSet *js, int chromStart, int chromEnd, struct d
 int junctIx = 0;
 int offSet = 100;
 dyStringClear(buff);
-dyStringPrintf(buff, "<a target=\"browser\" href=\"http://hgwdev-sugnet.cse.ucsc.edu/cgi-bin/hgTracks?position=%s:%d-%d&splicesPFt=red&splicesPlt=or&splicesP_name=", js->chrom, chromStart - offSet, chromEnd + offSet);
+dyStringPrintf(buff, "<a target=\"browser\" href=\"http://hgwdev-sugnet.gi.ucsc.edu/cgi-bin/hgTracks?position=%s:%d-%d&splicesPFt=red&splicesPlt=or&splicesP_name=", js->chrom, chromStart - offSet, chromEnd + offSet);
 for(junctIx = 0; junctIx < js->junctUsedCount; junctIx++)
     dyStringPrintf(buff, "%s ", js->junctUsed[junctIx]);
 if(js->exonPsName != NULL && differentWord(js->exonPsName, "NA"))
@@ -1158,7 +1158,7 @@ int offSet = 100;
 dyStringClear(buff);
 if(js->hName[0] != 'G' || strlen(js->hName) != 8)
     {
-    dyStringPrintf(buff, "<a target=\"browser\" href=\"http://hgwdev-sugnet.cse.ucsc.edu/cgi-bin/hgTracks?position=%s&splicesPFt=red&splicesPlt=or&splicesP_name=", js->hName);
+    dyStringPrintf(buff, "<a target=\"browser\" href=\"http://hgwdev-sugnet.gi.ucsc.edu/cgi-bin/hgTracks?position=%s&splicesPFt=red&splicesPlt=or&splicesP_name=", js->hName);
     for(junctIx = 0; junctIx < js->junctUsedCount; junctIx++)
 	dyStringPrintf(buff, "%s ", js->junctUsed[junctIx]);
     dyStringPrintf(buff, "\">%s</a>", js->hName);

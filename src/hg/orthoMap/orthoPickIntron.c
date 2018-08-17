@@ -26,7 +26,7 @@ exploratory PCR.
 a summary of the cluster (altGraphX) is generated.</li>
 
 <li>Mouse clusters are mapped via Jim Kent's <a
-href="http://mgc.cse.ucsc.edu/cgi-bin/hgTrackUi?&c=chr14&g=mouseNet">
+href="http://mgc.soe.ucsc.edu/cgi-bin/hgTrackUi?&c=chr14&g=mouseNet">
 net/chain mapping</a> of the mouse and human genomes to the human
 genome. By using the net/chain mapping we can take into account more
 sequence than just the individual mRNAs and also take into account
@@ -397,7 +397,7 @@ void writeOutFrames(FILE *htmlOut, char *fileName, char *db, char *bedFile, char
 fprintf(htmlOut, "<html><head><title>Introns and flanking exons for exploratory PCR</title></head>\n"
 	"<frameset cols=\"18%%,82%%\">\n"
 	"<frame name=\"_list\" src=\"./%s\">\n"
-	"<frame name=\"browser\" src=\"http://mgc.cse.ucsc.edu/cgi-bin/hgTracks?db=%s&position=%s&"
+	"<frame name=\"browser\" src=\"http://mgc.soe.ucsc.edu/cgi-bin/hgTracks?db=%s&position=%s&"
 	"hgt.customText=http://www.soe.ucsc.edu/~sugnet/mgc/%s\">\n"
 	"</frameset>\n"
 	"</html>\n", fileName, db, pos, bedFile);
@@ -467,7 +467,7 @@ for(iv = ivList; iv != NULL && maxPicks > 0; iv = iv->next)
 	    safef(buff, sizeof(buff), "%s:%d-%d", bed->chrom, bed->chromStart-50, bed->chromEnd+50);
 //	isMgcBad = isOverlappedByMgcBad(iv);
 	fprintf(htmlOut, "<tr><td>%d</td><td><a target=\"browser\" "
-		"href=\"http://mgc.cse.ucsc.edu/cgi-bin/hgTracks?db=hg15&position=%s:%d-%d\"> "
+		"href=\"http://mgc.soe.ucsc.edu/cgi-bin/hgTracks?db=hg15&position=%s:%d-%d\"> "
 		"%s </a></td><td>%d</td><td>%s</td></tr>\n", 
 		++i,bed->chrom, bed->chromStart-50, bed->chromEnd+50, bed->name, bed->score, 
 		twinScan ? "yes" : "no");
