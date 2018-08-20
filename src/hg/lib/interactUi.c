@@ -17,6 +17,19 @@ boolean interactUiDirectional(struct trackDb *tdb)
 return isNotEmpty(trackDbSetting(tdb, INTERACT_DIRECTIONAL));
 }
 
+char *interactUiOffset(struct trackDb *tdb)
+/* Determine whether to offset source or target (or neither if NULL) */
+{
+char *directional = trackDbSetting(tdb, INTERACT_DIRECTIONAL);
+if (directional)
+    {
+    if (sameString(directional, INTERACT_OFFSET_TARGET) ||
+         sameString(directional, INTERACT_OFFSET_SOURCE))
+                return directional;
+    }
+return FALSE;
+}
+
 void interactUiMinScore(struct cart *cart, char *track, struct trackDb *tdb)
 /* Minimum score */
 {
