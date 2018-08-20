@@ -18,7 +18,7 @@ setenv BUILDHOME /hive/groups/browser/newBuild
 setenv WEEKLYBLD ${BUILDHOME}/kent/src/utils/qa/weeklybld
 setenv REPLYTO azweig@ucsc.edu
 
-setenv GITSHAREDREPO hgwdev.cse.ucsc.edu:/data/git/kent.git
+setenv GITSHAREDREPO hgwdev.gi.ucsc.edu:/data/git/kent.git
 
 # see also paths in kent/java/build.xml
 setenv BUILDDIR $BUILDHOME
