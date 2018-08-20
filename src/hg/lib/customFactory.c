@@ -3928,6 +3928,13 @@ while ((line = customPpNextReal(cpp)) != NULL)
      * if no track line. Find out explicit type setting if any.
      * Also make sure settingsHash is set up. */
     lf = cpp->fileStack;
+    char *dataUrl = NULL;
+    if (lf->fileName && (
+            startsWith("http://" , lf->fileName) ||
+            startsWith("https://", lf->fileName) ||
+            startsWith("ftp://"  , lf->fileName)
+            ))
+        dataUrl = cloneString(lf->fileName);
     if (startsWithWord("track", line))
         {
 	track = trackLineToTrack(genomeDb, line, cpp->fileStack->lineIx);
@@ -3999,6 +4006,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	char *bigDataUrl = hashFindVal(track->tdb->settingsHash, "bigDataUrl");
 	/* Load track from appropriate factory */
         char *type = track->tdb->type;
+        lf = NULL;  // customFactoryFind may close this
 	struct customFactory *fac = customFactoryFind(genomeDb, cpp, type, track);
 	if (fac == NULL)
 	    {
@@ -4037,13 +4045,6 @@ while ((line = customPpNextReal(cpp)) != NULL)
 			 (lf ? lf->lineIx : 0), (lf ? lf->fileName : "NULL file"));
 		}
 	    }
-        char *dataUrl = NULL;
-        if (lf->fileName && (
-                startsWith("http://" , lf->fileName) ||
-                startsWith("https://", lf->fileName) ||
-                startsWith("ftp://"  , lf->fileName)
-                ))
-            dataUrl = cloneString(lf->fileName);
 	if (bigDataUrl && (ptMax > 0)) // handle separately in parallel so long timeouts don't accrue serially
                                        //  (unless ptMax == 0 which means turn parallel loading off)
             {
