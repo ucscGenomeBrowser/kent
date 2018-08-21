@@ -44,10 +44,10 @@
 # CPU overload on hgdownload
 RSYNCOPTS="-ltrvh"
 # rsync server for CGIs and html files
-RSYNCSRC="rsync://hgdownload.soe.ucsc.edu"
+RSYNCSRC="rsync://hgdownload.gi.ucsc.edu"
 RSYNCCGIBIN=cgi-bin
 RSYNCHTDOCS=htdocs
-UPDATEFLAG=http://hgdownload.soe.ucsc.edu/gbib/lastUpdate
+UPDATEFLAG=http://hgdownload.gi.ucsc.edu/gbib/lastUpdate
 LOGFILE=/var/log/gbibUpdates.log
 DEBUG=0
 if [[ "$#" -ne 0 ]]; then
@@ -110,9 +110,9 @@ fi
 
 
 # check if we have internet, stop if not
-wget -q --tries=1 --timeout=10 --spider http://hgdownload.soe.ucsc.edu -O /dev/null
+wget -q --tries=1 --timeout=10 --spider http://hgdownload.gi.ucsc.edu -O /dev/null
 if [ $? -ne 0 ] ; then
-    echoDebug GBiB has no connection to hgdownload.soe.ucsc.edu, cannot update now
+    echoDebug GBiB has no connection to hgdownload.gi.ucsc.edu, cannot update now
     exit 3
 fi
 
@@ -138,7 +138,7 @@ fi
 if [[ ( "$BASH_ARGV" != "notSelf" && "$1" != "hgwdev" ) && ( ! -e /root/gbibSkipNextUpdate ) ]] ; then
     echo getting new update script
     # we got three VMs where updateBrowser.sh was 0 bytes, so doing download/move now
-    wget http://hgdownload.soe.ucsc.edu/gbib/updateBrowser.sh -O /root/updateBrowser.sh.new -q && mv /root/updateBrowser.sh.new /root/updateBrowser.sh
+    wget http://hgdownload.gi.ucsc.edu/gbib/updateBrowser.sh -O /root/updateBrowser.sh.new -q && mv /root/updateBrowser.sh.new /root/updateBrowser.sh
     chmod a+x /root/updateBrowser.sh
     /root/updateBrowser.sh $1 notSelf
     exit 0
@@ -298,10 +298,10 @@ if [ "$1" == "hgwdev" ] ; then
       RSYNCAPACHE="$RSYNCAPACHE --exclude favicon*.ico --exclude hg.conf* --exclude ENCODE --exclude *.gz --exclude *.bw --exclude *.bb --exclude *.bam --exclude goldenPath/**.pdf --exclude admin --exclude goldenPath/customTracks --exclude pubs --exclude ancestors --exclude training --exclude trash --exclude .htaccess --exclude htdocs --exclude Neandertal --exclude RNA-img --exclude ebola --exclude encodeDCC --exclude evoFold --exclude geneExtra --exclude js-public --exclude style-public --exclude hgNearData --exclude visiGeneData --exclude visiGene"
     fi
 
-    rsync $RSYNCAPACHE $user@hgwdev.soe.ucsc.edu:/usr/local/apache/htdocs${htmlExt}/ /usr/local/apache/htdocs/
-    rsync $RSYNCAPACHE $user@hgwdev.soe.ucsc.edu:/usr/local/apache/cgi-bin${cgiExt}/ /usr/local/apache/cgi-bin/
+    rsync $RSYNCAPACHE $user@hgwdev.gi.ucsc.edu:/usr/local/apache/htdocs${htmlExt}/ /usr/local/apache/htdocs/
+    rsync $RSYNCAPACHE $user@hgwdev.gi.ucsc.edu:/usr/local/apache/cgi-bin${cgiExt}/ /usr/local/apache/cgi-bin/
 
-    PUSHLOC=$user@hgwdev.soe.ucsc.edu:/usr/local/apache/htdocs/gbib/push/
+    PUSHLOC=$user@hgwdev.gi.ucsc.edu:/usr/local/apache/htdocs/gbib/push/
 
 # normal public updates from hgdownload are easier, not many excludes necessary
 else
@@ -314,7 +314,7 @@ else
     # not updated anymore in #18337
     rsync --delete $RSYNCOPTS $RSYNCSRC/$RSYNCHTDOCS/ /usr/local/apache/htdocs/ --include **/customTracks/*.html --exclude ENCODE/ --exclude *.bam --exclude *.bb --exclude */*.bw --exclude */*.gz --exclude favicon.ico --exclude folders --exclude ancestors --exclude admin --exclude goldenPath/customTracks --exclude images/mammalPsg --exclude style/gbib.css --exclude images/title.jpg --exclude images/homeIconSprite.png --exclude goldenPath/**.pdf --exclude training
 
-    PUSHLOC=hgdownload.soe.ucsc.edu::gbib/push/
+    PUSHLOC=hgdownload.gi.ucsc.edu::gbib/push/
 fi
 
 chown -R www-data.www-data /usr/local/apache/cgi-bin/*
@@ -350,7 +350,7 @@ touch /data/mysql/hgFixed/gtexTissue.{MYI,MYD,frm}
 
 if [ "$1" != "hgwdev" ] ; then
   echo - Updating GBDB files...
-  rsync $RSYNCOPTS --existing rsync://hgdownload.soe.ucsc.edu/gbdb/ /data/gbdb/
+  rsync $RSYNCOPTS --existing rsync://hgdownload.gi.ucsc.edu/gbdb/ /data/gbdb/
   chown -R www-data.www-data /data/gbdb/
 fi
 
@@ -401,12 +401,12 @@ if [ "$1" != "hgwdev" ] ; then
   # it doesn't work if I use two mysql invocations, as 'flush tables with read lock'
   # is only valid as long as the session is open
   # so I use the SYSTEM command
-  echo "FLUSH TABLES WITH READ LOCK; SYSTEM rsync $RSYNCOPTS --existing rsync://hgdownload.soe.ucsc.edu/mysql/ /data/mysql/; SYSTEM chown -R mysql.mysql /data/mysql/; UNLOCK TABLES;" | mysql
+  echo "FLUSH TABLES WITH READ LOCK; SYSTEM rsync $RSYNCOPTS --existing rsync://hgdownload.gi.ucsc.edu/mysql/ /data/mysql/; SYSTEM chown -R mysql.mysql /data/mysql/; UNLOCK TABLES;" | mysql
   
   echo updating hgcentral database, make sure to always overwrite
-  echo "FLUSH TABLES WITH READ LOCK; SYSTEM rsync -vrz --existing rsync://hgdownload.soe.ucsc.edu/mysql/hgcentral/ /data/mysql/hgcentral/; SYSTEM chown -R mysql.mysql /data/mysql/hgcentral; UNLOCK TABLES;" | mysql
+  echo "FLUSH TABLES WITH READ LOCK; SYSTEM rsync -vrz --existing rsync://hgdownload.gi.ucsc.edu/mysql/hgcentral/ /data/mysql/hgcentral/; SYSTEM chown -R mysql.mysql /data/mysql/hgcentral; UNLOCK TABLES;" | mysql
   # update blat servers
-  mysql hgcentral -e 'UPDATE blatServers SET host=CONCAT(host,".soe.ucsc.edu") WHERE host not like "%ucsc.edu"'
+  mysql hgcentral -e 'UPDATE blatServers SET host=CONCAT(host,".gi.ucsc.edu") WHERE host not like "%ucsc.edu"'
   # the box does not officially support the HAL right now, remove the ecoli hubs
   mysql hgcentral -e 'delete from hubPublic where hubUrl like "%nknguyen%"'
 fi
@@ -486,7 +486,7 @@ if [ ! -f /usr/local/apache/trash/registration.txt ]; then
       if [[ $(awk '{if ($1 <= $2) print 1;}' <<< "$euroSpeed $ucscSpeed") -eq 1 ]]; then
          echo genome-euro seems to be closer
          echo modifying gbib to pull data from genome-euro instead of genome
-         sed -i s/slow-db.host=genome-mysql.soe.ucsc.edu/slow-db.host=genome-euro-mysql.soe.ucsc.edu/ /usr/local/apache/cgi-bin/hg.conf
+         sed -i s/slow-db.host=genome-mysql.gi.ucsc.edu/slow-db.host=genome-euro-mysql.gi.ucsc.edu/ /usr/local/apache/cgi-bin/hg.conf
       else
          echo genome.ucsc.edu seems to be closer
          echo not modifying /usr/local/apache/cgi-bin/hg.conf

@@ -3,7 +3,7 @@ import urllib2, time, os, datetime, optparse, sys
 
 parser = optparse.OptionParser("""usage: %prog [options] URL filename - compare modification time of file on http server against mtime of file on disk, return exit 0 if it is newer, exit with 1 if not newer.
 example:
-if [ ! %prog http://hgdownload.soe.ucsc.edu/admin/hgcentral.sql lastUpdateTime.flag ]; then
+if [ ! %prog http://hgdownload.gi.ucsc.edu/admin/hgcentral.sql lastUpdateTime.flag ]; then
     echo skip update
     exit
 fi

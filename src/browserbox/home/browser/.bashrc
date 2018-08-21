@@ -123,7 +123,7 @@ if [ `tty` = '/dev/tty1' ]; then
 fi
 
 # useful aliases when working with the gbib
-alias sqlUcsc='mysql -h genome-mysql.soe.ucsc.edu -u genomep --password=password -A hg19'
+alias sqlUcsc='mysql -h genome-mysql.gi.ucsc.edu -u genomep --password=password -A hg19'
 alias gbibSlowNet='sudo tc qdisc add dev eth0 root netem delay 100ms'
 alias gbibFastNet='sudo tc qdisc del dev eth0 root netem delay 100ms'
 alias mail='alpine'
@@ -136,8 +136,8 @@ alias autoUpdateOn=gbibAutoUpdateOn
 # rm and zero the disk
 alias rmIt='sudo shred -n 1 -zu'
 # update the update script
-alias gbibCoreUpdate='sudo wget http://genome-test.soe.ucsc.edu:/browserbox/updateBrowser.sh -O /root/updateBrowser.sh; sudo chmod a+x /root/updateBrowser.sh'
-alias gbibCoreUpdateBeta='sudo wget http://hgwdev.soe.ucsc.edu:/gbib/updateBrowser.sh -O /root/updateBrowser.sh; sudo chmod a+x /root/updateBrowser.sh'
+alias gbibCoreUpdate='sudo wget http://genome-test.gi.ucsc.edu:/browserbox/updateBrowser.sh -O /root/updateBrowser.sh; sudo chmod a+x /root/updateBrowser.sh'
+alias gbibCoreUpdateBeta='sudo wget http://hgwdev.gi.ucsc.edu:/gbib/updateBrowser.sh -O /root/updateBrowser.sh; sudo chmod a+x /root/updateBrowser.sh'
 
 # repair all tables, first while mysql is running, then with a full server stop
 alias gbibFixMysql1='sudo mysqlcheck --all-databases --auto-repair --fast'
@@ -149,8 +149,8 @@ alias gbibResetNetwork='sudo ifup --force eth0'
 alias gbibUcscTablesLog='sudo cat /var/log/apache2/error.log | grep -- "->" | grep -o "from [^ ]*" | cut -d" " -f2 | sort | uniq -c | sort -nr | less'
 alias gbibUcscTablesReset='sudo echo | sudo dd of=/var/log/apache2/error.log; sudo service apache2 reload'
 # show gbdb files that had to be loaded from UCSC since last reboot
-alias gbibUcscGbdbLog='sudo find /data/trash/udcCache/http/hgdownload.soe.ucsc.edu/gbdb/ -type f | egrep -v "bitmap"  | sed -e "s/\/sparseData//" | sed -e "s#/data/trash/udcCache/http/hgdownload.soe.ucsc.edu/##"'
-alias gbibUcscGbdbReset='rm -rf /data/trash/udcCache/http/hgdownload.soe.ucsc.edu/*'
+alias gbibUcscGbdbLog='sudo find /data/trash/udcCache/http/hgdownload.gi.ucsc.edu/gbdb/ -type f | egrep -v "bitmap"  | sed -e "s/\/sparseData//" | sed -e "s#/data/trash/udcCache/http/hgdownload.gi.ucsc.edu/##"'
+alias gbibUcscGbdbReset='rm -rf /data/trash/udcCache/http/hgdownload.gi.ucsc.edu/*'
 
 # remove or add the ucsc mysql server for testing
 alias gbibOffline='sudo sed -i "s/^slow-db/#slow-db/" /usr/local/apache/cgi-bin/hg.conf; sudo sed -i "s/^showTableCache/#showTableCache/" /usr/local/apache/cgi-bin/hg.conf; gbibAutoUpdateOff; echo remote access to UCSC off.'
@@ -169,9 +169,9 @@ alias gbibUcscLog='sudo tail -f /var/log/apache2/error.log'
 alias og='ls -ogrt'
 
 # get the kent tools
-alias gbibAddTools='sudo mkdir -p /data/tools; sudo rsync -avP hgdownload.soe.ucsc.edu::genome/admin/exe/linux.x86_64/ /data/tools/ && ln -s /data/tools ~/bin'
+alias gbibAddTools='sudo mkdir -p /data/tools; sudo rsync -avP hgdownload.gi.ucsc.edu::genome/admin/exe/linux.x86_64/ /data/tools/ && ln -s /data/tools ~/bin'
 
-function trackSize() { rsync -hvn  hgdownload.soe.ucsc.edu::mysql/hg19/$1.* ./ ; }
+function trackSize() { rsync -hvn  hgdownload.gi.ucsc.edu::mysql/hg19/$1.* ./ ; }
 
 if [ `tty` == "/dev/tty1" -a ! -e /root/noAutoUpdate ]; then
     sudo /root/updateBrowser.sh

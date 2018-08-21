@@ -1,4 +1,4 @@
 #!/bin/sh
 # copy some tools
-cd /usr/local/bin; wget http://hgwdev.soe.ucsc.edu/~max/browserbox/someTools.tgz -O - | tar xvz
-cd /usr/local/bin; wget http://hgwdev.soe.ucsc.edu/~max/browserbox/samtabixUtils.tgz -O - | tar xvz
+cd /usr/local/bin; wget http://hgwdev.gi.ucsc.edu/~max/browserbox/someTools.tgz -O - | tar xvz
+cd /usr/local/bin; wget http://hgwdev.gi.ucsc.edu/~max/browserbox/samtabixUtils.tgz -O - | tar xvz
