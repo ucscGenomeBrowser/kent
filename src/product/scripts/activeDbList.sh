@@ -7,7 +7,7 @@
 # fetch list of active databases from public MySQL server
 
 if [ "X${1}Y" = "XgoY" ]; then
-mysql -N -A -hgenome-mysql.cse.ucsc.edu -ugenomep -ppassword \
+mysql -N -A -hgenome-mysql.soe.ucsc.edu -ugenomep -ppassword \
 	-e "select name from dbDb where active=1;" hgcentral \
 	| sort
 else

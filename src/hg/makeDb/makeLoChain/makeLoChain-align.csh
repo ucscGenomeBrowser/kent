@@ -12,7 +12,7 @@ if ( $#argv != 4 && $#argv != 5 ) then
     exit 1
 endif
 
-if ($HOST != 'kk' && $HOST != 'kk.cse.ucsc.edu') then
+if ($HOST != 'kk' && $HOST != 'kk.soe.ucsc.edu') then
     echo "Must run on host kk"
     exit 1
 endif

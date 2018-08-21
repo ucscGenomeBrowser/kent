@@ -23,13 +23,13 @@ endif
 #echo "dbg: pair = $pair <br>"
 
 echo '<TITLE>Track UI on '`echo $srvr | sed "s/.ucsc.edu//" \
-  | sed "s/.cse//"`' </TITLE>'
+  | sed "s/.soe//"`' </TITLE>'
 echo "</HEAD>"
 echo 
 echo "<BODY>"
 echo
 echo '<H2>Track UI on '`echo $srvr | sed "s/.ucsc.edu//" \
-  | sed "s/.cse//"`'</H2>'
+  | sed "s/.soe//"`'</H2>'
 
 # echo "Hello.<br><br>"
 
@@ -43,7 +43,7 @@ foreach machine ( dev beta genome 1 2 3 4 5 6 7 8 )
       set node=genome
       set machine=RR
     else 
-      set node=hgw${machine}.cse 
+      set node=hgw${machine}.soe 
     endif
     echo '<A HREF="showTracks?srvr='$node'.ucsc.edu">'
   endif

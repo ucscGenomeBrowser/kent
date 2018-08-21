@@ -135,7 +135,7 @@ else
   
   echo
   # make links for three biggest
-  set url1="http://genome-test.cse.ucsc.edu/cgi-bin/hgTracks?db=$db&position="
+  set url1="http://genome-test.soe.ucsc.edu/cgi-bin/hgTracks?db=$db&position="
   set url2="&$table=pack&gap=dense"
   set bigThree=`head -3 $table.holes.sort \
     | awk '{print $1 ":" $2-300 "-" $3+300}'` 

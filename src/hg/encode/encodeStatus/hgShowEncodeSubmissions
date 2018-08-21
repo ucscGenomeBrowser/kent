@@ -14,7 +14,7 @@ echo "<HTML><BODY>"
             DATE_FORMAT(updated_at,"%Y-%m-%d") "Updated", \
             ifnull(metadata,"") "Metadata Terms", \
             id "ID", \
-            ifnull(CONCAT("<A HREF=\"http://genome-test.cse.ucsc.edu/cgi-bin/hgTrackUi?db=", db , "&g=", track, "\" target=\"newtab\">", track, "</A>"),"") \
+            ifnull(CONCAT("<A HREF=\"http://genome-test.soe.ucsc.edu/cgi-bin/hgTrackUi?db=", db , "&g=", track, "\" target=\"newtab\">", track, "</A>"),"") \
                         "Browser Track" from projects where status<>"new" order by status, updated_at desc, name' | \
     sed -e 's/TABLE/TABLE BGCOLOR="#FFFEE8" STYLE=\"border-collapse: collapse\" CELLPADDING=3/' \
         -e 's/<TH/<TH STYLE=\"background:#D9E4F8\"/g'

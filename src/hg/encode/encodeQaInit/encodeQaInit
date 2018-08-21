@@ -6,7 +6,7 @@ from ucscGb.gbData import ra, ucscUtils
 #from ucsc.gbData import ucscUtils
 
 def getMethods(qaDir, args, user, d):
-    cmd = "curl -X GET http://genomewiki.cse.ucsc.edu/genecats/index.php/ENCODE_QA 2>/dev/null"
+    cmd = "curl -X GET http://genomewiki.soe.ucsc.edu/genecats/index.php/ENCODE_QA 2>/dev/null"
     p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
     output = p.stdout.read().split("\n")
     r1 = re.compile('<li class="toclevel.*="tocnumber">(\S+)<.*="toctext">(.*)<\/span>')
@@ -267,7 +267,7 @@ def writeHtml(args, c, qaDir):
                 short = m.group(3)
 
     html = """<TR>
-    <TD><A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/%s/encodeDCC/%s/"
+    <TD><A HREF="http://hgdownload.soe.ucsc.edu/goldenPath/%s/encodeDCC/%s/"
     TARGET=_BLANK>%s</A></TD>
     <TD>%s</TD>
 </TR>""" % (args.database, args.composite, short, long)

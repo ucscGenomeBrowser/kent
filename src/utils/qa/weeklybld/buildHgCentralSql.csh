@@ -107,16 +107,16 @@ gzip /hive/groups/browser/centralArchive/hgcentral.$dateStamp.sql
 
 echo
 echo "A new hgcentral.sql file should now be present at:"
-echo "  http://hgdownload.cse.ucsc.edu/admin/"
+echo "  http://hgdownload.soe.ucsc.edu/admin/"
 echo "   and"
-echo "  http://hgdownload-sd.cse.ucsc.edu/admin/"
+echo "  http://hgdownload-sd.soe.ucsc.edu/admin/"
 echo
 echo "If it is not, you can request a push of the file:"
 echo "  /usr/local/apache/htdocs/admin/hgcentral.sql"
 echo "  from hgwdev --> hgdownload "
 echo
 echo "NOTE:  Some mirrors like to get hgcentral tables via ftp or rsync"
-echo "from hgdownload.cse.ucsc.edu/mysql/hgcentral/ instead of from the"
+echo "from hgdownload.soe.ucsc.edu/mysql/hgcentral/ instead of from the"
 echo "hgcentral.sql file. To make a table in hgcentral available there"
 echo "right now, ask for it to be pushed from hgnfs1 --> hgdownload. (Or"
 echo "just wait for the automatic weekly rsync.)"

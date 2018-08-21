@@ -77,14 +77,14 @@ endif
 set outfile1=$db.$table.$mach1
 set outfile2=$db.$table.$mach2
 if ( $rr1 == "true" ) then
-  nice mysql --user=genome --host=genome-mysql.cse.ucsc.edu -A \
+  nice mysql --user=genome --host=genome-mysql.soe.ucsc.edu -A \
     -N -e "SELECT * FROM $table" $db | sort > $outfile1
 else
   nice hgsql $host1 -N -e "SELECT * FROM $table" $db | sort > $outfile1
 endif
 
 if ( $rr2 == "true" ) then
-  nice mysql --user=genome --host=genome-mysql.cse.ucsc.edu -A \
+  nice mysql --user=genome --host=genome-mysql.soe.ucsc.edu -A \
     -N -e "SELECT * FROM $table" $db | sort > $outfile2
 else
   nice hgsql $host2 -N -e "SELECT * FROM $table" $db | sort > $outfile2

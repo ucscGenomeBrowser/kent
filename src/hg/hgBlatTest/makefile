@@ -12,13 +12,13 @@ hgBlatTest: $O ${MYLIBS}
 #	${STRIP} ${BINDIR}/hgBlatTest${EXE}
 
 test:
-	hgBlatTest hgwdev-${USER}.cse.ucsc.edu/cgi-bin/hgBlat test.log org=human db=hg16 type=DNA sort=score output=psl repeat=1 
+	hgBlatTest hgwdev-${USER}.soe.ucsc.edu/cgi-bin/hgBlat test.log org=human db=hg16 type=DNA sort=score output=psl repeat=1 
 
 test2:
-	hgBlatTest hgwbeta.cse.ucsc.edu/cgi-bin/hgBlat test.log org=chimp type=DNA sort=score output=psl repeat=1 
+	hgBlatTest hgwbeta.soe.ucsc.edu/cgi-bin/hgBlat test.log org=chimp type=DNA sort=score output=psl repeat=1 
 
 test3:
-	hgBlatTest hgwdev.cse.ucsc.edu/cgi-bin/hgBlat test.log type=DNA sort=score output=psl repeat=1 
+	hgBlatTest hgwdev.soe.ucsc.edu/cgi-bin/hgBlat test.log type=DNA sort=score output=psl repeat=1 
 
 backup: clean
 	date +%Y-%m-%d-%H-%M | gawk '{printf("zip hgBlatTest%s.zip *\n",$$1);}' > tempX

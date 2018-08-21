@@ -1,3 +1,3 @@
 #!/bin/sh
 mkdir ~/bin -p
-rsync -avP hgdownload.cse.ucsc.edu::genome/admin/exe/linux.x86_64/ ~/bin/
+rsync -avP hgdownload.gi.ucsc.edu::genome/admin/exe/linux.x86_64/ ~/bin/

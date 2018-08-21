@@ -2,15 +2,15 @@
 
 # Program: gc-stats.pl
 # Purpose: parses output of gene-check script into summary statistics
-# Test Protocal: http://genecats.cse.ucsc.edu/qa/test-protocols/gene-check.protocol.html
-# Summary results: http://genecats.cse.ucsc.edu/qa/test-results/gene-check.results.html
+# Test Protocal: http://genecats.soe.ucsc.edu/qa/test-protocols/gene-check.protocol.html
+# Summary results: http://genecats.soe.ucsc.edu/qa/test-results/gene-check.results.html
 # Author: Jennifer Jackson
 # Int Date: 2005-11-14
 # Rev Date: 2005-11-XX
 
 
 $documentation = "See test protocol documentation
-        http://genecats.cse.ucsc.edu/qa/test-protocols/gene-check.protocol.html";
+        http://genecats.soe.ucsc.edu/qa/test-protocols/gene-check.protocol.html";
 
 if ($#ARGV != 2) { die
 "\nUSAGE: $0 <genePreds_table> <gc-details> <gc-summary>
