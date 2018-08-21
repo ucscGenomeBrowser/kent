@@ -2,13 +2,13 @@
 
 # Program : getJoinerKeyErrors.pl
 # Purpose : parses output of joinerCheck and captures Errors and associated lines
-# Results : http://genecats.cse.ucsc.edu/qa/test-results/joinerCheck_monitor/keys/
+# Results : http://genecats.soe.ucsc.edu/qa/test-results/joinerCheck_monitor/keys/
 # Author  : Jennifer Jackson
 # Int Date: 2005-03-04
 # Rev Date: 2005-11-XX
 # Author  : Ann Zweig
 # Rev Date: 2006-02-13 - added results to HTML page
-# Results : http://genecats.cse.ucsc.edu/qa/test-results/joinerCheck_monitor/keys/joinerKeyErrors.YYMMDD
+# Results : http://genecats.soe.ucsc.edu/qa/test-results/joinerCheck_monitor/keys/joinerKeyErrors.YYMMDD
 
 use File::Copy;
 
@@ -21,7 +21,7 @@ if ($#ARGV != 0) { die
        	report is in target directory: joinerKeyErrors.YYMMDD 
 	STDERR is sent to screen
 	reports can be viewed online at:
-	http://genecats.cse.ucsc.edu/qa/test-results/joinerCheck_monitor/keys/YYYYMM/*\n\n";}
+	http://genecats.soe.ucsc.edu/qa/test-results/joinerCheck_monitor/keys/YYYYMM/*\n\n";}
 
 # State the program has started
 print STDERR "PROCESSING: $0 program started, locating directory & input files\n";

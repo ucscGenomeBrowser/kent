@@ -8,7 +8,7 @@ class UserTest < Test::Unit::TestCase
 
   def test_should_create_user
     assert_difference User, :count do
-      user = create_user(:host => "hgwdev.cse.ucsc.edu", :port => 3001)
+      user = create_user(:host => "hgwdev.soe.ucsc.edu", :port => 3001)
       assert !user.new_record?, "#{user.errors.full_messages.to_sentence}"
     end
   end

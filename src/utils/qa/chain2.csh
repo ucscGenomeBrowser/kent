@@ -146,7 +146,7 @@ if ( $split == "unsplit" ) then
       set multiz="&${multiz}=pack"
     endif
     foreach seq ( `head -3 $db.chromlist$$.Only` )
-      echo "http://genome-test.cse.ucsc.edu/cgi-bin/hgTracks?db=$db&position=$seq&chain$Org=pack$multiz"
+      echo "http://genome-test.soe.ucsc.edu/cgi-bin/hgTracks?db=$db&position=$seq&chain$Org=pack$multiz"
     end
     echo "get some DNA from these and see how it blats on $otherDb"
   else

@@ -231,7 +231,7 @@ echo "Don't forget to also push (to beta and then to the RR)"
 echo "the trackVersion table in the hgFixed database."
 echo "There are rows to allow the correct version number to be displayed in hgTrackUi."
 echo "Before you push the table, check the differences with compareWholeTable.csh hgFixed trackVersion"
-echo "See Wiki for more details: http://genomewiki.cse.ucsc.edu/genecats/index.php/Ensembl_QA"
+echo "See Wiki for more details: http://genomewiki.soe.ucsc.edu/genecats/index.php/Ensembl_QA"
 
 # make sure the date column has been updated
 echo "\n\n----------------------"

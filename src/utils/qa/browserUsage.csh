@@ -23,7 +23,7 @@ if ( $argv != 'go' ) then
   echo
   echo " Checks stats for browser and o/s usage."
   echo " Places report here:\
-         http://genecats.cse.ucsc.edu/qa/test-results/browserUsage"
+         http://genecats.soe.ucsc.edu/qa/test-results/browserUsage"
   echo "  usage: go"
   echo
   exit
@@ -64,7 +64,7 @@ cat shortFile | sed "$lineNum,$ d" > shorterFile
 
 # prep the file
 echo "<HTML><BODY>" > shortestFile
-echo 'See all the raw <A HREF="http://genome.cse.ucsc.edu/admin/stats/" TARGET=_blank>statistics</A>' >> shortestFile
+echo 'See all the raw <A HREF="http://genome.soe.ucsc.edu/admin/stats/" TARGET=_blank>statistics</A>' >> shortestFile
 
 # remove sub-items from the lists
 cat shorterFile | grep -v 'goto' | grep -v 'level2' >> shortestFile

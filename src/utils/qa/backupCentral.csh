@@ -41,7 +41,7 @@ set today=`date +%Y-%m-%d`
 set dirPath="/usr/local/apache/htdocs-genecats/qa/test-results/$directory"
 rm -rf $dirPath/$today/
 mkdir -p $dirPath/$today
-set urlPath="http://genecats.cse.ucsc.edu/qa/test-results/$directory/$today"
+set urlPath="http://genecats.soe.ucsc.edu/qa/test-results/$directory/$today"
 
 # remove last year's dir
 set lastYr=`date +%Y-%m --date='1 year  ago'`

@@ -48,7 +48,7 @@ endif
 
 # check for valid db
 set url1="http://"
-set url2=".cse.ucsc.edu/cgi-bin/hgTables?db=$db&hgta_doMetaData=1"
+set url2=".soe.ucsc.edu/cgi-bin/hgTables?db=$db&hgta_doMetaData=1"
 set url3="&hgta_metaDatabases=1"
 set url="$url1$machine$url2$url3"
 wget -q -O /dev/stdout "$url" | grep $db > /dev/null
@@ -77,7 +77,7 @@ else
 endif
 
 # set hgsid so don't fill up sessionDb table
-set baseUrl="http://$machine.cse.ucsc.edu"
+set baseUrl="http://$machine.soe.ucsc.edu"
 set hgsid=`htmlCheck  getVars $baseUrl/cgi-bin/hgGateway | grep hgsid \
   | head -1 | awk '{print $4}'`
 

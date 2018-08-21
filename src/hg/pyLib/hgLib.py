@@ -657,7 +657,7 @@ def getCspPolicyString():
     policy += " img-src 'self'"
     # used by hgGene for modbaseimages in hg/hgc/lowelab.c hg/protein/lib/domains.c hg/hgGene/domains.c
     policy += " modbase.compbio.ucsf.edu");  
-    policy += " hgwdev.cse.ucsc.edu"); # used by visiGene
+    policy += " hgwdev.soe.ucsc.edu"); # used by visiGene
     policy += " genome.ucsc.edu");     # used by visiGene
     policy += " code.jquery.com");          # used by hgIntegrator
     policy += " www.google-analytics.com"); # used by google analytics

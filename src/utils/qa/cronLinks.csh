@@ -27,7 +27,7 @@ if ( "$HOST" != "hgwdev" ) then
 endif
 
 set dirPath="/usr/local/apache/htdocs"
-set machine="genome-test.cse.ucsc.edu"
+set machine="genome-test.soe.ucsc.edu"
 set directory="qa/test-results/staticLinks"
 set dateString=`date +%Y-%m-%d`
 
