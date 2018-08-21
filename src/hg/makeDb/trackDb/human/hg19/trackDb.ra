@@ -124,7 +124,7 @@ longLabel cramTest2
 bigDataUrl /hive/users/braney/cram/HG00096.mapped.ILLUMINA.bwa.GBR.low_coverage.20120522.bam.cram
 type bam
 release alpha
-#refUrl http://hgwdev.cse.ucsc.edu/~braney/cramRef/%s
+#refUrl http://hgwdev.soe.ucsc.edu/~braney/cramRef/%s
 
 searchName ucscRetroInfoRefSeq5
 searchTable ucscRetroAli5

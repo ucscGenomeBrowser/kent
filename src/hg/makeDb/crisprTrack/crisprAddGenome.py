@@ -65,7 +65,7 @@ def runCmd(cmd, mustRun=True):
 def sqlConnect(db):
     """ connect to ucsc sql """
     #if name=="public":
-    host, user, passwd = "genome-mysql.cse.ucsc.edu", "genomep", "password"
+    host, user, passwd = "genome-mysql.soe.ucsc.edu", "genomep", "password"
     #elif name=="local":
         #cfg = parseHgConf()
         #host, user, passwd = cfg["db.host"], cfg["db.user"], cfg["db.password"]
@@ -223,7 +223,7 @@ def getUcscGenomes(rows, geneTable, symFixFile):
         printMsg("Genome: " + db)
         printMsg("Downloading")
         twoBitTmp = join(dbTmpDir, db+".2bit")
-        cmd = "wget http://hgdownload.cse.ucsc.edu/goldenpath/%s/bigZips/%s.2bit -O %s" % (db, db, twoBitTmp)
+        cmd = "wget http://hgdownload.soe.ucsc.edu/goldenpath/%s/bigZips/%s.2bit -O %s" % (db, db, twoBitTmp)
         runCmd(cmd)
 
         printMsg("Converting to fasta")
@@ -237,10 +237,10 @@ def getUcscGenomes(rows, geneTable, symFixFile):
         accToSymTmp = join(dbTmpDir, db+".ensemblToGeneName.txt")
         if geneTable!="ensGene":
             printMsg("Downloading mapping of %s transcript IDs to gene symbols" % geneTable)
-            cmd = "wget http://hgdownload.cse.ucsc.edu/goldenPath/%s/database/%s.txt.gz -O - | zcat | cut -f2,13 | sort -u > %s" % (db, geneTable, accToSymTmp)
+            cmd = "wget http://hgdownload.soe.ucsc.edu/goldenPath/%s/database/%s.txt.gz -O - | zcat | cut -f2,13 | sort -u > %s" % (db, geneTable, accToSymTmp)
         else:
             printMsg("Downloading ensembl transcripts to gene name table")
-            cmd = "wget http://hgdownload.cse.ucsc.edu/goldenPath/%s/database/ensemblToGeneName.txt.gz -O - | zcat > %s" % (db, accToSymTmp)
+            cmd = "wget http://hgdownload.soe.ucsc.edu/goldenPath/%s/database/ensemblToGeneName.txt.gz -O - | zcat > %s" % (db, accToSymTmp)
         runCmd(cmd)
         assert(getsize(accToSymTmp)!=0) # no symbols - email Max!
 
@@ -249,7 +249,7 @@ def getUcscGenomes(rows, geneTable, symFixFile):
 
         printMsg("Downloading gene models and converting to segments")
         segTmp = join(dbTmpDir, "%s.segments.bed" % db)
-        cmd = "wget http://hgdownload.cse.ucsc.edu/goldenPath/%(db)s/database/%(geneTable)s.txt.gz -O - | gunzip -c | cut -f2- | genePredToBed stdin stdout | bedToExons stdin stdout | lstOp replace stdin %(accToSymTmp)s | sort -u | bedSort stdin stdout | bedOverlapMerge /dev/stdin /dev/stdout | bedBetween stdin /dev/stdout -a -s %(sizesTmp)s | bedSort stdin %(segTmp)s" % locals()
+        cmd = "wget http://hgdownload.soe.ucsc.edu/goldenPath/%(db)s/database/%(geneTable)s.txt.gz -O - | gunzip -c | cut -f2- | genePredToBed stdin stdout | bedToExons stdin stdout | lstOp replace stdin %(accToSymTmp)s | sort -u | bedSort stdin stdout | bedOverlapMerge /dev/stdin /dev/stdout | bedBetween stdin /dev/stdout -a -s %(sizesTmp)s | bedSort stdin %(segTmp)s" % locals()
         runCmd(cmd)
         assert(getsize(segTmp)!=0) # no segments - email Max!
 

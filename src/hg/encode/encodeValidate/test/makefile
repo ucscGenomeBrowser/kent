@@ -6,7 +6,7 @@ PROG = ../doEncodeValidate.pl
 
 TEST_INSTALL_DIR = /cluster/data/encode/pipeline/tests
 
-# DOWNLOAD_DIR is accessible via the web (http://hgwdev.cse.ucsc.edu/encode/tests)
+# DOWNLOAD_DIR is accessible via the web (http://hgwdev.soe.ucsc.edu/encode/tests)
 DOWNLOAD_DIR = /usr/local/apache/htdocs/encode/tests
 
 # Put the working dataType's into DIRS

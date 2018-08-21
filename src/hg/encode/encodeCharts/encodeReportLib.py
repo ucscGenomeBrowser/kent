@@ -174,7 +174,7 @@ def renderHtml(template_vars, mouseover, clickable):
             var selection = viz.getSelection();
             var item = selection[0];
  
-            var urlString = "http://genecats.cse.ucsc.edu/cgi-bin/ENCODE/encodeReportFilter.py?" 
+            var urlString = "http://genecats.soe.ucsc.edu/cgi-bin/ENCODE/encodeReportFilter.py?" 
               + "key=%s"
               + "&value=" + jscode_data.getValue(item.row, 0)
               + "&status=" + jscode_data.getColumnLabel(item.column)

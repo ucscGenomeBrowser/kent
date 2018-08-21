@@ -1,6 +1,6 @@
 #
 # This file can be viewed at the following URL:
-# http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/product/scripts/README;hb=HEAD
+# https://genome-source.gi.ucsc.edu/kent.git/raw/master/src/product/scripts/README;hb=HEAD
 #
 
 Included here are some scripts to help with the job of constructing
@@ -54,7 +54,7 @@ for TBL in cytoBand cytoBandIdeo chromInfo gold gap grp trackDb hgFindSpec
 do
   for EXT in frm MYD MYI
   do
-rsync -a -P rsync://hgdownload.cse.ucsc.edu/mysql/hg19/${TBL}.${EXT} \
+rsync -a -P rsync://hgdownload.soe.ucsc.edu/mysql/hg19/${TBL}.${EXT} \
 	/var/mysql/hg19/
   done
 done
@@ -66,9 +66,9 @@ for TBL in cytoBand cytoBandIdeo chromInfo gold gap grp trackDb hgFindSpec
 do
   for EXT in frm MYD MYI
   do
-rsync -a -P rsync://hgdownload.cse.ucsc.edu/mysql/hg19/${TBL}.${EXT} \
+rsync -a -P rsync://hgdownload.soe.ucsc.edu/mysql/hg19/${TBL}.${EXT} \
 	/var/mysql/hg19/
-rsync -a -P rsync://hgdownload.cse.ucsc.edu/mysql/hg19/chr*_${TBL}.${EXT} \
+rsync -a -P rsync://hgdownload.soe.ucsc.edu/mysql/hg19/chr*_${TBL}.${EXT} \
 	/var/mysql/hg19/
   done
 done
