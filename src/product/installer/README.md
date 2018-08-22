@@ -149,13 +149,13 @@ If you find that you need the Kent command line utilities in addition to the Gen
 
 A majority of these utilities require an `.hg.conf` file in the users home directory. For 
 an example of a minimal `.hg.conf` file, click
-[here](http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob;f=src/product/minimal.hg.conf).
+[here](http://genome-source.soe.ucsc.edu/gitlist/kent.git/blob/master/src/product/minimal.hg.conf).
 
 If you find a bug, or if your Linux distribution is not supported, please contact 
 [genome-mirror@soe.ucsc.edu](mailto:genome-mirror@soe.ucsc.edu). 
 
 More details about the Genome Browser installation are available 
-[here](http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=tree;hb=HEAD;f=src/product).
+[here](http://genome-source.soe.ucsc.edu/gitlist/kent.git/tree/master/src/product).
  
 # All GBiC options
 
