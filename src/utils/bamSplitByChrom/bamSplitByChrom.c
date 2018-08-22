@@ -29,7 +29,7 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-void closeOutput(struct hash *hash, bam_header_t *head)
+void closeOutput(struct hash *hash)
 /* Loops through the output files and closes them. */
 {
 struct hashEl *hel, *helList = hashElListHash(hash);
@@ -44,7 +44,6 @@ void writeOutput(samfile_t *input,  struct hash *hash, boolean unmapped, char *d
 /* Reads through the input bam and writes each alignment to the correct output file.
  * Unmapped reads are written to 'unmapped.bam' */ 
 {
-bam_header_t *head = input ->header;
 bam1_t one;
 ZeroVar(&one);
 if (makeDir(dir))
@@ -52,6 +51,7 @@ if (makeDir(dir))
     setCurrentDir(dir);
     }
 // Creates a new directory and moves into it. 
+bam_header_t *head = sam_hdr_read(input);
 samfile_t *unmap = bamMustOpenLocal("unmapped.bam", "wb", head);
 if (!unmapped)
     /* Removes the 'unmapped.bam' file if it is not requested. */
@@ -60,11 +60,11 @@ if (!unmapped)
     }
 for (;;)
     {
-    if (samread (input, &one) < 0)
+    if (sam_read1(input, head, &one) < 0)
         {
 	break;
 	}
-    if (one.core.tid > 0)
+    if (one.core.tid >= 0)
 	{
 	char *chrom = head->target_name[one.core.tid];
 	samfile_t *out = hashFindVal(hash, chrom);
@@ -74,13 +74,13 @@ for (;;)
 	    out = bamMustOpenLocal(fileName, "wb", head);
 	    hashAdd(hash, chrom, out);
 	    }
-	samwrite(hashFindVal(hash, head->target_name[one.core.tid]), &one);    
+	sam_write1(hashFindVal(hash, head->target_name[one.core.tid]), head, &one);    
 	}
     else 
 	{
 	if (unmapped)
 	    {
-	    samwrite(unmap, &one);
+	    sam_write1(unmap, head, &one);
 	    }
 	}
     }
@@ -92,11 +92,10 @@ void bamSplitByChrom(char *inBam, char *dir, boolean unmapped)
 {
 struct hash *hash = hashNew(0);
 samfile_t *input = bamMustOpenLocal(inBam, "rb", NULL);
-bam_header_t *head = input ->header;
 writeOutput(input, hash, unmapped, dir);
 /* Open the output bam files in a new directory. */
 /* Write each alignment to the correct output file. */
-closeOutput(hash, head);
+closeOutput(hash);
 /* Loops through each output file and closes it */
 samclose(input);
 }
