@@ -2,7 +2,7 @@
 Installing the UCSC Genome browser
 
 This file is from:
-  https://genome-source.gi.ucsc.edu/kent.git/blob/master/src/product/README.install
+  http://genome-source.soe.ucsc.edu/gitlist/kent.git/blob/master/src/product/README.install
 
 Scripts to perform all of the functions below can be found in
 the directory here: ./scripts/
