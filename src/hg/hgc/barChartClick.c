@@ -176,17 +176,22 @@ chopByWhite(header, samples, wordCt);
 // Format: id, category, extras
 bits64 offset = (bits64)bed->_dataOffset;
 bits64 size = (bits64)bed->_dataLen;
+printf("offset %llu, size %llu", offset, size);
 udcSeek(f, offset);
 bits64 seek = udcTell(f);
 if (udcTell(f) != offset)
     warn("UDC seek mismatch: expecting %Lx, got %Lx. ", offset, seek);
 char *buf = needMem(size);
 bits64 count = udcRead(f, buf, size);
+printf("buffer %s", buf);
 if (count != size)
     warn("UDC read mismatch: expecting %Ld bytes, got %Ld. ", size, count);
 char **vals;
 AllocArray(vals, wordCt);
-chopByWhite(buf, vals, wordCt);
+int gotWordCt = chopByWhite(buf, vals, wordCt);
+if (gotWordCt != wordCt)
+    warn("Matrix format error: expected %d words, but got %d. File %s, on line for gene %s, at offset %llu, with line lenght %llu", wordCt, gotWordCt, dataFile, bed->name, offset, size);
+
 udcFileClose(&f);
 
 // Construct list of sample data with category
