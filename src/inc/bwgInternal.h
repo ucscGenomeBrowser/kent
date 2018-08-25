@@ -112,7 +112,7 @@ struct bbiSummary *bwgReduceSectionList(struct bwgSection *sectionList,
 
 void bwgCreate(struct bwgSection *sectionList, struct hash *chromSizeHash, 
 	int blockSize, int itemsPerSlot, boolean doCompress, boolean keepAllChromosomes,
-        boolean fixedSummaries, char *fileName);
+        boolean fixedSummaries, boolean clipDontDie, char *fileName);
 /* Create a bigWig file out of a sorted sectionList.  A lower level routine
  * than the one above. */
 
