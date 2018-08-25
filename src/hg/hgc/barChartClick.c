@@ -176,14 +176,12 @@ chopByWhite(header, samples, wordCt);
 // Format: id, category, extras
 bits64 offset = (bits64)bed->_dataOffset;
 bits64 size = (bits64)bed->_dataLen;
-printf("offset %llu, size %llu", offset, size);
 udcSeek(f, offset);
 bits64 seek = udcTell(f);
 if (udcTell(f) != offset)
     warn("UDC seek mismatch: expecting %Lx, got %Lx. ", offset, seek);
 char *buf = needMem(size);
 bits64 count = udcRead(f, buf, size);
-printf("buffer %s", buf);
 if (count != size)
     warn("UDC read mismatch: expecting %Ld bytes, got %Ld. ", size, count);
 char **vals;
