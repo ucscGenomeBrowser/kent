@@ -286,6 +286,8 @@ int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(tg->tdb, "scoreMin", "0
 int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tg->tdb, "scoreMax", "1000"));
 
 // Draw items
+struct hash *footHash = hashNew(0);
+char footBuf[256];
 for (inter = (struct interact *)tg->items; inter; inter = inter->next)
     {
     char *otherChrom = interactOtherChrom(inter);
@@ -349,7 +351,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
 
         // add map box to vertical
         mapBoxHgcOrHgGene(hvg, chromStart, chromEnd, x - 2, yOffOther, 4, 
-                            height, tg->track, itemBuf, statusBuf, NULL, TRUE, clickArg);
+                            height, tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
         if (tInfo->doOtherLabels)
             {
             // draw label
@@ -400,10 +402,19 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         else if (sameString(tInfo->offset, INTERACT_OFFSET_SOURCE))
             ySource = yOff + yOffset;
         }
+    unsigned footColor = color;
     if (sOnScreen)
         {
+        safef(footBuf, sizeof(footBuf), "%s:%d-%d", inter->sourceChrom,
+                                                        inter->sourceStart, inter->sourceEnd);
+        char *footPos = cloneString(footBuf);
+        if (hashLookup(footHash, footPos))
+            footColor = MG_BLACK;
+        else
+            hashStore(footHash, footPos);
+
         // draw foot of source region (2 pixels high)
-        hvGfxBox(hvg, sX - sWidth, ySource, sWidth + sWidth + 1, 2, color);
+        hvGfxBox(hvg, sX - sWidth, ySource, sWidth + sWidth + 1, 2, footColor);
         if (vis == tvDense || !tOnScreen || draw == DRAW_LINE || hvg->rc)
             {
             // draw vertical
@@ -415,8 +426,16 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         }
     if (tOnScreen)
         {
+        safef(footBuf, sizeof(footBuf), "%s:%d-%d", inter->targetChrom,
+                                                        inter->targetStart, inter->targetEnd);
+        char *footPos = cloneString(footBuf);
+        if (hashLookup(footHash, footPos))
+            footColor = MG_BLACK;
+        else
+            hashStore(footHash, footPos);
+
         // draw foot of target region (2 pixels high)
-        hvGfxBox(hvg, tX - tWidth, yTarget, tWidth + tWidth + 1, 2, color);
+        hvGfxBox(hvg, tX - tWidth, yTarget, tWidth + tWidth + 1, 2, footColor);
         if (vis == tvDense || !sOnScreen || draw == DRAW_LINE || hvg->rc)
             {
             // draw vertical

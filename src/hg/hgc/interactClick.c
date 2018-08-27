@@ -189,7 +189,7 @@ void doInteractDetails(struct trackDb *tdb, char *item)
 char *chrom = cartString(cart, "c");
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
-char *foot = cartString(cart, "foot");
+char *foot = cartOptionalString(cart, "foot");
 struct interact *inter = NULL;
 struct interact *inters = getInteractions(tdb, chrom, start, end, foot);
 if (inters == NULL)
