@@ -388,7 +388,7 @@ webOutFasta(ccr->upSeq, ccr->to->version);
 webOutFasta(ccr->midSeq, ccr->to->version);
 webOutFasta(ccr->downSeq, ccr->to->version);
 printf("<br><br>");
-printf("<i><font size=-1>Comments, Questions, Bug Reports: <a href=\"mailto:sugnet@cse.ucsc.edu\">sugnet@cse.ucsc.edu</a></font></i>\n");
+printf("<i><font size=-1>Comments, Questions, Bug Reports: <a href=\"mailto:sugnet@soe.ucsc.edu\">sugnet@soe.ucsc.edu</a></font></i>\n");
 }
 
 /* Mimic behaviour of doGoodReport do less stuff... */

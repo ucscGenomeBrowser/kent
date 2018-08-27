@@ -703,7 +703,7 @@ danRer6.refseq.mrna.xeno.load  = yes
     makeDownloads.pl danRer6 >& downloads.log
 
 # *** Please take a look at the downloads for danRer6 using a web browser.
-# *** The downloads url is: http://hgwdev.cse.ucsc.edu/goldenPath/danRer6. 
+# *** The downloads url is: http://hgwdev.soe.ucsc.edu/goldenPath/danRer6. 
 # *** Edit each README.txt to resolve any notes marked with "***":
 #     /hive/data/genomes/danRer6/goldenPath/database/README.txt
 #     /hive/data/genomes/danRer6/goldenPath/bigZips/README.txt
@@ -1020,7 +1020,7 @@ TMPDIR=/scratch/tmp
 
 vertebrate-wide transMap alignments were built  Tracks are created and loaded
 by a single Makefile. This is available from:
-   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
+   svn+ssh://hgwdev.soe.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
 
 
 ##########################################################################
@@ -1049,7 +1049,7 @@ by a single Makefile. This is available from:
     mkdir /cluster/data/danRer6/bed/multiz6way
     cd /cluster/data/danRer6/bed/multiz6way
 
-    wget -O 46way.nh http://hgdownload.cse.ucsc.edu/goldenPath/hg19/multiz46way/46way.corrected.nh
+    wget -O 46way.nh http://hgdownload.soe.ucsc.edu/goldenPath/hg19/multiz46way/46way.corrected.nh
 
 # ((Zebrafish,
 # (Stickleback,
@@ -1229,7 +1229,7 @@ rm -fr $tmp
     # Organism Image
     pushd $HOME/browser/images/phylo
     wget -O danRer6_6way.gif \
-	'http://hgwdev.cse.ucsc.edu/cgi-bin/phyloGif?hgsid=1831836&phyloGif_width=200&phyloGif_height=320&boolshad.phyloGif_branchLengths=0&boolshad.phyloGif_lengthLegend=0&boolshad.phyloGif_branchLabels=0&phyloGif_branchDecimals=2&phyloGif_branchMultiplier=1&phyloGif_underscores=on&boolshad.phyloGif_underscores=0&boolshad.phyloGif_htmlPage=0&phyloGif_tree=(%0D%0A(zebrafish%2C(tetraodon%2Cstickleback))%2C%0D%0A(X._tropicalis%2C(mouse%2Chuman))%0D%0A)%3B&phyloGif_submit=submit'
+	'http://hgwdev.soe.ucsc.edu/cgi-bin/phyloGif?hgsid=1831836&phyloGif_width=200&phyloGif_height=320&boolshad.phyloGif_branchLengths=0&boolshad.phyloGif_lengthLegend=0&boolshad.phyloGif_branchLabels=0&phyloGif_branchDecimals=2&phyloGif_branchMultiplier=1&phyloGif_underscores=on&boolshad.phyloGif_underscores=0&boolshad.phyloGif_htmlPage=0&phyloGif_tree=(%0D%0A(zebrafish%2C(tetraodon%2Cstickleback))%2C%0D%0A(X._tropicalis%2C(mouse%2Chuman))%0D%0A)%3B&phyloGif_submit=submit'
     #  check this .jpg file into the browser doc source tree images directory
     cvs add -kb danRer6_6way.gif 
     cvs commit -m 'organism tree for danRer6 6way' danRer6_6way.gif 

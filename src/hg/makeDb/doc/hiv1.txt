@@ -316,7 +316,7 @@ CREATE TABLE gsClinicRec (
 
     hgLoadSeq -replace hiv1 /gbdb/hiv1/vax004/vax004.fa
 
-    gfClient -minScore=200 -minIdentity=80 -nohead hiv1.cse.ucsc.edu 17779 \
+    gfClient -minScore=200 -minIdentity=80 -nohead hiv1.soe.ucsc.edu 17779 \
     /gbdb/hiv1/nib -out=psl -t=dna -q=dna vax004.fa vax004.psl
 
     wc *.psl

@@ -8,7 +8,7 @@
 #
 #files          a list of files that correspond to the metadata in this line
 #view           the view of the data as described below
-#cell           the cell line (http://genome-test.cse.ucsc.edu/ENCODE/cellTypes.html)
+#cell           the cell line (http://genome-test.soe.ucsc.edu/ENCODE/cellTypes.html)
 #ripTgtProtein  The target protien used.  In our database these are mixed with antibodies, found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Antibodies
 #labVersion     free text for the lab to specify metadata (possibly 'These files produced for use with GENCODE V3c' or something of the like) (OPTIONAL)
 #softwareVersion free text for the lab to specify Cufflinks V??? You can also clarify your mapAlgorithm here (OPTIONAL)

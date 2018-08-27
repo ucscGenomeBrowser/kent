@@ -1,6 +1,6 @@
 #!/bin/csh -f
 
-# Author: Charles Sugnet <sugnet@cse.ucsc.edu>
+# Author: Charles Sugnet <sugnet@soe.ucsc.edu>
 # Date: 06-16-02
 # Project: MGC clone selection.
 # Description: Selects the accesions from the database that are from the

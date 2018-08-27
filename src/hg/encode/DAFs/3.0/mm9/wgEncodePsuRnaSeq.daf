@@ -16,11 +16,11 @@
 #strain: The strain that the sample originated from. the strain registered vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Mouse_Metadata
 #treatment: The treatment used to treat a specific cell.The treatment registered vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Treatments
 #replicate: The Replicate number. The replication number of a given experiment.
-#readType       the read type (single, paired, directional, length) (http://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#readType)
-#rnaExtract     the features of rnaExtract (http://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#rnaExtract )
-#localization   the cellular compartment (http://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#localization)
+#readType       the read type (single, paired, directional, length) (http://genome-test.soe.ucsc.edu/ENCODE/otherTerms.html#readType)
+#rnaExtract     the features of rnaExtract (http://genome-test.soe.ucsc.edu/ENCODE/otherTerms.html#rnaExtract )
+#localization   the cellular compartment (http://genome-test.soe.ucsc.edu/ENCODE/otherTerms.html#localization)
 #seqPlatform: The sequencing platform.The sequence platform. Registered vocbulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Sequence_Platforms
-#readType: the read type (single, paired, directional, length) (http://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#readType)
+#readType: the read type (single, paired, directional, length) (http://genome-test.soe.ucsc.edu/ENCODE/otherTerms.html#readType)
 #labVersion: Free text for the lab to keep track of any other data
 
 # Lab and general info

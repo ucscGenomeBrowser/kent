@@ -6998,7 +6998,7 @@ TMPDIR=/scratch/tmp
 
 vertebrate-wide transMap alignments were built  Tracks are created and loaded
 by a single Makefile. This is available from:
-   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-07-01
+   svn+ssh://hgwdev.soe.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-07-01
 Or on the new hgwdev, /hive/users/markd/projs/transMap/
 
 see doc/builds.txt for specific details.
@@ -7601,7 +7601,7 @@ CREATE TABLE chainHg19Link (
 
 vertebrate-wide transMap alignments were built  Tracks are created and loaded
 by a single Makefile. This is available from:
-   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
+   svn+ssh://hgwdev.soe.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
 Or on the new hgwdev, /hive/users/markd/projs/transMap/
 
 see doc/builds.txt for specific details.
@@ -20266,7 +20266,7 @@ time ./chain.csh hg19.2bit:chr19: chain/hg19.2bit:chr19:.chain
     ver = 14
 
     # on code in the CCDS subversion tree:
-    #   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/svnroot/hausslerlab/ccds/trunk
+    #   svn+ssh://hgwdev.soe.ucsc.edu/projects/compbio/svnroot/hausslerlab/ccds/trunk
     # and markd's python library (it will be moved to the hausslerlab
     # repository soon)
     # may need to update
@@ -20714,7 +20714,7 @@ TMPDIR=/scratch/tmp
     ver = 15
 
     # on code in the CCDS subversion tree:
-    #   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/svnroot/hausslerlab/ccds/trunk
+    #   svn+ssh://hgwdev.soe.ucsc.edu/projects/compbio/svnroot/hausslerlab/ccds/trunk
     # and markd's python library may need to update
         ccds2/modules/gencode/src/lib/gencode/data/gencodeGenes.py
     # to add new biotypes, use this command to verify and update as needed
@@ -21041,7 +21041,7 @@ CLUSTER=swarm
 SPECIES="hg19 mm10"
 ROOTDIR="~/public_html/retro/hg19Feb13"
 WEBROOT=$ROOTDIR/retro.$VERSION/
-WEBSERVER=http://hgwdev-hartera.cse.ucsc.edu
+WEBSERVER=http://hgwdev-hartera.soe.ucsc.edu
 EXPDIR=exp
 GENEPFAM=ensGene
 PFAM=ensToPfam
@@ -21126,7 +21126,7 @@ retroFinder/trunk/src/pipeline/ucscStep6.sh DEF
     ver = 16
 
     # on code in the CCDS subversion tree:
-    #   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/svnroot/hausslerlab/ccds/trunk
+    #   svn+ssh://hgwdev.soe.ucsc.edu/projects/compbio/svnroot/hausslerlab/ccds/trunk
     # and markd's python library may need to update
         ccds2/modules/gencode/src/lib/gencode/data/gencodeGenes.py
     # to add new biotypes, use this command to verify and update as needed
@@ -21622,7 +21622,7 @@ TMPDIR=/scratch/tmp
     ver = 17
 
     # on code in the CCDS subversion tree:
-    #   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/svnroot/hausslerlab/ccds/trunk
+    #   svn+ssh://hgwdev.soe.ucsc.edu/projects/compbio/svnroot/hausslerlab/ccds/trunk
     # and markd's python library may need to update
         ccds2/modules/gencode/src/lib/gencode/data/gencodeGenes.py
     # to add new biotypes, use this command to verify and update as needed
