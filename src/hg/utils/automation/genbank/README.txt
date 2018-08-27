@@ -4,7 +4,7 @@ UCSC procedure to mirror genbank/refseq assemblies and generate assembly hubs
 
 This README.txt file is from:
 
-https://genome-source.gi.ucsc.edu/kent.git/blob/master/src/hg/utils/automation/genbank/README.txt
+http://genome-source.soe.ucsc.edu/gitlist/kent.git/blob/master/src/hg/utils/automation/genbank/README.txt
 
 ############################################################################
 # mirror genbank/refseq hierarchy

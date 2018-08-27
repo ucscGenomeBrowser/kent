@@ -163,7 +163,7 @@ class AccountControllerTest < Test::Unit::TestCase
 
     @user = users(:aaron)
 
-    @user.host = "hgwdev.cse.ucsc.edu"
+    @user.host = "hgwdev.soe.ucsc.edu"
     @user.port = 3001
     @user.activated_at = Time.now
 
@@ -191,7 +191,7 @@ class AccountControllerTest < Test::Unit::TestCase
 
   def test__reset_password__valid_code_but_not_matching_password__shouldnt_reset
     @user = users(:aaron)
-    @user.host = "hgwdev.cse.ucsc.edu"
+    @user.host = "hgwdev.soe.ucsc.edu"
     @user.port = 3001
 
     @user.forgot_password && @user.save

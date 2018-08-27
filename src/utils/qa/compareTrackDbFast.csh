@@ -92,7 +92,7 @@ if ( $field == "html" || $field == "settings" ) then
           WHERE tableName = "'$tableRow'"' $db > $machX.$db.$table.$field
       else
         set pubMySqlFlag=1
-        mysql --user=genome --host=genome-mysql.cse.ucsc.edu -A \
+        mysql --user=genome --host=genome-mysql.soe.ucsc.edu -A \
           -e 'SELECT '$field' FROM trackDb \
           WHERE tableName = "'$tableRow'"' $db > $machX.$db.$table.$field
       endif
@@ -111,7 +111,7 @@ else
          > $mach.$db.$table
     else
       set pubMySqlFlag=1
-      mysql --user=genome --host=genome-mysql.cse.ucsc.edu -A \
+      mysql --user=genome --host=genome-mysql.soe.ucsc.edu -A \
         -e "SELECT $field FROM trackDb"  $db > $mach.$db.$table
     endif
   end

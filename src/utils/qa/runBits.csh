@@ -65,7 +65,7 @@ else
 endif
 
 #set up urls
-set url1="http://genome-test.cse.ucsc.edu/cgi-bin/hgTracks?db=$db"
+set url1="http://genome-test.soe.ucsc.edu/cgi-bin/hgTracks?db=$db"
 set url3="&$track=$pack&gap=pack"
 
 # ------------------------------------------------

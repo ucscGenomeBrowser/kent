@@ -33,6 +33,6 @@ echo "\n$db\n" >> $basePath/$db
 # checkSync.csh $db times >> $basePath/$db
 checkSync.csh $db hgwbeta hgw2 times >> $basePath/$db
 cat $basePath/$db
-echo "http://genecats.cse.ucsc.edu/qa/test-results/sync/$db" 
+echo "http://genecats.soe.ucsc.edu/qa/test-results/sync/$db" 
 echo 
 

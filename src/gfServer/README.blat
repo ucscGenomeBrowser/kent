@@ -17,7 +17,7 @@ There are seven directories:
 To get things going read how to get the code to compile
 in the general purpose README, following the general
 install and then the BLAT install instructions.
-Then ftp over to genome-ftp.cse.ucsc.edu, go to
+Then ftp over to genome-ftp.soe.ucsc.edu, go to
 goldenPath/07oct2000/bigZips, and download chromNib.tar.Z.
 This contains the Oct 7th assembly in a format that
 puts two bases per byte, and is randomly accessible.
@@ -32,7 +32,7 @@ The gfServer will take about 10 minutes to index
 the files (first counting 12-mers, then actually
 indexing).  For 'hostName' you want to fill in the host
 name of the server on your side.  For us it's 
-kks00.cse.ucsc.edu.  You don't have to use the
+kks00.soe.ucsc.edu.  You don't have to use the
 port 17777 - that's the one we use though.
 
 After the server says it's ready for queries
@@ -57,7 +57,7 @@ directory that is accessible from the client
 as well as the server.
 
 hgBlat is currently hard wired to query
-kks00.cse.ucsc.edu.  Please change this
+kks00.soe.ucsc.edu.  Please change this
 to your local server once things are up
 if you are mirroring the web site.  
 

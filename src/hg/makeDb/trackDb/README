@@ -67,7 +67,7 @@ may have the following variables, which will be substituted:
                (e.g. loose, medium). Gets substituted into the chain or
                chainNet html page.
      $downloadsServer - the value of the hg.conf downloads.server variable, or
-                         hgdownload.cse.ucsc.edu if not set.
+                         hgdownload.soe.ucsc.edu if not set.
 In addition, if there is an $otherDb field set in the .ra file, these
 variables are available:
      $o_ORGANISM - all upper case other organism, like 'MOUSE'

@@ -31,7 +31,7 @@ newLogDir=""
 currDate=$(date +%F)
 currTime=$(date +%H_%M_%S)
 output="" # holds output message
-logUrl="http://genecats.cse.ucsc.edu/qa/test-results/qaAutoTrackLogs"
+logUrl="http://genecats.soe.ucsc.edu/qa/test-results/qaAutoTrackLogs"
 logDir="/usr/local/apache/htdocs-genecats/qa/test-results/qaAutoTrackLogs"
 currLogFile=""
 prevLogFile=""
@@ -73,7 +73,7 @@ Performs basic QA for auto-pushed tracks, which includes:
 By default, all results are output to a file and only issues
 are output to the command line. Use the "-v" option to see
 results on the command line as well. All log files are output to:
-http://genecats.cse.ucsc.edu/qa/test-results/qaAutoTrack.
+http://genecats.soe.ucsc.edu/qa/test-results/qaAutoTrack.
 
 Notes:
 	- For OMIM, ClinGen (formerly ISCA), or ClinVar tracks use omim, isca, or clinvar as the table name.

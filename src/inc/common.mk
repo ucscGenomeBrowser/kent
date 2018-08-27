@@ -81,7 +81,7 @@ ifneq (${SSL_DIR}, "/usr/include/openssl")
 endif
 # on hgwdev, already using the static library with mysqllient.
 ifeq (${IS_HGWDEV},yes)
-   L+=-lssl -lcrypto -lkrb5 -ldl
+   L+=/usr/lib64/libssl.a /usr/lib64/libcrypto.a -lkrb5 -lk5crypto -ldl
 else
    L+=-lssl -lcrypto
 endif
@@ -138,7 +138,7 @@ ifneq ($(MAKECMDGOALS),clean)
   # on hgwdev, use the static library.
   ifeq (${IS_HGWDEV},yes)
     MYSQLINC=/usr/include/mysql
-    MYSQLLIBS=-lssl -lcrypto /usr/lib64/libmysqlclient.a ${ZLIB} -lkrb5
+    MYSQLLIBS=/usr/lib64/libmysqlclient.a /usr/lib64/libssl.a /usr/lib64/libcrypto.a -lkrb5 -ldl -lz
   endif
   # this does *not* work on Mac OSX with the dynamic libraries
   ifneq ($(UNAME_S),Darwin)

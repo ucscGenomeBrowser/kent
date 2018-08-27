@@ -12,7 +12,7 @@ This script expects to find one of the following commands:
     wget, mysql, or ftp in order to fetch information from UCSC.
 Route the output to the file <db>.chrom.sizes as indicated above.
 This data is available at the URL:
-  http://hgdownload.cse.ucsc.edu/goldenPath/<db>/bigZips/<db>.chrom.sizes
+  http://hgdownload.soe.ucsc.edu/goldenPath/<db>/bigZips/<db>.chrom.sizes
 
 Example:   fetchChromSizes hg38 > hg38.chrom.sizes\n" 1>&2
     exit 255
@@ -27,7 +27,7 @@ fi
 DONE=0
 export DONE
 
-url="http://hgdownload.cse.ucsc.edu/goldenPath/${DB}/bigZips/${DB}.chrom.sizes"
+url="http://hgdownload.soe.ucsc.edu/goldenPath/${DB}/bigZips/${DB}.chrom.sizes"
 printf "INFO: trying CURL ${CURL} for database ${DB}\n" 1>&2
 printf "url: %s\n" "${url}" 1>&2
 tmpResult=${DB}.tmp.sizes$$
@@ -65,7 +65,7 @@ if [ "${DONE}" -eq 1 ]; then
 fi
 
 printf "INFO: trying MySQL ${MYSQL} for database ${DB}\n" 1>&2
-mysql -N --user=genome --host=genome-mysql.cse.ucsc.edu -A -e \
+mysql -N --user=genome --host=genome-mysql.soe.ucsc.edu -A -e \
 "SELECT chrom,size FROM chromInfo ORDER BY size DESC;" ${DB}
 if [ $? -ne 0 ]; then
     printf "WARNING: mysql command failed\n" 1>&2
@@ -78,7 +78,7 @@ if [ "${DONE}" -eq 1 ]; then
 fi
 
 printf "INFO: trying FTP ${FTP} for database ${DB}\n" 1>&2
-url="ftp://hgdownload.cse.ucsc.edu/goldenPath/${DB}/database/chromInfo.txt.gz"
+url="ftp://hgdownload.soe.ucsc.edu/goldenPath/${DB}/database/chromInfo.txt.gz"
 printf "url: %s\n" "${url}" 1>&2
 tmpResult="chromInfo.txt.gz"
 tmpFtpRsp=fetchTemp.$$
@@ -86,7 +86,7 @@ printf "user anonymous fetchChromSizes@
 cd goldenPath/${DB}/database
 get chromInfo.txt.gz ${tmpResult}
 bye\n" > ${tmpFtpRsp}
-ftp -n -i hgdownload.cse.ucsc.edu < ${tmpFtpRsp} > /dev/null 2>&1
+ftp -n -i hgdownload.soe.ucsc.edu < ${tmpFtpRsp} > /dev/null 2>&1
 if [ $? -ne 0 -o ! -s "${tmpResult}" ]; then
     printf "ERROR: ftp command failed\n" 1>&2
     rm -f "${tmpFtpRsp}" "${tmpResult}"

@@ -16,7 +16,7 @@ set out=""
 set url=""
 set exclude=""
 set excludeList=""
-set baseUrl="http://hgwbeta.cse.ucsc.edu"
+set baseUrl="http://hgwbeta.soe.ucsc.edu"
 set errs=0
 
 if ( $#argv < 1 || $#argv > 2 ) then

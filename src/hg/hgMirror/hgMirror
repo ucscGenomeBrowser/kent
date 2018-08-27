@@ -115,7 +115,7 @@ FORCEFIXED = ['trackVersion']
 # big file table base URL
 # points to a http directory with <db>/bigFiles.tab files that tell us which bigfile goes to which track
 #BIGFILETABLEURL = "http://hgwdev.soe.ucsc.edu/~max/browserbox/%s/bigFiles.tab.gz" # %s == db
-BIGFILETABLEURL = "http://hgdownload.cse.ucsc.edu/goldenpath/%s/database/bigFiles.txt.gz"
+BIGFILETABLEURL = "http://hgdownload.soe.ucsc.edu/goldenpath/%s/database/bigFiles.txt.gz"
 
 # cache of hg.conf dict
 hgConf = None
@@ -156,7 +156,7 @@ def parseHgConf():
 def sqlConnect(db, name):
     """ connect to sql """
     if name=="public":
-        host, user, passwd = "genome-mysql.cse.ucsc.edu", "genomep", "password"
+        host, user, passwd = "genome-mysql.soe.ucsc.edu", "genomep", "password"
     elif name=="local":
         cfg = parseHgConf()
         host, user, passwd = cfg["db.host"], cfg["db.user"], cfg["db.password"]
@@ -207,7 +207,7 @@ def downloadTable(db, table):
     names, then the tab sep file. Returns a list of objects, with field names
     as attributes and their values from the tab sep file.
     """
-    baseUrl = 'http://hgdownload.cse.ucsc.edu/goldenPath/%s/database/' % db
+    baseUrl = 'http://hgdownload.soe.ucsc.edu/goldenPath/%s/database/' % db
 
     # parse the .sql file and create a namedtuple "struct" for it
     sqlUrl = baseUrl+table+".sql"
@@ -1083,13 +1083,13 @@ def getRsyncSizes(dataType, db):
     # run rsync command
     tmpFname = TMPDIR+"%s_%s.rsync.txt" % (dataType, db)
     if not isfile(tmpFname):
-        cmd = "rsync -nav rsync://hgdownload.cse.ucsc.edu/%s/%s/ > %s.new && mv %s.new %s" % (dataType, db, tmpFname, tmpFname, tmpFname)
+        cmd = "rsync -nav rsync://hgdownload.soe.ucsc.edu/%s/%s/ > %s.new && mv %s.new %s" % (dataType, db, tmpFname, tmpFname, tmpFname)
         ret = runCmd(cmd, mustRun=False)
         if ret!=0:
             print "<p>"
             print "Cannot run %s<br>" % cmd
             print "<hr>"
-            print "It seems that the rsync server hgdownload.cse.ucsc.edu is not available<br>"
+            print "It seems that the rsync server hgdownload.soe.ucsc.edu is not available<br>"
             print "Please check your network connection. If this problem persists send email to genome@soe.ucsc.edu<br>"
             sys.exit(0)
 
@@ -1171,11 +1171,11 @@ def buildRsyncCmd(remotePath, localPath, listFname, logFname):
     if udrIsUsable():
         cmd =\
             'udr rsync -av --no-progress --files-from=%(listFname)s ' \
-            'hgdownload.cse.ucsc.edu::%(remotePath)s %(localPath)s >> %(logFname)s 2>&1\n' % locals()
+            'hgdownload.soe.ucsc.edu::%(remotePath)s %(localPath)s >> %(logFname)s 2>&1\n' % locals()
     else:
         cmd =\
             'rsync -av --no-progress --files-from=%(listFname)s ' \
-            'rsync://hgdownload.cse.ucsc.edu/%(remotePath)s %(localPath)s >> %(logFname)s 2>&1\n' % locals()
+            'rsync://hgdownload.soe.ucsc.edu/%(remotePath)s %(localPath)s >> %(logFname)s 2>&1\n' % locals()
     return cmd
 
 

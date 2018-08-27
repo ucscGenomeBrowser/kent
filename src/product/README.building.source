@@ -104,7 +104,7 @@ Following the instructions in scripts/README
 4b. optional SAM/BAM and tabix (for VCF) support:
 	If you want to display BAM and VCF tracks, download and build samtabix
 	(a merge of Heng Li's samtools and tabix libraries):
-	  git clone http://genome-source.cse.ucsc.edu/samtabix.git samtabix
+	  git clone git://genome-source.soe.ucsc.edu/samtabix.git samtabix
 	  cd samtabix
 	  make
         Add the following environment variables to .bashrc or .tcshrc,
@@ -285,5 +285,5 @@ make: *** [aliType.o] Error 1
 
 ====================================================================
 For more details see:
-http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=history;f=src/product/README.building.source
+https//genome-source.soe.ucsc.edu/gitlist/kent.git/blob/master/src/product/README.building.source
 ====================================================================

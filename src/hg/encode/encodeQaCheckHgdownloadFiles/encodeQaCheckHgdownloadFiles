@@ -62,10 +62,10 @@ encodeQaCheckHgdownloadFiles hg19 wgEncodeCshlLongRnaSeq checkPushFilesList -s h
 
     args = parser.parse_args(sys.argv[1:])
 
-    #http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/
+    #http://hgdownload.soe.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/
     sys.stderr.write("Initiating connection to hgdownload\n")
-    server = "%s.cse.ucsc.edu" % args.server
-    conn = httplib.HTTPConnection("%s.cse.ucsc.edu" % args.server)
+    server = "%s.soe.ucsc.edu" % args.server
+    conn = httplib.HTTPConnection("%s.soe.ucsc.edu" % args.server)
     basepath =  "/goldenPath/%s/encodeDCC/%s/" % (args.database, args.composite)
     print "%s%s" % (server, basepath)
     sys.stderr.write("Getting index of files\n")

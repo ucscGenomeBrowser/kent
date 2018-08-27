@@ -13,11 +13,11 @@ Install Git:
 
 Start an initial Git local repository:
 
-  $ git clone git://genome-source.cse.ucsc.edu/kent.git
+  $ git clone git://genome-source.soe.ucsc.edu/kent.git
  
  or, if a firewall prevents git daemon port 9418, use:
  
-  $ git clone http://genome-source.cse.ucsc.edu/kent.git
+  $ git clone http://genome-source.soe.ucsc.edu/kent.git
  
  The kent source tree will be imported to the current working directory in a
  directory named ./kent/.
