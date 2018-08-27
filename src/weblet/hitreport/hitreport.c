@@ -14,7 +14,7 @@ struct user
  * each IP address. */
     {
     struct user *next;	  /* Link to next user on list. */
-    char *ip;			  /* Something like cse.ucsc.edu. */
+    char *ip;			  /* Something like soe.ucsc.edu. */
     char *whence;		  /* http address we came from. */
     time_t lastTime;	  /* Time of hits in seconds since 1970s */
     int lastDay;		  /* Day of last hit (since 1970s) */

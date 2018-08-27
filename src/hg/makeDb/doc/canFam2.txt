@@ -2765,7 +2765,7 @@ This is the correct number of psl files, so continue with cat step:
 
 vertebrate-wide transMap alignments were built  Tracks are created and loaded
 by a single Makefile. This is available from:
-   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-05-20
+   svn+ssh://hgwdev.soe.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-05-20
 
 see doc/builds.txt for specific details.
 ############################################################################
@@ -2774,7 +2774,7 @@ see doc/builds.txt for specific details.
 
 vertebrate-wide transMap alignments were built  Tracks are created and loaded
 by a single Makefile. This is available from:
-   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-06-30
+   svn+ssh://hgwdev.soe.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-06-30
 
 see doc/builds.txt for specific details.
 
@@ -2906,7 +2906,7 @@ TMPDIR=/scratch/tmp
 
 vertebrate-wide transMap alignments were built  Tracks are created and loaded
 by a single Makefile. This is available from:
-   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-07-01
+   svn+ssh://hgwdev.soe.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-07-01
 
 see doc/builds.txt for specific details.
 ############################################################################
@@ -2978,7 +2978,7 @@ echo "show tables like 'chr%chainMonDom5%'" | hgsql canFam2 | tail -n +2 \
 
 vertebrate-wide transMap alignments were built  Tracks are created and loaded
 by a single Makefile. This is available from:
-   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
+   svn+ssh://hgwdev.soe.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
 
 see doc/builds.txt for specific details.
 ############################################################################

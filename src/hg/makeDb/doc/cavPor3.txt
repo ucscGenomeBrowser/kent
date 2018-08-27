@@ -1742,7 +1742,7 @@ _EOF_
     #     assemblies from the same sequencing center, please edit them into
     #     ~/kent/src/hg/utils/automation/makeDownloads.pl (or ask Angie for help).
 
-    # the downloads are located at: http://hgwdev.cse.ucsc.edu/goldenPath/cavPor3/
+    # the downloads are located at: http://hgwdev.soe.ucsc.edu/goldenPath/cavPor3/
     mv goldenPath old.goldenPath
     mv jkStuff/downloads.log jkStuff/old.downloads.log
     time nice -n +19 /cluster/home/tdreszer/kent/src/hg/utils/automation/makeDownloads.pl \
@@ -3750,7 +3750,7 @@ doBlastzChainNet.pl -swap -chainMinScore=3000 -chainLinearGap=medium \
 
 vertebrate-wide transMap alignments were built  Tracks are created and loaded
 by a single Makefile. This is available from:
-   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-05-20
+   svn+ssh://hgwdev.soe.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-05-20
 
 see doc/builds.txt for specific details.
 #############################################################################
@@ -4087,7 +4087,7 @@ _EOF_
 
 vertebrate-wide transMap alignments were built  Tracks are created and loaded
 by a single Makefile. This is available from:
-   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-06-30
+   svn+ssh://hgwdev.soe.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-06-30
 
 see doc/builds.txt for specific details.
 ############################################################################
@@ -4308,7 +4308,7 @@ nameTranslation "s/^MT/chrM/;"
 
 vertebrate-wide transMap alignments were built  Tracks are created and loaded
 by a single Makefile. This is available from:
-   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-07-01
+   svn+ssh://hgwdev.soe.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-07-01
 
 see doc/builds.txt for specific details.
 ############################################################################
@@ -4317,7 +4317,7 @@ see doc/builds.txt for specific details.
 
 vertebrate-wide transMap alignments were built  Tracks are created and loaded
 by a single Makefile. This is available from:
-   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
+   svn+ssh://hgwdev.soe.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
 
 see doc/builds.txt for specific details.
 

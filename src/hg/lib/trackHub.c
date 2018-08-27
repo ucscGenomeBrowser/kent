@@ -858,7 +858,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
                 "Track identifiers have to be unique. Please check your track hub files, "
                 "especially the 'track' lines. "
                 "The most likely reason for this error is that you duplicated a "
-                "'track' identifier.", tdb->track, genome->name);
+                "'track' identifier. Hub URL: %s", tdb->track, genome->name, hub->url);
     hashAdd(hash, tdb->track, tdb);
     }
 

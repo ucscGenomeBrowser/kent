@@ -122,7 +122,7 @@ insert into countryToNode (select countryId, node from countryToContinent cc, co
 update countryToNode set node=2 where countryId in ('AE','AM','BH','CY','GE','IL','IQ','JO','KW','LB','OM','PS','QA','SA','SY','YE');
 
 I compared the before and after updating with public_html/geoMap/test.csh at
- http://hgwdev.cse.ucsc.edu/~galt/geoMap/countryToNodeMap.html
+ http://hgwdev.soe.ucsc.edu/~galt/geoMap/countryToNodeMap.html
 And it looked identical. So we did not lose anything.
 
 mysql> select distinct countryId from geoIpCountry where countryId not in (select distinct countryId from countryToNode);
@@ -164,7 +164,7 @@ mysql> select distinct countryId from geoIpCountry where countryId not in (selec
 Empty set (0.13 sec)
 
 Re-ran test.csh and checked again:
-http://hgwdev.cse.ucsc.edu/~galt/geoMap/countryToNodeMap.html
+http://hgwdev.soe.ucsc.edu/~galt/geoMap/countryToNodeMap.html
 
 This means we should have full integrity.
 

@@ -17,8 +17,8 @@
 #include "eapLib.h"
 #include "eapGraph.h"
 
-char *submitUrl = "hgwdev-kent.cse.ucsc.edu/cgi-bin/edwScriptSubmit";
-char *statusUrl = "hgwdev-kent.cse.ucsc.edu/cgi-bin/edwScriptSubmitStatus";
+char *submitUrl = "hgwdev-kent.gi.ucsc.edu/cgi-bin/edwScriptSubmit";
+char *statusUrl = "hgwdev-kent.gi.ucsc.edu/cgi-bin/edwScriptSubmitStatus";
 char *userId = "jagegixelumaveteyigu";
 char *password = "cdefbdb6677d4c94a9f274c52e2c8dfa";
 

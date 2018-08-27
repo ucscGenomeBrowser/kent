@@ -275,8 +275,8 @@ _EOF_
   if ($opt_trackHub) {
       $bossScript->add(<<_EOF_
 cd $buildDir/bigMaf
-wget -O bigMaf.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/bigMaf.as'
-wget -O mafSummary.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/mafSummary.as'
+wget -O bigMaf.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigMaf.as'
+wget -O mafSummary.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/mafSummary.as'
 mafToBigMaf $tDb $tDb.$qDb.rbestNet.maf.gz stdout \\
   | sort -k1,1 -k2,2n > $tDb.$qDb.rbestNet.txt
 bedToBigBed -type=bed3+1 -as=bigMaf.as -tab  $tDb.$qDb.rbestNet.txt \\
@@ -419,8 +419,8 @@ _EOF_
       $bossScript->add(<<_EOF_
 cd $runDir
 hgLoadChain -test -noBin -tIndex $tDb chainRBest$QDb $tDb.$qDb.rbest.chain.gz
-wget -O bigChain.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/bigChain.as'
-wget -O bigLink.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/bigLink.as'
+wget -O bigChain.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigChain.as'
+wget -O bigLink.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigLink.as'
 sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\\t"} {print \$2, \$4, \$5, \$11, 1000, \$8, \$3, \$6, \$7, \$9, \$10, \$1}' > chainRBest${QDb}.tab
 bedToBigBed -type=bed6+6 -as=bigChain.as -tab chainRBest${QDb}.tab $targetSizes chainRBest${QDb}.bb
 awk 'BEGIN {OFS="\\t"} {print \$1, \$2, \$3, \$5, \$4}' link.tab | sort -k1,1 -k2,2n > $QDbLink.tab

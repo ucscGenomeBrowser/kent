@@ -51,6 +51,7 @@ year=$(date -d "$startDate" +%Y)
 while [ $(date -d "$newDate" +%m) -le $(($endMonth)) ] && [ $(date -d "$newDate" +%Y) -eq $(($year)) ] 
 do
     day=$newDate
+    echo $day
     # Make sym links for RR machines
     for server in RR euroNode asiaNode
     do
@@ -66,7 +67,6 @@ do
     done
  
     newDate=$(date -d "$day +7days" +%Y%m%d)
-    echo $newDate
 done
 
 # Remove any accidentally created broken links

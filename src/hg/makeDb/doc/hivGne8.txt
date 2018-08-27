@@ -117,7 +117,7 @@
     hgLoadSeq -replace hivgne8 /gbdb/hivgne8/vax004/vax004.fa
 
 # BLAT
-    gfClient -minScore=200 -minIdentity=80 -nohead hiv1.cse.ucsc.edu 17785  /gbdb/hivgne8/nib \
+    gfClient -minScore=200 -minIdentity=80 -nohead hiv1.soe.ucsc.edu 17785  /gbdb/hivgne8/nib \
     -out=psl -t=dna -q=dna vax004.fa vax004.psl
 
 # count the result
@@ -151,7 +151,7 @@
     tabToFa hSeq
 
 # BLAT the sequences agains hivgne8 base genome
-    gfClient -minScore=10 -minIdentity=35 -nohead hiv1.cse.ucsc.edu 17785 \
+    gfClient -minScore=10 -minIdentity=35 -nohead hiv1.soe.ucsc.edu 17785 \
     /gbdb/hivgne8/nib -out=psl -t=dna -q=dna hSeq.fa hSeq.psl
 
 # load the BLAT result into a temp psl track

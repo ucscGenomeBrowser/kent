@@ -9,9 +9,17 @@
 #include "hgHgvs.h"
 #include "options.h"
 #include "psl.h"
+#include "txAliDiff.h"
 
 // Arbitrary cutoff for minimum plausible intron size
 #define MIN_INTRON 45
+
+// Different color options
+#define MISMATCH_COLOR 0xff0000 //red
+#define SHORTGAP_COLOR 0xffa500 //orange
+#define SHIFTYGAP_COLOR 0xffa500 //orange
+#define DOUBLEGAP_COLOR 0x888888 //grey
+#define QSKIPPED_COLOR 0x800080 //purple
 
 // Command line option default
 static char *cdsFile = NULL;
@@ -30,7 +38,6 @@ errAbort(
   "   -cdsFile=X                Get Genbank CDS strings from file X\n"
   "   -db=X                     Get RefSeq chromosome accessions for target from database X\n"
   "   -ignoreQNamePrefix=X      Ignore PSL rows whose qName starts with X\n"
-  "5 BED files will be created: outBaseName.{mismatch,shortGap,shiftyGap,doubleGap,qSkipped}.bed\n"
   , MIN_INTRON);
 }
 
@@ -51,15 +58,17 @@ if (isRc)
     reverseComplement(buf, len);
 }
 
-static void addCoordCols(struct dyString *dy, char *acc, int start, int end)
-/* Append three tab-prefixed items to dy. */
+static void addCoordCols(struct txAliDiff *newDiff, char *acc, int start, int end)
+/* Fill out the txName, txStart, and txEnd fields of a txAliDiff. */
 {
-dyStringPrintf(dy, "\t%s\t%d\t%d", acc, start, end);
+newDiff->txName = cloneString(acc);
+newDiff->txStart = start;
+newDiff->txEnd = end;
 }
 
 static void compareExonBases(struct psl *psl, int ix, struct seqWindow *gSeqWin,
                              struct dnaSeq *txSeq, struct genbankCds *cds, char *chromAcc,
-                             struct bed4 **pMismatchList)
+                             struct txAliDiff **differencesList)
 /* Compare exon ix sequence from genome and transcript to find mismatched bases. */
 {
 boolean isRc = (pslQStrand(psl) == '-');
@@ -77,6 +86,8 @@ for (jx = 0;  jx < blockSize;  jx++)
     {
     if (exonT[jx] != exonQ[jx])
         {
+        struct txAliDiff *newMismatch = NULL;
+        AllocVar(newMismatch);
         int tStart = psl->tStarts[ix] + jx;
         char *tRef = exonT + jx;
         char *tAlt = exonQ + jx;
@@ -96,9 +107,10 @@ for (jx = 0;  jx < blockSize;  jx++)
             reverseComplement(qAlt, len);
             }
         dyStringClear(namePlus);
-        dyStringPrintf(namePlus, "%s>%s", qRef, qAlt);
-        dyStringPrintf(namePlus, "\t%c", psl->strand[0]);
-        addCoordCols(namePlus, psl->qName, qStart, qStart+len);
+        dyStringPrintf(namePlus, "Mismatch: %s>%s", qRef, qAlt);
+        newMismatch->name = cloneString(namePlus->string);
+        newMismatch->strand[0] = psl->strand[0];
+        addCoordCols(newMismatch, psl->qName, qStart, qStart+len);
         // Make HGVS g.
         struct bed3 variantBed;
         variantBed.chrom = psl->tName;
@@ -107,7 +119,7 @@ for (jx = 0;  jx < blockSize;  jx++)
         char alt[len+1];
         safencpy(alt, sizeof(alt), tAlt, len);
         char *hgvsG = hgvsGFromVariant(gSeqWin, &variantBed, alt, chromAcc, TRUE);
-        dyStringPrintf(namePlus, "\t%s", hgvsG);
+        newMismatch->hgvsG = cloneString(hgvsG);
         // Make HGVS c./n.
         char gRef[len+1];
         safencpy(gRef, sizeof(gRef), tRef, len);
@@ -128,9 +140,16 @@ for (jx = 0;  jx < blockSize;  jx++)
             hgvsCN = hgvsCFromVpTx(&vpTx, gSeqWin, psl, cds, txSeq, TRUE);
         else
             hgvsCN = hgvsNFromVpTx(&vpTx, gSeqWin, psl, txSeq, TRUE);
-        dyStringPrintf(namePlus, "\t%s", hgvsCN);
-        slAddHead(pMismatchList,
-                  bed4New(psl->tName, tStart, tStart+len, namePlus->string));
+        newMismatch->hgvsCN = cloneString(hgvsCN);
+        newMismatch->chrom = cloneString(psl->tName);
+        newMismatch->chromStart = tStart;
+        newMismatch->chromEnd = tStart + len;
+        newMismatch->thickStart = tStart;
+        newMismatch->thickEnd = tStart + len;
+        newMismatch->reserved = MISMATCH_COLOR;
+        newMismatch->hgvsN = "";
+        newMismatch->hgvsPosCN = "";
+        slAddHead(differencesList, newMismatch);
         freeMem(hgvsG);
         jx += (len - 1);
         }
@@ -163,8 +182,7 @@ else
 
 static void checkIntrons(struct psl *psl, int ix, struct seqWindow *gSeqWin, struct dnaSeq *txSeq,
                          struct genbankCds *cds, char *chromAcc,
-                         struct bed4 **pShortGapList, struct bed **pShiftyGapList,
-                         struct bed4 **pDoubleGapList)
+                         struct txAliDiff **differencesList)
 /* Examine each intron to see if it's too short to be plausible.  Report too-short introns
  * and determine whether they are ambiguously placed, i.e. if they could be shifted left
  * and/or right on genome and transcript (see also vpExpandIndelGaps).  If not too short,
@@ -200,45 +218,68 @@ if (ix < psl->blockCount - 1)
                 errAbort("pslMismatchGapToBed: support for overlapping blocks not implemented");
             if (psl->blockSizes[ix+1] < shiftR)
                 errAbort("pslMismatchGapToBed: support for overlapping blocks not implemented");
-            struct bed *bed;
-            AllocVar(bed);
-            bed->chrom = cloneString(psl->tName);
-            bed->chromStart = tGapStart - shiftL;
-            bed->chromEnd = tGapEnd + shiftR;
+            struct txAliDiff *shiftyItem = NULL;
+            AllocVar(shiftyItem);
+            shiftyItem->chrom = cloneString(psl->tName);
+            shiftyItem->chromStart = tGapStart - shiftL;
+            shiftyItem->chromEnd = tGapEnd + shiftR;
+            shiftyItem->reserved = SHIFTYGAP_COLOR;
+            shiftyItem->hgvsG = "";
+            shiftyItem->hgvsN = "";
+            shiftyItem->hgvsCN = "";
             dyStringClear(namePlus);
-            dyStringPrintf(namePlus, "shift:L%d,R%d", shiftL, shiftR);
+            dyStringPrintf(namePlus, "Shifted Gap shift: L%d,R%d", shiftL, shiftR);
+            shiftyItem->name = cloneString(namePlus->string);
+
             int qStart = qGapStart - (isRc ? shiftR : shiftL);
             int qEnd = qGapEnd + (isRc ? shiftL : shiftR);
-            addCoordCols(namePlus, psl->qName, qStart, qEnd);
-            dyStringPrintf(namePlus, "\t%d", tGapLen);
-            dyStringPrintf(namePlus, "\t%d", qGapLen);
-            dyStringPrintf(namePlus, "\t%d", shiftL);
-            dyStringPrintf(namePlus, "\t%d", shiftR);
-            dyStringPrintf(namePlus, "\t%s:", psl->qName);
+            addCoordCols(shiftyItem, psl->qName, qStart, qEnd);
+
+            shiftyItem->gSkipped = tGapLen;
+            shiftyItem->txSkipped = qGapLen;
+            shiftyItem->shiftL = shiftL;
+            shiftyItem->shiftR = shiftR;
+
+            dyStringClear(namePlus);
+            dyStringPrintf(namePlus, "%s:", psl->qName);
             addCNRange(namePlus, qStart, qEnd, cds);
-            bed->name = cloneString(namePlus->string);
-            bed->strand[0] = psl->strand[0];
+            shiftyItem->hgvsPosCN = cloneString(namePlus->string);
+            shiftyItem->strand[0] = psl->strand[0];
+
             int thickSize = tGapLen;
             if (qGapLen > thickSize)
                 thickSize = qGapLen;
             if (isRc)
                 {
-                bed->thickStart = bed->chromStart;
-                bed->thickEnd = bed->chromStart + thickSize;
-                if (bed->thickEnd > bed->chromEnd)
-                    bed->thickEnd = bed->chromEnd;
+                shiftyItem->thickStart = shiftyItem->chromStart;
+                shiftyItem->thickEnd = shiftyItem->chromStart + thickSize;
+                if (shiftyItem->thickEnd > shiftyItem->chromEnd)
+                    shiftyItem->thickEnd = shiftyItem->chromEnd;
                 }
             else
                 {
-                bed->thickStart = bed->chromEnd - thickSize;
-                if (bed->thickStart < bed->chromStart)
-                    bed->thickStart = bed->chromStart;
-                bed->thickEnd = bed->chromEnd;
+                shiftyItem->thickStart = shiftyItem->chromEnd - thickSize;
+                if (shiftyItem->thickStart < shiftyItem->chromStart)
+                    shiftyItem->thickStart = shiftyItem->chromStart;
+                shiftyItem->thickEnd = shiftyItem->chromEnd;
                 }
-            slAddHead(pShiftyGapList, bed);
+            slAddHead(differencesList, shiftyItem);
             }
+        struct txAliDiff *shortItem = NULL;
+        AllocVar(shortItem);
         dyStringClear(namePlus);
-        dyStringPrintf(namePlus, "skip:G%d,T%d", tGapLen, qGapLen);
+        dyStringPrintf(namePlus, "Short Gap skip: G%d,T%d", tGapLen, qGapLen);
+        shortItem->name = cloneString(namePlus->string);
+        shortItem->chrom = cloneString(psl->tName);
+        shortItem->chromStart = tGapStart;
+        shortItem->chromEnd = tGapEnd;
+        shortItem->thickStart = tGapStart;
+        shortItem->thickEnd = tGapEnd;
+        shortItem->reserved = SHORTGAP_COLOR;
+        shortItem->strand[0] = psl->strand[0];
+        shortItem->hgvsPosCN = "";
+        shortItem->hgvsCN = "";
+
         // Make HGVS g.
         struct bed3 variantBed;
         variantBed.chrom = psl->tName;
@@ -256,37 +297,52 @@ if (ix < psl->blockCount - 1)
             hgvsCN = hgvsCFromVpTx(vpTx, gSeqWin, psl, cds, txSeq, TRUE);
         else
             hgvsCN = hgvsNFromVpTx(vpTx, gSeqWin, psl, txSeq, TRUE);
-        dyStringPrintf(namePlus, "\t%c", psl->strand[0]);
-        addCoordCols(namePlus, psl->qName, vpTx->start.txOffset, vpTx->end.txOffset);
-        dyStringPrintf(namePlus, "\t%d", tGapLen);
-        dyStringPrintf(namePlus, "\t%d", qGapLen);
-        dyStringPrintf(namePlus, "\t%s", hgvsG);
-        dyStringPrintf(namePlus, "\t%s", hgvsCN);
-        slAddHead(pShortGapList,
-                  bed4New(psl->tName, tGapStart, tGapEnd, namePlus->string));
+
+        addCoordCols(shortItem, psl->qName, vpTx->start.txOffset, vpTx->end.txOffset);
+        shortItem->gSkipped = tGapLen;
+        shortItem->txSkipped = qGapLen;
+        shortItem->hgvsG = cloneString(hgvsG);
+        shortItem->hgvsN = cloneString(hgvsCN);
+        slAddHead(differencesList, shortItem);
         freeMem(hgvsG);
         vpTxFree(&vpTx);
         }
     else if (qGapLen > 0)
         {
         // Not too short, but skips transcript bases
+        struct txAliDiff *doubleItem = NULL;
+        AllocVar(doubleItem);
+        doubleItem->chrom = cloneString(psl->tName);
+        doubleItem->chromStart = tGapStart;
+        doubleItem->chromEnd = tGapEnd;
+        doubleItem->reserved = DOUBLEGAP_COLOR;
+        doubleItem->hgvsG = "";
+        doubleItem->hgvsN = "";
+        doubleItem->hgvsPosCN = "";
+
         dyStringClear(namePlus);
-        dyStringPrintf(namePlus, "skip:G%d,T%d", tGapLen, qGapLen);
-        dyStringPrintf(namePlus, "\t%c", psl->strand[0]);
-        addCoordCols(namePlus, psl->qName, qGapStart, qGapEnd);
-        dyStringPrintf(namePlus, "\t%d", tGapLen);
-        dyStringPrintf(namePlus, "\t%d", qGapLen);
-        dyStringPrintf(namePlus, "\t%s:", psl->qName);
+        dyStringPrintf(namePlus, "Double Gap: G%d,T%d", tGapLen, qGapLen);
+        doubleItem->name = cloneString(namePlus->string);
+
+        doubleItem->strand[0] = psl->strand[0];
+        addCoordCols(doubleItem, psl->qName, qGapStart, qGapEnd);
+        doubleItem->gSkipped = tGapLen;
+        doubleItem->txSkipped = qGapLen;
+        dyStringClear(namePlus);
+        dyStringPrintf(namePlus, "%s:", psl->qName);
         addCNRange(namePlus, qGapStart, qGapEnd, cds);
         dyStringAppend(namePlus, "del");
-        slAddHead(pDoubleGapList,
-                  bed4New(psl->tName, tGapStart, tGapEnd, namePlus->string));
+        doubleItem->hgvsCN = cloneString(namePlus->string);
+
+        doubleItem->thickStart = tGapStart;
+        doubleItem->thickEnd = tGapEnd;
+        slAddHead(differencesList, doubleItem);
         }
     }
 }
 
 static void checkUnalignedTxSeq(struct psl *psl, struct seqWindow *gSeqWin, struct dnaSeq *txSeq,
-                                struct genbankCds *cds, struct bed4 **pQSkippedList)
+                                struct genbankCds *cds, struct txAliDiff **differencesList)
 /* Check for skipped q bases before alignment start and non-polyA skipped q bases after end
  * of alignment. */
 {
@@ -296,6 +352,17 @@ if (namePlus == NULL)
     namePlus = dyStringNew(0);
 if (psl->qStarts[0] != 0)
     {
+    struct txAliDiff *newItem = NULL;
+    AllocVar(newItem);
+    newItem->chrom = cloneString(psl->tName);
+    newItem->chromStart = psl->tStart;
+    newItem->chromEnd = psl->tStart;
+    newItem->thickStart =  psl->tStart;
+    newItem->thickEnd = psl->tStart;
+    newItem->reserved = QSKIPPED_COLOR;
+    newItem->hgvsG = "";
+    newItem->hgvsN = "";
+    newItem->hgvsPosCN = "";
     if (isRc)
         {
         // Is it polyA?  Using the same heuristic as in hgTracks/cds.c, consider it close
@@ -307,27 +374,32 @@ if (psl->qStarts[0] != 0)
             // Unaligned transcript sequence at end
             int qSkipStart = psl->qSize - psl->qStarts[0];
             dyStringClear(namePlus);
-            dyStringPrintf(namePlus, "last%ddel", psl->qStarts[0]);
-            dyStringPrintf(namePlus, "\t%c", psl->strand[0]);
-            addCoordCols(namePlus, psl->qName, qSkipStart, psl->qSize);
-            dyStringPrintf(namePlus, "\t%s:", psl->qName);
+            dyStringPrintf(namePlus, "Transcript Skip: last%ddel", psl->qStarts[0]);
+            newItem->name = cloneString(namePlus->string);
+            dyStringClear(namePlus);
+            newItem->strand[0] = psl->strand[0];
+            addCoordCols(newItem, psl->qName, qSkipStart, psl->qSize);
+            dyStringPrintf(namePlus, "%s:", psl->qName);
             addCNRange(namePlus, qSkipStart, psl->qSize, cds);
             dyStringAppend(namePlus, "del");
-            slAddHead(pQSkippedList,
-                      bed4New(psl->tName, psl->tStart, psl->tStart, namePlus->string));
+            newItem->hgvsCN = cloneString(namePlus->string);
+            slAddHead(differencesList, newItem);
             }
         }
     else
         {
         // Unaligned transcript sequence at start
         dyStringClear(namePlus);
-        dyStringPrintf(namePlus, "first%ddel", psl->qStarts[0]);
-        dyStringPrintf(namePlus, "\t%c", psl->strand[0]);
-        addCoordCols(namePlus, psl->qName, 0, psl->qStarts[0]);
-        dyStringPrintf(namePlus, "\t%s:", psl->qName);
+        dyStringPrintf(namePlus, "Transcript Skip: first%ddel", psl->qStarts[0]);
+        newItem->name = cloneString(namePlus->string);
+        dyStringClear(namePlus);
+        newItem->strand[0] = psl->strand[0];
+        addCoordCols(newItem, psl->qName, 0, psl->qStarts[0]);
+        dyStringPrintf(namePlus, "%s:", psl->qName);
         addCNRange(namePlus, 0, psl->qStarts[0], cds);
         dyStringAppend(namePlus, "del");
-        slAddHead(pQSkippedList, bed4New(psl->tName, psl->tStart, psl->tStart, namePlus->string));
+        newItem->hgvsCN = cloneString(namePlus->string);
+        slAddHead(differencesList, newItem);
         }
     }
 // Unlike psl->qStarts[], psl->qStart and psl->qEnd are not reversed; for my sanity, keep it
@@ -337,17 +409,31 @@ int qEnd = psl->qStarts[lastIx] + psl->blockSizes[lastIx];
 int qSkipped = psl->qSize - qEnd;
 if (qSkipped > 0)
     {
+    struct txAliDiff *newItem = NULL;
+    AllocVar(newItem);
+    newItem->chrom = cloneString(psl->tName);
+    newItem->chromStart = psl->tEnd;
+    newItem->chromEnd = psl->tEnd;
+    newItem->thickStart =  psl->tEnd;
+    newItem->thickEnd = psl->tEnd;
+    newItem->reserved = QSKIPPED_COLOR;
+    newItem->hgvsG = "";
+    newItem->hgvsN = "";
+    newItem->hgvsPosCN = "";
     if (isRc)
         {
         // Unaligned transcript sequence at start
         dyStringClear(namePlus);
-        dyStringPrintf(namePlus, "first%ddel", qSkipped);
-        dyStringPrintf(namePlus, "\t%c", psl->strand[0]);
-        addCoordCols(namePlus, psl->qName, 0, qSkipped);
-        dyStringPrintf(namePlus, "\t%s:", psl->qName);
+        dyStringPrintf(namePlus, "Transcript Skip: first%ddel", qSkipped);
+        newItem->name = cloneString(namePlus->string);
+        dyStringClear(namePlus);
+        newItem->strand[0] = psl->strand[0];
+        addCoordCols(newItem, psl->qName, 0, qSkipped);
+        dyStringPrintf(namePlus, "%s:", psl->qName);
         addCNRange(namePlus, 0, qSkipped, cds);
         dyStringAppend(namePlus, "del");
-        slAddHead(pQSkippedList, bed4New(psl->tName, psl->tEnd, psl->tEnd, namePlus->string));
+        newItem->hgvsCN = cloneString(namePlus->string);
+        slAddHead(differencesList, newItem);
         }
     else
         {
@@ -359,23 +445,24 @@ if (qSkipped > 0)
             {
             // Unaligned transcript sequence at end
             dyStringClear(namePlus);
-            dyStringPrintf(namePlus, "last%ddel", qSkipped);
-            dyStringPrintf(namePlus, "\t%c", psl->strand[0]);
-            addCoordCols(namePlus, psl->qName, qEnd, psl->qSize);
-            dyStringPrintf(namePlus, "\t%s:", psl->qName);
+            dyStringPrintf(namePlus, "Transcript Skip: last%ddel", qSkipped);
+            newItem->name = cloneString(namePlus->string);
+            dyStringClear(namePlus);
+            newItem->strand[0] = psl->strand[0];
+            addCoordCols(newItem, psl->qName, qEnd, psl->qSize);
+            dyStringPrintf(namePlus, "%s:", psl->qName);
             addCNRange(namePlus, qEnd, psl->qSize, cds);
             dyStringAppend(namePlus, "del");
-            slAddHead(pQSkippedList, bed4New(psl->tName, psl->tEnd, psl->tEnd, namePlus->string));
-            }
+            newItem->hgvsCN = cloneString(namePlus->string);
+            slAddHead(differencesList, newItem);
+           }
         }
     }
 }
 
 static void checkTranscript(struct psl *psl, struct seqWindow *gSeqWin, struct dnaSeq *txSeq,
                             struct genbankCds *cds,
-                            struct bed4 **pMismatchList, struct bed4 **pShortGapList,
-                            struct bed **pShiftyGapList, struct bed4 **pDoubleGapList,
-                            struct bed4 **pQSkippedList)
+                            struct txAliDiff **differencesList)
 /* Build up lists of mismatches and non-exon, non-polyA indels between genome and transcript. */
 {
 if (psl->qSize != txSeq->size)
@@ -390,37 +477,24 @@ char *chromAcc = db ? hRefSeqAccForChrom(db, psl->tName) : psl->tName;
 int ix;
 for (ix = 0;  ix < psl->blockCount;  ix++)
     {
-    compareExonBases(psl, ix, gSeqWin, txSeq, cds, chromAcc, pMismatchList);
-    checkIntrons(psl, ix, gSeqWin, txSeq, cds, chromAcc,
-                 pShortGapList, pShiftyGapList, pDoubleGapList);
+    compareExonBases(psl, ix, gSeqWin, txSeq, cds, chromAcc, differencesList);
+    checkIntrons(psl, ix, gSeqWin, txSeq, cds, chromAcc, differencesList);
     }
-checkUnalignedTxSeq(psl, gSeqWin, txSeq, cds, pQSkippedList);
+checkUnalignedTxSeq(psl, gSeqWin, txSeq, cds, differencesList);
 }
 
-static void sortAndDumpBedNPlus(char *outBaseName, char *name, void *bedList, int n)
-/* Sort the mostly-backwards bed list with n fields and extra fields in bed->name following \t
- * and dump to file named outBaseName.name.bed. */
+static void sortAndDumpBedPlus(char *outBaseName, struct txAliDiff *diffList)
+/* Sort the mostly-backwards bed list and and dump to file named outBaseName.bed. */
 {
 char fileName[PATH_LEN];
-safef(fileName, sizeof(fileName), "%s.%s.bed", outBaseName, name);
+safef(fileName, sizeof(fileName), "%s.bed", outBaseName);
 FILE *f = mustOpen(fileName, "w");
-slReverse(&bedList);
-slSort(&bedList, bedCmp);
-struct bed *bed;
-for (bed = (struct bed *)bedList;  bed != NULL;  bed = bed->next)
+slReverse(&diffList);
+slSort(&diffList, bedCmp);
+struct txAliDiff *diffItem;
+for (diffItem = diffList; diffItem != NULL;  diffItem = diffItem->next)
     {
-    if (n == 4)
-        fprintf(f, "%s\t%d\t%d\t%s\n", bed->chrom, bed->chromStart, bed->chromEnd, bed->name);
-    else if (n == 8)
-        {
-        char *extra = strchr(bed->name, '\t');
-        *extra++ = '\0';
-        fprintf(f, "%s\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t%s\n",
-                bed->chrom, bed->chromStart, bed->chromEnd, bed->name,
-                bed->score, bed->strand, bed->thickStart, bed->thickEnd, extra);
-        }
-    else
-        errAbort("sortAndDumpBedNPlus: need to add support for bed%d", n);
+    txAliDiffOutput(diffItem, f, '\t', '\n');
     }
 carefulClose(&f);
 }
@@ -471,9 +545,7 @@ void pslMismatchGapToBed(char *pslFile, char *targetTwoBit, char *queryFa, char 
 /* pslMismatchGapToBed - Find mismatches and short indels between target and query
  * (e.g. genome & transcript). */
 {
-struct bed4 *baseMismatchList = NULL, *shortGapList = NULL, *doubleGapList = NULL,
-    *qSkippedList = NULL;
-struct bed *shiftyGapList = NULL;
+struct txAliDiff *differencesList = NULL;
 struct seqWindow *gSeqWin = twoBitSeqWindowNew(targetTwoBit, NULL, 0, 0);
 struct hash *qSeqHash = hashDnaSeqFromFa(queryFa);
 struct hash *cdsHash = hashCdsFromFile(cdsFile);
@@ -487,9 +559,7 @@ while ((psl = pslNext(pslLf)) != NULL)
         if (txSeq)
             {
             struct genbankCds *cds = cdsHash ? hashFindVal(cdsHash, psl->qName) : NULL;
-            checkTranscript(psl, gSeqWin, txSeq, cds,
-                            &baseMismatchList, &shortGapList, &shiftyGapList, &doubleGapList,
-                            &qSkippedList);
+            checkTranscript(psl, gSeqWin, txSeq, cds, &differencesList);
             }
         else
             {
@@ -499,11 +569,7 @@ while ((psl = pslNext(pslLf)) != NULL)
         }
     }
 lineFileClose(&pslLf);
-sortAndDumpBedNPlus(outBaseName, "mismatch", baseMismatchList, 4);
-sortAndDumpBedNPlus(outBaseName, "shortGap", shortGapList, 4);
-sortAndDumpBedNPlus(outBaseName, "shiftyGap", shiftyGapList, 8);
-sortAndDumpBedNPlus(outBaseName, "doubleGap", doubleGapList, 4);
-sortAndDumpBedNPlus(outBaseName, "qSkipped", qSkippedList, 4);
+sortAndDumpBedPlus(outBaseName, differencesList);
 }
 
 int main(int argc, char *argv[])

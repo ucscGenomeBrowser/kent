@@ -14,7 +14,20 @@ boolean isPopup = FALSE;
 boolean interactUiDirectional(struct trackDb *tdb)
 /* Determine if interactions are directional */
 {
-return trackDbSettingClosestToHomeOn(tdb, INTERACT_DIRECTIONAL);
+return isNotEmpty(trackDbSetting(tdb, INTERACT_DIRECTIONAL));
+}
+
+char *interactUiOffset(struct trackDb *tdb)
+/* Determine whether to offset source or target (or neither if NULL) */
+{
+char *directional = trackDbSetting(tdb, INTERACT_DIRECTIONAL);
+if (directional)
+    {
+    if (sameString(directional, INTERACT_OFFSET_TARGET) ||
+         sameString(directional, INTERACT_OFFSET_SOURCE))
+                return directional;
+    }
+return FALSE;
 }
 
 void interactUiMinScore(struct cart *cart, char *track, struct trackDb *tdb)
@@ -45,7 +58,6 @@ printf("&nbsp;<span>pixels&nbsp;(range: %d to %d, default: %d)<span>",
 
 void interactUiDrawMode(struct cart *cart, char *track, struct trackDb *tdb)
 /* Radio buttons to select drawing mode */
-
 {
 char *drawMode = cartUsualStringClosestToHome(cart, tdb, isNameAtParentLevel(tdb, track),
                                                 INTERACT_DRAW, INTERACT_DRAW_DEFAULT);
@@ -60,6 +72,26 @@ cgiMakeRadioButton(cartVar, INTERACT_DRAW_LINE, sameString(INTERACT_DRAW_LINE, d
 printf("&nbsp;%s&nbsp;", "rectangle");
 }
 
+void interactUiEndpointFilter(struct cart *cart, char *track, struct trackDb *tdb)
+/* Radio buttons to allow excluding items lacking endpoints in window */
+{
+char *endsVisible = cartUsualStringClosestToHome(cart, tdb, isNameAtParentLevel(tdb, track),
+                                    INTERACT_ENDS_VISIBLE, INTERACT_ENDS_VISIBLE_DEFAULT);
+char cartVar[1024];
+puts("<br><br><b>Show interactions:</b> ");
+//puts("<br><br><b>Exclude interactions:</b> ");
+safef(cartVar, sizeof(cartVar), "%s.%s", track, INTERACT_ENDS_VISIBLE);
+cgiMakeRadioButton(cartVar, INTERACT_ENDS_VISIBLE_ANY, sameString(INTERACT_ENDS_VISIBLE_ANY, endsVisible));
+printf("&nbsp;%s&nbsp;", "all");
+//printf("&nbsp;%s&nbsp;", "none");
+cgiMakeRadioButton(cartVar, INTERACT_ENDS_VISIBLE_ONE, sameString(INTERACT_ENDS_VISIBLE_ONE, endsVisible));
+printf("&nbsp;%s&nbsp;", "at least one end");
+//printf("&nbsp;%s&nbsp;", "only one end");
+cgiMakeRadioButton(cartVar, INTERACT_ENDS_VISIBLE_TWO , sameString(INTERACT_ENDS_VISIBLE_TWO, endsVisible));
+printf("&nbsp;%s&nbsp;", "both ends in window");
+//printf("&nbsp;%s&nbsp;", "no ends in window");
+}
+
 void interactCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char *track,
                         char *title, boolean boxed)
 /* Configure interact track type */
@@ -72,6 +104,7 @@ if (startsWith("big", tdb->type))
 //printf("\n<table id=interactControls style='font-size:%d%%' %s>\n<tr><td>",
         //isPopup ? 75 : 100, boxed ?" width='100%'":"");
 interactUiMinScore(cart, track, tdb);
+interactUiEndpointFilter(cart, track, tdb);
 interactUiTrackHeight(cart, track, tdb);
 puts("<div>");
 interactUiDrawMode(cart, track, tdb);

@@ -17,7 +17,7 @@ errAbort(
 "htmlMimeTest - post mime-encoded page with series on input sizes\n"
 "usage:\n"
 "   htmlMimeTest url-to-hgBlat dnaText startSize endSize\n"
-"e.g. htmlMimeTest http://hgwdev-${user}.cse.ucsc.edu/cgi-bin/hgBlat input/htmlMime.txt 100 200\n"
+"e.g. htmlMimeTest https://hgwdev-${user}.gi.ucsc.edu/cgi-bin/hgBlat input/htmlMime.txt 100 200\n"
 "options:\n"
 "   -asFile - send data as type FILE upload (seqFile) instead of TEXTAREA (userSeq) \n"
 );
@@ -35,7 +35,6 @@ void htmlMimeTest(char *url, char *dnaFileName, int size)
 struct htmlPage *rootPage, *page;
 struct htmlForm *form, *mainForm;
 struct qaStatus *qs;
-struct htmlFormVar *orgVar;
 char *dna, *dnaSeg;
 qs = qaPageGet(url, &rootPage);
 if (qs->errMessage)

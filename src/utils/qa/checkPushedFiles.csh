@@ -21,7 +21,7 @@ if ( $#argv != 2 ) then
   echo
   echo " website should include the path of the directory where"
   echo " the files reside, such as:"
-  echo "   http://hgdownload.cse.ucsc.edu/goldenPath/hg19/liftOver/ "
+  echo "   http://hgdownload.soe.ucsc.edu/goldenPath/hg19/liftOver/ "
   echo
   echo " file(s) is either a single name or a list of names, and can"
   echo " include items with additional directory structure, like so:"

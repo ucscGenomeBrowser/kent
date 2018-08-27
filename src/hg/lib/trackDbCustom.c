@@ -350,9 +350,13 @@ for (;;)
         line = trimSpaces(line);
         trackDbUpdateOldTag(&word, &line);
         if (releaseTag && sameString(word, "release"))
-            errAbort("Release tag %s in stanza with include override %s, line %d of %s",
-                line, releaseTag, lf->lineIx, lf->fileName);
-        trackDbAddInfo(bt, word, line, lf);
+            {
+            if (differentString(releaseTag, line))
+                errAbort("Release tag %s in stanza with include override %s, line %d of %s",
+                    line, releaseTag, lf->lineIx, lf->fileName);
+            }
+        else
+            trackDbAddInfo(bt, word, line, lf);
         }
     if (releaseTag)
         trackDbAddRelease(bt, releaseTag);

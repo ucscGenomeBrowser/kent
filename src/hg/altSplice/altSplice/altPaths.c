@@ -59,7 +59,7 @@ boolean looseCassettes = FALSE;    /* Are we using the loose definition of casse
 int looseCassettesCount = 0; /* Total number of loose cassettes counted. */
 FILE *htmlTableOut = NULL;   /* File to use for printing web table to. */
 FILE *htmlFrameOut = NULL;   /* File to print frames for web page to. */
-char *browserName = NULL;    /* Name of browser to link to. Something like 'hgwdev.cse.ucsc.edu' */
+char *browserName = NULL;    /* Name of browser to link to. Something like 'hgwdev.gi.ucsc.edu' */
 char *db = NULL;             /* Database used when linking via web pages. */
 struct hash *cassetteHash = NULL; /* Keep track of the cassette splices we have seen. */
 

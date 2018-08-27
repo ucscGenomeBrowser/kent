@@ -41,7 +41,7 @@ baseColorUseSequence *
 baseQualRange bam
 bedFilter bed
 bedNameLabel bed barChart bigBarChart
-bigDataUrl customTracks bigBed bigWig bam vcfTabix bigPsl halSnake bigBarChart gtexTranscExpr
+bigDataUrl customTracks bigBed bigWig bam vcfTabix bigPsl halSnake bigBarChart gtexTranscExpr bigInteract
 bigGeneDataUrl genePred
 blastRef psl bigPsl
 boxedCfg *
@@ -228,7 +228,7 @@ itemCount customTracks
 itemDetailsHtmlTable genePred psl bed bigPsl
 itemFirstCharCase wigMafProt wigMaf
 itemImagePath bed
-itemRgb bedDetail bedGraph bed bedLogR bigBed bigPsl
+itemRgb bedDetail bedGraph bed bedLogR bigBed bigPsl interact bigInteract
 lfPslTable bed
 linesAt chromGraph
 linkIdInName bed bigBed

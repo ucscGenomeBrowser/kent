@@ -12,11 +12,11 @@ tar cvzf ./userApps.src.tgz ./userApps/
 # note that hard links are used below
 
 # hgwdownload
-ssh -n qateam@hgdownload.cse.ucsc.edu "rm -f /mirrordata/apache/htdocs/admin/exe/userApps.src.tgz"
+ssh -n qateam@hgdownload.soe.ucsc.edu "rm -f /mirrordata/apache/htdocs/admin/exe/userApps.src.tgz"
 # in case the script was already run before:
-ssh -n qateam@hgdownload.cse.ucsc.edu "rm -f /mirrordata/apache/htdocs/admin/exe/userApps.v${BRANCHNN}.src.tgz"
+ssh -n qateam@hgdownload.soe.ucsc.edu "rm -f /mirrordata/apache/htdocs/admin/exe/userApps.v${BRANCHNN}.src.tgz"
 scp -p userApps.src.tgz qateam@hgdownload.soe.ucsc.edu:/mirrordata/apache/htdocs/admin/exe/
-ssh -n qateam@hgdownload.cse.ucsc.edu "cd /mirrordata/apache/htdocs/admin/exe; ln userApps.src.tgz ./userApps.v${BRANCHNN}.src.tgz"
+ssh -n qateam@hgdownload.soe.ucsc.edu "cd /mirrordata/apache/htdocs/admin/exe; ln userApps.src.tgz ./userApps.v${BRANCHNN}.src.tgz"
 
 # hgwdownload-sd
 ### ssh -n qateam@hgdownload-sd.sdsc.edu "rm -f /mirrordata/apache/htdocs/admin/exe/userApps.src.tgz"

@@ -25,10 +25,10 @@ etc-update-server:
 etc-update: etc-update-server # alternative name
 
 install-rr: all ${GB_BINARCH}/hgsql ${GB_BINARCH}/hgLsSnpPdbLoad ${GB_BINARCH}/mrnaToGene ${GB_BINARCH}/hgLoadGenePred 
-	${MAKE} install PREFIX=qateam@hgwbeta.cse.ucsc.edu:/genbank
+	${MAKE} install PREFIX=qateam@hgwbeta.soe.ucsc.edu:/genbank
 
 etc-update-rr:
-	${MAKE} install-etc PREFIX=qateam@hgwbeta.cse.ucsc.edu:/genbank
+	${MAKE} install-etc PREFIX=qateam@hgwbeta.soe.ucsc.edu:/genbank
 
 # standard options to use for rsync
 rsyncOpts = --times --recursive --executability --omit-dir-times --relative

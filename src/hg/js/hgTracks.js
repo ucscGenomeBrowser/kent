@@ -3125,7 +3125,7 @@ var rightClick = {
                                     }
                                 };
                             if (rightClick.supportZoomCodon && rec.type.indexOf("genePred") !== -1) {
-                                // http://hgwdev-larrym.cse.ucsc.edu/cgi-bin/hgGene?hgg_gene=uc003tqk.2&hgg_prot=P00533&hgg_chrom=chr7&hgg_start=55086724&hgg_end=55275030&hgg_type=knownGene&db=hg19&c=chr7
+                                // http://hgwdev-larrym.gi.ucsc.edu/cgi-bin/hgGene?hgg_gene=uc003tqk.2&hgg_prot=P00533&hgg_chrom=chr7&hgg_start=55086724&hgg_end=55275030&hgg_type=knownGene&db=hg19&c=chr7
                                 var name, table;
                                 var reg = new RegExp("hgg_gene=([^&]+)");
                                 var a = reg.exec(href);
@@ -3137,8 +3137,8 @@ var rightClick = {
                                         table = a[1];
                                     }
                                 } else {
-                                    // http://hgwdev-larrym.cse.ucsc.edu/cgi-bin/hgc?o=55086724&t=55275031&g=refGene&i=NM_005228&c=chr7
-                                    // http://hgwdev-larrym.cse.ucsc.edu/cgi-bin/hgc?o=55086713&t=55270769&g=wgEncodeGencodeManualV4&i=ENST00000455089&c=chr7
+                                    // http://hgwdev-larrym.gi.ucsc.edu/cgi-bin/hgc?o=55086724&t=55275031&g=refGene&i=NM_005228&c=chr7
+                                    // http://hgwdev-larrym.gi.ucsc.edu/cgi-bin/hgc?o=55086713&t=55270769&g=wgEncodeGencodeManualV4&i=ENST00000455089&c=chr7
                                     reg = new RegExp("i=([^&]+)");
                                     a = reg.exec(href);
                                     if (a && a[1]) {

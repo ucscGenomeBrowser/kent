@@ -1,12 +1,12 @@
 function setWgetSrc() {
-  var srcHost = "//hgdownload.cse.ucsc.edu";
+  var srcHost = "//hgdownload.soe.ucsc.edu";
   var hostName = location.hostname;
   if( /^hgwdev.*|^genome-test.*/i.test(hostName) ) {
-    srcHost = "//genome-test.cse.ucsc.edu";
+    srcHost = "//genome-test.soe.ucsc.edu";
   } else if ( /^genome-preview.*|^hgwalpha.*/i.test(hostName) ) {
-    srcHost = "//genome-preview.cse.ucsc.edu";
+    srcHost = "//genome-preview.soe.ucsc.edu";
   } else if ( /^genome.ucsc.*/i.test(hostName) ) {
-    srcHost = "//hgdownload.cse.ucsc.edu";
+    srcHost = "//hgdownload.soe.ucsc.edu";
   }
 
   var wgetSrc = document.getElementById('wgetSrc');

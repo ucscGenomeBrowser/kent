@@ -49,6 +49,7 @@ Optional:
 <li>&#39;gmt&#39; map plotting tools <a href='http://www.soest.hawaii.edu/gmt/' title=''>http://www.soest.hawaii.edu/gmt/</a></li>
 <li>&#39;pstack&#39; for stack traces</li>
 <li>&#39;R&#39; for the GTex track</li>
+<li>&#39;python-mysqldb&#39; for the gene interactions track</li>
 </ul>
 
 <p>
@@ -57,8 +58,8 @@ system package management tools:
 </p>
 
 <ul>
-<li>Debian/Ubuntu: <code>apt-get install ghostscript apache2 mysql-server gmt r-base uuid-dev</code></li>
-<li>Redhat/Fedora/CentOS: <code>yum install libpng12 httpd ghostscript GMT hdf5 R libuuid-devel</code></li>
+<li>Debian/Ubuntu: <code>apt-get install ghostscript apache2 mysql-server gmt r-base uuid-dev python-mysqldb</code></li>
+<li>Redhat/Fedora/CentOS: <code>yum install libpng12 httpd ghostscript GMT hdf5 R libuuid-devel MySQL-python</code></li>
 </ul>
 
 <a name='hardware-and-disk-space-requirements'></a>
@@ -1442,8 +1443,12 @@ Not all forms pay attention to that input, but when they do it
 generally looks like this:
 </p>
 
+hPrintf(&quot;
+
+
+
 <p>
-hPrintf(&quot;&lt;FORM ACTION=&quot;%s&quot; NAME=&quot;mainForm&quot; METHOD=%s&gt;<code>tex</code>&quot;,
+<code>tex</code>&quot;,
 getScriptName(), cartUsualString(cart, &quot;formMethod&quot;, &quot;POST&quot;));
 </p>
 

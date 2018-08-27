@@ -9,9 +9,9 @@
 #
 #files          a list of files that will be concatenated together
 #view           the view of the data as described below
-#cell           the cell line (http://genome-test.cse.ucsc.edu/ENCODE/cellTypes.html)
-#localization   the cellular compartment (http://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#localization)
-#rnaExtract     the features of rnaExtract (http://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#rnaExtract )
+#cell           the cell line (http://genome-test.soe.ucsc.edu/ENCODE/cellTypes.html)
+#localization   the cellular compartment (http://genome-test.soe.ucsc.edu/ENCODE/otherTerms.html#localization)
+#rnaExtract     the features of rnaExtract (http://genome-test.soe.ucsc.edu/ENCODE/otherTerms.html#rnaExtract )
 #labProtocolId  Transcriptome specific lab protocol ID, can be comma separated list for pooled
 #bioRep         Transcriptome specific bioRep ID, can be comma separated list for pooled
 #labExpId       optional lab internal identifiers, can be comma sepated list for pooled

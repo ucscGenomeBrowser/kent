@@ -44,10 +44,10 @@
 # CPU overload on hgdownload
 RSYNCOPTS="-ltrvh"
 # rsync server for CGIs and html files
-RSYNCSRC="rsync://hgdownload.cse.ucsc.edu"
+RSYNCSRC="rsync://hgdownload.soe.ucsc.edu"
 RSYNCCGIBIN=cgi-bin
 RSYNCHTDOCS=htdocs
-UPDATEFLAG=http://hgdownload.cse.ucsc.edu/gbib/lastUpdate
+UPDATEFLAG=http://hgdownload.soe.ucsc.edu/gbib/lastUpdate
 LOGFILE=/var/log/gbibUpdates.log
 DEBUG=0
 if [[ "$#" -ne 0 ]]; then
@@ -314,7 +314,7 @@ else
     # not updated anymore in #18337
     rsync --delete $RSYNCOPTS $RSYNCSRC/$RSYNCHTDOCS/ /usr/local/apache/htdocs/ --include **/customTracks/*.html --exclude ENCODE/ --exclude *.bam --exclude *.bb --exclude */*.bw --exclude */*.gz --exclude favicon.ico --exclude folders --exclude ancestors --exclude admin --exclude goldenPath/customTracks --exclude images/mammalPsg --exclude style/gbib.css --exclude images/title.jpg --exclude images/homeIconSprite.png --exclude goldenPath/**.pdf --exclude training
 
-    PUSHLOC=hgdownload.cse.ucsc.edu::gbib/push/
+    PUSHLOC=hgdownload.soe.ucsc.edu::gbib/push/
 fi
 
 chown -R www-data.www-data /usr/local/apache/cgi-bin/*
@@ -350,7 +350,7 @@ touch /data/mysql/hgFixed/gtexTissue.{MYI,MYD,frm}
 
 if [ "$1" != "hgwdev" ] ; then
   echo - Updating GBDB files...
-  rsync $RSYNCOPTS --existing rsync://hgdownload.cse.ucsc.edu/gbdb/ /data/gbdb/
+  rsync $RSYNCOPTS --existing rsync://hgdownload.soe.ucsc.edu/gbdb/ /data/gbdb/
   chown -R www-data.www-data /data/gbdb/
 fi
 
@@ -401,12 +401,12 @@ if [ "$1" != "hgwdev" ] ; then
   # it doesn't work if I use two mysql invocations, as 'flush tables with read lock'
   # is only valid as long as the session is open
   # so I use the SYSTEM command
-  echo "FLUSH TABLES WITH READ LOCK; SYSTEM rsync $RSYNCOPTS --existing rsync://hgdownload.cse.ucsc.edu/mysql/ /data/mysql/; SYSTEM chown -R mysql.mysql /data/mysql/; UNLOCK TABLES;" | mysql
+  echo "FLUSH TABLES WITH READ LOCK; SYSTEM rsync $RSYNCOPTS --existing rsync://hgdownload.soe.ucsc.edu/mysql/ /data/mysql/; SYSTEM chown -R mysql.mysql /data/mysql/; UNLOCK TABLES;" | mysql
   
   echo updating hgcentral database, make sure to always overwrite
-  echo "FLUSH TABLES WITH READ LOCK; SYSTEM rsync -vrz --existing rsync://hgdownload.cse.ucsc.edu/mysql/hgcentral/ /data/mysql/hgcentral/; SYSTEM chown -R mysql.mysql /data/mysql/hgcentral; UNLOCK TABLES;" | mysql
+  echo "FLUSH TABLES WITH READ LOCK; SYSTEM rsync -vrz --existing rsync://hgdownload.soe.ucsc.edu/mysql/hgcentral/ /data/mysql/hgcentral/; SYSTEM chown -R mysql.mysql /data/mysql/hgcentral; UNLOCK TABLES;" | mysql
   # update blat servers
-  mysql hgcentral -e 'UPDATE blatServers SET host=CONCAT(host,".cse.ucsc.edu") WHERE host not like "%ucsc.edu"'
+  mysql hgcentral -e 'UPDATE blatServers SET host=CONCAT(host,".soe.ucsc.edu") WHERE host not like "%ucsc.edu"'
   # the box does not officially support the HAL right now, remove the ecoli hubs
   mysql hgcentral -e 'delete from hubPublic where hubUrl like "%nknguyen%"'
 fi
@@ -486,7 +486,7 @@ if [ ! -f /usr/local/apache/trash/registration.txt ]; then
       if [[ $(awk '{if ($1 <= $2) print 1;}' <<< "$euroSpeed $ucscSpeed") -eq 1 ]]; then
          echo genome-euro seems to be closer
          echo modifying gbib to pull data from genome-euro instead of genome
-         sed -i s/slow-db.host=genome-mysql.cse.ucsc.edu/slow-db.host=genome-euro-mysql.soe.ucsc.edu/ /usr/local/apache/cgi-bin/hg.conf
+         sed -i s/slow-db.host=genome-mysql.soe.ucsc.edu/slow-db.host=genome-euro-mysql.soe.ucsc.edu/ /usr/local/apache/cgi-bin/hg.conf
       else
          echo genome.ucsc.edu seems to be closer
          echo not modifying /usr/local/apache/cgi-bin/hg.conf

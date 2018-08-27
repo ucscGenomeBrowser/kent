@@ -45,12 +45,26 @@ unsigned blue = inter->color & 0xff;
 return hvGfxFindColorIx(hvg, red, green, blue);
 }
 
+boolean interactSourceInWindow(struct interact *inter)
+/* True if midpoint of source is on screen */
+{
+unsigned s = interactRegionCenter(inter->sourceStart, inter->sourceEnd);
+return (s >= winStart) && (s < winEnd);
+}
+
+boolean interactTargetInWindow(struct interact *inter)
+/* True if midpoint of target is on screen */
+{
+unsigned t = interactRegionCenter(inter->targetStart, inter->targetEnd);
+return (t >= winStart) && (t < winEnd);
+}
+
 void interactLoadItems(struct track *tg)
 /* Load all interact items in region */
 {
 loadSimpleBedWithLoader(tg, (bedItemLoader)interactLoadAndValidate);
 
-if (tg->limitedVisSet)
+if (slCount(tg->items) == 0 && tg->limitedVisSet)
     {
     // too many items to display
     // borrowed behaviors in bamTrack and vcfTrack
@@ -62,17 +76,38 @@ if (tg->limitedVisSet)
     return;
 }
 
-// filter on score
+// filters
+
+// score filter
 char buf[1024];
 safef(buf, sizeof buf, "%s.%s", tg->tdb->track, INTERACT_MINSCORE);
 int minScore = cartUsualInt(cart, buf, 0);
 struct interact *inter, *next, *filteredItems = NULL;
 int count = slCount(tg->items);
+
+// exclude if missing endpoint(s) in window
+char *endsVisible = cartUsualStringClosestToHome(cart, tg->tdb, FALSE,
+                            INTERACT_ENDS_VISIBLE, INTERACT_ENDS_VISIBLE_DEFAULT);
 for (inter = tg->items; inter; inter = next)
     {
     next = inter->next;
     if (inter->score < minScore)
         continue;
+    if (differentString(endsVisible, INTERACT_ENDS_VISIBLE_ANY))
+        {
+        boolean sOnScreen = interactSourceInWindow(inter);
+        boolean tOnScreen = interactTargetInWindow(inter);
+        if (sameString(endsVisible, INTERACT_ENDS_VISIBLE_TWO))
+            {
+            if (!(sOnScreen && tOnScreen))
+                continue;
+            }
+        if (sameString(endsVisible, INTERACT_ENDS_VISIBLE_ONE))
+            {
+            if (!(sOnScreen || tOnScreen))
+                continue;
+            }
+        }
     slAddHead(&filteredItems, inter);
     }
 
@@ -145,7 +180,8 @@ return ((double)(pos - seqStart + .5) * scale) + xOff;
 }
 
 struct interactTrackInfo {
-    boolean isDirectional;
+    boolean isDirectional; // source and target are distinct item types
+    char *offset;          // which end to draw offset (source or target)
     boolean doOtherLabels;  // true to suppress labels on other chrom items (prevent overlap)
     int maxSize;        // longest interaction (midpoint to midpoint) in bp
     int fontHeight;
@@ -162,6 +198,7 @@ struct interactTrackInfo *tInfo = NULL;
 AllocVar(tInfo);
 tInfo->doOtherLabels = TRUE;
 tInfo->isDirectional = interactUiDirectional(tg->tdb);
+tInfo->offset = interactUiOffset(tg->tdb);
 
 char *otherChrom = NULL;
 int prevLabelEnd = 0, prevLabelStart = 0;
@@ -204,6 +241,16 @@ tInfo->sameHeight = (tInfo->sameCount) ? tg->height - tInfo->otherHeight : 0;
 return tInfo;
 }
 
+char *endpointClickArg(char *endpointName)
+/* Add var to identify endpoint ('foot'), or NULL if no name for endpoint */
+{
+if (isEmptyTextField(endpointName))
+    return NULL;
+char buf[256];
+safef(buf, sizeof(buf),"foot=%s", cgiEncode(endpointName));
+return(cloneString(buf));
+}
+
 static void interactDrawItems(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
@@ -229,6 +276,7 @@ double scale = scaleForWindow(width, seqStart, seqEnd);
 struct interact *inter = NULL;
 char buffer[1024];
 char itemBuf[2048];
+int chromStart, chromEnd;
 
 // Gather info for layout
 struct interactTrackInfo *tInfo = interactGetTrackInfo(tg, seqStart, hvg, xOff, font, scale);
@@ -238,6 +286,8 @@ int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(tg->tdb, "scoreMin", "0
 int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tg->tdb, "scoreMax", "1000"));
 
 // Draw items
+struct hash *footHash = hashNew(0);
+char footBuf[256];
 for (inter = (struct interact *)tg->items; inter; inter = inter->next)
     {
     char *otherChrom = interactOtherChrom(inter);
@@ -247,7 +297,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
     // Pick colors
 
     #define MG_LIGHT_MAGENTA    0xffffbbff
-    #define MG_LIGHT_GRAY       0xffbbbbbb
+    #define MG_LIGHT_GRAY         0xff909090
     color = interactItemColor(tg, inter, hvg, scoreMin, scoreMax);
     if (vis == tvDense && otherChrom && color == MG_BLACK)
         // use highlight color for other chrom items in dense mode
@@ -275,8 +325,8 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         int footWidth = regionFootWidth(inter->chromStart, inter->chromEnd, scale);
         unsigned yPos = yOffOther + height;
 
-        // draw the foot
-        hvGfxLine(hvg, x - footWidth, yOffOther, x + footWidth, yOffOther, color);
+        // draw the foot (2 pixels high)
+        hvGfxBox(hvg, x - footWidth, yOffOther, footWidth + footWidth + 1, 2, color);
 
         // draw the vertical
         if (tInfo->isDirectional && differentString(inter->chrom, inter->sourceChrom))
@@ -290,13 +340,14 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         // add map box to foot
         char *nameBuf = (inter->chromStart == inter->sourceStart ?      
                         inter->sourceName : inter->targetName);
+        char *clickArg = endpointClickArg(nameBuf);
         if (isEmptyTextField(nameBuf))
             nameBuf = statusBuf;
-        int chromStart = inter->chromStart;
-        int chromEnd = inter->chromEnd;
+        chromStart = inter->chromStart;
+        chromEnd = inter->chromEnd;
         mapBoxHgcOrHgGene(hvg, chromStart, chromEnd,
                         x - footWidth, yOffOther, footWidth * 2, 4,
-                        tg->track, itemBuf, nameBuf, NULL, TRUE, NULL);
+                        tg->track, itemBuf, nameBuf, NULL, TRUE, clickArg);
 
         // add map box to vertical
         mapBoxHgcOrHgGene(hvg, chromStart, chromEnd, x - 2, yOffOther, 4, 
@@ -312,7 +363,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
             // add map box to label
             mapBoxHgcOrHgGene(hvg, chromStart, chromEnd, x - labelWidth/2, 
                     yPos, labelWidth, tInfo->fontHeight, tg->track, itemBuf, statusBuf, 
-                    NULL, TRUE, NULL);
+                    NULL, TRUE, clickArg);
             }
         continue;
         }
@@ -340,58 +391,96 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
 
     // NOTE: until time permits, force to rectangle when in reversed strand mode.
 
+    int yTarget = yOff;
+    int ySource = yOff;
+    if (tInfo->offset && draw != DRAW_ELLIPSE)
+        // ellipse code doesn't support assymetrical ends
+        {
+        int yOffset = tg->height/20 + 1;
+        if (sameString(tInfo->offset, INTERACT_OFFSET_TARGET))
+            yTarget = yOff + yOffset;
+        else if (sameString(tInfo->offset, INTERACT_OFFSET_SOURCE))
+            ySource = yOff + yOffset;
+        }
+    unsigned footColor = color;
     if (sOnScreen)
         {
-        // draw foot of source region
-        hvGfxLine(hvg, sX - sWidth, yOff, sX + sWidth, yOff, color);
+        safef(footBuf, sizeof(footBuf), "%s:%d-%d", inter->sourceChrom,
+                                                        inter->sourceStart, inter->sourceEnd);
+        char *footPos = cloneString(footBuf);
+        if (hashLookup(footHash, footPos))
+            footColor = MG_BLACK;
+        else
+            hashStore(footHash, footPos);
+
+        // draw foot of source region (2 pixels high)
+        hvGfxBox(hvg, sX - sWidth, ySource, sWidth + sWidth + 1, 2, footColor);
         if (vis == tvDense || !tOnScreen || draw == DRAW_LINE || hvg->rc)
             {
             // draw vertical
             if (isReversed)
-                hvGfxDottedLine(hvg, sX, yOff, sX, peak, color, TRUE);
+                hvGfxDottedLine(hvg, sX, ySource, sX, peak, color, TRUE);
             else
-                hvGfxLine(hvg, sX, yOff, sX, peak, color);
+                hvGfxLine(hvg, sX, ySource, sX, peak, color);
             }
         }
     if (tOnScreen)
         {
-        // draw foot of target region
-        hvGfxLine(hvg, tX - tWidth, yOff, tX + tWidth, yOff, color);
+        safef(footBuf, sizeof(footBuf), "%s:%d-%d", inter->targetChrom,
+                                                        inter->targetStart, inter->targetEnd);
+        char *footPos = cloneString(footBuf);
+        if (hashLookup(footHash, footPos))
+            footColor = MG_BLACK;
+        else
+            hashStore(footHash, footPos);
+
+        // draw foot of target region (2 pixels high)
+        hvGfxBox(hvg, tX - tWidth, yTarget, tWidth + tWidth + 1, 2, footColor);
         if (vis == tvDense || !sOnScreen || draw == DRAW_LINE || hvg->rc)
             {
             // draw vertical
             if (isReversed)
-                hvGfxDottedLine(hvg, tX, yOff, tX, peak, color, TRUE);
+                hvGfxDottedLine(hvg, tX, yTarget, tX, peak, color, TRUE);
             else
-                hvGfxLine(hvg, tX, yOff, tX, peak, color);
+                hvGfxLine(hvg, tX, yTarget, tX, peak, color);
             }
         }
     if (vis == tvDense)
         continue;
 
     // Full mode: add map boxes and draw interaction
-    int chromStart = inter->chromStart;
-    int chromEnd = inter->chromEnd;
+    int highlightColor = MG_WHITE;
+    chromStart = inter->chromStart;
+    chromEnd = inter->chromEnd;
     char *nameBuf = NULL;
     if (sOnScreen)
         {
         // add map box to source region
-        nameBuf = isEmptyTextField(inter->sourceName) ? statusBuf : inter->sourceName;
-        hvGfxBox(hvg, sX-1, yOff, 3, 2, peakColor);
-        hvGfxBox(hvg, sX, yOff, 1, 1, MG_WHITE);
+        nameBuf = inter->sourceName;
+        char *clickArg = endpointClickArg(nameBuf);
+        if (isEmptyTextField(nameBuf))
+            nameBuf = statusBuf;
+        //hvGfxBox(hvg, sX-1, yOff-1, 3, 3, peakColor); // needed ?
+        hvGfxBox(hvg, sX-1, ySource, 3, 2, peakColor);
+        hvGfxBox(hvg, sX, ySource, 1, 1, highlightColor);
         mapBoxHgcOrHgGene(hvg, chromStart, chromEnd, 
-                           sX - sWidth, yOff, sWidth * 2, 4,
-                           tg->track, itemBuf, nameBuf, NULL, TRUE, NULL);
+                           sX - sWidth, ySource, sWidth * 2, 4,
+                           tg->track, itemBuf, nameBuf, NULL, TRUE, clickArg);
         }
     if (tOnScreen)
         {
         // add map box to target region
-        nameBuf = isEmptyTextField(inter->targetName) ? statusBuf : inter->targetName;
-        hvGfxBox(hvg, tX-1, yOff, 3, 2, peakColor);
-        hvGfxBox(hvg, tX, yOff, 1, 1, MG_WHITE);
+        nameBuf = inter->targetName;
+        char *clickArg = endpointClickArg(nameBuf);
+        if (isEmptyTextField(nameBuf))
+            nameBuf = statusBuf;
+        //hvGfxBox(hvg, tX-1, yTarget-1, 3, 3, tInfo->isDirectional ? MG_MAGENTA : peakColor);
+        hvGfxBox(hvg, tX-1, yTarget, 3, 2, tInfo->isDirectional ? MG_MAGENTA : peakColor);
+        hvGfxBox(hvg, tX, yTarget, 1, 1, highlightColor);
         mapBoxHgcOrHgGene(hvg, chromStart, chromEnd, 
-                        tX - tWidth, yOff, tWidth * 2, 4,
-                        tg->track, itemBuf, nameBuf, NULL, TRUE, NULL);
+                        //tX - tWidth, yTarget, tWidth * 2, 4,
+                        tX - tWidth, yTarget, tWidth * 2, 3,
+                        tg->track, itemBuf, nameBuf, NULL, TRUE, clickArg);
         }
     if ((s < seqStart && t < seqStart) || (s > seqEnd && t > seqEnd))
         continue;
@@ -420,7 +509,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         int xMap = lowerX + (double)(upperX-lowerX)/2;
         int yMap = peak-1;
         hvGfxBox(hvg, xMap-1, peak-1, 3, 3, peakColor);
-        hvGfxBox(hvg, xMap, peak, 1, 1, MG_WHITE);
+        hvGfxBox(hvg, xMap, peak, 1, 1, highlightColor);
         mapBoxHgcOrHgGene(hvg, chromStart, chromEnd, xMap-1, yMap-1, 3, 3,
                            tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
         continue;
@@ -430,16 +519,19 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         {
         int peakX = ((upperX - lowerX + 1) / 2) + lowerX;
         int peakY = peak + 30; // admittedly a hack (obscure how to define ypeak of curve)
-        int maxY = hvGfxCurve(hvg, lowerX, yOff, peakX, peakY, upperX, yOff, color, isReversed);
+        int maxY = hvGfxCurve(hvg, lowerX, 
+                                (isReversed ? yTarget : ySource), peakX, peakY, upperX, 
+                                (isReversed ? ySource : yTarget), color, isReversed);
         // curve drawer does not use peakY as expected, so it returns actual max Y used
         // draw map box on peak
         hvGfxBox(hvg, peakX-1, maxY-1, 3, 3, peakColor);
-        hvGfxBox(hvg, peakX, maxY, 1, 1, MG_WHITE);
+        hvGfxBox(hvg, peakX, maxY, 1, 1, highlightColor);
         mapBoxHgcOrHgGene(hvg, chromStart, chromEnd, peakX-1, maxY-1, 3, 3,
                        tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
         }
     else if (draw == DRAW_ELLIPSE)
         {
+        // can not support offsets
         int yLeft = yOff + peakHeight;
         int yTop = yOff - peakHeight;
         hvGfxEllipseDraw(hvg, lowerX, yLeft, upperX, yTop, color, ELLIPSE_BOTTOM, isReversed);
@@ -447,7 +539,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         int maxY = peakHeight + yOff;
         int peakX = ((upperX - lowerX + 1) / 2) + lowerX;
         hvGfxBox(hvg, peakX-1, maxY-1, 3, 3, peakColor);
-        hvGfxBox(hvg, peakX, maxY, 1, 1, MG_WHITE);
+        hvGfxBox(hvg, peakX, maxY, 1, 1, highlightColor);
         mapBoxHgcOrHgGene(hvg, chromStart, chromEnd, peakX-1, maxY-1, 3, 3,
                        tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
         }

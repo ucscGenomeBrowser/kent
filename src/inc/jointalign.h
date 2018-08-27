@@ -1,7 +1,7 @@
 /*****************************************************************************
  * Copyright (C) 2002 Ryan Weber.  This source code may be freely used       *
  * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Ryan Weber (weber@cse.ucsc.edu) *
+ * permitted only by explicit agreement with Ryan Weber (weber@soe.ucsc.edu) *
  *****************************************************************************/
 /* jointalign.h - routines for printing a joint alignment in html. */
 

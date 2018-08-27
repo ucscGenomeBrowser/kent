@@ -938,7 +938,7 @@ hPrintf(
   "<A HREF=\"../goldenPath/credits.html\">Credits</A> page for the list of "
   "contributors and usage restrictions associated with these data. "
   "All tables can be downloaded in their entirety from the "
-  "<A HREF=\"http://hgdownload.cse.ucsc.edu/downloads.html\""
+  "<A HREF=\"http://hgdownload.soe.ucsc.edu/downloads.html\""
   ">Sequence and Annotation Downloads</A> page."
    , getGenomeSpaceText()
    );

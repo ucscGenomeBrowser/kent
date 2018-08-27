@@ -657,7 +657,7 @@ PREPARE CLUSTER FOR BLASTZ RUN (DONE 12/3/02)
     rm -rf /scratch/hg/rn1/chromTrfMixedNib
     mkdir -p /scratch/hg/rn1/chromTrfMixedNib
     cp -p mixedNib/chr*.nib /scratch/hg/rn1/chromTrfMixedNib
-    # Ask cluster-admin@cse.ucsc.edu to binrsync /scratch/hg to clusters
+    # Ask cluster-admin@soe.ucsc.edu to binrsync /scratch/hg to clusters
 
 
 MAKING THE BLASTZBESTRAT TRACK FROM PENN STATE AXT FILES (TODO)

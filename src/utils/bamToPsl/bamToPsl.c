@@ -114,6 +114,7 @@ for (;;)
               psl->tName = cloneString((char *)hel->val); /* memory leak */
            }
         pslTabOut(psl, f);  /* no free of this psl data, memory leak */
+        pslFree(&psl);
     }
     ++processCount;
     if (dots)
