@@ -603,7 +603,7 @@ papAnu2.genbank.est.native.load = yes
     #   real    12m40.799s
  *** All done!
  *** Please take a look at the downloads for papAnu2 using a web browser.
- *** The downloads url is: http://hgdownload-test.cse.ucsc.edu/goldenPath/papAnu2.
+ *** The downloads url is: http://hgdownload-test.soe.ucsc.edu/goldenPath/papAnu2.
  *** Edit each README.txt to resolve any notes marked with "***":
      /cluster/data/papAnu2/goldenPath/database/README.txt
      /cluster/data/papAnu2/goldenPath/bigZips/README.txt

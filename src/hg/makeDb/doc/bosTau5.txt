@@ -364,7 +364,7 @@ close (FH);
     # *** All done!
     # *** Please take a look at the downloads for bosTau5 using a web browser.
     # *** The downloads url is:
-    # http://hgdownload-test.cse.ucsc.edu/goldenPath/bosTau5.
+    # http://hgdownload-test.soe.ucsc.edu/goldenPath/bosTau5.
     # *** Edit each README.txt to resolve any notes marked with "***":
     #   /hive/data/genomes/bosTau5/goldenPath/database/README.txt
     #   /hive/data/genomes/bosTau5/goldenPath/bigZips/README.txt

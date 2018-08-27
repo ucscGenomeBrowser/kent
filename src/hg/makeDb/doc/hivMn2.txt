@@ -365,7 +365,7 @@ do1 vax004Msa
     hgLoadSeq -replace hivmn2 /gbdb/hivmn2/vax003/vax003.fa
 
 # BLAT
-    gfClient -minScore=200 -minIdentity=70 -nohead hiv1.cse.ucsc.edu 17793 \
+    gfClient -minScore=200 -minIdentity=70 -nohead hiv1.soe.ucsc.edu 17793 \
     /gbdb/hivmn2/nib -out=psl -t=dna -q=dna vax003.fa vax003.psl
 
 # count the result
