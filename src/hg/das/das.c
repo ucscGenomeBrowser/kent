@@ -81,7 +81,7 @@ void sendHogMessage(char *hogHost)
 dasHead(DAS_OK, TRUE);
 printf("Your host, %s, has been sending too many requests lately and is "
        "unfairly loading our site, impacting performance for other users. "
-       "Please contact genome@cse.ucsc.edu to ask that your site "
+       "Please contact genome@soe.ucsc.edu to ask that your site "
        "be reenabled.  Also, please consider downloading sequence and/or "
        "annotations in bulk -- see http://genome.ucsc.edu/downloads.html.",
        hogHost);

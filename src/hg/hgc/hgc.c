@@ -20329,7 +20329,7 @@ void chuckHtmlContactInfo()
 /* Writes out Chuck's email so people bother Chuck instead of Jim */
 {
 puts("<br><br><span style='font-size:x-small;'><i>If you have comments and/or suggestions please email "
-     "<a href=\"mailto:sugnet@cse.ucsc.edu\">sugnet@cse.ucsc.edu</a>.</span>\n");
+     "<a href=\"mailto:sugnet@soe.ucsc.edu\">sugnet@soe.ucsc.edu</a>.</span>\n");
 }
 
 
