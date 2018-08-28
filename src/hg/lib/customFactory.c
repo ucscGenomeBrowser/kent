@@ -639,8 +639,10 @@ static boolean encodePeakRecognizer(struct customFactory *fac,
 /* Return TRUE if looks like we're handling an encodePeak track */
 {
 enum encodePeakType pt = 0;
-if (type != NULL && !sameType(type, fac->name) &&
-    !sameString(type, "narrowPeak") && !sameString(type, "broadPeak") && !sameString(type, "gappedPeak"))
+// type is required
+if (type == NULL ||
+    (!sameType(type, fac->name) && !sameString(type, "narrowPeak") &&
+     !sameString(type, "broadPeak") && !sameString(type, "gappedPeak")))
     return FALSE;
 char *line = customFactoryNextRealTilTrack(cpp);
 if (line == NULL)
@@ -649,11 +651,13 @@ char *dupe = cloneString(line);
 char *row[ENCODE_PEAK_KNOWN_FIELDS+1];
 int wordCount = chopLine(dupe, row);
 pt = encodePeakInferType(wordCount, type);
-if (pt)
+if (pt != invalid)
     track->fieldCount = wordCount;
+else
+    lineFileAbort(cpp->fileStack, "wrong number of columns for type '%s'", type);
 freeMem(dupe);
 customPpReuse(cpp, line);
-return (pt != 0);
+return (pt != invalid);
 }
 
 static struct pipeline *encodePeakLoaderPipe(struct customTrack *track)
@@ -788,24 +792,30 @@ static boolean bedDetailRecognizer(struct customFactory *fac,
         struct customTrack *track)
 /* Return TRUE if looks like we're handling an bedDetail track */
 {
-if (type != NULL && !sameType(type, fac->name) &&
-    !sameString(type, "bedDetail") )
+// type is required
+if (type == NULL ||
+    (!sameType(type, fac->name) && !sameString(type, "bedDetail")))
     return FALSE;
-if (type == NULL)
-    return FALSE; /* just in case gets past bed etc. */
 char *line = customFactoryNextRealTilTrack(cpp);
 if (line == NULL)
     return FALSE;
+struct lineFile *lf = cpp->fileStack;
 char *dupe = cloneString(line);
 char *row[14+3];
 int wordCount = chopTabs(dupe, row);
 if (wordCount > 14 || wordCount < 5)
-    return FALSE;
+    lineFileAbort(lf, "type is '%s' but has %d columns; "
+                  "expecting 5 to 14 tab-separated columns", type, wordCount);
 track->fieldCount = wordCount;
 /* bed 4 + so is first part bed? */
 char *ctDb = ctGenomeOrCurrent(track);
 int bedCount = wordCount -2;
-boolean isBed = rowIsBed(row, bedCount, ctDb, NULL);
+struct dyString *whyNotBed = dyStringNew(0);
+boolean isBed = rowIsBed(row, bedCount, ctDb, whyNotBed);
+if (!isBed)
+    lineFileAbort(lf, "type is '%s' with %d columns, but first %d columns are not valid BED: %s",
+                  type, wordCount, bedCount, whyNotBed->string);
+dyStringFree(&whyNotBed);
 freeMem(dupe);
 customPpReuse(cpp, line);
 return (isBed);
@@ -1185,7 +1195,8 @@ static boolean barChartRecognizer(struct customFactory *fac, struct customPp *cp
                                         struct customTrack *track)
 /* Return TRUE if looks like we're handling a barChart track */
 {
-if (type != NULL && !sameType(type, fac->name))
+// type is required
+if (type == NULL || !sameType(type, fac->name))
     return FALSE;
 char *line = customFactoryNextRealTilTrack(cpp);
 if (line == NULL)
@@ -1202,6 +1213,9 @@ if (wordCount == BARCHARTBED_NUM_COLS ||
     char *ctDb = ctGenomeOrCurrent(track);
     isBarChart = rowIsBarChart(row, wordCount, ctDb, lf);
     }
+else
+    lineFileAbort(cpp->fileStack, "type is '%s' but got %d columns (expecting %d or %d)",
+                  type, wordCount, BARCHARTBED_NUM_COLS-2, BARCHARTBED_NUM_COLS);
 freeMem(dupe);
 customPpReuse(cpp, line);
 return isBarChart;
@@ -1378,9 +1392,8 @@ static boolean interactRecognizer(struct customFactory *fac, struct customPp *cp
                                         struct customTrack *track)
 /* Return TRUE if looks like we're handling an interact track */
 {
-if (type == NULL)
-    return FALSE;
-if (!sameType(type, fac->name))
+// type is required
+if (type == NULL || !sameType(type, fac->name))
     return FALSE;
 char *line = customFactoryNextRealTilTrack(cpp);
 if (line == NULL)
@@ -1396,6 +1409,9 @@ if (wordCount == INTERACT_NUM_COLS)
     char *ctDb = ctGenomeOrCurrent(track);
     isInteract = rowIsInteract(row, wordCount, ctDb, lf);
     }
+else
+    lineFileAbort(lf, "type is '%s' but got %d columns (expecting %d)",
+                  type, wordCount, INTERACT_NUM_COLS);
 freeMem(dupe);
 customPpReuse(cpp, line);
 return isInteract;
@@ -1548,7 +1564,7 @@ struct customFactory interactFactory =
 
 /*** GFF/GTF Factory - converts to BED ***/
 
-static boolean rowIsGff(char *db, char **row, int wordCount)
+static boolean rowIsGff(char *db, char **row, int wordCount, char *type, struct lineFile *lf)
 /* Return TRUE if format of this row is consistent with being a .gff */
 {
 boolean isGff = FALSE;
@@ -1557,18 +1573,34 @@ if (wordCount >= 8 && wordCount <= 9)
     /* Check that strand is + - or . */
     char *strand = row[6];
     char c = strand[0];
-    if (c == '.' || c == '+' || c == '-')
+    if ((c == '.' || c == '+' || c == '-') && strand[1] == 0)
         {
-	if (strand[1] == 0)
-	    {
-	    if (hgIsOfficialChromName(db, row[0]))
-	        {
-		if (isdigit(row[3][0]) && isdigit(row[4][0]))
-		    isGff = TRUE;
-		}
-	    }
-	}
+        // check chrom name
+        char *officialChrom = hgOfficialChromName(db, row[0]);
+        if (! officialChrom)
+            {
+            if (type != NULL)
+                lineFileAbort(lf, "type is '%s' but '%s' is not a valid sequence name in %s",
+                              type, row[0], db);
+            }
+        else if (differentString(row[0], officialChrom))
+            {
+            if (type != NULL)
+                lineFileAbort(lf, "type is '%s' but '%s' is not a valid sequence name in %s "
+                              "(perhaps you mean '%s'?)",
+                              type, row[0], db, officialChrom);
+            }
+        else if (isdigit(row[3][0]) && isdigit(row[4][0]))
+            isGff = TRUE;
+        else if (type != NULL)
+            lineFileAbort(lf, "type is '%s' but 4th and/or 5th column values are not numeric", type);
+        }
+    else if (type != NULL)
+        lineFileAbort(lf, "type is '%s' but 7th column (strand) contains '%s' "
+                      "(expecting '+', '-' or '.')", type, strand);
     }
+else if (type != NULL)
+    lineFileAbort(lf, "type is '%s' but got %d columns (expecting 8 or 9)", type, wordCount);
 return isGff;
 }
 
@@ -1585,7 +1617,7 @@ if (line == NULL)
 char *dupe = cloneString(line);
 char *row[10];
 int wordCount = chopTabs(dupe, row);
-boolean isGff = rowIsGff(track->genomeDb, row, wordCount);
+boolean isGff = rowIsGff(track->genomeDb, row, wordCount, type, cpp->fileStack);
 if (isGff)
     track->gffHelper = gffFileNew("custom input");
 freeMem(dupe);
@@ -1609,6 +1641,8 @@ if (!gffRecognizer(fac, cpp, type, track))
 char *line = customPpNextReal(cpp);
 if (gffHasGtfGroup(line))
     isGtf = TRUE;
+if (sameType(type, "gtf") && !isGtf)
+    lineFileAbort(cpp->fileStack, "type is '%s' but could not find a valid GTF group column", type);
 customPpReuse(cpp, line);
 return isGtf;
 }
@@ -1750,37 +1784,77 @@ size = atoi(sSize);
 return start < end && end <= size;
 }
 
-static boolean rowIsPsl(char **row, int wordCount)
+static boolean rowIsPsl(char **row, int wordCount, char *type, struct lineFile *lf)
 /* Return TRUE if format of this row is consistent with being a .psl */
 {
 int i, len;
 char *s, c;
 int blockCount;
 if (wordCount != PSL_NUM_COLS)
+    {
+    if (type != NULL)
+        lineFileAbort(lf, "type is '%s' but got %d columns (expecting %d)",
+                      type, wordCount, PSL_NUM_COLS);
     return FALSE;
+    }
 for (i=0; i<=7; ++i)
    if (!isdigit(row[i][0]))
+       {
+       if (type != NULL)
+           lineFileAbort(lf, "type is '%s' but column %d has a non-numeric value",
+                         type, i+1);
        return FALSE;
+       }
 s = row[8];
 len = strlen(s);
 if (len < 1 || len > 2)
+    {
+    if (type != NULL)
+        lineFileAbort(lf, "type is '%s' but strand is %d characters long (expecting 1 or 2)",
+                      type, len);
     return FALSE;
+    }
 for (i=0; i<len; ++i)
     {
     c = s[i];
     if (c != '+' && c != '-')
+        {
+        if (type != NULL)
+            lineFileAbort(lf, "type is '%s' but strand contains '%c' (expecting '+' or '-')",
+                          type, c);
         return FALSE;
+        }
     }
 if (!checkStartEnd(row[10], row[11], row[12]))
+    {
+    if (type != NULL)
+        lineFileAbort(lf, "type is '%s' but qSize=%s, qStart=%s, qEnd=%s",
+                      type, row[10], row[11], row[12]);
     return FALSE;
+    }
 if (!checkStartEnd(row[14], row[15], row[16]))
+    {
+    if (type != NULL)
+        lineFileAbort(lf, "type is '%s' but tSize=%s, tStart=%s, tEnd=%s",
+                      type, row[14], row[15], row[16]);
     return FALSE;
+    }
 if (!isdigit(row[17][0]))
-   return FALSE;
+    {
+    if (type != NULL)
+        lineFileAbort(lf, "type is '%s' but blockCount is non-numeric", type);
+    return FALSE;
+    }
 blockCount = atoi(row[17]);
 for (i=18; i<=20; ++i)
     if (countChars(row[i], ',') != blockCount)
+        {
+        if (type != NULL)
+            lineFileAbort(lf, "type is '%s' but column %d has wrong number of "
+                          "comma-separated values (%d; expecting %d)",
+                          type, i+1, countChars(row[i], ','), blockCount);
         return FALSE;
+        }
 return TRUE;
 }
 
@@ -1804,7 +1878,7 @@ else
     char *dupe = cloneString(line);
     char *row[PSL_NUM_COLS+1];
     int wordCount = chopLine(dupe, row);
-    isPsl = rowIsPsl(row, wordCount);
+    isPsl = rowIsPsl(row, wordCount, type, cpp->fileStack);
     freeMem(dupe);
     }
 customPpReuse(cpp, line);
@@ -1976,7 +2050,11 @@ static boolean mafRecognizer(struct customFactory *fac,
 {
 if (type != NULL && !sameType(type, fac->name))
     return FALSE;
-return headerStartsWith(cpp, "##maf version");
+boolean isMaf = headerStartsWith(cpp, "##maf version");
+if (type != NULL && !isMaf)
+    lineFileAbort(cpp->fileStack, "type is '%s' but header does not start with '##maf version'",
+                  type);
+return isMaf;
 }
 
 static void mafLoaderBuildTab(struct customTrack *track, char *mafFile)
@@ -3122,7 +3200,11 @@ static boolean vcfRecognizer(struct customFactory *fac,
 {
 if (type != NULL && !sameType(type, fac->name))
     return FALSE;
-return headerStartsWith(cpp, "##fileformat=VCFv");
+boolean isVcf = headerStartsWith(cpp, "##fileformat=VCFv");
+if (type != NULL && !isVcf)
+    lineFileAbort(cpp->fileStack, "type is '%s' but header does not start with '##fileformat=VCFv'",
+                  type);
+return isVcf;
 }
 
 static void vcfLoaderAddDbTable(struct customTrack *track, char *vcfFile)
