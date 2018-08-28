@@ -396,7 +396,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
     if (tInfo->offset && draw != DRAW_ELLIPSE)
         // ellipse code doesn't support assymetrical ends
         {
-        int yOffset = tg->height/20 + 1;
+        int yOffset = tg->height/10 + 1;
         if (sameString(tInfo->offset, INTERACT_OFFSET_TARGET))
             yTarget = yOff + yOffset;
         else if (sameString(tInfo->offset, INTERACT_OFFSET_SOURCE))
