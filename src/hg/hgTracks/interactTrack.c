@@ -243,16 +243,6 @@ tInfo->sameHeight = (tInfo->sameCount) ? tg->height - tInfo->otherHeight : 0;
 return tInfo;
 }
 
-char *endpointClickArg(char *endpointName)
-/* Add var to identify endpoint ('foot'), or NULL if no name for endpoint */
-{
-if (isEmptyTextField(endpointName))
-    return NULL;
-char buf[256];
-safef(buf, sizeof(buf),"foot=%s", cgiEncode(endpointName));
-return(cloneString(buf));
-}
-
 void drawFoot(struct hvGfx *hvg, char *seq, int seqStart, int seqEnd, 
                             int x, int y, int width, Color color, struct hash *footHash)
 /* Draw interaction end, 2 pixels high.  Force to black if it exactly overlaps another */
@@ -282,7 +272,14 @@ void drawFootMapbox(struct hvGfx *hvg, char *track,
                                 int x, int y, int width, Color peakColor, Color highlightColor)
 /* Draw grab box and add map box */
 {
-char *clickArg = endpointClickArg(item);
+// Add var to identify endpoint ('foot'), or NULL if no name for endpoint */
+char *clickArg = NULL;
+if (!isEmptyTextField(item))
+    {
+    char buf[256];
+    safef(buf, sizeof(buf),"foot=%s", cgiEncode(item));
+    clickArg = cloneString(buf);
+    }
 char *itemBuf = isEmptyTextField(item) ? status : item;
 hvGfxBox(hvg, x-1, y, 3, 2, peakColor);
 hvGfxBox(hvg, x, y, 1, 1, highlightColor);
