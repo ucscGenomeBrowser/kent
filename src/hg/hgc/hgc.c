@@ -3223,7 +3223,7 @@ if (otherOrg == NULL)
     otherOrg = firstWordInLine(cloneString(tdb->shortLabel));
     }
 
-if (isHubTrack(tdb->track) || isCustomTrack(tdb->track))
+if (startsWith("big", tdb->type))
     {
     char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
     char *linkFileName = trackDbSetting(tdb, "linkDataUrl");
@@ -3343,7 +3343,7 @@ chainWinSize = min(winEnd-winStart, chain->tEnd - chain->tStart);
 /* server (or in other cases) if there is a database with a chromInfo table, */
 /* the sequences are available and there is an entry added to dbDb for */
 /* the otherDb. */
-if (sqlDatabaseExists(otherDb) && chromSeqFileExists(otherDb, chain->qName))
+if (!startsWith("big", tdb->type) && sqlDatabaseExists(otherDb) && chromSeqFileExists(otherDb, chain->qName))
     {
     if (chainWinSize < 1000000)
         {
