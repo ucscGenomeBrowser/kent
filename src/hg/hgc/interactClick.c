@@ -11,9 +11,9 @@
 #include "interact.h"
 #include "interactUi.h"
 
-static struct interact *getInteractFromTable(struct trackDb *tdb, char *item, 
-                                                char *chrom, int start, int end)
-/* Retrieve this item or items from track table */
+static struct interact *getInteractFromTable(struct trackDb *tdb, char *chrom, int start, int end,
+                                                char *foot)
+/* Retrieve interact items at this position from track table */
 {
 struct sqlConnection *conn = NULL;
 struct customTrack *ct = lookupCt(tdb->track);
@@ -40,18 +40,15 @@ while ((row = sqlNextRow(sr)) != NULL)
     inter = interactLoadAndValidate(row+offset);
     if (inter->chromStart != start || inter->chromEnd != end)
         continue;
-    if (isNotEmpty(item) && differentString(inter->name, item))
-        continue;
     slAddHead(&inters, inter);
     }
-slSort(&inters, interactDistanceCmp);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 return inters;
 }
 
-static struct interact *getInteractFromFile(char *file, char *item, char *chrom, int start, int end)
-/* Retrieve interact BED item from big file */
+static struct interact *getInteractFromFile(char *file, char *chrom, int start, int end, char *foot)
+/* Retrieve interact items at this position from big file */
 {
 struct bbiFile *bbi = bigBedFileOpen(file);
 struct lm *lm = lmInit(0);
@@ -67,33 +64,34 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         continue;
     if (inter->chromStart != start || inter->chromEnd != end)
         continue;
-    if (isNotEmpty(item) && differentString(inter->name, item))
-        continue;
     slAddHead(&inters, inter);
     }
-slSort(&inters, interactDistanceCmp);
 return inters;
 }
 
-static struct interact *getInteractions(struct trackDb *tdb, char *item, 
-                                        char *chrom, int start, int end)
-/* Retrieve interact BED item from track */
+static struct interact *getInteractions(struct trackDb *tdb, char *chrom, int start, int end, char *foot)
+/* Retrieve interact items at this position. Also any others with the same endpoint, if endpoint clicked on*/
 {
 struct interact *inters = NULL;
 char *file = trackDbSetting(tdb, "bigDataUrl");
 if (file != NULL)
-    inters = getInteractFromFile(file, item, chrom, start, end);
+    inters = getInteractFromFile(file, chrom, start, end, foot);
 else
-    inters = getInteractFromTable(tdb, item, chrom, start, end);
+    inters = getInteractFromTable(tdb, chrom, start, end, foot);
+slSort(&inters, bedCmpScore);
+slReverse(&inters);
 return inters;
 }
 
-void doInteractItemDetails(struct trackDb *tdb, struct interact *inter, char *item)
-/* Details of interaction item */
+void doInteractRegionDetails(struct trackDb *tdb, struct interact *inter)
 {
+/* print info for both regions */
+/* Use different labels:
+        1) directional (source/target)
+        2) non-directional same chrom (lower/upper)
+        3) non-directional other chrom (this/other)
+*/
 char startBuf[1024], endBuf[1024], sizeBuf[1024];
-if (!isEmptyTextField(inter->name))
-    printf("<b>Interaction name:</b> %s<br>\n", inter->name);
 printf("<b>Interaction region:</b> ");
 if (interactOtherChrom(inter))
     printf("across chromosomes<br>");
@@ -107,18 +105,7 @@ else
                 inter->chrom, startBuf, endBuf);
     printf("&nbsp;&nbsp;%s bp<br>\n", sizeBuf);
     }
-printf("<b>Score:</b> %d<br>\n", inter->score);
-printf("<b>Value:</b> %0.3f<br>\n", inter->value);
-if (!isEmptyTextField(inter->exp))
-    printf("<b>Experiment:</b> %s<br>\n", inter->exp);
-puts("<p>");
-
-/* print info for both regions */
-/* Use different labels:
-        1) directional (source/target)
-        2) non-directional same chrom (lower/upper)
-        3) non-directional other chrom (this/other)
-*/
+printf("<br>");
 char *region1Label = "Source";
 char *region1Chrom = inter->sourceChrom;
 int region1Start = inter->sourceStart;
@@ -148,7 +135,6 @@ if (!interactUiDirectional(tdb))
         region2Label = "Upper";
         }
     }
-
 // format and print
 sprintLongWithCommas(startBuf, region1Start + 1);
 sprintLongWithCommas(endBuf, region1End);
@@ -181,24 +167,46 @@ AllocArray(scores, count);
 #endif
 }
 
+void doInteractItemDetails(struct trackDb *tdb, struct interact *inter, char *item, boolean isMultiple)
+/* Details of interaction item */
+{
+if (!isEmptyTextField(inter->name))
+    printf("<b>Interaction name:</b> %s<br>\n", inter->name);
+
+
+printf("<b>Score:</b> %d<br>\n", inter->score);
+printf("<b>Value:</b> %0.3f<br>\n", inter->value);
+if (!isEmptyTextField(inter->exp))
+    printf("<b>Experiment:</b> %s<br>\n", inter->exp);
+puts("<p>");
+if (!isMultiple)
+    doInteractRegionDetails(tdb, inter);
+}
+
 void doInteractDetails(struct trackDb *tdb, char *item)
 /* Details of interaction items */
 {
 char *chrom = cartString(cart, "c");
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
+char *foot = cartOptionalString(cart, "foot");
 struct interact *inter = NULL;
-struct interact *inters = getInteractions(tdb, item, chrom, start, end);
+struct interact *inters = getInteractions(tdb, chrom, start, end, foot);
 if (inters == NULL)
     errAbort("Can't find interaction %s", item ? item : "");
 int count = slCount(inters);
 if (count > 1)
-    printf("<b>Interactions:</b> %d<hr>", count);
+    {
+    printf("<b>Interactions at this position:</b> %d<p>", count);
+    doInteractRegionDetails(tdb, inters);
+    printf("</p>");
+    }
 genericHeader(tdb, item);
 for (inter = inters; inter; inter = inter->next)
     {
-    doInteractItemDetails(tdb, inter, item);
-    printf("<hr>\n");
+    if (count > 1)
+        printf("<hr>\n");
+    doInteractItemDetails(tdb, inter, item, count > 1);
     if (count > 1 && !isEmptyTextField(inter->name) && sameString(inter->name, item))
         printf("<hr>\n");
     }

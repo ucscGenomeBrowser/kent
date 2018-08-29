@@ -8,7 +8,7 @@ The scripts are:
 
 			 Ex. usage:
 
-			 ./generateUsageStats.py -f /hive/data/inside/wwwstats/RR/2018/hgw1/access_log.20180107.gz
+			 ./generateSearchUse.py -f /hive/data/inside/wwwstats/RR/2018/hgw1/access_log.20180107.gz
 
 * generateUsageStats.py - used to genertate information on db and track usage information. By
                           default it outputs summary/combined counts over the period covered
@@ -20,11 +20,11 @@ The scripts are:
 
 			  ./generateUsageStats.py -pmjtf /hive/data/inside/wwwstats/RR/2018/hgw1/error_log.20180107.gz
 
-			  This will take all of the log files in this 'March 2017' directory and
-			  generate summary usage stats, per month usage stats, json files of the
-			  internal dictionaries containing the usage stats, the months/years
-			  covered in those log files, and the usage stats for the default tracks
-			  for the top 15 most used assemblies.
+			  This will take the specified log file and generate summary usage stats,
+			  per month usage stats, json files of the internal dictionaries
+			  containing the usage stats, the months/years covered in that log
+			  file, and the usage stats for the default tracks for the top 15 most
+			  used assemblies.
 
 
 * makeLogSymLinks.sh - helper script for creating the flat directory structure needed by the

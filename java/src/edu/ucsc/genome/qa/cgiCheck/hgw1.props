@@ -1,5 +1,5 @@
-machine mysqlbeta.cse.ucsc.edu
-server hgw1.cse.ucsc.edu
+machine mysqlbeta.soe.ucsc.edu
+server hgw1.soe.ucsc.edu
 quick false
 dbSpec all
 table all

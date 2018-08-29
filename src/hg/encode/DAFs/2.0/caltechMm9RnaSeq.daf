@@ -13,9 +13,9 @@
 #view: The type of view that these files are. The options are listed in this DAF
 #cell: The cell or tissue name. The cell registered vocbulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Mouse_cell_types
 #replicate: The Replicate number. The replication number of a given experiment.
-#readType       the read type (single, paired, directional, length) (http://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#readType)
-#mapAlgorithm   the mapping algorithm (http://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#mapAlgorithm )
-#insertLength   the insert length for the read (ttp://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#mapAlgorithm )
+#readType       the read type (single, paired, directional, length) (http://genome-test.soe.ucsc.edu/ENCODE/otherTerms.html#readType)
+#mapAlgorithm   the mapping algorithm (http://genome-test.soe.ucsc.edu/ENCODE/otherTerms.html#mapAlgorithm )
+#insertLength   the insert length for the read (ttp://genome-test.soe.ucsc.edu/ENCODE/otherTerms.html#mapAlgorithm )
 #sex: The sex of the individual the tissue originated or cell sex type. The sex registered vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Sex
 #age: The age of the sample used. The age registered vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Mouse_Metadata
 #strain: The strain that the sample originated from. the strain registered vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Mouse_Metadata

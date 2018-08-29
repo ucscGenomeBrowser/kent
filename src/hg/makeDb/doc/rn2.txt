@@ -454,7 +454,7 @@ PREPARE CLUSTER FOR BLASTZ RUN (DONE 03/06/03)
     rm -rf /scratch/hg/rn2/chromTrfMixedNib
     mkdir -p /scratch/hg/rn2/chromTrfMixedNib
     cp -p mixedNib/chr*.nib /scratch/hg/rn2/chromTrfMixedNib
-    # Ask cluster-admin@cse.ucsc.edu to binrsync /scratch/hg to clusters
+    # Ask cluster-admin@soe.ucsc.edu to binrsync /scratch/hg to clusters
 
     # Jim's comments Feb 12 '03 about the order in which to run blastz:
     # In general we should do

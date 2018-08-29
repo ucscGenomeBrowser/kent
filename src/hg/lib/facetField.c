@@ -28,6 +28,15 @@ struct facetVal *b = *((struct facetVal **)vb);
 return b->useCount - a->useCount;
 }
 
+int facetValCmp(const void *va, const void *vb)
+/* Compare two facetVal alphabetically by val */
+{
+struct facetVal *a = *((struct facetVal **)va);
+struct facetVal *b = *((struct facetVal **)vb);
+return strcasecmp(a->val, b->val);
+}
+
+
 static struct facetVal *facetValNew(char *val, int useCount)
 /* Create new facetVal structure */
 {
