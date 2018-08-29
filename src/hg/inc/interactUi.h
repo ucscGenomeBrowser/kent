@@ -21,6 +21,9 @@
 #define INTERACT_OFFSET_SOURCE  "offsetSource"
 #define INTERACT_OFFSET_TARGET  "offsetTarget"
 
+/* setting to show interactions with peak up (hill, not valley) */
+#define INTERACT_UP             "interactUp"
+
 /* Cart variables */
 
 #define INTERACT_DIRECTION_DASHES "dashes"

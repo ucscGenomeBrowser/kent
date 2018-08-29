@@ -262,7 +262,6 @@ static void interactDrawItems(struct track *tg, int seqStart, int seqEnd,
 
 // Determine drawing mode
 int draw = DRAW_LINE;
-boolean doDashes = FALSE;
 if (vis != tvDense)
     {
     char *drawMode = cartUsualStringClosestToHome(cart, tg->tdb, FALSE,
@@ -271,9 +270,8 @@ if (vis != tvDense)
         draw = DRAW_CURVE;
     else if (sameString(drawMode, INTERACT_DRAW_ELLIPSE))
         draw = DRAW_ELLIPSE;
-    doDashes = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE,
-                                INTERACT_DIRECTION_DASHES, INTERACT_DIRECTION_DASHES_DEFAULT);
     }
+
 double scale = scaleForWindow(width, seqStart, seqEnd);
 struct interact *inter = NULL;
 char buffer[1024];
@@ -331,8 +329,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         hvGfxBox(hvg, x - footWidth, yOffOther, footWidth + footWidth + 1, 2, color);
 
         // draw the vertical
-        boolean isReversed = tInfo->isDirectional && differentString(inter->chrom, inter->sourceChrom);
-        if (isReversed && doDashes)
+        if (tInfo->isDirectional && differentString(inter->chrom, inter->sourceChrom))
             hvGfxDottedLine(hvg, x, yOffOther, x, yPos, color, TRUE);
         else
             hvGfxLine(hvg, x, yOffOther, x, yPos, color);
@@ -421,7 +418,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         if (vis == tvDense || !tOnScreen || draw == DRAW_LINE || hvg->rc)
             {
             // draw vertical
-            if (isReversed && doDashes)
+            if (isReversed && (!tInfo->offset || draw == DRAW_ELLIPSE))
                 hvGfxDottedLine(hvg, sX, ySource, sX, peak, color, TRUE);
             else
                 hvGfxLine(hvg, sX, ySource, sX, peak, color);
@@ -442,7 +439,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         if (vis == tvDense || !sOnScreen || draw == DRAW_LINE || hvg->rc)
             {
             // draw vertical
-            if (isReversed && doDashes)
+            if (isReversed && (!tInfo->offset || draw == DRAW_ELLIPSE))
                 hvGfxDottedLine(hvg, tX, yTarget, tX, peak, color, TRUE);
             else
                 hvGfxLine(hvg, tX, yTarget, tX, peak, color);
@@ -503,7 +500,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
     if (draw == DRAW_LINE || !sOnScreen || !tOnScreen || hvg->rc)
         {
         // draw horizontal line between region centers at 'peak' height
-        if (isReversed && doDashes)
+        if (isReversed)
             hvGfxDottedLine(hvg, lowerX, peak, upperX, peak, color, TRUE);
         else
             hvGfxLine(hvg, lowerX, peak, upperX, peak, color);
@@ -522,9 +519,12 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         {
         int peakX = ((upperX - lowerX + 1) / 2) + lowerX;
         int peakY = peak + 30; // admittedly a hack (obscure how to define ypeak of curve)
+        boolean drawDashed = isReversed;
+        if (tInfo->offset)
+            drawDashed = FALSE;
         int maxY = hvGfxCurve(hvg, lowerX, 
                                 (isReversed ? yTarget : ySource), peakX, peakY, upperX, 
-                                (isReversed ? ySource : yTarget), color, isReversed && doDashes);
+                                (isReversed ? ySource : yTarget), color, drawDashed);
         // curve drawer does not use peakY as expected, so it returns actual max Y used
         // draw map box on peak
         hvGfxBox(hvg, peakX-1, maxY-1, 3, 3, peakColor);
@@ -537,8 +537,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         // can not support offsets
         int yLeft = yOff + peakHeight;
         int yTop = yOff - peakHeight;
-        hvGfxEllipseDraw(hvg, lowerX, yLeft, upperX, yTop, color, ELLIPSE_BOTTOM, 
-                                isReversed && doDashes);
+        hvGfxEllipseDraw(hvg, lowerX, yLeft, upperX, yTop, color, ELLIPSE_BOTTOM, isReversed);
         // draw map box on peak
         int maxY = peakHeight + yOff;
         int peakX = ((upperX - lowerX + 1) / 2) + lowerX;
