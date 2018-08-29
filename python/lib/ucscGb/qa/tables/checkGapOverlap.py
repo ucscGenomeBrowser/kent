@@ -55,7 +55,7 @@ def constructOutputUrls(db, table, overlapFile):
                 color = "&highlight=" + db + "." + chrom + ":" + start + "-" + end + "#aaedff"
                 # Order of tracks in hgTracks URLs is very sensitive. It MUST be in this order:
                 # superTrack vis > composite vis > base track vis
-                url="http://genome-test.cse.ucsc.edu/cgi-bin/hgTracks?db=" + db + "&hideTracks=1"\
+                url="http://genome-test.soe.ucsc.edu/cgi-bin/hgTracks?db=" + db + "&hideTracks=1"\
                      + superTrackUrl + parentUrl + "&" + table + "=" + vis + "&gap=pack&position="\
                      + position + color + "\n"
                 gapOverUrls += url  

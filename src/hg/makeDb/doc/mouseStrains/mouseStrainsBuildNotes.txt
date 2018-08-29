@@ -39,7 +39,7 @@ and view them on hgwdev via the access portal:
 
 This is the special 'development' access point to make it use the
 files as they exist on hgwdev. The 'public' portal access point:
-  http://hgdownload.cse.ucsc.edu/hubs/mouseStrains/hubIndex.html
+  http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hubIndex.html
 also known on hgwdev as:
   http://genome-test.soe.ucsc.edu/gbdb/hubs/mouseStrains/hubIndex.html
 causes all references to go to the public released data which sits on

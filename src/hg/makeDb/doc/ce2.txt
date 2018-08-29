@@ -2004,13 +2004,13 @@ CREATE TABLE altGraphX (
 
     #	Better location is in the goldenPath itself 2006-01-12:
     mkdir /usr/local/apache/htdocs/goldenPath/ce2/altGraphX
-    sed -e "s#http://hgwdev-sugnet.cse.ucsc.edu##" links.html \
+    sed -e "s#http://hgwdev-sugnet.soe.ucsc.edu##" links.html \
 	> /usr/local/apache/htdocs/goldenPath/ce2/altGraphX/links.html
 
     sed -e \
     "s/Human Alt Splicing Conserved in Mouse/Alt Splicing in C. elegans/" \
 	-e "s/NM_005487/chrII:14689493-14690232/" \
-	-e "s#http://hgwdev-sugnet.cse.ucsc.edu##" \
+	-e "s#http://hgwdev-sugnet.soe.ucsc.edu##" \
 	 frame.html \
 	    > /usr/local/apache/htdocs/goldenPath/ce2/altGraphX/frame.html
 
