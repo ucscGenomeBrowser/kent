@@ -362,10 +362,6 @@ struct interactTrackInfo *tInfo = interactGetTrackInfo(tg, seqStart, hvg, xOff, 
 setYOff(tg, yOff);      // TODO: better to stash this in tInfo, and save that in track struct */
 int highlightColor = MG_WHITE;
 boolean drawUp = trackDbSettingClosestToHomeOn(tg->tdb, INTERACT_UP) && vis == tvFull;
-#define DEBUG
-#ifdef DEBUG
-drawUp = TRUE;
-#endif
 
 // Get spectrum range
 int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(tg->tdb, "scoreMin", "0"));
