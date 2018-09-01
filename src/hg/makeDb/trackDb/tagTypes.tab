@@ -41,7 +41,7 @@ baseColorUseSequence *
 baseQualRange bam
 bedFilter bed
 bedNameLabel bed barChart bigBarChart
-bigDataUrl customTracks bigBed bigWig bam vcfTabix bigPsl halSnake bigBarChart gtexTranscExpr bigInteract
+bigDataUrl customTracks bigBed bigWig bam vcfTabix bigPsl halSnake bigBarChart gtexTranscExpr bigInteract bigChain
 bigGeneDataUrl genePred
 blastRef psl bigPsl
 boxedCfg *
@@ -54,10 +54,10 @@ cdsEvidence genePred
 cdsTable psl bigPsl
 cell bed bedGraph
 centerLabelsDense *
-chainColor chain
-chainLinearGap netAlign chain bed psl bigPsl
-chainMinScore netAlign chain bed psl bigPsl
-chainNormScoreAvailable netAlign bed chain
+chainColor chain bigChain
+chainLinearGap netAlign chain bed psl bigPsl bigChain
+chainMinScore netAlign chain bed psl bigPsl bigChain
+chainNormScoreAvailable netAlign bed chain bigChain
 chimpDb bed
 chimpMacaqueOrthoTable bed
 chimpOrangMacOrthoTable bed
@@ -197,7 +197,7 @@ hoverMetadata wig bigWig
 html *
 htmlFile customTracks
 htmlUrl customTracks
-idInUrlSql altGraphX genePred chain factorSource bed
+idInUrlSql altGraphX genePred chain factorSource bed  bigChain
 idXref genePred psl
 iframeUrl *
 iframeOptions *
@@ -231,6 +231,7 @@ itemImagePath bed
 itemRgb bedDetail bedGraph bed bedLogR bigBed bigPsl interact bigInteract
 lfPslTable bed
 linesAt chromGraph
+linkDataUrl  bigChain
 linkIdInName bed bigBed
 labelFields bigBed bigPsl bigGenePred bigBarChart
 labelOnFeature bed bigBed
@@ -246,8 +247,8 @@ mafFile customTracks
 mafShowSnp wigMaf
 mafTrack bed
 mapDispatcher expRatio
-matrix netAlign bed chain psl bigPsl
-matrixHeader netAlign bed chain psl bigPsl
+matrix netAlign bed chain psl bigPsl bigChain
+matrixHeader netAlign bed chain psl bigPsl bigChain
 maxChromName customTracks
 maxHeightPixels *
 maxItems *
@@ -289,7 +290,7 @@ origAssembly *
 origTrackLine customTracks
 otherDb *
 otherDbTable bed
-otherOrg netAlign chain
+otherOrg netAlign chain bigChain
 otherSpecies halSnake
 pairEndsByName bam
 pairedEndUrlFormat bed

@@ -52,6 +52,7 @@
 #include "customComposite.h"
 #include "trackVersion.h"
 #include "hubConnect.h"
+#include "bigBedFilter.h"
 
 #define SMALLBUF 256
 #define MAX_SUBGROUP 9
@@ -3636,7 +3637,7 @@ filterBy_t *buildFilterBy(struct trackDb *tdb, struct cart *cart, struct asObjec
 char *setting = trackDbSetting(tdb, filterName);
 char *value = cartUsualStringClosestToHome(cart, tdb, FALSE, filterName, setting);
 char *field = cloneString(filterName);
-int ix = strlen(field) - strlen("FilterValues");
+int ix = strlen(field) - strlen(FILTER_VALUES_NAME);
 assert(ix > 0);
 field[ix] = '\0';
 
@@ -3689,7 +3690,7 @@ filterBy_t *filterBySetGetGuts(struct trackDb *tdb, struct cart *cart, char *nam
 // Gets one or more "filterBy" settings (ClosestToHome).  returns NULL if not found
 {
 // first check to see if this tdb is using "new" FilterValues cart variables
-struct slName *filterValues = trackDbSettingsWildMatch(tdb, "*FilterValues");
+struct slName *filterValues = trackDbSettingsWildMatch(tdb, FILTER_VALUES_WILDCARD);
 if (filterValues)
     return filterByValues(tdb, cart, filterValues);
 
@@ -3962,16 +3963,36 @@ if (cartOptionalString(cart, "ajax") == NULL)
 int ix=0;
 for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next, ix++)
     {
+    char settingString[4096];
+    safef(settingString, sizeof settingString, "%s%s", filterBy->column, FILTER_TYPE_NAME);
+    char *setting = cartOrTdbString(cart, tdb, settingString, NULL);
+    boolean isMultiple = (setting != NULL) && (sameString(setting, FILTERBY_MULTIPLE) ||sameString(setting, FILTERBY_MULTIPLE_LIST_OR) ||sameString(setting, FILTERBY_MULTIPLE_LIST_AND));
+
     puts("<TD>");
+    char selectStatement[4096];
+    if (isMultiple)
+        safef(selectStatement, sizeof selectStatement, " (select multiple items - %s)", FILTERBY_HELP_LINK);
+    else
+        selectStatement[0] = 0;
     if(count == 1)
-	printf("<B>%s by %s</B> (select multiple items - %s)",filterTypeTitle,filterBy->title,FILTERBY_HELP_LINK);
+	printf("<B>%s by %s</B>%s",filterTypeTitle,filterBy->title,selectStatement);
     else
 	printf("<B>%s</B>",filterBy->title);
     printf("<BR>\n");
 
+    if (isMultiple)
+        {
+        char cartSettingString[4096];
+        safef(cartSettingString, sizeof cartSettingString, "%s.%s", tdb->track, settingString);
+        printf("<b>Match if  ");
+        cgiMakeRadioButton(cartSettingString, FILTERBY_MULTIPLE_LIST_AND, sameString(setting, FILTERBY_MULTIPLE_LIST_AND));
+        printf(" all ");
+        cgiMakeRadioButton(cartSettingString, FILTERBY_MULTIPLE_LIST_OR, sameString(setting, FILTERBY_MULTIPLE_LIST_OR));
+        printf(" one or more match</b> ");
+        }
     // TODO: columnCount (Number of filterBoxes per row) should be configurable through tdb setting
-    #define FILTER_BY_FORMAT "<SELECT id='%s%d' name='%s' multiple style='display: none; font-size:.9em;' class='filterBy'><BR>\n"
-    printf(FILTER_BY_FORMAT,selectIdPrefix,ix,filterBy->htmlName);
+    #define FILTER_BY_FORMAT "<SELECT id='%s%d' name='%s' %s style='display: none; font-size:.9em;' class='filterBy'><BR>\n"
+    printf(FILTER_BY_FORMAT,selectIdPrefix,ix,filterBy->htmlName, isMultiple ? "multiple" : "");
 
     // value is always "All", even if label is different, to simplify javascript code
     printf("<OPTION%s value=\"All\">%s</OPTION>\n", (filterByAllChosen(filterBy)?" SELECTED":""), allLabel);
@@ -5739,7 +5760,7 @@ static int numericFiltersShowAll(char *db, struct cart *cart, struct trackDb *td
 // Shows all *Filter style filters.  Note that these are in random order and have no graceful title
 {
 int count = 0;
-struct slName *filterSettings = trackDbSettingsWildMatch(tdb, "*Filter");
+struct slName *filterSettings = trackDbSettingsWildMatch(tdb, FILTER_NUMBER_WILDCARD);
 if (filterSettings)
     {
     puts("<BR>");
@@ -5764,7 +5785,7 @@ if (filterSettings)
 
             char *scoreName = cloneString(filter->name);
             char *field = filter->name;   // No need to clone: will be thrown away at end of cycle
-            int ix = strlen(field) - strlen("Filter");
+            int ix = strlen(field) - strlen(FILTER_NUMBER_NAME);
             assert(ix > 0);
             field[ix] = '\0';
 
@@ -5828,7 +5849,7 @@ if (trackDbSettingClosestToHome(tdb, FILTER_BY))
 if (trackDbSettingClosestToHome(tdb, GRAY_LEVEL_SCORE_MIN))
     return TRUE;
 boolean blocked = FALSE;
-struct slName *filterSettings = trackDbSettingsWildMatch(tdb, "*Filter");
+struct slName *filterSettings = trackDbSettingsWildMatch(tdb, FILTER_NUMBER_WILDCARD);
 if (filterSettings != NULL)
     {
     boolean one = FALSE;
@@ -5860,7 +5881,7 @@ return FALSE;
 void textFiltersShowAll(char *db, struct cart *cart, struct trackDb *tdb)
 /* Show all the text filters for this track. */
 {
-struct slName *filter, *filterSettings = trackDbSettingsWildMatch(tdb, "*FilterText");
+struct slName *filter, *filterSettings = trackDbSettingsWildMatch(tdb, FILTER_TEXT_WILDCARD);
 if (filterSettings)
     {
     while ((filter = slPopHead(&filterSettings)) != NULL)
@@ -5868,7 +5889,7 @@ if (filterSettings)
         char *setting = trackDbSetting(tdb, filter->name);
         char *value = cartUsualStringClosestToHome(cart, tdb, FALSE, filter->name, setting);
         char *field = cloneString(filter->name);
-        int ix = strlen(field) - strlen("FilterText");
+        int ix = strlen(field) - strlen(FILTER_TEXT_NAME);
         assert(ix > 0);
         field[ix] = '\0';
 
@@ -6365,7 +6386,7 @@ struct dyString *dyAddAllScoreFilters(struct cart *cart, struct trackDb *tdb,
 //          uses:  defaultLimits: function param if no tdb limits settings found)
 // The 'and' param and dyString in/out allows stringing multiple where clauses together
 {
-struct slName *filterSettings = trackDbSettingsWildMatch(tdb, "*Filter");
+struct slName *filterSettings = trackDbSettingsWildMatch(tdb, FILTER_NUMBER_WILDCARD);
 if (filterSettings)
     {
     struct slName *filter = NULL;

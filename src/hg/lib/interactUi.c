@@ -50,7 +50,7 @@ cartTdbFetchMinMaxPixels(cart, tdb, INTERACT_MINHEIGHT, INTERACT_MAXHEIGHT,
                                 atoi(INTERACT_DEFHEIGHT),
                                 &min, &max, &deflt, &current);
 safef(buffer, sizeof buffer, "%s.%s", track, INTERACT_HEIGHT);
-printf("<br><br><b>Track height:&nbsp;</b>");
+printf("<b>Track height:&nbsp;</b>");
 cgiMakeIntVar(buffer, current, 3);
 printf("&nbsp;<span>pixels&nbsp;(range: %d to %d, default: %d)<span>",
         min, max, deflt);
@@ -78,8 +78,7 @@ void interactUiEndpointFilter(struct cart *cart, char *track, struct trackDb *td
 char *endsVisible = cartUsualStringClosestToHome(cart, tdb, isNameAtParentLevel(tdb, track),
                                     INTERACT_ENDS_VISIBLE, INTERACT_ENDS_VISIBLE_DEFAULT);
 char cartVar[1024];
-puts("<br><br><b>Show interactions:</b> ");
-//puts("<br><br><b>Exclude interactions:</b> ");
+puts("<b>Show interactions:</b> ");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, INTERACT_ENDS_VISIBLE);
 cgiMakeRadioButton(cartVar, INTERACT_ENDS_VISIBLE_ANY, sameString(INTERACT_ENDS_VISIBLE_ANY, endsVisible));
 printf("&nbsp;%s&nbsp;", "all");
@@ -90,6 +89,18 @@ printf("&nbsp;%s&nbsp;", "at least one end");
 cgiMakeRadioButton(cartVar, INTERACT_ENDS_VISIBLE_TWO , sameString(INTERACT_ENDS_VISIBLE_TWO, endsVisible));
 printf("&nbsp;%s&nbsp;", "both ends in window");
 //printf("&nbsp;%s&nbsp;", "no ends in window");
+}
+
+void interactUiDashedLines(struct cart *cart, char *track, struct trackDb *tdb)
+/* Checkbox for dashed lines on interactions in reverse direction */
+{
+if (!interactUiDirectional(tdb))
+    return;
+char cartVar[1024];
+safef(cartVar, sizeof cartVar, "%s.%s", tdb->track, INTERACT_DIRECTION_DASHES);
+boolean doDashes = cartCgiUsualBoolean(cart, cartVar, INTERACT_DIRECTION_DASHES_DEFAULT);
+cgiMakeCheckBox(cartVar, doDashes);
+printf("Draw reverse direction interactions with dashed lines");
 }
 
 void interactCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char *track,
@@ -103,11 +114,15 @@ if (startsWith("big", tdb->type))
     labelCfgUi(database, cart, tdb);
 //printf("\n<table id=interactControls style='font-size:%d%%' %s>\n<tr><td>",
         //isPopup ? 75 : 100, boxed ?" width='100%'":"");
-interactUiMinScore(cart, track, tdb);
+puts("<p>");
 interactUiEndpointFilter(cart, track, tdb);
+puts("</p><p>");
 interactUiTrackHeight(cart, track, tdb);
-puts("<div>");
+puts("</p><p>");
 interactUiDrawMode(cart, track, tdb);
-//puts("\n</table>\n");
+puts("</p><p>");
+interactUiDashedLines(cart, track, tdb);
+puts("</p>");
+scoreCfgUi(database, cart,tdb,tdb->track,"",1000,FALSE);
 cfgEndBox(boxed);
 }

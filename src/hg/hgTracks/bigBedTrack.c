@@ -148,11 +148,20 @@ struct bigBedFilter *bigBedMakeFilterBy(struct cart *cart, struct bbiFile *bbi, 
 /* Add a bigBed filter using a trackDb filterBy statement. */
 {
 struct bigBedFilter *filter;
+char filterType[4096];
+safef(filterType, sizeof filterType, "%s%s", field, FILTER_TYPE_NAME);
+char *setting = cartOrTdbString(cart, tdb, filterType, NULL);
 
 AllocVar(filter);
 filter->fieldNum =  bbExtraFieldIndex(bbi, field) + 3;
-filter->comparisonType = COMPARE_HASH;
+if (setting && (sameString(setting, FILTERBY_SINGLE_LIST) || sameString(setting, FILTERBY_MULTIPLE_LIST_OR)))
+    filter->comparisonType = COMPARE_HASH_LIST_OR;
+else if (setting && sameString(setting, FILTERBY_MULTIPLE_LIST_AND))
+    filter->comparisonType = COMPARE_HASH_LIST_AND;
+else
+    filter->comparisonType = COMPARE_HASH;
 filter->valueHash = newHash(5);
+filter->numValuesInHash = slCount(choices);
 
 for(; choices; choices = choices->next)
     hashStore(filter->valueHash, choices->name);
@@ -164,22 +173,22 @@ struct bigBedFilter *bigBedBuildFilters(struct cart *cart, struct bbiFile *bbi, 
 /* Build all the numeric and filterBy filters for a bigBed */
 {
 struct bigBedFilter *filters = NULL, *filter;
-struct slName *filterSettings = trackDbSettingsWildMatch(tdb, "*Filter");
+struct slName *filterSettings = trackDbSettingsWildMatch(tdb, FILTER_NUMBER_WILDCARD);
 
 for(; filterSettings; filterSettings = filterSettings->next)
     {
     char *fieldName = cloneString(filterSettings->name);
-    fieldName[strlen(fieldName) - sizeof "Filter" + 1] = 0;
+    fieldName[strlen(fieldName) - sizeof FILTER_NUMBER_NAME + 1] = 0;
     if ((filter = bigBedMakeNumberFilter(cart, bbi, tdb, filterSettings->name, NULL, fieldName)) != NULL)
         slAddHead(&filters, filter);
     }
 
-filterSettings = trackDbSettingsWildMatch(tdb, "*FilterText");
+filterSettings = trackDbSettingsWildMatch(tdb, FILTER_TEXT_WILDCARD);
 
 for(; filterSettings; filterSettings = filterSettings->next)
     {
     char *fieldName = cloneString(filterSettings->name);
-    fieldName[strlen(fieldName) - sizeof "FilterText" + 1] = 0;
+    fieldName[strlen(fieldName) - sizeof FILTER_TEXT_NAME + 1] = 0;
     if ((filter = bigBedMakeFilterText(cart, bbi, tdb, filterSettings->name,  fieldName)) != NULL)
         slAddHead(&filters, filter);
     }
@@ -213,6 +222,30 @@ for(filter = filters; filter; filter = filter->next)
             if (regexec(&filter->regEx,bedRow[filter->fieldNum], 0, NULL,0 ) != 0)
                 return FALSE;
             break;
+        case COMPARE_HASH_LIST_AND:
+        case COMPARE_HASH_LIST_OR:
+            {
+            struct slName *values = commaSepToSlNames(bedRow[filter->fieldNum]);
+            unsigned found = 0;
+            for(; values; values = values->next)
+                {
+                if (hashLookup(filter->valueHash, values->name))
+                    {
+                    found++;
+                    if (filter->comparisonType == COMPARE_HASH_LIST_OR) 
+                        break;
+                    }
+                }
+            if (filter->comparisonType == COMPARE_HASH_LIST_AND) 
+                {
+                if (found < filter->numValuesInHash)
+                    return FALSE;
+                }
+            else if (!found)
+                return FALSE;
+            }
+            break;
+
         case COMPARE_HASH:
             if (!hashLookup(filter->valueHash, bedRow[filter->fieldNum]))
                 return FALSE;

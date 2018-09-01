@@ -878,8 +878,10 @@ if (cgiOptionalString(SEARCH_TERM))
     lookupTerm();
 else
     {
+    long enteredMainTime = clock1000();
     oldVars = hashNew(10);
     cartEmptyShellNoContent(doMiddle, hUserCookie(), excludeVars, oldVars);
+    cgiExitTime("hgGateway", enteredMainTime);
     }
 return 0;
 }

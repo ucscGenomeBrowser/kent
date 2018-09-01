@@ -75,7 +75,7 @@ errAbort(
   "         after liftOver\n"
   "   -genePred - File is in genePred format\n"
   "   -sample - File is in sample format\n"
-  "   -bedPlus=N - File is bed N+ format\n"
+  "   -bedPlus=N - File is bed N+ format (i.e. first N fields conform to bed format)\n"
   "   -positions - File is in browser \"position\" format\n"
   "   -hasBin - File has bin value (used only with -bedPlus)\n"
   "   -tab - Separate by tabs rather than space (used only with -bedPlus)\n"
@@ -182,7 +182,12 @@ minSizeT = optionInt("minSizeT", minChainT); /* note: we're setting minChainT */
 minSizeQ = optionInt("minSizeQ", minSizeQ);
 minChainT = optionInt("minChainT", minChainT);
 minChainQ = optionInt("minChainQ", minChainQ);
-bedPlus = optionInt("bedPlus", bedPlus);
+if (optionExists("bedPlus"))
+    {
+    bedPlus = optionInt("bedPlus", bedPlus);
+    if (bedPlus < 3 || bedPlus > 15)
+        errAbort("-bedPlus=%d is out of range -- BED has between 3 and 15 fields.", bedPlus);
+    }
 ends = optionInt("ends", ends);
 hasBin = optionExists("hasBin");
 tabSep = optionExists("tab") || optionExists("tabSep");
