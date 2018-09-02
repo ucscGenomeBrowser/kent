@@ -2619,7 +2619,7 @@ static boolean findBigBed(char *db, struct hgFindSpec *hfs, char *spec,
 {
 struct trackDb *tdb = tdbFindOrCreate(db, NULL, hfs->searchTable);
 
-return findBigBedPosInTdbList(db, tdb, spec, hgp, hfs);
+return findBigBedPosInTdbList(cart, db, tdb, spec, hgp, hfs);
 }
 
 static boolean searchSpecial(char *db, struct hgFindSpec *hfs, char *term, int limitResults,
@@ -3249,7 +3249,7 @@ else if (!matchesHgvs(cart, db, term, hgp))
 	if (!trackHubDatabase(db))
 	    findTigrGenes(db, term, hgp);
 
-	trackHubFindPos(db, term, hgp);
+	trackHubFindPos(cart, db, term, hgp);
 	}
     hgFindSpecFreeList(&shortList);
     hgFindSpecFreeList(&longList);
