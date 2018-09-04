@@ -3965,9 +3965,9 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next, ix++)
     {
     char settingString[4096];
     safef(settingString, sizeof settingString, "%s%s", filterBy->column, FILTER_TYPE_NAME);
-    char *setting = cartOrTdbString(cart, tdb, settingString, NULL);
-    boolean isMultiple = (setting != NULL) && (sameString(setting, FILTERBY_MULTIPLE) ||sameString(setting, FILTERBY_MULTIPLE_LIST_OR) ||sameString(setting, FILTERBY_MULTIPLE_LIST_AND));
-
+    char *setting = cartOrTdbString(cart, tdb, settingString, FILTERBY_MULTIPLE_LIST_AND);
+    boolean isMultiple = sameString(setting, FILTERBY_MULTIPLE) ||sameString(setting, FILTERBY_MULTIPLE_LIST_OR) ||sameString(setting, FILTERBY_MULTIPLE_LIST_AND);
+   
     puts("<TD>");
     char selectStatement[4096];
     if (isMultiple)
@@ -3991,14 +3991,21 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next, ix++)
         printf(" one or more match</b> ");
         }
     // TODO: columnCount (Number of filterBoxes per row) should be configurable through tdb setting
-    #define FILTER_BY_FORMAT "<SELECT id='%s%d' name='%s' %s style='display: none; font-size:.9em;' class='filterBy'><BR>\n"
-    printf(FILTER_BY_FORMAT,selectIdPrefix,ix,filterBy->htmlName, isMultiple ? "multiple" : "");
 
     // value is always "All", even if label is different, to simplify javascript code
-    printf("<OPTION%s value=\"All\">%s</OPTION>\n", (filterByAllChosen(filterBy)?" SELECTED":""), allLabel);
+    if (isMultiple)
+        {
+        printf( "<SELECT id='%s%d' name='%s' multiple style='display: none; font-size:.9em;' class='filterBy'><BR>\n", selectIdPrefix,ix,filterBy->htmlName);
+        printf("<OPTION%s value=\"All\">%s</OPTION>\n", (filterByAllChosen(filterBy)?" SELECTED":""), allLabel);
+        ix = 1;
+        }
+    else
+        {
+        printf( "<SELECT id='%s%d' name='%s' style='font-size:.9em;'<BR>\n", selectIdPrefix,ix,filterBy->htmlName);
+        ix = 0;
+        }
     struct slName *slValue;
 
-    int ix=1;
     for (slValue=filterBy->slValues;slValue!=NULL;slValue=slValue->next,ix++)
 	{
 	char varName[32];
@@ -5893,11 +5900,22 @@ if (filterSettings)
         assert(ix > 0);
         field[ix] = '\0';
 
-        printf("<P><B>Filter items by regular expression in '%s' field: ", field);
+        printf("<P><B>Filter items in '%s' field: ", field);
 
         char cgiVar[128];
         safef(cgiVar,sizeof(cgiVar),"%s.%s",tdb->track,filter->name);
         cgiMakeTextVar(cgiVar, value, 45);
+
+        char settingString[4096];
+        safef(settingString, sizeof settingString, "%s%s", field, FILTER_TYPE_NAME);
+        setting = cartOrTdbString(cart, tdb, settingString, NULL);
+        safef(cgiVar,sizeof(cgiVar),"%s.%s",tdb->track,settingString);
+        printf(" using ");
+        printf("<SELECT name='%s'> ", cgiVar);
+        printf("<OPTION %s>%s</OPTION>", sameString(setting, FILTERTEXT_WILDCARD) ? "SELECTED" : "",  FILTERTEXT_WILDCARD );
+        printf("<OPTION %s>%s</OPTION>", sameString(setting, FILTERTEXT_REGEXP) ? "SELECTED" : "",  FILTERTEXT_REGEXP );
+        printf("</SELECT>");
+        printf("</P>");
         }
     }
 }

@@ -137,10 +137,23 @@ struct bigBedFilter *filter;
 char *setting = trackDbSettingClosestToHome(tdb, filterName);
 char *value = cartUsualStringClosestToHome(cart, tdb, FALSE, filterName, setting);
 
+char filterType[4096];
+safef(filterType, sizeof filterType, "%s%s", field, FILTER_TYPE_NAME);
+char *typeValue = cartOrTdbString(cart, tdb, filterType, FILTERTEXT_WILDCARD);
+
 AllocVar(filter);
 filter->fieldNum =  bbExtraFieldIndex(bbi, field) + 3;
-filter->comparisonType = COMPARE_REGEXP;
-regcomp(&filter->regEx, value, REG_NOSUB);
+
+if (sameString(typeValue, FILTERTEXT_REGEXP) )
+    {
+    filter->comparisonType = COMPARE_REGEXP;
+    regcomp(&filter->regEx, value, REG_NOSUB);
+    }
+else
+    {
+    filter->comparisonType = COMPARE_WILDCARD;
+    filter->wildCardString = cloneString(value);
+    }
 
 return filter;
 }
@@ -219,6 +232,10 @@ for(filter = filters; filter; filter = filter->next)
 
     switch(filter->comparisonType)
         {
+        case COMPARE_WILDCARD:
+            if ( !wildMatch(filter->wildCardString, bedRow[filter->fieldNum]))
+                return FALSE;
+            break;
         case COMPARE_REGEXP:
             if (regexec(&filter->regEx,bedRow[filter->fieldNum], 0, NULL,0 ) != 0)
                 return FALSE;

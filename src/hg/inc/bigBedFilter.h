@@ -7,6 +7,8 @@
 #define FILTERBY_SINGLE_LIST       "singleList"
 #define FILTERBY_MULTIPLE_LIST_OR  "multipleListOr"
 #define FILTERBY_MULTIPLE_LIST_AND "multipleListAnd"
+#define FILTERTEXT_WILDCARD        "wildcard"
+#define FILTERTEXT_REGEXP          "regexp"
 
 /* cart and tdb variables */
 #define FILTER_NUMBER_NAME    "Filter"
@@ -23,11 +25,12 @@ struct bigBedFilter
 {
 struct bigBedFilter *next;
 int fieldNum;   // the field number
-enum {COMPARE_LESS, COMPARE_MORE, COMPARE_BETWEEN, COMPARE_HASH, COMPARE_REGEXP, COMPARE_HASH_LIST_AND, COMPARE_HASH_LIST_OR } comparisonType;  // the type of the comparison
+enum {COMPARE_LESS, COMPARE_MORE, COMPARE_BETWEEN, COMPARE_HASH, COMPARE_REGEXP, COMPARE_WILDCARD, COMPARE_HASH_LIST_AND, COMPARE_HASH_LIST_OR } comparisonType;  // the type of the comparison
 double value1, value2;
 struct hash *valueHash;
 unsigned numValuesInHash;
 regex_t regEx;
+char *wildCardString;
 };
 
 struct bigBedFilter *bigBedMakeNumberFilter(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *filter, char *defaultLimits,  char *field);
