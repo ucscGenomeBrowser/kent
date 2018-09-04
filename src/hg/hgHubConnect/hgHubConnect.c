@@ -147,19 +147,22 @@ return string;
 }
 
 #define GENLISTWIDTH 40
-static void printGenomeList(struct slName *genomes, int row)
+static void printGenomeList(char *hubUrl, struct slName *genomes, int row)
 /* print supported assembly names from sl list */
 {
 /* List of associated genomes. */
 struct dyString *dy = newDyString(100);
 struct dyString *dyShort = newDyString(100);
 char *trimmedName = NULL;
-for(; genomes; genomes = genomes->next)
+int charCount = 0;
+struct slName *genome = genomes;
+for(; genome; genome = genome->next)
     {
-    trimmedName = trackHubSkipHubName(genomes->name);
+    trimmedName = trackHubSkipHubName(genome->name);
     dyStringPrintf(dy,"%s, ", trimmedName);
     if (dyShort->stringSize == 0 || (dyShort->stringSize+strlen(trimmedName)<=GENLISTWIDTH))
 	dyStringPrintf(dyShort,"%s, ", trimmedName);
+    charCount += strlen(trimmedName);
     }
 char *genomesString = removeLastComma( dyStringCannibalize(&dy));
 char *genomesShort = removeLastComma( dyStringCannibalize(&dyShort));
@@ -168,7 +171,17 @@ if (strlen(genomesShort) > GENLISTWIDTH)  // If even the first element is too lo
     genomesShort[GENLISTWIDTH] = 0;
 if (strlen(genomesShort)==strlen(genomesString))
     {
-    safef(tempHtml, sizeof tempHtml, "%s", genomesString);
+    struct dyString *tempHtmlSrc = newDyString(1000);
+    genome = genomes;
+    for(; genome; genome = genome->next)
+        {
+        trimmedName = trackHubSkipHubName(genome->name);
+        dyStringPrintf(tempHtmlSrc,"<a href='hgTracks?hubUrl=%s&genome=%s'>%s</a>" , hubUrl, genome->name, trimmedName);
+        if (genome->next)
+            dyStringPrintf(tempHtmlSrc,", ");
+
+        }
+    safef(tempHtml, sizeof tempHtml, "%s", dyStringCannibalize(&tempHtmlSrc));
     }
 else
     {
@@ -209,7 +222,7 @@ for(; genomes; genomes = genomes->next)
     slAddHead(&list, el);
     }
 slReverse(&list);
-printGenomeList(list, row);
+printGenomeList(thub->url, list, row);
 }
 
 
@@ -650,7 +663,7 @@ else
     ourCellEnd();
     }
 
-printGenomeList(dbListNames, count); 
+printGenomeList(hubInfo->hubUrl, dbListNames, count); 
 printf("</tr>\n");
 }
 
