@@ -166,7 +166,7 @@ struct dbDb *trackHubDbDbFromAssemblyDb(char *database);
 /* Return a dbDb structure for just this database. */
 
 struct hgPositions;
-void trackHubFindPos(char *db, char *term, struct hgPositions *hgp);
+void trackHubFindPos(struct cart *cart, char *db, char *term, struct hgPositions *hgp);
 /* Look for term in track hubs.  Update hgp if found */
 
 void trackHubAddDescription(char *trackDbFile, struct trackDb *tdb);

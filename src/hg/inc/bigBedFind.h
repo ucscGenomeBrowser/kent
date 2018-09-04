@@ -5,6 +5,6 @@
 
 #ifndef BIGBEDFIND_H
 #define BIGBEDFIND_H
-boolean findBigBedPosInTdbList(char *db, struct trackDb *tdbList, char *term, struct hgPositions *hgp, struct hgFindSpec *hfs);
+boolean findBigBedPosInTdbList(struct cart *cart, char *db, struct trackDb *tdbList, char *term, struct hgPositions *hgp, struct hgFindSpec *hfs);
 /* find a term in a list of tracks which may include a bigBed */ 
 #endif /* BIGBEDFIND_H */

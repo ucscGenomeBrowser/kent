@@ -25,6 +25,7 @@
 #include "net.h"
 #include "bigPsl.h"
 #include "bigBedFilter.h"
+#include "bigBedLabel.h"
 
 struct bigBedFilter *bigBedMakeNumberFilter(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *filter, char *defaultLimits,  char *field)
 /* Make a filter on this column if the trackDb or cart wants us to. */
@@ -365,44 +366,6 @@ return field;
 }
 
 
-char *makeLabel(struct track *track,  struct bigBedInterval *bb)
-// Build a label for a bigBedTrack from the requested label fields.
-{
-char *labelSeparator = stripEnclosingDoubleQuotes(trackDbSettingClosestToHome(track->tdb, "labelSeparator"));
-if (labelSeparator == NULL)
-    labelSeparator = "/";
-char *restFields[256];
-if (bb->rest != NULL)
-    chopTabs(cloneString(bb->rest), restFields);
-struct dyString *dy = newDyString(128);
-boolean firstTime = TRUE;
-struct slInt *labelInt = track->labelColumns;
-for(; labelInt; labelInt = labelInt->next)
-    {
-    if (!firstTime)
-        dyStringAppend(dy, labelSeparator);
-
-    switch(labelInt->val)
-        {
-        case 0:
-            dyStringAppend(dy, chromName);
-            break;
-        case 1:
-            dyStringPrintf(dy, "%d", bb->start);
-            break;
-        case 2:
-            dyStringPrintf(dy, "%d", bb->end);
-            break;
-        default:
-            assert(bb->rest != NULL);
-            dyStringPrintf(dy, "%s", restFields[labelInt->val - 3]);
-            break;
-        }
-    firstTime = FALSE;
-    }
-return dyStringCannibalize(&dy);
-}
-
 void bigBedAddLinkedFeaturesFromExt(struct track *track,
 	char *chrom, int start, int end, int scoreMin, int scoreMax, boolean useItemRgb,
 	int fieldCount, struct linkedFeatures **pLfList, int maxItems)
@@ -465,7 +428,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     if (lf == NULL)
         continue;
 
-    lf->label = makeLabel(track,  bb);
+    lf->label = bigBedMakeLabel(track->tdb, track->labelColumns,  bb, chromName);
     if (sameString(track->tdb->type, "bigGenePred") || startsWith("genePred", track->tdb->type))
         {
         lf->original = genePredFromBigGenePred(chromName, bb); 
