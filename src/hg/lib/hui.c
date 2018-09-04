@@ -7203,7 +7203,7 @@ char classes[SMALLBUF];
 char javascript[JBUFSIZE];
 char id[256];
 #define CFG_LINK  "<B><A HREF=\"#a_cfg_%s\" id='%s' "\
-                  "title=\"%s Configuration\">%s</A><INPUT TYPE=HIDDEN " \
+                  "title=\"%s Configuration\">%s &#9662;</A><INPUT TYPE=HIDDEN " \
                   "NAME='%s.showCfg' value='%s'></B>"
 #define CFG_LINK_JS "return (showConfigControls('%s') == false);"
 #define MAKE_CFG_LINK(name,title,viewTrack,open) \
