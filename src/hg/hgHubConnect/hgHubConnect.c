@@ -147,7 +147,7 @@ return string;
 }
 
 #define GENLISTWIDTH 40
-static void printGenomeList(char *hubUrl, struct slName *genomes, int row)
+static void printGenomeList(char *hubUrl, struct slName *genomes, int row, boolean withLink)
 /* print supported assembly names from sl list */
 {
 /* List of associated genomes. */
@@ -176,7 +176,11 @@ if (strlen(genomesShort)==strlen(genomesString))
     for(; genome; genome = genome->next)
         {
         trimmedName = trackHubSkipHubName(genome->name);
-        dyStringPrintf(tempHtmlSrc,"<a href='hgTracks?hubUrl=%s&genome=%s'>%s</a>" , hubUrl, genome->name, trimmedName);
+        if (withLink)
+            dyStringPrintf(tempHtmlSrc,"<a href='hgTracks?hubUrl=%s&genome=%s'>%s</a>" , hubUrl, genome->name, trimmedName);
+        else
+            dyStringPrintf(tempHtmlSrc,"%s" , trimmedName);
+
         if (genome->next)
             dyStringPrintf(tempHtmlSrc,", ");
 
@@ -210,7 +214,7 @@ ourPrintCell(tempHtml);
 }
 
 
-static void printGenomes(struct trackHub *thub, int row)
+static void printGenomes(struct trackHub *thub, int row, boolean withLink)
 /* print supported assembly names from trackHub */
 {
 /* List of associated genomes. */
@@ -222,7 +226,7 @@ for(; genomes; genomes = genomes->next)
     slAddHead(&list, el);
     }
 slReverse(&list);
-printGenomeList(thub->url, list, row);
+printGenomeList(thub->url, list, row, withLink);
 }
 
 
@@ -322,7 +326,8 @@ for(hub = unlistedHubList; hub; hub = hub->next)
     else
 	ourPrintCell("");
 
-    if (!isEmpty(hub->errorMessage))
+    boolean hubHasError = (!isEmpty(hub->errorMessage));
+    if (hubHasError)
 	{
 	ourCellStart();
 	printf("<span class=\"hubError\">ERROR: %s </span>"
@@ -349,8 +354,9 @@ for(hub = unlistedHubList; hub; hub = hub->next)
     else
 	ourPrintCell("");
 
+
     if (hub->trackHub != NULL)
-	printGenomes(hub->trackHub, count);
+	printGenomes(hub->trackHub, count, !hubHasError);
     else
 	ourPrintCell("");
 
@@ -639,7 +645,8 @@ else
 
 ourPrintCellLink(hubInfo->shortLabel, hubInfo->hubUrl);
 
-if (isEmpty(hubInfo->errorMessage))
+boolean hubHasNoError = isEmpty(hubInfo->errorMessage);
+if (hubHasNoError)
     {
     if (hubInfo->tableHasDescriptionField && !isEmpty(hubInfo->descriptionUrl))
         ourPrintCellLink(hubInfo->longLabel, hubInfo->descriptionUrl);
@@ -663,7 +670,7 @@ else
     ourCellEnd();
     }
 
-printGenomeList(hubInfo->hubUrl, dbListNames, count); 
+printGenomeList(hubInfo->hubUrl, dbListNames, count, hubHasNoError); 
 printf("</tr>\n");
 }
 
