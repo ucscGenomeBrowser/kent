@@ -169,7 +169,7 @@ for(; genome; genome = genome->next)
     if (charCount == 0 || (charCount+strlen(trimmedName)<=GENLISTWIDTH))
         { 
         if (withLink)
-            dyStringPrintf(dyShortHtml,"<a href='hgTracks?hubUrl=%s&genome=%s'>%s</a>" , hubUrl, genome->name, shortName);
+            dyStringPrintf(dyShortHtml,"<a title='Connect hub and open the %s assembly' href='hgTracks?hubUrl=%s&genome=%s'>%s</a>" , genome->name, hubUrl, genome->name, shortName);
         else
             dyStringPrintf(dyShortHtml,"%s" , shortName);
         dyStringPrintf(dyShortHtml,", ");
@@ -180,7 +180,7 @@ for(; genome; genome = genome->next)
 
     // always append to dyHtml
     if (withLink)
-        dyStringPrintf(dyHtml,"<a href='hgTracks?hubUrl=%s&genome=%s'>%s</a>" , hubUrl, genome->name, trimmedName);
+        dyStringPrintf(dyHtml,"<a title='Connect hub and open the %s assembly' href='hgTracks?hubUrl=%s&genome=%s'>%s</a>" , genome->name, hubUrl, genome->name, trimmedName);
     else
         dyStringPrintf(dyHtml,"%s" , trimmedName);
 
