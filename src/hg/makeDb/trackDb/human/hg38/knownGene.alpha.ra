@@ -17,7 +17,7 @@ defaultLinkedTables kgXref
 intronGap 12
 html knownGene
 isGencode2 on
-#bigGeneDataUrl /gbdb/hg38/knownGene.bb
+bigGeneDataUrl /gbdb/hg38/knownGene.bb
 
 track knownGeneOld9
 shortLabel Old UCSC Genes
