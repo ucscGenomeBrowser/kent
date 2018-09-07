@@ -1,7 +1,7 @@
 
 track knownGene 
-shortLabel GENCODE v26
-longLabel  GENCODE v26 Comprehensive Transcript Set (only Basic displayed by default)
+shortLabel GENCODE v29
+longLabel  GENCODE v29 Comprehensive Transcript Set (only Basic displayed by default)
 group genes
 visibility pack
 priority 1
@@ -15,9 +15,9 @@ baseColorUseCds given
 baseColorDefault genomicCodons
 defaultLinkedTables kgXref
 intronGap 12
-isGencode on
 html knownGene
-bigGeneDataUrl /gbdb/hg38/knownGene.bb
+isGencode2 on
+#bigGeneDataUrl /gbdb/hg38/knownGene.bb
 
 track knownGeneOld9
 shortLabel Old UCSC Genes
