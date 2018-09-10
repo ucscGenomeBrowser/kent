@@ -5909,7 +5909,7 @@ if (filterSettings)
 
         char settingString[4096];
         safef(settingString, sizeof settingString, "%s%s", field, FILTER_TYPE_NAME);
-        setting = cartOrTdbString(cart, tdb, settingString, NULL);
+        setting = cartOrTdbString(cart, tdb, settingString, FILTERTEXT_WILDCARD);
         safef(cgiVar,sizeof(cgiVar),"%s.%s",tdb->track,settingString);
         printf(" using ");
         printf("<SELECT name='%s'> ", cgiVar);
