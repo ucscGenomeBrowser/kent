@@ -3980,7 +3980,7 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next, ix++)
 	printf("<B>%s</B>",filterBy->title);
     printf("<BR>\n");
 
-    if (isMultiple)
+    if (isMultiple && tdbIsBigBed(tdb))
         {
         char cartSettingString[4096];
         safef(cartSettingString, sizeof cartSettingString, "%s.%s", tdb->track, settingString);
@@ -3993,27 +3993,28 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next, ix++)
     // TODO: columnCount (Number of filterBoxes per row) should be configurable through tdb setting
 
     // value is always "All", even if label is different, to simplify javascript code
+    int valIx = 0;
     if (isMultiple)
         {
         printf( "<SELECT id='%s%d' name='%s' multiple style='display: none; font-size:.9em;' class='filterBy'><BR>\n", selectIdPrefix,ix,filterBy->htmlName);
         printf("<OPTION%s value=\"All\">%s</OPTION>\n", (filterByAllChosen(filterBy)?" SELECTED":""), allLabel);
-        ix = 1;
+        valIx = 1;
         }
     else
         {
         printf( "<SELECT id='%s%d' name='%s' style='font-size:.9em;'<BR>\n", selectIdPrefix,ix,filterBy->htmlName);
-        ix = 0;
+        valIx = 0;
         }
     struct slName *slValue;
 
-    for (slValue=filterBy->slValues;slValue!=NULL;slValue=slValue->next,ix++)
+    for (slValue=filterBy->slValues;slValue!=NULL;slValue=slValue->next,valIx++)
 	{
 	char varName[32];
 	char *label = NULL;
 	char *name = NULL;
 	if (filterBy->useIndex)
 	    {
-	    safef(varName, sizeof(varName), "%d",ix);
+	    safef(varName, sizeof(varName), "%d",valIx);
 	    name = varName;
 	    label = slValue->name;
 	    }
@@ -5908,7 +5909,7 @@ if (filterSettings)
 
         char settingString[4096];
         safef(settingString, sizeof settingString, "%s%s", field, FILTER_TYPE_NAME);
-        setting = cartOrTdbString(cart, tdb, settingString, NULL);
+        setting = cartOrTdbString(cart, tdb, settingString, FILTERTEXT_WILDCARD);
         safef(cgiVar,sizeof(cgiVar),"%s.%s",tdb->track,settingString);
         printf(" using ");
         printf("<SELECT name='%s'> ", cgiVar);

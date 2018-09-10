@@ -1,4 +1,7 @@
-# DONE braney 2017-05-28
+# DONE braney 2018-09-06
+# this procedure is not perfect.  Lots of suspicious stuff in the results, probably
+# because the source pages don't follow the same format.
+
 mkdir /hive/groups/browser/wikipediaScrape
 cd /hive/groups/browser/wikipediaScrape
 # get all the pages in the category "Human Proteins"
@@ -7,14 +10,17 @@ wget "https://petscan.wmflabs.org/?format=tsv&language=en&project=wikipedia&dept
 mkdir pages
 for i in `tawk '{print $2}' humanProteins.lst`; 
 do echo $i; 
-wget "https://en.wikipedia.org/wiki/$i" -O pages/$i; 
+# deal with slashes in names
+f=`echo $i | sed 's?/?TWTWTWTW?g' `;
+wget "https://en.wikipedia.org/wiki/$i" -O pages/$f; 
 sleep 2;
 done
 
 # create a mapping of symbols to pages
 for i in pages/*; 
 do 
-    f=`basename $i`; 
-    grep genenames $i | sed 's/.*hgnc_id.*">//' | sed 's?</a></span>&#160;;?;?' | sed 's/<.*//' | \
+
+    f=`basename $i | sed 's?TWTWTWTW?/?g'`; 
+    grep genenames $i | sed 's/.*hgnc_id=[0-9]*">//' | sed 's?</a></span>&#160;;?;?' | sed 's/<.*//' | \
     awk -v name=$f  'BEGIN {OFS="\t"} {n=split($0, a, ";");for (ii=1; ii<= n; ii++) print a[ii],name}'; 
 done | tr -d ' ' | sort  > symbolToPage.txt

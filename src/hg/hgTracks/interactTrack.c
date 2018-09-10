@@ -77,11 +77,6 @@ if (slCount(tg->items) == 0 && tg->limitedVisSet)
 }
 
 // filters
-
-// score filter
-char buf[1024];
-safef(buf, sizeof buf, "%s.%s", tg->tdb->track, INTERACT_MINSCORE);
-int minScore = cartUsualInt(cart, buf, 0);
 struct interact *inter, *next, *filteredItems = NULL;
 int count = slCount(tg->items);
 
@@ -91,8 +86,6 @@ char *endsVisible = cartUsualStringClosestToHome(cart, tg->tdb, FALSE,
 for (inter = tg->items; inter; inter = next)
     {
     next = inter->next;
-    if (inter->score < minScore)
-        continue;
     if (differentString(endsVisible, INTERACT_ENDS_VISIBLE_ANY))
         {
         boolean sOnScreen = interactSourceInWindow(inter);

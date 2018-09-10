@@ -6240,6 +6240,24 @@ return newList;
 
 #define BIT_BASIC       (1 << 0)        // transcript is in basic set
 #define BIT_CANON       (1 << 1)        // transcript is in canonical set
+#define BIT_PSEUDO      (1 << 2)        // transcript is a pseudogene
+
+struct linkedFeatures *stripLinkedFeaturesWithBitInScore (struct linkedFeatures *list, unsigned bit)
+/* Remove features that don't have this bit set in the score. */
+{
+struct linkedFeatures *newList = NULL, *el, *next;
+for (el = list; el != NULL; el = next)
+    {
+    next = el->next;
+    el->next = NULL;
+    if (!((unsigned)el->score & bit))
+        {
+        slAddHead(&newList, el);
+        }
+    }
+slReverse(&newList);
+return newList;
+}
 
 struct linkedFeatures *stripLinkedFeaturesWithoutBitInScore (struct linkedFeatures *list, unsigned bit)
 /* Remove features that don't have this bit set in the score. */
@@ -6294,6 +6312,10 @@ if (isGencode)
     boolean showComprehensive = cartUsualBoolean(cart, varName, FALSE);
     if (!showComprehensive)
         newList = stripLinkedFeaturesWithoutBitInScore(lfList,  BIT_BASIC);
+    safef(varName, sizeof(varName), "%s.show.pseudo", tg->tdb->track);
+    boolean showPseudo = cartUsualBoolean(cart, varName, FALSE);
+    if (!showPseudo)
+        newList = stripLinkedFeaturesWithBitInScore(lfList,  BIT_PSEUDO);
     }
 
 slSort(&newList, linkedFeaturesCmp);
