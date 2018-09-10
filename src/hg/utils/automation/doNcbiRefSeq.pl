@@ -294,8 +294,12 @@ export db=$db
 export gff3ToRefLink=$gff3ToRefLink
 export gbffToCds=$gbffToCds
 
+export annotationRelease=`zcat \$ncbiGffGz | head -100 | grep ^#.annotation-source | sed -e 's/.*annotation-source //'`
+if [ "\$annotationRelease" == "" ]; then
+  export annotationRelease=\$asmId
+fi
 export versionDate=`ls -L --full-time \$ncbiGffGz | awk '{print \$6;}'`
-echo "\$asmId (\$versionDate)" > ncbiRefSeqVersion.txt
+echo "\$annotationRelease (\$versionDate)" > ncbiRefSeqVersion.txt
 
 # this produces the genePred in NCBI coordinates
 # 8/23/17: gff3ToGenePred quits over illegal attribute SO_type... make it legal (so_type):
