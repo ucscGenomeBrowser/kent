@@ -569,8 +569,14 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         // can not support offsets
         int yLeft = yOff + peakHeight;
         int yTop = yOff - peakHeight;
-        // TODO: flipped mode
-        hvGfxEllipseDraw(hvg, lowerX, yLeft, upperX, yTop, color, ELLIPSE_BOTTOM, 
+        int ellipseOrient = ELLIPSE_BOTTOM;
+        if (drawUp)
+            {
+            ellipseOrient = ELLIPSE_TOP;
+            yLeft = yOff + tg->height - peakHeight;
+            yTop = yOff + tg->height + peakHeight;
+            }
+        hvGfxEllipseDraw(hvg, lowerX, yLeft, upperX, yTop, color, ellipseOrient,
                                 isReversed && doDashes);
         // draw grab box and map box on peak
         int maxY = peakHeight + yOff;
