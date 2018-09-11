@@ -557,10 +557,10 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
             peakY = flipY(tg, peakY);
             }
         int maxY = hvGfxCurve(hvg, lowerX, y1, peakX, peakY, upperX, y2, color, isReversed && doDashes);
-        if (drawUp)
-            maxY = maxY - fudge - 5;
         // curve drawer does not use peakY as expected, so it returns actual max Y used
         // draw grab box and map box on peak
+        if (drawUp)
+            maxY = (maxY - peakY)/2 + 3 + tg->customInt;        // derived experimentally !
         drawPeakMapbox(tg, hvg, inter->chromStart, inter->chromEnd, inter->name, statusBuf,
                             peakX, maxY, peakColor, highlightColor, drawUp);
         }
