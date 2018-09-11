@@ -348,7 +348,6 @@ double scale = scaleForWindow(width, seqStart, seqEnd);
 struct interact *inter = NULL;
 char buffer[1024];
 char itemBuf[2048];
-int chromStart, chromEnd;
 
 // Gather info for layout
 struct interactTrackInfo *tInfo = interactGetTrackInfo(tg, seqStart, hvg, xOff, font, scale);
@@ -419,7 +418,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
                         x - footWidth, yOffOther, footWidth, peakColor, highlightColor, drawUp);
 
         // add map box to vertical
-        mapBoxHgcOrHgGene(hvg, chromStart, chromEnd, x - 2, yOffOther, 4, 
+        mapBoxHgcOrHgGene(hvg, inter->chromStart, inter->chromEnd, x - 2, yOffOther, 4, 
                             height, tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
         if (tInfo->doOtherLabels)
             {
@@ -432,7 +431,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
             int labelWidth = vgGetFontStringWidth(hvg->vg, font, buffer);
 
             // add map box to label
-            mapBoxHgcOrHgGene(hvg, chromStart, chromEnd, x - labelWidth/2, 
+            mapBoxHgcOrHgGene(hvg, inter->chromStart, inter->chromEnd, x - labelWidth/2, 
                     yPos, labelWidth, tInfo->fontHeight, tg->track, itemBuf, statusBuf, 
                     NULL, TRUE, NULL);
             }
@@ -499,9 +498,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         continue;
 
     // Full mode: add map boxes and draw interaction
-    chromStart = inter->chromStart;
-    chromEnd = inter->chromEnd;
-   
+
     if (sOnScreen)
         {
         // draw grab box and map box to source region
@@ -537,7 +534,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
 
         // draw grab box and map box on mid-point of horizontal line
         int xMap = lowerX + (double)(upperX-lowerX)/2;
-        drawPeakMapbox(tg, hvg, chromStart, chromEnd, itemBuf, statusBuf,
+        drawPeakMapbox(tg, hvg, inter->chromStart, inter->chromEnd, itemBuf, statusBuf,
                             xMap, peak, peakColor, highlightColor, drawUp);
         continue;
         }
