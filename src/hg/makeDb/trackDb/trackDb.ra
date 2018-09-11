@@ -1040,6 +1040,17 @@ group regulation
 urls geneIds=https://www.ncbi.nlm.nih.gov/gene?cmd=Retrieve&dopt=full_report&list_uids=$$ pubMedIds=https://www.ncbi.nlm.nih.gov/pubmed/$$ soTerm=http://www.sequenceontology.org/browser/obob.cgi?rm=term_list&release=current_svn&obo_query=$$
 mouseOverField _mouseOver
 
+track xenoClinvar
+shortLabel Human Variants
+longLabel ClinVar Variants mapped to Mouse
+type bigBed 9 +
+itemRgb on
+bigDataUrl /gbdb/mm10/bbi/xenoClinvar.bb
+group x
+mouseOverField _mouseOver
+urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
+release alpha
+
 track snp148Common
 shortLabel Common SNPs(148)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 148) Found in >= 1% of Samples

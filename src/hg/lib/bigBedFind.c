@@ -8,15 +8,19 @@
 #include "hubConnect.h"
 #include "hdb.h"
 #include "errCatch.h"
+#include "bigBedLabel.h"
+#include "bigBedFind.h"
 
-static struct hgPos *bigBedIntervalListToHgPositions(struct bbiFile *bbi, char *term, struct bigBedInterval *intervalList, char *description)
+static struct hgPos *bigBedIntervalListToHgPositions(struct cart *cart, struct trackDb *tdb,  struct bbiFile *bbi, char *term, struct bigBedInterval *intervalList, char *description)
 /* Given an open bigBed file, and an interval list, return a pointer to a list of hgPos structures. */
 {
 struct hgPos *posList = NULL;
 char chromName[bbi->chromBpt->keySize+1];
 int lastChromId = -1;
 struct bigBedInterval *interval;
+struct slInt *labelColumns = NULL;
 
+bigBedLabelCalculateFields(cart, tdb, bbi,  &labelColumns );
 for (interval = intervalList; interval != NULL; interval = interval->next)
     {
     struct hgPos *hgPos;
@@ -29,7 +33,7 @@ for (interval = intervalList; interval != NULL; interval = interval->next)
     hgPos->chrom = cloneString(chromName);
     hgPos->chromStart = interval->start;
     hgPos->chromEnd = interval->end;
-    hgPos->name = cloneString(term);
+    hgPos->name = bigBedMakeLabel(tdb, labelColumns, interval, chromName);
     hgPos->browserName = cloneString(term);
     hgPos->description = cloneString(description);
     }
@@ -37,7 +41,7 @@ for (interval = intervalList; interval != NULL; interval = interval->next)
 return posList;
 }
 
-static struct hgPos *getPosFromBigBed(char *bigDataUrl, char *indexField, char *term, char *description)
+static struct hgPos *getPosFromBigBed(struct cart * cart, struct trackDb *tdb, char *bigDataUrl, char *indexField, char *term, char *description)
 /* Given a bigBed file with a search index, check for term. */
 {
 struct errCatch *errCatch = errCatchNew();
@@ -51,7 +55,7 @@ if (errCatchStart(errCatch))
     struct bigBedInterval *intervalList;
     intervalList = bigBedNameQuery(bbi, bpt, fieldIx, term, lm);
 
-    posList = bigBedIntervalListToHgPositions(bbi, term, 
+    posList = bigBedIntervalListToHgPositions(cart, tdb,  bbi, term, 
         intervalList, description);
     bbiFileClose(&bbi);
     }
@@ -63,7 +67,7 @@ if (errCatch->gotError)
 return posList;
 }
 
-static struct hgPos *doTrixSearch(char *trixFile, struct slName  *indices, char *bigDataUrl, char *term, char *description)
+static struct hgPos *doTrixSearch(struct cart *cart, struct trackDb *tdb, char *trixFile, struct slName  *indices, char *bigDataUrl, char *term, char *description)
 /* search a trix file in the "searchTrix" field of a bigBed trackDb */
 {
 struct trix *trix = trixOpen(trixFile);
@@ -92,7 +96,7 @@ for ( ; tsList != NULL; tsList = tsList->next)
     struct slName *oneIndex = indices;
     for (; oneIndex; oneIndex = oneIndex->next)
 	{
-	struct hgPos *posList2 = getPosFromBigBed(bigDataUrl, oneIndex->name, tsList->itemId, description);
+	struct hgPos *posList2 = getPosFromBigBed(cart, tdb, bigDataUrl, oneIndex->name, tsList->itemId, description);
 
 	posList = slCat(posList, posList2);
 	}
@@ -102,7 +106,7 @@ return posList;
 }
 
 
-boolean findBigBedPosInTdbList(char *db, struct trackDb *tdbList, char *term, struct hgPositions *hgp, struct hgFindSpec *hfs)
+boolean findBigBedPosInTdbList(struct cart *cart, char *db, struct trackDb *tdbList, char *term, struct hgPositions *hgp, struct hgFindSpec *hfs)
 /* Given a list of trackDb entries, check each of them for a searchIndex */
 {
 char *description = NULL;
@@ -120,7 +124,7 @@ boolean found = FALSE;
 for(tdb=tdbList; tdb; tdb = tdb->next)
     {
     if (tdb->subtracks)
-        found = findBigBedPosInTdbList(db, tdbList->subtracks, term, hgp, hfs) || found;
+        found = findBigBedPosInTdbList(cart, db, tdbList->subtracks, term, hgp, hfs) || found;
 
     char *indexField = trackDbSetting(tdb, "searchIndex");
     char *fileName = NULL;
@@ -146,7 +150,7 @@ for(tdb=tdbList; tdb; tdb = tdb->next)
         struct errCatch *errCatch = errCatchNew();
         if (errCatchStart(errCatch))
             {
-            posList1 = doTrixSearch(hReplaceGbdb(trixFile), indexList, fileName, term, NULL);
+            posList1 = doTrixSearch(cart, tdb, hReplaceGbdb(trixFile), indexList, fileName, term, NULL);
             }
         errCatchEnd(errCatch);
         if (errCatch->gotError)
@@ -158,7 +162,7 @@ for(tdb=tdbList; tdb; tdb = tdb->next)
     struct slName *oneIndex=indexList;
     for (; oneIndex; oneIndex = oneIndex->next)
 	{
-	posList2 = getPosFromBigBed(fileName, oneIndex->name, term, NULL);
+	posList2 = getPosFromBigBed(cart, tdb, fileName, oneIndex->name, term, NULL);
 	posList1 = slCat(posList1, posList2);
 	}
 

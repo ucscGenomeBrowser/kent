@@ -7016,3 +7016,41 @@ cd kent/src/hg/makeDb/trackDb
 
     featureBits -countGaps hg38 rmskJoinedCurrent
     # 2796899855 bases of 3209286105 (87.150%) in intersection
+#########################################################################
+2018-09-05: import of UCSC GENCODE group processing of GENCODE V29 (markd)
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # This is a pre-release from
+    # ftp://ftp.ebi.ac.uk/pub/databases/havana/gencode_pre/Gencode_human/release_29/
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg38/bed/gencodeV29
+    pushd /hive/data/genomes/hg38/bed/gencodeV29
+
+    # pre-release contained invalid biotype, fix for now
+    mv gencode.v29.chr_patch_hapl_scaff.annotation.gtf.gz  gencode.v29.chr_patch_hapl_scaff.annotation.orig.gtf.gz 
+    zcat gencode.v29.chr_patch_hapl_scaff.annotation.orig.gtf.gz | sed -e 's/"lincrna"/"lincRNA"/g' | gzip -c>  gencode.v29.chr_patch_hapl_scaff.annotation.gtf.gz
+    
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg38 29 94 'Sept 2018'
+
+    # Edit human/hg38/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release. [ONLY if it's going to be pushed]
+
+    # edit human/hg38/trackDb.wgEncode.ra to add new .ra file include
+    make DBS=hg38
+
+    # edit  all.joiner to add ~/tmp/gencodeV29.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg38/bed/gencodeV29
+    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # commit all
+
+#########################################################################

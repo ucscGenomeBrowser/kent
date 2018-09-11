@@ -891,7 +891,7 @@ char *line;
 if (!lineFileNext(g3f->lf, &line, NULL))
     gff3FileErr(g3f, FALSE, "empty GFF file, must have header");
 char *ver = skipToSpaces(line);
-if (*ver != '\0')
+if ((ver != NULL) && (*ver != '\0'))
     {
     *ver++ = '\0';
     ver = trimSpaces(ver);

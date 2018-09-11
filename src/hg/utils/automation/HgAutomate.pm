@@ -291,7 +291,7 @@ sub getFileServer {
   my $host = `df $path 2>&1 | grep -v Filesystem`;
   if ($host =~ /(\S+):\/.*/) {
     return $1;
-  } elsif ($host =~ /^\/\w/) {
+  } else {
     my $localhost = `uname -n`;	# HOST not always present
     if ($localhost =~ s/^(\w+)(\..*)?$/$1/) {
       return $localhost;

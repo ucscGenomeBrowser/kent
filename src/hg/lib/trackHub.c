@@ -1125,7 +1125,7 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
 
 
 
-void trackHubFindPos(char *db, char *term, struct hgPositions *hgp)
+void trackHubFindPos(struct cart *cart, char *db, char *term, struct hgPositions *hgp)
 /* Look for term in track hubs.  Update hgp if found */
 {
 struct trackDb *tdbList = NULL;
@@ -1137,7 +1137,7 @@ if (trackHubDatabase(db))
 else
     tdbList = hubCollectTracks(db, NULL);
 
-findBigBedPosInTdbList(db, tdbList, term, hgp, NULL);
+findBigBedPosInTdbList(cart, db, tdbList, term, hgp, NULL);
 }
 
 boolean trackHubGetBlatParams(char *database, boolean isTrans, char **pHost, char **pPort)

@@ -88,8 +88,6 @@ for (dirEl = dirList; dirEl != NULL; dirEl = dirEl->next)
 	else
 	    errAbort("%s is empty\n", name);
 	}
-    if (!isupper(line[0]))
-	notFold(path, 1);
     fprintf(f, "%s\t", name);	/* Save name */
     fprintf(f, "%s\t", line);	/* Save sequence */
     lineFileNeedNext(lf, &line, NULL);

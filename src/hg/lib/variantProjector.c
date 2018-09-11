@@ -1592,6 +1592,8 @@ if (posLeft.region == vpIntron)
     posRight.intron3TxOffset = psl->qStarts[exonBlkIx];
     posRight.intron3Distance = 0;
     posRight.gOffset = gRight;
+    // posRight's aliBlkIx is for the exon following the intron; decrement to get intron blkIx.
+    posRight.aliBlkIx--;
     }
 else if (posRight.region == vpIntron)
     {

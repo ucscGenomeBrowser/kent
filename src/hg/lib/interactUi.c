@@ -115,8 +115,6 @@ if (startsWith("big", tdb->type))
 //printf("\n<table id=interactControls style='font-size:%d%%' %s>\n<tr><td>",
         //isPopup ? 75 : 100, boxed ?" width='100%'":"");
 puts("<p>");
-interactUiMinScore(cart, track, tdb);
-puts("</p><p>");
 interactUiEndpointFilter(cart, track, tdb);
 puts("</p><p>");
 interactUiTrackHeight(cart, track, tdb);
@@ -125,5 +123,6 @@ interactUiDrawMode(cart, track, tdb);
 puts("</p><p>");
 interactUiDashedLines(cart, track, tdb);
 puts("</p>");
+scoreCfgUi(database, cart,tdb,tdb->track,"",1000,FALSE);
 cfgEndBox(boxed);
 }
