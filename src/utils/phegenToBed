@@ -37,16 +37,12 @@ def main():
         if line.startswith("#"):
             continue
         row = line.rstrip("\n").split("\t")
-
-        if row[-2]!="":
-            row[-2] = "phs%06d" % int(row[-2])
-        if row[2]!="":
-            row[2] = "rs"+row[2]
-
         _, trait, snpId, context, gene, geneId, gene2, geneId2, chrom, start, pVal, source, pmid, analysisId, studyId, studyName = row
         #if source=="NHGRI": # remove GWAS catalog for now?
             #continue
         # need phsxxxxxx for linkout to NCBI
+        if row[-2]!="":
+            row[-2] = "phs%06d" % int(row[-2])
         extraCount = len(row)
         bySnp[snpId].append(row)
 
@@ -57,7 +53,7 @@ def main():
         snpId = line.rstrip("\n").split('\t')[3]
         chrom, start, end, name = line.split("\t") # has chrom, start, end, name
         bed = [chrom, start, end, name]
-        rows = bySnp.get(snpId, None)
+        rows = bySnp.get(snpId.replace("rs",""), None)
         if rows==None:
             continue
 
@@ -73,15 +69,10 @@ def main():
         for i in range(1, extraCount):
             extras.append( [] )
 
-        hasGwasCatalog = False
         for row in rows:
             for i in range(1, len(row)):
                 #print row, i, len(row)
                 extras[i-1].append(row[i].replace(",", ";"))
-                _, trait, snpId, context, gene, geneId, gene2, geneId2, chrom, start, pVal, source, pmid, analysisId, studyId, studyName = row
-
-                if source=="NHGRI":
-                    hasGwasCatalog = True
 
         extras = [", ".join(x) for x in extras]
 
@@ -94,11 +85,6 @@ def main():
         if len(traitShort) > 17:
             traitShort = traitShort[:16]+".."
         bed[3] = traitShort
-
-        if hasGwasCatalog:
-            bed.append(snpId)
-        else:
-            bed.append("")
 
         print "\t".join(bed)
 

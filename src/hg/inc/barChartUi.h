@@ -14,23 +14,16 @@
 #define BAR_CHART_COLORS_DEFAULT             BAR_CHART_COLORS_USER
 
 /* Data transform */
-
-// WARNING: these also appear in JS
+    // WARNING: this also appears in JS
 #define BAR_CHART_LOG_TRANSFORM              "logTransform"
 #define BAR_CHART_LOG_TRANSFORM_DEFAULT      TRUE
-#define BAR_CHART_AUTOSCALE                  "autoScale"
-#define BAR_CHART_AUTOSCALE_DEFAULT           FALSE
 
 /* Data range and viewing limits */
 #define BAR_CHART_MAX_LIMIT                  "maxLimit"
 #define BAR_CHART_MAX_LIMIT_DEFAULT          10000
+    // WARNING: this also appears in JS
 #define BAR_CHART_MAX_VIEW_LIMIT             "maxViewLimit"
 #define BAR_CHART_MAX_VIEW_LIMIT_DEFAULT     50
-
-/* These cann be set via maxHeightPixels */
-#define BAR_CHART_MAX_HEIGHT_MIN             50
-#define BAR_CHART_MAX_HEIGHT_DEFAULT         175
-#define BAR_CHART_MAX_HEIGHT_MAX             250
 
 /* Category (bar) info */
 #define BAR_CHART_MAX_CATEGORIES        100
@@ -91,9 +84,5 @@ char *barChartUiGetCategoryLabelById(int id, char *database, struct trackDb *tdb
 
 char *barChartUiGetLabel(char *database, struct trackDb *tdb);
 /* Get label for category list */
-
-void barChartUiFetchMinMaxPixels(struct cart *cart, struct trackDb *tdb, 
-                                int *retMin, int *retMax, int *retDefault, int *retCurrent);
-/* Get min/max/default/current settings for track height from cart and trackDb */
 
 #endif /* BAR_CHARTUI_H */
