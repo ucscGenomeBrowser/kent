@@ -11,7 +11,7 @@
 #include "interact.h"
 #include "interactUi.h"
 
-static struct interact *getInteractFromTable(struct trackDb *tdb, char *chrom, int start, int end,
+static struct interact *getInteractsFromTable(struct trackDb *tdb, char *chrom, int start, int end,
                                                 char *foot)
 /* Retrieve interact items at this position from track table */
 {
@@ -47,7 +47,8 @@ hFreeConn(&conn);
 return inters;
 }
 
-static struct interact *getInteractFromFile(char *file, char *chrom, int start, int end, char *foot)
+static struct interact *getInteractsFromFile(char *file, char *chrom, int start, int end, 
+                                                char *foot)
 /* Retrieve interact items at this position from big file */
 {
 struct bbiFile *bbi = bigBedFileOpen(file);
@@ -69,15 +70,16 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 return inters;
 }
 
-static struct interact *getInteractions(struct trackDb *tdb, char *chrom, int start, int end, char *foot)
+static struct interact *getInteractions(struct trackDb *tdb, char *chrom, int start, int end, 
+                                                char *foot)
 /* Retrieve interact items at this position. Also any others with the same endpoint, if endpoint clicked on*/
 {
 struct interact *inters = NULL;
 char *file = trackDbSetting(tdb, "bigDataUrl");
 if (file != NULL)
-    inters = getInteractFromFile(file, chrom, start, end, foot);
+    inters = getInteractsFromFile(file, chrom, start, end, foot);
 else
-    inters = getInteractFromTable(tdb, chrom, start, end, foot);
+    inters = getInteractsFromTable(tdb, chrom, start, end, foot);
 slSort(&inters, bedCmpScore);
 slReverse(&inters);
 return inters;

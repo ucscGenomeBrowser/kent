@@ -259,6 +259,13 @@ struct bed *bed = (struct bed *)tg->items;
 /* Load category colors */
 extras->colors = getCategoryColors(tg);
 
+/* Test that configuration matches data file */
+int categCount = getCategoryCount(tg);
+int expCount = bed->expCount;
+if (categCount != expCount)
+    warn("Bar chart track: category count mismatch between trackDb (%d) and data file (%d)",
+                        categCount, expCount);
+
 filterCategories(tg);
 
 while (bed != NULL)

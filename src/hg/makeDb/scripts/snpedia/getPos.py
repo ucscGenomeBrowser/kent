@@ -7,13 +7,13 @@ doSnps = set([x.split("/")[-1].split(".")[0] for x in doSnps])
 ofh19 = open("build/hg38/snpPos.bed", "w")
 ofh38 = open("build/hg19/snpPos.bed", "w")
 
-for snp in doSnps:
+for line in open("SNPedia.gff"):
    #print snp
-   cmd = """hgsql hg19 -NB -e 'select chrom, chromStart, chromEnd, name from snp150 where name="%s"'""" % snp
+   cmd = """hgsql hg19 -NB -e 'select chrom, chromStart, chromEnd, name from snp150 where name="%s"'""" % snpId
    line = os.popen(cmd).read()
    #print line
    if(len(line)<10):
-       print "%s not found in hg19" % snp
+       print "%s not found in hg19" % snpId
    ofh19.write(line)
 
    cmd = """hgsql hg38 -NB -e 'select chrom, chromStart, chromEnd, name from snp150 where name="%s"'""" % snp
