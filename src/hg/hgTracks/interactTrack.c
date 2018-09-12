@@ -556,7 +556,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         // curve drawer does not use peakY as expected, so it returns actual max Y used
         // draw grab box and map box on peak
         if (drawUp)
-            maxY = (maxY - peakY)/2 + tg->customInt;        // derived experimentally !
+            maxY = (maxY - peakY)/2 + tg->customInt;
         drawPeakMapbox(tg, hvg, inter->chromStart, inter->chromEnd, inter->name, statusBuf,
                             peakX, maxY, peakColor, highlightColor, drawUp);
         }
