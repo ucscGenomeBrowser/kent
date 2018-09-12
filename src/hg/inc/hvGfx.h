@@ -245,7 +245,8 @@ INLINE void hvGfxEllipseDraw(struct hvGfx *hvg, int x1, int y1, int x2, int y2, 
  */
 {
 x1 = hvGfxAdjXX(hvg, x1, &x2, &y1, &y2);
-vgEllipse(hvg->vg, x1, y1, x2, y2, color, mode, isDashed);
+// NOTE: dashed mode may cause a hang, so disabling for now
+vgEllipse(hvg->vg, x1, y1, x2, y2, color, mode, FALSE);
 }
 
 INLINE int hvGfxCurve(struct hvGfx *hvg, int x1, int y1, int x2, int y2, int x3, int y3,

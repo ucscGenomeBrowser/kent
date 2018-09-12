@@ -7,6 +7,7 @@
 #include "obscure.h"
 #include "hdb.h"
 #include "hgc.h"
+#include "trashDir.h"
 
 #include "interact.h"
 #include "interactUi.h"
@@ -163,6 +164,26 @@ if (distance > 0)
     printf("<b>Distance between midpoints:</b> %s bp<br>\n", sizeBuf); 
     }
 
+// print link to multi-region view of ends
+
+// create bed file in trash directory with end coordinates
+struct tempName mrTn;
+trashDirFile(&mrTn, "hgt", "custRgn_interact", ".bed");
+FILE *f = fopen(mrTn.forCgi, "w");
+if (f == NULL)
+    errAbort("can't create temp file %s", mrTn.forCgi);
+fprintf(f, "%s\t%d\t%d\n"
+           "%s\t%d\t%d\n",
+                region1Chrom, region1Start, region1End, 
+                region2Chrom, region2Start, region2End);
+fclose(f);
+printf("<br><a target='_blank' href='hgTracks?"
+                "virtMode=1"
+                "&virtModeType=customUrl"
+                "&multiRegionsBedUrl=%s'"
+        ">Show both ends of interaction in multi-region browser view</a>",
+                mrTn.forCgi);
+
 #ifdef TODO /* TODO: get count and score stats of all interactions in window ?*/
 double *scores;
 AllocArray(scores, count);
@@ -212,6 +233,7 @@ for (inter = inters; inter; inter = inter->next)
     if (count > 1 && !isEmptyTextField(inter->name) && sameString(inter->name, item))
         printf("<hr>\n");
     }
+
 }
 
 
