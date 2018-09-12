@@ -542,7 +542,6 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
     if (draw == DRAW_CURVE)
         {
         int peakX = ((upperX - lowerX + 1) / 2) + lowerX;
-        //int fudge = drawUp ? -30 : 30;
         int fudge = 30;
         int peakY = peak + fudge; // admittedly a hack (obscure how to define ypeak of curve)
         int y1 = isReversed ? yTarget : ySource;
@@ -557,7 +556,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         // curve drawer does not use peakY as expected, so it returns actual max Y used
         // draw grab box and map box on peak
         if (drawUp)
-            maxY = (maxY - peakY)/2 + 3 + tg->customInt;        // derived experimentally !
+            maxY = (maxY - peakY)/2 + tg->customInt;        // derived experimentally !
         drawPeakMapbox(tg, hvg, inter->chromStart, inter->chromEnd, inter->name, statusBuf,
                             peakX, maxY, peakColor, highlightColor, drawUp);
         }
