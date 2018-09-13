@@ -349,7 +349,6 @@ if (bedSize == 0)
     showUrl = TRUE;
     }
 
-
 char *scoreFilter = cartOrTdbString(cart, tdb, "scoreFilter", NULL);
 int minScore = 0;
 if (scoreFilter)
@@ -411,7 +410,6 @@ for (bb = bbList; bb != NULL; bb = bb->next)
             char **extraFields = (restFields + restBedFields);
             int extraFieldCount = restCount - restBedFields;
             int printCount = extraFieldsPrint(tdb,NULL,extraFields, extraFieldCount);
-
             struct slPair* extraFieldPairs = getExtraFields(tdb, extraFields, extraFieldCount);
             printAllExternalExtraFields(tdb, extraFieldPairs);
 
@@ -430,21 +428,16 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	if (sameString(tdb->type, "bigGenePred"))
 	    bigGenePredLinks(tdb->track, item);
 	}
-
-
     if (isCustomTrack(tdb->track))
 	{
 	time_t timep = bbiUpdateTime(bbi);
 	printBbiUpdateTime(&timep);
 	}
-
     }
-
 if (!found)
     {
     printf("No item %s starting at %d\n", emptyForNull(item), start);
     }
-
 lmCleanup(&lm);
 bbiFileClose(&bbi);
 }
