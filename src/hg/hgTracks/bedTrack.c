@@ -101,7 +101,7 @@ else if (tg->isBigBed)
         bed = loader(bedRow);
         // FIXME BRANEY: either disable for all tracks with NUM_FIELDS > label field or better,
         // fix how label is stored so it doesn't trash custom bed field
-        if (differentString(tg->tdb->type, "bigInteract"))
+        if (!(sameString(tg->tdb->type, "bigInteract") && tg->visibility != tvPack))
             bed->label = bigBedMakeLabel(tg->tdb, tg->labelColumns, bb, chromName);
 
         slAddHead(&list, bed);

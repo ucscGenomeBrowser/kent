@@ -98,6 +98,15 @@ struct interact *interactLoadAndValidate(char **row);
 /* Load a interact from row fetched with select * from interact
  * from database, validating fields.  Dispose of this with interactFree(). */
 
+#ifdef DEBUG
+struct bed *interactBedLoad(char **row);
+/* Load an interact from row fetched with select * from interact
+ * from database, as a BED12.  Dispose of this with bedFree(). */
+#endif
+
+struct bed *interactToBed(struct interact *inter);
+/* Convert an interact to a BED12 */
+
 char *interactOtherChrom(struct interact *inter);
 /* Get other chromosome from an interaaction. Return NULL if same chromosome */
 

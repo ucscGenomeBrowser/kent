@@ -74,7 +74,7 @@ if (slCount(tg->items) == 0 && tg->limitedVisSet)
     tg->networkErrMsg = "Too many items in display (zoom in)"; 
     tg->totalHeight = bigWarnTotalHeight;
     return;
-}
+    }
 
 // filters
 struct interact *inter, *next, *filteredItems = NULL;
@@ -109,6 +109,21 @@ slReverse(&filteredItems);
 if (slCount(filteredItems) != count)
     labelTrackAsFiltered(tg);
 tg->items = filteredItems;
+}
+
+void interactLoadBedItems(struct track *tg)
+/* Load interact items as linked features */
+{
+interactLoadItems(tg);
+struct interact *inters = tg->items, *inter;
+struct bed *beds = NULL, *bed;
+for (inter = inters; inter; inter = inter->next)
+    {
+    bed = interactToBed(inter);
+    slAddHead(&beds, bed);
+    }
+slReverse(&beds);
+tg->items = beds;
 }
 
 char *interactMouseover(struct interact *inter, char *otherChrom)
@@ -594,11 +609,21 @@ void interactDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
 void interactMethods(struct track *tg)
 /* Interact track type methods */
 {
-tg->loadItems = interactLoadItems;
-tg->drawItems = interactDrawItems;
-tg->drawLeftLabels = interactDrawLeftLabels;
-tg->totalHeight = interactTotalHeight;
-tg->mapsSelf = TRUE;
+tg->canPack = TRUE;
+if (tg->visibility == tvPack)
+//if (1)
+    {
+    bedMethods(tg);
+    tg->loadItems = interactLoadBedItems;
+    }
+else
+    {
+    tg->loadItems = interactLoadItems;
+    tg->drawItems = interactDrawItems;
+    tg->drawLeftLabels = interactDrawLeftLabels;
+    tg->totalHeight = interactTotalHeight;
+    tg->mapsSelf = TRUE;
+    }
 }
 
 void interactCtMethods(struct track *tg)

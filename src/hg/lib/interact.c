@@ -371,3 +371,109 @@ ret->targetName = cloneString(row[16]);
 ret->targetStrand = cloneString(row[17]);
 return ret;
 }
+
+#ifdef DEBUG
+struct bed *interactBedLoad(char **row)
+/* Load an interact from row fetched with select * from interact
+ * from database, as a BED12.  Dispose of this with bedFree(). */
+// TODO: more validating, and consider bed12Source (can include exp field for mouseover)
+{
+struct bed *ret;
+
+AllocVar(ret);
+ret->chrom = cloneString(row[0]);
+ret->chromStart = sqlUnsigned(row[1]);
+ret->chromEnd = sqlUnsigned(row[2]);
+ret->name = cloneString(row[3]);
+ret->score = sqlUnsigned(row[4]);
+ret->thickStart = ret->chromStart;
+ret->thickEnd = ret->chromEnd;
+ret->itemRgb = sqlUnsigned(row[7]);
+
+char *sourceChrom = row[8];
+int sourceStart = sqlUnsigned(row[9]);
+int sourceEnd = sqlUnsigned(row[10]);
+char *targetChrom = row[13];
+int targetStart = sqlUnsigned(row[14]);
+int targetEnd = sqlUnsigned(row[15]);
+char *strand = "+";
+if (differentString(sourceChrom, targetChrom))
+    {
+    // inter-chromosomal
+    if sameString(ret->chrom, targetChrom)
+        strand = "-";
+    }
+else 
+    {
+    ret->blockCount = 2;
+    AllocArray(ret->blockSizes, 2);
+    AllocArray(ret->chromStarts, 2);
+    if (targetStart < sourceStart)
+        {
+        strand = "-";
+        ret->blockSizes[1] = sourceEnd - sourceStart;
+        ret->blockSizes[0] = targetEnd - targetStart;
+        ret->chromStarts[1] = sourceStart;
+        ret->chromStarts[0] = targetStart;
+        }
+    else
+        {
+        ret->blockSizes[0] = sourceEnd - sourceStart;
+        ret->blockSizes[1] = targetEnd - targetStart;
+        ret->chromStarts[0] = sourceStart;
+        ret->chromStarts[1] = targetStart;
+        }
+    }
+strcpy(ret->strand, strand);
+bed->label = bed->name;
+return ret;
+}
+#endif
+
+struct bed *interactToBed(struct interact *inter)
+/* Convert an interact to a BED12 */
+{
+struct bed *bed = NULL;
+AllocVar(bed);
+
+bed->chrom = inter->chrom;
+bed->chromStart = inter->chromStart;
+bed->chromEnd = inter->chromEnd;
+bed->name = inter->name;
+bed->score = inter->score;
+bed->thickStart = inter->chromStart;
+bed->thickEnd = inter->chromEnd;
+bed->itemRgb = inter->color;
+
+char *strand = "+";
+if (differentString(inter->sourceChrom, inter->targetChrom))
+    {
+    // inter-chromosomal
+    if sameString(bed->chrom, inter->targetChrom)
+        strand = "-";
+    }
+else 
+    {
+    bed->blockCount = 2;
+    AllocArray(bed->blockSizes, 2);
+    AllocArray(bed->chromStarts, 2);
+    if (inter->targetStart < inter->sourceStart)
+        {
+        strand = "-";
+        bed->blockSizes[1] = inter->sourceEnd - inter->sourceStart;
+        bed->blockSizes[0] = inter->targetEnd - inter->targetStart;
+        bed->chromStarts[1] = inter->sourceStart;
+        bed->chromStarts[0] = inter->targetStart;
+        }
+    else
+        {
+        bed->blockSizes[0] = inter->sourceEnd - inter->sourceStart;
+        bed->blockSizes[1] = inter->targetEnd - inter->targetStart;
+        bed->chromStarts[0] = inter->sourceStart;
+        bed->chromStarts[1] = inter->targetStart;
+        }
+    }
+strcpy(bed->strand, strand);
+bed->label = bed->name;
+return bed;
+}
