@@ -216,6 +216,7 @@ inputTracksSubgroupDisplay bed factorSource
 inputTrackTable bed factorSource
 inputTableFieldDisplay bed factorSource
 interactDirectional interact bigInteract
+interactUp interact bigInteract
 intronGap psl genePred bigPsl
 irows wigMaf
 isGencode2 genePred
