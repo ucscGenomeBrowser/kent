@@ -1250,7 +1250,7 @@ def refreshPage(paramStr, delay=5, addNote=False):
     <script type="text/javascript" nonce='%s'>
     function Redirect()
         { window.location="%s"; }
-    setTimeout('Redirect()', %d);
+    setTimeout(Redirect(), %d);
     </script>
     """ % (getNonce(), newUrl, delay)
 
