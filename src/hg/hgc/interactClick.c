@@ -6,13 +6,22 @@
 #include "common.h"
 #include "obscure.h"
 #include "hdb.h"
+#include "jksql.h"
 #include "hgc.h"
 
 #include "interact.h"
 #include "interactUi.h"
 
-static struct interact *getInteractsFromTable(struct trackDb *tdb, char *chrom, int start, int end,
-                                                char *foot)
+struct interactPlusRow
+    {
+    /* Keep field values in string format, for url processing */
+    struct interactPlusRow *next;
+    struct interact *interact;
+    char **row;
+    };
+
+static struct interactPlusRow *getInteractsFromTable(struct trackDb *tdb, char *chrom, 
+                                        int start, int end, char *foot)
 /* Retrieve interact items at this position from track table */
 {
 struct sqlConnection *conn = NULL;
@@ -31,58 +40,85 @@ else
 if (conn == NULL)
     return NULL;
 
-struct interact *inters = NULL, *inter = NULL;
+struct interactPlusRow *iprs = NULL;
 char **row;
 int offset;
 struct sqlResult *sr = hRangeQuery(conn, table, chrom, start, end, NULL, &offset);
+int fieldCount = 0;
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    inter = interactLoadAndValidate(row+offset);
+    struct interact *inter = interactLoadAndValidate(row+offset);
     if (inter->chromStart != start || inter->chromEnd != end)
         continue;
-    slAddHead(&inters, inter);
+
+    // got one, save object and row representation
+    struct interactPlusRow *ipr;
+    AllocVar(ipr);
+    ipr->interact = inter;
+    char **fieldVals;
+    if (fieldCount == 0)
+        fieldCount = sqlCountColumns(sr);
+    AllocArray(fieldVals, fieldCount);
+    int i;
+    for (i = 0; i < fieldCount; i++)
+        fieldVals[i] = cloneString(row[i]);
+    ipr->row = fieldVals;
+    slAddHead(&iprs, ipr);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-return inters;
+return iprs;
 }
 
-static struct interact *getInteractsFromFile(char *file, char *chrom, int start, int end, 
+static struct interactPlusRow *getInteractsFromFile(char *file, char *chrom, int start, int end, 
                                                 char *foot)
 /* Retrieve interact items at this position from big file */
 {
 struct bbiFile *bbi = bigBedFileOpen(file);
 struct lm *lm = lmInit(0);
-struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
-struct interact *inters = NULL, *inter = NULL;
+struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
+struct interactPlusRow *iprs = NULL;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     char startBuf[16], endBuf[16];
-    char *row[32];
-    bigBedIntervalToRow(bb, chrom, startBuf, endBuf, row, ArraySize(row));
-    inter = interactLoadAndValidate(row);
+    int maxFields = 32;
+    char *row[maxFields];      // big enough ?
+    int fieldCount = bigBedIntervalToRow(bb, chrom, startBuf, endBuf, row, maxFields);
+    struct interact *inter = interactLoadAndValidate(row);
     if (inter == NULL)
         continue;
     if (inter->chromStart != start || inter->chromEnd != end)
         continue;
-    slAddHead(&inters, inter);
+
+    // got one, save object and row representation
+    struct interactPlusRow *ipr;
+    AllocVar(ipr);
+    ipr->interact = inter;
+    char **fieldVals;
+    AllocArray(fieldVals, fieldCount);
+    int i;
+    for (i = 0; i < fieldCount; i++)
+        fieldVals[i] = cloneString(row[i]);
+    ipr->row = fieldVals;
+    slAddHead(&iprs, ipr);
     }
-return inters;
+return iprs;
 }
 
-static struct interact *getInteractions(struct trackDb *tdb, char *chrom, int start, int end, 
+static struct interactPlusRow *getInteractions(struct trackDb *tdb, char *chrom, int start, int end, 
                                                 char *foot)
 /* Retrieve interact items at this position. Also any others with the same endpoint, if endpoint clicked on*/
 {
-struct interact *inters = NULL;
+struct interactPlusRow *iprs = NULL;
 char *file = trackDbSetting(tdb, "bigDataUrl");
 if (file != NULL)
-    inters = getInteractsFromFile(file, chrom, start, end, foot);
+    iprs = getInteractsFromFile(file, chrom, start, end, foot);
 else
-    inters = getInteractsFromTable(tdb, chrom, start, end, foot);
-slSort(&inters, bedCmpScore);
-slReverse(&inters);
-return inters;
+    iprs = getInteractsFromTable(tdb, chrom, start, end, foot);
+// TODO: add sort on score in interacts in ipr
+//slSort(&inters, bedCmpScore);
+//slReverse(&inters);
+return iprs;
 }
 
 void doInteractRegionDetails(struct trackDb *tdb, struct interact *inter)
@@ -169,13 +205,15 @@ AllocArray(scores, count);
 #endif
 }
 
-void doInteractItemDetails(struct trackDb *tdb, struct interact *inter, char *item, boolean isMultiple)
+void doInteractItemDetails(struct trackDb *tdb, struct interactPlusRow *ipr, char *item, 
+                                boolean isMultiple)
 /* Details of interaction item */
 {
+struct interact *inter = ipr->interact;
+struct slPair *fields = getFields(tdb, ipr->row);
+printCustomUrlWithFields(tdb, item, item, TRUE, fields);
 if (!isEmptyTextField(inter->name))
-    printf("<b>Interaction name:</b> %s<br>\n", inter->name);
-
-
+    printf("<b>Interaction:</b> %s<br>\n", inter->name);
 printf("<b>Score:</b> %d<br>\n", inter->score);
 printf("<b>Value:</b> %0.3f<br>\n", inter->value);
 if (!isEmptyTextField(inter->exp))
@@ -192,24 +230,24 @@ char *chrom = cartString(cart, "c");
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 char *foot = cartOptionalString(cart, "foot");
-struct interact *inter = NULL;
-struct interact *inters = getInteractions(tdb, chrom, start, end, foot);
-if (inters == NULL)
+struct interactPlusRow *iprs = getInteractions(tdb, chrom, start, end, foot);
+if (iprs == NULL)
     errAbort("Can't find interaction %s", item ? item : "");
-int count = slCount(inters);
+int count = slCount(iprs);
 if (count > 1)
     {
     printf("<b>Interactions at this position:</b> %d<p>", count);
-    doInteractRegionDetails(tdb, inters);
+    doInteractRegionDetails(tdb, iprs->interact);
     printf("</p>");
     }
 genericHeader(tdb, item);
-for (inter = inters; inter; inter = inter->next)
+static struct interactPlusRow *ipr = NULL;
+for (ipr = iprs; ipr != NULL; ipr = ipr->next)
     {
     if (count > 1)
         printf("<hr>\n");
-    doInteractItemDetails(tdb, inter, item, count > 1);
-    if (count > 1 && !isEmptyTextField(inter->name) && sameString(inter->name, item))
+    doInteractItemDetails(tdb, ipr, item, count > 1);
+    if (count > 1 && !isEmptyTextField(ipr->interact->name) && sameString(ipr->interact->name, item))
         printf("<hr>\n");
     }
 }

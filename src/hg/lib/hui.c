@@ -9008,9 +9008,9 @@ for (i=0; i<subCount; ++i)
 return s;
 }
 
-char *replaceInUrl(char *url, char *idInUrl, struct cart* cart, char *db, char *seqName, int winStart, \
-    int winEnd, char *track, boolean encode) 
-/* replace $$ in url with idInUrl. Supports many other wildchards 
+char *replaceInUrl(char *url, char *idInUrl, struct cart *cart, char *db, char *seqName, 
+                        int winStart, int winEnd, char *track, boolean encode, struct slPair *fields) 
+/* replace $$ in url with idInUrl. Supports many other wildchards, and custom fields $<field>
  * XX Do we have readable docs for these parameters somewhere?
  * Look at http://genome.ucsc.edu/goldenpath/help/trackDb/trackDbHub.html */
 {
@@ -9105,7 +9105,26 @@ eUrl = subMulti(url, ArraySize(ins), ins, outs);
 freeDyString(&uUrl);
 freeMem(eItem);
 freeMem(scName);
-return eUrl->string;
+
+// substitute $<fieldName> variables
+if (!fields)
+    return eUrl->string;
+
+int fieldCount = slCount(fields);
+char **fieldNames = NULL, **fieldVals = NULL;
+AllocArray(fieldNames, fieldCount);
+AllocArray(fieldVals, fieldCount);
+int i;
+struct slPair *field;
+for (i=0, field=fields; i<fieldCount; i++, field=field->next)
+    {
+    char buf[64];
+    safef(buf, sizeof buf, "$<%s>", field->name);
+    fieldNames[i] = cloneString(buf);
+    fieldVals[i] = (char *)field->val;
+    }
+struct dyString *fUrl = subMulti(eUrl->string, fieldCount, fieldNames, fieldVals);
+    return fUrl->string;
 }
 
 char *checkDataVersion(char *database, struct trackDb *tdb)
@@ -9124,7 +9143,7 @@ if (version != NULL)
     // dataVersion can also be the path to a local file, for otto tracks
     if (!trackHubDatabase(database) && !isHubTrack(tdb->table) && startsWith("/", version))
         {
-        char *path = replaceInUrl(version, "", NULL, database, "", 0, 0, tdb->track, FALSE);
+        char *path = replaceInUrl(version, "", NULL, database, "", 0, 0, tdb->track, FALSE, NULL);
         struct lineFile* lf = lineFileMayOpen(path, TRUE);
         if (lf)
             version = lineFileReadAll(lf);

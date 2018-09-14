@@ -1446,9 +1446,9 @@ boolean vocabSettingIsEncode(char *setting);
 boolean isEncode2(char *database);
 // Return true for ENCODE2 assemblies
 
-char *replaceInUrl(char* url, char *idInUrl, struct cart* cart, char *db, char* seqName, int winStart, \
-    int winEnd, char *track, boolean encode);
-/* replace $$ in url with idInUrl. Supports many other wildchards */
+char *replaceInUrl(char *url, char *idInUrl, struct cart *cart, char *db, char *seqName, 
+                        int winStart, int winEnd, char *track, boolean encode, struct slPair *fields) ;
+/* replace $$ in url with idInUrl. Supports many other wildchards, and custom fields $<field> */
 
 struct slPair *buildFieldList(struct trackDb *tdb, char *trackDbVar, struct asObject *as);
 /* Build up a hash of a list of fields in an AS file. */
