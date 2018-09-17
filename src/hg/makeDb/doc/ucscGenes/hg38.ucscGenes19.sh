@@ -1,12 +1,12 @@
 
-export dir=/cluster/data/hg38/bed/ucsc.18.2
-export GENCODE_VERSION=V28
+export dir=/cluster/data/hg38/bed/ucsc.19.1
+export GENCODE_VERSION=V29
 export oldGeneDir=/cluster/data/hg38/bed/ucsc.17.1
 export oldGeneBed=$oldGeneDir/ucscGenes.bed
-export db=grcHhh38
+export db=hg38
 export spDb=sp180404
 export taxon=9606
-export tempDb=tmpFoo83
+export tempDb=tmpFoo87
 export kent=$HOME/kent
 export lastVer=10
 export curVer=11
@@ -45,6 +45,21 @@ export cpuFarm=ku
 mkdir -p $dir
 cd $dir
 
+# first get list of tables from push request in $lastVer.table.lst
+wc -l $lastVer.table.lst
+# 61
+
+(
+cat $lastVer.table.lst | grep -v "ToKg$lastVer" | grep -v "XrefOld" | grep -v "knownGeneOld" | grep -v "knownToGencode" 
+echo kg${lastVer}ToKg${curVer} >>  $curVer.table.lst
+echo knownGeneOld$lastVer >>  $curVer.table.lst
+echo kgXrefOld$lastVer >>  $curVer.table.lst
+) | sort >  $curVer.table.lst 
+
+for i in `cat $curVer.table.lst`; do d=`hgsql hg38 -Ne "SELECT create_time FROM INFORMATION_SCHEMA.TABLES
+  WHERE table_schema = 'hg38'
+    AND table_name = '$i'"` ; echo $i $d;   done | sort -nk2
+
 echo "create database $tempDb" | hgsql ""
 
 echo "create table knownGeneOld$lastVer like  $db.knownGene" | hgsql $tempDb
@@ -54,7 +69,7 @@ echo "insert into kgXrefOld$lastVer select * from   $db.kgXref" | hgsql $tempDb
 
 hgsql -e "select * from wgEncodeGencodeComp$GENCODE_VERSION" --skip-column-names $db | cut -f 2-16 |  genePredToBed stdin tmp
 hgsql -e "select * from wgEncodeGencodePseudoGene$GENCODE_VERSION" --skip-column-names $db | cut -f 2-16 |  genePredToBed stdin tmp2
-cat tmp tmp2 | gzip -c > gencode${GENCODE_VERSION}.bed.gz
+sort -k1,1 -k2,2n | gzip -c > gencode${GENCODE_VERSION}.bed.gz
 #hgsql -e "select * from wgEncodeGencodeComp$GENCODE_VERSION" --skip-column-names hg38 | cut -f 2-16 |  genePredToBed stdin stdout |  tawk '{$4=$4 "." $1; print}' |  gzip -c > gencode${GENCODE_VERSION}Comp.bed.gz
 
 
@@ -65,21 +80,21 @@ cat tmp tmp2 | gzip -c > gencode${GENCODE_VERSION}.bed.gz
 
 echo 5013138 > startId
 txGeneAccession -test $oldGeneBed startId gencode${GENCODE_VERSION}.bed.gz txToAcc.tab oldToNew.tab
-cat startId
+cat 
 # 5008279
 
 tawk '{print $4}' oldToNew.tab | sort | uniq -c
-#1391 compatible
-#190306 exact
-#6085 lost
-#5141 new
+# 4101 compatible
+# 187402 exact
+# 6279 lost
+# 35308 new
 
 # check to make sure we don't have any dups.  These two numbers should
 # be the same.   
 awk '{print $2}' txToAcc.tab | sed 's/\..*//' | sort -u | wc -l
-# 196838
+# 226811
 awk '{print $2}' txToAcc.tab | sed 's/\..*//' | sort  | wc -l
-# 196838
+# 226811
 
 # this should be the current db instead of olDdb if not the first release
 echo "select * from knownGene" | hgsql $db | sort > $db.knownGene.gp
@@ -88,9 +103,9 @@ grep lost oldToNew.tab | tawk '{print $2}' | sort > lost.txt
 join -t $'\t' lost.txt $db.knownGene.gp > $db.lost.gp
 
 awk '{if ($7 == $6) print}' $db.lost.gp | wc -l
-# non-coding 4298
+# non-coding 277
 awk '{if ($7 != $6) print}' $db.lost.gp | wc -l
-# coding 1787
+# coding 297
 
 #ifdef NOTNOW
 # Assign permanent accessions to each transcript, and make up a number
@@ -99,7 +114,7 @@ awk '{if ($7 != $6) print}' $db.lost.gp | wc -l
 
 cd $dir
 cp ~kent/src/hg/txGene/txGeneAccession/txLastId saveLastId
-txGeneAccession $oldGeneBed saveLastId gencode${GENCODE_VERSION}Comp.bed.gz txToAcc.tab oldToNew.tab
+txGeneAccession $oldGeneBed startId gencode${GENCODE_VERSION}.bed.gz txToAcc.tab oldToNew.tab
 #endif
 
 #subColumn 4 gencode${GENCODE_VERSION}Comp.bed.gz txToAcc.tab ucscGenes.bed
@@ -125,7 +140,7 @@ hgLoadBed $tempDb knownAlt ucscSplice.bed
 #faSize uniProt.fa
 
 #needs two passes.  First make knownGene, then supporting tables
-awk '{print $4,$4}' ucscGenes.bed | sort | uniq > txToAcc.tab
+#awk '{print $4,$4}' ucscGenes.bed | sort | uniq > txToAcc.tab
 makeGencodeKnownGene -justKnown $db $tempDb $GENCODE_VERSION txToAcc.tab
 
 hgLoadSqlTab -notOnServer $tempDb knownGene $kent/src/hg/lib/knownGene.sql knownGene.gp
@@ -164,6 +179,7 @@ hgsql $tempDb  -e "select * from knownToMrnaSingle" | tail -n +2 | sort > tmp2
 join  tmp2 tmp1 > knownGene.ev
 
 txGeneAlias $db $spDb kgXref.tab knownGene.ev oldToNew.tab foo.alias foo.protAlias
+awk '{split($2,a,"."); for(ii = 1; ii <= a[2]; ii++) print $1,a[1] "." ii }' txToAcc.tab >> foo.alias
 sort foo.alias | uniq > ucscGenes.alias
 sort foo.protAlias | uniq > ucscGenes.protAlias
 rm foo.alias foo.protAlias
@@ -194,7 +210,10 @@ hgLoadSqlTab -notOnServer $tempDb knownToTag $kent/src/hg/lib/knownTo.sql knownT
 
 
 # this should be done AFTER moving the new tables into hg38
-hgKgGetText $tempDb knownGene.text 
+hgKgGetText $tempDb tempSearch.txt
+sort tempSearch.txt > tempSearch2.txt
+tawk '{split($2,a,"."); printf "%s\t", $1;for(ii = 1; ii <= a[2]; ii++) printf "%s ",a[1] "." ii; printf "\n" }' txToAcc.tab | sort > tempSearch3.txt
+join tempSearch2.txt tempSearch3.txt | sort > knownGene.txt
 ixIxx knownGene.text knownGene.ix knownGene.ixx
  rm -rf /gbdb/$tempDb/knownGene.ix /gbdb/$tempDb/knownGene.ixx
 ln -s $dir/knownGene.ix  /gbdb/$tempDb/knownGene.ix
@@ -254,8 +273,8 @@ cd $dir
 if ($db =~ hg*) then
 hgLoadNetDist $genomes/hg19/p2p/hprd/hprd.pathLengths $tempDb humanHprdP2P \
     -sqlRemap="select distinct value, name from knownToHprd"
-hgLoadNetDist $genomes/hg19/p2p/vidal/humanVidal.pathLengths $tempDb humanVidalP2P -sqlRemap="select distinct locusLinkID, kgID from $db.refLink,kgXref where $db.refLink.mrnaAcc = kgXref.refSeq"
-hgLoadNetDist $genomes/hg19/p2p/wanker/humanWanker.pathLengths $tempDb humanWankerP2P -sqlRemap="select distinct locusLinkID, kgID from $db.refLink,kgXref where $db.refLink.mrnaAcc = kgXref.refSeq"
+hgLoadNetDist $genomes/hg19/p2p/vidal/humanVidal.pathLengths $tempDb humanVidalP2P -sqlRemap="select distinct locusLinkID, kgID from hgFixed.refLink,kgXref where hgFixed.refLink.mrnaAcc = kgXref.refSeq"
+hgLoadNetDist $genomes/hg19/p2p/wanker/humanWanker.pathLengths $tempDb humanWankerP2P -sqlRemap="select distinct locusLinkID, kgID from hgFixed.refLink,kgXref where hgFixed.refLink.mrnaAcc = kgXref.refSeq"
 endif
 
 
@@ -313,10 +332,10 @@ ln -s $genomes/$db/bed/liftOver/${db}To${Xdb}.over.chain.gz \
 # delete non-syntenic genes from rat and mouse blastp tables
 cd $dir/hgNearBlastp
 synBlastp.csh $tempDb $xdb
-# old number of unique query values: 89348
-# old number of unique target values 24096
-# new number of unique query values: 84198
-# new number of unique target values 23523
+#old number of unique query values: 98928
+#old number of unique target values 24289
+#new number of unique query values: 81280
+#new number of unique target values 20980
 
 export oldDb=hg38
 hgsql -e "select  count(*) from mmBlastTab\G" $oldDb | tail -n +2
@@ -325,10 +344,11 @@ hgsql -e "select  count(*) from mmBlastTab\G" $tempDb | tail -n +2
 # count(*): 83198
 
 synBlastp.csh $tempDb $ratDb knownGene ensGene
-# old number of unique query values: 88957
-# old number of unique target values 19572
-# new number of unique query values: 81904
-# new number of unique target values 18754
+# old number of unique query values: 98488
+# old number of unique target values 19851
+# new number of unique query values: 88508
+# new number of unique target values 18829
+
 
 
 hgsql -e "select  count(*) from rnBlastTab\G" $oldDb | tail -n +2
@@ -527,12 +547,13 @@ ssh $cpuFarm "cd $dir/pfam; para make jobList"
 ssh $cpuFarm "cd $dir/pfam; para time > run.time"
 cat run.time
 
-# Completed: 9024 of 9024 jobs
-# CPU time in finished jobs:    1944366s   32406.10m   540.10h   22.50d  0.062 y
-# IO & Wait Time:                775557s   12925.95m   215.43h    8.98d  0.025 y
-# Average job time:                 301s       5.02m     0.08h    0.00d
-# Longest finished job:             648s      10.80m     0.18h    0.01d
-# Submission to last job:          8810s     146.83m     2.45h    0.10d
+#Completed: 9425 of 9425 jobs
+#CPU time in finished jobs:    2242573s   37376.22m   622.94h   25.96d  0.071 y
+#IO & Wait Time:                490885s    8181.41m   136.36h    5.68d  0.016 y
+#Average job time:                 290s       4.83m     0.08h    0.00d
+#Longest finished job:             380s       6.33m     0.11h    0.00d
+#Submission to last job:         40826s     680.43m    11.34h    0.47d
+
 
 # Make up pfamDesc.tab by converting pfam to a ra file first
 cat << '_EOF_' > makePfamRa.awk
@@ -597,12 +618,12 @@ ssh $cpuFarm "cd $dir/scop; para make jobList"
 ssh $cpuFarm "cd $dir/scop; para time > run.time"
 cat run.time
 
-# Completed: 9024 of 9024 jobs
-# CPU time in finished jobs:    1630805s   27180.09m   453.00h   18.88d  0.052 y
-# IO & Wait Time:                918257s   15304.28m   255.07h   10.63d  0.029 y
-# Average job time:                 282s       4.71m     0.08h    0.00d
-# Longest finished job:             486s       8.10m     0.14h    0.01d
-# Submission to last job:         12224s     203.73m     3.40h    0.14d
+#Completed: 9425 of 9425 jobs
+#CPU time in finished jobs:    2111474s   35191.24m   586.52h   24.44d  0.067 y
+#IO & Wait Time:                457978s    7632.96m   127.22h    5.30d  0.015 y
+#Average job time:                 273s       4.54m     0.08h    0.00d
+#Longest finished job:             489s       8.15m     0.14h    0.01d
+#Submission to last job:         39656s     660.93m    11.02h    0.46d
 
 # Convert scop output to tab-separated files
 cd $dir
@@ -697,9 +718,10 @@ cd $dir
 #    gene symbol, e.g. uc010nxr.1__DDX11L1
 hgsql $db -N -e 'select kgId,geneSymbol from kgXref' \
     | perl -wpe 's/^(\S+)\t(\S+)/$1\t${1}__$2/ || die;' \
-      > idSub.txt 
+      | sort -u > idSub.txt 
 # 2. Get a file of per-transcript fasta sequences that contain the sequences of each UCSC Genes transcript, with this new ID in the place of the UCSC Genes accession.   Convert that file to TwoBit format and soft-link it into /gbdb/hg38/targetDb/ 
-subColumn 4 ucscGenes.bed idSub.txt ucscGenesIdSubbed.bed 
+awk '{if (!found[$4]) print; found[$4]=1 }' ucscGenes.bed > nodups.bed
+subColumn 4 nodups.bed idSub.txt ucscGenesIdSubbed.bed 
 sequenceForBed -keepName -db=$db -bedIn=ucscGenesIdSubbed.bed -fastaOut=stdout  | faToTwoBit stdin kgTargetSeq${curVer}.2bit 
 mkdir -p /gbdb/$db/targetDb/ 
 rm -f /gbdb/$db/targetDb/kgTargetSeq${curVer}.2bit 
@@ -765,19 +787,45 @@ TBD 'tmpFoo67.scBlastTab'
 hgsqladmin create ${db}Backup3
 
 # Swap in new tables, moving old tables to backup database.
-for i in  `cat hg38.all.knownGene.tables.txt`
+for i in  `cat hg38.knownGene.tables.txt`
 do
 echo "rename table $db.$i to ${db}Backup3.$i;" | hgsql $db;
 done
+ERROR 1146 (42S02) at line 1: Table 'hg38.kg7ToKg8' doesn't exist
+ERROR 1146 (42S02) at line 1: Table 'hg38.kgProtMap2' doesn't exist
+ERROR 1146 (42S02) at line 1: Table 'hg38.kgTxInfo' doesn't exist
+ERROR 1146 (42S02) at line 1: Table 'hg38.knownGeneTxMrna' doesn't exist
+ERROR 1146 (42S02) at line 1: Table 'hg38.knownGeneTxPep' doesn't exist
+
 
 # Drop tempDb history table and chromInfo, we don't want to swap them in!
 hgsql -e "drop table history" $tempDb
 hgsql -e "drop table chromInfo" $tempDb
 
+echo "show tables" | hgsql $tempDb > tablesInKnownGene.lst
+
 for i in  `cat tablesInKnownGene.lst`
 do
 echo "rename table $tempDb.$i to ${db}.$i;"  | hgsql $db
-done
+dkone
+
+ERROR 1146 (42S02) at line 1: Table 'tmpFoo87.Tables_in_tmpFoo87' doesn't exist
+ERROR 1050 (42S01) at line 1: Table 'gnfAtlas2Distance' already exists
+ERROR 1050 (42S01) at line 1: Table 'gnfU95Distance' already exists
+ERROR 1050 (42S01) at line 1: Table 'kg10ToKg11' already exists
+ERROR 1050 (42S01) at line 1: Table 'kgXrefOld10' already exists
+ERROR 1050 (42S01) at line 1: Table 'knownAttrs' already exists
+ERROR 1050 (42S01) at line 1: Table 'knownCds' already exists
+ERROR 1050 (42S01) at line 1: Table 'knownGeneExt' already exists
+ERROR 1050 (42S01) at line 1: Table 'knownGeneOld10' already exists
+ERROR 1050 (42S01) at line 1: Table 'knownToEnsembl' already exists
+ERROR 1050 (42S01) at line 1: Table 'knownToGnfAtlas2' already exists
+ERROR 1050 (42S01) at line 1: Table 'knownToMrna' already exists
+ERROR 1050 (42S01) at line 1: Table 'knownToMrnaSingle' already exists
+ERROR 1050 (42S01) at line 1: Table 'knownToTag' already exists
+ERROR 1050 (42S01) at line 1: Table 'knownToU133' already exists
+ERROR 1050 (42S01) at line 1: Table 'knownToU95' already exists
+
 
 #ERROR 1050 (42S01) at line 1: Table 'chromInfo' already exists
 #ERROR 1050 (42S01) at line 1: Table 'history' already exists
