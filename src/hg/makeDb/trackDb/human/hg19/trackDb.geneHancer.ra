@@ -1,5 +1,4 @@
 track geneHancer
-release alpha
 compositeTrack on
 shortLabel GeneHancer
 longLabel GeneHancer Regulatory Elements and Gene Interactions
@@ -22,7 +21,7 @@ priority 3
     url http://www.genecards.org/cgi-bin/carddisp.pl?gene=$$
     urlLabel In GeneCards: 
     visibility pack
-    parent geneHancer
+    parent geneHancer on
 
         track geneHancerGenesDoubleElite
         shortLabel GH genes TSS (DE)
@@ -57,7 +56,7 @@ priority 3
     url http://www.genecards.org/Search/Keyword?queryString=$$
     urlLabel In GeneCards: 
     visibility dense
-    parent geneHancer
+    parent geneHancer on
 
         track geneHancerRegElementsDoubleElite
         shortLabel GH Reg Elems (DE)
@@ -96,7 +95,7 @@ priority 3
     url https://www.genecards.org/cgi-bin/carddisp.pl?gene=$p&keywords=$P&prefilter=enhancers#enhancers
     urlLabel Interaction in GeneCards
     visibility full
-    parent geneHancer
+    parent geneHancer on
 
         track geneHancerInteractionsDoubleElite
         shortLabel GH Interactions (DE)

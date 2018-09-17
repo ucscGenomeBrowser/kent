@@ -146,7 +146,18 @@ void getBigWigData(char *file, char *chrom, unsigned winStart, unsigned winEnd, 
 /* Query a bigBed file to find the wiggle values we need for a specified range. */
 {
 struct lm *lm = lmInit(0);
-struct bbiFile *bwf = bigWigFileOpen(hReplaceGbdb(file));
+static char *fileName = NULL;
+static struct bbiFile *bwf = NULL;
+
+if ((fileName == NULL) || differentString(fileName, file))
+    {
+    if (bwf != NULL)
+        bbiFileClose(&bwf);
+
+    fileName = cloneString(file);
+    bwf = bigWigFileOpen(hReplaceGbdb(file));
+    }
+
 struct bbiInterval *iv, *ivList = bigWigIntervalQuery(bwf, chrom, winStart, winEnd, lm);
 unsigned width = winEnd - winStart;
 
