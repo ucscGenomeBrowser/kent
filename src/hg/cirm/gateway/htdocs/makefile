@@ -21,4 +21,4 @@ docs:
 	umask 002; rsync --times --recursive --omit-dir-times --relative --cvs-exclude --exclude='makefile' --exclude='style/*' `$(FIND)` ${HTDOCSDIR}
 
 styles:
-	umask 002; rsync --update --times --recursive --omit-dir-times --relative --cvs-exclude --exclude='makefile' $(CSS_FILES) ${HTDOCSDIR}/style/
+	umask 002; rsync --update --times --recursive --omit-dir-times --relative --cvs-exclude --exclude='makefile' $(CSS_FILES) ${HTDOCSDIR}
