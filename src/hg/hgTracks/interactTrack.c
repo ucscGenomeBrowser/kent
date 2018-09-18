@@ -6,6 +6,7 @@
 #include "common.h"
 #include "obscure.h"
 #include "hgTracks.h"
+#include "bedCart.h"
 #include "bigWarn.h"
 #include "interact.h"
 #include "interactUi.h"
@@ -59,7 +60,7 @@ unsigned t = interactRegionCenter(inter->targetStart, inter->targetEnd);
 return (t >= winStart) && (t < winEnd);
 }
 
-void interactLoadItems(struct track *tg)
+static void loadAndFilterItems(struct track *tg)
 /* Load all interact items in region */
 {
 loadSimpleBedWithLoader(tg, (bedItemLoader)interactLoadAndValidate);
@@ -111,19 +112,58 @@ if (slCount(filteredItems) != count)
 tg->items = filteredItems;
 }
 
-void interactLoadBedItems(struct track *tg)
-/* Load interact items as linked features */
+void interactDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
+    struct hvGfx *hvg, int xOff, int yOff, int width, int height,
+    boolean withCenterLabels, MgFont *font,
+    Color color, enum trackVisibility vis)
+/* Override default */
 {
-interactLoadItems(tg);
-struct interact *inters = tg->items, *inter;
-struct bed *beds = NULL, *bed;
-for (inter = inters; inter; inter = inter->next)
+}
+
+void interactFreeItems(struct track *tg)
+/* Free up interact items track */
+{
+interactFreeList((struct interact **)(&tg->items));
+}
+
+static boolean isBedMode(struct track *tg)
+/* Pack and squish modes display using BED linked features code */
+{
+return tg->visibility == tvPack || tg->visibility == tvDense;
+}
+
+void interactLoadItems(struct track *tg)
+/* Load interact items in interact format */
+{
+loadAndFilterItems(tg);
+if (isBedMode(tg))
     {
-    bed = interactToBed(inter);
-    slAddHead(&beds, bed);
+    /* convert to BEDs for linked feature display */
+    struct interact *inters = tg->items, *inter;
+    struct linkedFeatures *lfs = NULL, *lf;
+    for (inter = inters; inter; inter = inter->next)
+        {
+        struct bed *bed = interactToBed(inter);
+        lf = lfFromBed(bed);
+        if (!tg->colorShades)
+            {
+            lf->extra = (void *)USE_ITEM_RGB;   /* signal for coloring */
+            lf->filterColor = bed->itemRgb;
+            }
+        bedFree(&bed);
+        // TODO: use lfFromBedExtra with scoreMin, scoreMax
+        slAddHead(&lfs, lf);
+        }
+    slReverse(&lfs);
+    tg->items = lfs;
     }
-slReverse(&beds);
-tg->items = beds;
+else
+    {
+    tg->mapsSelf = TRUE;
+    tg->totalHeight = interactTotalHeight;
+    tg->drawLeftLabels = interactDrawLeftLabels;
+    tg->freeItems = interactFreeItems;
+    }
 }
 
 char *interactMouseover(struct interact *inter, char *otherChrom)
@@ -336,7 +376,7 @@ mapBoxHgcOrHgGene(hvg, seqStart, seqEnd, x-1, y-1, 3, 3,
                    tg->track, item, status, NULL, TRUE, NULL);
 }
 
-void interactDrawItems(struct track *tg, int seqStart, int seqEnd,
+static void drawInteractItems(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a list of interact structures. */
@@ -598,32 +638,27 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
     }
 }
 
-void interactDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
-    struct hvGfx *hvg, int xOff, int yOff, int width, int height,
-    boolean withCenterLabels, MgFont *font,
-    Color color, enum trackVisibility vis)
-/* Override default */
+void interactDrawItems(struct track *tg, int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a list of interact structures. */
 {
+if (isBedMode(tg))
+    {
+    tg->drawItemAt = linkedFeaturesDrawAt;
+    linkedFeaturesDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
+    }
+else
+    drawInteractItems(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
 }
 
 void interactMethods(struct track *tg)
 /* Interact track type methods */
 {
-tg->canPack = TRUE;
-if (tg->visibility == tvPack)
-//if (1)
-    {
-    bedMethods(tg);
-    tg->loadItems = interactLoadBedItems;
-    }
-else
-    {
-    tg->loadItems = interactLoadItems;
-    tg->drawItems = interactDrawItems;
-    tg->drawLeftLabels = interactDrawLeftLabels;
-    tg->totalHeight = interactTotalHeight;
-    tg->mapsSelf = TRUE;
-    }
+tg->bedSize = 12;
+linkedFeaturesMethods(tg);         // for pack and squish modes 
+tg->loadItems = interactLoadItems;
+tg->drawItems = interactDrawItems;
 }
 
 void interactCtMethods(struct track *tg)
