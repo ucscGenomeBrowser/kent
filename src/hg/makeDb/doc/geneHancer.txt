@@ -1,0 +1,65 @@
+##############################################################################
+# GeneHancer tracks (hg19 and hg38)
+#
+# GeneHancer: database of human enhancers and their inferred target genes
+# This is a component of GeneCards, Weizmann Institute
+# Collaborators:  GeneHancer lead, Simon Fishilevich (simon.fishilevich@weizmann.ac.il), with
+# support from GeneCards lead Marilyn Safran (Marilyn.Safran@weizmann.ac.il)
+
+# Publication: Database (Oxford). 2017; 2017: bax028.
+# Published online 2017 Apr 17. doi: 10.1093/database/bax028
+# GeneHancer: genome-wide integration of enhancers and target genes in GeneCards
+
+##############################################################################
+# RM #22048: GeneHancer (IN PROGRESS 2018-09-10 kate)
+
+# Files obtained from development hub prepared by Simon F:
+# https://genecards.weizmann.ac.il/geneloc/gh_hub_interactions/hub.txt  
+
+mkdir /hive/data/outside/geneHancer
+cd /hive/data/outside/geneHancer
+
+
+wget -r https://genecards.weizmann.ac.il/geneloc/gh_hub_interactions
+# sloppy command above -- whack extras after getting files needed
+mv genecards.weizmann.ac.il/geneloc/gh_hub_interactions/*/*.bb .
+
+// rename to UCSC conventions
+mv GeneHancer_hg19.bb geneHancerEnhancers.hg19.bb
+mv GCs_genes_tss_hg19.bb geneHancerGenesTss.hg19.bb
+mv GH_interactions1_all_hg19.bb geneHancerInteractions.hg19.bb
+mv GeneHancer_double_elite_hg19.bb geneHancerEnhancersDoubleElite.hg19.bb
+mv GCs_genes_tss_double_elite_hg19.bb geneHancerGenesTssDoubleElite.hg19.bb
+mv GH_interactions1_doubleElite_hg19.bb geneHancerInteractionsDoubleElite.hg19.bb
+
+mv GeneHancer.bb geneHancerEnhancers.hg38.bb
+mv GCs_genes_tss.bb geneHancerGenesTss.hg38.bb
+mv GH_interactions1_all.bb geneHancerInteractions.hg38.bb
+mv GeneHancer_double_elite.bb geneHancerEnhancersDoubleElite.hg38.bb
+mv GCs_genes_tss_double_elite.bb geneHancerGenesTssDoubleElite.hg38.bb
+mv GH_interactions1_doubleElite.bb geneHancerInteractionsDoubleElite.hg38.bb
+
+# link into /gbdb
+
+cd /gbdb
+mkdir hg19/geneHancer
+ln -s /hive/data/outside/geneHancer/*.hg19.bb hg19/geneHancer
+mkdir hg38/geneHancer
+ln -s /hive/data/outside/geneHancer/*.hg38.bb hg38/geneHancer
+
+# make trackDb
+
+cd gh_hub_interactions
+cp trackDb.txt ~/kent/src/hg/makeDb/trackDb/human/hg19/trackDb.geneHancer.ra
+# merge with composite versionin UCSC development hub
+cd ~/kent/src/hg/makeDb/trackDb/human/hg19
+cat ~/public_html/hubs/geneHancer/hg38/trackDb.txt >> trackDb.geneHancer.ra
+# edit
+
+# track description
+cp hg38/GeneHancer.html ~/kent/src/hg/makeDb/trackDb/human/hg19/geneHancer.html
+
+
+
+# cleanup
+rm -fr genecards.weizmann.ac.il
