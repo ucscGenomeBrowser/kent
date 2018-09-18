@@ -88,7 +88,7 @@ priority 3
     shortLabel Interaction
     type bigInteract
     interactDirectional offsetTarget
-    view I
+    view c_I
     viewUi on
     itemRgb on
     maxHeightPixels 50:100:200
