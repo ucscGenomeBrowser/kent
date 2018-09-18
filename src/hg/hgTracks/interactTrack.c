@@ -202,15 +202,6 @@ int regionFootWidth(int start, int end, double scale)
     return width;
 }
 
-void interactRegionCenters(struct interact *inter, int *sourceCenter, int *targetCenter)
-/* Return genomic position of endpoint centers */
-{
-assert(sourceCenter);
-assert(targetCenter);
-*sourceCenter = interactRegionCenter(inter->sourceStart, inter->sourceEnd);
-*targetCenter = interactRegionCenter(inter->targetStart, inter->targetEnd);
-}
-
 int interactSize(struct interact *inter)
 /* Compute length of interaction (distance between middle of each region) in bp */
 {

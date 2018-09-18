@@ -107,6 +107,9 @@ char *interactOtherChrom(struct interact *inter);
 int interactRegionCenter(int start, int end);
 /* Return genomic location of center of region */
 
+void interactRegionCenters(struct interact *inter, int *sourceCenter, int *targetCenter);
+/* Return genomic position of endpoint centers */
+
 int interactRegionDistance(struct interact *inter);
 /* Return distance between region midpoints. Return -1 for other chromosome */
 

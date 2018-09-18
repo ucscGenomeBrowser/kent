@@ -372,6 +372,15 @@ ret->targetStrand = cloneString(row[17]);
 return ret;
 }
 
+void interactRegionCenters(struct interact *inter, int *sourceCenter, int *targetCenter)
+/* Return genomic position of endpoint centers */
+{
+assert(sourceCenter);
+assert(targetCenter);
+*sourceCenter = interactRegionCenter(inter->sourceStart, inter->sourceEnd);
+*targetCenter = interactRegionCenter(inter->targetStart, inter->targetEnd);
+}
+
 struct bed *interactToBed(struct interact *inter)
 /* Convert an interact to a BED12 (actually, BED15+label) */
 {
@@ -379,48 +388,80 @@ struct bed *bed = NULL;
 AllocVar(bed);
 
 bed->chrom = inter->chrom;
-bed->chromStart = inter->chromStart;
-bed->chromEnd = inter->chromEnd;
+// expand extents to edges of endpoints
+// NOTE: this should be changed in schema defn
+//bed->chromStart = inter->chromStart;
+bed->chromStart = min(inter->sourceStart, inter->targetStart);
+//bed->chromEnd = inter->chromEnd;
+bed->chromEnd = max(inter->sourceEnd, inter->targetEnd);
+bed->thickStart = bed->chromStart;
+bed->thickEnd = bed->chromEnd;
 bed->name = inter->name;
 bed->score = inter->score;
-bed->thickStart = inter->chromStart;
-bed->thickEnd = inter->chromEnd;
 bed->itemRgb = inter->color;
+AllocArray(bed->blockSizes, 2);
+AllocArray(bed->chromStarts, 2);
 
 char *strand = "+";
 if (differentString(inter->sourceChrom, inter->targetChrom))
     {
     // inter-chromosomal
     bed->blockCount = 1;
-    AllocArray(bed->blockSizes, 1);
     bed->blockSizes[0] = inter->chromEnd - inter->chromStart;
-    AllocArray(bed->chromStarts, 1);
     bed->chromStarts[0] = 0;
     if sameString(bed->chrom, inter->targetChrom)
         strand = "-";
     }
 else 
     {
-    bed->blockCount = 2;
-    AllocArray(bed->blockSizes, 2);
-    AllocArray(bed->chromStarts, 2);
-    if (inter->targetStart < inter->sourceStart)
+    // same chromosome
+    int sourceCenter, targetCenter;
+    interactRegionCenters(inter, &sourceCenter, &targetCenter);
+    if (targetCenter < sourceCenter)
         {
         strand = "-";
-        bed->blockSizes[1] = inter->sourceEnd - inter->sourceStart;
-        bed->blockSizes[0] = inter->targetEnd - inter->targetStart;
-        bed->chromStarts[1] = inter->sourceStart = inter->chromStart;
-        bed->chromStarts[0] = 0;
+        if (inter->sourceStart <= inter->targetEnd)
+            {
+            // overlapping - use thickStart/End to delineate
+            bed->blockCount = 1;
+            bed->blockSizes[0] = bed->chromEnd - bed->chromStart;
+            bed->chromStarts[0] = 0;
+            bed->thickStart = targetCenter;
+            bed->thickEnd = sourceCenter;
+            }
+        else
+            {
+            bed->blockCount = 2;
+            bed->blockSizes[1] = inter->sourceEnd - inter->sourceStart;
+            bed->blockSizes[0] = inter->targetEnd - inter->targetStart;
+            bed->chromStarts[1] = inter->sourceStart - inter->chromStart;
+            bed->chromStarts[0] = 0;
+            }
         }
     else
         {
-        bed->blockSizes[0] = inter->sourceEnd - inter->sourceStart;
-        bed->blockSizes[1] = inter->targetEnd - inter->targetStart;
-        bed->chromStarts[0] = 0;
-        bed->chromStarts[1] = inter->targetStart - inter->chromStart;
+        // forward direction
+        if (inter->targetStart <= inter->sourceEnd)
+            {
+            // overlapping - use thickStart/End to delineate
+            bed->blockCount = 1;
+            bed->blockSizes[0] = bed->chromEnd - bed->chromStart;
+            bed->chromStarts[0] = 0;
+            bed->thickStart = sourceCenter;
+            bed->thickEnd = targetCenter;
+            }
+        else
+            {
+            bed->blockCount = 2;
+            bed->blockSizes[0] = inter->sourceEnd - inter->sourceStart;
+            bed->blockSizes[1] = inter->targetEnd - inter->targetStart;
+            bed->chromStarts[0] = 0;
+            bed->chromStarts[1] = inter->targetStart - inter->chromStart;
+            }
         }
     }
 strcpy(bed->strand, strand);
 bed->label = bed->name;
 return bed;
 }
+
