@@ -434,7 +434,7 @@ else
             bed->blockCount = 2;
             bed->blockSizes[1] = inter->sourceEnd - inter->sourceStart;
             bed->blockSizes[0] = inter->targetEnd - inter->targetStart;
-            bed->chromStarts[1] = inter->sourceStart - inter->chromStart;
+            bed->chromStarts[1] = inter->sourceStart - bed->chromStart;
             bed->chromStarts[0] = 0;
             }
         }
@@ -456,7 +456,7 @@ else
             bed->blockSizes[0] = inter->sourceEnd - inter->sourceStart;
             bed->blockSizes[1] = inter->targetEnd - inter->targetStart;
             bed->chromStarts[0] = 0;
-            bed->chromStarts[1] = inter->targetStart - inter->chromStart;
+            bed->chromStarts[1] = inter->targetStart - bed->chromStart;
             }
         }
     }

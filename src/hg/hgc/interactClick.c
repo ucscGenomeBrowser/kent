@@ -21,7 +21,7 @@ struct interactPlusRow
     };
 
 static struct interactPlusRow *getInteractsFromTable(struct trackDb *tdb, char *chrom, 
-                                        int start, int end, char *foot)
+                                        int start, int end, char *name, char *foot)
 /* Retrieve interact items at this position from track table */
 {
 struct sqlConnection *conn = NULL;
@@ -48,9 +48,16 @@ int fieldCount = 0;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct interact *inter = interactLoadAndValidate(row+offset);
-    if (inter->chromStart != start || inter->chromEnd != end)
-        continue;
-
+    if (!name)
+        {
+        if (inter->chromStart != start || inter->chromEnd != end)
+            continue;
+        }
+    else
+        {
+        if (differentString(inter->name, name))
+            continue;
+        }
     // got one, save object and row representation
     struct interactPlusRow *ipr;
     AllocVar(ipr);
@@ -71,13 +78,14 @@ return iprs;
 }
 
 static struct interactPlusRow *getInteractsFromFile(char *file, char *chrom, int start, int end, 
-                                                char *foot)
-/* Retrieve interact items at this position from big file */
+                                                        char *name, char *foot)
+/* Retrieve interact items at this position or name from big file */
 {
 struct bbiFile *bbi = bigBedFileOpen(file);
 struct lm *lm = lmInit(0);
 struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
 struct interactPlusRow *iprs = NULL;
+
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     char startBuf[16], endBuf[16];
@@ -87,8 +95,17 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     struct interact *inter = interactLoadAndValidate(row);
     if (inter == NULL)
         continue;
-    if (inter->chromStart != start || inter->chromEnd != end)
-        continue;
+    if (!name)
+        {
+        if (inter->chromStart != start || inter->chromEnd != end)
+            continue;
+        }
+    else
+        {
+        //uglyf("inter name: %s. len: %d ", inter->name, (int)strlen(inter->name));
+        if (differentString(inter->name, name))
+            continue;
+        }
 
     // got one, save object and row representation
     struct interactPlusRow *ipr;
@@ -105,16 +122,25 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 return iprs;
 }
 
-static struct interactPlusRow *getInteractions(struct trackDb *tdb, char *chrom, int start, int end, 
-                                                char *foot)
-/* Retrieve interact items at this position. Also any others with the same endpoint, if endpoint clicked on*/
+static struct interactPlusRow *getInteractions(struct trackDb *tdb, char *chrom, 
+                                                int start, int end, char *name, char *foot)
+/* Retrieve interact items at this position or name. 
+ * Also any others with the same endpoint, if endpoint clicked on*/
 {
 struct interactPlusRow *iprs = NULL;
 char *file = trackDbSetting(tdb, "bigDataUrl");
 if (file != NULL)
-    iprs = getInteractsFromFile(file, chrom, start, end, foot);
+    {
+    iprs = getInteractsFromFile(file, chrom, start, end, NULL, foot);
+    if (!iprs)
+        iprs = getInteractsFromFile(file, chrom, start, end, name, foot);
+    }
 else
-    iprs = getInteractsFromTable(tdb, chrom, start, end, foot);
+    {
+    iprs = getInteractsFromTable(tdb, chrom, start, end, NULL, foot);
+    if (!iprs)
+        iprs = getInteractsFromTable(tdb, chrom, start, end, name, foot);
+    }
 // TODO: add sort on score in interacts in ipr
 //slSort(&inters, bedCmpScore);
 //slReverse(&inters);
@@ -230,13 +256,13 @@ char *chrom = cartString(cart, "c");
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 char *foot = cartOptionalString(cart, "foot");
-struct interactPlusRow *iprs = getInteractions(tdb, chrom, start, end, foot);
+struct interactPlusRow *iprs = getInteractions(tdb, chrom, start, end, item, foot);
 if (iprs == NULL)
     errAbort("Can't find interaction %s", item ? item : "");
 int count = slCount(iprs);
 if (count > 1)
     {
-    printf("<b>Interactions at this position:</b> %d<p>", count);
+    printf("<b>Interactions:</b> %d<p>", count);
     doInteractRegionDetails(tdb, iprs->interact);
     printf("</p>");
     }
