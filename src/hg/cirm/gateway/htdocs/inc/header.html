@@ -43,12 +43,14 @@
         <a href="/index"><img src="<!--#echo var="ROOT" -->/images/cirmSChubLogo.png" class="img-responsive"
         style="margin-top: 15px; max-width: 450px;" width="75%" height="75%"/></a>
         <h3 style="margin-bottom: 0px">
-          <div style="float: right; width: 200px;" class="input-group">
-            <form action="https://google.com/search" method="get">
-              <input type="hidden" name="sitesearch" value="cirm.ucsc.edu" />
-              <input type="text" name="q" class="form-control" placeholder="press enter to search" />
-            </form>
-          </div>
+          <!--#if expr='"$SERVER_NAME" = /cirm.ucsc.edu/'-->
+            <div style="float: right; width: 200px;" class="input-group">
+              <form action="https://google.com/search" method="get">
+                <input type="hidden" name="sitesearch" value="cirm.ucsc.edu" />
+                <input type="text" name="q" class="form-control" placeholder="press enter to search" />
+              </form>
+            </div>
+          <!--#endif -->
           <div style="line-height: 1.5em;">
             <a class="a-unstyled" href="<!--#echo var="ROOT" -->/cgi-bin/cdwWebBrowse?cdwCommand=browseFiles">
             <span class="label back-dark-pink">Files</span></a>
