@@ -33,7 +33,7 @@ track mrna override
 visibility hide
 
 track intronEst override
-priority 2
+priority 0.5
 
 # Comparative Genomics
 
