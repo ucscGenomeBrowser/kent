@@ -63,3 +63,7 @@ cp hg38/GeneHancer.html ~/kent/src/hg/makeDb/trackDb/human/hg19/geneHancer.html
 
 # cleanup
 rm -fr genecards.weizmann.ac.il
+
+mkdir fixRanges
+bigBedToBed geneHancerInteractionsDoubleElite.hg38.bb stdout | interactFixRanges stdin > fixRanges/geneHancerInteractionsDoubleElite.hg38.fixed.bed
+
