@@ -129,7 +129,7 @@ interactFreeList((struct interact **)(&tg->items));
 static boolean isBedMode(struct track *tg)
 /* Pack and squish modes display using BED linked features code */
 {
-return tg->visibility == tvPack || tg->visibility == tvDense;
+return tg->visibility == tvPack || tg->visibility == tvSquish;
 }
 
 void interactLoadItems(struct track *tg)
