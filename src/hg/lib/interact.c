@@ -371,3 +371,37 @@ ret->targetName = cloneString(row[16]);
 ret->targetStrand = cloneString(row[17]);
 return ret;
 }
+
+struct interact *interactLoadAllAndValidate(char *fileName) 
+/* Load all interact from a whitespace-separated file.
+ * Dispose of this with interactFreeList(). */
+{
+struct interact *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[18];
+while (lineFileRow(lf, row))
+    {
+    el = interactLoadAndValidate(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+void interactFixRange(struct interact *inter)
+/* Set values for chromStart/chromEnd based on source and target start/ends */
+{
+int chromStart = min(inter->sourceStart, inter->targetStart);
+int chromEnd = max(inter->sourceEnd, inter->targetEnd);
+if (inter->chromStart != chromStart)
+    {
+    warn("Fixed chromStart: %d to %d. ", inter->chromStart, chromStart); 
+    inter->chromStart = chromStart;
+    }
+if (inter->chromEnd != chromEnd)
+    {
+    warn("Fixed chromEnd: %d to %d. ", inter->chromEnd, chromEnd); 
+    inter->chromEnd = chromEnd;
+    }
+}
