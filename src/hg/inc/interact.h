@@ -98,6 +98,13 @@ struct interact *interactLoadAndValidate(char **row);
 /* Load a interact from row fetched with select * from interact
  * from database, validating fields.  Dispose of this with interactFree(). */
 
+struct interact *interactLoadAllAndValidate(char *fileName);
+/* Load all interact from a whitespace-separated file.
+ * Dispose of this with interactFreeList(). */
+
+void interactFixRange(struct interact *inter);
+/* Set values for chromStart/chromEnd based on source and target start/ends */
+
 char *interactOtherChrom(struct interact *inter);
 /* Get other chromosome from an interaaction. Return NULL if same chromosome */
 
