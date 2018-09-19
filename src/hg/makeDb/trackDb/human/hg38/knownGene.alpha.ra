@@ -19,7 +19,7 @@ html knownGene
 isGencode2 on
 bigGeneDataUrl /gbdb/hg38/knownGene.bb
 
-track knownGeneOld9
+track knownGeneOld10
 shortLabel Old UCSC Genes
 longLabel Previous Version of UCSC Genes
 group genes
@@ -27,14 +27,23 @@ visibility hide
 color 82,82,160
 type genePred
 hgsid on
-oldToNew kg9ToKg10
+oldToNew kg10ToKg11
 baseColorUseCds given
 baseColorDefault genomicCodons
 
-searchName knownGeneOld9
-searchTable knownGeneOld9
+searchName knownGeneOld10
+searchTable knownGeneOld10
 searchDescription Previous Version of UCSC Genes
 searchMethod fuzzy
 query select chrom, txStart,txEnd, name from %s where name like '%%%s%%'
 searchPriority 3.53
+
+searchName knownGeneAcc
+searchTable knownGene
+searchMethod exact
+searchType knownGene
+shortCircuit 1
+semiShortCircuit 1
+termRegex ENST[0-9.]+
+searchPriority 9
 
