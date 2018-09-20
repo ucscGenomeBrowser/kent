@@ -96,7 +96,7 @@ off_t calcNextEnd(int fileIx, int totalFiles, off_t estSize)
 /* Return next end to break at. */
 {
 if (fileIx == totalFiles)
-     return 0x7fffffffffffffff;	/* bignum 64-bit positive*/
+     return 0x7fffffffffffffff;	/* biggest positive signed 64-bit integer */
 else
     {
     off_t nextEnd = round((double)fileIx*(double)estSize/(double)totalFiles/16.0);
