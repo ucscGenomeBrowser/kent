@@ -59,17 +59,6 @@ noScoreFilter .
 url http://www.informatics.jax.org/marker/$$
 urlLabel MGI QTL Detail: 
 
-track xenoClinvar
-shortLabel Human Variants
-longLabel ClinVar Variants mapped to Mouse
-type bigBed 9 +
-itemRgb on
-bigDataUrl /gbdb/mm10/bbi/xenoClinvar.bb
-group x
-mouseOverField _mouseOver
-urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
-release alpha
-
 track igtc
 shortLabel Gene Trap
 longLabel International Gene Trap Consortium Sequence Tag Alignments
