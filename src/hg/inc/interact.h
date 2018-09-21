@@ -102,6 +102,10 @@ struct interact *interactLoadAllAndValidate(char *fileName);
 /* Load all interact from a whitespace-separated file.
  * Dispose of this with interactFreeList(). */
 
+void interactOutputCustom(struct interact *el, FILE *f, char sep, char lastSep);
+/* Print out interact.  Separate fields with sep. Follow last field with lastSep.
+ * Differs from auto-gen'ed by printing rgb color  */
+
 void interactFixRange(struct interact *inter);
 /* Set values for chromStart/chromEnd based on source and target start/ends */
 

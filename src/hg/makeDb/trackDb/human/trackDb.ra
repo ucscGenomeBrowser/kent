@@ -16,6 +16,9 @@ include trackDb.pgSnp.ra
 # Genotype Tissue Expresssion (GTEx)
 include trackDb.gtex.ra
 
+# GeneHancer from Weizmann labs
+include trackDb.geneHancer.ra
+
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
 longLabel Chromosome Bands Localized by FISH Mapping Clones (for Ideogram)
@@ -5087,3 +5090,4 @@ semiShortCircuit 1
 termRegex nssv[0-9]+
 searchType bed
 searchPriority 50
+
