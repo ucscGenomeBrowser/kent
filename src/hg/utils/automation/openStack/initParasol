@@ -15,7 +15,7 @@ export binDir="/data/bin"
 export workDir="/data/parasol"
 
 # the internal cloud address of this machine:
-export parasolHub=`ip addr show | egrep "inet.*eth0" | head -1 | awk '{print $2}' | sed -e 's#/.*##;'`
+export parasolHub=`/usr/sbin/ip addr show | egrep "inet.*eth0|inet.*em1" | head -1 | awk '{print $2}' | sed -e 's#/.*##;'`
 
 # date stamp for log identification
 export dateStamp=`date "+%Y-%m-%dT%H:%M"`

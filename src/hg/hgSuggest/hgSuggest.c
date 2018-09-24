@@ -21,11 +21,7 @@ long enteredMainTime = clock1000();
 cgiSpoof(&argc, argv);
 char *prefix = cgiOptionalString("prefix");
 char *database = cgiOptionalString("db");
-
-initGenbankTableNames(database);
-
 int exact = cgiOptionalInt("exact", 0);
-struct sqlConnection *conn;
 char query[2048];
 char **row;
 struct sqlResult *sr;
@@ -34,14 +30,17 @@ boolean hasKnownCanonical;
 struct dyString *str = newDyString(10000);
 char *table;
 
+pushWarnHandler(htmlVaBadRequestAbort);
 pushAbortHandler(htmlVaBadRequestAbort);
 if(prefix == NULL || database == NULL)
     errAbort("%s", "Missing prefix and/or db CGI parameter");
 
-conn = hAllocConn(database);
+initGenbankTableNames(database);
+struct sqlConnection *conn = hAllocConn(database);
 table = connGeneSuggestTable(conn);
 if(table == NULL)
     errAbort("gene autosuggest is not supported for db '%s'", database);
+popWarnHandler();
 popAbortHandler();
 
 hasKnownCanonical = sameString(table, "knownCanonical");
