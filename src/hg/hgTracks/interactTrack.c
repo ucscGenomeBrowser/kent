@@ -132,30 +132,89 @@ static boolean isBedMode(struct track *tg)
 return tg->visibility == tvPack || tg->visibility == tvSquish;
 }
 
+static struct linkedFeatures *interactToLf(struct interact *inter, boolean doColor)
+/* Convert interact BED to linkedFeatures */
+{
+struct bed *bed = interactToBed(inter);
+struct linkedFeatures *lf = lfFromBed(bed);
+if (doColor)
+    {
+    lf->extra = (void *)USE_ITEM_RGB;   /* signal for coloring */
+    lf->filterColor = bed->itemRgb;
+    }
+bedFree(&bed);
+// TODO: use lfFromBedExtra with scoreMin, scoreMax ?
+return lf;
+}
+
 void interactLoadItems(struct track *tg)
 /* Load interact items in interact format */
 {
 loadAndFilterItems(tg);
 if (isBedMode(tg))
     {
-    /* convert to BEDs for linked feature display */
+    // convert to BEDs for linked feature display
     struct interact *inters = tg->items, *inter;
     struct linkedFeatures *lfs = NULL, *lf;
+    struct hash *intersMerge = hashNew(0);
+    boolean doMerge = cartVarExists(cart, "interactTargetMerge");
+    boolean doColor = !tg->colorShades;
     for (inter = inters; inter; inter = inter->next)
         {
-        struct bed *bed = interactToBed(inter);
-        lf = lfFromBed(bed);
-        if (!tg->colorShades)
+        if (doMerge)
             {
-            lf->extra = (void *)USE_ITEM_RGB;   /* signal for coloring */
-            lf->filterColor = bed->itemRgb;
+            lf = (struct linkedFeatures *) hashFindVal(intersMerge, inter->targetName);
+            if (lf)
+                {
+                // add a simple feature for this source to the linked feature
+                struct simpleFeature *sf = NULL;
+                AllocVar(sf);
+                sf->start = inter->sourceStart;
+                sf->end = inter->sourceEnd;
+                struct simpleFeature *sfs = lf->components;
+                slAddHead(&sfs, sf);
+                lf->components = sfs;
+                // TODO: consider averaging score
+
+                // FIXME: just for demo
+                struct bed *tempBed = interactToBed(inter);
+                if (orientFromChar(tempBed->strand[0]) != lf->orientation)
+                    lf->orientation = 0;
+                bedFree(&tempBed);
+                }
+            else
+                {
+                lf = interactToLf(inter, doColor);
+                lf->name = inter->targetName;
+                lf->tallStart = inter->targetStart;
+                lf->tallEnd = inter->targetEnd;
+                hashAdd(intersMerge, lf->name, lf);
+                }
             }
-        bedFree(&bed);
-        // TODO: use lfFromBedExtra with scoreMin, scoreMax
-        slAddHead(&lfs, lf);
+        else 
+            {
+            lf = interactToLf(inter, doColor);
+            slAddHead(&lfs, lf);
+            }
         }
-    slReverse(&lfs);
+    if (doMerge)
+        {
+        // sort simplefeatures and adjust bounds of merged features
+        struct hashEl *el, *els = hashElListHash(intersMerge);
+        for (el = els; el; el = el->next)
+            {
+            lf = (struct linkedFeatures *)el->val;
+            linkedFeaturesSortAndBound(lf);
+            slAddHead(&lfs, lf);
+            }
+        slSort(&lfs, linkedFeaturesCmp);
+        }
+    else
+        {
+        slReverse(&lfs);
+        }
     tg->items = lfs;
+    // TODO: consider freeing interact items
     }
 else
     {
