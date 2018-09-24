@@ -688,6 +688,18 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
     }
 }
 
+void interactLinkedFeaturesDrawAt(struct track *tg, void *item,
+                          struct hvGfx *hvg, int xOff, int y, double scale,
+                          MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a item with target in contrasting color */
+{
+linkedFeaturesDrawAt(tg, item, hvg, xOff, y, scale, font, color, vis);
+
+struct linkedFeatures *lf = item;
+// TODO: use magenta if track isn't colored ?
+drawScaledBox(hvg, lf->tallStart, lf->tallEnd, scale, xOff, y, tg->heightPer, MG_BLACK);
+}
+
 void interactDrawItems(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
@@ -695,7 +707,7 @@ void interactDrawItems(struct track *tg, int seqStart, int seqEnd,
 {
 if (isBedMode(tg))
     {
-    tg->drawItemAt = linkedFeaturesDrawAt;
+    tg->drawItemAt = interactLinkedFeaturesDrawAt;
     linkedFeaturesDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
     }
 else
