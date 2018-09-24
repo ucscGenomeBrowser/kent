@@ -176,18 +176,22 @@ if (isBedMode(tg))
                 lf->components = sfs;
                 // TODO: consider averaging score
 
+/*
                 // FIXME: just for demo
                 struct bed *tempBed = interactToBed(inter);
                 if (orientFromChar(tempBed->strand[0]) != lf->orientation)
                     lf->orientation = 0;
                 bedFree(&tempBed);
+*/
                 }
             else
                 {
+                // create a linked feature for this target
                 lf = interactToLf(inter, doColor);
                 lf->name = inter->targetName;
                 lf->tallStart = inter->targetStart;
                 lf->tallEnd = inter->targetEnd;
+                lf->orientation = 0;
                 hashAdd(intersMerge, lf->name, lf);
                 }
             }
