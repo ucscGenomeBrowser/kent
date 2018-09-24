@@ -147,6 +147,12 @@ bedFree(&bed);
 return lf;
 }
 
+static boolean isMergeMode(struct track *tg)
+/* Packed mode with merging on targets */
+{
+return cartBoolean(cart, "interactTargetMerge");
+}
+
 void interactLoadItems(struct track *tg)
 /* Load interact items in interact format */
 {
@@ -157,7 +163,7 @@ if (isBedMode(tg))
     struct interact *inters = tg->items, *inter;
     struct linkedFeatures *lfs = NULL, *lf;
     struct hash *intersMerge = hashNew(0);
-    boolean doMerge = cartVarExists(cart, "interactTargetMerge");
+    boolean doMerge = isMergeMode(tg);
     boolean doColor = !tg->colorShades;
     for (inter = inters; inter; inter = inter->next)
         {
@@ -699,9 +705,12 @@ void interactLinkedFeaturesDrawAt(struct track *tg, void *item,
 {
 linkedFeaturesDrawAt(tg, item, hvg, xOff, y, scale, font, color, vis);
 
-struct linkedFeatures *lf = item;
-// TODO: use magenta if track isn't colored ?
-drawScaledBox(hvg, lf->tallStart, lf->tallEnd, scale, xOff, y, tg->heightPer, MG_BLACK);
+if (isMergeMode(tg))
+    {
+    struct linkedFeatures *lf = item;
+    // TODO: use magenta if track isn't colored ?
+    drawScaledBox(hvg, lf->tallStart, lf->tallEnd, scale, xOff, y, tg->heightPer, MG_BLACK);
+    }
 }
 
 void interactDrawItems(struct track *tg, int seqStart, int seqEnd,

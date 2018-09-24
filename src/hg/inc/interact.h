@@ -101,6 +101,17 @@ struct interact *interactLoadAndValidate(char **row);
 struct bed *interactToBed(struct interact *inter);
 /* Convert an interact to a BED12 */
 
+struct interact *interactLoadAllAndValidate(char *fileName);
+/* Load all interact from a whitespace-separated file.
+ * Dispose of this with interactFreeList(). */
+
+void interactOutputCustom(struct interact *el, FILE *f, char sep, char lastSep);
+/* Print out interact.  Separate fields with sep. Follow last field with lastSep.
+ * Differs from auto-gen'ed by printing rgb color  */
+
+void interactFixRange(struct interact *inter);
+/* Set values for chromStart/chromEnd based on source and target start/ends */
+
 char *interactOtherChrom(struct interact *inter);
 /* Get other chromosome from an interaaction. Return NULL if same chromosome */
 

@@ -345,7 +345,8 @@ return aDist - bDist;
 
 struct interact *interactLoadAndValidate(char **row)
 /* Load a interact from row fetched with select * from interact
- * from database, validating fields.  Dispose of this with interactFree(). */
+ * from database, validating fields.  Dispose of this with interactFree(). 
+ * This currently differs from auto-gened only by it's handling of color field */
 // TODO: more validating
 {
 struct interact *ret;
@@ -358,7 +359,7 @@ ret->name = cloneString(row[3]);
 ret->score = sqlUnsigned(row[4]);
 ret->value = sqlDouble(row[5]);
 ret->exp = cloneString(row[6]);
-ret->color = bedParseColor(row[7]);
+ret->color = bedParseColor(row[7]);     // handle #NNNNNN, and HTML color (as well as rgb)
 ret->sourceChrom = cloneString(row[8]);
 ret->sourceStart = sqlUnsigned(row[9]);
 ret->sourceEnd = sqlUnsigned(row[10]);
@@ -463,5 +464,102 @@ else
 strcpy(bed->strand, strand);
 bed->label = bed->name;
 return bed;
+}
+
+struct interact *interactLoadAllAndValidate(char *fileName) 
+/* Load all interact from a whitespace-separated file.
+ * Dispose of this with interactFreeList(). */
+{
+struct interact *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[18];
+while (lineFileRow(lf, row))
+    {
+    el = interactLoadAndValidate(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+void interactOutputCustom(struct interact *el, FILE *f, char sep, char lastSep) 
+/* Print out interact.  Separate fields with sep. Follow last field with lastSep.
+ * Differs from auto-gen'ed by printing rgb color  */
+{
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->chrom);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->chromStart);
+fputc(sep,f);
+fprintf(f, "%u", el->chromEnd);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->name);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->score);
+fputc(sep,f);
+fprintf(f, "%g", el->value);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->exp);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+
+// print rgb color
+bedOutputRgb(f, el->color);
+
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->sourceChrom);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->sourceStart);
+fputc(sep,f);
+fprintf(f, "%u", el->sourceEnd);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->sourceName);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->sourceStrand);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->targetChrom);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->targetStart);
+fputc(sep,f);
+fprintf(f, "%u", el->targetEnd);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->targetName);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->targetStrand);
+if (sep == ',') fputc('"',f);
+fputc(lastSep,f);
+}
+
+void interactFixRange(struct interact *inter)
+/* Set values for chromStart/chromEnd based on source and target start/ends */
+{
+int chromStart = min(inter->sourceStart, inter->targetStart);
+int chromEnd = max(inter->sourceEnd, inter->targetEnd);
+if (inter->chromStart != chromStart)
+    {
+    warn("Fixed chromStart: %d to %d. ", inter->chromStart, chromStart); 
+    inter->chromStart = chromStart;
+    }
+if (inter->chromEnd != chromEnd)
+    {
+    warn("Fixed chromEnd: %d to %d. ", inter->chromEnd, chromEnd); 
+    inter->chromEnd = chromEnd;
+    }
 }
 

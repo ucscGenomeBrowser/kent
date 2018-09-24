@@ -167,8 +167,10 @@ void htmlVaWarn(char *format, va_list args);
  * This is exposed mostly for the benefit of the cart.) */
 
 void htmlVaBadRequestAbort(char *format, va_list args);
-/* Print out an HTTP header 400 status code (Bad Request) and message,
- * then exit with error.  For use as an errAbort handler. */
+/* Print out an HTTP header 400 status code (Bad Request) and message, then exit with error.
+ * NOTE: This must be installed using pushWarnHandler (pushAbortHandler optional) because
+ * vaErrAbort calls vaWarn and then noWarnAbort.  So if the defaut warn handler is used, then
+ * the error message will be printed out by defaultVaWarn before this prints out the header. */
 
 char *htmlWarnStartPattern();
 /* Return starting pattern for warning message. */
