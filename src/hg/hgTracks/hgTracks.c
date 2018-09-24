@@ -10016,6 +10016,10 @@ if(!trackImgOnly)
         jsIncludeFile("jquery.imgareaselect.js", NULL);
         }
     jsIncludeFile("autocomplete.js", NULL);
+    jsIncludeFile("es5-shim.4.0.3.min.js", NULL);
+    jsIncludeFile("es5-sham.4.0.3.min.js", NULL);
+    jsIncludeFile("lodash.3.10.0.compat.min.js", NULL);
+    jsIncludeFile("autocompleteCat.js", NULL);
     jsIncludeFile("hgTracks.js", NULL);
     jsIncludeFile("spectrum.min.js", NULL);
 
