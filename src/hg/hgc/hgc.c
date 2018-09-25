@@ -4302,10 +4302,20 @@ if (imagePath)
     printf("<A HREF=\"%s/%s.%s\">Download Original Image</A><BR>\n", bothWords[0], item, bothWords[1]);
     }
 
-if (sameString(tdb->table,"altLocations") && (!strchr(item,':')))
+if ((sameString(tdb->table,"altLocations") || sameString(tdb->table,"fixLocations")) &&
+    strchr(item,'_'))
     {
+    // Truncate item (alt/fix sequence name) at colon if found:
+    char itemCpy[strlen(item)+1];
+    safecpy(itemCpy, sizeof(itemCpy), item);
+    char *p = strchr(itemCpy, ':');
+    if (p)
+        *p = '\0';
     char *hgsid = cartSessionId(cart);
-    printf("<A HREF=\"/cgi-bin/hgTracks?hgsid=%s&virtModeType=singleAltHaplo&singleAltHaploId=%s\">Show this alternate haplotype placed on its chromosome</A><BR>\n", hgsid, item);
+    char *desc = sameString(tdb->table, "altLocations") ? "alternate haplotype" : "fix patch";
+    printf("<A HREF=\"/cgi-bin/hgTracks?hgsid=%s&virtModeType=singleAltHaplo&singleAltHaploId=%s\">"
+           "Show this %s placed on its chromosome</A><BR>\n",
+           hgsid, itemCpy, desc);
     }
 
 printTrackHtml(tdb);
