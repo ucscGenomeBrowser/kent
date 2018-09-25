@@ -2,7 +2,7 @@ track geneHancer
 compositeTrack on
 shortLabel GeneHancer
 longLabel GeneHancer Regulatory Elements and Gene Interactions
-subGroup1 view View a_GH=GeneHancer b_TSS=Gene_TSS c_I=Interaction 
+subGroup1 view View a_GH=Regulatory_Elements b_TSS=Gene_TSS c_I=Interactions d_I=Merged_Interactions
 subGroup2 set Set a_ELITE=Double_Elite b_ALL=All 
 sortOrder set=+ view=+
 dimensions dimX=set dimY=view
@@ -42,8 +42,8 @@ priority 1.5
 
     track ghGeneHancer
     type bigBed 9 +
-    shortLabel GeneHancer
-    view GeneHancer
+    shortLabel Reg Elem
+    view Regulatory Elements
     itemRgb on
     searchIndex name
     url http://www.genecards.org/Search/Keyword?queryString=$$
@@ -66,7 +66,7 @@ priority 1.5
         subGroups set=b_ALL view=a_GH
 
     track ghInteraction
-    shortLabel Interaction
+    shortLabel Interactions
     type bigInteract
     interactDirectional offsetTarget
     view c_I
@@ -92,4 +92,29 @@ priority 1.5
         urlLabel Interaction in GeneCards
         parent ghInteraction
         subGroups set=b_ALL view=c_I
+
+    track ghMergedInteraction
+    shortLabel Merged Interactions
+    type bigInteract
+    interactDirectional on mergeTarget
+    view d_I
+    viewUi on
+    visibility pack
+    parent geneHancer
+
+        track geneHancerMergedInteractionsDoubleElite
+        shortLabel GH Interactions (DE)
+        longLabel Merged interactions between GeneHancer regulatory elements and genes (Double Elite)
+        bigDataUrl /gbdb/$D/geneHancer/geneHancerInteractionsDoubleElite.$D.bb
+        urlLabel Interaction in GeneCards
+        parent ghMergedInteraction on
+        subGroups set=a_ELITE view=d_I
+
+        track geneHancerMergedInteractions
+        shortLabel GH Interactions
+        longLabel Merged interactions between GeneHancer regulatory elements and genes
+        bigDataUrl /gbdb/$D/geneHancer/geneHancerInteractionsAll.$D.bb
+        urlLabel Interaction in GeneCards
+        parent ghMergedInteraction
+        subGroups set=b_ALL view=d_I
 

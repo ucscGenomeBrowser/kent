@@ -20,14 +20,20 @@ return isNotEmpty(trackDbSetting(tdb, INTERACT_DIRECTIONAL));
 char *interactUiOffset(struct trackDb *tdb)
 /* Determine whether to offset source or target (or neither if NULL) */
 {
-char *directional = trackDbSetting(tdb, INTERACT_DIRECTIONAL);
-if (directional)
+char *setting = trackDbSetting(tdb, INTERACT_DIRECTIONAL);
+if (setting)
     {
-    if (sameString(directional, INTERACT_OFFSET_TARGET) ||
-         sameString(directional, INTERACT_OFFSET_SOURCE))
-                return directional;
+    char *words[8];
+    int count = chopByWhite(cloneString(setting), words, ArraySize(words));
+    if (count >= 1)
+        {
+        char *offset = words[0];
+        if (sameString(offset, INTERACT_OFFSET_TARGET) ||
+             sameString(offset, INTERACT_OFFSET_SOURCE))
+                return offset;
+        }
     }
-return FALSE;
+return NULL;
 }
 
 void interactUiMinScore(struct cart *cart, char *track, struct trackDb *tdb)
@@ -103,6 +109,53 @@ cgiMakeCheckBox(cartVar, doDashes);
 printf("Draw reverse direction interactions with dashed lines");
 }
 
+static char *interactMergeDefault(struct trackDb *tdb)
+/* Determine whether to merge by source or target (or neither if NULL) */
+{
+char *setting = trackDbSetting(tdb, INTERACT_DIRECTIONAL);
+if (setting)
+    {
+    char *words[8];
+    int count = chopByWhite(cloneString(setting), words, ArraySize(words));
+    if (count >= 2)
+        {
+        char *merge = words[1];
+        if (sameString(merge, INTERACT_TDB_MERGE_TARGET))
+            return INTERACT_MERGE_TARGET;
+         if (sameString(merge, INTERACT_TDB_MERGE_SOURCE))
+            return INTERACT_MERGE_SOURCE;
+        }
+    }
+return NULL;
+}
+
+char *interactUiMergeMode(struct cart *cart, char *track, struct trackDb *tdb)
+/* Get merge mode from trackDb and cart */
+{
+char *mergeDefault = interactMergeDefault(tdb);
+if (!mergeDefault)
+    return NULL;
+char *mergeMode = cartUsualStringClosestToHome(cart, tdb, isNameAtParentLevel(tdb, track),
+                                                INTERACT_MERGE, mergeDefault);
+if (sameString(INTERACT_MERGE_SOURCE, mergeMode) ||
+    sameString(INTERACT_MERGE_TARGET, mergeMode))
+        return mergeMode;
+return NULL;
+}
+
+static void interactUiSelectMergeMode(struct cart *cart, char *track, struct trackDb *tdb)
+/* Radio buttons to specify merge by source or target */
+{
+char *mergeMode = interactUiMergeMode(cart, track, tdb);
+char cartVar[1024];
+puts("<b>Merge by:</b> ");
+safef(cartVar, sizeof(cartVar), "%s.%s", track, INTERACT_MERGE);
+cgiMakeRadioButton(cartVar, INTERACT_MERGE_SOURCE, sameString(INTERACT_MERGE_SOURCE, mergeMode));
+printf("&nbsp;%s&nbsp;", "source");
+cgiMakeRadioButton(cartVar, INTERACT_MERGE_TARGET, sameString(INTERACT_MERGE_TARGET, mergeMode));
+printf("&nbsp;%s&nbsp;", "target");
+}
+
 void interactCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char *track,
                         char *title, boolean boxed)
 /* Configure interact track type */
@@ -117,12 +170,19 @@ if (startsWith("big", tdb->type))
 puts("<p>");
 interactUiEndpointFilter(cart, track, tdb);
 puts("</p><p>");
-interactUiTrackHeight(cart, track, tdb);
-puts("</p><p>");
-interactUiDrawMode(cart, track, tdb);
-puts("</p><p>");
-interactUiDashedLines(cart, track, tdb);
-puts("</p>");
+if (interactUiMergeMode(cart, track, tdb))
+    {
+    interactUiSelectMergeMode(cart, track, tdb);
+    }
+else
+    {
+    interactUiTrackHeight(cart, track, tdb);
+    puts("</p><p>");
+    interactUiDrawMode(cart, track, tdb);
+    puts("</p><p>");
+    interactUiDashedLines(cart, track, tdb);
+    puts("</p>");
+    }
 scoreCfgUi(database, cart,tdb,tdb->track,"",1000,FALSE);
 cfgEndBox(boxed);
 }

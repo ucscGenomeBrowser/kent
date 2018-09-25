@@ -20,6 +20,8 @@
 #define INTERACT_DIRECTIONAL    "interactDirectional"
 #define INTERACT_OFFSET_SOURCE  "offsetSource"
 #define INTERACT_OFFSET_TARGET  "offsetTarget"
+#define INTERACT_TDB_MERGE_SOURCE   "mergeSource"
+#define INTERACT_TDB_MERGE_TARGET   "mergeTarget"
 
 /* setting to show interactions with peak up (hill, not valley) */
 #define INTERACT_UP             "interactUp"
@@ -41,6 +43,10 @@
 #define INTERACT_ENDS_VISIBLE_ANY "any"
 #define INTERACT_ENDS_VISIBLE_DEFAULT INTERACT_ENDS_VISIBLE_ANY
 
+#define INTERACT_MERGE            "merge"
+#define INTERACT_MERGE_SOURCE     "source"
+#define INTERACT_MERGE_TARGET     "target"
+
 
 void interactCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char *track,
                         char *title, boolean boxed);
@@ -51,5 +57,8 @@ boolean interactUiDirectional(struct trackDb *tdb);
 
 char *interactUiOffset(struct trackDb *tdb);
 /* Determine whether to offset source or target (or neither if NULL) */
+
+char *interactUiMergeMode(struct cart *cart, char *track, struct trackDb *tdb);
+/* Get merge mode from trackDb and cart */
 
 #endif

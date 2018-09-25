@@ -416,49 +416,23 @@ if (differentString(inter->sourceChrom, inter->targetChrom))
 else 
     {
     // same chromosome
+    bed->blockCount = 2;
+    bed->chromStarts[0] = 0;
     int sourceCenter, targetCenter;
     interactRegionCenters(inter, &sourceCenter, &targetCenter);
     if (targetCenter < sourceCenter)
-        {
         strand = "-";
-        if (inter->sourceStart <= inter->targetEnd)
-            {
-            // overlapping - use thickStart/End to delineate
-            bed->blockCount = 1;
-            bed->blockSizes[0] = bed->chromEnd - bed->chromStart;
-            bed->chromStarts[0] = 0;
-            bed->thickStart = targetCenter;
-            bed->thickEnd = sourceCenter;
-            }
-        else
-            {
-            bed->blockCount = 2;
-            bed->blockSizes[1] = inter->sourceEnd - inter->sourceStart;
-            bed->blockSizes[0] = inter->targetEnd - inter->targetStart;
-            bed->chromStarts[1] = inter->sourceStart - bed->chromStart;
-            bed->chromStarts[0] = 0;
-            }
+    if (inter->sourceStart < inter->targetStart)
+        {
+        bed->blockSizes[0] = inter->sourceEnd - inter->sourceStart;
+        bed->blockSizes[1] = inter->targetEnd - inter->targetStart;
+        bed->chromStarts[1] = inter->targetStart - bed->chromStart;
         }
     else
         {
-        // forward direction
-        if (inter->targetStart <= inter->sourceEnd)
-            {
-            // overlapping - use thickStart/End to delineate
-            bed->blockCount = 1;
-            bed->blockSizes[0] = bed->chromEnd - bed->chromStart;
-            bed->chromStarts[0] = 0;
-            bed->thickStart = sourceCenter;
-            bed->thickEnd = targetCenter;
-            }
-        else
-            {
-            bed->blockCount = 2;
-            bed->blockSizes[0] = inter->sourceEnd - inter->sourceStart;
-            bed->blockSizes[1] = inter->targetEnd - inter->targetStart;
-            bed->chromStarts[0] = 0;
-            bed->chromStarts[1] = inter->targetStart - bed->chromStart;
-            }
+        bed->blockSizes[0] = inter->targetEnd - inter->targetStart;
+        bed->blockSizes[1] = inter->sourceEnd - inter->sourceStart;
+        bed->chromStarts[1] = inter->sourceStart - bed->chromStart;
         }
     }
 strcpy(bed->strand, strand);

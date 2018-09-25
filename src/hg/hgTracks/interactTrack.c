@@ -126,17 +126,13 @@ void interactFreeItems(struct track *tg)
 interactFreeList((struct interact **)(&tg->items));
 }
 
-static boolean isBedMode(struct track *tg)
-/* Pack and squish modes display using BED linked features code */
-{
-return tg->visibility == tvPack || tg->visibility == tvSquish;
-}
-
 static struct linkedFeatures *interactToLf(struct interact *inter, boolean doColor)
 /* Convert interact BED to linkedFeatures */
 {
 struct bed *bed = interactToBed(inter);
 struct linkedFeatures *lf = lfFromBed(bed);
+// not sure why this is needed -- lfFromBed seems to reorder blocks, sometimes ?
+linkedFeaturesSortAndBound(lf);
 if (doColor)
     {
     lf->extra = (void *)USE_ITEM_RGB;   /* signal for coloring */
@@ -147,57 +143,158 @@ bedFree(&bed);
 return lf;
 }
 
-static boolean isMergeMode(struct track *tg)
-/* Packed mode with merging on targets */
+static boolean isLinkedFeaturesMode(struct track *tg)
+/* Determine if linked feature display will be used */
 {
-return cartBoolean(cart, "interactTargetMerge");
+return (tg->visibility == tvPack || tg->visibility == tvSquish);
+}
+
+int interactSize(struct interact *inter)
+/* Compute length of interaction (distance between middle of each region) in bp */
+{
+int sourceCenter = 0, targetCenter = 0;
+interactRegionCenters(inter, &sourceCenter, &targetCenter);
+return abs(targetCenter - sourceCenter);
+}
+
+int getX(int pos, int seqStart, double scale, int xOff)
+/* Get x coordinate of a genomic location. Return -1 if off-screen */
+{
+if (pos < seqStart)
+    return -1;
+return ((double)(pos - seqStart + .5) * scale) + xOff;
+}
+
+
+static void setYOff(struct track *tg, int yOff)
+/* Stash y offset for this track */
+{
+tg->customInt = yOff;
+}
+
+static int getYOff(struct track *tg)
+/* Get y offset for this track (stashed by DrawItems) */
+{
+return tg->customInt;
+}
+
+static int flipY(struct track *tg, int y)
+/* Invert y coordinate if flipped display is requested */
+{
+int yOff = getYOff(tg);
+int flipped = yOff + tg->height + yOff - y;
+return flipped;
+}
+
+struct interactTrackInfo {
+    boolean isDirectional; // source and target are distinct item types
+    char *offset;          // which end to draw offset (source or target)
+    char *mergeMode;       // merge by source or target (or no merge if NULL)
+    boolean drawUp;          // draw interactions with peak up (hill)
+    boolean doOtherLabels;  // true to suppress labels on other chrom items (prevent overlap)
+    int maxSize;        // longest interaction (midpoint to midpoint) in bp
+    int fontHeight;
+    int sameCount;      // number of same chromosome interactions in window
+    int sameHeight;     // vertical space for same chromosome interactions
+    int otherCount;     // number of other chromosome interactions in window
+    int otherHeight;    // vertical space for other chromosome interactions
+} interactTrackInfo;
+
+static void interactGetLayoutInfo(struct track *tg, int seqStart, struct hvGfx *hvg,                                                       int xOff, MgFont *font, double scale)
+/* Get layout info from interact items in window */
+{
+struct interactTrackInfo *tInfo = tg->customPt;
+tInfo->doOtherLabels = TRUE;
+tInfo->isDirectional = interactUiDirectional(tg->tdb);
+tInfo->offset = interactUiOffset(tg->tdb);
+tInfo->drawUp = trackDbSettingClosestToHomeOn(tg->tdb, INTERACT_UP);
+
+char *otherChrom = NULL;
+int prevLabelEnd = 0, prevLabelStart = 0;
+char *prevLabel = 0;
+struct interact *inter;
+
+for (inter = (struct interact *)tg->items; inter; inter = inter->next)
+    {
+    otherChrom = interactOtherChrom(inter);
+    if (otherChrom == NULL)
+        {
+        tInfo->sameCount++;
+        // determine maximum interaction size, for later use laying out 'peaks'
+        int size = interactSize(inter);
+        if (size > tInfo->maxSize)
+            tInfo->maxSize = size;
+        }
+    else
+        {
+        tInfo->otherCount++;
+        // suppress interchromosomal labels if they overlap
+        if (!tInfo->doOtherLabels)
+            continue;
+        int labelWidth = vgGetFontStringWidth(hvg->vg, font, otherChrom);
+        int x = getX(inter->chromStart, seqStart, scale, xOff);
+        int labelStart = round((double)(x - labelWidth)/2);
+        int labelEnd = labelStart + labelWidth - 1;
+        if (labelStart <= prevLabelEnd && 
+                !(labelStart == prevLabelStart && labelEnd == prevLabelEnd && 
+                    sameString(otherChrom, prevLabel)))
+            tInfo->doOtherLabels = FALSE;
+        prevLabelStart = labelStart;
+        prevLabelEnd = labelEnd;
+        prevLabel = otherChrom;
+        }
+    }
+tInfo->fontHeight = vgGetFontPixelHeight(hvg->vg, font);
+tInfo->otherHeight = (tInfo->otherCount) ? 3 * tInfo->fontHeight : 0;
+tInfo->sameHeight = (tInfo->sameCount) ? tg->height - tInfo->otherHeight : 0;
 }
 
 void interactLoadItems(struct track *tg)
 /* Load interact items in interact format */
 {
+struct interactTrackInfo *tInfo = NULL;
+AllocVar(tInfo);
+tInfo->mergeMode = interactUiMergeMode(cart, tg->track, tg->tdb);
+tg->customPt = tInfo;
+
 loadAndFilterItems(tg);
-if (isBedMode(tg))
+if (tInfo->mergeMode || isLinkedFeaturesMode(tg))
     {
     // convert to BEDs for linked feature display
     struct interact *inters = tg->items, *inter;
     struct linkedFeatures *lfs = NULL, *lf;
     struct hash *intersMerge = hashNew(0);
-    boolean doMerge = isMergeMode(tg);
     boolean doColor = !tg->colorShades;
     for (inter = inters; inter; inter = inter->next)
         {
-        if (doMerge)
+        if (tInfo->mergeMode)
             {
-            lf = (struct linkedFeatures *) hashFindVal(intersMerge, inter->targetName);
+            boolean byTarget = sameString(tInfo->mergeMode, INTERACT_MERGE_TARGET);
+            // hash by source or target name
+            char *name = (byTarget ? inter->targetName : inter->sourceName);
+            lf = (struct linkedFeatures *) hashFindVal(intersMerge, name);
             if (lf)
                 {
-                // add a simple feature for this source to the linked feature
+                // add a simple feature for the other end (source or target) to the linked feature
                 struct simpleFeature *sf = NULL;
                 AllocVar(sf);
-                sf->start = inter->sourceStart;
-                sf->end = inter->sourceEnd;
+                sf->start = (byTarget ? inter->sourceStart : inter->targetStart);
+                sf->end = (byTarget ? inter->sourceEnd : inter->targetEnd);
                 struct simpleFeature *sfs = lf->components;
                 slAddHead(&sfs, sf);
                 lf->components = sfs;
+                if (lf->filterColor != inter->color)
+                    lf->filterColor = MG_GRAY;
                 // TODO: consider averaging score
-
-/*
-                // FIXME: just for demo
-                struct bed *tempBed = interactToBed(inter);
-                if (orientFromChar(tempBed->strand[0]) != lf->orientation)
-                    lf->orientation = 0;
-                bedFree(&tempBed);
-*/
                 }
             else
                 {
                 // create a linked feature for this target
                 lf = interactToLf(inter, doColor);
-                lf->name = inter->targetName;
-                lf->tallStart = inter->targetStart;
-                lf->tallEnd = inter->targetEnd;
                 lf->orientation = 0;
+                lf->name = (byTarget ? inter->targetName : inter->sourceName);
+                lf->tallStart = (byTarget ? inter->targetStart : inter->sourceStart);
+                lf->tallEnd = (byTarget ? inter->targetEnd : inter->sourceEnd);
                 hashAdd(intersMerge, lf->name, lf);
                 }
             }
@@ -207,7 +304,7 @@ if (isBedMode(tg))
             slAddHead(&lfs, lf);
             }
         }
-    if (doMerge)
+    if (tInfo->mergeMode)
         {
         // sort simplefeatures and adjust bounds of merged features
         struct hashEl *el, *els = hashElListHash(intersMerge);
@@ -269,106 +366,6 @@ int regionFootWidth(int start, int end, double scale)
     if (width == 0)
         width = 1;
     return width;
-}
-
-int interactSize(struct interact *inter)
-/* Compute length of interaction (distance between middle of each region) in bp */
-{
-int sourceCenter = 0, targetCenter = 0;
-interactRegionCenters(inter, &sourceCenter, &targetCenter);
-return abs(targetCenter - sourceCenter);
-}
-
-int getX(int pos, int seqStart, double scale, int xOff)
-/* Get x coordinate of a genomic location. Return -1 if off-screen */
-{
-if (pos < seqStart)
-    return -1;
-return ((double)(pos - seqStart + .5) * scale) + xOff;
-}
-
-struct interactTrackInfo {
-    boolean isDirectional; // source and target are distinct item types
-    char *offset;          // which end to draw offset (source or target)
-    boolean drawUp;          // draw interactions with peak up (hill)
-    boolean doOtherLabels;  // true to suppress labels on other chrom items (prevent overlap)
-    int maxSize;        // longest interaction (midpoint to midpoint) in bp
-    int fontHeight;
-    int sameCount;      // number of same chromosome interactions in window
-    int sameHeight;     // vertical space for same chromosome interactions
-    int otherCount;     // number of other chromosome interactions in window
-    int otherHeight;    // vertical space for other chromosome interactions
-} interactTrackInfo;
-
-struct interactTrackInfo *interactGetTrackInfo(struct track *tg, int seqStart, struct hvGfx *hvg,                                                       int xOff, MgFont *font, double scale)
-/* Get layout info from interact items in window */
-{
-struct interactTrackInfo *tInfo = NULL;
-AllocVar(tInfo);
-tInfo->doOtherLabels = TRUE;
-tInfo->isDirectional = interactUiDirectional(tg->tdb);
-tInfo->offset = interactUiOffset(tg->tdb);
-tInfo->drawUp = trackDbSettingClosestToHomeOn(tg->tdb, INTERACT_UP);
-
-char *otherChrom = NULL;
-int prevLabelEnd = 0, prevLabelStart = 0;
-char *prevLabel = 0;
-struct interact *inter;
-
-for (inter = (struct interact *)tg->items; inter; inter = inter->next)
-    {
-    otherChrom = interactOtherChrom(inter);
-    if (otherChrom == NULL)
-        {
-        tInfo->sameCount++;
-        // determine maximum interaction size, for later use laying out 'peaks'
-        int size = interactSize(inter);
-        if (size > tInfo->maxSize)
-            tInfo->maxSize = size;
-        }
-    else
-        {
-        tInfo->otherCount++;
-        // suppress interchromosomal labels if they overlap
-        if (!tInfo->doOtherLabels)
-            continue;
-        int labelWidth = vgGetFontStringWidth(hvg->vg, font, otherChrom);
-        int x = getX(inter->chromStart, seqStart, scale, xOff);
-        int labelStart = round((double)(x - labelWidth)/2);
-        int labelEnd = labelStart + labelWidth - 1;
-        if (labelStart <= prevLabelEnd && 
-                !(labelStart == prevLabelStart && labelEnd == prevLabelEnd && 
-                    sameString(otherChrom, prevLabel)))
-            tInfo->doOtherLabels = FALSE;
-        prevLabelStart = labelStart;
-        prevLabelEnd = labelEnd;
-        prevLabel = otherChrom;
-        }
-    }
-tInfo->fontHeight = vgGetFontPixelHeight(hvg->vg, font);
-tInfo->otherHeight = (tInfo->otherCount) ? 3 * tInfo->fontHeight : 0;
-tInfo->sameHeight = (tInfo->sameCount) ? tg->height - tInfo->otherHeight : 0;
-return tInfo;
-}
-
-static void setYOff(struct track *tg, int yOff)
-/* Stash y offset for this track */
-{
-tg->customInt = yOff;
-}
-
-static int getYOff(struct track *tg)
-/* Get y offset for this track (stashed by DrawItems) */
-{
-return tg->customInt;
-}
-
-static int flipY(struct track *tg, int y)
-/* Invert y coordinate if flipped display is requested */
-{
-int yOff = getYOff(tg);
-int flipped = yOff + tg->height + yOff - y;
-return flipped;
 }
 
 static void drawFoot(struct track *tg, struct hvGfx *hvg, char *seq, int seqStart, int seqEnd, 
@@ -439,7 +436,7 @@ mapBoxHgcOrHgGene(hvg, seqStart, seqEnd, x-1, y-1, 3, 3,
 static void drawInteractItems(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
-/* Draw a list of interact structures. */
+/* Draw a list of interact items with connectors (e.g. curves) */
 {
 #define DRAW_LINE       0
 #define DRAW_CURVE      1
@@ -465,7 +462,8 @@ char buffer[1024];
 char itemBuf[2048];
 
 // Gather info for layout
-struct interactTrackInfo *tInfo = interactGetTrackInfo(tg, seqStart, hvg, xOff, font, scale);
+interactGetLayoutInfo(tg, seqStart, hvg, xOff, font, scale);
+struct interactTrackInfo *tInfo = (struct interactTrackInfo *)tg->customPt;
 setYOff(tg, yOff);      // TODO: better to stash this in tInfo, and save that in track struct */
 int highlightColor = MG_WHITE;
 boolean drawUp = trackDbSettingClosestToHomeOn(tg->tdb, INTERACT_UP) && vis == tvFull;
@@ -703,13 +701,36 @@ void interactLinkedFeaturesDrawAt(struct track *tg, void *item,
                           MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a item with target in contrasting color */
 {
-linkedFeaturesDrawAt(tg, item, hvg, xOff, y, scale, font, color, vis);
-
-if (isMergeMode(tg))
+struct linkedFeatures *lf = item;
+if (tg->visibility == tvDense)
     {
-    struct linkedFeatures *lf = item;
-    // TODO: use magenta if track isn't colored ?
-    drawScaledBox(hvg, lf->tallStart, lf->tallEnd, scale, xOff, y, tg->heightPer, MG_BLACK);
+    lf->filterColor = slightlyDarkerColor(hvg, MG_GRAY);
+                // can't distinguish overlapping colors, so force to gray
+    }
+linkedFeaturesDrawAt(tg, item, hvg, xOff, y, scale, font, color, vis);
+struct interactTrackInfo *tInfo = tg->customPt;
+
+// draw overlapping items in white
+if (tInfo->mergeMode)
+    {
+    struct simpleFeature *sf;
+    int shortHeight = tg->heightPer/2;
+    for (sf = lf->components;  sf; sf = sf->next)
+        {
+        if (sf->start > lf->tallStart && sf->end < lf->tallEnd)
+            {
+            drawScaledBox(hvg, sf->start, sf->end, scale, xOff, y + shortHeight/2,
+                                shortHeight, MG_WHITE);
+            }
+        }
+    }
+else
+    {
+    struct simpleFeature *sf1 = lf->components, *sf2 = sf1->next;
+    if (sf2->start < sf1->end)
+        {
+        drawScaledBox(hvg, sf2->start, sf2->end, scale, xOff, y, tg->heightPer, MG_WHITE);
+        }
     }
 }
 
@@ -718,12 +739,14 @@ void interactDrawItems(struct track *tg, int seqStart, int seqEnd,
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a list of interact structures. */
 {
-if (isBedMode(tg))
+struct interactTrackInfo *tInfo = (struct interactTrackInfo *)tg->customPt;
+if (tInfo->mergeMode || isLinkedFeaturesMode(tg))
     {
     tg->drawItemAt = interactLinkedFeaturesDrawAt;
     linkedFeaturesDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
     }
 else
+    // curve, etc. connector display
     drawInteractItems(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
 }
 
@@ -731,7 +754,7 @@ void interactMethods(struct track *tg)
 /* Interact track type methods */
 {
 tg->bedSize = 12;
-linkedFeaturesMethods(tg);         // for pack and squish modes 
+linkedFeaturesMethods(tg);         // for most vis and mode settings
 tg->loadItems = interactLoadItems;
 tg->drawItems = interactDrawItems;
 }
