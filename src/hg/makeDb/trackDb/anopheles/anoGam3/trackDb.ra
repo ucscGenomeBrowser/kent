@@ -54,3 +54,5 @@ shortCircuit 1
 xrefTable ensGtp
 xrefQuery select transcript,protein from %s where protein like '%s%%'
 termRegex AGAP[0-9]+(-P[A-Z]+.[0-9])?
+
+include ../../crispr10K.ra
