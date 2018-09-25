@@ -3573,7 +3573,20 @@ var popUpHgt = {
     
         $('#hgTracksDialog').dialog('option' , 'title' , popUpHgt.title);
         $('#hgTracksDialog').dialog('open');
-    
+
+        // Initialize autocomplete for alt/fix sequence names
+        autocompleteCat.init($('#singleAltHaploId'),
+                             { baseUrl: 'hgSuggest?db=' + getDb() + '&type=altOrPatch&prefix=',
+                               enterSelectsIdentical: true });
+        // Make option inputs select their associated radio buttons
+        $('input[name="emPadding"]').keyup(function() {
+            $('#virtModeType[value="exonMostly"]').attr('checked', true); });
+        $('input[name="gmPadding"]').keyup(function() {
+            $('#virtModeType[value="geneMostly"]').attr('checked', true); });
+        $('#multiRegionsBedInput').keyup(function() {
+            $('#virtModeType[value="customUrl"]').attr('checked', true); });
+        $('#singleAltHaploId').keyup(function() {
+            $('#virtModeType[value="singleAltHaplo"]').attr('checked', true); });
     }
 };
 

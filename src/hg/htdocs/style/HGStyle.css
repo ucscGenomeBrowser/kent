@@ -627,6 +627,20 @@ div#haplotypes .textAlert { color:#DC143C; } /* dark red */
     color: gray;
 }
 
+/* for autocompleteCat (autocomplete with optional category labels) */
+.ui-autocomplete-category {
+    /* Adapted from https://jqueryui.com/autocomplete/#categories */
+    font-weight: bold;
+    line-height: 1.5;
+    background: lightgray;
+}
+
+.ui-menu-item {
+    /* This is necessary if a background color is specified in .ui-autocomplete-category above;
+     * the category labels actually extend upwards, behind the preceding items! */
+    background: white;
+}
+
 /* Added for Angie's React UI stuff */
 .cgiTitleBox {
     background-color: #D9E4F8;

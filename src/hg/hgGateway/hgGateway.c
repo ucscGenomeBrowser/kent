@@ -364,6 +364,7 @@ jsIncludeFile("cart.js", NULL);
 webIncludeResourceFile("jquery-ui.css");
 jsIncludeFile("jquery-ui.js", NULL);
 jsIncludeFile("jquery.watermarkinput.js", NULL);
+jsIncludeFile("autocompleteCat.js",NULL);
 jsIncludeFile("utils.js",NULL);
 
 // Phylogenetic tree .js file, produced by dbDbTaxonomy.pl:
