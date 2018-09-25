@@ -554,8 +554,15 @@ var genomePos = {
             positionDialog = $("#positionDialog")[0];
         }
         if (hgTracks.windows) {
-            var i,len;
+            var i, len, end;
+            var matches = /^virt:[0-9]+-([0-9]+)/.exec(position);
             var str = position;
+            if (matches) {
+                end = matches[1];
+                if (end < hgTracks.chromEnd) {
+                    str += "<br>(full virtual region is virt:1-" + hgTracks.chromEnd + ")";
+                }
+            }
             if (!(hgTracks.virtualSingleChrom && (hgTracks.windows.length === 1))) {
                 str += "<br>\n";
                 str += "<br>\n";
@@ -572,7 +579,7 @@ var genomePos = {
         }
         $(positionDialog).dialog({
                 modal: true,
-                title: "Window-Positions",
+                title: "Multi-region position ranges",
                 closeOnEscape: true,
                 resizable: false,
                 autoOpen: false,
