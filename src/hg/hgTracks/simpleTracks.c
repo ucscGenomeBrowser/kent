@@ -1626,6 +1626,7 @@ return a->start - b->start;
 
 void linkedFeaturesSortAndBound(struct linkedFeatures *lf)
 /* Sort simpleFeatures in the linkedFeature and set start and end based on simpleFetaures */
+// TODO: dedupe the simpleFeatures ?
 {
 struct simpleFeature *sfLast, *sfs = lf->components;
 slSort(&sfs, simpleFeatureCmp);
