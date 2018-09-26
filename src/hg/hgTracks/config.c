@@ -696,7 +696,10 @@ if (conn)
         cgiMakeRadioButton("virtModeType", "singleAltHaplo",
                            sameWord("singleAltHaplo", virtModeType));
         hPrintf("</TD><TD>");
-        hPrintf("Show one alternate haplotype, placed on its chromosome, using ID: ");
+        hPrintf("Show one alternate haplotype");
+        if (fixLocExists)
+            hPrintf(" or fix patch");
+        hPrintf(", placed on its chromosome, using ID: ");
         char *haplo = cartUsualString(cart, "singleAltHaploId", singleAltHaploId);
         char *foundHaplo = NULL;
         char sql[1024];
@@ -718,7 +721,7 @@ if (conn)
                 sqlSafef(sql, sizeof sql, "select name from fixLocations limit 1");
             haplo = sqlQuickString(conn, sql);
             }
-        hTextVar("singleAltHaploId", haplo, 20);
+        hTextVar("singleAltHaploId", haplo, 60);
         hPrintf("</TD></TR>\n");
         }
     }

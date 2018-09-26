@@ -95,6 +95,19 @@ dyStringPrintf(str, "\n]\n");
 puts(dyStringContents(str));
 }
 
+char *escapeAltFixTerm(char *term)
+/* Special tweaks for SQL search of alt/fix terms that may include '.' and '_' characters. */
+{
+// If there is a ".", make it into a single-character wildcard so that "GL383518.1"
+// can match "chr1_GL383518v1_alt".
+char termCpy[strlen(term)+1];
+safecpy(termCpy, sizeof termCpy, term);
+subChar(termCpy, '.', '?');
+// Escape '_' because that is an important character in alt/fix sequence names, and support
+// wildcards:
+return sqlLikeFromWild(termCpy);
+}
+
 struct slName *queryQNames(struct sqlConnection *conn, char *table, char *term, boolean prefixOnly)
 /* If table exists, return qNames in table that match term, otherwise NULL.  Exclude items whose
  * tName contains '_' so the mappings between _alt and _fix sequences don't sneak into the wrong
@@ -103,18 +116,10 @@ struct slName *queryQNames(struct sqlConnection *conn, char *table, char *term, 
 struct slName *names = NULL;
 if (sqlTableExists(conn, table))
     {
-    // If there is a ".", make it into a single-character wildcard so that "GL383518.1"
-    // can match "chr1_GL383518v1_alt".
-    char termCpy[strlen(term)+1];
-    safecpy(termCpy, sizeof termCpy, term);
-    subChar(termCpy, '.', '?');
-    // Escape '_' because that is an important character in alt/fix sequence names, and support
-    // wildcards:
-    char *escapedTerm = sqlLikeFromWild(termCpy);
     char query[2048];
     sqlSafef(query, sizeof query, "select distinct(qName) from %s where qName like '%s%s%%' "
              "and tName not rlike '.*_.*' order by qName",
-             table, (prefixOnly ? "" : "%"), escapedTerm);
+             table, (prefixOnly ? "" : "%"), escapeAltFixTerm(term));
     names = sqlQuickList(conn, query);
     }
 return names;
@@ -130,6 +135,46 @@ for (match = matches; match != NULL; match = match->next)
         {
         jsonWriteObjectStart(jw, NULL);
         jsonWriteString(jw, "value", match->name);
+        if (isNotEmpty(category))
+            jsonWriteString(jw, "category", category);
+        jsonWriteObjectEnd(jw);
+        }
+    }
+}
+
+struct slPair *queryChromAlias(struct sqlConnection *conn, char *term, boolean prefixOnly)
+/* Search chromAlias for prefix matches for term. */
+{
+struct slPair *matches = NULL;
+if (sqlTableExists(conn, "chromAlias"))
+    {
+    char query[1024];
+    sqlSafef(query, sizeof query, "select chrom, alias from chromAlias where alias like '%s%s%%' "
+             "order by chrom", (prefixOnly ? "" : "%"), escapeAltFixTerm(term));
+    matches = sqlQuickPairList(conn, query);
+    }
+return matches;
+}
+
+void writeValLabelMatches(struct jsonWrite *jw, struct slPair *matches, char *category)
+/* Append JSON objects containing alt/fix seqs with extra label info & optional category. */
+{
+struct slPair *match;
+for (match = matches; match != NULL; match = match->next)
+    {
+    char *seqName = match->name;
+    if (strchr(seqName, '_') && !endsWith(seqName, "_random") && !startsWith("chrUn", seqName))
+        {
+        jsonWriteObjectStart(jw, NULL);
+        jsonWriteString(jw, "value", seqName);
+        char *extraInfo = match->val;
+        if (isNotEmpty(extraInfo))
+            {
+            int len = strlen(seqName) + strlen(extraInfo) + 32;
+            char label[len];
+            safef(label, sizeof label, "%s (%s)", seqName, extraInfo);
+            jsonWriteString(jw, "label", label);
+            }
         if (isNotEmpty(category))
             jsonWriteString(jw, "category", category);
         jsonWriteObjectEnd(jw);
@@ -157,6 +202,17 @@ if (fixMatches == NULL && altMatches == NULL)
     altMatches = queryQNames(conn, "altSeqLiftOverPsl", term, FALSE);
     writeAltFixMatches(jw, fixMatches, altMatches ? "Fix Patches" : "");
     writeAltFixMatches(jw, altMatches, fixMatches ? "Alt Patches" : "");
+    }
+// If there are still no matches, try chromAlias.
+if (fixMatches == NULL && altMatches == NULL)
+    {
+    struct slPair *aliasMatches = queryChromAlias(conn, term, TRUE);
+    writeValLabelMatches(jw, aliasMatches, "");
+    if (aliasMatches == NULL)
+        {
+        struct slPair *aliasMatches = queryChromAlias(conn, term, FALSE);
+        writeValLabelMatches(jw, aliasMatches, "");
+        }
     }
 hFreeConn(&conn);
 jsonWriteListEnd(jw);
