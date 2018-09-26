@@ -387,16 +387,7 @@ struct bed *interactToBed(struct interact *inter)
 {
 struct bed *bed = NULL;
 AllocVar(bed);
-
 bed->chrom = inter->chrom;
-// expand extents to edges of endpoints
-// NOTE: this should be changed in schema defn
-//bed->chromStart = inter->chromStart;
-bed->chromStart = min(inter->sourceStart, inter->targetStart);
-//bed->chromEnd = inter->chromEnd;
-bed->chromEnd = max(inter->sourceEnd, inter->targetEnd);
-bed->thickStart = bed->chromStart;
-bed->thickEnd = bed->chromEnd;
 bed->name = inter->name;
 bed->score = inter->score;
 bed->itemRgb = inter->color;
@@ -408,6 +399,8 @@ if (differentString(inter->sourceChrom, inter->targetChrom))
     {
     // inter-chromosomal
     bed->blockCount = 1;
+    bed->chromStart = inter->chromStart;
+    bed->chromEnd = inter->chromEnd;
     bed->blockSizes[0] = inter->chromEnd - inter->chromStart;
     bed->chromStarts[0] = 0;
     if sameString(bed->chrom, inter->targetChrom)
@@ -417,6 +410,10 @@ else
     {
     // same chromosome
     bed->blockCount = 2;
+    // expand extents to edges of endpoints
+    // NOTE: this should be changed in schema defn
+    bed->chromStart = min(inter->sourceStart, inter->targetStart);
+    bed->chromEnd = max(inter->sourceEnd, inter->targetEnd);
     bed->chromStarts[0] = 0;
     int sourceCenter, targetCenter;
     interactRegionCenters(inter, &sourceCenter, &targetCenter);
@@ -435,6 +432,8 @@ else
         bed->chromStarts[1] = inter->sourceStart - bed->chromStart;
         }
     }
+bed->thickStart = bed->chromStart;
+bed->thickEnd = bed->chromEnd;
 strcpy(bed->strand, strand);
 bed->label = bed->name;
 return bed;
