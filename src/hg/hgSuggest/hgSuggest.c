@@ -96,7 +96,9 @@ puts(dyStringContents(str));
 }
 
 struct slName *queryQNames(struct sqlConnection *conn, char *table, char *term, boolean prefixOnly)
-/* If table exists, return qNames in table that match term, otherwise NULL. */
+/* If table exists, return qNames in table that match term, otherwise NULL.  Exclude items whose
+ * tName contains '_' so the mappings between _alt and _fix sequences don't sneak into the wrong
+ * category's results. */
 {
 struct slName *names = NULL;
 if (sqlTableExists(conn, table))
@@ -111,7 +113,7 @@ if (sqlTableExists(conn, table))
     char *escapedTerm = sqlLikeFromWild(termCpy);
     char query[2048];
     sqlSafef(query, sizeof query, "select distinct(qName) from %s where qName like '%s%s%%' "
-             "order by qName",
+             "and tName not rlike '.*_.*' order by qName",
              table, (prefixOnly ? "" : "%"), escapedTerm);
     names = sqlQuickList(conn, query);
     }
