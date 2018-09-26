@@ -95,6 +95,19 @@ dyStringPrintf(str, "\n]\n");
 puts(dyStringContents(str));
 }
 
+char *escapeAltFixTerm(char *term)
+/* Special tweaks for SQL search of alt/fix terms that may include '.' and '_' characters. */
+{
+// If there is a ".", make it into a single-character wildcard so that "GL383518.1"
+// can match "chr1_GL383518v1_alt".
+char termCpy[strlen(term)+1];
+safecpy(termCpy, sizeof termCpy, term);
+subChar(termCpy, '.', '?');
+// Escape '_' because that is an important character in alt/fix sequence names, and support
+// wildcards:
+return sqlLikeFromWild(termCpy);
+}
+
 struct slName *queryQNames(struct sqlConnection *conn, char *table, char *term, boolean prefixOnly)
 /* If table exists, return qNames in table that match term, otherwise NULL.  Exclude items whose
  * tName contains '_' so the mappings between _alt and _fix sequences don't sneak into the wrong
@@ -103,18 +116,10 @@ struct slName *queryQNames(struct sqlConnection *conn, char *table, char *term, 
 struct slName *names = NULL;
 if (sqlTableExists(conn, table))
     {
-    // If there is a ".", make it into a single-character wildcard so that "GL383518.1"
-    // can match "chr1_GL383518v1_alt".
-    char termCpy[strlen(term)+1];
-    safecpy(termCpy, sizeof termCpy, term);
-    subChar(termCpy, '.', '?');
-    // Escape '_' because that is an important character in alt/fix sequence names, and support
-    // wildcards:
-    char *escapedTerm = sqlLikeFromWild(termCpy);
     char query[2048];
     sqlSafef(query, sizeof query, "select distinct(qName) from %s where qName like '%s%s%%' "
              "and tName not rlike '.*_.*' order by qName",
-             table, (prefixOnly ? "" : "%"), escapedTerm);
+             table, (prefixOnly ? "" : "%"), escapeAltFixTerm(term));
     names = sqlQuickList(conn, query);
     }
 return names;
@@ -145,7 +150,7 @@ if (sqlTableExists(conn, "chromAlias"))
     {
     char query[1024];
     sqlSafef(query, sizeof query, "select chrom, alias from chromAlias where alias like '%s%s%%' "
-             "order by chrom", (prefixOnly ? "" : "%"), term);
+             "order by chrom", (prefixOnly ? "" : "%"), escapeAltFixTerm(term));
     matches = sqlQuickPairList(conn, query);
     }
 return matches;
