@@ -3322,7 +3322,7 @@ if (! hTableExists(database, table))
 // where is the alt haplo placed?
 char query[256];
 sqlSafef(query, sizeof(query), "select chrom, chromStart, chromEnd from %s "
-         "where name rlike '^%s(:[0-9-]+?)'", table, haplotypeId);
+         "where name rlike '^%s(:[0-9-]+)?'", table, haplotypeId);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (!row)
