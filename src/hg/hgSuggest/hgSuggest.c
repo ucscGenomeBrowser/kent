@@ -137,6 +137,46 @@ for (match = matches; match != NULL; match = match->next)
     }
 }
 
+struct slPair *queryChromAlias(struct sqlConnection *conn, char *term)
+/* Search chromAlias for prefix matches for term. */
+{
+struct slPair *matches = NULL;
+if (sqlTableExists(conn, "chromAlias"))
+    {
+    char query[1024];
+    sqlSafef(query, sizeof query, "select chrom, alias from chromAlias where alias like '%s%%' "
+             "order by chrom", term);
+    matches = sqlQuickPairList(conn, query);
+    }
+return matches;
+}
+
+void writeValLabelMatches(struct jsonWrite *jw, struct slPair *matches, char *category)
+/* Append JSON objects containing alt/fix seqs with extra label info & optional category. */
+{
+struct slPair *match;
+for (match = matches; match != NULL; match = match->next)
+    {
+    char *seqName = match->name;
+    if (strchr(seqName, '_') && !endsWith(seqName, "_random") && !startsWith("chrUn", seqName))
+        {
+        jsonWriteObjectStart(jw, NULL);
+        jsonWriteString(jw, "value", seqName);
+        char *extraInfo = match->val;
+        if (isNotEmpty(extraInfo))
+            {
+            int len = strlen(seqName) + strlen(extraInfo) + 32;
+            char label[len];
+            safef(label, sizeof label, "%s (%s)", seqName, extraInfo);
+            jsonWriteString(jw, "label", label);
+            }
+        if (isNotEmpty(category))
+            jsonWriteString(jw, "category", category);
+        jsonWriteObjectEnd(jw);
+        }
+    }
+}
+
 void suggestAltOrPatch(char *database, char *term)
 /* Print out a Javascript list of objects describing alternate haplotype or fix patch sequences
  * from database that match term. */
@@ -157,6 +197,12 @@ if (fixMatches == NULL && altMatches == NULL)
     altMatches = queryQNames(conn, "altSeqLiftOverPsl", term, FALSE);
     writeAltFixMatches(jw, fixMatches, altMatches ? "Fix Patches" : "");
     writeAltFixMatches(jw, altMatches, fixMatches ? "Alt Patches" : "");
+    }
+// If there are still no matches, try chromAlias.
+if (fixMatches == NULL && altMatches == NULL)
+    {
+    struct slPair *aliasMatches = queryChromAlias(conn, term);
+    writeValLabelMatches(jw, aliasMatches, "");
     }
 hFreeConn(&conn);
 jsonWriteListEnd(jw);
