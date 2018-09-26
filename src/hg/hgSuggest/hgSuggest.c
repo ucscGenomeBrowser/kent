@@ -108,18 +108,21 @@ subChar(termCpy, '.', '?');
 return sqlLikeFromWild(termCpy);
 }
 
-struct slName *queryQNames(struct sqlConnection *conn, char *table, char *term, boolean prefixOnly)
-/* If table exists, return qNames in table that match term, otherwise NULL.  Exclude items whose
- * tName contains '_' so the mappings between _alt and _fix sequences don't sneak into the wrong
- * category's results. */
+struct slName *queryAltFixNames(struct sqlConnection *conn, char *table, char *term,
+                                char *excludeSuffix, boolean prefixOnly)
+/* If table exists, return names in table that match term, otherwise NULL.
+ * Chop after ':' if there is one and exclude items that end with excludeSuffix so the
+ * mappings between _alt and _fix sequences don't sneak into the wrong category's results. */
 {
 struct slName *names = NULL;
 if (sqlTableExists(conn, table))
     {
     char query[2048];
-    sqlSafef(query, sizeof query, "select distinct(qName) from %s where qName like '%s%s%%' "
-             "and tName not rlike '.*_.*' order by qName",
-             table, (prefixOnly ? "" : "%"), escapeAltFixTerm(term));
+    sqlSafef(query, sizeof query, "select distinct(substring_index(name, ':', 1)) from %s "
+             "where name like '%s%s%%' "
+             "and name not like '%%%s' and name not like '%%%s:%%'"
+             "order by name",
+             table, (prefixOnly ? "" : "%"), escapeAltFixTerm(term), excludeSuffix, excludeSuffix);
     names = sqlQuickList(conn, query);
     }
 return names;
@@ -190,16 +193,16 @@ struct jsonWrite *jw = jsonWriteNew();
 jsonWriteListStart(jw, NULL);
 struct sqlConnection *conn = hAllocConn(database);
 // First, search for prefix matches
-struct slName *fixMatches = queryQNames(conn, "fixSeqLiftOverPsl", term, TRUE);
-struct slName *altMatches = queryQNames(conn, "altSeqLiftOverPsl", term, TRUE);
+struct slName *fixMatches = queryAltFixNames(conn, "fixLocations", term, "alt", TRUE);
+struct slName *altMatches = queryAltFixNames(conn, "altLocations", term, "fix", TRUE);
 // Add category labels only if we get both types of matches.
 writeAltFixMatches(jw, fixMatches, altMatches ? "Fix Patches" : "");
 writeAltFixMatches(jw, altMatches, fixMatches ? "Alt Patches" : "");
 // If there are no prefix matches, look for partial matches
 if (fixMatches == NULL && altMatches == NULL)
     {
-    fixMatches = queryQNames(conn, "fixSeqLiftOverPsl", term, FALSE);
-    altMatches = queryQNames(conn, "altSeqLiftOverPsl", term, FALSE);
+    fixMatches = queryAltFixNames(conn, "fixLocations", term, "alt", FALSE);
+    altMatches = queryAltFixNames(conn, "altLocations", term, "fix", FALSE);
     writeAltFixMatches(jw, fixMatches, altMatches ? "Fix Patches" : "");
     writeAltFixMatches(jw, altMatches, fixMatches ? "Alt Patches" : "");
     }
