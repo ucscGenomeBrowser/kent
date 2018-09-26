@@ -278,6 +278,14 @@ if (tInfo->mergeMode || isLinkedFeaturesMode(tg))
                 // add a simple feature for the other end (source or target) to the linked feature
                 struct simpleFeature *sf = NULL;
                 AllocVar(sf);
+
+                // tweak interact struct for intrachromsomal item to ease next steps
+                if (differentString(inter->targetChrom, inter->sourceChrom))
+                    {
+                    inter->sourceStart = inter->targetStart = inter->chromStart;
+                    inter->sourceEnd = inter->targetEnd = inter->chromEnd;
+                    }
+
                 sf->start = (byTarget ? inter->sourceStart : inter->targetStart);
                 sf->end = (byTarget ? inter->sourceEnd : inter->targetEnd);
                 struct simpleFeature *sfs = lf->components;
@@ -285,7 +293,6 @@ if (tInfo->mergeMode || isLinkedFeaturesMode(tg))
                 lf->components = sfs;
                 if (lf->filterColor != inter->color)
                     lf->filterColor = MG_GRAY;
-                // TODO: consider averaging score
                 }
             else
                 {

@@ -388,7 +388,7 @@ struct bed *interactToBed(struct interact *inter)
 struct bed *bed = NULL;
 AllocVar(bed);
 bed->chrom = inter->chrom;
-bed->name = inter->name;
+bed->name = cloneString(inter->name);
 bed->score = inter->score;
 bed->itemRgb = inter->color;
 AllocArray(bed->blockSizes, 2);
