@@ -95,15 +95,24 @@ dyStringPrintf(str, "\n]\n");
 puts(dyStringContents(str));
 }
 
-struct slName *queryQNames(struct sqlConnection *conn, char *table, char *prefix)
-/* If table exists, return qNames in table that match prefix, otherwise NULL. */
+struct slName *queryQNames(struct sqlConnection *conn, char *table, char *term, boolean prefixOnly)
+/* If table exists, return qNames in table that match term, otherwise NULL. */
 {
 struct slName *names = NULL;
 if (sqlTableExists(conn, table))
     {
+    // If there is a ".", make it into a single-character wildcard so that "GL383518.1"
+    // can match "chr1_GL383518v1_alt".
+    char termCpy[strlen(term)+1];
+    safecpy(termCpy, sizeof termCpy, term);
+    subChar(termCpy, '.', '?');
+    // Escape '_' because that is an important character in alt/fix sequence names, and support
+    // wildcards:
+    char *escapedTerm = sqlLikeFromWild(termCpy);
     char query[2048];
-    sqlSafef(query, sizeof query, "select distinct(qName) from %s where qName like '%s%%' "
-             "order by qName", table, sqlLikeFromWild(prefix));
+    sqlSafef(query, sizeof query, "select distinct(qName) from %s where qName like '%s%s%%' "
+             "order by qName",
+             table, (prefixOnly ? "" : "%"), escapedTerm);
     names = sqlQuickList(conn, query);
     }
 return names;
@@ -126,18 +135,27 @@ for (match = matches; match != NULL; match = match->next)
     }
 }
 
-void suggestAltOrPatch(char *database, char *prefix)
+void suggestAltOrPatch(char *database, char *term)
 /* Print out a Javascript list of objects describing alternate haplotype or fix patch sequences
- * from database that match prefix. */
+ * from database that match term. */
 {
 struct jsonWrite *jw = jsonWriteNew();
 jsonWriteListStart(jw, NULL);
 struct sqlConnection *conn = hAllocConn(database);
-struct slName *fixMatches = queryQNames(conn, "fixSeqLiftOverPsl", prefix);
-struct slName *altMatches = queryQNames(conn, "altSeqLiftOverPsl", prefix);
+// First, search for prefix matches
+struct slName *fixMatches = queryQNames(conn, "fixSeqLiftOverPsl", term, TRUE);
+struct slName *altMatches = queryQNames(conn, "altSeqLiftOverPsl", term, TRUE);
 // Add category labels only if we get both types of matches.
 writeAltFixMatches(jw, fixMatches, altMatches ? "Fix Patches" : "");
 writeAltFixMatches(jw, altMatches, fixMatches ? "Alt Patches" : "");
+// If there are no prefix matches, look for partial matches
+if (fixMatches == NULL && altMatches == NULL)
+    {
+    fixMatches = queryQNames(conn, "fixSeqLiftOverPsl", term, FALSE);
+    altMatches = queryQNames(conn, "altSeqLiftOverPsl", term, FALSE);
+    writeAltFixMatches(jw, fixMatches, altMatches ? "Fix Patches" : "");
+    writeAltFixMatches(jw, altMatches, fixMatches ? "Alt Patches" : "");
+    }
 hFreeConn(&conn);
 jsonWriteListEnd(jw);
 puts(jw->dy->string);

@@ -16,3 +16,44 @@ searchPriority 8
 track ensGene override
 visibility pack
 ensemblIdUrl http://metazoa.ensembl.org
+
+searchTable ensGene
+searchType genePred
+semiShortCircuit 1
+termRegex AGAP[0-9]+(-R[A-Z])?
+searchPriority 50
+
+searchName ensGeneGtpGene
+searchTable ensGene
+searchType genePred
+searchMethod prefix
+semiShortCircuit 1
+xrefTable ensGtp
+xrefQuery select transcript,gene from %s where gene like '%s%%'
+termRegex AGAP[0-9]+(-R[A-Z])?
+searchPriority 50
+
+searchName ensDotPrefix
+searchTable ensGene
+query select chrom,txStart,txEnd,name from %s where name like '%s.%%'
+semiShortCircuit 1
+termRegex AGAP[0-9]+(-R[A-Z])?
+searchPriority 50
+
+searchTable ensemblGeneScaffold
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex (UNKN|Y_unplaced).([0-9]+)?
+searchPriority 18
+
+searchName ensGeneGtpProtein
+searchTable ensGene
+searchType genePred
+searchMethod prefix
+shortCircuit 1
+xrefTable ensGtp
+xrefQuery select transcript,protein from %s where protein like '%s%%'
+termRegex AGAP[0-9]+(-P[A-Z]+.[0-9])?
+
+include ../../crispr10K.ra
