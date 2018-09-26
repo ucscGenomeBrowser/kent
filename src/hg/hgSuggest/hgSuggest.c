@@ -137,15 +137,15 @@ for (match = matches; match != NULL; match = match->next)
     }
 }
 
-struct slPair *queryChromAlias(struct sqlConnection *conn, char *term)
+struct slPair *queryChromAlias(struct sqlConnection *conn, char *term, boolean prefixOnly)
 /* Search chromAlias for prefix matches for term. */
 {
 struct slPair *matches = NULL;
 if (sqlTableExists(conn, "chromAlias"))
     {
     char query[1024];
-    sqlSafef(query, sizeof query, "select chrom, alias from chromAlias where alias like '%s%%' "
-             "order by chrom", term);
+    sqlSafef(query, sizeof query, "select chrom, alias from chromAlias where alias like '%s%s%%' "
+             "order by chrom", (prefixOnly ? "" : "%"), term);
     matches = sqlQuickPairList(conn, query);
     }
 return matches;
@@ -201,8 +201,13 @@ if (fixMatches == NULL && altMatches == NULL)
 // If there are still no matches, try chromAlias.
 if (fixMatches == NULL && altMatches == NULL)
     {
-    struct slPair *aliasMatches = queryChromAlias(conn, term);
+    struct slPair *aliasMatches = queryChromAlias(conn, term, TRUE);
     writeValLabelMatches(jw, aliasMatches, "");
+    if (aliasMatches == NULL)
+        {
+        struct slPair *aliasMatches = queryChromAlias(conn, term, FALSE);
+        writeValLabelMatches(jw, aliasMatches, "");
+        }
     }
 hFreeConn(&conn);
 jsonWriteListEnd(jw);
