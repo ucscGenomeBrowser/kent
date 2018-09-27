@@ -146,7 +146,7 @@ return lf;
 static boolean isLinkedFeaturesMode(struct track *tg)
 /* Determine if linked feature display will be used */
 {
-return (tg->visibility == tvPack || tg->visibility == tvSquish);
+return (tg->visibility != tvFull);
 }
 
 int interactSize(struct interact *inter)
