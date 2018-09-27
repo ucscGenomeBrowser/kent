@@ -2596,5 +2596,5 @@ origAssembly hg38
 #include trackDb.refGene.ra public
 include ../../refSeqComposite.ra
 
-include trackDb.geneHancer.ra
+include ../trackDb.geneHancer.ra
 
