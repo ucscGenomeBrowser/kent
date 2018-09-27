@@ -6315,7 +6315,7 @@ if (isGencode)
     safef(varName, sizeof(varName), "%s.show.pseudo", tg->tdb->track);
     boolean showPseudo = cartUsualBoolean(cart, varName, FALSE);
     if (!showPseudo)
-        newList = stripLinkedFeaturesWithBitInScore(lfList,  BIT_PSEUDO);
+        newList = stripLinkedFeaturesWithBitInScore(newList,  BIT_PSEUDO);
     }
 
 slSort(&newList, linkedFeaturesCmp);
