@@ -139,7 +139,7 @@ if (file != NULL)
 else
     iprs = getInteractsFromTable(tdb, chrom, start, end, name, mergeMode, foot);
 
-// TODO: add sort on score in interacts in ipr
+// TODO: add sort on score, or position for merged items ?
 //slSort(&inters, bedCmpScore);
 //slReverse(&inters);
 return iprs;
@@ -204,7 +204,8 @@ sprintLongWithCommas(sizeBuf, region1End - region1Start);
 printf("<b>%s region:</b> %s&nbsp;&nbsp;"
                 "<a href='hgTracks?position=%s:%d-%d' target='_blank'>%s:%s-%s</a> %s",
                 region1Label, region1Name, region1Chrom, region1Start+1, region1End,
-                region1Chrom, startBuf, endBuf, inter->sourceStrand[0] == '.' ? "" : inter->sourceStrand);
+                region1Chrom, startBuf, endBuf, 
+                inter->sourceStrand[0] == '.' ? "" : inter->sourceStrand);
 printf("&nbsp;&nbsp;%s bp<br>\n", sizeBuf);
 
 sprintLongWithCommas(startBuf, region2Start+1);
@@ -213,7 +214,8 @@ sprintLongWithCommas(sizeBuf, region2End - region2Start);
 printf("<b>%s region:</b> %s&nbsp;&nbsp;"
                 "<a href='hgTracks?position=%s:%d-%d' target='_blank'>%s:%s-%s</a> %s",
                 region2Label, region2Name, region2Chrom, region2Start+1, region2End,
-                region2Chrom, startBuf, endBuf, inter->targetStrand[0] == '.' ? "" : inter->targetStrand);
+                region2Chrom, startBuf, endBuf, 
+                inter->targetStrand[0] == '.' ? "" : inter->targetStrand);
 printf("&nbsp;&nbsp;%s bp<br>\n", sizeBuf);
 int distance = interactRegionDistance(inter);
 if (distance > 0)
@@ -262,7 +264,18 @@ char *mergeMode = interactUiMergeMode(cart, tdb->track, tdb);
 if (count > 1)
     {
     printf("<b>Interactions:</b> %d<p>", count);
-    if (!mergeMode)
+    if (mergeMode)
+        {
+        char startBuf[1024], endBuf[1024], sizeBuf[1024];
+        sprintLongWithCommas(startBuf, start + 1);
+        sprintLongWithCommas(endBuf, end);
+        sprintLongWithCommas(sizeBuf, end - start);
+        printf("<b>%s interactions region:</b> &nbsp;&nbsp;"
+                        "<a href='hgTracks?position=%s:%d-%d' target='_blank'>%s:%s-%s</a> ",
+                        item, chrom, start+1, end, chrom, startBuf, endBuf);
+        printf("&nbsp;&nbsp;%s bp<br>\n", sizeBuf);
+        }
+    else
         doInteractRegionDetails(tdb, iprs->interact);
     printf("</p>");
     }
