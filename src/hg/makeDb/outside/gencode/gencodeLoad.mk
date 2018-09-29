@@ -45,7 +45,7 @@ ifeq (${db},mm10)
     prevVer = M17
     gencodeOrg = Gencode_mouse
     ftpReleaseSubdir = release_${ver}
-    annGtfTypeName = chr_patch_hapl_scaff.annotation
+    annGffTypeName = chr_patch_hapl_scaff.annotation
     ensemblVer = 94_38
     ensemblPrevVer = 93_38
     ensemblCDnaDb = mus_musculus_cdna_${ensemblPrevVer}
@@ -55,7 +55,7 @@ else ifeq (${db},hg38)
     prevVer = 28
     gencodeOrg = Gencode_human
     ftpReleaseSubdir = release_${ver}
-    annGtfTypeName = chr_patch_hapl_scaff.annotation
+    annGffTypeName = chr_patch_hapl_scaff.annotation
     ensemblVer = 94_38
     ensemblPrevVer = 93_38
     ensemblCDnaDb = homo_sapiens_cdna_${ensemblPrevVer}
@@ -66,7 +66,7 @@ else ifeq (${db},grcHhh38)
     prevVer = 27
     gencodeOrg = Gencode_human
     ftpReleaseSubdir = release_${ver}
-    annGtfTypeName = chr_patch_hapl_scaff.annotation
+    annGffTypeName = chr_patch_hapl_scaff.annotation
     ensemblVer = 94_38
     ensemblPrevVer = 93_38
     ensemblCDnaDb = homo_sapiens_cdna_${ensemblPrevVer}
@@ -77,7 +77,7 @@ else ifeq (${db},hg19)
     ftpReleaseSubdir = release_${verBase}/GRCh37_mapping
     prevVer = 27lift37
     gencodeOrg = Gencode_human
-    annGtfTypeName = annotation
+    annGffTypeName = annotation
     ensemblVer = 74_37
     ensemblPrevVer = ${ensemblVer}  # doesn't change
     ensemblCDnaDb = homo_sapiens_cdna_${ensemblPrevVer}
@@ -97,9 +97,9 @@ rel = V${ver}
 releaseUrl = ${baseUrl}/${gencodeOrg}/${ftpReleaseSubdir}
 dataDir = data
 relDir = ${dataDir}/release_${ver}
-annotationGtf = ${relDir}/gencode.v${ver}.${annGtfTypeName}.gtf.gz
-pseudo2WayGtf = ${relDir}/gencode.v${ver}.2wayconspseudos.gtf.gz
-polyAGtf = ${relDir}/gencode.v${ver}.polyAs.gtf.gz
+annotationGff = ${relDir}/gencode.v${ver}.${annGffTypeName}.gff3.gz
+pseudo2WayGff = ${relDir}/gencode.v${ver}.2wayconspseudos.gff3.gz
+polyAGff = ${relDir}/gencode.v${ver}.polyAs.gff3.gz
 
 ccdsBinDir = ~markd/compbio/ccds/ccds2/output/bin/$(mach)/opt
 gencodeMakeTracks = ${ccdsBinDir}/gencodeMakeTracks
@@ -239,9 +239,9 @@ ${fetchDone}:
 ##
 # dependencies for files from release
 ##
-${annotationGtf}: ${fetchDone}
-${pseudo2WayGtf}: ${fetchDone}
-${polyAGtf}: ${fetchDone}
+${annotationGff}: ${fetchDone}
+${pseudo2WayGff}: ${fetchDone}
+${polyAGff}: ${fetchDone}
 ${tableGeneSourceMeta}: ${fetchDone}
 ${tableTranscriptSourceMeta}: ${fetchDone}
 ${tableTranscriptSupportMeta}: ${fetchDone}
@@ -273,12 +273,12 @@ ${tableAttrsTab}: ${gencodeGp} ${gencodeTsv}
 	${gencodeMakeAttrs} ${gencodeGp} ${gencodeTsv} $@.${tmpExt} ${tableTagTab}
 	mv -f $@.${tmpExt} $@
 
-${table2WayConsPseudoGp}: ${pseudo2WayGtf}
+${table2WayConsPseudoGp}: ${pseudo2WayGff}
 	@mkdir -p $(dir $@)
-	zcat $< | tawk '$$3=="transcript"{$$3 = "exon"} {print $$0}' | gtfToGenePred -ignoreGroupsWithoutExons stdin $@.${tmpExt}
+	zcat $< | tawk '$$3=="transcript"{$$3 = "exon"} {print $$0}' | gff3ToGenePred stdin $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
-${tablePolyAGp}: ${polyAGtf} ${ensemblToUcscChain}
+${tablePolyAGp}: ${polyAGff} ${ensemblToUcscChain}
 	@mkdir -p $(dir $@)
 	${gencodePolyaGxfToGenePred} $< ${ensemblToUcscChain} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
@@ -353,22 +353,22 @@ ${tableEntrezGeneTab}: ${tableEntrezGeneMeta}
 ##
 # intermediate data for ensembl/havana, not loaded into databases
 ##
-${gencodeGp}: ${annotationGtf} ${ensemblToUcscChain}
+${gencodeGp}: ${annotationGff} ${ensemblToUcscChain}
 	@mkdir -p $(dir $@)
-	${gencodeGxfToGenePred} ${annotationGtf} ${ensemblToUcscChain} $@.${tmpExt}
+	${gencodeGxfToGenePred} ${annotationGff} ${ensemblToUcscChain} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
 ${tableTranscriptionSupportLevelData}: ${gencodeTsv}
 	touch $@
-${gencodeTsv}: ${annotationGtf}
+${gencodeTsv}: ${annotationGff}
 	@mkdir -p $(dir $@)
-	${gencodeGxfToAttrs} --keepGoing ${annotationGtf} $@.${tmpExt} --tslTabOut=${tableTranscriptionSupportLevelData}.${tmpExt}
+	${gencodeGxfToAttrs} --keepGoing ${annotationGff} $@.${tmpExt} --tslTabOut=${tableTranscriptionSupportLevelData}.${tmpExt}
 	mv -f ${tableTranscriptionSupportLevelData}.${tmpExt} ${tableTranscriptionSupportLevelData}
 	mv -f $@.${tmpExt} $@
 
 # check attributes so code can be updated to handle new biotypes
-checkAttrs: ${annotationGtf}
-	${gencodeGxfToAttrs} ${annotationGtf} /dev/null
+checkAttrs: ${annotationGff}
+	${gencodeGxfToAttrs} ${annotationGff} /dev/null
 
 ##
 # load tables
