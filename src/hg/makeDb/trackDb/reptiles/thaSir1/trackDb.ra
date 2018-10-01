@@ -6,6 +6,11 @@ html gold
 track gap override
 html gap
 
+#Local declaration that conner edit this trackDb
+track mrna override
+visibility hide
+
+
 searchTable gold
 shortCircuit 1
 termRegex LFLD01[0-9]{5}[0-9]*(.1)?

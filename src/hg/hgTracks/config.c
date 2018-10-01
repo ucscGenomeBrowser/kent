@@ -686,23 +686,44 @@ if (emGeneTable && sqlTableExists(conn, emGeneTable))
     }
 */
 
-if (conn && sqlTableExists(conn, "altLocations"))
+if (conn)
     {
-    hPrintf("<TR><TD>");
-    cgiMakeRadioButton("virtModeType", "singleAltHaplo", sameWord("singleAltHaplo", virtModeType));
-    hPrintf("</TD><TD>");
-    hPrintf("Show one alternate haplotype, placed on its chromosome, using ID: ");
-    char *haplo = cartUsualString(cart, "singleAltHaploId", singleAltHaploId);
-    char sql[1024];
-    sqlSafef(sql, sizeof sql, "select name from altLocations where name='%s'", haplo);
-    char *result = sqlQuickString(conn, sql);
-    if (!result)
-	{
-	sqlSafef(sql, sizeof sql, "select name from altLocations limit 1");
-	haplo = sqlQuickString(conn, sql);
-	}
-    hTextVar("singleAltHaploId", haplo, 20);
-    hPrintf("</TD></TR>\n");
+    boolean altLocExists = sqlTableExists(conn, "altLocations");
+    boolean fixLocExists = sqlTableExists(conn, "fixLocations");
+    if (altLocExists || fixLocExists)
+        {
+        hPrintf("<TR><TD>");
+        cgiMakeRadioButton("virtModeType", "singleAltHaplo",
+                           sameWord("singleAltHaplo", virtModeType));
+        hPrintf("</TD><TD>");
+        hPrintf("Show one alternate haplotype");
+        if (fixLocExists)
+            hPrintf(" or fix patch");
+        hPrintf(", placed on its chromosome, using ID: ");
+        char *haplo = cartUsualString(cart, "singleAltHaploId", singleAltHaploId);
+        char *foundHaplo = NULL;
+        char sql[1024];
+        if (altLocExists)
+            {
+            sqlSafef(sql, sizeof sql, "select name from altLocations where name='%s'", haplo);
+            foundHaplo = sqlQuickString(conn, sql);
+            }
+        if (!foundHaplo && fixLocExists)
+            {
+            sqlSafef(sql, sizeof sql, "select name from fixLocations where name='%s'", haplo);
+            foundHaplo = sqlQuickString(conn, sql);
+            }
+        if (!foundHaplo)
+            {
+            if (altLocExists)
+                sqlSafef(sql, sizeof sql, "select name from altLocations limit 1");
+            else
+                sqlSafef(sql, sizeof sql, "select name from fixLocations limit 1");
+            haplo = sqlQuickString(conn, sql);
+            }
+        hTextVar("singleAltHaploId", haplo, 60);
+        hPrintf("</TD></TR>\n");
+        }
     }
 
 /* disable demo for now
