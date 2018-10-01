@@ -2,7 +2,7 @@ track geneHancer
 compositeTrack on
 shortLabel GeneHancer
 longLabel GeneHancer Regulatory Elements and Gene Interactions
-subGroup1 view View a_GH=Regulatory_Elements b_TSS=Gene_TSS c_I=Interactions d_I=Merged_Interactions
+subGroup1 view View a_GH=Regulatory_Elements b_TSS=Gene_TSS c_I=Interactions d_I=Clusters
 subGroup2 set Set a_ELITE=Double_Elite b_ALL=All 
 sortOrder set=+ view=+
 dimensions dimX=set dimY=view
@@ -93,28 +93,28 @@ priority 1.5
         parent ghInteraction
         subGroups set=b_ALL view=c_I
 
-    track ghMergedInteraction
-    shortLabel Merged Interactions
+    track ghClusteredInteraction
+    shortLabel Clustered Interactions
     type bigInteract
-    interactDirectional on mergeTarget
+    interactDirectional clusterTarget
     view d_I
     viewUi on
     visibility pack
     parent geneHancer
 
-        track geneHancerMergedInteractionsDoubleElite
-        shortLabel GH Interactions (DE)
-        longLabel Merged interactions between GeneHancer regulatory elements and genes (Double Elite)
+        track geneHancerClusteredInteractionsDoubleElite
+        shortLabel GH Clusters (DE)
+        longLabel Clustered interactions of GeneHancer regulatory elements and genes (Double Elite)
         bigDataUrl /gbdb/$D/geneHancer/geneHancerInteractionsDoubleElite.$D.bb
         urlLabel Interaction in GeneCards
-        parent ghMergedInteraction on
+        parent ghClusteredInteraction on
         subGroups set=a_ELITE view=d_I
 
-        track geneHancerMergedInteractions
-        shortLabel GH Interactions
-        longLabel Merged interactions between GeneHancer regulatory elements and genes
+        track geneHancerClusteredInteractions
+        shortLabel GH Clusters
+        longLabel Clustered interactions of GeneHancer regulatory elements and genes
         bigDataUrl /gbdb/$D/geneHancer/geneHancerInteractionsAll.$D.bb
         urlLabel Interaction in GeneCards
-        parent ghMergedInteraction
+        parent ghClusteredInteraction
         subGroups set=b_ALL view=d_I
 
