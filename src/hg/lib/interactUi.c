@@ -20,14 +20,20 @@ return isNotEmpty(trackDbSetting(tdb, INTERACT_DIRECTIONAL));
 char *interactUiOffset(struct trackDb *tdb)
 /* Determine whether to offset source or target (or neither if NULL) */
 {
-char *directional = trackDbSetting(tdb, INTERACT_DIRECTIONAL);
-if (directional)
+char *setting = trackDbSetting(tdb, INTERACT_DIRECTIONAL);
+if (setting)
     {
-    if (sameString(directional, INTERACT_OFFSET_TARGET) ||
-         sameString(directional, INTERACT_OFFSET_SOURCE))
-                return directional;
+    char *words[8];
+    int count = chopByWhite(cloneString(setting), words, ArraySize(words));
+    if (count >= 1)
+        {
+        char *offset = words[0];
+        if (sameString(offset, INTERACT_OFFSET_TARGET) ||
+             sameString(offset, INTERACT_OFFSET_SOURCE))
+                return offset;
+        }
     }
-return FALSE;
+return NULL;
 }
 
 void interactUiMinScore(struct cart *cart, char *track, struct trackDb *tdb)
@@ -103,6 +109,53 @@ cgiMakeCheckBox(cartVar, doDashes);
 printf("Draw reverse direction interactions with dashed lines");
 }
 
+static char *interactClusterDefault(struct trackDb *tdb)
+/* Determine whether to cluster by source or target (or neither if NULL) */
+{
+char *setting = trackDbSetting(tdb, INTERACT_DIRECTIONAL);
+if (setting)
+    {
+    char *words[8];
+    int count = chopByWhite(cloneString(setting), words, ArraySize(words));
+    if (count >= 1)
+        {
+        char *cluster = words[0];
+        if (sameString(cluster, INTERACT_TDB_CLUSTER_TARGET))
+            return INTERACT_CLUSTER_TARGET;
+         if (sameString(cluster, INTERACT_TDB_CLUSTER_SOURCE))
+            return INTERACT_CLUSTER_SOURCE;
+        }
+    }
+return NULL;
+}
+
+char *interactUiClusterMode(struct cart *cart, char *track, struct trackDb *tdb)
+/* Get cluster mode from trackDb and cart */
+{
+char *clusterDefault = interactClusterDefault(tdb);
+if (!clusterDefault)
+    return NULL;
+char *clusterMode = cartUsualStringClosestToHome(cart, tdb, isNameAtParentLevel(tdb, track),
+                                                INTERACT_CLUSTER, clusterDefault);
+if (sameString(INTERACT_CLUSTER_SOURCE, clusterMode) ||
+    sameString(INTERACT_CLUSTER_TARGET, clusterMode))
+        return clusterMode;
+return NULL;
+}
+
+static void interactUiSelectClusterMode(struct cart *cart, char *track, struct trackDb *tdb)
+/* Radio buttons to specify cluster by source or target */
+{
+char *clusterMode = interactUiClusterMode(cart, track, tdb);
+char cartVar[1024];
+puts("<b>Cluster by:</b> ");
+safef(cartVar, sizeof(cartVar), "%s.%s", track, INTERACT_CLUSTER);
+cgiMakeRadioButton(cartVar, INTERACT_CLUSTER_SOURCE, sameString(INTERACT_CLUSTER_SOURCE, clusterMode));
+printf("&nbsp;%s&nbsp;", "source");
+cgiMakeRadioButton(cartVar, INTERACT_CLUSTER_TARGET, sameString(INTERACT_CLUSTER_TARGET, clusterMode));
+printf("&nbsp;%s&nbsp;", "target");
+}
+
 void interactCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char *track,
                         char *title, boolean boxed)
 /* Configure interact track type */
@@ -117,12 +170,19 @@ if (startsWith("big", tdb->type))
 puts("<p>");
 interactUiEndpointFilter(cart, track, tdb);
 puts("</p><p>");
-interactUiTrackHeight(cart, track, tdb);
-puts("</p><p>");
-interactUiDrawMode(cart, track, tdb);
-puts("</p><p>");
-interactUiDashedLines(cart, track, tdb);
-puts("</p>");
+if (interactUiClusterMode(cart, track, tdb))
+    {
+    interactUiSelectClusterMode(cart, track, tdb);
+    }
+else
+    {
+    interactUiTrackHeight(cart, track, tdb);
+    puts("</p><p>");
+    interactUiDrawMode(cart, track, tdb);
+    puts("</p><p>");
+    interactUiDashedLines(cart, track, tdb);
+    puts("</p>");
+    }
 scoreCfgUi(database, cart,tdb,tdb->track,"",1000,FALSE);
 cfgEndBox(boxed);
 }
