@@ -189,7 +189,7 @@ return flipped;
 struct interactTrackInfo {
     boolean isDirectional; // source and target are distinct item types
     char *offset;          // which end to draw offset (source or target)
-    char *mergeMode;       // merge by source or target (or no merge if NULL)
+    char *clusterMode;     // cluster by source or target (or no cluster if NULL)
     boolean drawUp;          // draw interactions with peak up (hill)
     boolean doOtherLabels;  // true to suppress labels on other chrom items (prevent overlap)
     int maxSize;        // longest interaction (midpoint to midpoint) in bp
@@ -254,25 +254,25 @@ void interactLoadItems(struct track *tg)
 {
 struct interactTrackInfo *tInfo = NULL;
 AllocVar(tInfo);
-tInfo->mergeMode = interactUiMergeMode(cart, tg->track, tg->tdb);
+tInfo->clusterMode = interactUiClusterMode(cart, tg->track, tg->tdb);
 tg->customPt = tInfo;
 
 loadAndFilterItems(tg);
-if (tInfo->mergeMode || isLinkedFeaturesMode(tg))
+if (tInfo->clusterMode || isLinkedFeaturesMode(tg))
     {
     // convert to BEDs for linked feature display
     struct interact *inters = tg->items, *inter;
     struct linkedFeatures *lfs = NULL, *lf;
-    struct hash *intersMerge = hashNew(0);
+    struct hash *intersCluster = hashNew(0);
     boolean doColor = !tg->colorShades;
     for (inter = inters; inter; inter = inter->next)
         {
-        if (tInfo->mergeMode)
+        if (tInfo->clusterMode)
             {
-            boolean byTarget = sameString(tInfo->mergeMode, INTERACT_MERGE_TARGET);
+            boolean byTarget = sameString(tInfo->clusterMode, INTERACT_CLUSTER_TARGET);
             // hash by source or target name
             char *name = (byTarget ? inter->targetName : inter->sourceName);
-            lf = (struct linkedFeatures *) hashFindVal(intersMerge, name);
+            lf = (struct linkedFeatures *) hashFindVal(intersCluster, name);
             if (lf)
                 {
                 // add a simple feature for the other end (source or target) to the linked feature
@@ -302,7 +302,7 @@ if (tInfo->mergeMode || isLinkedFeaturesMode(tg))
                 lf->name = (byTarget ? inter->targetName : inter->sourceName);
                 lf->tallStart = (byTarget ? inter->targetStart : inter->sourceStart);
                 lf->tallEnd = (byTarget ? inter->targetEnd : inter->sourceEnd);
-                hashAdd(intersMerge, lf->name, lf);
+                hashAdd(intersCluster, lf->name, lf);
                 }
             }
         else 
@@ -311,10 +311,10 @@ if (tInfo->mergeMode || isLinkedFeaturesMode(tg))
             slAddHead(&lfs, lf);
             }
         }
-    if (tInfo->mergeMode)
+    if (tInfo->clusterMode)
         {
-        // sort simplefeatures and adjust bounds of merged features
-        struct hashEl *el, *els = hashElListHash(intersMerge);
+        // sort simplefeatures and adjust bounds of clustered features
+        struct hashEl *el, *els = hashElListHash(intersCluster);
         for (el = els; el; el = el->next)
             {
             lf = (struct linkedFeatures *)el->val;
@@ -460,7 +460,7 @@ if (vis != tvDense)
         draw = DRAW_CURVE;
     else if (sameString(drawMode, INTERACT_DRAW_ELLIPSE))
     draw = DRAW_ELLIPSE;
-doDashes = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE,
+    doDashes = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE,
                                 INTERACT_DIRECTION_DASHES, INTERACT_DIRECTION_DASHES_DEFAULT);
     }
 double scale = scaleForWindow(width, seqStart, seqEnd);
@@ -718,7 +718,7 @@ linkedFeaturesDrawAt(tg, item, hvg, xOff, y, scale, font, color, vis);
 struct interactTrackInfo *tInfo = tg->customPt;
 
 // draw overlapping items in white
-if (tInfo->mergeMode)
+if (tInfo->clusterMode)
     {
     struct simpleFeature *sf;
     int shortHeight = tg->heightPer/2;
@@ -747,7 +747,7 @@ void interactDrawItems(struct track *tg, int seqStart, int seqEnd,
 /* Draw a list of interact structures. */
 {
 struct interactTrackInfo *tInfo = (struct interactTrackInfo *)tg->customPt;
-if (tInfo->mergeMode || isLinkedFeaturesMode(tg))
+if (tInfo->clusterMode || isLinkedFeaturesMode(tg))
     {
     tg->drawItemAt = interactLinkedFeaturesDrawAt;
     linkedFeaturesDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);

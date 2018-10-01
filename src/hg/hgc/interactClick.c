@@ -21,9 +21,9 @@ struct interactPlusRow
     };
 
 static struct interactPlusRow *getInteractsFromTable(struct trackDb *tdb, char *chrom, 
-                                    int start, int end, char *name, char *mergeMode, char *foot)
+                                    int start, int end, char *name, char *clusterMode, char *foot)
 /* Retrieve interact items at this position from track table */
-// TODO: Support for mergeMode
+// TODO: Support for clusterMode
 {
 struct sqlConnection *conn = NULL;
 struct customTrack *ct = lookupCt(tdb->track);
@@ -79,7 +79,7 @@ return iprs;
 }
 
 static struct interactPlusRow *getInteractsFromFile(char *file, char *chrom, int start, int end, 
-                                                        char *name, char *mergeMode, char *foot)
+                                                        char *name, char *clusterMode, char *foot)
 /* Retrieve interact items at this position or name from big file */
 {
 struct bbiFile *bbi = bigBedFileOpen(file);
@@ -96,7 +96,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     struct interact *inter = interactLoadAndValidate(row);
     if (inter == NULL)
         continue;
-    if (!name)
+    if (!name || sameString(name, "."))
         {
         if (inter->chromStart != start || inter->chromEnd != end)
             continue;
@@ -104,8 +104,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     else
         {
         char *match = inter->name;
-        if (mergeMode)
-            match = sameString(mergeMode, INTERACT_MERGE_SOURCE) ?
+        if (clusterMode)
+            match = sameString(clusterMode, INTERACT_CLUSTER_SOURCE) ?
                                                 inter->sourceName : inter->targetName;
         if (differentString(name, match))
             continue;
@@ -133,13 +133,13 @@ static struct interactPlusRow *getInteractions(struct trackDb *tdb, char *chrom,
 {
 struct interactPlusRow *iprs = NULL;
 char *file = trackDbSetting(tdb, "bigDataUrl");
-char *mergeMode = interactUiMergeMode(cart, tdb->track, tdb);
+char *clusterMode = interactUiClusterMode(cart, tdb->track, tdb);
 if (file != NULL)
-    iprs = getInteractsFromFile(file, chrom, start, end, name, mergeMode, foot);
+    iprs = getInteractsFromFile(file, chrom, start, end, name, clusterMode, foot);
 else
-    iprs = getInteractsFromTable(tdb, chrom, start, end, name, mergeMode, foot);
+    iprs = getInteractsFromTable(tdb, chrom, start, end, name, clusterMode, foot);
 
-// TODO: add sort on score, or position for merged items ?
+// TODO: add sort on score, or position for clustered items ?
 //slSort(&inters, bedCmpScore);
 //slReverse(&inters);
 return iprs;
@@ -260,11 +260,11 @@ struct interactPlusRow *iprs = getInteractions(tdb, chrom, start, end, item, foo
 if (iprs == NULL)
     errAbort("Can't find interaction %s", item ? item : "");
 int count = slCount(iprs);
-char *mergeMode = interactUiMergeMode(cart, tdb->track, tdb);
+char *clusterMode = interactUiClusterMode(cart, tdb->track, tdb);
 if (count > 1)
     {
     printf("<b>Interactions:</b> %d<p>", count);
-    if (mergeMode)
+    if (clusterMode)
         {
         char startBuf[1024], endBuf[1024], sizeBuf[1024];
         sprintLongWithCommas(startBuf, start + 1);
@@ -285,14 +285,14 @@ for (ipr = iprs; ipr != NULL; ipr = ipr->next)
     {
     if (count > 1)
         printf("<hr>\n");
-    if (mergeMode)
+    if (clusterMode)
         doInteractRegionDetails(tdb, ipr->interact);
     else
         doInteractItemDetails(tdb, ipr, item, count > 1);
     if (count > 1 && !isEmptyTextField(ipr->interact->name) && sameString(ipr->interact->name, item))
         printf("<hr>\n");
     }
-if (count > 1 && mergeMode)
+if (count > 1 && clusterMode)
     printf("<hr>\n");
 }
 

@@ -109,50 +109,50 @@ cgiMakeCheckBox(cartVar, doDashes);
 printf("Draw reverse direction interactions with dashed lines");
 }
 
-static char *interactMergeDefault(struct trackDb *tdb)
-/* Determine whether to merge by source or target (or neither if NULL) */
+static char *interactClusterDefault(struct trackDb *tdb)
+/* Determine whether to cluster by source or target (or neither if NULL) */
 {
 char *setting = trackDbSetting(tdb, INTERACT_DIRECTIONAL);
 if (setting)
     {
     char *words[8];
     int count = chopByWhite(cloneString(setting), words, ArraySize(words));
-    if (count >= 2)
+    if (count >= 1)
         {
-        char *merge = words[1];
-        if (sameString(merge, INTERACT_TDB_MERGE_TARGET))
-            return INTERACT_MERGE_TARGET;
-         if (sameString(merge, INTERACT_TDB_MERGE_SOURCE))
-            return INTERACT_MERGE_SOURCE;
+        char *cluster = words[0];
+        if (sameString(cluster, INTERACT_TDB_CLUSTER_TARGET))
+            return INTERACT_CLUSTER_TARGET;
+         if (sameString(cluster, INTERACT_TDB_CLUSTER_SOURCE))
+            return INTERACT_CLUSTER_SOURCE;
         }
     }
 return NULL;
 }
 
-char *interactUiMergeMode(struct cart *cart, char *track, struct trackDb *tdb)
-/* Get merge mode from trackDb and cart */
+char *interactUiClusterMode(struct cart *cart, char *track, struct trackDb *tdb)
+/* Get cluster mode from trackDb and cart */
 {
-char *mergeDefault = interactMergeDefault(tdb);
-if (!mergeDefault)
+char *clusterDefault = interactClusterDefault(tdb);
+if (!clusterDefault)
     return NULL;
-char *mergeMode = cartUsualStringClosestToHome(cart, tdb, isNameAtParentLevel(tdb, track),
-                                                INTERACT_MERGE, mergeDefault);
-if (sameString(INTERACT_MERGE_SOURCE, mergeMode) ||
-    sameString(INTERACT_MERGE_TARGET, mergeMode))
-        return mergeMode;
+char *clusterMode = cartUsualStringClosestToHome(cart, tdb, isNameAtParentLevel(tdb, track),
+                                                INTERACT_CLUSTER, clusterDefault);
+if (sameString(INTERACT_CLUSTER_SOURCE, clusterMode) ||
+    sameString(INTERACT_CLUSTER_TARGET, clusterMode))
+        return clusterMode;
 return NULL;
 }
 
-static void interactUiSelectMergeMode(struct cart *cart, char *track, struct trackDb *tdb)
-/* Radio buttons to specify merge by source or target */
+static void interactUiSelectClusterMode(struct cart *cart, char *track, struct trackDb *tdb)
+/* Radio buttons to specify cluster by source or target */
 {
-char *mergeMode = interactUiMergeMode(cart, track, tdb);
+char *clusterMode = interactUiClusterMode(cart, track, tdb);
 char cartVar[1024];
-puts("<b>Merge by:</b> ");
-safef(cartVar, sizeof(cartVar), "%s.%s", track, INTERACT_MERGE);
-cgiMakeRadioButton(cartVar, INTERACT_MERGE_SOURCE, sameString(INTERACT_MERGE_SOURCE, mergeMode));
+puts("<b>Cluster by:</b> ");
+safef(cartVar, sizeof(cartVar), "%s.%s", track, INTERACT_CLUSTER);
+cgiMakeRadioButton(cartVar, INTERACT_CLUSTER_SOURCE, sameString(INTERACT_CLUSTER_SOURCE, clusterMode));
 printf("&nbsp;%s&nbsp;", "source");
-cgiMakeRadioButton(cartVar, INTERACT_MERGE_TARGET, sameString(INTERACT_MERGE_TARGET, mergeMode));
+cgiMakeRadioButton(cartVar, INTERACT_CLUSTER_TARGET, sameString(INTERACT_CLUSTER_TARGET, clusterMode));
 printf("&nbsp;%s&nbsp;", "target");
 }
 
@@ -170,9 +170,9 @@ if (startsWith("big", tdb->type))
 puts("<p>");
 interactUiEndpointFilter(cart, track, tdb);
 puts("</p><p>");
-if (interactUiMergeMode(cart, track, tdb))
+if (interactUiClusterMode(cart, track, tdb))
     {
-    interactUiSelectMergeMode(cart, track, tdb);
+    interactUiSelectClusterMode(cart, track, tdb);
     }
 else
     {
