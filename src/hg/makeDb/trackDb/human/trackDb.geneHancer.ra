@@ -37,7 +37,7 @@ priority 1.5
         bigDataUrl /gbdb/$D/geneHancer/geneHancerGenesTssAll.$D.bb
         type bigBed 9
         urlLabel In GeneCards: 
-        parent ghGeneTss
+        parent ghGeneTss off
         subGroups set=b_ALL view=b_TSS
 
     track ghGeneHancer
@@ -62,7 +62,7 @@ priority 1.5
         shortLabel GH Reg Elems
         longLabel Enhancers and promoters from GeneHancer
         bigDataUrl /gbdb/$D/geneHancer/geneHancerRegElementsAll.$D.bb
-        parent ghGeneHancer
+        parent ghGeneHancer off
         subGroups set=b_ALL view=a_GH
 
     track ghInteraction
@@ -90,7 +90,7 @@ priority 1.5
         longLabel Interactions between GeneHancer regulatory elements and genes
         bigDataUrl /gbdb/$D/geneHancer/geneHancerInteractionsAll.$D.bb
         urlLabel Interaction in GeneCards
-        parent ghInteraction
+        parent ghInteraction off
         subGroups set=b_ALL view=c_I
 
     track ghClusteredInteraction
@@ -115,6 +115,6 @@ priority 1.5
         longLabel Clustered interactions of GeneHancer regulatory elements and genes
         bigDataUrl /gbdb/$D/geneHancer/geneHancerInteractionsAll.$D.bb
         urlLabel Interaction in GeneCards
-        parent ghClusteredInteraction
+        parent ghClusteredInteraction off
         subGroups set=b_ALL view=d_I
 
