@@ -6,6 +6,7 @@
 #include "common.h"
 #include "obscure.h"
 #include "hgTracks.h"
+#include "bedCart.h"
 #include "bigWarn.h"
 #include "interact.h"
 #include "interactUi.h"
@@ -59,7 +60,7 @@ unsigned t = interactRegionCenter(inter->targetStart, inter->targetEnd);
 return (t >= winStart) && (t < winEnd);
 }
 
-void interactLoadItems(struct track *tg)
+static void loadAndFilterItems(struct track *tg)
 /* Load all interact items in region */
 {
 loadSimpleBedWithLoader(tg, (bedItemLoader)interactLoadAndValidate);
@@ -74,7 +75,7 @@ if (slCount(tg->items) == 0 && tg->limitedVisSet)
     tg->networkErrMsg = "Too many items in display (zoom in)"; 
     tg->totalHeight = bigWarnTotalHeight;
     return;
-}
+    }
 
 // filters
 struct interact *inter, *next, *filteredItems = NULL;
@@ -111,49 +112,41 @@ if (slCount(filteredItems) != count)
 tg->items = filteredItems;
 }
 
-char *interactMouseover(struct interact *inter, char *otherChrom)
-/* Make mouseover text for an interaction */
+void interactDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
+    struct hvGfx *hvg, int xOff, int yOff, int width, int height,
+    boolean withCenterLabels, MgFont *font,
+    Color color, enum trackVisibility vis)
+/* Override default */
 {
-struct dyString *ds = dyStringNew(0);
-if (isEmptyTextField(inter->name))
+}
+
+void interactFreeItems(struct track *tg)
+/* Free up interact items track */
+{
+interactFreeList((struct interact **)(&tg->items));
+}
+
+static struct linkedFeatures *interactToLf(struct interact *inter, boolean doColor)
+/* Convert interact BED to linkedFeatures */
+{
+struct bed *bed = interactToBed(inter);
+struct linkedFeatures *lf = lfFromBed(bed);
+// not sure why this is needed -- lfFromBed seems to reorder blocks, sometimes ?
+linkedFeaturesSortAndBound(lf);
+if (doColor)
     {
-    if (!isEmptyTextField(inter->exp))
-        dyStringPrintf(ds, "%s ", inter->exp);
-    if (otherChrom)
-        dyStringPrintf(ds, "%s", otherChrom);
-    else
-        {
-        char buf[4096];
-        sprintLongWithCommas(buf, inter->chromEnd - inter->chromStart);
-        dyStringPrintf(ds, "%s bp", buf);
-        }
+    lf->extra = (void *)USE_ITEM_RGB;   /* signal for coloring */
+    lf->filterColor = bed->itemRgb;
     }
-else
-    dyStringPrintf(ds, "%s", inter->name);
-if (inter->score)
-    dyStringPrintf(ds, " %d", inter->score);
-if (inter->value != 0.0)
-    dyStringPrintf(ds, " %0.2f", inter->value);
-return dyStringCannibalize(&ds);
+bedFree(&bed);
+// TODO: use lfFromBedExtra with scoreMin, scoreMax ?
+return lf;
 }
 
-int regionFootWidth(int start, int end, double scale)
-/* Return half foot width in pixels */
+static boolean isLinkedFeaturesMode(struct track *tg)
+/* Determine if linked feature display will be used */
 {
-    unsigned size = end - start;
-    int width = scale * (double)size / 2;
-    if (width == 0)
-        width = 1;
-    return width;
-}
-
-void interactRegionCenters(struct interact *inter, int *sourceCenter, int *targetCenter)
-/* Return genomic position of endpoint centers */
-{
-assert(sourceCenter);
-assert(targetCenter);
-*sourceCenter = interactRegionCenter(inter->sourceStart, inter->sourceEnd);
-*targetCenter = interactRegionCenter(inter->targetStart, inter->targetEnd);
+return (tg->visibility != tvFull);
 }
 
 int interactSize(struct interact *inter)
@@ -172,9 +165,31 @@ if (pos < seqStart)
 return ((double)(pos - seqStart + .5) * scale) + xOff;
 }
 
+
+static void setYOff(struct track *tg, int yOff)
+/* Stash y offset for this track */
+{
+tg->customInt = yOff;
+}
+
+static int getYOff(struct track *tg)
+/* Get y offset for this track (stashed by DrawItems) */
+{
+return tg->customInt;
+}
+
+static int flipY(struct track *tg, int y)
+/* Invert y coordinate if flipped display is requested */
+{
+int yOff = getYOff(tg);
+int flipped = yOff + tg->height + yOff - y;
+return flipped;
+}
+
 struct interactTrackInfo {
     boolean isDirectional; // source and target are distinct item types
     char *offset;          // which end to draw offset (source or target)
+    char *clusterMode;     // cluster by source or target (or no cluster if NULL)
     boolean drawUp;          // draw interactions with peak up (hill)
     boolean doOtherLabels;  // true to suppress labels on other chrom items (prevent overlap)
     int maxSize;        // longest interaction (midpoint to midpoint) in bp
@@ -185,11 +200,10 @@ struct interactTrackInfo {
     int otherHeight;    // vertical space for other chromosome interactions
 } interactTrackInfo;
 
-struct interactTrackInfo *interactGetTrackInfo(struct track *tg, int seqStart, struct hvGfx *hvg,                                                       int xOff, MgFont *font, double scale)
+static void interactGetLayoutInfo(struct track *tg, int seqStart, struct hvGfx *hvg,                                                       int xOff, MgFont *font, double scale)
 /* Get layout info from interact items in window */
 {
-struct interactTrackInfo *tInfo = NULL;
-AllocVar(tInfo);
+struct interactTrackInfo *tInfo = tg->customPt;
 tInfo->doOtherLabels = TRUE;
 tInfo->isDirectional = interactUiDirectional(tg->tdb);
 tInfo->offset = interactUiOffset(tg->tdb);
@@ -233,27 +247,132 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
 tInfo->fontHeight = vgGetFontPixelHeight(hvg->vg, font);
 tInfo->otherHeight = (tInfo->otherCount) ? 3 * tInfo->fontHeight : 0;
 tInfo->sameHeight = (tInfo->sameCount) ? tg->height - tInfo->otherHeight : 0;
-return tInfo;
 }
 
-static void setYOff(struct track *tg, int yOff)
-/* Stash y offset for this track */
+void interactLoadItems(struct track *tg)
+/* Load interact items in interact format */
 {
-tg->customInt = yOff;
+struct interactTrackInfo *tInfo = NULL;
+AllocVar(tInfo);
+tInfo->clusterMode = interactUiClusterMode(cart, tg->track, tg->tdb);
+tg->customPt = tInfo;
+
+loadAndFilterItems(tg);
+if (tInfo->clusterMode || isLinkedFeaturesMode(tg))
+    {
+    // convert to BEDs for linked feature display
+    struct interact *inters = tg->items, *inter;
+    struct linkedFeatures *lfs = NULL, *lf;
+    struct hash *intersCluster = hashNew(0);
+    boolean doColor = !tg->colorShades;
+    for (inter = inters; inter; inter = inter->next)
+        {
+        if (tInfo->clusterMode)
+            {
+            boolean byTarget = sameString(tInfo->clusterMode, INTERACT_CLUSTER_TARGET);
+            // hash by source or target name
+            char *name = (byTarget ? inter->targetName : inter->sourceName);
+            lf = (struct linkedFeatures *) hashFindVal(intersCluster, name);
+            if (lf)
+                {
+                // add a simple feature for the other end (source or target) to the linked feature
+                struct simpleFeature *sf = NULL;
+                AllocVar(sf);
+
+                // tweak interact struct for intrachromsomal item to ease next steps
+                if (differentString(inter->targetChrom, inter->sourceChrom))
+                    {
+                    inter->sourceStart = inter->targetStart = inter->chromStart;
+                    inter->sourceEnd = inter->targetEnd = inter->chromEnd;
+                    }
+
+                sf->start = (byTarget ? inter->sourceStart : inter->targetStart);
+                sf->end = (byTarget ? inter->sourceEnd : inter->targetEnd);
+                struct simpleFeature *sfs = lf->components;
+                slAddHead(&sfs, sf);
+                lf->components = sfs;
+                if (lf->filterColor != inter->color)
+                    lf->filterColor = MG_GRAY;
+                }
+            else
+                {
+                // create a linked feature for this target
+                lf = interactToLf(inter, doColor);
+                lf->orientation = 0;
+                lf->name = (byTarget ? inter->targetName : inter->sourceName);
+                lf->tallStart = (byTarget ? inter->targetStart : inter->sourceStart);
+                lf->tallEnd = (byTarget ? inter->targetEnd : inter->sourceEnd);
+                hashAdd(intersCluster, lf->name, lf);
+                }
+            }
+        else 
+            {
+            lf = interactToLf(inter, doColor);
+            slAddHead(&lfs, lf);
+            }
+        }
+    if (tInfo->clusterMode)
+        {
+        // sort simplefeatures and adjust bounds of clustered features
+        struct hashEl *el, *els = hashElListHash(intersCluster);
+        for (el = els; el; el = el->next)
+            {
+            lf = (struct linkedFeatures *)el->val;
+            linkedFeaturesSortAndBound(lf);
+            slAddHead(&lfs, lf);
+            }
+        slSort(&lfs, linkedFeaturesCmp);
+        }
+    else
+        {
+        slReverse(&lfs);
+        }
+    tg->items = lfs;
+    // TODO: consider freeing interact items
+    }
+else
+    {
+    tg->mapsSelf = TRUE;
+    tg->totalHeight = interactTotalHeight;
+    tg->drawLeftLabels = interactDrawLeftLabels;
+    tg->freeItems = interactFreeItems;
+    }
 }
 
-static int getYOff(struct track *tg)
-/* Get y offset for this track (stashed by DrawItems) */
+char *interactMouseover(struct interact *inter, char *otherChrom)
+/* Make mouseover text for an interaction */
 {
-return tg->customInt;
+struct dyString *ds = dyStringNew(0);
+if (isEmptyTextField(inter->name))
+    {
+    if (!isEmptyTextField(inter->exp))
+        dyStringPrintf(ds, "%s ", inter->exp);
+    if (otherChrom)
+        dyStringPrintf(ds, "%s", otherChrom);
+    else
+        {
+        char buf[4096];
+        sprintLongWithCommas(buf, inter->chromEnd - inter->chromStart);
+        dyStringPrintf(ds, "%s bp", buf);
+        }
+    }
+else
+    dyStringPrintf(ds, "%s", inter->name);
+if (inter->score)
+    dyStringPrintf(ds, " %d", inter->score);
+if (inter->value != 0.0)
+    dyStringPrintf(ds, " %0.2f", inter->value);
+return dyStringCannibalize(&ds);
 }
 
-static int flipY(struct track *tg, int y)
-/* Invert y coordinate if flipped display is requested */
+int regionFootWidth(int start, int end, double scale)
+/* Return half foot width in pixels */
 {
-int yOff = getYOff(tg);
-int flipped = yOff + tg->height + yOff - y;
-return flipped;
+    unsigned size = end - start;
+    int width = scale * (double)size / 2;
+    if (width == 0)
+        width = 1;
+    return width;
 }
 
 static void drawFoot(struct track *tg, struct hvGfx *hvg, char *seq, int seqStart, int seqEnd, 
@@ -321,10 +440,10 @@ mapBoxHgcOrHgGene(hvg, seqStart, seqEnd, x-1, y-1, 3, 3,
                    tg->track, item, status, NULL, TRUE, NULL);
 }
 
-void interactDrawItems(struct track *tg, int seqStart, int seqEnd,
+static void drawInteractItems(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
-/* Draw a list of interact structures. */
+/* Draw a list of interact items with connectors (e.g. curves) */
 {
 #define DRAW_LINE       0
 #define DRAW_CURVE      1
@@ -341,7 +460,7 @@ if (vis != tvDense)
         draw = DRAW_CURVE;
     else if (sameString(drawMode, INTERACT_DRAW_ELLIPSE))
     draw = DRAW_ELLIPSE;
-doDashes = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE,
+    doDashes = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE,
                                 INTERACT_DIRECTION_DASHES, INTERACT_DIRECTION_DASHES_DEFAULT);
     }
 double scale = scaleForWindow(width, seqStart, seqEnd);
@@ -350,7 +469,8 @@ char buffer[1024];
 char itemBuf[2048];
 
 // Gather info for layout
-struct interactTrackInfo *tInfo = interactGetTrackInfo(tg, seqStart, hvg, xOff, font, scale);
+interactGetLayoutInfo(tg, seqStart, hvg, xOff, font, scale);
+struct interactTrackInfo *tInfo = (struct interactTrackInfo *)tg->customPt;
 setYOff(tg, yOff);      // TODO: better to stash this in tInfo, and save that in track struct */
 int highlightColor = MG_WHITE;
 boolean drawUp = trackDbSettingClosestToHomeOn(tg->tdb, INTERACT_UP) && vis == tvFull;
@@ -583,22 +703,67 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
     }
 }
 
-void interactDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
-    struct hvGfx *hvg, int xOff, int yOff, int width, int height,
-    boolean withCenterLabels, MgFont *font,
-    Color color, enum trackVisibility vis)
-/* Override default */
+void interactLinkedFeaturesDrawAt(struct track *tg, void *item,
+                          struct hvGfx *hvg, int xOff, int y, double scale,
+                          MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a item with target in contrasting color */
 {
+struct linkedFeatures *lf = item;
+if (tg->visibility == tvDense)
+    {
+    lf->filterColor = slightlyDarkerColor(hvg, MG_GRAY);
+                // can't distinguish overlapping colors, so force to gray
+    }
+linkedFeaturesDrawAt(tg, item, hvg, xOff, y, scale, font, color, vis);
+struct interactTrackInfo *tInfo = tg->customPt;
+
+// draw overlapping items in white
+if (tInfo->clusterMode)
+    {
+    struct simpleFeature *sf;
+    int shortHeight = tg->heightPer/2;
+    for (sf = lf->components;  sf; sf = sf->next)
+        {
+        if (sf->start > lf->tallStart && sf->end < lf->tallEnd)
+            {
+            drawScaledBox(hvg, sf->start, sf->end, scale, xOff, y + shortHeight/2,
+                                shortHeight, MG_WHITE);
+            }
+        }
+    }
+else
+    {
+    struct simpleFeature *sf1 = lf->components, *sf2 = sf1->next;
+    if (sf2 && sf2->start < sf1->end)
+        {
+        drawScaledBox(hvg, sf2->start, sf2->end, scale, xOff, y, tg->heightPer, MG_WHITE);
+        }
+    }
+}
+
+void interactDrawItems(struct track *tg, int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a list of interact structures. */
+{
+struct interactTrackInfo *tInfo = (struct interactTrackInfo *)tg->customPt;
+if (tInfo->clusterMode || isLinkedFeaturesMode(tg))
+    {
+    tg->drawItemAt = interactLinkedFeaturesDrawAt;
+    linkedFeaturesDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
+    }
+else
+    // curve, etc. connector display
+    drawInteractItems(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
 }
 
 void interactMethods(struct track *tg)
 /* Interact track type methods */
 {
+tg->bedSize = 12;
+linkedFeaturesMethods(tg);         // for most vis and mode settings
 tg->loadItems = interactLoadItems;
 tg->drawItems = interactDrawItems;
-tg->drawLeftLabels = interactDrawLeftLabels;
-tg->totalHeight = interactTotalHeight;
-tg->mapsSelf = TRUE;
 }
 
 void interactCtMethods(struct track *tg)

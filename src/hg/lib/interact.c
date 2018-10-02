@@ -373,6 +373,72 @@ ret->targetStrand = cloneString(row[17]);
 return ret;
 }
 
+void interactRegionCenters(struct interact *inter, int *sourceCenter, int *targetCenter)
+/* Return genomic position of endpoint centers */
+{
+assert(sourceCenter);
+assert(targetCenter);
+*sourceCenter = interactRegionCenter(inter->sourceStart, inter->sourceEnd);
+*targetCenter = interactRegionCenter(inter->targetStart, inter->targetEnd);
+}
+
+struct bed *interactToBed(struct interact *inter)
+/* Convert an interact to a BED12 (actually, BED15+label) */
+{
+struct bed *bed = NULL;
+AllocVar(bed);
+bed->chrom = inter->chrom;
+bed->name = cloneString(inter->name);
+bed->score = inter->score;
+bed->itemRgb = inter->color;
+AllocArray(bed->blockSizes, 2);
+AllocArray(bed->chromStarts, 2);
+
+char *strand = "+";
+if (differentString(inter->sourceChrom, inter->targetChrom))
+    {
+    // inter-chromosomal
+    bed->blockCount = 1;
+    bed->chromStart = inter->chromStart;
+    bed->chromEnd = inter->chromEnd;
+    bed->blockSizes[0] = inter->chromEnd - inter->chromStart;
+    bed->chromStarts[0] = 0;
+    if sameString(bed->chrom, inter->targetChrom)
+        strand = "-";
+    }
+else 
+    {
+    // same chromosome
+    bed->blockCount = 2;
+    // expand extents to edges of endpoints
+    // NOTE: this should be changed in schema defn
+    bed->chromStart = min(inter->sourceStart, inter->targetStart);
+    bed->chromEnd = max(inter->sourceEnd, inter->targetEnd);
+    bed->chromStarts[0] = 0;
+    int sourceCenter, targetCenter;
+    interactRegionCenters(inter, &sourceCenter, &targetCenter);
+    if (targetCenter < sourceCenter)
+        strand = "-";
+    if (inter->sourceStart < inter->targetStart)
+        {
+        bed->blockSizes[0] = inter->sourceEnd - inter->sourceStart;
+        bed->blockSizes[1] = inter->targetEnd - inter->targetStart;
+        bed->chromStarts[1] = inter->targetStart - bed->chromStart;
+        }
+    else
+        {
+        bed->blockSizes[0] = inter->targetEnd - inter->targetStart;
+        bed->blockSizes[1] = inter->sourceEnd - inter->sourceStart;
+        bed->chromStarts[1] = inter->sourceStart - bed->chromStart;
+        }
+    }
+bed->thickStart = bed->chromStart;
+bed->thickEnd = bed->chromEnd;
+strcpy(bed->strand, strand);
+bed->label = bed->name;
+return bed;
+}
+
 struct interact *interactLoadAllAndValidate(char *fileName) 
 /* Load all interact from a whitespace-separated file.
  * Dispose of this with interactFreeList(). */
@@ -469,3 +535,4 @@ if (inter->chromEnd != chromEnd)
     inter->chromEnd = chromEnd;
     }
 }
+

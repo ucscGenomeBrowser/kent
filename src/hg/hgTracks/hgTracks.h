@@ -885,6 +885,12 @@ void linkedFeaturesFreeList(struct linkedFeatures **pList);
 void freeLinkedFeaturesSeries(struct linkedFeaturesSeries **pList);
 /* Free up a linked features series list. */
 
+int simpleFeatureCmp(const void *va, const void *vb);
+/* Compare to sort based on start. */
+
+void linkedFeaturesSortAndBound(struct linkedFeatures *lf);
+/* Sort simpleFeatures in the linkedFeature and set start and end based on simpleFetaures */
+
 int linkedFeaturesCmp(const void *va, const void *vb);
 /* Compare to sort based on chrom,chromStart. */
 
