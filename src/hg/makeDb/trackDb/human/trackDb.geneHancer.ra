@@ -99,6 +99,8 @@ priority 1.5
     interactDirectional clusterTarget
     view d_I
     viewUi on
+    url https://www.genecards.org/cgi-bin/carddisp.pl?gene=$<geneName>&keywords=$<geneHancerIdentifier>&prefilter=enhancers#enhancers
+    urlLabel Interaction in GeneCards
     visibility pack
     parent geneHancer
 
