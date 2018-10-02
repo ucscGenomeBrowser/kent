@@ -1,24 +1,59 @@
 <h2>Description</h2>
 
-<p>This composite of tracks represents GeneHancer<sup>1</sup>, a database of human regulatory elements (enhancers and promoters) and their inferred target genes, which is embedded in <a href="http://www.genecards.org" target="_blank">GeneCards</a>, the human gene compendium<sup>2</sup>.</p>
+<p>This composite of tracks represents GeneHancer<sup>1</sup>, a database of human regulatory 
+elements (enhancers and promoters) and their inferred target genes, which is embedded 
+in <a href="http://www.genecards.org" target="_blank">GeneCards</a>, the human gene 
+compendium<sup>2</sup>.</p>
 <h3>The GeneHancer view in the composite shows the regulatory elements.</h3>
-<p>We integrated >1 million regulatory elements from seven different genome-wide databases:<br><br>(A) The ENCODE project Z-Lab Enhancer-like regions (version v3)<br> (B) The Ensembl regulatory build (version 92)<br> (C) The FANTOM5 atlas of active enhancers<br> (D) The VISTA Enhancer Browser<br> (E) The dbSUPER super-enhancers<br> (F) The EPDnew promoters<br> (G) The UCNEbase ultra-conserved noncoding elements.<br><br> Employing an integration algorithm that aims to remove redundancy, GeneHancer shows ~250k integrated candidate regulatory elements (“GeneHancers”), each assigned an annotation-derived confidence score. The GeneHancers that are derived from more than one information source are defined as "elite" GeneHancers.</p>
-<h3>The Interaction view in the composite shows the associations between GeneHancers (in the GeneHancer view) and their target genes (in the Gene TSS view).</h3>
-<p>Gene-GeneHancer associations, and their likelihood-based scores, were generated using information that helps link regulatory elements to genes:<br><br>
-(A) eQTLs (expression quantitative trait loci) from GTEx (version v6p)<br> (B) Capture Hi-C promoter-enhancer long range interactions<br> (C) FANTOM5 eRNA-gene expression correlations<br> (D) Cross-tissue expression correlations between a transcription factor interacting with an enhancer and a candidate target gene<br> (E) Distance-based associations, including several approaches: (1) Nearest neighbors, where each GeneHancer is associated with its two proximal genes; (2) Overlaps with the gene territory (Intragenic); (3) Proximity to the gene TSS (<2kb).</p>
-<p>The associations that are derived from more than one information source are defined as "elite" associations, which leads to the definition of the “double elite” dataset – elite gene associations of elite GeneHancers. 
+<p>We integrated >1 million regulatory elements from seven different genome-wide 
+databases:
+<br><br>(A) The ENCODE project Z-Lab Enhancer-like regions (version v3)
+<br> (B) The Ensembl regulatory build (version 92)
+<br> (C) The FANTOM5 atlas of active enhancers
+<br> (D) The VISTA Enhancer Browser
+<br> (E) The dbSUPER super-enhancers
+<br> (F) The EPDnew promoters
+<br> (G) The UCNEbase ultra-conserved noncoding elements.
+<br><br> Employing an integration algorithm that aims to remove redundancy, GeneHancer 
+shows ~250k integrated candidate regulatory elements ("GeneHancers"), each assigned
+an annotation-derived confidence score. 
+The GeneHancers that are derived from more than one information source are defined 
+as "elite" GeneHancers.</p>
+
+<h3>The Interaction view in the composite shows the associations between GeneHancers (in
+the GeneHancer view) and their target genes (in the Gene TSS view).</h3>
+<p>Gene-GeneHancer associations, and their likelihood-based scores, were generated 
+using information that helps link regulatory elements to genes:
+<br><br>
+(A) eQTLs (expression quantitative trait loci) from GTEx (version v6p)
+<br> (B) Capture Hi-C promoter-enhancer long range interactions
+<br> (C) FANTOM5 eRNA-gene expression correlations
+<br> (D) Cross-tissue expression correlations between a transcription factor interacting 
+with an enhancer and a candidate target gene
+<br> (E) Distance-based associations, including several approaches: 
+(1) Nearest neighbors, where each GeneHancer is associated with its two proximal genes; 
+(2) Overlaps with the gene territory (Intragenic); (3) Proximity to the gene TSS (<2kb).</p>
+<p>The associations that are derived from more than one information source are defined 
+as "elite" associations, which leads to the definition of the "double elite"
+dataset - elite gene associations of elite GeneHancers. 
 </p>
-<p>More details are provided at the GeneCards<sup>2</sup> <a href="http://www.genecards.org/Guide/GeneCard/enhancers" target="_blank">information page</a>.</p>
+<p>More details are provided at the GeneCards<sup>2</sup> 
+<a href="http://www.genecards.org/Guide/GeneCard/enhancers" target="_blank">
+information page</a>.</p>
 
 <h2>Methods</h2> 
 
 <p>For a full description of the methods used, refer to the GeneHancer manuscript<sup>1</sup>.</p>
-<p>Source data for the GeneHancer version 4.8 was downloaded during May2018. See Description above for source data versions.</p>
-
+<p>Source data for the GeneHancer version 4.8 was downloaded during May2018. 
+See Description above for source data versions.</p>
 
 <h2>Display conventions and Configuration</h2>
 
-<p>Each GeneHancer is identified by a GeneHancer id. For example: GH0XJ101383 is located on chromosome X, with starting position of 101,383 kb. Based on the id, one can obtain full GeneHancer information, as displayed in the Genomics section within the gene-centric web pages of GeneCards</p>
+<p>Each GeneHancer is identified by a GeneHancer id. For example: GH0XJ101383 is located
+on chromosome X, with starting position of 101,383 kb. Based on the id, one can obtain full 
+GeneHancer information, as displayed in the Genomics section within the gene-centric web 
+pages of GeneCards</p>
+
 <h3>The GeneHancer view:</h3>
 <p>Colors are used to distinguish promoters and enhancers and to indicate the GeneHancer element confidence score:<p>
 <p>Promoters:<p>
@@ -40,16 +75,15 @@
 </li>
 </ul>
 <h3>The Interaction view and the Gene TSS view:</h3>
-<p>Colors are used to improve gene and interactions visibility. Consequent genes are colored in different colors, all interactions of a gene have the same color. </p>
-
-
+<p>Colors are used to improve gene and interactions visibility. 
+Successive genes are colored in different colors, all interactions of a gene 
+have the same color. </p>
 
 <h2>References</h2>
-
 <ol>
-<li>Fishilevich S., Nudel R., Rappaport N., Hadar R., Plaschkes I., Iny Stein T., Rosen N., Kohn A., Twik M., Safran M., Lancet D. and Cohen D. (in press).  <i>GeneHancer: genome-wide integration of enhancers and target genes in GeneCards</i>, Database (Oxford), doi:10.1093/database/bax028.</li>
+<li>Fishilevich S., Nudel R., Rappaport N., Hadar R., Plaschkes I., Iny Stein T., Rosen N., Kohn A., Twik M., Safran M., Lancet D. and Cohen D. <i>GeneHancer: genome-wide integration of enhancers and target genes in GeneCards</i>, Database (Oxford) (2017), doi:10.1093/database/bax028. <a href="https://www.genecards.org/papers/Database-2017-Fishilevich-GH.pdf" target="_blank">[PDF]</a> PMID <a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=PubMed&cmd=search&Dopt=b&term=28605766" target="_blank">28605766</a></li>
 
-<li>Stelzer G, Rosen R, Plaschkes I, Zimmerman S, Twik M, Fishilevich S, Iny Stein T, Nudel R, Lieder I, Mazor Y, Kaplan S, Dahary, D, Warshawsky D, Guan- Golan Y, Kohn A, Rappaport N, Safran M, and Lancet D. <i>The GeneCards Suite: From Gene Data Mining to Disease Genome Sequence Analysis</i>, Current Protocols in Bioinformatics (2016), 54:1.30.1-1.30.33. doi: 10.1002/cpbi.5. <a href="http://www.genecards.org/cdn/papers/Protocols-2016-Stelzer-GCSuite.pdf" target="_blank">[PDF]</a> PMID <a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=PubMed&cmd=search&Dopt=b&term=27322403" target="_blank">27322403</a></li>
+<li>Stelzer G, Rosen R, Plaschkes I, Zimmerman S, Twik M, Fishilevich S, Iny Stein T, Nudel R, Lieder I, Mazor Y, Kaplan S, Dahary, D, Warshawsky D, Guan- Golan Y, Kohn A, Rappaport N, Safran M, and Lancet D. <i>The GeneCards Suite: From Gene Data Mining to Disease Genome Sequence Analysis</i>, Current Protocols in Bioinformatics (2016), 54:1.30.1-1.30.33. doi: 10.1002/cpbi.5. PMID <a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=PubMed&cmd=search&Dopt=b&term=27322403" target="_blank">27322403</a></li>
 </ol>
 
 <h2>Contact</h2>
