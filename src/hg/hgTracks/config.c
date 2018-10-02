@@ -705,12 +705,14 @@ if (conn)
         char sql[1024];
         if (altLocExists)
             {
-            sqlSafef(sql, sizeof sql, "select name from altLocations where name='%s'", haplo);
+            sqlSafef(sql, sizeof sql,
+                     "select name from altLocations where name rlike '^%s(:[0-9-]+)?'", haplo);
             foundHaplo = sqlQuickString(conn, sql);
             }
         if (!foundHaplo && fixLocExists)
             {
-            sqlSafef(sql, sizeof sql, "select name from fixLocations where name='%s'", haplo);
+            sqlSafef(sql, sizeof sql,
+                     "select name from fixLocations where name rlike '^%s(:[0-9-]+)?'", haplo);
             foundHaplo = sqlQuickString(conn, sql);
             }
         if (!foundHaplo)
@@ -720,6 +722,7 @@ if (conn)
             else
                 sqlSafef(sql, sizeof sql, "select name from fixLocations limit 1");
             haplo = sqlQuickString(conn, sql);
+            chopSuffixAt(haplo, ':');
             }
         hTextVar("singleAltHaploId", haplo, 60);
         hPrintf("</TD></TR>\n");
