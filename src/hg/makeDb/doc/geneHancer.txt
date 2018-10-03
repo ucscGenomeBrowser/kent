@@ -16,8 +16,8 @@
 # Files obtained from development hub prepared by Simon F:
 # https://genecards.weizmann.ac.il/geneloc/gh_hub_interactions/hub.txt  
 
-mkdir /hive/data/outside/geneHancer
-cd /hive/data/outside/geneHancer
+mkdir /hive/data/outside/geneHancer/lab
+cd /hive/data/outside/geneHancer/lab
 
 
 wget -r https://genecards.weizmann.ac.il/geneloc/gh_hub_interactions
@@ -25,27 +25,21 @@ wget -r https://genecards.weizmann.ac.il/geneloc/gh_hub_interactions
 mv genecards.weizmann.ac.il/geneloc/gh_hub_interactions/*/*.bb .
 
 // rename to UCSC conventions
-mv GeneHancer_hg19.bb geneHancerEnhancers.hg19.bb
-mv GCs_genes_tss_hg19.bb geneHancerGenesTss.hg19.bb
-mv GH_interactions1_all_hg19.bb geneHancerInteractions.hg19.bb
-mv GeneHancer_double_elite_hg19.bb geneHancerEnhancersDoubleElite.hg19.bb
-mv GCs_genes_tss_double_elite_hg19.bb geneHancerGenesTssDoubleElite.hg19.bb
-mv GH_interactions1_doubleElite_hg19.bb geneHancerInteractionsDoubleElite.hg19.bb
+cd ..
+mv GeneHancer_hg19.bb lab/geneHancerRegElementsAll.hg19.bb
+mv GCs_genes_tss_hg19.bb lab/geneHancerGenesTssAll.hg19.bb
+mv GH_interactions1_all_hg19.bb lab/geneHancerInteractionsAll.hg19.bb
+mv GeneHancer_double_elite_hg19.bb lab/geneHancerRegElementsDoubleElite.hg19.bb
+mv GCs_genes_tss_double_elite_hg19.bb lab/geneHancerGenesTssDoubleElite.hg19.bb
+mv GH_interactions1_doubleElite_hg19.bb lab/geneHancerInteractionsDoubleElite.hg19.bb
 
-mv GeneHancer.bb geneHancerEnhancers.hg38.bb
-mv GCs_genes_tss.bb geneHancerGenesTss.hg38.bb
-mv GH_interactions1_all.bb geneHancerInteractions.hg38.bb
-mv GeneHancer_double_elite.bb geneHancerEnhancersDoubleElite.hg38.bb
-mv GCs_genes_tss_double_elite.bb geneHancerGenesTssDoubleElite.hg38.bb
-mv GH_interactions1_doubleElite.bb geneHancerInteractionsDoubleElite.hg38.bb
+mv GeneHancer.bb lab/geneHancerRegElementsAll.hg38.bb
+mv GCs_genes_tss.bb lab/geneHancerGenesTssAll.hg38.bb
+mv GH_interactions1_all.bb lab/geneHancerInteractionsAll.hg38.bb
+mv GeneHancer_double_elite.bb lab/geneHancerRegElementsDoubleElite.hg38.bb
+mv GCs_genes_tss_double_elite.bb lab/geneHancerGenesTssDoubleElite.hg38.bb
+mv GH_interactions1_doubleElite.bb lab/geneHancerInteractionsDoubleElite.hg38.bb
 
-# link into /gbdb
-
-cd /gbdb
-mkdir hg19/geneHancer
-ln -s /hive/data/outside/geneHancer/*.hg19.bb hg19/geneHancer
-mkdir hg38/geneHancer
-ln -s /hive/data/outside/geneHancer/*.hg38.bb hg38/geneHancer
 
 # make trackDb
 
@@ -59,11 +53,40 @@ cat ~/public_html/hubs/geneHancer/hg38/trackDb.txt >> trackDb.geneHancer.ra
 # track description
 cp hg38/GeneHancer.html ~/kent/src/hg/makeDb/trackDb/human/hg19/geneHancer.html
 
+# fix .as file for interactions tracks
+bigBedInfo -as geneHancerInteractionsDoubleElite.hg38.bb > geneHancer.as
+# edit to remove non-as stuff, remove extraneous eol chars, fix case to GB standard, also spelling
+sed 's/\r//' geneHancer.as  > geneHancerGb.as
 
+# correct interaction files chromStart, chromEnd (must be full extent of source and target regions)
+# and replace : in name with more cosmetic / 
+# (can now use new $<fieldName> to construct URL, instead of name field)
+
+mkdir fixed gbdb
+cat > make.csh << 'EOF'
+cd lab
+foreach v (All.hg19 All.hg38 DoubleElite.hg19 DoubleElite.hg38)
+  set db = $v:e
+  set f = geneHancerInteractions$v
+  echo $f
+  set sizes = /hive/data/genomes/$db/chrom.sizes
+    
+  bigBedToBed $f.bb $f.bed
+  sed 's/:/\//' $f.bed | interactFixRanges stdin stdout | \
+        bedSort stdin ../fixed/$f.bed
+  bedToBigBed -type=bed5+3 -as=../geneHancerGb.as ../fixed/$f.bed $sizes ../gbdb/$f.bb
+end
+'EOF'
+
+# link into /gbdb
+
+ln `pwd`/lab/*Tss*.bb gbdb
+ln `pwd`/lab/*RegElements*.bb gbdb
+
+cd /gbdb
+mkdir {hg19,hg38}/geneHancer
+ln -s /hive/data/outside/geneHancer/gbdb/*.hg19.bb hg19/geneHancer
+ln -s /hive/data/outside/geneHancer/gbdb/*.hg38.bb hg38/geneHancer
 
 # cleanup
 rm -fr genecards.weizmann.ac.il
-
-mkdir fixRanges
-bigBedToBed geneHancerInteractionsDoubleElite.hg38.bb stdout | interactFixRanges stdin > fixRanges/geneHancerInteractionsDoubleElite.hg38.fixed.bed
-

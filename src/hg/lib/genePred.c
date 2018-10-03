@@ -589,18 +589,30 @@ if (iPrevExon < 0)
 return iPrevExon;
 }
 
+static int exonCdsStart(struct genePred *gp, int iExon)
+/* get the CDS starting position in specified exon */
+{
+return (gp->cdsStart < gp->exonStarts[iExon]) ? gp->exonStarts[iExon] : gp->cdsStart;
+}
+
+static int exonCdsEnd(struct genePred *gp, int iExon)
+/* get the CDS ending position in specified exon */
+{
+return (gp->cdsEnd > gp->exonEnds[iExon]) ? gp->exonEnds[iExon] : gp->cdsEnd;
+}
+
 static void extendFramePos(struct genePred *gp)
 /* extend frame missing from last exon(s) for positive strand genes, normally
  * caused by GTF stop_codon */
 {
 int iExon = findLastFramedExon(gp);
-int frame = incrFrame(gp->exonFrames[iExon], (gp->exonEnds[iExon]-gp->exonStarts[iExon]));
+int frame = incrFrame(gp->exonFrames[iExon], (exonCdsEnd(gp, iExon) - exonCdsStart(gp, iExon)));
 for (iExon++; (iExon < gp->exonCount) && (gp->exonStarts[iExon] < gp->cdsEnd); iExon++)
     {
     if (!((gp->exonFrames[iExon] < 0) || (gp->exonFrames[iExon] == frame)))
         errAbort("conflicting frame for %s exon index %d, was %d, trying to assign %d", gp->name, iExon, gp->exonFrames[iExon], frame);
     gp->exonFrames[iExon] = frame;
-    frame = incrFrame(gp->exonFrames[iExon], (gp->exonEnds[iExon]-gp->exonStarts[iExon]));
+    frame = incrFrame(gp->exonFrames[iExon], (exonCdsEnd(gp, iExon) - exonCdsStart(gp, iExon)));
     }
 }
 
@@ -609,13 +621,13 @@ static void extendFrameNeg(struct genePred *gp)
  * caused by GTF stop_codon */
 {
 int iExon = findLastFramedExon(gp);
-int frame = incrFrame(gp->exonFrames[iExon], (gp->exonEnds[iExon]-gp->exonStarts[iExon]));
+int frame = incrFrame(gp->exonFrames[iExon], (exonCdsEnd(gp, iExon) - exonCdsStart(gp, iExon)));
 for (iExon--; (iExon >= 0) && (gp->exonEnds[iExon] > gp->cdsStart); iExon--)
     {
     if (!((gp->exonFrames[iExon] < 0) || (gp->exonFrames[iExon] == frame)))
         errAbort("conflicting frame for %s exon index %d, was %d, trying to assign %d", gp->name, iExon, gp->exonFrames[iExon], frame);
     gp->exonFrames[iExon] = frame;
-    frame = incrFrame(gp->exonFrames[iExon], (gp->exonEnds[iExon]-gp->exonStarts[iExon]));
+    frame = incrFrame(gp->exonFrames[iExon], (exonCdsEnd(gp, iExon) - exonCdsStart(gp, iExon)));
     }
 }
 

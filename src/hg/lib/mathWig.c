@@ -110,6 +110,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         array[ii] = sqlFloat(row[rowOffset + 3]);
     }
 
+hFreeConn(&conn);
 }
 
 void getWigData(char *db, char *table, char *chrom, unsigned winStart, unsigned winEnd, double *array)
@@ -140,6 +141,7 @@ for(wiggle = wiggleList; wiggle; wiggle = nextWiggle)
         getWigDataFromFile(wiggle, array, winStart, winEnd);
     freez(&wiggle);
     }
+hFreeConn(&conn);
 }
 
 void getBigWigData(char *file, char *chrom, unsigned winStart, unsigned winEnd, double *array)

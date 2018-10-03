@@ -229,7 +229,8 @@ boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
 		   sameString("bed8Attrs", s) || sameString("gvf", s) ||
 		   sameString("vcfTabix", s) || sameString("vcf", s) || sameString("pgSnp", s) ||
 		   sameString("narrowPeak", s) || sameString("broadPeak", s) || 
-                   sameString("peptideMapping", s) || sameString("barChart", s)
+                   sameString("peptideMapping", s) || sameString("barChart", s) ||
+                   sameString("interact", s) || sameString("bigInteract", s)
                    );
 freeMem(t);
 return canPack;
