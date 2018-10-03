@@ -45,10 +45,32 @@ Enhancers:&nbsp;
 <span style="border: 2px inset #000000; background-color:#A0A0A0;">&emsp;&emsp;</span>&nbsp;Medium
 <span style="border: 2px inset #000000; background-color:#C0C0C0;">&emsp;&emsp;</span>&nbsp;Low
 </p>
-<h3>Interactions and Gene TSS</h3>
+
+<h3>Gene TSS</h3>
 <p>
 Colors are used to improve gene and interactions visibility. 
-Successive genes are colored in different colors, and interactions of a gene have the same color.
+Successive genes are colored in different colors, and interactions of a gene have the same color.</p>
+
+<h3>Interactions</h3>
+<p>
+The Interactions view in Full mode shows GeneHancers and target genes connected by curves or 
+half-rectangles (when one of the connected regions is off-screen).  
+Configuration options are available to change the drawing style, and to limit the view to
+interactions with one or both connected items in the region.
+Interactions are identified on mouseover or clicked on for details at the end regions, or at 
+the curve peak, which is marked with a gray ring shape. Interactions in the reverse direction
+(Gene TSS precedes GeneHancer on the genome), are drawn with a dashed line.
+
+<h3>Clusters</h3>
+<p>
+The Clusters view groups interactions by target gene; the target gene and all GeneHancers 
+associated with it are displayed in a single browser item. The gene TSS and associated GeneHancers 
+are shown as blocks linked together, with the TSS drawn as a &quot;tall&quot; item, and the 
+GeneHancers drawn &quot;short&quot;. 
+A user configuration option is provided to change the view to group by GeneHancer 
+(with tall GeneHancer and short TSS's).  
+Clusters composed of interactions with a single gene are colored to correspond to the gene, 
+and those composed of interactions with multiple genes are colored dark gray.</p>
 
 <h2>Methods</h2> 
 <p>
@@ -65,7 +87,7 @@ obtained from seven genome-wide databases:
 </ol>
 <p>
 Employing an integration algorithm that removes redundancy, the GeneHancer pipeline
-identified &ilde;250k integrated candidate regulatory elements (&quot;GeneHancers&quot;).
+identified &tilde;250k integrated candidate regulatory elements (GeneHancers).
 Each GeneHancer is assigned an annotation-derived confidence score. 
 The GeneHancers that are derived from more than one information source are defined 
 as &quot;elite&quot; GeneHancers.</p>
@@ -95,7 +117,7 @@ More details are provided at the GeneCards<sup>2</sup>
 information page</a>.
 For a full description of the methods used, refer to the GeneHancer manuscript<sup>1</sup>.</p>
 <p>
-Source data for the GeneHancer version 4.8 was downloaded during May2018.</p>
+Source data for the GeneHancer version 4.8 was downloaded during May 2018.</p>
 
 <h2>Credits</h2>
 <p>
