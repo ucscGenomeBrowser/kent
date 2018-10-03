@@ -248,9 +248,17 @@ group map
 color 32,32,190
 shortLabel Alt Haplotypes
 longLabel Alternate Haplotypes to Reference Sequence Correspondence
-url /cgi-bin/hgTracks?position=$$
+url ../cgi-bin/hgTracks?db=$D&position=$$
 urlLabel Corresponding position:
 
+track fixLocations
+type bed 4
+group map
+color 190,32,32
+shortLabel Fix Patches
+longLabel Fix Patch to Reference Sequence Correspondence
+url ../cgi-bin/hgTracks?db=$D&position=$$
+urlLabel Corresponding position:
 
 track knownGene
 shortLabel UCSC Genes

@@ -285,10 +285,9 @@ for (ipr = iprs; ipr != NULL; ipr = ipr->next)
     {
     if (count > 1)
         printf("<hr>\n");
-    if (clusterMode)
+    doInteractItemDetails(tdb, ipr, item, count > 1);
+    if (clusterMode && count > 1)
         doInteractRegionDetails(tdb, ipr->interact);
-    else
-        doInteractItemDetails(tdb, ipr, item, count > 1);
     if (count > 1 && !isEmptyTextField(ipr->interact->name) && sameString(ipr->interact->name, item))
         printf("<hr>\n");
     }
