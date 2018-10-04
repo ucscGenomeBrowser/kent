@@ -108,7 +108,11 @@ for (bb = bbList; bb != NULL; bb = bb->next)
             match = sameString(clusterMode, INTERACT_CLUSTER_SOURCE) ?
                                                 inter->sourceName : inter->targetName;
         if (differentString(name, match))
-            continue;
+            {
+            if (foot && differentString(name, inter->sourceName) && 
+                        differentString(name, inter->targetName))
+                            continue;
+            }
         }
 
     // got one, save object and row representation
