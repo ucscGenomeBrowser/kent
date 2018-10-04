@@ -205,9 +205,6 @@ static void interactGetLayoutInfo(struct track *tg, int seqStart, struct hvGfx *
 {
 struct interactTrackInfo *tInfo = tg->customPt;
 tInfo->doOtherLabels = TRUE;
-tInfo->isDirectional = interactUiDirectional(tg->tdb);
-tInfo->offset = interactUiOffset(tg->tdb);
-tInfo->drawUp = trackDbSettingClosestToHomeOn(tg->tdb, INTERACT_UP);
 
 char *otherChrom = NULL;
 int prevLabelEnd = 0, prevLabelStart = 0;
@@ -252,12 +249,16 @@ tInfo->sameHeight = (tInfo->sameCount) ? tg->height - tInfo->otherHeight : 0;
 void interactLoadItems(struct track *tg)
 /* Load interact items in interact format */
 {
+loadAndFilterItems(tg);
+
 struct interactTrackInfo *tInfo = NULL;
 AllocVar(tInfo);
-tInfo->clusterMode = interactUiClusterMode(cart, tg->track, tg->tdb);
 tg->customPt = tInfo;
+tInfo->isDirectional = interactUiDirectional(tg->tdb);
+tInfo->offset = interactUiOffset(tg->tdb);
+tInfo->drawUp = trackDbSettingClosestToHomeOn(tg->tdb, INTERACT_UP);
+tInfo->clusterMode = interactUiClusterMode(cart, tg->track, tg->tdb);
 
-loadAndFilterItems(tg);
 if (tInfo->clusterMode || isLinkedFeaturesMode(tg))
     {
     // convert to BEDs for linked feature display
@@ -296,7 +297,7 @@ if (tInfo->clusterMode || isLinkedFeaturesMode(tg))
                 }
             else
                 {
-                // create a linked feature for this target
+                // create a linked feature for this cluster
                 lf = interactToLf(inter, doColor);
                 lf->orientation = 0;
                 lf->name = (byTarget ? inter->targetName : inter->sourceName);
@@ -307,7 +308,17 @@ if (tInfo->clusterMode || isLinkedFeaturesMode(tg))
             }
         else 
             {
+            // packed or squish mode view of single interaction (not cluster)
             lf = interactToLf(inter, doColor);
+            if (tInfo->isDirectional)
+                {
+                lf->tallStart = inter->targetStart;
+                lf->tallEnd = inter->targetEnd;
+                }
+            else
+                {
+                lf->orientation = 0;
+                }
             slAddHead(&lfs, lf);
             }
         }
