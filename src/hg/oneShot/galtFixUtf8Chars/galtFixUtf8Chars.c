@@ -5,11 +5,13 @@
 #include "obscure.h"
 #include "options.h"
 #include "jksql.h"
+#include "cheapcgi.h"
 #include "hex.h"
 #include "hash.h"
 
 boolean fix = FALSE;
 boolean useHtmlEntities = FALSE;
+boolean cgiDecodeValues = FALSE;
 struct hash *hash = NULL;
 struct hash *dupeVals = NULL;
 int dupeCount = 0;
@@ -27,12 +29,14 @@ errAbort(
   "       replaces valid utf-8 values with correct windows-1252 values in the specified table.field using profile \n"
   "options:\n"
   "   -useHtmlEntities causes values not mappable to windows-1252 to be converted to unicode codepoint entities.\n"
+  "   -cgiDecode runs cgiDecode on values in db field before further processing.\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"useHtmlEntities", OPTION_BOOLEAN},
+   {"cgiDecode", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -282,6 +286,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *fieldVal = row[0];
     ++rowCount;
 
+    if (cgiDecodeValues)  // remove extra layer of %HH encoding
+	{
+	fieldVal = cloneString(row[0]);
+	cgiDecodeFull(fieldVal, fieldVal, strlen(fieldVal));
+	}
+
     if (!hasAsciiCharsOnly(fieldVal))
 	{
 	// reporting the names here means we do not see plain ascii names which is good.
@@ -376,6 +386,7 @@ if (argc != 6)
     usage();
 
 useHtmlEntities = optionExists("useHtmlEntities");
+cgiDecodeValues = optionExists("cgiDecode");
 
 char *command = argv[1];
 verbose(1, "command=%s\n", command);

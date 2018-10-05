@@ -33051,3 +33051,57 @@ for BW in `ls $WORKDIR/coverage/*.bw`;
 
 
 ##############################################################################
+# GNOMAD pLI AND MISSENSE (IN PROGRESS 10/2/18 ChrisL)
+# Redmine #20394 and #22061
+
+    mkdir /hive/data/outside/gnomAD/pLI
+    # files downloaded as redmine attachments (#22061) and then scp'd to above location
+    # files provided by Anne O'Donnell-Luria: odonnell@broadinstitute.org
+
+    # remove track line (which has weird characters anyways)
+    tail -n +2 mis_z_20170508.bed > misZ.bed
+    tail -n +2 pLI_20170508.bed > pLI.bed
+
+    # make sure every field exists:
+    tawk '{print NF}' misZ.bed | sort -u
+    # 5
+    tawk '{print NF}' pLI.bed | sort -u
+    # 5
+
+    # I predict there will be more work on these to get colors and other features
+    # correct. For now just turn them into bigBeds:
+    cat << EOF > pLI.as
+table pLI
+"BED5 with the pLI score as the name and a score for proper shading"
+    (
+    string chrom;       "Reference sequence chromosome or scaffold"
+    uint   chromStart;  "Start position in chromosome"
+    uint   chromEnd;    "End position in chromosome"
+    string name;        "pLI score in range 0 - 1"
+    uint   score;       "Score for item shading"
+    )
+EOF
+
+    cat << EOF > misZ.as
+table misZ
+"BED5 with the missense Z-score as the name and a score for proper shading"
+    (
+    string chrom;       "Reference sequence chromosome or scaffold"
+    uint   chromStart;  "Start position in chromosome"
+    uint   chromEnd;    "End position in chromosome"
+    string name;        "Missense Z-score score"
+    uint   score;       "Score for item shading"
+    )
+EOF
+
+    chromSizes=/hive/data/genomes/hg19/chrom.sizes
+    sort -k1,1 -k2,2n pLI.bed > pLI.bed.sorted
+    sort -k1,1 -k2,2n misZ.bed > misZ.bed.sorted
+    bedToBigBed -tab -type=bed5 -as=pLI.as pLI.bed.sorted $chromSizes pLI.bb
+    bedToBigBed -tab -type=bed5 -as=misZ.as misZ.bed.sorted $chromSizes misZ.bb
+    mkdir /gbdb/hg19/gnomAD/pLI/
+    ln -s `pwd`/*.bb /gbdb/hg19/gnomAD/pLI/
+
+    # TODO: Ask Anne for feedback and changes, especially on color
+
+##############################################################################
