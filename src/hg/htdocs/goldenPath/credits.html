@@ -767,8 +767,15 @@ The cat sequence is made freely available with the following understanding:
 <a name="chimp_credits"></a>
 <h2>Chimpanzee genome</h2> 
 <p> 
-The UCSC Chimpanzee Genome Browsers display draft assembly data produced by the Chimpanzee Genome 
-Sequencing Consortium:</p>
+The UCSC Chimpanzee Genome Browsers display whole-genome assembly data produced by the University of
+Washington:</p>
+<ul>
+  <li>
+  Jan. 2018 <a href="../../cgi-bin/hgGateway?db=panTro6" target="_blank">panTro6</a> browser:
+  Clint_PTRv2 124x PacBio; Illumina NextSeq 500; BioNano Saphyr (two enzyme)</li>
+</ul>
+<p>
+and draft assembly data produced by the Chimpanzee Genome Sequencing Consortium:</p>
 <ul> 
   <li>
   May 2016 <a href="../../cgi-bin/hgGateway?db=panTro5" target="_blank">panTro5</a> browser: v3.0 
@@ -789,6 +796,24 @@ Sequencing Consortium:</p>
 <p>
 <strong>Funding:</strong> <a href="http://www.genome.gov/" target="_blank">National Human Genome 
 Research Institute</a> (NHGRI) </p>
+<p>
+<strong>Sequencing/Assembly (panTro6):</strong> </p>
+<p>
+The whole-genome assembly of a male chimpanzee, Clint (Yerkes pedigree number C0471) was done in
+stages, resulting in three progressive versions:
+<ul>
+  <li>
+  The backbone of the assembly is made up of contigs obtained by assembling the PacBio (P6-C4
+  chemistry) reads using the Falcon assembler. These contigs are error-corrected using the tool
+  Quiver and then further error-corrected using Pilon with 37-fold Illumina paired-end reads.</li>
+  <li>
+  BioNano optical maps are used to place the contigs into scaffolds, followed by chromosome-level
+  scaffolding using bicolor FISH.</li>
+  <li>
+  The assembly is further error-corrected, particularly in regions
+  that have clustered 1-2 bp indels. This is done by applying an Eichler-lab-created Freebayes-based
+  indel correction method.</li>
+</ul>
 <p>
 <strong>Sequencing/Assembly (panTro5):</strong> </p>
 <ul> 
@@ -866,6 +891,9 @@ Institute</p>
 <strong>UCSC Chimp Genome Browser:</strong> </p>
 <ul> 
   <li> 
+  <a href="../../cgi-bin/hgGateway?db=panTro6" target="_blank">panTro6</a>: Hiram Clawson and 
+  Jairo Navarro</li> 
+  <li>
   <a href="../../cgi-bin/hgGateway?db=panTro5" target="_blank">panTro5</a>: Hiram Clawson and 
   Chris Villarreal </li> 
   <li> 
