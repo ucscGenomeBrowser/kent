@@ -64,7 +64,6 @@ struct tagStanza
     int startLineIx;		/* Starting line number for stanza, for error reporting */
     };
 
-
 /** Read and write tag storms from/to files. */
 
 struct tagStorm *tagStormFromFile(char *fileName);
