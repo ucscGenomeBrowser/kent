@@ -346,8 +346,11 @@ void gfAlignTransTrans(int *pConn, char *nibDir, struct dnaSeq *seq,
  * and do detailed alignment.  Call 'outFunction' with each alignment
  * that is found. */
 
+int gfMayConnect(char *hostName, char *portName);
+/* Set up our network connection to server, or return -1. */
+
 int gfConnect(char *hostName, char *portName);
-/* Set up our network connection to server. */
+/* Set up our network connection to server. Aborts on error. */
 
 int gfDefaultRepMatch(int tileSize, int stepSize, boolean protTiles);
 /* Figure out appropriate step repMatch value. */
