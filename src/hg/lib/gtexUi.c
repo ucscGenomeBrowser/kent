@@ -341,7 +341,7 @@ void gtexGeneUiCodingFilter(struct cart *cart, char *track, struct trackDb *tdb)
 /* Checkbox to restrict display to protein coding genes */
 {
 char cartVar[1024];
-puts("<b>Limit to protein coding genes:</b>\n");
+puts("<b>Limit to protein-coding genes:</b>\n");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_CODING_GENE_FILTER);
 boolean isCodingOnly = cartCgiUsualBoolean(cart, cartVar, GTEX_CODING_GENE_FILTER_DEFAULT);
 cgiMakeCheckBox(cartVar, isCodingOnly);
