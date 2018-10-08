@@ -1625,8 +1625,6 @@ while (TRUE)
 	return TRUE;
 	}
     close(sd);
-    if (redirectCount > 0)
-	freeMem(url);
     if (success)
 	{
 	/* we have a new url to try */
@@ -1653,6 +1651,8 @@ while (TRUE)
 		}
 	    }
 	}
+    if (redirectCount > 1)
+	freeMem(url);
     if (!success)
 	{  /* failure after 0 to 5 redirects */
 	if (redirectCount > 0)

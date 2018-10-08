@@ -77,7 +77,7 @@ sub htmlStartPage {
     print OUT_FILE " <HEAD>\n";
     print OUT_FILE "  <TITLE>Index of $dirs[-1]</TITLE>\n";
     print OUT_FILE "    <META http-equiv='Content-Script-Type' content='text/javascript'>\n";
-    print OUT_FILE "    <LINK rel='STYLESHEET' href='http://hgwdev.cse.ucsc.edu/style/HGStyle.css' TYPE='text/css' />\n";
+    print OUT_FILE "    <LINK rel='STYLESHEET' href='http://hgwdev.soe.ucsc.edu/style/HGStyle.css' TYPE='text/css' />\n";
     print OUT_FILE " </HEAD>\n";
     print OUT_FILE " <BODY>\n";
 #   print OUT_FILE "<IMG SRC='http://<!--#echo var=\"BROWSER_HOST\" -->/icons/back.gif' ALT='[DIR]'> <A HREF='javascript:history.back();'>Parent Directory</A><BR>\n\n";
@@ -749,8 +749,8 @@ if (!defined $opt_redirect || htmlRedirectPage(*OUT_FILE,$db,$opt_db,$composite)
 
     if (defined $opt_sortable) {
         #print OUT_FILE "<script type='text/javascript' SRC='../js/jquery-1291074736.js'></script>\n";  Can't have timestamped version on static page (NOT A CGI)
-        print OUT_FILE "<script type='text/javascript' SRC='http://hgwdev.cse.ucsc.edu/js/tdreszer/jquery.js'></script>\n";
-        print OUT_FILE "<script type='text/javascript' SRC='http://hgwdev.cse.ucsc.edu/js/tdreszer/utils.js'></script>\n";
+        print OUT_FILE "<script type='text/javascript' SRC='http://hgwdev.soe.ucsc.edu/js/tdreszer/jquery.js'></script>\n";
+        print OUT_FILE "<script type='text/javascript' SRC='http://hgwdev.soe.ucsc.edu/js/tdreszer/utils.js'></script>\n";
         print OUT_FILE "<TABLE class='sortable' style='border: 2px outset #006600;'>\n";
 
         htmlTrHeader(*OUT_FILE,\@colList);

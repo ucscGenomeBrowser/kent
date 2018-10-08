@@ -117,6 +117,7 @@ for (table = tableList; table != NULL; table = table->next)
         sameString(tableName, "cdwBiosample") ||
         sameString(tableName, "cdwExperiment") ||
 	sameString(tableName, "cdwFileTags") ||
+	sameString(tableName, "cdwFileFacets") ||
 	sameString(tableName, "cdwScriptRegistry") ||
 	sameString(tableName, "cdwSubscriber") )
         continue;

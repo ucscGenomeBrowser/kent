@@ -147,57 +147,88 @@ return string;
 }
 
 #define GENLISTWIDTH 40
-static void printGenomeList(struct slName *genomes, int row)
+static void printGenomeList(char *hubUrl, struct slName *genomes, int row, boolean withLink)
 /* print supported assembly names from sl list */
 {
-/* List of associated genomes. */
-struct dyString *dy = newDyString(100);
-struct dyString *dyShort = newDyString(100);
-char *trimmedName = NULL;
-for(; genomes; genomes = genomes->next)
+struct dyString *dyHtml = newDyString(1024);
+struct dyString *dyShortHtml = newDyString(1024);
+
+// create two strings: one shortened to GENLISTWIDTH characters
+// and another one with all genomes
+int charCount = 0;
+struct slName *genome = genomes;
+for(; genome; genome = genome->next)
     {
-    trimmedName = trackHubSkipHubName(genomes->name);
-    dyStringPrintf(dy,"%s, ", trimmedName);
-    if (dyShort->stringSize == 0 || (dyShort->stringSize+strlen(trimmedName)<=GENLISTWIDTH))
-	dyStringPrintf(dyShort,"%s, ", trimmedName);
+    char *trimmedName = trackHubSkipHubName(genome->name);
+    char *shortName = cloneString(trimmedName);
+    // If even the first element is too long, truncate its short name.
+    if (genome==genomes && strlen(trimmedName) > GENLISTWIDTH)  
+        shortName[GENLISTWIDTH] = 0;
+
+    // append to dyShortHtml if necessary
+    if (charCount == 0 || (charCount+strlen(trimmedName)<=GENLISTWIDTH))
+        { 
+        if (withLink)
+            dyStringPrintf(dyShortHtml,"<a title='Connect hub and open the %s assembly' href='hgTracks?hubUrl=%s&genome=%s'>%s</a>" , genome->name, hubUrl, genome->name, shortName);
+        else
+            dyStringPrintf(dyShortHtml,"%s" , shortName);
+        dyStringPrintf(dyShortHtml,", ");
+        }
+    freeMem(shortName); 
+
+    charCount += strlen(trimmedName);
+
+    // always append to dyHtml
+    if (withLink)
+        dyStringPrintf(dyHtml,"<a title='Connect hub and open the %s assembly' href='hgTracks?hubUrl=%s&genome=%s'>%s</a>" , genome->name, hubUrl, genome->name, trimmedName);
+    else
+        dyStringPrintf(dyHtml,"%s" , trimmedName);
+
+    if (genome->next)
+        {
+        dyStringPrintf(dyHtml,", ");
+        }
+
     }
-char *genomesString = removeLastComma( dyStringCannibalize(&dy));
-char *genomesShort = removeLastComma( dyStringCannibalize(&dyShort));
-char tempHtml[1024+strlen(genomesString)+strlen(genomesShort)];
-if (strlen(genomesShort) > GENLISTWIDTH)  // If even the first element is too long, truncate it.
-    genomesShort[GENLISTWIDTH] = 0;
-if (strlen(genomesShort)==strlen(genomesString))
-    {
-    safef(tempHtml, sizeof tempHtml, "%s", genomesString);
-    }
+
+char *longHtml = dyStringCannibalize(&dyHtml);
+char *shortHtml = dyStringCannibalize(&dyShortHtml);
+shortHtml = removeLastComma(shortHtml);
+
+if (charCount < GENLISTWIDTH)
+    ourPrintCell(shortHtml);
 else
     {
     char id[256];
+    char tempHtml[1024+strlen(longHtml)+strlen(shortHtml)];
     safef(tempHtml, sizeof tempHtml, 
-	"<span id=Short%d>[+]&nbsp;%s...</span>"
-	"<span id=Full%d style=\"display:none\">[-]<br>%s</span>"
-	, row, genomesShort 
-	, row, genomesString);
+	"<span id=Short%d><span style='cursor:default' id='Short%dPlus'>[+]&nbsp;</span>%s...</span>"
+	"<span id=Full%d style=\"display:none\"><span style='cursor:default' id='Full%dMinus'>[-]<br></span>%s</span>"
+	, row, row, shortHtml
+	, row, row, longHtml);
 
-    safef(id, sizeof id, "Short%d", row);
+    safef(id, sizeof id, "Short%dPlus", row);
     jsOnEventByIdF("click", id,
 	"document.getElementById('Short%d').style.display='none';"
 	"document.getElementById('Full%d').style.display='inline';"
 	"return false;"
 	, row, row);
 
-    safef(id, sizeof id, "Full%d", row);
+    safef(id, sizeof id, "Full%dMinus", row);
     jsOnEventByIdF("click", id, 
 	"document.getElementById('Full%d').style.display='none';"
 	"document.getElementById('Short%d').style.display='inline';"
 	"return false;"
 	, row, row);
+    ourPrintCell(tempHtml);
     }
-ourPrintCell(tempHtml);
+
+freeMem(longHtml);
+freeMem(shortHtml);
 }
 
 
-static void printGenomes(struct trackHub *thub, int row)
+static void printGenomes(struct trackHub *thub, int row, boolean withLink)
 /* print supported assembly names from trackHub */
 {
 /* List of associated genomes. */
@@ -209,7 +240,7 @@ for(; genomes; genomes = genomes->next)
     slAddHead(&list, el);
     }
 slReverse(&list);
-printGenomeList(list, row);
+printGenomeList(thub->url, list, row, withLink);
 }
 
 
@@ -309,7 +340,8 @@ for(hub = unlistedHubList; hub; hub = hub->next)
     else
 	ourPrintCell("");
 
-    if (!isEmpty(hub->errorMessage))
+    boolean hubHasError = (!isEmpty(hub->errorMessage));
+    if (hubHasError)
 	{
 	ourCellStart();
 	printf("<span class=\"hubError\">ERROR: %s </span>"
@@ -336,8 +368,9 @@ for(hub = unlistedHubList; hub; hub = hub->next)
     else
 	ourPrintCell("");
 
+
     if (hub->trackHub != NULL)
-	printGenomes(hub->trackHub, count);
+	printGenomes(hub->trackHub, count, !hubHasError);
     else
 	ourPrintCell("");
 
@@ -626,7 +659,8 @@ else
 
 ourPrintCellLink(hubInfo->shortLabel, hubInfo->hubUrl);
 
-if (isEmpty(hubInfo->errorMessage))
+boolean hubHasNoError = isEmpty(hubInfo->errorMessage);
+if (hubHasNoError)
     {
     if (hubInfo->tableHasDescriptionField && !isEmpty(hubInfo->descriptionUrl))
         ourPrintCellLink(hubInfo->longLabel, hubInfo->descriptionUrl);
@@ -650,7 +684,7 @@ else
     ourCellEnd();
     }
 
-printGenomeList(dbListNames, count); 
+printGenomeList(hubInfo->hubUrl, dbListNames, count, hubHasNoError); 
 printf("</tr>\n");
 }
 

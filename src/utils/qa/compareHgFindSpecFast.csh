@@ -90,7 +90,7 @@ if ( $field == "searchSettings" ) then
           WHERE searchName = "'$tableRow'"' $db > $machX.$db.$table.$field
       else
         set pubMySqlFlag=1
-        mysql --user=genome --host=genome-mysql.cse.ucsc.edu -A \
+        mysql --user=genome --host=genome-mysql.soe.ucsc.edu -A \
           -e 'SELECT '$field' FROM hgFindSpec \
           WHERE searchName = "'$tableRow'"' $db > $machX.$db.$table.$field
       endif
@@ -109,7 +109,7 @@ else
          > $mach.$db.$table
     else
       set pubMySqlFlag=1
-      mysql --user=genome --host=genome-mysql.cse.ucsc.edu -A \
+      mysql --user=genome --host=genome-mysql.soe.ucsc.edu -A \
         -e 'SELECT '$field' FROM hgFindSpec'  $db > $mach.$db.$table
     endif
   end

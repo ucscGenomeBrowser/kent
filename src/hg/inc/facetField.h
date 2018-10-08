@@ -1,7 +1,7 @@
 #ifndef FACETFIELD_H
 #define FACETFIELD_H
 
-#define FacetFieldLimit 100   // maximum facet values to show before displaying the See More link 
+#define FacetFieldLimit 20   // maximum facet values to show before displaying the See More link 
 
 struct facetVal
 /* Keep track of number of uses of a field value */
@@ -30,6 +30,9 @@ struct facetField
 int facetValCmpSelectCountDesc(const void *va, const void *vb);
 /* Compare two facetVal so as to sort them based on selectCount with most used first.
  * If two have same count, sort alphabetically on facet val.  */
+
+int facetValCmp(const void *va, const void *vb);
+/* Compare two facetVal alphabetically by val */
 
 void selectedListFacetValUpdate(struct facetField **pSelectedList, char *facetName, char *facetValue, char *op);
 /* Add or remove by changing selected boolean */

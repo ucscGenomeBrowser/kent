@@ -245,15 +245,16 @@ INLINE void hvGfxEllipseDraw(struct hvGfx *hvg, int x1, int y1, int x2, int y2, 
  */
 {
 x1 = hvGfxAdjXX(hvg, x1, &x2, &y1, &y2);
-vgEllipse(hvg->vg, x1, y1, x2, y2, color, mode, isDashed);
+// NOTE: dashed mode may cause a hang, so disabling for now
+vgEllipse(hvg->vg, x1, y1, x2, y2, color, mode, FALSE);
 }
 
 INLINE int hvGfxCurve(struct hvGfx *hvg, int x1, int y1, int x2, int y2, int x3, int y3,
                                 Color color, boolean isDashed)
-/* Draw an ellipse (or limit to top or bottom) specified by rectangle.
- * Optionally, alternate dots.
- * Point 0 is left, point 1 is top of rectangle.
- */
+/* Draw a segment of an anti-aliased curve within 3 points (quadratic Bezier)
+ * Return max y value. Optionally draw curve as dashed line.
+ * Adapted trivially from code posted at http://members.chello.at/~easyfilter/bresenham.html
+ * Author: Zingl Alois, 8/22/2016 */
 {
 x1 = hvGfxAdjXX(hvg, x1, &x2, &y1, &y2);
 return vgCurve(hvg->vg, x1, y1, x2, y2, x3, y3, color, isDashed);

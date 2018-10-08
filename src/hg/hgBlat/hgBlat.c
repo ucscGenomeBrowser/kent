@@ -2,6 +2,7 @@
 
 /* Copyright (C) 2014 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
+#include <pthread.h>
 #include "common.h"
 #include "errAbort.h"
 #include "hCommon.h"
@@ -25,23 +26,270 @@
 #include "trashDir.h"
 #include "trackHub.h"
 #include "hgConfig.h"
+#include "errCatch.h"
+#include "portable.h"
+#include "portable.h"
+#include "dystring.h"
+
+#include "net.h"
 
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
 boolean orgChange = FALSE;
 boolean dbChange = FALSE;
+boolean allGenomes = FALSE;
+
+
+struct gfResult
+/* Detailed gfServer results, this is a span of several nearby tiles, minimum 2 for dna. */
+    {
+    struct gfResult *next;
+    /* have to multiply translated coordinates by 3 */
+    int qStart;    /* Query Start Coordinate */  
+    int qEnd;      /* Query End Coordinate */
+    char *chrom;   /* Target Chrom Name */
+    int tStart;    /* Target Start Coordinate */  
+    int tEnd;      /* Target End Coordinate */
+    int numHits;   /* number of tile hits, minimum  2 for dna */ 
+    char tStrand;  /* + or - Target Strand used with prot, rnax, dnax */ 
+    int tFrame;    /* Target Frame 0,1,2 (mostly ignorable?) used with prot, rnax, dnax */ 
+    int qFrame;    /* Query  Frame 0,1,2 (mostly ignorable?) used with rnax, dnax*/ 
+   
+    char qStrand;  /* + or - Query Strand used with prot, rnax, dnax, 
+		      given by caller rather than returned by gfServer. */ 
+    };
+
+struct genomeHits
+/* Information about hits on a genome assembly */
+    {
+    struct genomeHits *next;
+    char *db;		/* Database name. */
+    char *genome;	/* Genome name. */
+    int seqNumber;      /* Submission order */
+    char *faName;       /* fasta name */
+    char *dna;          /* query dna */
+    int dnaSize;        /* query dna size */
+    int sd;             /* Connection */
+    char *type;         /* query type = query, protQuery, transQuery */
+    char *xType;        /* query type = dna, prot, rnax, dnax */
+    boolean queryRC;    /* is the query reverse-complemented */
+    boolean complex;    /* is the query complex */
+    boolean isProt;     /* is the protein query */
+   
+    int maxGeneHits;    /* Highest gene hit-count */
+    char *maxGeneChrom; /* Target Chrom for gene with max gene hits */
+    int maxGeneChromSize; /* Target Chrom Size for only prot, rnax, dnax */
+    int maxGeneTStart;  /* Target Start Coordinate for gene with max hits */  
+    int maxGeneTEnd;    /* Target End Coordinate for gene with max hits*/
+    int maxGeneExons;   /* Number of Exons in gene with max hits */
+    char maxGeneStrand[3]; /* + or - or ++ +- -+ -- Strand for gene with max hits */ 
+    char maxGeneTStrand;/* + or - TStrand for gene with max hits */ 
+    boolean done;       /* Did the job get to finish */
+    boolean error;      /* Some error happened */
+    char *networkErrMsg;      /* Network layer error message */
+    struct dyString *dbg;     /* Output debugging info */
+    struct gfResult *gfList;  /* List of gfResult records */
+    boolean hide;      /* To not show both strands, suppress the weaker-scoring one */
+    };
+
+boolean debuggingGfResults = FALSE; //TRUE;
+
+int slGfResultsCmp(const void *va, const void *vb)
+/* Compare two gfResults. */
+{
+const struct gfResult *a = *((struct gfResult **)va);
+const struct gfResult *b = *((struct gfResult **)vb);
+int result = a->tStrand - b->tStrand;
+if (result == 0)
+    {
+    result = strcmp(a->chrom, b->chrom);
+    if (result == 0)
+	{
+	return (a->tStart - b->tStart);
+	}
+    else
+	return result;
+    }
+else
+    return result;
+}
+
+int slRcPairsCmp(const void *va, const void *vb)
+/* Recombine Reverse-complimented Pairs (to hide the weaker one). */
+{
+const struct genomeHits *a = *((struct genomeHits **)va);
+const struct genomeHits *b = *((struct genomeHits **)vb);
+// int result = strcmp(a->faName, b->faName); order by faName alphabetical
+int result = a->seqNumber - b->seqNumber;
+if (result == 0)
+    {
+    result = strcmp(a->db, b->db);
+    if (result == 0)
+	{
+	return (a->queryRC - b->queryRC); 
+	}
+    else
+	return result;
+    }
+else
+    return result;
+}
+
+
+int slHitsCmp(const void *va, const void *vb)
+/* Compare two slHits. */
+{
+const struct genomeHits *a = *((struct genomeHits **)va);
+const struct genomeHits *b = *((struct genomeHits **)vb);
+// int result = strcmp(a->faName, b->faName); order by faName alphabetical
+int result = a->seqNumber - b->seqNumber;
+if (result == 0)
+    {
+    if (a->error && b->error)
+	return 0;
+    else if (b->error && !a->error)
+	return -1;
+    else if (!b->error && a->error)
+	return 1;
+    else
+	{
+	return (b->maxGeneHits - a->maxGeneHits);
+	}
+    }
+else
+    return result;
+}
+
+// === parallel code ====
+
+void queryServerFinish(struct genomeHits *gH);   // Forward declaration
+
+static pthread_mutex_t pfdMutex = PTHREAD_MUTEX_INITIALIZER;
+static struct genomeHits *pfdList = NULL, *pfdRunning = NULL, *pfdDone = NULL, *pfdNeverStarted = NULL;
+
+static void *remoteParallelLoad(void *threadParam)
+/* Each thread loads tracks in parallel until all work is done. */
+{
+pthread_t *pthread = threadParam;
+struct genomeHits *pfd = NULL;
+pthread_detach(*pthread);  // this thread will never join back with it's progenitor
+    // Canceled threads that might leave locks behind,
+    // so the theads are detached and will be neither joined nor canceled.
+boolean allDone = FALSE;
+while(1)
+    {
+    pthread_mutex_lock( &pfdMutex );
+    if (!pfdList)
+	{
+	allDone = TRUE;
+	}
+    else
+	{  // move it from the waiting queue to the running queue
+	pfd = slPopHead(&pfdList);
+	slAddHead(&pfdRunning, pfd);
+        }
+    pthread_mutex_unlock( &pfdMutex );
+    if (allDone)
+	return NULL;
+
+    if (!pfd->networkErrMsg)  // we may have already had a connect error.
+	{
+	/* protect against errAbort */
+	struct errCatch *errCatch = errCatchNew();
+	if (errCatchStart(errCatch))
+	    {
+	    pfd->done = FALSE;
+
+	    // actually do the parallel work
+	    queryServerFinish(pfd);
+
+	    pfd->done = TRUE;
+	    }
+	errCatchEnd(errCatch);
+	if (errCatch->gotError)
+	    {
+	    pfd->networkErrMsg = cloneString(errCatch->message->string);
+	    pfd->error = TRUE;
+	    pfd->done = TRUE;
+	    }
+	errCatchFree(&errCatch);
+	}
+
+    pthread_mutex_lock( &pfdMutex );
+    slRemoveEl(&pfdRunning, pfd);  // this list will not be huge
+    slAddHead(&pfdDone, pfd);
+    pthread_mutex_unlock( &pfdMutex );
+
+    }
+}
+
+static int remoteParallelLoadWait(int maxTimeInSeconds)
+/* Wait, checking to see if finished (completed or errAborted).
+ * If timed-out or never-ran, record error status.
+ * Return error count. */
+{
+int maxTimeInMilliseconds = 1000 * maxTimeInSeconds;
+struct genomeHits *pfd;
+int errCount = 0;
+int waitTime = 0;
+while(1)
+    {
+    sleep1000(50); // milliseconds
+    waitTime += 50;
+    boolean done = TRUE;
+    pthread_mutex_lock( &pfdMutex );
+    if (pfdList || pfdRunning)
+	done = FALSE;
+    pthread_mutex_unlock( &pfdMutex );
+    if (done)
+        break;
+    if (waitTime >= maxTimeInMilliseconds)
+        break;
+    }
+pthread_mutex_lock( &pfdMutex );
+pfdNeverStarted = pfdList;
+pfdList = NULL;  // stop the workers from starting any more waiting track loads
+for (pfd = pfdNeverStarted; pfd; pfd = pfd->next)
+    {
+    // query was never even started
+    char temp[256];
+    safef(temp, sizeof temp, "Ran out of time (%d milliseconds) unable to process %s %s", maxTimeInMilliseconds, pfd->genome, pfd->db);
+    pfd->networkErrMsg = cloneString(temp);
+    pfd->error = TRUE;
+    ++errCount;
+    }
+for (pfd = pfdRunning; pfd; pfd = pfd->next)
+    {
+    // unfinished query
+    char temp[256];
+    safef(temp, sizeof temp, "Timeout %d milliseconds exceeded processing %s %s", maxTimeInMilliseconds, pfd->genome, pfd->db);
+    pfd->networkErrMsg = cloneString(temp);
+    pfd->error = TRUE;
+    ++errCount;
+    }
+for (pfd = pfdDone; pfd; pfd = pfd->next)
+    {
+    // some done queries may have errors
+    if (pfd->error)
+        ++errCount;
+    }
+pthread_mutex_unlock( &pfdMutex );
+return errCount;
+}
+
+// ==================
 
 struct serverTable
 /* Information on a server. */
-   {
-   char *db;		/* Database name. */
-   char *genome;	/* Genome name. */
-   boolean isTrans;	/* Is tranlated to protein? */
-   char *host;		/* Name of machine hosting server. */
-   char *port;		/* Port that hosts server. */
-   char *nibDir;	/* Directory of sequence files. */
-   };
+    {
+    char *db;		/* Database name. */
+    char *genome;	/* Genome name. */
+    boolean isTrans;	/* Is tranlated to protein? */
+    char *host;		/* Name of machine hosting server. */
+    char *port;		/* Port that hosts server. */
+    char *nibDir;	/* Directory of sequence files. */
+    };
 
 char *typeList[] = {"BLAT's guess", "DNA", "protein", "translated RNA", "translated DNA"};
 char *outputList[] = {"hyperlink", "psl", "psl no header"};
@@ -304,7 +552,7 @@ else if (pslOut)
 	pslTabOut(psl, stdout);
     printf("</PRE></TT>");
     }
-else
+else  // hyperlink
     {
     printf("<H2>BLAT Search Results</H2>");
     char* posStr = cartOptionalString(cart, "position");
@@ -317,7 +565,7 @@ else
         char *trackDescription = NULL;
         getCustomName(database, cart, pslList, &trackName, &trackDescription);
         psl = pslList;
-        printf( "<DIV STYLE=\"display:block;\"><TABLE><FORM ACTION=\"%s\"  METHOD=\"POST\" NAME=\"customTrackForm\">\n", hgcUrl);
+        printf( "<DIV STYLE=\"display:block;\"><FORM ACTION=\"%s\"  METHOD=\"POST\" NAME=\"customTrackForm\">\n", hgcUrl);
         printf("<INPUT TYPE=\"hidden\" name=\"o\" value=\"%d\" />\n",psl->tStart);
         printf("<INPUT TYPE=\"hidden\" name=\"t\" value=\"%d\" />\n",psl->tEnd);
         printf("<INPUT TYPE=\"hidden\" name=\"g\" value=\"%s\" />\n","buildBigPsl");
@@ -329,20 +577,43 @@ else
         if (pslIsProtein(psl))
             printf("<INPUT TYPE=\"hidden\" name=\"isProt\" value=\"on\" />\n");
 
-        printf("<TABLE><TR>Custom track name: ");
+        printf("<TABLE><TR><TD>Custom track name: ");
         cgiMakeTextVar( "trackName", trackName, 30);
         printf("</TD></TR>");
 
-        printf("<TR> Custom track description: ");
+        printf("<TR><TD> Custom track description: ");
         cgiMakeTextVar( "trackDescription", trackDescription,50);
         printf("</TD></TR>");
         printf("<TR><TD><INPUT TYPE=SUBMIT NAME=Submit VALUE=\"Build a custom track with these results\"></TD></TR>\n");
-        printf("</FORM></TT></DIV>");
+        printf("</TABLE></FORM></DIV>");
         }
 
-    printf("<DIV STYLE=\"display:block;\"><TABLE><PRE>");
-    printf("   ACTIONS      QUERY           SCORE START  END QSIZE IDENTITY CHRO STRAND  START    END      SPAN\n");
-    printf("---------------------------------------------------------------------------------------------------\n");
+    printf("<DIV STYLE=\"display:block;\"><PRE>");
+
+    // find maximum target chrom name size for padding calculations
+    int maxChromNameSize = 0;
+    for (psl = pslList; psl != NULL; psl = psl->next)
+	{
+	int l = strlen(psl->tName);
+	maxChromNameSize = max(maxChromNameSize,l);
+	}
+    maxChromNameSize = max(maxChromNameSize,5);
+
+    // header padding
+    char temp[256];
+
+    temp[0] = 0;
+    safecatRepeatChar(temp, sizeof temp, ' ', (maxChromNameSize - 5));
+
+    printf("   ACTIONS      QUERY          SCORE START   END QSIZE IDENTITY  CHROM ");
+    printf("%s", temp);
+    printf(" STRAND  START       END   SPAN\n");
+
+    printf("------------------------------------------------------------------------------------------------------");
+    temp[0] = 0;
+    safecatRepeatChar(temp, sizeof temp, '-', (maxChromNameSize - 5));
+    printf("%s\n", temp);
+
     for (psl = pslList; psl != NULL; psl = psl->next)
 	{
         if (customText)
@@ -358,13 +629,19 @@ else
 	    hgcUrl, psl->tStart, pslName, cgiEncode(faName), psl->qName,  psl->tName,
 	    psl->tStart, psl->tEnd, database, uiState);
 	printf("details</A> ");
-	printf("%-14s %5d %5d %5d %5d %5.1f%%  %4s  %2s  %9d %9d %6d\n",
+
+	temp[0] = 0;
+	safecpy(temp, sizeof temp, psl->tName);
+	int padding = maxChromNameSize - strlen(psl->tName);
+	safecatRepeatChar(temp, sizeof temp, ' ', padding);
+
+	printf("%-14s %5d %5d %5d %5d   %5.1f%%  %s  %-2s  %9d %9d %6d\n",
 	    psl->qName, pslScore(psl), psl->qStart+1, psl->qEnd, psl->qSize,
 	    100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
-	    skipChr(psl->tName), psl->strand, psl->tStart+1, psl->tEnd,
+	    temp, psl->strand, psl->tStart+1, psl->tEnd,
 	    psl->tEnd - psl->tStart);
 	}
-    printf("</PRE></TT>\n");
+    printf("</PRE>\n");
     puts("<P style=\"text-align:right\"><SMALL><A HREF=\"../FAQ/FAQblat.html#blat1b\">Missing a match?</A></SMALL></P>\n");
     puts("</DIV>\n");
     }
@@ -558,7 +835,420 @@ else
 *pDescription = cloneString(description);
 }
 
-void blatSeq(char *userSeq, char *organism, char *database)
+void queryServer(int conn, char *db, struct dnaSeq *seq, char *type, char *xType,
+    boolean complex, boolean isProt, boolean queryRC, int seqNumber)
+/* Send simple query to server and report results.
+ * queryRC is true when the query has been reverse-complemented */
+{
+struct genomeHits *gH;
+AllocVar(gH);
+
+gH->db = cloneString(db);
+gH->genome = cloneString(hGenome(db));
+gH->seqNumber = seqNumber;
+gH->faName = cloneString(seq->name);
+gH->dna = cloneString(seq->dna);
+gH->dnaSize = seq->size;
+gH->type = cloneString(type);
+gH->xType = cloneString(xType);
+gH->queryRC = queryRC;
+gH->complex = complex;
+gH->isProt = isProt;
+gH->sd = conn;
+if (gH->sd == -1)
+    {
+    gH->error = TRUE;
+    gH->networkErrMsg = "Connection to gfServer failed.";
+    }
+gH->dbg = dyStringNew(256);
+slAddHead(&pfdList, gH);
+}
+
+void findBestGene(struct genomeHits *gH, int queryFrame)
+/* Find best gene-like object with multiple linked-features.
+ * Remember chrom start end of best gene found and total hits in the gene. 
+ * Should sort the gfResults by tStrand, chrom, tStart.
+ * Filters on queryFrame */
+{
+char *bestChrom = NULL;
+int bestHits   = 0;
+int bestTStart = 0;
+int bestTEnd   = 0;
+int bestExons  = 0;
+char bestTStrand = ' ';
+char bestQStrand = ' ';
+
+char *thisChrom = NULL;
+int thisHits   = 0;
+int thisTStart = 0;
+int thisTEnd   = 0;
+int thisExons  = 0;
+char thisTStrand = ' ';
+char thisQStrand = ' ';
+
+int geneGap = 1000000;  // about a million bases is a cutoff for genes.
+    // TODO should this really be 750K?
+
+int qSlop = 5; // forgive 5 bases, about dna stepSize = 5.
+if (gH->complex)
+    qSlop = 4; // reduce for translated with tileSize/stepSize = 4.
+
+struct gfResult *gfR = NULL, *gfLast = NULL;
+for(gfR=gH->gfList; gfR; gfR=gfR->next)
+    {
+    // filter on given queryFrame
+    if (gfR->qFrame != queryFrame)
+	continue;
+
+    if (gfLast && (gfR->tStrand == gfLast->tStrand) && sameString(gfR->chrom,gfLast->chrom) && 
+
+	(gfR->qStart >= (gfLast->qEnd - qSlop)) && (gfR->tStart >= gfLast->tEnd) && ((gfR->tStart - gfLast->tEnd) < geneGap))
+	{	
+	thisHits += gfR->numHits;
+	thisTEnd  = gfR->tEnd;
+	thisExons += 1;
+
+	//if (gH->complex)
+	    //{
+	    // gfR->tStrand, gfR->tFrame
+	    //if (gH->complex)
+		//{
+		//gfR->qFrame
+		//}
+	    //}
+	}
+    else
+	{
+	thisHits   = gfR->numHits;
+	thisChrom  = gfR->chrom;
+	thisTStart = gfR->tStart;
+	thisTEnd   = gfR->tEnd;
+	thisExons  = 1;
+	thisTStrand = gfR->tStrand;
+	thisQStrand = gfR->qStrand;
+	}
+    if (thisHits > bestHits)
+	{
+	bestHits   = thisHits;
+	bestExons  = thisExons;
+	bestChrom  = thisChrom;
+	bestTStart = thisTStart;
+	bestTEnd   = thisTEnd;
+	bestTStrand = thisTStrand;
+	bestQStrand = thisQStrand;
+	}
+    gfLast = gfR;
+    }
+
+// save best gene with max hits
+gH->maxGeneHits   = bestHits;
+gH->maxGeneChrom  = cloneString(bestChrom);
+gH->maxGeneTStart = bestTStart;
+gH->maxGeneTEnd   = bestTEnd;
+gH->maxGeneExons  = bestExons;
+gH->maxGeneTStrand = bestTStrand;  // tells if we need to change to get pos strand coords.
+if (gH->complex)
+    {
+    safef(gH->maxGeneStrand, sizeof gH->maxGeneStrand, "%c%c", bestQStrand, bestTStrand);
+    }
+else
+    {
+    safef(gH->maxGeneStrand, sizeof gH->maxGeneStrand, "%c", bestQStrand);
+    }
+}
+
+void unTranslateCoordinates(struct genomeHits *gH)
+/* convert translated coordinates back to dna for all but prot query */
+{
+if (!gH->complex)
+    return;
+int qFactor = 3;
+int tFactor = 3;
+if (gH->isProt)
+    qFactor = 1;
+struct gfResult *gfR = NULL;
+for(gfR=gH->gfList; gfR; gfR=gfR->next)
+    {
+    gfR->qStart = gfR->qStart * qFactor + gfR->qFrame;
+    gfR->qEnd   = gfR->qEnd   * qFactor + gfR->qFrame;
+    gfR->tStart = gfR->tStart * tFactor + gfR->tFrame;
+    gfR->tEnd   = gfR->tEnd   * tFactor + gfR->tFrame;
+    }
+}
+
+void queryServerFinish(struct genomeHits *gH)
+/* Report results from gfServer. */
+{
+char buf[256];
+int matchCount = 0;
+
+dyStringPrintf(gH->dbg,"query strand %s qsize %d<br>\n", gH->queryRC ? "-" : "+", gH->dnaSize);
+
+/* Put together query command. */
+safef(buf, sizeof buf, "%s%s %d", gfSignature(), gH->type, gH->dnaSize);
+mustWriteFd(gH->sd, buf, strlen(buf));
+
+if (read(gH->sd, buf, 1) < 0)
+    errAbort("queryServerFinish: read failed: %s", strerror(errno));
+if (buf[0] != 'Y')
+    errAbort("Expecting 'Y' from server, got %c", buf[0]);
+mustWriteFd(gH->sd, gH->dna, gH->dnaSize);
+
+if (gH->complex)
+    {
+    char *s = netRecieveString(gH->sd, buf);
+    if (!s)
+	errAbort("expected response from gfServer with tileSize");
+    dyStringPrintf(gH->dbg,"%s<br>\n", s);  // from server: tileSize 4
+    }
+
+for (;;)
+    {
+    if (netGetString(gH->sd, buf) == NULL)
+        break;
+    if (sameString(buf, "end"))
+        {
+        dyStringPrintf(gH->dbg,"%d matches<br>\n", matchCount);
+        break;
+        }
+    else if (startsWith("Error:", buf))
+       {
+       errAbort("%s", buf);
+       break;
+       }
+    else
+        {
+        dyStringPrintf(gH->dbg,"%s<br>\n", buf);
+	// chop the line into words
+	int numHits = 0;
+	char *line = buf;
+	char *word=NULL;
+	int i=0;
+	struct gfResult *gfR = NULL;
+	AllocVar(gfR);
+	gfR->qStrand = (gH->queryRC ? '-' : '+');
+	while ((word = nextWord(&line)) != NULL)
+	    {
+	    if (i == 0)
+		{  // e.g. 3139
+		gfR->qStart = sqlUnsigned(word);
+		}
+	    if (i == 1)
+		{  // e.g. 3220
+		gfR->qEnd = sqlUnsigned(word);
+		}
+	    if (i == 2)
+		{  // e.g. hg38.2bit:chr1
+		char *colon = strchr(word, ':');
+		if (colon)
+		    {
+		    gfR->chrom = cloneString(colon+1);
+		    }
+		else
+		    { // e.g. chr10.nib
+		    char *dot = strchr(word, '.');
+		    if (dot)
+			{
+			*dot = 0;
+			gfR->chrom = cloneString(word);
+			}
+		    else
+			errAbort("Expecting colon or period in the 3rd field of gfServer response");
+		    }
+		}
+	    if (i == 3)
+		{  // e.g. 173515
+		gfR->tStart = sqlUnsigned(word);
+		}
+	    if (i == 4)
+		{  // e.g. 173586
+		gfR->tEnd = sqlUnsigned(word);
+		}
+	    if (i == 5)
+		{  // e.g. 14
+		numHits = sqlUnsigned(word);
+
+		// Frustrated with weird little results with vastly exaggerated hit-score,
+		// I have flattened that out so it maxes out at #tiles that could fit 
+		// It seems to still work just fine. I am going to leave it for now.
+		// One minor note, by suppressing extra scores for short exons,
+		// it will not prefer alignments with the same number of hits, but more exons.
+		if (!gH->complex) // dna xType
+		    {
+		    // maximum tiles that could fit in qSpan
+		    int limit = ((gfR->qEnd - gfR->qStart) - 6)/5; 
+		    ++limit;  // for a little extra.
+		    if (numHits > limit)
+			numHits = limit;
+		    }
+
+		gfR->numHits = numHits;
+		}
+	    if (gH->complex)
+		{
+		if (i == 6)
+		    {  // e.g. + or -
+		    gfR->tStrand = word[0];
+		    }
+		if (i == 7)
+		    {  // e.g. 0,1,2
+		    gfR->tFrame = sqlUnsigned(word);
+		    }
+		if (!gH->isProt)
+		    {
+		    if (i == 8)
+			{  // e.g. 0,1,2
+			gfR->qFrame = sqlUnsigned(word);
+			}
+		    }
+		}
+	    else
+		{
+		gfR->tStrand = '+';  // dna search only on + target strand
+		}
+	    ++i;
+	    }
+	
+        if (gH->complex)
+            {
+            char *s = netGetLongString(gH->sd);
+            if (s == NULL)
+                break;
+            dyStringPrintf(gH->dbg,"%s<br>\n", s); //dumps out qstart1 start1 qstart2 tstart2 ...  
+            freeMem(s);
+            }
+
+	slAddHead(&gH->gfList, gfR);
+        }
+    ++matchCount;
+    }
+slReverse(&gH->gfList);
+
+unTranslateCoordinates(gH);  // convert back to untranslated coordinates
+slSort(&gH->gfList, slGfResultsCmp);  // sort by tStrand, chrom, tStart
+
+
+
+struct qFrameResults
+/* Information about hits on a genome assembly */
+    {
+    int maxGeneHits;    /* Highest gene hit-count */
+    char *maxGeneChrom; /* Target Chrom for gene with max gene hits */
+    int maxGeneTStart;  /* Target Start Coordinate for gene with max hits */  
+    int maxGeneTEnd;    /* Target End Coordinate for gene with max hits*/
+    int maxGeneExons;   /* Number of Exons in gene with max hits */
+    char maxGeneTStrand;/* + or - TStrand for gene with max hits */ 
+    };
+
+int qFrame = 0;
+int qFrameStart = 0;
+int qFrameEnd = 0;
+
+if (gH->complex && !gH->isProt)  // rnax, dnax
+    {
+    qFrameEnd = 2;
+    }
+
+struct qFrameResults r[3]; 
+
+for(qFrame = qFrameStart; qFrame <= qFrameEnd; ++qFrame)
+    {	    
+    findBestGene(gH, qFrame);  // find best gene-line thing with most hits
+    
+    r[qFrame].maxGeneHits = gH->maxGeneHits;
+    r[qFrame].maxGeneChrom = cloneString(gH->maxGeneChrom);
+    r[qFrame].maxGeneTStart = gH->maxGeneTStart;
+    r[qFrame].maxGeneTEnd = gH->maxGeneTEnd;
+    r[qFrame].maxGeneExons = gH->maxGeneExons;
+    r[qFrame].maxGeneTStrand = gH->maxGeneTStrand;
+
+    }
+
+// combine the results from all 3 qFrames
+
+if (gH->complex && !gH->isProt)  // rnax, dnax
+    {
+    int biggestHit = -1;
+    int bigQFrame = -1;
+
+    // find the qFrame with the biggest hits
+    for(qFrame = qFrameStart; qFrame <= qFrameEnd; ++qFrame)
+	{	    
+	if (r[qFrame].maxGeneHits > biggestHit)
+	    {
+	    bigQFrame = qFrame;
+            biggestHit = r[qFrame].maxGeneHits;
+	    }
+	}
+
+    // save combined final answers back in gH
+    gH->maxGeneHits = 0;
+    gH->maxGeneTStrand = r[bigQFrame].maxGeneTStrand;
+    gH->maxGeneChrom   = cloneString(r[bigQFrame].maxGeneChrom);
+    gH->maxGeneExons   = r[bigQFrame].maxGeneExons;
+    gH->maxGeneTStart  = r[bigQFrame].maxGeneTStart;
+    gH->maxGeneTEnd    = r[bigQFrame].maxGeneTEnd;
+
+    for(qFrame = qFrameStart; qFrame <= qFrameEnd; ++qFrame)
+	{
+
+	// ignore frames that do not have same tStrand, chrom, and overlap with the best
+	if (!(
+	    (r[qFrame].maxGeneTStrand == r[bigQFrame].maxGeneTStrand) && 
+	    sameOk(r[qFrame].maxGeneChrom, r[bigQFrame].maxGeneChrom) && 
+	    // overlap start,end between this and bigQFrame
+	    (
+	       (r[qFrame].maxGeneTEnd > r[bigQFrame].maxGeneTStart) &&
+	    (r[bigQFrame].maxGeneTEnd >    r[qFrame].maxGeneTStart)
+	    )
+	    ))
+	    {
+	    continue;  // incompatible with best result, skip it
+	    }
+
+	// Add total hits
+	gH->maxGeneHits += r[qFrame].maxGeneHits;  // should be pretty accurate
+	// Find biggest exon count
+	if (gH->maxGeneExons < r[qFrame].maxGeneExons)   // often underestimates actual exon count.
+	    {
+	    gH->maxGeneExons = r[qFrame].maxGeneExons; 
+	    }
+	// Adjust tStart
+	if (gH->maxGeneTStart > r[qFrame].maxGeneTStart)
+	    {
+	    gH->maxGeneTStart = r[qFrame].maxGeneTStart; 
+	    }
+	// Adjust tEnd
+	if (gH->maxGeneTEnd < r[qFrame].maxGeneTEnd)
+	    {
+	    gH->maxGeneTEnd = r[qFrame].maxGeneTEnd; 
+	    }
+		
+	}
+
+    gH->maxGeneHits /= 3;  // average over 3 frames.
+
+    char qStrand = (gH->queryRC ? '-' : '+');
+    safef(gH->maxGeneStrand, sizeof gH->maxGeneStrand, "%c%c", qStrand, gH->maxGeneTStrand);
+
+    }
+
+
+close(gH->sd);
+}
+
+int gfConnectEx(char *host, char *port)
+/* Try to connect to gfServer */
+{
+int conn = -1;
+if (allGenomes)
+    conn = gfMayConnect(host, port); // returns -1 on failure
+else
+    conn = gfConnect(host, port);  // errAborts on failure.
+return conn;
+}
+
+void blatSeq(char *userSeq, char *organism, char *database, int dbCount)
 /* Blat sequence user pasted in. */
 {
 FILE *f;
@@ -579,17 +1269,29 @@ struct gfOutput *gvo;
 boolean qIsProt = FALSE;
 enum gfType qType, tType;
 struct hash *tFileCache = gfFileCacheNew();
-boolean feelingLucky = cgiBoolean("Lucky");
+// allGenomes ignores I'm Feeling Lucky for simplicity
+boolean feelingLucky = cgiBoolean("Lucky") && !allGenomes;
+char *xType = NULL; 
 
-getDbAndGenome(cart, &db, &genome, oldVars);
-if(!feelingLucky)
+if (allGenomes)
+    {
+    db = database;
+    genome = organism;
+    }
+else
+    getDbAndGenome(cart, &db, &genome, oldVars);
+
+
+if(!feelingLucky && !allGenomes)
     cartWebStart(cart, db, "%s BLAT Results",  trackHubSkipHubName(organism));
+
 /* Load user sequence and figure out if it is DNA or protein. */
 if (sameWord(type, "DNA"))
     {
     seqList = faSeqListFromMemText(seqLetters, TRUE);
     uToT(seqList);
     isTx = FALSE;
+    xType = "dna"; 
     }
 else if (sameWord(type, "translated RNA") || sameWord(type, "translated DNA"))
     {
@@ -597,20 +1299,25 @@ else if (sameWord(type, "translated RNA") || sameWord(type, "translated DNA"))
     uToT(seqList);
     isTx = TRUE;
     isTxTx = TRUE;
+    xType = "rnax"; 
     txTxBoth = sameWord(type, "translated DNA");
+    if (txTxBoth)
+	xType = "dnax"; 
     }
 else if (sameWord(type, "protein"))
     {
     seqList = faSeqListFromMemText(seqLetters, FALSE);
     isTx = TRUE;
     qIsProt = TRUE;
+    xType = "prot"; 
     }
-else 
+else  // BLAT's Guess
     {
     seqList = faSeqListFromMemTextRaw(seqLetters);
-    isTx = !seqIsDna(seqList);
+    isTx = !seqIsDna(seqList); // only tests first element, assumes the rest are the same type.
     if (!isTx)
 	{
+	xType = "dna"; 
 	for (seq = seqList; seq != NULL; seq = seq->next)
 	    {
 	    seq->size = dnaFilteredSize(seq->dna);
@@ -628,6 +1335,7 @@ else
 	    toUpperN(seq->dna, seq->size);
 	    }
 	qIsProt = TRUE;
+	xType = "prot"; 
 	}
     }
 if (seqList != NULL && seqList->name[0] == 0)
@@ -695,13 +1403,15 @@ else if (qType == gftDnaX)
     minSingleSize = 36;
     }
 
-
+int seqNumber = 0;
 /* Loop through each sequence. */
 for (seq = seqList; seq != NULL; seq = seq->next)
     {
     printf(" "); fflush(stdout);  /* prevent apache cgi timeout by outputting something */
     oneSize = realSeqSize(seq, !isTx);
     // Impose half the usual bot delay per sequence
+    
+    if (dbCount == 0)
 	hgBotDelayFrac(0.5);
     if (++seqCount > maxSeqCount)
         {
@@ -732,42 +1442,65 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	     seq->name, maxTotalSize);
 	break;
 	}
-    conn = gfConnect(serve->host, serve->port);
+
+    conn = gfConnectEx(serve->host, serve->port);
+
     if (isTx)
 	{
 	gvo->reportTargetStrand = TRUE;
 	if (isTxTx)
 	    {
-	    gfAlignTransTrans(&conn, serve->nibDir, seq, FALSE, 5, 
-	    	tFileCache, gvo, !txTxBoth);
+	    if (allGenomes)
+		queryServer(conn, db, seq, "transQuery", xType, TRUE, FALSE, FALSE, seqNumber);
+	    else
+		gfAlignTransTrans(&conn, serve->nibDir, seq, FALSE, 5, 
+		    tFileCache, gvo, !txTxBoth);
 	    if (txTxBoth)
 		{
 		reverseComplement(seq->dna, seq->size);
-		conn = gfConnect(serve->host, serve->port);
-		gfAlignTransTrans(&conn, serve->nibDir, seq, TRUE, 5, 
+		conn = gfConnectEx(serve->host, serve->port);
+		if (allGenomes)
+		    queryServer(conn, db, seq, "transQuery", xType, TRUE, FALSE, TRUE, seqNumber);
+		else
+		    gfAlignTransTrans(&conn, serve->nibDir, seq, TRUE, 5, 
 			tFileCache, gvo, FALSE);
 		}
 	    }
 	else
 	    {
-	    gfAlignTrans(&conn, serve->nibDir, seq, 5, tFileCache, gvo);
+	    if (allGenomes)
+		queryServer(conn, db, seq, "protQuery", xType, TRUE, TRUE, FALSE, seqNumber);
+	    else
+		gfAlignTrans(&conn, serve->nibDir, seq, 5, tFileCache, gvo);
 	    }
 	}
     else
 	{
-	gfAlignStrand(&conn, serve->nibDir, seq, FALSE, minMatchShown, tFileCache, gvo);
+	if (allGenomes)
+	    queryServer(conn, db, seq, "query", xType, FALSE, FALSE, FALSE, seqNumber);
+	else
+	    gfAlignStrand(&conn, serve->nibDir, seq, FALSE, minMatchShown, tFileCache, gvo);
 	reverseComplement(seq->dna, seq->size);
-	conn = gfConnect(serve->host, serve->port);
-	gfAlignStrand(&conn, serve->nibDir, seq, TRUE, minMatchShown, tFileCache, gvo);
+	conn = gfConnectEx(serve->host, serve->port);
+	if (allGenomes)
+	    queryServer(conn, db, seq, "query", xType, FALSE, FALSE, TRUE, seqNumber);
+	else
+	    gfAlignStrand(&conn, serve->nibDir, seq, TRUE, minMatchShown, tFileCache, gvo);
 	}
     gfOutputQuery(gvo, f);
+    ++seqNumber;
     }
 carefulClose(&f);
 
-showAliPlaces(pslTn.forCgi, faTn.forCgi, NULL, serve->db, qType, tType, 
+if (!allGenomes)
+    {
+    showAliPlaces(pslTn.forCgi, faTn.forCgi, NULL, serve->db, qType, tType, 
               organism, feelingLucky);
-if(!feelingLucky)
+    }
+
+if(!feelingLucky && !allGenomes)
     cartWebEnd();
+
 gfFileCacheFree(&tFileCache);
 }
 
@@ -784,6 +1517,7 @@ char *onChangeText = ""
     "document.mainForm.submit();";
 
 char *userSeq = NULL;
+char *type = NULL;
 
 printf( 
 "<FORM ACTION=\"../cgi-bin/hgBlat\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n"
@@ -792,7 +1526,16 @@ cartSaveSession(cart);
 puts("\n");
 puts("<INPUT TYPE=HIDDEN NAME=changeInfo VALUE=\"\">\n");
 puts("<TABLE BORDER=0 WIDTH=80>\n<TR>\n");
-printf("<TD ALIGN=CENTER>Genome:</TD>");
+printf("<TD ALIGN=CENTER style='overflow:hidden;white-space:nowrap;'>Genome:");
+printf(" <INPUT TYPE=CHECKBOX id=allGenomes NAME=allGenomes VALUE=\"\">");
+printf(" <span id=searchAllText> Search ALL<span>");
+printf("</TD>");
+// clicking on the Search ALL text clicks the checkbox.
+jsOnEventById("click", "searchAllText", 
+    "document.mainForm.allGenomes.click();"
+    "return false;"   // cancel the default
+    );
+
 printf("<TD ALIGN=CENTER>Assembly:</TD>");
 printf("<TD ALIGN=CENTER>Query type:</TD>");
 printf("<TD ALIGN=CENTER>Sort output:</TD>");
@@ -806,7 +1549,9 @@ printf("<TD ALIGN=CENTER>\n");
 printBlatAssemblyListHtml(db);
 printf("</TD>\n");
 printf("<TD ALIGN=CENTER>\n");
-cgiMakeDropList("type", typeList, ArraySize(typeList), NULL);
+if (orgChange)
+    type = cartOptionalString(cart, "type");
+cgiMakeDropList("type", typeList, ArraySize(typeList), type);
 printf("</TD>\n");
 printf("<TD ALIGN=CENTER>\n");
 cgiMakeDropList("sort", pslSortList, ArraySize(pslSortList), cartOptionalString(cart, "sort"));
@@ -844,7 +1589,19 @@ printf("%s",
 "<P>Only DNA sequences of 25,000 or fewer bases and protein or translated \n"
 "sequence of 10000 or fewer letters will be processed.  Up to 25 sequences\n"
 "can be submitted at the same time. The total limit for multiple sequence\n"
-"submissions is 50,000 bases or 25,000 letters.\n</P>");
+"submissions is 50,000 bases or 25,000 letters.\n</P>\n");
+
+printf("%s", 
+"<P>The <b>Search ALL</b> checkbox above the Genome drop-down list allows you to search the\n"
+"genomes of the default assemblies for all of our organisms.\n"
+"This shows you which organisms have the highest homology with your query sequence.\n"
+"The results are ordered so that the organism whose best alignment has the most hits is at the top,\n"
+"and shows the best region found.\n"
+"It makes quick approximate alignments based only on the raw hits,\n"
+"which are a perfectly matching short sub-sequence of a fixed size: \n"
+" 11 for DNA and 4 for protein.\n"
+"Click the link to see the full BLAT output for that organism.\n</P>\n");
+
 if (hgPcrOk(db))
     printf("<P>For locating PCR primers, use <A HREF=\"../cgi-bin/hgPcr?db=%s\">In-Silico PCR</A>"
            " for best results instead of BLAT.</P>", db);
@@ -895,12 +1652,160 @@ else
 
 }
 
+void fakeAskForSeqForm(char *organism, char *db)
+/* Put up a hidden form that asks for sequence.
+ * Call self.... */
+{
+char *userSeq = NULL;
+char *type = NULL;
+char *sort = NULL;
+char *output = NULL;
+
+printf("<FORM ACTION=\"../cgi-bin/hgBlat\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n");
+cartSaveSession(cart);
+printf("<INPUT TYPE=HIDDEN NAME=org VALUE=\"%s\">\n", organism);
+printf("<INPUT TYPE=HIDDEN NAME=db VALUE=\"%s\">\n", db);
+type = cartUsualString(cart, "type", "");
+printf("<INPUT TYPE=HIDDEN NAME=type VALUE=\"%s\">\n", type);
+sort = cartUsualString(cart, "sort", "");
+printf("<INPUT TYPE=HIDDEN NAME=sort VALUE=\"%s\">\n", sort);
+output = cartUsualString(cart, "output", "");
+printf("<INPUT TYPE=HIDDEN NAME=output VALUE=\"%s\">\n", output);
+userSeq = cartUsualString(cart, "userSeq", "");
+printf("<INPUT TYPE=HIDDEN NAME=userSeq VALUE=\"%s\">\n", userSeq);
+printf("<INPUT TYPE=HIDDEN NAME=Submit VALUE=submit>\n"); 
+printf("</FORM>\n");
+}
+
+void hideWeakerOfQueryRcPairs(struct genomeHits* gH1)
+/* hide the weaker of the pair of rc'd query results
+ * so users sees only one strand with the best gene hit. 
+ * Input must be sorted already into the pairs. */
+{
+struct genomeHits* gH2 = NULL;
+for (;gH1; gH1 = gH2->next)
+    {
+    gH2 = gH1->next;
+    if (!gH2)
+	errAbort("Hiding weaker of pairs found one without sibling.");
+    if (!((gH1->seqNumber == gH2->seqNumber) && sameString(gH1->db, gH2->db) && (gH1->queryRC != gH2->queryRC)))
+	errAbort("Error matching pairs, sibling does not match seqNumber and db.");
+    // check if one or the other had an error
+    if (gH1->error && gH2->error)
+	gH2->hide = TRUE;  // arbitrarily
+    else if (gH1->error && !gH2->error)
+	gH1->hide = TRUE;
+    else if (!gH1->error && gH2->error)
+	gH2->hide = TRUE;
+    else  // keep the best scoring or the pair, hide the other
+	{
+	if (gH2->maxGeneHits > gH1->maxGeneHits)
+	    gH1->hide = TRUE;
+	else
+	    gH2->hide = TRUE;
+	}
+    }
+}
+
+void changeMaxGenePositionToPositiveStrandCoords(struct genomeHits *gH)
+/* convert negative strand coordinates to positive strand coordinates if TStrand=='-' */
+{
+for (;gH; gH = gH->next)
+    {
+    if (gH->hide)
+	continue;
+    if (gH->error)
+	continue;
+    if (gH->maxGeneTStrand == '-')  // convert to pos strand coordinates
+	{
+	struct sqlConnection *conn = hAllocConn(gH->db);
+	char query[256];
+	sqlSafef(query, sizeof query, "select size from chromInfo where chrom='%s'", gH->maxGeneChrom);
+	int chromSize = sqlQuickNum(conn, query);
+	hFreeConn(&conn);
+	if (chromSize == 0)
+	    {
+	    warn("chromosome %s missing from %s.chromInfo (%s)", gH->maxGeneChrom, gH->db, gH->genome);
+	    char temp[256];
+	    safef(temp, sizeof temp, "chromosome %s missing from %s.chromInfo", gH->maxGeneChrom, gH->db);
+	    gH->error = TRUE;
+	    gH->networkErrMsg = cloneString(temp);
+	    }
+	else
+	    {
+	    gH->maxGeneChromSize = chromSize;
+	    int tempTStart = gH->maxGeneTStart;
+	    gH->maxGeneTStart = chromSize - gH->maxGeneTEnd;
+	    gH->maxGeneTEnd   = chromSize - tempTStart;
+	    }
+	}
+    }
+}
+
+void printDebugging()
+/* print detailed gfServer response info  */
+{
+struct genomeHits *gH;
+printf("<PRE>\n");
+for (gH = pfdDone; gH; gH = gH->next)
+    {
+    if (gH->hide) // hide weaker of pairs for dna and dnax with reverse-complimented queries.
+	    continue;
+    if (gH->error)
+	printf("%s %s %s %s %d %s %s\n", 
+	    gH->faName, gH->genome, gH->db, gH->networkErrMsg, gH->queryRC, gH->type, gH->xType);
+    else
+	{
+	int tStart = gH->maxGeneTStart;
+	int tEnd = gH->maxGeneTEnd;
+	// convert back to neg strand coordinates for debug display
+	if (gH->complex && (gH->maxGeneTStrand == '-'))
+	    {
+	    int tempTStart = tStart;
+	    tStart = gH->maxGeneChromSize - tEnd;
+	    tEnd   = gH->maxGeneChromSize - tempTStart;
+	    }
+	printf("%s %s %s %s %d %d %s %s %d %d\n", 
+	    gH->faName, gH->genome, 
+	    gH->db, 
+	    gH->maxGeneChrom, gH->maxGeneHits, gH->queryRC, gH->type, gH->xType, tStart, tEnd);
+	printf("%s", gH->dbg->string);
+
+	struct gfResult *gfR = NULL;
+	for(gfR=gH->gfList; gfR; gfR=gfR->next)
+	    {
+	    printf("(%3d)\t%4d\t%4d\t%s\t(%3d)\t%9d\t%9d\t%3d\t",
+		(gfR->qEnd-gfR->qStart), 
+	    gfR->qStart, gfR->qEnd, gfR->chrom, 
+		(gfR->tEnd-gfR->tStart), 
+	    gfR->tStart, gfR->tEnd, gfR->numHits);
+
+	    if (gH->complex)
+		{
+		printf("%c\t%d\t", gfR->tStrand, gfR->tFrame);
+		if (!gH->isProt)
+		    {
+		    printf("%d\t", gfR->qFrame);
+		    }
+		}
+	    printf("\n");
+	    }
+	}
+    printf("\n");
+
+    }
+printf("</PRE>\n");
+}
+
+
 void doMiddle(struct cart *theCart)
 /* Write header and body of html page. */
 {
 char *userSeq;
 char *db, *organism;
+
 boolean clearUserSeq = cgiBoolean("Clear");
+allGenomes = cgiVarExists("allGenomes");
 
 cart = theCart;
 dnaUtilOpen();
@@ -938,7 +1843,185 @@ if (isEmpty(userSeq) || orgChange)
     }
 else 
     {
-    blatSeq(skipLeadingSpaces(userSeq), organism, db);
+    if (allGenomes)
+	{
+	cartWebStart(cart, db, "ALL Genomes BLAT Results");
+
+	struct dbDb *dbList = hGetBlatIndexedDatabases();
+
+	struct dbDb *this = NULL;
+	char *saveDb = db;
+	char *saveOrg = organism;
+	struct sqlConnection *conn = hConnectCentral();
+	int dbCount = 0;
+	for(this = dbList; this; this = this->next)
+	    {
+	    db = this->name;
+	    organism = hGenome(db);
+
+	    char query[256];
+	    sqlSafef(query, sizeof query, "select name from defaultDb where genome='%s'", organism);
+	    char *defaultDb = sqlQuickString(conn, query);
+	    if (!sameOk(defaultDb, db))
+		continue;  // skip non-default dbs
+
+	    blatSeq(skipLeadingSpaces(userSeq), organism, db, dbCount);
+
+	    ++dbCount;
+	    }
+	dbDbFreeList(&dbList);
+	db = saveDb;
+	organism = saveOrg;
+	hDisconnectCentral(&conn);
+
+	// Loop over each org's default assembly
+
+	/* pre-load remote tracks in parallel */
+	int ptMax = atoi(cfgOptionDefault("parallelFetch.threads", "20"));  // default number of threads for parallel fetch.
+	int pfdListCount = 0;
+	pthread_t *threads = NULL;
+
+	pfdListCount = slCount(pfdList);
+	/* launch parallel threads */
+	ptMax = min(ptMax, pfdListCount);
+	if (ptMax > 0)
+	    {
+	    AllocArray(threads, ptMax);
+	    /* Create threads */
+	    int pt;
+	    for (pt = 0; pt < ptMax; ++pt)
+		{
+		int rc = pthread_create(&threads[pt], NULL, remoteParallelLoad, &threads[pt]);
+		if (rc)
+		    {
+		    errAbort("Unexpected error %d from pthread_create(): %s",rc,strerror(rc));
+		    }
+		}
+	    }
+
+	if (ptMax > 0)
+	    {
+	    /* wait for remote parallel load to finish */
+	    remoteParallelLoadWait(atoi(cfgOptionDefault("parallelFetch.timeout", "90")));  // wait up to default 90 seconds.
+	    }
+
+	// Should continue with pfdDone since threads could still be running that might access pdfList ?
+
+	// Hide weaker of RC'd query pairs, if not debugging.
+	// Combine pairs with a query and its RC.
+	if (!(debuggingGfResults) &&
+	   (sameString(pfdDone->xType,"dna") || sameString(pfdDone->xType,"dnax")))
+	    {
+	    slSort(&pfdDone, slRcPairsCmp);  
+	    hideWeakerOfQueryRcPairs(pfdDone);
+	    }
+
+	// requires db for chromSize, do database after multi-threading done.
+	changeMaxGenePositionToPositiveStrandCoords(pfdDone);
+
+        // sort by maximum hits
+	slSort(&pfdDone, slHitsCmp);
+
+	// Print instructions
+	printf("Click the link in the Assembly column to see the full BLAT output for that Genome.<br><br>\n");
+
+	// Print report  // TODO move to final report at the end of ALL Assemblies
+	int lastSeqNumber = -1;
+	int idCount = 0;
+	char id[256];
+	struct genomeHits *gH = NULL;
+	for (gH = pfdDone; gH; gH = gH->next)
+	    {
+	    if (lastSeqNumber != gH->seqNumber)
+		{
+		if (lastSeqNumber != -1) // end previous table
+		    {
+		    printf("</TABLE><br><br>\n");
+		    }
+		lastSeqNumber = gH->seqNumber;
+		// print next sequence table header
+		printf("<TABLE cellspacing='5'>\n");
+		printf("<TR>\n");
+		printf(
+		    "<th style='text-align:left'>Name</th>"
+		    "<th style='text-align:left'>Genome</th>"
+		    "<th style='text-align:left'>Assembly</th>"
+		    );
+		
+		printf(
+		    "<th style='text-align:right'>Hits</th>"
+		    "<th style='text-align:left'>Chrom</th>"
+			);
+		if (debuggingGfResults)
+		    {
+		    printf(
+		    "<th style='text-align:left'>Pos</th>"
+		    "<th style='text-align:left'>Strand</th>"
+		    "<th style='text-align:left'>Exons</th>"
+		    "<th style='text-align:left'>Query RC'd</th>"
+		    "<th style='text-align:left'>Type</th>"
+			);
+		    }
+		printf("\n");
+		printf("</TR>\n");
+		}
+
+	    if (gH->hide) // hide weaker of pairs for dna and dnax with reverse-complimented queries.
+		    continue;
+	    printf("<TR>\n");
+	    if (gH->error)
+		{
+		printf("<td>%s</td><td>%s</td><td>%s</td><td></td><td>%s</td><td></td>",
+		    gH->faName, gH->genome, gH->db, gH->networkErrMsg); 
+		if (debuggingGfResults)
+		    printf("<td>%d</td><td>%s</td><td></td>", 
+		    gH->queryRC, gH->type);
+		printf("\n");
+		}
+	    else
+		{
+		char pos[256];
+		safef(pos, sizeof pos, "%s:%d-%d", gH->maxGeneChrom, gH->maxGeneTStart+1, gH->maxGeneTEnd); // 1-based closed coord
+		if (!gH->maxGeneChrom) // null
+		    pos[0] = 0;  // empty string
+		safef(id, sizeof id, "res%d", idCount);
+		printf("<td>%s</td><td>%s</td>"
+		    "<td><a id=%s href=''>%s</a></td>"
+		    , gH->faName, gH->genome, id, gH->db);
+
+		printf("<td style='text-align:right'>%d</td><td>%s</td>", gH->maxGeneHits, 
+		    gH->maxGeneChrom ? gH->maxGeneChrom : "");
+
+		if (debuggingGfResults)
+		    {
+		    printf("<td>%s</td><td>%s</td>", pos, gH->maxGeneStrand);
+		    printf( "<td>%d</td><td>%d</td><td>%s</td>", gH->maxGeneExons, gH->queryRC, gH->xType);
+		    }
+
+		printf("\n");
+		jsOnEventByIdF("click", id, 
+		    "document.mainForm.org.value=\"%s\";"  // some have single-quotes in their value.
+		    "document.mainForm.db.value='%s';"
+		    "document.mainForm.submit();"
+		    "return false;"   // cancel the default link url
+		    , gH->genome, gH->db
+		    );
+		idCount++;
+		}
+	
+	    printf("</TR>\n");
+	    }
+	printf("</TABLE><br><br>\n");
+
+	if (debuggingGfResults)
+	    printDebugging();
+
+	fakeAskForSeqForm(organism, db);
+
+	cartWebEnd();
+	}
+    else
+	blatSeq(skipLeadingSpaces(userSeq), organism, db, 0);
     }
 }
 

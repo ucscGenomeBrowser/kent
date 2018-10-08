@@ -121,7 +121,7 @@ CREATING DATABASE
     hgLoadSeq -replace hiva244 /gbdb/hiva244/vax004/vax004.fa
 
 # BLAT
-    gfClient -minScore=200 -minIdentity=80 -nohead hiv1.cse.ucsc.edu 17797  /gbdb/hiva244/nib \
+    gfClient -minScore=200 -minIdentity=80 -nohead hiv1.soe.ucsc.edu 17797  /gbdb/hiva244/nib \
     -out=psl -t=dna -q=dna vax004.fa vax004.psl
 
 # count the result
@@ -153,7 +153,7 @@ CREATING DATABASE
     hgLoadSeq -replace hiva244 /gbdb/hiva244/vax003/vax003.fa
 
 # BLAT
-    gfClient -minScore=200 -minIdentity=80 -nohead hiv1.cse.ucsc.edu 17797  /gbdb/hiva244/nib \
+    gfClient -minScore=200 -minIdentity=80 -nohead hiv1.soe.ucsc.edu 17797  /gbdb/hiva244/nib \
     -out=psl -t=dna -q=dna vax003.fa vax003.psl
 
 # count the result

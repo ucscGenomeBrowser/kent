@@ -96,6 +96,7 @@ organizations who have made this project possible through their generous funding
     <li><a href="#coelacanth_credits">Coelacanth</a></li> 
     <li><a href="#elephant_shark_credits">Elephant shark</a></li> 
     <li><a href="#fugu_credits">Fugu</a></li> 
+    <li><a href="#garter_snake_credits">Garter snake</a></li>
     <li><a href="#golden_eagle_credits">Golden eagle</a></li>
     <li><a href="#lamprey_credits">Lamprey</a></li> 
     <li><a href="#lizard_credits">Lizard</a></li> 
@@ -766,8 +767,15 @@ The cat sequence is made freely available with the following understanding:
 <a name="chimp_credits"></a>
 <h2>Chimpanzee genome</h2> 
 <p> 
-The UCSC Chimpanzee Genome Browsers display draft assembly data produced by the Chimpanzee Genome 
-Sequencing Consortium:</p>
+The UCSC Chimpanzee Genome Browsers display whole-genome assembly data produced by the University of
+Washington:</p>
+<ul>
+  <li>
+  Jan. 2018 <a href="../../cgi-bin/hgGateway?db=panTro6" target="_blank">panTro6</a> browser:
+  Clint_PTRv2 124x PacBio; Illumina NextSeq 500; BioNano Saphyr (two enzyme)</li>
+</ul>
+<p>
+and draft assembly data produced by the Chimpanzee Genome Sequencing Consortium:</p>
 <ul> 
   <li>
   May 2016 <a href="../../cgi-bin/hgGateway?db=panTro5" target="_blank">panTro5</a> browser: v3.0 
@@ -788,6 +796,24 @@ Sequencing Consortium:</p>
 <p>
 <strong>Funding:</strong> <a href="http://www.genome.gov/" target="_blank">National Human Genome 
 Research Institute</a> (NHGRI) </p>
+<p>
+<strong>Sequencing/Assembly (panTro6):</strong> </p>
+<p>
+The whole-genome assembly of a male chimpanzee, Clint (Yerkes pedigree number C0471) was done in
+stages, resulting in three progressive versions:
+<ul>
+  <li>
+  The backbone of the assembly is made up of contigs obtained by assembling the PacBio (P6-C4
+  chemistry) reads using the Falcon assembler. These contigs are error-corrected using the tool
+  Quiver and then further error-corrected using Pilon with 37-fold Illumina paired-end reads.</li>
+  <li>
+  BioNano optical maps are used to place the contigs into scaffolds, followed by chromosome-level
+  scaffolding using bicolor FISH.</li>
+  <li>
+  The assembly is further error-corrected, particularly in regions
+  that have clustered 1-2 bp indels. This is done by applying an Eichler-lab-created Freebayes-based
+  indel correction method.</li>
+</ul>
 <p>
 <strong>Sequencing/Assembly (panTro5):</strong> </p>
 <ul> 
@@ -865,6 +891,9 @@ Institute</p>
 <strong>UCSC Chimp Genome Browser:</strong> </p>
 <ul> 
   <li> 
+  <a href="../../cgi-bin/hgGateway?db=panTro6" target="_blank">panTro6</a>: Hiram Clawson and 
+  Jairo Navarro</li> 
+  <li>
   <a href="../../cgi-bin/hgGateway?db=panTro5" target="_blank">panTro5</a>: Hiram Clawson and 
   Chris Villarreal </li> 
   <li> 
@@ -1258,6 +1287,41 @@ Peng X, Alf&ouml;ldi J, Gori K, Eisfeld AJ, Tyler SR, Tisoncik-Go J, Brawand D, 
 Hatta M <em>et al</em>.  <a href="http://www.nature.com/nbt/journal/v32/n12/full/nbt.3079.html" 
 target="_blank">The draft genome sequence of the ferret (Mustela putorius furo) facilitates study of
 human respiratory disease</a>.  <em>Nat Biotechnol</em>. 2014 Dec;32(12):1250-5. </p>
+
+<!-- Garter snake Credits -->
+<a name="garter_snake_credits"></a>
+<h2>Garter snake genome</h2>
+<p>
+<strong>Sequencing/Assembly:</strong>
+<a href="http://genome.wustl.edu/" target="_blank">The Genome Institute at Washington 
+University School of Medicine</a> </p>
+<p>
+<strong>UCSC Garter Snake Genome Browser/Annotations:</strong>
+<ul>
+  <li>
+  <a href="../../cgi-bin/hgGateway?db=aquChr2" target="_blank">thaSir1</a>: Jonathan Casper, Conner Powell </li>
+</ul>
+<a name="garter_snake_use"></a>
+<h3>Data use</h3>
+<p>
+The garter snake sequence is made freely available to the community by the Genome Sequencing Center,
+Washington University School of Medicine, with the following understanding:</p>
+<ul>
+  <li>
+  The data may be freely downloaded, used in analyses, and repackaged in databases. </li>
+  <li>
+  Users are free to use the data in scientific papers analyzing particular genes and regions if the
+  provider of these data is properly acknowledged. </li>
+  <li>
+  The center producing the data reserves the right to publish the initial large-scale analyses of
+  the data set, including large-scale identification of regions of evolutionary conservation and
+  large-scale genomic assembly. Large-scale refers to regions with size on the order of a
+  chromosome (that is, 30 Mb or more). </li>
+  <li>
+  Any redistribution of the data should carry this notice. </li>
+</ul>
+
+
 
 <!-- Gibbon Credits -->
 <a name="gibbon_credits"></a>
@@ -2681,6 +2745,9 @@ target="_blank">Justus-Liebig-University</a>, Germany</p>
 <p>
 <strong>UCSC Sheep Genome Browser/Annotations:</strong> </p> 
 <ul> 
+  <li>
+  <a href="../../cgi-bin/hgGateway?db=oviAri4" target="_blank">oviAri4</a>: Hiram Clawson, Chris 
+  Lee, Daniel Schmelter</li>
   <li> 
   <a href="../../cgi-bin/hgGateway?db=oviAri3" target="_blank">oviAri3</a>: Hiram Clawson, Brian 
   Raney, Matthew Speir, Brian Lee, Brooke Rhead, Steve Heitner, and Donna Karolchik</li> 
@@ -4152,7 +4219,9 @@ target="_blank">Ensembl</a> </p>
 <ul> 
   <li>
   <a href="../../cgi-bin/hgGateway?db=anoGam1" target="_blank">anoGam1</a>: Angie Hinrichs, Galt 
-  Barber, Donna Karolchik </li> 
+  Barber, Donna Karolchik </li>
+  <li>
+  <a href="../../cgi-bin/hgGateway?db=anoGam3" target="_blank">anoGam3</a>: Hiram Clawson, Luis Nassar </li>
 </ul> 
 <p> 
 <strong>Additional Genome Browser Annotations</strong>: </p> 

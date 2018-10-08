@@ -118,7 +118,7 @@
     hgLoadSeq -replace hivmn1 /gbdb/hivmn1/vax004/vax004.fa
 
 # BLAT
-    gfClient -minScore=200 -minIdentity=80 -nohead hiv1.cse.ucsc.edu 17785  /gbdb/hivmn1/nib \
+    gfClient -minScore=200 -minIdentity=80 -nohead hiv1.soe.ucsc.edu 17785  /gbdb/hivmn1/nib \
     -out=psl -t=dna -q=dna vax004.fa vax004.psl
 
 # count the result
@@ -155,7 +155,7 @@
     tabToFa hSeq
 
 # BLAT the sequences agains hivmn1 base genome
-    gfClient -minScore=10 -minIdentity=35 -nohead hiv1.cse.ucsc.edu 17787 \
+    gfClient -minScore=10 -minIdentity=35 -nohead hiv1.soe.ucsc.edu 17787 \
     /gbdb/hivmn1/nib -out=psl -t=dna -q=dna hSeq.fa jtemp.psl
 
 # Keep only the best ones

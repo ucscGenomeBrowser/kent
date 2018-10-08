@@ -920,12 +920,9 @@ hPrintf(
   "format, to calculate intersections between tracks, and to retrieve "
   "DNA sequence covered by a track. For help in using this application "
   "see <A HREF=\"#Help\">Using the Table Browser</A> for a description "
-  "of the controls in this form, the "
+  "of the controls in this form, and the "
   "<A HREF=\"../goldenPath/help/hgTablesHelp.html\">User's Guide</A> for "
-  "general information and sample queries, and the OpenHelix Table Browser "
-  "<A HREF=\"http://www.openhelix.com/cgi/tutorialInfo.cgi?id=28\" "
-  "TARGET=_blank>tutorial</A> for a narrated presentation of the software "
-  "features and usage. "
+  "general information and sample queries. "
   "For more complex queries, you may want to use "
   "<A HREF=\""GALAXY_URL_BASE"\" target=_BLANK>Galaxy</A> or "
   "our <A HREF=\"../goldenPath/help/mysql.html\">public "
@@ -938,7 +935,7 @@ hPrintf(
   "<A HREF=\"../goldenPath/credits.html\">Credits</A> page for the list of "
   "contributors and usage restrictions associated with these data. "
   "All tables can be downloaded in their entirety from the "
-  "<A HREF=\"http://hgdownload.cse.ucsc.edu/downloads.html\""
+  "<A HREF=\"http://hgdownload.soe.ucsc.edu/downloads.html\""
   ">Sequence and Annotation Downloads</A> page."
    , getGenomeSpaceText()
    );

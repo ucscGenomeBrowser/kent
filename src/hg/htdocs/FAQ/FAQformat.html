@@ -313,7 +313,7 @@ within a PSL file:</p>
   <strong>tBaseInsert</strong> - Number of bases inserted in target</li>
   <li>
   <strong>strand</strong> - &quot+&quot; or &quot-&quot; for query strand. For translated 
-  alignments, second &quot;+&quot;or &quot;-&quot; is for genomic strand</li>
+  alignments, second &quot;+&quot;or &quot;-&quot; is for target genomic strand.</li>
   <li>
   <strong>qName</strong> - Query sequence name</li>
   <li>
@@ -359,7 +359,7 @@ useScore=1
 Click <a class="insideLink" href="../cgi-bin/hgTracks?org=human&amp;position=chr7&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/fishBlats.txt"
 target="_blank">here</a> to display this track in the Genome Browser.</p>
 <p>
-Be aware that the coordinates for a negative strand in a PSL line are handled in a special way. In 
+Be aware that the coordinates for a negative strand in a dna query PSL line are handled in a special way. In 
 the <em>qStart</em> and <em>qEnd</em> fields, the coordinates indicate the position where the 
 query matches from the point of view of the forward strand, even when the match is on the reverse 
 strand. However, in the <I>qStarts</I> list, the coordinates are reversed.</p>
@@ -410,6 +410,14 @@ above.</p>
 <p>
 The 4, 14, and 5 bases at beginning, middle, and end were chosen to not match with the genome at the
 corresponding position.</p>
+<p>
+<strong><em>Translated Queries:</em></strong><br>
+Translated queries translate both the query and target dna into amino acids for greater sensitivity. 
+They are also used for protein search, although in that case the query does not need to be translated.
+For these search types, the strand field lists two values, the first for the query strand (qStrand) and the second for the target strand (tStrand).<br>
+The following rules apply, where x can be q or t:<br>
+If xStrand is negative, the xStarts list has negative-strand coordinates. <br>
+However, the xStart,xEnd values are always given in positive-strand coordinates, regardless of xStrand.<br>
 <p>
 <strong><em>Protein Query:</em></strong><br>
 A protein query consists of amino acids. To align amino acids against a database of nucleic acids,
@@ -1003,7 +1011,7 @@ The index is followed by the sequence records, which contain nine fields:</p>
 </ul>
 <p>
 For a complete definition of all fields in the twoBit format, see 
-<a href="http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/inc/twoBit.h;hb=HEAD">this</a> 
+<a href="http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/inc/twoBit.h">this</a> 
 description in the source code.</p>
 
 <a name="format8"></a>

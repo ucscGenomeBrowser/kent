@@ -42,7 +42,7 @@ my $clusterHub = 'ku';
 my $distrHost = 'ku';
 my $dbHost = 'hgwdev';
 my $workhorse = 'least loaded';
-my $blastPath = '/scratch/data/blast';
+my $blastPath = '/cluster/bin/blast/x86_64/blast-2.2.20';
 my $defaultVerbose = 1;
 
 sub usage {

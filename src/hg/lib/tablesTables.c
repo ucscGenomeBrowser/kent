@@ -497,6 +497,10 @@ if (visibleFacetList)  // facet desired?
 		}
 
 	    int valuesShown = 0;
+	    if (field->showAllValues)  // Sort alphabetically if they want all values 
+	        {
+		slSort(&field->valList, facetValCmp);
+		}
 	    for (val = field->valList; val; val=val->next)
 		{
 		boolean specificallySelected = (val->selected && !field->allSelected);

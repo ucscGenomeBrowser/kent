@@ -703,13 +703,15 @@ va_end(argscp);
 }
 
 void htmlVaBadRequestAbort(char *format, va_list args)
-/* Print out an HTTP header 400 status code (Bad Request) and message,
- * then exit with error.  For use as an errAbort handler. */
+/* Print out an HTTP header 400 status code (Bad Request) and message, then exit with error.
+ * NOTE: This must be installed using pushWarnHandler (pushAbortHandler optional) because
+ * vaErrAbort calls vaWarn and then noWarnAbort.  So if the defaut warn handler is used, then
+ * the error message will be printed out by defaultVaWarn before this prints out the header. */
 {
 puts("Status: 400\r");
 puts("Content-Type: text/plain; charset=UTF-8\r");
 puts("\r");
-if (format != NULL)
+if (format != NULL && args != NULL)
     {
     vfprintf(stdout, format, args);
     fprintf(stdout, "\n");
@@ -1010,7 +1012,7 @@ dyStringAppend(policy, " img-src * data:;");
 dyStringAppend(policy, " img-src 'self'");
 // used by hgGene for modbaseimages in hg/hgc/lowelab.c hg/protein/lib/domains.c hg/hgGene/domains.c
 dyStringAppend(policy, " modbase.compbio.ucsf.edu");  
-dyStringAppend(policy, " hgwdev.cse.ucsc.edu"); // used by visiGene
+dyStringAppend(policy, " hgwdev.gi.ucsc.edu"); // used by visiGene
 dyStringAppend(policy, " genome.ucsc.edu"); // used by visiGene
 dyStringAppend(policy, " code.jquery.com");          // used by hgIntegrator
 dyStringAppend(policy, " www.google-analytics.com"); // used by google analytics

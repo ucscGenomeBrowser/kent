@@ -7,7 +7,6 @@ dataVersion Release 2.0.2
 configureByPopup off
 type vcfTabix
 html gnomad
-pennantIcon New red ../goldenPath/newsarch.html#062118 "Released Jun. 21, 2018"
 
 track gnomadGenomesVariants
 parent gnomadVariants
@@ -42,7 +41,6 @@ dataVersion Release 2.0.2
 configureByPopup off
 type vcfTabix
 html gnomad
-pennantIcon New red ../goldenPath/newsarch.html#062118 "Released Jun. 21, 2018"
 
 track gnomadGenomesAvgCoverage
 parent gnomadCoverage
@@ -271,3 +269,26 @@ parent gnomadExomesReadDepthPct off
 color 15,0,240
 bigDataUrl /gbdb/hg19/gnomAD/coverage/gnomad.exomes.coverage.depth100.bw
 priority 9
+
+track gnomadPLI
+shortLabel gnomAD pLI/Missense Scores
+longLabel gnomAD pLI scores and Missense Constrained Z-Scores
+compositeTrack On
+group varRep
+type bigBed 5
+
+    track pLI
+    shortLabel Gene pLI Scores
+    longLabel pLI Scores for Genomic Region
+    type bigBed 5
+    useScore on
+    bigDataUrl /gbdb/hg19/gnomAD/pLI/pLI.bb
+    parent gnomadPLI
+
+    track misZ
+    shortLabel Gene Missense Z-Scores
+    longLabel Missense Constrained Region Z-Scores
+    type bigBed 5
+    useScore on
+    bigDataUrl /gbdb/hg19/gnomAD/pLI/misZ.bb
+    parent gnomadPLI

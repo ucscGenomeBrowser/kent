@@ -1409,6 +1409,9 @@ void safecat(char *buf, size_t bufSize, const char *src);
 void safencat(char *buf, size_t bufSize, const char *src, size_t n);
 /* append n characters from a string to a buffer, with bounds checking. */
 
+void safecatRepeatChar(char *buf, size_t bufSize, const char c, int n);
+/* Append a character to a buffer, n times with bounds checking.*/
+
 char *naForNull(char *s);
 /* Return 'n/a' if s is NULL, otherwise s. */
 

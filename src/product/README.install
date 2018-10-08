@@ -2,7 +2,7 @@
 Installing the UCSC Genome browser
 
 This file is from:
-  http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob;f=src/product/README.install
+  http://genome-source.soe.ucsc.edu/gitlist/kent.git/blob/master/src/product/README.install
 
 Scripts to perform all of the functions below can be found in
 the directory here: ./scripts/
@@ -98,7 +98,7 @@ XBitHack on
 	See also: scripts/updateHtml.sh
 
 6.  Copy CGI binaries:
-	rsync -avP rsync://hgdownload.cse.ucsc.edu/cgi-bin/ ${WEBROOT}/cgi-bin/
+	rsync -avP rsync://hgdownload.soe.ucsc.edu/cgi-bin/ ${WEBROOT}/cgi-bin/
 	This set of binaries are for x86_64 types of Linux machines.
 	If you need to instead build binaries for your platform,
 	follow the instructions in: README.building.source
@@ -157,7 +157,7 @@ XBitHack on
 	step is quite compute intensive.  A typical rsync command for an
 	entire database (e.g. ce4) would be something like:
 	rsync -avP --delete --max-delete=20 \
-		rsync://hgdownload.cse.ucsc.edu/mysql/ce4/ \
+		rsync://hgdownload.soe.ucsc.edu/mysql/ce4/ \
 		/var/lib/mysql/ce4/
 
 11.  Download extra databases to work with a full genome assembly

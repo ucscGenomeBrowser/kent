@@ -1616,6 +1616,26 @@ AllocVar(tg);
 return tg;
 }
 
+int simpleFeatureCmp(const void *va, const void *vb)
+/* Compare to sort based on start. */
+{
+const struct simpleFeature *a = *((struct simpleFeature **)va);
+const struct simpleFeature *b = *((struct simpleFeature **)vb);
+return a->start - b->start;
+}
+
+void linkedFeaturesSortAndBound(struct linkedFeatures *lf)
+/* Sort simpleFeatures in the linkedFeature and set start and end based on simpleFetaures */
+// TODO: dedupe the simpleFeatures ?
+{
+struct simpleFeature *sfLast, *sfs = lf->components;
+slSort(&sfs, simpleFeatureCmp);
+lf->components = sfs;
+sfLast = (struct simpleFeature *)slLastEl(sfs);
+lf->start = sfs->start;
+lf->end = sfLast->end;
+}
+
 int linkedFeaturesCmp(const void *va, const void *vb)
 /* Compare to sort based on start. */
 {
@@ -6240,6 +6260,24 @@ return newList;
 
 #define BIT_BASIC       (1 << 0)        // transcript is in basic set
 #define BIT_CANON       (1 << 1)        // transcript is in canonical set
+#define BIT_PSEUDO      (1 << 2)        // transcript is a pseudogene
+
+struct linkedFeatures *stripLinkedFeaturesWithBitInScore (struct linkedFeatures *list, unsigned bit)
+/* Remove features that don't have this bit set in the score. */
+{
+struct linkedFeatures *newList = NULL, *el, *next;
+for (el = list; el != NULL; el = next)
+    {
+    next = el->next;
+    el->next = NULL;
+    if (!((unsigned)el->score & bit))
+        {
+        slAddHead(&newList, el);
+        }
+    }
+slReverse(&newList);
+return newList;
+}
 
 struct linkedFeatures *stripLinkedFeaturesWithoutBitInScore (struct linkedFeatures *list, unsigned bit)
 /* Remove features that don't have this bit set in the score. */
@@ -6294,6 +6332,10 @@ if (isGencode)
     boolean showComprehensive = cartUsualBoolean(cart, varName, FALSE);
     if (!showComprehensive)
         newList = stripLinkedFeaturesWithoutBitInScore(lfList,  BIT_BASIC);
+    safef(varName, sizeof(varName), "%s.show.pseudo", tg->tdb->track);
+    boolean showPseudo = cartUsualBoolean(cart, varName, FALSE);
+    if (!showPseudo)
+        newList = stripLinkedFeaturesWithBitInScore(newList,  BIT_PSEUDO);
     }
 
 slSort(&newList, linkedFeaturesCmp);

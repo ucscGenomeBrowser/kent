@@ -110,6 +110,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         array[ii] = sqlFloat(row[rowOffset + 3]);
     }
 
+hFreeConn(&conn);
 }
 
 void getWigData(char *db, char *table, char *chrom, unsigned winStart, unsigned winEnd, double *array)
@@ -140,13 +141,25 @@ for(wiggle = wiggleList; wiggle; wiggle = nextWiggle)
         getWigDataFromFile(wiggle, array, winStart, winEnd);
     freez(&wiggle);
     }
+hFreeConn(&conn);
 }
 
 void getBigWigData(char *file, char *chrom, unsigned winStart, unsigned winEnd, double *array)
 /* Query a bigBed file to find the wiggle values we need for a specified range. */
 {
 struct lm *lm = lmInit(0);
-struct bbiFile *bwf = bigWigFileOpen(hReplaceGbdb(file));
+static char *fileName = NULL;
+static struct bbiFile *bwf = NULL;
+
+if ((fileName == NULL) || differentString(fileName, file))
+    {
+    if (bwf != NULL)
+        bbiFileClose(&bwf);
+
+    fileName = cloneString(file);
+    bwf = bigWigFileOpen(hReplaceGbdb(file));
+    }
+
 struct bbiInterval *iv, *ivList = bigWigIntervalQuery(bwf, chrom, winStart, winEnd, lm);
 unsigned width = winEnd - winStart;
 

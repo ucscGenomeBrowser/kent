@@ -27,8 +27,6 @@
   <ul><strong>
     <li><a class="toc" href="http://genome.ucsc.edu/blog/genome-browser-in-a-box-gbib-origins/" 
      target="_blank">UCSC blog post about GBiB</a></li>
-    <li><a class="toc" href="http://blog.openhelix.eu/?p=20193" target="_blank">OpenHelix blog post 
-    about GBiB</a></li>
     <li><a class="toc" href="https://www.youtube.com/watch?v=1DzZZgB1gvQ" target="_blank">GBiB 
     introductory video</a></li>
   </strong></ul>
@@ -256,6 +254,16 @@ Depending on your network bandwidth, the download can take several minutes or up
 a DSL line. <strong>During the download</strong>, the file <em>gbib-data.vdi</em> will grow in size,
 and <strong>you will not be able to use GBiB</strong>. Once the download is complete, the default 
 tracks should load in less than three seconds for a typical genomic position.</p>
+<p>
+If you are in your GBiB on the command-line you can use a direct rsync command for files of interest.
+For example, if you knew you wanted all the GENCODE tracks on hg19 you could run this command:
+<ul>
+<code>sudo rsync hgdownload.soe.ucsc.edu::mysql/hg19/wgEncodeGencode* /data/mysql/hg19/.</code>
+</ul>
+<p>
+It would rsync all of the files at the UCSC hgdownload server in the hg19 assembly that start with
+wgEncodeGencode to your GBiB into the hg19 directory. There are some supporting files in a hgFixed
+directory, such as for the publication tracks, that could be mirrored with such commands.</p>
 
 <h3>Offline mode</h3>
 <p>

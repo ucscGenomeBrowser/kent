@@ -361,6 +361,27 @@ for (item = itemList; item != NULL; )
 lmCleanup(&lmLocal);
 }
 
+static bits32 getChromSize(struct hash *chromSizeHash, char *chrom, boolean clipDontDie)
+/* return size of chrom or BIGNUM if hash is NULL. errAbort if not found, unless clipDontDie */
+{
+int chromSize = 0;
+if (chromSizeHash) {
+    chromSize = hashIntValDefault(chromSizeHash, chrom, -1);
+    if (chromSize==-1) {
+        warn("chromosome %s is not in chrom sizes file", chrom);
+
+        if (clipDontDie)
+            chromSize = BIGNUM;
+        else
+            noWarnAbort();
+    }
+}
+else
+    chromSize = BIGNUM;
+
+return chromSize;
+}
+
 static unsigned parseUnsignedVal(struct lineFile *lf, char *var, char *val)
 /* Return val as an integer, printing error message if it's not. */
 {
@@ -420,7 +441,9 @@ while ((varEqVal = nextWord(&initialLine)) != NULL)
  * rest of section. */
 if (chrom == NULL)
     errAbort("Missing chrom= setting line %d of %s\n", lf->lineIx, lf->fileName);
-bits32 chromSize = (chromSizeHash ? hashIntVal(chromSizeHash, chrom) : BIGNUM);
+
+bits32 chromSize = getChromSize(chromSizeHash, chrom, clipDontDie);
+
 if (start > chromSize)
     {
     warn("line %d of %s: chromosome %s has %u bases, but item starts at %u",
@@ -502,7 +525,7 @@ while (lineFileNextReal(lf, &line))
         {
 	lmAllocVar(chromHash->lm, chrom);
 	hashAddSaveName(chromHash, chromName, chrom, &chrom->name);
-	chrom->size = (chromSizeHash ? hashIntVal(chromSizeHash, chromName) : BIGNUM);
+	chrom->size = getChromSize(chromSizeHash, chromName, clipDontDie);
 	slAddHead(&chromList, chrom);
 	}
 
@@ -585,7 +608,7 @@ chromList = NULL;
 }
 
 void bwgMakeChromInfo(struct bwgSection *sectionList, struct hash *chromSizeHash,
-	int *retChromCount, struct bbiChromInfo **retChromArray,
+	boolean clipDontDie, int *retChromCount, struct bbiChromInfo **retChromArray,
 	int *retMaxChromNameSize)
 /* Fill in chromId field in sectionList.  Return array of chromosome name/ids. 
  * The chromSizeHash is keyed by name, and has int values. */
@@ -619,7 +642,7 @@ for (i = 0, uniq = uniqList; i < chromCount; ++i, uniq = uniq->next)
     {
     chromArray[i].name = uniq->val;
     chromArray[i].id = i;
-    chromArray[i].size = hashIntVal(chromSizeHash, uniq->val);
+    chromArray[i].size = getChromSize(chromSizeHash, uniq->val, clipDontDie);
     }
 
 /* Clean up, set return values and go home. */
@@ -636,7 +659,7 @@ static int bwgStrcmp (const void * A, const void * B) {
 }
 
 void bwgMakeAllChromInfo(struct bwgSection *sectionList, struct hash *chromSizeHash,
-	int *retChromCount, struct bbiChromInfo **retChromArray,
+	boolean clipDontDie, int *retChromCount, struct bbiChromInfo **retChromArray,
 	int *retMaxChromNameSize)
 /* Fill in chromId field in sectionList.  Return array of chromosome name/ids. 
  * The chromSizeHash is keyed by name, and has int values. */
@@ -667,7 +690,7 @@ for (i = 0; i < chromCount; ++i)
     {
     chromArray[i].name = chromNames[i];
     chromArray[i].id = i;
-    chromArray[i].size = hashIntVal(chromSizeHash, chromNames[i]);
+    chromArray[i].size = getChromSize(chromSizeHash, chromNames[i], clipDontDie);
     }
 
 // Assign IDs to sections:
@@ -956,7 +979,7 @@ for (i=1; i<REDUCTION_COUNT; i++)
 
 void bwgCreate(struct bwgSection *sectionList, struct hash *chromSizeHash, 
 	int blockSize, int itemsPerSlot, boolean doCompress, boolean keepAllChromosomes,
-        boolean fixedSummaries, char *fileName)
+        boolean fixedSummaries, boolean clipDontDie, char *fileName)
 /* Create a bigWig file out of a sorted sectionList. */
 {
 bits64 sectionCount = slCount(sectionList);
@@ -984,9 +1007,9 @@ int i;
 struct bbiChromInfo *chromInfoArray;
 int chromCount, maxChromNameSize;
 if (keepAllChromosomes)
-    bwgMakeAllChromInfo(sectionList, chromSizeHash, &chromCount, &chromInfoArray, &maxChromNameSize);
+    bwgMakeAllChromInfo(sectionList, chromSizeHash, clipDontDie, &chromCount, &chromInfoArray, &maxChromNameSize);
 else
-    bwgMakeChromInfo(sectionList, chromSizeHash, &chromCount, &chromInfoArray, &maxChromNameSize);
+    bwgMakeChromInfo(sectionList, chromSizeHash, clipDontDie, &chromCount, &chromInfoArray, &maxChromNameSize);
 
 if (fixedSummaries) 
     bwgComputeFixedSummaries(sectionList, reduceSummaries, &summaryCount, chromInfoArray, reductionAmounts);
@@ -1217,7 +1240,7 @@ struct lm *lm = lmInit(0);
 struct bwgSection *sectionList = bwgParseWig(inName, clipDontDie, chromSizeHash, itemsPerSlot, lm);
 if (sectionList == NULL)
     errAbort("%s is empty of data", inName);
-bwgCreate(sectionList, chromSizeHash, blockSize, itemsPerSlot, compress, keepAllChromosomes, fixedSummaries, outName);
+bwgCreate(sectionList, chromSizeHash, blockSize, itemsPerSlot, compress, keepAllChromosomes, fixedSummaries, clipDontDie, outName);
 lmCleanup(&lm);
 }
 

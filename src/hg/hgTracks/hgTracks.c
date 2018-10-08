@@ -3321,7 +3321,8 @@ if (! hTableExists(database, table))
 
 // where is the alt haplo placed?
 char query[256];
-sqlSafef(query, sizeof(query), "select chrom, chromStart, chromEnd from %s where name='%s'", table, haplotypeId);
+sqlSafef(query, sizeof(query), "select chrom, chromStart, chromEnd from %s "
+         "where name rlike '^%s(:[0-9-]+)?'", table, haplotypeId);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (!row)
@@ -8296,7 +8297,7 @@ if (!hideControls)
     hPrintf("</TD>");
     hPrintf("<td width='30'>&nbsp;</td>\n");
 #endif//ndef USE_NAVIGATION_LINKS
-    hPrintf("<TD COLSPAN=15 style=\"white-space:normal\">"); // allow this text to wrap
+    hPrintf("<TD class='infoText' COLSPAN=15 style=\"white-space:normal\">"); // allow this text to wrap
     hWrites("Click on a feature for details. ");
     hWrites("Click or drag in the base position track to zoom in. ");
     hWrites("Click side bars for track options. ");
@@ -8388,7 +8389,7 @@ if (!hideControls)
                            "return vis.expandAllGroups(false)");
         hPrintf("</td>");
 
-        hPrintf("<td colspan='%d' align='CENTER' nowrap>"
+        hPrintf("<td colspan='%d' class='infoText' align='CENTER' nowrap>"
                 "Use drop-down controls below and press refresh to alter tracks "
                 "displayed.<BR>"
                 "Tracks with lots of items will automatically be displayed in "
@@ -10016,6 +10017,10 @@ if(!trackImgOnly)
         jsIncludeFile("jquery.imgareaselect.js", NULL);
         }
     jsIncludeFile("autocomplete.js", NULL);
+    jsIncludeFile("es5-shim.4.0.3.min.js", NULL);
+    jsIncludeFile("es5-sham.4.0.3.min.js", NULL);
+    jsIncludeFile("lodash.3.10.0.compat.min.js", NULL);
+    jsIncludeFile("autocompleteCat.js", NULL);
     jsIncludeFile("hgTracks.js", NULL);
     jsIncludeFile("spectrum.min.js", NULL);
 

@@ -22,7 +22,7 @@ set CREATE_OR_LIST=`echo "${CREATE_ONLY}" | sed -e "s/ /|/g"`
 set IGNORE_TABLES=`hgsql -N -h genome-centdb -e "show tables;" hgcentral \
      | egrep -v -w "${CREATE_OR_LIST}" | xargs echo \
      | sed -e "s/^/--ignore-table=hgcentral./; s/ / --ignore-table=hgcentral./g"`
-hgsqldump --set-gtid-purged=OFF --skip-add-drop-table --skip-lock-tables --no-data ${IGNORE_TABLES} \
+hgsqldump --skip-add-drop-table --skip-lock-tables --no-data ${IGNORE_TABLES} \
           -h genome-centdb --no-create-db --databases hgcentral  | grep -v "^USE " \
          | sed -e "s/genome-centdb/localhost/; s/CREATE TABLE/CREATE TABLE IF NOT EXISTS/" \
     > /tmp/hgcentraltemp.sql 
@@ -38,7 +38,7 @@ set IGNORE_TABLES=`hgsql -N -h genome-centdb -e "show tables;" hgcentral \
 # --skip-add-drop-table ... to avoid dropping existing tables
 # Note that INSERT is turned into REPLACE making our table contents dominant, 
 #      but users additional rows are preserved
-hgsqldump ${IGNORE_TABLES} --set-gtid-purged=OFF --skip-lock-tables --skip-extended-insert --order-by-primary -c -h genome-centdb \
+hgsqldump ${IGNORE_TABLES} --skip-lock-tables --skip-extended-insert --order-by-primary -c -h genome-centdb \
         --no-create-db --databases hgcentral  | grep -v "^USE " | sed -e \
         "s/genome-centdb/localhost/" \
     >> /tmp/hgcentraltemp.sql
@@ -54,7 +54,7 @@ set IGNORE_TABLES=`hgsql -N -h genome-centdb -e "show tables;" hgcentral \
 # --skip-add-drop-table ... to avoid dropping existing tables
 # Note that INSERT is turned into REPLACE making our table contents dominant, 
 #      but users additional rows are preserved
-hgsqldump ${IGNORE_TABLES} --set-gtid-purged=OFF --skip-lock-tables --skip-add-drop-table --skip-extended-insert --order-by-primary -c -h genome-centdb \
+hgsqldump ${IGNORE_TABLES} --skip-lock-tables --skip-add-drop-table --skip-extended-insert --order-by-primary -c -h genome-centdb \
         --no-create-db --databases hgcentral  | grep -v "^USE " | sed -e \
         "s/genome-centdb/localhost/; s/CREATE TABLE/CREATE TABLE IF NOT EXISTS/; s/INSERT/REPLACE/" \
     >> /tmp/hgcentraltemp.sql
@@ -107,16 +107,16 @@ gzip /hive/groups/browser/centralArchive/hgcentral.$dateStamp.sql
 
 echo
 echo "A new hgcentral.sql file should now be present at:"
-echo "  http://hgdownload.cse.ucsc.edu/admin/"
+echo "  http://hgdownload.soe.ucsc.edu/admin/"
 echo "   and"
-echo "  http://hgdownload-sd.cse.ucsc.edu/admin/"
+echo "  http://hgdownload-sd.soe.ucsc.edu/admin/"
 echo
 echo "If it is not, you can request a push of the file:"
 echo "  /usr/local/apache/htdocs/admin/hgcentral.sql"
 echo "  from hgwdev --> hgdownload "
 echo
 echo "NOTE:  Some mirrors like to get hgcentral tables via ftp or rsync"
-echo "from hgdownload.cse.ucsc.edu/mysql/hgcentral/ instead of from the"
+echo "from hgdownload.soe.ucsc.edu/mysql/hgcentral/ instead of from the"
 echo "hgcentral.sql file. To make a table in hgcentral available there"
 echo "right now, ask for it to be pushed from hgnfs1 --> hgdownload. (Or"
 echo "just wait for the automatic weekly rsync.)"

@@ -3380,6 +3380,21 @@ strncat(buf, src, n);
 buf[blen+slen] = '\0';
 }
 
+void safecatRepeatChar(char *buf, size_t bufSize, const char c, int n)
+/* Append a character to a buffer, n times with bounds checking.*/
+{
+if (n < 0)
+    errAbort("safecatRepeatChar called with invalid negative count %d", n);
+size_t blen = strlen(buf);
+size_t slen = n;
+if (blen+slen > bufSize-1)
+    errAbort("buffer overflow, size %lld, new string size: %lld", (long long)bufSize, (long long)(blen+slen));
+int i;
+for(i=0; i < slen; ++i)
+    buf[blen+i] = c;
+buf[blen+slen] = 0;
+}
+
 
 static char *naStr = "n/a";
 static char *emptyStr = "";

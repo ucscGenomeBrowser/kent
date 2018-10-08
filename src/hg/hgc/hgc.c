@@ -878,7 +878,7 @@ if (sql != NULL)
 return id;
 }
 
-char* getUrlSetting(struct trackDb *tdb, char* urlSetting)
+char *getUrlSetting(struct trackDb *tdb, char* urlSetting)
 /* get the "url" setting for the current track */
 {
 char *url;
@@ -897,7 +897,8 @@ void printIframe(struct trackDb *tdb, char *itemName)
 char *url = getUrlSetting(tdb, "iframeUrl");
 if (url==NULL)
     return;
-char *eUrl = replaceInUrl(url, itemName, cart, database, seqName, winStart, winEnd, tdb->track, FALSE);
+char *eUrl = replaceInUrl(url, itemName, cart, database, seqName, winStart, winEnd, 
+                                tdb->track, FALSE, NULL);
 if (eUrl==NULL)
     return;
 
@@ -928,7 +929,8 @@ function resizeIframe(height) \
 <p>", eUrl, iframeOptions);
 }
 
-void printCustomUrlWithLabel(struct trackDb *tdb, char *itemName, char *itemLabel, char *urlSetting, boolean encode)
+void printCustomUrlWithLabel(struct trackDb *tdb, char *itemName, char *itemLabel, 
+                                char *urlSetting, boolean encode, struct slPair *fields)
 /* Print custom URL specified in trackDb settings. */
 {
 char urlLabelSetting[32];
@@ -939,7 +941,8 @@ char *url = getUrlSetting(tdb, urlSetting);
 if (url==NULL || isEmpty(url))
     return;
 
-char* eUrl = replaceInUrl(url, itemName, cart, database, seqName, winStart, winEnd, tdb->track, encode);
+char *eUrl = replaceInUrl(url, itemName, cart, database, seqName, winStart, winEnd, tdb->track, 
+                            encode, fields);
 if (eUrl==NULL)
     return;
 
@@ -974,20 +977,34 @@ else
 //freeMem(&eUrl); small memory leak
 }
 
-void printCustomUrl(struct trackDb *tdb, char *itemName, boolean encode)
-/* Wrapper to call printCustomUrlWithLabel using the url setting in trackDb */
+void printCustomUrlWithFields(struct trackDb *tdb, char *itemName, char *itemLabel, boolean encode,                                                      struct slPair *fields) 
+/* Wrapper to call printCustomUrlWithLabel with additional fields to substitute */
 {
 char urlSetting[10];
 safef(urlSetting, sizeof(urlSetting), "url");
 
-printCustomUrlWithLabel(tdb, itemName, itemName, urlSetting, encode);
+printCustomUrlWithLabel(tdb, itemName, itemName, urlSetting, encode, fields);
+}
+
+void printCustomUrl(struct trackDb *tdb, char *itemName, boolean encode)
+/* Wrapper to call printCustomUrlWithLabel using the url setting in trackDb */
+{
+printCustomUrlWithFields(tdb, itemName, itemName, encode, NULL);
+}
+
+void printOtherCustomUrlWithFields(struct trackDb *tdb, char *itemName, char *urlSetting, 
+                                        boolean encode, struct slPair *fields)
+/* Wrapper to call printCustomUrlWithLabel to use another url setting other than url in trackDb e.g. url2, this allows the use of multiple urls for a track
+ to be set in trackDb. */
+{
+printCustomUrlWithLabel(tdb, itemName, itemName, urlSetting, encode, fields);
 }
 
 void printOtherCustomUrl(struct trackDb *tdb, char *itemName, char* urlSetting, boolean encode)
 /* Wrapper to call printCustomUrlWithLabel to use another url setting other than url in trackDb e.g. url2, this allows the use of multiple urls for a track
  to be set in trackDb. */
 {
-printCustomUrlWithLabel(tdb, itemName, itemName, urlSetting, encode);
+printCustomUrlWithLabel(tdb, itemName, itemName, urlSetting, encode, NULL);
 }
 
 void genericSampleClick(struct sqlConnection *conn, struct trackDb *tdb,
@@ -1299,17 +1316,17 @@ printf("<THEAD>");
 printf("<TBODY>");
 printf("<TR><TH>");
 printf("Suh Trees<BR>\n");
-printf("<IMG src=http://hgwdev.cse.ucsc.edu/~braney/suhTrees/%s.tt.png><BR>",item);
-printf("<TD><IMG src=http://hgwdev.cse.ucsc.edu/~braney/suhTrees/%s.gt.png><BR>",item);
+printf("<IMG src=http://hgwdev.gi.ucsc.edu/~braney/suhTrees/%s.tt.png><BR>",item);
+printf("<TD><IMG src=http://hgwdev.gi.ucsc.edu/~braney/suhTrees/%s.gt.png><BR>",item);
 printf("<TR><TH>");
 printf("NJ Trees<BR>\n");
-printf("<IMG src=http://hgwdev.cse.ucsc.edu/~braney/njTrees/%s.tt.png><BR>",item);
-printf("<TD><IMG src=http://hgwdev.cse.ucsc.edu/~braney/njTrees/%s.gt.png><BR>",item);
+printf("<IMG src=http://hgwdev.gi.ucsc.edu/~braney/njTrees/%s.tt.png><BR>",item);
+printf("<TD><IMG src=http://hgwdev.gi.ucsc.edu/~braney/njTrees/%s.gt.png><BR>",item);
 printf("<TR><TH>");
 /*
 printf("Gap UPGMA Trees<BR>\n");
-printf("<IMG src=http://hgwdev.cse.ucsc.edu/~braney/gap992Trees/%s.tt.png><BR>",item);
-printf("<TD><IMG src=http://hgwdev.cse.ucsc.edu/~braney/gap992Trees/%s.gt.png><BR>",item);
+printf("<IMG src=http://hgwdev.gi.ucsc.edu/~braney/gap992Trees/%s.tt.png><BR>",item);
+printf("<TD><IMG src=http://hgwdev.gi.ucsc.edu/~braney/gap992Trees/%s.gt.png><BR>",item);
 printf("</TABLE>");
 
 */
@@ -1444,7 +1461,7 @@ for (itemId = slIds; itemId!=NULL; itemId = itemId->next)
         }
 
     char *idUrl = replaceInUrl(url, idForUrl, cart, database, seqName, winStart, 
-                    winEnd, tdb->track, encode);
+                    winEnd, tdb->track, encode, NULL);
     printf("<a href=\"%s\" target=\"_blank\">%s</a>", idUrl, itemName);
     } 
 printf("</td></tr>\n");
@@ -1468,7 +1485,7 @@ if (word && (sameWord(word,"bed") || sameWord(word,"bigBed") || sameWord(word,"b
 return start;
 }
 
-struct slPair* getExtraFields(struct trackDb *tdb, char **fields, int fieldCount)
+struct slPair *getExtraFields(struct trackDb *tdb, char **fields, int fieldCount)
 /* return the extra field names and their values as a list of slPairs.  */
 {
 struct asObject *as = asForDb(tdb, database);
@@ -1498,6 +1515,32 @@ for (;col != NULL && count < fieldCount;col=col->next)
     }
 slReverse(extraFields);
 return extraFields;
+}
+
+struct slPair *getFields(struct trackDb *tdb, char **row)
+/* return field names and their values as a list of slPairs.  */
+// TODO: refactor with getExtraFields
+{
+struct asObject *as = asForDb(tdb, database);
+if (as == NULL)
+    return NULL;
+int fieldCount = slCount(as->columnList);
+struct slPair *fields = NULL;
+struct asColumn *col = as->columnList;
+int count = 0;
+for (count = 0; col != NULL && count < fieldCount; col = col->next)
+    {
+    struct slPair *field;
+    AllocVar(field);
+    char *fieldName = col->name;
+    char *fieldVal = row[count];
+    field->name = fieldName;
+    field->val = fieldVal;
+    slAddHead(&fields, field);
+    count++;
+    }
+slReverse(fields);
+return fields;
 }
 
 int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount)
@@ -3223,7 +3266,7 @@ if (otherOrg == NULL)
     otherOrg = firstWordInLine(cloneString(tdb->shortLabel));
     }
 
-if (isHubTrack(tdb->track) || isCustomTrack(tdb->track))
+if (startsWith("big", tdb->type))
     {
     char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
     char *linkFileName = trackDbSetting(tdb, "linkDataUrl");
@@ -3343,7 +3386,7 @@ chainWinSize = min(winEnd-winStart, chain->tEnd - chain->tStart);
 /* server (or in other cases) if there is a database with a chromInfo table, */
 /* the sequences are available and there is an entry added to dbDb for */
 /* the otherDb. */
-if (sqlDatabaseExists(otherDb) && chromSeqFileExists(otherDb, chain->qName))
+if (!startsWith("big", tdb->type) && sqlDatabaseExists(otherDb) && chromSeqFileExists(otherDb, chain->qName))
     {
     if (chainWinSize < 1000000)
         {
@@ -4076,18 +4119,20 @@ if (container == NULL && wordCount > 0)
 /* Print header. */
 genericHeader(tdb, headerItem);
 
-itemForUrl = getIdInUrl(tdb, item);
-if (itemForUrl != NULL && trackDbSetting(tdb, "url"))
+if (differentString(type, "bigInteract") && differentString(type, "interact"))
     {
-    printCustomUrl(tdb, itemForUrl, item == itemForUrl);
-    printIframe(tdb, itemForUrl);
+    // skip generic URL code as these may have multiple items returned for a click
+    itemForUrl = getIdInUrl(tdb, item);
+    if (itemForUrl != NULL && trackDbSetting(tdb, "url"))
+        {
+        printCustomUrl(tdb, itemForUrl, item == itemForUrl);
+        printIframe(tdb, itemForUrl);
+        }
     }
-
 if (plus != NULL)
     {
     fputs(plus, stdout);
     }
-
 if (container != NULL)
     {
     genericContainerClick(conn, container, tdb, item, itemForUrl);
@@ -4130,8 +4175,7 @@ else if (wordCount > 0)
 	    mrnaTable = words[2];
 	genericGenePredClick(conn, tdb, item, start, pepTable, mrnaTable);
 	}
-    else if ( sameString(type, "bigPsl"))
-        {
+    else if ( sameString(type, "bigPsl")) {
 	genericBigPslClick(conn, tdb, item, start, end);
 	}
     else if (sameString(type, "psl"))
@@ -4258,10 +4302,20 @@ if (imagePath)
     printf("<A HREF=\"%s/%s.%s\">Download Original Image</A><BR>\n", bothWords[0], item, bothWords[1]);
     }
 
-if (sameString(tdb->table,"altLocations") && (!strchr(item,':')))
+if ((sameString(tdb->table,"altLocations") || sameString(tdb->table,"fixLocations")) &&
+    strchr(item,'_'))
     {
+    // Truncate item (alt/fix sequence name) at colon if found:
+    char itemCpy[strlen(item)+1];
+    safecpy(itemCpy, sizeof(itemCpy), item);
+    char *p = strchr(itemCpy, ':');
+    if (p)
+        *p = '\0';
     char *hgsid = cartSessionId(cart);
-    printf("<A HREF=\"/cgi-bin/hgTracks?hgsid=%s&virtModeType=singleAltHaplo&singleAltHaploId=%s\">Show this alternate haplotype placed on its chromosome</A><BR>\n", hgsid, item);
+    char *desc = sameString(tdb->table, "altLocations") ? "alternate haplotype" : "fix patch";
+    printf("<A HREF=\"/cgi-bin/hgTracks?hgsid=%s&virtModeType=singleAltHaplo&singleAltHaploId=%s\">"
+           "Show this %s placed on its chromosome</A><BR>\n",
+           hgsid, itemCpy, desc);
     }
 
 printTrackHtml(tdb);
@@ -11969,7 +12023,7 @@ if (sqlColumnExists(conn, "ncbiRefSeqLink", "externalId"))
 		char *url = (char *)hel->val;
 		char *labelStr = (char *)label->val;
 		char *idUrl = replaceInUrl(url, nrl->externalId, cart, database,
-		    nrl->externalId, winStart, winEnd, tdb->track, TRUE);
+		    nrl->externalId, winStart, winEnd, tdb->track, TRUE, NULL);
 		printf("<b>%s:</b> ", labelStr);
 		printf("<a href='%s' target='_blank'>%s</a><br>\n",
 		    idUrl, nrl->externalId);
@@ -13944,7 +13998,7 @@ printf("<B>Browser window size:</B> %d<BR>\n", winEnd - winStart);
 
 safef(anotherString, sizeof anotherString, "%s",otherOrg);
 toUpperN(anotherString,1);
-printf("Link to <a href=\"http://hgwdev-tcbruen.cse.ucsc.edu/cgi-bin/hgTracks?db=zoo%s1&position=chr1:%d-%d\">%s database</a><BR>\n",
+printf("Link to <a href=\"http://hgwdev-tcbruen.gi.ucsc.edu/cgi-bin/hgTracks?db=zoo%s1&position=chr1:%d-%d\">%s database</a><BR>\n",
        anotherString, psl->qStart, psl->qEnd, otherOrg);
 
 safef(otherString, sizeof otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTable=%s", psl->tStart,
@@ -20321,7 +20375,7 @@ void chuckHtmlStart(char *title)
 printf("<HTML>\n<HEAD>\n%s", getCspMetaHeader());
 // FIXME blueStyle should not be absolute to genome-test and should be called by:
 //       webIncludeResourceFile("blueStyle.css");
-printf("<LINK REL=STYLESHEET TYPE=\"text/css\" href=\"http://genome-test.cse.ucsc.edu/style/blueStyle.css\" title=\"Chuck Style\">\n");
+printf("<LINK REL=STYLESHEET TYPE=\"text/css\" href=\"http://genome-test.gi.ucsc.edu/style/blueStyle.css\" title=\"Chuck Style\">\n");
 printf("<title>%s</title>\n</head><body bgcolor=\"#f3f3ff\">",title);
 }
 
@@ -20329,7 +20383,7 @@ void chuckHtmlContactInfo()
 /* Writes out Chuck's email so people bother Chuck instead of Jim */
 {
 puts("<br><br><span style='font-size:x-small;'><i>If you have comments and/or suggestions please email "
-     "<a href=\"mailto:sugnet@cse.ucsc.edu\">sugnet@cse.ucsc.edu</a>.</span>\n");
+     "<a href=\"mailto:sugnet@soe.ucsc.edu\">sugnet@soe.ucsc.edu</a>.</span>\n");
 }
 
 
@@ -24992,7 +25046,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     safef(itemPlus, sizeof(itemPlus),
 	  "%s&o=%d&t=%d&g=%s_discordant&%s_discordant=full",
 	  cgiEncode(item), start, endForUrl, sampleName, sampleName);
-    printCustomUrlWithLabel(tdb, itemPlus, item, "url", FALSE);
+    printCustomUrlWithLabel(tdb, itemPlus, item, "url", FALSE, NULL);
     printKiddEichlerNcbiLinks(tdb, bed->name);
     printf("<B>Score:</B> %d<BR>\n", bed->score);
     printPosOnChrom(bed->chrom, bed->chromStart, bed->chromEnd, bed->strand,

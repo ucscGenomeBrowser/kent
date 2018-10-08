@@ -410,7 +410,7 @@ Checking job status 5277 minutes after launch
 277711 jobs in batch
 2 jobs (including everybody's) in Parasol queue or running.
 Checking finished jobs
-Can't open /hive/data/genomes/macEug2/bed/genscan/batch.1656.swarm.cse.ucsc.edu.tmp to write: Too many open files
+Can't open /hive/data/genomes/macEug2/bed/genscan/batch.1656.swarm.soe.ucsc.edu.tmp to write: Too many open files
 Command failed:
 ssh -x -o 'StrictHostKeyChecking = no' -o 'BatchMode = yes' swarm nice /hive/data/genomes/macEug2/bed/genscan/doGenscan.csh
 

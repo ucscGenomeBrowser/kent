@@ -1046,8 +1046,8 @@ _EOF_
   if ($opt_trackHub) {
     $bossScript->add(<<_EOF_
 cd $buildDir/bigMaf
-wget -O bigMaf.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/bigMaf.as'
-wget -O mafSummary.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/mafSummary.as'
+wget -O bigMaf.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigMaf.as'
+wget -O mafSummary.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/mafSummary.as'
 mafToBigMaf $tDb $tDb.$qDb.net.maf.gz stdout \\
   | sort -k1,1 -k2,2n > $tDb.$qDb.net.txt
 bedToBigBed -type=bed3+1 -as=bigMaf.as -tab \\
@@ -1079,9 +1079,14 @@ sub loadUp {
       "($tDb.$qDb.net[.gz] exists).  Either run with -continue download, " .
 	"or move aside/remove $runDir/$tDb.$qDb.net[.gz] and run again.\n";
   }
-  # Make sure previous stage was successful.
+  # Make sure previous stage was successful.  Depends upon what was done:
+  my $otherCheck = "$buildDir/mafNet";
+  if ($opt_trackHub) {
+     $otherCheck = "$buildDir/bigMaf";
+     &HgAutomate::nfsNoodge("$otherCheck/$tDb.$qDb.net.maf");
+  }
   my $successDir = $isSelf ? "$runDir/$tDb.$qDb.all.chain.gz" :
-                             "$buildDir/mafNet/";
+                             "$otherCheck";
   if (! -e $successDir && ! $opt_debug) {
     die "loadUp: looks like previous stage was not successful " .
       "(can't find $successDir).\n";
@@ -1122,8 +1127,8 @@ _EOF_
       $bossScript->add(<<_EOF_
 cd $runDir
 hgLoadChain -test -noBin -tIndex $tDb chain$QDb $tDb.$qDb.all.chain.gz
-wget -O bigChain.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/bigChain.as'
-wget -O bigLink.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/bigLink.as'
+wget -O bigChain.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigChain.as'
+wget -O bigLink.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigLink.as'
 sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\\t"} {print \$2, \$4, \$5, \$11, 1000, \$8, \$3, \$6, \$7, \$9, \$10, \$1}' > chain${QDb}.tab
 bedToBigBed -type=bed6+6 -as=bigChain.as -tab chain${QDb}.tab $defVars{SEQ1_LEN} chain${QDb}.bb
 awk 'BEGIN {OFS="\\t"} {print \$1, \$2, \$3, \$5, \$4}' link.tab | sort -k1,1 -k2,2n > chain${QDb}Link.tab
@@ -1713,8 +1718,8 @@ _EOF_
 set lineCount = `zcat $tDb.$qDb.syn.chain.gz | wc -l`
 if (\$lineCount > 0) then
   hgLoadChain -test -noBin -tIndex $tDb chainSyn$QDb $tDb.$qDb.syn.chain.gz
-  wget -O bigChain.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/bigChain.as'
-  wget -O bigLink.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/bigLink.as'
+  wget -O bigChain.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigChain.as'
+  wget -O bigLink.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigLink.as'
   sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\\t"} {print \$2, \$4, \$5, \$11, 1000, \$8, \$3, \$6, \$7, \$9, \$10, \$1}' > chainSyn${QDb}.tab
   bedToBigBed -type=bed6+6 -as=bigChain.as -tab chainSyn${QDb}.tab $defVars{SEQ1_LEN} chainSyn${QDb}.bb
   awk 'BEGIN {OFS="\\t"} {print \$1, \$2, \$3, \$5, \$4}' link.tab | sort -k1,1 -k2,2n > chainSyn${QDb}Link.tab
@@ -1751,8 +1756,8 @@ _EOF_
 if (\$lineCount > 0) then
   mkdir -p ../bigMaf
   cd ../bigMaf
-  wget -O bigMaf.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/bigMaf.as'
-  wget -O mafSummary.as 'http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/mafSummary.as'
+  wget -O bigMaf.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigMaf.as'
+  wget -O mafSummary.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/mafSummary.as'
   mafToBigMaf $tDb ../axtChain/$tDb.$qDb.synNet.maf.gz stdout \\
     | sort -k1,1 -k2,2n > $tDb.$qDb.synNet.txt
   bedToBigBed -type=bed3+1 -as=bigMaf.as -tab  $tDb.$qDb.synNet.txt \\

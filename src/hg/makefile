@@ -13,7 +13,7 @@ BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgCollection hgConvert \
 	encode/hgEncodeDataVersions encode/hgEncodeVocab encode/hgEncodeApi \
 	phyloPng hgCustom hgPal hgFileUi hgFileSearch makeDb/hgCgiData \
 	js htdocs/style hgMirror hgBeacon hgGtexTrackSettings pyLib \
-	hgGeneGraph
+	hgGeneGraph hgs
 
 ifdef LOWELAB
     BROWSER_BINS += $(HOME)/lowelab/src/browser/tooltip $(HOME)/lowelab/src/browser/chooseorg

@@ -22,6 +22,15 @@ searchPriority 2.07207
 searchType bigBed
 searchDescription COSMIC Regions
 
+track mastermind
+shortLabel Mastermind Variants
+longLabel Mastermind Variants extracted from fulltext publications
+group phenDis
+visibility hide
+type vcfTabix
+bigDataUrl /gbdb/hg19/bbi/mastermind_open_variant_file_preview.vcf.gz
+release alpha
+
 # chainNet tracks
 include trackDb.chainNet.ra
 include trackDb.wgEncode.ra
@@ -115,7 +124,7 @@ longLabel cramTest2
 bigDataUrl /hive/users/braney/cram/HG00096.mapped.ILLUMINA.bwa.GBR.low_coverage.20120522.bam.cram
 type bam
 release alpha
-#refUrl http://hgwdev.cse.ucsc.edu/~braney/cramRef/%s
+#refUrl http://hgwdev.soe.ucsc.edu/~braney/cramRef/%s
 
 searchName ucscRetroInfoRefSeq5
 searchTable ucscRetroAli5
@@ -2586,3 +2595,4 @@ origAssembly hg38
 # change these two to switch to the new refSeqComposite 2018-02
 #include trackDb.refGene.ra public
 include ../../refSeqComposite.ra
+

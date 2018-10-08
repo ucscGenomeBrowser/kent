@@ -98,7 +98,7 @@ if [ -s "${homeDir}/.bashrc" ]; then
   wget -qO /data/parasol/nodeInfo/nodeReport.sh 'http://genomewiki.ucsc.edu/images/e/e3/NodeReport.sh.txt' >> "${logFile}" 2>&1
   chmod 755 /data/parasol/nodeInfo/nodeReport.sh
   # bedSingleCover.pl for use in running featureBits like measurements
-  wget -O /data/scripts/bedSingleCover.pl 'http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/utils/bedSingleCover.pl' >> "${logFile}" 2>&1
+  wget -O /data/scripts/bedSingleCover.pl 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/utils/bedSingleCover.pl' >> "${logFile}" 2>&1
   chmod +x /data/scripts/bedSingleCover.pl
   chown -R ${nativeUser}:${nativeUser} "${dataDir}" "${homeDir}/bin" "${homeDir}/.vimrc"
 

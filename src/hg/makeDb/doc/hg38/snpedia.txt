@@ -31,16 +31,19 @@ python $SRC/makeBed.py hg19 && python makeBed.py hg38
 python $SRC/makeAll.py # takes 5 hours, stupid fgrep
 
 # load up everything
-hgLoadBed hg19 snpedia build/hg19/snpedia.bed -allowStartEqualEnd 
-hgLoadBed hg38 snpedia build/hg38/snpedia.bed -allowStartEqualEnd
-hgLoadSqlTab hg19 snpediaHtml $SRC/snpediaHtml.sql build/hg19/snpedia.htmlTab
-hgLoadSqlTab hg38 snpediaHtml $SRC/snpediaHtml.sql build/hg38/snpedia.htmlTab 
+hgLoadBed hg19 snpediaText build/hg19/snpedia.bed -allowStartEqualEnd 
+hgLoadBed hg38 snpediaText build/hg38/snpedia.bed -allowStartEqualEnd
+hgLoadSqlTab hg19 snpediaTextHtml $SRC/snpediaHtml.sql build/hg19/snpedia.htmlTab
+hgLoadSqlTab hg38 snpediaTextHtml $SRC/snpediaHtml.sql build/hg38/snpedia.htmlTab 
 
 bedSort build/hg19/snpAll.bed build/hg19/snpAll.bed 
-bedToBigBed build/hg19/snpAll.bed /scratch/data/hg19/chrom.sizes -type=bed4+ -tab -as=$SRC/bed4Note.as snpediaAll.hg19.bb -extraIndex=name
+bedToBigBed build/hg19/snpAll.bed /scratch/data/hg19/chrom.sizes -type=bed9+ -tab -as=$SRC/bed4Note.as snpediaAll.hg19.bb -extraIndex=name
 
 bedSort build/hg38/snpAll.bed build/hg38/snpAll.bed 
-bedToBigBed build/hg38/snpAll.bed /scratch/data/hg38/chrom.sizes -type=bed4+ -tab -as=$SRC/bed4Note.as snpediaAll.hg38.bb -extraIndex=name
+bedToBigBed build/hg38/snpAll.bed /scratch/data/hg38/chrom.sizes -type=bed9+ -tab -as=$SRC/bed4Note.as snpediaAll.hg38.bb -extraIndex=name
 
 ln -s `pwd`/snpediaAll.hg19.bb /gbdb/hg19/bbi/snpediaAll.bb
 ln -s `pwd`/snpediaAll.hg38.bb /gbdb/hg38/bbi/snpediaAll.bb
+
+hgsql hgFixed -e "insert into trackVersion values (NULL, 'hg38', 'snpedia', 'max', 'Downloaded April 15, 2017, using dbSNP 150', now(), 'manual run', 'snpedia website', '');"
+hgsql hgFixed -e "insert into trackVersion values (NULL, 'hg19', 'snpedia', 'max', 'Downloaded April 15, 2017, using dbSNP 150', now(), 'manual run', 'snpedia website', '');"

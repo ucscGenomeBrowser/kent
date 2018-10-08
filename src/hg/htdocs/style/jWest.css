@@ -1,5 +1,5 @@
 /* Jeff West's graphic design for new gateway page, see
- * http://redmine.cse.ucsc.edu/attachments/download/1727/FINAL_ART_GenomeBrowser.jpg,
+ * http://redmine.soe.ucsc.edu/attachments/download/1727/FINAL_ART_GenomeBrowser.jpg,
  * with a few tweaks (e.g. sprites). */
 
 body {
@@ -35,19 +35,6 @@ a.jwAnchor, a.jwAnchor:link, a.jwAnchor:visited,
     color: #003a72;
     font-weight: bold;
     text-decoration: none;
-}
-
-.ui-autocomplete-category {
-    /* Adapted from https://jqueryui.com/autocomplete/#categories */
-    font-weight: bold;
-    line-height: 1.5;
-    background: lightgray;
-}
-
-.ui-menu-item {
-    /* This is necessary if a background color is specified in .ui-autocomplete-category above;
-     * the category labels actually extend upwards, behind the preceding items! */
-    background: white;
 }
 
 div.jwBanner {

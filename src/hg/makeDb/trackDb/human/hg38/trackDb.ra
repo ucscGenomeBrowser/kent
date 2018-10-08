@@ -335,7 +335,7 @@ visibility hide
 shortLabel Big Alt Map
 longLabel Big GRCh38 Alignments to the Alternate Sequences/Haplotypes
 type bigPsl
-bigDataUrl http://hgwdev.cse.ucsc.edu/~braney/altSeqLiftOverPsl.bb
+bigDataUrl http://hgwdev.soe.ucsc.edu/~braney/altSeqLiftOverPsl.bb
 html altSequence
 indelDoubleInsert on
 indelQueryInsert on
@@ -406,7 +406,7 @@ xrefQuery select ucscRetroInfo8.name, hgFixed.refLink.name from %s where hgFixed
 searchPriority 3.52
 
 track mrnaBig
-bigDataUrl http://hgwdev.cse.ucsc.edu/~braney/bigMrna.bb
+bigDataUrl http://hgwdev.soe.ucsc.edu/~braney/bigMrna.bb
 shortLabel Big $Organism mRNAs
 longLabel Big $Organism mRNAs from GenBank 
 group x

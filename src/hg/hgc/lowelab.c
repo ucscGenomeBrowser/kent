@@ -854,13 +854,13 @@ if (list != NULL)
     printf("<TABLE><TR>");
     printf("<TD>");
     modBaseAnchor(spAcc);
-    printf("\n<IMG SRC=\"https://modbase.compbio.ucsf.edu/modbase-cgi/image/modbase.jpg?database_id=%s\"></A></TD>", spAcc);
+    printf("\n<IMG SRC=\"http://salilab.org/modbaseimages/image/modbase.jpg?database_id=%s\"></A></TD>", spAcc);
     printf("<TD>");
     modBaseAnchor(spAcc);
-    printf("\n<IMG SRC=\"https://modbase.compbio.ucsf.edu/modbase-cgi/image/modbase.jpg?database_id=%s&axis=x&degree=90\"></A></TD>", spAcc);
+    printf("\n<IMG SRC=\"http://salilab.org/modbaseimages/image/modbase.jpg?database_id=%s&axis=x&degree=90\"></A></TD>", spAcc);
     printf("<TD>");
     modBaseAnchor(spAcc);
-    printf("\n<IMG SRC=\"https://modbase.compbio.ucsf.edu/modbase-cgi/image/modbase.jpg?database_id=%s&axis=y&degree=90\"></A></TD>", spAcc);
+    printf("\n<IMG SRC=\"http://salilab.org/modbaseimages/image/modbase.jpg?database_id=%s&axis=y&degree=90\"></A></TD>", spAcc);
     printf("</TR><TR>\n");
     printf("<TD ALIGN=CENTER>Front</TD>");
     printf("<TD ALIGN=CENTER>Top</TD>");
@@ -3249,19 +3249,19 @@ void doPrimers(struct trackDb *tdb, char *primerName)
 
 void doWiki(char *track, struct trackDb *tdb, char *itemName)
 {
-  char strand[2];
+  //char strand[2];
 
   printf("<HEAD>%s", getCspMetaHeader());
 
   if(startsWith("Make", itemName))
   {
-    strand[0] = itemName[strlen(itemName)-1];
-    strand[1] = 0;
-    printf("<META HTTP-EQUIV=\"REFRESH\" content=\"0; URL=http://lowelabwiki.cse.ucsc.edu/index.php/BED:%s:%s:%d-%d:%s\"</META>", database, seqName, winStart, winEnd, strand);
+    //strand[0] = itemName[strlen(itemName)-1];
+    //strand[1] = 0;
+    /*printf("<META HTTP-EQUIV=\"REFRESH\" content=\"0; URL=http://lowelabwiki.soe.ucsc.edu/index.php/BED:%s:%s:%d-%d:%s\"</META>", database, seqName, winStart, winEnd, strand);*/
   }
   else
   {
-    printf("<META HTTP-EQUIV=\"REFRESH\" content=\"0; URL=http://lowelabwiki.cse.ucsc.edu/index.php/BED:%s:%s:%s\"</META>", database, seqName, itemName);
+    /*printf("<META HTTP-EQUIV=\"REFRESH\" content=\"0; URL=http://lowelabwiki.soe.ucsc.edu/index.php/BED:%s:%s:%s\"</META>", database, seqName, itemName);*/
   }
 
   printf("</HEAD>");
@@ -3451,7 +3451,6 @@ void doloweOrthologs(struct trackDb *tdb, char *itemName)
     {
         infoload = bedLoadN(row+rowOffset, bedSize);
     printf("<B>Name:</B> %s\n", infoload->name);
-    printf(" <A HREF=\"http://archdev-holmes.cse.ucsc.edu/cgi-bin/hgFrame?track=loweOrthologs&refseq=1&db=%s&name=%s\">List of Orthologs</A><BR>",database,infoload->name);
     printf("<B>Position:</B> "
                  "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
                  hgTracksPathAndSettings(), database, infoload->chrom, infoload->chromStart + 1, infoload->chromEnd);
@@ -3562,14 +3561,8 @@ void domegablastInfo(struct trackDb *tdb, char *itemName)
     printf(" Link to NCBI Site</A> <BR>\n");
     printf("<B>Description:</B> %s<BR>\n", infoload->fullname);
     printf("<B>E-value:</B> %0.0e", infoload->evalue);
-    #ifdef LISTUI
-    printf(" <A HREF=\"http://archdev-holmes.cse.ucsc.edu/cgi-bin/hgList?track=megablastInfo&order=evalue&db=%s\">Sort by E-value</A>",database);
-    #endif
     printf("<BR>\n");
     printf("<B>Protein Identity:</B> %u%%\n", infoload->percentident);
-    #ifdef LISTUI
-    printf(" <A HREF=\"http://archdev-holmes.cse.ucsc.edu/cgi-bin/hgList?track=megablastInfo&order=percentident&db=%s\">Sort by Percent Identity</A>",database);
-    #endif
     printf("<BR>\n");
           printf("<B>Position:</B> "
                  "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",

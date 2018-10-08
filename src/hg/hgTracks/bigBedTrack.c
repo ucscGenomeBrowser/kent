@@ -25,6 +25,7 @@
 #include "net.h"
 #include "bigPsl.h"
 #include "bigBedFilter.h"
+#include "bigBedLabel.h"
 
 struct bigBedFilter *bigBedMakeNumberFilter(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *filter, char *defaultLimits,  char *field)
 /* Make a filter on this column if the trackDb or cart wants us to. */
@@ -136,10 +137,23 @@ struct bigBedFilter *filter;
 char *setting = trackDbSettingClosestToHome(tdb, filterName);
 char *value = cartUsualStringClosestToHome(cart, tdb, FALSE, filterName, setting);
 
+char filterType[4096];
+safef(filterType, sizeof filterType, "%s%s", field, FILTER_TYPE_NAME);
+char *typeValue = cartOrTdbString(cart, tdb, filterType, FILTERTEXT_WILDCARD);
+
 AllocVar(filter);
 filter->fieldNum =  bbExtraFieldIndex(bbi, field) + 3;
-filter->comparisonType = COMPARE_REGEXP;
-regcomp(&filter->regEx, value, REG_NOSUB);
+
+if (sameString(typeValue, FILTERTEXT_REGEXP) )
+    {
+    filter->comparisonType = COMPARE_REGEXP;
+    regcomp(&filter->regEx, value, REG_NOSUB);
+    }
+else
+    {
+    filter->comparisonType = COMPARE_WILDCARD;
+    filter->wildCardString = cloneString(value);
+    }
 
 return filter;
 }
@@ -148,11 +162,20 @@ struct bigBedFilter *bigBedMakeFilterBy(struct cart *cart, struct bbiFile *bbi, 
 /* Add a bigBed filter using a trackDb filterBy statement. */
 {
 struct bigBedFilter *filter;
+char filterType[4096];
+safef(filterType, sizeof filterType, "%s%s", field, FILTER_TYPE_NAME);
+char *setting = cartOrTdbString(cart, tdb, filterType, NULL);
 
 AllocVar(filter);
 filter->fieldNum =  bbExtraFieldIndex(bbi, field) + 3;
-filter->comparisonType = COMPARE_HASH;
+if (setting && (sameString(setting, FILTERBY_SINGLE_LIST) || sameString(setting, FILTERBY_MULTIPLE_LIST_OR)))
+    filter->comparisonType = COMPARE_HASH_LIST_OR;
+else if (setting && sameString(setting, FILTERBY_MULTIPLE_LIST_AND))
+    filter->comparisonType = COMPARE_HASH_LIST_AND;
+else
+    filter->comparisonType = COMPARE_HASH;
 filter->valueHash = newHash(5);
+filter->numValuesInHash = slCount(choices);
 
 for(; choices; choices = choices->next)
     hashStore(filter->valueHash, choices->name);
@@ -164,22 +187,22 @@ struct bigBedFilter *bigBedBuildFilters(struct cart *cart, struct bbiFile *bbi, 
 /* Build all the numeric and filterBy filters for a bigBed */
 {
 struct bigBedFilter *filters = NULL, *filter;
-struct slName *filterSettings = trackDbSettingsWildMatch(tdb, "*Filter");
+struct slName *filterSettings = trackDbSettingsWildMatch(tdb, FILTER_NUMBER_WILDCARD);
 
 for(; filterSettings; filterSettings = filterSettings->next)
     {
     char *fieldName = cloneString(filterSettings->name);
-    fieldName[strlen(fieldName) - sizeof "Filter" + 1] = 0;
+    fieldName[strlen(fieldName) - sizeof FILTER_NUMBER_NAME + 1] = 0;
     if ((filter = bigBedMakeNumberFilter(cart, bbi, tdb, filterSettings->name, NULL, fieldName)) != NULL)
         slAddHead(&filters, filter);
     }
 
-filterSettings = trackDbSettingsWildMatch(tdb, "*FilterText");
+filterSettings = trackDbSettingsWildMatch(tdb, FILTER_TEXT_WILDCARD);
 
 for(; filterSettings; filterSettings = filterSettings->next)
     {
     char *fieldName = cloneString(filterSettings->name);
-    fieldName[strlen(fieldName) - sizeof "FilterText" + 1] = 0;
+    fieldName[strlen(fieldName) - sizeof FILTER_TEXT_NAME + 1] = 0;
     if ((filter = bigBedMakeFilterText(cart, bbi, tdb, filterSettings->name,  fieldName)) != NULL)
         slAddHead(&filters, filter);
     }
@@ -209,10 +232,38 @@ for(filter = filters; filter; filter = filter->next)
 
     switch(filter->comparisonType)
         {
+        case COMPARE_WILDCARD:
+            if ( !wildMatch(filter->wildCardString, bedRow[filter->fieldNum]))
+                return FALSE;
+            break;
         case COMPARE_REGEXP:
             if (regexec(&filter->regEx,bedRow[filter->fieldNum], 0, NULL,0 ) != 0)
                 return FALSE;
             break;
+        case COMPARE_HASH_LIST_AND:
+        case COMPARE_HASH_LIST_OR:
+            {
+            struct slName *values = commaSepToSlNames(bedRow[filter->fieldNum]);
+            unsigned found = 0;
+            for(; values; values = values->next)
+                {
+                if (hashLookup(filter->valueHash, values->name))
+                    {
+                    found++;
+                    if (filter->comparisonType == COMPARE_HASH_LIST_OR) 
+                        break;
+                    }
+                }
+            if (filter->comparisonType == COMPARE_HASH_LIST_AND) 
+                {
+                if (found < filter->numValuesInHash)
+                    return FALSE;
+                }
+            else if (!found)
+                return FALSE;
+            }
+            break;
+
         case COMPARE_HASH:
             if (!hashLookup(filter->valueHash, bedRow[filter->fieldNum]))
                 return FALSE;
@@ -332,44 +383,6 @@ return field;
 }
 
 
-char *makeLabel(struct track *track,  struct bigBedInterval *bb)
-// Build a label for a bigBedTrack from the requested label fields.
-{
-char *labelSeparator = stripEnclosingDoubleQuotes(trackDbSettingClosestToHome(track->tdb, "labelSeparator"));
-if (labelSeparator == NULL)
-    labelSeparator = "/";
-char *restFields[256];
-if (bb->rest != NULL)
-    chopTabs(cloneString(bb->rest), restFields);
-struct dyString *dy = newDyString(128);
-boolean firstTime = TRUE;
-struct slInt *labelInt = track->labelColumns;
-for(; labelInt; labelInt = labelInt->next)
-    {
-    if (!firstTime)
-        dyStringAppend(dy, labelSeparator);
-
-    switch(labelInt->val)
-        {
-        case 0:
-            dyStringAppend(dy, chromName);
-            break;
-        case 1:
-            dyStringPrintf(dy, "%d", bb->start);
-            break;
-        case 2:
-            dyStringPrintf(dy, "%d", bb->end);
-            break;
-        default:
-            assert(bb->rest != NULL);
-            dyStringPrintf(dy, "%s", restFields[labelInt->val - 3]);
-            break;
-        }
-    firstTime = FALSE;
-    }
-return dyStringCannibalize(&dy);
-}
-
 void bigBedAddLinkedFeaturesFromExt(struct track *track,
 	char *chrom, int start, int end, int scoreMin, int scoreMax, boolean useItemRgb,
 	int fieldCount, struct linkedFeatures **pLfList, int maxItems)
@@ -432,7 +445,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     if (lf == NULL)
         continue;
 
-    lf->label = makeLabel(track,  bb);
+    lf->label = bigBedMakeLabel(track->tdb, track->labelColumns,  bb, chromName);
     if (sameString(track->tdb->type, "bigGenePred") || startsWith("genePred", track->tdb->type))
         {
         lf->original = genePredFromBigGenePred(chromName, bb); 

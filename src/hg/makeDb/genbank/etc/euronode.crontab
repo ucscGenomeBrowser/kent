@@ -3,7 +3,7 @@
 #
 
 SHELL=/bin/sh
-MAILTO=genbank@cse.ucsc.edu
+MAILTO=genbank@soe.ucsc.edu
 PATH=/usr/local/bin:/usr/bin:/bin
 
 # poll every hour at 20 minutes after
