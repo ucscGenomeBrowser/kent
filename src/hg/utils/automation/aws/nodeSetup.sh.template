@@ -1,0 +1,126 @@
+#!/bin/bash
+
+# on AWS and OpenStack, This script ends up in:
+#       /var/lib/cloud/instance/scripts/part-001
+# running as the 'root' user and is run during first start up of the machine
+# This script attempts to keep its own log file.  If anything leaks out from
+#   here, it will end up in:
+#    /var/log/cloud-init-output.log
+
+# start a log file to record information from the operation of this script:
+export logFile="/tmp/startUpScript.log.$$"
+
+# record environment to find out the operating conditions of this script
+
+printf "#### begin start up script log %s\n" "`date '+%s %F %T'`" > "${logFile}"
+printf "#### uname -a\n" >> "${logFile}"
+uname -a >> "${logFile}" 2>&1
+## printf "#### df -h\n" >> "${logFile}"
+## df -h >> "${logFile}" 2>&1
+printf "#### env\n" >> "${logFile}"
+env >> "${logFile}" 2>&1
+printf "#### set\n" >> "${logFile}"
+set >> "${logFile}" 2>&1
+printf "#### arp -a\n" >> "${logFile}"
+arp -a >> "${logFile}" 2>&1
+printf "#### ifconfig -a\n" >> "${logFile}"
+ifconfig -a >> "${logFile}" 2>&1
+printf "#### PATH\n" >> "${logFile}"
+printf "${PATH}\n" >> "${logFile}" 2>&1
+
+export homeDir="notFound"
+export nativeUser="notFound"
+
+# determine OpenStack or AWS environment
+if [ -d "/home/centos" ]; then
+  nativeUser="centos"
+elif [ -d "/home/ec2-user" ]; then
+  nativeUser="ec2-user"
+fi
+homeDir="/home/$nativeUser"
+
+if [ -s "${homeDir}/.bashrc" ]; then
+  export startTime=`date "+%s"`
+  printf "## parasol node machine started install %s\n" "`date '+%s %F %T'`" >> /etc/motd
+  # directories and symlinks to make this machine appear very much as it
+  # would in the U.C. Santa Cruz Genome browser development environment
+  mkdir -p /data ${homeDir}/bin /hive /cluster/bin /scratch /genomes
+  chmod 777 /data /scratch /hive /cluster /cluster/bin /genomes
+  chmod 755 ${homeDir}/bin
+  chmod 755 ${homeDir}
+  ln -s /data/bedtools /cluster/bin/bedtools
+  ln -s /data /hive/data
+  ln -s /dev/shm /scratch/tmp
+  chown -R ${nativeUser}:${nativeUser} /data ${homeDir}/bin /genomes
+  # these additions to .bashrc should protect themselves from repeating
+  printf "export PATH=/data/bin:/data/bin/blat:${homeDir}/bin:\$PATH\n" >> "${homeDir}/.bashrc"
+  printf "export LANG=C\n" >> "${homeDir}/.bashrc"
+  printf "alias og='ls -ogrt'\n" >> "${homeDir}/.bashrc"
+  printf "alias plb='parasol list batches'\n" >> "${homeDir}/.bashrc"
+  printf "alias vi='vim'\n" >> "${homeDir}/.bashrc"
+  printf "set -o vi\n" >> "${homeDir}/.bashrc"
+  printf "set background=dark\n" >> "${homeDir}/.vimrc"
+  printf "#### before yum install %s\n" "`date '+%s %F %T'`" >> "${logFile}"
+  # useful to have the 'host' command, 'traceroute' and nmap ('nc')
+  # to investigate the network, and wget for fetching, tcsh for csh shell
+  #  bc for math calcs, perl-core installs 112 packages, vim for editing
+  # convenience
+  yum -y update >> "${logFile}" 2>&1
+  yum repolist >> "${logFile}" 2>&1
+  yum -y install bind-utils traceroute nmap-ncat wget tcsh perl-core vim-X11 vim-common vim-enhanced vim-minimal bc >> "${logFile}" 2>&1
+  yum -y install epel-release >> "${logFile}" 2>&1
+  # this python business allows the crispr calculation pipeline to function
+  yum -y install python-pip gcc gcc-c++ zlib-devel python-devel tkinter libpng12 >> "${logFile}" 2>&1
+  pip install --ignore-installed pytabix pandas twobitreader scipy matplotlib numpy >> "${logFile}" 2>&1
+  pip install scikit-learn==0.16.1 Biopython xlwt >> "${logFile}" 2>&1
+  printf "#### after yum install %s\n" "`date '+%s %F %T'`" >> "${logFile}"
+
+  export privateIp=`ifconfig -a | grep broadcast | head -1 | awk '{print $2}'`
+
+  # special case OpenStack /mnt setups (temporary work around for difficulties)
+  if [ "${nativeUser}" = "centos" ]; then
+    umount /mnt >> "${logFile}" 2>&1
+    parted -s /dev/vdb mklabel gpt >> "${logFile}" 2>&1
+    parted -s /dev/vdb mkpart primary 2048s 100% >> "${logFile}" 2>&1
+    mkfs -t xfs /dev/vdb1 >> "${logFile}" 2>&1
+    sed --in-place=.bak -e 's#/dev/vdb#/dev/vdb1#; s/auto/xfs/;' /etc/fstab >> "${logFile}" 2>&1
+    mount /mnt
+  fi
+
+  # this P A R A H U B will be sed changed to have the IP address of
+  # the parasol hub machine
+  if [ "${nativeUser}" = "centos" ]; then
+    printf "PARAHUB:/mnt/data /data nfs4 auto 0 0\n" >> /etc/fstab
+    mount /data >> "${logFile}" 2>&1
+#    mount -t nfs PARAHUB:/mnt/data /data >> "${logFile}" 2>&1
+  else
+    printf "PARAHUB:/data /data nfs4 auto 0 0\n" >> /etc/fstab
+    printf "PARAHUB:/genomes /genomes nfs4 auto 0 0\n" >> /etc/fstab
+    mount /data >> "${logFile}" 2>&1
+    mount /genomes >> "${logFile}" 2>&1
+  fi
+  # wait for NFS to work
+  sleep 15
+  # parasol uses the full exact path when running jobs on /data/genomes/...
+  # therefore must have the /mnt/data/ patch existing too
+  if [ "${nativeUser}" = "centos" ]; then
+    ln -s /data /mnt/data
+  fi
+  # wake up NFS, ensure the files are here
+  touch /data/parasol/nodeInfo >> "${logFile}" 2>&1
+  # and wake it up again in a different way:
+  stat /data/parasol/nodeInfo/id_rsa >> "${logFile}" 2>&1
+  cat /data/parasol/nodeInfo/id_rsa.pub > "${homeDir}/.ssh/id_rsa.pub"
+  # adding id_rsa.pub to authorized_keys will allow all machines in this
+  # parasol system to ssh to each other without prompts, including localhost
+  cat "${homeDir}/.ssh/id_rsa.pub" >> "${homeDir}/.ssh/authorized_keys"
+  chmod 644 "${homeDir}/.ssh/id_rsa.pub"
+  chown -R ${nativeUser}:${nativeUser} "${homeDir}/.ssh" "${homeDir}/.vimrc"
+  export endTime=`date "+%s"`
+  export et=`echo $endTime $startTime | awk '{printf "%d", $1-$2}'`
+  printf "## parasol node machine finished install %s\n" "`date '+%s %F %T'`" >> /etc/motd
+  printf "## elapsed time: %d seconds\n" "${et}" >> /etc/motd
+  printf "## elapsed time: %d seconds\n## %s\n" "${et}" "`date '+%s %F %T'`" >> /tmp/node.machine.ready.signal
+  printf "## this parasol node privateIp: %s\n" "${privateIp}" >> /tmp/node.machine.ready.signal
+fi
+printf "#### end start up script log %s\n" "`date '+%s %F %T'`" >> "${logFile}"
