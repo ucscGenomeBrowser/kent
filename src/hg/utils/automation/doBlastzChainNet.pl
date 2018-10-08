@@ -1079,9 +1079,14 @@ sub loadUp {
       "($tDb.$qDb.net[.gz] exists).  Either run with -continue download, " .
 	"or move aside/remove $runDir/$tDb.$qDb.net[.gz] and run again.\n";
   }
-  # Make sure previous stage was successful.
+  # Make sure previous stage was successful.  Depends upon what was done:
+  my $otherCheck = "$buildDir/mafNet";
+  if ($opt_trackHub) {
+     $otherCheck = "$buildDir/bigMaf";
+     &HgAutomate::nfsNoodge("$otherCheck/$tDb.$qDb.net.maf");
+  }
   my $successDir = $isSelf ? "$runDir/$tDb.$qDb.all.chain.gz" :
-                             "$buildDir/mafNet/";
+                             "$otherCheck";
   if (! -e $successDir && ! $opt_debug) {
     die "loadUp: looks like previous stage was not successful " .
       "(can't find $successDir).\n";
