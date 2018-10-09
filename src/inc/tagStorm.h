@@ -64,7 +64,6 @@ struct tagStanza
     int startLineIx;		/* Starting line number for stanza, for error reporting */
     };
 
-
 /** Read and write tag storms from/to files. */
 
 struct tagStorm *tagStormFromFile(char *fileName);
@@ -125,8 +124,6 @@ struct tagStanza *tagStanzaNew(struct tagStorm *tagStorm, struct tagStanza *pare
  * or to tagStorm->forest if parent is NULL. */
 
 struct tagStanza *tagStanzaNewAtEnd(struct tagStorm *tagStorm, struct tagStanza *parent);
-/* Create a new, empty stanza that is added as to head of child list of parent,
- * or to tagStorm->forest if parent is NULL. */
 /* Create new empty stanza that is added at tail of child list of parent */
 
 struct slPair *tagStanzaAdd(struct tagStorm *tagStorm, struct tagStanza *stanza, 
@@ -171,8 +168,14 @@ void tagStormAlphaSort(struct tagStorm *tagStorm);
 void tagStormOrderSort(struct tagStorm *tagStorm, char **orderFields, int orderCount);
 /* Sort tags in stanza to be in same order as orderFields input  which is orderCount long */
 
+void tagStormDeleteTags(struct tagStorm *tagStorm, char *tagName);
+/* Delete all tags of given name from tagStorm */
+
 struct slPair *tagStanzaDeleteTagsInHash(struct tagStanza *stanza, struct hash *weedHash);
 /* Delete any tags in stanza that have names that match hash. Return list of removed tags. */
+
+void tagStormSubTags(struct tagStorm *tagStorm, char *oldName, char *newName);
+/* Rename all tags with oldName to newName */
 
 void tagStanzaSubTagsInHash(struct tagStanza *stanza, struct hash *valHash);
 /* Substitute tags that are keys in valHash with the values in valHash */
@@ -189,6 +192,8 @@ void tagStanzaRecursiveSubTags(struct tagStanza *list, struct hash *subHash);
 void tagStormSubArray(struct tagStorm *tagStorm, char *subs[][2], int subCount);
 /* Substitute all tag names with substitutions from subs array */
 
+void tagStormCopyTags(struct tagStorm *tagStorm, char *oldTag, char *newTag);
+/* Make a newTag that has same value as oldTag every place oldTag occurs */
 
 /** Information about a tag storm */
 
