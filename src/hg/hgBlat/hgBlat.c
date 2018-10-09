@@ -1599,7 +1599,10 @@ printf("%s",
 "and shows the best region found.\n"
 "It makes quick approximate alignments based only on the raw hits,\n"
 "which are a perfectly matching short sub-sequence of a fixed size: \n"
-" 11 for DNA and 4 for protein.\n"
+"11 for DNA and 4 for protein. \n"
+"The entire alignment, including mismatches and gaps, must score 20 \n"
+"or higher in order to appear in the BLAT output.\n"
+"Having only 2 hits is quite low, and will often yield no BLAT results.\n"
 "Click the link to see the full BLAT output for that organism.\n</P>\n");
 
 if (hgPcrOk(db))
