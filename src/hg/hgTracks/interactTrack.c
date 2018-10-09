@@ -246,6 +246,28 @@ tInfo->otherHeight = (tInfo->otherCount) ? 3 * tInfo->fontHeight : 0;
 tInfo->sameHeight = (tInfo->sameCount) ? tg->height - tInfo->otherHeight : 0;
 }
 
+static int interactRightPixels(struct track *tg, void *item)
+/* Return number of pixels we need to the right. */
+{
+struct interact *inter = item;
+struct interactTrackInfo *tInfo = tg->customPt;
+if ((tg->visibility == tvPack || tg->visibility == tvFull) && !tInfo->clusterMode)
+    {
+    char *rightLabel = "";
+    if (tInfo->isDirectional)
+        {
+        if (inter->targetStart == inter->chromStart)
+            rightLabel = inter->sourceName;
+        if (inter->targetEnd == inter->chromEnd)
+            rightLabel = inter->targetName;
+        }
+    else
+        rightLabel = inter->targetName;
+    return mgFontStringWidth(tl.font, rightLabel);
+    }
+return 0;
+}
+
 void interactLoadItems(struct track *tg)
 /* Load interact items in interact format */
 {
@@ -726,9 +748,9 @@ if (tg->visibility == tvDense)
                 // can't distinguish overlapping colors, so force to gray
     }
 linkedFeaturesDrawAt(tg, item, hvg, xOff, y, scale, font, color, vis);
-struct interactTrackInfo *tInfo = tg->customPt;
 
-// draw overlapping items in white
+// draw overlapping items in white and add right label
+struct interactTrackInfo *tInfo = tg->customPt;
 if (tInfo->clusterMode)
     {
     struct simpleFeature *sf;
@@ -748,6 +770,15 @@ else
     if (sf2 && sf2->start < sf1->end)
         {
         drawScaledBox(hvg, sf2->start, sf2->end, scale, xOff, y, tg->heightPer, MG_WHITE);
+        }
+    else
+        {
+        // right label
+        int x2 = round((double)((int)lf->end - winStart) * scale) + xOff;
+        int x = x2 + tl.mWidth/2;
+        char *label = "foo";
+        int w = mgFontStringWidth(font, label);
+        hvGfxTextCentered(hvg, x, y, w, tg->heightPer, lf->filterColor, font, label);
         }
     }
 }
@@ -774,6 +805,7 @@ void interactMethods(struct track *tg)
 tg->bedSize = 12;
 linkedFeaturesMethods(tg);         // for most vis and mode settings
 tg->loadItems = interactLoadItems;
+tg->itemRightPixels = interactRightPixels;
 tg->drawItems = interactDrawItems;
 }
 
