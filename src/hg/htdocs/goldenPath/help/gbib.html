@@ -264,6 +264,12 @@ For example, if you knew you wanted all the GENCODE tracks on hg19 you could run
 It would rsync all of the files at the UCSC hgdownload server in the hg19 assembly that start with
 wgEncodeGencode to your GBiB into the hg19 directory. There are some supporting files in a hgFixed
 directory, such as for the publication tracks, that could be mirrored with such commands.</p>
+<p>
+You can also download gbdb files in this manner.
+<ul>
+<code>sudo rsync hgdownload.soe.ucsc.edu::gbdb/hg19/multiz100way/phyloP100way.wib /data/gbdb/hg19/multiz100way/.</code>
+</ul>
+<p>The above command would copy the phyloP100way track to display in the GBiB from a local file.</p>
 
 <h3>Offline mode</h3>
 <p>
