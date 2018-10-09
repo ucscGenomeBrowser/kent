@@ -1,33 +1,6 @@
 input.form-control { width: 300px; }
 textarea.form-control { width: 500px; height: 200px;}
 
-/* Label colors */
-/* This will be retired soon in favor of generic background coloring classes below */
-.label-cescg
-{
-    background-color: #FF8C00 /* orange */
-}
-
-.label-access
-{
-    background-color: #4682B4 /* gray blue */
-}
-
-.label-files
-{
-    background-color: #C71585 /* magenta */
-}
-
-.label-projects
-{
-    background-color: #1E90FF /* smurf blue */
-}
-
-.label-tools
-{
-    background-color: #5cb85c /* lime green */
-}
-
 /* Generic background coloring */
 .back-orange
 {
@@ -64,35 +37,53 @@ textarea.form-control { width: 500px; height: 200px;}
     /* light gray */
     background-color: #aaaaaa
 }
+.back-dark-red
+{
+    /* dark red */
+    background-color: #ff3333
+}
 
 /* Generic text coloring */
 .text-pink
 {
-/*formerly .singlecell*/
+    /*formerly .singlecell*/
     color: #ed217c;
 }
 .text-light-blue
 {
-/*formerly .transcriptome*/
+    /*formerly .transcriptome*/
     color: #1E90FF;
 }
 .text-dark-pink
 {
-/*formerly .genome*/
+    /*formerly .genome*/
     color: #C71585;
 }
 .text-light-green
 {
-/*formerly .epigenome*/
+    /*formerly .epigenome*/
     color: #5cb85c;
 }
 .text-orange
 {
-/*formerly .otherome*/
+    /*formerly .otherome*/
     color: #FF8C00;
+}
+.text-dark-blue
+{
+    /* gray blue */
+    color: #4682B4
 }
 
 /* Styling for parts of page body */
+.cirm-banner
+{
+    width: 100%;
+    background-color: #4682B4;
+    height: 20px;
+
+}
+
 .cirm-page-title
 {
     padding-left: 5px;
@@ -124,6 +115,45 @@ textarea.form-control { width: 500px; height: 200px;}
     margin: 0% 5%;
     background-color: #eaeaea;
 }
+
+/* Styling for secure site banner */
+.securesite-banner
+{
+    width: 100%;
+    background-color: #ff3333;
+    height: 26px;
+}
+
+.securesite-text
+{
+    color:#ffb3b3;
+    width: 95%;
+    text-align: right;
+    font-size: 1.3em;
+}
+
+.securesite:hover
+{
+    color: #ff3333;
+    text-decoration: none !important;
+    background-color: #ffb3b3;
+}
+
+.securesite:active
+{
+    color: #ff3333;
+    text-decoration: none !important;
+    background-color: #ffb3b3;
+}
+
+.securesite:link,
+.securesite:visited
+{
+    color: #ffffff !important;
+    text-decoration: underline;
+    background-color: none;
+}
+
 
 /* Styling for text + links */
 .a-unstyled,
