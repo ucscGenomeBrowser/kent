@@ -170,9 +170,7 @@ char *header = udcReadLine(f);
 int wordCt = sampleCt+1;        // initial field is label or empty 
 char **samples;
 AllocArray(samples, wordCt);
-int gotSampleCt = chopByWhite(header, samples, wordCt);
-if (gotSampleCt!=wordCt)
-    warn("Expected %d columns in matrix based on categories file, but got %d", wordCt, gotSampleCt);
+chopByWhite(header, samples, wordCt);
 
 // Get data values
 // Format: id, category, extras
@@ -190,9 +188,7 @@ if (count != size)
 char **vals;
 AllocArray(vals, wordCt);
 buf[size]=0; // in case that size does not include the trailing newline
-int gotWordCt = chopByWhite(buf, vals, wordCt);
-if (gotWordCt != wordCt)
-    warn("Matrix format error: expected %d words, but got %d. File %s, on line for gene %s, at offset %llu, with line lenght %llu", wordCt, gotWordCt, dataFile, bed->name, offset, size);
+chopByWhite(buf, vals, wordCt);
 
 udcFileClose(&f);
 

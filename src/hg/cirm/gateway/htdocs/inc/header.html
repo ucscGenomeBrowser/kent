@@ -37,7 +37,17 @@
   </script>
 
   <body>
-    <div style="width: 100%; background-color: #4682B4; height: 20px"></div>
+    <!--#if expr='("$SERVER_NAME" = /cirmdcm.soe.ucsc.edu/ || "$SERVER_NAME" = /cirm-01*/)'-->
+
+    <div class="securesite-banner">
+      <div class="securesite-text">
+        This is the secute site for labs to access pre-publication data. Public CIRM CESCG data
+        may be accessed at <a class=securesite" href="https://cirm.ucsc.edu"</a>https://cirm.ucsc.edu</a>.
+      </div>
+    </div>
+    <!--#else -->
+    <div class="cirm-banner"></div>
+    <!--#endif -->
     <div class="container container-fluid container-table" style="width: 90%">
       <div class="row">
         <a href="/index"><img src="<!--#echo var="ROOT" -->/images/cirmSChubLogo.png" class="img-responsive"
