@@ -143,7 +143,7 @@ struct shortcut shortcuts[] =
    {"assay.single_cell.barcode", "single_cell.barcode"},
    {"assay.rna", "rna"},
    {"assay.seq", "seq"},
-   {"assay.seq.barcode", "seq.barcode"},
+   {"assay.seq.umi_barcode", "seq.umi_barcode"},
 };
 
 char *sampleSubtypePrefixes[] = 
@@ -419,32 +419,6 @@ for (i=0; i<table->fieldCount; ++i)
 }
 
 
-struct copyTagContext
-/* Information for recursive tagStorm traversing function copyToNewTag*/
-    {
-    char *oldTag;   // Existing tag name
-    char *newTag;   // New tag name
-    };
-
-void copyToNewTag(struct tagStorm *storm, struct tagStanza *stanza, void *context)
-/* Add fields from stanza to list of converts in context */
-{
-struct copyTagContext *copyContext = context;
-char *val = tagFindLocalVal(stanza, copyContext->oldTag);
-if (val)
-    tagStanzaAdd(storm, stanza, copyContext->newTag, val);
-}
-
-void tagStormCopyTags(struct tagStorm *tagStorm, char *oldTag, char *newTag)
-/* Make a newTag that has same value as oldTag every place oldTag occurs */
-{
-struct copyTagContext copyContext; 
-copyContext.oldTag = oldTag;
-copyContext.newTag = newTag;
-tagStormTraverse(tagStorm, tagStorm->forest, &copyContext, copyToNewTag);
-}
-
-
 void oneRowTableSideways(struct fieldedTable *table, char *path)
 /* Write out a table of a single row as a two column table with label/value */
 {
@@ -612,34 +586,29 @@ for (i=0; i<table->fieldCount; ++i)
 fprintf(f, "\n");
        
 /* Now loop through the rows... */
-struct dyString *csvScratch = dyStringNew(0);
 struct fieldedRow *fr;
 for (fr = table->rowList; fr != NULL; fr = fr->next)
     {
     char **row = fr->row;
     char *files = row[filesIx];
     struct slName *urlList = csvParse(files);
-    char *fileUrl;
-    while ((fileUrl = csvParseNext(&files, csvScratch)) != NULL)
+    struct slName *url;
+    for (url = urlList; url != NULL; url = url->next)
 	{
-	struct slName *url;
-	for (url = urlList; url != NULL; url = url->next)
+	char baseName[FILENAME_LEN], ext[FILEEXT_LEN];
+	splitPath(url->name, NULL, baseName, ext);
+	fprintf(f, "%s%s\tfastq.gz\t", baseName, ext);
+	int lane = laneFromFileName(baseName);
+	if (lane > 0)
+	    fprintf(f, "%d", lane);
+	int end = endFromFileName(baseName);
+	fprintf(f, "\tr%d", end);
+	for (i=0; i<table->fieldCount; ++i)
 	    {
-	    char baseName[FILENAME_LEN], ext[FILEEXT_LEN];
-	    splitPath(url->name, NULL, baseName, ext);
-	    fprintf(f, "%s%s\tfastq.gz\t", baseName, ext);
-	    int lane = laneFromFileName(baseName);
-	    if (lane > 0)
-		fprintf(f, "%d", lane);
-	    int end = endFromFileName(baseName);
-	    fprintf(f, "\tr%d\t", end);
-	    for (i=0; i<table->fieldCount; ++i)
-		{
-		if (i != filesIx)
-		    fprintf(f, "\t%s", row[i]);
-		}
-	    fprintf(f, "\n");
+	    if (i != filesIx)
+		fprintf(f, "\t%s", row[i]);
 	    }
+	fprintf(f, "\n");
 	}
     slFreeList(urlList);
     }
@@ -712,45 +681,6 @@ dyStringFree(&scratch);
 hashFree(&uniqHash);
 }
 
-static void rDeleteTags(struct tagStanza *stanzaList, char *tagName)
-/* Recursively delete tag from all stanzas */
-{
-struct tagStanza *stanza;
-for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
-    {
-    tagStanzaDeleteTag(stanza, tagName);
-    if (stanza->children)
-	rDeleteTags(stanza->children, tagName);
-    }
-}
-
-void tagStormDeleteTags(struct tagStorm *tagStorm, char *tagName)
-/* Delete all tags of given name from tagStorm */
-{
-rDeleteTags(tagStorm->forest, tagName);
-}
-
-static void rRenameTags(struct tagStanza *stanzaList, char *oldName, char *newName)
-/* Recursively rename tag in all stanzas */
-{
-struct tagStanza *stanza;
-for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
-    {
-    struct slPair *pair = slPairFind(stanza->tagList, oldName);
-    if (pair != NULL)
-        pair->name = newName;
-    if (stanza->children)
-        rRenameTags(stanza->children, oldName, newName);
-    }
-}
-
-void tagStormRenameTags(struct tagStorm *tagStorm, char *oldName, char *newName)
-/* Rename all tags with oldName to newName */
-{
-char *newCopy = lmCloneString(tagStorm->lm, newName);
-rRenameTags(tagStorm->forest, oldName, newCopy);
-}
-
 
 void renameArrayField(struct tagStorm *tags, char *oldPrefix, int maxIndex, char *oldSuffix,
     char *newPrefix, char *newSuffix)
@@ -762,7 +692,7 @@ for (i=1; i<=maxIndex; ++i)
     char oldTag[128], newTag[128];
     safef(oldTag, sizeof(oldTag), "%s%d%s", oldPrefix, i,oldSuffix);
     safef(newTag, sizeof(newTag), "%s%d%s", newPrefix, i, newSuffix);
-    tagStormRenameTags(tags, oldTag, newTag);
+    tagStormSubTags(tags, oldTag, newTag);
     }
 }
 
@@ -805,11 +735,11 @@ a2ssc.arrayName = "sample.donor.disease";
 a2ssc.separator = ",";
 tagStormTraverse(tags, tags->forest, &a2ssc, stanzaArrayToSeparatedString);
 a2ssc.arrayName = "project.experimental_design";
-a2ssc.separator = "||";
+a2ssc.separator = ",";
 stanzaArrayToSeparatedString(tags, tags->forest, &a2ssc);
 
 /* Maybe this renaming should go into tagStorm, but it's a little not very pretty  */
-tagStormRenameTags(tags, "sample.donor.id", "sample.donor.sample_id");
+tagStormSubTags(tags, "sample.donor.id", "sample.donor.sample_id");
 
 /* Figure out what types of samples we have */
 struct entitySubtype *sampleSubtypeList = 
@@ -831,7 +761,7 @@ for (subtype = sampleSubtypeList; subtype != NULL; subtype = nextSubtype)
 	if (isDonor)  // Just use donor id
 	    tagStormDeleteTags(tags, "sample.sample_id");
 	else
-	    tagStormRenameTags(tags, "sample.sample_id", idTag);
+	    tagStormSubTags(tags, "sample.sample_id", idTag);
 	}
     else
         {
@@ -869,12 +799,12 @@ for (i=0; i<ArraySize(fieldsForLastSample); ++i)
     char oldTag[128], newTag[128];
     safef(oldTag, sizeof(oldTag), "sample.%s", field);
     safef(newTag, sizeof(newTag), "sample.%s.%s", lastType, field);
-    tagStormRenameTags(tags, oldTag, newTag);
+    tagStormSubTags(tags, oldTag, newTag);
     }
 
 /* Do some misc small changes to donor tab. */
-tagStormRenameTags(tags, "sample.donor.submitted_id", "sample.donor.name");
-tagStormRenameTags(tags, "sample.donor.id", "sample.donor.sample_id");
+tagStormSubTags(tags, "sample.donor.submitted_id", "sample.donor.name");
+tagStormSubTags(tags, "sample.donor.id", "sample.donor.sample_id");
 
 /* Figure out what types of assays we have */
 struct entitySubtype *assaySubtypeList = 
@@ -908,10 +838,10 @@ for (subtype = assaySubtypeList; subtype != NULL; subtype = subtype->next)
 char sampleId[128];
 safef(sampleId, sizeof(sampleId), "sample.%s.sample_id", lastSubtype->name);
 tagStormCopyTags(tags, sampleId, "file.sample_id");
-tagStormRenameTags(tags, "assay.assay_id", "file.assay_id");
-tagStormRenameTags(tags, "assay.seq.insdc_experiment", "file.seq.insdc_experiment");
-tagStormRenameTags(tags, "assay.seq.insdc_run", "file.seq.insdc_run");
-tagStormRenameTags(tags, "assay.seq.files", "file.files");
+tagStormSubTags(tags, "assay.assay_id", "file.assay_id");
+tagStormSubTags(tags, "assay.seq.insdc_experiment", "file.seq.insdc_experiment");
+tagStormSubTags(tags, "assay.seq.insdc_run", "file.seq.insdc_run");
+tagStormSubTags(tags, "assay.seq.files", "file.files");
 
 
 /* Make initial cut of our conversion tag list */

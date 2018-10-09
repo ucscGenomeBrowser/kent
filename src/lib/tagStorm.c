@@ -790,6 +790,24 @@ sOrderCount = orderCount;
 rOrderSort(tagStorm->forest);
 }
 
+static void rDeleteTags(struct tagStanza *stanzaList, char *tagName)
+/* Recursively delete tag from all stanzas */
+{
+struct tagStanza *stanza;
+for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
+    {
+    tagStanzaDeleteTag(stanza, tagName);
+    if (stanza->children)
+	rDeleteTags(stanza->children, tagName);
+    }
+}
+
+void tagStormDeleteTags(struct tagStorm *tagStorm, char *tagName)
+/* Delete all tags of given name from tagStorm */
+{
+rDeleteTags(tagStorm->forest, tagName);
+}
+
 struct slPair *tagStanzaDeleteTagsInHash(struct tagStanza *stanza, struct hash *weedHash)
 /* Delete any tags in stanza that have names that match hash. Return list of removed tags. */
 {
@@ -809,6 +827,27 @@ slReverse(&newList);
 stanza->tagList = newList;
 slReverse(&removedList);
 return removedList;
+}
+
+static void rSubTags(struct tagStanza *stanzaList, char *oldName, char *newName)
+/* Recursively rename tag in all stanzas */
+{
+struct tagStanza *stanza;
+for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
+    {
+    struct slPair *pair = slPairFind(stanza->tagList, oldName);
+    if (pair != NULL)
+        pair->name = newName;
+    if (stanza->children)
+        rSubTags(stanza->children, oldName, newName);
+    }
+}
+
+void tagStormSubTags(struct tagStorm *tagStorm, char *oldName, char *newName)
+/* Rename all tags with oldName to newName */
+{
+char *newCopy = lmCloneString(tagStorm->lm, newName);
+rSubTags(tagStorm->forest, oldName, newCopy);
 }
 
 void tagStanzaSubTagsInHash(struct tagStanza *stanza, struct hash *valHash)
@@ -1062,6 +1101,31 @@ for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
     }
 }
     
+struct copyTagContext
+/* Information for recursive tagStorm traversing function copyToNewTag*/
+    {
+    char *oldTag;   // Existing tag name
+    char *newTag;   // New tag name
+    };
+
+static void copyToNewTag(struct tagStorm *storm, struct tagStanza *stanza, void *context)
+/* Add fields from stanza to list of converts in context */
+{
+struct copyTagContext *copyContext = context;
+char *val = tagFindLocalVal(stanza, copyContext->oldTag);
+if (val)
+    tagStanzaAdd(storm, stanza, copyContext->newTag, val);
+}
+
+void tagStormCopyTags(struct tagStorm *tagStorm, char *oldTag, char *newTag)
+/* Make a newTag that has same value as oldTag every place oldTag occurs */
+{
+struct copyTagContext copyContext; 
+copyContext.oldTag = oldTag;
+copyContext.newTag = newTag;
+tagStormTraverse(tagStorm, tagStorm->forest, &copyContext, copyToNewTag);
+}
+
 
 static void rListLeaves(struct tagStanza *list, struct tagStanzaRef **pList)
 /* Recursively add leaf stanzas to *pList */
