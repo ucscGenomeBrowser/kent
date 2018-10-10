@@ -332,12 +332,15 @@ if (!tInfo->clusterMode && !isLinkedFeaturesMode(tg))
     }
 
 // convert to BEDs for linked feature display
-tg->itemName = interactLfLeftEndName;
-tg->mapItem = interactLfMapItem;
 struct interact *inters = tg->items, *inter;
 struct linkedFeatures *lfs = NULL, *lf;
 struct hash *intersCluster = hashNew(0);
 boolean doColor = !tg->colorShades;
+if (!tInfo->clusterMode)
+    {
+    tg->itemName = interactLfLeftEndName;
+    tg->mapItem = interactLfMapItem;
+    }
 for (inter = inters; inter; inter = inter->next)
     {
     if (tInfo->clusterMode)
