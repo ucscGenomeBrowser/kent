@@ -157,7 +157,8 @@ static struct linkedFeatures *interactToLf(struct interact *inter, boolean doCol
 struct bed *bed = interactToBed(inter);
 struct linkedFeatures *lf = lfFromBed(bed);
 
-// save source and target names to extra field of linked feature, so we can display them in pack mode
+// save source and target names to extra field of linked feature, so we can display them 
+//      in pack mode
 // TODO: code to free
 setInteractLfEndNames(lf, cloneString(inter->sourceName), cloneString(inter->targetName));
 
@@ -169,7 +170,6 @@ if (doColor)
     lf->filterColor = bed->itemRgb;
     }
 bedFree(&bed);
-// TODO: use lfFromBedExtra with scoreMin, scoreMax ?
 return lf;
 }
 
@@ -194,7 +194,6 @@ if (pos < seqStart)
     return -1;
 return ((double)(pos - seqStart + .5) * scale) + xOff;
 }
-
 
 static void setYOff(struct track *tg, int yOff)
 /* Stash y offset for this track */
@@ -298,15 +297,6 @@ struct interactLfEndNames *ends = getInteractLfEndNames(lf);
 return (lf->orientation < 0 ? ends->target : ends->source);
 }
 
-#ifdef FOO
-static char *interactLfItemName(struct track *tg, void *item)
-/* Return item name of interaction linked feature, for map */
-{
-struct linkedFeatures *lf = (struct linkedFeatures *)item;
-return lf->name;
-}
-#endif
-
 static void interactLfMapItem(struct track *tg, struct hvGfx *hvg, void *item,
                                 char *itemName, char *mapItemName, int start, int end,
                                 int x, int y, int width, int height)
@@ -344,7 +334,6 @@ if (!tInfo->clusterMode && !isLinkedFeaturesMode(tg))
 // convert to BEDs for linked feature display
 tg->itemName = interactLfLeftEndName;
 tg->mapItem = interactLfMapItem;
-//tg->mapItemName = interactLfItemName;
 struct interact *inters = tg->items, *inter;
 struct linkedFeatures *lfs = NULL, *lf;
 struct hash *intersCluster = hashNew(0);
@@ -566,7 +555,7 @@ int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(tg->tdb, "scoreMin", "0
 int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tg->tdb, "scoreMax", "1000"));
 
 // Draw items
-struct hash *footHash = hashNew(0);     // track feet so we can override color to black for overlapping
+struct hash *footHash = hashNew(0);     // track feet so we can override color to black 
 struct hash *footHashOther = hashNew(0);  // has for items on other chrom
 for (inter = (struct interact *)tg->items; inter; inter = inter->next)
     {
@@ -610,7 +599,8 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
                 x - footWidth, yOffOther, footWidth + footWidth + 1, color, drawUp, footHashOther);
 
         // draw the vertical
-        boolean isReversed = tInfo->isDirectional && differentString(inter->chrom, inter->sourceChrom);
+        boolean isReversed = tInfo->isDirectional && 
+                                differentString(inter->chrom, inter->sourceChrom);
         drawLine(tg, hvg, x, yOffOther, x, yPos, color, isReversed && doDashes, drawUp);
         
         if (vis == tvDense)
@@ -792,7 +782,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
 void interactLinkedFeaturesDrawAt(struct track *tg, void *item,
                           struct hvGfx *hvg, int xOff, int y, double scale,
                           MgFont *font, Color color, enum trackVisibility vis)
-/* Draw a item with target in contrasting color */
+/* Draw an item with target in contrasting color */
 {
 struct linkedFeatures *lf = item;
 if (vis == tvDense)
