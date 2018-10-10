@@ -1664,5 +1664,9 @@ void bedPlusLabelDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOf
 Color blackItemNameColor(struct track *tg, void *item, struct hvGfx *hvg);
 /* Force item name (label) color to black */
 
+void linkedFeaturesMapItem(struct track *tg, struct hvGfx *hvg, void *item,
+				char *itemName, char *mapItemName, int start, int end,
+				int x, int y, int width, int height);
+
 #endif /* HGTRACKS_H */
 
