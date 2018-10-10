@@ -112,12 +112,37 @@ if (slCount(filteredItems) != count)
 tg->items = filteredItems;
 }
 
-void interactDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
+void interactNoLeftLabels(struct track *tg, int seqStart, int seqEnd,
     struct hvGfx *hvg, int xOff, int yOff, int width, int height,
     boolean withCenterLabels, MgFont *font,
     Color color, enum trackVisibility vis)
 /* Override default */
 {
+}
+
+/* Interaction displayed as a linked feature */
+
+struct interactLfEndNames
+/* Stash source and target names when converted to linked feature */
+    {
+    char *source;
+    char *target;
+    };
+
+static void setInteractLfEndNames(struct linkedFeatures *lf, char *sourceName, char *targetName)
+/* Stash endpoint names in linked feature */
+{
+struct interactLfEndNames *ends = NULL;
+AllocVar(ends);
+ends->source = sourceName;
+ends->target = targetName;
+lf->original = ends;    // coopt this void * field (would have preferred to use extra)
+}
+
+static struct interactLfEndNames *getInteractLfEndNames(struct linkedFeatures *lf)
+/* Retrieve endpoint names from linked feature */
+{
+return (struct interactLfEndNames *)lf->original;
 }
 
 void interactFreeItems(struct track *tg)
@@ -131,6 +156,11 @@ static struct linkedFeatures *interactToLf(struct interact *inter, boolean doCol
 {
 struct bed *bed = interactToBed(inter);
 struct linkedFeatures *lf = lfFromBed(bed);
+
+// save source and target names to extra field of linked feature, so we can display them in pack mode
+// TODO: code to free
+setInteractLfEndNames(lf, cloneString(inter->sourceName), cloneString(inter->targetName));
+
 // not sure why this is needed -- lfFromBed seems to reorder blocks, sometimes ?
 linkedFeaturesSortAndBound(lf);
 if (doColor)
@@ -247,25 +277,45 @@ tInfo->sameHeight = (tInfo->sameCount) ? tg->height - tInfo->otherHeight : 0;
 }
 
 static int interactRightPixels(struct track *tg, void *item)
-/* Return number of pixels we need to the right. */
+/* Return number of pixels we need to the right, in linked features mode. */
 {
-struct interact *inter = item;
 struct interactTrackInfo *tInfo = tg->customPt;
-if ((tg->visibility == tvPack || tg->visibility == tvFull) && !tInfo->clusterMode)
-    {
-    char *rightLabel = "";
-    if (tInfo->isDirectional)
-        {
-        if (inter->targetStart == inter->chromStart)
-            rightLabel = inter->sourceName;
-        if (inter->targetEnd == inter->chromEnd)
-            rightLabel = inter->targetName;
-        }
-    else
-        rightLabel = inter->targetName;
-    return mgFontStringWidth(tl.font, rightLabel);
-    }
-return 0;
+if (tInfo->clusterMode || !(tg->visibility == tvPack || tg->visibility == tvFull))
+    return 0;
+struct linkedFeatures *lf = (struct linkedFeatures *)item;
+struct interactLfEndNames *ends = getInteractLfEndNames(lf);
+char *rightLabel = ends->target;
+if (lf->orientation != 0)
+    rightLabel = (lf->orientation < 0 ? ends->source : ends->target);
+return mgFontStringWidth(tl.font, rightLabel);
+}
+
+static char *interactLfLeftEndName(struct track *tg, void *item)
+/* Return name of left end in single interaction linked feature, for left label */
+{
+struct linkedFeatures *lf = (struct linkedFeatures *)item;
+struct interactLfEndNames *ends = getInteractLfEndNames(lf);
+return (lf->orientation < 0 ? ends->target : ends->source);
+}
+
+#ifdef FOO
+static char *interactLfItemName(struct track *tg, void *item)
+/* Return item name of interaction linked feature, for map */
+{
+struct linkedFeatures *lf = (struct linkedFeatures *)item;
+return lf->name;
+}
+#endif
+
+static void interactLfMapItem(struct track *tg, struct hvGfx *hvg, void *item,
+                                char *itemName, char *mapItemName, int start, int end,
+                                int x, int y, int width, int height)
+/* Draw mapbox on interact item when displayed as linked feature */
+{
+struct linkedFeatures *lf = (struct linkedFeatures *)item;
+// restore full item name (using end name for label)
+itemName = mapItemName = lf->name;
+linkedFeaturesMapItem(tg, hvg, item, itemName, mapItemName, start, end, x, y, width, height);
 }
 
 void interactLoadItems(struct track *tg)
@@ -281,95 +331,98 @@ tInfo->offset = interactUiOffset(tg->tdb);
 tInfo->drawUp = trackDbSettingClosestToHomeOn(tg->tdb, INTERACT_UP);
 tInfo->clusterMode = interactUiClusterMode(cart, tg->track, tg->tdb);
 
-if (tInfo->clusterMode || isLinkedFeaturesMode(tg))
+if (!tInfo->clusterMode && !isLinkedFeaturesMode(tg))
     {
-    // convert to BEDs for linked feature display
-    struct interact *inters = tg->items, *inter;
-    struct linkedFeatures *lfs = NULL, *lf;
-    struct hash *intersCluster = hashNew(0);
-    boolean doColor = !tg->colorShades;
-    for (inter = inters; inter; inter = inter->next)
-        {
-        if (tInfo->clusterMode)
-            {
-            boolean byTarget = sameString(tInfo->clusterMode, INTERACT_CLUSTER_TARGET);
-            // hash by source or target name
-            char *name = (byTarget ? inter->targetName : inter->sourceName);
-            lf = (struct linkedFeatures *) hashFindVal(intersCluster, name);
-            if (lf)
-                {
-                // add a simple feature for the other end (source or target) to the linked feature
-                struct simpleFeature *sf = NULL;
-                AllocVar(sf);
+    // draw curve display
+    tg->mapsSelf = TRUE;
+    tg->totalHeight = interactTotalHeight;
+    tg->drawLeftLabels = interactNoLeftLabels;
+    tg->freeItems = interactFreeItems;
+    return;
+    }
 
-                // tweak interact struct for intrachromsomal item to ease next steps
-                if (differentString(inter->targetChrom, inter->sourceChrom))
-                    {
-                    inter->sourceStart = inter->targetStart = inter->chromStart;
-                    inter->sourceEnd = inter->targetEnd = inter->chromEnd;
-                    }
-
-                sf->start = (byTarget ? inter->sourceStart : inter->targetStart);
-                sf->end = (byTarget ? inter->sourceEnd : inter->targetEnd);
-                struct simpleFeature *sfs = lf->components;
-                slAddHead(&sfs, sf);
-                lf->components = sfs;
-                if (lf->filterColor != inter->color)
-                    lf->filterColor = MG_GRAY;
-                }
-            else
-                {
-                // create a linked feature for this cluster
-                lf = interactToLf(inter, doColor);
-                lf->orientation = 0;
-                lf->name = (byTarget ? inter->targetName : inter->sourceName);
-                lf->tallStart = (byTarget ? inter->targetStart : inter->sourceStart);
-                lf->tallEnd = (byTarget ? inter->targetEnd : inter->sourceEnd);
-                hashAdd(intersCluster, lf->name, lf);
-                }
-            }
-        else 
-            {
-            // packed or squish mode view of single interaction (not cluster)
-            lf = interactToLf(inter, doColor);
-            if (tInfo->isDirectional)
-                {
-                lf->tallStart = inter->targetStart;
-                lf->tallEnd = inter->targetEnd;
-                }
-            else
-                {
-                lf->orientation = 0;
-                }
-            slAddHead(&lfs, lf);
-            }
-        }
+// convert to BEDs for linked feature display
+tg->itemName = interactLfLeftEndName;
+tg->mapItem = interactLfMapItem;
+//tg->mapItemName = interactLfItemName;
+struct interact *inters = tg->items, *inter;
+struct linkedFeatures *lfs = NULL, *lf;
+struct hash *intersCluster = hashNew(0);
+boolean doColor = !tg->colorShades;
+for (inter = inters; inter; inter = inter->next)
+    {
     if (tInfo->clusterMode)
         {
-        // sort simplefeatures and adjust bounds of clustered features
-        struct hashEl *el, *els = hashElListHash(intersCluster);
-        for (el = els; el; el = el->next)
+        boolean byTarget = sameString(tInfo->clusterMode, INTERACT_CLUSTER_TARGET);
+        // hash by source or target name
+        char *name = (byTarget ? inter->targetName : inter->sourceName);
+        lf = (struct linkedFeatures *) hashFindVal(intersCluster, name);
+        if (lf)
             {
-            lf = (struct linkedFeatures *)el->val;
-            linkedFeaturesSortAndBound(lf);
-            slAddHead(&lfs, lf);
+            // add a simple feature for the other end (source or target) to the linked feature
+            struct simpleFeature *sf = NULL;
+            AllocVar(sf);
+
+            // tweak interact struct for intrachromsomal item to ease next steps
+            if (differentString(inter->targetChrom, inter->sourceChrom))
+                {
+                inter->sourceStart = inter->targetStart = inter->chromStart;
+                inter->sourceEnd = inter->targetEnd = inter->chromEnd;
             }
-        slSort(&lfs, linkedFeaturesCmp);
+
+            sf->start = (byTarget ? inter->sourceStart : inter->targetStart);
+            sf->end = (byTarget ? inter->sourceEnd : inter->targetEnd);
+            struct simpleFeature *sfs = lf->components;
+            slAddHead(&sfs, sf);
+            lf->components = sfs;
+            if (lf->filterColor != inter->color)
+                lf->filterColor = MG_GRAY;
+            }
+        else
+            {
+            // create a linked feature for this cluster
+            lf = interactToLf(inter, doColor);
+            lf->orientation = 0;
+            lf->name = (byTarget ? inter->targetName : inter->sourceName);
+            lf->tallStart = (byTarget ? inter->targetStart : inter->sourceStart);
+            lf->tallEnd = (byTarget ? inter->targetEnd : inter->sourceEnd);
+            hashAdd(intersCluster, lf->name, lf);
+            }
         }
-    else
+    else 
         {
-        slReverse(&lfs);
+        // packed or squish mode view of single interaction (not cluster)
+        lf = interactToLf(inter, doColor);
+        if (tInfo->isDirectional)
+            {
+            lf->tallStart = inter->targetStart;
+            lf->tallEnd = inter->targetEnd;
+            }
+        else
+            {
+            lf->orientation = 0;
+            }
+        slAddHead(&lfs, lf);
         }
-    tg->items = lfs;
-    // TODO: consider freeing interact items
+    }
+if (tInfo->clusterMode)
+    {
+    // sort simplefeatures and adjust bounds of clustered features
+    struct hashEl *el, *els = hashElListHash(intersCluster);
+    for (el = els; el; el = el->next)
+        {
+        lf = (struct linkedFeatures *)el->val;
+        linkedFeaturesSortAndBound(lf);
+        slAddHead(&lfs, lf);
+        }
+    slSort(&lfs, linkedFeaturesCmp);
     }
 else
     {
-    tg->mapsSelf = TRUE;
-    tg->totalHeight = interactTotalHeight;
-    tg->drawLeftLabels = interactDrawLeftLabels;
-    tg->freeItems = interactFreeItems;
+    slReverse(&lfs);
     }
+tg->items = lfs;
+// TODO: consider freeing interact items
 }
 
 char *interactMouseover(struct interact *inter, char *otherChrom)
@@ -742,15 +795,16 @@ void interactLinkedFeaturesDrawAt(struct track *tg, void *item,
 /* Draw a item with target in contrasting color */
 {
 struct linkedFeatures *lf = item;
-if (tg->visibility == tvDense)
+if (vis == tvDense)
     {
     lf->filterColor = slightlyDarkerColor(hvg, MG_GRAY);
                 // can't distinguish overlapping colors, so force to gray
     }
+struct interactTrackInfo *tInfo = tg->customPt;
+
 linkedFeaturesDrawAt(tg, item, hvg, xOff, y, scale, font, color, vis);
 
 // draw overlapping items in white and add right label
-struct interactTrackInfo *tInfo = tg->customPt;
 if (tInfo->clusterMode)
     {
     struct simpleFeature *sf;
@@ -773,12 +827,16 @@ else
         }
     else
         {
-        // right label
-        int x2 = round((double)((int)lf->end - winStart) * scale) + xOff;
-        int x = x2 + tl.mWidth/2;
-        char *label = "foo";
-        int w = mgFontStringWidth(font, label);
-        hvGfxTextCentered(hvg, x, y, w, tg->heightPer, lf->filterColor, font, label);
+        if (vis == tvPack || vis == tvFull)
+            {
+            // right label
+            int x2 = round((double)((int)lf->end - winStart) * scale) + xOff;
+            int x = x2 + tl.mWidth/2;
+            struct interactLfEndNames *ends = getInteractLfEndNames(lf);
+            char *rightLabel = (lf->orientation < 0 ? ends->source : ends->target);
+            int w = mgFontStringWidth(font, rightLabel);
+            hvGfxTextCentered(hvg, x, y, w, tg->heightPer, color, font, rightLabel);
+            }
         }
     }
 }

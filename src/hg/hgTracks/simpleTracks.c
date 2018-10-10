@@ -4991,7 +4991,7 @@ return lf->end;
 }
 
 
-static void linkedFeaturesMapItem(struct track *tg, struct hvGfx *hvg, void *item,
+void linkedFeaturesMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 				char *itemName, char *mapItemName, int start, int end,
 				int x, int y, int width, int height)
 /* Draw the mouseOver (aka statusLine) text from the mouseOver field of lf
