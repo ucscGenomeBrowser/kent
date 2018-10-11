@@ -453,6 +453,12 @@ int regionFootWidth(int start, int end, double scale)
     return width;
 }
 
+/* Draw helper routines */
+
+#define DRAW_LINE       0
+#define DRAW_CURVE      1
+#define DRAW_ELLIPSE    2
+
 static void drawFoot(struct track *tg, struct hvGfx *hvg, char *seq, int seqStart, int seqEnd, 
         int x, int y, int width, Color color, boolean drawUp, struct hash *footHash)
 /* Draw interaction end, 2 pixels high.  Force to black if it exactly overlaps another */
@@ -506,12 +512,14 @@ mapBoxHgcOrHgGene(hvg, start, end, x - width, y, width * 2, 4,
                    tg->track, item, itemBuf, NULL, TRUE, clickArg);
 }
 
-void drawPeakMapbox(struct track *tg, struct hvGfx *hvg, int seqStart, int seqEnd, char *item, char *status,
-                        int x, int y, Color peakColor, Color highlightColor, boolean drawUp)
+void drawPeakMapbox(struct track *tg, struct hvGfx *hvg, int seqStart, int seqEnd, 
+                        char *item, char *status, int x, int y, 
+                        Color peakColor, Color highlightColor, boolean drawUp, int drawMode)
 /* Draw grab box and add map box */
 {
+int yAdjust = (drawMode == DRAW_CURVE ? 3 : 0);
 if (drawUp)
-    y = flipY(tg, y) - 3;
+    y = flipY(tg, y) - yAdjust;
 hvGfxBox(hvg, x-1, y-1, 3, 3, peakColor);
 hvGfxBox(hvg, x, y, 1, 1, highlightColor);
 mapBoxHgcOrHgGene(hvg, seqStart, seqEnd, x-1, y-1, 3, 3,
@@ -523,10 +531,6 @@ static void drawInteractItems(struct track *tg, int seqStart, int seqEnd,
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a list of interact items with connectors (e.g. curves) */
 {
-#define DRAW_LINE       0
-#define DRAW_CURVE      1
-#define DRAW_ELLIPSE    2
-
 // Determine drawing mode
 int draw = DRAW_LINE;
 boolean doDashes = FALSE;
@@ -734,7 +738,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         // draw grab box and map box on mid-point of horizontal line
         int xMap = lowerX + (double)(upperX-lowerX)/2;
         drawPeakMapbox(tg, hvg, inter->chromStart, inter->chromEnd, itemBuf, statusBuf,
-                            xMap, peak, peakColor, highlightColor, drawUp);
+                            xMap, peak, peakColor, highlightColor, drawUp, draw);
         continue;
         }
     // Draw curves
@@ -757,7 +761,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         if (drawUp)
             maxY = (maxY - peakY)/2 + tg->customInt;
         drawPeakMapbox(tg, hvg, inter->chromStart, inter->chromEnd, inter->name, statusBuf,
-                            peakX, maxY, peakColor, highlightColor, drawUp);
+                            peakX, maxY, peakColor, highlightColor, drawUp, draw);
         }
     else if (draw == DRAW_ELLIPSE)
         {
@@ -777,7 +781,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         int maxY = peakHeight + yOff;
         int peakX = ((upperX - lowerX + 1) / 2) + lowerX;
         drawPeakMapbox(tg, hvg, inter->chromStart, inter->chromEnd, inter->name, statusBuf,
-                            peakX, maxY, peakColor, highlightColor, drawUp);
+                            peakX, maxY, peakColor, highlightColor, drawUp, draw);
         }
     }
 }
