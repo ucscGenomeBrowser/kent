@@ -629,7 +629,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
                                         inter->targetChrom : inter->sourceChrom);
             yPos += 3;
             if (drawUp)
-                yPos = flipY(tg, yPos + 3);
+                yPos = flipY(tg, yPos + 6);
             hvGfxTextCentered(hvg, x, yPos, 4, 4, MG_BLUE, font, buffer);
             int labelWidth = vgGetFontStringWidth(hvg->vg, font, buffer);
 
