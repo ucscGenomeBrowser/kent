@@ -263,7 +263,7 @@ sys     0m14.042s
     ln -s `pwd`/galGal6.unmasked.2bit /gbdb/galGal6/galGal6.2bit
 
 ##############################################################################
-# cpgIslands on UNMASKED sequence (TBD - 2018-10-11 - Hiram)
+# cpgIslands on UNMASKED sequence (DONE - 2018-10-11 - Hiram)
     mkdir /hive/data/genomes/galGal6/bed/cpgIslandsUnmasked
     cd /hive/data/genomes/galGal6/bed/cpgIslandsUnmasked
 
@@ -271,74 +271,122 @@ sys     0m14.042s
        -tableName=cpgIslandExtUnmasked \
           -maskedSeq=/hive/data/genomes/galGal6/galGal6.unmasked.2bit \
              -workhorse=hgwdev -smallClusterHub=ku galGal6) > do.log 2>&1
+XXX - running - Thu Oct 11 14:05:11 PDT 2018
     # real    6m59.252s
 
     cat fb.galGal6.cpgIslandExtUnmasked.txt
     # 40554959 bases of 1218501075 (3.328%) in intersection
 
 #############################################################################
-# cytoBandIdeo - (TBD - 2018-10-11 - Hiram)
+# cytoBandIdeo - (DONE - 2018-10-11 - Hiram)
     mkdir /hive/data/genomes/galGal6/bed/cytoBand
     cd /hive/data/genomes/galGal6/bed/cytoBand
     makeCytoBandIdeo.csh galGal6
 
+#############################################################################
+# run up idKeys files for chromAlias/ncbiRefSeq (DONE - 2018-10-11 - Hiram)
+    mkdir /hive/data/genomes/galGal6/bed/idKeys
+    cd /hive/data/genomes/galGal6/bed/idKeys
+
+    time (doIdKeys.pl \
+        -twoBit=/hive/data/genomes/galGal6/galGal6.unmasked.2bit \
+        -buildDir=`pwd` galGal6) > do.log 2>&1 &
+XXX - running - Thu Oct 11 14:10:17 PDT 2018
+    # real    4m10.302s
+
+    cat galGal6.keySignature.txt
+    #  7850e2d5dabb6134fdc9d7083f1a3a54
+
 #########################################################################
-# ucscToINSDC table/track (TBD - 2018-10-11 - Hiram)
-    # the sequence here is working for a 'refseq' assembly with a chrM
-    # situation may be specific depending upon what is available in the assembly
+# ucscToINSDC table/track (DONE - 2018-10-11 - Hiram)
+    # construct idKeys for the refseq sequence
+    mkdir /hive/data/genomes/galGal6/refseq/idKeys
+    cd /hive/data/genomes/galGal6/refseq/idKeys
+    faToTwoBit ../GCF_000002315.5_GRCg6a_genomic.fna.gz galGal6.refSeq.2bit
 
-    mkdir /hive/data/genomes/galGal6/bed/ucscToINSDC
-    cd /hive/data/genomes/galGal6/bed/ucscToINSDC
+    time (doIdKeys.pl -buildDir=`pwd` \
+        -twoBit=`pwd`/galGal6.refSeq.2bit refseqGalGal6)  > do.log 2>&1 &
+    # real    0m48.786s
 
-    # find accession for chrM
-    grep chrM ../../galGal6.agp
-# chrM    1       16775   1       O       NC_001323.1     1       16775   +
+    cat refseqGalGal6.keySignature.txt
+    #  7850e2d5dabb6134fdc9d7083f1a3a54
 
-    # use that accession here:
-    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
-        ../../refseq/GCF_*structure/Primary_Assembly NC_001323.1
-    awk '{printf "%s\t%s\n", $2, $1}' ucscToINSDC.txt | sort > insdcToUcsc.txt
-    # there is no name for chrM/NC_001323.1 sequence, there is no such
-    #  sequence with an INSDC name
-    grep -v "^#" ../../refseq/GCF*_assembly_report.txt | cut -f5,7 \
-      | sed -e 's/na\b/notAvailable/;' | awk '{printf "%s\t%s\n", $2, $1}' \
-         | sort > insdc.refseq.txt
-    # the sed \b means to match word
+    # and the genbank sequence needs keys too:
+    mkdir /hive/data/genomes/galGal6/refseq/idKeysGenbank
+    cd /hive/data/genomes/galGal6/refseq/idKeysGenbank
+    faToTwoBit /hive/data/outside/ncbi/genomes/genbank/vertebrate_other/Gallus_gallus/all_assembly_versions/GCA_000002315.5_GRCg6a/GCA_000002315.5_GRCg6a_genomic.fna.gz galGal6.genbank.2bit
 
-    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
-         | sort > name.coordinate.tab
-    join insdc.refseq.txt insdcToUcsc.txt | tr '[ ]' '[\t]' | sort -k3 \
-       | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-3,5 \
-           > ucscToINSDC.bed
+    time (doIdKeys.pl -buildDir=`pwd` \
+        -twoBit=`pwd`/galGal6.genbank.2bit genbankGalGal6)  > do.log 2>&1 &
+
+    cat genbankGalGal6.keySignature.txt
+    #  a20fdad3318d371fcb34fcc66bab3752
+
+    mkdir /hive/data/genomes/galGal6/bed/chromAlias
+
+    join -t$'\t' ../idKeys/galGal6.idKeys.txt \
+        ../../refseq/idKeysGenbank/genbankGalGal6.idKeys.txt | cut -f2- \
+          | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+               | sort -k1,1 -k2,2n > ucscToINSDC.bed
+
+    join -t$'\t' ../idKeys/galGal6.idKeys.txt \
+        ../../refseq/idKeys/refseqGalGal6.idKeys.txt | cut -f2- \
+          | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+               | sort -k1,1 -k2,2n > ucscToRefSeq.bed
+
 
     # should be same line counts throughout:
-    wc -l *
-    # 23475 insdc.refseq.txt
-    # 23475 insdcToUcsc.txt
-    # 23475 name.coordinate.tab
-    # 23475 ucscToINSDC.bed
-    # 23475 ucscToINSDC.txt
+    wc -l * ../../chrom.sizes
+    #	463 ucscToINSDC.bed
+    #	464 ucscToRefSeq.bed
+    #	464 ../../chrom.sizes
 
-    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # need to find the accession for the INSDC equivalent to chrM:
+    egrep chrM *
+# ucscToRefSeq.bed:chrM   0       16775   NC_001323.1
+    # lookup that accession at NCBI Entrez: X52392.1
+    # and add to ucscToINSDC.bed:
+    printf "chrM\t0\t16775\tX52392.1\n" >> ucscToINSDC.bed
+    # verify:
+    grep chrM *
+# ucscToINSDC.bed:chrM    0       16775   X52392.1
+# ucscToRefSeq.bed:chrM   0       16775   NC_001323.1
+
+    export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
     # 27
-    # use the 27 in this sed
-    sed -e "s/21/27/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+    # use the $chrSize in this sed
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
          | hgLoadSqlTab galGal6 ucscToINSDC stdin ucscToINSDC.bed
+     # should be the same for ucscToRefSeq:
+    export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    # 27
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' \
+         | hgLoadSqlTab galGal6 ucscToRefSeq stdin ucscToRefSeq.bed
+
+    # should be quiet for all OK
     checkTableCoords galGal6
+
     # should cover %100 entirely:
     featureBits -countGaps galGal6 ucscToINSDC
-    # 1230258557 bases of 1230258557 (100.000%) in intersection
+    # 1065365425 bases of 1065365425 (100.000%) in intersection
+    featureBits -countGaps galGal6 ucscToRefSeq
+    # 1065365425 bases of 1065365425 (100.000%) in intersection
 
 #########################################################################
-# fixup search rule for assembly track/gold table (TBD - 2018-10-11 - Hiram)
+# fixup search rule for assembly track/gold table (DONE - 2018-10-11 - Hiram)
     cd ~/kent/src/hg/makeDb/trackDb/chicken/galGal6
     # preview prefixes and suffixes:
     hgsql -N -e "select frag from gold;" galGal6 \
       | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
-  24806 AADN.1
-     47 AC.1
-    310 AC.2
-    327 AC.3
+   1519 AADN.1
+    124 AC.1
+    313 AC.2
+    328 AC.3
      74 AC.4
      20 AC.5
       1 AC.6
@@ -348,11 +396,11 @@ sys     0m14.042s
 
     # verify this rule will find them all and eliminate them all:
     hgsql -N -e "select frag from gold;" galGal6 | wc -l
-    # 25586
+    # 2380
 
     hgsql -N -e "select frag from gold;" galGal6 \
        | egrep -e '[AN][AC][D0-9_][N0-9][0-9]+(\.[0-9]+)?' | wc -l
-    # 25586
+    # 2380
 
     hgsql -N -e "select frag from gold;" galGal6 \
        | egrep -v -e '[AN][AC][D0-9_][N0-9][0-9]+(\.[0-9]+)?' | wc -l
@@ -368,53 +416,57 @@ searchPriority 8
     # verify searches work in the position box
 
 ##########################################################################
-# running repeat masker (TBD - 2018-10-11 - Hiram)
+# running repeat masker (DONE - 2018-10-11 - Hiram)
     mkdir /hive/data/genomes/galGal6/bed/repeatMasker
     cd /hive/data/genomes/galGal6/bed/repeatMasker
     time  (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku galGal6) > do.log 2>&1
-    # real    254m18.208s
+    # real    48m25.181s
 
     cat faSize.rmsk.txt
-# 1230258557 bases (11766024 N's 1218492533 real 1016107420 upper
-#     202385113 lower) in 23475 sequences in 1 files
-# Total size: mean 52407.2 sd 2051122.3 min 200 (chrUn_NT_479312v1)
-#     max 196202544 (chr1) median 6930
-# %16.45 masked total, %16.61 masked real
+# 1065365425 bases (9784466 N's 1055580959 real 922186059 upper
+#	133394900 lower) in 464 sequences in 1 files
+# Total size: mean 2296046.2 sd 14494999.8 min 87 (chrUn_NW_020109844v1)
+#	max 197608386 (chr1) median 10066
+# %12.52 masked total, %12.64 masked real
 
     egrep -i "versi|relea" do.log
-    # RepeatMasker version open-4.0.5
-    #    January 31 2015 (open-4-0-5) version of RepeatMasker
-    # CC   RELEASE 20140131;                                            *
+    # RepeatMasker version open-4.0.7
+    #    February 01 2017 (open-4-0-7) 1.331 version of RepeatMasker
+    # CC    Dfam_Consensus RELEASE 20170127;                            *
+    # CC    RepBase RELEASE 20170127;     
 
     time featureBits -countGaps galGal6 rmsk
-    # 202387399 bases of 1230258557 (16.451%) in intersection
-    #  real    0m17.365s
+    # 133395265 bases of 1065365425 (12.521%) in intersection
+    # real    0m4.226s
 
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the faSize count above
     #   separates out the N's from the bases, it doesn't show lower case N's
 
-    # faster way to get the same result:
+    # faster way to get the same result on high contig count assemblies:
     time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' galGal6 \
         | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
-    # total 202387399.000000
-    #   real    0m6.394s
+    # total 133395265.000000
+    #   real    0m3.198s
 
 ##########################################################################
-# running simple repeat (TBD - 2018-10-11 - Hiram)
+# running simple repeat (DONE - 2018-10-11 - Hiram)
+
+    # The '-trf409 4' is a bit smaller than human which is 6
 
     mkdir /hive/data/genomes/galGal6/bed/simpleRepeat
     cd /hive/data/genomes/galGal6/bed/simpleRepeat
     time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
         -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
-        galGal6) > do.log 2>&1
-    # real    148m20.217s
+        -trf409=4 galGal6) > do.log 2>&1
+    # real    58m3.288s
 
     cat fb.simpleRepeat
-    # 89675196 bases of 1218501075 (7.359%) in intersection
+    # 31110690 bases of 1055588482 (2.947%) in intersection
 
+# waiting for WM result: Thu Oct 11 15:22:11 PDT 2018
     cd /hive/data/genomes/galGal6
     # using the Window Masker result:
     cd /hive/data/genomes/galGal6
@@ -438,7 +490,7 @@ searchPriority 8
     ln -s `pwd`/galGal6.2bit /gbdb/galGal6/galGal6.2bit
 
 #########################################################################
-# CREATE MICROSAT TRACK (TBD - 2018-10-11 - Hiram)
+# CREATE MICROSAT TRACK (DONE - 2018-10-11 - Hiram)
     ssh hgwdev
     mkdir /cluster/data/galGal6/bed/microsat
     cd /cluster/data/galGal6/bed/microsat
@@ -447,15 +499,16 @@ searchPriority 8
        ../simpleRepeat/simpleRepeat.bed > microsat.bed
 
     hgLoadBed galGal6 microsat microsat.bed
-    # Read 2030 elements of size 4 from microsat.bed
+    # Read 1745 elements of size 4 from microsat.bed
 
 ##########################################################################
-## WINDOWMASKER (TBD - 2018-10-11 - Hiram)
+## WINDOWMASKER (DONE - 2018-10-11 - Hiram)
 
     mkdir /hive/data/genomes/galGal6/bed/windowMasker
     cd /hive/data/genomes/galGal6/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev galGal6) > do.log 2>&1
+XXX - running - Thu Oct 11 15:23:01 PDT 2018
     # real    53m45.183s
 
     # Masking statistics
