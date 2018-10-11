@@ -738,7 +738,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         // draw grab box and map box on mid-point of horizontal line
         int xMap = lowerX + (double)(upperX-lowerX)/2;
         drawPeakMapbox(tg, hvg, inter->chromStart, inter->chromEnd, itemBuf, statusBuf,
-                            xMap, peak, peakColor, highlightColor, drawUp, draw);
+                            xMap, peak, peakColor, highlightColor, drawUp, DRAW_LINE);
         continue;
         }
     // Draw curves
