@@ -628,9 +628,10 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
             // draw label
             safef(buffer, sizeof buffer, "%s", sameString(inter->chrom, inter->sourceChrom) ?
                                         inter->targetChrom : inter->sourceChrom);
+            yPos += 3;
             if (drawUp)
-                yPos = flipY(tg, yPos);
-            hvGfxTextCentered(hvg, x, yPos + 2, 4, 4, MG_BLUE, font, buffer);
+                yPos = flipY(tg, yPos + 3);
+            hvGfxTextCentered(hvg, x, yPos, 4, 4, MG_BLUE, font, buffer);
             int labelWidth = vgGetFontStringWidth(hvg->vg, font, buffer);
 
             // add map box to label
