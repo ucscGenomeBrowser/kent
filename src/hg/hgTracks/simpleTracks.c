@@ -4030,6 +4030,12 @@ return (withNextExonArrows && tg->nextExonButtonable && tg->nextPrevExon);
 boolean exonNumberMapsCompatible(struct track *tg, enum trackVisibility vis)
 /* Check to see if we draw exon and intron maps labeling their number. */
 {
+if (tg->tdb)
+    {
+    char *type = tg->tdb->type;
+    if (sameString(type, "interact") || sameString(type, "bigInteract"))
+        return FALSE;
+    }
 boolean exonNumbers = sameString(trackDbSettingOrDefault(tg->tdb, "exonNumbers", "on"), "on");
 return (withExonNumbers && exonNumbers && (vis==tvFull || vis==tvPack) && (winEnd - winStart < 400000)
  && (tg->nextPrevExon==linkedFeaturesNextPrevItem));
@@ -4985,7 +4991,7 @@ return lf->end;
 }
 
 
-static void linkedFeaturesMapItem(struct track *tg, struct hvGfx *hvg, void *item,
+void linkedFeaturesMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 				char *itemName, char *mapItemName, int start, int end,
 				int x, int y, int width, int height)
 /* Draw the mouseOver (aka statusLine) text from the mouseOver field of lf
