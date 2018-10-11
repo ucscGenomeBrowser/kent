@@ -514,12 +514,11 @@ mapBoxHgcOrHgGene(hvg, start, end, x - width, y, width * 2, 4,
 
 void drawPeakMapbox(struct track *tg, struct hvGfx *hvg, int seqStart, int seqEnd, 
                         char *item, char *status, int x, int y, 
-                        Color peakColor, Color highlightColor, boolean drawUp, int drawMode)
+                        Color peakColor, Color highlightColor, boolean drawUp)
 /* Draw grab box and add map box */
 {
-int yAdjust = (drawMode == DRAW_CURVE ? 3 : 0);
 if (drawUp)
-    y = flipY(tg, y) - yAdjust;
+    y = flipY(tg, y);
 hvGfxBox(hvg, x-1, y-1, 3, 3, peakColor);
 hvGfxBox(hvg, x, y, 1, 1, highlightColor);
 mapBoxHgcOrHgGene(hvg, seqStart, seqEnd, x-1, y-1, 3, 3,
@@ -739,7 +738,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         // draw grab box and map box on mid-point of horizontal line
         int xMap = lowerX + (double)(upperX-lowerX)/2;
         drawPeakMapbox(tg, hvg, inter->chromStart, inter->chromEnd, itemBuf, statusBuf,
-                            xMap, peak, peakColor, highlightColor, drawUp, DRAW_LINE);
+                            xMap, peak, peakColor, highlightColor, drawUp);
         continue;
         }
     // Draw curves
@@ -762,7 +761,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         if (drawUp)
             maxY = (maxY - peakY)/2 + tg->customInt;
         drawPeakMapbox(tg, hvg, inter->chromStart, inter->chromEnd, inter->name, statusBuf,
-                            peakX, maxY, peakColor, highlightColor, drawUp, draw);
+                            peakX, maxY, peakColor, highlightColor, drawUp);
         }
     else if (draw == DRAW_ELLIPSE)
         {
@@ -782,7 +781,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         int maxY = peakHeight + yOff;
         int peakX = ((upperX - lowerX + 1) / 2) + lowerX;
         drawPeakMapbox(tg, hvg, inter->chromStart, inter->chromEnd, inter->name, statusBuf,
-                            peakX, maxY, peakColor, highlightColor, drawUp, draw);
+                            peakX, maxY, peakColor, highlightColor, drawUp);
         }
     }
 }
