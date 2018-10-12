@@ -316,11 +316,10 @@ sys     0m14.042s
     time (~/kent/src/hg/utils/automation/doTandemDup.pl \
   -twoBit=/hive/data/genomes/galGal6/galGal6.unmasked.2bit galGal6) \
         > do.log 2>&1 &
-XXX - running - Fri Oct 12 13:41:16 PDT 2018
-    # real    88m43.940s
+    # real    97m29.383s
 
     cat fb.galGal6.tandemDups.txt
-    # 70439161 bases of 2615516299 (2.693%) in intersection
+    # 24887623 bases of 1065365425 (2.336%) in intersection
 
     bigBedInfo galGal6.tandemDups.bb | sed -e 's/^/#  /;'
 #  version: 4
@@ -329,16 +328,16 @@ XXX - running - Fri Oct 12 13:41:16 PDT 2018
 #  isCompressed: yes
 #  isSwapped: 0
 #  extraIndexCount: 0
-#  itemCount: 863,625
-#  primaryDataSize: 23,596,930
-#  primaryIndexSize: 136,940
+#  itemCount: 346,400
+#  primaryDataSize: 8,843,385
+#  primaryIndexSize: 38,860
 #  zoomLevels: 9
-#  chromCount: 2406
-#  basesCovered: 1,733,829,936
-#  meanDepth (of bases covered): 4.431233
+#  chromCount: 407
+#  basesCovered: 114,644,428
+#  meanDepth (of bases covered): 21.207643
 #  minDepth: 1.000000
-#  maxDepth: 8999.000000
-#  std of depth: 12.907523
+#  maxDepth: 298.000000
+#  std of depth: 35.518221
 
 #########################################################################
 # ucscToINSDC and ucscToRefSeq table/track (DONE - 2018-10-11 - Hiram)
@@ -681,8 +680,10 @@ searchPriority 8
     # 92597630 bases of 1055588482 (8.772%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` galGal6 hg38) > rbest.log 2>&1 &
-XXX - running - Fri Oct 12 13:30:52 PDT 2018
-    # real    196m46.991s
+    # real    139m24.408s
+
+    cat fb.galGal6.chainRBest.Hg38.txt
+    # 106294585 bases of 1055588482 (10.070%) in intersection
 
 #########################################################################
 # lastz/chain/net swap mouse/mm10 (DONE - 2018-10-12 - Hiram)
@@ -711,8 +712,10 @@ XXX - running - Fri Oct 12 13:30:52 PDT 2018
     # 88539346 bases of 1055588482 (8.388%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` galGal6 mm10) > rbest.log 2>&1 &
-XXX - running - Fri Oct 12 13:28:20 PDT 2018
-    # real    138m37.610s
+    # real    94m11.007s
+
+    cat fb.galGal6.chainRBest.Mm10.txt
+    # 79474812 bases of 1055588482 (7.529%) in intersection
 
 #########################################################################
 # GENBANK AUTO UPDATE (DONE - 2018-10-12 - Hiram)
