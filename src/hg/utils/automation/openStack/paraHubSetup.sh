@@ -15,8 +15,8 @@ export logFile="/tmp/startUpScript.log.$$"
 printf "#### begin start up script log %s\n" "`date '+%s %F %T'`" > "${logFile}"
 printf "#### uname -a\n" >> "${logFile}"
 uname -a >> "${logFile}" 2>&1
-printf "#### df -h\n" >> "${logFile}"
-df -h >> "${logFile}" 2>&1
+## printf "#### df -h\n" >> "${logFile}"
+## df -h >> "${logFile}" 2>&1
 printf "#### env\n" >> "${logFile}"
 env >> "${logFile}" 2>&1
 printf "#### set\n" >> "${logFile}"
@@ -25,6 +25,8 @@ printf "#### arp -a\n" >> "${logFile}"
 arp -a >> "${logFile}" 2>&1
 printf "#### ifconfig -a\n" >> "${logFile}"
 ifconfig -a >> "${logFile}" 2>&1
+printf "#### /etc/fstab\n" >> "${logFile}"
+cat /etc/fstab >> "${logFile}"
 printf "#### PATH\n" >> "${logFile}"
 printf "${PATH}\n" >> "${logFile}" 2>&1
 
@@ -42,10 +44,11 @@ homeDir="/home/$nativeUser"
 if [ -s "${homeDir}/.bashrc" ]; then
   export startTime=`date "+%s"`
   printf "## parasol hub machine started install %s\n" "`date '+%s %F %T'`" >> /etc/motd
+  export instanceId=`curl http://169.254.169.254/latest/meta-data/instance-id`
   # directories and symlinks to make this machine appear very much as it
   # would in the U.C. Santa Cruz Genome browser development environment
-  mkdir -p /data/bin /data/scripts /data/genomes /data/bedtools /data/parasol/nodeInfo ${homeDir}/bin /hive /cluster/bin /scratch
-  chmod 777 /data /scratch /hive /cluster /cluster/bin
+  mkdir -p /data/bin /data/scripts /data/genomes /data/bedtools /data/parasol/nodeInfo ${homeDir}/bin /hive /cluster/bin /scratch /genomes
+  chmod 777 /data /scratch /hive /cluster /cluster/bin /genomes
   chmod 755 /data/bin /data/scripts /data/genomes /data/parasol ${homeDir}/bin
   chmod 755 ${homeDir}
   ln -s /data/bedtools /cluster/bin/bedtools
@@ -59,33 +62,16 @@ if [ -s "${homeDir}/.bashrc" ]; then
   printf "alias plb='parasol list batches'\n" >> "${homeDir}/.bashrc"
   printf "alias vi='vim'\n" >> "${homeDir}/.bashrc"
   printf "set -o vi\n" >> "${homeDir}/.bashrc"
-  printf "set background=dark\n" >> "${homeDir}/.vimrc"
-
-  # setup NFS exports
-  export privateIp=`ifconfig -a | grep broadcast | head -1 | awk '{print $2}'`
-  export subNet=`ifconfig -a | grep broadcast | head -1 | awk '{print $2}' | awk -F'.' '{printf "%s.%s.%s.0", $1,$2,$3}'`
-
-  export dataDir="/data"
-  # special case OpenStack /mnt setups (temporary work around for difficulties)
-  if [ "${nativeUser}" = "centos" ]; then
-    umount /mnt >> "${logFile}" 2>&1
-    parted -s /dev/vdb mklabel gpt >> "${logFile}" 2>&1
-    parted -s /dev/vdb mkpart primary 2048s 100% >> "${logFile}" 2>&1
-    mkfs -t xfs /dev/vdb1 >> "${logFile}" 2>&1
-    sed --in-place=.bak -e 's#/dev/vdb#/dev/vdb1#; s/auto/xfs/;' /etc/fstab >> "${logFile}" 2>&1
-    mount /mnt
-    printf "/mnt/data    ${subNet}/24(rw)\n" >> /etc/exports
-    mkdir /mnt/data
-    chmod 777 /mnt/data
-    rsync -a /data/ /mnt/data/
-    rm -fr /data
-    ln -s /mnt/data /data
-    dataDir="/mnt/data"
-  else
-    printf "/data    ${subNet}/24(rw)\n" > /etc/exports
+  printf "export AWS_DEFAULT_OUTPUT=text\n" >> "${homeDir}/.bashrc"
+  if [ "${nativeUser}" = "ec2-user" ]; then
+    availZone=`ec2-metadata --availability-zone | sed -e 's/placement: *//;'`
+    region=`echo ${availZone:0:${#availZone} - 1}`
+    printf "export AWS_DEFAULT_REGION=%s\n" "${region}" >> "${homeDir}/.bashrc"
+    printf "export AWS_ACCESS_KEY_ID=AWS_AccessKey\n" >> "${homeDir}/.bashrc"
+    printf "export AWS_SECRET_ACCESS_KEY=AWS_SecretKey\n" >> "${homeDir}/.bashrc"
+    printf "instId: %s, availZone: %s, region: %s\n" "${instanceId}" "${availZone}" "${region}" >> "${logFile}"
   fi
-
-  exportfs -a >> "${logFile}" 2>&1
+  printf "set background=dark\n" >> "${homeDir}/.vimrc"
 
   # install the wget command right away so the wgets can get done
   yum -y install wget >> "${logFile}" 2>&1
@@ -98,9 +84,15 @@ if [ -s "${homeDir}/.bashrc" ]; then
   wget -qO /data/parasol/nodeInfo/nodeReport.sh 'http://genomewiki.ucsc.edu/images/e/e3/NodeReport.sh.txt' >> "${logFile}" 2>&1
   chmod 755 /data/parasol/nodeInfo/nodeReport.sh
   # bedSingleCover.pl for use in running featureBits like measurements
-  wget -O /data/scripts/bedSingleCover.pl 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/utils/bedSingleCover.pl' >> "${logFile}" 2>&1
+  wget -P /data/scripts 'https://genome-source.gi.ucsc.edu/gitlist/kent.git/raw/master/src/utils/bedSingleCover.pl' >> "${logFile}" 2>&1
   chmod +x /data/scripts/bedSingleCover.pl
-  chown -R ${nativeUser}:${nativeUser} "${dataDir}" "${homeDir}/bin" "${homeDir}/.vimrc"
+  chown -R ${nativeUser}:${nativeUser} /data "${homeDir}/bin" "${homeDir}/.vimrc"
+
+  # ec2-user HOME/bin/attachVolume.sh used to attach extra data volume
+  wget -qO "${homeDir}/bin/attachVolume.sh"  'http://genomewiki.ucsc.edu/images/2/2c/AwsAttachVolume.sh.txt' >> "${logFile}" 2>&1
+  chmod 755 "${homeDir}/bin/attachVolume.sh"
+  chown ${nativeUser}:${nativeUser} "${homeDir}/bin/attachVolume.sh"
+  chown ${nativeUser}:${nativeUser} "/genomes"
 
   # and now can start the rest of yum installs, these take a while
   # useful to have the 'host' command, 'traceroute' and nmap ('nc')
@@ -111,10 +103,22 @@ if [ -s "${homeDir}/.bashrc" ]; then
   yum repolist >> "${logFile}" 2>&1
   yum -y install bind-utils traceroute nmap-ncat tcsh screen vim-X11 vim-common vim-enhanced vim-minimal git-all bc >> "${logFile}" 2>&1
   yum -y install epel-release >> "${logFile}" 2>&1
-  yum -y install python-pip gcc gcc-c++ zlib-devel python-devel tkinter libpng12 strace >> "${logFile}" 2>&1
+  yum -y install gcc gcc-c++ zlib-devel tkinter libpng12 strace >> "${logFile}" 2>&1
   # this python business allows the crispr calculation pipeline to function
-  pip install --ignore-installed pytabix pandas twobitreader scipy matplotlib numpy >> "${logFile}" 2>&1
-  pip install scikit-learn==0.16.1 Biopython xlwt >> "${logFile}" 2>&1
+  # need newer python on the OpenStack
+  if [ "${nativeUser}" = "centos" ]; then
+     yum -y install centos-release-scl >> "${logFile}"
+     yum -y install python36 python36-devel >> "${logFile}"
+     python3.6 -m ensurepip --default-pip >> "${logFile}"
+     python3.6 -m pip install --upgrade pip >> "${logFile}"
+     python3.6 -m pip install --ignore-installed pytabix pandas twobitreader scipy matplotlib numpy >> "${logFile}"
+     python3.6 -m pip install scikit-learn==0.16.1 Biopython xlwt >> "${logFile}" 2>&1
+  else
+     yum -y install python-pip python-devel >> "${logFile}" 2>&1
+     pip install --ignore-installed pytabix pandas twobitreader scipy matplotlib numpy >> "${logFile}" 2>&1
+     pip install scikit-learn==0.16.1 Biopython xlwt >> "${logFile}" 2>&1
+  fi
+  printf "#### after yum install %s\n" "`date '+%s %F %T'`" >> "${logFile}"
 
   # these systemctl commands may not be necessary
   # the package installs may have already performed these initalizations
@@ -135,9 +139,46 @@ if [ -s "${homeDir}/.bashrc" ]; then
       --exclude='kent/src/hg/utils/automation/ensGene' \
       --exclude='kent/src/hg/utils/automation/genbank' \
       --exclude='kent/src/hg/utils/automation/lastz_D' \
+      --exclude='kent/src/hg/utils/automation/aws' \
       --exclude='kent/src/hg/utils/automation/openStack' >> "${logFile}" 2>&1
 
   chown -R ${nativeUser}:${nativeUser} /data/scripts >> "${logFile}" 2>&1
+
+  # setup NFS exports to internal LAN
+  export privateIp=`curl http://169.254.169.254/latest/meta-data/local-ipv4`
+  export subNet=`echo $privateIp | awk -F'.' '{printf "%s.%s.0.0", $1,$2}'`
+
+  printf "# privateIp: '%s', instanceId: '%s', subNet: '%s'\n" "${privateIp}" "${instanceId}" "${subNet}" >> "${logFile}" 2>&1
+  printf "# lsblk:\n" >> "${logFile}" 2>&1
+  lsblk >> "${logFile}" 2>&1
+  printf "# fdisk -l:\n" >> "${logFile}" 2>&1
+  fdisk -l >> "${logFile}" 2>&1
+
+  # special case OpenStack /mnt setups, these machines come with 2 Tb
+  # already configured in /mnt/ - plenty of disk space for just about
+  # any type of work.  Rework fstab so that 2 Tb is mounted on /genomes
+  # instead of /mnt/
+  if [ "${nativeUser}" = "centos" ]; then
+    umount /mnt
+    sed --in-place=.bak -e 's@^/dev/vdb@# /dev/vdb@;' /etc/fstab
+    printf "/dev/vdb1\t/genomes\txfs\tdefaults,user,nofail\t0\t2\n" >> /etc/fstab
+    mount /genomes
+    chmod 777 /genomes
+    chown -R ${nativeUser}:${nativeUser} /genomes
+  fi
+  # export both these filesystems for para node access
+  printf "/data    ${subNet}/16(rw)\n" >> /etc/exports
+  printf "/genomes    ${subNet}/16(rw)\n" >> /etc/exports
+
+  # turn on the exported filesystems
+  exportfs -a >> "${logFile}" 2>&1
+  printf "### meta data from curl 169.254.169.254\n" >> "${logFile}" 2>&1
+
+  curl http://169.254.169.254/latest/meta-data/ 2> /dev/null | while read N
+do
+  V=`curl http://169.254.169.254/latest/meta-data/${N} 2> /dev/null`
+  printf "#\t%s\t%s\n" "${N}" "${V}"
+done >> "${logFile}" 2>&1
 
   export endTime=`date "+%s"`
   export et=`echo $endTime $startTime | awk '{printf "%d", $1-$2}'`
@@ -146,7 +187,7 @@ if [ -s "${homeDir}/.bashrc" ]; then
   printf "## elapsed time: %d seconds\n## %s\n" "${et}" "`date '+%s %F %T'`" >> /tmp/hub.machine.ready.signal
   printf "## this parasol hub privateIp: %s\n" "${privateIp}" >> /tmp/hub.machine.ready.signal
   printf "## this parasol hub subnet: %s\n" "${subNet}" >> /tmp/hub.machine.ready.signal
-  printf "## external IP address: %s\n" "`curl icanhazip.com`" >> /tmp/hub.machine.ready.signal
-  printf "## external IP address: %s\n" "`curl wgetip.com`" >> /tmp/hub.machine.ready.signal
+  printf "## external IP address: %s from curl icanhazip.com\n" "`curl icanhazip.com`" >> /tmp/hub.machine.ready.signal
+  printf "## external IP address: %s from curl wgetip.com\n" "`curl wgetip.com`" >> /tmp/hub.machine.ready.signal
 fi
 printf "#### end start up script log %s\n" "`date '+%s %F %T'`" >> "${logFile}"

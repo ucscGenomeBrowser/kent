@@ -1,4 +1,274 @@
 ################################################################
+# galGal6 - chicken - Gallus gallus - vertebrate - aves - taxId 9031
+################################################################
+track chainNetGalGal6
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 181
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb galGal6
+chainMinScore 5000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetGalGal6Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetGalGal6
+    spectrum on
+
+        track chainGalGal6
+        parent chainNetGalGal6Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain galGal6
+        html chainNet
+
+    track chainNetGalGal6Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetGalGal6
+
+        track netGalGal6
+        parent chainNetGalGal6Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign galGal6 chainGalGal6
+        html chainNet
+
+################################################################
+# galGal5 - chicken - Gallus gallus - vertebrate - aves - taxId 9031
+################################################################
+track chainNetGalGal5
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 181
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb galGal5
+chainMinScore 5000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetGalGal5Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetGalGal5
+    spectrum on
+
+        track chainGalGal5
+        parent chainNetGalGal5Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain galGal5
+        html chainNet
+
+    track chainNetGalGal5Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetGalGal5
+
+        track netGalGal5
+        parent chainNetGalGal5Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign galGal5 chainGalGal5
+        html chainNet
+
+################################################################
+# galGal4 - chicken - Gallus gallus - vertebrate - aves - taxId 9031
+################################################################
+track chainNetGalGal4
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 181
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb galGal4
+chainMinScore 3000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainNetGalGal4Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetGalGal4
+    spectrum on
+
+        track chainGalGal4
+        parent chainNetGalGal4Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain galGal4
+        html chainNet
+
+    track chainNetGalGal4Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetGalGal4
+
+        track netGalGal4
+        parent chainNetGalGal4Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign galGal4 chainGalGal4
+        html chainNet
+
+################################################################
+# galGal3 - chicken - Gallus gallus - vertebrate - aves - taxId 9031
+################################################################
+track chainNetGalGal3
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 181
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb galGal3
+chainMinScore 3000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainNetGalGal3Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetGalGal3
+    spectrum on
+
+        track chainGalGal3
+        parent chainNetGalGal3Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain galGal3
+        html chainNet
+
+    track chainNetGalGal3Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetGalGal3
+
+        track netGalGal3
+        parent chainNetGalGal3Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign galGal3 chainGalGal3
+        html chainNet
+
+################################################################
+# galGal2 - chicken - Gallus gallus - vertebrate - aves - taxId 9031
+################################################################
+track chainNetGalGal2
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 181
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb galGal2
+chainMinScore 5000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetGalGal2Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetGalGal2
+    spectrum on
+
+        track chainGalGal2
+        parent chainNetGalGal2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain galGal2
+        html chainNet
+
+    track chainNetGalGal2Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetGalGal2
+
+        track netGalGal2
+        parent chainNetGalGal2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign galGal2 chainGalGal2
+        html chainNet
+
+################################################################
 # anaPla1 - Mallard duck - Anas platyrhynchos - vertebrate - aves - 4357
 ################################################################
 track chainNetAnaPla1
