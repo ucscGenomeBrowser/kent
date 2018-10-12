@@ -1,0 +1,190 @@
+# JSON: '{}'
+# path: ''
+{}
+# path: 'not.found'
+NULL
+# path: 'name'
+NULL
+# path: 'id'
+NULL
+# path: '[1]'
+NULL
+# path: '[0].a'
+NULL
+# path: 'books[2]'
+NULL
+# path: 'books[*].someGuy'
+NULL
+# path: 'books[100]'
+NULL
+# path: 'books[0].isTrilogy'
+NULL
+# path: 'books[3].isTrilogy'
+NULL
+# path: 'books[number=1].title'
+NULL
+# path: 'books[title=LOTR:TT].double'
+NULL
+# path: 'books[double=2.0]'
+NULL
+# path: 'books[other=null].number'
+NULL
+# path: 'books[isTrilogy=true]'
+NULL
+# path: 'books[isTrilogy=false]'
+NULL
+# path: 'extra.extra[0]'
+NULL
+
+# JSON: '"just a string"'
+# path: ''
+"just a string"
+# path: 'not.found'
+# failed: jsonQueryElement: got element with scalar type (5), but children specified (not)
+# path: 'name'
+# failed: jsonQueryElement: got element with scalar type (5), but children specified (name)
+# path: 'id'
+# failed: jsonQueryElement: got element with scalar type (5), but children specified (id)
+# path: '[1]'
+# failed: jsonQueryElement: got element with scalar type (5), but children specified (1)
+# path: '[0].a'
+# failed: jsonQueryElement: got element with scalar type (5), but children specified (0)
+# path: 'books[2]'
+# failed: jsonQueryElement: got element with scalar type (5), but children specified (books)
+# path: 'books[*].someGuy'
+# failed: jsonQueryElement: got element with scalar type (5), but children specified (books)
+# path: 'books[100]'
+# failed: jsonQueryElement: got element with scalar type (5), but children specified (books)
+# path: 'books[0].isTrilogy'
+# failed: jsonQueryElement: got element with scalar type (5), but children specified (books)
+# path: 'books[3].isTrilogy'
+# failed: jsonQueryElement: got element with scalar type (5), but children specified (books)
+# path: 'books[number=1].title'
+# failed: jsonQueryElement: got element with scalar type (5), but children specified (books)
+# path: 'books[title=LOTR:TT].double'
+# failed: jsonQueryElement: got element with scalar type (5), but children specified (books)
+# path: 'books[double=2.0]'
+# failed: jsonQueryElement: got element with scalar type (5), but children specified (books)
+# path: 'books[other=null].number'
+# failed: jsonQueryElement: got element with scalar type (5), but children specified (books)
+# path: 'books[isTrilogy=true]'
+# failed: jsonQueryElement: got element with scalar type (5), but children specified (books)
+# path: 'books[isTrilogy=false]'
+# failed: jsonQueryElement: got element with scalar type (5), but children specified (books)
+# path: 'extra.extra[0]'
+# failed: jsonQueryElement: got element with scalar type (5), but children specified (extra)
+
+# JSON: '100'
+# path: ''
+100
+# path: 'not.found'
+# failed: jsonQueryElement: got element with scalar type (2), but children specified (not)
+# path: 'name'
+# failed: jsonQueryElement: got element with scalar type (2), but children specified (name)
+# path: 'id'
+# failed: jsonQueryElement: got element with scalar type (2), but children specified (id)
+# path: '[1]'
+# failed: jsonQueryElement: got element with scalar type (2), but children specified (1)
+# path: '[0].a'
+# failed: jsonQueryElement: got element with scalar type (2), but children specified (0)
+# path: 'books[2]'
+# failed: jsonQueryElement: got element with scalar type (2), but children specified (books)
+# path: 'books[*].someGuy'
+# failed: jsonQueryElement: got element with scalar type (2), but children specified (books)
+# path: 'books[100]'
+# failed: jsonQueryElement: got element with scalar type (2), but children specified (books)
+# path: 'books[0].isTrilogy'
+# failed: jsonQueryElement: got element with scalar type (2), but children specified (books)
+# path: 'books[3].isTrilogy'
+# failed: jsonQueryElement: got element with scalar type (2), but children specified (books)
+# path: 'books[number=1].title'
+# failed: jsonQueryElement: got element with scalar type (2), but children specified (books)
+# path: 'books[title=LOTR:TT].double'
+# failed: jsonQueryElement: got element with scalar type (2), but children specified (books)
+# path: 'books[double=2.0]'
+# failed: jsonQueryElement: got element with scalar type (2), but children specified (books)
+# path: 'books[other=null].number'
+# failed: jsonQueryElement: got element with scalar type (2), but children specified (books)
+# path: 'books[isTrilogy=true]'
+# failed: jsonQueryElement: got element with scalar type (2), but children specified (books)
+# path: 'books[isTrilogy=false]'
+# failed: jsonQueryElement: got element with scalar type (2), but children specified (books)
+# path: 'extra.extra[0]'
+# failed: jsonQueryElement: got element with scalar type (2), but children specified (extra)
+
+# JSON: '[{"a":"two"}, {"a":"things"}]'
+# path: ''
+[{"a": "two"},...]
+# path: 'not.found'
+# failed: jsonQueryElement: invalid index 'not' for list
+# path: 'name'
+# failed: jsonQueryElement: invalid index 'name' for list
+# path: 'id'
+# failed: jsonQueryElement: invalid index 'id' for list
+# path: '[1]'
+{"a": "things"}
+# path: '[0].a'
+"two"
+# path: 'books[2]'
+# failed: jsonQueryElement: invalid index 'books' for list
+# path: 'books[*].someGuy'
+# failed: jsonQueryElement: invalid index 'books' for list
+# path: 'books[100]'
+# failed: jsonQueryElement: invalid index 'books' for list
+# path: 'books[0].isTrilogy'
+# failed: jsonQueryElement: invalid index 'books' for list
+# path: 'books[3].isTrilogy'
+# failed: jsonQueryElement: invalid index 'books' for list
+# path: 'books[number=1].title'
+# failed: jsonQueryElement: invalid index 'books' for list
+# path: 'books[title=LOTR:TT].double'
+# failed: jsonQueryElement: invalid index 'books' for list
+# path: 'books[double=2.0]'
+# failed: jsonQueryElement: invalid index 'books' for list
+# path: 'books[other=null].number'
+# failed: jsonQueryElement: invalid index 'books' for list
+# path: 'books[isTrilogy=true]'
+# failed: jsonQueryElement: invalid index 'books' for list
+# path: 'books[isTrilogy=false]'
+# failed: jsonQueryElement: invalid index 'books' for list
+# path: 'extra.extra[0]'
+# failed: jsonQueryElement: invalid index 'extra' for list
+
+# JSON: '{ "id" : 1234, "name" : "z", "books" : [ {"title": "hobbit", "someGuy":"Bilbo", "isTrilogy":false, "number": 0, "double": 0.0, "other": null}, {"title": "LOTR:FOTR", "someGuy":"Gandalf", "isTrilogy":true, "number": 1, "double": 1.0 }, {"title":"LOTR:TT", "someGuy":"Sam", "isTrilogy":true, "number": 2, "double": 2.0 }, {"title":"LOTR:ROTK", "someGuy": "Aragorn", "isTrilogy":true, "number": 3, "double": 3.0, "other": "all done"}], "extra":{ "extra": [3209423, 2354341]} }...'
+# path: ''
+{"id": 1234,...}
+# path: 'not.found'
+NULL
+# path: 'name'
+"z"
+# path: 'id'
+1234
+# path: '[1]'
+NULL
+# path: '[0].a'
+NULL
+# path: 'books[2]'
+{"title": "LOTR:TT",...}
+# path: 'books[*].someGuy'
+"Bilbo"	"Gandalf"	"Sam"	"Aragorn"
+# path: 'books[100]'
+NULL
+# path: 'books[0].isTrilogy'
+false
+# path: 'books[3].isTrilogy'
+true
+# path: 'books[number=1].title'
+"LOTR:FOTR"
+# path: 'books[title=LOTR:TT].double'
+2
+# path: 'books[double=2.0]'
+{"title": "LOTR:TT",...}
+# path: 'books[other=null].number'
+0
+# path: 'books[isTrilogy=true]'
+{"title": "LOTR:FOTR",...}	{"title": "LOTR:TT",...}	{"title": "LOTR:ROTK",...}
+# path: 'books[isTrilogy=false]'
+{"title": "hobbit",...}
+# path: 'extra.extra[0]'
+3209423
+
