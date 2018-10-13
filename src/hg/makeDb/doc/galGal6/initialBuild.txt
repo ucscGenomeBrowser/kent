@@ -880,6 +880,7 @@ galGal6.downloadDir = galGal6
 
 #########################################################################
 # all.joiner update, downloads and in pushQ - (TBD - 2018-05-13 - Hiram)
+xyz
     cd $HOME/kent/src/hg/makeDb/schema
     # verify all the business is done for release
     ~/kent/src/hg/utils/automation/verifyBrowser.pl galGal6
