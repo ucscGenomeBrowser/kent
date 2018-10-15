@@ -1630,7 +1630,7 @@ for (;;)
 return s;
 }
 
-void replaceChar(char *s, char old, char new)
+void replaceChar(char *s, char oldc, char newc)
 /* Repace one char with another. Modifies original string. */
 {
 if (!s)
@@ -1638,8 +1638,8 @@ if (!s)
 char c;
 while((c=*s))
     {
-    if (c == old)
-       *s = new;	
+    if (c == oldc)
+       *s = newc;	
     ++s;
     }
 }
