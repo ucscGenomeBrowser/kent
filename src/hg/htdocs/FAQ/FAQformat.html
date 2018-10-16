@@ -341,20 +341,13 @@ within a PSL file:</p>
 </ol>
 <p>
 <strong><em>Example:</em></strong><br>
-Here is an example of an annotation track in PSL format. Note that line breaks have been inserted 
-into the PSL lines in this example for documentation display purposes. This 
-<a href="../goldenPath/help/fishBlats.txt" target="blank">example</a> can be pasted into the 
-browser without editing.</p>
+Here is an example of an annotation track in PSL format.</p>
 <pre><code>browser position chr22:13073000-13074000
 browser hide all
-track name=fishBlats description=&quot;Fish BLAT&quot; visibility=2
-useScore=1
-59 9 0 0 1 823 1 96 +- FS_CONTIG_48080_1 1955 171 1062 chr22
-    47748585 13073589 13073753 2 48,20,  171,1042,  34674832,34674976,
-59 7 0 0 1 55 1 55 +- FS_CONTIG_26780_1 2825 2456 2577 chr22
-    47748585 13073626 13073747 2 21,45,  2456,2532,  34674838,34674914,
-59 7 0 0 1 55 1 55 -+ FS_CONTIG_26780_1 2825 2455 2676 chr22
-    47748585 13073727 13073848 2 45,21,  249,349,  13073727,13073827, </code></pre>
+track name=fishBlats description=&quot;Fish BLAT&quot; visibility=2 useScore=1
+59 9 0 0 1 823 1 96 +- FS_CONTIG_48080_1 1955 171 1062 chr22 47748585 13073589 13073753 2 48,20,  171,1042,  34674832,34674976,
+59 7 0 0 1 55 1 55 +- FS_CONTIG_26780_1 2825 2456 2577 chr22 47748585 13073626 13073747 2 21,45,  2456,2532,  34674838,34674914,
+59 7 0 0 1 55 1 55 -+ FS_CONTIG_26780_1 2825 2455 2676 chr22 47748585 13073727 13073848 2 45,21,  249,349,  13073727,13073827, </code></pre>
 <p>
 Click <a class="insideLink" href="../cgi-bin/hgTracks?org=human&amp;position=chr7&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/fishBlats.txt"
 target="_blank">here</a> to display this track in the Genome Browser.</p>
@@ -483,20 +476,14 @@ Here is a brief description of the GFF fields:</p>
 </ol>
 <p>
 <strong><em>Example:</em></strong><br>
-Here's an example of a GFF-based track. This <a href="../goldenPath/help/regulatory.txt" 
-target="blank">example</a> can be pasted into the browser without editing. NOTE: Paste operations on
-some operating systems will replace tabs with spaces, which will result in an error when the GFF 
-track is uploaded. You can circumvent this problem by pasting the URL of the above example
-(http://genome.ucsc.edu/goldenPath/help/regulatory.txt) instead of the text itself into the custom 
-annotation track text box. If you encounter an error when loading a GFF track, check that the data 
-lines contain tabs rather than spaces.</p>
+Here's an example of a GFF-based track. This data format require tabs and some operating systems convert tabs to spaces. If pasting doesn't work, this <a href="../goldenPath/help/regulatory.txt" 
+target="blank">example's</a> contents or the url itself can be pasted into the custom track text box.
 <pre><code>browser position chr22:10000000-10025000
 browser hide all
-track name=regulatory description=&quot;TeleGene(tm) Regulatory Regions&quot;
-visibility=2
-chr22  TeleGene enhancer  10000000  10001000  500 +  .  touch1
-chr22  TeleGene promoter  10010000  10010100  900 +  .  touch1
-chr22  TeleGene promoter  10020000  10025000  800 -  .  touch2
+track name=regulatory description=&quot;TeleGene(tm) Regulatory Regions&quot; visibility=2
+chr22	TeleGene	enhancer	10000000	10001000	500	+	.	touch1
+chr22	TeleGene	promoter	10010000	10010100	900	+	.	touch1
+chr22	TeleGene	promoter	10020000	10025000	800	-	.	touch2
 </code></pre>
 <p>
 Click <a class="insideLink" href="../cgi-bin/hgTracks?org=human&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/regulatory.txt"

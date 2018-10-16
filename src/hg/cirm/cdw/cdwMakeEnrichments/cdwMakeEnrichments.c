@@ -442,6 +442,8 @@ char *ignoredFormats[] = {
 	"vcf.gz.tbi",
 	"text",
 	"html",
+	"csv",
+	"tsv",
 	"unknown",
 	};
 

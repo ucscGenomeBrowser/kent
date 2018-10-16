@@ -104,7 +104,7 @@ DBS = \
 	fr1 fr2 fr3 \
 	fukDam1 \
 	gadMor1 \
-	galGal2 galGal3 galGal4 galGal5 \
+	galGal2 galGal3 galGal4 galGal5 galGal6 \
 	galVar1 \
 	gasAcu1 \
 	gorGor1 gorGor2 gorGor3 gorGor4 gorGor5 \

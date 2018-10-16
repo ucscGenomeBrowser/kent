@@ -1,0 +1,927 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the galGal6
+
+#  Can use existing photograph (otherwise find one before starting here)
+
+#########################################################################
+#  Initial steps, find photograph (DONE - 2018-10-11 - Hiram)
+
+# To start this initialBuild.txt document, from a previous assembly document:
+
+mkdir ~/kent/src/hg/makeDb/doc/galGal6
+cd ~/kent/src/hg/makeDb/doc/galGal6
+
+sed -e 's/rouAeg1/galGal6/g; s/RouAeg1/GalGal6/g; s/DONE/TBD/g;' \
+  ../rouAeg1/initialBuild.txt > initialBuild.txt
+
+mkdir -p /hive/data/genomes/galGal6/refseq
+cd /hive/data/genomes/galGal6
+
+#  Can use existing photograph
+cp -p ../galGal5/photoReference.txt ./
+cat photoReference.txt
+photoCreditURL http://www.genome.gov/dmd/img.cfm?node=Photos/Animals/Red%20Jungle%20Fowl&id=2120
+photoCreditName NHGRI Press Photos
+
+## download from NCBI
+cd /hive/data/genomes/galGal6/refseq
+
+rsync -L -a -P --stats \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/refseq/vertebrate_other/Gallus_gallus/all_assembly_versions/GCF_000002315.5_GRCg6a/ ./
+
+# real    0m34.117s
+
+# this information is from the top of 
+#    galGal6/refseq/*_assembly_report.txt
+#    (aka: galGal6/refseq/GCF_000002315.5_GRCg6a_assembly_report.txt)
+
+# Assembly name:  GRCg6a
+# Description:    Genome Reference Consortium Chicken Build 6a
+# Organism name:  Gallus gallus (chicken)
+# Infraspecific name:  breed=Red Jungle fowl, inbred line UCD001
+# Isolate:  RJF #256
+# Sex:  female
+# Taxid:          9031
+# BioSample:      SAMN02981218
+# BioProject:     PRJNA13342
+# Submitter:      Genome Reference Consortium
+# Date:           2018-3-27
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Chromosome
+# Genome representation: full
+# WGS project:    AADN05
+# Assembly method: FALCON-integrate v. 1.7.5
+# Genome coverage: 82x
+# Sequencing technology: Pacific Biosciences RSII (P6-C4 and P5-C3 chemistry)
+# RefSeq category: Representative Genome
+# GenBank assembly accession: GCA_000002315.5
+# RefSeq assembly accession: GCF_000002315.5
+# RefSeq assembly and GenBank assemblies identical: no
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_000000185.5      GCF_000000185.4 Primary Assembly
+##      GCF_000184395.1 non-nuclear
+
+# check assembly size for later reference:
+
+faSize G*6a_genomic.fna.gz
+# 1065365425 bases (9784466 N's 1055580959 real 838536335 upper
+#	217044624 lower) in 464 sequences in 1 files
+# Total size: mean 2296046.2 sd 14494999.8 min 87 (NW_020109844.1)
+#	max 197608386 (NC_006088.5) median 10066
+# %20.37 masked total, %20.56 masked real
+
+
+#############################################################################
+# establish config.ra file (DONE - Hiram - 2018-10-11)
+    cd /hive/data/genomes/galGal6
+    ~/kent/src/hg/utils/automation/prepConfig.pl galGal6 vertebrate chicken \
+       refseq/*_assembly_report.txt > galGal6.config.ra
+
+    # compare with previous version to see if it is sane:
+    diff galGal6.config.ra ../galGal5/galGal5.config.ra
+
+    # verify it really does look sane
+    cat galGal6.config.ra
+# config parameters for makeGenomeDb.pl:
+db galGal6
+clade vertebrate
+scientificName Gallus gallus
+commonName Chicken
+assemblyDate Mar. 2018
+assemblyLabel Genome Reference Consortium
+assemblyShortLabel GRCg6a
+orderKey 3313
+# mitochondrial sequence included in refseq release
+# mitoAcc NC_001323.1
+mitoAcc none
+fastaFiles /hive/data/genomes/galGal6/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/galGal6/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir chicken
+photoCreditURL http://www.genome.gov/dmd/img.cfm?node=Photos/Animals/Red%20Jungle%20Fowl&id=2120
+photoCreditName NHGRI Press Photos
+ncbiGenomeId 111
+ncbiAssemblyId 1668981
+ncbiAssemblyName GRCg6a
+ncbiBioProject 13342
+ncbiBioSample SAMN02981218
+genBankAccessionID GCF_000002315.5
+taxId 9031
+
+#############################################################################
+# setup UCSC named files (DONE - 2018-10-11 - Hiram)
+
+    mkdir /hive/data/genomes/galGal6/ucsc
+    cd /hive/data/genomes/galGal6/ucsc
+
+    # check for duplicate sequences:
+    time faToTwoBit -noMask ../refseq/G*6a_genomic.fna.gz refseq.2bit
+    #  real    0m15.691s
+
+    twoBitDup refseq.2bit
+    # no output is a good result, otherwise, would have to eliminate duplicates
+    # the scripts creating the fasta here will be using this refseq.2bit file
+    # remove it later
+
+    # new option required to ucscCompositeAgp.pl 2016-04-13
+    time ~/kent/src/hg/utils/automation/ucscCompositeAgp.pl \
+      ../refseq/G*6a_genomic.fna.gz \
+	../refseq/*_assembly_structure/Primary_Assembly
+# constructing refseq.2bit from ../refseq/GCF_000002315.4_Gallus_gallus-5.0_genomic.fna.gz
+NC_006088.5 chr1
+NC_006089.5 chr2
+NC_006090.5 chr3
+NC_006091.5 chr4
+NC_006092.5 chr5
+NC_006093.5 chr6
+NC_006094.5 chr7
+NC_006095.5 chr8
+NC_006096.5 chr9
+NC_006097.5 chr10
+NC_006098.5 chr11
+NC_006099.5 chr12
+NC_006100.5 chr13
+NC_006101.5 chr14
+NC_006102.5 chr15
+NC_006103.5 chr16
+NC_006104.5 chr17
+NC_006105.5 chr18
+NC_006106.5 chr19
+NC_006107.5 chr20
+NC_006108.5 chr21
+NC_006109.5 chr22
+NC_006110.5 chr23
+NC_006111.5 chr24
+NC_006112.4 chr25
+NC_006113.5 chr26
+NC_006114.5 chr27
+NC_006115.5 chr28
+NC_006119.4 chr32
+NC_006126.5 chrW
+NC_006127.5 chrZ
+NC_008465.4 chr33
+NC_028739.2 chr30
+NC_028740.2 chr31
+
+real    4m25.626s
+user    4m27.043s
+sys     0m14.042s
+
+    time ~/kent/src/hg/utils/automation/unplacedWithChroms.pl \
+       ../refseq/*_assembly_structure/Primary_Assembly
+    # processed 340 sequences into chrUn.fa.gz
+    # real    0m5.066s
+
+    time ~/kent/src/hg/utils/automation/unlocalizedWithChroms.pl \
+       ../refseq/*_assembly_structure/Primary_Assembly
+# 33
+# Z
+# 22
+# 1
+# 23
+# 13
+# 16
+# 6
+# 25
+# 28
+# W
+# 3
+# 9
+# 14
+# 15
+# 19
+# 31
+# processed 89 sequences into chr*_random.gz 17 files
+
+# real    0m1.497s
+
+
+    # bash syntax here
+    mitoAcc=`grep "^# mitoAcc" ../galGal6.config.ra | awk '{print $NF}'`
+    printf "# mitoAcc %s\n" "$mitoAcc"
+# mitoAcc NC_001323.1
+    zcat \
+  ../refseq/*_assembly_structure/non-nuclear/assem*/AGP/chrMT.comp.agp.gz \
+     | grep -v "^#" | sed -e "s/^$mitoAcc/chrM/;" > chrM.agp
+
+    cat chrM.agp
+# chrM    1       16775   1       O       NC_001323.1     1       16775   +
+
+
+    printf ">chrM\n" > chrM.fa
+    twoBitToFa -noMask refseq.2bit:$mitoAcc stdout | grep -v "^>" >> chrM.fa
+    gzip chrM.fa
+
+    faSize chrM.fa.gz
+# 16775 bases (0 N's 16775 real 16775 upper 0 lower) in 1 sequences in 1 files
+
+    # verify fasta and AGPs agree
+    time faToTwoBit *.fa.gz test.2bit
+    # real    0m24.827s
+
+    cat *.agp | checkAgpAndFa stdin test.2bit 2>&1 | tail -4
+    # All AGP and FASTA entries agree - both files are valid
+
+    # and no sequence lost from orginal:
+    twoBitToFa test.2bit stdout | faSize stdin
+# 1065365425 bases (9784466 N's 1055580959 real 1055580959 upper 0 lower)
+#	in 464 sequences in 1 files
+# Total size: mean 2296046.2 sd 14494999.8 min 87 (chrUn_NW_020109844v1)
+#	max 197608386 (chr1) median 10066
+
+    # same numbers as above (except for upper/lower masking)
+# 1065365425 bases (9784466 N's 1055580959 real 838536335 upper
+#	217044624 lower) in 464 sequences in 1 files
+# Total size: mean 2296046.2 sd 14494999.8 min 87 (NW_020109844.1)
+#	max 197608386 (NC_006088.5) median 10066
+
+    # no longer need these temporary 2bit files
+    rm test.2bit refseq.2bit
+
+#############################################################################
+#  Initial database build (DONE - 2018-10-11 - Hiram)
+
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp galGal6.config.ra) > agp.log 2>&1
+    # about 2 minutes
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db galGal6.config.ra) > db.log 2>&1
+    # real    11m9.465s
+
+    # check in the trackDb files created in TemporaryTrackDbCheckout/
+    #    and add galGal6 to trackDb/makefile
+
+    # temporary symlink until masked sequence is available
+    cd /hive/data/genomes/galGal6
+    ln -s `pwd`/galGal6.unmasked.2bit /gbdb/galGal6/galGal6.2bit
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2018-10-11 - Hiram)
+    mkdir /hive/data/genomes/galGal6/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/galGal6/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/galGal6/galGal6.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku galGal6) > do.log 2>&1
+    # real    2m11.881s
+
+    cat fb.galGal6.cpgIslandExtUnmasked.txt
+    # 27399280 bases of 1055588482 (2.596%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2018-10-11 - Hiram)
+    mkdir /hive/data/genomes/galGal6/bed/cytoBand
+    cd /hive/data/genomes/galGal6/bed/cytoBand
+    makeCytoBandIdeo.csh galGal6
+
+#############################################################################
+# run up idKeys files for chromAlias/ncbiRefSeq (DONE - 2018-10-11 - Hiram)
+    mkdir /hive/data/genomes/galGal6/bed/idKeys
+    cd /hive/data/genomes/galGal6/bed/idKeys
+
+    time (doIdKeys.pl \
+        -twoBit=/hive/data/genomes/galGal6/galGal6.unmasked.2bit \
+        -buildDir=`pwd` galGal6) > do.log 2>&1 &
+    # real    0m47.105s
+
+    cat galGal6.keySignature.txt
+    #  7850e2d5dabb6134fdc9d7083f1a3a54
+
+#############################################################################
+# gapOverlap (DONE - 2018-10-12 - Hiram)
+    mkdir /hive/data/genomes/galGal6/bed/gapOverlap
+    cd /hive/data/genomes/galGal6/bed/gapOverlap
+    time (doGapOverlap.pl \
+        -twoBit=/hive/data/genomes/galGal6/galGal6.unmasked.2bit galGal6 ) \
+        > do.log 2>&1 &
+    # real    1m40.205s
+
+    # results are empty, there are none found.
+
+    cat fb.galGal6.gapOverlap.txt
+    # 97216 bases of 2615516299 (0.004%) in intersection
+
+#############################################################################
+# tandemDups (DONE - 2018-10-12 - Hiram)
+    mkdir /hive/data/genomes/galGal6/bed/tandemDups
+    cd /hive/data/genomes/galGal6/bed/tandemDups
+    time (~/kent/src/hg/utils/automation/doTandemDup.pl \
+  -twoBit=/hive/data/genomes/galGal6/galGal6.unmasked.2bit galGal6) \
+        > do.log 2>&1 &
+    # real    97m29.383s
+
+    cat fb.galGal6.tandemDups.txt
+    # 24887623 bases of 1065365425 (2.336%) in intersection
+
+    bigBedInfo galGal6.tandemDups.bb | sed -e 's/^/#  /;'
+#  version: 4
+#  fieldCount: 13
+#  hasHeaderExtension: yes
+#  isCompressed: yes
+#  isSwapped: 0
+#  extraIndexCount: 0
+#  itemCount: 346,400
+#  primaryDataSize: 8,843,385
+#  primaryIndexSize: 38,860
+#  zoomLevels: 9
+#  chromCount: 407
+#  basesCovered: 114,644,428
+#  meanDepth (of bases covered): 21.207643
+#  minDepth: 1.000000
+#  maxDepth: 298.000000
+#  std of depth: 35.518221
+
+#########################################################################
+# ucscToINSDC and ucscToRefSeq table/track (DONE - 2018-10-11 - Hiram)
+    # construct idKeys for the refseq sequence
+    mkdir /hive/data/genomes/galGal6/refseq/idKeys
+    cd /hive/data/genomes/galGal6/refseq/idKeys
+    faToTwoBit ../GCF_000002315.5_GRCg6a_genomic.fna.gz galGal6.refSeq.2bit
+
+    time (doIdKeys.pl -buildDir=`pwd` \
+        -twoBit=`pwd`/galGal6.refSeq.2bit refseqGalGal6)  > do.log 2>&1 &
+    # real    0m48.786s
+
+    cat refseqGalGal6.keySignature.txt
+    #  7850e2d5dabb6134fdc9d7083f1a3a54
+
+    # and the genbank sequence needs keys too:
+    mkdir /hive/data/genomes/galGal6/refseq/idKeysGenbank
+    cd /hive/data/genomes/galGal6/refseq/idKeysGenbank
+    faToTwoBit /hive/data/outside/ncbi/genomes/genbank/vertebrate_other/Gallus_gallus/all_assembly_versions/GCA_000002315.5_GRCg6a/GCA_000002315.5_GRCg6a_genomic.fna.gz galGal6.genbank.2bit
+
+    time (doIdKeys.pl -buildDir=`pwd` \
+        -twoBit=`pwd`/galGal6.genbank.2bit genbankGalGal6)  > do.log 2>&1 &
+
+    cat genbankGalGal6.keySignature.txt
+    #  a20fdad3318d371fcb34fcc66bab3752
+
+    mkdir /hive/data/genomes/galGal6/bed/chromAlias
+
+    join -t$'\t' ../idKeys/galGal6.idKeys.txt \
+        ../../refseq/idKeysGenbank/genbankGalGal6.idKeys.txt | cut -f2- \
+          | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+               | sort -k1,1 -k2,2n > ucscToINSDC.bed
+
+    join -t$'\t' ../idKeys/galGal6.idKeys.txt \
+        ../../refseq/idKeys/refseqGalGal6.idKeys.txt | cut -f2- \
+          | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+               | sort -k1,1 -k2,2n > ucscToRefSeq.bed
+
+    # should be same line counts throughout:
+    wc -l * ../../chrom.sizes
+    #	463 ucscToINSDC.bed
+    #	464 ucscToRefSeq.bed
+    #	464 ../../chrom.sizes
+
+    # need to find the accession for the INSDC equivalent to chrM:
+    egrep chrM *
+# ucscToRefSeq.bed:chrM   0       16775   NC_001323.1
+    # lookup that accession at NCBI Entrez: X52392.1
+    # and add to ucscToINSDC.bed:
+    printf "chrM\t0\t16775\tX52392.1\n" >> ucscToINSDC.bed
+    # verify:
+    grep chrM *
+# ucscToINSDC.bed:chrM    0       16775   X52392.1
+# ucscToRefSeq.bed:chrM   0       16775   NC_001323.1
+
+    export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    # 27
+    # use the $chrSize in this sed
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab galGal6 ucscToINSDC stdin ucscToINSDC.bed
+     # should be the same for ucscToRefSeq:
+    export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    # 27
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' \
+         | hgLoadSqlTab galGal6 ucscToRefSeq stdin ucscToRefSeq.bed
+
+    # should be quiet for all OK
+    checkTableCoords galGal6
+
+    # should cover %100 entirely:
+    featureBits -countGaps galGal6 ucscToINSDC
+    # 1065365425 bases of 1065365425 (100.000%) in intersection
+    featureBits -countGaps galGal6 ucscToRefSeq
+    # 1065365425 bases of 1065365425 (100.000%) in intersection
+
+#########################################################################
+# add chromAlias table (DONE - 2018-10-12 - ChrisL)
+
+    mkdir /hive/data/genomes/galGal6/bed/chromAlias
+    cd /hive/data/genomes/galGal6/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name from ucscToRefSeq;' galGal6 \
+        | sort -k1,1 > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name from ucscToINSDC;' galGal6 \
+        | sort -k1,1 > ucsc.genbank.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl ucsc.*.tab \
+        > galGal6.chromAlias.tab
+
+for t in refseq genbank
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t galGal6.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking refseq: 464 =? 464 OK
+# checking genbank: 464 =? 464 OK
+
+    hgLoadSqlTab galGal6 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        galGal6.chromAlias.tab
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2018-10-11 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/chicken/galGal6
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" galGal6 \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
+   1519 AADN.1
+    124 AC.1
+    313 AC.2
+    328 AC.3
+     74 AC.4
+     20 AC.5
+      1 AC.6
+      1 NC_.1
+
+    # implies a rule: '[AN][AC][D0-9_][N0-9][0-9]+(\.[0-9]+)?'
+
+    # verify this rule will find them all and eliminate them all:
+    hgsql -N -e "select frag from gold;" galGal6 | wc -l
+    # 2380
+
+    hgsql -N -e "select frag from gold;" galGal6 \
+       | egrep -e '[AN][AC][D0-9_][N0-9][0-9]+(\.[0-9]+)?' | wc -l
+    # 2380
+
+    hgsql -N -e "select frag from gold;" galGal6 \
+       | egrep -v -e '[AN][AC][D0-9_][N0-9][0-9]+(\.[0-9]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/chicken/galGal6/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [AN][AC][D0-9_][N0-9][0-9]+(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box
+
+##########################################################################
+# running repeat masker (DONE - 2018-10-11 - Hiram)
+    mkdir /hive/data/genomes/galGal6/bed/repeatMasker
+    cd /hive/data/genomes/galGal6/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku galGal6) > do.log 2>&1
+    # real    48m25.181s
+
+    cat faSize.rmsk.txt
+# 1065365425 bases (9784466 N's 1055580959 real 922186059 upper
+#	133394900 lower) in 464 sequences in 1 files
+# Total size: mean 2296046.2 sd 14494999.8 min 87 (chrUn_NW_020109844v1)
+#	max 197608386 (chr1) median 10066
+# %12.52 masked total, %12.64 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.7
+    #    February 01 2017 (open-4-0-7) 1.331 version of RepeatMasker
+    # CC    Dfam_Consensus RELEASE 20170127;                            *
+    # CC    RepBase RELEASE 20170127;     
+
+    time featureBits -countGaps galGal6 rmsk
+    # 133395265 bases of 1065365425 (12.521%) in intersection
+    # real    0m4.226s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the faSize count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+    # faster way to get the same result on high contig count assemblies:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' galGal6 \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+    # total 133395265.000000
+    #   real    0m3.198s
+
+##########################################################################
+# running simple repeat (DONE - 2018-10-11 - Hiram)
+
+    # The '-trf409 4' is a bit smaller than human which is 6
+
+    mkdir /hive/data/genomes/galGal6/bed/simpleRepeat
+    cd /hive/data/genomes/galGal6/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        -trf409=4 galGal6) > do.log 2>&1
+    # real    58m3.288s
+
+    cat fb.simpleRepeat
+    # 31110690 bases of 1055588482 (2.947%) in intersection
+
+    cd /hive/data/genomes/galGal6
+    # using the Window Masker result:
+    cd /hive/data/genomes/galGal6
+    twoBitMask bed/windowMasker/galGal6.cleanWMSdust.2bit \
+       -add bed/simpleRepeat/trfMask.bed  galGal6.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    # add to rmsk after it is done:
+#     twoBitMask galGal6.rmsk.2bit \
+#         -add bed/simpleRepeat/trfMask.bed galGal6.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa galGal6.2bit stdout | faSize stdin > faSize.galGal6.2bit.txt
+    cat faSize.galGal6.2bit.txt
+# 1065365425 bases (9784466 N's 1055580959 real 829559086 upper
+#	226021873 lower) in 464 sequences in 1 files
+# Total size: mean 2296046.2 sd 14494999.8 min 87 (chrUn_NW_020109844v1)
+#	max 197608386 (chr1) median 10066
+# %21.22 masked total, %21.41 masked real
+
+    rm /gbdb/galGal6/galGal6.2bit
+    ln -s `pwd`/galGal6.2bit /gbdb/galGal6/galGal6.2bit
+
+#########################################################################
+# CREATE MICROSAT TRACK (DONE - 2018-10-11 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/galGal6/bed/microsat
+    cd /cluster/data/galGal6/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed galGal6 microsat microsat.bed
+    # Read 1745 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2018-10-11 - Hiram)
+
+    mkdir /hive/data/genomes/galGal6/bed/windowMasker
+    cd /hive/data/genomes/galGal6/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev galGal6) > do.log 2>&1
+    # real    26m58.753s
+
+    # Masking statistics
+    cat faSize.galGal6.cleanWMSdust.txt
+# 1065365425 bases (9784466 N's 1055580959 real 830149186 upper
+#	225431773 lower) in 464 sequences in 1 files
+# Total size: mean 2296046.2 sd 14494999.8 min 87 (chrUn_NW_020109844v1)
+#	max 197608386 (chr1) median 10066
+# %21.16 masked total, %21.36 masked real
+
+    cat fb.galGal6.rmsk.windowmaskerSdust.txt
+    # 86091413 bases of 1065365425 (8.081%) in intersection
+
+##########################################################################
+# cpgIslands - (DONE - 2018-10-11 - Hiram)
+    mkdir /hive/data/genomes/galGal6/bed/cpgIslands
+    cd /hive/data/genomes/galGal6/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku galGal6) > do.log 2>&1
+    # real    2m5.105s
+
+    cat fb.galGal6.cpgIslandExt.txt
+    # 16395346 bases of 1055588482 (1.553%) in intersection
+
+##############################################################################
+# genscan - (DONE - 2018-10-11 - Hiram)
+    mkdir /hive/data/genomes/galGal6/bed/genscan
+    cd /hive/data/genomes/galGal6/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku galGal6) > do.log 2>&1
+    # real    88m34.900s
+
+    cat fb.galGal6.genscan.txt
+    # 23911678 bases of 1055588482 (2.265%) in intersection
+
+    cat fb.galGal6.genscanSubopt.txt
+    # 24521608 bases of 1055588482 (2.323%) in intersection
+
+#########################################################################
+# Create kluster run files (DONE - 2018-10-11 - Hiram)
+
+    # numerator is galGal6 gapless bases "real" as reported by:
+    featureBits -noRandom -noHap galGal6 gap
+    # 9758843 bases of 1040397755 (0.938%) in intersection
+    #                   ^^^
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 1040397755 / 2861349177 \) \* 1024
+    #  ( 1040397755 / 2861349177 ) * 1024 = 372.330406
+
+    # ==> use -repMatch=350 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/galGal6
+    blat galGal6.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/galGal6.11.ooc \
+        -repMatch=350
+    #   Wrote 18169 overused 11-mers to jkStuff/galGal6.11.ooc
+
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N \
+        -e 'select * from gap where bridge="no" order by size;' galGal6 \
+        | sort -k7,7nr | ave -col=7 stdin
+    # minimum gap size is 10 and produces a reasonable number of lifts
+    gapToLift -verbose=2 -minGap=10 galGal6 jkStuff/nonBridged.lft \
+        -bedFile=jkStuff/nonBridged.bed
+    wc -l jkStuff/nonBri*
+    # 525 jkStuff/nonBridged.bed
+    # 525 jkStuff/nonBridged.lft
+
+########################################################################
+# lastz/chain/net swap human/hg38 (DONE - 2018-10-12 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/hg38/bed/lastzGalGal6.2018-10-12
+
+    cat fb.hg38.chainGalGal6Link.txt
+    # 154079940 bases of 3095998939 (4.977%) in intersection
+    cat fb.hg38.chainSynGalGal6Link.txt
+    # 95877644 bases of 3095998939 (3.097%) in intersection
+    cat fb.hg38.chainRBest.GalGal6.txt
+    # 106665747 bases of 3095998939 (3.445%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/galGal6/bed/blastz.hg38.swap
+    cd /hive/data/genomes/galGal6/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzGalGal6.2018-10-12/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    9m45.514s
+
+    cat fb.galGal6.chainHg38Link.txt
+    # 120955955 bases of 1055588482 (11.459%) in intersection
+
+    cat fb.galGal6.chainSynHg38Link.txt
+    # 92597630 bases of 1055588482 (8.772%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` galGal6 hg38) > rbest.log 2>&1 &
+    # real    139m24.408s
+
+    cat fb.galGal6.chainRBest.Hg38.txt
+    # 106294585 bases of 1055588482 (10.070%) in intersection
+
+#########################################################################
+# lastz/chain/net swap mouse/mm10 (DONE - 2018-10-12 - Hiram)
+
+    # original alignment
+    cd /hive/data/genomes/mm10/bed/lastzGalGal6.2018-10-12
+    cat fb.mm10.chainGalGal6Link.txt
+    # 101151132 bases of 2652783500 (3.813%) in intersection
+    cat fb.mm10.chainSynGalGal6Link.txt
+    # 70707720 bases of 2652783500 (2.665%) in intersection
+    cat fb.mm10.chainRBest.GalGal6.txt 
+    # 79649474 bases of 2652783500 (3.002%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/galGal6/bed/blastz.mm10.swap
+    cd /hive/data/genomes/galGal6/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/mm10/bed/lastzGalGal6.2018-10-12/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    6m41.043s
+
+    cat fb.galGal6.chainMm10Link.txt
+    # 88539346 bases of 1055588482 (8.388%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` galGal6 mm10) > rbest.log 2>&1 &
+    # real    94m11.007s
+
+    cat fb.galGal6.chainRBest.Mm10.txt
+    # 79474812 bases of 1055588482 (7.529%) in intersection
+
+#########################################################################
+# GENBANK AUTO UPDATE (DONE - 2018-10-12 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism       mrnaCnt estCnt  refSeqCnt
+    # Gallus gallus	30708	600485	6392
+
+    # edit etc/genbank.conf to add galGal6 just before galGal5
+
+# galGal6 (chicken/GCF_000002315.5_GRCg6a)
+galGal6.serverGenome = /hive/data/genomes/galGal6/galGal6.2bit
+galGal6.clusterGenome = /hive/data/genomes/galGal6/galGal6.2bit
+galGal6.ooc = /hive/data/genomes/galGal6/jkStuff/galGal6.11.ooc
+galGal6.lift = /hive/data/genomes/galGal6/jkStuff/nonBridged.lft
+galGal6.perChromTables = no
+galGal6.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+galGal6.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+galGal6.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+galGal6.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+galGal6.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+galGal6.genbank.est.xeno.pslCDnaFilter    = ${finished.genbank.est.xeno.pslCDnaFilter}
+galGal6.refseq.mrna.native.load = yes
+galGal6.refseq.mrna.xeno.load = yes
+galGal6.genbank.mrna.xeno.load = yes
+galGal6.downloadDir = galGal6
+# galGal6.upstreamGeneTbl = refGene
+# galGal6.upstreamMaf = multiz7way /hive/data/genomes/galGal4/bed/multiz7way/species.lst
+
+    # verify the files specified exist before checking in the file:
+  grep ^galGal6 etc/genbank.conf | grep hive | awk '{print $NF}' | xargs ls -og
+# -rw-rw-r-- 1 313201328 Oct 11 15:51 /hive/data/genomes/galGal6/galGal6.2bit
+# -rw-rw-r-- 1 313201328 Oct 11 15:51 /hive/data/genomes/galGal6/galGal6.2bit
+# -rw-rw-r-- 1     72684 Oct 11 15:56 /hive/data/genomes/galGal6/jkStuff/galGal6.11.ooc
+# -rw-rw-r-- 1     29513 Oct 11 15:57 /hive/data/genomes/galGal6/jkStuff/nonBridged.lft
+
+    git commit -m "Added galGal6; refs #22113" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    # wait a few days for genbank magic to take place, the tracks will
+    # appear
+
+#############################################################################
+# augustus gene track (DONE - 2018-10-12 - Hiram)
+
+    mkdir /hive/data/genomes/galGal6/bed/augustus
+    cd /hive/data/genomes/galGal6/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=chicken -dbHost=hgwdev \
+           -workhorse=hgwdev galGal6) > do.log 2>&1
+    # real    48m48.597s
+
+    cat fb.galGal6.augustusGene.txt
+    # 25827925 bases of 1055588482 (2.447%) in intersection
+
+#########################################################################
+# ncbiRefSeq (DONE - 2018-10-12 - Hiram)
+
+    mkdir /hive/data/genomes/galGal6/bed/ncbiRefSeq
+    cd /hive/data/genomes/galGal6/bed/ncbiRefSeq
+    # running step wise just to be careful
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=download -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_other Gallus_gallus \
+      GCF_000002315.5_GRCg6a galGal6) > download.log 2>&1
+    # real    1m19.029s
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -continue=process -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=process -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_other Gallus_gallus \
+      GCF_000002315.5_GRCg6a galGal6) > process.log 2>&1
+    # real    2m6.030s
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -continue=load -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=load -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_other Gallus_gallus \
+      GCF_000002315.5_GRCg6a galGal6) > load.log 2>&1
+    # real    0m22.312s
+
+    cat fb.ncbiRefSeq.galGal6.txt
+    #  88641893 bases of 1055588482 (8.397%) in intersection
+
+    # need to add: include ../../refSeqComposite.ra alpha
+    # to the chicken/galGal6/trackDb.ra to turn on the track in the browser
+
+    # there was one gene that claimed to have a protein, but the
+    # protein sequence was not included in the protein.faa file
+    # discovered from joinerCheck
+    # manual fix to blank out this one protein, to see the entry
+    hgsql -e 'select * from ncbiRefSeqLink where protAcc="NP_989875.1";' galGal6
+    hgsql -e 'update ncbiRefSeqLink set protAcc="" where protAcc="NP_989875.1";' galGal6
+    # this makes the 'protein' link disappear from the gene details page
+    # curious that this gene is marked as a non-coding gene anyway ?
+    # gene: FET1 at chr4:63,102,774-63,105,516-
+
+    XXX TBD run this up after the genbank has constructed refGene
+    featureBits -enrichment galGal6 refGene ncbiRefSeq 
+    # refGene 1.181%, ncbiRefSeq 6.776%, both 1.175%, cover 99.49%,
+    #    enrich 14.68x
+
+#########################################################################
+# LIFTOVER TO galGal5 (DONE - 2018-10-11 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/galGal6/bed/blat.galGal5.2018-10-11
+    cd /hive/data/genomes/galGal6/bed/blat.galGal5.2018-10-11
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/galGal6/jkStuff/galGal6.11.ooc \
+         galGal6 galGal5
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/galGal6/jkStuff/galGal6.11.ooc \
+         galGal6 galGal5) > doLiftOverToGalGal5.log 2>&1
+    # real    156m30.215s
+
+    # see if the liftOver menus function in the browser from galGal6 to galGal5
+
+#########################################################################
+# LIFTOVER TO galGal4 (DONE - 2018-10-12 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/galGal6/bed/blat.galGal4.2018-10-12
+    cd /hive/data/genomes/galGal6/bed/blat.galGal4.2018-10-12
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/galGal6/jkStuff/galGal6.11.ooc \
+         galGal6 galGal4
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/galGal6/jkStuff/galGal6.11.ooc \
+         galGal6 galGal4) > doLiftOverToGalGal4.log 2>&1 &
+    # real    36m10.254s
+
+    # see if the liftOver menus function in the browser from galGal6 to galGal5
+
+#########################################################################
+#  BLATSERVERS ENTRY (DONE - 2018-10-12 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("galGal6", "blat1a", "17892", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("galGal6", "blat1a", "17893", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## reset default position to MEPE gene (egg shell protein)
+##  (DONE - 2018-10-12 - Hiram)
+
+    # as found from the galGal5 to galGal6 liftOver
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chr4:45667017-45672928"
+	where name="galGal6";' hgcentraltest
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (TBD - 2018-05-13 - Hiram)
+xyz
+    cd $HOME/kent/src/hg/makeDb/schema
+    # verify all the business is done for release
+    ~/kent/src/hg/utils/automation/verifyBrowser.pl galGal6
+
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=galGal6 -tableCoverage all.joiner
+    joinerCheck -database=galGal6 -times all.joiner
+    joinerCheck -database=galGal6 -keys all.joiner
+
+    # when clean, check in:
+    git commit -m 'adding rules for galGal6 refs #22113' all.joiner
+    git push
+    # run up a 'make alpha' in hg/hgTables to get this all.joiner file
+    # into the hgwdev/genome-test system
+
+    cd /hive/data/genomes/galGal6
+    time (makeDownloads.pl galGal6) > downloads.log 2>&1
+    #  real    27m1.207s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/galGal6/pushQ
+    cd /hive/data/genomes/galGal6/pushQ
+    time (makePushQSql.pl galGal6) > galGal6.pushQ.sql 2> stderr.out
+    #  real    7m21.629s
+
+   71 galGal6.pushQ.sql
+   43 stderr.out
+  114 total
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/galGal6/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/galGal6/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/galGal6/bbi/quality.bw
+    # WARNING: galGal6 does not have seq
+    # WARNING: galGal6 does not have extFile
+
+    #   copy it to hgwbeta
+    scp -p galGal6.pushQ.sql qateam@hgwbeta:/tmp/
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/galGal6.pushQ.sql"
+
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################

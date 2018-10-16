@@ -514,12 +514,11 @@ mapBoxHgcOrHgGene(hvg, start, end, x - width, y, width * 2, 4,
 
 void drawPeakMapbox(struct track *tg, struct hvGfx *hvg, int seqStart, int seqEnd, 
                         char *item, char *status, int x, int y, 
-                        Color peakColor, Color highlightColor, boolean drawUp, int drawMode)
+                        Color peakColor, Color highlightColor, boolean drawUp)
 /* Draw grab box and add map box */
 {
-int yAdjust = (drawMode == DRAW_CURVE ? 3 : 0);
 if (drawUp)
-    y = flipY(tg, y) - yAdjust;
+    y = flipY(tg, y);
 hvGfxBox(hvg, x-1, y-1, 3, 3, peakColor);
 hvGfxBox(hvg, x, y, 1, 1, highlightColor);
 mapBoxHgcOrHgGene(hvg, seqStart, seqEnd, x-1, y-1, 3, 3,
@@ -630,7 +629,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
                                         inter->targetChrom : inter->sourceChrom);
             yPos += 3;
             if (drawUp)
-                yPos = flipY(tg, yPos + 3);
+                yPos = flipY(tg, yPos + 6);
             hvGfxTextCentered(hvg, x, yPos, 4, 4, MG_BLUE, font, buffer);
             int labelWidth = vgGetFontStringWidth(hvg->vg, font, buffer);
 
@@ -739,7 +738,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         // draw grab box and map box on mid-point of horizontal line
         int xMap = lowerX + (double)(upperX-lowerX)/2;
         drawPeakMapbox(tg, hvg, inter->chromStart, inter->chromEnd, itemBuf, statusBuf,
-                            xMap, peak, peakColor, highlightColor, drawUp, DRAW_LINE);
+                            xMap, peak, peakColor, highlightColor, drawUp);
         continue;
         }
     // Draw curves
@@ -760,9 +759,13 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         // curve drawer does not use peakY as expected, so it returns actual max Y used
         // draw grab box and map box on peak
         if (drawUp)
-            maxY = (maxY - peakY)/2 + tg->customInt;
+            {
+            maxY = (maxY - peakY + 1)/2 + tg->customInt;
+            if (tInfo->offset)
+                maxY += abs(yTarget - ySource)/4;
+            }
         drawPeakMapbox(tg, hvg, inter->chromStart, inter->chromEnd, inter->name, statusBuf,
-                            peakX, maxY, peakColor, highlightColor, drawUp, draw);
+                            peakX, maxY, peakColor, highlightColor, drawUp);
         }
     else if (draw == DRAW_ELLIPSE)
         {
@@ -782,7 +785,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
         int maxY = peakHeight + yOff;
         int peakX = ((upperX - lowerX + 1) / 2) + lowerX;
         drawPeakMapbox(tg, hvg, inter->chromStart, inter->chromEnd, inter->name, statusBuf,
-                            peakX, maxY, peakColor, highlightColor, drawUp, draw);
+                            peakX, maxY, peakColor, highlightColor, drawUp);
         }
     }
 }

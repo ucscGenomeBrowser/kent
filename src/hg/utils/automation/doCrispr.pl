@@ -24,7 +24,8 @@ use vars qw/
 
 # Specify the steps supported with -continue / -stop:
 my $stepper = new HgStepManager(
-    [ { name => 'ranges',   func => \&doRanges },
+    [ { name => 'indexFa',   func => \&doIndexFa },
+      { name => 'ranges',   func => \&doRanges },
       { name => 'guides',   func => \&doGuides },
       { name => 'specScores',   func => \&doSpecScores },
       { name => 'effScores',   func => \&doEffScores },
@@ -83,6 +84,8 @@ _EOF_
 						'smallClusterHub' => '');
   print STDERR "
 Automates UCSC's crispr procedure.  Steps:
+    indexFa Construct bwa index for source fasta, will be skipped when already
+            available
     ranges: Construct ranges to work on around exons
     guides: Extract guide sequences from ranges
     specScores: Compute spec scores
@@ -133,6 +136,43 @@ sub checkOptions {
   $dbHost = $opt_dbHost if ($opt_dbHost);
 }
 
+#########################################################################
+# * step: indexFa [workhorse]
+sub doIndexFa {
+  my $runDir = "$buildDir/indexFa";
+  my $resultDir = "$crisporSrc/genomes/$db";
+  my $testDone = "${resultDir}/genomeInfo.tab";
+
+  &HgAutomate::mustMkdir($runDir);
+  my $whatItDoes = "Construct bwa indexes for the new genome fasta.";
+  my $bossScript = newBash HgRemoteScript("$runDir/runIndexFa.bash",
+		$workhorse, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+export PATH=$crisporSrc/tools/usrLocalBin:\$PATH
+export TMPDIR=/dev/shm
+
+if [ ! -s "$testDone" ]; then
+  time ($crisporSrc/tools/crisprAddGenome \\
+      ucscLocal $db --geneTable=$geneTrack --baseDir \\
+          $crisporSrc/genomes) > createIndex.log 2>&1
+fi
+
+if [ ! -s "$testDone" ]; then
+   printf "ERROR: bwa index not created correctly\\n" 1>&2
+   printf "result file does not exist:\\n" 1>&2
+   printf "%s\\n" "$testDone"
+   exit 255
+fi
+_EOF_
+  );
+  $bossScript->execute();
+  if ( -s "${testDone}" ) {
+     &HgAutomate::verbose(1,
+         "# step indesFa is already completed, continuing...\n");
+     return;
+  }
+} # doIndexFa
 
 #########################################################################
 # * step: ranges [workhorse]
@@ -278,6 +318,7 @@ sub doSpecScores {
 
   &HgAutomate::verbose(1,
          "# preparing the specificity alignment cluster run\n");
+  `touch "$runDir/para_hub_$paraHub"`;
 
   my $paraRun = &HgAutomate::paraRun();
   my $gensub2 = &HgAutomate::gensub2();
@@ -286,6 +327,17 @@ mkdir -p tmp/inFa tmp/outGuides tmp/outOffs
 twoBitToFa -noMask $twoBit $db.fa
 /cluster/bin/samtools-0.1.19/samtools faidx $db.fa
 $python $crisprScripts/splitGuidesSpecScore.py ../allGuides.txt tmp/inFa jobNames.txt
+# preload the /dev/shm on each parasol node with the fasta and index
+parasol list machines | awk '{print \$1}' | sort -u | while read M
+do
+  ssh "\${M}" "rsync -a --stats ${runDir}/$db.fa ${runDir}/$db.fa.fai /dev/shm/crispr10K.$db/ || true" < /dev/null
+done
+# and the /dev/shm on this parasol hub
+rsync -a --stats ${runDir}/$db.fa ${runDir}/$db.fa.fai /dev/shm/crispr10K.$db/ < /dev/null
+mv $db.fa $db.fa.original
+mv $db.fa.fai $db.fa.fai.original
+ln -s /dev/shm/crispr10K.$db/$db.fa* ./
+
 $gensub2 jobNames.txt single gsub jobList
 $paraRun
 find tmp/outGuides -type f | xargs cut -f3-6 > ../specScores.tab
@@ -476,7 +528,6 @@ die "illegal value for shoulder: $shoulder, must be >= 30" if ($shoulder < 30);
 &HgAutomate::verbose(1, "# shoulder: $shoulder bases\n");
 &HgAutomate::verbose(1, "# tableName $tableName\n");
 $genomeFname = "$crisporSrc/genomes/$db/$db.fa.bwt";
-die "can not find bwa index '$genomeFname'" if ( ! -s $genomeFname);
 $chromSizes = "/hive/data/genomes/$db/chrom.sizes";
 $exonShoulder = $shoulder;
 

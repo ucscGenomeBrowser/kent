@@ -958,6 +958,7 @@ int cdwFileIdFromPathSuffix(struct sqlConnection *conn, char *suf)
 {
 char query[4096];
 int sufLen = strlen(suf);
+// This is a bit slow, on the order of 1 second.  -jk
 sqlSafef(query, sizeof(query), "SELECT cdwFile.id FROM cdwSubmitDir, cdwFile " 
     "WHERE cdwFile.submitDirId=cdwSubmitDir.id AND RIGHT(CONCAT_WS('/', cdwSubmitDir.url, submitFileName), %d)='%s' "
     "ORDER BY cdwFile.id DESC LIMIT 1;", sufLen, suf);

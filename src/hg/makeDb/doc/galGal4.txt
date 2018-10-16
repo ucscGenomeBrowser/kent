@@ -1480,3 +1480,20 @@ TMPDIR=/dev/shm
     # real    168m45.457s
 
 #########################################################################
+# LIFTOVER TO galGal6 (DONE - 2016-10-12 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/galGal4/bed/blat.galGal6.2018-10-12
+    cd /hive/data/genomes/galGal4/bed/blat.galGal6.2018-10-12
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/galGal4/jkStuff/galGal4.11.ooc \
+         galGal4 galGal6
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/galGal4/jkStuff/galGal4.11.ooc \
+         galGal4 galGal6) > doLiftOverToGalGal6.log 2>&1
+    # real    47m3.714s
+
+    # see if the liftOver menus function in the browser from galGal4 to galGal6
+
+#########################################################################
