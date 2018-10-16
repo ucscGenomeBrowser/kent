@@ -491,7 +491,7 @@ if (!printed)
 boolean isWebBrowsableFormat(char *format)
 /* Return TRUE if it's one of the web-browseable formats */
 {
-char *formats[] = {"html", "jpg", "pdf", "png", "text", };
+char *formats[] = {"html", "jpg", "pdf", "png", "text", "tsv"};
 return stringArrayIx(format, formats, ArraySize(formats)) >= 0;
 }
 
@@ -1345,6 +1345,15 @@ printf(", <A HREF=\"cdwServeTagStorm?format=csv&cdwDataSet=%s&%s\"",
 printf(">csv</A>)"); 
 }
 
+int getRecentSubmitFileId(struct sqlConnection *conn, int submitDirId, char *submitFileName)
+/* Get the file ID of the most recent index.html file for dataset. */
+{
+char query[PATH_LEN]; 
+sqlSafef(query, sizeof(query), "select max(id)from cdwFile where submitFileName='%s' and submitDirId=%d", submitFileName,
+    submitDirId);
+return sqlQuickNum(conn, query);
+}
+
 void doBrowseDatasets(struct sqlConnection *conn)
 /* Show datasets and links to dataset summary pages. */
 {
@@ -1358,18 +1367,17 @@ for (dataset = datasetList; dataset != NULL; dataset = dataset->next)
     char *label = dataset->label;
     char *desc = dataset->description;
     char *datasetId = dataset->name;
-
-    // Check if we have a dataset summary page in the CDW and store its ID. The file must have passed validation.  
-    char summFname[8000];
-    safef(summFname, sizeof(summFname), "%s/summary/index.html", datasetId);
-    int fileId = cdwFileIdFromPathSuffix(conn, summFname);
+    sqlSafef(query, sizeof(query), "select id from cdwSubmitDir where url='/data/cirm/wrangle/%s'", datasetId);
+    int submitDirId = sqlQuickNum(conn, query);
 
     // If the ID exists and the user has access print a link to the page.  
+    int fileId = getRecentSubmitFileId(conn, submitDirId, "summary/index.html");
     boolean haveAccess = ((fileId > 0) && cdwCheckFileAccess(conn, fileId, user));
     if (haveAccess)
 	{
 	printf("<LI><B><A href=\"cdwGetFile/%s/summary/index.html\">%s (%s)</A></B><BR>\n", 
 	    datasetId, label, datasetId);
+// #ifdef SOON
 	// Print out file count and descriptions. 
 	sqlSafef(query, sizeof(query), 
 	    "select count(*) from %s where data_set_id='%s'", getCdwTableSetting("cdwFileTags"), datasetId);  
@@ -1378,9 +1386,7 @@ for (dataset = datasetList; dataset != NULL; dataset = dataset->next)
 		desc, datasetId, cartSidUrlString(cart)); 
 	printf(">%lld files</A>)",fileCount);
 
-	char metaFileName[PATH_LEN];
-	safef(metaFileName, sizeof(metaFileName), "%s/%s", datasetId, "meta.txt");
-	int fileId = cdwFileIdFromPathSuffix(conn, metaFileName);
+	int fileId = getRecentSubmitFileId(conn, submitDirId, "meta.txt");
 	if (cdwCheckFileAccess(conn, fileId, user))
 	    {
 	    printf(" (metadata: <A HREF=\"cdwWebBrowse?cdwCommand=dataSetMetaTree&cdwDataSet=%s&%s\"",
@@ -1943,20 +1949,6 @@ void doTestPage(struct sqlConnection *conn)
 /* Put up test page */
 {
 printf("testing 1 2 3...<BR>\n");
-static char *fields[] = 
-    {"data_set_id", "lab", "assay", "format", "read_size", "species", "organ"};
-uglyTime(NULL);
-struct facetField *fieldList = facetFieldsFromSqlTable(conn, getCdwTableSetting("cdwFileTags"), 
-						fields, ArraySize(fields), NULL, NULL, NULL, NULL);
-uglyTime("listing facets");
-printf("got info on %d fields<BR>\n", slCount(fieldList));
-struct facetField *field;
-for (field = fieldList; field != NULL; field = field->next)
-    {
-    printf("<div>\n");
-    printf("<b>%s</b> has %d values\n", field->fieldName, slCount(field->valList));
-    printf("</div>\n");
-    }
 }
 
 void dispatch(struct sqlConnection *conn)
@@ -2100,7 +2092,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Data Browser V0.58");
+localWebStartWrapper("CIRM Stem Cell Hub Data Browser V0.59");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
