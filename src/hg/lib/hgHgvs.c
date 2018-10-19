@@ -2100,7 +2100,8 @@ hgvsStartEndToZeroBasedHalfOpen(hgvs, &start, &end);
 if (hgvs->type == hgvstCoding)
     {
     struct genbankCds cds;
-    if (getCds(db, hgvs->seqAcc, &cds))
+    char *acc = normalizeVersion(db, hgvs->seqAcc, NULL);
+    if (getCds(db, acc, &cds))
         {
         // Determine whether to use cdsStart or cdsEnd for hgvs start and hgvs end.
         // Make sure the cds start and end are marked as complete.

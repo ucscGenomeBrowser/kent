@@ -1624,18 +1624,6 @@ const struct simpleFeature *b = *((struct simpleFeature **)vb);
 return a->start - b->start;
 }
 
-void linkedFeaturesSortAndBound(struct linkedFeatures *lf)
-/* Sort simpleFeatures in the linkedFeature and set start and end based on simpleFetaures */
-// TODO: dedupe the simpleFeatures ?
-{
-struct simpleFeature *sfLast, *sfs = lf->components;
-slSort(&sfs, simpleFeatureCmp);
-lf->components = sfs;
-sfLast = (struct simpleFeature *)slLastEl(sfs);
-lf->start = sfs->start;
-lf->end = sfLast->end;
-}
-
 int linkedFeaturesCmp(const void *va, const void *vb)
 /* Compare to sort based on start. */
 {
@@ -4970,8 +4958,8 @@ if ((sf = lf->components) != NULL)
 	if (sf->end > end)
 	    end = sf->end;
 	}
-    lf->start = lf->tallStart = start;
-    lf->end = lf->tallEnd = end;
+    lf->start = start;
+    lf->end = end;
     }
 lf->grayIx = lfCalcGrayIx(lf);
 }

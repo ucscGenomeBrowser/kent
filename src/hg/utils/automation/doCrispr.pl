@@ -24,7 +24,8 @@ use vars qw/
 
 # Specify the steps supported with -continue / -stop:
 my $stepper = new HgStepManager(
-    [ { name => 'ranges',   func => \&doRanges },
+    [ { name => 'indexFa',   func => \&doIndexFa },
+      { name => 'ranges',   func => \&doRanges },
       { name => 'guides',   func => \&doGuides },
       { name => 'specScores',   func => \&doSpecScores },
       { name => 'effScores',   func => \&doEffScores },
@@ -44,6 +45,7 @@ my $crisprScripts = "/hive/data/outside/crisprTrack/scripts";
 # Option defaults:
 my $dbHost = 'hgwdev';
 my $bigClusterHub = 'ku';
+my $fileServer = 'hgwdev';
 my $workhorse = 'hgwdev';
 my $defaultWorkhorse = 'hgwdev';
 my $twoBit = "$HgAutomate::clusterData/\$db/\$db.2bit";
@@ -80,9 +82,12 @@ _EOF_
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
 						'workhorse' => $defaultWorkhorse,
 						'bigClusterHub' => $bigClusterHub,
+						'fileServer' => $fileServer,
 						'smallClusterHub' => '');
   print STDERR "
 Automates UCSC's crispr procedure.  Steps:
+    indexFa Construct bwa index for source fasta, will be skipped when already
+            available
     ranges: Construct ranges to work on around exons
     guides: Extract guide sequences from ranges
     specScores: Compute spec scores
@@ -133,6 +138,43 @@ sub checkOptions {
   $dbHost = $opt_dbHost if ($opt_dbHost);
 }
 
+#########################################################################
+# * step: indexFa [workhorse]
+sub doIndexFa {
+  my $runDir = "$buildDir/indexFa";
+  my $resultDir = "$crisporSrc/genomes/$db";
+  my $testDone = "${resultDir}/genomeInfo.tab";
+
+  &HgAutomate::mustMkdir($runDir);
+  my $whatItDoes = "Construct bwa indexes for the new genome fasta.";
+  my $bossScript = newBash HgRemoteScript("$runDir/runIndexFa.bash",
+		$workhorse, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+export PATH=$crisporSrc/tools/usrLocalBin:\$PATH
+export TMPDIR=/dev/shm
+
+if [ ! -s "$testDone" ]; then
+  time ($crisporSrc/tools/crisprAddGenome \\
+      ucscLocal $db --geneTable=$geneTrack --baseDir \\
+          $crisporSrc/genomes) > createIndex.log 2>&1
+fi
+
+if [ ! -s "$testDone" ]; then
+   printf "ERROR: bwa index not created correctly\\n" 1>&2
+   printf "result file does not exist:\\n" 1>&2
+   printf "%s\\n" "$testDone"
+   exit 255
+fi
+_EOF_
+  );
+  $bossScript->execute();
+  if ( -s "${testDone}" ) {
+     &HgAutomate::verbose(1,
+         "# step indesFa is already completed, continuing...\n");
+     return;
+  }
+} # doIndexFa
 
 #########################################################################
 # * step: ranges [workhorse]
@@ -278,6 +320,7 @@ sub doSpecScores {
 
   &HgAutomate::verbose(1,
          "# preparing the specificity alignment cluster run\n");
+  `touch "$runDir/para_hub_$paraHub"`;
 
   my $paraRun = &HgAutomate::paraRun();
   my $gensub2 = &HgAutomate::gensub2();
@@ -286,6 +329,17 @@ mkdir -p tmp/inFa tmp/outGuides tmp/outOffs
 twoBitToFa -noMask $twoBit $db.fa
 /cluster/bin/samtools-0.1.19/samtools faidx $db.fa
 $python $crisprScripts/splitGuidesSpecScore.py ../allGuides.txt tmp/inFa jobNames.txt
+# preload the /dev/shm on each parasol node with the fasta and index
+parasol list machines | awk '{print \$1}' | sort -u | while read M
+do
+  ssh "\${M}" "rsync -a --stats ${runDir}/$db.fa ${runDir}/$db.fa.fai /dev/shm/crispr10K.$db/ || true" < /dev/null
+done
+# and the /dev/shm on this parasol hub
+rsync -a --stats ${runDir}/$db.fa ${runDir}/$db.fa.fai /dev/shm/crispr10K.$db/ < /dev/null
+mv $db.fa $db.fa.original
+mv $db.fa.fai $db.fa.fai.original
+ln -s /dev/shm/crispr10K.$db/$db.fa* ./
+
 $gensub2 jobNames.txt single gsub jobList
 $paraRun
 find tmp/outGuides -type f | xargs cut -f3-6 > ../specScores.tab
@@ -436,11 +490,58 @@ _EOF_
 sub doCleanup {
   my $runDir = "$buildDir";
   my $whatItDoes = "It cleans up or compresses intermediate files.";
-  my $fileServer = &HgAutomate::chooseFileServer($runDir);
-  my $bossScript = new HgRemoteScript("$runDir/doCleanup.csh", $fileServer,
+  my $bossScript = newBash HgRemoteScript("$runDir/doCleanup.bash", $fileServer,
 				      $runDir, $whatItDoes);
+  # Verify previous step is complete
+  #   it continue.
+  if ( ! $opt_debug && ( -d "$runDir" ) ) {
+    if (! -s "$runDir/crispr.bb") {
+     die "# previous step load has not completed\n";
+    }
+    if ( -s "specScores/$db.fa.gz" ) {
+     &HgAutomate::verbose(1,
+         "# step cleanup is already completed, continuing...\n");
+     return;
+    }
+  }
+
   $bossScript->add(<<_EOF_
-echo "nothing to do for cleanup yet"
+if [ -s "specScores/$db.fa.gz" ]; then
+  printf "# step cleanup has already completed.\\n"
+  exit 0
+fi
+printf "#\tdisk space before cleaning\\n"
+df -h .
+rm -fr ranges/tmp
+rm -fr guides/err
+rm -fr guides/tmp
+rm -f guides/batch.bak
+rm -f specScores/batch.bak
+rm -fr specScores/err
+rm -fr specScores/tmp
+rm -fr effScores/err
+rm -fr effScores/tmp
+rm -f effScores/batch.bak
+rm -fr offTargets/err
+rm -fr offTargets/tmp
+rm -f offTargets/batch.bak
+gzip specScores.tab effScores.tab offtargets.offsets.tab
+ssh $bigClusterHub parasol list machines | awk '{print \$1}' | sort -u | while read M
+do
+  ssh "\${M}" "rm -fr /dev/shm/crispr10K.galGal6" < /dev/null
+done
+ssh $bigClusterHub "rm -fr /dev/shm/crispr10K.galGal6" < /dev/null
+if [ -s "specScores/$db.fa.original" ]; then
+   rm -f specScores/$db.fa
+   mv specScores/$db.fa.original specScores/$db.fa
+fi
+if [ -s "specScores/$db.fa.fai.original" ]; then
+   rm -f specScores/$db.fa.fai
+   mv specScores/$db.fa.fai.original specScores/$db.fa.fai
+fi
+gzip specScores/$db.fa
+printf "#\tdisk space after cleaning\\n"
+df -h .
 _EOF_
   );
   $bossScript->execute();
@@ -457,7 +558,11 @@ _EOF_
 &usage(1) if (scalar(@ARGV) != 2);
 $workhorse = $opt_workhorse if ($opt_workhorse);
 $bigClusterHub = $opt_bigClusterHub if ($opt_bigClusterHub);
+$fileServer = $opt_fileServer if ($opt_fileServer);
 $dbHost = $opt_dbHost if ($opt_dbHost);
+&HgAutomate::verbose(1, "# bigClusterHub $bigClusterHub\n");
+&HgAutomate::verbose(1, "# fileServer $fileServer\n");
+&HgAutomate::verbose(1, "# dbHost $dbHost\n");
 $secondsStart = `date "+%s"`;
 chomp $secondsStart;
 
@@ -476,7 +581,6 @@ die "illegal value for shoulder: $shoulder, must be >= 30" if ($shoulder < 30);
 &HgAutomate::verbose(1, "# shoulder: $shoulder bases\n");
 &HgAutomate::verbose(1, "# tableName $tableName\n");
 $genomeFname = "$crisporSrc/genomes/$db/$db.fa.bwt";
-die "can not find bwa index '$genomeFname'" if ( ! -s $genomeFname);
 $chromSizes = "/hive/data/genomes/$db/chrom.sizes";
 $exonShoulder = $shoulder;
 

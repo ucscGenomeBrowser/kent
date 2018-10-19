@@ -392,7 +392,7 @@ and loads the recip net table.";
 # Load reciprocal best chains:
 _EOF_
   );
-  if ($dbExists) {
+  if (! $opt_trackHub && $dbExists) {
     $bossScript->add(<<_EOF_
 cd $runDir
 hgLoadChain -tIndex $tDb chainRBest$QDb $tDb.$qDb.rbest.chain.gz
@@ -433,7 +433,7 @@ rm -f link.tab
 rm -f chain.tab
 _EOF_
       );
-  }	# else if ($dbExists)
+  }	# else if (! $opt_trackHub && $dbExists)
 
   $bossScript->execute();
 }	#	sub loadRBest {}

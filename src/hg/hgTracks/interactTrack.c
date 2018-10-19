@@ -151,6 +151,27 @@ void interactFreeItems(struct track *tg)
 interactFreeList((struct interact **)(&tg->items));
 }
 
+void interactLfSortAndBound(struct linkedFeatures *lf)
+/* Sort simpleFeatures in the linkedFeature and set start and end based on simpleFetaures */
+// TODO: dedupe the simpleFeatures ?
+{
+struct simpleFeature *sfLast, *sf, *sfs = lf->components;
+slSort(&sfs, simpleFeatureCmp);
+lf->components = sfs;
+sfLast = (struct simpleFeature *)slLastEl(sfs);
+int start = sfs->start;
+int end = sfLast->end;
+for (sf = sfs; sf != NULL; sf = sf->next)
+    {
+    if (sf->start < start)
+        start = sf->start;
+    if (sf->end > end)
+        end = sf->end;
+    }
+lf->start = start;
+lf->end = end;
+}
+
 static struct linkedFeatures *interactToLf(struct interact *inter, boolean doColor)
 /* Convert interact BED to linkedFeatures */
 {
@@ -163,7 +184,7 @@ struct linkedFeatures *lf = lfFromBed(bed);
 setInteractLfEndNames(lf, cloneString(inter->sourceName), cloneString(inter->targetName));
 
 // not sure why this is needed -- lfFromBed seems to reorder blocks, sometimes ?
-linkedFeaturesSortAndBound(lf);
+interactLfSortAndBound(lf);
 if (doColor)
     {
     lf->extra = (void *)USE_ITEM_RGB;   /* signal for coloring */
@@ -404,7 +425,7 @@ void interactLoadItems(struct track *tg)
         for (el = els; el; el = el->next)
             {
             lf = (struct linkedFeatures *)el->val;
-            linkedFeaturesSortAndBound(lf);
+            interactLfSortAndBound(lf);
             slAddHead(&lfs, lf);
             }
         slSort(&lfs, linkedFeaturesCmp);
@@ -805,7 +826,6 @@ struct interactTrackInfo *tInfo = tg->customPt;
 
 linkedFeaturesDrawAt(tg, item, hvg, xOff, y, scale, font, color, vis);
 
-// draw overlapping items in white and add right label
 if (tInfo->clusterMode)
     {
     struct simpleFeature *sf;
@@ -822,22 +842,17 @@ if (tInfo->clusterMode)
 else
     {
     struct simpleFeature *sf1 = lf->components, *sf2 = sf1->next;
-    if (sf2 && sf2->start < sf1->end)
-        {
+    if (sf2->start > lf->tallStart && sf2->end < lf->tallEnd)
         drawScaledBox(hvg, sf2->start, sf2->end, scale, xOff, y, tg->heightPer, MG_WHITE);
-        }
-    else
+    if (vis == tvPack || vis == tvFull)
         {
-        if (vis == tvPack || vis == tvFull)
-            {
-            // right label
-            int x2 = round((double)((int)lf->end - winStart) * scale) + xOff;
-            int x = x2 + tl.mWidth/2;
-            struct interactLfEndNames *ends = getInteractLfEndNames(lf);
-            char *rightLabel = (lf->orientation < 0 ? ends->source : ends->target);
-            int w = mgFontStringWidth(font, rightLabel);
-            hvGfxTextCentered(hvg, x, y, w, tg->heightPer, color, font, rightLabel);
-            }
+        // add right label
+        int x2 = round((double)((int)lf->end - winStart) * scale) + xOff;
+        int x = x2 + tl.mWidth/2;
+        struct interactLfEndNames *ends = getInteractLfEndNames(lf);
+        char *rightLabel = (lf->orientation < 0 ? ends->source : ends->target);
+        int w = mgFontStringWidth(font, rightLabel);
+        hvGfxTextCentered(hvg, x, y, w, tg->heightPer, color, font, rightLabel);
         }
     }
 }
