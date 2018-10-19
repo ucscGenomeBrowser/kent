@@ -11,6 +11,7 @@ visibility full
 pennantIcon New red ../goldenPath/releaseLog.html  created September 2018
 group regulation
 priority 1.5
+release alpha,beta
 
     track ghGeneTss
     type bigBed 9
