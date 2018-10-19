@@ -6825,6 +6825,12 @@ identifier lrgTranscriptId
     $hg.lrgPep.name
     $hg.lrgCds.id
 
+identifier rmskJoinedCurrent
+"linking together RepeatMasker repeat fragments rmskJoined"
+    $gbd.rmskAlignCurrent.id dupeOk
+    $gbd.rmskJoinedCurrent.id minCheck=0.99
+    $gbd.rmskOutCurrent.id minCheck=0.99
+
 identifier rmskJoinedBaseline
 "linking together RepeatMasker repeat fragments rmskJoined"
     $gbd.rmskAlignBaseline.id dupeOk
