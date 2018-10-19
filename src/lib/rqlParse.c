@@ -326,6 +326,7 @@ else if (tok[0] == '[')
     p->op = rqlOpArrayIx;
     p->type = rqlTypeString;
     p->children = collection;
+    p->val.s = cloneString("");
     collection->next = index;
     }
 else
@@ -983,4 +984,3 @@ if (rql != NULL)
     freez(pRql);
     }
 }
-

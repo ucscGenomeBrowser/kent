@@ -45,6 +45,7 @@ my $crisprScripts = "/hive/data/outside/crisprTrack/scripts";
 # Option defaults:
 my $dbHost = 'hgwdev';
 my $bigClusterHub = 'ku';
+my $fileServer = 'hgwdev';
 my $workhorse = 'hgwdev';
 my $defaultWorkhorse = 'hgwdev';
 my $twoBit = "$HgAutomate::clusterData/\$db/\$db.2bit";
@@ -81,6 +82,7 @@ _EOF_
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
 						'workhorse' => $defaultWorkhorse,
 						'bigClusterHub' => $bigClusterHub,
+						'fileServer' => $fileServer,
 						'smallClusterHub' => '');
   print STDERR "
 Automates UCSC's crispr procedure.  Steps:
@@ -488,11 +490,58 @@ _EOF_
 sub doCleanup {
   my $runDir = "$buildDir";
   my $whatItDoes = "It cleans up or compresses intermediate files.";
-  my $fileServer = &HgAutomate::chooseFileServer($runDir);
-  my $bossScript = new HgRemoteScript("$runDir/doCleanup.csh", $fileServer,
+  my $bossScript = newBash HgRemoteScript("$runDir/doCleanup.bash", $fileServer,
 				      $runDir, $whatItDoes);
+  # Verify previous step is complete
+  #   it continue.
+  if ( ! $opt_debug && ( -d "$runDir" ) ) {
+    if (! -s "$runDir/crispr.bb") {
+     die "# previous step load has not completed\n";
+    }
+    if ( -s "specScores/$db.fa.gz" ) {
+     &HgAutomate::verbose(1,
+         "# step cleanup is already completed, continuing...\n");
+     return;
+    }
+  }
+
   $bossScript->add(<<_EOF_
-echo "nothing to do for cleanup yet"
+if [ -s "specScores/$db.fa.gz" ]; then
+  printf "# step cleanup has already completed.\\n"
+  exit 0
+fi
+printf "#\tdisk space before cleaning\\n"
+df -h .
+rm -fr ranges/tmp
+rm -fr guides/err
+rm -fr guides/tmp
+rm -f guides/batch.bak
+rm -f specScores/batch.bak
+rm -fr specScores/err
+rm -fr specScores/tmp
+rm -fr effScores/err
+rm -fr effScores/tmp
+rm -f effScores/batch.bak
+rm -fr offTargets/err
+rm -fr offTargets/tmp
+rm -f offTargets/batch.bak
+gzip specScores.tab effScores.tab offtargets.offsets.tab
+ssh $bigClusterHub parasol list machines | awk '{print \$1}' | sort -u | while read M
+do
+  ssh "\${M}" "rm -fr /dev/shm/crispr10K.galGal6" < /dev/null
+done
+ssh $bigClusterHub "rm -fr /dev/shm/crispr10K.galGal6" < /dev/null
+if [ -s "specScores/$db.fa.original" ]; then
+   rm -f specScores/$db.fa
+   mv specScores/$db.fa.original specScores/$db.fa
+fi
+if [ -s "specScores/$db.fa.fai.original" ]; then
+   rm -f specScores/$db.fa.fai
+   mv specScores/$db.fa.fai.original specScores/$db.fa.fai
+fi
+gzip specScores/$db.fa
+printf "#\tdisk space after cleaning\\n"
+df -h .
 _EOF_
   );
   $bossScript->execute();
@@ -509,7 +558,11 @@ _EOF_
 &usage(1) if (scalar(@ARGV) != 2);
 $workhorse = $opt_workhorse if ($opt_workhorse);
 $bigClusterHub = $opt_bigClusterHub if ($opt_bigClusterHub);
+$fileServer = $opt_fileServer if ($opt_fileServer);
 $dbHost = $opt_dbHost if ($opt_dbHost);
+&HgAutomate::verbose(1, "# bigClusterHub $bigClusterHub\n");
+&HgAutomate::verbose(1, "# fileServer $fileServer\n");
+&HgAutomate::verbose(1, "# dbHost $dbHost\n");
 $secondsStart = `date "+%s"`;
 chomp $secondsStart;
 

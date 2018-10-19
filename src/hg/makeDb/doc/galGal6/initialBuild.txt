@@ -759,6 +759,16 @@ galGal6.downloadDir = galGal6
     # update /cluster/data/genbank/:
     make etc-update
 
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add galGal6 to:
+    #   etc/align.dbs etc/hgwdev.dbs
+    git add etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added galGal6 - chicken refs #22113" etc/hgwdev.dbs
+    git push
+    make etc-update
+
     # wait a few days for genbank magic to take place, the tracks will
     # appear
 
@@ -818,10 +828,15 @@ galGal6.downloadDir = galGal6
     # curious that this gene is marked as a non-coding gene anyway ?
     # gene: FET1 at chr4:63,102,774-63,105,516-
 
-    XXX TBD run this up after the genbank has constructed refGene
     featureBits -enrichment galGal6 refGene ncbiRefSeq 
-    # refGene 1.181%, ncbiRefSeq 6.776%, both 1.175%, cover 99.49%,
-    #    enrich 14.68x
+ # refGene 1.374%, ncbiRefSeq 8.397%, both 1.370%, cover 99.73%, enrich 11.88x
+    featureBits -enrichment galGal6 ncbiRefSeq refGene
+ # ncbiRefSeq 8.397%, refGene 1.374%, both 1.370%, cover 16.32%, enrich 11.88x
+
+    featureBits -enrichment galGal6 ncbiRefSeqCurated refGene
+ # ncbiRefSeqCurated 1.368%, refGene 1.374%, both 1.364%, cover 99.71%, enrich 72.59x
+    featureBits -enrichment galGal6 refGene ncbiRefSeqCurated
+ # refGene 1.374%, ncbiRefSeqCurated 1.368%, both 1.364%, cover 99.32%, enrich 72.59x
 
 #########################################################################
 # LIFTOVER TO galGal5 (DONE - 2018-10-11 - Hiram)
@@ -879,7 +894,45 @@ galGal6.downloadDir = galGal6
 	where name="galGal6";' hgcentraltest
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (TBD - 2018-05-13 - Hiram)
+# crispr 10K shoulders (DONE - 2018-10-16 - Hiram)
+    # working on this script, adding the indexFa step:
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+	-stop=indexFa -buildDir=`pwd` -smallClusterHub=ku galGal6 ncbiRefSeq) \
+	> indexFa.log 2>&1
+    # real    23m26.694s
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+       -continue=ranges -stop=guides -buildDir=`pwd` -smallClusterHub=ku \
+           galGal6 ncbiRefSeq) > guides.log 2>&1
+    # real    2m50.758s
+
+    # adding the /dev/shm/ setup rsync for the indexed Fa
+    # performed manually to work out the procedure
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+        -continue=specScores -stop=specScores -buildDir=`pwd` \
+           -smallClusterHub=ku galGal6 ncbiRefSeq) > specScores.log
+
+    # had about half of ku for about half this time:
+# Completed: 884922 of 884922 jobs
+# CPU time in finished jobs:  35872791s  597879.85m  9964.66h  415.19d  1.138 y
+# IO & Wait Time:               899261s   14987.69m   249.79h   10.41d  0.029 y
+# Average job time:                 42s       0.69m     0.01h    0.00d
+# Longest finished job:             88s       1.47m     0.02h    0.00d
+# Submission to last job:        48045s     800.75m    13.35h    0.56d
+
+
+    time find tmp/outGuides -type f | xargs cut -f3-6 > ../specScores.tab
+    # real    236m17.220s
+    wc -l specScores.tab
+    # 66451712 specScores.tab
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+	-continue=effScores -stop=load \
+	    -buildDir=`pwd` -smallClusterHub=ku galGal6 ncbiRefSeq) \
+	> load.log
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (DONE - 2018-10-17 - Hiram)
 xyz
     cd $HOME/kent/src/hg/makeDb/schema
     # verify all the business is done for release
@@ -898,17 +951,29 @@ xyz
 
     cd /hive/data/genomes/galGal6
     time (makeDownloads.pl galGal6) > downloads.log 2>&1
-    #  real    27m1.207s
+    #  real    10m7.605s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/galGal6/pushQ
     cd /hive/data/genomes/galGal6/pushQ
-    time (makePushQSql.pl galGal6) > galGal6.pushQ.sql 2> stderr.out
-    #  real    7m21.629s
+  time (makePushQSql.pl -redmineList galGal6) > galGal6.pushQ.sql 2> stderr.out
+    # real    9m58.779s
 
-   71 galGal6.pushQ.sql
-   43 stderr.out
-  114 total
+    # remove the extra chainNet files from the listings:
+    sed -i -e "/etNig1/d" redmine.galGal6.file.list
+    sed -i -e "/asAcu1/d" redmine.galGal6.file.list
+    sed -i -e "/etNig1/d" redmine.galGal6.table.list
+    sed -i -e "/onAlb1/d" redmine.galGal6.table.list
+    sed -i -e "/asAcu1/d" redmine.galGal6.table.list
+    sed -i -e "/Stickleback/d" redmine.galGal6.releaseLog.txt
+    sed -i -e "/Tetraodon/d" redmine.galGal6.releaseLog.txt
+    sed -i -e "/sparrow/d" redmine.galGal6.releaseLog.txt
+    # remove the tandemDups and gapOverlap from the file list:
+    sed -i -e "/tandemDups/d" redmine.galGal6.table.list
+    sed -i -e "/Tandem Dups/d" redmine.galGal6.releaseLog.txt
+    sed -i -e "/gapOverlap/d" redmine.galGal6.table.list
+    sed -i -e "/Gap Overlaps/d" redmine.galGal6.releaseLog.txt
+    #  real    7m21.629s
 
     #   check for errors in stderr.out, some are OK, e.g.:
     # WARNING: hgwdev does not have /gbdb/galGal6/wib/gc5Base.wib
@@ -917,11 +982,11 @@ xyz
     # WARNING: galGal6 does not have seq
     # WARNING: galGal6 does not have extFile
 
-    #   copy it to hgwbeta
-    scp -p galGal6.pushQ.sql qateam@hgwbeta:/tmp/
-    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/galGal6.pushQ.sql"
+    # add the path names to the listing files in the redmine issue
+    # in the three appropriate entry boxes:
 
-    #   in that pushQ entry walk through each entry and see if the
-    #   sizes will set properly
+#	/hive/data/genomes/galGal6/pushQ/redmine.galGal6.file.list
+#	/hive/data/genomes/galGal6/pushQ/redmine.galGal6.releaseLog.txt
+#	/hive/data/genomes/galGal6/pushQ/redmine.galGal6.table.list
 
 #########################################################################

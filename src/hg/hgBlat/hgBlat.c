@@ -30,7 +30,7 @@
 #include "portable.h"
 #include "portable.h"
 #include "dystring.h"
-
+#include "chromInfo.h"
 #include "net.h"
 
 
@@ -253,7 +253,7 @@ pfdList = NULL;  // stop the workers from starting any more waiting track loads
 for (pfd = pfdNeverStarted; pfd; pfd = pfd->next)
     {
     // query was never even started
-    char temp[256];
+    char temp[1024];
     safef(temp, sizeof temp, "Ran out of time (%d milliseconds) unable to process %s %s", maxTimeInMilliseconds, pfd->genome, pfd->db);
     pfd->networkErrMsg = cloneString(temp);
     pfd->error = TRUE;
@@ -262,7 +262,7 @@ for (pfd = pfdNeverStarted; pfd; pfd = pfd->next)
 for (pfd = pfdRunning; pfd; pfd = pfd->next)
     {
     // unfinished query
-    char temp[256];
+    char temp[1024];
     safef(temp, sizeof temp, "Timeout %d milliseconds exceeded processing %s %s", maxTimeInMilliseconds, pfd->genome, pfd->db);
     pfd->networkErrMsg = cloneString(temp);
     pfd->error = TRUE;
@@ -590,29 +590,52 @@ else  // hyperlink
 
     printf("<DIV STYLE=\"display:block;\"><PRE>");
 
+    // find maximum query name size for padding calculations
+    int maxQChromNameSize = 0;
+    for (psl = pslList; psl != NULL; psl = psl->next)
+	{
+	int l = strlen(psl->qName);
+	maxQChromNameSize = max(maxQChromNameSize,l);
+	}
+    maxQChromNameSize = max(maxQChromNameSize,5);
+
     // find maximum target chrom name size for padding calculations
-    int maxChromNameSize = 0;
+    int maxTChromNameSize = 0;
     for (psl = pslList; psl != NULL; psl = psl->next)
 	{
 	int l = strlen(psl->tName);
-	maxChromNameSize = max(maxChromNameSize,l);
+	maxTChromNameSize = max(maxTChromNameSize,l);
 	}
-    maxChromNameSize = max(maxChromNameSize,5);
+    maxTChromNameSize = max(maxTChromNameSize,5);
 
     // header padding
-    char temp[256];
+    char tempQ[1024];
+    char tempT[1024];
 
-    temp[0] = 0;
-    safecatRepeatChar(temp, sizeof temp, ' ', (maxChromNameSize - 5));
 
-    printf("   ACTIONS      QUERY          SCORE START   END QSIZE IDENTITY  CHROM ");
-    printf("%s", temp);
+    printf("   ACTIONS      QUERY ");
+    tempQ[0] = 0;
+    safecatRepeatChar(tempQ, sizeof tempQ, ' ', (maxQChromNameSize - 5));
+    printf("%s", tempQ);
+
+    printf("SCORE START   END QSIZE IDENTITY  CHROM ");
+    tempT[0] = 0;
+    safecatRepeatChar(tempT, sizeof tempT, ' ', (maxTChromNameSize - 5));
+    printf("%s", tempT);
+
     printf(" STRAND  START       END   SPAN\n");
 
-    printf("------------------------------------------------------------------------------------------------------");
-    temp[0] = 0;
-    safecatRepeatChar(temp, sizeof temp, '-', (maxChromNameSize - 5));
-    printf("%s\n", temp);
+    printf("---------------------------------------------------------------------------------------------");
+
+    tempQ[0] = 0;
+    safecatRepeatChar(tempQ, sizeof tempQ, '-', (maxQChromNameSize - 5));
+    printf("%s", tempQ);
+
+    tempT[0] = 0;
+    safecatRepeatChar(tempT, sizeof tempT, '-', (maxTChromNameSize - 5));
+    printf("%s", tempT);
+
+    printf("\n");
 
     for (psl = pslList; psl != NULL; psl = psl->next)
 	{
@@ -630,15 +653,20 @@ else  // hyperlink
 	    psl->tStart, psl->tEnd, database, uiState);
 	printf("details</A> ");
 
-	temp[0] = 0;
-	safecpy(temp, sizeof temp, psl->tName);
-	int padding = maxChromNameSize - strlen(psl->tName);
-	safecatRepeatChar(temp, sizeof temp, ' ', padding);
+	tempQ[0] = 0;
+	safecpy(tempQ, sizeof tempQ, psl->qName);
+	int qPadding = maxQChromNameSize - strlen(psl->qName);
+	safecatRepeatChar(tempQ, sizeof tempQ, ' ', qPadding);
+
+	tempT[0] = 0;
+	safecpy(tempT, sizeof tempT, psl->tName);
+	int tPadding = maxTChromNameSize - strlen(psl->tName);
+	safecatRepeatChar(tempT, sizeof tempT, ' ', tPadding);
 
 	printf("%-14s %5d %5d %5d %5d   %5.1f%%  %s  %-2s  %9d %9d %6d\n",
-	    psl->qName, pslScore(psl), psl->qStart+1, psl->qEnd, psl->qSize,
+	    tempQ, pslScore(psl), psl->qStart+1, psl->qEnd, psl->qSize,
 	    100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
-	    temp, psl->strand, psl->tStart+1, psl->tEnd,
+	    tempT, psl->strand, psl->tStart+1, psl->tEnd,
 	    psl->tEnd - psl->tStart);
 	}
     printf("</PRE>\n");
@@ -1593,7 +1621,7 @@ printf("%s",
 
 printf("%s", 
 "<P>The <b>Search ALL</b> checkbox above the Genome drop-down list allows you to search the\n"
-"genomes of the default assemblies for all of our organisms.\n"
+"genomes of the default assemblies for all of our organisms. It also searches any attached hubs' blat servers.\n"
 "This shows you which organisms have the highest homology with your query sequence.\n"
 "The results are ordered so that the organism whose best alignment has the most hits is at the top,\n"
 "and shows the best region found.\n"
@@ -1602,8 +1630,8 @@ printf("%s",
 "11 for DNA and 4 for protein. \n"
 "The entire alignment, including mismatches and gaps, must score 20 \n"
 "or higher in order to appear in the BLAT output.\n"
-"Having only 2 hits is quite low, and will often yield no BLAT results.\n"
-"Click the link to see the full BLAT output for that organism.\n</P>\n");
+"Having too few hits will often yield no BLAT results.\n"
+"Click the Assembly column link on the results page to see the full BLAT output for that organism.\n</P>\n");
 
 if (hgPcrOk(db))
     printf("<P>For locating PCR primers, use <A HREF=\"../cgi-bin/hgPcr?db=%s\">In-Silico PCR</A>"
@@ -1622,7 +1650,7 @@ printf(
 "perfect sequence matches of 20 bases.\n"
 "BLAT on proteins finds sequences of 80%% and greater similarity of length 20 amino\n"
 "acids or more.  In practice DNA BLAT works well on primates, and protein\n"
-"blat on land vertebrates."
+"BLAT on land vertebrates."
 );
 
 
@@ -1721,16 +1749,36 @@ for (;gH; gH = gH->next)
 	continue;
     if (gH->maxGeneTStrand == '-')  // convert to pos strand coordinates
 	{
-	struct sqlConnection *conn = hAllocConn(gH->db);
-	char query[256];
-	sqlSafef(query, sizeof query, "select size from chromInfo where chrom='%s'", gH->maxGeneChrom);
-	int chromSize = sqlQuickNum(conn, query);
-	hFreeConn(&conn);
+	int chromSize = 0;
+	char temp[1024];
+	safef(temp, sizeof temp, "%s", "");
+	if (trackHubDatabase(gH->db))  // if not hub db, make sure it is the default assembly.
+	    {
+
+	    struct chromInfo *ci = trackHubMaybeChromInfo(gH->db, gH->maxGeneChrom);
+	    if (ci)
+		chromSize = ci->size;
+	    else
+		{
+		warn("chromosome %s missing from %s .2bit (%s).", gH->maxGeneChrom, gH->db, gH->genome);
+		safef(temp, sizeof temp, "chromosome %s missing from %s .2bit.", gH->maxGeneChrom, gH->db);
+		}
+	    }
+	else
+	    {
+	    struct sqlConnection *conn = hAllocConn(gH->db);
+	    char query[256];
+	    sqlSafef(query, sizeof query, "select size from chromInfo where chrom='%s'", gH->maxGeneChrom);
+	    chromSize = sqlQuickNum(conn, query);
+	    hFreeConn(&conn);
+	    if (chromSize == 0)
+		{
+		warn("chromosome %s missing from %s.chromInfo (%s)", gH->maxGeneChrom, gH->db, gH->genome);
+		safef(temp, sizeof temp, "chromosome %s missing from %s.chromInfo", gH->maxGeneChrom, gH->db);
+		}
+	    }
 	if (chromSize == 0)
 	    {
-	    warn("chromosome %s missing from %s.chromInfo (%s)", gH->maxGeneChrom, gH->db, gH->genome);
-	    char temp[256];
-	    safef(temp, sizeof temp, "chromosome %s missing from %s.chromInfo", gH->maxGeneChrom, gH->db);
 	    gH->error = TRUE;
 	    gH->networkErrMsg = cloneString(temp);
 	    }
@@ -1862,11 +1910,14 @@ else
 	    db = this->name;
 	    organism = hGenome(db);
 
-	    char query[256];
-	    sqlSafef(query, sizeof query, "select name from defaultDb where genome='%s'", organism);
-	    char *defaultDb = sqlQuickString(conn, query);
-	    if (!sameOk(defaultDb, db))
-		continue;  // skip non-default dbs
+	    if (!trackHubDatabase(db))  // if not hub db, make sure it is the default assembly.
+		{	    
+		char query[256];
+		sqlSafef(query, sizeof query, "select name from defaultDb where genome='%s'", organism);
+		char *defaultDb = sqlQuickString(conn, query);
+		if (!sameOk(defaultDb, db))
+		    continue;  // skip non-default dbs
+		}
 
 	    blatSeq(skipLeadingSpaces(userSeq), organism, db, dbCount);
 
@@ -1975,7 +2026,7 @@ else
 	    if (gH->error)
 		{
 		printf("<td>%s</td><td>%s</td><td>%s</td><td></td><td>%s</td><td></td>",
-		    gH->faName, gH->genome, gH->db, gH->networkErrMsg); 
+		    gH->faName, trackHubSkipHubName(gH->genome), trackHubSkipHubName(gH->db), gH->networkErrMsg); 
 		if (debuggingGfResults)
 		    printf("<td>%d</td><td>%s</td><td></td>", 
 		    gH->queryRC, gH->type);
@@ -1990,7 +2041,7 @@ else
 		safef(id, sizeof id, "res%d", idCount);
 		printf("<td>%s</td><td>%s</td>"
 		    "<td><a id=%s href=''>%s</a></td>"
-		    , gH->faName, gH->genome, id, gH->db);
+		    , gH->faName, trackHubSkipHubName(gH->genome), id, trackHubSkipHubName(gH->db));
 
 		printf("<td style='text-align:right'>%d</td><td>%s</td>", gH->maxGeneHits, 
 		    gH->maxGeneChrom ? gH->maxGeneChrom : "");
