@@ -4,14 +4,14 @@ setenv LASTREVIEWDAY 2018-09-17         # v372 preview
 setenv previewSubversion       # empty string unless mistake, otherwise .1 etc
 
 # set for preview 2: move date and vNNN from REVIEW2DAY to LASTREVIEW2DAY
-setenv REVIEW2DAY  2018-09-24           # v372 preview2
-setenv LASTREVIEW2DAY  2018-09-03       # v371 preview2
+setenv REVIEW2DAY  2018-10-15           # v373 preview2
+setenv LASTREVIEW2DAY  2018-09-24       # v372 preview2
 setenv preview2Subversion      # empty string unless mistake, otherwise .1 etc
 
 # set these three for final build:  increment NN and copy date from TODAY to LASTWEEK
-setenv BRANCHNN 372                    # increment for new build
-setenv TODAY 2018-10-01                # v372 final, copy to LASTWEEK
-setenv LASTWEEK  2018-09-10            # v371 final, copy from TODAY
+setenv BRANCHNN 373                    # increment for new build
+setenv TODAY 2018-10-22                # v373 final, copy to LASTWEEK
+setenv LASTWEEK  2018-10-01            # v372 final, copy from TODAY
 setenv baseSubversion                  # empty string unless mistake, otherwise .1 etc (warning: fixed for _base but not _branch)
 
 setenv BUILDHOME /hive/groups/browser/newBuild
