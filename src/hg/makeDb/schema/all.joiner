@@ -4548,6 +4548,11 @@ identifier knownGeneId dependency
     $kgDb.knownToAllenBrain.name
     $kgDb.knownToCdsSnp.name
     $kgDb.knownToEnsembl.name
+    $kgDb.knownToLynx.name
+    $kgDb.ucscScop.ucscId
+    $kgDb.knownToMrna.name
+    $kgDb.knownToMrnaSingle.name
+    $kgDb.knownToNextProt.name
     $kgDb.knownToGnf1h.name
     $kgDb.knownToGnfAtlas2.name
     $kgDb.knownToHInv.name
@@ -5353,7 +5358,7 @@ identifier ensemblProteinId3 external=Ensembl
     $gbd.sfAssign.seqID minCheck=0.01
 
 
-set notEnsemblTranscriptId !allMis1,!ambMex1,!aotNan1,!aptMan1,!aquChr2,!balAcu1,!bisBis1,!bosTau8,!braFlo2,!ce10,!calMil1,!casCan1,!cebCap1,!cerAty1,!cerSim1,!chrPic2,!$colAng,!eboVir3,!eulFla1,!eulMac1,!equCab3,!felCat8,!felCat9,!galVar1,!gorGor5,!manPen1,!macNem1,!macFas5,!manLeu1,!melGal5,!micMur3,!nanPar1,!nasLar1,!neoSch1,!$orcOrc,!oreNil3,!oviAri4,!oxyTri2,!panPan1,!panPan2,!panTro5,!panTro6,!petMar3,!ponAbe3,!priPac3,!proCoq1,!rhiBie1,!rhiRox1,!rouAeg1,!staAur1,!taeGut2,!tarSyr2,!thaSir1,!tupChi1,!xenLae2,!xenTro7,!xenTro9
+set notEnsemblTranscriptId !allMis1,!ambMex1,!aotNan1,!aptMan1,!aquChr2,!balAcu1,!bisBis1,!bosTau8,!braFlo2,!ce10,!calMil1,!casCan1,!cebCap1,!cerAty1,!cerSim1,!chrPic2,!$colAng,!eboVir3,!eulFla1,!eulMac1,!equCab3,!felCat8,!felCat9,!galGal6,!galVar1,!gorGor5,!manPen1,!macNem1,!macFas5,!manLeu1,!melGal5,!micMur3,!nanPar1,!nasLar1,!neoSch1,!$orcOrc,!oreNil3,!oviAri4,!oxyTri2,!panPan1,!panPan2,!panTro5,!panTro6,!petMar3,!ponAbe3,!priPac3,!proCoq1,!rhiBie1,!rhiRox1,!rouAeg1,!staAur1,!taeGut2,!tarSyr2,!thaSir1,!tupChi1,!xenLae2,!xenTro7,!xenTro9
 
 identifier ensemblTranscriptId external=Ensembl dependency
 "Ensembl Transcript ID"
@@ -5365,7 +5370,7 @@ identifier ensemblTranscriptId external=Ensembl dependency
     $gbd,$notEnsemblTranscriptId.ensInfo.name minCheck=0.9
     $ensGeneDb,$notEnsemblTranscriptId.ensemblToGeneName.name minCheck=0.94
     $ensGeneDb,$notEnsemblTranscriptId.ensemblSource.name minCheck=0.96
-    $kgDb.knownToEnsembl.value chopAfter=.
+    !hg38,$kgDb.knownToEnsembl.value chopAfter=.
     $kgDb.rgdGene2ToEnsembl.value chopAfter=.
     $danRer.ensZfishBlastTab.query
     $danRer.ensZfishBlastTab.target
@@ -5528,7 +5533,7 @@ identifier cgapAlias
     $gbd.cgapAlias.alias dupeOk
     $gbd,!hg16,!hg18,!hg19,!mm9,!mm10,!hg38.knownGene.name minCheck=0.50
     hg16.knownGene.name minCheck=0.05
-    hg18,hg19,hg38,mm9,mm10.kgXref.geneSymbol minCheck=0.74
+    hg18,hg19,hg38,mm9,mm10.kgXref.geneSymbol minCheck=0.70
 
 # SNP (Simple Nucleotide Polymorphism) Stuff
 
@@ -6819,6 +6824,12 @@ identifier lrgTranscriptId
     $hg.lrgCdna.name
     $hg.lrgPep.name
     $hg.lrgCds.id
+
+identifier rmskJoinedCurrent
+"linking together RepeatMasker repeat fragments rmskJoined"
+    $gbd.rmskAlignCurrent.id dupeOk
+    $gbd.rmskJoinedCurrent.id minCheck=0.99
+    $gbd.rmskOutCurrent.id minCheck=0.99
 
 identifier rmskJoinedBaseline
 "linking together RepeatMasker repeat fragments rmskJoined"

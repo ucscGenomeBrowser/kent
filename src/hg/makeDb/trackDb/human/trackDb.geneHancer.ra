@@ -7,10 +7,11 @@ subGroup2 set Set a_ELITE=Double_Elite b_ALL=All
 sortOrder set=+ view=+
 dimensions dimX=set dimY=view
 type bed 3
-visibility full
+visibility hide
 pennantIcon New red ../goldenPath/releaseLog.html  created September 2018
 group regulation
 priority 1.5
+release alpha,beta
 
     track ghGeneTss
     type bigBed 9

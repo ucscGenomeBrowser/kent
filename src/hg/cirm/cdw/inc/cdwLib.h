@@ -485,6 +485,10 @@ struct slRef *tagStanzasMatchingQuery(struct tagStorm *tags, char *query);
 void cdwPrintMatchingStanzas(char *rqlQuery, int limit, struct tagStorm *tags, char *format);
 /* Show stanzas that match query */
 
+void cdwPrintSlRefList(struct slRef *results, struct slName *fieldNames, char *format, int limit);
+/* Print a linked list of results in ra, tsv, or csv format.  Each result should be a list of
+ * slPair key/values. */
+
 struct cgiParsedVars *cdwMetaVarsList(struct sqlConnection *conn, struct cdwFile *ef);
 /* Return list of cgiParsedVars dictionaries for metadata for file.  Free this up 
  * with cgiParsedVarsFreeList() */
