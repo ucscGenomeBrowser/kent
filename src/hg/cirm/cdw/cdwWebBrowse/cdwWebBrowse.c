@@ -275,6 +275,17 @@ webSortableFieldedTable(cart, table, returnUrl, "cdwOneFile", 0, outputWrappers,
 fieldedTableFree(&table);
 }
 
+char *unquotedCartString(struct cart *cart, char *varName)
+/* Return unquoted cart variable */
+{
+char *val = cartOptionalString(cart, varName);
+if (val == NULL)
+    return "";
+stripChar(val, '"');
+stripChar(val, '\'');
+return val;
+}
+
 char *getCdwSetting(char *setting, char *deflt)
 /* Get string cdw.<setting> */
 {
@@ -904,21 +915,8 @@ void makeDownloadAllButtonForm()
 {
 printf("<A HREF=\"cdwWebBrowse?hgsid=%s&cdwCommand=downloadFiles", cartSessionId(cart));
 
-/* old way 
-char *fieldNames[128];
-char *tempFileTableFields = cloneString(fileTableFields); // cannot modify string literals
-int fieldCount = chopString(tempFileTableFields, ",", fieldNames, ArraySize(fieldNames));
-int i;
-for (i = 0; i<fieldCount; i++)
-    {
-    char varName[1024];
-    safef(varName, sizeof(varName), "cdwBrowseFiles_f_%s", fieldNames[i]);
-    printf("&%s=%s", varName, cartCgiUsualString(cart, varName, ""));
-    }
-*/
-
-printf("&cdwFileSearch=%s", cartCgiUsualString(cart, "cdwFileSearch", ""));
-printf("&cdwFile_filter=%s", cartCgiUsualString(cart, "cdwFile_filter", ""));
+printf("&cdwFileSearch=%s", unquotedCartString(cart, "cdwFileSearch"));
+printf("&cdwFile_filter=%s", cartUsualString(cart, "cdwFile_filter", ""));
 printf("\">Download All</A>");
 }
 
@@ -983,7 +981,9 @@ dyStringFree(&where);
 char *showSearchControl(char *varName, char *itemPlural)
 /* Put up the search control text and stuff. Returns current search string. */
 {
-char *varVal = cartUsualString(cart, varName, "");
+/* Get cart variable and clean it up some removing quotes and the like */
+char *varVal = unquotedCartString(cart, varName);
+
 printf("Search <input name=\"%s\" type=\"text\" id=\"%s\" value=\"%s\" size=60>", 
     varName, varName, varVal);
 printf("&nbsp;");
@@ -1048,7 +1048,7 @@ if (createSubdirs)
 else
     puts("Content-disposition: attachment; filename=fileUrls.txt\n");
 
-char *searchString = cartUsualString(cart, "cdwFileSearch", "");
+char *searchString = unquotedCartString(cart, "cdwFileSearch");
 char *initialWhere = cartUsualString(cart, "cdwFile_filter", "");
 
 struct cdwFile *efList = findDownloadableFiles(conn, cart, initialWhere, searchString);
@@ -1110,7 +1110,7 @@ cgiMakeHiddenVar("cdwCommand", "downloadUrls");
 
 continueSearchVars();
 
-char *searchString = cartUsualString(cart, "cdwFileSearch", "");
+char *searchString = unquotedCartString(cart, "cdwFileSearch");
 char *initialWhere = cartUsualString(cart, "cdwFile_filter", "");
 
 struct cdwFile *efList = findDownloadableFiles(conn, cart, initialWhere, searchString);
@@ -1377,13 +1377,17 @@ for (dataset = datasetList; dataset != NULL; dataset = dataset->next)
 	{
 	printf("<LI><B><A href=\"cdwGetFile/%s/summary/index.html\">%s (%s)</A></B><BR>\n", 
 	    datasetId, label, datasetId);
-// #ifdef SOON
+	
 	// Print out file count and descriptions. 
 	sqlSafef(query, sizeof(query), 
 	    "select count(*) from %s where data_set_id='%s'", getCdwTableSetting("cdwFileTags"), datasetId);  
 	long long fileCount = sqlQuickLongLong(conn, query);
-	printf("%s (<A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwBrowseFiles_f_data_set_id=%s&%s\"",
-		desc, datasetId, cartSidUrlString(cart)); 
+//	printf("%s (<A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwFile_filter=data_set_id%%3D+%%27%s%%27&%s\"",
+//		desc, datasetId, cartSidUrlString(cart)); 
+	char varEqVal[256];
+	safef(varEqVal, sizeof(varEqVal), "data_set_id='%s'", datasetId);
+	printf("%s (<A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwFile_filter=%s&%s\"",
+		desc, cgiEncode(varEqVal), cartSidUrlString(cart)); 
 	printf(">%lld files</A>)",fileCount);
 
 	int fileId = getRecentSubmitFileId(conn, submitDirId, "meta.txt");
@@ -2092,7 +2096,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Data Browser V0.59");
+localWebStartWrapper("CIRM Stem Cell Hub Data Browser V0.60");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
