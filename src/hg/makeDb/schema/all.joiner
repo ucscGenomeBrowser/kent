@@ -4548,6 +4548,11 @@ identifier knownGeneId dependency
     $kgDb.knownToAllenBrain.name
     $kgDb.knownToCdsSnp.name
     $kgDb.knownToEnsembl.name
+    $kgDb.knownToLynx.name
+    $kgDb.ucscScop.ucscId
+    $kgDb.knownToMrna.name
+    $kgDb.knownToMrnaSingle.name
+    $kgDb.knownToNextProt.name
     $kgDb.knownToGnf1h.name
     $kgDb.knownToGnfAtlas2.name
     $kgDb.knownToHInv.name
@@ -5365,7 +5370,7 @@ identifier ensemblTranscriptId external=Ensembl dependency
     $gbd,$notEnsemblTranscriptId.ensInfo.name minCheck=0.9
     $ensGeneDb,$notEnsemblTranscriptId.ensemblToGeneName.name minCheck=0.94
     $ensGeneDb,$notEnsemblTranscriptId.ensemblSource.name minCheck=0.96
-    $kgDb.knownToEnsembl.value chopAfter=.
+    !hg38,$kgDb.knownToEnsembl.value chopAfter=.
     $kgDb.rgdGene2ToEnsembl.value chopAfter=.
     $danRer.ensZfishBlastTab.query
     $danRer.ensZfishBlastTab.target
@@ -5528,7 +5533,7 @@ identifier cgapAlias
     $gbd.cgapAlias.alias dupeOk
     $gbd,!hg16,!hg18,!hg19,!mm9,!mm10,!hg38.knownGene.name minCheck=0.50
     hg16.knownGene.name minCheck=0.05
-    hg18,hg19,hg38,mm9,mm10.kgXref.geneSymbol minCheck=0.74
+    hg18,hg19,hg38,mm9,mm10.kgXref.geneSymbol minCheck=0.70
 
 # SNP (Simple Nucleotide Polymorphism) Stuff
 

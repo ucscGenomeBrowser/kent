@@ -730,7 +730,7 @@ BLAT rapidly locates genomic sequences with 80% or greater similarity of length 
 more. In general, gene family members that arose within the last 350 million years can generally be 
 detected. More divergent sequences can be aligned to the human genome by using NCBI's BLAST and 
 psi-BLAST, then using BLAT to align the resulting match onto the UCSC genome assembly. In practice 
-DNA BLAT works well on primates, and protein BLAT works well on land vertebrates.</p> 
+DNA Blat works well on primates, and protein Blat works well on land vertebrates.</p> 
 <p>
 Some common uses of BLAT include:</p> 
 <ul> 
@@ -745,7 +745,10 @@ Some common uses of BLAT include:</p>
   <li> 
   searching for gene family members</li>
   <li>
-  finding human homologs of a query from another species</li> 
+  finding human homologs of a query from another species</li>
+  <li>
+  finding homologs of a query in all species hosted on the UCSC Genome Browser</li>
+  
 </ul>	
 	
 <h3>Making a BLAT query</h3>
@@ -759,7 +762,12 @@ To locate a nucleotide or protein within a genome using BLAT:</p>
   Select the genome, assembly, query type, output sort order, and output type. To order the search 
   results based on the closeness of the sequence match, choose one of the score options in the 
   <em>Sort output</em> menu. The score is determined by the number of matches vs. mismatches in the 
-  final alignment of the query to the genome.</li>  
+  final alignment of the query to the genome. <br/>
+ <b>Blat ALL genomes</b> &ndash; <a href="https://hgwdev.gi.ucsc.edu/cgi-bin/hgBlat" target="_blank"><em>The Search ALL</em></a> 
+ checkbox above the Genome drop-down list allows you to search
+ the genomes of the default assemblies for all of our organisms. This shows you an ordered list of the default 
+ assemblies having the highest homology with your query sequence. Additionally, the <em>Search ALL</em> feature 
+ searches any attached hubs' blat servers, meaning you can search your user-generated assembly hubs.  </li>  
   <li> 
   If the sequence to be uploaded is in an unformatted plain text file, enter the file name in the 
   <em>Upload sequence</em> text box, then click the <em>submit file</em> button. Otherwise, paste 
@@ -822,6 +830,7 @@ be uploaded into the Genome Browser by pasting the data into the data text box o
 <a href="../../cgi-bin/hgCustom?">Add Custom Tracks</a> page, accessed via the &quot;add custom 
 tracks&quot; button on the Browser gateway and annotation tracks pages. See the 
 <a href="#CustomTracks">Creating custom annotation tracks</a> section for more information.</p>
+
 
 <h3>Using BLAT for large batch jobs or commercial use</h3>
 <p>
