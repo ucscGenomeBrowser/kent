@@ -91,7 +91,7 @@ genome. This is done to improve speed, but may result in missed hits when you ar
 sequences in repeats.</p>
 <p>
 If your input sequence is not one of the very repetitive sequences, but still
-present a few dozen times on a chromsome, note that BLAT results are limited
+present a few dozen times on a chromosome, note that BLAT results are limited
 to 16 results per chromosome strand. This means that at most 32 locations
 per chromosome are returned.
 </p>
@@ -309,20 +309,24 @@ score, coverage, or quality desired. For information on obtaining the source cod
 <h2>Blat ALL genomes</h2>
 <h6>How do I Blat queries for the default genome assemblies of all organisms?</h6>
 <p>
-BLAT is desgined to quickly find sequence similarity between query and target sequences. 
+BLAT is designed to quickly find sequence similarity between query and target sequences. 
 Generally, Blat is used to find locations of sequence homology in a single target genome or determine
  the exon structure of an mRNA. Blat also allows users to compare the query sequence against all of 
-the default assemblies for organisms hosted on the UCSC Genome Browser.  
+the default assemblies for organisms hosted on the UCSC Genome Browser. The <em>Search ALL</em> feature
+may be useful if you have an ambiguous query sequence and are trying to determine what organism it may
+belong to.
 </p>
 <p>
-The <a href="https://hgwdev.gi.ucsc.edu/cgi-bin/hgBlat" target="_blank"><em>Search ALL</em></a> 
+Selecting the <em>Search ALL</em> 
 checkbox above the Genome drop-down list allows you to search the genomes
-of the default assemblies for all of our organisms. It also searches any attached hubs' blat servers, meaning you can search your user-generated assembly hubs. The results show an ordered list 
-of which organisms have the highest homology with your query sequence. The results are ordered 
-so that the organism whose best alignment has the most hits is at the top, and shows the best region found.
+of the default assemblies for all of our organisms. It also searches any attached hubs' 
+blat servers, meaning you can search your user-generated assembly hubs. The results page displays an ordered list 
+of all our organisms and their homology with your query sequence. The results are ordered 
+so that the organism with the best alignment score is at the top, indicating which region(s) 
+of that organism has the greatest homology with your query sequence.
 The entire alignment, including mismatches and gaps, must <a href="../FAQ/FAQblat.html#blat4">score</a>  
 20 or higher in order to appear in the Blat output. By clicking into a link in the <em>Assembly list</em> 
-you will be taken to a new page displaying various locations and scores of sequence homolgy in the assembly of interest.
+you will be taken to a new page displaying various locations and scores of sequence homology in the assembly of interest.
 </p>
 
 
