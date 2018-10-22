@@ -663,7 +663,7 @@ else  // hyperlink
 	int tPadding = maxTChromNameSize - strlen(psl->tName);
 	safecatRepeatChar(tempT, sizeof tempT, ' ', tPadding);
 
-	printf("%-14s %5d %5d %5d %5d   %5.1f%%  %s  %-2s  %9d %9d %6d\n",
+	printf("%s %5d %5d %5d %5d   %5.1f%%  %s  %-2s  %9d %9d %6d\n",
 	    tempQ, pslScore(psl), psl->qStart+1, psl->qEnd, psl->qSize,
 	    100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
 	    tempT, psl->strand, psl->tStart+1, psl->tEnd,
