@@ -1553,7 +1553,7 @@ visibility hide
 useScore 1
 type bed 12 +
 
-include joinedRmskComposite.ra alpha
+include joinedRmskComposite.ra alpha, beta
 include joinedRmsk.ra beta,public
 
 track windowmasker
