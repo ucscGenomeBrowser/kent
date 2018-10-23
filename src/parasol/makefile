@@ -43,7 +43,3 @@ clean:
 	rm -f */*.o lib/*/*.a
 	rm -f bin/*
 
-broad:
-	cd lib && ${MAKE}
-	cd broadNode && ${MAKE}
-	cd broadHub && ${MAKE}
