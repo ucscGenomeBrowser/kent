@@ -2403,7 +2403,7 @@ Node 343:
 	parent = 342
 	lchild = -1
 	rchild = -1
-	name = 'galGal5'
+	name = 'galGal6'
 	dparent = 0.031254
 
 Node 344:
