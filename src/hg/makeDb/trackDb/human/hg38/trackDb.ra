@@ -303,6 +303,7 @@ longLabel GRCh38 Haplotype to Reference Sequence Mapping Correspondence
 visibility hide
 otherDb hg38
 group map
+release beta,public
 
     track altLocations
     superTrack altSequence pack
@@ -311,8 +312,9 @@ group map
     shortLabel Haplotypes
     longLabel GRCh38 Haplotype to Reference Sequence Mapping Correspondence
     html altSequence
-    url /cgi-bin/hgTracks?db=hg38&position=$$
+    url /cgi-bin/hgTracks?db=$D&position=$$
     urlLabel Corresponding position:
+    release beta,public
 
     track altSeqLiftOverPsl
     superTrack altSequence pack
@@ -328,6 +330,7 @@ group map
     showCdsAllScales .
     baseColorDefault diffBases
     baseColorUseSequence extFile seqNcbiAltSequence extNcbiAltSequence
+    release beta,public
 
 track altSeqLiftOverBigPsl
 #superTrack altSequence pack

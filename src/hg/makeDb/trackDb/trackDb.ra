@@ -260,6 +260,38 @@ longLabel Fix Patch to Reference Sequence Correspondence
 url ../cgi-bin/hgTracks?db=$D&position=$$
 urlLabel Corresponding position:
 
+track altSeqLiftOverPsl
+shortLabel Alt Haplotypes
+longLabel Reference Assembly Alternate Haplotype Sequence Alignments
+group map
+type psl
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsMaxZoom 10000.0
+showCdsAllScales .
+baseColorDefault diffBases
+baseColorUseSequence db
+color 0,0,100
+release alpha
+
+track fixSeqLiftOverPsl
+shortLabel Fix Patches
+longLabel Reference Assembly Fix Patch Sequence Alignments
+group map
+type psl
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsMaxZoom 10000.0
+showCdsAllScales .
+baseColorDefault diffBases
+baseColorUseSequence db
+color 100,0,0
+release alpha
+
 track knownGene
 shortLabel UCSC Genes
 longLabel UCSC Genes (RefSeq, GenBank, tRNAs & Comparative Genomics)
