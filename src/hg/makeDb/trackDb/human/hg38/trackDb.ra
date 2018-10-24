@@ -1,4 +1,5 @@
 include ../../refSeqComposite.ra
+include ../../crispr10K.ra alpha
 
 include barCharts.ra
 
