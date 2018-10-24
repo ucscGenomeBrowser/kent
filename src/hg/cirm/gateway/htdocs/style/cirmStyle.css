@@ -282,6 +282,11 @@ textarea.form-control { width: 500px; height: 200px;}
     margin: 0% 1%
 }
 
+.centered-text
+{
+    text-align: center;
+}
+
 /*Styling for Projects page table*/
 .table-header-rotated th.row-header
 {
