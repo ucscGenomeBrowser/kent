@@ -34,9 +34,9 @@ those starting with &quot;#&quot; are ignored.</p>
 To construct an annotation file and display it in the Genome Browser, follow these steps:</p>
 
 <a name="format"></a>
-<p>
-<strong>Step 1. Format the data set</strong><br>
-Formulate your data set as a tab-separated file using one of the formats supported by the Genome 
+<p><dl>
+<dt>Step 1. Format the data set</dt>
+<dd>Formulate your data set as a tab-separated file using one of the formats supported by the Genome 
 Browser. Annotation data can be in standard 
 <a href="../../FAQ/FAQformat.html#format3">GFF</a> format or in a format designed specifically for 
 the Human Genome Project or UCSC Genome Browser, including 
@@ -68,32 +68,33 @@ and <a href="../../FAQ/FAQformat.html#format6.5">microarray</a>
 (BED15). GFF and GTF files <em>must</em> be tab-delimited rather than space-delimited to display 
 correctly. Chromosome references must be of the form <em>chrN</em> (the parsing of chromosome names 
 <em><strong>is</strong></em> case-sensitive). You may include more than one data set in your 
-annotation file; these need not be in the same format.</p> 
+annotation file; these need not be in the same format.</dd></p> 
 <p>
-<strong>Step 2. Define the Genome Browser display characteristics</strong><br>
-Add one or more optional <a href="#lines">browser lines</a> to the beginning of your formatted data 
+<dt>Step 2. Define the Genome Browser display characteristics</dt>
+<dd>Add one or more optional <a href="#lines">browser lines</a> to the beginning of your formatted data 
 file to configure the overall display of the Genome Browser when it initially shows your annotation 
 data. Browser lines allow you to configure such things as the genome position that the Genome 
 Browser will initially open to, the width of the display, and the configuration of the other 
 annotation tracks that are shown (or hidden) in the initial display. NOTE: If the browser position 
 is not explicitly set in the annotation file, the initial display will default to the position 
 setting most recently used by the user, which may not be an appropriate position for viewing the 
-annotation track.</p>
+annotation track.</dd></p>
 <p>
-<strong>Step 3. Define the annotation track display characteristics</strong><br>
-Following the browser lines--and immediately preceding the formatted data--add a 
+<dt>Step 3. Define the annotation track display characteristics</dt>
+<dd>Following the browser lines--and immediately preceding the formatted data--add a 
 <a href="#TRACK">track line</a> to define the display attributes for your annotation data set. Track
 lines enable you to define annotation track characteristics such as the name, description, colors, 
 initial display mode, use score, etc. The track <a href="#TRACK">type=<<em>track_type</em>></a> 
 attribute is required for some tracks. If you have included more than one data set in your 
-annotation file, insert a track line at the beginning of each new set of data.</p>
+annotation file, insert a track line at the beginning of each new set of data.</dd></p>
 
 <a name="EXAMPLE1"></a>
 <p>
-<strong><em>Example #1:</em></strong><br> 
-Here is an example of a simple annotation file that contains a list of chromosome coordinates. 
+<dt><em>Example #1:</em></dt>
+<dd>Here is an example of a simple annotation file that contains a list of chromosome coordinates.</dd> 
 <pre><code>browser position chr22:20100000-20100900
 track name=coords description="Chromosome coordinates list" visibility=2
+#chrom chromStart chromEnd
 chr22   20100000 20100100
 chr22   20100011 20100200	
 chr22   20100215 20100400
@@ -101,56 +102,58 @@ chr22   20100350 20100500
 chr22   20100700 20100800
 chr22   20100700 20100900</code></pre>
 <p>
-Click <a class="insideLink" href="../../cgi-bin/hgTracks?org=human&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/examples/ct_example1.txt" 
-target="_blank">here</a> to view this track in the Genome Browser.</p>
+<dd>Click <a class="insideLink" href="../../cgi-bin/hgTracks?org=human&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/examples/ct_example1.txt" 
+target="_blank">here</a> to view this track in the Genome Browser.</dd></p>
 <p>
-<strong><em>Example #2:</em></strong><br>
-Here is an example of an annotation file that defines 2 separate annotation tracks in BED format. 
+<dl><dt><em>Example #2:</em></dt>
+<dd>Here is an example of an annotation file that defines 2 separate annotation tracks in BED format. 
 The first track displays blue one-base tick marks every 10000 bases on chr 22. The second track 
-displays red 100-base features alternating with blank space in the same region of chr 22. 
+displays red 100-base features alternating with blank space in the same region of chr 22.</dd> 
 <pre><code>browser position chr22:20100000-20140000
 track name=spacer description="Blue ticks every 10000 bases" color=0,0,255,
+#chrom chromStart chromEnd
 chr22   20100000 20100001
 chr22   20110000 20110001
 chr22   20120000 20120001
 track name=even description="Red ticks every 100 bases, skip 100" color=255,0,0
+#chrom chromStart chromEnd name
 chr22   20100000 20100100	first
 chr22   20100200 20100300	second
 chr22   20100400 20100500	third</code></pre>
 <p>
-Click <a class="insideLink" href="../../cgi-bin/hgTracks?org=human&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/examples/ct_example2.txt" 
-target="_blank">here</a> to view this track in the Genome Browser.</p>
+<dd>Click <a class="insideLink" href="../../cgi-bin/hgTracks?org=human&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/examples/ct_example2.txt" 
+target="_blank">here</a> to view this track in the Genome Browser.</dd</p>
 
-<p>
-<strong><em>Example #3a:</em></strong><br>
-This example shows an annotation file containing one data set in BED format. The track displays 
+<p><dl>
+<dt><em>Example #3a:</em></dt>
+<dd>This example shows an annotation file containing one data set in BED format. The track displays 
 features with multiple blocks, a thick end and thin end, and hatch marks indicating the direction of
 transcription. The track labels display in green (0,128,0), and the gray level of the each feature 
-reflects the score value of that line. 
+reflects the score value of that line.</dd> 
 <pre><code>browser position chr22:1000-10000
 browser hide all
 track name="BED track" description="BED format custom track example" visibility=2 color=0,128,0 useScore=1
-#chrom chromStart chromEnd name score strand thickStart thickEnd, itemRgb, blockCount, blockSizes, blockStarts
+#chrom chromStart chromEnd name score strand thickStart thickEnd itemRgb blockCount blockSizes blockStarts
 chr22 1000 5000 itemA 960 + 1100 4700 0 2 1567,1488, 0,2512
 chr22 2000 7000 itemB 200 - 2200 6950 0 4 433,100,550,1500 0,500,2000,3500 </code></pre>
 <p>
-Click 
+<dd>Click 
 <a class="insideLink" href="../../cgi-bin/hgTracks?org=human&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/examples/ct_example3.txt" 
-target="_blank">here</a> to view this track in the Genome Browser.</p>  
-
+target="_blank">here</a> to view this track in the Genome Browser.</dd></p>  
+</dl>
 <p>
-<strong><em>Example 3b:</em></strong><br>
-This example shows a simple annotation file containing one data set in the bigBed format. This track
+<dt><em>Example 3b:</em></dt>
+<dd>This example shows a simple annotation file containing one data set in the bigBed format. This track
 displays random sized blocks across chr21 in the human genome. The big data formats, such as the 
 bigBed format, can be uploaded using a bigDataUrl that is specified in the track line. For more 
 information on these track line parameters, refer to the <a href="#TRACK">Track Lines</a>
 section. When using bigDataUrls, data is cached and updated every 300 seconds. If you are updating
 your big data tracks with different displays and are not seeing your track changes in the browser,
 you may want to add the <a href="hgTrackHubHelp.html#Debug">udcTimeout</a>= parameter to prevent 
-caching of your track data and force a reload.</p> 
+caching of your track data and force a reload.</dd></p> 
 <p> 
-You may paste these two lines directly into the "Add Custom Tracks" page to view this example in the
-browser:</p> 
+<dd>You may paste these two lines directly into the "Add Custom Tracks" page to view this example in the
+browser:</dd></p> 
 <pre><code>browser position chr21:33,031,597-33,041,570
 track type=bigBed name="bigBed Example One" description="A bigBed file" bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb</code></pre>
 <p>
@@ -189,11 +192,11 @@ about the feature by using the track line <em>url</em> attribute. In the annotat
 by the <em>name</em> attribute. You can take advantage of this feature to provide individualized 
 information for each feature in your track by creating HTML anchors that correspond to the feature 
 names in your web page.</p>
-<p><strong><em>Example 4:</em></strong><br> 
-Here is an example of a file in which the <em>url</em> attribute has been set to point to the file 
+<p><dt><em>Example 4:</em></dt>> 
+<dd>Here is an example of a file in which the <em>url</em> attribute has been set to point to the file 
 <a href="cloneshtml.txt" target="_blank">http://genome.ucsc.edu/goldenPath/help/clones.html</a>. The
 '#$$' appended to the end of the file name in the example points to the HTML NAME tag within the 
-file that matches the name of the feature (cloneA, cloneB, etc.).</p> 
+file that matches the name of the feature (cloneA, cloneB, etc.).</dd></p> 
 <pre><code>browser position chr22:10000000-10020000
 browser hide all
 track name=clones description="Clones" visibility=2 color=0,128,0 useScore=1 url="http://genome.ucsc.edu/goldenPath/help/clones.html#$$"
