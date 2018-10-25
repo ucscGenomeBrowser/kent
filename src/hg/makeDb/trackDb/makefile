@@ -76,6 +76,7 @@ DBS = \
 	ci1 ci2 ci3 cioSav2 \
 	cioSav1 \
 	colAng1 \
+	cotJap2 \
 	criGri1 criGriChoV1 criGriChoV2 \
 	danRer3 danRer4 danRer5 danRer6 danRer7 danRer10 danRer11 \
 	dasNov1 dasNov2 dasNov3 \
@@ -104,7 +105,7 @@ DBS = \
 	fr1 fr2 fr3 \
 	fukDam1 \
 	gadMor1 \
-	galGal2 galGal3 galGal4 galGal5 \
+	galGal2 galGal3 galGal4 galGal5 galGal6 \
 	galVar1 \
 	gasAcu1 \
 	gorGor1 gorGor2 gorGor3 gorGor4 gorGor5 \

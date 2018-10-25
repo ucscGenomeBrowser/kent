@@ -116,6 +116,11 @@ textarea.form-control { width: 500px; height: 200px;}
     background-color: #eaeaea;
 }
 
+.icon-sm
+{
+    font-size: 1.15rem !important;
+}
+
 /* Styling for secure site banner */
 .securesite-banner
 {
@@ -277,6 +282,11 @@ textarea.form-control { width: 500px; height: 200px;}
     margin: 0% 1%
 }
 
+.centered-text
+{
+    text-align: center;
+}
+
 /*Styling for Projects page table*/
 .table-header-rotated th.row-header
 {
@@ -362,4 +372,9 @@ textarea.form-control { width: 500px; height: 200px;}
 {
     padding: 5px 0;
     margin-top: -3px;
+}
+
+.last-row
+{
+    border-bottom: 1pt solid #dddddd;
 }

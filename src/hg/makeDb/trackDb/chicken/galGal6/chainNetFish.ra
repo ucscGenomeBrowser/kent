@@ -1,0 +1,178 @@
+track fishChainNet
+compositeTrack on
+shortLabel Fish Chain/Net
+longLabel Fish Chain and Net Alignments
+subGroup1 view Views chain=Chains net=Nets
+subGroup2 species Species s000=Zebrafish s001=Japanese_eel s002=Nile_tilapia s003=Stickleback s004=Medaka s005=Zebra_mbuna s006=Tetraodon s007=Tetraodon s008=Fugu
+subGroup3 clade Clade c00=fish
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+color 0,0,0
+altColor 255,255,0
+type bed 3
+chainLinearGap loose
+chainMinScore 5000
+dimensions dimensionX=clade dimensionY=species
+sortOrder species=+ view=+ clade=+
+configurable on
+html fishChainNet
+
+    track fishChainNetViewchain
+    shortLabel Chains
+    view chain
+    visibility pack
+    subTrack fishChainNet
+    spectrum on
+
+        track chainDanRer11
+        subTrack fishChainNetViewchain off
+        subGroups view=chain species=s000 clade=c00
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain danRer11
+        otherDb danRer11
+
+        track chainAngJap1
+        subTrack fishChainNetViewchain off
+        subGroups view=chain species=s001 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain angJap1
+        otherDb angJap1
+
+        track chainOreNil3
+        subTrack fishChainNetViewchain off
+        subGroups view=chain species=s002 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain oreNil3
+        otherDb oreNil3
+
+        track chainGasAcu1
+        subTrack fishChainNetViewchain off
+        subGroups view=chain species=s003 clade=c00
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain gasAcu1
+        otherDb gasAcu1
+
+        track chainOryLat2
+        subTrack fishChainNetViewchain off
+        subGroups view=chain species=s004 clade=c00
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain oryLat2
+        otherDb oryLat2
+
+        track chainMayZeb1
+        subTrack fishChainNetViewchain off
+        subGroups view=chain species=s005 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain mayZeb1
+        otherDb mayZeb1
+
+        track chainTetNig2
+        subTrack fishChainNetViewchain off
+        subGroups view=chain species=s006 clade=c00
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain tetNig2
+        otherDb tetNig2
+
+        track chainTetNig1
+        subTrack fishChainNetViewchain off
+        subGroups view=chain species=s007 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain tetNig1
+        otherDb tetNig1
+
+        track chainFr3
+        subTrack fishChainNetViewchain off
+        subGroups view=chain species=s008 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain fr3
+        otherDb fr3
+
+    track fishChainNetViewnet
+    shortLabel Nets
+    view net
+    visibility dense
+    subTrack fishChainNet
+
+        track netDanRer11
+        subTrack fishChainNetViewnet off
+        subGroups view=net species=s000 clade=c00
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign danRer11 chainDanRer11
+        otherDb danRer11
+
+        track netAngJap1
+        subTrack fishChainNetViewnet off
+        subGroups view=net species=s001 clade=c00
+        shortLabel $o_db Net
+        longLabel $o_db ($o_date) Alignment Net
+        type netAlign angJap1 chainAngJap1
+        otherDb angJap1
+
+        track netOreNil3
+        subTrack fishChainNetViewnet off
+        subGroups view=net species=s002 clade=c00
+        shortLabel $o_db Net
+        longLabel $o_db ($o_date) Alignment Net
+        type netAlign oreNil3 chainOreNil3
+        otherDb oreNil3
+
+        track netGasAcu1
+        subTrack fishChainNetViewnet off
+        subGroups view=net species=s003 clade=c00
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign gasAcu1 chainGasAcu1
+        otherDb gasAcu1
+
+        track netOryLat2
+        subTrack fishChainNetViewnet off
+        subGroups view=net species=s004 clade=c00
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign oryLat2 chainOryLat2
+        otherDb oryLat2
+
+        track netMayZeb1
+        subTrack fishChainNetViewnet off
+        subGroups view=net species=s005 clade=c00
+        shortLabel $o_db Net
+        longLabel $o_db ($o_date) Alignment Net
+        type netAlign mayZeb1 chainMayZeb1
+        otherDb mayZeb1
+
+        track netTetNig2
+        subTrack fishChainNetViewnet off
+        subGroups view=net species=s006 clade=c00
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign tetNig2 chainTetNig2
+        otherDb tetNig2
+
+        track netTetNig1
+        subTrack fishChainNetViewnet off
+        subGroups view=net species=s007 clade=c00
+        shortLabel $o_db Net
+        longLabel $o_db ($o_date) Alignment Net
+        type netAlign tetNig1 chainTetNig1
+        otherDb tetNig1
+
+        track netFr3
+        subTrack fishChainNetViewnet off
+        subGroups view=net species=s008 clade=c00
+        shortLabel $o_db Net
+        longLabel $o_db ($o_date) Alignment Net
+        type netAlign fr3 chainFr3
+        otherDb fr3
+

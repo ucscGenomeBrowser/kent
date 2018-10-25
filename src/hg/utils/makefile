@@ -35,6 +35,7 @@ UTILS_APPLIST = \
 	gff3ToGenePred \
 	gff3ToPsl \
 	gtfToGenePred \
+	hgvsToVcf \
 	hubCheck \
 	hubPublicCheck \
 	mafToBigMaf \
@@ -69,7 +70,6 @@ DIRS = ${buildRefresh} \
 	buildReleaseLog \
 	checkUrlsInTable \
 	geoMirrorNode \
-	hgvsToVcf \
 	makeTrackIndex \
 	mysqlSecurityCheck \
 	pslFixCdsJoinGap \

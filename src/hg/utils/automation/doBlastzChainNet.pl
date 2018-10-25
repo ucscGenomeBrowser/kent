@@ -1117,7 +1117,7 @@ end
 _EOF_
       );
   } else {
-    if ($dbExists) {
+    if (! $opt_trackHub && $dbExists) {
       $bossScript->add(<<_EOF_
 cd $runDir
 hgLoadChain -tIndex $tDb chain$QDb $tDb.$qDb.all.chain.gz
@@ -1150,7 +1150,7 @@ _EOF_
     $tRepeats = $opt_qRepeats ? "-tRepeats=$opt_qRepeats" : $defaultQRepeats;
     $qRepeats = $opt_tRepeats ? "-qRepeats=$opt_tRepeats" : $defaultTRepeats;
   }
-    if ($dbExists) {
+    if (! $opt_trackHub && $dbExists) {
       $bossScript->add(<<_EOF_
 
 # Add gap/repeat stats to the net file using database tables:
@@ -1703,7 +1703,7 @@ netChainSubset -verbose=0 $tDb.$qDb.syn.net.gz $tDb.$qDb.all.chain.gz stdout \\
 _EOF_
       );
 
-    if ($dbExists) {
+    if (! $opt_trackHub && $dbExists) {
       $bossScript->add(<<_EOF_
 set lineCount = `zcat $tDb.$qDb.syn.chain.gz | wc -l`
 if (\$lineCount > 0) then
@@ -1790,7 +1790,7 @@ _EOF_
       );
     }
 
-    if ($dbExists) {
+    if (! $opt_trackHub && $dbExists) {
       $bossScript->add(<<_EOF_
 cd "$buildDir"
 featureBits $tDb chainSyn${QDb}Link >&fb.$tDb.chainSyn${QDb}Link.txt

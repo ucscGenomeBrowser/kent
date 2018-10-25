@@ -11781,3 +11781,86 @@ TMPDIR=/dev/shm
     # 38573370 bases of 28366694468 (0.136%) in intersection
 
 #############################################################################
+# LASTZ human/hg38 vs. chicken/galGal6 - (DONE - 2018-10-12 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/lastzGalGal6.2018-10-12
+    cd /hive/data/genomes/hg38/bed/lastzGalGal6.2018-10-12
+
+    printf "# human vs chicken
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+#      A    C    G    T
+#     91  -90  -25 -100
+#    -90  100 -100  -25
+#    -25 -100  100  -90
+#   -100  -25  -90  91
+
+# TARGET: human hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=30
+SEQ1_LAP=10000
+
+# QUERY: chicken galGal6
+SEQ2_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ2_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzGalGal6.2018-10-12
+TMPDIR=/dev/shm
+" > DEF
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    83m10.878s
+
+    cat fb.hg38.chainGalGal6Link.txt
+    # 154079940 bases of 3095998939 (4.977%) in intersection
+
+    cat fb.hg38.chainSynGalGal6Link.txt
+    # 95877644 bases of 3095998939 (3.097%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` hg38 galGal6) > rbest.log 2>&1 &
+    # real    154m32.367s
+
+    cat fb.hg38.chainRBest.GalGal6.txt
+    # 106665747 bases of 3095998939 (3.445%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/galGal6/bed/blastz.hg38.swap
+    cd /hive/data/genomes/galGal6/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzGalGal6.2018-10-12/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    9m45.514s
+
+    cat fb.galGal6.chainHg38Link.txt
+    # 120955955 bases of 1055588482 (11.459%) in intersection
+
+    cat fb.galGal6.chainSynHg38Link.txt
+    # 92597630 bases of 1055588482 (8.772%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` galGal6 hg38) > rbest.log 2>&1 &
+    # real    139m24.408s
+
+    cat fb.galGal6.chainRBest.Hg38.txt
+    # 106294585 bases of 1055588482 (10.070%) in intersection
+
+#########################################################################

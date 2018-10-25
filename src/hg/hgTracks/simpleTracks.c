@@ -1624,18 +1624,6 @@ const struct simpleFeature *b = *((struct simpleFeature **)vb);
 return a->start - b->start;
 }
 
-void linkedFeaturesSortAndBound(struct linkedFeatures *lf)
-/* Sort simpleFeatures in the linkedFeature and set start and end based on simpleFetaures */
-// TODO: dedupe the simpleFeatures ?
-{
-struct simpleFeature *sfLast, *sfs = lf->components;
-slSort(&sfs, simpleFeatureCmp);
-lf->components = sfs;
-sfLast = (struct simpleFeature *)slLastEl(sfs);
-lf->start = sfs->start;
-lf->end = sfLast->end;
-}
-
 int linkedFeaturesCmp(const void *va, const void *vb)
 /* Compare to sort based on start. */
 {
@@ -4030,6 +4018,12 @@ return (withNextExonArrows && tg->nextExonButtonable && tg->nextPrevExon);
 boolean exonNumberMapsCompatible(struct track *tg, enum trackVisibility vis)
 /* Check to see if we draw exon and intron maps labeling their number. */
 {
+if (tg->tdb)
+    {
+    char *type = tg->tdb->type;
+    if (sameString(type, "interact") || sameString(type, "bigInteract"))
+        return FALSE;
+    }
 boolean exonNumbers = sameString(trackDbSettingOrDefault(tg->tdb, "exonNumbers", "on"), "on");
 return (withExonNumbers && exonNumbers && (vis==tvFull || vis==tvPack) && (winEnd - winStart < 400000)
  && (tg->nextPrevExon==linkedFeaturesNextPrevItem));
@@ -4964,8 +4958,8 @@ if ((sf = lf->components) != NULL)
 	if (sf->end > end)
 	    end = sf->end;
 	}
-    lf->start = lf->tallStart = start;
-    lf->end = lf->tallEnd = end;
+    lf->start = start;
+    lf->end = end;
     }
 lf->grayIx = lfCalcGrayIx(lf);
 }
@@ -4985,7 +4979,7 @@ return lf->end;
 }
 
 
-static void linkedFeaturesMapItem(struct track *tg, struct hvGfx *hvg, void *item,
+void linkedFeaturesMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 				char *itemName, char *mapItemName, int start, int end,
 				int x, int y, int width, int height)
 /* Draw the mouseOver (aka statusLine) text from the mouseOver field of lf

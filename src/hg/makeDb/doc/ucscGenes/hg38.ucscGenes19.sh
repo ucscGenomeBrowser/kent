@@ -132,7 +132,7 @@ echo "insert into chromInfo select * from   $db.chromInfo" | hgsql $tempDb
 hgLoadPsl $tempDb kgTargetAli.psl
 
 txBedToGraph ucscGenes.bed ucscGenes ucscGenes.txg
-txgAnalyze ucscGenes.txg $genomes/$db/$db.2bit stdout | sort | uniq > ucscSplice.bed
+txgAnalyze ucscGenes.txg $genomes/$db/$db.2bit stdout | sort | uniq | bedClip stdin /cluster/data/hg38/chrom.sizes  ucscSplice.bed
 hgLoadBed $tempDb knownAlt ucscSplice.bed
 # edited one row that started in negative coordinates to start at 0
 
@@ -223,7 +223,7 @@ hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from hgFixed.refLink" $
 hgMapToGene -tempDb=$tempDb $db refGene knownGene knownToLocusLink -lookup=refToLl.txt
 knownToVisiGene $tempDb -probesDb=$db
 
-tawk '{print $2,$1}' tmp1 | sort > knownToEnsembl.tab
+awk '{OFS="\t"} {print $2,$1}' tmp1 | sort > knownToEnsembl.tab
 tawk '{print $2,$1}' tmp1 | sort > knownToGencode${GENCODE_VERSION}.tab
 hgLoadSqlTab -notOnServer $tempDb  knownToEnsembl  $kent/src/hg/lib/knownTo.sql  knownToEnsembl.tab
 hgLoadSqlTab -notOnServer $tempDb  knownToGencode${GENCODE_VERSION}  $kent/src/hg/lib/knownTo.sql  knownToGencode${GENCODE_VERSION}.tab
@@ -640,6 +640,16 @@ hgLoadSqlTab $tempDb ucscScop $kent/src/hg/lib/ucscScop.sql ucscScop.tab
 # Regenerate ccdsKgMap table
 $kent/src/hg/makeDb/genbank/bin/x86_64/mkCcdsGeneMap  -db=$tempDb -loadDb $db.ccdsGene knownGene ccdsKgMap
 
+hgsql -Ne "select kgName from ucscRetroInfo9" hg38 | sort -u > retro9.names.txt
+tawk '{print $1,$1}' retro9.names.txt |  sed 's/\.[0-9]*//' | sort -u > /tmp/1
+hgsql hg38 -Ne "select alignId,name from knownGene" | sed 's/\.[0-9]*//' | sort -u > /tmp/2
+join /tmp/1 /tmp/2 | awk 'BEGIN {OFS="\t"} {print $2,$3}' > /tmp/3
+cat /tmp/3 /tmp/4 | tawk '{if (!found[$1]) print; found[$1]=1}' > /tmp/5
+hgsql -Ne "select * from ucscRetroInfo9" hg38 | subColumn 44 stdin /tmp/5 stdout | sort -k1,1 -k2,2n  > newUcscRetroInfo9.txt 
+hgsql hg38 -Ne "create table newUcscRetroInfo9 like ucscRetroInfo9"
+hgsql hg38 -Ne "load data local infile 'newUcscRetroInfo9.txt' into table newUcscRetroInfo9;"
+hgsql hg38 -Ne "rename table ucscRetroInfo9 to oldUcscRetroInfo9"
+hgsql hg38 -Ne "rename table newUcscRetroInfo9 to ucscRetroInfo9"
 
 # Do BioCyc Pathways build
 export bioCycDir=/hive/data/outside/bioCyc/160824/download/1.7.1/data
@@ -890,8 +900,9 @@ ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
 # host (field 2) and port (field 3) specified by cluster-admin.  Identify the
 # blatServer by the keyword "$db"Kg with the version number appended
 # untrans gfServer for hg38KgSeq10 on host blat1c, port 17873
+# Starting untrans gfServer for kgTargetSeq11 on host blat1a, port 17891
 hgsql hgcentraltest -e \
-      'INSERT into blatServers values ("hg38KgSeq11", "blat1c", 17891, 0, 1);'
+      'INSERT into blatServers values ("hg38KgSeq11", "blat1a", 17891, 0, 1);'
 hgsql hgcentraltest -e \                                                    
       'INSERT into targetDb values("hg38KgSeq11", "UCSC Genes", \
          "hg38", "kgTargetAli", "", "", \

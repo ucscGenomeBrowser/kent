@@ -1,0 +1,3900 @@
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Rifleman/acaChl1 - (DONE - 2018-10-16 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzAcaChl1.2018-10-16
+    cd /hive/data/genomes/galGal6/bed/lastzAcaChl1.2018-10-16
+
+   printf "# chicken vs Rifleman
+# galGal6 vs acaChl1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: acaChl1 - Rifleman - Acanthisitta chloris
+SEQ2_DIR=/hive/data/genomes/acaChl1/acaChl1.2bit
+SEQ2_LEN=/hive/data/genomes/acaChl1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzAcaChl1.2018-10-16
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	641m40.810s
+
+    cat fb.galGal6.chainAcaChl1Link.txt
+    # 839072309 bases of 1055588482 (79.489%) in intersection
+
+    cat fb.galGal6.chainSynAcaChl1Link.txt
+    # 680540676 bases of 1055588482 (64.470%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 AcaChl1) > rbest.log 2>&1 &
+    # real	470m51.711s
+
+    cat fb.galGal6.chainRBest.AcaChl1.txt
+    # 740532507 bases of 1055588482 (70.154%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Japanese eel/angJap1 - (DONE - 2018-10-16 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzAngJap1.2018-10-16
+    cd /hive/data/genomes/galGal6/bed/lastzAngJap1.2018-10-16
+
+   printf "# chicken vs Japanese eel
+# galGal6 vs angJap1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: angJap1 - Japanese eel - Anguilla japonica
+SEQ2_DIR=/hive/data/genomes/angJap1/angJap1.2bit
+SEQ2_LEN=/hive/data/genomes/angJap1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzAngJap1.2018-10-16
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	157m11.534s
+
+    cat fb.galGal6.chainAngJap1Link.txt
+    # 57085539 bases of 1055588482 (5.408%) in intersection
+
+    cat fb.galGal6.chainSynAngJap1Link.txt
+    # 8699962 bases of 1055588482 (0.824%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 AngJap1) > rbest.log 2>&1 &
+    # real	85m42.406s
+
+    cat fb.galGal6.chainRBest.AngJap1.txt
+    # 43283102 bases of 1055588482 (4.100%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Stickleback/gasAcu1 - (DONE - 2018-10-16 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzGasAcu1.2018-10-16
+    cd /hive/data/genomes/galGal6/bed/lastzGasAcu1.2018-10-16
+
+   printf "# chicken vs Stickleback
+# galGal6 vs gasAcu1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: gasAcu1 - Stickleback - Gasterosteus aculeatus
+SEQ2_DIR=/hive/data/genomes/gasAcu1/gasAcu1.2bit
+SEQ2_LEN=/hive/data/genomes/gasAcu1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzGasAcu1.2018-10-16
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	130m29.417s
+
+    cat fb.galGal6.chainGasAcu1Link.txt
+    # 48797842 bases of 1055588482 (4.623%) in intersection
+
+    cat fb.galGal6.chainSynGasAcu1Link.txt
+    # 13482396 bases of 1055588482 (1.277%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 GasAcu1) > rbest.log 2>&1 &
+    # real	79m45.934s
+
+    cat fb.galGal6.chainRBest.GasAcu1.txt
+    # 38052220 bases of 1055588482 (3.605%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Turkey/melGal5 - (DONE - 2018-10-16 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzMelGal5.2018-10-16
+    cd /hive/data/genomes/galGal6/bed/lastzMelGal5.2018-10-16
+
+   printf "# chicken vs Turkey
+# galGal6 vs melGal5
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: melGal5 - Turkey - Meleagris gallopavo
+SEQ2_DIR=/hive/data/genomes/melGal5/melGal5.2bit
+SEQ2_LEN=/hive/data/genomes/melGal5/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzMelGal5.2018-10-16
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	91m10.856s
+
+    cat fb.galGal6.chainMelGal5Link.txt
+    # 997476452 bases of 1055588482 (94.495%) in intersection
+
+    cat fb.galGal6.chainSynMelGal5Link.txt
+    # 715177000 bases of 1055588482 (67.751%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 MelGal5) > rbest.log 2>&1 &
+    # real	251m2.883s
+
+    cat fb.galGal6.chainRBest.MelGal5.txt
+    # 909544688 bases of 1055588482 (86.165%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Lamprey/petMar3 - (DONE - 2018-10-16 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzPetMar3.2018-10-16
+    cd /hive/data/genomes/galGal6/bed/lastzPetMar3.2018-10-16
+
+   printf "# chicken vs Lamprey
+# galGal6 vs petMar3
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: petMar3 - Lamprey - Petromyzon marinus
+SEQ2_DIR=/hive/data/genomes/petMar3/petMar3.2bit
+SEQ2_LEN=/hive/data/genomes/petMar3/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzPetMar3.2018-10-16
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	123m7.872s
+
+    cat fb.galGal6.chainPetMar3Link.txt
+    # 38618644 bases of 1055588482 (3.658%) in intersection
+
+    cat fb.galGal6.chainSynPetMar3Link.txt
+    # 1678799 bases of 1055588482 (0.159%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 PetMar3) > rbest.log 2>&1 &
+    # real	61m19.652s
+
+    cat fb.galGal6.chainRBest.PetMar3.txt
+    # 26040801 bases of 1055588482 (2.467%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs White-throated sparrow/zonAlb1 - (DONE - 2018-10-16 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzZonAlb1.2018-10-16
+    cd /hive/data/genomes/galGal6/bed/lastzZonAlb1.2018-10-16
+
+   printf "# chicken vs White-throated sparrow
+# galGal6 vs zonAlb1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: zonAlb1 - White-throated sparrow - Zonotrichia albicollis
+SEQ2_DIR=/hive/data/genomes/zonAlb1/zonAlb1.2bit
+SEQ2_LEN=/hive/data/genomes/zonAlb1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzZonAlb1.2018-10-16
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	414m13.921s
+
+    cat fb.galGal6.chainZonAlb1Link.txt
+    # 830165711 bases of 1055588482 (78.645%) in intersection
+
+    cat fb.galGal6.chainSynZonAlb1Link.txt
+    # 694714801 bases of 1055588482 (65.813%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 ZonAlb1) > rbest.log 2>&1 &
+    # real	414m13.866s
+
+    cat fb.galGal6.chainRBest.ZonAlb1.txt
+    # 720721079 bases of 1055588482 (68.277%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs American alligator/allMis1 - (DONE - 2018-10-17 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzAllMis1.2018-10-17
+    cd /hive/data/genomes/galGal6/bed/lastzAllMis1.2018-10-17
+
+   printf "# chicken vs American alligator
+# galGal6 vs allMis1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: allMis1 - American alligator - Alligator mississippiensis
+SEQ2_DIR=/hive/data/genomes/allMis1/allMis1.2bit
+SEQ2_LEN=/hive/data/genomes/allMis1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzAllMis1.2018-10-17
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	368m30.696s
+
+    cat fb.galGal6.chainAllMis1Link.txt
+    # 472919428 bases of 1055588482 (44.801%) in intersection
+
+    cat fb.galGal6.chainSynAllMis1Link.txt
+    # 394401603 bases of 1055588482 (37.363%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 AllMis1) > rbest.log 2>&1 &
+    # real	231m5.251s
+
+    cat fb.galGal6.chainRBest.AllMis1.txt
+    # 432775108 bases of 1055588482 (40.998%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Chinese alligator/allSin1 - (DONE - 2018-10-17 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzAllSin1.2018-10-17
+    cd /hive/data/genomes/galGal6/bed/lastzAllSin1.2018-10-17
+
+   printf "# chicken vs Chinese alligator
+# galGal6 vs allSin1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: allSin1 - Chinese alligator - Alligator sinensis
+SEQ2_DIR=/hive/data/genomes/allSin1/allSin1.2bit
+SEQ2_LEN=/hive/data/genomes/allSin1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzAllSin1.2018-10-17
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	393m51.584s
+
+    cat fb.galGal6.chainAllSin1Link.txt
+    # 486162994 bases of 1055588482 (46.056%) in intersection
+
+    cat fb.galGal6.chainSynAllSin1Link.txt
+    # 406936492 bases of 1055588482 (38.551%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 AllSin1) > rbest.log 2>&1 &
+    # real	235m27.827s
+
+    cat fb.galGal6.chainRBest.AllSin1.txt
+    # 435270631 bases of 1055588482 (41.235%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Parrot/amaVit1 - (DONE - 2018-10-17 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzAmaVit1.2018-10-17
+    cd /hive/data/genomes/galGal6/bed/lastzAmaVit1.2018-10-17
+
+   printf "# chicken vs Parrot
+# galGal6 vs amaVit1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: amaVit1 - Parrot - Amazona vittata
+SEQ2_DIR=/hive/data/genomes/amaVit1/amaVit1.2bit
+SEQ2_LEN=/hive/data/genomes/amaVit1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzAmaVit1.2018-10-17
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	716m56.681s
+
+    cat fb.galGal6.chainAmaVit1Link.txt
+    # 850564670 bases of 1055588482 (80.577%) in intersection
+
+    cat fb.galGal6.chainSynAmaVit1Link.txt
+    # 570324827 bases of 1055588482 (54.029%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 AmaVit1) > rbest.log 2>&1 &
+    # real	514m10.579s
+
+    cat fb.galGal6.chainRBest.AmaVit1.txt
+    # 760058258 bases of 1055588482 (72.003%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Mallard duck/anaPla1 - (DONE - 2018-10-17 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzAnaPla1.2018-10-17
+    cd /hive/data/genomes/galGal6/bed/lastzAnaPla1.2018-10-17
+
+   printf "# chicken vs Mallard duck
+# galGal6 vs anaPla1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: anaPla1 - Mallard duck - Anas platyrhynchos
+SEQ2_DIR=/hive/data/genomes/anaPla1/anaPla1.2bit
+SEQ2_LEN=/hive/data/genomes/anaPla1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzAnaPla1.2018-10-17
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	624m1.292s
+
+    cat fb.galGal6.chainAnaPla1Link.txt
+    # 902625137 bases of 1055588482 (85.509%) in intersection
+
+    cat fb.galGal6.chainSynAnaPla1Link.txt
+    # 788255126 bases of 1055588482 (74.674%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 AnaPla1) > rbest.log 2>&1 &
+    # real	323m11.383s
+
+    cat fb.galGal6.chainRBest.AnaPla1.txt
+    # 811001997 bases of 1055588482 (76.829%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Lizard/anoCar2 - (DONE - 2018-10-17 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzAnoCar2.2018-10-17
+    cd /hive/data/genomes/galGal6/bed/lastzAnoCar2.2018-10-17
+
+   printf "# chicken vs Lizard
+# galGal6 vs anoCar2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: anoCar2 - Lizard - Anolis carolinensis
+SEQ2_DIR=/hive/data/genomes/anoCar2/anoCar2.2bit
+SEQ2_LEN=/hive/data/genomes/anoCar2/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzAnoCar2.2018-10-17
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	499m17.964s
+
+    cat fb.galGal6.chainAnoCar2Link.txt
+    # 153349199 bases of 1055588482 (14.527%) in intersection
+
+    cat fb.galGal6.chainSynAnoCar2Link.txt
+    # 93909487 bases of 1055588482 (8.896%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 AnoCar2) > rbest.log 2>&1 &
+    # real	378m57.784s
+
+    cat fb.galGal6.chainRBest.AnoCar2.txt
+    # 121779211 bases of 1055588482 (11.537%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Spiny softshell turtle/apaSpi1 - (DONE - 2018-10-17 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzApaSpi1.2018-10-17
+    cd /hive/data/genomes/galGal6/bed/lastzApaSpi1.2018-10-17
+
+   printf "# chicken vs Spiny softshell turtle
+# galGal6 vs apaSpi1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: apaSpi1 - Spiny softshell turtle - Apalone spinifera
+SEQ2_DIR=/hive/data/genomes/apaSpi1/apaSpi1.2bit
+SEQ2_LEN=/hive/data/genomes/apaSpi1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzApaSpi1.2018-10-17
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	848m10.616s
+
+    cat fb.galGal6.chainApaSpi1Link.txt
+    # 405079543 bases of 1055588482 (38.375%) in intersection
+
+    cat fb.galGal6.chainSynApaSpi1Link.txt
+    # 73623886 bases of 1055588482 (6.975%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 ApaSpi1) > rbest.log 2>&1 &
+    # real	635m31.914s
+
+    cat fb.galGal6.chainRBest.ApaSpi1.txt
+    # 345975149 bases of 1055588482 (32.776%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Bar tailed trogon/apaVit1 - (DONE - 2018-10-17 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzApaVit1.2018-10-17
+    cd /hive/data/genomes/galGal6/bed/lastzApaVit1.2018-10-17
+
+   printf "# chicken vs Bar tailed trogon
+# galGal6 vs apaVit1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: apaVit1 - Bar tailed trogon - Apaloderma vittatum
+SEQ2_DIR=/hive/data/genomes/apaVit1/apaVit1.2bit
+SEQ2_LEN=/hive/data/genomes/apaVit1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzApaVit1.2018-10-17
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	666m21.837s
+
+    cat fb.galGal6.chainApaVit1Link.txt
+    # 855130988 bases of 1055588482 (81.010%) in intersection
+
+    cat fb.galGal6.chainSynApaVit1Link.txt
+    # 707907699 bases of 1055588482 (67.063%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 ApaVit1) > rbest.log 2>&1 &
+    # real	395m8.109s
+
+    cat fb.galGal6.chainRBest.ApaVit1.txt
+    # 768399443 bases of 1055588482 (72.793%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Emperor penguin/aptFor1 - (DONE - 2018-10-17 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzAptFor1.2018-10-17
+    cd /hive/data/genomes/galGal6/bed/lastzAptFor1.2018-10-17
+
+   printf "# chicken vs Emperor penguin
+# galGal6 vs aptFor1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: aptFor1 - Emperor penguin - Aptenodytes forsteri
+SEQ2_DIR=/hive/data/genomes/aptFor1/aptFor1.2bit
+SEQ2_LEN=/hive/data/genomes/aptFor1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzAptFor1.2018-10-17
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	482m48.347s
+
+    cat fb.galGal6.chainAptFor1Link.txt
+    # 916608502 bases of 1055588482 (86.834%) in intersection
+
+    cat fb.galGal6.chainSynAptFor1Link.txt
+    # 828156085 bases of 1055588482 (78.454%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 AptFor1) > rbest.log 2>&1 &
+    # real	222m3.219s
+
+    cat fb.galGal6.chainRBest.AptFor1.txt
+    # 840254605 bases of 1055588482 (79.601%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Golden eagle/aquChr2 - (DONE - 2018-10-17 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzAquChr2.2018-10-17
+    cd /hive/data/genomes/galGal6/bed/lastzAquChr2.2018-10-17
+
+   printf "# chicken vs Golden eagle
+# galGal6 vs aquChr2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: aquChr2 - Golden eagle - Aquila chrysaetos canadensis
+SEQ2_DIR=/hive/data/genomes/aquChr2/aquChr2.2bit
+SEQ2_LEN=/hive/data/genomes/aquChr2/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzAquChr2.2018-10-17
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	446m55.621s
+
+    cat fb.galGal6.chainAquChr2Link.txt
+    # 925613456 bases of 1055588482 (87.687%) in intersection
+
+    cat fb.galGal6.chainSynAquChr2Link.txt
+    # 831330877 bases of 1055588482 (78.755%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 AquChr2) > rbest.log 2>&1 &
+    # real	232m0.358s
+
+    cat fb.galGal6.chainRBest.AquChr2.txt
+    # 848365224 bases of 1055588482 (80.369%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Scarlet macaw/araMac1 - (DONE - 2018-10-17 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzAraMac1.2018-10-17
+    cd /hive/data/genomes/galGal6/bed/lastzAraMac1.2018-10-17
+
+   printf "# chicken vs Scarlet macaw
+# galGal6 vs araMac1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: araMac1 - Scarlet macaw - Ara macao
+SEQ2_DIR=/hive/data/genomes/araMac1/araMac1.2bit
+SEQ2_LEN=/hive/data/genomes/araMac1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzAraMac1.2018-10-17
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	890m2.745s
+
+    cat fb.galGal6.chainAraMac1Link.txt
+    # 804150969 bases of 1055588482 (76.180%) in intersection
+
+    cat fb.galGal6.chainSynAraMac1Link.txt
+    # 463740960 bases of 1055588482 (43.932%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 AraMac1) > rbest.log 2>&1 &
+    # real	640m35.617s
+
+    cat fb.galGal6.chainRBest.AraMac1.txt
+    # 708288676 bases of 1055588482 (67.099%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Crowned crain/balPav1 - (DONE - 2018-10-17 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzBalPav1.2018-10-17
+    cd /hive/data/genomes/galGal6/bed/lastzBalPav1.2018-10-17
+
+   printf "# chicken vs Crowned crain
+# galGal6 vs balPav1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: balPav1 - Crowned crain - Balearica pavonina gibbericeps
+SEQ2_DIR=/hive/data/genomes/balPav1/balPav1.2bit
+SEQ2_LEN=/hive/data/genomes/balPav1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzBalPav1.2018-10-17
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	520m25.509s
+
+    cat fb.galGal6.chainBalPav1Link.txt
+    # 893943891 bases of 1055588482 (84.687%) in intersection
+
+    cat fb.galGal6.chainSynBalPav1Link.txt
+    # 760199826 bases of 1055588482 (72.017%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 BalPav1) > rbest.log 2>&1 &
+    # real	317m39.665s
+
+    cat fb.galGal6.chainRBest.BalPav1.txt
+    # 816345959 bases of 1055588482 (77.336%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Rhinoceros hornbill/bucRhi1 - (DONE - 2018-10-17 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzBucRhi1.2018-10-17
+    cd /hive/data/genomes/galGal6/bed/lastzBucRhi1.2018-10-17
+
+   printf "# chicken vs Rhinoceros hornbill
+# galGal6 vs bucRhi1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: bucRhi1 - Rhinoceros hornbill - Buceros rhinoceros silvestris
+SEQ2_DIR=/hive/data/genomes/bucRhi1/bucRhi1.2bit
+SEQ2_LEN=/hive/data/genomes/bucRhi1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzBucRhi1.2018-10-17
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	621m43.314s
+
+    cat fb.galGal6.chainBucRhi1Link.txt
+    # 853039041 bases of 1055588482 (80.812%) in intersection
+
+    cat fb.galGal6.chainSynBucRhi1Link.txt
+    # 702565404 bases of 1055588482 (66.557%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 BucRhi1) > rbest.log 2>&1 &
+    # real	409m2.624s
+
+    cat fb.galGal6.chainRBest.BucRhi1.txt
+    # 762575881 bases of 1055588482 (72.242%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Anna's hummingbird/calAnn1 - (DONE - 2018-10-17 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzCalAnn1.2018-10-17
+    cd /hive/data/genomes/galGal6/bed/lastzCalAnn1.2018-10-17
+
+   printf "# chicken vs Anna's hummingbird
+# galGal6 vs calAnn1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: calAnn1 - Anna's hummingbird - Calypte anna
+SEQ2_DIR=/hive/data/genomes/calAnn1/calAnn1.2bit
+SEQ2_LEN=/hive/data/genomes/calAnn1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzCalAnn1.2018-10-17
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	645m42.059s
+
+    cat fb.galGal6.chainCalAnn1Link.txt
+    # 841653301 bases of 1055588482 (79.733%) in intersection
+
+    cat fb.galGal6.chainSynCalAnn1Link.txt
+    # 708340584 bases of 1055588482 (67.104%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 CalAnn1) > rbest.log 2>&1 &
+    # real	402m36.129s
+
+    cat fb.galGal6.chainRBest.CalAnn1.txt
+    # 736578452 bases of 1055588482 (69.779%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Chuck-will's-widow/capCar1 - (DONE - 2018-10-17 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzCapCar1.2018-10-17
+    cd /hive/data/genomes/galGal6/bed/lastzCapCar1.2018-10-17
+
+   printf "# chicken vs Chuck-will's-widow
+# galGal6 vs capCar1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: capCar1 - Chuck-will's-widow - Caprimulgus carolinensis
+SEQ2_DIR=/hive/data/genomes/capCar1/capCar1.2bit
+SEQ2_LEN=/hive/data/genomes/capCar1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzCapCar1.2018-10-17
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	618m38.832s
+
+    cat fb.galGal6.chainCapCar1Link.txt
+    # 882181787 bases of 1055588482 (83.573%) in intersection
+
+    cat fb.galGal6.chainSynCapCar1Link.txt
+    # 724094046 bases of 1055588482 (68.596%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 CapCar1) > rbest.log 2>&1 &
+    # real	404m29.064s
+
+    cat fb.galGal6.chainRBest.CapCar1.txt
+    # 795678181 bases of 1055588482 (75.378%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Zebrafish/danRer11 - (DONE - 2018-10-17 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzDanRer11.2018-10-17
+    cd /hive/data/genomes/galGal6/bed/lastzDanRer11.2018-10-17
+
+   printf "# chicken vs Zebrafish
+# galGal6 vs danRer11
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: danRer11 - Zebrafish - Danio rerio
+SEQ2_DIR=/hive/data/genomes/danRer11/danRer11.2bit
+SEQ2_LEN=/hive/data/genomes/danRer11/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzDanRer11.2018-10-17
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	288m51.949s
+
+    cat fb.galGal6.chainDanRer11Link.txt
+    # 67051784 bases of 1055588482 (6.352%) in intersection
+
+    cat fb.galGal6.chainSynDanRer11Link.txt
+    # 15220724 bases of 1055588482 (1.442%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 DanRer11) > rbest.log 2>&1 &
+    # real	181m30.518s
+
+    cat fb.galGal6.chainRBest.DanRer11.txt
+    # 54875577 bases of 1055588482 (5.199%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Collared flycatcher/ficAlb2 - (DONE - 2018-10-17 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzFicAlb2.2018-10-17
+    cd /hive/data/genomes/galGal6/bed/lastzFicAlb2.2018-10-17
+
+   printf "# chicken vs Collared flycatcher
+# galGal6 vs ficAlb2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: ficAlb2 - Collared flycatcher - Ficedula albicollis
+SEQ2_DIR=/hive/data/genomes/ficAlb2/ficAlb2.2bit
+SEQ2_LEN=/hive/data/genomes/ficAlb2/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzFicAlb2.2018-10-17
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	916m56.403s
+
+    cat fb.galGal6.chainFicAlb2Link.txt
+    # 837654801 bases of 1055588482 (79.354%) in intersection
+
+    cat fb.galGal6.chainSynFicAlb2Link.txt
+    # 701981619 bases of 1055588482 (66.501%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 FicAlb2) > rbest.log 2>&1 &
+    # real	687m21.884s
+
+    cat fb.galGal6.chainRBest.FicAlb2.txt
+    # 733810856 bases of 1055588482 (69.517%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Fugu/fr3 - (DONE - 2018-10-17 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzFr3.2018-10-17
+    cd /hive/data/genomes/galGal6/bed/lastzFr3.2018-10-17
+
+   printf "# chicken vs Fugu
+# galGal6 vs fr3
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: fr3 - Fugu - Takifugu rubripes
+SEQ2_DIR=/hive/data/genomes/fr3/fr3.2bit
+SEQ2_LEN=/hive/data/genomes/fr3/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzFr3.2018-10-17
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	89m47.854s
+
+    cat fb.galGal6.chainFr3Link.txt
+    # 42301582 bases of 1055588482 (4.007%) in intersection
+
+    cat fb.galGal6.chainSynFr3Link.txt
+    # 11843090 bases of 1055588482 (1.122%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 Fr3) > rbest.log 2>&1 &
+    # real	56m3.102s
+
+    cat fb.galGal6.chainRBest.Fr3.txt
+    # 33236371 bases of 1055588482 (3.149%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Zebra finch/taeGut2 - (DONE - 2018-10-17 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzTaeGut2.2018-10-17
+    cd /hive/data/genomes/galGal6/bed/lastzTaeGut2.2018-10-17
+
+   printf "# chicken vs Zebra finch
+# galGal6 vs taeGut2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: taeGut2 - Zebra finch - Taeniopygia guttata
+SEQ2_DIR=/hive/data/genomes/taeGut2/taeGut2.2bit
+SEQ2_LEN=/hive/data/genomes/taeGut2/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzTaeGut2.2018-10-17
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	483m53.121s
+
+    cat fb.galGal6.chainTaeGut2Link.txt
+    # 781017086 bases of 1055588482 (73.989%) in intersection
+
+    cat fb.galGal6.chainSynTaeGut2Link.txt
+    # 692861685 bases of 1055588482 (65.637%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 TaeGut2) > rbest.log 2>&1 &
+    # real	333m5.501s
+
+    cat fb.galGal6.chainRBest.TaeGut2.txt
+    # 718742085 bases of 1055588482 (68.089%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Tetraodon/tetNig1 - (DONE - 2018-10-17 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzTetNig1.2018-10-17
+    cd /hive/data/genomes/galGal6/bed/lastzTetNig1.2018-10-17
+
+   printf "# chicken vs Tetraodon
+# galGal6 vs tetNig1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: tetNig1 - Tetraodon - Tetraodon nigroviridis
+SEQ2_DIR=/hive/data/genomes/tetNig1/tetNig1.2bit
+SEQ2_LEN=/hive/data/genomes/tetNig1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzTetNig1.2018-10-17
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	146m39.394s
+
+    cat fb.galGal6.chainTetNig1Link.txt
+    # 50235405 bases of 1055588482 (4.759%) in intersection
+
+    cat fb.galGal6.chainSynTetNig1Link.txt
+    # 11303688 bases of 1055588482 (1.071%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 TetNig1) > rbest.log 2>&1 &
+    # real	125m11.284s
+
+    cat fb.galGal6.chainRBest.TetNig1.txt
+    # 36506176 bases of 1055588482 (3.458%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs White throated tinamou/tinGut2 - (DONE - 2018-10-17 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzTinGut2.2018-10-17
+    cd /hive/data/genomes/galGal6/bed/lastzTinGut2.2018-10-17
+
+   printf "# chicken vs White throated tinamou
+# galGal6 vs tinGut2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: tinGut2 - White throated tinamou - Tinamus guttatus
+SEQ2_DIR=/hive/data/genomes/tinGut2/tinGut2.2bit
+SEQ2_LEN=/hive/data/genomes/tinGut2/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzTinGut2.2018-10-17
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	389m18.202s
+
+    cat fb.galGal6.chainTinGut2Link.txt
+    # 776674866 bases of 1055588482 (73.577%) in intersection
+
+    cat fb.galGal6.chainSynTinGut2Link.txt
+    # 660844755 bases of 1055588482 (62.604%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 TinGut2) > rbest.log 2>&1 &
+    # real	285m22.493s
+
+    cat fb.galGal6.chainRBest.TinGut2.txt
+    # 688296692 bases of 1055588482 (65.205%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs X. tropicalis/xenTro9 - (DONE - 2018-10-17 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzXenTro9.2018-10-17
+    cd /hive/data/genomes/galGal6/bed/lastzXenTro9.2018-10-17
+
+   printf "# chicken vs X. tropicalis
+# galGal6 vs xenTro9
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: xenTro9 - X. tropicalis - Xenopus tropicalis
+SEQ2_DIR=/hive/data/genomes/xenTro9/xenTro9.2bit
+SEQ2_LEN=/hive/data/genomes/xenTro9/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzXenTro9.2018-10-17
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	359m38.252s
+
+    cat fb.galGal6.chainXenTro9Link.txt
+    # 85528839 bases of 1055588482 (8.102%) in intersection
+
+    cat fb.galGal6.chainSynXenTro9Link.txt
+    # 41958665 bases of 1055588482 (3.975%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 XenTro9) > rbest.log 2>&1 &
+    # real	250m49.764s
+
+    cat fb.galGal6.chainRBest.XenTro9.txt
+    # 66190094 bases of 1055588482 (6.270%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Red-legged seriema/carCri1 - (DONE - 2018-10-18 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzCarCri1.2018-10-18
+    cd /hive/data/genomes/galGal6/bed/lastzCarCri1.2018-10-18
+
+   printf "# chicken vs Red-legged seriema
+# galGal6 vs carCri1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: carCri1 - Red-legged seriema - Cariama cristata
+SEQ2_DIR=/hive/data/genomes/carCri1/carCri1.2bit
+SEQ2_LEN=/hive/data/genomes/carCri1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzCarCri1.2018-10-18
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	477m19.869s
+
+    cat fb.galGal6.chainCarCri1Link.txt
+    # 898243255 bases of 1055588482 (85.094%) in intersection
+
+    cat fb.galGal6.chainSynCarCri1Link.txt
+    # 766895002 bases of 1055588482 (72.651%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 CarCri1) > rbest.log 2>&1 &
+    # real	340m49.453s
+
+    cat fb.galGal6.chainRBest.CarCri1.txt
+    # 818808423 bases of 1055588482 (77.569%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Killdeer/chaVoc2 - (DONE - 2018-10-18 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzChaVoc2.2018-10-18
+    cd /hive/data/genomes/galGal6/bed/lastzChaVoc2.2018-10-18
+
+   printf "# chicken vs Killdeer
+# galGal6 vs chaVoc2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: chaVoc2 - Killdeer - Charadrius vociferus
+SEQ2_DIR=/hive/data/genomes/chaVoc2/chaVoc2.2bit
+SEQ2_LEN=/hive/data/genomes/chaVoc2/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzChaVoc2.2018-10-18
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	421m52.748s
+
+    cat fb.galGal6.chainChaVoc2Link.txt
+    # 910629364 bases of 1055588482 (86.267%) in intersection
+
+    cat fb.galGal6.chainSynChaVoc2Link.txt
+    # 813864162 bases of 1055588482 (77.101%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 ChaVoc2) > rbest.log 2>&1 &
+    # real	242m34.087s
+
+    cat fb.galGal6.chainRBest.ChaVoc2.txt
+    # 833063294 bases of 1055588482 (78.919%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Green seaturtle/cheMyd1 - (DONE - 2018-10-18 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzCheMyd1.2018-10-18
+    cd /hive/data/genomes/galGal6/bed/lastzCheMyd1.2018-10-18
+
+   printf "# chicken vs Green seaturtle
+# galGal6 vs cheMyd1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: cheMyd1 - Green seaturtle - Chelonia mydas
+SEQ2_DIR=/hive/data/genomes/cheMyd1/cheMyd1.2bit
+SEQ2_LEN=/hive/data/genomes/cheMyd1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzCheMyd1.2018-10-18
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	488m23.776s
+
+    cat fb.galGal6.chainCheMyd1Link.txt
+    # 538550235 bases of 1055588482 (51.019%) in intersection
+
+    cat fb.galGal6.chainSynCheMyd1Link.txt
+    # 439571636 bases of 1055588482 (41.642%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 CheMyd1) > rbest.log 2>&1 &
+    # real	356m1.191s
+
+    cat fb.galGal6.chainRBest.CheMyd1.txt
+    # 484498431 bases of 1055588482 (45.898%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Houbara bustard/chlUnd1 - (DONE - 2018-10-18 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzChlUnd1.2018-10-18
+    cd /hive/data/genomes/galGal6/bed/lastzChlUnd1.2018-10-18
+
+   printf "# chicken vs Houbara bustard
+# galGal6 vs chlUnd1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: chlUnd1 - Houbara bustard - Chlamydotis undulata macqueenii
+SEQ2_DIR=/hive/data/genomes/chlUnd1/chlUnd1.2bit
+SEQ2_LEN=/hive/data/genomes/chlUnd1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzChlUnd1.2018-10-18
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	444m5.490s
+
+    cat fb.galGal6.chainChlUnd1Link.txt
+    # 876572094 bases of 1055588482 (83.041%) in intersection
+
+    cat fb.galGal6.chainSynChlUnd1Link.txt
+    # 728906002 bases of 1055588482 (69.052%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 ChlUnd1) > rbest.log 2>&1 &
+    # real	315m54.274s
+
+    cat fb.galGal6.chainRBest.ChlUnd1.txt
+    # 792837683 bases of 1055588482 (75.109%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Painted turtle/chrPic2 - (DONE - 2018-10-18 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzChrPic2.2018-10-18
+    cd /hive/data/genomes/galGal6/bed/lastzChrPic2.2018-10-18
+
+   printf "# chicken vs Painted turtle
+# galGal6 vs chrPic2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: chrPic2 - Painted turtle - Chrysemys picta bellii
+SEQ2_DIR=/hive/data/genomes/chrPic2/chrPic2.2bit
+SEQ2_LEN=/hive/data/genomes/chrPic2/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzChrPic2.2018-10-18
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	499m8.294s
+
+    cat fb.galGal6.chainChrPic2Link.txt
+    # 545995699 bases of 1055588482 (51.724%) in intersection
+
+    cat fb.galGal6.chainSynChrPic2Link.txt
+    # 441949079 bases of 1055588482 (41.868%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 ChrPic2) > rbest.log 2>&1 &
+    # real	392m57.089s
+
+    cat fb.galGal6.chainRBest.ChrPic2.txt
+    # 489464915 bases of 1055588482 (46.369%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Rock pigeon/colLiv1 - (DONE - 2018-10-18 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzColLiv1.2018-10-18
+    cd /hive/data/genomes/galGal6/bed/lastzColLiv1.2018-10-18
+
+   printf "# chicken vs Rock pigeon
+# galGal6 vs colLiv1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: colLiv1 - Rock pigeon - Columba livia
+SEQ2_DIR=/hive/data/genomes/colLiv1/colLiv1.2bit
+SEQ2_LEN=/hive/data/genomes/colLiv1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzColLiv1.2018-10-18
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	477m10.507s
+
+    cat fb.galGal6.chainColLiv1Link.txt
+    # 876908494 bases of 1055588482 (83.073%) in intersection
+
+    cat fb.galGal6.chainSynColLiv1Link.txt
+    # 766031947 bases of 1055588482 (72.569%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 ColLiv1) > rbest.log 2>&1 &
+    # real	314m13.764s
+
+    cat fb.galGal6.chainRBest.ColLiv1.txt
+    # 785036429 bases of 1055588482 (74.370%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Speckled mousebird/colStr1 - (DONE - 2018-10-18 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzColStr1.2018-10-18
+    cd /hive/data/genomes/galGal6/bed/lastzColStr1.2018-10-18
+
+   printf "# chicken vs Speckled mousebird
+# galGal6 vs colStr1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: colStr1 - Speckled mousebird - Colius striatus
+SEQ2_DIR=/hive/data/genomes/colStr1/colStr1.2bit
+SEQ2_LEN=/hive/data/genomes/colStr1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzColStr1.2018-10-18
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	587m56.997s
+
+    cat fb.galGal6.chainColStr1Link.txt
+    # 854884790 bases of 1055588482 (80.987%) in intersection
+
+    cat fb.galGal6.chainSynColStr1Link.txt
+    # 678861985 bases of 1055588482 (64.311%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 ColStr1) > rbest.log 2>&1 &
+    # real	441m29.228s
+
+    cat fb.galGal6.chainRBest.ColStr1.txt
+    # 760238251 bases of 1055588482 (72.020%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs American crow/corBra1 - (DONE - 2018-10-18 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzCorBra1.2018-10-18
+    cd /hive/data/genomes/galGal6/bed/lastzCorBra1.2018-10-18
+
+   printf "# chicken vs American crow
+# galGal6 vs corBra1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: corBra1 - American crow - Corvus brachyrhynchos
+SEQ2_DIR=/hive/data/genomes/corBra1/corBra1.2bit
+SEQ2_LEN=/hive/data/genomes/corBra1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzCorBra1.2018-10-18
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	565m41.665s
+
+    cat fb.galGal6.chainCorBra1Link.txt
+    # 854798756 bases of 1055588482 (80.978%) in intersection
+
+    cat fb.galGal6.chainSynCorBra1Link.txt
+    # 732338012 bases of 1055588482 (69.377%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 CorBra1) > rbest.log 2>&1 &
+    # real	392m5.064s
+
+    cat fb.galGal6.chainRBest.CorBra1.txt
+    # 754104139 bases of 1055588482 (71.439%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Hooded crow/corCor1 - (DONE - 2018-10-19 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzCorCor1.2018-10-19
+    cd /hive/data/genomes/galGal6/bed/lastzCorCor1.2018-10-19
+
+   printf "# chicken vs Hooded crow
+# galGal6 vs corCor1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: corCor1 - Hooded crow - Corvus cornix cornix
+SEQ2_DIR=/hive/data/genomes/corCor1/corCor1.2bit
+SEQ2_LEN=/hive/data/genomes/corCor1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzCorCor1.2018-10-19
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	591m45.748s
+
+    cat fb.galGal6.chainCorCor1Link.txt
+    # 850530295 bases of 1055588482 (80.574%) in intersection
+
+    cat fb.galGal6.chainSynCorCor1Link.txt
+    # 718475664 bases of 1055588482 (68.064%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 CorCor1) > rbest.log 2>&1 &
+    # real	425m28.944s
+
+    cat fb.galGal6.chainRBest.CorCor1.txt
+    # 750021584 bases of 1055588482 (71.052%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Japanese quail/cotJap1 - (DONE - 2018-10-19 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzCotJap1.2018-10-19
+    cd /hive/data/genomes/galGal6/bed/lastzCotJap1.2018-10-19
+
+   printf "# chicken vs Japanese quail
+# galGal6 vs cotJap1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: cotJap1 - Japanese quail - Coturnix japonica
+SEQ2_DIR=/hive/data/genomes/cotJap1/cotJap1.2bit
+SEQ2_LEN=/hive/data/genomes/cotJap1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzCotJap1.2018-10-19
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	402m14.191s
+
+    cat fb.galGal6.chainCotJap1Link.txt
+    # 592408208 bases of 1055588482 (56.121%) in intersection
+
+    cat fb.galGal6.chainSynCotJap1Link.txt
+    # 428571708 bases of 1055588482 (40.600%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 CotJap1) > rbest.log 2>&1 &
+    # real	331m41.351s
+
+    cat fb.galGal6.chainRBest.CotJap1.txt
+    # 431816963 bases of 1055588482 (40.908%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Common cuckoo/cucCan1 - (DONE - 2018-10-19 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzCucCan1.2018-10-19
+    cd /hive/data/genomes/galGal6/bed/lastzCucCan1.2018-10-19
+
+   printf "# chicken vs Common cuckoo
+# galGal6 vs cucCan1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: cucCan1 - Common cuckoo - Cuculus canorus
+SEQ2_DIR=/hive/data/genomes/cucCan1/cucCan1.2bit
+SEQ2_LEN=/hive/data/genomes/cucCan1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzCucCan1.2018-10-19
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	495m53.604s
+
+    cat fb.galGal6.chainCucCan1Link.txt
+    # 877724050 bases of 1055588482 (83.150%) in intersection
+
+    cat fb.galGal6.chainSynCucCan1Link.txt
+    # 761013196 bases of 1055588482 (72.094%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 CucCan1) > rbest.log 2>&1 &
+    # real	330m35.696s
+
+    cat fb.galGal6.chainRBest.CucCan1.txt
+    # 784860736 bases of 1055588482 (74.353%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Little egret/egrGar1 - (DONE - 2018-10-19 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzEgrGar1.2018-10-19
+    cd /hive/data/genomes/galGal6/bed/lastzEgrGar1.2018-10-19
+
+   printf "# chicken vs Little egret
+# galGal6 vs egrGar1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: egrGar1 - Little egret - Egretta garzetta
+SEQ2_DIR=/hive/data/genomes/egrGar1/egrGar1.2bit
+SEQ2_LEN=/hive/data/genomes/egrGar1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzEgrGar1.2018-10-19
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	380m24.844s
+
+    cat fb.galGal6.chainEgrGar1Link.txt
+    # 903470826 bases of 1055588482 (85.589%) in intersection
+
+    cat fb.galGal6.chainSynEgrGar1Link.txt
+    # 807513965 bases of 1055588482 (76.499%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 EgrGar1) > rbest.log 2>&1 &
+    # real	242m14.176s
+
+    cat fb.galGal6.chainRBest.EgrGar1.txt
+    # 823806797 bases of 1055588482 (78.042%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Sunbittern/eurHel1 - (DONE - 2018-10-19 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzEurHel1.2018-10-19
+    cd /hive/data/genomes/galGal6/bed/lastzEurHel1.2018-10-19
+
+   printf "# chicken vs Sunbittern
+# galGal6 vs eurHel1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: eurHel1 - Sunbittern - Eurypyga helias
+SEQ2_DIR=/hive/data/genomes/eurHel1/eurHel1.2bit
+SEQ2_LEN=/hive/data/genomes/eurHel1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzEurHel1.2018-10-19
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	691m55.179s
+
+    cat fb.galGal6.chainEurHel1Link.txt
+    # 870082807 bases of 1055588482 (82.426%) in intersection
+
+    cat fb.galGal6.chainSynEurHel1Link.txt
+    # 714159632 bases of 1055588482 (67.655%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 EurHel1) > rbest.log 2>&1 &
+    # real	387m45.136s
+
+    cat fb.galGal6.chainRBest.EurHel1.txt
+    # 783796534 bases of 1055588482 (74.252%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Saker falcon/falChe1 - (DONE - 2018-10-19 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzFalChe1.2018-10-19
+    cd /hive/data/genomes/galGal6/bed/lastzFalChe1.2018-10-19
+
+   printf "# chicken vs Saker falcon
+# galGal6 vs falChe1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: falChe1 - Saker falcon - Falco cherrug
+SEQ2_DIR=/hive/data/genomes/falChe1/falChe1.2bit
+SEQ2_LEN=/hive/data/genomes/falChe1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzFalChe1.2018-10-19
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	624m12.224s
+
+    cat fb.galGal6.chainFalChe1Link.txt
+    # 911415065 bases of 1055588482 (86.342%) in intersection
+
+    cat fb.galGal6.chainSynFalChe1Link.txt
+    # 807507886 bases of 1055588482 (76.498%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 FalChe1) > rbest.log 2>&1 &
+    # real	273m9.858s
+
+    cat fb.galGal6.chainRBest.FalChe1.txt
+    # 828810487 bases of 1055588482 (78.516%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Peregrine falcon/falPer1 - (DONE - 2018-10-19 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzFalPer1.2018-10-19
+    cd /hive/data/genomes/galGal6/bed/lastzFalPer1.2018-10-19
+
+   printf "# chicken vs Peregrine falcon
+# galGal6 vs falPer1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: falPer1 - Peregrine falcon - Falco peregrinus
+SEQ2_DIR=/hive/data/genomes/falPer1/falPer1.2bit
+SEQ2_LEN=/hive/data/genomes/falPer1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzFalPer1.2018-10-19
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	625m24.573s
+
+    cat fb.galGal6.chainFalPer1Link.txt
+    # 913080823 bases of 1055588482 (86.500%) in intersection
+
+    cat fb.galGal6.chainSynFalPer1Link.txt
+    # 812447015 bases of 1055588482 (76.966%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 FalPer1) > rbest.log 2>&1 &
+    # real	274m12.882s
+
+    cat fb.galGal6.chainRBest.FalPer1.txt
+    # 830510373 bases of 1055588482 (78.677%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Northern fulmar/fulGla1 - (DONE - 2018-10-19 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzFulGla1.2018-10-19
+    cd /hive/data/genomes/galGal6/bed/lastzFulGla1.2018-10-19
+
+   printf "# chicken vs Northern fulmar
+# galGal6 vs fulGla1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: fulGla1 - Northern fulmar - Fulmarus glacialis
+SEQ2_DIR=/hive/data/genomes/fulGla1/fulGla1.2bit
+SEQ2_LEN=/hive/data/genomes/fulGla1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzFulGla1.2018-10-19
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	599m13.056s
+
+    cat fb.galGal6.chainFulGla1Link.txt
+    # 900756652 bases of 1055588482 (85.332%) in intersection
+
+    cat fb.galGal6.chainSynFulGla1Link.txt
+    # 771539763 bases of 1055588482 (73.091%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 FulGla1) > rbest.log 2>&1 &
+    # real	300m46.949s
+
+    cat fb.galGal6.chainRBest.FulGla1.txt
+    # 824502605 bases of 1055588482 (78.108%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Red-throated loon/gavSte1 - (DONE - 2018-10-19 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzGavSte1.2018-10-19
+    cd /hive/data/genomes/galGal6/bed/lastzGavSte1.2018-10-19
+
+   printf "# chicken vs Red-throated loon
+# galGal6 vs gavSte1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: gavSte1 - Red-throated loon - Gavia stellata
+SEQ2_DIR=/hive/data/genomes/gavSte1/gavSte1.2bit
+SEQ2_LEN=/hive/data/genomes/gavSte1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzGavSte1.2018-10-19
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	612m10.148s
+
+    cat fb.galGal6.chainGavSte1Link.txt
+    # 894263882 bases of 1055588482 (84.717%) in intersection
+
+    cat fb.galGal6.chainSynGavSte1Link.txt
+    # 761960610 bases of 1055588482 (72.183%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 GavSte1) > rbest.log 2>&1 &
+    # real	314m22.814s
+
+    cat fb.galGal6.chainRBest.GavSte1.txt
+    # 818435214 bases of 1055588482 (77.534%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Medium ground finch/geoFor1 - (DONE - 2018-10-19 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzGeoFor1.2018-10-19
+    cd /hive/data/genomes/galGal6/bed/lastzGeoFor1.2018-10-19
+
+   printf "# chicken vs Medium ground finch
+# galGal6 vs geoFor1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: geoFor1 - Medium ground finch - Geospiza fortis
+SEQ2_DIR=/hive/data/genomes/geoFor1/geoFor1.2bit
+SEQ2_LEN=/hive/data/genomes/geoFor1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzGeoFor1.2018-10-19
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	765m20.987s
+
+    cat fb.galGal6.chainGeoFor1Link.txt
+    # 837073388 bases of 1055588482 (79.299%) in intersection
+
+    cat fb.galGal6.chainSynGeoFor1Link.txt
+    # 706945549 bases of 1055588482 (66.972%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 GeoFor1) > rbest.log 2>&1 &
+    # real	423m23.442s
+
+    cat fb.galGal6.chainRBest.GeoFor1.txt
+    # 731219352 bases of 1055588482 (69.271%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs White-tailed eagle/halAlb1 - (DONE - 2018-10-20 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzHalAlb1.2018-10-20
+    cd /hive/data/genomes/galGal6/bed/lastzHalAlb1.2018-10-20
+
+   printf "# chicken vs White-tailed eagle
+# galGal6 vs halAlb1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: halAlb1 - White-tailed eagle - Haliaeetus albicilla
+SEQ2_DIR=/hive/data/genomes/halAlb1/halAlb1.2bit
+SEQ2_LEN=/hive/data/genomes/halAlb1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzHalAlb1.2018-10-20
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	425m10.485s
+
+    cat fb.galGal6.chainHalAlb1Link.txt
+    # 897213301 bases of 1055588482 (84.997%) in intersection
+
+    cat fb.galGal6.chainSynHalAlb1Link.txt
+    # 772402407 bases of 1055588482 (73.173%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 HalAlb1) > rbest.log 2>&1 &
+    # real	299m24.177s
+
+    cat fb.galGal6.chainRBest.HalAlb1.txt
+    # 819350653 bases of 1055588482 (77.620%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Bald eagle/halLeu1 - (DONE - 2018-10-20 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzHalLeu1.2018-10-20
+    cd /hive/data/genomes/galGal6/bed/lastzHalLeu1.2018-10-20
+
+   printf "# chicken vs Bald eagle
+# galGal6 vs halLeu1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: halLeu1 - Bald eagle - Haliaeetus leucocephalus
+SEQ2_DIR=/hive/data/genomes/halLeu1/halLeu1.2bit
+SEQ2_LEN=/hive/data/genomes/halLeu1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzHalLeu1.2018-10-20
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	384m24.469s
+
+    cat fb.galGal6.chainHalLeu1Link.txt
+    # 917551459 bases of 1055588482 (86.923%) in intersection
+
+    cat fb.galGal6.chainSynHalLeu1Link.txt
+    # 820998974 bases of 1055588482 (77.776%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 HalLeu1) > rbest.log 2>&1 &
+    # real	247m10.238s
+
+    cat fb.galGal6.chainRBest.HalLeu1.txt
+    # 838255932 bases of 1055588482 (79.411%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Cuckoo roller/lepDis1 - (DONE - 2018-10-20 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzLepDis1.2018-10-20
+    cd /hive/data/genomes/galGal6/bed/lastzLepDis1.2018-10-20
+
+   printf "# chicken vs Cuckoo roller
+# galGal6 vs lepDis1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: lepDis1 - Cuckoo roller - Leptosomus discolor
+SEQ2_DIR=/hive/data/genomes/lepDis1/lepDis1.2bit
+SEQ2_LEN=/hive/data/genomes/lepDis1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzLepDis1.2018-10-20
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	483m47.811s
+
+    cat fb.galGal6.chainLepDis1Link.txt
+    # 897470746 bases of 1055588482 (85.021%) in intersection
+
+    cat fb.galGal6.chainSynLepDis1Link.txt
+    # 763954799 bases of 1055588482 (72.372%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 LepDis1) > rbest.log 2>&1 &
+    # real	346m34.314s
+
+    cat fb.galGal6.chainRBest.LepDis1.txt
+    # 818033338 bases of 1055588482 (77.495%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Arctic lamprey/letCam1 - (DONE - 2018-10-20 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzLetCam1.2018-10-20
+    cd /hive/data/genomes/galGal6/bed/lastzLetCam1.2018-10-20
+
+   printf "# chicken vs Arctic lamprey
+# galGal6 vs letCam1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: letCam1 - Arctic lamprey - Lethenteron camtschaticum
+SEQ2_DIR=/hive/data/genomes/letCam1/letCam1.2bit
+SEQ2_LEN=/hive/data/genomes/letCam1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzLetCam1.2018-10-20
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	87m59.672s
+
+    cat fb.galGal6.chainLetCam1Link.txt
+    # 35206160 bases of 1055588482 (3.335%) in intersection
+
+    cat fb.galGal6.chainSynLetCam1Link.txt
+    # 1547533 bases of 1055588482 (0.147%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 LetCam1) > rbest.log 2>&1 &
+    # real	57m29.804s
+
+    cat fb.galGal6.chainRBest.LetCam1.txt
+    # 23080040 bases of 1055588482 (2.186%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Zebra mbuna/mayZeb1 - (DONE - 2018-10-20 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzMayZeb1.2018-10-20
+    cd /hive/data/genomes/galGal6/bed/lastzMayZeb1.2018-10-20
+
+   printf "# chicken vs Zebra mbuna
+# galGal6 vs mayZeb1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: mayZeb1 - Zebra mbuna - Maylandia zebra
+SEQ2_DIR=/hive/data/genomes/mayZeb1/mayZeb1.2bit
+SEQ2_LEN=/hive/data/genomes/mayZeb1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzMayZeb1.2018-10-20
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	95m40.688s
+
+    cat fb.galGal6.chainMayZeb1Link.txt
+    # 47913341 bases of 1055588482 (4.539%) in intersection
+
+    cat fb.galGal6.chainSynMayZeb1Link.txt
+    # 14297083 bases of 1055588482 (1.354%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 MayZeb1) > rbest.log 2>&1 &
+    # real	67m51.802s
+
+    cat fb.galGal6.chainRBest.MayZeb1.txt
+    # 39264653 bases of 1055588482 (3.720%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Budgerigar/melUnd1 - (DONE - 2018-10-20 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzMelUnd1.2018-10-20
+    cd /hive/data/genomes/galGal6/bed/lastzMelUnd1.2018-10-20
+
+   printf "# chicken vs Budgerigar
+# galGal6 vs melUnd1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: melUnd1 - Budgerigar - Melopsittacus undulatus
+SEQ2_DIR=/hive/data/genomes/melUnd1/melUnd1.2bit
+SEQ2_LEN=/hive/data/genomes/melUnd1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzMelUnd1.2018-10-20
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	578m59.698s
+
+    cat fb.galGal6.chainMelUnd1Link.txt
+    # 862351682 bases of 1055588482 (81.694%) in intersection
+
+    cat fb.galGal6.chainSynMelUnd1Link.txt
+    # 737018487 bases of 1055588482 (69.821%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 MelUnd1) > rbest.log 2>&1 &
+    # real	424m30.658s
+
+    cat fb.galGal6.chainRBest.MelUnd1.txt
+    # 765760426 bases of 1055588482 (72.543%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Northern carmine bee-eater/merNub1 - (DONE - 2018-10-20 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzMerNub1.2018-10-20
+    cd /hive/data/genomes/galGal6/bed/lastzMerNub1.2018-10-20
+
+   printf "# chicken vs Northern carmine bee-eater
+# galGal6 vs merNub1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: merNub1 - Northern carmine bee-eater - Merops nubicus
+SEQ2_DIR=/hive/data/genomes/merNub1/merNub1.2bit
+SEQ2_LEN=/hive/data/genomes/merNub1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzMerNub1.2018-10-20
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	609m53.704s
+
+    cat fb.galGal6.chainMerNub1Link.txt
+    # 855219539 bases of 1055588482 (81.018%) in intersection
+
+    cat fb.galGal6.chainSynMerNub1Link.txt
+    # 689682468 bases of 1055588482 (65.336%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 MerNub1) > rbest.log 2>&1 &
+    # real	461m12.202s
+
+    cat fb.galGal6.chainRBest.MerNub1.txt
+    # 762543217 bases of 1055588482 (72.239%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Brown roatelo/mesUni1 - (DONE - 2018-10-20 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzMesUni1.2018-10-20
+    cd /hive/data/genomes/galGal6/bed/lastzMesUni1.2018-10-20
+
+   printf "# chicken vs Brown roatelo
+# galGal6 vs mesUni1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: mesUni1 - Brown roatelo - Mesitornis unicolor
+SEQ2_DIR=/hive/data/genomes/mesUni1/mesUni1.2bit
+SEQ2_LEN=/hive/data/genomes/mesUni1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzMesUni1.2018-10-20
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	515m50.332s
+
+    cat fb.galGal6.chainMesUni1Link.txt
+    # 872437783 bases of 1055588482 (82.649%) in intersection
+
+    cat fb.galGal6.chainSynMesUni1Link.txt
+    # 712722916 bases of 1055588482 (67.519%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 MesUni1) > rbest.log 2>&1 &
+    # real	382m17.567s
+
+    cat fb.galGal6.chainRBest.MesUni1.txt
+    # 780887325 bases of 1055588482 (73.976%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Tibetan frog/nanPar1 - (DONE - 2018-10-20 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzNanPar1.2018-10-20
+    cd /hive/data/genomes/galGal6/bed/lastzNanPar1.2018-10-20
+
+   printf "# chicken vs Tibetan frog
+# galGal6 vs nanPar1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: nanPar1 - Tibetan frog - Nanorana parkeri
+SEQ2_DIR=/hive/data/genomes/nanPar1/nanPar1.2bit
+SEQ2_LEN=/hive/data/genomes/nanPar1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzNanPar1.2018-10-20
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	246m50.610s
+
+    cat fb.galGal6.chainNanPar1Link.txt
+    # 79844603 bases of 1055588482 (7.564%) in intersection
+
+    cat fb.galGal6.chainSynNanPar1Link.txt
+    # 32681061 bases of 1055588482 (3.096%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 NanPar1) > rbest.log 2>&1 &
+    # real	114m3.839s
+
+    cat fb.galGal6.chainRBest.NanPar1.txt
+    # 60765484 bases of 1055588482 (5.757%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Crested ibis/nipNip1 - (DONE - 2018-10-20 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzNipNip1.2018-10-20
+    cd /hive/data/genomes/galGal6/bed/lastzNipNip1.2018-10-20
+
+   printf "# chicken vs Crested ibis
+# galGal6 vs nipNip1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: nipNip1 - Crested ibis - Nipponia nippon
+SEQ2_DIR=/hive/data/genomes/nipNip1/nipNip1.2bit
+SEQ2_LEN=/hive/data/genomes/nipNip1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzNipNip1.2018-10-20
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	468m6.512s
+
+    cat fb.galGal6.chainNipNip1Link.txt
+    # 917340936 bases of 1055588482 (86.903%) in intersection
+
+    cat fb.galGal6.chainSynNipNip1Link.txt
+    # 816164720 bases of 1055588482 (77.318%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 NipNip1) > rbest.log 2>&1 &
+    # real	258m34.526s
+
+    cat fb.galGal6.chainRBest.NipNip1.txt
+    # 839113287 bases of 1055588482 (79.492%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Hoatzin/opiHoa1 - (DONE - 2018-10-20 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzOpiHoa1.2018-10-20
+    cd /hive/data/genomes/galGal6/bed/lastzOpiHoa1.2018-10-20
+
+   printf "# chicken vs Hoatzin
+# galGal6 vs opiHoa1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: opiHoa1 - Hoatzin - Opisthocomus hoazin
+SEQ2_DIR=/hive/data/genomes/opiHoa1/opiHoa1.2bit
+SEQ2_LEN=/hive/data/genomes/opiHoa1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzOpiHoa1.2018-10-20
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	489m5.171s
+
+    cat fb.galGal6.chainOpiHoa1Link.txt
+    # 892802003 bases of 1055588482 (84.579%) in intersection
+
+    cat fb.galGal6.chainSynOpiHoa1Link.txt
+    # 789312550 bases of 1055588482 (74.775%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 OpiHoa1) > rbest.log 2>&1 &
+    # real	283m23.426s
+
+    cat fb.galGal6.chainRBest.OpiHoa1.txt
+    # 810599536 bases of 1055588482 (76.791%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Nile tilapia/oreNil3 - (DONE - 2018-10-20 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzOreNil3.2018-10-20
+    cd /hive/data/genomes/galGal6/bed/lastzOreNil3.2018-10-20
+
+   printf "# chicken vs Nile tilapia
+# galGal6 vs oreNil3
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: oreNil3 - Nile tilapia - Oreochromis niloticus
+SEQ2_DIR=/hive/data/genomes/oreNil3/oreNil3.2bit
+SEQ2_LEN=/hive/data/genomes/oreNil3/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzOreNil3.2018-10-20
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	145m20.448s
+
+    cat fb.galGal6.chainOreNil3Link.txt
+    # 51982658 bases of 1055588482 (4.925%) in intersection
+
+    cat fb.galGal6.chainSynOreNil3Link.txt
+    # 15123869 bases of 1055588482 (1.433%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 OreNil3) > rbest.log 2>&1 &
+    # real	109m35.337s
+
+    cat fb.galGal6.chainRBest.OreNil3.txt
+    # 42938334 bases of 1055588482 (4.068%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Medaka/oryLat2 - (DONE - 2018-10-20 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzOryLat2.2018-10-20
+    cd /hive/data/genomes/galGal6/bed/lastzOryLat2.2018-10-20
+
+   printf "# chicken vs Medaka
+# galGal6 vs oryLat2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: oryLat2 - Medaka - Oryzias latipes
+SEQ2_DIR=/hive/data/genomes/oryLat2/oryLat2.2bit
+SEQ2_LEN=/hive/data/genomes/oryLat2/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzOryLat2.2018-10-20
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	115m40.641s
+
+    cat fb.galGal6.chainOryLat2Link.txt
+    # 48185568 bases of 1055588482 (4.565%) in intersection
+
+    cat fb.galGal6.chainSynOryLat2Link.txt
+    # 12103669 bases of 1055588482 (1.147%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 OryLat2) > rbest.log 2>&1 &
+    # real	86m59.599s
+
+    cat fb.galGal6.chainRBest.OryLat2.txt
+    # 37955179 bases of 1055588482 (3.596%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Dalmatian pelican/pelCri1 - (DONE - 2018-10-20 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzPelCri1.2018-10-20
+    cd /hive/data/genomes/galGal6/bed/lastzPelCri1.2018-10-20
+
+   printf "# chicken vs Dalmatian pelican
+# galGal6 vs pelCri1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: pelCri1 - Dalmatian pelican - Pelecanus crispus
+SEQ2_DIR=/hive/data/genomes/pelCri1/pelCri1.2bit
+SEQ2_LEN=/hive/data/genomes/pelCri1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzPelCri1.2018-10-20
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	448m45.276s
+
+    cat fb.galGal6.chainPelCri1Link.txt
+    # 900882646 bases of 1055588482 (85.344%) in intersection
+
+    cat fb.galGal6.chainSynPelCri1Link.txt
+    # 761992182 bases of 1055588482 (72.186%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 PelCri1) > rbest.log 2>&1 &
+    # real	321m51.723s
+
+    cat fb.galGal6.chainRBest.PelCri1.txt
+    # 825489194 bases of 1055588482 (78.202%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Chinese softshell turtle/pelSin1 - (DONE - 2018-10-20 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzPelSin1.2018-10-20
+    cd /hive/data/genomes/galGal6/bed/lastzPelSin1.2018-10-20
+
+   printf "# chicken vs Chinese softshell turtle
+# galGal6 vs pelSin1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: pelSin1 - Chinese softshell turtle - Pelodiscus sinensis
+SEQ2_DIR=/hive/data/genomes/pelSin1/pelSin1.2bit
+SEQ2_LEN=/hive/data/genomes/pelSin1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzPelSin1.2018-10-20
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	606m19.155s
+
+    cat fb.galGal6.chainPelSin1Link.txt
+    # 443193142 bases of 1055588482 (41.985%) in intersection
+
+    cat fb.galGal6.chainSynPelSin1Link.txt
+    # 328819719 bases of 1055588482 (31.150%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 PelSin1) > rbest.log 2>&1 &
+    # real	462m36.209s
+
+    cat fb.galGal6.chainRBest.PelSin1.txt
+    # 379282279 bases of 1055588482 (35.931%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Great cormorant/phaCar1 - (DONE - 2018-10-20 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzPhaCar1.2018-10-20
+    cd /hive/data/genomes/galGal6/bed/lastzPhaCar1.2018-10-20
+
+   printf "# chicken vs Great cormorant
+# galGal6 vs phaCar1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: phaCar1 - Great cormorant - Phalacrocorax carbo
+SEQ2_DIR=/hive/data/genomes/phaCar1/phaCar1.2bit
+SEQ2_LEN=/hive/data/genomes/phaCar1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzPhaCar1.2018-10-20
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	521m40.317s
+
+    cat fb.galGal6.chainPhaCar1Link.txt
+    # 888618683 bases of 1055588482 (84.182%) in intersection
+
+    cat fb.galGal6.chainSynPhaCar1Link.txt
+    # 748304742 bases of 1055588482 (70.890%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 PhaCar1) > rbest.log 2>&1 &
+    # real	336m56.098s
+
+    cat fb.galGal6.chainRBest.PhaCar1.txt
+    # 812143245 bases of 1055588482 (76.937%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs White-tailed tropicbird/phaLep1 - (DONE - 2018-10-20 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzPhaLep1.2018-10-20
+    cd /hive/data/genomes/galGal6/bed/lastzPhaLep1.2018-10-20
+
+   printf "# chicken vs White-tailed tropicbird
+# galGal6 vs phaLep1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: phaLep1 - White-tailed tropicbird - Phaethon lepturus
+SEQ2_DIR=/hive/data/genomes/phaLep1/phaLep1.2bit
+SEQ2_LEN=/hive/data/genomes/phaLep1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzPhaLep1.2018-10-20
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	522m18.477s
+
+    cat fb.galGal6.chainPhaLep1Link.txt
+    # 892174920 bases of 1055588482 (84.519%) in intersection
+
+    cat fb.galGal6.chainSynPhaLep1Link.txt
+    # 748102047 bases of 1055588482 (70.871%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 PhaLep1) > rbest.log 2>&1 &
+    # real	348m19.903s
+
+    cat fb.galGal6.chainRBest.PhaLep1.txt
+    # 815574374 bases of 1055588482 (77.263%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs American flamingo/phoRub1 - (DONE - 2018-10-21 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzPhoRub1.2018-10-21
+    cd /hive/data/genomes/galGal6/bed/lastzPhoRub1.2018-10-21
+
+   printf "# chicken vs American flamingo
+# galGal6 vs phoRub1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: phoRub1 - American flamingo - Phoenicopterus ruber ruber
+SEQ2_DIR=/hive/data/genomes/phoRub1/phoRub1.2bit
+SEQ2_LEN=/hive/data/genomes/phoRub1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzPhoRub1.2018-10-21
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	453m3.724s
+
+    cat fb.galGal6.chainPhoRub1Link.txt
+    # 895062456 bases of 1055588482 (84.793%) in intersection
+
+    cat fb.galGal6.chainSynPhoRub1Link.txt
+    # 747746047 bases of 1055588482 (70.837%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 PhoRub1) > rbest.log 2>&1 &
+    # real	320m1.593s
+
+    cat fb.galGal6.chainRBest.PhoRub1.txt
+    # 820973879 bases of 1055588482 (77.774%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Downy woodpecker/picPub1 - (DONE - 2018-10-21 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzPicPub1.2018-10-21
+    cd /hive/data/genomes/galGal6/bed/lastzPicPub1.2018-10-21
+
+   printf "# chicken vs Downy woodpecker
+# galGal6 vs picPub1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: picPub1 - Downy woodpecker - Picoides pubescens
+SEQ2_DIR=/hive/data/genomes/picPub1/picPub1.2bit
+SEQ2_LEN=/hive/data/genomes/picPub1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzPicPub1.2018-10-21
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	707m2.631s
+
+    cat fb.galGal6.chainPicPub1Link.txt
+    # 783855965 bases of 1055588482 (74.258%) in intersection
+
+    cat fb.galGal6.chainSynPicPub1Link.txt
+    # 638057644 bases of 1055588482 (60.446%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 PicPub1) > rbest.log 2>&1 &
+    # real	557m15.590s
+
+    cat fb.galGal6.chainRBest.PicPub1.txt
+    # 673786174 bases of 1055588482 (63.830%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Tibetan ground jay/pseHum1 - (DONE - 2018-10-21 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzPseHum1.2018-10-21
+    cd /hive/data/genomes/galGal6/bed/lastzPseHum1.2018-10-21
+
+   printf "# chicken vs Tibetan ground jay
+# galGal6 vs pseHum1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: pseHum1 - Tibetan ground jay - Pseudopodoces humilis
+SEQ2_DIR=/hive/data/genomes/pseHum1/pseHum1.2bit
+SEQ2_LEN=/hive/data/genomes/pseHum1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzPseHum1.2018-10-21
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	657m45.610s
+
+    cat fb.galGal6.chainPseHum1Link.txt
+    # 851036997 bases of 1055588482 (80.622%) in intersection
+
+    cat fb.galGal6.chainSynPseHum1Link.txt
+    # 717648839 bases of 1055588482 (67.986%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 PseHum1) > rbest.log 2>&1 &
+    # real	478m33.407s
+
+    cat fb.galGal6.chainRBest.PseHum1.txt
+    # 747040317 bases of 1055588482 (70.770%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Yellow-throated sandgrouse/pteGut1 - (DONE - 2018-10-21 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzPteGut1.2018-10-21
+    cd /hive/data/genomes/galGal6/bed/lastzPteGut1.2018-10-21
+
+   printf "# chicken vs Yellow-throated sandgrouse
+# galGal6 vs pteGut1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: pteGut1 - Yellow-throated sandgrouse - Pterocles gutturalis
+SEQ2_DIR=/hive/data/genomes/pteGut1/pteGut1.2bit
+SEQ2_LEN=/hive/data/genomes/pteGut1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzPteGut1.2018-10-21
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	484m8.206s
+
+    cat fb.galGal6.chainPteGut1Link.txt
+    # 871105195 bases of 1055588482 (82.523%) in intersection
+
+    cat fb.galGal6.chainSynPteGut1Link.txt
+    # 727109988 bases of 1055588482 (68.882%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 PteGut1) > rbest.log 2>&1 &
+    # real	344m37.225s
+
+    cat fb.galGal6.chainRBest.PteGut1.txt
+    # 784577743 bases of 1055588482 (74.326%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Adelie penguin/pygAde1 - (DONE - 2018-10-21 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzPygAde1.2018-10-21
+    cd /hive/data/genomes/galGal6/bed/lastzPygAde1.2018-10-21
+
+   printf "# chicken vs Adelie penguin
+# galGal6 vs pygAde1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: pygAde1 - Adelie penguin - Pygoscelis adeliae
+SEQ2_DIR=/hive/data/genomes/pygAde1/pygAde1.2bit
+SEQ2_LEN=/hive/data/genomes/pygAde1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzPygAde1.2018-10-21
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	375m37.220s
+
+    cat fb.galGal6.chainPygAde1Link.txt
+    # 906663676 bases of 1055588482 (85.892%) in intersection
+
+    cat fb.galGal6.chainSynPygAde1Link.txt
+    # 820549396 bases of 1055588482 (77.734%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 PygAde1) > rbest.log 2>&1 &
+    # real	225m31.093s
+
+    cat fb.galGal6.chainRBest.PygAde1.txt
+    # 832234764 bases of 1055588482 (78.841%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Burmese python/pytBiv1 - (DONE - 2018-10-21 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzPytBiv1.2018-10-21
+    cd /hive/data/genomes/galGal6/bed/lastzPytBiv1.2018-10-21
+
+   printf "# chicken vs Burmese python
+# galGal6 vs pytBiv1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: pytBiv1 - Burmese python - Python bivittatus
+SEQ2_DIR=/hive/data/genomes/pytBiv1/pytBiv1.2bit
+SEQ2_LEN=/hive/data/genomes/pytBiv1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzPytBiv1.2018-10-21
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	324m31.677s
+
+    cat fb.galGal6.chainPytBiv1Link.txt
+    # 166849799 bases of 1055588482 (15.806%) in intersection
+
+    cat fb.galGal6.chainSynPytBiv1Link.txt
+    # 71801031 bases of 1055588482 (6.802%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 PytBiv1) > rbest.log 2>&1 &
+    # real	268m26.640s
+
+    cat fb.galGal6.chainRBest.PytBiv1.txt
+    # 125015534 bases of 1055588482 (11.843%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Canary/serCan1 - (DONE - 2018-10-21 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzSerCan1.2018-10-21
+    cd /hive/data/genomes/galGal6/bed/lastzSerCan1.2018-10-21
+
+   printf "# chicken vs Canary
+# galGal6 vs serCan1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: serCan1 - Canary - Serinus canaria
+SEQ2_DIR=/hive/data/genomes/serCan1/serCan1.2bit
+SEQ2_LEN=/hive/data/genomes/serCan1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzSerCan1.2018-10-21
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	717m30.966s
+
+    cat fb.galGal6.chainSerCan1Link.txt
+    # 843441693 bases of 1055588482 (79.903%) in intersection
+
+    cat fb.galGal6.chainSynSerCan1Link.txt
+    # 699854918 bases of 1055588482 (66.300%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 SerCan1) > rbest.log 2>&1 &
+    # real	522m59.796s
+
+    cat fb.galGal6.chainRBest.SerCan1.txt
+    # 733176559 bases of 1055588482 (69.457%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Ostrich/strCam1 - (DONE - 2018-10-21 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzStrCam1.2018-10-21
+    cd /hive/data/genomes/galGal6/bed/lastzStrCam1.2018-10-21
+
+   printf "# chicken vs Ostrich
+# galGal6 vs strCam1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: strCam1 - Ostrich - Struthio camelus australis
+SEQ2_DIR=/hive/data/genomes/strCam1/strCam1.2bit
+SEQ2_LEN=/hive/data/genomes/strCam1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzStrCam1.2018-10-21
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	363m35.472s
+
+    cat fb.galGal6.chainStrCam1Link.txt
+    # 869691537 bases of 1055588482 (82.389%) in intersection
+
+    cat fb.galGal6.chainSynStrCam1Link.txt
+    # 787385857 bases of 1055588482 (74.592%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 StrCam1) > rbest.log 2>&1 &
+    # real	205m25.277s
+
+    cat fb.galGal6.chainRBest.StrCam1.txt
+    # 800156430 bases of 1055588482 (75.802%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Red crested turaco/tauEry1 - (DONE - 2018-10-21 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzTauEry1.2018-10-21
+    cd /hive/data/genomes/galGal6/bed/lastzTauEry1.2018-10-21
+
+   printf "# chicken vs Red crested turaco
+# galGal6 vs tauEry1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: tauEry1 - Red crested turaco - Tauraco erythrolophus
+SEQ2_DIR=/hive/data/genomes/tauEry1/tauEry1.2bit
+SEQ2_LEN=/hive/data/genomes/tauEry1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzTauEry1.2018-10-21
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	479m16.276s
+
+    cat fb.galGal6.chainTauEry1Link.txt
+    # 891815531 bases of 1055588482 (84.485%) in intersection
+
+    cat fb.galGal6.chainSynTauEry1Link.txt
+    # 754044834 bases of 1055588482 (71.434%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 TauEry1) > rbest.log 2>&1 &
+    # real	315m40.917s
+
+    cat fb.galGal6.chainRBest.TauEry1.txt
+    # 810517802 bases of 1055588482 (76.784%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Tetraodon/tetNig2 - (DONE - 2018-10-21 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzTetNig2.2018-10-21
+    cd /hive/data/genomes/galGal6/bed/lastzTetNig2.2018-10-21
+
+   printf "# chicken vs Tetraodon
+# galGal6 vs tetNig2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: tetNig2 - Tetraodon - Tetraodon nigroviridis
+SEQ2_DIR=/hive/data/genomes/tetNig2/tetNig2.2bit
+SEQ2_LEN=/hive/data/genomes/tetNig2/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzTetNig2.2018-10-21
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	103m2.026s
+
+    cat fb.galGal6.chainTetNig2Link.txt
+    # 43782179 bases of 1055588482 (4.148%) in intersection
+
+    cat fb.galGal6.chainSynTetNig2Link.txt
+    # 10673340 bases of 1055588482 (1.011%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 TetNig2) > rbest.log 2>&1 &
+    # real	68m58.779s
+
+    cat fb.galGal6.chainRBest.TetNig2.txt
+    # 32928708 bases of 1055588482 (3.119%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Garter snake/thaSir1 - (DONE - 2018-10-21 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzThaSir1.2018-10-21
+    cd /hive/data/genomes/galGal6/bed/lastzThaSir1.2018-10-21
+
+   printf "# chicken vs Garter snake
+# galGal6 vs thaSir1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: thaSir1 - Garter snake - Thamnophis sirtalis
+SEQ2_DIR=/hive/data/genomes/thaSir1/thaSir1.2bit
+SEQ2_LEN=/hive/data/genomes/thaSir1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzThaSir1.2018-10-21
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	263m16.804s
+
+    cat fb.galGal6.chainThaSir1Link.txt
+    # 124073447 bases of 1055588482 (11.754%) in intersection
+
+    cat fb.galGal6.chainSynThaSir1Link.txt
+    # 41632178 bases of 1055588482 (3.944%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 ThaSir1) > rbest.log 2>&1 &
+    # real	179m29.254s
+
+    cat fb.galGal6.chainRBest.ThaSir1.txt
+    # 93424295 bases of 1055588482 (8.850%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Barn owl/tytAlb1 - (DONE - 2018-10-21 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzTytAlb1.2018-10-21
+    cd /hive/data/genomes/galGal6/bed/lastzTytAlb1.2018-10-21
+
+   printf "# chicken vs Barn owl
+# galGal6 vs tytAlb1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: tytAlb1 - Barn owl - Tyto alba
+SEQ2_DIR=/hive/data/genomes/tytAlb1/tytAlb1.2bit
+SEQ2_LEN=/hive/data/genomes/tytAlb1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzTytAlb1.2018-10-21
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	510m12.860s
+
+    cat fb.galGal6.chainTytAlb1Link.txt
+    # 887980659 bases of 1055588482 (84.122%) in intersection
+
+    cat fb.galGal6.chainSynTytAlb1Link.txt
+    # 743212909 bases of 1055588482 (70.407%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 TytAlb1) > rbest.log 2>&1 &
+    # real	302m9.764s
+
+    cat fb.galGal6.chainRBest.TytAlb1.txt
+    # 804558618 bases of 1055588482 (76.219%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs African clawed frog/xenLae2 - (DONE - 2018-10-21 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzXenLae2.2018-10-21
+    cd /hive/data/genomes/galGal6/bed/lastzXenLae2.2018-10-21
+
+   printf "# chicken vs African clawed frog
+# galGal6 vs xenLae2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: xenLae2 - African clawed frog - Xenopus laevis
+SEQ2_DIR=/hive/data/genomes/xenLae2/xenLae2.2bit
+SEQ2_LEN=/hive/data/genomes/xenLae2/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzXenLae2.2018-10-21
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	391m11.899s
+
+    cat fb.galGal6.chainXenLae2Link.txt
+    # 83674239 bases of 1055588482 (7.927%) in intersection
+
+    cat fb.galGal6.chainSynXenLae2Link.txt
+    # 40258327 bases of 1055588482 (3.814%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 XenLae2) > rbest.log 2>&1 &
+    # real	242m24.342s
+
+    cat fb.galGal6.chainRBest.XenLae2.txt
+    # 69131006 bases of 1055588482 (6.549%) in intersection

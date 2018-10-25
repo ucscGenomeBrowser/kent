@@ -21,9 +21,8 @@ struct interactPlusRow
     };
 
 static struct interactPlusRow *getInteractsFromTable(struct trackDb *tdb, char *chrom, 
-                                    int start, int end, char *name, char *clusterMode, char *foot)
+                                    int start, int end, char *name, char *foot)
 /* Retrieve interact items at this position from track table */
-// TODO: Support for clusterMode
 {
 struct sqlConnection *conn = NULL;
 struct customTrack *ct = lookupCt(tdb->track);
@@ -49,16 +48,6 @@ int fieldCount = 0;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct interact *inter = interactLoadAndValidate(row+offset);
-    if (!name)
-        {
-        if (inter->chromStart != start || inter->chromEnd != end)
-            continue;
-        }
-    else
-        {
-        if (differentString(inter->name, name))
-            continue;
-        }
     // got one, save object and row representation
     struct interactPlusRow *ipr;
     AllocVar(ipr);
@@ -79,8 +68,8 @@ return iprs;
 }
 
 static struct interactPlusRow *getInteractsFromFile(char *file, char *chrom, int start, int end, 
-                                                        char *name, char *clusterMode, char *foot)
-/* Retrieve interact items at this position or name from big file */
+                                                        char *name, char *foot)
+/* Retrieve interact items at this position from big file */
 {
 struct bbiFile *bbi = bigBedFileOpen(file);
 struct lm *lm = lmInit(0);
@@ -96,24 +85,6 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     struct interact *inter = interactLoadAndValidate(row);
     if (inter == NULL)
         continue;
-    if (!name || sameString(name, "."))
-        {
-        if (inter->chromStart != start || inter->chromEnd != end)
-            continue;
-        }
-    else
-        {
-        char *match = inter->name;
-        if (clusterMode)
-            match = sameString(clusterMode, INTERACT_CLUSTER_SOURCE) ?
-                                                inter->sourceName : inter->targetName;
-        if (differentString(name, match))
-            {
-            if (foot && differentString(name, inter->sourceName) && 
-                        differentString(name, inter->targetName))
-                            continue;
-            }
-        }
 
     // got one, save object and row representation
     struct interactPlusRow *ipr;
@@ -130,23 +101,56 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 return iprs;
 }
 
-static struct interactPlusRow *getInteractions(struct trackDb *tdb, char *chrom, 
-                                                int start, int end, char *name, char *foot)
+static struct interactPlusRow *getInteractions(struct trackDb *tdb, char *chrom, int start, int end, 
+                                                char *name, char *foot, int *retStart, int *retEnd)
 /* Retrieve interact items at this position or name. 
- * Also any others with the same endpoint, if endpoint clicked on*/
+ * Also any others with the same endpoint, if endpoint clicked on.
+ * Return full extent of included interactions in returned start, end */
+// NOTE: Consider sortable table of matching interactions
 {
-struct interactPlusRow *iprs = NULL;
+struct interactPlusRow *ipr, *iprs = NULL, *next, *filtered = NULL;
 char *file = trackDbSetting(tdb, "bigDataUrl");
 char *clusterMode = interactUiClusterMode(cart, tdb->track, tdb);
 if (file != NULL)
-    iprs = getInteractsFromFile(file, chrom, start, end, name, clusterMode, foot);
+    iprs = getInteractsFromFile(file, chrom, start, end, name, foot);
 else
-    iprs = getInteractsFromTable(tdb, chrom, start, end, name, clusterMode, foot);
+    iprs = getInteractsFromTable(tdb, chrom, start, end, name, foot);
 
-// TODO: add sort on score, or position for clustered items ?
-//slSort(&inters, bedCmpScore);
-//slReverse(&inters);
-return iprs;
+int minStart = iprs->interact->chromStart;
+int maxEnd = iprs->interact->chromEnd;
+for (ipr = iprs; ipr; ipr = next)
+    {
+    struct interact *inter = ipr->interact;
+    next = ipr->next;
+    if (!name || sameString(name, "."))
+        {
+        if (inter->chromStart != start || inter->chromEnd != end)
+            continue;
+        }
+    else
+        {
+        char *match = inter->name;
+        if (clusterMode)
+            match = sameString(clusterMode, INTERACT_CLUSTER_SOURCE) ?
+                                                inter->sourceName : inter->targetName;
+        if (differentString(name, match))
+            {
+            if (clusterMode || !foot)
+                continue;
+            // if clicked on foot, look at endpoint names
+            if (differentString(name, inter->sourceName) && differentString(name, inter->targetName))
+                continue;
+            }
+        }
+    minStart = inter->chromStart <  minStart ? inter->chromStart : minStart;
+    maxEnd = inter->chromEnd > maxEnd ? inter->chromEnd : maxEnd;
+    slAddHead(&filtered, ipr);
+    }
+
+*retStart = minStart;
+*retEnd = maxEnd;
+// consider sorting on score or position
+return filtered;
 }
 
 void doInteractRegionDetails(struct trackDb *tdb, struct interact *inter)
@@ -259,16 +263,19 @@ void doInteractDetails(struct trackDb *tdb, char *item)
 char *chrom = cartString(cart, "c");
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
-char *foot = cartOptionalString(cart, "foot");
-struct interactPlusRow *iprs = getInteractions(tdb, chrom, start, end, item, foot);
+char *foot = cgiOptionalString("foot");
+int minStart, maxEnd;
+struct interactPlusRow *iprs = getInteractions(tdb, chrom, start, end, item, foot, &minStart, &maxEnd);
+start = minStart;
+end = maxEnd;
 if (iprs == NULL)
     errAbort("Can't find interaction %s", item ? item : "");
 int count = slCount(iprs);
 char *clusterMode = interactUiClusterMode(cart, tdb->track, tdb);
-if (count > 1)
+if (count > 1 || clusterMode)
     {
     printf("<b>Interactions:</b> %d<p>", count);
-    if (clusterMode)
+    if (clusterMode || foot)
         {
         char startBuf[1024], endBuf[1024], sizeBuf[1024];
         sprintLongWithCommas(startBuf, start + 1);
@@ -280,9 +287,12 @@ if (count > 1)
         printf("&nbsp;&nbsp;%s bp<br>\n", sizeBuf);
         }
     else
+        {
         doInteractRegionDetails(tdb, iprs->interact);
+        }
     printf("</p>");
     }
+
 genericHeader(tdb, item);
 static struct interactPlusRow *ipr = NULL;
 for (ipr = iprs; ipr != NULL; ipr = ipr->next)
@@ -290,7 +300,7 @@ for (ipr = iprs; ipr != NULL; ipr = ipr->next)
     if (count > 1)
         printf("<hr>\n");
     doInteractItemDetails(tdb, ipr, item, count > 1);
-    if (clusterMode && count > 1)
+    if (foot || (clusterMode && count > 1))
         doInteractRegionDetails(tdb, ipr->interact);
     if (count > 1 && !isEmptyTextField(ipr->interact->name) && sameString(ipr->interact->name, item))
         printf("<hr>\n");
