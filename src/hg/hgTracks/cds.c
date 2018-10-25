@@ -984,6 +984,14 @@ else if (startsWith("table ", seqSource))
     nextWord(&table);
     mrnaSeq = hGenBankGetMrna(database, name, table);
     }
+else if (startsWithWord("db", seqSource))
+    {
+    char *sourceDb = seqSource;
+    nextWord(&sourceDb);
+    if (isEmpty(sourceDb))
+        sourceDb = database;
+    mrnaSeq = hChromSeq(sourceDb, name, 0, 0);
+    }
 else
     mrnaSeq = hGenBankGetMrna(database, name, NULL);
 
