@@ -577,6 +577,13 @@ struct slName *slNameListFromString(char *s, char delimiter);
 #define slNameListFromComma(s) slNameListFromString(s, ',')
 /* Parse out comma-separated list. */
 
+struct slName *slNameListFromCommaEscaped(char *s);
+/* Return list of slNames gotten from parsing comma delimited string.
+ * The final comma is optional. a,b,c  and a,b,c, are equivalent
+ * for comma-delimited lists. To escape commas, put two in a row, 
+ * which eliminates the possibility for null names 
+ * (eg.  a,,b,c will parse to two elements a,b and c). */
+
 struct slName *slNameListFromStringArray(char *stringArray[], int arraySize);
 /* Return list of slNames from an array of strings of length arraySize.
  * If a string in the array is NULL, the array will be treated as
