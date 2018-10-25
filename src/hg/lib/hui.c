@@ -1131,7 +1131,7 @@ if (isNotEmpty(setting))
 	sameString(setting, "ss") || startsWith("extFile", setting) ||
 	sameString(setting, "hgPcrResult") || sameString(setting, "nameIsSequence") ||
 	sameString(setting, "seq1Seq2") || sameString(setting, "lfExtra") ||
-	sameString(setting, "lrg") || startsWith("table ", setting))
+	sameString(setting, "lrg") || startsWith("table ", setting) || startsWithWord("db", setting))
 	gotIt = TRUE;
     else if (differentString(setting, "none"))
 	errAbort("trackDb for %s, setting %s: unrecognized value \"%s\".  "
