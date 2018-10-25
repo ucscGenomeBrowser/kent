@@ -199,8 +199,14 @@ real    3m51.531s
 # 10
 # 5
 # processed 884 sequences into chr*_random.gz 30 files
-
 # real    0m5.399s
+    # one of those ends up with a name over 31 characters:
+    # chrLGE22C19W28_E50C23_NW_015439740v1_random
+    # manually edit the fasta and the AGP to shorten to:
+    # chrLGE22C19W28_E50C23_random
+    # editing these two files:
+-rw-rw-r-- 1      503 Oct 24 16:56 chrLGE22C19W28_E50C23_random.agp
+-rw-rw-r-- 1     1580 Oct 24 16:56 chrLGE22C19W28_E50C23_random.fa.gz
 
     # bash syntax here
     mitoAcc=`grep "^# mitoAcc" ../cotJap2.config.ra | awk '{print $NF}'`
@@ -217,12 +223,19 @@ real    3m51.531s
     twoBitToFa -noMask refseq.2bit:$mitoAcc stdout | grep -v "^>" >> chrM.fa
     gzip chrM.fa
 
+    # to verify chrom name sizes are legitimate, should be length < 32:
+    grep -h -v "^#" *.agp | cut -f1 \
+        | awk '{print length($0),$0}' | sort -rn | head -3 | sed -e 's/^/# /;'
+# 30 chrLGE64_NW_015439742v1_random
+# 30 chrLGE64_NW_015439741v1_random
+# 28 chrLGE22C19W28_E50C23_random
+
     faSize chrM.fa.gz
 # 16697 bases (0 N's 16697 real 16697 upper 0 lower) in 1 sequences in 1 files
 
     # verify fasta and AGPs agree
     time faToTwoBit *.fa.gz test.2bit
-    # real    0m20.637s
+    # real    0m22.272s
 
     cat *.agp | checkAgpAndFa stdin test.2bit 2>&1 | tail -4
     # All AGP and FASTA entries agree - both files are valid
@@ -249,13 +262,23 @@ real    3m51.531s
     # verify sequence and AGP are OK:
     time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
          -stop=agp cotJap2.config.ra) > agp.log 2>&1
-    # real    0m57.569s
+    # real    0m53.913s
 
     # then finish it off:
     time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
        -fileServer=hgwdev -continue=db cotJap2.config.ra) > db.log 2>&1
-XXX
-    # real    11m9.465s
+    # real    4m53.186s
+
+    # error out due to previous error and cotJap2 db exists, remove it,
+    # run manually:
+    cd jkStuff
+    ./makeDb.csh
+    # continuing
+    cd ..
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=dbDb cotJap2.config.ra) > dbDb.log 2>&1
+XXX - running - Wed Oct 24 17:11:21 PDT 2018
+    # real    0m7.665s
 
     # check in the trackDb files created in TemporaryTrackDbCheckout/
     #    and add cotJap2 to trackDb/makefile
@@ -265,7 +288,7 @@ XXX
     ln -s `pwd`/cotJap2.unmasked.2bit /gbdb/cotJap2/cotJap2.2bit
 
 ##############################################################################
-# cpgIslands on UNMASKED sequence (TBD - 2018-10-11 - Hiram)
+# cpgIslands on UNMASKED sequence (DONE - 2018-10-24 - Hiram)
     mkdir /hive/data/genomes/cotJap2/bed/cpgIslandsUnmasked
     cd /hive/data/genomes/cotJap2/bed/cpgIslandsUnmasked
 
@@ -273,37 +296,40 @@ XXX
        -tableName=cpgIslandExtUnmasked \
           -maskedSeq=/hive/data/genomes/cotJap2/cotJap2.unmasked.2bit \
              -workhorse=hgwdev -smallClusterHub=ku cotJap2) > do.log 2>&1
+XXX - running
     # real    2m11.881s
 
     cat fb.cotJap2.cpgIslandExtUnmasked.txt
     # 27399280 bases of 1055588482 (2.596%) in intersection
 
 #############################################################################
-# cytoBandIdeo - (TBD - 2018-10-11 - Hiram)
+# cytoBandIdeo - (DONE - 2018-10-24 - Hiram)
     mkdir /hive/data/genomes/cotJap2/bed/cytoBand
     cd /hive/data/genomes/cotJap2/bed/cytoBand
     makeCytoBandIdeo.csh cotJap2
 
 #############################################################################
-# run up idKeys files for chromAlias/ncbiRefSeq (TBD - 2018-10-11 - Hiram)
+# run up idKeys files for chromAlias/ncbiRefSeq (DONE - 2018-10-24 - Hiram)
     mkdir /hive/data/genomes/cotJap2/bed/idKeys
     cd /hive/data/genomes/cotJap2/bed/idKeys
 
     time (doIdKeys.pl \
         -twoBit=/hive/data/genomes/cotJap2/cotJap2.unmasked.2bit \
         -buildDir=`pwd` cotJap2) > do.log 2>&1 &
+XXX
     # real    0m47.105s
 
     cat cotJap2.keySignature.txt
     #  7850e2d5dabb6134fdc9d7083f1a3a54
 
 #############################################################################
-# gapOverlap (TBD - 2018-10-12 - Hiram)
+# gapOverlap (DONE - 2018-10-24 - Hiram)
     mkdir /hive/data/genomes/cotJap2/bed/gapOverlap
     cd /hive/data/genomes/cotJap2/bed/gapOverlap
     time (doGapOverlap.pl \
         -twoBit=/hive/data/genomes/cotJap2/cotJap2.unmasked.2bit cotJap2 ) \
         > do.log 2>&1 &
+XXX
     # real    1m40.205s
 
     # results are empty, there are none found.
@@ -312,12 +338,13 @@ XXX
     # 97216 bases of 2615516299 (0.004%) in intersection
 
 #############################################################################
-# tandemDups (TBD - 2018-10-12 - Hiram)
+# tandemDups (DONE - 2018-10-24 - Hiram)
     mkdir /hive/data/genomes/cotJap2/bed/tandemDups
     cd /hive/data/genomes/cotJap2/bed/tandemDups
     time (~/kent/src/hg/utils/automation/doTandemDup.pl \
   -twoBit=/hive/data/genomes/cotJap2/cotJap2.unmasked.2bit cotJap2) \
         > do.log 2>&1 &
+XXX
     # real    97m29.383s
 
     cat fb.cotJap2.tandemDups.txt
@@ -489,12 +516,13 @@ searchPriority 8
     # verify searches work in the position box
 
 ##########################################################################
-# running repeat masker (TBD - 2018-10-11 - Hiram)
+# running repeat masker (DONE - 2018-10-24 - Hiram)
     mkdir /hive/data/genomes/cotJap2/bed/repeatMasker
     cd /hive/data/genomes/cotJap2/bed/repeatMasker
     time  (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku cotJap2) > do.log 2>&1
+XXX
     # real    48m25.181s
 
     cat faSize.rmsk.txt
@@ -525,7 +553,7 @@ searchPriority 8
     #   real    0m3.198s
 
 ##########################################################################
-# running simple repeat (TBD - 2018-10-11 - Hiram)
+# running simple repeat (DONE - 2018-10-25 - Hiram)
 
     # The '-trf409 4' is a bit smaller than human which is 6
 
@@ -534,6 +562,7 @@ searchPriority 8
     time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
         -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
         -trf409=4 cotJap2) > do.log 2>&1
+XXX
     # real    58m3.288s
 
     cat fb.simpleRepeat
