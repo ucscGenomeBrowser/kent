@@ -33108,3 +33108,11 @@ EOF
     # TODO: Ask Anne for feedback and changes, especially on color
 
 ##############################################################################
+# crispr 10K shoulders (working - 2018-10-24 - Hiram)
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+	-buildDir=`pwd` -smallClusterHub=hgwdev-101 hg19 ncbiRefSeq) \
+	> do.log 2>&1
+XXX - running - Wed Oct 24 12:53:27 PDT 2018
+    # real    23m26.694s
+
+##############################################################################
