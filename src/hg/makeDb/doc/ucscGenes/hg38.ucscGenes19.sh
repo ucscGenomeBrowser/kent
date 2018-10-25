@@ -640,12 +640,16 @@ hgLoadSqlTab $tempDb ucscScop $kent/src/hg/lib/ucscScop.sql ucscScop.tab
 # Regenerate ccdsKgMap table
 $kent/src/hg/makeDb/genbank/bin/x86_64/mkCcdsGeneMap  -db=$tempDb -loadDb $db.ccdsGene knownGene ccdsKgMap
 
-hgsql -Ne "select kgName from ucscRetroInfo9" hg38 | sort -u > retro9.names.txt
-tawk '{print $1,$1}' retro9.names.txt |  sed 's/\.[0-9]*//' | sort -u > /tmp/1
-hgsql hg38 -Ne "select alignId,name from knownGene" | sed 's/\.[0-9]*//' | sort -u > /tmp/2
-join /tmp/1 /tmp/2 | awk 'BEGIN {OFS="\t"} {print $2,$3}' > /tmp/3
-cat /tmp/3 /tmp/4 | tawk '{if (!found[$1]) print; found[$1]=1}' > /tmp/5
-hgsql -Ne "select * from ucscRetroInfo9" hg38 | subColumn 44 stdin /tmp/5 stdout | sort -k1,1 -k2,2n  > newUcscRetroInfo9.txt 
+mkdir -p retroTmp
+hgsql -Ne "select kgName from ucscRetroInfo9" hg38 | sort -u > retroTmp/0
+tawk '{print $1,$1}' retroTmp/0 |  sed 's/\.[0-9]*//' | sort -u > retroTmp/1
+hgsql hg38 -Ne "select alignId,name from knownGene" | sed 's/\.[0-9]*//' | sort -u > retroTmp/2
+join retroTmp/1 retroTmp/2 | awk 'BEGIN {OFS="\t"} {print $2,$3}' > retroTmp/3
+hgsql -Ne "select * from ucscRetroInfo9" hg38 | tawk '{print $44,"noKg"}' | sort -u > retroTmp/4
+cat retroTmp/3 retroTmp/4 | tawk '{if (!found[$1]) print; found[$1]=1}' > retroTmp/5
+hgsql -Ne "select * from ucscRetroInfo9" hg38 | subColumn 44 stdin retroTmp/5 stdout | sort -k1,1 -k2,2n  > newUcscRetroInfo9.txt 
+rm -rf retroTmp
+
 hgsql hg38 -Ne "create table newUcscRetroInfo9 like ucscRetroInfo9"
 hgsql hg38 -Ne "load data local infile 'newUcscRetroInfo9.txt' into table newUcscRetroInfo9;"
 hgsql hg38 -Ne "rename table ucscRetroInfo9 to oldUcscRetroInfo9"
