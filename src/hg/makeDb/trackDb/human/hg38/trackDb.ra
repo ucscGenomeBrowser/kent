@@ -23,6 +23,7 @@ barChartLabel Tissue
     url2Label miRBase v21 Precursor:
     release alpha,beta
     parent miRnaAtlas
+    visibility full
     shortLabel Sample1 Expression
     longLabel Sample1 miRna Expression
     bigDataUrl /gbdb/hg38/bbi/miRnaAtlasSample1.bb
@@ -44,6 +45,7 @@ barChartLabel Tissue
     url2Label miRBase v21 Precursor:
     release alpha,beta
     parent miRnaAtlas
+    visibility full
     shortLabel Sample2 Expression
     longLabel Sample2 miRna Expression
     bigDataUrl /gbdb/hg38/bbi/miRnaAtlasSample2.bb
