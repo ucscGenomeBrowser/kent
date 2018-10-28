@@ -14,7 +14,7 @@ BIN_DIR = bin/${MACHTYPE}
 test: errCatchTest htmlPageTest htmlExpandUrlTest pipelineTests dyStringTest \
     mimeTests base64Tests quotedPTests safeTest hashTest fetchUrlTest gff3Test \
     ${TABIX_TESTS} hacTreeTest testSumDoubles
-	rm -r output fetchUrlTest testSumDoubles
+	rm -r output fetchUrlTest fetchUrlViaUdcTest testSumDoubles
 	@echo tested all
 
 
@@ -234,6 +234,9 @@ miniBlat:  mkdirs miniBlat.o ${MYLIBS}
 fetchUrlTest:  mkdirs fetchUrlTest.o ${MYLIBS}
 	${CC} ${COPT} -o fetchUrlTest fetchUrlTest.o ${MYLIBS} ${L}
 
+fetchUrlViaUdcTest:  mkdirs fetchUrlViaUdcTest.o ${MYLIBS}
+	${CC} ${COPT} -o fetchUrlViaUdcTest fetchUrlViaUdcTest.o ${MYLIBS} ${L}
+
 ##
 # gff3 tests
 ##
@@ -325,7 +328,7 @@ testOutOfMem: testOutOfMem.o ${MYLIBS} mkdirs
 	-${BIN_DIR}/testOutOfMem 100000 1
 
 clean:
-	rm -rf *.o bin output *.tmp mimeTester.tmp mimeTester.out fetchUrlTest
+	rm -rf *.o bin output *.tmp mimeTester.tmp mimeTester.out fetchUrlTest fetchUrlViaUdcTest
 
 ${BIN_DIR}/testDecodedString: mkdirs testDecodedString.o ${MYLIBS}
 	${CC} ${COPT} -o ${BIN_DIR}/testDecodedString testDecodedString.o ${MYLIBS} ${L}
