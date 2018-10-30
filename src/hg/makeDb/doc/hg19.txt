@@ -32577,6 +32577,9 @@ cat /hive/data/outside/hgmd/2017.4-hgmd-public.tsv | grep -v \# | tawk '{if ($5=
 bedToBigBed hgmd.bed /hive/data/genomes/hg19/chrom.sizes hgmd.bb -type=bed9+ -as=hgmd.as -tab
 ln -s /hive/data/genomes/hg19/bed/hgmd/hgmd.bb /gbdb/hg19/bbi/hgmd.bb
 hgBbiDbLink hg19 hgmd /gbdb/hg19/bbi/hgmd.bb
+# Forgot, finally done Oct 24: also updated hgBeacon
+bigBedToBed /gbdb/hg19/bbi/hgmd.bb /tmp/temp.bed
+/usr/local/apache/cgi-bin/hgBeacon -f hgmd temp.bed hgmd
 
 ###########################################################################
 2018-03-08: update UCSC GENCODE V19 to include protein id (for VAI)
@@ -33103,5 +33106,13 @@ EOF
     ln -s `pwd`/*.bb /gbdb/hg19/gnomAD/pLI/
 
     # TODO: Ask Anne for feedback and changes, especially on color
+
+##############################################################################
+# crispr 10K shoulders (working - 2018-10-24 - Hiram)
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+	-buildDir=`pwd` -smallClusterHub=hgwdev-101 hg19 ncbiRefSeq) \
+	> do.log 2>&1
+XXX - running - Wed Oct 24 12:53:27 PDT 2018
+    # real    23m26.694s
 
 ##############################################################################

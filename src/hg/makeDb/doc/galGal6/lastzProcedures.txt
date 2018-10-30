@@ -1,0 +1,73 @@
+
+# The lastz chainNet alignments were done via scripts and cluster jobs.
+# A parasol cluster running on hgwdev fed the lastz/chainNet scripts to
+# the ku parasol cluster.
+
+# Working in directory:
+
+cd /hive/data/genomes/galGal6/bed/multiz75way/lastzRun
+
+hgwdev parasol 'runJob' script:
+##############################################################################
+
+#!/bin/bash
+
+set -beEu -o pipefail
+
+cd /hive/data/genomes/galGal6/bed/multiz75way/lastzRun
+
+if [ $# -lt 1 ]; then
+  printf "usage: runOne abcDefN\n" 1>&2
+  printf "where abcDefN is one of the databases to run\n" 1>&2
+  exit 255
+fi
+
+export BED="/hive/data/genomes/galGal6/bed"
+
+export db=$1
+export Db="${db^}"
+
+# printf "# %s -> %s\n" "${db}" "${Db}" 1>&2
+
+export wrkDir=`ls -d ${BED}/lastz${Db}* 2> /dev/null`
+
+if [ "x${wrkDir}y" = "xy" ]; then
+  export dateStamp=`date "+%Y-%m-%d"`
+  wrkDir="${BED}/lastz${Db}.${dateStamp}"
+  printf "./prepOne.pl $db\n" 1>&2
+  ./prepOne.pl $db 1>&2
+  if [ ! -d "${wrkDir}" ]; then
+    printf "# ERROR: failed to mkdir '${wrkDir}'\n" 1>&2
+    exit 255
+  fi
+  printf "cd ${wrkDir}\n" 1>&2
+  cd ${wrkDir}
+  printf "time (./runAlignment.sh) > do.log 2>&1\n" 1>&2
+  time (./runAlignment.sh) > do.log 2>&1
+else
+  printf "# found: %s\n" "${wrkDir}" 1>&2
+fi
+
+printf "# %s done: %s\n" "$db" "`date '+%s %F %T'`" > "/hive/data/genomes/galGal6/bed/multiz75way/lastzRun/results/${db}.txt"
+exit $?
+
+##############################################################################
+template:
+
+#LOOP
+runOne $(path1) {check out exists+ results/$(path1).txt}
+#ENDLOOP
+
+##############################################################################
+
+generate jobList from dbId.list:
+
+gensub2 dbId.list single template jobList
+
+##############################################################################
+
+The runJob script above uses prepOne.pl to generate the directory
+structure and run script for the lastz/chainNet.  See also the prepOne.pl
+script in this directory.
+
+##############################################################################

@@ -15,3 +15,7 @@ searchPriority 8
 include ../../refSeqComposite.ra alpha
 
 include ../../crispr10K.ra
+
+include chainNetBirds.ra
+include chainNetFish.ra
+include chainNetvertebrate.ra

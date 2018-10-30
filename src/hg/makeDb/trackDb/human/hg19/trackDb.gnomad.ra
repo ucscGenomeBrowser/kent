@@ -276,6 +276,7 @@ longLabel gnomAD pLI scores and Missense Constrained Z-Scores
 compositeTrack On
 group varRep
 type bigBed 5
+release alpha
 
     track pLI
     shortLabel Gene pLI Scores
@@ -284,6 +285,7 @@ type bigBed 5
     useScore on
     bigDataUrl /gbdb/hg19/gnomAD/pLI/pLI.bb
     parent gnomadPLI
+    release alpha
 
     track misZ
     shortLabel Gene Missense Z-Scores
@@ -292,3 +294,4 @@ type bigBed 5
     useScore on
     bigDataUrl /gbdb/hg19/gnomAD/pLI/misZ.bb
     parent gnomadPLI
+    release alpha

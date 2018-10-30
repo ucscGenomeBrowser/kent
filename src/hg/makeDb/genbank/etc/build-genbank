@@ -13,7 +13,7 @@ trap "echo Error: build-genbank failed on $(hostname) >&2; exit 1" ERR
 exec </dev/null
 
 # initialize
-gbRoot=/hive/data/outside/genbank
+gbRoot=/data/genbank
 cd $gbRoot
 . $gbRoot/lib/gbCommon.sh
 
@@ -22,6 +22,31 @@ cd $gbRoot
 nice gbDownloadStep
 nice gbProcessStep -mkOrganismList
 
+# copy new fasta to hgwdev
+rsync --delete -av /data/genbank/data/processed /hive/data/outside/genbank/data/
+
+# should check to see if any of the two-bit files changed from the last
+# time we ran, and if so, re-do all the alignments.
+
 nice etc/align-genbank
+
+#check for new databases
+#checkNewDbs.sh 
+
+etc/genbank-dbload
+
+# check for gbExtFile for need to run gbExtUpdate
+# hgsql hg38 -Ne "select path from gbExtFile" | sed 's?/gbdb/genbank/./data/processed/??' | sed 's?/.*??' | uniq
+f=`hgsql hg38 -Ne "select path from gbExtFile" | sed 's?/gbdb/genbank/./data/processed/??' | sed 's?/.*??' | uniq | wc -l`
+if test $f -gt 2; then bin/x86_64/extFileUpdate hg38 ; fi
+
+# copy over hg38 metadata tables to hgFixed
+#./updateMetaDev.sh hg38 hgFixed braNey1 ../metaTables.txt
+
+# rsync hgFixed
+#updateMeta.sh
+
+# rsync the assemblies
+
 
 echo "$(hostname) genbank build completed"

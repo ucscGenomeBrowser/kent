@@ -50,6 +50,10 @@
     # miRNA   1918
     # scaRna  21 
 
-    # this track is probably not going to make it to the rr, if so, some code needs to be added
-    # to hgTracks to get color-coding right for the different rna's, so this track matches the 
-    # old style.
+    # backup old table and compare to new one before rename. Should be only miRNA update:
+    hgsql -Ne "select * from wgRna" hg38 | cut -f2- > wgRna.backup
+    comm -23 <(sort -k1 -k2n wgRna052518.bed) <(sort -k1 -k2n wgRna.backup) | cut -f9 | sort -u
+miRNA
+
+    # rename wgRnaNew table:
+    hgsqlSwapTables -dropTable3 hg38 wgRnaNew wgRna wgRnaOld

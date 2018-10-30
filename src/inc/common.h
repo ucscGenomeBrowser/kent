@@ -577,6 +577,13 @@ struct slName *slNameListFromString(char *s, char delimiter);
 #define slNameListFromComma(s) slNameListFromString(s, ',')
 /* Parse out comma-separated list. */
 
+struct slName *slNameListFromCommaEscaped(char *s);
+/* Return list of slNames gotten from parsing comma delimited string.
+ * The final comma is optional. a,b,c  and a,b,c, are equivalent
+ * for comma-delimited lists. To escape commas, put two in a row, 
+ * which eliminates the possibility for null names 
+ * (eg.  a,,b,c will parse to two elements a,b and c). */
+
 struct slName *slNameListFromStringArray(char *stringArray[], int arraySize);
 /* Return list of slNames from an array of strings of length arraySize.
  * If a string in the array is NULL, the array will be treated as
@@ -1409,8 +1416,8 @@ void safecat(char *buf, size_t bufSize, const char *src);
 void safencat(char *buf, size_t bufSize, const char *src, size_t n);
 /* append n characters from a string to a buffer, with bounds checking. */
 
-void safecatRepeatChar(char *buf, size_t bufSize, const char c, int n);
-/* Append a character to a buffer, n times with bounds checking.*/
+void safememset(char *buf, size_t bufSize, const char c, size_t n);
+/* Append a character to a buffer repeatedly, n times with bounds checking.*/
 
 char *naForNull(char *s);
 /* Return 'n/a' if s is NULL, otherwise s. */

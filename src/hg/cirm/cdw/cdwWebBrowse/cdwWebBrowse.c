@@ -34,6 +34,7 @@
 #include "cdwFlowCharts.h"
 #include "cdwStep.h"
 #include "facetField.h"
+#include "rqlToSql.h"
 
 /* Global vars */
 struct cart *cart;	// User variables saved from click to click
@@ -273,6 +274,17 @@ struct hash *outputWrappers = hashNew(0);
 hashAdd(outputWrappers, "tag", wrapTagField);
 webSortableFieldedTable(cart, table, returnUrl, "cdwOneFile", 0, outputWrappers, NULL);
 fieldedTableFree(&table);
+}
+
+char *unquotedCartString(struct cart *cart, char *varName)
+/* Return unquoted cart variable */
+{
+char *val = cartOptionalString(cart, varName);
+if (val == NULL)
+    return "";
+stripChar(val, '"');
+stripChar(val, '\'');
+return val;
 }
 
 char *getCdwSetting(char *setting, char *deflt)
@@ -904,21 +916,8 @@ void makeDownloadAllButtonForm()
 {
 printf("<A HREF=\"cdwWebBrowse?hgsid=%s&cdwCommand=downloadFiles", cartSessionId(cart));
 
-/* old way 
-char *fieldNames[128];
-char *tempFileTableFields = cloneString(fileTableFields); // cannot modify string literals
-int fieldCount = chopString(tempFileTableFields, ",", fieldNames, ArraySize(fieldNames));
-int i;
-for (i = 0; i<fieldCount; i++)
-    {
-    char varName[1024];
-    safef(varName, sizeof(varName), "cdwBrowseFiles_f_%s", fieldNames[i]);
-    printf("&%s=%s", varName, cartCgiUsualString(cart, varName, ""));
-    }
-*/
-
-printf("&cdwFileSearch=%s", cartCgiUsualString(cart, "cdwFileSearch", ""));
-printf("&cdwFile_filter=%s", cartCgiUsualString(cart, "cdwFile_filter", ""));
+printf("&cdwFileSearch=%s", unquotedCartString(cart, "cdwFileSearch"));
+printf("&cdwFile_filter=%s", cartUsualString(cart, "cdwFile_filter", ""));
 printf("\">Download All</A>");
 }
 
@@ -983,7 +982,9 @@ dyStringFree(&where);
 char *showSearchControl(char *varName, char *itemPlural)
 /* Put up the search control text and stuff. Returns current search string. */
 {
-char *varVal = cartUsualString(cart, varName, "");
+/* Get cart variable and clean it up some removing quotes and the like */
+char *varVal = unquotedCartString(cart, varName);
+
 printf("Search <input name=\"%s\" type=\"text\" id=\"%s\" value=\"%s\" size=60>", 
     varName, varName, varVal);
 printf("&nbsp;");
@@ -1048,7 +1049,7 @@ if (createSubdirs)
 else
     puts("Content-disposition: attachment; filename=fileUrls.txt\n");
 
-char *searchString = cartUsualString(cart, "cdwFileSearch", "");
+char *searchString = unquotedCartString(cart, "cdwFileSearch");
 char *initialWhere = cartUsualString(cart, "cdwFile_filter", "");
 
 struct cdwFile *efList = findDownloadableFiles(conn, cart, initialWhere, searchString);
@@ -1110,7 +1111,7 @@ cgiMakeHiddenVar("cdwCommand", "downloadUrls");
 
 continueSearchVars();
 
-char *searchString = cartUsualString(cart, "cdwFileSearch", "");
+char *searchString = unquotedCartString(cart, "cdwFileSearch");
 char *initialWhere = cartUsualString(cart, "cdwFile_filter", "");
 
 struct cdwFile *efList = findDownloadableFiles(conn, cart, initialWhere, searchString);
@@ -1377,13 +1378,17 @@ for (dataset = datasetList; dataset != NULL; dataset = dataset->next)
 	{
 	printf("<LI><B><A href=\"cdwGetFile/%s/summary/index.html\">%s (%s)</A></B><BR>\n", 
 	    datasetId, label, datasetId);
-// #ifdef SOON
+	
 	// Print out file count and descriptions. 
 	sqlSafef(query, sizeof(query), 
 	    "select count(*) from %s where data_set_id='%s'", getCdwTableSetting("cdwFileTags"), datasetId);  
 	long long fileCount = sqlQuickLongLong(conn, query);
-	printf("%s (<A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwBrowseFiles_f_data_set_id=%s&%s\"",
-		desc, datasetId, cartSidUrlString(cart)); 
+//	printf("%s (<A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwFile_filter=data_set_id%%3D+%%27%s%%27&%s\"",
+//		desc, datasetId, cartSidUrlString(cart)); 
+	char varEqVal[256];
+	safef(varEqVal, sizeof(varEqVal), "data_set_id='%s'", datasetId);
+	printf("%s (<A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwFile_filter=%s&%s\"",
+		desc, cgiEncode(varEqVal), cartSidUrlString(cart)); 
 	printf(">%lld files</A>)",fileCount);
 
 	int fileId = getRecentSubmitFileId(conn, submitDirId, "meta.txt");
@@ -1487,7 +1492,6 @@ fieldedTableFree(&table);
 }
 
 
-
 void doAnalysisQuery(struct sqlConnection *conn)
 /* Print up query page */
 {
@@ -1506,23 +1510,21 @@ cgiMakeHiddenVar("cdwCommand", "analysisQuery");
 /* Fields clause */
 char *fieldsVar = "cdwQueryFields";
 char *fields = cartUsualString(cart, fieldsVar, "*");
-struct dyString *rqlQuery = dyStringCreate("select %s from files ", fields);
+struct dyString *rqlQuery = dyStringCreate("select %s from files", fields);
 
 /* Where clause */
 char *whereVar = "cdwQueryWhere";
 char *where = cartUsualString(cart, whereVar, "");
-dyStringPrintf(rqlQuery, "where accession");
 if (!isEmpty(where))
-    dyStringPrintf(rqlQuery, " and (%s)", where);
+    dyStringPrintf(rqlQuery, " where %s", where);
+
+struct rqlStatement *rql = rqlStatementParseString(rqlQuery->string);
 
 /* Limit clause */
 char *limitVar = "cdwQueryLimit";
 int limit = cartUsualInt(cart, limitVar, 10);
 
-struct tagStorm *tags = cdwUserTagStorm(conn, user);
-struct slRef *matchList = tagStanzasMatchingQuery(tags, rqlQuery->string);
-int matchCount = slCount(matchList);
-/** Write out select [  ] from files whre [  ] limit [ ] <submit> **/
+/* Write out select [  ] from files where [  ] limit [ ] <submit> **/
 printf("select ");
 cgiMakeTextVar(fieldsVar, fields, 40);
 printf("from files ");
@@ -1553,11 +1555,109 @@ cgiMakeHiddenVar("Download format", format);
 cgiMakeButton(format, "Download"); 
 printf("</FORM>\n\n");
 
+// Get field list for the cdwFileTags table, leaving out things we don't want to display on the site
+// (allAccess and groupIds).
+struct dyString *descQuery = dyStringNew(0);
+sqlDyStringPrintf(descQuery, "desc cdwFileTags");
+struct sqlResult *sr = sqlGetResult(conn, descQuery->string);
+char **row;
+struct slName *allFieldList = NULL;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (sameString(row[0], "allAccess") || sameString(row[0], "groupIds"))
+        continue;
+    slNameAddHead(&allFieldList, row[0]);
+    }
+sqlFreeResult(&sr);
+slReverse(&allFieldList);
+
+// Verify the query restrictions are on existing fields
+cdwCheckRqlFields(rql, allFieldList);
+
+// Obtain the list of fields to be returned by the query
+struct slName *returnedFieldList = wildExpandList(allFieldList, rql->fieldList, TRUE);
+
+// Retrieve results from the server
+struct dyString *sqlQuery = dyStringNew(0);
+sqlDyStringPrintf(sqlQuery, "select ");
+struct slName *l = returnedFieldList;
+sqlDyStringPrintfFrag(sqlQuery, "%s", l->name);
+l = l->next;
+while (l != NULL)
+    {
+    sqlDyStringPrintfFrag(sqlQuery, ",%s", l->name);
+    l = l->next;
+    }
+sqlDyStringPrintfFrag(sqlQuery, " from cdwFileTags");
+
+int whereClauseStarted = 0;
+if (!isEmpty(where))
+    {
+    // Can't use sqlDyString functions due to the possible presence of valid wildcards, but
+    // the while clause has already been validated by passing through the more restrictive
+    // rql parser anyway.
+    dyStringPrintf(sqlQuery, " where %s", rqlParseToSqlWhereClause(rql->whereClause, FALSE));
+    whereClauseStarted = 1;
+    }
+
+// Ensure the user has access to the data.  Access means either it's a public set (allAccess = 1) or one of the user's
+// associated group IDs appears in the groupIds field (or they're an admin).
+if ((user == NULL) || (!user->isAdmin))
+    {
+    if (whereClauseStarted == 0)
+        {
+        dyStringPrintf(sqlQuery, " where ");
+        whereClauseStarted = 1;
+        }
+    else
+        dyStringPrintf(sqlQuery, " and ");
+    sqlDyStringPrintfFrag(sqlQuery, "(allAccess = 1");
+    if (user != NULL)
+        {
+        // Handle group-based access for this user
+        struct dyString *groupQuery = dyStringNew(0);
+        sqlDyStringPrintf(groupQuery, "select groupId from cdwGroupUser where userId = %u\n", user->id);
+        sr = sqlGetResult(conn, groupQuery->string);
+        while ((row = sqlNextRow(sr)) != NULL)
+            {
+            sqlDyStringPrintfFrag(sqlQuery, " or find_in_set(\"%s\", groupIds) > 0", row[0]);
+            }
+        sqlFreeResult(&sr);
+        }
+    sqlDyStringPrintfFrag(sqlQuery, ")");
+    }
+
+// Now to actually fetch the data!
+sr = sqlGetResult(conn, sqlQuery->string);
+struct slName *fieldNames = sqlResultFieldList(sr);
+struct slRef *resultData = NULL;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct slPair *fieldList = NULL;
+    struct slName *fieldName = fieldNames;
+    int fieldIdx = 0;
+    while (fieldName != NULL)
+        {
+        char *val = NULL;
+        if (!isEmpty(row[fieldIdx]))
+            val = cloneString(row[fieldIdx]);
+        slPairAdd(&fieldList, fieldName->name, val);
+        fieldIdx++;
+        fieldName = fieldName->next;
+        }
+    slReverse(&fieldList);
+    refAdd(&resultData, fieldList);
+    }
+
+slReverse(&resultData);
+// Now, resultData is an slRef list of results, and each result contains an slPair list of field name/value pairs.
+int matchCount = slCount(resultData);
 printf("<PRE><TT>");
 printLongWithCommas(stdout, matchCount);
 printf(" files match\n\n");
-cdwPrintMatchingStanzas(rqlQuery->string, limit, tags, format);
+cdwPrintSlRefList(resultData, fieldNames, format, limit);
 printf("</TT></PRE>\n");
+rqlStatementFree(&rql);
 }
 
 void doAnalysisJointPages(struct sqlConnection *conn)
@@ -2092,7 +2192,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Data Browser V0.59");
+localWebStartWrapper("CIRM Stem Cell Hub Data Browser V0.60");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
