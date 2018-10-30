@@ -16,7 +16,7 @@ longLabel RNA sequences that do not code for a protein
     noScoreFilter .
 
     track wgRna
-    release beta,public
+    release public
     superTrack nonCodingRNAs pack
     shortLabel sno/miRNA
     longLabel C/D and H/ACA Box snoRNAs, scaRNAs, and microRNAs from snoRNABase and miRBase
@@ -35,7 +35,7 @@ longLabel RNA sequences that do not code for a protein
     origAssembly hg19
 
     track wgRna
-    release alpha
+    release alpha,beta
     superTrack nonCodingRNAs pack
     shortLabel sno/miRNA
     longLabel C/D and H/ACA Box snoRNAs, scaRNAs, and microRNAs from snoRNABase and miRBase
