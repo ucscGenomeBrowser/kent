@@ -4334,9 +4334,16 @@ For the complete bigInteract format definitions please see the
 </DIV>
 
 <DIV class="interactDirectional"><span class="types bigInteract"></span>
-<div class="format"><code>interactDirectional true</code></div>
-    <P>This setting will display dashed lines when the target region precedes the source region 
-(reverse direction) in the genome.
+<div class="format"><code>interactDirectional &lt;true|offsetSource|offsetTarget|clusterSource|clusterTarget&gt;</code></div>
+    <P>This setting is used when the interaction has an orientation (direction of effect). The offset setting shows the source (offsetSource) or target (offsetTarget) below the other end type; that is vertically displaced in the image.  The interaction is drawn with dashed lines when the target region precedes the source region (reverse direction) in the genome.
+    </P>
+    <P>The cluster setting collects all interactions with the same source (clusterSource) or target (clusterTarget) and displays each group as a single linked block display in the browser. This provides an alternate view of an interact file.
+    </P>
+</DIV>
+
+<DIV class="interactUp"><span class="types bigInteract"></span>
+<div class="format"><code>interactUp &lt;true|false&gt;</code></div>
+    <P>This setting flips the curved full visibility display so that the peak of the curves is 'up' (hills instead of valleys). 
     </P>
 </DIV>
 
