@@ -130,8 +130,8 @@ in the sections below.</I>
     <LI><A HREF="#settingsByType">Settings by track type</A> &ndash; with examples
     <UL>
         <LI><A HREF="#bam">bam/cram</A>: Compressed Sequence Alignment/Map tracks</LI>
-        <LI><A HREF="#bigBarChart">bigBarChart</A>: Bar charts of categorical varaables displayed over genomic regions</LI>
         <LI><A HREF="#bigBed_-_Item_or_Region_Track_Settings">bigBed</A>: Item or region tracks</LI>
+        <LI><A HREF="#bigBarChart">bigBarChart</A>: Bar charts of categorical varaables displayed over genomic regions</LI>
         <LI><A HREF="#bigChain_-_Pairwise_Alignments">bigChain</A>: Genome-wide Pairwise Alignments</LI>
         <LI><A HREF="#bigGenePred_-_Gene_Annotations">bigGenePred</A>: Gene Annotations</LI>
         <LI><A HREF="#bigInteract">bigInteract</A>: Pairwise interactions</LI>
@@ -640,8 +640,14 @@ are described below along with settings specific to their types.</P>
     </div>
 </td></tr>
 <tr valign=top><td class="interactDirectional"><a name="interactDirectional"></a> <img class='toggle detail'>
-    <div class="format"> <code class="level-full">interactDirectional &lt;true/false&gt;</code>
+    <div class="format"> <code class="level-full">interactDirectional &lt;true/offsetSource/offsetTarget/clusterSource/clusterTarget&gt;</code>
     </div>
+</td></tr>
+<tr valign=top><td class="interactUp"><a name="interactUp"></a> <img class='toggle detail'>
+    <div class="format"> <code class="level-full">interactUp &lt;true/false&gt;</code>
+    </div>
+</td></tr>
+
 <tr valign=top><td>
         <p>Additional settings defined in other sections are also
         available for displaying bigInteract tracks.</p>
