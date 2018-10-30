@@ -59,6 +59,7 @@ struct trackDb
     char *grp;	/* Which group track belongs to */
     unsigned char canPack;	/* 1 if can pack track display, 0 otherwise */
     char *settings;	/* Name/value pairs for track-specific stuff */
+    struct hash *viewHash;  /* Hash for settings. Not saved in database.*/
     struct hash *settingsHash;  /* Hash for settings. Not saved in database.
                                  * Don't use directly, rely on trackDbSetting to access. */
     /* additional info, determined from settings */
@@ -548,6 +549,30 @@ struct mdbObj;
 struct _membersForAll;
 struct _membership;
 
+enum filterCompositeType 
+// Filter composites are drop-down checkbox-lists for selecting subtracks (eg hg19::HAIB TFBS)
+    {
+    fctNone=0,      // do not offer filter for this dimension
+    fctOne=1,       // filter composite by one or all
+    fctOneOnly=2,   // filter composite by only one
+    fctMulti=3,     // filter composite by multiselect: all, one or many
+    };
+
+typedef struct _members
+    {
+    int count;
+    char * groupTag;
+    char * groupTitle;
+    char **tags;
+    char **titles;
+    boolean *selected;
+    char * setting;
+    int *subtrackCount;              // count of subtracks
+    int *currentlyVisible;           // count of visible subtracks 
+    struct slRef **subtrackList;     // set of subtracks belonging to each subgroup member
+    enum filterCompositeType fcType; // fctNone,fctOne,fctMulti
+    } members_t;
+
 struct tdbExtras
 #define TDB_EXTRAS_EMPTY_STATE 666
 // Struct for misc. data collected/calculated during CGI track setup that are cached for later use.
@@ -561,6 +586,7 @@ struct tdbExtras
     struct _membership *membership;       // hgTrackUi subtracks have individual membership info
 
     // Developer: please add your useful data that is costly to calculate/retrieve more than once
+    struct hash *membersHash;
     };
 
 void tdbExtrasFree(struct tdbExtras **pTdbExtras);
@@ -589,6 +615,12 @@ struct _membersForAll *tdbExtrasMembersForAll(struct trackDb *tdb);
 
 void tdbExtrasMembersForAllSet(struct trackDb *tdb, struct _membersForAll *membersForAll);
 // Sets the composite view/dimensions members for all for later retrieval.
+
+members_t *tdbExtrasMembers(struct trackDb *tdb, char *groupNameOrTag);
+// Returns subtrack members if already known, else NULL
+
+void tdbExtrasMembersSet(struct trackDb *tdb,  char *groupNameOrTag,  members_t *members);
+// Sets the subtrack members for later retrieval.
 
 struct _membership *tdbExtrasMembership(struct trackDb *tdb);
 // Returns subtrack membership if already known, else NULL
@@ -658,5 +690,8 @@ struct slPair *trackDbMetaPairs(struct trackDb *tdb);
  * that metadata can be represented in a trackDb stanza: "metadata" lines per stanza,
  * or a  tab-separated or tagStorm file with a foreign key specified by the "meta" tag.
  */
+
+char *trackDbViewSetting(struct trackDb *tdb, char *name);
+/* Return view setting from tdb, but *not* any of it's parents. */
 #endif /* TRACKDB_H */
 

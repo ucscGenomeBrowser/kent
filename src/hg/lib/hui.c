@@ -2562,30 +2562,6 @@ if (dimensions && *dimensions)
 
 #define SUBGROUP_MAX 9
 
-enum filterCompositeType
-// Filter composites are drop-down checkbix-lists for selecting subtracks (eg hg19::HAIB TFBS)
-    {
-    fctNone=0,      // do not offer filter for this dimension
-    fctOne=1,       // filter composite by one or all
-    fctOneOnly=2,   // filter composite by only one
-    fctMulti=3,     // filter composite by multiselect: all, one or many
-    };
-
-typedef struct _members
-    {
-    int count;
-    char * groupTag;
-    char * groupTitle;
-    char **tags;
-    char **titles;
-    boolean *selected;
-    char * setting;
-    int *subtrackCount;              // count of subtracks
-    int *currentlyVisible;           // count of visible subtracks
-    struct slRef **subtrackList;     // set of subtracks belonging to each subgroup member
-    enum filterCompositeType fcType; // fctNone,fctOne,fctMulti
-    } members_t;
-
 int subgroupCount(struct trackDb *parentTdb)
 // How many subGroup setting does this parent have?
 {
@@ -2606,27 +2582,19 @@ char * subgroupSettingByTagOrName(struct trackDb *parentTdb, char *groupNameOrTa
 {
 struct trackDb *ancestor;
 for (ancestor = parentTdb; ancestor != NULL; ancestor = ancestor->parent)
-{
-int ix;
-char *setting = NULL;
-if (startsWith("subGroup",groupNameOrTag))
     {
-    setting = trackDbSetting(ancestor, groupNameOrTag);
+    char *setting = NULL;
+    if (startsWith("subGroup",groupNameOrTag))
+        {
+        setting = trackDbSetting(ancestor, groupNameOrTag);
+        if (setting != NULL)
+            return setting;
+        }
+    // these views are cached at trackDb read time
+    setting = trackDbViewSetting(ancestor, groupNameOrTag);
     if (setting != NULL)
-	return setting;
+        return setting;
     }
-for (ix=1;ix<=SUBGROUP_MAX;ix++)
-    {
-    char subGrp[16];
-    safef(subGrp, ArraySize(subGrp), "subGroup%d",ix);
-    setting = trackDbSetting(ancestor, subGrp);
-    if (setting != NULL)  // Doesn't require consecutive subgroups
-	{
-	if (startsWithWord(groupNameOrTag,setting))
-	    return setting;
-	}
-    }
-}
 return NULL;
 }
 
@@ -2640,11 +2608,15 @@ static members_t *subgroupMembersGet(struct trackDb *parentTdb, char *groupNameO
 // Parse a subGroup setting line into tag,title, names(optional) and values(optional),
 // returning the count of members or 0
 {
+members_t *members  = tdbExtrasMembers(parentTdb, groupNameOrTag);
+if (members != NULL)
+    return members;
+
 int ix,count;
 char *setting = subgroupSettingByTagOrName(parentTdb, groupNameOrTag);
 if (setting == NULL)
     return NULL;
-members_t *members = needMem(sizeof(members_t));
+members = needMem(sizeof(members_t));
 members->setting = cloneString(setting);
 char *words[SMALLBUF];
 count = chopLine(members->setting, words);
@@ -2669,6 +2641,8 @@ for (ix = 2,members->count=0; ix < count; ix++)
 	members->count++;
 	}
     }
+tdbExtrasMembersSet(parentTdb, groupNameOrTag, members);
+
 return members;
 }
 
@@ -2763,7 +2737,7 @@ members->count = ixOut;
 
 if (members->count == 0) // No members of this subgroup had a subtrack
     {
-    subgroupMembersFree(&members);
+    //subgroupMembersFree(&members);   // don't bother freeing
     return NULL;
     }
 
@@ -3045,6 +3019,8 @@ static void membersForAllSubGroupsFree(struct trackDb *parentTdb,
 				   membersForAll_t** membersForAllPtr)
 // frees memory for membersForAllSubGroups struct
 {
+return;    // don't bother freeing things, just takes time for no benefit
+
 if (membersForAllPtr && *membersForAllPtr)
     {
     if (parentTdb != NULL)
@@ -3138,7 +3114,7 @@ for (ix = 0,membership->count=0; ix < cnt; ix++)
 	    if (ix2 != -1)
 		membership->titles[membership->count] =
 					strSwapChar(cloneString(members->titles[ix2]),'_',' ');
-	    subgroupMembersFree(&members);
+//	    subgroupMembersFree(&members);   /// don't bother freeing
 	    }
 	membership->count++;
 	}
@@ -3192,7 +3168,7 @@ for (i=0; i<members->count; ++i)
     if (sameString(members->tags[i], id))
 	result = cloneString(members->titles[i]);
     }
-subgroupMembersFree(&members);
+//subgroupMembersFree(&members);   /// don't bother freeing
 return result;
 }
 
@@ -3207,7 +3183,7 @@ for (i=0; i<members->count; ++i)
     if (sameString(members->titles[i], label))
 	result = cloneString(members->tags[i]);
     }
-subgroupMembersFree(&members);
+//subgroupMembersFree(&members);   /// don't bother freeing
 return result;
 }
 
