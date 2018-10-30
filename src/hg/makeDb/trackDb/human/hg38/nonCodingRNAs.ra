@@ -16,6 +16,7 @@ longLabel RNA sequences that do not code for a protein
     noScoreFilter .
 
     track wgRna
+    release beta,public
     superTrack nonCodingRNAs pack
     shortLabel sno/miRNA
     longLabel C/D and H/ACA Box snoRNAs, scaRNAs, and microRNAs from snoRNABase and miRBase
@@ -33,7 +34,8 @@ longLabel RNA sequences that do not code for a protein
     pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
     origAssembly hg19
 
-    track wgRnaNew
+    track wgRna
+    release alpha
     superTrack nonCodingRNAs pack
     shortLabel sno/miRNA
     longLabel C/D and H/ACA Box snoRNAs, scaRNAs, and microRNAs from snoRNABase and miRBase
@@ -46,8 +48,7 @@ longLabel RNA sequences that do not code for a protein
     url http://www-snorna.biotoul.fr/plus.php?id=$$
     url2Label miRBase:
     url2 http://www.mirbase.org/cgi-bin/query.pl?terms=$$
-    dataVersion miRBase Release 22 (March 2018) and snoRNABase Version 3
-    html ../wgRna.html
+    dataVersion miRBase Release 22 (March 2018) and snoRNABase Version 3 (lifted from hg19)
     pennantIcon New red ../goldenPath/releaseLog.html  "Updated May 25, 2018"
 
     track lincRNAsTranscripts
