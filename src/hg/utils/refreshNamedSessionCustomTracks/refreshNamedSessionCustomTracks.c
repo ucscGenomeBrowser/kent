@@ -99,7 +99,7 @@ struct sigaction act;
 act.sa_handler = handle_SIGCHLD;
 if (sigaction(SIGCHLD, &act, 0)) 
     {
-    perror("sigaction err");
+    errnoAbort("sigaction err");
     }
 
 sigemptyset (&mask);
@@ -108,7 +108,7 @@ sigaddset (&mask, SIGCHLD);
 /* BLOCK to prevent a race condition that loses SIGCHLD events */
 if (sigprocmask(SIG_BLOCK, &mask, &orig_mask) < 0) 
     {
-    perror ("sigprocmask");
+    errnoAbort("sigprocmask");
     }
 
 /* This is critical because we are about to fork, 
@@ -122,7 +122,7 @@ if (pid == 0)  // child
     {
     if (sigprocmask(SIG_SETMASK, &orig_mask, NULL) < 0)  // unblock SIGCHLD
 	{
-	perror("sigprocmask SIG_SETMASK to unblock child SIGCHLD");
+	errnoAbort("sigprocmask SIG_SETMASK to unblock child SIGCHLD");
 	}
     }
 
@@ -130,13 +130,13 @@ return pid;
 }
 
 void waitForChildWithTimeout(pid_t pid)
-/* wait for child with timeout */
+/* wait for child with timeout. exit non-zero if child had error. */
 {
 
 int wstat;
 struct timespec timeout;
 
-timeout.tv_sec = 2400;  // TODO make this a parameter
+timeout.tv_sec = 3600;  // TODO make this a parameter
 timeout.tv_nsec = 0;
 
 while (1)
@@ -162,9 +162,7 @@ while (1)
 	    }
 	else 
 	    {
-	    perror ("sigtimedwait");
-	    fflush(stdout); fflush(stderr);
-	    return;
+	    errnoAbort ("sigtimedwait");
 	    }
 	}
 
@@ -173,15 +171,28 @@ while (1)
 
 if (sigprocmask(SIG_SETMASK, &orig_mask, NULL) < 0)  // unblock SIGCHLD
     {
-    perror("sigprocmask SIG_SETMASK to unblock SIGCHLD");
+    errnoAbort("sigprocmask SIG_SETMASK to unblock SIGCHLD");
     }
 if (waitpid(pid, &wstat, 0) < 0)
     {
-    perror("waitpid failed");
-    fflush(stdout); fflush(stderr);
-    return;
+    errnoAbort("waitpid failed");
     }
-
+else
+    {
+    if (WIFEXITED(wstat))
+	{
+	if (WEXITSTATUS(wstat) > 0)
+	    {
+	    verbose(1,"waitpid child had a error exit status %d. Exiting.\n", WEXITSTATUS(wstat));
+	    exit(1);	
+	    }
+	}
+    else if (WIFSIGNALED(wstat))
+	{
+	verbose(1,"waitpid child had a signal. Exiting.\n");
+	exit(1);	
+	}
+    }
 
 }
 
@@ -403,7 +414,7 @@ else
 sqlDisconnect(&conn);
 
 int childDone=0;
-int perFork = slCount(sessionList) / numForks;
+int perFork = (slCount(sessionList) + (numForks - 1)) / numForks;
 if (perFork < 1)
     perFork = 1;
 
@@ -451,7 +462,6 @@ for (si = sessionList;  si != NULL;  si = si->next)
 	}
     }
 
-
 }
 
 
@@ -463,12 +473,12 @@ optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
 numForks = optionInt("forks", numForks);
+if (numForks < 1)
+    errAbort("forks option must specify positive integer >= 1");
 char *workDir = optionVal("workDir", CGI_BIN);
 setCurrentDir(workDir);
 
 refreshNamedSessionCustomTracks(argv[1]);
-
-showVmPeak();
 
 return 0;
 }
