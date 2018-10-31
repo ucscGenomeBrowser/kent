@@ -4405,7 +4405,7 @@ for (trackTable = trackTableList; trackTable != NULL; trackTable = trackTable->n
 	char **row;
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
-	    struct hash *settings = trackDbSettingsFromString(row[1]);
+	    struct hash *settings = trackDbSettingsFromString(NULL, row[1]);
 	    hashAdd(hash, row[0], settings);
 	    }
 	sqlFreeResult(&sr);
