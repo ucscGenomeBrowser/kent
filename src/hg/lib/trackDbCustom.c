@@ -414,11 +414,11 @@ struct hash *trackDbHashSettings(struct trackDb *tdb)
  * done on demand. Returns settings hash. */
 {
 if (tdb->settingsHash == NULL)
-    tdb->settingsHash = trackDbSettingsFromString(tdb->settings);
+    tdb->settingsHash = trackDbSettingsFromString(tdb, tdb->settings);
 return tdb->settingsHash;
 }
 
-struct hash *trackDbSettingsFromString(char *string)
+struct hash *trackDbSettingsFromString(struct trackDb *tdb, char *string)
 /* Return hash of key/value pairs from string.  Differs
  * from raFromString in that it passes the key/val
  * pair through the backwards compatability routines. */
@@ -442,6 +442,18 @@ for (;;)
     s = lineEnd;
     val = lmCloneString(hash->lm, val);
     hashAdd(hash, key, val);
+    if (tdb && startsWith("subGroup", key))
+        {
+        char *storeValue = cloneString(val);
+        char *ptr = strchr(val, ' ');
+        if (ptr)
+            *ptr = 0;
+        if (tdb->viewHash == NULL)
+            tdb->viewHash = newHash(5);
+        hashAdd(tdb->viewHash, val, storeValue);
+        if (ptr)
+            *ptr = ' ';
+        }
     }
 freeMem(dupe);
 return hash;
@@ -463,7 +475,7 @@ char *trackDbLocalSetting(struct trackDb *tdb, char *name)
 if (tdb == NULL)
     errAbort("Program error: null tdb passed to trackDbSetting.");
 if (tdb->settingsHash == NULL)
-    tdb->settingsHash = trackDbSettingsFromString(tdb->settings);
+    tdb->settingsHash = trackDbSettingsFromString(tdb, tdb->settings);
 return hashFindVal(tdb->settingsHash, name);
 }
 
@@ -473,7 +485,7 @@ struct slName *trackDbLocalSettingsWildMatch(struct trackDb *tdb, char *expressi
 if (tdb == NULL)
     errAbort("Program error: null tdb passed to trackDbSetting.");
 if (tdb->settingsHash == NULL)
-    tdb->settingsHash = trackDbSettingsFromString(tdb->settings);
+    tdb->settingsHash = trackDbSettingsFromString(tdb, tdb->settings);
 
 struct slName *slFoundVars = NULL;
 struct hashCookie brownie = hashFirst(tdb->settingsHash);

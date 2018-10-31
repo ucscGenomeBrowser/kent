@@ -2608,14 +2608,23 @@ static members_t *subgroupMembersGet(struct trackDb *parentTdb, char *groupNameO
 // Parse a subGroup setting line into tag,title, names(optional) and values(optional),
 // returning the count of members or 0
 {
+static members_t nullMember;   // place holder for NULL
 members_t *members  = tdbExtrasMembers(parentTdb, groupNameOrTag);
 if (members != NULL)
+    {
+    if (members == &nullMember)
+        return NULL;
     return members;
+    }
+
 
 int ix,count;
 char *setting = subgroupSettingByTagOrName(parentTdb, groupNameOrTag);
 if (setting == NULL)
+    {
+    tdbExtrasMembersSet(parentTdb, groupNameOrTag, &nullMember);
     return NULL;
+    }
 members = needMem(sizeof(members_t));
 members->setting = cloneString(setting);
 char *words[SMALLBUF];
@@ -2625,6 +2634,7 @@ if (count <= 1)
     {
     freeMem(members->setting);
     freeMem(members);
+    tdbExtrasMembersSet(parentTdb, groupNameOrTag, &nullMember);
     return NULL;
     }
 members->groupTag   = words[0];
