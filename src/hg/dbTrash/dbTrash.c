@@ -50,6 +50,7 @@ static struct optionSpec options[] = {
     {"extFile", OPTION_BOOLEAN},
     {"extDel", OPTION_BOOLEAN},
     {"drop", OPTION_BOOLEAN},
+    {"dropLimit", OPTION_INT},
     {"db", OPTION_STRING},
     {"topDir", OPTION_STRING},
     {"tableStatus", OPTION_BOOLEAN},
@@ -60,9 +61,9 @@ static struct optionSpec options[] = {
 
 static double ageHours = 0.0;	/*	must be specified	*/
 static boolean drop = FALSE;		/*	optional	*/
+static int dropLimit = 0;		/*	optional	*/
 static char *db = CUSTOM_TRASH;		/*	optional	*/
 static boolean historyToo = FALSE;	/*	optional	*/
-static int dropLimit = 0;		/*	optional	*/
 
 static time_t timeNow = 0;
 static time_t dropTime = 0;
@@ -473,6 +474,7 @@ else
     usage();
     }
 drop = optionExists("drop");
+dropLimit = optionInt("dropLimit", 0);
 historyToo = optionExists("historyToo");
 db = optionVal("db",db);
 extFileCheck = optionExists("extFile");
