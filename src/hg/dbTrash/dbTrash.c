@@ -357,7 +357,7 @@ if (drop)
 		if (toBeDropped > dropLimit)
 		    {
             errAbort("ERROR: expected drop table count: %d\n\tis larger"
-		" than the dropLimit: %d\n\twill not proceed with this drop.",
+		" than the dropLimit: %d\n\twill not proceed with this drop.\n",
 		toBeDropped, dropLimit);
 		    }
 	    }
@@ -406,6 +406,14 @@ else
     if (expiredTableNames)
 	{
 	int droppedCount = slCount(expiredTableNames);
+	if (dropLimit > 0)
+	    {
+		if (droppedCount > dropLimit)
+		    {
+            warn("WARNING: expected drop table count: %d\n\tis larger"
+		" than the dropLimit: %d\n", droppedCount, dropLimit);
+		    }
+	    }
 	if (tableStatus)
 	    safef(comment, sizeof(comment), "Would have dropped %d tables with "
 		"total size %llu, %llu lost tables",
