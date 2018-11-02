@@ -9,7 +9,6 @@ include cancerExpr.ra
 
 track miRnaAtlas
 compositeTrack on
-release alpha,beta
 shortLabel miRNA Tissue Atlas
 longLabel Tissue-Specific microRNA Expression from Two Individuals
 type bigBarChart
@@ -26,12 +25,10 @@ pennantIcon New red ../releaseLog.html Created October 2018
     parent miRnaAtlas
     view a_A
     configurable on
-    release alpha,beta
 
         track miRnaAtlasSample1BarChart
         url2 http://www.mirbase.org/cgi-bin/query.pl?terms=$$
         url2Label miRBase v21 Precursor Accession:
-        release alpha,beta
         parent miRnaAtlasSample1
         visibility full
         shortLabel Sample 1
@@ -60,12 +57,10 @@ pennantIcon New red ../releaseLog.html Created October 2018
     parent miRnaAtlas
     view b_B
     configurable on
-    release alpha,beta
 
         track miRnaAtlasSample2BarChart
         url2 http://www.mirbase.org/cgi-bin/query.pl?terms=$$
         url2Label miRBase v21 Precursor Accession:
-        release alpha,beta
         parent miRnaAtlasSample2
         visibility full
         shortLabel Sample 2
