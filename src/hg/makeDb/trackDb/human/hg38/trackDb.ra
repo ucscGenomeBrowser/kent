@@ -562,8 +562,8 @@ include trackDb.cloneEnd.ra
 
 include hg38Patch11.ra beta,public
 
-include knownGene.alpha.ra  alpha
-include knownGene.ra  beta,public
+include knownGene.alpha.ra  alpha,beta
+include knownGene.ra  public
 
 include trackDb.100way.ra
 include trackDb.145way.ra alpha
