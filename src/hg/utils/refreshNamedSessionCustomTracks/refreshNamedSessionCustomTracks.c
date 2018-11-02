@@ -14,7 +14,6 @@
 #include "hgConfig.h"
 #include <sys/wait.h>
 #include <signal.h>
-#include "errCatch.h"
 #include "obscure.h"
 
 #define savedSessionTable "namedSessionDb"
@@ -258,14 +257,7 @@ while (isNotEmpty(namePt))
 	    dyStringAppend(newContents, oneSetting->string);
 	    char *db = namePt + strlen(CT_FILE_VAR_PREFIX);
 
-	    /* put some error catching in so it won't just abort  */
-	    struct errCatch *errCatch = errCatchNew();
-	    if (errCatchStart(errCatch))
-		customFactoryTestExistence(db, dataPt, &thisGotLiveCT, &thisGotExpiredCT);
-	    errCatchEnd(errCatch);
-	    if (errCatch->gotError)
-		warn("sessionList errCatch: %s", errCatch->message->string);
-	    errCatchFree(&errCatch);
+	    customFactoryTestExistence(db, dataPt, &thisGotLiveCT, &thisGotExpiredCT);
 
 	    ++CFTEcalls;
 	    }

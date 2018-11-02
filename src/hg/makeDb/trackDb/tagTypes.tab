@@ -371,7 +371,7 @@ scoreFilterMax bed bedlogR peptideMapping bigBed bigPsl
 scoreMax bed bedlogR interaction peptideMapping narrowPeak bigBed bigPsl
 scoreMin broadPeak narrowPeak bed bedlogR interaction peptideMapping bigBed bigPsl
 scoreLabel bed bigBed bigPsl bigGenePred
-searchIndex bigBed bigPsl bigGenePred
+searchIndex bigBed bigPsl bigGenePred bigBarChart
 searchTrix bigBed bigPsl bigGenePred
 selectSubject psl bigPsl
 seqTable bed
