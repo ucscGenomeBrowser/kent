@@ -13,7 +13,7 @@ shortLabel miRNA Tissue Atlas
 longLabel Tissue-Specific microRNA Expression from Two Individuals
 type bigBarChart
 group expression
-release alpha,beta
+release alpha,beta,public
 maxLimit 52000
 barChartLabel Tissue
 configurable off
@@ -22,7 +22,7 @@ pennantIcon New red ../releaseLog.html Created October 2018
 
     track miRnaAtlasSample1
     type bigBarChart
-    release alpha,beta
+    release alpha,beta,public
     visibility pack
     parent miRnaAtlas
     view a_A
@@ -33,7 +33,7 @@ pennantIcon New red ../releaseLog.html Created October 2018
         url2Label miRBase v21 Precursor Accession:
         parent miRnaAtlasSample1
         visibility full
-        release alpha,beta
+        release alpha,beta,public
         shortLabel Sample 1
         longLabel miRNA Tissue Atlas microRna Expression
         bigDataUrl /gbdb/hg38/bbi/miRnaAtlasSample1.bb
@@ -57,7 +57,7 @@ pennantIcon New red ../releaseLog.html Created October 2018
     track miRnaAtlasSample2
     type bigBarChart
     visibility pack
-    release alpha,beta
+    release alpha,beta,public
     parent miRnaAtlas
     view b_B
     configurable on
@@ -67,7 +67,7 @@ pennantIcon New red ../releaseLog.html Created October 2018
         url2Label miRBase v21 Precursor Accession:
         parent miRnaAtlasSample2
         visibility full
-        release alpha,beta
+        release alpha,beta,public
         shortLabel Sample 2
         longLabel miRNA Tissue Atlas microRna Expression
         bigDataUrl /gbdb/hg38/bbi/miRnaAtlasSample2.bb
