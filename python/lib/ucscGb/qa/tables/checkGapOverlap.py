@@ -103,7 +103,7 @@ def checkGapOverlap(db, table, checkUnbridged=False):
         gapUnbrFile.close()
 
         gapUnbrOverFile = str(db) + ".gapOver.unbr.bed"
-        bedIntCmd = ["bedIntersect", "-aHitAny", gapUnbrFileName, tableFileName, gapUnbrOverFile]
+        bedIntCmd = ["bedIntersect", "-allowStartEqualEnd -aHitAny", gapUnbrFileName, tableFileName, gapUnbrOverFile]
         qaUtils.runCommand(bedIntCmd)
 
         gapUnbrOverUrls = constructOutputUrls(db, table, gapUnbrOverFile)

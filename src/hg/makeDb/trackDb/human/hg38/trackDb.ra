@@ -9,33 +9,33 @@ include cancerExpr.ra
 
 track miRnaAtlas
 compositeTrack on
-release alpha,beta
-shortLabel miRNA Tissue Atlas Expression
-longLabel miRNA Tissue Atlas - microRNA Tissue Specific Expression from Two Individuals
+shortLabel miRNA Tissue Atlas
+longLabel Tissue-Specific microRNA Expression from Two Individuals
 type bigBarChart
 group expression
+release alpha,beta,public
 maxLimit 52000
 barChartLabel Tissue
 configurable off
-subGroup1 view View a_A=Individual1 b_B=Individual2
+subGroup1 view View a_A=Sample1 b_B=Sample2
 pennantIcon New red ../releaseLog.html Created October 2018
 
     track miRnaAtlasSample1
     type bigBarChart
+    release alpha,beta,public
     visibility pack
     parent miRnaAtlas
     view a_A
     configurable on
-    release alpha,beta
 
         track miRnaAtlasSample1BarChart
         url2 http://www.mirbase.org/cgi-bin/query.pl?terms=$$
-        url2Label miRBase v21 Precursor:
-        release alpha,beta
+        url2Label miRBase v21 Precursor Accession:
         parent miRnaAtlasSample1
         visibility full
+        release alpha,beta,public
         shortLabel Sample 1
-        longLabel miRNA Tissue Atlas microRna Expression, Sample 1
+        longLabel miRNA Tissue Atlas microRna Expression
         bigDataUrl /gbdb/hg38/bbi/miRnaAtlasSample1.bb
         barChartMatrixUrl /gbdb/hgFixed/human/expMatrix/miRnaAtlasSample1Matrix.txt
         barChartSampleUrl /gbdb/hgFixed/human/expMatrix/miRnaAtlasSample1.txt
@@ -52,38 +52,39 @@ pennantIcon New red ../releaseLog.html Created October 2018
         html miRnaAtlas
         configurable on
         subGroups view=a_A
+        searchIndex name
 
     track miRnaAtlasSample2
     type bigBarChart
     visibility pack
+    release alpha,beta,public
     parent miRnaAtlas
     view b_B
     configurable on
-    release alpha,beta
 
         track miRnaAtlasSample2BarChart
         url2 http://www.mirbase.org/cgi-bin/query.pl?terms=$$
-        url2Label miRBase v21 Precursor:
-        release alpha,beta
+        url2Label miRBase v21 Precursor Accession:
         parent miRnaAtlasSample2
         visibility full
+        release alpha,beta,public
         shortLabel Sample 2
-        longLabel miRNA Tissue Atlas microRna Expression, Sample 2
+        longLabel miRNA Tissue Atlas microRna Expression
         bigDataUrl /gbdb/hg38/bbi/miRnaAtlasSample2.bb
         barChartMatrixUrl /gbdb/hgFixed/human/expMatrix/miRnaAtlasSample2Matrix.txt
         barChartSampleUrl /gbdb/hgFixed/human/expMatrix/miRnaAtlasSample2.txt
         barChartBars adipocyte artery colon dura_mater kidney liver lung muscle myocardium skin \
             spleen stomach testis thyroid small_intestine_duodenum small_intestine_jejunum pancreas \
-            kidney_glandula_suprarenalis kidney_cortex_renalis esophagus prostate bone_marrow vein \
-            lymph_node nerve_not_specified pleura brain_pituitary_gland spinal_cord brain_thalamus \
-            brain_white_matter brain_nucleus_caudatus kidney_medulla_renalis brain_gray_matter \
+            kidney_glandula_suprarenalis kidney_cortex_renalis kidney_medulla_renalis esophagus prostate \
+            bone_marrow vein lymph_node nerve_not_specified pleura brain_pituitary_gland spinal_cord \
+            brain_thalamus brain_white_matter brain_nucleus_caudatus brain_gray_matter \
             brain_cerebral_cortex_temporal brain_cerebral_cortex_frontal \
             brain_cerebral_cortex_occipital brain_cerebellum
         barChartColors #F7A028 #F73528 #DEBE98 #86BF80 #CDB79E #CDB79E #9ACD32 #7A67AE #9745AC #1E90FF \
-            \#CDB79E #FFD39B #A6A6A6 #008B45 #CDB79E #CDB79E #CD9B10 \
-            \#CDB79E #CDB79E #AC8F69 #D9D9D9 #BD3487 #FF00FF \
-            \#EE82EE #F7E300 #73A585 #B4EEB4 #EEEE00 #EEEE00 \
-            \#EEEE00 #EEEE00 #CDB79E #EEEE00 \
+            \#CDB79E #FFD39B #A6A6A6 #008B45 #CDB79E #CDB79E #CD9B1D \
+            \#CDB79E #CDB79E #CDB79E #AC8F69 #D9D9D9 #BD3487 \
+            \#FF00FF #EE82EE #F7E300 #73A585 #B4EEB4 #EEEE00 \
+            \#EEEE00 #EEEE00 #EEEE00 #EEEE00 \
             \#EEEE00 #EEEE00 \
             \#EEEE00 #EEEE00
         group expression
@@ -93,6 +94,21 @@ pennantIcon New red ../releaseLog.html Created October 2018
         html miRnaAtlas
         configurable on
         subGroups view=b_B
+        searchIndex name
+
+searchTable miRnaAtlasSample1BarChart
+searchType bigBed
+searchPriority 1
+searchDescription miRNA Tissue Atlas Sample 1
+searchMethod exact
+semiShortCircuit 1
+
+searchTable miRnaAtlasSample2BarChart
+searchType bigBed
+searchPriority 1
+searchDescription miRNA Tissue Atlas Sample 2
+searchMethod exact
+semiShortCircuit 1
 
 track cosmicRegions
 shortLabel COSMIC Regions
@@ -562,8 +578,8 @@ include trackDb.cloneEnd.ra
 
 include hg38Patch11.ra beta,public
 
-include knownGene.alpha.ra  alpha
-include knownGene.ra  beta,public
+include knownGene.alpha.ra  alpha,beta
+include knownGene.ra  public
 
 include trackDb.100way.ra
 include trackDb.145way.ra alpha
