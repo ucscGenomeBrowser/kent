@@ -16,6 +16,8 @@
 #include <signal.h>
 #include "obscure.h"
 
+int version = 37;  // PLEASE INCREMENT THIS WITH EVERY COMMIT
+
 #define savedSessionTable "namedSessionDb"
 
 int CFTEcalls = 0; 
@@ -149,7 +151,7 @@ while (1)
 	    {
 	    /* Interrupted by a signal other than SIGCHLD. */
 	    /* An minor improvement would be to subtract the time already consumed before continuing. */
-	    verbose(1, "EINTR received, ignoring");
+	    verbose(1, "EINTR received, ignoring.\n");
 	    fflush(stdout); fflush(stderr);
 	    continue;
 	    }
@@ -296,10 +298,10 @@ while (isNotEmpty(namePt))
 	{
 	cgiDecode(dataPt, dataPt, strlen(dataPt));
 	if (fileExists(dataPt))
-           {
-           verbose(4, "setting compositeFile: %s\n", dataPt);
-	   dyStringAppend(newContents, oneSetting->string);
-           }
+	    {
+	    verbose(4, "setting compositeFile: %s\n", dataPt);
+	    dyStringAppend(newContents, oneSetting->string);
+	    }
 	}
     else
 	{
@@ -346,6 +348,10 @@ void refreshNamedSessionCustomTracks(char *centralDbName)
 /* refreshNamedSessionCustomTracks -- cron robot for keeping alive custom 
  * tracks that are referenced by saved sessions. */
 {
+// Helpful for showing rapid version changes.  
+// Be sure to increment this when committing and pushing.
+// People testing will know they have the correct new version.
+verbose(1, "refreshNamedSessionCustomTracks version #%d\n", version);  
 
 struct sqlConnection *conn = unCachedCentralConn();
 char *actualDbName = sqlGetDatabase(conn);
@@ -397,46 +403,77 @@ if (sqlTableExists(conn, savedSessionTable))
 	safecpy(si->sessionName, sizeof(si->sessionName), row[1]);
 	slAddHead(&sessionList, si);
 	}
+    // processing them in the same order they appear in the table helps testing 
+    slReverse(&sessionList); 
     sqlFreeResult(&sr);
     }
 else
     errAbort("ERROR: can not find table %s.%s on central.host: '%s'",
 	savedSessionTable, centralDbName, cfgOption("central.host"));
 
+// parent must close all db connections before forking
 sqlDisconnect(&conn);
 
-int childDone=0;
-int perFork = (slCount(sessionList) + (numForks - 1)) / numForks;
-if (perFork < 1)
-    perFork = 1;
-
-verbose(1, "listlength=%d numForks=%d perFork = %d\n", slCount(sessionList), numForks, perFork);
+int sessionsPerForkDone=0; // number of sessions done for current fork
+int listLength = slCount(sessionList);
+int perFork = listLength / numForks;  // number of sessions per fork
+int forkRem = listLength % numForks;  // remainder of the above division
+if (forkRem > 0)
+    ++perFork;   // deal with remainder by starting off with elevated perFork
 
 pid_t pid = 0;
 boolean parent = TRUE;
+int fork = 0;
+
+// DEALING WITH USING LOTS OF MEMORY
+// To avoid taking too much ram from leaks when loading the saved named sessions,
+// this program splits the session list into numForks pieces (default 10),
+// and the hands them off to a child forked process.
+// When the child finishes, the operating system will free up its memory.
+// This repeats for each child until the entire list has finished.
+// The children run sequentially, not in parallel.
+
+// It is CRUCIAL that this program exits with non-zero exit code
+// when it or any of its children exit non-zero, abort, get killed, or crash,
+// in order to tell the calling program that it has failed.
+// This is the only thing will stop the deletion and loss of saved named sessions!
+
+// Every single session MUST be processed in order to save it from deletion.
 for (si = sessionList;  si != NULL;  si = si->next)
     {
-    if (parent && childDone == 0)
+	
+    if (parent && sessionsPerForkDone == 0)
 	{
 	pid = forkIt();
 	if (pid == 0)
 	    {
 	    parent = FALSE;
-	    conn = unCachedCentralConn();
+	    conn = unCachedCentralConn(); // avoid cached connections when forking 
 	    }
         }
     
     if (!parent)
+	{
     	scanSettingsForCT(si->userName, si->sessionName, &liveCount, &expiredCount, conn);
-    ++childDone;
+	}
+    ++sessionsPerForkDone;
 
-    if (!si->next)
-        childDone = perFork;
-	
-    if (childDone >= perFork)
+    if (sessionsPerForkDone >= perFork) 
+	// the fork has done all of its sessions
 	{
 
-	childDone = 0;
+	// Adjust for the fact that divisions have remainders.
+	// We want to split the list into numForks, but it often does not divide evenly.
+	// The first forkRem forks will get one extra session to do if forkRem > 0.
+	// It use important that we do not create any extra fork so that the count will
+	// match numForks (default 10) in the output.
+
+	++fork;
+
+	if (fork == forkRem) 
+	    --perFork;
+
+	sessionsPerForkDone = 0;
 	if (parent)
 	    {
 	    waitForChildWithTimeout(pid);
@@ -448,11 +485,17 @@ for (si = sessionList;  si != NULL;  si = si->next)
 	    verbose(1, "Found %d live and %d expired custom tracks in %s.\n",
 		liveCount, expiredCount, centralDbName);
 	    sqlDisconnect(&conn);
-	    showVmPeak();
+	    // Causes "VmPeak" to appear in the stderr output.
+	    // The caller of this program can look for exactly numForks
+	    // lines of "VmPeak" in the output as a double-check that the program completed.
+	    showVmPeak();  
+	    verbose(1, "forked child process# %d done.\n", fork);
 	    exit(0);
 	    }
 	}
     }
+
+verbose(1, "parent process done.\n");
 
 }
 
@@ -460,8 +503,17 @@ for (si = sessionList;  si != NULL;  si = si->next)
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+// EXERCISE CARE WHEN MODIFYING THIS PROGRAM!
 
-optionInit(&argc, argv, options);
+// THIS PROGRAM IS CRITICAL FOR PRESERVING USER SAVED SESSION DATA
+// ESPECIALLY CUSTOM TRACKS DATA AND CUSTOM TRACKS DATABASE.  
+// BE SURE TO DISCUSS CHANGES IN DETAIL WITH THE PEOPLE THAT RUN THE PROGRAM.
+
+// Please also increment the "version" variable at the top of the source.
+// This is helpful when you are commiting a new change and giving it
+// to others to run or test with the trash cleaning scripts,
+// especially when it is changing rapidly.
+optionInit(&argc, argv, options); // causes it to emit ### kent source version 999 ###
 if (argc != 2)
     usage();
 numForks = optionInt("forks", numForks);
