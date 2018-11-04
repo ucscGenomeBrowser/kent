@@ -228,12 +228,26 @@ return ((chrom = hgOfficialChromName(db, name)) != NULL &&
 	sameString(name, chrom));
 }
 
+static boolean minLen = 0;
+
+void setMinIndexLengthForTrashCleaner()
+/* set the minimum index size so trash cleaner will not die
+ * on custom tracks on hubs that are not currently loading.
+ * However, they might be re-established in the future,
+ * and we want to allow it to proceed without failure
+ * in order to touch the trash database table access times,
+ * preserving them from the trash cleaner.
+ * Only the trash cleaner should call this:
+ *  src/hg/utils/refreshNamedCustomTracks/refreshNamedCustomTracks.c 
+ */
+{
+minLen = 1;  // any value other than 0 is fine.
+}
 
 int hGetMinIndexLength(char *db)
 /* get the minimum index size for the given database that won't smoosh
  * together chromNames. */
 {
-static boolean minLen = 0;
 if (minLen <= 0)
     {
     struct slName *nameList = hAllChromNames(db);

@@ -16,7 +16,9 @@
 #include <signal.h>
 #include "obscure.h"
 
-int version = 37;  // PLEASE INCREMENT THIS WITH EVERY COMMIT
+int version = 38;  // PLEASE INCREMENT THIS BEFORE PUSHING TO SHARED REPO
+                   // SO THAT OTHERS MAY TEST WITH IT, SO THAT EVERYONE KNOWS THEY HAVE THE
+                   // EXACT RIGHT VERSION.
 
 #define savedSessionTable "namedSessionDb"
 
@@ -352,6 +354,17 @@ void refreshNamedSessionCustomTracks(char *centralDbName)
 // Be sure to increment this when committing and pushing.
 // People testing will know they have the correct new version.
 verbose(1, "refreshNamedSessionCustomTracks version #%d\n", version);  
+
+// Avoids a problem in hdb.c deep in the library
+// that would otherwise fail when trying to set this
+// on a new child process using a custom track that
+// was defined on a hub that is not presently able to load.
+// However, because that hub might be OK in the future,
+// we need to not fail and keep touching the custom trash db files.
+// This static library variable has been wrong ever since this program was created
+// and run to clean the trash, so clearly it is not actually needed 
+// for the trash cleaning.
+setMinIndexLengthForTrashCleaner();  
 
 struct sqlConnection *conn = unCachedCentralConn();
 char *actualDbName = sqlGetDatabase(conn);
