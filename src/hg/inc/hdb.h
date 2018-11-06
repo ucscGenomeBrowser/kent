@@ -883,6 +883,17 @@ struct grp* hLoadGrps(char *db);
 /* load the grp tables using the list configured in hg.conf, returning a list
  * sorted by priority. */
 
+void setMinIndexLengthForTrashCleaner();
+/* set the minimum index size so trash cleaner will not die
+ * on custom tracks on hubs that are not currently loading.
+ * However, they might be re-established in the future,
+ * and we want to allow it to proceed without failure
+ * in order to touch the trash database table access times,
+ * preserving them from the trash cleaner.
+ * Only the trash cleaner should call this:
+ *  src/hg/utils/refreshNamedCustomTracks/refreshNamedCustomTracks.c 
+ */
+
 int hGetMinIndexLength(char *db);
 /* get the minimum index size for the given database that won't smoosh
  * together chromNames such that any group of smooshed entries has a

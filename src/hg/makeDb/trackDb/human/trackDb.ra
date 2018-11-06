@@ -17,7 +17,7 @@ include trackDb.pgSnp.ra
 include trackDb.gtex.ra
 
 # GeneHancer from Weizmann labs
-include trackDb.geneHancer.ra alpha,beta
+include trackDb.geneHancer.ra
 
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)

@@ -33112,7 +33112,12 @@ EOF
     time (~/kent/src/hg/utils/automation/doCrispr.pl \
 	-buildDir=`pwd` -smallClusterHub=hgwdev-101 hg19 ncbiRefSeq) \
 	> do.log 2>&1
-XXX - running - Wed Oct 24 12:53:27 PDT 2018
-    # real    23m26.694s
+    # due to hive interruptions, the specScores step took 6 days to complete
+    # it probably would have been done in about 3 or 4 with no interference
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+	-continue=effScores -buildDir=`pwd` \
+	-smallClusterHub=hgwdev-101 hg19 ncbiRefSeq) > effScores.log 2>&1
+XXX - Wed Oct 31 07:53:55 PDT 2018
 
 ##############################################################################
