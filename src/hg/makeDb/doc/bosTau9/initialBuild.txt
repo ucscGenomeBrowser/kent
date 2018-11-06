@@ -240,35 +240,31 @@ chrM    16338   5457    4238    2202    4441    0       358
     # then finish it off:
     time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
        -fileServer=hgwdev -continue=db bosTau9.config.ra) > db.log 2>&1
-XXX - running - Tue Nov  6 12:00:06 PST 2018
-    # real    21m31.622s
+    # real    15m27.039s
 
-    # verify gaps are all there, the 2bit was created with hgFakeAgp
-    # with a min gap size of 1, and so we get more gaps from the 2bit
-    # than in the gap table
+    # verify gaps are all there
     twoBitInfo -nBed bosTau9.unmasked.2bit stdout | awk '{print $3-$2}' \
 	| ave stdin | sed -e 's/^/# /;'
-# Q1 100.000000
-# median 100.000000
-# Q3 685.000000
-# average 628.481937
-# min 1.000000
-# max 24582.000000
-# count 44566
-# total 28008926.000000
-# standard deviation 1110.525457
+# Q1 25.000000
+# median 25.000000
+# Q3 100.000000
+# average 72.958549
+# min 23.000000
+# max 252.000000
+# count 386
+# total 28162.000000
+# standard deviation 71.040090
 
+    # the gap table has nothing
+    hgsql -e 'select count(*) from gap;' bosTau9
++----------+
+| count(*) |
++----------+
+|        0 |
++----------+
+
+    # otherwise, compare to the gap table:
     hgsql -e 'select chromEnd-chromStart from gap;' bosTau9 | ave stdin | sed -e 's/^/# /;'
-# Q1 100.000000
-# median 100.000000
-# Q3 721.000000
-# average 650.935140
-# min 10.000000
-# max 24582.000000
-# count 43016
-# total 28000626.000000
-# standard deviation 1123.926322
-
 
     # check in the trackDb files created in TemporaryTrackDbCheckout/
     #    and add bosTau9 to trackDb/makefile
@@ -278,7 +274,7 @@ XXX - running - Tue Nov  6 12:00:06 PST 2018
     ln -s `pwd`/bosTau9.unmasked.2bit /gbdb/bosTau9/bosTau9.2bit
 
 ##############################################################################
-# cpgIslands on UNMASKED sequence (TBD - 2018-04-20 - Hiram)
+# cpgIslands on UNMASKED sequence (DONE - 2018-11-06 - Hiram)
     mkdir /hive/data/genomes/bosTau9/bed/cpgIslandsUnmasked
     cd /hive/data/genomes/bosTau9/bed/cpgIslandsUnmasked
 
@@ -286,24 +282,39 @@ XXX - running - Tue Nov  6 12:00:06 PST 2018
        -tableName=cpgIslandExtUnmasked \
           -maskedSeq=/hive/data/genomes/bosTau9/bosTau9.unmasked.2bit \
              -workhorse=hgwdev -smallClusterHub=ku bosTau9) > do.log 2>&1
+XXX - running - Tue Nov  6 14:59:27 PST 2018
     # real    4m59.915s
 
     cat fb.bosTau9.cpgIslandExtUnmasked.txt
     # 29501154 bases of 2587515673 (1.140%) in intersection
 
 #############################################################################
-# cytoBandIdeo - (TBD - 2018-04-20 - Hiram)
+# cytoBandIdeo - (DONE - 2018-11-06 - Hiram)
     mkdir /hive/data/genomes/bosTau9/bed/cytoBand
     cd /hive/data/genomes/bosTau9/bed/cytoBand
     makeCytoBandIdeo.csh bosTau9
 
 #############################################################################
-# gapOverlap (TBD - 2018-04-20 - Hiram)
+# run up idKeys files for chromAlias/ncbiRefSeq (DONE - 2018-11-06 - Hiram)
+    mkdir /hive/data/genomes/bosTau9/bed/idKeys
+    cd /hive/data/genomes/bosTau9/bed/idKeys
+
+    time (doIdKeys.pl \
+        -twoBit=/hive/data/genomes/bosTau9/bosTau9.unmasked.2bit \
+        -buildDir=`pwd` bosTau9) > do.log 2>&1 &
+    # real    0m47.105s
+
+    cat bosTau9.keySignature.txt
+    #  7850e2d5dabb6134fdc9d7083f1a3a54
+
+#############################################################################
+# gapOverlap (DONE - 2018-11-06 - Hiram)
     mkdir /hive/data/genomes/bosTau9/bed/gapOverlap
     cd /hive/data/genomes/bosTau9/bed/gapOverlap
     time (doGapOverlap.pl \
 	-twoBit=/hive/data/genomes/bosTau9/bosTau9.unmasked.2bit bosTau9 ) \
 	> do.log 2>&1
+XXX - running - Tue Nov  6 15:01:28 PST 2018
     # real    15m25.615s
 
     cat fb.bosTau9.gapOverlap.txt
@@ -318,12 +329,13 @@ XXX - running - Tue Nov  6 12:00:06 PST 2018
       3 chr4
 
 #############################################################################
-# tandemDups (TBD - 2018-04-20 - Hiram)
+# tandemDups (DONE - 2018-11-06 - Hiram)
     mkdir /hive/data/genomes/bosTau9/bed/tandemDups
     cd /hive/data/genomes/bosTau9/bed/tandemDups
     time (~/kent/src/hg/utils/automation/doTandemDup.pl \
   -twoBit=/hive/data/genomes/bosTau9/bosTau9.unmasked.2bit bosTau9) \
 	> do.log 2>&1 &
+XXX - running - Tue Nov  6 15:02:07 PST 2018
     # real    88m43.940s
 
     cat fb.bosTau9.tandemDups.txt
@@ -348,118 +360,89 @@ XXX - running - Tue Nov  6 12:00:06 PST 2018
 #  std of depth: 12.907523
 
 #############################################################################
-# run up idKeys files for chromAlias/ncbiRefSeq (TBD - 2018-04-20 - Hiram)
-    mkdir /hive/data/genomes/bosTau9/bed/idKeys
-    cd /hive/data/genomes/bosTau9/bed/idKeys
-
-    time (doIdKeys.pl \
-	-twoBit=/hive/data/genomes/bosTau9/bosTau9.unmasked.2bit \
-	-buildDir=`pwd` bosTau9) > do.log 2>&1 &
-    # real    4m10.302s
-
-    cat bosTau9.keySignature.txt
-    #  790b46494bd4998aeb10d01d37f71791
-
-#############################################################################
-# ucscToINSDC and ucscToRefSeq table/track (TBD - 2018-04-23 - Hiram)
-    # the sequence here is working for a 'refseq' assembly
-    # beware of a chrM situation may be specific depending upon what is
-    # available in the assembly
-
-    mkdir /hive/data/genomes/bosTau9/bed/ucscToINSDC
-    cd /hive/data/genomes/bosTau9/bed/ucscToINSDC
-    
-    # missing idKey for refSeq and genbank assemblies so make them first
-    # first add refSeq keys
-    mkdir /hive/data/genomes/bosTau9/refSeq/idKeys
-    cd /hive/data/genomes/bosTau9/refSeq/idKeys
-    faToTwoBit ../GCF_000298735.2_OarD1.2_genomic.fna.gz bosTau9.refSeq.2bit
+# ucscToINSDC and ucscToRefSeq table/track (DONE - 2018-11-06 - Hiram)
+    # construct idKeys for the refseq sequence
+    mkdir /hive/data/genomes/bosTau9/refseq/idKeys
+    cd /hive/data/genomes/bosTau9/refseq/idKeys
+    faToTwoBit ../GCF_002263795.1_ARS-UCD1.2_genomic.fna.gz bosTau9.refSeq.2bit
 
     time (doIdKeys.pl -buildDir=`pwd` \
-        -twoBit=`pwd`/bosTau9.refSeq.2bit bosTau9)  > do.log 2>&1 &
-    # real  11m55.410s
+        -twoBit=`pwd`/bosTau9.refSeq.2bit refseqBosTau9)  > do.log 2>&1 &
+XXX - running - Tue Nov  6 15:11:56 PST 2018
+    # real    0m48.786s
 
-    cat bosTau9.keySignature.txt 
-    # 790b46494bd4998aeb10d01d37f71791
+    cat refseqBosTau9.keySignature.txt
+    #  7850e2d5dabb6134fdc9d7083f1a3a54
 
-    # now genbank
-    mkdir /hive/data/genomes/bosTau9/refSeq/idKeysGenbank
-    cd /hive/data/genomes/bosTau9/refSeq/idKeysGenbank
-    ln -s /hive/data/outside/ncbi/genomes/genbank/vertebrate_mammalian/Ovis_aries/all_assembly_versions/GCA_000298735.2_OarD1.2/GCA_000298735.2_Oar_v4.0_genomic.fna.gz .
-    faToTwoBit GCA_000298735.2_Oar_v4.0_genomic.fna.gz bosTau9.genbank.2bit
+    # and the genbank sequence needs keys too:
+    mkdir /hive/data/genomes/bosTau9/refseq/idKeysGenbank
+    cd /hive/data/genomes/bosTau9/refseq/idKeysGenbank
+    faToTwoBit /hive/data/outside/ncbi/genomes/genbank/vertebrate_mammalian/Bos_taurus/all_assembly_versions/GCA_002263795.2_ARS-UCD1.2/GCA_002263795.2_ARS-UCD1.2_genomic.fna.gz bosTau9.genbank.2bit
 
-    time ( doIdKeys.pl -buildDir=`pwd` \
-        -twoBit=`pwd`/bosTau9.genbank.2bit bosTau9 ) > do.log 2>&1 &
-    # real  11m56.978s
+    time (doIdKeys.pl -buildDir=`pwd` \
+        -twoBit=`pwd`/bosTau9.genbank.2bit genbankBosTau9)  > do.log 2>&1 &
+XXX - running - Tue Nov  6 15:14:12 PST 2018
 
-    cat bosTau9.keySignature.txt 
-    # cccd25ef9c9a8f4c210b7c32415a7ca1
+    cat genbankBosTau9.keySignature.txt
+    #  a20fdad3318d371fcb34fcc66bab3752
+
+    mkdir /hive/data/genomes/bosTau9/bed/chromAlias
 
     join -t$'\t' ../idKeys/bosTau9.idKeys.txt \
-	../../refseq/idKeysGenbank/bosTau9.idKeys.txt | cut -f2- \
+        ../../refseq/idKeysGenbank/genbankBosTau9.idKeys.txt | cut -f2- \
           | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
             | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
                | sort -k1,1 -k2,2n > ucscToINSDC.bed
 
     join -t$'\t' ../idKeys/bosTau9.idKeys.txt \
-	../../refseq/idKeys/bosTau9.idKeys.txt | cut -f2- \
+        ../../refseq/idKeys/refseqBosTau9.idKeys.txt | cut -f2- \
           | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
             | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
                | sort -k1,1 -k2,2n > ucscToRefSeq.bed
 
-    # verify line counts are the same
-    wc -l *.bed ../../chrom.sizes
-    #  5465 ucscToINSDC.bed
-    #  5466 ucscToRefSeq.bed
-    #  5466 ../../chrom.sizes
-
-    # need to find INSDC equivalents for chrM:
-    egrep "chrM" *
-ucscToRefSeq.bed:chrM   0   16616   NC_001941.1
-
-    # lookup those accessions at NCBI Entrez
-    # NC_001941.1 = AF010406.1
-    printf "chrM\t0\t16616\tAF010406.1\n" >> ucscToINSDC.bed
-
-    # resort the bed file:
-    sort -k1,1 -k2,2n -o ucscToINSDC.bed ucscToINSDC.bed
-
-    # verify chrM is correct:
-    egrep "chrM|chrY" *
-ucscToINSDC.bed:chrM    0   16616   AF010406.1
-ucscToRefSeq.bed:chrM   0   16616   NC_001941.1
-
     # should be same line counts throughout:
-    # wc -l *.bed ../../chrom.sizes 
-    #   5466 ucscToINSDC.bed
-    #   5466 ucscToRefSeq.bed
-    #   5466 ../../chrom.sizes
+    wc -l * ../../chrom.sizes
+    #   463 ucscToINSDC.bed
+    #   464 ucscToRefSeq.bed
+    #   464 ../../chrom.sizes
+
+    # need to find the accession for the INSDC equivalent to chrM:
+    egrep chrM *
+# ucscToRefSeq.bed:chrM   0       16775   NC_001323.1
+    # lookup that accession at NCBI Entrez: X52392.1
+    # and add to ucscToINSDC.bed:
+    printf "chrM\t0\t16775\tX52392.1\n" >> ucscToINSDC.bed
+    # verify:
+    grep chrM *
+# ucscToINSDC.bed:chrM    0       16775   X52392.1
+# ucscToRefSeq.bed:chrM   0       16775   NC_001323.1
 
     export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
     echo $chrSize
-    # 20
+    # 27
     # use the $chrSize in this sed
     sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
          | hgLoadSqlTab bosTau9 ucscToINSDC stdin ucscToINSDC.bed
-    # should be the same for ucscToRefSeq:
+     # should be the same for ucscToRefSeq:
     export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
     echo $chrSize
-    #  20
+    # 27
     sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
-       | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
-    hgLoadSqlTab bosTau9 ucscToRefSeq ./ucscToRefSeq.sql ucscToRefSeq.bed
+       | sed -e 's/INSDC/RefSeq/g;' \
+         | hgLoadSqlTab bosTau9 ucscToRefSeq stdin ucscToRefSeq.bed
 
-    # checkTableCoords should be silent
+    # should be quiet for all OK
     checkTableCoords bosTau9
 
-    # each should cover %100 entirely:
+    # should cover %100 entirely:
+    featureBits -countGaps bosTau9 ucscToINSDC
+    # 1065365425 bases of 1065365425 (100.000%) in intersection
     featureBits -countGaps bosTau9 ucscToRefSeq
-    # 2615516299 bases of 2615516299 (100.000%) in intersection
-    featureBits -countGaps bosTau9 ucscToINSDC 
-    # 2615516299 bases of 2615516299 (100.000%) in intersection
+    # 1065365425 bases of 1065365425 (100.000%) in intersection
 
 #########################################################################
 # add chromAlias table (TBD - 2018-04-23 - Hiram)
+    # after ucscToRefSeq and ucscToINSDC tables have been created
 
     mkdir /hive/data/genomes/bosTau9/bed/chromAlias
     cd /hive/data/genomes/bosTau9/bed/chromAlias
@@ -489,45 +472,46 @@ done
         bosTau9.chromAlias.tab
 
 #########################################################################
-# fixup search rule for assembly track/gold table (TBD - 2018-04-23 - Hiram)
-    cd ~/kent/src/hg/makeDb/trackDb/sheep/bosTau9
+# fixup search rule for assembly track/gold table (DONE - 2018-11-06 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/cow/bosTau9
 
     # preview prefixes and suffixes:
     hgsql -N -e "select frag from gold;" bosTau9 \
       | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c | sed -e 's/^/#\t/;'
-    #     48481 AMGL.1
-    #         1 NC_.1
-               
-    # implies a rule: '[AN][MC][GL0-9_]+(\.[0-9]+)?'
+    #             1 NC_.1
+    #          2210 NKLS.1
+
+    # implies a rule: 'N[CK][LS0-9_]+(\.[0-9]+)?'
 
     # verify this rule will find them all and eliminate them all:
     hgsql -N -e "select frag from gold;" bosTau9 | wc -l
-    # 5254
+    # 2211
 
     hgsql -Ne "select frag from gold" bosTau9 \
-        | egrep -e '[AN][MC][GL0-9_]+(\.[0-9]+)?' | wc -l
-    # 48482
+        | egrep -e 'N[CK][LS0-9_]+(\.[0-9]+)?' | wc -l
+    # 2211
 
     hgsql -Ne "select frag from gold" bosTau9 \
-        | egrep -v -e '[AN][MC][GL0-9_]+(\.[0-9]+)?' | wc -l
+        | egrep -v -e 'N[CK][LS0-9_]+(\.[0-9]+)?' | wc -l
     # 0
 
-    # hence, add to trackDb/sheep/bosTau9/trackDb.ra
+    # hence, add to trackDb/cow/bosTau9/trackDb.ra
 searchTable gold
 shortCircuit 1
-termRegex [ABN][ACSB][ACGZ0-9_]+(\.[0-9]+)?
+termRegex N[CK][LS0-9_]+(\.[0-9]+)?
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
     # verify searches work in the position box
 
 #############################################################################
-# running repeat masker (TBD - 2018-04-20 - Hiram)
+# running repeat masker (DONE - 2018-11-06 - Hiram)
     mkdir /hive/data/genomes/bosTau9/bed/repeatMasker
     cd /hive/data/genomes/bosTau9/bed/repeatMasker
     time  (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku bosTau9) > do.log 2>&1 &
+XXX - running - Tue Nov  6 15:03:08 PST 2018
     # real    459m57.416s
 
     egrep "bases|Total|masked" faSize.rmsk.txt \
@@ -559,7 +543,7 @@ searchPriority 8
     # real    0m38.423s
 
 ##########################################################################
-# running simple repeat (TBD - 2018-03-23 - Hiram)
+# running simple repeat (DONE - 2018-11-06 - Hiram)
 
     mkdir /hive/data/genomes/bosTau9/bed/simpleRepeat
     cd /hive/data/genomes/bosTau9/bed/simpleRepeat
@@ -567,6 +551,7 @@ searchPriority 8
     time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
         -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
         -trf409 6 bosTau9) > do.log 2>&1 &
+XXX - running - Tue Nov  6 15:04:34 PST 2018
     # real    273m49.147s
 
     cat fb.simpleRepeat
