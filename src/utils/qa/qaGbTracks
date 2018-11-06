@@ -49,6 +49,8 @@ def cleanTableList(tableList):
         if "." in tbl:
             ix = tbl.index(".")
             ret.append(tbl[ix+1:])
+        else:
+            ret.append(tbl)
     return ret
 
 def checkTablesReceived(tableList, outFile):
