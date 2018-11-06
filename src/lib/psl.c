@@ -1951,13 +1951,12 @@ if (cigar == NULL)
     }
 else
     {
+    if (strand[0] == '-' && strand[1] == '-')
+        errAbort("GFF3 spec is vague about Gap when both strands are '-'; not implemented yet.");
     char cigarSpec[strlen(cigar)+1];  // copy since parsing is destructive
-    strcpy(cigarSpec, cigar);
+    safecpy(cigarSpec, sizeof cigarSpec, cigar);
     char *cigarNext = cigarSpec;
-    if (strand[1] == '-')
-	for(; *cigarNext; cigarNext++)
-	    ;
-    while(getNextCigarOp(cigarSpec, (strand[1] == '-'), &cigarNext, &op, &size))
+    while(getNextCigarOp(cigarSpec, FALSE, &cigarNext, &op, &size))
 	{
 	switch (op)
 	    {
