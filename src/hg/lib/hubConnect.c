@@ -224,6 +224,10 @@ struct slPair *pair, *pairList = cartVarsWithPrefix(cart, hgHubConnectHubVarPref
 struct sqlConnection *conn = hConnectCentral();
 for (pair = pairList; pair != NULL; pair = pair->next)
     {
+    // is this hub turned connected??
+    if (differentString(pair->val, "1"))
+        continue;
+
     int id = hubIdFromCartName(pair->name);
     hub = hubConnectStatusForId(conn, id);
     if (hub != NULL)
