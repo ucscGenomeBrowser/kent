@@ -1010,5 +1010,5 @@ $hgLoadSqlTab $tempDb knownToTreefam $kent/src/hg/lib/knownTo.sql knownToTreefam
 # make bigKnownGene.bb
 cd $dir
 makeBigKnown hg38
-rm -f /gbdb/hg38/knownGene.bb
-ln -s `pwd`/hg38.knownGene.bb /gbdb/hg38/knownGene.bb
+rm -f /gbdb/hg38/knownGene29.bb
+ln -s `pwd`/hg38.knownGene.bb /gbdb/hg38/knownGene29.bb
