@@ -16,7 +16,7 @@
 #include <signal.h>
 #include "obscure.h"
 
-int version = 38;  // PLEASE INCREMENT THIS BEFORE PUSHING TO SHARED REPO
+int version = 39;  // PLEASE INCREMENT THIS BEFORE PUSHING TO SHARED REPO
                    // SO THAT OTHERS MAY TEST WITH IT, SO THAT EVERYONE KNOWS THEY HAVE THE
                    // EXACT RIGHT VERSION.
 
@@ -290,6 +290,8 @@ while (isNotEmpty(namePt))
 	    {  // should have a bed file in trash and a sha1 for quick change detection
 	    if (fileExists(dataPt) && fileExists(multiRegionsBedUrlSha1Name))
 		{
+		readAndIgnore(dataPt); // touch access time
+		readAndIgnore(multiRegionsBedUrlSha1Name);
 		verbose(4, "setting multiRegionsBedUrl: %s\n", dataPt);
 		verbose(4, "setting multiRegionsBedUrl: %s\n", multiRegionsBedUrlSha1Name);
 	        dyStringAppend(newContents, oneSetting->string);
@@ -301,6 +303,7 @@ while (isNotEmpty(namePt))
 	cgiDecode(dataPt, dataPt, strlen(dataPt));
 	if (fileExists(dataPt))
 	    {
+	    readAndIgnore(dataPt); // touch access time
 	    verbose(4, "setting compositeFile: %s\n", dataPt);
 	    dyStringAppend(newContents, oneSetting->string);
 	    }
