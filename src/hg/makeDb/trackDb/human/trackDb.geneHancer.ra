@@ -8,7 +8,7 @@ sortOrder set=+ view=+
 dimensions dimX=set dimY=view
 type bed 3
 visibility hide
-pennantIcon New red ../goldenPath/releaseLog.html  created September 2018
+pennantIcon New red ../goldenPath/newsarch.html#110718  created September 2018
 group regulation
 priority 1.5
 
