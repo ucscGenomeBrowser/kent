@@ -357,7 +357,7 @@ trashDirFile(&pngTn, "hgc", "barChart", ".png");
 
 /* Exec R in quiet mode, without reading/saving environment or workspace */
 char cmd[512];
-safef(cmd, sizeof(cmd), "Rscript --vanilla --slave hgcData/barChartBoxplot.R %s %s %s %s %s %s",
+safef(cmd, sizeof(cmd), "Rscript --vanilla --slave hgcData/barChartBoxplot.R %s '%s' %s %s %s %s",
                                 item, units, colorFile, df, pngTn.forHtml, isEmpty(name2) ? "n/a" : name2);
 int ret = system(cmd);
 if (ret == 0)
