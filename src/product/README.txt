@@ -162,7 +162,6 @@ The following external websites were not created by UCSC
 staff and are of varying quality, but may be helpful when installing on
 unusual platforms.
 
-* [Installation on CentOS](http://bergmanlab.smith.man.ac.uk/?p=1111)
 * [Installation on Ubuntu](http://enotacoes.wordpress.com/2009/09/03/installing-a-minimal-ucsc-mirror-in-ubuntu-jaunty-64-bits/)
 * [Installation into a FreeBSD jail](http://www.bioinformatics.uni-muenster.de/download/ucsc), by Norbert Grundmann, Universitaet Muenster, Germany
 * [Compilation of the Kent source tree on OSX with fink](http://bergmanlab.ls.manchester.ac.uk/?p=32) by Casey Bergman, Manchester, UK

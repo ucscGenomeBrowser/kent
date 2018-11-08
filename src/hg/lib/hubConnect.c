@@ -169,11 +169,9 @@ return tHub;
 static boolean
 hubTimeToCheck(struct hubConnectStatus *hub, char *notOkStatus)
 /* check to see if enough time has passed to re-check a hub that
- * has an error status.  Default time to wait is 30 minutes, but this
- * is configurable with the hub.timeToCheck conf variable */
+ * has an error status.  Use udcTimeout as the length of time to wait.*/
 {
-char *checkTimeString = cfgOptionDefault(hgHubConnectTimeToCheck, "1800");
-time_t checkTime = sqlUnsigned(checkTimeString);
+time_t checkTime = udcCacheTimeout();
 return dateIsOlderBy(notOkStatus, "%F %T", checkTime);
 }
 
@@ -224,6 +222,10 @@ struct slPair *pair, *pairList = cartVarsWithPrefix(cart, hgHubConnectHubVarPref
 struct sqlConnection *conn = hConnectCentral();
 for (pair = pairList; pair != NULL; pair = pair->next)
     {
+    // is this hub turned connected??
+    if (differentString(pair->val, "1"))
+        continue;
+
     int id = hubIdFromCartName(pair->name);
     hub = hubConnectStatusForId(conn, id);
     if (hub != NULL)

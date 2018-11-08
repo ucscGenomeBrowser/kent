@@ -18,7 +18,7 @@ maxLimit 52000
 barChartLabel Tissue
 configurable off
 subGroup1 view View a_A=Sample1 b_B=Sample2
-pennantIcon New red ../releaseLog.html Created October 2018
+pennantIcon New red ../goldenPath/releaseLog.html Created October 2018
 
     track miRnaAtlasSample1
     type bigBarChart
