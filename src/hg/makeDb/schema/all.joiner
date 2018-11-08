@@ -6814,6 +6814,11 @@ identifier geneReviewsRefGeneId
     hg18,hg19,hg38.kgXref.geneSymbol dupeOk
     hg18,hg19,hg38.geneReviewsDetail.geneSymbol minCheck=0.85
 
+identifier mm10Strains1ExtFileId
+"External file ID for mm10 strain1 sequences"
+    mm10.extMm10Strains1.id
+    mm10.seqMm10Strains1.extFile
+
 identifier mouseStrains
 "chrom names in the mouse alternate strains"
     mm10.chromInfo.chrom
