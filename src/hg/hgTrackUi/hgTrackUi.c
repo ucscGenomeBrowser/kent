@@ -3034,7 +3034,7 @@ else if (tdb->type != NULL)
     else if (startsWithWord("factorSource",tdb->type))
         factorSourceUi(database,tdb);
     else if (startsWithWord("bigBed",tdb->type))
-        labelCfgUi(database, cart, tdb);
+        labelCfgUi(database, cart, tdb, tdb->track);
     }
 
 if (!ajax) // ajax asks for a simple cfg dialog for right-click popup or hgTrackUi subtrack cfg
