@@ -8,14 +8,14 @@ sortOrder set=+ view=+
 dimensions dimX=set dimY=view
 type bed 3
 visibility hide
-pennantIcon New red ../goldenPath/releaseLog.html  created September 2018
+pennantIcon New red ../goldenPath/newsarch.html#110718  created September 2018
 group regulation
 priority 1.5
 
     track ghGeneTss
     type bigBed 9
     shortLabel Gene TSS
-    view TSS
+    view b_TSS
     itemRgb on
     searchIndex name
     url http://www.genecards.org/cgi-bin/carddisp.pl?gene=$$
@@ -43,7 +43,7 @@ priority 1.5
     track ghGeneHancer
     type bigBed 9 +
     shortLabel Reg Elem
-    view Regulatory Elements
+    view a_GH
     itemRgb on
     searchIndex name
     url http://www.genecards.org/Search/Keyword?queryString=$$

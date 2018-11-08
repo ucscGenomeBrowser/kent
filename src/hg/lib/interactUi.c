@@ -183,6 +183,6 @@ else
     interactUiDashedLines(cart, track, tdb);
     puts("</p>");
     }
-scoreCfgUi(database, cart,tdb,tdb->track,"",1000,FALSE);
+scoreCfgUi(database, cart,tdb,track,NULL,1000,FALSE);
 cfgEndBox(boxed);
 }
