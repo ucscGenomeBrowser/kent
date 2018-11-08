@@ -255,6 +255,22 @@ chrM    16338   5457    4238    2202    4441    0       358
 # total 28162.000000
 # standard deviation 71.040090
 
+    twoBitInfo -nBed bosTau9.unmasked.2bit stdout \
+       | awk '{printf "%s\t%d\t%d\t%d\n", $1,$2,$3,$3-$2}' \
+         | sort -k4,4nr | cut -f4 | uniq -c
+     42 252
+    116 100
+      1 99
+      1 85
+      1 66
+      1 65
+      1 60
+      1 44
+      1 36
+    220 25
+      1 23
+
+
     # the gap table has nothing
     hgsql -e 'select count(*) from gap;' bosTau9
 +----------+
@@ -282,11 +298,10 @@ chrM    16338   5457    4238    2202    4441    0       358
        -tableName=cpgIslandExtUnmasked \
           -maskedSeq=/hive/data/genomes/bosTau9/bosTau9.unmasked.2bit \
              -workhorse=hgwdev -smallClusterHub=ku bosTau9) > do.log 2>&1
-XXX - running - Tue Nov  6 14:59:27 PST 2018
-    # real    4m59.915s
+    # real    3m41.462s
 
     cat fb.bosTau9.cpgIslandExtUnmasked.txt
-    # 29501154 bases of 2587515673 (1.140%) in intersection
+    # 33761995 bases of 2715853792 (1.243%) in intersection
 
 #############################################################################
 # cytoBandIdeo - (DONE - 2018-11-06 - Hiram)
@@ -314,19 +329,14 @@ XXX - running - Tue Nov  6 14:59:27 PST 2018
     time (doGapOverlap.pl \
 	-twoBit=/hive/data/genomes/bosTau9/bosTau9.unmasked.2bit bosTau9 ) \
 	> do.log 2>&1
-XXX - running - Tue Nov  6 15:01:28 PST 2018
-    # real    15m25.615s
+    # real    1m51.390s
 
     cat fb.bosTau9.gapOverlap.txt
-    # 97216 bases of 2615516299 (0.004%) in intersection
+    # 150 bases of 2715853792 (0.000%) in intersection
 
-    # 123 items, mostly on unplaced contigs:
-    zcat *.bed.gz | cut -f1 | cut -d'_' -f1 | sort  | uniq -c |sort -r  | head -5
-     84 chrUn
-      6 chr3
-      6 chr1
-      4 chr25
-      3 chr4
+    # 1 items on chr13
+    zcat *.bed.gz | cut -f1 | cut -d'_' -f1 | sort | uniq -c |sort -r | head -5
+     1 chr13
 
 #############################################################################
 # tandemDups (DONE - 2018-11-06 - Hiram)
@@ -335,11 +345,10 @@ XXX - running - Tue Nov  6 15:01:28 PST 2018
     time (~/kent/src/hg/utils/automation/doTandemDup.pl \
   -twoBit=/hive/data/genomes/bosTau9/bosTau9.unmasked.2bit bosTau9) \
 	> do.log 2>&1 &
-XXX - running - Tue Nov  6 15:02:07 PST 2018
-    # real    88m43.940s
+    # real    140m36.622s
 
     cat fb.bosTau9.tandemDups.txt
-    # 70439161 bases of 2615516299 (2.693%) in intersection
+    # 110536957 bases of 2715853792 (4.070%) in intersection
 
     bigBedInfo bosTau9.tandemDups.bb | sed -e 's/^/#  /;'
 #  version: 4
@@ -348,19 +357,19 @@ XXX - running - Tue Nov  6 15:02:07 PST 2018
 #  isCompressed: yes
 #  isSwapped: 0
 #  extraIndexCount: 0
-#  itemCount: 863,625
-#  primaryDataSize: 23,596,930
-#  primaryIndexSize: 136,940
+#  itemCount: 1,556,737
+#  primaryDataSize: 41,133,265
+#  primaryIndexSize: 152,196
 #  zoomLevels: 9
-#  chromCount: 2406
-#  basesCovered: 1,733,829,936
-#  meanDepth (of bases covered): 4.431233
+#  chromCount: 1955
+#  basesCovered: 2,031,718,211
+#  meanDepth (of bases covered): 7.749018
 #  minDepth: 1.000000
-#  maxDepth: 8999.000000
-#  std of depth: 12.907523
+#  maxDepth: 1559.000000
+#  std of depth: 13.615893
 
 #############################################################################
-# ucscToINSDC and ucscToRefSeq table/track (DONE - 2018-11-06 - Hiram)
+# ucscToINSDC and ucscToRefSeq table/track (DONE - 2018-11-08 - Hiram)
     # construct idKeys for the refseq sequence
     mkdir /hive/data/genomes/bosTau9/refseq/idKeys
     cd /hive/data/genomes/bosTau9/refseq/idKeys
@@ -368,11 +377,10 @@ XXX - running - Tue Nov  6 15:02:07 PST 2018
 
     time (doIdKeys.pl -buildDir=`pwd` \
         -twoBit=`pwd`/bosTau9.refSeq.2bit refseqBosTau9)  > do.log 2>&1 &
-XXX - running - Tue Nov  6 15:11:56 PST 2018
-    # real    0m48.786s
+    # real    2m57.680s
 
     cat refseqBosTau9.keySignature.txt
-    #  7850e2d5dabb6134fdc9d7083f1a3a54
+    #  8eb392728eaf8d55db9d9cf05639cc0e
 
     # and the genbank sequence needs keys too:
     mkdir /hive/data/genomes/bosTau9/refseq/idKeysGenbank
@@ -381,12 +389,13 @@ XXX - running - Tue Nov  6 15:11:56 PST 2018
 
     time (doIdKeys.pl -buildDir=`pwd` \
         -twoBit=`pwd`/bosTau9.genbank.2bit genbankBosTau9)  > do.log 2>&1 &
-XXX - running - Tue Nov  6 15:14:12 PST 2018
+    # real    3m3.732s
 
     cat genbankBosTau9.keySignature.txt
-    #  a20fdad3318d371fcb34fcc66bab3752
+    #  c5f6bb39f5c7053fa10deecfa9ce4fc6
 
     mkdir /hive/data/genomes/bosTau9/bed/chromAlias
+    cd /hive/data/genomes/bosTau9/bed/chromAlias
 
     join -t$'\t' ../idKeys/bosTau9.idKeys.txt \
         ../../refseq/idKeysGenbank/genbankBosTau9.idKeys.txt | cut -f2- \
@@ -402,31 +411,32 @@ XXX - running - Tue Nov  6 15:14:12 PST 2018
 
     # should be same line counts throughout:
     wc -l * ../../chrom.sizes
-    #   463 ucscToINSDC.bed
-    #   464 ucscToRefSeq.bed
-    #   464 ../../chrom.sizes
+    # 2210 ucscToINSDC.bed
+    # 2211 ucscToRefSeq.bed
+    # 2211 ../../chrom.sizes
 
     # need to find the accession for the INSDC equivalent to chrM:
     egrep chrM *
-# ucscToRefSeq.bed:chrM   0       16775   NC_001323.1
-    # lookup that accession at NCBI Entrez: X52392.1
+# ucscToRefSeq.bed:chrM   0       16338   NC_006853.1
+
+    # lookup that accession at NCBI Entrez: AY526085.1
     # and add to ucscToINSDC.bed:
-    printf "chrM\t0\t16775\tX52392.1\n" >> ucscToINSDC.bed
+    printf "chrM\t0\t16338\tAY526085.1\n" >> ucscToINSDC.bed
     # verify:
     grep chrM *
-# ucscToINSDC.bed:chrM    0       16775   X52392.1
-# ucscToRefSeq.bed:chrM   0       16775   NC_001323.1
+# ucscToINSDC.bed:chrM    0       16338   AY526085.1
+# ucscToRefSeq.bed:chrM   0       16338   NC_006853.1
 
     export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
     echo $chrSize
-    # 27
+    # 20
     # use the $chrSize in this sed
     sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
          | hgLoadSqlTab bosTau9 ucscToINSDC stdin ucscToINSDC.bed
      # should be the same for ucscToRefSeq:
     export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
     echo $chrSize
-    # 27
+    # 20
     sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
        | sed -e 's/INSDC/RefSeq/g;' \
          | hgLoadSqlTab bosTau9 ucscToRefSeq stdin ucscToRefSeq.bed
@@ -436,12 +446,13 @@ XXX - running - Tue Nov  6 15:14:12 PST 2018
 
     # should cover %100 entirely:
     featureBits -countGaps bosTau9 ucscToINSDC
-    # 1065365425 bases of 1065365425 (100.000%) in intersection
+    # 2715853792 bases of 2715853792 (100.000%) in intersection
+
     featureBits -countGaps bosTau9 ucscToRefSeq
-    # 1065365425 bases of 1065365425 (100.000%) in intersection
+    # 2715853792 bases of 2715853792 (100.000%) in intersection
 
 #########################################################################
-# add chromAlias table (TBD - 2018-04-23 - Hiram)
+# add chromAlias table (DONE - 2018-11-08 - Hiram)
     # after ucscToRefSeq and ucscToINSDC tables have been created
 
     mkdir /hive/data/genomes/bosTau9/bed/chromAlias
@@ -465,8 +476,8 @@ do
   fi
   printf "# checking $t: $c0 =? $c1 $ok\n"
 done
-# checking refseq: 5466 =? 5466 OK
-# checking genbank: 5466 =? 5466 OK
+# checking refseq: 2211 =? 2211 OK
+# checking genbank: 2211 =? 2211 OK
 
     hgLoadSqlTab bosTau9 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
         bosTau9.chromAlias.tab
@@ -511,16 +522,50 @@ searchPriority 8
     time  (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku bosTau9) > do.log 2>&1 &
-XXX - running - Tue Nov  6 15:03:08 PST 2018
-    # real    459m57.416s
+    # real    531m36.333s
+
+    # had quite a few with this error:
+# RepeatMasker bug?: Undefined id, line 5255479 of input:
+#  1073  25.3  0.4  0.4  chrUn_NW_020191554v1   44876   45087   (19682) C  BTSAT2c        Satellite/centr       (11)  341      1   
+
+    # get that list of items out of the do.log and remove them from
+    # the bosTau9.sorted.fa.out to clean it up:
+    mv bosTau9.sorted.fa.out bosTau9.sorted.fa.out.broken
+    grep chrUn_NW do.log | cut -c24-59 | sort > grep.remove.list
+    # there are 171 of these:
+    wc -l grep.remove.list
+    # 171
+    grep -v -f grep.remove.list bosTau9.sorted.fa.out.broken \
+	> bosTau9.sorted.fa.out
+    # verify 171 lines removed:
+    wc -l bosTau9.sorted.fa.out bosTau9.sorted.fa.out.broken
+    # 5620007 bosTau9.sorted.fa.out
+    # 5620178 bosTau9.sorted.fa.out.broken
+    #     171 difference
+    mv bosTau9.fa.out bosTau9.fa.out.broken
+    grep -v -f grep.remove.list bosTau9.fa.out.broken \
+	> bosTau9.fa.out
+    wc -l bosTau9.fa.out.broken bosTau9.fa.out
+    #	5620178 bosTau9.fa.out.broken
+    #	5620007 bosTau9.fa.out
+    #       171 difference
+    # the last command of doCat.csh:
+    time /cluster/bin/scripts/extractNestedRepeats.pl bosTau9.fa.out \
+	| sort -k1,1 -k2,2n > bosTau9.nestedRepeats.bed
+
+    # continuing:
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -continue=mask -smallClusterHub=ku bosTau9) > mask.log 2>&1 &
+    # real    17m45.760s
 
     egrep "bases|Total|masked" faSize.rmsk.txt \
 	| fold -w 75 -s  | sed -e 's/^/# /;'
-# 2615516299 bases (28008926 N's 2587507373 real 1402824796 upper 1184682577 
-# lower) in 5466 sequences in 1 files
-# Total size: mean 478506.5 sd 7917732.5 min 1001 (chrUn_NW_014643138v1) max 
-# 275406953 (chr1) median 2910
-# %45.29 masked total, %45.78 masked real
+# 2715853792 bases (28162 N's 2715825630 real 1376420245 upper 1339405385 
+# lower) in 2211 sequences in 1 files
+# Total size: mean 1228337.3 sd 10762990.9 min 1034 (chrUn_NW_020192071v1) 
+# max 158534110 (chr1) median 21935
+# %49.32 masked total, %49.32 masked real
 
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.7
@@ -529,8 +574,8 @@ XXX - running - Tue Nov  6 15:03:08 PST 2018
     # CC    RepBase RELEASE 20170127;                                   *
 
     time featureBits -countGaps bosTau9 rmsk
-    # 1186367593 bases of 2615516299 (45.359%) in intersection
-    # real    0m47.404s
+    # 1339405686 bases of 2715853792 (49.318%) in intersection
+    # real    0m31.962s
 
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the faSize count above
@@ -539,8 +584,8 @@ XXX - running - Tue Nov  6 15:03:08 PST 2018
     # faster way to get the same result on high contig count assemblies:
     time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' bosTau9 \
         | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
-    # total 1186367593.000000
-    # real    0m38.423s
+    # total 1339405686.000000
+    # real    0m24.033s
 
 ##########################################################################
 # running simple repeat (DONE - 2018-11-06 - Hiram)
@@ -551,11 +596,10 @@ XXX - running - Tue Nov  6 15:03:08 PST 2018
     time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
         -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
         -trf409 6 bosTau9) > do.log 2>&1 &
-XXX - running - Tue Nov  6 15:04:34 PST 2018
-    # real    273m49.147s
+    # real    173m39.504s
 
     cat fb.simpleRepeat
-    # 42833496 bases of 2587515673 (1.655%) in intersection
+    # 78768566 bases of 2715853792 (2.900%) in intersection
 
     bigBedInfo *.bb | sed -e 's/^/# /;'
 # version: 4
@@ -564,16 +608,16 @@ XXX - running - Tue Nov  6 15:04:34 PST 2018
 # isCompressed: yes
 # isSwapped: 0
 # extraIndexCount: 0
-# itemCount: 540,268
-# primaryDataSize: 19,728,389
-# primaryIndexSize: 120,340
+# itemCount: 545,256
+# primaryDataSize: 17,063,916
+# primaryIndexSize: 103,156
 # zoomLevels: 10
-# chromCount: 2486
-# basesCovered: 42,833,496
-# meanDepth (of bases covered): 1.295128
+# chromCount: 2051
+# basesCovered: 78,768,566
+# meanDepth (of bases covered): 6.563866
 # minDepth: 1.000000
-# maxDepth: 70.000000
-# std of depth: 1.175788
+# maxDepth: 206.000000
+# std of depth: 9.700871
 
     # adding this trfMask to the other masking
     cd /hive/data/genomes/bosTau9
@@ -591,18 +635,18 @@ XXX - running - Tue Nov  6 15:04:34 PST 2018
     twoBitToFa bosTau9.2bit stdout | faSize stdin > faSize.bosTau9.2bit.txt
     egrep "bases|Total|masked" faSize.bosTau9.2bit.txt \
 	| fold -w 75 -s  | sed -e 's/^/# /;'
-# 2615516299 bases (28008926 N's 2587507373 real 1402047273 upper 1185460100 
-# lower) in 5466 sequences in 1 files
-# Total size: mean 478506.5 sd 7917732.5 min 1001 (chrUn_NW_014643138v1) max 
-# 275406953 (chr1) median 2910
-# %45.32 masked total, %45.81 masked real
+# 2715853792 bases (28162 N's 2715825630 real 1375606800 upper 1340218830 
+# lower) in 2211 sequences in 1 files
+# Total size: mean 1228337.3 sd 10762990.9 min 1034 (chrUn_NW_020192071v1) 
+# max 158534110 (chr1) median 21935
+# %49.35 masked total, %49.35 masked real
 
     # reset the symlink
     rm /gbdb/bosTau9/bosTau9.2bit
     ln -s `pwd`/bosTau9.2bit /gbdb/bosTau9/bosTau9.2bit
 
 #########################################################################
-# CREATE MICROSAT TRACK (TBD - 2018-03-24 - Hiram)
+# CREATE MICROSAT TRACK (DONE - 2018-11-08 - Hiram)
     ssh hgwdev
     mkdir /cluster/data/bosTau9/bed/microsat
     cd /cluster/data/bosTau9/bed/microsat
@@ -611,31 +655,31 @@ XXX - running - Tue Nov  6 15:04:34 PST 2018
        ../simpleRepeat/simpleRepeat.bed > microsat.bed
 
     hgLoadBed bosTau9 microsat microsat.bed
-    # Read 27099 elements of size 4 from microsat.bed
+    # Read 25219 elements of size 4 from microsat.bed
 
 ##########################################################################
-## WINDOWMASKER (TBD - 2018-04-23 - Hiram)
+## WINDOWMASKER (DONE - 2018-11-07 - Hiram)
 
     mkdir /hive/data/genomes/bosTau9/bed/windowMasker
     cd /hive/data/genomes/bosTau9/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev bosTau9) > do.log 2>&1
-    # real    163m20.197s
+    # real    95m24.111s
 
     # Masking statistics
     egrep "bases|Total|masked" faSize.bosTau9.cleanWMSdust.txt \
 	| fold -w 75 -s  | sed -e 's/^/# /;'
-# 2615516299 bases (28008926 N's 2587507373 real 1571964655 upper 1015542718 
-# lower) in 5466 sequences in 1 files
-# Total size: mean 478506.5 sd 7917732.5 min 1001 (chrUn_NW_014643138v1) max 
-# 275406953 (chr1) median 2910
-# %38.83 masked total, %39.25 masked real
+# 2715853792 bases (28162 N's 2715825630 real 1580978410 upper 1134847220 
+# lower) in 2211 sequences in 1 files
+# Total size: mean 1228337.3 sd 10762990.9 min 1034 (chrUn_NW_020192071v1) 
+# max 158534110 (chr1) median 21935
+# %41.79 masked total, %41.79 masked real
 
     cat fb.bosTau9.rmsk.windowmaskerSdust.txt
-    # 769538371 bases of 2615516299 (29.422%) in intersection
+    # 907805797 bases of 2715853792 (33.426%) in intersection
 
 #############################################################################
-# ncbiRefSeq (TBD - 2018-03-24 - Hiram)
+# ncbiRefSeq (DONE - 2018-11-08 - Hiram)
 
     # can be run up after ucscToRefSeq table is constructed
     mkdir /hive/data/genomes/bosTau9/bed/ncbiRefSeq
@@ -644,38 +688,45 @@ XXX - running - Tue Nov  6 15:04:34 PST 2018
     # adjust the name arguments
     time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
       -bigClusterHub=ku -dbHost=hgwdev \
-      -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
-      refseq vertebrate_mammalian Ovis_aries \
-      GCF_000298735.2_Oar_v4.0 bosTau9) > do.log 2>&1
-    # real    6m15.984s
+      -fileServer=hgwdev -smallClusterHub=hgwdev-101 -workhorse=hgwdev \
+      refseq vertebrate_mammalian Bos_taurus \
+      GCF_002263795.1_ARS-UCD1.2 bosTau9) > do.log 2>&1 &
+    # real    5m10.572s
 
     cat fb.ncbiRefSeq.bosTau9.txt
-    # 84600787 bases of 2587515673 (3.270%) in intersection
+    # 80750008 bases of 2715853792 (2.973%) in intersection
 
 #############################################################################
-# cpgIslands - (TBD - 2018-03-24 - Hiram)
+# cpgIslands - (DONE - 2018-11-08 - Hiram)
     mkdir /hive/data/genomes/bosTau9/bed/cpgIslands
     cd /hive/data/genomes/bosTau9/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku bosTau9) > do.log 2>&1 &
-    # real    5m4.827s
+    # real    3m43.856s
 
     cat fb.bosTau9.cpgIslandExt.txt
-    # 25897025 bases of 2587515673 (1.001%) in intersection
+    # 26618121 bases of 2715853792 (0.980%) in intersection
 
 ##############################################################################
-# genscan - (TBD - 2018-03-24 - Hiram)
+# genscan - (DONE - 2018-11-08 - Hiram)
     mkdir /hive/data/genomes/bosTau9/bed/genscan
     cd /hive/data/genomes/bosTau9/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku bosTau9) > do.log 2>&1 &
-    # real  128m51.713s
+    # real    48m49.605s
+
+    # one broken one finished with 2,000,000 window size:
+    time (././runGsBig2M.csh chr13 000 gtf/000/chr13.gtf pep/000/chr13.pep subopt/000/chr13.bed) > lastOne.log 2>&1
+    # real    28m54.073s
+
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -continue=makeBed -bigClusterHub=ku bosTau9) > makeBed.log 2>&1 &
 
     cat fb.bosTau9.genscan.txt
-    # 55432140 bases of 2587515673 (2.142%) in intersection
+    # 56389215 bases of 2715853792 (2.076%) in intersection
 
     cat fb.bosTau9.genscanSubopt.txt
-    # 52806452 bases of 2587515673 (2.041%) in intersection
+    # 51538764 bases of 2715853792 (1.898%) in intersection
 
     bigBedInfo bosTau9.genscan.bb | sed -e 's/^/# /;'
 # version: 4
@@ -684,28 +735,28 @@ XXX - running - Tue Nov  6 15:04:34 PST 2018
 # isCompressed: yes
 # isSwapped: 0
 # extraIndexCount: 0
-# itemCount: 45,411
-# primaryDataSize: 2,697,165
-# primaryIndexSize: 86,740
-# zoomLevels: 8
-# chromCount: 2312
-# basesCovered: 1,816,748,807
+# itemCount: 43,798
+# primaryDataSize: 2,587,464
+# primaryIndexSize: 37,772
+# zoomLevels: 7
+# chromCount: 804
+# basesCovered: 1,855,898,050
 # meanDepth (of bases covered): 1.000000
 # minDepth: 1.000000
 # maxDepth: 1.000000
-# std of depth: 0.000000
+# std of depth: -nan
 
 #############################################################################
-# augustus gene track (TBD - 2018-04-24 - Hiram)
+# augustus gene track (DONE - 2018-11-08 - Hiram)
 
     mkdir /hive/data/genomes/bosTau9/bed/augustus
     cd /hive/data/genomes/bosTau9/bed/augustus
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
      -species=human -dbHost=hgwdev -workhorse=hgwdev bosTau9) > do.log 2>&1 &
-    # real  73m0.609s
+    # real    109m41.672s
 
     cat fb.bosTau9.augustusGene.txt
-    # 47691785 bases of 2587515673 (1.843%) in intersection
+    # 52391476 bases of 2715853792 (1.929%) in intersection
 
      bigBedInfo  bosTau9.augustus.bb | sed -e 's/^/# /;'
 # version: 4
@@ -714,16 +765,16 @@ XXX - running - Tue Nov  6 15:04:34 PST 2018
 # isCompressed: yes
 # isSwapped: 0
 # extraIndexCount: 0
-# itemCount: 28,101
-# primaryDataSize: 2,075,682
-# primaryIndexSize: 37,244
-# zoomLevels: 8
-# chromCount: 770
-# basesCovered: 1,236,829,591
-# meanDepth (of bases covered): 1.216583
+# itemCount: 30,862
+# primaryDataSize: 2,187,353
+# primaryIndexSize: 22,468
+# zoomLevels: 7
+# chromCount: 454
+# basesCovered: 1,220,657,991
+# meanDepth (of bases covered): 1.261447
 # minDepth: 1.000000
 # maxDepth: 5.000000
-# std of depth: 0.579340
+# std of depth: 0.630592
 
 #############################################################################
 # lastz/chain/net swap human/hg38 (TBD - 2018-04-25 - Hiram)
@@ -795,60 +846,94 @@ XXX - running - Tue Nov  6 15:04:34 PST 2018
     # 656602300 bases of 2587515673 (25.376%) in intersection
 
 ##############################################################################
-# Create kluster run files (TBD - 2018-03-24 - Hiram)
+# Create kluster run files (DONE - 2018-11-08 - Hiram)
 
     cd /hive/data/genomes/bosTau9
     # numerator is bosTau9 gapless bases "real" as reported by:
     featureBits -noRandom -noHap bosTau9 gap
-    # 24055659 bases of 2560776851 (0.939%) in intersection
-    # 28994139 bases of 2803637675 (1.034%) in intersection
-    #                   ^^^
+    # 0 bases of 2628411261 (0.000%) in intersection
+    #               ^^^
 
     # denominator is hg19 gapless bases as reported by:
     #   featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \(2560776851 / 2861349177 \) \* 1024
-    # (2560776851 / 2861349177 ) * 1024 = 916.433239
+    calc \(2628411261 / 2861349177 \) \* 1024
+    # (2628411261 / 2861349177 ) * 1024 = 940.637778
 
-    # ==> use -repMatch=900 same as was oviAri3
+    # ==> use -repMatch=900 same as was bosTau8
     cd /hive/data/genomes/bosTau9
     blat bosTau9.2bit /dev/null /dev/null -tileSize=11 \
         -makeOoc=jkStuff/bosTau9.11.ooc -repMatch=900
-    #  Wrote 31423 overused 11-mers to jkStuff/bosTau9.11.ooc
-    # oviAri3 at repMatch=900 was:
-    #  Wrote 30413 overused 11-mers to jkStuff/oviAri3.11.ooc
+    #   Wrote 35432 overused 11-mers to jkStuff/bosTau9.11.ooc
+    # bosTau8 at repMatch=900 was:
+    #   Wrote 33613 overused 11-mers to jkStuff/bosTau8.11.ooc
 
     # no unbridged gaps so no need to worry about gaplift file:
     hgsql -Ne "select bridge from gap" bosTau9 | sort | uniq -c
-    # 43016 yes
+    # no gaps of any sort
+
+    hgsql -Ne "select count(*) from gap" bosTau9
+    #    +---+
+    #    | 0 |
+    #    +---+
 
 ##############################################################################
-# LIFTOVER TO oviAri3(TBD - 2018-03-24 - Hiram)
+# LIFTOVER TO bosTau8 (DONE - 2018-11-08 - Hiram)
     ssh hgwdev
-    mkdir /hive/data/genomes/bosTau9/bed/blat.oviAri3.2018-04-24
-    cd /hive/data/genomes/bosTau9/bed/blat.oviAri3.2018-04-24
+    mkdir /hive/data/genomes/bosTau9/bed/blat.bosTau8.2018-11-08
+    cd /hive/data/genomes/bosTau9/bed/blat.bosTau8.2018-11-08
     time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
 	-ooc=/hive/data/genomes/bosTau9/jkStuff/bosTau9.11.ooc \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-         bosTau9 oviAri3) > do.log 2>&1 &
+         bosTau9 bosTau8) > do.log 2>&1 &
+XXX - running - Thu Nov  8 13:19:11 PST 2018
     # real    102m14.916s
 
-    # verify the convert link on the test browser is now active from bosTau9 to
-    # oviAri3
+    # verify the convert link on the test browser is now active
+    # from bosTau9 to bosTau8
 
 ##############################################################################
-# GENBANK AUTO UPDATE (TBD - 2018-03-25 - Hiram)
+# LIFTOVER TO bosTau7 (DONE - 2018-11-08 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/bosTau9/bed/blat.bosTau7.2018-11-08
+    cd /hive/data/genomes/bosTau9/bed/blat.bosTau7.2018-11-08
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/bosTau9/jkStuff/bosTau9.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         bosTau9 bosTau7) > do.log 2>&1 &
+XXX - running - Thu Nov  8 13:19:11 PST 2018
+    # real    102m14.916s
+
+    # verify the convert link on the test browser is now active
+    # from bosTau9 to bosTau7
+
+##############################################################################
+# LIFTOVER TO bosTau6 (DONE - 2018-11-08 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/bosTau9/bed/blat.bosTau6.2018-11-08
+    cd /hive/data/genomes/bosTau9/bed/blat.bosTau6.2018-11-08
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/bosTau9/jkStuff/bosTau9.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         bosTau9 bosTau6) > do.log 2>&1 &
+XXX - running - Thu Nov  8 13:19:11 PST 2018
+    # real    102m14.916s
+
+    # verify the convert link on the test browser is now active
+    # from bosTau9 to bosTau6
+
+##############################################################################
+# GENBANK AUTO UPDATE (DONE - 2018-11-08 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # /cluster/data/genbank/data/organism.lst shows:
     # #organism      mrnaCnt   estCnt  refSeqCnt
-    # Ovis aries    3510    338862  915
-    # Ovis aries musimon  2   0   0
+    # Bos taurus	20115	1583423	13363
 
-    # edit etc/genbank.conf to add bosTau9 just before oviAri3
-# bosTau9 (sheep - Ovis aries - refseq GCF_000298735.2 - taxId 9940)
+    # edit etc/genbank.conf to add bosTau9 just after bosTau8
+# bosTau9 (cow - Bos taurus - refseq GCF_002263795.1 ARS-UCD1.2 - taxId 9913)
 bosTau9.serverGenome = /hive/data/genomes/bosTau9/bosTau9.2bit
 bosTau9.clusterGenome = /hive/data/genomes/bosTau9/bosTau9.2bit
 bosTau9.ooc = /hive/data/genomes/bosTau9/jkStuff/bosTau9.11.ooc
@@ -861,6 +946,7 @@ bosTau9.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDna
 bosTau9.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
 bosTau9.genbank.est.xeno.pslCDnaFilter    = ${finished.genbank.est.xeno.pslCDnaFilter}
 bosTau9.downloadDir = bosTau9
+# bosTau9.upstreamGeneTbl = refGene
 # defaults yes: genbank.mrna.native.load genbank.mrna.native.loadDesc
 # yes: genbank.est.native.load refseq.mrna.native.load
 # yes: refseq.mrna.native.loadDesc refseq.mrna.xeno.load
@@ -868,43 +954,45 @@ bosTau9.downloadDir = bosTau9
 # defaults no: genbank.mrna.xeno.load genbank.mrna.xeno.loadDesc
 # no: genbank.est.native.loadDesc genbank.est.xeno.load
 # no: genbank.est.xeno.loadDesc
-# DO NOT NEED genbank.mrna.xeno except for human, mouse
-# have been doing this for chimp too:
-bosTau9.genbank.mrna.xeno.load = no
 
     # verify stated file paths do exist:
     grep bosTau9 etc/genbank.conf | egrep "Genome|ooc|lift" \
-	| awk '{print $NF}' | xargs ls -og
--rw-rw-r-- 1    146968 Mar 24 20:30 /hive/data/genomes/bosTau9/jkStuff/bosTau9.11.ooc
--rw-rw-r-- 1 795113145 Mar 24 20:22 /hive/data/genomes/bosTau9/bosTau9.2bit
--rw-rw-r-- 1 795113145 Mar 24 20:22 /hive/data/genomes/bosTau9/bosTau9.2bit
+	| awk '{print $NF}' | sort -u | xargs ls -og
+ls: cannot access no: No such file or directory
+-rw-rw-r-- 1 712534740 Nov  7 13:35 /hive/data/genomes/bosTau9/bosTau9.2bit
+-rw-rw-r-- 1    141736 Nov  8 13:13 /hive/data/genomes/bosTau9/jkStuff/bosTau9.11.ooc
+
+    $ ls error on the file named 'no' is from the bosTau9.lift = no
 
     # add bosTau9 to:
-    #   etc/align.dbs etc/hgwdev.dbs
-    git commit -m 'starting genbank updates for bosTau9/sheep refs #17247' \
-	etc/genbank.conf etc/align.dbs etc/hgwdev.dbs
+    #   etc/hgwdev.dbs
+    git commit -m 'adding bosTau9 refs #22425' etc/hgwdev.dbs
+
     git push
     # update /cluster/data/genbank/:
     make etc-update
 
 #############################################################################
-#  BLATSERVERS ENTRY (TBD - 2018-04-24 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2018-11-08 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-    VALUES ("bosTau9", "blat1a", "17888", "1", "0"); \
+    VALUES ("bosTau9", "blat1c", "17908", "1", "0"); \
     INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-    VALUES ("bosTau9", "blat1a", "17889", "0", "1");' \
+    VALUES ("bosTau9", "blat1c", "17909", "0", "1");' \
     hgcentraltest
     #   test it with some sequence
 
 ##############################################################################
-## reset default position to same as what oviAri3 has: 
-##  (TBD - 2018-04-09 - Hiram)
+## reset default position to the casein gene complex (milk production proteins)
+##  (DONE - 2018-11-08 - Hiram)
+## https://www.ncbi.nlm.nih.gov/pmc/articles/PMC332753/
+## quote: The four genes reside on less than 200 kb of DNA in
+##        the order CASAS1-CASB-CASAS2-CASK.
 
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="chr19:50698607-50712547" where name="bosTau9";' hgcentraltest
+    hgsql -e 'update dbDb set defaultPos="chr6:85405597-85664387" where name="bosTau9";' hgcentraltest
 
 ##############################################################################
 # all.joiner update, downloads and in pushQ - (TBD - 2018-05-01 - Hiram)

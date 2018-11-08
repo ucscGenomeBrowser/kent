@@ -1144,6 +1144,8 @@ _EOF_
   $fh = &HgAutomate::mustOpen(">$topDir/html/gap.html");
   my $em = $commonName ? "" : "<em>";
   my $noEm = $commonName ? "" : "</em>";
+  my $gapCount = `hgsql -N -e 'select count(*) from gap;' $db`;
+  chomp $gapCount;
   if ($gotAgp) {
     print $fh <<_EOF_
 <H2>Description</H2>
@@ -1172,10 +1174,14 @@ of the gap is supported by read pair data,
 it is a <em>bridged</em> gap and a white line is drawn
 through the black box representing the gap.
 </P>
-<P>This assembly contains the following principal types of gaps:
-<UL>
 _EOF_
     ;
+    if ($gapCount > 0) {
+      print $fh "<P>This assembly contains the following principal types of gaps:
+<UL>\n";
+    } else {
+      print $fh "<P>This assembly has no annotated gaps.\n</P>\n";
+    }
     open (GL, "hgsql -N -e 'select type from gap;' $db | sort | uniq -c | sort -n|") or die "can not select type from $db.gap table";
     while (my $line = <GL>) {
         chomp $line;
@@ -1200,7 +1206,9 @@ _EOF_
         }
     }
     close (GL);
-    print $fh "</UL></P>\n";
+    if ($gapCount > 0) {
+      print $fh "</UL></P>\n";
+    }
   } else {
     print $fh <<_EOF_
 <H2>Description</H2>
