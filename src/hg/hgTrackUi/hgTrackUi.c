@@ -2700,7 +2700,7 @@ filterBy_t *filters = filterBySetGet(tdb, cart, tdb->track);
 if (filters != NULL)
     {
     puts("<p>");
-    filterBySetCfgUi(cart, tdb, filters, TRUE);
+    filterBySetCfgUi(cart, tdb, filters, TRUE, tdb->track);
     filterBySetFree(&filters);
     }
 char varName[64];
