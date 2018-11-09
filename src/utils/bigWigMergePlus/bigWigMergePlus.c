@@ -71,7 +71,7 @@ void usage()
       "   bigWigMergePlus in1.bw in2.bw .. inN.bw out.bedGraph\n"
       "\n"
       "Options:\n"
-      "   -range=chr1:0-100   - Range to merge (default: none)"
+      "   -range=chr1:0-100   - Range to merge (default: none)\n"
       "   -threshold=0.N      - Don't output values at or below this threshold. (default: 0.0)\n"
       "   -normalize          - Use values weighted according to each file maximum (default: false)\n"
       );
