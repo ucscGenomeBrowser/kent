@@ -5089,7 +5089,10 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     inheritance can be hard to explain, they are often intuitive in
     practice. In composite subtracks, visibility settings are directly
     inherited from the parent composite, therefore, any visibility lines
-    added at the child subtrack level of a composite will be ignored.</div></P>
+    added at the child subtrack level of a composite will be ignored.
+    Also note the <a href="#parent">parent</a> line should be referenced as
+    <code>parent myComposite on</code> if one desires the child subtrack
+    in a composite to be visible (checked, selected) by default.</p></div></P>
 </DIV>
 
 <DIV class="view"><span class="types view"></span>
