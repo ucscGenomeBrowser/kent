@@ -33,6 +33,7 @@
 /* A range of bigWig file */
 struct Range {
   char *chrom;
+  boolean isFullChrom;
   uint32_t start;
   uint32_t end;
 };
@@ -65,7 +66,7 @@ static int maxGigs = 100;   // Maximum number of gigs to allocate in one block.
 void usage()
 /* Explain usage and exit. */
 {
-  errAbort(
+  printf(
       "bigWigMergePlus 1.0.0 - Merge together multiple bigWigs into a single bigWig.\n"
       "You'll have to run bedGraphToBigWig to make the output bigWig.\n"
       "The signal values are just added together to merge them\n"
@@ -77,6 +78,7 @@ void usage()
       "   -position=chr1:0-100 - range to merge"
       "   -threshold=0.N       - don't output values at or below this threshold. Default is 0.0\n"
       );
+  exit(0);
 }
 
 double clThreshold = 0.0;
@@ -94,30 +96,42 @@ static struct optionSpec options[] = {
 
 /**
  * Parses a chrom position range
+ * (chr6)
  * (chr1:0-10000)
  */
-struct Range *parseRange(char *input)
+Range *parseRange(char *input)
 {
   char *s;
   char *e;
+  boolean isFullChrom = TRUE;
+  uint32_t start = 0;
+  uint32_t end = 0;
 
   s = strchr(input, ':');
-  if (s == NULL)
-      return NULL;
 
-  *s++ = 0;
-  e = strchr(s, '-');
-  if (e == NULL)
-      return NULL;
+  if (s != NULL) {
+    *s++ = 0;
 
-  *e++ = 0;
-  if (!isdigit(s[0]) || !isdigit(e[0]))
-      return NULL;
+    e = strchr(s, '-');
+    if (e == NULL)
+        return NULL;
 
-  struct Range *range = malloc(sizeof(struct Range));
+    *e++ = 0;
+    if (!isdigit(s[0]) || !isdigit(e[0]))
+        return NULL;
+
+    isFullChrom = FALSE;
+    start = atoi(s);
+    end = atoi(e);
+  } else {
+    s = input;
+  }
+
+  Range *range = malloc(sizeof(struct Range));
   range->chrom = input;
-  range->start = atoi(s);
-  range->end = atoi(e);
+  range->isFullChrom = isFullChrom;
+  range->start = start;
+  range->end = end;
   return range;
 }
 
@@ -140,7 +154,9 @@ static int bbiChromInfoCmpStringsWithEmbeddedNumbers(const void *va, const void 
   return cmpStringsWithEmbeddedNumbers(a->name, b->name);
 }
 
-/** Read chromosomes from all files and make sure they agree, and return merged list. */
+/**
+ * Read chromosomes from all files and make sure they agree, and return merged list.
+ */
 struct bbiChromInfo *getAllChroms(struct bbiFile *fileList)
 {
   struct bbiFile *file;
@@ -158,7 +174,7 @@ struct bbiChromInfo *getAllChroms(struct bbiFile *fileList)
       if (oldInfo != NULL)
       {
         if (info->size != oldInfo->size)
-          errAbort("ERROR: Merging from different assemblies? "
+          errAbort("Error: Merging from different assemblies? "
               "Chromosome %s is %d in %s but %d in another file",
               info->name, (int)(info->size), file->fileName, (int)oldInfo->size);
       }
@@ -170,22 +186,22 @@ struct bbiChromInfo *getAllChroms(struct bbiFile *fileList)
     }
   }
   slSort(&nameList, bbiChromInfoCmpStringsWithEmbeddedNumbers);
+  freeMem(hash);
   return nameList;
 }
 
-/** Return count of numbers at start that are the same as first number.  */
-int getDoubleSequenceCount(double *pt, int size)
+/**
+ * Finds chromosome by name
+ */
+struct bbiChromInfo *findChrom(struct bbiChromInfo *chromList, char *name)
 {
-  int sameCount = 1;
-  int i;
-  double x = pt[0];
-  for (i = 1; i < size; i++)
+  struct bbiChromInfo *chrom;
+  for (chrom = chromList; chrom != NULL; chrom = chrom->next)
   {
-    if (pt[i] != x)
-      break;
-    sameCount++;
+    if (sameString(chrom->name, name))
+      return chrom;
   }
-  return sameCount;
+  return NULL;
 }
 
 /** Gets the maximum size from a chrom list */
@@ -203,8 +219,19 @@ int getMaxChromSize(struct bbiChromInfo *chromList)
   return maxSize;
 }
 
-void printSectionItem(SectionItem *item) {
-  printf("{ start = %u, end = %u, val = %f}\n", item->start, item->end, item->val);
+/** Return count of numbers at start that are the same as first number.  */
+int getDoubleSequenceCount(double *pt, int size)
+{
+  int sameCount = 1;
+  int i;
+  double x = pt[0];
+  for (i = 1; i < size; i++)
+  {
+    if (pt[i] != x)
+      break;
+    sameCount++;
+  }
+  return sameCount;
 }
 
 /**
@@ -220,8 +247,6 @@ void writeSection(
     int maxSectionSize,
     struct dyString *stream,
     FILE *f) {
-
-  /* printf("writeSection: %s %i %i\n", usage->name, *sectionIx, *itemIx); */
 
   /* Figure out section position. */
   bits32 chromId = usage->id;
@@ -317,7 +342,7 @@ void writeSections(
     {
       SectionItem item = chromItems[c][i];
 
-      /* Figure out whether need to output section. */
+      /* Figure out whether we need to output section. */
       if (itemIx >= itemsPerSlot)
       {
         writeSection(
@@ -339,16 +364,16 @@ void writeSections(
 
       /* Verify that inputs meets our assumption - that it is a sorted bedGraph file. */
       if (start > end)
-        errAbort("Error - start (%u) after end (%u) item %i of %i", start, end, i, c);
+        errAbort("Error: start (%u) after end (%u) item %i of %i", start, end, i, c);
 
       if (lastB != NULL)
       {
         if (lastB->start > start) {
-          errAbort("Error - bedGraph not sorted on start item %i of %i (%s [%i])\n%i-%i : %f\n",
+          errAbort("Error: bedGraph not sorted on start item %i of %i (%s [%i])\n%i-%i : %f\n",
               i, usage->itemCount, usage->name, c, start, end, val);
         }
         if (lastB->end > start) {
-          errAbort("Error - overlapping regions in bedGraph item %i of %i (%s [%i])",
+          errAbort("Error: overlapping regions in bedGraph item %i of %i (%s [%i])",
               i, usage->itemCount, usage->name, c);
         }
       }
@@ -374,7 +399,6 @@ void writeSections(
       b->start = start;
       b->end = end;
       b->val = val;
-      /* printf("%i-%i : %f\n", start, end, val); */
       lastB = b;
       itemIx += 1;
     }
@@ -395,7 +419,6 @@ void writeSections(
       resEnds[resTry] = 0;
   }
 
-  printf("%i == %i\n", sectionIx, sectionCount);
   assert(sectionIx == sectionCount);
 
   *retMaxSectionSize = maxSectionSize;
@@ -406,7 +429,7 @@ void writeSections(
  * in memory next reduction level. This is more work than some ways, but it
  * keeps us from having to keep the first reduction entirely in memory.
  */
-static struct bbiSummary *bedGraphWriteReducedOnceReturnReducedTwice(
+static struct bbiSummary *itemsWriteReducedOnceReturnReducedTwice(
     struct bbiChromUsage *usageList,
     SectionItem **chromItems,
     int fieldCount,
@@ -427,7 +450,9 @@ static struct bbiSummary *bedGraphWriteReducedOnceReturnReducedTwice(
   struct bbiChromUsage *usage = usageList;
   struct bbiSummary oneSummary;
   struct bbiSummary *sum = NULL;
-  struct bbiBoundsArray *boundsArray, *boundsPt, *boundsEnd;
+  struct bbiBoundsArray *boundsArray,
+                        *boundsPt,
+                        *boundsEnd;
   boundsPt = AllocArray(boundsArray, initialReductionCount);
   boundsEnd = boundsPt + initialReductionCount;
 
@@ -525,13 +550,14 @@ static struct bbiSummary *bedGraphWriteReducedOnceReturnReducedTwice(
       sum->sumData += val * size;
       sum->sumSquares += val*val * size;
     }
-  }
 
-  /* Output last section */
-  if (sum != NULL)
-  {
-    bbiOutputOneSummaryFurtherReduce(sum, &twiceReducedList, doubleReductionSize,
-        &boundsPt, boundsEnd, lm, stream);
+    /* Output section before chrom switch */
+    if (sum != NULL)
+    {
+      bbiOutputOneSummaryFurtherReduce(sum, &twiceReducedList, doubleReductionSize,
+          &boundsPt, boundsEnd, lm, stream);
+      sum = NULL;
+    }
   }
 
   bbiSumOutStreamClose(&stream);
@@ -596,9 +622,9 @@ int writeZoomLevels(
     SectionItem **chromItems,
     FILE *f,            /* Output. */
     int blockSize,      /* Size of index block */
-    int itemsPerSlot,       /* Number of data points bundled at lowest level. */
+    int itemsPerSlot,   /* Number of data points bundled at lowest level. */
     int fieldCount,     /* Number of fields in bed (4 for bedGraph) */
-    boolean doCompress,     /* Do we compress.  Answer really should be yes! */
+    boolean doCompress,     /* Do we compress. Answer really should be yes! */
     bits64 dataSize,        /* Size of data on disk (after compression if any). */
     int resTryCount, int resScales[], int resSizes[],   /* How much to zoom at each level */
     bits32 zoomAmounts[bbiMaxZoomLevels],      /* Fills in amount zoomed at each level. */
@@ -609,7 +635,8 @@ int writeZoomLevels(
   /* Write out first zoomed section while storing in memory next zoom level. */
   assert(resTryCount > 0);
   int maxReducedSize = dataSize / 2;
-  int initialReduction = 0, initialReducedCount = 0;
+  int initialReduction = 0;
+  int initialReducedCount = 0;
 
   /* Figure out initialReduction for zoom - one that is maxReducedSize or less. */
   int resTry;
@@ -643,13 +670,23 @@ int writeZoomLevels(
   struct lm *lm = lmInit(0);
   int zoomIncrement = bbiResIncrement;
 
-  struct bbiSummary *rezoomedList = bedGraphWriteReducedOnceReturnReducedTwice(
-      usageList, chromItems, fieldCount,
-      initialReduction, initialReducedCount,
-      zoomIncrement, blockSize, itemsPerSlot, doCompress, lm,
-      f, &zoomDataOffsets[0], &zoomIndexOffsets[0], totalSum);
+  struct bbiSummary *rezoomedList = itemsWriteReducedOnceReturnReducedTwice(
+      usageList,
+      chromItems,
+      fieldCount,
+      initialReduction,
+      initialReducedCount,
+      zoomIncrement,
+      blockSize,
+      itemsPerSlot,
+      doCompress,
+      lm,
+      f,
+      &zoomDataOffsets[0],
+      &zoomIndexOffsets[0],
+      totalSum);
 
-  verboseTime(2, "writeReducedOnceReturnReducedTwice");
+  verboseTime(2, "itemsWriteReducedOnceReturnReducedTwice");
 
   zoomAmounts[0] = initialReduction;
 
@@ -668,7 +705,7 @@ int writeZoomLevels(
     zoomIndexOffsets[zoomLevels] = bbiWriteSummaryAndIndex(rezoomedList,
         blockSize, itemsPerSlot, doCompress, f);
     zoomAmounts[zoomLevels] = reduction;
-    ++zoomLevels;
+    zoomLevels++;
     reduction *= zoomIncrement;
     rezoomedList = bbiSummarySimpleReduce(rezoomedList, reduction, lm);
   }
@@ -810,7 +847,9 @@ void itemsToBigWig(
   carefulClose(&f);
 }
 
-/** Merge together multiple bigWigs into a single one.. */
+/**
+ * Merge together multiple bigWigs into a single one
+ */
 void bigWigMergePlus(int inCount, char *inFilenames[], char *outFile)
 {
 
@@ -829,40 +868,61 @@ void bigWigMergePlus(int inCount, char *inFilenames[], char *outFile)
   int maxChromSize = getMaxChromSize(chromList);
   int chromCount = slCount(chromList);
 
+
+  verbose(1, "Got %d chromosomes from %d bigWigs (maxSize: %i)\n",
+      slCount(chromList), slCount(inFiles), maxChromSize);
+
+  /* Assert provided chrom exists if applicable */
+  if (clRange != NULL) {
+    if (findChrom(chromList, clRange->chrom) == NULL)
+      errAbort("Error: Chromosome parsed from -position param didn't match "
+          "any chromosome in files: %s",
+          clRange->chrom);
+  }
+
+  /* Informations to write will be stored here */
   struct bbiChromUsage *usageList = NULL;
   SectionItem **chromItems = needMem(chromCount * sizeof(SectionItem *));
 
-  verbose(1, "Got %d chromosomes from %d bigWigs (maxSize: %i)\nProcessing",
-      slCount(chromList), slCount(inFiles), maxChromSize);
-
+  /* Buffer to merge values */
   double *mergeBuf = needHugeMem(maxChromSize * sizeof(double));
 
   int c = 0;
   for (chrom = chromList; chrom != NULL; chrom = chrom->next, c++)
   {
-    struct lm *lm = lmInit(0);
     struct bbiChromUsage *usage = needMem(sizeof(struct bbiChromUsage));
     usage->id = chrom->id;
     usage->name = chrom->name;
     usage->size = chrom->size;
     slAddHead(&usageList, usage);
 
-    chromItems[c] = needHugeMem(chrom->size * sizeof(SectionItem));
+    /* If there is a range and it's not this chrom, just fill a single zero item */
+    if (clRange != NULL && differentString(clRange->chrom, chrom->name)) {
+      usage->itemCount = 1;
+      chromItems[c] = needMem(sizeof(SectionItem));
+      chromItems[c][0] = (SectionItem) { 0, chrom->size, 0.0 };
+      continue;
+    }
 
-    verboseDot();
-    verbose(2, "Processing %s (%d bases)\n", chrom->name, chrom->size);
+    struct lm *lm = lmInit(0);
+    chromItems[c] = needHugeMem(chrom->size * sizeof(SectionItem));
 
     /* Reset mergeBuf memory to 0 */
     memset(mergeBuf, 0, chrom->size * sizeof(double));
 
+    verbose(1, "Processing \x1b[1;93m%s\x1b[0m (%d bases)\n", chrom->name, chrom->size);
+
     /* Loop through each input file grabbing data and merging it in. */
     for (inFile = inFiles; inFile != NULL; inFile = inFile->next)
     {
-      struct bbiInterval *ivList = bigWigIntervalQuery(inFile, chrom->name, 0, chrom->size, lm);
+      uint32_t start = clRange == NULL ? 0 : clRange->start;
+      uint32_t end   = clRange == NULL || clRange->isFullChrom ? chrom->size : clRange->end;
 
-      verbose(3, "Got %d intervals in %s\n", slCount(ivList), inFile->fileName);
-
+      struct bbiInterval *ivList = bigWigIntervalQuery(inFile, chrom->name, start, end, lm);
       struct bbiInterval *iv;
+
+      verbose(2, "Got %d intervals in %s\n", slCount(ivList), inFile->fileName);
+
       for (iv = ivList; iv != NULL; iv = iv->next)
       {
         for (int i = iv->start; i < iv->end; i++)
@@ -872,9 +932,7 @@ void bigWigMergePlus(int inCount, char *inFilenames[], char *outFile)
       }
     }
 
-    verbose(1, "Creating intervals for \x1b[1;93m%s\x1b[0m\n", usage->name);
-
-    /* Output each range of same values as a bedGraph item */
+    /* Store each range of contiguous values as a section item */
     int index = 0;
     int sameCount;
     for (int i = 0; i < chrom->size; i += sameCount)
@@ -882,12 +940,11 @@ void bigWigMergePlus(int inCount, char *inFilenames[], char *outFile)
       sameCount = getDoubleSequenceCount(mergeBuf + i, chrom->size - i);
       double val = mergeBuf[i];
       if (val > clThreshold) {
-        /* fprintf(f, "%s\t%d\t%d\t%g\n", chrom->name, i, i + sameCount, val); */
-        usage->itemCount += 1;
         SectionItem item = { i, i + sameCount, val };
         chromItems[c][index++] = item;
       }
     }
+    usage->itemCount = index;
 
     /* Sort items by start position */
     qsort(chromItems[c], usage->itemCount, sizeof(SectionItem), compareSectionItems);
@@ -897,19 +954,6 @@ void bigWigMergePlus(int inCount, char *inFilenames[], char *outFile)
   slReverse(&usageList);
 
   verbose(1, "\n");
-
-  int itemCount = 0;
-  int sectionCount = 0;
-  c = 0;
-  struct bbiChromUsage *usage;
-  for (usage = usageList; usage != NULL; usage = usage->next, c++)
-  {
-    itemCount += usage->itemCount;
-    sectionCount += (usage->itemCount + itemsPerSlot - 1) / itemsPerSlot;
-  }
-
-  printf("Items: %i\n", itemCount);
-  printf("Sections: %i\n", sectionCount);
 
   itemsToBigWig(usageList, chromItems, outFile);
 }
@@ -929,7 +973,6 @@ int main(int argc, char *argv[])
     if (clRange == NULL)
       errAbort("Invalid range for argument -position");
   }
-
 
   int minArgs = 4;
 
