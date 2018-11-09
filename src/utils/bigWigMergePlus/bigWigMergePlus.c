@@ -1,8 +1,6 @@
 /*
  * bigWigMergePlus - Merge together multiple bigWigs into a single bigWig
- */
-
-/*
+ *
  * Copyright (C) 2018 Romain Grégoire <romain.gregoire@mcgill.ca>
  */
 
@@ -55,12 +53,10 @@ static uint32_t reserved32 = 0;
 static uint64_t reserved64 = 0;
 
 
-/* for bedGraphToBigWig */
+/* for itemsToBigWig */
 static int blockSize = 256;
 static int itemsPerSlot = 1024;
 static boolean doCompress = FALSE;
-static int maxGigs = 100;   // Maximum number of gigs to allocate in one block.
-                            // Undocumented on purpose.
 
 
 void usage()
@@ -75,21 +71,22 @@ void usage()
       "   bigWigMergePlus in1.bw in2.bw .. inN.bw out.bedGraph\n"
       "\n"
       "Options:\n"
-      "   -position=chr1:0-100 - range to merge"
-      "   -threshold=0.N       - don't output values at or below this threshold. Default is 0.0\n"
+      "   -range=chr1:0-100   - Range to merge (default: none)"
+      "   -threshold=0.N      - Don't output values at or below this threshold. (default: 0.0)\n"
+      "   -normalize          - Use values weighted according to each file maximum (default: false)\n"
       );
   exit(0);
 }
 
 double clThreshold = 0.0;
-char *clPosition = NULL;
+boolean clNormalize = FALSE;
 Range *clRange = NULL;
 
 
 static struct optionSpec options[] = {
-  {"position", OPTION_STRING},
+  {"range", OPTION_STRING},
   {"threshold", OPTION_DOUBLE},
-  {"inList", OPTION_BOOLEAN},
+  {"normalize", OPTION_BOOLEAN},
   {NULL, 0},
 };
 
@@ -438,7 +435,6 @@ static struct bbiSummary *itemsWriteReducedOnceReturnReducedTwice(
     int zoomIncrement,
     int blockSize,
     int itemsPerSlot,
-    boolean doCompress,
     struct lm *lm,
     FILE *f,
     bits64 *retDataStart,
@@ -679,7 +675,6 @@ int writeZoomLevels(
       zoomIncrement,
       blockSize,
       itemsPerSlot,
-      doCompress,
       lm,
       f,
       &zoomDataOffsets[0],
@@ -852,6 +847,9 @@ void itemsToBigWig(
  */
 void bigWigMergePlus(int inCount, char *inFilenames[], char *outFile)
 {
+  /* Factors for normalization */
+  double factors[inCount];
+  double totalMaximum = 0.0;
 
   /* Make a list of open bigWig files. */
   struct bbiFile *inFile;
@@ -861,6 +859,19 @@ void bigWigMergePlus(int inCount, char *inFilenames[], char *outFile)
   {
     inFile = bigWigFileOpen(inFilenames[i]);
     slAddTail(&inFiles, inFile);
+
+    if (clNormalize) {
+      struct bbiSummaryElement sum = bbiTotalSummary(inFile);
+      factors[i] = sum.maxVal;
+      totalMaximum += sum.maxVal;
+    }
+  }
+
+  if (clNormalize) {
+    for (int i = 0; i < inCount; i++)
+    {
+      factors[i] = factors[i] / totalMaximum;
+    }
   }
 
   struct bbiChromInfo *chrom;
@@ -913,7 +924,8 @@ void bigWigMergePlus(int inCount, char *inFilenames[], char *outFile)
     verbose(1, "Processing \x1b[1;93m%s\x1b[0m (%d bases)\n", chrom->name, chrom->size);
 
     /* Loop through each input file grabbing data and merging it in. */
-    for (inFile = inFiles; inFile != NULL; inFile = inFile->next)
+    int f = 0;
+    for (inFile = inFiles; inFile != NULL; inFile = inFile->next, f++)
     {
       uint32_t start = clRange == NULL ? 0 : clRange->start;
       uint32_t end   = clRange == NULL || clRange->isFullChrom ? chrom->size : clRange->end;
@@ -927,7 +939,10 @@ void bigWigMergePlus(int inCount, char *inFilenames[], char *outFile)
       {
         for (int i = iv->start; i < iv->end; i++)
         {
-          mergeBuf[i] += iv->val;
+          if (clNormalize)
+            mergeBuf[i] += iv->val * factors[f];
+          else
+            mergeBuf[i] += iv->val;
         }
       }
     }
@@ -964,14 +979,15 @@ int main(int argc, char *argv[])
   /* Process command line. */
 {
   optionInit(&argc, argv, options);
-  clPosition = optionVal("position", clPosition);
   clThreshold = optionDouble("threshold", clThreshold);
+  clNormalize = optionExists("normalize");
+  char *range = optionVal("range", NULL);
 
-  if (clPosition != NULL) {
-    clRange = parseRange(clPosition);
+  if (range != NULL) {
+    clRange = parseRange(range);
 
     if (clRange == NULL)
-      errAbort("Invalid range for argument -position");
+      errAbort("Error: Invalid value for argument -range (format: chrom:start-end)");
   }
 
   int minArgs = 4;
