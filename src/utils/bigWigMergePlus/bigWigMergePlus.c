@@ -64,8 +64,6 @@ void usage()
 {
   printf(
       "bigWigMergePlus 1.0.0 - Merge together multiple bigWigs into a single bigWig.\n"
-      "You'll have to run bedGraphToBigWig to make the output bigWig.\n"
-      "The signal values are just added together to merge them\n"
       "\n"
       "Usage:\n"
       "   bigWigMergePlus in1.bw in2.bw .. inN.bw out.bedGraph\n"
