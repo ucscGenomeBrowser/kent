@@ -1060,7 +1060,7 @@ void wigOption(struct cart *cart, char *name, char *title, struct trackDb *tdb);
 void wigCfgUi(struct cart *cart, struct trackDb *tdb,char *name,char *title,boolean boxed);
 /* UI for the wiggle track */
 
-void labelCfgUi(char *db, struct cart *cart, struct trackDb *tdb);
+void labelCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *prefix);
 /* Put up a choice for labels. */
 
 #define NO_SCORE_FILTER  "noScoreFilter"
@@ -1298,7 +1298,7 @@ return ((filterBy->slChoices == NULL) || (slNameInList(filterBy->slChoices,"All"
 }
 
 void filterBySetCfgUi(struct cart *cart, struct trackDb *tdb,
-                      filterBy_t *filterBySet, boolean onOneLine);
+                      filterBy_t *filterBySet, boolean onOneLine, char *prefix);
 // Does the UI for a list of filterBy structure
 
 char *filterByClause(filterBy_t *filterBy);

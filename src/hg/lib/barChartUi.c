@@ -251,7 +251,7 @@ if (cartVarExists(cart, "ajax"))
     isPopup = TRUE;
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 if (startsWith("big", tdb->type))
-    labelCfgUi(database, cart, tdb);
+    labelCfgUi(database, cart, tdb, track);
 printf("\n<table id=barChartControls style='font-size:%d%%' %s>\n<tr><td>", 
         isPopup ? 75 : 100, boxed ?" width='100%'":"");
 

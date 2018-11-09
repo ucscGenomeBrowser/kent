@@ -2700,7 +2700,7 @@ filterBy_t *filters = filterBySetGet(tdb, cart, tdb->track);
 if (filters != NULL)
     {
     puts("<p>");
-    filterBySetCfgUi(cart, tdb, filters, TRUE);
+    filterBySetCfgUi(cart, tdb, filters, TRUE, tdb->track);
     filterBySetFree(&filters);
     }
 char varName[64];
@@ -3034,7 +3034,7 @@ else if (tdb->type != NULL)
     else if (startsWithWord("factorSource",tdb->type))
         factorSourceUi(database,tdb);
     else if (startsWithWord("bigBed",tdb->type))
-        labelCfgUi(database, cart, tdb);
+        labelCfgUi(database, cart, tdb, tdb->track);
     }
 
 if (!ajax) // ajax asks for a simple cfg dialog for right-click popup or hgTrackUi subtrack cfg
