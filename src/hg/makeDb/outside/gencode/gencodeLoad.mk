@@ -39,6 +39,10 @@ mach = $(shell uname -m)
 db = hg38
 #db = hg19
 #db = grcHhh38
+# official release
+baseUrl = ftp://ftp.ebi.ac.uk/pub/databases/gencode
+# pre-release
+# baseUrl = ftp://ftp.ebi.ac.uk/pub/databases/havana/gencode_pre
 ifeq (${db},mm10)
     grcRefAssembly = GRCm38
     ver = M18
@@ -85,10 +89,6 @@ else ifeq (${db},hg19)
 else
     $(error unimplement genome database: ${db})
 endif
-# official release
-#  baseUrl = ftp://ftp.ebi.ac.uk/pub/databases/gencode
-# pre-release
-baseUrl = ftp://ftp.ebi.ac.uk/pub/databases/havana/gencode_pre
 
 
 # END EDIT THESE EACH RELEASE
@@ -170,6 +170,10 @@ tableExonSupportMeta = ${relDir}/gencode.v${ver}.metadata.Exon_supporting_featur
 tableExonSupport = ${tablePre}ExonSupport${rel}
 tableExonSupportTab = ${tableDir}/${tableExonSupport}.tab
 
+tableHgncMeta = ${relDir}/gencode.v${ver}.metadata.HGNC.gz
+tableHgnc = ${tablePre}Hgnc${rel}
+tableHgncTab = ${tableDir}/${tableHgnc}.tab
+
 tablePdbMeta = ${relDir}/gencode.v${ver}.metadata.PDB.gz
 tablePdb = ${tablePre}Pdb${rel}
 tablePdbTab = ${tableDir}/${tablePdb}.tab
@@ -207,7 +211,7 @@ genePredExtTables = ${tableBasic} ${tableComp} ${tablePseudo}
 genePredTables =
 tabTables = ${tableAttrs} ${tableTag} ${tableGeneSource} \
 	    ${tableTranscriptSource} ${tableTranscriptSupport} \
-	    ${tablePdb} ${tablePubMed} ${tableRefSeq} ${tableUniProt} \
+	    ${tableHgnc} ${tablePdb} ${tablePubMed} ${tableRefSeq} ${tableUniProt} \
 	    ${tableAnnotationRemark} ${tableEntrezGene}  ${tableTranscriptionSupportLevel}
 ifneq (${isBackmap}, yes)
     # these are not included in backmap releases
@@ -246,6 +250,7 @@ ${tableGeneSourceMeta}: ${fetchDone}
 ${tableTranscriptSourceMeta}: ${fetchDone}
 ${tableTranscriptSupportMeta}: ${fetchDone}
 ${tableExonSupportMeta}: ${fetchDone}
+${tableHgncMeta}: ${fetchDone}
 ${tablePdbMeta}: ${fetchDone}
 ${tablePubMedMeta}: ${fetchDone}
 ${tableRefSeqMeta}: ${fetchDone}
@@ -323,6 +328,8 @@ ${tableExonSupportTab}: ${tableExonSupportMeta} ${ensemblToUcscChain}
 	@mkdir -p $(dir $@)
 	${gencodeExonSupportToTable} ${tableExonSupportMeta} ${ensemblToUcscChain} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
+${tableHgncTab}: ${tableHgncMeta}
+	${copyMetadataTabGz}
 ${tablePdbTab}: ${tablePdbMeta}
 	${copyMetadataTabGz}
 ${tablePubMedTab}: ${tablePubMedMeta}

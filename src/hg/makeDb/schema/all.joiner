@@ -2276,6 +2276,11 @@ identifier wgEncodeGencodeGeneSourceV29
     hg38.wgEncodeGencodeGeneSourceV29.geneId
     hg38.wgEncodeGencodeAttrsV29.geneId
 
+identifier wgEncodeGencodeHgncV29
+"Link together Gencode Hgnc table with Attributes table"
+    hg38.wgEncodeGencodeHgncV29.transcriptId dupeOk
+    hg38.wgEncodeGencodeAttrsV29.transcriptId minCheck=0.20
+
 identifier wgEncodeGencodePdbV29
 "Link together Gencode Pdb table with Attributes table"
     hg38.wgEncodeGencodePdbV29.transcriptId dupeOk
