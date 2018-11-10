@@ -36,8 +36,8 @@ mach = $(shell uname -m)
 #   as this doesn't change between release.
 ##
 #db = mm10
-db = hg38
-#db = hg19
+#db = hg38
+db = hg19
 #db = grcHhh38
 preRelease = no
 #preRelease = yes

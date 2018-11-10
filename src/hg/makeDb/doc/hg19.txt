@@ -33129,6 +33129,14 @@ XXX - Wed Oct 31 07:53:55 PDT 2018
     pushd /hive/data/genomes/hg19/bed/gencodeV29lift37
     (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
 
+    # Contained invalid biotype for one transcript (ENST00000649475.1_1), fix for now
+    cd data/release_29lift37
+    mv gencode.v29lift37.annotation.gff3.gz  gencode.v29lift37.annotation.orig.gff3.gz 
+    zcat gencode.v29lift37.annotation.orig.gff3.gz | sed -e 's/lincrna/lincRNA/g' | gzip -c>  gencode.v29lift37.annotation.gff3.gz
+    cd ../..
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.2.out&
+
+    
     # compare tables from previous release to see if number changed makes
     # sense.  Results are in gencode-cmp.tsv
 
@@ -33148,12 +33156,5 @@ XXX - Wed Oct 31 07:53:55 PDT 2018
     make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
 
     # commit all
-
-    # 2018-05-01 markd
-    # fix bug in wgEncodeGencodeEntrezGeneV29lift37 with change in gencodeLoad.mk.  Reload the table.
-    mkdir -p /hive/data/genomes/hg19/bed/gencodeV29lift37
-    rm tables/wgEncodeGencodeEntrezGeneV29lift37.tab 
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.3.out&
-                                                                                 
 
 #########################################################################
