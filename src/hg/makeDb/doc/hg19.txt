@@ -33121,3 +33121,39 @@ EOF
 XXX - Wed Oct 31 07:53:55 PDT 2018
 
 ##############################################################################
+2018-11-09: import of UCSC GENCODE group processing of GENCODE V29lift37 (markd)
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV29lift37
+    pushd /hive/data/genomes/hg19/bed/gencodeV29lift37
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg19 29lift37 94 'Oct 2018'
+
+    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release. [ONLY if it's going to be pushed]
+
+    # edit human/hg19/trackDb.wgEncode.ra to add new .ra file include
+    make DBS=hg19
+
+    # edit  all.joiner to add ~/tmp/gencodeV29lift37.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg19/bed/gencodeV29lift37
+    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # commit all
+
+    # 2018-05-01 markd
+    # fix bug in wgEncodeGencodeEntrezGeneV29lift37 with change in gencodeLoad.mk.  Reload the table.
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV29lift37
+    rm tables/wgEncodeGencodeEntrezGeneV29lift37.tab 
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.3.out&
+                                                                                 
+
+#########################################################################
