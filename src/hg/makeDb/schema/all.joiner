@@ -2276,9 +2276,9 @@ identifier wgEncodeGencodeGeneSourceV29
     hg38.wgEncodeGencodeGeneSourceV29.geneId
     hg38.wgEncodeGencodeAttrsV29.geneId
 
-identifier wgEncodeGencodeHgncV29
-"Link together Gencode Hgnc table with Attributes table"
-    hg38.wgEncodeGencodeHgncV29.transcriptId dupeOk
+identifier wgEncodeGencodeGeneSymbolV29
+"Link together Gencode gene symbol table with Attributes table"
+    hg38.wgEncodeGencodeGeneSymbolV29.transcriptId dupeOk
     hg38.wgEncodeGencodeAttrsV29.transcriptId minCheck=0.20
 
 identifier wgEncodeGencodePdbV29
@@ -2726,9 +2726,9 @@ identifier wgEncodeGencodeGeneSourceV29lift37
     hg19.wgEncodeGencodeGeneSourceV29lift37.geneId
     hg19.wgEncodeGencodeAttrsV29lift37.geneId
 
-identifier wgEncodeGencodeHgncV29lift37
-"Link together Gencode Hgnc table with Attributes table"
-    hg19.wgEncodeGencodeHgncV29lift37.transcriptId dupeOk
+identifier wgEncodeGencodeGeneSymbolV29lift37
+"Link together Gencode gene symbol table with Attributes table"
+    hg19.wgEncodeGencodeGeneSymbolV29lift37.transcriptId dupeOk
     hg19.wgEncodeGencodeAttrsV29lift37.transcriptId minCheck=0.20
 
 identifier wgEncodeGencodePdbV29lift37

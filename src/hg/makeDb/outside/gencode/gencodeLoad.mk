@@ -35,16 +35,16 @@ mach = $(shell uname -m)
 # - ensemblPrevVersion is use to get chrom name mappings for pre-release,
 #   as this doesn't change between release.
 ##
-#db = mm10
 #db = hg38
-db = hg19
+#db = hg19
+db = mm10
 #db = grcHhh38
 preRelease = no
 #preRelease = yes
 ifeq (${db},mm10)
     grcRefAssembly = GRCm38
-    ver = M18
-    prevVer = M17
+    ver = M19
+    prevVer = M18
     gencodeOrg = Gencode_mouse
     ftpReleaseSubdir = release_${ver}
     annGffTypeName = chr_patch_hapl_scaff.annotation
@@ -175,9 +175,13 @@ tableExonSupportMeta = ${relDir}/gencode.v${ver}.metadata.Exon_supporting_featur
 tableExonSupport = ${tablePre}ExonSupport${rel}
 tableExonSupportTab = ${tableDir}/${tableExonSupport}.tab
 
-tableHgncMeta = ${relDir}/gencode.v${ver}.metadata.HGNC.gz
-tableHgnc = ${tablePre}Hgnc${rel}
-tableHgncTab = ${tableDir}/${tableHgnc}.tab
+ifeq (${gencodeOrg}, Gencode_human)
+   tableGeneSymbolMeta = ${relDir}/gencode.v${ver}.metadata.HGNC.gz
+else
+   tableGeneSymbolMeta = ${relDir}/gencode.v${ver}.metadata.MGI.gz
+endif
+tableGeneSymbol = ${tablePre}GeneSymbol${rel}
+tableGeneSymbolTab = ${tableDir}/${tableGeneSymbol}.tab
 
 tablePdbMeta = ${relDir}/gencode.v${ver}.metadata.PDB.gz
 tablePdb = ${tablePre}Pdb${rel}
@@ -216,7 +220,7 @@ genePredExtTables = ${tableBasic} ${tableComp} ${tablePseudo}
 genePredTables =
 tabTables = ${tableAttrs} ${tableTag} ${tableGeneSource} \
 	    ${tableTranscriptSource} ${tableTranscriptSupport} \
-	    ${tableHgnc} ${tablePdb} ${tablePubMed} ${tableRefSeq} ${tableUniProt} \
+	    ${tableGeneSymbol} ${tablePdb} ${tablePubMed} ${tableRefSeq} ${tableUniProt} \
 	    ${tableAnnotationRemark} ${tableEntrezGene}  ${tableTranscriptionSupportLevel}
 ifneq (${isBackmap}, yes)
     # these are not included in backmap releases
@@ -255,7 +259,7 @@ ${tableGeneSourceMeta}: ${fetchDone}
 ${tableTranscriptSourceMeta}: ${fetchDone}
 ${tableTranscriptSupportMeta}: ${fetchDone}
 ${tableExonSupportMeta}: ${fetchDone}
-${tableHgncMeta}: ${fetchDone}
+${tableGeneSymbolMeta}: ${fetchDone}
 ${tablePdbMeta}: ${fetchDone}
 ${tablePubMedMeta}: ${fetchDone}
 ${tableRefSeqMeta}: ${fetchDone}
@@ -333,7 +337,7 @@ ${tableExonSupportTab}: ${tableExonSupportMeta} ${ensemblToUcscChain} ${gencodeT
 	@mkdir -p $(dir $@)
 	${gencodeExonSupportToTable} ${tableExonSupportMeta} ${ensemblToUcscChain} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
-${tableHgncTab}: ${tableHgncMeta} ${gencodeTsv}
+${tableGeneSymbolTab}: ${tableGeneSymbolMeta} ${gencodeTsv}
 	${copyMetadataTabGz}
 ${tablePdbTab}: ${tablePdbMeta} ${gencodeTsv}
 	${copyMetadataTabGz}

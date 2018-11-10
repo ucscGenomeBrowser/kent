@@ -39,7 +39,7 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     encode/pairedTagAlign.o encode/peptideMapping.o encode/tagAlign.o  \
     encode/wgEncodeGencodeAttrs.o encode/wgEncodeGencodeExonSupport.o \
     encode/wgEncodeGencodeEntrezGene.o encode/wgEncodeGencodeTag.o  \
-    encode/wgEncodeGencodePdb.o encode/wgEncodeGencodePubMed.o \
+    encode/wgEncodeGencodeGeneSymbol.o encode/wgEncodeGencodePdb.o encode/wgEncodeGencodePubMed.o \
     encode/wgEncodeGencodeRefSeq.o encode/wgEncodeGencodeGeneSource.o encode/wgEncodeGencodeTranscriptSource.o \
     encode/wgEncodeGencodeTranscriptSupport.o encode/wgEncodeGencodeTranscriptionSupportLevel.o \
     encode/wgEncodeGencodeUniProt.o \
