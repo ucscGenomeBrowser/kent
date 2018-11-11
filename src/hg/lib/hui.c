@@ -3617,7 +3617,7 @@ for (;val!=NULL;val=val->next)
     }
 }
 
-filterBy_t *buildFilterBy(struct trackDb *tdb, struct cart *cart, struct asObject *as, char *filterName)
+filterBy_t *buildFilterBy(struct trackDb *tdb, struct cart *cart, struct asObject *as, char *filterName, char *name)
 /* Build a filterBy_t structure from a <column>FilterValues statement. */
 {
 char *setting = trackDbSetting(tdb, filterName);
@@ -3652,13 +3652,12 @@ if (cart != NULL)
 // Note: cannot use found name above because that may be at a higher (composite/view) level
 int len = strlen(tdb->track) + strlen(filterBy->column) + 15;
 filterBy->htmlName = needMem(len);
-safef(filterBy->htmlName, len, "%s.%s.%s", tdb->track,"filterBy",filterBy->column);
-freeMem(setting);
+safef(filterBy->htmlName, len, "%s.%s.%s", name,"filterBy",filterBy->column);
 
 return filterBy;
 }
 
-filterBy_t *filterByValues(struct trackDb *tdb, struct cart *cart, struct slName *filterValues)
+filterBy_t *filterByValues(struct trackDb *tdb, struct cart *cart, struct slName *filterValues, char *name)
 /* Build a filterBy_t list from tdb variables of the form *FilterValues */
 {
 struct asObject *as = asForTdb(NULL, tdb);
@@ -3666,7 +3665,7 @@ filterBy_t *filterByList = NULL, *filter;
 struct slName *fieldFilter;
 while ((fieldFilter = slPopHead(&filterValues)) != NULL)
     {
-    if ((filter = buildFilterBy(tdb, cart, as, fieldFilter->name)) != NULL)
+    if ((filter = buildFilterBy(tdb, cart, as, fieldFilter->name, name)) != NULL)
         slAddHead(&filterByList, filter);
     }
 return filterByList;
@@ -3678,7 +3677,7 @@ filterBy_t *filterBySetGetGuts(struct trackDb *tdb, struct cart *cart, char *nam
 // first check to see if this tdb is using "new" FilterValues cart variables
 struct slName *filterValues = trackDbSettingsWildMatch(tdb, FILTER_VALUES_WILDCARD);
 if (filterValues)
-    return filterByValues(tdb, cart, filterValues);
+    return filterByValues(tdb, cart, filterValues, name);
 
 filterBy_t *filterBySet = NULL;
 char *setting = trackDbSettingClosestToHome(tdb, settingName);
@@ -3924,7 +3923,7 @@ printf(">%s</OPTION>\n",label);
 
 void filterBySetCfgUiGuts(struct cart *cart, struct trackDb *tdb,
 		      filterBy_t *filterBySet, boolean onOneLine,
-		      char *filterTypeTitle, char *selectIdPrefix, char *allLabel)
+		      char *filterTypeTitle, char *selectIdPrefix, char *allLabel, char *prefix)
 // Does the UI for a list of filterBy structure for either filterBy or highlightBy controls
 {
 if (filterBySet == NULL)
@@ -3969,7 +3968,7 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next, ix++)
     if (isMultiple && tdbIsBigBed(tdb))
         {
         char cartSettingString[4096];
-        safef(cartSettingString, sizeof cartSettingString, "%s.%s", tdb->track, settingString);
+        safef(cartSettingString, sizeof cartSettingString, "%s.%s", prefix, settingString);
         printf("<b>Match if  ");
         cgiMakeRadioButton(cartSettingString, FILTERBY_MULTIPLE_LIST_AND, sameString(setting, FILTERBY_MULTIPLE_LIST_AND));
         printf(" all ");
@@ -4035,17 +4034,17 @@ puts("</TR></TABLE>");
 }
 
 void filterBySetCfgUi(struct cart *cart, struct trackDb *tdb,
-		  filterBy_t *filterBySet, boolean onOneLine)
+		  filterBy_t *filterBySet, boolean onOneLine, char *prefix)
 /* Does the filter UI for a list of filterBy structure */
 {
-filterBySetCfgUiGuts(cart, tdb, filterBySet, onOneLine, "Filter", "fbc", "All");
+filterBySetCfgUiGuts(cart, tdb, filterBySet, onOneLine, "Filter", "fbc", "All", prefix);
 }
 
 void highlightBySetCfgUi(struct cart *cart, struct trackDb *tdb,
-		     filterBy_t *filterBySet, boolean onOneLine)
+		     filterBy_t *filterBySet, boolean onOneLine, char *prefix)
 /* Does the highlight UI for a list of filterBy structure */
 {
-filterBySetCfgUiGuts(cart, tdb, filterBySet, onOneLine, "Highlight", "hbc", "None");
+filterBySetCfgUiGuts(cart, tdb, filterBySet, onOneLine, "Highlight", "hbc", "None", prefix);
 }
 
 #define COLOR_BG_DEFAULT_IX     0
@@ -4223,7 +4222,7 @@ switch(cType)
 			scoreCfgUi(db, cart,tdb,prefix,title,maxScore,boxed);
 
 			if(startsWith("bigBed", tdb->type))
-			    labelCfgUi(db, cart, tdb);
+			    labelCfgUi(db, cart, tdb, prefix);
 			}
 			break;
     case cfgPeak:
@@ -5931,7 +5930,7 @@ if (filterBySet != NULL)
 
     if (!isBoxOpened)   // Note filterBy boxes are not double "boxed",
         printf("<BR>"); // if there are no other filters
-    filterBySetCfgUi(cart,tdb,filterBySet,TRUE);
+    filterBySetCfgUi(cart,tdb,filterBySet,TRUE, name);
     filterBySetFree(&filterBySet);
     skipScoreFilter = TRUE;
     }
@@ -6078,7 +6077,7 @@ slReverse(&list);
 return list;
 }
 
-void labelCfgUi(char *db, struct cart *cart, struct trackDb *tdb)
+void labelCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *prefix)
 /* If there is a labelFields for a bigBed, this routine is called to put up the label options. */
 {
 if (trackDbSettingClosestToHomeOn(tdb, "linkIdInName"))
@@ -6098,7 +6097,7 @@ printf("<B>Label:</B> ");
 struct slPair *thisLabel = labelList;
 for(; thisLabel; thisLabel = thisLabel->next)
     {
-    safef(varName, sizeof(varName), "%s.label.%s", tdb->track, thisLabel->name);
+    safef(varName, sizeof(varName), "%s.label.%s", prefix, thisLabel->name);
     boolean isDefault = FALSE;
     if (defaultLabelList == NULL)
         isDefault = (thisLabel == labelList);
@@ -6130,7 +6129,7 @@ char *typeLine = cloneString(tdb->type);
 char *words[8];
 int wordCount = wordCount = chopLine(typeLine, words);
 if (sameString(tdb->type, "bigPsl"))
-    labelCfgUi(db, cart, tdb);
+    labelCfgUi(db, cart, tdb, name);
 if (wordCount == 3 && sameWord(words[1], "xeno"))
     crossSpeciesCfgUi(cart,tdb);
 baseColorDropLists(cart, tdb, name);
@@ -6527,7 +6526,7 @@ boolean parentLevel = isNameAtParentLevel(tdb,name);
 char *geneLabel = cartUsualStringClosestToHome(cart, tdb,parentLevel, "label", "gene");
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 
-labelCfgUi(db, cart, tdb);
+labelCfgUi(db, cart, tdb, name);
 if (sameString(name, "acembly"))
     {
     char *acemblyClass = cartUsualStringClosestToHome(cart,tdb,parentLevel,"type",
@@ -6577,14 +6576,14 @@ filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
 if (filterBySet != NULL)
     {
     printf("<BR>");
-    filterBySetCfgUi(cart,tdb,filterBySet,FALSE);
+    filterBySetCfgUi(cart,tdb,filterBySet,FALSE, name);
     filterBySetFree(&filterBySet);
     }
 filterBy_t *highlightBySet = highlightBySetGet(tdb,cart,name);
 if (highlightBySet != NULL)
     {
     printf("<BR>");
-    highlightBySetCfgUi(cart,tdb,highlightBySet,FALSE);
+    highlightBySetCfgUi(cart,tdb,highlightBySet,FALSE, name);
     filterBySetFree(&highlightBySet);
     }
 
