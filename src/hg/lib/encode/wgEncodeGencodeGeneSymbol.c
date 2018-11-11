@@ -6,7 +6,7 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
-#include "wgEncodeGencodeGeneSymbol.h"
+#include "encode/wgEncodeGencodeGeneSymbol.h"
 
 
 
