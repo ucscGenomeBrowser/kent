@@ -164,7 +164,7 @@ struct bigBedFilter *bigBedMakeFilterBy(struct cart *cart, struct bbiFile *bbi, 
 struct bigBedFilter *filter;
 char filterType[4096];
 safef(filterType, sizeof filterType, "%s%s", field, FILTER_TYPE_NAME);
-char *setting = cartOrTdbString(cart, tdb, filterType, NULL);
+char *setting = cartOrTdbString(cart, tdb, filterType, FILTERBY_SINGLE);
 
 AllocVar(filter);
 filter->fieldNum =  bbExtraFieldIndex(bbi, field) + 3;

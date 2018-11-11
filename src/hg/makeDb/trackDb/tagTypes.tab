@@ -465,6 +465,7 @@ wgEncodeGencodeAttrs genePred
 wgEncodeGencodeExonSupport genePred
 wgEncodeGencodeGeneSource genePred
 wgEncodeGencodeTranscriptSource genePred
+wgEncodeGencodeHgnc genePred
 wgEncodeGencodePdb genePred
 wgEncodeGencodePubMed genePred
 wgEncodeGencodeRefSeq genePred
