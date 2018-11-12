@@ -54,6 +54,7 @@ def shortenName(name):
             copy = ""
         shortName = band+copy
     elif name.startswith("GRCh"):
+        # GRCh37/hg19 15q14-15.1 chr15:34638237..42057083 complex variant
         print name
         assert False # name that starts with GRCh but does not match our regex should not happen
     #elif "del" in name:
@@ -306,7 +307,8 @@ allToHgvs = parseHgvsFile(hgvsFname)
 # e.g. GRCh38/hg38 1p36.33-36.31(chr1:1181847-5507243)x1
 # GRCh38/hg38 9p24.3-q34.3(chr9:204193-138179445)
 # GRCh37/hg19 21q22.13-22.2(chr21:38741104..40274106)
-cnvRe = re.compile(r'GRCh[0-9]*/hg[0-9]* ([XY0-9pq.-]+)\([XYa-z_:0-9.-]+\)(x[0-9]+)?')
+# GRCh37/hg19 15q14-15.1 chr15:34638237..42057083 complex variant
+cnvRe = re.compile(r'GRCh[0-9]*/hg[0-9]* ([XY0-9pq.-]+) ?\(?[XYa-z_:0-9.-]+?\)?(x[0-9]+)?.*')
 
 hgvsRe = re.compile(r'(N[RPCGM]_[0-9.]+)(\([a-zA-Z0-9_-]+\))?:([+0-9c.ACTG>a-z_()-]+)')
 
