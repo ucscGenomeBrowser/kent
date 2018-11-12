@@ -17534,11 +17534,10 @@ TMPDIR=/dev/shm
     # 660591041 bases of 2715853792 (24.324%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` bosTau9 mm10) > rbest.log 2>&1 &
-XXX - running Sun Nov 11 13:24:13 PST 2018
-    # real    241m51.110s
+    # real    204m36.465s
 
     cat fb.bosTau9.chainRBest.Mm10.txt
-    # 810427625 bases of 2286657046 (35.442%) in intersection
+    # 667305554 bases of 2715853792 (24.571%) in intersection
 
 #########################################################################
 2018-11-10: import of UCSC GENCODE group processing of GENCODE VM19 (markd)
