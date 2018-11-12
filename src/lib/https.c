@@ -420,7 +420,7 @@ while (1)
 		    if ((sigErr = sigwait(&sigpipe_mask, &sig)) != 0) 
 			{
 			errno = sigErr;
-			perror("sigtimedwait");
+			perror("sigwait");
 			exit(1);
 			}
 		    }

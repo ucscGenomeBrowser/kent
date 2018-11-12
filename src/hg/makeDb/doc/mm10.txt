@@ -17504,20 +17504,18 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1 &
-XXX - running - Thu Nov  8 10:36:49 PST 2018
-    # real    190m45.265s
+    # real    211m46.258s
 
     cat fb.mm10.chainBosTau9Link.txt
-    # 851790136 bases of 2652783500 (32.109%) in intersection
-
+    # 703580224 bases of 2652783500 (26.522%) in intersection
     cat fb.mm10.chainSynBosTau9Link.txt
-    # 806407823 bases of 2652783500 (30.399%) in intersection
+    # 659095603 bases of 2652783500 (24.845%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` mm10 bosTau9) > rbest.log 2>&1 &
-    # real    287m58.329s
+    # real    214m24.819s
 
     cat fb.mm10.chainRBest.BosTau9.txt
-    # 811435554 bases of 2652783500 (30.588%) in intersection
+    # 667950653 bases of 2652783500 (25.179%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/bosTau9/bed/blastz.mm10.swap
@@ -17528,18 +17526,55 @@ XXX - running - Thu Nov  8 10:36:49 PST 2018
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1 &
-    #  real    67m0.560s
+    #  real    41m22.962s
 
     cat fb.bosTau9.chainMm10Link.txt
-    # 832845143 bases of 2286657046 (36.422%) in intersection
-
+    # 695248613 bases of 2715853792 (25.600%) in intersection
     cat fb.bosTau9.chainSynMm10Link.txt
-    # 802734600 bases of 2286657046 (35.105%) in intersection
+    # 660591041 bases of 2715853792 (24.324%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` bosTau9 mm10) > rbest.log 2>&1 &
+XXX - running Sun Nov 11 13:24:13 PST 2018
     # real    241m51.110s
 
     cat fb.bosTau9.chainRBest.Mm10.txt
     # 810427625 bases of 2286657046 (35.442%) in intersection
 
 #########################################################################
+2018-11-10: import of UCSC GENCODE group processing of GENCODE VM19 (markd)
+    # not being push to the RR
+
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM19
+    pushd /hive/data/genomes/mm10/bed/gencodeVM19
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    ##  gencode-cmp.tsv check to see if sizes make sense
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs mm10 M19 94 'Oct 2018'
+
+    ## only if being pushed to RR:
+    (skipped)
+    # Update mouse/mm10/wgEncodeGencodeSuper.html
+    # Update 'Release Notes' to describe new release.
+
+    # edit mouse/mm10/trackDb.gencode.ra to add new .ra file include
+    make DBS=mm10
+
+    ## only if being pushed to RR: (SKIPPED)
+    # edit  all.joiner to add ~/tmp/gencodeVM19.joiner
+    # verify with:
+    pushd /hive/data/genomes/mm10/bed/gencodeVM19
+    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck db=mm10
+
+    # commit all and make push request, the file tables.lst will have the
+    # list of tables for the push request.
+
+    cd ~/kent/src/hg/makeDb/trackDb
+    make alpha DBS=mm10
+
+##############################################################################

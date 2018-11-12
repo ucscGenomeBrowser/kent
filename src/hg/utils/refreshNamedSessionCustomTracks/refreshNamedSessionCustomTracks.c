@@ -16,7 +16,7 @@
 #include <signal.h>
 #include "obscure.h"
 
-int version = 39;  // PLEASE INCREMENT THIS BEFORE PUSHING TO SHARED REPO
+int version = 40;  // PLEASE INCREMENT THIS BEFORE PUSHING TO SHARED REPO
                    // SO THAT OTHERS MAY TEST WITH IT, SO THAT EVERYONE KNOWS THEY HAVE THE
                    // EXACT RIGHT VERSION.
 
@@ -26,6 +26,11 @@ int CFTEcalls = 0;
 int numUpdates = 0;
 
 int numForks = 10;
+
+int timeoutSecs = 3600; // Timeout for each forked child process
+                        // default 3600 seconds is one hour
+
+char *testFailure = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -44,10 +49,12 @@ errAbort(
   "    -atime=N - If the session has not been accessed since N days ago,\n"
   "             - don't refresh its custom tracks.  Default: no limit.\n"
   "    -forks=N - Number of times to fork to recover memory.  Default: %d\n"
+  "    -timeoutSecs=N - Number of seconds to kill a timed-out forked child.  Default: %d\n"
+  "    -testFailure={exitCode|errAbort|segfault|timeout} must cause the parent to return non-zero exitCode\n"
   "This is intended to be run as a nightly cron job for each central db.\n"
   "The ~/.hg.conf file (or $HGDB_CONF) must specify the same central db\n"
   "as the command line.  [The command line arg helps to verify coordination.]",
-  savedSessionTable, CGI_BIN, CGI_BIN, numForks
+  savedSessionTable, CGI_BIN, CGI_BIN, numForks, timeoutSecs
   );
 }
 
@@ -56,6 +63,8 @@ static struct optionSpec options[] = {
     {"atime",    OPTION_INT},
     {"workDir",  OPTION_STRING},
     {"forks",  OPTION_INT},
+    {"timeoutSecs", OPTION_INT},
+    {"testFailure",  OPTION_STRING},
     {"hardcore", OPTION_BOOLEAN}, /* Intentionally omitted from usage(). */
     {NULL, 0},
 };
@@ -139,7 +148,7 @@ void waitForChildWithTimeout(pid_t pid)
 int wstat;
 struct timespec timeout;
 
-timeout.tv_sec = 3600;  // TODO make this a parameter
+timeout.tv_sec = timeoutSecs;   // default 3600 is one hour
 timeout.tv_nsec = 0;
 
 while (1)
@@ -506,6 +515,27 @@ for (si = sessionList;  si != NULL;  si = si->next)
 	    // lines of "VmPeak" in the output as a double-check that the program completed.
 	    showVmPeak();  
 	    verbose(1, "forked child process# %d done.\n", fork);
+	    // It is important to be able to easily test that these failures 
+	    // behave correctly, and cause the parent process to exit with non-zero exit code.
+	    if (testFailure) // {exitCode|errAbort|segfault|timeout}
+		{
+		if (sameString(testFailure, "exitCode"))
+		    exit(1);
+		else if (sameString(testFailure, "errAbort"))
+		    errAbort("Test asked for errAbort in child");
+		else if (sameString(testFailure, "segfault"))
+		    {
+		    char *ptr = NULL;
+		    char c = *ptr; // invalid null pointer should cause segfault.
+		    printf("c=%c\n",c);  // it should never get here. Make compiler happy.
+		    }
+		else if (sameString(testFailure, "timeout"))
+		    {
+		    // nothing happens in child, but parent will timeout in 1 second and kill the child.
+		    }
+		else 
+		    errAbort("unknown value [%s] for testFailure", testFailure);
+		}
 	    exit(0);
 	    }
 	}
@@ -535,6 +565,10 @@ if (argc != 2)
 numForks = optionInt("forks", numForks);
 if (numForks < 1)
     errAbort("forks option must specify positive integer >= 1");
+timeoutSecs = optionInt("timeoutSecs", timeoutSecs);
+testFailure = optionVal("testFailure", testFailure);
+if (testFailure && sameString(testFailure,"timeout"))
+    timeoutSecs = 1; // Timeout for each forked child process
 char *workDir = optionVal("workDir", CGI_BIN);
 setCurrentDir(workDir);
 

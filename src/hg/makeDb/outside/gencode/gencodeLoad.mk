@@ -35,18 +35,16 @@ mach = $(shell uname -m)
 # - ensemblPrevVersion is use to get chrom name mappings for pre-release,
 #   as this doesn't change between release.
 ##
-#db = mm10
-db = hg38
+#db = hg38
 #db = hg19
+db = mm10
 #db = grcHhh38
-# official release
-baseUrl = ftp://ftp.ebi.ac.uk/pub/databases/gencode
-# pre-release
-# baseUrl = ftp://ftp.ebi.ac.uk/pub/databases/havana/gencode_pre
+preRelease = no
+#preRelease = yes
 ifeq (${db},mm10)
     grcRefAssembly = GRCm38
-    ver = M18
-    prevVer = M17
+    ver = M19
+    prevVer = M18
     gencodeOrg = Gencode_mouse
     ftpReleaseSubdir = release_${ver}
     annGffTypeName = chr_patch_hapl_scaff.annotation
@@ -76,13 +74,13 @@ else ifeq (${db},grcHhh38)
     ensemblCDnaDb = homo_sapiens_cdna_${ensemblPrevVer}
 else ifeq (${db},hg19)
     grcRefAssembly = GRCh37
-    verBase = 28
+    verBase = 29
     ver = ${verBase}lift37
     ftpReleaseSubdir = release_${verBase}/GRCh37_mapping
-    prevVer = 27lift37
+    prevVer = 28lift37
     gencodeOrg = Gencode_human
     annGffTypeName = annotation
-    ensemblVer = 74_37
+    ensemblVer = 74_37      # only used to get genome chromsome name mappings
     ensemblPrevVer = ${ensemblVer}  # doesn't change
     ensemblCDnaDb = homo_sapiens_cdna_${ensemblPrevVer}
     isBackmap = yes
@@ -92,6 +90,13 @@ endif
 
 
 # END EDIT THESE EACH RELEASE
+ifeq (${preRelease},yes)
+    # pre-release
+    baseUrl = ftp://ftp.ebi.ac.uk/pub/databases/havana/gencode_pre
+else
+    # official release
+    baseUrl = ftp://ftp.ebi.ac.uk/pub/databases/gencode
+endif
 
 rel = V${ver}
 releaseUrl = ${baseUrl}/${gencodeOrg}/${ftpReleaseSubdir}
@@ -170,9 +175,13 @@ tableExonSupportMeta = ${relDir}/gencode.v${ver}.metadata.Exon_supporting_featur
 tableExonSupport = ${tablePre}ExonSupport${rel}
 tableExonSupportTab = ${tableDir}/${tableExonSupport}.tab
 
-tableHgncMeta = ${relDir}/gencode.v${ver}.metadata.HGNC.gz
-tableHgnc = ${tablePre}Hgnc${rel}
-tableHgncTab = ${tableDir}/${tableHgnc}.tab
+ifeq (${gencodeOrg}, Gencode_human)
+   tableGeneSymbolMeta = ${relDir}/gencode.v${ver}.metadata.HGNC.gz
+else
+   tableGeneSymbolMeta = ${relDir}/gencode.v${ver}.metadata.MGI.gz
+endif
+tableGeneSymbol = ${tablePre}GeneSymbol${rel}
+tableGeneSymbolTab = ${tableDir}/${tableGeneSymbol}.tab
 
 tablePdbMeta = ${relDir}/gencode.v${ver}.metadata.PDB.gz
 tablePdb = ${tablePre}Pdb${rel}
@@ -211,7 +220,7 @@ genePredExtTables = ${tableBasic} ${tableComp} ${tablePseudo}
 genePredTables =
 tabTables = ${tableAttrs} ${tableTag} ${tableGeneSource} \
 	    ${tableTranscriptSource} ${tableTranscriptSupport} \
-	    ${tableHgnc} ${tablePdb} ${tablePubMed} ${tableRefSeq} ${tableUniProt} \
+	    ${tableGeneSymbol} ${tablePdb} ${tablePubMed} ${tableRefSeq} ${tableUniProt} \
 	    ${tableAnnotationRemark} ${tableEntrezGene}  ${tableTranscriptionSupportLevel}
 ifneq (${isBackmap}, yes)
     # these are not included in backmap releases
@@ -250,7 +259,7 @@ ${tableGeneSourceMeta}: ${fetchDone}
 ${tableTranscriptSourceMeta}: ${fetchDone}
 ${tableTranscriptSupportMeta}: ${fetchDone}
 ${tableExonSupportMeta}: ${fetchDone}
-${tableHgncMeta}: ${fetchDone}
+${tableGeneSymbolMeta}: ${fetchDone}
 ${tablePdbMeta}: ${fetchDone}
 ${tablePubMedMeta}: ${fetchDone}
 ${tableRefSeqMeta}: ${fetchDone}
@@ -318,23 +327,23 @@ ${metaFilterCmd} $< > $@.${tmpExt}
 mv -f $@.${tmpExt} $@
 endef
 
-${tableGeneSourceTab}: ${tableGeneSourceMeta}
+${tableGeneSourceTab}: ${tableGeneSourceMeta} ${gencodeTsv}
 	${copyMetadataTabGz}
-${tableTranscriptSourceTab}: ${tableTranscriptSourceMeta}
+${tableTranscriptSourceTab}: ${tableTranscriptSourceMeta} ${gencodeTsv}
 	${copyMetadataTabGz}
-${tableTranscriptSupportTab}: ${tableTranscriptSupportMeta}
+${tableTranscriptSupportTab}: ${tableTranscriptSupportMeta} ${gencodeTsv}
 	${copyMetadataTabGz}
-${tableExonSupportTab}: ${tableExonSupportMeta} ${ensemblToUcscChain}
+${tableExonSupportTab}: ${tableExonSupportMeta} ${ensemblToUcscChain} ${gencodeTsv}
 	@mkdir -p $(dir $@)
 	${gencodeExonSupportToTable} ${tableExonSupportMeta} ${ensemblToUcscChain} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
-${tableHgncTab}: ${tableHgncMeta}
+${tableGeneSymbolTab}: ${tableGeneSymbolMeta} ${gencodeTsv}
 	${copyMetadataTabGz}
-${tablePdbTab}: ${tablePdbMeta}
+${tablePdbTab}: ${tablePdbMeta} ${gencodeTsv}
 	${copyMetadataTabGz}
-${tablePubMedTab}: ${tablePubMedMeta}
+${tablePubMedTab}: ${tablePubMedMeta} ${gencodeTsv}
 	${copyMetadataTabGz}
-${tableRefSeqTab}: ${tableRefSeqMeta}
+${tableRefSeqTab}: ${tableRefSeqMeta} ${gencodeTsv}
 	${copyMetadataTabGz}
 
 ${tableTranscriptionSupportLevelTab}: ${tableTranscriptionSupportLevelData}
@@ -343,7 +352,7 @@ ${tableTranscriptionSupportLevelTab}: ${tableTranscriptionSupportLevelData}
 	mv -f $@.${tmpExt} $@
 
 # convert to zero-based, 1/2 open
-${tablePolyAFeatureTab}: ${tablePolyAFeatureMeta}
+${tablePolyAFeatureTab}: ${tablePolyAFeatureMeta} ${gencodeTsv}
 	@mkdir -p $(dir $@)
 	zcat $< | tawk '{print $$1,$$2-1,$$3,$$4,$$5-1,$$6,$$7,$$8}' | sort -k 4,4 -k 5,5n > $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
@@ -352,7 +361,7 @@ ${tableAnnotationRemarkTab}: ${tableAnnotationRemarkMeta} ${gencodeTsv}
 	${metaFilterCmdGz} $<  | tawk '{print $$1,gensub("\\\\n|\\\\","","g",$$2)}' | sort -k 1,1 > $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 # drop ENSTR entries that are a hack to support PAR sequences in GTF
-${tableEntrezGeneTab}: ${tableEntrezGeneMeta}
+${tableEntrezGeneTab}: ${tableEntrezGeneMeta} ${gencodeTsv}
 	@mkdir -p $(dir $@)
 	zcat $< | tawk '$$1!~/^ENSTR/' | sort -k 1,1 | ${metaFilterCmd} /dev/stdin > $@.${tmpExt}
 	mv -f $@.${tmpExt} $@

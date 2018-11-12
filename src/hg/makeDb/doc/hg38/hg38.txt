@@ -7072,7 +7072,7 @@ cd kent/src/hg/makeDb/trackDb
 
     # generate trackDb and joiner blurb
     pushd ~/kent/src/hg/makeDb/trackDb
-    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg38 29 94 'Sept 2018'
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg38 29 94 'Oct 2018'
 
     # Edit human/hg38/wgEncodeGencodeSuper.html and update 'Release Notes'
     # to describe new release. [ONLY if it's going to be pushed]
