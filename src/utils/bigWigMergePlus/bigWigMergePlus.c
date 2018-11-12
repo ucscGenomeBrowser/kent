@@ -26,6 +26,7 @@
 
 /* version history:
  *  1.0.0 - copied from bigWigMerge
+ *  1.0.1 - fix help text
  */
 
 /* A range of bigWig file */
@@ -63,10 +64,10 @@ void usage()
 /* Explain usage and exit. */
 {
   printf(
-      "bigWigMergePlus 1.0.0 - Merge together multiple bigWigs into a single bigWig.\n"
+      "bigWigMergePlus 1.0.1 - Merge together multiple bigWigs into a single bigWig.\n"
       "\n"
       "Usage:\n"
-      "   bigWigMergePlus in1.bw in2.bw .. inN.bw out.bedGraph\n"
+      "   bigWigMergePlus in1.bw in2.bw .. inN.bw out.bw\n"
       "\n"
       "Options:\n"
       "   -range=chr1:0-100   - Range to merge (default: none)\n"
