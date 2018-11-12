@@ -42,6 +42,17 @@ The following statistics are recorded:
         args.tableFile[0].close()
     return args
 
+def cleanTableList(tableList):
+    """Strips 'db.' from tables in tableList."""
+    ret = []
+    for tbl in tableList:
+        if "." in tbl:
+            ix = tbl.index(".")
+            ret.append(tbl[ix+1:])
+        else:
+            ret.append(tbl)
+    return ret
+
 def checkTablesReceived(tableList, outFile):
     """Raises an exception if the tableList is empty. (Necessary because both ways of specifying
     tables are optional.)"""
@@ -80,7 +91,7 @@ def writeSummaryFile(sumTable, sumFile):
 def main():
     """Main function of qaGbTracks. Runs all of the other functions of the program."""
     args = parseCommandLine()
-    tableList = args.table
+    tableList = cleanTableList(args.table)
     db = args.db
     outFile = args.outFile
     checkTablesReceived(tableList, outFile)

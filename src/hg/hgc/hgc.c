@@ -5944,21 +5944,21 @@ void printAlignments(struct psl *pslList, int startFirst, char *hgcCommand,
 printAlignmentsExtra(pslList, startFirst, hgcCommand, "htcCdnaAliInWindow", tableName, itemIn);
 }
 
-struct psl *getAlignments(struct sqlConnection *conn, char *table, char *acc)
-/* get the list of alignments for the specified acc */
+static struct psl *getAlignmentsTName(struct sqlConnection *conn, char *table, char *acc,
+                                      char *tName)
+/* get the list of alignments for the specified acc and tName (if given). */
 {
 struct sqlResult *sr = NULL;
 char **row;
 struct psl *psl, *pslList = NULL;
 boolean hasBin;
-char splitTable[64];
-char query[256];
+char splitTable[256];
+char query[1024];
 if (!hFindSplitTable(database, seqName, table, splitTable, &hasBin))
     errAbort("can't find table %s or %s_%s", table, seqName, table);
-char *chr = cartOptionalString(cart, "c");
-if (isNotEmpty(chr))
+if (isNotEmpty(tName))
     sqlSafef(query, sizeof(query), "select * from %s where qName = '%s' and tName = '%s'",
-             splitTable, acc, chr);
+             splitTable, acc, tName);
 else
     sqlSafef(query, sizeof(query), "select * from %s where qName = '%s'", splitTable, acc);
 sr = sqlGetResult(conn, query);
@@ -5970,6 +5970,12 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 slReverse(&pslList);
 return pslList;
+}
+
+struct psl *getAlignments(struct sqlConnection *conn, char *table, char *acc)
+/* get the list of alignments for the specified acc */
+{
+return getAlignmentsTName(conn, table, acc, NULL);
 }
 
 struct psl *loadPslRangeT(char *table, char *qName, char *tName, int tStart, int tEnd)
@@ -8920,6 +8926,7 @@ return foundOverlap;
 void doPslAltSeq(struct trackDb *tdb, char *item)
 /* Details for alignments between chromosomes and alt haplogtype or fix patch sequences. */
 {
+char *chrom = cartString(cart, "c");
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn(database);
 
@@ -8927,7 +8934,7 @@ genericHeader(tdb, item);
 printCustomUrl(tdb, item, TRUE);
 
 puts("<P>");
-struct psl *pslList = getAlignments(conn, tdb->table, item);
+struct psl *pslList = getAlignmentsTName(conn, tdb->table, item, chrom);
 if (pslList)
     {
     printf("<B>Alignment of %s to %s:</B><BR>\n", item, pslList->tName);

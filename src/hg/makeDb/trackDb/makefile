@@ -46,7 +46,7 @@ DBS = \
 	ascSuu1 \
 	balAcu1 \
 	bisBis1 \
-	bosTau2 bosTau3 bosTau4 bosTau5 bosTau6 bosTau7 bosTau8 \
+	bosTau2 bosTau3 bosTau4 bosTau5 bosTau6 bosTau7 bosTau8 bosTau9 \
 	braFlo1 braFlo2 \
 	bruMal1 bruMal2 \
 	burXyl1 \

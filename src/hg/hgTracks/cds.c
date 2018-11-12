@@ -74,6 +74,7 @@ drawScaledBox(hvg, chromStart, chromEnd, scale, xOff, y, height,
 if (zoomed)
     {
     int i;
+    Color textColor = hvGfxContrastingColor(hvg, color);
     int x1, x2, w;
     x1 = round((double)(chromStart-winStart)*scale) + xOff;
     x2 = round((double)(chromEnd-winStart)*scale) + xOff;
@@ -86,9 +87,9 @@ if (zoomed)
     if (chromEnd - chromStart == 3 && isCoding)
         {
         if (justifyString)
-            spreadBasesString(hvg, x1, y, w, height, whiteIndex(),  font, text, strlen(text),  TRUE);
+            spreadBasesString(hvg, x1, y, w, height, textColor,  font, text, strlen(text),  TRUE);
         else
-            hvGfxTextCentered(hvg, x1, y, w, height, whiteIndex(), font, text);
+            hvGfxTextCentered(hvg, x1, y, w, height, textColor, font, text);
         }
     else if (chromEnd - chromStart < 3 && isCoding)
         {
@@ -112,7 +113,7 @@ if (zoomed)
             thisX = round((double)(chromStart+i-winStart)*scale) + xOff;
             thisX2 = round((double)(chromStart+1+i-winStart)*scale) + xOff;
             hvGfxTextCentered(hvg, thisX, y, thisX2-thisX, height,
-			   whiteIndex(),font,c);
+			   textColor,font,c);
             }
         }
     }

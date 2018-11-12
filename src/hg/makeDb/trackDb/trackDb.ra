@@ -250,15 +250,7 @@ shortLabel Alt Haplotypes
 longLabel Alternate Haplotypes to Reference Sequence Correspondence
 url ../cgi-bin/hgTracks?db=$D&position=$$
 urlLabel Corresponding position:
-
-track fixLocations
-type bed 4
-group map
-color 190,32,32
-shortLabel Fix Patches
-longLabel Fix Patch to Reference Sequence Correspondence
-url ../cgi-bin/hgTracks?db=$D&position=$$
-urlLabel Corresponding position:
+release beta,public
 
 track altSeqLiftOverPsl
 shortLabel Alt Haplotypes
@@ -274,6 +266,7 @@ showCdsAllScales .
 baseColorDefault diffBases
 baseColorUseSequence db
 color 0,0,100
+visibility dense
 release alpha
 
 track fixSeqLiftOverPsl
@@ -289,7 +282,10 @@ showCdsMaxZoom 10000.0
 showCdsAllScales .
 baseColorDefault diffBases
 baseColorUseSequence db
-color 100,0,0
+color 255,255,0
+darkerLabels on
+priority 1
+visibility pack
 release alpha
 
 track knownGene

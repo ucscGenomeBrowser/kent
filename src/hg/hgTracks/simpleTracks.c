@@ -10863,6 +10863,8 @@ bool isSubtrackVisible(struct track *subtrack)
 /* Has this subtrack not been deselected in hgTrackUi or declared with
  * "subTrack ... off"?  -- assumes composite track is visible. */
 {
+if (subtrack->subTrackVisSet)
+    return subtrack->subTrackVis;
 boolean overrideComposite = (NULL != cartOptionalString(cart, subtrack->track));
 if (subtrack->limitedVisSet && subtrack->limitedVis == tvHide)
     return FALSE;
@@ -10872,6 +10874,8 @@ safef(option, sizeof(option), "%s_sel", subtrack->track);
 boolean enabled = cartUsualBoolean(cart, option, enabledInTdb);
 if (overrideComposite)
     enabled = TRUE;
+subtrack->subTrackVisSet = TRUE;
+subtrack->subTrackVis = enabled;
 return enabled;
 }
 

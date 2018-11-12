@@ -1,8 +1,8 @@
 #!/bin/bash -e
 #
-# hgwdev-dbload [-inclEsts] [-extFileUpdate] [-allowLargeDeletes]
+# genbank-dbload [-inclEsts] [-extFileUpdate] [-allowLargeDeletes]
 #
-# dbload for hgwdev.
+# dbload for genbank
 #
 opts="$*"
 

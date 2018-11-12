@@ -22,6 +22,8 @@ errAbort(
   "options:\n"
   "   -age=N - number of hours old to qualify for drop.  N can be a float.\n"
   "   -drop - actually drop the tables, default is merely to display tables.\n"
+  "   -dropLimit=N - ERROR out if number of tables to drop is greater than limit,\n"
+  "                - default is to drop all expired tables\n"
   "   -db=<DB> - Specify a database to work with, default is "
 	CUSTOM_TRASH ".\n"
   "   -historyToo - also consider the table called 'history' for deletion.\n"
@@ -48,6 +50,7 @@ static struct optionSpec options[] = {
     {"extFile", OPTION_BOOLEAN},
     {"extDel", OPTION_BOOLEAN},
     {"drop", OPTION_BOOLEAN},
+    {"dropLimit", OPTION_INT},
     {"db", OPTION_STRING},
     {"topDir", OPTION_STRING},
     {"tableStatus", OPTION_BOOLEAN},
@@ -58,6 +61,7 @@ static struct optionSpec options[] = {
 
 static double ageHours = 0.0;	/*	must be specified	*/
 static boolean drop = FALSE;		/*	optional	*/
+static int dropLimit = 0;		/*	optional	*/
 static char *db = CUSTOM_TRASH;		/*	optional	*/
 static boolean historyToo = FALSE;	/*	optional	*/
 
@@ -348,6 +352,17 @@ if (drop)
     if (expiredTableNames)
 	{
 	struct slName *el;
+	int toBeDropped = slCount(expiredTableNames);
+	if (dropLimit > 0)
+	    {
+		if (toBeDropped > dropLimit)
+		    {
+            errAbort("ERROR: expected drop table count: %d\n\tis larger"
+		" than the dropLimit: %d\n\twill not proceed with this drop.\n",
+		toBeDropped, dropLimit);
+		    }
+	    }
+
 	int droppedCount = 0;
 	/* customTrash DB user permissions do not have permissions to
  	 * drop tables.  Must use standard special user that has all
@@ -392,6 +407,14 @@ else
     if (expiredTableNames)
 	{
 	int droppedCount = slCount(expiredTableNames);
+	if (dropLimit > 0)
+	    {
+		if (droppedCount > dropLimit)
+		    {
+            warn("WARNING: expected drop table count: %d\n\tis larger"
+		" than the dropLimit: %d\n", droppedCount, dropLimit);
+		    }
+	    }
 	if (tableStatus)
 	    safef(comment, sizeof(comment), "Would have dropped %d tables with "
 		"total size %llu, %llu lost tables",
@@ -451,6 +474,7 @@ else
     usage();
     }
 drop = optionExists("drop");
+dropLimit = optionInt("dropLimit", 0);
 historyToo = optionExists("historyToo");
 db = optionVal("db",db);
 extFileCheck = optionExists("extFile");
@@ -458,6 +482,12 @@ extDel = optionExists("extDel");
 tableStatus = optionExists("tableStatus");
 topDir = optionVal("topDir", topDir);
 verbose(2,"#	drop requested: %s\n", drop ? "TRUE" : "FALSE");
+if (0 == dropLimit)
+    {
+	verbose(2,"#	    drop limit: unlimited, drop all expired\n");
+    } else {
+	verbose(2,"#	    drop limit: %d\n", dropLimit);
+    }
 verbose(2,"#	    historyToo: %s\n", historyToo ? "TRUE" : "FALSE");
 verbose(2,"#	       extFile: %s\n", extFileCheck ? "TRUE" : "FALSE");
 verbose(2,"#	        extDel: %s\n", extDel ? "TRUE" : "FALSE");
