@@ -27,6 +27,7 @@
 /* version history:
  *  1.0.0 - copied from bigWigMerge
  *  1.0.1 - fix help text
+ *  1.1.0 - performance improvements
  */
 
 /* A range of bigWig file */
@@ -47,6 +48,11 @@ struct SectionItem
 };
 typedef struct SectionItem SectionItem;
 
+typedef union {
+  int32_t i;
+  float f;
+} Uint64Float;
+
 /* for writing */
 static uint8_t reserved8 = 0;
 static uint16_t reserved16 = 0;
@@ -64,7 +70,7 @@ void usage()
 /* Explain usage and exit. */
 {
   printf(
-      "bigWigMergePlus 1.0.1 - Merge together multiple bigWigs into a single bigWig.\n"
+      "bigWigMergePlus 1.1.0 - Merge together multiple bigWigs into a single bigWig.\n"
       "\n"
       "Usage:\n"
       "   bigWigMergePlus in1.bw in2.bw .. inN.bw out.bw\n"
@@ -77,7 +83,7 @@ void usage()
   exit(0);
 }
 
-double clThreshold = 0.0;
+float clThreshold = 0.0;
 boolean clNormalize = FALSE;
 Range *clRange = NULL;
 
@@ -129,16 +135,6 @@ Range *parseRange(char *input)
   range->start = start;
   range->end = end;
   return range;
-}
-
-/**
- * Compare SectionItems
- */
-static int compareSectionItems(const void *va, const void *vb)
-{
-  const SectionItem *a = (SectionItem *)va;
-  const SectionItem *b = (SectionItem *)vb;
-  return a->start - b->start;
 }
 
 /** Compare strings such as gene names that may have embedded numbers,
@@ -215,20 +211,35 @@ int getMaxChromSize(struct bbiChromInfo *chromList)
   return maxSize;
 }
 
-/** Return count of numbers at start that are the same as first number.  */
-int getDoubleSequenceCount(double *pt, int size)
+/**
+ * Return count of numbers at start that are the same as first number.
+ */
+int getSequenceCount(float *pt, int size)
 {
-  int sameCount = 1;
+  /*
+   * We compare values two-by-two to speed up the thing.
+   */
+
   int i;
-  double x = pt[0];
-  for (i = 1; i < size; i++)
+  Uint64Float value = { .f = 0.0 };
+  value.f = pt[0];
+
+  int64_t twice = (uint64_t)value.i << 32 | value.i;
+  int64_t *ipt = (int64_t *)pt;
+
+  for (i = 0; i < size; i++)
   {
-    if (pt[i] != x)
+    if (ipt[i] != twice)
       break;
-    sameCount++;
   }
+
+  int sameCount = i * 2;
+
+  if (pt[sameCount] == pt[0])
+    return sameCount + 1;
+
   return sameCount;
-}
+} 
 
 /**
  * Writes a single section to disk
@@ -575,7 +586,7 @@ static struct bbiSummary *itemsWriteReducedOnceReturnReducedTwice(
 void itemsStats(
     struct bbiChromUsage *usageList,
     SectionItem **chromItems,
-    double *retAveSize,
+    float *retAveSize,
     bits64 *retBedCount)
 {
   struct bbiChromUsage *usage = NULL;
@@ -596,10 +607,10 @@ void itemsStats(
     }
   }
 
-  double aveSize = 0;
+  float aveSize = 0;
 
   if (bedCount > 0)
-    aveSize = (double)totalBases/bedCount;
+    aveSize = (float)totalBases/bedCount;
 
   *retAveSize = aveSize;
   *retBedCount = bedCount;
@@ -719,7 +730,7 @@ void itemsToBigWig(
   verboseTimeInit();
 
   int i;
-  double aveSize = 0;
+  float aveSize = 0;
   bits64 bedCount = 0;
   bits32 uncompressBufSize = 0;
 
@@ -842,13 +853,99 @@ void itemsToBigWig(
 }
 
 /**
+ * Merge chroms
+ */
+void mergeChroms(
+    struct bbiFile *inFiles,
+    float *factors,
+    struct bbiChromInfo *chromList,
+    int maxChromSize,
+    struct bbiChromUsage **usageList,
+    SectionItem **chromItems) {
+
+  struct bbiFile *inFile;
+  struct bbiChromInfo *chrom;
+
+  /* Buffer to merge values */
+  float *mergeBuf = needHugeMem(maxChromSize * sizeof(float));
+
+  int c = 0;
+  for (chrom = chromList; chrom != NULL; chrom = chrom->next, c++)
+  {
+    struct bbiChromUsage *usage = needMem(sizeof(struct bbiChromUsage));
+    usage->id = chrom->id;
+    usage->name = chrom->name;
+    usage->size = chrom->size;
+    slAddHead(usageList, usage);
+
+    /* If there is a range and it's not this chrom, just fill a single zero item */
+    if (clRange != NULL && differentString(clRange->chrom, chrom->name)) {
+      usage->itemCount = 1;
+      chromItems[c] = needMem(sizeof(SectionItem));
+      chromItems[c][0] = (SectionItem) { 0, chrom->size, 0.0 };
+      continue;
+    }
+
+    struct lm *lm = lmInit(0);
+    chromItems[c] = needHugeMem(chrom->size * sizeof(SectionItem));
+
+    /* Reset mergeBuf memory to 0 */
+    memset(mergeBuf, 0, chrom->size * sizeof(float));
+
+    verbose(1, "Processing \x1b[1;93m%s\x1b[0m (%d bases)\n", chrom->name, chrom->size);
+
+    /* Loop through each input file grabbing data and merging it in. */
+    int f = 0;
+    for (inFile = inFiles; inFile != NULL; inFile = inFile->next, f++)
+    {
+      uint32_t start = clRange == NULL ? 0 : clRange->start;
+      uint32_t end   = clRange == NULL || clRange->isFullChrom ? chrom->size : clRange->end;
+
+      struct bbiInterval *ivList = bigWigIntervalQuery(inFile, chrom->name, start, end, lm);
+      struct bbiInterval *iv;
+
+      for (iv = ivList; iv != NULL; iv = iv->next)
+      {
+        for (int i = iv->start; i < iv->end; i++)
+        {
+          if (clNormalize)
+            mergeBuf[i] += iv->val * factors[f];
+          else
+            mergeBuf[i] += iv->val;
+        }
+      }
+
+      /* slCount is a performance hit for large lists */
+      /* verbose(2, "Got %d intervals in %s\n", slCount(ivList), inFile->fileName); */
+    }
+
+    /* Store each range of contiguous values as a section item */
+    int index = 0;
+    int sameCount;
+    for (int i = 0; i < chrom->size; i += sameCount)
+    {
+      sameCount = getSequenceCount(mergeBuf + i, chrom->size - i);
+      float val = mergeBuf[i];
+      if (val > clThreshold) {
+        SectionItem item = { i, i + sameCount, val };
+        chromItems[c][index++] = item;
+      }
+    }
+    usage->itemCount = index;
+
+    lmCleanup(&lm);
+  }
+  slReverse(usageList);
+}
+
+/**
  * Merge together multiple bigWigs into a single one
  */
 void bigWigMergePlus(int inCount, char *inFilenames[], char *outFile)
 {
   /* Factors for normalization */
-  double factors[inCount];
-  double totalMaximum = 0.0;
+  float factors[inCount];
+  float totalMaximum = 0.0;
 
   /* Make a list of open bigWig files. */
   struct bbiFile *inFile;
@@ -873,7 +970,6 @@ void bigWigMergePlus(int inCount, char *inFilenames[], char *outFile)
     }
   }
 
-  struct bbiChromInfo *chrom;
   struct bbiChromInfo *chromList = getAllChroms(inFiles);
   int maxChromSize = getMaxChromSize(chromList);
   int chromCount = slCount(chromList);
@@ -894,78 +990,7 @@ void bigWigMergePlus(int inCount, char *inFilenames[], char *outFile)
   struct bbiChromUsage *usageList = NULL;
   SectionItem **chromItems = needMem(chromCount * sizeof(SectionItem *));
 
-  /* Buffer to merge values */
-  double *mergeBuf = needHugeMem(maxChromSize * sizeof(double));
-
-  int c = 0;
-  for (chrom = chromList; chrom != NULL; chrom = chrom->next, c++)
-  {
-    struct bbiChromUsage *usage = needMem(sizeof(struct bbiChromUsage));
-    usage->id = chrom->id;
-    usage->name = chrom->name;
-    usage->size = chrom->size;
-    slAddHead(&usageList, usage);
-
-    /* If there is a range and it's not this chrom, just fill a single zero item */
-    if (clRange != NULL && differentString(clRange->chrom, chrom->name)) {
-      usage->itemCount = 1;
-      chromItems[c] = needMem(sizeof(SectionItem));
-      chromItems[c][0] = (SectionItem) { 0, chrom->size, 0.0 };
-      continue;
-    }
-
-    struct lm *lm = lmInit(0);
-    chromItems[c] = needHugeMem(chrom->size * sizeof(SectionItem));
-
-    /* Reset mergeBuf memory to 0 */
-    memset(mergeBuf, 0, chrom->size * sizeof(double));
-
-    verbose(1, "Processing \x1b[1;93m%s\x1b[0m (%d bases)\n", chrom->name, chrom->size);
-
-    /* Loop through each input file grabbing data and merging it in. */
-    int f = 0;
-    for (inFile = inFiles; inFile != NULL; inFile = inFile->next, f++)
-    {
-      uint32_t start = clRange == NULL ? 0 : clRange->start;
-      uint32_t end   = clRange == NULL || clRange->isFullChrom ? chrom->size : clRange->end;
-
-      struct bbiInterval *ivList = bigWigIntervalQuery(inFile, chrom->name, start, end, lm);
-      struct bbiInterval *iv;
-
-      verbose(2, "Got %d intervals in %s\n", slCount(ivList), inFile->fileName);
-
-      for (iv = ivList; iv != NULL; iv = iv->next)
-      {
-        for (int i = iv->start; i < iv->end; i++)
-        {
-          if (clNormalize)
-            mergeBuf[i] += iv->val * factors[f];
-          else
-            mergeBuf[i] += iv->val;
-        }
-      }
-    }
-
-    /* Store each range of contiguous values as a section item */
-    int index = 0;
-    int sameCount;
-    for (int i = 0; i < chrom->size; i += sameCount)
-    {
-      sameCount = getDoubleSequenceCount(mergeBuf + i, chrom->size - i);
-      double val = mergeBuf[i];
-      if (val > clThreshold) {
-        SectionItem item = { i, i + sameCount, val };
-        chromItems[c][index++] = item;
-      }
-    }
-    usage->itemCount = index;
-
-    /* Sort items by start position */
-    qsort(chromItems[c], usage->itemCount, sizeof(SectionItem), compareSectionItems);
-
-    lmCleanup(&lm);
-  }
-  slReverse(&usageList);
+  mergeChroms(inFiles, factors, chromList, maxChromSize, &usageList, chromItems);
 
   verbose(1, "\n");
 
