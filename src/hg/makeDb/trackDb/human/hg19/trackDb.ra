@@ -2595,4 +2595,4 @@ origAssembly hg38
 # change these two to switch to the new refSeqComposite 2018-02
 #include trackDb.refGene.ra public
 include ../../refSeqComposite.ra
-include ../../crispr10K.ra alpha,beta
+include ../../crispr10K.ra alpha
