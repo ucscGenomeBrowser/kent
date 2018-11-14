@@ -3649,10 +3649,9 @@ if (cart != NULL)
         }
     }
 
-// Note: cannot use found name above because that may be at a higher (composite/view) level
-int len = strlen(tdb->track) + strlen(filterBy->column) + 15;
-filterBy->htmlName = needMem(len);
-safef(filterBy->htmlName, len, "%s.%s.%s", name,"filterBy",filterBy->column);
+struct dyString *dy = newDyString(128);
+dyStringPrintf(dy, "%s.%s.%s", name, "filterBy", filterBy->column);
+filterBy->htmlName = dy->string;
 
 return filterBy;
 }
