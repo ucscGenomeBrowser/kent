@@ -487,6 +487,8 @@ if [ ! -f /usr/local/apache/trash/registration.txt ]; then
          echo genome-euro seems to be closer
          echo modifying gbib to pull data from genome-euro instead of genome
          sed -i s/slow-db.host=genome-mysql.soe.ucsc.edu/slow-db.host=genome-euro-mysql.soe.ucsc.edu/ /usr/local/apache/cgi-bin/hg.conf
+         # Nov 2018: hgdownload-euro is online now
+         sed -i 's#gbdbLoc2=http://hgdownload.soe.ucsc.edu/gbdb/#gbdbLoc2=http://hgdownload-euro.soe.ucsc.edu/gbdb/#' /usr/local/apache/cgi-bin/hg.conf
       else
          echo genome.ucsc.edu seems to be closer
          echo not modifying /usr/local/apache/cgi-bin/hg.conf
