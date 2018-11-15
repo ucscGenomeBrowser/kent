@@ -6,7 +6,7 @@ subGroup1 view Views chain=Chains net=Nets
 subGroup2 species Species s000=Human s001=Mouse s002=Painted_turtle s003=Green_seaturtle s004=Chinese_alligator s005=American_alligator s006=Chinese_softshell_turtle s007=Spiny_softshell_turtle s008=Burmese_python s009=Lizard s010=Garter_snake s011=X._tropicalis s012=African_clawed_frog s013=Tibetan_frog s014=Lamprey s015=Arctic_lamprey
 subGroup3 clade Clade c00=mammal c01=vertebrate
 dragAndDrop subTracks
-group compGenoi
+group compGeno
 visibility dense
 noInherit on
 color 0,0,0
