@@ -21,3 +21,4 @@ include ../../crispr10K.ra
 include chainNetBirds.ra
 include chainNetFish.ra
 include chainNetvertebrate.ra
+include trackDb.77way.ra
