@@ -35,13 +35,23 @@ else if (sameString(labelList->name, "none"))
 else
     {
     // what has the user said to use as a label
+    // we need to check parents as well as this tdb
     char cartVar[1024];
-    safef(cartVar, sizeof cartVar, "%s.label", tdb->track);
-    struct hashEl *labelEl = cartFindPrefix(cart, cartVar);
-    struct hash *onHash = newHash(4);
+    struct hashEl *labelEl = NULL;
+    struct trackDb *cartTdb = tdb;
+    while ( labelEl == NULL)
+        {
+        safef(cartVar, sizeof cartVar, "%s.label", cartTdb->track);
+        labelEl = cartFindPrefix(cart, cartVar);
+        if ((labelEl != NULL) || (cartTdb->parent == NULL))
+            break;
+
+        cartTdb = cartTdb->parent;
+        }
 
     // fill hash with fields that should be used for labels
     // first turn on all the fields that are in defaultLabelFields
+    struct hash *onHash = newHash(4);
     struct slPair *defaultLabelList = buildFieldList(tdb, "defaultLabelFields",  as);
     if (defaultLabelList != NULL)
         {
