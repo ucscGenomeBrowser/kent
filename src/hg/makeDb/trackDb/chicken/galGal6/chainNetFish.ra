@@ -18,6 +18,7 @@ dimensions dimensionX=clade dimensionY=species
 sortOrder species=+ view=+ clade=+
 configurable on
 html fishChainNet
+release alpha
 
     track fishChainNetViewchain
     shortLabel Chains
