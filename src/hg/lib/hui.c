@@ -3635,7 +3635,7 @@ struct asColumn *asCol = asColumnFind(as, field);
 if (asCol != NULL)
     filterBy->title = asCol->comment;
 filterBy->useIndex = FALSE;
-filterBy->slValues = slNameListFromComma(value);
+filterBy->slValues = slNameListFromCommaEscaped(value);
 chopUpValues(filterBy);
 if (cart != NULL)
     {
