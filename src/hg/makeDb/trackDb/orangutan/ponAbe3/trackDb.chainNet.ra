@@ -1,0 +1,6 @@
+#	"$Id: trackDb.chainNet.ra,v 1.14 2010/03/19 18:22:09 antonio Exp $";
+
+
+track chainNetMm10 override
+priority 370.3
+visibility dense

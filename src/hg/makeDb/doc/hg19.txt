@@ -33108,17 +33108,11 @@ EOF
     # TODO: Ask Anne for feedback and changes, especially on color
 
 ##############################################################################
-# crispr 10K shoulders (working - 2018-10-24 - Hiram)
+# crispr 10K shoulders (DONE - 2018-11-09 - Hiram)
     time (~/kent/src/hg/utils/automation/doCrispr.pl \
-	-buildDir=`pwd` -smallClusterHub=hgwdev-101 hg19 ncbiRefSeq) \
+     -stop=load -buildDir=`pwd` -smallClusterHub=hgwdev-101 hg19 ncbiRefSeq) \
 	> do.log 2>&1
-    # due to hive interruptions, the specScores step took 6 days to complete
-    # it probably would have been done in about 3 or 4 with no interference
-
-    time (~/kent/src/hg/utils/automation/doCrispr.pl \
-	-continue=effScores -buildDir=`pwd` \
-	-smallClusterHub=hgwdev-101 hg19 ncbiRefSeq) > effScores.log 2>&1
-XXX - Wed Oct 31 07:53:55 PDT 2018
+    # real    5896m44.643s
 
 ##############################################################################
 2018-11-09: import of UCSC GENCODE group processing of GENCODE V29lift37 (markd)

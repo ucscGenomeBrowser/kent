@@ -1,6 +1,7 @@
 # Local declaration so that local gold.html is picked up.
 track gold override
 html gold
+visibility hide
 
 # Local declaration so that local gap.html is picked up.
 track gap override
@@ -20,3 +21,4 @@ include ../../crispr10K.ra
 include chainNetBirds.ra
 include chainNetFish.ra
 include chainNetvertebrate.ra
+include trackDb.77way.ra
