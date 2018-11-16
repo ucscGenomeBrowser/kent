@@ -89,7 +89,7 @@ if (fileExists(path))
     }
 }
 
-int sqlMakeDefaultsFile(char* defaultFileName, char* profile, char* group)
+int sqlMakeDefaultsFile(char* defaultFileName, char* profile, char* group, char *prog)
 /* Create a temporary file in the supplied directory to be passed to
  * mysql with --defaults-file.  Writes a mysql options set for
  * the mysql group [group] with the profile.host, profile.user, and
@@ -136,6 +136,10 @@ if (write (fileNo, paddedGroup, strlen(paddedGroup)) == -1)
 char *settings = sqlProfileToMyCnf(profile);
 if (!settings)
     errAbort("profile %s not found in sqlProfileToMyCnf() -- failed for file %s failed with errno %d", profile, defaultFileName, errno);
+if (sameString(prog, "mysqldump"))
+    {  // need to suppress the database setting, it messes up mysqldump and is not needed. comment it out
+    settings = replaceChars(settings, "\ndatabase=", "\n#database=");
+    }
 if (write (fileNo, settings, strlen(settings)) == -1)
     errAbort("Writing profile %s settings=[%s] as my.cnf format failed for file %s failed with errno %d", profile, settings, defaultFileName, errno);
 
@@ -212,7 +216,7 @@ for (i = 0; i < userArgc; i++)
 
 safef(defaultFileName, sizeof(defaultFileName), "%s/.hgsql.cnf-XXXXXX", homeDir);
 // discard returned fileNo
-(void) sqlMakeDefaultsFile(defaultFileName, profile, "client");
+(void) sqlMakeDefaultsFile(defaultFileName, profile, "client", prog);
 
 safef(defaultFileArg, sizeof(defaultFileArg), "--defaults-file=%s", defaultFileName);
 
