@@ -3,7 +3,7 @@ compositeTrack on
 shortLabel NCBI RefSeq
 longLabel RefSeq gene predictions from NCBI
 group genes
-visibility full
+visibility pack
 type genePred
 dragAndDrop subTracks
 noInherit on
@@ -58,6 +58,7 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         subGroups view=aNcbiRefSeq
         longLabel NCBI RefSeq other annotations (not NM_*, NR_*, XM_*, XR_*, or YP_*)
         priority 4
+        visibility hide
         searchIndex name,gene,ID,Name2,geneSynonym,product
         searchTrix /gbdb/$D/ncbiRefSeq/ncbiRefSeqOther.ix
         bigDataUrl /gbdb/$D/ncbiRefSeq/ncbiRefSeqOther.bb
