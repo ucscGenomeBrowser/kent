@@ -169,7 +169,7 @@ sub printTree($) {
     printf ":0.1";
   }
   $printDepth -= 1;
-}
+}	# sub printTree($)
 
 ##############################################################################
 # start a new node element
@@ -273,6 +273,7 @@ sub cleanLeafName($) {
   $leafName = "noName" if (length($leafName) < 1);
   $leafDistance = $defaultDistance if (!defined($leafDistance));
   $leafDistance = $allDistances if (length($allDistances) > 0);
+  $leafDistance =~ s/,//;	# eliminate trailing comma
   if (defined($translateName{$leafName})) {
     $leafName = $translateName{$leafName};
   } else {
@@ -294,6 +295,7 @@ sub cleanNodeName($) {
   $nodeName = "noName" if (length($nodeName) < 1);
   $nodeDistance = $defaultDistance if (!defined($nodeDistance));
   $nodeDistance = $allDistances if (length($allDistances) > 0);
+  $nodeDistance =~ s/,//;	# eliminate trailing comma
   if (defined($translateName{$nodeName})) {
     $nodeName = $translateName{$nodeName};
   } else {

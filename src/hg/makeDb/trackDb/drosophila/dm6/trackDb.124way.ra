@@ -1,0 +1,109 @@
+track cons124way
+compositeTrack on
+shortLabel 124 fly multiz
+longLabel Multiz Alignment & Conservation (124 Species)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+subGroup2 clade Clade drosophila=Drosophila
+dragAndDrop subTracks
+dimensions dimensionX=clade
+visibility full
+type bed 4
+group compGeno
+priority 1
+
+    track cons124wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons124way
+
+        track multiz124way
+        subTrack cons124wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Alignments of 124 Flies
+        subGroups view=align clade=drosophila
+        noInherit on
+        irows on
+        summary multiz124waySummary
+#        frames multiz124wayFrames
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        type wigMaf 0.0 1.0
+        speciesCodonDefault dm6
+        speciesGroups Drosophila Flies
+        sGroup_Drosophila droSim2 droSec1 droYak3 droEre2 droTak2 droEle2 droEug2 droBia2 droRho2 droFic2 droSuz1 droKik2 GCF_002093755v1 droAna3 droBip2 GCF_002217835v1 droPse3 droMir2 droPer1 GCA_002749795v1 GCA_003185025v1 droVir3 droWil2 droGri2 droMoj3 GCA_001014495v1 GCA_003285875v1 GCF_002780465v1 GCA_001245395v1 GCA_003086615v1 droAlb1 GCA_003285725v1 GCF_001277935v1 GCF_001654025v1 GCA_002222885v1 GCA_001752445v1 GCF_001654015v1
+        sGroup_Flies  GCA_001014415v1 GCA_002237135v1 GCF_001687245v1 GCF_000699065v1 GCF_001853355v1 GCF_001188975v1 GCF_000806345v1 GCA_001735545v1 GCF_000347755v3 GCA_003055125v1 GCA_000695345v1 musDom2 GCF_000789215v1 GCF_001015335v1 GCA_000688715v1 GCA_000671735v1 GCA_000671755v1 GCA_001077435v1 GCA_000688735v1 GCA_000818775v1 GCA_001014675v1 GCA_001014835v1 GCA_001014515v1 GCA_001017275v1 GCF_001876365v2 GCA_001015235v1 GCA_001932985v1 GCA_003123925v1 GCA_001014575v1 triCas2 GCF_002204515v2 anoGam3 GCF_000209185v1 GCA_001015175v1 GCA_002091835v1 GCA_001017515v1 GCA_000473845v2 GCA_000349145v1 GCA_001015075v1 GCA_000349185v1 GCA_000441895v2 GCA_000473505v1 GCA_000349105v1 GCA_000349065v1 GCA_000473445v2 GCA_000349025v1 GCA_000349085v1 GCA_000473525v2 GCA_000150765v1 GCA_001014945v1 GCA_000262795v1 GCA_000473375v1 GCA_003448975v1 GCA_001014335v1 GCA_900258525v2 GCA_000349125v2 GCA_000349165v1 GCA_002091845v1 GCA_002846955v1 GCA_001014845v1 GCA_001014895v1 GCA_000211455v3 GCA_001017455v1 GCA_001015115v1 GCA_000956215v1 GCA_001015215v1 GCA_000265325v1 GCA_000956275v1 GCA_000775305v1 GCA_000956255v1 GCA_900005825v1 GCA_000149185v1 GCA_001047195v1 GCA_000786525v1 GCA_001014505v1 GCA_001014525v1 GCA_001014935v1 GCA_001015145v1 GCA_000439205v1 GCA_001014815v1 GCA_001017535v1 apiMel4 GCA_001014875v1 GCA_000341915v2 GCA_001014665v1 GCA_001014425v1
+        speciesDefaultOff GCF_002093755v1 GCF_002217835v1 GCA_002749795v1 GCA_003185025v1 GCA_001014495v1 GCA_003285875v1 GCF_002780465v1 GCA_001245395v1 GCA_003086615v1 GCA_003285725v1 GCF_001277935v1 GCF_001654025v1 GCA_002222885v1 GCA_001752445v1 GCF_001654015v1 GCA_001014415v1 GCA_002237135v1 GCF_001687245v1 GCF_000699065v1 GCF_001853355v1 GCF_001188975v1 GCF_000806345v1 GCA_001735545v1 GCF_000347755v3 GCA_003055125v1 GCA_000695345v1 GCF_000789215v1 GCF_001015335v1 GCA_000688715v1 GCA_000671735v1 GCA_000671755v1 GCA_001077435v1 GCA_000688735v1 GCA_000818775v1 GCA_001014675v1 GCA_001014835v1 GCA_001014515v1 GCA_001017275v1 GCF_001876365v2 GCA_001015235v1 GCA_001932985v1 GCA_003123925v1 GCA_001014575v1 GCF_002204515v2 GCF_000209185v1 GCA_001015175v1 GCA_002091835v1 GCA_001017515v1 GCA_000473845v2 GCA_000349145v1 GCA_001015075v1 GCA_000349185v1 GCA_000441895v2 GCA_000473505v1 GCA_000349105v1 GCA_000349065v1 GCA_000473445v2 GCA_000349025v1 GCA_000349085v1 GCA_000473525v2 GCA_000150765v1 GCA_001014945v1 GCA_000262795v1 GCA_000473375v1 GCA_003448975v1 GCA_001014335v1 GCA_900258525v2 GCA_000349125v2 GCA_000349165v1 GCA_002091845v1 GCA_002846955v1 GCA_001014845v1 GCA_001014895v1 GCA_000211455v3 GCA_001017455v1 GCA_001015115v1 GCA_000956215v1 GCA_001015215v1 GCA_000265325v1 GCA_000956275v1 GCA_000775305v1 GCA_000956255v1 GCA_900005825v1 GCA_000149185v1 GCA_001047195v1 GCA_000786525v1 GCA_001014505v1 GCA_001014525v1 GCA_001014935v1 GCA_001015145v1 GCA_000439205v1 GCA_001014815v1 GCA_001017535v1 GCA_001014875v1 GCA_000341915v2 GCA_001014665v1 GCA_001014425v1
+        speciesDefaultOn droSim2 droSec1 droYak3 droEre2 droTak2 droEle2 droEug2 droBia2 droRho2 droFic2 droSuz1 droKik2 droAna3 droBip2 droPse3 droMir2 droPer1 droVir3 droWil2 droGri2 droMoj3 droAlb1 musDom2 triCas2 anoGam3 apiMel4
+        defaultMaf multiz124wayDefault
+        itemFirstCharCase noChange
+        treeImage phylo/dm6_124way.png
+        priority 100
+
+    # PhyloP conservation
+    track cons124wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack cons124way
+    viewLimits -20.0:9.869
+    viewLimitsMax -20:0.869
+
+        track phyloP124way
+        subTrack cons124wayViewphyloP on
+        subGroups view=phyloP clade=drosophila
+        shortLabel Cons 124 Verts
+        longLabel 124 flies Basewise Conservation by PhyloP
+        noInherit on
+        configurable on
+        type wig -20 7.532
+        maxHeightPixels 100:50:11
+        viewLimits -4.5:4.88
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 60,60,140
+        altColor 140,60,60
+        priority 4
+
+    # phastCons conservation
+    track cons124wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility hide
+    subTrack cons124way
+
+        track phastCons124way
+        subTrack cons124wayViewphastcons off
+        subGroups view=phastcons clade=drosophila
+        shortLabel Cons 124 Verts
+        longLabel 124 flies conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 70,130,70
+        altColor 130,70,70
+        priority 13
+
+    # Conserved Elements (Most Conserved)
+    track cons124wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility hide
+    subTrack cons124way
+
+        track phastConsElements124way
+        subTrack cons124wayViewelements off
+        subGroups view=elements clade=drosophila
+        shortLabel 124 Vert. El
+        longLabel 124 flies Conserved Elements
+        noInherit on
+        color 110,10,40
+        type bed 5 .
+        priority 23
