@@ -48,3 +48,4 @@ bigDataUrl /gbdb/$D/uniprot/unipMut.bb
 include ../../refSeqComposite.ra
 
 include trackDb.124way.ra alpha
+include trackDb.124wayMafNet.ra alpha
