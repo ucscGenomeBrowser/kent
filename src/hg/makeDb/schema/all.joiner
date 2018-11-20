@@ -6013,7 +6013,8 @@ identifier snpName151
     $hg.snp151Common.name
     $hg.snp151Flagged.name
     $hg.snp151Mult.name
-    $hg.snp151Seq.acc minCheck=.98
+    hg38.snp151Seq.acc minCheck=.99
+    hg19.snp151Seq.acc minCheck=.96
     $hg.snp151CodingDbSnp.name minCheck=.90
     $hg.snp151OrthoPt5Pa2Rm8.name
 
