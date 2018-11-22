@@ -37,8 +37,8 @@ html insectsChainNet
         track chainDroSec1
         subTrack insectsChainNetViewchain off
         subGroups view=chain species=s001 clade=c00
-        shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain droSec1
         otherDb droSec1
 
@@ -173,8 +173,8 @@ html insectsChainNet
         track chainDroPer1
         subTrack insectsChainNetViewchain off
         subGroups view=chain species=s018 clade=c00
-        shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain droPer1
         otherDb droPer1
 
@@ -669,8 +669,8 @@ html insectsChainNet
         track chainAnoGam3
         subTrack insectsChainNetViewchain off
         subGroups view=chain species=s080 clade=c01
-        shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain anoGam3
         otherDb anoGam3
 
@@ -1027,8 +1027,8 @@ html insectsChainNet
         track netDroSec1
         subTrack insectsChainNetViewnet off
         subGroups view=net species=s001 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign droSec1 chainDroSec1
         otherDb droSec1
 
@@ -1112,14 +1112,6 @@ html insectsChainNet
         type netAlign droKik2 chainDroKik2
         otherDb droKik2
 
-        track netD_serrata
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s012 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign D_serrata chainD_serrata
-        otherDb D_serrata
-
         track netDroAna3
         subTrack insectsChainNetViewnet off
         subGroups view=net species=s013 clade=c00
@@ -1135,14 +1127,6 @@ html insectsChainNet
         longLabel $o_db ($o_date) Alignment Net
         type netAlign droBip2 chainDroBip2
         otherDb droBip2
-
-        track netD_obscura
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s015 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign D_obscura chainD_obscura
-        otherDb D_obscura
 
         track netDroPse3
         subTrack insectsChainNetViewnet off
@@ -1163,26 +1147,10 @@ html insectsChainNet
         track netDroPer1
         subTrack insectsChainNetViewnet off
         subGroups view=net species=s018 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign droPer1 chainDroPer1
         otherDb droPer1
-
-        track netD_subobscura
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s019 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign D_subobscura chainD_subobscura
-        otherDb D_subobscura
-
-        track netD_athabasca
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s020 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign D_athabasca chainD_athabasca
-        otherDb D_athabasca
 
         track netDroVir3
         subTrack insectsChainNetViewnet off
@@ -1216,46 +1184,6 @@ html insectsChainNet
         type netAlign droMoj3 chainDroMoj3
         otherDb droMoj3
 
-        track netD_pseudoobscura_1
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s025 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign D_pseudoobscura_1 chainD_pseudoobscura_1
-        otherDb D_pseudoobscura_1
-
-        track netD_novamexicana
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s026 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign D_novamexicana chainD_novamexicana
-        otherDb D_novamexicana
-
-        track netD_hydei
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s027 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign D_hydei chainD_hydei
-        otherDb D_hydei
-
-        track netD_americana
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s028 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign D_americana chainD_americana
-        otherDb D_americana
-
-        track netD_montana
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s029 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign D_montana chainD_montana
-        otherDb D_montana
-
         track netDroAlb1
         subTrack insectsChainNetViewnet off
         subGroups view=net species=s030 clade=c00
@@ -1263,142 +1191,6 @@ html insectsChainNet
         longLabel $o_db ($o_date) Alignment Net
         type netAlign droAlb1 chainDroAlb1
         otherDb droAlb1
-
-        track netScaptodrosophila_lebanonensis
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s031 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Scaptodrosophila_lebanonensis chainScaptodrosophila_lebanonensis
-        otherDb Scaptodrosophila_lebanonensis
-
-        track netD_busckii
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s032 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign D_busckii chainD_busckii
-        otherDb D_busckii
-
-        track netD_arizonae
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s033 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign D_arizonae chainD_arizonae
-        otherDb D_arizonae
-
-        track netD_nasuta
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s034 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign D_nasuta chainD_nasuta
-        otherDb D_nasuta
-
-        track netZaprionus_indianus
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s035 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Zaprionus_indianus chainZaprionus_indianus
-        otherDb Zaprionus_indianus
-
-        track netD_navojoa
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s036 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign D_navojoa chainD_navojoa
-        otherDb D_navojoa
-
-        track netPhortica_variegata
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s037 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Phortica_variegata chainPhortica_variegata
-        otherDb Phortica_variegata
-
-        track netTeleopsis_dalmanni
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s038 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Teleopsis_dalmanni chainTeleopsis_dalmanni
-        otherDb Teleopsis_dalmanni
-
-        track netRhagoletis_zephyria
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s039 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Rhagoletis_zephyria chainRhagoletis_zephyria
-        otherDb Rhagoletis_zephyria
-
-        track netLucilia_cuprina
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s040 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Lucilia_cuprina chainLucilia_cuprina
-        otherDb Lucilia_cuprina
-
-        track netBactrocera_latifrons
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s041 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Bactrocera_latifrons chainBactrocera_latifrons
-        otherDb Bactrocera_latifrons
-
-        track netBactrocera_oleae
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s042 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Bactrocera_oleae chainBactrocera_oleae
-        otherDb Bactrocera_oleae
-
-        track netZeugodacus_cucurbitae
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s043 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Zeugodacus_cucurbitae chainZeugodacus_cucurbitae
-        otherDb Zeugodacus_cucurbitae
-
-        track netPhormia_regina
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s044 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Phormia_regina chainPhormia_regina
-        otherDb Phormia_regina
-
-        track netCeratitis_capitata
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s045 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Ceratitis_capitata chainCeratitis_capitata
-        otherDb Ceratitis_capitata
-
-        track netPaykullia_maculata
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s046 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Paykullia_maculata chainPaykullia_maculata
-        otherDb Paykullia_maculata
-
-        track netBactrocera_tryoni
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s047 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Bactrocera_tryoni chainBactrocera_tryoni
-        otherDb Bactrocera_tryoni
 
         track netMusDom2
         subTrack insectsChainNetViewnet off
@@ -1408,581 +1200,13 @@ html insectsChainNet
         type netAlign musDom2 chainMusDom2
         otherDb musDom2
 
-        track netBactrocera_dorsalis
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s049 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Bactrocera_dorsalis chainBactrocera_dorsalis
-        otherDb Bactrocera_dorsalis
-
-        track netStomoxys_calcitrans
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s050 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Stomoxys_calcitrans chainStomoxys_calcitrans
-        otherDb Stomoxys_calcitrans
-
-        track netGlossina_pallidipes
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s051 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Glossina_pallidipes chainGlossina_pallidipes
-        otherDb Glossina_pallidipes
-
-        track netGlossina_fuscipes
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s052 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Glossina_fuscipes chainGlossina_fuscipes
-        otherDb Glossina_fuscipes
-
-        track netGlossina_brevipalpis
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s053 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Glossina_brevipalpis chainGlossina_brevipalpis
-        otherDb Glossina_brevipalpis
-
-        track netGlossina_morsitans_2
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s054 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Glossina_morsitans_2 chainGlossina_morsitans_2
-        otherDb Glossina_morsitans_2
-
-        track netGlossina_austeni
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s055 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Glossina_austeni chainGlossina_austeni
-        otherDb Glossina_austeni
-
-        track netGlossina_palpalis_gambiensis
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s056 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Glossina_palpalis_gambiensis chainGlossina_palpalis_gambiensis
-        otherDb Glossina_palpalis_gambiensis
-
-        track netEphydra_gracilis
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s057 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Ephydra_gracilis chainEphydra_gracilis
-        otherDb Ephydra_gracilis
-
-        track netLucilia_sericata
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s058 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Lucilia_sericata chainLucilia_sericata
-        otherDb Lucilia_sericata
-
-        track netGlossina_morsitans_1
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s059 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Glossina_morsitans_1 chainGlossina_morsitans_1
-        otherDb Glossina_morsitans_1
-
-        track netCalliphora_vicina
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s060 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Calliphora_vicina chainCalliphora_vicina
-        otherDb Calliphora_vicina
-
-        track netSphyracephala_brevicornis
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s061 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Sphyracephala_brevicornis chainSphyracephala_brevicornis
-        otherDb Sphyracephala_brevicornis
-
-        track netProctacanthus_coquilletti
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s062 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Proctacanthus_coquilletti chainProctacanthus_coquilletti
-        otherDb Proctacanthus_coquilletti
-
-        track netHaematobia_irritans
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s063 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Haematobia_irritans chainHaematobia_irritans
-        otherDb Haematobia_irritans
-
-        track netThemira_minor
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s064 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Themira_minor chainThemira_minor
-        otherDb Themira_minor
-
-        track netMegaselia_abdita
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s065 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Megaselia_abdita chainMegaselia_abdita
-        otherDb Megaselia_abdita
-
-        track netTephritis_californica
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s066 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Tephritis_californica chainTephritis_californica
-        otherDb Tephritis_californica
-
-        track netCirrula_hians
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s067 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Cirrula_hians chainCirrula_hians
-        otherDb Cirrula_hians
-
-        track netHermetia_illucens
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s068 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Hermetia_illucens chainHermetia_illucens
-        otherDb Hermetia_illucens
-
-        track netNeobellieria_bullata
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s069 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Neobellieria_bullata chainNeobellieria_bullata
-        otherDb Neobellieria_bullata
-
-        track netEutreta_diana
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s070 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Eutreta_diana chainEutreta_diana
-        otherDb Eutreta_diana
-
-        track netHolcocephala_fusca
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s071 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Holcocephala_fusca chainHolcocephala_fusca
-        otherDb Holcocephala_fusca
-
-        track netSarcophagidae_BV_2014
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s072 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Sarcophagidae_BV_2014 chainSarcophagidae_BV_2014
-        otherDb Sarcophagidae_BV_2014
-
-        track netLiriomyza_trifolii
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s073 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Liriomyza_trifolii chainLiriomyza_trifolii
-        otherDb Liriomyza_trifolii
-
-        track netEristalis_dimidiata
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s074 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Eristalis_dimidiata chainEristalis_dimidiata
-        otherDb Eristalis_dimidiata
-
-        track netCondylostylus_patibulatus
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s075 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Condylostylus_patibulatus chainCondylostylus_patibulatus
-        otherDb Condylostylus_patibulatus
-
-        track netMegaselia_scalaris
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s076 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Megaselia_scalaris chainMegaselia_scalaris
-        otherDb Megaselia_scalaris
-
-        track netTrupanea_jonesi
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s077 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Trupanea_jonesi chainTrupanea_jonesi
-        otherDb Trupanea_jonesi
-
-        track netAedes_albopictus
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s078 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Aedes_albopictus chainAedes_albopictus
-        otherDb Aedes_albopictus
-
-        track netAedes_aegypti
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s079 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Aedes_aegypti chainAedes_aegypti
-        otherDb Aedes_aegypti
-
         track netAnoGam3
         subTrack insectsChainNetViewnet off
         subGroups view=net species=s080 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign anoGam3 chainAnoGam3
         otherDb anoGam3
-
-        track netCulex_quinquefasciatus
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s081 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Culex_quinquefasciatus chainCulex_quinquefasciatus
-        otherDb Culex_quinquefasciatus
-
-        track netA_maculatus
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s082 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign A_maculatus chainA_maculatus
-        otherDb A_maculatus
-
-        track netA_merus
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s083 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign A_merus chainA_merus
-        otherDb A_merus
-
-        track netA_dirus
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s084 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign A_dirus chainA_dirus
-        otherDb A_dirus
-
-        track netA_arabiensis
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s085 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign A_arabiensis chainA_arabiensis
-        otherDb A_arabiensis
-
-        track netA_sinensis
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s086 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign A_sinensis chainA_sinensis
-        otherDb A_sinensis
-
-        track netA_atroparvus
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s087 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign A_atroparvus chainA_atroparvus
-        otherDb A_atroparvus
-
-        track netA_epiroticus
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s088 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign A_epiroticus chainA_epiroticus
-        otherDb A_epiroticus
-
-        track netA_quadriannulatus
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s089 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign A_quadriannulatus chainA_quadriannulatus
-        otherDb A_quadriannulatus
-
-        track netA_farauti
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s090 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign A_farauti chainA_farauti
-        otherDb A_farauti
-
-        track netA_minimus
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s091 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign A_minimus chainA_minimus
-        otherDb A_minimus
-
-        track netA_funestus
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s092 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign A_funestus chainA_funestus
-        otherDb A_funestus
-
-        track netA_melas
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s093 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign A_melas chainA_melas
-        otherDb A_melas
-
-        track netA_coluzzii
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s094 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign A_coluzzii chainA_coluzzii
-        otherDb A_coluzzii
-
-        track netClogmia_albipunctata
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s095 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Clogmia_albipunctata chainClogmia_albipunctata
-        otherDb Clogmia_albipunctata
-
-        track netPhlebotomus_papatasi
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s096 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Phlebotomus_papatasi chainPhlebotomus_papatasi
-        otherDb Phlebotomus_papatasi
-
-        track netA_culicifacies
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s097 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign A_culicifacies chainA_culicifacies
-        otherDb A_culicifacies
-
-        track netA_stephensi
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s098 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign A_stephensi chainA_stephensi
-        otherDb A_stephensi
-
-        track netCoboldia_fuscipes
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s099 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Coboldia_fuscipes chainCoboldia_fuscipes
-        otherDb Coboldia_fuscipes
-
-        track netCulicoides_sonorensis
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s100 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Culicoides_sonorensis chainCulicoides_sonorensis
-        otherDb Culicoides_sonorensis
-
-        track netA_albimanus
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s101 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign A_albimanus chainA_albimanus
-        otherDb A_albimanus
-
-        track netA_christyi
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s102 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign A_christyi chainA_christyi
-        otherDb A_christyi
-
-        track netA_cracens
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s103 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign A_cracens chainA_cracens
-        otherDb A_cracens
-
-        track netA_aquasalis
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s104 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign A_aquasalis chainA_aquasalis
-        otherDb A_aquasalis
-
-        track netMochlonyx_cinctipes
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s105 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Mochlonyx_cinctipes chainMochlonyx_cinctipes
-        otherDb Mochlonyx_cinctipes
-
-        track netA_darlingi
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s106 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign A_darlingi chainA_darlingi
-        otherDb A_darlingi
-
-        track netA_farauti_No4
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s107 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign A_farauti_No4 chainA_farauti_No4
-        otherDb A_farauti_No4
-
-        track netLutzomyia_longipalpis
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s108 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Lutzomyia_longipalpis chainLutzomyia_longipalpis
-        otherDb Lutzomyia_longipalpis
-
-        track netA_koliensis
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s109 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign A_koliensis chainA_koliensis
-        otherDb A_koliensis
-
-        track netBelgica_antarctica
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s110 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Belgica_antarctica chainBelgica_antarctica
-        otherDb Belgica_antarctica
-
-        track netA_punctulatus
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s111 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign A_punctulatus chainA_punctulatus
-        otherDb A_punctulatus
-
-        track netClunio_marinus
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s112 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Clunio_marinus chainClunio_marinus
-        otherDb Clunio_marinus
-
-        track netMayetiola_destructor
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s113 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Mayetiola_destructor chainMayetiola_destructor
-        otherDb Mayetiola_destructor
-
-        track netChironomus_tentans
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s114 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Chironomus_tentans chainChironomus_tentans
-        otherDb Chironomus_tentans
-
-        track netChironomus_riparius
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s115 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Chironomus_riparius chainChironomus_riparius
-        otherDb Chironomus_riparius
-
-        track netA_gambiae_1
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s116 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign A_gambiae_1 chainA_gambiae_1
-        otherDb A_gambiae_1
-
-        track netA_nili
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s117 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign A_nili chainA_nili
-        otherDb A_nili
-
-        track netChaoborus_trivitattus
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s118 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Chaoborus_trivitattus chainChaoborus_trivitattus
-        otherDb Chaoborus_trivitattus
-
-        track netTipula_oleracea
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s119 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Tipula_oleracea chainTipula_oleracea
-        otherDb Tipula_oleracea
-
-        track netTrichoceridae_BV_2014
-        subTrack insectsChainNetViewnet off
-        subGroups view=net species=s120 clade=c01
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign Trichoceridae_BV_2014 chainTrichoceridae_BV_2014
-        otherDb Trichoceridae_BV_2014
 
         track netTriCas2
         subTrack insectsChainNetViewnet off
