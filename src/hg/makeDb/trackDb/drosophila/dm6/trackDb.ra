@@ -51,3 +51,4 @@ include trackDb.124wayRbest.ra alpha
 include chainNetInsects.ra
 include chainNetSynInsects.ra
 include chainNetRBestInsects.ra
+include ../../crispr10K.ra alpha
