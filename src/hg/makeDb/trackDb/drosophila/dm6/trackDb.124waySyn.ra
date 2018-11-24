@@ -1,7 +1,7 @@
-track cons124wayRbest
+track cons124waySyn
 compositeTrack on
-shortLabel 124 multiz rBestNet
-longLabel RBEST NET Multiz Alignment & Conservation (124 Species)
+shortLabel 124 multiz Syntenic
+longLabel SYNTENIC NET Multiz Alignment & Conservation (124 Species)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 subGroup2 clade Clade drosophila=Drosophila
 dragAndDrop subTracks
@@ -11,22 +11,22 @@ type bed 4
 group compGeno
 priority 1
 
-    track cons124wayRbestViewalign
+    track cons124waySynViewalign
     shortLabel Multiz Alignments
     view align
     visibility pack
     viewUi on
-    subTrack cons124wayRbest
+    subTrack cons124waySyn
 
-        track multiz124wayRbest
-        subTrack cons124wayRbestViewalign on
-        shortLabel RBEST NET 124
-        longLabel RBEST NET Multiz Alignments of 124 Flies
+        track multiz124waySyn
+        subTrack cons124waySynViewalign on
+        shortLabel SYNTENIC NET 124
+        longLabel SYNTENIC NET Multiz Alignments of 124 Flies
         subGroups view=align clade=drosophila
         noInherit on
         irows on
-        summary multiz124wayRbestSummary
-#        frames multiz124wayRbestFrames
+        summary multiz124waySynSummary
+#        frames multiz124waySynFrames
         group compGeno
         color 0, 10, 100
         altColor 0,90,10
@@ -43,16 +43,16 @@ priority 1
         priority 100
 
     # PhyloP conservation
-    track cons124wayRbestViewphyloP
+    track cons124waySynViewphyloP
     shortLabel Basewise Conservation (phyloP)
     view phyloP
     visibility full
-    subTrack cons124wayRbest
+    subTrack cons124waySyn
     viewLimits -20.0:9.869
     viewLimitsMax -20:0.869
 
-        track phyloP124wayRbest
-        subTrack cons124wayRbestViewphyloP on
+        track phyloP124waySyn
+        subTrack cons124waySynViewphyloP on
         subGroups view=phyloP clade=drosophila
         shortLabel Cons 124 Verts
         longLabel 124 flies Basewise Conservation by PhyloP
@@ -69,14 +69,14 @@ priority 1
         priority 4
 
     # phastCons conservation
-    track cons124wayRbestViewphastcons
+    track cons124waySynViewphastcons
     shortLabel Element Conservation (phastCons)
     view phastcons
     visibility hide
-    subTrack cons124wayRbest
+    subTrack cons124waySyn
 
-        track phastCons124wayRbest
-        subTrack cons124wayRbestViewphastcons off
+        track phastCons124waySyn
+        subTrack cons124waySynViewphastcons off
         subGroups view=phastcons clade=drosophila
         shortLabel Cons 124 Verts
         longLabel 124 flies conservation by PhastCons
@@ -92,14 +92,14 @@ priority 1
         priority 13
 
     # Conserved Elements (Most Conserved)
-    track cons124wayRbestViewelements
+    track cons124waySynViewelements
     shortLabel Conserved Elements
     view elements
     visibility hide
-    subTrack cons124wayRbest
+    subTrack cons124waySyn
 
-        track phastConsElements124wayRbest
-        subTrack cons124wayRbestViewelements off
+        track phastConsElements124waySyn
+        subTrack cons124waySynViewelements off
         subGroups view=elements clade=drosophila
         shortLabel 124 Vert. El
         longLabel 124 flies Conserved Elements
