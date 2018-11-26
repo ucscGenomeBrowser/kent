@@ -17643,11 +17643,16 @@ TMPDIR=/dev/shm
     cat fb.cotJap2.chainSynMm10Link.txt
     # 66583746 bases of 917263224 (7.259%) in intersection
 
+    # mistakenly started this on ku, it failed at the download step since
+    # it could not see the /gbdb/mm10/ hierarchy:
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` cotJap2 mm10) > rbest.log 2>&1 &
-XXX - running - Fri Nov 16 08:29:08 PST 2018
-    # real    94m11.007s
+    # real    79m48.767s
+
+    # continue on hgwdev
+    time (doRecipBest.pl -load -workhorse=hgwdev -continue=download -buildDir=`pwd` cotJap2 mm10) > rbest.download.log 2>&1 &
+    # real    1m40.970s
 
     cat fb.cotJap2.chainRBest.Mm10.txt
-    # 79474812 bases of 1055588482 (7.529%) in intersection
+    # 76078816 bases of 917263224 (8.294%) in intersection
 
 #########################################################################
