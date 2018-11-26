@@ -1527,7 +1527,6 @@ snpSeq snp151Seq
 snpExceptionDesc snp151ExceptionDesc
 defaultGeneTracks knownGene
 defaultMaxWeight 3
-maxWindowToDraw 10000000
 type bed 6 +
 trackHandler snp125
 chimpOrangMacOrthoTable snp151OrthoPt5Pa2Rm8
