@@ -3,7 +3,7 @@ compositeTrack on
 shortLabel Birds Chain/Net
 longLabel Birds Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species s000=Mallard_duck s001=Japanese_quail s002=Chicken s003=Turkey s004=Little_egret s005=Crested_ibis s006=Dalmatian_pelican s007=Great_cormorant s008=White-tailed_tropicbird s009=Rifleman s010=American_crow s011=Hooded_crow s012=Collared_flycatcher s013=Medium_ground_finch s014=Tibetan_ground_jay s015=Canary s016=Zebra_finch s017=White-throated_sparrow s018=Ostrich s019=White_throated_tinamou s020=Emperor_penguin s021=Killdeer s022=Adelie_penguin s023=Northern_fulmar s024=Cuckoo_roller s025=Red-throated_loon s026=Hoatzin s027=Red_crested_turaco s028=Barn_owl s029=Chuck-will's-widow s030=Common_cuckoo s031=Rock_pigeon s032=Yellow-throated_sandgrouse s033=Budgerigar s034=Northern_carmine_bee-eater s035=Bar_tailed_trogon s036=Speckled_mousebird s037=Rhinoceros_hornbill s038=Anna's_hummingbird s039=Downy_woodpecker s040=Red-legged_seriema s041=Sunbittern s042=Brown_roatelo s043=Golden_eagle s044=Saker_falcon s045=Peregrine_falcon s046=White-tailed_eagle s047=Bald_eagle s048=American_flamingo s049=Crowned_crain s050=Houbara_bustard s051=Parrot s052=Scarlet_macaw
+subGroup2 species Species s000a=Japanese_quail s000b=Japanese_quail s001=Mallard_duck s002=Chicken s003=Turkey s004=Little_egret s005=Crested_ibis s006=Dalmatian_pelican s007=Great_cormorant s008=White-tailed_tropicbird s009=Rifleman s010=American_crow s011=Hooded_crow s012=Collared_flycatcher s013=Medium_ground_finch s014=Tibetan_ground_jay s015=Canary s016=Zebra_finch s017=White-throated_sparrow s018=Ostrich s019=White_throated_tinamou s020=Emperor_penguin s021=Killdeer s022=Adelie_penguin s023=Northern_fulmar s024=Cuckoo_roller s025=Red-throated_loon s026=Hoatzin s027=Red_crested_turaco s028=Barn_owl s029=Chuck-will's-widow s030=Common_cuckoo s031=Rock_pigeon s032=Yellow-throated_sandgrouse s033=Budgerigar s034=Northern_carmine_bee-eater s035=Bar_tailed_trogon s036=Speckled_mousebird s037=Rhinoceros_hornbill s038=Anna's_hummingbird s039=Downy_woodpecker s040=Red-legged_seriema s041=Sunbittern s042=Brown_roatelo s043=Golden_eagle s044=Saker_falcon s045=Peregrine_falcon s046=White-tailed_eagle s047=Bald_eagle s048=American_flamingo s049=Crowned_crain s050=Houbara_bustard s051=Parrot s052=Scarlet_macaw
 subGroup3 clade Clade c00=galloanserae c01=pelecaniformes c02=passeriformes c03=palaeognathae c04=neognathae c05=gruiformes c06=falconiformes c07=otherBirds
 dragAndDrop subTracks
 visibility hide
@@ -28,15 +28,23 @@ html birdsChainNet
 
         track chainAnaPla1
         subTrack birdsChainNetViewchain off
-        subGroups view=chain species=s000 clade=c00
+        subGroups view=chain species=s001 clade=c00
         shortLabel $o_db Chain
         longLabel $o_db ($o_date) Chained Alignments
         type chain anaPla1
         otherDb anaPla1
 
+        track chainCotJap2
+        subTrack birdsChainNetViewchain off
+        subGroups view=chain species=s000a clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain cotJap2
+        otherDb cotJap2
+
         track chainCotJap1
         subTrack birdsChainNetViewchain off
-        subGroups view=chain species=s001 clade=c00
+        subGroups view=chain species=s000b clade=c00
         shortLabel $o_db Chain
         longLabel $o_db ($o_date) Chained Alignments
         type chain cotJap1
@@ -458,15 +466,23 @@ html birdsChainNet
 
         track netAnaPla1
         subTrack birdsChainNetViewnet off
-        subGroups view=net species=s000 clade=c00
+        subGroups view=net species=s001 clade=c00
         shortLabel $o_db Net
         longLabel $o_db ($o_date) Alignment Net
         type netAlign anaPla1 chainAnaPla1
         otherDb anaPla1
 
+        track netCotJap2
+        subTrack birdsChainNetViewnet off
+        subGroups view=net species=s000a clade=c00
+        shortLabel $o_db Net
+        longLabel $o_db ($o_date) Alignment Net
+        type netAlign cotJap2 chainCotJap2
+        otherDb cotJap2
+
         track netCotJap1
         subTrack birdsChainNetViewnet off
-        subGroups view=net species=s001 clade=c00
+        subGroups view=net species=s000b clade=c00
         shortLabel $o_db Net
         longLabel $o_db ($o_date) Alignment Net
         type netAlign cotJap1 chainCotJap1
