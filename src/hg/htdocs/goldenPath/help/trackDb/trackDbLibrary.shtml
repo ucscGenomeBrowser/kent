@@ -1706,7 +1706,7 @@ There are no extra options that can appear on the type bigInteract line.
     in looking up the sequence. These tables are loaded by hgLoadSeq.
     </LI>
     <LI>If
-    <code>hgPcrResult</code> is specified than a PCR result is
+    <code>hgPcrResult</code> is specified then a PCR result is
     used.</LI>
     <LI>If <code>lfExtra</code>
     is specified then the sequence of an item is found in the last
