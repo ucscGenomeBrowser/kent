@@ -45,6 +45,7 @@
 <li><a href="#download34">Name of fourth column in BED output</a></li>
 <li><a href="#download36">Track data access</a></li>
 <li><a href="#download37">Known issues with Table Browser GTF output</a></li>
+<li><a href="#download38">Table Browser output file not ordered</a></li>
 </ul>
 <hr>
 <p>
@@ -860,5 +861,19 @@ or GFF Format wiki page</a> for examples and various methods for conversion. The
 utility can convert files from several sources, such as Table Browser output from a genePred table,
 a local downloaded gene set table like refGene.txt, or from querying
 <a href="../goldenpath/help/mysql.html">public MySQL tables.</a></p>
+
+<a name="download38"></a>
+<h2>Table Browser output file order</h2>
+<h6>My table browser output file is not ordered by position, how is it ordered?</h6>
+<p>
+Most of our tables have a special first column called "bin" that helps with quickly displaying data on 
+the Genome Browser. This (chrom,bin) index causes query results to be ordered first by bin, then by 
+chromStart. This allows us to query and return results more quickly than if they were sorted by chromStart.
+</p>
+<p>
+A quick way to sort an output BED file by position is to use the following UNIX command on our
+<a href="../cgi-bin/hgTables">Table Browser</a> output BED file:
+<pre><code>sort -k1,1 -k2n,2n example.bed > example.sorted.bed</code></pre>
+</p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
