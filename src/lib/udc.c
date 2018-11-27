@@ -24,6 +24,7 @@
  * for each block of the file that has been fetched.  Currently the block size is 8K. */
 
 #include <sys/file.h>
+#include <sys/mman.h>
 #include "common.h"
 #include "hash.h"
 #include "obscure.h"
@@ -139,6 +140,7 @@ struct udcFile
     bits64 endData;		/* End of area in file we know to have data. */
     bits32 bitmapVersion;	/* Version of associated bitmap we were opened with. */
     struct connInfo connInfo;   /* Connection info for open net connection. */
+    void *mmapBase;             /* pointer to memory address if file has been mmapped, or NULL */
     struct ios ios;             /* Statistics on file access. */
     };
 
@@ -1243,6 +1245,11 @@ if (file != NULL)
            file->ios.udc.numSeeks, file->ios.udc.numReads, file->ios.udc.bytesRead, file->ios.udc.numWrites,  file->ios.udc.bytesWritten, 
            file->ios.net.numSeeks, file->ios.net.numReads, file->ios.net.bytesRead, file->ios.net.numWrites,  file->ios.net.bytesWritten);
         }
+    if (file->mmapBase != NULL)
+        {
+        if (munmap(file->mmapBase, file->size) < 0)
+            errnoAbort("munmap() failed on %s", file->url);
+        }
     if (file->connInfo.socket != 0)
 	mustCloseFd(&(file->connInfo.socket));
     if (file->connInfo.ctrlSocket != 0)
@@ -2017,3 +2024,32 @@ boolean udcExists(char *url)
 {
 return udcFileSize(url)!=-1;
 }
+
+void udcMMap(struct udcFile *file)
+/* Enable access to underlying file as memory using mmap.  udcMMapFetch
+ * must be called to actually access regions of the file. */
+{
+if (file->mmapBase != NULL)
+    errAbort("File is already mmaped: %s", file->url);
+file->mmapBase = mmap(NULL, file->size, PROT_READ, MAP_SHARED, file->fdSparse, 0);
+if (file->mmapBase == MAP_FAILED)
+    errnoAbort("mmap() failed for %s", file->url);
+}
+
+void *udcMMapFetch(struct udcFile *file, bits64 offset, bits64 size)
+/* Return pointer to a region of the file in memory, ensuring that regions is
+ * cached. udcMMap must have been called to enable access.  This must be
+ * called for first access to a range of the file or erroneous (zeros) data
+ * maybe returned.  Maybe called multiple times on a range or overlapping
+ * returns. */
+{
+if (file->mmapBase == NULL)
+    errAbort("udcMMap() has not been called for: %s", file->url);
+if ((offset + size) > file->size)
+    errAbort("udcMMapFetch on offset %lld for %lld bytes exceeds length of file %lld on %s",
+             offset, size, file->size, file->url);
+if (udcCacheEnabled() && !sameString(file->protocol, "transparent"))
+    udcCachePreload(file, offset, size);
+return ((char*)file->mmapBase) + offset;
+}
+

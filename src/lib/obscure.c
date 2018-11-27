@@ -154,10 +154,12 @@ struct hash *hashTwoColumnFile(char *fileName)
 /* Given a two column file (key, value) return a hash. */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[2];
 struct hash *hash = hashNew(16);
-while (lineFileRow(lf, row))
+char *row[3];
+int fields = 0;
+while ((fields = lineFileChop(lf, row)) != 0)
     {
+    lineFileExpectWords(lf, 2, fields);
     char *name = row[0];
     char *value = lmCloneString(hash->lm, row[1]);
     hashAdd(hash, name, value);

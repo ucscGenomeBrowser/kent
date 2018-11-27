@@ -233,12 +233,15 @@ if (sqlIsLocked(conn, "makeFileTags"))
 removeUnusedMetaTags(conn);
 
 /* Get tagStorm and make sure that all tags are unique in case insensitive way */
+verboseTime(2, "Before fetching tagStorm");
 struct tagStorm *tagStorm = cdwTagStorm(conn);
+verboseTime(2, "Fetching tagStorm");
 
 /* Build up list and hash of column types */
 struct tagTypeInfo *ttiList = NULL;
 struct hash *ttiHash = NULL;
 tagStormInferTypeInfo(tagStorm, &ttiList, &ttiHash);
+verboseTime(2, "Inferring column types");
 
 /* Make optionally a dump of the tag type info. */
 char *dumpName = optionVal("types", NULL);
@@ -269,7 +272,9 @@ dyStringAppend(query, NOSQLINJ);
 tagStormToSqlCreate(tagStorm, fullTable, ttiList, ttiHash, 
     keyFields, ArraySize(keyFields), query);
 verbose(2, "%s\n", query->string);
+verboseTime(2, "creating query string and tab-sep file");
 sqlRemakeTable(conn, fullTable, query->string);
+verboseTime(2, "sqlRemakeTable");
 
 /* Do insert statements for each accessioned file in the system */
 struct slRef *stanzaList = tagStanzasMatchingQuery(tagStorm, "select * from files where accession");
@@ -283,6 +288,7 @@ for (stanzaRef = stanzaList; stanzaRef != NULL; stanzaRef = stanzaRef->next)
     sqlUpdate(conn, query->string);
     }
 slFreeList(&stanzaList);
+verboseTime(2, "sql inserts");
 
 /* Make facetTable as a subset of fullTable */
 

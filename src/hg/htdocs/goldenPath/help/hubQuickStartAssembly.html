@@ -135,12 +135,17 @@ here</a>. Please note that because the <code>-mask</code> option in the above <c
 -trans</code> gfServer option will mask all lower-case sequence from being matched, you may not 
 wish to include it. See the above blat links and gfServer usage statement for more information.</p>
 <p>
-If you have trouble connecting your blat servers with the browser, check if your institution has a 
-firewall that prevents the browser from sending multiple inquiries. If this is the case, ask your 
-systems administrator to add the IP range <code>128.114.119.*</code> as an exception that is not 
-limited. This will allow connections with the U.S.-based genome.ucsc.edu
-site. To enable requests for the Genome Browser's Europe-based mirror site (genome-euro.ucsc.edu), 
-the IP range <code>129.70.40.99</code> should be added to the exception list.</p>
+If you have trouble connecting your blat servers with the browser or if the browser cannot access 
+your files, check if your institution has a firewall that prevents the browser from sending 
+multiple inquiries. If this is the case, ask your systems administrator to add the following 
+IP addresses as exceptions so that access is not limited.
+<pre><code>128.114.119.*
+129.70.40.99
+134.160.84.67
+128.114.198.32</code></pre>
+<p>
+This will allow connections with the U.S.-based genome.ucsc.edu site, the European site mirror, 
+the Asian site mirror, and the UCSC development server.</p>
 
 <!-- ========== blat assembly hub GBiB ============================== -->
 

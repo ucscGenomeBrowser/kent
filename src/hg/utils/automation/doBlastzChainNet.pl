@@ -1079,9 +1079,14 @@ sub loadUp {
       "($tDb.$qDb.net[.gz] exists).  Either run with -continue download, " .
 	"or move aside/remove $runDir/$tDb.$qDb.net[.gz] and run again.\n";
   }
-  # Make sure previous stage was successful.
+  # Make sure previous stage was successful.  Depends upon what was done:
+  my $otherCheck = "$buildDir/mafNet";
+  if ($opt_trackHub) {
+     $otherCheck = "$buildDir/bigMaf";
+     &HgAutomate::nfsNoodge("$otherCheck/$tDb.$qDb.net.maf");
+  }
   my $successDir = $isSelf ? "$runDir/$tDb.$qDb.all.chain.gz" :
-                             "$buildDir/mafNet/";
+                             "$otherCheck";
   if (! -e $successDir && ! $opt_debug) {
     die "loadUp: looks like previous stage was not successful " .
       "(can't find $successDir).\n";
@@ -1112,7 +1117,7 @@ end
 _EOF_
       );
   } else {
-    if ($dbExists) {
+    if (! $opt_trackHub && $dbExists) {
       $bossScript->add(<<_EOF_
 cd $runDir
 hgLoadChain -tIndex $tDb chain$QDb $tDb.$qDb.all.chain.gz
@@ -1145,7 +1150,7 @@ _EOF_
     $tRepeats = $opt_qRepeats ? "-tRepeats=$opt_qRepeats" : $defaultQRepeats;
     $qRepeats = $opt_tRepeats ? "-qRepeats=$opt_tRepeats" : $defaultTRepeats;
   }
-    if ($dbExists) {
+    if (! $opt_trackHub && $dbExists) {
       $bossScript->add(<<_EOF_
 
 # Add gap/repeat stats to the net file using database tables:
@@ -1698,7 +1703,7 @@ netChainSubset -verbose=0 $tDb.$qDb.syn.net.gz $tDb.$qDb.all.chain.gz stdout \\
 _EOF_
       );
 
-    if ($dbExists) {
+    if (! $opt_trackHub && $dbExists) {
       $bossScript->add(<<_EOF_
 set lineCount = `zcat $tDb.$qDb.syn.chain.gz | wc -l`
 if (\$lineCount > 0) then
@@ -1785,7 +1790,7 @@ _EOF_
       );
     }
 
-    if ($dbExists) {
+    if (! $opt_trackHub && $dbExists) {
       $bossScript->add(<<_EOF_
 cd "$buildDir"
 featureBits $tDb chainSyn${QDb}Link >&fb.$tDb.chainSyn${QDb}Link.txt

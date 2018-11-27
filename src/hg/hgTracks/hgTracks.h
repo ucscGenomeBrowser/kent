@@ -281,6 +281,8 @@ struct track
 
 
     struct slInt *labelColumns; /* The columns in a bigBed that can be used for labels. */
+    boolean subTrackVisSet;     /* have we calculated visibility on this subtrack */
+    boolean subTrackVis;        /* if we calculated it, what is it */
     };
 
 struct window  // window in multiwindow image
@@ -884,6 +886,9 @@ void linkedFeaturesFreeList(struct linkedFeatures **pList);
 
 void freeLinkedFeaturesSeries(struct linkedFeaturesSeries **pList);
 /* Free up a linked features series list. */
+
+int simpleFeatureCmp(const void *va, const void *vb);
+/* Compare to sort based on start. */
 
 int linkedFeaturesCmp(const void *va, const void *vb);
 /* Compare to sort based on chrom,chromStart. */
@@ -1657,6 +1662,10 @@ void bedPlusLabelDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOf
 
 Color blackItemNameColor(struct track *tg, void *item, struct hvGfx *hvg);
 /* Force item name (label) color to black */
+
+void linkedFeaturesMapItem(struct track *tg, struct hvGfx *hvg, void *item,
+				char *itemName, char *mapItemName, int start, int end,
+				int x, int y, int width, int height);
 
 #endif /* HGTRACKS_H */
 

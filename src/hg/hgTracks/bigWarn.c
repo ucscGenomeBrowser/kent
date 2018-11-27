@@ -7,6 +7,7 @@
 #include "hgTracks.h"
 #include "container.h"
 #include "bigWarn.h"
+#include "hgConfig.h"
 
 static int bigWarnNumLines(char *errMsg)
 /* Count number of lines in err msg */
@@ -46,6 +47,11 @@ void bigDrawWarning(struct track *tg, int seqStart, int seqEnd, struct hvGfx *hv
 {
 if (currentWindow != windows)
     return;
+
+// put the error message into the log
+if (sameString(cfgOptionDefault("bigWarn", "on"), "on"))
+    fprintf(stderr, "bigWarn: %s\n", tg->networkErrMsg);
+
 int clipXBak, clipYBak, clipWidthBak, clipHeightBak;
 hvGfxGetClip(hvg, &clipXBak, &clipYBak, &clipWidthBak, &clipHeightBak);
 hvGfxUnclip(hvg);

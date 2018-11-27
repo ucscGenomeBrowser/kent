@@ -122,6 +122,7 @@ int main(int argc, char *argv[])
 if (!cgiIsOnWeb())
    usage();
 cgiSpoof(&argc, argv);
+pushWarnHandler(htmlVaBadRequestAbort);
 pushAbortHandler(htmlVaBadRequestAbort);
 edwScriptSubmitStatus();
 return 0;

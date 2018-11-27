@@ -554,8 +554,15 @@ var genomePos = {
             positionDialog = $("#positionDialog")[0];
         }
         if (hgTracks.windows) {
-            var i,len;
+            var i, len, end;
+            var matches = /^virt:[0-9]+-([0-9]+)/.exec(position);
             var str = position;
+            if (matches) {
+                end = matches[1];
+                if (end < hgTracks.chromEnd) {
+                    str += "<br>(full virtual region is virt:1-" + hgTracks.chromEnd + ")";
+                }
+            }
             if (!(hgTracks.virtualSingleChrom && (hgTracks.windows.length === 1))) {
                 str += "<br>\n";
                 str += "<br>\n";
@@ -572,7 +579,7 @@ var genomePos = {
         }
         $(positionDialog).dialog({
                 modal: true,
-                title: "Window-Positions",
+                title: "Multi-region position ranges",
                 closeOnEscape: true,
                 resizable: false,
                 autoOpen: false,
@@ -3573,7 +3580,20 @@ var popUpHgt = {
     
         $('#hgTracksDialog').dialog('option' , 'title' , popUpHgt.title);
         $('#hgTracksDialog').dialog('open');
-    
+
+        // Initialize autocomplete for alt/fix sequence names
+        autocompleteCat.init($('#singleAltHaploId'),
+                             { baseUrl: 'hgSuggest?db=' + getDb() + '&type=altOrPatch&prefix=',
+                               enterSelectsIdentical: true });
+        // Make option inputs select their associated radio buttons
+        $('input[name="emPadding"]').keyup(function() {
+            $('#virtModeType[value="exonMostly"]').attr('checked', true); });
+        $('input[name="gmPadding"]').keyup(function() {
+            $('#virtModeType[value="geneMostly"]').attr('checked', true); });
+        $('#multiRegionsBedInput').keyup(function() {
+            $('#virtModeType[value="customUrl"]').attr('checked', true); });
+        $('#singleAltHaploId').keyup(function() {
+            $('#virtModeType[value="singleAltHaplo"]').attr('checked', true); });
     }
 };
 

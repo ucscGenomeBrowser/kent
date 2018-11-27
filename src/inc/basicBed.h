@@ -275,6 +275,9 @@ int bedParseColor(char *colorSpec);
  * or a 6-digit hex string  preceded by #. 
  * O/w return unsigned integer value.  Return -1 on error */
 
+void bedOutputRgb(FILE *f, unsigned int color);
+/*      Output a string: "r,g,b" for 24 bit number */
+
 long long bedTotalSize(struct bed *bedList);
 /* Add together sizes of all beds in list. */
 

@@ -123,9 +123,6 @@ nice gbDbLoadStep -verbose=${verb} $typeArg $opts -workdir=$workdir $databases
 mv -f $lastTimeTmp $lastTime
 gbMkTimeFile $dbloadTime
 
-# save tables statistics for all databases
-nice dumpTableStats
-
 # issue a reminder if -allowLargeDeletes was used, so we remember to turn it off
 if [ $largeDeletes = YES ] ; then
     echo "WARNING: -allowLargeDeletes is enabled"

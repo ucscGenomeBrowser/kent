@@ -1,12 +1,12 @@
 track wgEncodeGencodeVM16
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel All GENCODE VM16
 longLabel All GENCODE annotations from VM16 (Ensembl 91)
 group genes
 dragAndDrop subTracks
 priority 2.968
-visibility pack
+visibility hide
 subGroup1 view View aGenes=Genes b2-way=2-way  cPolya=PolyA
 subGroup2 name Name Basic=Basic Comprehensive=Comprehensive Pseudogenes=Pseudogenes yTwo-way=2-way_Pseudogenes zPolyA=PolyA
 allButtonPair on

@@ -426,6 +426,9 @@ void printOtherSnpMappings(char *table, char *name, int start,
 void printCustomUrl(struct trackDb *tdb, char *itemName, boolean encode);
 /* Wrapper to call printCustomUrlWithLabel using the url setting in trackDb */
 
+void printCustomUrlWithFields(struct trackDb *tdb, char *itemName, char *itemLabel, boolean encode,                                                      struct slPair *fields);
+/* Wrapper to call printCustomUrlWithLabel with additional fields to substitute */
+
 void printOtherCustomUrl(struct trackDb *tdb, char *itemName, char* urlSetting, boolean encode);
 /* Wrapper to call printCustomUrlWithLabel to use another url setting other than url in trackDb e.g. url2, this allows the use of multiple urls for a track
  *  to be set in trackDb. */
@@ -501,6 +504,9 @@ void printAddWbr(char *text, int distance);
 
 struct slPair* getExtraFields(struct trackDb *tdb, char **fields, int fieldCount);
 /* return the extra field names and their values as a list of slPairs */
+
+struct slPair *getFields(struct trackDb *tdb, char **fields);
+/* return field names and their values as a list of slPairs.  */
 
 int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount);
 // Any extra bed or bigBed fields (defined in as and occurring after N in bed N + types.

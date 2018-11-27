@@ -125,8 +125,7 @@ Color mgFindColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned 
 return MAKECOLOR_32(r,g,b);
 }
 
-
-struct rgbColor mgColorIxToRgb(struct memGfx *mg, int colorIx)
+struct rgbColor colorIxToRgb(int colorIx)
 /* Return rgb value at color index. */
 {
 static struct rgbColor rgb;
@@ -140,6 +139,12 @@ rgb.g = (colorIx >> 8) & 0xff;
 rgb.b = (colorIx >> 16) & 0xff;
 #endif
 return rgb;
+}
+
+struct rgbColor mgColorIxToRgb(struct memGfx *mg, int colorIx)
+/* Return rgb value at color index. */
+{
+return colorIxToRgb(colorIx);
 }
 
 Color mgClosestColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned char b)

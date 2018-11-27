@@ -208,7 +208,7 @@ int len = winEnd-winStart;
 char start1[255];
 safef(start1, sizeof(start1), "%d", winStart+1);
 
-char *url = replaceInUrl(et->url, "", cart, db, chromName, winStart, winEnd, NULL, TRUE);
+char *url = replaceInUrl(et->url, "", cart, db, chromName, winStart, winEnd, NULL, TRUE, NULL);
 
 char *method = "POST";
 if (et->isHttpGet)
@@ -294,7 +294,7 @@ for (slp=et->params; slp!=NULL; slp=slp->next)
     // any remaining $-expression might be one of the general ones
     else if (stringIn("$", val))
         {
-        val = replaceInUrl(val, "", cart, db, chromName, winStart, winEnd, NULL, TRUE);
+        val = replaceInUrl(val, "", cart, db, chromName, winStart, winEnd, NULL, TRUE, NULL);
         }
 
     // output

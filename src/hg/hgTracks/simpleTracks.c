@@ -1616,6 +1616,14 @@ AllocVar(tg);
 return tg;
 }
 
+int simpleFeatureCmp(const void *va, const void *vb)
+/* Compare to sort based on start. */
+{
+const struct simpleFeature *a = *((struct simpleFeature **)va);
+const struct simpleFeature *b = *((struct simpleFeature **)vb);
+return a->start - b->start;
+}
+
 int linkedFeaturesCmp(const void *va, const void *vb)
 /* Compare to sort based on start. */
 {
@@ -4010,6 +4018,12 @@ return (withNextExonArrows && tg->nextExonButtonable && tg->nextPrevExon);
 boolean exonNumberMapsCompatible(struct track *tg, enum trackVisibility vis)
 /* Check to see if we draw exon and intron maps labeling their number. */
 {
+if (tg->tdb)
+    {
+    char *type = tg->tdb->type;
+    if (sameString(type, "interact") || sameString(type, "bigInteract"))
+        return FALSE;
+    }
 boolean exonNumbers = sameString(trackDbSettingOrDefault(tg->tdb, "exonNumbers", "on"), "on");
 return (withExonNumbers && exonNumbers && (vis==tvFull || vis==tvPack) && (winEnd - winStart < 400000)
  && (tg->nextPrevExon==linkedFeaturesNextPrevItem));
@@ -4944,8 +4958,8 @@ if ((sf = lf->components) != NULL)
 	if (sf->end > end)
 	    end = sf->end;
 	}
-    lf->start = lf->tallStart = start;
-    lf->end = lf->tallEnd = end;
+    lf->start = start;
+    lf->end = end;
     }
 lf->grayIx = lfCalcGrayIx(lf);
 }
@@ -4965,7 +4979,7 @@ return lf->end;
 }
 
 
-static void linkedFeaturesMapItem(struct track *tg, struct hvGfx *hvg, void *item,
+void linkedFeaturesMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 				char *itemName, char *mapItemName, int start, int end,
 				int x, int y, int width, int height)
 /* Draw the mouseOver (aka statusLine) text from the mouseOver field of lf
@@ -6315,7 +6329,7 @@ if (isGencode)
     safef(varName, sizeof(varName), "%s.show.pseudo", tg->tdb->track);
     boolean showPseudo = cartUsualBoolean(cart, varName, FALSE);
     if (!showPseudo)
-        newList = stripLinkedFeaturesWithBitInScore(lfList,  BIT_PSEUDO);
+        newList = stripLinkedFeaturesWithBitInScore(newList,  BIT_PSEUDO);
     }
 
 slSort(&newList, linkedFeaturesCmp);
@@ -10849,6 +10863,8 @@ bool isSubtrackVisible(struct track *subtrack)
 /* Has this subtrack not been deselected in hgTrackUi or declared with
  * "subTrack ... off"?  -- assumes composite track is visible. */
 {
+if (subtrack->subTrackVisSet)
+    return subtrack->subTrackVis;
 boolean overrideComposite = (NULL != cartOptionalString(cart, subtrack->track));
 if (subtrack->limitedVisSet && subtrack->limitedVis == tvHide)
     return FALSE;
@@ -10858,6 +10874,8 @@ safef(option, sizeof(option), "%s_sel", subtrack->track);
 boolean enabled = cartUsualBoolean(cart, option, enabledInTdb);
 if (overrideComposite)
     enabled = TRUE;
+subtrack->subTrackVisSet = TRUE;
+subtrack->subTrackVis = enabled;
 return enabled;
 }
 

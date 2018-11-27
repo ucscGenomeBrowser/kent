@@ -1025,6 +1025,16 @@ lineFileClose(&lf);
 return hash;
 }
 
+void bedOutputRgb(FILE *f, unsigned int color)
+/*      Output a string: "r,g,b" for 24 bit number */
+{
+int colorIx = (int)color;
+struct rgbColor rgb = colorIxToRgb(colorIx);
+//fprintf(f, "%d,%d,%d", rgb.r, rgb.g, rgb.b);
+// FIXME: endian issue ??
+fprintf(f, "%d,%d,%d", rgb.b, rgb.g, rgb.r);
+}
+
 int bedParseRgb(char *itemRgb)
 /*      parse a string: "r,g,b" into three unsigned char values
         returned as 24 bit number, or -1 for failure */

@@ -483,6 +483,7 @@ char *fluidics_chip[] =
 };
 char *format[] =
 {
+"2bit",
 "bam",
 "bam.bai",
 "bed",
@@ -490,17 +491,23 @@ char *format[] =
 "bigWig",
 "cram",
 "csv",
+"customTrack",
+"expression_matrix",
 "fasta",
 "fastq",
 "gtf",
 "html",
 "idat",
 "jpg",
+"kallisto_abundance",
 "pdf",
 "png",
 "rcc",
+"tsv",
 "text",
 "vcf",
+"vcf.gz.tbi",
+"vcf.idx",
 "unknown",
 };
 char *assay_platform[] =

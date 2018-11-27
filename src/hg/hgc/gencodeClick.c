@@ -49,9 +49,8 @@ static char *vegaGeneIdUrl = "http://vega.sanger.ac.uk/%s/Gene/Summary?db=core;g
 static char *yalePseudoUrl = "http://tables.pseudogene.org/%s";
 static char *hgncUrl = "http://www.genenames.org/data/hgnc_data.php?match=%s";
 static char *geneCardsUrl = "http://www.genecards.org/cgi-bin/carddisp.pl?gene=%s";
-static char *apprisHomeUrl = "http://appris.bioinfo.cnio.es/";
-static char *apprisGeneUrl = "http://appris.bioinfo.cnio.es/report.html?id=%s&namespace=Ensembl_Gene_Id&specie=%s";
-static char *apprisTranscriptUrl = "http://appris.bioinfo.cnio.es/report.html?id=%s&namespace=Ensembl_Transcript_Id&specie=%s";
+static char *apprisHomeUrl = "http://appris-tools.org/";
+static char *apprisGeneUrl = "http://appris-tools.org/#/database/id/%s/%s?sc=ensembl";
 
 static char *getBaseAcc(char *acc, char *accBuf, int accBufSize)
 /* get the accession with version number dropped. */
@@ -275,7 +274,7 @@ subChar(speciesArg, ' ', '_');
 
 char accBuf[64];
 printf("<td><a href=\"");
-printf(urlTemplate, getBaseAcc(id, accBuf, sizeof(accBuf)), speciesArg);
+printf(urlTemplate, speciesArg, getBaseAcc(id, accBuf, sizeof(accBuf)));
 printf("\" target=_blank>%s</a>", label);
 
 freeMem(speciesArg);
@@ -337,9 +336,10 @@ char* apprisTag = findApprisTag(tags);
 char* transLabel = (apprisTag != NULL) ? apprisTagToSymbol(apprisTag) : NULL;
 char *geneLabel = ((apprisTag != NULL) || geneHasApprisTranscripts(tdb, conn, transAttrs)) ? transAttrs->geneName : NULL;
 
+// APPRIS gene and transcript now go to the same location
 printf("<tr><th><a href=\"%s\" target=_blank>APPRIS</a>\n", apprisHomeUrl);
 if (transLabel != NULL)
-    prApprisTdAnchor(transAttrs->transcriptId, transLabel, apprisTranscriptUrl);
+    prApprisTdAnchor(transAttrs->geneId, transLabel, apprisGeneUrl);
 else
     printf("<td>&nbsp;");
 if (geneLabel != NULL)

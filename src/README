@@ -71,7 +71,7 @@ As per Unix standard practice, tab stops are set to 8, not 4
 as is the common practice in Windows, so some care must be
 taken when using tabs for indenting.  
 
-Tabs continue to be a problem for the programmer even in 2012.
+Tabs continue to be a problem for the programmer even in 2018.
 Currently our makefiles require tabs, while our python code forbids
 them. The C code can go either way so long as tabs are treated
 as advancing to the next multiple-of-eight column. Please consult local
@@ -279,6 +279,22 @@ Sadly many of the Genome Browser specific modules are currently quite long.
 On the bright side the vast majority of the library modules are reasonably
 sized.
 
+PREVENTING STRING OVERFLOW
+
+One weakness of C in the string handling.  It is very easy using standard C 
+library functions like sprintf and strcat to write past the end of the
+character array that holds a string.  For this reason instead of sprintf
+we use the "safef" function, which takes an additional parameter, the size
+of the character array.  So
+   char buffer[50];
+   sprintf(buf, "My name is %s", name);
+becomes
+   char buffer[50];
+   safef(buf, sizeof(buf), "My name is %s", name);
+Instead of just silently overflowing the buffer and crashing cryptically
+in many cases if the string is too long, say "Sahar Barjesteh van Waalwijk van Doorn-Khosrovani"
+which is actually a real scientists name!
+
 PREVENTING SQL-INJECTION
 
 In order to prevent SQL-Injection (sqli), we use primarily
@@ -294,4 +310,10 @@ functions to defeat sqli.  The function reference is found here:
 
 http://genomewiki.ucsc.edu/index.php/Sql-injection_safe_functions
 
-====================================================================
+CREATING NEW PROGRAMS
+
+By convention most of our command line programs follow a very simple structure.  They are in 
+a directory by themselves which initially will just contain a .c file and a makefile.  It
+is easiest to use the program called "newProg" in our source tree to set this up.  It'll create
+a proper makefile, which is not simple, but is rarely done enough you're likely to forget it.
+It also creates a skeleton for the C program including a usage message.

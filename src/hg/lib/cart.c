@@ -945,20 +945,9 @@ struct dyString *encoded = newDyString(4096);
 /* Make up encoded string holding all variables. */
 cartEncodeState(cart, encoded);
 
-/* Make up update statement unless it looks like a robot with
- * a great bunch of variables. */
-if (encoded->stringSize < 16*1024 || cart->userInfo->useCount > 0)
-    {
-    updateOne(conn, userDbTable(), cart->userInfo, encoded->string, encoded->stringSize);
-    updateOne(conn, sessionDbTable(), cart->sessionInfo, encoded->string, encoded->stringSize);
-    }
-else
-    {
-    fprintf(stderr, "Cart stuffing bot?  Not writing %d bytes to cart on first use of %d from IP=%s\n",
-            encoded->stringSize, cart->userInfo->id, cgiRemoteAddr());
-    /* Do increment the useCount so that cookie-users don't get stuck here: */
-    updateOne(conn, userDbTable(), cart->userInfo, "", 0);
-    }
+/* update sessionDb and userDb tables (removed check for cart stuffing bots) */
+updateOne(conn, userDbTable(), cart->userInfo, encoded->string, encoded->stringSize);
+updateOne(conn, sessionDbTable(), cart->sessionInfo, encoded->string, encoded->stringSize);
 
 /* Cleanup */
 cartDefaultDisconnector(&conn);

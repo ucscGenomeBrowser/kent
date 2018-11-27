@@ -17395,3 +17395,264 @@ TMPDIR=/dev/shm
     make alpha DBS=mm10
 
 ##############################################################################
+# LASTZ mouse/mm10 vs. chicken/galGal6 - (DONE - 2018-10-12 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzGalGal6.2018-10-12
+    cd /hive/data/genomes/mm10/bed/lastzGalGal6.2018-10-12
+
+    printf "# Mouse vs. chicken
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+#      A    C    G    T
+#     91  -90  -25 -100
+#    -90  100 -100  -25
+#    -25 -100  100  -90
+#   -100  -25  -90  91
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: chicken galGal6
+SEQ2_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ2_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/mm10/bed/lastzGalGal6.2018-10-12
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    84m14.188s
+
+    cat fb.mm10.chainGalGal6Link.txt
+    # 101151132 bases of 2652783500 (3.813%) in intersection
+    cat fb.mm10.chainSynGalGal6Link.txt
+    # 70707720 bases of 2652783500 (2.665%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` mm10 galGal6) > rbest.log 2>&1 &
+    # real    116m19.316s
+
+    cat fb.mm10.chainRBest.GalGal6.txt 
+    # 79649474 bases of 2652783500 (3.002%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/galGal6/bed/blastz.mm10.swap
+    cd /hive/data/genomes/galGal6/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/mm10/bed/lastzGalGal6.2018-10-12/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    6m41.043s
+
+    cat fb.galGal6.chainMm10Link.txt
+    # 88539346 bases of 1055588482 (8.388%) in intersection
+
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` galGal6 mm10) > rbest.log 2>&1 &
+    # real    94m11.007s
+
+    cat fb.galGal6.chainRBest.Mm10.txt
+    # 79474812 bases of 1055588482 (7.529%) in intersection
+
+#########################################################################
+# LASTZ mouse/mm10 Minke whale/bosTau9 - (DONE - 2018-11-08 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzBosTau9.2018-11-08
+    cd /hive/data/genomes/mm10/bed/lastzBosTau9.2018-11-08
+
+    printf '# mouse vs cow
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_M=254
+# default BLASTZ_Q score matrix:
+#       A     C     G     T
+# A    91  -114   -31  -123
+# C  -114   100  -125   -31
+# G   -31  -125   100  -114
+# T  -123   -31  -114    91
+
+# TARGET: mouse mm10
+SEQ1_DIR=/hive/data/genomes/mm10/mm10.2bit
+SEQ1_LEN=/hive/data/genomes/mm10/chrom.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=2
+SEQ1_LAP=10000
+
+# QUERY: cow bosTau9
+SEQ2_DIR=/hive/data/genomes/bosTau9/bosTau9.2bit
+SEQ2_LEN=/hive/data/genomes/bosTau9/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=10
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzBosTau9.2018-11-08
+TMPDIR=/dev/shm
+' > DEF
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1 &
+    # real    211m46.258s
+
+    cat fb.mm10.chainBosTau9Link.txt
+    # 703580224 bases of 2652783500 (26.522%) in intersection
+    cat fb.mm10.chainSynBosTau9Link.txt
+    # 659095603 bases of 2652783500 (24.845%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` mm10 bosTau9) > rbest.log 2>&1 &
+    # real    214m24.819s
+
+    cat fb.mm10.chainRBest.BosTau9.txt
+    # 667950653 bases of 2652783500 (25.179%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/bosTau9/bed/blastz.mm10.swap
+    cd /hive/data/genomes/bosTau9/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/mm10/bed/lastzBosTau9.2018-11-08/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1 &
+    #  real    41m22.962s
+
+    cat fb.bosTau9.chainMm10Link.txt
+    # 695248613 bases of 2715853792 (25.600%) in intersection
+    cat fb.bosTau9.chainSynMm10Link.txt
+    # 660591041 bases of 2715853792 (24.324%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` bosTau9 mm10) > rbest.log 2>&1 &
+    # real    204m36.465s
+
+    cat fb.bosTau9.chainRBest.Mm10.txt
+    # 667305554 bases of 2715853792 (24.571%) in intersection
+
+#########################################################################
+2018-11-10: import of UCSC GENCODE group processing of GENCODE VM19 (markd)
+    # not being push to the RR
+
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM19
+    pushd /hive/data/genomes/mm10/bed/gencodeVM19
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    ##  gencode-cmp.tsv check to see if sizes make sense
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs mm10 M19 94 'Oct 2018'
+
+    ## only if being pushed to RR:
+    (skipped)
+    # Update mouse/mm10/wgEncodeGencodeSuper.html
+    # Update 'Release Notes' to describe new release.
+
+    # edit mouse/mm10/trackDb.gencode.ra to add new .ra file include
+    make DBS=mm10
+
+    ## only if being pushed to RR: (SKIPPED)
+    # edit  all.joiner to add ~/tmp/gencodeVM19.joiner
+    # verify with:
+    pushd /hive/data/genomes/mm10/bed/gencodeVM19
+    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck db=mm10
+
+    # commit all and make push request, the file tables.lst will have the
+    # list of tables for the push request.
+
+    cd ~/kent/src/hg/makeDb/trackDb
+    make alpha DBS=mm10
+
+##############################################################################
+# LASTZ mouse/mm10 vs. Japanese quail/cotJap2 - (DONE - 2018-11-15 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzCotJap2.2018-11-15
+    cd /hive/data/genomes/mm10/bed/lastzCotJap2.2018-11-15
+
+    printf "# Mouse vs. Japanese quail
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+#      A    C    G    T
+#     91  -90  -25 -100
+#    -90  100 -100  -25
+#    -25 -100  100  -90
+#   -100  -25  -90  91
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Japanese quail cotJap2
+SEQ2_DIR=/hive/data/genomes/cotJap2/cotJap2.2bit
+SEQ2_LEN=/hive/data/genomes/cotJap2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/mm10/bed/lastzCotJap2.2018-11-15
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    82m16.032s
+
+    cat fb.mm10.chainCotJap2Link.txt
+    # 97251364 bases of 2652783500 (3.666%) in intersection
+    cat fb.mm10.chainSynCotJap2Link.txt
+    # 67653818 bases of 2652783500 (2.550%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` mm10 cotJap2) > rbest.log 2>&1 &
+    # real    104m58.905s
+
+    cat fb.mm10.chainRBest.CotJap2.txt 
+    # 76298136 bases of 2652783500 (2.876%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/cotJap2/bed/blastz.mm10.swap
+    cd /hive/data/genomes/cotJap2/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/mm10/bed/lastzCotJap2.2018-11-15/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    6m37.873s
+
+    cat fb.cotJap2.chainMm10Link.txt
+    # 82592561 bases of 917263224 (9.004%) in intersection
+    cat fb.cotJap2.chainSynMm10Link.txt
+    # 66583746 bases of 917263224 (7.259%) in intersection
+
+    # mistakenly started this on ku, it failed at the download step since
+    # it could not see the /gbdb/mm10/ hierarchy:
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` cotJap2 mm10) > rbest.log 2>&1 &
+    # real    79m48.767s
+
+    # continue on hgwdev
+    time (doRecipBest.pl -load -workhorse=hgwdev -continue=download -buildDir=`pwd` cotJap2 mm10) > rbest.download.log 2>&1 &
+    # real    1m40.970s
+
+    cat fb.cotJap2.chainRBest.Mm10.txt
+    # 76078816 bases of 917263224 (8.294%) in intersection
+
+#########################################################################

@@ -802,6 +802,42 @@ slReverse(&list);
 return list;
 }
 
+struct slName *slNameListFromCommaEscaped(char *s)
+/* Return list of slNames gotten from parsing comma delimited string.
+ * The final comma is optional. a,b,c  and a,b,c, are equivalent
+ * for comma-delimited lists. To escape commas, put two in a row, 
+ * which eliminates the possibility for null names 
+ * (eg.  a,,b,c will parse to two elements a,b and c). */
+{
+if (s == NULL)
+    return NULL;
+
+struct slName *list = NULL;
+char buffer[strlen(s) + 1], *ptr = buffer;
+
+for (; *s != 0; s++)
+    {
+    *ptr++ = *s;
+    if (*s == ',')
+        {
+        if (s[1] != ',') // if next character not also a ,
+            {
+            // we found the delimeter, add the string to the list
+            slAddHead(&list, slNameNewN(buffer, ptr - buffer - 1));
+            ptr = buffer;   // start a new buffer
+            }
+        else
+            s++; // skip the quoting comma and continue
+        }
+    }
+
+if (ptr > buffer)  // is there something in the buffer
+    slAddHead(&list, slNameNewN(buffer, ptr - buffer)); // add it to the list
+
+slReverse(&list);
+return list;
+}
+
 struct slName *slNameListFromStringArray(char *stringArray[], int arraySize)
 /* Return list of slNames from an array of strings of length arraySize.
  * If a string in the array is NULL, the array will be treated as
@@ -1630,7 +1666,7 @@ for (;;)
 return s;
 }
 
-void replaceChar(char *s, char old, char new)
+void replaceChar(char *s, char oldc, char newc)
 /* Repace one char with another. Modifies original string. */
 {
 if (!s)
@@ -1638,8 +1674,8 @@ if (!s)
 char c;
 while((c=*s))
     {
-    if (c == old)
-       *s = new;	
+    if (c == oldc)
+       *s = newc;	
     ++s;
     }
 }
@@ -3378,6 +3414,16 @@ if (slen > n)
     slen = n;
 strncat(buf, src, n);
 buf[blen+slen] = '\0';
+}
+
+void safememset(char *buf, size_t bufSize, const char c, size_t n)
+/* Append a character to a buffer repeatedly, n times with bounds checking.*/
+{
+size_t blen = strlen(buf);
+if (blen+n+1 > bufSize)
+    errAbort("buffer overflow, size %lld, new string size: %lld", (long long)bufSize, (long long)(blen+n));
+memset(buf+blen, c, n);
+buf[blen+n] = 0;
 }
 
 

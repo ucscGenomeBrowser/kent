@@ -43,7 +43,8 @@ my $maskedSeq = "$HgAutomate::clusterData/\$db/\$db.2bit";
 my $utr = "off";
 my $noDbGenePredCheck = 1;    # default yes, use -db for genePredCheck
 my $species = "human";
-my $augustusConfig="/hive/data/outside/augustus/augustus.3.1/config";
+my $augustusDir = "/hive/data/outside/augustus/augustus-3.3.1";
+my $augustusConfig="$augustusDir/config";
 
 my $base = $0;
 $base =~ s/^(.*\/)?//;
@@ -221,14 +222,14 @@ mkdir -p \$tmpDir
 pushd \$tmpDir
 
 if ( \$start == \$end ) then
-augustus --species=$species --softmasking=1 --UTR=$utr --protein=off \\
+$augustusDir/bin/augustus --species=$species --softmasking=1 --UTR=$utr --protein=off \\
  --AUGUSTUS_CONFIG_PATH=$augustusConfig \\
   --alternatives-from-sampling=true --sample=100 --minexonintronprob=0.2 \\
    --minmeanexonintronprob=0.5 --maxtracks=3 --temperature=2 \\
     \$fasta --outfile=\$gtfFile --errfile=\$errFile:t
 else
  @ start++
-augustus --species=$species --softmasking=1 --UTR=$utr --protein=off \\
+$augustusDir/bin/augustus --species=$species --softmasking=1 --UTR=$utr --protein=off \\
  --AUGUSTUS_CONFIG_PATH=$augustusConfig \\
   --alternatives-from-sampling=true --sample=100 --minexonintronprob=0.2 \\
    --minmeanexonintronprob=0.5 --maxtracks=3 --temperature=2 \\
@@ -301,7 +302,7 @@ find ./run.augustus/gtf -type f | grep ".gtf.gz\$" \\
   | sed -e 's#/# _D_ #g; s#\\.# _dot_ #g;' \\
     | sort -k11,11 -k13,13n \\
      | sed -e 's# _dot_ #.#g; s# _D_ #/#g' | xargs zcat \\
-       | /hive/data/outside/augustus/augustus.3.1/scripts/join_aug_pred.pl \\
+       | $augustusDir/scripts/join_aug_pred.pl \\
           | grep -P "\\t(CDS|exon|stop_codon|start_codon|tts|tss)\\t" \\
             > \$db.augustus.gtf
 gtfToGenePred -genePredExt -infoOut=\$db.info \$db.augustus.gtf \$db.augustus.gp

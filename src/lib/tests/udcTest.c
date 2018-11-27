@@ -16,9 +16,10 @@
 
 
 static struct optionSpec options[] = {
-    {"size",    OPTION_BOOLEAN},
+    {"size",     OPTION_BOOLEAN},
     {"raBuf",    OPTION_BOOLEAN},
     {"fork",     OPTION_BOOLEAN},
+    {"mmap",     OPTION_BOOLEAN},
     {"protocol", OPTION_STRING},
     {"seed",     OPTION_INT},
     {NULL, 0},
@@ -26,6 +27,7 @@ static struct optionSpec options[] = {
 
 boolean raBuf = FALSE;   /* exercise the read-ahead buffer */
 boolean doFork = FALSE;
+boolean mmapAccess = FALSE; /* test access via mmap */
 char *protocol = "ftp";
 unsigned int seed = 0;
 int size = 0;
@@ -131,13 +133,21 @@ verbose(2, "0x%08llx: %lldB @%lld\n", (bits64)udcf, len, offset);
 openSeekRead(localCopy, offset, len, bufRef);
 
 // Get data from udcFile object and compare to reference:
-udcSeek(udcf, offset);
-bits64 bytesRead = udcRead(udcf, bufTest, len);
+if (mmapAccess)
+    {
+    char *ptr = udcMMapFetch(udcf, offset, len);
+    memcpy(bufTest, ptr, len);
+    }
+else
+    {
+    udcSeek(udcf, offset);
+    bits64 bytesRead = udcRead(udcf, bufTest, len);
+    // udcRead does a mustRead, and we have checked offset+len, so this should never happen,
+    // but test anyway:
+    if (bytesRead < len)
+        errAbort("Got %lld bytes instead of %lld from %s @%lld", bytesRead, len, url, offset);
+    }
 
-// udcRead does a mustRead, and we have checked offset+len, so this should never happen,
-// but test anyway:
-if (bytesRead < len)
-    errAbort("Got %lld bytes instead of %lld from %s @%lld", bytesRead, len, url, offset);
 gotError |= compareBytes(bufTest, bufRef, len, url, localCopy, "url", offset);
 
 if (0) // -- Check sparseData after the dust settles.
@@ -254,6 +264,8 @@ boolean gotError = FALSE;
 bits64 fSize = fileSize(localCopy);
 
 struct udcFile *udcf = udcFileOpen(url, udcDefaultDir());
+if (mmapAccess)
+    udcMMap(udcf);
 bits64 offset = 0;
 if (mode == -1)
    offset = 0 + 8192 * myDrand();
@@ -319,6 +331,8 @@ bits64 size = fileSize(localCopy);
 
 // First, read some bytes from udcFile udcf1.
 struct udcFile *udcf1 = udcFileOpen(url, udcDefaultDir());
+if (mmapAccess)
+    udcMMap(udcf1);
 int blksRead1 = 0;
 bits64 offset1 = randomStartOffset(size);
 
@@ -327,6 +341,8 @@ gotError |= readAndTestBlocks(udcf1, &offset1, 2, &blksRead1, localCopy, url);
 // While keeping udcf1 open, create udcf2 on the same URL, and read from a 
 // (probably) different location:
 struct udcFile *udcf2 = udcFileOpen(url, udcDefaultDir());
+if (mmapAccess)
+    udcMMap(udcf2);
 int blksRead2 = 0;
 bits64 offset2 = randomStartOffset(size);
 
@@ -384,6 +400,8 @@ else if (kidPid == 0)
     {
     // child: access url and then exit, to pass control back to parent.
     struct udcFile *udcf = udcFileOpen(url, udcDefaultDir());
+    if (mmapAccess)
+        udcMMap(udcf);
     int blksRead = 0;
     gotErrorChild = readAndTestBlocks(udcf, &offsetParent, MAX_BLOCKS, &blksRead, localCopy, url);
     udcFileClose(&udcf);
@@ -393,6 +411,8 @@ else
     {
     // parent: access url, wait for child, do post-checking.
     struct udcFile *udcf = udcFileOpen(url, udcDefaultDir());
+    if (mmapAccess)
+        udcMMap(udcf);
     int blksRead = 0;
     gotErrorParent = readAndTestBlocks(udcf, &offsetChild, MAX_BLOCKS, &blksRead, localCopy, url);
     udcFileClose(&udcf);
@@ -423,6 +443,7 @@ optionInit(&argc, argv, options);
 size = optionExists("size");
 raBuf = optionExists("raBuf");
 doFork = optionExists("fork");
+mmapAccess = optionExists("mmap");
 protocol = optionVal("protocol", protocol);
 seed = optionInt("seed", seed);
 

@@ -3321,7 +3321,8 @@ if (! hTableExists(database, table))
 
 // where is the alt haplo placed?
 char query[256];
-sqlSafef(query, sizeof(query), "select chrom, chromStart, chromEnd from %s where name='%s'", table, haplotypeId);
+sqlSafef(query, sizeof(query), "select chrom, chromStart, chromEnd from %s "
+         "where name rlike '^%s(:[0-9-]+)?'", table, haplotypeId);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (!row)
@@ -10016,6 +10017,10 @@ if(!trackImgOnly)
         jsIncludeFile("jquery.imgareaselect.js", NULL);
         }
     jsIncludeFile("autocomplete.js", NULL);
+    jsIncludeFile("es5-shim.4.0.3.min.js", NULL);
+    jsIncludeFile("es5-sham.4.0.3.min.js", NULL);
+    jsIncludeFile("lodash.3.10.0.compat.min.js", NULL);
+    jsIncludeFile("autocompleteCat.js", NULL);
     jsIncludeFile("hgTracks.js", NULL);
     jsIncludeFile("spectrum.min.js", NULL);
 

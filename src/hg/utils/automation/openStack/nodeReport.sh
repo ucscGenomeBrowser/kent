@@ -1,7 +1,7 @@
 #!/bin/bash
 # construct .ms file from this node for parasol hub controller
 reserveCPUs=$1
-myIp=`/usr/sbin/ip addr show | egrep "inet.*eth0" | awk '{print $2}' | sed -e 's#/.*##;'`
+myIp=`/usr/sbin/ip addr show | egrep "inet.*eth0|inet.*em1" | awk '{print $2}' | sed -e 's#/.*##;'`
 memSizeMb=`grep -w MemTotal /proc/meminfo  | awk '{print 1024*(1+int($2/(1024*1024)))}'`
 cpuCount=`grep processor /proc/cpuinfo | wc -l`
 useCPUs=$(expr $cpuCount - $reserveCPUs)

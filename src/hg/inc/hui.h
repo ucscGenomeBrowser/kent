@@ -1060,7 +1060,7 @@ void wigOption(struct cart *cart, char *name, char *title, struct trackDb *tdb);
 void wigCfgUi(struct cart *cart, struct trackDb *tdb,char *name,char *title,boolean boxed);
 /* UI for the wiggle track */
 
-void labelCfgUi(char *db, struct cart *cart, struct trackDb *tdb);
+void labelCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *prefix);
 /* Put up a choice for labels. */
 
 #define NO_SCORE_FILTER  "noScoreFilter"
@@ -1298,7 +1298,7 @@ return ((filterBy->slChoices == NULL) || (slNameInList(filterBy->slChoices,"All"
 }
 
 void filterBySetCfgUi(struct cart *cart, struct trackDb *tdb,
-                      filterBy_t *filterBySet, boolean onOneLine);
+                      filterBy_t *filterBySet, boolean onOneLine, char *prefix);
 // Does the UI for a list of filterBy structure
 
 char *filterByClause(filterBy_t *filterBy);
@@ -1446,9 +1446,9 @@ boolean vocabSettingIsEncode(char *setting);
 boolean isEncode2(char *database);
 // Return true for ENCODE2 assemblies
 
-char *replaceInUrl(char* url, char *idInUrl, struct cart* cart, char *db, char* seqName, int winStart, \
-    int winEnd, char *track, boolean encode);
-/* replace $$ in url with idInUrl. Supports many other wildchards */
+char *replaceInUrl(char *url, char *idInUrl, struct cart *cart, char *db, char *seqName, 
+                        int winStart, int winEnd, char *track, boolean encode, struct slPair *fields) ;
+/* replace $$ in url with idInUrl. Supports many other wildchards, and custom fields $<field> */
 
 struct slPair *buildFieldList(struct trackDb *tdb, char *trackDbVar, struct asObject *as);
 /* Build up a hash of a list of fields in an AS file. */

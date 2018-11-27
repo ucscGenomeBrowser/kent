@@ -36,69 +36,6 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-#ifdef OLD
-void maybeDoUpdate(struct sqlConnection *conn, char *query, boolean really)
-/* If really is true than do sqlUpdate with query, otherwise just print it out. */
-{
-if (really)
-    sqlUpdate(conn, query);
-else
-    printf("update: %s\n", query);
-}
-
-void maybeRemoveFile(struct sqlConnection *conn, long long fileId, boolean really)
-/* Remove references to file, and file itself from database. If really is FALSE just print out
- * what we would do. */
-{
-char query[256];
-
-/* Delete from all the auxiliarry tables - tables are alphabetical to help update. */
-cdwReally
-sqlSafef(query, sizeof(query), "delete from cdwBamFile where fileId=%lld", fileId);
-maybeDoUpdate(conn, query, really);
-sqlSafef(query, sizeof(query), "delete from cdwFastqFile where fileId=%lld", fileId);
-maybeDoUpdate(conn, query, really);
-sqlSafef(query, sizeof(query), "delete from cdwVcfFile where fileId=%lld", fileId);
-maybeDoUpdate(conn, query, really);
-sqlSafef(query, sizeof(query), "delete from cdwTrackViz where fileId=%lld", fileId);
-maybeDoUpdate(conn, query, really);
-sqlSafef(query, sizeof(query), "delete from cdwQaContam where fileId=%lld", fileId);
-maybeDoUpdate(conn, query, really);
-sqlSafef(query, sizeof(query), "delete from cdwQaEnrich where fileId=%lld", fileId);
-maybeDoUpdate(conn, query, really);
-sqlSafef(query, sizeof(query), "delete from cdwQaFail where fileId=%lld", fileId);
-maybeDoUpdate(conn, query, really);
-sqlSafef(query, sizeof(query), 
-    "delete from cdwQaPairCorrelation where elderFileId=%lld or youngerFileId=%lld", 
-    fileId, fileId);
-maybeDoUpdate(conn, query, really);
-sqlSafef(query, sizeof(query), 
-    "delete from cdwQaPairSampleOverlap where elderFileId=%lld or youngerFileId=%lld", 
-    fileId, fileId);
-maybeDoUpdate(conn, query, really);
-sqlSafef(query, sizeof(query), 
-    "delete from cdwQaPairedEndFastq where fileId1=%lld or fileId2=%lld", 
-    fileId, fileId);
-maybeDoUpdate(conn, query, really);
-sqlSafef(query, sizeof(query), "delete from cdwQaRepeat where fileId=%lld", fileId);
-maybeDoUpdate(conn, query, really);
-sqlSafef(query, sizeof(query), "delete from cdwValidFile where fileId=%lld", fileId);
-maybeDoUpdate(conn, query, really);
-
-/* Get file name */
-char *path = cdwPathForFileId(conn, fileId);
-
-/* Delete from cdwFileTable */
-sqlSafef(query, sizeof(query), "delete from cdwFile where id=%lld", fileId);
-maybeDoUpdate(conn, query, really);
-
-/* Delete file */
-if (really)
-    remove(path);
-else
-    printf("remove: %s\n", path);
-}
-#endif /* OLD */
 
 void cdwReallyRemoveFiles(char *email, char *submitDir, int fileCount, char *fileIds[])
 /* cdwReallyRemoveFiles - Remove files from data warehouse.  Generally you want to depricate them 

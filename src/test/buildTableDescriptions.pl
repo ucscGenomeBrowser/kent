@@ -397,7 +397,7 @@ foreach my $db (@dbs) {
   my %tableTypes = $trackDb->getTrackNamesTypes();
   my %tableFields = &getTableFields($hgConf, $db);
   foreach my $table (sort keys %tableFields) {
-    next if ($table =~ /^(trackDb|hgFindSpec|metaDb)_?/);
+    next if ($table =~ /^(trackDb|hgFindSpec|metaDb)_/);
     next if $tableFields{$table} eq "fileName,";
     if ((! defined $tableAutoSql{$table}) ||
 	($tableFields{$table} ne $tableAutoSql{$table}->{fields})) {

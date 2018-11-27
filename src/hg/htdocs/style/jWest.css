@@ -37,19 +37,6 @@ a.jwAnchor, a.jwAnchor:link, a.jwAnchor:visited,
     text-decoration: none;
 }
 
-.ui-autocomplete-category {
-    /* Adapted from https://jqueryui.com/autocomplete/#categories */
-    font-weight: bold;
-    line-height: 1.5;
-    background: lightgray;
-}
-
-.ui-menu-item {
-    /* This is necessary if a background color is specified in .ui-autocomplete-category above;
-     * the category labels actually extend upwards, behind the preceding items! */
-    background: white;
-}
-
 div.jwBanner {
     background: #f9f9f9; /* #dddee3; /* jWest: #f4f4eb; */
     padding: 5px;

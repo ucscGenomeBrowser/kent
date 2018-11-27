@@ -958,6 +958,7 @@ int cdwFileIdFromPathSuffix(struct sqlConnection *conn, char *suf)
 {
 char query[4096];
 int sufLen = strlen(suf);
+// This is a bit slow, on the order of 1 second.  -jk
 sqlSafef(query, sizeof(query), "SELECT cdwFile.id FROM cdwSubmitDir, cdwFile " 
     "WHERE cdwFile.submitDirId=cdwSubmitDir.id AND RIGHT(CONCAT_WS('/', cdwSubmitDir.url, submitFileName), %d)='%s' "
     "ORDER BY cdwFile.id DESC LIMIT 1;", sufLen, suf);
@@ -2544,6 +2545,82 @@ else if (sameString(format, "csv"))
 if (sameWord(rql->command, "count"))
     printf("%d\n", gMatchCount);
 }
+
+
+void cdwPrintSlRefList(struct slRef *results, struct slName *fieldNames, char *format, int limit)
+/* Print a linked list of results in ra, tsv, or csv format.  Each result should be a list of
+ * slPair key/values. */
+{
+int maxLimit = 10000;
+if (limit > maxLimit)
+    limit = maxLimit;
+int matchCount = 0;
+if (sameString(format, "csv"))
+    {
+    // Write csv header
+    struct slName *fieldName = fieldNames;
+    char *sep = "";
+    while (fieldName != NULL)
+        {
+        printf("%s%s", sep, fieldName->name);
+        sep = ",";
+        fieldName = fieldName->next;
+        }
+    printf("\n");
+    }
+if (sameString(format, "tsv"))
+    {
+    // Write tsv header
+    struct slName *fieldName = fieldNames;
+    char *sep = "";
+    printf("#");
+    while (fieldName != NULL)
+        {
+        printf("%s%s", sep, fieldName->name);
+        sep = "\t";
+        fieldName = fieldName->next;
+        }
+    printf("\n");
+    }
+
+struct slRef *result = results;
+while (result != NULL)
+    {
+    if (++matchCount > limit)
+        break;
+    struct slPair *keyval = result->val;
+    char *sep = "";
+    while (keyval != NULL)
+        {
+        char *val = keyval->val;
+        if (sameString(format, "ra") && !isEmpty(val))
+            printf("%s\t%s\n", keyval->name, val);
+        if (sameString(format, "csv"))
+            {
+            printf("%s", sep);
+            sep = ",";
+            val = emptyForNull(val);
+            // Check for embedded comma or existing quotes
+            if (strchr(val, ',') == NULL && strchr(val, '"') == NULL)
+                printf("%s", val);
+            else
+                {
+                printQuotedTsv(val);
+                }
+            }
+        if (sameString(format, "tsv"))
+            {
+            val = naForNull(val);
+            printf("%s%s", sep, val);
+            sep = "\t";
+            }
+        keyval = keyval->next;
+        }
+    printf("\n");
+    result = result->next;
+    }
+}
+
 
 static struct dyString *getLoginBits(struct cart *cart)
 /* Get a little HTML fragment that has login/logout bit of menu */

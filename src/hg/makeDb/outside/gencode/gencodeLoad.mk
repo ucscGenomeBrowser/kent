@@ -35,17 +35,19 @@ mach = $(shell uname -m)
 # - ensemblPrevVersion is use to get chrom name mappings for pre-release,
 #   as this doesn't change between release.
 ##
-#db = mm10
-db = hg38
+#db = hg38
 #db = hg19
+db = mm10
 #db = grcHhh38
+preRelease = no
+#preRelease = yes
 ifeq (${db},mm10)
     grcRefAssembly = GRCm38
-    ver = M18
-    prevVer = M17
+    ver = M19
+    prevVer = M18
     gencodeOrg = Gencode_mouse
     ftpReleaseSubdir = release_${ver}
-    annGtfTypeName = chr_patch_hapl_scaff.annotation
+    annGffTypeName = chr_patch_hapl_scaff.annotation
     ensemblVer = 94_38
     ensemblPrevVer = 93_38
     ensemblCDnaDb = mus_musculus_cdna_${ensemblPrevVer}
@@ -55,7 +57,7 @@ else ifeq (${db},hg38)
     prevVer = 28
     gencodeOrg = Gencode_human
     ftpReleaseSubdir = release_${ver}
-    annGtfTypeName = chr_patch_hapl_scaff.annotation
+    annGffTypeName = chr_patch_hapl_scaff.annotation
     ensemblVer = 94_38
     ensemblPrevVer = 93_38
     ensemblCDnaDb = homo_sapiens_cdna_${ensemblPrevVer}
@@ -66,40 +68,43 @@ else ifeq (${db},grcHhh38)
     prevVer = 27
     gencodeOrg = Gencode_human
     ftpReleaseSubdir = release_${ver}
-    annGtfTypeName = chr_patch_hapl_scaff.annotation
+    annGffTypeName = chr_patch_hapl_scaff.annotation
     ensemblVer = 94_38
     ensemblPrevVer = 93_38
     ensemblCDnaDb = homo_sapiens_cdna_${ensemblPrevVer}
 else ifeq (${db},hg19)
     grcRefAssembly = GRCh37
-    verBase = 28
+    verBase = 29
     ver = ${verBase}lift37
     ftpReleaseSubdir = release_${verBase}/GRCh37_mapping
-    prevVer = 27lift37
+    prevVer = 28lift37
     gencodeOrg = Gencode_human
-    annGtfTypeName = annotation
-    ensemblVer = 74_37
+    annGffTypeName = annotation
+    ensemblVer = 74_37      # only used to get genome chromsome name mappings
     ensemblPrevVer = ${ensemblVer}  # doesn't change
     ensemblCDnaDb = homo_sapiens_cdna_${ensemblPrevVer}
     isBackmap = yes
 else
     $(error unimplement genome database: ${db})
 endif
-# official release
-#  baseUrl = ftp://ftp.ebi.ac.uk/pub/databases/gencode
-# pre-release
-baseUrl = ftp://ftp.ebi.ac.uk/pub/databases/havana/gencode_pre
 
 
 # END EDIT THESE EACH RELEASE
+ifeq (${preRelease},yes)
+    # pre-release
+    baseUrl = ftp://ftp.ebi.ac.uk/pub/databases/havana/gencode_pre
+else
+    # official release
+    baseUrl = ftp://ftp.ebi.ac.uk/pub/databases/gencode
+endif
 
 rel = V${ver}
 releaseUrl = ${baseUrl}/${gencodeOrg}/${ftpReleaseSubdir}
 dataDir = data
 relDir = ${dataDir}/release_${ver}
-annotationGtf = ${relDir}/gencode.v${ver}.${annGtfTypeName}.gtf.gz
-pseudo2WayGtf = ${relDir}/gencode.v${ver}.2wayconspseudos.gtf.gz
-polyAGtf = ${relDir}/gencode.v${ver}.polyAs.gtf.gz
+annotationGff = ${relDir}/gencode.v${ver}.${annGffTypeName}.gff3.gz
+pseudo2WayGff = ${relDir}/gencode.v${ver}.2wayconspseudos.gff3.gz
+polyAGff = ${relDir}/gencode.v${ver}.polyAs.gff3.gz
 
 ccdsBinDir = ~markd/compbio/ccds/ccds2/output/bin/$(mach)/opt
 gencodeMakeTracks = ${ccdsBinDir}/gencodeMakeTracks
@@ -170,6 +175,14 @@ tableExonSupportMeta = ${relDir}/gencode.v${ver}.metadata.Exon_supporting_featur
 tableExonSupport = ${tablePre}ExonSupport${rel}
 tableExonSupportTab = ${tableDir}/${tableExonSupport}.tab
 
+ifeq (${gencodeOrg}, Gencode_human)
+   tableGeneSymbolMeta = ${relDir}/gencode.v${ver}.metadata.HGNC.gz
+else
+   tableGeneSymbolMeta = ${relDir}/gencode.v${ver}.metadata.MGI.gz
+endif
+tableGeneSymbol = ${tablePre}GeneSymbol${rel}
+tableGeneSymbolTab = ${tableDir}/${tableGeneSymbol}.tab
+
 tablePdbMeta = ${relDir}/gencode.v${ver}.metadata.PDB.gz
 tablePdb = ${tablePre}Pdb${rel}
 tablePdbTab = ${tableDir}/${tablePdb}.tab
@@ -207,7 +220,7 @@ genePredExtTables = ${tableBasic} ${tableComp} ${tablePseudo}
 genePredTables =
 tabTables = ${tableAttrs} ${tableTag} ${tableGeneSource} \
 	    ${tableTranscriptSource} ${tableTranscriptSupport} \
-	    ${tablePdb} ${tablePubMed} ${tableRefSeq} ${tableUniProt} \
+	    ${tableGeneSymbol} ${tablePdb} ${tablePubMed} ${tableRefSeq} ${tableUniProt} \
 	    ${tableAnnotationRemark} ${tableEntrezGene}  ${tableTranscriptionSupportLevel}
 ifneq (${isBackmap}, yes)
     # these are not included in backmap releases
@@ -239,13 +252,14 @@ ${fetchDone}:
 ##
 # dependencies for files from release
 ##
-${annotationGtf}: ${fetchDone}
-${pseudo2WayGtf}: ${fetchDone}
-${polyAGtf}: ${fetchDone}
+${annotationGff}: ${fetchDone}
+${pseudo2WayGff}: ${fetchDone}
+${polyAGff}: ${fetchDone}
 ${tableGeneSourceMeta}: ${fetchDone}
 ${tableTranscriptSourceMeta}: ${fetchDone}
 ${tableTranscriptSupportMeta}: ${fetchDone}
 ${tableExonSupportMeta}: ${fetchDone}
+${tableGeneSymbolMeta}: ${fetchDone}
 ${tablePdbMeta}: ${fetchDone}
 ${tablePubMedMeta}: ${fetchDone}
 ${tableRefSeqMeta}: ${fetchDone}
@@ -273,12 +287,12 @@ ${tableAttrsTab}: ${gencodeGp} ${gencodeTsv}
 	${gencodeMakeAttrs} ${gencodeGp} ${gencodeTsv} $@.${tmpExt} ${tableTagTab}
 	mv -f $@.${tmpExt} $@
 
-${table2WayConsPseudoGp}: ${pseudo2WayGtf}
+${table2WayConsPseudoGp}: ${pseudo2WayGff}
 	@mkdir -p $(dir $@)
-	zcat $< | tawk '$$3=="transcript"{$$3 = "exon"} {print $$0}' | gtfToGenePred -ignoreGroupsWithoutExons stdin $@.${tmpExt}
+	zcat $< | tawk '$$3=="transcript"{$$3 = "exon"} {print $$0}' | gff3ToGenePred stdin $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
-${tablePolyAGp}: ${polyAGtf} ${ensemblToUcscChain}
+${tablePolyAGp}: ${polyAGff} ${ensemblToUcscChain}
 	@mkdir -p $(dir $@)
 	${gencodePolyaGxfToGenePred} $< ${ensemblToUcscChain} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
@@ -313,21 +327,23 @@ ${metaFilterCmd} $< > $@.${tmpExt}
 mv -f $@.${tmpExt} $@
 endef
 
-${tableGeneSourceTab}: ${tableGeneSourceMeta}
+${tableGeneSourceTab}: ${tableGeneSourceMeta} ${gencodeTsv}
 	${copyMetadataTabGz}
-${tableTranscriptSourceTab}: ${tableTranscriptSourceMeta}
+${tableTranscriptSourceTab}: ${tableTranscriptSourceMeta} ${gencodeTsv}
 	${copyMetadataTabGz}
-${tableTranscriptSupportTab}: ${tableTranscriptSupportMeta}
+${tableTranscriptSupportTab}: ${tableTranscriptSupportMeta} ${gencodeTsv}
 	${copyMetadataTabGz}
-${tableExonSupportTab}: ${tableExonSupportMeta} ${ensemblToUcscChain}
+${tableExonSupportTab}: ${tableExonSupportMeta} ${ensemblToUcscChain} ${gencodeTsv}
 	@mkdir -p $(dir $@)
 	${gencodeExonSupportToTable} ${tableExonSupportMeta} ${ensemblToUcscChain} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
-${tablePdbTab}: ${tablePdbMeta}
+${tableGeneSymbolTab}: ${tableGeneSymbolMeta} ${gencodeTsv}
 	${copyMetadataTabGz}
-${tablePubMedTab}: ${tablePubMedMeta}
+${tablePdbTab}: ${tablePdbMeta} ${gencodeTsv}
 	${copyMetadataTabGz}
-${tableRefSeqTab}: ${tableRefSeqMeta}
+${tablePubMedTab}: ${tablePubMedMeta} ${gencodeTsv}
+	${copyMetadataTabGz}
+${tableRefSeqTab}: ${tableRefSeqMeta} ${gencodeTsv}
 	${copyMetadataTabGz}
 
 ${tableTranscriptionSupportLevelTab}: ${tableTranscriptionSupportLevelData}
@@ -336,7 +352,7 @@ ${tableTranscriptionSupportLevelTab}: ${tableTranscriptionSupportLevelData}
 	mv -f $@.${tmpExt} $@
 
 # convert to zero-based, 1/2 open
-${tablePolyAFeatureTab}: ${tablePolyAFeatureMeta}
+${tablePolyAFeatureTab}: ${tablePolyAFeatureMeta} ${gencodeTsv}
 	@mkdir -p $(dir $@)
 	zcat $< | tawk '{print $$1,$$2-1,$$3,$$4,$$5-1,$$6,$$7,$$8}' | sort -k 4,4 -k 5,5n > $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
@@ -345,7 +361,7 @@ ${tableAnnotationRemarkTab}: ${tableAnnotationRemarkMeta} ${gencodeTsv}
 	${metaFilterCmdGz} $<  | tawk '{print $$1,gensub("\\\\n|\\\\","","g",$$2)}' | sort -k 1,1 > $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 # drop ENSTR entries that are a hack to support PAR sequences in GTF
-${tableEntrezGeneTab}: ${tableEntrezGeneMeta}
+${tableEntrezGeneTab}: ${tableEntrezGeneMeta} ${gencodeTsv}
 	@mkdir -p $(dir $@)
 	zcat $< | tawk '$$1!~/^ENSTR/' | sort -k 1,1 | ${metaFilterCmd} /dev/stdin > $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
@@ -353,22 +369,22 @@ ${tableEntrezGeneTab}: ${tableEntrezGeneMeta}
 ##
 # intermediate data for ensembl/havana, not loaded into databases
 ##
-${gencodeGp}: ${annotationGtf} ${ensemblToUcscChain}
+${gencodeGp}: ${annotationGff} ${ensemblToUcscChain}
 	@mkdir -p $(dir $@)
-	${gencodeGxfToGenePred} ${annotationGtf} ${ensemblToUcscChain} $@.${tmpExt}
+	${gencodeGxfToGenePred} ${annotationGff} ${ensemblToUcscChain} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
 ${tableTranscriptionSupportLevelData}: ${gencodeTsv}
 	touch $@
-${gencodeTsv}: ${annotationGtf}
+${gencodeTsv}: ${annotationGff}
 	@mkdir -p $(dir $@)
-	${gencodeGxfToAttrs} --keepGoing ${annotationGtf} $@.${tmpExt} --tslTabOut=${tableTranscriptionSupportLevelData}.${tmpExt}
+	${gencodeGxfToAttrs} --keepGoing ${annotationGff} $@.${tmpExt} --tslTabOut=${tableTranscriptionSupportLevelData}.${tmpExt}
 	mv -f ${tableTranscriptionSupportLevelData}.${tmpExt} ${tableTranscriptionSupportLevelData}
 	mv -f $@.${tmpExt} $@
 
 # check attributes so code can be updated to handle new biotypes
-checkAttrs: ${annotationGtf}
-	${gencodeGxfToAttrs} ${annotationGtf} /dev/null
+checkAttrs: ${annotationGff}
+	${gencodeGxfToAttrs} ${annotationGff} /dev/null
 
 ##
 # load tables

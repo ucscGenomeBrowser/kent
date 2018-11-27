@@ -345,7 +345,8 @@ return aDist - bDist;
 
 struct interact *interactLoadAndValidate(char **row)
 /* Load a interact from row fetched with select * from interact
- * from database, validating fields.  Dispose of this with interactFree(). */
+ * from database, validating fields.  Dispose of this with interactFree(). 
+ * This currently differs from auto-gened only by it's handling of color field */
 // TODO: more validating
 {
 struct interact *ret;
@@ -358,7 +359,7 @@ ret->name = cloneString(row[3]);
 ret->score = sqlUnsigned(row[4]);
 ret->value = sqlDouble(row[5]);
 ret->exp = cloneString(row[6]);
-ret->color = bedParseColor(row[7]);
+ret->color = bedParseColor(row[7]);     // handle #NNNNNN, and HTML color (as well as rgb)
 ret->sourceChrom = cloneString(row[8]);
 ret->sourceStart = sqlUnsigned(row[9]);
 ret->sourceEnd = sqlUnsigned(row[10]);
@@ -371,3 +372,167 @@ ret->targetName = cloneString(row[16]);
 ret->targetStrand = cloneString(row[17]);
 return ret;
 }
+
+void interactRegionCenters(struct interact *inter, int *sourceCenter, int *targetCenter)
+/* Return genomic position of endpoint centers */
+{
+assert(sourceCenter);
+assert(targetCenter);
+*sourceCenter = interactRegionCenter(inter->sourceStart, inter->sourceEnd);
+*targetCenter = interactRegionCenter(inter->targetStart, inter->targetEnd);
+}
+
+struct bed *interactToBed(struct interact *inter)
+/* Convert an interact to a BED12 (actually, BED15+label) */
+{
+struct bed *bed = NULL;
+AllocVar(bed);
+bed->chrom = inter->chrom;
+bed->name = cloneString(inter->name);
+bed->score = inter->score;
+bed->itemRgb = inter->color;
+AllocArray(bed->blockSizes, 2);
+AllocArray(bed->chromStarts, 2);
+
+char *strand = "+";
+if (differentString(inter->sourceChrom, inter->targetChrom))
+    {
+    // inter-chromosomal
+    bed->blockCount = 1;
+    bed->chromStart = inter->chromStart;
+    bed->chromEnd = inter->chromEnd;
+    bed->blockSizes[0] = inter->chromEnd - inter->chromStart;
+    bed->chromStarts[0] = 0;
+    if sameString(bed->chrom, inter->targetChrom)
+        strand = "-";
+    }
+else 
+    {
+    // same chromosome
+    bed->blockCount = 2;
+    // expand extents to edges of endpoints
+    // NOTE: this should be changed in schema defn
+    bed->chromStart = min(inter->sourceStart, inter->targetStart);
+    bed->chromEnd = max(inter->sourceEnd, inter->targetEnd);
+    bed->chromStarts[0] = 0;
+    int sourceCenter, targetCenter;
+    interactRegionCenters(inter, &sourceCenter, &targetCenter);
+    if (targetCenter < sourceCenter)
+        strand = "-";
+    if (inter->sourceStart < inter->targetStart)
+        {
+        bed->blockSizes[0] = inter->sourceEnd - inter->sourceStart;
+        bed->blockSizes[1] = inter->targetEnd - inter->targetStart;
+        bed->chromStarts[1] = inter->targetStart - bed->chromStart;
+        }
+    else
+        {
+        bed->blockSizes[0] = inter->targetEnd - inter->targetStart;
+        bed->blockSizes[1] = inter->sourceEnd - inter->sourceStart;
+        bed->chromStarts[1] = inter->sourceStart - bed->chromStart;
+        }
+    }
+bed->thickStart = bed->chromStart;
+bed->thickEnd = bed->chromEnd;
+strcpy(bed->strand, strand);
+bed->label = bed->name;
+return bed;
+}
+
+struct interact *interactLoadAllAndValidate(char *fileName) 
+/* Load all interact from a whitespace-separated file.
+ * Dispose of this with interactFreeList(). */
+{
+struct interact *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[18];
+while (lineFileRow(lf, row))
+    {
+    el = interactLoadAndValidate(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+void interactOutputCustom(struct interact *el, FILE *f, char sep, char lastSep) 
+/* Print out interact.  Separate fields with sep. Follow last field with lastSep.
+ * Differs from auto-gen'ed by printing rgb color  */
+{
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->chrom);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->chromStart);
+fputc(sep,f);
+fprintf(f, "%u", el->chromEnd);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->name);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->score);
+fputc(sep,f);
+fprintf(f, "%g", el->value);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->exp);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+
+// print rgb color
+bedOutputRgb(f, el->color);
+
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->sourceChrom);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->sourceStart);
+fputc(sep,f);
+fprintf(f, "%u", el->sourceEnd);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->sourceName);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->sourceStrand);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->targetChrom);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->targetStart);
+fputc(sep,f);
+fprintf(f, "%u", el->targetEnd);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->targetName);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->targetStrand);
+if (sep == ',') fputc('"',f);
+fputc(lastSep,f);
+}
+
+void interactFixRange(struct interact *inter)
+/* Set values for chromStart/chromEnd based on source and target start/ends */
+{
+int chromStart = min(inter->sourceStart, inter->targetStart);
+int chromEnd = max(inter->sourceEnd, inter->targetEnd);
+if (inter->chromStart != chromStart)
+    {
+    warn("Fixed chromStart: %d to %d. ", inter->chromStart, chromStart); 
+    inter->chromStart = chromStart;
+    }
+if (inter->chromEnd != chromEnd)
+    {
+    warn("Fixed chromEnd: %d to %d. ", inter->chromEnd, chromEnd); 
+    inter->chromEnd = chromEnd;
+    }
+}
+

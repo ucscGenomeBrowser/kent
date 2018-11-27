@@ -131,16 +131,16 @@ EOF
     join -t $'\t' -1 4 -2 1 atlasSortedByName.bed tsi_quantiles_person2.txt \
         | tawk '{print $2,$3,$4,$1,$5,$6,$7,$8}' > atlasCoordsPlusTSIPerson2.bed
 
-    expMatrixToBarchartBed --autoSql miRnaAtlasReordered.as --groupOrderFile person1.order2 person1Samples.txt person1.matrix atlasCoordsPlusTSIPerson1.bed person1.bed1 &> person1.log1
-    expMatrixToBarchartBed --autoSql miRnaAtlasReordered.as --groupOrderFile person2.order2 person2Samples.txt person2.matrix atlasCoordsPlusTSIPerson2.bed person2.bed1 &> person2.log1
+    expMatrixToBarchartBed --autoSql miRnaAtlasReordered.as --groupOrderFile person1.order2 person1Samples.txt person1.matrix atlasCoordsPlusTSIPerson1.bed person1.bed1 &> person1.log2
+    expMatrixToBarchartBed --autoSql miRnaAtlasReordered.as --groupOrderFile person2.order2 person2Samples.txt person2.matrix atlasCoordsPlusTSIPerson2.bed person2.bed1 &> person2.log2
     # column order person1:
     adipocyte artery colon dura_mater kidney liver lung muscle myocardium skin spleen stomach testis thyroid small_intestine bone gallbladder fascia bladder epididymis tunica_albuginea nerve_nervus_intercostalis arachnoid_mater brain
     # column order person2:
-    adipocyte artery colon dura_mater kidney liver lung muscle myocardium skin spleen stomach testis thyroid small_intestine_duodenum small_intestine_jejunum pancreas kidney_glandula_suprarenalis kidney_cortex_renalis esophagus prostate bone_marrow vein lymph_node nerve_not_specified pleura brain_pituitary_gland spinal_cord brain_thalamus brain_white_matter brain_nucleus_caudatus kidney_medulla_renalis brain_gray_matter brain_cerebral_cortex_temporal brain_cerebral_cortex_frontal brain_cerebral_cortex_occipital brain_cerebellum
+    adipocyte artery colon dura_mater kidney liver lung muscle myocardium skin spleen stomach testis thyroid small_intestine_duodenum small_intestine_jejunum pancreas kidney_glandula_suprarenalis kidney_cortex_renalis kidney_medulla_renalis esophagus prostate bone_marrow vein lymph_node nerve_not_specified pleura brain_pituitary_gland spinal_cord brain_thalamus brain_white_matter brain_nucleus_caudatus brain_gray_matter brain_cerebral_cortex_temporal brain_cerebral_cortex_frontal brain_cerebral_cortex_occipital brain_cerebellum
 
     # to get corresponding colors for trackDb:
-    grep -Fwf person1.order2 allTissueNames.txt  | cut -f2 | tr '\n' ' '; echo
-    grep -Fwf person2.order2 allTissueNames.txt  | cut -f2 | tr '\n' ' '; echo
+    for tissue in $(cat person1.order2); do grep -w $tissue allTissueNames.txt ; done | cut -f2 | tr '\n' ' ' ; echo
+    for tissue in $(cat person2.order2); do grep -w $tissue allTissueNames.txt ; done | cut -f2 | tr '\n' ' ' ; echo
 
     chromSizes=../../../chrom.sizes
     sort -k1,1 -k2,2n person1.bed1 > person1.bed1.sorted

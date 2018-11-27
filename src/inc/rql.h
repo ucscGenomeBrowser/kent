@@ -8,6 +8,10 @@
 #include "tokenizer.h"
 #endif
 
+#ifndef HASH_H
+#include "hash.h"
+#endif
+
 enum rqlOp
 /* An operation in the parse tree. */
     {
@@ -46,6 +50,12 @@ enum rqlOp
 
     /* Fancy ops to fetch sub-parts. */
     rqlOpArrayIx,	/* An array with an index. */
+
+    /* Binary mathematical operations. */
+    rqlOpAdd,
+    rqlOpSubtract,
+    rqlOpMultiply,
+    rqlOpDivide,
     };
 
 char *rqlOpToString(enum rqlOp op);

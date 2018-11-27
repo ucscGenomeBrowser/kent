@@ -403,4 +403,7 @@ struct rgbColor mgRgbTransformHsv(struct rgbColor in, double h, double s, double
 struct rgbColor mgColorIxToRgb(struct memGfx *mg, int colorIx);
 /* Return rgb value at color index. */
 
+struct rgbColor colorIxToRgb(int colorIx);
+/* Return rgb value at color index. */
+
 #endif /* MEMGFX_H */

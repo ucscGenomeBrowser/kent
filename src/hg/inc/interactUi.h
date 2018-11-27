@@ -14,12 +14,15 @@
 
 /* trackDb settings:
       interactDirectional on          use dashes for reverse direction
-      interactDirectional offsetSource  use dashes for reverse direction, and offset source
-      interactDirectional offsetTarget  use dashes for reverse direction, and offset target
+      interactDirectional offsetSource|offsetTarget     horizontally offset (lower) source or target
+      interactDirectional clusterSource|clusterTarget   cluster (merge) interactions having same
+                                                                source or target
 */
 #define INTERACT_DIRECTIONAL    "interactDirectional"
 #define INTERACT_OFFSET_SOURCE  "offsetSource"
 #define INTERACT_OFFSET_TARGET  "offsetTarget"
+#define INTERACT_TDB_CLUSTER_SOURCE   "clusterSource"
+#define INTERACT_TDB_CLUSTER_TARGET   "clusterTarget"
 
 /* setting to show interactions with peak up (hill, not valley) */
 #define INTERACT_UP             "interactUp"
@@ -41,6 +44,10 @@
 #define INTERACT_ENDS_VISIBLE_ANY "any"
 #define INTERACT_ENDS_VISIBLE_DEFAULT INTERACT_ENDS_VISIBLE_ANY
 
+#define INTERACT_CLUSTER          "cluster"
+#define INTERACT_CLUSTER_SOURCE   "source"
+#define INTERACT_CLUSTER_TARGET   "target"
+
 
 void interactCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char *track,
                         char *title, boolean boxed);
@@ -51,5 +58,8 @@ boolean interactUiDirectional(struct trackDb *tdb);
 
 char *interactUiOffset(struct trackDb *tdb);
 /* Determine whether to offset source or target (or neither if NULL) */
+
+char *interactUiClusterMode(struct cart *cart, char *track, struct trackDb *tdb);
+/* Get cluster mode from trackDb and cart */
 
 #endif

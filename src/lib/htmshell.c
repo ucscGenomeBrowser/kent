@@ -703,13 +703,15 @@ va_end(argscp);
 }
 
 void htmlVaBadRequestAbort(char *format, va_list args)
-/* Print out an HTTP header 400 status code (Bad Request) and message,
- * then exit with error.  For use as an errAbort handler. */
+/* Print out an HTTP header 400 status code (Bad Request) and message, then exit with error.
+ * NOTE: This must be installed using pushWarnHandler (pushAbortHandler optional) because
+ * vaErrAbort calls vaWarn and then noWarnAbort.  So if the defaut warn handler is used, then
+ * the error message will be printed out by defaultVaWarn before this prints out the header. */
 {
 puts("Status: 400\r");
 puts("Content-Type: text/plain; charset=UTF-8\r");
 puts("\r");
-if (format != NULL)
+if (format != NULL && args != NULL)
     {
     vfprintf(stdout, format, args);
     fprintf(stdout, "\n");
