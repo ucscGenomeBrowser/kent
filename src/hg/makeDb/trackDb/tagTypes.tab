@@ -322,6 +322,7 @@ sGroup_Afrotheria wigMaf
 sGroup_Aves wigMaf
 sGroup_bird wigMaf
 sGroup_Birds wigMaf
+sGroup_Brachycera wigMaf
 sGroup_Bundibugyo_2007 wigMaf
 sGroup_Caenorhabditis wigMaf
 sGroup_Chimp wigMaf
@@ -331,16 +332,17 @@ sGroup_Ebola_2014 wigMaf
 sGroup_Euarchontoglires wigMaf
 sGroup_fish wigMaf
 sGroup_Fish wigMaf
-sGroup_Flies wigMaf
 sGroup_Gabon wigMaf
 sGroup_Glires wigMaf
 sGroup_hiv wigMafProt wigMaf
+sGroup_Holometabola wigMaf
 sGroup_Human wigMaf
 sGroup_Laurasiatheria wigMaf
 sGroup_Mammal wigMaf
 sGroup_mammal wigMaf
 sGroup_Mammals wigMaf
 sGroup_Marburg_1987 wigMaf
+sGroup_Nematocera wigMaf
 sGroup_Nematode wigMaf
 sGroup_Nematodes wigMaf
 sGroup_Others wigMaf
