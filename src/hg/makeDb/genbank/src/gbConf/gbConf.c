@@ -343,7 +343,7 @@ if (checkClusterMaster)
 struct slName *db;
 for (db = dbs; db != NULL; db = db->next)
     {
-    checkForDbFile(conf, db->name, "clusterGenome", TRUE, TRUE, replacePre, replaceVal);
+    //checkForDbFile(conf, db->name, "clusterGenome", TRUE, TRUE, replacePre, replaceVal);
     checkForDbFile(conf, db->name, "ooc", TRUE, FALSE, replacePre, replaceVal);
     }
 }
