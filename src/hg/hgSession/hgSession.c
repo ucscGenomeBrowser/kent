@@ -162,7 +162,12 @@ void addSessionLink(struct dyString *dy, char *userName, char *sessionName,
  * copy-paste it into emails.  */
 {
 struct dyString *dyTmp = dyStringNew(1024);
-dyStringPrintf(dyTmp, "%shgTracks?hgS_doOtherUser=submit&"
+if (cfgOptionBooleanDefault("hgSession.shortLink", FALSE) &&
+        !stringIn("%2F", userName) && !stringIn("%2F", sessionName))
+    dyStringPrintf(dyTmp, "http%s://%s/s/%s/%s", cgiAppendSForHttps(), cgiServerNamePort(),
+        userName, sessionName);
+else
+    dyStringPrintf(dyTmp, "%shgTracks?hgS_doOtherUser=submit&"
 	       "hgS_otherUserName=%s&hgS_otherUserSessionName=%s",
 	       hLocalHostCgiBinUrl(), userName, sessionName);
 if (encode)

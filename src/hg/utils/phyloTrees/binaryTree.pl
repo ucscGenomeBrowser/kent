@@ -166,7 +166,7 @@ sub printTree($) {
   } elsif ( ! $noInternal) {
     printf "%s:%s", $node->{'name'}, $node->{'distance'};
   } else {
-    printf ":0.1";
+    printf ":%s", $node->{'distance'};
   }
   $printDepth -= 1;
 }	# sub printTree($)
