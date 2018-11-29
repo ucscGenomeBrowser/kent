@@ -64,10 +64,10 @@ options:
     -ooc /path/11.ooc     Use this instead of the default
                           /hive/data/genomes/fromDb/11.ooc
                           Can be "none".
-    -target2Bit /path/target.2bit  Full path to target sequence
-    -targetSizes /path/query.2bit  Full path to query sequence
-    -query2Bit  /path/target.chrom.sizes  Full path to target chrom.sizes
-    -querySizes  /path/query.chrom.sizes  Full path to query chrom.sizes
+    -target2Bit /path/target.2bit  Full path to target sequence (fromDb)
+    -targetSizes /path/query.2bit  Full path to query sequence (fromDb)
+    -query2Bit  /path/target.chrom.sizes  Full path to target chrom.sizes (toDb)
+    -querySizes  /path/query.chrom.sizes  Full path to query chrom.sizes (toDb)
     -localTmp  /dev/shm  Full path to temporary storage for heavy I/O usage
 _EOF_
   ;

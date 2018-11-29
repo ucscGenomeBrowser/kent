@@ -1,6 +1,6 @@
 track cons124way
 compositeTrack on
-shortLabel 124 insect multiz
+shortLabel Cons 124 Insects
 longLabel Multiz Alignment & Conservation (124 Species)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 subGroup2 clade Clade drosophila=Drosophila
@@ -9,7 +9,7 @@ dimensions dimensionX=clade
 visibility full
 type bed 4
 group compGeno
-priority 1
+priority 2
 
     track cons124wayViewalign
     shortLabel Multiz Alignments
@@ -73,7 +73,7 @@ priority 1
     track cons124wayViewphastcons
     shortLabel Element Conservation (phastCons)
     view phastcons
-    visibility hide
+    visibility full
     subTrack cons124way
 
         track phastCons124way
@@ -96,7 +96,7 @@ priority 1
     track cons124wayViewelements
     shortLabel Conserved Elements
     view elements
-    visibility hide
+    visibility dense
     subTrack cons124way
 
         track phastConsElements124way
