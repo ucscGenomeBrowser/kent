@@ -1,0 +1,1051 @@
+<h2>Description</h2>
+<p>
+This track shows multiple alignments of 124 insects and measurements of
+evolutionary conservation using
+two methods (<em>phastCons</em> and <em>phyloP</em>) from the
+<a href="http://compgen.cshl.edu/phast/" target=_BLANK>
+PHAST package</a>, for all 124 species.
+The multiple alignments were generated using multiz and
+other tools in the UCSC/<a href="http://www.bx.psu.edu/miller_lab/"
+target=_blank>Penn State Bioinformatics</a>
+comparative genomics alignment pipeline.
+Conserved elements identified by phastCons are also displayed in
+this track.
+</p>
+<p>
+PhastCons (which has been used in previous Conservation tracks) is a hidden
+Markov model-based method that estimates the probability that each
+nucleotide belongs to a conserved element, based on the multiple alignment.
+It considers not just each individual alignment column, but also its
+flanking columns.  By contrast, phyloP separately measures conservation at
+individual columns, ignoring the effects of their neighbors.  As a
+consequence, the phyloP plots have a less smooth appearance than the
+phastCons plots, with more &quot;texture&quot; at individual sites.  The two methods
+have different strengths and weaknesses.  PhastCons is sensitive to &quot;runs&quot;
+of conserved sites, and is therefore effective for picking out conserved
+elements.  PhyloP, on the other hand, is more appropriate for evaluating
+signatures of selection at particular nucleotides or classes of nucleotides
+(e.g., third codon positions, or first positions of miRNA target sites).
+</p>
+<p>
+Another important difference is that phyloP can measure acceleration
+(faster evolution than expected under neutral drift) as well as
+conservation (slower than expected evolution).  In the phyloP plots, sites
+predicted to be conserved are assigned positive scores (and shown in blue),
+while sites predicted to be fast-evolving are assigned negative scores (and
+shown in red).  The absolute values of the scores represent -log p-values
+under a null hypothesis of neutral evolution.  The phastCons scores, by
+contrast, represent probabilities of negative selection and range between 0
+and 1.
+</p>
+<p>
+Both phastCons and phyloP treat alignment gaps and unaligned nucleotides as
+missing data.
+</p>
+
+<p>
+Missing sequence in the assemblies is highlighted in the track display
+by regions of yellow when zoomed out and Ns displayed at base
+level (see <em>Gap Annotation</em>, below). </p>
+<p>
+<blockquote><table border=1 cellpadding=4 bordercolor="#aaaaaa">
+<tr><th>Organism</th><th>Species</th><th>Assembly name</th><th>UCSC browser or<br>NCBI source</th><th>alignment type</th></tr>
+<tr align=left><td>D. melanogaster</td><td>Drosophila melanogaster</td>
+    <td>Aug. 2014 (BDGP Release 6 + ISO1 MT/dm6)</td>
+    <td><a href="../cgi-bin/hgTracks?db=dm6"
+    target=_blank>Aug. 2014 (BDGP Release 6 + ISO1 MT/dm6)</a></td>
+    <td>reference</td></tr>
+<tr align=left><td>A. albimanus</td><td>Anopheles albimanus</td>
+    <td>Aug. 2017 (Anop_albi_ALBI9_A_V2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/349/125/GCA_000349125.2_Anop_albi_ALBI9_A_V2/"
+    target=_blank>GCA_000349125.2</a></td>
+    <td>net</td></tr>
+<tr align=left><td>A. aquasalis</td><td>Anopheles aquasalis</td>
+    <td>Dec. 2017 (A_aquasalis_v1.0)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/002/846/955/GCA_002846955.1_A_aquasalis_v1.0/"
+    target=_blank>GCA_002846955.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>A. arabiensis</td><td>Anopheles arabiensis</td>
+    <td>Apr. 2013 (Anop_arab_DONG5_A_V1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/349/185/GCA_000349185.1_Anop_arab_DONG5_A_V1/"
+    target=_blank>GCA_000349185.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>A. atroparvus</td><td>Anopheles atroparvus</td>
+    <td>Sep. 2013 (Anop_atro_EBRO_V1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/473/505/GCA_000473505.1_Anop_atro_EBRO_V1/"
+    target=_blank>GCA_000473505.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>A. christyi</td><td>Anopheles christyi</td>
+    <td>Apr. 2013 (Anop_chri_ACHKN1017_V1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/349/165/GCA_000349165.1_Anop_chri_ACHKN1017_V1/"
+    target=_blank>GCA_000349165.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>A. coluzzii</td><td>Anopheles coluzzii</td>
+    <td>Apr. 2008 (m5)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/150/765/GCA_000150765.1_m5/"
+    target=_blank>GCA_000150765.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>A. cracens</td><td>Anopheles cracens</td>
+    <td>Apr. 2017 (ASM209184v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/002/091/845/GCA_002091845.1_ASM209184v1/"
+    target=_blank>GCA_002091845.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>A. culicifacies</td><td>Anopheles culicifacies</td>
+    <td>Sep. 2013 (Anop_culi_species_A-37_1_V1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/473/375/GCA_000473375.1_Anop_culi_species_A-37_1_V1/"
+    target=_blank>GCA_000473375.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>A. darlingi</td><td>Anopheles darlingi</td>
+    <td>Dec. 2013 (A_darlingi_v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/211/455/GCA_000211455.3_A_darlingi_v1/"
+    target=_blank>GCA_000211455.3</a></td>
+    <td>net</td></tr>
+<tr align=left><td>A. dirus</td><td>Anopheles dirus</td>
+    <td>Mar. 2013 (Anop_diru_WRAIR2_V1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/349/145/GCA_000349145.1_Anop_diru_WRAIR2_V1/"
+    target=_blank>GCA_000349145.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>A. epiroticus</td><td>Anopheles epiroticus</td>
+    <td>Mar. 2013 (Anop_epir_epiroticus2_V1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/349/105/GCA_000349105.1_Anop_epir_epiroticus2_V1/"
+    target=_blank>GCA_000349105.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>A. farauti</td><td>Anopheles farauti</td>
+    <td>Jan. 2014 (Anop_fara_FAR1_V2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/473/445/GCA_000473445.2_Anop_fara_FAR1_V2/"
+    target=_blank>GCA_000473445.2</a></td>
+    <td>net</td></tr>
+<tr align=left><td>A. farauti_No4</td><td>Anopheles farauti No. 4</td>
+    <td>Mar. 2015 (ASM95621v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/956/215/GCA_000956215.1_ASM95621v1/"
+    target=_blank>GCA_000956215.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>A. funestus</td><td>Anopheles funestus</td>
+    <td>Mar. 2013 (Anop_fune_FUMOZ_V1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/349/085/GCA_000349085.1_Anop_fune_FUMOZ_V1/"
+    target=_blank>GCA_000349085.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>A. gambiae</td><td>Anopheles gambiae</td>
+    <td>Oct. 2006 (AgamP3/anoGam3)</td>
+    <td><a href="../cgi-bin/hgTracks?db=anoGam3"
+    target=_blank>Oct. 2006 (AgamP3/anoGam3)</a></td>
+    <td>net</td></tr>
+<tr align=left><td>A. gambiae_1</td><td>Anopheles gambiae str. PEST</td>
+    <td>Oct. 2006 (AgamP3)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/005/575/GCF_000005575.2_AgamP3/"
+    target=_blank>GCF_000005575.2</a></td>
+    <td>net</td></tr>
+<tr align=left><td>A. koliensis</td><td>Anopheles koliensis</td>
+    <td>Mar. 2015 (ASM95627v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/956/275/GCA_000956275.1_ASM95627v1/"
+    target=_blank>GCA_000956275.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>A. maculatus</td><td>Anopheles maculatus</td>
+    <td>Apr. 2017 (ASM209183v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/002/091/835/GCA_002091835.1_ASM209183v1/"
+    target=_blank>GCA_002091835.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>A. melas</td><td>Anopheles melas</td>
+    <td>Jan. 2014 (Anop_mela_CM1001059_A_V2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/473/525/GCA_000473525.2_Anop_mela_CM1001059_A_V2/"
+    target=_blank>GCA_000473525.2</a></td>
+    <td>net</td></tr>
+<tr align=left><td>A. mellifera</td><td>Apis mellifera</td>
+    <td>04 Nov 2010 (Amel_4.5/apiMel4)</td>
+    <td><a href="../cgi-bin/hgTracks?db=apiMel4"
+    target=_blank>04 Nov 2010 (Amel_4.5/apiMel4)</a></td>
+    <td>net</td></tr>
+<tr align=left><td>A. merus</td><td>Anopheles merus</td>
+    <td>Jan. 2014 (Anop_meru_MAF_V1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/473/845/GCA_000473845.2_Anop_meru_MAF_V1/"
+    target=_blank>GCA_000473845.2</a></td>
+    <td>net</td></tr>
+<tr align=left><td>A. minimus</td><td>Anopheles minimus</td>
+    <td>Mar. 2013 (Anop_mini_MINIMUS1_V1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/349/025/GCA_000349025.1_Anop_mini_MINIMUS1_V1/"
+    target=_blank>GCA_000349025.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>A. nili</td><td>Anopheles nili</td>
+    <td>Jul. 2013 (Anili1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/439/205/GCA_000439205.1_Anili1/"
+    target=_blank>GCA_000439205.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>A. punctulatus</td><td>Anopheles punctulatus</td>
+    <td>Mar. 2015 (ASM95625v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/956/255/GCA_000956255.1_ASM95625v1/"
+    target=_blank>GCA_000956255.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>A. quadriannulatus</td><td>Anopheles quadriannulatus</td>
+    <td>Mar. 2013 (Anop_quad_QUAD4_A_V1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/349/065/GCA_000349065.1_Anop_quad_QUAD4_A_V1/"
+    target=_blank>GCA_000349065.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>A. sinensis</td><td>Anopheles sinensis</td>
+    <td>Jul. 2014 (AS2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/441/895/GCA_000441895.2_AS2/"
+    target=_blank>GCA_000441895.2</a></td>
+    <td>net</td></tr>
+<tr align=left><td>A. stephensi</td><td>Anopheles stephensi</td>
+    <td>Sep. 2018 (ASM344897v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/003/448/975/GCA_003448975.1_ASM344897v1/"
+    target=_blank>GCA_003448975.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Aedes_aegypti</td><td>Aedes aegypti</td>
+    <td>Jun. 2017 (AaegL5.0)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/204/515/GCF_002204515.2_AaegL5.0/"
+    target=_blank>GCF_002204515.2</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Aedes_albopictus</td><td>Aedes albopictus</td>
+    <td>Jan. 2017 (canu_80X_arrow2.2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/876/365/GCF_001876365.2_canu_80X_arrow2.2/"
+    target=_blank>GCF_001876365.2</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Bactrocera_dorsalis</td><td>Bactrocera dorsalis</td>
+    <td>Dec. 2014 (ASM78921v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/789/215/GCF_000789215.1_ASM78921v2/"
+    target=_blank>GCF_000789215.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Bactrocera_latifrons</td><td>Bactrocera latifrons</td>
+    <td>Oct. 2016 (ASM185335v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/853/355/GCF_001853355.1_ASM185335v1/"
+    target=_blank>GCF_001853355.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Bactrocera_oleae</td><td>Bactrocera oleae</td>
+    <td>Jul. 2015 (gapfilled_joined_lt9474.gt500.covgt10)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/188/975/GCF_001188975.1_gapfilled_joined_lt9474.gt500.covgt10/"
+    target=_blank>GCF_001188975.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Bactrocera_tryoni</td><td>Bactrocera tryoni</td>
+    <td>May 2014 (Assembly_2.2_of_Bactrocera_tryoni_genome)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/695/345/GCA_000695345.1_Assembly_2.2_of_Bactrocera_tryoni_genome/"
+    target=_blank>GCA_000695345.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Belgica_antarctica</td><td>Belgica antarctica</td>
+    <td>Sep. 2014 (ASM77530v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/775/305/GCA_000775305.1_ASM77530v1/"
+    target=_blank>GCA_000775305.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Calliphora_vicina</td><td>Calliphora vicina</td>
+    <td>Jun. 2015 (ASM101727v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/017/275/GCA_001017275.1_ASM101727v1/"
+    target=_blank>GCA_001017275.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Ceratitis_capitata</td><td>Ceratitis capitata</td>
+    <td>Nov. 2017 (Ccap_2.1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/347/755/GCF_000347755.3_Ccap_2.1/"
+    target=_blank>GCF_000347755.3</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Chaoborus_trivitattus</td><td>Chaoborus trivitattus</td>
+    <td>May 2015 (ASM101481v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/014/815/GCA_001014815.1_ASM101481v1/"
+    target=_blank>GCA_001014815.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Chironomus_riparius</td><td>Chironomus riparius</td>
+    <td>May 2015 (ASM101450v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/014/505/GCA_001014505.1_ASM101450v1/"
+    target=_blank>GCA_001014505.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Chironomus_tentans</td><td>Chironomus tentans</td>
+    <td>Nov. 2014 (CT01)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/786/525/GCA_000786525.1_CT01/"
+    target=_blank>GCA_000786525.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Cirrula_hians</td><td>Cirrula hians</td>
+    <td>May 2015 (ASM101507v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/015/075/GCA_001015075.1_ASM101507v1/"
+    target=_blank>GCA_001015075.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Clogmia_albipunctata</td><td>Clogmia albipunctata</td>
+    <td>May 2015 (ASM101494v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/014/945/GCA_001014945.1_ASM101494v1/"
+    target=_blank>GCA_001014945.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Clunio_marinus</td><td>Clunio marinus</td>
+    <td>Nov. 2016 (CLUMA_1.0)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/900/005/825/GCA_900005825.1_CLUMA_1.0/"
+    target=_blank>GCA_900005825.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Coboldia_fuscipes</td><td>Coboldia fuscipes</td>
+    <td>May 2015 (ASM101433v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/014/335/GCA_001014335.1_ASM101433v1/"
+    target=_blank>GCA_001014335.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Condylostylus_patibulatus</td><td>Condylostylus patibulatus</td>
+    <td>May 2015 (ASM101487v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/014/875/GCA_001014875.1_ASM101487v1/"
+    target=_blank>GCA_001014875.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Culex_quinquefasciatus</td><td>Culex quinquefasciatus</td>
+    <td>Apr. 2007 (CulPip1.0)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/209/185/GCF_000209185.1_CulPip1.0/"
+    target=_blank>GCF_000209185.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Culicoides_sonorensis</td><td>Culicoides sonorensis</td>
+    <td>Feb. 2018 (Cson_Genome_version_2.0)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/900/258/525/GCA_900258525.2_Cson_Genome_version_2.0/"
+    target=_blank>GCA_900258525.2</a></td>
+    <td>net</td></tr>
+<tr align=left><td>D. albomicans</td><td>Drosophila albomicans</td>
+    <td>21 May 2012 (DroAlb_1.0/droAlb1)</td>
+    <td><a href="../cgi-bin/hgTracks?db=droAlb1"
+    target=_blank>21 May 2012 (DroAlb_1.0/droAlb1)</a></td>
+    <td>net</td></tr>
+<tr align=left><td>D. americana</td><td>Drosophila americana</td>
+    <td>Oct. 2015 (D._americana_H5_strain_genome_assembly)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/245/395/GCA_001245395.1_D._americana_H5_strain_genome_assembly/"
+    target=_blank>GCA_001245395.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>D. ananassae</td><td>Drosophila ananassae</td>
+    <td>Feb. 2006 (Agencourt CAF1/droAna3)</td>
+    <td><a href="../cgi-bin/hgTracks?db=droAna3"
+    target=_blank>Feb. 2006 (Agencourt CAF1/droAna3)</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>D. arizonae</td><td>Drosophila arizonae</td>
+    <td>May 2016 (ASM165402v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/654/025/GCF_001654025.1_ASM165402v1/"
+    target=_blank>GCF_001654025.1</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>D. athabasca</td><td>Drosophila athabasca</td>
+    <td>Jun. 2018 (ASM318502v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/003/185/025/GCA_003185025.1_ASM318502v1/"
+    target=_blank>GCA_003185025.1</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>D. biarmipes</td><td>Drosophila biarmipes</td>
+    <td>04 Mar 2013 (Dbia_2.0/droBia2)</td>
+    <td><a href="../cgi-bin/hgTracks?db=droBia2"
+    target=_blank>04 Mar 2013 (Dbia_2.0/droBia2)</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>D. bipectinata</td><td>Drosophila bipectinata</td>
+    <td>04 Mar 2013 (Dbip_2.0/droBip2)</td>
+    <td><a href="../cgi-bin/hgTracks?db=droBip2"
+    target=_blank>04 Mar 2013 (Dbip_2.0/droBip2)</a></td>
+    <td>net</td></tr>
+<tr align=left><td>D. busckii</td><td>Drosophila busckii</td>
+    <td>Sep. 2015 (ASM127793v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/277/935/GCF_001277935.1_ASM127793v1/"
+    target=_blank>GCF_001277935.1</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>D. elegans</td><td>Drosophila elegans</td>
+    <td>04 Mar 2013 (Dele_2.0/droEle2)</td>
+    <td><a href="../cgi-bin/hgTracks?db=droEle2"
+    target=_blank>04 Mar 2013 (Dele_2.0/droEle2)</a></td>
+    <td>net</td></tr>
+<tr align=left><td>D. erecta</td><td>Drosophila erecta</td>
+    <td>Feb. 2006 (Agencourt CAF1/droEre2)</td>
+    <td><a href="../cgi-bin/hgTracks?db=droEre2"
+    target=_blank>Feb. 2006 (Agencourt CAF1/droEre2)</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>D. eugracilis</td><td>Drosophila eugracilis</td>
+    <td>04 Mar 2013 (Deug_2.0/droEug2)</td>
+    <td><a href="../cgi-bin/hgTracks?db=droEug2"
+    target=_blank>04 Mar 2013 (Deug_2.0/droEug2)</a></td>
+    <td>net</td></tr>
+<tr align=left><td>D. ficusphila</td><td>Drosophila ficusphila</td>
+    <td>04 Mar 2013 (Dfic_2.0/droFic2)</td>
+    <td><a href="../cgi-bin/hgTracks?db=droFic2"
+    target=_blank>04 Mar 2013 (Dfic_2.0/droFic2)</a></td>
+    <td>net</td></tr>
+<tr align=left><td>D. grimshawi</td><td>Drosophila grimshawi</td>
+    <td>Feb. 2006 (Agencourt CAF1/droGri2)</td>
+    <td><a href="../cgi-bin/hgTracks?db=droGri2"
+    target=_blank>Feb. 2006 (Agencourt CAF1/droGri2)</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>D. hydei</td><td>Drosophila hydei</td>
+    <td>Nov. 2017 (ASM278046v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/780/465/GCF_002780465.1_ASM278046v1/"
+    target=_blank>GCF_002780465.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>D. kikkawai</td><td>Drosophila kikkawai</td>
+    <td>04 Mar 2013 (Dkik_2.0/droKik2)</td>
+    <td><a href="../cgi-bin/hgTracks?db=droKik2"
+    target=_blank>04 Mar 2013 (Dkik_2.0/droKik2)</a></td>
+    <td>net</td></tr>
+<tr align=left><td>D. miranda</td><td>Drosophila miranda</td>
+    <td>19 Apr 2013 (DroMir_2.2/droMir2)</td>
+    <td><a href="../cgi-bin/hgTracks?db=droMir2"
+    target=_blank>19 Apr 2013 (DroMir_2.2/droMir2)</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>D. mojavensis</td><td>Drosophila mojavensis</td>
+    <td>Feb. 2006 (Agencourt CAF1/droMoj3)</td>
+    <td><a href="../cgi-bin/hgTracks?db=droMoj3"
+    target=_blank>Feb. 2006 (Agencourt CAF1/droMoj3)</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>D. montana</td><td>Drosophila montana</td>
+    <td>May 2018 (ASM308661v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/003/086/615/GCA_003086615.1_ASM308661v1/"
+    target=_blank>GCA_003086615.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>D. nasuta</td><td>Drosophila nasuta</td>
+    <td>Jul. 2017 (ASM222288v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/002/222/885/GCA_002222885.1_ASM222288v1/"
+    target=_blank>GCA_002222885.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>D. navojoa</td><td>Drosophila navojoa</td>
+    <td>May 2016 (ASM165401v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/654/015/GCF_001654015.1_ASM165401v1/"
+    target=_blank>GCF_001654015.1</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>D. novamexicana</td><td>Drosophila novamexicana</td>
+    <td>Jul. 2018 (DnovRS1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/003/285/875/GCA_003285875.1_DnovRS1/"
+    target=_blank>GCA_003285875.1</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>D. obscura</td><td>Drosophila obscura</td>
+    <td>Jul. 2017 (Dobs_1.0)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/217/835/GCF_002217835.1_Dobs_1.0/"
+    target=_blank>GCF_002217835.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>D. persimilis</td><td>Drosophila persimilis</td>
+    <td>Oct. 2005 (Broad/droPer1)</td>
+    <td><a href="../cgi-bin/hgTracks?db=droPer1"
+    target=_blank>Oct. 2005 (Broad/droPer1)</a></td>
+    <td>net</td></tr>
+<tr align=left><td>D. pseudoobscura</td><td>Drosophila pseudoobscura pseudoobscura</td>
+    <td>11 Apr 2013 (Dpse_3.0/droPse3)</td>
+    <td><a href="../cgi-bin/hgTracks?db=droPse3"
+    target=_blank>11 Apr 2013 (Dpse_3.0/droPse3)</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>D. pseudoobscura_1</td><td>Drosophila pseudoobscura pseudoobscura</td>
+    <td>Apr. 2013 (Dpse_3.0)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/765/GCF_000001765.3_Dpse_3.0/"
+    target=_blank>GCF_000001765.3</a></td>
+    <td>net</td></tr>
+<tr align=left><td>D. rhopaloa</td><td>Drosophila rhopaloa</td>
+    <td>22 Feb 2013 (Drho_2.0/droRho2)</td>
+    <td><a href="../cgi-bin/hgTracks?db=droRho2"
+    target=_blank>22 Feb 2013 (Drho_2.0/droRho2)</a></td>
+    <td>net</td></tr>
+<tr align=left><td>D. sechellia</td><td>Drosophila sechellia</td>
+    <td>Oct. 2005 (Broad/droSec1)</td>
+    <td><a href="../cgi-bin/hgTracks?db=droSec1"
+    target=_blank>Oct. 2005 (Broad/droSec1)</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>D. serrata</td><td>Drosophila serrata</td>
+    <td>Apr. 2017 (Dser1.0)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/093/755/GCF_002093755.1_Dser1.0/"
+    target=_blank>GCF_002093755.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>D. simulans</td><td>Drosophila simulans</td>
+    <td>Sep. 2014 (ASM75419v2/droSim2)</td>
+    <td><a href="../cgi-bin/hgTracks?db=droSim2"
+    target=_blank>Sep. 2014 (ASM75419v2/droSim2)</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>D. subobscura</td><td>Drosophila subobscura</td>
+    <td>Nov. 2017 (Dsub_1.0)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/002/749/795/GCA_002749795.1_Dsub_1.0/"
+    target=_blank>GCA_002749795.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>D. suzukii</td><td>Drosophila suzukii</td>
+    <td>30 Sep 2013 (Dsuzukii.v01/droSuz1)</td>
+    <td><a href="../cgi-bin/hgTracks?db=droSuz1"
+    target=_blank>30 Sep 2013 (Dsuzukii.v01/droSuz1)</a></td>
+    <td>net</td></tr>
+<tr align=left><td>D. takahashii</td><td>Drosophila takahashii</td>
+    <td>04 Mar 2013 (Dtak_2.0/droTak2)</td>
+    <td><a href="../cgi-bin/hgTracks?db=droTak2"
+    target=_blank>04 Mar 2013 (Dtak_2.0/droTak2)</a></td>
+    <td>net</td></tr>
+<tr align=left><td>D. virilis</td><td>Drosophila virilis</td>
+    <td>Feb. 2006 (Agencourt CAF1/droVir3)</td>
+    <td><a href="../cgi-bin/hgTracks?db=droVir3"
+    target=_blank>Feb. 2006 (Agencourt CAF1/droVir3)</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>D. willistoni</td><td>Drosophila willistoni</td>
+    <td>03 Aug 2006 (dwil_caf1/droWil2)</td>
+    <td><a href="../cgi-bin/hgTracks?db=droWil2"
+    target=_blank>03 Aug 2006 (dwil_caf1/droWil2)</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>D. yakuba</td><td>Drosophila yakuba</td>
+    <td>27 Jun 2006 (dyak_caf1/droYak3)</td>
+    <td><a href="../cgi-bin/hgTracks?db=droYak3"
+    target=_blank>27 Jun 2006 (dyak_caf1/droYak3)</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>Ephydra_gracilis</td><td>Ephydra gracilis</td>
+    <td>May 2015 (ASM101467v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/014/675/GCA_001014675.1_ASM101467v1/"
+    target=_blank>GCA_001014675.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Eristalis_dimidiata</td><td>Eristalis dimidiata</td>
+    <td>May 2015 (ASM101514v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/015/145/GCA_001015145.1_ASM101514v1/"
+    target=_blank>GCA_001015145.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Eutreta_diana</td><td>Eutreta diana</td>
+    <td>May 2015 (ASM101511v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/015/115/GCA_001015115.1_ASM101511v1/"
+    target=_blank>GCA_001015115.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Glossina_austeni</td><td>Glossina austeni</td>
+    <td>May 2014 (Glossina_austeni-1.0.3)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/688/735/GCA_000688735.1_Glossina_austeni-1.0.3/"
+    target=_blank>GCA_000688735.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Glossina_brevipalpis</td><td>Glossina brevipalpis</td>
+    <td>May 2014 (Glossina_brevipalpis_1.0.3)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/671/755/GCA_000671755.1_Glossina_brevipalpis_1.0.3/"
+    target=_blank>GCA_000671755.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Glossina_fuscipes</td><td>Glossina fuscipes fuscipes</td>
+    <td>May 2014 (Glossina_fuscipes-3.0.2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/671/735/GCA_000671735.1_Glossina_fuscipes-3.0.2/"
+    target=_blank>GCA_000671735.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Glossina_morsitans_1</td><td>Glossina morsitans</td>
+    <td>May 2015 (ASM101451v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/014/515/GCA_001014515.1_ASM101451v1/"
+    target=_blank>GCA_001014515.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Glossina_morsitans_2</td><td>Glossina morsitans morsitans</td>
+    <td>Mar. 2014 (ASM107743v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/077/435/GCA_001077435.1_ASM107743v1/"
+    target=_blank>GCA_001077435.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Glossina_pallidipes</td><td>Glossina pallidipes</td>
+    <td>May 2014 (Glossina_pallidipes-1.0.3)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/688/715/GCA_000688715.1_Glossina_pallidipes-1.0.3/"
+    target=_blank>GCA_000688715.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Glossina_palpalis_gambiensis</td><td>Glossina palpalis gambiensis</td>
+    <td>Jan. 2015 (Glossina_palpalis_gambiensis-2.0.1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/818/775/GCA_000818775.1_Glossina_palpalis_gambiensis-2.0.1/"
+    target=_blank>GCA_000818775.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Haematobia_irritans</td><td>Haematobia irritans</td>
+    <td>May 2018 (Hi_v1.0)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/003/123/925/GCA_003123925.1_Hi_v1.0/"
+    target=_blank>GCA_003123925.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Hermetia_illucens</td><td>Hermetia illucens</td>
+    <td>May 2015 (ASM101489v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/014/895/GCA_001014895.1_ASM101489v1/"
+    target=_blank>GCA_001014895.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Holcocephala_fusca</td><td>Holcocephala fusca</td>
+    <td>May 2015 (ASM101521v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/015/215/GCA_001015215.1_ASM101521v1/"
+    target=_blank>GCA_001015215.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Liriomyza_trifolii</td><td>Liriomyza trifolii</td>
+    <td>May 2015 (ASM101493v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/014/935/GCA_001014935.1_ASM101493v1/"
+    target=_blank>GCA_001014935.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Lucilia_cuprina</td><td>Lucilia cuprina</td>
+    <td>Dec. 2017 (Lcup_2.0)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/699/065/GCF_000699065.1_Lcup_2.0/"
+    target=_blank>GCF_000699065.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Lucilia_sericata</td><td>Lucilia sericata</td>
+    <td>May 2015 (ASM101483v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/014/835/GCA_001014835.1_ASM101483v1/"
+    target=_blank>GCA_001014835.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Lutzomyia_longipalpis</td><td>Lutzomyia longipalpis</td>
+    <td>Jun. 2012 (Llon_1.0)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/265/325/GCA_000265325.1_Llon_1.0/"
+    target=_blank>GCA_000265325.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>M. domestica</td><td>Musca domestica</td>
+    <td>22 Apr 2013 (Musca_domestica-2.0.2/musDom2)</td>
+    <td><a href="../cgi-bin/hgTracks?db=musDom2"
+    target=_blank>22 Apr 2013 (Musca_domestica-2.0.2/musDom2)</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Mayetiola_destructor</td><td>Mayetiola destructor</td>
+    <td>Oct. 2010 (Mdes_1.0)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/149/185/GCA_000149185.1_Mdes_1.0/"
+    target=_blank>GCA_000149185.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Megaselia_abdita</td><td>Megaselia abdita</td>
+    <td>May 2015 (ASM101517v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/015/175/GCA_001015175.1_ASM101517v1/"
+    target=_blank>GCA_001015175.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Megaselia_scalaris</td><td>Megaselia scalaris</td>
+    <td>Mar. 2013 (ASM34191v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/341/915/GCA_000341915.2_ASM34191v2/"
+    target=_blank>GCA_000341915.2</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Mochlonyx_cinctipes</td><td>Mochlonyx cinctipes</td>
+    <td>May 2015 (ASM101484v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/014/845/GCA_001014845.1_ASM101484v1/"
+    target=_blank>GCA_001014845.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Neobellieria_bullata</td><td>Neobellieria bullata</td>
+    <td>Jun. 2015 (ASM101745v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/017/455/GCA_001017455.1_ASM101745v1/"
+    target=_blank>GCA_001017455.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Paykullia_maculata</td><td>Paykullia maculata</td>
+    <td>Apr. 2018 (ASM305512v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/003/055/125/GCA_003055125.1_ASM305512v1/"
+    target=_blank>GCA_003055125.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Phlebotomus_papatasi</td><td>Phlebotomus papatasi</td>
+    <td>May 2012 (Ppap_1.0)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/262/795/GCA_000262795.1_Ppap_1.0/"
+    target=_blank>GCA_000262795.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Phormia_regina</td><td>Phormia regina</td>
+    <td>Sep. 2016 (ASM173554v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/735/545/GCA_001735545.1_ASM173554v1/"
+    target=_blank>GCA_001735545.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Phortica_variegata</td><td>Phortica variegata</td>
+    <td>May 2015 (ASM101441v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/014/415/GCA_001014415.1_ASM101441v1/"
+    target=_blank>GCA_001014415.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Proctacanthus_coquilletti</td><td>Proctacanthus coquilletti</td>
+    <td>Jan. 2017 (200kmer_750.trimmed)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/932/985/GCA_001932985.1_200kmer_750.trimmed/"
+    target=_blank>GCA_001932985.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Rhagoletis_zephyria</td><td>Rhagoletis zephyria</td>
+    <td>Jul. 2016 (Rhagoletis_zephyria_1.0)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/687/245/GCF_001687245.1_Rhagoletis_zephyria_1.0/"
+    target=_blank>GCF_001687245.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Sarcophagidae_BV_2014</td><td>Sarcophagidae sp. BV-2014</td>
+    <td>Jul. 2015 (ASM104719v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/047/195/GCA_001047195.1_ASM104719v1/"
+    target=_blank>GCA_001047195.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Scaptodrosophila_lebanonensis</td><td>Scaptodrosophila lebanonensis</td>
+    <td>Jul. 2018 (SlebRS1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/003/285/725/GCA_003285725.1_SlebRS1/"
+    target=_blank>GCA_003285725.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Sphyracephala_brevicornis</td><td>Sphyracephala brevicornis</td>
+    <td>May 2015 (ASM101523v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/015/235/GCA_001015235.1_ASM101523v1/"
+    target=_blank>GCA_001015235.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Stomoxys_calcitrans</td><td>Stomoxys calcitrans</td>
+    <td>May 2015 (Stomoxys_calcitrans-1.0.1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/015/335/GCF_001015335.1_Stomoxys_calcitrans-1.0.1/"
+    target=_blank>GCF_001015335.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>T. castaneum</td><td>Tribolium castaneum</td>
+    <td>Sep. 2005 (Baylor 2.0/triCas2)</td>
+    <td><a href="../cgi-bin/hgTracks?db=triCas2"
+    target=_blank>Sep. 2005 (Baylor 2.0/triCas2)</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Teleopsis_dalmanni</td><td>Teleopsis dalmanni</td>
+    <td>Jul. 2017 (Tel_dalmanni_2A_v1.0)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/002/237/135/GCA_002237135.1_Tel_dalmanni_2A_v1.0/"
+    target=_blank>GCA_002237135.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Tephritis_californica</td><td>Tephritis californica</td>
+    <td>Jun. 2015 (ASM101751v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/017/515/GCA_001017515.1_ASM101751v1/"
+    target=_blank>GCA_001017515.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Themira_minor</td><td>Themira minor</td>
+    <td>May 2015 (ASM101457v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/014/575/GCA_001014575.1_ASM101457v1/"
+    target=_blank>GCA_001014575.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Tipula_oleracea</td><td>Tipula oleracea</td>
+    <td>Jun. 2015 (ASM101753v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/017/535/GCA_001017535.1_ASM101753v1/"
+    target=_blank>GCA_001017535.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Trichoceridae_BV_2014</td><td>Trichoceridae sp. BV-2014</td>
+    <td>May 2015 (ASM101442v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/014/425/GCA_001014425.1_ASM101442v1/"
+    target=_blank>GCA_001014425.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Trupanea_jonesi</td><td>Trupanea jonesi</td>
+    <td>May 2015 (ASM101466v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/014/665/GCA_001014665.1_ASM101466v1/"
+    target=_blank>GCA_001014665.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Zaprionus_indianus</td><td>Zaprionus indianus</td>
+    <td>Oct. 2016 (ZP_IN_1.0)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/752/445/GCA_001752445.1_ZP_IN_1.0/"
+    target=_blank>GCA_001752445.1</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Zeugodacus_cucurbitae</td><td>Zeugodacus cucurbitae</td>
+    <td>Dec. 2014 (ASM80634v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/806/345/GCF_000806345.1_ASM80634v1/"
+    target=_blank>GCF_000806345.1</a></td>
+    <td>net</td></tr>
+</table><br>
+<b>Table 1.</b> <em>Genome assemblies included in the 124-way Conservation track.</em>
+</blockquote></p>
+
+Downloads for data in this track are available:
+<ul>
+<li>
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/dm6/multiz124way/">Multiz alignments</a> (MAF format), and phylogenetic trees
+<li>
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/dm6/phyloP124way/">PhyloP conservation</a> (WIG format)
+<li>
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/dm6/phastCons124way/">PhastCons conservation</a> (WIG format)
+</ul>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+The track configuration options allow the user to display the three different
+sets of scores, all, birds or vertebrate, individually or all simultaneously.
+In full and pack display modes, conservation scores are displayed as a
+<em>wiggle track</em> (histogram) in which the height reflects the
+value of the score.
+The conservation wiggles can be configured in a variety of ways to
+highlight different aspects of the displayed information.
+Click the <a href="../goldenPath/help/hgWiggleTrackHelp.html"
+target=_blank>Graph configuration help</a> link for an explanation
+of the configuration options.</p>
+<p>
+Pairwise alignments of each species to the $organism genome are
+displayed below the conservation histogram as a grayscale density plot (in
+pack mode) or as a wiggle (in full mode) that indicates alignment quality.
+In dense display mode, conservation is shown in grayscale using
+darker values to indicate higher levels of overall conservation
+as scored by phastCons. </p>
+<p>
+Checkboxes on the track configuration page allow selection of the
+species to include in the pairwise display.
+Configuration buttons are available to select all of the species
+(<em>Set all</em>), deselect all of the species (<em>Clear all</em>), or
+use the default settings (<em>Set defaults</em>).
+Note that excluding species from the pairwise display does not alter the
+the conservation score display.</p>
+<p>
+To view detailed information about the alignments at a specific
+position, zoom the display in to 30,000 or fewer bases, then click on
+the alignment.</p>
+
+<h3>Gap Annotation</h3>
+<p>
+The <em>Display chains between alignments</em> configuration option
+enables display of gaps between alignment blocks in the pairwise alignments in
+a manner similar to the Chain track display.  The following
+conventions are used:
+<ul>
+<li><b>Single line:</b> No bases in the aligned species. Possibly due to a
+lineage-specific insertion between the aligned blocks in the $organism genome
+or a lineage-specific deletion between the aligned blocks in the aligning
+species.
+<li><b>Double line:</b> Aligning species has one or more unalignable bases in
+the gap region. Possibly due to excessive evolutionary distance between
+species or independent indels in the region between the aligned blocks in both
+species.
+<li><b>Pale yellow coloring:</b> Aligning species has Ns in the gap region.
+Reflects uncertainty in the relationship between the DNA of both species, due
+to lack of sequence in relevant portions of the aligning species.
+</ul></p>
+
+<h3>Genomic Breaks</h3>
+<p>
+Discontinuities in the genomic context (chromosome, scaffold or region) of the
+aligned DNA in the aligning species are shown as follows:
+<ul>
+<li>
+<b>Vertical blue bar:</b> Represents a discontinuity that persists indefinitely
+on either side, <em>e.g.</em> a large region of DNA on either side of the bar
+comes from a different chromosome in the aligned species due to a large scale
+rearrangement.
+<li>
+<b>Green square brackets:</b> Enclose shorter alignments consisting of DNA from
+one genomic context in the aligned species nested inside a larger chain of
+alignments from a different genomic context. The alignment within the
+brackets may represent a short misalignment, a lineage-specific insertion of a
+transposon in the $organism genome that aligns to a paralogous copy somewhere
+else in the aligned species, or other similar occurrence.
+</ul></p>
+
+<h3>Base Level</h3>
+<p>
+When zoomed-in to the base-level display, the track shows the base
+composition of each alignment.
+The numbers and symbols on the Gaps
+line indicate the lengths of gaps in the $organism sequence at those
+alignment positions relative to the longest non-$organism sequence.
+If there is sufficient space in the display, the size of the gap is shown.
+If the space is insufficient and the gap size is a multiple of 3, a
+&quot;*&quot; is displayed; other gap sizes are indicated by &quot;+&quot;.</p>
+<p>
+Codon translation is available in base-level display mode if the
+displayed region is identified as a coding segment. To display this annotation,
+select the species for translation from the pull-down menu in the Codon
+Translation configuration section at the top of the page. Then, select one of
+the following modes:
+<ul>
+<li>
+<b>No codon translation:</b> The gene annotation is not used; the bases are
+displayed without translation.
+<li>
+<b>Use default species reading frames for translation:</b> The annotations from
+the genome displayed in the <em>Default species to establish reading frame</em>
+pull-down menu are used to translate all the aligned species present in the
+alignment.
+<li>
+<b>Use reading frames for species if available, otherwise no translation:</b>
+Codon translation is performed only for those species where the region is
+annotated as protein coding.
+<li><b>Use reading frames for species if available, otherwise use default species:</b>
+Codon translation is done on those species that are annotated as being protein
+coding over the aligned region using species-specific annotation; the remaining
+species are translated using the default species annotation.
+</ul></p>
+<p>
+Codon translation uses the following gene tracks as the basis for
+translation, depending on the species chosen (<b>Table 2</b>).
+
+<blockquote><table border=1 cellpadding=4 bordercolor="#aaaaaa">
+<tr align=left><td><b>Gene Track</b></td><td><b>Species</b></td></tr>
+<tr align=left><td>NCBI RefSeq Genes</td><td>D. persimilis</td></tr>
+<tr align=left><td>Ensembl Genes v68</td><td>D. erecta, D. ananassae, D. melanogaster</td></tr>
+<tr align=left><td>Xeno RefGene</td><td>D. sechellia</td></tr>
+<tr align=left><td>no annotations</td><td>all others</td></tr>
+</td></tr>
+</table>
+<b>Table 2.</b> <em>Gene tracks used for codon translation.</em>
+</blockquote></p>
+
+<h2>Methods</h2>
+<p>
+Pairwise alignments with the $organism genome were generated for
+each species using lastz from repeat-masked genomic sequence.
+Pairwise alignments were then linked into chains using a dynamic programming
+algorithm that finds maximally scoring chains of gapless subsections
+of the alignments organized in a kd-tree.
+The scoring matrix and parameters for pairwise alignment and chaining
+were tuned for each species based on phylogenetic distance from the reference.
+High-scoring chains were then placed along the genome, with
+gaps filled by lower-scoring chains, to produce an alignment net.
+For more information about the chaining and netting process and
+parameters for each species, see the description pages for the Chain and Net
+tracks.</p>
+<p>
+An additional filtering step was introduced in the generation of the 124-way
+conservation track to reduce the number of paralogs and pseudogenes from the
+high-quality assemblies and the suspect alignments from the low-quality
+assemblies:
+the pairwise alignments of the bird assemblies were filtered based on synteny;
+those for the human and mouse genomes were filtered to retain only
+alignments of best quality in both the target and query (&quot;reciprocal
+best&quot;).</p>
+<p>
+The resulting best-in-genome pairwise alignments
+were progressively aligned using multiz/autoMZ,
+following the tree topology diagrammed above, to produce multiple alignments.
+The multiple alignments were post-processed to
+add annotations indicating alignment gaps, genomic breaks,
+and base quality of the component sequences.
+The annotated multiple alignments, in MAF format, are available for
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/dm6/multiz124way"
+target=_blank>bulk download</a>.
+An alignment summary table containing an entry for each
+alignment block in each species was generated to improve
+track display performance at large scales.
+Framing tables were constructed to enable
+visualization of codons in the multiple alignment display.</p>
+
+<h3> Phylogenetic Tree Model</h3>
+<p>
+Both <em>phastCons</em> and <em>phyloP</em> are phylogenetic methods that rely
+on a tree model containing the tree topology, branch lengths representing
+evolutionary distance at neutrally evolving sites, the background distribution
+of nucleotides, and a substitution rate matrix.
+The
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/dm6/phastCons124way/dm6.phastCons124way.mod"
+target=_blank>all species tree model</a> for this track was
+generated using the <em>phyloFit</em> program from the PHAST package
+(REV model, EM algorithm, medium precision) using multiple alignments of
+4-fold degenerate sites extracted from the 124-way alignment
+(msa_view).  The 4d sites were derived from the NCBI RefSeq gene set,
+filtered to select single-coverage long transcripts.
+</p>
+<p>
+This same tree model was used in the phyloP calculations, however their
+background frequencies were modified to maintain reversibility.
+The resulting tree model for
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/dm6/phyloP124way/dm6.phyloP124way.mod"
+target=_blank>all species</a>.
+</p>
+<h3> PhastCons Conservation </h3>
+<p>
+The phastCons program computes conservation scores based on a phylo-HMM, a
+type of probabilistic model that describes both the process of DNA
+substitution at each site in a genome and the way this process changes from
+one site to the next (Felsenstein and Churchill 1996, Yang 1995, Siepel and
+Haussler 2005).  PhastCons uses a two-state phylo-HMM, with a state for
+conserved regions and a state for non-conserved regions.  The value plotted
+at each site is the posterior probability that the corresponding alignment
+column was "generated" by the conserved state of the phylo-HMM.  These
+scores reflect the phylogeny (including branch lengths) of the species in
+question, a continuous-time Markov model of the nucleotide substitution
+process, and a tendency for conservation levels to be autocorrelated along
+the genome (i.e., to be similar at adjacent sites).  The general reversible
+(REV) substitution model was used.  Unlike many conservation-scoring programs,
+phastCons does not rely on a sliding window
+of fixed size; therefore, short highly-conserved regions and long moderately
+conserved regions can both obtain high scores.
+More information about
+phastCons can be found in Siepel <em>et al</em>. 2005.</p>
+<p>
+The phastCons parameters used were: expected-length=45,
+target-coverage=0.3, rho=0.3.</p>
+
+<h3> PhyloP Conservation </h3>
+<p>
+The phyloP program supports several different methods for computing
+p-values of conservation or acceleration, for individual nucleotides or
+larger elements
+(<a href="http://compgen.cshl.edu/phast/" target="_blank">
+http://compgen.cshl.edu/phast/</a>).
+Here it was used
+to produce separate scores at each base (--wig-scores option), considering
+all branches of the phylogeny rather than a particular subtree or lineage
+(i.e., the --subtree option was not used).  The scores were computed by
+performing a likelihood ratio test at each alignment column (--method LRT),
+and scores for both conservation and acceleration were produced (--mode CONACC).
+</p>
+<h3> Conserved Elements </h3>
+<p>
+The conserved elements were predicted by running phastCons with the
+--viterbi option.  The predicted elements are segments of the alignment
+that are likely to have been "generated" by the conserved state of the
+phylo-HMM. Each element is assigned a log-odds score equal to its log
+probability under the conserved model minus its log probability under the
+non-conserved model. The "score" field associated with this track contains
+transformed log-odds scores, taking values between 0 and 1000. (The scores
+are transformed using a monotonic function of the form a * log(x) + b.) The
+raw log odds scores are retained in the "name" field and can be seen on the
+details page or in the browser when the track's display mode is set to
+"pack" or "full".
+</p>
+
+<h2>Credits</h2>
+<p> This track was created using the following programs:
+<ul>
+<li> Alignment tools: lastz (formerly blastz) and multiz by Minmei Hou, Scott Schwartz and Webb
+Miller of the <a href="http://www.bx.psu.edu/miller_lab/"
+target=_blank>Penn State Bioinformatics Group</a>
+<li> Chaining and Netting:  axtChain, chainNet by Jim Kent at UCSC
+<li> Conservation scoring: phastCons, phyloP, phyloFit, tree_doctor, msa_view and
+other programs in PHAST by
+<a href="http://siepellab.labsites.cshl.edu/"
+target=_blank>Adam Siepel</a> at Cold Spring Harbor Laboratory (original development
+done at the Haussler lab at UCSC).
+<li> MAF Annotation tools: mafAddIRows by Brian Raney, UCSC; mafAddQRows
+by Richard Burhans, Penn State; genePredToMafFrames by Mark Diekhans, UCSC
+<li> Tree image generator: phyloPng by Galt Barber, UCSC
+<li> Conservation track display: Kate Rosenbloom, Hiram Clawson (wiggle
+display), and Brian Raney (gap annotation and codon framing) at UCSC
+</ul>
+</p>
+<p>The phylogenetic tree is based on Murphy <em>et al</em>. (2001) and general
+consensus in the vertebrate phylogeny community as of March 2007.
+</p>
+
+<h2>References</h2>
+
+<h3>Phylo-HMMs, phastCons, and phyloP:</h3>
+<p>
+Felsenstein J, Churchill GA.
+<a href="https://academic.oup.com/mbe/article/13/1/93/1055515/A-Hidden-Markov-Model-approach-to-
+variation-among" target="_blank">A Hidden Markov Model approach to
+variation among sites in rate of evolution</a>.
+<em>Mol Biol Evol</em>. 1996 Jan;13(1):93-104.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/8583911" target="_blank">8583911</a>
+</p>
+
+<p>
+Pollard KS, Hubisz MJ, Rosenbloom KR, Siepel A.
+<a href="https://genome.cshlp.org/content/20/1/110.long" target="_blank">
+Detection of nonneutral substitution rates on mammalian phylogenies</a>.
+<em>Genome Res</em>. 2010 Jan;20(1):110-21.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/19858363" target="_blank">19858363</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2798823/" target="_blank">PMC2798823</a>
+</p>
+
+<p>
+Siepel A, Bejerano G, Pedersen JS, Hinrichs AS, Hou M, Rosenbloom K,
+Clawson H, Spieth J, Hillier LW, Richards S, <em>et al.</em>
+<a href="https://genome.cshlp.org/content/15/8/1034"
+target="_blank">Evolutionarily conserved elements in vertebrate, insect, worm,
+and yeast genomes</a>.
+<em>Genome Res</em>. 2005 Aug;15(8):1034-50.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/16024819" target="_blank">16024819</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1182216/" target="_blank">PMC1182216</a>
+</p>
+
+<p>
+Siepel A, Haussler D.
+<a href="http://compgen.cshl.edu/~acs/phylohmm.pdf"
+target="_blank">Phylogenetic Hidden Markov Models</a>.
+In: Nielsen R, editor. Statistical Methods in Molecular Evolution.
+New York: Springer; 2005. pp. 325-351.
+</p>
+
+<p>
+Yang Z.
+<a href="http://www.genetics.org/content/139/2/993"
+target="_blank">A space-time process model for the evolution of DNA
+sequences</a>.
+<em>Genetics</em>. 1995 Feb;139(2):993-1005.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/7713447" target="_blank">7713447</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1206396/" target="_blank">PMC1206396</a>
+</p>
+
+<h3>Chain/Net:</h3>
+<p>
+Kent WJ, Baertsch R, Hinrichs A, Miller W, Haussler D.
+<a href="http://www.pnas.org/content/100/20/11484"
+target="_blank">Evolution's cauldron:
+duplication, deletion, and rearrangement in the mouse and human genomes</a>.
+<em>Proc Natl Acad Sci U S A</em>. 2003 Sep 30;100(20):11484-9.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/14500911" target="_blank">14500911</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC208784/" target="_blank">PMC208784</a>
+</p>
+
+<h3>Multiz:</h3>
+<p>
+Blanchette M, Kent WJ, Riemer C, Elnitski L, Smit AF, Roskin KM,
+Baertsch R, Rosenbloom K, Clawson H, Green ED, <em>et al.</em>
+<a href="https://genome.cshlp.org/content/14/4/708.abstract"
+target="_blank">Aligning multiple genomic sequences with the threaded blockset aligner</a>.
+<em>Genome Res</em>. 2004 Apr;14(4):708-15.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/15060014" target="_blank">15060014</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC383317/" target="_blank">PMC383317</a>
+</p>
+
+<h3>Lastz (formerly Blastz):</h3>
+<p>
+Chiaromonte F, Yap VB, Miller W.
+<a href="http://psb.stanford.edu/psb-online/proceedings/psb02/chiaromonte.pdf"
+target="_blank">Scoring pairwise genomic sequence alignments</a>.
+<em>Pac Symp Biocomput</em>. 2002:115-26.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/11928468" target="_blank">11928468</a>
+</p>
+
+<p>
+Harris RS.
+<a href="http://www.bx.psu.edu/~rsharris/rsharris_phd_thesis_2007.pdf"
+target="_blank">Improved pairwise alignment of genomic DNA</a>.
+<em>Ph.D. Thesis</em>. Pennsylvania State University, USA. 2007.
+</p>
+
+<p>
+Schwartz S, Kent WJ, Smit A, Zhang Z, Baertsch R, Hardison RC,
+Haussler D, Miller W.
+<a href="https://genome.cshlp.org/content/13/1/103.abstract"
+target="_blank">Human-mouse alignments with BLASTZ</a>.
+<em>Genome Res</em>. 2003 Jan;13(1):103-7.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/12529312" target="_blank">12529312</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC430961/" target="_blank">PMC430961</a>
+</p>
+
+
+<h3>Phylogenetic Tree:</h3>
+<p>
+Murphy WJ, Eizirik E, O'Brien SJ, Madsen O, Scally M, Douady CJ, Teeling E,
+Ryder OA, Stanhope MJ, de Jong WW, Springer MS.
+<a href="http://science.sciencemag.org/content/294/5550/2348"
+target="_blank">Resolution of the early placental mammal radiation using Bayesian phylogenetics</a>.
+<em>Science</em>. 2001 Dec 14;294(5550):2348-51.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/11743200" target="_blank">11743200</a>
+</p>
