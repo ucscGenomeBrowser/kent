@@ -1582,7 +1582,8 @@ printf("%s",
 "<P>Only DNA sequences of 25,000 or fewer bases and protein or translated \n"
 "sequence of 10000 or fewer letters will be processed.  Up to 25 sequences\n"
 "can be submitted at the same time. The total limit for multiple sequence\n"
-"submissions is 50,000 bases or 25,000 letters.\n</P>\n");
+"submissions is 50,000 bases or 25,000 letters.<br> A valid example "
+"is <tt>GTCCTCGGAACCAGGACCTCGGCGTGGCCTAGCG</tt> (human SOD1).\n</P>\n");
 
 printf("%s", 
 "<P>The <b>Search ALL</b> checkbox above the Genome drop-down list allows you to search the\n"
