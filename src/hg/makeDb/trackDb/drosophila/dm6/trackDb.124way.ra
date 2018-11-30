@@ -1,7 +1,7 @@
 track cons124way
 compositeTrack on
 shortLabel Cons 124 Insects
-longLabel Multiz Alignment & Conservation (124 Species)
+longLabel Multiz Alignment & Conservation (124 insects)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 subGroup2 clade Clade drosophila=Drosophila
 dragAndDrop subTracks
@@ -55,7 +55,7 @@ priority 2
         track phyloP124way
         subTrack cons124wayViewphyloP on
         subGroups view=phyloP clade=drosophila
-        shortLabel Cons 124 Verts
+        shortLabel Cons 124 insects
         longLabel 124 insects Basewise Conservation by PhyloP
         noInherit on
         configurable on
@@ -79,7 +79,7 @@ priority 2
         track phastCons124way
         subTrack cons124wayViewphastcons off
         subGroups view=phastcons clade=drosophila
-        shortLabel Cons 124 Verts
+        shortLabel Cons 124 insects
         longLabel 124 insects conservation by PhastCons
         noInherit on
         configurable on
@@ -102,7 +102,7 @@ priority 2
         track phastConsElements124way
         subTrack cons124wayViewelements off
         subGroups view=elements clade=drosophila
-        shortLabel 124 Vert. El
+        shortLabel 124 insects El
         longLabel 124 insects Conserved Elements
         noInherit on
         color 110,10,40
