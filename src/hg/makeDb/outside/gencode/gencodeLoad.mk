@@ -39,17 +39,17 @@ mach = $(shell uname -m)
 #db = hg19
 db = mm10
 #db = grcHhh38
-preRelease = no
-#preRelease = yes
+#preRelease = no
+preRelease = yes
 ifeq (${db},mm10)
     grcRefAssembly = GRCm38
-    ver = M19
-    prevVer = M18
+    ver = M20
+    prevVer = M19
     gencodeOrg = Gencode_mouse
     ftpReleaseSubdir = release_${ver}
     annGffTypeName = chr_patch_hapl_scaff.annotation
-    ensemblVer = 94_38
-    ensemblPrevVer = 93_38
+    ensemblVer = 95_38
+    ensemblPrevVer = 94_38
     ensemblCDnaDb = mus_musculus_cdna_${ensemblPrevVer}
 else ifeq (${db},hg38)
     grcRefAssembly = GRCh38
