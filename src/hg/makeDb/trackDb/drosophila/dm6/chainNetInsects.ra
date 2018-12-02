@@ -3,8 +3,8 @@ compositeTrack on
 shortLabel Insects  Chain/Net
 longLabel Insects  Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species s000=D._simulans s001=D._sechellia s002=D._yakuba s003=D._erecta s004=D._takahashii s005=D._elegans s006=D._eugracilis s007=D._biarmipes s008=D._rhopaloa s009=D._ficusphila s010=D._suzukii s011=D._kikkawai s012=D_serrata s013=D._ananassae s014=D._bipectinata s015=D_obscura s016=D._pseudoobscura s017=D._miranda s018=D._persimilis s019=D_subobscura s020=D_athabasca s021=D._virilis s022=D._willistoni s023=D._grimshawi s024=D._mojavensis s025=D_pseudoobscura_1 s026=D_novamexicana s027=D_hydei s028=D_americana s029=D_montana s030=D._albomicans s031=Scaptodrosophila_lebanonensis s032=D_busckii s033=D_arizonae s034=D_nasuta s035=Zaprionus_indianus s036=D_navojoa s037=Phortica_variegata s038=Teleopsis_dalmanni s039=Rhagoletis_zephyria s040=Lucilia_cuprina s041=Bactrocera_latifrons s042=Bactrocera_oleae s043=Zeugodacus_cucurbitae s044=Phormia_regina s045=Ceratitis_capitata s046=Paykullia_maculata s047=Bactrocera_tryoni s048=M._domestica s049=Bactrocera_dorsalis s050=Stomoxys_calcitrans s051=Glossina_pallidipes s052=Glossina_fuscipes s053=Glossina_brevipalpis s054=Glossina_morsitans_2 s055=Glossina_austeni s056=Glossina_palpalis_gambiensis s057=Ephydra_gracilis s058=Lucilia_sericata s059=Glossina_morsitans_1 s060=Calliphora_vicina s061=Sphyracephala_brevicornis s062=Proctacanthus_coquilletti s063=Haematobia_irritans s064=Themira_minor s065=Megaselia_abdita s066=Tephritis_californica s067=Cirrula_hians s068=Hermetia_illucens s069=Neobellieria_bullata s070=Eutreta_diana s071=Holcocephala_fusca s072=Sarcophagidae_BV_2014 s073=Liriomyza_trifolii s074=Eristalis_dimidiata s075=Condylostylus_patibulatus s076=Megaselia_scalaris s077=Trupanea_jonesi s078=Aedes_albopictus s079=Aedes_aegypti s080=A._gambiae s081=Culex_quinquefasciatus s082=A_maculatus s083=A_merus s084=A_dirus s085=A_arabiensis s086=A_sinensis s087=A_atroparvus s088=A_epiroticus s089=A_quadriannulatus s090=A_farauti s091=A_minimus s092=A_funestus s093=A_melas s094=A_coluzzii s095=Clogmia_albipunctata s096=Phlebotomus_papatasi s097=A_culicifacies s098=A_stephensi s099=Coboldia_fuscipes s100=Culicoides_sonorensis s101=A_albimanus s102=A_christyi s103=A_cracens s104=A_aquasalis s105=Mochlonyx_cinctipes s106=A_darlingi s107=A_farauti_No4 s108=Lutzomyia_longipalpis s109=A_koliensis s110=Belgica_antarctica s111=A_punctulatus s112=Clunio_marinus s113=Mayetiola_destructor s114=Chironomus_tentans s115=Chironomus_riparius s116=A_gambiae_1 s117=A_nili s118=Chaoborus_trivitattus s119=Tipula_oleracea s120=Trichoceridae_BV_2014 s121=T._castaneum s122=A._mellifera
-subGroup3 clade Clade c00=brachycera c01=nematocera c02=flies
+subGroup2 species Species s000a=D._simulans s000b=D._simulans s001=D._sechellia s002=D._yakuba s003=D._erecta s004=D._takahashii s005=D._elegans s006=D._eugracilis s007=D._biarmipes s008=D._rhopaloa s009=D._ficusphila s010=D._suzukii s011=D._kikkawai s012=D_serrata s013=D._ananassae s014=D._bipectinata s015=D_obscura s016a=D._pseudoobscura s016b=D._pseudoobscura s017=D._miranda s018=D._persimilis s019=D_subobscura s020=D_athabasca s021=D._virilis s022=D._willistoni s023=D._grimshawi s024=D._mojavensis s025=D_pseudoobscura_1 s026=D_novamexicana s027=D_hydei s028=D_americana s029=D_montana s030=D._albomicans s031=Scaptodrosophila_lebanonensis s032=D_busckii s033=D_arizonae s034=D_nasuta s035=Zaprionus_indianus s036=D_navojoa s037=Phortica_variegata s038=Teleopsis_dalmanni s039=Rhagoletis_zephyria s040=Lucilia_cuprina s041=Bactrocera_latifrons s042=Bactrocera_oleae s043=Zeugodacus_cucurbitae s044=Phormia_regina s045=Ceratitis_capitata s046=Paykullia_maculata s047=Bactrocera_tryoni s048=M._domestica s049=Bactrocera_dorsalis s050=Stomoxys_calcitrans s051=Glossina_pallidipes s052=Glossina_fuscipes s053=Glossina_brevipalpis s054=Glossina_morsitans_2 s055=Glossina_austeni s056=Glossina_palpalis_gambiensis s057=Ephydra_gracilis s058=Lucilia_sericata s059=Glossina_morsitans_1 s060=Calliphora_vicina s061=Sphyracephala_brevicornis s062=Proctacanthus_coquilletti s063=Haematobia_irritans s064=Themira_minor s065=Megaselia_abdita s066=Tephritis_californica s067=Cirrula_hians s068=Hermetia_illucens s069=Neobellieria_bullata s070=Eutreta_diana s071=Holcocephala_fusca s072=Sarcophagidae_BV_2014 s073=Liriomyza_trifolii s074=Eristalis_dimidiata s075=Condylostylus_patibulatus s076=Megaselia_scalaris s077=Trupanea_jonesi s078=Aedes_albopictus s079=Aedes_aegypti s080a=A._gambiae s080b=A._gambiae s081=Culex_quinquefasciatus s082=A_maculatus s083=A_merus s084=A_dirus s085=A_arabiensis s086=A_sinensis s087=A_atroparvus s088=A_epiroticus s089=A_quadriannulatus s090=A_farauti s091=A_minimus s092=A_funestus s093=A_melas s094=A_coluzzii s095=Clogmia_albipunctata s096=Phlebotomus_papatasi s097=A_culicifacies s098=A_stephensi s099=Coboldia_fuscipes s100=Culicoides_sonorensis s101=A_albimanus s102=A_christyi s103=A_cracens s104=A_aquasalis s105=Mochlonyx_cinctipes s106=A_darlingi s107=A_farauti_No4 s108=Lutzomyia_longipalpis s109=A_koliensis s110=Belgica_antarctica s111=A_punctulatus s112=Clunio_marinus s113=Mayetiola_destructor s114=Chironomus_tentans s115=Chironomus_riparius s116=A_gambiae_1 s117=A_nili s118=Chaoborus_trivitattus s119=Tipula_oleracea s120=Trichoceridae_BV_2014 s121=T._castaneum s122=A._mellifera
+subGroup3 clade Clade c00=brachycera c01=nematocera c02=holometabola
 dragAndDrop subTracks
 visibility hide
 group compGeno
@@ -17,7 +17,8 @@ chainMinScore 5000
 dimensions dimensionX=clade dimensionY=species
 sortOrder species=+ view=+ clade=+
 configurable on
-html insectsChainNet
+html chainNetInsects
+
 
     track insectsChainNetViewchain
     shortLabel  Chains
@@ -28,11 +29,19 @@ html insectsChainNet
 
         track chainDroSim2
         subTrack insectsChainNetViewchain off
-        subGroups view=chain species=s000 clade=c00
+        subGroups view=chain species=s000a clade=c00
         shortLabel $o_db Chain
         longLabel $o_db ($o_date) Chained Alignments
         type chain droSim2
         otherDb droSim2
+
+        track chainDroSim1
+        subTrack insectsChainNetViewchain off
+        subGroups view=chain species=s000b clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain droSim1
+        otherDb droSim1
 
         track chainDroSec1
         subTrack insectsChainNetViewchain off
@@ -156,11 +165,19 @@ html insectsChainNet
 
         track chainDroPse3
         subTrack insectsChainNetViewchain off
-        subGroups view=chain species=s016 clade=c00
+        subGroups view=chain species=s016a clade=c00
         shortLabel $o_db Chain
         longLabel $o_db ($o_date) Chained Alignments
         type chain droPse3
         otherDb droPse3
+
+        track chainDp4
+        subTrack insectsChainNetViewchain off
+        subGroups view=chain species=s016b clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain dp4
+        otherDb dp4
 
         track chainDroMir2
         subTrack insectsChainNetViewchain off
@@ -668,11 +685,19 @@ html insectsChainNet
 
         track chainAnoGam3
         subTrack insectsChainNetViewchain off
-        subGroups view=chain species=s080 clade=c01
+        subGroups view=chain species=s080a clade=c01
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain anoGam3
         otherDb anoGam3
+
+        track chainAnoGam1
+        subTrack insectsChainNetViewchain off
+        subGroups view=chain species=s080b clade=c01
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain anoGam1
+        otherDb anoGam1
 
         track chainCulex_quinquefasciatus
         subTrack insectsChainNetViewchain off
@@ -1018,11 +1043,19 @@ html insectsChainNet
 
         track netDroSim2
         subTrack insectsChainNetViewnet off
-        subGroups view=net species=s000 clade=c00
+        subGroups view=net species=s000a clade=c00
         shortLabel $o_db Net
         longLabel $o_db ($o_date) Alignment Net
         type netAlign droSim2 chainDroSim2
         otherDb droSim2
+
+        track netDroSim1
+        subTrack insectsChainNetViewnet off
+        subGroups view=net species=s000b clade=c00
+        shortLabel $o_db Net
+        longLabel $o_db ($o_date) Alignment Net
+        type netAlign droSim1 chainDroSim1
+        otherDb droSim1
 
         track netDroSec1
         subTrack insectsChainNetViewnet off
@@ -1130,11 +1163,19 @@ html insectsChainNet
 
         track netDroPse3
         subTrack insectsChainNetViewnet off
-        subGroups view=net species=s016 clade=c00
+        subGroups view=net species=s016a clade=c00
         shortLabel $o_db Net
         longLabel $o_db ($o_date) Alignment Net
         type netAlign droPse3 chainDroPse3
         otherDb droPse3
+
+        track netDp4
+        subTrack insectsChainNetViewnet off
+        subGroups view=net species=s016b clade=c00
+        shortLabel $o_db Net
+        longLabel $o_db ($o_date) Alignment Net
+        type netAlign dp4 chainDp4
+        otherDb dp4
 
         track netDroMir2
         subTrack insectsChainNetViewnet off
@@ -1202,11 +1243,19 @@ html insectsChainNet
 
         track netAnoGam3
         subTrack insectsChainNetViewnet off
-        subGroups view=net species=s080 clade=c01
+        subGroups view=net species=s080a clade=c01
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign anoGam3 chainAnoGam3
         otherDb anoGam3
+
+        track netAnoGam1
+        subTrack insectsChainNetViewnet off
+        subGroups view=net species=s080b clade=c01
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign anoGam1 chainAnoGam1
+        otherDb anoGam1
 
         track netTriCas2
         subTrack insectsChainNetViewnet off

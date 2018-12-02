@@ -1,15 +1,13 @@
 track cons124way
 compositeTrack on
-shortLabel 124 insect multiz
-longLabel Multiz Alignment & Conservation (124 Species)
+shortLabel Cons 124 Insects
+longLabel Multiz Alignment & Conservation (124 insects)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
-subGroup2 clade Clade drosophila=Drosophila
 dragAndDrop subTracks
-dimensions dimensionX=clade
 visibility full
 type bed 4
 group compGeno
-priority 1
+priority 2
 
     track cons124wayViewalign
     shortLabel Multiz Alignments
@@ -22,7 +20,7 @@ priority 1
         subTrack cons124wayViewalign on
         shortLabel Multiz Align
         longLabel Multiz Alignments of 124 insects
-        subGroups view=align clade=drosophila
+        subGroups view=align
         noInherit on
         irows on
         summary multiz124waySummary
@@ -54,8 +52,8 @@ priority 1
 
         track phyloP124way
         subTrack cons124wayViewphyloP on
-        subGroups view=phyloP clade=drosophila
-        shortLabel Cons 124 Verts
+        subGroups view=phyloP
+        shortLabel Cons 124 insects
         longLabel 124 insects Basewise Conservation by PhyloP
         noInherit on
         configurable on
@@ -73,13 +71,13 @@ priority 1
     track cons124wayViewphastcons
     shortLabel Element Conservation (phastCons)
     view phastcons
-    visibility hide
+    visibility full
     subTrack cons124way
 
         track phastCons124way
         subTrack cons124wayViewphastcons off
-        subGroups view=phastcons clade=drosophila
-        shortLabel Cons 124 Verts
+        subGroups view=phastcons
+        shortLabel Cons 124 insects
         longLabel 124 insects conservation by PhastCons
         noInherit on
         configurable on
@@ -96,13 +94,13 @@ priority 1
     track cons124wayViewelements
     shortLabel Conserved Elements
     view elements
-    visibility hide
+    visibility dense
     subTrack cons124way
 
         track phastConsElements124way
         subTrack cons124wayViewelements off
-        subGroups view=elements clade=drosophila
-        shortLabel 124 Vert. El
+        subGroups view=elements
+        shortLabel 124 insects El
         longLabel 124 insects Conserved Elements
         noInherit on
         color 110,10,40

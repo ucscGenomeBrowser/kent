@@ -2244,7 +2244,6 @@ rm -f $c.gp $c.maf $c.ss
     time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
 	    --EM --precision MED --msa-format FASTA --subst-mod REV \
 		--tree tree-commas.nh 4d.all.mfa
-XXX - running - Mon Nov 26 12:09:12 PST 2018
     #   real    129m47.846s
 
     mv phyloFit.mod all.mod
@@ -2390,9 +2389,9 @@ XXX - running - Mon Nov 26 12:09:12 PST 2018
   printf "#\t%s\t%8.6f\t%8.6f\t%8.6f\t%8.6f\n", $1, $2, $3, $2-$3, 100*($2-$3)/$3 }'       | sort -k4n
 
 #########################################################################
-# phastCons 124-way (DONE - 2015-05-07 - Hiram)
+# phastCons 124-way (DONE - 2018-11-27 - Hiram)
     # split 124way mafs into 10M chunks and generate sufficient statistics
-    # files for # phastCons
+    # files for phastCons
     ssh ku
     mkdir -p /hive/data/genomes/dm6/bed/multiz124way/cons/ss
     mkdir -p /hive/data/genomes/dm6/bed/multiz124way/cons/msa.split
@@ -2401,7 +2400,7 @@ XXX - running - Mon Nov 26 12:09:12 PST 2018
     cat << '_EOF_' > doSplit.csh
 #!/bin/csh -ef
 set c = $1
-set MAF = /hive/data/genomes/dm6/bed/multiz124way/anno/result/$c.maf
+set MAF = /hive/data/genomes/dm6/bed/multiz124way/anno/maf/result/$c.maf
 set WINDOWS = /hive/data/genomes/dm6/bed/multiz124way/cons/ss/$c
 set WC = `cat $MAF | wc -l`
 set NL = `grep "^#" $MAF | wc -l`
@@ -2418,7 +2417,7 @@ rm -fr $WINDOWS
 mkdir $WINDOWS
 pushd $WINDOWS > /dev/null
 if ( $WC != $NL ) then
-/cluster/bin/phast.build/cornellCVS/phast.2010-12-124/bin/msa_split \
+/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_split \
     $MAF -i MAF -o SS -r $WINDOWS/$c -w 12400000,0 -I 1240 -B 5000
 endif
 popd > /dev/null
@@ -2428,60 +2427,24 @@ rm -f $2.running
     # << happy emacs
     chmod +x doSplit.csh
 
-    cat << '_EOF_' > template
     printf '#LOOP
 doSplit.csh $(root1) {check out line+ $(root1).done}
 #ENDLOOP
 ' > template
 
-F_' > doSplit.csh
-#!/bin/csh -ef
-set c = $1
-set MAF = /hive/data/genomes/dm6/bed/multiz124way/anno/result/$c.maf
-set WINDOWS = /hive/data/genomes/dm6/bed/multiz124way/cons/ss/$c
-set WC = `cat $MAF | wc -l`
-set NL = `grep "^#" $MAF | wc -l`
-if ( -s $2 ) then
-    exit 0
-endif
-if ( -s $2.running ) then
-    exit 0
-endif
-
-date >> $2.running
-
-rm -fr $WINDOWS
-mkdir $WINDOWS
-pushd $WINDOWS > /dev/null
-if ( $WC != $NL ) then
-/cluster/bin/phast.build/cornellCVS/phast.2010-12-124/bin/msa_split \
-    $MAF -i MAF -o SS -r $WINDOWS/$c -w 12400000,0 -I 1240 -B 5000
-endif
-popd > /dev/null
-date >> $2
-rm -f $2.running
-'_EOF_'
-    # << happy emacs
-    chmod +x doSplit.csh
-
-    cat << '_EOF_' > template
-#LOOP
-doSplit.csh $(root1) {check out line+ $(root1).done}
-#ENDLOOP
-
 #	do the easy ones first to see some immediate results
-    ls -1S -r ../../anno/result | sed -e "s/.maf//;" > maf.list
+    ls -1S -r ../../anno/maf/result | sed -e "s/.maf//;" > maf.list
     # all can finish OK at a 64Gb memory limit
     gensub2 maf.list single template jobList
     para -ram=64g create jobList
     para try ... check ... etc
     para push
-# Completed: 358 of 358 jobs
-# CPU time in finished jobs:      112499s     218.32m     3.64h    0.15d  0.000 y
-# IO & Wait Time:                  1841s      124.68m     0.51h    0.02d  0.000 y
-# Average job time:                  42s       0.70m     0.01h    0.00d
-# Longest finished job:            1393s      23.22m     0.39h    0.02d
-# Submission to last job:          1468s      24.47m     0.41h    0.02d
+# Completed: 595 of 595 jobs
+# CPU time in finished jobs:       3902s      65.03m     1.08h    0.05d  0.000 y
+# IO & Wait Time:                  1798s      29.97m     0.50h    0.02d  0.000 y
+# Average job time:                  10s       0.16m     0.00h    0.00d
+# Longest finished job:            1040s      17.33m     0.29h    0.01d
+# Submission to last job:          1110s      18.50m     0.31h    0.01d
 
     # Run phastCons
     #	This job is I/O intensive in its output files, beware where this
@@ -2498,7 +2461,7 @@ doSplit.csh $(root1) {check out line+ $(root1).done}
 
     cat << '_EOF_' > doPhast.csh
 #!/bin/csh -fe
-set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-124/bin
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
 set c = $1
 set f = $2
 set len = $3
@@ -2551,7 +2514,7 @@ rm -fr $tmp
 
     ls -1S ../ss/chr*/chr* | sed -e "s/.ss$//" > ss.list
     wc -l ss.list
-    #	1337 ss.list
+    #	383 ss.list
 
     # Create parasol batch and run it
     # run for all species
@@ -2566,12 +2529,12 @@ rm -fr $tmp
     para -ram=32g create jobList
     para try ... check ...
     para -maxJob=16 push
-# Completed: 1337 of 1337 jobs
-# CPU time in finished jobs:      17323s     288.72m     4.81h    0.20d  0.001 y
-# IO & Wait Time:                  9727s     162.11m     2.70h    0.11d  0.000 y
-# Average job time:                  20s       0.34m     0.01h    0.00d
-# Longest finished job:              31s       0.52m     0.01h    0.00d
-# Submission to last job:           2124s       3.83m     0.06h    0.00d
+# Completed: 383 of 383 jobs
+# CPU time in finished jobs:       7131s     118.84m     1.98h    0.08d  0.000 y
+# IO & Wait Time:                  2605s      43.42m     0.72h    0.03d  0.000 y
+# Average job time:                  25s       0.42m     0.01h    0.00d
+# Longest finished job:             740s      12.33m     0.21h    0.01d
+# Submission to last job:           750s      12.50m     0.21h    0.01d
 
     # create Most Conserved track
     cd /hive/data/genomes/dm6/bed/multiz124way/cons/all
@@ -2584,33 +2547,34 @@ do
     done | sort -k1,1 -k2,2n \
     | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", "'${C}'", $2, $3, $5, $5;}'
 done > tmpMostConserved.bed
-    # real    0m50.678s
+    # real    0m39.720s
 
-    # -rw-rw-r--   1 101245734 Nov  3 14:20 tmpMostConserved.bed
+    # -rw-rw-r--   1 217453711 Nov 27 10:59 tmpMostConserved.bed
 
     time /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed \
         > mostConserved.bed
-    # real    0m24.196s
+    # real    0m34.940s
 
-    # -rw-rw-r--   1 103966297 Nov  3 14:21 mostConserved.bed
+    # -rw-rw-r--   1 221916771 Nov 27 11:00 mostConserved.bed
 
     # load into database
     ssh hgwdev
     cd /hive/data/genomes/dm6/bed/multiz124way/cons/all
     time hgLoadBed dm6 phastConsElements124way mostConserved.bed
-    #  Read 2949865 elements of size 5 from mostConserved.bed
-    #  real    0m26.263s
+    #  Read 6459398 elements of size 5 from mostConserved.bed
+    #  real    0m44.720s
 
+    # most interesting high measurement for this coverage
     #	--rho 0.3 --expected-length 45 --target-coverage 0.3
-    time featureBits dm6 -enrichment knownGene:cds phastConsElements124way
-# knownGene:cds 1.271%, phastConsElements124way 5.795%, both 0.874%, cover 68.73%, enrich 11.86x
-# real    0m21.637s
+    time featureBits dm6 -enrichment ncbiRefSeq:cds phastConsElements124way
+# ncbiRefSeq:cds 16.056%, phastConsElements124way 50.489%, both 10.836%, cover 67.49%, enrich 1.34x
+
+# real    0m30.071s
 
     # Try for 5% overall cov, and 70% CDS cov
     time featureBits dm6 -enrichment refGene:cds phastConsElements124way
-# refGene:cds 1.225%, phastConsElements124way 5.795%, both 0.863%, cover 70.50%, enrich 12.16x
-
-# real    0m22.260s
+# refGene:cds 16.049%, phastConsElements124way 50.489%, both 10.829%, cover 67.47%, enrich 1.34x
+# real    0m32.078s
 
     # Create merged posterier probability file and wiggle track data files
     cd /hive/data/genomes/dm6/bed/multiz124way/cons/all
@@ -2623,18 +2587,17 @@ do
 	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
         | gzip -c > downloads/${D}.phastCons124way.wigFix.gz
 done
-    # real    32m29.089s
-
+    # real    0m50.886s
 
     #	encode those files into wiggle data
     time (zcat downloads/*.wigFix.gz \
 	| wigEncode stdin phastCons124way.wig phastCons124way.wib)
     #   Converted stdin, upper limit 1.00, lower limit 0.00
-    #   real    15m40.010s
+    #   real    0m24.946s
 
     du -hsc *.wi?
-    # 2.8G    phastCons124way.wib
-    # 283M    phastCons124way.wig
+    #	118M    phastCons124way.wib
+    #	12M     phastCons124way.wig
 
     #	encode into a bigWig file:
     #	(warning wigToBigWig process may be too large for memory limits
@@ -2668,12 +2631,11 @@ std: 0.247422
 
     #	if you wanted to use the bigWig file, loading bigWig table:
     #   but we don't use the bigWig file
-    mkdir /gbdb/dm6/bbi
-    ln -s `pwd`/phastCons124way.bw /gbdb/dm6/bbi
+    ln -s `pwd`/phastCons124way.bw /gbdb/dm6/multiz124way
     hgsql dm6 -e 'drop table if exists phastCons124way; \
             create table phastCons124way (fileName varchar(255) not null); \
             insert into phastCons124way values
-	("/gbdb/dm6/bbi/phastCons124way.bw");'
+	("/gbdb/dm6/multiz124way/phastCons124way.bw");'
 
     # Load gbdb and database with wiggle.
     ssh hgwdev
@@ -2681,14 +2643,15 @@ std: 0.247422
     ln -s `pwd`/phastCons124way.wib /gbdb/dm6/multiz124way/phastCons124way.wib
     time hgLoadWiggle -pathPrefix=/gbdb/dm6/multiz124way dm6 \
 	phastCons124way phastCons124way.wig
-    #   real    0m32.272s
+    #   real    0m1.037s
 
     time wigTableStats.sh dm6 phastCons124way
 # db.table            min max   mean       count     sumData
-# dm6.phastCons124way     0 1 0.128025 2955660600 3.78397e+08
+# dm6.phastCons124way  0 1 0.585666 123404840 7.2274e+07
 #       stdDev viewLimits
-#     0.247422 viewLimits=0:1
-# real    0m13.507s
+#    0.455202 viewLimits=0:1
+
+# real    0m0.571s
 
     #  Create histogram to get an overview of all the data
     ssh hgwdev
@@ -2699,24 +2662,31 @@ std: 0.247422
     #	real    2m38.952s
 
     #	create plot of histogram:
-
-    printf 'set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff font \
-"/usr/share/fonts/default/Type1/n022004l.pfb"
-set size 1.4, 0.8
-set key left box
+    # updated for new gnuplot on hgwdev 2018-11-26 (can't get font to change)
+    printf 'set terminal pngcairo size 1000,600 background "#000000" font "/usr/share/fonts/default/Type1/n022004l.pfb"
+set output "dm6.phastCons.histo.png"
+set size 1.0, 1.0
+set style line 1 lt 2 lc rgb "#ff88ff" lw 2
+set style line 2 lt 2 lc rgb "#66ff66" lw 2
+set style line 3 lt 2 lc rgb "#ffff00" lw 2
+set style line 4 lt 2 lc rgb "#ffffff" lw 2
+set border lc rgb "#ffff00"
+set key left box ls 3
+set key tc variable
 set grid noxtics
-set grid ytics
-set title " Human Hg38 Histogram phastCons124way track"
-set xlabel " phastCons124way score"
-set ylabel " Relative Frequency"
-set y2label " Cumulative Relative Frequency (CRF)"
+set grid y2tics ls 4
+set grid ytics ls 4
+set title " D. melanogaster/dm6 Histogram phastCons124way track" \
+    tc rgb "#ffffff"
+set xlabel " phastCons124way score" tc rgb "#ffffff"
+set ylabel " Relative Frequency" tc rgb "#ff88ff"
+set y2label " Cumulative Relative Frequency (CRF)" tc rgb "#66ff66"
 set y2range [0:1]
-set y2tics
 set yrange [0:0.02]
 
-plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
-        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
-' | gnuplot > histo.png
+plot "histogram.data" using 2:5 title " RelFreq" with impulses ls 1, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines ls 2
+' | gnuplot
 
     # take a look to see if it is sane:
 
@@ -2736,7 +2706,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 
     printf '#!/bin/csh -ef
 set c = $1
-set MAF = /hive/data/genomes/dm6/bed/multiz124way/anno/result/$c.maf
+set MAF = /hive/data/genomes/dm6/bed/multiz124way/anno/maf/result/$c.maf
 set WINDOWS = /hive/data/genomes/dm6/bed/multiz124way/consPhyloP/ss/$c
 set WC = `cat $MAF | wc -l`
 set NL = `grep "^#" $MAF | wc -l`
@@ -2753,7 +2723,7 @@ rm -fr $WINDOWS
 mkdir -p $WINDOWS
 pushd $WINDOWS > /dev/null
 if ( $WC != $NL ) then
-/cluster/bin/phast.build/cornellCVS/phast.2010-12-124/bin/msa_split \
+/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_split \
     $MAF -i MAF -o SS -r $WINDOWS/$c -w 1000000,0 -I 1000 -B 5000
 endif
 popd > /dev/null
@@ -2764,7 +2734,7 @@ rm -f $2.running
     chmod +x doSplit.csh
 
     #	do the easy ones first to see some immediate results
-    ls -1S -r ../../anno/result | sed -e "s/.maf//;" > maf.list
+    ls -1S -r ../../anno/maf/result | sed -e "s/.maf//;" > maf.list
 
     # this needs a {check out line+ $(root1.done)} test for verification:
     printf '#LOOP
@@ -2777,12 +2747,12 @@ rm -f $2.running
     para -ram=64g create jobList
     para try ... check ... push ... etc...
 
-# Completed: 358 of 358 jobs
-# CPU time in finished jobs:      13512s     225.20m     3.75h    0.16d  0.000 y
-# IO & Wait Time:                  1646s      27.43m     0.46h    0.02d  0.000 y
-# Average job time:                  42s       0.71m     0.01h    0.00d
-# Longest finished job:            1494s      24.90m     0.41h    0.02d
-# Submission to last job:          1717s      28.62m     0.48h    0.02d
+# Completed: 595 of 595 jobs
+# CPU time in finished jobs:       3804s      63.40m     1.06h    0.04d  0.000 y
+# IO & Wait Time:                  1818s      30.30m     0.50h    0.02d  0.000 y
+# Average job time:                   9s       0.16m     0.00h    0.00d
+# Longest finished job:            1050s      17.50m     0.29h    0.01d
+# Submission to last job:          1110s      18.50m     0.31h    0.01d
 
     # run phyloP with score=LRT
     ssh ku
@@ -2794,18 +2764,18 @@ rm -f $2.running
     # Adjust model file base composition background and rate matrix to be
     # representative of the chromosomes in play
     grep BACK ../../4d/all.mod
-    #   BACKGROUND: 0.207173 0.3281241 0.237184 0.227343
+    #   BACKGROUND: 0.227566 0.316377 0.227975 0.228082
 
     grep BACKGROUND ../../4d/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
-    #	0.565
-    /cluster/bin/phast.build/cornellCVS/phast.2010-12-124/bin/modFreqs \
-	../../4d/all.mod 0.565 > all.mod
+    #	0.544
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
+	../../4d/all.mod 0.544 > all.mod
     # verify, the BACKGROUND should now be paired up:
     grep BACK all.mod
-    #   BACKGROUND: 0.217500 0.282500 0.282500 0.217500
+    #   BACKGROUND: 0.228000 0.272000 0.272000 0.228000 
 
     printf '#!/bin/csh -fe
-set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-124/bin
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
 set f = $1
 set ssFile = $1:t
 set out = $2
@@ -2839,7 +2809,7 @@ sleep 4
     find ../ss -type f | sed -e "s/.ss$//; s#../ss/##;" > ss.list
     # make sure the list looks good
     wc -l ss.list
-    #	31248 ss.list
+    #	568 ss.list
 
     # Create template file
     #	file1 == $chr/$chunk/file name without .ss suffix
@@ -2861,13 +2831,12 @@ sleep 4
     para try ... check ...
     para -maxJob=16 push
     para time > run.time
-
-# Completed: 31248 of 31248 jobs
-# CPU time in finished jobs:     647954s   10799.23m   179.99h    7.50d  0.021 y
-# IO & Wait Time:                 22374s     372.90m     6.22h    0.26d  0.001 y
-# Average job time:                 203s       3.38m     0.06h    0.00d
-# Longest finished job:             349s       5.82m     0.10h    0.00d
-# Submission to last job:          3226s      53.124m     0.90h    0.04d
+# Completed: 568 of 568 jobs
+# CPU time in finished jobs:     440703s    7345.04m   122.42h    5.10d  0.014 y
+# IO & Wait Time:                  3849s      64.16m     1.07h    0.04d  0.000 y
+# Average job time:                 783s      13.04m     0.22h    0.01d
+# Longest finished job:            4019s      66.98m     1.12h    0.05d
+# Submission to last job:          4781s      79.68m     1.33h    0.06d
 
     mkdir downloads
     time for D in `ls -d wigFix/chr* | sed -e 's#wigFix/##'`
@@ -2877,123 +2846,129 @@ do
 	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
         | gzip -c > downloads/${D}.phyloP124way.wigFix.gz
 done
-    #   real    48m50.219s
+    #   real    2m2.576s
 
     du -hsc downloads
-    #   4.6G    downloads
+    #   262M    downloads
 
     # check integrity of data with wigToBigWig
     time (zcat downloads/*.wigFix.gz \
 	| wigToBigWig -verbose=2 stdin /hive/data/genomes/dm6/chrom.sizes \
 	phyloP124way.bw) > bigWig.log 2>&1
 
-
     egrep "real|VmPeak" bigWig.log
-    # pid=66292: VmPeak:    33751268 kB
-    #  real    43m40.194s
-
+    # pid=153945: VmPeak:    1438260 kB
+    # real    1m10.028s
 
     bigWigInfo phyloP124way.bw  | sed -e 's/^/# /;'
 # version: 4
 # isCompressed: yes
 # isSwapped: 0
-# primaryDataSize: 6,1244,0124,591
-# primaryIndexSize: 93,404,704
+# primaryDataSize: 375,618,358
+# primaryIndexSize: 4,032,612
 # zoomLevels: 10
-# chromCount: 355
-# basesCovered: 2,955,660,581
-# mean: 0.097833
+# chromCount: 434
+# basesCovered: 123,466,109
+# mean: 2.659923
 # min: -20.000000
-# max: 1.312000
-# std: 0.727453
+# max: 20.000000
+# std: 4.629012
 
     #	encode those files into wiggle data
     time (zcat downloads/*.wigFix.gz \
 	| wigEncode stdin phyloP124way.wig phyloP124way.wib)
 
-# Converted stdin, upper limit 1.31, lower limit -20.00
-# real    17m36.880s
-# -rw-rw-r--   1 2955660581 Nov  6 14:10 phyloP124way.wib
-# -rw-rw-r--   1  1244274846 Nov  6 14:10 phyloP124way.wig
+# Converted stdin, upper limit 20.00, lower limit -20.00
+# real    0m31.685s
+
+# -rw-rw-r--   1 123466109 Nov 27 14:29 phyloP124way.wib
+# -rw-rw-r--   1  12818989 Nov 27 14:29 phyloP124way.wig
 
     du -hsc *.wi?
-    # 2.8G    phyloP124way.wib
-    # 291M    phyloP124way.wig
+    # 118M    phyloP124way.wib
+    #  13M     phyloP124way.wig
 
     # Load gbdb and database with wiggle.
     ln -s `pwd`/phyloP124way.wib /gbdb/dm6/multiz124way/phyloP124way.wib
     time hgLoadWiggle -pathPrefix=/gbdb/dm6/multiz124way dm6 \
 	phyloP124way phyloP124way.wig
-    # real    0m124.538s
+    # real    0m1.440s
 
     # use to set trackDb.ra entries for wiggle min and max
     # and verify table is loaded correctly
 
     wigTableStats.sh dm6 phyloP124way
 # db.table          min   max     mean       count     sumData
-# dm6.phyloP124way  -20 1.312 0.0978331 2955660581 2.89162e+08
+# dm6.phyloP124way   -20 20 2.65992 123466109 3.2841e+08
 #       stdDev viewLimits
-#     0.727453 viewLimits=-3.53943:1.312
+#      4.62901 viewLimits=-20:20
 
-    #	that range is: 20+1.312= 21.312 for hBinSize=0.021312
+    #	that range is: 20+20= 40 for hBinSize=0.04
 
     #  Create histogram to get an overview of all the data
     time hgWiggle -doHistogram \
-	-hBinSize=0.021312 -hBinCount=1000 -hMinVal=-20 -verbose=2 \
+	-hBinSize=0.04 -hBinCount=1000 -hMinVal=-20 -verbose=2 \
 	    -db=dm6 phyloP124way > histogram.data 2>&1
-    #   real    2m43.313s
+    #   real    0m4.803s
 
     # xaxis range:
     grep -v chrom histogram.data | grep "^[0-9]" | ave -col=2 stdin \
 	| sed -e 's/^/# /;'
-# Q1 -10.9512450
-# median -6.861155
-# Q3 -2.1249245
-# average -6.875971
+# Q1 -7.460000
+# median 0.320000
+# Q3 8.140000
+# average 0.328480
 # min -20.000000
-# max 1.312000
-# count 1248
-# total -5280.745380
-# standard deviation 4.757034
+# max 20.000000
+# count 783
+# total 257.200147
+# standard deviation 9.069287
 
     # find out the range for the 2:5 graph
     grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin \
       | sed -e 's/^/# /;'
-# Q1 0.000000
-# median 0.000001
-# Q3 0.000140
-# average 0.0011242
+# Q1 0.000002
+# median 0.000177
+# Q3 0.001312
+# average 0.001340
 # min 0.000000
-# max 0.023556
-# count 1248
-# total 0.999975
-# standard deviation 0.003490
+# max 0.047793
+# count 782
+# total 1.047624
+# standard deviation 0.003225
 
     #	create plot of histogram:
-    printf 'set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff font \
-"/usr/share/fonts/default/Type1/n022004l.pfb"
-set size 1.4, 0.8
-set key left box
+    # updated for new gnuplot on hgwdev 2018-11-26 (can't get font to change)
+    printf 'set terminal pngcairo size 1000,600 background "#000000" font "/usr/share/fonts/default/Type1/n022004l.pfb"
+set output "dm6.phyloP124.histo.png"
+set size 1.0, 1.0
+set style line 1 lt 2 lc rgb "#ff88ff" lw 2
+set style line 2 lt 2 lc rgb "#66ff66" lw 2
+set style line 3 lt 2 lc rgb "#ffff00" lw 2
+set style line 4 lt 2 lc rgb "#ffffff" lw 2
+set border lc rgb "#ffff00"
+set key left box ls 3
+set key tc variable
 set grid noxtics
-set grid ytics
-set title " Human dm6 Histogram phyloP124way track"
-set xlabel " phyloP124way score"
-set ylabel " Relative Frequency"
-set y2label " Cumulative Relative Frequency (CRF)"
-set y2range [0:1]
-set y2tics
-set xrange [-5:1.5]
+set grid y2tics ls 4
+set grid ytics ls 4
+set title " D. melanogaster/dm6 Histogram phyloP124way track" \
+    tc rgb "#ffffff"
+set xlabel " phyloP124way score" tc rgb "#ffffff"
+set ylabel " Relative Frequency" tc rgb "#ff88ff"
+set y2label " Cumulative Relative Frequency (CRF)" tc rgb "#66ff66"
+set xrange [-1:1.5]
 set yrange [0:0.04]
 
-plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
-        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
-' | gnuplot > histo.png
+plot "histogram.data" using 2:5 title " RelFreq" with impulses ls 1, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines ls 2
+' | gnuplot
 
     # verify it looks sane
-    display histo.png &
+    display dm6.phyloP124.histo.png &
 
 #############################################################################
-# construct download files for 124-way (TBD - 2015-04-15 - Hiram)
+# construct download files for 124-way (DONE - 2018-11-27 - Hiram)
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/dm6/multiz124way
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/dm6/phastCons124way
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/dm6/phyloP124way
@@ -3007,7 +2982,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     # bash script
 
 #!/bin/sh
-export geneTbl="refGene"
+export geneTbl="ncbiRefSeq"
 for S in 1240 2000 5000
 do
     echo "making upstream${S}.maf"
@@ -3020,30 +2995,52 @@ do
     echo "done upstream${S}.${geneTbl}.maf.gz"
 done
 
-    #   real    88m40.1247s
+    #   real    186m37.993s
 
--rw-rw-r-- 1   52659159 Nov  6 11:46 upstream1240.knownGene.maf.gz
--rw-rw-r-- 1  451126665 Nov  6 12:15 upstream2000.knownGene.maf.gz
--rw-rw-r-- 1 1080533794 Nov  6 12:55 upstream5000.knownGene.maf.gz
+# -rw-rw-r-- 1  646104882 Nov 27 15:46 upstream1240.ncbiRefSeq.maf.gz
+# -rw-rw-r-- 1 1103012060 Nov 27 16:41 upstream2000.ncbiRefSeq.maf.gz
+# -rw-rw-r-- 1 3022261832 Nov 27 18:09 upstream5000.ncbiRefSeq.maf.gz
 
     ######################################################################
     ## compress the maf files
     cd /hive/data/genomes/dm6/bed/multiz124way/downloads/multiz124way
     mkdir maf
-    rsync -a -P ../../anno/result/ ./maf/
+    rsync -a -P ../../anno/maf/result/ ./maf/
     du -hsc maf/
-    # 156G    maf
+    # 63G     maf
+
     cd maf
     time gzip *.maf &
-    # real    135m1.784s
+    # real 21m44.263s
 
-    du -hscL maf ../../anno/result/
-    #  18G     maf
+    du -hscL maf ../../anno/maf/result/
+    # 5.4G    maf
+    #  63G     ../../anno/maf/result/
 
     cd maf
-    md5sum *.maf.gz *.nh > md5sum.txt
+    md5sum *.maf.gz > md5sum.txt
 
-    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/dm6/multiz124way/maf
+    # collect the other sequences here:
+    cd /hive/data/genomes/dm6/bed/multiz124way/downloads/multiz124way
+    mkdir sequences
+grep -v "^[a-z]" nameCrossReference.tsv | while read L
+do
+   seqName=`printf "%s" "${L}" | awk -F$'\t' '{print $1}'`
+   acc=`printf "%s" "${L}" | awk -F$'\t' '{print $2}'`
+   asmId=`printf "%s" "${L}" | awk -F$'\t' '{print $4}'`
+   src="../../../awsMultiz/sequences/${acc}_${asmId}"
+   twoBit="../../../awsMultiz/twoBit/${acc}_${asmId}.2bit"
+   destName=`printf "%s.%s.%s" "${seqName}" "${acc}" "${asmId}"`
+   printf "sequences/%s\n" "${destName}"
+   mkdir -p "sequences/${destName}"
+   cp -p "${twoBit}" "sequences/${destName}/"
+   cp -p ${src}/*_assembly_report.txt "sequences/${destName}/"
+done
+
+   cd sequences
+   md5sum */*.2bit */*.txt > md5sum.txt
+
+   mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/dm6/multiz124way/maf
     cd maf
     ln -s `pwd`/* /usr/local/apache/htdocs-hgdownload/goldenPath/dm6/multiz124way/maf
     cd --
@@ -3122,15 +3119,13 @@ done
     cd dm6.124way.phyloP
     ln -s `pwd`/* \
 /usr/local/apache/htdocs-hgdownload/goldenPath/dm6/phyloP124way/dm6.124way.phyloP
-
     cd ..
 
-    #   situation
     ln -s `pwd`/*.mod `pwd`/*.bw `pwd`/*.txt \
       /usr/local/apache/htdocs-hgdownload/goldenPath/dm6/phyloP124way
 
 #############################################################################
-# hgPal downloads (DONE - 2017-11-06 - Hiram)
+# hgPal downloads (DONE - 2018-11-27 - Hiram)
 #   FASTA from 124-way for knownGene, refGene and knownCanonical
 
     ssh hgwdev
@@ -3142,7 +3137,7 @@ done
     # this for loop can take hours on a high contig count assembly
     # it is just fine on human/dm6, just a few seconds
     export mz=multiz124way
-    export gp=knownGene
+    export gp=ncbiRefSeq
     export db=dm6
     export I=0
     export D=0
@@ -3166,23 +3161,23 @@ done
     echo "wait" >> $gp.jobs
 
     time (sh -x ./$gp.jobs) > $gp.jobs.log 2>&1
-    # real    79m18.323s
+    # real    38m28.377s
 
     export mz=multiz124way
-    export gp=knownGene
+    export gp=ncbiRefSeq
     time find ./exonAA -type f | grep exonAA.fa.gz | xargs zcat \
      | gzip -c > $gp.$mz.exonAA.fa.gz
-    # real    1m28.841s
+    # real    1m49.576s
 
     time find ./exonNuc -type f | grep exonNuc.fa.gz | xargs zcat \
      | gzip -c > $gp.$mz.exonNuc.fa.gz
-    #   real    3m56.370s
+    #   real    12m10.083s
 
     # -rw-rw-r-- 1 397928833 Nov  6 18:44 knownGene.multiz124way.exonAA.fa.gz
     # -rw-rw-r-- 1 5803124720 Nov  6 18:49 knownGene.multiz124way.exonNuc.fa.gz
 
     export mz=multiz124way
-    export gp=knownGene
+    export gp=ncbiRefSeq
     export db=dm6
     export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
     mkdir -p $pd

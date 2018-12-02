@@ -9,7 +9,7 @@ dimensions dimensionX=clade
 visibility hide
 type bed 4
 group compGeno
-priority 1
+priority 202
 
     track cons124wayRbestViewalign
     shortLabel Multiz Alignments
