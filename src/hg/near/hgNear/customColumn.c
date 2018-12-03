@@ -32,12 +32,11 @@ return fileName;
 }
 
 static char *newCustomFileName()
-/* Create new custom file name and add it to cart. */
+/* Create new custom file name. */
 {
 struct tempName tn;
 makeTempName(&tn, "near", ".col");
-cartSetString(cart, customFileVarName, tn.forCgi);
-return cartString(cart, customFileVarName);
+return cloneString(tn.forCgi);
 }
 
 void doCustomPage(struct sqlConnection *conn, struct column *colList)
@@ -389,23 +388,13 @@ slReverse(&list);
 *pColList = list;
 }
 
-static char *getDupedCustomFileName()
-/* Get custom file name, recycling if possible.  FreeMem this
- * when done. */
-{
-char *fileName = customFileName();
-if (fileName == NULL)
-    fileName = newCustomFileName();
-return cloneString(fileName);
-}
-
 static void customFromText(struct sqlConnection *conn, char *text, 
 	struct column **pColList)
 /* Convert custom column text to lineFile, and call custom column
  * updater. */
 {
 struct lineFile *lf = lineFileOnString("custom column", TRUE, text);
-char *outFileName = getDupedCustomFileName();
+char *outFileName = newCustomFileName();
 struct column *newList;
 FILE *f;
 struct hash *uniqHash = NULL;
@@ -433,7 +422,7 @@ static void customFromUrls(struct sqlConnection *conn, char *urlList,
 	struct column **pColList)
 /* Grab custom columns from a list of URLs. */
 {
-char *outFileName = getDupedCustomFileName();
+char *outFileName = newCustomFileName();
 struct column *customCols = NULL;
 FILE *f;
 char *url;

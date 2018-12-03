@@ -303,7 +303,6 @@ sqlUpdate(conn, dy->string);
 dyStringFree(&dy);
 }
 
-#ifndef GBROWSE
 static void copyCustomComposites(struct cart *cart, struct hashEl *el)
 /* Copy a set of custom composites to a new hub file. Update the 
  * relevant cart variables. */
@@ -376,47 +375,6 @@ for (el = elList; el != NULL; el = el->next)
         copyCustomComposites(cart, el);
     }
 }
-
-void cartCopyCustomTracks(struct cart *cart)
-/* If cart contains any live custom tracks, save off a new copy of them,
- * to prevent clashes by multiple uses of the same session.  */
-{
-struct hashEl *el, *elList = hashElListHash(cart->hash);
-
-for (el = elList; el != NULL; el = el->next)
-    {
-    if (startsWith(CT_FILE_VAR_PREFIX, el->name))
-	{
-	char *db = &el->name[strlen(CT_FILE_VAR_PREFIX)];
-	struct slName *browserLines = NULL;
-	struct customTrack *ctList = NULL;
-	char *ctFileName = (char *)(el->val);
-	if (fileExists(ctFileName))
-	    ctList = customFactoryParseAnyDb(db, ctFileName, TRUE, &browserLines, FALSE);
-        /* Save off only if the custom tracks are live -- if none are live,
-         * leave cart variables in place so hgSession can detect and inform
-         * the user. */
-	if (ctList)
-	    {
-	    struct customTrack *ct;
-	    static struct tempName tn;
-	    char *ctFileVar = el->name;
-	    char *ctFileName;
-	    for (ct = ctList;  ct != NULL;  ct = ct->next)
-		{
-		copyFileToTrash(&(ct->htmlFile), "ct", CT_PREFIX, ".html");
-		copyFileToTrash(&(ct->wibFile), "ct", CT_PREFIX, ".wib");
-		copyFileToTrash(&(ct->wigFile), "ct", CT_PREFIX, ".wig");
-		}
-	    trashDirFile(&tn, "ct", CT_PREFIX, ".bed");
-	    ctFileName = tn.forCgi;
-	    cartSetString(cart, ctFileVar, ctFileName);
-	    customTracksSaveFile(db, ctList, ctFileName);
-	    }
-	}
-    }
-}
-#endif /* GBROWSE */
 
 static void storeInOldVars(struct cart *cart, struct hash *oldVars, char *var)
 /* Store all cart hash elements for var into oldVars (if it exists). */
@@ -1401,11 +1359,6 @@ if (didSessionLoad)
 pushWarnHandler(cartHubWarn);
 char *newDatabase = hubConnectLoadHubs(cart);
 popWarnHandler();
-
-#ifndef GBROWSE
-if (didSessionLoad)
-    cartCopyCustomTracks(cart);
-#endif /* GBROWSE */
 
 if (newDatabase != NULL)
     {
