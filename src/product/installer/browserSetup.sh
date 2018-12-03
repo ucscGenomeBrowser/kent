@@ -8,6 +8,14 @@
 
 set -u -e -o pipefail # fail on unset vars and all errors, also in pipes
 
+function errorHandler {
+    echo The UCSC Genome Browser installation script exited with an error.
+    echo Please contact us at genome-mirror@soe.ucsc.edu and send us an output log 
+    echo of the command prefixed with '"bash -x"', e.g.
+    echo 'bash -x browserSetup.sh install 2>&1 > install.log'
+}
+trap errorHandler ERR
+
 # ---- GLOBAL DEFAULT SETTINGS ----
 
 # Directory where CGI-BIN and htdocs are downloaded to.
@@ -1098,10 +1106,15 @@ if commandExists selinuxenabled; then
     if [ selinuxenabled ]; then
        echo2
        echo2 The Genome Browser requires that SELINUX is deactivated.
-       echo2 Deactivating it now.
+       echo2 Deactivating it now with "'setenforce 0'" and in /etc/sysconfig/selinux.
        waitKey
        # deactivate selinux until next reboot
+       # On Redhat 7.5 setenforce 0 returns error code 1 if selinux is disabled
+       # so we simply ignore the error code here. Possibly we should use 'setstatus | grep 'Current mode'
+       # instead of the error code of selinuxenabled above. selinux
+       set +e
        setenforce 0
+       set -e
        # permanently deactivate after next reboot
        if [ -f /etc/sysconfig/selinux ]; then
            sed -i 's/^SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
