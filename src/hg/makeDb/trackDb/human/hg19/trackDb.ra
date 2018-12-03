@@ -2596,3 +2596,6 @@ origAssembly hg38
 #include trackDb.refGene.ra public
 include ../../refSeqComposite.ra
 include ../../crispr10K.ra alpha
+
+track ensGene override
+ensemblIdUrl https://grch37.ensembl.org/Homo_sapiens
