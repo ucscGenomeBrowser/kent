@@ -553,10 +553,12 @@ char *subcellular_localization[] =
 "monosome",
 "polysome",
 "light polysome",
+"medium polysome",
 "heavy polysome",
 "membrane",
 "insoluble",
 "nucleus",
+"n fraction",
 };
 char *immunoprecipitation_target[] =
 {
