@@ -5913,6 +5913,10 @@ char option[256];
 boolean parentLevel = isNameAtParentLevel(tdb,name);
 boolean skipScoreFilter = FALSE;
 
+// score filters are explicitly handled by bigBed.  It's not automatically on.
+if (tdbIsBigBed(tdb))
+    skipScoreFilter = TRUE;
+
 // Numeric filters are first
 boolean isBoxOpened = FALSE;
 if (numericFiltersShowAll(db, cart, tdb, &isBoxOpened, boxed, parentLevel, name, title) > 0)
@@ -5934,18 +5938,7 @@ if (filterBySet != NULL)
     skipScoreFilter = TRUE;
     }
 
-// For no good reason scoreFilter is incompatible with filterBy and or numericFilters
-// FIXME scoreFilter should be implemented inside numericFilters and is currently specificly
-//       excluded to avoid unexpected changes
-if (skipScoreFilter)
-    {
-    if (isBoxOpened)
-        cfgEndBox(boxed);
-
-    return; // Cannot have both '*filter' and 'scoreFilter'
-    }
-
-boolean scoreFilterOk = (trackDbSettingClosestToHome(tdb, NO_SCORE_FILTER) == NULL);
+boolean scoreFilterOk = (trackDbSettingClosestToHome(tdb, NO_SCORE_FILTER) == NULL) && !skipScoreFilter;
 boolean glvlScoreMin = (trackDbSettingClosestToHome(tdb, GRAY_LEVEL_SCORE_MIN) != NULL);
 if (! (scoreFilterOk || glvlScoreMin))
     return;
