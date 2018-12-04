@@ -907,6 +907,22 @@ for (childFp = child->posList; childFp != NULL; childFp = childFp->next)
     }
 }
 
+static boolean isFilter(char *name)
+/* Check to see if this is one of the filter variables that have arbitrary initial strings. */
+{
+if (endsWith(name, "Filter"))
+    return TRUE;
+if (endsWith(name, "FilterValues"))
+    return TRUE;
+if (endsWith(name, "FilterType"))
+    return TRUE;
+if (endsWith(name, "FilterLimits"))
+    return TRUE;
+if (endsWith(name, "FilterText"))
+    return TRUE;
+return FALSE;
+}
+
 static void doRecordChecks(struct tdbRecord *recordList, struct lm *lm)
 /* Do additional checks on records. */
 {
@@ -920,6 +936,9 @@ for (record = recordList; record != NULL; record = record->next)
     struct tdbField *field;
     for (field = record->fieldList; field != NULL; field = field->next)
         {
+        if (isFilter(field->name))
+            continue;
+
 	struct slName *typeList = rqlHashFindValEvenInWilds(glTagTypes, field->name);
 	if (typeList == NULL)
 	    {

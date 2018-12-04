@@ -313,7 +313,6 @@ def dbOpen(mustExist=False):
         dbDir = "/gbdb/hg19/beacon/"
 
     dbName = join(dbDir, SQLITEDB)
-    print("Opening %s" % dbName)
 
     if not exists(dbName) and mustExist:
         errAbort("Database file %s does not exist. This beacon is not serving any data." % dbName)
