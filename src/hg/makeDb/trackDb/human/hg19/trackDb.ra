@@ -24,12 +24,20 @@ searchDescription COSMIC Regions
 
 track mastermind
 shortLabel Mastermind Variants
-longLabel Mastermind Variants extracted from fulltext publications
+longLabel Genomenom Mastermind Variants extracted from fulltext publications
 group phenDis
 visibility hide
-type vcfTabix
-bigDataUrl /gbdb/hg19/bbi/mastermind_open_variant_file_preview.vcf.gz
+type bigBed 9 +
 release alpha
+urls url=https://mastermind.genomenon.com/detail?disease=all%20diseases&$$
+bigDataUrl /gbdb/hg19/bbi/mastermind.bb
+noScoreFilter on
+exonNumbers off
+mouseOverField _mouseOver
+itemRgb on
+#mmcnt1Filter 0
+#mmcnt2Filter 0
+#mmcnt3Filter 0
 
 # chainNet tracks
 include trackDb.chainNet.ra
