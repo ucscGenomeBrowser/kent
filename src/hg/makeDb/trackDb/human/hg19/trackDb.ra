@@ -35,9 +35,9 @@ noScoreFilter on
 exonNumbers off
 mouseOverField _mouseOver
 itemRgb on
-#mmcnt1Filter 0
-#mmcnt2Filter 0
-#mmcnt3Filter 0
+mmcnt1Filter 0
+mmcnt2Filter 0
+mmcnt3Filter 0
 
 # chainNet tracks
 include trackDb.chainNet.ra
