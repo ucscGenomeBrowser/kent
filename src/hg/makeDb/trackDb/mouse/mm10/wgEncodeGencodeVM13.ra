@@ -1,6 +1,6 @@
 track wgEncodeGencodeVM13
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel All GENCODE VM13
 longLabel All GENCODE annotations from VM13 (Ensembl 88)
 group genes

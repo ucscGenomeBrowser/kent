@@ -1396,7 +1396,7 @@ track snp150Common
 shortLabel Common SNPs(150)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 150) Found in >= 1% of Samples
 group varRep
-visibility dense
+visibility hide
 url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 snpSeq snp150Seq
