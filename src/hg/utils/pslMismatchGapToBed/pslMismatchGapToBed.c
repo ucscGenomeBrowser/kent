@@ -215,9 +215,13 @@ if (ix < psl->blockCount - 1)
         if (shiftL || shiftR)
             {
             if (blockSize < shiftL)
-                errAbort("pslMismatchGapToBed: support for overlapping blocks not implemented");
+                warn("pslMismatchGapToBed: %s gapIx %d shifted left %d bases, but previous block "
+                     "size is only %d; report to NCBI",
+                     psl->qName, ix, shiftL, blockSize);
             if (psl->blockSizes[ix+1] < shiftR)
-                errAbort("pslMismatchGapToBed: support for overlapping blocks not implemented");
+                warn("pslMismatchGapToBed: %s gapIx %d shifted right %d bases, but next block "
+                     "size is only %d; report to NCBI",
+                     psl->qName, ix, shiftR, psl->blockSizes[ix+1]);
             struct txAliDiff *shiftyItem = NULL;
             AllocVar(shiftyItem);
             shiftyItem->chrom = cloneString(psl->tName);
