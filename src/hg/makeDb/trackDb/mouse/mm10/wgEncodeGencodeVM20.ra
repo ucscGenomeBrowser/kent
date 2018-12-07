@@ -1,6 +1,6 @@
 track wgEncodeGencodeVM20
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel All GENCODE VM20
 longLabel All GENCODE annotations from VM20 (Ensembl 95)
 group genes
