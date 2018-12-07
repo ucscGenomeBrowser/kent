@@ -181,6 +181,17 @@ else
 dyStringFree(&dyTmp);
 }
 
+void printShareMessage(struct dyString *dy, char *userName, char *sessionName,
+            boolean encode)
+{
+struct dyString *dyTmp = dyStringNew(0);
+addSessionLink(dyTmp, userName, sessionName, encode);
+dyStringPrintf(dy,
+    "<p>You can share this session with the following  URL: %s</p>",
+    dyTmp->string);
+//dyStringFree(&dyTmp);
+}
+
 char *getSessionLink(char *encUserName, char *encSessionName)
 /* Form a link that will take the user to a bookmarkable page that
  * will load the given session. */
@@ -809,6 +820,10 @@ if (sqlTableExists(conn, namedSessionTable))
 	  htmlEncode(sessionName), (shareSession ? "may" : "may not"),
 	  getSessionLink(encUserName, encSessionName),
 	  getSessionEmailLink(encUserName, encSessionName));
+    if (shareSession)
+        {
+        printShareMessage(dyMessage, encUserName, encSessionName, FALSE);
+        }
     cartCheckForCustomTracks(cart, dyMessage);
     }
 else
@@ -1458,6 +1473,8 @@ if (isEmpty(dyMessage->string))
 dyStringPrintf(dyMessage, "%s %s",
 	       getSessionLink(encUserName, encSessionName),
 	       getSessionEmailLink(encUserName, encSessionName));
+if (shared)
+    printShareMessage(dyMessage, encUserName, encSessionName, FALSE);
 return dyStringCannibalize(&dyMessage);
 }
 
