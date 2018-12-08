@@ -3742,6 +3742,10 @@ if (!init)
     // NOTE it is important for security that no other characters be allowed here
     init = TRUE;
     }
+if (identifier[0] == 0) // empty string not allowed since this is usually caused by an error.
+    {
+    sqlCheckError("Illegal empty string identifier not allowed.");
+    }
 if (!sqlCheckAllowedChars(identifier, allowed))
     {
     sqlCheckError("Illegal character found in identifier %s", identifier);
