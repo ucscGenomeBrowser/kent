@@ -299,14 +299,14 @@ static struct chain *chainLoadIdSome(char *database, char *track, char *chrom,
 struct sqlConnection *conn;
 struct sqlResult *sr;
 char **row;
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 boolean hasBin;
 struct chain *chain;
 char query[256];
 struct dyString *dy = newDyString(128);
 
 /* Load chain header. */
-if (!hFindSplitTable(database, chrom, track, table, &hasBin))
+if (!hFindSplitTable(database, chrom, track, table, sizeof table, &hasBin))
    errAbort("%s table is not in %s", track, database);
 conn = sqlConnect(database);
 sqlSafef(query, sizeof(query),
