@@ -1217,7 +1217,7 @@ for (i=0; i<psl->blockCount; ++i)
 fprintf(f, "</PRE>");
 }
 
-static void pslRecalcBounds(struct psl *psl)
+void pslRecalcBounds(struct psl *psl)
 /* Calculate qStart/qEnd tStart/tEnd at top level to be consistent
  * with blocks. */
 {

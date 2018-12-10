@@ -82,7 +82,8 @@ static boolean pslIntronTooShort(struct psl *psl, int blkIx, int minIntronSize)
 /* Return TRUE if the target gap between blkIx and blkIx+1 is too short to be a plausible intron. */
 {
 if (blkIx >= psl->blockCount - 1 || blkIx < 0)
-    errAbort("pslIntronTooShort: blkIx %d is out of range [0, %d]", blkIx, psl->blockCount - 1);
+    errAbort("pslIntronTooShort: %s blkIx %d is out of range [0, %d]",
+             psl->qName, blkIx, psl->blockCount - 1);
 int tGapLen = psl->tStarts[blkIx+1] - psl->tStarts[blkIx] - psl->blockSizes[blkIx];
 int qGapLen = psl->qStarts[blkIx+1] - psl->qStarts[blkIx] - psl->blockSizes[blkIx];
 int intronLen = tGapLen - qGapLen;
@@ -649,11 +650,145 @@ else if (hasAnomalousGaps(txAli, gStart, gEnd))
     }
 }
 
+static void pslDeleteBlock(struct psl *psl, int ix)
+/* Remove block indexed by ix (in blockSizes, tStarts, qStarts) from psl. */
+{
+int jx;
+for (jx = ix+1;  jx < psl->blockCount;  jx++)
+    {
+    psl->blockSizes[jx-1] = psl->blockSizes[jx];
+    psl->tStarts[jx-1] = psl->tStarts[jx];
+    psl->qStarts[jx-1] = psl->qStarts[jx];
+    }
+psl->blockCount--;
+pslRecalcBounds(psl);
+}
+
+static void pslUpdateGapCounts(struct psl *psl)
+/* After psl's gaps have been modified, update {q,t}{Num,Base}Insert and match statistics.
+ * match and/or repMatch may be inaccurate after this. */
+{
+int qNumInsert = 0, tNumInsert = 0, qBaseInsert = 0, tBaseInsert = 0, aligned = 0;
+int ix;
+for (ix = 0;  ix < psl->blockCount;  ix++)
+    {
+    aligned += psl->blockSizes[ix];
+    if (ix < psl->blockCount - 1)
+        {
+        int tInsLen = psl->tStarts[ix+1] - (psl->tStarts[ix] + psl->blockSizes[ix]);
+        int qInsLen = psl->qStarts[ix+1] - (psl->qStarts[ix] + psl->blockSizes[ix]);
+        if (tInsLen)
+            {
+            tNumInsert++;
+            tBaseInsert += tInsLen;
+            }
+        if (qInsLen)
+            {
+            qNumInsert++;
+            qBaseInsert += qInsLen;
+            }
+        }
+    }
+psl->qNumInsert = qNumInsert;
+psl->qBaseInsert = qBaseInsert;
+psl->tNumInsert = tNumInsert;
+psl->tBaseInsert = tBaseInsert;
+int oldAligned = psl->match + psl->misMatch + psl->repMatch + psl->nCount;
+int gapified = oldAligned - aligned;
+// Count them against repMatch first, since shiftable gaps imply repetitive sequence.
+if (psl->repMatch >= gapified)
+    psl->repMatch -= gapified;
+else
+    {
+    int extra = gapified - psl->repMatch;
+    psl->repMatch = 0;
+    if (psl->match >= extra)
+        psl->match -= extra;
+    else
+        {
+        // Maybe they were just left blank...
+        psl->match = aligned;
+        psl->misMatch = 0;
+        psl->repMatch = 0;
+        psl->nCount = 0;
+        }
+    }
+}
+
+static boolean pslExpandGapRight(struct psl *psl, int ix, uint shiftR, boolean fixBrokenExons)
+/* Expand the gap following block ix by shiftR bases on both t and q, making it a double-sided gap.
+ * If shiftR is greater than or equal to the size of the following block then delete that block,
+ * extending the double-sided gap into the next gap.  If fixBrokenExons is true then also check
+ * to see if the following gap cancels out this gap (i.e. after sliding and considering the next
+ * gap, the same number of bases are skipped on t and q); in that case, merge the following
+ * block too because the two gaps should not have been introduced. */
+{
+boolean deletedBlocks = FALSE;
+if (ix < 0 || ix >= psl->blockCount - 1)
+    errAbort("pslExpandGapRight: invalid ix %d for %s, expecting 0..%d",
+             ix, psl->qName, psl->blockCount - 2);
+if (psl->blockSizes[ix+1] > shiftR)
+    {
+    // Expand gap to the right -- increase {t,q}Starts[ix+1], decrease blockSizes[ix+1]
+    psl->tStarts[ix+1] += shiftR;
+    psl->qStarts[ix+1] += shiftR;
+    psl->blockSizes[ix+1] -= shiftR;
+    }
+else
+    {
+    // The ambiguous region extends all the way through the next block, maybe past it!
+    // Delete the block (i.e. merge the gaps).
+    verbose(2, "%s gapIx %d slides past block %d; deleting block %d.\n",
+            psl->qName, ix, ix+1, ix+1);
+    // Calculate these before modifying psl:
+    uint newTGapEnd = psl->tStarts[ix+1] + shiftR;
+    pslDeleteBlock(psl, ix+1);
+    // There should be at least one block left after deletion; check for overlap with it.
+    if (ix > psl->blockCount - 2)
+        errAbort("vpExpandIndelGaps: %s gapIx %d ambiguous region extended past final block. "
+                 "(Do we need a fake 0-length block to end the double-sided gap?)  "
+                 "Please report this case as a bug in the aligner.", psl->qName, ix);
+    if (newTGapEnd > psl->tStarts[ix+1])
+        {
+        int overlap = newTGapEnd - psl->tStarts[ix+1];
+        if (overlap > psl->blockSizes[ix+1])
+            errAbort("vpExpandIndelGaps: %s gapIx %d ambiguous region extended past >1 blocks.  "
+                     "Please report this case as a bug in the aligner.", psl->qName, ix);
+        psl->tStarts[ix+1] += overlap;
+        psl->qStarts[ix+1] += overlap;
+        psl->blockSizes[ix+1] -= overlap;
+        }
+    if (fixBrokenExons && newTGapEnd == psl->tStarts[ix+1])
+        {
+        // NCBI has given us alignments that include unnecessary but compensating gaps. For example,
+        // both galGal6 and NM_001030566.1 have a run of 15 A's in the middle of an aligning block.
+        // For unknown reasons, NCBI's alignment introduces a 1-base gap on the target and then a
+        // 1-base gap on the query that compensate for each other, but split up an exon into three
+        // aligned blocks with unnecessary gaps.  Detect and fix that case:
+        int newTInsLen = psl->tStarts[ix+1] - (psl->tStarts[ix] + psl->blockSizes[ix]);
+        int newQInsLen = psl->qStarts[ix+1] - (psl->qStarts[ix] + psl->blockSizes[ix]);
+        if (newTInsLen == newQInsLen)
+            {
+            // Gaps cancelled each other out; merge exons.
+            verbose(2, "%s gapIx %d seems to cancel out gapIx %d; merging block formerly known "
+                    "as %d\n",
+                    psl->qName, ix+1, ix, ix+2);
+            psl->blockSizes[ix] += newTInsLen + psl->blockSizes[ix+1];
+            pslDeleteBlock(psl, ix+1);
+            }
+        }
+    // Block ix has changed, so repeat with the same ix to see what happens to the next gap.
+    deletedBlocks = TRUE;
+    }
+return deletedBlocks;
+}
+
 void vpExpandIndelGaps(struct psl *txAli, struct seqWindow *gSeqWin, struct dnaSeq *txSeq)
 /* If txAli has any gaps that are too short to be introns, they are often indels that could be
  * shifted left and/or right.  If so, turn those gaps into double-sided gaps that span the
  * ambiguous region. This may change gSeqWin's range. */
 {
+boolean modified = FALSE;
 int ix;
 for (ix = 0;  ix < txAli->blockCount - 1;  ix++)
     {
@@ -682,20 +817,45 @@ for (ix = 0;  ix < txAli->blockCount - 1;  ix++)
             {
             // Expand gap to the left -- decrease blockSizes[ix].
             if (txAli->blockSizes[ix] < shiftL)
-                errAbort("vpExpandIndelGaps: support for deleting/merging blocks not implemented");
-            txAli->blockSizes[ix] -= shiftL;
+                {
+                if (ix == 0)
+                    warn("vpExpandIndelGaps: %s gapIx %d slides left past start of first block.  "
+                         "Skipping.  (Should we make a 0-length block at beginning?)",
+                         txAli->qName, ix);
+                else
+                    warn("vpExpandIndelGaps: %s gapIx %d slides left past the start of block %d, "
+                         "but this should have already been taken care of when pslExpandGapRight "
+                         "was called for gapIx %d.  Investigate...",
+                         txAli->qName, ix, ix, ix-1);
+                continue;
+                }
+            else
+                {
+                txAli->blockSizes[ix] -= shiftL;
+                }
+            modified = TRUE;
             }
         if (shiftR)
             {
-            // Expand gap to the right -- increase {t,q}Starts[ix+1], decrease blockSizes[ix+1]
-            if (txAli->blockSizes[ix+1] < shiftR)
-                errAbort("vpExpandIndelGaps: support for deleting/merging blocks not implemented");
-            txAli->tStarts[ix+1] += shiftR;
-            txAli->qStarts[ix+1] += shiftR;
-            txAli->blockSizes[ix+1] -= shiftR;
+            boolean deletedBlocks = pslExpandGapRight(txAli, ix, shiftR, TRUE);
+            if (deletedBlocks && ix < txAli->blockCount - 1 &&
+                pslIntronTooShort(txAli, ix, MIN_INTRON))
+                {
+                // Repeat w/same ix because block ix has expanded & gap to the right has changed.
+                // indelShift doesn't work on gaps that have already been expanded, though --
+                // so shrink the expanded gap back to single-sided.
+                int tInsLen = txAli->tStarts[ix+1] - (txAli->tStarts[ix] + txAli->blockSizes[ix]);
+                int qInsLen = txAli->qStarts[ix+1] - (txAli->qStarts[ix] + txAli->blockSizes[ix]);
+                int doubleLen = min(tInsLen, qInsLen);
+                txAli->blockSizes[ix] += doubleLen;
+                ix--;
+                }
+            modified = TRUE;
             }
         }
     }
+if (modified)
+    pslUpdateGapCounts(txAli);
 }
 
 struct vpTx *vpGenomicToTranscript(struct seqWindow *gSeqWin, struct bed3 *gBed3, char *gAlt,
