@@ -12,3 +12,4 @@ core.*
 *.pyo
 tags
 src/htslib/version.h
+*.gcno
