@@ -229,7 +229,7 @@ static int connInfoGetSocket(struct udcFile *file, char *url, bits64 offset, int
  * or return -1 if there is an error opening a new one. */
 {
 struct connInfo *ci = &file->connInfo;
-if (FALSE&& ci != NULL && ci->socket > 0 && ci->offset != offset)
+if (ci != NULL && ci->socket > 0 && ci->offset != offset)
     {
     bits64 skipSize = (offset - ci->offset);
     if (skipSize > 0 && skipSize <= MAX_SKIP_TO_SAVE_RECONNECT)
