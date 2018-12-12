@@ -2121,7 +2121,7 @@ void doMiddle()
 /* Menu bar has been drawn.  We are in the middle of first section. */
 {
 struct sqlConnection *conn = sqlConnect(cdwDatabase);
-setCdwUser(conn);
+user = cdwCurrentUser(conn);
 dispatch(conn);
 sqlDisconnect(&conn);
 }
@@ -2178,7 +2178,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Data Browser V0.60");
+localWebStartWrapper("CIRM Stem Cell Hub Data Browser v0.60");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
