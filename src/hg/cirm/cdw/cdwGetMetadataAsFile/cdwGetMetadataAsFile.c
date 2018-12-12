@@ -42,6 +42,7 @@ errAbort(
   );
 }
 
+#ifdef OLD
 void setCdwUser(struct sqlConnection *conn)
 /* set the global variable 'user' based on the current cookie */
 {
@@ -63,6 +64,8 @@ if (userName != NULL)
     user = cdwUserFromEmail(conn, email);
     }
 }
+#endif /* OLD */
+
 
 void cdwGetMetadataAsFile(struct sqlConnection *conn)
 /* Determine the users's download format and generate a file that matches their
@@ -101,7 +104,7 @@ void localWebWrap(struct cart *theCart)
 cart = theCart;
 struct sqlConnection *conn = sqlConnect(cdwDatabase);
 printf("Content-Type: text/plain\n\n");
-setCdwUser(conn);
+user = cdwCurrentUser(conn);
 cdwGetMetadataAsFile(conn); 
 sqlDisconnect(&conn);
 }
