@@ -15,9 +15,9 @@ baseColorUseCds given
 baseColorDefault genomicCodons
 defaultLinkedTables kgXref
 intronGap 12
-html knownGene
+html knownGene.alpha
 isGencode2 on
-bigGeneDataUrl /gbdb/hg38/knownGene.bb
+bigGeneDataUrl /gbdb/hg38/knownGene29.bb
 
 track knownGeneOld10
 shortLabel Old UCSC Genes

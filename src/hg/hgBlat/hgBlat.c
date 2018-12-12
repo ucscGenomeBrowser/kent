@@ -32,6 +32,7 @@
 #include "dystring.h"
 #include "chromInfo.h"
 #include "net.h"
+#include "fuzzyFind.h"
 
 
 struct cart *cart;	/* The user's ui state. */
@@ -95,7 +96,7 @@ struct genomeHits
 
 boolean debuggingGfResults = FALSE; //TRUE;
 
-int slGfResultsCmp(const void *va, const void *vb)
+int gfResultsCmp(const void *va, const void *vb)
 /* Compare two gfResults. */
 {
 const struct gfResult *a = *((struct gfResult **)va);
@@ -115,7 +116,7 @@ else
     return result;
 }
 
-int slRcPairsCmp(const void *va, const void *vb)
+int rcPairsCmp(const void *va, const void *vb)
 /* Recombine Reverse-complimented Pairs (to hide the weaker one). */
 {
 const struct genomeHits *a = *((struct genomeHits **)va);
@@ -137,8 +138,8 @@ else
 }
 
 
-int slHitsCmp(const void *va, const void *vb)
-/* Compare two slHits. */
+int genomeHitsCmp(const void *va, const void *vb)
+/* Compare two genomeHits. */
 {
 const struct genomeHits *a = *((struct genomeHits **)va);
 const struct genomeHits *b = *((struct genomeHits **)vb);
@@ -235,15 +236,17 @@ int errCount = 0;
 int waitTime = 0;
 while(1)
     {
-    sleep1000(50); // milliseconds
+    sleep1000(50); // milliseconds, give the threads some time to work
     waitTime += 50;
+    // check if they are done
     boolean done = TRUE;
     pthread_mutex_lock( &pfdMutex );
-    if (pfdList || pfdRunning)
+    if (pfdList || pfdRunning)  // lists not empty, stuff to do still
 	done = FALSE;
     pthread_mutex_unlock( &pfdMutex );
     if (done)
         break;
+    // check if max allowed time has been exceeded
     if (waitTime >= maxTimeInMilliseconds)
         break;
     }
@@ -590,50 +593,32 @@ else  // hyperlink
 
     printf("<DIV STYLE=\"display:block;\"><PRE>");
 
-    // find maximum query name size for padding calculations
-    int maxQChromNameSize = 0;
-    for (psl = pslList; psl != NULL; psl = psl->next)
-	{
-	int l = strlen(psl->qName);
-	maxQChromNameSize = max(maxQChromNameSize,l);
-	}
-    maxQChromNameSize = max(maxQChromNameSize,5);
-
+    // find maximum query name size for padding calculations and
     // find maximum target chrom name size for padding calculations
+    int maxQChromNameSize = 0;
     int maxTChromNameSize = 0;
     for (psl = pslList; psl != NULL; psl = psl->next)
 	{
-	int l = strlen(psl->tName);
-	maxTChromNameSize = max(maxTChromNameSize,l);
+	int qLen = strlen(psl->qName);
+	maxQChromNameSize = max(maxQChromNameSize,qLen);
+	int tLen = strlen(psl->tName);
+	maxTChromNameSize = max(maxTChromNameSize,tLen);
 	}
+    maxQChromNameSize = max(maxQChromNameSize,5);
     maxTChromNameSize = max(maxTChromNameSize,5);
 
-    // header padding
-    char tempQ[1024];
-    char tempT[1024];
-
-
     printf("   ACTIONS      QUERY ");
-    tempQ[0] = 0;
-    safecatRepeatChar(tempQ, sizeof tempQ, ' ', (maxQChromNameSize - 5));
-    printf("%s", tempQ);
+    
+    spaceOut(stdout, maxQChromNameSize - 5);
 
     printf("SCORE START   END QSIZE IDENTITY  CHROM ");
-    tempT[0] = 0;
-    safecatRepeatChar(tempT, sizeof tempT, ' ', (maxTChromNameSize - 5));
-    printf("%s", tempT);
+    spaceOut(stdout, maxTChromNameSize - 5);
 
     printf(" STRAND  START       END   SPAN\n");
 
     printf("---------------------------------------------------------------------------------------------");
-
-    tempQ[0] = 0;
-    safecatRepeatChar(tempQ, sizeof tempQ, '-', (maxQChromNameSize - 5));
-    printf("%s", tempQ);
-
-    tempT[0] = 0;
-    safecatRepeatChar(tempT, sizeof tempT, '-', (maxTChromNameSize - 5));
-    printf("%s", tempT);
+    repeatCharOut(stdout, '-', maxQChromNameSize - 5);
+    repeatCharOut(stdout, '-', maxTChromNameSize - 5);
 
     printf("\n");
 
@@ -653,20 +638,15 @@ else  // hyperlink
 	    psl->tStart, psl->tEnd, database, uiState);
 	printf("details</A> ");
 
-	tempQ[0] = 0;
-	safecpy(tempQ, sizeof tempQ, psl->qName);
-	int qPadding = maxQChromNameSize - strlen(psl->qName);
-	safecatRepeatChar(tempQ, sizeof tempQ, ' ', qPadding);
-
-	tempT[0] = 0;
-	safecpy(tempT, sizeof tempT, psl->tName);
-	int tPadding = maxTChromNameSize - strlen(psl->tName);
-	safecatRepeatChar(tempT, sizeof tempT, ' ', tPadding);
-
-	printf("%s %5d %5d %5d %5d   %5.1f%%  %s  %-2s  %9d %9d %6d\n",
-	    tempQ, pslScore(psl), psl->qStart+1, psl->qEnd, psl->qSize,
-	    100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
-	    tempT, psl->strand, psl->tStart+1, psl->tEnd,
+	printf("%s",psl->qName);
+	spaceOut(stdout, maxQChromNameSize - strlen(psl->qName));
+	printf(" %5d %5d %5d %5d   %5.1f%%  ",
+	    pslScore(psl), psl->qStart+1, psl->qEnd, psl->qSize,
+	    100.0 - pslCalcMilliBad(psl, TRUE) * 0.1);
+	printf("%s",psl->tName);
+	spaceOut(stdout, maxTChromNameSize - strlen(psl->tName));
+	printf("  %-2s  %9d %9d %6d\n",
+	    psl->strand, psl->tStart+1, psl->tEnd,
 	    psl->tEnd - psl->tStart);
 	}
     printf("</PRE>\n");
@@ -914,8 +894,7 @@ int thisExons  = 0;
 char thisTStrand = ' ';
 char thisQStrand = ' ';
 
-int geneGap = 1000000;  // about a million bases is a cutoff for genes.
-    // TODO should this really be 750K?
+int geneGap = ffIntronMaxDefault;  // about a million bases is a cutoff for genes.
 
 int qSlop = 5; // forgive 5 bases, about dna stepSize = 5.
 if (gH->complex)
@@ -1050,91 +1029,77 @@ for (;;)
 	// chop the line into words
 	int numHits = 0;
 	char *line = buf;
-	char *word=NULL;
-	int i=0;
 	struct gfResult *gfR = NULL;
 	AllocVar(gfR);
 	gfR->qStrand = (gH->queryRC ? '-' : '+');
-	while ((word = nextWord(&line)) != NULL)
+
+	char *word[10];
+	int fields = chopLine(line,word);
+	int expectedFields = 6;
+	if (gH->complex)
 	    {
-	    if (i == 0)
-		{  // e.g. 3139
-		gfR->qStart = sqlUnsigned(word);
-		}
-	    if (i == 1)
-		{  // e.g. 3220
-		gfR->qEnd = sqlUnsigned(word);
-		}
-	    if (i == 2)
-		{  // e.g. hg38.2bit:chr1
-		char *colon = strchr(word, ':');
-		if (colon)
-		    {
-		    gfR->chrom = cloneString(colon+1);
-		    }
-		else
-		    { // e.g. chr10.nib
-		    char *dot = strchr(word, '.');
-		    if (dot)
-			{
-			*dot = 0;
-			gfR->chrom = cloneString(word);
-			}
-		    else
-			errAbort("Expecting colon or period in the 3rd field of gfServer response");
-		    }
-		}
-	    if (i == 3)
-		{  // e.g. 173515
-		gfR->tStart = sqlUnsigned(word);
-		}
-	    if (i == 4)
-		{  // e.g. 173586
-		gfR->tEnd = sqlUnsigned(word);
-		}
-	    if (i == 5)
-		{  // e.g. 14
-		numHits = sqlUnsigned(word);
+	    if (gH->isProt)
+		expectedFields = 8;
+	    else
+		expectedFields = 9;
+	    }
+	if (fields != expectedFields)
+	    errAbort("expected %d fields, got %d fields", expectedFields, fields);
 
-		// Frustrated with weird little results with vastly exaggerated hit-score,
-		// I have flattened that out so it maxes out at #tiles that could fit 
-		// It seems to still work just fine. I am going to leave it for now.
-		// One minor note, by suppressing extra scores for short exons,
-		// it will not prefer alignments with the same number of hits, but more exons.
-		if (!gH->complex) // dna xType
-		    {
-		    // maximum tiles that could fit in qSpan
-		    int limit = ((gfR->qEnd - gfR->qStart) - 6)/5; 
-		    ++limit;  // for a little extra.
-		    if (numHits > limit)
-			numHits = limit;
-		    }
+	gfR->qStart = sqlUnsigned(word[0]); // e.g. 3139
+	gfR->qEnd   = sqlUnsigned(word[1]); // e.g. 3220
 
-		gfR->numHits = numHits;
-		}
-	    if (gH->complex)
+	// e.g. hg38.2bit:chr1
+	char *colon = strchr(word[2], ':');
+	if (colon)
+	    {
+	    gfR->chrom = cloneString(colon+1);
+	    }
+	else
+	    { // e.g. chr10.nib
+	    char *dot = strchr(word[2], '.');
+	    if (dot)
 		{
-		if (i == 6)
-		    {  // e.g. + or -
-		    gfR->tStrand = word[0];
-		    }
-		if (i == 7)
-		    {  // e.g. 0,1,2
-		    gfR->tFrame = sqlUnsigned(word);
-		    }
-		if (!gH->isProt)
-		    {
-		    if (i == 8)
-			{  // e.g. 0,1,2
-			gfR->qFrame = sqlUnsigned(word);
-			}
-		    }
+		*dot = 0;
+		gfR->chrom = cloneString(word[2]);
 		}
 	    else
+		errAbort("Expecting colon or period in the 3rd field of gfServer response");
+	    }
+
+	gfR->tStart = sqlUnsigned(word[3]); // e.g. 173515
+	gfR->tEnd   = sqlUnsigned(word[4]); // e.g. 173586
+
+	numHits     = sqlUnsigned(word[5]); // e.g. 14
+
+	// Frustrated with weird little results with vastly exaggerated hit-score,
+	// I have flattened that out so it maxes out at #tiles that could fit 
+	// It seems to still work just fine. I am going to leave it for now.
+	// One minor note, by suppressing extra scores for short exons,
+	// it will not prefer alignments with the same number of hits, but more exons.
+	if (!gH->complex) // dna xType
+	    {
+	    // maximum tiles that could fit in qSpan
+	    int limit = ((gfR->qEnd - gfR->qStart) - 6)/5; 
+	    ++limit;  // for a little extra.
+	    if (numHits > limit)
+		numHits = limit;
+	    }
+
+	gfR->numHits = numHits;
+
+	if (gH->complex)
+	    {
+	    gfR->tStrand = word[6][0];          // e.g. + or -
+	    gfR->tFrame = sqlUnsigned(word[7]); // e.g. 0,1,2
+	    if (!gH->isProt)
 		{
-		gfR->tStrand = '+';  // dna search only on + target strand
+		gfR->qFrame = sqlUnsigned(word[8]); // e.g. 0,1,2
 		}
-	    ++i;
+	    }
+	else
+	    {
+	    gfR->tStrand = '+';  // dna search only on + target strand
 	    }
 	
         if (gH->complex)
@@ -1142,7 +1107,7 @@ for (;;)
             char *s = netGetLongString(gH->sd);
             if (s == NULL)
                 break;
-            dyStringPrintf(gH->dbg,"%s<br>\n", s); //dumps out qstart1 start1 qstart2 tstart2 ...  
+            dyStringPrintf(gH->dbg,"%s<br>\n", s); //dumps out qstart1 tstart1 qstart2 tstart2 ...  
             freeMem(s);
             }
 
@@ -1153,7 +1118,7 @@ for (;;)
 slReverse(&gH->gfList);
 
 unTranslateCoordinates(gH);  // convert back to untranslated coordinates
-slSort(&gH->gfList, slGfResultsCmp);  // sort by tStrand, chrom, tStart
+slSort(&gH->gfList, gfResultsCmp);  // sort by tStrand, chrom, tStart
 
 
 
@@ -1181,7 +1146,7 @@ struct qFrameResults r[3];
 
 for(qFrame = qFrameStart; qFrame <= qFrameEnd; ++qFrame)
     {	    
-    findBestGene(gH, qFrame);  // find best gene-line thing with most hits
+    findBestGene(gH, qFrame);  // find best gene-like thing with most hits
     
     r[qFrame].maxGeneHits = gH->maxGeneHits;
     r[qFrame].maxGeneChrom = cloneString(gH->maxGeneChrom);
@@ -1617,7 +1582,8 @@ printf("%s",
 "<P>Only DNA sequences of 25,000 or fewer bases and protein or translated \n"
 "sequence of 10000 or fewer letters will be processed.  Up to 25 sequences\n"
 "can be submitted at the same time. The total limit for multiple sequence\n"
-"submissions is 50,000 bases or 25,000 letters.\n</P>\n");
+"submissions is 50,000 bases or 25,000 letters.<br> A valid example "
+"is <tt>GTCCTCGGAACCAGGACCTCGGCGTGGCCTAGCG</tt> (human SOD1).\n</P>\n");
 
 printf("%s", 
 "<P>The <b>Search ALL</b> checkbox above the Genome drop-down list allows you to search the\n"
@@ -1966,7 +1932,7 @@ else
 	if (!(debuggingGfResults) &&
 	   (sameString(pfdDone->xType,"dna") || sameString(pfdDone->xType,"dnax")))
 	    {
-	    slSort(&pfdDone, slRcPairsCmp);  
+	    slSort(&pfdDone, rcPairsCmp);  
 	    hideWeakerOfQueryRcPairs(pfdDone);
 	    }
 
@@ -1974,7 +1940,7 @@ else
 	changeMaxGenePositionToPositiveStrandCoords(pfdDone);
 
         // sort by maximum hits
-	slSort(&pfdDone, slHitsCmp);
+	slSort(&pfdDone, genomeHitsCmp);
 
 	// Print instructions
 	printf("Click the link in the Assembly column to see the full BLAT output for that Genome.<br><br>\n");

@@ -250,15 +250,43 @@ shortLabel Alt Haplotypes
 longLabel Alternate Haplotypes to Reference Sequence Correspondence
 url ../cgi-bin/hgTracks?db=$D&position=$$
 urlLabel Corresponding position:
+release beta,public
 
-track fixLocations
-type bed 4
+track altSeqLiftOverPsl
+shortLabel Alt Haplotypes
+longLabel Reference Assembly Alternate Haplotype Sequence Alignments
 group map
-color 190,32,32
+type psl
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsMaxZoom 10000.0
+showCdsAllScales .
+baseColorDefault diffBases
+baseColorUseSequence db
+color 0,0,100
+visibility dense
+release alpha
+
+track fixSeqLiftOverPsl
 shortLabel Fix Patches
-longLabel Fix Patch to Reference Sequence Correspondence
-url ../cgi-bin/hgTracks?db=$D&position=$$
-urlLabel Corresponding position:
+longLabel Reference Assembly Fix Patch Sequence Alignments
+group map
+type psl
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsMaxZoom 10000.0
+showCdsAllScales .
+baseColorDefault diffBases
+baseColorUseSequence db
+color 255,255,0
+darkerLabels on
+priority 1
+visibility pack
+release alpha
 
 track knownGene
 shortLabel UCSC Genes
@@ -1553,8 +1581,8 @@ visibility hide
 useScore 1
 type bed 12 +
 
-include joinedRmskComposite.ra alpha
-include joinedRmsk.ra beta,public
+include joinedRmskComposite.ra
+#include joinedRmsk.ra public
 
 track windowmasker
 shortLabel WindowMasker

@@ -164,7 +164,7 @@ if (cartVarExists(cart, "ajax"))
     isPopup = TRUE;
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 if (startsWith("big", tdb->type))
-    labelCfgUi(database, cart, tdb);
+    labelCfgUi(database, cart, tdb, track);
 //printf("\n<table id=interactControls style='font-size:%d%%' %s>\n<tr><td>",
         //isPopup ? 75 : 100, boxed ?" width='100%'":"");
 puts("<p>");
@@ -183,6 +183,6 @@ else
     interactUiDashedLines(cart, track, tdb);
     puts("</p>");
     }
-scoreCfgUi(database, cart,tdb,tdb->track,"",1000,FALSE);
+scoreCfgUi(database, cart,tdb,track,NULL,1000,FALSE);
 cfgEndBox(boxed);
 }

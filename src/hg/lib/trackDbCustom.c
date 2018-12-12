@@ -122,7 +122,22 @@ if (sameString(var, "track"))
     parseTrackLine(bt, value, lf);
 if (bt->settingsHash == NULL)
     bt->settingsHash = hashNew(7);
-hashAdd(bt->settingsHash, var, cloneString(value));
+if (bt->viewHash == NULL)
+    bt->viewHash = hashNew(7);
+char *storeValue = cloneString(value);
+
+// squirrel away views
+if (startsWith("subGroup", var))
+    {
+    char *ptr = strchr(value, ' ');
+    if (ptr)
+        *ptr = 0;
+    hashAdd(bt->viewHash, value, storeValue);
+    if (ptr)
+        *ptr = ' ';
+    }
+
+hashAdd(bt->settingsHash, var, storeValue);
 
 if (bt->overrides != NULL)
     hashAdd(bt->overrides, var, NULL);
@@ -399,11 +414,11 @@ struct hash *trackDbHashSettings(struct trackDb *tdb)
  * done on demand. Returns settings hash. */
 {
 if (tdb->settingsHash == NULL)
-    tdb->settingsHash = trackDbSettingsFromString(tdb->settings);
+    tdb->settingsHash = trackDbSettingsFromString(tdb, tdb->settings);
 return tdb->settingsHash;
 }
 
-struct hash *trackDbSettingsFromString(char *string)
+struct hash *trackDbSettingsFromString(struct trackDb *tdb, char *string)
 /* Return hash of key/value pairs from string.  Differs
  * from raFromString in that it passes the key/val
  * pair through the backwards compatability routines. */
@@ -427,9 +442,31 @@ for (;;)
     s = lineEnd;
     val = lmCloneString(hash->lm, val);
     hashAdd(hash, key, val);
+    if (tdb && startsWith("subGroup", key))
+        {
+        char *storeValue = cloneString(val);
+        char *ptr = strchr(val, ' ');
+        if (ptr)
+            *ptr = 0;
+        if (tdb->viewHash == NULL)
+            tdb->viewHash = newHash(5);
+        hashAdd(tdb->viewHash, val, storeValue);
+        if (ptr)
+            *ptr = ' ';
+        }
     }
 freeMem(dupe);
 return hash;
+}
+
+char *trackDbViewSetting(struct trackDb *tdb, char *name)
+/* Return view setting from tdb, but *not* any of it's parents. */
+{
+if (tdb == NULL)
+    errAbort("Program error: null tdb passed to trackDbSetting.");
+if (tdb->viewHash == NULL)
+    return NULL;
+return hashFindVal(tdb->viewHash, name);
 }
 
 char *trackDbLocalSetting(struct trackDb *tdb, char *name)
@@ -438,7 +475,7 @@ char *trackDbLocalSetting(struct trackDb *tdb, char *name)
 if (tdb == NULL)
     errAbort("Program error: null tdb passed to trackDbSetting.");
 if (tdb->settingsHash == NULL)
-    tdb->settingsHash = trackDbSettingsFromString(tdb->settings);
+    tdb->settingsHash = trackDbSettingsFromString(tdb, tdb->settings);
 return hashFindVal(tdb->settingsHash, name);
 }
 
@@ -448,7 +485,7 @@ struct slName *trackDbLocalSettingsWildMatch(struct trackDb *tdb, char *expressi
 if (tdb == NULL)
     errAbort("Program error: null tdb passed to trackDbSetting.");
 if (tdb->settingsHash == NULL)
-    tdb->settingsHash = trackDbSettingsFromString(tdb->settings);
+    tdb->settingsHash = trackDbSettingsFromString(tdb, tdb->settings);
 
 struct slName *slFoundVars = NULL;
 struct hashCookie brownie = hashFirst(tdb->settingsHash);
@@ -1287,6 +1324,23 @@ void tdbExtrasMembersForAllSet(struct trackDb *tdb, struct _membersForAll *membe
 // Sets the composite view/dimensions members for all for later retrieval.
 {
 tdbExtrasGet(tdb)->membersForAll = membersForAll;
+}
+
+members_t *tdbExtrasMembers(struct trackDb *tdb, char *groupNameOrTag)
+// Returns subtrack members if already known, else NULL
+{
+struct tdbExtras *extras = tdbExtrasGet(tdb);
+
+if (extras->membersHash == NULL)
+    extras->membersHash = newHash(5);
+
+return (members_t *)hashFindVal(extras->membersHash, groupNameOrTag);
+}
+
+void tdbExtrasMembersSet(struct trackDb *tdb,  char *groupNameOrTag,  members_t *members)
+// Sets the subtrack members for later retrieval.
+{
+hashAdd(tdbExtrasGet(tdb)->membersHash, groupNameOrTag, members);
 }
 
 struct _membership *tdbExtrasMembership(struct trackDb *tdb)

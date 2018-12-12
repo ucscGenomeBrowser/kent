@@ -20,7 +20,7 @@ def runCommand(command):
     if p.returncode != 0:
         # keep command arguments nicely quoted
         cmdstr = " ".join([pipes.quote(arg) for arg in command])
-        raise Exception("Error from: " + cmdstr)
+        raise Exception("Error from: " + cmdstr + "\nError Message: " + cmderr)
     return cmdout, cmderr
 
 def runCommandMergedOutErr(command):

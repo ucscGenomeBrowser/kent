@@ -2700,7 +2700,7 @@ filterBy_t *filters = filterBySetGet(tdb, cart, tdb->track);
 if (filters != NULL)
     {
     puts("<p>");
-    filterBySetCfgUi(cart, tdb, filters, TRUE);
+    filterBySetCfgUi(cart, tdb, filters, TRUE, tdb->track);
     filterBySetFree(&filters);
     }
 char varName[64];
@@ -2797,9 +2797,9 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
     printf("</TD>\n");
     printf("<TD>%s", tdb->longLabel);
 
-    printf("&nbsp&nbsp;");
+    printf("&nbsp;&nbsp;");
     printDataVersion(database, tdb);
-    //printf("&nbsp&nbsp;<EM style='color:#666666; font-size:smaller;'>%s</EM>", dataVersion);
+    //printf("&nbsp;&nbsp;<EM style='color:#666666; font-size:smaller;'>%s</EM>", dataVersion);
     printf("</TD></TR>");
     }
 printf("</TABLE>");
@@ -3034,7 +3034,7 @@ else if (tdb->type != NULL)
     else if (startsWithWord("factorSource",tdb->type))
         factorSourceUi(database,tdb);
     else if (startsWithWord("bigBed",tdb->type))
-        labelCfgUi(database, cart, tdb);
+        labelCfgUi(database, cart, tdb, tdb->track);
     }
 
 if (!ajax) // ajax asks for a simple cfg dialog for right-click popup or hgTrackUi subtrack cfg
@@ -3423,9 +3423,9 @@ if (tdb->html != NULL && tdb->html[0] != 0)
     printf("</td><td nowrap>");
     cgiDown(0.7); // positions top link below line
     makeTopLink(tdb);
-    printf("&nbsp</td></tr><tr valign='bottom'><td nowrap>");
+    printf("&nbsp;</td></tr><tr valign='bottom'><td nowrap>");
     makeTopLink(tdb);
-    printf("&nbsp</td></tr></table>");
+    printf("&nbsp;</td></tr></table>");
     }
 }       /*      void trackUi(struct trackDb *tdb)       */
 

@@ -107,11 +107,13 @@ dataset. If no span is specified, the default span of 1 is used. As the name sug
 wiggles require the same size step throughout the dataset. If not specified, a step size of 1 is 
 used.</p>
 
+<a name="data"></a>
 <h2>Data values</h2>
 <p>
 Wiggle track data values can be integer or real, positive or negative values. Only positions 
 specified have data. Positions not specified do not have data and will not be graphed. All positions
-specified in the input data must be in numerical order.</p>
+specified in the input data must be in numerical order. NaN values are not supported by the browser 
+and, if included, may have unforeseen effects.</p>
 
 <h3>1-start coordinate system in use for variableStep and fixedStep</h3>
 <p>

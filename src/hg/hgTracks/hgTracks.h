@@ -281,6 +281,8 @@ struct track
 
 
     struct slInt *labelColumns; /* The columns in a bigBed that can be used for labels. */
+    boolean subTrackVisSet;     /* have we calculated visibility on this subtrack */
+    boolean subTrackVis;        /* if we calculated it, what is it */
     };
 
 struct window  // window in multiwindow image

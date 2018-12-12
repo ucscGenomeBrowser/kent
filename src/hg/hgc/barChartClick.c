@@ -353,13 +353,13 @@ static void printBoxplot(char *df, char *item, char *name2, char *units, char *c
 /* Plot data frame to image file and include in HTML */
 {
 struct tempName pngTn;
+struct dyString *cmd = dyStringNew(0);
 trashDirFile(&pngTn, "hgc", "barChart", ".png");
 
 /* Exec R in quiet mode, without reading/saving environment or workspace */
-char cmd[256];
-safef(cmd, sizeof(cmd), "Rscript --vanilla --slave hgcData/barChartBoxplot.R %s %s %s %s %s %s",
+dyStringPrintf(cmd, "Rscript --vanilla --slave hgcData/barChartBoxplot.R %s '%s' %s %s %s %s",
                                 item, units, colorFile, df, pngTn.forHtml, isEmpty(name2) ? "n/a" : name2);
-int ret = system(cmd);
+int ret = system(cmd->string);
 if (ret == 0)
     printf("<img src = \"%s\" border=1><br>\n", pngTn.forHtml);
 else

@@ -45,20 +45,242 @@
 
 <!-- ============= 2018 archived news ============= -->
 
-<a name="081818"></a>
-<h2>Aug. 10, 2018 &nbsp;&nbsp; BLAT ALL genomes feature</h2>
+<a name="120418"></a>
+<h2>Dec. 04, 2018 &nbsp;&nbsp; New dbSNP build 151 tracks now available for hg19 and hg38</h2>
 <p>
-The UCSC Genome Browser is proud to announce a new <a href="https://genome.ucsc.edu/cgi-bin/hgBlat?command=start" target="_blank">BLAT</a> feature,<em>Search ALL</em>. Generally, Blat is used to find locations of sequence homology in a single target genome or determine the exon structure of an mRNA. The <em>Search ALL</em>  feature allow users to search the genomes of the default assemblies for all of our organisms. The results page displays an ordered list of all our organisms and their homology with your query sequence. The results are ordered so that the organism with the best alignment score is at the top, indicating which region(s) of that organism has the greatest homology with your query sequence.</p>
-<p> One example of how a user might employ the new <em>Search ALL</em> feature is to determine what organism an ambiguous query comes from.  
+We are pleased to announce the release of our &quot;SNP&quot; tracks derived from
+<a href="https://www.ncbi.nlm.nih.gov/SNP/snp_summary.cgi?view+summary=view+summary&build_id=151"
+target="_blank">NCBI&#39;s dbSNP Human Build 151 data</a>, available on the two most recent human
+assemblies, 
+<a href="../cgi-bin/hgTrackUi?db=hg38&g=snp151" target="_blank">GRCh38/hg38</a> and 
+<a href="../cgi-bin/hgTrackUi?db=hg19&g=snp151" target="_blank">GRCh37/hg19</a>.
+This release 
+<a href="https://ncbiinsights.ncbi.nlm.nih.gov/2018/07/02/dbsnp-database-doubles-size-twice-13-
+months/" target="_blank">will again double in size</a> to about 650 million variants compared to
+the previous 150 release (300 million for hg38, and over 200 million for hg19).</p>
+
+<p>
+There are four SNP tracks available as part of this release:
+<ul>
+  <li>
+  All SNPs (151): containing all mappings of reference SNPs to the human assembly. The tracks below
+  are subsets of <i>All SNPs (151)</i>.</li>
+  <li>
+  Common SNPs (151): uniquely mapped variants that appear in at least 1% of the global population or
+  are 100% non-reference.</li>
+  <li>
+  Flagged SNPs (151): uniquely mapped variants, excluding Common SNPs, that have been flagged by
+  dbSNP as &quot;clinically associated.&quot;</li>
+  <li>
+  Mult. SNPs (151): variants that have been mapped to more than one genomic location. This track
+  has been shrinking over the course of the last few releases as dbSNP now excludes most SNPs whose
+  flanking sequences map to multiple locations in the genome.</li>
+</ul></p>
+
+<p class='text-center'>
+  <img class='text-center' src="../images/SNPs151Announce.jpg" alt="SNPs151 growth" width="699"
+  height="464">
+  <p class='gbsCaption text-center'>The graph above shows the increasing growth of variants
+  in the All SNPs track, by dbSNP release number, and the stagnant growth of the Common SNPs track, 
+  essentially stuck at
+  14.8 million variants.</p>
+<p>
+By default, only the <i>Common SNPs (151)</i> are visible in the browser; other tracks must be made
+visible using the track controls. All four SNP tracks reside in the &quot;Variation&quot; group
+category for the hg19 and hg38 genome browsers.</p>
+<p>
+We would like to thank Angie Hinrichs, Robert Kuhn, and Jairo Navarro for their work on creating
+and analyzing the data. We'd like to thank the dbSNP group at NCBI for providing access to the data.
+</p> 
+
+<a name="112118"></a>
+<h2>Nov. 21. 2018 &nbsp;&nbsp; New Genome Browser: Chicken, galGal6 (<em>Gallus gallus</em>)</h2>
+<p>
+A genome browser is now available for the <em>Gallus gallus</em> assembly released in March 2018 by the
+<a href="https://www.ncbi.nlm.nih.gov/grc" target="_blank"> Genome Reference Consortium</a> (GRCg6a).
+<h3>About the assembly:</h3>
+<ul>
+  <li><b>UCSC Genome Browser assembly ID:</b> galGal6</li>
+  <li><b>Sequencing/Assembly provider ID:</b> <a href="https://www.ncbi.nlm.nih.gov/grc">
+Genome Reference Consortium</a></li>
+  <li><b>Assembly date:</b> March 2018</li>
+  <li><b>Accession ID:</b>GCF_000002315.5</li>
+  <li><b>NCBI Genome information:</b><a href="https://www.ncbi.nlm.nih.gov/genome/111" 
+target="_blank" > 111</a> <em>(Gallus gallus)</em></li>
+  <li><b>NCBI Assembly information:</b><a href="https://www.ncbi.nlm.nih.gov/assembly/1668981" 
+target="_blank" > 1668981 </a></li>
+  <li><b>NCBI BioProject information:</b><a href="https://www.ncbi.nlm.nih.gov/bioproject/13342" 
+target="_blank" > 13342</a></li>
+  <li><b>NCBI BioSample information:</b><a href="https://www.ncbi.nlm.nih.gov/biosample/SAMN02981218"
+target="_blank" > SAMN02981218</a></li>
+  <li><b>Contig+scaffold count:</b> 1928</li>
+  <li><b>Total size:</b> 1,065,365,425</li>
+  <li><a href="../goldenPath/credits.html#chicken_credits" 
+target="_blank" >Acknowledgments</a></li>
+</ul>
+<h3>Data and Downloads:</h3>
+<ul>
+  <li><a href="../goldenPath/credits.html#chicken_use" 
+target="_blank" >Data use conditions and restrictions</a></li>
+  <li><a href="../goldenPath/help/ftp.html" 
+target="_blank" >Rsync</a> and
+<a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/galGal6/" 
+target="_blank" >FTP</a></li>
+  <li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#chicken"
+target="_blank" >Downloads page</a></li>
+</ul>
+</p>
+
+<a name="111918"></a>
+<h2>Nov. 19. 2018 &nbsp;&nbsp; New Genome Browser: Orangutan, ponAbe3 (<em>Pongo pygmaeus abelii
+</em>)</h2>
+<p>
+A genome browser is now available for the <em>Pongo pygmaeus abelii</em> assembly released in January 2018 by the
+<a href="http://www.gs.washington.edu/" target="_blank"> University of Washington</a> (Susie_PABv2).
+<h3>About the assembly:</h3>
+<ul>
+  <li><b>UCSC Genome Browser assembly ID:</b> ponAbe3</li>
+  <li><b>Sequencing/Assembly provider ID:</b> <a href="http://eichlerlab.gs.washington.edu/index.html">
+University of Washington</a></li>
+  <li><b>Assembly date:</b> January 2018</li>
+  <li><b>Accession ID:</b> GCF_002880775.1</li>
+  <li><b>NCBI Genome information:</b><a href="https://www.ncbi.nlm.nih.gov/genome/325" 
+target="_blank" > 325</a> <em>(Pongo pygmaeus abelii)</em></li>
+  <li><b>NCBI Assembly information:</b><a href="https://www.ncbi.nlm.nih.gov/assembly/1529631" 
+target="_blank" > 1529631 </a></li>
+  <li><b>NCBI BioProject information:</b><a href="https://www.ncbi.nlm.nih.gov/bioproject/369439" 
+target="_blank" > 369439</a></li>
+  <li><b>NCBI BioSample information:</b><a href="https://www.ncbi.nlm.nih.gov/biosample/SAMN06275555" 
+target="_blank" > SAMN06275555</a></li>
+  <li><b>Contig+scaffold count:</b> 5,300</li>
+  <li><b>Total size:</b> 3,065,052,215</li>
+  <li><a href="../goldenPath/credits.html#orangutan_credits" 
+target="_blank" >Acknowledgments</a></li>
+</ul>
+<h3>Data and Downloads:</h3>
+<ul>
+  <li><a href="../goldenPath/credits.html#orangutan_use" 
+target="_blank" >Data use conditions and restrictions</a></li>
+  <li><a href="../goldenPath/help/ftp.html" 
+target="_blank" >Rsync</a> and
+<a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/ponAbe3/" 
+target="_blank" >FTP</a></li>
+  <li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#orangutan"
+target="_blank" >Downloads page</a></li>
+</ul>
+</p>
+
+<a name="111618"></a>
+<h2>Nov. 16, 2018 &nbsp;&nbsp; GENCODE Genes v29 track released for human (GRCh38/hg38)</h2>
+<p>
+We are  pleased to announce the release of the GENCODE Genes v29 track for the Human
+(<a href="../cgi-bin/hgGateway?db=hg38" target="_blank">GRCh38/hg38</a>) 
+assembly. In this GENCODE Genes update, we have made the ENST* IDs the default IDs and have added
+the GENCODE pseudogenes to the knownGene tables. 
+</p>
+<p>
+More details about the GENCODE Genes v29 track can be found on the
+<a href="../cgi-bin/hgTrackUi?db=hg38&g=knownGene" target="_blank">GENCODE Genes track description
+page</a>.</p>
+<p>
+We would like to thank the <a href="https://www.gencodegenes.org/" target="_blank">GENCODE
+Project</a> for providing the data. The creation of this track was made possible thanks to Brian
+Raney, Mark Diekhans, and Jairo Navarro.</p>
+
+<a name="111318"></a>
+<h2>Nov. 13, 2018 &nbsp;&nbsp; New video:  Saving and Sharing Sessions   </h2>
+<p>
+We are pleased to announce the release of another video tutorial, 
+<a href =
+"https://www.youtube.com/watch?v=d5rHBLXwraM&feature=youtu.be&feature=player_detailpage&v=8ATcoDTOc0g&list=UUQnUJepyNOw0p8s2otX4RYQ"
+target = _blank>Saving and sharing sessions</a>.  
+
+The Saved Sessions feature of the Browser has been around
+for quite some time, but many of our users have not made full use of it.  It
+offers a great way to keep track of your thinking on a particular topic and
+has also been discussed in our <a href = "http://genome.ucsc.edu/blog/2015/08/"
+target = blank>blog</a>.
+</p>
+
+<p>
+This
+<a href =
+"https://www.youtube.com/watch?v=d5rHBLXwraM&feature=youtu.be&feature=player_detailpage&v=8ATcoDTOc0g&list=UUQnUJepyNOw0p8s2otX4RYQ"
+target = _ blank>video</a>
+shows how to create an
+account, how to save sessions for easy future access, how to share sessions with
+colleagues and how to make a public session that you can share with all Genome Browser
+users.
+The video comes with a full <a href = "../training/vids/transcript16.pdf" target =
+blank>transcript</a>
+</p>
+
+<p>
+Links to all of our tutorials are available on our <a href = "../training/"
+target = _blank>training page</a> and on our <a href =
+"https://www.youtube.com/channel/UCQnUJepyNOw0p8s2otX4RYQ/videos" target = _blank>YouTube
+channel</a>.  At the YouTube channel and in the transcript, quick links offer access
+to the video at key points.
+</p>
+
+<p>
+Produced at UCSC by Robert  Kuhn and David Gibson.
+</p>
+
+<a name="2018"></a>
+<a name="110918"></a>
+<h2>Nov. 09, 2018 &nbsp;&nbsp; BLAT ALL genomes feature</h2>
+<p>
+The UCSC Genome Browser is proud to announce a new <a href="../../cgi-bin/hgBlat?command=start" 
+target="_blank">BLAT</a> feature: <em>Search ALL</em>. Generally, BLAT is used to find locations
+of sequence similarity in a single target genome or to determine the exon structure of a mRNA. The
+<em>Search ALL</em>  feature allows users to search the genomes of the default assemblies for all
+of our organisms at once. The results page displays an ordered list of all our organisms and their
+similarity to your query sequence. The results are ordered so that the organism with the most hits
+is at the top, indicating which region(s) of that organism has the greatest similarity with your query
+sequence. One example of how a user might employ the new <em>Search ALL</em> feature is to determine
+what organism an unknown sequence comes from.
 </p>
 <p>
 See the following link for examples and more information on the
-<a href="http://genome.ucsc.edu/goldenPath/help/hgTracksHelp.html#BLATAlign">Using BLAT alignments</a> 
+<a href="../../goldenPath/help/hgTracksHelp.html#BLATAlign" target="_blank">Using BLAT alignments</a>
 and
-<a href="https://hgwdev.gi.ucsc.edu/FAQ/FAQblat.html">BLAT FAQs</a>
+<a href="../../FAQ/FAQblat.html" target="_blank">BLAT FAQs</a>. <br><br>
+
+Thanks to Galt Barber and Conner Powell for development and testing of this new feature.
 </p>
 
 
+
+<a name="110718"></a>
+<h2>Nov. 7, 2018 &nbsp;&nbsp; Interact enhancements and GeneHancer track</h2>
+<p>
+The UCSC Genome Browser is pleased to announce enhancements to our 
+<a href="../goldenPath/help/interact.html">interact track format</a> as well as 
+our first native track using this format: 
+<a href="../cgi-bin/hgTrackUi?db=hg19&g=geneHancer">GeneHancer</a>. GeneHancer is a 
+database of human regulatory elements (enhancers and promoters) and their inferred target genes. 
+These elements were created from over 1 million regulatory elements obtained from seven 
+genome-wide databases--more information is available in the 
+<a href="../cgi-bin/hgTrackUi?db=hg19&g=geneHancer#TRACK_HTML">methods</a>. 
+This track is available on the hg19 and hg38 assemblies.</p>
+
+<p>
+Interact format now supports an inverted view (hills instead of valleys), pack and squish visibility 
+modes, and a cluster mode which combines directional interactions with the same target or source 
+into a single item. For additional information see our 
+<a href="../goldenpath/help/trackDb/trackDbDoc.html#bigInteract">help docs</a>.</p>
+
+<p>
+Thanks to Simon Fishilevich, Marilyn Safran, Naomi Rosen, and Tsippi Iny Stein of the 
+<a href="https://www.genecards.org/" target="_blank">GeneCards group</a> and Shifra Ben-Dor of the 
+<a href="https://www.weizmann.ac.il/LS_CoreFacilities/bioinformatics/about" target="_blank">
+Bioinformatics Core group at the Weizmann Institute</a> for providing this data and 
+assisting with track development. Thanks to Kate Rosenbloom, Max Haeussler, and 
+Luis Nassar of the UCSC Genome Browser for development and testing.</p>
+
+<p>
+<img src="../../images/GeneHancer_Announce.png" alt="GeneHancer_Release.png"></p>
 
 <a name="101118"></a>
 <h2>Oct. 11, 2018 &nbsp;&nbsp; Four new genome assemblies available </h2>
@@ -115,7 +337,6 @@ and collaborators worldwide. See the
 <a href="https://genome.ucsc.edu/goldenPath/credits.html">Credits</a> for a detailed list of the
 organizations and individuals who contributed to these releases.</p>
 
-<a name="2018"></a>
 <a name="081018"></a>
 <h2>Aug. 10, 2018 &nbsp;&nbsp; New interact track type</h2>
 <p>
@@ -132,11 +353,11 @@ See the following link for examples and more information on the
 <a href="http://genome.ucsc.edu/goldenPath/help/interact.html">interact and bigInteract formats.</a>
 
 <p>
-Thanks to Kate Rosenbloom and Jairo Navarro for the
+Thanks to Kate Rosenbloom, Brian Raney, and Jairo Navarro for the
 development and testing of this new track format.</p>
 
 <p> 
-<img src="../../images/GeneHancer_Example.png" alt="GeneHancer_Example.png"></p>
+<img src="../images/GeneHancer_Example.png" alt="GeneHancer_Example.png"></p>
 
 <a name="073118"></a>
 <h2>Jul. 31, 2018 &nbsp;&nbsp; New Ensembl gene tracks for 60 assemblies</h2>

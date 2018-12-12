@@ -4313,7 +4313,7 @@ if ((sameString(tdb->table,"altLocations") || sameString(tdb->table,"fixLocation
         *p = '\0';
     char *hgsid = cartSessionId(cart);
     char *desc = sameString(tdb->table, "altLocations") ? "alternate haplotype" : "fix patch";
-    printf("<A HREF=\"/cgi-bin/hgTracks?hgsid=%s&virtModeType=singleAltHaplo&singleAltHaploId=%s\">"
+    printf("<A HREF=\"hgTracks?hgsid=%s&virtModeType=singleAltHaplo&singleAltHaploId=%s\">"
            "Show this %s placed on its chromosome</A><BR>\n",
            hgsid, itemCpy, desc);
     }
@@ -5944,19 +5944,23 @@ void printAlignments(struct psl *pslList, int startFirst, char *hgcCommand,
 printAlignmentsExtra(pslList, startFirst, hgcCommand, "htcCdnaAliInWindow", tableName, itemIn);
 }
 
-struct psl *getAlignments(struct sqlConnection *conn, char *table, char *acc)
-/* get the list of alignments for the specified acc */
+static struct psl *getAlignmentsTName(struct sqlConnection *conn, char *table, char *acc,
+                                      char *tName)
+/* get the list of alignments for the specified acc and tName (if given). */
 {
 struct sqlResult *sr = NULL;
 char **row;
 struct psl *psl, *pslList = NULL;
 boolean hasBin;
-char splitTable[64];
-char query[256];
+char splitTable[256];
+char query[1024];
 if (!hFindSplitTable(database, seqName, table, splitTable, &hasBin))
     errAbort("can't find table %s or %s_%s", table, seqName, table);
-
-sqlSafef(query, sizeof(query), "select * from %s where qName = '%s'", splitTable, acc);
+if (isNotEmpty(tName))
+    sqlSafef(query, sizeof(query), "select * from %s where qName = '%s' and tName = '%s'",
+             splitTable, acc, tName);
+else
+    sqlSafef(query, sizeof(query), "select * from %s where qName = '%s'", splitTable, acc);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -5966,6 +5970,12 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 slReverse(&pslList);
 return pslList;
+}
+
+struct psl *getAlignments(struct sqlConnection *conn, char *table, char *acc)
+/* get the list of alignments for the specified acc */
+{
+return getAlignmentsTName(conn, table, acc, NULL);
 }
 
 struct psl *loadPslRangeT(char *table, char *qName, char *tName, int tStart, int tEnd)
@@ -7369,11 +7379,19 @@ char *spec = trackDbRequiredSetting(tdb, BASE_COLOR_USE_SEQUENCE);
 char *specCopy = cloneString(spec);
 
 // value is: extFile seqTbl extFileTbl
+// or:       db [dddBbb1]
 char *words[3];
 int nwords = chopByWhite(specCopy, words, ArraySize(words));
-if ((nwords != ArraySize(words)) || !sameString(words[0], "extFile"))
+if (sameString(words[0], "extFile") && (nwords == ArraySize(words)))
+    return hDnaSeqGet(database, itemName, words[1], words[2]);
+else if (sameString(words[0], "db"))
+    {
+    char *db = (nwords == 2) ? words[1] : database;
+    return hChromSeq(db, itemName, 0, 0);
+    }
+else
     errAbort("invalid %s track setting: %s", BASE_COLOR_USE_SEQUENCE, spec);
-return hDnaSeqGet(database, itemName, words[1], words[2]);
+return NULL; // make compiler happy
 }
 
 void htcCdnaAli(char *acc)
@@ -7432,7 +7450,8 @@ else if (sameString("HInvGeneMrna", aliTable))
     sqlSafef(query, sizeof query, "select mrnaAcc from HInv where geneId='%s'", acc);
     rnaSeq = hRnaSeq(database, sqlQuickString(conn, query));
     }
-else if (sameString("ncbiRefSeqPsl", aliTable) || startsWith("altSeqLiftOverPsl", aliTable))
+else if (sameString("ncbiRefSeqPsl", aliTable) || startsWith("altSeqLiftOverPsl", aliTable) ||
+         startsWith("fixSeqLiftOverPsl", aliTable))
     {
     rnaSeq = getBaseColorSequence(acc, aliTable);
     }
@@ -7560,7 +7579,9 @@ else
     wholePsl = pslLoad(row+hasBin);
     sqlFreeResult(&sr);
 
-    if (startsWith("ucscRetroAli", aliTable) || startsWith("retroMrnaAli", aliTable) || sameString("pseudoMrna", aliTable) || startsWith("altSeqLiftOverPsl", aliTable) || startsWith("ncbiRefSeqPsl", aliTable))
+    if (startsWith("ucscRetroAli", aliTable) || startsWith("retroMrnaAli", aliTable) ||
+        sameString("pseudoMrna", aliTable) || startsWith("altSeqLiftOverPsl", aliTable) ||
+        startsWith("fixSeqLiftOverPsl", aliTable) || startsWith("ncbiRefSeqPsl", aliTable))
 	{
         rnaSeq = getBaseColorSequence(acc, aliTable);
 	}
@@ -8858,49 +8879,113 @@ printAlignments(pslList, start, "htcProteinAli", "chr1_viralProt", geneName);
 printTrackHtml(tdb);
 }
 
-void doPslAltSeq(struct trackDb *tdb, char *item)
-/* Fairly generic PSL handler -- print out some more details about the
- * alignment. */
+static boolean pslTrimListToTargetRange(struct psl *pslList, int winStart, int winEnd,
+                                        int *retQRangeStart, int *retQRangeEnd)
+/* If the current window overlaps the target coords of any psl(s) in pslList, then return TRUE and
+ * set *retQRange{Start,End} to span all query coord ranges corresponding to target coord ranges.
+ * errAbort if qName is not consistent across all psls.
+ * Otherwise return FALSE and set *retQRange{Start,End} to -1. */
 {
+boolean foundOverlap = FALSE;
+char *qName = NULL;
+int qRangeStart = -1, qRangeEnd = -1;
+struct psl *psl;
+for (psl = pslList;  psl != NULL;  psl = psl->next)
+    {
+    if (qName == NULL)
+        qName = psl->qName;
+    else if (differentString(qName, psl->qName))
+        errAbort("pslTrimListToTargetRange: inconsistent qName: got both '%s' and '%s'",
+                 qName, psl->qName);
+    if (psl->tStart >= winStart && psl->tEnd <= winEnd)
+        {
+        foundOverlap = TRUE;
+        if (qRangeStart < 0 || psl->qStart < qRangeStart)
+            qRangeStart = psl->qStart;
+        if (qRangeEnd < 0 || psl->qEnd > qRangeEnd)
+            qRangeEnd = psl->qEnd;
+        }
+    else
+        {
+        struct psl *partPsl = pslTrimToTargetRange(psl, winStart, winEnd);
+        if (partPsl)
+            {
+            foundOverlap = TRUE;
+            if (qRangeStart < 0 || partPsl->qStart < qRangeStart)
+                qRangeStart = partPsl->qStart;
+            if (qRangeEnd < 0 || partPsl->qEnd > qRangeEnd)
+                qRangeEnd = partPsl->qEnd;
+            }
+        }
+    }
+*retQRangeStart = qRangeStart;
+*retQRangeEnd = qRangeEnd;
+return foundOverlap;
+}
+
+void doPslAltSeq(struct trackDb *tdb, char *item)
+/* Details for alignments between chromosomes and alt haplogtype or fix patch sequences. */
+{
+char *chrom = cartString(cart, "c");
 int start = cartInt(cart, "o");
-int total = 0, i = 0;
-struct psl *pslList = NULL;
 struct sqlConnection *conn = hAllocConn(database);
-// char *otherDb = trackDbSetting(tdb, "otherDb");
-// int altSize = hChromSize(otherDb, item);
 
 genericHeader(tdb, item);
 printCustomUrl(tdb, item, TRUE);
 
 puts("<P>");
-puts("<B>Alignment Summary:</B><BR>\n");
-// char strBuf[64];
-// sprintLongWithCommas(strBuf, altSize);
-// printf("<B>Alignment Summary: '%s' %s</B><BR>\n", item, strBuf);
-pslList = getAlignments(conn, tdb->table, item);
-printAlignments(pslList, start, "htcCdnaAli", tdb->table, item);
-
-puts("<P>");
-total = 0;
-for (i=0;  i < pslList -> blockCount;  i++)
+struct psl *pslList = getAlignmentsTName(conn, tdb->table, item, chrom);
+if (pslList)
     {
-    total += pslList->blockSizes[i];
-    }
-printf("%d block(s) covering %d bases<BR>\n"
-       "%d matching bases<BR>\n"
-       "%d mismatching bases<BR>\n"
-       "%d N bases<BR>\n"
-       "%d bases inserted in %s<BR>\n"
-       "%d bases inserted in %s<BR>\n"
-       "score: %d<BR>\n",
-       pslList->blockCount, total,
-       pslList->match,
-       pslList->misMatch,
-       pslList->nCount,
-       pslList->tBaseInsert, hOrganism(database),
-       pslList->qBaseInsert, item,
-       pslScore(pslList));
+    printf("<B>Alignment of %s to %s:</B><BR>\n", item, pslList->tName);
+    printAlignments(pslList, start, "htcCdnaAli", tdb->table, item);
 
+    char *hgsid = cartSessionId(cart);
+    int rangeStart = 0, rangeEnd = 0;
+    if (pslTrimListToTargetRange(pslList, winStart, winEnd, &rangeStart, &rangeEnd))
+        {
+        printf("<A HREF='hgTracks?hgsid=%s&position=%s:%d-%d'>"
+               "View corresponding position range on %s</A><BR>\n",
+               hgsid, item, rangeStart+1, rangeEnd, item);
+        }
+    char *altFix = item;
+    if (!endsWith(altFix, "alt") && !endsWith(altFix, "fix"))
+        altFix = pslList->tName;
+    printf("<A HREF=\"hgTracks?hgsid=%s&virtModeType=singleAltHaplo&singleAltHaploId=%s\">"
+           "Show %s placed on its chromosome</A><BR>\n",
+           hgsid, altFix, altFix);
+
+    puts("<P><B>Alignment stats:</B><BR>");
+    // Sometimes inversions cause alignments to be split up; just sum up all the stats.
+    int totalBlocks = 0, totalSize = 0, totalMatch = 0, totalMismatch = 0, totalN = 0;
+    int totalTIns = 0, totalQIns = 0;
+    struct psl *psl;
+    for (psl = pslList;  psl != NULL;  psl = psl->next)
+        {
+        totalBlocks += psl->blockCount;
+        int i;
+        for (i=0;  i < psl->blockCount;  i++)
+            totalSize += psl->blockSizes[i];
+        totalMatch += (psl->match + psl->repMatch);
+        totalMismatch += psl->misMatch;
+        totalN += psl->nCount;
+        totalTIns += psl->tBaseInsert;
+        totalQIns += psl->qBaseInsert;
+        }
+    printf("%d block(s) covering %d bases<BR>\n"
+           "%d matching bases (%.2f%%)<BR>\n"
+           "%d mismatching bases (%.2f%%)<BR>\n"
+           "%d N bases(%.2f%%)<BR>\n"
+           "%d bases inserted in %s<BR>\n"
+           "%d bases inserted in %s<BR>\n",
+           totalBlocks, totalSize,
+           totalMatch, 100.0 * (totalMatch / (double)totalSize),
+           totalMismatch, 100.0 * (totalMismatch / (double)totalSize),
+           totalN, 100.0 * (totalN / (double)totalSize),
+           totalTIns, pslList->tName, totalQIns, item);
+    }
+else
+    warn("Unable to find alignment for '%s' in table %s", item, tdb->table);
 printTrackHtml(tdb);
 hFreeConn(&conn);
 }
@@ -8936,7 +9021,7 @@ printf("%d block(s) covering %d bases<BR>\n"
        "%d bases inserted in %s<BR>\n"
        "score: %d<BR>\n",
        pslList->blockCount, total,
-       pslList->match,
+       pslList->match + pslList->repMatch,
        pslList->misMatch,
        pslList->nCount,
        pslList->tBaseInsert, hOrganism(database),
@@ -25865,7 +25950,7 @@ else if ( sameWord(table, "blastHg16KG") ||  sameWord(table, "blatHg16KG" ) ||
     {
     blastProtein(tdb, item);
     }
-else if (startsWith("altSeqLiftOverPsl", table))
+else if (startsWith("altSeqLiftOverPsl", table) || startsWith("fixSeqLiftOverPsl", table))
     {
     doPslAltSeq(tdb, item);
     }

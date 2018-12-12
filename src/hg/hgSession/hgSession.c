@@ -162,7 +162,12 @@ void addSessionLink(struct dyString *dy, char *userName, char *sessionName,
  * copy-paste it into emails.  */
 {
 struct dyString *dyTmp = dyStringNew(1024);
-dyStringPrintf(dyTmp, "%shgTracks?hgS_doOtherUser=submit&"
+if (cfgOptionBooleanDefault("hgSession.shortLink", FALSE) &&
+        !stringIn("%2F", userName) && !stringIn("%2F", sessionName))
+    dyStringPrintf(dyTmp, "http%s://%s/s/%s/%s", cgiAppendSForHttps(), cgiServerNamePort(),
+        userName, sessionName);
+else
+    dyStringPrintf(dyTmp, "%shgTracks?hgS_doOtherUser=submit&"
 	       "hgS_otherUserName=%s&hgS_otherUserSessionName=%s",
 	       hLocalHostCgiBinUrl(), userName, sessionName);
 if (encode)
@@ -174,6 +179,17 @@ else
     dyStringPrintf(dy, "%s", dyTmp->string);
     }
 dyStringFree(&dyTmp);
+}
+
+void printShareMessage(struct dyString *dy, char *userName, char *sessionName,
+            boolean encode)
+{
+struct dyString *dyTmp = dyStringNew(0);
+addSessionLink(dyTmp, userName, sessionName, encode);
+dyStringPrintf(dy,
+    "<p>You can share this session with the following  URL: %s</p>",
+    dyTmp->string);
+//dyStringFree(&dyTmp);
 }
 
 char *getSessionLink(char *encUserName, char *encSessionName)
@@ -804,6 +820,10 @@ if (sqlTableExists(conn, namedSessionTable))
 	  htmlEncode(sessionName), (shareSession ? "may" : "may not"),
 	  getSessionLink(encUserName, encSessionName),
 	  getSessionEmailLink(encUserName, encSessionName));
+    if (shareSession)
+        {
+        printShareMessage(dyMessage, encUserName, encSessionName, FALSE);
+        }
     cartCheckForCustomTracks(cart, dyMessage);
     }
 else
@@ -1453,6 +1473,8 @@ if (isEmpty(dyMessage->string))
 dyStringPrintf(dyMessage, "%s %s",
 	       getSessionLink(encUserName, encSessionName),
 	       getSessionEmailLink(encUserName, encSessionName));
+if (shared)
+    printShareMessage(dyMessage, encUserName, encSessionName, FALSE);
 return dyStringCannibalize(&dyMessage);
 }
 

@@ -1131,7 +1131,7 @@ if (isNotEmpty(setting))
 	sameString(setting, "ss") || startsWith("extFile", setting) ||
 	sameString(setting, "hgPcrResult") || sameString(setting, "nameIsSequence") ||
 	sameString(setting, "seq1Seq2") || sameString(setting, "lfExtra") ||
-	sameString(setting, "lrg") || startsWith("table ", setting))
+	sameString(setting, "lrg") || startsWith("table ", setting) || startsWithWord("db", setting))
 	gotIt = TRUE;
     else if (differentString(setting, "none"))
 	errAbort("trackDb for %s, setting %s: unrecognized value \"%s\".  "
@@ -2562,30 +2562,6 @@ if (dimensions && *dimensions)
 
 #define SUBGROUP_MAX 9
 
-enum filterCompositeType
-// Filter composites are drop-down checkbix-lists for selecting subtracks (eg hg19::HAIB TFBS)
-    {
-    fctNone=0,      // do not offer filter for this dimension
-    fctOne=1,       // filter composite by one or all
-    fctOneOnly=2,   // filter composite by only one
-    fctMulti=3,     // filter composite by multiselect: all, one or many
-    };
-
-typedef struct _members
-    {
-    int count;
-    char * groupTag;
-    char * groupTitle;
-    char **tags;
-    char **titles;
-    boolean *selected;
-    char * setting;
-    int *subtrackCount;              // count of subtracks
-    int *currentlyVisible;           // count of visible subtracks
-    struct slRef **subtrackList;     // set of subtracks belonging to each subgroup member
-    enum filterCompositeType fcType; // fctNone,fctOne,fctMulti
-    } members_t;
-
 int subgroupCount(struct trackDb *parentTdb)
 // How many subGroup setting does this parent have?
 {
@@ -2606,27 +2582,19 @@ char * subgroupSettingByTagOrName(struct trackDb *parentTdb, char *groupNameOrTa
 {
 struct trackDb *ancestor;
 for (ancestor = parentTdb; ancestor != NULL; ancestor = ancestor->parent)
-{
-int ix;
-char *setting = NULL;
-if (startsWith("subGroup",groupNameOrTag))
     {
-    setting = trackDbSetting(ancestor, groupNameOrTag);
+    char *setting = NULL;
+    if (startsWith("subGroup",groupNameOrTag))
+        {
+        setting = trackDbSetting(ancestor, groupNameOrTag);
+        if (setting != NULL)
+            return setting;
+        }
+    // these views are cached at trackDb read time
+    setting = trackDbViewSetting(ancestor, groupNameOrTag);
     if (setting != NULL)
-	return setting;
+        return setting;
     }
-for (ix=1;ix<=SUBGROUP_MAX;ix++)
-    {
-    char subGrp[16];
-    safef(subGrp, ArraySize(subGrp), "subGroup%d",ix);
-    setting = trackDbSetting(ancestor, subGrp);
-    if (setting != NULL)  // Doesn't require consecutive subgroups
-	{
-	if (startsWithWord(groupNameOrTag,setting))
-	    return setting;
-	}
-    }
-}
 return NULL;
 }
 
@@ -2640,11 +2608,24 @@ static members_t *subgroupMembersGet(struct trackDb *parentTdb, char *groupNameO
 // Parse a subGroup setting line into tag,title, names(optional) and values(optional),
 // returning the count of members or 0
 {
+static members_t nullMember;   // place holder for NULL
+members_t *members  = tdbExtrasMembers(parentTdb, groupNameOrTag);
+if (members != NULL)
+    {
+    if (members == &nullMember)
+        return NULL;
+    return members;
+    }
+
+
 int ix,count;
 char *setting = subgroupSettingByTagOrName(parentTdb, groupNameOrTag);
 if (setting == NULL)
+    {
+    tdbExtrasMembersSet(parentTdb, groupNameOrTag, &nullMember);
     return NULL;
-members_t *members = needMem(sizeof(members_t));
+    }
+members = needMem(sizeof(members_t));
 members->setting = cloneString(setting);
 char *words[SMALLBUF];
 count = chopLine(members->setting, words);
@@ -2653,6 +2634,7 @@ if (count <= 1)
     {
     freeMem(members->setting);
     freeMem(members);
+    tdbExtrasMembersSet(parentTdb, groupNameOrTag, &nullMember);
     return NULL;
     }
 members->groupTag   = words[0];
@@ -2669,6 +2651,8 @@ for (ix = 2,members->count=0; ix < count; ix++)
 	members->count++;
 	}
     }
+tdbExtrasMembersSet(parentTdb, groupNameOrTag, members);
+
 return members;
 }
 
@@ -2763,7 +2747,7 @@ members->count = ixOut;
 
 if (members->count == 0) // No members of this subgroup had a subtrack
     {
-    subgroupMembersFree(&members);
+    //subgroupMembersFree(&members);   // don't bother freeing
     return NULL;
     }
 
@@ -3045,6 +3029,8 @@ static void membersForAllSubGroupsFree(struct trackDb *parentTdb,
 				   membersForAll_t** membersForAllPtr)
 // frees memory for membersForAllSubGroups struct
 {
+return;    // don't bother freeing things, just takes time for no benefit
+
 if (membersForAllPtr && *membersForAllPtr)
     {
     if (parentTdb != NULL)
@@ -3138,7 +3124,7 @@ for (ix = 0,membership->count=0; ix < cnt; ix++)
 	    if (ix2 != -1)
 		membership->titles[membership->count] =
 					strSwapChar(cloneString(members->titles[ix2]),'_',' ');
-	    subgroupMembersFree(&members);
+//	    subgroupMembersFree(&members);   /// don't bother freeing
 	    }
 	membership->count++;
 	}
@@ -3192,7 +3178,7 @@ for (i=0; i<members->count; ++i)
     if (sameString(members->tags[i], id))
 	result = cloneString(members->titles[i]);
     }
-subgroupMembersFree(&members);
+//subgroupMembersFree(&members);   /// don't bother freeing
 return result;
 }
 
@@ -3207,7 +3193,7 @@ for (i=0; i<members->count; ++i)
     if (sameString(members->titles[i], label))
 	result = cloneString(members->tags[i]);
     }
-subgroupMembersFree(&members);
+//subgroupMembersFree(&members);   /// don't bother freeing
 return result;
 }
 
@@ -3631,7 +3617,7 @@ for (;val!=NULL;val=val->next)
     }
 }
 
-filterBy_t *buildFilterBy(struct trackDb *tdb, struct cart *cart, struct asObject *as, char *filterName)
+filterBy_t *buildFilterBy(struct trackDb *tdb, struct cart *cart, struct asObject *as, char *filterName, char *name)
 /* Build a filterBy_t structure from a <column>FilterValues statement. */
 {
 char *setting = trackDbSetting(tdb, filterName);
@@ -3649,7 +3635,7 @@ struct asColumn *asCol = asColumnFind(as, field);
 if (asCol != NULL)
     filterBy->title = asCol->comment;
 filterBy->useIndex = FALSE;
-filterBy->slValues = slNameListFromComma(value);
+filterBy->slValues = slNameListFromCommaEscaped(value);
 chopUpValues(filterBy);
 if (cart != NULL)
     {
@@ -3663,16 +3649,14 @@ if (cart != NULL)
         }
     }
 
-// Note: cannot use found name above because that may be at a higher (composite/view) level
-int len = strlen(tdb->track) + strlen(filterBy->column) + 15;
-filterBy->htmlName = needMem(len);
-safef(filterBy->htmlName, len, "%s.%s.%s", tdb->track,"filterBy",filterBy->column);
-freeMem(setting);
+struct dyString *dy = newDyString(128);
+dyStringPrintf(dy, "%s.%s.%s", name, "filterBy", filterBy->column);
+filterBy->htmlName = dy->string;
 
 return filterBy;
 }
 
-filterBy_t *filterByValues(struct trackDb *tdb, struct cart *cart, struct slName *filterValues)
+filterBy_t *filterByValues(struct trackDb *tdb, struct cart *cart, struct slName *filterValues, char *name)
 /* Build a filterBy_t list from tdb variables of the form *FilterValues */
 {
 struct asObject *as = asForTdb(NULL, tdb);
@@ -3680,7 +3664,7 @@ filterBy_t *filterByList = NULL, *filter;
 struct slName *fieldFilter;
 while ((fieldFilter = slPopHead(&filterValues)) != NULL)
     {
-    if ((filter = buildFilterBy(tdb, cart, as, fieldFilter->name)) != NULL)
+    if ((filter = buildFilterBy(tdb, cart, as, fieldFilter->name, name)) != NULL)
         slAddHead(&filterByList, filter);
     }
 return filterByList;
@@ -3692,7 +3676,7 @@ filterBy_t *filterBySetGetGuts(struct trackDb *tdb, struct cart *cart, char *nam
 // first check to see if this tdb is using "new" FilterValues cart variables
 struct slName *filterValues = trackDbSettingsWildMatch(tdb, FILTER_VALUES_WILDCARD);
 if (filterValues)
-    return filterByValues(tdb, cart, filterValues);
+    return filterByValues(tdb, cart, filterValues, name);
 
 filterBy_t *filterBySet = NULL;
 char *setting = trackDbSettingClosestToHome(tdb, settingName);
@@ -3938,7 +3922,7 @@ printf(">%s</OPTION>\n",label);
 
 void filterBySetCfgUiGuts(struct cart *cart, struct trackDb *tdb,
 		      filterBy_t *filterBySet, boolean onOneLine,
-		      char *filterTypeTitle, char *selectIdPrefix, char *allLabel)
+		      char *filterTypeTitle, char *selectIdPrefix, char *allLabel, char *prefix)
 // Does the UI for a list of filterBy structure for either filterBy or highlightBy controls
 {
 if (filterBySet == NULL)
@@ -3983,7 +3967,7 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next, ix++)
     if (isMultiple && tdbIsBigBed(tdb))
         {
         char cartSettingString[4096];
-        safef(cartSettingString, sizeof cartSettingString, "%s.%s", tdb->track, settingString);
+        safef(cartSettingString, sizeof cartSettingString, "%s.%s", prefix, settingString);
         printf("<b>Match if  ");
         cgiMakeRadioButton(cartSettingString, FILTERBY_MULTIPLE_LIST_AND, sameString(setting, FILTERBY_MULTIPLE_LIST_AND));
         printf(" all ");
@@ -4049,17 +4033,17 @@ puts("</TR></TABLE>");
 }
 
 void filterBySetCfgUi(struct cart *cart, struct trackDb *tdb,
-		  filterBy_t *filterBySet, boolean onOneLine)
+		  filterBy_t *filterBySet, boolean onOneLine, char *prefix)
 /* Does the filter UI for a list of filterBy structure */
 {
-filterBySetCfgUiGuts(cart, tdb, filterBySet, onOneLine, "Filter", "fbc", "All");
+filterBySetCfgUiGuts(cart, tdb, filterBySet, onOneLine, "Filter", "fbc", "All", prefix);
 }
 
 void highlightBySetCfgUi(struct cart *cart, struct trackDb *tdb,
-		     filterBy_t *filterBySet, boolean onOneLine)
+		     filterBy_t *filterBySet, boolean onOneLine, char *prefix)
 /* Does the highlight UI for a list of filterBy structure */
 {
-filterBySetCfgUiGuts(cart, tdb, filterBySet, onOneLine, "Highlight", "hbc", "None");
+filterBySetCfgUiGuts(cart, tdb, filterBySet, onOneLine, "Highlight", "hbc", "None", prefix);
 }
 
 #define COLOR_BG_DEFAULT_IX     0
@@ -4237,7 +4221,7 @@ switch(cType)
 			scoreCfgUi(db, cart,tdb,prefix,title,maxScore,boxed);
 
 			if(startsWith("bigBed", tdb->type))
-			    labelCfgUi(db, cart, tdb);
+			    labelCfgUi(db, cart, tdb, prefix);
 			}
 			break;
     case cfgPeak:
@@ -5929,6 +5913,10 @@ char option[256];
 boolean parentLevel = isNameAtParentLevel(tdb,name);
 boolean skipScoreFilter = FALSE;
 
+// score filters are explicitly handled by bigBed.  It's not automatically on.
+if (tdbIsBigBed(tdb))
+    skipScoreFilter = TRUE;
+
 // Numeric filters are first
 boolean isBoxOpened = FALSE;
 if (numericFiltersShowAll(db, cart, tdb, &isBoxOpened, boxed, parentLevel, name, title) > 0)
@@ -5945,23 +5933,12 @@ if (filterBySet != NULL)
 
     if (!isBoxOpened)   // Note filterBy boxes are not double "boxed",
         printf("<BR>"); // if there are no other filters
-    filterBySetCfgUi(cart,tdb,filterBySet,TRUE);
+    filterBySetCfgUi(cart,tdb,filterBySet,TRUE, name);
     filterBySetFree(&filterBySet);
     skipScoreFilter = TRUE;
     }
 
-// For no good reason scoreFilter is incompatible with filterBy and or numericFilters
-// FIXME scoreFilter should be implemented inside numericFilters and is currently specificly
-//       excluded to avoid unexpected changes
-if (skipScoreFilter)
-    {
-    if (isBoxOpened)
-        cfgEndBox(boxed);
-
-    return; // Cannot have both '*filter' and 'scoreFilter'
-    }
-
-boolean scoreFilterOk = (trackDbSettingClosestToHome(tdb, NO_SCORE_FILTER) == NULL);
+boolean scoreFilterOk = (trackDbSettingClosestToHome(tdb, NO_SCORE_FILTER) == NULL) && !skipScoreFilter;
 boolean glvlScoreMin = (trackDbSettingClosestToHome(tdb, GRAY_LEVEL_SCORE_MIN) != NULL);
 if (! (scoreFilterOk || glvlScoreMin))
     return;
@@ -6092,7 +6069,7 @@ slReverse(&list);
 return list;
 }
 
-void labelCfgUi(char *db, struct cart *cart, struct trackDb *tdb)
+void labelCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *prefix)
 /* If there is a labelFields for a bigBed, this routine is called to put up the label options. */
 {
 if (trackDbSettingClosestToHomeOn(tdb, "linkIdInName"))
@@ -6112,7 +6089,7 @@ printf("<B>Label:</B> ");
 struct slPair *thisLabel = labelList;
 for(; thisLabel; thisLabel = thisLabel->next)
     {
-    safef(varName, sizeof(varName), "%s.label.%s", tdb->track, thisLabel->name);
+    safef(varName, sizeof(varName), "%s.label.%s", prefix, thisLabel->name);
     boolean isDefault = FALSE;
     if (defaultLabelList == NULL)
         isDefault = (thisLabel == labelList);
@@ -6144,7 +6121,7 @@ char *typeLine = cloneString(tdb->type);
 char *words[8];
 int wordCount = wordCount = chopLine(typeLine, words);
 if (sameString(tdb->type, "bigPsl"))
-    labelCfgUi(db, cart, tdb);
+    labelCfgUi(db, cart, tdb, name);
 if (wordCount == 3 && sameWord(words[1], "xeno"))
     crossSpeciesCfgUi(cart,tdb);
 baseColorDropLists(cart, tdb, name);
@@ -6541,7 +6518,7 @@ boolean parentLevel = isNameAtParentLevel(tdb,name);
 char *geneLabel = cartUsualStringClosestToHome(cart, tdb,parentLevel, "label", "gene");
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 
-labelCfgUi(db, cart, tdb);
+labelCfgUi(db, cart, tdb, name);
 if (sameString(name, "acembly"))
     {
     char *acemblyClass = cartUsualStringClosestToHome(cart,tdb,parentLevel,"type",
@@ -6591,14 +6568,14 @@ filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
 if (filterBySet != NULL)
     {
     printf("<BR>");
-    filterBySetCfgUi(cart,tdb,filterBySet,FALSE);
+    filterBySetCfgUi(cart,tdb,filterBySet,FALSE, name);
     filterBySetFree(&filterBySet);
     }
 filterBy_t *highlightBySet = highlightBySetGet(tdb,cart,name);
 if (highlightBySet != NULL)
     {
     printf("<BR>");
-    highlightBySetCfgUi(cart,tdb,highlightBySet,FALSE);
+    highlightBySetCfgUi(cart,tdb,highlightBySet,FALSE, name);
     filterBySetFree(&highlightBySet);
     }
 

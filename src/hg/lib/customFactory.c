@@ -4273,24 +4273,6 @@ hashElFreeList(&fileSettings);
 return isLive;
 }
 
-static void touchUdcSettings(struct trackDb *tdb)
-/* Touch existing local udcCache bitmap and sparse files.  */
-{
-char *url = trackDbSetting(tdb, "bigDataUrl");
-if (url)
-    {
-    struct slName *el, *list = udcFileCacheFiles(url, udcDefaultDir());
-    for (el = list; el; el = el->next)
-	{
-	if (fileExists(el->name) && readAndIgnore(el->name))
-	    {
-	    verbose(4, "setting bigDataUrl: %s\n", el->name);
-	    }
-	}
-    slFreeList(&list);
-    }
-}
-
 static void freeCustomTrack(struct customTrack **pTrack)
 {
 if (NULL == pTrack)
@@ -4411,9 +4393,6 @@ while ((line = customPpNextReal(cpp)) != NULL)
     /* Handle File* settings */
     isLive = (isLive && testFileSettings(track->tdb, fileName));
 
-
-    /* Handle bigDataUrl udc settings */
-    touchUdcSettings(track->tdb);
 
     if (track->dbDataLoad)
 	/* Track was loaded into the database -- check if it still exists. */

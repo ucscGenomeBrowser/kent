@@ -32577,6 +32577,9 @@ cat /hive/data/outside/hgmd/2017.4-hgmd-public.tsv | grep -v \# | tawk '{if ($5=
 bedToBigBed hgmd.bed /hive/data/genomes/hg19/chrom.sizes hgmd.bb -type=bed9+ -as=hgmd.as -tab
 ln -s /hive/data/genomes/hg19/bed/hgmd/hgmd.bb /gbdb/hg19/bbi/hgmd.bb
 hgBbiDbLink hg19 hgmd /gbdb/hg19/bbi/hgmd.bb
+# Forgot, finally done Oct 24: also updated hgBeacon
+bigBedToBed /gbdb/hg19/bbi/hgmd.bb /tmp/temp.bed
+/usr/local/apache/cgi-bin/hgBeacon -f hgmd temp.bed hgmd
 
 ###########################################################################
 2018-03-08: update UCSC GENCODE V19 to include protein id (for VAI)
@@ -33105,3 +33108,47 @@ EOF
     # TODO: Ask Anne for feedback and changes, especially on color
 
 ##############################################################################
+# crispr 10K shoulders (DONE - 2018-11-09 - Hiram)
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+     -stop=load -buildDir=`pwd` -smallClusterHub=hgwdev-101 hg19 ncbiRefSeq) \
+	> do.log 2>&1
+    # real    5896m44.643s
+
+##############################################################################
+2018-11-09: import of UCSC GENCODE group processing of GENCODE V29lift37 (markd)
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV29lift37
+    pushd /hive/data/genomes/hg19/bed/gencodeV29lift37
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # Contained invalid biotype for one transcript (ENST00000649475.1_1), fix for now
+    cd data/release_29lift37
+    mv gencode.v29lift37.annotation.gff3.gz  gencode.v29lift37.annotation.orig.gff3.gz 
+    zcat gencode.v29lift37.annotation.orig.gff3.gz | sed -e 's/lincrna/lincRNA/g' | gzip -c>  gencode.v29lift37.annotation.gff3.gz
+    cd ../..
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.2.out&
+
+    
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg19 29lift37 94 'Oct 2018'
+
+    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release. [ONLY if it's going to be pushed]
+
+    # edit human/hg19/trackDb.wgEncode.ra to add new .ra file include
+    make DBS=hg19
+
+    # edit  all.joiner to add ~/tmp/gencodeV29lift37.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg19/bed/gencodeV29lift37
+    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # commit all
+
+#########################################################################

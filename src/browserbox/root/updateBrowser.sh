@@ -419,7 +419,7 @@ sed -i '/<li class="menuparent" id="downloads">/,/^<\/li>$/d' /tmp/navbar.inc
 # adding the link to the mirror tracks tool
 sed -i '/hgLiftOver/a <li><a href="../cgi-bin/hgMirror">Mirror tracks</a></li>' /tmp/navbar.inc
 # add a link to the gbib shared data folder
-sed -i '/Track Hubs/a <li><a target="_blank" href="http:\/\/127.0.0.1:1234\/folders\/">GBiB Shared Data Folder<\/a><\/li>' /tmp/navbar.inc
+sed -i '/Track Hubs/a <li><a target="_blank" href="\/folders\/">GBiB Shared Data Folder<\/a><\/li>' /tmp/navbar.inc
 # adding a link to the GBIB help pages
 sed -i '/genomewiki/a <li><a href="../goldenPath/help/gbib.html">Help on GBiB</a></li>' /tmp/navbar.inc
 cat /tmp/navbar.inc | grep -v hgNear | grep -v hgVisiGene | uniq > /usr/local/apache/htdocs/inc/globalNavBar.inc
@@ -487,6 +487,8 @@ if [ ! -f /usr/local/apache/trash/registration.txt ]; then
          echo genome-euro seems to be closer
          echo modifying gbib to pull data from genome-euro instead of genome
          sed -i s/slow-db.host=genome-mysql.soe.ucsc.edu/slow-db.host=genome-euro-mysql.soe.ucsc.edu/ /usr/local/apache/cgi-bin/hg.conf
+         # Nov 2018: hgdownload-euro is online now
+         sed -i 's#gbdbLoc2=http://hgdownload.soe.ucsc.edu/gbdb/#gbdbLoc2=http://hgdownload-euro.soe.ucsc.edu/gbdb/#' /usr/local/apache/cgi-bin/hg.conf
       else
          echo genome.ucsc.edu seems to be closer
          echo not modifying /usr/local/apache/cgi-bin/hg.conf
