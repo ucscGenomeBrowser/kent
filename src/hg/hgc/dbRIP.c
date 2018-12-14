@@ -156,7 +156,7 @@ void dbRIP(struct trackDb *tdb, char *item, char *itemForUrl)
 {
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 boolean hasBin;
 struct dbRIP *loadItem;
 struct dyString *query = newDyString(512);
@@ -167,7 +167,8 @@ int itemCount = 0;
 
 genericHeader(tdb, item);
 
-hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
+if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
+    errAbort("track %s not found", tdb->table);
 sqlDyStringPrintf(query, "select * from %s where chrom = '%s' and ",
 	       table, seqName);
 hAddBinToQuery(winStart, winEnd, query);

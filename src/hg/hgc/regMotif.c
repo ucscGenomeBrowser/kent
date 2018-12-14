@@ -229,14 +229,15 @@ struct sqlResult *sr = NULL;
 char **row;
 int start = cartInt(cart, "o");
 int end   = cartInt(cart, "t");
-char fullTable[64];
+char fullTable[HDB_MAX_TABLE_STRING];
 boolean hasBin = FALSE;
 char *motifTable = "flyregMotif";
 struct dnaMotif *motif = NULL;
 boolean isVersion2 = sameString(tdb->table, "flyreg2");
 
 genericHeader(tdb, item);
-hFindSplitTable(database, seqName, tdb->table, fullTable, &hasBin);
+if (!hFindSplitTable(database, seqName, tdb->table, fullTable, sizeof fullTable, &hasBin))
+    errAbort("track %s not found", tdb->table);
 sqlDyStringPrintf(query, "select * from %s where chrom = '%s' and ",
 	       fullTable, seqName);
 hAddBinToQuery(start, end, query);

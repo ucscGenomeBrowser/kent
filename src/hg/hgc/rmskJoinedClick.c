@@ -233,14 +233,16 @@ if (offset >= 0)
     struct sqlResult *sr2;
     char **row;
     char query[256];
-    char qTable[64];
+    char qTable[HDB_MAX_TABLE_STRING];
     boolean hasBin;
 
     int start = cartInt (cart, "o");
 
     if (hTableExists (database, table))
 	{
-	hFindSplitTable (database, seqName, table, qTable, &hasBin);
+	if (!hFindSplitTable (database, seqName, table, qTable, sizeof(qTable), &hasBin))
+	    errAbort("track %s not found", table);
+    
 	sqlSafef (query, sizeof (query),
 	       "select * from %s where chrom = '%s' and alignStart >= %d"
 	       " and id = %s", qTable, seqName, start-1, repeat);
@@ -287,7 +289,8 @@ if (offset >= 0)
 	{
 	int isFirst = 0;
 	struct rmskOut2 *ro;
-	hFindSplitTable (database, seqName, outTable, qTable, &hasBin);
+	if (!hFindSplitTable (database, seqName, outTable, qTable, sizeof(qTable), &hasBin))
+	    errAbort("track %s not found", outTable);
 	sqlSafef (query, sizeof (query),
 	       "select * from %s where genoName = '%s' and genoStart >= %d"
 	       " and id = %s", qTable, seqName, start-1, repeat);
@@ -358,7 +361,8 @@ if (offset >= 0)
     if (hTableExists (database, alignTable))
 	{
 	struct rmskAlign *ro;
-	hFindSplitTable (database, seqName, alignTable, qTable, &hasBin);
+	if (!hFindSplitTable (database, seqName, alignTable, qTable, sizeof(qTable), &hasBin))
+	    errAbort("track %s not found", alignTable);
 	sqlSafef (query, sizeof (query),
 	       "select * from %s where genoName = '%s' and genoStart >= %d"
 	       " and id = %s", qTable, seqName, start-1, repeat);

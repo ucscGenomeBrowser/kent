@@ -592,9 +592,13 @@ boolean hFindFieldsAndBin(char *db, char *table,
  * and whether it's binned . */
 
 boolean hFindSplitTable(char *db, char *chrom, char *rootName,
-	char retTableBuf[HDB_MAX_TABLE_STRING], boolean *hasBin);
-/* Find name of table that may or may not be split across chromosomes.
- * Return FALSE if table doesn't exist.  */
+	char *retTableBuf, int tableBufSize, boolean *hasBin);
+/* Find name of table in a given database that may or may not
+ * be split across chromosomes. Return FALSE if table doesn't exist. 
+ *
+ * Do not ignore the return value. 
+ * This function does NOT tell you whether or not the table is split. 
+ * It tells you if the table exists. */
 
 struct slName *hSplitTableNames(char *db, char *rootName);
 /* Return a list of all split tables for rootName, or of just rootName if not

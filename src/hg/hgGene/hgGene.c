@@ -654,13 +654,14 @@ static struct genePred *getCurGenePred(struct sqlConnection *conn)
 /* Return current gene in genePred. */
 {
 char *track = genomeSetting("knownGene");
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 boolean hasBin;
 char query[256];
 struct sqlResult *sr;
 char **row;
 struct genePred *gp = NULL;
-hFindSplitTable(sqlGetDatabase(conn), curGeneChrom, track, table, &hasBin);
+if (!hFindSplitTable(sqlGetDatabase(conn), curGeneChrom, track, table, sizeof table, &hasBin))
+    errAbort("track %s not found", track);
 bool hasAttrId = sqlColumnExists(conn, table, "alignId");
 sqlSafef(query, sizeof(query),
 	"select * from %s where name = '%s' "
