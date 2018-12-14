@@ -45,6 +45,7 @@
 <li><a href="#download34">Name of fourth column in BED output</a></li>
 <li><a href="#download36">Track data access</a></li>
 <li><a href="#download37">Known issues with Table Browser GTF output</a></li>
+<li><a href="#download38">Table Browser output file not ordered</a></li>
 </ul>
 <hr>
 <p>
@@ -832,11 +833,14 @@ to acquire data.
 
 <a name="download37"></a>
 <h2>Obtaining GTF (Gene Transfer Format)</h2>
-<h6>Known issues with Table Browser GTF output: What is the best method for obtaining GTF output?</h6>
+<h6>What is the best method for obtaining GTF output?</h5>
 <p>
-Currently, the <a href="../cgi-bin/hgTables">Table Browser</a> option to output as
-<a href="../FAQ/FAQformat.html#format4">GTF</a> is limited. For now, the best method to obtain 
-GTF output is to convert genePred to GTF using the command-line utility, <code>genePredToGtf</code>.</p>
+Currently, the <a href="../cgi-bin/hgTables">Table Browser</a> does not have an option return data as
+<a href="../FAQ/FAQformat.html#format4">GTF</a> files. Currently, the best method to obtain 
+GTF files is to use the command-line format conversion utility, <code>genePredToGtf</code>. This can be set up 
+to automatically connect to the UCSC public SQL database and return GTF files in a few minutes using 
+<a href="http://genomewiki.ucsc.edu/index.php/Genes_in_gtf_or_gff_format#Using_kent_commands_with_the_public_database_server">
+this short guide</a>.</p>
 <p>
 <p>Summary of Table Browser limitations:</p>
 <ul>
@@ -860,5 +864,19 @@ or GFF Format wiki page</a> for examples and various methods for conversion. The
 utility can convert files from several sources, such as Table Browser output from a genePred table,
 a local downloaded gene set table like refGene.txt, or from querying
 <a href="../goldenpath/help/mysql.html">public MySQL tables.</a></p>
+
+<a name="download38"></a>
+<h2>Table Browser output file order</h2>
+<h6>My table browser output file is not ordered by position, how is it ordered?</h6>
+<p>
+Most of our tables have a special first column called "bin" that helps with quickly displaying data on 
+the Genome Browser. This (chrom,bin) index causes query results to be ordered first by bin, then by 
+chromStart. This allows us to query and return results more quickly than if they were sorted by chromStart.
+</p>
+<p>
+A quick way to sort an output BED file by position is to use the following UNIX command on our
+<a href="../cgi-bin/hgTables">Table Browser</a> output BED file:
+<pre><code>sort -k1,1 -k2n,2n example.bed > example.sorted.bed</code></pre>
+</p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

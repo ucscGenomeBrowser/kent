@@ -5934,18 +5934,7 @@ if (filterBySet != NULL)
     skipScoreFilter = TRUE;
     }
 
-// For no good reason scoreFilter is incompatible with filterBy and or numericFilters
-// FIXME scoreFilter should be implemented inside numericFilters and is currently specificly
-//       excluded to avoid unexpected changes
-if (skipScoreFilter)
-    {
-    if (isBoxOpened)
-        cfgEndBox(boxed);
-
-    return; // Cannot have both '*filter' and 'scoreFilter'
-    }
-
-boolean scoreFilterOk = (trackDbSettingClosestToHome(tdb, NO_SCORE_FILTER) == NULL);
+boolean scoreFilterOk = (trackDbSettingClosestToHome(tdb, NO_SCORE_FILTER) == NULL) && !skipScoreFilter;
 boolean glvlScoreMin = (trackDbSettingClosestToHome(tdb, GRAY_LEVEL_SCORE_MIN) != NULL);
 if (! (scoreFilterOk || glvlScoreMin))
     return;

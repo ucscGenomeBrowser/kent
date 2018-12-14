@@ -249,6 +249,23 @@ if (email)
 return email;
 }
 
+struct cdwUser *cdwCurrentUser(struct sqlConnection *conn)
+/* Look in a few places for the currently logged in user and return it or NULL */
+{
+char *userName = wikiLinkUserName();
+struct cdwUser *user = NULL;
+
+// for debugging, accept the userName on the cgiSpoof command line
+// instead of a cookie
+if (!cgiIsOnWeb() && userName == NULL)
+    userName = cgiOptionalString("userName");
+
+if (userName != NULL)
+    user = cdwUserFromUserName(conn, userName);
+return user;
+}
+
+
 struct cdwUser *cdwUserFromUserName(struct sqlConnection *conn, char* userName)
 /* Return user associated with that username or NULL if not found */
 {

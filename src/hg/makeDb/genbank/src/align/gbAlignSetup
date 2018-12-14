@@ -71,7 +71,7 @@ class GenomeTarget(GenomePartition):
 
     def __init__(self, db, conf):
         # get nib dir or 2bit file on cluster
-        self.clusterGenome = conf.getDbStr(db, "clusterGenome")
+        self.clusterGenome = conf.getDbStr(db, "serverGenome")
         if self.clusterGenome.endswith(".nib"):
             self.clusterGenome = os.path.dirname(self.clusterGenome)
 

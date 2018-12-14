@@ -260,6 +260,10 @@ struct psl *pslTrimToQueryRange(struct psl *oldPsl, int qMin, int qMax);
 /* Return psl trimmed to fit inside qMin/qMax.  Note this does not
  * update the match/misMatch and related fields. */
 
+void pslRecalcBounds(struct psl *psl);
+/* Calculate qStart/qEnd tStart/tEnd at top level to be consistent
+ * with blocks. */
+
 int pslCheck(char *pslDesc, FILE* out, struct psl* psl);
 /* Validate a PSL for consistency.  pslDesc is printed the error messages
  * to file out (open /dev/null to discard). Return count of errors. */

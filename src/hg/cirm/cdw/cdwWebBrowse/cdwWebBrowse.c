@@ -1001,25 +1001,11 @@ return varVal;
 }
 
 
-void setCdwUser(struct sqlConnection *conn)
-/* set the global variable 'user' based on the current cookie */
-{
-char *userName = wikiLinkUserName();
-
-// for debugging, accept the userName on the cgiSpoof command line
-// instead of a cookie
-if (!cgiIsOnWeb() && userName == NULL)
-    userName = cgiOptionalString("userName");
-
-if (userName != NULL)
-    user = cdwUserFromUserName(conn, userName);
-}
-
 void doDownloadUrls()
 /* serve textfile with file URLs and ask user's internet browser to save it to disk */
 {
 struct sqlConnection *conn = sqlConnect(cdwDatabase);
-setCdwUser(conn);
+user = cdwCurrentUser(conn);
 
 // on non-public cirm (and development vhosts) users must be logged in to use download tokens. 
 if (user==NULL && !isPublicSite)
@@ -2135,7 +2121,7 @@ void doMiddle()
 /* Menu bar has been drawn.  We are in the middle of first section. */
 {
 struct sqlConnection *conn = sqlConnect(cdwDatabase);
-setCdwUser(conn);
+user = cdwCurrentUser(conn);
 dispatch(conn);
 sqlDisconnect(&conn);
 }
@@ -2192,7 +2178,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Data Browser V0.60");
+localWebStartWrapper("CIRM Stem Cell Hub Data Browser v0.60");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();

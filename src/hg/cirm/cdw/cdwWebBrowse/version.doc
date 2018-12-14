@@ -30,7 +30,7 @@
    - Making facets list first 25 rather than first 100 before showing "see more"
    - Sorting facet values alphabetically rather than by use count facet is fully open
    - Speeding up browse/data sets page.
-0.60 In progress
+0.60 Dec 12 2018
    - Optimizing speed of analysis/query page by querying cdwFileTags table rather than
      the built-on-the-fly tagStorm.
    - Making program behave better if you put quotes into the search string.

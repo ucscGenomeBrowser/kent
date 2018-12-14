@@ -281,7 +281,7 @@ void doPeakClusters(struct trackDb *tdb, char *item);
 void doPeakClusterListItemsAssayed();
 /* Put up a page that shows all experiments associated with a cluster track. */
 
-void doFactorSource(struct sqlConnection *conn, struct trackDb *tdb, char *item, int start);
+void doFactorSource(struct sqlConnection *conn, struct trackDb *tdb, char *item, int start, int end);
 /* Display detailed info about a cluster of peaks from other tracks. */
 
 void doFlyreg(struct trackDb *tdb, char *item);

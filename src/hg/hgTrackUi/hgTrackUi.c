@@ -2797,9 +2797,9 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
     printf("</TD>\n");
     printf("<TD>%s", tdb->longLabel);
 
-    printf("&nbsp&nbsp;");
+    printf("&nbsp;&nbsp;");
     printDataVersion(database, tdb);
-    //printf("&nbsp&nbsp;<EM style='color:#666666; font-size:smaller;'>%s</EM>", dataVersion);
+    //printf("&nbsp;&nbsp;<EM style='color:#666666; font-size:smaller;'>%s</EM>", dataVersion);
     printf("</TD></TR>");
     }
 printf("</TABLE>");
@@ -3423,9 +3423,9 @@ if (tdb->html != NULL && tdb->html[0] != 0)
     printf("</td><td nowrap>");
     cgiDown(0.7); // positions top link below line
     makeTopLink(tdb);
-    printf("&nbsp</td></tr><tr valign='bottom'><td nowrap>");
+    printf("&nbsp;</td></tr><tr valign='bottom'><td nowrap>");
     makeTopLink(tdb);
-    printf("&nbsp</td></tr></table>");
+    printf("&nbsp;</td></tr></table>");
     }
 }       /*      void trackUi(struct trackDb *tdb)       */
 
