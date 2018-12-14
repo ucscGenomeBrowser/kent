@@ -70,6 +70,7 @@ do
   ln -s ../../doOmimPhenotype.pl ./doOmimPhenotype.pl
 
   ../../buildOmimTracks.sh $db
+  ../../flagOmimGene.py $db > omimGene2.prev.flagged
   ../../validateOmim.sh $db
   cd ..
 

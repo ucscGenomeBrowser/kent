@@ -245,6 +245,10 @@ sqlDyStringPrintf(query, " from %s,%s ", inputTrackTable, sourceTable);
 sqlDyStringPrintf(query, " where %s.source = %s.description", inputTrackTable, sourceTable);
 sqlDyStringPrintf(query, " and factor='%s' order by %s.source", cluster->name, inputTrackTable);
 
+boolean encodeStanford = FALSE;
+if (startsWith("encode3", sourceTable) || startsWith("encode4", sourceTable))
+    encodeStanford = TRUE;
+
 int displayNo = 0;
 int fieldCount = slCount(fieldList);
 struct sqlResult *sr = sqlGetResult(conn, query->string);
@@ -286,7 +290,22 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    else
 		webPrintLinkCell(fieldVal);
 	    }
-	printMetadataForTable(row[2]);
+        char *table = row[2];
+        if (encodeStanford)
+            {
+            char *file = stringIn("ENCFF", table);
+            if (!file)
+                webPrintLinkCell(table);
+            else
+                {
+                webPrintLinkCellStart();
+                printf("<A target='_blank'"
+                        "href='https://www.encodeproject.org/files/%s'>%s</A>", file, file);
+                webPrintLinkCellEnd();
+               } 
+            }
+        else
+            printMetadataForTable(table);
 	}
     }
 sqlFreeResult(&sr);
@@ -459,19 +478,14 @@ if (motifPwmTable != NULL && sqlTableExists(conn, motifPwmTable))
     }
 }
 
-void doFactorSource(struct sqlConnection *conn, struct trackDb *tdb, char *item, int start)
+void doFactorSource(struct sqlConnection *conn, struct trackDb *tdb, char *item, int start, int end)
 /* Display detailed info about a cluster of TFBS peaks from other tracks. */
 {
-int rowOffset = hOffsetPastBin(database, seqName, tdb->table);
-char **row;
-struct sqlResult *sr;
-char query[256];
-
-sqlSafef(query, sizeof(query),
-	"select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
-	tdb->table, item, seqName, start);
-sr = sqlGetResult(conn, query);
-row = sqlNextRow(sr);
+char extraWhere[256];
+safef(extraWhere, sizeof extraWhere, "name='%s'", item);
+int rowOffset;
+struct sqlResult *sr = hRangeQuery(conn, tdb->table, seqName, start, end, extraWhere, &rowOffset);
+char **row = sqlNextRow(sr);
 struct factorSource *cluster = NULL;
 if (row != NULL)
     cluster = factorSourceLoad(row + rowOffset);
@@ -493,11 +507,11 @@ printf("<B>Factor:</B> %s<BR>\n", factorLink);
 printf("<B>Cluster Score (out of 1000):</B> %d<BR>\n", cluster->score);
 printPos(cluster->chrom, cluster->chromStart, cluster->chromEnd, NULL, TRUE, item);
 
-
 /* Get list of tracks we'll look through for input. */
 char *inputTrackTable = trackDbRequiredSetting(tdb, "inputTrackTable");
-sqlSafef(query, sizeof(query), 
-    "select tableName from %s where factor='%s' order by source", inputTrackTable, 
+char query[256];
+sqlSafef(query, sizeof(query), "select tableName from %s where factor='%s' order by source", 
+                inputTrackTable, 
     cluster->name);
 
 /* Next do the lists of hits and misses.  We have the hits from the non-zero signals in
