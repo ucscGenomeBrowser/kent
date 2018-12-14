@@ -78,7 +78,7 @@ endif
 
 # set hgsid so don't fill up sessionDb table
 set baseUrl="http://$machine.soe.ucsc.edu"
-set hgsid=`htmlCheck  getVars $baseUrl/cgi-bin/hgGateway | grep hgsid \
+set hgsid=`htmlCheck  getVars $baseUrl/cgi-bin/hgBlat | grep hgsid \
   | head -1 | awk '{print $4}'`
 
 echo "hgw1 hgw2 hgw3 hgw4 hgw5 hgw6" | grep $machine

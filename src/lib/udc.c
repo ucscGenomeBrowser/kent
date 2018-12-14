@@ -256,6 +256,8 @@ if (ci == NULL || ci->socket <= 0)
 	{
 	url = transferParamsToRedirectedUrl(url, ci->redirUrl);
 	}
+    // IMPORTANT NOTE: byterange is not a real URL parameter, this is a hack to pass
+    // the range to the net.c functions, which then parse it.
     char rangeUrl[2048];
     if (ci == NULL)
 	{
@@ -1546,8 +1548,12 @@ if (!udcCacheEnabled())
     return TRUE;
 
 boolean ok = TRUE;
-/* We'll break this operation into blocks of a reasonable size to allow
- * other processes to get cache access, since we have to lock the cache files. */
+/* Original comment said:
+ *  "We'll break this operation into blocks of a reasonable size to allow
+ *   other processes to get cache access, since we have to lock the cache files."
+ * However there is no locking done, so this whole splitting might be unnecessary
+ * complexity.
+ */
 bits64 s,e, endPos=offset+size;
 for (s = offset; s < endPos; s = e)
     {

@@ -4114,6 +4114,7 @@ dupe = cloneString(tdb->type);
 wordCount = chopLine(dupe, words);
 headerItem = cloneString(item);
 
+
 /* Suppress printing item name in page header, as it is not informative for these types of
  * tracks... */
 if (container == NULL && wordCount > 0)
@@ -4129,7 +4130,6 @@ if (container == NULL && wordCount > 0)
          &&  sameString(headerItem, ".") )
         headerItem = NULL;
     }
-
 /* Print header. */
 genericHeader(tdb, headerItem);
 
@@ -4266,7 +4266,7 @@ else if (wordCount > 0)
 	}
     else if (sameString(type, "factorSource"))
         {
-	doFactorSource(conn, tdb, item, start);
+	doFactorSource(conn, tdb, item, start, end);
 	}
     else if (sameString(type, "bed5FloatScore") ||
              sameString(type, "bed5FloatScoreWithFdr"))
@@ -25460,7 +25460,6 @@ char *track = cartString(cart, "g");
 char *item = cloneString(cartOptionalString(cart, "i"));
 char *parentWigMaf = cartOptionalString(cart, "parentWigMaf");
 struct trackDb *tdb = NULL;
-
 
 if (hIsGisaidServer())
     {

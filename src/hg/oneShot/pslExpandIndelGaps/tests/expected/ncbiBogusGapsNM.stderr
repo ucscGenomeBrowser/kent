@@ -1,0 +1,14 @@
+NM_001030566.1:ncbi gapIx 17 slides past block 18; deleting block 18.
+NM_001030566.1:ncbi gapIx 18 seems to cancel out gapIx 17; merging block formerly known as 19
+NM_001030566.1:2ndGap2L gapIx 17 slides past block 18; deleting block 18.
+NM_001030566.1:2ndGap2L gapIx 18 seems to cancel out gapIx 17; merging block formerly known as 19
+NM_001030566.1:bothGS gapIx 17 slides past block 18; deleting block 18.
+NM_001030566.1:bothGS gapIx 18 seems to cancel out gapIx 17; merging block formerly known as 19
+NM_001030566.1:bothGE gapIx 17 slides past block 18; deleting block 18.
+NM_001030566.1:bothGE gapIx 18 seems to cancel out gapIx 17; merging block formerly known as 19
+NM_001030566.1:1GS2GE gapIx 17 slides past block 18; deleting block 18.
+NM_001030566.1:1GS2GE gapIx 18 seems to cancel out gapIx 17; merging block formerly known as 19
+NM_001030566.1:swap gapIx 17 slides past block 18; deleting block 18.
+NM_001030566.1:swap gapIx 18 seems to cancel out gapIx 17; merging block formerly known as 19
+NM_001030566.1:swap2ndGap2L gapIx 17 slides past block 18; deleting block 18.
+NM_001030566.1:swap2ndGap2L gapIx 18 seems to cancel out gapIx 17; merging block formerly known as 19
