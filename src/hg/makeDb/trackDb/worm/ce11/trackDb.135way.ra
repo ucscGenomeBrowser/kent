@@ -1,7 +1,7 @@
 track cons135way
 compositeTrack on
-shortLabel Cons 135 Nematodes
-longLabel Multiz Alignment & Conservation (135 nematodes)
+shortLabel Cons 135 species
+longLabel Multiz Alignment & Conservation (135 species: 119 nematodes, 15 flatworms and Ciona intestinalis)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
 visibility full
@@ -19,7 +19,7 @@ priority 2
         track multiz135way
         subTrack cons135wayViewalign on
         shortLabel Multiz Align
-        longLabel Multiz Alignments of 135 nematodes
+        longLabel Multiz Alignments of 135 species
         subGroups view=align
         noInherit on
         irows on
@@ -58,8 +58,8 @@ priority 2
         track phyloP135way
         subTrack cons135wayViewphyloP on
         subGroups view=phyloP
-        shortLabel Cons 135 nematodes
-        longLabel 135 nematodes Basewise Conservation by PhyloP
+        shortLabel Cons 135 species
+        longLabel 135 species Basewise Conservation by PhyloP
         noInherit on
         configurable on
         type wig -20 7.532
@@ -82,8 +82,8 @@ priority 2
         track phastCons135way
         subTrack cons135wayViewphastcons off
         subGroups view=phastcons
-        shortLabel Cons 135 nematodes
-        longLabel 135 nematodes conservation by PhastCons
+        shortLabel Cons 135 species
+        longLabel 135 species conservation by PhastCons
         noInherit on
         configurable on
         type wig 0 1
@@ -105,8 +105,8 @@ priority 2
         track phastConsElements135way
         subTrack cons135wayViewelements off
         subGroups view=elements
-        shortLabel 135 nematodes El
-        longLabel 135 nematodes Conserved Elements
+        shortLabel 135 species El
+        longLabel 135 species Conserved Elements
         noInherit on
         color 110,10,40
         type bed 5 .
