@@ -2228,12 +2228,12 @@ sleep 4
     para try ... check ...
     para -maxJob=16 push
     para time > run.time
-# Completed: 568 of 568 jobs
-# CPU time in finished jobs:     440703s    7345.04m   122.42h    5.10d  0.014 y
-# IO & Wait Time:                  3849s      64.16m     1.07h    0.04d  0.000 y
-# Average job time:                 783s      13.04m     0.22h    0.01d
-# Longest finished job:            4019s      66.98m     1.12h    0.05d
-# Submission to last job:          4781s      79.68m     1.33h    0.06d
+# Completed: 104 of 104 jobs
+# CPU time in finished jobs:     420481s    7008.02m   116.80h    4.87d  0.013 y
+# IO & Wait Time:                  1037s      17.28m     0.29h    0.01d  0.000 y
+# Average job time:                4053s      67.55m     1.13h    0.05d
+# Longest finished job:            5455s      90.92m     1.52h    0.06d
+# Submission to last job:          5629s      93.82m     1.56h    0.07d
 
     mkdir downloads
     time for D in `ls -d wigFix/chr* | sed -e 's#wigFix/##'`
@@ -2243,96 +2243,96 @@ do
 	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
         | gzip -c > downloads/${D}.phyloP135way.wigFix.gz
 done
-    #   real    2m2.576s
+    #   real    1m24.231s
 
     du -hsc downloads
-    #   262M    downloads
+    #   195M    downloads
 
     # check integrity of data with wigToBigWig
     time (zcat downloads/*.wigFix.gz \
 	| wigToBigWig -verbose=2 stdin /hive/data/genomes/ce11/chrom.sizes \
 	phyloP135way.bw) > bigWig.log 2>&1
-
     egrep "real|VmPeak" bigWig.log
-    # pid=153945: VmPeak:    1438260 kB
-    # real    1m10.028s
+    # pid=180522: VmPeak:    1108636 kB
+    # real    0m51.720s
+
+    # -rw-rw-r-- 1 356259120 Dec 14 17:17 phyloP135way.bw
 
     bigWigInfo phyloP135way.bw  | sed -e 's/^/# /;'
 # version: 4
 # isCompressed: yes
 # isSwapped: 0
-# primaryDataSize: 375,618,358
-# primaryIndexSize: 4,032,612
+# primaryDataSize: 281,654,520
+# primaryIndexSize: 3,214,556
 # zoomLevels: 10
-# chromCount: 434
-# basesCovered: 123,466,109
-# mean: 2.659923
+# chromCount: 7
+# basesCovered: 95,051,167
+# mean: 1.130380
 # min: -20.000000
 # max: 20.000000
-# std: 4.629012
+# std: 2.927330
 
     #	encode those files into wiggle data
     time (zcat downloads/*.wigFix.gz \
 	| wigEncode stdin phyloP135way.wig phyloP135way.wib)
-
 # Converted stdin, upper limit 20.00, lower limit -20.00
-# real    0m31.685s
+# real    0m25.705s
 
-# -rw-rw-r--   1 123466109 Nov 27 14:29 phyloP135way.wib
-# -rw-rw-r--   1  12818989 Nov 27 14:29 phyloP135way.wig
+    # -rw-rw-r-- 1  95051167 Dec 14 17:19 phyloP135way.wib
+    # -rw-rw-r-- 1  10006648 Dec 14 17:19 phyloP135way.wig
 
     du -hsc *.wi?
-    # 118M    phyloP135way.wib
-    #  13M     phyloP135way.wig
+    #  91M     phyloP135way.wib
+    # 9.6M    phyloP135way.wig
 
     # Load gbdb and database with wiggle.
     ln -s `pwd`/phyloP135way.wib /gbdb/ce11/multiz135way/phyloP135way.wib
     time hgLoadWiggle -pathPrefix=/gbdb/ce11/multiz135way ce11 \
 	phyloP135way phyloP135way.wig
-    # real    0m1.440s
+    # real    0m0.761s
 
     # use to set trackDb.ra entries for wiggle min and max
     # and verify table is loaded correctly
 
     wigTableStats.sh ce11 phyloP135way
 # db.table          min   max     mean       count     sumData
-# ce11.phyloP135way   -20 20 2.65992 123466109 3.2841e+08
+# ce11.phyloP135way -20 20 1.13038 95051167 1.07444e+08
 #       stdDev viewLimits
-#      4.62901 viewLimits=-20:20
+#      2.92733 viewLimits=-13.5063:15.767
 
     #	that range is: 20+20= 40 for hBinSize=0.04
 
     #  Create histogram to get an overview of all the data
     time hgWiggle -doHistogram \
 	-hBinSize=0.04 -hBinCount=1000 -hMinVal=-20 -verbose=2 \
-	    -db=ce11 phyloP135way > histogram.data 2>&1
-    #   real    0m4.803s
+	    -db=ce11 phyloP135way > ce11.phyloP135way.histo.data 2>&1
+    #   real    0m4.117s
 
     # xaxis range:
-    grep -v chrom histogram.data | grep "^[0-9]" | ave -col=2 stdin \
-	| sed -e 's/^/# /;'
-# Q1 -7.460000
+    grep -v chrom ce11.phyloP135way.histo.data | grep "^[0-9]" \
+	| ave -col=2 stdin | sed -e 's/^/# /;'
+# Q1 -7.500000
 # median 0.320000
 # Q3 8.140000
-# average 0.328480
+# average 0.309272
 # min -20.000000
 # max 20.000000
 # count 783
-# total 257.200147
-# standard deviation 9.069287
+# total 242.159998
+# standard deviation 9.085841
 
     # find out the range for the 2:5 graph
-    grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin \
-      | sed -e 's/^/# /;'
+    grep -v chrom ce11.phyloP135way.histo.data | grep "^[0-9]" \
+	| ave -col=5 stdin | sed -e 's/^/# /;'
 # Q1 0.000002
-# median 0.000177
-# Q3 0.001312
-# average 0.001340
+# median 0.000108
+# Q3 0.000374
+# average 0.001277
 # min 0.000000
-# max 0.047793
-# count 782
-# total 1.047624
-# standard deviation 0.003225
+# max 0.038921
+# count 783
+# total 0.999993
+# standard deviation 0.003638
 
     #	create plot of histogram:
     # updated for new gnuplot on hgwdev 2018-11-26 (can't get font to change)
@@ -2349,7 +2349,7 @@ set key tc variable
 set grid noxtics
 set grid y2tics ls 4
 set grid ytics ls 4
-set title " D. melanogaster/ce11 Histogram phyloP135way track" \
+set title " C. elegans/ce11 Histogram phyloP135way track" \
     tc rgb "#ffffff"
 set xlabel " phyloP135way score" tc rgb "#ffffff"
 set ylabel " Relative Frequency" tc rgb "#ff88ff"
@@ -2357,12 +2357,121 @@ set y2label " Cumulative Relative Frequency (CRF)" tc rgb "#66ff66"
 set xrange [-1:1.5]
 set yrange [0:0.04]
 
-plot "histogram.data" using 2:5 title " RelFreq" with impulses ls 1, \
-        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines ls 2
+plot "ce11.phyloP135way.histo.data" using 2:5 title " RelFreq" with impulses ls 1, \
+        "ce11.phyloP135way.histo.data" using 2:7 axes x1y2 title " CRF" with lines ls 2
 ' | gnuplot
 
     # verify it looks sane
     display ce11.phyloP135.histo.png &
+
+#############################################################################
+# determine taxonomy for everything (DONE - 2018-12-14 - Hiram)
+# to set up group divisions
+
+    # use this perl script to extra the taxonomy strings from NCBI entrez
+
+    mkdir /hive/data/genomes/ce11/bed/multiz135way/taxonomy
+    cd /hive/data/genomes/ce11/bed/multiz135way/taxonomy
+
+    cat > taxon.pl << '_EOF_'
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $argc = scalar(@ARGV);
+if ($argc < 1) {
+  printf STDERR "usage: taxon.pl <taxId> [more taxIds]\n";
+  exit 255;
+}
+
+while (my $taxId = shift) {
+  my $taxonomyString = "";
+  open (TX, "wget -O /dev/stdout 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=taxonomy&id=$taxId&retmode=xml' 2> /dev/null | grep -i ScientificName | headRest 1 stdin|") or die "can not wget entrez/eutils";
+while (my $sciName = <TX>) {
+    chomp $sciName;
+    $sciName =~ s/.*<ScientificName>//;
+    $sciName =~ s#</ScientificName>##;
+    $taxonomyString .= sprintf("%s;", $sciName);
+  }
+  close (TX);
+  printf "%d\t%s\n", $taxId, $taxonomyString;
+}
+'_EOF_'
+# << happy emacs
+
+    chmod +x taxon.pl
+
+    ./taxon.pl `sed -e 's/:.*//; s/(//g; s/ //g;' ../ce11.135way.taxId.nh  | sort -u | xargs echo` > taxonomy.txt
+
+    # survey the names in those
+    sed -e 's/.*organisms;//;' taxonomy.txt | tr ';' '\n' | sort | uniq -c | sort -rn | head -20
+    122 Opisthokonta
+    122 Metazoa
+    122 Eumetazoa
+    122 Eukaryota
+    122 Bilateria
+    122 
+     99 Protostomia
+     99 Nematoda
+     99 Ecdysozoa
+     83 Chromadorea
+     76 Rhabditida
+     35 Rhabditina
+     29 Rhabditomorpha
+     27 Tylenchina
+     23 Rhabditoidea
+     23 Rhabditidae
+     22 Platyhelminthes
+     18 Peloderinae
+     18 Caenorhabditis
+     16 Enoplea
+
+     sed -e 's/.*;Bilateria;//;' taxonomy.txt | cut -d';' -f1-4 \
+         | sort | uniq -c | sort -n
+      1 Deuterostomia;Chordata;Tunicata;Ascidiacea
+      1 Platyhelminthes;Cestoda;Eucestoda;Diphyllobothriidea
+      1 Platyhelminthes;Monogenea;Monopisthocotylea;Gyrodactylidea
+      1 Platyhelminthes;Rhabditophora;Macrostomorpha;Macrostomida
+      2 Platyhelminthes;Trematoda;Digenea;Opisthorchiida
+      3 Platyhelminthes;Rhabditophora;Seriata;Tricladida
+      3 Platyhelminthes;Trematoda;Digenea;Plagiorchiida
+      3 Platyhelminthes;Trematoda;Digenea;Strigeidida
+      8 Platyhelminthes;Cestoda;Eucestoda;Cyclophyllidea
+     16 Protostomia;Ecdysozoa;Nematoda;Enoplea
+     83 Protostomia;Ecdysozoa;Nematoda;Chromadorea
+
+     sed -e 's/.*;Bilateria;//;' taxonomy.txt | grep Protostomia \
+          | cut -d';' -f1-6 | sort | uniq -c | sort -n
+      1 Protostomia;Ecdysozoa;Nematoda;Chromadorea;Plectida;Plectina
+      1 Protostomia;Ecdysozoa;Nematoda;Chromadorea;Strongylida;Metastrongyloidea
+      1 Protostomia;Ecdysozoa;Nematoda;Enoplea;Dorylaimia;Mermithida
+      5 Protostomia;Ecdysozoa;Nematoda;Chromadorea;Strongylida;Trichostrongyloidea
+     14 Protostomia;Ecdysozoa;Nematoda;Chromadorea;Rhabditida;Spirurina
+     15 Protostomia;Ecdysozoa;Nematoda;Enoplea;Dorylaimia;Trichinellida
+     27 Protostomia;Ecdysozoa;Nematoda;Chromadorea;Rhabditida;Tylenchina
+     35 Protostomia;Ecdysozoa;Nematoda;Chromadorea;Rhabditida;Rhabditina
+
+     # with those numbers in hand, break them up like this
+     # the 'orderByChain.db.txt' list is from the output of sizeStats.pl
+     # as done earlier, just the sequence name/db names from that output
+     # in their featureBits chainLink order
+
+for N in Deuterostomia Platyhelminthes Plectida Rhabditina Spirurina Tylenchina Strongylida Dorylaimia
+do
+   grep ";$N;" taxonomy.txt | cut -f1 > $N.taxId.list
+   join -t$'\t' <(sort $N.taxId.list) <(sort taxId.GC.sequenceName.accAsmId.sciName.name.tab) | cut -f3 | sort -u > $N.db.list
+done
+
+cat orderByChain.db.txt | while read n
+do
+  grep -w "${n}" *.list
+done | sed -e 's/.db.list:/\t/;' > division.dbName.ordered.tab
+
+for N in Deuterostomia Platyhelminthes Plectida Rhabditina Spirurina Tylenchina Strongylida Dorylaimia
+do
+  grep "$N" division.dbName.ordered.tab | cut -f2 > ${N}.ordered
+done
 
 #############################################################################
 # construct download files for 135-way (TBD - 2018-11-27 - Hiram)
@@ -2378,8 +2487,8 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses ls 1, \
     cd /hive/data/genomes/ce11/bed/multiz135way/downloads/multiz135way
     # bash script
 
-#!/bin/sh
-export geneTbl="ncbiRefSeq"
+#!/bin/bash
+export geneTbl="ensGene"
 for S in 1000 2000 5000
 do
     echo "making upstream${S}.maf"
@@ -2391,6 +2500,7 @@ do
         | gzip -c > upstream${S}.${geneTbl}.maf.gz
     echo "done upstream${S}.${geneTbl}.maf.gz"
 done
+XXX - running - Fri Dec 14 17:28:40 PST 2018
 
     #   real    186m37.993s
 
@@ -2534,7 +2644,7 @@ done
     # this for loop can take hours on a high contig count assembly
     # it is just fine on human/ce11, just a few seconds
     export mz=multiz135way
-    export gp=ncbiRefSeq
+    export gp=ensGene
     export db=ce11
     export I=0
     export D=0
@@ -2558,6 +2668,7 @@ done
     echo "wait" >> $gp.jobs
 
     time (sh -x ./$gp.jobs) > $gp.jobs.log 2>&1
+XXX - running - Fri Dec 14 17:27:13 PST 2018
     # real    38m28.377s
 
     export mz=multiz135way
