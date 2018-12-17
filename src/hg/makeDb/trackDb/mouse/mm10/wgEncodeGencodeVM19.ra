@@ -1,6 +1,6 @@
 track wgEncodeGencodeVM19
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel All GENCODE VM19
 longLabel All GENCODE annotations from VM19 (Ensembl 94)
 group genes

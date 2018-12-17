@@ -57,20 +57,6 @@ static boolean cdwCheckFileAccess(struct sqlConnection *conn, int fileId, struct
 return cdwCheckAccessFromFileId(conn, fileId, user, cdwAccessRead);
 }
 
-void setCdwUser(struct sqlConnection *conn)
-/* set the global variable 'user' based on the current cookie */
-{
-char *userName = wikiLinkUserName();
-
-// for debugging, accept the userName on the cgiSpoof command line
-// instead of a cookie
-if (!cgiIsOnWeb() && userName == NULL)
-    userName = cgiOptionalString("userName");
-
-if (userName != NULL)
-    user = cdwUserFromUserName(conn, userName);
-}
-
 void cdwServeTagStorm(struct sqlConnection *conn)
 /* Serve up a cirm data warehouse meta.txt tagstorm as a .txt file */ 
 {
@@ -123,7 +109,7 @@ void localWebWrap(struct cart *theCart)
 cart = theCart;
 struct sqlConnection *conn = sqlConnect(cdwDatabase);
 printf("Content-Type: text/plain\n\n");
-setCdwUser(conn);
+user = cdwCurrentUser(conn);
 cdwServeTagStorm(conn); 
 sqlDisconnect(&conn);
 }

@@ -1,6 +1,6 @@
 track wgEncodeGencodeVM17
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel All GENCODE VM17
 longLabel All GENCODE annotations from VM17 (Ensembl 92)
 group genes

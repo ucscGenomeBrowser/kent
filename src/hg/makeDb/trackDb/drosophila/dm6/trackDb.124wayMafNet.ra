@@ -6,10 +6,10 @@ subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyl
 subGroup2 clade Clade drosophila=Drosophila
 dragAndDrop subTracks
 dimensions dimensionX=clade
-visibility full
+visibility hide
 type bed 4
 group compGeno
-priority 1
+priority 200
 
     track cons124wayMafNetViewalign
     shortLabel Multiz Alignments
@@ -40,7 +40,7 @@ priority 1
         speciesDefaultOn A_albimanus A_arabiensis A_atroparvus A_coluzzii A_dirus A_farauti A_minimus A_stephensi Aedes_aegypti Clunio_marinus D_arizonae D_athabasca D_busckii D_navojoa D_novamexicana Scaptodrosophila_lebanonensis anoGam3 apiMel4 droAna3 droBia2 droEre2 droGri2 droMir2 droMoj3 droPse3 droSec1 droSim2 droVir3 droWil2 droYak3 triCas2
         itemFirstCharCase noChange
         treeImage phylo/dm6_124way.png
-        priority 100
+        priority 200
 
     # PhyloP conservation
     track cons124wayMafNetViewphyloP
@@ -66,7 +66,7 @@ priority 1
         windowingFunction mean
         color 60,60,140
         altColor 140,60,60
-        priority 4
+        priority 197
 
     # phastCons conservation
     track cons124wayMafNetViewphastcons
@@ -89,7 +89,7 @@ priority 1
         windowingFunction mean
         color 70,130,70
         altColor 130,70,70
-        priority 13
+        priority 198
 
     # Conserved Elements (Most Conserved)
     track cons124wayMafNetViewelements
@@ -106,4 +106,4 @@ priority 1
         noInherit on
         color 110,10,40
         type bed 5 .
-        priority 23
+        priority 199

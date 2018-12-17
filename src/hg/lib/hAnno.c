@@ -114,9 +114,8 @@ struct asObject *hAnnoGetAutoSqlForDbTable(char *db, char *table, struct trackDb
 {
 struct sqlConnection *conn = hAllocConn(db);
 char maybeSplitTable[HDB_MAX_TABLE_STRING];
-if (!hFindSplitTable(db, NULL, table, maybeSplitTable, NULL))
-    errAbort("hAnnoGetAutoSqlForDbTable: can't find table (or split table) for '%s.%s'",
-             db, table);
+if (!hFindSplitTable(db, NULL, table, maybeSplitTable, sizeof maybeSplitTable, NULL))
+    errAbort("hAnnoGetAutoSqlForDbTable: can't find table (or split table) for '%s.%s'", db, table);
 struct sqlFieldInfo *fieldList = sqlFieldInfoGet(conn, maybeSplitTable);
 struct asObject *asObj = NULL;
 if (tdb != NULL)

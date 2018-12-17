@@ -45,6 +45,54 @@
 
 <!-- ============= 2018 archived news ============= -->
 
+<a name="120418"></a>
+<h2>Dec. 04, 2018 &nbsp;&nbsp; New dbSNP build 151 tracks now available for hg19 and hg38</h2>
+<p>
+We are pleased to announce the release of our &quot;SNP&quot; tracks derived from
+<a href="https://www.ncbi.nlm.nih.gov/SNP/snp_summary.cgi?view+summary=view+summary&build_id=151"
+target="_blank">NCBI&#39;s dbSNP Human Build 151 data</a>, available on the two most recent human
+assemblies, 
+<a href="../cgi-bin/hgTrackUi?db=hg38&g=snp151" target="_blank">GRCh38/hg38</a> and 
+<a href="../cgi-bin/hgTrackUi?db=hg19&g=snp151" target="_blank">GRCh37/hg19</a>.
+This release 
+<a href="https://ncbiinsights.ncbi.nlm.nih.gov/2018/07/02/dbsnp-database-doubles-size-twice-13-
+months/" target="_blank">will again double in size</a> to about 650 million variants compared to
+the previous 150 release (300 million for hg38, and over 200 million for hg19).</p>
+
+<p>
+There are four SNP tracks available as part of this release:
+<ul>
+  <li>
+  All SNPs (151): containing all mappings of reference SNPs to the human assembly. The tracks below
+  are subsets of <i>All SNPs (151)</i>.</li>
+  <li>
+  Common SNPs (151): uniquely mapped variants that appear in at least 1% of the global population or
+  are 100% non-reference.</li>
+  <li>
+  Flagged SNPs (151): uniquely mapped variants, excluding Common SNPs, that have been flagged by
+  dbSNP as &quot;clinically associated.&quot;</li>
+  <li>
+  Mult. SNPs (151): variants that have been mapped to more than one genomic location. This track
+  has been shrinking over the course of the last few releases as dbSNP now excludes most SNPs whose
+  flanking sequences map to multiple locations in the genome.</li>
+</ul></p>
+
+<p class='text-center'>
+  <img class='text-center' src="../images/SNPs151Announce.jpg" alt="SNPs151 growth" width="699"
+  height="464">
+  <p class='gbsCaption text-center'>The graph above shows the increasing growth of variants
+  in the All SNPs track, by dbSNP release number, and the stagnant growth of the Common SNPs track, 
+  essentially stuck at
+  14.8 million variants.</p>
+<p>
+By default, only the <i>Common SNPs (151)</i> are visible in the browser; other tracks must be made
+visible using the track controls. All four SNP tracks reside in the &quot;Variation&quot; group
+category for the hg19 and hg38 genome browsers.</p>
+<p>
+We would like to thank Angie Hinrichs, Robert Kuhn, and Jairo Navarro for their work on creating
+and analyzing the data. We'd like to thank the dbSNP group at NCBI for providing access to the data.
+</p> 
+
 <a name="112118"></a>
 <h2>Nov. 21. 2018 &nbsp;&nbsp; New Genome Browser: Chicken, galGal6 (<em>Gallus gallus</em>)</h2>
 <p>

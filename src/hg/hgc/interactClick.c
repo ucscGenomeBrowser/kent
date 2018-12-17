@@ -266,7 +266,7 @@ void doInteractItemDetails(struct trackDb *tdb, struct interactPlusRow *ipr, cha
 {
 struct interact *inter = ipr->interact;
 struct slPair *fields = getFields(tdb, ipr->row);
-printCustomUrlWithFields(tdb, item, item, TRUE, fields);
+printCustomUrlWithFields(tdb, inter->name, inter->name, TRUE, fields);
 if (!isEmptyTextField(inter->name))
     printf("<b>Interaction:</b> %s<br>\n", inter->name);
 printf("<b>Score:</b> %d<br>\n", inter->score);

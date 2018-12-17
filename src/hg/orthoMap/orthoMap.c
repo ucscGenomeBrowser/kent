@@ -287,14 +287,14 @@ struct chain *chainDbLoad(char *db, struct sqlConnection *conn, char *track,
 			  char *chrom, int id)
 /** Load chain. */
 {
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 char query[256];
 struct sqlResult *sr;
 char **row;
 int rowOffset;
 struct chain *chain = NULL;
 
-if (!hFindSplitTable(db, chrom, track, table, &rowOffset))
+if (!hFindSplitTable(db, chrom, track, table, sizeof table, &rowOffset))
     errAbort("No %s track in database", track);
 sqlSafef(query, sizeof(query), 
 	 "select * from %s where id = %d", table, id);

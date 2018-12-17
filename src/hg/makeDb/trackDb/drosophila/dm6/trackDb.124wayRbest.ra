@@ -6,10 +6,10 @@ subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyl
 subGroup2 clade Clade drosophila=Drosophila
 dragAndDrop subTracks
 dimensions dimensionX=clade
-visibility full
+visibility hide
 type bed 4
 group compGeno
-priority 1
+priority 202
 
     track cons124wayRbestViewalign
     shortLabel Multiz Alignments
