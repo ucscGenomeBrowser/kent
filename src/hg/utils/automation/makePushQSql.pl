@@ -150,7 +150,8 @@ sub getInfrastructureEntry {
   # 2017-03-02 - remove gc5Base.wib quality.wib quality.bw
   #              rarely, if ever, used any more
   my @gbdbFiles = map {"$HgAutomate::gbdb/$db/$_"}
-    ("$db.2bit", 'html/description.html', "bbi/gc5BaseBw/gc5Base.bw", "liftOver/${db}To$SameSpecies*");
+    ("$db.2bit", 'html/description.html', "bbi/gc5BaseBw/gc5Base.bw", "ncbiRefSeq/ncbiRefSeqVersion.txt", "ncbiRefSeq/ncbiRefSeqOther.bb", "ncbiRefSeq/ncbiRefSeqOther.ix", "ncbiRefSeq/ncbiRefSeqOther.ixx", "ncbiRefSeq/seqNcbiRefSeq.rna.fa", "liftOver/${db}To$SameSpecies*");
+
   my @goldenPathFiles = map {"$HgAutomate::goldenPath/$db/$_"}
     (qw( bigZips/* database/* chromosomes/* ),
      "liftOver/${db}To$SameSpecies*");
