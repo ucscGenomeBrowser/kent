@@ -480,7 +480,7 @@ static int wigOutRegion(char *table, struct sqlConnection *conn,
  * Returns number of elements written. */
 {
 int linesOut = 0;
-char splitTableOrFileName[256];
+char splitTableOrFileName[HDB_MAX_TABLE_STRING];
 struct customTrack *ct = NULL;
 boolean isCustom = FALSE;
 boolean hasConstraint = FALSE;
@@ -542,9 +542,7 @@ if (isCustom)
     }
 else
     {
-    boolean hasBin = FALSE;
-
-    if (hFindSplitTable(database, region->chrom, table, splitTableOrFileName, &hasBin))
+    if (hFindSplitTable(database, region->chrom, table, splitTableOrFileName, sizeof splitTableOrFileName, NULL))
 	{
 	/* XXX TBD, watch for a span limit coming in as an SQL filter */
 	if (intersectBedList)
@@ -816,7 +814,7 @@ struct bed *getWiggleAsBed(
 /* filter, idHash and lm are currently unused, perhaps future use	*/
 {
 struct bed *bedList=NULL;
-char splitTableOrFileName[256];
+char splitTableOrFileName[HDB_MAX_TABLE_STRING];
 struct customTrack *ct = NULL;
 boolean isCustom = FALSE;
 boolean hasConstraint = FALSE;
@@ -866,12 +864,10 @@ if (isCustom)
     }
 else
     {
-    boolean hasBin;
-
     if (conn == NULL)
 	errAbort( "getWiggleAsBed: NULL conn given for database table");
 
-    if (hFindSplitTable(database, region->chrom, table, splitTableOrFileName, &hasBin))
+    if (hFindSplitTable(database, region->chrom, table, splitTableOrFileName, sizeof splitTableOrFileName, NULL))
 	{
 	struct trackDb *tdb = findTdbForTable(database, curTrack, table, ctLookupName);
 	unsigned span = 0;
@@ -956,7 +952,7 @@ char *regionName = getRegionName();
 long long regionSize = 0;
 long long gapTotal = 0;
 long startTime = 0, wigFetchTime = 0;
-char splitTableOrFileName[256];
+char splitTableOrFileName[HDB_MAX_TABLE_STRING];
 struct customTrack *ct = NULL;
 boolean isCustom = FALSE;
 struct wiggleDataStream *wds = NULL;
@@ -1002,7 +998,6 @@ WIG_INIT;  /* ct, isCustom, hasConstraint, wds and table2 are set here */
 for (region = regionList; region != NULL; region = region->next)
     {
     struct bed *intersectBedList = NULL;
-    boolean hasBin;
     int operations;
 
     ++regionsDone;
@@ -1060,7 +1055,7 @@ for (region = regionList; region != NULL; region = region->next)
 	}
     else
 	{
-	if (hFindSplitTable(database, region->chrom, table, splitTableOrFileName, &hasBin))
+	if (hFindSplitTable(database, region->chrom, table, splitTableOrFileName, sizeof splitTableOrFileName, NULL))
 	    {
 	    span = minSpan(conn, splitTableOrFileName, region->chrom,
 		region->start, region->end, cart, track);

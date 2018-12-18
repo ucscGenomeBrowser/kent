@@ -54,7 +54,7 @@ struct wiggleDataStream *wigChromRawStats(char *chrom)
 /* Fetch stats for wig data in chrom.  
  * Returns a wiggleDataStream, free it with wiggleDataStreamFree() */
 {
-char splitTableOrFileName[256];
+char splitTableOrFileName[HDB_MAX_TABLE_STRING];
 struct customTrack *ct = NULL;
 boolean isCustom = FALSE;
 struct wiggleDataStream *wds = NULL;
@@ -70,11 +70,9 @@ if (isCustomTrack(table))
 	errAbort("called to work on a custom track '%s' that isn't wiggle data ?", table); 
  
     if (ct->dbTrack) 
-	safef(splitTableOrFileName,ArraySize(splitTableOrFileName), "%s", 
-		ct->dbTableName); 
+	safef(splitTableOrFileName, sizeof splitTableOrFileName, "%s", ct->dbTableName); 
     else 
-	safef(splitTableOrFileName,ArraySize(splitTableOrFileName), "%s", 
-		ct->wigFile); 
+	safef(splitTableOrFileName, sizeof splitTableOrFileName, "%s", ct->wigFile); 
     } 
 
 wds = wiggleDataStreamNew(); 
@@ -90,11 +88,12 @@ if (isCustom)
     }
 else
     {
-    boolean hasBin = FALSE;
-    if (hFindSplitTable(database, chrom, table, splitTableOrFileName, &hasBin))
+    if (hFindSplitTable(database, chrom, table, splitTableOrFileName, sizeof splitTableOrFileName, NULL))
 	{
 	wds->getData(wds, database, splitTableOrFileName, operations);
 	}
+    else
+	errAbort("Track %s not found", table);
     }
 return wds;
 }

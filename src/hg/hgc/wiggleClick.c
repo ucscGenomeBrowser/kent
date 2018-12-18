@@ -22,8 +22,7 @@ void genericWiggleClick(struct sqlConnection *conn, struct trackDb *tdb,
  *	conn may be NULL for custom tracks when from file */
 {
 char *chrom = cartString(cart, "c");
-char table[64];
-boolean hasBin;
+char table[HDB_MAX_TABLE_STRING];
 unsigned span = 0;
 struct wiggleDataStream *wds = wiggleDataStreamNew();
 unsigned long long valuesMatched = 0;
@@ -61,7 +60,8 @@ if (startsWith("ct_", tdb->table))
     }
 else
     {
-    hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
+    if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, NULL))
+	errAbort("track %s not found", tdb->table);
     /*span = spanInUse(conn, table, chrom, winStart, winEnd, cart);*/
     span = minSpan(conn, table, chrom, winStart, winEnd, cart, tdb);
     }

@@ -142,10 +142,11 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 struct altGraphX *ag;
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 boolean hasBin;
 
-hFindSplitTable(sqlGetDatabase(conn), curGeneChrom, "altGraphX", table, &hasBin);
+if (!hFindSplitTable(sqlGetDatabase(conn), curGeneChrom, "altGraphX", table, sizeof table, &hasBin))
+    errAbort("track altGraphX not found");
 sqlSafef(query, sizeof(query), "select * from %s where name='%s'", table, altId);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<!--#set var="TITLE" value="GTEx Resources at UCSC" -->
+<!--#set var="ROOT" value="." -->
+
+<!--#include virtual="$ROOT/inc/gbPageStart.html"-->
+
+<link rel="stylesheet" href="<!--#echo var="ROOT" -->/style/hgGtexTrackSettings.css">
+
+<h1>Genotype Tissue Expression (GTEx) Project Resources at UCSC</h1>
+<p>
+The <a href="https://commonfund.nih.gov/gtex" target="_blank">Genotype Tissue Expression
+(GTEx) Project</a> is a data resource and tissue bank established by the 
+<a target="_blank" href="https://commonfund.nih.gov/about">National Institutes of Health Common Fund</a>,
+in order to study the relationship between genetic variation and gene expression in
+a variety of human tissues. A total of 53 tissues from nearly 1000 individuals have been studied
+by genomic and RNA sequencing.  These resources are valuable for exploring the genetic basis of
+human diseases.</p>
+<p>
+The UCSC Genome Browser provides visualization resources for selected summary data from the GTEx project.
+More extensive data access and visualizations are available from the
+<a target="_blank" href="https://gtexportal.org">GTEx Portal</a>, a resource provided by the
+GTEx Laboratory, Data Analysis and Coordinating Center at the Broad Institute.</p>
+
+<div class="row">
+    <div class="col-md-6">
+        <h2>GTEx Tissue Body Map</h2>
+<p>This interactive graphic identifies the tissues sampled by GTEx for gene expression studies. 
+Some GTEx browser tracks include the Body Map in the track configuration page, to facilitate 
+limiting track display to tissues of interest.  A stand-alone page with the interactive
+graphic is <a target="_blank" href="../gtexBodyMap.html">here</a>.</p>
+            
+<!--
+        <a target="_blank" href="../gtexBodyMap.html"><img src="../images/gtexBodyMap.svg" alt="GTEx Body Map">
+-->
+        <p class="text-center">
+        <object id="bodyMapSvg" type="image/svg+xml" 
+                data="<!--#echo var="ROOT" -->/images/gtexBodyMapPage.svg"></object>
+        <div class="gbmCredit">Credit: jwestdesign</div>
+        </p>
+    </div>
+    <div class="col-md-6">
+        <div class="row">
+            <h2>GTEx data at UCSC</h2>
+            <ul>
+            <li><a target="_blank" 
+                href="../cgi-bin/hgGtexTrackSettings?db=hg19&g=gtexGene#INFO_SECTION">
+                        GTEx Gene track</a></li>
+                <dd>Gene Expression in 53 tissues from GTEx RNA-seq of 8555 samples (570 donors)</dd>
+            <li><a target="_blank" 
+                href="../cgi-bin/hgTrackUi?db=hg19&g=gtexTranscExpr#TRACK_HTML">
+                        GTEx Transcript track</a></li>
+                <dd>Transcript Expression in 53 tissues from GTEx RNA-seq of 8555 samples (570 donors)</dd>
+            <li><a target="_blank" 
+                href="../cgi-bin/hgGtexTrackSettings?db=hg19&g=gtexEqtlCluster#INFO_SECTION">
+                        GTEx Combined eQTL track</a></li>
+                <dd>Combined Expression QTLs from 44 Tissues from GTEx</dd>
+            <li><a target="_blank" 
+                href="../cgi-bin/hgTrackUi?db=hg19&g=gtexEqtlTissue#TRACK_HTML">
+                        GTEx Tissue eQTL track</a></li>
+                <dd>Expression QTLs in 44 tissues from GTEx </dd>
+            <li><a target="_blank" 
+                href="http://hgdownload.soe.ucsc.edu/hubs/gtex/gtexHub.html">
+                        GTEx Signal hub</a></li>
+                <dd>GTEx RNA-seq of 53 tissues (570 donors)</dd>
+            <li><a target="_blank" 
+                href="http://hgdownload.soe.ucsc.edu/hubs/gtexAnalysis/gtexAnalysisHub.html">
+                        GTEx Analysis hub</a></li>
+                <dd>Allele-Specific Expression in 53 Tissues from GTEx Analysis</dd>
+                <dd>Distant variants affecting gene expression (trans-eQTLs) from GTEx Analysis</dd>
+            </ul>
+        </div>
+        <div class="row">
+            <h2>GTEx in the browser</h2>
+            <p>
+Below is a screenshot of a  
+<a target="_blank" 
+href="http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=kate&hgS_otherUserSessionName=GTEx%20demo%20for%20blog">
+public session</a>
+ that highlights the GTEx gene expression track and GTEx RNA-seq signal hub for the <a target="_blank" href="http://genome.ucsc.edu/blog/gtex-resources-in-the-browser/">GTEx Resources in the Genome Browser blog article</a>. 
+The session shows a genomic region where 5 genes exhibit different patterns of tissue-specific expression. 
+        <p class="text-center">
+        <img src="../images/gtexBlogSession.png" width="540px" height="424px"></p>
+        </div>
+    </div>
+</div>
+
+<!--#include virtual="$ROOT/inc/gbPageEnd.html"-->
+
+<script type='text/javascript' src='/js/hgGtexTrackSettings.js'></script>
+
+
