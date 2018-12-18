@@ -357,18 +357,14 @@ struct bbiFile *bbi = bigBedFileOpen(fileName);
 struct bbiChromInfo *chromList = bbiChromList(bbi);
 struct lm *lm = lmInit(0);
 struct bigBedInterval *ivList = getNElements(bbi, chromList, lm, 10);
+time_t timep = bbiUpdateTime(bbi);
 
 /* Get description of columns, making it up from BED records if need be. */
 struct asObject *as = bigBedAsOrDefault(bbi);
 
 hPrintf("<B>Database:</B> %s", database);
 hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Primary Table:</B> %s ", table);
-if (!isHubTrack(table)  && hTableExists(database, table))
-    {
-    char *date = firstWordInLine(sqlTableUpdate(conn, table));
-    if (date != NULL)
-	printf("&nbsp&nbsp<B>Data last updated:&nbsp;</B>%s<BR>\n", date);
-    }
+printf("<B>Data last updated:&nbsp;</B>%s<BR>\n", firstWordInLine(sqlUnixTimeToDate(&timep, FALSE)));
 hPrintf("<B>Big Bed File:</B> %s", fileName);
 if (bbi->version >= 2)
     {
