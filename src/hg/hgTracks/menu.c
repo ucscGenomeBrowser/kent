@@ -231,6 +231,10 @@ safef(uiVars, sizeof(uiVars), "%s=%s", cartSessionVarName(), cartSessionId(cart)
 
 menuStr = menuBar(cart, database);
 
+/* hide Projects dropdown (just used by static and gateway pages */
+menuStr = replaceChars(menuStr, "<!-- OPTIONAL_PROJECT_MENU_START -->", "<!-- OPTIONAL_PROJECT_MENU_START");
+menuStr = replaceChars(menuStr, "<!--OPTIONAL_PROJECT_MENU_END -->", "OPTIONAL_PROJECT_MENU_END -->");
+
 // Create top items in view menu
 safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgt.psOutput=on", uiVars);
 appendLink(&links, buf, "PDF/PS", "pdfLink", FALSE);
@@ -396,6 +400,8 @@ dyStringAppend(viewMenu, "</ul>\n</li>\n");
 menuStr = replaceChars(menuStr, "<!-- OPTIONAL_VIEW_MENU -->", dyStringCannibalize(&viewMenu));
 menuStr = replaceChars(menuStr, "id=\"main-menu-whole\"", "id=\"hgTracks-main-menu-whole\"");
 menuStr = replaceChars(menuStr, "id=\"home-link\"", "id=\"hgTracks-home-link\"");
+
+
 hPuts(menuStr);
 freez(&menuStr);
 
