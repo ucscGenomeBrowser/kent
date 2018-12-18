@@ -9,6 +9,8 @@
 #include "jksql.h"
 #include "hgc.h"
 #include "trashDir.h"
+#include "hex.h"
+#include <openssl/sha.h>
 
 #include "interact.h"
 #include "interactUi.h"
@@ -242,17 +244,35 @@ trashDirFile(&mrTn, "hgt", "custRgn_interact", ".bed");
 FILE *f = fopen(mrTn.forCgi, "w");
 if (f == NULL)
     errAbort("can't create temp file %s", mrTn.forCgi);
-fprintf(f, "%s\t%d\t%d\n"
+char regionInfo[1024];
+// TODO: check chrom bounds
+int padding = 2;
+safef(regionInfo, sizeof regionInfo, "%s\t%d\t%d\n"
            "%s\t%d\t%d\n",
-                region1Chrom, region1Start, region1End, 
-                region2Chrom, region2Start, region2End);
+                region1Chrom, region1Start-padding, region1End+padding, 
+                region2Chrom, region2Start-padding, region2End+padding);
+mustWrite(f, regionInfo, strlen(regionInfo));
 fclose(f);
-printf("<br><a target='_blank' href='hgTracks?"
-                "virtMode=1"
-                "&virtModeType=customUrl"
-                "&multiRegionsBedUrl=%s'"
-        ">Show both ends of interaction in multi-region browser view</a>",
-                mrTn.forCgi);
+
+// create SHA1 file; used to see if file has changed
+unsigned char hash[SHA_DIGEST_LENGTH];
+SHA1((const unsigned char *)regionInfo, strlen(regionInfo), hash);
+char newSha1[(SHA_DIGEST_LENGTH + 1) * 2];
+hexBinaryString(hash, SHA_DIGEST_LENGTH, newSha1, (SHA_DIGEST_LENGTH + 1) * 2);
+char sha1File[1024];
+safef(sha1File, sizeof sha1File, "%s.sha1", mrTn.forCgi);
+f = mustOpen(sha1File, "w");
+mustWrite(f, newSha1, strlen(newSha1));
+carefulClose(&f);
+
+// TODO: add cart variable to set viewport to entire virtual chromosome (TBD galt)
+printf("<br><a target='_blank' "
+        "href='hgTracks?"
+            "virtMode=1&"
+            "virtModeType=customUrl&"
+            "multiRegionsBedUrl=%s'>"
+        "Show both ends of interaction in multi-region browser view</a>",
+                cgiEncode(mrTn.forCgi));
 
 #ifdef TODO /* TODO: get count and score stats of all interactions in window ?*/
 double *scores;
