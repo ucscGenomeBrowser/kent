@@ -916,19 +916,24 @@ remove all of your custom tracks, reset the Genome Browser to its default settin
 <em>Click here to reset</em> link on the Gateway page. Note that this reset will also remove any 
 other customizations you have made to your Genome Browser display.</p> 
 <p>
-<strong><em>Problem:</em></strong> I put my custom track files on Google Drive and they won't 
-display in the browser. Why? <br>
+<strong><em>Problem:</em></strong> I put my custom track files on Dropbox,
+Apple iCloud, Google Drive, Amazon Drive, Box.com, Microsoft OneDrive, or
+another "online cloud backup" provider and they won't display in the browser.
+Why? <br>
 <em>OR</em><br>
 <strong><em>Problem:</em></strong> When I try to visualize my custom tracks in the Browser, I 
 receive the error message &quot;Byte-range request was ignored by server&quot;.<br>
-<strong><em>Solution:</em></strong> Data servers (such as Google Drive) used to work for hosting 
+
+<strong><em>Solution:</em></strong> Backup providers used to work for hosting 
 simple text-based custom tracks, but things have changed. For large custom track data sets, the use 
-of indexed binary formats such as bigBed and bigWig is preferable but never worked with Google Drive
-and often fail with other free data providers. These formats provide much faster display performance
+of indexed binary formats such as bigBed and bigWig is preferable and usually fail with backup providers. 
+These formats provide much faster display performance
 because only the portion of the file needed to display the currently viewed region must be 
-transferred to the Genome Browser server. To allow this type of display, byte-range support must be 
-enabled on the data server. To check if your server has byte-range requests enabled, issue the 
-following command:</p>
+transferred to the Genome Browser server. This requires that they are stored on a real web server.
+And to allow this type of display, byte-range support must be 
+enabled on the web server. No commercial online backup solution supports this,
+to our knowledge. To check if your server has byte-range requests enabled,
+issue the following command:</p>
 <pre><code>&gt; curl -I &lt;URL of your file&gt;</code></pre>
 <p>
 In order for your server to host bigBed and bigWig files (or track hubs) for Genome Browser display,
@@ -939,7 +944,8 @@ If you do not receive this output, you may be able to resolve the problem throug
 following actions:</p>
 <ul>
   <li>
-  Check with the systems administrators about the configuration of the server. This will often 
+  Store the files on a real webserver, e.g. at your University. Check with the
+  systems administrators about the configuration of the server. This will often
   solve the problem.</li>
   <li>
   Find another site with a server that supports byte-ranges.</li>  
@@ -947,12 +953,12 @@ following actions:</p>
   Install an Apache alternative http server such as Cherokee.</li>
 </ul>
 <p>
-Please note that this does not constitute an endorsement by UCSC for using Google Drive to host 
-your data.</p>
-<p>
 <strong><em>Problem:</em></strong> I used to host files on Dropbox which used to accept byte-range 
 requests, but I can't get my data to display. Why?<br>
-<strong><em>Solution:</em></strong> Dropbox recently changed the ability to stream large amounts of
+<strong><em>Solution:</em></strong> As described in the previous question, Dropbox is a backup provider
+and not a real webserver and as such does not support hosting indexed files, even though it used to
+work to some extend and may work for some time with a paid Dropbox account. 
+Dropbox recently changed the ability to stream large amounts of
 data making binary files hosted there inaccessible to the browser. If you use Dropbox for smaller 
 text based track hubs you need to enable the &quot;Public Folder&quot; function on Dropbox, rather 
 than using the &quot;Share Link&quot; function. For custom tracks that require an associated index 
@@ -968,8 +974,9 @@ that this does not constitute an endorsement by UCSC for using Dropbox to host y
 data.</p>
 <a name="BYTERANGE"></a>
 <p>
-<strong><em>Problem:</em></strong> If I can't host files on Dropbox or Google Drive where can I
-host my files, especially my bigWigs and bigBeds?<br>
+<strong><em>Problem:</em></strong> If I can't host files on backup providers
+like Dropbox or Google Drive where can I host my files, especially my bigWigs
+and bigBeds?<br>
 <strong><em>Solution:</em></strong> The NSF-funded website <a href="http://cyverse.org">CyVerse</a>
 was created in order to provide hosting free hosting services to researchers, and allows byte-range
 requests, meaning binary files like BAMs, bigBeds and bigWigs can be hosted there.. Please see the

@@ -888,7 +888,8 @@ boolean hasBin;
 char table[HDB_MAX_TABLE_STRING];
 
 verbose(2, "track %s\n", td->name);
-hFindSplitTable(database, segment->seq, td->name, table, &hasBin);
+if (!hFindSplitTable(database, segment->seq, td->name, table, sizeof table, &hasBin))
+    errAbort("track %s not found", td->name);
 // horrible hack because hFindSplitTable and hRangeQuery don't really seem to
 // handle est->all_est/mrna->all_mrna right, but markd fears modifying that
 // code

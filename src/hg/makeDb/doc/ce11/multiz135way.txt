@@ -320,7 +320,7 @@
     -nameTranslate=sequenceName.taxId.tab -noInternal -lineOutput \
       /dev/stdin > ce11.135way.taxId.nh
 
-    sed -e 's/^/# /;' ce11.135way.sciName.nh 
+    sed -e 's/^/# /;' ce11.135way.sciName.nh
 
 # (((((((((((((Caenorhabditis_elegans:0.20748,
 #             (Caenorhabditis_sp._38_MB-2015:0.20466,
@@ -711,48 +711,48 @@ close (FH);
     # create species list and stripped down tree for autoMZ
     sed -e 's/,//g; s/:[0-9]\+.[0-9]\+//g; s/;//g;' ce11.135way.nh \
        | xargs echo > tree.nh
- 
+
     cat tree.nh | fold -s -w 78 | sed -e 's/^/# /;'
 
-# (((((((((((((ce11 (C_sp38_MB_2015 caeAng2)) caeJap4) C_sp34_TK_2017) 
-# (((((((C_briggsae cb4) C_nigoni) (C_sp26_LS_2015 caeSp51)) C_sp40_LS_2015) 
-# ((C_latens caeRem4) caePb3)) caeSp111) C_sp31_LS_2015)) C_sp21_LS_2015) 
-# (((C_sp32_LS_2015 C_sp39_LS_2015) (((Pristionchus_arcanus 
-# ((Pristionchus_exspectatus priExs1) (Pristionchus_pacificus priPac3))) 
-# Pristionchus_maxplancki) Pristionchus_entomophagus)) 
-# (((Bursaphelenchus_xylophilus burXyl1) Subanguina_moxae) ((Oscheius_MCB 
-# Oscheius_TEL_2014) (((Angiostrongylus_cantonensis (Necator_americanus 
-# necAme1)) Nippostrongylus_brasiliensis) ((((((((Ancylostoma_caninum 
-# Ancylostoma_duodenale) ancCey1) ((((Ascaris_suum ascSuu1) 
-# Parascaris_univalens) Toxocara_canis) Oesophagostomum_dentatum)) 
-# ((Haemonchus_contortus haeCon2) Teladorsagia_circumcincta)) 
-# (((Clonorchis_sinensis Opisthorchis_viverrini) Dicrocoelium_dendriticum) 
-# ((Elaeophora_elaphi Macrostomum_lignano) ((Fasciola_gigantica 
-# Fasciola_hepatica) Spirometra_erinaceieuropaei)))) 
-# (Heligmosomoides_polygyrus_bakeri (Oscheius_tipulae 
-# (((Steinernema_carpocapsae Steinernema_scapterisci) Steinernema_feltiae) 
-# Steinernema_glaseri)))) ((((Echinococcus_canadensis Echinococcus_granulosus) 
-# Echinococcus_multilocularis) (((Taenia_asiatica Taenia_saginata) 
-# Taenia_multiceps) Taenia_solium)) (Trichuris_muris (Trichuris_trichiura 
-# triSui1)))) ((Plectus_sambesii Steinernema_monticolum) panRed1))))))) 
-# (Diploscapter_coronatus Diploscapter_pachys)) (((((((((((((Brugia_malayi 
-# bruMal2) Brugia_pahangi) Wuchereria_bancrofti) ((Dirofilaria_immitis dirImm1) 
-# (Onchocerca_ochengi (Onchocerca_volvulus oncVol1)))) (Loa_loa loaLoa1)) 
-# (Setaria_digitata Setaria_equina)) Onchocerca_flexuosa) ((((Dugesia_japonica 
-# Girardia_tigrina) Schmidtea_mediterranea) (((((Meloidogyne_arenaria 
-# Meloidogyne_javanica) Meloidogyne_incognita) (Meloidogyne_floridensis 
-# melInc2)) (Meloidogyne_graminicola melHap1)) (Parastrongyloides_trichosuri 
-# ((Strongyloides_papillosus Strongyloides_venezuelensis) 
-# (Strongyloides_stercoralis strRat2))))) ((Schistosoma_haematobium 
-# Schistosoma_mansoni) Schistosoma_japonicum))) Dictyocaulus_viviparus) 
-# Hymenolepis_microstoma) (Rhabditophanes_KR3021 (ci3 hetBac1))) 
-# Gyrodactylus_salaris) Parapristionchus_giblindavisi)) Ditylenchus_destructor) 
-# (((((Trichinella_T6 Trichinella_patagoniensis) ((Trichinella_T8 
-# (Trichinella_T9 Trichinella_britovi)) Trichinella_murrelli)) 
-# Trichinella_nativa) (Trichinella_nelsoni (Trichinella_spiralis triSpi1))) 
-# ((Trichinella_papuae Trichinella_zimbabwensis) Trichinella_pseudospiralis))) 
-# Romanomermis_culicivorax) ((((Globodera_ellingtonae Globodera_rostochiensis) 
-# Globodera_pallida) Heterodera_glycines) Rotylenchulus_reniformis)) 
+# (((((((((((((ce11 (C_sp38_MB_2015 caeAng2)) caeJap4) C_sp34_TK_2017)
+# (((((((C_briggsae cb4) C_nigoni) (C_sp26_LS_2015 caeSp51)) C_sp40_LS_2015)
+# ((C_latens caeRem4) caePb3)) caeSp111) C_sp31_LS_2015)) C_sp21_LS_2015)
+# (((C_sp32_LS_2015 C_sp39_LS_2015) (((Pristionchus_arcanus
+# ((Pristionchus_exspectatus priExs1) (Pristionchus_pacificus priPac3)))
+# Pristionchus_maxplancki) Pristionchus_entomophagus))
+# (((Bursaphelenchus_xylophilus burXyl1) Subanguina_moxae) ((Oscheius_MCB
+# Oscheius_TEL_2014) (((Angiostrongylus_cantonensis (Necator_americanus
+# necAme1)) Nippostrongylus_brasiliensis) ((((((((Ancylostoma_caninum
+# Ancylostoma_duodenale) ancCey1) ((((Ascaris_suum ascSuu1)
+# Parascaris_univalens) Toxocara_canis) Oesophagostomum_dentatum))
+# ((Haemonchus_contortus haeCon2) Teladorsagia_circumcincta))
+# (((Clonorchis_sinensis Opisthorchis_viverrini) Dicrocoelium_dendriticum)
+# ((Elaeophora_elaphi Macrostomum_lignano) ((Fasciola_gigantica
+# Fasciola_hepatica) Spirometra_erinaceieuropaei))))
+# (Heligmosomoides_polygyrus_bakeri (Oscheius_tipulae
+# (((Steinernema_carpocapsae Steinernema_scapterisci) Steinernema_feltiae)
+# Steinernema_glaseri)))) ((((Echinococcus_canadensis Echinococcus_granulosus)
+# Echinococcus_multilocularis) (((Taenia_asiatica Taenia_saginata)
+# Taenia_multiceps) Taenia_solium)) (Trichuris_muris (Trichuris_trichiura
+# triSui1)))) ((Plectus_sambesii Steinernema_monticolum) panRed1)))))))
+# (Diploscapter_coronatus Diploscapter_pachys)) (((((((((((((Brugia_malayi
+# bruMal2) Brugia_pahangi) Wuchereria_bancrofti) ((Dirofilaria_immitis dirImm1)
+# (Onchocerca_ochengi (Onchocerca_volvulus oncVol1)))) (Loa_loa loaLoa1))
+# (Setaria_digitata Setaria_equina)) Onchocerca_flexuosa) ((((Dugesia_japonica
+# Girardia_tigrina) Schmidtea_mediterranea) (((((Meloidogyne_arenaria
+# Meloidogyne_javanica) Meloidogyne_incognita) (Meloidogyne_floridensis
+# melInc2)) (Meloidogyne_graminicola melHap1)) (Parastrongyloides_trichosuri
+# ((Strongyloides_papillosus Strongyloides_venezuelensis)
+# (Strongyloides_stercoralis strRat2))))) ((Schistosoma_haematobium
+# Schistosoma_mansoni) Schistosoma_japonicum))) Dictyocaulus_viviparus)
+# Hymenolepis_microstoma) (Rhabditophanes_KR3021 (ci3 hetBac1)))
+# Gyrodactylus_salaris) Parapristionchus_giblindavisi)) Ditylenchus_destructor)
+# (((((Trichinella_T6 Trichinella_patagoniensis) ((Trichinella_T8
+# (Trichinella_T9 Trichinella_britovi)) Trichinella_murrelli))
+# Trichinella_nativa) (Trichinella_nelsoni (Trichinella_spiralis triSpi1)))
+# ((Trichinella_papuae Trichinella_zimbabwensis) Trichinella_pseudospiralis)))
+# Romanomermis_culicivorax) ((((Globodera_ellingtonae Globodera_rostochiensis)
+# Globodera_pallida) Heterodera_glycines) Rotylenchulus_reniformis))
 # Acrobeloides_nanus)
 
     sed -e 's/:.*//; s/(//g; s/ *//;' ce11.135way.nh \
@@ -760,41 +760,41 @@ close (FH);
 
     cat species.list | fold -s -w 78 | sed -e 's/^/# /;'
 
-# ce11 C_sp38_MB_2015 caeAng2 caeJap4 C_sp34_TK_2017 C_briggsae cb4 C_nigoni 
-# C_sp26_LS_2015 caeSp51 C_sp40_LS_2015 C_latens caeRem4 caePb3 caeSp111 
-# C_sp31_LS_2015 C_sp21_LS_2015 C_sp32_LS_2015 C_sp39_LS_2015 
-# Pristionchus_arcanus Pristionchus_exspectatus priExs1 Pristionchus_pacificus 
-# priPac3 Pristionchus_maxplancki Pristionchus_entomophagus 
-# Bursaphelenchus_xylophilus burXyl1 Subanguina_moxae Oscheius_MCB 
-# Oscheius_TEL_2014 Angiostrongylus_cantonensis Necator_americanus necAme1 
-# Nippostrongylus_brasiliensis Ancylostoma_caninum Ancylostoma_duodenale 
-# ancCey1 Ascaris_suum ascSuu1 Parascaris_univalens Toxocara_canis 
-# Oesophagostomum_dentatum Haemonchus_contortus haeCon2 
-# Teladorsagia_circumcincta Clonorchis_sinensis Opisthorchis_viverrini 
-# Dicrocoelium_dendriticum Elaeophora_elaphi Macrostomum_lignano 
-# Fasciola_gigantica Fasciola_hepatica Spirometra_erinaceieuropaei 
-# Heligmosomoides_polygyrus_bakeri Oscheius_tipulae Steinernema_carpocapsae 
-# Steinernema_scapterisci Steinernema_feltiae Steinernema_glaseri 
-# Echinococcus_canadensis Echinococcus_granulosus Echinococcus_multilocularis 
-# Taenia_asiatica Taenia_saginata Taenia_multiceps Taenia_solium 
-# Trichuris_muris Trichuris_trichiura triSui1 Plectus_sambesii 
-# Steinernema_monticolum panRed1 Diploscapter_coronatus Diploscapter_pachys 
-# Brugia_malayi bruMal2 Brugia_pahangi Wuchereria_bancrofti Dirofilaria_immitis 
-# dirImm1 Onchocerca_ochengi Onchocerca_volvulus oncVol1 Loa_loa loaLoa1 
-# Setaria_digitata Setaria_equina Onchocerca_flexuosa Dugesia_japonica 
-# Girardia_tigrina Schmidtea_mediterranea Meloidogyne_arenaria 
-# Meloidogyne_javanica Meloidogyne_incognita Meloidogyne_floridensis melInc2 
-# Meloidogyne_graminicola melHap1 Parastrongyloides_trichosuri 
-# Strongyloides_papillosus Strongyloides_venezuelensis 
-# Strongyloides_stercoralis strRat2 Schistosoma_haematobium Schistosoma_mansoni 
-# Schistosoma_japonicum Dictyocaulus_viviparus Hymenolepis_microstoma 
-# Rhabditophanes_KR3021 ci3 hetBac1 Gyrodactylus_salaris 
-# Parapristionchus_giblindavisi Ditylenchus_destructor Trichinella_T6 
-# Trichinella_patagoniensis Trichinella_T8 Trichinella_T9 Trichinella_britovi 
-# Trichinella_murrelli Trichinella_nativa Trichinella_nelsoni 
-# Trichinella_spiralis triSpi1 Trichinella_papuae Trichinella_zimbabwensis 
-# Trichinella_pseudospiralis Romanomermis_culicivorax Globodera_ellingtonae 
-# Globodera_rostochiensis Globodera_pallida Heterodera_glycines 
+# ce11 C_sp38_MB_2015 caeAng2 caeJap4 C_sp34_TK_2017 C_briggsae cb4 C_nigoni
+# C_sp26_LS_2015 caeSp51 C_sp40_LS_2015 C_latens caeRem4 caePb3 caeSp111
+# C_sp31_LS_2015 C_sp21_LS_2015 C_sp32_LS_2015 C_sp39_LS_2015
+# Pristionchus_arcanus Pristionchus_exspectatus priExs1 Pristionchus_pacificus
+# priPac3 Pristionchus_maxplancki Pristionchus_entomophagus
+# Bursaphelenchus_xylophilus burXyl1 Subanguina_moxae Oscheius_MCB
+# Oscheius_TEL_2014 Angiostrongylus_cantonensis Necator_americanus necAme1
+# Nippostrongylus_brasiliensis Ancylostoma_caninum Ancylostoma_duodenale
+# ancCey1 Ascaris_suum ascSuu1 Parascaris_univalens Toxocara_canis
+# Oesophagostomum_dentatum Haemonchus_contortus haeCon2
+# Teladorsagia_circumcincta Clonorchis_sinensis Opisthorchis_viverrini
+# Dicrocoelium_dendriticum Elaeophora_elaphi Macrostomum_lignano
+# Fasciola_gigantica Fasciola_hepatica Spirometra_erinaceieuropaei
+# Heligmosomoides_polygyrus_bakeri Oscheius_tipulae Steinernema_carpocapsae
+# Steinernema_scapterisci Steinernema_feltiae Steinernema_glaseri
+# Echinococcus_canadensis Echinococcus_granulosus Echinococcus_multilocularis
+# Taenia_asiatica Taenia_saginata Taenia_multiceps Taenia_solium
+# Trichuris_muris Trichuris_trichiura triSui1 Plectus_sambesii
+# Steinernema_monticolum panRed1 Diploscapter_coronatus Diploscapter_pachys
+# Brugia_malayi bruMal2 Brugia_pahangi Wuchereria_bancrofti Dirofilaria_immitis
+# dirImm1 Onchocerca_ochengi Onchocerca_volvulus oncVol1 Loa_loa loaLoa1
+# Setaria_digitata Setaria_equina Onchocerca_flexuosa Dugesia_japonica
+# Girardia_tigrina Schmidtea_mediterranea Meloidogyne_arenaria
+# Meloidogyne_javanica Meloidogyne_incognita Meloidogyne_floridensis melInc2
+# Meloidogyne_graminicola melHap1 Parastrongyloides_trichosuri
+# Strongyloides_papillosus Strongyloides_venezuelensis
+# Strongyloides_stercoralis strRat2 Schistosoma_haematobium Schistosoma_mansoni
+# Schistosoma_japonicum Dictyocaulus_viviparus Hymenolepis_microstoma
+# Rhabditophanes_KR3021 ci3 hetBac1 Gyrodactylus_salaris
+# Parapristionchus_giblindavisi Ditylenchus_destructor Trichinella_T6
+# Trichinella_patagoniensis Trichinella_T8 Trichinella_T9 Trichinella_britovi
+# Trichinella_murrelli Trichinella_nativa Trichinella_nelsoni
+# Trichinella_spiralis triSpi1 Trichinella_papuae Trichinella_zimbabwensis
+# Trichinella_pseudospiralis Romanomermis_culicivorax Globodera_ellingtonae
+# Globodera_rostochiensis Globodera_pallida Heterodera_glycines
 # Rotylenchulus_reniformis Acrobeloides_nanus
 
     # take an N50 survery to see if the quality of these genomes makes a mark
@@ -1006,7 +1006,7 @@ done > allSummary.tab
 
     # are woefully inadequate for this purpose.  Hardly any of them
     # have any syntenic net coverage.
-  
+
     awk -F$'\t' '$4 > 500000' allSummary.tab | awk '$5 < 5' \
 	| cut -f7 | awk -F'.' '{print $1}' > syntenicList.txt
 
@@ -1262,7 +1262,7 @@ done
     ln -s ../sizes .
     ln -s ../sizesDir/*.len .
     ln -s ../nBedsDir/*.bed .
-    
+
     printf '#LOOP
 mafAddIRows -nBeds=nBeds $(path1) /hive/data/genomes/ce11/ce11.2bit {check out line+ result/$(file1)}
 #ENDLOOP
@@ -1315,7 +1315,7 @@ mafAddIRows -nBeds=nBeds $(path1) /hive/data/genomes/ce11/ce11.2bit {check out l
     rm multiz135way*.tab
 
 ##############################################################################
-# MULTIZ7WAY MAF FRAMES (DONE - 2017-11-03 - Hiram)
+# MULTIZ7WAY MAF FRAMES (DONE - 2018-12-13 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/ce11/bed/multiz135way/frames
     cd /hive/data/genomes/ce11/bed/multiz135way/frames
@@ -1328,6 +1328,7 @@ foreach db (`cat ../species.list | tr " " "\\n" | grep -v "^[A-Z]"`)
     foreach table ($tables)
         if ($table == "ensGene" || $table == "refGene" || \
            $table == "ncbiRefSeq" || $table == "mgcGenes" || \
+           $table == "ws245Genes" || \
            $table == "knownGene" || $table == "xenoRefGene" ) then
            set count = `hgsql $db -N -e "select count(*) from $table"`
             echo -n "${table}: ${count}, "
@@ -1339,21 +1340,43 @@ end
 
     chmod +x ./showGenes.csh
     time ./showGenes.csh
-# ce11: ensGene: 34729, ncbiRefSeq: 34111, refGene: 36168, xenoRefGene: 54307, 
-# droSec1: xenoRefGene: 252243, 
-# droPer1: ncbiRefSeq: 17352, xenoRefGene: 248816, 
-# droEre2: ensGene: 15902, 
-# droAna3: ensGene: 16061, 
+# ce11: ensGene: 61109, ncbiRefSeq: 52984, refGene: 53937, ws245Genes: 57827, xenoRefGene: 32625,
+# caeAng2: ws245Genes: 33934,
+# caeJap4: ws245Genes: 38144, xenoRefGene: 158453,
+# cb4: ws245Genes: 23050, xenoRefGene: 130721,
+# caeSp51: ws245Genes: 46280,
+# caeRem4: ws245Genes: 32899, xenoRefGene: 155137,
+# caePb3: ws245Genes: 33210, xenoRefGene: 189584,
+# caeSp111: ws245Genes: 27721,
+# priExs1: ws245Genes: 24642, xenoRefGene: 153824,
+# priPac3: ws245Genes: 24243, xenoRefGene: 97503,
+# burXyl1: ws245Genes: 18074,
+# necAme1: ws245Genes: 19643,
+# ancCey1: ws245Genes: 65583, xenoRefGene: 149848,
+# ascSuu1: ws245Genes: 3082, xenoRefGene: 148202,
+# haeCon2: ws245Genes: 26359,
+# triSui1: ws245Genes: 14435,
+# panRed1: ws245Genes: 26372,
+# bruMal2: ws245Genes: 18709,
+# dirImm1: ws245Genes: 12857,
+# oncVol1: ws245Genes: 12385,
+# loaLoa1: ws245Genes: 15577,
+# melInc2: ws245Genes: 20365,
+# melHap1: ws245Genes: 14420, xenoRefGene: 88300,
+# ci3: ensGene: 17784, refGene: 1306, xenoRefGene: 86960,
+# hetBac1: ws245Genes: 20928,
+# triSpi1: ws245Genes: 16380,
 
     # from that summary, use these gene sets:
-    # ensGene - ce11 droEre2 droAna3
-    # ncbiRefSeq - droPer1
-    # xenoRefGene - droSec1
+    # ensGene - ce11 ci3
+    # ws245Genes - caeAng2 caeJap4 cb4 caeSp51 caeRem4 caePb3 caeSp111 priExs1
+    # priPac3 burXyl1 necAme1 ancCey1 ascSuu1 haeCon2 triSui1 panRed1 bruMal2
+    # dirImm1 oncVol1 loaLoa1 melInc2 melHap1 hetBac1 triSpi1
 
     mkdir genes
 
-    # 1. ensGene: ce11 droEre2 droAna3
-    for DB in ce11 droEre2 droAna3
+    # 1. ensGene: ce11 ci3
+    for DB in ce11 ci3
 do
 hgsql -N -e "select
 name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds
@@ -1364,37 +1387,48 @@ from ensGene" ${DB} \
     echo -n "# ${DB}: "
     genePredCheck -db=${DB} genes/${DB}.gp.gz
 done
-# ce11: checked: 13860 failed: 0
-# droEre2: checked: 14992 failed: 0
-# droAna3: checked: 15022 failed: 0
+# ce11: checked: 20195 failed: 0
+# ci3: checked: 16035 failed: 0
 
-    # 2. ncbiRefSeq for droPer1
-    for DB in droPer1
+    # 2. ws245Genes caeAng2 caeJap4 cb4 caeSp51 caeRem4 caePb3 caeSp111 priExs1
+    # priPac3 burXyl1 necAme1 ancCey1 ascSuu1 haeCon2 triSui1 panRed1 bruMal2
+    # dirImm1 oncVol1 loaLoa1 melInc2 melHap1 hetBac1 triSpi1
+
+    for DB in caeAng2 caeJap4 cb4 caeSp51 caeRem4 caePb3 caeSp111 priExs1 priPac3 burXyl1 necAme1 ancCey1 ascSuu1 haeCon2 triSui1 panRed1 bruMal2 dirImm1 oncVol1 loaLoa1 melInc2 melHap1 hetBac1 triSpi1
 do
     hgsql -N -e "select
 name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds
-from ncbiRefSeq" ${DB} \
+from ws245Genes" ${DB} \
       | genePredSingleCover stdin stdout | gzip -2c \
         > /dev/shm/${DB}.tmp.gz
     mv /dev/shm/${DB}.tmp.gz genes/$DB.gp.gz
     echo -n "# ${DB}: "
     genePredCheck -db=${DB} genes/${DB}.gp.gz
 done
-# droPer1: checked: 16815 failed: 0
-
-    # 3. xenoRefGene for droSec1
-    for DB in droSec1
-do
-    hgsql -N -e "select
-name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds
-from xenoRefGene" ${DB} \
-      | genePredSingleCover stdin stdout | gzip -2c \
-        > /dev/shm/${DB}.tmp.gz
-    mv /dev/shm/${DB}.tmp.gz genes/$DB.gp.gz
-    echo -n "# ${DB}: "
-    genePredCheck -db=${DB} genes/${DB}.gp.gz
-done
-# droSec1: checked: 13077 failed: 0
+# caeAng2: checked: 27919 failed: 0
+# caeJap4: checked: 29913 failed: 0
+# cb4: checked: 21737 failed: 0
+# caeSp51: checked: 34679 failed: 0
+# caeRem4: checked: 31433 failed: 0
+# caePb3: checked: 30626 failed: 0
+# caeSp111: checked: 22306 failed: 0
+# priExs1: checked: 23767 failed: 0
+# priPac3: checked: 22872 failed: 0
+# burXyl1: checked: 18074 failed: 0
+# necAme1: checked: 18984 failed: 0
+# ancCey1: checked: 35775 failed: 0
+# ascSuu1: checked: 3065 failed: 0
+# haeCon2: checked: 21837 failed: 0
+# triSui1: checked: 13600 failed: 0
+# panRed1: checked: 24071 failed: 0
+# bruMal2: checked: 13471 failed: 0
+# dirImm1: checked: 12857 failed: 0
+# oncVol1: checked: 12133 failed: 0
+# loaLoa1: checked: 14903 failed: 0
+# melInc2: checked: 19189 failed: 0
+# melHap1: checked: 14103 failed: 0
+# hetBac1: checked: 20928 failed: 0
+# triSpi1: checked: 16370 failed: 0
 
     # verify counts for genes are reasonable:
     for T in genes/*.gz
@@ -1402,10 +1436,32 @@ do
     echo -n "# $T: "
     zcat $T | cut -f1 | sort | uniq -c | wc -l
 done
-# genes/ce11.gp.gz: 13860
-# genes/droAna3.gp.gz: 15022
-# genes/droEre2.gp.gz: 14992
-# genes/droSec1.gp.gz: 12380
+# genes/ancCey1.gp.gz: 35775
+# genes/ascSuu1.gp.gz: 3065
+# genes/bruMal2.gp.gz: 13471
+# genes/burXyl1.gp.gz: 18074
+# genes/caeAng2.gp.gz: 27919
+# genes/caeJap4.gp.gz: 29913
+# genes/caePb3.gp.gz: 30626
+# genes/caeRem4.gp.gz: 31433
+# genes/caeSp111.gp.gz: 22306
+# genes/caeSp51.gp.gz: 34679
+# genes/cb4.gp.gz: 21737
+# genes/ce11.gp.gz: 20195
+# genes/ci3.gp.gz: 16035
+# genes/dirImm1.gp.gz: 12857
+# genes/haeCon2.gp.gz: 21837
+# genes/hetBac1.gp.gz: 20928
+# genes/loaLoa1.gp.gz: 14903
+# genes/melHap1.gp.gz: 14103
+# genes/melInc2.gp.gz: 19189
+# genes/necAme1.gp.gz: 18984
+# genes/oncVol1.gp.gz: 12133
+# genes/panRed1.gp.gz: 24071
+# genes/priExs1.gp.gz: 23767
+# genes/priPac3.gp.gz: 22872
+# genes/triSpi1.gp.gz: 16370
+# genes/triSui1.gp.gz: 13600
 
     # kluster job to annotate each maf file
     screen -S ce11      # manage long running procedure with screen
@@ -1417,13 +1473,13 @@ done
 set C = $1
 set G = $2
 
-cat ../maf/${C}.maf | genePredToMafFrames ce11 stdin stdout \
+cat ../anno/mafNet/result/${C}.maf | genePredToMafFrames ce11 stdin stdout \
         ${G} genes/${G}.gp.gz | gzip > parts/${C}.${G}.mafFrames.gz
 ' > runOne
 
     chmod +x runOne
 
-    ls ../maf | sed -e "s/.maf//" > chr.list
+    ls ../anno/mafNet/result > chr.list
     ls genes | sed -e "s/.gp.gz//" > gene.list
 
     printf '#LOOP
@@ -1435,12 +1491,12 @@ runOne $(root1) $(root2) {check out exists+ parts/$(root1).$(root2).mafFrames.gz
     gensub2 chr.list gene.list template jobList
     para -ram=64g create jobList
     para try ... check ... push
-# Completed: 2975 of 2975 jobs
-# CPU time in finished jobs:       2426s      40.43m     0.67h    0.03d  0.000 y
-# IO & Wait Time:                  7217s     120.29m     2.00h    0.08d  0.000 y
-# Average job time:                   3s       0.05m     0.00h    0.00d
-# Longest finished job:             100s       1.67m     0.03h    0.00d
-# Submission to last job:           135s       2.25m     0.04h    0.00d
+# Completed: 182 of 182 jobs
+# CPU time in finished jobs:      16011s     266.86m     4.45h    0.19d  0.001 y
+# IO & Wait Time:                  7072s     117.86m     1.96h    0.08d  0.000 y
+# Average job time:                 127s       2.11m     0.04h    0.00d
+# Longest finished job:             196s       3.27m     0.05h    0.00d
+# Submission to last job:           401s       6.68m     0.11h    0.00d
 
     # collect all results into one file:
     cd /hive/data/genomes/ce11/bed/multiz135way/frames
@@ -1449,64 +1505,62 @@ do
     echo "${F}" 1>&2
     zcat ${F}
 done | sort -k1,1 -k2,2n > multiz135wayFrames.bed
-    # real    0m22.007s
+    # real    0m24.365s
 
-    # -rw-rw-r-- 1 34902139 Nov 25 21:16 multiz135wayFrames.bed
-    # -rw-rw-r-- 1 39202611 Nov 25 21:50 multiz135wayMafNetFrames.bed
-    # -rw-rw-r-- 1 34684272 Nov 25 21:49 multiz135waySynNetFrames.bed
+    # -rw-rw-r-- 1 287750919 Dec 13 11:50 multiz135wayFrames.bed
 
     gzip multiz135wayFrames.bed
 
-    # verify there are frames on everything, should be 5 species:
+    # verify there are frames on everything, should be 26 species:
     # (count from: ls genes | wc)
     zcat multiz135wayFrames.bed.gz | awk '{print $4}' | sort | uniq -c \
         | sed -e 's/^/# /;' > species.check.list
     wc -l species.check.list
-    # 5
-#   54977 ce11
-#  139381 droAna3
-#  104520 droEre2
-#  183211 droPer1
-#   84299 droSec1
-
-    # mafNet:
-#   54976 ce11
-#  180143 droAna3
-#  121340 droEre2
-#  187196 droPer1
-#   94802 droSec1
-
-    # synNet:
-#   54977 ce11
-#  138553 droAna3
-#  103491 droEre2
-#  182067 droPer1
-#   83559 droSec1
-
-    # RBest:
-#   55003 ce11
-#  175910 droAna3
-#  114498 droEre2
-#  198449 droPer1
-#   89753 droSec1
+    # 26
+#  278211 ancCey1
+#   12740 ascSuu1
+#  120258 bruMal2
+#  147066 burXyl1
+#  314609 caeAng2
+#  268169 caeJap4
+#  372623 caePb3
+#  450001 caeRem4
+#  384830 caeSp111
+#  271790 caeSp51
+#  251521 cb4
+#  123527 ce11
+#   49580 ci3
+#  119879 dirImm1
+#  154460 haeCon2
+#  209501 hetBac1
+#  119983 loaLoa1
+#  100365 melHap1
+#   87175 melInc2
+#  144268 necAme1
+#  124476 oncVol1
+#  157050 panRed1
+#   86331 priExs1
+#   89170 priPac3
+#   94395 triSpi1
+#   60978 triSui1
 
     #   load the resulting file
     ssh hgwdev
     cd /hive/data/genomes/ce11/bed/multiz135way/frames
     time hgLoadMafFrames ce11 multiz135wayFrames multiz135wayFrames.bed.gz
-    #   real    0m3.547s
+    #   real    0m29.214s
 
 
     hgsql -e 'select count(*) from multiz135wayFrames;' ce11
     # +----------+
     # | count(*) |
     # +----------+
-    # |   566388 |
+    # |  4592956 |
     # +----------+
 
     time featureBits -countGaps ce11 multiz135wayFrames
-    # 23808691 bases of 143726002 (16.565%) in intersection
-    # real    0m3.486s
+    # 34457786 bases of 100286401 (34.359%) in intersection
+    # real    0m22.416s
 
     #   enable the trackDb entries:
 # frames multiz135wayFrames
@@ -1515,33 +1569,32 @@ done | sort -k1,1 -k2,2n > multiz135wayFrames.bed
     #	appears to work OK
 
 #########################################################################
-# Phylogenetic tree from 135-way (DONE - 2018-11-26 - Hiram)
+# Phylogenetic tree from 135-way (DONE - 2018-12-13 - Hiram)
     mkdir /hive/data/genomes/ce11/bed/multiz135way/4d
     cd /hive/data/genomes/ce11/bed/multiz135way/4d
 
     # the annotated maf's are in:
-    ../anno/maf/result
+    ../anno/mafNet/result
 
     # using knownGene for ce11, only transcribed genes and nothing
     #	from the randoms and other misc.
-    hgsql -Ne "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ncbiRefSeq where cdsEnd > cdsStart;" ce11 \
-      | egrep -E -v "chrM|chrUn|random|_alt" > ncbiRefSeq.gp
+    hgsql -Ne "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene where cdsEnd > cdsStart;" ce11 \
+      | egrep -E -v "chrM|chrUn|random|_alt" > ensGene.gp
     wc -l *.gp
-    #     30463 ncbiRefSeq.gp
+    #     33379 ensGene.gp
 
     # verify it is only on the chroms:
-    cut -f2 ncbiRefSeq.gp | sort | uniq -c | sort -rn | sed -e 's/^/    # /;'
-    #    7186 chr3R
-    #    6039 chr2R
-    #    5867 chr3L
-    #    5683 chr2L
-    #    5368 chrX
-    #     295 chr4
-    #      25 chrY
+    cut -f2 ensGene.gp | sort | uniq -c | sort -rn | sed -e 's/^/    # /;'
+    #    7509 chrV
+    #    6211 chrIV
+    #    5588 chrII
+    #    4997 chrI
+    #    4646 chrIII
+    #    4428 chrX
 
-    genePredSingleCover ncbiRefSeq.gp stdout | sort > ncbiRefSeqNR.gp
-    wc -l ncbiRefSeqNR.gp
-    #	13837 ncbiRefSeqNR.gp
+    genePredSingleCover ensGene.gp stdout | sort > ensGeneNR.gp
+    wc -l ensGeneNR.gp
+    #	20184 ensGeneNR.gp
 
     ssh ku
     mkdir /hive/data/genomes/ce11/bed/multiz135way/4d/run
@@ -1555,12 +1608,12 @@ done | sort -k1,1 -k2,2n > multiz135wayFrames.bed
 set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
 set r = "/hive/data/genomes/ce11/bed/multiz135way"
 set c = $1
-set infile = $r/anno/result/$2
+set infile = $r/anno/mafNet/result/$2
 set outfile = $3
 cd /dev/shm
 # 'clean' maf, removes all chrom names, leaves only the db name
 perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf
-awk -v C=$c '$2 == C {print}' $r/4d/ncbiRefSeqNR.gp | sed -e "s/\t$c\t/\tce11.$c\t/" > $c.gp
+awk -v C=$c '$2 == C {print}' $r/4d/ensGeneNR.gp | sed -e "s/\t$c\t/\tce11.$c\t/" > $c.gp
 set NL=`wc -l $c.gp| gawk '{print $1}'`
 if ("$NL" != "0") then
     $PHASTBIN/msa_view --4d --features $c.gp -i MAF $c.maf -o SS > $c.ss
@@ -1573,10 +1626,10 @@ rm -f $c.gp $c.maf $c.ss
     # << happy emacs
     chmod +x 4d.csh
 
-    ../anno/maf/result
+    ../anno/mafNet/result
 
-    ls -1S /hive/data/genomes/ce11/bed/multiz135way/anno/maf/result/*.maf \
-	| sed -e "s#.*multiz135way/anno/maf/result/##" \
+    ls -1S /hive/data/genomes/ce11/bed/multiz135way/anno/mafNet/result/*.maf \
+	| sed -e "s#.*multiz135way/anno/mafNet/result/##" \
         | egrep -E -v "chrM|chrUn|random|_alt" > maf.list
 
     printf '#LOOP
@@ -1588,181 +1641,190 @@ rm -f $c.gp $c.maf $c.ss
     para -ram=64g create jobList
     para try ... check ... push ... etc...
     para time
-# Completed: 7 of 7 jobs
-# CPU time in finished jobs:       2365s      39.42m     0.66h    0.03d  0.000 y
-# IO & Wait Time:                    11s       0.18m     0.00h    0.00d  0.000 y
-# Average job time:                 339s       5.66m     0.09h    0.00d
-# Longest finished job:             580s       9.67m     0.16h    0.01d
-# Submission to last job:           591s       9.85m     0.16h    0.01d
+# Completed: 6 of 6 jobs
+# CPU time in finished jobs:       1829s      30.48m     0.51h    0.02d  0.000 y
+# IO & Wait Time:                    20s       0.34m     0.01h    0.00d  0.000 y
+# Average job time:                 308s       5.14m     0.09h    0.00d
+# Longest finished job:             341s       5.68m     0.09h    0.00d
+# Submission to last job:           352s       5.87m     0.10h    0.00d
 
     # combine mfa files
     ssh hgwdev
     cd /hive/data/genomes/ce11/bed/multiz135way/4d
     # verify no tiny files:
-    ls -og mfa | sort -k3nr | tail -2
-    #	-rw-rw-r-- 1 5543614 Nov 26 12:02 chr3R.mfa
-    #	-rw-rw-r-- 1 4591790 Nov 26 12:00 chr2R.mfa
-    #	-rw-rw-r-- 1 4516274 Nov 26 12:00 chr3L.mfa
-    #	-rw-rw-r-- 1 4107446 Nov 26 12:00 chr2L.mfa
-    #	-rw-rw-r-- 1 3849898 Nov 26 11:59 chrX.mfa
-    #	-rw-rw-r-- 1  203182 Nov 26 11:53 chr4.mfa
-    #	-rw-rw-r-- 1   43966 Nov 26 11:53 chrY.mfa
+    ls -og mfa | sort -k3nr
+# -rw-rw-r-- 1 4660039 Dec 13 12:08 chrII.mfa
+# -rw-rw-r-- 1 3973699 Dec 13 12:09 chrV.mfa
+# -rw-rw-r-- 1 3416554 Dec 13 12:08 chrX.mfa
+# -rw-rw-r-- 1 2920429 Dec 13 12:08 chrI.mfa
+# -rw-rw-r-- 1 2589544 Dec 13 12:08 chrIII.mfa
+# -rw-rw-r-- 1 2183464 Dec 13 12:09 chrIV.mfa
 
     #want comma-less species.list
     time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
 	--aggregate "`cat ../species.list`" mfa/*.mfa | sed s/"> "/">"/ \
 	    > 4d.all.mfa
-    # real    0m0.884s
+    # real    0m1.255s
 
     # check they are all in there:
     grep "^>" 4d.all.mfa | wc -l
     #   135
 
-    # remove the :0.1 distances from the nh tree:
-    sed -e 's/:0.1//g;' ../ce11.135way.speciesName.nh > tree-commas.nh
+    # remove the :0.1234 distances from the nh tree:
+    sed -e 's/:[0-9.]\+//g;' ../ce11.135way.nh > tree-commas.nh
 
     # use phyloFit to create tree model (output is phyloFit.mod)
     time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
 	    --EM --precision MED --msa-format FASTA --subst-mod REV \
 		--tree tree-commas.nh 4d.all.mfa
-    #   real    129m47.846s
+    #   real    50m55.630s
 
     mv phyloFit.mod all.mod
 
     # after rearranging the tree to be more display friendly:
 
-# ((((((((((((D_melanogaster:0.114107,
-#            (D_miranda:0.015580,
-#             (D_mojavensis:0.939775,
-#              (D_navojoa:0.929147,
-#               (D_persimilis:0.021939,
-#                ((D_pseudoobscura:0.009189,
-#                  D_pseudoobscura_1:0.031741):0.004264,
-#                 (D_sechellia:0.022232,
-#                  (D_simulans:0.019437,
-#                   (D_subobscura:0.715370,
-#                    (D_virilis:0.883894,
-#                     (D_yakuba:0.135411,
-#                      (D_athabasca:0.484091,
-#                       (D_willistoni:0.874110,
-#                        (D_arizonae:0.724721,
-#                         (D_serrata:0.446719,
-#                          (D_obscura:0.487386,
-#                           (D_albomicans:0.785218,
-#                            (D_suzukii:0.201400,
-#                             (D_eugracilis:0.359758,
-#                              (D_takahashii:0.196207,
-#                               (D_busckii:0.898062,
-#                                (D_elegans:0.207441,
-#                                 (D_ficusphila:0.289395,
-#                                  (D_kikkawai:0.302963,
-#                                   (D_americana:0.021567,
-#                                    (D_montana:0.113441,
-#                                     (D_bipectinata:1.130060,
-#                                      (D_nasuta:0.759403,
-#                                       (D_novamexicana:0.012500,
-#                                        (D_biarmipes:0.221826,
-#                                         (D_rhopaloa:0.258034,
-#                                          (Scaptodrosophila_lebanonensis:0.606778,
-#                                           (Phortica_variegata:0.856583,
-#                                            Zaprionus_indianus:0.421888):0.097813):0.387770):0.002045):0.711987):0.002239):0.002210):0.002222):0.002134):0.677974):0.119708):0.015058):0.002171):0.036502):0.005818):0.002248):0.125256):0.002227):0.002109):0.002168):0.002219):0.002202):0.189163):0.002110):0.001757):0.108631):0.002171):0.879601):0.002255):0.009543):0.002102):0.002158):0.772378):0.002187,
-#           D_hydei:1.014730):0.002089,
-#          D_grimshawi:0.941939):0.002030,
-#         D_erecta:0.109391):0.230494,
-#        D_ananassae:0.509167):0.917125,
-#       ((Haematobia_irritans:0.404383,
-#         (Stomoxys_calcitrans:0.401004,
-#          M_domestica:0.465012):0.030948):0.181924,
-#        ((Calliphora_vicina:0.239691,
-#          (Phormia_regina:0.278317,
-#           (Lucilia_sericata:0.087468,
-#            Lucilia_cuprina:0.088001):0.158896):0.005159):0.186205,
-#         ((Sarcophagidae_BV_2014:0.467027,
-#           Neobellieria_bullata:0.437862):0.043422,
-#          (((Glossina_morsitans_2:0.005129,
-#             Glossina_morsitans_1:0.011288):0.023794,
-#            (Glossina_austeni:0.051900,
-#             (Glossina_pallidipes:0.032225,
-#              (Glossina_brevipalpis:0.334883,
-#               (Glossina_palpalis_gambiensis:0.011451,
-#                (Glossina_fuscipes:0.006627,
-#                 (Mayetiola_destructor:0.573306,
-#                  (Megaselia_abdita:0.423730,
-#                   Megaselia_scalaris:0.328525):0.385678):0.941840):0.002230):0.065678):0.034136):0.002129):0.006115):0.736405,
-#           ((Teleopsis_dalmanni:0.477396,
-#             (Sphyracephala_brevicornis:0.532282,
-#              (Coboldia_fuscipes:0.482302,
-#               Culicoides_sonorensis:0.547423):0.173733):0.002225):0.140141,
-#            (Liriomyza_trifolii:0.822419,
-#             (Chaoborus_trivitattus:0.835956,
-#              (Mochlonyx_cinctipes:1.033420,
-#               (Themira_minor:2.039580,
-#                (Tipula_oleracea:0.768930,
-#                 (Hermetia_illucens:1.013830,
-#                  (Paykullia_maculata:0.551777,
-#                   (Eristalis_dimidiata:1.030550,
-#                    (Condylostylus_patibulatus:0.534540,
-#                     (A_mellifera:0.871215,
-#                      (Ephydra_gracilis:0.271046,
-#                       (Cirrula_hians:0.225590,
-#                        (Trichoceridae_BV_2014:0.250828,
-#                         (Proctacanthus_coquilletti:0.759192,
-#                          Holcocephala_fusca:0.317250):0.187419):0.715976):0.002071):0.493755):0.079616):0.014870):0.051295):0.002092):0.002175):0.002038):0.002063):0.002030):0.002188):0.002245):0.116633):0.089399):0.003074):0.084295):0.249151):0.246438,
-#      (Bactrocera_dorsalis:0.045606,
-#       (Bactrocera_tryoni:0.060154,
-#        (Bactrocera_oleae:0.152791,
-#         (Bactrocera_latifrons:0.063471,
-#          (Zeugodacus_cucurbitae:0.163723,
-#           (Rhagoletis_zephyria:0.384024,
-#            (Tephritis_californica:0.153505,
-#             (Trupanea_jonesi:0.206490,
-#              Eutreta_diana:0.241612):0.002233):0.303752):0.237317):0.131580):0.002106):0.009433):0.007355):0.337748):0.002090,
-#     Ceratitis_capitata:0.338075):0.570744,
-#    (Lutzomyia_longipalpis:0.474549,
-#     (Clogmia_albipunctata:1.275610,
-#      Phlebotomus_papatasi:0.374721):0.109111):0.436354):0.150416,
-#   (Aedes_aegypti:0.169997,
-#    (Aedes_albopictus:0.202992,
-#     (Culex_quinquefasciatus:0.385184,
-#      ((A_gambiae:0.016631,
-#        A_gambiae_1:0.057342):0.004340,
-#       (A_albimanus:0.912687,
-#        (A_dirus:0.614137,
-#         (A_arabiensis:0.021712,
-#          (A_koliensis:0.687084,
-#           (A_merus:0.038508,
-#            (A_punctulatus:0.687121,
-#             (A_stephensi:0.609085,
-#              (A_melas:0.045102,
-#               (A_quadriannulatus:0.023445,
-#                (A_atroparvus:0.559762,
-#                 (A_aquasalis:0.602981,
-#                  (A_christyi:0.362563,
-#                   (A_darlingi:0.623690,
-#                    (A_farauti_No4:0.370477,
-#                     (A_funestus:0.371135,
-#                      (A_farauti:0.357872,
-#                       (A_maculatus:0.365995,
-#                        (A_sinensis:0.622635,
-#                         (A_minimus:0.327246,
-#                          (A_cracens:0.402964,
-#                           (A_culicifacies:0.347253,
-#                            (A_nili:0.679175,
-#                             (A_coluzzii:0.232353,
-#                              A_epiroticus:0.296093):0.105861):0.040457):0.002093):0.002239):0.012135):0.002213):0.029698):0.002205):0.002085):0.109249):0.002191):0.002140):0.037975):0.224786):0.002223):0.002108):0.002156):0.002144):0.002219):0.005113):0.002204):0.002254):0.002048):0.787345):0.484801):0.123874):0.836299):0.229909,
-#  (Chironomus_tentans:0.122018,
-#   (Chironomus_riparius:0.123408,
-#    (Clunio_marinus:0.382428,
-#     Belgica_antarctica:0.838802):0.394452):0.009211):0.533136):0.781543,
-# T_castaneum:0.781543):0.1:0.1;
-
-    # *NOT* going to compare these lengths, there were no lengths to begin with
-    /cluster/bin/phast/all_dists ../ce11.135way.nh  | grep ce11 \
-	| sed -e "s/ce11.//;" | sort > original.dists
+# (((((((((((((Caenorhabditis_elegans:0.425799,
+#             (Caenorhabditis_sp._38_MB-2015:0.448904,
+#              Caenorhabditis_angaria:0.438865):0.38477):0.0632893,
+#            Caenorhabditis_japonica:0.631705):0.00332863,
+#           Caenorhabditis_sp._34_TK-2017:0.670052):0.00266019,
+#          (((((((Caenorhabditis_briggsae:0.00761568,
+#                 Caenorhabditis_briggsae:0.00617763):0.0901744,
+#                Caenorhabditis_nigoni:0.0878926):0.37284,
+#               (Caenorhabditis_sp._26_LS-2015:0.266258,
+#                Caenorhabditis_sp5_ju800:0.250871):0.0573557):0.00272983,
+#              Caenorhabditis_sp._40_LS-2015:0.311033):0.160657,
+#             ((Caenorhabditis_latens:0.0739274,
+#               Caenorhabditis_remanei:0.0771516):0.343608,
+#              Caenorhabditis_brenneri:0.439498):0.0439004):0.0374774,
+#            Caenorhabditis_tropicalis:0.479027):0.0929836,
+#           Caenorhabditis_sp._31_LS-2015:0.844993):0.0466798):0.0886724,
+#         Caenorhabditis_sp._21_LS-2015:0.81046):0.159439,
+#        (((Caenorhabditis_sp._32_LS-2015:0.461375,
+#           Caenorhabditis_sp._39_LS-2015:0.42763):0.0699299,
+#          (((Pristionchus_arcanus:0.12529,
+#             ((Pristionchus_exspectatus:0.0115759,
+#               Pristionchus_exspectatus:0.00987795):0.092637,
+#              (Pristionchus_pacificus:0.0135936,
+#               Pristionchus_pacificus:0.0151984):0.0917107):0.0582013):0.146807,
+#            Pristionchus_maxplancki:0.231402):0.108203,
+#           Pristionchus_entomophagus:0.314155):0.615931):0.00264449,
+#         (((Bursaphelenchus_xylophilus:0.0169712,
+#            Bursaphelenchus_xylophilus:0.0121836):0.664516,
+#           Subanguina_moxae:1.19812):0.279427,
+#          ((Oscheius_sp._MCB:0.310932,
+#            Oscheius_sp._TEL-2014:0.314067):0.387814,
+#           (((Angiostrongylus_cantonensis:0.76614,
+#              (Necator_americanus:0.0069094,
+#               Necator_americanus:0.00709169):0.62038):0.22255,
+#             Nippostrongylus_brasiliensis:0.585445):0.128625,
+#            ((((((((Ancylostoma_caninum:0.109552,
+#                    Ancylostoma_duodenale:0.128167):0.0645197,
+#                   Ancylostoma_ceylanicum:0.138249):0.302453,
+#                  ((((Ascaris_suum:0.0264911,
+#                      Ascaris_suum:0.0266353):0.0718425,
+#                     Parascaris_univalens:0.111167):0.412171,
+#                    Toxocara_canis:0.435243):1.03133,
+#                   Oesophagostomum_dentatum:0.444431):0.133431):0.231588,
+#                 ((Haemonchus_contortus:0.0237971,
+#                   Haemonchus_contortus:0.0104187):0.40375,
+#                  Teladorsagia_circumcincta:0.313931):0.415593):0.132113,
+#                (((Clonorchis_sinensis:0.102068,
+#                   Opisthorchis_viverrini:0.0948009):0.672677,
+#                  Dicrocoelium_dendriticum:0.641121):0.366763,
+#                 ((Elaeophora_elaphi:0.229754,
+#                   Macrostomum_lignano:0.315971):0.260862,
+#                  ((Fasciola_gigantica:0.0728112,
+#                    Fasciola_hepatica:0.0784224):0.849193,
+#                   Spirometra_erinaceieuropaei:0.717335):0.238022):0.175856):0.306152):0.0247175,
+#               (Heligmosomoides_polygyrus_bakeri:0.639113,
+#                (Oscheius_tipulae:0.772979,
+#                 (((Steinernema_carpocapsae:0.288945,
+#                    Steinernema_scapterisci:0.285651):0.224527,
+#                   Steinernema_feltiae:0.606142):0.0853374,
+#                  Steinernema_glaseri:0.525076):0.152498):0.168142):0.00279645):0.00267557,
+#              ((((Echinococcus_canadensis:0.0305467,
+#                  Echinococcus_granulosus:0.0307877):0.00949128,
+#                 Echinococcus_multilocularis:0.039056):0.157973,
+#                (((Taenia_asiatica:0.00962609,
+#                   Taenia_saginata:0.0164412):0.0108728,
+#                  Taenia_multiceps:0.0270195):0.034031,
+#                 Taenia_solium:0.0458656):0.187618):0.687903,
+#               (Trichuris_muris:0.289869,
+#                (Trichuris_trichiura:0.184836,
+#                 Trichuris_suis:0.125543):0.291242):0.610672):0.454711):0.00261495,
+#             ((Plectus_sambesii:0.668591,
+#               Steinernema_monticolum:0.874638):0.0801328,
+#              Panagrellus_redivivus:0.667253):0.218884):0.00718934):0.198615):0.0754372):0.16779):0.00370935):0.149757,
+#       (Diploscapter_coronatus:0.0396115,
+#        Diploscapter_pachys:0.0410107):0.965863):0.0835229,
+#      (((((((((((((Brugia_malayi:0.0147423,
+#                   Brugia_malayi:0.0184123):0.0136278,
+#                  Brugia_pahangi:0.0347893):0.0496926,
+#                 Wuchereria_bancrofti:0.0607276):0.203732,
+#                ((Dirofilaria_immitis:0.021486,
+#                  Dirofilaria_immitis:0.00721013):0.206272,
+#                 (Onchocerca_ochengi:0.0198343,
+#                  (Onchocerca_volvulus:0.00726612,
+#                   Onchocerca_volvulus:0.0153111):0.0105149):0.0986467):0.0222077):0.00274305,
+#               (Loa_loa:0.0109839,
+#                Loa_loa:0.00898028):0.213308):0.00261442,
+#              (Setaria_digitata:0.149493,
+#               Setaria_equina:0.120979):0.317084):0.0425831,
+#             Onchocerca_flexuosa:0.0978734):0.742036,
+#            ((((Dugesia_japonica:0.514157,
+#                Girardia_tigrina:1.22545):0.240555,
+#               Schmidtea_mediterranea:0.619031):0.356539,
+#              (((((Meloidogyne_arenaria:0.0340878,
+#                   Meloidogyne_javanica:0.0426825):0.0272648,
+#                  Meloidogyne_incognita:0.0308494):0.0157159,
+#                 (Meloidogyne_floridensis:0.0840962,
+#                  Meloidogyne_incognita:0.0530444):0.00989274):0.18009,
+#                (Meloidogyne_graminicola:0.50525,
+#                 Meloidogyne_hapla:0.171223):0.0509786):0.654631,
+#               (Parastrongyloides_trichosuri:0.389745,
+#                ((Strongyloides_papillosus:0.0783108,
+#                  Strongyloides_venezuelensis:0.0916494):0.198375,
+#                 (Strongyloides_stercoralis:0.177646,
+#                  Strongyloides_ratti:0.150624):0.0896129):0.165222):0.220136):0.131527):0.137744,
+#             ((Schistosoma_haematobium:0.0960504,
+#               Schistosoma_mansoni:0.10575):0.224188,
+#              Schistosoma_japonicum:0.29067):0.484258):0.152071):0.239138,
+#           Dictyocaulus_viviparus:0.814104):0.248629,
+#          Hymenolepis_microstoma:0.705812):0.234011,
+#         (Rhabditophanes_sp._KR3021:0.753609,
+#          (Ciona_intestinalis:0.864953,
+#           Heterorhabditis_bacteriophora:0.889764):0.341081):0.233997):0.163448,
+#        Gyrodactylus_salaris:0.912435):0.232379,
+#       Parapristionchus_giblindavisi:0.738653):0.156608):0.28746,
+#     Ditylenchus_destructor:0.885526):0.238847,
+#    (((((Trichinella_sp._T6:0.0168947,
+#         Trichinella_patagoniensis:0.0187164):0.00398067,
+#        ((Trichinella_sp._T8:0.0102628,
+#          (Trichinella_sp._T9:0.0118704,
+#           Trichinella_britovi:0.00645468):0.00273378):0.00273053,
+#         Trichinella_murrelli:0.0111672):0.00482982):0.00272028,
+#       Trichinella_nativa:0.0154206):0.0136128,
+#      (Trichinella_nelsoni:0.0210349,
+#       (Trichinella_spiralis:0.00697283,
+#        Trichinella_spiralis:0.0168217):0.0169346):0.00352233):0.0510198,
+#     ((Trichinella_papuae:0.0217595,
+#       Trichinella_zimbabwensis:0.0207942):0.0233717,
+#      Trichinella_pseudospiralis:0.0610335):0.0574885):0.947802):0.183355,
+#   Romanomermis_culicivorax:0.680971):0.164498,
+#  ((((Globodera_ellingtonae:0.035005,
+#      Globodera_rostochiensis:0.0362764):0.0267624,
+#     Globodera_pallida:0.0659637):0.259339,
+#    Heterodera_glycines:0.354234):0.225215,
+#   Rotylenchulus_reniformis:0.468661):0.395303):0.491,
+# Acrobeloides_nanus:0.491):0.1:0.1;
 
     grep TREE all.mod | sed -e 's/TREE: //;' \
        | /cluster/bin/phast/all_dists /dev/stdin | grep ce11 \
           | sed -e "s/ce11.//;"  | sort > ce11.dists
+
+    /cluster/bin/phast/all_dists ../ce11.135way.nh | grep ce11 \
+          | sed -e "s/ce11.//;"  | sort > original.dists
 
     # printing out the 'original', the 'new' the 'difference' and
     #    percent difference/delta
@@ -1770,8 +1832,8 @@ rm -f $c.gp $c.maf $c.ss
   printf "#\t%s\t%8.6f\t%8.6f\t%8.6f\t%8.6f\n", $1, $2, $3, $2-$3, 100*($2-$3)/$3 }'       | sort -k4n
 
 #########################################################################
-# phastCons 135-way (DONE - 2018-11-27 - Hiram)
-    # split 135way mafs into 10M chunks and generate sufficient statistics
+# phastCons 135-way (DONE - 2018-12-14 - Hiram)
+    # split 135way mafs into 1M chunks and generate sufficient statistics
     # files for phastCons
     ssh ku
     mkdir -p /hive/data/genomes/ce11/bed/multiz135way/cons/ss
@@ -1781,7 +1843,7 @@ rm -f $c.gp $c.maf $c.ss
     cat << '_EOF_' > doSplit.csh
 #!/bin/csh -ef
 set c = $1
-set MAF = /hive/data/genomes/ce11/bed/multiz135way/anno/maf/result/$c.maf
+set MAF = /hive/data/genomes/ce11/bed/multiz135way/anno/mafNet/result/$c.maf
 set WINDOWS = /hive/data/genomes/ce11/bed/multiz135way/cons/ss/$c
 set WC = `cat $MAF | wc -l`
 set NL = `grep "^#" $MAF | wc -l`
@@ -1799,7 +1861,7 @@ mkdir $WINDOWS
 pushd $WINDOWS > /dev/null
 if ( $WC != $NL ) then
 /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_split \
-    $MAF -i MAF -o SS -r $WINDOWS/$c -w 13500000,0 -I 1350 -B 5000
+    $MAF -i MAF -o SS -r $WINDOWS/$c -w 1000000,0 -I 1000 -B 5000
 endif
 popd > /dev/null
 date >> $2
@@ -1814,18 +1876,18 @@ doSplit.csh $(root1) {check out line+ $(root1).done}
 ' > template
 
 #	do the easy ones first to see some immediate results
-    ls -1S -r ../../anno/maf/result | sed -e "s/.maf//;" > maf.list
+    ls -1S -r ../../anno/mafNet/result | sed -e "s/.maf//;" > maf.list
     # all can finish OK at a 64Gb memory limit
     gensub2 maf.list single template jobList
     para -ram=64g create jobList
     para try ... check ... etc
     para push
-# Completed: 595 of 595 jobs
-# CPU time in finished jobs:       3902s      65.03m     1.08h    0.05d  0.000 y
-# IO & Wait Time:                  1798s      29.97m     0.50h    0.02d  0.000 y
-# Average job time:                  10s       0.16m     0.00h    0.00d
-# Longest finished job:            1040s      17.33m     0.29h    0.01d
-# Submission to last job:          1110s      18.50m     0.31h    0.01d
+# Completed: 7 of 7 jobs
+# CPU time in finished jobs:       2431s      40.52m     0.68h    0.03d  0.000 y
+# IO & Wait Time:                   278s       4.63m     0.08h    0.00d  0.000 y
+# Average job time:                 387s       6.45m     0.11h    0.00d
+# Longest finished job:             540s       9.00m     0.15h    0.01d
+# Submission to last job:           548s       9.13m     0.15h    0.01d
 
     # Run phastCons
     #	This job is I/O intensive in its output files, beware where this
@@ -1895,7 +1957,7 @@ rm -fr $tmp
 
     ls -1S ../ss/chr*/chr* | sed -e "s/.ss$//" > ss.list
     wc -l ss.list
-    #	383 ss.list
+    #	104 ss.list
 
     # Create parasol batch and run it
     # run for all species
@@ -1910,12 +1972,12 @@ rm -fr $tmp
     para -ram=32g create jobList
     para try ... check ...
     para -maxJob=16 push
-# Completed: 383 of 383 jobs
-# CPU time in finished jobs:       7131s     118.84m     1.98h    0.08d  0.000 y
-# IO & Wait Time:                  2605s      43.42m     0.72h    0.03d  0.000 y
-# Average job time:                  25s       0.42m     0.01h    0.00d
-# Longest finished job:             740s      12.33m     0.21h    0.01d
-# Submission to last job:           750s      12.50m     0.21h    0.01d
+# Completed: 104 of 104 jobs
+# CPU time in finished jobs:       6198s     103.30m     1.72h    0.07d  0.000 y
+# IO & Wait Time:                   718s      11.97m     0.20h    0.01d  0.000 y
+# Average job time:                  67s       1.11m     0.02h    0.00d
+# Longest finished job:              84s       1.40m     0.02h    0.00d
+# Submission to last job:           216s       3.60m     0.06h    0.00d
 
     # create Most Conserved track
     cd /hive/data/genomes/ce11/bed/multiz135way/cons/all
@@ -1930,32 +1992,35 @@ do
 done > tmpMostConserved.bed
     # real    0m39.720s
 
-    # -rw-rw-r--   1 217453711 Nov 27 10:59 tmpMostConserved.bed
+    # -rw-rw-r-- 1 74615007 Dec 14 14:15 tmpMostConserved.bed
 
     time /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed \
         > mostConserved.bed
-    # real    0m34.940s
+    # real    0m10.119s
 
-    # -rw-rw-r--   1 221916771 Nov 27 11:00 mostConserved.bed
+    # -rw-rw-r-- 1 76283801 Dec 14 14:16 mostConserved.bed
 
     # load into database
     ssh hgwdev
     cd /hive/data/genomes/ce11/bed/multiz135way/cons/all
     time hgLoadBed ce11 phastConsElements135way mostConserved.bed
-    #  Read 6459398 elements of size 5 from mostConserved.bed
-    #  real    0m44.720s
+    #  Read 2275482 elements of size 5 from mostConserved.bed
+    #  real    0m10.328s
 
     # most interesting high measurement for this coverage
     #	--rho 0.3 --expected-length 45 --target-coverage 0.3
     time featureBits ce11 -enrichment ncbiRefSeq:cds phastConsElements135way
-# ncbiRefSeq:cds 16.056%, phastConsElements135way 50.489%, both 10.836%, cover 67.49%, enrich 1.34x
-
-# real    0m30.071s
+    # ncbiRefSeq:cds 25.009%, phastConsElements135way 43.266%, both 16.084%, cover 64.31%, enrich 1.49x
+    # real    0m12.804s
 
     # Try for 5% overall cov, and 70% CDS cov
     time featureBits ce11 -enrichment refGene:cds phastConsElements135way
-# refGene:cds 16.049%, phastConsElements135way 50.489%, both 10.829%, cover 67.47%, enrich 1.34x
-# real    0m32.078s
+    # refGene:cds 25.013%, phastConsElements135way 43.266%, both 16.087%, cover 64.31%, enrich 1.49x
+    # real    0m13.519s
+
+    time featureBits ce11 -enrichment ensGene:cds phastConsElements135way
+    # ensGene:cds 25.144%, phastConsElements135way 43.266%, both 16.129%, cover 64.15%, enrich 1.48x
+    # real    0m10.267s
 
     # Create merged posterier probability file and wiggle track data files
     cd /hive/data/genomes/ce11/bed/multiz135way/cons/all
@@ -1968,17 +2033,20 @@ do
 	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
         | gzip -c > downloads/${D}.phastCons135way.wigFix.gz
 done
-    # real    0m50.886s
+    # real    0m51.373s
 
     #	encode those files into wiggle data
     time (zcat downloads/*.wigFix.gz \
 	| wigEncode stdin phastCons135way.wig phastCons135way.wib)
     #   Converted stdin, upper limit 1.00, lower limit 0.00
-    #   real    0m24.946s
+    #   real    0m26.755s
 
     du -hsc *.wi?
-    #	118M    phastCons135way.wib
-    #	12M     phastCons135way.wig
+    #	91M     phastCons135way.wib
+    #  9.1M    phastCons135way.wig
+
+    # -rw-rw-r-- 1 95051167 Dec 14 14:24 phastCons135way.wib
+    # -rw-rw-r-- 1  9487394 Dec 14 14:24 phastCons135way.wig
 
     #	encode into a bigWig file:
     #	(warning wigToBigWig process may be too large for memory limits
@@ -1990,25 +2058,24 @@ ulimit -v $sizeG
       | wigToBigWig -verbose=2 stdin \
 	../../../../chrom.sizes phastCons135way.bw) > bigWig.log 2>&1
     egrep "VmPeak|real" bigWig.log
-    # pid=37111: VmPeak:    33886864 kB
-    # real    42m13.614s
+    # pid=74267: VmPeak:     1108636 kB
+    # real    0m51.112s
 
-    # -rw-rw-r--   1 70135152013 Nov  6 08:52 phastCons135way.bw
-
+    # -rw-rw-r-- 1 244041045 Dec 14 14:27 phastCons135way.bw
 
     bigWigInfo phastCons135way.bw
 version: 4
 isCompressed: yes
 isSwapped: 0
-primaryDataSize: 5,097,637,987
-primaryIndexSize: 93,372,648
+primaryDataSize: 182,564,643
+primaryIndexSize: 3,214,556
 zoomLevels: 10
-chromCount: 355
-basesCovered: 2,955,660,600
-mean: 0.128025
+chromCount: 7
+basesCovered: 95,051,167
+mean: 0.467683
 min: 0.000000
 max: 1.000000
-std: 0.247422
+std: 0.439150
 
     #	if you wanted to use the bigWig file, loading bigWig table:
     #   but we don't use the bigWig file
@@ -2024,28 +2091,30 @@ std: 0.247422
     ln -s `pwd`/phastCons135way.wib /gbdb/ce11/multiz135way/phastCons135way.wib
     time hgLoadWiggle -pathPrefix=/gbdb/ce11/multiz135way ce11 \
 	phastCons135way phastCons135way.wig
-    #   real    0m1.037s
+    #   real    0m0.722s
 
     time wigTableStats.sh ce11 phastCons135way
-# db.table            min max   mean       count     sumData
-# ce11.phastCons135way  0 1 0.585666 123404840 7.2274e+07
+# db.table            min max   mean   count     sumData
+# ce11.phastCons135way  0 1 0.467683 95051167 4.44538e+07
 #       stdDev viewLimits
-#    0.455202 viewLimits=0:1
-
-# real    0m0.571s
+#      0.43915 viewLimits=0:1
+#  real    0m0.505s
 
     #  Create histogram to get an overview of all the data
     ssh hgwdev
     cd /hive/data/genomes/ce11/bed/multiz135way/cons/all
     time hgWiggle -doHistogram -db=ce11 \
-	-hBinSize=0.001 -hBinCount=1350 -hMinVal=0.0 -verbose=2 \
-	    phastCons135way > histogram.data 2>&1
-    #	real    2m38.952s
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    phastCons135way > ce11.phastCons135way.histogram.data 2>&1
+    #	real    0m4.020s
+    # the pid VmPeak measurements to stderr are getting into the middle of
+    # a line in this data output.  Either do *not* use 2>&1 to get all
+    # into the output file, or edit it to fix it after done
 
     #	create plot of histogram:
     # updated for new gnuplot on hgwdev 2018-11-26 (can't get font to change)
     printf 'set terminal pngcairo size 1000,600 background "#000000" font "/usr/share/fonts/default/Type1/n022004l.pfb"
-set output "ce11.phastCons.histo.png"
+set output "ce11.phastCons135.histo.png"
 set size 1.0, 1.0
 set style line 1 lt 2 lc rgb "#ff88ff" lw 2
 set style line 2 lt 2 lc rgb "#66ff66" lw 2
@@ -2057,7 +2126,7 @@ set key tc variable
 set grid noxtics
 set grid y2tics ls 4
 set grid ytics ls 4
-set title " D. melanogaster/ce11 Histogram phastCons135way track" \
+set title " C. elegans/ce11 Histogram phastCons135way track" \
     tc rgb "#ffffff"
 set xlabel " phastCons135way score" tc rgb "#ffffff"
 set ylabel " Relative Frequency" tc rgb "#ff88ff"
@@ -2065,8 +2134,8 @@ set y2label " Cumulative Relative Frequency (CRF)" tc rgb "#66ff66"
 set y2range [0:1]
 set yrange [0:0.02]
 
-plot "histogram.data" using 2:5 title " RelFreq" with impulses ls 1, \
-        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines ls 2
+plot "ce11.phastCons135way.histogram.data" using 2:5 title " RelFreq" with impulses ls 1, \
+        "ce11.phastCons135way.histogram.data" using 2:7 axes x1y2 title " CRF" with lines ls 2
 ' | gnuplot
 
     # take a look to see if it is sane:
@@ -2074,66 +2143,10 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses ls 1, \
     display histo.png &
 
 #########################################################################
-# phyloP for 135-way (DONE - 2017-11-06 - Hiram)
+# phyloP for 135-way (DONE - 2018-12-14 - Hiram)
 #
-    # split SS files into 1M chunks, this business needs smaller files
-    #   to complete
-
-    ssh ku
-    mkdir /hive/data/genomes/ce11/bed/multiz135way/consPhyloP
-    cd /hive/data/genomes/ce11/bed/multiz135way/consPhyloP
-    mkdir ss run.split
-    cd run.split
-
-    printf '#!/bin/csh -ef
-set c = $1
-set MAF = /hive/data/genomes/ce11/bed/multiz135way/anno/maf/result/$c.maf
-set WINDOWS = /hive/data/genomes/ce11/bed/multiz135way/consPhyloP/ss/$c
-set WC = `cat $MAF | wc -l`
-set NL = `grep "^#" $MAF | wc -l`
-if ( -s $2 ) then
-    exit 0
-endif
-if ( -s $2.running ) then
-    exit 0
-endif
-
-date >> $2.running
-
-rm -fr $WINDOWS
-mkdir -p $WINDOWS
-pushd $WINDOWS > /dev/null
-if ( $WC != $NL ) then
-/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_split \
-    $MAF -i MAF -o SS -r $WINDOWS/$c -w 1000000,0 -I 1000 -B 5000
-endif
-popd > /dev/null
-date >> $2
-rm -f $2.running
-' > doSplit.csh
-
-    chmod +x doSplit.csh
-
-    #	do the easy ones first to see some immediate results
-    ls -1S -r ../../anno/maf/result | sed -e "s/.maf//;" > maf.list
-
-    # this needs a {check out line+ $(root1.done)} test for verification:
-    printf '#LOOP
-./doSplit.csh $(root1) $(root1).done
-#ENDLOOP
-' > template
-
-    gensub2 maf.list single template jobList
-    # all can complete successfully at the 64Gb memory limit
-    para -ram=64g create jobList
-    para try ... check ... push ... etc...
-
-# Completed: 595 of 595 jobs
-# CPU time in finished jobs:       3804s      63.40m     1.06h    0.04d  0.000 y
-# IO & Wait Time:                  1818s      30.30m     0.50h    0.02d  0.000 y
-# Average job time:                   9s       0.16m     0.00h    0.00d
-# Longest finished job:            1050s      17.50m     0.29h    0.01d
-# Submission to last job:          1110s      18.50m     0.31h    0.01d
+    # can use the same split 1M chunk SS files into that were used
+    # for phastCons
 
     # run phyloP with score=LRT
     ssh ku
@@ -2145,55 +2158,58 @@ rm -f $2.running
     # Adjust model file base composition background and rate matrix to be
     # representative of the chromosomes in play
     grep BACK ../../4d/all.mod
-    #   BACKGROUND: 0.227566 0.316377 0.227975 0.228082
+    #   BACKGROUND: 0.338800 0.205656 0.164894 0.290649
 
     grep BACKGROUND ../../4d/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
-    #	0.544
+    #	0.371
     /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
-	../../4d/all.mod 0.544 > all.mod
+	../../4d/all.mod 0.371 > all.mod
     # verify, the BACKGROUND should now be paired up:
     grep BACK all.mod
-    #   BACKGROUND: 0.228000 0.272000 0.272000 0.228000 
+    #   BACKGROUND: 0.314500 0.185500 0.185500 0.314500
 
-    printf '#!/bin/csh -fe
+    cat << '_EOF_' > doPhyloP.csh
+#!/bin/csh -fe
 set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
 set f = $1
-set ssFile = $1:t
+set d = $f:h
+set file1 = $f:t
 set out = $2
-set cName = $f:h
-set n = $f:r:e
+set cName = $f:t:r
 set grp = $cwd:t
 set cons = /hive/data/genomes/ce11/bed/multiz135way/consPhyloP
 set tmp = $cons/tmp/$grp/$f
 /bin/rm -fr $tmp
 /bin/mkdir -p $tmp
-set ssSrc = "$cons/ss/$cName/$ssFile"
+set ssSrc = "/hive/data/genomes/ce11/bed/multiz135way/cons/ss/$f"
 set useGrp = "$grp.mod"
 /bin/ln -s $cons/run.phyloP/$grp.mod $tmp
 pushd $tmp > /dev/null
-echo source: $ssSrc.ss
 $PHASTBIN/phyloP --method LRT --mode CONACC --wig-scores --chrom $cName \
-    -i SS $useGrp $ssSrc.ss > $ssFile.wigFix
+    -i SS $useGrp $ssSrc.ss > $file1.wigFix
 popd > /dev/null
 /bin/mkdir -p $out:h
 sleep 4
 /bin/touch $out:h
-/bin/mv $tmp/$ssFile.wigFix $out
+/bin/mv $tmp/$file1.wigFix $out
 /bin/rm -fr $tmp
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp/$d:h
 /bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp
 /bin/rmdir --ignore-fail-on-non-empty $cons/tmp
-' > doPhyloP.csh
-
+'_EOF_'
+    # << happy emacs
     chmod +x doPhyloP.csh
 
     # Create list of chunks
-    find ../ss -type f | sed -e "s/.ss$//; s#../ss/##;" > ss.list
+    find ../../cons/ss -type f | grep ".ss$" \
+	| sed -e "s/.ss$//; s#^../../cons/ss/##" > ss.list
     # make sure the list looks good
     wc -l ss.list
-    #	568 ss.list
+    #	104 ss.list
 
     # Create template file
     #	file1 == $chr/$chunk/file name without .ss suffix
+    cat << '_EOF_' > template
     printf '#LOOP
 ../run.phyloP/doPhyloP.csh $(path1) {check out line+ wigFix/$(dir1)/$(file1).wigFix}
 #ENDLOOP
@@ -2212,12 +2228,12 @@ sleep 4
     para try ... check ...
     para -maxJob=16 push
     para time > run.time
-# Completed: 568 of 568 jobs
-# CPU time in finished jobs:     440703s    7345.04m   122.42h    5.10d  0.014 y
-# IO & Wait Time:                  3849s      64.16m     1.07h    0.04d  0.000 y
-# Average job time:                 783s      13.04m     0.22h    0.01d
-# Longest finished job:            4019s      66.98m     1.12h    0.05d
-# Submission to last job:          4781s      79.68m     1.33h    0.06d
+# Completed: 104 of 104 jobs
+# CPU time in finished jobs:     420481s    7008.02m   116.80h    4.87d  0.013 y
+# IO & Wait Time:                  1037s      17.28m     0.29h    0.01d  0.000 y
+# Average job time:                4053s      67.55m     1.13h    0.05d
+# Longest finished job:            5455s      90.92m     1.52h    0.06d
+# Submission to last job:          5629s      93.82m     1.56h    0.07d
 
     mkdir downloads
     time for D in `ls -d wigFix/chr* | sed -e 's#wigFix/##'`
@@ -2227,96 +2243,96 @@ do
 	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
         | gzip -c > downloads/${D}.phyloP135way.wigFix.gz
 done
-    #   real    2m2.576s
+    #   real    1m24.231s
 
     du -hsc downloads
-    #   262M    downloads
+    #   195M    downloads
 
     # check integrity of data with wigToBigWig
     time (zcat downloads/*.wigFix.gz \
 	| wigToBigWig -verbose=2 stdin /hive/data/genomes/ce11/chrom.sizes \
 	phyloP135way.bw) > bigWig.log 2>&1
-
     egrep "real|VmPeak" bigWig.log
-    # pid=153945: VmPeak:    1438260 kB
-    # real    1m10.028s
+    # pid=180522: VmPeak:    1108636 kB
+    # real    0m51.720s
+
+    # -rw-rw-r-- 1 356259120 Dec 14 17:17 phyloP135way.bw
 
     bigWigInfo phyloP135way.bw  | sed -e 's/^/# /;'
 # version: 4
 # isCompressed: yes
 # isSwapped: 0
-# primaryDataSize: 375,618,358
-# primaryIndexSize: 4,032,612
+# primaryDataSize: 281,654,520
+# primaryIndexSize: 3,214,556
 # zoomLevels: 10
-# chromCount: 434
-# basesCovered: 123,466,109
-# mean: 2.659923
+# chromCount: 7
+# basesCovered: 95,051,167
+# mean: 1.130380
 # min: -20.000000
 # max: 20.000000
-# std: 4.629012
+# std: 2.927330
 
     #	encode those files into wiggle data
     time (zcat downloads/*.wigFix.gz \
 	| wigEncode stdin phyloP135way.wig phyloP135way.wib)
-
 # Converted stdin, upper limit 20.00, lower limit -20.00
-# real    0m31.685s
+# real    0m25.705s
 
-# -rw-rw-r--   1 123466109 Nov 27 14:29 phyloP135way.wib
-# -rw-rw-r--   1  12818989 Nov 27 14:29 phyloP135way.wig
+    # -rw-rw-r-- 1  95051167 Dec 14 17:19 phyloP135way.wib
+    # -rw-rw-r-- 1  10006648 Dec 14 17:19 phyloP135way.wig
 
     du -hsc *.wi?
-    # 118M    phyloP135way.wib
-    #  13M     phyloP135way.wig
+    #  91M     phyloP135way.wib
+    # 9.6M    phyloP135way.wig
 
     # Load gbdb and database with wiggle.
     ln -s `pwd`/phyloP135way.wib /gbdb/ce11/multiz135way/phyloP135way.wib
     time hgLoadWiggle -pathPrefix=/gbdb/ce11/multiz135way ce11 \
 	phyloP135way phyloP135way.wig
-    # real    0m1.440s
+    # real    0m0.761s
 
     # use to set trackDb.ra entries for wiggle min and max
     # and verify table is loaded correctly
 
     wigTableStats.sh ce11 phyloP135way
 # db.table          min   max     mean       count     sumData
-# ce11.phyloP135way   -20 20 2.65992 123466109 3.2841e+08
+# ce11.phyloP135way -20 20 1.13038 95051167 1.07444e+08
 #       stdDev viewLimits
-#      4.62901 viewLimits=-20:20
+#      2.92733 viewLimits=-13.5063:15.767
 
     #	that range is: 20+20= 40 for hBinSize=0.04
 
     #  Create histogram to get an overview of all the data
     time hgWiggle -doHistogram \
 	-hBinSize=0.04 -hBinCount=1000 -hMinVal=-20 -verbose=2 \
-	    -db=ce11 phyloP135way > histogram.data 2>&1
-    #   real    0m4.803s
+	    -db=ce11 phyloP135way > ce11.phyloP135way.histo.data 2>&1
+    #   real    0m4.117s
 
     # xaxis range:
-    grep -v chrom histogram.data | grep "^[0-9]" | ave -col=2 stdin \
-	| sed -e 's/^/# /;'
-# Q1 -7.460000
+    grep -v chrom ce11.phyloP135way.histo.data | grep "^[0-9]" \
+	| ave -col=2 stdin | sed -e 's/^/# /;'
+# Q1 -7.500000
 # median 0.320000
 # Q3 8.140000
-# average 0.328480
+# average 0.309272
 # min -20.000000
 # max 20.000000
 # count 783
-# total 257.200147
-# standard deviation 9.069287
+# total 242.159998
+# standard deviation 9.085841
 
     # find out the range for the 2:5 graph
-    grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin \
-      | sed -e 's/^/# /;'
+    grep -v chrom ce11.phyloP135way.histo.data | grep "^[0-9]" \
+	| ave -col=5 stdin | sed -e 's/^/# /;'
 # Q1 0.000002
-# median 0.000177
-# Q3 0.001312
-# average 0.001340
+# median 0.000108
+# Q3 0.000374
+# average 0.001277
 # min 0.000000
-# max 0.047793
-# count 782
-# total 1.047624
-# standard deviation 0.003225
+# max 0.038921
+# count 783
+# total 0.999993
+# standard deviation 0.003638
 
     #	create plot of histogram:
     # updated for new gnuplot on hgwdev 2018-11-26 (can't get font to change)
@@ -2333,7 +2349,7 @@ set key tc variable
 set grid noxtics
 set grid y2tics ls 4
 set grid ytics ls 4
-set title " D. melanogaster/ce11 Histogram phyloP135way track" \
+set title " C. elegans/ce11 Histogram phyloP135way track" \
     tc rgb "#ffffff"
 set xlabel " phyloP135way score" tc rgb "#ffffff"
 set ylabel " Relative Frequency" tc rgb "#ff88ff"
@@ -2341,15 +2357,124 @@ set y2label " Cumulative Relative Frequency (CRF)" tc rgb "#66ff66"
 set xrange [-1:1.5]
 set yrange [0:0.04]
 
-plot "histogram.data" using 2:5 title " RelFreq" with impulses ls 1, \
-        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines ls 2
+plot "ce11.phyloP135way.histo.data" using 2:5 title " RelFreq" with impulses ls 1, \
+        "ce11.phyloP135way.histo.data" using 2:7 axes x1y2 title " CRF" with lines ls 2
 ' | gnuplot
 
     # verify it looks sane
     display ce11.phyloP135.histo.png &
 
 #############################################################################
-# construct download files for 135-way (DONE - 2018-11-27 - Hiram)
+# determine taxonomy for everything (DONE - 2018-12-14 - Hiram)
+# to set up group divisions
+
+    # use this perl script to extra the taxonomy strings from NCBI entrez
+
+    mkdir /hive/data/genomes/ce11/bed/multiz135way/taxonomy
+    cd /hive/data/genomes/ce11/bed/multiz135way/taxonomy
+
+    cat > taxon.pl << '_EOF_'
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $argc = scalar(@ARGV);
+if ($argc < 1) {
+  printf STDERR "usage: taxon.pl <taxId> [more taxIds]\n";
+  exit 255;
+}
+
+while (my $taxId = shift) {
+  my $taxonomyString = "";
+  open (TX, "wget -O /dev/stdout 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=taxonomy&id=$taxId&retmode=xml' 2> /dev/null | grep -i ScientificName | headRest 1 stdin|") or die "can not wget entrez/eutils";
+while (my $sciName = <TX>) {
+    chomp $sciName;
+    $sciName =~ s/.*<ScientificName>//;
+    $sciName =~ s#</ScientificName>##;
+    $taxonomyString .= sprintf("%s;", $sciName);
+  }
+  close (TX);
+  printf "%d\t%s\n", $taxId, $taxonomyString;
+}
+'_EOF_'
+# << happy emacs
+
+    chmod +x taxon.pl
+
+    ./taxon.pl `sed -e 's/:.*//; s/(//g; s/ //g;' ../ce11.135way.taxId.nh  | sort -u | xargs echo` > taxonomy.txt
+
+    # survey the names in those
+    sed -e 's/.*organisms;//;' taxonomy.txt | tr ';' '\n' | sort | uniq -c | sort -rn | head -20
+    122 Opisthokonta
+    122 Metazoa
+    122 Eumetazoa
+    122 Eukaryota
+    122 Bilateria
+    122 
+     99 Protostomia
+     99 Nematoda
+     99 Ecdysozoa
+     83 Chromadorea
+     76 Rhabditida
+     35 Rhabditina
+     29 Rhabditomorpha
+     27 Tylenchina
+     23 Rhabditoidea
+     23 Rhabditidae
+     22 Platyhelminthes
+     18 Peloderinae
+     18 Caenorhabditis
+     16 Enoplea
+
+     sed -e 's/.*;Bilateria;//;' taxonomy.txt | cut -d';' -f1-4 \
+         | sort | uniq -c | sort -n
+      1 Deuterostomia;Chordata;Tunicata;Ascidiacea
+      1 Platyhelminthes;Cestoda;Eucestoda;Diphyllobothriidea
+      1 Platyhelminthes;Monogenea;Monopisthocotylea;Gyrodactylidea
+      1 Platyhelminthes;Rhabditophora;Macrostomorpha;Macrostomida
+      2 Platyhelminthes;Trematoda;Digenea;Opisthorchiida
+      3 Platyhelminthes;Rhabditophora;Seriata;Tricladida
+      3 Platyhelminthes;Trematoda;Digenea;Plagiorchiida
+      3 Platyhelminthes;Trematoda;Digenea;Strigeidida
+      8 Platyhelminthes;Cestoda;Eucestoda;Cyclophyllidea
+     16 Protostomia;Ecdysozoa;Nematoda;Enoplea
+     83 Protostomia;Ecdysozoa;Nematoda;Chromadorea
+
+     sed -e 's/.*;Bilateria;//;' taxonomy.txt | grep Protostomia \
+          | cut -d';' -f1-6 | sort | uniq -c | sort -n
+      1 Protostomia;Ecdysozoa;Nematoda;Chromadorea;Plectida;Plectina
+      1 Protostomia;Ecdysozoa;Nematoda;Chromadorea;Strongylida;Metastrongyloidea
+      1 Protostomia;Ecdysozoa;Nematoda;Enoplea;Dorylaimia;Mermithida
+      5 Protostomia;Ecdysozoa;Nematoda;Chromadorea;Strongylida;Trichostrongyloidea
+     14 Protostomia;Ecdysozoa;Nematoda;Chromadorea;Rhabditida;Spirurina
+     15 Protostomia;Ecdysozoa;Nematoda;Enoplea;Dorylaimia;Trichinellida
+     27 Protostomia;Ecdysozoa;Nematoda;Chromadorea;Rhabditida;Tylenchina
+     35 Protostomia;Ecdysozoa;Nematoda;Chromadorea;Rhabditida;Rhabditina
+
+     # with those numbers in hand, break them up like this
+     # the 'orderByChain.db.txt' list is from the output of sizeStats.pl
+     # as done earlier, just the sequence name/db names from that output
+     # in their featureBits chainLink order
+
+for N in Deuterostomia Platyhelminthes Plectida Rhabditina Spirurina Tylenchina Strongylida Dorylaimia
+do
+   grep ";$N;" taxonomy.txt | cut -f1 > $N.taxId.list
+   join -t$'\t' <(sort $N.taxId.list) <(sort taxId.GC.sequenceName.accAsmId.sciName.name.tab) | cut -f3 | sort -u > $N.db.list
+done
+
+cat orderByChain.db.txt | while read n
+do
+  grep -w "${n}" *.list
+done | sed -e 's/.db.list:/\t/;' > division.dbName.ordered.tab
+
+for N in Deuterostomia Platyhelminthes Plectida Rhabditina Spirurina Tylenchina Strongylida Dorylaimia
+do
+  grep "$N" division.dbName.ordered.tab | cut -f2 > ${N}.ordered
+done
+
+#############################################################################
+# construct download files for 135-way (TBD - 2018-11-27 - Hiram)
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/multiz135way
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/phastCons135way
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/phyloP135way
@@ -2362,9 +2487,9 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses ls 1, \
     cd /hive/data/genomes/ce11/bed/multiz135way/downloads/multiz135way
     # bash script
 
-#!/bin/sh
-export geneTbl="ncbiRefSeq"
-for S in 1350 2000 5000
+#!/bin/bash
+export geneTbl="ensGene"
+for S in 1000 2000 5000
 do
     echo "making upstream${S}.maf"
     featureBits ce11 ${geneTbl}:upstream:${S} -fa=/dev/null -bed=stdout \
@@ -2375,10 +2500,11 @@ do
         | gzip -c > upstream${S}.${geneTbl}.maf.gz
     echo "done upstream${S}.${geneTbl}.maf.gz"
 done
+XXX - running - Fri Dec 14 17:28:40 PST 2018
 
     #   real    186m37.993s
 
-# -rw-rw-r-- 1  646104882 Nov 27 15:46 upstream1350.ncbiRefSeq.maf.gz
+# -rw-rw-r-- 1  646104882 Nov 27 15:46 upstream1000.ncbiRefSeq.maf.gz
 # -rw-rw-r-- 1 1103012060 Nov 27 16:41 upstream2000.ncbiRefSeq.maf.gz
 # -rw-rw-r-- 1 3022261832 Nov 27 18:09 upstream5000.ncbiRefSeq.maf.gz
 
@@ -2506,7 +2632,7 @@ done
       /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/phyloP135way
 
 #############################################################################
-# hgPal downloads (DONE - 2018-11-27 - Hiram)
+# hgPal downloads (TBD - 2018-11-27 - Hiram)
 #   FASTA from 135-way for knownGene, refGene and knownCanonical
 
     ssh hgwdev
@@ -2518,7 +2644,7 @@ done
     # this for loop can take hours on a high contig count assembly
     # it is just fine on human/ce11, just a few seconds
     export mz=multiz135way
-    export gp=ncbiRefSeq
+    export gp=ensGene
     export db=ce11
     export I=0
     export D=0
@@ -2542,6 +2668,7 @@ done
     echo "wait" >> $gp.jobs
 
     time (sh -x ./$gp.jobs) > $gp.jobs.log 2>&1
+XXX - running - Fri Dec 14 17:27:13 PST 2018
     # real    38m28.377s
 
     export mz=multiz135way
@@ -2570,7 +2697,7 @@ done
     rm -rf exonAA exonNuc
 
 #############################################################################
-# wiki page for 135-way (DONE - 2017-11-06 - Hiram)
+# wiki page for 135-way (TBD - 2017-11-06 - Hiram)
     mkdir /hive/users/hiram/bigWays/ce11.135way
     cd /hive/users/hiram/bigWays
 
@@ -2607,7 +2734,7 @@ done
     # missing two.
 
 ############################################################################
-# pushQ readmine (DONE - 2017-11-07 - Hiram)
+# pushQ readmine (TBD - 2017-11-07 - Hiram)
 
   cd /usr/local/apache/htdocs-hgdownload/goldenPath/ce11
   find -L `pwd`/multiz135way `pwd`/phastCons135way `pwd`/phyloP135way \

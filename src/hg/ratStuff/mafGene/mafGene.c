@@ -76,12 +76,9 @@ struct sqlConnection *conn = hAllocConn(db);
 struct genePred *list = NULL;
 char splitTable[HDB_MAX_TABLE_STRING];
 struct genePred *gene;
-boolean hasBin;
 struct genePredReader *reader;
 
-boolean found =  hFindSplitTable(db, NULL, geneTable,
-	splitTable, &hasBin);
-
+boolean found = hFindSplitTable(db, NULL, geneTable, splitTable, sizeof splitTable, NULL);
 if (!found)
     errAbort("can't find table %s\n", geneTable);
 
