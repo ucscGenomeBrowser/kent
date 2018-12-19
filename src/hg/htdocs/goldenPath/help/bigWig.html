@@ -222,7 +222,9 @@ the <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directo
   <a href="http://genome.ucsc.edu/FAQ/FAQformat.html#format1.8">bedGraph</a> format.</li>
   <li>
   <code>bigWigToWig</code> &mdash; converts a bigWig file to 
-  <a href="http://genome.ucsc.edu/FAQ/FAQformat.html#format6">wig</a> format.</li>
+  <a href="http://genome.ucsc.edu/FAQ/FAQformat.html#format6">wig</a> format. Note: 
+  if a bigWig file was created from a bedGraph, bigWigToWig will revert the file back
+  to bedGraph.</li>
   <li>
   <code>bigWigSummary</code> &mdash; extracts summary information from a bigWig file.</li>
   <li>
