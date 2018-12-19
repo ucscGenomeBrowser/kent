@@ -1,10 +1,11 @@
-# Human-specific link info.
-name gepis
-shortLabel Gepis Tissue
-tables kgXref
-idSql select geneSymbol from kgXref x, knownGene k where kgID = '%s' and name= kgID and cdsStart <> cdsEnd
-url http://research-public.gene.com/cgi-bin/genentech/genehub-gepis/web_search.pl?intype=1&xrefid=%s&species=human
-priority 10
+#Human-specific link info.
+
+#name gepis
+#shortLabel Gepis Tissue
+#tables kgXref
+#idSql select geneSymbol from kgXref x, knownGene k where kgID = '%s' and name= kgID and cdsStart <> cdsEnd
+#url http://research-public.gene.com/cgi-bin/genentech/genehub-gepis/web_search.pl?intype=1&xrefid=%s&species=human
+#priority 10
 
 name omim
 shortLabel OMIM
@@ -62,7 +63,7 @@ name reactome
 shortLabel Reactome
 tables proteome.spReactomeEvent kgXref
 idSql select spReactomeId.spID from proteome.spReactomeId,proteome.spVariant,kgXref where kgXref.kgID = '%s' and kgXref.spID=variant and spReactomeId.spID=parent;
-url http://www.reactome.org/cgi-bin/link?SOURCE=UniProt&ID=%s&
+url http://www.reactome.org/content/query?q=%s
 priority 10
 
 name ensembl
