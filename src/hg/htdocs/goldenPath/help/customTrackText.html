@@ -964,21 +964,10 @@ following actions:</p>
 requests, but I can't get my data to display. Why?<br>
 <strong><em>Solution:</em></strong> As described in the previous question, Dropbox is a backup provider
 and not a real webserver and as such does not support hosting indexed files, even though it used to
-work to some extend and may work for some time with a paid Dropbox account. 
-Dropbox recently changed the ability to stream large amounts of
-data making binary files hosted there inaccessible to the browser. If you use Dropbox for smaller 
-text based track hubs you need to enable the &quot;Public Folder&quot; function on Dropbox, rather 
-than using the &quot;Share Link&quot; function. For custom tracks that require an associated index 
-file, the Public Folder approach will allow the Browser to locate the file, whereas the Share Link
-feature creates a unique, unassociated link for each file. To enable your Dropbox public folder, 
-navigate to the following site: <a href="https://www.dropbox.com/enable_public_folder"
-target="_blank"> https://www.dropbox.com/enable_public_folder</a>. If you are using a free Dropbox 
-account, note that Dropbox may throttle access to your data to prevent their servers from becoming 
-overloaded; this may in turn block the Genome Browser's access to the data, preventing the display 
-of your tracks. Paid Dropbox accounts may not experience this problem. Also, keep in mind that 
-files in your Dropbox Public Folder are public, and therefore may be indexed by Google. Please note 
-that this does not constitute an endorsement by UCSC for using Dropbox to host your
-data.</p>
+work to some extent. Dropbox recently removed their Public Folder feature, which means all links
+to files hosted there are inaccessible to the browser. For more information, please refer to  <a 
+href="https://www.dropbox.com/help/files-folders/public-folder" target="_blank">this announcement
+</a>.</p>
 <a name="BYTERANGE"></a>
 <p>
 <strong><em>Problem:</em></strong> If I can't host files on backup providers
