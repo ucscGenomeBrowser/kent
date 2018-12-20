@@ -105,7 +105,14 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         shortLabel RefSeq Clinical (HGMD)
         longLabel RefSeq Transcripts with at least one clinical mutation annotated by HGMD
         parent ncbiRefSeqView off
-        release alpha
+
+        track ncbiRefSeqMane
+        subGroups view=aNcbiRefSeq
+        priority 8
+        type genePred
+        shortLabel RefSeq MANE
+        longLabel RefSeq selected representative transcript for each gene, MANE 0.5
+        parent ncbiRefSeqView off
 
     track ucscRefSeqView
     parent refSeqComposite off
