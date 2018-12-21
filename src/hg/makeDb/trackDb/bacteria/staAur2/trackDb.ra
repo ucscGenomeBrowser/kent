@@ -12,3 +12,30 @@ termRegex NC_[0-9]+(v[0-9]+)?
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
+track ncbiGene
+shortLabel NCBI Genes
+longLabel NCBI Genes annotations
+group genes
+visibility pack
+priority 1
+color 12,12,120
+type genePred
+baseColorUseCds given
+baseColorDefault genomicCodons
+itemDetailsHtmlTable geneDesc
+
+include chainNetStaph.ra
+
+searchName ncbiGeneName
+searchTable ncbiGene
+searchType genePred
+shortCircuit 1
+searchMethod fuzzy
+termRegex [a-zS][a-zA][a-zU]+[A-Z0-9_]*
+searchPriority 50
+
+searchName ncbiGeneName2
+searchTable ncbiGene
+searchMethod prefix
+query select chrom, txStart,txEnd, name from %s where name2 like '%s%%'
+searchPriority 50.1
