@@ -22,6 +22,35 @@ time (/cluster/home/hiram/kent/src/hg/utils/automation/doCrispr.pl \
    -buildDir=`pwd` -bigClusterHub=ku -smallClusterHub=ku \
         -continue=specScores -stop=specScores -workhorse=hgwdev hg38 \
 	knownGene) > specScores.log 2>&1
-XXX - running - Wed Jun  6 11:32:23 PDT 2018
+# this failed when trying to run on ku:
+# Traceback (most recent call last):
+#   File "/hive/data/outside/crisprTrack/scripts/splitGuidesSpecScore.py", line 39, in <module>
+#     guideCounts[guide[:20]]+=1
+# MemoryError
+# Command failed:
+# ssh -x -o 'StrictHostKeyChecking = no' -o 'BatchMode = yes' ku nice /hive/data/genomes/hg38/bed/crispr.10K/specScores/runSpecScores.bash
+
+# real    22m46.921s
+
+    # run this command on hgwdev
+    time /cluster/software/bin/python /hive/data/outside/crisprTrack/scripts/splitGuidesSpecScore.py ../allGuides.txt tmp/inFa jobNames.txt
+
+Writing tmp/inFa/1781201.fa
+Writing tmp/inFa/1781202.fa
+124684218 sequences written
+3368831 sequences removed as they are non-unique
+0 sequences removed as they were already done before
+
+real    35m17.468s
+
+    # then, continuing the kluster run:
+    ssh ku
+    cd /hive/data/genomes/hg38/bed/crispr.10K/specScores
+    gensub2 jobNames.txt single gsub jobList
+    time para create jobList
+
+#     1781204 jobs written to /hive/data/genomes/hg38/bed/crispr.10K/specScores/batch
+
+# real    15m24.369s
 
 ###############################################################################
