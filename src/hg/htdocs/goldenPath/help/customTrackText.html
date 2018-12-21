@@ -941,11 +941,11 @@ And to allow this type of display, byte-range support must be
 enabled on the web server. No commercial online backup solution supports this,
 to our knowledge. To check if your server has byte-range requests enabled,
 issue the following command:</p>
-<pre><code>&gt; curl -I &lt;URL of your file&gt;</code></pre>
+<pre><code> curl -I &lt;URL of your file&gt;</code></pre>
 <p>
 In order for your server to host bigBed and bigWig files (or track hubs) for Genome Browser display,
 the command output must contain: 
-<pre><code>&gt; Accept-Ranges: bytes</code></pre>
+<pre><code>Accept-Ranges: bytes</code></pre>
 <p>
 If you do not receive this output, you may be able to resolve the problem through one of the 
 following actions:</p>
