@@ -861,9 +861,8 @@ translation, depending on the species chosen (<b>Table 2</b>).
 
 <blockquote><table border=1 cellpadding=4 bordercolor="#aaaaaa">
 <tr align=left><td><b>Gene Track</b></td><td><b>Species</b></td></tr>
-<tr align=left><td>NCBI RefSeq Genes</td><td>D. persimilis</td></tr>
-<tr align=left><td>Ensembl Genes v68</td><td>D. erecta, D. ananassae, D. melanogaster</td></tr>
-<tr align=left><td>Xeno RefGene</td><td>D. sechellia</td></tr>
+<tr align=left><td>Ensembl Genes v92</td><td>C. elegans, Ciona intestinalis</td></tr>
+<tr align=left><td>WormBase WS245 genes</td><td>C. angaria, C. japonica, C. briggsae, C. sp. 5 ju800, C. remanei, C. brenneri, C. tropicalis, P. exspectatus, P. pacificus, Pine wood nematode, N. americanus, A. ceylanicum, Pig roundworm, Barber pole worm, Whipworm, Microworm, Filarial worm, Dog heartworm, O. volvulus, Eye worm, M. incognita, M. hapla, H. bacteriophora/m31e, Trichinella</td></tr>
 <tr align=left><td>no annotations</td><td>all others</td></tr>
 </td></tr>
 </table>
@@ -884,15 +883,6 @@ gaps filled by lower-scoring chains, to produce an alignment net.
 For more information about the chaining and netting process and
 parameters for each species, see the description pages for the Chain and Net
 tracks.</p>
-<p>
-An additional filtering step was introduced in the generation of the 135-way
-conservation track to reduce the number of paralogs and pseudogenes from the
-high-quality assemblies and the suspect alignments from the low-quality
-assemblies:
-the pairwise alignments of the bird assemblies were filtered based on synteny;
-those for the human and mouse genomes were filtered to retain only
-alignments of best quality in both the target and query (&quot;reciprocal
-best&quot;).</p>
 <p>
 The resulting best-in-genome pairwise alignments
 were progressively aligned using multiz/autoMZ,

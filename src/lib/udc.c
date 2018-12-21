@@ -228,6 +228,12 @@ static int connInfoGetSocket(struct udcFile *file, char *url, bits64 offset, int
  * reuse ci->socket.  Otherwise close the socket, open a new one, and update ci,
  * or return -1 if there is an error opening a new one. */
 {
+/* NOTE: This doesn't use HTTP 1.1 keep alive to do multiple request on the
+ * same socket.  The only way subsequent random requests on the same socket
+ * work is because previous request are open-ended and this can continue
+ * reading where it left off.  The HTTP requests are issued as 1.0, even
+ * through range requests are a 1.1 feature. */ 
+
 struct connInfo *ci = &file->connInfo;
 if (ci != NULL && ci->socket > 0 && ci->offset != offset)
     {
