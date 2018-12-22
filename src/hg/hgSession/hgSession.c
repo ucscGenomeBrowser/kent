@@ -1229,7 +1229,7 @@ struct pipeline *compressPipe = textOutInit(fileName, compressType, NULL);
 
 cleanHgSessionFromCart(cart);
 
-cartDumpNoEncode(cart);
+cartDumpHgSession(cart);
 
 // Now add all the default visibilities to output.
 outDefaultTracks(cart, NULL);
@@ -1304,7 +1304,7 @@ else
 	if (isNotEmpty(fileName))
 	    dyStringPrintf(dyMessage, ", only the filename <B>%s</B>",
 			   fileName);
-	dyStringAppend(dyMessage, ".  Your settings have not been changed.");
+	dyStringAppend(dyMessage, " (empty file?).  Your settings have not been changed.");
 	lf = NULL;
 	}
     dyStringPrintf(dyMessage, "&nbsp;&nbsp;"
@@ -1314,13 +1314,36 @@ else
     }
 if (lf != NULL)
     {
-    cartLoadSettings(lf, cart, NULL, actionVar);
-    cartCopyCustomComposites(cart);
-    hubConnectLoadHubs(cart);
-    cartCopyCustomTracks(cart);
-    cartHideDefaultTracks(cart);
-    cartCheckForCustomTracks(cart, dyMessage);
+    lineFileCarefulNewlines(lf);
+    struct dyString *dyLoadMessage = dyStringNew(0);
+    boolean ok = cartLoadSettingsFromUserInput(lf, cart, NULL, actionVar, dyLoadMessage);
     lineFileClose(&lf);
+    if (ok)
+        {
+        dyStringAppend(dyMessage, dyLoadMessage->string);
+        cartCopyCustomComposites(cart);
+        hubConnectLoadHubs(cart);
+        cartCopyCustomTracks(cart);
+        cartHideDefaultTracks(cart);
+        cartCheckForCustomTracks(cart, dyMessage);
+        }
+    else
+        {
+        dyStringClear(dyMessage);
+        dyStringAppend(dyMessage, "<span style='color: red;'><b>"
+                       "Unable to load session: </b></span>");
+        dyStringAppend(dyMessage, dyLoadMessage->string);
+        dyStringAppend(dyMessage, "The uploaded file needs to have been previously saved from the "
+                       "<b>Save Settings</b> section.  If you feel you have reached this "
+                       "message in error, please contact the "
+                       "<A HREF=\"mailto:genome-www@soe.ucsc.edu?subject=Session file upload failed&"
+                       "body=Hello Genome Browser team,%0AMy session file failed to upload. "
+                       "The error message was:%0A");
+        dyStringAppend(dyMessage, cgiEncodeFull(dyLoadMessage->string));
+        dyStringAppend(dyMessage, "%0ACan you help me upload the data?\">"
+                       "UCSC Genome Browser team</A> for assistance.\n");
+        }
+    dyStringFree(&dyLoadMessage);
     }
 return dyStringCannibalize(&dyMessage);
 }
