@@ -944,9 +944,9 @@ The file begins with a 16-byte header containing the following fields:</p>
   the file</li>
   <li>
   <strong>version</strong> - zero for now. Readers should abort if they see a version number higher 
-  than 0.</li>
+  than 0</li>
   <li>
-  <strong>sequenceCount</strong> - the number of sequences in the file.</li>  
+  <strong>sequenceCount</strong> - the number of sequences in the file</li>  
   <li>
   <strong>reserved</strong> - always zero for now</li>
 </ul>
@@ -962,10 +962,11 @@ contains three fields:</p>
   <li>
   <strong>nameSize</strong> - a byte containing the length of the name field</li>
   <li>
-  <strong>name</strong> - the sequence name itself, of variable length depending on nameSize</li>
+  <strong>name</strong> - the sequence name itself (in ASCII-compatible byte string), of variable 
+  length depending on nameSize</li>
   <li>
   <strong>offset</strong> - the 32-bit offset of the sequence data relative to the start of the 
-  file</li>
+  file, not aligned to any 4-byte padding boundary</li>
 </ul>
 <p>
 The index is followed by the sequence records, which contain nine fields:</p>
@@ -977,7 +978,7 @@ The index is followed by the sequence records, which contain nine fields:</p>
   sequence)</li>
   <li>
   <strong>nBlockStarts</strong> - an array of length nBlockCount of 32 bit integers indicating the 
-  starting position of a block of Ns</li>
+  (0-based) starting position of a block of Ns</li>
   <li>
   <strong>nBlockSizes</strong> - an array of length nBlockCount of 32 bit integers indicating the 
   length of a block of Ns</li>
@@ -985,7 +986,7 @@ The index is followed by the sequence records, which contain nine fields:</p>
   <strong>maskBlockCount</strong> - the number of masked (lower-case) blocks</li>
   <li>
   <strong>maskBlockStarts</strong> - an array of length maskBlockCount of 32 bit integers indicating
-  the starting position of a masked block</li>
+  the (0-based) starting position of a masked block</li>
   <li>
   <strong>maskBlockSizes</strong> - an array of length maskBlockCount of 32 bit integers indicating 
   the length of a masked block</li>

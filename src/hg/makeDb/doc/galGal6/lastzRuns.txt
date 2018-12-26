@@ -3898,3 +3898,77 @@ TMPDIR=/dev/shm
 
     cat fb.galGal6.chainRBest.XenLae2.txt
     # 69131006 bases of 1055588482 (6.549%) in intersection
+
+#############################################################################
+# LASTZ chicken/galGal6 vs Japanese quail/cotJap2 - (DONE - 2018-10-25 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzCotJap2.2018-10-25
+    cd /hive/data/genomes/galGal6/bed/lastzCotJap2.2018-10-25
+
+   printf "# chicken vs Japanese quail
+# galGal6 vs cotJap2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: cotJap2 - Japanese quail - Coturnix japonica
+SEQ2_DIR=/hive/data/genomes/cotJap2/cotJap2.2bit
+SEQ2_LEN=/hive/data/genomes/cotJap2/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzCotJap2.2018-10-25
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real	402m14.191s
+
+    cat fb.galGal6.chainCotJap2Link.txt
+    # 950779519 bases of 1055588482 (90.071%) in intersection
+
+    cat fb.galGal6.chainSynCotJap2Link.txt
+    # 840595400 bases of 1055588482 (79.633%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 CotJap2) > rbest.log 2>&1 &
+    # real	331m41.351s
+
+    cat fb.galGal6.chainRBest.CotJap2.txt
+    # 846148712 bases of 1055588482 (80.159%) in intersection
+
+    #   running the swap
+    mkdir /hive/data/genomes/cotJap2/bed/blastz.galGal6.swap
+    cd /hive/data/genomes/cotJap2/bed/blastz.galGal6.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/galGal6/bed/lastzBosTau9.2018-10-25/DEF \
+        -swap  -syntenicNet -workhorse=hgwdev \
+	-smallClusterHub=hgwdev-101 -bigClusterHub=ku \
+        ) > swap.log 2>&1
+    #   real    286m17.880s
+
+    cat fb.cotJap2.chainGalGal6Link.txt
+    #   883933933 bases of 917263224 (96.366%) in intersection
+    cat fb.cotJap2.chainSynGalGal6Link.txt
+    #	838388062 bases of 917263224 (91.401%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` cotJap2 galGal6) > rbest.log 2>&1 &
+
+    cat fb.cotJap2.chainRBest.GalGal6.txt
+    # 846862875 bases of 917263224 (92.325%) in intersection
+
+#############################################################################

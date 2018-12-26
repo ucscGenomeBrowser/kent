@@ -322,6 +322,15 @@ chrM    16338   5457    4238    2202    4441    0       358
     cat bosTau9.keySignature.txt
     #  7850e2d5dabb6134fdc9d7083f1a3a54
 
+    # one of them did not work, joinerCheck complained, remove it:
+hgsql -e 'delete from ncbiRefSeq where name="NM_001143743.1";' bosTau9
+hgsql -e 'delete from ncbiRefSeqLink where protAcc="NP_001137215.1";' bosTau9
+hgsql -e 'delete from ncbiRefSeqPsl where qName="NM_001143743.1";' bosTau9
+hgsql -e 'delete from ncbiRefSeqCurated where name="NM_001143743.1";' bosTau9
+hgsql -e 'delete from seqNcbiRefSeq where acc="NM_001143743.1";' bosTau9
+
+
+
 #############################################################################
 # gapOverlap (DONE - 2018-11-06 - Hiram)
     mkdir /hive/data/genomes/bosTau9/bed/gapOverlap
@@ -887,8 +896,7 @@ searchPriority 8
 	-ooc=/hive/data/genomes/bosTau9/jkStuff/bosTau9.11.ooc \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
          bosTau9 bosTau8) > do.log 2>&1 &
-XXX - running - Thu Nov  8 13:19:11 PST 2018
-    # real    102m14.916s
+    # real    1255m56.756s
 
     # verify the convert link on the test browser is now active
     # from bosTau9 to bosTau8
@@ -902,8 +910,7 @@ XXX - running - Thu Nov  8 13:19:11 PST 2018
 	-ooc=/hive/data/genomes/bosTau9/jkStuff/bosTau9.11.ooc \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
          bosTau9 bosTau7) > do.log 2>&1 &
-XXX - running - Thu Nov  8 13:19:11 PST 2018
-    # real    102m14.916s
+    # real    831m15.041s
 
     # verify the convert link on the test browser is now active
     # from bosTau9 to bosTau7
@@ -917,11 +924,29 @@ XXX - running - Thu Nov  8 13:19:11 PST 2018
 	-ooc=/hive/data/genomes/bosTau9/jkStuff/bosTau9.11.ooc \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
          bosTau9 bosTau6) > do.log 2>&1 &
-XXX - running - Thu Nov  8 13:19:11 PST 2018
-    # real    102m14.916s
+    # real    1236m43.784s
 
     # verify the convert link on the test browser is now active
     # from bosTau9 to bosTau6
+
+##############################################################################
+# crispr 10K shoulders (DONE - 2018-11-16 - Hiram)
+    mkdir  /hive/data/genomes/bosTau9/bed/crispr10K
+    cd  /hive/data/genomes/bosTau9/bed/crispr10K
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+   -stop=load -buildDir=`pwd` -smallClusterHub=hgwdev-101 bosTau9 ncbiRefSeq) \
+	> do.log 2>&1
+XXX - running - Fri Nov 16 08:34:10 PST 2018
+    # real    5896m44.643s
+
+    time find tmp/outGuides -type f | xargs cut -f3-6 > ../specScores.tab
+    # real    329m49.271s
+
+    # after is appears to be correct, cleanup:
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -continue=cleanup \
+   -buildDir=`pwd` -smallClusterHub=hgwdev-101 cotJap2 ncbiRefSeq) \
+	> do.log 2>&1
 
 ##############################################################################
 # GENBANK AUTO UPDATE (DONE - 2018-11-08 - Hiram)
@@ -961,8 +986,10 @@ bosTau9.downloadDir = bosTau9
 ls: cannot access no: No such file or directory
 -rw-rw-r-- 1 712534740 Nov  7 13:35 /hive/data/genomes/bosTau9/bosTau9.2bit
 -rw-rw-r-- 1    141736 Nov  8 13:13 /hive/data/genomes/bosTau9/jkStuff/bosTau9.11.ooc
+    # ls error on the file named 'no' is from the bosTau9.lift = no
 
-    $ ls error on the file named 'no' is from the bosTau9.lift = no
+    git commit -m 'adding bosTau9 refs #22425' etc/genbank.conf
+    git push
 
     # add bosTau9 to:
     #   etc/hgwdev.dbs
@@ -998,22 +1025,24 @@ ls: cannot access no: No such file or directory
 # all.joiner update, downloads and in pushQ - (TBD - 2018-05-01 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     ~/kent/src/hg/utils/automation/verifyBrowser.pl bosTau9
-# 65 tables in database bosTau9 - Sheep, Ovis aries
-# verified 65 tables in database bosTau9, 0 extra tables, 24 optional tables
-# NCBI RefSeq genes 10 optional tables
-# chainNetRBestHg38 3 optional tables
-# chainNetRBestMm10 3 optional tables
-# chainNetSynHg38   3 optional tables
-# chainNetSynMm10   3 optional tables
+# 64 tables in database bosTau9 - Cow, Bos taurus
+# verified 62 tables in database bosTau9, 2 extra tables, 24 optional tables
+# NCBI RefSeq genes     10 optional tables
+# chainNetRBestHg38     3 optional tables
+# chainNetRBestMm10     3 optional tables
+# chainNetSynHg38       3 optional tables
+# chainNetSynMm10       3 optional tables
 # gapOverlap    1 optional tables
 # tandemDups    1 optional tables
-# 12 genbank tables found
+# 1     crispr10KRanges - extra table
+# 2     crispr10KTargets        - extra table
+# 9 genbank tables found
 # verified 29 required tables, 0 missing tables
 # hg38 chainNet to bosTau9 found 3 required tables
 # mm10 chainNet to bosTau9 found 3 required tables
 # hg38 chainNet RBest and syntenic to bosTau9 found 6 optional tables
 # mm10 chainNet RBest and syntenic to bosTau9 found 3 optional tables
-# liftOver to previous versions: 1, from previous versions: 1
+# liftOver to previous versions: 3, from previous versions: 3
 
     # fixup all.joiner until this is a clean output
     joinerCheck -database=bosTau9 -tableCoverage all.joiner
@@ -1026,31 +1055,18 @@ ls: cannot access no: No such file or directory
     rm -fr TemporaryTrackDbCheckout
 
     time (makeDownloads.pl -workhorse=hgwdev bosTau9) > downloads.log 2>&1
-    #  real    23m39.716s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/bosTau9/pushQ
     cd /hive/data/genomes/bosTau9/pushQ
   time (makePushQSql.pl -redmineList bosTau9) > bosTau9.pushQ.sql 2> stderr.out
+    # real    9m34.930s
+
     # remove the tandemDups and gapOverlap from the file list:
     sed -i -e "/tandemDups/d" redmine.bosTau9.table.list
     sed -i -e "/Tandem Dups/d" redmine.bosTau9.releaseLog.txt
     sed -i -e "/gapOverlap/d" redmine.bosTau9.table.list
     sed -i -e "/Gap Overlaps/d" redmine.bosTau9.releaseLog.txt
-
-    # also remove the genbank tables because they are built automatically
-    # on beta/rr
-    all_est
-    all_mrna
-    estOrientInfo
-    intronEst
-    mrnaOrientInfo
-    refFlat
-    refGene
-    refSeqAli
-    xenoRefFlat
-    xenoRefGene
-    xenoRefSeqAli
 
     #   check for errors in stderr.out, some are OK, e.g.:
     # WARNING: bosTau9 does not have seq

@@ -161,12 +161,15 @@ sub printTree($) {
      printTree($node->{'left'}) if (defined($node->{'left'}));
      printf ")" if defined($node->{'left'});
   }
+  my $distOut = sprintf("%.9f", $node->{'distance'});
+  $distOut =~ s/0+$//g;
+  $distOut = "0.000001" if ($distOut eq "0.");
   if ( $node->{'isLeaf'} ) {
-    printf "%s:%s", $node->{'name'}, $node->{'distance'};
+    printf "%s:%s", $node->{'name'}, $distOut;
   } elsif ( ! $noInternal) {
-    printf "%s:%s", $node->{'name'}, $node->{'distance'};
+    printf "%s:%s", $node->{'name'}, $distOut;
   } else {
-    printf ":%s", $node->{'distance'};
+    printf ":%s", $distOut;
   }
   $printDepth -= 1;
 }	# sub printTree($)

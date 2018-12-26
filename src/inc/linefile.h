@@ -25,7 +25,8 @@ enum nlType {
  nlt_undet, /* undetermined */
  nlt_unix,  /* lf   */
  nlt_dos,   /* crlf */
- nlt_mac    /* cr   */
+ nlt_mac,   /* cr   */
+ nlt_mixed  /* could be any or all of the above */
 };
 
 struct metaOutput
@@ -302,6 +303,10 @@ struct lineFile *lineFileTabixMayOpen(char *fileOrUrl, bool zTerm);
 boolean lineFileSetTabixRegion(struct lineFile *lf, char *seqName, int start, int end);
 /* Assuming lf was created by lineFileTabixMayOpen, tell tabix to seek to the specified region
  * and return TRUE (or if there are no items in region, return FALSE). */
+
+void lineFileCarefulNewlines(struct lineFile *lf);
+/* Tell lf to use a less efficient method of scanning for the next newline that can handle
+ * files with a mix of newline conventions. */
 
 #endif /* LINEFILE_H */
 

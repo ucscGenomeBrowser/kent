@@ -162,7 +162,9 @@ The remaining values are OPTIONAL:</p>
 <strong>altColor          </strong><em>&lt;RRR,GGG,BBB&gt;                       </em> # default is 128,128,128
 <strong>priority          </strong><em>&lt;N&gt;                                 </em> # default is 100</code></pre>
 <p>
-For a list of additional options, see the <a href="bigWig.html#optional">bigWig format</a> page.</p>
+For a list of additional options, see the <a href="bigWig.html#optional">bigWig format</a> page.
+Note that bigWig files created from bedGraph cannot be converted to wiggle using <code>bigWigToWig</code>
+and instead will be reverted back to their original bedGraph format.</p>
 
 <h2>Examples</h2>
 <p>

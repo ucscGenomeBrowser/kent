@@ -1,0 +1,113 @@
+track cons135way
+compositeTrack on
+shortLabel Cons 135 species
+longLabel Multiz Alignment & Conservation (135 species: 112 nematodes, 22 flatworms and Ciona intestinalis)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+dragAndDrop subTracks
+visibility full
+type bed 4
+group compGeno
+priority 2
+
+    track cons135wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons135way
+
+        track multiz135way
+        subTrack cons135wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Alignments of 135 species
+        subGroups view=align
+        noInherit on
+        irows on
+        summary multiz135waySummary
+        frames multiz135wayFrames
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        type wigMaf 0.0 1.0
+        speciesCodonDefault ce11
+        speciesGroups Rhabditina Spirurina Tylenchina Strongylida Plectida Dorylaimia Platyhelminthes Deuterostomia
+        sGroup_Rhabditina C_nigoni caeRem4 C_briggsae C_sp26_LS_2015 caePb3 C_latens caeSp111 C_sp34_TK_2017 C_sp40_LS_2015 caeJap4 C_sp39_LS_2015 C_sp38_MB_2015 C_sp31_LS_2015 caeSp51 caeAng2 cb4 C_sp32_LS_2015 Diploscapter_coronatus Diploscapter_pachys C_sp21_LS_2015 Ancylostoma_caninum Oscheius_tipulae ancCey1 Parapristionchus_giblindavisi Necator_americanus Oscheius_TEL_2014 Ancylostoma_duodenale Oesophagostomum_dentatum Pristionchus_arcanus Pristionchus_pacificus Pristionchus_maxplancki Pristionchus_entomophagus Pristionchus_exspectatus hetBac1 necAme1 Oscheius_MCB priPac3 priExs1
+        sGroup_Spirurina Onchocerca_volvulus Wuchereria_bancrofti Dirofilaria_immitis Brugia_pahangi Onchocerca_ochengi Brugia_malayi Loa_loa Setaria_digitata Onchocerca_flexuosa Setaria_equina Ascaris_suum Parascaris_univalens Toxocara_canis ascSuu1 oncVol1 bruMal2 loaLoa1 dirImm1 Elaeophora_elaphi
+        sGroup_Tylenchina strRat2 Strongyloides_stercoralis Strongyloides_venezuelensis Meloidogyne_arenaria Strongyloides_papillosus Parastrongyloides_trichosuri Meloidogyne_incognita Meloidogyne_javanica Acrobeloides_nanus Rhabditophanes_KR3021 Meloidogyne_graminicola Rotylenchulus_reniformis Ditylenchus_destructor Bursaphelenchus_xylophilus Steinernema_monticolum Meloidogyne_floridensis Steinernema_carpocapsae Steinernema_scapterisci Steinernema_feltiae Subanguina_moxae Globodera_ellingtonae Globodera_rostochiensis Steinernema_glaseri Globodera_pallida Heterodera_glycines panRed1 burXyl1 melHap1 melInc2
+        sGroup_Strongylida Dictyocaulus_viviparus Nippostrongylus_brasiliensis Heligmosomoides_polygyrus_bakeri Teladorsagia_circumcincta Haemonchus_contortus Angiostrongylus_cantonensis haeCon2
+        sGroup_Plectida Plectus_sambesii
+        sGroup_Dorylaimia Trichinella_murrelli Trichinella_zimbabwensis Trichinella_pseudospiralis Trichinella_papuae Trichinella_T6 Trichinella_britovi Trichinella_T8 Trichinella_T9 Trichinella_patagoniensis Trichinella_nelsoni Trichinella_nativa Trichinella_spiralis Romanomermis_culicivorax Trichuris_trichiura Trichuris_muris triSui1 triSpi1
+        sGroup_Platyhelminthes Schmidtea_mediterranea Girardia_tigrina Dugesia_japonica Macrostomum_lignano Schistosoma_mansoni Schistosoma_haematobium Schistosoma_japonicum Gyrodactylus_salaris Hymenolepis_microstoma Fasciola_hepatica Taenia_multiceps Fasciola_gigantica Taenia_saginata Clonorchis_sinensis Opisthorchis_viverrini Echinococcus_multilocularis Taenia_asiatica Echinococcus_canadensis Taenia_solium Echinococcus_granulosus Spirometra_erinaceieuropaei Dicrocoelium_dendriticum
+        sGroup_Deuterostomia ci3
+        speciesDefaultOff C_nigoni C_briggsae C_sp26_LS_2015 caePb3 C_latens caeSp111 C_sp34_TK_2017 C_sp40_LS_2015 caeJap4 C_sp39_LS_2015 C_sp38_MB_2015 C_sp31_LS_2015 caeSp51 caeAng2 C_sp32_LS_2015 Diploscapter_coronatus Diploscapter_pachys C_sp21_LS_2015 Ancylostoma_caninum Oscheius_tipulae Parapristionchus_giblindavisi Necator_americanus Oscheius_TEL_2014 Ancylostoma_duodenale Oesophagostomum_dentatum Pristionchus_arcanus Pristionchus_pacificus Pristionchus_maxplancki Pristionchus_entomophagus Pristionchus_exspectatus hetBac1 necAme1 Oscheius_MCB priExs1 Onchocerca_volvulus Wuchereria_bancrofti Dirofilaria_immitis Brugia_pahangi Onchocerca_ochengi Brugia_malayi Loa_loa Setaria_digitata Onchocerca_flexuosa Setaria_equina Ascaris_suum Parascaris_univalens Toxocara_canis oncVol1 bruMal2 loaLoa1 dirImm1 Elaeophora_elaphi Strongyloides_stercoralis Strongyloides_venezuelensis Meloidogyne_arenaria Strongyloides_papillosus Parastrongyloides_trichosuri Meloidogyne_incognita Meloidogyne_javanica Acrobeloides_nanus Rhabditophanes_KR3021 Meloidogyne_graminicola Rotylenchulus_reniformis Ditylenchus_destructor Bursaphelenchus_xylophilus Steinernema_monticolum Meloidogyne_floridensis Steinernema_carpocapsae Steinernema_scapterisci Steinernema_feltiae Subanguina_moxae Globodera_ellingtonae Globodera_rostochiensis Steinernema_glaseri Globodera_pallida Heterodera_glycines panRed1 melHap1 melInc2 Dictyocaulus_viviparus Nippostrongylus_brasiliensis Heligmosomoides_polygyrus_bakeri Teladorsagia_circumcincta Haemonchus_contortus Angiostrongylus_cantonensis haeCon2 Plectus_sambesii Trichinella_murrelli Trichinella_zimbabwensis Trichinella_pseudospiralis Trichinella_papuae Trichinella_T6 Trichinella_britovi Trichinella_T8 Trichinella_T9 Trichinella_patagoniensis Trichinella_nelsoni Trichinella_nativa Trichinella_spiralis Romanomermis_culicivorax Trichuris_trichiura Trichuris_muris triSpi1 Schmidtea_mediterranea Girardia_tigrina Dugesia_japonica Macrostomum_lignano Schistosoma_mansoni Schistosoma_haematobium Schistosoma_japonicum Gyrodactylus_salaris Hymenolepis_microstoma Fasciola_hepatica Taenia_multiceps Fasciola_gigantica Taenia_saginata Clonorchis_sinensis Opisthorchis_viverrini Echinococcus_multilocularis Taenia_asiatica Echinococcus_canadensis Taenia_solium Echinococcus_granulosus Spirometra_erinaceieuropaei Dicrocoelium_dendriticum ci3
+        speciesDefaultOn caeRem4 cb4 ancCey1 priPac3 ascSuu1 strRat2 burXyl1 triSui1
+        defaultMaf multiz135wayDefault
+        itemFirstCharCase noChange
+        treeImage phylo/ce11_135way.png
+        priority 100
+
+    # PhyloP conservation
+    track cons135wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack cons135way
+    viewLimits -20.0:9.869
+    viewLimitsMax -20:0.869
+
+        track phyloP135way
+        subTrack cons135wayViewphyloP on
+        subGroups view=phyloP
+        shortLabel Cons 135 species
+        longLabel 135 species Basewise Conservation by PhyloP
+        noInherit on
+        configurable on
+        type wig -20 7.532
+        maxHeightPixels 100:50:11
+        viewLimits -4.5:4.88
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 60,60,140
+        altColor 140,60,60
+        priority 4
+
+    # phastCons conservation
+    track cons135wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility full
+    subTrack cons135way
+
+        track phastCons135way
+        subTrack cons135wayViewphastcons off
+        subGroups view=phastcons
+        shortLabel Cons 135 species
+        longLabel 135 species conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 70,130,70
+        altColor 130,70,70
+        priority 13
+
+    # Conserved Elements (Most Conserved)
+    track cons135wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility dense
+    subTrack cons135way
+
+        track phastConsElements135way
+        subTrack cons135wayViewelements off
+        subGroups view=elements
+        shortLabel 135 species El
+        longLabel 135 species Conserved Elements
+        noInherit on
+        color 110,10,40
+        type bed 5 .
+        priority 23
