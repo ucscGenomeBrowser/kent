@@ -155,14 +155,15 @@ printf("<A HREF=\"../cgi-bin/cartReset?%s&destination=%s\">Click here to "
 }
 
 void addSessionLink(struct dyString *dy, char *userName, char *sessionName,
-		    boolean encode)
+		    boolean encode, boolean tryShortLink)
 /* Add to dy an URL that tells hgSession to load a saved session.
  * If encode, cgiEncodeFull the URL. 
+ * If tryShortLink, print a shortened link that apache can redirect.
  * The link is an absolute link that includes the server name so people can
  * copy-paste it into emails.  */
 {
 struct dyString *dyTmp = dyStringNew(1024);
-if (cfgOptionBooleanDefault("hgSession.shortLink", FALSE) &&
+if (tryShortLink && cfgOptionBooleanDefault("hgSession.shortLink", FALSE) &&
         !stringIn("%2F", userName) && !stringIn("%2F", sessionName))
     dyStringPrintf(dyTmp, "http%s://%s/s/%s/%s", cgiAppendSForHttps(), cgiServerNamePort(),
         userName, sessionName);
@@ -185,7 +186,7 @@ void printShareMessage(struct dyString *dy, char *userName, char *sessionName,
             boolean encode)
 {
 struct dyString *dyTmp = dyStringNew(0);
-addSessionLink(dyTmp, userName, sessionName, encode);
+addSessionLink(dyTmp, userName, sessionName, encode, TRUE);
 dyStringPrintf(dy,
     "<p>You can share this session with the following  URL: %s</p>",
     dyTmp->string);
@@ -198,7 +199,7 @@ char *getSessionLink(char *encUserName, char *encSessionName)
 {
 struct dyString *dy = dyStringNew(1024);
 dyStringPrintf(dy, "<A HREF=\"");
-addSessionLink(dy, encUserName, encSessionName, FALSE);
+addSessionLink(dy, encUserName, encSessionName, FALSE, TRUE);
 dyStringPrintf(dy, "\">Browser</A>\n");
 return dyStringCannibalize(&dy);
 }
@@ -212,7 +213,7 @@ dyStringPrintf(dy, "<A HREF=\"mailto:?subject=UCSC browser session %s&"
 	       "body=Here is a UCSC browser session I%%27d like to share with "
 	       "you:%%20",
 	       cgiDecodeClone(encSessionName));
-addSessionLink(dy, encUserName, encSessionName, TRUE);
+addSessionLink(dy, encUserName, encSessionName, TRUE, TRUE);
 dyStringPrintf(dy, "\">Email</A>\n");
 return dyStringCannibalize(&dy);
 }
@@ -339,7 +340,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<TR><TD>&nbsp;&nbsp;</TD><TD>");
 
     struct dyString *dy = dyStringNew(1024);
-    addSessionLink(dy, encUserName, encSessionName, FALSE);
+    addSessionLink(dy, encUserName, encSessionName, FALSE, TRUE);
     printf("<a href=\"%s\">%s</a>", dyStringContents(dy), sessionName);
     dyStringFree(&dy);
 
@@ -879,7 +880,7 @@ char *destFile = sessionThumbnailFilePath(userIdentifier, encSessionName, firstU
 if (destFile != NULL)
     {
     struct dyString *hgTracksUrl = dyStringNew(0);
-    addSessionLink(hgTracksUrl, encUserName, encSessionName, FALSE);
+    addSessionLink(hgTracksUrl, encUserName, encSessionName, FALSE, FALSE);
     struct dyString *renderUrl =
         dyStringSub(hgTracksUrl->string, "cgi-bin/hgTracks", "cgi-bin/hgRenderTracks");
     dyStringAppend(renderUrl, "&pix=640");
