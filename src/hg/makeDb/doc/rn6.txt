@@ -4347,3 +4347,37 @@ danRer10' > fish.list
     include vertebrateChainNet.ra
 
 ############################################################################
+# crispr 10K track (DONE - 2018-07-02 - Hiram)
+    mkdir -p /hive/data/genomes/rn6/bed/crispr.10K
+    cd /hive/data/genomes/rn6/bed/crispr.10K
+
+    # since this time, the indexing has been built into the primary script
+export PATH=/hive/data/outside/crisprTrack/crispor/tools/usrLocalBin:$PATH
+export TMPDIR=/dev/shm
+
+time (/hive/data/outside/crisprTrack/crispor/tools/crisprAddGenome ucscLocal \
+   rn6 --geneTable ensGene \
+      --baseDir /hive/data/outside/crisprTrack/crispor/genomes) > index.log 2>&1
+
+    # real    109m47.348s
+
+    time (/cluster/home/hiram/kent/src/hg/utils/automation/doCrispr.pl \
+   -buildDir=`pwd` -bigClusterHub=ku -smallClusterHub=ku \
+  -continue=guides -stop=guides -workhorse=hgwdev rn6 ensGene) > guides.log 2>&1
+    # real    18m23.512s
+
+    # step specScores were run manually to test fixes in the script to avoid
+    # the bottleneck
+    /cluster/home/hiram/kent/src/hg/utils/automation/doCrispr.pl \
+   -buildDir=`pwd` -bigClusterHub=ku -smallClusterHub=ku -debug \
+        -continue=specScores -stop=specScores -workhorse=hgwdev rn6 ensGene
+
+    /cluster/home/hiram/kent/src/hg/utils/automation/doCrispr.pl -debug \
+   -buildDir=`pwd` -bigClusterHub=ku -smallClusterHub=ku \
+        -continue=effScores -stop=offTargets -workhorse=hgwdev rn6 ensGene)
+
+    /cluster/home/hiram/kent/src/hg/utils/automation/doCrispr.pl -debug \
+   -buildDir=`pwd` -bigClusterHub=ku -smallClusterHub=ku \
+        -continue=load -stop=load -workhorse=hgwdev rn6 ensGene
+
+############################################################################

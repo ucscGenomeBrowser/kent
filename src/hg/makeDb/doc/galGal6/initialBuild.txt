@@ -930,6 +930,7 @@ galGal6.downloadDir = galGal6
 	-continue=effScores -stop=load \
 	    -buildDir=`pwd` -smallClusterHub=ku galGal6 ncbiRefSeq) \
 	> load.log
+    # real    307m41.143s
 
 #########################################################################
 # all.joiner update, downloads and in pushQ - (DONE - 2018-10-17 - Hiram)

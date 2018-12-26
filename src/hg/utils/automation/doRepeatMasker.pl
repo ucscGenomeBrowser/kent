@@ -16,7 +16,7 @@ use HgRemoteScript;
 use HgStepManager;
 
 # Hardcoded command path:
-my $RepeatMaskerPath = "/scratch/data/RepeatMasker";
+my $RepeatMaskerPath = "/hive/data/staging/data/RepeatMasker";
 my $RepeatMasker = "$RepeatMaskerPath/RepeatMasker";
 my $RepeatMaskerEngine = "-engine crossmatch -s";
 # Let parasol pick defaults
