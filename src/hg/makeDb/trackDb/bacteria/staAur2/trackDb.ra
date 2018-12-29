@@ -4,6 +4,7 @@ html gold
 
 # Local declaration so that local gap.html is picked up.
 track gap override
+visibility hide
 html gap
 
 searchTable gold
@@ -39,3 +40,5 @@ searchTable ncbiGene
 searchMethod prefix
 query select chrom, txStart,txEnd, name from %s where name2 like '%s%%'
 searchPriority 50.1
+
+include trackDb.369way.ra
