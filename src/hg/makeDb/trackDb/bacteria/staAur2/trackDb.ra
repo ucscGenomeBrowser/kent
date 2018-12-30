@@ -25,7 +25,8 @@ baseColorUseCds given
 baseColorDefault genomicCodons
 itemDetailsHtmlTable geneDesc
 
-include chainNetStaph.ra
+include chainNetStaph0.ra
+include chainNetStaph1.ra
 
 searchName ncbiGeneName
 searchTable ncbiGene
