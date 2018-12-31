@@ -109,10 +109,10 @@ if ($aaFile =~ m/.gz$/) {
 
 my $aaSequence = "";
 my $geneName = "";
+my $sequenceName = "";
 my $chrName = "";
 my $chrStrand = "";
 my $cdsStart = 0;
-my $sequenceName = "";
 my $aaLength = 0;
 my $frame = 0;
 my $lastFrame = 0;
@@ -170,8 +170,15 @@ sub outputCounts($$) {
           }
           my $end = $start + 3;
           die "chrEnd $end GT $chromSizes{$chrName} chrSize for gene $geneName" if ($end > $chromSizes{$chrName});
+          my $score = int(1000 * ($aaCount->[$i]/$sequenceCounted));
+          my $colorIntensity = 255 * (int(10 * ($score / 1000)) / 10);
+          my $backGround = 255 - $colorIntensity;
+          $colorIntensity = 255;
+          my $itemRgb = sprintf("%d,%d,%d", $backGround, $backGround, $colorIntensity);
+          $itemRgb = sprintf("%d,%d,%d", $colorIntensity, $backGround, $backGround) if ($chrStrand eq "-");
+          my $popUp = sprintf("%d%% (%d / %d)", int($score/10), $aaCount->[$i], $sequenceCounted);
           local *BD = $outFiles[$i];
-          printf BD "%s\t%d\t%d\t\t%d\t%s\n", $chrName, $start, $end, $aaCount->[$i], $chrStrand;
+          printf BD "%s\t%d\t%d\t\t%d\t%s\t%d\t%d\t%s\t%s\n", $chrName, $start, $end, $score, $chrStrand, $start, $end, $itemRgb, $popUp;
         }
 #        printf " %d", $aaCount->[$i];
 #      } else {
@@ -183,6 +190,7 @@ sub outputCounts($$) {
 }
 
 my $prevLength = 0;
+my $skipSequence = 0;
 
 while (my $line = <FH>) {
   chomp $line;
@@ -195,11 +203,27 @@ while (my $line = <FH>) {
       }
       countAAs($prevLength, $aaSequence);
     }
+    $skipSequence = 0;
     my @a = split('\s+', $line);
     $aaLength = $a[1];
     $frame = $a[2];
     $lastFrame = $a[3];
     $aaSequence = "";
+    $sequenceName = $a[0];
+    $geneName = $a[0];
+    $geneName =~ s/^>//;
+    if ($geneName =~ m/^[a-z]/) {
+       $geneName=~ s/_.*//;
+    } else {
+       my @g = split('_', $geneName);
+       $geneName = sprintf("%s_%s", $g[0], $g[1]);
+    }
+    $sequenceName =~ s/^>${geneName}_//;
+    if ($sequenceName =~ m/Bacillus|E_coli/) {
+      $skipSequence = 1;
+#      printf STDERR "# skipping sequence: '$sequenceName' '$geneName'\n";
+      next;
+    }
 #    printf STDERR "# working: $a[0] length $aaLength\n";
     if ($a[0] =~ m/staAur2/) {
       outputCounts($prevLength, $geneName) if ($sequenceCounted);
@@ -207,9 +231,6 @@ while (my $line = <FH>) {
 #      printf STDERR "# reference staAur2, initialize counters\n";
       initCounters($aaLength);
       $prevLength = $aaLength;
-      $geneName = $a[0];
-      $geneName =~ s/_staAur2.*//;
-      $geneName =~ s/^>//;
       die "can not find cdsStart for gene '$geneName'" if (!defined($geneCdsStart{$geneName}));
       $cdsStart = $geneCdsStart{$geneName};
       $chrName = $a[4];	# e.g.  NC_007793v1:544-1905+
@@ -218,6 +239,7 @@ while (my $line = <FH>) {
       printf STDERR "# %s %d %s %s %d\n", $chrName, $cdsStart, $chrStrand, $geneName, $aaLength;
     }
   } else {
+    next if ($skipSequence);
     $aaSequence = sprintf("%s%s", $aaSequence, $line);
   }
 }

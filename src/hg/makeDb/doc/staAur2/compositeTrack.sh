@@ -11,7 +11,10 @@ group compGeno
 priority 4
 color 0,0,128
 altColor 128,0,0
-type bigBed 6 .
+type bigBed 9 +
+mouseOverField popUp
+itemRgb on
+labelOnFeature off
 sortOrder view=+
 html aaCounts
 
@@ -34,7 +37,8 @@ do
         subGroups view=aliHydro
         shortLabel ${aaa} - ${aa}
         longLabel ${aaa} - ${aa} amino acid profile 
-        type bigBed 6 .
+        type bigBed 9 +
+        bedNameLabel ${aaa} - ${aa}
 
 "
 done
@@ -56,7 +60,8 @@ do
         subGroups view=aroHydro
         shortLabel ${aaa} - ${aa}
         longLabel ${aaa} - ${aa} amino acid profile 
-        type bigBed 6 .
+        type bigBed 9 +
+        bedNameLabel ${aaa} - ${aa}
 
 "
 done
@@ -78,7 +83,8 @@ do
         subGroups view=neut
         shortLabel ${aaa} - ${aa}
         longLabel ${aaa} - ${aa} amino acid profile 
-        type bigBed 6 .
+        type bigBed 9 +
+        bedNameLabel ${aaa} - ${aa}
 
 "
 done
@@ -100,7 +106,8 @@ do
         subGroups view=pos
         shortLabel ${aaa} - ${aa}
         longLabel ${aaa} - ${aa} amino acid profile 
-        type bigBed 6 .
+        type bigBed 9 +
+        bedNameLabel ${aaa} - ${aa}
 
 "
 done
@@ -122,7 +129,8 @@ do
         subGroups view=neg
         shortLabel ${aaa} - ${aa}
         longLabel ${aaa} - ${aa} amino acid profile 
-        type bigBed 6 .
+        type bigBed 9 +
+        bedNameLabel ${aaa} - ${aa}
 
 "
 done
@@ -144,7 +152,8 @@ do
         subGroups view=unq
         shortLabel ${aaa} - ${aa}
         longLabel ${aaa} - ${aa} amino acid profile 
-        type bigBed 6 .
+        type bigBed 9 +
+        bedNameLabel ${aaa} - ${aa}
 
 "
 done
