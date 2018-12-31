@@ -9,7 +9,10 @@ group compGeno
 priority 4
 color 0,0,128
 altColor 128,0,0
-type bigBed 6 .
+type bigBed 9 +
+mouseOverField popUp
+itemRgb on
+labelOnFeature off
 sortOrder view=+
 html aaCounts
 
@@ -24,28 +27,32 @@ html aaCounts
         subGroups view=aliHydro
         shortLabel ALA - A
         longLabel ALA - A amino acid profile 
-        type bigBed 6 .
+        type bigBed 9 +
+        bedNameLabel ALA - A
 
         track aaCountsILE
         parent aaCountAliHydro
         subGroups view=aliHydro
         shortLabel ILE - I
         longLabel ILE - I amino acid profile 
-        type bigBed 6 .
+        type bigBed 9 +
+        bedNameLabel ILE - I
 
         track aaCountsLEU
         parent aaCountAliHydro
         subGroups view=aliHydro
         shortLabel LEU - L
         longLabel LEU - L amino acid profile 
-        type bigBed 6 .
+        type bigBed 9 +
+        bedNameLabel LEU - L
 
         track aaCountsVAL
         parent aaCountAliHydro
         subGroups view=aliHydro
         shortLabel VAL - V
         longLabel VAL - V amino acid profile 
-        type bigBed 6 .
+        type bigBed 9 +
+        bedNameLabel VAL - V
 
     track aaCountAroHydro
     shortLabel Aromatic Hydrophobic
@@ -58,21 +65,24 @@ html aaCounts
         subGroups view=aroHydro
         shortLabel PHE - F
         longLabel PHE - F amino acid profile 
-        type bigBed 6 .
+        type bigBed 9 +
+        bedNameLabel PHE - F
 
         track aaCountsTRP
         parent aaCountAroHydro
         subGroups view=aroHydro
         shortLabel TRP - W
         longLabel TRP - W amino acid profile 
-        type bigBed 6 .
+        type bigBed 9 +
+        bedNameLabel TRP - W
 
         track aaCountsTYR
         parent aaCountAroHydro
         subGroups view=aroHydro
         shortLabel TYR - Y
         longLabel TYR - Y amino acid profile 
-        type bigBed 6 .
+        type bigBed 9 +
+        bedNameLabel TYR - Y
 
     track aaCountNeutral
     shortLabel Neutral
@@ -85,42 +95,48 @@ html aaCounts
         subGroups view=neut
         shortLabel ASN - N
         longLabel ASN - N amino acid profile 
-        type bigBed 6 .
+        type bigBed 9 +
+        bedNameLabel ASN - N
 
         track aaCountsCYS
         parent aaCountNeutral
         subGroups view=neut
         shortLabel CYS - C
         longLabel CYS - C amino acid profile 
-        type bigBed 6 .
+        type bigBed 9 +
+        bedNameLabel CYS - C
 
         track aaCountsGLN
         parent aaCountNeutral
         subGroups view=neut
         shortLabel GLN - Q
         longLabel GLN - Q amino acid profile 
-        type bigBed 6 .
+        type bigBed 9 +
+        bedNameLabel GLN - Q
 
         track aaCountsMET
         parent aaCountNeutral
         subGroups view=neut
         shortLabel MET - M
         longLabel MET - M amino acid profile 
-        type bigBed 6 .
+        type bigBed 9 +
+        bedNameLabel MET - M
 
         track aaCountsSER
         parent aaCountNeutral
         subGroups view=neut
         shortLabel SER - S
         longLabel SER - S amino acid profile 
-        type bigBed 6 .
+        type bigBed 9 +
+        bedNameLabel SER - S
 
         track aaCountsTHR
         parent aaCountNeutral
         subGroups view=neut
         shortLabel THR - T
         longLabel THR - T amino acid profile 
-        type bigBed 6 .
+        type bigBed 9 +
+        bedNameLabel THR - T
 
     track aaCountPositive
     shortLabel Positive
@@ -133,21 +149,24 @@ html aaCounts
         subGroups view=pos
         shortLabel ARG - R
         longLabel ARG - R amino acid profile 
-        type bigBed 6 .
+        type bigBed 9 +
+        bedNameLabel ARG - R
 
         track aaCountsHIS
         parent aaCountPositive
         subGroups view=pos
         shortLabel HIS - H
         longLabel HIS - H amino acid profile 
-        type bigBed 6 .
+        type bigBed 9 +
+        bedNameLabel HIS - H
 
         track aaCountsLYS
         parent aaCountPositive
         subGroups view=pos
         shortLabel LYS - K
         longLabel LYS - K amino acid profile 
-        type bigBed 6 .
+        type bigBed 9 +
+        bedNameLabel LYS - K
 
     track aaCountNegative
     shortLabel Negative
@@ -160,14 +179,16 @@ html aaCounts
         subGroups view=neg
         shortLabel ASP - D
         longLabel ASP - D amino acid profile 
-        type bigBed 6 .
+        type bigBed 9 +
+        bedNameLabel ASP - D
 
         track aaCountsGLU
         parent aaCountNegative
         subGroups view=neg
         shortLabel GLU - E
         longLabel GLU - E amino acid profile 
-        type bigBed 6 .
+        type bigBed 9 +
+        bedNameLabel GLU - E
 
     track aaCountUnique
     shortLabel Unique
@@ -180,12 +201,14 @@ html aaCounts
         subGroups view=unq
         shortLabel GLY - G
         longLabel GLY - G amino acid profile 
-        type bigBed 6 .
+        type bigBed 9 +
+        bedNameLabel GLY - G
 
         track aaCountsPRO
         parent aaCountUnique
         subGroups view=unq
         shortLabel PRO - P
         longLabel PRO - P amino acid profile 
-        type bigBed 6 .
+        type bigBed 9 +
+        bedNameLabel PRO - P
 
