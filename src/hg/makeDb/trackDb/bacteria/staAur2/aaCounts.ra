@@ -1,0 +1,191 @@
+track aaCounts
+compositeTrack on
+shortLabel AA counts
+longLabel amino acid profile
+subGroup1 view Views aliHydro=Aliphatic_Hydrophic aroHydro=Aromatic_Hydrophic neut=Neutral pos=Positive neg=Negative unq=Unique
+dragAndDrop subTracks
+visibility dense
+group compGeno
+priority 4
+color 0,0,128
+altColor 128,0,0
+type bigBed 6 .
+sortOrder view=+
+html aaCounts
+
+    track aaCountAliHydro
+    shortLabel Aliphatic Hydrophobic
+    view aliHydro
+    visibility dense
+    parent aaCounts
+
+        track aaCountsALA
+        parent aaCountAliHydro
+        subGroups view=aliHydro
+        shortLabel ALA - A
+        longLabel ALA - A amino acid profile 
+        type bigBed 6 .
+
+        track aaCountsILE
+        parent aaCountAliHydro
+        subGroups view=aliHydro
+        shortLabel ILE - I
+        longLabel ILE - I amino acid profile 
+        type bigBed 6 .
+
+        track aaCountsLEU
+        parent aaCountAliHydro
+        subGroups view=aliHydro
+        shortLabel LEU - L
+        longLabel LEU - L amino acid profile 
+        type bigBed 6 .
+
+        track aaCountsVAL
+        parent aaCountAliHydro
+        subGroups view=aliHydro
+        shortLabel VAL - V
+        longLabel VAL - V amino acid profile 
+        type bigBed 6 .
+
+    track aaCountAroHydro
+    shortLabel Aromatic Hydrophobic
+    view aroHydro
+    visibility dense
+    parent aaCounts
+
+        track aaCountsPHE
+        parent aaCountAroHydro
+        subGroups view=aroHydro
+        shortLabel PHE - F
+        longLabel PHE - F amino acid profile 
+        type bigBed 6 .
+
+        track aaCountsTRP
+        parent aaCountAroHydro
+        subGroups view=aroHydro
+        shortLabel TRP - W
+        longLabel TRP - W amino acid profile 
+        type bigBed 6 .
+
+        track aaCountsTYR
+        parent aaCountAroHydro
+        subGroups view=aroHydro
+        shortLabel TYR - Y
+        longLabel TYR - Y amino acid profile 
+        type bigBed 6 .
+
+    track aaCountNeutral
+    shortLabel Neutral
+    view neut
+    visibility dense
+    parent aaCounts
+
+        track aaCountsASN
+        parent aaCountNeutral
+        subGroups view=neut
+        shortLabel ASN - N
+        longLabel ASN - N amino acid profile 
+        type bigBed 6 .
+
+        track aaCountsCYS
+        parent aaCountNeutral
+        subGroups view=neut
+        shortLabel CYS - C
+        longLabel CYS - C amino acid profile 
+        type bigBed 6 .
+
+        track aaCountsGLN
+        parent aaCountNeutral
+        subGroups view=neut
+        shortLabel GLN - Q
+        longLabel GLN - Q amino acid profile 
+        type bigBed 6 .
+
+        track aaCountsMET
+        parent aaCountNeutral
+        subGroups view=neut
+        shortLabel MET - M
+        longLabel MET - M amino acid profile 
+        type bigBed 6 .
+
+        track aaCountsSER
+        parent aaCountNeutral
+        subGroups view=neut
+        shortLabel SER - S
+        longLabel SER - S amino acid profile 
+        type bigBed 6 .
+
+        track aaCountsTHR
+        parent aaCountNeutral
+        subGroups view=neut
+        shortLabel THR - T
+        longLabel THR - T amino acid profile 
+        type bigBed 6 .
+
+    track aaCountPositive
+    shortLabel Positive
+    view pos
+    visibility dense
+    parent aaCounts
+
+        track aaCountsARG
+        parent aaCountPositive
+        subGroups view=pos
+        shortLabel ARG - R
+        longLabel ARG - R amino acid profile 
+        type bigBed 6 .
+
+        track aaCountsHIS
+        parent aaCountPositive
+        subGroups view=pos
+        shortLabel HIS - H
+        longLabel HIS - H amino acid profile 
+        type bigBed 6 .
+
+        track aaCountsLYS
+        parent aaCountPositive
+        subGroups view=pos
+        shortLabel LYS - K
+        longLabel LYS - K amino acid profile 
+        type bigBed 6 .
+
+    track aaCountNegative
+    shortLabel Negative
+    view neg
+    visibility dense
+    parent aaCounts
+
+        track aaCountsASP
+        parent aaCountNegative
+        subGroups view=neg
+        shortLabel ASP - D
+        longLabel ASP - D amino acid profile 
+        type bigBed 6 .
+
+        track aaCountsGLU
+        parent aaCountNegative
+        subGroups view=neg
+        shortLabel GLU - E
+        longLabel GLU - E amino acid profile 
+        type bigBed 6 .
+
+    track aaCountUnique
+    shortLabel Unique
+    view unq
+    visibility dense
+    parent aaCounts
+
+        track aaCountsGLY
+        parent aaCountUnique
+        subGroups view=unq
+        shortLabel GLY - G
+        longLabel GLY - G amino acid profile 
+        type bigBed 6 .
+
+        track aaCountsPRO
+        parent aaCountUnique
+        subGroups view=unq
+        shortLabel PRO - P
+        longLabel PRO - P amino acid profile 
+        type bigBed 6 .
+

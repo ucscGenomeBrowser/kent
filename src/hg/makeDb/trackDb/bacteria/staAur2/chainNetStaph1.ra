@@ -1,0 +1,1538 @@
+track staph1ChainNet
+compositeTrack on
+shortLabel Staph1 Chain/Net
+longLabel Staph1 Chain and Net Alignments 93-88 percent plus others
+subGroup1 view Views chain=Chains net=Nets
+subGroup2 species Species s000=Sa_ch22 s001=Sa_22_LA_562 s002=Sa_ch21 s003=Sa_M92 s004=Sa_5_3949 s005=Sa_FORC_039 s006=Sa_CFSAN007896 s007=Sa_FORC_012 s008=Sa_JH4899 s009=Sa_CN1 s010=Sa_SR434 s011=Sa_CC5 s012=Sa_FDAARGOS_159 s013=Sa_12_LA_293 s014=Sa_FORC_040 s015=Sa_NRS153 s016=Sa_FORC_001 s017=Sa_15_LA_305 s018=Sa_FDAARGOS_504 s019=Sa_TMUS2126 s020=Sa_TMUS2134 s021=Sa_CFSAN064038 s022=Sa_13_LA_301 s023=Sa_14_5418 s024=Sa_SA564 s025=Sa_21_LA_436 s026=Sa_8_LA_272 s027=Sa_20_LA_415 s028=Sa_AR_0470 s029=Sa_ED133 s030=Sa_TCH60 s031=Sa_2_LA_86 s032=Sa_3_LA_115 s033=Sa_ECT_R_2 s034=Sa_19_LA_388 s035=Sa_6_LA_232 s036=Sa_MOK063 s037=Sa_CFSAN018749 s038=Sa_2148N s039=Sa_NCTC10344 s040=Sa_MOK042 s041=Sa_CFSAN007851 s042=Sa_E16SA093 s043=Sa_ST228_16035 s044=Sa_ST228_10388 s045=Sa_ST228_10497 s046=Sa_ST228_15532 s047=Sa_ST228_18341 s048=Sa_55_99_44 s049=Sa_ST228_18583 s050=Sa_ST228_18412 s051=Sa_080880048_3 s052=Sa_101110051_1 s053=Sa_FDA209P s054=Sa_ATCC_6538 s055=Sa_SA268 s056=Sa_CMRSA_6 s057=Sa_XQ s058=Sa_CFSAN007847 s059=Sa_78 s060=Sa_BA01611 s061=Sa_ST772_MRSA_V_DAR4145 s062=Sa_AR_0469 s063=Sa_FORC_061 s064=Sa_ST398_S0385 s065=Sa_QD_CD9 s066=Sa_S_aureus_171 s067=Sa_101110041_3 s068=Sa_O17 s069=Sa_AR_475 s070=Sa_NRS143 s071=Sa_SA40TW s072=Sa_GD705 s073=Sa_13420 s074=Sa_CFBR_105 s075=Sa_NCTC13137 s076=Sa_GN1 s077=Sa_AR464 s078=Sa_277 s079=Sa_85 s080=Sa_F17SA003 s081=Sa_27 s082=Sa_O46 s083=Sa_No10 s084=Sa_08_02300 s085=Sa_502A_RN6607 s086=Sa_IT1_S s087=Sa_IT4_R s088=Sa_CFSAN007894 s089=Sa_RIVM3897 s090=Sa_AR_0471 s091=Sa_FDAARGOS_10 s092=Sa_08_02119 s093=Sa_NX_T55 s094=Sa_NCTC8325_2018 s095=Sa_HG001_RN1 s096=Sa_NCTC8325_2006 s097=Sa_O326 s098=Sa_AR466 s099=Sa_ILRI_Eymole1_1 s100=Sa_NRS149 s101=Sa_BB155 s102=Sa_Tager_104 s103=Sa_GD1539 s104=Sa_16_LA_309 s105=Sa_SJTUF_J27 s106=Sa_HZW450 s107=Sa_JMUB1273 s108=Sa_121560027_1 s109=Sa_LA_MRSA_ST398_E154 s110=Sa_45 s111=Sa_135 s112=Sa_PTDrAP2 s113=Sa_FDAARGOS_6 s114=Sa_EDCC5464 s115=Sa_ISU926_ST398 s116=Sa_SA957 s117=Sa_468 s118=Sa_466 s119=Sa_143 s120=Sa_M013 s121=Sa_08S00974 s122=Sa_NCTC5663 s123=Sa_ST20130942 s124=Sa_ST20130943 s125=Sa_NRS107 s126=Sa_RKI4 s127=Sa_JS395 s128=Sa_422 s129=Sa_128 s130=Sa_24117_WT s131=Sa_24117_REV s132=Sa_24117_SCV s133=Sa_GN3 s134=Sa_AUS0325 s135=Sa_ATCC_25923 s136=Sa_Seattle_1945_G477 s137=Sa_Seattle_1945_G478 s138=Sa_10_5235 s139=Sa_RIVM1295 s140=Sa_4_LA_208 s141=Sa_NCTC3761 s142=Sa_08BA02176 s143=Sa_GD1677 s144=Sa_1549_WT s145=Sa_1549_SCV s146=Sa_1549_REV s147=Sa_FDAARGOS_15 s148=Sa_CFSAN007883 s149=Sa_NCTC8726 s150=Sa_AR_0222 s151=Sa_FORC_026 s152=Sa_CFSAN064037 s153=Sa_RF122 s154=Sa_GD5 s155=Sa_FORC59 s156=Sa_SA40 s157=Sa_LGA251 s158=Sa_293G s159=Sa_NRS137 s160=Sa_NCTC9752 s161=Sa_71193 s162=Sa_K18 s163=Sa_K5 s164=Sa_RIVM1607 s165=Sa_VC40 s166=Sa_NRS133 s167=Sa_NRS146 s168=Sa_ST20130938 s169=Sa_ST20130939 s170=Sa_NCTC7485 s171=Sa_CFSAN018750 s172=Sa_55_2053 s173=Sa_80wphwpl_v1 s174=Sa_6850 s175=Sa_MCRF184 s176=Sa_K17 s177=Sa_ST20130940 s178=Sa_ST20130941 s179=Sa_CFSAN007835 s180=Sa_MS4 s181=Bacillus_subtilis_168 s182=E_coli_K_12_MG1655 s183=E_coli_O157_H7_Sakai_RIMD_0509952 s184=E_coli_UMN026 s185=E_coli_O83_H1_NRG_857C s186=E_coli_IAI39 s187=E_coli_O104_H4_2011C_3493
+subGroup3 clade Clade c00=percent93 c01=percent92 c02=percent91 c03=percent90 c04=percent88 c05=others
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+color 0,0,0
+altColor 255,255,0
+type bed 3
+chainLinearGap loose
+chainMinScore 5000
+dimensions dimensionX=clade dimensionY=species
+sortOrder species=+ view=+ clade=+
+configurable on
+html staph1ChainNet
+
+    track staph1ChainNetViewchain
+    shortLabel Chains
+    view chain
+    visibility pack
+    subTrack staph1ChainNet
+    spectrum on
+
+        track chainSa_ch22
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s000 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_ch22
+        otherDb Sa_ch22
+
+        track chainSa_22_LA_562
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s001 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_22_LA_562
+        otherDb Sa_22_LA_562
+
+        track chainSa_ch21
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s002 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_ch21
+        otherDb Sa_ch21
+
+        track chainSa_M92
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s003 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_M92
+        otherDb Sa_M92
+
+        track chainSa_5_3949
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s004 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_5_3949
+        otherDb Sa_5_3949
+
+        track chainSa_FORC_039
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s005 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_FORC_039
+        otherDb Sa_FORC_039
+
+        track chainSa_CFSAN007896
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s006 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_CFSAN007896
+        otherDb Sa_CFSAN007896
+
+        track chainSa_FORC_012
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s007 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_FORC_012
+        otherDb Sa_FORC_012
+
+        track chainSa_JH4899
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s008 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_JH4899
+        otherDb Sa_JH4899
+
+        track chainSa_CN1
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s009 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_CN1
+        otherDb Sa_CN1
+
+        track chainSa_SR434
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s010 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_SR434
+        otherDb Sa_SR434
+
+        track chainSa_CC5
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s011 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_CC5
+        otherDb Sa_CC5
+
+        track chainSa_FDAARGOS_159
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s012 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_FDAARGOS_159
+        otherDb Sa_FDAARGOS_159
+
+        track chainSa_12_LA_293
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s013 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_12_LA_293
+        otherDb Sa_12_LA_293
+
+        track chainSa_FORC_040
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s014 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_FORC_040
+        otherDb Sa_FORC_040
+
+        track chainSa_NRS153
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s015 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_NRS153
+        otherDb Sa_NRS153
+
+        track chainSa_FORC_001
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s016 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_FORC_001
+        otherDb Sa_FORC_001
+
+        track chainSa_15_LA_305
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s017 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_15_LA_305
+        otherDb Sa_15_LA_305
+
+        track chainSa_FDAARGOS_504
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s018 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_FDAARGOS_504
+        otherDb Sa_FDAARGOS_504
+
+        track chainSa_TMUS2126
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s019 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_TMUS2126
+        otherDb Sa_TMUS2126
+
+        track chainSa_TMUS2134
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s020 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_TMUS2134
+        otherDb Sa_TMUS2134
+
+        track chainSa_CFSAN064038
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s021 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_CFSAN064038
+        otherDb Sa_CFSAN064038
+
+        track chainSa_13_LA_301
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s022 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_13_LA_301
+        otherDb Sa_13_LA_301
+
+        track chainSa_14_5418
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s023 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_14_5418
+        otherDb Sa_14_5418
+
+        track chainSa_SA564
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s024 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_SA564
+        otherDb Sa_SA564
+
+        track chainSa_21_LA_436
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s025 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_21_LA_436
+        otherDb Sa_21_LA_436
+
+        track chainSa_8_LA_272
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s026 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_8_LA_272
+        otherDb Sa_8_LA_272
+
+        track chainSa_20_LA_415
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s027 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_20_LA_415
+        otherDb Sa_20_LA_415
+
+        track chainSa_AR_0470
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s028 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_AR_0470
+        otherDb Sa_AR_0470
+
+        track chainSa_ED133
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s029 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_ED133
+        otherDb Sa_ED133
+
+        track chainSa_TCH60
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s030 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_TCH60
+        otherDb Sa_TCH60
+
+        track chainSa_2_LA_86
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s031 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_2_LA_86
+        otherDb Sa_2_LA_86
+
+        track chainSa_3_LA_115
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s032 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_3_LA_115
+        otherDb Sa_3_LA_115
+
+        track chainSa_ECT_R_2
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s033 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_ECT_R_2
+        otherDb Sa_ECT_R_2
+
+        track chainSa_19_LA_388
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s034 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_19_LA_388
+        otherDb Sa_19_LA_388
+
+        track chainSa_6_LA_232
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s035 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_6_LA_232
+        otherDb Sa_6_LA_232
+
+        track chainSa_MOK063
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s036 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_MOK063
+        otherDb Sa_MOK063
+
+        track chainSa_CFSAN018749
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s037 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_CFSAN018749
+        otherDb Sa_CFSAN018749
+
+        track chainSa_2148N
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s038 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_2148N
+        otherDb Sa_2148N
+
+        track chainSa_NCTC10344
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s039 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_NCTC10344
+        otherDb Sa_NCTC10344
+
+        track chainSa_MOK042
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s040 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_MOK042
+        otherDb Sa_MOK042
+
+        track chainSa_CFSAN007851
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s041 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_CFSAN007851
+        otherDb Sa_CFSAN007851
+
+        track chainSa_E16SA093
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s042 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_E16SA093
+        otherDb Sa_E16SA093
+
+        track chainSa_ST228_16035
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s043 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_ST228_16035
+        otherDb Sa_ST228_16035
+
+        track chainSa_ST228_10388
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s044 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_ST228_10388
+        otherDb Sa_ST228_10388
+
+        track chainSa_ST228_10497
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s045 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_ST228_10497
+        otherDb Sa_ST228_10497
+
+        track chainSa_ST228_15532
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s046 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_ST228_15532
+        otherDb Sa_ST228_15532
+
+        track chainSa_ST228_18341
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s047 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_ST228_18341
+        otherDb Sa_ST228_18341
+
+        track chainSa_55_99_44
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s048 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_55_99_44
+        otherDb Sa_55_99_44
+
+        track chainSa_ST228_18583
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s049 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_ST228_18583
+        otherDb Sa_ST228_18583
+
+        track chainSa_ST228_18412
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s050 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_ST228_18412
+        otherDb Sa_ST228_18412
+
+        track chainSa_080880048_3
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s051 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_080880048_3
+        otherDb Sa_080880048_3
+
+        track chainSa_101110051_1
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s052 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_101110051_1
+        otherDb Sa_101110051_1
+
+        track chainSa_FDA209P
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s053 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_FDA209P
+        otherDb Sa_FDA209P
+
+        track chainSa_ATCC_6538
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s054 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_ATCC_6538
+        otherDb Sa_ATCC_6538
+
+        track chainSa_SA268
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s055 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_SA268
+        otherDb Sa_SA268
+
+        track chainSa_CMRSA_6
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s056 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_CMRSA_6
+        otherDb Sa_CMRSA_6
+
+        track chainSa_XQ
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s057 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_XQ
+        otherDb Sa_XQ
+
+        track chainSa_CFSAN007847
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s058 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_CFSAN007847
+        otherDb Sa_CFSAN007847
+
+        track chainSa_78
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s059 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_78
+        otherDb Sa_78
+
+        track chainSa_BA01611
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s060 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_BA01611
+        otherDb Sa_BA01611
+
+        track chainSa_ST772_MRSA_V_DAR4145
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s061 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_ST772_MRSA_V_DAR4145
+        otherDb Sa_ST772_MRSA_V_DAR4145
+
+        track chainSa_AR_0469
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s062 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_AR_0469
+        otherDb Sa_AR_0469
+
+        track chainSa_FORC_061
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s063 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_FORC_061
+        otherDb Sa_FORC_061
+
+        track chainSa_ST398_S0385
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s064 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_ST398_S0385
+        otherDb Sa_ST398_S0385
+
+        track chainSa_QD_CD9
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s065 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_QD_CD9
+        otherDb Sa_QD_CD9
+
+        track chainSa_S_aureus_171
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s066 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_S_aureus_171
+        otherDb Sa_S_aureus_171
+
+        track chainSa_101110041_3
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s067 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_101110041_3
+        otherDb Sa_101110041_3
+
+        track chainSa_O17
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s068 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_O17
+        otherDb Sa_O17
+
+        track chainSa_AR_475
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s069 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_AR_475
+        otherDb Sa_AR_475
+
+        track chainSa_NRS143
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s070 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_NRS143
+        otherDb Sa_NRS143
+
+        track chainSa_SA40TW
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s071 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_SA40TW
+        otherDb Sa_SA40TW
+
+        track chainSa_GD705
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s072 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_GD705
+        otherDb Sa_GD705
+
+        track chainSa_13420
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s073 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_13420
+        otherDb Sa_13420
+
+        track chainSa_CFBR_105
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s074 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_CFBR_105
+        otherDb Sa_CFBR_105
+
+        track chainSa_NCTC13137
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s075 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_NCTC13137
+        otherDb Sa_NCTC13137
+
+        track chainSa_GN1
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s076 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_GN1
+        otherDb Sa_GN1
+
+        track chainSa_AR464
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s077 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_AR464
+        otherDb Sa_AR464
+
+        track chainSa_277
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s078 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_277
+        otherDb Sa_277
+
+        track chainSa_85
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s079 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_85
+        otherDb Sa_85
+
+        track chainSa_F17SA003
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s080 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_F17SA003
+        otherDb Sa_F17SA003
+
+        track chainSa_27
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s081 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_27
+        otherDb Sa_27
+
+        track chainSa_O46
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s082 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_O46
+        otherDb Sa_O46
+
+        track chainSa_No10
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s083 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_No10
+        otherDb Sa_No10
+
+        track chainSa_08_02300
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s084 clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_08_02300
+        otherDb Sa_08_02300
+
+        track chainSa_502A_RN6607
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s085 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_502A_RN6607
+        otherDb Sa_502A_RN6607
+
+        track chainSa_IT1_S
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s086 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_IT1_S
+        otherDb Sa_IT1_S
+
+        track chainSa_IT4_R
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s087 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_IT4_R
+        otherDb Sa_IT4_R
+
+        track chainSa_CFSAN007894
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s088 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_CFSAN007894
+        otherDb Sa_CFSAN007894
+
+        track chainSa_RIVM3897
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s089 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_RIVM3897
+        otherDb Sa_RIVM3897
+
+        track chainSa_AR_0471
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s090 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_AR_0471
+        otherDb Sa_AR_0471
+
+        track chainSa_FDAARGOS_10
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s091 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_FDAARGOS_10
+        otherDb Sa_FDAARGOS_10
+
+        track chainSa_08_02119
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s092 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_08_02119
+        otherDb Sa_08_02119
+
+        track chainSa_NX_T55
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s093 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_NX_T55
+        otherDb Sa_NX_T55
+
+        track chainSa_NCTC8325_2018
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s094 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_NCTC8325_2018
+        otherDb Sa_NCTC8325_2018
+
+        track chainSa_HG001_RN1
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s095 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_HG001_RN1
+        otherDb Sa_HG001_RN1
+
+        track chainSa_NCTC8325_2006
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s096 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_NCTC8325_2006
+        otherDb Sa_NCTC8325_2006
+
+        track chainSa_O326
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s097 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_O326
+        otherDb Sa_O326
+
+        track chainSa_AR466
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s098 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_AR466
+        otherDb Sa_AR466
+
+        track chainSa_ILRI_Eymole1_1
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s099 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_ILRI_Eymole1_1
+        otherDb Sa_ILRI_Eymole1_1
+
+        track chainSa_NRS149
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s100 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_NRS149
+        otherDb Sa_NRS149
+
+        track chainSa_BB155
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s101 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_BB155
+        otherDb Sa_BB155
+
+        track chainSa_Tager_104
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s102 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_Tager_104
+        otherDb Sa_Tager_104
+
+        track chainSa_GD1539
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s103 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_GD1539
+        otherDb Sa_GD1539
+
+        track chainSa_16_LA_309
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s104 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_16_LA_309
+        otherDb Sa_16_LA_309
+
+        track chainSa_SJTUF_J27
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s105 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_SJTUF_J27
+        otherDb Sa_SJTUF_J27
+
+        track chainSa_HZW450
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s106 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_HZW450
+        otherDb Sa_HZW450
+
+        track chainSa_JMUB1273
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s107 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_JMUB1273
+        otherDb Sa_JMUB1273
+
+        track chainSa_121560027_1
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s108 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_121560027_1
+        otherDb Sa_121560027_1
+
+        track chainSa_LA_MRSA_ST398_E154
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s109 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_LA_MRSA_ST398_E154
+        otherDb Sa_LA_MRSA_ST398_E154
+
+        track chainSa_45
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s110 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_45
+        otherDb Sa_45
+
+        track chainSa_135
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s111 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_135
+        otherDb Sa_135
+
+        track chainSa_PTDrAP2
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s112 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_PTDrAP2
+        otherDb Sa_PTDrAP2
+
+        track chainSa_FDAARGOS_6
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s113 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_FDAARGOS_6
+        otherDb Sa_FDAARGOS_6
+
+        track chainSa_EDCC5464
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s114 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_EDCC5464
+        otherDb Sa_EDCC5464
+
+        track chainSa_ISU926_ST398
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s115 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_ISU926_ST398
+        otherDb Sa_ISU926_ST398
+
+        track chainSa_SA957
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s116 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_SA957
+        otherDb Sa_SA957
+
+        track chainSa_468
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s117 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_468
+        otherDb Sa_468
+
+        track chainSa_466
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s118 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_466
+        otherDb Sa_466
+
+        track chainSa_143
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s119 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_143
+        otherDb Sa_143
+
+        track chainSa_M013
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s120 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_M013
+        otherDb Sa_M013
+
+        track chainSa_08S00974
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s121 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_08S00974
+        otherDb Sa_08S00974
+
+        track chainSa_NCTC5663
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s122 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_NCTC5663
+        otherDb Sa_NCTC5663
+
+        track chainSa_ST20130942
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s123 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_ST20130942
+        otherDb Sa_ST20130942
+
+        track chainSa_ST20130943
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s124 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_ST20130943
+        otherDb Sa_ST20130943
+
+        track chainSa_NRS107
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s125 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_NRS107
+        otherDb Sa_NRS107
+
+        track chainSa_RKI4
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s126 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_RKI4
+        otherDb Sa_RKI4
+
+        track chainSa_JS395
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s127 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_JS395
+        otherDb Sa_JS395
+
+        track chainSa_422
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s128 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_422
+        otherDb Sa_422
+
+        track chainSa_128
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s129 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_128
+        otherDb Sa_128
+
+        track chainSa_24117_WT
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s130 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_24117_WT
+        otherDb Sa_24117_WT
+
+        track chainSa_24117_REV
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s131 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_24117_REV
+        otherDb Sa_24117_REV
+
+        track chainSa_24117_SCV
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s132 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_24117_SCV
+        otherDb Sa_24117_SCV
+
+        track chainSa_GN3
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s133 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_GN3
+        otherDb Sa_GN3
+
+        track chainSa_AUS0325
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s134 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_AUS0325
+        otherDb Sa_AUS0325
+
+        track chainSa_ATCC_25923
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s135 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_ATCC_25923
+        otherDb Sa_ATCC_25923
+
+        track chainSa_Seattle_1945_G477
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s136 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_Seattle_1945_G477
+        otherDb Sa_Seattle_1945_G477
+
+        track chainSa_Seattle_1945_G478
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s137 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_Seattle_1945_G478
+        otherDb Sa_Seattle_1945_G478
+
+        track chainSa_10_5235
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s138 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_10_5235
+        otherDb Sa_10_5235
+
+        track chainSa_RIVM1295
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s139 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_RIVM1295
+        otherDb Sa_RIVM1295
+
+        track chainSa_4_LA_208
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s140 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_4_LA_208
+        otherDb Sa_4_LA_208
+
+        track chainSa_NCTC3761
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s141 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_NCTC3761
+        otherDb Sa_NCTC3761
+
+        track chainSa_08BA02176
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s142 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_08BA02176
+        otherDb Sa_08BA02176
+
+        track chainSa_GD1677
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s143 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_GD1677
+        otherDb Sa_GD1677
+
+        track chainSa_1549_WT
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s144 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_1549_WT
+        otherDb Sa_1549_WT
+
+        track chainSa_1549_SCV
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s145 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_1549_SCV
+        otherDb Sa_1549_SCV
+
+        track chainSa_1549_REV
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s146 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_1549_REV
+        otherDb Sa_1549_REV
+
+        track chainSa_FDAARGOS_15
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s147 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_FDAARGOS_15
+        otherDb Sa_FDAARGOS_15
+
+        track chainSa_CFSAN007883
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s148 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_CFSAN007883
+        otherDb Sa_CFSAN007883
+
+        track chainSa_NCTC8726
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s149 clade=c02
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_NCTC8726
+        otherDb Sa_NCTC8726
+
+        track chainSa_AR_0222
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s150 clade=c02
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_AR_0222
+        otherDb Sa_AR_0222
+
+        track chainSa_FORC_026
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s151 clade=c02
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_FORC_026
+        otherDb Sa_FORC_026
+
+        track chainSa_CFSAN064037
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s152 clade=c02
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_CFSAN064037
+        otherDb Sa_CFSAN064037
+
+        track chainSa_RF122
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s153 clade=c02
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_RF122
+        otherDb Sa_RF122
+
+        track chainSa_GD5
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s154 clade=c02
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_GD5
+        otherDb Sa_GD5
+
+        track chainSa_FORC59
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s155 clade=c02
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_FORC59
+        otherDb Sa_FORC59
+
+        track chainSa_SA40
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s156 clade=c02
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_SA40
+        otherDb Sa_SA40
+
+        track chainSa_LGA251
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s157 clade=c02
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_LGA251
+        otherDb Sa_LGA251
+
+        track chainSa_293G
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s158 clade=c02
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_293G
+        otherDb Sa_293G
+
+        track chainSa_NRS137
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s159 clade=c02
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_NRS137
+        otherDb Sa_NRS137
+
+        track chainSa_NCTC9752
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s160 clade=c02
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_NCTC9752
+        otherDb Sa_NCTC9752
+
+        track chainSa_71193
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s161 clade=c02
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_71193
+        otherDb Sa_71193
+
+        track chainSa_K18
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s162 clade=c02
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_K18
+        otherDb Sa_K18
+
+        track chainSa_K5
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s163 clade=c02
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_K5
+        otherDb Sa_K5
+
+        track chainSa_RIVM1607
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s164 clade=c02
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_RIVM1607
+        otherDb Sa_RIVM1607
+
+        track chainSa_VC40
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s165 clade=c02
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_VC40
+        otherDb Sa_VC40
+
+        track chainSa_NRS133
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s166 clade=c02
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_NRS133
+        otherDb Sa_NRS133
+
+        track chainSa_NRS146
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s167 clade=c02
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_NRS146
+        otherDb Sa_NRS146
+
+        track chainSa_ST20130938
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s168 clade=c02
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_ST20130938
+        otherDb Sa_ST20130938
+
+        track chainSa_ST20130939
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s169 clade=c02
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_ST20130939
+        otherDb Sa_ST20130939
+
+        track chainSa_NCTC7485
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s170 clade=c02
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_NCTC7485
+        otherDb Sa_NCTC7485
+
+        track chainSa_CFSAN018750
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s171 clade=c02
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_CFSAN018750
+        otherDb Sa_CFSAN018750
+
+        track chainSa_55_2053
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s172 clade=c02
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_55_2053
+        otherDb Sa_55_2053
+
+        track chainSa_80wphwpl_v1
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s173 clade=c02
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_80wphwpl_v1
+        otherDb Sa_80wphwpl_v1
+
+        track chainSa_6850
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s174 clade=c02
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_6850
+        otherDb Sa_6850
+
+        track chainSa_MCRF184
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s175 clade=c03
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_MCRF184
+        otherDb Sa_MCRF184
+
+        track chainSa_K17
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s176 clade=c03
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_K17
+        otherDb Sa_K17
+
+        track chainSa_ST20130940
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s177 clade=c03
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_ST20130940
+        otherDb Sa_ST20130940
+
+        track chainSa_ST20130941
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s178 clade=c03
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_ST20130941
+        otherDb Sa_ST20130941
+
+        track chainSa_CFSAN007835
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s179 clade=c03
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_CFSAN007835
+        otherDb Sa_CFSAN007835
+
+        track chainSa_MS4
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s180 clade=c04
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sa_MS4
+        otherDb Sa_MS4
+
+        track chainBacillus_subtilis_168
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s181 clade=c05
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Bacillus_subtilis_168
+        otherDb Bacillus_subtilis_168
+
+        track chainE_coli_K_12_MG1655
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s182 clade=c05
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain E_coli_K_12_MG1655
+        otherDb E_coli_K_12_MG1655
+
+        track chainE_coli_O157_H7_Sakai_RIMD_0509952
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s183 clade=c05
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain E_coli_O157_H7_Sakai_RIMD_0509952
+        otherDb E_coli_O157_H7_Sakai_RIMD_0509952
+
+        track chainE_coli_UMN026
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s184 clade=c05
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain E_coli_UMN026
+        otherDb E_coli_UMN026
+
+        track chainE_coli_O83_H1_NRG_857C
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s185 clade=c05
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain E_coli_O83_H1_NRG_857C
+        otherDb E_coli_O83_H1_NRG_857C
+
+        track chainE_coli_IAI39
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s186 clade=c05
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain E_coli_IAI39
+        otherDb E_coli_IAI39
+
+        track chainE_coli_O104_H4_2011C_3493
+        subTrack staph1ChainNetViewchain off
+        subGroups view=chain species=s187 clade=c05
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain E_coli_O104_H4_2011C_3493
+        otherDb E_coli_O104_H4_2011C_3493
+
+    track staph1ChainNetViewnet
+    shortLabel Nets
+    view net
+    visibility dense
+    subTrack staph1ChainNet
+

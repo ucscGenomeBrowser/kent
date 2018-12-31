@@ -1581,8 +1581,14 @@ popd > /dev/null
     # some of these jobs get to be pretty large in memory
     para -ram=48g create jobList
     para try ... check ... push ... etc...
-XXX - running Wed Dec 19 16:02:07 PST 2018
-    # final result:
+    # re-run final result:
+# Completed: 617 of 617 jobs
+# CPU time in finished jobs:     802945s   13382.42m   223.04h    9.29d  0.025 y
+# IO & Wait Time:                  1714s      28.57m     0.48h    0.02d  0.000 y
+# Average job time:                1304s      21.74m     0.36h    0.02d
+# Longest finished job:           52168s     869.47m    14.49h    0.60d
+# Submission to last job:         52230s     870.50m    14.51h    0.60d
+    # first final result:
 # Completed: 617 of 617 jobs
 # CPU time in finished jobs:     929187s   15486.45m   258.11h   10.75d  0.029 y
 # IO & Wait Time:                  1793s      29.88m     0.50h    0.02d  0.000 y
@@ -1646,7 +1652,15 @@ runOne $(root1) {check out exists ../maf/$(root1).maf}
     para -ram=16g create jobList
     para try ... check ... push ... etc ...
     para -maxJob=32 push
-    # final result:
+    # re-run final result:
+# Completed: 1870 of 1870 jobs
+# CPU time in finished jobs:        212s       3.54m     0.06h    0.00d  0.000 y
+# IO & Wait Time:                  4987s      83.11m     1.39h    0.06d  0.000 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest finished job:              53s       0.88m     0.01h    0.00d
+# Submission to last job:            63s       1.05m     0.02h    0.00d
+
+    # first final result:
 # Completed: 1870 of 1870 jobs
 # CPU time in finished jobs:        212s       3.54m     0.06h    0.00d  0.000 y
 # IO & Wait Time:                  4691s      78.18m     1.30h    0.05d  0.000 y
@@ -1710,7 +1724,7 @@ runOne $(root1) {check out exists ../maf/$(root1).maf}
 
 
     time (cat /gbdb/dm6/multiz124way/maf/*.maf \
-        | hgLoadMafSummary -verbose=2 -minSize=124000 \
+        | hgLoadMafSummary -verbose=2 -minSize=30000 \
 	-mergeGap=1500 -maxSize=200000 dm6 multiz124waySummary stdin)
     # final result
 # Created 1080666 summary blocks from 290131112 components and 7161555 mafs from stdin
@@ -1739,7 +1753,7 @@ runOne $(root1) {check out exists ../maf/$(root1).maf}
 
 # loading the rBest summary:
     time (cat /gbdb/dm6/multiz124way/rBestNet/*.maf \
-        | hgLoadMafSummary -verbose=2 -minSize=124000 \
+        | hgLoadMafSummary -verbose=2 -minSize=30000 \
           -mergeGap=1500 -maxSize=200000 dm6 multiz124wayRbestSummary stdin)
 # Created 1104461 summary blocks from 331875476 components and 8256877 mafs from stdin
 # Loading into dm6 table multiz124wayRbestSummary...
@@ -1795,7 +1809,6 @@ do
 done
 
     # make sure they all are successful symLinks:
-    ls -ogrtL *.bed | wc -l
     ls -ogL nBedsDir/*.bed | wc -l
     # 124
 
@@ -1804,20 +1817,27 @@ done
     mkdir /hive/data/genomes/dm6/bed/multiz124way/anno/mafNet
     cd /hive/data/genomes/dm6/bed/multiz124way/anno/mafNet
     mkdir result
-    ln -s ../nBedsDir/*.len .
-    
+    ln -s ../nBedsDir/*.bed .
+    ln -s ../nBeds .
 
     printf '#LOOP
 mafAddIRows -nBeds=nBeds $(path1) /hive/data/genomes/dm6/dm6.2bit {check out line+ result/$(file1)}
 #ENDLOOP
 ' > template
 
-    ls ../../mafNet/*.maf > maf.list
+    ls ../../maf/*.maf > maf.list
     gensub2 maf.list single template jobList
     # these jobs require a lot of memory
     para -ram=48g create jobList
     para try ... check ...
     para push
+    # re-run final result
+# Completed: 595 of 595 jobs
+# CPU time in finished jobs:       5828s      97.14m     1.62h    0.07d  0.000 y
+# IO & Wait Time:                  1635s      27.24m     0.45h    0.02d  0.000 y
+# Average job time:                  13s       0.21m     0.00h    0.00d
+# Longest finished job:             751s      12.52m     0.21h    0.01d
+# Submission to last job:           816s      13.60m     0.23h    0.01d
     # final result
 # Completed: 595 of 595 jobs
 # CPU time in finished jobs:       5751s      95.85m     1.60h    0.07d  0.000 y
@@ -1847,6 +1867,9 @@ mafAddIRows -nBeds=nBeds $(path1) /hive/data/genomes/dm6/dm6.2bit {check out lin
 # Longest finished job:             954s      15.90m     0.27h    0.01d
 # Submission to last job:           959s      15.98m     0.27h    0.01d
 
+     du -hsc result
+    # 64G     result
+
      du -hsc */result
     # 67G     mafNet/result
     # 71G     rBestNet/result
@@ -1862,6 +1885,10 @@ mafAddIRows -nBeds=nBeds $(path1) /hive/data/genomes/dm6/dm6.2bit {check out lin
     #	where it is running.  Best to run this over in scratch.
     cd /dev/shm
 time hgLoadMaf -pathPrefix=/gbdb/dm6/multiz124way/maf dm6 multiz124way
+    # rerun final result
+# Loading multiz124way into database
+# Loaded 7161464 mafs in 595 files from /gbdb/dm6/multiz124way/maf
+# real    6m47.836s
     # final result
 # Loading multiz124way into database
 # Loaded 7166940 mafs in 595 files from /gbdb/dm6/multiz124way/maf
@@ -1883,8 +1910,17 @@ time hgLoadMaf -pathPrefix=/gbdb/dm6/multiz124way/synNet dm6 multiz124waySyn
 # -rw-rw-r-- 1  353703689 Nov 23 12:41 multiz124waySyn.tab
 
     time (cat /gbdb/dm6/multiz124way/maf/*.maf \
-        | hgLoadMafSummary -verbose=2 -minSize=124000 \
+        | hgLoadMafSummary -verbose=2 -minSize=30000 \
 	-mergeGap=1500 -maxSize=200000 dm6 multiz124waySummary stdin)
+    # re-run final result
+# Created 1152126 summary blocks from 293548283 components and 7161464 mafs from stdin
+# Loading into dm6 table multiz124waySummary...
+# real    12m3.744s
+# -rw-rw-r-- 1 373058484 Dec 20 10:06 multiz124way.tab
+# -rw-rw-r-- 1  63513336 Dec 20 10:26 multiz124waySummary.tab
+#   7161464 multiz124way.tab
+#   1152126 multiz124waySummary.tab
+
      # final set:
 # Created 1080666 summary blocks from 290131112 components and 7166940 mafs from stdin
 # Loading into dm6 table multiz124waySummary...
@@ -1894,7 +1930,7 @@ time hgLoadMaf -pathPrefix=/gbdb/dm6/multiz124way/synNet dm6 multiz124waySyn
 
 
     time (cat /gbdb/dm6/multiz124way/mafNet/*.maf \
-        | hgLoadMafSummary -verbose=2 -minSize=124000 \
+        | hgLoadMafSummary -verbose=2 -minSize=30000 \
 	-mergeGap=1500 -maxSize=200000 dm6 multiz124wayMafNetSummary stdin)
 # Created 1104780 summary blocks from 312007602 components and 7575770 mafs from stdin
 # Loading into dm6 table multiz124wayMafNetSummary...
@@ -1903,7 +1939,7 @@ time hgLoadMaf -pathPrefix=/gbdb/dm6/multiz124way/synNet dm6 multiz124waySyn
 # -rw-rw-r-- 1   61141637 Nov 23 13:27 multiz124wayMafNetSummary.tab
 
     time (cat /gbdb/dm6/multiz124way/rBestNet/*.maf \
-        | hgLoadMafSummary -verbose=2 -minSize=124000 \
+        | hgLoadMafSummary -verbose=2 -minSize=30000 \
 	-mergeGap=1500 -maxSize=200000 dm6 multiz124wayRbestSummary stdin)
 # Created 1104461 summary blocks from 331875476 components and 8266734 mafs from stdin
 # Loading into dm6 table multiz124wayRbestSummary...
@@ -1912,7 +1948,7 @@ time hgLoadMaf -pathPrefix=/gbdb/dm6/multiz124way/synNet dm6 multiz124waySyn
 # -rw-rw-r-- 1   61130011 Nov 23 13:41 multiz124wayRbestSummary.tab
 
     time (cat /gbdb/dm6/multiz124way/synNet/*.maf \
-        | hgLoadMafSummary -verbose=2 -minSize=124000 \
+        | hgLoadMafSummary -verbose=2 -minSize=30000 \
 	-mergeGap=1500 -maxSize=200000 dm6 multiz124waySynSummary stdin)
 # Created 953395 summary blocks from 258483767 components and 6807137 mafs from stdin
 # Loading into dm6 table multiz124waySynSummary...
@@ -1946,6 +1982,7 @@ foreach db (`cat ../species.list | tr " " "\\n" | grep -v "^[A-Z]"`)
     set tables = `hgsql $db -N -e "show tables" | egrep "Gene|ncbiRefSeq"`
     foreach table ($tables)
         if ($table == "ensGene" || $table == "refGene" || \
+           $table == "augustusGene" || \
            $table == "ncbiRefSeq" || $table == "mgcGenes" || \
            $table == "knownGene" || $table == "xenoRefGene" ) then
            set count = `hgsql $db -N -e "select count(*) from $table"`
@@ -1958,16 +1995,37 @@ end
 
     chmod +x ./showGenes.csh
     time ./showGenes.csh
-# dm6: ensGene: 34729, ncbiRefSeq: 34111, refGene: 36168, xenoRefGene: 54307, 
-# droSec1: xenoRefGene: 252243, 
-# droPer1: ncbiRefSeq: 17352, xenoRefGene: 248816, 
-# droEre2: ensGene: 15902, 
-# droAna3: ensGene: 16061, 
+# dm6: augustusGene: 13509, ensGene: 34729, ncbiRefSeq: 34111, refGene: 36168, xenoRefGene: 54334, 
+# droSim2: augustusGene: 11111, 
+# droSec1: augustusGene: 14775, xenoRefGene: 252305, 
+# droEre2: augustusGene: 13891, ensGene: 15902, 
+# droYak3: augustusGene: 12910, 
+# droFic2: augustusGene: 12722, 
+# droEug2: augustusGene: 11661, 
+# droBia2: augustusGene: 12104, 
+# droSuz1: augustusGene: 13399, 
+# droTak2: augustusGene: 13592, 
+# droEle2: augustusGene: 11875, 
+# droRho2: augustusGene: 15291, 
+# droKik2: augustusGene: 12667, 
+# droAna3: augustusGene: 15438, ensGene: 16061, 
+# droBip2: augustusGene: 11931, 
+# droVir3: augustusGene: 13122, 
+# droMoj3: augustusGene: 12857, 
+# droGri2: augustusGene: 13386, 
+# droMir2: augustusGene: 10051, 
+# droPer1: augustusGene: 15909, ncbiRefSeq: 17352, xenoRefGene: 248917, 
+# droPse3: augustusGene: 11267, 
+# droAlb1: augustusGene: 13563, 
+# droWil2: augustusGene: 8361, 
+# triCas2: augustusGene: 9060, 
+# apiMel4: augustusGene: 8898, 
 
     # from that summary, use these gene sets:
     # ensGene - dm6 droEre2 droAna3
     # ncbiRefSeq - droPer1
-    # xenoRefGene - droSec1
+    # augustusGene - droSim2 droSec1 droYak3 droFic2 droEug2 droBia2 droSuz1 droTak2 droEle2 droRho2 droKik2 droBip2 droVir3 droMoj3 droGri2 droMir2 droPse3 droAlb1 droWil2 triCas2 apiMel4
+
 
     mkdir genes
 
@@ -2002,18 +2060,41 @@ done
 # droPer1: checked: 16815 failed: 0
 
     # 3. xenoRefGene for droSec1
-    for DB in droSec1
+    # 3. augustusGene - droSim2 droSec1 droYak3 droFic2 droEug2 droBia2
+    #    droSuz1 droTak2 droEle2 droRho2 droKik2 droBip2 droVir3 droMoj3
+    #    droGri2 droMir2 droPse3 droAlb1 droWil2 triCas2 apiMel4
+    for DB in droSim2 droSec1 droYak3 droFic2 droEug2 droBia2 droSuz1 droTak2 droEle2 droRho2 droKik2 droBip2 droVir3 droMoj3 droGri2 droMir2 droPse3 droAlb1 droWil2 triCas2 apiMel4
 do
     hgsql -N -e "select
 name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds
-from xenoRefGene" ${DB} \
+from augustusGene" ${DB} \
       | genePredSingleCover stdin stdout | gzip -2c \
         > /dev/shm/${DB}.tmp.gz
     mv /dev/shm/${DB}.tmp.gz genes/$DB.gp.gz
     echo -n "# ${DB}: "
     genePredCheck -db=${DB} genes/${DB}.gp.gz
 done
-# droSec1: checked: 13077 failed: 0
+# droSim2: checked: 8166 failed: 0
+# droSec1: checked: 12033 failed: 0
+# droYak3: checked: 9828 failed: 0
+# droFic2: checked: 9732 failed: 0
+# droEug2: checked: 8739 failed: 0
+# droBia2: checked: 9234 failed: 0
+# droSuz1: checked: 10126 failed: 0
+# droTak2: checked: 10562 failed: 0
+# droEle2: checked: 9127 failed: 0
+# droRho2: checked: 11806 failed: 0
+# droKik2: checked: 9669 failed: 0
+# droBip2: checked: 9034 failed: 0
+# droVir3: checked: 10356 failed: 0
+# droMoj3: checked: 10152 failed: 0
+# droGri2: checked: 10515 failed: 0
+# droMir2: checked: 7261 failed: 0
+# droPse3: checked: 8346 failed: 0
+# droAlb1: checked: 9901 failed: 0
+# droWil2: checked: 6189 failed: 0
+# triCas2: checked: 6432 failed: 0
+# apiMel4: checked: 5806 failed: 0
 
     # verify counts for genes are reasonable:
     for T in genes/*.gz
@@ -2021,10 +2102,31 @@ do
     echo -n "# $T: "
     zcat $T | cut -f1 | sort | uniq -c | wc -l
 done
+# genes/apiMel4.gp.gz: 5806
 # genes/dm6.gp.gz: 13860
+# genes/droAlb1.gp.gz: 9901
 # genes/droAna3.gp.gz: 15022
+# genes/droBia2.gp.gz: 9234
+# genes/droBip2.gp.gz: 9034
+# genes/droEle2.gp.gz: 9127
 # genes/droEre2.gp.gz: 14992
-# genes/droSec1.gp.gz: 12380
+# genes/droEug2.gp.gz: 8739
+# genes/droFic2.gp.gz: 9732
+# genes/droGri2.gp.gz: 10515
+# genes/droKik2.gp.gz: 9669
+# genes/droMir2.gp.gz: 7261
+# genes/droMoj3.gp.gz: 10152
+# genes/droPer1.gp.gz: 16815
+# genes/droPse3.gp.gz: 8346
+# genes/droRho2.gp.gz: 11806
+# genes/droSec1.gp.gz: 12033
+# genes/droSim2.gp.gz: 8166
+# genes/droSuz1.gp.gz: 10126
+# genes/droTak2.gp.gz: 10562
+# genes/droVir3.gp.gz: 10356
+# genes/droWil2.gp.gz: 6189
+# genes/droYak3.gp.gz: 9828
+# genes/triCas2.gp.gz: 6432
 
     # kluster job to annotate each maf file
     screen -S dm6      # manage long running procedure with screen
@@ -2054,12 +2156,12 @@ runOne $(root1) $(root2) {check out exists+ parts/$(root1).$(root2).mafFrames.gz
     gensub2 chr.list gene.list template jobList
     para -ram=64g create jobList
     para try ... check ... push
-# Completed: 2975 of 2975 jobs
-# CPU time in finished jobs:       2426s      40.43m     0.67h    0.03d  0.000 y
-# IO & Wait Time:                  7217s     120.29m     2.00h    0.08d  0.000 y
-# Average job time:                   3s       0.05m     0.00h    0.00d
-# Longest finished job:             100s       1.67m     0.03h    0.00d
-# Submission to last job:           135s       2.25m     0.04h    0.00d
+# Completed: 14875 of 14875 jobs
+# CPU time in finished jobs:      12939s     215.65m     3.59h    0.15d  0.000 y
+# IO & Wait Time:                 37740s     629.00m    10.48h    0.44d  0.001 y
+# Average job time:                   3s       0.06m     0.00h    0.00d
+# Longest finished job:             122s       2.03m     0.03h    0.00d
+# Submission to last job:           444s       7.40m     0.12h    0.01d
 
     # collect all results into one file:
     cd /hive/data/genomes/dm6/bed/multiz124way/frames
@@ -2068,7 +2170,9 @@ do
     echo "${F}" 1>&2
     zcat ${F}
 done | sort -k1,1 -k2,2n > multiz124wayFrames.bed
-    # real    0m22.007s
+    # real    1m37.610s
+
+    # -rw-rw-r-- 1 176353464 Dec 20 11:01 multiz124wayFrames.bed
 
     # -rw-rw-r-- 1 34902139 Nov 25 21:16 multiz124wayFrames.bed
     # -rw-rw-r-- 1 39202611 Nov 25 21:50 multiz124wayMafNetFrames.bed
@@ -2076,17 +2180,37 @@ done | sort -k1,1 -k2,2n > multiz124wayFrames.bed
 
     gzip multiz124wayFrames.bed
 
-    # verify there are frames on everything, should be 5 species:
+    # verify there are frames on everything, should be 25 species:
     # (count from: ls genes | wc)
     zcat multiz124wayFrames.bed.gz | awk '{print $4}' | sort | uniq -c \
         | sed -e 's/^/# /;' > species.check.list
     wc -l species.check.list
-    # 5
+    # 25
+#  171767 apiMel4
 #   54977 dm6
-#  139381 droAna3
-#  104520 droEre2
-#  183211 droPer1
-#   84299 droSec1
+#  155374 droAlb1
+#  117551 droAna3
+#   82885 droBia2
+#  133429 droBip2
+#  100551 droEle2
+#   76496 droEre2
+#   89986 droEug2
+#  101437 droFic2
+#  144992 droGri2
+#  133679 droKik2
+#  131613 droMir2
+#  138524 droMoj3
+#  198957 droPer1
+#  130849 droPse3
+#  101789 droRho2
+#   66077 droSec1
+#   60200 droSim2
+#  104050 droSuz1
+#  115922 droTak2
+#  141554 droVir3
+#  106137 droWil2
+#   66648 droYak3
+#  277959 triCas2
 
     # mafNet:
 #   54976 dm6
@@ -2113,19 +2237,20 @@ done | sort -k1,1 -k2,2n > multiz124wayFrames.bed
     ssh hgwdev
     cd /hive/data/genomes/dm6/bed/multiz124way/frames
     time hgLoadMafFrames dm6 multiz124wayFrames multiz124wayFrames.bed.gz
-    #   real    0m3.547s
+    #   real    0m17.036s
 
 
     hgsql -e 'select count(*) from multiz124wayFrames;' dm6
     # +----------+
     # | count(*) |
     # +----------+
-    # |   566388 |
+    # |  3003403 |
     # +----------+
 
+
     time featureBits -countGaps dm6 multiz124wayFrames
-    # 23808691 bases of 143726002 (16.565%) in intersection
-    # real    0m3.486s
+    # 27774049 bases of 143726002 (19.324%) in intersection
+    # real    0m14.701s
 
     #   enable the trackDb entries:
 # frames multiz124wayFrames
@@ -2139,9 +2264,9 @@ done | sort -k1,1 -k2,2n > multiz124wayFrames.bed
     cd /hive/data/genomes/dm6/bed/multiz124way/4d
 
     # the annotated maf's are in:
-    ../anno/maf/result
+    ../anno/mafNet/result
 
-    # using knownGene for dm6, only transcribed genes and nothing
+    # using ncbiRefSeq for dm6, only transcribed genes and nothing
     #	from the randoms and other misc.
     hgsql -Ne "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ncbiRefSeq where cdsEnd > cdsStart;" dm6 \
       | egrep -E -v "chrM|chrUn|random|_alt" > ncbiRefSeq.gp
@@ -2174,7 +2299,7 @@ done | sort -k1,1 -k2,2n > multiz124wayFrames.bed
 set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
 set r = "/hive/data/genomes/dm6/bed/multiz124way"
 set c = $1
-set infile = $r/anno/result/$2
+set infile = $r/anno/mafNet/result/$2
 set outfile = $3
 cd /dev/shm
 # 'clean' maf, removes all chrom names, leaves only the db name
@@ -2192,10 +2317,10 @@ rm -f $c.gp $c.maf $c.ss
     # << happy emacs
     chmod +x 4d.csh
 
-    ../anno/maf/result
+    ../anno/mafNet/result
 
-    ls -1S /hive/data/genomes/dm6/bed/multiz124way/anno/maf/result/*.maf \
-	| sed -e "s#.*multiz124way/anno/maf/result/##" \
+    ls -1S /hive/data/genomes/dm6/bed/multiz124way/anno/mafNet/result/*.maf \
+	| sed -e "s#.*multiz124way/anno/mafNet/result/##" \
         | egrep -E -v "chrM|chrUn|random|_alt" > maf.list
 
     printf '#LOOP
@@ -2208,185 +2333,216 @@ rm -f $c.gp $c.maf $c.ss
     para try ... check ... push ... etc...
     para time
 # Completed: 7 of 7 jobs
-# CPU time in finished jobs:       2365s      39.42m     0.66h    0.03d  0.000 y
-# IO & Wait Time:                    11s       0.18m     0.00h    0.00d  0.000 y
-# Average job time:                 339s       5.66m     0.09h    0.00d
-# Longest finished job:             580s       9.67m     0.16h    0.01d
-# Submission to last job:           591s       9.85m     0.16h    0.01d
+# CPU time in finished jobs:       2350s      39.17m     0.65h    0.03d  0.000 y
+# IO & Wait Time:                    19s       0.32m     0.01h    0.00d  0.000 y
+# Average job time:                 338s       5.64m     0.09h    0.00d
+# Longest finished job:             581s       9.68m     0.16h    0.01d
+# Submission to last job:           585s       9.75m     0.16h    0.01d
 
     # combine mfa files
     ssh hgwdev
     cd /hive/data/genomes/dm6/bed/multiz124way/4d
     # verify no tiny files:
     ls -og mfa | sort -k3nr | tail -2
-    #	-rw-rw-r-- 1 5543614 Nov 26 12:02 chr3R.mfa
-    #	-rw-rw-r-- 1 4591790 Nov 26 12:00 chr2R.mfa
-    #	-rw-rw-r-- 1 4516274 Nov 26 12:00 chr3L.mfa
-    #	-rw-rw-r-- 1 4107446 Nov 26 12:00 chr2L.mfa
-    #	-rw-rw-r-- 1 3849898 Nov 26 11:59 chrX.mfa
-    #	-rw-rw-r-- 1  203182 Nov 26 11:53 chr4.mfa
-    #	-rw-rw-r-- 1   43966 Nov 26 11:53 chrY.mfa
+    # -rw-rw-r-- 1 5403742 Dec 20 11:21 chr3R.mfa
+    # -rw-rw-r-- 1 4512306 Dec 20 11:19 chr2R.mfa
+    # -rw-rw-r-- 1 4429846 Dec 20 11:19 chr3L.mfa
+    # -rw-rw-r-- 1 4037634 Dec 20 11:19 chr2L.mfa
+    # -rw-rw-r-- 1 3791866 Dec 20 11:18 chrX.mfa
+    # -rw-rw-r-- 1  197230 Dec 20 11:12 chr4.mfa
+    # -rw-rw-r-- 1   40742 Dec 20 11:12 chrY.mfa
 
     #want comma-less species.list
     time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
 	--aggregate "`cat ../species.list`" mfa/*.mfa | sed s/"> "/">"/ \
 	    > 4d.all.mfa
-    # real    0m0.884s
+    # real    0m1.068s
 
     # check they are all in there:
     grep "^>" 4d.all.mfa | wc -l
     #   124
 
     # remove the :0.1 distances from the nh tree:
-    sed -e 's/:0.1//g;' ../dm6.124way.speciesName.nh > tree-commas.nh
+    sed -e 's/:[0-9]\+.[0-9]\+//g;' ../dm6.124way.nh > tree-commas.nh
 
     # use phyloFit to create tree model (output is phyloFit.mod)
     time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
 	    --EM --precision MED --msa-format FASTA --subst-mod REV \
 		--tree tree-commas.nh 4d.all.mfa
-    #   real    129m47.846s
+    #   real    69m1.032s
 
     mv phyloFit.mod all.mod
 
-    # after rearranging the tree to be more display friendly:
+    grep TREE all.mod | sed -e 's/TREE: //;' \
+      | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+          > dm6.4d.nh
 
-# ((((((((((((D_melanogaster:0.114107,
-#            (D_miranda:0.015580,
-#             (D_mojavensis:0.939775,
-#              (D_navojoa:0.929147,
-#               (D_persimilis:0.021939,
-#                ((D_pseudoobscura:0.009189,
-#                  D_pseudoobscura_1:0.031741):0.004264,
-#                 (D_sechellia:0.022232,
-#                  (D_simulans:0.019437,
-#                   (D_subobscura:0.715370,
-#                    (D_virilis:0.883894,
-#                     (D_yakuba:0.124411,
-#                      (D_athabasca:0.484091,
-#                       (D_willistoni:0.874110,
-#                        (D_arizonae:0.724721,
-#                         (D_serrata:0.446719,
-#                          (D_obscura:0.487386,
-#                           (D_albomicans:0.785218,
-#                            (D_suzukii:0.201400,
-#                             (D_eugracilis:0.359758,
-#                              (D_takahashii:0.196207,
-#                               (D_busckii:0.898062,
-#                                (D_elegans:0.207441,
-#                                 (D_ficusphila:0.289395,
-#                                  (D_kikkawai:0.302963,
-#                                   (D_americana:0.021567,
-#                                    (D_montana:0.113441,
-#                                     (D_bipectinata:1.130060,
-#                                      (D_nasuta:0.759403,
-#                                       (D_novamexicana:0.012500,
-#                                        (D_biarmipes:0.221826,
-#                                         (D_rhopaloa:0.258034,
-#                                          (Scaptodrosophila_lebanonensis:0.606778,
-#                                           (Phortica_variegata:0.856583,
-#                                            Zaprionus_indianus:0.421888):0.097813):0.387770):0.002045):0.711987):0.002239):0.002210):0.002222):0.002134):0.677974):0.119708):0.015058):0.002171):0.036502):0.005818):0.002248):0.125256):0.002227):0.002109):0.002168):0.002219):0.002202):0.189163):0.002110):0.001757):0.108631):0.002171):0.879601):0.002255):0.009543):0.002102):0.002158):0.772378):0.002187,
-#           D_hydei:1.014730):0.002089,
-#          D_grimshawi:0.941939):0.002030,
-#         D_erecta:0.109391):0.230494,
-#        D_ananassae:0.509167):0.917125,
-#       ((Haematobia_irritans:0.404383,
-#         (Stomoxys_calcitrans:0.401004,
-#          M_domestica:0.465012):0.030948):0.181924,
-#        ((Calliphora_vicina:0.239691,
-#          (Phormia_regina:0.278317,
-#           (Lucilia_sericata:0.087468,
-#            Lucilia_cuprina:0.088001):0.158896):0.005159):0.186205,
-#         ((Sarcophagidae_BV_2014:0.467027,
-#           Neobellieria_bullata:0.437862):0.043422,
-#          (((Glossina_morsitans_2:0.005129,
-#             Glossina_morsitans_1:0.011288):0.023794,
-#            (Glossina_austeni:0.051900,
-#             (Glossina_pallidipes:0.032225,
-#              (Glossina_brevipalpis:0.334883,
-#               (Glossina_palpalis_gambiensis:0.011451,
-#                (Glossina_fuscipes:0.006627,
-#                 (Mayetiola_destructor:0.573306,
-#                  (Megaselia_abdita:0.423730,
-#                   Megaselia_scalaris:0.328525):0.385678):0.941840):0.002230):0.065678):0.034136):0.002129):0.006115):0.736405,
-#           ((Teleopsis_dalmanni:0.477396,
-#             (Sphyracephala_brevicornis:0.532282,
-#              (Coboldia_fuscipes:0.482302,
-#               Culicoides_sonorensis:0.547423):0.173733):0.002225):0.140141,
-#            (Liriomyza_trifolii:0.822419,
-#             (Chaoborus_trivitattus:0.835956,
-#              (Mochlonyx_cinctipes:1.033420,
-#               (Themira_minor:2.039580,
-#                (Tipula_oleracea:0.768930,
-#                 (Hermetia_illucens:1.013830,
-#                  (Paykullia_maculata:0.551777,
-#                   (Eristalis_dimidiata:1.030550,
-#                    (Condylostylus_patibulatus:0.534540,
-#                     (A_mellifera:0.871215,
-#                      (Ephydra_gracilis:0.271046,
-#                       (Cirrula_hians:0.225590,
-#                        (Trichoceridae_BV_2014:0.250828,
-#                         (Proctacanthus_coquilletti:0.759192,
-#                          Holcocephala_fusca:0.317250):0.187419):0.715976):0.002071):0.493755):0.079616):0.014870):0.051295):0.002092):0.002175):0.002038):0.002063):0.002030):0.002188):0.002245):0.116633):0.089399):0.003074):0.084295):0.249151):0.246438,
-#      (Bactrocera_dorsalis:0.045606,
-#       (Bactrocera_tryoni:0.060154,
-#        (Bactrocera_oleae:0.152791,
-#         (Bactrocera_latifrons:0.063471,
-#          (Zeugodacus_cucurbitae:0.163723,
-#           (Rhagoletis_zephyria:0.384024,
-#            (Tephritis_californica:0.153505,
-#             (Trupanea_jonesi:0.206490,
-#              Eutreta_diana:0.241612):0.002233):0.303752):0.237317):0.131580):0.002106):0.009433):0.007355):0.337748):0.002090,
-#     Ceratitis_capitata:0.338075):0.570744,
-#    (Lutzomyia_longipalpis:0.474549,
-#     (Clogmia_albipunctata:1.275610,
-#      Phlebotomus_papatasi:0.374721):0.109111):0.436354):0.150416,
-#   (Aedes_aegypti:0.169997,
-#    (Aedes_albopictus:0.202992,
-#     (Culex_quinquefasciatus:0.385184,
-#      ((A_gambiae:0.016631,
-#        A_gambiae_1:0.057342):0.004340,
-#       (A_albimanus:0.912687,
-#        (A_dirus:0.614137,
-#         (A_arabiensis:0.021712,
-#          (A_koliensis:0.687084,
-#           (A_merus:0.038508,
-#            (A_punctulatus:0.687121,
-#             (A_stephensi:0.609085,
-#              (A_melas:0.045102,
-#               (A_quadriannulatus:0.023445,
-#                (A_atroparvus:0.559762,
-#                 (A_aquasalis:0.602981,
-#                  (A_christyi:0.362563,
-#                   (A_darlingi:0.623690,
-#                    (A_farauti_No4:0.370477,
-#                     (A_funestus:0.371135,
-#                      (A_farauti:0.357872,
-#                       (A_maculatus:0.365995,
-#                        (A_sinensis:0.622635,
-#                         (A_minimus:0.327246,
-#                          (A_cracens:0.402964,
-#                           (A_culicifacies:0.347253,
-#                            (A_nili:0.679175,
-#                             (A_coluzzii:0.232353,
-#                              A_epiroticus:0.296093):0.105861):0.040457):0.002093):0.002239):0.012135):0.002213):0.029698):0.002205):0.002085):0.109249):0.002191):0.002140):0.037975):0.224786):0.002223):0.002108):0.002156):0.002144):0.002219):0.005113):0.002204):0.002254):0.002048):0.787345):0.484801):0.123874):0.836299):0.229909,
-#  (Chironomus_tentans:0.122018,
-#   (Chironomus_riparius:0.123408,
-#    (Clunio_marinus:0.382428,
-#     Belgica_antarctica:0.838802):0.394452):0.009211):0.533136):0.781543,
-# T_castaneum:0.781543):0.1:0.1;
+    sed -e 's/^/# /;' dm6.4d.nh
+# (((((((((((((((((((((((((((((((((dm6:0.0551579,
+#                                 (droSim2:0.0194173,
+#                                 droSec1:0.0230825):0.0247225):0.0766663,
+#                                droEre2:0.0817568):0.00847834,
+#                               droYak3:0.0873846):0.188293,
+#                              droFic2:0.302548):0.00737577,
+#                             droEug2:0.334652):0.0157182,
+#                            (((droBia2:0.12096,
+#                              droSuz1:0.100623):0.0671379,
+#                             droTak2:0.173958):0.0538078,
+#                            (droEle2:0.146525,
+#                            droRho2:0.152335):0.0844285):0.00593118):0.164067,
+#                           (D_serrata:0.178597,
+#                           droKik2:0.134738):0.19974):0.0632143,
+#                          (droAna3:0.132874,
+#                          droBip2:0.141124):0.342634):0.319892,
+#                         ((((((D_americana:0.0170546,
+#                              D_novamexicana:0.0146484):0.0239468,
+#                             droVir3:0.050763):0.0354574,
+#                            D_montana:0.0617251):0.20129,
+#                           (((((D_arizonae:0.0246951,
+#                               droMoj3:0.0248786):0.0313305,
+#                              D_navojoa:0.0665127):0.111407,
+#                             D_hydei:0.167416):0.182402,
+#                            D_busckii:0.539752):0.0169868,
+#                           droGri2:0.375038):0.0019462):0.159308,
+#                          ((((D_athabasca:0.0985958,
+#                             (D_pseudoobscura_1:0.0335025,
+#                             (droMir2:0.0270724,
+#                             (droPer1:0.0226158,
+#                             droPse3:0.0128304):0.00193609):0.00194456):0.0802627):0.0780591,
+#                            D_subobscura:0.165934):0.0113966,
+#                           D_obscura:0.0878656):0.457052,
+#                          Zaprionus_indianus:0.507897):0.00556367):0.00801923,
+#                         (D_nasuta:0.0397659,
+#                         droAlb1:0.0391969):0.422816):0.031105):0.17858,
+#                        Scaptodrosophila_lebanonensis:0.552469):0.197058,
+#                       Phortica_variegata:0.637376):0.0771903,
+#                      droWil2:0.457923):0.350306,
+#                     Liriomyza_trifolii:0.635963):0.179116,
+#                    ((Eutreta_diana:0.249712,
+#                     Trupanea_jonesi:0.199646):0.0017583,
+#                    Tephritis_californica:0.14755):0.319984):0.0843606,
+#                   (Stomoxys_calcitrans:0.826441,
+#                   Trichoceridae_BV_2014:0.421908):0.00703535):0.00192362,
+#                  ((Proctacanthus_coquilletti:0.613941,
+#                   triCas2:2.51517):0.344435,
+#                  ((((Chironomus_riparius:0.111303,
+#                     Chironomus_tentans:0.138886):0.302423,
+#                    Clunio_marinus:0.469684):0.126075,
+#                   (Lutzomyia_longipalpis:0.542091,
+#                   Phlebotomus_papatasi:0.405693):0.617047):0.0959304,
+#                  ((Coboldia_fuscipes:0.495528,
+#                   Mayetiola_destructor:0.521097):0.096249,
+#                  ((Clogmia_albipunctata:1.36054,
+#                   apiMel4:0.730591):0.189665,
+#                  (((((((((Bactrocera_dorsalis:0.049117,
+#                          (Bactrocera_latifrons:0.0631722,
+#                          Bactrocera_tryoni:0.0594235):0.00475348):0.0683841,
+#                         Bactrocera_oleae:0.0946512):0.0914658,
+#                        Zeugodacus_cucurbitae:0.152362):0.216321,
+#                       Ceratitis_capitata:0.328573):0.305107,
+#                      ((Cirrula_hians:0.220658,
+#                       Ephydra_gracilis:0.213905):0.58151,
+#                      Sphyracephala_brevicornis:0.523332):0.0599791):0.181976,
+#                     ((((Glossina_austeni:0.0437976,
+#                        ((Glossina_morsitans_1:0.0112507,
+#                         Glossina_morsitans_2:0.00507154):0.027494,
+#                        Glossina_pallidipes:0.0301732):0.0115356):0.0290825,
+#                       (Glossina_fuscipes:0.00855417,
+#                       Glossina_palpalis_gambiensis:0.0115118):0.0633159):0.18361,
+#                      Glossina_brevipalpis:0.151436):0.529569,
+#                     Neobellieria_bullata:0.498998):0.0457248):0.00779782,
+#                    ((((Calliphora_vicina:0.228722,
+#                       (Lucilia_cuprina:0.0875226,
+#                       Lucilia_sericata:0.0861576):0.136227):0.140882,
+#                      ((((((Condylostylus_patibulatus:0.832751,
+#                           Phormia_regina:0.279935):0.00187344,
+#                          Sarcophagidae_BV_2014:0.55443):0.00184407,
+#                         Paykullia_maculata:0.376511):0.0131885,
+#                        Teleopsis_dalmanni:0.801276):0.00191464,
+#                       Holcocephala_fusca:0.8609):0.00194015,
+#                      Megaselia_abdita:1.11453):0.00187587):0.182482,
+#                     Tipula_oleracea:0.843991):0.001883,
+#                    Haematobia_irritans:0.605763):0.0167958):0.00194606,
+#                   musDom2:0.675344):0.205801,
+#                  (((Chaoborus_trivitattus:0.638614,
+#                    Culicoides_sonorensis:0.497482):0.0165328,
+#                   Mochlonyx_cinctipes:0.742897):0.0389109,
+#                  Megaselia_scalaris:0.61371):0.113802):0.00183911):0.00193952):0.00189725):0.0182775):0.134865):0.154124,
+#                 ((Aedes_aegypti:0.212938,
+#                  Aedes_albopictus:0.28364):1.11146,
+#                 (Hermetia_illucens:0.929359,
+#                 Rhagoletis_zephyria:0.599087):0.00492273):0.00184716):0.838224,
+#                Culex_quinquefasciatus:0.726599):0.00551796,
+#               Belgica_antarctica:1.32598):0.0252904,
+#              (Eristalis_dimidiata:1.17979,
+#              Themira_minor:0.827402):0.240488):0.395582,
+#             A_maculatus:0.271203):0.0122661,
+#            A_nili:0.688443):0.00252274,
+#           A_sinensis:0.61791):0.0100432,
+#          ((A_culicifacies:0.161751,
+#           A_minimus:0.137921):0.0717001,
+#          A_funestus:0.187841):0.159579):0.0876693,
+#         A_christyi:0.339954):0.00880872,
+#        (((((((A_arabiensis:0.0207219,
+#              A_coluzzii:0.0304008):0.00464321,
+#             A_quadriannulatus:0.0266565):0.00186682,
+#            A_merus:0.0419218):0.00194884,
+#           anoGam3:0.0242104):0.00487147,
+#          A_gambiae_1:0.0597944):0.0093385,
+#         A_melas:0.036266):0.212396,
+#        A_epiroticus:0.291793):0.0810923):0.117058,
+#       (A_cracens:0.042607,
+#       A_dirus:0.0331054):0.264425):0.00177288,
+#      A_stephensi:0.371303):0.0187972,
+#     ((A_farauti:0.0550375,
+#      A_koliensis:0.0728747):0.0181164,
+#     (A_farauti_No4:0.0818284,
+#     A_punctulatus:0.0829723):0.0149567):0.269633):0.136407,
+#    A_atroparvus:0.441117):0.452979,
+#   A_darlingi:0.151351):0.0291308,
+#  A_aquasalis:0.139331):0.0687377,
+# A_albimanus:0.0687377);
 
-    # *NOT* going to compare these lengths, there were no lengths to begin with
+
+    # compare distances calculated here with what the kmer counting method
+    # constructed.  The original kmer lengths:
     /cluster/bin/phast/all_dists ../dm6.124way.nh  | grep dm6 \
 	| sed -e "s/dm6.//;" | sort > original.dists
 
-    grep TREE all.mod | sed -e 's/TREE: //;' \
-       | /cluster/bin/phast/all_dists /dev/stdin | grep dm6 \
-          | sed -e "s/dm6.//;"  | sort > dm6.dists
+    # these lengths:
+    /cluster/bin/phast/all_dists dm6.4d.nh  | grep dm6 \
+          | sed -e "s/dm6.//;"  | sort > dm6.4d.dists
 
     # printing out the 'original', the 'new' the 'difference' and
     #    percent difference/delta
-    join original.dists dm6.dists | awk '{
+    join original.dists dm6.4d.dists | awk '{
   printf "#\t%s\t%8.6f\t%8.6f\t%8.6f\t%8.6f\n", $1, $2, $3, $2-$3, 100*($2-$3)/$3 }'       | sort -k4n
+
+    # they are radically different since the kmer lengths are a different
+    # unit measurement system, the numbers have nothing in common.
+
+    sort -k2,2n original.dists | head
+droSim2 0.291380
+droSec1 0.330720
+droYak3 0.381930
+droEre2 0.395840
+droEle2 0.401380
+droFic2 0.402640
+droEug2 0.408790
+droSuz1 0.414730
+droRho2 0.414920
+droBia2 0.419570
+    sort -k2,2n dm6.4d.dists | head
+droSim2 0.099298
+droSec1 0.102963
+droEre2 0.213581
+droYak3 0.227687
+droSuz1 0.579189
+droTak2 0.585386
+droEle2 0.588574
+droRho2 0.594384
+droBia2 0.599526
+droFic2 0.631144
 
 #########################################################################
 # phastCons 124-way (DONE - 2018-11-27 - Hiram)
@@ -2400,7 +2556,7 @@ rm -f $c.gp $c.maf $c.ss
     cat << '_EOF_' > doSplit.csh
 #!/bin/csh -ef
 set c = $1
-set MAF = /hive/data/genomes/dm6/bed/multiz124way/anno/maf/result/$c.maf
+set MAF = /hive/data/genomes/dm6/bed/multiz124way/anno/mafNet/result/$c.maf
 set WINDOWS = /hive/data/genomes/dm6/bed/multiz124way/cons/ss/$c
 set WC = `cat $MAF | wc -l`
 set NL = `grep "^#" $MAF | wc -l`
@@ -2418,7 +2574,7 @@ mkdir $WINDOWS
 pushd $WINDOWS > /dev/null
 if ( $WC != $NL ) then
 /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_split \
-    $MAF -i MAF -o SS -r $WINDOWS/$c -w 12400000,0 -I 1240 -B 5000
+    $MAF -i MAF -o SS -r $WINDOWS/$c -w 10000000,0 -I 1000 -B 5000
 endif
 popd > /dev/null
 date >> $2
@@ -2433,18 +2589,18 @@ doSplit.csh $(root1) {check out line+ $(root1).done}
 ' > template
 
 #	do the easy ones first to see some immediate results
-    ls -1S -r ../../anno/maf/result | sed -e "s/.maf//;" > maf.list
+    ls -1S -r ../../anno/mafNet/result | sed -e "s/.maf//;" > maf.list
     # all can finish OK at a 64Gb memory limit
     gensub2 maf.list single template jobList
     para -ram=64g create jobList
     para try ... check ... etc
     para push
 # Completed: 595 of 595 jobs
-# CPU time in finished jobs:       3902s      65.03m     1.08h    0.05d  0.000 y
-# IO & Wait Time:                  1798s      29.97m     0.50h    0.02d  0.000 y
-# Average job time:                  10s       0.16m     0.00h    0.00d
-# Longest finished job:            1040s      17.33m     0.29h    0.01d
-# Submission to last job:          1110s      18.50m     0.31h    0.01d
+# CPU time in finished jobs:       3998s      66.63m     1.11h    0.05d  0.000 y
+# IO & Wait Time:                  1922s      32.04m     0.53h    0.02d  0.000 y
+# Average job time:                  10s       0.17m     0.00h    0.00d
+# Longest finished job:            1113s      18.55m     0.31h    0.01d
+# Submission to last job:          1175s      19.58m     0.33h    0.01d
 
     # Run phastCons
     #	This job is I/O intensive in its output files, beware where this
@@ -2514,7 +2670,7 @@ rm -fr $tmp
 
     ls -1S ../ss/chr*/chr* | sed -e "s/.ss$//" > ss.list
     wc -l ss.list
-    #	383 ss.list
+    #	452 ss.list
 
     # Create parasol batch and run it
     # run for all species
@@ -2529,12 +2685,12 @@ rm -fr $tmp
     para -ram=32g create jobList
     para try ... check ...
     para -maxJob=16 push
-# Completed: 383 of 383 jobs
-# CPU time in finished jobs:       7131s     118.84m     1.98h    0.08d  0.000 y
-# IO & Wait Time:                  2605s      43.42m     0.72h    0.03d  0.000 y
-# Average job time:                  25s       0.42m     0.01h    0.00d
-# Longest finished job:             740s      12.33m     0.21h    0.01d
-# Submission to last job:           750s      12.50m     0.21h    0.01d
+# Completed: 452 of 452 jobs
+# CPU time in finished jobs:       7745s     129.09m     2.15h    0.09d  0.000 y
+# IO & Wait Time:                  2922s      48.70m     0.81h    0.03d  0.000 y
+# Average job time:                  24s       0.39m     0.01h    0.00d
+# Longest finished job:             653s      10.88m     0.18h    0.01d
+# Submission to last job:           661s      11.02m     0.18h    0.01d
 
     # create Most Conserved track
     cd /hive/data/genomes/dm6/bed/multiz124way/cons/all
@@ -2547,34 +2703,36 @@ do
     done | sort -k1,1 -k2,2n \
     | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", "'${C}'", $2, $3, $5, $5;}'
 done > tmpMostConserved.bed
-    # real    0m39.720s
+    # real    0m32.864s
 
-    # -rw-rw-r--   1 217453711 Nov 27 10:59 tmpMostConserved.bed
+    # -rw-rw-r--   1 140111706 Dec 20 14:18 tmpMostConserved.bed
 
     time /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed \
         > mostConserved.bed
-    # real    0m34.940s
+    # real    0m20.341s
 
-    # -rw-rw-r--   1 221916771 Nov 27 11:00 mostConserved.bed
+    # -rw-rw-r--   1 142985761 Dec 20 14:19 mostConserved.bed
 
     # load into database
     ssh hgwdev
     cd /hive/data/genomes/dm6/bed/multiz124way/cons/all
     time hgLoadBed dm6 phastConsElements124way mostConserved.bed
-    #  Read 6459398 elements of size 5 from mostConserved.bed
-    #  real    0m44.720s
+    #  Read 4164913 elements of size 5 from mostConserved.bed
+    #  real    0m19.852s
+
+    featureBits dm6 phastConsElements124way
+    # 65154135 bases of 142573024 (45.699%) in intersection
 
     # most interesting high measurement for this coverage
     #	--rho 0.3 --expected-length 45 --target-coverage 0.3
     time featureBits dm6 -enrichment ncbiRefSeq:cds phastConsElements124way
-# ncbiRefSeq:cds 16.056%, phastConsElements124way 50.489%, both 10.836%, cover 67.49%, enrich 1.34x
-
-# real    0m30.071s
+# ncbiRefSeq:cds 16.056%, phastConsElements124way 45.699%, both 10.454%, cover 65.11%, enrich 1.42x
+# real    0m22.051s
 
     # Try for 5% overall cov, and 70% CDS cov
     time featureBits dm6 -enrichment refGene:cds phastConsElements124way
-# refGene:cds 16.049%, phastConsElements124way 50.489%, both 10.829%, cover 67.47%, enrich 1.34x
-# real    0m32.078s
+# refGene:cds 16.049%, phastConsElements124way 45.699%, both 10.447%, cover 65.09%, enrich 1.42x
+# real    0m22.082s
 
     # Create merged posterier probability file and wiggle track data files
     cd /hive/data/genomes/dm6/bed/multiz124way/cons/all
@@ -2587,13 +2745,13 @@ do
 	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
         | gzip -c > downloads/${D}.phastCons124way.wigFix.gz
 done
-    # real    0m50.886s
+    # real    0m56.231s
 
     #	encode those files into wiggle data
     time (zcat downloads/*.wigFix.gz \
 	| wigEncode stdin phastCons124way.wig phastCons124way.wib)
     #   Converted stdin, upper limit 1.00, lower limit 0.00
-    #   real    0m24.946s
+    #   real    0m25.715s
 
     du -hsc *.wi?
     #	118M    phastCons124way.wib
@@ -2609,25 +2767,24 @@ ulimit -v $sizeG
       | wigToBigWig -verbose=2 stdin \
 	../../../../chrom.sizes phastCons124way.bw) > bigWig.log 2>&1
     egrep "VmPeak|real" bigWig.log
-    # pid=37111: VmPeak:    33886864 kB
-    # real    42m13.614s
+    # pid=40131: VmPeak:     1442944 kB
+    # real    1m1.011s
 
-    # -rw-rw-r--   1 70124152013 Nov  6 08:52 phastCons124way.bw
-
+    # -rw-rw-r--   1 262114145 Dec 20 14:29 phastCons124way.bw
 
     bigWigInfo phastCons124way.bw
 version: 4
 isCompressed: yes
 isSwapped: 0
-primaryDataSize: 5,097,637,987
-primaryIndexSize: 93,372,648
+primaryDataSize: 187,837,403
+primaryIndexSize: 3,992,816
 zoomLevels: 10
-chromCount: 355
-basesCovered: 2,955,660,600
-mean: 0.128025
+chromCount: 441
+basesCovered: 123,478,525
+mean: 0.532258
 min: 0.000000
 max: 1.000000
-std: 0.247422
+std: 0.462402
 
     #	if you wanted to use the bigWig file, loading bigWig table:
     #   but we don't use the bigWig file
@@ -2643,23 +2800,24 @@ std: 0.247422
     ln -s `pwd`/phastCons124way.wib /gbdb/dm6/multiz124way/phastCons124way.wib
     time hgLoadWiggle -pathPrefix=/gbdb/dm6/multiz124way dm6 \
 	phastCons124way phastCons124way.wig
-    #   real    0m1.037s
+    #   real    0m1.059s
 
     time wigTableStats.sh dm6 phastCons124way
-# db.table            min max   mean       count     sumData
-# dm6.phastCons124way  0 1 0.585666 123404840 7.2274e+07
-#       stdDev viewLimits
-#    0.455202 viewLimits=0:1
+# db.table          min max   mean       count     sumData
+# dm6.phastCons124way  0 1 0.532258 123478525 6.57225e+07
+#     stdDev viewLimits
+#   0.462402 viewLimits=0:1
 
-# real    0m0.571s
+# real    0m0.524s
 
     #  Create histogram to get an overview of all the data
     ssh hgwdev
     cd /hive/data/genomes/dm6/bed/multiz124way/cons/all
     time hgWiggle -doHistogram -db=dm6 \
-	-hBinSize=0.001 -hBinCount=1240 -hMinVal=0.0 -verbose=2 \
-	    phastCons124way > histogram.data 2>&1
-    #	real    2m38.952s
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    phastCons124way > dm6.phastCons124way.histogram.data 2>&1
+    #	real    0m5.143s
+
 
     #	create plot of histogram:
     # updated for new gnuplot on hgwdev 2018-11-26 (can't get font to change)
@@ -2684,13 +2842,13 @@ set y2label " Cumulative Relative Frequency (CRF)" tc rgb "#66ff66"
 set y2range [0:1]
 set yrange [0:0.02]
 
-plot "histogram.data" using 2:5 title " RelFreq" with impulses ls 1, \
-        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines ls 2
+plot "dm6.phastCons124way.histogram.data" using 2:5 title " RelFreq" with impulses ls 1, \
+        "dm6.phastCons124way.histogram.data" using 2:7 axes x1y2 title " CRF" with lines ls 2
 ' | gnuplot
 
     # take a look to see if it is sane:
 
-    display histo.png &
+    display dm6.phastCons.histo.png &
 
 #########################################################################
 # phyloP for 124-way (DONE - 2017-11-06 - Hiram)
@@ -2706,7 +2864,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses ls 1, \
 
     printf '#!/bin/csh -ef
 set c = $1
-set MAF = /hive/data/genomes/dm6/bed/multiz124way/anno/maf/result/$c.maf
+set MAF = /hive/data/genomes/dm6/bed/multiz124way/anno/mafNet/result/$c.maf
 set WINDOWS = /hive/data/genomes/dm6/bed/multiz124way/consPhyloP/ss/$c
 set WC = `cat $MAF | wc -l`
 set NL = `grep "^#" $MAF | wc -l`
@@ -2734,11 +2892,11 @@ rm -f $2.running
     chmod +x doSplit.csh
 
     #	do the easy ones first to see some immediate results
-    ls -1S -r ../../anno/maf/result | sed -e "s/.maf//;" > maf.list
+    ls -1S -r ../../anno/mafNet/result | sed -e "s/.maf//;" > maf.list
 
     # this needs a {check out line+ $(root1.done)} test for verification:
     printf '#LOOP
-./doSplit.csh $(root1) $(root1).done
+./doSplit.csh $(root1) {check out exists+ $(root1).done}
 #ENDLOOP
 ' > template
 
@@ -2746,13 +2904,12 @@ rm -f $2.running
     # all can complete successfully at the 64Gb memory limit
     para -ram=64g create jobList
     para try ... check ... push ... etc...
-
 # Completed: 595 of 595 jobs
-# CPU time in finished jobs:       3804s      63.40m     1.06h    0.04d  0.000 y
-# IO & Wait Time:                  1818s      30.30m     0.50h    0.02d  0.000 y
-# Average job time:                   9s       0.16m     0.00h    0.00d
-# Longest finished job:            1050s      17.50m     0.29h    0.01d
-# Submission to last job:          1110s      18.50m     0.31h    0.01d
+# CPU time in finished jobs:       4048s      67.47m     1.12h    0.05d  0.000 y
+# IO & Wait Time:                  1733s      28.88m     0.48h    0.02d  0.000 y
+# Average job time:                  10s       0.16m     0.00h    0.00d
+# Longest finished job:            1114s      18.57m     0.31h    0.01d
+# Submission to last job:          2391s      39.85m     0.66h    0.03d
 
     # run phyloP with score=LRT
     ssh ku
@@ -2764,7 +2921,7 @@ rm -f $2.running
     # Adjust model file base composition background and rate matrix to be
     # representative of the chromosomes in play
     grep BACK ../../4d/all.mod
-    #   BACKGROUND: 0.227566 0.316377 0.227975 0.228082
+    #   BACKGROUND: 0.227451 0.315973 0.228396 0.228180 
 
     grep BACKGROUND ../../4d/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
     #	0.544
@@ -2809,7 +2966,7 @@ sleep 4
     find ../ss -type f | sed -e "s/.ss$//; s#../ss/##;" > ss.list
     # make sure the list looks good
     wc -l ss.list
-    #	568 ss.list
+    #	575 ss.list
 
     # Create template file
     #	file1 == $chr/$chunk/file name without .ss suffix
@@ -2831,12 +2988,12 @@ sleep 4
     para try ... check ...
     para -maxJob=16 push
     para time > run.time
-# Completed: 568 of 568 jobs
-# CPU time in finished jobs:     440703s    7345.04m   122.42h    5.10d  0.014 y
-# IO & Wait Time:                  3849s      64.16m     1.07h    0.04d  0.000 y
-# Average job time:                 783s      13.04m     0.22h    0.01d
-# Longest finished job:            4019s      66.98m     1.12h    0.05d
-# Submission to last job:          4781s      79.68m     1.33h    0.06d
+# Completed: 575 of 575 jobs
+# CPU time in finished jobs:     416388s    6939.80m   115.66h    4.82d  0.013 y
+# IO & Wait Time:                  3787s      63.11m     1.05h    0.04d  0.000 y
+# Average job time:                 731s      12.18m     0.20h    0.01d
+# Longest finished job:            3722s      62.03m     1.03h    0.04d
+# Submission to last job:          3766s      62.77m     1.05h    0.04d
 
     mkdir downloads
     time for D in `ls -d wigFix/chr* | sed -e 's#wigFix/##'`
@@ -2846,10 +3003,10 @@ do
 	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
         | gzip -c > downloads/${D}.phyloP124way.wigFix.gz
 done
-    #   real    2m2.576s
+    #   real    1m56.653s
 
     du -hsc downloads
-    #   262M    downloads
+    #   257M    downloads
 
     # check integrity of data with wigToBigWig
     time (zcat downloads/*.wigFix.gz \
@@ -2857,32 +3014,34 @@ done
 	phyloP124way.bw) > bigWig.log 2>&1
 
     egrep "real|VmPeak" bigWig.log
-    # pid=153945: VmPeak:    1438260 kB
-    # real    1m10.028s
+    # pid=103618: VmPeak:    1442720 kB
+    # real    1m15.614s
+
+    # -rw-rw-r--   1 470242283 Dec 21 09:24 phyloP124way.bw
 
     bigWigInfo phyloP124way.bw  | sed -e 's/^/# /;'
 # version: 4
 # isCompressed: yes
 # isSwapped: 0
-# primaryDataSize: 375,618,358
-# primaryIndexSize: 4,032,612
+# primaryDataSize: 373,906,167
+# primaryIndexSize: 3,993,208
 # zoomLevels: 10
-# chromCount: 434
-# basesCovered: 123,466,109
-# mean: 2.659923
+# chromCount: 441
+# basesCovered: 123,478,525
+# mean: 1.853567
 # min: -20.000000
 # max: 20.000000
-# std: 4.629012
+# std: 3.772884
 
     #	encode those files into wiggle data
     time (zcat downloads/*.wigFix.gz \
 	| wigEncode stdin phyloP124way.wig phyloP124way.wib)
 
 # Converted stdin, upper limit 20.00, lower limit -20.00
-# real    0m31.685s
+# real    0m34.219s
 
-# -rw-rw-r--   1 123466109 Nov 27 14:29 phyloP124way.wib
-# -rw-rw-r--   1  12818989 Nov 27 14:29 phyloP124way.wig
+    # -rw-rw-r--   1 123478525 Dec 21 09:27 phyloP124way.wib
+    # -rw-rw-r--   1  12669999 Dec 21 09:27 phyloP124way.wig
 
     du -hsc *.wi?
     # 118M    phyloP124way.wib
@@ -2899,43 +3058,44 @@ done
 
     wigTableStats.sh dm6 phyloP124way
 # db.table          min   max     mean       count     sumData
-# dm6.phyloP124way   -20 20 2.65992 123466109 3.2841e+08
+# dm6.phyloP124way  -20 20 1.85357 123478525 2.28876e+08
 #       stdDev viewLimits
-#      4.62901 viewLimits=-20:20
+#      3.77288 viewLimits=-17.0109:20
 
     #	that range is: 20+20= 40 for hBinSize=0.04
 
     #  Create histogram to get an overview of all the data
     time hgWiggle -doHistogram \
 	-hBinSize=0.04 -hBinCount=1000 -hMinVal=-20 -verbose=2 \
-	    -db=dm6 phyloP124way > histogram.data 2>&1
-    #   real    0m4.803s
+	    -db=dm6 phyloP124way > dm6.phyloP124way.histogram.data 2>&1
+
+    #   real    0m5.483s
 
     # xaxis range:
-    grep -v chrom histogram.data | grep "^[0-9]" | ave -col=2 stdin \
-	| sed -e 's/^/# /;'
-# Q1 -7.460000
-# median 0.320000
+    grep -v chrom dm6.phyloP124way.histogram.data | grep "^[0-9]" \
+	| ave -col=2 stdin | sed -e 's/^/# /;'
+# Q1 -7.500000
+# median 0.340000
 # Q3 8.140000
-# average 0.328480
+# average 0.312916
 # min -20.000000
 # max 20.000000
-# count 783
-# total 257.200147
-# standard deviation 9.069287
+# count 784
+# total 245.325946
+# standard deviation 9.075547
 
     # find out the range for the 2:5 graph
-    grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin \
-      | sed -e 's/^/# /;'
+    grep -v chrom dm6.phyloP124way.histogram.data | grep "^[0-9]" \
+	| ave -col=5 stdin | sed -e 's/^/# /;'
 # Q1 0.000002
-# median 0.000177
-# Q3 0.001312
-# average 0.001340
+# median 0.000135
+# Q3 0.000652
+# average 0.001276
 # min 0.000000
-# max 0.047793
-# count 782
-# total 1.047624
-# standard deviation 0.003225
+# max 0.022758
+# count 784
+# total 1.000121
+# standard deviation 0.003026
 
     #	create plot of histogram:
     # updated for new gnuplot on hgwdev 2018-11-26 (can't get font to change)
@@ -2960,8 +3120,8 @@ set y2label " Cumulative Relative Frequency (CRF)" tc rgb "#66ff66"
 set xrange [-1:1.5]
 set yrange [0:0.04]
 
-plot "histogram.data" using 2:5 title " RelFreq" with impulses ls 1, \
-        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines ls 2
+plot "dm6.phyloP124way.histogram.data" using 2:5 title " RelFreq" with impulses ls 1, \
+        "dm6.phyloP124way.histogram.data" using 2:7 axes x1y2 title " CRF" with lines ls 2
 ' | gnuplot
 
     # verify it looks sane
@@ -2983,7 +3143,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses ls 1, \
 
 #!/bin/sh
 export geneTbl="ncbiRefSeq"
-for S in 1240 2000 5000
+for S in 1000 2000 5000
 do
     echo "making upstream${S}.maf"
     featureBits dm6 ${geneTbl}:upstream:${S} -fa=/dev/null -bed=stdout \
@@ -2994,28 +3154,29 @@ do
         | gzip -c > upstream${S}.${geneTbl}.maf.gz
     echo "done upstream${S}.${geneTbl}.maf.gz"
 done
+    # real    174m53.029s
 
-    #   real    186m37.993s
-
-# -rw-rw-r-- 1  646104882 Nov 27 15:46 upstream1240.ncbiRefSeq.maf.gz
-# -rw-rw-r-- 1 1103012060 Nov 27 16:41 upstream2000.ncbiRefSeq.maf.gz
-# -rw-rw-r-- 1 3022261832 Nov 27 18:09 upstream5000.ncbiRefSeq.maf.gz
+# -rw-rw-r--  1  519405841 Dec 21 11:58 upstream1000.ncbiRefSeq.maf.gz
+# -rw-rw-r--  1 1080640733 Dec 21 12:51 upstream2000.ncbiRefSeq.maf.gz
+# -rw-rw-r--  1 2869040688 Dec 21 14:16 upstream5000.ncbiRefSeq.maf.gz
 
     ######################################################################
     ## compress the maf files
     cd /hive/data/genomes/dm6/bed/multiz124way/downloads/multiz124way
     mkdir maf
-    rsync -a -P ../../anno/maf/result/ ./maf/
+    time rsync -a -P ../../anno/mafNet/result/ ./maf/
+    # real    4m12.463s
+
     du -hsc maf/
-    # 63G     maf
+    # 64G     maf
 
     cd maf
     time gzip *.maf &
     # real 21m44.263s
 
-    du -hscL maf ../../anno/maf/result/
+    du -hscL maf ../../anno/mafNet/result/
     # 5.4G    maf
-    #  63G     ../../anno/maf/result/
+    #  63G     ../../anno/mafNet/result/
 
     cd maf
     md5sum *.maf.gz > md5sum.txt
@@ -3052,13 +3213,32 @@ done
     cd /hive/data/genomes/dm6/bed/multiz124way/downloads/multiz124way
     grep TREE ../../4d/all.mod | awk '{print $NF}' \
       | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
-         > dm6.124way.nh
-    ~/kent/src/hg/utils/phyloTrees/commonNames.sh dm6.124way.nh \
-      | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
-         > dm6.124way.commonNames.nh
-    ~/kent/src/hg/utils/phyloTrees/scientificNames.sh dm6.124way.nh \
-	| $HOME/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
-	    > dm6.124way.scientificNames.nh
+         > dm6.124way.sequenceNames.nh
+    # verify names are sane:
+    sed -e 's/:.*//; s/(//g; s/ //g;' dm6.124way.sequenceNames.nh | sort | less
+
+    cat dm6.124way.sequenceNames.nh \
+      | sed -e 's/(/(\n/g; s/,/,\n/g; s/)/\n)/g; s/ //g;' \
+        | grep -v "^$" | ~/kent/src/hg/utils/phyloTrees/binaryTree.pl \
+	-nameTranslate=../../sequenceName.scientificName.txt -noInternal \
+          -lineOutput /dev/stdin > dm6.124way.scientificName.nh
+    # verify names are sane:
+    sed -e 's/:.*//; s/(//g; s/ //g;' dm6.124way.scientificName.nh | sort | less
+    cat dm6.124way.sequenceNames.nh \
+      | sed -e 's/(/(\n/g; s/,/,\n/g; s/)/\n)/g; s/ //g;' \
+        | grep -v "^$" | ~/kent/src/hg/utils/phyloTrees/binaryTree.pl \
+	-nameTranslate=../../seqName.taxId.txt -noInternal \
+          -lineOutput /dev/stdin > dm6.124way.taxId.nh
+    sed -e 's/:.*//; s/(//g; s/ //g;' dm6.124way.taxId.nh | sort | less
+    # one of those is duplicated:
+    sed -e 's/:.*//; s/(//g; s/ //g;' dm6.124way.taxId.nh | sort \
+      | uniq -c | awk '$1 > 1'
+#   2 46245
+    # two versions of droPse3
+    grep 46245 ../../seqName.taxId.txt
+#    D_pseudoobscura_1       46245
+#    droPse3 46245
+
     time md5sum *.nh *.maf.gz > md5sum.txt
     #   real    0m3.147s
 
@@ -3080,7 +3260,8 @@ done
     mkdir dm6.124way.phastCons
     cd dm6.124way.phastCons
     ln -s ../../../cons/all/downloads/*.wigFix.gz .
-    md5sum *.gz > md5sum.txt
+    time md5sum *.gz > md5sum.txt
+    # real    0m2.012s
 
     cd /hive/data/genomes/dm6/bed/multiz124way/downloads/phastCons124way
     ln -s ../../cons/all/phastCons124way.bw ./dm6.phastCons124way.bw
@@ -3105,7 +3286,8 @@ done
     cd dm6.124way.phyloP
 
     ln -s ../../../consPhyloP/all/downloads/*.wigFix.gz .
-    md5sum *.wigFix.gz > md5sum.txt
+    time md5sum *.wigFix.gz > md5sum.txt
+    # real    0m2.256s
 
     cd ..
 
@@ -3161,7 +3343,8 @@ done
     echo "wait" >> $gp.jobs
 
     time (sh -x ./$gp.jobs) > $gp.jobs.log 2>&1
-    # real    38m28.377s
+    # real    32m22.288s
+
 
     export mz=multiz124way
     export gp=ncbiRefSeq
@@ -3171,10 +3354,10 @@ done
 
     time find ./exonNuc -type f | grep exonNuc.fa.gz | xargs zcat \
      | gzip -c > $gp.$mz.exonNuc.fa.gz
-    #   real    12m10.083s
+    #   real    13m45.800s
 
-    # -rw-rw-r-- 1 397928833 Nov  6 18:44 knownGene.multiz124way.exonAA.fa.gz
-    # -rw-rw-r-- 1 5803124720 Nov  6 18:49 knownGene.multiz124way.exonNuc.fa.gz
+    # -rw-rw-r-- 1  697628863 Dec 21 14:00 ncbiRefSeq.multiz124way.exonAA.fa.gz
+    # -rw-rw-r-- 1 1621549781 Dec 21 14:15 ncbiRefSeq.multiz124way.exonNuc.fa.gz
 
     export mz=multiz124way
     export gp=ncbiRefSeq

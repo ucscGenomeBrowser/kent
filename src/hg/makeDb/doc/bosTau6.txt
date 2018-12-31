@@ -1056,4 +1056,18 @@ TMPDIR=/dev/shm
 	> best.log 2>&1
     # real    57m47.275s
 
-#########################################################################
+##############################################################################
+# LIFTOVER TO bosTau9 (DONE - 2018-11-07 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/bosTau6/bed/blat.bosTau9.2018-11-07
+    cd /hive/data/genomes/bosTau6/bed/blat.bosTau9.2018-11-07
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/bosTau6/jkStuff/bosTau6.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         bosTau6 bosTau9) > do.log 2>&1 &
+    # real    968m17.100s
+
+    # verify the convert link on the test browser is now
+    # active from bosTau6 to bosTau9
+
+##############################################################################

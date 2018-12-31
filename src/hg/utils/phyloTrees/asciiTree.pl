@@ -19,7 +19,7 @@ sub fixSciNotation($) {
   if (3 == scalar(@branches)) {
      $answer = "$branches[0]";
      my $dist = $branches[1];
-     $dist =~ s/\)//;
+     $dist =~ s/\)//g;
      $answer = sprintf("%s:%.8f", $answer, $dist);
      $answer =~ s/0+$//;
      $dist = $branches[2];
