@@ -7,6 +7,9 @@ track gap override
 visibility hide
 html gap
 
+track rmsk override
+visibility hide
+
 searchTable gold
 shortCircuit 1
 termRegex NC_[0-9]+(v[0-9]+)?

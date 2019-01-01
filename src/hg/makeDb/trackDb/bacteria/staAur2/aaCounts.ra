@@ -2,7 +2,7 @@ track aaCounts
 compositeTrack on
 shortLabel AA counts
 longLabel amino acid profile
-subGroup1 view Views aliHydro=Aliphatic_Hydrophic aroHydro=Aromatic_Hydrophic neut=Neutral pos=Positive neg=Negative unq=Unique
+subGroup1 view Views aliHydro=Aliphatic_Hydrophic aroHydro=Aromatic_Hydrophic neut=Neutral pos=Positive neg=Negative unq=Unique oth=Other
 dragAndDrop subTracks
 visibility dense
 group compGeno
@@ -13,7 +13,6 @@ type bigBed 9 +
 mouseOverField popUp
 itemRgb on
 labelOnFeature off
-sortOrder view=+
 html aaCounts
 
     track aaCountAliHydro
@@ -21,6 +20,7 @@ html aaCounts
     view aliHydro
     visibility dense
     parent aaCounts
+    priority 5
 
         track aaCountsALA
         parent aaCountAliHydro
@@ -29,6 +29,7 @@ html aaCounts
         longLabel ALA - A amino acid profile 
         type bigBed 9 +
         bedNameLabel ALA - A
+        priority 6
 
         track aaCountsILE
         parent aaCountAliHydro
@@ -37,6 +38,7 @@ html aaCounts
         longLabel ILE - I amino acid profile 
         type bigBed 9 +
         bedNameLabel ILE - I
+        priority 7
 
         track aaCountsLEU
         parent aaCountAliHydro
@@ -45,6 +47,7 @@ html aaCounts
         longLabel LEU - L amino acid profile 
         type bigBed 9 +
         bedNameLabel LEU - L
+        priority 8
 
         track aaCountsVAL
         parent aaCountAliHydro
@@ -53,12 +56,14 @@ html aaCounts
         longLabel VAL - V amino acid profile 
         type bigBed 9 +
         bedNameLabel VAL - V
+        priority 9
 
     track aaCountAroHydro
     shortLabel Aromatic Hydrophobic
     view aroHydro
     visibility dense
     parent aaCounts
+    priority 10
 
         track aaCountsPHE
         parent aaCountAroHydro
@@ -67,6 +72,7 @@ html aaCounts
         longLabel PHE - F amino acid profile 
         type bigBed 9 +
         bedNameLabel PHE - F
+        priority 11
 
         track aaCountsTRP
         parent aaCountAroHydro
@@ -75,6 +81,7 @@ html aaCounts
         longLabel TRP - W amino acid profile 
         type bigBed 9 +
         bedNameLabel TRP - W
+        priority 12
 
         track aaCountsTYR
         parent aaCountAroHydro
@@ -83,12 +90,14 @@ html aaCounts
         longLabel TYR - Y amino acid profile 
         type bigBed 9 +
         bedNameLabel TYR - Y
+        priority 13
 
     track aaCountNeutral
     shortLabel Neutral
     view neut
     visibility dense
     parent aaCounts
+    priority 14
 
         track aaCountsASN
         parent aaCountNeutral
@@ -97,6 +106,7 @@ html aaCounts
         longLabel ASN - N amino acid profile 
         type bigBed 9 +
         bedNameLabel ASN - N
+        priority 15
 
         track aaCountsCYS
         parent aaCountNeutral
@@ -105,6 +115,7 @@ html aaCounts
         longLabel CYS - C amino acid profile 
         type bigBed 9 +
         bedNameLabel CYS - C
+        priority 16
 
         track aaCountsGLN
         parent aaCountNeutral
@@ -113,6 +124,7 @@ html aaCounts
         longLabel GLN - Q amino acid profile 
         type bigBed 9 +
         bedNameLabel GLN - Q
+        priority 17
 
         track aaCountsMET
         parent aaCountNeutral
@@ -121,6 +133,7 @@ html aaCounts
         longLabel MET - M amino acid profile 
         type bigBed 9 +
         bedNameLabel MET - M
+        priority 18
 
         track aaCountsSER
         parent aaCountNeutral
@@ -129,6 +142,7 @@ html aaCounts
         longLabel SER - S amino acid profile 
         type bigBed 9 +
         bedNameLabel SER - S
+        priority 19
 
         track aaCountsTHR
         parent aaCountNeutral
@@ -137,12 +151,14 @@ html aaCounts
         longLabel THR - T amino acid profile 
         type bigBed 9 +
         bedNameLabel THR - T
+        priority 20
 
     track aaCountPositive
     shortLabel Positive
     view pos
     visibility dense
     parent aaCounts
+    priority 21
 
         track aaCountsARG
         parent aaCountPositive
@@ -151,6 +167,7 @@ html aaCounts
         longLabel ARG - R amino acid profile 
         type bigBed 9 +
         bedNameLabel ARG - R
+        priority 22
 
         track aaCountsHIS
         parent aaCountPositive
@@ -159,6 +176,7 @@ html aaCounts
         longLabel HIS - H amino acid profile 
         type bigBed 9 +
         bedNameLabel HIS - H
+        priority 23
 
         track aaCountsLYS
         parent aaCountPositive
@@ -167,12 +185,14 @@ html aaCounts
         longLabel LYS - K amino acid profile 
         type bigBed 9 +
         bedNameLabel LYS - K
+        priority 24
 
     track aaCountNegative
     shortLabel Negative
     view neg
     visibility dense
     parent aaCounts
+    priority 25
 
         track aaCountsASP
         parent aaCountNegative
@@ -181,6 +201,7 @@ html aaCounts
         longLabel ASP - D amino acid profile 
         type bigBed 9 +
         bedNameLabel ASP - D
+        priority 26
 
         track aaCountsGLU
         parent aaCountNegative
@@ -189,12 +210,14 @@ html aaCounts
         longLabel GLU - E amino acid profile 
         type bigBed 9 +
         bedNameLabel GLU - E
+        priority 27
 
     track aaCountUnique
     shortLabel Unique
     view unq
     visibility dense
     parent aaCounts
+    priority 28
 
         track aaCountsGLY
         parent aaCountUnique
@@ -203,6 +226,7 @@ html aaCounts
         longLabel GLY - G amino acid profile 
         type bigBed 9 +
         bedNameLabel GLY - G
+        priority 29
 
         track aaCountsPRO
         parent aaCountUnique
@@ -211,4 +235,39 @@ html aaCounts
         longLabel PRO - P amino acid profile 
         type bigBed 9 +
         bedNameLabel PRO - P
+        priority 30
+
+    track aaCountOther
+    shortLabel Other
+    view oth
+    visibility dense
+    parent aaCounts
+    priority 31
+
+        track aaCountsUNK
+        parent aaCountOther
+        subGroups view=oth
+        shortLabel UNK - X
+        longLabel UNK - X amino acid profile 
+        type bigBed 9 +
+        bedNameLabel UNK - X
+        priority 32
+
+        track aaCountsTER
+        parent aaCountOther
+        subGroups view=oth
+        shortLabel TER - Z
+        longLabel TER - Z amino acid profile 
+        type bigBed 9 +
+        bedNameLabel TER - Z
+        priority 33
+
+        track aaCountsNUL
+        parent aaCountOther
+        subGroups view=oth
+        shortLabel NUL n/a
+        longLabel NUL - n/a amino acid profile 
+        type bigBed 9 +
+        bedNameLabel NUL - n/a
+        priority 34
 
