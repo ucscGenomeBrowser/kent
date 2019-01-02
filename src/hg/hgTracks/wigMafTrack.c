@@ -2407,11 +2407,18 @@ for (mi = miList->next, i=1; mi != NULL && mi->db != NULL; mi = mi->next, i++)
     /* draw sequence letters for alignment */
     hvGfxSetClip(hvg, x, y-1, width, mi->height);
 
+    /* having these static here will allow the option 'codonDefault'
+     * to run rapidly through the display without extra calls to SQL
+     * for the same answer over and over.  For other codon modes, it
+     * will still need to query the Frames table repeatedly.  Currently this
+     * is slow, perhaps it needs an index on the src column ?
+     */
+    static char * extraPrevious = NULL;
+    static struct mafFrames *mfList = NULL, *mf;
+    static boolean found = FALSE;
     if (framesTable != NULL)
 	{
-        struct mafFrames *mfList = NULL, *mf;
 	char extra[512];
-	boolean found = FALSE;
 
 	if (sameString("codonDefault", codonTransMode))
 	    {
@@ -2437,7 +2444,11 @@ tryagain:
         if (track->isBigBed)
             mfList = getFramesFromBb(  framesTable, chromName, seqStart, seqEnd);
         else
-            mfList = getFramesFromSql(  framesTable, chromName, seqStart, seqEnd, extra, newTableType);
+            if (differentStringNullOk(extraPrevious, extra))
+		{
+		mfList = getFramesFromSql(  framesTable, chromName, seqStart, seqEnd, extra, newTableType);
+		extraPrevious = cloneString(extra);
+		}
 
         if (mfList != NULL)
             found = TRUE;
