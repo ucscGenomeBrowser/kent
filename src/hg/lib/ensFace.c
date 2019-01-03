@@ -126,6 +126,7 @@ else if (startsWith("scaffold", chrom))
     chrName = chrom;
 else
     chrName = skipChr(chrom);
+
 if (archive)
     if (sameWord(archive,"ncbi36"))
 	{
@@ -140,7 +141,12 @@ if (archive)
 		    archive, ensOrg, chrName, start, end);
 	}
 else
-    dyStringPrintf(dy, 
+    if (sameWord(database, "hg19"))
+        // grch37 now has a special status within Ensembl, with a separate server that gets special updates
+        dyStringPrintf(dy, 
+               "http://grch37.ensembl.org/Homo_sapiens/contigview?chr=%s&start=%d&end=%d", chrName, start, end);
+    else
+        dyStringPrintf(dy, 
                "http://www.ensembl.org/%s/contigview?chr=%s&start=%d&end=%d", ensOrg, chrName, start, end);
 return dy;
 }
