@@ -4,7 +4,11 @@ html gold
 
 # Local declaration so that local gap.html is picked up.
 track gap override
+visibility hide
 html gap
+
+track rmsk override
+visibility hide
 
 searchTable gold
 shortCircuit 1
@@ -24,7 +28,8 @@ baseColorUseCds given
 baseColorDefault genomicCodons
 itemDetailsHtmlTable geneDesc
 
-include chainNetStaph.ra
+include chainNetStaph0.ra
+include chainNetStaph1.ra
 
 searchName ncbiGeneName
 searchTable ncbiGene
@@ -39,3 +44,7 @@ searchTable ncbiGene
 searchMethod prefix
 query select chrom, txStart,txEnd, name from %s where name2 like '%s%%'
 searchPriority 50.1
+
+include trackDb.369way.ra
+
+include aaCounts.ra
