@@ -4,7 +4,7 @@ import argparse
 import subprocess
 import sys
 
-parser = argparse.ArgumentParser(description="Print rows from omimGene2 that lose chromosomes in new version of table.\nWrites records to stdout. Intended usage:\nbackupOmimRecords.py hg19 > dateBackupOmimGene2.txt", formatter_class=argparse.RawDescriptionHelpFormatter)
+parser = argparse.ArgumentParser(description="Print rows from omimGene2 that lose chromosomes in new version of table.\nWrites records to stdout. Intended usage:\nflagOmimGene.py hg19 > dateBackupOmimGene2.txt", formatter_class=argparse.RawDescriptionHelpFormatter)
 parser.add_argument("db", help="ucsc database name")
 parser.add_argument("-v", "--verbose", action="store_true", help="Print out verbose messages about number of changed records")
 
