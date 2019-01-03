@@ -28,6 +28,7 @@ priority 2
         group compGeno
         color 0, 10, 100
         altColor 0,90,10
+        mafDot on
         type wigMaf 0.0 1.0
         speciesCodonDefault staAur2
         speciesGroups Percent99 Percent98 Percent97 Percent96 Percent95 Percent94 Percent93 Percent92 Percent91 Percent90 Percent88 Others
