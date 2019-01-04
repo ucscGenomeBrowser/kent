@@ -39,7 +39,7 @@ static char *createString =
 static char *indexString =
           "#Indices\n"
     "%s"                            /* Optional bin. */
-    "INDEX(qName(12))\n"
+    "INDEX(qName)\n"
 ")\n";
 
 
