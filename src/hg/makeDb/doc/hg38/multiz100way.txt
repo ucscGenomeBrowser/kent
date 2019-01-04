@@ -1887,7 +1887,7 @@ done | tr '[\t]' '[ ]' >> README.txt
     # running up refGene
     cd /hive/data/genomes/hg38/bed/multiz100way/pal
     export mz=multiz100way
-    export gp=refGene
+    export gp=ncbiRefSeq
     export db=hg38
     export I=0
     mkdir exonAA exonNuc
@@ -1909,7 +1909,7 @@ done | tr '[\t]' '[ ]' >> README.txt
     # real    126m0.688s
 
     export mz=multiz100way
-    export gp=refGene
+    export gp=ncbiRefSeq
     export db=hg38
     time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
     #   real    3m14.449s
@@ -1917,17 +1917,16 @@ done | tr '[\t]' '[ ]' >> README.txt
     #   real    13m27.577s
 
     du -hsc exonAA exonNuc $gp*.fa.gz
-    # 930M    exonAA
-    # 1.5G    exonNuc
-    # 930M    refGene.multiz100way.exonAA.fa.gz
-    # 1.5G    refGene.multiz100way.exonNuc.fa.gz
-    # 4.8G    total
+# 3.1G    exonAA
+# 4.9G    exonNuc
+# 3.1G    ncbiRefSeq.multiz100way.exonAA.fa.gz
+# 4.9G    ncbiRefSeq.multiz100way.exonNuc.fa.gz
 
     rm -rf exonAA exonNuc
 
     # we're only distributing exons at the moment
     export mz=multiz100way
-    export gp=refGene
+    export gp=ncbiRefSeq
     export db=hg38
     export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
     mkdir -p $pd
