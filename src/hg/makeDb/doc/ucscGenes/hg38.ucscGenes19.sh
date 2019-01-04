@@ -312,7 +312,8 @@ doHgNearBlastp.pl -noLoad -clusterHub=ku -distrHost=hgwdev -dbHost=hgwdev -workh
 
 # Load self
 cd $dir/hgNearBlastp/run.$tempDb.$tempDb
-./loadPairwise.csh
+# builds knownBlastTab
+./loapPairwise.csh
 
 # Load mouse and rat
 cd $dir/hgNearBlastp/run.$tempDb.$xdb

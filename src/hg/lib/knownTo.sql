@@ -8,6 +8,6 @@ CREATE TABLE knownTo (
     name varchar(255) not null,	# Same as name field in known gene
     value varchar(255) not null,	# Other id
               #Indices
-    INDEX(name(12)),
-    INDEX(value(12))
+    INDEX(name),
+    INDEX(value)
 );
