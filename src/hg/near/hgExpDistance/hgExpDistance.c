@@ -302,12 +302,12 @@ hgLoadTabFile(conn, tempDir, outTable, &f);
 printf("Loaded %s\n", outTable);
 
 /* Add indices. */
-sqlSafef(query, sizeof(query), "alter table %s add index(query(12))", outTable);
+sqlSafef(query, sizeof(query), "alter table %s add index(query)", outTable);
 sqlUpdate(conn, query);
 printf("Made query index\n");
 if (optionExists("targetIndex"))
     {
-    sqlSafef(query, sizeof(query), "alter table %s add index(target(12))", outTable);
+    sqlSafef(query, sizeof(query), "alter table %s add index(target)", outTable);
     sqlUpdate(conn, query);
     printf("Made target index\n");
     }
