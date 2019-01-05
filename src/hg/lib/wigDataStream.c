@@ -479,20 +479,24 @@ freeMem(dateStamp);
 static void showResolution(double resolution, FILE *fh)
 {
 if (resolution > 0.0)
+    {
     fprintf (fh, "#\tThis data has been compressed with a minor "
 	"loss in resolution.\n" );
     fprintf (fh, "#\t(Worst case: %g)  The original source data\n",
 	resolution);
     fprintf (fh, "#\t(before querying and compression) is available at \n"
 	"#\t\thttp://hgdownload.soe.ucsc.edu/downloads.html\n");
+    }
 }
 
 static void showResolutionNoDownloads(double resolution, FILE *fh)
 {
 if (resolution > 0.0)
+    {
     fprintf (fh, "#\tThis data has been compressed with a minor "
 	"loss in resolution.\n" );
     fprintf (fh, "#\t(Worst case: %g)\n", resolution);
+    }
 }
 
 static void showConstraints(struct wiggleDataStream *wds, FILE *fh)
