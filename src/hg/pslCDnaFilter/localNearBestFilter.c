@@ -89,8 +89,7 @@ void localNearBestFilter(struct cDnaQuery *cdna, float localNearBest, int minLoc
  *    alignment.
  */
 {
-float baseScores[cDnaQuerySize(cdna)];
-zeroBytes(baseScores,  cDnaQuerySize(cdna)*sizeof(float));
+float *baseScores = needMem(cDnaQuerySize(cdna) * sizeof(float));
 computeLocalScores(cdna, baseScores);
 struct cDnaAlignRef *hapSetAln;
 
