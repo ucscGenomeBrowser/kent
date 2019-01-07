@@ -212,6 +212,6 @@ int dif;
 dif = strcmp(a->chrom, b->chrom);
 if (dif == 0)
     dif = a->chromStart - b->chromStart;
-    return dif;
+return dif;
 }
 

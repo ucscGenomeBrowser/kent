@@ -1690,7 +1690,10 @@ struct sqlResult *sr;
 if (sameString(table,""))
     {
     if (sameOk(cfgOption("noSqlInj.dumpStack"), "on"))
-	dumpStack("jksql sqlTableExists: Buggy code is feeding me empty table name. table=[%s].\n", table); fflush(stderr); // log only
+	{
+	dumpStack("jksql sqlTableExists: Buggy code is feeding me empty table name. table=[%s].\n", table);
+	fflush(stderr); // log only
+	}
     return FALSE;
     }
 // TODO If the ability to supply a list of tables is hardly used,
@@ -1704,7 +1707,10 @@ if (strchr(table,','))
 if (strchr(table,'%'))
     {
     if (sameOk(cfgOption("noSqlInj.dumpStack"), "on"))
-	dumpStack("jksql sqlTableExists: Buggy code is feeding me junk wildcards. table=[%s].\n", table); fflush(stderr); // log only
+	{
+	dumpStack("jksql sqlTableExists: Buggy code is feeding me junk wildcards. table=[%s].\n", table);
+	fflush(stderr); // log only
+	}
     return FALSE;
     }
 if (strchr(table,'-'))
