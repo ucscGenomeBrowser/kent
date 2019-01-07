@@ -9,6 +9,7 @@ type bed 4
 group compGeno
 priority 2
 pennantIcon New red ../goldenPath/releaseLog.html  Released January 2018
+release alpha,beta
 
     track cons135wayViewalign
     shortLabel Multiz Alignments
