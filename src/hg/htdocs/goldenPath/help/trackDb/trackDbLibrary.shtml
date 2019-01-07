@@ -1062,7 +1062,7 @@
     additional non-standard fields, the parameter '<code>.</code>' (dot)
     must be specified if this track is meant to be configurable.</P>
     <P><B>Example:</B></P>
-    <pre>  type bigBed 9+ </pre>
+    <pre>  type bigBed 9 +</pre>
 
 </DIV>
 
