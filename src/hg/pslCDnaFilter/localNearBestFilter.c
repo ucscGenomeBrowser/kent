@@ -98,5 +98,6 @@ for (hapSetAln = cdna->hapSets; hapSetAln != NULL; hapSetAln = hapSetAln->next)
     if (!hapSetAln->ref->drop && !isLocalNearBest(cdna, hapSetAln->ref, localNearBest, minLocalBestCnt, baseScores))
         cDnaAlignDrop(hapSetAln->ref, TRUE, &cdna->stats->localBestDropCnts, "local near best %0.4g", hapSetAln->ref->score);
     }
+freeMem(baseScores);
 }
 
