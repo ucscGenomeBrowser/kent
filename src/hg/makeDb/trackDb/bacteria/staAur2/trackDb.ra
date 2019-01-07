@@ -48,3 +48,5 @@ searchPriority 50.1
 include trackDb.369way.ra
 
 include aaCounts.ra
+
+include ../../crispr10K.ra

@@ -57,7 +57,7 @@ sqlDyStringPrintf(dy,
 "    target varchar(255) not null,\n"
 "    distance float,\n"
 "#Indices\n"
-"    INDEX(query(8))\n"
+"    INDEX(query)\n"
 ")\n",  tableName);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);

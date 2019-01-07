@@ -74,7 +74,7 @@ _EOF_
   print STDERR "
 Automates UCSC's CpG Island finder for genome database \$db.  Steps:
     hardMask:  Creates hard-masked fastas needed for the CpG Island program.
-    cpg:       Run /scratch/data/cpgIslandExt/cpglh on the hard-masked fastas
+    cpg:       Run /hive/data/staging/data/cpgIslandExt/cpglh on the hard-masked fastas
     makeBed:   Transform output from cpglh into cpgIsland.bed
     load:      Load cpgIsland.bed into \$db.
     cleanup:   Removes hard-masked fastas and output from cpglh.
@@ -194,12 +194,12 @@ sub doCpg {
 set partName = \$1
 set part2bit = hardMaskedFa/\$partName.2bit
 set result = \$2
-twoBitToFa \$part2bit stdout | /scratch/data/cpgIslandExt/cpglh /dev/stdin > \$result
+twoBitToFa \$part2bit stdout | /hive/data/staging/data/cpgIslandExt/cpglh /dev/stdin > \$result
 _EOF_
   ;
   close($fh);
 
-  my $whatItDoes = "Run /scratch/data/cpgIslandExt/cpglh on masked sequence.";
+  my $whatItDoes = "Run /hive/data/staging/data/cpgIslandExt/cpglh on masked sequence.";
   my $bossScript = new HgRemoteScript("$runDir/doCpg.csh", $paraHub,
 				      $runDir, $whatItDoes);
   my $paraRun = &HgAutomate::paraRun();

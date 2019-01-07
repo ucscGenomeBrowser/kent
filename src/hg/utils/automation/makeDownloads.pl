@@ -87,7 +87,7 @@ Assumptions:
 2. $HgAutomate::clusterData/\$db/{\$db.2bit,chrom.sizes} are in place.
 3. AGP, RepeatMasker .out and trfBig .bed files are in their usual places under
    $HgAutomate::clusterData/\$db/ .  (Will complain if not able to find.)
-4. RepeatMasker version information obtained from /scratch/data/RepeatMasker/
+4. RepeatMasker version information obtained from /hive/data/staging/data/RepeatMasker/
 5. Data use conditions are generic, they may need to be specific.
 " if ($detailed);
   print "\n";
@@ -704,17 +704,17 @@ sub makeBigZipsReadme {
       $organism, $consortium, $sequencingCenter, $projectUrl) =
 	&getDescriptives();
   my $rmVersion = "";
-  if ( ! -s "/scratch/data/RepeatMasker/RepeatMasker" ) {
-    die "can not read /scratch/data/RepeatMasker/RepeatMasker\n";
+  if ( ! -s "/hive/data/staging/data/RepeatMasker/RepeatMasker" ) {
+    die "can not read /hive/data/staging/data/RepeatMasker/RepeatMasker\n";
   }
-  $rmVersion = `grep -w open /scratch/data/RepeatMasker/RepeatMasker | grep -w version | grep -w RepeatMasker`;
+  $rmVersion = `grep -w open /hive/data/staging/data/RepeatMasker/RepeatMasker | grep -w version | grep -w RepeatMasker`;
   chomp $rmVersion;
   $rmVersion =~ s/#\s*//;
   my $emblLib = "";
-  if ( ! -s "/scratch/data/RepeatMasker/Libraries/RepeatMaskerLib.embl" ) {
-    die "can not read /scratch/data/RepeatMasker/Libraries/RepeatMaskerLib.embl\n";
+  if ( ! -s "/hive/data/staging/data/RepeatMasker/Libraries/RepeatMaskerLib.embl" ) {
+    die "can not read /hive/data/staging/data/RepeatMasker/Libraries/RepeatMaskerLib.embl\n";
   }
-  $emblLib = `head -100 /scratch/data/RepeatMasker/Libraries/RepeatMaskerLib.embl | grep -w RELEASE`;
+  $emblLib = `head -100 /hive/data/staging/data/RepeatMasker/Libraries/RepeatMaskerLib.embl | grep -w RELEASE`;
   chomp $emblLib;
   $emblLib =~ s/CC\s*//;
   $emblLib =~ s/;\s*.*//;
