@@ -1083,10 +1083,10 @@ if (cartHelList != NULL)
 			   "Marked session <B>%s</B> as %s.<BR>\n",
 			   htmlEncode(sessionName),
 			   (newGallery == TRUE ? "added to gallery" : "removed from public listing"));
-        if (newGallery == FALSE)
-            thumbnailRemove(encUserName, encSessionName, conn);
-        if (newGallery == TRUE)
-            thumbnailAdd(encUserName, encSessionName, conn, dyMessage);
+            if (newGallery == FALSE)
+                thumbnailRemove(encUserName, encSessionName, conn);
+            if (newGallery == TRUE)
+                thumbnailAdd(encUserName, encSessionName, conn, dyMessage);
 	    didSomething = TRUE;
 	    }
 	}
@@ -1125,8 +1125,8 @@ if (cartHelList != NULL)
 			   "Marked session <B>%s</B> as %s.<BR>\n",
 			   htmlEncode(sessionName),
 			   (newShared == TRUE ? "shared" : "unshared"));
-        if (newShared == FALSE && inGallery == TRUE)
-            thumbnailRemove(encUserName, encSessionName, conn);
+            if (newShared == FALSE && inGallery == TRUE)
+                thumbnailRemove(encUserName, encSessionName, conn);
 	    didSomething = TRUE;
 	    }
 	}
