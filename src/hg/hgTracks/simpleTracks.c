@@ -663,8 +663,9 @@ for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
                     range->next = NULL;  // do not need the rest of the ranges
                     }
                 }
-
-	    if (spaceSaverAddOverflowMulti(ss, rangeList, nodeList, allowOverflow) == NULL)
+            boolean doPadding = !cartOrTdbBoolean(cart, tg->tdb, "packDense", FALSE);
+	    if (spaceSaverAddOverflowMultiOptionalPadding(
+                                ss, rangeList, nodeList, allowOverflow, doPadding) == NULL)
 		break;
 
 	    }
