@@ -2357,7 +2357,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
             }
         else
             {
-            if (!intronTruncated == TRUE)
+            if (!(intronTruncated == TRUE))
                 {
                 printf("...intron truncated...<br>");
                 intronTruncated = TRUE;
@@ -4113,13 +4113,12 @@ if (itemForUrl == NULL)
 dupe = cloneString(tdb->type);
 wordCount = chopLine(dupe, words);
 headerItem = cloneString(item);
-
+type = words[0];
 
 /* Suppress printing item name in page header, as it is not informative for these types of
  * tracks... */
 if (container == NULL && wordCount > 0)
     {
-    type = words[0];
     if (sameString(type, "maf") || sameString(type, "wigMaf") || sameString(type, "bigMaf") || sameString(type, "netAlign")
         || sameString(type, "encodePeak"))
         headerItem = NULL;

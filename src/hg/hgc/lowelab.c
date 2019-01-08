@@ -3626,6 +3626,7 @@ void doAlignInfo(struct trackDb *tdb, char *itemName)
           printf("<B>Genomic size: </B> %d nt<BR>\n", (infoload->chromEnd - infoload->chromStart));
           if (infoload->next != NULL)
             printf("<hr>\n");
+          else
             break;
     }
   sqlFreeResult(&sr);
