@@ -587,10 +587,10 @@ if ((row = sqlNextRow(sr)) != NULL)
 	cartRemoveLike(cart, "*");
 	cartParseOverHash(cart, row[1]);
 	cartSetString(cart, sessionVar, hgsid);
-    if (sessionTableString != NULL)
-        cartSetString(cart, hgSessionTableState, sessionTableString);
-    if (pubSessionsTableString != NULL)
-        cartSetString(cart, hgPublicSessionsTableState, pubSessionsTableString);
+	if (sessionTableString != NULL)
+	    cartSetString(cart, hgSessionTableState, sessionTableString);
+	if (pubSessionsTableString != NULL)
+	    cartSetString(cart, hgPublicSessionsTableState, pubSessionsTableString);
 	if (oldVars)
 	    hashEmpty(oldVars);
 	/* Overload settings explicitly passed in via CGI (except for the

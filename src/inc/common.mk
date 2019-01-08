@@ -83,7 +83,11 @@ endif
 ifeq (${IS_HGWDEV},yes)
    L+=/usr/lib64/libssl.a /usr/lib64/libcrypto.a -lkrb5 -lk5crypto -ldl
 else
-   L+=-lssl -lcrypto
+   ifneq ($(wildcard /usr/lib/x86_64-linux-gnu/libssl.a),)
+	L+=/usr/lib/x86_64-linux-gnu/libssl.a -lcrypto
+   else
+	L+=-lssl -lcrypto
+   endif
 endif
 
 # autodetect where libm is installed
@@ -139,6 +143,11 @@ ifneq ($(MAKECMDGOALS),clean)
   ifeq (${IS_HGWDEV},yes)
     MYSQLINC=/usr/include/mysql
     MYSQLLIBS=/usr/lib64/libmysqlclient.a /usr/lib64/libssl.a /usr/lib64/libcrypto.a -lkrb5 -ldl -lz
+  endif
+  ifeq (${MYSQLLIBS},)
+    ifneq ($(wildcard /usr/lib/x86_64-linux-gnu/libmysqlclient.a),)
+	  MYSQLLIBS=/usr/lib/x86_64-linux-gnu/libmysqlclient.a -ldl
+    endif
   endif
   # this does *not* work on Mac OSX with the dynamic libraries
   ifneq ($(UNAME_S),Darwin)

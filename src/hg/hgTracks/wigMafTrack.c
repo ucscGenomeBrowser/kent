@@ -2410,8 +2410,10 @@ for (mi = miList->next, i=1; mi != NULL && mi->db != NULL; mi = mi->next, i++)
     /* having these static here will allow the option 'codonDefault'
      * to run rapidly through the display without extra calls to SQL
      * for the same answer over and over.  For other codon modes, it
-     * will still need to query the Frames table repeatedly.  Currently this
-     * is slow, perhaps it needs an index on the src column ?
+     * will still need to query the Frames table repeatedly.
+     * This was found to speed up dramatically by adding an index to
+     * the table:
+     * hgsql staAur2 -e 'CREATE INDEX src on multiz369wayFrames (src, bin);'
      */
     static char * extraPrevious = NULL;
     static struct mafFrames *mfList = NULL, *mf;
