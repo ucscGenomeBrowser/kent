@@ -54,6 +54,7 @@ cdsEvidence genePred
 cdsTable psl bigPsl
 cell bed bedGraph
 centerLabelsDense *
+centerLabelsPack *
 chainColor chain bigChain
 chainLinearGap netAlign chain bed psl bigPsl bigChain
 chainMinScore netAlign chain bed psl bigPsl bigChain
