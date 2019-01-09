@@ -13727,10 +13727,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Left Primer Sequence:</B> %s<BR>\n", snp.primerL);
     printf("<B>Right Primer Sequence:</B> %s<BR>\n", snp.primerR);
     if (snp.snpType[0] != 'S')
+        {
         if (snp.questionM[0] == 'H')
 	    printf("<B>Indel Confidence</B>: High\n");
         if (snp.questionM[0] == 'L')
 	    printf("<B>Indel Confidence</B>: Low\n");
+        }
     }
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
