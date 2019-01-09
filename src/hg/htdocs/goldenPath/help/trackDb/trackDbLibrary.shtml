@@ -1061,7 +1061,9 @@
     type should end with a '<code>+</code>' (plus).  Even if there are no
     additional non-standard fields, the parameter '<code>.</code>' (dot)
     must be specified if this track is meant to be configurable.</P>
-    <P><em>Examples can be found below.</em></P>
+    <P><B>Example:</B></P>
+    <pre>  type bigBed 9 +</pre>
+
 </DIV>
 
 <DIV class="bigPsl"><span class="types bigPsl"></span>
@@ -1452,7 +1454,10 @@ There are no extra options that can appear on the type bigInteract line.
     item coloring using the value in the ninth field, <code>itemRgb</code>. The
     value of the  item field must be an R,G,B triplet.  When loaded
     into a table, this field appears as an integer with the RGB values
-    in specific bits of the integer.</P>
+    in specific bits of the integer. To observe this field, specify the type as,
+     <code>type bigBed 9</code>, or, <code>type bigBed 9+</code>, for additional
+    <A HREF="../../../FAQ/FAQformat.html#format1" target="_blank">non-standard columns</A>, 
+    in the trackDb stanza for the bigBed file.</P>
     <P><B>Example:</B></P>
     <pre>   itemRgb on</pre>
 </DIV>

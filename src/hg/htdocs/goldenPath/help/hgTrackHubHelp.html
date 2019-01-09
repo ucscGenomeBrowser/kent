@@ -536,7 +536,9 @@ characters.</p>
 <em>bigBed</em>, <em>bigBarChart</em>, <em>bigGenePred</em>, <em>bigInteract</em>, <em>bigNarrowPeak</em>, <em>bigChain</em>, <em>bigPsl</em>, 
 <em>bigMaf</em>, <em>bam</em>, <em>halSnake</em> or <em>vcfTabix</em> (Note: use <em> type bam</em> 
 for CRAM files). If the type is <em>bigBed</em>, it may be followed by an optional number denoting 
-the number of fields in the bigBed file (e.g., &quot;type bigBed 12&quot; for a file with 12 fields). 
+the number of fields in the bigBed file (e.g., &quot;type bigBed 12&quot; for a file with 12 fields
+or &quot;type bigBed 12 +&quot; for a file that contains additional <a href="../../FAQ/FAQformat.html#format1" 
+target="_blank">non-standard columns</a>). 
 If no number is given, a default value of 3 is assumed (a very limited display that omits names, strand 
 information, and exon boundaries).</p>
 <p>
@@ -651,8 +653,8 @@ The hubCheck program is available from the UCSC downloads server at
 The Genome Browser supports searching for items within bigBed tracks in track data hubs. To support 
 this behavior you have to add an index to the bigBed file when you initially create the the bigBed 
 file from the bed file input. Indices are usually created on the name field of the bed, but can be 
-created on any field of the bed. Free-text searches can also be enabled by creating a TRIX index 
-file that maps id's in the track to free-text metadata.</p>
+created on any field of the bed. Free-text searches can also be enabled by creating a 
+<a href="trix.html">TRIX index file</a> that maps id's in the track to free-text metadata.</p>
 <p>
 See the searchIndex and searchTrix fields in the Hub Track Database Definition document for 
 information on how to set up your bigBed to enable searching. The searchIndex setting requires
@@ -830,7 +832,7 @@ just examples and do not represent real trackDb variables for hubs at Ensembl.)
 As stated in <a href="#Intro">What Are Track Hubs?</a>, track hubs files must be located
 in web-accessible locations that support byte-range requests. If your institution does not
 provide web hosting space for you, we know of at least the following sites where you can host
-your data and configuration files:</p>
+your data and configuration files for free:</p>
 <ul>
   <li><a href="https://de.cyverse.org/de/" target="_blank">CyVerse Discovery Environment</a></li>
   <!--<li><a href="https://usegalaxy.org/" target="_blank">Galaxy</a></li>-->
@@ -842,8 +844,20 @@ Each of the providers above has a slightly different approach to hosting data fo
 compatibility with the UCSC Genome Browser, and may have different advantages and disadvantages,
 such as size limitations, usage statistics, and version control integration. Additionally, as 
 previously mentioned, any provider that supports byte-range access will work for hub hosting, 
-and you are not limited to the above sites. Below is a summarized guide for each of the providers 
-mentioned above. <b>Please note these services are external to UCSC and may change.</b></p>
+and you are not limited to the above sites. Below is a summarized guide for
+each of the providers mentioned above.</p>
+
+<p>In general, commercial online <b>cloud backup</b> providers
+that charge a flat rate, like Dropbox, iCloud, Google Drive, Box.com, Microsoft
+OneDrive, Tencent Weiyun, Yandex.Disk, etc. do not work reliably as their business
+model requires rare and rate-limited data access, which is too slow or too limited for
+genome annotation display. However, commercial
+<b>cloud storage</b> offers that charge per GB transferred, like Amazon S3, Microsoft
+Azure Storage, Google Cloud Storage, Backblaze, Alibaba Object Store, etc.
+typically do work. For optimal performance,
+select a San Francisco / San Jose data center for the main UCSC site genome.ucsc.edu,  
+a Frankfurt/Germany data center for genome-euro.ucsc.edu and a Tokyo data center for
+genome-asia.ucsc.edu. <b>These services are external to UCSC and may change.</b></p>
 
 <h3>Hosting Hubs on CyVerse</h3>
 <p>

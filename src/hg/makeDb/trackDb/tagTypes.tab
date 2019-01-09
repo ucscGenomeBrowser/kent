@@ -40,7 +40,7 @@ baseColorUseCds bed psl genePred bigPsl
 baseColorUseSequence *
 baseQualRange bam
 bedFilter bed
-bedNameLabel bed barChart bigBarChart
+bedNameLabel bed barChart bigBarChart bigBed
 bigDataUrl customTracks bigBed bigWig bam vcfTabix bigPsl halSnake bigBarChart gtexTranscExpr bigInteract bigChain
 bigGeneDataUrl genePred
 blastRef psl bigPsl
@@ -327,6 +327,8 @@ sGroup_Bundibugyo_2007 wigMaf
 sGroup_Caenorhabditis wigMaf
 sGroup_Chimp wigMaf
 sGroup_DRC_2007 wigMaf
+sGroup_Deuterostomia wigMaf
+sGroup_Dorylaimia wigMaf
 sGroup_Drosophila wigMaf
 sGroup_Ebola_2014 wigMaf
 sGroup_Euarchontoglires wigMaf
@@ -346,18 +348,35 @@ sGroup_Nematocera wigMaf
 sGroup_Nematode wigMaf
 sGroup_Nematodes wigMaf
 sGroup_Others wigMaf
+sGroup_Percent99 wigMaf
+sGroup_Percent98 wigMaf
+sGroup_Percent97 wigMaf
+sGroup_Percent96 wigMaf
+sGroup_Percent95 wigMaf
+sGroup_Percent94 wigMaf
+sGroup_Percent93 wigMaf
+sGroup_Percent92 wigMaf
+sGroup_Percent91 wigMaf
+sGroup_Percent90 wigMaf
+sGroup_Percent88 wigMaf
 sGroup_placental wigMaf
 sGroup_Placental wigMaf
 sGroup_Placental_Mammal wigMaf
 sGroup_Placental_Mammals wigMaf
+sGroup_Platyhelminthes wigMaf
+sGroup_Plectida wigMaf
 sGroup_Primate wigMaf
 sGroup_Primates wigMaf
 sGroup_primate wigMaf
 sGroup_Primates wigMaf
 sGroup_Reptiles wigMaf
 sGroup_Reston_1989-90 wigMaf
+sGroup_Rhabditina wigMaf
 sGroup_Sarcopterygii wigMaf
+sGroup_Spirurina wigMaf
+sGroup_Strongylida wigMaf
 sGroup_Sudan_1976-9 wigMaf
+sGroup_Tylenchina wigMaf
 sGroup_vertebrate wigMaf
 sGroup_Vertebrate wigMaf
 sGroup_Vertebrates wigMaf

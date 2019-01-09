@@ -3340,21 +3340,29 @@ else
 
 
 boolean hFindSplitTable(char *db, char *chrom, char *rootName,
-	char retTableBuf[HDB_MAX_TABLE_STRING], boolean *hasBin)
+	char *retTableBuf, int tableBufSize, boolean *hasBin)
 /* Find name of table in a given database that may or may not
- * be split across chromosomes. Return FALSE if table doesn't exist.  */
+ * be split across chromosomes. Return FALSE if table doesn't exist. 
+ *
+ * Do not ignore the return value. 
+ * This function does NOT tell you whether or not the table is split. 
+ * It tells you if the table exists. */
 {
 struct hTableInfo *hti = hFindTableInfo(db, chrom, rootName);
 if (hti == NULL)
+    {
+    // better than uninitialized stack value if caller ignores return value.
+    retTableBuf[0] = 0;
     return FALSE;
+    }
 if (retTableBuf != NULL)
     {
     if (chrom == NULL)
 	chrom = hDefaultChrom(db);
     if (hti->isSplit)
-	safef(retTableBuf, HDB_MAX_TABLE_STRING, "%s_%s", chrom, rootName);
+	safef(retTableBuf, tableBufSize, "%s_%s", chrom, rootName);
     else
-	safef(retTableBuf, HDB_MAX_TABLE_STRING, "%s", rootName);
+	safef(retTableBuf, tableBufSize, "%s", rootName);
     }
 if (hasBin != NULL)
     *hasBin = hti->hasBin;

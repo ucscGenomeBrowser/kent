@@ -528,19 +528,15 @@ struct psl *getChromPsl(char *database, char *chrom, char *splitTable)
 /* Get all alignments for chromosome sorted by chromosome
  * start position. */
 {
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 char query[256], **row;
 struct sqlResult *sr;
 struct psl *pslList = NULL, *psl;
 boolean hasBin;
-boolean isSplit = hFindSplitTable(database, chrom, splitTable, table, &hasBin);
-if (hTableExists(database, table))
+if (hFindSplitTable(database, chrom, splitTable, table, sizeof table, &hasBin))
     {
     struct sqlConnection *conn = hAllocConn(database);
-    if (isSplit)
-	sqlSafef(query, sizeof query, "select * from %s", table);
-    else
-	sqlSafef(query, sizeof query, "select * from %s where qName = '%s'", table, chrom);
+    sqlSafef(query, sizeof query, "select * from %s where qName = '%s'", table, chrom);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -560,22 +556,16 @@ struct bed *getChromBed(char *database, char *chrom, char *splitTable)
 /* Get all alignments for chromosome sorted by chromosome
  * start position. */
 {
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 char query[256], **row;
 struct sqlResult *sr;
 struct bed *bedList = NULL, *bed;
-boolean hasBin;
-boolean isSplit = hFindSplitTable(database, chrom, splitTable, table, &hasBin);
-
-uglyf("hFindSplitTable(%s, %s, %s, %d)\n", chrom, splitTable, table, hasBin);
-if (hTableExists(database, table))
+boolean found = hFindSplitTable(database, chrom, splitTable, table, sizeof table, NULL);
+uglyf("hFindSplitTable(%s, %s, %s)\n", chrom, splitTable, table);
+if (found)
     {
     struct sqlConnection *conn = hAllocConn(database);
-    if (isSplit)
-	sqlSafef(query, sizeof query, "select chrom,chromStart,chromEnd from %s", table);
-    else
-	sqlSafef(query, sizeof query, "select chrom,chromStart,chromEnd from %s where chrom = '%s'", 
-		table, chrom);
+    sqlSafef(query, sizeof query, "select chrom,chromStart,chromEnd from %s where chrom = '%s'", table, chrom);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{

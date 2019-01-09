@@ -315,14 +315,13 @@ void cartSaveSession(struct cart *cart);
  * somewhere inside of form or bad things will happen. */
 
 void cartDump(struct cart *cart);
-/* Dump contents of cart. */
+/* Dump contents of cart with anti-XSS HTML encoding. */
 
-void cartDumpNoEncode(struct cart *cart);
-/* Dump contents of cart without HTML encoding. */
+void cartDumpHgSession(struct cart *cart);
+/* Dump contents of cart with escaped newlines for hgSession output files.
+ * Cart variable "cartDumpAsTable" is ignored. */
 
 #define CART_DUMP_AS_TABLE "cartDumpAsTable"
-void cartDumpList(struct hashEl *elList,boolean asTable, boolean doHtmlEncode);
-/* Dump list of cart variables optionally as a table with ajax update support. */
 
 void cartDumpPrefix(struct cart *cart, char *prefix);
 /* Dump all cart variables with prefix */
@@ -472,13 +471,22 @@ void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
  * If non-NULL, actionVar is a cartRemove wildcard string specifying the
  * CGI action variable that sent us here. */
 
-void cartLoadSettings(struct lineFile *lf, struct cart *cart,
-		      struct hash *oldVars, char *actionVar);
-/* Load settings (cartDump output) into current session, and then
- * reload the CGI settings (to support override of session settings).
+boolean cartLoadSettingsFromUserInput(struct lineFile *lf, struct cart *cart, struct hash *oldVars,
+                                      char *actionVar, struct dyString *dyMessage);
+/* Verify that the user data in lf looks like valid settings (hgSession saved file;
+ * like cartDump output, but values may or may not be htmlEncoded).
+ * Older session files may have unencoded newlines, causing bogus variables;
+ * watch out for those after pasted input variables like hgta_pastedIdentifiers.
+ * Users have uploaded custom tracks, DTC genotypes, hgTracks HTML, even
+ * binary data files.  Look for problematic patterns observed in the past.
+ * Load settings into current session, and then reload the CGI settings
+ * (to support override of session settings).
  * If non-NULL, oldVars will contain values overloaded when reloading CGI.
  * If non-NULL, actionVar is a cartRemove wildcard string specifying the
- * CGI action variable that sent us here. */
+ * CGI action variable that sent us here.
+ * If input contains suspect data, then add diagnostics to dyMessage.  If input
+ * contains so much garbage that we shouldn't even try to load what passes the filters,
+ * return FALSE. */
 
 char *cartGetOrderFromFile(char *genomeDb, struct cart *cart, char *speciesUseFile);
 /* Look in a cart variable that holds the filename that has a list of

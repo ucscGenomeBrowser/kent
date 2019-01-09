@@ -1690,7 +1690,10 @@ struct sqlResult *sr;
 if (sameString(table,""))
     {
     if (sameOk(cfgOption("noSqlInj.dumpStack"), "on"))
-	dumpStack("jksql sqlTableExists: Buggy code is feeding me empty table name. table=[%s].\n", table); fflush(stderr); // log only
+	{
+	dumpStack("jksql sqlTableExists: Buggy code is feeding me empty table name. table=[%s].\n", table);
+	fflush(stderr); // log only
+	}
     return FALSE;
     }
 // TODO If the ability to supply a list of tables is hardly used,
@@ -1704,7 +1707,10 @@ if (strchr(table,','))
 if (strchr(table,'%'))
     {
     if (sameOk(cfgOption("noSqlInj.dumpStack"), "on"))
-	dumpStack("jksql sqlTableExists: Buggy code is feeding me junk wildcards. table=[%s].\n", table); fflush(stderr); // log only
+	{
+	dumpStack("jksql sqlTableExists: Buggy code is feeding me junk wildcards. table=[%s].\n", table);
+	fflush(stderr); // log only
+	}
     return FALSE;
     }
 if (strchr(table,'-'))
@@ -3742,6 +3748,15 @@ if (!init)
     // NOTE it is important for security that no other characters be allowed here
     init = TRUE;
     }
+/* A good idea but code is currently using empty in table names at least. 
+See src/hg/lib/gtexTissue.c:
+select * from gtexTissue%s order by id
+This could be re-worked someday, but not now. refs #22596
+if (identifier[0] == 0) // empty string not allowed since this is usually caused by an error.
+    {
+    sqlCheckError("Illegal empty string identifier not allowed.");
+    }
+*/
 if (!sqlCheckAllowedChars(identifier, allowed))
     {
     sqlCheckError("Illegal character found in identifier %s", identifier);

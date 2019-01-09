@@ -1,5 +1,3 @@
-/* hubCheck - Check a track data hub for integrity.. */
-
 /* Copyright (C) 2014 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
 
@@ -292,6 +290,11 @@ for (tag = page->tags; tag != NULL; tag = tag->next)
     buf[len] = 0;
     verbose(6, "Found spec: %s\n", buf);
     spec->name = cloneString(firstWordInLine(buf));
+    if (spec->name == NULL || strlen(spec->name) == 0)
+        {
+        warn("ERROR: format problem with trackDbHub.html -- contact UCSC.");
+        continue;
+        }
     spec->level = cloneString(chopPrefixAt(attr->val, '-'));
     verbose(6, "spec: name=%s, level=%s\n", spec->name, spec->level);
     savedSpec = (struct trackHubSettingSpec *)hashFindVal(specHash, spec->name);

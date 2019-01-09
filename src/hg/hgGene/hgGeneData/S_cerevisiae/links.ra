@@ -13,7 +13,7 @@ name sgd
 shortLabel SGD
 tables sgdGene
 idSql select name from sgdGene where name = '%s'
-url http://db.yeastgenome.org/cgi-bin/SGD/locus.pl?locus=%s
+url http://db.yeastgenome.org/locus/%s
 priority 10
 
 name uniProt

@@ -36,6 +36,9 @@ int main(int argc, char *argv[])
 long enteredMainTime = clock1000();
 struct dyString *headText = newDyString(512);
 char *destination = cgiUsualString("destination", defaultDestination);
+if (strstr(destination, "://"))
+    errAbort("To stop Open Redirect abuse, only relative URLs are supported. "
+	    "Request for destination=[%s] rejected.\n", destination);
 
 dyStringPrintf(headText,
 	       "<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"0;URL=%s\">"

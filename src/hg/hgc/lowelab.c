@@ -478,7 +478,7 @@ struct slName *el, *list;
 char *table = tdb->table;
 char *pdb = hPdbFromGdb(database);
 struct genePred *gpList = NULL, *gp = NULL;
-char tableName[64];
+char tableName[HDB_MAX_TABLE_STRING];
 boolean hasBin;
 int itemCount = 0;
 int arcogCount = 0;
@@ -580,7 +580,8 @@ printf("<tbody><tr><td style=\"background-color:#eee9e9;\">\n");
 printf("<a name=\"positions\"></a><b>Positions and Sequence</b><br></td></tr>\n");
 printf("<tr><td>\n");
 
-hFindSplitTable(database, seqName, table, tableName, &hasBin);
+if (!hFindSplitTable(database, seqName, table, tableName, sizeof tableName, &hasBin))
+    errAbort("track %s not found", table);
 sqlSafefFrag(query, sizeof(query), "name = \"%s\"", item);
 gpList = genePredReaderLoadQuery(conn, tableName, query);
 for (gp = gpList; gp != NULL; gp = gp->next)
@@ -3625,6 +3626,7 @@ void doAlignInfo(struct trackDb *tdb, char *itemName)
           printf("<B>Genomic size: </B> %d nt<BR>\n", (infoload->chromEnd - infoload->chromStart));
           if (infoload->next != NULL)
             printf("<hr>\n");
+          else
             break;
     }
   sqlFreeResult(&sr);

@@ -34,13 +34,14 @@ static char *makeMysqlMatchStr(char *str)
 // we also strip leading/trailing spaces.
 char *matchStr = needMem(strlen(str) * 2 + 1);
 int i = 0;
-for(;*str && isspace(*str);str++)
-    ; while(*str)
+for(;*str && isspace(*str);str++) // skip initial whitespace
+    ; 
+while(*str)
     {
     matchStr[i++] = '+';
-    for(; *str && !isspace(*str);str++)
+    for(; *str && !isspace(*str);str++) // copy next word
         matchStr[i++] = *str;
-    for(;*str && isspace(*str);str++)
+    for(;*str && isspace(*str);str++) // skip over white space
         ;
     }
 matchStr[i++] = 0;

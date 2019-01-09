@@ -268,7 +268,7 @@ BLASTZ_Q=$HgAutomate::clusterData/blastz/HoxD55.q
 # Globals:
 my %defVars = ();
 my ($DEF, $tDb, $qDb, $QDb, $isSelf, $selfSplit, $buildDir, $fileServer);
-my ($swapDir, $splitRef, $inclHap, $secondsStart, $secondsEnd, $dbExists);
+my ($swapDir, $splitRef, $inclHap, $secondsStart, $secondsEnd, $dbExists, $qDbExists);
 
 sub isInDirList {
   # Return TRUE if $dir is under (begins with) something in dirList.
@@ -1151,6 +1151,7 @@ _EOF_
     $qRepeats = $opt_tRepeats ? "-qRepeats=$opt_tRepeats" : $defaultTRepeats;
   }
     if (! $opt_trackHub && $dbExists) {
+      if ($qDbExists) {
       $bossScript->add(<<_EOF_
 
 # Add gap/repeat stats to the net file using database tables:
@@ -1160,6 +1161,19 @@ netClass -verbose=0 $tRepeats $qRepeats -noAr noClass.net $tDb $qDb $tDb.$qDb.ne
 # Load nets:
 netFilter -minGap=10 $tDb.$qDb.net \\
   | hgLoadNet -verbose=0 $tDb net$QDb stdin
+_EOF_
+      );
+      } else {
+      $bossScript->add(<<_EOF_
+cp -p noClass.net $tDb.$qDb.net
+netFilter -minGap=10 noClass.net \\
+  | hgLoadNet -test -noBin -warn -verbose=0 $tDb net$QDb stdin
+mv align.tab net$QDb.tab
+_EOF_
+      );
+      }
+
+      $bossScript->add(<<_EOF_
 
 cd $buildDir
 featureBits $tDb $QDbLink >&fb.$tDb.$QDbLink.txt
@@ -1185,13 +1199,16 @@ sub makeDownloads {
   # Compress the netClassed .net for download (other files should have been
   # compressed already).
   my $runDir = "$buildDir/axtChain";
-  if (-e "$runDir/$tDb.$qDb.net") {
+  if (-s "$runDir/$tDb.$qDb.net") {
     &HgAutomate::run("$HgAutomate::runSSH $fileServer nice " .
 	 "gzip $runDir/$tDb.$qDb.net");
   }
   return if ($opt_skipDownload);
   # Make an md5sum.txt file.
   my $net = $isSelf ? "" : "$tDb.$qDb.net.gz";
+  if (! -s "$net") {
+     $net = "";
+  }
   my $whatItDoes =
 "It makes an md5sum.txt file for downloadable files, with relative paths
 matching what the user will see on the download server, and installs the
@@ -1513,8 +1530,10 @@ sub installDownloads {
   # load liftOver chains into hgcentral
   my $runDir = "$buildDir/axtChain";
   # Make sure previous stage was successful.
-  my $successFile = $isSelf ? "$runDir/$tDb.$qDb.all.chain.gz" :
-                              "$runDir/$tDb.$qDb.net.gz";
+  my $successFile = "$runDir/$tDb.$qDb.all.chain.gz";
+  if (! $isSelf && -s "$runDir/$tDb.$qDb.net.gz") {
+     $successFile = "$runDir/$tDb.$qDb.net.gz";
+  }
   if (! -e $successFile && ! $opt_debug) {
     die "installDownloads: looks like previous stage was not successful " .
       "(can't find $successFile).\n";
@@ -1545,8 +1564,14 @@ _EOF_
     my $axt = ($splitRef ?
 	       "mkdir axtNet\n" . "ln -s $buildDir/axtNet/*.axt.gz axtNet/" :
 	       "ln -s $buildDir/axtNet/$tDb.$qDb.net.axt.gz .");
+    if ( -s "$runDir/$tDb.$qDb.net.gz") {
     $bossScript->add(<<_EOF_
 ln -s $runDir/$tDb.$qDb.net.gz .
+_EOF_
+      );
+    }
+    $bossScript->add(<<_EOF_
+
 $axt
 
 mkdir -p $gpLiftOverDir
@@ -1708,11 +1733,17 @@ _EOF_
 set lineCount = `zcat $tDb.$qDb.syn.chain.gz | wc -l`
 if (\$lineCount > 0) then
   hgLoadChain -tIndex $tDb chainSyn$QDb $tDb.$qDb.syn.chain.gz
+endif
+_EOF_
+      );
+      if ($qDbExists) {
+        $bossScript->add(<<_EOF_
   netFilter -minGap=10 $tDb.$qDb.syn.net.gz \\
     | hgLoadNet -verbose=0 $tDb netSyn$QDb stdin
 endif
 _EOF_
-      );
+        );
+      }
     } else {
       $bossScript->add(<<_EOF_
 set lineCount = `zcat $tDb.$qDb.syn.chain.gz | wc -l`
@@ -1780,12 +1811,14 @@ _EOF_
       $bossScript->add(<<_EOF_
 mkdir -p $HgAutomate::goldenPath/$tDb/vs$QDb
 cd $HgAutomate::goldenPath/$tDb/vs$QDb
-ln -s $runDir/$tDb.$qDb.syn.net.gz .
-ln -s $runDir/$tDb.$qDb.synNet.maf.gz .
-cat $runDir/synNet.md5sum.txt >> md5sum.txt
-sort -u md5sum.txt > tmp.sum
-cat tmp.sum > md5sum.txt
-rm -f tmp.sum
+if (-s $runDir/synNet.md5sum.txt ) then
+  ln -s $runDir/$tDb.$qDb.syn.net.gz .
+  ln -s $runDir/$tDb.$qDb.synNet.maf.gz .
+  cat $runDir/synNet.md5sum.txt >> md5sum.txt
+  sort -u md5sum.txt > tmp.sum
+  cat tmp.sum > md5sum.txt
+  rm -f tmp.sum
+endif
 _EOF_
       );
     }
@@ -1793,8 +1826,10 @@ _EOF_
     if (! $opt_trackHub && $dbExists) {
       $bossScript->add(<<_EOF_
 cd "$buildDir"
-featureBits $tDb chainSyn${QDb}Link >&fb.$tDb.chainSyn${QDb}Link.txt
-cat fb.$tDb.chainSyn${QDb}Link.txt
+if (\$lineCount > 0) then
+  featureBits $tDb chainSyn${QDb}Link >&fb.$tDb.chainSyn${QDb}Link.txt
+  cat fb.$tDb.chainSyn${QDb}Link.txt
+endif
 _EOF_
       );
     }
@@ -1878,6 +1913,9 @@ $fileServer = &HgAutomate::chooseFileServer($opt_swap ? $swapDir : $buildDir);
 # may be working on a 2bit file that does not have a database browser
 $dbExists = 0;
 $dbExists = 1 if (&HgAutomate::databaseExists($dbHost, $tDb));
+# may be working with a query that does not have a database
+$qDbExists = 0;
+$qDbExists = 1 if (&HgAutomate::databaseExists($dbHost, $qDb));
 
 # When running -swap, swapGlobals() happens at the end of the chainMerge step.
 # However, if we also use -continue with some step later than chainMerge, we
