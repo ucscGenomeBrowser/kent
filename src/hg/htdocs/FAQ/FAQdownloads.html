@@ -884,9 +884,14 @@ A quick way to sort an output BED file by position is to use the following UNIX 
 <h2>'Permisssion denied' error when trying to use command-line utilities</h2>
 <h6>Why do I get a 'Permission denied' error when I try to run command-line utilities?</h6>
 <p>
-To make utilities usable, turn on its 'executable' bit: <br>
-        <code>$ chmod +x ./filePath </code><br>
-        <code>$ ./filePath/utility_name</code><br>
+In order for your computer to run a freshly downloaded utility, you will need to update the file
+system permissions to allow your operating system to run the program.
+<br>
+To make utilities usable, turn on its 'executable' bit: 
+       <pre> <code>$ chmod +x ./filePath </code></pre>
+       <pre> <code>$ ./filePath/utility_name</code></pre>
+Example:
+       <pre><code>$ chmod +x /home/user/liftover/liftOver</code></pre>
         See also: <a href="http://en.wikipedia.org/wiki/Chmod" target="_blank">http://en.wikipedia.org/wiki/Chmod</a>
 
 </p>
