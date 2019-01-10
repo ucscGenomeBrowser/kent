@@ -4949,7 +4949,6 @@ if (sameString(action, EXTENDED_DNA_BUTTON))
 // But we want to keep it very simple and close to a plain text dump.
 
 cartHtmlStart("DNA");
-hgBotDelay();
 puts("<PRE>");
 if (tbl[0] == 0)
     {
@@ -7650,7 +7649,6 @@ char *otherDb = NULL, *org = NULL, *otherOrg = NULL;
 struct dnaSeq *qSeq = NULL;
 char name[128];
 
-hgBotDelay();	/* Prevent abuse. */
 
 /* Figure out other database. */
 if (chopLine(type, typeWords) < ArraySize(typeWords))
@@ -25461,6 +25459,8 @@ char *track = cartString(cart, "g");
 char *item = cloneString(cartOptionalString(cart, "i"));
 char *parentWigMaf = cartOptionalString(cart, "parentWigMaf");
 struct trackDb *tdb = NULL;
+
+hgBotDelayFrac(0.5);
 
 if (hIsGisaidServer())
     {
