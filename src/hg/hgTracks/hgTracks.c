@@ -4798,12 +4798,14 @@ for (track = trackList; track != NULL; track = track->next)
             flatTracksAdd(&flatTracks,track,cart, orderedWiggles);
         else
             {
+            boolean doCollapse = trackDbSettingOn(track->tdb, "collapseEmptySubtracks");
             for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
                 {
                 if (!isSubtrackVisible(subtrack))
                     continue;
 
-                if (!isLimitedVisHiddenForAllWindows(subtrack))
+                if (!isLimitedVisHiddenForAllWindows(subtrack) && 
+                        !(doCollapse && slCount(subtrack->items) == 0))
                     {
                     flatTracksAdd(&flatTracks,subtrack,cart, orderedWiggles);
                     }
