@@ -205,7 +205,6 @@ UTIL_DIRS = \
 	ratStuff \
 	relPairs \
 	recycleDb \
-	reviewSanity \
 	rnaStructure \
 	sage \
 	scanRa \
