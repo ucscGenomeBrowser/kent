@@ -12,7 +12,7 @@ priority 4
 type bigBed 9 +
 mouseOverField mouseOver
 itemRgb on
-labelOnFeature off
+labelOnFeature on
 html aaCounts
 
         track aaCountsALA
@@ -22,7 +22,6 @@ html aaCounts
         longLabel ALA - A - Alanine - Aliphatic Hydrophobic
         type bigBed 9 +
         bedNameLabel ALA - A - Alanine - Aliphatic Hydrophobic
-        labelOnFeature off
         priority 5
 
         track aaCountsILE
@@ -32,7 +31,6 @@ html aaCounts
         longLabel ILE - I - Isoleucine - Aliphatic Hydrophobic
         type bigBed 9 +
         bedNameLabel ILE - I - Isoleucine - Aliphatic Hydrophobic
-        labelOnFeature off
         priority 6
 
         track aaCountsLEU
@@ -42,7 +40,6 @@ html aaCounts
         longLabel LEU - L - Leucine - Aliphatic Hydrophobic
         type bigBed 9 +
         bedNameLabel LEU - L - Leucine - Aliphatic Hydrophobic
-        labelOnFeature off
         priority 7
 
         track aaCountsVAL
@@ -52,7 +49,6 @@ html aaCounts
         longLabel VAL - V - Valine - Aliphatic Hydrophobic
         type bigBed 9 +
         bedNameLabel VAL - V - Valine - Aliphatic Hydrophobic
-        labelOnFeature off
         priority 8
 
         track aaCountsPHE
@@ -62,7 +58,6 @@ html aaCounts
         longLabel PHE - F - Phenylalanine - Aromatic Hydrophobic
         type bigBed 9 +
         bedNameLabel PHE - F - Phenylalanine - Aromatic Hydrophobic
-        labelOnFeature off
         priority 9
 
         track aaCountsTRP
@@ -72,7 +67,6 @@ html aaCounts
         longLabel TRP - W - Tryptophan - Aromatic Hydrophobic
         type bigBed 9 +
         bedNameLabel TRP - W - Tryptophan - Aromatic Hydrophobic
-        labelOnFeature off
         priority 10
 
         track aaCountsTYR
@@ -82,7 +76,6 @@ html aaCounts
         longLabel TYR - Y - Tyrosine - Aromatic Hydrophobic
         type bigBed 9 +
         bedNameLabel TYR - Y - Tyrosine - Aromatic Hydrophobic
-        labelOnFeature off
         priority 11
 
         track aaCountsASN
@@ -92,7 +85,6 @@ html aaCounts
         longLabel ASN - N - Asparagine - Neutral side chain
         type bigBed 9 +
         bedNameLabel ASN - N - Asparagine - Neutral side chain
-        labelOnFeature off
         priority 12
 
         track aaCountsCYS
@@ -102,7 +94,6 @@ html aaCounts
         longLabel CYS - C - Cysteine - Neutral side chain
         type bigBed 9 +
         bedNameLabel CYS - C - Cysteine - Neutral side chain
-        labelOnFeature off
         priority 13
 
         track aaCountsGLN
@@ -112,7 +103,6 @@ html aaCounts
         longLabel GLN - Q - Glutamine - Neutral side chain
         type bigBed 9 +
         bedNameLabel GLN - Q - Glutamine - Neutral side chain
-        labelOnFeature off
         priority 14
 
         track aaCountsMET
@@ -122,7 +112,6 @@ html aaCounts
         longLabel MET - M - Methionine - Neutral side chain
         type bigBed 9 +
         bedNameLabel MET - M - Methionine - Neutral side chain
-        labelOnFeature off
         priority 15
 
         track aaCountsSER
@@ -132,7 +121,6 @@ html aaCounts
         longLabel SER - S - Serine - Neutral side chain
         type bigBed 9 +
         bedNameLabel SER - S - Serine - Neutral side chain
-        labelOnFeature off
         priority 16
 
         track aaCountsTHR
@@ -142,7 +130,6 @@ html aaCounts
         longLabel THR - T - Threonine - Neutral side chain
         type bigBed 9 +
         bedNameLabel THR - T - Threonine - Neutral side chain
-        labelOnFeature off
         priority 17
 
         track aaCountsARG
@@ -152,7 +139,6 @@ html aaCounts
         longLabel ARG - R - Arginine - Positive side chain
         type bigBed 9 +
         bedNameLabel ARG - R - Arginine - Positive side chain
-        labelOnFeature off
         priority 18
 
         track aaCountsHIS
@@ -162,7 +148,6 @@ html aaCounts
         longLabel HIS - H - Histidine - Positive side chain
         type bigBed 9 +
         bedNameLabel HIS - H - Histidine - Positive side chain
-        labelOnFeature off
         priority 19
 
         track aaCountsLYS
@@ -172,7 +157,6 @@ html aaCounts
         longLabel LYS - K - Lysine - Positive side chain
         type bigBed 9 +
         bedNameLabel LYS - K - Lysine - Positive side chain
-        labelOnFeature off
         priority 20
 
         track aaCountsASP
@@ -182,7 +166,6 @@ html aaCounts
         longLabel ASP - D - Aspartic - Negative side chain
         type bigBed 9 +
         bedNameLabel ASP - D - Aspartic - Negative side chain
-        labelOnFeature off
         priority 21
 
         track aaCountsGLU
@@ -192,7 +175,6 @@ html aaCounts
         longLabel GLU - E - Glutamic - Negative side chain
         type bigBed 9 +
         bedNameLabel GLU - E - Glutamic - Negative side chain
-        labelOnFeature off
         priority 22
 
         track aaCountsGLY
@@ -202,7 +184,6 @@ html aaCounts
         longLabel GLY - G - Glycine - Unique
         type bigBed 9 +
         bedNameLabel GLY - G - Glycine - Unique
-        labelOnFeature off
         priority 23
 
         track aaCountsPRO
@@ -212,7 +193,6 @@ html aaCounts
         longLabel PRO - P - Proline - Unique
         type bigBed 9 +
         bedNameLabel PRO - P - Proline - Unique
-        labelOnFeature off
         priority 24
 
         track aaCountsUNK
@@ -222,17 +202,15 @@ html aaCounts
         longLabel UNK - X - Unknown - other misc.
         type bigBed 9 +
         bedNameLabel UNK - X - Unknown - other misc.
-        labelOnFeature off
         priority 25
 
         track aaCountsTER
         parent aaCounts
         subGroups sideChain=oth aa=a21
-        shortLabel TER - *
-        longLabel TER - * - STOP - other misc.
+        shortLabel TER - Z
+        longLabel TER - Z - STOP - other misc.
         type bigBed 9 +
-        bedNameLabel TER - * - STOP - other misc.
-        labelOnFeature off
+        bedNameLabel TER - Z - STOP - other misc.
         priority 26
 
         track aaCountsNUL
@@ -242,6 +220,5 @@ html aaCounts
         longLabel NUL - n/a - no translation available, missing sequence - other misc.
         type bigBed 9 +
         bedNameLabel NUL - n/a - no translation available, missing sequence - other misc.
-        labelOnFeature off
         priority 27
 
