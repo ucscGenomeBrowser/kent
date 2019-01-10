@@ -49,7 +49,7 @@ warn("There is a very high volume of traffic coming from your "
        "please read <a href='http://genome.ucsc.edu/FAQ/FAQdownloads.html#download36'>our FAQ</a> on this topic. "
        "For further help on how to access our data from a command line, "
        "or if "
-       "you think this delay is being imposed unfairly, please contact genome@soe.ucsc.edu.", 
+       "you think this delay is being imposed unfairly, please contact genome-www@soe.ucsc.edu.", 
 	    ip, asctime(localtime(&now)), .001*millis);
 }
 
@@ -67,7 +67,7 @@ hUserAbort("There is an exceedingly high volume of traffic coming from your "
        "please read <a href='http://genome.ucsc.edu/FAQ/FAQdownloads.html#download36'>our FAQ</a> on this topic. "
        "For further help on how to access our data from a command line, "
        "or if "
-       "you think this delay is being imposed unfairly, please contact genome@soe.ucsc.edu."
+       "you think this delay is being imposed unfairly, please contact genome-www@soe.ucsc.edu."
        , ip, asctime(localtime(&now)), millis);
 }
 
