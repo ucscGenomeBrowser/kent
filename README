@@ -40,8 +40,8 @@ The UCSC Genome Browser in particular is mostly found in kent/src/hg/hgTracks.
 
 The current version number is stored in src/hg/inc/versionInfo.h .
 The current version of a running genome browser is displayed in the html
-page <TITLE> by every CGI program, e.g. http://genome.ucsc.edu/cgi-bin/hgTracks, 
-in modern internet browser hover over a tab to show it.
+tag <TITLE> by the hgTracks program, e.g. http://genome.ucsc.edu/cgi-bin/hgTracks, 
+in modern internet browsers, hover over a tab to show it.
 
 GENERAL INSTALL INSTRUCTIONS
 

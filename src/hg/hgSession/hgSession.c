@@ -465,10 +465,6 @@ printf("<P></P>\n");
 void showSavingOptions(char *userName)
 /* Show options for saving a new named session in our db or to a file. */
 {
-static char *textOutCompressMenu[] = textOutCompressMenuContents;
-static char *textOutCompressValues[] = textOutCompressValuesContents;
-static int textOutCompressMenuSize = ArraySize(textOutCompressMenu) - 1;
-
 printf("<H3>Save Settings</H3>\n");
 printf("<TABLE BORDERWIDTH=0>\n");
 
@@ -521,10 +517,13 @@ cgiMakeOnKeypressTextVar(hgsSaveLocalFileName,
 			 20, jsPressOnEnter(hgsDoSaveLocal));
 printf("&nbsp;&nbsp;&nbsp;");
 printf("file type returned: ");
-cgiMakeDropListFull(hgsSaveLocalFileCompress,
-	textOutCompressMenu, textOutCompressValues, textOutCompressMenuSize,
-	cartUsualString(cart, hgsSaveLocalFileCompress, textOutCompressNone),
-	NULL, NULL);
+char *compressType = cartUsualString(cart, hgsSaveLocalFileCompress, textOutCompressNone);
+cgiMakeRadioButton(hgsSaveLocalFileCompress, textOutCompressNone,
+		   differentWord(textOutCompressGzip, compressType));
+printf("&nbsp;plain text&nbsp&nbsp");
+cgiMakeRadioButton(hgsSaveLocalFileCompress, textOutCompressGzip,
+		   sameWord(textOutCompressGzip, compressType));
+printf("&nbsp;gzip compressed (ignored if output file is blank)");
 printf("</TD><TD>");
 printf("&nbsp;");
 cgiMakeButton(hgsDoSaveLocal, "submit");
@@ -1335,7 +1334,17 @@ if (lf != NULL)
                        "Unable to load session: </b></span>");
         dyStringAppend(dyMessage, dyLoadMessage->string);
         dyStringAppend(dyMessage, "The uploaded file needs to have been previously saved from the "
-                       "<b>Save Settings</b> section.  If you feel you have reached this "
+                       "<b>Save Settings</b> section.\n");
+        // Looking for the words "custom track" in an error string is hokey, returning an enum
+        // from cartLoadSettings would be better, but IMO that isn't worth a big refactoring.
+        if (stringIn("custom track", dyLoadMessage->string))
+            {
+            dyStringPrintf(dyMessage, "If you would like to upload a custom track, please use the "
+                           "<a href='%s?%s'>"
+                           "Custom Tracks</a> tool.\n",
+                           hgCustomName(), cartSidUrlString(cart));
+            }
+        dyStringAppend(dyMessage, "If you feel you have reached this "
                        "message in error, please contact the "
                        "<A HREF=\"mailto:genome-www@soe.ucsc.edu?subject=Session file upload failed&"
                        "body=Hello Genome Browser team,%0AMy session file failed to upload. "
