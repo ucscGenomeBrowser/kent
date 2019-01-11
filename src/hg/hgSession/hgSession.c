@@ -1335,7 +1335,17 @@ if (lf != NULL)
                        "Unable to load session: </b></span>");
         dyStringAppend(dyMessage, dyLoadMessage->string);
         dyStringAppend(dyMessage, "The uploaded file needs to have been previously saved from the "
-                       "<b>Save Settings</b> section.  If you feel you have reached this "
+                       "<b>Save Settings</b> section.\n");
+        // Looking for the words "custom track" in an error string is hokey, returning an enum
+        // from cartLoadSettings would be better, but IMO that isn't worth a big refactoring.
+        if (stringIn("custom track", dyLoadMessage->string))
+            {
+            dyStringPrintf(dyMessage, "If you would like to upload a custom track, please use the "
+                           "<a href='%s?%s'>"
+                           "Custom Tracks</a> tool.\n",
+                           hgCustomName(), cartSidUrlString(cart));
+            }
+        dyStringAppend(dyMessage, "If you feel you have reached this "
                        "message in error, please contact the "
                        "<A HREF=\"mailto:genome-www@soe.ucsc.edu?subject=Session file upload failed&"
                        "body=Hello Genome Browser team,%0AMy session file failed to upload. "
