@@ -465,10 +465,6 @@ printf("<P></P>\n");
 void showSavingOptions(char *userName)
 /* Show options for saving a new named session in our db or to a file. */
 {
-static char *textOutCompressMenu[] = textOutCompressMenuContents;
-static char *textOutCompressValues[] = textOutCompressValuesContents;
-static int textOutCompressMenuSize = ArraySize(textOutCompressMenu) - 1;
-
 printf("<H3>Save Settings</H3>\n");
 printf("<TABLE BORDERWIDTH=0>\n");
 
@@ -521,10 +517,13 @@ cgiMakeOnKeypressTextVar(hgsSaveLocalFileName,
 			 20, jsPressOnEnter(hgsDoSaveLocal));
 printf("&nbsp;&nbsp;&nbsp;");
 printf("file type returned: ");
-cgiMakeDropListFull(hgsSaveLocalFileCompress,
-	textOutCompressMenu, textOutCompressValues, textOutCompressMenuSize,
-	cartUsualString(cart, hgsSaveLocalFileCompress, textOutCompressNone),
-	NULL, NULL);
+char *compressType = cartUsualString(cart, hgsSaveLocalFileCompress, textOutCompressNone);
+cgiMakeRadioButton(hgsSaveLocalFileCompress, textOutCompressNone,
+		   differentWord(textOutCompressGzip, compressType));
+printf("&nbsp;plain text&nbsp&nbsp");
+cgiMakeRadioButton(hgsSaveLocalFileCompress, textOutCompressGzip,
+		   sameWord(textOutCompressGzip, compressType));
+printf("&nbsp;gzip compressed (ignored if output file is blank)");
 printf("</TD><TD>");
 printf("&nbsp;");
 cgiMakeButton(hgsDoSaveLocal, "submit");
