@@ -4,11 +4,13 @@ include ../../../../inc/common.mk
 #Get list of files to copy over. Will only copy over files which have been committed.
 FIND=gitFiles
 CSS_FILES=style/cirmStyle.css
+JS_FILES=js/cirmStuff.js
 HOSTNAME:=$(shell hostname)
 
 # Set proper htdocs directory based on what machine we're using
 ifeq (${HOSTNAME}, hgwdev)
-  HTDOCSDIR=${DOCUMENTROOT}-cirm
+#  HTDOCSDIR=${DOCUMENTROOT}-cirm
+  HTDOCSDIR=${DOCUMENTROOT}-jcasper
 endif
 ifeq (${HOSTNAME}, cirm)
   HTDOCSDIR=${DOCUMENTROOT}
@@ -18,7 +20,11 @@ ifeq (${HOSTNAME}, cirm-01)
 endif
 
 docs:
-	umask 002; rsync --times --recursive --omit-dir-times --relative --cvs-exclude --exclude='makefile' --exclude='style/*' `$(FIND)` ${HTDOCSDIR}
+	umask 002; rsync --times --recursive --omit-dir-times --relative --cvs-exclude --exclude='makefile' --exclude='style/*' --exclude='js/*' `$(FIND)` ${HTDOCSDIR}
 
 styles:
 	umask 002; rsync --update --times --recursive --omit-dir-times --relative --cvs-exclude --exclude='makefile' $(CSS_FILES) ${HTDOCSDIR}
+
+jsfiles:
+	umask 002; rsync --update --times --recursive --omit-dir-times --relative --cvs-exclude --exclude='makefile' $(JS_FILES) ${HTDOCSDIR}
+
