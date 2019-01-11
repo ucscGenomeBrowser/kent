@@ -69,6 +69,7 @@ codingAnnoLabel_snp131CodingDbSnp bed
 codingAnnoLabel_snp132CodingDbSnp bed
 codingAnnoLabel_snp134CodingDbSnp bed
 codingAnnotations bed
+collapseEmptySubtracks *
 color *
 colorByStrand bigBed bed
 colorChromDefault psl bigPsl
