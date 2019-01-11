@@ -772,6 +772,16 @@ if (stats)
     }
 }
 
+static uint vsErrorCount(struct validityStats *stats)
+/* Return the sum of all error counts. */
+{
+return (stats->binaryCount +
+        stats->weirdCharsCount +
+        stats->dataCount +
+        stats->varTooLongCount +
+        stats->valTooLongCount);
+}
+
 #define CART_LOAD_TOO_MANY_ERRORS 100
 #define CART_LOAD_ENOUGH_VALID 20
 #define CART_LOAD_WAY_TOO_MANY_ERRORS 1000
@@ -781,8 +791,7 @@ static boolean vsTooManyErrors(struct validityStats *stats)
 {
 if (stats)
     {
-    uint errorSum = (stats->binaryCount + stats->weirdCharsCount + stats->dataCount +
-                     stats->varTooLongCount);
+    uint errorSum = vsErrorCount(stats);
     uint total = errorSum + stats->validCount;
     return ((total > (CART_LOAD_TOO_MANY_ERRORS + CART_LOAD_ENOUGH_VALID) &&
              errorSum > CART_LOAD_TOO_MANY_ERRORS &&
@@ -800,30 +809,32 @@ static void vsReport(struct validityStats *stats, struct dyString *dyMessage)
 {
 if (stats && dyMessage)
     {
+    boolean quitting = vsTooManyErrors(stats);
+    char *atLeast = (quitting ? "At least " : "");
     dyStringPrintf(dyMessage, "<br>%d valid settings found.  ", stats->validCount);
     if (stats->binaryCount || stats->weirdCharsCount || stats->dataCount ||
         stats->varTooLongCount || stats->valTooLongCount)
         dyStringPrintf(dyMessage, "<b>Note: invalid settings were found and omitted.</b>  ");
     if (stats->binaryCount)
-        dyStringPrintf(dyMessage, "%d setting names contained binary data.  ",
-                       stats->binaryCount);
+        dyStringPrintf(dyMessage, "%s%d setting names contained binary data.  ",
+                       atLeast, stats->binaryCount);
     if (stats->weirdCharsCount)
         dyStringPrintf(dyMessage,
-                       "%d setting names contained unexpected characters, for example '%s'.  ",
-                       stats->weirdCharsCount, stats->weirdCharsExample);
+                       "%s%d setting names contained unexpected characters, for example '%s'.  ",
+                       atLeast, stats->weirdCharsCount, htmlEncode(stats->weirdCharsExample));
     if (stats->dataCount)
-        dyStringPrintf(dyMessage, "%d lines appeared to be custom track data, for example "
+        dyStringPrintf(dyMessage, "%s%d lines appeared to be custom track data, for example "
                        "a line begins with '%s'.  ",
-                       stats->dataCount, stats->dataExample);
+                       atLeast, stats->dataCount, stats->dataExample);
     if (stats->varTooLongCount)
-        dyStringPrintf(dyMessage, "%d setting names were too long (up to %d).  ",
-                       stats->varTooLongCount, stats->varTooLongLength);
+        dyStringPrintf(dyMessage, "%s%d setting names were too long (up to %d).  ",
+                       atLeast, stats->varTooLongCount, stats->varTooLongLength);
     if (stats->valTooLongCount)
-        dyStringPrintf(dyMessage, "%d setting values were too long (up to %d).  ",
-                       stats->valTooLongCount, stats->valTooLongLength);
+        dyStringPrintf(dyMessage, "%s%d setting values were too long (up to %d).  ",
+                       atLeast, stats->valTooLongCount, stats->valTooLongLength);
+    if (quitting)
+        dyStringPrintf(dyMessage, "Encountered too many errors -- quitting.  ");
     }
-if (vsTooManyErrors(stats))
-    dyStringPrintf(dyMessage, "Encountered too many errors -- quitting.  ");
 }
 
 // Our timestamp vars (_, hgt_) are an exception to the usual cart var naming patterns:
@@ -1174,6 +1185,8 @@ while (lineFileNext(lf, &line, &size))
         }
     }
 freeMem(prevVar);
+if (stats.validCount == 0 && vsErrorCount(&stats) > 0)
+    isValidEnough = FALSE;
 if (isValidEnough)
     {
     if (oldVars)

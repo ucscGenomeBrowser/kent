@@ -1189,6 +1189,7 @@ char *clearSearch = cartOptionalString(cart, "clearSearch");
 if (clearSearch && sameString(clearSearch,"1"))
     {
     cartSetString(cart, "cdwFile_filter", "");  // reset file filter to empty string
+    cartRemove(cart, "clearSearch");
     }
 
 // DEBUG REMOVE
