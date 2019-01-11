@@ -5395,7 +5395,6 @@ if (withCenterLabels)
 	if (isLimitedVisHiddenForAllWindows(track))
             continue;
 
-
         int centerLabelHeight = (isCenterLabelIncluded(track) ? fontHeight : 0);
         int yStart = y + centerLabelHeight;
         // ORIG int yEnd   = y + trackPlusLabelHeight(track, fontHeight);
@@ -5466,7 +5465,9 @@ if (withCenterLabels)
 	    y = savey + flatTrack->maxHeight;
 	    }
 
-        if (theImgBox && track->limitedVis == tvDense && tdbIsCompositeChild(track->tdb))
+        if (theImgBox && tdbIsCompositeChild(track->tdb) &&
+                (track->limitedVis == tvDense ||
+                 (track->limitedVis == tvPack && centerLabelHeight == 0)))
             mapBoxToggleVis(hvg, 0, yStart,tl.picWidth, sliceHeight,track);
             // Strange mapBoxToggleLogic handles reverse complement itself so x=0,width=tl.picWidth
 

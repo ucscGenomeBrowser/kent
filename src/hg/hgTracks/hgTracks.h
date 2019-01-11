@@ -1355,12 +1355,14 @@ boolean isWithCenterLabels(struct track *track);
  * the default and inhibit composite track center labels in all modes.
  * Otherwise use the global boolean withCenterLabels. */
 
-#define isCenterLabelConditional(track) \
-                        ((limitVisibility(track) == tvDense) && tdbIsCompositeChild((track)->tdb))
-// dense subtracks have conditional centerLabels
+boolean isCenterLabelConditional(struct track *track);
+/* Dense subtracks and pack subtracks (when centerLabelsPack off set)
+ *      show center labels depending on vis of previous track */
 
 boolean isCenterLabelConditionallySeen(struct track *track);
-// returns FALSE if track and prevTrack have same parent, and are both dense subtracks
+/* Returns FALSE if track and prevTrack have same parent, and are both conditional
+ * i.e. dense subtrack or pack subtrack with centerLabelsPack off set /
+ */
 
 #define isCenterLabelIncluded(track) \
                 (isWithCenterLabels(track) && (theImgBox || isCenterLabelConditionallySeen(track)))

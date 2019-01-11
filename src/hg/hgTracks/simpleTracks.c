@@ -923,22 +923,27 @@ return dy;
 
 boolean isWithCenterLabels(struct track *track)
 /* Cases: only TRUE when global withCenterLabels is TRUE
- * If track->tdb has a centerLabelDense setting, go with it.
-// * If composite child then no center labels in dense mode. */
+ * If track has a centerLabelDense setting 'on', then composite child has 
+ * center labels in dense mode.
+ * If track has centerLabelsPack setting 'off', then composite child has no
+ * center labels in pack mode (instead, has left short label.
+ * NOTE: if there are labels, then this should be used with labelOnFeature setting.
+ */
 {
-if (!withCenterLabels)
-    {
+if (!track)
     return FALSE;
-    }
-if (track != NULL)
-    {
-    char *centerLabelsDense = trackDbSetting(track->tdb, "centerLabelsDense");
-    if (centerLabelsDense)
-        {
-        return sameWord(centerLabelsDense, "on");
-        }
-    }
-return withCenterLabels;
+if (!withCenterLabels)
+    return FALSE;
+
+/* NOTE: this feature may be broken.  Only used in affyTxnPhase2 track */
+char *centerLabelsDense = trackDbSetting(track->tdb, "centerLabelsDense");
+if (centerLabelsDense && sameWord(centerLabelsDense, "on"))
+    return TRUE;
+
+char *centerLabelsPack = trackDbSetting(track->tdb, "centerLabelsPack");
+if (centerLabelsPack && sameWord(centerLabelsPack, "off"))
+    return FALSE;
+return TRUE;
 }
 
 boolean isCenterLabelConditionallySeen(struct track *track)
@@ -952,6 +957,24 @@ if (isCenterLabelConditional(track))
         return FALSE;
     }
 return isWithCenterLabels(track);
+}
+
+boolean isCenterLabelConditional(struct track *track)
+/* Dense subtracks and pack subtracks (when centerLabelsPack off set) have
+ *      show center labels depending on vis of previous track */
+{
+if (!tdbIsCompositeChild((track)->tdb))
+    return FALSE;
+enum trackVisibility vis = limitVisibility(track);
+if (vis == tvFull)
+    return FALSE;
+if (vis == tvDense)
+    return TRUE;
+/* pack or squish */
+char *centerLabelsPack = trackDbSetting(track->tdb, "centerLabelsPack");
+if (centerLabelsPack)
+    return !sameWord(centerLabelsPack, "off");
+return FALSE;
 }
 
 void mapStatusMessage(char *format, ...)
