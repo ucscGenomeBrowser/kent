@@ -772,6 +772,16 @@ if (stats)
     }
 }
 
+static uint vsErrorCount(struct validityStats *stats)
+/* Return the sum of all error counts. */
+{
+return (stats->binaryCount +
+        stats->weirdCharsCount +
+        stats->dataCount +
+        stats->varTooLongCount +
+        stats->valTooLongCount);
+}
+
 #define CART_LOAD_TOO_MANY_ERRORS 100
 #define CART_LOAD_ENOUGH_VALID 20
 #define CART_LOAD_WAY_TOO_MANY_ERRORS 1000
@@ -781,8 +791,7 @@ static boolean vsTooManyErrors(struct validityStats *stats)
 {
 if (stats)
     {
-    uint errorSum = (stats->binaryCount + stats->weirdCharsCount + stats->dataCount +
-                     stats->varTooLongCount);
+    uint errorSum = vsErrorCount(stats);
     uint total = errorSum + stats->validCount;
     return ((total > (CART_LOAD_TOO_MANY_ERRORS + CART_LOAD_ENOUGH_VALID) &&
              errorSum > CART_LOAD_TOO_MANY_ERRORS &&
@@ -1176,6 +1185,8 @@ while (lineFileNext(lf, &line, &size))
         }
     }
 freeMem(prevVar);
+if (stats.validCount == 0 && vsErrorCount(&stats) > 0)
+    isValidEnough = FALSE;
 if (isValidEnough)
     {
     if (oldVars)
