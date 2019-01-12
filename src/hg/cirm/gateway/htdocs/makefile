@@ -9,8 +9,7 @@ HOSTNAME:=$(shell hostname)
 
 # Set proper htdocs directory based on what machine we're using
 ifeq (${HOSTNAME}, hgwdev)
-#  HTDOCSDIR=${DOCUMENTROOT}-cirm
-  HTDOCSDIR=${DOCUMENTROOT}-jcasper
+  HTDOCSDIR=${DOCUMENTROOT}-cirm
 endif
 ifeq (${HOSTNAME}, cirm)
   HTDOCSDIR=${DOCUMENTROOT}
