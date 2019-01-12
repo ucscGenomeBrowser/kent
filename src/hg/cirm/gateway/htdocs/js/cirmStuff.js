@@ -41,6 +41,11 @@ var cirmSiteFunctions = (function() {
             window.location.href = redirUrl;
         }, 200);
     }
+
+    return {
+        basicAuthLogout: basicAuthLogout,
+        isSecureSite: isSecureSite
+    };
 }()); // cirmSiteFunctions definition
 
 // Screw with login/logout button
