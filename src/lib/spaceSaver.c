@@ -59,15 +59,15 @@ for (i=0; i<count; ++i)
 return TRUE;
 }
 
-struct spaceNode *spaceSaverAddOverflowMulti(struct spaceSaver *ss, 
-	struct spaceRange *rangeList, struct spaceNode *nodeList, 
-					boolean allowOverflow)
+struct spaceNode *spaceSaverAddOverflowMultiOptionalPadding(struct spaceSaver *ss, 
+	                struct spaceRange *rangeList, struct spaceNode *nodeList, 
+					boolean allowOverflow, boolean doPadding)
 /* Add new nodes for multiple windows to space saver. Returns NULL if can't fit item in
  * and allowOverflow == FALSE. If allowOverflow == TRUE then put items
  * that won't fit in first row (ends up being last row after
- * spaceSaverFinish()). */
+ * spaceSaverFinish()). Allow caller to suppress padding between items 
+ * (show adjacent items on single row */
 {
-//int cellStart, cellEnd, cellWidth;
 struct spaceRowTracker *srt, *freeSrt = NULL;
 int rowIx = 0;
 struct spaceNode *sn;
@@ -86,9 +86,9 @@ for (range = rangeList; range; range = range->next)
     if ((start -= ss->winStart) < 0)
     	start = 0;
     end -= ss->winStart;	/* We'll clip this in cell coordinates. */
-
     cellRange->start = round(start * ss->scale);
-    cellRange->end = round(end * ss->scale)+1;
+    int padding = doPadding ? 1 : 0;
+    cellRange->end = round(end * ss->scale) + padding;
     if (cellRange->end > ss->cellsInRow)
 	cellRange->end = ss->cellsInRow;
     cellRange->width = cellRange->end - cellRange->start;
@@ -172,6 +172,16 @@ for (sn=nodeList; sn; sn=snNext)
 return nodeList;
 }
 
+struct spaceNode *spaceSaverAddOverflowMulti(struct spaceSaver *ss, 
+	struct spaceRange *rangeList, struct spaceNode *nodeList, 
+					boolean allowOverflow)
+/* Add new nodes for multiple windows to space saver. Returns NULL if can't fit item in
+ * and allowOverflow == FALSE. If allowOverflow == TRUE then put items
+ * that won't fit in first row (ends up being last row after
+ * spaceSaverFinish()). */
+{
+return spaceSaverAddOverflowMultiOptionalPadding(ss, rangeList, nodeList, allowOverflow, TRUE);
+}
 
 struct spaceNode *spaceSaverAddOverflowExtended(struct spaceSaver *ss, int start, int end, 
 					void *val, boolean allowOverflow, struct spaceSaver *parentSs, bool noLabel)

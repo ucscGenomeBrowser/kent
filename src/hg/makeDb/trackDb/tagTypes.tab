@@ -96,6 +96,7 @@ defaultLabelFields bigBed bigPsl bigGenePred bigBarChart
 defaultMaf wigMaf
 defaultMaxWeight bed
 defaultLinkedTables genePred
+densePack bed bigBed
 dimensionAchecked *
 dimensionBchecked *
 dimensionCchecked *
