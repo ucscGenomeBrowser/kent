@@ -1364,9 +1364,8 @@ boolean isCenterLabelConditionallySeen(struct track *track);
  * i.e. dense subtrack or pack subtrack with centerLabelsPack off set /
  */
 
-#define isCenterLabelIncluded(track) \
-                (isWithCenterLabels(track) && (theImgBox || isCenterLabelConditionallySeen(track)))
-// Center labels may be conditionally included
+boolean isCenterLabelIncluded(struct track *track);
+/* Center labels may be conditionally included */
 
 Color maybeDarkerLabels(struct track *track, struct hvGfx *hvg, Color color);
 /* For tracks having light track display but needing a darker label */

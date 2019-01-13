@@ -794,6 +794,18 @@ switch (vis)
 	    rows = packCountRowsOverflow(tg, floor(maxHeight/tg->lineHeight), TRUE, allowOverflow, vis);
 	else
 	    rows = packCountRowsOverflow(tg, floor(maxHeight/tg->lineHeight)+1, TRUE, FALSE, vis);
+        if (tdbIsCompositeChild(tg->tdb))
+            {
+            char *centerLabelsPackOff = trackDbSetting(tg->tdb, "centerLabelsPack");
+            char *collapseEmptySubtracks = trackDbSetting(tg->tdb, "collapseEmptySubtracks");
+            boolean collapseEmpty = FALSE;
+            if (collapseEmptySubtracks && sameWord(collapseEmptySubtracks, "on"))
+                collapseEmpty = TRUE;
+            if (centerLabelsPackOff)
+                if (sameWord(centerLabelsPackOff, "off") && !collapseEmpty)
+                    if (rows == 0)
+                        rows = 1;   // compact pack mode, shows just side label
+            }
 	break;
 	}
     case tvSquish:
@@ -930,19 +942,25 @@ boolean isWithCenterLabels(struct track *track)
  * NOTE: if there are labels, then this should be used with labelOnFeature setting.
  */
 {
-if (!track)
-    return FALSE;
 if (!withCenterLabels)
     return FALSE;
+if (!track)
+    return withCenterLabels;
 
 /* NOTE: this feature may be broken.  Only used in affyTxnPhase2 track */
 char *centerLabelsDense = trackDbSetting(track->tdb, "centerLabelsDense");
 if (centerLabelsDense && sameWord(centerLabelsDense, "on"))
     return TRUE;
 
+/*
 char *centerLabelsPack = trackDbSetting(track->tdb, "centerLabelsPack");
 if (centerLabelsPack && sameWord(centerLabelsPack, "off"))
-    return FALSE;
+    {
+    enum trackVisibility vis = limitVisibility(track);
+    if (vis == tvPack)
+        return FALSE;
+    }
+*/
 return TRUE;
 }
 
@@ -960,21 +978,34 @@ return isWithCenterLabels(track);
 }
 
 boolean isCenterLabelConditional(struct track *track)
-/* Dense subtracks and pack subtracks (when centerLabelsPack off set) have
+/* Dense subtracks and pack subtracks (when centerLabelsPack off set)
  *      show center labels depending on vis of previous track */
 {
 if (!tdbIsCompositeChild((track)->tdb))
     return FALSE;
 enum trackVisibility vis = limitVisibility(track);
-if (vis == tvFull)
+if (vis == tvFull || vis == tvSquish)
     return FALSE;
 if (vis == tvDense)
     return TRUE;
-/* pack or squish */
+// pack mode
 char *centerLabelsPack = trackDbSetting(track->tdb, "centerLabelsPack");
 if (centerLabelsPack)
-    return !sameWord(centerLabelsPack, "off");
+    return sameWord(centerLabelsPack, "off");
 return FALSE;
+}
+
+boolean isCenterLabelIncluded(struct track *track)
+/* Center labels may be conditionally included */
+{
+if (!isWithCenterLabels(track))
+    return FALSE;
+if (theImgBox)
+    return TRUE;
+if (isCenterLabelConditionallySeen(track))
+    return TRUE;
+return FALSE;
+//return isWithCenterLabels(track) && (theImgBox || isCenterLabelConditionallySeen(track));
 }
 
 void mapStatusMessage(char *format, ...)
@@ -4149,18 +4180,9 @@ else if (vis == tvFull)
     int geneMapBoxX = insideX;
     int geneMapBoxW = insideWidth;
     /* Draw the first gene label mapbox, in the left margin. */
-#ifndef IMAGEv2_NO_LEFTLABEL_ON_FULL
     int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
-#ifdef IMAGEv2_SHORT_MAPITEMS
-    char *name = tg->itemName(tg, item);
-    if (*name != '\0')
-        tg->mapItem(tg, hvg, item, name, tg->mapItemName(tg, item),
-                    s, e, trackPastTabX, y, insideX - trackPastTabX, heightPer);
-#else///ndef IMAGEv2_SHORT_MAPITEMS
     tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
                 s, e, trackPastTabX, y, insideX - trackPastTabX, heightPer);
-#endif///ndef IMAGEv2_SHORT_MAPITEMS
-#endif///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
     /* Depending on which button mapboxes we drew, draw the remaining mapbox. */
     if (lButton)
         {
@@ -4171,18 +4193,6 @@ else if (vis == tvFull)
 	{
         geneMapBoxW -= buttonW;
 	}
-#ifdef IMAGEv2_SHORT_MAPITEMS
-    if (x2 > 0)
-        {
-        geneMapBoxX = textX;
-        geneMapBoxW = x2-geneMapBoxX;
-        if (geneMapBoxW < 5) // Full with short labels but don't make tiny map items
-            {
-            geneMapBoxX -= (5 - geneMapBoxW)/2;
-            geneMapBoxW = 5;
-            }
-        }
-#endif//def IMAGEv2_SHORT_MAPITEMS
     if (compat)
 	{  // draw labeled exon/intron maps with exon/intron numbers
 	linkedFeaturesItemExonMaps(tg, hvg, item, scale, y, heightPer, s, e, lButton, rButton, buttonW);

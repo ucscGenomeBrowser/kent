@@ -499,7 +499,8 @@ static int trackPlusLabelHeight(struct track *track, int fontHeight)
 if (trackShouldUseAjaxRetrieval(track))
     return REMOTE_TRACK_HEIGHT;
 
-int y = track->totalHeight(track, limitVisibility(track));
+enum trackVisibility vis = limitVisibility(track);
+int y = track->totalHeight(track, vis);
 if (isCenterLabelIncluded(track))
     y += fontHeight;
 if (tdbIsComposite(track->tdb) && !isCompositeInAggregate(track))
@@ -1246,6 +1247,7 @@ if (trackDbSetting(track->tdb, "darkerLabels"))
 return color;
 }
 
+
 static int doLeftLabels(struct track *track, struct hvGfx *hvg, MgFont *font,
                                 int y)
 /* Draw left labels.  Return y coord. */
@@ -1333,11 +1335,25 @@ if (startsWith("bigMaf", track->tdb->type) || startsWith("wigMaf", track->tdb->t
 if (track->limitedVis == tvFull && isTypeBedLike(track))
     vis = tvPack;
 
+char *centerLabelsPack = NULL;
 switch (vis)
     {
     case tvHide:
         break;  /* Do nothing; */
     case tvPack:
+        centerLabelsPack = trackDbSetting(track->tdb, "centerLabelsPack");
+        if (centerLabelsPack && sameWord(centerLabelsPack, "off"))
+            // draw left labels for pack mode track with center labels off
+            {
+            if (isCenterLabelIncluded(track))
+                y += fontHeight;
+            hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, track->lineHeight, labelColor, font, 
+                                track->shortLabel);
+            y += track->height;
+            }
+        else
+            y += tHeight;
+        break;
     case tvSquish:
 	y += tHeight;
         break;
@@ -1433,8 +1449,8 @@ switch (vis)
          * (always puts 0-100% range)*/
         if (track->subType == lfSubSample && track->heightPer > (3 * fontHeight))
             {
-            ymax = y - (track->heightPer / 2) + (fontHeight / 2);
-            ymin = y + (track->heightPer / 2) - (fontHeight / 2);
+            int ymax = y - (track->heightPer / 2) + (fontHeight / 2);
+            int ymin = y + (track->heightPer / 2) - (fontHeight / 2);
             hvGfxTextRight(hvg, leftLabelX, ymin,
                         leftLabelWidth-1, track->lineHeight,
                         track->ixAltColor, font, minRangeStr );
@@ -5507,12 +5523,7 @@ if (withLeftLabels)
 
         if (trackShouldUseAjaxRetrieval(track))
             y += REMOTE_TRACK_HEIGHT;
-    #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
-        else if (track->drawLeftLabels != NULL
-             &&  (theImgBox == NULL || track->limitedVis == tvDense))
-    #else ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
         else if (track->drawLeftLabels != NULL)
-    #endif ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
 	    {
 	    setGlobalsFromWindow(windows);
             y = doOwnLeftLabels(track, hvgSide, font, y);
