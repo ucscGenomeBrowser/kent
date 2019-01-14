@@ -1,0 +1,35 @@
+
+<h2>Description</h2>
+<p>This track shows introns supported by the aligned reads. 
+All BAM files for the cells of a cluster were merged
+and reads with a gap longer than 70 bp and shorter than 500 kbp were retained.
+These gaps are shown and are annotated with the number of reads, in the 'score' field.</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>You can use the 'score' filter on the track configuration page to show only introns with a certain number of supporting reads. The maximum number of reads that are shown is 1000, even if more reads support an intron.</p>
+
+<h2>Methods</h2>
+<p>The alignments were used as submitted. All BAM files for all cells of a cluster were merged with "samtools merge". On the resulting merged BAM file the software IntronProspector was run.</p>
+<h2>Data Access</h2>
+<p>The original IntronProspector .bed files can be downloaded from the <a href='http:'>track hub directory</a>. You can also find *.calls.tsv files with more details about each junction, e.g. number of uniquely mapping reads.</p>
+<h2>Credits</h2>
+<p>IntronProspector was written by Mark Diekhans.</p>
+
+<h2>References</h2>
+<p>
+Mark Diekhans,
+<a href="https://github.com/diekhans/intronProspector"
+target="_blank">
+IntronProspector GitHub Repository </a>.
+<em>Github</em> 2018
+</p>
+
+<p>
+<p>
+The Tabula Muris Consortium, Stephen R. Quake, Tony Wyss-Coray, Spyros DarmanisThe Tabula Muris Consortium, Stephen R. Quake, Tony Wyss-Coray, Spyros Darmanis:<br>
+<a href="https://doi.org/10.1101/237446" target="_blank">
+Single-cell transcriptomic characterization of 20 organs and tissues from individual mice creates a Tabula Muris</a>.
+<em>bioRxiv March 2018</em>, manuscript 237446.
+</p>
+
+</p>
