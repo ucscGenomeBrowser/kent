@@ -3,7 +3,7 @@ shortLabel Single Cell
 longLabel Single Cell RNA-Seq: Genome Coverage and Junctions
 superTrack on
 visibility hide
-group expression
+group regulation
 
 track tabulamurisBarChart
 type bigBarChart
