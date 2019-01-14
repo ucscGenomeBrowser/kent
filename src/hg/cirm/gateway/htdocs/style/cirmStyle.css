@@ -1,3 +1,8 @@
+/* CSS Specific to the CIRM website
+ *
+ * Copyright (C) 2017 The Regents of the University of California
+ */
+
 input.form-control { width: 300px; }
 textarea.form-control { width: 500px; height: 200px;}
 
@@ -76,6 +81,11 @@ textarea.form-control { width: 500px; height: 200px;}
 }
 
 /* Styling for parts of page body */
+div.card.facet-card
+{
+    margin-bottom:5px
+}
+
 .cirm-banner
 {
     width: 100%;
@@ -110,15 +120,32 @@ textarea.form-control { width: 500px; height: 200px;}
 
 .cirm-page-body
 {
+    font-size:14px;
     width: 90%;
     margin: 0% 5%;
 }
 
 .footer
 {
-    width: 90%;
+    font-size:14px;
     margin: 0% 5%;
     background-color: #eaeaea;
+}
+
+.footer a
+{
+    color: #337ab7;
+}
+
+.topbar
+{
+    font-weight:bold;
+}
+
+a.btn,input.btn
+{
+    padding: 0rem 0.3rem;
+    line-height: 1.2rem;
 }
 
 .icon-sm
@@ -235,6 +262,16 @@ textarea.form-control { width: 500px; height: 200px;}
     color: white;
     text-decoration: none;
     background-color: transparent !important;
+}
+
+nav
+{
+    margin-bottom: 10px;
+}
+
+.nav
+{
+    border-radius: 0.25em;
 }
 
 .nopadding
@@ -387,4 +424,18 @@ textarea.form-control { width: 500px; height: 200px;}
 .last-row
 {
     border-bottom: 1pt solid #dddddd;
+}
+
+.label
+{
+    display: inline;
+    padding: .2em .6em .3em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25em;
 }
