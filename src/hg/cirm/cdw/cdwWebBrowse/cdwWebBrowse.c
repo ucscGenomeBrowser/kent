@@ -155,6 +155,43 @@ freez(&escapedQuery);
 printf("\">%s</A>", shortVal);
 }
 
+void wrapFileSize(struct fieldedTable *table, struct fieldedRow *row,
+    char * field, char *val, char *shortVal, void *context)
+/* Write out wrapper that displays file sizes in human-readable format */
+{
+if (!isdigit(val[0]))
+    warn("Warning: expected a number for file_size, but got %s", val);
+double fVal = atof(val);
+char* valQual = "";
+int intVal = 0;
+if (fVal>=1E12)
+    {
+    intVal = round(fVal/1E12);
+    valQual = "TB";
+    }
+else if (fVal>=1E9)
+    {
+    intVal = round(fVal/1E9);
+    valQual = "GB";
+    }
+else if (fVal>=1E6)
+    {
+    intVal = round(fVal/1E6);
+    valQual = "MB";
+    }
+else if (fVal>=1E3)
+    {
+    intVal = round(fVal/1E3);
+    valQual = "KB";
+    }
+else
+    {
+    intVal = round(fVal);
+    valQual = "B";
+    }
+printf("%d %s", intVal, valQual);
+}
+
 static char *mustFindFieldInRow(char *field, struct slName *fieldList, char **row)
 /* Assuming field is in list, which is ordered same as row, return row cell
  * corrsepondint to field */
@@ -910,15 +947,18 @@ for (i = 0; i<fieldCount; i++)
     }
 }
 
-void makeDownloadAllButtonForm() 
+void makeDownloadAllButtonForm(int count) 
 /* The "download all" button cannot be a form at this place, nested forms are
  * not allowed in html. So create a link instead. */
 {
-printf("<A HREF=\"cdwWebBrowse?hgsid=%s&cdwCommand=downloadFiles", cartSessionId(cart));
+if (count<0)
+    errAbort("Error: Search results in a negative number of files found");
+printf("<A class='btn btn-secondary' HREF=\"cdwWebBrowse?hgsid=%s&cdwCommand=downloadFiles", cartSessionId(cart));
 
 printf("&cdwFileSearch=%s", unquotedCartString(cart, "cdwFileSearch"));
 printf("&cdwFile_filter=%s", cartUsualString(cart, "cdwFile_filter", ""));
-printf("\">Download All</A>");
+printf("\">Download %d File%s</A>", count, count>1?"s":"");
+printf("<br><br>\n");
 }
 
 char *createTokenForUser()
@@ -985,8 +1025,8 @@ char *showSearchControl(char *varName, char *itemPlural)
 /* Get cart variable and clean it up some removing quotes and the like */
 char *varVal = unquotedCartString(cart, varName);
 
-printf("Search <input name=\"%s\" type=\"text\" id=\"%s\" value=\"%s\" size=60>", 
-    varName, varName, varVal);
+printf("Search <input name=\"%s\" type=\"text\" id=\"%s\" value=\"%s\" size=60>",
+        varName, varName, varVal);
 printf("&nbsp;");
 printf("<img src=\"../images/magnify.png\">\n");
 jsInlineF(
@@ -1126,7 +1166,7 @@ puts("Name files as submitted, one single directory<br>");
 puts("<input class='scriptButton' type=radio name='cdwDownloadName' VALUE='subAndDir'>\n");
 puts("Name files as submitted and put into subdirectories<p>");
 
-cgiMakeSubmitButton();
+printf("<input class='btn btn-secondary' type='submit' name='Submit' id='Submit' value='Submit'>\n");
 printf("</FORM>\n");
 
 jsInline 
@@ -1189,6 +1229,7 @@ char *clearSearch = cartOptionalString(cart, "clearSearch");
 if (clearSearch && sameString(clearSearch,"1"))
     {
     cartSetString(cart, "cdwFile_filter", "");  // reset file filter to empty string
+    cartRemove(cart, "clearSearch");
     }
 
 // DEBUG REMOVE
@@ -1219,12 +1260,6 @@ if (selOp)
 	}
     }
 
-// DEBUG REMOVE
-//varVal = cartUsualString(cart, varName, "");  // get a fresh value
-//htmlPrintf("Selected Fields String <input name='%s|attr|' type='text' id='%s|attr|' value='%s|attr|' size=60><br>\n", 
-//    varName, varName, varVal);
-
-printf("<B>Files</B> - search, filter, and sort files. ");
 printf("Click on file's name to see full metadata.");
 printf(" Links in ucsc_db go to the Genome Browser. <BR>\n");
 char *searchString = showSearchControl("cdwFileSearch", "files");
@@ -1242,6 +1277,7 @@ struct hash *wrappers = hashNew(0);
 hashAdd(wrappers, "file_name", wrapFileName);
 hashAdd(wrappers, "ucsc_db", wrapTrackNearFileName);
 hashAdd(wrappers, "format", wrapFormat);
+hashAdd(wrappers, "file_size", wrapFileSize);
 
 accessibleFilesTable(cart, conn, searchString,
   fileTableFields,
@@ -1344,7 +1380,7 @@ return sqlQuickNum(conn, query);
 void doBrowseDatasets(struct sqlConnection *conn)
 /* Show datasets and links to dataset summary pages. */
 {
-printf("<UL>\n");
+printf("<ul class='list-group'>\n");
 char query[PATH_LEN]; 
 sqlSafef(query, sizeof(query), "SELECT * FROM cdwDataset ORDER BY label "); 
 struct cdwDataset *dataset, *datasetList = cdwDatasetLoadByQuery(conn, query);
@@ -1362,7 +1398,7 @@ for (dataset = datasetList; dataset != NULL; dataset = dataset->next)
     boolean haveAccess = ((fileId > 0) && cdwCheckFileAccess(conn, fileId, user));
     if (haveAccess)
 	{
-	printf("<LI><B><A href=\"cdwGetFile/%s/summary/index.html\">%s (%s)</A></B><BR>\n", 
+	printf("<li class='list-group-item'><b><a href=\"cdwGetFile/%s/summary/index.html\">%s (%s)</a></b><br>\n", 
 	    datasetId, label, datasetId);
 	
 	// Print out file count and descriptions. 
@@ -1388,10 +1424,10 @@ for (dataset = datasetList; dataset != NULL; dataset = dataset->next)
 	}
     else // Otherwise print a label and description. 
 	{
-	printf("<LI><B>%s (%s)</B><BR>\n", label, datasetId);
+	printf("<li class='list-group-item'><B>%s (%s)</B><BR>\n", label, datasetId);
 	printf("%s\n", desc);
 	}
-    printf("</LI>\n");
+    printf("</li>\n");
     }
 cdwDatasetFree(&datasetList);
 }
@@ -1528,7 +1564,7 @@ char *format = cartUsualString(cart, formatVar, menu[0]);
 printf("  "); 
 cgiMakeDropList(formatVar, menu, ArraySize(menu), format);
 printf("  "); 
-cgiMakeButton("View", "View"); 
+printf("<input class='btn btn-secondary' type='submit' name='View' id='View' value='View'>\n");
 printf("</FORM>\n\n");
 
 
@@ -1538,7 +1574,7 @@ printf("<FORM class=\"inlineBlock\" ACTION=\"../cgi-bin/cdwGetMetadataAsFile\" M
 cartSaveSession(cart);
 cgiMakeHiddenVar("cdwCommand", "analysisQuery");
 cgiMakeHiddenVar("Download format", format); 
-cgiMakeButton(format, "Download"); 
+printf("<input class='btn btn-secondary' type='submit' name='%s' id='%s' value='Download'>\n", format, format);
 printf("</FORM>\n\n");
 
 // Get field list for the cdwFileTags table, leaving out things we don't want to display on the site
@@ -1997,8 +2033,7 @@ printf("</TR></TABLE>\n");
 printf("<CENTER><I>charts are based on proportion of files in each category</I></CENTER>\n");
 printf("</td></tr></table>\n");
 
-printFile("cirm-motd.html");
-
+//printFile("cirm-motd.html");
 }
 
 #ifdef OLD
@@ -2131,10 +2166,45 @@ static void doSendMenubar()
 {
 oldVars = hashNew(0);
 cart = cartAndCookieWithHtml(hUserCookie(), excludeVars, oldVars, TRUE);
-//cartEmptyShell(localWebWrap, hUserCookie(), excludeVars, oldVars);
-//puts("Content-Type: text/html\n\n");
+puts("Content-Type: text/html\n\n");
 char* mb = cdwLocalMenuBar(cart, TRUE);
 puts(mb);
+}
+
+static void doSendUserName()
+/* send username and authentication method info in a tiny JSON block */
+{
+oldVars = hashNew(0);
+cart = cartAndCookieWithHtml(hUserCookie(), excludeVars, oldVars, TRUE);
+printf("{\n");
+int firstEntry = 1;
+if (loginUseBasicAuth())
+    {
+    if (!firstEntry)
+        printf(",");
+    else
+        firstEntry = 0;
+    printf ("\"auth\": \"basic\"\n");
+    }
+else
+    {
+    if (!firstEntry)
+        printf(",");
+    else
+        firstEntry = 0;
+    printf ("\"auth\": \"hgLogin\"\n");
+    }
+
+char *userName = wikiLinkUserName();
+if (userName != NULL)
+    {
+    if (!firstEntry)
+        printf(",");
+    else
+        firstEntry = 0;
+    printf("\"username\": \"%s\"\n", userName);
+    }
+printf("}\n");
 }
 
 void localWebStartWrapper(char *titleString)
@@ -2143,22 +2213,32 @@ void localWebStartWrapper(char *titleString)
 /* Do html header. We do this a little differently than web.c routines, mostly
  * in that we are strict rather than transitional HTML 4.01 */
     {
-    puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" "
-             "\"http://www.w3.org/TR/html4/strict.dtd\">");
-    puts("<HTML><HEAD>\n");
+    printf("<!DOCTYPE html>\n");
+    printf("<html>\n\t<head>\n");
+    webCirmPragmasEtc();
     puts(getCspMetaHeader());
-    webPragmasEtc();
     printf("<TITLE>%s</TITLE>\n", titleString);
-    webIncludeResourceFile("HGStyle.css");
-    webIncludeResourceFile("jquery-ui.css");
-    webIncludeResourceFile("nice_menu.css");
-    webIncludeResourceFile("jquery.ui.colorPicker.css");
-    jsIncludeFile("jquery.js", NULL);
-    jsIncludeFile("jquery.plugins.js", NULL);
-    jsIncludeFile("jquery-ui.js", NULL);
+    printf("\t\t<link rel=\"shortcut icon\" href=\"../images/schub.ico\" type=\"image/png\" />\n");
+    printf("\t\t<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js\"></script>");
+    webIncludeResourceFile("cirmStyle.css");
+
+    printf("\t\t<link href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css\" rel=\"stylesheet\">\n"
+        "\n"
+        "\t\t<!-- Latest compiled and minified CSS -->\n"
+        "\t\t<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css\"\n"
+        "\t\t integrity=\"sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm\"\n"
+        "\t\t crossorigin=\"anonymous\">\n"
+        "\n"
+        "\t\t<!-- Latest compiled and minified JavaScript -->\n"
+        "\t\t<script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js\"\n"
+        "\t\t  integrity=\"sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q\"\n"
+        "\t\t crossorigin=\"anonymous\"></script>\n"
+        "\t\t<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js\"\n"
+        "\t\t integrity=\"sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl\"\n"
+        "\t\t crossorigin=\"anonymous\"></script>\n"
+        );
+
     jsIncludeFile("jquery.watermark.js", NULL);
-    jsIncludeFile("jquery.ui.colorPicker.js", NULL);
-    jsIncludeFile("ajax.js", NULL);
     jsIncludeFile("d3pie.min.js", NULL);
     jsIncludeFile("dagre-d3.js", NULL);
     printf("<script src=\"//cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js\"></script>");
@@ -2167,9 +2247,10 @@ void localWebStartWrapper(char *titleString)
     printBodyTag(stdout);
     }
 
-webStartSectionTables();    // Start table layout code
+puts(cdwPageHeader(cart, FALSE));
+
+printf("<div class=\"cirm-page-body\">\n");
 puts(cdwLocalMenuBar(cart, FALSE));	    // Menu bar after tables open but before first section
-webFirstSection(titleString);	// Open first section
 webPushErrHandlers();	    // Now can do improved error handler
 }
 
@@ -2181,8 +2262,9 @@ cart = theCart;
 localWebStartWrapper("CIRM Stem Cell Hub Data Browser v0.60");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
-webEndSectionTables();
-jsInlineFinish(); 
+jsInlineFinish();
+printf("</div> <!-- cirm-page-body -->\n");
+puts(cdwPageFooter(cart, FALSE));
 printf("</BODY></HTML>\n");
 }
 
@@ -2236,6 +2318,8 @@ if (sameOk(cdwCmd, "downloadUrls"))
     doDownloadUrls();
 else if (sameOk(cdwCmd, "menubar"))
     doSendMenubar();
+else if (sameOk(cdwCmd, "userName"))
+    doSendUserName();
 else
     cartEmptyShell(localWebWrap, hUserCookie(), excludeVars, oldVars);
 cgiExitTime("cdwWebBrowse", enteredMainTime);

@@ -53,6 +53,13 @@ and 1.
 Both phastCons and phyloP treat alignment gaps and unaligned nucleotides as
 missing data.
 </p>
+<p>
+See also: <a href="http://genomewiki.ucsc.edu/index.php/Ce11_135-way_conservation_lastz_parameters"
+target=_blank>lastz parameters</a> and other details, and
+chain <a href="http://genomewiki.ucsc.edu/index.php/Ce11_135-way_Genome_size_statistics"
+target=_blank>minimum score and gap</a> parameters used in these alignments.
+</p>
+
 
 <p>
 Missing sequence in the assemblies is highlighted in the track display
@@ -876,8 +883,8 @@ each species using lastz from repeat-masked genomic sequence.
 Pairwise alignments were then linked into chains using a dynamic programming
 algorithm that finds maximally scoring chains of gapless subsections
 of the alignments organized in a kd-tree.
-The scoring matrix and parameters for pairwise alignment and chaining
-were tuned for each species based on phylogenetic distance from the reference.
+Please note the <a href="http://genomewiki.ucsc.edu/index.php/Ce11_135-way_Genome_size_statistics"
+target=_blank>specific parameters</a> for the alignments.
 High-scoring chains were then placed along the genome, with
 gaps filled by lower-scoring chains, to produce an alignment net.
 For more information about the chaining and netting process and

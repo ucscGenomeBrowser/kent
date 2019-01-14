@@ -128,7 +128,7 @@ if (ix >= 0)
     {
     char *origin = gvf->attrVals[ix];
     if (sameWord(origin, "Not tested") || sameWord(origin, "Not reported") ||
-	sameWord(origin, "Tested - inconclusive"))
+	sameWord(origin, "Tested - inconclusive") || sameWord(origin, "Not Provided"))
 	dyStringPrintf(name, "%s_unk", gvf->name);
     else if (sameWord(origin, "De novo"))
 	dyStringPrintf(name, "%s_dnovo", gvf->name);

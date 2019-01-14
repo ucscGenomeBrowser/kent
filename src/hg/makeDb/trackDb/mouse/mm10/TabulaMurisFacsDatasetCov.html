@@ -1,0 +1,32 @@
+
+<h2>Description</h2>
+<p>This track shows the coverage of read alignments to the genome. BAM files were provided
+by the data submitters, one or two files per cell. All BAM files for the cells of a cluster were merged
+and from the result we obtained the coverage, as number of reads per basepair.</p>
+<h2>Display Conventions and Configuration</h2>
+<p>For configuration options, see <a href="https://genome.ucsc.edu/goldenpath/help/hgWiggleTrackHelp.html">the graph tracks configuration help page</a>.</p>
+<h2>Methods</h2>
+<p>The alignments were used as submitted. All BAM files for all cells of a cluster were merged with "samtools merge". From the resulting merged BAM file, coverage was obtained using "wiggletools coverage" and the result was converted with the tool "wigToBigWig".</p>
+<h2>Data Access</h2>
+<p>The bigWig files can be downloaded from the <a href='http:'>track hub directory</a>.</p>
+<h2>References</h2>
+<p>
+Zerbino DR, Johnson N, Juettemann T, Wilder SP, Flicek P.
+<a href="https://academic.oup.com/bioinformatics/article-lookup/doi/10.1093/bioinformatics/btt737"
+target="_blank">
+WiggleTools: parallel processing of large collections of genome-wide datasets for visualization and
+statistical analysis</a>.
+<em>Bioinformatics</em>. 2014 Apr 1;30(7):1008-9.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/24363377" target="_blank">24363377</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3967112/" target="_blank">PMC3967112</a>
+</p>
+
+<p>
+<p>
+The Tabula Muris Consortium, Stephen R. Quake, Tony Wyss-Coray, Spyros DarmanisThe Tabula Muris Consortium, Stephen R. Quake, Tony Wyss-Coray, Spyros Darmanis:<br>
+<a href="https://doi.org/10.1101/237446" target="_blank">
+Single-cell transcriptomic characterization of 20 organs and tissues from individual mice creates a Tabula Muris</a>.
+<em>bioRxiv March 2018</em>, manuscript 237446.
+</p>
+
+</p>

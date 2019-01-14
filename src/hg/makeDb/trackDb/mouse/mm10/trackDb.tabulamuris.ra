@@ -1,0 +1,1752 @@
+track singleCell
+shortLabel Single Cell
+longLabel Single Cell RNA-Seq: Genome Coverage and Junctions
+superTrack on
+visibility hide
+group regulation
+
+track tabulamurisBarChart
+type bigBarChart
+visibility full
+shortLabel Cell expression
+longLabel Tabula Muris Cell type expression
+barChartBars B_cell Bergmann_glial_cell Brush_cell_of_epithelium_proper_of_large_intestine DN1_thymic_pro-T_cell Kupffer_cell Slamf1-negative_multipotent_progenitor_cell Slamf1-positive_multipotent_progenitor_cell T_cell astrocyte basal_cell basal_cell_of_epidermis basophil bladder_cell bladder_urothelial_cell blood_cell brain_pericyte cardiac_muscle_cell ciliated_columnar_cell_of_tracheobronchial_tree classical_monocyte common_lymphoid_progenitor endocardial_cell endothelial_cell endothelial_cell_of_hepatic_sinusoid enterocyte_of_epithelium_of_large_intestine enteroendocrine_cell epidermal_cell epithelial_cell epithelial_cell_of_large_intestine epithelial_cell_of_lung epithelial_cell_of_proximal_tubule erythrocyte fibroblast granulocyte granulocyte_monocyte_progenitor_cell granulocytopoietic_cell hematopoietic_precursor_cell hepatocyte immature_B_cell immature_NK_T_cell immature_T_cell immature_natural_killer_cell keratinocyte keratinocyte_stem_cell kidney_collecting_duct_epithelial_cell large_intestine_goblet_cell late_pro-B_cell leukocyte luminal_epithelial_cell_of_mammary_gland lung_endothelial_cell lymphocyte macrophage mature_natural_killer_cell megakaryocyte-erythroid_progenitor_cell mesenchymal_cell mesenchymal_stem_cell mesenchymal_stem_cell_of_adipose microglial_cell monocyte myeloid_cell myofibroblast_cell naive_B_cell natural_killer_cell neuron oligodendrocyte oligodendrocyte_precursor_cell pancreatic_A_cell pancreatic_D_cell pancreatic_PP_cell pancreatic_acinar_cell pancreatic_ductal_cell pancreatic_stellate_cell pre-natural_killer_cell precursor_B_cell professional_antigen_presenting_cell regulatory_T_cell skeletal_muscle_satellite_cell skeletal_muscle_satellite_stem_cell smooth_muscle_cell stem_cell_of_epidermis stromal_cell type_B_pancreatic_cell
+barChartColors #ff0000 #ff1200 #ff2500 #ff3800 #ff4b00 #ff5e00 #ff7100 #ff8400 #ff9700 #ffaa00 #ffbc00 #ffcf00 #ffe200 #fff500 #f5ff00 #e2ff00 #cfff00 #bcff00 #aaff00 #97ff00 #84ff00 #71ff00 #5eff00 #4bff00 #38ff00 #25ff00 #12ff00 #00ff00 #00ff12 #00ff25 #00ff38 #00ff4b #00ff5e #00ff71 #00ff84 #00ff97 #00ffa9 #00ffbc #00ffcf #00ffe2 #00fff5 #00f5ff #00e2ff #00cfff #00bcff #00a9ff #0097ff #0084ff #0071ff #005eff #004bff #0038ff #0025ff #0012ff #0000ff #1200ff #2500ff #3800ff #4b00ff #5e00ff #7100ff #8400ff #9700ff #aa00ff #bc00ff #cf00ff #e200ff #f500ff #ff00f5 #ff00e2 #ff00cf #ff00bc #ff00a9 #ff0097 #ff0084 #ff0071 #ff005e #ff004b #ff0038 #ff0025 #ff0012
+barChartMetric median
+barChartUnit TPM
+barChartMatrixUrl exprMatrix.tsv
+barChartSampleUrl clusters.tsv
+defaultLabelFields name2
+labelFields name2,name
+bigDataUrl /gbdb/mm10/tabulamuris/barChart.bb
+parent singleCell
+
+track TabulaMurisFacsDataset
+shortLabel Tabula Muris FACS dataset
+longLabel Tabula Muris FACS dataset - 44779 cells
+compositeTrack on
+#subGroup1 view Views reads=Reads cov=Coverage junc=Junctions
+subGroup1 view Views reads=Reads cov=Coverage junc=Junctions
+type bed 3
+visibility dense
+parent singleCell
+
+#include trackDb.tabulamurisReads.ra
+
+    track TabulaMurisFacsDatasetViewCov
+    shortLabel Coverage
+    longLabel Tabula Muris FACS dataset Coverage - 44779 cells
+    parent TabulaMurisFacsDataset
+    type bigWig
+    visibility dense
+    view cov
+
+        track pancreaticDCellCov
+        shortLabel pancreatic D cell Cov
+        longLabel pancreatic D cell Coverage (140 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/pancreaticDCell.bw
+        visibility dense
+
+        track pancreaticACellCov
+        shortLabel pancreatic A cell Cov
+        longLabel pancreatic A cell Coverage (390 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/pancreaticACell.bw
+        visibility dense
+
+    track endothelialCellCov
+    shortLabel endothelial cell Cov
+    longLabel endothelial cell Coverage (3319 cells)
+    type bigWig
+    parent TabulaMurisFacsDatasetViewCov
+    subGroups view=cov
+    autoScale on
+    bigDataUrl /gbdb/mm10/tabulamuris/endothelialCell.bw
+    visibility dense
+
+        track classicalMonocyteCov
+        shortLabel classical monocyte Cov
+        longLabel classical monocyte Coverage (90 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/classicalMonocyte.bw
+        visibility dense
+
+        track megakaryocyteerythroidProgenitorCellCov
+        shortLabel megakaryocyte-erythroid progenitor cell Cov
+        longLabel megakaryocyte-erythroid progenitor cell Coverage (55 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/megakaryocyteerythroidProgenitorCell.bw
+        visibility dense
+
+        track lateProBCellCov
+        shortLabel late pro-B cell Cov
+        longLabel late pro-B cell Coverage (306 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/lateProBCell.bw
+        visibility dense
+
+        track immatureTCellCov
+        shortLabel immature T cell Cov
+        longLabel immature T cell Coverage (1337 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/immatureTCell.bw
+        visibility dense
+
+        track professionalAntigenPresentingCellCov
+        shortLabel professional antigen presenting cell Cov
+        longLabel professional antigen presenting cell Coverage (59 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/professionalAntigenPresentingCell.bw
+        visibility dense
+
+        track skeletalMuscleSatelliteStemCellCov
+        shortLabel skeletal muscle satellite stem cell Cov
+        longLabel skeletal muscle satellite stem cell Coverage (439 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/skeletalMuscleSatelliteStemCell.bw
+        visibility dense
+
+        track granulocyteCov
+        shortLabel granulocyte Cov
+        longLabel granulocyte Coverage (761 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/granulocyte.bw
+        visibility dense
+
+        track erythrocyteCov
+        shortLabel erythrocyte Cov
+        longLabel erythrocyte Coverage (91 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/erythrocyte.bw
+        visibility dense
+
+        track microglialCellCov
+        shortLabel microglial cell Cov
+        longLabel microglial cell Coverage (4394 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/microglialCell.bw
+        visibility hide
+
+        track bladderCellCov
+        shortLabel bladder cell Cov
+        longLabel bladder cell Coverage (695 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/bladderCell.bw
+        visibility dense
+
+        track pancreaticDuctalCellCov
+        shortLabel pancreatic ductal cell Cov
+        longLabel pancreatic ductal cell Coverage (161 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/pancreaticDuctalCell.bw
+        visibility dense
+
+        track TCellCov
+        shortLabel T cell Cov
+        longLabel T cell Coverage (793 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/TCell.bw
+        visibility dense
+
+        track stemCellOfEpidermisCov
+        shortLabel stem cell of epidermis Cov
+        longLabel stem cell of epidermis Coverage (53 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/stemCellOfEpidermis.bw
+        visibility dense
+
+        track epithelialCellOfLargeIntestineCov
+        shortLabel epithelial cell of large intestine Cov
+        longLabel epithelial cell of large intestine Coverage (2019 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/epithelialCellOfLargeIntestine.bw
+        visibility dense
+
+        track epithelialCellOfProximalTubuleCov
+        shortLabel epithelial cell of proximal tubule Cov
+        longLabel epithelial cell of proximal tubule Coverage (219 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/epithelialCellOfProximalTubule.bw
+        visibility dense
+
+        track bladderUrothelialCellCov
+        shortLabel bladder urothelial cell Cov
+        longLabel bladder urothelial cell Coverage (683 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/bladderUrothelialCell.bw
+        visibility dense
+
+        track granulocytopoieticCellCov
+        shortLabel granulocytopoietic cell Cov
+        longLabel granulocytopoietic cell Coverage (221 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/granulocytopoieticCell.bw
+        visibility dense
+
+        track BCellCov
+        shortLabel B cell Cov
+        longLabel B cell Coverage (2029 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/BCell.bw
+        visibility dense
+
+        track pancreaticAcinarCellCov
+        shortLabel pancreatic acinar cell Cov
+        longLabel pancreatic acinar cell Coverage (182 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/pancreaticAcinarCell.bw
+        visibility dense
+
+        track KupfferCellCov
+        shortLabel Kupffer cell Cov
+        longLabel Kupffer cell Coverage (61 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/KupfferCell.bw
+        visibility dense
+
+        track leukocyteCov
+        shortLabel leukocyte Cov
+        longLabel leukocyte Coverage (683 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/leukocyte.bw
+        visibility dense
+
+        track macrophageCov
+        shortLabel macrophage Cov
+        longLabel macrophage Coverage (395 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/macrophage.bw
+        visibility dense
+
+        track oligodendrocytePrecursorCellCov
+        shortLabel oligodendrocyte precursor cell Cov
+        longLabel oligodendrocyte precursor cell Coverage (203 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/oligodendrocytePrecursorCell.bw
+        visibility dense
+
+        track mesenchymalStemCellCov
+        shortLabel mesenchymal stem cell Cov
+        longLabel mesenchymal stem cell Coverage (499 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/mesenchymalStemCell.bw
+        visibility dense
+
+        track skeletalMuscleSatelliteCellCov
+        shortLabel skeletal muscle satellite cell Cov
+        longLabel skeletal muscle satellite cell Coverage (540 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/skeletalMuscleSatelliteCell.bw
+        visibility dense
+
+        track pancreaticPpCellCov
+        shortLabel pancreatic PP cell Cov
+        longLabel pancreatic PP cell Coverage (73 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/pancreaticPpCell.bw
+        visibility dense
+
+        track prenaturalKillerCellCov
+        shortLabel pre-natural killer cell Cov
+        longLabel pre-natural killer cell Coverage (22 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/prenaturalKillerCell.bw
+        visibility dense
+
+        track hepatocyteCov
+        shortLabel hepatocyte Cov
+        longLabel hepatocyte Coverage (391 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/hepatocyte.bw
+        visibility dense
+
+        track myeloidCellCov
+        shortLabel myeloid cell Cov
+        longLabel myeloid cell Coverage (1208 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/myeloidCell.bw
+        visibility dense
+
+        track Slamf1negativeMultipotentProgenitorCellCov
+        shortLabel Slamf1-negative multipotent progenitor cell Cov
+        longLabel Slamf1-negative multipotent progenitor cell Coverage (713 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/Slamf1negativeMultipotentProgenitorCell.bw
+        visibility dense
+
+        track keratinocyteStemCellCov
+        shortLabel keratinocyte stem cell Cov
+        longLabel keratinocyte stem cell Coverage (1404 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/keratinocyteStemCell.bw
+        visibility dense
+
+        track oligodendrocyteCov
+        shortLabel oligodendrocyte Cov
+        longLabel oligodendrocyte Coverage (1574 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/oligodendrocyte.bw
+        visibility dense
+
+        track basalCellOfEpidermisCov
+        shortLabel basal cell of epidermis Cov
+        longLabel basal cell of epidermis Coverage (1648 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/basalCellOfEpidermis.bw
+        visibility dense
+
+        track enterocyteOfEpitheliumOfLargeIntestineCov
+        shortLabel enterocyte of epithelium of large intestine Cov
+        longLabel enterocyte of epithelium of large intestine Coverage (964 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/enterocyteOfEpitheliumOfLargeIntestine.bw
+        visibility dense
+
+        track astrocyteCov
+        shortLabel astrocyte Cov
+        longLabel astrocyte Coverage (432 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/astrocyte.bw
+        visibility dense
+
+        track BergmannGlialCellCov
+        shortLabel Bergmann glial cell Cov
+        longLabel Bergmann glial cell Coverage (40 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/BergmannGlialCell.bw
+        visibility dense
+
+        track neuronCov
+        shortLabel neuron Cov
+        longLabel neuron Coverage (281 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/neuron.bw
+        visibility dense
+
+        track epithelialCellCov
+        shortLabel epithelial cell Cov
+        longLabel epithelial cell Coverage (201 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/epithelialCell.bw
+        visibility dense
+
+        track myofibroblastCellCov
+        shortLabel myofibroblast cell Cov
+        longLabel myofibroblast cell Coverage (178 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/myofibroblastCell.bw
+        visibility dense
+
+        track immatureNaturalKillerCellCov
+        shortLabel immature natural killer cell Cov
+        longLabel immature natural killer cell Coverage (36 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/immatureNaturalKillerCell.bw
+        visibility dense
+
+        track monocyteCov
+        shortLabel monocyte Cov
+        longLabel monocyte Coverage (331 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/monocyte.bw
+        visibility dense
+
+        track hematopoieticPrecursorCellCov
+        shortLabel hematopoietic precursor cell Cov
+        longLabel hematopoietic precursor cell Coverage (265 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/hematopoieticPrecursorCell.bw
+        visibility dense
+
+        track regulatoryTCellCov
+        shortLabel regulatory T cell Cov
+        longLabel regulatory T cell Coverage (27 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/regulatoryTCell.bw
+        visibility dense
+
+        track endothelialCellOfHepaticSinusoidCov
+        shortLabel endothelial cell of hepatic sinusoid Cov
+        longLabel endothelial cell of hepatic sinusoid Coverage (182 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/endothelialCellOfHepaticSinusoid.bw
+        visibility dense
+
+        track kidneyCollectingDuctEpithelialCellCov
+        shortLabel kidney collecting duct epithelial cell Cov
+        longLabel kidney collecting duct epithelial cell Coverage (121 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/kidneyCollectingDuctEpithelialCell.bw
+        visibility dense
+
+        track bloodCellCov
+        shortLabel blood cell Cov
+        longLabel blood cell Coverage (206 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/bloodCell.bw
+        visibility dense
+
+        track smoothMuscleCellCov
+        shortLabel smooth muscle cell Cov
+        longLabel smooth muscle cell Coverage (42 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/smoothMuscleCell.bw
+        visibility dense
+
+        track BrushCellOfEpitheliumProperOfLargeIntestineCov
+        shortLabel Brush cell of epithelium proper of large intestine Cov
+        longLabel Brush cell of epithelium proper of large intestine Coverage (63 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/BrushCellOfEpitheliumProperOfLargeIntestine.bw
+        visibility dense
+
+        track immatureNkTCellCov
+        shortLabel immature NK T cell Cov
+        longLabel immature NK T cell Coverage (37 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/immatureNkTCell.bw
+        visibility dense
+
+        track fibroblastCov
+        shortLabel fibroblast Cov
+        longLabel fibroblast Coverage (2189 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/fibroblast.bw
+        visibility dense
+
+        track naiveBCellCov
+        shortLabel naive B cell Cov
+        longLabel naive B cell Coverage (692 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/naiveBCell.bw
+        visibility dense
+
+        track Slamf1positiveMultipotentProgenitorCellCov
+        shortLabel Slamf1-positive multipotent progenitor cell Cov
+        longLabel Slamf1-positive multipotent progenitor cell Coverage (134 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/Slamf1positiveMultipotentProgenitorCell.bw
+        visibility dense
+
+        track stromalCellCov
+        shortLabel stromal cell Cov
+        longLabel stromal cell Coverage (863 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/stromalCell.bw
+        visibility dense
+
+        track matureNaturalKillerCellCov
+        shortLabel mature natural killer cell Cov
+        longLabel mature natural killer cell Coverage (49 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/matureNaturalKillerCell.bw
+        visibility dense
+
+        track mesenchymalCellCov
+        shortLabel mesenchymal cell Cov
+        longLabel mesenchymal cell Coverage (830 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/mesenchymalCell.bw
+        visibility dense
+
+        track brainPericyteCov
+        shortLabel brain pericyte Cov
+        longLabel brain pericyte Coverage (156 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/brainPericyte.bw
+        visibility dense
+
+        track endocardialCellCov
+        shortLabel endocardial cell Cov
+        longLabel endocardial cell Coverage (165 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/endocardialCell.bw
+        visibility dense
+
+        track largeIntestineGobletCellCov
+        shortLabel large intestine goblet cell Cov
+        longLabel large intestine goblet cell Coverage (833 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/largeIntestineGobletCell.bw
+        visibility dense
+
+        track commonLymphoidProgenitorCov
+        shortLabel common lymphoid progenitor Cov
+        longLabel common lymphoid progenitor Coverage (156 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/commonLymphoidProgenitor.bw
+        visibility dense
+
+        track typeBPancreaticCellCov
+        shortLabel type B pancreatic cell Cov
+        longLabel type B pancreatic cell Coverage (449 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/typeBPancreaticCell.bw
+        visibility dense
+
+        track basophilCov
+        shortLabel basophil Cov
+        longLabel basophil Coverage (25 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/basophil.bw
+        visibility dense
+
+        track granulocyteMonocyteProgenitorCellCov
+        shortLabel granulocyte monocyte progenitor cell Cov
+        longLabel granulocyte monocyte progenitor cell Coverage (134 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/granulocyteMonocyteProgenitorCell.bw
+        visibility dense
+
+        track keratinocyteCov
+        shortLabel keratinocyte Cov
+        longLabel keratinocyte Coverage (330 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/keratinocyte.bw
+        visibility dense
+
+        track cardiacMuscleCellCov
+        shortLabel cardiac muscle cell Cov
+        longLabel cardiac muscle cell Coverage (133 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/cardiacMuscleCell.bw
+        visibility dense
+
+        track luminalEpithelialCellOfMammaryGlandCov
+        shortLabel luminal epithelial cell of mammary gland Cov
+        longLabel luminal epithelial cell of mammary gland Coverage (578 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/luminalEpithelialCellOfMammaryGland.bw
+        visibility dense
+
+        track immatureBCellCov
+        shortLabel immature B cell Cov
+        longLabel immature B cell Coverage (344 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/immatureBCell.bw
+        visibility dense
+
+        track lymphocyteCov
+        shortLabel lymphocyte Cov
+        longLabel lymphocyte Coverage (81 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/lymphocyte.bw
+        visibility dense
+
+        track lungEndothelialCellCov
+        shortLabel lung endothelial cell Cov
+        longLabel lung endothelial cell Coverage (693 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/lungEndothelialCell.bw
+        visibility dense
+
+        track DN1ThymicProTCellCov
+        shortLabel DN1 thymic pro-T cell Cov
+        longLabel DN1 thymic pro-T cell Coverage (32 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/DN1ThymicProTCell.bw
+        visibility dense
+
+        track mesenchymalStemCellOfAdiposeCov
+        shortLabel mesenchymal stem cell of adipose Cov
+        longLabel mesenchymal stem cell of adipose Coverage (2107 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/mesenchymalStemCellOfAdipose.bw
+        visibility dense
+
+        track ciliatedColumnarCellOfTracheobronchialTreeCov
+        shortLabel ciliated columnar cell of tracheobronchial tree Cov
+        longLabel ciliated columnar cell of tracheobronchial tree Coverage (25 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/ciliatedColumnarCellOfTracheobronchialTree.bw
+        visibility dense
+
+        track enteroendocrineCellCov
+        shortLabel enteroendocrine cell Cov
+        longLabel enteroendocrine cell Coverage (59 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/enteroendocrineCell.bw
+        visibility dense
+
+        track basalCellCov
+        shortLabel basal cell Cov
+        longLabel basal cell Coverage (1340 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/basalCell.bw
+        visibility dense
+
+        track naturalKillerCellCov
+        shortLabel natural killer cell Cov
+        longLabel natural killer cell Coverage (171 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/naturalKillerCell.bw
+        visibility dense
+
+        track pancreaticStellateCellCov
+        shortLabel pancreatic stellate cell Cov
+        longLabel pancreatic stellate cell Coverage (49 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/pancreaticStellateCell.bw
+        visibility dense
+
+        track epithelialCellOfLungCov
+        shortLabel epithelial cell of lung Cov
+        longLabel epithelial cell of lung Coverage (113 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/epithelialCellOfLung.bw
+        visibility dense
+
+        track epidermalCellCov
+        shortLabel epidermal cell Cov
+        longLabel epidermal cell Coverage (276 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/epidermalCell.bw
+        visibility dense
+
+        track precursorBCellCov
+        shortLabel precursor B cell Cov
+        longLabel precursor B cell Coverage (517 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/precursorBCell.bw
+        visibility dense
+
+    track TabulaMurisFacsDatasetViewJunc
+    shortLabel Splicing
+    longLabel Tabula Muris FACS dataset Splice Junctions - 44779 cells
+    parent TabulaMurisFacsDataset
+    spectrum on
+    type bigBed 12
+    visibility dense
+    view junc
+
+        track pancreaticDCellJunc
+        shortLabel pancreatic D cell Junc
+        longLabel pancreatic D cell Splice Junctions (140 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/pancreaticDCell.junctions.bb
+        visibility dense
+
+        track pancreaticACellJunc
+        shortLabel pancreatic A cell Junc
+        longLabel pancreatic A cell Splice Junctions (390 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/pancreaticACell.junctions.bb
+        visibility dense
+
+        track endothelialCellJunc
+        shortLabel endothelial cell Junc
+        longLabel endothelial cell Splice Junctions (3319 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/endothelialCell.junctions.bb
+        visibility dense
+
+        track classicalMonocyteJunc
+        shortLabel classical monocyte Junc
+        longLabel classical monocyte Splice Junctions (90 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/classicalMonocyte.junctions.bb
+        visibility dense
+
+        track megakaryocyteerythroidProgenitorCellJunc
+        shortLabel megakaryocyte-erythroid progenitor cell Junc
+        longLabel megakaryocyte-erythroid progenitor cell Splice Junctions (55 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/megakaryocyteerythroidProgenitorCell.junctions.bb
+        visibility dense
+
+        track lateProBCellJunc
+        shortLabel late pro-B cell Junc
+        longLabel late pro-B cell Splice Junctions (306 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/lateProBCell.junctions.bb
+        visibility dense
+
+        track immatureTCellJunc
+        shortLabel immature T cell Junc
+        longLabel immature T cell Splice Junctions (1337 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/immatureTCell.junctions.bb
+        visibility dense
+
+        track professionalAntigenPresentingCellJunc
+        shortLabel professional antigen presenting cell Junc
+        longLabel professional antigen presenting cell Splice Junctions (59 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/professionalAntigenPresentingCell.junctions.bb
+        visibility dense
+
+        track skeletalMuscleSatelliteStemCellJunc
+        shortLabel skeletal muscle satellite stem cell Junc
+        longLabel skeletal muscle satellite stem cell Splice Junctions (439 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/skeletalMuscleSatelliteStemCell.junctions.bb
+        visibility dense
+
+        track granulocyteJunc
+        shortLabel granulocyte Junc
+        longLabel granulocyte Splice Junctions (761 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/granulocyte.junctions.bb
+        visibility dense
+
+        track erythrocyteJunc
+        shortLabel erythrocyte Junc
+        longLabel erythrocyte Splice Junctions (91 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/erythrocyte.junctions.bb
+        visibility dense
+
+        track microglialCellJunc
+        shortLabel microglial cell Junc
+        longLabel microglial cell Splice Junctions (4394 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/microglialCell.junctions.bb
+        visibility hide
+
+        track bladderCellJunc
+        shortLabel bladder cell Junc
+        longLabel bladder cell Splice Junctions (695 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/bladderCell.junctions.bb
+        visibility dense
+
+        track pancreaticDuctalCellJunc
+        shortLabel pancreatic ductal cell Junc
+        longLabel pancreatic ductal cell Splice Junctions (161 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/pancreaticDuctalCell.junctions.bb
+        visibility dense
+
+        track TCellJunc
+        shortLabel T cell Junc
+        longLabel T cell Splice Junctions (793 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/TCell.junctions.bb
+        visibility dense
+
+        track stemCellOfEpidermisJunc
+        shortLabel stem cell of epidermis Junc
+        longLabel stem cell of epidermis Splice Junctions (53 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/stemCellOfEpidermis.junctions.bb
+        visibility dense
+
+        track epithelialCellOfLargeIntestineJunc
+        shortLabel epithelial cell of large intestine Junc
+        longLabel epithelial cell of large intestine Splice Junctions (2019 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/epithelialCellOfLargeIntestine.junctions.bb
+        visibility dense
+
+        track epithelialCellOfProximalTubuleJunc
+        shortLabel epithelial cell of proximal tubule Junc
+        longLabel epithelial cell of proximal tubule Splice Junctions (219 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/epithelialCellOfProximalTubule.junctions.bb
+        visibility dense
+
+        track bladderUrothelialCellJunc
+        shortLabel bladder urothelial cell Junc
+        longLabel bladder urothelial cell Splice Junctions (683 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/bladderUrothelialCell.junctions.bb
+        visibility dense
+
+        track granulocytopoieticCellJunc
+        shortLabel granulocytopoietic cell Junc
+        longLabel granulocytopoietic cell Splice Junctions (221 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/granulocytopoieticCell.junctions.bb
+        visibility dense
+
+        track BCellJunc
+        shortLabel B cell Junc
+        longLabel B cell Splice Junctions (2029 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/BCell.junctions.bb
+        visibility dense
+
+        track pancreaticAcinarCellJunc
+        shortLabel pancreatic acinar cell Junc
+        longLabel pancreatic acinar cell Splice Junctions (182 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/pancreaticAcinarCell.junctions.bb
+        visibility dense
+
+        track KupfferCellJunc
+        shortLabel Kupffer cell Junc
+        longLabel Kupffer cell Splice Junctions (61 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/KupfferCell.junctions.bb
+        visibility dense
+
+        track leukocyteJunc
+        shortLabel leukocyte Junc
+        longLabel leukocyte Splice Junctions (683 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/leukocyte.junctions.bb
+        visibility dense
+
+        track macrophageJunc
+        shortLabel macrophage Junc
+        longLabel macrophage Splice Junctions (395 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/macrophage.junctions.bb
+        visibility dense
+
+        track oligodendrocytePrecursorCellJunc
+        shortLabel oligodendrocyte precursor cell Junc
+        longLabel oligodendrocyte precursor cell Splice Junctions (203 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/oligodendrocytePrecursorCell.junctions.bb
+        visibility dense
+
+        track mesenchymalStemCellJunc
+        shortLabel mesenchymal stem cell Junc
+        longLabel mesenchymal stem cell Splice Junctions (499 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/mesenchymalStemCell.junctions.bb
+        visibility dense
+
+        track skeletalMuscleSatelliteCellJunc
+        shortLabel skeletal muscle satellite cell Junc
+        longLabel skeletal muscle satellite cell Splice Junctions (540 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/skeletalMuscleSatelliteCell.junctions.bb
+        visibility dense
+
+        track pancreaticPpCellJunc
+        shortLabel pancreatic PP cell Junc
+        longLabel pancreatic PP cell Splice Junctions (73 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/pancreaticPpCell.junctions.bb
+        visibility dense
+
+        track prenaturalKillerCellJunc
+        shortLabel pre-natural killer cell Junc
+        longLabel pre-natural killer cell Splice Junctions (22 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/prenaturalKillerCell.junctions.bb
+        visibility dense
+
+        track hepatocyteJunc
+        shortLabel hepatocyte Junc
+        longLabel hepatocyte Splice Junctions (391 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/hepatocyte.junctions.bb
+        visibility dense
+
+        track myeloidCellJunc
+        shortLabel myeloid cell Junc
+        longLabel myeloid cell Splice Junctions (1208 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/myeloidCell.junctions.bb
+        visibility dense
+
+        track Slamf1negativeMultipotentProgenitorCellJunc
+        shortLabel Slamf1-negative multipotent progenitor cell Junc
+        longLabel Slamf1-negative multipotent progenitor cell Splice Junctions (713 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/Slamf1negativeMultipotentProgenitorCell.junctions.bb
+        visibility dense
+
+        track keratinocyteStemCellJunc
+        shortLabel keratinocyte stem cell Junc
+        longLabel keratinocyte stem cell Splice Junctions (1404 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/keratinocyteStemCell.junctions.bb
+        visibility dense
+
+        track oligodendrocyteJunc
+        shortLabel oligodendrocyte Junc
+        longLabel oligodendrocyte Splice Junctions (1574 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/oligodendrocyte.junctions.bb
+        visibility dense
+
+        track basalCellOfEpidermisJunc
+        shortLabel basal cell of epidermis Junc
+        longLabel basal cell of epidermis Splice Junctions (1648 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/basalCellOfEpidermis.junctions.bb
+        visibility dense
+
+        track enterocyteOfEpitheliumOfLargeIntestineJunc
+        shortLabel enterocyte of epithelium of large intestine Junc
+        longLabel enterocyte of epithelium of large intestine Splice Junctions (964 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/enterocyteOfEpitheliumOfLargeIntestine.junctions.bb
+        visibility dense
+
+        track astrocyteJunc
+        shortLabel astrocyte Junc
+        longLabel astrocyte Splice Junctions (432 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/astrocyte.junctions.bb
+        visibility dense
+
+        track BergmannGlialCellJunc
+        shortLabel Bergmann glial cell Junc
+        longLabel Bergmann glial cell Splice Junctions (40 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/BergmannGlialCell.junctions.bb
+        visibility dense
+
+        track neuronJunc
+        shortLabel neuron Junc
+        longLabel neuron Splice Junctions (281 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/neuron.junctions.bb
+        visibility dense
+
+        track epithelialCellJunc
+        shortLabel epithelial cell Junc
+        longLabel epithelial cell Splice Junctions (201 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/epithelialCell.junctions.bb
+        visibility dense
+
+        track myofibroblastCellJunc
+        shortLabel myofibroblast cell Junc
+        longLabel myofibroblast cell Splice Junctions (178 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/myofibroblastCell.junctions.bb
+        visibility dense
+
+        track immatureNaturalKillerCellJunc
+        shortLabel immature natural killer cell Junc
+        longLabel immature natural killer cell Splice Junctions (36 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/immatureNaturalKillerCell.junctions.bb
+        visibility dense
+
+        track monocyteJunc
+        shortLabel monocyte Junc
+        longLabel monocyte Splice Junctions (331 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/monocyte.junctions.bb
+        visibility dense
+
+        track hematopoieticPrecursorCellJunc
+        shortLabel hematopoietic precursor cell Junc
+        longLabel hematopoietic precursor cell Splice Junctions (265 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/hematopoieticPrecursorCell.junctions.bb
+        visibility dense
+
+        track regulatoryTCellJunc
+        shortLabel regulatory T cell Junc
+        longLabel regulatory T cell Splice Junctions (27 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/regulatoryTCell.junctions.bb
+        visibility dense
+
+        track endothelialCellOfHepaticSinusoidJunc
+        shortLabel endothelial cell of hepatic sinusoid Junc
+        longLabel endothelial cell of hepatic sinusoid Splice Junctions (182 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/endothelialCellOfHepaticSinusoid.junctions.bb
+        visibility dense
+
+        track kidneyCollectingDuctEpithelialCellJunc
+        shortLabel kidney collecting duct epithelial cell Junc
+        longLabel kidney collecting duct epithelial cell Splice Junctions (121 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/kidneyCollectingDuctEpithelialCell.junctions.bb
+        visibility dense
+
+        track bloodCellJunc
+        shortLabel blood cell Junc
+        longLabel blood cell Splice Junctions (206 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/bloodCell.junctions.bb
+        visibility dense
+
+        track smoothMuscleCellJunc
+        shortLabel smooth muscle cell Junc
+        longLabel smooth muscle cell Splice Junctions (42 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/smoothMuscleCell.junctions.bb
+        visibility dense
+
+        track BrushCellOfEpitheliumProperOfLargeIntestineJunc
+        shortLabel Brush cell of epithelium proper of large intestine Junc
+        longLabel Brush cell of epithelium proper of large intestine Splice Junctions (63 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/BrushCellOfEpitheliumProperOfLargeIntestine.junctions.bb
+        visibility dense
+
+        track immatureNkTCellJunc
+        shortLabel immature NK T cell Junc
+        longLabel immature NK T cell Splice Junctions (37 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/immatureNkTCell.junctions.bb
+        visibility dense
+
+        track fibroblastJunc
+        shortLabel fibroblast Junc
+        longLabel fibroblast Splice Junctions (2189 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/fibroblast.junctions.bb
+        visibility dense
+
+        track naiveBCellJunc
+        shortLabel naive B cell Junc
+        longLabel naive B cell Splice Junctions (692 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/naiveBCell.junctions.bb
+        visibility dense
+
+        track Slamf1positiveMultipotentProgenitorCellJunc
+        shortLabel Slamf1-positive multipotent progenitor cell Junc
+        longLabel Slamf1-positive multipotent progenitor cell Splice Junctions (134 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/Slamf1positiveMultipotentProgenitorCell.junctions.bb
+        visibility dense
+
+        track stromalCellJunc
+        shortLabel stromal cell Junc
+        longLabel stromal cell Splice Junctions (863 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/stromalCell.junctions.bb
+        visibility dense
+
+        track matureNaturalKillerCellJunc
+        shortLabel mature natural killer cell Junc
+        longLabel mature natural killer cell Splice Junctions (49 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/matureNaturalKillerCell.junctions.bb
+        visibility dense
+
+        track mesenchymalCellJunc
+        shortLabel mesenchymal cell Junc
+        longLabel mesenchymal cell Splice Junctions (830 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/mesenchymalCell.junctions.bb
+        visibility dense
+
+        track brainPericyteJunc
+        shortLabel brain pericyte Junc
+        longLabel brain pericyte Splice Junctions (156 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/brainPericyte.junctions.bb
+        visibility dense
+
+        track endocardialCellJunc
+        shortLabel endocardial cell Junc
+        longLabel endocardial cell Splice Junctions (165 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/endocardialCell.junctions.bb
+        visibility dense
+
+        track largeIntestineGobletCellJunc
+        shortLabel large intestine goblet cell Junc
+        longLabel large intestine goblet cell Splice Junctions (833 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/largeIntestineGobletCell.junctions.bb
+        visibility dense
+
+        track commonLymphoidProgenitorJunc
+        shortLabel common lymphoid progenitor Junc
+        longLabel common lymphoid progenitor Splice Junctions (156 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/commonLymphoidProgenitor.junctions.bb
+        visibility dense
+
+        track typeBPancreaticCellJunc
+        shortLabel type B pancreatic cell Junc
+        longLabel type B pancreatic cell Splice Junctions (449 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/typeBPancreaticCell.junctions.bb
+        visibility dense
+
+        track basophilJunc
+        shortLabel basophil Junc
+        longLabel basophil Splice Junctions (25 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/basophil.junctions.bb
+        visibility dense
+
+        track granulocyteMonocyteProgenitorCellJunc
+        shortLabel granulocyte monocyte progenitor cell Junc
+        longLabel granulocyte monocyte progenitor cell Splice Junctions (134 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/granulocyteMonocyteProgenitorCell.junctions.bb
+        visibility dense
+
+        track keratinocyteJunc
+        shortLabel keratinocyte Junc
+        longLabel keratinocyte Splice Junctions (330 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/keratinocyte.junctions.bb
+        visibility dense
+
+        track cardiacMuscleCellJunc
+        shortLabel cardiac muscle cell Junc
+        longLabel cardiac muscle cell Splice Junctions (133 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/cardiacMuscleCell.junctions.bb
+        visibility dense
+
+        track luminalEpithelialCellOfMammaryGlandJunc
+        shortLabel luminal epithelial cell of mammary gland Junc
+        longLabel luminal epithelial cell of mammary gland Splice Junctions (578 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/luminalEpithelialCellOfMammaryGland.junctions.bb
+        visibility dense
+
+        track immatureBCellJunc
+        shortLabel immature B cell Junc
+        longLabel immature B cell Splice Junctions (344 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/immatureBCell.junctions.bb
+        visibility dense
+
+        track lymphocyteJunc
+        shortLabel lymphocyte Junc
+        longLabel lymphocyte Splice Junctions (81 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/lymphocyte.junctions.bb
+        visibility dense
+
+        track lungEndothelialCellJunc
+        shortLabel lung endothelial cell Junc
+        longLabel lung endothelial cell Splice Junctions (693 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/lungEndothelialCell.junctions.bb
+        visibility dense
+
+        track DN1ThymicProTCellJunc
+        shortLabel DN1 thymic pro-T cell Junc
+        longLabel DN1 thymic pro-T cell Splice Junctions (32 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/DN1ThymicProTCell.junctions.bb
+        visibility dense
+
+        track mesenchymalStemCellOfAdiposeJunc
+        shortLabel mesenchymal stem cell of adipose Junc
+        longLabel mesenchymal stem cell of adipose Splice Junctions (2107 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/mesenchymalStemCellOfAdipose.junctions.bb
+        visibility dense
+
+        track ciliatedColumnarCellOfTracheobronchialTreeJunc
+        shortLabel ciliated columnar cell of tracheobronchial tree Junc
+        longLabel ciliated columnar cell of tracheobronchial tree Splice Junctions (25 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/ciliatedColumnarCellOfTracheobronchialTree.junctions.bb
+        visibility dense
+
+        track enteroendocrineCellJunc
+        shortLabel enteroendocrine cell Junc
+        longLabel enteroendocrine cell Splice Junctions (59 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/enteroendocrineCell.junctions.bb
+        visibility dense
+
+        track basalCellJunc
+        shortLabel basal cell Junc
+        longLabel basal cell Splice Junctions (1340 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/basalCell.junctions.bb
+        visibility dense
+
+        track naturalKillerCellJunc
+        shortLabel natural killer cell Junc
+        longLabel natural killer cell Splice Junctions (171 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/naturalKillerCell.junctions.bb
+        visibility dense
+
+        track pancreaticStellateCellJunc
+        shortLabel pancreatic stellate cell Junc
+        longLabel pancreatic stellate cell Splice Junctions (49 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/pancreaticStellateCell.junctions.bb
+        visibility dense
+
+        track epithelialCellOfLungJunc
+        shortLabel epithelial cell of lung Junc
+        longLabel epithelial cell of lung Splice Junctions (113 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/epithelialCellOfLung.junctions.bb
+        visibility dense
+
+        track epidermalCellJunc
+        shortLabel epidermal cell Junc
+        longLabel epidermal cell Splice Junctions (276 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/epidermalCell.junctions.bb
+        visibility dense
+
+        track precursorBCellJunc
+        shortLabel precursor B cell Junc
+        longLabel precursor B cell Splice Junctions (517 cells)
+        type bigBed 12 +
+        spectrum on
+        scoreLabel Number of supporting reads (max: 1000)
+        parent TabulaMurisFacsDatasetViewJunc
+        subGroups view=junc
+        bigDataUrl /gbdb/mm10/tabulamuris/precursorBCell.junctions.bb
+        visibility dense

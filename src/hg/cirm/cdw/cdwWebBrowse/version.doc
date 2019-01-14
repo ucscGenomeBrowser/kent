@@ -34,4 +34,7 @@
    - Optimizing speed of analysis/query page by querying cdwFileTags table rather than
      the built-on-the-fly tagStorm.
    - Making program behave better if you put quotes into the search string.
+0.61 Jan 11 2019
+   - Fixing things so that a "clear search" works better after coming into browsing files
+     with a URL that sets a filter.
 
