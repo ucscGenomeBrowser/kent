@@ -54,4 +54,4 @@ otherDb ce11
 include ../../refSeqComposite.ra
 
 include chainNetNematodes.ra
-include trackDb.135way.ra alpha,beta
+include trackDb.135way.ra
