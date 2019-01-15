@@ -94,6 +94,11 @@ div.card.facet-card
 
 }
 
+.badge
+{
+    color: white;
+}
+
 .cirm-page-title
 {
     padding-left: 5px;
@@ -145,7 +150,12 @@ a.btn,input.btn
 
 .icon-sm
 {
-    font-size: 1.15rem !important;
+    font-size: 0.75rem !important;
+}
+
+.padded-deck
+{
+    padding: 0px 15px !important;
 }
 
 /* Styling for secure site banner */
@@ -230,6 +240,11 @@ a.btn,input.btn
     background-color: #1E90FF;
 }
 
+.centered-text
+{
+    text-align: center;
+}
+
 .white-link
 {
     color: white;
@@ -282,6 +297,12 @@ nav
     margin-right: 15px;
 }
 
+.padded-top-img
+{
+    display: block;
+    padding-top: 15px;
+}
+
 .btnexpand:after
 {
     font-family: "Glyphicons Halflings";
@@ -294,7 +315,7 @@ nav
 {
     content: "\e080";
 }
- 
+
 /*.verticaltext { width: 20px; transform: rotate(-90deg); transform-origin: right, top; -ms-transform: rotate(-90deg); -ms-transform-origin:right, top; -webkit-transform: rotate(-90deg); -webkit-transform-origin:right, top; color: #ed217c; position: relative; }
 
 .verticaltext {
@@ -313,11 +334,6 @@ nav
 }
 */
 
-.centered-text
-{
-    text-align: center;
-}
-
 /*Styling for Projects page table*/
 .table-header-rotated th.row-header
 {
@@ -335,7 +351,7 @@ nav
 
 .table-header-rotated th.rotate-45
 {
-    height: 80px;
+    height: 90px;
     width: 40px;
     min-width: 40px;
     max-width: 40px;
