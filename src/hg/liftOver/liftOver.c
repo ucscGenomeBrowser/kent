@@ -121,19 +121,23 @@ if (optionExists("gff"))
     fprintf(stderr, "WARNING: -gff is not recommended.\nUse 'ldHgGene -out=<file.gp>' and then 'liftOver -genePred <file.gp>'\n");
     if (multiple)
         errAbort("ERROR: -multiple is not supported for -gff.");
+    if (chainTable)
+        errAbort("ERROR: -chainTable is not supported for -gff.");
     liftOverGff(oldFile, chainHash, minMatch, minBlocks, mapped, unmapped);
     }
 else if (optionExists("genePred"))
     {
-    if (multiple)
-        errAbort("ERROR: -multiple is not supported for -genePred.");
+    if (chainTable)
+        errAbort("ERROR: -chainTable is not supported for -genePred.");
     liftOverGenePred(oldFile, chainHash, minMatch, minBlocks, fudgeThick,
-                        mapped, unmapped);
+                     mapped, unmapped, multiple);
     }
 else if (optionExists("sample"))
     {
     if (multiple)
         errAbort("ERROR: -multiple is not supported for -sample.");
+    if (chainTable)
+        errAbort("ERROR: -chainTable is not supported for -sample.");
     liftOverSample(oldFile, chainHash, minMatch, minBlocks, fudgeThick,
                         mapped, unmapped);
     }
@@ -142,6 +146,8 @@ else if (optionExists("pslT"))
     verbose(1, "Consider using pslMap instead of liftOver for PSL.\n");
     if (multiple)
         errAbort("ERROR: -multiple is not supported for -pslT.");
+    if (chainTable)
+        errAbort("ERROR: -chainTable is not supported for -pslT.");
     liftOverPsl(oldFile, chainHash, minMatch, minBlocks, fudgeThick,
                         mapped, unmapped);
     }

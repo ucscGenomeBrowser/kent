@@ -537,11 +537,13 @@ done
 
 
 ##############################################################################
-# Extend GTEX GENE (DONE 19-01-08 angie)
+# Extend GTEX GENE (DONE 19-01-15 angie)
 # first done 18-08-10; redone 18-11-06 and 19-01-08 with updated .over.chain file.
-# I'm not really sure what file(s) are the true source of the latest hg38 GTEX Gene tables,
-# so I'll just work from the tables.
+# gtexGeneModel redone 19-01-15 after implementing liftOver -multiple -genePred.
 #NOTE: this has not been liftOver'd to original alts, aside from hg19 chr to -> hg38 alt!
+
+    # I'm not really sure what file(s) are the true source of the latest hg38 GTEX Gene tables,
+    # so I'll just work from the tables.
     mkdir /hive/data/genomes/hg38/bed/gtex.p11
     cd /hive/data/genomes/hg38/bed/gtex.p11
     # There is actually no bin column in gtexGene.
@@ -568,7 +570,7 @@ done
       gtexGene.p11.bed /dev/null
     sort -k1,1 -k2n,2n gtexGene.initial.bed gtexGene.p11.bed \
       > gtexGene.plusP11.bed
-#TODO: redo with -multiple-capable liftOver -genePred.
+    # 19-01-15: recompute now that liftOver -multiple -genePred works.
     liftOver -multiple -genePred gtexGeneModel.initial.gp \
       /hive/data/genomes/hg38/jkStuff/hg38.mainToPatch.p11.over.chain \
       gtexGeneModel.p11.gp /dev/null

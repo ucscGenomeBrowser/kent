@@ -499,9 +499,10 @@ done
 
 
 ##############################################################################
-# Extend GTEX GENE (DONE 19-01-08 angie)
+# Extend GTEX GENE (DONE 19-01-15 angie)
 # originally done 18-08-28; redone 18-11-08, 19-01-08 with recomputed .plusP11
 # files and updated .chain
+# gtexGeneModel redone 19-01-15 after implementing liftOver -multiple -genePred.
     mkdir /hive/data/genomes/hg38/bed/gtex.p12
     cd /hive/data/genomes/hg38/bed/gtex.p12
     liftOver -multiple -bedPlus=6 -noSerial ../gtex.p11/gtexGene.plusP11.bed \
@@ -520,7 +521,7 @@ done
     | grep -v '^chr7_KV880765v1_fix.*+.ENSG00000164597' \
     | hgLoadSqlTab hg38 gtexGene $HOME/kent/src/hg/lib/gtexGeneBed.sql stdin
 
-#TODO: redo with -multiple-capable liftOver -genePred.
+    # 19-01-15: recompute now that liftOver -multiple -genePred works.
     liftOver -multiple -genePred ../gtex.p11/gtexGeneModel.plusP11.gp \
       /hive/data/genomes/hg38/jkStuff/hg38.mainToPatch.p12.over.chain \
       gtexGeneModel.p12.gp /dev/null

@@ -630,7 +630,8 @@ done
 
 
 ##############################################################################
-# Extend GTEX GENE (DONE 19-01-10 angie)
+# Extend GTEX GENE (DONE 19-01-15 angie)
+# first done 19-01-10; gtexGeneModel redone 19-01-15 after implementing liftOver -multiple -genePred.
 #NOTE: this has not been liftOver'd to original alts, so use mainToAllAltPatch.over.chain
 
     cd /hive/data/genomes/hg19/bed/gtex
@@ -705,7 +706,7 @@ done
     # I don't see the original file for gtexGeneModelV6, so I'll dump genePred from the table.
     # gtexGeneModel has a bin.... but gtexGeneModelV6 does not.
     hgsql hg19 -NBe 'select * from gtexGeneModelV6' > gtexGeneModelV6.initial.gp
-#TODO: redo with -multiple-capable liftOver -genePred.
+    # 19-01-15: update now that liftOver -multiple -genePred works.
     liftOver -multiple -genePred gtexGeneModelV6.initial.gp \
       /hive/data/genomes/hg19/jkStuff/hg19.mainToAllAltPatch.p13.over.chain \
       gtexGeneModelV6.p13.gp /dev/null
