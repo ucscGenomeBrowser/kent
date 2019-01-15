@@ -453,6 +453,7 @@ subgroups bed
 summary wigMaf
 superTrack *
 symbolTable bed genePred
+packDense *
 pubsArticleTable bed psl bigPsl
 pubsSequenceTable bed psl bigPsl
 pubsMarkerTable bed psl bigPsl
