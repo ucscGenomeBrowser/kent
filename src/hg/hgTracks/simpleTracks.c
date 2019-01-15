@@ -1593,13 +1593,13 @@ hvGfxBox(hvg, x1, y, w, height, color);
 char *shortLabel = cloneString(label);
 /* calculate how many characters we can squeeze into the box */
 int charsInBox = w / mgFontCharWidth(font, 'm');
-if (charsInBox > 4)
-    {
-    if (charsInBox < strlen(label))
+if (charsInBox < strlen(label))
+    if (charsInBox > 4)
         strcpy(shortLabel+charsInBox-3, "...");
-    Color labelColor = hvGfxContrastingColor(hvg, color);
-    hvGfxTextCentered(hvg, x1, y, w, height, labelColor, font, shortLabel);
-    }
+if (charsInBox < strlen(shortLabel))
+    return;
+Color labelColor = hvGfxContrastingColor(hvg, color);
+hvGfxTextCentered(hvg, x1, y, w, height, labelColor, font, shortLabel);
 }
 
 void filterItems(struct track *tg, boolean (*filter)(struct track *tg, void *item),
