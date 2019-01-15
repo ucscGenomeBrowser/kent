@@ -520,6 +520,7 @@ done
     | grep -v '^chr7_KV880765v1_fix.*+.ENSG00000164597' \
     | hgLoadSqlTab hg38 gtexGene $HOME/kent/src/hg/lib/gtexGeneBed.sql stdin
 
+#TODO: redo with -multiple-capable liftOver -genePred.
     liftOver -multiple -genePred ../gtex.p11/gtexGeneModel.plusP11.gp \
       /hive/data/genomes/hg38/jkStuff/hg38.mainToPatch.p12.over.chain \
       gtexGeneModel.p12.gp /dev/null

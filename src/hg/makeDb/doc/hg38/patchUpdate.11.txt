@@ -568,6 +568,7 @@ done
       gtexGene.p11.bed /dev/null
     sort -k1,1 -k2n,2n gtexGene.initial.bed gtexGene.p11.bed \
       > gtexGene.plusP11.bed
+#TODO: redo with -multiple-capable liftOver -genePred.
     liftOver -multiple -genePred gtexGeneModel.initial.gp \
       /hive/data/genomes/hg38/jkStuff/hg38.mainToPatch.p11.over.chain \
       gtexGeneModel.p11.gp /dev/null
