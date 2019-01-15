@@ -615,7 +615,7 @@ function installRedhat () {
     # imagemagick is required for the session gallery
     # MySQL-python is required for hgGeneGraph
     yum update
-    yum -y install --enablerepo=extras epel-release
+    yum -y install epel-release
     yum -y install ghostscript rsync ImageMagick R-core MySQL-python curl
 
     # centos 7 and fedora 20 do not provide libpng by default

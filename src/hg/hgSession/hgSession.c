@@ -155,14 +155,15 @@ printf("<A HREF=\"../cgi-bin/cartReset?%s&destination=%s\">Click here to "
 }
 
 void addSessionLink(struct dyString *dy, char *userName, char *sessionName,
-		    boolean encode)
+		    boolean encode, boolean tryShortLink)
 /* Add to dy an URL that tells hgSession to load a saved session.
  * If encode, cgiEncodeFull the URL. 
+ * If tryShortLink, print a shortened link that apache can redirect.
  * The link is an absolute link that includes the server name so people can
  * copy-paste it into emails.  */
 {
 struct dyString *dyTmp = dyStringNew(1024);
-if (cfgOptionBooleanDefault("hgSession.shortLink", FALSE) &&
+if (tryShortLink && cfgOptionBooleanDefault("hgSession.shortLink", FALSE) &&
         !stringIn("%2F", userName) && !stringIn("%2F", sessionName))
     dyStringPrintf(dyTmp, "http%s://%s/s/%s/%s", cgiAppendSForHttps(), cgiServerNamePort(),
         userName, sessionName);
@@ -185,7 +186,7 @@ void printShareMessage(struct dyString *dy, char *userName, char *sessionName,
             boolean encode)
 {
 struct dyString *dyTmp = dyStringNew(0);
-addSessionLink(dyTmp, userName, sessionName, encode);
+addSessionLink(dyTmp, userName, sessionName, encode, TRUE);
 dyStringPrintf(dy,
     "<p>You can share this session with the following  URL: %s</p>",
     dyTmp->string);
@@ -198,7 +199,7 @@ char *getSessionLink(char *encUserName, char *encSessionName)
 {
 struct dyString *dy = dyStringNew(1024);
 dyStringPrintf(dy, "<A HREF=\"");
-addSessionLink(dy, encUserName, encSessionName, FALSE);
+addSessionLink(dy, encUserName, encSessionName, FALSE, TRUE);
 dyStringPrintf(dy, "\">Browser</A>\n");
 return dyStringCannibalize(&dy);
 }
@@ -212,7 +213,7 @@ dyStringPrintf(dy, "<A HREF=\"mailto:?subject=UCSC browser session %s&"
 	       "body=Here is a UCSC browser session I%%27d like to share with "
 	       "you:%%20",
 	       cgiDecodeClone(encSessionName));
-addSessionLink(dy, encUserName, encSessionName, TRUE);
+addSessionLink(dy, encUserName, encSessionName, TRUE, TRUE);
 dyStringPrintf(dy, "\">Email</A>\n");
 return dyStringCannibalize(&dy);
 }
@@ -339,7 +340,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<TR><TD>&nbsp;&nbsp;</TD><TD>");
 
     struct dyString *dy = dyStringNew(1024);
-    addSessionLink(dy, encUserName, encSessionName, FALSE);
+    addSessionLink(dy, encUserName, encSessionName, FALSE, TRUE);
     printf("<a href=\"%s\">%s</a>", dyStringContents(dy), sessionName);
     dyStringFree(&dy);
 
@@ -464,10 +465,6 @@ printf("<P></P>\n");
 void showSavingOptions(char *userName)
 /* Show options for saving a new named session in our db or to a file. */
 {
-static char *textOutCompressMenu[] = textOutCompressMenuContents;
-static char *textOutCompressValues[] = textOutCompressValuesContents;
-static int textOutCompressMenuSize = ArraySize(textOutCompressMenu) - 1;
-
 printf("<H3>Save Settings</H3>\n");
 printf("<TABLE BORDERWIDTH=0>\n");
 
@@ -520,10 +517,13 @@ cgiMakeOnKeypressTextVar(hgsSaveLocalFileName,
 			 20, jsPressOnEnter(hgsDoSaveLocal));
 printf("&nbsp;&nbsp;&nbsp;");
 printf("file type returned: ");
-cgiMakeDropListFull(hgsSaveLocalFileCompress,
-	textOutCompressMenu, textOutCompressValues, textOutCompressMenuSize,
-	cartUsualString(cart, hgsSaveLocalFileCompress, textOutCompressNone),
-	NULL, NULL);
+char *compressType = cartUsualString(cart, hgsSaveLocalFileCompress, textOutCompressNone);
+cgiMakeRadioButton(hgsSaveLocalFileCompress, textOutCompressNone,
+		   differentWord(textOutCompressGzip, compressType));
+printf("&nbsp;plain text&nbsp&nbsp");
+cgiMakeRadioButton(hgsSaveLocalFileCompress, textOutCompressGzip,
+		   sameWord(textOutCompressGzip, compressType));
+printf("&nbsp;gzip compressed (ignored if output file is blank)");
 printf("</TD><TD>");
 printf("&nbsp;");
 cgiMakeButton(hgsDoSaveLocal, "submit");
@@ -879,7 +879,7 @@ char *destFile = sessionThumbnailFilePath(userIdentifier, encSessionName, firstU
 if (destFile != NULL)
     {
     struct dyString *hgTracksUrl = dyStringNew(0);
-    addSessionLink(hgTracksUrl, encUserName, encSessionName, FALSE);
+    addSessionLink(hgTracksUrl, encUserName, encSessionName, FALSE, FALSE);
     struct dyString *renderUrl =
         dyStringSub(hgTracksUrl->string, "cgi-bin/hgTracks", "cgi-bin/hgRenderTracks");
     dyStringAppend(renderUrl, "&pix=640");
@@ -1082,10 +1082,10 @@ if (cartHelList != NULL)
 			   "Marked session <B>%s</B> as %s.<BR>\n",
 			   htmlEncode(sessionName),
 			   (newGallery == TRUE ? "added to gallery" : "removed from public listing"));
-        if (newGallery == FALSE)
-            thumbnailRemove(encUserName, encSessionName, conn);
-        if (newGallery == TRUE)
-            thumbnailAdd(encUserName, encSessionName, conn, dyMessage);
+            if (newGallery == FALSE)
+                thumbnailRemove(encUserName, encSessionName, conn);
+            if (newGallery == TRUE)
+                thumbnailAdd(encUserName, encSessionName, conn, dyMessage);
 	    didSomething = TRUE;
 	    }
 	}
@@ -1124,8 +1124,8 @@ if (cartHelList != NULL)
 			   "Marked session <B>%s</B> as %s.<BR>\n",
 			   htmlEncode(sessionName),
 			   (newShared == TRUE ? "shared" : "unshared"));
-        if (newShared == FALSE && inGallery == TRUE)
-            thumbnailRemove(encUserName, encSessionName, conn);
+            if (newShared == FALSE && inGallery == TRUE)
+                thumbnailRemove(encUserName, encSessionName, conn);
 	    didSomething = TRUE;
 	    }
 	}
@@ -1229,7 +1229,7 @@ struct pipeline *compressPipe = textOutInit(fileName, compressType, NULL);
 
 cleanHgSessionFromCart(cart);
 
-cartDumpNoEncode(cart);
+cartDumpHgSession(cart);
 
 // Now add all the default visibilities to output.
 outDefaultTracks(cart, NULL);
@@ -1304,7 +1304,7 @@ else
 	if (isNotEmpty(fileName))
 	    dyStringPrintf(dyMessage, ", only the filename <B>%s</B>",
 			   fileName);
-	dyStringAppend(dyMessage, ".  Your settings have not been changed.");
+	dyStringAppend(dyMessage, " (empty file?).  Your settings have not been changed.");
 	lf = NULL;
 	}
     dyStringPrintf(dyMessage, "&nbsp;&nbsp;"
@@ -1314,13 +1314,46 @@ else
     }
 if (lf != NULL)
     {
-    cartLoadSettings(lf, cart, NULL, actionVar);
-    cartCopyCustomComposites(cart);
-    hubConnectLoadHubs(cart);
-    cartCopyCustomTracks(cart);
-    cartHideDefaultTracks(cart);
-    cartCheckForCustomTracks(cart, dyMessage);
+    lineFileCarefulNewlines(lf);
+    struct dyString *dyLoadMessage = dyStringNew(0);
+    boolean ok = cartLoadSettingsFromUserInput(lf, cart, NULL, actionVar, dyLoadMessage);
     lineFileClose(&lf);
+    if (ok)
+        {
+        dyStringAppend(dyMessage, dyLoadMessage->string);
+        cartCopyCustomComposites(cart);
+        hubConnectLoadHubs(cart);
+        cartCopyCustomTracks(cart);
+        cartHideDefaultTracks(cart);
+        cartCheckForCustomTracks(cart, dyMessage);
+        }
+    else
+        {
+        dyStringClear(dyMessage);
+        dyStringAppend(dyMessage, "<span style='color: red;'><b>"
+                       "Unable to load session: </b></span>");
+        dyStringAppend(dyMessage, dyLoadMessage->string);
+        dyStringAppend(dyMessage, "The uploaded file needs to have been previously saved from the "
+                       "<b>Save Settings</b> section.\n");
+        // Looking for the words "custom track" in an error string is hokey, returning an enum
+        // from cartLoadSettings would be better, but IMO that isn't worth a big refactoring.
+        if (stringIn("custom track", dyLoadMessage->string))
+            {
+            dyStringPrintf(dyMessage, "If you would like to upload a custom track, please use the "
+                           "<a href='%s?%s'>"
+                           "Custom Tracks</a> tool.\n",
+                           hgCustomName(), cartSidUrlString(cart));
+            }
+        dyStringAppend(dyMessage, "If you feel you have reached this "
+                       "message in error, please contact the "
+                       "<A HREF=\"mailto:genome-www@soe.ucsc.edu?subject=Session file upload failed&"
+                       "body=Hello Genome Browser team,%0AMy session file failed to upload. "
+                       "The error message was:%0A");
+        dyStringAppend(dyMessage, cgiEncodeFull(dyLoadMessage->string));
+        dyStringAppend(dyMessage, "%0ACan you help me upload the data?\">"
+                       "UCSC Genome Browser team</A> for assistance.\n");
+        }
+    dyStringFree(&dyLoadMessage);
     }
 return dyStringCannibalize(&dyMessage);
 }

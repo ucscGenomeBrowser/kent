@@ -27,6 +27,7 @@ my $stepper = new HgStepManager(
     [ { name => 'indexFa',   func => \&doIndexFa },
       { name => 'ranges',   func => \&doRanges },
       { name => 'guides',   func => \&doGuides },
+      { name => 'specScoreJobList',   func => \&doSpecScoreJobList },
       { name => 'specScores',   func => \&doSpecScores },
       { name => 'effScores',   func => \&doEffScores },
       { name => 'offTargets',   func => \&doOffTargets },
@@ -45,6 +46,7 @@ my $crisprScripts = "/hive/data/outside/crisprTrack/scripts";
 # Option defaults:
 my $dbHost = 'hgwdev';
 my $bigClusterHub = 'ku';
+my $smallClusterHub = 'hgwdev-101';
 my $fileServer = 'hgwdev';
 my $workhorse = 'hgwdev';
 my $defaultWorkhorse = 'hgwdev';
@@ -83,19 +85,20 @@ _EOF_
 						'workhorse' => $defaultWorkhorse,
 						'bigClusterHub' => $bigClusterHub,
 						'fileServer' => $fileServer,
-						'smallClusterHub' => '');
+						'smallClusterHub' => $smallClusterHub);
   print STDERR "
 Automates UCSC's crispr procedure.  Steps:
     indexFa Construct bwa index for source fasta, will be skipped when already
-            available
-    ranges: Construct ranges to work on around exons
-    guides: Extract guide sequences from ranges
-    specScores: Compute spec scores
-    effScores: Compute the efficiency scores
-    offTargets: Converting off-targets
+            available (workhorse)
+    ranges: Construct ranges to work on around exons (workhorse)
+    guides: Extract guide sequences from ranges (smallClusterHub)
+    specScoreJobList: Construct spec score jobList (workhorse)
+    specScores: Compute spec scores (bigClusterHub)
+    effScores: Compute the efficiency scores (bigClusterHub)
+    offTargets: Converting off-targets (bigClusterHub)
     load: Construct bigBed file of results, link into /gbdb/<db>/<tableName>
-          and load into database if database is present
-    cleanup: Removes or compresses intermediate files.
+          and load into database if database is present (dbHost)
+    cleanup: Removes or compresses intermediate files. (fileServer)
 All operations are performed in the build directory which is
 $HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/crispr unless -buildDir is given.
 ";
@@ -157,7 +160,18 @@ export TMPDIR=/dev/shm
 if [ ! -s "$testDone" ]; then
   time ($crisporSrc/tools/crisprAddGenome \\
       ucscLocal $db --geneTable=$geneTrack --baseDir \\
-          $crisporSrc/genomes) > createIndex.log 2>&1
+          $crisporSrc/genomes) > createIndex.log 2>&1 &
+fi
+
+if [ ! -s "$db.fa.fai" ]; then
+  twoBitToFa -noMask $twoBit $db.fa
+  /cluster/bin/samtools-0.1.19/samtools faidx $db.fa &
+fi
+
+wait
+if [ ! -s "$db.fa.fai" ]; then
+   printf "ERROR: step indexFa: samtools index of $db.fa has failed\\n" 1>&2
+   exit 255
 fi
 
 if [ ! -s "$testDone" ]; then
@@ -273,6 +287,7 @@ sub doGuides {
 
   my $paraRun = &HgAutomate::paraRun();
   my $gensub2 = &HgAutomate::gensub2();
+  `touch "$runDir/para_hub_$paraHub"`;
   $bossScript->add(<<_EOF_
 mkdir -p tmp
 find $inFaDir -type f | grep "\.fa\$" > fa.list
@@ -286,24 +301,70 @@ _EOF_
 } # doGuides
 
 #########################################################################
-sub doSpecScores {
-# * step: specScores [bigClusterHub]
-  my $paraHub = $bigClusterHub;
+sub doSpecScoreJobList {
+# * step: specScoreJobList [workhorse]
+  my $paraHub = $smallClusterHub;
   my $runDir = "$buildDir/specScores";
+  my $indexDir = "$buildDir/indexFa";
 
   # First, make sure we're starting clean, or if done already, let
   #   it continue.
   if ( ! $opt_debug && ( -d "$runDir" ) ) {
+    if (-s "$runDir/jobList") {
+     &HgAutomate::verbose(1,
+         "# step specScoreJobList is already completed, continuing...\n");
+     return;
+    } else {
+      die "step specScoreJobList may have been attempted and failed," .
+        "directory $runDir exists, however the 'jobList' result does not " .
+        "exist.  Either run with -continue effScores or some later " .
+        "stage, or move aside/remove $runDir and run again, " .
+        "or determine the failure to complete this step.\n";
+    }
+  }
+
+  &HgAutomate::mustMkdir($runDir);
+
+  my $whatItDoes = "Compute spec scores.";
+  my $bossScript = newBash HgRemoteScript("$runDir/runJobList.bash",
+		$workhorse, $runDir, $whatItDoes);
+
+  &HgAutomate::verbose(1,
+         "# preparing the joblist for specificity alignment cluster run\n");
+
+  $bossScript->add(<<_EOF_
+mkdir -p tmp/inFa tmp/outGuides tmp/outOffs
+$python $crisprScripts/splitGuidesSpecScore.py ../allGuides.txt tmp/inFa jobNames.txt
+_EOF_
+  );
+  $bossScript->execute();
+} # doSpecScoreJobList
+
+#########################################################################
+sub doSpecScores {
+# * step: specScores [bigClusterHub]
+  my $paraHub = $bigClusterHub;
+  my $runDir = "$buildDir/specScores";
+  my $indexDir = "$buildDir/indexFa";
+
+  if (! $opt_debug && (! -s "$buildDir/allGuides.bed")) {
+     die "ERROR: previous step 'guides' has not completed in order to run" .
+          " this 'specScores' step.  Complete 'guides' step to create" .
+          " result file 'allGuides.bed'";
+  }
+  if (! $opt_debug && (! -s "$runDir/jobNames.txt")) {
+     die "ERROR: previous step 'specScoreJobList' has not completed in order" .
+          " to run this 'specScores' step.  Complete 'specScoreJobList'" .
+          " step to create result file 'specScores/jobNames.txt'";
+  }
+
+  # First, make sure we're starting clean, or if done already, let
+  #   it continue.
+  if ( ! $opt_debug ) {
     if (-s "$runDir/run.time" && -s "$buildDir/specScores.tab") {
      &HgAutomate::verbose(1,
          "# step specScores is already completed, continuing...\n");
      return;
-    } else {
-      die "step specScores may have been attempted and failed," .
-        "directory $runDir exists, however the run.time result does not " .
-        "exist.  Either run with -continue effScores or some later " .
-        "stage, or move aside/remove $runDir and run again, " .
-        "or determine the failure to complete this step.\n";
     }
   }
 
@@ -325,25 +386,19 @@ sub doSpecScores {
   my $paraRun = &HgAutomate::paraRun();
   my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
-mkdir -p tmp/inFa tmp/outGuides tmp/outOffs
-twoBitToFa -noMask $twoBit $db.fa
-/cluster/bin/samtools-0.1.19/samtools faidx $db.fa
-$python $crisprScripts/splitGuidesSpecScore.py ../allGuides.txt tmp/inFa jobNames.txt
 # preload the /dev/shm on each parasol node with the fasta and index
 parasol list machines | awk '{print \$1}' | sort -u | while read M
 do
-  ssh "\${M}" "rsync -a --stats ${runDir}/$db.fa ${runDir}/$db.fa.fai /dev/shm/crispr10K.$db/ || true" < /dev/null
+  ssh "\${M}" "rsync -a --stats ${indexDir}/$db.fa ${indexDir}/$db.fa.fai /dev/shm/crispr10K.$db/ || true" < /dev/null
 done
 # and the /dev/shm on this parasol hub
-rsync -a --stats ${runDir}/$db.fa ${runDir}/$db.fa.fai /dev/shm/crispr10K.$db/ < /dev/null
-mv $db.fa $db.fa.original
-mv $db.fa.fai $db.fa.fai.original
+rsync -a --stats ${indexDir}/$db.fa ${indexDir}/$db.fa.fai /dev/shm/crispr10K.$db/ < /dev/null
 ln -s /dev/shm/crispr10K.$db/$db.fa* ./
 
 $gensub2 jobNames.txt single gsub jobList
 $paraRun
 find tmp/outGuides -type f | xargs cut -f3-6 > ../specScores.tab
-printf "# Number of specScores: %d\\n" "`cat ../specScores.tab | wc -l`" 1>&1
+printf "# Number of specScores: %d\\n" "`cat ../specScores.tab | wc -l`" 1>&2
 _EOF_
   );
   $bossScript->execute();
@@ -354,6 +409,12 @@ sub doEffScores {
 # * step: effScores [bigClusterHub]
   my $paraHub = $bigClusterHub;
   my $runDir = "$buildDir/effScores";
+
+  if (! $opt_debug && (! -s "$buildDir/allGuides.bed")) {
+     die "ERROR: previous step 'guides' has not completed in order to run" .
+          " this 'effScores' step.  Complete 'guides' step to create" .
+          " result file 'allGuides.bed'";
+  }
 
   # First, make sure we're starting clean, or if done already, let
   #   it continue.
@@ -383,6 +444,7 @@ sub doEffScores {
 
   my $paraRun = &HgAutomate::paraRun();
   my $gensub2 = &HgAutomate::gensub2();
+  `touch "$runDir/para_hub_$paraHub"`;
   $bossScript->add(<<_EOF_
 $python $crisprScripts/splitGuidesEffScore.py $chromSizes ../allGuides.bed tmp jobNames.txt
 $gensub2 jobNames.txt single gsub jobList
@@ -396,10 +458,16 @@ _EOF_
 
 #########################################################################
 sub doOffTargets {
-# * step: effScores [bigClusterHub]
+# * step: offTargets [bigClusterHub]
   my $paraHub = $bigClusterHub;
   my $runDir = "$buildDir/offTargets";
   my $specScores = "$buildDir/specScores";
+
+  if (! $opt_debug && (! -s "$buildDir/specScores.tab")) {
+     die "ERROR: previous step 'specScores' has not completed in order to run" .
+          " this 'offTargets' step.  Complete 'specScores' step to create" .
+          " result file 'specScores.tab'";
+  }
 
   # First, make sure we're starting clean, or if done already, let
   #   it continue.
@@ -429,6 +497,7 @@ sub doOffTargets {
 
   my $paraRun = &HgAutomate::paraRun();
   my $gensub2 = &HgAutomate::gensub2();
+  `touch "$runDir/para_hub_$paraHub"`;
   $bossScript->add(<<_EOF_
 # to allow the crisprScripts to find their python2.7 version:
 export PATH=/cluster/software/bin:\$PATH
@@ -528,18 +597,11 @@ rm -f offTargets/batch.bak
 gzip specScores.tab effScores.tab offtargets.offsets.tab
 ssh $bigClusterHub parasol list machines | awk '{print \$1}' | sort -u | while read M
 do
-  ssh "\${M}" "rm -fr /dev/shm/crispr10K.galGal6" < /dev/null
+  ssh "\${M}" "rm -fr /dev/shm/crispr10K.$db" < /dev/null
 done
-ssh $bigClusterHub "rm -fr /dev/shm/crispr10K.galGal6" < /dev/null
-if [ -s "specScores/$db.fa.original" ]; then
-   rm -f specScores/$db.fa
-   mv specScores/$db.fa.original specScores/$db.fa
-fi
-if [ -s "specScores/$db.fa.fai.original" ]; then
-   rm -f specScores/$db.fa.fai
-   mv specScores/$db.fa.fai.original specScores/$db.fa.fai
-fi
-gzip specScores/$db.fa
+ssh $bigClusterHub "rm -fr /dev/shm/crispr10K.$db" < /dev/null
+rm -f specScores/$db.fa specScores/$db.fa.fai
+rm -f indexFa/$db.fa indexFa/$db.fa.fai
 printf "#\tdisk space after cleaning\\n"
 df -h .
 _EOF_
@@ -558,11 +620,14 @@ _EOF_
 &usage(1) if (scalar(@ARGV) != 2);
 $workhorse = $opt_workhorse if ($opt_workhorse);
 $bigClusterHub = $opt_bigClusterHub if ($opt_bigClusterHub);
+$smallClusterHub = $opt_smallClusterHub if ($opt_smallClusterHub);
 $fileServer = $opt_fileServer if ($opt_fileServer);
 $dbHost = $opt_dbHost if ($opt_dbHost);
 &HgAutomate::verbose(1, "# bigClusterHub $bigClusterHub\n");
+&HgAutomate::verbose(1, "# smallClusterHub $smallClusterHub\n");
 &HgAutomate::verbose(1, "# fileServer $fileServer\n");
 &HgAutomate::verbose(1, "# dbHost $dbHost\n");
+&HgAutomate::verbose(1, "# workhorse $workhorse\n");
 $secondsStart = `date "+%s"`;
 chomp $secondsStart;
 

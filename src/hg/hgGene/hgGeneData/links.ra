@@ -84,12 +84,12 @@ priority 10
 #url https://www.ncbi.nlm.nih.gov/nuccore/%s?report=GenBank
 #priority 10
 
-name moped
-shortLabel MOPED
-tables kgXref
-idSql select spId from kgXref where kgID = '%s'
-url http://moped.proteinspire.org/?proteinId=%s
-priority 10
+#name moped
+#shortLabel MOPED
+#tables kgXref
+#idSql select spId from kgXref where kgID = '%s'
+#url http://moped.proteinspire.org/?proteinId=%s
+#priority 10
 
 name pubMed
 shortLabel PubMed
@@ -98,12 +98,12 @@ idSql select geneSymbol from kgXref where kgID = '%s'
 url https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=PubMed&term=%s&doptcmdl=DocSum&tool=genome.ucsc.edu
 priority 10
 
-name gepis
-shortLabel Gepis Tissue
-tables kgXref
-idSql select geneSymbol from kgXref where kgID = '%s'
-url http://research-public.gene.com/cgi-bin/genentech/genehub-gepis/web_search.pl?intype=1&xrefid=%s&species=human
-priority 10
+#name gepis
+#shortLabel Gepis Tissue
+#tables kgXref
+#idSql select geneSymbol from kgXref where kgID = '%s'
+#url http://research-public.gene.com/cgi-bin/genentech/genehub-gepis/web_search.pl?intype=1&xrefid=%s&species=human
+#priority 10
 
 name treeFam
 shortLabel Treefam

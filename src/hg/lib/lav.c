@@ -121,8 +121,10 @@ if (stringIn("lastz",line))
     for (i = 3 ; i <wordCount ; i++)
         fprintf(f, " %s ",words[i]);
     fprintf(f,"\n");
+    char aligner[strlen(words[0])+1];
+    safecpy(aligner, sizeof aligner, words[0]);
     ss = axtScoreSchemeReadLf(lf);
-    axtScoreSchemeDnaWrite(ss, f, words[0]);
+    axtScoreSchemeDnaWrite(ss, f, aligner);
     }
 seekEndOfStanza(lf);
 }

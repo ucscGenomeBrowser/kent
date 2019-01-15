@@ -228,13 +228,25 @@ static int connInfoGetSocket(struct udcFile *file, char *url, bits64 offset, int
  * reuse ci->socket.  Otherwise close the socket, open a new one, and update ci,
  * or return -1 if there is an error opening a new one. */
 {
+/* NOTE: This doesn't use HTTP 1.1 keep alive to do multiple request on the
+ * same socket.  The only way subsequent random requests on the same socket
+ * work is because previous request are open-ended and this can continue
+ * reading where it left off.  The HTTP requests are issued as 1.0, even
+ * through range requests are a 1.1 feature.
+ *
+ * For FTP, the serial read approach is essential.  FTP only supports resuming
+ * from an offset, but doesn't not support limiting the number of bytes
+ * transferred.  All that can be done to stop the transfer is to abort the
+ * operation, when then requires reconnecting.
+ */ 
+
 struct connInfo *ci = &file->connInfo;
 if (ci != NULL && ci->socket > 0 && ci->offset != offset)
     {
     bits64 skipSize = (offset - ci->offset);
     if (skipSize > 0 && skipSize <= MAX_SKIP_TO_SAVE_RECONNECT)
 	{
-	verbose(4, "!! skipping %lld bytes @%lld to avoid reconnect\n", skipSize, ci->offset);
+	verbose(4, "skipping %lld bytes @%lld to avoid reconnect\n", skipSize, ci->offset);
 	udcReadAndIgnore(&file->ios.net, ci->socket, skipSize);
 	ci->offset = offset;
         file->ios.numReuse++;

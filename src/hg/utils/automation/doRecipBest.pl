@@ -43,7 +43,7 @@ my $stepper = new HgStepManager(
 # Option defaults:
 my $dbHost = 'hgwdev';
 
-my ($dbExists);
+my ($dbExists, $qDbExists);
 
 my $base = $0;
 $base =~ s/^(.*\/)?//;
@@ -399,6 +399,7 @@ hgLoadChain -tIndex $tDb chainRBest$QDb $tDb.$qDb.rbest.chain.gz
 _EOF_
     );
 
+    if ($qDbExists) {
     $bossScript->add(<<_EOF_
 
 # Add gap/repeat stats to the net file using database tables:
@@ -409,7 +410,11 @@ netClass -verbose=0 -noAr $tDb.$qDb.rbest.net.gz $tDb $qDb stdout \\
 # Load nets:
 netFilter -minGap=10 $tDb.$qDb.rbest.classed.net.gz \\
 | hgLoadNet -verbose=0 $tDb netRBest$QDb stdin
+_EOF_
+      );
+     }
 
+    $bossScript->add(<<_EOF_
 cd $buildDir
 featureBits $tDb $QDbLink >&fb.$tDb.chainRBest.$QDb.txt
 cat fb.$tDb.chainRBest.$QDb.txt
@@ -472,6 +477,9 @@ _EOF_
 # may be working on a 2bit file that does not have a database browser
 $dbExists = 0;
 $dbExists = 1 if (&HgAutomate::databaseExists($dbHost, $tDb));
+# may be working with a query that has no database
+$qDbExists = 0;
+$qDbExists = 1 if (&HgAutomate::databaseExists($dbHost, $qDb));
 
 $QDb = ucfirst($qDb);
 

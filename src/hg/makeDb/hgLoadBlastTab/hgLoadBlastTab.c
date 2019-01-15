@@ -55,7 +55,7 @@ static char *createString = "CREATE TABLE %s (\n"
 "    eValue double not null,	# Expectation value\n"
 "    bitScore double not null,	# Bit score\n"
 "              #Indices\n"
-"    INDEX(query(12))\n"
+"    INDEX(query)\n"
 ")\n";
 struct dyString *dy = newDyString(1024);
 sqlDyStringPrintf(dy, createString, tableName);

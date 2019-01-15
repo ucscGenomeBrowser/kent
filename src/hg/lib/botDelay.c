@@ -44,8 +44,12 @@ warn("There is a very high volume of traffic coming from your "
        "and inquire about more efficient ways to access our data.  "
        "If you are sharing an IP address with someone who is submitting "
        "large batch queries, we apologize for the "
-       "inconvenience. Please contact genome-www@soe.ucsc.edu if "
-       "you think this delay is being imposed unfairly.", 
+       "inconvenience. "
+       "To use the genome browser functionality from a Unix command line, "
+       "please read <a href='http://genome.ucsc.edu/FAQ/FAQdownloads.html#download36'>our FAQ</a> on this topic. "
+       "For further help on how to access our data from a command line, "
+       "or if "
+       "you think this delay is being imposed unfairly, please contact genome-www@soe.ucsc.edu.", 
 	    ip, asctime(localtime(&now)), .001*millis);
 }
 
@@ -58,7 +62,13 @@ hUserAbort("There is an exceedingly high volume of traffic coming from your "
        "a web robot is launching queries quickly, and not even waiting for "
        "the results of one query to finish before launching another query. "
        "/* We cannot service requests from your IP address under */ these "
-       "conditions.  (code %d)", ip, asctime(localtime(&now)), millis);
+       "conditions.  (code %d)"
+       "To use the genome browser functionality from a Unix command line, "
+       "please read <a href='http://genome.ucsc.edu/FAQ/FAQdownloads.html#download36'>our FAQ</a> on this topic. "
+       "For further help on how to access our data from a command line, "
+       "or if "
+       "you think this delay is being imposed unfairly, please contact genome-www@soe.ucsc.edu."
+       , ip, asctime(localtime(&now)), millis);
 }
 
 static char *getCookieUser()

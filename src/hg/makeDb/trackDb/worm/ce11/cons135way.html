@@ -1,6 +1,7 @@
 <h2>Description</h2>
 <p>
-This track shows multiple alignments of 135 species: 119 nematodes, 15 flatworms and one Ciona intestinalis sequence and measurements of
+This track shows multiple alignments of 135 species: 112 nematodes,
+22 flatworms and one Ciona intestinalis sequence and measurements of
 evolutionary conservation using
 two methods (<em>phastCons</em> and <em>phyloP</em>) from the
 <a href="http://compgen.cshl.edu/phast/" target=_BLANK>
@@ -11,6 +12,16 @@ target=_blank>Penn State Bioinformatics</a>
 comparative genomics alignment pipeline.
 Conserved elements identified by phastCons are also displayed in
 this track.
+</p>
+<p>
+The phylogenetic tree was derived from kmers in common counting
+between the sequences to obtain a 'distance' matrix, then using the
+phylip command 'neighbors' operation for the simple neighbor joining
+algorithm to establish this binary tree.  This tree is not necessarily
+biologically correct, but it does serve as a useful guide tree for the
+multiz alignment procedure.  See also:
+<a href="http://evolution.genetics.washington.edu/phylip/progs.data.dist.html"
+target=_blank>Phylip distance operations</a>
 </p>
 <p>
 PhastCons (which has been used in previous Conservation tracks) is a hidden
@@ -42,6 +53,13 @@ and 1.
 Both phastCons and phyloP treat alignment gaps and unaligned nucleotides as
 missing data.
 </p>
+<p>
+See also: <a href="http://genomewiki.ucsc.edu/index.php/Ce11_135-way_conservation_lastz_parameters"
+target=_blank>lastz parameters</a> and other details, and
+chain <a href="http://genomewiki.ucsc.edu/index.php/Ce11_135-way_Genome_size_statistics"
+target=_blank>minimum score and gap</a> parameters used in these alignments.
+</p>
+
 
 <p>
 Missing sequence in the assemblies is highlighted in the track display
@@ -742,7 +760,7 @@ Downloads for data in this track are available:
 <h2>Display Conventions and Configuration</h2>
 <p>
 The track configuration options allow the user to display the three different
-sets of scores, all, birds or vertebrate, individually or all simultaneously.
+sets of scores by all, subclass, individually, or any combination of these.
 In full and pack display modes, conservation scores are displayed as a
 <em>wiggle track</em> (histogram) in which the height reflects the
 value of the score.
@@ -850,9 +868,8 @@ translation, depending on the species chosen (<b>Table 2</b>).
 
 <blockquote><table border=1 cellpadding=4 bordercolor="#aaaaaa">
 <tr align=left><td><b>Gene Track</b></td><td><b>Species</b></td></tr>
-<tr align=left><td>NCBI RefSeq Genes</td><td>D. persimilis</td></tr>
-<tr align=left><td>Ensembl Genes v68</td><td>D. erecta, D. ananassae, D. melanogaster</td></tr>
-<tr align=left><td>Xeno RefGene</td><td>D. sechellia</td></tr>
+<tr align=left><td>Ensembl Genes v92</td><td>C. elegans, Ciona intestinalis</td></tr>
+<tr align=left><td>WormBase WS245 genes</td><td>C. angaria, C. japonica, C. briggsae, C. sp. 5 ju800, C. remanei, C. brenneri, C. tropicalis, P. exspectatus, P. pacificus, Pine wood nematode, N. americanus, A. ceylanicum, Pig roundworm, Barber pole worm, Whipworm, Microworm, Filarial worm, Dog heartworm, O. volvulus, Eye worm, M. incognita, M. hapla, H. bacteriophora/m31e, Trichinella</td></tr>
 <tr align=left><td>no annotations</td><td>all others</td></tr>
 </td></tr>
 </table>
@@ -866,22 +883,15 @@ each species using lastz from repeat-masked genomic sequence.
 Pairwise alignments were then linked into chains using a dynamic programming
 algorithm that finds maximally scoring chains of gapless subsections
 of the alignments organized in a kd-tree.
-The scoring matrix and parameters for pairwise alignment and chaining
-were tuned for each species based on phylogenetic distance from the reference.
+Please note the <a href="http://genomewiki.ucsc.edu/index.php/Ce11_135-way_Genome_size_statistics"
+target=_blank>specific parameters</a> for the alignments.
 High-scoring chains were then placed along the genome, with
 gaps filled by lower-scoring chains, to produce an alignment net.
 For more information about the chaining and netting process and
-parameters for each species, see the description pages for the Chain and Net
-tracks.</p>
-<p>
-An additional filtering step was introduced in the generation of the 135-way
-conservation track to reduce the number of paralogs and pseudogenes from the
-high-quality assemblies and the suspect alignments from the low-quality
-assemblies:
-the pairwise alignments of the bird assemblies were filtered based on synteny;
-those for the human and mouse genomes were filtered to retain only
-alignments of best quality in both the target and query (&quot;reciprocal
-best&quot;).</p>
+parameters for each species, see the description pages for the 
+<a href="../cgi-bin/hgTrackUi?db=ce11&g=nematodesChainNet" target=_blank>
+Chain and Net tracks.</a>
+</p>
 <p>
 The resulting best-in-genome pairwise alignments
 were progressively aligned using multiz/autoMZ,

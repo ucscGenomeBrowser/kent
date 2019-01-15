@@ -1,13 +1,14 @@
 track cons135way
 compositeTrack on
 shortLabel Cons 135 species
-longLabel Multiz Alignment & Conservation (135 species: 119 nematodes, 15 flatworms and Ciona intestinalis)
+longLabel Multiz Alignment & Conservation (135 species: 112 nematodes, 22 flatworms and Ciona intestinalis)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
 visibility full
 type bed 4
 group compGeno
 priority 2
+pennantIcon New red ../goldenPath/releaseLog.html  Released January 2018
 
     track cons135wayViewalign
     shortLabel Multiz Alignments

@@ -687,8 +687,8 @@ double viewMax = (double)cartUsualIntClosestToHome(cart, tg->tdb, FALSE,
 int i = 0;
 for (categ = categs; categ != NULL; categ = categ->next, i++)
     {
-if (!filterCategory(tg, categ->name))
-    continue;
+    if (!filterCategory(tg, categ->name))
+	continue;
     double expScore = bed->expScores[i];
     int height = valToClippedHeight(expScore, maxMedian, viewMax, 
                                         barChartMaxHeight(), extras->doLogTransform);

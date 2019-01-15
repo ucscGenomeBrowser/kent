@@ -66,7 +66,8 @@ The hub.txt file can be as short as four lines, and the genomes.txt as short as 
 file is typically much larger. At its most basic, it defines the tracks in the hub using stanzas 
 about the type, location, and name of the binary files to display. However, it provides real power 
 to tailor your presentation using additional <a href="trackDb/trackDbHub.html" 
-target="_blank">trackDb settings</a>.</p>
+target="_blank">trackDb settings</a>.</p> 
+
 <p>
 Note that the Browser waits 5 minutes before checking for any changes to these files. <strong>When 
 editing hub.txt, genomes.txt,and trackDb.txt, you can shorten this delay by adding 
@@ -161,5 +162,19 @@ also allows for advanced <a href="trackDb/trackDbHub.html#groupingTracks" target
 grouping</a> known as composites, superTracks and multiWigs. See a basic 
 <a href="../help/examples/hubDirectory/hg19/trackDb.txt" target="_blank">example 
 trackDb.txt</a>.</p>
+
+<p>
+When type is set to <b>bigBed</b>, the track hub assumes that the bigBed track is BED3 by default.
+To allow track hubs to use all fields in the bigBed file,
+one must define how many columns to expect.
+For example, if a bigBed file has nine columns, which would include an itemRgb field to display a
+R,G,B color value (e.g. 255,0,0), specify the type as <code>type bigBed 9</code>.
+If the file contains the first 9 <a href="../../FAQ/FAQformat.html#format1" target="_blank">
+standard BED columns</a>, one could use <code>type bigBed 9 +</code> to denote the additional 
+non-standard columns as defined in AutoSql format(.as) file, <code>-as=bedExample1.as</code>.
+</p>
+
+
+
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

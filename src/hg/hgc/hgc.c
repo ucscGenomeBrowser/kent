@@ -2357,7 +2357,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
             }
         else
             {
-            if (!intronTruncated == TRUE)
+            if (!(intronTruncated == TRUE))
                 {
                 printf("...intron truncated...<br>");
                 intronTruncated = TRUE;
@@ -4113,13 +4113,12 @@ if (itemForUrl == NULL)
 dupe = cloneString(tdb->type);
 wordCount = chopLine(dupe, words);
 headerItem = cloneString(item);
-
+type = words[0];
 
 /* Suppress printing item name in page header, as it is not informative for these types of
  * tracks... */
 if (container == NULL && wordCount > 0)
     {
-    type = words[0];
     if (sameString(type, "maf") || sameString(type, "wigMaf") || sameString(type, "bigMaf") || sameString(type, "netAlign")
         || sameString(type, "encodePeak"))
         headerItem = NULL;
@@ -4950,7 +4949,6 @@ if (sameString(action, EXTENDED_DNA_BUTTON))
 // But we want to keep it very simple and close to a plain text dump.
 
 cartHtmlStart("DNA");
-hgBotDelay();
 puts("<PRE>");
 if (tbl[0] == 0)
     {
@@ -7651,7 +7649,6 @@ char *otherDb = NULL, *org = NULL, *otherOrg = NULL;
 struct dnaSeq *qSeq = NULL;
 char name[128];
 
-hgBotDelay();	/* Prevent abuse. */
 
 /* Figure out other database. */
 if (chopLine(type, typeWords) < ArraySize(typeWords))
@@ -13728,10 +13725,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Left Primer Sequence:</B> %s<BR>\n", snp.primerL);
     printf("<B>Right Primer Sequence:</B> %s<BR>\n", snp.primerR);
     if (snp.snpType[0] != 'S')
+        {
         if (snp.questionM[0] == 'H')
 	    printf("<B>Indel Confidence</B>: High\n");
         if (snp.questionM[0] == 'L')
 	    printf("<B>Indel Confidence</B>: Low\n");
+        }
     }
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
@@ -25460,6 +25459,8 @@ char *track = cartString(cart, "g");
 char *item = cloneString(cartOptionalString(cart, "i"));
 char *parentWigMaf = cartOptionalString(cart, "parentWigMaf");
 struct trackDb *tdb = NULL;
+
+hgBotDelayFrac(0.5);
 
 if (hIsGisaidServer())
     {
