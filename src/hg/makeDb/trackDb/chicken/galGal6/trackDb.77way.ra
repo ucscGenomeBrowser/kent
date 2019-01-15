@@ -11,6 +11,7 @@ visibility full
 type bed 4
 group compGeno
 priority 1
+pennantIcon New red ../goldenPath/releaseLog.html  Released January 2019
 
     track cons77wayViewalign
     shortLabel Multiz Alignments
