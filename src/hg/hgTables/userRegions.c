@@ -147,6 +147,7 @@ if (isNotEmpty(idText))
     cartSetString(cart, hgtaRegionType, hgtaRegionTypeUserRegions);
     if (strlen(idText) > 64 * 1024)
          cartRemove(cart, hgtaEnteredUserRegions);
+    cartRemove(cart, hgtaEnteredUserRegionFile);
     }
 else
     {
