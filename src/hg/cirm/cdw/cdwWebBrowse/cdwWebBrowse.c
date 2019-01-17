@@ -425,7 +425,7 @@ struct dyString *dy = dyStringNew(0);
 dyStringPrintf(dy, "track name=\"%s\" ", viz->shortLabel);
 dyStringPrintf(dy, "description=\"%s\" ", viz->longLabel);
 //char *host = hHttpHost();
-dyStringPrintf(dy, "bigDataUrl=http://localhost/cgi-bin/cdwGetFile?acc=%s", viz->shortLabel);
+dyStringPrintf(dy, "bigDataUrl=https://localhost/cgi-bin/cdwGetFile?acc=%s", viz->shortLabel);
 if (accessibleFilesToken != NULL)
     dyStringPrintf(dy, "&token=%s", accessibleFilesToken);
 dyStringPrintf(dy, " ");

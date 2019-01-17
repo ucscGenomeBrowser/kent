@@ -1,0 +1,300 @@
+# for emacs: -*- mode: sh; -*-
+
+##############################################################################
+# GRCh37 patch 13 build: build basic tracks on separate database for new
+# sequences only, then add to test database hg19.
+##############################################################################
+
+##############################################################################
+# download the patch release files (DONE - 2018-08-29 - Angie)
+
+    # Note: newer assemblies use refseq releases instead of genbank, but hg19 uses genbank
+    # so continue with that when building patches.
+    mkdir -p /hive/data/genomes/grcH37P13/genbank
+    cd /hive/data/genomes/grcH37P13/genbank
+
+    # The files are no longer on the main ftp site, nor are they in /hive/data/outside/ncbi/genomes.
+    # Do as Hiram did in hg19Patch13.txt:
+    time rsync -L -a -P \
+            rsync://ftp.ncbi.nlm.nih.gov/genomes/archive/old_genbank/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37.p13/ ./
+    # this is an entire release of everything, construct the convenient
+    # single file as in modern releases:
+    find . -type f | grep FASTA | egrep -v "rm.out.gz|/placed_scaffolds/" \
+    | xargs zcat | gzip -c > GCA_000001405.14_GRCh37.p13_genomic.fna.gz
+
+    faSize GCA_000001405.14_GRCh37.p13_genomic.fna.gz
+#3234834689 bases (243146540 N's 2991688149 real 2991688149 upper 0 lower) in 297 sequences in 1 files
+#Total size: mean 10891699.3 sd 38623365.0 min 4262 (gi|224182996|gb|GL000207.1|) max 249250621 (gi|224384768|gb|CM000663.1|) median 196262
+#N count: mean 818675.2 sd 3640667.9
+
+
+##############################################################################
+# Set up fasta and agp with UCSC names (DONE - 2018-09-28 - Angie)
+    mkdir /hive/data/genomes/grcH37P13/ucsc
+    cd /hive/data/genomes/grcH37P13/ucsc
+
+    # identify sequences not in existing genome db
+    faCount ../genbank/GCA_000001405.14_GRCh37.p13_genomic.fna.gz \
+      > faCount.GRCh37.p13.txt
+    ~/kent/src/hg/makeDb/doc/hg19.scanAssemblyReport.pl \
+      /hive/data/genomes/hg19/chrom.sizes \
+      faCount.GRCh37.p13.txt ../genbank/GCA_000001405.14_GRCh37.p13_assembly_report.txt \
+    | grep -w new > new.sequences.list
+    wc -l new.sequences.list
+#204 new.sequences.list
+
+    # Extract UCSC-named FASTA for the new sequences
+    cut -f3 new.sequences.list > extract.new.list
+    awk '{printf "s/%s/%s/; ", $3,$1}' new.sequences.list > genbankToUCSC.sed
+    time (zcat  ../genbank/GCA_000001405.14_GRCh37.p13_genomic.fna.gz \
+    | sed -re 's/^>gi\|[0-9]+\|gb\|([A-Z0-9.]+)\|.*/>\1/;' \
+    | faSomeRecords stdin extract.new.list stdout \
+    | sed -f genbankToUCSC.sed \
+    | gzip -c > grcH37P13.fa.gz)
+#real    2m50.420s
+#user    3m55.080s
+
+    faSize grcH37P13.fa.gz
+#97673427 bases (3295737 N's 94377690 real 94377690 upper 0 lower) in 204 sequences in 1 files
+#Total size: mean 478791.3 sd 848169.0 min 22394 (chr9_jh806577_fix) max 7283150 (chr1_jh636052_fix) median 240775
+#N count: mean 16155.6 sd 86668.4
+
+    # Compare faSize for whole GCA_000001405.14_GRCh37.p13_genomic.fna.gz (copied from above) --
+#3234834689 bases (243146540 N's 2991688149 real 2991688149 upper 0 lower) in 297 sequences in 1 files
+#Total size: mean 10891699.3 sd 38623365.0 min 4262 (gi|224182996|gb|GL000207.1|) max 249250621 (gi|2#24384768|gb|CM000663.1|) median 196262
+#N count: mean 818675.2 sd 3640667.9
+
+    # -- vs. concatenation of hg19 fasta and grcH37P13.fa.gz:
+    twoBitToFa /hive/data/genomes/hg19/hg19.2bit stdout \
+    | faSize grcH37P13.fa.gz stdin
+#3234834691 bases (243146539 N's 2991688152 real 1524764949 upper 1466923203 lower) in 297 sequences in 2 files
+#Total size: mean 10891699.3 sd 38623365.0 min 4262 (chr18_gl000207_random) max 249250621 (chr1) median 196262
+#N count: mean 818675.2 sd 3640667.9
+    # Doh!  It's off by two bases -- but that's because we used the wrong mitochondrial
+    # sequence for hg19 (16571 bases) while GenBank uses the rCRS (16569 bases).
+    # So the new patch sequences are fine.
+
+    # Make UCSC-named AGP:
+    zcat ../genbank/PATCHES/alt_scaffolds/AGP/alt.scaf.agp.gz \
+    | sed -f genbankToUCSC.sed > grcH37P13.agp
+
+    # construct 2bit file:
+    cd /hive/data/genomes/grcH37P13
+    faToTwoBit ucsc/grcH37P13.fa.gz grcH37P13.unmasked.2bit
+    twoBitInfo grcH37P13.unmasked.2bit stdout | sort -k2nr > chrom.sizes
+    # take a look at chrom.sizes to verify it looks OK.
+
+    # Make sure AGP and FASTA/2bit agree:
+    checkAgpAndFa ucsc/grcH37P13.agp grcH37P13.unmasked.2bit | tail -1
+#All AGP and FASTA entries agree - both files are valid
+
+
+##############################################################################
+# establish config.ra file (DONE - Angie - 2018-08-29)
+    cd /hive/data/genomes/grcH37P13
+    # Must make photoReference.txt first -- copy from hg38
+    cp /hive/data/genomes/hg38/photoReference.txt .
+    # arguments here are: <db> <clade> <trackDbDir> <assembly_report.txt>
+    $HOME/kent/src/hg/utils/automation/prepConfig.pl grcH37P13 haplotypes \
+        GRCh37.p13 genbank/*_assembly_report.txt > grcH37P13.config.ra
+# going to need a mitoAcc ?
+    # Edit grcH37P13.config.ra to avoid confusion with actual hg19
+assemblyDate PATCH Jun. 2013
+orderKey 2000
+mitoAcc none
+    # I don't know what's with the "51" on a line by itself... but the grcH38P* files have
+    # "ncbiGenomeId 51" so I'll just go with that.
+
+    sed -e 's/^/#/' grcH37P13.config.ra
+## config parameters for makeGenomeDb.pl:
+#db grcH37P13
+#clade haplotypes
+#genomeCladePriority 134
+#scientificName Homo sapiens
+#commonName NotFound
+#assemblyDate PATCH Jun. 2013
+#assemblyLabel Genome Reference Consortium
+#assemblyShortLabel GRCh37.p13
+#orderKey 2000
+#mitoAcc none
+#fastaFiles /hive/data/genomes/grcH37P13/ucsc/*.fa.gz
+#agpFiles /hive/data/genomes/grcH37P13/ucsc/*.agp
+## qualFiles none
+#dbDbSpeciesDir GRCh37.p13
+#photoCreditURL http://www.cbse.ucsc.edu/
+#photoCreditName        Graphic courtesy of CBSE
+#ncbiGenomeId 51
+#ncbiAssemblyId 37871
+#ncbiAssemblyName GRCh37.p13
+#ncbiBioProject notFound
+#ncbiBioSample notFound
+#genBankAccessionID notFound
+#taxId 9606
+
+
+##############################################################################
+#  Initial database build (DONE - 2018-09-28 - Angie)
+
+    cd /hive/data/genomes/grcH37P13
+    # AGP and unmasked.2bit are already built and checked, so start at the db step:
+    mkdir jkStuff
+    $HOME/kent/src/hg/utils/automation/makeGenomeDb.pl grcH37P13.config.ra -debug
+#HgStepManager: executing from step 'seq' through step 'trackDb'.
+#HgStepManager: executing step 'seq' Fri Apr 13 14:23:27 2018.
+#seq: looks like this was run successfully already (/cluster/data/grcH37P13/chrom.sizes exists).  Either run with -continue agp or some later step, or move aside/remove /cluster/data/grcH37P13/chrom.sizes and run again.
+
+    # But we do need to make chromInfo.tab before the db step.
+    mkdir -p bed/chromInfo
+    awk '{print $1 "\t" $2 "\t/gbdb/grcH37P13/grcH37P13.2bit";}' chrom.sizes \
+      > bed/chromInfo/chromInfo.tab
+
+    time ($HOME/kent/src/hg/utils/automation/makeGenomeDb.pl \
+          -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+          -continue=agp grcH37P13.config.ra) > do.log 2>&1 & tail -f do.log
+#real    0m45.569s
+
+    # Ignore all the "NOTES -- STUFF THAT YOU WILL HAVE TO DO --" stuff because this is
+    # going to be folded into hg19.
+
+    # Now the gold, gap and gc5BaseBw tracks are built.
+
+
+#############################################################################
+# RepeatMasker (DONE - 2018-09-28 - Angie)
+    mkdir /hive/data/genomes/grcH37P13/bed/repeatMasker
+    cd /hive/data/genomes/grcH37P13/bed/repeatMasker
+    time  ($HOME/kent/src/hg/utils/automation/doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku grcH37P13) > do.log 2>&1 &
+    tail -f do.log
+# *** All done! - Elapsed time: 59m21s
+
+    egrep "bases|Total|masked" faSize.rmsk.txt \
+    | sed -e 's/^/# /;'
+# 97673427 bases (3295737 N's 94377690 real 42827571 upper 51550119 lower) in 204 sequences in 1 files
+# Total size: mean 478791.3 sd 848169.0 min 22394 (chr9_jh806577_fix) max 7283150 (chr1_jh636052_fix) median 240775
+# %52.78 masked total, %54.62 masked real
+
+    egrep -i "versi|relea" do.log | sed -e 's/^/# /;'
+# RepeatMasker version open-4.0.7
+# grep version of RepeatMasker$ /scratch/data/RepeatMasker/RepeatMasker
+# #    February 01 2017 (open-4-0-7) 1.331 version of RepeatMasker
+# grep RELEASE /scratch/data/RepeatMasker/Libraries/RepeatMaskerLib.embl
+# CC    Dfam_Consensus RELEASE 20170127;                            *
+# CC    RepBase RELEASE 20170127;                                   *
+
+    featureBits -countGaps grcH37P13 rmsk
+#51550580 bases of 97673427 (52.779%) in intersection
+
+
+##########################################################################
+# running simple repeat (DONE - 2018-09-28 - Angie)
+
+    mkdir /hive/data/genomes/grcH37P13/bed/simpleRepeat
+    cd /hive/data/genomes/grcH37P13/bed/simpleRepeat
+    # using trf409 6 here like hg19
+    time ($HOME/kent/src/hg/utils/automation/doSimpleRepeat.pl -buildDir=`pwd` \
+        -dbHost=hgwdev -workhorse=hgwdev -bigClusterHub=ku -smallClusterHub=ku \
+        -trf409 6 grcH37P13) > do.log 2>&1 &
+    tail -f do.log
+#real    9m55.230s
+    # The cleanup stage failed due to an 'rm: no match' but the track was built OK.
+
+    cat fb.simpleRepeat
+#4006366 bases of 94378040 (4.245%) in intersection
+
+    # adding this trfMask to .rmsk.2bit
+    cd /hive/data/genomes/grcH37P13
+    twoBitMask grcH37P13.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed grcH37P13.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    twoBitToFa grcH37P13.2bit stdout | faSize stdin > faSize.grcH37P13.2bit.txt
+    egrep "bases|Total|masked" faSize.grcH37P13.2bit.txt \
+    | sed -e 's/^/# /;'
+# 97673427 bases (3295737 N's 94377690 real 42661623 upper 51716067 lower) in 204 sequences in 1 files
+# Total size: mean 478791.3 sd 848169.0 min 22394 (chr9_jh806577_fix) max 7283150 (chr1_jh636052_fix) median 240775
+# %52.95 masked total, %54.80 masked real
+
+    # reset the symlink
+    ln -sf `pwd`/grcH37P13.2bit /gbdb/grcH37P13/grcH37P13.2bit
+
+
+##########################################################################
+# WINDOWMASKER (DONE - 2018-09-28 - Angie)
+
+    mkdir /hive/data/genomes/grcH37P13/bed/windowMasker
+    cd /hive/data/genomes/grcH37P13/bed/windowMasker
+    time ($HOME/kent/src/hg/utils/automation/doWindowMasker.pl -buildDir=`pwd` \
+         -workhorse=hgwdev -dbHost=hgwdev grcH37P13) > do.log 2>&1 &
+    tail -f do.log
+#real    3m10.679s
+
+    featureBits -countGaps grcH37P13 rmsk windowmaskerSdust \
+      > fb.grcH37P13.rmsk.windowmaskerSdust.txt 2>&1
+    cat fb.grcH37P13.rmsk.windowmaskerSdust.txt 
+#24560148 bases of 97673427 (25.145%) in intersection
+
+    # Masking statistics
+    egrep "bases|Total|masked" faSize.grcH37P13.cleanWMSdust.txt \
+    | sed -e 's/^/# /;'
+# 97673427 bases (3295737 N's 94377690 real 64868273 upper 29509417 lower) in 204 sequences in 1 files
+# Total size: mean 478791.3 sd 848169.0 min 22394 (chr9_jh806577_fix) max 7283150 (chr1_jh636052_fix) median 240775
+# %30.21 masked total, %31.27 masked real
+
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2018-09-28 - Angie)
+    # There is no cytoBand info for these (although... could we map??)
+    # so just make a fake cytoBandIdeo to get a blank ideogram.
+    mkdir /hive/data/genomes/grcH37P13/bed/cytoBand
+    cd /hive/data/genomes/grcH37P13/bed/cytoBand
+    makeCytoBandIdeo.csh grcH37P13
+
+
+#############################################################################
+# cpgIslands - (DONE - 2018-09-28 - Angie)
+    mkdir /hive/data/genomes/grcH37P13/bed/cpgIslands
+    cd /hive/data/genomes/grcH37P13/bed/cpgIslands
+    time ($HOME/kent/src/hg/utils/automation/doCpgIslands.pl -dbHost=hgwdev \
+      -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku grcH37P13) > do.log 2>&1 &
+# *** All done !  Elapsed time: 0m45s
+
+    cat fb.grcH37P13.cpgIslandExt.txt
+#1278964 bases of 94378040 (1.355%) in intersection
+
+
+##############################################################################
+# genscan - (DONE - 2018-09-28 - Angie)
+    mkdir /hive/data/genomes/grcH37P13/bed/genscan
+    cd /hive/data/genomes/grcH37P13/bed/genscan
+    time ($HOME/kent/src/hg/utils/automation/doGenscan.pl -buildDir=`pwd` \
+      -workhorse=hgwdev -dbHost=hgwdev -bigClusterHub=ku grcH37P13) > do.log 2>&1 &
+#real    15m2.782s
+    cat fb.grcH37P13.genscan.txt
+#2946438 bases of 94378040 (3.122%) in intersection
+    cat fb.grcH37P13.genscanSubopt.txt
+#2239445 bases of 94378040 (2.373%) in intersection
+
+
+#############################################################################
+# augustus gene track (DONE - 2018-09-28 - Angie)
+    mkdir /hive/data/genomes/grcH37P13/bed/augustus
+    cd /hive/data/genomes/grcH37P13/bed/augustus
+    time ($HOME/kent/src/hg/utils/automation/doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+      -species=human -dbHost=hgwdev -workhorse=hgwdev grcH37P13) > do.log 2>&1 &
+# *** All done !  Elapsed time: 34m34s
+    cat fb.grcH37P13.augustusGene.txt
+#2865177 bases of 94378040 (3.036%) in intersection
+
+
+##############################################################################
+# Download files (DONE - 2018-09-28 - Angie)
+    cd /hive/data/genomes/grcH37P13
+    time ($HOME/kent/src/hg/utils/automation/makeDownloads.pl \
+      -workhorse=hgwdev grcH37P13) > downloads.log 2>&1 &
+# *** All done!
+#real    0m45.275s
+
+
+##############################################################################

@@ -819,21 +819,25 @@ Pairwise alignments were then linked into chains using a dynamic programming
 algorithm that finds maximally scoring chains of gapless subsections
 of the alignments organized in a kd-tree.
 Please note the <a href="http://genomewiki.ucsc.edu/index.php/Dm6_124-way_Genome_size_statistics"
-target=_blank>specific parameters</a>for the alignments.
+target=_blank>specific parameters</a> for the alignments.
 High-scoring chains were then placed along the genome, with
 gaps filled by lower-scoring chains, to produce an alignment net.
 For more information about the chaining and netting process
-for each species, see the description pages for the Chain and Net
-tracks.</p>
+for each species, see the description pages for the <a href="../cgi-bin/hgTrackUi?db=dm6&g=insectsChainNet"
+target=_blank>Chain and Net
+tracks</a>.</p>
+
 <p>
-An additional filtering step was introduced in the generation of the 124-way
-conservation track to reduce the number of paralogs and pseudogenes from the
-high-quality assemblies and the suspect alignments from the low-quality
-assemblies:
-the pairwise alignments of the bird assemblies were filtered based on synteny;
-those for the human and mouse genomes were filtered to retain only
-alignments of best quality in both the target and query (&quot;reciprocal
-best&quot;).</p>
+An additional filtering step was introduced in the generation of the
+124-way conservation track to reduce the number of paralogs and pseudogenes
+from the high-quality assemblies and the suspect alignments from the
+low-quality assemblies: some of the pairwise alignments were
+filtered based on synteny; and some were filtered to retain only
+alignments of best quality in both the target and query ("reciprocal best").
+
+See also: <a href="http://genomewiki.ucsc.edu/index.php/Dm6_124-way_Genome_size_statistics"
+target=_blank>D. melanogaster/dm6 124-way alignment</a> filtering parameters.
+The column <em>alignment type</em> indicates the type of filtering.</p>
 <p>
 The resulting best-in-genome pairwise alignments
 were progressively aligned using multiz/autoMZ,

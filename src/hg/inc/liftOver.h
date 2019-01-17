@@ -103,7 +103,7 @@ void liftOverPsl(char *fileName, struct hash *chainHash,
 
 void liftOverGenePred(char *fileName, struct hash *chainHash, 
                         double minMatch, double minBlocks, bool fudgeThick,
-                        FILE *mapped, FILE *unmapped);
+                      FILE *mapped, FILE *unmapped, boolean multiple);
 /* Lift over file in genePred format. */
 
 void liftOverSample(char *fileName, struct hash *chainHash, 
