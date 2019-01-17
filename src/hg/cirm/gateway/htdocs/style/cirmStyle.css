@@ -163,14 +163,14 @@ a.btn,input.btn
 {
     width: 100%;
     background-color: #ff3333;
-    height: 26px;
+    min-height: 26px;
 }
 
 .securesite-text
 {
     color:#ffb3b3;
     width: 95%;
-    text-align: right;
+    text-align: center;
     font-size: 1.3em;
 }
 
