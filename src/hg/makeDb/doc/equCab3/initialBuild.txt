@@ -489,10 +489,23 @@ ucscToRefSeq.bed:chrM   0       16660   NC_001640.1
     hgsql -N -e 'select chrom,name from ucscToINSDC;' equCab3 \
         | sort -k1,1 > ucsc.genbank.tab
 
+    ### Adding Ensembl alias with v95 release, after idKeys made: 2019-01-16
+    join -t$'\t' ../idKeys/equCab3.idKeys.txt \
+        ../../ens95/ensEquCab3.idKeys.txt | cut -f2- \
+          | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+               | sort -k1,1 -k2,2n > ucscToEns.bed
+    cut -f1,4 ucscToEns.bed | sort > ucsc.ensembl.tab
+    wc -l *.tab
+#   4701 ucsc.ensembl.tab
+#   4701 ucsc.genbank.tab
+#   4701 ucsc.refseq.tab
+
+
     ~/kent/src/hg/utils/automation/chromAlias.pl ucsc.*.tab \
 	> equCab3.chromAlias.tab
 
-for t in refseq genbank
+for t in refseq genbank ensembl
 do
   c0=`cat ucsc.$t.tab | wc -l`
   c1=`grep $t equCab3.chromAlias.tab | wc -l`
@@ -504,6 +517,7 @@ do
 done
 # checking refseq: 4701 =? 4701 OK
 # checking genbank: 4701 =? 4701 OK
+# checking ensembl: 4701 =? 4701 OK
 
     hgLoadSqlTab equCab3 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
         equCab3.chromAlias.tab
