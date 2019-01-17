@@ -13,6 +13,16 @@ Conserved elements identified by phastCons are also displayed in
 this track.
 </p>
 <p>
+The phylogenetic tree was derived from kmers in common counting
+between the sequences to obtain a 'distance' matrix, then using the
+phylip command 'neighbors' operation for the simple neighbor joining
+algorithm to establish this binary tree.  This tree is not necessarily
+biologically correct, but it does serve as a useful guide tree for the
+multiz alignment procedure.  See also:
+<a href="http://evolution.genetics.washington.edu/phylip/progs.data.dist.html"
+target=_blank>Phylip distance operations</a>
+</p>
+<p>
 PhastCons (which has been used in previous Conservation tracks) is a hidden
 Markov model-based method that estimates the probability that each
 nucleotide belongs to a conserved element, based on the multiple alignment.
