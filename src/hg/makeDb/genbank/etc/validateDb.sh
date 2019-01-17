@@ -35,9 +35,7 @@ do
     echo $i `cat $i.out` `cat $i.new.out`
     rm $i.out $i.new.out
     fi
-done > change.stats
-
-cat change.stats | awk -v db=$db -v tooMuch=$tooMuch -v force=$force ' 
+done | awk -v db=$db -v tooMuch=$tooMuch -v force=$force ' 
 function abs(v) {return v < 0 ? -v : v} 
 
 {
