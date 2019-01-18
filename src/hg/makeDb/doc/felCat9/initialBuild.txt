@@ -418,11 +418,34 @@ taxId 9685
     hgsql -N -e 'select chrom,name from ucscToINSDC;' felCat9 \
         | sort -k1,1 > ucsc.genbank.tab
 
-    awk '{printf "%s\t%s\n", $1,$2}' ../ensLift/ucscToEns.txt \
-        | sort -k1,1 > ucsc.ensembl.tab
+    ### Adding Ensembl alias with v95 release, after idKeys made: 2019-01-16
+    join -t$'\t' ../idKeys/felCat9.idKeys.txt \
+        ../../ens95/ensFelCat9.idKeys.txt | cut -f2- \
+          | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+               | sort -k1,1 -k2,2n > ucscToEns.bed
+    cut -f1,4 ucscToEns.bed | sort > ucsc.ensembl.tab
+    wc -l *.tab
+#   4508 ucsc.ensembl.tab
+#   4508 ucsc.genbank.tab
+#   4508 ucsc.refseq.tab
 
     ~/kent/src/hg/utils/automation/chromAlias.pl ucsc.*.tab \
 	> felCat9.chromAlias.tab
+
+for t in refseq genbank ensembl
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t felCat9.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking refseq: 4508 =? 4508 OK
+# checking genbank: 4508 =? 4508 OK
+# checking ensembl: 4508 =? 4508 OK
 
     hgLoadSqlTab felCat9 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
         felCat9.chromAlias.tab
