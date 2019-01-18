@@ -35,11 +35,11 @@ pennantIcon New red ../goldenPath/releaseLog.html  Released January 2019
         type wigMaf 0.0 1.0
         speciesCodonDefault galGal6
         speciesGroups Birds Reptiles Vertebrate
-        sGroup_Birds cotJap2 melGal5 aquChr2 halLeu1 nipNip1 aptFor1 falPer1 falChe1 chaVoc2 pygAde1 egrGar1 anaPla1 pelCri1 fulGla1 carCri1 lepDis1 halAlb1 phoRub1 gavSte1 balPav1 opiHoa1 phaLep1 tauEry1 phaCar1 tytAlb1 capCar1 cucCan1 colLiv1 chlUnd1 mesUni1 pteGut1 eurHel1 strCam1 melUnd1 merNub1 apaVit1 colStr1 corBra1 bucRhi1 pseHum1 amaVit1 corCor1 serCan1 calAnn1 acaChl1 ficAlb2 geoFor1 zonAlb1 araMac1 picPub1 taeGut2 tinGut2 chrPic2 cheMyd1
-        sGroup_Reptiles allSin1 allMis1 pelSin1 apaSpi1 pytBiv1 anoCar2 thaSir1 xenTro9 xenLae2 nanPar1
-        sGroup_Vertebrate hg38 mm10 danRer11 angJap1 oreNil3 gasAcu1 oryLat2 mayZeb1 tetNig2 fr3 petMar3 letCam1
+        sGroup_Birds cotJap2 melGal5 aquChr2 halLeu1 nipNip1 aptFor1 falPer1 falChe1 chaVoc2 pygAde1 egrGar1 anaPla1 pelCri1 fulGla1 carCri1 lepDis1 halAlb1 phoRub1 gavSte1 balPav1 opiHoa1 phaLep1 tauEry1 phaCar1 tytAlb1 capCar1 cucCan1 colLiv1 chlUnd1 mesUni1 pteGut1 eurHel1 strCam1 melUnd1 merNub1 apaVit1 colStr1 corBra1 bucRhi1 pseHum1 amaVit1 corCor1 serCan1 calAnn1 acaChl1 ficAlb2 geoFor1 zonAlb1 araMac1 picPub1 taeGut2 tinGut2
+        sGroup_Reptiles allSin1 allMis1 pelSin1 apaSpi1 pytBiv1 anoCar2 thaSir1 chrPic2 cheMyd1
+        sGroup_Vertebrate hg38 mm10 danRer11 angJap1 oreNil3 gasAcu1 oryLat2 mayZeb1 tetNig2 fr3 petMar3 letCam1 xenTro9 xenLae2 nanPar1
         speciesDefaultOff cotJap2 aquChr2 halLeu1 nipNip1 aptFor1 falPer1 falChe1 chaVoc2 pygAde1 egrGar1 anaPla1 pelCri1 fulGla1 carCri1 lepDis1 halAlb1 phoRub1 gavSte1 balPav1 opiHoa1 phaLep1 tauEry1 phaCar1 tytAlb1 capCar1 cucCan1 colLiv1 chlUnd1 mesUni1 pteGut1 eurHel1 strCam1 melUnd1 merNub1 apaVit1 colStr1 corBra1 bucRhi1 pseHum1 amaVit1 corCor1 serCan1 calAnn1 acaChl1 ficAlb2 geoFor1 zonAlb1 araMac1 picPub1 taeGut2 tinGut2 chrPic2 cheMyd1 allSin1 allMis1 pelSin1 apaSpi1 pytBiv1 anoCar2 thaSir1 xenTro9 xenLae2 nanPar1 hg38 mm10 danRer11 angJap1 oreNil3 gasAcu1 oryLat2 mayZeb1 tetNig2 fr3 petMar3 letCam1
-        speciesDefaultOn melGal5
+        speciesDefaultOn melGal5 anaPla1 amaVit1 falPer1 hg38 mm10 danRer11 thaSir1
         defaultMaf multiz77wayDefault
         itemFirstCharCase noChange
         treeImage phylo/galGal6_77way.png
