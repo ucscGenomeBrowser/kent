@@ -145,10 +145,8 @@ if(ic != NULL)
 	    {
 	    slSort(&pslList, pslCmpScore);	
 	    if(bestPsl == NULL || (pslScore(pslList) > pslScore(bestPsl)))
-		{
 		pslFree(&bestPsl);
 		bestPsl = copyPsl(pslList);
-		}
 	    }
 	
 	pslFreeList(&pslList);
