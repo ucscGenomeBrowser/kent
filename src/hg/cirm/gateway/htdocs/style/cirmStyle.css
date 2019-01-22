@@ -163,14 +163,14 @@ a.btn,input.btn
 {
     width: 100%;
     background-color: #ff3333;
-    height: 26px;
+    min-height: 26px;
 }
 
 .securesite-text
 {
     color:#ffb3b3;
     width: 95%;
-    text-align: right;
+    text-align: center;
     font-size: 1.3em;
 }
 
@@ -273,6 +273,18 @@ nav
 {
     border-radius: 0.25em;
 }
+
+.padded-nav-link
+{
+    padding: 2px 6px !important;
+}
+
+.nav-button
+{
+    font-weight: 600;
+    margin: 0px;
+}
+
 
 .nopadding
 {
