@@ -83,10 +83,19 @@ target="_blank">Assembly Terminology</a> page.
 prevent adequate representation by a single sequence. To address this, the GRCh38 assembly provides 
 alternate sequence for selected variant regions through the inclusion of  <em>alternate loci 
 scaffolds</em> (or <em>alt loci</em>). Alt loci are separate accessioned sequences that are aligned 
-to reference chromosomes. This assembly contains 261 alt loci, many of which are associated with 
-the LRC/KIR area of chr19 and the MHC region on chr6.
-See the <a href="../cgi-bin/hgTracks?chromInfoPage=">sequences</a> page for a complete
-list of the reference chromosomes and alternate sequences in GRCh38.
+to reference chromosomes. The GRCh38 initial assembly contained 261 alt loci, many of which are 
+associated with the LRC/KIR area of chr19 and the MHC region on chr6. Subsequent GRC patch releases
+have added additional alt loci and fix patches. See the 
+<a href="../cgi-bin/hgTracks?chromInfoPage=">sequences</a> page for the latest
+list of the reference chromosomes, alternate, and patch sequences in GRCh38.
+<li>
+<b>Fix sequences</b> - Fix patches denoted by <em>chr_<accession>_fix</em> represent changes to the 
+existing sequence. These are generally error corrections (such as base changes, component 
+replacements/updates, switch point updates or tiling path changes) or assembly improvements 
+(such as extension of sequence into gaps). These fix patch scaffold sequences are given chromosome 
+context through alignments to the corresponding chromosome regions. A list of all chromosomes 
+including <em>chr_fix</em> sequences can be found in the 
+<a href="../cgi-bin/hgTracks?chromInfoPage=">sequences</a> page.
 <li>
 <b>Centromere representation</b> - Debuting in this release, the large megabase-sized gaps that
 represented centromeric regions in previous assemblies have been replaced by sequences from
@@ -135,6 +144,8 @@ this release:
   <li>The &quot;v2&quot; at the end of the accession number indicates the NCBI version number</li>
   <li>Haplotype chromosome names consist of the chromosome number, followed by the NCBI accession
       number, followed by &quot;alt&quot;</li>
+  <li>Fix sequence names consist of the chromosomes number, followed by the NCBI accession number, 
+      followed by &quot;fix&quot; (e.g., chr7_KQ031388v1_fix)</li>
   <li>Unlocalized contig names consist of the chromosome number, followed by the NCBI accession
       number, followed by &quot;random&quot;</li>
   <li>Unplaced contig names (contigs whose associated chromosome is not known) consist of
@@ -161,43 +172,44 @@ For a detailed set of statistics about this assembly, see the
 target="_blank">GRCh38 GenBank record</a>.
 <br>
 <TABLE BORDER=1 CELLPADDING=3>
-    <TR><TH>Number</TH><TH>Haplotypes</TH><TH>Unplaced Contigs</TH></TH></TR>
-    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr1</TD><TD ALIGN="CENTER"><FONT SIZE=-1>12</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>9</FONT></TD></TR>
-    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr2</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>15</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>2</FONT></TD></TR>
-    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr3</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>16</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
-    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr4</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>11</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
-    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr5</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>13</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
-    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr6</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>16</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
-    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr7</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>9</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
-    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr8</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>16</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
-    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr9</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>5</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>4</FONT></TD></TR>
-    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr10</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>4</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
-    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr11</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>12</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
-    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr12</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>13</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
-    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr13</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>6</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
-    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr14</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>4</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>8</FONT></TD></TR>
-    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr15</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>9</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
-    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr16</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>6</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
-    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr17</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>18</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>3</FONT></TD></TR>
-    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr18</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>10</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
-    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr19</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>43</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
-    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr20</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>4</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
-    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr21</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>7</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
-    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr22</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>9</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>9</FONT></TD></TR>
-    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chrX</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>3</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
-    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chrY</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
-    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chrM</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TH>Number</TH><TH>Haplotypes</TH><TH>Fixes</TH><TH>Unplaced Contigs</TH></TH></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr1</TD><TD ALIGN="CENTER"><FONT SIZE=-1>19</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>8</FONT><TD ALIGN="CENTER"><FONT SIZE=-1>9</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr2</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>18</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>3</FONT><TD ALIGN="CENTER"><FONT SIZE=-1>2</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr3</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>21</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>7</FONT><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr4</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>16</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr5</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>16</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr6</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>17</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>5</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr7</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>11</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>4</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr8</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>17</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>4</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr9</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>7</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>4</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr10</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>5</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>5</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr11</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>15</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>6</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr12</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>16</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>6</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr13</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>8</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>4</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr14</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>5</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>8</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr15</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>10</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr16</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>10</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>2</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr17</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>21</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>2</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>3</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr18</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>12</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>3</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr19</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>58</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>2</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr20</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>4</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr21</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>7</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr22</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>14</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>9</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chrX</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>4</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chrY</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>3</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chrM</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
 </TABLE>
 </p>
 <p>
 <TABLE BORDER=1 CELLPADDING=3>
     <TH ALIGN="LEFT">Type</TH><TH WIDTH=50>Total</TH>
     <TR><TD><FONT SIZE=-1>chromosomes</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>25</FONT></TD></TR>
-    <TR><TD><FONT SIZE=-1>haplotypes</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>261</FONT></TD></TR>
+    <TR><TD><FONT SIZE=-1>haplotypes</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>331</FONT></TD></TR>
+    <TR><TD><FONT SIZE=-1>fixes</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>70</FONT></TD></TR>
     <TR><TD><FONT SIZE=-1>unlocalized contigs</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>42</FONT></TD></TR>
     <TR><TD><FONT SIZE=-1>unplaced contigs</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>127</FONT></TD></TR>
     <TR><TD></TD><TD></TD></TR>
-    <TR><TD><B><FONT SIZE=-1>Total</FONT></B></TD><TD ALIGN="CENTER"><FONT SIZE=-1>455</FONT></TD></TR>
+    <TR><TD><B><FONT SIZE=-1>Total</FONT></B></TD><TD ALIGN="CENTER"><FONT SIZE=-1>595</FONT></TD></TR>
 </TABLE>
 </p>
 <p>
