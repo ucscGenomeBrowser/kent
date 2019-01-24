@@ -540,6 +540,99 @@ done
     rm /hive/data/staging/data/hg38/hg38.2bit.bak
 
 
+##############################################################################
+# Extend wgEncodeRegDnase (DNase HS) (DONE 19-01-23 angie)
+    # 95 Peak view subtracks
+    mkdir /hive/data/genomes/hg38/bed/wgEncodeRegDnase/wgEncodeRegDnaseHS.p12
+    cd /hive/data/genomes/hg38/bed/wgEncodeRegDnase/wgEncodeRegDnaseHS.p12
+    for f in ../wgEncodeRegDnaseHS.p11/*.plusP11.bed; do
+      track=$(basename $f .plusP11.bed)
+      liftOver -multiple -bedPlus=5 -noSerial $f \
+        /hive/data/genomes/hg38/jkStuff/hg38.mainToPatch.p12.over.chain \
+        $track.p12.bed /dev/null
+      sort -k1,1 -k2n,2n $f $track.p12.bed > $track.plusP12.bed
+    done
+    # Install
+    for f in *.plusP12.bed; do
+      table=$(basename $f .plusP12.bed)
+      echo $table
+      hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/encode/narrowPeak.sql -renameSqlTable \
+        -type=bed6+4 -as=$HOME/kent/src/hg/lib/bigNarrowPeak.as -noNameIx \
+       hg38 $table $f
+    done
+    rm bed.tab
+
+    # 95 Hotspots view subtracks
+    mkdir /hive/data/genomes/hg38/bed/wgEncodeRegDnase/wgEncodeRegDnaseHotspot.p12
+    cd /hive/data/genomes/hg38/bed/wgEncodeRegDnase/wgEncodeRegDnaseHotspot.p12
+    cat >runOne <<'_EOF_'
+#!/bin/bash
+set -beEu -o pipefail
+track=$1
+origFile=$2
+
+liftOver -multiple -bedPlus=6 -noSerial $origFile \
+  /hive/data/genomes/hg38/jkStuff/hg38.mainToPatch.p12.over.chain \
+  $track.broadPeak.p12.bed /dev/null
+sort -k1,1 -k2n,2n $origFile $track.broadPeak.p12.bed > $track.broadPeak.plusP12.bed
+
+bedToBigBed -as=$HOME/kent/src/hg/lib/encode/broadPeak.as -type=bed6+3 $track.broadPeak.plusP12.bed \
+  /hive/data/genomes/hg38/chrom.sizes  $track.broadPeak.plusP12.bb
+_EOF_
+    chmod a+x runOne
+    cp /dev/null jobList
+    for origFile in ../wgEncodeRegDnaseHotspot.p11/*.broadPeak.plusP11.bed; do
+      track=$(basename $origFile .broadPeak.plusP11.bed)
+      echo ./runOne $track $origFile >> jobList
+    done
+    para make jobList
+    para time
+#Completed: 95 of 95 jobs
+#CPU time in finished jobs:        206s       3.43m     0.06h    0.00d  0.000 y
+#IO & Wait Time:                   251s       4.19m     0.07h    0.00d  0.000 y
+#Average job time:                   5s       0.08m     0.00h    0.00d
+#Longest finished job:               8s       0.13m     0.00h    0.00d
+#Submission to last job:            22s       0.37m     0.01h    0.00d
+
+    # Install
+    for f in *.broadPeak.plusP12.bb; do
+      track=$(basename $f .broadPeak.plusP12.bb)
+      ln -sf `pwd`/$f /gbdb/hg38/bbi/wgEncodeRegDnase/$track.broadPeak.bb
+    done
+
+    # Don't do wgEncodeRegDnaseSignal view... the data files are same as DnaseWig below!
+
+
+#############################################################################
+# Extend wgEncodeRegDnaseWig (DNase Signal) (DONE 19-01-23 angie)
+
+    mkdir /hive/data/genomes/hg38/bed/wgEncodeRegDnase/wgEncodeRegDnaseWig.p12
+    cd /hive/data/genomes/hg38/bed/wgEncodeRegDnase/wgEncodeRegDnaseWig.p12
+    cp /dev/null jobList
+    for origFile in ../wgEncodeRegDnaseWig.p11/*.plusP11.bw; do
+      track=$(basename $origFile .plusP11.bw)
+      echo ~/kent/src/hg/utils/liftOverBigWigToPatches $origFile \
+        /hive/data/genomes/hg38/jkStuff/hg38.mainToPatch.p12.over.chain \
+        /hive/data/genomes/hg38/chrom.sizes \
+        {check out exists $track.plusP12.bw} \
+        >> jobList
+    done
+    para make jobList
+    para time
+#Completed: 95 of 95 jobs
+#CPU time in finished jobs:     140913s    2348.55m    39.14h    1.63d  0.004 y
+#IO & Wait Time:                     0s       0.00m     0.00h    0.00d  0.000 y
+#Average job time:                 428s       7.14m     0.12h    0.00d
+#Longest finished job:             828s      13.80m     0.23h    0.01d
+#Submission to last job:          1534s      25.57m     0.43h    0.02d
+
+    # Install by updating /gbdb/ links.
+    for f in *.plusP12.bw; do
+      track=$(basename $f .plusP12.bw)
+      ln -sf `pwd`/$f /gbdb/hg38/bbi/wgEncodeRegDnase/$track.bw
+    done
+
+
 #############################################################################
 # DBSNP B151 / SNP151 (TODO 19-? angie)
 # b151 is for GRCh38.p7 (orgDir human_9606_b151_GRCh38p7) so it doesn't have
