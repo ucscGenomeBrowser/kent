@@ -37,7 +37,6 @@
 #include "obscure.h"
 #include "trashDir.h"
 #include "hubConnect.h"
-
 #include "trackHub.h"
 
 void usage()
@@ -799,6 +798,8 @@ if (sqlTableExists(conn, namedSessionTable))
 		       "sessionName = '%s';",
 		   namedSessionTable, encUserName, encSessionName);
     sqlUpdate(conn, dy->string);
+
+    saveSessionData(cart, encUserName, encSessionName);
 
     dyStringClear(dy);
     sqlDyStringPrintf(dy, "INSERT INTO %s ", namedSessionTable);

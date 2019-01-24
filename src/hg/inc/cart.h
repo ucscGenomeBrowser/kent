@@ -607,6 +607,10 @@ boolean cartTdbTreeCleanupOverrides(struct trackDb *tdb,struct cart *newCart,str
 void cartCopyCustomComposites(struct cart *cart);
 /* Find any custom composite hubs and copy them so they can be modified. */
 
+void cartReplaceHubVars(struct cart *cart, char *hubFileVar, char *oldHubUrl, char *newHubUrl);
+/* Replace all cart variables corresponding to oldHubUrl (and/or its hub ID) with
+ * equivalents for newHubUrl. */
+
 void cgiExitTime(char *cgiName, long enteredMainTime);
 /* single stderr print out called at end of CGI binaries to record run
  * time in apache error_log */
