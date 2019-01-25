@@ -20,6 +20,13 @@
 #include "hubConnect.h"
 #include "obscure.h"
 #include "errCatch.h"
+#include "vcf.h"
+#include "bedTabix.h"
+#include "bamFile.h"
+
+#ifdef USE_HAL
+#include "halBlockViz.h"
+#endif
 
 /* Global Variables */
 struct cart *cart;             /* CGI and other variables */
@@ -62,7 +69,7 @@ while ((hel = hashNext(&hc)) != NULL)
 hPrintf("    </ul>\n");
 }
 
-static int bbiBriefMeasure(char *type, char *bigDataUrl, long *chromCount, long *itemCount, struct dyString *errors)
+static int bbiBriefMeasure(char *type, char *bigDataUrl, char *bigDataIndex, long *chromCount, long *itemCount, struct dyString *errors)
 /* check a bigDataUrl to find chrom count and item count */
 {
 int retVal = 0;
@@ -96,6 +103,55 @@ if (errCatchStart(errCatch))
         *itemCount = sum.validCount;
         bbiFileClose(&bwf);
         }
+    else if (startsWithWord("vcfTabix", type))
+        {
+        struct vcfFile *vcf = vcfTabixFileAndIndexMayOpen(bigDataUrl, bigDataIndex, NULL, 0, 0, 1, 1);
+        if (vcf == NULL)
+	    {
+	    dyStringPrintf(errors, "Could not open %s and/or its tabix index (.tbi) file.  See http://genome.ucsc.edu/goldenPath/help/vcf.html", bigDataUrl);
+            retVal = 1;
+	    }
+        else
+	    vcfFileFree(&vcf);
+        }
+    else if (startsWithWord("bam", type))
+        {
+	bamFileAndIndexMustExist(bigDataUrl, bigDataIndex);
+        }
+    else if (startsWithWord("longTabix", type))
+        {
+	struct bedTabixFile *btf = bedTabixFileMayOpen(bigDataUrl, NULL, 0, 0);
+	if (btf == NULL)
+	    {
+	    dyStringPrintf(errors, "Couldn't open %s and/or its tabix index (.tbi) file.", bigDataUrl);
+            retVal = 1;
+	    }
+	else
+	    bedTabixFileClose(&btf);
+        }
+#ifdef USE_HAL
+    else if (startsWithWord("halSnake", type))
+        {
+	char *errString;
+	int handle = halOpenLOD(bigDataUrl, &errString);
+	if (handle < 0)
+	    {
+	    dyStringPrintf(errors, "HAL open error: %s", errString);
+            retVal = 1;
+	    }
+	if (halClose(handle, &errString) < 0)
+	    {
+	    dyStringPrintf(errors, "HAL close error: %s", errString);
+	    retVal = 1;
+	    }
+        }
+#endif
+    else
+        {
+	dyStringPrintf(errors, "unrecognized type %s", type);
+        retVal = 1;
+        }
+
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
@@ -108,7 +164,7 @@ errCatchFree(&errCatch);
 return retVal;
 }	/* static int bbiBriefMeasure() */
 
-static void trackList(struct trackDb *tdb)
+static void trackList(struct trackDb *tdb, struct trackHubGenome *genome)
 /* process the track list to show all tracks */
 {
 if (tdb)
@@ -132,13 +188,18 @@ if (tdb)
            hashIncInt(countTracks, track->type);
         if (depthSearch && bigDataUrl)
 	    {
+	    char *bigDataIndex = NULL;
+	    char *relIdxUrl = trackDbSetting(tdb, "bigDataIndex");
+	    if (relIdxUrl != NULL)
+		bigDataIndex = trackHubRelativeUrl(genome->trackDbFile, relIdxUrl);
+
 	    long chromCount = 0;
 	    long itemCount = 0;
 	    struct dyString *errors = newDyString(1024);
-	    int retVal = bbiBriefMeasure(track->type, bigDataUrl, &chromCount, &itemCount, errors);
+	    int retVal = bbiBriefMeasure(track->type, bigDataUrl, bigDataIndex, &chromCount, &itemCount, errors);
             if (retVal)
 		{
-		    hPrintf("    <li>%s : %s : ERROR: %s</li>\n", track->track, track->type, errors->string);
+		    hPrintf("    <li>%s : %s : <font color='red'>ERROR: %s</font></li>\n", track->track, track->type, errors->string);
 		}
 	    else
 		{
@@ -185,19 +246,19 @@ if (tdb)
     }
 }	/*	static void trackList(struct trackDb *tdb)	*/
 
-static void assemblySettings(struct trackHubGenome *thg)
+static void assemblySettings(struct trackHubGenome *genome)
 /* display all the assembly 'settingsHash' */
 {
 hPrintf("    <ul>\n");
 struct hashEl *hel;
-struct hashCookie hc = hashFirst(thg->settingsHash);
+struct hashCookie hc = hashFirst(genome->settingsHash);
 while ((hel = hashNext(&hc)) != NULL)
     {
     hPrintf("    <li>%s : %s</li>\n", hel->name, (char *)hel->val);
     if (sameWord("trackDb", hel->name))	/* examine the trackDb structure */
 	{
-        struct trackDb *tdb = trackHubTracksForGenome(thg->trackHub, thg);
-	trackList(tdb);
+        struct trackDb *tdb = trackHubTracksForGenome(genome->trackHub, genome);
+	trackList(tdb, genome);
         }
     if (timeOutReached())
 	break;
@@ -210,34 +271,37 @@ static void genomeList (struct trackHub *hubTop)
  * in a circle from one to the other to find all hub resources
  */
 {
-struct trackHubGenome *thg = hubTop->genomeList;
+long totalAssemblyCount = 0;
+struct trackHubGenome *genome = hubTop->genomeList;
 
 hPrintf("<h4>genome sequences (and tracks) present in this track hub</h4>\n");
 hPrintf("<ul>\n");
 long lastTime = clock1000();
-for ( ; thg; thg = thg->next )
+for ( ; genome; genome = genome->next )
     {
-    if (thg->organism)
+    ++totalAssemblyCount;
+    if (genome->organism)
 	{
-	hPrintf("<li>%s - %s - %s</li>\n", thg->organism, thg->name, thg->description);
+	hPrintf("<li>%s - %s - %s</li>\n", genome->organism, genome->name, genome->description);
 	}
     else
 	{	/* can there be a description when organism is empty ? */
-	hPrintf("<li>%s</li>\n", thg->name);
+	hPrintf("<li>%s</li>\n", genome->name);
 	}
-    if (thg->settingsHash)
-	assemblySettings(thg);
+    if (genome->settingsHash)
+	assemblySettings(genome);
     if (measureTiming)
 	{
 	long thisTime = clock1000();
-	hPrintf("<em>processing time %s: %ld millis</em><br>\n", thg->name, thisTime - lastTime);
+	hPrintf("<em>processing time %s: %ld millis</em><br>\n", genome->name, thisTime - lastTime);
 	}
     if (timeOutReached())
 	break;
     }
 if (trackCounter->elCount)
     {
-    hPrintf("    <li>%ld total tracks counted, %d different types:</li>\n", totalTracks, trackCounter->elCount);
+    hPrintf("    <li>total assembly count: %ld</li>\n", totalAssemblyCount);
+    hPrintf("    <li>%ld total tracks counted, %d different track types:</li>\n", totalTracks, trackCounter->elCount);
     hPrintf("    <ul>\n");
     struct hashEl *hel;
     struct hashCookie hc = hashFirst(trackCounter);
@@ -264,7 +328,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     slNameStore(&publicHubShortLabels, row[0]);
     }
 sqlFreeResult(&sr);
-slNameSort(&publicHubShortLabels);
+slNameSortCase(&publicHubShortLabels);
 int listSize = slCount(publicHubShortLabels);
 AllocArray(shortLabels, listSize);
 struct slName *el = publicHubShortLabels;
@@ -275,28 +339,6 @@ for ( ; el != NULL; el = el->next )
     ++publicHubCount;
     }
 }	/*	static void getPublicHubList()	*/
-
-static void displayPublicHubs()
-/* show URLs to all public hubs */
-{
-return;
-hPrintf("<h3>public hub URLs from hgwdev-gi</h3>\n");
-hPrintf("<ul>\n");
-struct sqlConnection *conn = hConnectCentral();
-// Build a query to find all public hub URL's
-struct dyString *query = sqlDyStringCreate("select hubUrl,shortLabel from %s",
-                                           hubPublicTableName());
-struct sqlResult *sr = sqlGetResult(conn, query->string);
-char **row;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    hPrintf("<li>%s - %s</li>\n", row[1], row[0]);
-    }
-sqlFreeResult(&sr);
-hDisconnectCentral(&conn);
-
-hPrintf("</ul>\n");
-}
 
 static char *urlFromShortLabel(char *shortLabel)
 {
@@ -409,10 +451,13 @@ if (hub->genomeList)
 
 hPrintf("</p>\n");
 
-displayPublicHubs();
+if (timedOut)
+    hPrintf("<h1>Reached time out %ld seconds</h1>", timeOutSeconds);
+if (measureTiming)
+    hPrintf("<em>Overall total time: %ld millis</em><br>\n", clock1000() - enteredMainTime);
 
 cartWebEnd();
-}
+}	/*	void doMiddle(struct cart *theCart)	*/
 
 /* Null terminated list of CGI Variables we don't want to save
  * permanently. */
@@ -427,9 +472,5 @@ measureTiming = TRUE;
 verboseTimeInit();
 trackCounter = hashNew(0);
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
-if (timedOut)
-    hPrintf("<h1>Reached time out %ld seconds</h1>", timeOutSeconds);
-if (measureTiming)
-    hPrintf("<em>Overall total time: %ld millis</em><br>\n", clock1000() - enteredMainTime);
 return 0;
 }
