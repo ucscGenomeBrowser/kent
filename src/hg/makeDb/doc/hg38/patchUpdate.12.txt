@@ -634,6 +634,30 @@ _EOF_
 
 
 #############################################################################
+# Rebuild ncbiRefSeqGenomicDiff (DONE 19-01-25 angie)
+    mkdir /hive/data/genomes/hg38/bed/ncbiRefSeqAnomalies.p12
+    cd /hive/data/genomes/hg38/bed/ncbiRefSeqAnomalies.p12
+
+    db=hg38
+    pre=ncbiRefSeqGenomicDiff
+    buildDir=/hive/data/genomes/hg38/bed/ncbiRefSeq.p12.2018-08-10
+    asmId=GCF_000001405.38_GRCh38.p12
+
+    time (zcat $buildDir/process/$asmId.rna.cds.gz \
+        | egrep '[0-9]+\.\.[0-9]+' \
+        | pslMismatchGapToBed -cdsFile=stdin -db=$db -ignoreQNamePrefix=X \
+            $buildDir/process/$asmId.$db.psl.gz \
+            /hive/data/genomes/$db/$db.2bit \
+            $buildDir/$db.rna.fa \
+            $pre)
+#real    0m40.604s
+
+    bedToBigBed -type=bed9+ -tab -as=$HOME/kent/src/hg/lib/txAliDiff.as $pre.bed \
+        /hive/data/genomes/$db/chrom.sizes $pre.bb
+    ln -sf `pwd`/$pre.bb /gbdb/hg38/ncbiRefSeq/$pre.bb
+
+
+#############################################################################
 # DBSNP B151 / SNP151 (TODO 19-? angie)
 # b151 is for GRCh38.p7 (orgDir human_9606_b151_GRCh38p7) so it doesn't have
 # sequences added in p8 and later.
