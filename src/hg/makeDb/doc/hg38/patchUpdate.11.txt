@@ -485,7 +485,7 @@ done
 
 
 ##############################################################################
-# Extend wgEncodeRegDnase (DONE 19-01-08 angie)
+# Extend wgEncodeRegDnaseClustered (DONE 19-01-08 angie)
 # first done 18-08-10; redone 18-11-06 and 19-01-08 with updated .over.chain file.
 #NOTE: this has not been liftOver'd to original alts, aside from hg19 chr to -> hg38 alt!
     cd /hive/data/genomes/hg38/bed/wgEncodeRegDnase
@@ -576,6 +576,111 @@ done
       gtexGeneModel.p11.gp /dev/null
     sort -k2,2 -k3n,3n gtexGeneModel.initial.gp gtexGeneModel.p11.gp \
       > gtexGeneModel.plusP11.gp
+
+
+##############################################################################
+# Extend wgEncodeRegDnase (DNase HS) (DONE 19-01-23 angie)
+# Nothing on the original alts, so use mainToAllAltPatch
+
+    # 95 Peak view subtracks
+    # I tried in vain to find the files from which the *Peak tables were loaded.
+    # The closest I got were some files like
+    # /hive/data/genomes/hg38/bed/wgEncodeRegDnase/run_pooled_hotspot5.1/wgEncodeEH000484.pooled.narrowPeak
+    # a bigBed file which has the same number of rows as wgEncodeRegDnaseUwK562Peak,
+    # and similar but not identical values.
+    # So, first dump values from the database tables.
+    mkdir /hive/data/genomes/hg38/bed/wgEncodeRegDnase/wgEncodeRegDnaseHS.p11
+    cd /hive/data/genomes/hg38/bed/wgEncodeRegDnase/wgEncodeRegDnaseHS.p11
+    for table in $(hgsql hg38 -NBe 'show tables like "wgEncodeRegDnase%Peak";'); do
+      echo $table
+      hgsql hg38 -NBe 'select * from '$table';' | cut -f 2- > $table.initial.bed
+    done
+    for f in *.initial.bed; do
+      track=$(basename $f .initial.bed)
+      echo $track
+      liftOver -multiple -bedPlus=5 -noSerial $f \
+        /hive/data/genomes/hg38/jkStuff/hg38.mainToAllAltPatch.p11.over.chain \
+        $track.p11.bed /dev/null
+      sort -k1,1 -k2n,2n $f $track.p11.bed > $track.plusP11.bed
+    done
+
+    # 95 Hotspots view subtracks
+    mkdir /hive/data/genomes/hg38/bed/wgEncodeRegDnase/wgEncodeRegDnaseHotspot.p11
+    cd /hive/data/genomes/hg38/bed/wgEncodeRegDnase/wgEncodeRegDnaseHotspot.p11
+    # Similar to wgEncodeRegDnaseWig, the original /gbdb/ links point to files with names
+    # that differ from the track names.  Save that association and use it to add patches.
+    ls -l /gbdb/hg38/bbi/wgEncodeRegDnase/wgEncodeRegDnase*Hotspot*.bb \
+    | awk '{print $9 "\t" $11;}' > wgEncodeRegDnaseHotspot.gbdbToOrigFile.tab
+    wc -l wgEncodeRegDnaseHotspot.gbdbToOrigFile.tab
+#95 wgEncodeRegDnaseHotspot.gbdbToOrigFile.tab
+    cat >runOne <<'_EOF_'
+#!/bin/bash
+set -beEu -o pipefail
+track=$1
+origFile=$2
+
+bigBedToBed $origFile stdout \
+| liftOver -multiple -bedPlus=6 -noSerial stdin \
+    /hive/data/genomes/hg38/jkStuff/hg38.mainToAllAltPatch.p11.over.chain \
+    $track.broadPeak.p11.bed /dev/null
+sort -k1,1 -k2n,2n <(bigBedToBed $origFile stdout) $track.broadPeak.p11.bed \
+  > $track.broadPeak.plusP11.bed
+# Don't make bigBed yet; we'll use the .bed to compute .plusP12 next, and install that.
+#bedToBigBed -as $HOME/kent/src/hg/lib/bigNarrowPeak.as -type=bed6+3 $track.broadPeak.plusP11.bed \
+#  /hive/data/genomes/hg38/chrom.sizes  $track.broadPeak.plusP11.bb
+_EOF_
+    chmod a+x runOne
+    while read gbdbPath origFile; do
+      track=$(basename $gbdbPath .broadPeak.bb)
+      echo ./runOne $track $origFile
+    done < wgEncodeRegDnaseHotspot.gbdbToOrigFile.tab > jobList
+    para make jobList
+    para time
+#Completed: 95 of 95 jobs
+#CPU time in finished jobs:        153s       2.56m     0.04h    0.00d  0.000 y
+#IO & Wait Time:                   245s       4.08m     0.07h    0.00d  0.000 y
+#Average job time:                   4s       0.07m     0.00h    0.00d
+#Longest finished job:               8s       0.13m     0.00h    0.00d
+#Submission to last job:            26s       0.43m     0.01h    0.00d
+
+
+    # Don't do wgEncodeRegDnaseSignal view... the data files are same as DnaseWig below!
+
+    # Don't update /gbdb -- use .plusP11 files to make .plusP12.
+
+
+##############################################################################
+# Extend wgEncodeRegDnaseWig (DNase Signal) (DONE 19-01-23 angie)
+# Nothing on the original alts, so use mainToAllAltPatch
+
+    mkdir /hive/data/genomes/hg38/bed/wgEncodeRegDnase/wgEncodeRegDnaseWig.p11
+    cd /hive/data/genomes/hg38/bed/wgEncodeRegDnase/wgEncodeRegDnaseWig.p11
+    # There are 95 subtracks.  The original /gbdb/ links point to files with very different
+    # names from the track/link name.  For example:
+    # /gbdb/hg38/bbi/wgEncodeRegDnase/wgEncodeRegDnaseUwHelas3Signal.bw ->
+    # /hive/data/genomes/hg38/bed/wgEncodeRegDnase/run_normalized/out/wgEncodeEH000495.norm.bw
+    # So for starters, make a file to record the correspondence between track and file.
+    ls -l /gbdb/hg38/bbi/wgEncodeRegDnase/wgEncodeRegDnase*Signal*.bw \
+        | awk '{print $9 "\t" $11;}' > wgEncodeRegDnaseWig.gbdbToOrigFile.tab
+
+    # Use that file to make a small cluster job to do the liftOvers
+    while read gbdbPath origFile; do
+      track=$(basename $gbdbPath .bw)
+      echo ~/kent/src/hg/utils/liftOverBigWigToPatches $origFile \
+        /hive/data/genomes/hg38/jkStuff/hg38.mainToAllAltPatch.p11.over.chain \
+              /hive/data/genomes/hg38/chrom.sizes \
+              {check out exists $track.plusP11.bw}
+    done < wgEncodeRegDnaseWig.gbdbToOrigFile.tab > jobList
+    para make jobList
+    para time
+#Completed: 95 of 95 jobs
+#CPU time in finished jobs:     136582s    2276.37m    37.94h    1.58d  0.004 y
+#IO & Wait Time:                     0s       0.00m     0.00h    0.00d  0.000 y
+#Average job time:                 463s       7.72m     0.13h    0.01d
+#Longest finished job:             884s      14.73m     0.25h    0.01d
+#Submission to last job:          1684s      28.07m     0.47h    0.02d
+
+    # Don't update /gbdb -- use .plusP11 files to make .plusP12.
 
 
 ##############################################################################

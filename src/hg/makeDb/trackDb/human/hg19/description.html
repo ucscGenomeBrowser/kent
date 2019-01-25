@@ -188,16 +188,23 @@ Reference Sequence (rCRS)</A> in the next human assembly release.
 <P>
 <B>Chromosome naming scheme</B><BR>
 In addition to the &quot;regular&quot; chromosomes, the hg19 browser contains
-nine haplotype chromosomes, 39 unplaced contigs, and 20 unlocalized contigs.
+9 haplotype chromosomes, 39 unplaced contigs, and 20 unlocalized contigs.
 For unlocalized contigs, the contig name is appended to the regular chromosome
 name, as in <TT>chr1_gl000191_random</TT>.  If the chromosome is unknown, the
 contig is represented with the name &quot;chrUn&quot; followed by the contig
 identifier, as in <TT>chrUn_gl000211</TT>.  Note that the chrUn contigs are no
 longer placed in a single, artificial chromosome as they have been in previous UCSC
-assemblies. See the <A HREF="../cgi-bin/hgTracks?chromInfoPage=">sequences</A>
-page for a complete list of hg19 chromosome names.
+assemblies. hg19 also includes alternative haplotype sequences as well as fix sequences. 
+The 9 alternative haplotypes released with the original assembly are shown in the
+table below. For subsequent alternate haplotype patches the regular chromosome 
+name is followed by the contig accession and then &quot;_alt&quot;, for example 
+<TT>chr5_gl339449_alt.</TT> Fix sequences introduced by patches are named in a similar 
+fashion but with &quot;_fix&quot; instead of &quot;_alt&quot;, e.g. <TT>chrX_jh806590_fix</TT>. 
+Additional information on alt and fix sequences can be found in our 
+<A HREF="../FAQ/FAQdownloads.html#downloadFix">FAQ</A>. See the 
+<A HREF="../cgi-bin/hgTracks?chromInfoPage=">sequences</A> page for a complete list of hg19 sequences.
 <P>
-The nine haplotype chromosomes are:
+The nine haplotype sequences in the initial GRCh37 release are named:
 <BR>
 <TABLE BORDER=1 CELLPADDING = 3><TR><TH>name</TH><TH>accession</TH><TH>UCSC chr name</TH></TR>
 <TR><TD ALIGN=LEFT>HSCHR6_MHC_APD_CTG1</TD><TD>GL000250.1</TD><TD ALIGN=LEFT>chr6_apd_hap1</TD></TR>
