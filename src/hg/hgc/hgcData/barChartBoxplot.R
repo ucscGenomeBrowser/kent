@@ -6,18 +6,10 @@
 #               sample  category  value
 #       outFile is filename suitable for writing graphic (e.g. in PNG format)
 
-# https://stackoverflow.com/questions/9341635/check-for-installed-packages-before-running-install-packages
-# Install function for packages    
-packages<-function(x){
-  x<-as.character(match.call()[[2]])
-  if (!require(x,character.only=TRUE)){
-    install.packages(pkgs=x,repos="http://cran.r-project.org")
-    require(x,character.only=TRUE)
-  }
+if (require("showtext",character.only=TRUE)){
+    library(showtext)
+    showtext_auto()
 }
-
-packages(showtext)
-showtext_auto()
 
 # if more than this categories, switch to a display mode that is easier to read
 DENSECUTOFF <- 35
@@ -77,11 +69,12 @@ drawBoxPlot <- function(df) {
                         names=rep(c(""), count))
         y1 <- par("usr")[1]
         size <- .7
-        # draw only black, at 90 degrees and left-adjusted
+        # draw numbers only black, at 90 degrees and left-adjusted
         rot <- 0
         adjust <- .15*abs(y1)
         text(y1 + adjust, 1:count, exprPlot$n, cex=size, col="black", srt=rot, adj=0.0)
         # draw labels
+        size <- .9
         adjust <- .4*abs(y1)
         text(y1-adjust, 1:count, cex=size, labels=labels, srt=rot, xpd=TRUE, adj=c(1,.5), col="black")
     }
@@ -140,7 +133,7 @@ count <- length(labels)
 if (count < DENSECUTOFF) {
     png(file=outFile, width=1070, height=600)
 } else {
-    png(file=outFile, width=800, height=1070)
+    png(file=outFile, width=1070, height=18*count)
 }
 # res=72 is default
 gray <- "#A6A6A6"
