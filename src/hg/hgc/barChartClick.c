@@ -363,7 +363,7 @@ int ret = system(cmd->string);
 if (ret == 0)
     printf("<img src = \"%s\" border=1><br>\n", pngTn.forHtml);
 else
-    warn("Error creating boxplot from sample data");
+    warn("Error creating boxplot from sample data with command: %s", cmd->string);
 }
 
 struct asColumn *asFindColByIx(struct asObject *as, int ix)
