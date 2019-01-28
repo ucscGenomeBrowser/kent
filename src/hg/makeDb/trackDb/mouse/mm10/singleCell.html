@@ -10,23 +10,30 @@ with gene expression, exon-coverage and splice-junctions are available.</p>
 As indicated by the &quot;...&quot; after its name, this is a 'super track', a container for other
 tracks. There are three different types of tracks for each dataset:</a></p>
 
-<p><b>Cell type expression:</b> A rectangle on the genome, at the location of a gene, filled
-with a bar graph that indicates the gene's expression by single cell cluster. The term
-"cluster" refers to a cluster of single cells. Usually this is a cell or tissue
-type.</p>
+<dl>
+  <dt>Cell type expression:</dt>
+    <dd>
+    A rectangle on the genome, at the location of a gene, filled with a bar graph that indicates the
+    gene's expression by single cell cluster. The term &quot;cluster&quot; refers to a cluster of
+    single cells. Usually this is a cell or tissue type.</dd>
 
-<p><b>Coverage:</b> bar graphs indicate the number of reads at this base pair.
-You may want to switch on auto-scaling of the y axis. For configuration
-options, see <a
-href="https://genome.ucsc.edu/goldenpath/help/hgWiggleTrackHelp.html">the graph
-tracks configuration help page</a>. These tracks are shown in "dense" by default, set any of the tracks to "full" to see the detailed coverage plot.</p>
+  <dt>Coverage:</dt>
+    <dd>
+    Bar graphs indicate the number of reads at this base pair. You may want to switch on
+    auto-scaling of the y axis. For configuration options, see <a target="_blank"
+    href="https://genome.ucsc.edu/goldenpath/help/hgWiggleTrackHelp.html">the graph tracks
+    configuration help page</a>. These tracks are shown in &quot;dense&quot; by default, set any of
+    the tracks to &quot;full&quot; to see the detailed coverage plot.</dd>
 
-<p><b>Splice Junctions:</b> thick rectangles show exons around a splice site,
-connected by a line that indicates the intron. These gaps are shown and are
-annotated with the number of reads, in the 'score' field. You can use the
-'score' filter on the track configuration page to show only introns with a
-certain number of supporting reads. The maximum number of reads that are shown
-is 1000, even if more reads support an intron. These tracks are shown in dense by default, set this track to "pack" to see. Then click the splice junctions to see their score.</p>
+  <dt>Splice Junctions:</dt>
+    <dd>
+    Thick rectangles show exons around a splice site, connected by a line that indicates the
+    intron. These gaps are shown and are annotated with the number of reads, in the 'score' field.
+    You can use the 'score' filter on the track configuration page to show only introns with a
+    certain number of supporting reads. The maximum number of reads that are shown is 1,000, even if
+    more reads support an intron. These tracks are shown in dense by default, set this track to
+    &quot;pack&quot; to see. Then click the splice junctions to see their score.</dd>
+</dl>
 
 <p>
 Converage and splice junctions are &quot;Views&quot;, which can be configured independently. See
