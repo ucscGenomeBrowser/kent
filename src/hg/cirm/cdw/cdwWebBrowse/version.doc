@@ -37,4 +37,6 @@
 0.61 Jan 11 2019
    - Fixing things so that a "clear search" works better after coming into browsing files
      with a URL that sets a filter.
-
+0.62 (in progress)
+   - Widened display area for pie charts in cdwWebBrowse to avoid truncated labels
+   - Changed button from "Download" to "Download All Matching" on analysis/query page
