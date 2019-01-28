@@ -1,6 +1,7 @@
 #!/bin/sh -e
+cd etc
 touch alpha.gbLoaded build.gbLoaded; 
-list=`sed '/^#/d' /cluster/data/genbank/etc/hgwdev.dbs `
+list=`sed '/^#/d' hgwdev.dbs `
 for db in $list
 do 
     echo "examining $db"
@@ -11,7 +12,7 @@ do
     if test build.gbLoaded -nt alpha.gbLoaded; 
     then 
         echo "Updating $db"
-        ./updateDb.sh $db gbTmp /cluster/home/braney/.hg.conf.hgwdev perAss.txt
+        ./copyDbDev.sh $db gbTmp .hg.conf.hgwdev gbPerAssemblyTables.txt
     fi; 
 done 
 rm alpha.gbLoaded build.gbLoaded; 

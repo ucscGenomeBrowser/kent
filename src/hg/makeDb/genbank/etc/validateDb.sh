@@ -16,28 +16,15 @@ list=`hgsql $db -e "show tables" | egrep -f $tableList`
 for i in $list
 do 
     fields='*'
+
     if  test $i != "gbLoaded"
     then
-#    if  test $i == "decipherRaw"
-#    then
-#	fields='id,start,end,chr,mean_ratio,classification_type'
-#	#fields='id,start,end,chr,mean_ratio'
-#    else
-#        fields='*'
-#    fi
-
-    echo "select count(*) from $i" | HGDB_CONF=$betaCfg  hgsql $db > $i.out
-#    f=$i"New"
-    echo 0 > $i.new.out
-#    set +e
-    echo "select count(*) from $i" | HGDB_CONF=$betaCfg hgsql $tmpDb > $i.new.out
-#    set -e
-    echo $i `cat $i.out` `cat $i.new.out`
-    rm $i.out $i.new.out
+        echo "select count(*) from $i" | HGDB_CONF=$betaCfg  hgsql $db > $i.out
+        echo "select count(*) from $i" | HGDB_CONF=$betaCfg hgsql $tmpDb > $i.new.out
+        echo $i `cat $i.out` `cat $i.new.out`
+        rm $i.out $i.new.out
     fi
-done > change.stats
-
-cat change.stats | awk -v db=$db -v tooMuch=$tooMuch -v force=$force ' 
+done | awk -v db=$db -v tooMuch=$tooMuch -v force=$force ' 
 function abs(v) {return v < 0 ? -v : v} 
 
 {

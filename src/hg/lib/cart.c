@@ -2253,7 +2253,10 @@ char *logProxy = cfgOption("logProxy");
 if (logProxy)
     setenv("log_proxy", logProxy, TRUE);
 
-char *hguid = getCookieId(cookieName);
+// if ignoreCookie is on the URL, don't check for cookies
+char *hguid = NULL;
+if (cgiOptionalString("ignoreCookie") == NULL)
+    hguid = getCookieId(cookieName);
 char *hgsid = getSessionId();
 struct cart *cart = cartNew(hguid, hgsid, exclude, oldVars);
 cartExclude(cart, sessionVar);

@@ -31,16 +31,23 @@ rsync -av /data/genbank/data/organism.lst /hive/data/outside/genbank/data/
 
 nice etc/align-genbank
 
+# if you want to ignore errors
+# date +%s > var/build/build.time
+# rm var/build/run/*
+
 #check for new databases
-# mkdir SOMEDIRECGO
+# SOMEDIR=some
+# mkdir $SOMEDIR
 #sed '/^#/d' etc/hgwdev.dbs | sort > $SOMEDIR/wantDbs.txt
 #hgsql "" -Ne "show databases" | sort > $SOMEDIR/haveDbs.txt
 # join -v 1 $SOMEDIR/wantDbs.txt $SOMEDIR/haveDbs.txt > $SOMEDIR/needDbs.txt
 
-#for i in `join -v 1 wantDbs.txt haveDbs.txt`; do HGDB_CONF=etc/.hg.conf.hgwdev hgsql $i -Ne "select * from chromInfo" > $SOMEDIR/$i.chromInfo; hgsql "" -Ne "create database $i"; hgsql $i < ~/kent/src/hg/lib/chromInfo.sql; hgsql $i -Ne "load data local infile '$i.chromInfo' into table chromInfo"; hgsql $i < gbLoaded.sql; done
+#(cd $SOMEDIR; for i in `join -v 1 wantDbs.txt haveDbs.txt`; do HGDB_CONF=/data/genbank/etc/.hg.conf.hgwdev hgsql $i -Ne "select * from chromInfo" > $i.chromInfo; hgsql "" -Ne "create database $i"; hgsql $i < ~/kent/src/hg/lib/chromInfo.sql; hgsql $i -Ne "load data local infile '$i.chromInfo' into table chromInfo"; hgsql $i < ~/kent/src/hg/lib/gbLoaded.sql; done)
 # rm SOMEDIR
 
 etc/genbank-dbload
+
+# newly made dbs need to be copied without validation
 
 # check for gbExtFile for need to run gbExtUpdate
 # hgsql hg38 -Ne "select path from gbExtFile" | sed 's?/gbdb/genbank/./data/processed/??' | sed 's?/.*??' | uniq
@@ -57,14 +64,16 @@ sudo mygbcopy hg38 hgFixed
 # build the grep index
 bin/dumpGrepIndex /data/tmp/grepIndex hgFixed
 rsync -av /data/tmp/grepIndex/hgFixed/  hgwdev-101:/data/tmp/grepIndex/hgFixed/  
+# to fix errors --
+# cd etc
+# ./deleteLocks.sh petMar3 gbTmp .hg.conf.hgwdev 
+# ./validateDb.sh /cluster/home/braney/.hg.conf.hgwdev  petMar3 gbTmp  gbPerAssemblyTables.txt  yes 
+# ./copyDbDev.sh petMar3  gbTmp /cluster/home/braney/.hg.conf.hgwdev  gbPerAssemblyTables.txt  yes 
 
 # rsync hgFixed
-#updateMeta.sh
-
+etc/copyMetaDev.sh
 
 # rsync the assemblies
+etc/copyAssemblies.sh
 
-#sh
-
-
-echo "$(hostname) genbank build completed"
+echo "genbank build completed on $(hostname)"
