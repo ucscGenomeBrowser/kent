@@ -6,13 +6,9 @@
 #               sample  category  value
 #       outFile is filename suitable for writing graphic (e.g. in PNG format)
 
-if (require("showtext",character.only=TRUE)){
-    library(showtext)
-    showtext_auto()
-}
 
 # if more than this categories, switch to a display mode that is easier to read
-DENSECUTOFF <- 35
+DENSECUTOFF <- 54
 
 drawBoxPlot <- function(df) {
     # it's not easy at all in R to add optional arguments via a list object, so duplicate code
@@ -82,7 +78,7 @@ drawBoxPlot <- function(df) {
 
 drawBarPlot <- function(df) {
     yLimit <- c(-(max*.02), max+ (max*.03))
-    par(mar=c(marBottom,marLeft,3,1) + 0.1, mgp=c(2,1,0), font.main=1)
+    par(mar=c(marBottom,marLeft,3,1) + 0.1, mgp=c(2.5,1,0), font.main=1)
     df <- df[(order(match(df$category, colorDf$category))),]
     exprPlot <- barplot(df$value, ylab=yLabel, ylim=yLimit,
                         main=title,
@@ -103,7 +99,7 @@ drawBarPlot <- function(df) {
     rot <- 45
     size <- 1
     text(exprPlot, ymin - adjust, cex=size, labels=labels, srt=rot, xpd=TRUE,
-        adj=c(1,.5), col="black")
+        adj=c(1,.5), col="black") # does this have any effect?
     text(exprPlot, ymin - adjust, cex=size, labels=labels, srt=rot, xpd=TRUE,
         adj=c(1,.5), col=colorsHex)
 }
@@ -114,8 +110,16 @@ units <- args[2]
 colorFile <- args[3]
 dataFile <- args[4]
 outFile <- args[5]
-
 name2 <- args[6]
+# this argument can be used by QA to check if the new fonts look very different from the old fonts
+# see #22838
+useOldFonts <- (!is.na(args[7]) && args[7]=="1")
+
+if (!useOldFonts && require("showtext",character.only=TRUE)) {
+    library(showtext)
+    showtext_auto()
+    showtext_opts(dpi = 72)
+}
 
 # read colors file
 colorDf = read.table(colorFile, sep="\t", header=TRUE)

@@ -28,6 +28,33 @@
 #include "halBlockViz.h"
 #endif
 
+/*
++------------------+------------------+------+-----+---------+-------+
+| Field            | Type             | Null | Key | Default | Extra |
++------------------+------------------+------+-----+---------+-------+
+| hubUrl           | longblob         | NO   | PRI | NULL    |       |
+| shortLabel       | varchar(255)     | NO   |     | NULL    |       |
+| longLabel        | varchar(255)     | NO   |     | NULL    |       |
+| registrationTime | varchar(255)     | NO   |     | NULL    |       |
+| dbCount          | int(10) unsigned | NO   |     | NULL    |       |
+| dbList           | blob             | YES  |     | NULL    |       |
+| descriptionUrl   | longblob         | YES  |     | NULL    |       |
++------------------+------------------+------+-----+---------+-------+
+*/
+
+struct hubPublic
+/* Table of public track data hub connections. */
+    {
+    struct hubPublic *next;  /* Next in singly linked list. */
+    char *hubUrl;	/* URL to hub.ra file */
+    char *shortLabel;	/* Hub short label. */
+    char *longLabel;	/* Hub long label. */
+    char *registrationTime;	/* Time first registered */
+    unsigned dbCount;	/* Number of databases hub has data for. */
+    char *dbList;	/* Comma separated list of databases. */
+    char *descriptionUrl;	/* URL to description HTML */
+    };
+
 /* Global Variables */
 struct cart *cart;             /* CGI and other variables */
 struct hash *oldVars = NULL;
@@ -35,14 +62,166 @@ static struct hash *trackCounter = NULL;
 static long totalTracks = 0;
 static boolean measureTiming = FALSE;	/* set by CGI parameters */
 static boolean allTrackSettings = FALSE;	/* checkbox setting */
-static struct slName *publicHubShortLabels = NULL;
 static char **shortLabels = NULL;	/* public hub short labels in array */
 static int publicHubCount = 0;
+static struct hubPublic *publicHubList = NULL;
 static char *defaultHub = "Plants";
 static long enteredMainTime = 0;	/* will become = clock1000() on entry */
 		/* to allow calculation of when to bail out, taking too long */
 static long timeOutSeconds = 100;
 static boolean timedOut = FALSE;
+static boolean jsonOutput = FALSE;	/* turns on when pathInfo present */
+
+/* ######################################################################### */
+
+/* json output needs to encode special characters in strings:
+  " - quotation mark
+  / - forward slash
+  \ - back slash
+  \n - new line
+  \r - carriage return
+  \t - tab
+*/
+
+static char* jsonEscape(char *jsonString)
+/* escape any of the special characters in the string for json output */
+{
+if (NULL == jsonString)
+    return NULL;
+/* going to alternate the result string between a and b so the returned
+ * string from replaceChars() can be freemem'ed
+ * returned result from here should also be freemem'ed
+ */
+static char *a = NULL;
+static char *b = NULL;
+/* replace back slash first since the other encodings will be adding
+ * the back slash
+ */
+a = replaceChars(jsonString, "\\", "\\\\");	/* \ -> \\ */
+b = replaceChars(a, "\"", "\\\"");	/* " -> \" */
+freeMem(a);
+a = replaceChars(b, "/", "\\/");	/* / -> \/ */
+freeMem(b);
+b = replaceChars(a, "\n", "\\\n");	/* \n -> \\n */
+freeMem(a);
+a = replaceChars(b, "\r", "\\\r");	/* \r -> \\r */
+freeMem(b);
+b = replaceChars(a, "\t", "\\\t");	/* \t -> \\t */
+return b;
+}
+
+static void jsonInteger(FILE *f, char *tag, int value)
+/* output one json interger: "tag":value appropriately quoted and encoded */
+{
+fprintf(f,"\"%s\":%d",tag, value);
+}
+
+static void jsonString(FILE *f, char *tag, char *value)
+/* output one json string: "tag":"value" appropriately quoted and encoded */
+{
+fprintf(f,"\"%s\":",tag);
+char *a = jsonEscape(value);
+if (isEmpty(a))
+    fprintf(f, "%s", "null");
+else
+    fprintf(f, "\"%s\"", a);
+freeMem(a);
+}
+
+static void hubPublicJsonOutput(struct hubPublic *el, FILE *f) 
+/* Print out hubPublic element in JSON format. */
+{
+fputc('{',f);
+jsonString(f, "hubUrl", el->hubUrl);
+fputc(',',f);
+jsonString(f, "shortLabel", el->shortLabel);
+fputc(',',f);
+jsonString(f, "longLabel", el->longLabel);
+fputc(',',f);
+jsonString(f, "registrationTime", el->registrationTime);
+fputc(',',f);
+jsonInteger(f, "dbCount", el->dbCount);
+fputc(',',f);
+jsonString(f, "dbList", el->dbList);
+fputc(',',f);
+jsonString(f, "descriptionUrl", el->descriptionUrl);
+fputc('}',f);
+}
+
+static int publicHubCmpCase(const void *va, const void *vb)
+/* Compare two slNames, ignore case. */
+{
+const struct hubPublic *a = *((struct hubPublic **)va);
+const struct hubPublic *b = *((struct hubPublic **)vb);
+return strcasecmp(a->shortLabel, b->shortLabel);
+}
+
+static void publicHubSortCase(struct hubPublic **pList)
+/* Sort slName list, ignore case. */
+{
+slSort(pList, publicHubCmpCase);
+}
+
+static struct hubPublic *hubPublicLoad(char **row)
+/* Load a hubPublic from row fetched with select * from hubPublic
+ * from database.  Dispose of this with hubPublicFree(). */
+{
+struct hubPublic *ret;
+
+AllocVar(ret);
+ret->hubUrl = cloneString(row[0]);
+ret->shortLabel = cloneString(row[1]);
+ret->longLabel = cloneString(row[2]);
+ret->registrationTime = cloneString(row[3]);
+ret->dbCount = sqlUnsigned(row[4]);
+ret->dbList = cloneString(row[5]);
+// if (row[6])
+    ret->descriptionUrl = cloneString(row[6]);
+// else
+//     ret->descriptionUrl = cloneString("");
+return ret;
+}
+
+static struct hubPublic *hubPublicLoadAll()
+{
+struct hubPublic *list = NULL;
+struct sqlConnection *conn = hConnectCentral();
+// Build a query to find all public hub URL's
+struct dyString *query = sqlDyStringCreate("select * from %s",
+                                           hubPublicTableName());
+struct sqlResult *sr = sqlGetResult(conn, query->string);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct hubPublic *el = hubPublicLoad(row);
+    slAddHead(&list, el);
+    }
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
+publicHubSortCase(&list);
+int listSize = slCount(list);
+AllocArray(shortLabels, listSize);
+struct hubPublic *el = list;
+int i = 0;
+for ( ; el != NULL; el = el->next )
+    {
+    shortLabels[i++] = el->shortLabel;
+    ++publicHubCount;
+    }
+return list;
+}
+
+#ifdef NOT
+static void startHtml(char *title)
+{
+printf ("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n<html>\n<head><title>%s</title></head><body>\n", title);
+}
+
+static void endHtml()
+{
+printf ("</body></html>\n");
+}
+#endif
 
 static boolean timeOutReached()
 {
@@ -314,32 +493,6 @@ if (trackCounter->elCount)
 hPrintf("</ul>\n");
 }
 
-static void getPublicHubList()
-/* obtain shortLabel from all public hubs */
-{
-struct sqlConnection *conn = hConnectCentral();
-// Build a query to find all public hub URL's
-struct dyString *query = sqlDyStringCreate("select shortLabel from %s",
-                                           hubPublicTableName());
-struct sqlResult *sr = sqlGetResult(conn, query->string);
-char **row;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    slNameStore(&publicHubShortLabels, row[0]);
-    }
-sqlFreeResult(&sr);
-slNameSortCase(&publicHubShortLabels);
-int listSize = slCount(publicHubShortLabels);
-AllocArray(shortLabels, listSize);
-struct slName *el = publicHubShortLabels;
-int i = 0;
-for ( ; el != NULL; el = el->next )
-    {
-    shortLabels[i++] = el->name;
-    ++publicHubCount;
-    }
-}	/*	static void getPublicHubList()	*/
-
 static char *urlFromShortLabel(char *shortLabel)
 {
 char hubUrl[1024];
@@ -354,16 +507,29 @@ hDisconnectCentral(&conn);
 return cloneString(hubUrl);
 }
 
+void jsonPublicHubs()
+{
+struct hubPublic *el = publicHubList;
+hPrintf("{\"publicHubs\":[");
+for ( ; el != NULL; el = el->next )
+    {
+    hubPublicJsonOutput(el, stdout);
+    if (el->next)
+       hPrintf(",");
+    }
+hPrintf("]}\n");
+}
+
 void doMiddle(struct cart *theCart)
 /* Set up globals and make web page */
 {
-getPublicHubList();	/* populates slName publicHubShortLabels	*/
+// struct hubPublic *hubList = hubPublicLoadAll();
+publicHubList = hubPublicLoadAll();
 cart = theCart;
 measureTiming = hPrintStatus() && isNotEmpty(cartOptionalString(cart, "measureTiming"));
 measureTiming = TRUE;
 char *database = NULL;
 char *genome = NULL;
-
 
 getDbAndGenome(cart, &database, &genome, oldVars);
 initGenbankTableNames(database);
@@ -377,10 +543,23 @@ knetUdcInstall();
 
 char *pathInfo = getenv("PATH_INFO");
 
-if ((NULL == pathInfo) || strlen(pathInfo) < 1) {
-   pathInfo = cloneString("noPathInfo");
-}
+if ((NULL == pathInfo) || strlen(pathInfo) < 1)
+    {
+    pathInfo = cloneString("noPathInfo");
+    }
+else
+    {
+    jsonOutput = TRUE;
+    }
 
+if (jsonOutput)
+    {
+//    startHtml("json output example");
+//    hPrintf("<br><a href='http://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi'>return to hubApi</a><br><br>\n");
+    jsonPublicHubs();
+//    endHtml();
+    return;
+    }
 cartWebStart(cart, database, "access mechanism to hub data resources");
 
 char *goOtherHub = cartUsualString(cart, "goOtherHub", defaultHub);
@@ -392,6 +571,10 @@ char *urlInput = urlDropDown;	/* assume public hub */
 if (sameWord("go", goOtherHub))	/* requested other hub URL */
     urlInput = otherHubUrl;
 
+hPrintf("<h2>Example URLs to return json data structures:</h2>\n");
+hPrintf("<ul>\n");
+hPrintf("<li><a href='/cgi-bin/hubApi/list/publicHubs'>list public hubs</a> <em>/cgi-bin/hubApi/list/publicHubs</em></li>\n");
+hPrintf("</ul>\n");
 long lastTime = clock1000();
 struct trackHub *hub = trackHubOpen(urlInput, "");
 if (measureTiming)
@@ -400,7 +583,7 @@ if (measureTiming)
     hPrintf("<em>hub open time: %ld millis</em><br>\n", thisTime - lastTime);
     }
 
-hPrintf("<h2>cart dump</h2>");
+hPrintf("<h4>cart dump</h4>");
 hPrintf("<pre>\n");
 cartDump(cart);
 hPrintf("</pre>\n");

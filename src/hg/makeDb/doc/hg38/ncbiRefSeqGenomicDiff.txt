@@ -97,3 +97,7 @@ EOF
     bedToBigBed -type=bed9+ -tab -as=$HOME/kent/src/hg/lib/txAliDiff.as $pre.bed \
         /hive/data/genomes/$db/chrom.sizes $pre.bb
     ln -s `pwd`/$pre.bb /gbdb/hg38/ncbiRefSeq/$pre.bb
+
+#########################################################################
+# Updated 2019-01-25 to include patch sequences (p12), see patchUpdate.12.txt
+# Eventually this process will be folded into doNcbiRefSeq.pl .
