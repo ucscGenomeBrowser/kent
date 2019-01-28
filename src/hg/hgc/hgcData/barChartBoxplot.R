@@ -78,7 +78,7 @@ drawBoxPlot <- function(df) {
 
 drawBarPlot <- function(df) {
     yLimit <- c(-(max*.02), max+ (max*.03))
-    par(mar=c(marBottom,marLeft,3,1) + 0.1, mgp=c(2,1,0), font.main=1)
+    par(mar=c(marBottom,marLeft,3,1) + 0.1, mgp=c(2.5,1,0), font.main=1)
     df <- df[(order(match(df$category, colorDf$category))),]
     exprPlot <- barplot(df$value, ylab=yLabel, ylim=yLimit,
                         main=title,
