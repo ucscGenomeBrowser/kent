@@ -56,8 +56,8 @@ struct hubPublic
     };
 
 /* Global Variables */
-struct cart *cart;             /* CGI and other variables */
-struct hash *oldVars = NULL;
+static struct cart *cart;             /* CGI and other variables */
+static struct hash *oldVars = NULL;
 static struct hash *trackCounter = NULL;
 static long totalTracks = 0;
 static boolean measureTiming = FALSE;	/* set by CGI parameters */
@@ -70,7 +70,6 @@ static long enteredMainTime = 0;	/* will become = clock1000() on entry */
 		/* to allow calculation of when to bail out, taking too long */
 static long timeOutSeconds = 100;
 static boolean timedOut = FALSE;
-static boolean jsonOutput = FALSE;	/* turns on when pathInfo present */
 
 /* ######################################################################### */
 
@@ -507,7 +506,7 @@ hDisconnectCentral(&conn);
 return cloneString(hubUrl);
 }
 
-void jsonPublicHubs()
+static void jsonPublicHubs()
 {
 struct hubPublic *el = publicHubList;
 hPrintf("{\"publicHubs\":[");
@@ -520,7 +519,57 @@ for ( ; el != NULL; el = el->next )
 hPrintf("]}\n");
 }
 
-void doMiddle(struct cart *theCart)
+#define MAX_PATH_INFO 32
+static void apiList(char *words[MAX_PATH_INFO])
+/* 'list' function */
+{
+if (sameWord("publicHubs", words[1]))
+    jsonPublicHubs();
+else if (sameWord("genomes", words[1]))
+    {
+    char *hubUrl = cgiOptionalString("hubUrl");
+    if (isNotEmpty(hubUrl))
+	{
+        hPrintf("# list genomes for hubUrl: '%s'\n", hubUrl);
+	}
+    else
+	errAbort("# must supply hubUrl='http:...' some URL to a hub for /list/genomes\n");
+    }
+else
+    errAbort("# ERROR: do not recognize '%s' for 'list' function\n", words[1]);
+}
+
+static struct hash *apiFunctionHash = NULL;
+
+static void setupFunctionHash()
+{
+if (apiFunctionHash)
+    return;
+
+apiFunctionHash = hashNew(0);
+hashAdd(apiFunctionHash, "list", &apiList);
+}
+
+static void apiFunctionSwitch(char *pathInfo)
+/* given a pathInfo string: /command/subCommand/etc...
+ *  parse that and decide on which function to acll
+ */
+{
+/* the leading slash has been removed from the pathInfo, therefore, the
+ * chop will have the first word in words[0]
+ */
+char *words[MAX_PATH_INFO];/*expect no more than MAX_PATH_INFO number of words*/
+int wordCount = chopByChar(pathInfo, '/', words, ArraySize(words));
+if (wordCount < 2)
+    errAbort("ERROR: no commands found in path info\n");
+
+void (*apiFunction)(char **) = hashMustFindVal(apiFunctionHash, words[0]);
+
+(*apiFunction)(words);
+
+}
+
+static void doMiddle(struct cart *theCart)
 /* Set up globals and make web page */
 {
 // struct hubPublic *hubList = hubPublicLoadAll();
@@ -543,23 +592,15 @@ knetUdcInstall();
 
 char *pathInfo = getenv("PATH_INFO");
 
-if ((NULL == pathInfo) || strlen(pathInfo) < 1)
+if (isNotEmpty(pathInfo))
     {
-    pathInfo = cloneString("noPathInfo");
-    }
-else
-    {
-    jsonOutput = TRUE;
-    }
-
-if (jsonOutput)
-    {
-//    startHtml("json output example");
-//    hPrintf("<br><a href='http://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi'>return to hubApi</a><br><br>\n");
-    jsonPublicHubs();
-//    endHtml();
+    /* skip the first leading slash to simplify chopByChar parsing */
+    pathInfo += 1;
+    setupFunctionHash();
+    apiFunctionSwitch(pathInfo);
     return;
     }
+
 cartWebStart(cart, database, "access mechanism to hub data resources");
 
 char *goOtherHub = cartUsualString(cart, "goOtherHub", defaultHub);
@@ -574,6 +615,7 @@ if (sameWord("go", goOtherHub))	/* requested other hub URL */
 hPrintf("<h2>Example URLs to return json data structures:</h2>\n");
 hPrintf("<ul>\n");
 hPrintf("<li><a href='/cgi-bin/hubApi/list/publicHubs'>list public hubs</a> <em>/cgi-bin/hubApi/list/publicHubs</em></li>\n");
+hPrintf("<li><a href='/cgi-bin/hubApi/list/genomes?hubUrl=%s'>list genomes from specified hub</a> <em>/cgi-bin/hubApi/list/genomes?hubUrl='%s'</em></li>\n", urlInput, urlInput);
 hPrintf("</ul>\n");
 long lastTime = clock1000();
 struct trackHub *hub = trackHubOpen(urlInput, "");
@@ -627,7 +669,7 @@ hPrintf("<p>URL: %s - %s<br>\n", urlInput, sameWord("go",goPublicHub) ? "public 
 hPrintf("name: %s<br>\n", hub->shortLabel);
 hPrintf("description: %s<br>\n", hub->longLabel);
 hPrintf("default db: '%s'<br>\n", isEmpty(hub->defaultDb) ? "(none available)" : hub->defaultDb);
-printf("pathInfo:'%s'<br>\ndocRoot:'%s'<br>\n", pathInfo, docRoot);
+printf("docRoot:'%s'<br>\n", docRoot);
 
 if (hub->genomeList)
     genomeList(hub);
