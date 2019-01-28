@@ -110,80 +110,41 @@ b = replaceChars(a, "\t", "\\\t");	/* \t -> \\t */
 return b;
 }
 
+static void jsonInteger(FILE *f, char *tag, int value)
+/* output one json interger: "tag":value appropriately quoted and encoded */
+{
+fprintf(f,"\"%s\":%d",tag, value);
+}
+
+static void jsonString(FILE *f, char *tag, char *value)
+/* output one json string: "tag":"value" appropriately quoted and encoded */
+{
+fprintf(f,"\"%s\":",tag);
+char *a = jsonEscape(value);
+if (isEmpty(a))
+    fprintf(f, "%s", "null");
+else
+    fprintf(f, "\"%s\"", a);
+freeMem(a);
+}
+
 static void hubPublicJsonOutput(struct hubPublic *el, FILE *f) 
 /* Print out hubPublic element in JSON format. */
 {
 fputc('{',f);
-fputc('"',f);
-fprintf(f,"hubUrl");
-fputc('"',f);
-fputc(':',f);
-fputc('"',f);
-char *a = jsonEscape(el->hubUrl);
-fprintf(f, "%s", a);
-freeMem(a);
-fputc('"',f);
+jsonString(f, "hubUrl", el->hubUrl);
 fputc(',',f);
-fputc('"',f);
-fprintf(f,"shortLabel");
-fputc('"',f);
-fputc(':',f);
-fputc('"',f);
-a = jsonEscape(el->shortLabel);
-fprintf(f, "%s", a);
-freeMem(a);
-fputc('"',f);
+jsonString(f, "shortLabel", el->shortLabel);
 fputc(',',f);
-fputc('"',f);
-fprintf(f,"longLabel");
-fputc('"',f);
-fputc(':',f);
-fputc('"',f);
-a = jsonEscape(el->longLabel);
-fprintf(f, "%s", a);
-freeMem(a);
-fputc('"',f);
+jsonString(f, "longLabel", el->longLabel);
 fputc(',',f);
-fputc('"',f);
-fprintf(f,"registrationTime");
-fputc('"',f);
-fputc(':',f);
-fputc('"',f);
-a = jsonEscape(el->registrationTime);
-fprintf(f, "%s", a);
-freeMem(a);
-fputc('"',f);
+jsonString(f, "registrationTime", el->registrationTime);
 fputc(',',f);
-fputc('"',f);
-fprintf(f,"dbCount");
-fputc('"',f);
-fputc(':',f);
-fprintf(f, "%u", el->dbCount);
+jsonInteger(f, "dbCount", el->dbCount);
 fputc(',',f);
-fputc('"',f);
-fprintf(f,"dbList");
-fputc('"',f);
-fputc(':',f);
-fputc('"',f);
-a = jsonEscape(el->dbList);
-fprintf(f, "%s", a);
-freeMem(a);
-fputc('"',f);
+jsonString(f, "dbList", el->dbList);
 fputc(',',f);
-fputc('"',f);
-fprintf(f,"descriptionUrl");
-fputc('"',f);
-fputc(':',f);
-a = jsonEscape(el->descriptionUrl);
-if (isEmpty(a))
-    fprintf(f, "%s", "null");
-else
-    {
-    fputc('"',f);
-    fprintf(f, "%s", a);
-    fputc('"',f);
-}
-freeMem(a);
+jsonString(f, "descriptionUrl", el->descriptionUrl);
 fputc('}',f);
 }
 
