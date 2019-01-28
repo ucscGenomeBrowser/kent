@@ -444,11 +444,13 @@ while ((hel = hashNext(&hc)) != NULL)
 hPrintf("    </ul>\n");
 }
 
-static void genomeList (struct trackHub *hubTop)
+static struct slName *genomeList(struct trackHub *hubTop)
 /* follow the pointers from the trackHub to trackHubGenome and around
  * in a circle from one to the other to find all hub resources
  */
 {
+struct slName *retList = NULL;
+
 long totalAssemblyCount = 0;
 struct trackHubGenome *genome = hubTop->genomeList;
 
@@ -458,6 +460,8 @@ long lastTime = clock1000();
 for ( ; genome; genome = genome->next )
     {
     ++totalAssemblyCount;
+    struct slName *el = slNameNew(genome->name);
+    slAddHead(&retList, el);
     if (genome->organism)
 	{
 	hPrintf("<li>%s - %s - %s</li>\n", genome->organism, genome->name, genome->description);
@@ -490,7 +494,8 @@ if (trackCounter->elCount)
     hPrintf("    </ul>\n");
     }
 hPrintf("</ul>\n");
-}
+return retList;
+}	/*	static struct slName *genomeList (struct trackHub *hubTop) */
 
 static char *urlFromShortLabel(char *shortLabel)
 {
@@ -509,14 +514,14 @@ return cloneString(hubUrl);
 static void jsonPublicHubs()
 {
 struct hubPublic *el = publicHubList;
-hPrintf("{\"publicHubs\":[");
+printf("{\"publicHubs\":[");
 for ( ; el != NULL; el = el->next )
     {
     hubPublicJsonOutput(el, stdout);
     if (el->next)
-       hPrintf(",");
+       printf(",");
     }
-hPrintf("]}\n");
+printf("]}\n");
 }
 
 #define MAX_PATH_INFO 32
@@ -530,7 +535,25 @@ else if (sameWord("genomes", words[1]))
     char *hubUrl = cgiOptionalString("hubUrl");
     if (isNotEmpty(hubUrl))
 	{
-        hPrintf("# list genomes for hubUrl: '%s'\n", hubUrl);
+        struct trackHub *hub = trackHubOpen(hubUrl, "");
+        if (hub->genomeList)
+	    {
+            fputc('{',stdout);
+            jsonString(stdout, "hubUrl", hubUrl);
+            fputc(',',stdout);
+            printf("\"genomes\":[");
+	    struct slName *theList = genomeList(hub);
+            slNameSort(&theList);
+            struct slName *el = theList;
+            for ( ; el ; el = el->next )
+		{
+		char *n = jsonEscape(el->name);
+                printf("\"%s\"", n);
+		if (el->next)
+		    fputc(',',stdout);
+		}
+            printf("]}\n");
+	    }
 	}
     else
 	errAbort("# must supply hubUrl='http:...' some URL to a hub for /list/genomes\n");
@@ -555,6 +578,8 @@ static void apiFunctionSwitch(char *pathInfo)
  *  parse that and decide on which function to acll
  */
 {
+hPrintDisable();	/* turn off all normal HTML output */
+
 /* the leading slash has been removed from the pathInfo, therefore, the
  * chop will have the first word in words[0]
  */
@@ -672,7 +697,7 @@ hPrintf("default db: '%s'<br>\n", isEmpty(hub->defaultDb) ? "(none available)" :
 printf("docRoot:'%s'<br>\n", docRoot);
 
 if (hub->genomeList)
-    genomeList(hub);
+    (void) genomeList(hub);	/* ignore returned list */
 
 hPrintf("</p>\n");
 
