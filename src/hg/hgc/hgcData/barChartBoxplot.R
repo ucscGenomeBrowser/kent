@@ -6,10 +6,6 @@
 #               sample  category  value
 #       outFile is filename suitable for writing graphic (e.g. in PNG format)
 
-if (require("showtext",character.only=TRUE)){
-    library(showtext)
-    showtext_auto()
-}
 
 # if more than this categories, switch to a display mode that is easier to read
 DENSECUTOFF <- 35
@@ -114,8 +110,13 @@ units <- args[2]
 colorFile <- args[3]
 dataFile <- args[4]
 outFile <- args[5]
-
 name2 <- args[6]
+useOldFonts <- (!is.na(args[7]) && args[7]=="1")
+
+if (!useOldFonts && require("showtext",character.only=TRUE)) {
+    library(showtext)
+    showtext_auto()
+}
 
 # read colors file
 colorDf = read.table(colorFile, sep="\t", header=TRUE)
