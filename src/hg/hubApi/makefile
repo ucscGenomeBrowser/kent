@@ -16,3 +16,5 @@ compile:: $O
 	${CC} $O ${MYLIBS} ${L}
 	mv ${AOUT} $A${EXE}
 
+test::
+	cd tests && make test

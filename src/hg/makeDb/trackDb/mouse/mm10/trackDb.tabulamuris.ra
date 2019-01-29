@@ -19,6 +19,7 @@ barChartSampleUrl /gbdb/mm10/tabulamuris/clusters.tsv
 defaultLabelFields name2
 labelFields name2,name
 bigDataUrl /gbdb/mm10/tabulamuris/barChart.bb
+html singleCell
 parent singleCell
 
 track TabulaMurisFacsDataset
