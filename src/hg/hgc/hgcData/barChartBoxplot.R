@@ -7,7 +7,11 @@
 #       outFile is filename suitable for writing graphic (e.g. in PNG format)
 
 
-# if more than this categories, switch to a display mode that is easier to read
+# if more than this categories, switch to a display mode that is easier to read:
+# - instead of plotting boxplot from left to right, plot from top to bottom
+# - box plot labels are horizontal
+# - labels and number are printed in black, not colored
+
 DENSECUTOFF <- 54
 
 drawBoxPlot <- function(df) {
