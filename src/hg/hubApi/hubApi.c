@@ -23,6 +23,7 @@
 #include "vcf.h"
 #include "bedTabix.h"
 #include "bamFile.h"
+#include "jsonParse.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
@@ -73,53 +74,17 @@ static boolean timedOut = FALSE;
 
 /* ######################################################################### */
 
-/* json output needs to encode special characters in strings:
-  " - quotation mark
-  / - forward slash
-  \ - back slash
-  \n - new line
-  \r - carriage return
-  \t - tab
-*/
-
-static char* jsonEscape(char *jsonString)
-/* escape any of the special characters in the string for json output */
-{
-if (NULL == jsonString)
-    return NULL;
-/* going to alternate the result string between a and b so the returned
- * string from replaceChars() can be freemem'ed
- * returned result from here should also be freemem'ed
- */
-static char *a = NULL;
-static char *b = NULL;
-/* replace back slash first since the other encodings will be adding
- * the back slash
- */
-a = replaceChars(jsonString, "\\", "\\\\");	/* \ -> \\ */
-b = replaceChars(a, "\"", "\\\"");	/* " -> \" */
-freeMem(a);
-a = replaceChars(b, "/", "\\/");	/* / -> \/ */
-freeMem(b);
-b = replaceChars(a, "\n", "\\\n");	/* \n -> \\n */
-freeMem(a);
-a = replaceChars(b, "\r", "\\\r");	/* \r -> \\r */
-freeMem(b);
-b = replaceChars(a, "\t", "\\\t");	/* \t -> \\t */
-return b;
-}
-
 static void jsonInteger(FILE *f, char *tag, int value)
 /* output one json interger: "tag":value appropriately quoted and encoded */
 {
 fprintf(f,"\"%s\":%d",tag, value);
 }
 
-static void jsonString(FILE *f, char *tag, char *value)
+static void jsonStringOut(FILE *f, char *tag, char *value)
 /* output one json string: "tag":"value" appropriately quoted and encoded */
 {
 fprintf(f,"\"%s\":",tag);
-char *a = jsonEscape(value);
+char *a = jsonStringEscape(value);
 if (isEmpty(a))
     fprintf(f, "%s", "null");
 else
@@ -131,19 +96,19 @@ static void hubPublicJsonOutput(struct hubPublic *el, FILE *f)
 /* Print out hubPublic element in JSON format. */
 {
 fputc('{',f);
-jsonString(f, "hubUrl", el->hubUrl);
+jsonStringOut(f, "hubUrl", el->hubUrl);
 fputc(',',f);
-jsonString(f, "shortLabel", el->shortLabel);
+jsonStringOut(f, "shortLabel", el->shortLabel);
 fputc(',',f);
-jsonString(f, "longLabel", el->longLabel);
+jsonStringOut(f, "longLabel", el->longLabel);
 fputc(',',f);
-jsonString(f, "registrationTime", el->registrationTime);
+jsonStringOut(f, "registrationTime", el->registrationTime);
 fputc(',',f);
 jsonInteger(f, "dbCount", el->dbCount);
 fputc(',',f);
-jsonString(f, "dbList", el->dbList);
+jsonStringOut(f, "dbList", el->dbList);
 fputc(',',f);
-jsonString(f, "descriptionUrl", el->descriptionUrl);
+jsonStringOut(f, "descriptionUrl", el->descriptionUrl);
 fputc('}',f);
 }
 
@@ -342,9 +307,10 @@ errCatchFree(&errCatch);
 return retVal;
 }	/* static int bbiBriefMeasure() */
 
-static void trackList(struct trackDb *tdb, struct trackHubGenome *genome)
+static struct slName *trackList(struct trackDb *tdb, struct trackHubGenome *genome)
 /* process the track list to show all tracks */
 {
+struct slName *retList = NULL;	/* for return of track list for 'genome' */
 if (tdb)
     {
     struct hash *countTracks = hashNew(0);
@@ -352,6 +318,8 @@ if (tdb)
     struct trackDb *track = tdb;
     for ( ; track; track = track->next )
 	{
+        struct slName *el = slNameNew(track->track);
+        slAddHead(&retList, el);
         char *bigDataUrl = hashFindVal(track->settingsHash, "bigDataUrl");
       char *compositeTrack = hashFindVal(track->settingsHash, "compositeTrack");
 	char *superTrack = hashFindVal(track->settingsHash, "superTrack");
@@ -422,11 +390,13 @@ if (tdb)
 	}
     hPrintf("    </ul>\n");
     }
-}	/*	static void trackList(struct trackDb *tdb)	*/
+return retList;
+}	/*	static struct slName *trackList()	*/
 
-static void assemblySettings(struct trackHubGenome *genome)
+static struct slName *assemblySettings(struct trackHubGenome *genome)
 /* display all the assembly 'settingsHash' */
 {
+struct slName *retList = NULL;
 hPrintf("    <ul>\n");
 struct hashEl *hel;
 struct hashCookie hc = hashFirst(genome->settingsHash);
@@ -436,17 +406,20 @@ while ((hel = hashNext(&hc)) != NULL)
     if (sameWord("trackDb", hel->name))	/* examine the trackDb structure */
 	{
         struct trackDb *tdb = trackHubTracksForGenome(genome->trackHub, genome);
-	trackList(tdb, genome);
+	retList = trackList(tdb, genome);
         }
     if (timeOutReached())
 	break;
     }
 hPrintf("    </ul>\n");
+return retList;
 }
 
-static struct slName *genomeList(struct trackHub *hubTop)
+static struct slName *genomeList(struct trackHub *hubTop, struct slName **dbTrackList, char *selectGenome)
 /* follow the pointers from the trackHub to trackHubGenome and around
  * in a circle from one to the other to find all hub resources
+ * return slName list of the genomes in this track hub
+ * optionally, return the trackList from this hub for the specified genome
  */
 {
 struct slName *retList = NULL;
@@ -459,6 +432,11 @@ hPrintf("<ul>\n");
 long lastTime = clock1000();
 for ( ; genome; genome = genome->next )
     {
+    if (selectGenome)	/* is only one genome requested ?	*/
+	{
+	if ( differentStringNullOk(selectGenome, genome->name) )
+	    continue;
+	}
     ++totalAssemblyCount;
     struct slName *el = slNameNew(genome->name);
     slAddHead(&retList, el);
@@ -471,7 +449,11 @@ for ( ; genome; genome = genome->next )
 	hPrintf("<li>%s</li>\n", genome->name);
 	}
     if (genome->settingsHash)
-	assemblySettings(genome);
+	{
+	struct slName *trackList = assemblySettings(genome);
+        if (dbTrackList)
+	    *dbTrackList = trackList;
+        }
     if (measureTiming)
 	{
 	long thisTime = clock1000();
@@ -482,7 +464,7 @@ for ( ; genome; genome = genome->next )
     }
 if (trackCounter->elCount)
     {
-    hPrintf("    <li>total assembly count: %ld</li>\n", totalAssemblyCount);
+    hPrintf("    <li>total genome assembly count: %ld</li>\n", totalAssemblyCount);
     hPrintf("    <li>%ld total tracks counted, %d different track types:</li>\n", totalTracks, trackCounter->elCount);
     hPrintf("    <ul>\n");
     struct hashEl *hel;
@@ -495,7 +477,7 @@ if (trackCounter->elCount)
     }
 hPrintf("</ul>\n");
 return retList;
-}	/*	static struct slName *genomeList (struct trackHub *hubTop) */
+}	/*	static struct slName *genomeList ()	*/
 
 static char *urlFromShortLabel(char *shortLabel)
 {
@@ -533,38 +515,74 @@ if (sameWord("publicHubs", words[1]))
 else if (sameWord("genomes", words[1]))
     {
     char *hubUrl = cgiOptionalString("hubUrl");
-    if (isNotEmpty(hubUrl))
-	{
-        struct trackHub *hub = trackHubOpen(hubUrl, "");
-        if (hub->genomeList)
-	    {
-            fputc('{',stdout);
-            jsonString(stdout, "hubUrl", hubUrl);
-            fputc(',',stdout);
-            printf("\"genomes\":[");
-	    struct slName *theList = genomeList(hub);
-            slNameSort(&theList);
-            struct slName *el = theList;
-            for ( ; el ; el = el->next )
-		{
-		char *n = jsonEscape(el->name);
-                printf("\"%s\"", n);
-		if (el->next)
-		    fputc(',',stdout);
-		}
-            printf("]}\n");
-	    }
-	}
-    else
+    if (isEmpty(hubUrl))
 	errAbort("# must supply hubUrl='http:...' some URL to a hub for /list/genomes\n");
+
+    struct trackHub *hub = trackHubOpen(hubUrl, "");
+    if (hub->genomeList)
+	{
+	fputc('{',stdout);
+	jsonStringOut(stdout, "hubUrl", hubUrl);
+	fputc(',',stdout);
+	printf("\"genomes\":[");
+	struct slName *theList = genomeList(hub, NULL, NULL);
+	slNameSort(&theList);
+	struct slName *el = theList;
+	for ( ; el ; el = el->next )
+	    {
+	    char *a = jsonStringEscape(el->name);
+	    printf("\"%s\"", a);
+	    freeMem(a);
+	    if (el->next)
+		fputc(',',stdout);
+	    }
+	printf("]}\n");
+	}
+    }
+else if (sameWord("tracks", words[1]))
+    {
+    char *hubUrl = cgiOptionalString("hubUrl");
+    char *genome = cgiOptionalString("genome");
+    if (isEmpty(genome) || isEmpty(hubUrl))
+	{
+        if (isEmpty(genome))
+	    warn("# must supply genome='someName' the name of a genome in a hub for /list/tracks\n");
+	if (isEmpty(hubUrl))
+	    warn("# must supply hubUrl='http:...' some URL to a hub for /list/genomes\n");
+	    errAbort("# ERROR exit");
+	}
+    struct trackHub *hub = trackHubOpen(hubUrl, "");
+    if (hub->genomeList)
+	{
+	struct slName *dbTrackList = NULL;
+	(void) genomeList(hub, &dbTrackList, genome);
+	fputc('{',stdout);
+	jsonStringOut(stdout, "hubUrl", hubUrl);
+	fputc(',',stdout);
+	jsonStringOut(stdout, "genome", genome);
+	fputc(',',stdout);
+	printf("\"tracks\":[");
+	slNameSort(&dbTrackList);
+	struct slName *el = dbTrackList;
+	for ( ; el ; el = el->next )
+	    {
+	    char *a = jsonStringEscape(el->name);
+	    printf("\"%s\"", a);
+	    freeMem(a);
+	    if (el->next)
+		fputc(',',stdout);
+	    }
+	printf("]}\n");
+	}
     }
 else
-    errAbort("# ERROR: do not recognize '%s' for 'list' function\n", words[1]);
+    errAbort("# ERROR: do not recognize command '%s' for 'list' function\n", words[1]);
 }
 
 static struct hash *apiFunctionHash = NULL;
 
 static void setupFunctionHash()
+/* initialize the apiFunctionHash */
 {
 if (apiFunctionHash)
     return;
@@ -578,7 +596,7 @@ static void apiFunctionSwitch(char *pathInfo)
  *  parse that and decide on which function to acll
  */
 {
-hPrintDisable();	/* turn off all normal HTML output */
+hPrintDisable();	/* turn off all normal HTML output, doing JSON output */
 
 /* the leading slash has been removed from the pathInfo, therefore, the
  * chop will have the first word in words[0]
@@ -637,11 +655,6 @@ char *urlInput = urlDropDown;	/* assume public hub */
 if (sameWord("go", goOtherHub))	/* requested other hub URL */
     urlInput = otherHubUrl;
 
-hPrintf("<h2>Example URLs to return json data structures:</h2>\n");
-hPrintf("<ul>\n");
-hPrintf("<li><a href='/cgi-bin/hubApi/list/publicHubs'>list public hubs</a> <em>/cgi-bin/hubApi/list/publicHubs</em></li>\n");
-hPrintf("<li><a href='/cgi-bin/hubApi/list/genomes?hubUrl=%s'>list genomes from specified hub</a> <em>/cgi-bin/hubApi/list/genomes?hubUrl='%s'</em></li>\n", urlInput, urlInput);
-hPrintf("</ul>\n");
 long lastTime = clock1000();
 struct trackHub *hub = trackHubOpen(urlInput, "");
 if (measureTiming)
@@ -649,6 +662,15 @@ if (measureTiming)
     long thisTime = clock1000();
     hPrintf("<em>hub open time: %ld millis</em><br>\n", thisTime - lastTime);
     }
+
+struct trackHubGenome *hubGenome = hub->genomeList;
+
+hPrintf("<h2>Example URLs to return json data structures:</h2>\n");
+hPrintf("<ul>\n");
+hPrintf("<li><a href='/cgi-bin/hubApi/list/publicHubs'>list public hubs</a> <em>/cgi-bin/hubApi/list/publicHubs</em></li>\n");
+hPrintf("<li><a href='/cgi-bin/hubApi/list/genomes?hubUrl=%s'>list genomes from specified hub</a> <em>/cgi-bin/hubApi/list/genomes?hubUrl='%s'</em></li>\n", urlInput, urlInput);
+hPrintf("<li><a href='/cgi-bin/hubApi/list/tracks?hubUrl=%s&genome=%s'>list tracks from specified hub and genome</a> <em>/cgi-bin/hubApi/list/genomes?hubUrl='%s&genome=%s'</em></li>\n", urlInput, hubGenome->name, urlInput, hubGenome->name);
+hPrintf("</ul>\n");
 
 hPrintf("<h4>cart dump</h4>");
 hPrintf("<pre>\n");
@@ -697,7 +719,7 @@ hPrintf("default db: '%s'<br>\n", isEmpty(hub->defaultDb) ? "(none available)" :
 printf("docRoot:'%s'<br>\n", docRoot);
 
 if (hub->genomeList)
-    (void) genomeList(hub);	/* ignore returned list */
+    (void) genomeList(hub, NULL, NULL);	/* ignore returned list */
 
 hPrintf("</p>\n");
 
