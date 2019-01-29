@@ -25843,7 +25843,7 @@ else if (sameWord(table, "knownGene"))
     {
     doKnownGene(tdb, item);
     }
-else if (sameWord(table, "ncbiRefSeq") ||
+else if (matchTableOrHandler("ncbiRefSeq", tdb) ||
          sameWord(table, "ncbiRefSeqPsl") ||
          sameWord(table, "ncbiRefSeqCurated") ||
          sameWord(table, "ncbiRefSeqPredicted") )
