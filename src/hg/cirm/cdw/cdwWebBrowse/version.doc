@@ -40,3 +40,4 @@
 0.62 (in progress)
    - Widened display area for pie charts in cdwWebBrowse to avoid truncated labels
    - Changed button from "Download" to "Download All Matching" on analysis/query page
+   - Added count of more things to see by "see more" link on faceted search.
