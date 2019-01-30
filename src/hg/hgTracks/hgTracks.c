@@ -91,7 +91,7 @@ char *excludeVars[] = { "submit", "Submit", "dirty", "hgt.reset",
             "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter", "hgt.imageV1", "hgt.suggestTrack", "hgt.setWidth",
              TRACK_SEARCH,         TRACK_SEARCH_ADD_ROW,     TRACK_SEARCH_DEL_ROW, TRACK_SEARCH_PAGER,
             "hgt.contentType", "hgt.positionInput", "hgt.internal",
-            "sortExp", "sortSim", "hideTracks",
+            "sortExp", "sortSim", "hideTracks", "ignoreCookie",
             NULL };
 
 /* These variables persist from one incarnation of this program to the
@@ -6941,14 +6941,16 @@ for (track = trackList; track != NULL; track = track->next)
         struct track *subtrack;
         for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
             {
-            char *s = cartOptionalString(cart, subtrack->track);
+            char *s = hideTracks ? cgiOptionalString( subtrack->track) : cartOptionalString(cart, subtrack->track);
             if (s == NULL && startsWith("hub_", subtrack->track))
-                s = cartOptionalString(cart, trackHubSkipHubName(subtrack->track));
+                s = hideTracks ? cgiOptionalString(trackHubSkipHubName(subtrack->track)) : cartOptionalString(cart, trackHubSkipHubName(subtrack->track));
 
             char buffer[4096];
             safef(buffer, sizeof buffer, "%s_sel", subtrack->track);
             if (s != NULL)
                 {
+                subtrack->visibility = hTvFromString(s);
+                cartSetString(cart, subtrack->track, s);
                 if (sameString("hide", s))
                     cartSetString(cart, buffer, "0");
                 else

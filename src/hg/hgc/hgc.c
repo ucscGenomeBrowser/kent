@@ -19516,7 +19516,7 @@ bool matchTableOrHandler(char *word, struct trackDb *tdb)
 /* return true if word matches either the table name or the trackHandler setting of the tdb struct */
 {
 char* handler = trackDbSetting(tdb, "trackHandler");
-return (sameWord(word, tdb->table) || (handler==NULL || sameWord(word, handler)));
+return (sameWord(word, tdb->table) || (handler!=NULL && sameWord(word, handler)));
 }
 
 void doLinkedFeaturesSeries(char *track, char *clone, struct trackDb *tdb)
@@ -25843,7 +25843,7 @@ else if (sameWord(table, "knownGene"))
     {
     doKnownGene(tdb, item);
     }
-else if (sameWord(table, "ncbiRefSeq") ||
+else if (matchTableOrHandler("ncbiRefSeq", tdb) ||
          sameWord(table, "ncbiRefSeqPsl") ||
          sameWord(table, "ncbiRefSeqCurated") ||
          sameWord(table, "ncbiRefSeqPredicted") )

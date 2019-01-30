@@ -216,4 +216,11 @@ genePredCheck -db=hg38 ncbiRefSeqOther
 ########## early experiment, not used later
 
 #############################################################################
+# addition of HGMD-restricted subset, Max, Jan 29 2019
+cd /hive/data/genomes/hg38/bed/ncbiRefSeq.p12.2018-08-10
+cat /hive/data/outside/hgmd/2018.4-hgmd-public_hg38.tsv | cut -f7 | sort -u > hgmdTranscripts.txt
+zcat process/hg38.curated.gp.gz | fgrep -f hgmdTranscripts.txt - > hgmd.curated.gp
+hgLoadGenePred -genePredExt hg38 ncbiRefSeqHgmd hgmd.curated.gp
+#############################################################################
+
 
