@@ -11,6 +11,7 @@ group compGeno
 priority 4
 type bigBed 9 +
 mouseOverField mouseOver
+scoreFilterByRange on
 itemRgb on
 labelOnFeature on
 html aaCounts

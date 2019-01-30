@@ -356,14 +356,19 @@ struct tempName pngTn;
 struct dyString *cmd = dyStringNew(0);
 trashDirFile(&pngTn, "hgc", "barChart", ".png");
 
+// to help with QAing the change, we add the "oldFonts" CGI parameter so QA can compare
+// old and new fonts to make sure that things are still readible on mirrors and servers
+// without the new fonts installed. This only needed during the QA phase
+bool useOldFonts = cgiBoolean("oldFonts");
+
 /* Exec R in quiet mode, without reading/saving environment or workspace */
-dyStringPrintf(cmd, "Rscript --vanilla --slave hgcData/barChartBoxplot.R %s '%s' %s %s %s %s",
-                                item, units, colorFile, df, pngTn.forHtml, isEmpty(name2) ? "n/a" : name2);
+dyStringPrintf(cmd, "Rscript --vanilla --slave hgcData/barChartBoxplot.R %s '%s' %s %s %s %s %d",
+                                item, units, colorFile, df, pngTn.forHtml, isEmpty(name2) ? "n/a" : name2, useOldFonts);
 int ret = system(cmd->string);
 if (ret == 0)
     printf("<img src = \"%s\" border=1><br>\n", pngTn.forHtml);
 else
-    warn("Error creating boxplot from sample data");
+    warn("Error creating boxplot from sample data with command: %s", cmd->string);
 }
 
 struct asColumn *asFindColByIx(struct asObject *as, int ix)

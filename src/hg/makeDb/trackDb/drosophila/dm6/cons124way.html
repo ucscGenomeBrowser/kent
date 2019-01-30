@@ -13,6 +13,16 @@ Conserved elements identified by phastCons are also displayed in
 this track.
 </p>
 <p>
+The phylogenetic tree was derived from kmers in common counting
+between the sequences to obtain a 'distance' matrix, then using the
+phylip command 'neighbors' operation for the simple neighbor joining
+algorithm to establish this binary tree.  This tree is not necessarily
+biologically correct, but it does serve as a useful guide tree for the
+multiz alignment procedure.  See also:
+<a href="http://evolution.genetics.washington.edu/phylip/progs.data.dist.html"
+target=_blank>Phylip distance operations</a>
+</p>
+<p>
 PhastCons (which has been used in previous Conservation tracks) is a hidden
 Markov model-based method that estimates the probability that each
 nucleotide belongs to a conserved element, based on the multiple alignment.
@@ -819,21 +829,25 @@ Pairwise alignments were then linked into chains using a dynamic programming
 algorithm that finds maximally scoring chains of gapless subsections
 of the alignments organized in a kd-tree.
 Please note the <a href="http://genomewiki.ucsc.edu/index.php/Dm6_124-way_Genome_size_statistics"
-target=_blank>specific parameters</a>for the alignments.
+target=_blank>specific parameters</a> for the alignments.
 High-scoring chains were then placed along the genome, with
 gaps filled by lower-scoring chains, to produce an alignment net.
 For more information about the chaining and netting process
-for each species, see the description pages for the Chain and Net
-tracks.</p>
+for each species, see the description pages for the <a href="../cgi-bin/hgTrackUi?db=dm6&g=insectsChainNet"
+target=_blank>Chain and Net
+tracks</a>.</p>
+
 <p>
-An additional filtering step was introduced in the generation of the 124-way
-conservation track to reduce the number of paralogs and pseudogenes from the
-high-quality assemblies and the suspect alignments from the low-quality
-assemblies:
-the pairwise alignments of the bird assemblies were filtered based on synteny;
-those for the human and mouse genomes were filtered to retain only
-alignments of best quality in both the target and query (&quot;reciprocal
-best&quot;).</p>
+An additional filtering step was introduced in the generation of the
+124-way conservation track to reduce the number of paralogs and pseudogenes
+from the high-quality assemblies and the suspect alignments from the
+low-quality assemblies: some of the pairwise alignments were
+filtered based on synteny; and some were filtered to retain only
+alignments of best quality in both the target and query ("reciprocal best").
+
+See also: <a href="http://genomewiki.ucsc.edu/index.php/Dm6_124-way_Genome_size_statistics"
+target=_blank>D. melanogaster/dm6 124-way alignment</a> filtering parameters.
+The column <em>alignment type</em> indicates the type of filtering.</p>
 <p>
 The resulting best-in-genome pairwise alignments
 were progressively aligned using multiz/autoMZ,
@@ -949,6 +963,19 @@ consensus in the vertebrate phylogeny community as of March 2007.
 </p>
 
 <h2>References</h2>
+<h3>Phylip distance operations:</h3>
+<p>
+Fan H, Ives A, Surget_groba Y, Cannon C.
+<a href="https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-015-1647-5" target="_blank">An assembly and alignment-free method of phylogeny reconstruction from next-generation sequencing data</a>.
+<em>BMC Genomics</em>. 2015; 16(1): 522.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4501066/" target="_blank">26169061</a>
+</p>
+<p>
+Bernard G, Ragan M, Chana C.X.
+<a href="https://f1000research.com/articles/5-2789/v2" target="_blank">Recapitulating phylogenies using k-mers: from trees to networks</a>.
+<em> F1000Res</em>. 2016; 5: 2789.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5224691/" target="_blank">28105314</a>
+</p>
 
 <h3>Phylo-HMMs, phastCons, and phyloP:</h3>
 <p>

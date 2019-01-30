@@ -68,6 +68,13 @@ performance. You can then use the program to download
 assemblies of interest to your local Genome Browser, which will result in performance at least 
 as fast as the UCSC site.
 
+Your network firewall must allow outgoing connections to the following servers and ports:
+	MySQL connections, used to load tracks not local to your computer:
+		US server: Port 3306 on genome-mysql.soe.ucsc.edu (128.114.119.174)
+		European server: Port 3306 on genome-euro-mysql.soe.ucsc.edu (129.70.40.120)
+	TCP port 873 on hgdownload.soe.ucsc.edu (128.114.119.163), used by rsync to download track data
+	TCP port 80 on hgdownload.soe.ucsc.edu (128.114.119.163), used to download html descriptions on the fly
+
 # GBiC commands
 
 The first argument of the program is called `command` in the following section of this document. 
