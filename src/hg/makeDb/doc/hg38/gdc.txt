@@ -1,0 +1,42 @@
+
+
+mkdir /cluster/data/hg38/bed/gdc
+cd /cluster/data/hg38/bed/gdc
+
+mkdir data
+#https://portal.gdc.cancer.gov/repository?filters=%7B%22op%22%3A%22and%22%2C%22content%22%3A%5B%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22files.access%22%2C%22value%22%3A%5B%22open%22%5D%7D%7D%2C%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22files.analysis.workflow_type%22%2C%22value%22%3A%5B%22MuTect2%20Variant%20Aggregation%20and%20Masking%22%5D%7D%7D%2C%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22files.data_format%22%2C%22value%22%3A%5B%22MAF%22%5D%7D%7D%2C%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22files.data_type%22%2C%22value%22%3A%5B%22Masked%20Somatic%20Mutation%22%5D%7D%7D%5D%7D
+
+tar xvf gdc_download_20190130_190717.328881.tar.gz
+
+echo "hub hub1" > trackDb.txt
+echo "shortLabel GDC Cancers" >> trackDb.txt
+echo "longLabel GDC Cancers" >> trackDb.txt
+echo "useOneFile on" >> trackDb.txt
+echo "email genome-www@soe.ucsc.edu" >> trackDb.txt
+echo "" >> trackDb.txt
+echo "genome hg38" >> trackDb.txt
+echo "" >> trackDb.txt
+echo "track gdcComp" >> trackDb.txt
+echo "shortLabel NCI-GDC " >> trackDb.txt
+echo "longLabel NCI Genomic Data Commons (GDC)." >> trackDb.txt
+echo "type bigBed 4 1 ." >> trackDb.txt
+echo "compositeTrack on" >> trackDb.txt
+echo "" >> trackDb.txt
+
+for i in */*.maf.gz
+do
+id=`dirname $i`
+name=`grep $id MANIFEST.txt | sed 's/.*TCGA.//' | sed 's/\..*//' | head -1`
+zcat $i | sed '/^#/d' | tail -n +2 | tawk '$102 != "" {print $5,$6,$7,$1,$102}' | sort -k1,1 -k2,2n > $name.bed
+bedToBigBed -as=bigFreq.as -type=bed4+1 $name.bed /cluster/data/hg38/chrom.sizes $name.bb
+longName=`grep $name project2LongLabel.txt | tawk '{print $2}'`
+echo "track $name"
+echo "shortLabel $name"
+echo "longLabel $longName"
+echo "bigDataUrl $name.bb"
+echo "type bigBed 4 1 ."
+echo "lollipopField 4"
+echo "parent gdcComp"
+echo 
+done >> trackDb.txt
+

@@ -80,7 +80,7 @@ if (sameString(format,"tsv"))
     safef(command, sizeof(command), "./tagStormToTab %s stdout", path);
     mustSystem(command);
     }
-if (sameString(format,"csv"))
+else if (sameString(format,"csv"))
     {
     fflush(stdout);
     char command[3*PATH_LEN];

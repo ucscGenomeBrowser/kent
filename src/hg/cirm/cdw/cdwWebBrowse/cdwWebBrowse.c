@@ -1574,7 +1574,7 @@ printf("<FORM class=\"inlineBlock\" ACTION=\"../cgi-bin/cdwGetMetadataAsFile\" M
 cartSaveSession(cart);
 cgiMakeHiddenVar("cdwCommand", "analysisQuery");
 cgiMakeHiddenVar("Download format", format); 
-printf("<input class='btn btn-secondary' type='submit' name='%s' id='%s' value='Download'>\n", format, format);
+printf("<input class='btn btn-secondary' type='submit' name='%s' id='%s' value='Download All Matching'>\n", format, format);
 printf("</FORM>\n\n");
 
 // Get field list for the cdwFileTags table, leaving out things we don't want to display on the site
@@ -1899,7 +1899,7 @@ dyStringPrintf(dy,"\"footer\": {\"color\": \"#999999\",");
 dyStringPrintf(dy,"\"fontSize\": 10,");
 dyStringPrintf(dy,"\"font\": \"open sans\",");
 dyStringPrintf(dy,"\"location\": \"bottom-left\",},\n");
-dyStringPrintf(dy,"\"size\": { \"canvasWidth\": 270, \"canvasHeight\": 220},\n");
+dyStringPrintf(dy,"\"size\": { \"canvasWidth\": 330, \"canvasHeight\": 220},\n");
 dyStringPrintf(dy,"\"data\": { \"sortOrder\": \"value-desc\", \"content\": [\n");
 struct facetVal *fv = NULL;
 float colorOffset = 1;
@@ -2259,7 +2259,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Data Browser v0.60");
+localWebStartWrapper("CIRM Stem Cell Hub Data Browser v0.62");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 jsInlineFinish();
