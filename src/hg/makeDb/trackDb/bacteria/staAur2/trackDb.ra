@@ -24,11 +24,12 @@ visibility pack
 priority 1
 color 12,12,120
 altColor 120,12,12
-colorByStrand 12,12,120 120,12,12
 type genePred
 baseColorUseCds given
 baseColorDefault genomicCodons
 itemDetailsHtmlTable geneDesc
+
+# colorByStrand 12,12,120 120,12,12
 
 include protBlat0.ra
 include protBlat1.ra
