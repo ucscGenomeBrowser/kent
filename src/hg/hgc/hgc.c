@@ -19515,6 +19515,8 @@ hFreeConn(&conn);
 bool matchTableOrHandler(char *word, struct trackDb *tdb)
 /* return true if word matches either the table name or the trackHandler setting of the tdb struct */
 {
+if (NULL == tdb)
+    return FALSE;
 char* handler = trackDbSetting(tdb, "trackHandler");
 return (sameWord(word, tdb->table) || (handler!=NULL && sameWord(word, handler)));
 }
