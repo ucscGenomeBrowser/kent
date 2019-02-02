@@ -4519,6 +4519,7 @@ if (
 || sameWord(type, "bigBarChart")
 || sameWord(type, "interact")
 || sameWord(type, "bigInteract")
+|| sameWord(type, "bigLolly")
 //|| track->loadItems == loadSimpleBed
 //|| track->bedSize >= 3 // should pick up several ENCODE BED-Plus types.
 )
@@ -6111,6 +6112,7 @@ else if (sameString(type, "bigWig"))
 else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") ||
         sameString(type, "bigNarrowPeak") || sameString(type, "bigPsl") ||
         sameString(type, "bigMaf")|| sameString(type, "bigChain") ||
+        sameString(type, "bigLolly") || 
         sameString(type, "bigBarChart") || sameString(type, "bigInteract"))
     {
     struct bbiFile *bbi = ct->bbiFile;
@@ -6130,6 +6132,8 @@ else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") ||
 	safef(typeBuf, sizeof(typeBuf), "bigPsl");
     else if (sameString(type, "bigBarChart"))
 	safef(typeBuf, sizeof(typeBuf), "bigBarChart");
+    else if (sameString(type, "bigLolly"))
+	safef(typeBuf, sizeof(typeBuf), "bigLolly");
     else if (sameString(type, "bigInteract"))
 	safef(typeBuf, sizeof(typeBuf), "bigInteract");
     else
