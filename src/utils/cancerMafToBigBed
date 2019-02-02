@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 
+# possible features:
+# - add counts per diagnosis
+
 import logging, sys, optparse, gzip
-from collections import defaultdict, namedtuple
+from collections import defaultdict, namedtuple, Counter
 from os.path import join, basename, dirname, isfile, walk, splitext
 from os import system
 
@@ -22,8 +25,31 @@ fixedFields = [
 # these fields vary between variants at the same position, they are output to the BED as a comma-separated list
 varFields = [
     "Tumor_Sample_Barcode",
-    "Matched_Norm_Sample_Barcode"
+    "Matched_Norm_Sample_Barcode",
+    "case_id"
 ]
+
+# these clinical annotations are summarized as counts
+annotCountFields = [
+    "gender",
+    "project_id",
+    "ethnicity",
+]
+
+# these clinical annotations are copied as a list into every variant
+annotListFields = [
+    # from annotations.tsv
+    "days_to_death",
+    # from exposure.tsv
+    "cigarettes_per_day",
+    "weight",
+    "alcohol_history",
+    "alcohol_intensity",
+    "bmi",
+    "years_smoked",
+    "height"
+]
+
 
 # field descriptions for the AS file
 fieldDescs = {
@@ -60,7 +86,7 @@ def findMafs(inDir):
     mafFnames = []
 
     def gotFiles(arg, dirName, fnames):
-        " callback for walk "
+        " callback for walk, called for every file "
         for fname in fnames:
             if fname.endswith(".maf.gz"):
                 mafFnames.append( join(dirName, fname) )
@@ -68,29 +94,34 @@ def findMafs(inDir):
     walk(inDir, gotFiles, None)
     return mafFnames
 
-def parseMaf(fname, MafRec):
-    " parse maf file, yield a dict "
-    for line in gzip.open(fname):
+def openFile(fname):
+    if fname.endswith(".gz"):
+        return gzip.open(fname)
+    else:
+        return open(fname)
+
+def parseTsv(fname, Rec):
+    " parse maf file, use rows to fill the Rec (~struct) and yield Recs "
+    for line in openFile(fname):
         if line.startswith("#"):
             continue
         if line.startswith("Hugo_Sym"):
             headers = line.rstrip("\n").split("\t")
-            assert(tuple(headers)==MafRec._fields)
+            assert(tuple(headers)==Rec._fields)
             continue
         row = line.rstrip("\n").split("\t")
-        #yield dict(zip(headers, row))
-        yield MafRec(*row)
+        yield Rec(*row)
 
 def makeRec(fname):
     " return the namedtuple rec (=struct) made from first non-comment line in fname "
-    for line in gzip.open(fname):
+    for line in openFile(fname):
         if line.startswith("#"):
             continue
         headers = line.rstrip("\n").split("\t")
         MafRec = namedtuple("mafRecord", headers)
         return MafRec
 
-def mafsToBed(mafFnames, outBed):
+def mafsToBed(mafFnames, annots, outBed):
     " summarize mafFnames to outBed "
     byPosAndAllele = defaultdict(list)
     MafRec = None
@@ -101,7 +132,7 @@ def mafsToBed(mafFnames, outBed):
             MafRec = makeRec(mafName)
         logging.info("Reading %s" % mafName)
         lineCount = 0
-        for var in parseMaf(mafName, MafRec):
+        for var in parseTsv(mafName, MafRec):
             chrom, start, end = var.Chromosome, var.Start_Position, var.End_Position
             all1, all2 = var.Tumor_Seq_Allele1, var.Tumor_Seq_Allele2
             key = (chrom, start, end, all1, all2)
@@ -141,34 +172,58 @@ def mafsToBed(mafFnames, outBed):
         ftLen = str(int(end)-int(start))
         row = [chrom, start, end, name, str(score), ".", start, end, "0,0,0", "1", ftLen, "0"]
 
-        row.append( str(varSampleCount) )
-        row.append( str( float(varSampleCount) / sampleCount ) )
+        # add the count/frequency fields that we derive from the data
+        row.append( str(varSampleCount) ) # raw count
+        row.append( str( float(varSampleCount) / sampleCount ) ) # frequency
 
+        # a few fields are always the same, so we just add the value from the first variant
         for fieldName in fixedFields:
             row.append(var1[fieldName])
 
-        # must convert structs to dicts
+        # some annotations are summarized as counts
+        for summCountField in annotCountFields:
+            vals = []
+            for var in varList:
+                annot = annots[var.case_id]
+                vals.append(annot[summCountField])
+
+            mostCommon = Counter(vals).most_common()
+            mostCommStrings = ["%s:%d" % (name, count) for name, count in mostCommon]
+            countStr = ", ".join(mostCommStrings)
+            row.append(countStr)
+
+        # some annotations are copied as a long list
+        for fieldName in annotListFields:
+            vals = []
+            for var in varList:
+                annot = annots[var.case_id]
+                vals.append(annot[fieldName])
+
+            row.append(",".join(vals))
+
+        # first convert structs to dicts
         dictList = []
         for var in varList:
             dictList.append(var._asdict())
 
+        # some variant values are copied as a long list 
         for fieldName in varFields:
             valList = []
             for d in dictList:
                 valList.append(d[fieldName])
             valStr = ",".join(valList)
             row.append(valStr)
-            if len(valStr)>256:
-                longFields.add(fieldName)
+            #if len(valStr)>256:
+                #longFields.add(fieldName)
 
         ofh.write("\t".join(row))
         ofh.write("\n")
 
     ofh.close()
     logging.info("Created file %s" % ofh.name)
-    return longFields
+    #return longFields
 
-def makeAs(extraFields, longFields, outFname):
+def makeAs(extraFields, outFname):
     " write the .as file to outFname "
     minAs = """table bed12Mafs
 "somatic variants converted from MAF files obtained through the NCI GDC"
@@ -193,9 +248,9 @@ def makeAs(extraFields, longFields, outFname):
 
     for fieldList in extraFields:
         for fieldName in fieldList:
-            fieldType = "string"
-            if fieldName in longFields:
-                fieldType = "lstring"
+            fieldType = "lstring"
+            #if fieldName in longFields:
+                #fieldType = "lstring"
             fieldDesc = fieldDescs.get(fieldName, fieldName)
             ofh.write('    %s %s; "%s"\n' % (fieldType, fieldName, fieldDesc))
     ofh.write(")\n")
@@ -213,14 +268,31 @@ def bedToBb(outBed, outBedSorted, chromSizes, outAs, outBb):
     assert(system(cmd)==0)
     logging.info("Created %s" % outBb)
 
+def parseAnnots(annotFn):
+    " read clinical annotations and return as dict caseId -> namedtuple "
+    Rec = makeRec(annotFn)
+    ret = {}
+    for annot in parseTsv(annotFn, Rec):
+        caseId = annot.case_id
+        assert(caseId not in ret)
+        ret[caseId] = annot
+    return ret
+
 # ----------- main --------------
 def main():
     args, options = parseArgs()
 
-    inDir, outBb = args
-    #if options.test:
-        #logging.debug("test is set")
-        #f = open(options.file, "r")
+    inDir, annotFn, expFn, outBb = args
+
+    annots = parseAnnots(annotFn)
+    exposures = parseAnnots(expFn)
+
+    # join annots and exposures into a single dict case_id -> field_name -> value
+    joinedAnnots = {}
+    for key, annot in annots.iteritems():
+        ad = annot._asdict()
+        ad.update(exposures[key]._asdict())
+        joinedAnnots[key] = ad
 
     mafFnames = findMafs(inDir)
 
@@ -229,9 +301,9 @@ def main():
     outBedSorted = outBase+".s.bed"
     outAs = outBase+".as"
 
-    longFields = mafsToBed(mafFnames, outBed)
+    mafsToBed(mafFnames, joinedAnnots, outBed)
 
-    makeAs([fixedFields, varFields], longFields, outAs)
+    makeAs([fixedFields, annotCountFields, annotListFields, varFields], outAs)
 
     chromSizes = "/gbdb/hg38/chrom.sizes"
     bedToBb(outBed, outBedSorted, chromSizes, outAs, outBb)
