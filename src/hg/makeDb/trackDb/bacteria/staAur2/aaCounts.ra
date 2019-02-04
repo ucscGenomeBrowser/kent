@@ -16,6 +16,8 @@ labelOnFeature on
 centerLabelsPack off
 collapseEmptySubtracks on
 packDense on
+scoreFilter 0
+scoreFilterByRange on
 html aaCounts
 
         track aaCountsALA
