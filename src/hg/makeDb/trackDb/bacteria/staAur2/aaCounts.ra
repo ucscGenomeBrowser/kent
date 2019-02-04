@@ -215,11 +215,7 @@ html aaCounts
         shortLabel TER - Z
         longLabel TER - Z - STOP - other misc.
         type bigBed 9 +
-<<<<<<< HEAD
-        bedNameLabel TER - * - STOP - other misc.
-=======
         bedNameLabel TER - Z - STOP - other misc.
->>>>>>> master
         priority 26
 
         track aaCountsNUL
