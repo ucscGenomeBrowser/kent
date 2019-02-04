@@ -11,13 +11,13 @@ group compGeno
 priority 4
 type bigBed 9 +
 mouseOverField mouseOver
+scoreFilter 0
+scoreFilterByRange on
 itemRgb on
 labelOnFeature on
 centerLabelsPack off
 collapseEmptySubtracks on
 packDense on
-scoreFilter 0
-scoreFilterByRange on
 html aaCounts
 
         track aaCountsALA
@@ -212,10 +212,14 @@ html aaCounts
         track aaCountsTER
         parent aaCounts
         subGroups sideChain=oth aa=a21
-        shortLabel TER - *
-        longLabel TER - * - STOP - other misc.
+        shortLabel TER - Z
+        longLabel TER - Z - STOP - other misc.
         type bigBed 9 +
+<<<<<<< HEAD
         bedNameLabel TER - * - STOP - other misc.
+=======
+        bedNameLabel TER - Z - STOP - other misc.
+>>>>>>> master
         priority 26
 
         track aaCountsNUL

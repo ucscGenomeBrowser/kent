@@ -116,8 +116,8 @@ if (file != NULL)
 else
     iprs = getInteractsFromTable(tdb, chrom, start, end, name, foot);
 
-int minStart = iprs->interact->chromStart;
-int maxEnd = iprs->interact->chromEnd;
+int minStart = 999999999;
+int maxEnd = 0;
 for (ipr = iprs; ipr; ipr = next)
     {
     struct interact *inter = ipr->interact;
@@ -280,7 +280,7 @@ if (count > 1 || clusterMode)
         char startBuf[1024], endBuf[1024], sizeBuf[1024];
         sprintLongWithCommas(startBuf, start + 1);
         sprintLongWithCommas(endBuf, end);
-        sprintLongWithCommas(sizeBuf, end - start);
+        sprintLongWithCommas(sizeBuf, end - start + 1);
         printf("<b>%s interactions region:</b> &nbsp;&nbsp;"
                         "<a href='hgTracks?position=%s:%d-%d' target='_blank'>%s:%s-%s</a> ",
                         item, chrom, start+1, end, chrom, startBuf, endBuf);

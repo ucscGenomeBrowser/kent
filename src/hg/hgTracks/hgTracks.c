@@ -91,7 +91,7 @@ char *excludeVars[] = { "submit", "Submit", "dirty", "hgt.reset",
             "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter", "hgt.imageV1", "hgt.suggestTrack", "hgt.setWidth",
              TRACK_SEARCH,         TRACK_SEARCH_ADD_ROW,     TRACK_SEARCH_DEL_ROW, TRACK_SEARCH_PAGER,
             "hgt.contentType", "hgt.positionInput", "hgt.internal",
-            "sortExp", "sortSim",
+            "sortExp", "sortSim", "hideTracks",
             NULL };
 
 /* These variables persist from one incarnation of this program to the
@@ -6843,49 +6843,135 @@ if (cartOptionalString(cart, "hgt.trackNameFilter") == NULL)
 loadCustomTracks(&trackList);
 groupTracks( &trackList, pGroupList, grpList, vis);
 setSearchedTrackToPackOrFull(trackList);
-if (cgiOptionalString( "hideTracks"))
-    changeTrackVis(groupList, NULL, tvHide);
+boolean hideTracks = cgiOptionalString( "hideTracks") != NULL;
+if (hideTracks)
+    changeTrackVis(groupList, NULL, tvHide);    // set all top-level tracks to hide
 
 /* Get visibility values if any from ui. */
+struct hash *superTrackHash = newHash(5);  // cache whether supertrack is hiding tracks or not
+
 for (track = trackList; track != NULL; track = track->next)
     {
-    char *s = cartOptionalString(cart, track->track);
-    if (startsWith("hub_", track->track) && (s == NULL))
-        s = cartOptionalString(cart, trackHubSkipHubName(track->track));
-    if (cgiOptionalString("hideTracks"))
-	{
-        if (tdbIsSuperTrackChild(track->tdb))
+    // deal with any supertracks we're seeing for the first time
+    if (tdbIsSuperTrackChild(track->tdb))
+        {
+        struct hashEl *hel = NULL;
+
+        if ((hel = hashLookup(superTrackHash, track->tdb->parent->track)) == NULL)   // we haven't seen this guy
             {
-            s = cgiOptionalString(track->tdb->parent->track);
+            // first deal with visibility of super track
+            char *s = hideTracks ? cgiOptionalString(track->tdb->parent->track) : cartOptionalString(cart, track->tdb->parent->track);
             if (s)
                 {
-                cartSetString(cart, track->tdb->parent->track, s);
                 track->tdb->parent->visibility = hTvFromString(s) ;
+                cartSetString(cart, track->tdb->parent->track, s);
                 }
+            else if (startsWith("hub_", track->tdb->parent->track))
+                {
+                s = hideTracks ? cgiOptionalString( trackHubSkipHubName(track->tdb->parent->track)) :  cgiOptionalString( trackHubSkipHubName(track->tdb->parent->track));
+                if (s)
+                    {
+                    cartSetString(cart, track->tdb->parent->track, s);
+                    cartRemove(cart, trackHubSkipHubName(track->tdb->parent->track)); // remove the undecorated version
+                    track->tdb->parent->visibility = hTvFromString(s) ;
+                    }
+                }
+            
+            // now look to see if we have a _sel statement to turn off all subtracks (including the current one)
+            unsigned hideChildren = 0;
+            char buffer[4096];
+            char *usedThis = buffer;
+            safef(buffer, sizeof buffer, "%s_sel", track->tdb->parent->track);
+
+            s = cartOptionalString(cart, buffer);
+            if (s == NULL && startsWith("hub_", track->tdb->parent->track))
+                s = cartOptionalString(cart, usedThis = trackHubSkipHubName(buffer));
+
+            if (s != NULL)
+                {
+                if (sameString(s, "0"))
+                    hideChildren = 1;
+                cartRemove(cart, usedThis);  // we don't want this hanging out in the cart
+                }
+
+            // mark this as having been addressed
+            hel = hashAddInt(superTrackHash, track->tdb->parent->track, hideChildren );  
             }
-	s = cgiOptionalString(track->track);
-	if (s != NULL)
-	    {
-	    if (hTvFromString(s) == track->tdb->visibility)
-		cartRemove(cart, track->track);
-	    else
-		cartSetString(cart, track->track, s);
-	    }
-	}
-    if (s != NULL && !track->limitedVisSet)
-	track->visibility = hTvFromString(s);
-    if (tdbIsCompositeChild(track->tdb))
-        track->visibility = tdbVisLimitedByAncestry(cart, track->tdb, FALSE);
-    else if (tdbIsComposite(track->tdb) && track->visibility != tvHide)
-	{
-	struct trackDb *parent = track->tdb->parent;
-	char *parentShow = NULL;
-	if (parent)
-	    parentShow = cartUsualString(cart, parent->track,
-			 parent->isShow ? "show" : "hide");
-	if (!parent || sameString(parentShow, "show"))
-	    compositeTrackVis(track);
-	}
+
+        if ( ptToInt(hel->val) == 1)    // we want to hide this track
+            {
+            if (tvHide == track->tdb->visibility)
+                /* remove if setting to default vis */
+                cartRemove(cart, track->track);
+            else
+                cartSetString(cart, track->track, "hide");
+            track->visibility = tvHide;
+            }
+        }
+    
+    // we use cgiOptionString because the above code may have turned off the track in the cart if
+    // the user requested that all the default tracks be turned off
+    char *s = hideTracks ? cgiOptionalString(track->track) : cartOptionalString(cart, track->track);
+
+    if (s != NULL)
+        {
+        if (!track->limitedVisSet)
+            {
+            track->visibility = hTvFromString(s); 
+            cartSetString(cart, track->track, s);
+            }
+        }
+    else
+        {
+        // maybe this track is on the URL without the hub_ prefix
+        if (startsWith("hub_", track->track))
+            s = cgiOptionalString(trackHubSkipHubName(track->track));
+        if (s != NULL && !track->limitedVisSet)
+            {
+            track->visibility = hTvFromString(s);
+            cartSetString(cart, track->track, s);   // add the decorated visibility to the cart
+            cartRemove(cart, trackHubSkipHubName(track->track)); // remove the undecorated version
+            }
+        }
+
+    // now deal with composite track children
+    if (tdbIsComposite(track->tdb))
+        {
+        char buffer[4096];
+        char *usedThis = buffer;
+
+        // first check to see if we've been asked to hide all the subtracks
+        boolean hideTracks = FALSE;
+        safef(buffer, sizeof buffer, "%s_sel", track->track);
+
+        s = cartOptionalString(cart, buffer);
+        if (s == NULL && startsWith("hub_", track->track))
+            s = cartOptionalString(cart, usedThis = trackHubSkipHubName(buffer));
+        if ((s != NULL) && (sameString(s, "0")))
+            hideTracks = TRUE;
+        cartRemove(cart, usedThis);   // we don't want these _sel variables in the cart
+
+        // now see if we have any specified visibilities
+        struct track *subtrack;
+        for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
+            {
+            char *s = cartOptionalString(cart, subtrack->track);
+            if (s == NULL && startsWith("hub_", subtrack->track))
+                s = cartOptionalString(cart, trackHubSkipHubName(subtrack->track));
+
+            char buffer[4096];
+            safef(buffer, sizeof buffer, "%s_sel", subtrack->track);
+            if (s != NULL)
+                {
+                if (sameString("hide", s))
+                    cartSetString(cart, buffer, "0");
+                else
+                    cartSetString(cart, buffer, "1");
+                }
+            else if (hideTracks && isSubtrackVisible(subtrack))
+                cartSetString(cart, buffer, "0");
+            }
+        }
     }
 return trackList;
 }
