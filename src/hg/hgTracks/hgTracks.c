@@ -4519,6 +4519,7 @@ if (
 || sameWord(type, "bigBarChart")
 || sameWord(type, "interact")
 || sameWord(type, "bigInteract")
+|| sameWord(type, "bigLolly")
 //|| track->loadItems == loadSimpleBed
 //|| track->bedSize >= 3 // should pick up several ENCODE BED-Plus types.
 )
@@ -6111,6 +6112,7 @@ else if (sameString(type, "bigWig"))
 else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") ||
         sameString(type, "bigNarrowPeak") || sameString(type, "bigPsl") ||
         sameString(type, "bigMaf")|| sameString(type, "bigChain") ||
+        sameString(type, "bigLolly") || 
         sameString(type, "bigBarChart") || sameString(type, "bigInteract"))
     {
     struct bbiFile *bbi = ct->bbiFile;
@@ -6130,6 +6132,8 @@ else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") ||
 	safef(typeBuf, sizeof(typeBuf), "bigPsl");
     else if (sameString(type, "bigBarChart"))
 	safef(typeBuf, sizeof(typeBuf), "bigBarChart");
+    else if (sameString(type, "bigLolly"))
+	safef(typeBuf, sizeof(typeBuf), "bigLolly");
     else if (sameString(type, "bigInteract"))
 	safef(typeBuf, sizeof(typeBuf), "bigInteract");
     else
@@ -6835,6 +6839,7 @@ if (hideTracks)
 
 /* Get visibility values if any from ui. */
 struct hash *superTrackHash = newHash(5);  // cache whether supertrack is hiding tracks or not
+char buffer[4096];
 
 for (track = trackList; track != NULL; track = track->next)
     {
@@ -6854,7 +6859,7 @@ for (track = trackList; track != NULL; track = track->next)
                 }
             else if (startsWith("hub_", track->tdb->parent->track))
                 {
-                s = hideTracks ? cgiOptionalString( trackHubSkipHubName(track->tdb->parent->track)) :  cgiOptionalString( trackHubSkipHubName(track->tdb->parent->track));
+                s = hideTracks ? cgiOptionalString( trackHubSkipHubName(track->tdb->parent->track)) :  cartOptionalString( cart, trackHubSkipHubName(track->tdb->parent->track));
                 if (s)
                     {
                     cartSetString(cart, track->tdb->parent->track, s);
@@ -6865,7 +6870,6 @@ for (track = trackList; track != NULL; track = track->next)
             
             // now look to see if we have a _sel statement to turn off all subtracks (including the current one)
             unsigned hideChildren = 0;
-            char buffer[4096];
             char *usedThis = buffer;
             safef(buffer, sizeof buffer, "%s_sel", track->tdb->parent->track);
 
@@ -6923,18 +6927,17 @@ for (track = trackList; track != NULL; track = track->next)
     // now deal with composite track children
     if (tdbIsComposite(track->tdb))
         {
-        char buffer[4096];
         char *usedThis = buffer;
 
         // first check to see if we've been asked to hide all the subtracks
-        boolean hideTracks = FALSE;
+        boolean hideChildren = FALSE;
         safef(buffer, sizeof buffer, "%s_sel", track->track);
 
         s = cartOptionalString(cart, buffer);
         if (s == NULL && startsWith("hub_", track->track))
             s = cartOptionalString(cart, usedThis = trackHubSkipHubName(buffer));
         if ((s != NULL) && (sameString(s, "0")))
-            hideTracks = TRUE;
+            hideChildren = TRUE;
         cartRemove(cart, usedThis);   // we don't want these _sel variables in the cart
 
         // now see if we have any specified visibilities
@@ -6945,7 +6948,6 @@ for (track = trackList; track != NULL; track = track->next)
             if (s == NULL && startsWith("hub_", subtrack->track))
                 s = hideTracks ? cgiOptionalString(trackHubSkipHubName(subtrack->track)) : cartOptionalString(cart, trackHubSkipHubName(subtrack->track));
 
-            char buffer[4096];
             safef(buffer, sizeof buffer, "%s_sel", subtrack->track);
             if (s != NULL)
                 {
@@ -6956,7 +6958,7 @@ for (track = trackList; track != NULL; track = track->next)
                 else
                     cartSetString(cart, buffer, "1");
                 }
-            else if (hideTracks && isSubtrackVisible(subtrack))
+            else if (hideChildren && isSubtrackVisible(subtrack))
                 cartSetString(cart, buffer, "0");
             }
         }

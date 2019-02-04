@@ -23,13 +23,19 @@ group genes
 visibility pack
 priority 1
 color 12,12,120
+altColor 120,12,12
 type genePred
 baseColorUseCds given
 baseColorDefault genomicCodons
 itemDetailsHtmlTable geneDesc
 
-include chainNetStaph0.ra
-include chainNetStaph1.ra
+# colorByStrand 12,12,120 120,12,12
+
+include protBlat0.ra
+include protBlat1.ra
+# include bigPsl0.ra
+# include chainNetStaph0.ra
+# include chainNetStaph1.ra
 
 searchName ncbiGeneName
 searchTable ncbiGene

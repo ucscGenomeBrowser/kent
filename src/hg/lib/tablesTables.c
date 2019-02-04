@@ -494,10 +494,9 @@ if (visibleFacetList)
 			"&browseFiles_facet_fieldName=%s|url|"
 			"&browseFiles_facet_fieldVal=%s|url|"
 			"&cdwBrowseFiles_page=1' "
-			">%s</a></dd>\n",
+			">See %d More</a></dd>\n",
 		    cartSessionVarName(), cartSessionId(cart),
-		    op, field->fieldName, "",
-		    "See More"
+		    op, field->fieldName, "", slCount(field->valList) - FacetFieldLimit 
 		    );
 		}
 
