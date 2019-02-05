@@ -10,6 +10,7 @@
 <h2>Topics</h2>
 
 <ul>
+<li><a href="#genestrans">What is a gene?</a></li>
 <li><a href="#genestrans">What is the difference between genes and transcripts ?</a></li>
 <li><a href="#ens">What is the difference between Ensembl and Gencode ?</a></li>
 <li><a href="#ensRefseq">What is the difference between Gencode/Ensembl and RefSeq ?</a></li>
@@ -29,6 +30,16 @@
 
 <a name="genestrans"></a>
 <h2>The basics</h2>
+<h6>What is a gene?</h6>
+<p>
+Before DNA sequencing, genes were traits. In bioinformatics today, a gene is a
+collection of transcripts. Transcripts either encode one protein or are 
+non-coding transcripts.
+For human, most of the genes have a symbol associated to them by the Human Gene
+Nomenclature Commitee (HGNC, formerly HUGO). For other organisms there is usually
+a database curation team that assigns symbols, like MGI for mouse.
+</p>
+
 <h6>What is the difference between genes and transcripts? </h6>
 <p>
 Every gene has a set of transcripts. Tracks are often called "Genes", e.g.
@@ -36,9 +47,7 @@ Every gene has a set of transcripts. Tracks are often called "Genes", e.g.
 Every transcript has an
 accession number, a sequence and a list of exon
 chrom/start/end coordinates on a genome assembly. The transcript accessions
-are assigned to genes, so every transcript is assigned to one gene. Most of the
-genes have a symbol associated to them by the Human Gene Nomenclature Commitee
-(HGNC, formerly HUGO).</p>
+are assigned to genes. </p>
 
 <h6>What are the most common gene transcript tracks?</h6>
 <p>
@@ -59,19 +68,26 @@ least one ENST assigned to it. Manually curated Refseq transcript identifiers
 start with NM_ (coding) or NR_ (noncoding), followed by a number, or XM_ if
 they are predicted by software.</p>
 
-<p>There are many other tracks in the group "Genes and Gene Predictions". Genescan and N-Scan are older
-transcript predictor algorithms that are based on only the genome sequence alone. Augustus and AceView
-are automated gene-predictors that use cDNA and EST data. Most of these and similar gene tracks
-are only relevant when you are working on a particular locus where you think that the manually curated gene models
-(Ensembl and RefSeq) have errors.</p>
+<p>There are many other tracks in the group "Genes and Gene Predictions".
+Genescan and N-Scan are older transcript predictor algorithms that are based on
+only the genome sequence alone. Augustus and AceView are automated
+gene-predictors that use cDNA and EST data. Most of these and similar gene
+tracks are only relevant when you are working on a particular locus where you
+think that the manually curated gene models (Ensembl and RefSeq) have
+errors.</p>
 
 <a name="ensgencode"></a>
 <h2>The differences</h2>
 <h6>What are Ensembl and Gencode and is there any difference?</h6>
+
+<p>TODO Lou or Max: compare the Ensembl GFF with the Gencode GFF.</p>
+
 <p> 
-On the human and mouse genome, the identifiers, transcript sequences and exon coordinates of
-equivalent Ensembl and Gencode versions are identical. The
-<a target=_blank href="https://www.gencodegenes.org/human/releases.html">Gencode Release History</a>.
+On the most current human and mouse genome assemblies (hg38 and mm10), the
+identifiers, transcript sequences and exon coordinates of equivalent Ensembl
+and Gencode versions are identical. The <a target=_blank
+href="https://www.gencodegenes.org/human/releases.html">Gencode Release
+History</a>.
 shows which versions are equivalent.  You can download the gene transcript
 models either from the website <a href=https://gencodegenes.org>https://gencodegenes.org</a> or from 
 <a href=http://ensembl.org>http://ensembl.org</a>. Additional information that are not directly 
@@ -86,7 +102,7 @@ use.
 Different institutions have different rules on how they annotate genes. E.g.
 RefSeq's criteria are more stringent, so there are a lot fewer RefSeq
 transcripts than for Ensembl/Gencode. Also, RefSeq transcripts have their own
-sequences independent of the genome, so certain population-specific variants
+sequences independent of the genome assembly, so certain population-specific variants
 may be in RefSeq that are entirely missing from the reference genome sequence.
 The links from either transcript model to other gene-related databases are
 different. In general, it seems that high-throuput sequencing data results,
@@ -113,10 +129,15 @@ I don't really know. Is it only the meta data? Mark?
 </p>
 
 <a name="hg38"></a>
-<h6>What is the difference between "Gencode comprehensive" and "Gencode basic"</h6>
+<h6>What is the difference between "Gencode Comprehensive" and "Gencode Basic"</h6>
 <p> 
-I don't really know. Is it only the meta data? Mark?
-</p>
+Gencode Basic is the subset of Gencode useful to most users and it is what the UCSC Genome
+Browser shows by default.  
+The "basic" tag is defined like this in the <a href="https://www.gencodegenes.org/pages/tags.html">Gencode FAQ</a>:
+"Identifies a subset of representative transcripts for each gene; prioritises
+full-length protein coding transcripts over partial or non-protein coding
+transcripts within the same gene, and intends to highlight those transcripts
+that will be useful to the majority of users.". </p>
 
 <a name="justsingle"></a>
 <h6>How can I just show a single transcript per gene?</h6>
