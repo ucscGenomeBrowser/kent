@@ -939,7 +939,7 @@ parent singleCell
     parent TabulaMurisFacsDataset
     spectrum on
     type bigBed 12
-    visibility dense
+    visibility hide
     view junc
 
         track pancreaticDCellJunc
