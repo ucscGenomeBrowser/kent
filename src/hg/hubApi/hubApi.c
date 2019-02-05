@@ -575,6 +575,14 @@ for ( el=dbList; el != NULL; el = el->next )
 printf("]}\n");
 }
 
+static void ucscDbTrackList(char *db)
+/* return track list from specified UCSC database name */
+{
+struct trackDb *tdbList = hTrackDb(db);
+struct trackDb *el;
+for (el
+}
+
 #define MAX_PATH_INFO 32
 static void apiList(char *words[MAX_PATH_INFO])
 /* 'list' function */
@@ -614,6 +622,16 @@ else if (sameWord("tracks", words[1]))
     {
     char *hubUrl = cgiOptionalString("hubUrl");
     char *genome = cgiOptionalString("genome");
+    char *db = cgiOptionalString("db");
+    if (isEmpty(hubUrl) && isEmpty(db))
+	{
+	errAbort("# ERROR: must supply hubUrl or db name to return track list");
+	}
+    if (isEmpty(hubUrl))
+	{
+        ucscDbTrackList(db);	// only need db for this function
+	return;
+	}
     if (isEmpty(genome) || isEmpty(hubUrl))
 	{
         if (isEmpty(genome))
@@ -742,6 +760,7 @@ hPrintf("<li><a href='/cgi-bin/hubApi/list/publicHubs'>list public hubs</a> <em>
 hPrintf("<li><a href='/cgi-bin/hubApi/list/ucscGenomes'>list database genomes</a> <em>/cgi-bin/hubApi/list/ucscGenomes</em></li>\n");
 hPrintf("<li><a href='/cgi-bin/hubApi/list/genomes?hubUrl=%s'>list genomes from specified hub</a> <em>/cgi-bin/hubApi/list/genomes?hubUrl='%s'</em></li>\n", urlInput, urlInput);
 hPrintf("<li><a href='/cgi-bin/hubApi/list/tracks?hubUrl=%s&genome=%s'>list tracks from specified hub and genome</a> <em>/cgi-bin/hubApi/list/tracks?hubUrl='%s&genome=%s'</em></li>\n", urlInput, hubGenome->name, urlInput, hubGenome->name);
+hPrintf("<li><a href='/cgi-bin/hubApi/list/tracks?db=%s'>list tracks from specified UCSC database</a> <em>/cgi-bin/hubApi/list/tracks?db='%s'</em></li>\n", "ce11", "ce11");
 hPrintf("</ul>\n");
 
 hPrintf("<h4>cart dump</h4>");
