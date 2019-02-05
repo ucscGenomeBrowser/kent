@@ -580,7 +580,21 @@ static void ucscDbTrackList(char *db)
 {
 struct trackDb *tdbList = hTrackDb(db);
 struct trackDb *el;
-for (el
+fputc('{',stdout);
+jsonStringOut(stdout, "source", "UCSantaCruz");
+fputc(',',stdout);
+jsonStringOut(stdout, "db", db);
+fputc(',',stdout);
+printf("\"tracks\":[");
+for (el = tdbList; el != NULL; el = el->next )
+    {
+    char *a = jsonStringEscape(el->track);
+    printf("\"%s\"", a);
+    freeMem(a);
+    if (el->next)
+	fputc(',',stdout);
+    }
+printf("]}\n");
 }
 
 #define MAX_PATH_INFO 32
@@ -650,10 +664,9 @@ else if (sameWord("tracks", words[1]))
 	fputc(',',stdout);
 	jsonStringOut(stdout, "genome", genome);
 	fputc(',',stdout);
-	printf("\"tracks\":[");
 	slNameSort(&dbTrackList);
 	struct slName *el = dbTrackList;
-	for ( ; el ; el = el->next )
+	for ( ; el != NULL; el = el->next )
 	    {
 	    char *a = jsonStringEscape(el->name);
 	    printf("\"%s\"", a);
