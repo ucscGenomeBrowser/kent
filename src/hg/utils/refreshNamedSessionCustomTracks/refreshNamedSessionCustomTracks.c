@@ -270,7 +270,7 @@ while (isNotEmpty(namePt))
 	    dyStringAppend(newContents, oneSetting->string);
 	    char *db = namePt + strlen(CT_FILE_VAR_PREFIX);
 
-	    customFactoryTestExistence(db, dataPt, &thisGotLiveCT, &thisGotExpiredCT);
+	    customFactoryTestExistence(db, dataPt, &thisGotLiveCT, &thisGotExpiredCT, NULL);
 
 	    ++CFTEcalls;
 	    }
@@ -343,6 +343,7 @@ if (optionExists("hardcore") && newContents->stringSize != contentLength)  // al
     sqlUpdate(conn, update->string);
     dyStringFree(&update);
     }
+hDisconnectCentral(&conn);
 dyStringFree(&oneSetting);
 dyStringFree(&newContents);
 freeMem(contentsToChop);

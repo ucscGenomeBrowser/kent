@@ -291,6 +291,12 @@ boolean sqlTableWildExists(struct sqlConnection *sc, char *table);
 boolean sqlTableOk(struct sqlConnection *sc, char *table);
 /* Return TRUE if a table not only exists, but also is not corrupted. */
 
+unsigned long sqlTableDataSizeFromSchema(struct sqlConnection *conn, char *db, char *table);
+/* Get table data size. Table must exist or will abort. */
+
+unsigned long sqlTableIndexSizeFromSchema(struct sqlConnection *conn, char *db, char *table);
+/* Get table index size. Table must exist or will abort. */
+
 char *sqlQuickQuery(struct sqlConnection *sc, char *query, char *buf, int bufSize);
 /* Does query and returns first field in first row.  Meant
  * for cases where you are just looking up one small thing.
@@ -387,6 +393,9 @@ void sqlHardUnlockAll(struct sqlConnection *sc);
 boolean sqlMaybeMakeTable(struct sqlConnection *sc, char *table, char *query);
 /* Create table from query if it doesn't exist already.
  * Returns FALSE if didn't make table. */
+
+char *sqlGetCreateTable(struct sqlConnection *sc, char *table);
+/* Get the Create table statement. table must exist. */
 
 void sqlRemakeTable(struct sqlConnection *sc, char *table, char *create);
 /* Drop table if it exists, and recreate it. */
