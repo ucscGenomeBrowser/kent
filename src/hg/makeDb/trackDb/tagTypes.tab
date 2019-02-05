@@ -36,12 +36,12 @@ barChartSampleUrl barChart bigBarChart
 barChartUnit barChart bigBarChart
 baseColorDefault *
 baseColorTickColor bed bigBed bigPsl
-baseColorUseCds bed psl genePred bigPsl
+baseColorUseCds bed psl genePred bigPsl bigGenePred
 baseColorUseSequence *
 baseQualRange bam
 bedFilter bed
 bedNameLabel bed barChart bigBarChart bigBed
-bigDataUrl customTracks bigBed bigWig bam vcfTabix bigPsl halSnake bigBarChart gtexTranscExpr bigInteract bigChain
+bigDataUrl customTracks bigBed bigWig bam vcfTabix bigPsl halSnake bigBarChart gtexTranscExpr bigInteract bigChain bigGenePred
 bigGeneDataUrl genePred
 blastRef psl bigPsl
 boxedCfg *
@@ -54,6 +54,7 @@ cdsEvidence genePred
 cdsTable psl bigPsl
 cell bed bedGraph
 centerLabelsDense *
+centerLabelsPack *
 chainColor chain bigChain
 chainLinearGap netAlign chain bed psl bigPsl bigChain
 chainMinScore netAlign chain bed psl bigPsl bigChain
@@ -68,8 +69,9 @@ codingAnnoLabel_snp131CodingDbSnp bed
 codingAnnoLabel_snp132CodingDbSnp bed
 codingAnnoLabel_snp134CodingDbSnp bed
 codingAnnotations bed
+collapseEmptySubtracks *
 color *
-colorByStrand bigBed bed
+colorByStrand bigBed bed genePred
 colorChromDefault psl bigPsl
 compareGenomeLinks bed
 compositeTrack *
@@ -450,6 +452,7 @@ subgroups bed
 summary wigMaf
 superTrack *
 symbolTable bed genePred
+packDense *
 pubsArticleTable bed psl bigPsl
 pubsSequenceTable bed psl bigPsl
 pubsMarkerTable bed psl bigPsl
@@ -474,7 +477,7 @@ url2 bed genePred bigBarChart
 url2Label bed genePred bigBarChart
 urlLabel *
 urlName genePred psl bigPsl
-urls bigBed bed bigPsl genePred psl bigBarChart
+urls bigBed bed bigPsl genePred psl bigBarChart bigGenePred
 useScore *
 view *
 viewLimits *
