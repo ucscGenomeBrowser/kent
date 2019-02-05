@@ -64,8 +64,8 @@ static long totalTracks = 0;
 static boolean measureTiming = FALSE;	/* set by CGI parameters */
 static boolean allTrackSettings = FALSE;	/* checkbox setting */
 static char **shortLabels = NULL;	/* public hub short labels in array */
+struct hubPublic *publicHubList = NULL;
 static int publicHubCount = 0;
-static struct hubPublic *publicHubList = NULL;
 static char *defaultHub = "Plants";
 static long enteredMainTime = 0;	/* will become = clock1000() on entry */
 		/* to allow calculation of when to bail out, taking too long */
@@ -148,12 +148,11 @@ return ret;
 
 static struct hubPublic *hubPublicLoadAll()
 {
+char query[1024];
 struct hubPublic *list = NULL;
 struct sqlConnection *conn = hConnectCentral();
-// Build a query to find all public hub URL's
-struct dyString *query = sqlDyStringCreate("select * from %s",
-                                           hubPublicTableName());
-struct sqlResult *sr = sqlGetResult(conn, query->string);
+sqlSafef(query, sizeof(query), "select * from %s", hubPublicTableName());
+struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -493,13 +492,83 @@ hDisconnectCentral(&conn);
 return cloneString(hubUrl);
 }
 
+static void dbDbJsonOutput(struct dbDb *el, FILE *f) 
+/* Print out hubPublic element in JSON format. */
+{
+fputc('{',f);
+jsonStringOut(f, "name", el->name);
+fputc(',',f);
+jsonStringOut(f, "description", el->description);
+fputc(',',f);
+jsonStringOut(f, "nibPath", el->nibPath);
+fputc(',',f);
+jsonStringOut(f, "organism", el->organism);
+fputc(',',f);
+jsonStringOut(f, "defaultPos", el->defaultPos);
+fputc(',',f);
+jsonInteger(f, "active", el->active);
+fputc(',',f);
+jsonInteger(f, "orderKey", el->orderKey);
+fputc(',',f);
+jsonStringOut(f, "genome", el->genome);
+fputc(',',f);
+jsonStringOut(f, "scientificName", el->scientificName);
+fputc(',',f);
+jsonStringOut(f, "htmlPath", el->htmlPath);
+fputc(',',f);
+jsonInteger(f, "hgNearOk", el->hgNearOk);
+fputc(',',f);
+jsonInteger(f, "hgPbOk", el->hgPbOk);
+fputc(',',f);
+jsonStringOut(f, "sourceName", el->sourceName);
+fputc(',',f);
+jsonInteger(f, "taxId", el->taxId);
+fputc('}',f);
+}
+
 static void jsonPublicHubs()
+/* output the hubPublic SQL table */
 {
 struct hubPublic *el = publicHubList;
-printf("{\"publicHubs\":[");
+printf("{\"source\":\"UCSantaCruz\",\"publicHubs\":[");
 for ( ; el != NULL; el = el->next )
     {
     hubPublicJsonOutput(el, stdout);
+    if (el->next)
+       printf(",");
+    }
+printf("]}\n");
+}
+
+static int dbDbCmpName(const void *va, const void *vb)
+/* Compare two dbDb elements: name, ignore case. */
+{
+const struct dbDb *a = *((struct dbDb **)va);
+const struct dbDb *b = *((struct dbDb **)vb);
+return strcasecmp(a->name, b->name);
+}
+
+static void jsonDbDb()
+/* output the dbDb SQL table */
+{
+char query[1024];
+struct sqlConnection *conn = hConnectCentral();
+sqlSafef(query, sizeof(query), "select * from dbDb");
+struct dbDb *dbList = NULL, *el = NULL;
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = dbDbLoad(row);
+    slAddHead(&dbList, el);
+    }
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
+slSort(&dbList, dbDbCmpName);
+printf("{\"source\":\"UCSantaCruz\",\"ucscGenomes\":[");
+for ( el=dbList; el != NULL; el = el->next )
+    {
+    dbDbJsonOutput(el, stdout);
     if (el->next)
        printf(",");
     }
@@ -512,6 +581,8 @@ static void apiList(char *words[MAX_PATH_INFO])
 {
 if (sameWord("publicHubs", words[1]))
     jsonPublicHubs();
+else if (sameWord("ucscGenomes", words[1]))
+    jsonDbDb();
 else if (sameWord("genomes", words[1]))
     {
     char *hubUrl = cgiOptionalString("hubUrl");
@@ -521,7 +592,7 @@ else if (sameWord("genomes", words[1]))
     struct trackHub *hub = trackHubOpen(hubUrl, "");
     if (hub->genomeList)
 	{
-	fputc('{',stdout);
+        printf("{\"source\":\"UCSantaCruz\",");
 	jsonStringOut(stdout, "hubUrl", hubUrl);
 	fputc(',',stdout);
 	printf("\"genomes\":[");
@@ -556,7 +627,7 @@ else if (sameWord("tracks", words[1]))
 	{
 	struct slName *dbTrackList = NULL;
 	(void) genomeList(hub, &dbTrackList, genome);
-	fputc('{',stdout);
+        printf("{\"source\":\"UCSantaCruz\",");
 	jsonStringOut(stdout, "hubUrl", hubUrl);
 	fputc(',',stdout);
 	jsonStringOut(stdout, "genome", genome);
@@ -668,8 +739,9 @@ struct trackHubGenome *hubGenome = hub->genomeList;
 hPrintf("<h2>Example URLs to return json data structures:</h2>\n");
 hPrintf("<ul>\n");
 hPrintf("<li><a href='/cgi-bin/hubApi/list/publicHubs'>list public hubs</a> <em>/cgi-bin/hubApi/list/publicHubs</em></li>\n");
+hPrintf("<li><a href='/cgi-bin/hubApi/list/ucscGenomes'>list database genomes</a> <em>/cgi-bin/hubApi/list/ucscGenomes</em></li>\n");
 hPrintf("<li><a href='/cgi-bin/hubApi/list/genomes?hubUrl=%s'>list genomes from specified hub</a> <em>/cgi-bin/hubApi/list/genomes?hubUrl='%s'</em></li>\n", urlInput, urlInput);
-hPrintf("<li><a href='/cgi-bin/hubApi/list/tracks?hubUrl=%s&genome=%s'>list tracks from specified hub and genome</a> <em>/cgi-bin/hubApi/list/genomes?hubUrl='%s&genome=%s'</em></li>\n", urlInput, hubGenome->name, urlInput, hubGenome->name);
+hPrintf("<li><a href='/cgi-bin/hubApi/list/tracks?hubUrl=%s&genome=%s'>list tracks from specified hub and genome</a> <em>/cgi-bin/hubApi/list/tracks?hubUrl='%s&genome=%s'</em></li>\n", urlInput, hubGenome->name, urlInput, hubGenome->name);
 hPrintf("</ul>\n");
 
 hPrintf("<h4>cart dump</h4>");
