@@ -5248,6 +5248,14 @@ struct slName *sln2 = *(struct slName **)el2;
 return chrNameCmp(sln1->name, sln2->name);
 }
 
+static boolean isAltFixRandom(char *str)
+/* Return TRUE if str ends with _alt, _fix or _random or contains "_hap". */
+{
+return (endsWith(str, "_alt") || endsWith(str, "_fix") || endsWith(str, "_random") ||
+        stringIn("_hap", str));
+
+}
+
 int chrNameCmpWithAltRandom(char *str1, char *str2)
 /* Compare chromosome or linkage group names str1 and str2 
  * to achieve this order:
@@ -5255,7 +5263,7 @@ int chrNameCmpWithAltRandom(char *str1, char *str2)
  * chrX
  * chrY
  * chrM
- * chr1_{alt, random} .. chr22_{alt, random}
+ * chr1_{alt,fix,hap*,random} .. chr22_{alt,fix,hap*,random}
  * chrUns
  */
 {
@@ -5270,9 +5278,9 @@ if (!startsWith("chrUn", str1) && startsWith("chrUn", str2))
     return  -1;
 
 /* if it is _alt or _random then it goes at the end */
-if ( (endsWith(str1, "_alt")||endsWith(str1, "_random")) && !(endsWith(str2, "_alt") || endsWith(str2, "_random")))
+if (isAltFixRandom(str1) && !isAltFixRandom(str2))
     return 1;
-if (!(endsWith(str1, "_alt")||endsWith(str1, "_random")) &&  (endsWith(str2, "_alt") || endsWith(str2, "_random")))
+if (!isAltFixRandom(str1) && isAltFixRandom(str2))
     return -1;
 
 /* get past "chr" or "Group" prefix: */
@@ -5340,8 +5348,8 @@ int chrSlNameCmpWithAltRandom(const void *el1, const void *el2)
  * chrX
  * chrY
  * chrM
- * chr1_{alt, random} .. chr22_{alt, random}
- * chrUns
+ * chr1_{alt,fix,hap*,random} .. chr22_{alt,fix,hap*,random}
+ * chrUn*
  */
 {
 struct slName *sln1 = *(struct slName **)el1;
