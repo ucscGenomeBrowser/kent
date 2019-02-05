@@ -575,26 +575,26 @@ for ( el=dbList; el != NULL; el = el->next )
 printf("]}\n");
 }
 
-static void ucscDbTrackList(char *db)
+static void trackDbJsonOutput(char *db, FILE *f)
 /* return track list from specified UCSC database name */
 {
 struct trackDb *tdbList = hTrackDb(db);
 struct trackDb *el;
-fputc('{',stdout);
-jsonStringOut(stdout, "source", "UCSantaCruz");
-fputc(',',stdout);
-jsonStringOut(stdout, "db", db);
-fputc(',',stdout);
-printf("\"tracks\":[");
+fputc('{',f);
+jsonStringOut(f, "source", "UCSantaCruz");
+fputc(',',f);
+jsonStringOut(f, "db", db);
+fputc(',',f);
+fprintf(f, "\"tracks\":[");
 for (el = tdbList; el != NULL; el = el->next )
     {
     char *a = jsonStringEscape(el->track);
     printf("\"%s\"", a);
     freeMem(a);
     if (el->next)
-	fputc(',',stdout);
+	fputc(',',f);
     }
-printf("]}\n");
+fprintf(f, "]}\n");
 }
 
 #define MAX_PATH_INFO 32
@@ -643,7 +643,7 @@ else if (sameWord("tracks", words[1]))
 	}
     if (isEmpty(hubUrl))
 	{
-        ucscDbTrackList(db);	// only need db for this function
+        trackDbJsonOutput(db, stdout);	// only need db for this function
 	return;
 	}
     if (isEmpty(genome) || isEmpty(hubUrl))
