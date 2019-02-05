@@ -979,6 +979,13 @@ boolean trackIsType(char *database, char *table, struct trackDb *parent, char *t
  * custom track by name, otherwise pass NULL
  */
 
+boolean hIsBigWig(char *database, char *table, struct trackDb *parent, struct customTrack *(*ctLookupName)(char *table));
+/* Return TRUE if table corresponds to a bigWig file.
+ * if table has no parent trackDb pass NULL for parent
+ * If this is a custom track, pass in function ctLookupName(table) which looks up a
+ * custom track by name, otherwise pass NULL
+ */
+
 boolean hIsBigBed(char *database, char *table, struct trackDb *parent, struct customTrack *(*ctLookupName)(char *table));
 /* Return TRUE if table corresponds to a bigBed file.
  * if table has no parent trackDb pass NULL for parent

@@ -5515,6 +5515,17 @@ return trackIsType(database, table, parent, "bigBed", ctLookupName) ||
     trackIsType(database, table, parent, "bigMaf", ctLookupName);
 }
 
+boolean hIsBigWig(char *database, char *table, struct trackDb *parent, struct customTrack *(*ctLookupName)(char *table))
+/* Return TRUE if table corresponds to a bigWig file.
+ * if table has no parent trackDb pass NULL for parent
+ * If this is a custom track, pass in function ctLookupName(table) which looks up a
+ * custom track by name, otherwise pass NULL
+ */
+{
+return trackIsType(database, table, parent, "bigWig", ctLookupName) ||
+    trackIsType(database, table, parent, "mathWig", ctLookupName);
+}
+
 static char *bbiNameFromTableChrom(struct sqlConnection *conn, char *table, char *seqName)
 /* Return file name from table.  If table has a seqName column, then grab the
  * row associated with chrom (which can be e.g. '1' not 'chr1' if that is the
