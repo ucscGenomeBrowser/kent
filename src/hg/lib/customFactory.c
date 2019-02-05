@@ -4317,12 +4317,13 @@ freez(pTrack);
 }
 
 void customFactoryTestExistence(char *genomeDb, char *fileName, boolean *retGotLive,
-				boolean *retGotExpired)
+				boolean *retGotExpired, struct customTrack **retTrackList)
 /* Test existence of custom track fileName.  If it exists, parse it just
  * enough to tell whether it refers to database tables and if so, whether
  * they are alive or have expired.  If they are live, touch them to keep
  * them active. */
 {
+struct customTrack *trackList = NULL;
 boolean trackNotFound = TRUE;
 char *line = NULL;
 struct sqlConnection *ctConn = NULL;
@@ -4332,6 +4333,8 @@ if (!fileExists(fileName))
     {
     if (retGotExpired)
 	*retGotExpired = TRUE;
+    if (retTrackList)
+	*retTrackList = trackList;
     return;
     }
 
@@ -4431,8 +4434,16 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	if (retGotExpired)
 	    *retGotExpired = TRUE;
 	}
-    freeCustomTrack(&track);
+    if (retTrackList)
+	slAddHead(&trackList, track);
+    else
+	freeCustomTrack(&track);
     trackNotFound = FALSE;
+    }
+if (retTrackList)
+    {
+    slReverse(&trackList);
+    *retTrackList = trackList;
     }
 customPpFree(&cpp);
 freez(&cpp);

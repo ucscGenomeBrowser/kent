@@ -79,6 +79,11 @@ struct cart *cartFromCgiOnly(char *userId, char *sessionId,
 void cartCheckout(struct cart **pCart);
 /* Save cart to database and free it up. */
 
+void cartSaveState(struct cart *cart);
+/* Free up cart and save it to database.
+ * Intended for updating cart before background CGI runs.
+ * Use cartCheckout() instead. */
+
 void cartEncodeState(struct cart *cart, struct dyString *dy);
 /* Add a CGI-encoded var=val&... string of all cart variables to dy. */
 
@@ -87,6 +92,9 @@ char *cartSessionVarName();
 
 char *cartSessionId(struct cart *cart);
 /* Return session id. */
+
+unsigned cartSessionRawId(struct cart *cart);
+/* Return raw session id without security key. */
 
 char *cartSidUrlString(struct cart *cart);
 /* Return session id string as in hgsid=N . */

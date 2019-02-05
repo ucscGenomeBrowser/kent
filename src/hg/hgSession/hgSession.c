@@ -31,10 +31,14 @@
 #include "customFactory.h"
 #include "udc.h"
 #include "hgSession.h"
-#include "hubConnect.h"
 #include "hgConfig.h"
 #include "sessionThumbnail.h"
+#include "filePath.h"
 #include "obscure.h"
+#include "trashDir.h"
+#include "hubConnect.h"
+
+#include "trackHub.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -307,7 +311,8 @@ printf("<table id=\"sessionTable\" class=\"sessionTable stripe hover row-border 
 printf("<thead><tr>");
 printf("<TH><TD><B>session name (click to load)</B></TD><TD><B>created on</B></TD><td><b>assembly</b></td>"
        "<TD align=center><B>view/edit&nbsp;<BR>details&nbsp;</B></TD>"
-       "<TD align=center><B>delete this&nbsp;<BR>session&nbsp;</B></TD><TD align=center><B>share with&nbsp;<BR>others?&nbsp;</B></TD>"
+       "<TD align=center><B>delete this&nbsp;<BR>session&nbsp;</B></TD>"
+       "<TD align=center><B>share with&nbsp;<BR>others?&nbsp;</B></TD>"
        "<td align-center><b>post in&nbsp;<br><a href=\"../cgi-bin/hgPublicSessions?%s\">public listing</a>?</b></td>"
        "<TD align=center><B>send to<BR>mail</B></TD></TH>",
        cartSidUrlString(cart));
@@ -375,6 +380,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         }
     else
         printf("unavailable");
+
     printf("</TD><TD align=center>");
     safef(buf, sizeof(buf), "%s%s", hgsDeletePrefix, encSessionName);
     char command[512];
@@ -458,6 +464,31 @@ cgiMakeOnKeypressTextVar(hgsLoadUrlName,
 printf("&nbsp;&nbsp;");
 cgiMakeButton(hgsDoLoadUrl, "submit");
 printf("</TD></TR>\n");
+
+printf("<TR><TD colspan=2></TD></TR>\n");
+
+char name[256];
+safef(name, sizeof name, "%s", hgsExtractUploadPrefix);
+
+printf("<TR>");
+printf("<TD colspan=2>Use settings including custom tracks in local backup archive file (.tar.gz):</TD>");
+printf("<TD><INPUT TYPE=FILE NAME='%s' id='%s'>", name, name);
+printf("&nbsp;&nbsp;<input type='submit' id='archiveUpload' value='submit'></TD></TR>");
+printf("<TR><TD colspan=2></TD></TR>");
+
+// check the file name, e.g. does it have the right name or extension?
+char js[1024];
+safef(js, sizeof js, 
+"var control = document.getElementById('%s');"
+"var files = control.files;"
+"if ((files.length == 1) && (files[0].name.endsWith('.tar.gz')))"
+"    return true;"
+"alert('Please choose the correct backup archive ending in .tar.gz');"
+"return false;"
+, name);
+
+jsOnEventById("click", "archiveUpload", js);
+
 printf("</TABLE>\n");
 printf("<P></P>\n");
 }
@@ -530,6 +561,16 @@ cgiMakeButton(hgsDoSaveLocal, "submit");
 printf("</TD></TR>\n");
 printf("<TR><TD></TD><TD colspan=3>(leave file blank to get output in "
        "browser window)</TD></TR>\n");
+printf("<TR><TD colspan=4></TD></TR>\n");
+
+printf("<TR><TD colspan=4>Save Full Session:</TD></TR>\n");
+printf("<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD colspan=2>");
+printf("backup settings including custom tracks to archive .tar.gz</TD>");
+printf("<TD>");
+printf("&nbsp;");
+cgiMakeButton(hgsShowDownloadPrefix, "submit");
+printf("</TD></TR>\n");
+
 printf("<TR><TD colspan=4></TD></TR>\n");
 printf("</TABLE>\n");
 }
@@ -687,6 +728,11 @@ cartRemovePrefix(cart, hgsLoadPrefix);
 cartRemovePrefix(cart, hgsEditPrefix);
 cartRemovePrefix(cart, hgsLoadLocalFileName);
 cartRemovePrefix(cart, hgsDeletePrefix);
+cartRemovePrefix(cart, hgsShowDownloadPrefix);
+cartRemovePrefix(cart, hgsMakeDownloadPrefix);
+cartRemovePrefix(cart, hgsDoDownloadPrefix);
+cartRemovePrefix(cart, hgsExtractUploadPrefix);
+cartRemovePrefix(cart, hgsDoUploadPrefix);
 cartRemovePrefix(cart, hgsDo);
 cartRemove(cart, hgsOldSessionName);
 cartRemove(cart, hgsCancel);
@@ -977,7 +1023,9 @@ if ((row = sqlNextRow(sr)) != NULL)
 		   "<BR>\n",
 		   hgsLoadPrefix, encSessionName, 
 		   hgsDeletePrefix, encSessionName, hgsDeletePrefix, encSessionName,
-		   hgsDoSessionChange, hgsDoSessionChange, hgsCancel);
+		   hgsDoSessionChange, hgsDoSessionChange, 
+		   hgsCancel);
+
     char id[256];
     safef(id, sizeof id, "%s%s", hgsDeletePrefix, encSessionName);
     jsOnEventByIdF("click", id, confirmDeleteFormat, encSessionName);
@@ -1421,9 +1469,14 @@ if (isNotEmpty(newName) && !sameString(sessionName, newName))
 		   sessionName, newName);
     sessionName = newName;
     encSessionName = encNewName;
-    renamePrefixedCartVar(hgsEditPrefix, encOldSessionName, encNewName);
-    renamePrefixedCartVar(hgsLoadPrefix, encOldSessionName, encNewName);
-    renamePrefixedCartVar(hgsDeletePrefix, encOldSessionName, encNewName);
+    renamePrefixedCartVar(hgsEditPrefix         , encOldSessionName, encNewName);
+    renamePrefixedCartVar(hgsLoadPrefix         , encOldSessionName, encNewName);
+    renamePrefixedCartVar(hgsDeletePrefix       , encOldSessionName, encNewName);
+    renamePrefixedCartVar(hgsShowDownloadPrefix , encOldSessionName, encNewName);
+    renamePrefixedCartVar(hgsMakeDownloadPrefix , encOldSessionName, encNewName);
+    renamePrefixedCartVar(hgsDoDownloadPrefix   , encOldSessionName, encNewName);
+    renamePrefixedCartVar(hgsExtractUploadPrefix, encOldSessionName, encNewName);
+    renamePrefixedCartVar(hgsDoUploadPrefix     , encOldSessionName, encNewName);
     if (shared >= 2)
         {
         thumbnailRemove(encUserName, encSessionName, conn);
@@ -1511,6 +1564,92 @@ if (shared)
 return dyStringCannibalize(&dyMessage);
 }
 
+// ======================================
+
+void prepBackGroundCall(char **pBackgroundProgress, char *cleanPrefix)
+/* fix cart and save state */
+{
+*pBackgroundProgress = cloneString(cgiUsualString("backgroundProgress", NULL)); 
+cartRemove(cart, "backgroundExec");
+cartRemove(cart, "backgroundProgress");
+cartRemovePrefix(cart, cleanPrefix);
+cartSaveState(cart);  // in case it crashes
+}
+
+void launchForeAndBackGround(char *operation)
+/* update cart, launch background and foreground */
+{
+char cmd[1024]; 
+safef(cmd, sizeof cmd, "./hgSession backgroundExec=%s", operation);
+
+// allow child to see variables loaded from CGI.
+// because CGI settings have not been saved back to the cart yet
+cartSaveState(cart);   
+
+char *workUrl = NULL;
+// automatically adds hgsid
+// automatically adds backGroundProgress=%s url.progress for separate channel
+// Have to pass the userName manually since background exec will not get cookie,
+// but we are no longer using userName which was needed with saved-sessions.
+startBackgroundWork(cmd, &workUrl);
+
+htmlOpen("Background Status");
+
+jsInlineF(
+    "setTimeout(function(){location = 'hgSession?backgroundStatus=%s&hgsid=%s';},2000);\n", 
+    cgiEncode(workUrl), cartSessionId(cart));
+htmlClose();
+fflush(stdout);
+}
+
+void passSubmittedBinaryAsTrashFile(struct hashEl *list)
+/* fetch the binary file submitted in memory,
+ * and save it to temp trash location,
+ * saving the name in the cart. 
+ * This is necessary to pass the file to the background process.*/
+{
+// List should have these two
+// hgS_extractUpload_hub_9614_Anc11__binary
+// hgS_extractUpload_hub_9614_Anc11__filename
+// can have a third __filepath if crashes leaving in the cart.
+
+char *binaryParam = NULL;
+struct hashEl *hel = NULL;
+for (hel = list; hel; hel = hel->next)
+    {
+    if (endsWith(hel->name, "__binary"))
+	binaryParam = cloneString(hel->name);
+    }
+
+if (!binaryParam)
+    {
+    htmlOpen("No file selected");
+    printf("Please choose a saved session custom tracks local backup archive file (.tar.gz) to upload");
+    htmlClose();
+    exit(0);
+    } 
+
+char *binaryValue = cartOptionalString(cart, binaryParam);
+
+char *binInfo = cloneString(binaryValue);
+char *words[2];
+char *mem;
+unsigned long size;
+chopByWhite(binInfo, words, ArraySize(words));
+mem = (char *)sqlUnsignedLong(words[0]);
+size = sqlUnsignedLong(words[1]);
+
+struct tempName tn;
+trashDirFile(&tn, "backGround", cartSessionId(cart), ".bin");
+
+writeGulp(tn.forCgi, mem, size); 
+
+// add new cart var with trash path
+// hgS_extractUpload_hub_9614_Anc11__filepath
+char *varName = replaceChars(binaryParam, "__binary", "__filepath");
+cartRemove(cart, varName);  // just in case
+cartSetString(cart, varName, tn.forCgi);  // update the cart
+}
 
 void hgSession()
 /* hgSession - Interface with wiki login and do session saving/loading.
@@ -1525,7 +1664,138 @@ cart = cartAndCookieNoContent(hUserCookie(), excludeVars, oldVars);
 
 char *userName = (loginSystemEnabled() || wikiLinkEnabled()) ? wikiLinkUserName() : NULL;
 
-if (cartVarExists(cart, hgsDoMainPage) || cartVarExists(cart, hgsCancel))
+char *backgroundStatus = cloneString(cartUsualString(cart, "backgroundStatus", NULL));
+
+if (backgroundStatus)
+    {
+    // clear backgroundStatus from the cart
+    cartRemove(cart, "backgroundStatus");
+    /* Save cart variables. */
+    cartSaveState(cart);
+    getBackgroundStatus(backgroundStatus);
+    exit(0);
+    }
+
+char *backgroundExec = cloneString(cgiUsualString("backgroundExec", NULL));
+
+
+struct hashEl *showDownloadList = cartFindPrefix(cart, hgsShowDownloadPrefix);
+struct hashEl *makeDownloadList = cartFindPrefix(cart, hgsMakeDownloadPrefix);
+struct hashEl *doDownloadList = cartFindPrefix(cart, hgsDoDownloadPrefix);
+struct hashEl *extractUploadList = cartFindPrefix(cart, hgsExtractUploadPrefix);
+struct hashEl *doUploadList = cartFindPrefix(cart, hgsDoUploadPrefix);
+
+// The form gets submitted but no filename for upload was chosen and submitted.
+if (extractUploadList && sameString(hgsExtractUploadPrefix, extractUploadList->name))
+    extractUploadList = NULL; // no filename was submitted. ignore.
+
+if (showDownloadList)
+    showDownloadSessionCtData(showDownloadList);
+else if (makeDownloadList)
+    {
+    if (sameOk(backgroundExec,"makeDownloadSessionCtData"))
+	{
+	// only one, not a list.
+	struct hashEl *hel = makeDownloadList;
+	char *param1 = cloneString(hel->name);
+
+	char *backgroundProgress = NULL; 
+	prepBackGroundCall(&backgroundProgress, hgsMakeDownloadPrefix);
+
+	makeDownloadSessionCtData(param1, backgroundProgress);
+
+	exit(0);  // cannot return
+	}
+    else
+	{
+
+	launchForeAndBackGround("makeDownloadSessionCtData");
+
+	exit(0);
+	}
+
+    }
+else if (doDownloadList)
+    doDownloadSessionCtData(doDownloadList);
+else if (extractUploadList)
+    {
+    if (sameOk(backgroundExec,"extractUploadSessionCtData"))
+	{
+	// only one, but becomes a list
+        // since there are multiple cart names with suffixes for handling binary submitted file.
+	//hgS_extractUpload___filepath 
+	//hgS_extractUpload___binary 
+	//hgS_extractUpload___filename 
+	char *param1 = NULL;
+	char *param2 = NULL;
+	char *param3 = NULL;
+	struct hashEl *hel = NULL;
+	for (hel = extractUploadList; hel; hel = hel->next)
+	    {
+	    if (endsWith(hel->name, "__binary"))
+		param1 = cloneString(hel->name);
+	    if (endsWith(hel->name, "__filename"))
+		param2 = cloneString(hel->name);
+	    if (endsWith(hel->name, "__filepath"))
+		param3 = cloneString(hel->name);
+	    }
+	if (!param1)
+	    errAbort("missing __binary param");
+	if (!param2)
+	    errAbort("missing __filename param");
+	if (!param3)
+	    errAbort("missing __filepath param");
+
+	char *param1Value = cloneString(cartOptionalString(cart, param1));
+	char *param2Value = cloneString(cartOptionalString(cart, param2));
+	char *param3Value = cloneString(cartOptionalString(cart, param3));
+
+	char *backgroundProgress = NULL; 
+	prepBackGroundCall(&backgroundProgress, hgsExtractUploadPrefix);
+
+	extractUploadSessionCtData(
+	    param1, param1Value, 
+	    param2, param2Value, 
+	    param3, param3Value, 
+	    backgroundProgress);
+
+	exit(0);  // cannot return
+	}
+    else
+	{
+	passSubmittedBinaryAsTrashFile(extractUploadList);
+
+	launchForeAndBackGround("extractUploadSessionCtData");
+
+	exit(0);
+	}
+
+    }
+else if (doUploadList)
+    {
+    if (sameOk(backgroundExec,"doUploadSessionCtData"))
+	{
+	// only one, not a list.
+	struct hashEl *hel = doUploadList;
+	char *param1 = cloneString(hel->name);
+
+	char *backgroundProgress = NULL; 
+	prepBackGroundCall(&backgroundProgress, hgsDoUploadPrefix);
+
+	doUploadSessionCtData(param1, backgroundProgress);
+
+	exit(0);  // cannot return
+	}
+    else
+	{
+
+	launchForeAndBackGround("doUploadSessionCtData");
+
+	exit(0);
+	}
+
+    }
+else if (cartVarExists(cart, hgsDoMainPage) || cartVarExists(cart, hgsCancel))
     doMainPage(userName, NULL);
 else if (cartVarExists(cart, hgsDoNewSession))
     {

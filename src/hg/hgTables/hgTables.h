@@ -734,6 +734,10 @@ void wigShowFilter(struct sqlConnection *conn);
 
 /* ----------- BigWig business in bigWig.c -------------------- */
 
+boolean isBigWig(char *database, char *table, struct trackDb *parent,
+	struct customTrack *(*ctLookupName)(char *table));
+/* Local test to see if something is bigWig.  Handles hub tracks unlike hIsBigWig. */
+
 boolean isBigWigTable(char *table);
 /* Return TRUE if table is bedGraph in current database's trackDb. */
 

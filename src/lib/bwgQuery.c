@@ -387,7 +387,7 @@ bigWigSummaryArray(bwf, chrom, start, end, summaryType, 1, &arrayOfOne);
 return arrayOfOne;
 }
 
-boolean isBigWig(char *fileName)
+boolean isBigWigFile(char *fileName)
 /* Peak at a file to see if it's bigWig */
 {
 FILE *f = mustOpen(fileName, "rb");
