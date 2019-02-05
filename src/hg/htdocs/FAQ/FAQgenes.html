@@ -11,14 +11,17 @@
 
 <ul>
 <li><a href="#genestrans">What is the difference between genes and transcripts ?</a></li>
-<li><a href="#ensgencode">What is the difference between Ensembl and Gencode ?</a></li>
-<li><a href="#hg19">For the human assembly hg19/GrCH37: What is the difference between UCSC Genes, the "Gencode All" track and the "Ensembl Genes" track ?</a></li>
-<li><a href="#hg38">For the human assembly hg38/GrCH38: What is the difference between "Gencode" and "All Gencode" ?</a></li>
+<li><a href="#ens">What is the difference between Ensembl and Gencode ?</a></li>
 <li><a href="#ensRefseq">What is the difference between Gencode/Ensembl and RefSeq ?</a></li>
-<li><a href="#gencode">What is the difference between Gencode comprehensive and basic?</a></li>
+<li><a href="#hg19">For the human assembly hg19/GrCH37: What is the difference between UCSC 
+                    Genes, the "Gencode All" track and the "Ensembl Genes" track ?</a></li>
+<li><a href="#hg38">For the human assembly hg38/GrCH38: What is the difference between "Gencode" 
+                    and "All Gencode" ?</a></li>
+<li><a href="#gencod.org">What is the difference between Gencode comprehensive and basic?</a></li>
 <li><a href="#ccds">What is CCDS?</a></li>
-<li><a href="#justsingle">There are too many transcripts. Can I show just a single transcript?</a></li>
-<li><a href="#whatdo">This is rather complicated. Can you tell me which gene transcript track I should use?</a></li>
+<li><a href="#justsingle">There are too many transcripts. Can I show just a single one?</a></li>
+<li><a href="#whatdo">This is rather complicated. Can you tell me which gene transcript track
+                      I should use?</a></li>
 </ul>
 <hr>
 <p>
@@ -28,59 +31,115 @@
 <h2>The basics</h2>
 <h6>What is the difference between genes and transcripts? </h6>
 <p>
-There are a few general things that are true of any gene track.
 Every gene has a set of transcripts. Tracks are often called "Genes", e.g.
 "Ensembl Genes" or "UCSC Genes", but they really are transcripts on an assembly.
 Every transcript has an
-accession number, a sequence and, in the genome browser, also a list of exon
-chrom/start/end coordinates on a genome assembly. These transcript accessions
+accession number, a sequence and a list of exon
+chrom/start/end coordinates on a genome assembly. The transcript accessions
 are assigned to genes, so every transcript is assigned to one gene. Most of the
 genes have a symbol associated to them by the Human Gene Nomenclature Commitee
 (HGNC, formerly HUGO).</p>
 
-<h6>What are common gene tracks?</h6>
+<h6>What are the most common gene transcript tracks?</h6>
 <p>
 Originally, researchers sequenced cDNA sequences, submitted them to Genbank and the
 Genome Browser shows these in the Genbank track, or in the EST track, if the cDNA is just
 a single read from the 5' or 3' end. From the alignment of the cDNAs and ESTs, 
-the NCBI RefSeq group would manually create a smaller set of representative transcripts.
-Automated programs like UCSC's or Ensembl's gene build software did the same, just
-in software, which is more systematic but also more error-prone.
+the NCBI RefSeq group manually creates a smaller set of representative transcripts.
+Automated programs like UCSC's or Ensembl's gene build software do the same, just
+in software, which is more systematic but more error-prone.
 With the arrival of Gencode, Ensembl added a manual curation of their
-transcripts. NCBI added with Gnomon and its "Refseq Predicted" transcripts an
-automated gene build pipeline. ?Aceview? ?UCSC vs Ensembl?  </p>
+human and mouse transcripts. NCBI added with Gnomon and its "Refseq Predicted" transcripts an
+automated gene build pipeline.</p>
 
 <p>
 Ensembl/Gencode accession numbers in the human genome start with ENST followed by a
-number. The genes have identifiers that start with ENSG and every ENSG has at
+number. Every transcript is assigned to a gene with identifiers that start with ENSG and every ENSG has at
 least one ENST assigned to it. Manually curated Refseq transcript identifiers
 start with NM_ (coding) or NR_ (noncoding), followed by a number, or XM_ if
-they are predicted.  </p>
+they are predicted by software.</p>
+
+<p>There are many other tracks in the group "Genes and Gene Predictions". Genescan and N-Scan are older
+transcript predictor algorithms that are based on only the genome sequence alone. Augustus and AceView
+are automated gene-predictors that use cDNA and EST data. Most of these and similar gene tracks
+are only relevant when you are working on a particular locus where you think that the manually curated gene models
+(Ensembl and RefSeq) have errors.</p>
 
 <a name="ensgencode"></a>
 <h2>The differences</h2>
-<h6>What is the difference between Ensembl and Gencode?</h6>
+<h6>What are Ensembl and Gencode and is there any difference?</h6>
 <p> 
 On the human and mouse genome, the identifiers, transcript sequences and exon coordinates of
-Ensembl and Gencode versions are identical. You can see which version of
-Ensembl corresponds to which version of Gencode on the 
-<a target=_blank href="https://www.gencodegenes.org/releases/">Gencode Release History</a>.
-You can download the gene models either from the website gencodegenes.org or from
-http://ensembl.org. Additional information that are not directly transcript related, e.g.
-the linkouts to other databases, sometimes differ in the files that are distributed by
-Gencode and the gene model files you can find on the Ensembl website.
+equivalent Ensembl and Gencode versions are identical. The
+<a target=_blank href="https://www.gencodegenes.org/human/releases.html">Gencode Release History</a>.
+shows which versions are equivalent.  You can download the gene transcript
+models either from the website <a href=https://gencodegenes.org>https://gencodegenes.org</a> or from 
+<a href=http://ensembl.org>http://ensembl.org</a>. Additional information that are not directly 
+transcript related, e.g. the linkouts to other databases, sometimes differ in
+the files that are distributed by Gencode and the Ensembl website (IS THIS TRUE? MARK?). 
+The GFF files distributed by Ensembl and Gencode are different. For most
+applications, the files distributed on the Gencode website should be easier to
+use.
+
+<h6>What is the difference between Ensembl/Gencode and RefSeq?</h6>
+<p> 
+Different institutions have different rules on how they annotate genes. E.g.
+RefSeq's criteria are more stringent, so there are a lot fewer RefSeq
+transcripts than for Ensembl/Gencode. Also, RefSeq transcripts have their own
+sequences independent of the genome, so certain population-specific variants
+may be in RefSeq that are entirely missing from the reference genome sequence.
+The links from either transcript model to other gene-related databases are
+different. In general, it seems that high-throuput sequencing data results,
+e.g. RNA-seq, are often using Ensembl/Gencode annotations and human genetics
+results are reported using RefSeq annotations. It depends on your particular
+project which gene model set you want to use. Over time, the two transcript
+databases are becoming more and more similar.
 
 <a name="hg19"></a>
 <h6>For the human assembly hg19/GrCH37: What is the difference between UCSC
 Genes, the "Gencode All" track and the "Ensembl Genes" track ?</h6>
-<p> 
-UCSC vs others is easy, but what is the difference between Gencode All vs Ensembl ?
-</p>
+<p>The "UCSC Genes", also called "Known Genes" track, is available only on
+assemblies before hg38.  It was built with a gene predictor developed at UCSC.
+It uses protein, EST and cDNA annotations to derive a relatively restricted
+gene transcript set. The software is not used anymore and the track is not
+available on newer assemblies.</p>
+
+<p> ???  what is the difference between Gencode All vs Ensembl ???</p>
 
 <a name="hg38"></a>
 <h6>For the human assembly hg38/GrCH38: What is the difference between "Gencode" and "All Gencode" ?</h6>
 <p> 
-I don't really know. Is it only the meta data?
+I don't really know. Is it only the meta data? Mark?
+</p>
+
+<a name="hg38"></a>
+<h6>What is the difference between "Gencode comprehensive" and "Gencode basic"</h6>
+<p> 
+I don't really know. Is it only the meta data? Mark?
+</p>
+
+<a name="justsingle"></a>
+<h6>How can I just show a single transcript per gene?</h6>
+<p> 
+For the tracks "UCSC Genes" (hg19) or "Gencode Genes" (hg38), click on
+their title and on the configuration page, uncheck the box "Show splice
+variants". Only a single transcript will be shown. The method how this
+transcript is selected is described in the track documentation below the 
+configuration settings.</p>
+
+<p>For the track NCBI RefSeq (hg38), you can activate the subtrack "RefSeq Clinical".
+It contains only the transcripts that are part of the Human Gene Mutation Database.
+</p>
+
+<a name="whatdo"></a>
+<h6>This is rather complicated. Can you tell me which gene transcript track I should use?</h6>
+<p> 
+If you are doing NGS analysis and you need to capture all possible transcripts,
+use Ensembl/Gencode.  For human genetics or variant annotation, a more
+restricted transcript set is usually sufficient and RefSeq is the standard. If you
+are only interested in protein coding annotations, CCDS or UniProt may be an option. 
+Use TransMap, Augustus, Genscan, SIB, SGP or GeneId in obscure cases where you
+are looking for hints on what an alternative splicing could look like.
 </p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

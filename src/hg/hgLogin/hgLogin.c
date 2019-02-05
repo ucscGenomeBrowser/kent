@@ -40,7 +40,7 @@ char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update",
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
 char *database;		/* Name of genome database - hg15, mm3, or the like. */
 struct hash *oldCart;	/* Old cart hash. */
-char *errMsg;           /* Error message to show user when form data rejected */
+char *errMsg = NULL;    /* Error message to show user when form data rejected */
 char brwName[64];
 char brwAddr[256];
 char signature[256];
@@ -941,8 +941,9 @@ cartSaveSession(cart);
 void signup(struct sqlConnection *conn)
 /* process the signup form */
 {
-char query[256];
+char query[1024];
 char *user = cartUsualString(cart, "hgLogin_userName", "");
+char *encUserName = cgiEncodeFull(user);
 if (!user || sameString(user,""))
     {
     freez(&errMsg);
@@ -951,10 +952,12 @@ if (!user || sameString(user,""))
     return;
     }
 /* Make sure the escaped usrename is less than 32 characters */
-if (strlen(user) > 32)
+if (strlen(encUserName) > 32)
     {
+    char buf[1024];
+    safef(buf,sizeof(buf), "Encoded user name: '%s' is %d characters.  Please use a shorter name: less than 32 characters after URL encoding.", encUserName, (int)strlen(encUserName));
     freez(&errMsg);
-    errMsg = cloneString("Encoded username longer than 32 characters.");
+    errMsg = cloneString(buf);
     signupPage(conn);
     return;
     }

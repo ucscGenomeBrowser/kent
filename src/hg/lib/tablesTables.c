@@ -67,7 +67,7 @@ return table;
 }
 
 static void showTableFilterInstructionsEtc(struct fieldedTable *table, 
-    char *itemPlural, struct  fieldedTableSegment *largerContext, void (*addFunc)(void),
+    char *itemPlural, struct  fieldedTableSegment *largerContext, void (*addFunc)(int),
     char *visibleFacetList)
 /* Print instructional text, and basic summary info on who passes filter, and a submit
  * button just in case user needs it */
@@ -77,23 +77,22 @@ int matchCount = slCount(table->rowList);
 if (largerContext != NULL)  // Need to page?
      matchCount = largerContext->tableSize;
 
-cgiMakeButton("submit", "search");
+printf("<input class='btn btn-secondary' type='submit' name='submit' id='submit' value='Search'>");
 
 printf("&nbsp&nbsp;");
-
-cgiMakeOnClickButton("clearButton", 
-"$(':input').not(':button, :submit, :reset, :hidden, :checkbox, :radio').val('');\n"
-"$('[name=cdwBrowseFiles_page]').val('1');\n"
-"$('[name=clearSearch]').val('1');\n"
-"$('#submit').click();\n",
-"clear search");
+printf("<input class='btn btn-secondary' type='button' id='clearButton' VALUE=\"Clear Search\">");
+jsOnEventById("click", "clearButton",
+    "$(':input').not(':button, :submit, :reset, :hidden, :checkbox, :radio').val('');\n"
+    "$('[name=cdwBrowseFiles_page]').val('1');\n"
+    "$('[name=clearSearch]').val('1');\n"
+    "$('#submit').click();\n");
 
 printf("<br>");
 
 printf("%d&nbsp;%s&nbsp;found. ", matchCount, itemPlural);
 
 if (addFunc)
-    addFunc();
+    addFunc(matchCount);
 
 if (!visibleFacetList)
     {
@@ -127,6 +126,7 @@ jsInline(dy->string);
 dyStringFree(&dy);
 }
 
+#ifdef NOT_CURRENTLY_USED
 static void printWatermark(char *id, char *watermark)
 /* Print light text filter prompt as watermark. */
 {
@@ -135,6 +135,7 @@ jsInlineF(
 "  $('#%s').watermark(\"%s\");\n"
 "});\n", id, watermark);
 }
+#endif
 
 static void resetPageNumberOnChange(char *id)
 /* On change, reset page number to 1. */
@@ -156,53 +157,37 @@ static void showTableFilterControlRow(struct fieldedTable *table, struct cart *c
  * it's value is slName list of suggestion values */
 {
 /* Include javascript and style we need  */
-webIncludeResourceFile("jquery-ui.css");
-jsIncludeFile("jquery.js", NULL);
-jsIncludeFile("jquery.plugins.js", NULL);
-jsIncludeFile("jquery-ui.js", NULL);
-jsIncludeFile("jquery.watermark.js", NULL);
+printf("<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css'>\n");
+printf("<script src='https://code.jquery.com/ui/1.12.1/jquery-ui.js'></script>\n");
 
 int i;
-printf("<TR>");
+printf("<tr>");
 for (i=0; i<table->fieldCount; ++i)
     {
     char *field = table->fields[i];
     char varName[256];
     safef(varName, sizeof(varName), "%s_f_%s", varPrefix, field);
-    webPrintLinkCellStart();
-
-#ifdef MAKES_TOO_WIDE
-    /* Print out input control.  As you can see from all the commented out bits
-     * this part has been a challenge.  We'd like to make the input cell fit the
-     * table size, but if we do it with style it makes whole table wider. */
-    char *oldVal = cartUsualString(cart, varName, "");
-    printf("<input type=\"text\" name=\"%s\" style=\"display:table-cell; width=100%%\""
-	   " value=\"%s\">", varName, oldVal);
-#endif /* MAKES_TOO_WIDE */
+    printf("<td>");
 
     /* Approximate size of input control in characters */
     int size = fieldedTableMaxColChars(table, i);
     if (size > maxLenField)
 	size = maxLenField;
 
-#ifdef ACTUALLY_WORKS
-    /* This way does work last I checked and is just a line of code.
-     * Getting an id= property on the input tag though isn't possible this way. */
-    cartMakeTextVar(cart, varName, "", size + 1);
-#endif
-
     /* Print input control getting previous value from cart.  Set an id=
      * so auto-suggest can find this control. */
     char *oldVal = cartUsualString(cart, varName, "");
-    printf("<INPUT TYPE=TEXT NAME=\"%s\" id=\"%s\" SIZE=%d VALUE=\"%s\">\n",
-	varName, varName, size+1, oldVal);
-
-    /* Write out javascript to initialize autosuggest on control */
-    printWatermark(varName, " filter ");
+    printf("<INPUT TYPE=TEXT NAME=\"%s\" id=\"%s\" SIZE=%d",
+	varName, varName, size+1);
+    if (isEmpty(oldVal))
+        printf(" placeholder=\" filter \">\n");
+    else
+        printf(" value=\"%s\">\n", oldVal);
 
     /* Write out javascript to reset page number to 1 if filter changes */
     resetPageNumberOnChange(varName);
 
+    /* Set up the auto-suggest list for this filter */
     if (suggestHash != NULL)
         {
 	struct slName *suggestList = hashFindVal(suggestHash, field);
@@ -211,7 +196,7 @@ for (i=0; i<table->fieldCount; ++i)
 	    printSuggestScript(varName, suggestList);
 	    }
 	}
-    webPrintLinkCellEnd();
+    printf("</td>\n");
     }
 
 
@@ -234,7 +219,7 @@ safef(pageVar, sizeof(pageVar), "%s_page", varPrefix);
 int i;
 for (i=0; i<table->fieldCount; ++i)
     {
-    webPrintLabelCellStart();
+    printf("<td>");
     printf("<A class=\"topbar\" HREF=\"");
     printf("%s", returnUrl);
     printf("&%s=1", pageVar);
@@ -260,7 +245,7 @@ for (i=0; i<table->fieldCount; ++i)
 	    }
 	}
     printf("</A>");
-    webPrintLabelCellEnd();
+    printf("</td>\n");
     }
 
 /* Sort on field */
@@ -310,10 +295,10 @@ for (row = table->rowList; row != NULL; row = row->next)
 		val = shortVal;
 		}
 	    }
-	if (isNum[fieldIx])
-	    webPrintLinkCellRightStart();
-	else
-	    webPrintLinkCellStart();
+	if (isNum[fieldIx]) // vacuous, but left it just in case we want to do different stuff to numbers later
+            printf("<td>");
+        else
+            printf("<td>");
 	boolean printed = FALSE;
 	if (tagOutputWrappers != NULL && !isEmpty(val))
 	    {
@@ -328,7 +313,7 @@ for (row = table->rowList; row != NULL; row = row->next)
 	    }
 	if (!printed)
 	    printf("%s", val);
-	webPrintLinkCellEnd();
+	printf("</td>\n");
 	}
     printf("</TR>\n");
     }
@@ -352,7 +337,7 @@ if (largerContext != NULL)  // Need to page?
 	    {
 	    // first page
 	    safef(id, sizeof id, "%s_first", varPrefix);
-	    printf("<a href='#' id='%s' style='font-size: 150%%;'>&#9198;</a>", id);
+	    printf("<a href='#' id='%s'>&#9198;</a>", id);
 	    jsOnEventByIdF("click", id, 
 		"$('[name=%s_page]').val('1');\n"
 		"$('#submit').click();\n"
@@ -361,7 +346,7 @@ if (largerContext != NULL)  // Need to page?
 
 	    // prev page
 	    safef(id, sizeof id, "%s_prev", varPrefix);
-	    printf("<a href='#' id='%s' style='font-size: 150%%;'>&#9194;</a>", id);
+	    printf("<a href='#' id='%s'>&#9194;</a>", id);
 	    jsOnEventByIdF("click", id, 
 		"$('[name=%s_page]').val('%d');\n"
 		"$('#submit').click();\n"
@@ -383,7 +368,7 @@ if (largerContext != NULL)  // Need to page?
 	    // next page
 	    printf("&nbsp;&nbsp;&nbsp;");
 	    safef(id, sizeof id, "%s_next", varPrefix);
-	    printf("<a href='#' id='%s' style='font-size: 150%%;' >&#9193;</a>", id);
+	    printf("<a href='#' id='%s'>&#9193;</a>", id);
 	    jsOnEventByIdF("click", id, 
 		"$('[name=%s_page]').val('%d');\n"
 		"$('#submit').click();\n"
@@ -392,7 +377,7 @@ if (largerContext != NULL)  // Need to page?
 	    // last page
 	    printf("&nbsp;&nbsp;&nbsp;");
 	    safef(id, sizeof id, "%s_last", varPrefix);
-	    printf("<a href='#' id='%s' style='font-size: 150%%;' >&#9197;</a>", id);
+	    printf("<a href='#' id='%s'>&#9197;</a>", id);
 	    jsOnEventByIdF("click", id, 
 		"$('[name=%s_page]').val('%d');\n"
 		"$('#submit').click();\n"
@@ -403,14 +388,13 @@ if (largerContext != NULL)  // Need to page?
      }
 }
 
-
 void webFilteredFieldedTable(struct cart *cart, struct fieldedTable *table, 
     char *returnUrl, char *varPrefix,
     int maxLenField, struct hash *tagOutputWrappers, void *wrapperContext,
     boolean withFilters, char *itemPlural, 
     int pageSize, struct fieldedTableSegment *largerContext, struct hash *suggestHash, 
     struct facetField **ffArray, char *visibleFacetList,
-    void (*addFunc)(void))
+    void (*addFunc)(int))
 /* Show a fielded table that can be sorted by clicking on column labels and optionally
  * that includes a row of filter controls above the labels .
  * The maxLenField is maximum character length of field before truncation with ...
@@ -422,77 +406,49 @@ if (strchr(returnUrl, '?') == NULL)
 if (withFilters || visibleFacetList)
     showTableFilterInstructionsEtc(table, itemPlural, largerContext, addFunc, visibleFacetList);
 
-printf("<div style='position:relative;'>"); // parent container
+printf("<div class='row'>\n"); // parent container
 
-int facetMargin = 280;
-// right column
-printf("<DIV style='position:absolute; top:0; left:%dpx;'>\n", visibleFacetList ? facetMargin : 0);
-/* Set up our table within table look. */
-webPrintLinkTableStart();
-
-/* Draw optional filters cells ahead of column labels*/
-if (withFilters)
-    showTableFilterControlRow(table, cart, varPrefix, maxLenField, suggestHash);
-
-showTableSortingLabelRow(table, cart, varPrefix, returnUrl);
-showTableDataRows(table, pageSize, maxLenField, tagOutputWrappers, wrapperContext);
-
-/* Get rid of table within table look */
-webPrintLinkTableEnd();
-
-if (largerContext != NULL)
-    showTablePaging(table, cart, varPrefix, largerContext, pageSize);
-printf("</div>");
-
-if (visibleFacetList)  // facet desired?
+if (visibleFacetList)
     {
     // left column
-    printf("<DIV style='position:absolute; top:2px; left:0; width: %dpx; background-color:#FFFFCC; "
-	"padding-top:20px; padding-bottom:20px; border: 1px solid grey;'>\n", facetMargin);
+    printf("<div class='col-xs-6 col-sm-4 col-md-4 col-lg-3 col-xl-3'>\n");
 
     // reset all facet value selections
-    char *color = "#FFFFCC";
     char *op = "resetAll";
-    htmlPrintf("<a href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
+    htmlPrintf("<a class='btn btn-secondary' href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
 	    "&browseFiles_facet_op=%s|url|"
 	    "&browseFiles_facet_fieldName=%s|url|"
 	    "&browseFiles_facet_fieldVal=%s|url|"
 	    "&cdwBrowseFiles_page=1' "
-	    "style='display:inline; position:relative; background-color:%s|none|; margin-left:5px;'"
-	    ">%s</a><br>\n",
+	    ">%s</a><br><br>\n",
 	cartSessionVarName(), cartSessionId(cart),
 	op, "", "",
-	color,
-	"<Clear All"
+	"Clear All"
 	);
 
-    int valIndent = 20;
     struct slName *nameList = slNameListFromComma(visibleFacetList);
     int f;
     for (f = 0; f < table->fieldCount; ++f) 
 	{
 	struct facetField *field = ffArray[f];
-	if (slNameInListUseCase(nameList, field->fieldName)) // is this field a visible facet?
+	if (slNameInListUseCase(nameList, field->fieldName)) // i.e. is this field a visible facet?
 	    {
-	    htmlPrintf("<span style='display:inline; font-weight:bold; margin-left:5px'>%s</span><br>\n", 
-		field->fieldName); // (%d), slCount(field->valList));
+            htmlPrintf("<div class='card facet-card'><div class='card-body'>\n");
+            htmlPrintf("<h6 class='card-title'>%s</h6><dl>\n", field->fieldName);
 	    struct facetVal *val;
 
 	    if (!field->allSelected)  // add reset facet link
 		{
-		char *color = "#FFFFCC";
 		char *op = "reset";
-		htmlPrintf("<a href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
+		htmlPrintf("<dd><a class='btn btn-secondary' href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
 			"&browseFiles_facet_op=%s|url|"
 			"&browseFiles_facet_fieldName=%s|url|"
 			"&browseFiles_facet_fieldVal=%s|url|"
 			"&cdwBrowseFiles_page=1' "
-			"style='display:inline; position:relative; background-color:%s|none|; margin-left:5px;'"
-			">%s</a><br>\n",
+			">%s</a></dd>\n",
 		    cartSessionVarName(), cartSessionId(cart),
 		    op, field->fieldName, "",
-		    color,
-		    "<Clear"
+		    "Clear"
 		    );
 		}
 
@@ -508,19 +464,11 @@ if (visibleFacetList)  // facet desired?
 		    || specificallySelected)
 		    {
 		    ++valuesShown;
-		    char *color = "#FFFFCC";
-		    if (val->selected)
-			color = "#CCFFFF";
 		    char *op = "add";
 		    if (specificallySelected)
 			op = "remove";
-		    printf("<DIV style='position:relative; left:%dpx; width: %dpx; background-color:#FFFFCC;'>\n",
-			valIndent, (facetMargin-valIndent));
-		    htmlPrintf(
-			    "<span "
-			    "style='display:inline; position:relative; background-color:%s|none|;'>"
-			    "<input type=checkbox value=%s class=cdwFSCheckBox %s></span>",
-			color,
+		    printf("<dd class=\"facet\">\n");
+		    htmlPrintf("<input type=checkbox value=%s class=cdwFSCheckBox %s>&nbsp;",
 			specificallySelected ? "true" : "false", 
 			specificallySelected ? "checked" : "");
 		    htmlPrintf("<a href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
@@ -528,68 +476,87 @@ if (visibleFacetList)  // facet desired?
 			    "&browseFiles_facet_fieldName=%s|url|"
 			    "&browseFiles_facet_fieldVal=%s|url|"
                             "&cdwBrowseFiles_page=1' "
-			    "style='display:inline; position:relative; background-color:%s|none|;'"
 			    ">",
 			cartSessionVarName(), cartSessionId(cart),
-			op, field->fieldName, val->val,
-		        color);
-		    htmlPrintf("%s(%d)</a>\n", val->val, val->selectCount);
-		    printf("</div>\n");
+			op, field->fieldName, val->val
+                        );
+		    htmlPrintf("%s (%d)</a>", val->val, val->selectCount);
+		    printf("</dd>\n");
 		    }
 		}
 
-	    // show See More link when facet has lots of values
+	    // show "See More" link when facet has lots of values
 	    if (!(field->showAllValues || valuesShown < FacetFieldLimit))
 		{
-		char *color = "#FFFFCC";
 		char *op = "showAllValues";
-		htmlPrintf("<a href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
+		htmlPrintf("<dd><a href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
 			"&browseFiles_facet_op=%s|url|"
 			"&browseFiles_facet_fieldName=%s|url|"
 			"&browseFiles_facet_fieldVal=%s|url|"
 			"&cdwBrowseFiles_page=1' "
-			"style='display:inline; position:relative; background-color:%s|none|; margin-left:5px;'"
-			">%s</a><br>\n",
+			">See %d More</a></dd>\n",
 		    cartSessionVarName(), cartSessionId(cart),
-		    op, field->fieldName, "",
-		    color,
-		    "See More"
+		    op, field->fieldName, "", slCount(field->valList) - FacetFieldLimit 
 		    );
 		}
 
-	    // show See Less link when facet has lots of values
+	    // show "See Fewer" link when facet has lots of values
 	    if (field->showAllValues && valuesShown >= FacetFieldLimit)
 		{
-		char *color = "#FFFFCC";
 		char *op = "showSomeValues";
-		htmlPrintf("<a href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
+		htmlPrintf("<dd><a href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
 			"&browseFiles_facet_op=%s|url|"
 			"&browseFiles_facet_fieldName=%s|url|"
 			"&browseFiles_facet_fieldVal=%s|url|"
 			"&cdwBrowseFiles_page=1' "
-			"style='display:inline; position:relative; background-color:%s|none|; margin-left:5px;'"
-			">%s</a><br>\n",
+			">%s</a></dd>\n",
 		    cartSessionVarName(), cartSessionId(cart),
 		    op, field->fieldName, "",
-		    color,
 		    "See Fewer"
 		    );
 		}
-
-
+            htmlPrintf("</div></div>\n");
 	    }
 	}
     printf("</div>\n");
+    // Clicking a checkbox is actually a click on the following link
     jsInlineF(
 	"$(function () {\n"
 	"  $('.cdwFSCheckBox').click(function() {\n"
-	"    this.parentElement.nextSibling.click();\n"
+	"    this.nextSibling.nextSibling.click();\n"
 	"  });\n"
 	"});\n");
     }
 
-printf("</div>\n");
+// start right column, if there are two columns
+if (visibleFacetList)
+    printf("<div class='col-xs-6 col-sm-8 col-md-8 col-lg-9 col-xl-9'>\n");
+else
+    printf("<div class='col-12'>\n");
+    
+printf("  <div>\n");
+printf("    <table class=\"table table-striped table-bordered table-sm\">\n");
 
+/* Draw optional filters cells ahead of column labels*/
+printf("<thead>\n");
+if (withFilters)
+    showTableFilterControlRow(table, cart, varPrefix, maxLenField, suggestHash);
+showTableSortingLabelRow(table, cart, varPrefix, returnUrl);
+printf("</thead>\n");
+
+printf("<tbody>\n");
+showTableDataRows(table, pageSize, maxLenField, tagOutputWrappers, wrapperContext);
+printf("</tbody>\n");
+printf("</table>\n");
+printf("</div>");
+
+if (largerContext != NULL)
+    showTablePaging(table, cart, varPrefix, largerContext, pageSize);
+
+if (visibleFacetList) // close right column, if there are two columns
+    printf("</div>");
+
+printf("</div>\n"); //close parent container
 }
 
 void webSortableFieldedTable(struct cart *cart, struct fieldedTable *table, 
@@ -702,7 +669,8 @@ void webFilteredSqlTable(struct cart *cart, struct sqlConnection *conn,
     char *fields, char *from, char *initialWhere,  
     char *returnUrl, char *varPrefix, int maxFieldWidth, 
     struct hash *tagOutWrappers, void *wrapperContext,
-    boolean withFilters, char *itemPlural, int pageSize, struct hash *suggestHash, char *visibleFacetList, void (*addFunc)(void) )
+    boolean withFilters, char *itemPlural, int pageSize, struct hash *suggestHash, char *visibleFacetList,
+    void (*addFunc)(int) )
 /* Given a query to the database in conn that is basically a select query broken into
  * separate clauses, construct and display an HTML table around results. This HTML table has
  * column names that will sort the table, and optionally (if withFilters is set)

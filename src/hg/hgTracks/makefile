@@ -5,6 +5,7 @@ HG_INC += -I../../optimalLeaf
 L += ${HALLIBS} ${MYSQLLIBS}
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ${MYLIBDIR}/optimalLeaf.a
+COPT = -ggdb
 
 A = hgTracks
 RENDERA = hgRenderTracks
@@ -15,7 +16,7 @@ COMMONO = adjacencyTrack.o pubsTracks.o altGraphXTrack.o bamTrack.o barChartTrac
 	coverageTrack.o cytoBandTrack.o cutterTrack.o \
 	expRatioTracks.o factorSource.o hgTracks.o interactTrack.o \
 	gencodeTracks.o goldTrack.o gtexTracks.o gtexEqtlClusterTrack.o gvfTrack.o \
-	longRangeTrack.o loweLabTracks.o lrgTrack.o \
+	lollipop.o longRangeTrack.o loweLabTracks.o lrgTrack.o \
 	mafTrack.o makeItemsTrack.o menu.o multiWig.o netTrack.o peptideAtlasTrack.o pslTrack.o \
 	rmskJoinedTrack.o rmskTrack.o \
 	sampleTracks.o searchTracks.o simpleTracks.o snakeTrack.o sortWig.o switchGear.o transMapTracks.o \

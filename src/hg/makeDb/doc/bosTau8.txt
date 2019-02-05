@@ -945,3 +945,17 @@ EOF
     # pretty sparse.  Not sure it's worth pushing out as a separate subtrack.
 
 ##############################################################################
+# LIFTOVER TO bosTau9 (DONE - 2018-11-07 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/bosTau8/bed/blat.bosTau9.2018-11-07
+    cd /hive/data/genomes/bosTau8/bed/blat.bosTau9.2018-11-07
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/bosTau8/jkStuff/bosTau8.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         bosTau8 bosTau9) > do.log 2>&1 &
+    # real    933m14.111s
+
+    # verify the convert link on the test browser is now
+    # active from bosTau8 to bosTau9
+
+##############################################################################

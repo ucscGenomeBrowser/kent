@@ -252,8 +252,7 @@ if (userName && (cookieIdx > 0 || isNotEmpty(cookieKey)))
             // Replace with improved cookie, in preparation for when better security is enabled.
             sendNewCookies(userName, cookieSalt);
             }
-// TODO: change default to FALSE in v344 Jan 2017:
-        else if (cfgOptionBooleanDefault(CFG_LOGIN_ACCEPT_IDX, TRUE) &&
+        else if (cfgOptionBooleanDefault(CFG_LOGIN_ACCEPT_IDX, FALSE) &&
                  idxIsValid(userName, cookieIdx))
             {
             // Compare cookieIdx vs. gbMembers.idx (if login is local) -- a little more secure

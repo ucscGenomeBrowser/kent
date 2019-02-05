@@ -625,7 +625,12 @@ if (curTrack == NULL)
 
 /* Region line */
 {
-char *regionType = cartUsualString(cart, hgtaRegionType, hgtaRegionTypeGenome);
+char *regionType;
+if (cartVarExists(cart, "hgFind.matches")) // coming back from a search
+    regionType = cartUsualString(cart, hgtaRegionType, hgtaRegionTypeRange);
+else
+    regionType = cartUsualString(cart, hgtaRegionType, hgtaRegionTypeGenome);
+
 char *range = cartUsualString(cart, hgtaRange, "");
 if (isPositional)
     {

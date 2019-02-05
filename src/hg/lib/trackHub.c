@@ -826,6 +826,7 @@ else
                   startsWithWord("bigGenePred", type) ||
                   startsWithWord("bigNarrowPeak", type) ||
                   startsWithWord("bigChain", type) ||
+                  startsWithWord("bigLolly", type) ||
                   startsWithWord("bigBarChart", type) ||
                   startsWithWord("bigInteract", type) ||
                   startsWithWord("bam", type)))

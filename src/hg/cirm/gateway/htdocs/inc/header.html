@@ -6,28 +6,31 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Stem Cell Hub, California Institute for Regenerative Medicine CESCG at UC Santa Cruz</title>
     <link rel="shortcut icon" href="<!--#echo var="ROOT" -->/images/schub.ico" type="image/png" />
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 
     <!-- Local stylesheet -->
     <link rel="stylesheet" href="<!--#echo var="ROOT" -->/style/cirmStyle.css">
+    <script src="<!--#echo var="ROOT" -->/js/cirmStuff.js"></script>
 
-    <!-- Bootstrap -->
+    <!-- Font Awesome -->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-     integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-     crossorigin="anonymous">
-
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
-     integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
-     crossorigin="anonymous">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous">
 
     <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-     integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-     crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+
+
   </head>
 
   <script>
@@ -36,49 +39,75 @@
     });
   </script>
 
-  <body>
+  <body style="font-size: 14px">
     <!--#if expr='("$SERVER_NAME" = /cirmdcm.soe.ucsc.edu/ || "$SERVER_NAME" = /cirm-01*/)'-->
 
     <div class="securesite-banner">
       <div class="securesite-text">
-        This is the secute site for labs to access pre-publication data. Public CIRM CESCG data
+        This is the secure site for labs to access pre-publication data. Public CIRM CESCG data
         may be accessed at <a class=securesite" href="https://cirm.ucsc.edu"</a>https://cirm.ucsc.edu</a>.
       </div>
     </div>
     <!--#else -->
     <div class="cirm-banner"></div>
     <!--#endif -->
-    <div class="container container-fluid container-table" style="width: 90%">
+    <div class="container-fluid" style="width: 90%">
       <div class="row">
-        <a href="/index"><img src="<!--#echo var="ROOT" -->/images/cirmSChubLogo.png" class="img-responsive"
-        style="margin-top: 15px; max-width: 450px;" width="75%" height="75%"/></a>
-        <h3 style="margin-bottom: 0px">
-          <!--#if expr='"$SERVER_NAME" = /cirm.ucsc.edu/'-->
-            <div style="float: right; width: 200px;" class="input-group">
-              <form action="https://google.com/search" method="get">
-                <input type="hidden" name="sitesearch" value="cirm.ucsc.edu" />
-                <input type="text" name="q" class="form-control" placeholder="press enter to search" />
-              </form>
-            </div>
-          <!--#endif -->
-          <div style="line-height: 1.5em;">
-            <a class="a-unstyled" href="<!--#echo var="ROOT" -->/cgi-bin/cdwWebBrowse?cdwCommand=browseFiles">
-            <span class="label back-dark-pink">Files</span></a>
-            <a class="a-unstyled" href="<!--#echo var="ROOT" -->/projects">
-            <span class="label back-light-blue">Projects</span></a>
-            <a class="a-unstyled" href="<!--#echo var="ROOT" -->/tools">
-            <span class="label back-light-green">Tools</span></a>
-            <a class="a-unstyled" href="<!--#echo var="ROOT" -->/cescg/cescgOrg">
-            <span class="label back-orange">CESCG Organization</span></a>
-            <a class="a-unstyled" href="<!--#echo var="ROOT" -->/cescg/cescgPeople">
-            <span class="label back-dark-blue">CESCG People</span></a>
-            <a class="a-unstyled" href="<!--#echo var="ROOT" -->/cescg/cescgPubs">
-            <span class="label back-dark-pink">CESCG Publications</span></a>
-            <a class="a-unstyled" href="<!--#echo var="ROOT" -->/help/cirmBasics">
-            <span class="label back-light-blue">Help</span></a>
-            <a class="a-unstyled" href="<!--#echo var="ROOT" -->/bestPractices">
-            <span class="label back-light-green">Best Practices</span></a>
+        <a href="/index"><img src="<!--#echo var="ROOT" -->/images/cirmSChubLogo.png"
+        style="margin-top: 15px; max-width: 450px;" /></a>
+      </div>
+      <div class="row">
+        <nav class="navbar navbar-expand-lg navbar-light nopadding" style="width: 100%">
+          <button class="navbar-toggler" type="button" data-toggle="collapse"
+          data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
+          aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+              <li class="nav-item back-dark-blue rounded">
+                <h5 class="nav-button"><a class="nav-link text-white padded-nav-link" href="<!--#echo var="ROOT" -->/index">Home</a></h5>
+              </li>
+              <li class="nav-item back-dark-pink rounded" style="margin-left: 6px">
+                <h5 class="nav-button"><a class="nav-link text-white padded-nav-link" href="<!--#echo var="ROOT" -->/cgi-bin/cdwWebBrowse">Files</a>
+              </li>
+              <li class="nav-item back-light-blue rounded" style="margin-left: 6px">
+                <h5 class="nav-button"><a class="nav-link text-white padded-nav-link" href="<!--#echo var="ROOT" -->/projects">Projects</a></h5>
+              </li>
+              <li class="nav-item back-light-green rounded" style="margin-left: 6px">
+                <h5 class="nav-button"><a class="nav-link text-white padded-nav-link" href="<!--#echo var="ROOT" -->/tools">Tools</a></h5>
+              </li>
+              <li class="nav-item back-orange rounded" style="margin-left: 6px">
+                <h5 class="nav-button"><a class="nav-link text-white padded-nav-link" href="<!--#echo var="ROOT" -->/bestPractices">Standards</a></h5>
+              </li>
+              <li class="nav-item back-dark-blue rounded" style="margin-left: 6px">
+                <h5 class="nav-button"><a class="nav-link text-white padded-nav-link" href="<!--#echo var="ROOT" -->/help/cirmBasics">Help</a></h5>
+              </li>
+              <li class="nav-item dropdown back-dark-pink rounded" style="margin-left: 6px">
+                <h5 class="nav-button"><a class="nav-link dropdown-toggle text-white padded-nav-link" href="#" id="navbarDropdownMenuLink"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About</a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <a class="dropdown-item" href="<!--#echo var="ROOT" -->/cescg/cescgOrg">Organization</a>
+                  <a class="dropdown-item" href="<!--#echo var="ROOT" -->/cescg/cescgPeople">People</a>
+                  <a class="dropdown-item" href="<!--#echo var="ROOT" -->/cescg/cescgPubs">Publications</a>
+                </div>
+              </li>
+              <li class="nav-item back-gray rounded" style="margin-left: 6px">
+                <h5 class="nav-button"><a class="nav-link text-white padded-nav-link login" href="../cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1">
+                Login</a></h5>
+              </li>
+              <li class="nav-item back-gray rounded" style="margin-left: 6px">
+                <h5 class="nav-button"><a class="nav-link text-white padded-nav-link login" id="logoutLink"
+                href="../cgi-bin/hgLogin?hgLogin.do.displayLogout=1" style="display:none">
+                Logout</a></h5>
+              </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0" action="https://google.com/search" method="get">
+              <input type="hidden" name="sitesearch" value="cirm.ucsc.edu" />
+              <input class="form-control mr-sm-2" style="padding: 2px 12px" type="search" name="q" placeholder="Search">
+              <button class="btn btn-outline-dark my-2 my-sm-0" style="padding: 2px 12px" type="submit">Search</button>
+            </form>
           </div>
-        </h3>
+        </nav>
       </div>
     </div>

@@ -1662,6 +1662,25 @@ sqlUpdate(sc, query);
 return TRUE;
 }
 
+char *sqlGetCreateTable(struct sqlConnection *sc, char *table)
+/* Get the Create table statement. table must exist. */
+{
+char query[256];
+struct sqlResult *res;
+char **row = NULL;
+char *statement = NULL;
+
+sqlSafef(query, sizeof(query), "show create table %s", table);
+res = sqlGetResult(sc, query);
+if ((row=sqlNextRow(res)))
+    {
+    // skip first column which has useless table name in it.
+    statement = cloneString(row[1]);
+    }
+sqlFreeResult(&res);
+return statement;
+}
+
 void sqlRemakeTable(struct sqlConnection *sc, char *table, char *create)
 /* Drop table if it exists, and recreate it. */
 {
@@ -1690,7 +1709,10 @@ struct sqlResult *sr;
 if (sameString(table,""))
     {
     if (sameOk(cfgOption("noSqlInj.dumpStack"), "on"))
-	dumpStack("jksql sqlTableExists: Buggy code is feeding me empty table name. table=[%s].\n", table); fflush(stderr); // log only
+	{
+	dumpStack("jksql sqlTableExists: Buggy code is feeding me empty table name. table=[%s].\n", table);
+	fflush(stderr); // log only
+	}
     return FALSE;
     }
 // TODO If the ability to supply a list of tables is hardly used,
@@ -1704,7 +1726,10 @@ if (strchr(table,','))
 if (strchr(table,'%'))
     {
     if (sameOk(cfgOption("noSqlInj.dumpStack"), "on"))
-	dumpStack("jksql sqlTableExists: Buggy code is feeding me junk wildcards. table=[%s].\n", table); fflush(stderr); // log only
+	{
+	dumpStack("jksql sqlTableExists: Buggy code is feeding me junk wildcards. table=[%s].\n", table);
+	fflush(stderr); // log only
+	}
     return FALSE;
     }
 if (strchr(table,'-'))
@@ -2180,16 +2205,6 @@ if(sr != NULL)
     return mysql_field_count(sr->conn->conn);
 return 0;
 }
-
-#ifdef SOMETIMES  /* Not available for all MYSQL environments. */
-int sqlFieldCount(struct sqlResult *sr)
-/* Return number of fields in a row of result. */
-{
-if (sr == NULL)
-    return 0;
-return mysql_field_count(sr->result);
-}
-#endif /* SOMETIMES */
 
 int sqlFieldCount(struct sqlResult *sr)
 /* Return number of fields in a row of result. */
@@ -3109,6 +3124,49 @@ time_t time = sqlDateToUnixTime(date);
 freeMem(date);
 return time;
 }
+
+static char *sqlTablePropertyFromSchema(struct sqlConnection *conn, char *db, char *table, char *field)
+/* Get table property. Table must exist or will abort. */
+{
+char query[512], **row;
+struct sqlResult *sr;
+char *ret;
+sqlSafef(query, sizeof(query), 
+    "SELECT %s FROM information_schema.TABLES"
+    " WHERE TABLE_SCHEMA = '%s' AND TABLE_NAME = '%s'", field, db, table);
+// the failover strategy for failoverConn does not work for this command, 
+// as it never returns an error. So we run this on the failover server
+// if we have a failover connection and the table is not on the main server
+if (conn->failoverConn && !sqlTableExistsOnMain(conn, table))
+    {
+    sqlConnectIfUnconnected(conn->failoverConn, TRUE);
+    monitorPrintInfo(conn->failoverConn, "SQL_TABLE_STATUS_FAILOVER");
+    sr = sqlGetResult(conn->failoverConn, query);
+    }
+else
+    sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row == NULL)
+    errAbort("Database table %s or field %s doesn't exist", table, field);
+ret = cloneString(row[0]);
+sqlFreeResult(&sr);
+return ret;
+}
+
+unsigned long sqlTableDataSizeFromSchema(struct sqlConnection *conn, char *db, char *table)
+/* Get table data size. Table must exist or will abort. */
+{
+char *sizeString = sqlTablePropertyFromSchema(conn, db, table, "data_length");
+return sqlUnsignedLong(sizeString);
+}
+
+unsigned long sqlTableIndexSizeFromSchema(struct sqlConnection *conn, char *db, char *table)
+/* Get table index size. Table must exist or will abort. */
+{
+char *sizeString = sqlTablePropertyFromSchema(conn, db, table, "index_length");
+return sqlUnsignedLong(sizeString);
+}
+
 
 char *sqlGetPrimaryKey(struct sqlConnection *conn, char *table)
 /* Get primary key if any for table, return NULL if none. */

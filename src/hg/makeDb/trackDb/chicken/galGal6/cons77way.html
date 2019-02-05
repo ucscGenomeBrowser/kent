@@ -44,6 +44,12 @@ and 1.
 Both phastCons and phyloP treat alignment gaps and unaligned nucleotides as
 missing data.
 </p>
+<p>
+See also: <a href="http://genomewiki.ucsc.edu/index.php/GalGal6_77-way_conservation_lastz_parameters"
+target=_blank>lastz parameters</a> and other details, and
+chain <a href="http://genomewiki.ucsc.edu/index.php/GalGal6_77-way_Genome_size_statistics"
+target=_blank>minimum score and gap</a> parameters used in these alignments.
+</p>
 
 <p>
 Missing sequence in the assemblies is highlighted in the track display
@@ -52,10 +58,10 @@ level (see <em>Gap Annotation</em>, below). </p>
 <p>
 <blockquote><table border=1 cellpadding=4 bordercolor='#aaaaaa'>
 <tr><th>Organism</th><th>Species</th><th>Assembly name</th><th>browser or<br>NCBI source</th><th>alignment type</th></tr>
-<tr align=left><td>D. melanogaster</td><td>Drosophila melanogaster</td>
-    <td>Aug. 2014 (BDGP Release 6 + ISO1 MT/dm6)</td>
-    <td><a href="../cgi-bin/hgTracks?db=dm6"
-    target=_blank>Aug. 2014 (BDGP Release 6 + ISO1 MT/dm6)</a></td>
+<tr align=left><td>Chicken</td><td>Gallus gallus</td>
+    <td>Mar. 2018 (GRCg6a/galGal6)</td>
+    <td><a href="../cgi-bin/hgTracks?db=galGal6"
+    target=_blank>Mar. 2018 (GRCg6a/galGal6)</a></td>
     <td>reference</td></tr>
 <tr align=left><td>Adelie penguin</td><td>Pygoscelis adeliae</td>
     <td>Jun 2014 (ASM69910v1/pygAde1)</td>
@@ -127,11 +133,6 @@ level (see <em>Gap Annotation</em>, below). </p>
     <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/serCan1/"
     target=_blank>15 Jan-2014 (SCA1/serCan1)</a></td>
     <td>syntenic</td></tr>
-<tr align=left><td>Chicken</td><td>Gallus gallus</td>
-    <td>Mar. 2018 (GRCg6a/galGal6)</td>
-    <td><a href="../cgi-bin/hgTracks?db=galGal6"
-    target=_blank>Mar. 2018 (GRCg6a/galGal6)</a></td>
-    <td>notFound</td></tr>
 <tr align=left><td>Chinese alligator</td><td>Alligator sinensis</td>
     <td>29 Aug 2013 (ASM45574v1/allSin1)</td>
     <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/allSin1/"
@@ -459,7 +460,7 @@ Downloads for data in this track are available:
 <h2>Display Conventions and Configuration</h2>
 <p>
 The track configuration options allow the user to display the three different
-sets of alignments:, all, birds, reptiles or vertebrate, individually or all
+sets of alignments: all, birds, reptiles or vertebrate, individually or all
 simultaneously.
 In full and pack display modes, conservation scores are displayed as a
 <em>wiggle track</em> (histogram) in which the height reflects the
@@ -482,7 +483,7 @@ species to include in the pairwise display.
 Configuration buttons are available to select all of the species
 (<em>Set all</em>), deselect all of the species (<em>Clear all</em>), or
 use the default settings (<em>Set defaults</em>).
-Note that excluding species from the pairwise display does not alter the
+Note that excluding species from the pairwise display does not alter 
 the conservation score display.</p>
 <p>
 To view detailed information about the alignments at a specific
@@ -584,12 +585,12 @@ each species using lastz from repeat-masked genomic sequence.
 Pairwise alignments were then linked into chains using a dynamic programming
 algorithm that finds maximally scoring chains of gapless subsections
 of the alignments organized in a kd-tree.
-The scoring matrix and parameters for pairwise alignment and chaining
-were tuned for each species based on phylogenetic distance from the reference.
+Please note the <a href="http://genomewiki.ucsc.edu/index.php/GalGal6_77-way_Genome_size_statistics"
+target=_blank>specific parameters</a>for the alignments.
 High-scoring chains were then placed along the genome, with
 gaps filled by lower-scoring chains, to produce an alignment net.
-For more information about the chaining and netting process and
-parameters for each species, see the description pages for the Chain and Net
+For more information about the chaining and netting process
+for each species, see the description pages for the Chain and Net
 tracks.</p>
 <p>
 An additional filtering step was introduced in the generation of the 77-way

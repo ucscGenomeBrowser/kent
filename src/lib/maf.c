@@ -754,8 +754,8 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
     reverseIntRange(&mc->start, &e, mc->srcSize);
     if (mc->text != NULL)
         reverseComplement(mc->text, maf->textSize);
-	if (mc->quality != NULL)
-		reverseBytes(mc->quality, maf->textSize);
+    if (mc->quality != NULL)
+	reverseBytes(mc->quality, maf->textSize);
     if (mc->strand == '-')
         mc->strand = '+';
     else

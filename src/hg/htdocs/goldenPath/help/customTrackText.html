@@ -1,6 +1,6 @@
 <!-- This file contains custom track documentation included in -->
 <!-- hgTracksHelp.html and customTrack.html.                   -->
-<p><dd>
+<p>
 The Genome Browser provides dozens of aligned annotation tracks that have been computed at UCSC or 
 have been provided by outside collaborators. In addition to these standard tracks, it is also 
 possible for users to upload their own annotation data for temporary display in the browser. These 
@@ -9,34 +9,34 @@ automatically discarded 48 hours after the last time they are accessed, unless t
 <a href="/goldenPath/help/hgSessionHelp.html#CTs">Session</a>. Optionally, users can make custom 
 annotations viewable by others as well. For a more stable option for custom annotations, we suggest
 using <a href="hgTrackHubHelp.html" target="_blank">track hubs</a>. A third, more technical, option is to operate a mirror. Custom tracks work well for quickly displaying data, while track hubs are 
-more configurable and permanent.</dd></p>
-<p><dd>
+more configurable and permanent.</p>
+<p>
 Custom tracks are a wonderful tool for research scientists using the Genome Browser. Because space 
 is limited in the Genome Browser track window, many excellent genome-wide tracks cannot be included 
 in the standard set of tracks packaged with the browser. Other tracks of interest may be excluded 
 from distribution because the annotation track data is too specific to be of general interest or 
 can't be shared until journal publication. In the past, many individuals and labs contributed custom
 tracks to the Genome Browser website for use by others. To view a list of these custom annotation 
-tracks, click <a href="../customTracks/custTracks.html">here</a>.</dd></p>
-<p><dd>
+tracks, click <a href="../customTracks/custTracks.html">here</a>.</p>
+<p>
 Track hubs are now the preferred approach for viewing and sharing data on the Browser. Labs, 
 consortia, and institutions submit their hubs to be listed as a <a href="hgTrackHubHelp.html#View" 
 target="_blank">Public Hub</a>. Track hubs require remotely hosted data. They use binary index 
 files which allow the browser to quickly access only what is relevant for the current region being 
 viewed in the browser. See the <a href="hgTrackHubHelp.html" target="_blank">track hub help 
-page</a> for more information.</dd></p>
-<p><dd>
+page</a> for more information.</p>
+<p>
 Genome Browser annotation tracks are based on files in line-oriented format. Each line in the file 
 defines a display characteristic for the track or defines a data item within the track. Annotation 
 files contain three types of lines: browser lines, track lines, and data lines. Empty lines and 
-those starting with &quot;#&quot; are ignored.</dd></p> 
-<p><dd>
-To construct an annotation file and display it in the Genome Browser, follow these steps:</dd></p>
+those starting with &quot;#&quot; are ignored.</p> 
+<p>
+To construct an annotation file and display it in the Genome Browser, follow these steps:</p>
 
 <a name="format"></a>
 <p>
-<dt>Step 1. Format the data set</dt>
-<dd>Formulate your data set as a tab-separated file using one of the formats supported by the Genome 
+<strong>Step 1. </strong> Format the data set
+Formulate your data set as a tab-separated file using one of the formats supported by the Genome 
 Browser. Annotation data can be in standard 
 <a href="../../FAQ/FAQformat.html#format3">GFF</a> format or in a format designed specifically for 
 the Human Genome Project or UCSC Genome Browser, including 
@@ -68,30 +68,30 @@ and <a href="../../FAQ/FAQformat.html#format6.5">microarray</a>
 (BED15). GFF and GTF files <em>must</em> be tab-delimited rather than space-delimited to display 
 correctly. Chromosome references must be of the form <em>chrN</em> (the parsing of chromosome names 
 <em><strong>is</strong></em> case-sensitive). You may include more than one data set in your 
-annotation file; these need not be in the same format.</dd></p> 
+annotation file; these need not be in the same format.</p> 
 <p>
-<dt>Step 2. Define the Genome Browser display characteristics</dt>
-<dd>Add one or more optional <a href="#lines">browser lines</a> to the beginning of your formatted data 
+<strong>Step 2.</strong> Define the Genome Browser display characteristics
+Add one or more optional <a href="#lines">browser lines</a> to the beginning of your formatted data 
 file to configure the overall display of the Genome Browser when it initially shows your annotation 
 data. Browser lines allow you to configure such things as the genome position that the Genome 
 Browser will initially open to, the width of the display, and the configuration of the other 
 annotation tracks that are shown (or hidden) in the initial display. NOTE: If the browser position 
 is not explicitly set in the annotation file, the initial display will default to the position 
 setting most recently used by the user, which may not be an appropriate position for viewing the 
-annotation track.</dd></p>
+annotation track.</p>
 <p>
-<dt>Step 3. Define the annotation track display characteristics</dt>
-<dd>Following the browser lines--and immediately preceding the formatted data--add a 
+<strong>Step 3.</strong> Define the annotation track display characteristics
+Following the browser lines--and immediately preceding the formatted data--add a 
 <a href="#TRACK">track line</a> to define the display attributes for your annotation data set. Track
 lines enable you to define annotation track characteristics such as the name, description, colors, 
 initial display mode, use score, etc. The track <a href="#TRACK">type=<<em>track_type</em>></a> 
 attribute is required for some tracks. If you have included more than one data set in your 
-annotation file, insert a track line at the beginning of each new set of data.</dd></p>
+annotation file, insert a track line at the beginning of each new set of data.</p>
 
 <a name="EXAMPLE1"></a>
 <p>
-<dt><em>Example #1:</em></dt>
-<dd>Here is an example of a simple annotation file that contains a list of chromosome coordinates.</dd> 
+<strong><em>Example #1:</em></strong>
+Here is an example of a simple annotation file that contains a list of chromosome coordinates. 
 <pre><code>browser position chr22:20100000-20100900
 track name=coords description="Chromosome coordinates list" visibility=2
 #chrom chromStart chromEnd
@@ -102,13 +102,13 @@ chr22   20100350 20100500
 chr22   20100700 20100800
 chr22   20100700 20100900</code></pre>
 <p>
-<dd>Click <a class="insideLink" href="../../cgi-bin/hgTracks?org=human&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/examples/ct_example1.txt" 
-target="_blank">here</a> to view this track in the Genome Browser.</dd></p>
+Click <a class="insideLink" href="../../cgi-bin/hgTracks?org=human&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/examples/ct_example1.txt" 
+target="_blank">here</a> to view this track in the Genome Browser.</p>
 <p>
-<dt><em>Example #2:</em></dt>
-<dd>Here is an example of an annotation file that defines 2 separate annotation tracks in BED format. 
+<strong><em>Example #2:</em></strong>
+Here is an example of an annotation file that defines 2 separate annotation tracks in BED format. 
 The first track displays blue one-base tick marks every 10000 bases on chr 22. The second track 
-displays red 100-base features alternating with blank space in the same region of chr 22.</dd> 
+displays red 100-base features alternating with blank space in the same region of chr 22. 
 <pre><code>browser position chr22:20100000-20140000
 track name=spacer description="Blue ticks every 10000 bases" color=0,0,255,
 #chrom chromStart chromEnd
@@ -121,15 +121,15 @@ chr22   20100000 20100100	first
 chr22   20100200 20100300	second
 chr22   20100400 20100500	third</code></pre>
 <p>
-<dd>Click <a class="insideLink" href="../../cgi-bin/hgTracks?org=human&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/examples/ct_example2.txt" 
+Click <a class="insideLink" href="../../cgi-bin/hgTracks?org=human&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/examples/ct_example2.txt" 
 target="_blank">here</a> to view this track in the Genome Browser.</dd</p>
 
 <p>
-<dt><em>Example #3a:</em></dt>
-<dd>This example shows an annotation file containing one data set in BED format. The track displays 
+<strong><em>Example #3a:</em></strong>
+This example shows an annotation file containing one data set in BED format. The track displays 
 features with multiple blocks, a thick end and thin end, and hatch marks indicating the direction of
 transcription. The track labels display in green (0,128,0), and the gray level of the each feature 
-reflects the score value of that line.</dd> 
+reflects the score value of that line. 
 <pre><code>browser position chr22:1000-10000
 browser hide all
 track name="BED track" description="BED format custom track example" visibility=2 color=0,128,0 useScore=1
@@ -137,65 +137,65 @@ track name="BED track" description="BED format custom track example" visibility=
 chr22 1000 5000 itemA 960 + 1100 4700 0 2 1567,1488, 0,2512
 chr22 2000 7000 itemB 200 - 2200 6950 0 4 433,100,550,1500 0,500,2000,3500 </code></pre>
 <p>
-<dd>Click 
+Click 
 <a class="insideLink" href="../../cgi-bin/hgTracks?org=human&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/examples/ct_example3.txt" 
-target="_blank">here</a> to view this track in the Genome Browser.</dd></p>
+target="_blank">here</a> to view this track in the Genome Browser.</p>
 <p>
-<dt><em>Example #3b:</em></dt>
-<dd>This example shows a simple annotation file containing one data set in the bigBed format. This track
+<strong><em>Example #3b:</em></strong>
+This example shows a simple annotation file containing one data set in the bigBed format. This track
 displays random sized blocks across chr21 in the human genome. The big data formats, such as the 
 bigBed format, can be uploaded using a bigDataUrl that is specified in the track line. For more 
 information on these track line parameters, refer to the <a href="#TRACK">Track Lines</a>
 section. When using bigDataUrls, data is cached and updated every 300 seconds. If you are updating
 your big data tracks with different displays and are not seeing your track changes in the browser,
 you may want to add the <a href="hgTrackHubHelp.html#Debug">udcTimeout</a>= parameter to prevent 
-caching of your track data and force a reload.</dd></p> 
+caching of your track data and force a reload.</p> 
 <p> 
-<dd>You may paste these two lines directly into the "Add Custom Tracks" page to view this example in the
-browser:</dd></p> 
+You may paste these two lines directly into the "Add Custom Tracks" page to view this example in the
+browser:</p> 
 <pre><code>browser position chr21:33,031,597-33,041,570
 track type=bigBed name="bigBed Example One" description="A bigBed file" bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb</code></pre>
-<p><dd>
-Alternatively, you may also upload just the URL of the bigBed file:</dd></p>
+<p>
+Alternatively, you may also upload just the URL of the bigBed file:</p>
 <pre><code>http://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb </code></pre>
-<p><dd>
+<p>
 This will infer the track type as &quot;bigBed&quot; based on the file extension and set the track 
-name to &quot;bigBedExample&quot;.</dd></p>
-<p><dt>
-<strong>Step 4. Display your annotation track in the Genome Browser</strong></dt><br>
-<dd>From the <a href="../../cgi-bin/hgGateway">Gateway page</a>, select the 
+name to &quot;bigBedExample&quot;.</p>
+<p>
+<strong>Step 4. Display your annotation track in the Genome Browser</strong><br>
+From the <a href="../../cgi-bin/hgGateway">Gateway page</a>, select the 
 genome assembly on which your annotation data is based, click 'GO', then click the &quot;add custom 
-tracks&quot; or &quot;manage custom tracks&quot; button below the tracks window.</dd></p>
-<p><dd>
+tracks&quot; or &quot;manage custom tracks&quot; button below the tracks window.</p>
+<p>
 On the Add Custom Tracks page, load the annotation track data or URL for your custom track into the 
 upper text box and the track documentation (optional) into the lower text box, then click the 
 &quot;Submit&quot; button. Tracks may be loaded by entering text, a URL, or a pathname on your local computer. 
 The track <a href="#TRACK">type=<<em>track_type</em>></a> attribute is required for some tracks. 
 For more information on these methods, as well as information on creating and adding track 
-documentation, see <a href="#ADD_CT">Loading a Custom Track into the Genome Browser</a>.</dd></p>
-<p><dd>
+documentation, see <a href="#ADD_CT">Loading a Custom Track into the Genome Browser</a>.</p>
+<p>
 If you encounter difficulties displaying your annotation, read the section 
 <a href="#TROUBLE">Troubleshooting Annotation Display Problems</a>.</p> 
-<p><dt><strong>Step 5. (Optional) Add details pages for individual track features</strong></dt><br>
-<dd>After you've constructed your track and have successfully displayed it in the Genome Browser, you 
+<p><strong>Step 5. (Optional) Add details pages for individual track features</strong><br>
+After you've constructed your track and have successfully displayed it in the Genome Browser, you 
 may wish to customize the details pages for individual track features. The Genome Browser 
 automatically creates a default details page for each feature in the track containing the feature's 
 name, position information, and a link to the corresponding DNA sequence. To view the details page 
 for a feature in your custom annotation track (in full, pack, or squish display mode), click on the 
-item's label in the annotation track window.</dd></p> 
-<p><dd>
+item's label in the annotation track window.</p> 
+<p>
 You can add a link from a details page to an external web page containing additional information 
 about the feature by using the track line <em>url</em> attribute. In the annotation file, set the 
 <em>url</em> attribute in the track line to point to a publicly available page on a web server. The 
 <em>url</em> attribute substitutes each occurrence of '$$' in the URL string with the name defined 
 by the <em>name</em> attribute. You can take advantage of this feature to provide individualized 
 information for each feature in your track by creating HTML anchors that correspond to the feature 
-names in your web page.</dd></p>
-<p><dt><em>Example #4:</em></dt>
-<dd>Here is an example of a file in which the <em>url</em> attribute has been set to point to the file 
+names in your web page.</p>
+<p><strong><em>Example #4:</em></strong>
+Here is an example of a file in which the <em>url</em> attribute has been set to point to the file 
 <a href="cloneshtml.txt" target="_blank">http://genome.ucsc.edu/goldenPath/help/clones.html</a>. The
 '#$$' appended to the end of the file name in the example points to the HTML NAME tag within the 
-file that matches the name of the feature (cloneA, cloneB, etc.).</dd></p> 
+file that matches the name of the feature (cloneA, cloneB, etc.).</p> 
 <pre><code>browser position chr22:10000000-10020000
 browser hide all
 track name=clones description="Clones" visibility=2 color=0,128,0 useScore=1 url="http://genome.ucsc.edu/goldenPath/help/clones.html#$$"
@@ -206,41 +206,41 @@ chr22 10005000 10009000 cloneC 700
 chr22 10006000 10010000 cloneD 600
 chr22 10011000 10015000 cloneE 300
 chr22 10012000 10017000 cloneF 100 </code></pre>
-<p><dd>
+<p>
 Click 
 <a class="insideLink" href="../../cgi-bin/hgTracks?org=human&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/examples/ct_example4.txt" 
-target="_blank">here</a> to display this track in the Genome Browser.</dd></p> 
-<p><dt>
-<strong>Step 6. (Optional) Share your annotation track with others</strong></dt><br> <dd>
+target="_blank">here</a> to display this track in the Genome Browser.</p> 
+<p>
+<strong>Step 6. (Optional) Share your annotation track with others</strong><br> 
 The previous steps showed you how to upload annotation data for your own use on your own machine. 
 However, many users would like to share their annotation data with members of their research group 
 on different machines or with colleagues at other sites. To learn how to make your Genome Browser 
 annotation track viewable by others, read the section <a href="#SHARE">Sharing Your Annotation Track
-with Others</a>.</dd></p>
+with Others</a>.</p>
 
 <a name="ADD_CT"></a>
 <h2>Loading a custom track into the Genome Browser</h2>
-<p><dd>
+<p>
 Using the Genome Browser's custom track upload and management utility, annotation tracks may be 
 added for display in the Genome Browser, deleted from the Genome Browser, or updated with new data 
 and/or display options. You may also use this interface to upload and manage custom track sets for 
-multiple genome assemblies.</dd></p>
-<p><dd>
+multiple genome assemblies.</p>
+<p>
 To load a custom track into the Genome Browser:</p>
-<p><dd>
-<dt><strong>Step 1. Open the Add Custom Tracks page</strong></dt><br>
-<dd>Select the top blue bar &quot;My Data&quot; menu and click <a href="../../cgi-bin/hgCustom">Custom 
+<p>
+<strong>Step 1. Open the Add Custom Tracks page</strong><br>
+Select the top blue bar &quot;My Data&quot; menu and click <a href="../../cgi-bin/hgCustom">Custom 
 Tracks</a>. Or, when browsing tracks, click the &quot;add custom tracks&quot; button below the 
 <a href="../../cgi-bin/hgTracks">Genome Browser</a>. (Note: if one or more tracks have already
 been uploaded during the current Browser session, additional tracks may be loaded on the Manage 
 Custom Tracks page. In this case, the button on the Browser page will be labeled &quot;manage 
 custom tracks&quot; and will automatically direct you to the track management page. See 
-<a href="#MANAGE_CT">Displaying and Managing Custom Tracks</a> for more information.)<dd></p>
-<p><dt>
-<strong>Step 2. Load the custom track data</strong></dt><br><dd>
+<a href="#MANAGE_CT">Displaying and Managing Custom Tracks</a> for more information.)</p>
+<p>
+<strong>Step 2. Load the custom track data</strong><br>
 The Add Custom Tracks page contains separate sections for uploading custom track data and optional 
 custom track descriptive documentation. Load the annotation data into the upper section by one of 
-the following methods:</dd></p>
+the following methods:</p>
 <ul>
   <li> 
   Enter one or more URLs for custom tracks (one per line) in the data text box. The Genome Browser 
@@ -260,9 +260,9 @@ the following methods:</dd></p>
   not be saved to a file, this method is not recommended unless you have a copy of the data 
   elsewhere.</li>  
 </ul>
-<p><dd>
+<p>
 Multiple custom tracks may be uploaded at one time on the Add Custom Tracks page through one of the 
-following methods:</dd></p>
+following methods:</p>
 <ul>
   <li> 
   Put all the tracks into the same file (rather than separate files), then load the file via the 
@@ -272,15 +272,15 @@ following methods:</dd></p>
   Browser by pasting their URLs into the text input box.</li>  
 </ul>
 <p>
-<dd><strong><em>NOTE: Please limit the number of custom tracks that you upload and maintain to less 
+<strong><em>NOTE: Please limit the number of custom tracks that you upload and maintain to less 
 than 1000 tracks. If you have more than this suggested limit of 1000 tracks, please consider
-setting up a <a href="hgTrackHubHelp.html" target="_blank">track hub</a> instead.</em></strong></dd></p>
-<p><dt>
-<strong>Step 3. (Optional) Load the custom track description page</strong></dt><br><dd>
+setting up a <a href="hgTrackHubHelp.html" target="_blank">track hub</a> instead.</em></strong></p>
+<p>
+<strong>Step 3. (Optional) Load the custom track description page</strong><br>
 If desired, you can provide optional descriptive text (in plain or HTML format) to accompany your 
 custom track. This text will be displayed when a user clicks the track's description button on the 
 Genome Browser annotation tracks page. Descriptive text may be loaded by one of the following 
-methods:</dd></p>
+methods:</p>
 <ul>
   <li>
   Click the &quot;Choose File&quot; button directly above the documentation text box, then choose a text 
@@ -295,31 +295,31 @@ methods:</dd></p>
   <strong>htmlUrl=<<em>external_url</em>></strong>. In this case, there is no need to insert 
   anything into the documentation text box.</li>
 </ul>
-<p><dd>
+<p>
 To format your description page in a style that is consistent with standard Genome Browser tracks, 
 click the template link below the documentation text box for an HTML <a href="ct_description.txt" 
-target="_blank">template</a> that may be copied and pasted into a file for editing.</dd></p>
-<p><dd>
+target="_blank">template</a> that may be copied and pasted into a file for editing.</p>
+<p>
 If you load multiple custom tracks simultaneously using one of the methods described in Step 2, a 
 track description can be associated only with the last custom track loaded, unless you upload the 
-descriptive text using the track line &quot;htmlUrl&quot; attribute described above.</dd></p>
-<p><dt>
-<strong>Step 4. Upload the track</strong></dt><br>
-<dd>Click the <em>Submit</em> button to load your custom track data and documentation into the Genome 
+descriptive text using the track line &quot;htmlUrl&quot; attribute described above.</p>
+<p>
+<strong>Step 4. Upload the track</strong><br>
+Click the <em>Submit</em> button to load your custom track data and documentation into the Genome 
 Browser. If the track uploads successfully, you will be directed to the custom track management page
 where you can display your track, update an uploaded track, add more tracks, or delete uploaded 
 tracks. If the Genome Browser encounters a problem while loading your track, it will display an 
 error. See the section <a href="#TROUBLE">Troubleshooting Annotation Display Problems</a> for help 
-in diagnosing custom track problems.</dd>
-<p><dd>
+in diagnosing custom track problems.
+<p>
 <strong><em>NOTE: Please limit the number of custom tracks that you upload and maintain to less 
 than 1000 tracks. If you have more than this suggested limit of 1000 tracks, please consider 
-setting up a <a href="hgTrackHubHelp.html" target="_blank">track hub</a> instead.</em></strong></dd></p>
+setting up a <a href="hgTrackHubHelp.html" target="_blank">track hub</a> instead.</em></strong></p>
 
 <a name="MANAGE"></a> 
 <a name="MANAGE_CT"></a> 
 <h2>Displaying and managing custom tracks</h2>
-<p><dd>
+<p>
 After a custom track has been successfully loaded into the Genome Browser, you can display it -- as 
 well as manage your entire custom track set -- via the options on the Manage Custom Tracks page. 
 This page automatically displays when a track has been uploaded into the Genome Browser (see 
@@ -327,14 +327,14 @@ This page automatically displays when a track has been uploaded into the Genome 
 access the track management page by clicking the &quot;manage custom tracks&quot; button on the 
 Gateway or Genome Browser annotation tracks pages. (Note that the track management page is available
 only if at least one track has been loaded during the current browser session; otherwise, this 
-button is labeled &quot;add custom tracks&quot; and opens the Add Custom Track page.)</dd></p>
-<p></dd>
+button is labeled &quot;add custom tracks&quot; and opens the Add Custom Track page.)</p>
+<p>
 The table on the Manage Custom Tracks page shows the current set of uploaded custom tracks for the 
 genome and assembly specified at the top of the page. If tracks have been loaded for more than one 
 genome assembly, pulldown lists are displayed; to view the uploaded tracks for a different assembly,
-select the desired genome and assembly option from the lists.</dd></p>  
-<p><dd>
-The following track information is displayed in the Manage Custom Tracks table:</dd></p>
+select the desired genome and assembly option from the lists.</p>  
+<p>
+The following track information is displayed in the Manage Custom Tracks table:</p>
 <ul>
   <li>
   <strong>Name: </strong> a hyperlink to the Update Custom Track page where you can update your 
@@ -359,39 +359,39 @@ The following track information is displayed in the Manage Custom Tracks table:<
   in this column). The Pos column remains blank if the track lacks individual items (e.g. wiggle 
   format data) and the browser line &quot;position&quot; attribute hasn't been set.</li> 
 </ul>
-<p><dd>
+<p>
 <strong>Displaying a custom track in the Genome Browser</strong><br> 
 Click the &quot;go&quot; button to display the entire custom track set for the 
 specified genome assembly in the Genome Browser. By default, the browser will open to the position 
 specified in the browser line &quot;position&quot; attribute or first data line of the first custom 
 track in the table, or the last-accessed Genome Browser position if the track is in wiggle data 
 format. To open the display at the default position for another track in the list, click the track's
-position link in the Pos column.</dd></p>
-<p><dd>
+position link in the Pos column.</p>
+<p>
 <strong>Viewing a custom track in the Table Browser</strong><br>
 Select &quot;Table Browser&quot; from the drop down menu and click the &quot;go&quot; button to 
 access the data for the custom track set in the Table Browser. The custom tracks will be listed 
-in the &quot;Custom Tracks&quot; group pulldown list.</dd></p>
-<p><dd>
+in the &quot;Custom Tracks&quot; group pulldown list.</p>
+<p>
 <strong>Loading additional custom tracks</strong><br>
 To load a new custom track into the currently displayed track set, click the &quot;add custom 
 tracks&quot; button. To change the genome assembly to which the track should be added, select the 
 appropriate options from the pulldown lists at the top of the page. For instructions on adding a 
 custom track on the Add Custom Tracks page, see <a href="#ADD_CT">Loading a Custom Track into the 
-Genome Browser</a>.</dd></p>  
-<p><dd>
+Genome Browser</a>.</p>  
+<p>
 <strong>Removing one or more custom tracks</strong><br>
 To remove custom tracks from the uploaded track set, click the checkboxes in the &quot;delete&quot; 
 column for all tracks you wish to remove, then click the &quot;delete&quot; button. A custom track 
 may also be removed by clicking the &quot;Remove custom track&quot; button on the track's 
 description page. Note: removing the track from the Genome Browser does not delete the track file 
-from your server or local disk.</dd></p>
-<p><dd>
+from your server or local disk.</p>
+<p>
 <strong>Updating a custom track</strong><br>
 To update the stored information for a loaded custom track, click the track's link in the 
 &quot;Name&quot; column in the Manage Custom Tracks table. A custom track may also be updated by 
-clicking the &quot;Update custom track&quot; button on the track's description page.</dd></p> 
-<p><dd>
+clicking the &quot;Update custom track&quot; button on the track's description page.</p> 
+<p>
 The Update Custom Track page provides sections for modifying the track configuration information 
 (the browser lines and track lines), the annotation data, and the descriptive documentation that 
 accompanies the track. Existing track configuration lines are displayed in the top &quot;Edit 
@@ -401,28 +401,28 @@ interface, but instead must be fully replaced using one of the data entry method
 <a href="#ADD_CT">Loading a Custom Track into the Genome Browser</a>. If description text has been 
 uploaded for the track, it will be displayed in the track documentation edit box, where it may be 
 edited or completely replaced. Once you have completed your updates, click the Submit button to 
-upload the new data into the Genome Browser.</dd></p>
-<p><dd>
+upload the new data into the Genome Browser.</p>
+<p>
 If the data or description text for your custom track was originally loaded from a file on your hard
 disk or server, you should first edit the file, then reload it from the Update Custom Track page 
 using the &quot;Choose File&quot; button. Note that edits made on this page to description text uploaded 
 from a file will not be saved to the original file on your computer or server. Because of this, we 
 recommend that you use the documentation edit box only for changes made to text that was typed or 
-pasted in.</dd></p> 
+pasted in.</p> 
 
 <a name="lines"></a>
 <h2>Browser lines</h2>
-<p><dd>
+<p>
 Browser lines configure the overall display of the Genome Browser window when your annotation file 
-is uploaded. Each line defines one display attribute. Browser lines consist of the format:</dd></p>
-<p><dd>
+is uploaded. Each line defines one display attribute. Browser lines consist of the format:</p>
+<p>
 <pre><code>browser attribute_name attribute_value(s)</code></pre>
 
-<p><dd>
+<p>
 For example, if the browser line <code>browser position chr22:1-20000</code> is included in the 
 annotation file, the Genome Browser window will initially display the first 20000 bases of chr 
-22.</dd></p>
-<p><dd>
+22.</p>
+<p>
 The following browser line attribute name/value options are available. The value
 <em>track_primary_table_name</em> must be set to the name of the primary table on which the
 track is based. To identify this table, open up the
@@ -433,12 +433,19 @@ Alternatively, the primary table name can be obtained from a mouseover on the
 track name in the track control section.
 You can also find instructions on how to find this table name in the video
 &quot;<a href="../../training/vids/index.html#vid06" target="_blank">How do I learn which tables
-belong to a data track on the UCSC Genome Browser?</a>&quot;.</dd></p>
-<p><dd>
+belong to a data track on the UCSC Genome Browser?</a>&quot;.</p>
+<p>
 Note that composite track subtracks are not valid <em>track_primary_table_name</em> values. To find 
 the symbolic name of a composite track, look in the <em>tableName</em> field in the <em>trackDb</em>
 table, or mouse over the track name in the track control section. It is not possible to display only
-a subset of the subtracks at this time.</dd></p>
+a subset of the subtracks at this time.</p>
+<p>
+Definition: <strong><em>&lt;track_primary_table_name(s)&gt;</em></strong>. You can find the primary 
+table name by clicking "View Table Schema" from the track's description page, or from the Table 
+Browser. It will be listed as the Primary Table. Alternatively, you can mouse-over the track label 
+in the Browser and look at the URL the link points to. The part after the g= in the URL is the 
+track's primary table name (e.g., for UCSC Genes you will see g=knownGene in the URL. The track 
+primary table is knownGene).</p>
 <ul>
   <li>
   <strong>position <<em>position</em>></strong> - Determines the part of the genome that the Genome 
@@ -482,23 +489,16 @@ a subset of the subtracks at this time.</dd></p>
   <strong>full &lt;<em>track_primary_table_name(s)</em>&gt;</strong> - Displays the specified tracks
   in full mode. Symbolic names must be used. Multiple track names should be space-separated.</li> 
 </ul>
-<p><dd>
-Definition: <strong><em>&lt;track_primary_table_name(s)&gt;</em></strong>. You can find the primary 
-table name by clicking "View Table Schema" from the track's description page, or from the Table 
-Browser. It will be listed as the Primary Table. Alternatively, you can mouse-over the track label 
-in the Browser and look at the URL the link points to. The part after the g= in the URL is the 
-track's primary table name (e.g., for UCSC Genes you will see g=knownGene in the URL. The track 
-primary table is knownGene).</dd></p>
-<p><dd>
+<p>
 Note that the Genome Browser will open to the range defined in the Gateway page <em>search term</em>
 box or the position saved as the default unless the browser line position attribute is defined in 
 the annotation file. Although this attribute is optional, it's recommended that you set this value 
 in your annotation file to ensure that the track will appear in the display range when it is 
-uploaded into the Genome Browser.</dd></p>
+uploaded into the Genome Browser.</p>
 
 <a name="TRACK"></a>
 <h2>Track lines</h2>
-<p><dd>
+<p>
 Track lines define the display attributes for all lines in an annotation data set. If more than one 
 data set is included in the annotation file, each group of data must be preceded by a track line 
 that describes the display characteristics for that set of data. A track line begins with the word 
@@ -506,9 +506,9 @@ that describes the display characteristics for that set of data. A track line be
 lines - in which each attribute is defined on a separate line - all of the track attributes for a 
 given set of data are listed on one line <em>with no line breaks</em>. The inadvertent insertion of 
 a line break into a track line will generate an error when you attempt to upload the annotation 
-track into the Genome Browser.</dd></p>
-<p><dd>
-The following track line attribute=value pairs are defined in the Genome Browser:</dd></p>
+track into the Genome Browser.</p>
+<p>
+The following track line attribute=value pairs are defined in the Genome Browser:</p>
 <ul> 
   <li>
   <strong>name=<<em>track_label</em>></strong> - Defines the track label that will be displayed to 
@@ -573,7 +573,7 @@ The following track line attribute=value pairs are defined in the Genome Browser
   shading in which the data is displayed. The track will display in shades of gray unless the 
   <em>color</em> attribute is set to 100,50,0 (shades of brown) or 0,60,120 (shades of blue). The 
   default setting for <em>useScore</em> is &quot;0&quot;. This table shows the Genome Browser's 
-  translation of BED score values into shades of gray:</dd></p>
+  translation of BED score values into shades of gray:</p>
 
   <table cellspacing="5">
     <tr><td>shade</td>
@@ -647,24 +647,24 @@ The following track line attribute=value pairs are defined in the Genome Browser
   <a href="../help/vcf.html" target="_blank">VCF</a> tracks. This is a required attribute for those 
   track types. There is no default for this attribute.</li>
 </ul>
-<p><dd>
+<p>
 Here is an example of a properly formatted track line using the bigBed format, with accompanying 
-browser line:</dd></p>
+browser line:</p>
 <pre><code>browser position chr21:33,031,597-33,041,570
 track type=bigBed name="bigBed Example One" description="A bigBed file" bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb</code></pre>
 
 <a name="SHARE"></a>
 <h2>Sharing your annotation track with others</h2>
-<p><dd>
+<p>
 To make your Genome Browser annotation track viewable by people on other machines or at other sites,
 follow the steps below. (Note that some of the URL examples in this section have been broken up into
-2 lines for documentation display purposes).</dd></p>
-<p><dd>
+2 lines for documentation display purposes).</p>
+<p>
 <strong>Step 1.</strong> Put your formatted annotation file on your web site. Be sure that the file 
-permissions allow it to be read by others.</dd></p>
-<p><dd>
+permissions allow it to be read by others.</p>
+<p>
 <strong>Step 2.</strong> Construct a URL that will link this annotation file to the Genome Browser. 
-The URL must contain 3 pieces of information specific to your annotation data:</dd></p> 
+The URL must contain 3 pieces of information specific to your annotation data:</p> 
 <ul>
   <li>
   The species or genome assembly on which your annotation data is based. To automatically display 
@@ -687,7 +687,7 @@ The URL must contain 3 pieces of information specific to your annotation data:</
 </ul>
 
 <a name="optParams"></a>
-<p><dd>
+<p>
 You can add other optional parameters to the URL: (Note: Display may vary if you have conflicting 
 cart variables, for example having both hide all and highlight features.)
 <ul>
@@ -758,36 +758,38 @@ cart variables, for example having both hide all and highlight features.)
 
   <li>
   <code>position=&lt;geneSymbol&gt;&amp;singleSearch=knownCanonical</code> - 
-  Jump directly to the location of a gene, without showing the search results - <a href="../../cgi-bin/hgTracks?db=hg19&position=PITX2&singleSearch=knownCanonical" 
+  Jump directly to the location of a gene, without showing the search results - 
+  <a href="../../cgi-bin/hgTracks?db=hg19&position=PITX2&singleSearch=knownCanonical" 
   target="_blank">example link</a> to jump directly to the PITX2 gene on hg19
   dialog</li>
 
   <li>
   <code>position=&lt;rsID&gt;&amp;singleSearch=snp150</code> -
-  Jump directly to the first search result of the specified query on the declared track - <a href="../../cgi-bin/hgTracks?db=hg38&position=rs104894977&singleSearch=snp150" 
+  Jump directly to the first search result of the specified query on the declared track - 
+  <a href="../../cgi-bin/hgTracks?db=hg38&position=rs104894977&singleSearch=snp150" 
   target="_blank">example link</a> to go directly to the top rs10489494977 id hit of the snp150 
   track on hg38</li>
 
 </ul>
-<p><dd>
+<p>
 If a login and password is required to access data loaded through a URL (e.g., via https: 
 protocol), this information can be included in the URL using the format 
 protocol://user:password@server.com/somepath. Only Basic Authentication is supported for HTTP. 
 Note that passwords included in URLs are not protected. If a password contains a non-alphanumeric 
 character, such as &#36;, the character must be replaced by the hexadecimal representation for 
 that character. For example, in the password mypwd&#36;wk, the &#36; character should be replaced 
-by %24, resulting in the modified password mypwd%24wk.</dd></p> 
-<p><dd>
+by %24, resulting in the modified password mypwd%24wk.</p> 
+<p>
 For integration into your own website e.g. in an html IFRAME, you can obtain the track image only,
 without the rest of the genome browser user interface, by replacing hgTracks in the URL with 
-hgRenderTracks, like in this example:</dd></p> 
+hgRenderTracks, like in this example:</p> 
 <pre><code><a href="http://genome.ucsc.edu/cgi-bin/hgRenderTracks?db=hg19&position=chr9%3A136130563-136150630"
 target="_blank">http://genome.ucsc.edu/cgi-bin/hgRenderTracks?db=hg19&position=chr9%3A136130563-136150630</a></code></pre>
-<p><dd>
+<p>
 Combine the above pieces of information into a URL of the following format (the information 
-specific to your annotation file is highlighted):</dd></p>
+specific to your annotation file is highlighted):</p>
 <pre><code>http://genome.ucsc.edu/cgi-bin/hgTracks?org=<font color="000099"><em>organism_name</em></font>&amp;position=<font color="000099"><em>chr_position</em></font>&amp;hgt.customText=<font color="000099"><em>URL</em></font></code></pre>
-<p><dd>
+<p>
 <strong><em>Example #5:</em></strong><br>
 The following URL will open up the Genome Browser window to display chr 22 of the latest human 
 genome assembly and will show the annotation track pointed to by the URL 
@@ -795,11 +797,11 @@ http://genome.ucsc.edu/goldenPath/help/test.bed:
 <pre><code
 <a class="insideLink" href="../../cgi-bin/hgTracks?org=human&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/test.bed"
 target="_blank">http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/test.bed</a></code></pre>
-<p><dd>
+<p>
 <strong>Step 3.</strong> Provide the URL to others. To upload a custom annotation track pointed to 
 by a URL into the Genome Browser, paste the URL into the large text edit box on the Add Custom 
-Tracks page, then click the Submit button.</dd></p>  
-<p><dd>
+Tracks page, then click the Submit button.</p>  
+<p>
 If you'd like to share your annotation track with a broader audience, send the URL for your 
 track&mdash;along with a description of the format, methods, and data used&mdash;to the UCSC Genome 
 mailing list 
@@ -807,7 +809,7 @@ mailing list
 <!-- above address is genome at soe.ucsc.edu -->
 
 <a name="EXAMPLE11"></a>
-<p><dd>
+<p>
 <strong><em>Example #6:</em></strong><br>
 If you would like to share a URL that your colleague can click on directly, rather than loading it 
 in the Custom Track tool (as in Example #5), then the URL will need a few extra parameters. Let's 
@@ -834,23 +836,23 @@ target="_blank">http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg18&position=chr21:3
 =track%20type=bigBed%20name=myBigBedTrack%20description=%22a%20bigBed%20track%22%20visibility=<br>
 full%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb
 </code></pre></a>
-<p><dd>
+<p>
 Custom Tracks can also be shared with others through named sessions. First, upload your tracks as 
 discussed in the <a href="#ADD_CT">Loading a Custom Track into the Genome Browser</a> section. Then create a named session that includes your custom tracks by navigating to the "Sessions" 
 page through the "My Data" section in the menu bar. Once there, follow the instructions in the 
 <a href=../help/hgSessionHelp.html#Create>Creating a Session</a> section of the Sessions help page.
 Once you have saved your custom track into a named session, you can share that session with others 
 by sharing the URL from the &quot;Browser&quot; link or emailing it to them directly by clicking 
-the "Email" link.</dd></p> 
-<p><dd>
+the "Email" link.</p> 
+<p>
 <strong>Tip:</strong> Multiple tracks can be placed into one custom track submission. To do so, 
 create a new file that contains the 
 <a href="/goldenPath/help/customTrack.html#TRACK">track lines</a> to each file that will be 
-included. To submit this custom set of tracks, merely use the URL to this new file.</dd></p>
+included. To submit this custom set of tracks, merely use the URL to this new file.</p>
 
 <a name="TROUBLE"></a>
 <h2>Troubleshooting annotation display problems</h2>
-<p><dd>
+<p>
 Occasionally users encounter problems when uploading annotation files to the Genome Browser. In 
 most cases, these problems are caused by errors in the format of the annotation file and can be 
 tracked down using the information displayed in the error message. This section contains suggestions
@@ -862,36 +864,36 @@ for further assistance.
 <strong><span class="gbsWarnText">Messages sent to this address will be posted to the moderated genome mailing list, which is 
 archived on a SEARCHABLE, PUBLIC</span>
 <a HREF="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">Google Groups 
-forum</a></strong>.</dd></p>
-<p><dd>
+forum</a></strong>.</p>
+<p>
 <strong><em>Problem: </em></strong>When I try one of your examples by cutting and pasting it into 
 the Genome Browser, I get an error message.<br> 
 <strong><em>Solution: </em></strong>Check that none of the browser lines, track lines, or data lines
 in your annotation file contains a line break. If the example contains GFF or GTF data lines, check 
-that all the fields are tab-separated rather than space-separated.</dd></p> 
-<p><dd>
+that all the fields are tab-separated rather than space-separated.</p> 
+<p>
 <strong><em>Problem:</em></strong> When I click the <em>submit</em> button, I get the error message &quot;line 1 of custom input:&quot;.<br> 
 <strong><em>Solution:</em></strong> Check that none of the browser lines, track lines, or data 
 lines in your annotation file contains a line break. A common source for this problem is the track 
 line: all of the attribute pairs must on the same line and must not be separated by a line break. 
 If you are uploading your annotation file by pasting it into the text box on the Genome Browser 
 Gateway page, check that the cut-and-paste operation did not inadvertently insert unwanted line 
-feeds into the longer lines.</dd></p>
-<p><dd>
+feeds into the longer lines.</p>
+<p>
 <strong><em>Problem:</em></strong> When I click the <em>submit</em> button, I get the error message 
 &quot;line # of custom input: missing = in var/val pair&quot;.<br>
 <strong><em>Solution:</em></strong> Check for incorrect syntax in the track lines in the annotation 
 file. Be sure that each track line attribute pair consists of the format 
-<em>attribute=attribute name</em>.</dd></p>
-<p><dd>
+<em>attribute=attribute name</em>.</p>
+<p>
 <strong><em>Problem:</em></strong> When I click the <em>submit</em> button, I get the error message 
 &quot;line # of custom input: BED chromStarts[i] must be in ascending order&quot;.<br> 
 <strong><em>Solution:</em></strong> This is most likely caused by a logical conflict in the Genome 
 Browse software. It accepts custom GFF tracks that have multiple &quot;exons&quot; at the same 
 position, but not BED tracks. Because the browser translates GFF tracks to BED format before 
 storing the custom track data, GFF tracks with multiple exons will case an error when the BED is 
-read back in. To work around this problem, remove duplicate lines in the GFF track.</dd></p> 
-<p><dd>
+read back in. To work around this problem, remove duplicate lines in the GFF track.</p> 
+<p>
 <strong><em>Problem:</em></strong> When I click the <em>submit</em> button, the Genome Browser
 track window displays OK, but my track isn't visible.<br> 
 <strong><em>Solution:</em></strong> Check the browser and track lines in your annotation file to 
@@ -901,8 +903,8 @@ you've entered the correct file name. If neither of these is the cause of the pr
 the Genome Browser to clear any settings that may be preventing the annotation to display. To reset 
 the Genome Browser, click the <em>Click here to reset</em> link on the Gateway page. If the 
 annotation track still doesn't display, you may need to clear the cookies in your Internet browser 
-as well (refer to your Internet browser's documentation for further information).</dd></p>
-<p><dd>
+as well (refer to your Internet browser's documentation for further information).</p>
+<p>
 <strong><em>Problem:</em></strong> I am trying to upload some custom tracks (.gz files) to the 
 Genome Browser using a URL from a GEO query. However, the upload is failing with the error
 &quot;line 1 of <filename>.gz: thickStart after thickEnd&quot;.<br>
@@ -911,18 +913,18 @@ that are of the type <a href="../../FAQ/FAQformat.html#format13">broadPeak</a> o
 <a href="../../FAQ/FAQformat.html#format12">narrowPeak</a>. Set the track attribute
 <a href="#TRACK">type=<<em>track_type</em>></a> to enable the loader to correctly process the 
 special columns at the end of each line. Your track type entry should consist of two lines: the 
-first to define the track type and the second to specify the URL. For example:</dd></p>
+first to define the track type and the second to specify the URL. For example:</p>
 <pre><code>track type=<font color="000099">broadPeak</font>
 https://www.ncbi.nlm.nih.gov/geosuppl/...</code></pre>
-<p><dd>
+<p>
 <strong><em>Problem:</em></strong> I've gotten my annotation track to display, but now I can't make 
 it go away! How do I remove an annotation track from my Genome Browser display?<br>
 <strong><em>Solution:</em></strong> To remove only one track, click the <em>Manage Custom 
 Tracks</em> button and delete the desired track using the checkbox and Delete button. To quickly 
 remove all of your custom tracks, reset the Genome Browser to its default settings by clicking the 
 <em>Click here to reset</em> link on the Gateway page. Note that this reset will also remove any 
-other customizations you have made to your Genome Browser display.</dd></p> 
-<p><dd>
+other customizations you have made to your Genome Browser display.</p> 
+<p>
 <strong><em>Problem:</em></strong> I put my custom track files on Dropbox,
 Apple iCloud, Google Drive, Amazon Drive, Box.com, Microsoft OneDrive, or
 another "online cloud backup" provider and they won't display in the browser.
@@ -940,15 +942,15 @@ transferred to the Genome Browser server. This requires that they are stored on 
 And to allow this type of display, byte-range support must be 
 enabled on the web server. No commercial online backup solution supports this,
 to our knowledge. To check if your server has byte-range requests enabled,
-issue the following command:</dd></p>
-<pre><code>&gt; curl -I &lt;URL of your file&gt;</code></pre>
-<p><dd>
+issue the following command:</p>
+<pre><code> curl -I &lt;URL of your file&gt;</code></pre>
+<p>
 In order for your server to host bigBed and bigWig files (or track hubs) for Genome Browser display,
 the command output must contain: 
-<pre><code>&gt; Accept-Ranges: bytes</code></pre>
-<p><dd>
+<pre><code>Accept-Ranges: bytes</code></pre>
+<p>
 If you do not receive this output, you may be able to resolve the problem through one of the 
-following actions:</dd></p>
+following actions:</p>
 <ul>
   <li>
   Store the files on a real webserver, e.g. at your University. Check with the
@@ -959,7 +961,7 @@ following actions:</dd></p>
   <li>
   Install an Apache alternative http server such as Cherokee.</li>
 </ul>
-<p><dd>
+<p>
 <strong><em>Problem:</em></strong> I used to host files on Dropbox which used to accept byte-range 
 requests, but I can't get my data to display. Why?<br>
 <strong><em>Solution:</em></strong> As described in the previous question, Dropbox is a backup provider
@@ -967,14 +969,23 @@ and not a real webserver and as such does not support hosting indexed files, eve
 work to some extent. Dropbox recently removed their Public Folder feature, which means all links
 to files hosted there are inaccessible to the browser. For more information, please refer to  <a 
 href="https://www.dropbox.com/help/files-folders/public-folder" target="_blank">this announcement
-</a>.</dd></p>
+</a>.</p>
 <a name="BYTERANGE"></a>
-<p><dd>
+<p>
 <strong><em>Problem:</em></strong> If I can't host files on backup providers
 like Dropbox or Google Drive where can I host my files, especially my bigWigs
 and bigBeds?<br>
 <strong><em>Solution:</em></strong> The NSF-funded website <a href="http://cyverse.org">CyVerse</a>
-was created in order to provide hosting free hosting services to researchers, and allows byte-range
-requests, meaning binary files like BAMs, bigBeds and bigWigs can be hosted there. Please see the
+was created to provide free hosting services to researchers, and allows byte-range
+requests, meaning binary files such as BAMs, bigBeds, and bigWigs can be hosted. Please see the
 <a href="hgTrackHubHelp.html#Hosting">Hosting</a> section of the Track Hub help page for more
-information on hosting your data at CyVerse and other alternatives.</dd></p>
+information on hosting your data at CyVerse and other alternatives.</p>
+<p>
+<strong><em>Problem:</em></strong> I have a bigBed file with colors in the 9th column. I set the
+option itemRgb on in the trackDb file, the track is fine, but why are the boxes all black?<br>
+<strong><em>Solution:</em></strong> When type is set to bigBed, the track hub assumes that the
+bigBed track is BED3 by default. To allow track hubs to use all fields in a bigBed file, you must
+define how many columns to expect. For example, if a bigBed file has nine columns, which would 
+include an itemRgb field to display a R,G,B color value (e.g. 255,0,0), specify the type
+as <code>type bigBed 9</code> or if the bigBed contains additional <a href="../../FAQ/FAQformat.html#format1" 
+target="_blank">non-standard columns</a>, use <code>type bigBed 9 +</code>.</p>
