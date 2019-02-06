@@ -96,6 +96,9 @@ char *cartSessionId(struct cart *cart);
 unsigned cartSessionRawId(struct cart *cart);
 /* Return raw session id without security key. */
 
+unsigned cartUserRawId(struct cart *cart);
+/* Return raw user id without security key. */
+
 char *cartSidUrlString(struct cart *cart);
 /* Return session id string as in hgsid=N . */
 

@@ -1602,7 +1602,7 @@ else
 return result;
 }
 
-void saveContentsToTable(char *contents, char *table)
+void saveContentsToTable(char *contents, unsigned id, char *table)
 /* save updated contents back to sessionDb or userDb */
 {
 struct sqlConnection *conn = hConnectCentral();
@@ -1613,7 +1613,7 @@ struct dyString *update = dyStringNew(contentLength*2);
 sqlDyStringPrintf(update, "UPDATE %s set contents='", table);
 dyStringAppendN(update, contents, contentLength);
 dyStringPrintf(update, "', lastUse=now(), useCount=useCount+1 "
-	       "where id=%u", cartSessionRawId(cart));
+	       "where id=%u", id);
 sqlUpdate(conn, update->string);
 dyStringFree(&update);
 
@@ -2134,8 +2134,8 @@ processContentsForTrackHubs(&contents, dy->string);
 long totalSize = uploadArchive(&contents, tempOutRand, backgroundProgress, dyProg);
 
 // save cart to db
-saveContentsToTable(contents, "sessionDb");
-saveContentsToTable(contents, "userDb");
+saveContentsToTable(contents, cartSessionRawId(cart), "sessionDb");
+saveContentsToTable(contents, cartUserRawId(cart), "userDb");
     
 printf("<br>\n");
 
