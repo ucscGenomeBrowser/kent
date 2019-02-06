@@ -24,6 +24,7 @@
 #include "bedTabix.h"
 #include "bamFile.h"
 #include "jsonParse.h"
+#include "chromInfo.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
@@ -64,9 +65,10 @@ static long totalTracks = 0;
 static boolean measureTiming = FALSE;	/* set by CGI parameters */
 static boolean allTrackSettings = FALSE;	/* checkbox setting */
 static char **shortLabels = NULL;	/* public hub short labels in array */
+struct hubPublic *publicHubList = NULL;
 static int publicHubCount = 0;
-static struct hubPublic *publicHubList = NULL;
 static char *defaultHub = "Plants";
+static char *defaultDb = "ce11";
 static long enteredMainTime = 0;	/* will become = clock1000() on entry */
 		/* to allow calculation of when to bail out, taking too long */
 static long timeOutSeconds = 100;
@@ -74,10 +76,10 @@ static boolean timedOut = FALSE;
 
 /* ######################################################################### */
 
-static void jsonInteger(FILE *f, char *tag, int value)
+static void jsonInteger(FILE *f, char *tag, long long value)
 /* output one json interger: "tag":value appropriately quoted and encoded */
 {
-fprintf(f,"\"%s\":%d",tag, value);
+fprintf(f,"\"%s\":%lld",tag, value);
 }
 
 static void jsonStringOut(FILE *f, char *tag, char *value)
@@ -90,6 +92,14 @@ if (isEmpty(a))
 else
     fprintf(f, "\"%s\"", a);
 freeMem(a);
+}
+
+static void jsonStartOutput(FILE *f)
+/* begin json output */
+{
+fputc('{',f);
+jsonStringOut(f, "source", "UCSantaCruz");
+fputc(',',f);
 }
 
 static void hubPublicJsonOutput(struct hubPublic *el, FILE *f) 
@@ -148,12 +158,11 @@ return ret;
 
 static struct hubPublic *hubPublicLoadAll()
 {
+char query[1024];
 struct hubPublic *list = NULL;
 struct sqlConnection *conn = hConnectCentral();
-// Build a query to find all public hub URL's
-struct dyString *query = sqlDyStringCreate("select * from %s",
-                                           hubPublicTableName());
-struct sqlResult *sr = sqlGetResult(conn, query->string);
+sqlSafef(query, sizeof(query), "select * from %s", hubPublicTableName());
+struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -493,10 +502,46 @@ hDisconnectCentral(&conn);
 return cloneString(hubUrl);
 }
 
+static void dbDbJsonOutput(struct dbDb *el, FILE *f) 
+/* Print out hubPublic element in JSON format. */
+{
+fputc('{',f);
+jsonStringOut(f, "name", el->name);
+fputc(',',f);
+jsonStringOut(f, "description", el->description);
+fputc(',',f);
+jsonStringOut(f, "nibPath", el->nibPath);
+fputc(',',f);
+jsonStringOut(f, "organism", el->organism);
+fputc(',',f);
+jsonStringOut(f, "defaultPos", el->defaultPos);
+fputc(',',f);
+jsonInteger(f, "active", el->active);
+fputc(',',f);
+jsonInteger(f, "orderKey", el->orderKey);
+fputc(',',f);
+jsonStringOut(f, "genome", el->genome);
+fputc(',',f);
+jsonStringOut(f, "scientificName", el->scientificName);
+fputc(',',f);
+jsonStringOut(f, "htmlPath", el->htmlPath);
+fputc(',',f);
+jsonInteger(f, "hgNearOk", el->hgNearOk);
+fputc(',',f);
+jsonInteger(f, "hgPbOk", el->hgPbOk);
+fputc(',',f);
+jsonStringOut(f, "sourceName", el->sourceName);
+fputc(',',f);
+jsonInteger(f, "taxId", el->taxId);
+fputc('}',f);
+}
+
 static void jsonPublicHubs()
+/* output the hubPublic SQL table */
 {
 struct hubPublic *el = publicHubList;
-printf("{\"publicHubs\":[");
+jsonStartOutput(stdout);
+printf("\"publicHubs\":[");
 for ( ; el != NULL; el = el->next )
     {
     hubPublicJsonOutput(el, stdout);
@@ -506,13 +551,114 @@ for ( ; el != NULL; el = el->next )
 printf("]}\n");
 }
 
+static int dbDbCmpName(const void *va, const void *vb)
+/* Compare two dbDb elements: name, ignore case. */
+{
+const struct dbDb *a = *((struct dbDb **)va);
+const struct dbDb *b = *((struct dbDb **)vb);
+return strcasecmp(a->name, b->name);
+}
+
+static struct dbDb *ucscDbDb()
+/* return the dbDb table as an slList */
+{
+char query[1024];
+struct sqlConnection *conn = hConnectCentral();
+sqlSafef(query, sizeof(query), "select * from dbDb");
+struct dbDb *dbList = NULL, *el = NULL;
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = dbDbLoad(row);
+    slAddHead(&dbList, el);
+    }
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
+slSort(&dbList, dbDbCmpName);
+return dbList;
+}
+
+static void jsonDbDb()
+/* output the dbDb SQL table */
+{
+struct dbDb *dbList = ucscDbDb();
+struct dbDb *el;
+jsonStartOutput(stdout);
+printf("\"ucscGenomes\":[");
+for ( el=dbList; el != NULL; el = el->next )
+    {
+    dbDbJsonOutput(el, stdout);
+    if (el->next)
+       printf(",");
+    }
+printf("]}\n");
+}
+
+static void chromInfoJsonOutput(char *db, FILE *f, char *track)
+{
+if (track)
+    {
+;
+    }
+else
+    {
+    struct chromInfo *ciList = createChromInfoList(NULL, db);
+    struct chromInfo *el = ciList;
+    jsonStartOutput(f);
+    jsonStringOut(f, "genome", db);
+    fputc(',',f);
+    jsonInteger(f, "chromCount", slCount(ciList));
+    fputc(',',f);
+    for ( ; el != NULL; el = el->next )
+	{
+        jsonInteger(f, el->chrom, el->size);
+	if (el->next)
+           fputc(',',f);
+	}
+    fputc('}',f);
+    }
+}
+
+static void chromListJsonOutput(char *db, FILE *f)
+/* return chromsome list from specified UCSC database name,
+ * can be for a specific track if cgiVar(track) exists, otherwise,
+ * the chrom list is from the chromInfo table.
+ */
+{
+char *track = cgiOptionalString("track");
+chromInfoJsonOutput(db, f, track);
+}	/*	static void chromListJsonOutput(char *db, FILE *f)	*/
+
+static void trackDbJsonOutput(char *db, FILE *f)
+/* return track list from specified UCSC database name */
+{
+struct trackDb *tdbList = hTrackDb(db);
+struct trackDb *el;
+jsonStartOutput(f);
+jsonStringOut(f, "db", db);
+fputc(',',f);
+fprintf(f, "\"tracks\":[");
+for (el = tdbList; el != NULL; el = el->next )
+    {
+    char *a = jsonStringEscape(el->track);
+    printf("\"%s\"", a);
+    freeMem(a);
+    if (el->next)
+	fputc(',',f);
+    }
+fprintf(f, "]}\n");
+}	/*	static void trackDbJsonOutput(char *db, FILE *f)	*/
+
 #define MAX_PATH_INFO 32
 static void apiList(char *words[MAX_PATH_INFO])
-/* 'list' function */
+/* 'list' function words[1] is the subCommand */
 {
 if (sameWord("publicHubs", words[1]))
     jsonPublicHubs();
-else if (sameWord("genomes", words[1]))
+else if (sameWord("ucscGenomes", words[1]))
+    jsonDbDb();
+else if (sameWord("hubGenomes", words[1]))
     {
     char *hubUrl = cgiOptionalString("hubUrl");
     if (isEmpty(hubUrl))
@@ -521,7 +667,7 @@ else if (sameWord("genomes", words[1]))
     struct trackHub *hub = trackHubOpen(hubUrl, "");
     if (hub->genomeList)
 	{
-	fputc('{',stdout);
+        jsonStartOutput(stdout);
 	jsonStringOut(stdout, "hubUrl", hubUrl);
 	fputc(',',stdout);
 	printf("\"genomes\":[");
@@ -543,6 +689,16 @@ else if (sameWord("tracks", words[1]))
     {
     char *hubUrl = cgiOptionalString("hubUrl");
     char *genome = cgiOptionalString("genome");
+    char *db = cgiOptionalString("db");
+    if (isEmpty(hubUrl) && isEmpty(db))
+	{
+	errAbort("# ERROR: must supply hubUrl or db name to return track list");
+	}
+    if (isEmpty(hubUrl))	// missing hubUrl implies UCSC database
+	{
+        trackDbJsonOutput(db, stdout);	// only need db for this function
+	return;
+	}
     if (isEmpty(genome) || isEmpty(hubUrl))
 	{
         if (isEmpty(genome))
@@ -556,15 +712,14 @@ else if (sameWord("tracks", words[1]))
 	{
 	struct slName *dbTrackList = NULL;
 	(void) genomeList(hub, &dbTrackList, genome);
-	fputc('{',stdout);
+        jsonStartOutput(stdout);
 	jsonStringOut(stdout, "hubUrl", hubUrl);
 	fputc(',',stdout);
 	jsonStringOut(stdout, "genome", genome);
 	fputc(',',stdout);
-	printf("\"tracks\":[");
 	slNameSort(&dbTrackList);
 	struct slName *el = dbTrackList;
-	for ( ; el ; el = el->next )
+	for ( ; el != NULL; el = el->next )
 	    {
 	    char *a = jsonStringEscape(el->name);
 	    printf("\"%s\"", a);
@@ -575,8 +730,23 @@ else if (sameWord("tracks", words[1]))
 	printf("]}\n");
 	}
     }
+else if (sameWord("chromosomes", words[1]))
+    {
+    char *hubUrl = cgiOptionalString("hubUrl");
+//    char *genome = cgiOptionalString("genome");
+    char *db = cgiOptionalString("db");
+    if (isEmpty(hubUrl) && isEmpty(db))
+	{
+	errAbort("# ERROR: must supply hubUrl or db name to return chromosome list");
+	}
+    if (isEmpty(hubUrl))	// missing hubUrl implies UCSC database
+	{
+        chromListJsonOutput(db, stdout); // only need db for this function
+	return;
+	}
+    }
 else
-    errAbort("# ERROR: do not recognize command '%s' for 'list' function\n", words[1]);
+    errAbort("# ERROR: do not recognize endpoint '/list/%s' function\n", words[1]);
 }
 
 static struct hash *apiFunctionHash = NULL;
@@ -610,6 +780,22 @@ void (*apiFunction)(char **) = hashMustFindVal(apiFunctionHash, words[0]);
 
 (*apiFunction)(words);
 
+}	/*	static void apiFunctionSwitch(char *pathInfo)	*/
+
+static void tracksForUcscDb(char * ucscDb)
+{
+hPrintf("<p>Tracks in UCSC genome: '%s'<br>\n", ucscDb);
+struct trackDb *tdbList = hTrackDb(ucscDb);
+struct trackDb *track;
+hPrintf("<ul>\n");
+for (track = tdbList; track != NULL; track = track->next )
+    {
+    hPrintf("<li>%s</li>\n", track->track);
+    if (allTrackSettings)
+        trackSettings(track); /* show all settings */
+    }
+hPrintf("</ul>\n");
+hPrintf("</p>\n");
 }
 
 static void doMiddle(struct cart *theCart)
@@ -644,13 +830,30 @@ if (isNotEmpty(pathInfo))
     return;
     }
 
+struct dbDb *dbList = ucscDbDb();
+char **ucscDbList = NULL;
+int listSize = slCount(dbList);
+AllocArray(ucscDbList, listSize);
+struct dbDb *el = dbList;
+int ucscDataBaseCount = 0;
+int maxDbNameWidth = 0;
+for ( ; el != NULL; el = el->next )
+    {
+    ucscDbList[ucscDataBaseCount++] = el->name;
+    if (strlen(el->name) > maxDbNameWidth)
+	maxDbNameWidth = strlen(el->name);
+    }
+maxDbNameWidth += 1;
+
 cartWebStart(cart, database, "access mechanism to hub data resources");
 
 char *goOtherHub = cartUsualString(cart, "goOtherHub", defaultHub);
+char *goUcscDb = cartUsualString(cart, "goUcscDb", "");
 char *otherHubUrl = cartUsualString(cart, "urlHub", defaultHub);
 char *goPublicHub = cartUsualString(cart, "goPublicHub", defaultHub);
 char *hubDropDown = cartUsualString(cart, "publicHubs", defaultHub);
 char *urlDropDown = urlFromShortLabel(hubDropDown);
+char *ucscDb = cartUsualString(cart, "ucscGenomes", defaultDb);
 char *urlInput = urlDropDown;	/* assume public hub */
 if (sameWord("go", goOtherHub))	/* requested other hub URL */
     urlInput = otherHubUrl;
@@ -663,13 +866,18 @@ if (measureTiming)
     hPrintf("<em>hub open time: %ld millis</em><br>\n", thisTime - lastTime);
     }
 
+hPrintf("<h3>ucscDb: '%s'</h2>\n", ucscDb);
+
 struct trackHubGenome *hubGenome = hub->genomeList;
 
 hPrintf("<h2>Example URLs to return json data structures:</h2>\n");
 hPrintf("<ul>\n");
 hPrintf("<li><a href='/cgi-bin/hubApi/list/publicHubs'>list public hubs</a> <em>/cgi-bin/hubApi/list/publicHubs</em></li>\n");
-hPrintf("<li><a href='/cgi-bin/hubApi/list/genomes?hubUrl=%s'>list genomes from specified hub</a> <em>/cgi-bin/hubApi/list/genomes?hubUrl='%s'</em></li>\n", urlInput, urlInput);
-hPrintf("<li><a href='/cgi-bin/hubApi/list/tracks?hubUrl=%s&genome=%s'>list tracks from specified hub and genome</a> <em>/cgi-bin/hubApi/list/genomes?hubUrl='%s&genome=%s'</em></li>\n", urlInput, hubGenome->name, urlInput, hubGenome->name);
+hPrintf("<li><a href='/cgi-bin/hubApi/list/ucscGenomes'>list database genomes</a> <em>/cgi-bin/hubApi/list/ucscGenomes</em></li>\n");
+hPrintf("<li><a href='/cgi-bin/hubApi/list/hubGenomes?hubUrl=%s'>list genomes from specified hub</a> <em>/cgi-bin/hubApi/list/hubGenomes?hubUrl='%s'</em></li>\n", urlInput, urlInput);
+hPrintf("<li><a href='/cgi-bin/hubApi/list/tracks?hubUrl=%s&genome=%s'>list tracks from specified hub and genome</a> <em>/cgi-bin/hubApi/list/tracks?hubUrl='%s&genome=%s'</em></li>\n", urlInput, hubGenome->name, urlInput, hubGenome->name);
+hPrintf("<li><a href='/cgi-bin/hubApi/list/tracks?db=%s'>list tracks from specified UCSC database</a> <em>/cgi-bin/hubApi/list/tracks?db='%s'</em></li>\n", ucscDb, ucscDb);
+hPrintf("<li><a href='/cgi-bin/hubApi/list/chromosomes?db=%s'>list chromosomes from specified UCSC database</a> <em>/cgi-bin/hubApi/list/chromosomes?db='%s'</em></li>\n", ucscDb, ucscDb);
 hPrintf("</ul>\n");
 
 hPrintf("<h4>cart dump</h4>");
@@ -681,13 +889,11 @@ hPrintf("<form action='%s' name='hubApiUrl' id='hubApiUrl' method='GET'>\n\n", "
 
 hPrintf("<b>Select public hub:&nbsp;</b>");
 #define JBUFSIZE 2048
+#define SMALLBUF 256
 char javascript[JBUFSIZE];
 struct slPair *events = NULL;
 safef(javascript, sizeof(javascript), "this.lastIndex=this.selectedIndex;");
 slPairAdd(&events, "focus", cloneString(javascript));
-#define SMALLBUF 256
-// char class[SMALLBUF];
-// safef(class, sizeof(class), "viewDD normalText %s", "class");
 
 cgiMakeDropListClassWithIdStyleAndJavascript("publicHubs", "publicHubs",
     shortLabels, publicHubCount, hubDropDown, NULL, "width: 400px", events);
@@ -700,6 +906,15 @@ hPrintf("<input type='text' name='urlHub' id='urlHub' size='60' value='%s'>\n", 
 hWrites("&nbsp;");
 hButton("goOtherHub", "go");
 
+hPrintf("<br>Or, select a UCSC database name:&nbsp;");
+maxDbNameWidth *= 9;  // 9 should be font width here
+char widthPx[SMALLBUF];
+safef(widthPx, sizeof(widthPx), "width: %dpx", maxDbNameWidth);
+cgiMakeDropListClassWithIdStyleAndJavascript("ucscGenomes", "ucscGenomes",
+    ucscDbList, ucscDataBaseCount, ucscDb, NULL, widthPx, events);
+hWrites("&nbsp;");
+hButton("goUcscDb", "go");
+
 boolean depthSearch = cartUsualBoolean(cart, "depthSearch", FALSE);
 hPrintf("<br>\n&nbsp;&nbsp;");
 hCheckBox("depthSearch", cartUsualBoolean(cart, "depthSearch", FALSE));
@@ -709,19 +924,25 @@ allTrackSettings = cartUsualBoolean(cart, "allTrackSettings", FALSE);
 hCheckBox("allTrackSettings", allTrackSettings);
 hPrintf("&nbsp;display all track settings for each track : %s<br>\n", allTrackSettings ? "TRUE" : "FALSE");
 
-
 hPrintf("<br>\n</form>\n");
 
-hPrintf("<p>URL: %s - %s<br>\n", urlInput, sameWord("go",goPublicHub) ? "public hub" : "other hub");
-hPrintf("name: %s<br>\n", hub->shortLabel);
-hPrintf("description: %s<br>\n", hub->longLabel);
-hPrintf("default db: '%s'<br>\n", isEmpty(hub->defaultDb) ? "(none available)" : hub->defaultDb);
-printf("docRoot:'%s'<br>\n", docRoot);
+if (sameWord("go", goUcscDb))	/* requested UCSC db track list */
+    {
+    tracksForUcscDb(ucscDb);
+    }
+else
+    {
+    hPrintf("<p>URL: %s - %s<br>\n", urlInput, sameWord("go",goPublicHub) ? "public hub" : "other hub");
+    hPrintf("name: %s<br>\n", hub->shortLabel);
+    hPrintf("description: %s<br>\n", hub->longLabel);
+    hPrintf("default db: '%s'<br>\n", isEmpty(hub->defaultDb) ? "(none available)" : hub->defaultDb);
+    printf("docRoot:'%s'<br>\n", docRoot);
 
-if (hub->genomeList)
-    (void) genomeList(hub, NULL, NULL);	/* ignore returned list */
+    if (hub->genomeList)
+	(void) genomeList(hub, NULL, NULL);	/* ignore returned list */
+    hPrintf("</p>\n");
+    }
 
-hPrintf("</p>\n");
 
 if (timedOut)
     hPrintf("<h1>Reached time out %ld seconds</h1>", timeOutSeconds);

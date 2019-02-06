@@ -1559,6 +1559,12 @@ cartDbSecureId(buf, sizeof buf, cart->userInfo);
 return buf;
 }
 
+unsigned cartUserRawId(struct cart *cart)
+/* Return raw user id without security key. */
+{
+return cart->userInfo->id;
+}
+
 static char *cartMultShadowVar(struct cart *cart, char *var)
 /* Return a pointer to the list variable shadow variable name for var.
  * Don't modify or free result. */

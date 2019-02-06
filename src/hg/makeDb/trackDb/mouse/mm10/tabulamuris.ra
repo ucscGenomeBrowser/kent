@@ -87,7 +87,7 @@ parent singleCell
         visibility dense
 
         track megakaryocyteerythroidProgenitorCellCov
-        shortLabel  Cv
+        shortLabel  MEP cell Cv
         metadata cell_ontology=megakaryocyte-erythroid_progenitor_cell
         longLabel megakaryocyte-erythroid progenitor cell Coverage (55 cells)
         type bigWig
@@ -120,7 +120,7 @@ parent singleCell
         visibility dense
 
         track professionalAntigenPresentingCellCov
-        shortLabel  Cv
+        shortLabel  Pro APC Cv
         metadata cell_ontology=professional_antigen_presenting_cell
         longLabel professional antigen presenting cell Coverage (59 cells)
         type bigWig
@@ -939,7 +939,7 @@ parent singleCell
     parent TabulaMurisFacsDataset
     spectrum on
     type bigBed 12
-    visibility dense
+    visibility hide
     view junc
 
         track pancreaticDCellJunc
@@ -991,7 +991,7 @@ parent singleCell
         visibility dense
 
         track megakaryocyteerythroidProgenitorCellJunc
-        shortLabel  Sp
+        shortLabel  MEP cell Sp
         metadata cell_ontology=megakaryocyte-erythroid_progenitor_cell
         longLabel megakaryocyte-erythroid progenitor cell Splice Junctions (55 cells)
         type bigBed 12 +
@@ -1027,7 +1027,7 @@ parent singleCell
         visibility dense
 
         track professionalAntigenPresentingCellJunc
-        shortLabel  Sp
+        shortLabel  Pro APC Sp
         metadata cell_ontology=professional_antigen_presenting_cell
         longLabel professional antigen presenting cell Splice Junctions (59 cells)
         type bigBed 12 +
