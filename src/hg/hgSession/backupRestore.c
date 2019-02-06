@@ -1894,13 +1894,14 @@ for(lineNum=0; lineNum<lineCount; ++lineNum)
 	char prefix[16];
 	static int dbTrackCount = 0;
 	struct sqlConnection *ctConn = hAllocConn(CUSTOM_TRASH);
+
 	++dbTrackCount;
 	safef(prefix, sizeof(prefix), "t%d", dbTrackCount);
 	char *table = sqlTempTableName(ctConn, prefix);
 
 	dyStringPrintf(dyProg, "Creating table %s<br>\n", table);
 	updateProgessFile(backgroundProgress, dyProg);
-	lazarusLives(20 * 60);
+	lazarusLives(30 * 60);
 
 	// read from .sql file
 	char sqlPath[1024];
@@ -1932,7 +1933,8 @@ for(lineNum=0; lineNum<lineCount; ++lineNum)
 	char txtPath[1024];
 	safef(txtPath, sizeof txtPath, "%s/%s.txt", dbDir, track); 
 
-	sqlLoadTabFile(ctConn, txtPath, table, SQL_TAB_FILE_ON_SERVER);
+	sqlLoadTabFile(ctConn, txtPath, table, 0); 
+	// Unable to use SQL_TAB_FILE_ON_SERVER on RR since customTrash is on another server.
 
 	// touch will add it to metaInfo
 	ctTouchLastUse(ctConn, table, TRUE); // must use TRUE
