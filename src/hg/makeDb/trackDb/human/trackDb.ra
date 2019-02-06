@@ -3404,6 +3404,17 @@ type bigBed 4 +
 url http://cancer.sanger.ac.uk/cosmic/mutation/overview?id=
 html cosmic
 
+track cancerMutations
+shortLabel Cancer mutations
+longLabel Cancer somatic mutations from The Cancer Genome Atlas
+group phenDis
+visibility hide
+color 200,0,0
+type bigBed 12 +
+bigDataUrl /gbdb/$D/bbi/cancerMutations/BRCA.bb
+release alpha
+urls case_id=https://portal.gdc.cancer.gov/cases/$$
+
 track lovd
 shortLabel LOVD Variants
 longLabel Leiden Open Variation Database Public Variants
