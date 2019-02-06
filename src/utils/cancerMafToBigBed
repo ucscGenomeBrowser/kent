@@ -121,6 +121,15 @@ def makeRec(fname):
         MafRec = namedtuple("mafRecord", headers)
         return MafRec
 
+def joinMaxLen(vals, maxLen=255):
+    " join strings together. If total length is > maxLen, just take the first 3 and add ... "
+    newLen = len(vals[0])*len(vals)
+    if newLen>250:
+        newStr = ",".join(vals[:3])
+    else:
+        newStr = ",".join(vals)
+    return newStr
+
 def mafsToBed(mafFnames, annots, outBed):
     " summarize mafFnames to outBed "
     byPosAndAllele = defaultdict(list)
@@ -142,7 +151,7 @@ def mafsToBed(mafFnames, annots, outBed):
         logging.info("Read %d rows" % lineCount)
 
     sampleCount = len(allSampleIds)
-    logging.info("Read variants from %d samples in total" % sampleCount)
+    logging.info("Read %d variants from %d samples" % (len(byPosAndAllele),sampleCount))
 
     logging.info("Writing variant summary to %s" % outBed)
     # now summarize all variants for every chrom pos
@@ -199,7 +208,7 @@ def mafsToBed(mafFnames, annots, outBed):
                 annot = annots[var.case_id]
                 vals.append(annot[fieldName])
 
-            row.append(",".join(vals))
+            row.append(joinMaxLen(vals))
 
         # first convert structs to dicts
         dictList = []
@@ -211,7 +220,7 @@ def mafsToBed(mafFnames, annots, outBed):
             valList = []
             for d in dictList:
                 valList.append(d[fieldName])
-            valStr = ",".join(valList)
+            valStr = joinMaxLen(valList)
             row.append(valStr)
             #if len(valStr)>256:
                 #longFields.add(fieldName)
@@ -305,7 +314,7 @@ def main():
 
     makeAs([fixedFields, annotCountFields, annotListFields, varFields], outAs)
 
-    chromSizes = "/gbdb/hg38/chrom.sizes"
+    chromSizes = "/hive/data/genomes/hg38/chrom.sizes"
     bedToBb(outBed, outBedSorted, chromSizes, outAs, outBb)
 
 main()
