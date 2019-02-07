@@ -53,7 +53,7 @@ hgsql "" -Ne "show databases" | sort > $SOMEDIR/haveDbs.txt
 join -v 1 $SOMEDIR/wantDbs.txt $SOMEDIR/haveDbs.txt > $SOMEDIR/needDbs.txt
 
 (cd $SOMEDIR; for i in `join -v 1 wantDbs.txt haveDbs.txt`; do HGDB_CONF=/data/genbank/etc/.hg.conf.hgwdev hgsql $i -Ne "select * from chromInfo" > $i.chromInfo; hgsql "" -Ne "create database $i"; hgsql $i < ~/kent/src/hg/lib/chromInfo.sql; hgsql $i -Ne "load data local infile '$i.chromInfo' into table chromInfo"; hgsql $i < ~/kent/src/hg/lib/gbLoaded.sql; done)
-rm -f $SOMEDIR
+rm -rf $SOMEDIR
 
 # load the databases
 etc/genbank-dbload
