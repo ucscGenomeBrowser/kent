@@ -3409,11 +3409,28 @@ shortLabel Cancer mutations
 longLabel Cancer somatic mutations from The Cancer Genome Atlas
 group phenDis
 visibility hide
-color 200,0,0
-type bigBed 12 +
-bigDataUrl /gbdb/$D/bbi/cancerMutations/BRCA.bb
+color 0,0,0
+type bed
 release alpha
-urls case_id=https://portal.gdc.cancer.gov/cases/$$
+compositeTrack on
+
+        track pancan33
+        shortLabel PanCan33
+        longLabel Cancer mutations: 33 TCGA Cancer Projects Summary (Pan-Can 33)
+        type bigBed 12 +
+        release alpha
+        bigDataUrl /gbdb/$D/bbi/cancerMutations/pancan33.bb
+        urls case_id=https://portal.gdc.cancer.gov/cases/$$
+        parent cancerMutations
+
+        track tcgaBrca
+        shortLabel Breast
+        longLabel Cancer mutations: TCGA Breast Cancer
+        type bigBed 12 +
+        release alpha
+        bigDataUrl /gbdb/$D/bbi/cancerMutations/BRCA.bb
+        urls case_id=https://portal.gdc.cancer.gov/cases/$$
+        parent cancerMutations
 
 track lovd
 shortLabel LOVD Variants
