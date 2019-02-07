@@ -82,12 +82,20 @@ struct spaceNode *spaceSaverAddOverflow(struct spaceSaver *ss, int start, int en
  * that won't fit in first row (ends up being last row after
  * spaceSaverFinish()). */
 
-struct spaceNode *spaceSaverAddOverflowMulti(struct spaceSaver *ss, struct spaceRange *rangeList, struct spaceNode *nodeList, 
-					boolean allowOverflow);
+struct spaceNode *spaceSaverAddOverflowMulti(struct spaceSaver *ss, struct spaceRange *rangeList, 
+                        struct spaceNode *nodeList, boolean allowOverflow);
 /* Add new nodes for multiple windows to space saver. Returns NULL if can't fit item in
  * and allowOverflow == FALSE. If allowOverflow == TRUE then put items
  * that won't fit in first row (ends up being last row after
  * spaceSaverFinish()). */
+
+struct spaceNode *spaceSaverAddOverflowMultiOptionalPadding(struct spaceSaver *ss, 
+	                struct spaceRange *rangeList, struct spaceNode *nodeList, 
+					boolean allowOverflow, boolean doPadding);
+/* Add new nodes for multiple windows to space saver. Returns NULL if can't fit item in
+ * and allowOverflow == FALSE. If allowOverflow == TRUE then put items
+ * that won't fit in first row (ends up being last row after
+ * spaceSaverFinish()). Allow caller to suppress padding between items (show adjacent items on single row */
 
 void spaceSaverSetRowHeights(struct spaceSaver *ss, struct spaceSaver *holdSs, int (*itemHeight)(void *item));
 /* Determine maximum height of items in a row. Return total height.
