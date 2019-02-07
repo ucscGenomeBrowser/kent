@@ -663,7 +663,7 @@ for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
                     range->next = NULL;  // do not need the rest of the ranges
                     }
                 }
-            boolean doPadding = !cartOrTdbBoolean(cart, tg->tdb, "packDense", FALSE);
+            boolean doPadding = !cartOrTdbBoolean(cart, tg->tdb, "bedPackDense", FALSE);
 	    if (spaceSaverAddOverflowMultiOptionalPadding(
                                 ss, rangeList, nodeList, allowOverflow, doPadding) == NULL)
 		break;
@@ -797,15 +797,10 @@ switch (vis)
 	    rows = packCountRowsOverflow(tg, floor(maxHeight/tg->lineHeight)+1, TRUE, FALSE, vis);
         if (tdbIsCompositeChild(tg->tdb))
             {
-            char *centerLabelsPackOff = trackDbSetting(tg->tdb, "centerLabelsPack");
-            char *collapseEmptySubtracks = trackDbSetting(tg->tdb, "collapseEmptySubtracks");
-            boolean collapseEmpty = FALSE;
-            if (collapseEmptySubtracks && sameWord(collapseEmptySubtracks, "on"))
-                collapseEmpty = TRUE;
-            if (centerLabelsPackOff)
-                if (sameWord(centerLabelsPackOff, "off") && !collapseEmpty)
-                    if (rows == 0)
-                        rows = 1;   // compact pack mode, shows just side label
+            boolean doCollapse = doCollapseEmptySubtracks(tg);
+            if (isCenterLabelsPackOff(tg) && !doCollapse)
+                if (rows == 0)
+                    rows = 1;   // compact pack mode, shows just side label
             }
 	break;
 	}
@@ -936,33 +931,22 @@ return dy;
 
 boolean isWithCenterLabels(struct track *track)
 /* Cases: only TRUE when global withCenterLabels is TRUE
- * If track has a centerLabelDense setting 'on', then composite child has 
- * center labels in dense mode.
- * If track has centerLabelsPack setting 'off', then composite child has no
- * center labels in pack mode (instead, has left short label.
- * NOTE: if there are labels, then this should be used with labelOnFeature setting.
- */
+ * If track->tdb has a centerLabelDense setting, go with it.
+// * If composite child then no center labels in dense mode. */
 {
 if (!withCenterLabels)
-    return FALSE;
-if (!track)
-    return withCenterLabels;
-
-/* NOTE: this feature may be broken.  Only used in affyTxnPhase2 track */
-char *centerLabelsDense = trackDbSetting(track->tdb, "centerLabelsDense");
-if (centerLabelsDense && sameWord(centerLabelsDense, "on"))
-    return TRUE;
-
-/*
-char *centerLabelsPack = trackDbSetting(track->tdb, "centerLabelsPack");
-if (centerLabelsPack && sameWord(centerLabelsPack, "off"))
     {
-    enum trackVisibility vis = limitVisibility(track);
-    if (vis == tvPack)
-        return FALSE;
+    return FALSE;
     }
-*/
-return TRUE;
+if (track != NULL)
+    {
+    char *centerLabelsDense = trackDbSetting(track->tdb, "centerLabelsDense");
+    if (centerLabelsDense)
+        {
+        return sameWord(centerLabelsDense, "on");
+        }
+    }
+return withCenterLabels;
 }
 
 boolean isCenterLabelConditionallySeen(struct track *track)
@@ -990,10 +974,7 @@ if (vis == tvFull || vis == tvSquish)
 if (vis == tvDense)
     return TRUE;
 // pack mode
-char *centerLabelsPack = trackDbSetting(track->tdb, "centerLabelsPack");
-if (centerLabelsPack)
-    return sameWord(centerLabelsPack, "off");
-return FALSE;
+return isCenterLabelsPackOff(track);
 }
 
 boolean isCenterLabelIncluded(struct track *track)
@@ -1006,7 +987,6 @@ if (theImgBox)
 if (isCenterLabelConditionallySeen(track))
     return TRUE;
 return FALSE;
-//return isWithCenterLabels(track) && (theImgBox || isCenterLabelConditionallySeen(track));
 }
 
 void mapStatusMessage(char *format, ...)

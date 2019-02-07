@@ -17,7 +17,7 @@ itemRgb on
 labelOnFeature on
 centerLabelsPack off
 collapseEmptySubtracks on
-packDense on
+bedPackDense on
 html aaCounts
 
         track aaCountsALA

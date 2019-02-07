@@ -1361,11 +1361,17 @@ boolean isCenterLabelConditional(struct track *track);
 
 boolean isCenterLabelConditionallySeen(struct track *track);
 /* Returns FALSE if track and prevTrack have same parent, and are both conditional
- * i.e. dense subtrack or pack subtrack with centerLabelsPack off set /
+ * i.e. dense subtrack or pack subtrack with centerLabelsPack off set
  */
+
+boolean isCenterLabelsPackOff(struct track *track);
+/* Check for trackDb setting to suppress center labels of composite in pack mode */
 
 boolean isCenterLabelIncluded(struct track *track);
 /* Center labels may be conditionally included */
+
+boolean doCollapseEmptySubtracks(struct track *track);
+/* Suppress display of empty subtracks. Initial support only for bed's. */
 
 Color maybeDarkerLabels(struct track *track, struct hvGfx *hvg, Color color);
 /* For tracks having light track display but needing a darker label */

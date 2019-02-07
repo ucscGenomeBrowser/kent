@@ -41,6 +41,7 @@ baseColorUseSequence *
 baseQualRange bam
 bedFilter bed
 bedNameLabel bed barChart bigBarChart bigBed
+bedPackDense bed bigBed
 bigDataUrl customTracks bigBed bigWig bam vcfTabix bigPsl halSnake bigBarChart gtexTranscExpr bigInteract bigChain bigGenePred
 bigGeneDataUrl genePred
 blastRef psl bigPsl
@@ -453,7 +454,6 @@ subgroups bed
 summary wigMaf
 superTrack *
 symbolTable bed genePred
-packDense *
 pubsArticleTable bed psl bigPsl
 pubsSequenceTable bed psl bigPsl
 pubsMarkerTable bed psl bigPsl

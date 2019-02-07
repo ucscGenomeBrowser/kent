@@ -1247,6 +1247,14 @@ if (trackDbSetting(track->tdb, "darkerLabels"))
 return color;
 }
 
+boolean isCenterLabelsPackOff(struct track *track)
+/* Check for trackDb setting to suppress center labels of composite in pack mode */
+{
+if (!track || !track->tdb)
+    return FALSE;
+char *centerLabelsPack = trackDbSetting(track->tdb, "centerLabelsPack");
+return (centerLabelsPack && sameWord(centerLabelsPack, "off"));
+}
 
 static int doLeftLabels(struct track *track, struct hvGfx *hvg, MgFont *font,
                                 int y)
@@ -1335,14 +1343,12 @@ if (startsWith("bigMaf", track->tdb->type) || startsWith("wigMaf", track->tdb->t
 if (track->limitedVis == tvFull && isTypeBedLike(track))
     vis = tvPack;
 
-char *centerLabelsPack = NULL;
 switch (vis)
     {
     case tvHide:
         break;  /* Do nothing; */
     case tvPack:
-        centerLabelsPack = trackDbSetting(track->tdb, "centerLabelsPack");
-        if (centerLabelsPack && sameWord(centerLabelsPack, "off"))
+        if (isCenterLabelsPackOff(track))
             // draw left labels for pack mode track with center labels off
             {
             if (isCenterLabelIncluded(track))
@@ -4587,6 +4593,12 @@ setGlobalsFromWindow(windows); // first window
 flatTrack->maxHeight = maxHeight;
 }
 
+boolean doCollapseEmptySubtracks(struct track *track)
+/* Suppress display of empty subtracks. Initial support only for bed's. */
+{
+char *collapseEmptySubtracks = trackDbSetting(track->tdb, "collapseEmptySubtracks");
+return (collapseEmptySubtracks && sameWord(collapseEmptySubtracks, "on"));
+}
 
 void makeActiveImage(struct track *trackList, char *psOutput)
 /* Make image and image map. */
@@ -4814,7 +4826,7 @@ for (track = trackList; track != NULL; track = track->next)
             flatTracksAdd(&flatTracks,track,cart, orderedWiggles);
         else
             {
-            boolean doCollapse = trackDbSettingOn(track->tdb, "collapseEmptySubtracks");
+            boolean doCollapse = doCollapseEmptySubtracks(track);
             for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
                 {
                 if (!isSubtrackVisible(subtrack))
@@ -5533,8 +5545,6 @@ if (withLeftLabels)
 	    y += flatTrack->maxHeight;
         }
     }
-
-
 
 /* Make map background. */
 
