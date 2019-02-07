@@ -83,19 +83,27 @@ errors.</p>
 <p>TODO Lou or Max: compare the Ensembl GFF with the Gencode GFF.</p>
 
 <p> 
-On the most current human and mouse genome assemblies (hg38 and mm10), the
+On the most current human and mouse genome assemblies (hg38 and mm10), and the primary chromosomes
+(not alternate sequences or patches (LINK TO EXPLAIN WHAT THIS IS?) the
 identifiers, transcript sequences and exon coordinates of equivalent Ensembl
-and Gencode versions are identical. The <a target=_blank
+and Gencode versions are almost identical. Gencode uses the UCSC convention of prefixing
+chromosome names with "chr", e.g. "chr1" and "chrM", but Ensembl calls these
+"1" or "MT". At a time of writing (Ensembl 89), a few transcripts differ due to
+conversion issues. In addition, around 160 PAR genes are duplicated in Gencode
+but only once in Gencode. The differences affect fewer than 1% of the
+transcripts. Apart from gene annotation itself, the links to external databases
+differ. 
+
+The <a target=_blank
 href="https://www.gencodegenes.org/human/releases.html">Gencode Release
-History</a>.
-shows which versions are equivalent.  You can download the gene transcript
-models either from the website <a href=https://gencodegenes.org>https://gencodegenes.org</a> or from 
-<a href=http://ensembl.org>http://ensembl.org</a>. Additional information that are not directly 
-transcript related, e.g. the linkouts to other databases, sometimes differ in
-the files that are distributed by Gencode and the Ensembl website (IS THIS TRUE? MARK?). 
-The GFF files distributed by Ensembl and Gencode are different. For most
-applications, the files distributed on the Gencode website should be easier to
-use.
+History</a> shows the release dates and can be linked to corresponding Ensembl
+releases.  You can download the gene transcript models from the website
+<a href=https://gencodegenes.org>https://gencodegenes.org</a> or from
+<a href=http://ensembl.org>http://ensembl.org</a>. 
+For many applications, the files distributed on the Gencode website
+should be easier to use, as the third party database links are easier to parse
+and the sequence identifiers match the UCSC genome files, at least for the
+primary chromosomes.
 
 <h6>What is the difference between Ensembl/Gencode and RefSeq?</h6>
 <p> 
@@ -118,14 +126,17 @@ Genes, the "Gencode All" track and the "Ensembl Genes" track ?</h6>
 assemblies before hg38.  It was built with a gene predictor developed at UCSC.
 It uses protein, EST and cDNA annotations to derive a relatively restricted
 gene transcript set. The software is not used anymore and the track is not
-available on newer assemblies.</p>
+available on the newer assemblies.</p>
 
-<p> ???  what is the difference between Gencode All vs Ensembl ???</p>
+<p>The "Gencode All" track has all version of Gencode. "Ensembl Genes" contains just 
+a single Ensembl version. See above for the differences between Ensembl and Gencode.</p>
 
 <a name="hg38"></a>
 <h6>For the human assembly hg38/GrCH38: What is the difference between "Gencode" and "All Gencode" ?</h6>
 <p> 
-I don't really know. Is it only the meta data? Mark?
+"Gencode" is the default gene track on hg38 (similar to "Known Genes" on hg19). It shows a lot of 
+third party information when you click on a gene. "All Gencode" contains all
+versions of Gencode, but a lot less third-party information.
 </p>
 
 <a name="hg38"></a>
@@ -155,12 +166,19 @@ It contains only the transcripts that are part of the Human Gene Mutation Databa
 <a name="whatdo"></a>
 <h6>This is rather complicated. Can you tell me which gene transcript track I should use?</h6>
 <p> 
-If you are doing NGS analysis and you need to capture all possible transcripts,
-use Ensembl/Gencode.  For human genetics or variant annotation, a more
-restricted transcript set is usually sufficient and RefSeq is the standard. If you
-are only interested in protein coding annotations, CCDS or UniProt may be an option. 
-Use TransMap, Augustus, Genscan, SIB, SGP or GeneId in obscure cases where you
-are looking for hints on what an alternative splicing could look like.
+For automated analysis, if you are doing NGS analysis and you need to capture
+all possible transcripts, use Gencode.  For human genetics or variant
+annotation, a more restricted transcript set is usually sufficient and "NCBI
+RefSeq" is the standard. If you are only interested in protein coding
+annotations, CCDS or UniProt may be an option, but this is rather unusual.<br>
+
+For manual inspection of exon boundaries of a single gene, and especially if it
+is a transcript that is repetitive or hard to align (e.g. very small exons),
+look at the UCSC RefSeq track and watch out for differences between the NCBI
+and UCSC exon placement. You can also BLAT the transcript sequence. 
+Manually look at ESTs, mRNAs, TransMap and possibly Augustus, Genscan, SIB, SGP
+or GeneId in obscure cases where you are looking for hints on what an
+alternative splicing could look like.
 </p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
