@@ -842,7 +842,7 @@ if (tInfo->clusterMode)
 else
     {
     struct simpleFeature *sf1 = lf->components, *sf2 = sf1->next;
-    if (sf2->start > lf->tallStart && sf2->end < lf->tallEnd)
+    if (sf2 && sf2->start > lf->tallStart && sf2->end < lf->tallEnd)
         drawScaledBox(hvg, sf2->start, sf2->end, scale, xOff, y, tg->heightPer, MG_WHITE);
     if (vis == tvPack || vis == tvFull)
         {
