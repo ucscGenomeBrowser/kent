@@ -82,10 +82,9 @@ static void jsonInteger(FILE *f, char *tag, long long value)
 fprintf(f,"\"%s\":%lld",tag, value);
 }
 
-static void jsonStringOut(FILE *f, char *tag, char *value)
-/* output one json string: "tag":"value" appropriately quoted and encoded */
+static void jsonStringPrint(FILE *f, char *value)
+/* escape string for output */
 {
-fprintf(f,"\"%s\":",tag);
 char *a = jsonStringEscape(value);
 if (isEmpty(a))
     fprintf(f, "%s", "null");
@@ -94,33 +93,79 @@ else
 freeMem(a);
 }
 
+static void jsonTagValue(FILE *f, char *tag, char *value)
+/* output one json string: "tag":"value" appropriately quoted and encoded */
+{
+fprintf(f,"\"%s\":",tag);
+jsonStringPrint(f, value);
+}
+
 static void jsonStartOutput(FILE *f)
 /* begin json output */
 {
 fputc('{',f);
-jsonStringOut(f, "source", "UCSantaCruz");
+jsonTagValue(f, "source", "UCSantaCruz");
 fputc(',',f);
 }
 
+static void jsonErrAbort(char *format, ...)
+/* Issue an error message in json format. */
+{
+char errMsg[2048];
+va_list args;
+va_start(args, format);
+vsnprintf(errMsg, sizeof(errMsg), format, args);
+fputc('{',stdout);
+jsonTagValue(stdout, "error", errMsg);
+fputc('}',stdout);
+}
+
+static void hubPublicJsonData(struct hubPublic *el, FILE *f)
+/* Print array data for one row from hubPublic table, order here
+ * must be same as was stated in the columnName header element
+ *  TODO: need to figure out how to use the order of the columns as
+ *        they are in the 'desc' request
+ */
+{
+fputc('[',f);
+jsonStringPrint(f, el->hubUrl);
+fputc(',',f);
+jsonStringPrint(f, el->shortLabel);
+fputc(',',f);
+jsonStringPrint(f, el->longLabel);
+fputc(',',f);
+jsonStringPrint(f, el->registrationTime);
+fputc(',',f);
+fprintf(f, "%lld", (long long)el->dbCount);
+fputc(',',f);
+jsonStringPrint(f, el->dbList);
+fputc(',',f);
+jsonStringPrint(f, el->descriptionUrl);
+fputc(']',f);
+}
+
+#ifdef NOT
+/* This function should be in hg/lib/hubPublic.c */
 static void hubPublicJsonOutput(struct hubPublic *el, FILE *f)
 /* Print out hubPublic element in JSON format. */
 {
 fputc('{',f);
-jsonStringOut(f, "hubUrl", el->hubUrl);
+jsonTagValue(f, "hubUrl", el->hubUrl);
 fputc(',',f);
-jsonStringOut(f, "shortLabel", el->shortLabel);
+jsonTagValue(f, "shortLabel", el->shortLabel);
 fputc(',',f);
-jsonStringOut(f, "longLabel", el->longLabel);
+jsonTagValue(f, "longLabel", el->longLabel);
 fputc(',',f);
-jsonStringOut(f, "registrationTime", el->registrationTime);
+jsonTagValue(f, "registrationTime", el->registrationTime);
 fputc(',',f);
 jsonInteger(f, "dbCount", el->dbCount);
 fputc(',',f);
-jsonStringOut(f, "dbList", el->dbList);
+jsonTagValue(f, "dbList", el->dbList);
 fputc(',',f);
-jsonStringOut(f, "descriptionUrl", el->descriptionUrl);
+jsonTagValue(f, "descriptionUrl", el->descriptionUrl);
 fputc('}',f);
 }
+#endif
 
 static int publicHubCmpCase(const void *va, const void *vb)
 /* Compare two slNames, ignore case. */
@@ -506,34 +551,64 @@ static void dbDbJsonOutput(struct dbDb *el, FILE *f)
 /* Print out hubPublic element in JSON format. */
 {
 fputc('{',f);
-jsonStringOut(f, "name", el->name);
+jsonTagValue(f, "name", el->name);
 fputc(',',f);
-jsonStringOut(f, "description", el->description);
+jsonTagValue(f, "description", el->description);
 fputc(',',f);
-jsonStringOut(f, "nibPath", el->nibPath);
+jsonTagValue(f, "nibPath", el->nibPath);
 fputc(',',f);
-jsonStringOut(f, "organism", el->organism);
+jsonTagValue(f, "organism", el->organism);
 fputc(',',f);
-jsonStringOut(f, "defaultPos", el->defaultPos);
+jsonTagValue(f, "defaultPos", el->defaultPos);
 fputc(',',f);
 jsonInteger(f, "active", el->active);
 fputc(',',f);
 jsonInteger(f, "orderKey", el->orderKey);
 fputc(',',f);
-jsonStringOut(f, "genome", el->genome);
+jsonTagValue(f, "genome", el->genome);
 fputc(',',f);
-jsonStringOut(f, "scientificName", el->scientificName);
+jsonTagValue(f, "scientificName", el->scientificName);
 fputc(',',f);
-jsonStringOut(f, "htmlPath", el->htmlPath);
+jsonTagValue(f, "htmlPath", el->htmlPath);
 fputc(',',f);
 jsonInteger(f, "hgNearOk", el->hgNearOk);
 fputc(',',f);
 jsonInteger(f, "hgPbOk", el->hgPbOk);
 fputc(',',f);
-jsonStringOut(f, "sourceName", el->sourceName);
+jsonTagValue(f, "sourceName", el->sourceName);
 fputc(',',f);
 jsonInteger(f, "taxId", el->taxId);
 fputc('}',f);
+}
+
+static boolean tableColumns(FILE *f, char *table)
+/* output the column names for the given table
+ * return: TRUE on error, FALSE on success
+ */
+{
+fprintf(f, "\"columnNames\":[");
+char query[1024];
+struct sqlConnection *conn = hConnectCentral();
+sqlSafef(query, sizeof(query), "desc %s", table);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+row = sqlNextRow(sr);
+if (NULL == row)
+    {
+    jsonErrAbort("ERROR: can not 'desc' table '%s'\n", table);
+    return TRUE;
+    }
+fprintf(f, "\"%s\"",row[0]);
+while (row != NULL)
+    {
+    row = sqlNextRow(sr);
+    if (row)
+       fprintf(f, ",\"%s\"",row[0]);
+    }
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
+fprintf(f, "],");
+return FALSE;
 }
 
 static void jsonPublicHubs()
@@ -541,10 +616,11 @@ static void jsonPublicHubs()
 {
 struct hubPublic *el = publicHubList;
 jsonStartOutput(stdout);
-printf("\"publicHubs\":[");
+tableColumns(stdout, hubPublicTableName());
+printf("\"publicHubData\":[");
 for ( ; el != NULL; el = el->next )
     {
-    hubPublicJsonOutput(el, stdout);
+    hubPublicJsonData(el, stdout);
     if (el->next)
        printf(",");
     }
@@ -595,18 +671,6 @@ for ( el=dbList; el != NULL; el = el->next )
 printf("]}\n");
 }
 
-static void jsonErrAbort(char *format, ...)
-/* Issue an error message in json format. */
-{
-char errMsg[2048];
-va_list args;
-va_start(args, format);
-vsnprintf(errMsg, sizeof(errMsg), format, args);
-fputc('{',stdout);
-jsonStringOut(stdout, "error", errMsg);
-fputc('}',stdout);
-}
-
 static void chromInfoJsonOutput(char *db, FILE *f, char *track)
 {
 if (track)
@@ -617,9 +681,9 @@ if (track)
     if (sqlColumnExists(conn, track, "chrom"))
 	{
 	jsonStartOutput(f);
-	jsonStringOut(f, "genome", db);
+	jsonTagValue(f, "genome", db);
 	fputc(',',f);
-	jsonStringOut(f, "track", track);
+	jsonTagValue(f, "track", track);
 	fputc(',',f);
         struct slPair *list = NULL;
 	char query[2048];
@@ -656,7 +720,7 @@ else
     struct chromInfo *ciList = createChromInfoList(NULL, db);
     struct chromInfo *el = ciList;
     jsonStartOutput(f);
-    jsonStringOut(f, "genome", db);
+    jsonTagValue(f, "genome", db);
     fputc(',',f);
     jsonInteger(f, "chromCount", slCount(ciList));
     fputc(',',f);
@@ -686,14 +750,12 @@ static void trackDbJsonOutput(char *db, FILE *f)
 struct trackDb *tdbList = hTrackDb(db);
 struct trackDb *el;
 jsonStartOutput(f);
-jsonStringOut(f, "db", db);
+jsonTagValue(f, "db", db);
 fputc(',',f);
 fprintf(f, "\"tracks\":[");
 for (el = tdbList; el != NULL; el = el->next )
     {
-    char *a = jsonStringEscape(el->track);
-    printf("\"%s\"", a);
-    freeMem(a);
+    jsonStringPrint(f, el->track);
     if (el->next)
 	fputc(',',f);
     }
@@ -718,7 +780,7 @@ else if (sameWord("hubGenomes", words[1]))
     if (hub->genomeList)
 	{
         jsonStartOutput(stdout);
-	jsonStringOut(stdout, "hubUrl", hubUrl);
+	jsonTagValue(stdout, "hubUrl", hubUrl);
 	fputc(',',stdout);
 	printf("\"genomes\":[");
 	struct slName *theList = genomeList(hub, NULL, NULL);
@@ -726,9 +788,7 @@ else if (sameWord("hubGenomes", words[1]))
 	struct slName *el = theList;
 	for ( ; el ; el = el->next )
 	    {
-	    char *a = jsonStringEscape(el->name);
-	    printf("\"%s\"", a);
-	    freeMem(a);
+	    jsonStringPrint(stdout, el->name);
 	    if (el->next)
 		fputc(',',stdout);
 	    }
@@ -760,17 +820,15 @@ else if (sameWord("tracks", words[1]))
 	struct slName *dbTrackList = NULL;
 	(void) genomeList(hub, &dbTrackList, genome);
         jsonStartOutput(stdout);
-	jsonStringOut(stdout, "hubUrl", hubUrl);
+	jsonTagValue(stdout, "hubUrl", hubUrl);
 	fputc(',',stdout);
-	jsonStringOut(stdout, "genome", genome);
+	jsonTagValue(stdout, "genome", genome);
 	fputc(',',stdout);
 	slNameSort(&dbTrackList);
 	struct slName *el = dbTrackList;
 	for ( ; el != NULL; el = el->next )
 	    {
-	    char *a = jsonStringEscape(el->name);
-	    printf("\"%s\"", a);
-	    freeMem(a);
+            jsonStringPrint(stdout, el->name);
 	    if (el->next)
 		fputc(',',stdout);
 	    }
