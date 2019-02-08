@@ -120,7 +120,7 @@ jsonTagValue(stdout, "error", errMsg);
 fputc('}',stdout);
 }
 
-static void hubPublicJsonData(struct hubPublic *el, FILE *f)
+static void hubPublicJsonData(FILE *f, struct hubPublic *el)
 /* Print array data for one row from hubPublic table, order here
  * must be same as was stated in the columnName header element
  *  TODO: need to figure out how to use the order of the columns as
@@ -146,7 +146,7 @@ fputc(']',f);
 
 #ifdef NOT
 /* This function should be in hg/lib/hubPublic.c */
-static void hubPublicJsonOutput(struct hubPublic *el, FILE *f)
+static void hubPublicJsonOutput(FILE *f, struct hubPublic *el)
 /* Print out hubPublic element in JSON format. */
 {
 fputc('{',f);
@@ -547,7 +547,47 @@ hDisconnectCentral(&conn);
 return cloneString(hubUrl);
 }
 
-static void dbDbJsonOutput(struct dbDb *el, FILE *f)
+static void dbDbJsonData(FILE *f, struct dbDb *el)
+/* Print out dbDb table element in JSON format.
+ * must be same as was stated in the columnName header element
+ *  TODO: need to figure out how to use the order of the columns as
+ *        they are in the 'desc' request
+ */
+{
+fputc('[',f);
+jsonStringPrint(f, el->name);
+fputc(',',f);
+jsonStringPrint(f, el->description);
+fputc(',',f);
+jsonStringPrint(f, el->nibPath);
+fputc(',',f);
+jsonStringPrint(f, el->organism);
+fputc(',',f);
+jsonStringPrint(f, el->defaultPos);
+fputc(',',f);
+fprintf(f, "%lld", (long long)el->active);
+fputc(',',f);
+fprintf(f, "%lld", (long long)el->orderKey);
+fputc(',',f);
+jsonStringPrint(f, el->genome);
+fputc(',',f);
+jsonStringPrint(f, el->scientificName);
+fputc(',',f);
+jsonStringPrint(f, el->htmlPath);
+fputc(',',f);
+fprintf(f, "%lld", (long long)el->hgNearOk);
+fputc(',',f);
+fprintf(f, "%lld", (long long)el->hgPbOk);
+fputc(',',f);
+jsonStringPrint(f, el->sourceName);
+fputc(',',f);
+fprintf(f, "%lld", (long long)el->taxId);
+fputc(']',f);
+}
+
+#ifdef NOT
+/* this code should be in hg/lib/dbDb.c */
+static void dbDbJsonOutput(FILE *f, struct dbDb *el)
 /* Print out hubPublic element in JSON format. */
 {
 fputc('{',f);
@@ -580,6 +620,7 @@ fputc(',',f);
 jsonInteger(f, "taxId", el->taxId);
 fputc('}',f);
 }
+#endif
 
 static boolean tableColumns(FILE *f, char *table)
 /* output the column names for the given table
@@ -620,7 +661,7 @@ tableColumns(stdout, hubPublicTableName());
 printf("\"publicHubData\":[");
 for ( ; el != NULL; el = el->next )
     {
-    hubPublicJsonData(el, stdout);
+    hubPublicJsonData(stdout, el);
     if (el->next)
        printf(",");
     }
@@ -661,18 +702,23 @@ static void jsonDbDb()
 struct dbDb *dbList = ucscDbDb();
 struct dbDb *el;
 jsonStartOutput(stdout);
+tableColumns(stdout, "dbDb");
 printf("\"ucscGenomes\":[");
 for ( el=dbList; el != NULL; el = el->next )
     {
-    dbDbJsonOutput(el, stdout);
+    dbDbJsonData(stdout, el);
     if (el->next)
        printf(",");
     }
 printf("]}\n");
 }
 
-static void chromInfoJsonOutput(char *db, FILE *f, char *track)
+static void chromInfoJsonOutput(FILE *f, char *db)
+/* for given db, if there is a track, list the chromosomes in that track,
+ * for no track, simply list the chromosomes in the sequence
+ */
 {
+char *track = cgiOptionalString("track");
 if (track)
     {
     struct sqlConnection *conn = hAllocConn(db);
@@ -733,16 +779,6 @@ else
     fputc('}',f);
     }
 }
-
-static void chromListJsonOutput(char *db, FILE *f)
-/* return chromsome list from specified UCSC database name,
- * can be for a specific track if cgiVar(track) exists, otherwise,
- * the chrom list is from the chromInfo table.
- */
-{
-char *track = cgiOptionalString("track");
-chromInfoJsonOutput(db, f, track);
-}	/*	static void chromListJsonOutput(char *db, FILE *f)	*/
 
 static void trackDbJsonOutput(char *db, FILE *f)
 /* return track list from specified UCSC database name */
@@ -845,7 +881,7 @@ else if (sameWord("chromosomes", words[1]))
 
     if (isEmpty(hubUrl))	// missing hubUrl implies UCSC database
 	{
-        chromListJsonOutput(db, stdout); // only need db for this function
+        chromInfoJsonOutput(stdout, db);
 	return;
 	}
     }
