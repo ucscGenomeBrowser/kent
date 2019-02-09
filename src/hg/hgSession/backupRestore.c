@@ -1407,8 +1407,11 @@ char greekSize[32];
 sprintWithGreekByte(greekSize, sizeof(greekSize), size);
 printf("Contents of archive <B>%s</B> (%s).<br>\n", fileName, greekSize);
 
+// Now we do not have to care about special chars in the name
+char *tempFileName = "savedSessionCtRaw.tar.gz";  // do not use their actual filename.
+
 char tempOutFile[1024];
-safef(tempOutFile, sizeof tempOutFile, "%s/%s", tempOutRand, fileName);
+safef(tempOutFile, sizeof tempOutFile, "%s/%s", tempOutRand, tempFileName);
 
 // move our uploaded binary file where we really want it.
 if (rename(filePath, tempOutFile))
@@ -1420,7 +1423,7 @@ lazarusLives(20 * 60);
 
 // create the archive
 char cmd[2048];
-safef(cmd, sizeof cmd, "cd %s; tar -xpzf %s", tempOutRand, fileName);
+safef(cmd, sizeof cmd, "cd %s; tar -xpzf %s", tempOutRand, tempFileName);
 mustSystem(cmd);
 
 // check the version file
@@ -1851,6 +1854,16 @@ freeMem(contentsToChop);
 
 }
 
+void testForNonAsciiChars(char *s, char *description)
+/* Not allowing non-ascii chars in input string s */
+{
+char c;
+while((c=*s++))
+    {
+    if (c < 0)
+	errAbort("Non ascii chars not allowed in %s", description);
+    }
+}
 
 long uploadDb(char **pContents, char *dbDir, char *db, char *newDb, char *backgroundProgress, struct dyString *dyProg)
 /* Show db dir. Return total size. */
@@ -1909,13 +1922,19 @@ for(lineNum=0; lineNum<lineCount; ++lineNum)
 	char *sql = NULL;
 	readInGulp(sqlPath, &sql, NULL);
 
-	if (!startsWith("CREATE TABLE ", sql))
-	    errAbort("Invalid SQL input. for track %s", track);
+
+	// do not allow non-ascii chars in sql
+	testForNonAsciiChars(sql, "track .sql");
 
 	// patch old name to new in create sql
 	char *origTableName = findValueInCtLine(result->origCtLine, "dbTableName");
 	char oldPat[1024];
 	safef(oldPat, sizeof oldPat, "CREATE TABLE `%s`", origTableName);
+
+	// THIS IS A CRITICAL REQUIREMENT FOR SECURITY.
+	if (!startsWith(oldPat, sql))
+	    errAbort("Invalid .sql create statement for track %s", track);
+
 	char newPat[1024];
 	safef(newPat, sizeof newPat, "CREATE TABLE `%s`", table);
 	char *newSql = replaceChars(sql, oldPat, newPat);
