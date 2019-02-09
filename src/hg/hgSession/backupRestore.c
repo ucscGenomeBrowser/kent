@@ -905,7 +905,7 @@ if ((row = sqlNextRow(sr)) != NULL)
 	    unsigned hubId = sqlUnsigned(hubStr[i]);
 	    char *hubUrl = getHubUrlFromId(hubId);
 	    if (hubUrl)
-		fprintf(f, "%d %s", hubId, hubUrl);
+		fprintf(f, "%d %s\n", hubId, hubUrl);
 	    }
 	}
     carefulClose(&f);	
