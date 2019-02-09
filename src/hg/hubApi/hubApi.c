@@ -24,6 +24,7 @@
 #include "bedTabix.h"
 #include "bamFile.h"
 #include "jsonParse.h"
+#include "jsonWrite.h"
 #include "chromInfo.h"
 
 #ifdef USE_HAL
@@ -76,11 +77,13 @@ static boolean timedOut = FALSE;
 
 /* ######################################################################### */
 
+#ifdef NOT
 static void jsonInteger(FILE *f, char *tag, long long value)
 /* output one json interger: "tag":value appropriately quoted and encoded */
 {
 fprintf(f,"\"%s\":%lld",tag, value);
 }
+#endif
 
 static void jsonStringPrint(FILE *f, char *value)
 /* escape string for output */
@@ -100,12 +103,13 @@ fprintf(f,"\"%s\":",tag);
 jsonStringPrint(f, value);
 }
 
-static void jsonStartOutput(FILE *f)
+static struct jsonWrite *jsonStartOutput()
 /* begin json output */
 {
-fputc('{',f);
-jsonTagValue(f, "source", "UCSantaCruz");
-fputc(',',f);
+struct jsonWrite *jw = jsonWriteNew();
+jsonWriteObjectStart(jw, NULL);
+jsonWriteString(jw, "source", "UCSantaCurz");
+return jw;
 }
 
 static void jsonErrAbort(char *format, ...)
@@ -120,28 +124,22 @@ jsonTagValue(stdout, "error", errMsg);
 fputc('}',stdout);
 }
 
-static void hubPublicJsonData(FILE *f, struct hubPublic *el)
+static void hubPublicJsonData(struct jsonWrite *jw, struct hubPublic *el)
 /* Print array data for one row from hubPublic table, order here
  * must be same as was stated in the columnName header element
  *  TODO: need to figure out how to use the order of the columns as
  *        they are in the 'desc' request
  */
 {
-fputc('[',f);
-jsonStringPrint(f, el->hubUrl);
-fputc(',',f);
-jsonStringPrint(f, el->shortLabel);
-fputc(',',f);
-jsonStringPrint(f, el->longLabel);
-fputc(',',f);
-jsonStringPrint(f, el->registrationTime);
-fputc(',',f);
-fprintf(f, "%lld", (long long)el->dbCount);
-fputc(',',f);
-jsonStringPrint(f, el->dbList);
-fputc(',',f);
-jsonStringPrint(f, el->descriptionUrl);
-fputc(']',f);
+jsonWriteListStart(jw, NULL);
+jsonWriteString(jw, NULL, el->hubUrl);
+jsonWriteString(jw, NULL, el->shortLabel);
+jsonWriteString(jw, NULL, el->longLabel);
+jsonWriteString(jw, NULL, el->registrationTime);
+jsonWriteNumber(jw, NULL, (long long)el->dbCount);
+jsonWriteString(jw, NULL, el->dbList);
+jsonWriteString(jw, NULL, el->descriptionUrl);
+jsonWriteListEnd(jw);
 }
 
 #ifdef NOT
@@ -547,42 +545,29 @@ hDisconnectCentral(&conn);
 return cloneString(hubUrl);
 }
 
-static void dbDbJsonData(FILE *f, struct dbDb *el)
+static void dbDbJsonData(struct jsonWrite *jw, struct dbDb *el)
 /* Print out dbDb table element in JSON format.
  * must be same as was stated in the columnName header element
  *  TODO: need to figure out how to use the order of the columns as
  *        they are in the 'desc' request
  */
 {
-fputc('[',f);
-jsonStringPrint(f, el->name);
-fputc(',',f);
-jsonStringPrint(f, el->description);
-fputc(',',f);
-jsonStringPrint(f, el->nibPath);
-fputc(',',f);
-jsonStringPrint(f, el->organism);
-fputc(',',f);
-jsonStringPrint(f, el->defaultPos);
-fputc(',',f);
-fprintf(f, "%lld", (long long)el->active);
-fputc(',',f);
-fprintf(f, "%lld", (long long)el->orderKey);
-fputc(',',f);
-jsonStringPrint(f, el->genome);
-fputc(',',f);
-jsonStringPrint(f, el->scientificName);
-fputc(',',f);
-jsonStringPrint(f, el->htmlPath);
-fputc(',',f);
-fprintf(f, "%lld", (long long)el->hgNearOk);
-fputc(',',f);
-fprintf(f, "%lld", (long long)el->hgPbOk);
-fputc(',',f);
-jsonStringPrint(f, el->sourceName);
-fputc(',',f);
-fprintf(f, "%lld", (long long)el->taxId);
-fputc(']',f);
+jsonWriteListStart(jw, NULL);
+jsonWriteString(jw, NULL, el->name);
+jsonWriteString(jw, NULL, el->description);
+jsonWriteString(jw, NULL, el->nibPath);
+jsonWriteString(jw, NULL, el->organism);
+jsonWriteString(jw, NULL, el->defaultPos);
+jsonWriteNumber(jw, NULL, (long long)el->active);
+jsonWriteNumber(jw, NULL, (long long)el->orderKey);
+jsonWriteString(jw, NULL, el->genome);
+jsonWriteString(jw, NULL, el->scientificName);
+jsonWriteString(jw, NULL, el->htmlPath);
+jsonWriteNumber(jw, NULL, (long long)el->hgNearOk);
+jsonWriteNumber(jw, NULL, (long long)el->hgPbOk);
+jsonWriteString(jw, NULL, el->sourceName);
+jsonWriteNumber(jw, NULL, (long long)el->taxId);
+jsonWriteListEnd(jw);
 }
 
 #ifdef NOT
@@ -622,12 +607,12 @@ fputc('}',f);
 }
 #endif
 
-static boolean tableColumns(FILE *f, char *table)
+static boolean tableColumns(struct jsonWrite *jw, char *table)
 /* output the column names for the given table
  * return: TRUE on error, FALSE on success
  */
 {
-fprintf(f, "\"columnNames\":[");
+jsonWriteListStart(jw, "columnNames");
 char query[1024];
 struct sqlConnection *conn = hConnectCentral();
 sqlSafef(query, sizeof(query), "desc %s", table);
@@ -639,16 +624,11 @@ if (NULL == row)
     jsonErrAbort("ERROR: can not 'desc' table '%s'\n", table);
     return TRUE;
     }
-fprintf(f, "\"%s\"",row[0]);
-while (row != NULL)
-    {
-    row = sqlNextRow(sr);
-    if (row)
-       fprintf(f, ",\"%s\"",row[0]);
-    }
+while ((row = sqlNextRow(sr)) != NULL)
+    jsonWriteString(jw, NULL, row[0]);
 sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
-fprintf(f, "],");
+jsonWriteListEnd(jw);
 return FALSE;
 }
 
@@ -656,16 +636,16 @@ static void jsonPublicHubs()
 /* output the hubPublic SQL table */
 {
 struct hubPublic *el = publicHubList;
-jsonStartOutput(stdout);
-tableColumns(stdout, hubPublicTableName());
-printf("\"publicHubData\":[");
+struct jsonWrite *jw = jsonStartOutput();
+tableColumns(jw, hubPublicTableName());
+jsonWriteListStart(jw, "publicHubData");
 for ( ; el != NULL; el = el->next )
     {
-    hubPublicJsonData(stdout, el);
-    if (el->next)
-       printf(",");
+    hubPublicJsonData(jw, el);
     }
-printf("]}\n");
+jsonWriteListEnd(jw);
+jsonWriteObjectEnd(jw);
+fputs(jw->dy->string,stdout);
 }
 
 static int dbDbCmpName(const void *va, const void *vb)
@@ -701,16 +681,16 @@ static void jsonDbDb()
 {
 struct dbDb *dbList = ucscDbDb();
 struct dbDb *el;
-jsonStartOutput(stdout);
-tableColumns(stdout, "dbDb");
-printf("\"ucscGenomes\":[");
+struct jsonWrite *jw = jsonStartOutput();
+tableColumns(jw, "dbDb");
+jsonWriteListStart(jw, "ucscGenomes");
 for ( el=dbList; el != NULL; el = el->next )
     {
-    dbDbJsonData(stdout, el);
-    if (el->next)
-       printf(",");
+    dbDbJsonData(jw, el);
     }
-printf("]}\n");
+jsonWriteListEnd(jw);
+jsonWriteObjectEnd(jw);
+fputs(jw->dy->string,stdout);
 }
 
 static void chromInfoJsonOutput(FILE *f, char *db)
@@ -726,11 +706,9 @@ if (track)
 	jsonErrAbort("ERROR: endpoint: /list/chromosomes?db=%&table=%s ERROR table does not exist", db, track);
     if (sqlColumnExists(conn, track, "chrom"))
 	{
-	jsonStartOutput(f);
-	jsonTagValue(f, "genome", db);
-	fputc(',',f);
-	jsonTagValue(f, "track", track);
-	fputc(',',f);
+        struct jsonWrite *jw = jsonStartOutput();
+	jsonWriteString(jw, "genome", db);
+	jsonWriteString(jw, "track", track);
         struct slPair *list = NULL;
 	char query[2048];
         sqlSafef(query, sizeof(query), "select distinct chrom from %s", track);
@@ -744,16 +722,12 @@ if (track)
 	sqlFreeResult(&sr);
         slPairIntSort(&list);
         slReverse(&list);
-        jsonInteger(f, "chromCount", slCount(list));
-        fputc(',',f);
+        jsonWriteNumber(jw, "chromCount", (long long)slCount(list));
         struct slPair *el = list;
         for ( ; el != NULL; el = el->next )
-	    {
-            jsonInteger(f, el->name, ptToInt(el->val));
-	    if (el->next)
-		fputc(',',f);
-	    }
-        fputc('}',f);
+            jsonWriteNumber(jw, el->name, (long long)ptToInt(el->val));
+        jsonWriteObjectEnd(jw);
+        fputs(jw->dy->string,stdout);
 	}
     else
 	{
@@ -765,18 +739,15 @@ else
     {
     struct chromInfo *ciList = createChromInfoList(NULL, db);
     struct chromInfo *el = ciList;
-    jsonStartOutput(f);
-    jsonTagValue(f, "genome", db);
-    fputc(',',f);
-    jsonInteger(f, "chromCount", slCount(ciList));
-    fputc(',',f);
+    struct jsonWrite *jw = jsonStartOutput();
+    jsonWriteString(jw, "genome", db);
+    jsonWriteNumber(jw, "chromCount", (long long)slCount(ciList));
     for ( ; el != NULL; el = el->next )
 	{
-        jsonInteger(f, el->chrom, el->size);
-	if (el->next)
-           fputc(',',f);
+        jsonWriteNumber(jw, el->chrom, (long long)el->size);
 	}
-    fputc('}',f);
+    jsonWriteObjectEnd(jw);
+    fputs(jw->dy->string,stdout);
     }
 }
 
@@ -785,17 +756,14 @@ static void trackDbJsonOutput(char *db, FILE *f)
 {
 struct trackDb *tdbList = hTrackDb(db);
 struct trackDb *el;
-jsonStartOutput(f);
-jsonTagValue(f, "db", db);
-fputc(',',f);
-fprintf(f, "\"tracks\":[");
+struct jsonWrite *jw = jsonStartOutput();
+jsonWriteString(jw, "db", db);
+jsonWriteListStart(jw, "tracks");
 for (el = tdbList; el != NULL; el = el->next )
-    {
-    jsonStringPrint(f, el->track);
-    if (el->next)
-	fputc(',',f);
-    }
-fprintf(f, "]}\n");
+    jsonWriteString(jw, NULL, el->track);
+jsonWriteListEnd(jw);
+jsonWriteObjectEnd(jw);
+fputs(jw->dy->string,stdout);
 }	/*	static void trackDbJsonOutput(char *db, FILE *f)	*/
 
 #define MAX_PATH_INFO 32
@@ -815,20 +783,19 @@ else if (sameWord("hubGenomes", words[1]))
     struct trackHub *hub = trackHubOpen(hubUrl, "");
     if (hub->genomeList)
 	{
-        jsonStartOutput(stdout);
-	jsonTagValue(stdout, "hubUrl", hubUrl);
-	fputc(',',stdout);
-	printf("\"genomes\":[");
+        struct jsonWrite *jw = jsonStartOutput();
+	jsonWriteString(jw, "hubUrl", hubUrl);
+        jsonWriteListStart(jw, "genomes");
 	struct slName *theList = genomeList(hub, NULL, NULL);
 	slNameSort(&theList);
 	struct slName *el = theList;
 	for ( ; el ; el = el->next )
 	    {
-	    jsonStringPrint(stdout, el->name);
-	    if (el->next)
-		fputc(',',stdout);
+	    jsonWriteString(jw, NULL, el->name);
 	    }
-	printf("]}\n");
+	jsonWriteListEnd(jw);
+	jsonWriteObjectEnd(jw);
+        fputs(jw->dy->string,stdout);
 	}
     }
 else if (sameWord("tracks", words[1]))
@@ -855,20 +822,18 @@ else if (sameWord("tracks", words[1]))
 	{
 	struct slName *dbTrackList = NULL;
 	(void) genomeList(hub, &dbTrackList, genome);
-        jsonStartOutput(stdout);
-	jsonTagValue(stdout, "hubUrl", hubUrl);
-	fputc(',',stdout);
-	jsonTagValue(stdout, "genome", genome);
-	fputc(',',stdout);
+        struct jsonWrite *jw = jsonStartOutput();
+	jsonWriteString(jw, "hubUrl", hubUrl);
+        jsonWriteListStart(jw, "genome");
 	slNameSort(&dbTrackList);
 	struct slName *el = dbTrackList;
 	for ( ; el != NULL; el = el->next )
 	    {
-            jsonStringPrint(stdout, el->name);
-	    if (el->next)
-		fputc(',',stdout);
+            jsonWriteString(jw, NULL, el->name);
 	    }
-	printf("]}\n");
+	jsonWriteListEnd(jw);
+	jsonWriteObjectEnd(jw);
+        fputs(jw->dy->string,stdout);
 	}
     }
 else if (sameWord("chromosomes", words[1]))
