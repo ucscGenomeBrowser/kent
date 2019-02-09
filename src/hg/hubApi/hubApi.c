@@ -24,6 +24,8 @@
 #include "bedTabix.h"
 #include "bamFile.h"
 #include "jsonParse.h"
+#include "jsonWrite.h"
+#include "chromInfo.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
@@ -75,16 +77,17 @@ static boolean timedOut = FALSE;
 
 /* ######################################################################### */
 
-static void jsonInteger(FILE *f, char *tag, int value)
+#ifdef NOT
+static void jsonInteger(FILE *f, char *tag, long long value)
 /* output one json interger: "tag":value appropriately quoted and encoded */
 {
-fprintf(f,"\"%s\":%d",tag, value);
+fprintf(f,"\"%s\":%lld",tag, value);
 }
+#endif
 
-static void jsonStringOut(FILE *f, char *tag, char *value)
-/* output one json string: "tag":"value" appropriately quoted and encoded */
+static void jsonStringPrint(FILE *f, char *value)
+/* escape string for output */
 {
-fprintf(f,"\"%s\":",tag);
 char *a = jsonStringEscape(value);
 if (isEmpty(a))
     fprintf(f, "%s", "null");
@@ -93,25 +96,74 @@ else
 freeMem(a);
 }
 
-static void hubPublicJsonOutput(struct hubPublic *el, FILE *f) 
+static void jsonTagValue(FILE *f, char *tag, char *value)
+/* output one json string: "tag":"value" appropriately quoted and encoded */
+{
+fprintf(f,"\"%s\":",tag);
+jsonStringPrint(f, value);
+}
+
+static struct jsonWrite *jsonStartOutput()
+/* begin json output */
+{
+struct jsonWrite *jw = jsonWriteNew();
+jsonWriteObjectStart(jw, NULL);
+jsonWriteString(jw, "source", "UCSantaCurz");
+return jw;
+}
+
+static void jsonErrAbort(char *format, ...)
+/* Issue an error message in json format. */
+{
+char errMsg[2048];
+va_list args;
+va_start(args, format);
+vsnprintf(errMsg, sizeof(errMsg), format, args);
+fputc('{',stdout);
+jsonTagValue(stdout, "error", errMsg);
+fputc('}',stdout);
+}
+
+static void hubPublicJsonData(struct jsonWrite *jw, struct hubPublic *el)
+/* Print array data for one row from hubPublic table, order here
+ * must be same as was stated in the columnName header element
+ *  TODO: need to figure out how to use the order of the columns as
+ *        they are in the 'desc' request
+ */
+{
+jsonWriteListStart(jw, NULL);
+jsonWriteString(jw, NULL, el->hubUrl);
+jsonWriteString(jw, NULL, el->shortLabel);
+jsonWriteString(jw, NULL, el->longLabel);
+jsonWriteString(jw, NULL, el->registrationTime);
+jsonWriteNumber(jw, NULL, (long long)el->dbCount);
+jsonWriteString(jw, NULL, el->dbList);
+jsonWriteString(jw, NULL, el->descriptionUrl);
+jsonWriteListEnd(jw);
+}
+
+#ifdef NOT
+/* This function should be in hg/lib/hubPublic.c */
+static void hubPublicJsonOutput(FILE *f, struct hubPublic *el)
 /* Print out hubPublic element in JSON format. */
 {
 fputc('{',f);
-jsonStringOut(f, "hubUrl", el->hubUrl);
+jsonTagValue(f, "hubUrl", el->hubUrl);
 fputc(',',f);
-jsonStringOut(f, "shortLabel", el->shortLabel);
+jsonTagValue(f, "shortLabel", el->shortLabel);
 fputc(',',f);
-jsonStringOut(f, "longLabel", el->longLabel);
+jsonTagValue(f, "longLabel", el->longLabel);
 fputc(',',f);
-jsonStringOut(f, "registrationTime", el->registrationTime);
+jsonTagValue(f, "registrationTime", el->registrationTime);
 fputc(',',f);
 jsonInteger(f, "dbCount", el->dbCount);
 fputc(',',f);
-jsonStringOut(f, "dbList", el->dbList);
+jsonTagValue(f, "dbList", el->dbList);
 fputc(',',f);
-jsonStringOut(f, "descriptionUrl", el->descriptionUrl);
+jsonTagValue(f, "descriptionUrl", el->descriptionUrl);
 fputc('}',f);
 }
+#endif
 
 static int publicHubCmpCase(const void *va, const void *vb)
 /* Compare two slNames, ignore case. */
@@ -493,52 +545,107 @@ hDisconnectCentral(&conn);
 return cloneString(hubUrl);
 }
 
-static void dbDbJsonOutput(struct dbDb *el, FILE *f) 
+static void dbDbJsonData(struct jsonWrite *jw, struct dbDb *el)
+/* Print out dbDb table element in JSON format.
+ * must be same as was stated in the columnName header element
+ *  TODO: need to figure out how to use the order of the columns as
+ *        they are in the 'desc' request
+ */
+{
+jsonWriteListStart(jw, NULL);
+jsonWriteString(jw, NULL, el->name);
+jsonWriteString(jw, NULL, el->description);
+jsonWriteString(jw, NULL, el->nibPath);
+jsonWriteString(jw, NULL, el->organism);
+jsonWriteString(jw, NULL, el->defaultPos);
+jsonWriteNumber(jw, NULL, (long long)el->active);
+jsonWriteNumber(jw, NULL, (long long)el->orderKey);
+jsonWriteString(jw, NULL, el->genome);
+jsonWriteString(jw, NULL, el->scientificName);
+jsonWriteString(jw, NULL, el->htmlPath);
+jsonWriteNumber(jw, NULL, (long long)el->hgNearOk);
+jsonWriteNumber(jw, NULL, (long long)el->hgPbOk);
+jsonWriteString(jw, NULL, el->sourceName);
+jsonWriteNumber(jw, NULL, (long long)el->taxId);
+jsonWriteListEnd(jw);
+}
+
+#ifdef NOT
+/* this code should be in hg/lib/dbDb.c */
+static void dbDbJsonOutput(FILE *f, struct dbDb *el)
 /* Print out hubPublic element in JSON format. */
 {
 fputc('{',f);
-jsonStringOut(f, "name", el->name);
+jsonTagValue(f, "name", el->name);
 fputc(',',f);
-jsonStringOut(f, "description", el->description);
+jsonTagValue(f, "description", el->description);
 fputc(',',f);
-jsonStringOut(f, "nibPath", el->nibPath);
+jsonTagValue(f, "nibPath", el->nibPath);
 fputc(',',f);
-jsonStringOut(f, "organism", el->organism);
+jsonTagValue(f, "organism", el->organism);
 fputc(',',f);
-jsonStringOut(f, "defaultPos", el->defaultPos);
+jsonTagValue(f, "defaultPos", el->defaultPos);
 fputc(',',f);
 jsonInteger(f, "active", el->active);
 fputc(',',f);
 jsonInteger(f, "orderKey", el->orderKey);
 fputc(',',f);
-jsonStringOut(f, "genome", el->genome);
+jsonTagValue(f, "genome", el->genome);
 fputc(',',f);
-jsonStringOut(f, "scientificName", el->scientificName);
+jsonTagValue(f, "scientificName", el->scientificName);
 fputc(',',f);
-jsonStringOut(f, "htmlPath", el->htmlPath);
+jsonTagValue(f, "htmlPath", el->htmlPath);
 fputc(',',f);
 jsonInteger(f, "hgNearOk", el->hgNearOk);
 fputc(',',f);
 jsonInteger(f, "hgPbOk", el->hgPbOk);
 fputc(',',f);
-jsonStringOut(f, "sourceName", el->sourceName);
+jsonTagValue(f, "sourceName", el->sourceName);
 fputc(',',f);
 jsonInteger(f, "taxId", el->taxId);
 fputc('}',f);
+}
+#endif
+
+static boolean tableColumns(struct jsonWrite *jw, char *table)
+/* output the column names for the given table
+ * return: TRUE on error, FALSE on success
+ */
+{
+jsonWriteListStart(jw, "columnNames");
+char query[1024];
+struct sqlConnection *conn = hConnectCentral();
+sqlSafef(query, sizeof(query), "desc %s", table);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+row = sqlNextRow(sr);
+if (NULL == row)
+    {
+    jsonErrAbort("ERROR: can not 'desc' table '%s'\n", table);
+    return TRUE;
+    }
+while ((row = sqlNextRow(sr)) != NULL)
+    jsonWriteString(jw, NULL, row[0]);
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
+jsonWriteListEnd(jw);
+return FALSE;
 }
 
 static void jsonPublicHubs()
 /* output the hubPublic SQL table */
 {
 struct hubPublic *el = publicHubList;
-printf("{\"source\":\"UCSantaCruz\",\"publicHubs\":[");
+struct jsonWrite *jw = jsonStartOutput();
+tableColumns(jw, hubPublicTableName());
+jsonWriteListStart(jw, "publicHubData");
 for ( ; el != NULL; el = el->next )
     {
-    hubPublicJsonOutput(el, stdout);
-    if (el->next)
-       printf(",");
+    hubPublicJsonData(jw, el);
     }
-printf("]}\n");
+jsonWriteListEnd(jw);
+jsonWriteObjectEnd(jw);
+fputs(jw->dy->string,stdout);
 }
 
 static int dbDbCmpName(const void *va, const void *vb)
@@ -574,14 +681,74 @@ static void jsonDbDb()
 {
 struct dbDb *dbList = ucscDbDb();
 struct dbDb *el;
-printf("{\"source\":\"UCSantaCruz\",\"ucscGenomes\":[");
+struct jsonWrite *jw = jsonStartOutput();
+tableColumns(jw, "dbDb");
+jsonWriteListStart(jw, "ucscGenomes");
 for ( el=dbList; el != NULL; el = el->next )
     {
-    dbDbJsonOutput(el, stdout);
-    if (el->next)
-       printf(",");
+    dbDbJsonData(jw, el);
     }
-printf("]}\n");
+jsonWriteListEnd(jw);
+jsonWriteObjectEnd(jw);
+fputs(jw->dy->string,stdout);
+}
+
+static void chromInfoJsonOutput(FILE *f, char *db)
+/* for given db, if there is a track, list the chromosomes in that track,
+ * for no track, simply list the chromosomes in the sequence
+ */
+{
+char *track = cgiOptionalString("track");
+if (track)
+    {
+    struct sqlConnection *conn = hAllocConn(db);
+    if (! sqlTableExists(conn, track))
+	jsonErrAbort("ERROR: endpoint: /list/chromosomes?db=%&table=%s ERROR table does not exist", db, track);
+    if (sqlColumnExists(conn, track, "chrom"))
+	{
+        struct jsonWrite *jw = jsonStartOutput();
+	jsonWriteString(jw, "genome", db);
+	jsonWriteString(jw, "track", track);
+        struct slPair *list = NULL;
+	char query[2048];
+        sqlSafef(query, sizeof(query), "select distinct chrom from %s", track);
+	struct sqlResult *sr = sqlGetResult(conn, query);
+	char **row;
+	while ((row = sqlNextRow(sr)) != NULL)
+    	{
+            int size = hChromSize(db, row[0]);
+	    slAddHead(&list, slPairNew(row[0], intToPt(size)));
+    	}
+	sqlFreeResult(&sr);
+        slPairIntSort(&list);
+        slReverse(&list);
+        jsonWriteNumber(jw, "chromCount", (long long)slCount(list));
+        struct slPair *el = list;
+        for ( ; el != NULL; el = el->next )
+            jsonWriteNumber(jw, el->name, (long long)ptToInt(el->val));
+        jsonWriteObjectEnd(jw);
+        fputs(jw->dy->string,stdout);
+	}
+    else
+	{
+	jsonErrAbort("ERROR: table '%s' is not a position table, no chromosomes for genome: '%s'", track, db);
+	}
+    hFreeConn(&conn);
+    }
+else
+    {
+    struct chromInfo *ciList = createChromInfoList(NULL, db);
+    struct chromInfo *el = ciList;
+    struct jsonWrite *jw = jsonStartOutput();
+    jsonWriteString(jw, "genome", db);
+    jsonWriteNumber(jw, "chromCount", (long long)slCount(ciList));
+    for ( ; el != NULL; el = el->next )
+	{
+        jsonWriteNumber(jw, el->chrom, (long long)el->size);
+	}
+    jsonWriteObjectEnd(jw);
+    fputs(jw->dy->string,stdout);
+    }
 }
 
 static void trackDbJsonOutput(char *db, FILE *f)
@@ -589,56 +756,46 @@ static void trackDbJsonOutput(char *db, FILE *f)
 {
 struct trackDb *tdbList = hTrackDb(db);
 struct trackDb *el;
-fputc('{',f);
-jsonStringOut(f, "source", "UCSantaCruz");
-fputc(',',f);
-jsonStringOut(f, "db", db);
-fputc(',',f);
-fprintf(f, "\"tracks\":[");
+struct jsonWrite *jw = jsonStartOutput();
+jsonWriteString(jw, "db", db);
+jsonWriteListStart(jw, "tracks");
 for (el = tdbList; el != NULL; el = el->next )
-    {
-    char *a = jsonStringEscape(el->track);
-    printf("\"%s\"", a);
-    freeMem(a);
-    if (el->next)
-	fputc(',',f);
-    }
-fprintf(f, "]}\n");
-}
+    jsonWriteString(jw, NULL, el->track);
+jsonWriteListEnd(jw);
+jsonWriteObjectEnd(jw);
+fputs(jw->dy->string,stdout);
+}	/*	static void trackDbJsonOutput(char *db, FILE *f)	*/
 
 #define MAX_PATH_INFO 32
 static void apiList(char *words[MAX_PATH_INFO])
-/* 'list' function */
+/* 'list' function words[1] is the subCommand */
 {
 if (sameWord("publicHubs", words[1]))
     jsonPublicHubs();
 else if (sameWord("ucscGenomes", words[1]))
     jsonDbDb();
-else if (sameWord("genomes", words[1]))
+else if (sameWord("hubGenomes", words[1]))
     {
     char *hubUrl = cgiOptionalString("hubUrl");
     if (isEmpty(hubUrl))
-	errAbort("# must supply hubUrl='http:...' some URL to a hub for /list/genomes\n");
+	jsonErrAbort("ERROR: must supply hubUrl='http:...' some URL to a hub for /list/genomes\n");
 
     struct trackHub *hub = trackHubOpen(hubUrl, "");
     if (hub->genomeList)
 	{
-        printf("{\"source\":\"UCSantaCruz\",");
-	jsonStringOut(stdout, "hubUrl", hubUrl);
-	fputc(',',stdout);
-	printf("\"genomes\":[");
+        struct jsonWrite *jw = jsonStartOutput();
+	jsonWriteString(jw, "hubUrl", hubUrl);
+        jsonWriteListStart(jw, "genomes");
 	struct slName *theList = genomeList(hub, NULL, NULL);
 	slNameSort(&theList);
 	struct slName *el = theList;
 	for ( ; el ; el = el->next )
 	    {
-	    char *a = jsonStringEscape(el->name);
-	    printf("\"%s\"", a);
-	    freeMem(a);
-	    if (el->next)
-		fputc(',',stdout);
+	    jsonWriteString(jw, NULL, el->name);
 	    }
-	printf("]}\n");
+	jsonWriteListEnd(jw);
+	jsonWriteObjectEnd(jw);
+        fputs(jw->dy->string,stdout);
 	}
     }
 else if (sameWord("tracks", words[1]))
@@ -647,10 +804,8 @@ else if (sameWord("tracks", words[1]))
     char *genome = cgiOptionalString("genome");
     char *db = cgiOptionalString("db");
     if (isEmpty(hubUrl) && isEmpty(db))
-	{
-	errAbort("# ERROR: must supply hubUrl or db name to return track list");
-	}
-    if (isEmpty(hubUrl))
+      jsonErrAbort("ERROR: must supply hubUrl or db name to return track list");
+    if (isEmpty(hubUrl))	// missing hubUrl implies UCSC database
 	{
         trackDbJsonOutput(db, stdout);	// only need db for this function
 	return;
@@ -660,34 +815,43 @@ else if (sameWord("tracks", words[1]))
         if (isEmpty(genome))
 	    warn("# must supply genome='someName' the name of a genome in a hub for /list/tracks\n");
 	if (isEmpty(hubUrl))
-	    warn("# must supply hubUrl='http:...' some URL to a hub for /list/genomes\n");
-	    errAbort("# ERROR exit");
+            jsonErrAbort("ERROR: must supply hubUrl='http:...' some URL to a hub for /list/genomes\n");
 	}
     struct trackHub *hub = trackHubOpen(hubUrl, "");
     if (hub->genomeList)
 	{
 	struct slName *dbTrackList = NULL;
 	(void) genomeList(hub, &dbTrackList, genome);
-        printf("{\"source\":\"UCSantaCruz\",");
-	jsonStringOut(stdout, "hubUrl", hubUrl);
-	fputc(',',stdout);
-	jsonStringOut(stdout, "genome", genome);
-	fputc(',',stdout);
+        struct jsonWrite *jw = jsonStartOutput();
+	jsonWriteString(jw, "hubUrl", hubUrl);
+        jsonWriteListStart(jw, "genome");
 	slNameSort(&dbTrackList);
 	struct slName *el = dbTrackList;
 	for ( ; el != NULL; el = el->next )
 	    {
-	    char *a = jsonStringEscape(el->name);
-	    printf("\"%s\"", a);
-	    freeMem(a);
-	    if (el->next)
-		fputc(',',stdout);
+            jsonWriteString(jw, NULL, el->name);
 	    }
-	printf("]}\n");
+	jsonWriteListEnd(jw);
+	jsonWriteObjectEnd(jw);
+        fputs(jw->dy->string,stdout);
+	}
+    }
+else if (sameWord("chromosomes", words[1]))
+    {
+    char *hubUrl = cgiOptionalString("hubUrl");
+//    char *genome = cgiOptionalString("genome");
+    char *db = cgiOptionalString("db");
+    if (isEmpty(hubUrl) && isEmpty(db))
+        jsonErrAbort("ERROR: must supply hubUrl or db name to return chromosome list");
+
+    if (isEmpty(hubUrl))	// missing hubUrl implies UCSC database
+	{
+        chromInfoJsonOutput(stdout, db);
+	return;
 	}
     }
 else
-    errAbort("# ERROR: do not recognize command '%s' for 'list' function\n", words[1]);
+    jsonErrAbort("ERROR: do not recognize endpoint '/list/%s' function\n", words[1]);
 }
 
 static struct hash *apiFunctionHash = NULL;
@@ -715,7 +879,7 @@ hPrintDisable();	/* turn off all normal HTML output, doing JSON output */
 char *words[MAX_PATH_INFO];/*expect no more than MAX_PATH_INFO number of words*/
 int wordCount = chopByChar(pathInfo, '/', words, ArraySize(words));
 if (wordCount < 2)
-    errAbort("ERROR: no commands found in path info\n");
+    jsonErrAbort("ERROR: no endpoint commands found ?\n");
 
 void (*apiFunction)(char **) = hashMustFindVal(apiFunctionHash, words[0]);
 
@@ -815,9 +979,11 @@ hPrintf("<h2>Example URLs to return json data structures:</h2>\n");
 hPrintf("<ul>\n");
 hPrintf("<li><a href='/cgi-bin/hubApi/list/publicHubs'>list public hubs</a> <em>/cgi-bin/hubApi/list/publicHubs</em></li>\n");
 hPrintf("<li><a href='/cgi-bin/hubApi/list/ucscGenomes'>list database genomes</a> <em>/cgi-bin/hubApi/list/ucscGenomes</em></li>\n");
-hPrintf("<li><a href='/cgi-bin/hubApi/list/genomes?hubUrl=%s'>list genomes from specified hub</a> <em>/cgi-bin/hubApi/list/genomes?hubUrl='%s'</em></li>\n", urlInput, urlInput);
+hPrintf("<li><a href='/cgi-bin/hubApi/list/hubGenomes?hubUrl=%s'>list genomes from specified hub</a> <em>/cgi-bin/hubApi/list/hubGenomes?hubUrl='%s'</em></li>\n", urlInput, urlInput);
 hPrintf("<li><a href='/cgi-bin/hubApi/list/tracks?hubUrl=%s&genome=%s'>list tracks from specified hub and genome</a> <em>/cgi-bin/hubApi/list/tracks?hubUrl='%s&genome=%s'</em></li>\n", urlInput, hubGenome->name, urlInput, hubGenome->name);
 hPrintf("<li><a href='/cgi-bin/hubApi/list/tracks?db=%s'>list tracks from specified UCSC database</a> <em>/cgi-bin/hubApi/list/tracks?db='%s'</em></li>\n", ucscDb, ucscDb);
+hPrintf("<li><a href='/cgi-bin/hubApi/list/chromosomes?db=%s'>list chromosomes from specified UCSC database</a> <em>/cgi-bin/hubApi/list/chromosomes?db='%s'</em></li>\n", ucscDb, ucscDb);
+hPrintf("<li><a href='/cgi-bin/hubApi/list/chromosomes?db=%s&track=gap'>list chromosomes from specified track from UCSC databaset</a> <em>/cgi-bin/hubApi/list/chromosomes?db='%s'&track=gap</em></li>\n", ucscDb, ucscDb);
 hPrintf("</ul>\n");
 
 hPrintf("<h4>cart dump</h4>");

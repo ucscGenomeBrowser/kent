@@ -11,10 +11,13 @@ group compGeno
 priority 4
 type bigBed 9 +
 mouseOverField mouseOver
-scoreFilter 0
+scoreFilter 0:1000
 scoreFilterByRange on
 itemRgb on
 labelOnFeature on
+centerLabelsPack off
+collapseEmptySubtracks on
+bedPackDense on
 html aaCounts
 
         track aaCountsALA

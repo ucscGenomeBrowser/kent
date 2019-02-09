@@ -499,7 +499,8 @@ static int trackPlusLabelHeight(struct track *track, int fontHeight)
 if (trackShouldUseAjaxRetrieval(track))
     return REMOTE_TRACK_HEIGHT;
 
-int y = track->totalHeight(track, limitVisibility(track));
+enum trackVisibility vis = limitVisibility(track);
+int y = track->totalHeight(track, vis);
 if (isCenterLabelIncluded(track))
     y += fontHeight;
 if (tdbIsComposite(track->tdb) && !isCompositeInAggregate(track))
@@ -1246,6 +1247,15 @@ if (trackDbSetting(track->tdb, "darkerLabels"))
 return color;
 }
 
+boolean isCenterLabelsPackOff(struct track *track)
+/* Check for trackDb setting to suppress center labels of composite in pack mode */
+{
+if (!track || !track->tdb)
+    return FALSE;
+char *centerLabelsPack = trackDbSetting(track->tdb, "centerLabelsPack");
+return (centerLabelsPack && sameWord(centerLabelsPack, "off"));
+}
+
 static int doLeftLabels(struct track *track, struct hvGfx *hvg, MgFont *font,
                                 int y)
 /* Draw left labels.  Return y coord. */
@@ -1338,6 +1348,18 @@ switch (vis)
     case tvHide:
         break;  /* Do nothing; */
     case tvPack:
+        if (isCenterLabelsPackOff(track))
+            // draw left labels for pack mode track with center labels off
+            {
+            if (isCenterLabelIncluded(track))
+                y += fontHeight;
+            hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, track->lineHeight, labelColor, font, 
+                                track->shortLabel);
+            y += track->height;
+            }
+        else
+            y += tHeight;
+        break;
     case tvSquish:
 	y += tHeight;
         break;
@@ -1433,8 +1455,8 @@ switch (vis)
          * (always puts 0-100% range)*/
         if (track->subType == lfSubSample && track->heightPer > (3 * fontHeight))
             {
-            ymax = y - (track->heightPer / 2) + (fontHeight / 2);
-            ymin = y + (track->heightPer / 2) - (fontHeight / 2);
+            int ymax = y - (track->heightPer / 2) + (fontHeight / 2);
+            int ymin = y + (track->heightPer / 2) - (fontHeight / 2);
             hvGfxTextRight(hvg, leftLabelX, ymin,
                         leftLabelWidth-1, track->lineHeight,
                         track->ixAltColor, font, minRangeStr );
@@ -4572,6 +4594,12 @@ setGlobalsFromWindow(windows); // first window
 flatTrack->maxHeight = maxHeight;
 }
 
+boolean doCollapseEmptySubtracks(struct track *track)
+/* Suppress display of empty subtracks. Initial support only for bed's. */
+{
+char *collapseEmptySubtracks = trackDbSetting(track->tdb, "collapseEmptySubtracks");
+return (collapseEmptySubtracks && sameWord(collapseEmptySubtracks, "on"));
+}
 
 void makeActiveImage(struct track *trackList, char *psOutput)
 /* Make image and image map. */
@@ -4799,12 +4827,14 @@ for (track = trackList; track != NULL; track = track->next)
             flatTracksAdd(&flatTracks,track,cart, orderedWiggles);
         else
             {
+            boolean doCollapse = doCollapseEmptySubtracks(track);
             for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
                 {
                 if (!isSubtrackVisible(subtrack))
                     continue;
 
-                if (!isLimitedVisHiddenForAllWindows(subtrack))
+                if (!isLimitedVisHiddenForAllWindows(subtrack) && 
+                        !(doCollapse && slCount(subtrack->items) == 0))
                     {
                     flatTracksAdd(&flatTracks,subtrack,cart, orderedWiggles);
                     }
@@ -5394,7 +5424,6 @@ if (withCenterLabels)
 	if (isLimitedVisHiddenForAllWindows(track))
             continue;
 
-
         int centerLabelHeight = (isCenterLabelIncluded(track) ? fontHeight : 0);
         int yStart = y + centerLabelHeight;
         // ORIG int yEnd   = y + trackPlusLabelHeight(track, fontHeight);
@@ -5465,7 +5494,9 @@ if (withCenterLabels)
 	    y = savey + flatTrack->maxHeight;
 	    }
 
-        if (theImgBox && track->limitedVis == tvDense && tdbIsCompositeChild(track->tdb))
+        if (theImgBox && tdbIsCompositeChild(track->tdb) &&
+                (track->limitedVis == tvDense ||
+                 (track->limitedVis == tvPack && centerLabelHeight == 0)))
             mapBoxToggleVis(hvg, 0, yStart,tl.picWidth, sliceHeight,track);
             // Strange mapBoxToggleLogic handles reverse complement itself so x=0,width=tl.picWidth
 
@@ -5505,12 +5536,7 @@ if (withLeftLabels)
 
         if (trackShouldUseAjaxRetrieval(track))
             y += REMOTE_TRACK_HEIGHT;
-    #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
-        else if (track->drawLeftLabels != NULL
-             &&  (theImgBox == NULL || track->limitedVis == tvDense))
-    #else ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
         else if (track->drawLeftLabels != NULL)
-    #endif ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
 	    {
 	    setGlobalsFromWindow(windows);
             y = doOwnLeftLabels(track, hvgSide, font, y);
@@ -5520,8 +5546,6 @@ if (withLeftLabels)
 	    y += flatTrack->maxHeight;
         }
     }
-
-
 
 /* Make map background. */
 
@@ -6868,10 +6892,10 @@ for (track = trackList; track != NULL; track = track->next)
                     }
                 }
             
-            // now look to see if we have a _sel statement to turn off all subtracks (including the current one)
-            unsigned hideChildren = 0;
+            // now look to see if we have a _hideKids statement to turn off all subtracks (including the current one)
+            unsigned hideKids = 0;
             char *usedThis = buffer;
-            safef(buffer, sizeof buffer, "%s_sel", track->tdb->parent->track);
+            safef(buffer, sizeof buffer, "%s_hideKids", track->tdb->parent->track);
 
             s = cartOptionalString(cart, buffer);
             if (s == NULL && startsWith("hub_", track->tdb->parent->track))
@@ -6879,13 +6903,12 @@ for (track = trackList; track != NULL; track = track->next)
 
             if (s != NULL)
                 {
-                if (sameString(s, "0"))
-                    hideChildren = 1;
+                hideKids = 1;
                 cartRemove(cart, usedThis);  // we don't want this hanging out in the cart
                 }
 
             // mark this as having been addressed
-            hel = hashAddInt(superTrackHash, track->tdb->parent->track, hideChildren );  
+            hel = hashAddInt(superTrackHash, track->tdb->parent->track, hideKids );  
             }
 
         if ( ptToInt(hel->val) == 1)    // we want to hide this track
@@ -6930,15 +6953,15 @@ for (track = trackList; track != NULL; track = track->next)
         char *usedThis = buffer;
 
         // first check to see if we've been asked to hide all the subtracks
-        boolean hideChildren = FALSE;
-        safef(buffer, sizeof buffer, "%s_sel", track->track);
+        boolean hideKids = FALSE;
+        safef(buffer, sizeof buffer, "%s_hideKids", track->track);
 
         s = cartOptionalString(cart, buffer);
         if (s == NULL && startsWith("hub_", track->track))
             s = cartOptionalString(cart, usedThis = trackHubSkipHubName(buffer));
         if ((s != NULL) && (sameString(s, "0")))
-            hideChildren = TRUE;
-        cartRemove(cart, usedThis);   // we don't want these _sel variables in the cart
+            hideKids = TRUE;
+        cartRemove(cart, usedThis);   // we don't want these _hideKids variables in the cart
 
         // now see if we have any specified visibilities
         struct track *subtrack;
@@ -6958,7 +6981,7 @@ for (track = trackList; track != NULL; track = track->next)
                 else
                     cartSetString(cart, buffer, "1");
                 }
-            else if (hideChildren && isSubtrackVisible(subtrack))
+            else if (hideKids && isSubtrackVisible(subtrack))
                 cartSetString(cart, buffer, "0");
             }
         }
