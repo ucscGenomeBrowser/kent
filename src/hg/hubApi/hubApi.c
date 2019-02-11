@@ -77,14 +77,6 @@ static boolean timedOut = FALSE;
 
 /* ######################################################################### */
 
-#ifdef NOT
-static void jsonInteger(FILE *f, char *tag, long long value)
-/* output one json interger: "tag":value appropriately quoted and encoded */
-{
-fprintf(f,"\"%s\":%lld",tag, value);
-}
-#endif
-
 static void jsonStringPrint(FILE *f, char *value)
 /* escape string for output */
 {
@@ -108,7 +100,8 @@ static struct jsonWrite *jsonStartOutput()
 {
 struct jsonWrite *jw = jsonWriteNew();
 jsonWriteObjectStart(jw, NULL);
-jsonWriteString(jw, "source", "UCSantaCurz");
+jsonWriteString(jw, "version", "0.1");
+jsonWriteString(jw, "source", "UCSantaCruz");
 return jw;
 }
 
@@ -141,29 +134,6 @@ jsonWriteString(jw, NULL, el->dbList);
 jsonWriteString(jw, NULL, el->descriptionUrl);
 jsonWriteListEnd(jw);
 }
-
-#ifdef NOT
-/* This function should be in hg/lib/hubPublic.c */
-static void hubPublicJsonOutput(FILE *f, struct hubPublic *el)
-/* Print out hubPublic element in JSON format. */
-{
-fputc('{',f);
-jsonTagValue(f, "hubUrl", el->hubUrl);
-fputc(',',f);
-jsonTagValue(f, "shortLabel", el->shortLabel);
-fputc(',',f);
-jsonTagValue(f, "longLabel", el->longLabel);
-fputc(',',f);
-jsonTagValue(f, "registrationTime", el->registrationTime);
-fputc(',',f);
-jsonInteger(f, "dbCount", el->dbCount);
-fputc(',',f);
-jsonTagValue(f, "dbList", el->dbList);
-fputc(',',f);
-jsonTagValue(f, "descriptionUrl", el->descriptionUrl);
-fputc('}',f);
-}
-#endif
 
 static int publicHubCmpCase(const void *va, const void *vb)
 /* Compare two slNames, ignore case. */
@@ -226,18 +196,6 @@ for ( ; el != NULL; el = el->next )
     }
 return list;
 }
-
-#ifdef NOT
-static void startHtml(char *title)
-{
-printf ("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n<html>\n<head><title>%s</title></head><body>\n", title);
-}
-
-static void endHtml()
-{
-printf ("</body></html>\n");
-}
-#endif
 
 static boolean timeOutReached()
 {
@@ -570,43 +528,6 @@ jsonWriteNumber(jw, NULL, (long long)el->taxId);
 jsonWriteListEnd(jw);
 }
 
-#ifdef NOT
-/* this code should be in hg/lib/dbDb.c */
-static void dbDbJsonOutput(FILE *f, struct dbDb *el)
-/* Print out hubPublic element in JSON format. */
-{
-fputc('{',f);
-jsonTagValue(f, "name", el->name);
-fputc(',',f);
-jsonTagValue(f, "description", el->description);
-fputc(',',f);
-jsonTagValue(f, "nibPath", el->nibPath);
-fputc(',',f);
-jsonTagValue(f, "organism", el->organism);
-fputc(',',f);
-jsonTagValue(f, "defaultPos", el->defaultPos);
-fputc(',',f);
-jsonInteger(f, "active", el->active);
-fputc(',',f);
-jsonInteger(f, "orderKey", el->orderKey);
-fputc(',',f);
-jsonTagValue(f, "genome", el->genome);
-fputc(',',f);
-jsonTagValue(f, "scientificName", el->scientificName);
-fputc(',',f);
-jsonTagValue(f, "htmlPath", el->htmlPath);
-fputc(',',f);
-jsonInteger(f, "hgNearOk", el->hgNearOk);
-fputc(',',f);
-jsonInteger(f, "hgPbOk", el->hgPbOk);
-fputc(',',f);
-jsonTagValue(f, "sourceName", el->sourceName);
-fputc(',',f);
-jsonInteger(f, "taxId", el->taxId);
-fputc('}',f);
-}
-#endif
-
 static boolean tableColumns(struct jsonWrite *jw, char *table)
 /* output the column names for the given table
  * return: TRUE on error, FALSE on success
@@ -723,10 +644,12 @@ if (track)
         slPairIntSort(&list);
         slReverse(&list);
         jsonWriteNumber(jw, "chromCount", (long long)slCount(list));
+	jsonWriteObjectStart(jw, "chromosomes");
         struct slPair *el = list;
         for ( ; el != NULL; el = el->next )
             jsonWriteNumber(jw, el->name, (long long)ptToInt(el->val));
-        jsonWriteObjectEnd(jw);
+	jsonWriteObjectEnd(jw);	/* chromosomes */
+        jsonWriteObjectEnd(jw);	/* top level */
         fputs(jw->dy->string,stdout);
 	}
     else
@@ -742,11 +665,13 @@ else
     struct jsonWrite *jw = jsonStartOutput();
     jsonWriteString(jw, "genome", db);
     jsonWriteNumber(jw, "chromCount", (long long)slCount(ciList));
+    jsonWriteObjectStart(jw, "chromosomes");
     for ( ; el != NULL; el = el->next )
 	{
         jsonWriteNumber(jw, el->chrom, (long long)el->size);
 	}
-    jsonWriteObjectEnd(jw);
+    jsonWriteObjectEnd(jw);	/* chromosomes */
+    jsonWriteObjectEnd(jw);	/* top level */
     fputs(jw->dy->string,stdout);
     }
 }
