@@ -614,6 +614,11 @@ int diff = trixSearchResultCmp(&hg1->tp->tsr, &hg2->tp->tsr);
 if (diff == 0)
     {
     diff = (hg2->canonical - hg1->canonical);
+    if (diff == 0)
+        {
+	// Prioritize things on main chromosomes
+	diff = chrNameCmpWithAltRandom(hg1->chrom, hg2->chrom);
+	}
     }
 return diff;
 }
