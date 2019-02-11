@@ -468,6 +468,11 @@ while (isNotEmpty(namePt))
 		extra->trackLine = cloneString(origTrackLine);
 
 		// is it weird that the loader customFactoryTestExistence() did not do this for me?
+                char *wibFilePath = hashFindVal(track->tdb->settingsHash, "wibFile");
+                if (wibFilePath && fileExists(wibFilePath))
+                    {
+                    track->wibFile = wibFilePath;
+                    }
 		char *mafFilePath = hashFindVal(track->tdb->settingsHash, "mafFile");
 		if (mafFilePath && fileExists(mafFilePath))
 		    {
@@ -1538,6 +1543,17 @@ if (size >= 0) // file exists
 	sqlUpdate(ctConn, sql);
 	hFreeConn(&ctConn);
 	}
+    if (sameString(ext,".wib"))  
+	{    
+	// have to patch the new ct table with newPath
+	char *table = findValueInCtLine(result->newCtLine, "dbTableName");
+	char sql[1024];
+	sqlSafef(sql, sizeof sql, "update %s set file='./%s'", table, newPath);
+	struct sqlConnection *ctConn = hAllocConn(CUSTOM_TRASH);
+	sqlUpdate(ctConn, sql);
+	hFreeConn(&ctConn);
+	}
+
 
     // mv for speed.
     if (rename(path, newPath))
@@ -1969,8 +1985,9 @@ for(lineNum=0; lineNum<lineCount; ++lineNum)
 	result->newCtLine = newerCtLine;
 
 
-	totalSize += uploadFileIfExists(dbDir, track, ".wib" , result, backgroundProgress, dyProg);
 	totalSize += uploadFileIfExists(dbDir, track, ".maf" , result, backgroundProgress, dyProg);
+	// wib patches table data trash pointer, depends on dbTableName being patched already above
+	totalSize += uploadFileIfExists(dbDir, track, ".wib" , result, backgroundProgress, dyProg);
 	// vcf patches table data trash pointer, depends on dbTableName being patched already above
 	totalSize += uploadFileIfExists(dbDir, track, ".vcf" , result, backgroundProgress, dyProg); 
 
