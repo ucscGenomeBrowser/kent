@@ -100,7 +100,7 @@ static struct jsonWrite *jsonStartOutput()
 {
 struct jsonWrite *jw = jsonWriteNew();
 jsonWriteObjectStart(jw, NULL);
-jsonWriteString(jw, "version", "0.1");
+jsonWriteString(jw, "apiVersion", "0.1");
 jsonWriteString(jw, "source", "UCSantaCruz");
 return jw;
 }
@@ -490,6 +490,10 @@ return retList;
 }	/*	static struct slName *genomeList ()	*/
 
 static char *urlFromShortLabel(char *shortLabel)
+/* this is not a fair way to get the URL since shortLabel's are not
+ * necessarily unique.  This is temporary.  TBD: need to always use URL
+ * and then get the shortLabel
+ */
 {
 char hubUrl[1024];
 char query[1024];
@@ -556,8 +560,15 @@ return FALSE;
 static void jsonPublicHubs()
 /* output the hubPublic SQL table */
 {
+struct sqlConnection *conn = hConnectCentral();
+char *dataTime = sqlTableUpdate(conn, hubPublicTableName());
+hDisconnectCentral(&conn);
+time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
 struct hubPublic *el = publicHubList;
 struct jsonWrite *jw = jsonStartOutput();
+jsonWriteString(jw, "dataTime", dataTime);
+jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
+freeMem(dataTime);
 tableColumns(jw, hubPublicTableName());
 jsonWriteListStart(jw, "publicHubData");
 for ( ; el != NULL; el = el->next )
@@ -600,9 +611,16 @@ return dbList;
 static void jsonDbDb()
 /* output the dbDb SQL table */
 {
+struct sqlConnection *conn = hConnectCentral();
+char *dataTime = sqlTableUpdate(conn, "dbDb");
+hDisconnectCentral(&conn);
+time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
 struct dbDb *dbList = ucscDbDb();
 struct dbDb *el;
 struct jsonWrite *jw = jsonStartOutput();
+jsonWriteString(jw, "dataTime", dataTime);
+jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
+freeMem(dataTime);
 tableColumns(jw, "dbDb");
 jsonWriteListStart(jw, "ucscGenomes");
 for ( el=dbList; el != NULL; el = el->next )
@@ -619,20 +637,26 @@ static void chromInfoJsonOutput(FILE *f, char *db)
  * for no track, simply list the chromosomes in the sequence
  */
 {
-char *track = cgiOptionalString("track");
-if (track)
+char *table = cgiOptionalString("track");
+struct sqlConnection *conn = hAllocConn(db);
+/* in trackDb language: track == table */
+if (table)
     {
-    struct sqlConnection *conn = hAllocConn(db);
-    if (! sqlTableExists(conn, track))
-	jsonErrAbort("ERROR: endpoint: /list/chromosomes?db=%&table=%s ERROR table does not exist", db, track);
-    if (sqlColumnExists(conn, track, "chrom"))
+    if (! sqlTableExists(conn, table))
+	jsonErrAbort("ERROR: endpoint: /list/chromosomes?db=%&table=%s ERROR table does not exist", db, table);
+    if (sqlColumnExists(conn, table, "chrom"))
 	{
+	char *dataTime = sqlTableUpdate(conn, table);
+	time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
         struct jsonWrite *jw = jsonStartOutput();
 	jsonWriteString(jw, "genome", db);
-	jsonWriteString(jw, "track", track);
+	jsonWriteString(jw, "track", table);
+	jsonWriteString(jw, "dataTime", dataTime);
+	jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
+	freeMem(dataTime);
         struct slPair *list = NULL;
 	char query[2048];
-        sqlSafef(query, sizeof(query), "select distinct chrom from %s", track);
+        sqlSafef(query, sizeof(query), "select distinct chrom from %s", table);
 	struct sqlResult *sr = sqlGetResult(conn, query);
 	char **row;
 	while ((row = sqlNextRow(sr)) != NULL)
@@ -654,16 +678,20 @@ if (track)
 	}
     else
 	{
-	jsonErrAbort("ERROR: table '%s' is not a position table, no chromosomes for genome: '%s'", track, db);
+	jsonErrAbort("ERROR: table '%s' is not a position table, no chromosomes for genome: '%s'", table, db);
 	}
-    hFreeConn(&conn);
     }
 else
     {
+    char *dataTime = sqlTableUpdate(conn, "chromInfo");
+    time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
     struct chromInfo *ciList = createChromInfoList(NULL, db);
     struct chromInfo *el = ciList;
     struct jsonWrite *jw = jsonStartOutput();
     jsonWriteString(jw, "genome", db);
+    jsonWriteString(jw, "dataTime", dataTime);
+    jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
+    freeMem(dataTime);
     jsonWriteNumber(jw, "chromCount", (long long)slCount(ciList));
     jsonWriteObjectStart(jw, "chromosomes");
     for ( ; el != NULL; el = el->next )
@@ -674,15 +702,23 @@ else
     jsonWriteObjectEnd(jw);	/* top level */
     fputs(jw->dy->string,stdout);
     }
+hFreeConn(&conn);
 }
 
 static void trackDbJsonOutput(char *db, FILE *f)
 /* return track list from specified UCSC database name */
 {
+struct sqlConnection *conn = hAllocConn(db);
+char *dataTime = sqlTableUpdate(conn, "trackDb");
+time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
+hFreeConn(&conn);
 struct trackDb *tdbList = hTrackDb(db);
 struct trackDb *el;
 struct jsonWrite *jw = jsonStartOutput();
 jsonWriteString(jw, "db", db);
+jsonWriteString(jw, "dataTime", dataTime);
+jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
+freeMem(dataTime);
 jsonWriteListStart(jw, "tracks");
 for (el = tdbList; el != NULL; el = el->next )
     jsonWriteString(jw, NULL, el->track);
@@ -706,6 +742,7 @@ else if (sameWord("hubGenomes", words[1]))
 	jsonErrAbort("ERROR: must supply hubUrl='http:...' some URL to a hub for /list/genomes\n");
 
     struct trackHub *hub = trackHubOpen(hubUrl, "");
+registrationTime
     if (hub->genomeList)
 	{
         struct jsonWrite *jw = jsonStartOutput();
@@ -806,6 +843,7 @@ int wordCount = chopByChar(pathInfo, '/', words, ArraySize(words));
 if (wordCount < 2)
     jsonErrAbort("ERROR: no endpoint commands found ?\n");
 
+/* TBD: need to protect this hash find from 'not found' error */
 void (*apiFunction)(char **) = hashMustFindVal(apiFunctionHash, words[0]);
 
 (*apiFunction)(words);
