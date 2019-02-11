@@ -64,16 +64,16 @@ parent singleCell
         bigDataUrl /gbdb/mm10/tabulamuris/pancreaticACell.bw
         visibility dense
 
-    track endothelialCellCov
-    shortLabel endothelial Cv
-    metadata cell_ontology=endothelial_cell
-    longLabel endothelial cell Coverage (3319 cells)
-    type bigWig
-    parent TabulaMurisFacsDatasetViewCov
-    subGroups view=cov
-    autoScale on
-    bigDataUrl /gbdb/mm10/tabulamuris/endothelialCell.bw
-    visibility dense
+        track endothelialCellCov
+        shortLabel endothelial Cv
+        metadata cell_ontology=endothelial_cell
+        longLabel endothelial cell Coverage (3319 cells)
+        type bigWig
+        parent TabulaMurisFacsDatasetViewCov
+        subGroups view=cov
+        autoScale on
+        bigDataUrl /gbdb/mm10/tabulamuris/endothelialCell.bw
+        visibility dense
 
         track classicalMonocyteCov
         shortLabel class monocyte Cv
