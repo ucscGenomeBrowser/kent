@@ -13,6 +13,6 @@ CREATE TABLE knownCanonical (
     protein varchar(255) not null,	# Accession of the associated protein, or UCSC ID in newer tables.
               #Indices
     UNIQUE(clusterId),
-    INDEX(transcript(12)),
-    INDEX(protein(12))
+    INDEX(transcript),
+    INDEX(protein)
 );

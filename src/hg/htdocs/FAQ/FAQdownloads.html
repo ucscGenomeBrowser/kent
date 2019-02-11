@@ -24,6 +24,7 @@
 <li><a href="#download8">Missing RefSeq ID</a></li>
 <li><a href="#download9">Finished vs. draft segments</a></li>
 <li><a href="#downloadAlt">chr_alt Chromosome</a></li>
+<li><a href="#downloadFix">chr_fix Chromosome</a></li>
 <li><a href="#download10">chrN_random tables</a></li>
 <li><a href="#download11">Chromosome Un</a></li>
 <li><a href="#download12">Chromosome M</a></li>
@@ -46,6 +47,7 @@
 <li><a href="#download36">Track data access</a></li>
 <li><a href="#download37">Known issues with Table Browser GTF output</a></li>
 <li><a href="#download38">Table Browser output file not ordered</a></li>
+<li><a href="#download39">'Permisssion denied' error when trying to use command-line utilities</a></li>
 </ul>
 <hr>
 <p>
@@ -403,7 +405,7 @@ as well.</p>
 <p>
 The chr_alt chromosomes, such as <em>chr5_KI270794v1_alt</em>, are alternative sequences that differ
 from the reference genome, currently
-available for the hg38 human genome assembly. You can read more about them on the 
+available for the hg19 and hg38 human genome assemblies. You can read more about them on the 
 <a href="../cgi-bin/hgGateway?db=hg38" target="_blank">GRChg38/hg38 Gateway page,</a> under 
 the section titled  &quot;GRCh38 Highlights&quot;.  There you will read how several human
 chromosomal regions exhibit sufficient variability to prevent adequate representation by a single
@@ -412,11 +414,27 @@ regions through the inclusion of alternate loci scaffolds (or alt loci such as K
 referenced as chr5_KI270794v1_alt in the browser). More information on these alternative loci can 
 be found on the 
 <a href="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/info/definitions.shtml#ALTERNATE"
-target="_blank">Genome Reference Consortium(GRC) website</a>. To find the regions these alternate
-sequences correspond to in the genome, use the <a href="../cgi-bin/hgTrackUi?db=hg38&g=altSequence" 
-target='_blank'>Alt Map Super-track</a> feature.
+target="_blank">Genome Reference Consortium (GRC) website</a>. To find the regions these alternate
+sequences correspond to in the genome, use the <a href="../cgi-bin/hgTrackUi?db=hg38&g=altSeqLiftOverPsl" 
+target="_blank">Alt Haplotypes track</a>.
 </p>
 
+<a name="downloadFix"></a>
+<h2>chr_fix chromosomes</h2>
+<h6>What is chr_fix?</h6>
+<p>
+The chr_fix chromosomes, such as <em>chr1_KN538361v1_fix</em>, are fix patches currently available
+for the hg19 and hg38 assemblies that represent changes to the existing sequence. These are 
+generally error corrections (such as base changes, component replacements/updates, switch point 
+updates or tiling path changes) or assembly improvements (such as extension of sequence into gaps). 
+These fix patch scaffold sequences are given chromosome context through alignments to the 
+corresponding chromosome regions. A list of all chromosomes including chr_fix sequences can be 
+found in the <a href="../cgi-bin/hgTracks?db=hg19&chromInfoPage=" target="_blank">hg19</a> or 
+<a href="../cgi-bin/hgTracks?db=hg38&chromInfoPage=" target="_blank">hg38</a> assembly sequences 
+pages. More information on these patch sequences can be found on the 
+<a href="https://www.ncbi.nlm.nih.gov/grc/help/faq/#fix-patches" 
+target="_blank">Genome Reference Consortium (GRC) website</a>.
+</p>
 
 <a name="download10"></a>
 <h2>chrN_random tables</h2>
@@ -499,7 +517,7 @@ chromosomes to more closely match their human counterparts. As a result, chromos
 (present in the panTro1 assembly) do not exist in later versions.</p>
 
 <div class="row">
-  <!-- Left column -- used to indent table -->
+  <!-- Left column  - used to indent table -->
   <div class="col-md-1">
   </div>
   <!-- Middle column -->
@@ -877,6 +895,22 @@ chromStart. This allows us to query and return results more quickly than if they
 A quick way to sort an output BED file by position is to use the following UNIX command on our
 <a href="../cgi-bin/hgTables">Table Browser</a> output BED file:
 <pre><code>sort -k1,1 -k2n,2n example.bed > example.sorted.bed</code></pre>
+</p>
+
+<a name="download39"></a>
+<h2>'Permisssion denied' error when trying to use command-line utilities</h2>
+<h6>Why do I get a 'Permission denied' error when I try to run command-line utilities?</h6>
+<p>
+In order for your computer to run a freshly downloaded utility, you will need to update the file
+system permissions to allow your operating system to run the program.
+<br>
+To make utilities usable, turn on its 'executable' bit: 
+       <pre> <code>$ chmod +x ./filePath </code></pre>
+       <pre> <code>$ ./filePath/utility_name</code></pre>
+Example:
+       <pre><code>$ chmod +x /home/user/liftover/liftOver</code></pre>
+        See also: <a href="http://en.wikipedia.org/wiki/Chmod" target="_blank">http://en.wikipedia.org/wiki/Chmod</a>
+
 </p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

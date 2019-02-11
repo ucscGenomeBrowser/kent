@@ -1,4 +1,6 @@
-// Javascript for use in hgTracks CGI
+// hgTracks.js - Javascript for use in hgTracks CGI
+
+// Copyright (C) 2008 The Regents of the University of California
 
 // "use strict";
 // Don't complain about line break before '||' etc:

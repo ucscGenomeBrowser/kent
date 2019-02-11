@@ -592,9 +592,13 @@ boolean hFindFieldsAndBin(char *db, char *table,
  * and whether it's binned . */
 
 boolean hFindSplitTable(char *db, char *chrom, char *rootName,
-	char retTableBuf[HDB_MAX_TABLE_STRING], boolean *hasBin);
-/* Find name of table that may or may not be split across chromosomes.
- * Return FALSE if table doesn't exist.  */
+	char *retTableBuf, int tableBufSize, boolean *hasBin);
+/* Find name of table in a given database that may or may not
+ * be split across chromosomes. Return FALSE if table doesn't exist. 
+ *
+ * Do not ignore the return value. 
+ * This function does NOT tell you whether or not the table is split. 
+ * It tells you if the table exists. */
 
 struct slName *hSplitTableNames(char *db, char *rootName);
 /* Return a list of all split tables for rootName, or of just rootName if not
@@ -913,17 +917,6 @@ int chrSlNameCmp(const void *el1, const void *el2);
  * slName **s (as passed in by slSort) whose names match the regex
  * "chr([0-9]+|[A-Za-z0-9]+)(_[A-Za-z0-9_]+)?". */
 
-int chrNameCmpWithAltRandom(char *str1, char *str2);
-/* Compare chromosome or linkage group names str1 and str2 
- * to achieve this order:
- * chr1 .. chr22
- * chrX
- * chrY
- * chrM
- * chr1_{alt, random} .. chr22_{alt, random}
- * chrUns
- */
-
 int chrSlNameCmpWithAltRandom(const void *el1, const void *el2);
 /* Compare chromosome or linkage group names str1 and str2 
  * to achieve this order:
@@ -931,8 +924,8 @@ int chrSlNameCmpWithAltRandom(const void *el1, const void *el2);
  * chrX
  * chrY
  * chrM
- * chr1_{alt, random} .. chr22_{alt, random}
- * chrUns
+ * chr1_{alt,fix,hap*,random} .. chr22_{alt,fix,hap*,random}
+ * chrUn*
  */
 
 int bedCmpExtendedChr(const void *va, const void *vb);
@@ -970,6 +963,13 @@ char *findTypeForTable(char *db,struct trackDb *parent,char *table, struct custo
 boolean trackIsType(char *database, char *table, struct trackDb *parent, char *type, struct customTrack *(*ctLookupName)(char *table));
 /* Return TRUE track is a specific type.  Type should be something like "bed" or
  * "bigBed" or "bigWig"
+ * if table has no parent trackDb pass NULL for parent
+ * If this is a custom track, pass in function ctLookupName(table) which looks up a
+ * custom track by name, otherwise pass NULL
+ */
+
+boolean hIsBigWig(char *database, char *table, struct trackDb *parent, struct customTrack *(*ctLookupName)(char *table));
+/* Return TRUE if table corresponds to a bigWig file.
  * if table has no parent trackDb pass NULL for parent
  * If this is a custom track, pass in function ctLookupName(table) which looks up a
  * custom track by name, otherwise pass NULL

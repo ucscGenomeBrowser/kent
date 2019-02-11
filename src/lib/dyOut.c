@@ -98,8 +98,10 @@ dyOutAssertToken(token);
 
 int len = dyStringLen(dyOutStack);
 if (len != 0)
+    {
     fprintf(file,"%s",dyStringContents(dyOutStack));
     fflush(file);
+    }
 return len;
 }
 

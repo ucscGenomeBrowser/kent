@@ -218,7 +218,7 @@ set resultPep = \$4
 set resultSubopt = \$5
 mkdir -p gtf/\$dir pep/\$dir subopt/\$dir
 set seqFile = hardMaskedFa/\$dir/\$chrom.fa
-/cluster/bin/x86_64/gsBig \$seqFile \$resultGtf -trans=\$resultPep -subopt=\$resultSubopt -exe=/scratch/data/genscan/genscan -par=/scratch/data/genscan/HumanIso.smat -tmp=/tmp -window=2400000
+/cluster/bin/x86_64/gsBig \$seqFile \$resultGtf -trans=\$resultPep -subopt=\$resultSubopt -exe=/hive/data/staging/data/genscan/genscan -par=/hive/data/staging/data/genscan/HumanIso.smat -tmp=/tmp -window=2400000
 _EOF_
   ;
   close($fh);

@@ -1274,7 +1274,7 @@ struct annoStreamer *annoStreamDbNew(char *db, char *table, struct annoAssembly 
 {
 struct sqlConnection *conn = hAllocConn(db);
 char splitTable[HDB_MAX_TABLE_STRING];
-if (!hFindSplitTable(db, NULL, table, splitTable, NULL))
+if (!hFindSplitTable(db, NULL, table, splitTable, sizeof splitTable, NULL))
     errAbort("annoStreamDbNew: can't find table (or split table) for '%s.%s'", db, table);
 struct annoStreamDb *self = NULL;
 AllocVar(self);

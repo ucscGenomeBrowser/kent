@@ -1012,6 +1012,7 @@ vg->unclip = (vg_unclip)mgUnclip;
 vg->verticalSmear = (vg_verticalSmear)mgVerticalSmear;
 vg->fillUnder = (vg_fillUnder)mgFillUnder;
 vg->drawPoly = (vg_drawPoly)mgDrawPoly;
+vg->circle = (vg_circle)mgCircle;
 vg->ellipse = (vg_ellipse)mgEllipse;
 vg->curve = (vg_curve)mgCurve;
 vg->setHint = (vg_setHint)mgSetHint;

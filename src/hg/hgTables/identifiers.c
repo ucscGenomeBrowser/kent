@@ -92,7 +92,7 @@ else
     {
     char fullTable[HDB_MAX_TABLE_STRING];
     char *c = strchr(table, '.');
-    if (c || ! hFindSplitTable(database, NULL, table, fullTable, NULL))
+    if (c || ! hFindSplitTable(database, NULL, table, fullTable, sizeof fullTable, NULL))
 	safecpy(fullTable, sizeof(fullTable), table);
     return sqlRandomSampleConn(conn, fullTable, field, count);
     }

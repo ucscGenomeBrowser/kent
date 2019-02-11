@@ -1355,16 +1355,23 @@ boolean isWithCenterLabels(struct track *track);
  * the default and inhibit composite track center labels in all modes.
  * Otherwise use the global boolean withCenterLabels. */
 
-#define isCenterLabelConditional(track) \
-                        ((limitVisibility(track) == tvDense) && tdbIsCompositeChild((track)->tdb))
-// dense subtracks have conditional centerLabels
+boolean isCenterLabelConditional(struct track *track);
+/* Dense subtracks and pack subtracks (when centerLabelsPack off set)
+ *      show center labels depending on vis of previous track */
 
 boolean isCenterLabelConditionallySeen(struct track *track);
-// returns FALSE if track and prevTrack have same parent, and are both dense subtracks
+/* Returns FALSE if track and prevTrack have same parent, and are both conditional
+ * i.e. dense subtrack or pack subtrack with centerLabelsPack off set
+ */
 
-#define isCenterLabelIncluded(track) \
-                (isWithCenterLabels(track) && (theImgBox || isCenterLabelConditionallySeen(track)))
-// Center labels may be conditionally included
+boolean isCenterLabelsPackOff(struct track *track);
+/* Check for trackDb setting to suppress center labels of composite in pack mode */
+
+boolean isCenterLabelIncluded(struct track *track);
+/* Center labels may be conditionally included */
+
+boolean doCollapseEmptySubtracks(struct track *track);
+/* Suppress display of empty subtracks. Initial support only for bed's. */
 
 Color maybeDarkerLabels(struct track *track, struct hvGfx *hvg, Color color);
 /* For tracks having light track display but needing a darker label */
@@ -1540,6 +1547,10 @@ void gtexEqtlClusterMethods(struct track *tg);
 
 void gtexEqtlTissueMethods(struct track *tg);
 /* Install handler for GTEx eQTL Tissues track */
+
+void lollipopMethods(struct track *track, struct trackDb *tdb,
+                                int wordCount, char *words[]);
+/* Lollipop track type methods */
 
 void interactMethods(struct track *tg);
 /* Interact track type methods */

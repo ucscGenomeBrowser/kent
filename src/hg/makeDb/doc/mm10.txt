@@ -17693,3 +17693,19 @@ TMPDIR=/dev/shm
     make alpha DBS=mm10
 
 #########################################################################
+2019-01-17: tabula muris track (max)
+# download 7Tb of data from Amazon, using token, CZI pays (got token by email, via Angela Pisco, James Webber)
+export AWS_ACCESS_KEY_ID=xxxxx
+export AWS_SESSION_TOKEN=xxxxx
+aws s3 sync s3://czbiohub-tabula-muris/tabula_muris_bam_files/ . --delete
+cd ~/projects/czi/cbData/ucsc/tabulaMuris
+csvToTab TM_facs_metadata.csv > TM_facs_metadata.tsv
+cat TM_facs_metadata.csv | tr '.' '-' | csvToTab > TM_facs_metadata.fix.tsv
+# this is not necessary anymore, the new mm10.sizes file comes with cbTrackHub and 
+# includes the ERCCs
+hgsql -N -e 'select alias,chrom from chromAlias;' mm10 > mm10.chromAlias.tab
+faSize ERCC92.fa -detailed > ERCC.sizes
+cat /hive/data/genomes/mm10/chrom.sizes ERCC.sizes > mm10ercc.sizes 
+
+# the next one requires single cell browser, from https://github.com/maximilianh/cellBrowser
+cbTrackHub mm10 bam/ TM_facs_metadata.fix.tsv cell_ontology_class hub/ --name "TabulaMuris"

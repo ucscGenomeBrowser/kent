@@ -1,3 +1,3 @@
-kentSrc = ../..
-A = reviewSanity
+kentSrc = ../../..
+A = hubClone
 include $(kentSrc)/inc/userApp.mk

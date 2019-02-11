@@ -8,7 +8,8 @@ sortOrder set=+ view=+
 dimensions dimX=set dimY=view
 type bed 3
 visibility hide
-pennantIcon New red ../goldenPath/newsarch.html#110718  created September 2018
+pennantIcon Updated red ../goldenPath/newsarch.html#110718  updated January 2019
+dataVersion January 2019 (V2: Corrections to Experiment field)
 group regulation
 priority 1.5
 
@@ -81,7 +82,7 @@ priority 1.5
         track geneHancerInteractionsDoubleElite
         shortLabel GH Interactions (DE)
         longLabel Interactions between GeneHancer regulatory elements and genes (Double Elite)
-        bigDataUrl /gbdb/$D/geneHancer/geneHancerInteractionsDoubleElite.$D.bb
+        bigDataUrl /gbdb/$D/geneHancer/geneHancerInteractionsDoubleElite.v2.$D.bb
         urlLabel Interaction in GeneCards
         parent ghInteraction on
         subGroups set=a_ELITE view=c_I
@@ -89,7 +90,7 @@ priority 1.5
         track geneHancerInteractions
         shortLabel GH Interactions
         longLabel Interactions between GeneHancer regulatory elements and genes
-        bigDataUrl /gbdb/$D/geneHancer/geneHancerInteractionsAll.$D.bb
+        bigDataUrl /gbdb/$D/geneHancer/geneHancerInteractionsAll.v2.$D.bb
         urlLabel Interaction in GeneCards
         parent ghInteraction off
         subGroups set=b_ALL view=c_I
@@ -108,7 +109,7 @@ priority 1.5
         track geneHancerClusteredInteractionsDoubleElite
         shortLabel GH Clusters (DE)
         longLabel Clustered interactions of GeneHancer regulatory elements and genes (Double Elite)
-        bigDataUrl /gbdb/$D/geneHancer/geneHancerInteractionsDoubleElite.$D.bb
+        bigDataUrl /gbdb/$D/geneHancer/geneHancerInteractionsDoubleElite.v2.$D.bb
         urlLabel Interaction in GeneCards
         parent ghClusteredInteraction on
         subGroups set=a_ELITE view=d_I
@@ -116,8 +117,7 @@ priority 1.5
         track geneHancerClusteredInteractions
         shortLabel GH Clusters
         longLabel Clustered interactions of GeneHancer regulatory elements and genes
-        bigDataUrl /gbdb/$D/geneHancer/geneHancerInteractionsAll.$D.bb
+        bigDataUrl /gbdb/$D/geneHancer/geneHancerInteractionsAll.v2.$D.bb
         urlLabel Interaction in GeneCards
         parent ghClusteredInteraction off
         subGroups set=b_ALL view=d_I
-

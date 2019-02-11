@@ -1895,3 +1895,18 @@ searchPriority 50
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+#############################################################################
+# LIFTOVER TO petMar3 (DONE - 2018-01-12 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/petMar2/bed/blat.petMar3.2018-01-12
+    cd /hive/data/genomes/petMar2/bed/blat.petMar3.2018-01-12
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/petMar2/jkStuff/petMar2.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         petMar2 petMar3) > do.log 2>&1
+    # real    598m36.466s
+
+    # verify the convert link on the test browser is now active from petMar2 to
+    # petMar3
+
+#############################################################################

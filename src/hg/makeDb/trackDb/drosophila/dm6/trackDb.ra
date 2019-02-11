@@ -45,10 +45,10 @@ bigDataUrl /gbdb/$D/uniprot/unipMut.bb
 
 include ../../refSeqComposite.ra
 
-include trackDb.124way.ra alpha
-include trackDb.124wayMafNet.ra alpha
-include trackDb.124wayRbest.ra alpha
-include trackDb.124waySyn.ra alpha
+include trackDb.124way.ra 
+include trackDb.124wayMafNet.ra
+include trackDb.124wayRbest.ra 
+include trackDb.124waySyn.ra 
 include chainNetInsects.ra
 include chainNetSynInsects.ra
 include chainNetRBestInsects.ra

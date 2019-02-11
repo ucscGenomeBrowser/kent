@@ -1011,7 +1011,7 @@ void genericSampleClick(struct sqlConnection *conn, struct trackDb *tdb,
                         char *item, int start, int smpSize)
 /* Handle click in generic sample (wiggle) track. */
 {
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 boolean hasBin;
 struct sample *smp;
 char query[512];
@@ -1019,7 +1019,8 @@ struct sqlResult *sr;
 char **row;
 boolean firstTime = TRUE;
 
-hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
+if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
+    errAbort("genericSampleClick track %s not found", tdb->table);
 sqlSafef(query, sizeof query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
         table, item, seqName, start);
 
@@ -1074,7 +1075,7 @@ void showBedTopScorersInWindow(struct sqlConnection *conn,
 struct sqlResult *sr = NULL;
 char **row = NULL;
 struct bed *bedList = NULL, *bed = NULL;
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 boolean hasBin = FALSE;
 char query[512];
 
@@ -1088,7 +1089,9 @@ if (filterTable)
     }
 else
     {
-    hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
+    if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
+	errAbort("showBedTopScorersInWindow track %s not found", tdb->table);
+    
     sqlSafef(query, sizeof(query),
           "select * from %s where chrom = '%s' and chromEnd > %d and "
           "chromStart < %d order by score desc",
@@ -1235,7 +1238,7 @@ void mafPrettyOut(FILE *f, struct mafAli *maf, int lineSize,
 
 void doAtom( struct trackDb *tdb, char *item)
 {
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 boolean hasBin;
 //struct bed *bed;
 char query[512];
@@ -1250,7 +1253,8 @@ struct sqlConnection *sc;
 struct atom ret;
 
 genericHeader(tdb, item);
-hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
+if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
+    errAbort("mafPrettyOut track %s not found", tdb->table);
 #if 0
 sqlSafef(query, sizeof query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d", table, escapedName, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -1650,7 +1654,7 @@ void genericBedClick(struct sqlConnection *conn, struct trackDb *tdb,
 		     char *item, int start, int bedSize)
 /* Handle click in generic BED track. */
 {
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 boolean hasBin;
 struct bed *bed;
 char query[512];
@@ -1658,7 +1662,8 @@ struct sqlResult *sr;
 char **row;
 boolean firstTime = TRUE;
 
-hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
+if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
+    errAbort("genericBedClick track %s not found", tdb->table);
 if (bedSize <= 3)
     sqlSafef(query, sizeof query, "select * from %s where chrom = '%s' and chromStart = %d", table, seqName, start);
 else
@@ -1808,7 +1813,7 @@ void pseudoGeneClick(struct sqlConnection *conn, struct trackDb *tdb,
                      char *item, int start, int bedSize)
 /* Handle click in track. */
 {
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 boolean hasBin;
 struct bed *bed;
 char query[512];
@@ -1816,7 +1821,8 @@ struct sqlResult *sr;
 char **row;
 boolean firstTime = TRUE;
 
-hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
+if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
+    errAbort("pseudoGeneClick track %s not found", tdb->table);
 if (bedSize <= 3)
     sqlSafef(query, sizeof query, "select * from %s where chrom = '%s' and chromStart = %d", table, seqName, start);
 else
@@ -2351,7 +2357,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
             }
         else
             {
-            if (!intronTruncated == TRUE)
+            if (!(intronTruncated == TRUE))
                 {
                 printf("...intron truncated...<br>");
                 intronTruncated = TRUE;
@@ -2536,14 +2542,14 @@ char *rootTable = tdb->table;
 char query[512];
 struct sqlConnection *conn = hAllocConn(database);
 struct genePred *gpList = NULL, *gp = NULL;
-boolean hasBin;
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 struct sqlResult *sr = NULL;
 char **row = NULL;
 char *classTable = trackDbSetting(tdb, GENEPRED_CLASS_TBL);
 
 
-hFindSplitTable(database, seqName, rootTable, table, &hasBin);
+if (!hFindSplitTable(database, seqName, rootTable, table, sizeof table, NULL))
+    errAbort("showGenePos track %s not found", rootTable);
 sqlSafefFrag(query, sizeof(query), "name = \"%s\"", name);
 gpList = genePredReaderLoadQuery(conn, table, query);
 for (gp = gpList; gp != NULL; gp = gp->next)
@@ -2667,9 +2673,10 @@ char **row;
 struct genePred *gp = NULL;
 boolean hasBin;
 int posCount = 0;
-char table[64] ;
+char table[HDB_MAX_TABLE_STRING];
 
-hFindSplitTable(database, seqName, rootTable, table, &hasBin);
+if (!hFindSplitTable(database, seqName, rootTable, table, sizeof table, &hasBin))
+    errAbort("showGenePosMouse track %s not found", rootTable);
 sqlSafef(query, sizeof query, "select * from %s where name = '%s'", table, name);
 sr = sqlGetResult(connMm, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -3179,14 +3186,14 @@ struct chain *chainDbLoad(struct sqlConnection *conn, char *db, char *track,
 			  char *chrom, int id)
 /* Load chain. */
 {
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 char query[256];
 struct sqlResult *sr;
 char **row;
-int rowOffset;
+boolean hasBin;
 struct chain *chain;
 
-if (!hFindSplitTable(db, seqName, track, table, &rowOffset))
+if (!hFindSplitTable(db, seqName, track, table, sizeof table, &hasBin))
     errAbort("No %s track in database %s for %s", track, db, seqName);
 sqlSafef(query, sizeof(query),
 	 "select * from %s where id = %d", table, id);
@@ -3194,7 +3201,7 @@ sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row == NULL)
     errAbort("Can't find %d in %s", id, table);
-chain = chainHeadLoad(row + rowOffset);
+chain = chainHeadLoad(row + hasBin);
 sqlFreeResult(&sr);
 chainDbAddBlocks(chain, track, conn);
 return chain;
@@ -3362,9 +3369,9 @@ boolean normScoreAvailable = chainDbNormScoreAvailable(tdb);
 
 if (normScoreAvailable)
     {
-    boolean hasBin;
     char tableName[HDB_MAX_TABLE_STRING];
-    hFindSplitTable(database, chain->tName, tdb->table, tableName, &hasBin);
+    if (!hFindSplitTable(database, chain->tName, tdb->table, tableName, sizeof tableName, NULL))
+	errAbort("genericChainClick track %s not found", tdb->table);
     char query[256];
     struct sqlResult *sr;
     char **row;
@@ -3487,8 +3494,8 @@ void genericNetClick(struct sqlConnection *conn, struct trackDb *tdb,
                      char *item, int start, char *otherDb, char *chainTrack)
 /* Generic click handler for net tracks. */
 {
-char table[64];
-int rowOffset;
+char table[HDB_MAX_TABLE_STRING];
+boolean hasBin;
 char query[256];
 struct sqlResult *sr;
 char **row;
@@ -3505,7 +3512,8 @@ if (otherOrg == NULL)
     /* use first word in short track label */
     otherOrg = firstWordInLine(cloneString(tdb->shortLabel));
     }
-hFindSplitTable(database, seqName, tdb->table, table, &rowOffset);
+if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
+    errAbort("genericNetClick track %s not found", tdb->table);
 sqlSafef(query, sizeof(query),
 	 "select * from %s where tName = '%s' and tStart <= %d and tEnd > %d "
 	 "and level = %s",
@@ -3514,7 +3522,7 @@ sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     errAbort("Couldn't find %s:%d in %s", seqName, start, table);
 
-net = netAlignLoad(row+rowOffset);
+net = netAlignLoad(row+hasBin);
 sqlFreeResult(&sr);
 tSize = net->tEnd - net->tStart;
 qSize = net->qEnd - net->qStart;
@@ -3616,7 +3624,7 @@ boolean printedPlus = FALSE;
 boolean printedMinus = FALSE;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn(database);
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 boolean hasBin;
 char query[512];
 struct sqlResult *sr;
@@ -3630,7 +3638,8 @@ char *mappedId = NULL;
 
 genericHeader(tdb, item);
 
-hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
+if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
+    errAbort("tfbsConsSites track %s not found", tdb->table);
 sqlSafef(query, sizeof query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
 	    table, item, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -3643,7 +3652,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 slReverse(&tfbsConsSitesList);
 
-hFindSplitTable(database, seqName, "tfbsConsFactors", table, &hasBin);
+if (!hFindSplitTable(database, seqName, "tfbsConsFactors", table, sizeof table, &hasBin))
+    errAbort("tfbsConsSites table tfbsConsFactors not found");
 sqlSafef(query, sizeof query, "select * from %s where name = '%s' ", table, item);
 sr = sqlGetResult(conn, query);
 
@@ -3708,7 +3718,7 @@ boolean printedPlus = FALSE;
 boolean printedMinus = FALSE;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn(database);
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 boolean hasBin;
 char query[512];
 struct sqlResult *sr;
@@ -3721,7 +3731,8 @@ char *mappedId = NULL;
 
 genericHeader(tdb, item);
 
-hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
+if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
+    errAbort("tfbsCons track %s not found", tdb->table);
 sqlSafef(query, sizeof query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
 	    table, item, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -3799,7 +3810,7 @@ void firstEF(struct trackDb *tdb, char *item)
 {
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn(database);
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 boolean hasBin;
 struct bed *bed;
 char query[512];
@@ -3812,7 +3823,8 @@ genericHeader(tdb, item);
 printCustomUrl(tdb, item, FALSE);
 /* printCustomUrl(tdb, itemForUrl, item == itemForUrl); */
 
-hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
+if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
+    errAbort("firstEF track %s not found", tdb->table);
 sqlSafef(query, sizeof query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
 	    table, item, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -3839,7 +3851,7 @@ void doBed5FloatScore(struct trackDb *tdb, char *item)
 {
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 boolean hasBin;
 struct bed5FloatScore *b5;
 struct dyString *query = newDyString(512);
@@ -3848,7 +3860,8 @@ boolean firstTime = TRUE;
 int start = cartInt(cart, "o");
 int bedSize = 5;
 
-hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
+if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
+    errAbort("doBed5FloatScore track %s not found", tdb->table);
 sqlDyStringPrintf(query, "select * from %s where chrom = '%s' and ",
 	       table, seqName);
 hAddBinToQuery(winStart, winEnd, query);
@@ -3881,7 +3894,7 @@ void doBed6FloatScore(struct trackDb *tdb, char *item)
 {
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 boolean hasBin;
 struct bed6FloatScore *b6 = NULL;
 struct dyString *query = newDyString(512);
@@ -3891,7 +3904,8 @@ int start = cartInt(cart, "o");
 
 genericHeader(tdb, item);
 
-hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
+if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
+    errAbort("doBed6FloatScore track %s not found", tdb->table);
 sqlDyStringPrintf(query, "select * from %s where chrom = '%s' and ",
 	       table, seqName);
 hAddBinToQuery(winStart, winEnd, query);
@@ -4099,12 +4113,12 @@ if (itemForUrl == NULL)
 dupe = cloneString(tdb->type);
 wordCount = chopLine(dupe, words);
 headerItem = cloneString(item);
+type = words[0];
 
 /* Suppress printing item name in page header, as it is not informative for these types of
  * tracks... */
 if (container == NULL && wordCount > 0)
     {
-    type = words[0];
     if (sameString(type, "maf") || sameString(type, "wigMaf") || sameString(type, "bigMaf") || sameString(type, "netAlign")
         || sameString(type, "encodePeak"))
         headerItem = NULL;
@@ -4115,7 +4129,6 @@ if (container == NULL && wordCount > 0)
          &&  sameString(headerItem, ".") )
         headerItem = NULL;
     }
-
 /* Print header. */
 genericHeader(tdb, headerItem);
 
@@ -4252,7 +4265,7 @@ else if (wordCount > 0)
 	}
     else if (sameString(type, "factorSource"))
         {
-	doFactorSource(conn, tdb, item, start);
+	doFactorSource(conn, tdb, item, start, end);
 	}
     else if (sameString(type, "bed5FloatScore") ||
              sameString(type, "bed5FloatScoreWithFdr"))
@@ -4854,14 +4867,15 @@ struct sqlResult *sr;
 struct sqlConnection *conn = hAllocConn(database);
 struct dnaSeq *tSeq;
 char query[256], **row;
-char fullTable[64];
+char fullTable[HDB_MAX_TABLE_STRING];
 boolean hasBin;
 char *buffer, *str;
 int i, j;
 char *ptr;
 
 start = cartInt(cart, "o");
-hFindSplitTable(database, seqName, table, fullTable, &hasBin);
+if (!hFindSplitTable(database, seqName, table, fullTable, sizeof fullTable, &hasBin))
+    errAbort("doGetBlastPep track %s not found", table);
 sqlSafef(query, sizeof query, "select * from %s where qName = '%s' and tName = '%s' and tStart=%d",
 	fullTable, readName, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -4935,7 +4949,6 @@ if (sameString(action, EXTENDED_DNA_BUTTON))
 // But we want to keep it very simple and close to a plain text dump.
 
 cartHtmlStart("DNA");
-hgBotDelay();
 puts("<PRE>");
 if (tbl[0] == 0)
     {
@@ -5952,9 +5965,9 @@ struct sqlResult *sr = NULL;
 char **row;
 struct psl *psl, *pslList = NULL;
 boolean hasBin;
-char splitTable[256];
+char splitTable[HDB_MAX_TABLE_STRING];
 char query[1024];
-if (!hFindSplitTable(database, seqName, table, splitTable, &hasBin))
+if (!hFindSplitTable(database, seqName, table, splitTable, sizeof splitTable, &hasBin))
     errAbort("can't find table %s or %s_%s", table, seqName, table);
 if (isNotEmpty(tName))
     sqlSafef(query, sizeof(query), "select * from %s where qName = '%s' and tName = '%s'",
@@ -5985,11 +5998,12 @@ struct sqlResult *sr = NULL;
 char **row;
 struct psl *psl = NULL, *pslList = NULL;
 boolean hasBin;
-char splitTable[64];
+char splitTable[HDB_MAX_TABLE_STRING];
 char query[256];
 struct sqlConnection *conn = hAllocConn(database);
 
-hFindSplitTable(database, seqName, table, splitTable, &hasBin);
+if (!hFindSplitTable(database, seqName, table, splitTable, sizeof splitTable, &hasBin))
+    errAbort("loadPslRangeT track %s not found", table);
 sqlSafef(query, sizeof(query), "select * from %s where qName = '%s' and tName = '%s' and tEnd > %d and tStart < %d", splitTable, qName, tName, tStart, tEnd);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -6608,7 +6622,7 @@ struct agpFrag frag;
 struct contigAcc contigAcc;
 int start = cartInt(cart, "o");
 boolean hasBin;
-char splitTable[64];
+char splitTable[HDB_MAX_TABLE_STRING];
 char *chp;
 char *accession1, *accession2, *spanner, *variation, *varEvidence,
     *contact, *remark, *comment;
@@ -6618,7 +6632,8 @@ char *tmpString;
 int first;
 
 cartWebStart(cart, database, "%s", fragName);
-hFindSplitTable(database, seqName, tdb->table, splitTable, &hasBin);
+if (!hFindSplitTable(database, seqName, tdb->table, splitTable, sizeof splitTable, &hasBin))
+    errAbort("doHgGold track %s not found", tdb->table);
 sqlSafef(query, sizeof query, "select * from %s where frag = '%s' and chromStart = %d",
 	splitTable, fragName, start);
 sr = sqlMustGetResult(conn, query);
@@ -6748,10 +6763,11 @@ char **row;
 struct agpGap gap;
 int start = cartInt(cart, "o");
 boolean hasBin;
-char splitTable[64];
+char splitTable[HDB_MAX_TABLE_STRING];
 
 cartWebStart(cart, database, "Gap in Sequence");
-hFindSplitTable(database, seqName, tdb->table, splitTable, &hasBin);
+if (!hFindSplitTable(database, seqName, tdb->table, splitTable, sizeof splitTable, &hasBin))
+    errAbort("doHgGap track %s not found", tdb->table);
 if (sameString(tdb->table, splitTable))
     sqlSafef(query, sizeof(query), "select * from %s where chrom = '%s' and "
           "chromStart = %d",
@@ -6779,10 +6795,10 @@ void selectOneRow(struct sqlConnection *conn, char *table, char *query,
 		  struct sqlResult **retSr, char ***retRow)
 /* Do query and return one row offset by bin as needed. */
 {
-char fullTable[64];
+char fullTable[HDB_MAX_TABLE_STRING];
 boolean hasBin;
 char **row;
-if (!hFindSplitTable(database, seqName, table, fullTable, &hasBin))
+if (!hFindSplitTable(database, seqName, table, fullTable, sizeof fullTable, &hasBin))
     errAbort("Table %s doesn't exist in database", table);
 *retSr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(*retSr)) == NULL)
@@ -7398,7 +7414,7 @@ void htcCdnaAli(char *acc)
 /* Show alignment for accession. */
 {
 char query[256];
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 char accTmp[64];
 struct sqlConnection *conn;
 struct sqlResult *sr;
@@ -7425,7 +7441,8 @@ conn = hAllocConn(database);
 getCdsStartAndStop(conn, accChopped, aliTable, &cdsStart, &cdsEnd);
 
 /* Look up alignments in database */
-hFindSplitTable(database, seqName, aliTable, table, &hasBin);
+if (!hFindSplitTable(database, seqName, aliTable, table, sizeof table, &hasBin))
+    errAbort("Failed to find aliTable=%s", aliTable);
 sqlSafef(query, sizeof query, "select * from %s where qName like '%s%%' and tName=\"%s\" and tStart=%d",
 	table, acc, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -7569,7 +7586,8 @@ if (startsWith("user", aliTable))
 else
     {
     /* Look up alignments in database */
-    hFindSplitTable(database, seqName, aliTable, table, &hasBin);
+    if (!hFindSplitTable(database, seqName, aliTable, table, sizeof table, &hasBin))
+	errAbort("aliTable %s not found", aliTable);
     sqlSafef(query, sizeof(query),
          "select * from %s where qName = '%s' and tName=\"%s\" and tStart=%d", 
          table, acc, seqName, start);
@@ -7631,7 +7649,6 @@ char *otherDb = NULL, *org = NULL, *otherOrg = NULL;
 struct dnaSeq *qSeq = NULL;
 char name[128];
 
-hgBotDelay();	/* Prevent abuse. */
 
 /* Figure out other database. */
 if (chopLine(type, typeWords) < ArraySize(typeWords))
@@ -7781,7 +7798,7 @@ struct sqlResult *sr;
 struct sqlConnection *conn = hAllocConn(database);
 struct dnaSeq *seq = NULL;
 char query[256], **row;
-char fullTable[64];
+char fullTable[HDB_MAX_TABLE_STRING];
 boolean hasBin;
 char buffer[256];
 int addp = 0;
@@ -7794,7 +7811,8 @@ htmlFramesetStart(title);
 addp = cartUsualInt(cart, "addp",0);
 pred = cartUsualString(cart, "pred",NULL);
 start = cartInt(cart, "o");
-hFindSplitTable(database, seqName, table, fullTable, &hasBin);
+if (!hFindSplitTable(database, seqName, table, fullTable, sizeof fullTable, &hasBin))
+    errAbort("track %s not found", table);
 sqlSafef(query, sizeof query, "select * from %s where qName = '%s' and tName = '%s' and tStart=%d",
 	fullTable, readName, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -7848,7 +7866,7 @@ struct sqlResult *sr;
 struct sqlConnection *conn = hAllocConn(database);
 struct dnaSeq *seq;
 char query[256], **row;
-char fullTable[64];
+char fullTable[HDB_MAX_TABLE_STRING];
 boolean hasBin;
 
 char title[1024];
@@ -7856,7 +7874,8 @@ safef(title, sizeof title, "Sequence %s", readName);
 htmlFramesetStart(title);
 
 start = cartInt(cart, "o");
-hFindSplitTable(database, seqName, table, fullTable, &hasBin);
+if (!hFindSplitTable(database, seqName, table, fullTable, sizeof fullTable, &hasBin))
+    errAbort("track %s not found", table);
 sqlSafef(query, sizeof query, "select * from %s where qName = '%s' and tName = '%s' and tStart=%d",
 	fullTable, readName, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -7948,11 +7967,12 @@ if (offset >= 0)
     char **row;
     struct rmskOut *ro;
     char query[256];
-    char table[64];
+    char table[HDB_MAX_TABLE_STRING];
     boolean hasBin;
     int start = cartInt(cart, "o");
 
-    hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
+    if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
+	errAbort("Track %s not found", tdb->table);
     sqlSafef(query, sizeof query, "select * from %s where  repName = '%s' and genoName = '%s' and genoStart = %d",
 	    table, repeat, seqName, start);
     sr = sqlGetResult(conn, query);
@@ -13341,7 +13361,7 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row = NULL;
 char query[256];
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 boolean hasBin = FALSE;
 int n = atoi(tdb->type + 4);
 int start = cgiInt("o");
@@ -13349,7 +13369,8 @@ if (n < 3)
     n = 3;
 if (n > maxN)
     n = maxN;
-hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
+if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
+    errAbort("track %s not found", tdb->table);
 sqlSafef(query, sizeof(query),
       "select * from %s where chrom = '%s' and chromStart = %d "
       "and name = '%s'",
@@ -13704,10 +13725,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Left Primer Sequence:</B> %s<BR>\n", snp.primerL);
     printf("<B>Right Primer Sequence:</B> %s<BR>\n", snp.primerR);
     if (snp.snpType[0] != 'S')
+        {
         if (snp.questionM[0] == 'H')
 	    printf("<B>Indel Confidence</B>: High\n");
         if (snp.questionM[0] == 'L')
 	    printf("<B>Indel Confidence</B>: Low\n");
+        }
     }
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
@@ -13803,7 +13826,7 @@ int start = cartInt(cart, "o");
 struct psl *pslList = NULL, *psl;
 char *tiNum = strrchr(itemName, '|');
 boolean hasBin;
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 
 /* Print heading info including link to NCBI. */
 if (tiNum != NULL)
@@ -13856,7 +13879,8 @@ if (tiNum != NULL && sqlTableExists(conn, "mouseTraceInfo"))
 
 /* Get alignment info and print. */
 printf("<H2>Alignments</H2>\n");
-hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
+if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
+    errAbort("track %s not found", tdb->table);
 sqlSafef(query, sizeof query, "select * from %s where qName = '%s'", table, itemName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -13902,13 +13926,14 @@ struct psl *loadPslAt(char *track, char *qName, int qStart, int qEnd, char *tNam
 {
 struct dyString *dy = newDyString(1024);
 struct sqlConnection *conn = hAllocConn(database);
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 boolean hasBin;
 struct sqlResult *sr;
 char **row;
 struct psl *psl;
 
-hFindSplitTable(database, tName, track, table, &hasBin);
+if (!hFindSplitTable(database, tName, track, table, sizeof table, &hasBin))
+    errAbort("track %s not found", track);
 sqlDyStringPrintf(dy, "select * from %s ", table);
 sqlDyStringPrintf(dy, "where qStart = %d ", qStart);
 sqlDyStringPrintf(dy, "and qEnd = %d ", qEnd);
@@ -14210,7 +14235,7 @@ char *qChrom = cgiOptionalString("qc");
 int chainId = cgiInt("ci");
 int qStart = cgiInt("qs");
 int qEnd = cgiInt("qe");
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 char query[512];
 char nibFile[512];
 char qNibFile[512];
@@ -14240,7 +14265,7 @@ if (sqlQuickQuery(conn2, query, qNibFile, sizeof(qNibFile)) == NULL)
     errAbort("Sequence chr1 isn't in chromInfo");
 
 /* get gp */
-if (!hFindSplitTable(db2, qChrom, track, table, &hasBin))
+if (!hFindSplitTable(db2, qChrom, track, table, sizeof table, &hasBin))
     errAbort("htcPseudoGene: table %s not found.\n",track);
 else if (sameString(track, "mrna"))
     {
@@ -14396,7 +14421,7 @@ int end = cartInt(cart, "t");
 char *chrom = cartString(cart, "c");
 struct psl *pslList = NULL, *psl;
 boolean hasBin;
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 
 char *typeLine = cloneString(tdb->type);
 char *words[8];
@@ -14424,7 +14449,8 @@ printf("%s DNA</A><BR>\n", otherGenome);
 
 /* Get alignment info and print. */
 printf("<H2>Alignments</H2>\n");
-hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
+if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
+    errAbort("doAlignCompGeno track %s not found", tdb->table);
 
 /* if this is a non-split table then query with tName */
 if (startsWith(tdb->table, table))
@@ -18879,7 +18905,7 @@ void doNcRna(struct trackDb *tdb, char *item)
 /* Handle click in ncRna track. */
 {
 struct ncRna *ncRna;
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 boolean hasBin;
 struct bed *bed;
 char query[512];
@@ -18890,7 +18916,8 @@ int bedSize;
 
 genericHeader(tdb, item);
 bedSize = 8;
-hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
+if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
+    errAbort("track %s not found", tdb->table);
 sqlSafef(query, sizeof query, "select * from %s where name = '%s'", table, item);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
@@ -18914,7 +18941,7 @@ void doWgRna(struct trackDb *tdb, char *item)
 /* Handle click in wgRna track. */
 {
 struct wgRna *wgRna;
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 boolean hasBin;
 struct bed *bed;
 char query[512];
@@ -18925,7 +18952,8 @@ int bedSize;
 
 genericHeader(tdb, item);
 bedSize = 8;
-hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
+if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
+    errAbort("track %s not found", tdb->table);
 sqlSafef(query, sizeof query, "select * from %s where name = '%s'", table, item);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
@@ -19238,14 +19266,15 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlConnection *conn2 = hAllocConn(database);
 struct genePred *gpList = NULL, *gp = NULL;
 boolean hasBin;
-char table[128];
+char table[HDB_MAX_TABLE_STRING];
 char aliasTable[256];
 boolean gotAlias = FALSE;
 
 genericHeader(tdb, item);
 safef(aliasTable, sizeof(aliasTable), "%sAlias", tdb->table);
 gotAlias = hTableExists(database, aliasTable);
-hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
+if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
+    errAbort("track %s not found", tdb->table);
 sqlSafefFrag(query, sizeof(query), "name = \"%s\"", item);
 gpList = genePredReaderLoadQuery(conn, table, query);
 for (gp = gpList; gp != NULL; gp = gp->next)
@@ -19486,8 +19515,10 @@ hFreeConn(&conn);
 bool matchTableOrHandler(char *word, struct trackDb *tdb)
 /* return true if word matches either the table name or the trackHandler setting of the tdb struct */
 {
+if (NULL == tdb)
+    return FALSE;
 char* handler = trackDbSetting(tdb, "trackHandler");
-return (sameWord(word, tdb->table) || (handler==NULL || sameWord(word, handler)));
+return (sameWord(word, tdb->table) || (handler!=NULL && sameWord(word, handler)));
 }
 
 void doLinkedFeaturesSeries(char *track, char *clone, struct trackDb *tdb)
@@ -19501,7 +19532,7 @@ char **row, **row1, **row2, **rowb;
 char *lfLabel = NULL;
 char *table = NULL;
 char *intName = NULL;
-char pslTable[64];
+char pslTable[HDB_MAX_TABLE_STRING];
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 int length = end - start;
@@ -19686,7 +19717,8 @@ if (row != NULL)
     for (i = 0; i < lfs->lfCount; i++)
         {
         sqlFreeResult(&sr);
-        hFindSplitTable(database, seqName, lfs->pslTable, pslTable, &hasBin);
+        if (!hFindSplitTable(database, seqName, lfs->pslTable, pslTable, sizeof pslTable, &hasBin))
+	    errAbort("track %s not found", lfs->pslTable);
 
         if (isEmpty(pslTable) && trackDbSetting(tdb, "lfPslTable"))
             safecpy(pslTable, sizeof(pslTable), trackDbSetting(tdb, "lfPslTable"));
@@ -20168,7 +20200,7 @@ void perlegenDetails(struct trackDb *tdb, char *item)
 {
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn(database);
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 boolean hasBin;
 struct bed *bed;
 char query[512];
@@ -20181,7 +20213,8 @@ if(tdb == NULL)
 
 genericHeader(tdb, item);
 printCustomUrl(tdb, item, FALSE);
-hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
+if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
+    errAbort("track %s not found", tdb->table);
 sqlSafef(query, sizeof query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
         table, item, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -20238,7 +20271,7 @@ void haplotypeDetails(struct trackDb *tdb, char *item)
 {
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn(database);
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 boolean hasBin;
 struct bed *bed;
 char query[512];
@@ -20250,7 +20283,8 @@ if(tdb == NULL)
 
 genericHeader(tdb, item);
 printCustomUrl(tdb, item, TRUE);
-hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
+if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
+    errAbort("track %s not found", tdb->table);
 sqlSafef(query, sizeof query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
         table, item, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -20279,7 +20313,7 @@ void mitoDetails(struct trackDb *tdb, char *item)
 {
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn(database);
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 boolean hasBin;
 struct bed *bed;
 char query[512];
@@ -20292,7 +20326,8 @@ if(tdb == NULL)
 
 genericHeader(tdb, item);
 printCustomUrl(tdb, item, TRUE);
-hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
+if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
+    errAbort("track %s not found", tdb->table);
 sqlSafef(query, sizeof query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
         table, item, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -20347,7 +20382,7 @@ hFreeConn(&conn);
 void ancientRDetails(struct trackDb *tdb, char *item)
 {
 struct sqlConnection *conn = hAllocConn(database);
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 boolean hasBin;
 struct bed *bed = NULL;
 char query[512];
@@ -20361,7 +20396,8 @@ if(tdb == NULL)
     errAbort("TrackDb entry null for ancientR, item=%s\n", item);
 genericHeader(tdb, item);
 printCustomUrl(tdb, item, TRUE);
-hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
+if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
+    errAbort("track %s not found", tdb->table);
 sqlSafef(query, sizeof query, "select * from %s where name = '%s' and chrom = '%s'",
         table, item, seqName );
 sr = sqlGetResult(conn, query);
@@ -20430,11 +20466,12 @@ char **row;
 char query[256];
 struct gcPercent *gc;
 boolean hasBin;
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 
 cartWebStart(cart, database, "Percentage GC in 20,000 Base Windows (GC)");
 
-hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
+if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
+    errAbort("track %s not found", tdb->table);
 sqlSafef(query, sizeof query, "select * from %s where chrom = '%s' and chromStart = %d and name = '%s'",
 	table, seqName, start, itemName);
 
@@ -21103,7 +21140,7 @@ void humMusSampleClick(struct sqlConnection *conn, struct trackDb *tdb,
 {
 int humMusWinSize = 50;
 int i;
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 boolean hasBin;
 struct sample *smp;
 char query[512];
@@ -21123,7 +21160,8 @@ int left = cartIntExp( cart, "l" );
 int right = cartIntExp( cart, "r" );
 char *winOn = cartUsualString( cart, "win", "F" );
 
-hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
+if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
+    errAbort("track %s not found", tdb->table);
 sqlSafef(query, sizeof query, "select * from %s where name = '%s' and chrom = '%s'",
 	table, item, seqName);
 sr = sqlGetResult(conn, query);
@@ -21135,7 +21173,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	htmlHorizontalLine();
     smp = sampleLoad(row+hasBin);
     safef(tempTableName, sizeof tempTableName, "%s_%s", smp->chrom, pslTableName );
-    hFindSplitTable(database, seqName, pslTableName, table, &hasBin);
+    if (!hFindSplitTable(database, seqName, pslTableName, table, sizeof table, &hasBin))
+	errAbort("table %s not found", pslTableName);
     sqlSafef(query, sizeof query, "select * from %s where tName = '%s' and tEnd >= %d and tStart <= %d"
 	    , table, smp->chrom, smp->chromStart+smp->samplePosition[0]
 	    , smp->chromStart+smp->samplePosition[smp->sampleCount-1] );
@@ -21200,7 +21239,7 @@ void footPrinterSampleClick(struct sqlConnection *conn, struct trackDb *tdb,
                             char *item, int start, int smpSize)
 /* Handle click in humMus sample (wiggle) track. */
 {
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 boolean hasBin;
 struct sample *smp;
 char query[512];
@@ -21213,7 +21252,8 @@ char pslTableName[128] = "blastzBestMouse";
 int offset;
 int motifid;
 
-hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
+if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
+    errAbort("track %s not found", tdb->table);
 sqlSafef(query, sizeof query, "select * from %s where name = '%s'",
 	table, item);
 sr = sqlGetResult(conn, query);
@@ -21229,7 +21269,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     safef(filename, sizeof filename, "../zoo_blanchem/new_raw2_offset%d.fa.main.html?motifID=%d", offset, motifid);
 
     safef(tempTableName, sizeof tempTableName,"%s_%s", smp->chrom, pslTableName );
-    hFindSplitTable(database, seqName, pslTableName, table, &hasBin);
+    if (!hFindSplitTable(database, seqName, pslTableName, table, sizeof table, &hasBin))
+	errAbort("table %s not found", pslTableName);
     sqlSafef(query, sizeof query, "select * from %s where tName = '%s' and tEnd >= %d and tStart <= %d" ,
 	    table, smp->chrom, smp->chromStart+smp->samplePosition[0],
 	    smp->chromStart+smp->samplePosition[smp->sampleCount-1] );
@@ -21784,14 +21825,14 @@ static void doSimpleDiff(struct trackDb *tdb, char *otherOrg)
 {
 struct simpleNucDiff snd;
 struct sqlConnection *conn = hAllocConn(database);
-char fullTable[64];
+char fullTable[HDB_MAX_TABLE_STRING];
 char query[256], **row;
 struct sqlResult *sr;
 int rowOffset;
 int start = cartInt(cart, "o");
 
 genericHeader(tdb, NULL);
-if (!hFindSplitTable(database, seqName, tdb->table, fullTable, &rowOffset))
+if (!hFindSplitTable(database, seqName, tdb->table, fullTable, sizeof fullTable, &rowOffset))
     errAbort("No %s table in database %s", tdb->table, database);
 sqlSafef(query, sizeof(query), "select * from %s where chrom = '%s' and chromStart=%d",
     fullTable, seqName, start);
@@ -21860,12 +21901,13 @@ struct sqlResult *sr = NULL;
 char **row;
 char query[256];
 int start = cartInt(cart, "o");
-char fullTable[64];
+char fullTable[HDB_MAX_TABLE_STRING];
 boolean hasBin = FALSE;
 
 genericHeader(tdb, item);
 genericBedClick(conn, tdb, item, start, 4);
-hFindSplitTable(database, seqName, tdb->table, fullTable, &hasBin);
+if (!hFindSplitTable(database, seqName, tdb->table, fullTable, sizeof fullTable, &hasBin))
+    errAbort("track %s not found", tdb->table);
 sqlSafef(query, sizeof(query), "select * from %s where name = '%s'",
       fullTable, item);
 sr = sqlGetResult(conn, query);
@@ -21903,13 +21945,14 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
 int start = cartInt(cart, "o");
-char fullTable[64];
+char fullTable[HDB_MAX_TABLE_STRING];
 boolean hasBin = FALSE;
 struct bed *bed = NULL;
 char query[512];
 
 genericHeader(tdb, item);
-hFindSplitTable(database, seqName, tdb->table, fullTable, &hasBin);
+if (!hFindSplitTable(database, seqName, tdb->table, fullTable, sizeof fullTable, &hasBin))
+    errAbort("track %s not found", tdb->table);
 sqlSafef(query, sizeof(query),
       "select * from %s where chrom = '%s' and chromStart = %d",
       fullTable, seqName, start);
@@ -22068,13 +22111,14 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row = NULL;
 int start = cartInt(cart, "o");
-char fullTable[64];
+char fullTable[HDB_MAX_TABLE_STRING];
 boolean hasBin = FALSE;
 char query[1024];
 
 cartWebStart(cart, database, "%s", tdb->longLabel);
 genericHeader(tdb, item);
-hFindSplitTable(database, seqName, tdb->table, fullTable, &hasBin);
+if (!hFindSplitTable(database, seqName, tdb->table, fullTable, sizeof fullTable, &hasBin))
+    errAbort("track %s not found", tdb->table);
 sqlSafef(query, sizeof(query),
      "select * from %s where chrom = '%s' and chromStart = %d and name = '%s'",
       fullTable, seqName, start, item);
@@ -22098,13 +22142,14 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row = NULL;
 int start = cartInt(cart, "o");
-char fullTable[64];
+char fullTable[HDB_MAX_TABLE_STRING];
 boolean hasBin = FALSE;
 char query[1024];
 
 cartWebStart(cart, database, "%s", tdb->longLabel);
 genericHeader(tdb, item);
-hFindSplitTable(database, seqName, tdb->table, fullTable, &hasBin);
+if (!hFindSplitTable(database, seqName, tdb->table, fullTable, sizeof fullTable, &hasBin))
+    errAbort("track %s not found", tdb->table);
 sqlSafef(query, sizeof(query),
      "select * from %s where chrom = '%s' and chromStart = %d and name = '%s'",
       fullTable, seqName, start, item);
@@ -22678,12 +22723,13 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
 int start = cartInt(cart, "o");
-char fullTable[64];
+char fullTable[HDB_MAX_TABLE_STRING];
 boolean hasBin = FALSE;
 char query[512];
 
 genericHeader(tdb, item);
-hFindSplitTable(database, seqName, tdb->table, fullTable, &hasBin);
+if (!hFindSplitTable(database, seqName, tdb->table, fullTable, sizeof fullTable, &hasBin))
+    errAbort("track %s not found", tdb->table);
 sqlSafef(query, sizeof(query),
      "select * from %s where chrom = '%s' and chromStart = %d and name = '%s'",
       fullTable, seqName, start, item);
@@ -23209,14 +23255,14 @@ struct psl *psl = NULL;
 struct dnaSeq *qSeq = NULL;
 char *db = cgiString("db");
 char name[64];
-char query[256], fullTable[64];
+char query[256], fullTable[HDB_MAX_TABLE_STRING];
 char **row;
 boolean hasBin;
 struct sqlResult *sr = NULL;
 struct sqlConnection *conn = hAllocConn(database);
 
-
-hFindSplitTable(database, chrom, pslTable, fullTable, &hasBin);
+if (!hFindSplitTable(database, seqName, pslTable, fullTable, sizeof fullTable, &hasBin))
+    errAbort("track %s not found", pslTable);
 
 sqlSafef(query, sizeof query, "SELECT * FROM %s WHERE "
         "tName = '%s' AND tStart = %d "
@@ -25416,6 +25462,7 @@ char *item = cloneString(cartOptionalString(cart, "i"));
 char *parentWigMaf = cartOptionalString(cart, "parentWigMaf");
 struct trackDb *tdb = NULL;
 
+hgBotDelayFrac(0.5);
 
 if (hIsGisaidServer())
     {
@@ -25798,7 +25845,7 @@ else if (sameWord(table, "knownGene"))
     {
     doKnownGene(tdb, item);
     }
-else if (sameWord(table, "ncbiRefSeq") ||
+else if (matchTableOrHandler("ncbiRefSeq", tdb) ||
          sameWord(table, "ncbiRefSeqPsl") ||
          sameWord(table, "ncbiRefSeqCurated") ||
          sameWord(table, "ncbiRefSeqPredicted") )

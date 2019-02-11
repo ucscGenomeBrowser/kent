@@ -76,6 +76,15 @@
 
 <!-- OPTIONAL_VIEW_MENU -->
 
+<!-- OPTIONAL_PROJECT_MENU_START -->
+<li class="menuparent" id="projects"><span>Projects</span>
+	<ul style="display: none; visibility: hidden;">
+	<li class="first"><a href="../gtex.html">Genotype Tissue Expression (GTEx)</a></li>
+	<li><a href="../ENCODE/index.html">Encyclopedia of DNA Elements (ENCODE)</a></li>
+        <li class="last"><a href="https://cells.ucsc.edu">UCSC Single Cell Browser</a></li>
+	</ul>
+<!-- OPTIONAL_PROJECT_MENU_END -->
+
 <li class="menuparent" id="help"><span>Help</span><ul style="display: none; visibility: hidden;">
 <!-- CONTEXT_SPECIFIC_HELP -->
 <li><a href="../FAQ/">FAQs & Search</a></li>

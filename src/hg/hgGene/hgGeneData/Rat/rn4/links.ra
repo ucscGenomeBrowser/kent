@@ -53,12 +53,12 @@ idSql select info from rgdGene2Xref where rgdGeneId='%s' and infoType='Name'
 url https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=PubMed&term=%s&doptcmdl=DocSum&tool=genome.ucsc.edu
 priority 10
 
-name gepis
-shortLabel Gepis Tissue
-tables rgdGene2Xref
-idSql select info from rgdGene2Xref where rgdGeneId='%s' and infoType='Name'
-url http://research-public.gene.com/cgi-bin/genentech/genehub-gepis/web_search.pl?intype=1&xrefid=%s&species=human
-priority 10
+#name gepis
+#shortLabel Gepis Tissue
+#tables rgdGene2Xref
+#idSql select info from rgdGene2Xref where rgdGeneId='%s' and infoType='Name'
+#url http://research-public.gene.com/cgi-bin/genentech/genehub-gepis/web_search.pl?intype=1&xrefid=%s&species=human
+#priority 10
 
 name geneNetwork
 shortLabel GeneNetwork

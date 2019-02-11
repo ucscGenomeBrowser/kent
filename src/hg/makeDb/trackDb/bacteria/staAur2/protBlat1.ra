@@ -1,0 +1,1719 @@
+track protBlat1
+compositeTrack on
+shortLabel Protein blat 93-88
+longLabel Protein blat alignments
+subGroup1 species Species s000=Sa_ch22 s001=Sa_22_LA_562 s002=Sa_ch21 s003=Sa_M92 s004=Sa_5_3949 s005=Sa_FORC_039 s006=Sa_CFSAN007896 s007=Sa_FORC_012 s008=Sa_JH4899 s009=Sa_CN1 s010=Sa_SR434 s011=Sa_CC5 s012=Sa_FDAARGOS_159 s013=Sa_12_LA_293 s014=Sa_FORC_040 s015=Sa_NRS153 s016=Sa_FORC_001 s017=Sa_15_LA_305 s018=Sa_FDAARGOS_504 s019=Sa_TMUS2126 s020=Sa_TMUS2134 s021=Sa_CFSAN064038 s022=Sa_13_LA_301 s023=Sa_14_5418 s024=Sa_SA564 s025=Sa_21_LA_436 s026=Sa_8_LA_272 s027=Sa_20_LA_415 s028=Sa_AR_0470 s029=Sa_ED133 s030=Sa_TCH60 s031=Sa_2_LA_86 s032=Sa_3_LA_115 s033=Sa_ECT_R_2 s034=Sa_19_LA_388 s035=Sa_6_LA_232 s036=Sa_MOK063 s037=Sa_CFSAN018749 s038=Sa_2148N s039=Sa_NCTC10344 s040=Sa_MOK042 s041=Sa_CFSAN007851 s042=Sa_E16SA093 s043=Sa_ST228_16035 s044=Sa_ST228_10388 s045=Sa_ST228_10497 s046=Sa_ST228_15532 s047=Sa_ST228_18341 s048=Sa_55_99_44 s049=Sa_ST228_18583 s050=Sa_ST228_18412 s051=Sa_080880048_3 s052=Sa_101110051_1 s053=Sa_FDA209P s054=Sa_ATCC_6538 s055=Sa_SA268 s056=Sa_CMRSA_6 s057=Sa_XQ s058=Sa_CFSAN007847 s059=Sa_78 s060=Sa_BA01611 s061=Sa_ST772_MRSA_V_DAR4145 s062=Sa_AR_0469 s063=Sa_FORC_061 s064=Sa_ST398_S0385 s065=Sa_QD_CD9 s066=Sa_S_aureus_171 s067=Sa_101110041_3 s068=Sa_O17 s069=Sa_AR_475 s070=Sa_NRS143 s071=Sa_SA40TW s072=Sa_GD705 s073=Sa_13420 s074=Sa_CFBR_105 s075=Sa_NCTC13137 s076=Sa_GN1 s077=Sa_AR464 s078=Sa_277 s079=Sa_85 s080=Sa_F17SA003 s081=Sa_27 s082=Sa_O46 s083=Sa_No10 s084=Sa_08_02300 s085=Sa_502A_RN6607 s086=Sa_IT1_S s087=Sa_IT4_R s088=Sa_CFSAN007894 s089=Sa_RIVM3897 s090=Sa_AR_0471 s091=Sa_FDAARGOS_10 s092=Sa_08_02119 s093=Sa_NX_T55 s094=Sa_NCTC8325_2018 s095=Sa_HG001_RN1 s096=Sa_NCTC8325_2006 s097=Sa_O326 s098=Sa_AR466 s099=Sa_ILRI_Eymole1_1 s100=Sa_NRS149 s101=Sa_BB155 s102=Sa_Tager_104 s103=Sa_GD1539 s104=Sa_16_LA_309 s105=Sa_SJTUF_J27 s106=Sa_HZW450 s107=Sa_JMUB1273 s108=Sa_121560027_1 s109=Sa_LA_MRSA_ST398_E154 s110=Sa_45 s111=Sa_135 s112=Sa_PTDrAP2 s113=Sa_FDAARGOS_6 s114=Sa_EDCC5464 s115=Sa_ISU926_ST398 s116=Sa_SA957 s117=Sa_468 s118=Sa_466 s119=Sa_143 s120=Sa_M013 s121=Sa_08S00974 s122=Sa_NCTC5663 s123=Sa_ST20130942 s124=Sa_ST20130943 s125=Sa_NRS107 s126=Sa_RKI4 s127=Sa_JS395 s128=Sa_422 s129=Sa_128 s130=Sa_24117_WT s131=Sa_24117_REV s132=Sa_24117_SCV s133=Sa_GN3 s134=Sa_AUS0325 s135=Sa_ATCC_25923 s136=Sa_Seattle_1945_G477 s137=Sa_Seattle_1945_G478 s138=Sa_10_5235 s139=Sa_RIVM1295 s140=Sa_4_LA_208 s141=Sa_NCTC3761 s142=Sa_08BA02176 s143=Sa_GD1677 s144=Sa_1549_WT s145=Sa_1549_SCV s146=Sa_1549_REV s147=Sa_FDAARGOS_15 s148=Sa_CFSAN007883 s149=Sa_NCTC8726 s150=Sa_AR_0222 s151=Sa_FORC_026 s152=Sa_CFSAN064037 s153=Sa_RF122 s154=Sa_GD5 s155=Sa_FORC59 s156=Sa_SA40 s157=Sa_LGA251 s158=Sa_293G s159=Sa_NRS137 s160=Sa_NCTC9752 s161=Sa_71193 s162=Sa_K18 s163=Sa_K5 s164=Sa_RIVM1607 s165=Sa_VC40 s166=Sa_NRS133 s167=Sa_NRS146 s168=Sa_ST20130938 s169=Sa_ST20130939 s170=Sa_NCTC7485 s171=Sa_CFSAN018750 s172=Sa_55_2053 s173=Sa_80wphwpl_v1 s174=Sa_6850 s175=Sa_MCRF184 s176=Sa_K17 s177=Sa_ST20130940 s178=Sa_ST20130941 s179=Sa_CFSAN007835 s180=Sa_MS4 s181=Bacillus_subtilis_168 s182=E_coli_K_12_MG1655 s183=E_coli_O157_H7_Sakai_RIMD_0509952 s184=E_coli_UMN026 s185=E_coli_O83_H1_NRG_857C s186=E_coli_IAI39 s187=E_coli_O104_H4_2011C_3493
+subGroup2 match Match c00=percent93 c01=percent92 c02=percent91 c03=percent90 c04=percent88 c05=others
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+color 0,0,0
+altColor 255,255,0
+type bigPsl
+dimensions dimensionX=match dimensionY=species
+sortOrder species=+ match=+
+configurable on
+baseColorDefault diffCodons
+baseColorUseCds given
+baseColorUseSequence lfExtra
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+html protBlat
+
+        track pslSa_ch22
+        subTrack protBlat1 off
+        subGroups species=s000 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_ch22.psl.bb
+        otherDb Sa_ch22
+
+        track pslSa_22_LA_562
+        subTrack protBlat1 off
+        subGroups species=s001 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_22_LA_562.psl.bb
+        otherDb Sa_22_LA_562
+
+        track pslSa_ch21
+        subTrack protBlat1 off
+        subGroups species=s002 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_ch21.psl.bb
+        otherDb Sa_ch21
+
+        track pslSa_M92
+        subTrack protBlat1 off
+        subGroups species=s003 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_M92.psl.bb
+        otherDb Sa_M92
+
+        track pslSa_5_3949
+        subTrack protBlat1 off
+        subGroups species=s004 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_5_3949.psl.bb
+        otherDb Sa_5_3949
+
+        track pslSa_FORC_039
+        subTrack protBlat1 off
+        subGroups species=s005 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_FORC_039.psl.bb
+        otherDb Sa_FORC_039
+
+        track pslSa_CFSAN007896
+        subTrack protBlat1 off
+        subGroups species=s006 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_CFSAN007896.psl.bb
+        otherDb Sa_CFSAN007896
+
+        track pslSa_FORC_012
+        subTrack protBlat1 off
+        subGroups species=s007 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_FORC_012.psl.bb
+        otherDb Sa_FORC_012
+
+        track pslSa_JH4899
+        subTrack protBlat1 off
+        subGroups species=s008 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_JH4899.psl.bb
+        otherDb Sa_JH4899
+
+        track pslSa_CN1
+        subTrack protBlat1 off
+        subGroups species=s009 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_CN1.psl.bb
+        otherDb Sa_CN1
+
+        track pslSa_SR434
+        subTrack protBlat1 off
+        subGroups species=s010 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_SR434.psl.bb
+        otherDb Sa_SR434
+
+        track pslSa_CC5
+        subTrack protBlat1 off
+        subGroups species=s011 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_CC5.psl.bb
+        otherDb Sa_CC5
+
+        track pslSa_FDAARGOS_159
+        subTrack protBlat1 off
+        subGroups species=s012 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_FDAARGOS_159.psl.bb
+        otherDb Sa_FDAARGOS_159
+
+        track pslSa_12_LA_293
+        subTrack protBlat1 off
+        subGroups species=s013 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_12_LA_293.psl.bb
+        otherDb Sa_12_LA_293
+
+        track pslSa_FORC_040
+        subTrack protBlat1 off
+        subGroups species=s014 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_FORC_040.psl.bb
+        otherDb Sa_FORC_040
+
+        track pslSa_NRS153
+        subTrack protBlat1 off
+        subGroups species=s015 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_NRS153.psl.bb
+        otherDb Sa_NRS153
+
+        track pslSa_FORC_001
+        subTrack protBlat1 off
+        subGroups species=s016 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_FORC_001.psl.bb
+        otherDb Sa_FORC_001
+
+        track pslSa_15_LA_305
+        subTrack protBlat1 off
+        subGroups species=s017 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_15_LA_305.psl.bb
+        otherDb Sa_15_LA_305
+
+        track pslSa_FDAARGOS_504
+        subTrack protBlat1 off
+        subGroups species=s018 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_FDAARGOS_504.psl.bb
+        otherDb Sa_FDAARGOS_504
+
+        track pslSa_TMUS2126
+        subTrack protBlat1 off
+        subGroups species=s019 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_TMUS2126.psl.bb
+        otherDb Sa_TMUS2126
+
+        track pslSa_TMUS2134
+        subTrack protBlat1 off
+        subGroups species=s020 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_TMUS2134.psl.bb
+        otherDb Sa_TMUS2134
+
+        track pslSa_CFSAN064038
+        subTrack protBlat1 off
+        subGroups species=s021 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_CFSAN064038.psl.bb
+        otherDb Sa_CFSAN064038
+
+        track pslSa_13_LA_301
+        subTrack protBlat1 off
+        subGroups species=s022 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_13_LA_301.psl.bb
+        otherDb Sa_13_LA_301
+
+        track pslSa_14_5418
+        subTrack protBlat1 off
+        subGroups species=s023 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_14_5418.psl.bb
+        otherDb Sa_14_5418
+
+        track pslSa_SA564
+        subTrack protBlat1 off
+        subGroups species=s024 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_SA564.psl.bb
+        otherDb Sa_SA564
+
+        track pslSa_21_LA_436
+        subTrack protBlat1 off
+        subGroups species=s025 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_21_LA_436.psl.bb
+        otherDb Sa_21_LA_436
+
+        track pslSa_8_LA_272
+        subTrack protBlat1 off
+        subGroups species=s026 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_8_LA_272.psl.bb
+        otherDb Sa_8_LA_272
+
+        track pslSa_20_LA_415
+        subTrack protBlat1 off
+        subGroups species=s027 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_20_LA_415.psl.bb
+        otherDb Sa_20_LA_415
+
+        track pslSa_AR_0470
+        subTrack protBlat1 off
+        subGroups species=s028 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_AR_0470.psl.bb
+        otherDb Sa_AR_0470
+
+        track pslSa_ED133
+        subTrack protBlat1 off
+        subGroups species=s029 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_ED133.psl.bb
+        otherDb Sa_ED133
+
+        track pslSa_TCH60
+        subTrack protBlat1 off
+        subGroups species=s030 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_TCH60.psl.bb
+        otherDb Sa_TCH60
+
+        track pslSa_2_LA_86
+        subTrack protBlat1 off
+        subGroups species=s031 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_2_LA_86.psl.bb
+        otherDb Sa_2_LA_86
+
+        track pslSa_3_LA_115
+        subTrack protBlat1 off
+        subGroups species=s032 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_3_LA_115.psl.bb
+        otherDb Sa_3_LA_115
+
+        track pslSa_ECT_R_2
+        subTrack protBlat1 off
+        subGroups species=s033 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_ECT_R_2.psl.bb
+        otherDb Sa_ECT_R_2
+
+        track pslSa_19_LA_388
+        subTrack protBlat1 off
+        subGroups species=s034 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_19_LA_388.psl.bb
+        otherDb Sa_19_LA_388
+
+        track pslSa_6_LA_232
+        subTrack protBlat1 off
+        subGroups species=s035 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_6_LA_232.psl.bb
+        otherDb Sa_6_LA_232
+
+        track pslSa_MOK063
+        subTrack protBlat1 off
+        subGroups species=s036 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_MOK063.psl.bb
+        otherDb Sa_MOK063
+
+        track pslSa_CFSAN018749
+        subTrack protBlat1 off
+        subGroups species=s037 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_CFSAN018749.psl.bb
+        otherDb Sa_CFSAN018749
+
+        track pslSa_2148N
+        subTrack protBlat1 off
+        subGroups species=s038 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_2148N.psl.bb
+        otherDb Sa_2148N
+
+        track pslSa_NCTC10344
+        subTrack protBlat1 off
+        subGroups species=s039 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_NCTC10344.psl.bb
+        otherDb Sa_NCTC10344
+
+        track pslSa_MOK042
+        subTrack protBlat1 off
+        subGroups species=s040 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_MOK042.psl.bb
+        otherDb Sa_MOK042
+
+        track pslSa_CFSAN007851
+        subTrack protBlat1 off
+        subGroups species=s041 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_CFSAN007851.psl.bb
+        otherDb Sa_CFSAN007851
+
+        track pslSa_E16SA093
+        subTrack protBlat1 off
+        subGroups species=s042 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_E16SA093.psl.bb
+        otherDb Sa_E16SA093
+
+        track pslSa_ST228_16035
+        subTrack protBlat1 off
+        subGroups species=s043 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_ST228_16035.psl.bb
+        otherDb Sa_ST228_16035
+
+        track pslSa_ST228_10388
+        subTrack protBlat1 off
+        subGroups species=s044 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_ST228_10388.psl.bb
+        otherDb Sa_ST228_10388
+
+        track pslSa_ST228_10497
+        subTrack protBlat1 off
+        subGroups species=s045 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_ST228_10497.psl.bb
+        otherDb Sa_ST228_10497
+
+        track pslSa_ST228_15532
+        subTrack protBlat1 off
+        subGroups species=s046 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_ST228_15532.psl.bb
+        otherDb Sa_ST228_15532
+
+        track pslSa_ST228_18341
+        subTrack protBlat1 off
+        subGroups species=s047 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_ST228_18341.psl.bb
+        otherDb Sa_ST228_18341
+
+        track pslSa_55_99_44
+        subTrack protBlat1 off
+        subGroups species=s048 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_55_99_44.psl.bb
+        otherDb Sa_55_99_44
+
+        track pslSa_ST228_18583
+        subTrack protBlat1 off
+        subGroups species=s049 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_ST228_18583.psl.bb
+        otherDb Sa_ST228_18583
+
+        track pslSa_ST228_18412
+        subTrack protBlat1 off
+        subGroups species=s050 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_ST228_18412.psl.bb
+        otherDb Sa_ST228_18412
+
+        track pslSa_080880048_3
+        subTrack protBlat1 off
+        subGroups species=s051 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_080880048_3.psl.bb
+        otherDb Sa_080880048_3
+
+        track pslSa_101110051_1
+        subTrack protBlat1 off
+        subGroups species=s052 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_101110051_1.psl.bb
+        otherDb Sa_101110051_1
+
+        track pslSa_FDA209P
+        subTrack protBlat1 off
+        subGroups species=s053 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_FDA209P.psl.bb
+        otherDb Sa_FDA209P
+
+        track pslSa_ATCC_6538
+        subTrack protBlat1 off
+        subGroups species=s054 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_ATCC_6538.psl.bb
+        otherDb Sa_ATCC_6538
+
+        track pslSa_SA268
+        subTrack protBlat1 off
+        subGroups species=s055 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_SA268.psl.bb
+        otherDb Sa_SA268
+
+        track pslSa_CMRSA_6
+        subTrack protBlat1 off
+        subGroups species=s056 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_CMRSA_6.psl.bb
+        otherDb Sa_CMRSA_6
+
+        track pslSa_XQ
+        subTrack protBlat1 off
+        subGroups species=s057 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_XQ.psl.bb
+        otherDb Sa_XQ
+
+        track pslSa_CFSAN007847
+        subTrack protBlat1 off
+        subGroups species=s058 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_CFSAN007847.psl.bb
+        otherDb Sa_CFSAN007847
+
+        track pslSa_78
+        subTrack protBlat1 off
+        subGroups species=s059 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_78.psl.bb
+        otherDb Sa_78
+
+        track pslSa_BA01611
+        subTrack protBlat1 off
+        subGroups species=s060 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_BA01611.psl.bb
+        otherDb Sa_BA01611
+
+        track pslSa_ST772_MRSA_V_DAR4145
+        subTrack protBlat1 off
+        subGroups species=s061 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_ST772_MRSA_V_DAR4145.psl.bb
+        otherDb Sa_ST772_MRSA_V_DAR4145
+
+        track pslSa_AR_0469
+        subTrack protBlat1 off
+        subGroups species=s062 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_AR_0469.psl.bb
+        otherDb Sa_AR_0469
+
+        track pslSa_FORC_061
+        subTrack protBlat1 off
+        subGroups species=s063 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_FORC_061.psl.bb
+        otherDb Sa_FORC_061
+
+        track pslSa_ST398_S0385
+        subTrack protBlat1 off
+        subGroups species=s064 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_ST398_S0385.psl.bb
+        otherDb Sa_ST398_S0385
+
+        track pslSa_QD_CD9
+        subTrack protBlat1 off
+        subGroups species=s065 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_QD_CD9.psl.bb
+        otherDb Sa_QD_CD9
+
+        track pslSa_S_aureus_171
+        subTrack protBlat1 off
+        subGroups species=s066 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_S_aureus_171.psl.bb
+        otherDb Sa_S_aureus_171
+
+        track pslSa_101110041_3
+        subTrack protBlat1 off
+        subGroups species=s067 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_101110041_3.psl.bb
+        otherDb Sa_101110041_3
+
+        track pslSa_O17
+        subTrack protBlat1 off
+        subGroups species=s068 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_O17.psl.bb
+        otherDb Sa_O17
+
+        track pslSa_AR_475
+        subTrack protBlat1 off
+        subGroups species=s069 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_AR_475.psl.bb
+        otherDb Sa_AR_475
+
+        track pslSa_NRS143
+        subTrack protBlat1 off
+        subGroups species=s070 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_NRS143.psl.bb
+        otherDb Sa_NRS143
+
+        track pslSa_SA40TW
+        subTrack protBlat1 off
+        subGroups species=s071 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_SA40TW.psl.bb
+        otherDb Sa_SA40TW
+
+        track pslSa_GD705
+        subTrack protBlat1 off
+        subGroups species=s072 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_GD705.psl.bb
+        otherDb Sa_GD705
+
+        track pslSa_13420
+        subTrack protBlat1 off
+        subGroups species=s073 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_13420.psl.bb
+        otherDb Sa_13420
+
+        track pslSa_CFBR_105
+        subTrack protBlat1 off
+        subGroups species=s074 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_CFBR_105.psl.bb
+        otherDb Sa_CFBR_105
+
+        track pslSa_NCTC13137
+        subTrack protBlat1 off
+        subGroups species=s075 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_NCTC13137.psl.bb
+        otherDb Sa_NCTC13137
+
+        track pslSa_GN1
+        subTrack protBlat1 off
+        subGroups species=s076 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_GN1.psl.bb
+        otherDb Sa_GN1
+
+        track pslSa_AR464
+        subTrack protBlat1 off
+        subGroups species=s077 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_AR464.psl.bb
+        otherDb Sa_AR464
+
+        track pslSa_277
+        subTrack protBlat1 off
+        subGroups species=s078 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_277.psl.bb
+        otherDb Sa_277
+
+        track pslSa_85
+        subTrack protBlat1 off
+        subGroups species=s079 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_85.psl.bb
+        otherDb Sa_85
+
+        track pslSa_F17SA003
+        subTrack protBlat1 off
+        subGroups species=s080 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_F17SA003.psl.bb
+        otherDb Sa_F17SA003
+
+        track pslSa_27
+        subTrack protBlat1 off
+        subGroups species=s081 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_27.psl.bb
+        otherDb Sa_27
+
+        track pslSa_O46
+        subTrack protBlat1 off
+        subGroups species=s082 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_O46.psl.bb
+        otherDb Sa_O46
+
+        track pslSa_No10
+        subTrack protBlat1 off
+        subGroups species=s083 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_No10.psl.bb
+        otherDb Sa_No10
+
+        track pslSa_08_02300
+        subTrack protBlat1 off
+        subGroups species=s084 match=c00
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent93
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_08_02300.psl.bb
+        otherDb Sa_08_02300
+
+        track pslSa_502A_RN6607
+        subTrack protBlat1 off
+        subGroups species=s085 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_502A_RN6607.psl.bb
+        otherDb Sa_502A_RN6607
+
+        track pslSa_IT1_S
+        subTrack protBlat1 off
+        subGroups species=s086 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_IT1_S.psl.bb
+        otherDb Sa_IT1_S
+
+        track pslSa_IT4_R
+        subTrack protBlat1 off
+        subGroups species=s087 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_IT4_R.psl.bb
+        otherDb Sa_IT4_R
+
+        track pslSa_CFSAN007894
+        subTrack protBlat1 off
+        subGroups species=s088 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_CFSAN007894.psl.bb
+        otherDb Sa_CFSAN007894
+
+        track pslSa_RIVM3897
+        subTrack protBlat1 off
+        subGroups species=s089 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_RIVM3897.psl.bb
+        otherDb Sa_RIVM3897
+
+        track pslSa_AR_0471
+        subTrack protBlat1 off
+        subGroups species=s090 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_AR_0471.psl.bb
+        otherDb Sa_AR_0471
+
+        track pslSa_FDAARGOS_10
+        subTrack protBlat1 off
+        subGroups species=s091 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_FDAARGOS_10.psl.bb
+        otherDb Sa_FDAARGOS_10
+
+        track pslSa_08_02119
+        subTrack protBlat1 off
+        subGroups species=s092 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_08_02119.psl.bb
+        otherDb Sa_08_02119
+
+        track pslSa_NX_T55
+        subTrack protBlat1 off
+        subGroups species=s093 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_NX_T55.psl.bb
+        otherDb Sa_NX_T55
+
+        track pslSa_NCTC8325_2018
+        subTrack protBlat1 off
+        subGroups species=s094 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_NCTC8325_2018.psl.bb
+        otherDb Sa_NCTC8325_2018
+
+        track pslSa_HG001_RN1
+        subTrack protBlat1 off
+        subGroups species=s095 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_HG001_RN1.psl.bb
+        otherDb Sa_HG001_RN1
+
+        track pslSa_NCTC8325_2006
+        subTrack protBlat1 off
+        subGroups species=s096 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_NCTC8325_2006.psl.bb
+        otherDb Sa_NCTC8325_2006
+
+        track pslSa_O326
+        subTrack protBlat1 off
+        subGroups species=s097 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_O326.psl.bb
+        otherDb Sa_O326
+
+        track pslSa_AR466
+        subTrack protBlat1 off
+        subGroups species=s098 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_AR466.psl.bb
+        otherDb Sa_AR466
+
+        track pslSa_ILRI_Eymole1_1
+        subTrack protBlat1 off
+        subGroups species=s099 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_ILRI_Eymole1_1.psl.bb
+        otherDb Sa_ILRI_Eymole1_1
+
+        track pslSa_NRS149
+        subTrack protBlat1 off
+        subGroups species=s100 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_NRS149.psl.bb
+        otherDb Sa_NRS149
+
+        track pslSa_BB155
+        subTrack protBlat1 off
+        subGroups species=s101 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_BB155.psl.bb
+        otherDb Sa_BB155
+
+        track pslSa_Tager_104
+        subTrack protBlat1 off
+        subGroups species=s102 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_Tager_104.psl.bb
+        otherDb Sa_Tager_104
+
+        track pslSa_GD1539
+        subTrack protBlat1 off
+        subGroups species=s103 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_GD1539.psl.bb
+        otherDb Sa_GD1539
+
+        track pslSa_16_LA_309
+        subTrack protBlat1 off
+        subGroups species=s104 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_16_LA_309.psl.bb
+        otherDb Sa_16_LA_309
+
+        track pslSa_SJTUF_J27
+        subTrack protBlat1 off
+        subGroups species=s105 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_SJTUF_J27.psl.bb
+        otherDb Sa_SJTUF_J27
+
+        track pslSa_HZW450
+        subTrack protBlat1 off
+        subGroups species=s106 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_HZW450.psl.bb
+        otherDb Sa_HZW450
+
+        track pslSa_JMUB1273
+        subTrack protBlat1 off
+        subGroups species=s107 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_JMUB1273.psl.bb
+        otherDb Sa_JMUB1273
+
+        track pslSa_121560027_1
+        subTrack protBlat1 off
+        subGroups species=s108 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_121560027_1.psl.bb
+        otherDb Sa_121560027_1
+
+        track pslSa_LA_MRSA_ST398_E154
+        subTrack protBlat1 off
+        subGroups species=s109 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_LA_MRSA_ST398_E154.psl.bb
+        otherDb Sa_LA_MRSA_ST398_E154
+
+        track pslSa_45
+        subTrack protBlat1 off
+        subGroups species=s110 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_45.psl.bb
+        otherDb Sa_45
+
+        track pslSa_135
+        subTrack protBlat1 off
+        subGroups species=s111 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_135.psl.bb
+        otherDb Sa_135
+
+        track pslSa_PTDrAP2
+        subTrack protBlat1 off
+        subGroups species=s112 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_PTDrAP2.psl.bb
+        otherDb Sa_PTDrAP2
+
+        track pslSa_FDAARGOS_6
+        subTrack protBlat1 off
+        subGroups species=s113 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_FDAARGOS_6.psl.bb
+        otherDb Sa_FDAARGOS_6
+
+        track pslSa_EDCC5464
+        subTrack protBlat1 off
+        subGroups species=s114 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_EDCC5464.psl.bb
+        otherDb Sa_EDCC5464
+
+        track pslSa_ISU926_ST398
+        subTrack protBlat1 off
+        subGroups species=s115 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_ISU926_ST398.psl.bb
+        otherDb Sa_ISU926_ST398
+
+        track pslSa_SA957
+        subTrack protBlat1 off
+        subGroups species=s116 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_SA957.psl.bb
+        otherDb Sa_SA957
+
+        track pslSa_468
+        subTrack protBlat1 off
+        subGroups species=s117 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_468.psl.bb
+        otherDb Sa_468
+
+        track pslSa_466
+        subTrack protBlat1 off
+        subGroups species=s118 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_466.psl.bb
+        otherDb Sa_466
+
+        track pslSa_143
+        subTrack protBlat1 off
+        subGroups species=s119 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_143.psl.bb
+        otherDb Sa_143
+
+        track pslSa_M013
+        subTrack protBlat1 off
+        subGroups species=s120 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_M013.psl.bb
+        otherDb Sa_M013
+
+        track pslSa_08S00974
+        subTrack protBlat1 off
+        subGroups species=s121 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_08S00974.psl.bb
+        otherDb Sa_08S00974
+
+        track pslSa_NCTC5663
+        subTrack protBlat1 off
+        subGroups species=s122 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_NCTC5663.psl.bb
+        otherDb Sa_NCTC5663
+
+        track pslSa_ST20130942
+        subTrack protBlat1 off
+        subGroups species=s123 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_ST20130942.psl.bb
+        otherDb Sa_ST20130942
+
+        track pslSa_ST20130943
+        subTrack protBlat1 off
+        subGroups species=s124 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_ST20130943.psl.bb
+        otherDb Sa_ST20130943
+
+        track pslSa_NRS107
+        subTrack protBlat1 off
+        subGroups species=s125 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_NRS107.psl.bb
+        otherDb Sa_NRS107
+
+        track pslSa_RKI4
+        subTrack protBlat1 off
+        subGroups species=s126 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_RKI4.psl.bb
+        otherDb Sa_RKI4
+
+        track pslSa_JS395
+        subTrack protBlat1 off
+        subGroups species=s127 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_JS395.psl.bb
+        otherDb Sa_JS395
+
+        track pslSa_422
+        subTrack protBlat1 off
+        subGroups species=s128 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_422.psl.bb
+        otherDb Sa_422
+
+        track pslSa_128
+        subTrack protBlat1 off
+        subGroups species=s129 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_128.psl.bb
+        otherDb Sa_128
+
+        track pslSa_24117_WT
+        subTrack protBlat1 off
+        subGroups species=s130 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_24117_WT.psl.bb
+        otherDb Sa_24117_WT
+
+        track pslSa_24117_REV
+        subTrack protBlat1 off
+        subGroups species=s131 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_24117_REV.psl.bb
+        otherDb Sa_24117_REV
+
+        track pslSa_24117_SCV
+        subTrack protBlat1 off
+        subGroups species=s132 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_24117_SCV.psl.bb
+        otherDb Sa_24117_SCV
+
+        track pslSa_GN3
+        subTrack protBlat1 off
+        subGroups species=s133 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_GN3.psl.bb
+        otherDb Sa_GN3
+
+        track pslSa_AUS0325
+        subTrack protBlat1 off
+        subGroups species=s134 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_AUS0325.psl.bb
+        otherDb Sa_AUS0325
+
+        track pslSa_ATCC_25923
+        subTrack protBlat1 off
+        subGroups species=s135 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_ATCC_25923.psl.bb
+        otherDb Sa_ATCC_25923
+
+        track pslSa_Seattle_1945_G477
+        subTrack protBlat1 off
+        subGroups species=s136 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_Seattle_1945_G477.psl.bb
+        otherDb Sa_Seattle_1945_G477
+
+        track pslSa_Seattle_1945_G478
+        subTrack protBlat1 off
+        subGroups species=s137 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_Seattle_1945_G478.psl.bb
+        otherDb Sa_Seattle_1945_G478
+
+        track pslSa_10_5235
+        subTrack protBlat1 off
+        subGroups species=s138 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_10_5235.psl.bb
+        otherDb Sa_10_5235
+
+        track pslSa_RIVM1295
+        subTrack protBlat1 off
+        subGroups species=s139 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_RIVM1295.psl.bb
+        otherDb Sa_RIVM1295
+
+        track pslSa_4_LA_208
+        subTrack protBlat1 off
+        subGroups species=s140 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_4_LA_208.psl.bb
+        otherDb Sa_4_LA_208
+
+        track pslSa_NCTC3761
+        subTrack protBlat1 off
+        subGroups species=s141 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_NCTC3761.psl.bb
+        otherDb Sa_NCTC3761
+
+        track pslSa_08BA02176
+        subTrack protBlat1 off
+        subGroups species=s142 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_08BA02176.psl.bb
+        otherDb Sa_08BA02176
+
+        track pslSa_GD1677
+        subTrack protBlat1 off
+        subGroups species=s143 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_GD1677.psl.bb
+        otherDb Sa_GD1677
+
+        track pslSa_1549_WT
+        subTrack protBlat1 off
+        subGroups species=s144 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_1549_WT.psl.bb
+        otherDb Sa_1549_WT
+
+        track pslSa_1549_SCV
+        subTrack protBlat1 off
+        subGroups species=s145 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_1549_SCV.psl.bb
+        otherDb Sa_1549_SCV
+
+        track pslSa_1549_REV
+        subTrack protBlat1 off
+        subGroups species=s146 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_1549_REV.psl.bb
+        otherDb Sa_1549_REV
+
+        track pslSa_FDAARGOS_15
+        subTrack protBlat1 off
+        subGroups species=s147 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_FDAARGOS_15.psl.bb
+        otherDb Sa_FDAARGOS_15
+
+        track pslSa_CFSAN007883
+        subTrack protBlat1 off
+        subGroups species=s148 match=c01
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent92
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_CFSAN007883.psl.bb
+        otherDb Sa_CFSAN007883
+
+        track pslSa_NCTC8726
+        subTrack protBlat1 off
+        subGroups species=s149 match=c02
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent91
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_NCTC8726.psl.bb
+        otherDb Sa_NCTC8726
+
+        track pslSa_AR_0222
+        subTrack protBlat1 off
+        subGroups species=s150 match=c02
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent91
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_AR_0222.psl.bb
+        otherDb Sa_AR_0222
+
+        track pslSa_FORC_026
+        subTrack protBlat1 off
+        subGroups species=s151 match=c02
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent91
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_FORC_026.psl.bb
+        otherDb Sa_FORC_026
+
+        track pslSa_CFSAN064037
+        subTrack protBlat1 off
+        subGroups species=s152 match=c02
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent91
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_CFSAN064037.psl.bb
+        otherDb Sa_CFSAN064037
+
+        track pslSa_RF122
+        subTrack protBlat1 off
+        subGroups species=s153 match=c02
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent91
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_RF122.psl.bb
+        otherDb Sa_RF122
+
+        track pslSa_GD5
+        subTrack protBlat1 off
+        subGroups species=s154 match=c02
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent91
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_GD5.psl.bb
+        otherDb Sa_GD5
+
+        track pslSa_FORC59
+        subTrack protBlat1 off
+        subGroups species=s155 match=c02
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent91
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_FORC59.psl.bb
+        otherDb Sa_FORC59
+
+        track pslSa_SA40
+        subTrack protBlat1 off
+        subGroups species=s156 match=c02
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent91
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_SA40.psl.bb
+        otherDb Sa_SA40
+
+        track pslSa_LGA251
+        subTrack protBlat1 off
+        subGroups species=s157 match=c02
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent91
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_LGA251.psl.bb
+        otherDb Sa_LGA251
+
+        track pslSa_293G
+        subTrack protBlat1 off
+        subGroups species=s158 match=c02
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent91
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_293G.psl.bb
+        otherDb Sa_293G
+
+        track pslSa_NRS137
+        subTrack protBlat1 off
+        subGroups species=s159 match=c02
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent91
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_NRS137.psl.bb
+        otherDb Sa_NRS137
+
+        track pslSa_NCTC9752
+        subTrack protBlat1 off
+        subGroups species=s160 match=c02
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent91
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_NCTC9752.psl.bb
+        otherDb Sa_NCTC9752
+
+        track pslSa_71193
+        subTrack protBlat1 off
+        subGroups species=s161 match=c02
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent91
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_71193.psl.bb
+        otherDb Sa_71193
+
+        track pslSa_K18
+        subTrack protBlat1 off
+        subGroups species=s162 match=c02
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent91
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_K18.psl.bb
+        otherDb Sa_K18
+
+        track pslSa_K5
+        subTrack protBlat1 off
+        subGroups species=s163 match=c02
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent91
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_K5.psl.bb
+        otherDb Sa_K5
+
+        track pslSa_RIVM1607
+        subTrack protBlat1 off
+        subGroups species=s164 match=c02
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent91
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_RIVM1607.psl.bb
+        otherDb Sa_RIVM1607
+
+        track pslSa_VC40
+        subTrack protBlat1 off
+        subGroups species=s165 match=c02
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent91
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_VC40.psl.bb
+        otherDb Sa_VC40
+
+        track pslSa_NRS133
+        subTrack protBlat1 off
+        subGroups species=s166 match=c02
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent91
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_NRS133.psl.bb
+        otherDb Sa_NRS133
+
+        track pslSa_NRS146
+        subTrack protBlat1 off
+        subGroups species=s167 match=c02
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent91
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_NRS146.psl.bb
+        otherDb Sa_NRS146
+
+        track pslSa_ST20130938
+        subTrack protBlat1 off
+        subGroups species=s168 match=c02
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent91
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_ST20130938.psl.bb
+        otherDb Sa_ST20130938
+
+        track pslSa_ST20130939
+        subTrack protBlat1 off
+        subGroups species=s169 match=c02
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent91
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_ST20130939.psl.bb
+        otherDb Sa_ST20130939
+
+        track pslSa_NCTC7485
+        subTrack protBlat1 off
+        subGroups species=s170 match=c02
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent91
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_NCTC7485.psl.bb
+        otherDb Sa_NCTC7485
+
+        track pslSa_CFSAN018750
+        subTrack protBlat1 off
+        subGroups species=s171 match=c02
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent91
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_CFSAN018750.psl.bb
+        otherDb Sa_CFSAN018750
+
+        track pslSa_55_2053
+        subTrack protBlat1 off
+        subGroups species=s172 match=c02
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent91
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_55_2053.psl.bb
+        otherDb Sa_55_2053
+
+        track pslSa_80wphwpl_v1
+        subTrack protBlat1 off
+        subGroups species=s173 match=c02
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent91
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_80wphwpl_v1.psl.bb
+        otherDb Sa_80wphwpl_v1
+
+        track pslSa_6850
+        subTrack protBlat1 off
+        subGroups species=s174 match=c02
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent91
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_6850.psl.bb
+        otherDb Sa_6850
+
+        track pslSa_MCRF184
+        subTrack protBlat1 off
+        subGroups species=s175 match=c03
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent90
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_MCRF184.psl.bb
+        otherDb Sa_MCRF184
+
+        track pslSa_K17
+        subTrack protBlat1 off
+        subGroups species=s176 match=c03
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent90
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_K17.psl.bb
+        otherDb Sa_K17
+
+        track pslSa_ST20130940
+        subTrack protBlat1 off
+        subGroups species=s177 match=c03
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent90
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_ST20130940.psl.bb
+        otherDb Sa_ST20130940
+
+        track pslSa_ST20130941
+        subTrack protBlat1 off
+        subGroups species=s178 match=c03
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent90
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_ST20130941.psl.bb
+        otherDb Sa_ST20130941
+
+        track pslSa_CFSAN007835
+        subTrack protBlat1 off
+        subGroups species=s179 match=c03
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent90
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_CFSAN007835.psl.bb
+        otherDb Sa_CFSAN007835
+
+        track pslSa_MS4
+        subTrack protBlat1 off
+        subGroups species=s180 match=c04
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results Percent88
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Sa_MS4.psl.bb
+        otherDb Sa_MS4
+
+        track pslBacillus_subtilis_168
+        subTrack protBlat1 off
+        subGroups species=s181 match=c05
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results outgroup
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/Bacillus_subtilis_168.psl.bb
+        otherDb Bacillus_subtilis_168
+
+        track pslE_coli_K_12_MG1655
+        subTrack protBlat1 off
+        subGroups species=s182 match=c05
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results outgroup
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/E_coli_K_12_MG1655.psl.bb
+        otherDb E_coli_K_12_MG1655
+
+        track pslE_coli_O157_H7_Sakai_RIMD_0509952
+        subTrack protBlat1 off
+        subGroups species=s183 match=c05
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results outgroup
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/E_coli_O157_H7_Sakai_RIMD_0509952.psl.bb
+        otherDb E_coli_O157_H7_Sakai_RIMD_0509952
+
+        track pslE_coli_UMN026
+        subTrack protBlat1 off
+        subGroups species=s184 match=c05
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results outgroup
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/E_coli_UMN026.psl.bb
+        otherDb E_coli_UMN026
+
+        track pslE_coli_O83_H1_NRG_857C
+        subTrack protBlat1 off
+        subGroups species=s185 match=c05
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results outgroup
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/E_coli_O83_H1_NRG_857C.psl.bb
+        otherDb E_coli_O83_H1_NRG_857C
+
+        track pslE_coli_IAI39
+        subTrack protBlat1 off
+        subGroups species=s186 match=c05
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results outgroup
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/E_coli_IAI39.psl.bb
+        otherDb E_coli_IAI39
+
+        track pslE_coli_O104_H4_2011C_3493
+        subTrack protBlat1 off
+        subGroups species=s187 match=c05
+        shortLabel $o_db Protein blat
+        longLabel $o_db Protein blat results outgroup
+        type bigPsl
+        bigDataUrl /gbdb/staAur2/multiz369way/bigPsl/E_coli_O104_H4_2011C_3493.psl.bb
+        otherDb E_coli_O104_H4_2011C_3493
+

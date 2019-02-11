@@ -185,6 +185,7 @@ SCRIPT_FILES = \
 	cgiSmokeTest \
 	phegenToBed \
 	doLocusName \
+	cancerMafToBigBed \
 	${USER_APP_SCRIPTS}
 
 # List of all directories to build

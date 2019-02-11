@@ -55,7 +55,18 @@ shortLabel Ensembl
 longLabel Ensembl Genome Browser
 url http://www.ensembl.org/$n/contigview
 email helpdesk@ensembl.org
-notDbs hg19
+notDbs hg19,mm9
+isHttpGet true
+param chr $s
+param start $start1
+param end $]
+
+tool ensemblMm9
+shortLabel Ensembl
+longLabel Ensembl Genome Browser
+url http://may2012.archive.ensembl.org/$n/contigview
+email helpdesk@ensembl.org
+onlyDbs mm9
 isHttpGet true
 param chr $s
 param start $start1

@@ -3340,21 +3340,29 @@ else
 
 
 boolean hFindSplitTable(char *db, char *chrom, char *rootName,
-	char retTableBuf[HDB_MAX_TABLE_STRING], boolean *hasBin)
+	char *retTableBuf, int tableBufSize, boolean *hasBin)
 /* Find name of table in a given database that may or may not
- * be split across chromosomes. Return FALSE if table doesn't exist.  */
+ * be split across chromosomes. Return FALSE if table doesn't exist. 
+ *
+ * Do not ignore the return value. 
+ * This function does NOT tell you whether or not the table is split. 
+ * It tells you if the table exists. */
 {
 struct hTableInfo *hti = hFindTableInfo(db, chrom, rootName);
 if (hti == NULL)
+    {
+    // better than uninitialized stack value if caller ignores return value.
+    retTableBuf[0] = 0;
     return FALSE;
+    }
 if (retTableBuf != NULL)
     {
     if (chrom == NULL)
 	chrom = hDefaultChrom(db);
     if (hti->isSplit)
-	safef(retTableBuf, HDB_MAX_TABLE_STRING, "%s_%s", chrom, rootName);
+	safef(retTableBuf, tableBufSize, "%s_%s", chrom, rootName);
     else
-	safef(retTableBuf, HDB_MAX_TABLE_STRING, "%s", rootName);
+	safef(retTableBuf, tableBufSize, "%s", rootName);
     }
 if (hasBin != NULL)
     *hasBin = hti->hasBin;
@@ -5240,6 +5248,14 @@ struct slName *sln2 = *(struct slName **)el2;
 return chrNameCmp(sln1->name, sln2->name);
 }
 
+static boolean isAltFixRandom(char *str)
+/* Return TRUE if str ends with _alt, _fix or _random or contains "_hap". */
+{
+return (endsWith(str, "_alt") || endsWith(str, "_fix") || endsWith(str, "_random") ||
+        stringIn("_hap", str));
+
+}
+
 int chrNameCmpWithAltRandom(char *str1, char *str2)
 /* Compare chromosome or linkage group names str1 and str2 
  * to achieve this order:
@@ -5247,7 +5263,7 @@ int chrNameCmpWithAltRandom(char *str1, char *str2)
  * chrX
  * chrY
  * chrM
- * chr1_{alt, random} .. chr22_{alt, random}
+ * chr1_{alt,fix,hap*,random} .. chr22_{alt,fix,hap*,random}
  * chrUns
  */
 {
@@ -5262,9 +5278,9 @@ if (!startsWith("chrUn", str1) && startsWith("chrUn", str2))
     return  -1;
 
 /* if it is _alt or _random then it goes at the end */
-if ( (endsWith(str1, "_alt")||endsWith(str1, "_random")) && !(endsWith(str2, "_alt") || endsWith(str2, "_random")))
+if (isAltFixRandom(str1) && !isAltFixRandom(str2))
     return 1;
-if (!(endsWith(str1, "_alt")||endsWith(str1, "_random")) &&  (endsWith(str2, "_alt") || endsWith(str2, "_random")))
+if (!isAltFixRandom(str1) && isAltFixRandom(str2))
     return -1;
 
 /* get past "chr" or "Group" prefix: */
@@ -5332,8 +5348,8 @@ int chrSlNameCmpWithAltRandom(const void *el1, const void *el2)
  * chrX
  * chrY
  * chrM
- * chr1_{alt, random} .. chr22_{alt, random}
- * chrUns
+ * chr1_{alt,fix,hap*,random} .. chr22_{alt,fix,hap*,random}
+ * chrUn*
  */
 {
 struct slName *sln1 = *(struct slName **)el1;
@@ -5505,6 +5521,17 @@ boolean hIsBigBed(char *database, char *table, struct trackDb *parent, struct cu
 {
 return trackIsType(database, table, parent, "bigBed", ctLookupName) ||
     trackIsType(database, table, parent, "bigMaf", ctLookupName);
+}
+
+boolean hIsBigWig(char *database, char *table, struct trackDb *parent, struct customTrack *(*ctLookupName)(char *table))
+/* Return TRUE if table corresponds to a bigWig file.
+ * if table has no parent trackDb pass NULL for parent
+ * If this is a custom track, pass in function ctLookupName(table) which looks up a
+ * custom track by name, otherwise pass NULL
+ */
+{
+return trackIsType(database, table, parent, "bigWig", ctLookupName) ||
+    trackIsType(database, table, parent, "mathWig", ctLookupName);
 }
 
 static char *bbiNameFromTableChrom(struct sqlConnection *conn, char *table, char *seqName)
