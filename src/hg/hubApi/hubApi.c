@@ -76,32 +76,18 @@ static long timeOutSeconds = 100;
 static boolean timedOut = FALSE;
 
 /* ######################################################################### */
-
-static void jsonStringPrint(FILE *f, char *value)
-/* escape string for output */
-{
-char *a = jsonStringEscape(value);
-if (isEmpty(a))
-    fprintf(f, "%s", "null");
-else
-    fprintf(f, "\"%s\"", a);
-freeMem(a);
-}
-
-static void jsonTagValue(FILE *f, char *tag, char *value)
-/* output one json string: "tag":"value" appropriately quoted and encoded */
-{
-fprintf(f,"\"%s\":",tag);
-jsonStringPrint(f, value);
-}
-
 static struct jsonWrite *jsonStartOutput()
 /* begin json output */
 {
+time_t timeNow = time(NULL);
+// struct tm tm;
+// gmtime_r(&timeNow, &tm);
 struct jsonWrite *jw = jsonWriteNew();
 jsonWriteObjectStart(jw, NULL);
 jsonWriteString(jw, "apiVersion", "0.1");
 jsonWriteString(jw, "source", "UCSantaCruz");
+jsonWriteDateFromUnix(jw, "downloadTime", (long long) timeNow);
+jsonWriteNumber(jw, "downloadTimeStamp", (long long) timeNow);
 return jw;
 }
 
@@ -112,9 +98,11 @@ char errMsg[2048];
 va_list args;
 va_start(args, format);
 vsnprintf(errMsg, sizeof(errMsg), format, args);
-fputc('{',stdout);
-jsonTagValue(stdout, "error", errMsg);
-fputc('}',stdout);
+struct jsonWrite *jw = jsonStartOutput();
+jsonWriteString(jw, "error", errMsg);
+jsonWriteObjectEnd(jw);
+fputs(jw->dy->string,stdout);
+exit(0);
 }
 
 static void hubPublicJsonData(struct jsonWrite *jw, struct hubPublic *el)
@@ -546,7 +534,7 @@ char **row;
 row = sqlNextRow(sr);
 if (NULL == row)
     {
-    jsonErrAbort("ERROR: can not 'desc' table '%s'\n", table);
+    jsonErrAbort("ERROR: can not 'desc' table '%s'", table);
     return TRUE;
     }
 while ((row = sqlNextRow(sr)) != NULL)
@@ -564,11 +552,13 @@ struct sqlConnection *conn = hConnectCentral();
 char *dataTime = sqlTableUpdate(conn, hubPublicTableName());
 hDisconnectCentral(&conn);
 time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
+replaceChar(dataTime, ' ', 'T');
 struct hubPublic *el = publicHubList;
 struct jsonWrite *jw = jsonStartOutput();
 jsonWriteString(jw, "dataTime", dataTime);
 jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
 freeMem(dataTime);
+jsonWriteString(jw, "tableName", hubPublicTableName());
 tableColumns(jw, hubPublicTableName());
 jsonWriteListStart(jw, "publicHubData");
 for ( ; el != NULL; el = el->next )
@@ -615,12 +605,14 @@ struct sqlConnection *conn = hConnectCentral();
 char *dataTime = sqlTableUpdate(conn, "dbDb");
 hDisconnectCentral(&conn);
 time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
+replaceChar(dataTime, ' ', 'T');
 struct dbDb *dbList = ucscDbDb();
 struct dbDb *el;
 struct jsonWrite *jw = jsonStartOutput();
 jsonWriteString(jw, "dataTime", dataTime);
 jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
 freeMem(dataTime);
+jsonWriteString(jw, "tableName", "dbDb");
 tableColumns(jw, "dbDb");
 jsonWriteListStart(jw, "ucscGenomes");
 for ( el=dbList; el != NULL; el = el->next )
@@ -648,6 +640,7 @@ if (table)
 	{
 	char *dataTime = sqlTableUpdate(conn, table);
 	time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
+	replaceChar(dataTime, ' ', 'T');
         struct jsonWrite *jw = jsonStartOutput();
 	jsonWriteString(jw, "genome", db);
 	jsonWriteString(jw, "track", table);
@@ -685,6 +678,7 @@ else
     {
     char *dataTime = sqlTableUpdate(conn, "chromInfo");
     time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
+    replaceChar(dataTime, ' ', 'T');
     struct chromInfo *ciList = createChromInfoList(NULL, db);
     struct chromInfo *el = ciList;
     struct jsonWrite *jw = jsonStartOutput();
@@ -711,6 +705,7 @@ static void trackDbJsonOutput(char *db, FILE *f)
 struct sqlConnection *conn = hAllocConn(db);
 char *dataTime = sqlTableUpdate(conn, "trackDb");
 time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
+replaceChar(dataTime, ' ', 'T');
 hFreeConn(&conn);
 struct trackDb *tdbList = hTrackDb(db);
 struct trackDb *el;
@@ -739,10 +734,9 @@ else if (sameWord("hubGenomes", words[1]))
     {
     char *hubUrl = cgiOptionalString("hubUrl");
     if (isEmpty(hubUrl))
-	jsonErrAbort("ERROR: must supply hubUrl='http:...' some URL to a hub for /list/genomes\n");
+	jsonErrAbort("ERROR: must supply hubUrl='http:...' some URL to a hub for /list/genomes");
 
     struct trackHub *hub = trackHubOpen(hubUrl, "");
-registrationTime
     if (hub->genomeList)
 	{
         struct jsonWrite *jw = jsonStartOutput();
@@ -777,7 +771,7 @@ else if (sameWord("tracks", words[1]))
         if (isEmpty(genome))
 	    warn("# must supply genome='someName' the name of a genome in a hub for /list/tracks\n");
 	if (isEmpty(hubUrl))
-            jsonErrAbort("ERROR: must supply hubUrl='http:...' some URL to a hub for /list/genomes\n");
+            jsonErrAbort("ERROR: must supply hubUrl='http:...' some URL to a hub for /list/genomes");
 	}
     struct trackHub *hub = trackHubOpen(hubUrl, "");
     if (hub->genomeList)
@@ -813,7 +807,7 @@ else if (sameWord("chromosomes", words[1]))
 	}
     }
 else
-    jsonErrAbort("ERROR: do not recognize endpoint '/list/%s' function\n", words[1]);
+    jsonErrAbort("do not recognize endpoint: '/list/%s' request", words[1]);
 }
 
 static struct hash *apiFunctionHash = NULL;
@@ -841,10 +835,13 @@ hPrintDisable();	/* turn off all normal HTML output, doing JSON output */
 char *words[MAX_PATH_INFO];/*expect no more than MAX_PATH_INFO number of words*/
 int wordCount = chopByChar(pathInfo, '/', words, ArraySize(words));
 if (wordCount < 2)
-    jsonErrAbort("ERROR: no endpoint commands found ?\n");
+    jsonErrAbort("unknown endpoint command: '/%s'", pathInfo);
 
-/* TBD: need to protect this hash find from 'not found' error */
-void (*apiFunction)(char **) = hashMustFindVal(apiFunctionHash, words[0]);
+struct hashEl *hel = hashLookup(apiFunctionHash, words[0]);
+if (hel == NULL)
+    jsonErrAbort("no such command: '%s' for endpoint '/%s'", words[0], pathInfo);
+void (*apiFunction)(char **) = hel->val;
+// void (*apiFunction)(char **) = hashMustFindVal(apiFunctionHash, words[0]);
 
 (*apiFunction)(words);
 
@@ -940,13 +937,13 @@ struct trackHubGenome *hubGenome = hub->genomeList;
 
 hPrintf("<h2>Example URLs to return json data structures:</h2>\n");
 hPrintf("<ul>\n");
-hPrintf("<li><a href='/cgi-bin/hubApi/list/publicHubs'>list public hubs</a> <em>/cgi-bin/hubApi/list/publicHubs</em></li>\n");
-hPrintf("<li><a href='/cgi-bin/hubApi/list/ucscGenomes'>list database genomes</a> <em>/cgi-bin/hubApi/list/ucscGenomes</em></li>\n");
-hPrintf("<li><a href='/cgi-bin/hubApi/list/hubGenomes?hubUrl=%s'>list genomes from specified hub</a> <em>/cgi-bin/hubApi/list/hubGenomes?hubUrl='%s'</em></li>\n", urlInput, urlInput);
-hPrintf("<li><a href='/cgi-bin/hubApi/list/tracks?hubUrl=%s&genome=%s'>list tracks from specified hub and genome</a> <em>/cgi-bin/hubApi/list/tracks?hubUrl='%s&genome=%s'</em></li>\n", urlInput, hubGenome->name, urlInput, hubGenome->name);
-hPrintf("<li><a href='/cgi-bin/hubApi/list/tracks?db=%s'>list tracks from specified UCSC database</a> <em>/cgi-bin/hubApi/list/tracks?db='%s'</em></li>\n", ucscDb, ucscDb);
-hPrintf("<li><a href='/cgi-bin/hubApi/list/chromosomes?db=%s'>list chromosomes from specified UCSC database</a> <em>/cgi-bin/hubApi/list/chromosomes?db='%s'</em></li>\n", ucscDb, ucscDb);
-hPrintf("<li><a href='/cgi-bin/hubApi/list/chromosomes?db=%s&track=gap'>list chromosomes from specified track from UCSC databaset</a> <em>/cgi-bin/hubApi/list/chromosomes?db='%s'&track=gap</em></li>\n", ucscDb, ucscDb);
+hPrintf("<li><a href='https://jsonlint.com/?json=https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi/list/publicHubs' target=_blank>list public hubs</a> <em>/cgi-bin/hubApi/list/publicHubs</em></li>\n");
+hPrintf("<li><a href='https://jsonlint.com/?json=https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi/list/ucscGenomes' target=_blank>list database genomes</a> <em>/cgi-bin/hubApi/list/ucscGenomes</em></li>\n");
+hPrintf("<li><a href='/cgi-bin/hubApi/list/hubGenomes?hubUrl=%s' target=_blank>list genomes from specified hub</a> <em>/cgi-bin/hubApi/list/hubGenomes?hubUrl='%s'</em></li>\n", urlInput, urlInput);
+hPrintf("<li><a href='/cgi-bin/hubApi/list/tracks?hubUrl=%s&genome=%s' target=_blank>list tracks from specified hub and genome</a> <em>/cgi-bin/hubApi/list/tracks?hubUrl='%s&genome=%s'</em></li>\n", urlInput, hubGenome->name, urlInput, hubGenome->name);
+hPrintf("<li><a href='/cgi-bin/hubApi/list/tracks?db=%s' target=_blank>list tracks from specified UCSC database</a> <em>/cgi-bin/hubApi/list/tracks?db='%s'</em></li>\n", ucscDb, ucscDb);
+hPrintf("<li><a href='/cgi-bin/hubApi/list/chromosomes?db=%s' target=_blank>list chromosomes from specified UCSC database</a> <em>/cgi-bin/hubApi/list/chromosomes?db='%s'</em></li>\n", ucscDb, ucscDb);
+hPrintf("<li><a href='/cgi-bin/hubApi/list/chromosomes?db=%s&track=gap' target=_blank>list chromosomes from specified track from UCSC databaset</a> <em>/cgi-bin/hubApi/list/chromosomes?db='%s'&track=gap</em></li>\n", ucscDb, ucscDb);
 hPrintf("</ul>\n");
 
 hPrintf("<h4>cart dump</h4>");
