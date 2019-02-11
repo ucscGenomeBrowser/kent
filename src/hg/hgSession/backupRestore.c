@@ -468,6 +468,11 @@ while (isNotEmpty(namePt))
 		extra->trackLine = cloneString(origTrackLine);
 
 		// is it weird that the loader customFactoryTestExistence() did not do this for me?
+                char *wibFilePath = hashFindVal(track->tdb->settingsHash, "wibFile");
+                if (wibFilePath && fileExists(wibFilePath))
+                    {
+                    track->wibFile = wibFilePath;
+                    }
 		char *mafFilePath = hashFindVal(track->tdb->settingsHash, "mafFile");
 		if (mafFilePath && fileExists(mafFilePath))
 		    {
