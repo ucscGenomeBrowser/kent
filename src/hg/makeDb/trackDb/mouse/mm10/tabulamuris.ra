@@ -76,7 +76,7 @@ parent singleCell
     visibility dense
 
         track classicalMonocyteCov
-        shortLabel monocyte Cv
+        shortLabel class monocyte Cv
         metadata cell_ontology=classical_monocyte
         longLabel classical monocyte Coverage (90 cells)
         type bigWig
@@ -428,7 +428,7 @@ parent singleCell
         visibility dense
 
         track basalCellOfEpidermisCov
-        shortLabel basal cell Cv
+        shortLabel epiderm basal Cv
         metadata cell_ontology=basal_cell_of_epidermis
         longLabel basal cell of epidermis Coverage (1648 cells)
         type bigWig
@@ -979,7 +979,7 @@ parent singleCell
         visibility dense
 
         track classicalMonocyteJunc
-        shortLabel monocyte Sp
+        shortLabel class monocyte Sp
         metadata cell_ontology=classical_monocyte
         longLabel classical monocyte Splice Junctions (90 cells)
         type bigBed 12 +
@@ -1363,7 +1363,7 @@ parent singleCell
         visibility dense
 
         track basalCellOfEpidermisJunc
-        shortLabel basal cell Sp
+        shortLabel epiderm basal Sp
         metadata cell_ontology=basal_cell_of_epidermis
         longLabel basal cell of epidermis Splice Junctions (1648 cells)
         type bigBed 12 +
