@@ -888,12 +888,16 @@ char *pathInfo = getenv("PATH_INFO");
 
 if (isNotEmpty(pathInfo))
     {
+    puts("Content-Type:application/json");
+    puts("\n");
     /* skip the first leading slash to simplify chopByChar parsing */
     pathInfo += 1;
     setupFunctionHash();
     apiFunctionSwitch(pathInfo);
     return;
     }
+puts("Content-Type:text/html");
+puts("\n");
 
 struct dbDb *dbList = ucscDbDb();
 char **ucscDbList = NULL;
@@ -937,8 +941,8 @@ struct trackHubGenome *hubGenome = hub->genomeList;
 
 hPrintf("<h2>Example URLs to return json data structures:</h2>\n");
 hPrintf("<ul>\n");
-hPrintf("<li><a href='https://jsonlint.com/?json=https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi/list/publicHubs' target=_blank>list public hubs</a> <em>/cgi-bin/hubApi/list/publicHubs</em></li>\n");
-hPrintf("<li><a href='https://jsonlint.com/?json=https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi/list/ucscGenomes' target=_blank>list database genomes</a> <em>/cgi-bin/hubApi/list/ucscGenomes</em></li>\n");
+hPrintf("<li><a href='/cgi-bin/hubApi/list/publicHubs' target=_blank>list public hubs</a> <em>/cgi-bin/hubApi/list/publicHubs</em></li>\n");
+hPrintf("<li><a href='/cgi-bin/hubApi/list/ucscGenomes' target=_blank>list database genomes</a> <em>/cgi-bin/hubApi/list/ucscGenomes</em></li>\n");
 hPrintf("<li><a href='/cgi-bin/hubApi/list/hubGenomes?hubUrl=%s' target=_blank>list genomes from specified hub</a> <em>/cgi-bin/hubApi/list/hubGenomes?hubUrl='%s'</em></li>\n", urlInput, urlInput);
 hPrintf("<li><a href='/cgi-bin/hubApi/list/tracks?hubUrl=%s&genome=%s' target=_blank>list tracks from specified hub and genome</a> <em>/cgi-bin/hubApi/list/tracks?hubUrl='%s&genome=%s'</em></li>\n", urlInput, hubGenome->name, urlInput, hubGenome->name);
 hPrintf("<li><a href='/cgi-bin/hubApi/list/tracks?db=%s' target=_blank>list tracks from specified UCSC database</a> <em>/cgi-bin/hubApi/list/tracks?db='%s'</em></li>\n", ucscDb, ucscDb);
@@ -1030,6 +1034,6 @@ cgiSpoof(&argc, argv);
 measureTiming = TRUE;
 verboseTimeInit();
 trackCounter = hashNew(0);
-cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
+cartEmptyShellNoContent(doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;
 }
