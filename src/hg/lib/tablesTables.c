@@ -535,7 +535,7 @@ else
     printf("<div class='col-12'>\n");
     
 printf("  <div>\n");
-printf("    <table class=\"table table-striped table-bordered table-sm\">\n");
+printf("    <table class=\"table table-striped table-bordered table-sm text-nowrap\">\n");
 
 /* Draw optional filters cells ahead of column labels*/
 printf("<thead>\n");
