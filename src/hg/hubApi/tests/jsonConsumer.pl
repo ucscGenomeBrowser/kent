@@ -120,6 +120,10 @@ sub topLevelKeys($) {
   my ($topHash) = @_;
   printf "### keys in top level hash:\n";
   foreach my $topKey ( sort keys %$topHash) {
+    # do not print out the downloadTime and downloadTimeStamps since that
+    # would make it difficult to have a consistent test output.
+    next if ($topKey eq "downloadTime");
+    next if ($topKey eq "downloadTimeStamp");
     my $value = $topHash->{$topKey};
     $value = "<array>" if (ref($value) eq "ARRAY");
     $value = "<hash>" if (ref($value) eq "HASH");
@@ -128,12 +132,44 @@ sub topLevelKeys($) {
 }
 
 #############################################################################
+sub checkError($$$) {
+  my ($json, $endpoint, $expect) = @_;
+  my $jsonReturn = performJsonAction($endpoint, "");
+  # printf "%s", $json->pretty->encode( $jsonReturn );
+  if (! defined($jsonReturn->{'error'}) ) {
+     printf "ERROR: no error received from endpoint: '%s', received:\n", $endpoint;
+     printf "%s", $json->pretty->encode( $jsonReturn );
+  } else {
+     if ($jsonReturn->{'error'} ne "$expect '$endpoint'") {
+	printf "incorrect error received from endpoint '%s':\n\t'%s'\n", $endpoint, $jsonReturn->{'error'};
+     }
+  }
+}
+
+#############################################################################
+sub verifyCommandProcessing()
+{
+    my $json = JSON->new;
+    # verify command processing can detected bad input
+    my $endpoint = "/noSuchCommand";
+    my $expect = "unknown endpoint command:";
+    checkError($json, $endpoint, $expect);
+    $endpoint = "/list/noSubCommand";
+    $expect = "do not recognize endpoint function:";
+    checkError($json, $endpoint,$expect);
+}	#	sub verifyCommandProcessing()
+
+
+#############################################################################
 ### main()
 #############################################################################
 
 my $json = JSON->new;
+my $jsonReturn = {};
 
-my $jsonReturn = performJsonAction("/list/publicHubs", "");
+verifyCommandProcessing();	# check 'command' and 'subCommand'
+
+$jsonReturn = performJsonAction("/list/publicHubs", "");
 
 # this prints everything out indented nicely:
 # printf "%s", $json->pretty->encode( $jsonReturn );
