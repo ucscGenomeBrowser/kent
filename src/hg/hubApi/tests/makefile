@@ -1,6 +1,6 @@
 
 test::
-	@./jsonConsumer.pl | gzip -c > testOutput.json.gz
+	@./jsonConsumer.pl 2> /dev/null | gzip -c > testOutput.json.gz
 	@zdiff testOutput.json.gz expected.json.gz
 
 clean::

@@ -37,7 +37,7 @@ if [ $# != 0 ] ; then
 fi
 
 # initialize
-gbRoot=/data/genbank
+gbRoot=/cluster/data/genbank
 cd $gbRoot
 . $gbRoot/lib/gbCommon.sh
 

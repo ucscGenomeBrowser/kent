@@ -6892,10 +6892,10 @@ for (track = trackList; track != NULL; track = track->next)
                     }
                 }
             
-            // now look to see if we have a _sel statement to turn off all subtracks (including the current one)
-            unsigned hideChildren = 0;
+            // now look to see if we have a _hideKids statement to turn off all subtracks (including the current one)
+            unsigned hideKids = 0;
             char *usedThis = buffer;
-            safef(buffer, sizeof buffer, "%s_sel", track->tdb->parent->track);
+            safef(buffer, sizeof buffer, "%s_hideKids", track->tdb->parent->track);
 
             s = cartOptionalString(cart, buffer);
             if (s == NULL && startsWith("hub_", track->tdb->parent->track))
@@ -6903,13 +6903,12 @@ for (track = trackList; track != NULL; track = track->next)
 
             if (s != NULL)
                 {
-                if (sameString(s, "0"))
-                    hideChildren = 1;
+                hideKids = 1;
                 cartRemove(cart, usedThis);  // we don't want this hanging out in the cart
                 }
 
             // mark this as having been addressed
-            hel = hashAddInt(superTrackHash, track->tdb->parent->track, hideChildren );  
+            hel = hashAddInt(superTrackHash, track->tdb->parent->track, hideKids );  
             }
 
         if ( ptToInt(hel->val) == 1)    // we want to hide this track
@@ -6954,15 +6953,15 @@ for (track = trackList; track != NULL; track = track->next)
         char *usedThis = buffer;
 
         // first check to see if we've been asked to hide all the subtracks
-        boolean hideChildren = FALSE;
-        safef(buffer, sizeof buffer, "%s_sel", track->track);
+        boolean hideKids = FALSE;
+        safef(buffer, sizeof buffer, "%s_hideKids", track->track);
 
         s = cartOptionalString(cart, buffer);
         if (s == NULL && startsWith("hub_", track->track))
             s = cartOptionalString(cart, usedThis = trackHubSkipHubName(buffer));
         if ((s != NULL) && (sameString(s, "0")))
-            hideChildren = TRUE;
-        cartRemove(cart, usedThis);   // we don't want these _sel variables in the cart
+            hideKids = TRUE;
+        cartRemove(cart, usedThis);   // we don't want these _hideKids variables in the cart
 
         // now see if we have any specified visibilities
         struct track *subtrack;
@@ -6982,7 +6981,7 @@ for (track = trackList; track != NULL; track = track->next)
                 else
                     cartSetString(cart, buffer, "1");
                 }
-            else if (hideChildren && isSubtrackVisible(subtrack))
+            else if (hideKids && isSubtrackVisible(subtrack))
                 cartSetString(cart, buffer, "0");
             }
         }

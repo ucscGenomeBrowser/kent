@@ -468,6 +468,11 @@ while (isNotEmpty(namePt))
 		extra->trackLine = cloneString(origTrackLine);
 
 		// is it weird that the loader customFactoryTestExistence() did not do this for me?
+                char *wibFilePath = hashFindVal(track->tdb->settingsHash, "wibFile");
+                if (wibFilePath && fileExists(wibFilePath))
+                    {
+                    track->wibFile = wibFilePath;
+                    }
 		char *mafFilePath = hashFindVal(track->tdb->settingsHash, "mafFile");
 		if (mafFilePath && fileExists(mafFilePath))
 		    {
@@ -905,7 +910,7 @@ if ((row = sqlNextRow(sr)) != NULL)
 	    unsigned hubId = sqlUnsigned(hubStr[i]);
 	    char *hubUrl = getHubUrlFromId(hubId);
 	    if (hubUrl)
-		fprintf(f, "%d %s", hubId, hubUrl);
+		fprintf(f, "%d %s\n", hubId, hubUrl);
 	    }
 	}
     carefulClose(&f);	
@@ -1407,8 +1412,11 @@ char greekSize[32];
 sprintWithGreekByte(greekSize, sizeof(greekSize), size);
 printf("Contents of archive <B>%s</B> (%s).<br>\n", fileName, greekSize);
 
+// Now we do not have to care about special chars in the name
+char *tempFileName = "savedSessionCtRaw.tar.gz";  // do not use their actual filename.
+
 char tempOutFile[1024];
-safef(tempOutFile, sizeof tempOutFile, "%s/%s", tempOutRand, fileName);
+safef(tempOutFile, sizeof tempOutFile, "%s/%s", tempOutRand, tempFileName);
 
 // move our uploaded binary file where we really want it.
 if (rename(filePath, tempOutFile))
@@ -1420,7 +1428,7 @@ lazarusLives(20 * 60);
 
 // create the archive
 char cmd[2048];
-safef(cmd, sizeof cmd, "cd %s; tar -xpzf %s", tempOutRand, fileName);
+safef(cmd, sizeof cmd, "cd %s; tar -xpzf %s", tempOutRand, tempFileName);
 mustSystem(cmd);
 
 // check the version file
@@ -1535,6 +1543,17 @@ if (size >= 0) // file exists
 	sqlUpdate(ctConn, sql);
 	hFreeConn(&ctConn);
 	}
+    if (sameString(ext,".wib"))  
+	{    
+	// have to patch the new ct table with newPath
+	char *table = findValueInCtLine(result->newCtLine, "dbTableName");
+	char sql[1024];
+	sqlSafef(sql, sizeof sql, "update %s set file='./%s'", table, newPath);
+	struct sqlConnection *ctConn = hAllocConn(CUSTOM_TRASH);
+	sqlUpdate(ctConn, sql);
+	hFreeConn(&ctConn);
+	}
+
 
     // mv for speed.
     if (rename(path, newPath))
@@ -1851,6 +1870,16 @@ freeMem(contentsToChop);
 
 }
 
+void testForNonAsciiChars(char *s, char *description)
+/* Not allowing non-ascii chars in input string s */
+{
+char c;
+while((c=*s++))
+    {
+    if (c < 0)
+	errAbort("Non ascii chars not allowed in %s", description);
+    }
+}
 
 long uploadDb(char **pContents, char *dbDir, char *db, char *newDb, char *backgroundProgress, struct dyString *dyProg)
 /* Show db dir. Return total size. */
@@ -1909,13 +1938,19 @@ for(lineNum=0; lineNum<lineCount; ++lineNum)
 	char *sql = NULL;
 	readInGulp(sqlPath, &sql, NULL);
 
-	if (!startsWith("CREATE TABLE ", sql))
-	    errAbort("Invalid SQL input. for track %s", track);
+
+	// do not allow non-ascii chars in sql
+	testForNonAsciiChars(sql, "track .sql");
 
 	// patch old name to new in create sql
 	char *origTableName = findValueInCtLine(result->origCtLine, "dbTableName");
 	char oldPat[1024];
 	safef(oldPat, sizeof oldPat, "CREATE TABLE `%s`", origTableName);
+
+	// THIS IS A CRITICAL REQUIREMENT FOR SECURITY.
+	if (!startsWith(oldPat, sql))
+	    errAbort("Invalid .sql create statement for track %s", track);
+
 	char newPat[1024];
 	safef(newPat, sizeof newPat, "CREATE TABLE `%s`", table);
 	char *newSql = replaceChars(sql, oldPat, newPat);
@@ -1950,8 +1985,9 @@ for(lineNum=0; lineNum<lineCount; ++lineNum)
 	result->newCtLine = newerCtLine;
 
 
-	totalSize += uploadFileIfExists(dbDir, track, ".wib" , result, backgroundProgress, dyProg);
 	totalSize += uploadFileIfExists(dbDir, track, ".maf" , result, backgroundProgress, dyProg);
+	// wib patches table data trash pointer, depends on dbTableName being patched already above
+	totalSize += uploadFileIfExists(dbDir, track, ".wib" , result, backgroundProgress, dyProg);
 	// vcf patches table data trash pointer, depends on dbTableName being patched already above
 	totalSize += uploadFileIfExists(dbDir, track, ".vcf" , result, backgroundProgress, dyProg); 
 
