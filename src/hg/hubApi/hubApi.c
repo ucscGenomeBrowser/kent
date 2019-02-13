@@ -1,39 +1,5 @@
 /* hubApi - access mechanism to hub data resources. */
 #include "dataApi.h"
-#ifdef NOT
-#include "common.h"
-#include "linefile.h"
-#include "hash.h"
-#include "options.h"
-#include "jksql.h"
-#include "htmshell.h"
-#include "web.h"
-#include "cheapcgi.h"
-#include "cart.h"
-#include "hui.h"
-#include "udc.h"
-#include "knetUdc.h"
-#include "genbank.h"
-#include "trackHub.h"
-#include "hgConfig.h"
-#include "hCommon.h"
-#include "hPrint.h"
-#include "bigWig.h"
-#include "hubConnect.h"
-#include "obscure.h"
-#include "errCatch.h"
-#include "vcf.h"
-#include "bedTabix.h"
-#include "bamFile.h"
-#include "jsonParse.h"
-#include "jsonWrite.h"
-#include "chromInfo.h"
-
-#ifdef USE_HAL
-#include "halBlockViz.h"
-#endif
-
-#endif
 
 /*
 +------------------+------------------+------+-----+---------+-------+
@@ -49,6 +15,8 @@
 +------------------+------------------+------+-----+---------+-------+
 */
 
+#ifdef NOT
+/*this definition should be over in hg/inc/hubPublic.h but that does not exist*/
 struct hubPublic
 /* Table of public track data hub connections. */
     {
@@ -61,6 +29,7 @@ struct hubPublic
     char *dbList;	/* Comma separated list of databases. */
     char *descriptionUrl;	/* URL to description HTML */
     };
+#endif
 
 /* Global Variables */
 static struct cart *cart;             /* CGI and other variables */
@@ -80,37 +49,6 @@ static long timeOutSeconds = 100;
 static boolean timedOut = FALSE;
 
 #ifdef NOT
-/* ######################################################################### */
-static struct jsonWrite *jsonStartOutput()
-/* begin json output with standard header information for all requests */
-{
-time_t timeNow = time(NULL);
-// struct tm tm;
-// gmtime_r(&timeNow, &tm);
-struct jsonWrite *jw = jsonWriteNew();
-jsonWriteObjectStart(jw, NULL);
-jsonWriteString(jw, "apiVersion", "0.1");
-jsonWriteString(jw, "source", "UCSantaCruz");
-jsonWriteDateFromUnix(jw, "downloadTime", (long long) timeNow);
-jsonWriteNumber(jw, "downloadTimeStamp", (long long) timeNow);
-return jw;
-}
-
-static void jsonErrAbort(char *format, ...)
-/* Issue an error message in json format, and exit(0) */
-{
-char errMsg[2048];
-va_list args;
-va_start(args, format);
-vsnprintf(errMsg, sizeof(errMsg), format, args);
-struct jsonWrite *jw = jsonStartOutput();
-jsonWriteString(jw, "error", errMsg);
-jsonWriteObjectEnd(jw);
-fputs(jw->dy->string,stdout);
-exit(0);
-}
-#endif
-
 static void hubPublicJsonData(struct jsonWrite *jw, struct hubPublic *el)
 /* Print array data for one row from hubPublic table, order here
  * must be same as was stated in the columnName header element
@@ -129,7 +67,7 @@ jsonWriteString(jw, NULL, el->descriptionUrl);
 jsonWriteListEnd(jw);
 }
 
-int trackDbTrackCmp(const void *va, const void *vb)
+static int trackDbTrackCmp(const void *va, const void *vb)
 /* Compare to sort based on 'track' name; use shortLabel as secondary sort key.
  * Note: parallel code to hgTracks.c:tgCmpPriority */
 {
@@ -143,6 +81,8 @@ else if (dif == 0.0)
 else
    return 1;
 }
+
+#endif
 
 static int publicHubCmpCase(const void *va, const void *vb)
 /* Compare two slNames, ignore case. */
@@ -178,7 +118,7 @@ ret->dbList = cloneString(row[5]);
 return ret;
 }
 
-static struct hubPublic *hubPublicLoadAll()
+struct hubPublic *hubPublicLoadAll()
 {
 char query[1024];
 struct hubPublic *list = NULL;
@@ -458,7 +398,7 @@ hPrintf("    </ul>\n");
 return retTbd;
 }
 
-static struct slName *genomeList(struct trackHub *hubTop, struct trackDb **dbTrackList, char *selectGenome)
+struct slName *genomeList(struct trackHub *hubTop, struct trackDb **dbTrackList, char *selectGenome)
 /* follow the pointers from the trackHub to trackHubGenome and around
  * in a circle from one to the other to find all hub resources
  * return slName list of the genomes in this track hub
@@ -538,6 +478,7 @@ hDisconnectCentral(&conn);
 return cloneString(hubUrl);
 }
 
+#ifdef NOT
 static void dbDbJsonData(struct jsonWrite *jw, struct dbDb *el)
 /* Print out dbDb table element in JSON format.
  * must be same as was stated in the columnName header element
@@ -562,6 +503,7 @@ jsonWriteString(jw, NULL, el->sourceName);
 jsonWriteNumber(jw, NULL, (long long)el->taxId);
 jsonWriteListEnd(jw);
 }
+
 
 static boolean tableColumns(struct jsonWrite *jw, char *table)
 /* output the column names for the given table
@@ -612,6 +554,7 @@ jsonWriteListEnd(jw);
 jsonWriteObjectEnd(jw);
 fputs(jw->dy->string,stdout);
 }
+#endif
 
 static int dbDbCmpName(const void *va, const void *vb)
 /* Compare two dbDb elements: name, ignore case. */
@@ -621,7 +564,7 @@ const struct dbDb *b = *((struct dbDb **)vb);
 return strcasecmp(a->name, b->name);
 }
 
-static struct dbDb *ucscDbDb()
+struct dbDb *ucscDbDb()
 /* return the dbDb table as an slList */
 {
 char query[1024];
@@ -641,6 +584,7 @@ slSort(&dbList, dbDbCmpName);
 return dbList;
 }
 
+#ifdef NOT
 static void jsonDbDb()
 /* output the dbDb SQL table */
 {
@@ -783,68 +727,6 @@ jsonWriteObjectEnd(jw);
 fputs(jw->dy->string,stdout);
 }	/*	static void trackDbJsonOutput(char *db, FILE *f)	*/
 
-#ifdef NOT
-static void getTrackData()
-{
-}
-
-static void getSequenceData()
-/* given at least a db=name and chrom=chr, optionally start and end  */
-{
-char *db = cgiOptionalString("db");
-char *chrom = cgiOptionalString("chrom");
-char *start = cgiOptionalString("start");
-char *end = cgiOptionalString("end");
-
-if (isEmpty(db))
-    jsonErrAbort("missing URL db=<ucscDb> name for endpoint '/getData/sequence");
-if (isEmpty(chrom))
-    jsonErrAbort("missing URL chrom=<name> for endpoint '/getData/sequence?db=%s", db);
-if (chromSeqFileExists(db, chrom))
-    {
-    struct chromInfo *ci = hGetChromInfo(db, chrom);
-    struct dnaSeq *seq = NULL;
-    if (isEmpty(start) || isEmpty(end))
-	seq = hChromSeqMixed(db, chrom, 0, 0);
-    else
-	seq = hChromSeqMixed(db, chrom, sqlSigned(start), sqlSigned(end));
-    if (NULL == seq)
-        jsonErrAbort("can not find sequence for chrom=%s for endpoint '/getData/sequence?db=%s&chrom=%s", chrom, db, chrom);
-    struct jsonWrite *jw = jsonStartOutput();
-    jsonWriteString(jw, "db", db);
-    jsonWriteString(jw, "chrom", chrom);
-    if (isEmpty(start) || isEmpty(end))
-	{
-        jsonWriteNumber(jw, "start", (long long)0);
-        jsonWriteNumber(jw, "end", (long long)ci->size);
-	}
-    else
-	{
-        jsonWriteNumber(jw, "start", (long long)sqlSigned(start));
-        jsonWriteNumber(jw, "end", (long long)sqlSigned(end));
-	}
-    jsonWriteString(jw, "dna", seq->dna);
-    jsonWriteObjectEnd(jw);
-    fputs(jw->dy->string,stdout);
-    freeDnaSeq(&seq);
-    }
-else
-    jsonErrAbort("can not find specified chrom=%s in sequence for endpoint '/getData/sequence?db=%s&chrom=%s", chrom, db, chrom);
-}
-#endif
-
-#define MAX_PATH_INFO 32
-static void apiGetData(char *words[MAX_PATH_INFO])
-/* 'getData' function, words[1] is the subCommand */
-{
-if (sameWord("track", words[1]))
-    getTrackData();
-else if (sameWord("sequence", words[1]))
-    getSequenceData();
-else
-    jsonErrAbort("do not recognize endpoint function: '/%s/%s'", words[0], words[1]);
-}
-
 static void apiList(char *words[MAX_PATH_INFO])
 /* 'list' function words[1] is the subCommand */
 {
@@ -937,6 +819,7 @@ else if (sameWord("chromosomes", words[1]))
 else
     jsonErrAbort("do not recognize endpoint function: '/%s/%s'", words[0], words[1]);
 }
+#endif
 
 static struct hash *apiFunctionHash = NULL;
 

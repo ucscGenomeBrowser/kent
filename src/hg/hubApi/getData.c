@@ -52,4 +52,13 @@ else
     jsonErrAbort("can not find specified chrom=%s in sequence for endpoint '/getData/sequence?db=%s&chrom=%s", chrom, db, chrom);
 }
 
-
+void apiGetData(char *words[MAX_PATH_INFO])
+/* 'getData' function, words[1] is the subCommand */
+{
+if (sameWord("track", words[1]))
+    getTrackData();
+else if (sameWord("sequence", words[1]))
+    getSequenceData();
+else
+    jsonErrAbort("do not recognize endpoint function: '/%s/%s'", words[0], words[1]);
+}
