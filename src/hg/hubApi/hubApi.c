@@ -488,8 +488,10 @@ for ( ; genome; genome = genome->next )
 	{	/* can there be a description when organism is empty ? */
 	hPrintf("<li>%s</li>\n", genome->name);
 	}
-    if (genome->settingsHash)
-	*dbTrackList = assemblySettings(genome);
+	if (dbTrackList)
+	    *dbTrackList = assemblySettings(genome);
+	else
+	    (void) assemblySettings(genome);
     if (measureTiming)
 	{
 	long thisTime = clock1000();
@@ -783,7 +785,47 @@ static void getTrackData()
 }
 
 static void getSequenceData()
+/* given at least a db=name and chrom=chr, optionally start and end  */
 {
+char *db = cgiOptionalString("db");
+char *chrom = cgiOptionalString("chrom");
+char *start = cgiOptionalString("start");
+char *end = cgiOptionalString("end");
+
+if (isEmpty(db))
+    jsonErrAbort("missing URL db=<ucscDb> name for endpoint '/getData/sequence");
+if (isEmpty(chrom))
+    jsonErrAbort("missing URL chrom=<name> for endpoint '/getData/sequence?db=%s", db);
+if (chromSeqFileExists(db, chrom))
+    {
+    struct chromInfo *ci = hGetChromInfo(db, chrom);
+    struct dnaSeq *seq = NULL;
+    if (isEmpty(start) || isEmpty(end))
+	seq = hChromSeqMixed(db, chrom, 0, 0);
+    else
+	seq = hChromSeqMixed(db, chrom, sqlSigned(start), sqlSigned(end));
+    if (NULL == seq)
+        jsonErrAbort("can not find sequence for chrom=%s for endpoint '/getData/sequence?db=%s&chrom=%s", chrom, db, chrom);
+    struct jsonWrite *jw = jsonStartOutput();
+    jsonWriteString(jw, "db", db);
+    jsonWriteString(jw, "chrom", chrom);
+    if (isEmpty(start) || isEmpty(end))
+	{
+        jsonWriteNumber(jw, "start", (long long)0);
+        jsonWriteNumber(jw, "end", (long long)ci->size);
+	}
+    else
+	{
+        jsonWriteNumber(jw, "start", (long long)sqlSigned(start));
+        jsonWriteNumber(jw, "end", (long long)sqlSigned(end));
+	}
+    jsonWriteString(jw, "dna", seq->dna);
+    jsonWriteObjectEnd(jw);
+    fputs(jw->dy->string,stdout);
+    freeDnaSeq(&seq);
+    }
+else
+    jsonErrAbort("can not find specified chrom=%s in sequence for endpoint '/getData/sequence?db=%s&chrom=%s", chrom, db, chrom);
 }
 
 #define MAX_PATH_INFO 32
@@ -792,9 +834,10 @@ static void apiGetData(char *words[MAX_PATH_INFO])
 {
 if (sameWord("track", words[1]))
     getTrackData();
-if (sameWord("sequence", words[1]))
+else if (sameWord("sequence", words[1]))
     getSequenceData();
-jsonErrAbort("do not recognize endpoint function: '/%s/%s'", words[0], words[1]);
+else
+    jsonErrAbort("do not recognize endpoint function: '/%s/%s'", words[0], words[1]);
 }
 
 static void apiList(char *words[MAX_PATH_INFO])
@@ -808,9 +851,20 @@ else if (sameWord("hubGenomes", words[1]))
     {
     char *hubUrl = cgiOptionalString("hubUrl");
     if (isEmpty(hubUrl))
-	jsonErrAbort("ERROR: must supply hubUrl='http:...' some URL to a hub for /list/genomes");
+	jsonErrAbort("must supply hubUrl='http:...' some URL to a hub for /list/hubGenomes");
 
-    struct trackHub *hub = trackHubOpen(hubUrl, "");
+    struct trackHub *hub = NULL;
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+	{
+	hub = trackHubOpen(hubUrl, "");
+        }
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+	{
+	jsonErrAbort("error opening hubUrl: '%s', '%s'", hubUrl,  errCatch->message->string);
+	}
+    errCatchFree(&errCatch);
     if (hub->genomeList)
 	{
         struct jsonWrite *jw = jsonStartOutput();
@@ -933,6 +987,32 @@ hPrintf("</ul>\n");
 hPrintf("</p>\n");
 }
 
+static void showExamples(char *url, struct trackHubGenome *hubGenome, char *ucscDb)
+{
+
+hPrintf("<h2>Example URLs to return json data structures:</h2>\n");
+hPrintf("<ul>\n");
+hPrintf("<li><a href='/cgi-bin/hubApi/list/publicHubs' target=_blank>list public hubs</a> <em>/cgi-bin/hubApi/list/publicHubs</em></li>\n");
+hPrintf("<li><a href='/cgi-bin/hubApi/list/ucscGenomes' target=_blank>list database genomes</a> <em>/cgi-bin/hubApi/list/ucscGenomes</em></li>\n");
+hPrintf("<li><a href='/cgi-bin/hubApi/list/hubGenomes?hubUrl=%s' target=_blank>list genomes from specified hub</a> <em>/cgi-bin/hubApi/list/hubGenomes?hubUrl=%s</em></li>\n", url, url);
+hPrintf("<li><a href='/cgi-bin/hubApi/list/tracks?hubUrl=%s&genome=%s' target=_blank>list tracks from specified hub and genome</a> <em>/cgi-bin/hubApi/list/tracks?hubUrl=%s&genome=%s</em></li>\n", url, hubGenome->name, url, hubGenome->name);
+hPrintf("<li><a href='/cgi-bin/hubApi/list/tracks?db=%s' target=_blank>list tracks from specified UCSC database</a> <em>/cgi-bin/hubApi/list/tracks?db=%s</em></li>\n", ucscDb, ucscDb);
+hPrintf("<li><a href='/cgi-bin/hubApi/list/chromosomes?db=%s' target=_blank>list chromosomes from specified UCSC database</a> <em>/cgi-bin/hubApi/list/chromosomes?db=%s</em></li>\n", ucscDb, ucscDb);
+hPrintf("<li><a href='/cgi-bin/hubApi/list/chromosomes?db=%s&track=gap' target=_blank>list chromosomes from specified track from UCSC databaset</a> <em>/cgi-bin/hubApi/list/chromosomes?db=%s&track=gap</em></li>\n", ucscDb, ucscDb);
+hPrintf("<li><a href='/cgi-bin/hubApi/getData/sequence?db=%s&chrom=chrM' target=_blank>get sequence from specified database and chromosome</a> <em>/cgi-bin/hubApi/getData/sequence?db=%s&chrom=chrM</em></li>\n", ucscDb, ucscDb);
+hPrintf("<li><a href='/cgi-bin/hubApi/getData/sequence?db=%s&chrom=chrM&start=0&end=128' target=_blank>get sequence from specified database, chromosome with start,end coordinates</a> <em>/cgi-bin/hubApi/getData/sequence?db=%s&chrom=chrM&start=0&end=128</em></li>\n", ucscDb, ucscDb);
+hPrintf("</ul>\n");
+}	/*	static void showExamples()	*/
+
+static void showCartDump()
+/* for information purposes only during development, will become obsolete */
+{
+hPrintf("<h4>cart dump</h4>");
+hPrintf("<pre>\n");
+cartDump(cart);
+hPrintf("</pre>\n");
+}
+
 static void doMiddle(struct cart *theCart)
 /* Set up globals and make web page */
 {
@@ -1009,21 +1089,9 @@ hPrintf("<h3>ucscDb: '%s'</h2>\n", ucscDb);
 
 struct trackHubGenome *hubGenome = hub->genomeList;
 
-hPrintf("<h2>Example URLs to return json data structures:</h2>\n");
-hPrintf("<ul>\n");
-hPrintf("<li><a href='/cgi-bin/hubApi/list/publicHubs' target=_blank>list public hubs</a> <em>/cgi-bin/hubApi/list/publicHubs</em></li>\n");
-hPrintf("<li><a href='/cgi-bin/hubApi/list/ucscGenomes' target=_blank>list database genomes</a> <em>/cgi-bin/hubApi/list/ucscGenomes</em></li>\n");
-hPrintf("<li><a href='/cgi-bin/hubApi/list/hubGenomes?hubUrl=%s' target=_blank>list genomes from specified hub</a> <em>/cgi-bin/hubApi/list/hubGenomes?hubUrl='%s'</em></li>\n", urlInput, urlInput);
-hPrintf("<li><a href='/cgi-bin/hubApi/list/tracks?hubUrl=%s&genome=%s' target=_blank>list tracks from specified hub and genome</a> <em>/cgi-bin/hubApi/list/tracks?hubUrl='%s&genome=%s'</em></li>\n", urlInput, hubGenome->name, urlInput, hubGenome->name);
-hPrintf("<li><a href='/cgi-bin/hubApi/list/tracks?db=%s' target=_blank>list tracks from specified UCSC database</a> <em>/cgi-bin/hubApi/list/tracks?db='%s'</em></li>\n", ucscDb, ucscDb);
-hPrintf("<li><a href='/cgi-bin/hubApi/list/chromosomes?db=%s' target=_blank>list chromosomes from specified UCSC database</a> <em>/cgi-bin/hubApi/list/chromosomes?db='%s'</em></li>\n", ucscDb, ucscDb);
-hPrintf("<li><a href='/cgi-bin/hubApi/list/chromosomes?db=%s&track=gap' target=_blank>list chromosomes from specified track from UCSC databaset</a> <em>/cgi-bin/hubApi/list/chromosomes?db='%s'&track=gap</em></li>\n", ucscDb, ucscDb);
-hPrintf("</ul>\n");
+showExamples(urlInput, hubGenome, ucscDb);
 
-hPrintf("<h4>cart dump</h4>");
-hPrintf("<pre>\n");
-cartDump(cart);
-hPrintf("</pre>\n");
+showCartDump();
 
 hPrintf("<form action='%s' name='hubApiUrl' id='hubApiUrl' method='GET'>\n\n", "../cgi-bin/hubApi");
 
