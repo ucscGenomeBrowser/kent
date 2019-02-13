@@ -1,4 +1,6 @@
 /* hubApi - access mechanism to hub data resources. */
+#include "dataApi.h"
+#ifdef NOT
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -29,6 +31,8 @@
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
+#endif
+
 #endif
 
 /*
@@ -75,6 +79,7 @@ static long enteredMainTime = 0;	/* will become = clock1000() on entry */
 static long timeOutSeconds = 100;
 static boolean timedOut = FALSE;
 
+#ifdef NOT
 /* ######################################################################### */
 static struct jsonWrite *jsonStartOutput()
 /* begin json output with standard header information for all requests */
@@ -104,6 +109,7 @@ jsonWriteObjectEnd(jw);
 fputs(jw->dy->string,stdout);
 exit(0);
 }
+#endif
 
 static void hubPublicJsonData(struct jsonWrite *jw, struct hubPublic *el)
 /* Print array data for one row from hubPublic table, order here
@@ -777,6 +783,7 @@ jsonWriteObjectEnd(jw);
 fputs(jw->dy->string,stdout);
 }	/*	static void trackDbJsonOutput(char *db, FILE *f)	*/
 
+#ifdef NOT
 static void getTrackData()
 {
 }
@@ -824,6 +831,7 @@ if (chromSeqFileExists(db, chrom))
 else
     jsonErrAbort("can not find specified chrom=%s in sequence for endpoint '/getData/sequence?db=%s&chrom=%s", chrom, db, chrom);
 }
+#endif
 
 #define MAX_PATH_INFO 32
 static void apiGetData(char *words[MAX_PATH_INFO])
