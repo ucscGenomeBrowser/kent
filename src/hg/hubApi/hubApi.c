@@ -1,4 +1,6 @@
 /* hubApi - access mechanism to hub data resources. */
+#include "dataApi.h"
+#ifdef NOT
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -29,6 +31,8 @@
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
+#endif
+
 #endif
 
 /*
@@ -66,7 +70,7 @@ static long totalTracks = 0;
 static boolean measureTiming = FALSE;	/* set by CGI parameters */
 static boolean allTrackSettings = FALSE;	/* checkbox setting */
 static char **shortLabels = NULL;	/* public hub short labels in array */
-struct hubPublic *publicHubList = NULL;
+// struct hubPublic *publicHubList = NULL;
 static int publicHubCount = 0;
 static char *defaultHub = "Plants";
 static char *defaultDb = "ce11";
@@ -75,9 +79,10 @@ static long enteredMainTime = 0;	/* will become = clock1000() on entry */
 static long timeOutSeconds = 100;
 static boolean timedOut = FALSE;
 
+#ifdef NOT
 /* ######################################################################### */
 static struct jsonWrite *jsonStartOutput()
-/* begin json output */
+/* begin json output with standard header information for all requests */
 {
 time_t timeNow = time(NULL);
 // struct tm tm;
@@ -92,7 +97,7 @@ return jw;
 }
 
 static void jsonErrAbort(char *format, ...)
-/* Issue an error message in json format. */
+/* Issue an error message in json format, and exit(0) */
 {
 char errMsg[2048];
 va_list args;
@@ -104,6 +109,7 @@ jsonWriteObjectEnd(jw);
 fputs(jw->dy->string,stdout);
 exit(0);
 }
+#endif
 
 static void hubPublicJsonData(struct jsonWrite *jw, struct hubPublic *el)
 /* Print array data for one row from hubPublic table, order here
@@ -121,6 +127,21 @@ jsonWriteNumber(jw, NULL, (long long)el->dbCount);
 jsonWriteString(jw, NULL, el->dbList);
 jsonWriteString(jw, NULL, el->descriptionUrl);
 jsonWriteListEnd(jw);
+}
+
+int trackDbTrackCmp(const void *va, const void *vb)
+/* Compare to sort based on 'track' name; use shortLabel as secondary sort key.
+ * Note: parallel code to hgTracks.c:tgCmpPriority */
+{
+const struct trackDb *a = *((struct trackDb **)va);
+const struct trackDb *b = *((struct trackDb **)vb);
+int dif = strcmp(a->track, b->track);
+if (dif < 0)
+   return -1;
+else if (dif == 0.0)
+   return strcasecmp(a->shortLabel, b->shortLabel);
+else
+   return 1;
 }
 
 static int publicHubCmpCase(const void *va, const void *vb)
@@ -305,10 +326,36 @@ errCatchFree(&errCatch);
 return retVal;
 }	/* static int bbiBriefMeasure() */
 
-static struct slName *trackList(struct trackDb *tdb, struct trackHubGenome *genome)
-/* process the track list to show all tracks */
+#ifdef NOT
+static void cloneTdb(struct trackDb *source, struct trackDb *destination)
+/* TBD: is there a cloneTdb() function somewhere else ? */
 {
-struct slName *retList = NULL;	/* for return of track list for 'genome' */
+destination->track = cloneString(source->track);
+destination->shortLabel = cloneString(source->shortLabel);
+destination->type = cloneString(source->type);
+destination->longLabel = cloneString(source->longLabel);
+destination->visibility = source->visibility;
+destination->priority = source->priority;
+destination->colorR = source->colorR;
+destination->colorG = source->colorG;
+destination->colorB = source->colorB;
+destination->altColorR = source->altColorR;
+destination->altColorG = source->altColorG;
+destination->altColorB = source->altColorB;
+destination->useScore = source->useScore;
+destination->private = source->private;
+destination->url = cloneString(source->url);
+destination->html = cloneString(source->html);
+destination->grp = cloneString(source->grp);
+destination->canPack = source->canPack;
+destination->settings = cloneString(source->settings);
+destination->settingsHash = source->settingsHash;
+}
+#endif
+
+static void hubTrackList(struct trackDb *tdb, struct trackHubGenome *genome)
+/* process the track list to show all tracks, return trackDb list */
+{
 if (tdb)
     {
     struct hash *countTracks = hashNew(0);
@@ -316,21 +363,19 @@ if (tdb)
     struct trackDb *track = tdb;
     for ( ; track; track = track->next )
 	{
-        struct slName *el = slNameNew(track->track);
-        slAddHead(&retList, el);
-        char *bigDataUrl = hashFindVal(track->settingsHash, "bigDataUrl");
-      char *compositeTrack = hashFindVal(track->settingsHash, "compositeTrack");
-	char *superTrack = hashFindVal(track->settingsHash, "superTrack");
-        boolean depthSearch = cartUsualBoolean(cart, "depthSearch", FALSE);
-        if (compositeTrack)
-           hashIncInt(countTracks, "composite container");
-        else if (superTrack)
-           hashIncInt(countTracks, "superTrack container");
+	char *bigDataUrl = trackDbSetting(track, "bigDataUrl");
+	char *compositeTrack = trackDbSetting(track, "compositeTrack");
+	char *superTrack = trackDbSetting(track, "superTrack");
+	boolean depthSearch = cartUsualBoolean(cart, "depthSearch", FALSE);
+	if (compositeTrack)
+	    hashIncInt(countTracks, "composite container");
+	else if (superTrack)
+	    hashIncInt(countTracks, "superTrack container");
 	else if (isEmpty(track->type))
-           hashIncInt(countTracks, "no type specified");
+	    hashIncInt(countTracks, "no type specified");
 	else
-           hashIncInt(countTracks, track->type);
-        if (depthSearch && bigDataUrl)
+	    hashIncInt(countTracks, track->type);
+	if (depthSearch && bigDataUrl)
 	    {
 	    char *bigDataIndex = NULL;
 	    char *relIdxUrl = trackDbSetting(tdb, "bigDataIndex");
@@ -355,7 +400,7 @@ if (tdb)
 		    hPrintf("    <li>%s : %s : %ld chroms : %ld count</li>\n", track->track, track->type, chromCount, itemCount);
 		}
 	    }
-        else
+	else
 	    {
 	    if (compositeTrack)
 		hPrintf("    <li>%s : %s : composite track container</li>\n", track->track, track->type);
@@ -388,13 +433,12 @@ if (tdb)
 	}
     hPrintf("    </ul>\n");
     }
-return retList;
-}	/*	static struct slName *trackList()	*/
+}	/*	static struct trackDb *hubTrackList()	*/
 
-static struct slName *assemblySettings(struct trackHubGenome *genome)
+static struct trackDb * assemblySettings(struct trackHubGenome *genome)
 /* display all the assembly 'settingsHash' */
 {
-struct slName *retList = NULL;
+struct trackDb *retTbd = NULL;
 hPrintf("    <ul>\n");
 struct hashEl *hel;
 struct hashCookie hc = hashFirst(genome->settingsHash);
@@ -404,16 +448,17 @@ while ((hel = hashNext(&hc)) != NULL)
     if (sameWord("trackDb", hel->name))	/* examine the trackDb structure */
 	{
         struct trackDb *tdb = trackHubTracksForGenome(genome->trackHub, genome);
-	retList = trackList(tdb, genome);
+	retTbd = tdb;
+	hubTrackList(tdb, genome);
         }
     if (timeOutReached())
 	break;
     }
 hPrintf("    </ul>\n");
-return retList;
+return retTbd;
 }
 
-static struct slName *genomeList(struct trackHub *hubTop, struct slName **dbTrackList, char *selectGenome)
+static struct slName *genomeList(struct trackHub *hubTop, struct trackDb **dbTrackList, char *selectGenome)
 /* follow the pointers from the trackHub to trackHubGenome and around
  * in a circle from one to the other to find all hub resources
  * return slName list of the genomes in this track hub
@@ -446,12 +491,10 @@ for ( ; genome; genome = genome->next )
 	{	/* can there be a description when organism is empty ? */
 	hPrintf("<li>%s</li>\n", genome->name);
 	}
-    if (genome->settingsHash)
-	{
-	struct slName *trackList = assemblySettings(genome);
-        if (dbTrackList)
-	    *dbTrackList = trackList;
-        }
+	if (dbTrackList)
+	    *dbTrackList = assemblySettings(genome);
+	else
+	    (void) assemblySettings(genome);
     if (measureTiming)
 	{
 	long thisTime = clock1000();
@@ -553,7 +596,7 @@ char *dataTime = sqlTableUpdate(conn, hubPublicTableName());
 hDisconnectCentral(&conn);
 time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
 replaceChar(dataTime, ' ', 'T');
-struct hubPublic *el = publicHubList;
+struct hubPublic *el = hubPublicLoadAll();
 struct jsonWrite *jw = jsonStartOutput();
 jsonWriteString(jw, "dataTime", dataTime);
 jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
@@ -699,6 +742,28 @@ else
 hFreeConn(&conn);
 }
 
+static void recursiveTrackList(struct jsonWrite *jw, struct trackDb *tdb, char *type)
+{
+jsonWriteListStart(jw, type);
+struct trackDb *el;
+for (el = tdb; el != NULL; el = el->next )
+    {
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteString(jw, "track", el->track);
+    jsonWriteString(jw, "shortLabel", el->shortLabel);
+    jsonWriteString(jw, "type", el->type);
+    jsonWriteString(jw, "longLabel", el->longLabel);
+    if (tdbIsComposite(el))
+	{
+	recursiveTrackList(jw, el->subtracks, "subtracks");
+	}
+    if (tdb->parent && tdbIsSuperTrackChild(el))
+	jsonWriteString(jw, "superTrack", "TRUE");
+    jsonWriteObjectEnd(jw);
+    }
+jsonWriteListEnd(jw);
+}
+
 static void trackDbJsonOutput(char *db, FILE *f)
 /* return track list from specified UCSC database name */
 {
@@ -708,21 +773,78 @@ time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
 replaceChar(dataTime, ' ', 'T');
 hFreeConn(&conn);
 struct trackDb *tdbList = hTrackDb(db);
-struct trackDb *el;
 struct jsonWrite *jw = jsonStartOutput();
 jsonWriteString(jw, "db", db);
 jsonWriteString(jw, "dataTime", dataTime);
 jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
 freeMem(dataTime);
-jsonWriteListStart(jw, "tracks");
-for (el = tdbList; el != NULL; el = el->next )
-    jsonWriteString(jw, NULL, el->track);
-jsonWriteListEnd(jw);
+recursiveTrackList(jw, tdbList, "tracks");
 jsonWriteObjectEnd(jw);
 fputs(jw->dy->string,stdout);
 }	/*	static void trackDbJsonOutput(char *db, FILE *f)	*/
 
+#ifdef NOT
+static void getTrackData()
+{
+}
+
+static void getSequenceData()
+/* given at least a db=name and chrom=chr, optionally start and end  */
+{
+char *db = cgiOptionalString("db");
+char *chrom = cgiOptionalString("chrom");
+char *start = cgiOptionalString("start");
+char *end = cgiOptionalString("end");
+
+if (isEmpty(db))
+    jsonErrAbort("missing URL db=<ucscDb> name for endpoint '/getData/sequence");
+if (isEmpty(chrom))
+    jsonErrAbort("missing URL chrom=<name> for endpoint '/getData/sequence?db=%s", db);
+if (chromSeqFileExists(db, chrom))
+    {
+    struct chromInfo *ci = hGetChromInfo(db, chrom);
+    struct dnaSeq *seq = NULL;
+    if (isEmpty(start) || isEmpty(end))
+	seq = hChromSeqMixed(db, chrom, 0, 0);
+    else
+	seq = hChromSeqMixed(db, chrom, sqlSigned(start), sqlSigned(end));
+    if (NULL == seq)
+        jsonErrAbort("can not find sequence for chrom=%s for endpoint '/getData/sequence?db=%s&chrom=%s", chrom, db, chrom);
+    struct jsonWrite *jw = jsonStartOutput();
+    jsonWriteString(jw, "db", db);
+    jsonWriteString(jw, "chrom", chrom);
+    if (isEmpty(start) || isEmpty(end))
+	{
+        jsonWriteNumber(jw, "start", (long long)0);
+        jsonWriteNumber(jw, "end", (long long)ci->size);
+	}
+    else
+	{
+        jsonWriteNumber(jw, "start", (long long)sqlSigned(start));
+        jsonWriteNumber(jw, "end", (long long)sqlSigned(end));
+	}
+    jsonWriteString(jw, "dna", seq->dna);
+    jsonWriteObjectEnd(jw);
+    fputs(jw->dy->string,stdout);
+    freeDnaSeq(&seq);
+    }
+else
+    jsonErrAbort("can not find specified chrom=%s in sequence for endpoint '/getData/sequence?db=%s&chrom=%s", chrom, db, chrom);
+}
+#endif
+
 #define MAX_PATH_INFO 32
+static void apiGetData(char *words[MAX_PATH_INFO])
+/* 'getData' function, words[1] is the subCommand */
+{
+if (sameWord("track", words[1]))
+    getTrackData();
+else if (sameWord("sequence", words[1]))
+    getSequenceData();
+else
+    jsonErrAbort("do not recognize endpoint function: '/%s/%s'", words[0], words[1]);
+}
+
 static void apiList(char *words[MAX_PATH_INFO])
 /* 'list' function words[1] is the subCommand */
 {
@@ -734,9 +856,20 @@ else if (sameWord("hubGenomes", words[1]))
     {
     char *hubUrl = cgiOptionalString("hubUrl");
     if (isEmpty(hubUrl))
-	jsonErrAbort("ERROR: must supply hubUrl='http:...' some URL to a hub for /list/genomes");
+	jsonErrAbort("must supply hubUrl='http:...' some URL to a hub for /list/hubGenomes");
 
-    struct trackHub *hub = trackHubOpen(hubUrl, "");
+    struct trackHub *hub = NULL;
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+	{
+	hub = trackHubOpen(hubUrl, "");
+        }
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+	{
+	jsonErrAbort("error opening hubUrl: '%s', '%s'", hubUrl,  errCatch->message->string);
+	}
+    errCatchFree(&errCatch);
     if (hub->genomeList)
 	{
         struct jsonWrite *jw = jsonStartOutput();
@@ -776,18 +909,13 @@ else if (sameWord("tracks", words[1]))
     struct trackHub *hub = trackHubOpen(hubUrl, "");
     if (hub->genomeList)
 	{
-	struct slName *dbTrackList = NULL;
+	struct trackDb *dbTrackList = NULL;
 	(void) genomeList(hub, &dbTrackList, genome);
+	slSort(dbTrackList, trackDbTrackCmp);
         struct jsonWrite *jw = jsonStartOutput();
 	jsonWriteString(jw, "hubUrl", hubUrl);
-        jsonWriteListStart(jw, "genome");
-	slNameSort(&dbTrackList);
-	struct slName *el = dbTrackList;
-	for ( ; el != NULL; el = el->next )
-	    {
-            jsonWriteString(jw, NULL, el->name);
-	    }
-	jsonWriteListEnd(jw);
+	jsonWriteString(jw, "genome", genome);
+        recursiveTrackList(jw, dbTrackList, "tracks");
 	jsonWriteObjectEnd(jw);
         fputs(jw->dy->string,stdout);
 	}
@@ -807,7 +935,7 @@ else if (sameWord("chromosomes", words[1]))
 	}
     }
 else
-    jsonErrAbort("do not recognize endpoint: '/list/%s' request", words[1]);
+    jsonErrAbort("do not recognize endpoint function: '/%s/%s'", words[0], words[1]);
 }
 
 static struct hash *apiFunctionHash = NULL;
@@ -816,10 +944,11 @@ static void setupFunctionHash()
 /* initialize the apiFunctionHash */
 {
 if (apiFunctionHash)
-    return;
+    return;	/* already done */
 
 apiFunctionHash = hashNew(0);
 hashAdd(apiFunctionHash, "list", &apiList);
+hashAdd(apiFunctionHash, "getData", &apiGetData);
 }
 
 static void apiFunctionSwitch(char *pathInfo)
@@ -863,11 +992,35 @@ hPrintf("</ul>\n");
 hPrintf("</p>\n");
 }
 
+static void showExamples(char *url, struct trackHubGenome *hubGenome, char *ucscDb)
+{
+
+hPrintf("<h2>Example URLs to return json data structures:</h2>\n");
+hPrintf("<ul>\n");
+hPrintf("<li><a href='/cgi-bin/hubApi/list/publicHubs' target=_blank>list public hubs</a> <em>/cgi-bin/hubApi/list/publicHubs</em></li>\n");
+hPrintf("<li><a href='/cgi-bin/hubApi/list/ucscGenomes' target=_blank>list database genomes</a> <em>/cgi-bin/hubApi/list/ucscGenomes</em></li>\n");
+hPrintf("<li><a href='/cgi-bin/hubApi/list/hubGenomes?hubUrl=%s' target=_blank>list genomes from specified hub</a> <em>/cgi-bin/hubApi/list/hubGenomes?hubUrl=%s</em></li>\n", url, url);
+hPrintf("<li><a href='/cgi-bin/hubApi/list/tracks?hubUrl=%s&genome=%s' target=_blank>list tracks from specified hub and genome</a> <em>/cgi-bin/hubApi/list/tracks?hubUrl=%s&genome=%s</em></li>\n", url, hubGenome->name, url, hubGenome->name);
+hPrintf("<li><a href='/cgi-bin/hubApi/list/tracks?db=%s' target=_blank>list tracks from specified UCSC database</a> <em>/cgi-bin/hubApi/list/tracks?db=%s</em></li>\n", ucscDb, ucscDb);
+hPrintf("<li><a href='/cgi-bin/hubApi/list/chromosomes?db=%s' target=_blank>list chromosomes from specified UCSC database</a> <em>/cgi-bin/hubApi/list/chromosomes?db=%s</em></li>\n", ucscDb, ucscDb);
+hPrintf("<li><a href='/cgi-bin/hubApi/list/chromosomes?db=%s&track=gap' target=_blank>list chromosomes from specified track from UCSC databaset</a> <em>/cgi-bin/hubApi/list/chromosomes?db=%s&track=gap</em></li>\n", ucscDb, ucscDb);
+hPrintf("<li><a href='/cgi-bin/hubApi/getData/sequence?db=%s&chrom=chrM' target=_blank>get sequence from specified database and chromosome</a> <em>/cgi-bin/hubApi/getData/sequence?db=%s&chrom=chrM</em></li>\n", ucscDb, ucscDb);
+hPrintf("<li><a href='/cgi-bin/hubApi/getData/sequence?db=%s&chrom=chrM&start=0&end=128' target=_blank>get sequence from specified database, chromosome with start,end coordinates</a> <em>/cgi-bin/hubApi/getData/sequence?db=%s&chrom=chrM&start=0&end=128</em></li>\n", ucscDb, ucscDb);
+hPrintf("</ul>\n");
+}	/*	static void showExamples()	*/
+
+static void showCartDump()
+/* for information purposes only during development, will become obsolete */
+{
+hPrintf("<h4>cart dump</h4>");
+hPrintf("<pre>\n");
+cartDump(cart);
+hPrintf("</pre>\n");
+}
+
 static void doMiddle(struct cart *theCart)
 /* Set up globals and make web page */
 {
-// struct hubPublic *hubList = hubPublicLoadAll();
-publicHubList = hubPublicLoadAll();
 cart = theCart;
 measureTiming = hPrintStatus() && isNotEmpty(cartOptionalString(cart, "measureTiming"));
 measureTiming = TRUE;
@@ -898,6 +1051,8 @@ if (isNotEmpty(pathInfo))
     }
 puts("Content-Type:text/html");
 puts("\n");
+
+(void) hubPublicLoadAll();
 
 struct dbDb *dbList = ucscDbDb();
 char **ucscDbList = NULL;
@@ -939,21 +1094,9 @@ hPrintf("<h3>ucscDb: '%s'</h2>\n", ucscDb);
 
 struct trackHubGenome *hubGenome = hub->genomeList;
 
-hPrintf("<h2>Example URLs to return json data structures:</h2>\n");
-hPrintf("<ul>\n");
-hPrintf("<li><a href='/cgi-bin/hubApi/list/publicHubs' target=_blank>list public hubs</a> <em>/cgi-bin/hubApi/list/publicHubs</em></li>\n");
-hPrintf("<li><a href='/cgi-bin/hubApi/list/ucscGenomes' target=_blank>list database genomes</a> <em>/cgi-bin/hubApi/list/ucscGenomes</em></li>\n");
-hPrintf("<li><a href='/cgi-bin/hubApi/list/hubGenomes?hubUrl=%s' target=_blank>list genomes from specified hub</a> <em>/cgi-bin/hubApi/list/hubGenomes?hubUrl='%s'</em></li>\n", urlInput, urlInput);
-hPrintf("<li><a href='/cgi-bin/hubApi/list/tracks?hubUrl=%s&genome=%s' target=_blank>list tracks from specified hub and genome</a> <em>/cgi-bin/hubApi/list/tracks?hubUrl='%s&genome=%s'</em></li>\n", urlInput, hubGenome->name, urlInput, hubGenome->name);
-hPrintf("<li><a href='/cgi-bin/hubApi/list/tracks?db=%s' target=_blank>list tracks from specified UCSC database</a> <em>/cgi-bin/hubApi/list/tracks?db='%s'</em></li>\n", ucscDb, ucscDb);
-hPrintf("<li><a href='/cgi-bin/hubApi/list/chromosomes?db=%s' target=_blank>list chromosomes from specified UCSC database</a> <em>/cgi-bin/hubApi/list/chromosomes?db='%s'</em></li>\n", ucscDb, ucscDb);
-hPrintf("<li><a href='/cgi-bin/hubApi/list/chromosomes?db=%s&track=gap' target=_blank>list chromosomes from specified track from UCSC databaset</a> <em>/cgi-bin/hubApi/list/chromosomes?db='%s'&track=gap</em></li>\n", ucscDb, ucscDb);
-hPrintf("</ul>\n");
+showExamples(urlInput, hubGenome, ucscDb);
 
-hPrintf("<h4>cart dump</h4>");
-hPrintf("<pre>\n");
-cartDump(cart);
-hPrintf("</pre>\n");
+showCartDump();
 
 hPrintf("<form action='%s' name='hubApiUrl' id='hubApiUrl' method='GET'>\n\n", "../cgi-bin/hubApi");
 
