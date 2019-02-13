@@ -65,12 +65,10 @@ static void loadAndFilterItems(struct track *tg)
 {
 loadSimpleBedWithLoader(tg, (bedItemLoader)interactLoadAndValidate);
 
-if (slCount(tg->items) == 0 && tg->limitedVisSet)
+// if the summary is filled in then the number of items in the region is greater than maxItems.
+if (tg->summary != NULL)
     {
     // too many items to display
-    // borrowed behaviors in bamTrack and vcfTrack
-    // TODO BRANEY: make this behavior generic for bigBeds
-    // (bigBedSelectRange)
     tg->drawItems = bigDrawWarning;
     tg->networkErrMsg = "Too many items in display (zoom in)"; 
     tg->totalHeight = bigWarnTotalHeight;
