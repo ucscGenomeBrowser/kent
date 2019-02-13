@@ -357,22 +357,19 @@ if (tdb)
     struct trackDb *track = tdb;
     for ( ; track; track = track->next )
 	{
-//        char *bigDataUrl = hashFindVal(track->settingsHash, "bigDataUrl");
-        char *bigDataUrl = trackDbSetting(track, "bigDataUrl");
-//    char *compositeTrack = hashFindVal(track->settingsHash, "compositeTrack");
-      char *compositeTrack = trackDbSetting(track, "compositeTrack");
-//	char *superTrack = hashFindVal(track->settingsHash, "superTrack");
+	char *bigDataUrl = trackDbSetting(track, "bigDataUrl");
+	char *compositeTrack = trackDbSetting(track, "compositeTrack");
 	char *superTrack = trackDbSetting(track, "superTrack");
-        boolean depthSearch = cartUsualBoolean(cart, "depthSearch", FALSE);
-        if (compositeTrack)
-           hashIncInt(countTracks, "composite container");
-        else if (superTrack)
-           hashIncInt(countTracks, "superTrack container");
+	boolean depthSearch = cartUsualBoolean(cart, "depthSearch", FALSE);
+	if (compositeTrack)
+	    hashIncInt(countTracks, "composite container");
+	else if (superTrack)
+	    hashIncInt(countTracks, "superTrack container");
 	else if (isEmpty(track->type))
-           hashIncInt(countTracks, "no type specified");
+	    hashIncInt(countTracks, "no type specified");
 	else
-           hashIncInt(countTracks, track->type);
-        if (depthSearch && bigDataUrl)
+	    hashIncInt(countTracks, track->type);
+	if (depthSearch && bigDataUrl)
 	    {
 	    char *bigDataIndex = NULL;
 	    char *relIdxUrl = trackDbSetting(tdb, "bigDataIndex");
@@ -397,7 +394,7 @@ if (tdb)
 		    hPrintf("    <li>%s : %s : %ld chroms : %ld count</li>\n", track->track, track->type, chromCount, itemCount);
 		}
 	    }
-        else
+	else
 	    {
 	    if (compositeTrack)
 		hPrintf("    <li>%s : %s : composite track container</li>\n", track->track, track->type);
