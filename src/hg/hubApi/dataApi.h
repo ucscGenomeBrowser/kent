@@ -64,20 +64,14 @@ struct slName *genomeList(struct trackHub *hubTop, struct trackDb **dbTrackList,
  */
 
 /*  functions in apiUtils.c */
-void jsonErrAbort(char *format, ...);
+void apiErrAbort(char *format, ...);
 /* Issue an error message in json format, and exit(0) */
 
-struct jsonWrite *jsonStartOutput();
+struct jsonWrite *apiStartOutput();
 /* begin json output with standard header information for all requests */
 
 /* ######################################################################### */
 /*  functions in getData.c */
-extern void getTrackData();
-/* return data from a track */
-
-extern void getSequenceData();
-/* return DNA sequence, given at least a db=name and chrom=chr,
-   optionally start and end  */
 
 void apiGetData(char *words[MAX_PATH_INFO]);
 /* 'getData' function, words[1] is the subCommand */

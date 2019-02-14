@@ -480,11 +480,11 @@ hPrintDisable();	/* turn off all normal HTML output, doing JSON output */
 char *words[MAX_PATH_INFO];/*expect no more than MAX_PATH_INFO number of words*/
 int wordCount = chopByChar(pathInfo, '/', words, ArraySize(words));
 if (wordCount < 2)
-    jsonErrAbort("unknown endpoint command: '/%s'", pathInfo);
+    apiErrAbort("unknown endpoint command: '/%s'", pathInfo);
 
 struct hashEl *hel = hashLookup(apiFunctionHash, words[0]);
 if (hel == NULL)
-    jsonErrAbort("no such command: '%s' for endpoint '/%s'", words[0], pathInfo);
+    apiErrAbort("no such command: '%s' for endpoint '/%s'", words[0], pathInfo);
 void (*apiFunction)(char **) = hel->val;
 // void (*apiFunction)(char **) = hashMustFindVal(apiFunctionHash, words[0]);
 
