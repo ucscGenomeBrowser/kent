@@ -31,9 +31,6 @@ extern char *database;		/* Current database, often but not always dbDatabase. */
 #define hgsMakeDownloadPrefix hgSessionPrefix "makeDownload_"
 #define hgsDoDownloadPrefix hgSessionPrefix "doDownload_"
 
-#define hgsExtractUploadPrefix hgSessionPrefix "extractUpload_"
-#define hgsDoUploadPrefix hgSessionPrefix "doUpload_"
-
 #define hgsSaveLocalBackupFileName hgSessionPrefix "saveLocalBackupFileName"
 #define hgsSaveLocalFileName hgSessionPrefix "saveLocalFileName"
 #define hgsSaveLocalFileCompress hgSessionPrefix "saveLocalFileCompress"
@@ -83,15 +80,5 @@ void makeDownloadSessionCtData(char *param1, char *backgroundProgress);
 
 void doDownloadSessionCtData(struct hashEl *downloadPathList);
 /* Download given table to browser to save. */
-
-void extractUploadSessionCtData(
-    char *param1, char *param1Value, 
-    char *param2, char *param2Value, 
-    char *param3, char *param3Value, 
-    char *backgroundProgress);
-/* Extract uploaded archive to restore cts. */
-
-void doUploadSessionCtData(char *param1, char *backgroundProgress);
-/* Extract uploaded archive to restore cts. */
 
 #endif /* HGSESSION_H */
