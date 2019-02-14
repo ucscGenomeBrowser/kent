@@ -75,17 +75,20 @@ sudo mygbcopy hg38 hgFixed
 # build the grep index
 bin/dumpGrepIndex /data/tmp/grepIndex hgFixed
 rsync -av /data/tmp/grepIndex/hgFixed/  hgwdev-101:/data/tmp/grepIndex/hgFixed/  
-# to fix errors --
-# cd etc
-# ./deleteLocks.sh petMar3 gbTmp .hg.conf.hgwdev 
-# ./validateDb.sh /cluster/home/braney/.hg.conf.hgwdev  petMar3 gbTmp  gbPerAssemblyTables.txt  yes 
-# ./copyDbDev.sh petMar3  gbTmp /cluster/home/braney/.hg.conf.hgwdev  gbPerAssemblyTables.txt  yes 
 
 # rsync hgFixed
 etc/copyMetaDev.sh
 
 # rsync the assemblies
 etc/copyAssemblies.sh
+
+# to fix errors --
+# cd etc
+# ./deleteLocks.sh ochPri3 gbTmp .hg.conf.hgwdev 
+# ./validateDb.sh .hg.conf.hgwdev  ochPri3 gbTmp  gbPerAssemblyTables.txt  yes 
+# ./copyDbDev.sh ochPri3  gbTmp .hg.conf.hgwdev  gbPerAssemblyTables.txt  yes 
+# cd ..
+# etc/copyAssemblies.sh
 
 rm var/build.lock
 
