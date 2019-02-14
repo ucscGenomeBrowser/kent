@@ -10,15 +10,15 @@
 <h2>Topics</h2>
 
 <ul>
-<li><a href="#genestrans">What is a gene?</a></li>
-<li><a href="#genestrans">What is the difference between genes and transcripts ?</a></li>
-<li><a href="#ens">What is the difference between Ensembl and Gencode ?</a></li>
-<li><a href="#ensRefseq">What is the difference between Gencode/Ensembl and RefSeq ?</a></li>
+<li><a href="#gene">What is a gene?</a></li>
+<li><a href="#genestrans">What is the difference between genes and transcripts?</a></li>
+<li><a href="#ens">What is the difference between Ensembl and Gencode?</a></li>
+<li><a href="#ensRefseq">What is the difference between GENCODE, Ensembl and RefSeq?</a></li>
 <li><a href="#hg19">For the human assembly hg19/GrCH37: What is the difference between UCSC 
-                    Genes, the "Gencode All" track and the "Ensembl Genes" track ?</a></li>
-<li><a href="#hg38">For the human assembly hg38/GrCH38: What is the difference between "Gencode" 
-                    and "All Gencode" ?</a></li>
-<li><a href="#gencod.org">What is the difference between Gencode comprehensive and basic?</a></li>
+                    Genes track, the "GENCODE" track and the "Ensembl Genes" track?</a></li>
+<li><a href="#hg38">For the human assembly hg38/GrCH38: What are the differences between the 
+		    "GENCODE" and "All GENCODE" tracks?</a></li>
+<li><a href="#gencode">What is the difference between GENCODE comprehensive and basic?</a></li>
 <li><a href="#ccds">What is CCDS?</a></li>
 <li><a href="#justsingle">There are too many transcripts. Can I show just a single one?</a></li>
 <li><a href="#whatdo">This is rather complicated. Can you tell me which gene transcript track
@@ -28,7 +28,7 @@
 <p>
 <a href="index.html">Return to FAQ Table of Contents</a></p>
 
-<a name="genestrans"></a>
+<a name="gene"></a>
 <h2>The basics</h2>
 <h6>What is a gene?</h6>
 <p>
@@ -40,10 +40,11 @@ Nomenclature Commitee (HGNC, formerly HUGO). For other organisms there is usuall
 a database curation team that assigns symbols, like MGI for mouse.
 </p>
 
+<a name="genestrans"></a>
 <h6>What is the difference between genes and transcripts? </h6>
 <p>
 Every gene has a set of transcripts. Tracks are often called "Genes", e.g.
-"Ensembl Genes" or "UCSC Genes", but they really are transcripts on an assembly.
+"Ensembl Genes" or "UCSC Genes", but they are really transcripts on an assembly.
 Every transcript has an
 accession number, a sequence and a list of exon
 chrom/start/end coordinates on a genome assembly. The transcript accessions
@@ -76,7 +77,7 @@ tracks are only relevant when you are working on a particular locus where you
 think that the manually curated gene models (Ensembl and RefSeq) have
 errors.</p>
 
-<a name="ensgencode"></a>
+<a name="ens"></a>
 <h2>The differences</h2>
 <h6>What are Ensembl and Gencode and is there any difference?</h6>
 
@@ -105,7 +106,8 @@ should be easier to use, as the third party database links are easier to parse
 and the sequence identifiers match the UCSC genome files, at least for the
 primary chromosomes.
 
-<h6>What is the difference between Ensembl/Gencode and RefSeq?</h6>
+<a name="ensRefseq"></a>
+<h6>What is the difference between Ensembl, Gencode and RefSeq?</h6>
 <p> 
 Different institutions have different rules on how they annotate genes. E.g.
 RefSeq's criteria are more stringent, so there are a lot fewer RefSeq
@@ -121,7 +123,7 @@ databases are becoming more and more similar.
 
 <a name="hg19"></a>
 <h6>For the human assembly hg19/GrCH37: What is the difference between UCSC
-Genes, the "Gencode All" track and the "Ensembl Genes" track ?</h6>
+Genes, the "GENCODE All" track and the "Ensembl Genes" track?</h6>
 <p>The "UCSC Genes", also called "Known Genes" track, is available only on
 assemblies before hg38.  It was built with a gene predictor developed at UCSC.
 It uses protein, EST and cDNA annotations to derive a relatively restricted
@@ -132,15 +134,16 @@ available on the newer assemblies.</p>
 a single Ensembl version. See above for the differences between Ensembl and Gencode.</p>
 
 <a name="hg38"></a>
-<h6>For the human assembly hg38/GrCH38: What is the difference between "Gencode" and "All Gencode" ?</h6>
+<h6>For the human assembly hg38/GrCH38: What are the differences between the "GENCODE" and 
+"All GENCODE" tracks?</h6>
 <p> 
 "Gencode" is the default gene track on hg38 (similar to "Known Genes" on hg19). It shows a lot of 
 third party information when you click on a gene. "All Gencode" contains all
 versions of Gencode, but a lot less third-party information.
 </p>
 
-<a name="hg38"></a>
-<h6>What is the difference between "Gencode Comprehensive" and "Gencode Basic"</h6>
+<a name="gencode"></a>
+<h6>What is the difference between "GENCODE Comprehensive" and "GENCODE Basic?"</h6>
 <p> 
 Gencode Basic is the subset of Gencode useful to most users and it is what the UCSC Genome
 Browser shows by default.  
@@ -149,6 +152,9 @@ The "basic" tag is defined like this in the <a href="https://www.gencodegenes.or
 full-length protein coding transcripts over partial or non-protein coding
 transcripts within the same gene, and intends to highlight those transcripts
 that will be useful to the majority of users.". </p>
+
+<a name="ccds"></a>
+<h6>What is CCDS?</h6>
 
 <a name="justsingle"></a>
 <h6>How can I just show a single transcript per gene?</h6>
