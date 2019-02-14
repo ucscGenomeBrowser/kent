@@ -6992,6 +6992,7 @@ identifier ncbiRefSeq
     $gbd.ncbiRefSeq.name dupeOk
     $gbd.ncbiRefSeqLink.id full
     $gbd.ncbiRefSeqCurated.name
+    $gbd.ncbiRefSeqHgmd.name
     $gbd.ncbiRefSeqPredicted.name
     $gbd.ncbiRefSeqPsl.qName
     $gbd.ncbiRefSeqCds.id
