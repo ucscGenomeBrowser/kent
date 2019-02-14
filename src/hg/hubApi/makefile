@@ -6,7 +6,7 @@ MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  $(MYLIBDIR)/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 A = hubApi
-O = hubApi.o
+O = hubApi.o getData.o apiUtils.o list.o
 
 A = hubApi
 

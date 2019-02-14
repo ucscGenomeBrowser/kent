@@ -42,9 +42,18 @@ var cirmSiteFunctions = (function() {
         }, 200);
     }
 
+    // This happens at the time the script is being read, so of course it's the last script in the
+    // DOM.
+    var thisScriptUrl=$("script")[$("script").length-1].src;
+    var userUrl = thisScriptUrl.replace(/js\/cirmStuff\.js.*$/i, "cgi-bin/cdwWebBrowse?cdwCommand=userName");
+    function userNameUrl() {
+        return userUrl;
+    }
+
     return {
         basicAuthLogout: basicAuthLogout,
-        isSecureSite: isSecureSite
+        isSecureSite: isSecureSite,
+        userNameUrl: userNameUrl
     };
 }()); // cirmSiteFunctions definition
 
@@ -72,7 +81,7 @@ $(document).ready(function() {
             }
         };
     };
-    var url = "cdwWebBrowse?cdwCommand=userName";
+    var url = cirmSiteFunctions.userNameUrl();
     loginRequest.open("GET", url, true);
     loginRequest.send();
 });
