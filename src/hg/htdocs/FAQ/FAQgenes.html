@@ -11,7 +11,8 @@
 
 <ul>
 <li><a href="#gene">What is a gene?</a></li>
-<li><a href="#genestrans">What is the difference between genes and transcripts?</a></li>
+<li><a href="#genestrans">What is the difference between a gene and a transcript?</a></li>
+<li><a href="#genename">What is a gene name?</a></li>
 <li><a href="#ens">What is the difference between Ensembl and Gencode?</a></li>
 <li><a href="#ensRefseq">What is the difference between GENCODE, Ensembl and RefSeq?</a></li>
 <li><a href="#hg19">For the human assembly hg19/GrCH37: What is the difference between UCSC 
@@ -32,22 +33,22 @@
 <h2>The basics</h2>
 <h6>What is a gene?</h6>
 <p>
-Before DNA sequencing, genes were traits. In bioinformatics today, a gene is a
-collection of transcripts. Transcripts either encode one protein or are 
-non-coding transcripts.
-For human, most of the genes have a symbol associated to them by the Human Gene
-Nomenclature Commitee (HGNC, formerly HUGO). For other organisms there is usually
-a database curation team that assigns symbols, like MGI for mouse.
+Before DNA sequencing, genes were defined as heritable traits. In the present day context of 
+bioinformatics, a gene represents a collection of transcripts usually transcribed within certain 
+genomic coordinates . Transcripts either encode one protein or are non-coding transcripts. 
+For human, most of the genes have a symbol associated to them by the Human Gene Nomenclature 
+Commitee (HGNC, formerly HUGO). For other organisms there is usually a database curation 
+team that assigns symbols, such as MGI for mouse.
 </p>
 
 <a name="genestrans"></a>
-<h6>What is the difference between genes and transcripts? </h6>
+<h6>What is the difference between a gene and a transcript? </h6>
 <p>
-Every gene has a set of transcripts. Tracks are often called "Genes", e.g.
-"Ensembl Genes" or "UCSC Genes", but they are really transcripts on an assembly.
-Every transcript has an
-accession number, a sequence and a list of exon
-chrom/start/end coordinates on a genome assembly. The transcript accessions
+Trancripts are defined as RNA molecules that are transcribed in the genome. Every gene 
+is comprised of a set of transcripts. In the Genome Browser, tracks are often called 
+"Genes", e.g. "Ensembl Genes" or "UCSC Genes", but they really represent transcripts 
+on an assembly. Every transcript has an accession number, a sequence, and a list of exon
+chrom/start/end coordinates on a genome assembly. These transcript accession numbers 
 are assigned to genes. </p>
 
 <h6>What are the most common gene transcript tracks?</h6>
@@ -58,16 +59,9 @@ a single read from the 5' or 3' end. From the alignment of the cDNAs and ESTs,
 the NCBI RefSeq group manually creates a smaller set of representative transcripts.
 Automated programs like UCSC's or Ensembl's gene build software do the same, just
 in software, which is more systematic but more error-prone.
-With the arrival of Gencode, Ensembl added a manual curation of their
-human and mouse transcripts. NCBI added with Gnomon and its "Refseq Predicted" transcripts an
-automated gene build pipeline.</p>
-
-<p>
-Ensembl/Gencode accession numbers in the human genome start with ENST followed by a
-number. Every transcript is assigned to a gene with identifiers that start with ENSG and every ENSG has at
-least one ENST assigned to it. Manually curated Refseq transcript identifiers
-start with NM_ (coding) or NR_ (noncoding), followed by a number, or XM_ if
-they are predicted by software.</p>
+With the arrival of GENCODE, Ensembl added a manual curation to their
+human and mouse transcripts. NCBI has since also added automated predictions pipeline with 
+their tool Gnomon and its resulting "Refseq Predicted" transcripts.</p>
 
 <p>There are many other tracks in the group "Genes and Gene Predictions".
 Genescan and N-Scan are older transcript predictor algorithms that are based on
@@ -77,9 +71,21 @@ tracks are only relevant when you are working on a particular locus where you
 think that the manually curated gene models (Ensembl and RefSeq) have
 errors.</p>
 
+<a name="genename"></a>
+<h6>What is a gene name? </h6>
+
+<p>
+The most common gene names encountered by users are either from Ensembl, GENCODE, RefSeq, or 
+gene symbols. For gene symbols, such as DDX11L1, see the above question "What is a gene?".
+Ensembl/GENCODE accession numbers in the human genome start with ENST followed by a
+number. Every transcript is assigned to a gene with identifiers that start with ENSG and 
+every ENSG has at least one ENST assigned to it. Manually curated RefSeq transcript identifiers
+start with NM_ (coding) or NR_ (noncoding), followed by a number, or XM_ if
+they are predicted by software.</p>
+
 <a name="ens"></a>
 <h2>The differences</h2>
-<h6>What are Ensembl and Gencode and is there any difference?</h6>
+<h6>What are Ensembl and GENCODE and is there any difference?</h6>
 
 <p>TODO Lou or Max: compare the Ensembl GFF with the Gencode GFF.</p>
 
