@@ -16,7 +16,7 @@ char **row;
 row = sqlNextRow(sr);
 if (NULL == row)
     {
-    jsonErrAbort("ERROR: can not 'desc' table '%s'", table);
+    apiErrAbort("ERROR: can not 'desc' table '%s'", table);
     return TRUE;
     }
 while ((row = sqlNextRow(sr)) != NULL)
@@ -54,7 +54,7 @@ hDisconnectCentral(&conn);
 time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
 replaceChar(dataTime, ' ', 'T');
 struct hubPublic *el = hubPublicLoadAll();
-struct jsonWrite *jw = jsonStartOutput();
+struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "dataTime", dataTime);
 jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
 freeMem(dataTime);
@@ -105,7 +105,7 @@ time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
 replaceChar(dataTime, ' ', 'T');
 struct dbDb *dbList = ucscDbDb();
 struct dbDb *el;
-struct jsonWrite *jw = jsonStartOutput();
+struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "dataTime", dataTime);
 jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
 freeMem(dataTime);
@@ -132,13 +132,13 @@ struct sqlConnection *conn = hAllocConn(db);
 if (table)
     {
     if (! sqlTableExists(conn, table))
-	jsonErrAbort("ERROR: endpoint: /list/chromosomes?db=%&table=%s ERROR table does not exist", db, table);
+	apiErrAbort("ERROR: endpoint: /list/chromosomes?db=%&table=%s ERROR table does not exist", db, table);
     if (sqlColumnExists(conn, table, "chrom"))
 	{
 	char *dataTime = sqlTableUpdate(conn, table);
 	time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
 	replaceChar(dataTime, ' ', 'T');
-        struct jsonWrite *jw = jsonStartOutput();
+        struct jsonWrite *jw = apiStartOutput();
 	jsonWriteString(jw, "genome", db);
 	jsonWriteString(jw, "track", table);
 	jsonWriteString(jw, "dataTime", dataTime);
@@ -168,7 +168,7 @@ if (table)
 	}
     else
 	{
-	jsonErrAbort("ERROR: table '%s' is not a position table, no chromosomes for genome: '%s'", table, db);
+	apiErrAbort("ERROR: table '%s' is not a position table, no chromosomes for genome: '%s'", table, db);
 	}
     }
 else
@@ -178,7 +178,7 @@ else
     replaceChar(dataTime, ' ', 'T');
     struct chromInfo *ciList = createChromInfoList(NULL, db);
     struct chromInfo *el = ciList;
-    struct jsonWrite *jw = jsonStartOutput();
+    struct jsonWrite *jw = apiStartOutput();
     jsonWriteString(jw, "genome", db);
     jsonWriteString(jw, "dataTime", dataTime);
     jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
@@ -218,7 +218,7 @@ for (el = tdb; el != NULL; el = el->next )
     }
 jsonWriteListEnd(jw);
 }
-int trackDbTrackCmp(const void *va, const void *vb)
+static int trackDbTrackCmp(const void *va, const void *vb)
 /* Compare to sort based on 'track' name; use shortLabel as secondary sort key.
  * Note: parallel code to hgTracks.c:tgCmpPriority */
 {
@@ -242,7 +242,7 @@ time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
 replaceChar(dataTime, ' ', 'T');
 hFreeConn(&conn);
 struct trackDb *tdbList = hTrackDb(db);
-struct jsonWrite *jw = jsonStartOutput();
+struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "db", db);
 jsonWriteString(jw, "dataTime", dataTime);
 jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
@@ -263,7 +263,7 @@ else if (sameWord("hubGenomes", words[1]))
     {
     char *hubUrl = cgiOptionalString("hubUrl");
     if (isEmpty(hubUrl))
-	jsonErrAbort("must supply hubUrl='http:...' some URL to a hub for /list/hubGenomes");
+	apiErrAbort("must supply hubUrl='http:...' some URL to a hub for /list/hubGenomes");
 
     struct trackHub *hub = NULL;
     struct errCatch *errCatch = errCatchNew();
@@ -274,12 +274,12 @@ else if (sameWord("hubGenomes", words[1]))
     errCatchEnd(errCatch);
     if (errCatch->gotError)
 	{
-	jsonErrAbort("error opening hubUrl: '%s', '%s'", hubUrl,  errCatch->message->string);
+	apiErrAbort("error opening hubUrl: '%s', '%s'", hubUrl,  errCatch->message->string);
 	}
     errCatchFree(&errCatch);
     if (hub->genomeList)
 	{
-        struct jsonWrite *jw = jsonStartOutput();
+        struct jsonWrite *jw = apiStartOutput();
 	jsonWriteString(jw, "hubUrl", hubUrl);
         jsonWriteListStart(jw, "genomes");
 	struct slName *theList = genomeList(hub, NULL, NULL);
@@ -300,7 +300,7 @@ else if (sameWord("tracks", words[1]))
     char *genome = cgiOptionalString("genome");
     char *db = cgiOptionalString("db");
     if (isEmpty(hubUrl) && isEmpty(db))
-      jsonErrAbort("ERROR: must supply hubUrl or db name to return track list");
+      apiErrAbort("ERROR: must supply hubUrl or db name to return track list");
     if (isEmpty(hubUrl))	// missing hubUrl implies UCSC database
 	{
         trackDbJsonOutput(db, stdout);	// only need db for this function
@@ -311,7 +311,7 @@ else if (sameWord("tracks", words[1]))
         if (isEmpty(genome))
 	    warn("# must supply genome='someName' the name of a genome in a hub for /list/tracks\n");
 	if (isEmpty(hubUrl))
-            jsonErrAbort("ERROR: must supply hubUrl='http:...' some URL to a hub for /list/genomes");
+            apiErrAbort("ERROR: must supply hubUrl='http:...' some URL to a hub for /list/genomes");
 	}
     struct trackHub *hub = trackHubOpen(hubUrl, "");
     if (hub->genomeList)
@@ -319,7 +319,7 @@ else if (sameWord("tracks", words[1]))
 	struct trackDb *dbTrackList = NULL;
 	(void) genomeList(hub, &dbTrackList, genome);
 	slSort(dbTrackList, trackDbTrackCmp);
-        struct jsonWrite *jw = jsonStartOutput();
+        struct jsonWrite *jw = apiStartOutput();
 	jsonWriteString(jw, "hubUrl", hubUrl);
 	jsonWriteString(jw, "genome", genome);
         recursiveTrackList(jw, dbTrackList, "tracks");
@@ -333,7 +333,7 @@ else if (sameWord("chromosomes", words[1]))
 //    char *genome = cgiOptionalString("genome");
     char *db = cgiOptionalString("db");
     if (isEmpty(hubUrl) && isEmpty(db))
-        jsonErrAbort("ERROR: must supply hubUrl or db name to return chromosome list");
+        apiErrAbort("ERROR: must supply hubUrl or db name to return chromosome list");
 
     if (isEmpty(hubUrl))	// missing hubUrl implies UCSC database
 	{
@@ -342,5 +342,5 @@ else if (sameWord("chromosomes", words[1]))
 	}
     }
 else
-    jsonErrAbort("do not recognize endpoint function: '/%s/%s'", words[0], words[1]);
+    apiErrAbort("do not recognize endpoint function: '/%s/%s'", words[0], words[1]);
 }	/*	void apiList(char *words[MAX_PATH_INFO])        */
