@@ -17,14 +17,24 @@ gbRoot=/data/genbank
 cd $gbRoot
 . $gbRoot/lib/gbCommon.sh
 
+if test -f var/build.lock
+then 
+    echo "genbank build lock file exists."
+    ls -l var/build.lock
+    exit 1
+fi
+
+touch var/build.lock
+
+
 # download and process
 cd $gbRoot
 nice gbDownloadStep
 nice gbProcessStep -mkOrganismList
 
 # copy new fasta to hgwdev
-rsync --delete -av /data/genbank/data/processed /hive/data/outside/genbank/data/
-rsync -av /data/genbank/data/organism.lst /hive/data/outside/genbank/data/
+rsync --delete -a /data/genbank/data/processed /hive/data/outside/genbank/data/
+rsync -a /data/genbank/data/organism.lst /hive/data/outside/genbank/data/
 
 # should check to see if any of the two-bit files changed from the last
 # time we ran, and if so, re-do all the alignments.
@@ -36,21 +46,22 @@ nice etc/align-genbank
 # rm var/build/run/*
 
 #check for new databases
-# SOMEDIR=some
-# mkdir $SOMEDIR
-#sed '/^#/d' etc/hgwdev.dbs | sort > $SOMEDIR/wantDbs.txt
-#hgsql "" -Ne "show databases" | sort > $SOMEDIR/haveDbs.txt
-# join -v 1 $SOMEDIR/wantDbs.txt $SOMEDIR/haveDbs.txt > $SOMEDIR/needDbs.txt
+SOMEDIR=some
+mkdir $SOMEDIR
+sed '/^#/d' etc/hgwdev.dbs | sort > $SOMEDIR/wantDbs.txt
+hgsql "" -Ne "show databases" | sort > $SOMEDIR/haveDbs.txt
+join -v 1 $SOMEDIR/wantDbs.txt $SOMEDIR/haveDbs.txt > $SOMEDIR/needDbs.txt
 
-#(cd $SOMEDIR; for i in `join -v 1 wantDbs.txt haveDbs.txt`; do HGDB_CONF=/data/genbank/etc/.hg.conf.hgwdev hgsql $i -Ne "select * from chromInfo" > $i.chromInfo; hgsql "" -Ne "create database $i"; hgsql $i < ~/kent/src/hg/lib/chromInfo.sql; hgsql $i -Ne "load data local infile '$i.chromInfo' into table chromInfo"; hgsql $i < ~/kent/src/hg/lib/gbLoaded.sql; done)
-# rm SOMEDIR
+(cd $SOMEDIR; for i in `join -v 1 wantDbs.txt haveDbs.txt`; do HGDB_CONF=/data/genbank/etc/.hg.conf.hgwdev hgsql $i -Ne "select * from chromInfo" > $i.chromInfo; hgsql "" -Ne "create database $i"; hgsql $i < ~/kent/src/hg/lib/chromInfo.sql; hgsql $i -Ne "load data local infile '$i.chromInfo' into table chromInfo"; hgsql $i < ~/kent/src/hg/lib/gbLoaded.sql; done)
+rm -rf $SOMEDIR
 
+# load the databases
 etc/genbank-dbload
 
 # newly made dbs need to be copied without validation
+# TODO
 
 # check for gbExtFile for need to run gbExtUpdate
-# hgsql hg38 -Ne "select path from gbExtFile" | sed 's?/gbdb/genbank/./data/processed/??' | sed 's?/.*??' | uniq
 f=`hgsql hg38 -Ne "select path from gbExtFile" | sed 's?/gbdb/genbank/./data/processed/??' | sed 's?/.*??' | uniq | wc -l`
 if test $f -gt 2; then bin/x86_64/extFileUpdate hg38 ; fi
 
@@ -64,16 +75,21 @@ sudo mygbcopy hg38 hgFixed
 # build the grep index
 bin/dumpGrepIndex /data/tmp/grepIndex hgFixed
 rsync -av /data/tmp/grepIndex/hgFixed/  hgwdev-101:/data/tmp/grepIndex/hgFixed/  
-# to fix errors --
-# cd etc
-# ./deleteLocks.sh petMar3 gbTmp .hg.conf.hgwdev 
-# ./validateDb.sh /cluster/home/braney/.hg.conf.hgwdev  petMar3 gbTmp  gbPerAssemblyTables.txt  yes 
-# ./copyDbDev.sh petMar3  gbTmp /cluster/home/braney/.hg.conf.hgwdev  gbPerAssemblyTables.txt  yes 
 
 # rsync hgFixed
 etc/copyMetaDev.sh
 
 # rsync the assemblies
 etc/copyAssemblies.sh
+
+# to fix errors --
+# cd etc
+# ./deleteLocks.sh ochPri3 gbTmp .hg.conf.hgwdev 
+# ./validateDb.sh .hg.conf.hgwdev  ochPri3 gbTmp  gbPerAssemblyTables.txt  yes 
+# ./copyDbDev.sh ochPri3  gbTmp .hg.conf.hgwdev  gbPerAssemblyTables.txt  yes 
+# cd ..
+# etc/copyAssemblies.sh
+
+rm var/build.lock
 
 echo "genbank build completed on $(hostname)"

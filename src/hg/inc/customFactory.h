@@ -88,7 +88,7 @@ struct customTrack *customFactoryParseAnyDb(char *genomeDb, char *text, boolean 
  * If doParallelLoad is true, load the big tracks */
 
 void customFactoryTestExistence(char *genomeDb, char *fileName,
-                                boolean *retGotLive, boolean *retGotExpired);
+                                boolean *retGotLive, boolean *retGotExpired, struct customTrack **retTrackList);
 /* Test existence of custom track fileName.  If it exists, parse it just 
  * enough to tell whether it refers to database tables and if so, whether 
  * they are alive or have expired.  If they are live, touch them to keep 

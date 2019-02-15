@@ -80,6 +80,9 @@ struct vGfx
     	boolean filled);
     /* Draw polygon, possibly filled in color. */
 
+    void (*circle)(void *v, int xCen, int yCen, int rad,  Color color, boolean filled);
+    /* Draw a circle. */
+
     void (*ellipse)(void *v, int x1, int y1, int x2, int y2, Color color,
                     int mode, boolean isDashed); 
     /* Draw an ellipse or half-ellipse (top or bottom),
@@ -115,6 +118,9 @@ struct vGfx *vgOpenPostScript(int width, int height, char *fileName);
 
 void vgClose(struct vGfx **pVg);
 /* Close down virtual graphics object, and finish writing it to file. */
+
+#define vgCircle(v,x,y, rad, color, filled) v->circle(v->data,x,y,rad,color,filled)
+/* Draw a circle. */
 
 #define vgDot(v,x,y, color) v->dot(v->data,x,y,color)
 /* Draw a single pixel.  Try to work at a higher level

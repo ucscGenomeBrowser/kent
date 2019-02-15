@@ -83,10 +83,19 @@ endif
 ifeq (${IS_HGWDEV},yes)
    L+=/usr/lib64/libssl.a /usr/lib64/libcrypto.a -lkrb5 -lk5crypto -ldl
 else
-   ifneq ($(wildcard /usr/lib/x86_64-linux-gnu/libssl.a),)
-	L+=/usr/lib/x86_64-linux-gnu/libssl.a -lcrypto
+   ifneq ($(wildcard /opt/local/lib/libssl.a),)
+       L+=/opt/local/lib/libssl.a
    else
-	L+=-lssl -lcrypto
+     ifneq ($(wildcard /usr/lib/x86_64-linux-gnu/libssl.a),)
+	L+=/usr/lib/x86_64-linux-gnu/libssl.a
+     else
+	L+=-lssl
+     endif
+   endif
+   ifneq (@(wildcard /opt/local/lib/libcrypto.a),)
+       L+=/opt/local/lib/libcrypto.a
+   else
+       L+=-lcrypto
    endif
 endif
 

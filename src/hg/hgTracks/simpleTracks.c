@@ -663,8 +663,9 @@ for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
                     range->next = NULL;  // do not need the rest of the ranges
                     }
                 }
-
-	    if (spaceSaverAddOverflowMulti(ss, rangeList, nodeList, allowOverflow) == NULL)
+            boolean doPadding = !cartOrTdbBoolean(cart, tg->tdb, "bedPackDense", FALSE);
+	    if (spaceSaverAddOverflowMultiOptionalPadding(
+                                ss, rangeList, nodeList, allowOverflow, doPadding) == NULL)
 		break;
 
 	    }
@@ -794,6 +795,13 @@ switch (vis)
 	    rows = packCountRowsOverflow(tg, floor(maxHeight/tg->lineHeight), TRUE, allowOverflow, vis);
 	else
 	    rows = packCountRowsOverflow(tg, floor(maxHeight/tg->lineHeight)+1, TRUE, FALSE, vis);
+        if (tdbIsCompositeChild(tg->tdb))
+            {
+            boolean doCollapse = doCollapseEmptySubtracks(tg);
+            if (isCenterLabelsPackOff(tg) && !doCollapse)
+                if (rows == 0)
+                    rows = 1;   // compact pack mode, shows just side label
+            }
 	break;
 	}
     case tvSquish:
@@ -952,6 +960,33 @@ if (isCenterLabelConditional(track))
         return FALSE;
     }
 return isWithCenterLabels(track);
+}
+
+boolean isCenterLabelConditional(struct track *track)
+/* Dense subtracks and pack subtracks (when centerLabelsPack off set)
+ *      show center labels depending on vis of previous track */
+{
+if (!tdbIsCompositeChild((track)->tdb))
+    return FALSE;
+enum trackVisibility vis = limitVisibility(track);
+if (vis == tvFull || vis == tvSquish)
+    return FALSE;
+if (vis == tvDense)
+    return TRUE;
+// pack mode
+return isCenterLabelsPackOff(track);
+}
+
+boolean isCenterLabelIncluded(struct track *track)
+/* Center labels may be conditionally included */
+{
+if (!isWithCenterLabels(track))
+    return FALSE;
+if (theImgBox)
+    return TRUE;
+if (isCenterLabelConditionallySeen(track))
+    return TRUE;
+return FALSE;
 }
 
 void mapStatusMessage(char *format, ...)
@@ -1538,13 +1573,13 @@ hvGfxBox(hvg, x1, y, w, height, color);
 char *shortLabel = cloneString(label);
 /* calculate how many characters we can squeeze into the box */
 int charsInBox = w / mgFontCharWidth(font, 'm');
-if (charsInBox > 4)
-    {
-    if (charsInBox < strlen(label))
+if (charsInBox < strlen(label))
+    if (charsInBox > 4)
         strcpy(shortLabel+charsInBox-3, "...");
-    Color labelColor = hvGfxContrastingColor(hvg, color);
-    hvGfxTextCentered(hvg, x1, y, w, height, labelColor, font, shortLabel);
-    }
+if (charsInBox < strlen(shortLabel))
+    return;
+Color labelColor = hvGfxContrastingColor(hvg, color);
+hvGfxTextCentered(hvg, x1, y, w, height, labelColor, font, shortLabel);
 }
 
 void filterItems(struct track *tg, boolean (*filter)(struct track *tg, void *item),
@@ -4126,18 +4161,9 @@ else if (vis == tvFull)
     int geneMapBoxX = insideX;
     int geneMapBoxW = insideWidth;
     /* Draw the first gene label mapbox, in the left margin. */
-#ifndef IMAGEv2_NO_LEFTLABEL_ON_FULL
     int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
-#ifdef IMAGEv2_SHORT_MAPITEMS
-    char *name = tg->itemName(tg, item);
-    if (*name != '\0')
-        tg->mapItem(tg, hvg, item, name, tg->mapItemName(tg, item),
-                    s, e, trackPastTabX, y, insideX - trackPastTabX, heightPer);
-#else///ndef IMAGEv2_SHORT_MAPITEMS
     tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
                 s, e, trackPastTabX, y, insideX - trackPastTabX, heightPer);
-#endif///ndef IMAGEv2_SHORT_MAPITEMS
-#endif///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
     /* Depending on which button mapboxes we drew, draw the remaining mapbox. */
     if (lButton)
         {
@@ -4148,18 +4174,6 @@ else if (vis == tvFull)
 	{
         geneMapBoxW -= buttonW;
 	}
-#ifdef IMAGEv2_SHORT_MAPITEMS
-    if (x2 > 0)
-        {
-        geneMapBoxX = textX;
-        geneMapBoxW = x2-geneMapBoxX;
-        if (geneMapBoxW < 5) // Full with short labels but don't make tiny map items
-            {
-            geneMapBoxX -= (5 - geneMapBoxW)/2;
-            geneMapBoxW = 5;
-            }
-        }
-#endif//def IMAGEv2_SHORT_MAPITEMS
     if (compat)
 	{  // draw labeled exon/intron maps with exon/intron numbers
 	linkedFeaturesItemExonMaps(tg, hvg, item, scale, y, heightPer, s, e, lButton, rButton, buttonW);
@@ -13971,6 +13985,12 @@ else if (sameWord(type, "bigBarChart"))
     tdb->canPack = TRUE;
     track->isBigBed = TRUE;
     barChartMethods(track);
+    }
+else if (sameWord(type, "bigLolly"))
+    {
+    tdb->canPack = TRUE;
+    track->isBigBed = TRUE;
+    lollipopMethods(track, tdb, wordCount, words);
     }
 else if (sameWord(type, "bigInteract"))
     {

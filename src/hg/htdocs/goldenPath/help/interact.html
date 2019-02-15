@@ -5,7 +5,7 @@
 <!-- Relative paths to support mirror sites with non-standard GB docs install -->
 <!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
-<h1>interact and bigInteract Track Format</h1> 
+<h1>Interact and bigInteract Track Format</h1> 
 <p>
 <p>
 The interact (and bigInteract) track format displays pairwise interactions as arcs or 
@@ -38,7 +38,7 @@ schema file defining the fields of the bigInteract.
 </p>
 
 <a name=interact></a>
-<h2>interact format definition</h2>
+<h2>Interact format definition</h2>
 <p>
 The following autoSql definition illustrates the basic schema supporting interact (and 
 bigInteract) tracks.</p>
@@ -216,8 +216,9 @@ bigInteract on a hub can be viewed <a href="./trackDb/trackDbHub.html#bigInterac
    database is located at
    <a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.chrom.sizes" 
    target="_blank">http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.chrom.sizes</a>.</li>
-   <li>Save the autoSql file <a href="examples/interact/interact.as">interact.as</a> to your computer.</li>
-   <li>Edit the .as file to change the 'source' fields to 'region1' and the 'target' fields to 'region2'.
+   <li>Save the autoSql file <a href="examples/interact/interact.as">interact.as</a> to your computer.
+       If you want the column labels to reflect non-directional interactions, you can change the 
+       default variable names from 'source...' and 'target...' to 'region1...' and 'region2...'.</li>
    <li>Run bedToBigBed to create the bigInteract file:
    <pre><code>
 bedToBigBed -as=interact.as -type=bed5+13 interactExample4.inter.bed hg19.chrom.sizes interactExample4.inter.bb

@@ -681,7 +681,7 @@ else if (isCustomTrack(table))
     showSchemaCt(db, table);
 else if (sameWord(table, WIKI_TRACK_TABLE))
     showSchemaWiki(tdb, table);
-else if (tdb &&startsWithWord("bigWig", tdb->type) && !hTableExists(db, table))
+else if (isBigWig(database, table, curTrack, ctLookupName))
 	showSchemaBigWigNoTable(db, table, tdb);
 else
     showSchemaDb(db, tdb, table);

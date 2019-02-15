@@ -9,7 +9,6 @@
 
     <!-- Local stylesheet -->
     <link rel="stylesheet" href="<!--#echo var="ROOT" -->/style/cirmStyle.css">
-    <script src="<!--#echo var="ROOT" -->/js/cirmStuff.js"></script>
 
     <!-- Font Awesome -->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -29,7 +28,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
     integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
     crossorigin="anonymous"></script>
-
+    <script src="<!--#echo var="ROOT" -->/js/cirmStuff.js"></script>
 
   </head>
 
@@ -45,16 +44,16 @@
     <div class="securesite-banner">
       <div class="securesite-text">
         This is the secure site for labs to access pre-publication data. Public CIRM CESCG data
-        may be accessed at <a class=securesite" href="https://cirm.ucsc.edu"</a>https://cirm.ucsc.edu</a>.
+        may be accessed at <a class="securesite" href="https://cirm.ucsc.edu">https://cirm.ucsc.edu</a>.
       </div>
     </div>
     <!--#else -->
     <div class="cirm-banner"></div>
     <!--#endif -->
-    <div class="container container-fluid container-table" style="width: 90%; max-width: none">
+    <div class="container-fluid" style="width: 90%">
       <div class="row">
-        <a href="/index"><img src="<!--#echo var="ROOT" -->/images/cirmSChubLogo.png" class="img-responsive"
-        style="margin-top: 15px; max-width: 450px;" width="100%"/></a>
+        <a href="/index"><img src="<!--#echo var="ROOT" -->/images/cirmSChubLogo.png"
+        style="margin-top: 15px; max-width: 450px;" /></a>
       </div>
       <div class="row">
         <nav class="navbar navbar-expand-lg navbar-light nopadding" style="width: 100%">
@@ -93,12 +92,12 @@
                 </div>
               </li>
               <li class="nav-item back-gray rounded" style="margin-left: 6px">
-                <h5 class="nav-button"><a class="nav-link text-white padded-nav-link login" href="../cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1">
+                <h5 class="nav-button"><a class="nav-link text-white padded-nav-link login" href="<!--#echo var="ROOT" -->/cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1">
                 Login</a></h5>
               </li>
               <li class="nav-item back-gray rounded" style="margin-left: 6px">
                 <h5 class="nav-button"><a class="nav-link text-white padded-nav-link login" id="logoutLink"
-                href="../cgi-bin/hgLogin?hgLogin.do.displayLogout=1" style="display:none">
+                href="<!--#echo var="ROOT" -->/cgi-bin/hgLogin?hgLogin.do.displayLogout=1" style="display:none">
                 Logout</a></h5>
               </li>
             </ul>

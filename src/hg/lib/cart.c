@@ -1512,6 +1512,17 @@ if (cart != NULL)
     }
 }
 
+void cartSaveState(struct cart *cart)
+/* Free up cart and save it to database.
+ * Intended for updating cart before background CGI runs.
+ * Use cartCheckout() instead. */
+{
+if (cart != NULL)
+    {
+    saveState(cart);
+    }
+}
+
 char *cartSessionVarName()
 /* Return name of CGI session ID variable. */
 {
@@ -1524,6 +1535,12 @@ char *cartSessionId(struct cart *cart)
 static char buf[256];
 cartDbSecureId(buf, sizeof buf, cart->sessionInfo);
 return buf;
+}
+
+unsigned cartSessionRawId(struct cart *cart)
+/* Return raw session id without security key. */
+{
+return cart->sessionInfo->id;
 }
 
 char *cartSidUrlString(struct cart *cart)
@@ -1540,6 +1557,12 @@ char *cartUserId(struct cart *cart)
 static char buf[256];
 cartDbSecureId(buf, sizeof buf, cart->userInfo);
 return buf;
+}
+
+unsigned cartUserRawId(struct cart *cart)
+/* Return raw user id without security key. */
+{
+return cart->userInfo->id;
 }
 
 static char *cartMultShadowVar(struct cart *cart, char *var)
@@ -3401,6 +3424,9 @@ if (sameWord("yes", cfgOptionDefault("browser.cgiTime", "yes")) )
         cgiName, clock1000() - enteredMainTime);
 }
 
+// TODO This should probably be moved to customFactory.c
+// Only used by hgSession 
+#include "errCatch.h"
 void cartCheckForCustomTracks(struct cart *cart, struct dyString *dyMessage)
 /* Scan cart for ctfile_<db> variables.  Tally up the databases that have
  * live custom tracks and those that have expired custom tracks. */
@@ -3410,12 +3436,13 @@ struct hashEl *helList = cartFindPrefix(cart, CT_FILE_VAR_PREFIX);
 if (helList != NULL)
     {
     struct hashEl *hel;
-    boolean gotLiveCT = FALSE, gotExpiredCT = FALSE;
-    struct slName *liveDbList = NULL, *expiredDbList = NULL, *sln = NULL;
+    boolean gotLiveCT = FALSE, gotExpiredCT = FALSE, gotErrorCT = FALSE;
+    struct slName *liveDbList = NULL, *expiredDbList = NULL,  *errorDbList = NULL, *sln = NULL;
     for (hel = helList;  hel != NULL;  hel = hel->next)
 	{
 	char *db = hel->name + strlen(CT_FILE_VAR_PREFIX);
-	boolean thisGotLiveCT = FALSE, thisGotExpiredCT = FALSE;
+	boolean thisGotLiveCT = FALSE, thisGotExpiredCT = FALSE, thisGotErrorCT = FALSE;
+	char errMsg[4096];
 	/* If the file doesn't exist, just remove the cart variable so it
 	 * doesn't get copied from session to session.  If it does exist,
 	 * leave it up to customFactoryTestExistence to parse the file for
@@ -3428,15 +3455,29 @@ if (helList != NULL)
 	    }
 	else
 	    {
-	    customFactoryTestExistence(db, hel->val,
-				       &thisGotLiveCT, &thisGotExpiredCT);
+	    /* protect against errAbort */
+	    struct errCatch *errCatch = errCatchNew();
+	    if (errCatchStart(errCatch))
+		{
+		customFactoryTestExistence(db, hel->val, &thisGotLiveCT, &thisGotExpiredCT, NULL);
+		}
+	    errCatchEnd(errCatch);
+	    if (errCatch->gotError)  // tends to abort if db not found or hub not attached.
+		{
+		thisGotErrorCT = TRUE;
+		safef(errMsg, sizeof errMsg, "%s {%s}", db, errCatch->message->string);
+		}
+	    errCatchFree(&errCatch);
 	    }
 	if (thisGotLiveCT)
 	    slNameAddHead(&liveDbList, db);
 	if (thisGotExpiredCT)
 	    slNameAddHead(&expiredDbList, db);
+	if (thisGotErrorCT)
+	    slNameAddHead(&errorDbList, errMsg);
 	gotLiveCT |= thisGotLiveCT;
 	gotExpiredCT |= thisGotExpiredCT;
+	gotErrorCT |= thisGotErrorCT;
 	}
     if (gotLiveCT)
 	{
@@ -3459,6 +3500,18 @@ if (helList != NULL)
 		       "<P>Note: the session has at least one expired custom "
 		       "track (in database ");
 	for (sln = expiredDbList;  sln != NULL;  sln = sln->next)
+	    dyStringPrintf(dyMessage, "%s%s",
+			   sln->name, (sln->next ? sln->next->next ? ", " : " and " : ""));
+	dyStringPrintf(dyMessage,
+		       "), so it may not appear as originally intended.  ");
+	}
+    if (gotErrorCT)
+	{
+	slSort(&errorDbList, slNameCmp);
+	dyStringPrintf(dyMessage,
+		       "<P>Note: the session has at least one custom "
+		       "track with errors (in database ");
+	for (sln = errorDbList;  sln != NULL;  sln = sln->next)
 	    dyStringPrintf(dyMessage, "%s%s",
 			   sln->name, (sln->next ? sln->next->next ? ", " : " and " : ""));
 	dyStringPrintf(dyMessage,

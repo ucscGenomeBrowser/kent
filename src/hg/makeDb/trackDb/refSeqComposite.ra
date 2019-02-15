@@ -102,8 +102,8 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         subGroups view=aNcbiRefSeq
         priority 7
         type genePred
-        shortLabel RefSeq Clinical (HGMD)
-        longLabel Only NCBI RefSeq Curated Transcripts with clinical variants (HGMD)
+        shortLabel RefSeq HGMD
+        longLabel Only NCBI RefSeq manually annotated transcripts with at least one HGMD clinical variant
         parent ncbiRefSeqView off
         trackHandler ncbiRefSeq
         idXref ncbiRefSeqLink mrnaAcc name

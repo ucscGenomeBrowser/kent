@@ -18,7 +18,6 @@ intronGap 12
 html knownGene
 isGencode2 on
 bigGeneDataUrl /gbdb/hg38/knownGene29.bb
-pennantIcon Updated red ../goldenPath/newsarch.html#111618 "Released Nov. 16, 2018"
 
 track knownGeneOld10
 shortLabel Old UCSC Genes

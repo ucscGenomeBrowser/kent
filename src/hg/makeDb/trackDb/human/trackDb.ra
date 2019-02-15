@@ -1495,7 +1495,6 @@ macaqueDb rheMac8
 hapmapPhase III
 codingAnnotations snp151CodingDbSnp,
 priority 0.9
-pennantIcon New red ../goldenPath/newsarch.html#120418  "released December 04, 2018"
 
 track snp151Flagged
 shortLabel Flagged SNPs(151)
@@ -1516,7 +1515,6 @@ macaqueDb rheMac8
 hapmapPhase III
 codingAnnotations snp151CodingDbSnp,
 priority 12.9
-pennantIcon New red ../goldenPath/newsarch.html#120418  "released December 04, 2018"
 
 track snp151Mult
 shortLabel Mult. SNPs(151)
@@ -1538,7 +1536,6 @@ macaqueDb rheMac8
 hapmapPhase III
 codingAnnotations snp151CodingDbSnp,
 priority 18.9
-pennantIcon New red ../goldenPath/newsarch.html#120418  "released December 04, 2018"
 
 track snp151
 shortLabel All SNPs(151)
@@ -1558,7 +1555,6 @@ macaqueDb rheMac8
 hapmapPhase III
 codingAnnotations snp151CodingDbSnp,
 priority 6.9
-pennantIcon New red ../goldenPath/newsarch.html#120418  "released December 04, 2018"
 
 track hgdpGeo
 shortLabel HGDP Allele Freq
@@ -3407,6 +3403,34 @@ color 200,0,0
 type bigBed 4 +
 url http://cancer.sanger.ac.uk/cosmic/mutation/overview?id=
 html cosmic
+
+track cancerMutations
+shortLabel Cancer mutations
+longLabel Cancer somatic mutations from The Cancer Genome Atlas
+group phenDis
+visibility hide
+color 0,0,0
+type bed
+release alpha
+compositeTrack on
+
+        track pancan33
+        shortLabel PanCan33
+        longLabel Cancer mutations: 33 TCGA Cancer Projects Summary (Pan-Can 33)
+        type bigBed 12 +
+        release alpha
+        bigDataUrl /gbdb/$D/bbi/cancerMutations/pancan33.bb
+        urls case_id=https://portal.gdc.cancer.gov/cases/$$
+        parent cancerMutations
+
+        track tcgaBrca
+        shortLabel Breast
+        longLabel Cancer mutations: TCGA Breast Cancer
+        type bigBed 12 +
+        release alpha
+        bigDataUrl /gbdb/$D/bbi/cancerMutations/BRCA.bb
+        urls case_id=https://portal.gdc.cancer.gov/cases/$$
+        parent cancerMutations
 
 track lovd
 shortLabel LOVD Variants
