@@ -872,9 +872,9 @@ struct vpTx *vpGenomicToTranscript(struct seqWindow *gSeqWin, struct bed3 *gBed3
 if (sameString(gAlt, "<DEL>"))
     gAlt[0] = '\0';
 int altLen = strlen(gAlt);
-if (!isAllNt(gAlt, altLen))
-    errAbort("vpGenomicToTranscript: alternate allele must be sequence of IUPAC DNA characters "
-             "or '<DEL>' but is '%s'", gAlt);
+if (!isAllNt(gAlt, altLen) && differentString(gAlt, "*"))
+    errAbort("vpGenomicToTranscript: alternate allele must be sequence of IUPAC DNA characters, "
+             "'*', or '<DEL>' but is '%s'", gAlt);
 gSeqWin->fetch(gSeqWin, gBed3->chrom, gBed3->chromStart, gBed3->chromEnd);
 struct vpTx *vpTx;
 AllocVar(vpTx);
@@ -885,8 +885,11 @@ uint gStart = gBed3->chromStart, gEnd = gBed3->chromEnd;
 int refLen = gEnd - gStart;
 char gRef[refLen+1];
 seqWindowCopy(gSeqWin, gStart, refLen, gRef, sizeof(gRef));
+// ALT='*' means the variant is irrelevant because it falls in a deleted region.  Treat as no-change.
+if (sameString(gAlt, "*"))
+    altLen = refLen;
 char gAltCpy[altLen+1];
-safecpy(gAltCpy, sizeof(gAltCpy), gAlt);
+safecpy(gAltCpy, sizeof(gAltCpy), (sameString(gAlt, "*") ? gRef: gAlt));
 if (differentString(gRef, gAltCpy))
     // Trim identical bases from start and end -- unless this is an assertion that there is
     // no change, in which case it's good to keep the range on which that assertion was made.
