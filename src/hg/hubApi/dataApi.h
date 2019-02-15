@@ -70,8 +70,10 @@ void apiErrAbort(char *format, ...);
 struct jsonWrite *apiStartOutput();
 /* begin json output with standard header information for all requests */
 
-void tableColumns(struct sqlConnection *conn, struct jsonWrite *jw, char *table);
-/* output the column names for the given table */
+int tableColumns(struct sqlConnection *conn, struct jsonWrite *jw, char *table);
+/* output the column names, and their MySQL data type, for the given table
+ *  return number of columns (aka 'fields')
+ */
 
 /* ######################################################################### */
 /*  functions in getData.c */
