@@ -1655,10 +1655,6 @@ struct hashEl *showDownloadList = cartFindPrefix(cart, hgsShowDownloadPrefix);
 struct hashEl *makeDownloadList = cartFindPrefix(cart, hgsMakeDownloadPrefix);
 struct hashEl *doDownloadList = cartFindPrefix(cart, hgsDoDownloadPrefix);
 
-// TODO REMOVE THESE LINES GALT
-//struct hashEl *extractUploadList = cartFindPrefix(cart, hgsExtractUploadPrefix);
-//struct hashEl *doUploadList = cartFindPrefix(cart, hgsDoUploadPrefix);
-
 if (showDownloadList)
     showDownloadSessionCtData(showDownloadList);
 else if (makeDownloadList)

@@ -622,7 +622,6 @@ for (result=resultList; result; result=result->next)
 
 printf("<br>\n");
 printf("%d custom tracks found.<br>\n", ctCount);
-printf("%d custom tracks stored at UCSC.<br>\n", nonBigDataUrlCount);
 
 char greek[32];
 sprintWithGreekByte(greek, sizeof(greek), totalDataToDownload);
@@ -1104,9 +1103,16 @@ jsOnEventById("click", downButName, js);
 // Add a button that just returns to the saved sessions list.
 // because after pressing download and it will go into the users downloads folder,
 // the browser remains sitting on this page and needs a way to return
-// to the saved sessions list.
+// to the saved sessions list.  Also clear the download name field.
 printf(" &nbsp; ");
-printf("<input type='submit' value='return'>");
+printf("<input type='submit' id='hgsReturn' value='return'>");
+safef(js, sizeof js,
+"var textVar = document.getElementById('%s');"
+"textVar.value = '';"
+"return true;"
+, hgsSaveLocalBackupFileName);
+
+jsOnEventById("click", "hgsReturn", js);
 
 printf("<br>\n");
 printf("<br>\n");
@@ -1158,6 +1164,8 @@ while (remaining)
     lazarusLives(20 * 60);   // extend keep-alive time. for big downloads on slow connections.
     }
 carefulClose(&f);
+
+cartRemove(cart, hgsSaveLocalBackupFileName);
 
 }
 
