@@ -3,8 +3,61 @@
 #include "dataApi.h"
 
 static void getTrackData()
-/* return data from a track */
+/* return data from a track, optionally just one chrom data,
+ *  optionally just one section of that chrom data
+ */
 {
+char *db = cgiOptionalString("db");
+char *chrom = cgiOptionalString("chrom");
+char *start = cgiOptionalString("start");
+char *end = cgiOptionalString("end");
+char *table = cgiOptionalString("track");
+/* 'track' name in trackDb refers to a SQL 'table' */
+
+if (isEmpty(db))
+    apiErrAbort("missing URL db=<ucscDb> name for endpoint '/getData/track");
+if (isEmpty(table))
+    apiErrAbort("missing URL track=<trackName> name for endpoint '/getData/track");
+struct sqlConnection *conn = hAllocConn(db);
+if (! sqlTableExists(conn, table))
+    apiErrAbort("can not find specified 'track=%s' for endpoint: /getData/track?db=%s&track=%s", table, db, table);
+
+struct jsonWrite *jw = apiStartOutput();
+jsonWriteString(jw, "db", db);
+jsonWriteString(jw, "track", table);
+char *dataTime = sqlTableUpdate(conn, table);
+time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
+replaceChar(dataTime, ' ', 'T');
+jsonWriteString(jw, "dataTime", dataTime);
+jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
+
+/* no chrom specified, return entire table */
+if (isEmpty(chrom))
+    {
+    tableColumns(conn, jw, table);
+    }
+else if (isEmpty(start) || isEmpty(end))
+    {
+    if (! sqlColumnExists(conn, table, "chrom"))
+	apiErrAbort("track '%s' is not a position track, request table without chrom specification, genome: '%s'", table, db);
+    jsonWriteString(jw, "chrom", chrom);
+    struct chromInfo *ci = hGetChromInfo(db, chrom);
+    jsonWriteNumber(jw, "start", (long long)0);
+    jsonWriteNumber(jw, "end", (long long)ci->size);
+    tableColumns(conn, jw, table);
+    }
+else
+    {
+    if (! sqlColumnExists(conn, table, "chrom"))
+	apiErrAbort("track '%s' is not a position track, request table without chrom specification, genome: '%s'", table, db);
+    jsonWriteString(jw, "chrom", chrom);
+    jsonWriteNumber(jw, "start", (long long)sqlSigned(start));
+    jsonWriteNumber(jw, "end", (long long)sqlSigned(end));
+    tableColumns(conn, jw, table);
+    }
+jsonWriteObjectEnd(jw);
+fputs(jw->dy->string,stdout);
+hFreeConn(&conn);
 }
 
 static void getSequenceData()

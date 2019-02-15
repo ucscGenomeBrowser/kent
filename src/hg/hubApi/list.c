@@ -2,6 +2,7 @@
 
 #include "dataApi.h"
 
+#ifdef NOT
 static boolean tableColumns(struct jsonWrite *jw, char *table)
 /* output the column names for the given table
  * return: TRUE on error, FALSE on success
@@ -26,6 +27,7 @@ hDisconnectCentral(&conn);
 jsonWriteListEnd(jw);
 return FALSE;
 }
+#endif
 
 static void hubPublicJsonData(struct jsonWrite *jw, struct hubPublic *el)
 /* Print array data for one row from hubPublic table, order here
@@ -50,7 +52,6 @@ static void jsonPublicHubs()
 {
 struct sqlConnection *conn = hConnectCentral();
 char *dataTime = sqlTableUpdate(conn, hubPublicTableName());
-hDisconnectCentral(&conn);
 time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
 replaceChar(dataTime, ' ', 'T');
 struct hubPublic *el = hubPublicLoadAll();
@@ -59,7 +60,7 @@ jsonWriteString(jw, "dataTime", dataTime);
 jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
 freeMem(dataTime);
 jsonWriteString(jw, "tableName", hubPublicTableName());
-tableColumns(jw, hubPublicTableName());
+tableColumns(conn, jw, hubPublicTableName());
 jsonWriteListStart(jw, "publicHubData");
 for ( ; el != NULL; el = el->next )
     {
@@ -68,6 +69,7 @@ for ( ; el != NULL; el = el->next )
 jsonWriteListEnd(jw);
 jsonWriteObjectEnd(jw);
 fputs(jw->dy->string,stdout);
+hDisconnectCentral(&conn);
 }
 
 static void dbDbJsonData(struct jsonWrite *jw, struct dbDb *el)
@@ -100,7 +102,6 @@ static void jsonDbDb()
 {
 struct sqlConnection *conn = hConnectCentral();
 char *dataTime = sqlTableUpdate(conn, "dbDb");
-hDisconnectCentral(&conn);
 time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
 replaceChar(dataTime, ' ', 'T');
 struct dbDb *dbList = ucscDbDb();
@@ -110,7 +111,7 @@ jsonWriteString(jw, "dataTime", dataTime);
 jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
 freeMem(dataTime);
 jsonWriteString(jw, "tableName", "dbDb");
-tableColumns(jw, "dbDb");
+tableColumns(conn, jw, "dbDb");
 jsonWriteListStart(jw, "ucscGenomes");
 for ( el=dbList; el != NULL; el = el->next )
     {
@@ -119,6 +120,7 @@ for ( el=dbList; el != NULL; el = el->next )
 jsonWriteListEnd(jw);
 jsonWriteObjectEnd(jw);
 fputs(jw->dy->string,stdout);
+hDisconnectCentral(&conn);
 }
 
 static void chromInfoJsonOutput(FILE *f, char *db)
@@ -132,7 +134,7 @@ struct sqlConnection *conn = hAllocConn(db);
 if (table)
     {
     if (! sqlTableExists(conn, table))
-	apiErrAbort("ERROR: endpoint: /list/chromosomes?db=%&table=%s ERROR table does not exist", db, table);
+	apiErrAbort("can not find specified 'track=%s' for endpoint: /list/chromosomes?db=%s&track=%s", table, db, table);
     if (sqlColumnExists(conn, table, "chrom"))
 	{
 	char *dataTime = sqlTableUpdate(conn, table);
@@ -167,9 +169,7 @@ if (table)
         fputs(jw->dy->string,stdout);
 	}
     else
-	{
-	apiErrAbort("ERROR: table '%s' is not a position table, no chromosomes for genome: '%s'", table, db);
-	}
+	apiErrAbort("track '%s' is not a position track, request table without chrom specification, genome: '%s'", table, db);
     }
 else
     {

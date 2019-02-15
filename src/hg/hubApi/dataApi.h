@@ -70,6 +70,9 @@ void apiErrAbort(char *format, ...);
 struct jsonWrite *apiStartOutput();
 /* begin json output with standard header information for all requests */
 
+void tableColumns(struct sqlConnection *conn, struct jsonWrite *jw, char *table);
+/* output the column names for the given table */
+
 /* ######################################################################### */
 /*  functions in getData.c */
 
