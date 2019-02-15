@@ -47,6 +47,7 @@
 #include "barChartUi.h"
 #include "interact.h"
 #include "interactUi.h"
+#include "cgiApoptosis.h"
 
 // placeholder when custom track uploaded file name is not known
 #define CT_NO_FILE_NAME         "custom track"
@@ -4039,6 +4040,8 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	}
     if (!track)
         continue;
+
+    lazarusLives(20 * 60);   // extend keep-alive time. for big uploads on slow connections.
 
     /* verify database for custom track */
     char *ctDb = ctGenome(track);

@@ -2,21 +2,21 @@
 
 #include "dataApi.h"
 
-void jsonErrAbort(char *format, ...)
+void apiErrAbort(char *format, ...)
 /* Issue an error message in json format, and exit(0) */
 {
 char errMsg[2048];
 va_list args;
 va_start(args, format);
 vsnprintf(errMsg, sizeof(errMsg), format, args);
-struct jsonWrite *jw = jsonStartOutput();
+struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "error", errMsg);
 jsonWriteObjectEnd(jw);
 fputs(jw->dy->string,stdout);
 exit(0);
 }
 
-struct jsonWrite *jsonStartOutput()
+struct jsonWrite *apiStartOutput()
 /* begin json output with standard header information for all requests */
 {
 time_t timeNow = time(NULL);

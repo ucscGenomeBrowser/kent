@@ -465,30 +465,6 @@ printf("&nbsp;&nbsp;");
 cgiMakeButton(hgsDoLoadUrl, "submit");
 printf("</TD></TR>\n");
 
-printf("<TR><TD colspan=2></TD></TR>\n");
-
-char name[256];
-safef(name, sizeof name, "%s", hgsExtractUploadPrefix);
-
-printf("<TR>");
-printf("<TD colspan=2>Use settings including custom tracks in local backup archive file (.tar.gz):</TD>");
-printf("<TD><INPUT TYPE=FILE NAME='%s' id='%s'>", name, name);
-printf("&nbsp;&nbsp;<input type='submit' id='archiveUpload' value='submit'></TD></TR>");
-printf("<TR><TD colspan=2></TD></TR>");
-
-// check the file name, e.g. does it have the right name or extension?
-char js[1024];
-safef(js, sizeof js, 
-"var control = document.getElementById('%s');"
-"var files = control.files;"
-"if ((files.length == 1) && (files[0].name.endsWith('.tar.gz')))"
-"    return true;"
-"alert('Please choose the correct backup archive ending in .tar.gz');"
-"return false;"
-, name);
-
-jsOnEventById("click", "archiveUpload", js);
-
 printf("</TABLE>\n");
 printf("<P></P>\n");
 }
@@ -563,9 +539,9 @@ printf("<TR><TD></TD><TD colspan=3>(leave file blank to get output in "
        "browser window)</TD></TR>\n");
 printf("<TR><TD colspan=4></TD></TR>\n");
 
-printf("<TR><TD colspan=4>Save Full Session:</TD></TR>\n");
+printf("<TR><TD colspan=4>Save Custom Tracks:</TD></TR>\n");
 printf("<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD colspan=2>");
-printf("backup settings including custom tracks to archive .tar.gz</TD>");
+printf("backup custom tracks to archive .tar.gz</TD>");
 printf("<TD>");
 printf("&nbsp;");
 cgiMakeButton(hgsShowDownloadPrefix, "submit");
@@ -731,8 +707,6 @@ cartRemovePrefix(cart, hgsDeletePrefix);
 cartRemovePrefix(cart, hgsShowDownloadPrefix);
 cartRemovePrefix(cart, hgsMakeDownloadPrefix);
 cartRemovePrefix(cart, hgsDoDownloadPrefix);
-cartRemovePrefix(cart, hgsExtractUploadPrefix);
-cartRemovePrefix(cart, hgsDoUploadPrefix);
 cartRemovePrefix(cart, hgsDo);
 cartRemove(cart, hgsOldSessionName);
 cartRemove(cart, hgsCancel);
@@ -1475,8 +1449,6 @@ if (isNotEmpty(newName) && !sameString(sessionName, newName))
     renamePrefixedCartVar(hgsShowDownloadPrefix , encOldSessionName, encNewName);
     renamePrefixedCartVar(hgsMakeDownloadPrefix , encOldSessionName, encNewName);
     renamePrefixedCartVar(hgsDoDownloadPrefix   , encOldSessionName, encNewName);
-    renamePrefixedCartVar(hgsExtractUploadPrefix, encOldSessionName, encNewName);
-    renamePrefixedCartVar(hgsDoUploadPrefix     , encOldSessionName, encNewName);
     if (shared >= 2)
         {
         thumbnailRemove(encUserName, encSessionName, conn);
@@ -1682,12 +1654,6 @@ char *backgroundExec = cloneString(cgiUsualString("backgroundExec", NULL));
 struct hashEl *showDownloadList = cartFindPrefix(cart, hgsShowDownloadPrefix);
 struct hashEl *makeDownloadList = cartFindPrefix(cart, hgsMakeDownloadPrefix);
 struct hashEl *doDownloadList = cartFindPrefix(cart, hgsDoDownloadPrefix);
-struct hashEl *extractUploadList = cartFindPrefix(cart, hgsExtractUploadPrefix);
-struct hashEl *doUploadList = cartFindPrefix(cart, hgsDoUploadPrefix);
-
-// The form gets submitted but no filename for upload was chosen and submitted.
-if (extractUploadList && sameString(hgsExtractUploadPrefix, extractUploadList->name))
-    extractUploadList = NULL; // no filename was submitted. ignore.
 
 if (showDownloadList)
     showDownloadSessionCtData(showDownloadList);
@@ -1717,84 +1683,6 @@ else if (makeDownloadList)
     }
 else if (doDownloadList)
     doDownloadSessionCtData(doDownloadList);
-else if (extractUploadList)
-    {
-    if (sameOk(backgroundExec,"extractUploadSessionCtData"))
-	{
-	// only one, but becomes a list
-        // since there are multiple cart names with suffixes for handling binary submitted file.
-	//hgS_extractUpload___filepath 
-	//hgS_extractUpload___binary 
-	//hgS_extractUpload___filename 
-	char *param1 = NULL;
-	char *param2 = NULL;
-	char *param3 = NULL;
-	struct hashEl *hel = NULL;
-	for (hel = extractUploadList; hel; hel = hel->next)
-	    {
-	    if (endsWith(hel->name, "__binary"))
-		param1 = cloneString(hel->name);
-	    if (endsWith(hel->name, "__filename"))
-		param2 = cloneString(hel->name);
-	    if (endsWith(hel->name, "__filepath"))
-		param3 = cloneString(hel->name);
-	    }
-	if (!param1)
-	    errAbort("missing __binary param");
-	if (!param2)
-	    errAbort("missing __filename param");
-	if (!param3)
-	    errAbort("missing __filepath param");
-
-	char *param1Value = cloneString(cartOptionalString(cart, param1));
-	char *param2Value = cloneString(cartOptionalString(cart, param2));
-	char *param3Value = cloneString(cartOptionalString(cart, param3));
-
-	char *backgroundProgress = NULL; 
-	prepBackGroundCall(&backgroundProgress, hgsExtractUploadPrefix);
-
-	extractUploadSessionCtData(
-	    param1, param1Value, 
-	    param2, param2Value, 
-	    param3, param3Value, 
-	    backgroundProgress);
-
-	exit(0);  // cannot return
-	}
-    else
-	{
-	passSubmittedBinaryAsTrashFile(extractUploadList);
-
-	launchForeAndBackGround("extractUploadSessionCtData");
-
-	exit(0);
-	}
-
-    }
-else if (doUploadList)
-    {
-    if (sameOk(backgroundExec,"doUploadSessionCtData"))
-	{
-	// only one, not a list.
-	struct hashEl *hel = doUploadList;
-	char *param1 = cloneString(hel->name);
-
-	char *backgroundProgress = NULL; 
-	prepBackGroundCall(&backgroundProgress, hgsDoUploadPrefix);
-
-	doUploadSessionCtData(param1, backgroundProgress);
-
-	exit(0);  // cannot return
-	}
-    else
-	{
-
-	launchForeAndBackGround("doUploadSessionCtData");
-
-	exit(0);
-	}
-
-    }
 else if (cartVarExists(cart, hgsDoMainPage) || cartVarExists(cart, hgsCancel))
     doMainPage(userName, NULL);
 else if (cartVarExists(cart, hgsDoNewSession))
