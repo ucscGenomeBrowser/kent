@@ -2,33 +2,6 @@
 
 #include "dataApi.h"
 
-#ifdef NOT
-static boolean tableColumns(struct jsonWrite *jw, char *table)
-/* output the column names for the given table
- * return: TRUE on error, FALSE on success
- */
-{
-jsonWriteListStart(jw, "columnNames");
-char query[1024];
-struct sqlConnection *conn = hConnectCentral();
-sqlSafef(query, sizeof(query), "desc %s", table);
-struct sqlResult *sr = sqlGetResult(conn, query);
-char **row;
-row = sqlNextRow(sr);
-if (NULL == row)
-    {
-    apiErrAbort("ERROR: can not 'desc' table '%s'", table);
-    return TRUE;
-    }
-while ((row = sqlNextRow(sr)) != NULL)
-    jsonWriteString(jw, NULL, row[0]);
-sqlFreeResult(&sr);
-hDisconnectCentral(&conn);
-jsonWriteListEnd(jw);
-return FALSE;
-}
-#endif
-
 static void hubPublicJsonData(struct jsonWrite *jw, struct hubPublic *el)
 /* Print array data for one row from hubPublic table, order here
  * must be same as was stated in the columnName header element
@@ -60,7 +33,7 @@ jsonWriteString(jw, "dataTime", dataTime);
 jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
 freeMem(dataTime);
 jsonWriteString(jw, "tableName", hubPublicTableName());
-tableColumns(conn, jw, hubPublicTableName());
+(void) tableColumns(conn, jw, hubPublicTableName());
 jsonWriteListStart(jw, "publicHubData");
 for ( ; el != NULL; el = el->next )
     {
@@ -111,7 +84,7 @@ jsonWriteString(jw, "dataTime", dataTime);
 jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
 freeMem(dataTime);
 jsonWriteString(jw, "tableName", "dbDb");
-tableColumns(conn, jw, "dbDb");
+(void) tableColumns(conn, jw, "dbDb");
 jsonWriteListStart(jw, "ucscGenomes");
 for ( el=dbList; el != NULL; el = el->next )
     {

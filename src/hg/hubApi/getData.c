@@ -2,6 +2,24 @@
 
 #include "dataApi.h"
 
+static void tableDataOutput(struct sqlConnection *conn, struct jsonWrite *jw, char *query, char *table)
+/* output the table data from the specified query string */
+{
+int columnCount = tableColumns(conn, jw, table);
+jsonWriteListStart(jw, "trackData");
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row = NULL;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    jsonWriteListStart(jw, NULL);
+    int i = 0;
+    for (i = 0; i < columnCount; ++i)
+	jsonWriteString(jw, NULL, row[i]);
+    jsonWriteListEnd(jw);
+    }
+jsonWriteListEnd(jw);
+}
+
 static void getTrackData()
 /* return data from a track, optionally just one chrom data,
  *  optionally just one section of that chrom data
@@ -34,7 +52,9 @@ jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
 /* no chrom specified, return entire table */
 if (isEmpty(chrom))
     {
-    tableColumns(conn, jw, table);
+    char query[4096];
+    sqlSafef(query, sizeof(query), "select * from %s", table);
+    tableDataOutput(conn, jw, query, table);
     }
 else if (isEmpty(start) || isEmpty(end))
     {
@@ -44,7 +64,9 @@ else if (isEmpty(start) || isEmpty(end))
     struct chromInfo *ci = hGetChromInfo(db, chrom);
     jsonWriteNumber(jw, "start", (long long)0);
     jsonWriteNumber(jw, "end", (long long)ci->size);
-    tableColumns(conn, jw, table);
+    char query[4096];
+    sqlSafef(query, sizeof(query), "select * from %s where chrom='%s'", table, chrom);
+    tableDataOutput(conn, jw, query, table);
     }
 else
     {
@@ -53,7 +75,9 @@ else
     jsonWriteString(jw, "chrom", chrom);
     jsonWriteNumber(jw, "start", (long long)sqlSigned(start));
     jsonWriteNumber(jw, "end", (long long)sqlSigned(end));
-    tableColumns(conn, jw, table);
+    char query[4096];
+    sqlSafef(query, sizeof(query), "select * from %s where chrom='%s' AND chromEnd > %d AND chromStart < %d", table, chrom, sqlSigned(start), sqlSigned(end));
+    tableDataOutput(conn, jw, query, table);
     }
 jsonWriteObjectEnd(jw);
 fputs(jw->dy->string,stdout);

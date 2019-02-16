@@ -31,19 +31,20 @@ jsonWriteNumber(jw, "downloadTimeStamp", (long long) timeNow);
 return jw;
 }
 
-void tableColumns(struct sqlConnection *conn, struct jsonWrite *jw, char *table)
-/* output the column names for the given table */
+int tableColumns(struct sqlConnection *conn, struct jsonWrite *jw, char *table)
+/* output the column names, and their MySQL data type, for the given table
+ *  return number of columns (aka 'fields')
+ */
 {
 jsonWriteListStart(jw, "columnNames");
-char query[1024];
-sqlSafef(query, sizeof(query), "desc %s", table);
-struct sqlResult *sr = sqlGetResult(conn, query);
-char **row;
-row = sqlNextRow(sr);
-if (NULL == row)
-    apiErrAbort("internal error: can not 'desc' SQL table '%s'", table);
-while ((row = sqlNextRow(sr)) != NULL)
-    jsonWriteString(jw, NULL, row[0]);
-sqlFreeResult(&sr);
+struct sqlFieldInfo *fi, *fiList = sqlFieldInfoGet(conn, table);
+int columnCount = slCount(fiList);
+for (fi = fiList; fi; fi = fi->next)
+    {
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteString(jw, fi->field, fi->type);
+    jsonWriteObjectEnd(jw);
+    }
 jsonWriteListEnd(jw);
+return columnCount;
 }
