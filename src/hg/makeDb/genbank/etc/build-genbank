@@ -79,6 +79,12 @@ rsync -av /data/tmp/grepIndex/hgFixed/  hgwdev-101:/data/tmp/grepIndex/hgFixed/
 # rsync hgFixed
 etc/copyMetaDev.sh
 
+# to fix errors --
+# cd etc
+# ./deleteLocks.sh hgFixed gbMeta .hg.conf.hgwdev 
+# ./validateDb.sh .hg.conf.hgwdev  hgFixed gbMeta gbMetadataTablesReg.txt  yes 
+# ./copyDbDev.sh hgFixed gbMeta .hg.conf.hgwdev gbMetadataTablesReg.txt  yes
+
 # rsync the assemblies
 etc/copyAssemblies.sh
 
