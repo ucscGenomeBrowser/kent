@@ -45,37 +45,35 @@ jsonWriteString(jw, "db", db);
 jsonWriteString(jw, "track", table);
 char *dataTime = sqlTableUpdate(conn, table);
 time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
-replaceChar(dataTime, ' ', 'T');
+replaceChar(dataTime, ' ', 'T');	/*	ISO 8601	*/
 jsonWriteString(jw, "dataTime", dataTime);
 jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
 
+char query[4096];
 /* no chrom specified, return entire table */
 if (isEmpty(chrom))
     {
-    char query[4096];
     sqlSafef(query, sizeof(query), "select * from %s", table);
     tableDataOutput(conn, jw, query, table);
     }
 else if (isEmpty(start) || isEmpty(end))
     {
     if (! sqlColumnExists(conn, table, "chrom"))
-	apiErrAbort("track '%s' is not a position track, request table without chrom specification, genome: '%s'", table, db);
+	apiErrAbort("track '%s' is not a position track, request track without chrom specification, genome: '%s'", table, db);
     jsonWriteString(jw, "chrom", chrom);
     struct chromInfo *ci = hGetChromInfo(db, chrom);
     jsonWriteNumber(jw, "start", (long long)0);
     jsonWriteNumber(jw, "end", (long long)ci->size);
-    char query[4096];
     sqlSafef(query, sizeof(query), "select * from %s where chrom='%s'", table, chrom);
     tableDataOutput(conn, jw, query, table);
     }
 else
     {
     if (! sqlColumnExists(conn, table, "chrom"))
-	apiErrAbort("track '%s' is not a position track, request table without chrom specification, genome: '%s'", table, db);
+	apiErrAbort("track '%s' is not a position track, request track without chrom specification, genome: '%s'", table, db);
     jsonWriteString(jw, "chrom", chrom);
     jsonWriteNumber(jw, "start", (long long)sqlSigned(start));
     jsonWriteNumber(jw, "end", (long long)sqlSigned(end));
-    char query[4096];
     sqlSafef(query, sizeof(query), "select * from %s where chrom='%s' AND chromEnd > %d AND chromStart < %d", table, chrom, sqlSigned(start), sqlSigned(end));
     tableDataOutput(conn, jw, query, table);
     }
