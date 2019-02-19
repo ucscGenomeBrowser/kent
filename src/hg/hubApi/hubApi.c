@@ -116,6 +116,8 @@ while ((hel = hashNext(&hc)) != NULL)
     else
 	hPrintf("    <li>%s : '%s'</li>\n", hel->name, (char *)hel->val);
     }
+if (tdb->subtracks)
+    trackSettings(tdb->subtracks);
 hPrintf("    </ul>\n");
 }
 
@@ -241,69 +243,73 @@ destination->settingsHash = source->settingsHash;
 }
 #endif
 
-static void hubTrackList(struct trackDb *tdb, struct trackHubGenome *genome)
+static void hubTrackList(struct trackDb *topTrackDb, struct trackHubGenome *genome)
 /* process the track list to show all tracks, return trackDb list */
 {
-if (tdb)
+if (topTrackDb)
     {
     struct hash *countTracks = hashNew(0);
     hPrintf("    <ul>\n");
-    struct trackDb *track = tdb;
-    for ( ; track; track = track->next )
+    struct trackDb *tdb = NULL;
+    for ( tdb = topTrackDb; tdb; tdb = tdb->next )
 	{
-	char *bigDataUrl = trackDbSetting(track, "bigDataUrl");
-	char *compositeTrack = trackDbSetting(track, "compositeTrack");
-	char *superTrack = trackDbSetting(track, "superTrack");
+	char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+	char *compositeTrack = trackDbSetting(tdb, "compositeTrack");
+	char *superTrack = trackDbSetting(tdb, "superTrack");
 	boolean depthSearch = cartUsualBoolean(cart, "depthSearch", FALSE);
 	if (compositeTrack)
 	    hashIncInt(countTracks, "composite container");
 	else if (superTrack)
 	    hashIncInt(countTracks, "superTrack container");
-	else if (isEmpty(track->type))
+	else if (isEmpty(tdb->type))
 	    hashIncInt(countTracks, "no type specified");
 	else
-	    hashIncInt(countTracks, track->type);
+	    hashIncInt(countTracks, tdb->type);
 	if (depthSearch && bigDataUrl)
 	    {
 	    char *bigDataIndex = NULL;
-	    char *relIdxUrl = trackDbSetting(tdb, "bigDataIndex");
+	    char *relIdxUrl = trackDbSetting(topTrackDb, "bigDataIndex");
 	    if (relIdxUrl != NULL)
 		bigDataIndex = trackHubRelativeUrl(genome->trackDbFile, relIdxUrl);
 
 	    long chromCount = 0;
 	    long itemCount = 0;
 	    struct dyString *errors = newDyString(1024);
-	    int retVal = bbiBriefMeasure(track->type, bigDataUrl, bigDataIndex, &chromCount, &itemCount, errors);
+	    int retVal = bbiBriefMeasure(tdb->type, bigDataUrl, bigDataIndex, &chromCount, &itemCount, errors);
             if (retVal)
 		{
-		    hPrintf("    <li>%s : %s : <font color='red'>ERROR: %s</font></li>\n", track->track, track->type, errors->string);
+		    hPrintf("    <li>%s : %s : <font color='red'>ERROR: %s</font></li>\n", tdb->track, tdb->type, errors->string);
 		}
 	    else
 		{
-		if (startsWithWord("bigBed", track->type))
-		    hPrintf("    <li>%s : %s : %ld chroms : %ld item count</li>\n", track->track, track->type, chromCount, itemCount);
-		else if (startsWithWord("bigWig", track->type))
-		    hPrintf("    <li>%s : %s : %ld chroms : %ld bases covered</li>\n", track->track, track->type, chromCount, itemCount);
+		if (startsWithWord("bigBed", tdb->type))
+		    hPrintf("    <li>%s : %s : %ld chroms : %ld item count</li>\n", tdb->track, tdb->type, chromCount, itemCount);
+		else if (startsWithWord("bigWig", tdb->type))
+		    hPrintf("    <li>%s : %s : %ld chroms : %ld bases covered</li>\n", tdb->track, tdb->type, chromCount, itemCount);
 		else
-		    hPrintf("    <li>%s : %s : %ld chroms : %ld count</li>\n", track->track, track->type, chromCount, itemCount);
+		    hPrintf("    <li>%s : %s : %ld chroms : %ld count</li>\n", tdb->track, tdb->type, chromCount, itemCount);
 		}
 	    }
 	else
 	    {
 	    if (compositeTrack)
-		hPrintf("    <li>%s : %s : composite track container</li>\n", track->track, track->type);
+		hPrintf("    <li>%s : %s : composite track container</li>\n", tdb->track, tdb->type);
 	    else if (superTrack)
-		hPrintf("    <li>%s : %s : superTrack container</li>\n", track->track, track->type);
+		hPrintf("    <li>%s : %s : superTrack container</li>\n", tdb->track, tdb->type);
 	    else if (! depthSearch)
-		hPrintf("    <li>%s : %s : %s</li>\n", track->track, track->type, bigDataUrl);
+		hPrintf("    <li>%s : %s : %s</li>\n", tdb->track, tdb->type, bigDataUrl);
             else
-		hPrintf("    <li>%s : %s</li>\n", track->track, track->type);
+		hPrintf("    <li>%s : %s</li>\n", tdb->track, tdb->type);
 	    }
+	if (tdb->subtracks)
+	    hPrintf("    <li>hasSubtracks : TRUE</li>\n");
+	else
+	    hPrintf("    <li>hasSubtracks : FALSE</li>\n");
         if (allTrackSettings)
-            trackSettings(track); /* show all settings */
+            trackSettings(tdb); /* show all settings */
 	if (timeOutReached())
 	    break;
-	}	/*	for ( ; track; track = track->next )	*/
+	}	/*	for ( tdb = topTrackDb; tdb; tdb = tdb->next )	*/
     hPrintf("    <li>%d different track types</li>\n", countTracks->elCount);
     if (countTracks->elCount)
 	{
@@ -496,13 +502,13 @@ static void tracksForUcscDb(char * ucscDb)
 {
 hPrintf("<p>Tracks in UCSC genome: '%s'<br>\n", ucscDb);
 struct trackDb *tdbList = hTrackDb(ucscDb);
-struct trackDb *track;
+struct trackDb *tdb;
 hPrintf("<ul>\n");
-for (track = tdbList; track != NULL; track = track->next )
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next )
     {
-    hPrintf("<li>%s</li>\n", track->track);
+    hPrintf("<li>%s</li>\n", tdb->track);
     if (allTrackSettings)
-        trackSettings(track); /* show all settings */
+        trackSettings(tdb); /* show all settings */
     }
 hPrintf("</ul>\n");
 hPrintf("</p>\n");

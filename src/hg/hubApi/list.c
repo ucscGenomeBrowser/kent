@@ -7,6 +7,7 @@ static void hubPublicJsonData(struct jsonWrite *jw, struct hubPublic *el)
  * must be same as was stated in the columnName header element
  *  TODO: need to figure out how to use the order of the columns as
  *        they are in the 'desc' request
+ * This code should be in hg/lib/hubPublic.c (which does not exist)
  */
 {
 jsonWriteListStart(jw, NULL);
@@ -26,7 +27,7 @@ static void jsonPublicHubs()
 struct sqlConnection *conn = hConnectCentral();
 char *dataTime = sqlTableUpdate(conn, hubPublicTableName());
 time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
-replaceChar(dataTime, ' ', 'T');
+replaceChar(dataTime, ' ', 'T');	/* ISO 8601 */
 struct hubPublic *el = hubPublicLoadAll();
 struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "dataTime", dataTime);
@@ -50,6 +51,7 @@ static void dbDbJsonData(struct jsonWrite *jw, struct dbDb *el)
  * must be same as was stated in the columnName header element
  *  TODO: need to figure out how to use the order of the columns as
  *        they are in the 'desc' request
+ * This code should be over in hg/lib/dbDb.c
  */
 {
 jsonWriteListStart(jw, NULL);
@@ -76,7 +78,7 @@ static void jsonDbDb()
 struct sqlConnection *conn = hConnectCentral();
 char *dataTime = sqlTableUpdate(conn, "dbDb");
 time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
-replaceChar(dataTime, ' ', 'T');
+replaceChar(dataTime, ' ', 'T');	/* ISO 8601 */
 struct dbDb *dbList = ucscDbDb();
 struct dbDb *el;
 struct jsonWrite *jw = apiStartOutput();
@@ -112,7 +114,7 @@ if (table)
 	{
 	char *dataTime = sqlTableUpdate(conn, table);
 	time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
-	replaceChar(dataTime, ' ', 'T');
+	replaceChar(dataTime, ' ', 'T');	/* ISO 8601 */
         struct jsonWrite *jw = apiStartOutput();
 	jsonWriteString(jw, "genome", db);
 	jsonWriteString(jw, "track", table);
@@ -148,7 +150,7 @@ else
     {
     char *dataTime = sqlTableUpdate(conn, "chromInfo");
     time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
-    replaceChar(dataTime, ' ', 'T');
+    replaceChar(dataTime, ' ', 'T');	/* ISO 8601 */
     struct chromInfo *ciList = createChromInfoList(NULL, db);
     struct chromInfo *el = ciList;
     struct jsonWrite *jw = apiStartOutput();
@@ -181,7 +183,23 @@ for (el = tdb; el != NULL; el = el->next )
     jsonWriteString(jw, "shortLabel", el->shortLabel);
     jsonWriteString(jw, "type", el->type);
     jsonWriteString(jw, "longLabel", el->longLabel);
+    if (el->parent)
+        jsonWriteString(jw, "parent", "TRUE");
+    else
+        jsonWriteString(jw, "parent", "FALSE");
+    if (el->subtracks)
+	jsonWriteString(jw, "subtracks", "TRUE");
+    else
+	jsonWriteString(jw, "subtracks", "FALSE");
     if (tdbIsComposite(el))
+	jsonWriteString(jw, "tdbIsComposite", "TRUE");
+    else
+	jsonWriteString(jw, "tdbIsComposite", "FALSE");
+    if (tdbIsComposite(el))
+	{
+	recursiveTrackList(jw, el->subtracks, "subtracks");
+	}
+    else if (el->subtracks)
 	{
 	recursiveTrackList(jw, el->subtracks, "subtracks");
 	}
@@ -212,7 +230,7 @@ static void trackDbJsonOutput(char *db, FILE *f)
 struct sqlConnection *conn = hAllocConn(db);
 char *dataTime = sqlTableUpdate(conn, "trackDb");
 time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
-replaceChar(dataTime, ' ', 'T');
+replaceChar(dataTime, ' ', 'T');	/* ISO 8601 */
 hFreeConn(&conn);
 struct trackDb *tdbList = hTrackDb(db);
 struct jsonWrite *jw = apiStartOutput();
