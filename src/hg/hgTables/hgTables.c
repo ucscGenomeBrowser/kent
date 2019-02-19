@@ -1817,8 +1817,7 @@ else
     webPushErrHandlersCartDb(cart, database);
     mainPageAfterOpen(conn);
     hFreeConn(&conn);
-    webPopErrHandlers();
-    htmlClose();
+    cartWebEnd();
     }
 
 textOutClose(&compressPipeline, &saveStdout);

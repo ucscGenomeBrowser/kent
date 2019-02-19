@@ -2,9 +2,84 @@
 
 #include "dataApi.h"
 
-static void getTrackData()
-/* return data from a track */
+static void tableDataOutput(struct sqlConnection *conn, struct jsonWrite *jw, char *query, char *table)
+/* output the table data from the specified query string */
 {
+int columnCount = tableColumns(conn, jw, table);
+jsonWriteListStart(jw, "trackData");
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row = NULL;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    jsonWriteListStart(jw, NULL);
+    int i = 0;
+    for (i = 0; i < columnCount; ++i)
+	jsonWriteString(jw, NULL, row[i]);
+    jsonWriteListEnd(jw);
+    }
+jsonWriteListEnd(jw);
+}
+
+static void getTrackData()
+/* return data from a track, optionally just one chrom data,
+ *  optionally just one section of that chrom data
+ */
+{
+char *db = cgiOptionalString("db");
+char *chrom = cgiOptionalString("chrom");
+char *start = cgiOptionalString("start");
+char *end = cgiOptionalString("end");
+char *table = cgiOptionalString("track");
+/* 'track' name in trackDb refers to a SQL 'table' */
+
+if (isEmpty(db))
+    apiErrAbort("missing URL db=<ucscDb> name for endpoint '/getData/track");
+if (isEmpty(table))
+    apiErrAbort("missing URL track=<trackName> name for endpoint '/getData/track");
+struct sqlConnection *conn = hAllocConn(db);
+if (! sqlTableExists(conn, table))
+    apiErrAbort("can not find specified 'track=%s' for endpoint: /getData/track?db=%s&track=%s", table, db, table);
+
+struct jsonWrite *jw = apiStartOutput();
+jsonWriteString(jw, "db", db);
+jsonWriteString(jw, "track", table);
+char *dataTime = sqlTableUpdate(conn, table);
+time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
+replaceChar(dataTime, ' ', 'T');	/*	ISO 8601	*/
+jsonWriteString(jw, "dataTime", dataTime);
+jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
+
+char query[4096];
+/* no chrom specified, return entire table */
+if (isEmpty(chrom))
+    {
+    sqlSafef(query, sizeof(query), "select * from %s", table);
+    tableDataOutput(conn, jw, query, table);
+    }
+else if (isEmpty(start) || isEmpty(end))
+    {
+    if (! sqlColumnExists(conn, table, "chrom"))
+	apiErrAbort("track '%s' is not a position track, request track without chrom specification, genome: '%s'", table, db);
+    jsonWriteString(jw, "chrom", chrom);
+    struct chromInfo *ci = hGetChromInfo(db, chrom);
+    jsonWriteNumber(jw, "start", (long long)0);
+    jsonWriteNumber(jw, "end", (long long)ci->size);
+    sqlSafef(query, sizeof(query), "select * from %s where chrom='%s'", table, chrom);
+    tableDataOutput(conn, jw, query, table);
+    }
+else
+    {
+    if (! sqlColumnExists(conn, table, "chrom"))
+	apiErrAbort("track '%s' is not a position track, request track without chrom specification, genome: '%s'", table, db);
+    jsonWriteString(jw, "chrom", chrom);
+    jsonWriteNumber(jw, "start", (long long)sqlSigned(start));
+    jsonWriteNumber(jw, "end", (long long)sqlSigned(end));
+    sqlSafef(query, sizeof(query), "select * from %s where chrom='%s' AND chromEnd > %d AND chromStart < %d", table, chrom, sqlSigned(start), sqlSigned(end));
+    tableDataOutput(conn, jw, query, table);
+    }
+jsonWriteObjectEnd(jw);
+fputs(jw->dy->string,stdout);
+hFreeConn(&conn);
 }
 
 static void getSequenceData()

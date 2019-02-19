@@ -1,0 +1,45 @@
+track knownGene
+shortLabel UCSC Genes
+longLabel UCSC Genes (RefSeq, GenBank, tRNAs & Comparative Genomics)
+group genes
+visibility pack
+color 12,12,120
+type genePred knownGenePep knownGeneMrna
+idXref kgAlias kgID alias
+hgGene on
+hgsid on
+directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
+baseColorUseCds given
+baseColorDefault genomicCodons
+defaultLinkedTables kgXref
+intronGap 12
+bigGeneDataUrl /gbdb/mm10/knownGene.bb
+
+track knownGeneOld9
+shortLabel Old UCSC Genes
+longLabel Previous Version of UCSC Genes
+group genes
+visibility hide
+color 82,82,160
+type genePred
+hgsid on
+oldToNew kg9ToKg10
+baseColorUseCds given
+baseColorDefault genomicCodons
+
+searchName knownGeneOld9
+searchTable knownGeneOld9
+searchDescription Previous Version of UCSC Genes
+searchMethod fuzzy
+query select chrom, txStart,txEnd, name from %s where name like '%%%s%%'
+searchPriority 3.53
+
+searchName knownGeneAcc
+searchTable knownGene
+searchMethod exact
+searchType knownGene
+shortCircuit 1
+semiShortCircuit 1
+termRegex (uc[0-9]{3}[a-z]{3}(\.[0-9]+)?|N(M|R)_[0-9]{6}[0-9]*|[a-z][a-z0-9][0-9]{4}[0-9]*)
+searchPriority 9
+

@@ -2,36 +2,12 @@
 
 #include "dataApi.h"
 
-static boolean tableColumns(struct jsonWrite *jw, char *table)
-/* output the column names for the given table
- * return: TRUE on error, FALSE on success
- */
-{
-jsonWriteListStart(jw, "columnNames");
-char query[1024];
-struct sqlConnection *conn = hConnectCentral();
-sqlSafef(query, sizeof(query), "desc %s", table);
-struct sqlResult *sr = sqlGetResult(conn, query);
-char **row;
-row = sqlNextRow(sr);
-if (NULL == row)
-    {
-    apiErrAbort("ERROR: can not 'desc' table '%s'", table);
-    return TRUE;
-    }
-while ((row = sqlNextRow(sr)) != NULL)
-    jsonWriteString(jw, NULL, row[0]);
-sqlFreeResult(&sr);
-hDisconnectCentral(&conn);
-jsonWriteListEnd(jw);
-return FALSE;
-}
-
 static void hubPublicJsonData(struct jsonWrite *jw, struct hubPublic *el)
 /* Print array data for one row from hubPublic table, order here
  * must be same as was stated in the columnName header element
  *  TODO: need to figure out how to use the order of the columns as
  *        they are in the 'desc' request
+ * This code should be in hg/lib/hubPublic.c (which does not exist)
  */
 {
 jsonWriteListStart(jw, NULL);
@@ -50,16 +26,15 @@ static void jsonPublicHubs()
 {
 struct sqlConnection *conn = hConnectCentral();
 char *dataTime = sqlTableUpdate(conn, hubPublicTableName());
-hDisconnectCentral(&conn);
 time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
-replaceChar(dataTime, ' ', 'T');
+replaceChar(dataTime, ' ', 'T');	/* ISO 8601 */
 struct hubPublic *el = hubPublicLoadAll();
 struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "dataTime", dataTime);
 jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
 freeMem(dataTime);
 jsonWriteString(jw, "tableName", hubPublicTableName());
-tableColumns(jw, hubPublicTableName());
+(void) tableColumns(conn, jw, hubPublicTableName());
 jsonWriteListStart(jw, "publicHubData");
 for ( ; el != NULL; el = el->next )
     {
@@ -68,6 +43,7 @@ for ( ; el != NULL; el = el->next )
 jsonWriteListEnd(jw);
 jsonWriteObjectEnd(jw);
 fputs(jw->dy->string,stdout);
+hDisconnectCentral(&conn);
 }
 
 static void dbDbJsonData(struct jsonWrite *jw, struct dbDb *el)
@@ -75,6 +51,7 @@ static void dbDbJsonData(struct jsonWrite *jw, struct dbDb *el)
  * must be same as was stated in the columnName header element
  *  TODO: need to figure out how to use the order of the columns as
  *        they are in the 'desc' request
+ * This code should be over in hg/lib/dbDb.c
  */
 {
 jsonWriteListStart(jw, NULL);
@@ -100,9 +77,8 @@ static void jsonDbDb()
 {
 struct sqlConnection *conn = hConnectCentral();
 char *dataTime = sqlTableUpdate(conn, "dbDb");
-hDisconnectCentral(&conn);
 time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
-replaceChar(dataTime, ' ', 'T');
+replaceChar(dataTime, ' ', 'T');	/* ISO 8601 */
 struct dbDb *dbList = ucscDbDb();
 struct dbDb *el;
 struct jsonWrite *jw = apiStartOutput();
@@ -110,7 +86,7 @@ jsonWriteString(jw, "dataTime", dataTime);
 jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
 freeMem(dataTime);
 jsonWriteString(jw, "tableName", "dbDb");
-tableColumns(jw, "dbDb");
+(void) tableColumns(conn, jw, "dbDb");
 jsonWriteListStart(jw, "ucscGenomes");
 for ( el=dbList; el != NULL; el = el->next )
     {
@@ -119,6 +95,7 @@ for ( el=dbList; el != NULL; el = el->next )
 jsonWriteListEnd(jw);
 jsonWriteObjectEnd(jw);
 fputs(jw->dy->string,stdout);
+hDisconnectCentral(&conn);
 }
 
 static void chromInfoJsonOutput(FILE *f, char *db)
@@ -132,12 +109,12 @@ struct sqlConnection *conn = hAllocConn(db);
 if (table)
     {
     if (! sqlTableExists(conn, table))
-	apiErrAbort("ERROR: endpoint: /list/chromosomes?db=%&table=%s ERROR table does not exist", db, table);
+	apiErrAbort("can not find specified 'track=%s' for endpoint: /list/chromosomes?db=%s&track=%s", table, db, table);
     if (sqlColumnExists(conn, table, "chrom"))
 	{
 	char *dataTime = sqlTableUpdate(conn, table);
 	time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
-	replaceChar(dataTime, ' ', 'T');
+	replaceChar(dataTime, ' ', 'T');	/* ISO 8601 */
         struct jsonWrite *jw = apiStartOutput();
 	jsonWriteString(jw, "genome", db);
 	jsonWriteString(jw, "track", table);
@@ -167,15 +144,13 @@ if (table)
         fputs(jw->dy->string,stdout);
 	}
     else
-	{
-	apiErrAbort("ERROR: table '%s' is not a position table, no chromosomes for genome: '%s'", table, db);
-	}
+	apiErrAbort("track '%s' is not a position track, request table without chrom specification, genome: '%s'", table, db);
     }
 else
     {
     char *dataTime = sqlTableUpdate(conn, "chromInfo");
     time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
-    replaceChar(dataTime, ' ', 'T');
+    replaceChar(dataTime, ' ', 'T');	/* ISO 8601 */
     struct chromInfo *ciList = createChromInfoList(NULL, db);
     struct chromInfo *el = ciList;
     struct jsonWrite *jw = apiStartOutput();
@@ -208,7 +183,23 @@ for (el = tdb; el != NULL; el = el->next )
     jsonWriteString(jw, "shortLabel", el->shortLabel);
     jsonWriteString(jw, "type", el->type);
     jsonWriteString(jw, "longLabel", el->longLabel);
+    if (el->parent)
+        jsonWriteString(jw, "parent", "TRUE");
+    else
+        jsonWriteString(jw, "parent", "FALSE");
+    if (el->subtracks)
+	jsonWriteString(jw, "subtracks", "TRUE");
+    else
+	jsonWriteString(jw, "subtracks", "FALSE");
     if (tdbIsComposite(el))
+	jsonWriteString(jw, "tdbIsComposite", "TRUE");
+    else
+	jsonWriteString(jw, "tdbIsComposite", "FALSE");
+    if (tdbIsComposite(el))
+	{
+	recursiveTrackList(jw, el->subtracks, "subtracks");
+	}
+    else if (el->subtracks)
 	{
 	recursiveTrackList(jw, el->subtracks, "subtracks");
 	}
@@ -239,7 +230,7 @@ static void trackDbJsonOutput(char *db, FILE *f)
 struct sqlConnection *conn = hAllocConn(db);
 char *dataTime = sqlTableUpdate(conn, "trackDb");
 time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
-replaceChar(dataTime, ' ', 'T');
+replaceChar(dataTime, ' ', 'T');	/* ISO 8601 */
 hFreeConn(&conn);
 struct trackDb *tdbList = hTrackDb(db);
 struct jsonWrite *jw = apiStartOutput();

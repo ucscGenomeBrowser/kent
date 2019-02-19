@@ -209,16 +209,61 @@ blue navigation bar. Follow these steps to save your session:</p>
   in case of a system failure.
   To do this, go to the <code>Save Settings</code> section.  
   Click the <code>submit</code> button to the right of "backup custom tracks to archive."
-  The databases, custom track names will be shown. For non-bigDataUrl custom tracks that
+  For each database, the custom track names will be shown. For non-bigDataUrl custom tracks that
   are being stored on our servers, the space used will be indicated.  At the bottom the
   total size stored for all the custom tracks currently in use will be displayed.
   To proceed, click <code>create custom track backup archive</code> button. All the custom tracks will
   be dumped into an archive and compressed. Large custom tracks may take several minutes to finish.
-  To download the archive, first fill in the name.   
+  To download the archive, first fill in the name for the downloaded archive.   
   Click the <code>download backup archive</code> button to download the file
   to your computer. The file will have a ".tar.gz" extension. Safari browser may unzip the
   archive leaving you with a .tar file in the downloads directory.
-  Click the <code>return</code> button to return to the main session screen.</li> 
+  Click the <code>return</code> button to return to the main session screen.<br>
+  <br>
+  Remember that the downloaded archive cannot be directly reloaded into the system.<br>
+  <br>
+  However, if you need to re-load custom tracks, first gunzip the downloaded .tar.gz file.<br>
+  <br>
+  <code>cd Downloads</code> (or the location with the custom track archive)<br> 
+  <code>mkdir someproject</code><br> 
+  <code>cd someproject</code><br> 
+  <code>tar -xzf ../someproject.tar.gz</code><br> 
+  However, if you use the Safari browser, it may have gunzipped the .tar.gz file automatically, leaving just .tar<br>
+  <code>tar -xf ../someproject.tar</code>(Safari users only)<br> 
+  <br>
+  Look around the archive contents:<br>
+  List the directory contents which are directories for each database.<br>
+  <code>ls -l</code><br> 
+  For example, change into the hg38 database directory.<br> 
+  <code>cd hg38</code><br>
+  <code>ls -l</code><br>
+  The directory contents are .ct files, one for each custom track.<br> 
+  To restore a single custom track, go to the hgCustom tool, and click <code>add custom track</code> button. 
+  Make sure that you have the correct database selected. Now click the <code>browse</code> button next to 
+  the top window where it says Paste URLs or data. A file-selection dialog box will open,
+  navigate to the directory where the desired custom track .ct file is, and choose it. Now click the <code>submit</code> button.<br>  
+  <br>  
+  If an optional help text or html page was saved with the custom track, you will see a corresponding custom track .html file.
+  You can restore these by selecting the <code>browse</code> button next to where it says
+  Optional track documentation. A file-selection dialog box will open,
+  navigate to the directory where the .html file is for the correct track, and choose it. 
+  Now click the <code>submit</code> button. <br>
+  <br>  
+  BULK RESTORE:<br>
+  You can restore all the custom tracks in a database directory in a single upload by simply concatenating the .ct files togther.<br>
+  <code>cd hg38</code><br>
+  <code>cat *.ct &gt; hg38_all.ct</code>(the name is arbitrary)<br>
+  Compress the large single file for faster upload:<br>
+  <code>gzip hg38_all.ct</code> (creates hg38_all.ct.gz)<br>
+  Now go to hgCustom and repeat the steps above, but this time choose the big concatenated compressed file instead
+  (hg38_all.ct.gz in our example).<br>
+  Large custom track sets may require a long time both to upload and to get processed, so be patient.<br>
+  <br>
+  Note that some database directories from custom tracks defined on hubs will contain long names with the hub id.
+  As an aid to identifying the actual hub it corresponds to, these database directories will contain
+  an additional hubUrl file which simply contains the URL of the hub itself. This can also be used to recreate
+  the hub on some other genome browser system on which that hub has not been created. <br>
+  </li> 
 </ul> 
 <p>
 Saved sessions <a href="#Lifespan">will not be expired</a>, and should persist until you 
