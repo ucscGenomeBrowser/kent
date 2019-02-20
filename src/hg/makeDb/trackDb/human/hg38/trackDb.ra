@@ -307,7 +307,7 @@ longLabel GRCh38 Haplotype to Reference Sequence Mapping Correspondence
 visibility hide
 otherDb hg38
 group map
-release beta,public
+release public
 
     track altLocations
     superTrack altSequence pack
@@ -318,7 +318,7 @@ release beta,public
     html altSequence
     url /cgi-bin/hgTracks?db=$D&position=$$
     urlLabel Corresponding position:
-    release beta,public
+    release public
 
     track altSeqLiftOverPsl
     superTrack altSequence pack
@@ -334,7 +334,7 @@ release beta,public
     showCdsAllScales .
     baseColorDefault diffBases
     baseColorUseSequence extFile seqNcbiAltSequence extNcbiAltSequence
-    release beta,public
+    release public
 
 track altSeqLiftOverBigPsl
 #superTrack altSequence pack
@@ -567,10 +567,25 @@ urlLabel SIB link:
 track sibTxGraph override
 url http://ccg.vital-it.ch/cgi-bin/tromer/tromergraph2draw.pl?db=hg38&species=H.+sapiens&tromer=$$
 
+track altSeqLiftOverPsl override
+release alpha,beta
+
+track fixSeqLiftOverPsl override
+release alpha,beta
+
+track altLocations
+type bed 4
+group map
+color 32,32,190
+shortLabel Alt Haplotypes
+longLabel Alternate Haplotypes to Reference Sequence Correspondence
+url ../cgi-bin/hgTracks?db=$D&position=$$
+urlLabel Corresponding position:
+release public
 
 include trackDb.cloneEnd.ra
 
-include hg38Patch11.ra beta,public
+include hg38Patch11.ra public
 
 include knownGene.ra
 
