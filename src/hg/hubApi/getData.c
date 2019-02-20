@@ -70,7 +70,7 @@ return list;
 
 static void bedDataOutput(struct jsonWrite *jw, struct bbiFile *bbi,
     char *chrom, unsigned start, unsigned end, unsigned maxItems)
-/* output the data for one chrom in the given bbi file */
+/* output bed data for one chrom in the given bbi file */
 {
 struct lm *bbLm = lmInit(0);
 struct bigBedInterval *iv, *ivList = NULL;
@@ -89,6 +89,54 @@ for (iv = ivList; iv; iv = iv->next)
     jsonWriteListEnd(jw);
     }
 lmCleanup(&bbLm);
+}
+
+static void wigDataOutput(struct jsonWrite *jw, struct bbiFile *bwf,
+    char *chrom, unsigned start, unsigned end, unsigned maxItems)
+/* output wig data for one chrom in the given bwf file */
+{
+struct lm *lm = lmInit(0);
+struct bbiInterval *iv, *ivList = bigWigIntervalQuery(bwf, chrom, start, end, lm);
+if (NULL == ivList)
+    return;
+
+unsigned itemCount = 0;
+
+jsonWriteObjectStart(jw, NULL);
+jsonWriteListStart(jw, chrom);
+for (iv = ivList; iv && itemCount < maxItems; iv = iv->next)
+    {
+    jsonWriteListStart(jw, NULL);
+    int s = max(iv->start, start);
+    int e = min(iv->end, end);
+    double val = iv->val;
+    jsonWriteNumber(jw, NULL, (long long)s);
+    jsonWriteNumber(jw, NULL, (long long)e);
+    jsonWriteDouble(jw, NULL, val);
+    jsonWriteListEnd(jw);
+    ++itemCount;
+    }
+jsonWriteListEnd(jw);
+jsonWriteObjectEnd(jw);
+}
+
+static void wigData(struct jsonWrite *jw, struct bbiFile *bwf, char *chrom,
+    unsigned start, unsigned end, unsigned maxItems)
+/* output the data for a bigWig bbi file */
+{
+struct bbiChromInfo *chromList = NULL;
+// struct bbiSummaryElement sum = bbiTotalSummary(bwf);
+if (isEmpty(chrom))
+    {
+    chromList = bbiChromList(bwf);
+    struct bbiChromInfo *bci;
+    for (bci = chromList; bci; bci = bci->next)
+	{
+	wigDataOutput(jw, bwf, bci->name, 0, bci->size, maxItems);
+	}
+    }
+    else
+	wigDataOutput(jw, bwf, chrom, start, end, maxItems);
 }
 
 static void getHubTrackData(char *hubUrl)
@@ -198,6 +246,10 @@ if (startsWith("bigBed", thisTrack->type))
     }
 else if (startsWith("bigWig", thisTrack->type))
     {
+    unsigned maxItems = 1000;	/* TBD will use this later for paging */
+    jsonWriteListStart(jw, "trackData");
+    wigData(jw, bbi, chrom, uStart, uEnd, maxItems);
+    jsonWriteListEnd(jw);
     }
 bbiFileClose(&bbi);
 jsonWriteObjectEnd(jw);
