@@ -23,6 +23,15 @@ shortLabel Known Genes
 longLabel UCSC Known Genes (June, 05) Based on UniProt, RefSeq, and GenBank mRNA
 priority 1
 
+track altLocations
+type bed 4
+group map
+color 32,32,190
+shortLabel Alt Haplotypes
+longLabel Alternate Haplotypes to Reference Sequence Correspondence
+url ../cgi-bin/hgTracks?db=$D&position=$$
+urlLabel Corresponding position:
+
 track kgProtMap
 shortLabel kgProtMap
 longLabel kgProtMap
