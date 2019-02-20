@@ -256,18 +256,7 @@ else if (sameWord("hubGenomes", words[1]))
     if (isEmpty(hubUrl))
 	apiErrAbort("must supply hubUrl='http:...' some URL to a hub for /list/hubGenomes");
 
-    struct trackHub *hub = NULL;
-    struct errCatch *errCatch = errCatchNew();
-    if (errCatchStart(errCatch))
-	{
-	hub = trackHubOpen(hubUrl, "");
-        }
-    errCatchEnd(errCatch);
-    if (errCatch->gotError)
-	{
-	apiErrAbort("error opening hubUrl: '%s', '%s'", hubUrl,  errCatch->message->string);
-	}
-    errCatchFree(&errCatch);
+    struct trackHub *hub = errCatchTrackHubOpen(hubUrl);
     if (hub->genomeList)
 	{
         struct jsonWrite *jw = apiStartOutput();
@@ -304,7 +293,7 @@ else if (sameWord("tracks", words[1]))
 	if (isEmpty(hubUrl))
             apiErrAbort("ERROR: must supply hubUrl='http:...' some URL to a hub for /list/genomes");
 	}
-    struct trackHub *hub = trackHubOpen(hubUrl, "");
+    struct trackHub *hub = errCatchTrackHubOpen(hubUrl);
     if (hub->genomeList)
 	{
 	struct trackDb *dbTrackList = NULL;
