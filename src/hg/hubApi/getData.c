@@ -68,6 +68,77 @@ slReverse(&list);
 return list;
 }
 
+static void bedDataOutput(struct jsonWrite *jw, struct bbiFile *bbi,
+    char *chrom, unsigned start, unsigned end, unsigned maxItems)
+/* output bed data for one chrom in the given bbi file */
+{
+struct lm *bbLm = lmInit(0);
+struct bigBedInterval *iv, *ivList = NULL;
+ivList = bigBedIntervalQuery(bbi,chrom, start, end, 0, bbLm);
+char *row[bbi->fieldCount];
+for (iv = ivList; iv; iv = iv->next)
+    {
+    char startBuf[16], endBuf[16];
+    bigBedIntervalToRow(iv, chrom, startBuf, endBuf, row, bbi->fieldCount);
+    jsonWriteListStart(jw, NULL);
+    int i;
+    for (i = 0; i < bbi->fieldCount; ++i)
+        {
+        jsonWriteString(jw, NULL, row[i]);
+        }
+    jsonWriteListEnd(jw);
+    }
+lmCleanup(&bbLm);
+}
+
+static void wigDataOutput(struct jsonWrite *jw, struct bbiFile *bwf,
+    char *chrom, unsigned start, unsigned end, unsigned maxItems)
+/* output wig data for one chrom in the given bwf file */
+{
+struct lm *lm = lmInit(0);
+struct bbiInterval *iv, *ivList = bigWigIntervalQuery(bwf, chrom, start, end, lm);
+if (NULL == ivList)
+    return;
+
+unsigned itemCount = 0;
+
+jsonWriteObjectStart(jw, NULL);
+jsonWriteListStart(jw, chrom);
+for (iv = ivList; iv && itemCount < maxItems; iv = iv->next)
+    {
+    jsonWriteListStart(jw, NULL);
+    int s = max(iv->start, start);
+    int e = min(iv->end, end);
+    double val = iv->val;
+    jsonWriteNumber(jw, NULL, (long long)s);
+    jsonWriteNumber(jw, NULL, (long long)e);
+    jsonWriteDouble(jw, NULL, val);
+    jsonWriteListEnd(jw);
+    ++itemCount;
+    }
+jsonWriteListEnd(jw);
+jsonWriteObjectEnd(jw);
+}
+
+static void wigData(struct jsonWrite *jw, struct bbiFile *bwf, char *chrom,
+    unsigned start, unsigned end, unsigned maxItems)
+/* output the data for a bigWig bbi file */
+{
+struct bbiChromInfo *chromList = NULL;
+// struct bbiSummaryElement sum = bbiTotalSummary(bwf);
+if (isEmpty(chrom))
+    {
+    chromList = bbiChromList(bwf);
+    struct bbiChromInfo *bci;
+    for (bci = chromList; bci; bci = bci->next)
+	{
+	wigDataOutput(jw, bwf, bci->name, 0, bci->size, maxItems);
+	}
+    }
+    else
+	wigDataOutput(jw, bwf, chrom, start, end, maxItems);
+}
+
 static void getHubTrackData(char *hubUrl)
 /* return data from a hub track, optionally just one chrom data,
  *  optionally just one section of that chrom data
@@ -108,28 +179,50 @@ for (thisTrack = tdb; thisTrack; thisTrack = thisTrack->next)
 if (NULL == thisTrack)
     apiErrAbort("failed to find specified track=%s in genome=%s for endpoint '/getdata/track'  given hubUrl='%s'", track, genome, hubUrl);
 
+char *bigDataUrl = trackDbSetting(thisTrack, "bigDataUrl");
+struct bbiFile *bbi = bigFileOpen(thisTrack->type, bigDataUrl);
+if (NULL == bbi)
+    apiErrAbort("track type %s management not implemented yet TBD track=%s in genome=%s for endpoint '/getdata/track'  given hubUrl='%s'", track, genome, hubUrl);
+
 struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "hubUrl", hubUrl);
 jsonWriteString(jw, "genome", genome);
 jsonWriteString(jw, "track", track);
+unsigned chromSize = 0;
+struct bbiChromInfo *chromList = NULL;
 if (isNotEmpty(chrom))
+    {
     jsonWriteString(jw, "chrom", chrom);
+    chromSize = bbiChromSize(bbi, chrom);
+    if (0 == chromSize)
+	apiErrAbort("can not find specified chrom=%s in bigBed file URL %s", chrom, bigDataUrl);
+    jsonWriteNumber(jw, "chromSize", (long long)chromSize);
+    }
+else
+    {
+    chromList = bbiChromList(bbi);
+    jsonWriteNumber(jw, "chromCount", (long long)slCount(chromList));
+    }
+
+unsigned uStart = 0;
+unsigned uEnd = chromSize;
 if ( ! (isEmpty(start) || isEmpty(end)) )
     {
-    jsonWriteString(jw, "start", start);
-    jsonWriteString(jw, "end", end);
+    uStart = sqlUnsigned(start);
+    uEnd = sqlUnsigned(end);
+    jsonWriteNumber(jw, "start", uStart);
+    jsonWriteNumber(jw, "end", uEnd);
     }
-char *bigDataUrl = trackDbSetting(thisTrack, "bigDataUrl");
+
 jsonWriteString(jw, "bigDataUrl", bigDataUrl);
 jsonWriteString(jw, "type", thisTrack->type);
-struct bbiFile *bbi = bigFileOpen(thisTrack->type, bigDataUrl);
-if (NULL == bbi)
-    apiErrAbort("track type %s management not implemented yet TBD track=%s in genome=%s for endpoint '/getdata/track'  given hubUrl='%s'", track, genome, hubUrl);
+
 if (startsWith("bigBed", thisTrack->type))
     {
     struct asObject *as = bigBedAsOrDefault(bbi);
     struct sqlFieldType *fi, *fiList = sqlFieldTypesFromAs(as);
     jsonWriteListStart(jw, "columnNames");
+    unsigned maxItems = 0;	/* TBD will use this later for paging */
 //    int columnCount = slCount(fiList);
     for (fi = fiList; fi; fi = fi->next)
 	{
@@ -138,30 +231,25 @@ if (startsWith("bigBed", thisTrack->type))
 	jsonWriteObjectEnd(jw);
 	}
     jsonWriteListEnd(jw);
-    struct lm *bbLm = lmInit(0);
-    unsigned uStart = sqlUnsigned(start);
-    unsigned uEnd = sqlUnsigned(end);
-    struct bigBedInterval *iv, *ivList = NULL;
-    ivList = bigBedIntervalQuery(bbi,chrom, uStart, uEnd, 0, bbLm);
-    char *row[bbi->fieldCount];
     jsonWriteListStart(jw, "trackData");
-    for (iv = ivList; iv; iv = iv->next)
+    if (isEmpty(chrom))
 	{
-	char startBuf[16], endBuf[16];
-	bigBedIntervalToRow(iv, chrom, startBuf, endBuf, row, bbi->fieldCount);
-	jsonWriteListStart(jw, NULL);
-        int i;
-        for (i = 0; i < bbi->fieldCount; ++i)
+	struct bbiChromInfo *bci;
+	for (bci = chromList; bci; bci = bci->next)
 	    {
-	    jsonWriteString(jw, NULL, row[i]);
+	    bedDataOutput(jw, bbi, bci->name, 0, bci->size, maxItems);
 	    }
-	jsonWriteListEnd(jw);
 	}
+    else
+	bedDataOutput(jw, bbi, chrom, uStart, uEnd, maxItems);
     jsonWriteListEnd(jw);
-    lmCleanup(&bbLm);
     }
 else if (startsWith("bigWig", thisTrack->type))
     {
+    unsigned maxItems = 1000;	/* TBD will use this later for paging */
+    jsonWriteListStart(jw, "trackData");
+    wigData(jw, bbi, chrom, uStart, uEnd, maxItems);
+    jsonWriteListEnd(jw);
     }
 bbiFileClose(&bbi);
 jsonWriteObjectEnd(jw);
