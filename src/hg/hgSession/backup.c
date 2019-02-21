@@ -389,6 +389,7 @@ struct ctExtra
     char *trackLine;
     int tableRows;
     unsigned long tableDataLength;
+    char *bigDataUrl;
     };
 
 struct downloadResults
@@ -399,6 +400,37 @@ struct downloadResults
     struct customTrack *cts;  // tracks
     struct ctExtra *ctExtras; // parallel additional info to the tracks
     };
+
+
+void addFieldToTrackLine(struct dyString *dy, struct customTrack *track, char *field, boolean isRequired)
+/* add optional or required field and its value to a track line */
+{
+char *val = hashFindVal(track->tdb->settingsHash, field);
+if (val)
+    {
+    dyStringPrintf(dy, " %s='%s'", field, val);
+    }
+else
+    {
+    if (isRequired)
+	errAbort("required field %s is missing from custom track settings", field);
+    }
+}
+
+char *fabricateWigTrackline(struct customTrack *track)
+/* make up a missing trackline for a ct exported from Table Browser as a wig */
+{
+struct dyString *dy = dyStringNew(1024);
+dyStringPrintf(dy, "track ");
+addFieldToTrackLine(dy, track,"name", TRUE);  // Required
+dyStringPrintf(dy, " type='wiggle_0'");
+addFieldToTrackLine(dy, track,"description", FALSE);
+addFieldToTrackLine(dy, track,"visibility", FALSE);
+addFieldToTrackLine(dy, track,"priority", FALSE);
+addFieldToTrackLine(dy, track,"altColor", FALSE);
+return dyStringCannibalize(&dy);
+}
+ 
 
 struct downloadResults *processCtsForDownloadInternals(char *contents, char **pTrackHubsVar)
 /* Process the saved session cart contents,
@@ -468,6 +500,14 @@ while (isNotEmpty(namePt))
 
                 char *origTrackLine = hashFindVal(track->tdb->settingsHash, "origTrackLine");
 		extra->trackLine = cloneString(origTrackLine);
+		if (!extra->trackLine) // Table Browser creates some wiggles without an origTrackLine
+		    {
+		    char *tdbType = hashFindVal(track->tdb->settingsHash, "tdbType");
+		    if (tdbType && startsWith("wig ", tdbType))
+			{
+			extra->trackLine = fabricateWigTrackline(track);
+			}
+		    }
 
 		// is it weird that the loader customFactoryTestExistence() did not do this for me?
 		char *wibFilePath = hashFindVal(track->tdb->settingsHash, "wibFile");
@@ -492,6 +532,12 @@ while (isNotEmpty(namePt))
 		    extra->tableRows = sqlTableSizeIfExists(ctConn, track->dbTableName); 
 		    extra->tableDataLength = sqlTableDataSizeFromSchema(ctConn, CUSTOM_TRASH, track->dbTableName);
 		    }
+
+
+		char *bigDataUrl = hashFindVal(track->tdb->settingsHash, "bigDataUrl");
+		if (bigDataUrl)
+		    extra->bigDataUrl = bigDataUrl;
+
 		slAddHead(&result->ctExtras,extra);
 		}
 	    slReverse(&result->ctExtras);
@@ -534,7 +580,6 @@ printf("You can backup the custom tracks which you previously uploaded to UCSC G
 struct downloadResults *result = NULL;
 
 
-int nonBigDataUrlCount = 0;
 int ctCount = 0;
 long totalDataToDownload = 0;
 
@@ -545,6 +590,8 @@ for (result=resultList; result; result=result->next)
 	continue;
 
     printf("<h3>Database %s</h3>\n", result->db);
+
+    //printf("result->ctPath %s <br>\n", result->ctPath);  // DEBUG REMOVE
 
     if (startsWith("hub_", result->db))
 	{
@@ -573,47 +620,57 @@ for (result=resultList; result; result=result->next)
 
     for (track=cts,extra=extras; track; track=track->next,extra=extra->next)
 	{
-	long trackDataToDownload = 0;
+	//printf("track name %s <br>\n", extra->name);  // DEBUG REMOVE
+	//printf("track->dbTrack %d <br>\n", track->dbTrack);  // DEBUG REMOVE
+	//printf("track->dbTableName %s <br>\n", track->dbTableName);  // DEBUG REMOVE
+	//printf("track->dbTrackType %s <br>\n", track->dbTrackType);  // DEBUG REMOVE
+	//printf("track->dbDataLoad %d <br>\n", track->dbDataLoad);  // DEBUG REMOVE
+	//printf("extra->bigDataUrl %s <br>\n", extra->bigDataUrl);  // DEBUG REMOVE
 
-	++ctCount;
+	boolean wibMissing = track->wibFile && !fileExists(track->wibFile);
 
-	// handle user-friendly sizes GB MB KB and B
-	if (track->dbTrack && track->dbDataLoad && track->dbTableName)
+	if (extra->bigDataUrl || (track->dbTrack && track->dbDataLoad && track->dbTableName && !wibMissing))
 	    {
-	    char greek[32];
-	    ++nonBigDataUrlCount;
-	    sprintWithGreekByte(greek, sizeof(greek), extra->tableDataLength);
-	    trackDataToDownload += extra->tableDataLength;
+	    long trackDataToDownload = 0;
 
-	    // handle wiggle cts which have an additional wig binary
-	    // wibFile=../trash/ct/hgtct_genome_542_dc1750.wib
-	    // wibFile=../trash/ct/ct_hgwdev_galt_e83f_3892d0.maf 
-	    // wibFIle=../trash/ct/ct_hgwdev_galt_4ba3_415cc0.vcf
-	    if (track->wibFile && fileExists(track->wibFile))
+	    ++ctCount;
+
+	    if (!extra->bigDataUrl)
 		{
-		long wibFileSize = fileSize(track->wibFile);
 		char greek[32];
-		sprintWithGreekByte(greek, sizeof(greek), wibFileSize);
-		trackDataToDownload += wibFileSize;
+		sprintWithGreekByte(greek, sizeof(greek), extra->tableDataLength);
+		trackDataToDownload += extra->tableDataLength;
+
+		// handle wiggle cts which have an additional wig binary
+		// wibFile=../trash/ct/hgtct_genome_542_dc1750.wib
+		// wibFile=../trash/ct/ct_hgwdev_galt_e83f_3892d0.maf 
+		// wibFIle=../trash/ct/ct_hgwdev_galt_4ba3_415cc0.vcf
+		if (track->wibFile && fileExists(track->wibFile))
+		    {
+		    long wibFileSize = fileSize(track->wibFile);
+		    char greek[32];
+		    sprintWithGreekByte(greek, sizeof(greek), wibFileSize);
+		    trackDataToDownload += wibFileSize;
+		    }
 		}
-	    }
 
-	// htmlFile=../trash/ct/ct_hgwdev_galt_d011_383c50.html 
-	if (track->htmlFile && fileExists(track->htmlFile))
-	    {
-	    long htmlFileSize = fileSize(track->htmlFile);
+	    // htmlFile=../trash/ct/ct_hgwdev_galt_d011_383c50.html 
+	    if (track->htmlFile && fileExists(track->htmlFile))
+		{
+		long htmlFileSize = fileSize(track->htmlFile);
+		char greek[32];
+		sprintWithGreekByte(greek, sizeof(greek), htmlFileSize);
+		trackDataToDownload += htmlFileSize;
+		}
+
 	    char greek[32];
-	    sprintWithGreekByte(greek, sizeof(greek), htmlFileSize);
-	    trackDataToDownload += htmlFileSize;
+	    sprintWithGreekByte(greek, sizeof(greek), trackDataToDownload);
+	    if (trackDataToDownload == 0)  // suppress 0.0 B
+		greek[0] = 0; // empty string
+	    printf("<tr><td>%s</td><td>%s</td></tr>\n", extra->name, greek); // track name
+
+	    totalDataToDownload += trackDataToDownload;
 	    }
-
-	char greek[32];
-	sprintWithGreekByte(greek, sizeof(greek), trackDataToDownload);
-	if (trackDataToDownload == 0)  // suppress 0.0 B
-	    greek[0] = 0; // empty string
-	printf("<tr><td>%s</td><td>%s</td></tr>\n", extra->name, greek); // track name
-
-	totalDataToDownload += trackDataToDownload;
 	}
 
     printf("</table>\n");
@@ -627,7 +684,10 @@ char greek[32];
 sprintWithGreekByte(greek, sizeof(greek), totalDataToDownload);
 printf("Total custom track data to backup: %s ", greek);
 
-cgiMakeButton(hgsMakeDownloadPrefix, "create custom tracks backup archive");
+if (ctCount > 0)
+    {
+    cgiMakeButton(hgsMakeDownloadPrefix, "create custom tracks backup archive");
+    }
 
 printf("<br>\n");
 printf("<br>\n");
@@ -891,6 +951,7 @@ while(TRUE)
 	errAbort("unable to create random output dir.");  
     }
 
+int ctCount = 0;
 int foundCount = 0;
 if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -946,6 +1007,9 @@ if ((row = sqlNextRow(sr)) != NULL)
 	updateProgessFile(backgroundProgress, dyProg);
 	lazarusLives(20 * 60);
 
+	
+	//printf("result->ctPath %s <br>\n", result->ctPath);  // DEBUG REMOVE
+
 
 	if (startsWith("hub_", result->db))
 	    {
@@ -966,62 +1030,78 @@ if ((row = sqlNextRow(sr)) != NULL)
 	for (track=cts,extra=extras; track; track=track->next,extra=extra->next)
 	    {
 
-	    printf("%s <br>\n", extra->name);
+	    //printf("track name %s <br>\n", extra->name);  // DEBUG REMOVE
+	    //printf("track->dbTrack %d <br>\n", track->dbTrack);  // DEBUG REMOVE
+	    //printf("track->dbTableName %s <br>\n", track->dbTableName);  // DEBUG REMOVE
+	    //printf("track->dbTrackType %s <br>\n", track->dbTrackType);  // DEBUG REMOVE
+	    //printf("track->dbDataLoad %d <br>\n", track->dbDataLoad);  // DEBUG REMOVE
+	    //printf("extra->bigDataUrl %s <br>\n", extra->bigDataUrl);  // DEBUG REMOVE
 
-	    dyStringPrintf(dyProg, "%s <br>\n", extra->name);
-	    updateProgessFile(backgroundProgress, dyProg);
-	    lazarusLives(20 * 60);
-
-	    char outNameCt[2014];
-	    safef(outNameCt, sizeof outNameCt, "%s/%s.ct", outDbDir, extra->name);
-	    FILE *fct = mustOpen(outNameCt, "w");
-
-	    // write the track header
-	    if (extra->browserLines)
-		fprintf(fct, "%s", extra->browserLines);  // should have ; converted \n already
-	    fprintf(fct, "%s\n", extra->trackLine);
-    
 	    boolean wibMissing = track->wibFile && !fileExists(track->wibFile);
 
-	    if (track->dbTrack && track->dbDataLoad && track->dbTableName && !wibMissing)
+	    if (extra->bigDataUrl || (track->dbTrack && track->dbDataLoad && track->dbTableName && !wibMissing))
 		{
+
+		++ctCount;
+		printf("%s <br>\n", extra->name);
+
+		dyStringPrintf(dyProg, "%s <br>\n", extra->name);
+		updateProgessFile(backgroundProgress, dyProg);
+		lazarusLives(20 * 60);
+
+
+		char outNameCt[2014];
+		safef(outNameCt, sizeof outNameCt, "%s/%s.ct", outDbDir, extra->name);
+		FILE *fct = mustOpen(outNameCt, "w");
+
+		// write the track header
+		if (extra->browserLines)
+		    fprintf(fct, "%s", extra->browserLines);  // should have ; converted \n already
+
+		if (!extra->trackLine)
+		    errAbort("origTrackLine is NULL!");
+		fprintf(fct, "%s\n", extra->trackLine);
+    
 
 		//printf("%s <br>\n", track->wibFile);  // DEBUG REMOVE
 		
-
-		// handle wiggle cts which have an additional wig binary
-		// wibFile='../trash/ct/hgtct_genome_542_dc1750.wib'
-		// wibFile='../trash/ct/ct_hgwdev_galt_e83f_3892d0.maf'
-		// wibFile='../trash/ct/ct_hgwdev_galt_4ba3_415cc0.vcf'
-		// symlink for speed, file should not change
-		if (track->wibFile)
+		if (!extra->bigDataUrl)
 		    {
-		    if (endsWith(track->wibFile, ".wib"))
-			{
-			// dump wig as ascii
-			char outNameWig[2014];
-			safef(outNameWig, sizeof outNameWig, "%s/%s.wig", outDbDir, extra->name);
-			doOutWigData(track->dbTableName, CUSTOM_TRASH, outNameWig); // no easy way to append it to .ct directly 
-			// append text to ct
-			appendTrashFileToCt(fct, outNameWig);
-			remove(outNameWig);
-			}
-		    if (endsWith(track->wibFile, ".maf"))
-			{
-			// append text to ct
-			appendTrashFileToCt(fct, track->wibFile);
-			}
-		    if (endsWith(track->wibFile, ".vcf"))
-			{
-			// append text to ct
-			appendTrashFileToCt(fct, track->wibFile);
-			}
-		    }
-		else  // simple BED-like
-		    {
-		    saveSqlDataForTable(track->dbTableName, fct);
-		    }
 
+		    // handle wiggle cts which have an additional wig binary
+		    // wibFile='../trash/ct/hgtct_genome_542_dc1750.wib'
+		    // wibFile='../trash/ct/ct_hgwdev_galt_e83f_3892d0.maf'
+		    // wibFile='../trash/ct/ct_hgwdev_galt_4ba3_415cc0.vcf'
+		    // symlink for speed, file should not change
+		    if (track->wibFile)
+			{
+			if (endsWith(track->wibFile, ".wib"))
+			    {
+			    // dump wig as ascii
+			    char outNameWig[2014];
+			    safef(outNameWig, sizeof outNameWig, "%s/%s.wig", outDbDir, extra->name);
+			    doOutWigData(track->dbTableName, CUSTOM_TRASH, outNameWig); // no easy way to append it to .ct directly 
+			    // append text to ct
+			    appendTrashFileToCt(fct, outNameWig);
+			    remove(outNameWig);
+			    }
+			if (endsWith(track->wibFile, ".maf"))
+			    {
+			    // append text to ct
+			    appendTrashFileToCt(fct, track->wibFile);
+			    }
+			if (endsWith(track->wibFile, ".vcf"))
+			    {
+			    // append text to ct
+			    appendTrashFileToCt(fct, track->wibFile);
+			    }
+			}
+		    else  // simple BED-like
+			{
+			saveSqlDataForTable(track->dbTableName, fct);
+			}
+
+		    }
 		// handle extra htmlFile track doc
 		// htmlFile=../trash/ct/ct_hgwdev_galt_d011_383c50.html 
 		// symlink for speed, file should not change
@@ -1029,9 +1109,10 @@ if ((row = sqlNextRow(sr)) != NULL)
 		    {
 		    makeTrashFileLink(track->htmlFile, cwd, outDbDir, extra->name);
 		    }
+
+		carefulClose(&fct);
 		}
 
-	    carefulClose(&fct);
 	    }
 	}
 
@@ -1040,6 +1121,9 @@ sqlFreeResult(&sr);
  
 if (foundCount == 0)
     errAbort("No session found for hgsid=%u", cartSessionRawId(cart));
+
+if (ctCount == 0)
+    errAbort("No custom tracks found for hgsid=%u", cartSessionRawId(cart));
 
 char archiveName[1024];
 safef(archiveName, sizeof archiveName, "savedSessionCtRaw.tar.gz");
