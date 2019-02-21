@@ -92,7 +92,7 @@ else
 	L+=-lssl
      endif
    endif
-   ifneq (@(wildcard /opt/local/lib/libcrypto.a),)
+   ifneq ($(wildcard /opt/local/lib/libcrypto.a),)
        L+=/opt/local/lib/libcrypto.a
    else
        L+=-lcrypto
