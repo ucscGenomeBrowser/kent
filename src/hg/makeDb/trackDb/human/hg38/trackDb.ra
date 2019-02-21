@@ -573,16 +573,6 @@ release alpha,beta
 track fixSeqLiftOverPsl override
 release alpha,beta
 
-track altLocations
-type bed 4
-group map
-color 32,32,190
-shortLabel Alt Haplotypes
-longLabel Alternate Haplotypes to Reference Sequence Correspondence
-url ../cgi-bin/hgTracks?db=$D&position=$$
-urlLabel Corresponding position:
-release public
-
 include trackDb.cloneEnd.ra
 
 include hg38Patch11.ra public
