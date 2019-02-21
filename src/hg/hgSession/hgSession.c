@@ -352,7 +352,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *spacePt = strchr(firstUse, ' ');
     if (spacePt != NULL) *spacePt = '\0';
         printf("&nbsp;&nbsp;</TD>"
-	        "<TD><nobr>%s<nobr>&nbsp;&nbsp;</TD><TD align=center>", firstUse);
+	        "<TD><nobr>%s</nobr>&nbsp;&nbsp;</TD><TD align=center>", firstUse);
 
     char *dbIdx = NULL;
     if (startsWith("db=", row[3]))
