@@ -75,6 +75,9 @@ int tableColumns(struct sqlConnection *conn, struct jsonWrite *jw, char *table);
  *  return number of columns (aka 'fields')
  */
 
+struct trackHub *errCatchTrackHubOpen(char *hubUrl);
+/* use errCatch around a trackHub open in case it fails */
+
 /* ######################################################################### */
 /*  functions in getData.c */
 

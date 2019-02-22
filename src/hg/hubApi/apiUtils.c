@@ -48,3 +48,21 @@ for (fi = fiList; fi; fi = fi->next)
 jsonWriteListEnd(jw);
 return columnCount;
 }
+
+struct trackHub *errCatchTrackHubOpen(char *hubUrl)
+/* use errCatch around a trackHub open in case it fails */
+{
+struct trackHub *hub = NULL;
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    hub = trackHubOpen(hubUrl, "");
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    apiErrAbort("error opening hubUrl: '%s', '%s'", hubUrl,  errCatch->message->string);
+    }
+errCatchFree(&errCatch);
+return hub;
+}
