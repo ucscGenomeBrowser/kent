@@ -921,6 +921,8 @@ void doMainPage()
 {
 char *db = NULL, *genome = NULL, *clade = NULL;
 getDbGenomeClade(cart, &db, &genome, &clade, oldVars);
+char *position = windowsToAscii(cartUsualString(cart, "position", hDefaultPos(db)));
+cartSetLastPosition(cart, position, oldVars);
 initGenbankTableNames(db);
 webStartWrapperDetailedNoArgs(cart, trackHubSkipHubName(db),
                               "", "Data Integrator",

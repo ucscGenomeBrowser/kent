@@ -414,6 +414,7 @@ range = trimSpaces(range);
 if (range[0] != 0)
     {
     struct region r;
+    cartSetLastPosition(cart, range, oldVars);
     isSingle = searchPosition(range, &r);
     if (!isSingle)
 	{

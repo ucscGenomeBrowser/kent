@@ -640,6 +640,11 @@ char *cartGetPosition(struct cart *cart, char *database, struct cart **pLastDbPo
 void cartSetDbPosition(struct cart *cart, char *database, struct cart *lastDbPosCart);
 /* Set the 'position.db' variable in the cart.*/
 
+void cartSetLastPosition(struct cart *cart, char *position, struct hash *oldVars);
+/* If position and oldVars are non-NULL, and oldVars' position is different, add it to the cart
+ * as lastPosition.  This is called by cartHtmlShell{,WithHead} but not other cart openers;
+ * it should be called after cartGetPosition or equivalent. */
+
 void cartTdbFetchMinMaxPixels(struct cart *theCart, struct trackDb *tdb,
                                 int defaultMin, int defaultMax, int defaultDefault,
                                 int *retMin, int *retMax, int *retDefault, int *retCurrent);
