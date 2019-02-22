@@ -14,10 +14,10 @@
 <li><a href="#genestrans">What is the difference between a gene and a transcript?</a></li>
 <li><a href="#genename">What is a gene name?</a></li>
 <li><a href="#ens">What is the difference between Ensembl and Gencode?</a></li>
-<li><a href="#ensRefseq">What is the difference between GENCODE, Ensembl and RefSeq?</a></li>
-<li><a href="#hg19">For the human assembly hg19/GrCH37: What is the difference between UCSC 
+<li><a href="#ensRefseq">What are the differences among GENCODE, Ensembl and RefSeq?</a></li>
+<li><a href="#hg19">For the human assembly hg19/GRCh37: What is the difference between UCSC 
                     Genes track, the "GENCODE" track and the "Ensembl Genes" track?</a></li>
-<li><a href="#hg38">For the human assembly hg38/GrCH38: What are the differences between the 
+<li><a href="#hg38">For the human assembly hg38/GRCh38: What are the differences between the 
 		    "GENCODE" and "All GENCODE" tracks?</a></li>
 <li><a href="#gencode">What is the difference between GENCODE comprehensive and basic?</a></li>
 <li><a href="#ccds">What is CCDS?</a></li>
@@ -36,7 +36,7 @@
 Before DNA sequencing, genes were defined as heritable traits. In the present day context of 
 bioinformatics, a gene represents a collection of transcripts usually transcribed within certain 
 genomic coordinates . Transcripts either encode one protein or are non-coding transcripts. 
-For human, most of the genes have a symbol associated to them by the Human Gene Nomenclature 
+For human, most genes have an associated symbol assigned by the Human Gene Nomenclature 
 Commitee (HGNC, formerly HUGO). For other organisms there is usually a database curation 
 team that assigns symbols, such as MGI for mouse.
 </p>
@@ -44,8 +44,8 @@ team that assigns symbols, such as MGI for mouse.
 <a name="genestrans"></a>
 <h6>What is the difference between a gene and a transcript? </h6>
 <p>
-Trancripts are defined as RNA molecules that are transcribed in the genome. Every gene 
-is comprised of a set of transcripts. In the Genome Browser, tracks are often called 
+Transcripts are defined as RNA molecules that are copied from a DNA template of a gene. Every gene 
+is comprised of a set of transcripts. In the Genome Browser, data tracks are often called 
 "Genes", e.g. "Ensembl Genes" or "UCSC Genes", but they really represent transcripts 
 on an assembly. Every transcript has an accession number, a sequence, and a list of exon
 chrom/start/end coordinates on a genome assembly. These transcript accession numbers 
@@ -90,10 +90,11 @@ they are predicted by software.</p>
 <p>TODO Lou or Max: compare the Ensembl GFF with the Gencode GFF.</p>
 
 <p> 
+Officially, the Ensembl and Gencode gene models are the same. 
 On the most current human and mouse genome assemblies (hg38 and mm10), and the primary chromosomes
 (not alternate sequences or patches (LINK TO EXPLAIN WHAT THIS IS?) the
 identifiers, transcript sequences and exon coordinates of equivalent Ensembl
-and Gencode versions are almost identical. Gencode uses the UCSC convention of prefixing
+and Gencode versions are indeed almost identical. Gencode uses the UCSC convention of prefixing
 chromosome names with "chr", e.g. "chr1" and "chrM", but Ensembl calls these
 "1" or "MT". At a time of writing (Ensembl 89), a few transcripts differ due to
 conversion issues. In addition, around 160 PAR genes are duplicated in Gencode
@@ -113,14 +114,21 @@ and the sequence identifiers match the UCSC genome files, at least for the
 primary chromosomes.
 
 <a name="ensRefseq"></a>
-<h6>What is the difference between Ensembl, Gencode and RefSeq?</h6>
+<h6>What are the differences among Ensembl, Gencode and RefSeq?</h6>
 <p> 
 Different institutions have different rules on how they annotate genes. E.g.
 RefSeq's criteria are more stringent, so there are a lot fewer RefSeq
 transcripts than for Ensembl/Gencode. Also, RefSeq transcripts have their own
 sequences independent of the genome assembly, so certain population-specific variants
-may be in RefSeq that are entirely missing from the reference genome sequence.
-The links from either transcript model to other gene-related databases are
+may be in RefSeq that are entirely missing from the reference genome sequence. 
+This has the important implication that the position of genome variants 
+are harder to map to RefSeq transcripts than for Gencode, since RefSeq transcripts
+can have additional sequence or missing sequence relative to the genome, 
+and when placing a variant onto a RefSeq transcript, the counting has to 
+take these into account. Not every software that places variants onto
+transcripts takes RefSeq/genome insertions/deletions into account.</p>
+
+<p>The links from either transcript model to other gene-related databases are
 different. In general, it seems that high-throuput sequencing data results,
 e.g. RNA-seq, are often using Ensembl/Gencode annotations and human genetics
 results are reported using RefSeq annotations. It depends on your particular
@@ -128,24 +136,27 @@ project which gene model set you want to use. Over time, the two transcript
 databases are becoming more and more similar.
 
 <a name="hg19"></a>
-<h6>For the human assembly hg19/GrCH37: What is the difference between UCSC
+<h6>For the human assembly hg19/GRCh37: What is the difference between UCSC
 Genes, the "GENCODE All" track and the "Ensembl Genes" track?</h6>
 <p>The "UCSC Genes", also called "Known Genes" track, is available only on
 assemblies before hg38.  It was built with a gene predictor developed at UCSC.
-It uses protein, EST and cDNA annotations to derive a relatively restricted
-gene transcript set. The software is not used anymore and the track is not
-available on the newer assemblies.</p>
+This gene predictor uses protein, EST and cDNA annotations to derive a
+relatively restricted gene transcript set. The software is not used anymore and
+the track is not available on the newer human assemblies. It was last used for the 
+mm10 mouse assembly. We are condering updating the hg19 annotation produced by this 
+software and are interested in your feedback.</p>
 
-<p>The "Gencode All" track has all version of Gencode. "Ensembl Genes" contains just 
-a single Ensembl version. See above for the differences between Ensembl and Gencode.</p>
+<p>The "Gencode All" track contains data from all versions of Gencode. "Ensembl Genes" contains just 
+a single Ensembl version. See the previous question for the differences between Ensembl and Gencode.</p>
 
 <a name="hg38"></a>
-<h6>For the human assembly hg38/GrCH38: What are the differences between the "GENCODE" and 
+<h6>For the human assembly hg38/GRCh38: What are the differences between the "GENCODE" and 
 "All GENCODE" tracks?</h6>
 <p> 
-"Gencode" is the default gene track on hg38 (similar to "Known Genes" on hg19). It shows a lot of 
-third party information when you click on a gene. "All Gencode" contains all
-versions of Gencode, but a lot less third-party information.
+"Gencode" is the default gene track on hg38 (similar to "Known Genes" on hg19),
+which means that it shows a lot of third party information when you click on a
+gene. "All Gencode" contains all versions of Gencode, but a lot less
+third-party information.
 </p>
 
 <a name="gencode"></a>
@@ -161,6 +172,13 @@ that will be useful to the majority of users.". </p>
 
 <a name="ccds"></a>
 <h6>What is CCDS?</h6>
+Todo: MARKD?<br>
+The Consensus Coding Sequence Project is a list of coding sequences that are
+shared between RefSeq, Ensembl/Gencode and UCSC (hg19 "Known Genes") gene
+transcripts. You can consider these a subset of any gene track, filtered for
+high quality. The CCDS identifiers are very stable and allow you to link easily
+between the different databases. As the name implies, it does not cover non-coding
+transcripts.
 
 <a name="justsingle"></a>
 <h6>How can I just show a single transcript per gene?</h6>
