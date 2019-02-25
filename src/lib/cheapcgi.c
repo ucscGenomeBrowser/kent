@@ -61,7 +61,8 @@ void jsInlineFinish()
 if (jsInlineFinishCalled)
     {
     // jsInlineFinish can be called multiple times when generating framesets or genomeSpace.
-    warn("jsInlineFinish() called already.");
+    // Log to stderr instead of bothering user, at least until work on #22945 is complete.
+    fprintf(stderr, "jsInlineFinish() called already.");
     }
 jsInlineInit(); // init if needed
 printf("<script type='text/javascript' nonce='%s'>\n%s</script>\n", getNonce(), jsInlineLines->string);

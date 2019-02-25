@@ -104,20 +104,34 @@ return timedOut;
 }
 
 static void trackSettings(struct trackDb *tdb)
-/* process the settingsHash for a track */
+/* process the settingsHash for a trackDb, recursive if subtracks */
 {
 hPrintf("    <ul>\n");
+// if (tdb->children)  haven't yet seen a track with children ?
+//   hPrintf("    <li>%s: has children</li>\n", tdb->track);
+// else
+//   hPrintf("    <li>%s: NO children</li>\n", tdb->track);
 struct hashEl *hel;
 struct hashCookie hc = hashFirst(tdb->settingsHash);
 while ((hel = hashNext(&hc)) != NULL)
     {
+    if (sameWord("track", hel->name))
+	continue;	// already output in header
     if (isEmpty((char *)hel->val))
 	hPrintf("    <li>%s : &lt;empty&gt;</li>\n", hel->name);
     else
 	hPrintf("    <li>%s : '%s'</li>\n", hel->name, (char *)hel->val);
     }
 if (tdb->subtracks)
-    trackSettings(tdb->subtracks);
+    {
+    struct trackDb *tdbEl = tdb->subtracks;
+    hPrintf("   <li>has %d subtrack(s)</li>\n", slCount(tdb->subtracks));
+    for (tdbEl = tdb->subtracks; tdbEl; tdbEl = tdbEl->next)
+	{
+        hPrintf("<li>subtrack: %s of parent: %s</li>\n", tdbEl->track, tdbEl->parent->track);
+	trackSettings(tdbEl);
+	}
+    }
 hPrintf("    </ul>\n");
 }
 
@@ -216,33 +230,6 @@ errCatchFree(&errCatch);
 return retVal;
 }	/* static int bbiBriefMeasure() */
 
-#ifdef NOT
-static void cloneTdb(struct trackDb *source, struct trackDb *destination)
-/* TBD: is there a cloneTdb() function somewhere else ? */
-{
-destination->track = cloneString(source->track);
-destination->shortLabel = cloneString(source->shortLabel);
-destination->type = cloneString(source->type);
-destination->longLabel = cloneString(source->longLabel);
-destination->visibility = source->visibility;
-destination->priority = source->priority;
-destination->colorR = source->colorR;
-destination->colorG = source->colorG;
-destination->colorB = source->colorB;
-destination->altColorR = source->altColorR;
-destination->altColorG = source->altColorG;
-destination->altColorB = source->altColorB;
-destination->useScore = source->useScore;
-destination->private = source->private;
-destination->url = cloneString(source->url);
-destination->html = cloneString(source->html);
-destination->grp = cloneString(source->grp);
-destination->canPack = source->canPack;
-destination->settings = cloneString(source->settings);
-destination->settingsHash = source->settingsHash;
-}
-#endif
-
 static void hubTrackList(struct trackDb *topTrackDb, struct trackHubGenome *genome)
 /* process the track list to show all tracks, return trackDb list */
 {
@@ -260,7 +247,7 @@ if (topTrackDb)
 	if (compositeTrack)
 	    hashIncInt(countTracks, "composite container");
 	else if (superTrack)
-	    hashIncInt(countTracks, "superTrack container");
+	    hashIncInt(countTracks, "superTrack child");
 	else if (isEmpty(tdb->type))
 	    hashIncInt(countTracks, "no type specified");
 	else
@@ -295,18 +282,18 @@ if (topTrackDb)
 	    if (compositeTrack)
 		hPrintf("    <li>%s : %s : composite track container</li>\n", tdb->track, tdb->type);
 	    else if (superTrack)
-		hPrintf("    <li>%s : %s : superTrack container</li>\n", tdb->track, tdb->type);
+		hPrintf("    <li>%s : %s : superTrack child</li>\n", tdb->track, tdb->type);
 	    else if (! depthSearch)
 		hPrintf("    <li>%s : %s : %s</li>\n", tdb->track, tdb->type, bigDataUrl);
             else
 		hPrintf("    <li>%s : %s</li>\n", tdb->track, tdb->type);
 	    }
-	if (tdb->subtracks)
-	    hPrintf("    <li>hasSubtracks : TRUE</li>\n");
-	else
-	    hPrintf("    <li>hasSubtracks : FALSE</li>\n");
         if (allTrackSettings)
-            trackSettings(tdb); /* show all settings */
+	    {
+	    hPrintf("    <ul>\n");
+	    trackSettings(tdb); /* show all settings */
+	    hPrintf("    </ul>\n");
+	    }
 	if (timeOutReached())
 	    break;
 	}	/*	for ( tdb = topTrackDb; tdb; tdb = tdb->next )	*/
@@ -327,29 +314,33 @@ if (topTrackDb)
 	}
     hPrintf("    </ul>\n");
     }
+else
+    hPrintf("    <li>no trackTopDb</li>\n");
 }	/*	static struct trackDb *hubTrackList()	*/
 
-static struct trackDb * assemblySettings(struct trackHubGenome *genome)
+static void assemblySettings(struct trackHubGenome *genome)
 /* display all the assembly 'settingsHash' */
 {
-struct trackDb *retTbd = NULL;
+struct trackDb *tdb = trackHubTracksForGenome(genome->trackHub, genome);
+tdb = trackDbLinkUpGenerations(tdb);
+
+int elCount = 0;
 hPrintf("    <ul>\n");
 struct hashEl *hel;
 struct hashCookie hc = hashFirst(genome->settingsHash);
 while ((hel = hashNext(&hc)) != NULL)
     {
+    ++elCount;
     hPrintf("    <li>%s : %s</li>\n", hel->name, (char *)hel->val);
     if (sameWord("trackDb", hel->name))	/* examine the trackDb structure */
 	{
-        struct trackDb *tdb = trackHubTracksForGenome(genome->trackHub, genome);
-	retTbd = tdb;
 	hubTrackList(tdb, genome);
         }
     if (timeOutReached())
 	break;
     }
+hPrintf("    <li>elCount: %d</li>\n", elCount);
 hPrintf("    </ul>\n");
-return retTbd;
 }
 
 struct slName *genomeList(struct trackHub *hubTop, struct trackDb **dbTrackList, char *selectGenome)
@@ -385,10 +376,7 @@ for ( ; genome; genome = genome->next )
 	{	/* can there be a description when organism is empty ? */
 	hPrintf("<li>%s</li>\n", genome->name);
 	}
-	if (dbTrackList)
-	    *dbTrackList = assemblySettings(genome);
-	else
-	    (void) assemblySettings(genome);
+    assemblySettings(genome);
     if (measureTiming)
 	{
 	long thisTime = clock1000();
@@ -500,19 +488,86 @@ void (*apiFunction)(char **) = hel->val;
 
 static void tracksForUcscDb(char * ucscDb)
 {
+struct hash *countTracks = hashNew(0);
+struct sqlConnection *conn = hAllocConn(ucscDb);
 hPrintf("<p>Tracks in UCSC genome: '%s'<br>\n", ucscDb);
 struct trackDb *tdbList = hTrackDb(ucscDb);
 struct trackDb *tdb;
 hPrintf("<ul>\n");
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next )
     {
-    hPrintf("<li>%s</li>\n", tdb->track);
+    char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+    char *compositeTrack = trackDbSetting(tdb, "compositeTrack");
+    char *superTrack = trackDbSetting(tdb, "superTrack");
+    boolean depthSearch = cartUsualBoolean(cart, "depthSearch", FALSE);
+    if (compositeTrack)
+	hashIncInt(countTracks, "composite container");
+    else if (superTrack)
+	hashIncInt(countTracks, "superTrack child");
+    else if (isEmpty(tdb->type))
+	hashIncInt(countTracks, "no type specified");
+    else
+	hashIncInt(countTracks, tdb->type);
+    if (depthSearch && bigDataUrl)
+	{
+	long chromCount = 0;
+	long itemCount = 0;
+	struct dyString *errors = newDyString(1024);
+	int retVal = bbiBriefMeasure(tdb->type, bigDataUrl, NULL, &chromCount, &itemCount, errors);
+	if (retVal)
+	    {
+	    hPrintf("    <li>%s : %s : <font color='red'>ERROR: %s</font></li>\n", tdb->track, tdb->type, errors->string);
+	    }
+	else
+	    {
+	    if (startsWithWord("bigBed", tdb->type))
+		hPrintf("    <li>%s : %s : %ld chroms : %ld item count</li>\n", tdb->track, tdb->type, chromCount, itemCount);
+	    else if (startsWithWord("bigWig", tdb->type))
+		hPrintf("    <li>%s : %s : %ld chroms : %ld bases covered</li>\n", tdb->track, tdb->type, chromCount, itemCount);
+	    else
+		hPrintf("    <li>%s : %s : %ld chroms : %ld count</li>\n", tdb->track, tdb->type, chromCount, itemCount);
+	    }
+	}
+    else
+	{
+	if (isEmpty(bigDataUrl))
+	    {
+	    int rowCount = 0;
+	    if (sqlTableExists(conn, tdb->track))
+		{
+		rowCount = sqlRowCount(conn, tdb->track);
+		hPrintf("<li>%s : %s : %d item count</li>\n", tdb->track, tdb->type, rowCount);
+		}
+	    else
+		{
+		if (compositeTrack)
+		    hPrintf("<li>%s : %s : composite container </li>\n", tdb->track, tdb->type);
+		else
+		    hPrintf("<li>%s : %s</li>\n", tdb->track, tdb->type);
+		}
+            }
+	else
+	    hPrintf("<li>%s : %s : %s</li>\n", tdb->track,tdb->type,bigDataUrl);
+	}
     if (allTrackSettings)
         trackSettings(tdb); /* show all settings */
     }
+hPrintf("    <li>%d different track types</li>\n", countTracks->elCount);
+if (countTracks->elCount)
+    {
+    hPrintf("        <ul>\n");
+    struct hashEl *hel;
+    struct hashCookie hc = hashFirst(countTracks);
+    while ((hel = hashNext(&hc)) != NULL)
+	{
+	hPrintf("        <li>%d - %s</li>\n", ptToInt(hel->val), hel->name);
+	}
+    hPrintf("        </ul>\n");
+    }
 hPrintf("</ul>\n");
 hPrintf("</p>\n");
-}
+hFreeConn(&conn);
+}	// static void tracksForUcscDb(char * ucscDb)
 
 static void showExamples(char *url, struct trackHubGenome *hubGenome, char *ucscDb)
 {
@@ -522,7 +577,7 @@ hPrintf("<ol>\n");
 hPrintf("<li><a href='/cgi-bin/hubApi/list/publicHubs' target=_blank>list public hubs</a> <em>/cgi-bin/hubApi/list/publicHubs</em></li>\n");
 hPrintf("<li><a href='/cgi-bin/hubApi/list/ucscGenomes' target=_blank>list database genomes</a> <em>/cgi-bin/hubApi/list/ucscGenomes</em></li>\n");
 hPrintf("<li><a href='/cgi-bin/hubApi/list/hubGenomes?hubUrl=%s' target=_blank>list genomes from specified hub</a> <em>/cgi-bin/hubApi/list/hubGenomes?hubUrl=%s</em></li>\n", url, url);
-hPrintf("<li><a href='/cgi-bin/hubApi/list/tracks?hubUrl=%s&genome=%s' target=_blank>list tracks from specified hub and genome</a> <em>/cgi-bin/hubApi/list/tracks?hubUrl=%s&genome=%s</em></li>\n", url, hubGenome->name, url, hubGenome->name);
+hPrintf("<li><a href='/cgi-bin/hubApi/list/tracks?hubUrl=%s&hubUrl=%s&genome=%s' target=_blank>list tracks from specified hub and genome</a> <em>/cgi-bin/hubApi/list/tracks?hubUrl=%s&genome=%s</em></li>\n", url, url, hubGenome->name, url, hubGenome->name);
 hPrintf("<li><a href='/cgi-bin/hubApi/list/tracks?db=%s' target=_blank>list tracks from specified UCSC database</a> <em>/cgi-bin/hubApi/list/tracks?db=%s</em></li>\n", ucscDb, ucscDb);
 hPrintf("<li><a href='/cgi-bin/hubApi/list/chromosomes?db=%s' target=_blank>list chromosomes from specified UCSC database</a> <em>/cgi-bin/hubApi/list/chromosomes?db=%s</em></li>\n", ucscDb, ucscDb);
 hPrintf("<li><a href='/cgi-bin/hubApi/list/chromosomes?db=%s&track=gap' target=_blank>list chromosomes from specified track from UCSC databaset</a> <em>/cgi-bin/hubApi/list/chromosomes?db=%s&track=gap</em></li>\n", ucscDb, ucscDb);
@@ -544,7 +599,6 @@ hPrintf("<ol>\n");
 hPrintf("</ol>\n");
 }	/*	static void showExamples()	*/
 
-#ifdef NOT
 static void showCartDump()
 /* for information purposes only during development, will become obsolete */
 {
@@ -553,7 +607,6 @@ hPrintf("<pre>\n");
 cartDump(cart);
 hPrintf("</pre>\n");
 }
-#endif
 
 static void doMiddle(struct cart *theCart)
 /* Set up globals and make web page */
@@ -563,6 +616,8 @@ measureTiming = hPrintStatus() && isNotEmpty(cartOptionalString(cart, "measureTi
 measureTiming = TRUE;
 char *database = NULL;
 char *genome = NULL;
+
+cgiVarSet("ignoreCookie", "1");
 
 getDbAndGenome(cart, &database, &genome, oldVars);
 initGenbankTableNames(database);
@@ -633,7 +688,7 @@ struct trackHubGenome *hubGenome = hub->genomeList;
 
 showExamples(urlInput, hubGenome, ucscDb);
 
-// showCartDump();
+showCartDump();
 
 hPrintf("<form action='%s' name='hubApiUrl' id='hubApiUrl' method='GET'>\n\n", "../cgi-bin/hubApi");
 
@@ -704,7 +759,7 @@ cartWebEnd();
 
 /* Null terminated list of CGI Variables we don't want to save
  * permanently. */
-char *excludeVars[] = {"Submit", "submit", NULL,};
+static char *excludeVars[] = {"Submit", "submit", NULL,};
 
 int main(int argc, char *argv[])
 /* Process command line. */

@@ -18,6 +18,7 @@
 #include "bigWarn.h"
 #include "mathWig.h"
 #include "float.h"
+#include "hubConnect.h"
 
 struct preDrawContainer *bigWigLoadPreDraw(struct track *tg, int seqStart, int seqEnd, int width)
 /* Do bits that load the predraw buffer tg->preDrawContainer. */
@@ -257,7 +258,7 @@ char *extTableString = trackDbSetting(tg->tdb, "extTable");
 if (tg->bbiFile == NULL)
     {
     /* Figure out bigWig file name. */
-    if (tg->parallelLoading) // do not use mysql during parallel-fetch
+    if (isHubTrack(database) || tg->parallelLoading) // do not use mysql during parallel-fetch or if assembly hub
 	{
 	char *fileName = cloneString(trackDbSetting(tg->tdb, "bigDataUrl"));
 	bigWigOpenCatch(tg, fileName);
