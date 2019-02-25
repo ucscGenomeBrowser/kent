@@ -37,6 +37,7 @@ UTILS_APPLIST = \
 	gtfToGenePred \
 	hgvsToVcf \
 	hubCheck \
+	hubClone \
 	hubPublicCheck \
 	mafToBigMaf \
 	makeTableList \
