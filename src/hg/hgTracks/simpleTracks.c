@@ -14245,14 +14245,14 @@ struct track *subtrack;
 long thisTime = 0, lastTime = 0;
 for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
+    if (!subtrack->loadItems) // This could happen if track type has no handler (eg, for new types or mnissing a type s)
+        errAbort("Error: No loadItems() handler for subtrack (%s) of composite track (%s) (was a type specified for this track?)\n", subtrack->track, track->track);
     if (isSubtrackVisible(subtrack) &&
 	( limitedVisFromComposite(subtrack) != tvHide))
 	{
 	if (!subtrack->parallelLoading)
 	    {
 	    lastTime = clock1000();
-	    if (!subtrack->loadItems) // This could happen if track type has no handler (eg, for new types)
-		errAbort("Error: No loadItems() handler for subtrack (%s) of composite track (%s) (is this a new track 'type'?)\n", subtrack->track, track->track);
 	    checkIfWiggling(cart, subtrack);
 	    subtrack->loadItems(subtrack);
 	    if (measureTiming)
