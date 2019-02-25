@@ -172,6 +172,13 @@ sub updateGenBank() {
     ftpOpen();
 
     my $genBankDir = "data/download/genbank.$version";
+    my $dirExists = -e "$genBankDir";
+
+    if (!($dirExists))
+        {
+        endTask();
+        die("STOPPING: genbank directory $genBankDir does not exist. Manually create this directory after validating the dailies are correct");
+        }
 
     # Either get or check full release.  Explict get releases notes from flat-file dir,
     # as they are not in the asn1 directory
