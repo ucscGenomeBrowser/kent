@@ -176,8 +176,8 @@ sub updateGenBank() {
 
     if (!($dirExists))
         {
-        die("STOPPING: genbank directory $genBankDir does not exist. Manually create this directory after validating the dailies are correct");
         endTask();
+        die("STOPPING: genbank directory $genBankDir does not exist. Manually create this directory after validating the dailies are correct");
         }
 
     # Either get or check full release.  Explict get releases notes from flat-file dir,
