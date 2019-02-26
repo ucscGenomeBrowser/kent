@@ -21437,11 +21437,10 @@ else
 	int start = cartInt(cart, "o");
 	int end = cartInt(cart, "t");
 
-	if (ct->fieldCount < 4)
-	    sqlSafefFrag(where, sizeof(where), "chromStart = '%d'", start);
-	else
+	sqlSafefFrag(where, sizeof(where), "chromStart = '%d' and chromEnd = '%d'", start, end);
+	if (ct->fieldCount >= 4)
 	    {
-	    sqlSafefFrag(where, sizeof(where), "name = '%s'", itemName);
+	    sqlSafefAppend(where, sizeof(where), " and name = '%s'", itemName);
 	    }
 	sr = hRangeQuery(conn, ct->dbTableName, seqName, start, end,
                      where, &rowOffset);
