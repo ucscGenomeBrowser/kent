@@ -51,14 +51,14 @@ def warn(format, *args):
 
 def errAbort(msg):
     " show msg and abort. Like errAbort.c "
-    if not contentLineDone:
-        printContentType()
+    printContentType()
     print msg
     exit(0)
 
 def debug(level, msg):
     " output debug message with a given verbosity level "
     if level >= verboseLevel:
+        printContentType()
         print(msg+"<br>")
         sys.stdout.flush()
  
@@ -332,6 +332,8 @@ def runCmd(cmd, mustRun=True):
 def printContentType(contType="text/html", fname=None):
     " print the HTTP Content-type header line with an optional file name "
     global contentLineDone
+    if contentLineDone:
+        return
     contentLineDone = True
     print("Content-type: %s; charset=utf-8" % contType)
     if fname is not None:
@@ -365,7 +367,7 @@ def hgBotDelay():
     Implement bottleneck delay, get bottleneck server from hg.conf.
     This behaves similar to the function src/hg/lib/botDelay.c:hgBotDelay
     It does not use the hgsid, currently it always uses the IP address.
-    Using the hgsid makes little sense. It is more lenient than that C version.
+    Using the hgsid makes little sense. It is more lenient than the C version.
     """
     import time
     if "DOCUMENT_ROOT" not in os.environ: # skip if not called from Apache
@@ -376,9 +378,11 @@ def hgBotDelay():
         return
     ip = os.environ["REMOTE_ADDR"]
     delay = queryBottleneck(hgConf["bottleneck.host"], hgConf["bottleneck.port"], ip)
-    if delay>10000:
+    printContentType()
+    debug(1, "Bottleneck delay: %d msecs" % delay)
+    if delay>2000:
         time.sleep(delay/1000.0)
-    if delay>20000:
+    if delay>10000:
         errAbort("Too many queries. Your IP has been blocked. Please contact genome-www@soe.ucsc.edu to unblock your IP address.")
         sys.exit(0)
 
