@@ -47,7 +47,12 @@ cgiArgs = None
 contentLineDone = False
 
 # the effective total delay that was added before showing the page
-botDelay = 0
+doWarnBot = False
+
+# two global variables: the first is the botDelay limit after which the page is slowed down and a warning is shown
+# the second is the limit after which the page is not shown anymore
+botDelayWarn = 1000
+botDelayBlock = 5000
 
 jksqlTrace = False
 
@@ -345,7 +350,7 @@ def printContentType(contType="text/html", fname=None):
             print("Content-Disposition: attachment; filename=%s" % fname)
         print
 
-    if botDelay!=0:
+    if doWarnBot:
         print ("<div style='background-color:yellow; border:2px solid black'>")
         print ("We have a suspicion that you are an automated web bot software, not a real user. ")
         print ("To keep our site fast for other users, we have slowed down this page. ")
@@ -390,22 +395,24 @@ def hgBotDelay():
     if "DOCUMENT_ROOT" not in os.environ: # skip if not called from Apache
         return
     global hgConf
-    global botDelay
+    global doWarnBot
     hgConf = parseHgConf()
     if "bottleneck.host" not in hgConf:
         return
     ip = os.environ["REMOTE_ADDR"]
     delay = queryBottleneck(hgConf["bottleneck.host"], hgConf["bottleneck.port"], ip)
     debug(1, "Bottleneck delay: %d msecs" % delay)
-    if delay>1000:
-        time.sleep(delay/1000.0)
-        botDelay = delay # show warning message in printContentType()
 
-    if delay>5000:
+    if delay>botDelayBlock:
         errAbort("Too many HTTP requests. Your IP has been blocked to keep this website responsive for other users. "
         "Please contact genome-www@soe.ucsc.edu to unblock your IP address. We can also help you obtain the data you need without "
         "web crawling. ")
         sys.exit(0)
+
+    if delay>botDelayWarn:
+        time.sleep(delay/1000.0)
+        doWarnBot = True # = show warning message later in printContentType()
+
 
 def parseRa(text):
     " Parse ra-style string and return as dict name -> value "
