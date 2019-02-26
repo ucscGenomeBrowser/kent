@@ -399,7 +399,7 @@ def hgBotDelay():
     debug(1, "Bottleneck delay: %d msecs" % delay)
     if delay>1000:
         time.sleep(delay/1000.0)
-        botDelay = delay
+        botDelay = delay # show warning message in printContentType()
 
     if delay>5000:
         errAbort("Too many HTTP requests. Your IP has been blocked to keep this website responsive for other users. "
