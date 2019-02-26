@@ -37,12 +37,17 @@ if "hgwdev" in platform.node():
     cgitb.enable()
 
 # debug level: a number. the higher, the more debug info is printed
-verboseLevel = None
+# to see most debug messages, set to 1
+# another way to change this variable is by setting the URL variable "debug" to 1
+verboseLevel = 0
 
 cgiArgs = None
 
 # like in the kent tree, we keep track of whether we have already output the content-type line
 contentLineDone = False
+
+# the effective total delay that was added before showing the page
+botDelay = 0
 
 jksqlTrace = False
 
@@ -57,7 +62,7 @@ def errAbort(msg):
 
 def debug(level, msg):
     " output debug message with a given verbosity level "
-    if level >= verboseLevel:
+    if verboseLevel >= level:
         printContentType()
         print(msg+"<br>")
         sys.stdout.flush()
@@ -330,15 +335,27 @@ def runCmd(cmd, mustRun=True):
     return ret
 
 def printContentType(contType="text/html", fname=None):
-    " print the HTTP Content-type header line with an optional file name "
+    " print the HTTP Content-type header line with an optional file name. Also print bot delay note. "
     global contentLineDone
-    if contentLineDone:
-        return
-    contentLineDone = True
-    print("Content-type: %s; charset=utf-8" % contType)
-    if fname is not None:
-        print("Content-Disposition: attachment; filename=%s" % fname)
-    print
+    if not contentLineDone:
+        contentLineDone = True
+        print("Content-type: %s; charset=utf-8" % contType)
+
+        if fname is not None:
+            print("Content-Disposition: attachment; filename=%s" % fname)
+        print
+
+    if botDelay!=0:
+        print ("<div style='background-color:yellow; border:2px solid black'>")
+        print ("We have a suspicion that you are an automated web bot software, not a real user. ")
+        print ("To keep our site fast for other users, we have slowed down this page. ")
+        print ("The slowdown will gradually disappear. ")
+        print ("If you think this is a mistake, please contact us at genome-www@soe.ucsc.edu. ")
+        print ("Also note that all data for hgGeneGraph can be obtained through our public MySQL server and")
+        print ("all our software source code is available and can be installed locally onto your own computer. ")
+        print ("If you are unsure how to use these resources, do not hesitate to contact us.")
+        print ("</div>")
+
 
 def queryBottleneck(host, port, ip):
     " contact UCSC-style bottleneck server to get current delay time. From hg/lib/botDelay.c "
@@ -373,17 +390,21 @@ def hgBotDelay():
     if "DOCUMENT_ROOT" not in os.environ: # skip if not called from Apache
         return
     global hgConf
+    global botDelay
     hgConf = parseHgConf()
     if "bottleneck.host" not in hgConf:
         return
     ip = os.environ["REMOTE_ADDR"]
     delay = queryBottleneck(hgConf["bottleneck.host"], hgConf["bottleneck.port"], ip)
-    printContentType()
     debug(1, "Bottleneck delay: %d msecs" % delay)
-    if delay>2000:
+    if delay>1000:
         time.sleep(delay/1000.0)
-    if delay>10000:
-        errAbort("Too many queries. Your IP has been blocked. Please contact genome-www@soe.ucsc.edu to unblock your IP address.")
+        botDelay = delay
+
+    if delay>5000:
+        errAbort("Too many HTTP requests. Your IP has been blocked to keep this website responsive for other users. "
+        "Please contact genome-www@soe.ucsc.edu to unblock your IP address. We can also help you obtain the data you need without "
+        "web crawling. ")
         sys.exit(0)
 
 def parseRa(text):
@@ -417,22 +438,11 @@ def lineFileNextRow(inFile):
     line1 = fh.readline()
     line1 = line1.rstrip("\n").lstrip("#")
     headers = line1.split("\t")
-    #headers = [re.sub("[^a-zA-Z0-9_]","_", h) for h in headers]
-    #headers = [x if x!="" else "noName" for x in headers]
-
-    #filtHeads = []
-    #for h in headers:
-        #if h[0].isdigit():
-            #filtHeads.append("x"+h)
-        #else:
-            #filtHeads.append(h)
-    #headers = filtHeads
 
     Record = namedtuple('tsvRec', headers)
     for line in fh:
         if line.startswith("#"):
             continue
-        #line = line.decode("latin1")
         line = line.rstrip("\n")
         fields = string.split(line, "\t", maxsplit=len(headers)-1)
         try:
@@ -448,7 +458,8 @@ def lineFileNextRow(inFile):
 
 def parseDict(fname):
     """ Parse text file in format key<tab>value<newline> and return as dict key->val.
-    Does not abort on duplicate keys, for performance reasons. """
+    Does not abort on duplicate keys, for performance reasons.
+    """
     import gzip
     d = {}
 
@@ -463,7 +474,7 @@ def parseDict(fname):
     return d
 
 def gbdbReplace(fname, hgConfSetting):
-    " replace /gbdb/ in fname with hgConfSetting "
+    " hdb.c: replace /gbdb/ in fname with hgConfSetting "
     if not fname.startswith("/gbdb/"):
         return None
 
@@ -952,11 +963,11 @@ def cgiSetup():
     global cgiArgs
     cgiArgs = cgi.FieldStorage() # Python has built-in cgiSpoof support: sys.argv[1] is the query string if run from the command line
 
-    hgBotDelay()
-
     if cgiString("debug"):
         global verboseLevel
         verboseLevel = int(cgiString("debug"))
+
+    hgBotDelay()
 
     cart = cartAndCookieSimple()
     return cart
