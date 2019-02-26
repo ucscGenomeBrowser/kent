@@ -735,7 +735,7 @@ if ((row = sqlNextRow(sr)) != NULL)
 
     printf("<TR>");
 
-    printf("<TD><nobr>%s<nobr>&nbsp;&nbsp;</TD>", firstUse);
+    printf("<TD><nobr>%s</nobr>&nbsp;&nbsp;</TD>", firstUse);
 
     char *contents = row[1];
 
