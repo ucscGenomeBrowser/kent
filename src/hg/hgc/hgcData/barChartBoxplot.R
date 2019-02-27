@@ -17,6 +17,7 @@ DENSECUTOFF <- 54
 drawBoxPlot <- function(df) {
     # it's not easy at all in R to add optional arguments via a list object, so duplicate code
     if (count < DENSECUTOFF) {
+        # old-style vertical bars with labels at a 45 degree angle. Harder to read but saves screen space
         yLimit <- c(-(max*.02), max+ (max*.03))
         par(mar=c(marBottom,marLeft,3,1) + 0.1, mgp=c(2,1,0), font.main=1)
 
@@ -48,7 +49,12 @@ drawBoxPlot <- function(df) {
         text(1:count, y1 - adjust, cex=size, labels=labels, srt=rot, xpd=TRUE, adj=c(1,.5), col=colorsHex)
     }
     else { 
-        par(mar=c(3,marBottom,2,1) + 0.1, mgp=c(2,1,0), font.main=1)
+        # new-style vertical bars, easier to read
+        size <- .7
+        longestLabelIdx = which.max(nchar(labels))
+        longestLabel = labels[longestLabelIdx]
+        marLeft = nchar(longestLabel)/2.5 # 2.5 was trial and error, strwidth(longestLabel, "inches") didn't work
+        par(mar=c(3,marLeft,2,1) + 0.1, mgp=c(2,1,0), font.main=1)
         yLimit <- c(-(max*.02), max+ (max*.03))
         exprPlot <- boxplot(value ~ df$category, data=df, xlab=yLabel, ylim=yLimit, xlim=c(0, count),
                         main=title, 
@@ -68,7 +74,6 @@ drawBoxPlot <- function(df) {
                         # erase X axis labels (add later rotated)
                         names=rep(c(""), count))
         y1 <- par("usr")[1]
-        size <- .7
         # draw numbers only black, at 90 degrees and left-adjusted
         rot <- 0
         adjust <- .15*abs(y1)
