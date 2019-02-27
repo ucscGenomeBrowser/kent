@@ -165,7 +165,7 @@ for (hubGenome = hub->genomeList; hubGenome; hubGenome = hubGenome->next)
 if (NULL == hubGenome)
     apiErrAbort("failed to find specified genome=%s for endpoint '/getdata/track'  given hubUrl '%s'", genome, hubUrl);
 
-struct trackDb *tdb = trackHubTracksForGenome(hubGenome->trackHub, hubGenome);
+struct trackDb *tdb = obtainTdb(hubGenome, NULL);
 
 if (NULL == tdb)
     apiErrAbort("failed to find a track hub definition in genome=%s for endpoint '/getdata/track'  given hubUrl='%s'", genome, hubUrl);

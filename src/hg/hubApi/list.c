@@ -175,7 +175,7 @@ static void recursiveTrackList(struct jsonWrite *jw, struct trackDb *tdb, char *
 /* output trackDb tags, recursive when composite track */
 {
 jsonWriteListStart(jw, type);
-struct trackDb *el;
+struct trackDb *el = NULL;
 for (el = tdb; el != NULL; el = el->next )
     {
     jsonWriteObjectStart(jw, NULL);
@@ -184,27 +184,18 @@ for (el = tdb; el != NULL; el = el->next )
     jsonWriteString(jw, "type", el->type);
     jsonWriteString(jw, "longLabel", el->longLabel);
     if (el->parent)
-        jsonWriteString(jw, "parent", "TRUE");
-    else
-        jsonWriteString(jw, "parent", "FALSE");
+        jsonWriteString(jw, "parent", el->parent->track);
     if (el->subtracks)
 	jsonWriteString(jw, "subtracks", "TRUE");
-    else
-	jsonWriteString(jw, "subtracks", "FALSE");
     if (tdbIsComposite(el))
 	jsonWriteString(jw, "tdbIsComposite", "TRUE");
-    else
-	jsonWriteString(jw, "tdbIsComposite", "FALSE");
-    if (tdbIsComposite(el))
-	{
+    if (tdbIsCompositeView(el))
+	jsonWriteString(jw, "tdbIsCompositeView", "TRUE");
+    if (el->subtracks)
 	recursiveTrackList(jw, el->subtracks, "subtracks");
-	}
-    else if (el->subtracks)
-	{
-	recursiveTrackList(jw, el->subtracks, "subtracks");
-	}
-    if (tdb->parent && tdbIsSuperTrackChild(el))
-	jsonWriteString(jw, "superTrack", "TRUE");
+
+    if (tdbIsSuperTrackChild(el))
+	jsonWriteString(jw, "superTrackChild", "TRUE");
     jsonWriteObjectEnd(jw);
     }
 jsonWriteListEnd(jw);
@@ -233,7 +224,7 @@ char *dataTime = sqlTableUpdate(conn, "trackDb");
 time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
 replaceChar(dataTime, ' ', 'T');	/* ISO 8601 */
 hFreeConn(&conn);
-struct trackDb *tdbList = hTrackDb(db);
+struct trackDb *tdbList = obtainTdb(NULL, db);
 struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "db", db);
 jsonWriteString(jw, "dataTime", dataTime);

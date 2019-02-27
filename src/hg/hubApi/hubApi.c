@@ -184,7 +184,7 @@ while ((hel = hashNext(&hc)) != NULL)
     }
 if (tdb->subtracks)
     {
-    struct trackDb *tdbEl = tdb->subtracks;
+    struct trackDb *tdbEl = NULL;
     hPrintf("   <li>has %d subtrack(s)</li>\n", slCount(tdb->subtracks));
     for (tdbEl = tdb->subtracks; tdbEl; tdbEl = tdbEl->next)
 	{
@@ -391,8 +391,7 @@ else
 static struct trackDb *assemblySettings(struct trackHubGenome *genome)
 /* display all the assembly 'settingsHash' */
 {
-struct trackDb *tdb = trackHubTracksForGenome(genome->trackHub, genome);
-tdb = trackDbLinkUpGenerations(tdb);
+struct trackDb *tdb = obtainTdb(genome, NULL);
 
 hPrintf("    <ul>\n");
 struct hashEl *hel;
@@ -561,7 +560,7 @@ static void tracksForUcscDb(char *db)
 {
 struct hash *countTracks = hashNew(0);
 hPrintf("<p>Tracks in UCSC genome: '%s'<br>\n", db);
-struct trackDb *tdbList = hTrackDb(db);
+struct trackDb *tdbList = obtainTdb(NULL, db);
 struct trackDb *tdb;
 hPrintf("<ul>\n");
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next )
