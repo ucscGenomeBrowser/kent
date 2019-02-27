@@ -1271,6 +1271,10 @@ if (id != NULL)
     char buffer[1024];
     safef(buffer, sizeof buffer, "hgHubConnect.hub.%s", id);
     cartRemove(cart, buffer);
+
+    // now we need to remove any custom tracks that are on this hub
+    safef(buffer, sizeof buffer, "ctfile_hub_%s", id);
+    cartRemovePrefix(cart, buffer);
     }
 
 cartRemove(cart, "hubId");
