@@ -208,7 +208,8 @@ for (el = tdb; el != NULL; el = el->next )
     jsonWriteObjectEnd(jw);
     }
 jsonWriteListEnd(jw);
-}
+}	/*	static void recursiveTrackList()	*/
+
 static int trackDbTrackCmp(const void *va, const void *vb)
 /* Compare to sort based on 'track' name; use shortLabel as secondary sort key.
  * Note: parallel code to hgTracks.c:tgCmpPriority */
@@ -296,13 +297,13 @@ else if (sameWord("tracks", words[1]))
     struct trackHub *hub = errCatchTrackHubOpen(hubUrl);
     if (hub->genomeList)
 	{
-	struct trackDb *dbTrackList = NULL;
-	(void) genomeList(hub, &dbTrackList, genome);
-	slSort(dbTrackList, trackDbTrackCmp);
+	struct trackDb *tdbList = NULL;
+	(void) genomeList(hub, &tdbList, genome);
+	slSort(tdbList, trackDbTrackCmp);
         struct jsonWrite *jw = apiStartOutput();
 	jsonWriteString(jw, "hubUrl", hubUrl);
 	jsonWriteString(jw, "genome", genome);
-        recursiveTrackList(jw, dbTrackList, "tracks");
+        recursiveTrackList(jw, tdbList, "tracks");
 	jsonWriteObjectEnd(jw);
         fputs(jw->dy->string,stdout);
 	}

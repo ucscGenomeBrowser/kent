@@ -328,9 +328,9 @@ else
     if (compositeContainer)
         hPrintf("    <li>%s : %s : composite track container</li>\n", tdb->track, tdb->type);
     else if (compositeView)
-        hPrintf("    <li>%s : %s : composite view</li>\n", tdb->track, tdb->type);
+        hPrintf("    <li>%s : %s : composite view of parent: %s</li>\n", tdb->track, tdb->type, tdb->parent->track);
     else if (superChild)
-        hPrintf("    <li>%s : %s : superTrack child</li>\n", tdb->track, tdb->type);
+        hPrintf("    <li>%s : %s : superTrack child of parent: %s</li>\n", tdb->track, tdb->type, tdb->parent->track);
     else if (! depthSearch)
         hPrintf("    <li>%s : %s : %s</li>\n", tdb->track, tdb->type, bigDataUrl);
     else
@@ -388,7 +388,7 @@ else
     hPrintf("    <li>no trackTopDb</li>\n");
 }	/*	static struct trackDb *hubTrackList()	*/
 
-static void assemblySettings(struct trackHubGenome *genome)
+static struct trackDb *assemblySettings(struct trackHubGenome *genome)
 /* display all the assembly 'settingsHash' */
 {
 struct trackDb *tdb = trackHubTracksForGenome(genome->trackHub, genome);
@@ -408,6 +408,7 @@ while ((hel = hashNext(&hc)) != NULL)
 	break;
     }
 hPrintf("    </ul>\n");
+return tdb;
 }
 
 struct slName *genomeList(struct trackHub *hubTop, struct trackDb **dbTrackList, char *selectGenome)
@@ -443,7 +444,9 @@ for ( ; genome; genome = genome->next )
 	{	/* can there be a description when organism is empty ? */
 	hPrintf("<li>%s</li>\n", genome->name);
 	}
-    assemblySettings(genome);
+    struct trackDb *tdb = assemblySettings(genome);
+    if (dbTrackList)
+	*dbTrackList = tdb;
     if (measureTiming)
 	{
 	long thisTime = clock1000();
