@@ -1,6 +1,6 @@
 track singleCell
 shortLabel Single Cell
-longLabel Single Cell RNA-Seq of 44,779 cells from Tabula Muris
+longLabel Single Cell FACS RNA-Seq of 44,779 cells from Tabula Muri
 superTrack on
 visibility hide
 group regulation
@@ -22,34 +22,21 @@ bigDataUrl /gbdb/mm10/tabulamuris/barChart.bb
 html singleCell
 parent singleCell
 
-track TabulaMurisFacsDataset
-shortLabel Tabula Muris FACS dataset
-longLabel Single Cell RNA-Seq Genome Coverage and Splice Junctions from Tabula Muris
-compositeTrack on
-#subGroup1 view Views reads=Reads cov=Coverage junc=Junctions
-subGroup1 view Views reads=Reads cov=Coverage junc=Junctions
-type bed 3
+track TabulaMurisFacsCoverage
+shortLabel Tabula Muris Genome Coverage
+longLabel Tabula Muris single cell RNA-Seq genome coverage
 visibility dense
+compositeTrack on
 parent singleCell
-
-#include trackDb.tabulamurisReads.ra
-
-    track TabulaMurisFacsDatasetViewCov
-    shortLabel Coverage
-    longLabel Single Cell RNA-Seq Genome Coverage from Tabula Muris
-    parent TabulaMurisFacsDataset
-    type bigWig
-    visibility dense
-    autoScale off
-    view cov
+type bigWig
+autoScale off
 
         track pancreaticDCellCov
         shortLabel pancr D cell Cv
         metadata cell_ontology=pancreatic_D_cell
         longLabel pancreatic D cell Coverage (140 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/pancreaticDCell.bw
         visibility dense
 
@@ -58,8 +45,7 @@ parent singleCell
         metadata cell_ontology=pancreatic_A_cell
         longLabel pancreatic A cell Coverage (390 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/pancreaticACell.bw
         visibility dense
 
@@ -68,8 +54,7 @@ parent singleCell
         metadata cell_ontology=endothelial_cell
         longLabel endothelial cell Coverage (3319 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/endothelialCell.bw
         visibility dense
 
@@ -78,8 +63,7 @@ parent singleCell
         metadata cell_ontology=classical_monocyte
         longLabel classical monocyte Coverage (90 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/classicalMonocyte.bw
         visibility dense
 
@@ -88,8 +72,7 @@ parent singleCell
         metadata cell_ontology=megakaryocyte-erythroid_progenitor_cell
         longLabel megakaryocyte-erythroid progenitor cell Coverage (55 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/megakaryocyteerythroidProgenitorCell.bw
         visibility dense
 
@@ -98,8 +81,7 @@ parent singleCell
         metadata cell_ontology=late_pro-B_cell
         longLabel late pro-B cell Coverage (306 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/lateProBCell.bw
         visibility dense
 
@@ -108,8 +90,7 @@ parent singleCell
         metadata cell_ontology=immature_T_cell
         longLabel immature T cell Coverage (1337 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/immatureTCell.bw
         visibility dense
 
@@ -118,8 +99,7 @@ parent singleCell
         metadata cell_ontology=professional_antigen_presenting_cell
         longLabel professional antigen presenting cell Coverage (59 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/professionalAntigenPresentingCell.bw
         visibility dense
 
@@ -128,8 +108,7 @@ parent singleCell
         metadata cell_ontology=skeletal_muscle_satellite_stem_cell
         longLabel skeletal muscle satellite stem cell Coverage (439 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/skeletalMuscleSatelliteStemCell.bw
         visibility dense
 
@@ -138,8 +117,7 @@ parent singleCell
         metadata cell_ontology=granulocyte
         longLabel granulocyte Coverage (761 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/granulocyte.bw
         visibility dense
 
@@ -148,8 +126,7 @@ parent singleCell
         metadata cell_ontology=erythrocyte
         longLabel erythrocyte Coverage (91 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/erythrocyte.bw
         visibility dense
 
@@ -158,8 +135,7 @@ parent singleCell
         metadata cell_ontology=microglial_cell
         longLabel microglial cell Coverage (4394 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/microglialCell.bw
         visibility hide
 
@@ -168,8 +144,7 @@ parent singleCell
         metadata cell_ontology=bladder_cell
         longLabel bladder cell Coverage (695 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/bladderCell.bw
         visibility dense
 
@@ -178,8 +153,7 @@ parent singleCell
         metadata cell_ontology=pancreatic_ductal_cell
         longLabel pancreatic ductal cell Coverage (161 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/pancreaticDuctalCell.bw
         visibility dense
 
@@ -188,8 +162,7 @@ parent singleCell
         metadata cell_ontology=T_cell
         longLabel T cell Coverage (793 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/TCell.bw
         visibility dense
 
@@ -198,8 +171,7 @@ parent singleCell
         metadata cell_ontology=stem_cell_of_epidermis
         longLabel stem cell of epidermis Coverage (53 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/stemCellOfEpidermis.bw
         visibility dense
 
@@ -208,8 +180,7 @@ parent singleCell
         metadata cell_ontology=epithelial_cell_of_large_intestine
         longLabel epithelial cell of large intestine Coverage (2019 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/epithelialCellOfLargeIntestine.bw
         visibility dense
 
@@ -218,8 +189,7 @@ parent singleCell
         metadata cell_ontology=epithelial_cell_of_proximal_tubule
         longLabel epithelial cell of proximal tubule Coverage (219 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/epithelialCellOfProximalTubule.bw
         visibility dense
 
@@ -228,8 +198,7 @@ parent singleCell
         metadata cell_ontology=bladder_urothelial_cell
         longLabel bladder urothelial cell Coverage (683 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/bladderUrothelialCell.bw
         visibility dense
 
@@ -238,8 +207,7 @@ parent singleCell
         metadata cell_ontology=granulocytopoietic_cell
         longLabel granulocytopoietic cell Coverage (221 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/granulocytopoieticCell.bw
         visibility dense
 
@@ -248,8 +216,7 @@ parent singleCell
         metadata cell_ontology=B_cell
         longLabel B cell Coverage (2029 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/BCell.bw
         visibility dense
 
@@ -258,8 +225,7 @@ parent singleCell
         metadata cell_ontology=pancreatic_acinar_cell
         longLabel pancreatic acinar cell Coverage (182 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/pancreaticAcinarCell.bw
         visibility dense
 
@@ -268,8 +234,7 @@ parent singleCell
         metadata cell_ontology=Kupffer_cell
         longLabel Kupffer cell Coverage (61 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/KupfferCell.bw
         visibility dense
 
@@ -278,8 +243,7 @@ parent singleCell
         metadata cell_ontology=leukocyte
         longLabel leukocyte Coverage (683 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/leukocyte.bw
         visibility dense
 
@@ -288,8 +252,7 @@ parent singleCell
         metadata cell_ontology=macrophage
         longLabel macrophage Coverage (395 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/macrophage.bw
         visibility dense
 
@@ -298,8 +261,7 @@ parent singleCell
         metadata cell_ontology=oligodendrocyte_precursor_cell
         longLabel oligodendrocyte precursor cell Coverage (203 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/oligodendrocytePrecursorCell.bw
         visibility dense
 
@@ -308,8 +270,7 @@ parent singleCell
         metadata cell_ontology=mesenchymal_stem_cell
         longLabel mesenchymal stem cell Coverage (499 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/mesenchymalStemCell.bw
         visibility dense
 
@@ -318,8 +279,7 @@ parent singleCell
         metadata cell_ontology=skeletal_muscle_satellite_cell
         longLabel skeletal muscle satellite cell Coverage (540 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/skeletalMuscleSatelliteCell.bw
         visibility dense
 
@@ -328,8 +288,7 @@ parent singleCell
         metadata cell_ontology=pancreatic_PP_cell
         longLabel pancreatic PP cell Coverage (73 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/pancreaticPpCell.bw
         visibility dense
 
@@ -338,8 +297,7 @@ parent singleCell
         metadata cell_ontology=pre-natural_killer_cell
         longLabel pre-natural killer cell Coverage (22 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/prenaturalKillerCell.bw
         visibility dense
 
@@ -348,8 +306,7 @@ parent singleCell
         metadata cell_ontology=hepatocyte
         longLabel hepatocyte Coverage (391 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/hepatocyte.bw
         visibility dense
 
@@ -358,8 +315,7 @@ parent singleCell
         metadata cell_ontology=myeloid_cell
         longLabel myeloid cell Coverage (1208 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/myeloidCell.bw
         visibility dense
 
@@ -368,8 +324,7 @@ parent singleCell
         metadata cell_ontology=Slamf1-negative_multipotent_progenitor_cell
         longLabel Slamf1-negative multipotent progenitor cell Coverage (713 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/Slamf1negativeMultipotentProgenitorCell.bw
         visibility dense
 
@@ -378,8 +333,7 @@ parent singleCell
         metadata cell_ontology=keratinocyte_stem_cell
         longLabel keratinocyte stem cell Coverage (1404 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/keratinocyteStemCell.bw
         visibility dense
 
@@ -388,8 +342,7 @@ parent singleCell
         metadata cell_ontology=oligodendrocyte
         longLabel oligodendrocyte Coverage (1574 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/oligodendrocyte.bw
         visibility dense
 
@@ -398,8 +351,7 @@ parent singleCell
         metadata cell_ontology=basal_cell_of_epidermis
         longLabel basal cell of epidermis Coverage (1648 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/basalCellOfEpidermis.bw
         visibility dense
 
@@ -408,8 +360,7 @@ parent singleCell
         metadata cell_ontology=enterocyte_of_epithelium_of_large_intestine
         longLabel enterocyte of epithelium of large intestine Coverage (964 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/enterocyteOfEpitheliumOfLargeIntestine.bw
         visibility dense
 
@@ -418,8 +369,7 @@ parent singleCell
         metadata cell_ontology=astrocyte
         longLabel astrocyte Coverage (432 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/astrocyte.bw
         visibility dense
 
@@ -428,8 +378,7 @@ parent singleCell
         metadata cell_ontology=Bergmann_glial_cell
         longLabel Bergmann glial cell Coverage (40 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/BergmannGlialCell.bw
         visibility dense
 
@@ -438,8 +387,7 @@ parent singleCell
         metadata cell_ontology=neuron
         longLabel neuron Coverage (281 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/neuron.bw
         visibility dense
 
@@ -448,8 +396,7 @@ parent singleCell
         metadata cell_ontology=epithelial_cell
         longLabel epithelial cell Coverage (201 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/epithelialCell.bw
         visibility dense
 
@@ -458,8 +405,7 @@ parent singleCell
         metadata cell_ontology=myofibroblast_cell
         longLabel myofibroblast cell Coverage (178 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/myofibroblastCell.bw
         visibility dense
 
@@ -468,8 +414,7 @@ parent singleCell
         metadata cell_ontology=immature_natural_killer_cell
         longLabel immature natural killer cell Coverage (36 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/immatureNaturalKillerCell.bw
         visibility dense
 
@@ -478,8 +423,7 @@ parent singleCell
         metadata cell_ontology=monocyte
         longLabel monocyte Coverage (331 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/monocyte.bw
         visibility dense
 
@@ -488,8 +432,7 @@ parent singleCell
         metadata cell_ontology=hematopoietic_precursor_cell
         longLabel hematopoietic precursor cell Coverage (265 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/hematopoieticPrecursorCell.bw
         visibility dense
 
@@ -498,8 +441,7 @@ parent singleCell
         metadata cell_ontology=regulatory_T_cell
         longLabel regulatory T cell Coverage (27 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/regulatoryTCell.bw
         visibility dense
 
@@ -508,8 +450,7 @@ parent singleCell
         metadata cell_ontology=endothelial_cell_of_hepatic_sinusoid
         longLabel endothelial cell of hepatic sinusoid Coverage (182 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/endothelialCellOfHepaticSinusoid.bw
         visibility dense
 
@@ -518,8 +459,7 @@ parent singleCell
         metadata cell_ontology=kidney_collecting_duct_epithelial_cell
         longLabel kidney collecting duct epithelial cell Coverage (121 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/kidneyCollectingDuctEpithelialCell.bw
         visibility dense
 
@@ -528,8 +468,7 @@ parent singleCell
         metadata cell_ontology=blood_cell
         longLabel blood cell Coverage (206 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/bloodCell.bw
         visibility dense
 
@@ -538,8 +477,7 @@ parent singleCell
         metadata cell_ontology=smooth_muscle_cell
         longLabel smooth muscle cell Coverage (42 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/smoothMuscleCell.bw
         visibility dense
 
@@ -548,8 +486,7 @@ parent singleCell
         metadata cell_ontology=Brush_cell_of_epithelium_proper_of_large_intestine
         longLabel Brush cell of epithelium proper of large intestine Coverage (63 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/BrushCellOfEpitheliumProperOfLargeIntestine.bw
         visibility dense
 
@@ -558,8 +495,7 @@ parent singleCell
         metadata cell_ontology=immature_NK_T_cell
         longLabel immature NK T cell Coverage (37 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/immatureNkTCell.bw
         visibility dense
 
@@ -568,8 +504,7 @@ parent singleCell
         metadata cell_ontology=fibroblast
         longLabel fibroblast Coverage (2189 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/fibroblast.bw
         visibility dense
 
@@ -578,8 +513,7 @@ parent singleCell
         metadata cell_ontology=naive_B_cell
         longLabel naive B cell Coverage (692 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/naiveBCell.bw
         visibility dense
 
@@ -588,8 +522,7 @@ parent singleCell
         metadata cell_ontology=Slamf1-positive_multipotent_progenitor_cell
         longLabel Slamf1-positive multipotent progenitor cell Coverage (134 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/Slamf1positiveMultipotentProgenitorCell.bw
         visibility dense
 
@@ -598,8 +531,7 @@ parent singleCell
         metadata cell_ontology=stromal_cell
         longLabel stromal cell Coverage (863 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/stromalCell.bw
         visibility dense
 
@@ -608,8 +540,7 @@ parent singleCell
         metadata cell_ontology=mature_natural_killer_cell
         longLabel mature natural killer cell Coverage (49 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/matureNaturalKillerCell.bw
         visibility dense
 
@@ -618,8 +549,7 @@ parent singleCell
         metadata cell_ontology=mesenchymal_cell
         longLabel mesenchymal cell Coverage (830 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/mesenchymalCell.bw
         visibility dense
 
@@ -628,8 +558,7 @@ parent singleCell
         metadata cell_ontology=brain_pericyte
         longLabel brain pericyte Coverage (156 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/brainPericyte.bw
         visibility dense
 
@@ -638,8 +567,7 @@ parent singleCell
         metadata cell_ontology=endocardial_cell
         longLabel endocardial cell Coverage (165 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/endocardialCell.bw
         visibility dense
 
@@ -648,8 +576,7 @@ parent singleCell
         metadata cell_ontology=large_intestine_goblet_cell
         longLabel large intestine goblet cell Coverage (833 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/largeIntestineGobletCell.bw
         visibility dense
 
@@ -658,8 +585,7 @@ parent singleCell
         metadata cell_ontology=common_lymphoid_progenitor
         longLabel common lymphoid progenitor Coverage (156 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/commonLymphoidProgenitor.bw
         visibility dense
 
@@ -668,8 +594,7 @@ parent singleCell
         metadata cell_ontology=type_B_pancreatic_cell
         longLabel type B pancreatic cell Coverage (449 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/typeBPancreaticCell.bw
         visibility dense
 
@@ -678,8 +603,7 @@ parent singleCell
         metadata cell_ontology=basophil
         longLabel basophil Coverage (25 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/basophil.bw
         visibility dense
 
@@ -688,8 +612,7 @@ parent singleCell
         metadata cell_ontology=granulocyte_monocyte_progenitor_cell
         longLabel granulocyte monocyte progenitor cell Coverage (134 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/granulocyteMonocyteProgenitorCell.bw
         visibility dense
 
@@ -698,8 +621,7 @@ parent singleCell
         metadata cell_ontology=keratinocyte
         longLabel keratinocyte Coverage (330 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/keratinocyte.bw
         visibility dense
 
@@ -708,8 +630,7 @@ parent singleCell
         metadata cell_ontology=cardiac_muscle_cell
         longLabel cardiac muscle cell Coverage (133 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/cardiacMuscleCell.bw
         visibility dense
 
@@ -718,8 +639,7 @@ parent singleCell
         metadata cell_ontology=luminal_epithelial_cell_of_mammary_gland
         longLabel luminal epithelial cell of mammary gland Coverage (578 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/luminalEpithelialCellOfMammaryGland.bw
         visibility dense
 
@@ -728,8 +648,7 @@ parent singleCell
         metadata cell_ontology=immature_B_cell
         longLabel immature B cell Coverage (344 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/immatureBCell.bw
         visibility dense
 
@@ -738,8 +657,7 @@ parent singleCell
         metadata cell_ontology=lymphocyte
         longLabel lymphocyte Coverage (81 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/lymphocyte.bw
         visibility dense
 
@@ -748,8 +666,7 @@ parent singleCell
         metadata cell_ontology=lung_endothelial_cell
         longLabel lung endothelial cell Coverage (693 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/lungEndothelialCell.bw
         visibility dense
 
@@ -758,8 +675,7 @@ parent singleCell
         metadata cell_ontology=DN1_thymic_pro-T_cell
         longLabel DN1 thymic pro-T cell Coverage (32 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/DN1ThymicProTCell.bw
         visibility dense
 
@@ -768,8 +684,7 @@ parent singleCell
         metadata cell_ontology=mesenchymal_stem_cell_of_adipose
         longLabel mesenchymal stem cell of adipose Coverage (2107 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/mesenchymalStemCellOfAdipose.bw
         visibility dense
 
@@ -778,8 +693,7 @@ parent singleCell
         metadata cell_ontology=ciliated_columnar_cell_of_tracheobronchial_tree
         longLabel ciliated columnar cell of tracheobronchial tree Coverage (25 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/ciliatedColumnarCellOfTracheobronchialTree.bw
         visibility dense
 
@@ -788,8 +702,7 @@ parent singleCell
         metadata cell_ontology=enteroendocrine_cell
         longLabel enteroendocrine cell Coverage (59 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/enteroendocrineCell.bw
         visibility dense
 
@@ -798,8 +711,7 @@ parent singleCell
         metadata cell_ontology=basal_cell
         longLabel basal cell Coverage (1340 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/basalCell.bw
         visibility dense
 
@@ -808,8 +720,7 @@ parent singleCell
         metadata cell_ontology=natural_killer_cell
         longLabel natural killer cell Coverage (171 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/naturalKillerCell.bw
         visibility dense
 
@@ -818,8 +729,7 @@ parent singleCell
         metadata cell_ontology=pancreatic_stellate_cell
         longLabel pancreatic stellate cell Coverage (49 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/pancreaticStellateCell.bw
         visibility dense
 
@@ -828,8 +738,7 @@ parent singleCell
         metadata cell_ontology=epithelial_cell_of_lung
         longLabel epithelial cell of lung Coverage (113 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/epithelialCellOfLung.bw
         visibility dense
 
@@ -838,8 +747,7 @@ parent singleCell
         metadata cell_ontology=epidermal_cell
         longLabel epidermal cell Coverage (276 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/epidermalCell.bw
         visibility dense
 
@@ -848,19 +756,19 @@ parent singleCell
         metadata cell_ontology=precursor_B_cell
         longLabel precursor B cell Coverage (517 cells)
         type bigWig
-        parent TabulaMurisFacsDatasetViewCov
-        subGroups view=cov
+        parent TabulaMurisFacsCoverage
         bigDataUrl /gbdb/mm10/tabulamuris/precursorBCell.bw
         visibility dense
 
-    track TabulaMurisFacsDatasetViewJunc
-    shortLabel Splicing
-    longLabel Single Cell RNA-Seq Genome Splice Junctions from Tabula Muris
-    parent TabulaMurisFacsDataset
-    spectrum on
-    type bigBed 12
-    visibility hide
-    view junc
+track TabulaMurisFacsJunctions
+shortLabel Tabula Muris Splice Sites
+longLabel Tabula Muris single cell RNA-Seq splice sites
+compositeTrack on
+visibility hide
+parent singleCell off
+spectrum on
+type bigBed 12
+
 
         track pancreaticDCellJunc
         shortLabel pancr D cell Sp
@@ -869,8 +777,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/pancreaticDCell.junctions.bb
         visibility dense
 
@@ -881,8 +788,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/pancreaticACell.junctions.bb
         visibility dense
 
@@ -893,8 +799,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/endothelialCell.junctions.bb
         visibility dense
 
@@ -905,8 +810,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/classicalMonocyte.junctions.bb
         visibility dense
 
@@ -917,8 +821,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/megakaryocyteerythroidProgenitorCell.junctions.bb
         visibility dense
 
@@ -929,8 +832,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/lateProBCell.junctions.bb
         visibility dense
 
@@ -941,8 +843,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/immatureTCell.junctions.bb
         visibility dense
 
@@ -953,8 +854,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/professionalAntigenPresentingCell.junctions.bb
         visibility dense
 
@@ -965,8 +865,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/skeletalMuscleSatelliteStemCell.junctions.bb
         visibility dense
 
@@ -977,8 +876,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/granulocyte.junctions.bb
         visibility dense
 
@@ -989,8 +887,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/erythrocyte.junctions.bb
         visibility dense
 
@@ -1001,8 +898,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/microglialCell.junctions.bb
         visibility hide
 
@@ -1013,8 +909,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/bladderCell.junctions.bb
         visibility dense
 
@@ -1025,8 +920,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/pancreaticDuctalCell.junctions.bb
         visibility dense
 
@@ -1037,8 +931,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/TCell.junctions.bb
         visibility dense
 
@@ -1049,8 +942,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/stemCellOfEpidermis.junctions.bb
         visibility dense
 
@@ -1061,8 +953,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/epithelialCellOfLargeIntestine.junctions.bb
         visibility dense
 
@@ -1073,8 +964,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/epithelialCellOfProximalTubule.junctions.bb
         visibility dense
 
@@ -1085,8 +975,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/bladderUrothelialCell.junctions.bb
         visibility dense
 
@@ -1097,8 +986,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/granulocytopoieticCell.junctions.bb
         visibility dense
 
@@ -1109,8 +997,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/BCell.junctions.bb
         visibility dense
 
@@ -1121,8 +1008,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/pancreaticAcinarCell.junctions.bb
         visibility dense
 
@@ -1133,8 +1019,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/KupfferCell.junctions.bb
         visibility dense
 
@@ -1145,8 +1030,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/leukocyte.junctions.bb
         visibility dense
 
@@ -1157,8 +1041,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/macrophage.junctions.bb
         visibility dense
 
@@ -1169,8 +1052,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/oligodendrocytePrecursorCell.junctions.bb
         visibility dense
 
@@ -1181,8 +1063,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/mesenchymalStemCell.junctions.bb
         visibility dense
 
@@ -1193,8 +1074,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/skeletalMuscleSatelliteCell.junctions.bb
         visibility dense
 
@@ -1205,8 +1085,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/pancreaticPpCell.junctions.bb
         visibility dense
 
@@ -1217,8 +1096,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/prenaturalKillerCell.junctions.bb
         visibility dense
 
@@ -1229,8 +1107,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/hepatocyte.junctions.bb
         visibility dense
 
@@ -1241,8 +1118,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/myeloidCell.junctions.bb
         visibility dense
 
@@ -1253,8 +1129,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/Slamf1negativeMultipotentProgenitorCell.junctions.bb
         visibility dense
 
@@ -1265,8 +1140,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/keratinocyteStemCell.junctions.bb
         visibility dense
 
@@ -1277,8 +1151,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/oligodendrocyte.junctions.bb
         visibility dense
 
@@ -1289,8 +1162,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/basalCellOfEpidermis.junctions.bb
         visibility dense
 
@@ -1301,8 +1173,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/enterocyteOfEpitheliumOfLargeIntestine.junctions.bb
         visibility dense
 
@@ -1313,8 +1184,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/astrocyte.junctions.bb
         visibility dense
 
@@ -1325,8 +1195,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/BergmannGlialCell.junctions.bb
         visibility dense
 
@@ -1337,8 +1206,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/neuron.junctions.bb
         visibility dense
 
@@ -1349,8 +1217,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/epithelialCell.junctions.bb
         visibility dense
 
@@ -1361,8 +1228,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/myofibroblastCell.junctions.bb
         visibility dense
 
@@ -1373,8 +1239,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/immatureNaturalKillerCell.junctions.bb
         visibility dense
 
@@ -1385,8 +1250,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/monocyte.junctions.bb
         visibility dense
 
@@ -1397,8 +1261,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/hematopoieticPrecursorCell.junctions.bb
         visibility dense
 
@@ -1409,8 +1272,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/regulatoryTCell.junctions.bb
         visibility dense
 
@@ -1421,8 +1283,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/endothelialCellOfHepaticSinusoid.junctions.bb
         visibility dense
 
@@ -1433,8 +1294,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/kidneyCollectingDuctEpithelialCell.junctions.bb
         visibility dense
 
@@ -1445,8 +1305,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/bloodCell.junctions.bb
         visibility dense
 
@@ -1457,8 +1316,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/smoothMuscleCell.junctions.bb
         visibility dense
 
@@ -1469,8 +1327,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/BrushCellOfEpitheliumProperOfLargeIntestine.junctions.bb
         visibility dense
 
@@ -1481,8 +1338,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/immatureNkTCell.junctions.bb
         visibility dense
 
@@ -1493,8 +1349,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/fibroblast.junctions.bb
         visibility dense
 
@@ -1505,8 +1360,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/naiveBCell.junctions.bb
         visibility dense
 
@@ -1517,8 +1371,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/Slamf1positiveMultipotentProgenitorCell.junctions.bb
         visibility dense
 
@@ -1529,8 +1382,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/stromalCell.junctions.bb
         visibility dense
 
@@ -1541,8 +1393,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/matureNaturalKillerCell.junctions.bb
         visibility dense
 
@@ -1553,8 +1404,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/mesenchymalCell.junctions.bb
         visibility dense
 
@@ -1565,8 +1415,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/brainPericyte.junctions.bb
         visibility dense
 
@@ -1577,8 +1426,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/endocardialCell.junctions.bb
         visibility dense
 
@@ -1589,8 +1437,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/largeIntestineGobletCell.junctions.bb
         visibility dense
 
@@ -1601,8 +1448,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/commonLymphoidProgenitor.junctions.bb
         visibility dense
 
@@ -1613,8 +1459,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/typeBPancreaticCell.junctions.bb
         visibility dense
 
@@ -1625,8 +1470,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/basophil.junctions.bb
         visibility dense
 
@@ -1637,8 +1481,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/granulocyteMonocyteProgenitorCell.junctions.bb
         visibility dense
 
@@ -1649,8 +1492,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/keratinocyte.junctions.bb
         visibility dense
 
@@ -1661,8 +1503,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/cardiacMuscleCell.junctions.bb
         visibility dense
 
@@ -1673,8 +1514,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/luminalEpithelialCellOfMammaryGland.junctions.bb
         visibility dense
 
@@ -1685,8 +1525,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/immatureBCell.junctions.bb
         visibility dense
 
@@ -1697,8 +1536,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/lymphocyte.junctions.bb
         visibility dense
 
@@ -1709,8 +1547,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/lungEndothelialCell.junctions.bb
         visibility dense
 
@@ -1721,8 +1558,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/DN1ThymicProTCell.junctions.bb
         visibility dense
 
@@ -1733,8 +1569,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/mesenchymalStemCellOfAdipose.junctions.bb
         visibility dense
 
@@ -1745,8 +1580,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/ciliatedColumnarCellOfTracheobronchialTree.junctions.bb
         visibility dense
 
@@ -1757,8 +1591,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/enteroendocrineCell.junctions.bb
         visibility dense
 
@@ -1769,8 +1602,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/basalCell.junctions.bb
         visibility dense
 
@@ -1781,8 +1613,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/naturalKillerCell.junctions.bb
         visibility dense
 
@@ -1793,8 +1624,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/pancreaticStellateCell.junctions.bb
         visibility dense
 
@@ -1805,8 +1635,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/epithelialCellOfLung.junctions.bb
         visibility dense
 
@@ -1817,8 +1646,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/epidermalCell.junctions.bb
         visibility dense
 
@@ -1829,7 +1657,7 @@ parent singleCell
         type bigBed 12 +
         spectrum on
         scoreLabel Number of supporting reads (max: 1000)
-        parent TabulaMurisFacsDatasetViewJunc
-        subGroups view=junc
+        parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/precursorBCell.junctions.bb
         visibility dense
+
