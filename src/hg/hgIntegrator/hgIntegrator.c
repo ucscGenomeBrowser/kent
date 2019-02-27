@@ -28,6 +28,7 @@
 #include "joiner.h"
 #include "jsHelper.h"
 #include "jsonParse.h"
+#include "knetUdc.h"
 #include "textOut.h"
 #include "trackHub.h"
 #include "userRegions.h"
@@ -964,6 +965,11 @@ void doMiddle(struct cart *theCart)
  * serve up JSON for the UI, or display the main page. */
 {
 cart = theCart;
+
+int timeout = cartUsualInt(cart, "udcTimeout", 300);
+if (udcCacheTimeout() < timeout)
+    udcSetCacheTimeout(timeout);
+knetUdcInstall();
 
 // Try to deal with virt chrom position used by hgTracks.
 if (startsWith("virt:", cartUsualString(cart, "position", "")))
