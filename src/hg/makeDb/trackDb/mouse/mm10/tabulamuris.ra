@@ -1,6 +1,6 @@
 track singleCell
 shortLabel Single Cell
-longLabel Single Cell FACS RNA-Seq of 44,779 cells from Tabula Muri
+longLabel Single Cell FACS RNA-Seq of 44,779 cells from Tabula Muris
 superTrack on
 visibility hide
 group regulation
@@ -29,6 +29,7 @@ visibility dense
 compositeTrack on
 parent singleCell
 type bigWig
+html singleCell
 autoScale off
 
         track pancreaticDCellCov
@@ -766,6 +767,7 @@ longLabel Tabula Muris single cell RNA-Seq splice sites
 compositeTrack on
 visibility hide
 parent singleCell off
+html singleCell
 spectrum on
 type bigBed 12
 
