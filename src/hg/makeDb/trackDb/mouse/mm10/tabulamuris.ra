@@ -29,6 +29,7 @@ visibility dense
 compositeTrack on
 parent singleCell
 type bigWig
+html singleCell
 autoScale off
 
         track pancreaticDCellCov
@@ -766,6 +767,7 @@ longLabel Tabula Muris single cell RNA-Seq splice sites
 compositeTrack on
 visibility hide
 parent singleCell off
+html singleCell
 spectrum on
 type bigBed 12
 
