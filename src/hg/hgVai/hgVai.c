@@ -3035,6 +3035,8 @@ if (udcCacheTimeout() < timeout)
     udcSetCacheTimeout(timeout);
 knetUdcInstall();
 
+char *range = trimSpaces(windowsToAscii(cartUsualString(cart, hgvaRange, "")));
+cartSetLastPosition(cart, range, oldVars);
 cartTrackDbInit(cart, &fullTrackList, &fullGroupList, TRUE);
 if (lookupPosition(cart, hgvaRange))
     {
