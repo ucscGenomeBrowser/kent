@@ -2481,6 +2481,19 @@ if(isNotEmpty(cartTheme))
     }
 }
 
+void cartSetLastPosition(struct cart *cart, char *position, struct hash *oldVars)
+/* If position and oldVars are non-NULL, and oldVars' position is different, add it to the cart
+ * as lastPosition.  This is called by cartHtmlShell{,WithHead} but not other cart openers;
+ * it should be called after cartGetPosition or equivalent. */
+{
+if (position != NULL && oldVars != NULL)
+    {
+    struct hashEl *oldPos = hashLookup(oldVars, positionCgiName);
+    if (oldPos != NULL && differentString(position, oldPos->val))
+        cartSetString(cart, "lastPosition", oldPos->val);
+    }
+}
+
 void cartHtmlShellWithHead(char *head, char *title, void (*doMiddle)(struct cart *cart),
 	char *cookieName, char **exclude, struct hash *oldVars)
 /* Load cart from cookie and session cgi variable.  Write web-page
@@ -2497,12 +2510,7 @@ cart = cartAndCookie(cookieName, exclude, oldVars);
 getDbAndGenome(cart, &db, &org, oldVars);
 pos = cartGetPosition(cart, db, NULL);
 pos = addCommasToPos(db, stripCommas(pos));
-if (pos != NULL && oldVars != NULL)
-    {
-    struct hashEl *oldPos = hashLookup(oldVars, positionCgiName);
-    if (oldPos != NULL && differentString(pos, oldPos->val))
-        cartSetString(cart, "lastPosition", oldPos->val);
-    }
+cartSetLastPosition(cart, pos, oldVars);
 safef(titlePlus, sizeof(titlePlus), "%s %s %s %s", 
                     org ? trackHubSkipHubName(org) : "", db ? db : "",  pos ? pos : "", title);
 popWarnHandler();

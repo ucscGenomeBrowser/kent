@@ -78,6 +78,9 @@ int tableColumns(struct sqlConnection *conn, struct jsonWrite *jw, char *table);
 struct trackHub *errCatchTrackHubOpen(char *hubUrl);
 /* use errCatch around a trackHub open in case it fails */
 
+struct trackDb *obtainTdb(struct trackHubGenome *genome, char *db);
+/* return a full trackDb fiven the hub genome pointer, or ucsc database name */
+
 /* ######################################################################### */
 /*  functions in getData.c */
 

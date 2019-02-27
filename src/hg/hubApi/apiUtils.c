@@ -66,3 +66,19 @@ if (errCatch->gotError)
 errCatchFree(&errCatch);
 return hub;
 }
+
+struct trackDb *obtainTdb(struct trackHubGenome *genome, char *db)
+/* return a full trackDb fiven the hub genome pointer, or ucsc database name */
+{
+struct trackDb *tdb = NULL;
+if (db)
+    tdb = hTrackDb(db);
+else
+    {
+    tdb = trackHubTracksForGenome(genome->trackHub, genome);
+    tdb = trackDbLinkUpGenerations(tdb);
+    tdb = trackDbPolishAfterLinkup(tdb, genome->name);
+    slSort(&tdb, trackDbCmp);
+    }
+return tdb;
+}
