@@ -176,7 +176,7 @@ safef(urlErr, sizeof urlErr, "%s.err", url);
 if (!autoRefreshFound && !successfullyUploaded && (fileSize(urlErr) > 0))
     {
     readInGulp(urlErr, &textErr, NULL);
-    //printf("%s", textErr); /* DEBUG REMOVE? more annoying than helpful in some places. */
+    //printf("%s", textErr); /* more annoying than helpful in some places. */
     }
 }
 
@@ -591,8 +591,6 @@ for (result=resultList; result; result=result->next)
 
     printf("<h3>Database %s</h3>\n", result->db);
 
-    //printf("result->ctPath %s <br>\n", result->ctPath);  // DEBUG REMOVE
-
     if (startsWith("hub_", result->db))
 	{
 	unsigned hubId = isLiveHub(result->db, NULL, TRUE);
@@ -620,12 +618,6 @@ for (result=resultList; result; result=result->next)
 
     for (track=cts,extra=extras; track; track=track->next,extra=extra->next)
 	{
-	//printf("track name %s <br>\n", extra->name);  // DEBUG REMOVE
-	//printf("track->dbTrack %d <br>\n", track->dbTrack);  // DEBUG REMOVE
-	//printf("track->dbTableName %s <br>\n", track->dbTableName);  // DEBUG REMOVE
-	//printf("track->dbTrackType %s <br>\n", track->dbTrackType);  // DEBUG REMOVE
-	//printf("track->dbDataLoad %d <br>\n", track->dbDataLoad);  // DEBUG REMOVE
-	//printf("extra->bigDataUrl %s <br>\n", extra->bigDataUrl);  // DEBUG REMOVE
 
 	boolean wibMissing = track->wibFile && !fileExists(track->wibFile);
 
@@ -1008,9 +1000,6 @@ if ((row = sqlNextRow(sr)) != NULL)
 	lazarusLives(20 * 60);
 
 	
-	//printf("result->ctPath %s <br>\n", result->ctPath);  // DEBUG REMOVE
-
-
 	if (startsWith("hub_", result->db))
 	    {
 	    // Save the hubUrl now in case it gets restored on another machine
@@ -1029,13 +1018,6 @@ if ((row = sqlNextRow(sr)) != NULL)
 
 	for (track=cts,extra=extras; track; track=track->next,extra=extra->next)
 	    {
-
-	    //printf("track name %s <br>\n", extra->name);  // DEBUG REMOVE
-	    //printf("track->dbTrack %d <br>\n", track->dbTrack);  // DEBUG REMOVE
-	    //printf("track->dbTableName %s <br>\n", track->dbTableName);  // DEBUG REMOVE
-	    //printf("track->dbTrackType %s <br>\n", track->dbTrackType);  // DEBUG REMOVE
-	    //printf("track->dbDataLoad %d <br>\n", track->dbDataLoad);  // DEBUG REMOVE
-	    //printf("extra->bigDataUrl %s <br>\n", extra->bigDataUrl);  // DEBUG REMOVE
 
 	    boolean wibMissing = track->wibFile && !fileExists(track->wibFile);
 
@@ -1063,8 +1045,6 @@ if ((row = sqlNextRow(sr)) != NULL)
 		fprintf(fct, "%s\n", extra->trackLine);
     
 
-		//printf("%s <br>\n", track->wibFile);  // DEBUG REMOVE
-		
 		if (!extra->bigDataUrl)
 		    {
 
