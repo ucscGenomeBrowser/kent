@@ -12,7 +12,7 @@
 <h6><a href="#Introduction">Introduction</a></h6> 
 <h6><a href="#Example">Some simple examples</a></h6> 
 <h6><a href="#Create">Creating a session</a></h6>
-<h6><a href="#CreateVid">Creating a session &mdash; video demonstration</a></h5>
+<h6><a href="#CreateVid">Creating a session &mdash; video demonstration</a></h6>
 <h6><a href="#Details">Session details</a></h6>     
 <h6><a href="#Share">Sharing a session</a></h6>
 <!--
@@ -46,7 +46,7 @@ tracks</a>, and save the configuration options. Multiple sessions may be saved f
 for comparing different data sets, or for sharing with your colleagues. Saved sessions 
 <A href="#Lifespan">will not be expired</a>, however, we still recommend that you keep local 
 back-ups of your session contents and any associated custom tracks. <a href="#CTs">BLAT result 
-tracks persist</a> for at least 48 hours after the last time they are viewed.</a> The creation date 
+tracks persist</a> for at least 48 hours after the last time they are viewed. The creation date 
 of a session can be viewed in the Session Management menu. This date only reflects the initial 
 creation of the Session and is not updated when sessions are edited. Descriptive text can also be 
 added to a session in the <A href="#Details">Session Details</a> menu.</p> 
@@ -369,7 +369,18 @@ There are five ways to let others know about your saved sessions:
   link to open the Genome Browser with the session loaded. You can obtain the URL of the Genome 
   Browser page by capturing the <code>Browser</code> hyperlink via right-click before you proceed 
   to the Browser graphical view. You can then store the URL, create a bookmark or share the link 
-  with others.</li> 
+  with others.
+  <p>The UCSC site and supported mirrors display short session links similar to the following:
+  <code>http://genome.ucsc.edu/s/YourUserName/YourSessionName</code></p>
+  <p>Previously, longer links were used:
+  <code>http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=YourUserName&hgS_otherUserSessionName=YourSessionName</code></p>
+  <p>System administrators of mirrors can introduce Apache redirects from the shorter links
+  that will redirect to the longer links and enable the links to display for new sessions by
+  setting <code>hgSession.shortLink=on</code> in the mirror's configuration files. Both links
+  can still be used, where the longer links do have the benefit of being able to be modified,
+  such as including <code>&position=chr10:69,644,222-69,644,999</code> in this example:
+  <pre><a href="http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=view&hgS_otherUserSessionName=clinicalzoom&position=chr10:69,644,222-69,644,999"
+  target="_blank">http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=view&hgS_otherUserSessionName=clinicalzoom&position=chr10:69,644,222-69,644,999</a></pre></p></li>
   <li>
   <strong>Email a session link.</strong> Each session entry in the <em>My Sessions</em> list also 
   has an <code>Email</code> link. Click this link to automatically invoke your email tool with a 
