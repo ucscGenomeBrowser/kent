@@ -1,6 +1,6 @@
 track singleCell
 shortLabel Single Cell
-longLabel Single Cell RNA-Seq of 44,779 cells from Tabula Muris
+longLabel Single Cell FACS RNA-Seq of 44,779 cells from Tabula Muri
 superTrack on
 visibility hide
 group regulation
@@ -764,8 +764,8 @@ track TabulaMurisFacsJunctions
 shortLabel Tabula Muris Splice Sites
 longLabel Tabula Muris single cell RNA-Seq splice sites
 compositeTrack on
-visibility dense
-parent singleCell
+visibility hide
+parent singleCell off
 spectrum on
 type bigBed 12
 
@@ -1660,5 +1660,4 @@ type bigBed 12
         parent TabulaMurisFacsJunctions
         bigDataUrl /gbdb/mm10/tabulamuris/precursorBCell.junctions.bb
         visibility dense
-#include trackDb.tabulamurisReads.ra
 
