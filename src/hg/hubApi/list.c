@@ -186,16 +186,7 @@ for (el = tdb; el != NULL; el = el->next )
     if (el->parent)
         jsonWriteString(jw, "parent", el->parent->track);
     if (el->subtracks)
-	jsonWriteString(jw, "subtracks", "TRUE");
-    if (tdbIsComposite(el))
-	jsonWriteString(jw, "tdbIsComposite", "TRUE");
-    if (tdbIsCompositeView(el))
-	jsonWriteString(jw, "tdbIsCompositeView", "TRUE");
-    if (el->subtracks)
 	recursiveTrackList(jw, el->subtracks, "subtracks");
-
-    if (tdbIsSuperTrackChild(el))
-	jsonWriteString(jw, "superTrackChild", "TRUE");
     jsonWriteObjectEnd(jw);
     }
 jsonWriteListEnd(jw);

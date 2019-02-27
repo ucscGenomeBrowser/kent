@@ -254,7 +254,7 @@ else if (startsWith("bigWig", thisTrack->type))
 bbiFileClose(&bbi);
 jsonWriteObjectEnd(jw);
 fputs(jw->dy->string,stdout);
-}
+}	/*	static void getHubTrackData(char *hubUrl)	*/
 
 static void getTrackData()
 /* return data from a track, optionally just one chrom data,
@@ -269,9 +269,14 @@ char *table = cgiOptionalString("track");
 /* 'track' name in trackDb refers to a SQL 'table' */
 
 if (isEmpty(db))
-    apiErrAbort("missing URL db=<ucscDb> name for endpoint '/getData/track");
+    apiErrAbort("missing URL variable db=<ucscDb> name for endpoint '/getData/track");
 if (isEmpty(table))
-    apiErrAbort("missing URL track=<trackName> name for endpoint '/getData/track");
+    apiErrAbort("missing URL variable track=<trackName> name for endpoint '/getData/track");
+
+struct trackDb *thisTrack = hTrackDbForTrackAndAncestors(db, table);
+if (NULL == thisTrack)
+    apiErrAbort("can not find track=%s name for endpoint '/getData/track", table);
+
 struct sqlConnection *conn = hAllocConn(db);
 if (! sqlTableExists(conn, table))
     apiErrAbort("can not find specified 'track=%s' for endpoint: /getData/track?db=%s&track=%s", table, db, table);
@@ -286,9 +291,90 @@ jsonWriteString(jw, "dataTime", dataTime);
 jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
 
 char query[4096];
-/* no chrom specified, return entire table */
-if (isEmpty(chrom))
+unsigned chromSize = 0;
+struct bbiFile *bbi = NULL;
+struct bbiChromInfo *chromList = NULL;
+
+if (startsWith("big", thisTrack->type))
     {
+    char *bigDataUrl = trackDbSetting(thisTrack, "bigDataUrl");
+    if (bigDataUrl)
+	bbi = bigFileOpen(thisTrack->type, bigDataUrl);
+    else
+	{
+	char quickReturn[2048];
+        sqlSafef(query, sizeof(query), "select fileName from %s", table);
+        if (sqlQuickQuery(conn, query, quickReturn, sizeof(quickReturn)))
+	    {
+	    bigDataUrl = cloneString(quickReturn);
+	    bbi = bigFileOpen(thisTrack->type, bigDataUrl);
+	    }
+	}
+    if (NULL == bbi)
+	apiErrAbort("failed to find bigDataUrl=%s for track=%s in database=%s for endpoint '/getdata/track'", table, db);
+    if (isNotEmpty(chrom))
+	{
+	jsonWriteString(jw, "chrom", chrom);
+	chromSize = bbiChromSize(bbi, chrom);
+	if (0 == chromSize)
+	    apiErrAbort("can not find specified chrom=%s in bigWig file URL %s", chrom, bigDataUrl);
+	jsonWriteNumber(jw, "chromSize", (long long)chromSize);
+	}
+else
+	{
+	chromList = bbiChromList(bbi);
+	jsonWriteNumber(jw, "chromCount", (long long)slCount(chromList));
+	}
+    }
+
+unsigned uStart = 0;
+unsigned uEnd = chromSize;
+if ( ! (isEmpty(start) || isEmpty(end)) )
+    {
+    uStart = sqlUnsigned(start);
+    uEnd = sqlUnsigned(end);
+    jsonWriteNumber(jw, "start", uStart);
+    jsonWriteNumber(jw, "end", uEnd);
+    }
+
+if (startsWith("bigBed", thisTrack->type))
+    {
+    struct asObject *as = bigBedAsOrDefault(bbi);
+    struct sqlFieldType *fi, *fiList = sqlFieldTypesFromAs(as);
+    jsonWriteListStart(jw, "columnNames");
+    unsigned maxItems = 1000;	/* TBD will use this later for paging */
+//    int columnCount = slCount(fiList);
+    for (fi = fiList; fi; fi = fi->next)
+	{
+	jsonWriteObjectStart(jw, NULL);
+	jsonWriteString(jw, fi->name, fi->type);
+	jsonWriteObjectEnd(jw);
+	}
+    jsonWriteListEnd(jw);
+    jsonWriteListStart(jw, "trackData");
+    if (isEmpty(chrom))
+	{
+	struct bbiChromInfo *bci;
+	for (bci = chromList; bci; bci = bci->next)
+	    {
+	    bedDataOutput(jw, bbi, bci->name, 0, bci->size, maxItems);
+	    }
+	}
+    else
+	bedDataOutput(jw, bbi, chrom, uStart, uEnd, maxItems);
+    jsonWriteListEnd(jw);
+    }
+else if (startsWith("bigWig", thisTrack->type))
+    {
+    unsigned maxItems = 1000;	/* TBD will use this later for paging */
+    jsonWriteListStart(jw, "trackData");
+    wigData(jw, bbi, chrom, uStart, uEnd, maxItems);
+    jsonWriteListEnd(jw);
+    bbiFileClose(&bbi);
+    }
+else if (isEmpty(chrom))
+    {
+    /* no chrom specified, return entire table */
     sqlSafef(query, sizeof(query), "select * from %s", table);
     tableDataOutput(conn, jw, query, table);
     }
