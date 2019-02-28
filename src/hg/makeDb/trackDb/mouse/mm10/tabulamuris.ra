@@ -1,5 +1,5 @@
 track singleCell
-shortLabel Single Cell
+shortLabel Tabula Muris
 longLabel Single Cell FACS RNA-Seq of 44,779 cells from Tabula Muris
 superTrack on
 visibility hide

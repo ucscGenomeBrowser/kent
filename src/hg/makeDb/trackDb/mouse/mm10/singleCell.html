@@ -15,12 +15,15 @@ tracks. There are three different types of tracks for each dataset:</a></p>
     <dd>
     A rectangle on the genome, at the location of a gene, filled with a bar graph that indicates the
     gene's expression by single cell cluster. The term &quot;cluster&quot; refers to a cluster of
-    single cells. Usually this is a cell or tissue type.</dd>
+    single cells. Usually this is a cell or tissue type. The height of the bar graph on the genome
+    is the median expression level and a click-through on the bar graph displays a boxplot of
+    expression level quartiles with outliers, per cluster. On the boxplot, the number of cells from
+    each experiment is shown.</dd>
 
   <dt><b>Coverage:</b></dt>
     <dd>
     Bar graphs indicate the number of reads at this base pair. You may want to switch on
-    auto-scaling of the y axis. For configuration options, see <a target="_blank"
+    auto-scaling of the y-axis. For configuration options, see <a target="_blank"
     href="https://genome.ucsc.edu/goldenpath/help/hgWiggleTrackHelp.html">the graph tracks
     configuration help page</a>. These tracks are shown in &quot;dense&quot; by default, set any of
     the tracks to &quot;full&quot; to see the detailed coverage plot.</dd>
