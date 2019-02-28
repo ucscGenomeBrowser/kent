@@ -128,7 +128,7 @@ DBS = \
 	melInc1 melInc2 \
 	micMur1 micMur2 micMur3 \
 	micOch1 \
-	mm6 mm7 mm8 mm9 mm10 mm10Patch1 mm10Strains1 mm10Patch4 \
+	mm6 mm7 mm8 mm9 mm10 mm10Patch1 mm10Strains1 mm10Patch4 GRCm38B \
 	monDom1 monDom4 monDom5 \
 	musFur1 \
 	myoLuc1 myoLuc2 \
