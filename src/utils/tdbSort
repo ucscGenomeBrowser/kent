@@ -1,0 +1,128 @@
+#!/usr/bin/env python
+
+import logging, sys, optparse, string, re
+from collections import OrderedDict
+from os.path import join, basename, dirname, isfile
+from operator import itemgetter
+
+# ==== functions =====
+    
+def parseArgs():
+    " setup logging, parse command line arguments and options. -h shows auto-generated help page "
+    parser = optparse.OptionParser("""usage: %prog [options] inFile tagName outFile - sort a trackDb file by a tag
+            
+    Examples:
+        %prog trackDb.orig.txt shortLabel trackDb.txt
+    """)
+
+    parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
+    parser.add_option("-p", "--parent", dest="parent", action="store", help="only sort tracks that have a given 'parent' tag")
+    parser.add_option("-i", "--ignCase", dest="ignCase", action="store_true", help="ignore case when sorting")
+    #parser.add_option("", "--suffList", dest="suffList", action="store", help="comma-sep list of suffixes. These are ignored when comparing values. Many tracks need suffixes for the various track types, e.g. peaks and coverage. A typical value could be 'pk,cov'")
+    #parser.add_option("-f", "--file", dest="file", action="store", help="run on file") 
+    #parser.add_option("", "--test", dest="test", action="store_true", help="do something") 
+    (options, args) = parser.parse_args()
+
+    if args==[]:
+        parser.print_help()
+        exit(1)
+
+    if options.debug:
+        logging.basicConfig(level=logging.DEBUG)
+        logging.getLogger().setLevel(logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.INFO)
+        logging.getLogger().setLevel(logging.INFO)
+
+    return args, options
+
+def parseTrackDb(fname, sortTag, ignCase):
+    """ parse Track db into a list of dictionaries, one per stanza. indentation is stored in special field #indent
+    the sort key is in the field #key
+    """
+    tdb = []
+    stanza = OrderedDict()
+    for line in open(fname):
+        line = line.rstrip("\n")
+        if line=="":
+            tdb.append(stanza)
+            stanza = OrderedDict()
+            continue
+
+        fields = line.split()
+        key = fields[0]
+        val = " ".join(fields[1:]) # XX multi-spaces get reduced to a single space
+        # alternative is string.split in py2 / line.split(maxsplit=1) in py3
+        #key, val = line.split(line, maxsplit=1)
+        if key=="track":
+            stanza["#indent"] = re.compile("^ *").match(line).group(0)
+        if key==sortTag:
+            sortKey = val
+            if ignCase:
+                sortKey = sortKey.lower()
+            stanza["#key"] = sortKey
+
+
+        key = key.strip()
+        val = val.strip()
+        stanza[key] = val
+
+    tdb = [t for t in tdb if len(t.keys())!=0] # remove empty stanzas
+    return tdb
+
+def sortTdb(tdb, onlyParent):
+    " sort tdb alphabetically by #key, if onlyParent is not None, only sort entries with given parent "
+    # build true/false mask whether stanza is selected
+    if not onlyParent:
+        selMask = [True] * len(tdb)
+    else:
+        selMask = []
+        for t in tdb:
+            # append True if parent Ok, otherwise False. 
+            selMask.append( t.get('parent', "")==onlyParent)
+
+    # get the selected elements
+    selEls = []
+    for i, isSel in enumerate(selMask):
+        if isSel:
+            selEls.append( tdb[i] )
+
+    # https://stackoverflow.com/questions/72899/how-do-i-sort-a-list-of-dictionaries-by-a-value-of-the-dictionary
+    sortEls = sorted(selEls, key=itemgetter("#key"))
+
+    # splice it all together
+    newTdb = []
+    for i, isSel in enumerate(selMask):
+        if isSel:
+            newTdb.append( sortEls.pop(0) )
+        else:
+            newTdb.append( tdb[i] )
+
+    return newTdb
+
+def writeTdb(tdb, outFname):
+    " write list of dicts to outFname "
+    ofh = open(outFname, "w")
+    for t in tdb:
+        indent = t["#indent"]
+        del t["#indent"]
+        del t["#key"]
+        for key, val in t.items():
+            ofh.write("%s%s %s\n" % (indent, key, val))
+        ofh.write("\n")
+    ofh.close()
+
+# ----------- main --------------
+def main():
+    args, options = parseArgs()
+
+    onlyParent = options.parent
+    ignCase = options.ignCase
+
+    inFn, tag, outFn = args
+
+    tdb = parseTrackDb(inFn, tag, ignCase)
+    newTdb = sortTdb(tdb, onlyParent)
+    writeTdb(newTdb, outFn)
+
+main()
