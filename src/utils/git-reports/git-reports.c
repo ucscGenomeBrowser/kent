@@ -116,10 +116,11 @@ struct commit *commits = NULL, *commit = NULL;
 struct files *files = NULL, *f = NULL;
 while (lineFileNext(lf, &line, &lineSize))
     {
+    
     char *w = nextWord(&line);
     AllocVar(commit);
     if (!sameString("commit", w))
-	errAbort("expected keyword commit parsing commits.tmp\n");
+	lineFileAbort(lf, "expected keyword commit parsing commits.tmp\n");
     commit->commitId = cloneString(nextWord(&line));
     commit->commitNumber = ++numCommits;
 
@@ -132,7 +133,7 @@ while (lineFileNext(lf, &line, &lineSize))
 	w = nextWord(&line);
 	}
     if (!sameString("Author:", w))
-	errAbort("expected keyword Author: parsing commits.tmp\n");
+	lineFileAbort(lf, "expected keyword Author: parsing commits.tmp\n");
 
     /* Full author information */
     commit->fullAuthor = cloneString(line);
@@ -140,11 +141,11 @@ while (lineFileNext(lf, &line, &lineSize))
     /* by request, keep just the email account name */
     char *lc = strchr(line, '<');
     if (!lc)
-	errAbort("expected '<' char in email address in Author: parsing commits.tmp\n");
+	lineFileAbort(lf, "expected '<' char in email address in Author: parsing commits.tmp\n");
     ++lc;
     char *rc = strchr(lc, '>');
     if (!rc)
-	errAbort("expected '>' char in email address in Author: parsing commits.tmp\n");
+	lineFileAbort(lf, "expected '>' char in email address in Author: parsing commits.tmp\n");
     char *ac = strchr(lc, '@');
     if (ac)
 	rc = ac;
@@ -153,12 +154,12 @@ while (lineFileNext(lf, &line, &lineSize))
     lineFileNext(lf, &line, &lineSize);
     w = nextWord(&line);
     if (!sameString("Date:", w))
-	errAbort("expected keyword Date: parsing commits.tmp\n");
+	lineFileAbort(lf, "expected keyword Date: parsing commits.tmp\n");
     commit->date = cloneString(line);
 
     lineFileNext(lf, &line, &lineSize);
     if (!sameString("", line))
-	errAbort("expected blank line parsing commits.tmp\n");
+	lineFileAbort(lf, "expected blank line parsing commits.tmp\n");
 
     /* collect the comment-lines */
     struct dyString *dy = NULL;
@@ -183,6 +184,11 @@ while (lineFileNext(lf, &line, &lineSize))
 	/* collect the files-list */
 	while (lineFileNext(lf, &line, &lineSize))
 	    {
+	    if (startsWith("commit ", line))
+		{
+		lineFileReuse(lf); // extremely rare case of commit with no file lines
+		break;
+		}
 	    if (sameString("", line))
 		break;
 	    w = nextWord(&line);
