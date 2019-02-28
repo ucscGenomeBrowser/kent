@@ -10883,7 +10883,7 @@ boolean overrideComposite = (NULL != cartOptionalString(cart, subtrack->track));
 if (subtrack->limitedVisSet && subtrack->limitedVis == tvHide)
     return FALSE;
 bool enabledInTdb = subtrackEnabledInTdb(subtrack);
-char option[SMALLBUF];
+char option[4096];
 safef(option, sizeof(option), "%s_sel", subtrack->track);
 boolean enabled = cartUsualBoolean(cart, option, enabledInTdb);
 if (overrideComposite)
