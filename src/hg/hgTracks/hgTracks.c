@@ -5782,7 +5782,20 @@ struct trackDb *tdbList;
 if(trackNameFilter == NULL)
     tdbList = hTrackDb(database);
 else
+    {
     tdbList = hTrackDbForTrack(database, trackNameFilter);
+
+    if (tdbList->parent)        // we want to give the composite parent a chance to load and set options
+        {
+        while(tdbList->parent)
+            {
+            if (tdbList->parent->subtracks == NULL)     // we don't want to go up to a supertrack
+                break;
+            tdbList = tdbList->parent;
+            }
+        trackNameFilter = tdbList->track;
+        }
+    }
 addTdbListToTrackList(tdbList, trackNameFilter, pTrackList);
 }
 
