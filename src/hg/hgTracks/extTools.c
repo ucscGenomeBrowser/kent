@@ -202,7 +202,8 @@ char *pos = cartString(cart, "position");
 if (startsWith("virt:", cartUsualString(cart, "position", "")))
     pos = cartString(cart, "nonVirtPosition");
 
-findGenomePos(db, pos, &chromName, &winStart, &winEnd, cart);
+if (!parsePosition(pos, &chromName, (uint *)&winStart, (uint *)&winEnd))
+    errAbort("Can't parse position '%s'", pos);
 int len = winEnd-winStart;
 
 char start1[255];

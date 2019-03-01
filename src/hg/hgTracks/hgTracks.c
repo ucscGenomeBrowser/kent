@@ -144,7 +144,7 @@ boolean hideControls = FALSE;           /* Hide all controls? */
 boolean trackImgOnly = FALSE;           /* caller wants just the track image and track table html */
 boolean ideogramToo =  FALSE;           /* caller wants the ideoGram (when requesting just one track) */
 
-/* Structure returned from findGenomePos.
+/* Structure returned from resolvePosition.
  * We use this to to expand any tracks to full
  * that were found to contain the searched-upon
  * position string */
@@ -8922,13 +8922,6 @@ printf("<a href='%s?%s=%s'><input type='button' VALUE='Return to Browser'></a>\n
            hgTracksName(), cartSessionVarName(), cartSessionId(cart));
 }
 
-boolean isGenome(char *pos)
-/* Return TRUE if pos is genome. */
-{
-pos = trimSpaces(pos);
-return(sameWord(pos, "genome") || sameWord(pos, "hgBatch"));
-}
-
 void setRulerMode()
 /* Set the rulerMode variable from cart. */
 {
@@ -8966,6 +8959,35 @@ fullInsideX = trackOffsetX();
 fullInsideWidth = tl.picWidth-gfxBorder-fullInsideX;
 }
 
+static boolean resolvePosition(char **pPosition)
+/* Position may be an already-resolved chr:start-end, or a search term.
+ * If it is a search term:
+ * 1 match ==> set globals chromName, winStart, winEnd, return TRUE.
+ * 0 matches ==> switch back to lastPosition, hopefully get 1 match from that;
+ * set globals chromName, winStart, winEnd, return TRUE.  If no lastPosition, try w/hDefaultPos().
+ * multiple matches ==> Display a page with links to match positions, return FALSE. */
+{
+boolean resolved = TRUE;
+struct dyString *dyWarn = dyStringNew(0);
+hgp = hgFindSearch(cart, pPosition, &chromName, &winStart, &winEnd, hgTracksName(), dyWarn);
+if (isNotEmpty(dyWarn->string))
+    warn("%s", dyWarn->string);
+if (hgp->singlePos)
+    {
+    createHgFindMatchHash();
+    }
+else
+    {
+    char *menuStr = menuBar(cart, database);
+    if (menuStr)
+        puts(menuStr);
+    hgPositionsHtml(database, hgp, hgTracksName(), cart);
+    resolved = FALSE;
+    }
+cartSetString(cart, "position", *pPosition);
+return resolved;
+}
+
 void parseVirtPosition(char *position)
 /* parse virtual position
  *  TODO this is just temporary */
@@ -8975,6 +8997,7 @@ if (!position)
     errAbort("position NULL");
     }
 char *vPos = cloneString(position);
+stripChar(vPos, ',');
 char *colon = strchr(vPos, ':');
 if (!colon)
     errAbort("position has no colon");
@@ -9076,7 +9099,6 @@ void tracksDisplay()
 /* Put up main tracks display. This routine handles zooming and
  * scrolling. */
 {
-char *defaultPosition = hDefaultPos(database);
 char titleVar[256];
 char *oldPosition = cartUsualString(cart, "oldPosition", "");
 boolean findNearest = cartUsualBoolean(cart, "findNearest", FALSE);
@@ -9106,38 +9128,8 @@ if (sameString(position, ""))
 
 if (!positionIsVirt)
     {
-    chromName = NULL;
-    winStart = 0;
-    if (isGenome(position) || NULL ==
-	(hgp = findGenomePos(database, position, &chromName, &winStart, &winEnd, cart)))
-	{
-	if (winStart == 0)  /* number of positions found */
-	    {
-	    freeMem(position);
-	    position = cloneString(cartUsualString(cart, "lastPosition", defaultPosition));
-	    hgp = findGenomePos(database, position, &chromName, &winStart, &winEnd,cart);
-	    if (hgp != NULL && differentString(position, defaultPosition))
-		cartSetString(cart, "position", position);
-	    }
-	}
-
-    /* After position is found set up hash of matches that should
-       be drawn with names highlighted for easy identification. */
-    createHgFindMatchHash();
-
-    /* This means that no single result was found
-    I.e., multiple results may have been found and are printed out prior to this code*/
-    if (NULL == chromName)
-	{
-	// In case user manually edits the browser location as described in #13009,
-	// revert the position.  If they instead choose from the list as we expect,
-	// that will set the position to their choice.
-	// lastPosition gets set in cart.c
-	char *lastPosition = cartUsualString(cart, "lastPosition", hDefaultPos(database));
-	cartSetString(cart, "position", lastPosition);
-	return;
-	}
-
+    if (! resolvePosition(&position))
+        return;
     }
 
 virtMode = cartUsualBoolean(cart, "virtMode", FALSE);
@@ -9197,8 +9189,7 @@ while(TRUE)
 	virtModeType = "default";
 	cartSetString(cart, "virtModeType", virtModeType);
 	position = cloneString(hDefaultPos(database));
-	hgp = findGenomePos(database, position, &chromName, &winStart, &winEnd, cart);
-	cartSetString(cart, "position", position);
+        resolvePosition(&position);
 	positionIsVirt=FALSE;
 	virtMode=FALSE;
 	}
@@ -10255,7 +10246,7 @@ if (cartVarExists(cart, "hgt.convertChromToVirtChrom"))
 
 jsonObjectAdd(jsonForClient, "measureTiming", newJsonBoolean(measureTiming));
 // js code needs to know if a highlightRegion is defined for this db
-checkAddHighlight(); // call again in case tracksDisplay's call to findGenomePos changed vars
+checkAddHighlight(); // call again in case tracksDisplay's call to resolvePosition changed vars
 char *highlightDef = cartOptionalString(cart, "highlight");
 if (highlightDef && startsWith(database,highlightDef) && highlightDef[strlen(database)] == '.')
     jsonObjectAdd(jsonForClient, "highlight", newJsonString(highlightDef));

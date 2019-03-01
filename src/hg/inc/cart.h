@@ -399,6 +399,10 @@ void cartVaWebStart(struct cart *cart, char *db, char *format, va_list args);
 /* Print out pretty wrapper around things when working
  * from cart. */
 
+void cartWebStartHeader(struct cart *cart, char *db, char *format, ...);
+/* Print out Content-type header and then pretty wrapper around things when working
+ * from cart. */
+
 void cartWebEnd();
 /* End out pretty wrapper around things when working
  * from cart. */
