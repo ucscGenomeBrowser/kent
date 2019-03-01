@@ -31,6 +31,7 @@
 #include "cgiApoptosis.h"
 #include "customComposite.h"
 #include "regexHelper.h"
+#include "windowsToAscii.h"
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -2384,13 +2385,23 @@ htmStart(stdout, title);
 didCartHtmlStart = TRUE;
 }
 
+static void cartVaWebStartMaybeHeader(struct cart *cart, char *db, boolean withHttpHeader,
+                                      char *format, va_list args)
+/* Print out optional Content-Type and pretty wrapper around things when working from cart. */
+{
+pushWarnHandler(htmlVaWarn);
+webStartWrapper(cart, trackHubSkipHubName(db), format, args, withHttpHeader, FALSE);
+inWeb = TRUE;
+jsIncludeFile("jquery.js", NULL);
+jsIncludeFile("utils.js", NULL);
+jsIncludeFile("ajax.js", NULL);
+}
+
 void cartVaWebStart(struct cart *cart, char *db, char *format, va_list args)
 /* Print out pretty wrapper around things when working
  * from cart. */
 {
-pushWarnHandler(htmlVaWarn);
-webStartWrapper(cart, trackHubSkipHubName(db), format, args, FALSE, FALSE);
-inWeb = TRUE;
+cartVaWebStartMaybeHeader(cart, db, FALSE, format, args);
 }
 
 void cartWebStart(struct cart *cart, char *db, char *format, ...)
@@ -2401,9 +2412,6 @@ va_list args;
 va_start(args, format);
 cartVaWebStart(cart, db, format, args);
 va_end(args);
-jsIncludeFile("jquery.js", NULL);
-jsIncludeFile("utils.js", NULL);
-jsIncludeFile("ajax.js", NULL);
 // WTF - variable outside of a form on almost every page we make below?
 // Tim put this in.  Talking with him it sounds like some pages might actually
 // depend on it.  Not removing it until we have a chance to test.  Best fix
@@ -2411,6 +2419,16 @@ jsIncludeFile("ajax.js", NULL);
 // well named, and not all things have 'db.'  Arrr.  Probably best to remove
 // and test a bunch.
 cgiMakeHiddenVar("db", db);  
+}
+
+void cartWebStartHeader(struct cart *cart, char *db, char *format, ...)
+/* Print out Content-type header and then pretty wrapper around things when working
+ * from cart. */
+{
+va_list args;
+va_start(args, format);
+cartVaWebStartMaybeHeader(cart, db, TRUE, format, args);
+va_end(args);
 }
 
 void cartWebEnd()
@@ -3607,7 +3625,7 @@ if (sameOk(cgiOptionalString("position"), "lastDbPos"))
     
 if (position == NULL)
     {
-    position = cloneString(cartUsualString(cart, "position", NULL));
+    position = windowsToAscii(cloneString(cartUsualString(cart, "position", NULL)));
     }
 
 /* default if not set at all, as would happen if it came from a URL with no
