@@ -12,7 +12,7 @@ include trackDb.euarchontoglireChainNet.ra
 include trackDb.placentalsChainNet.ra
 include trackDb.vertebrateChainNet.ra
 include trackDb.previousVersionsChainNet.ra alpha
-include tabulamuris.ra alpha
+include tabulamuris.ra alpha,beta
 
 # Local declaration so that local gold.html is picked up.
 track gold override

@@ -1,4 +1,4 @@
-track singleCell
+track tabulaMuris
 shortLabel Tabula Muris
 longLabel Single Cell FACS RNA-Seq of 44,779 cells from Tabula Muris
 superTrack on
@@ -19,17 +19,17 @@ barChartSampleUrl /gbdb/mm10/tabulamuris/clusters.tsv
 defaultLabelFields name2
 labelFields name2,name
 bigDataUrl /gbdb/mm10/tabulamuris/barChart.bb
-html singleCell
-parent singleCell
+html tabulaMuris
+parent tabulaMuris
 
 track TabulaMurisFacsCoverage
 shortLabel Tabula Muris Genome Coverage
 longLabel Tabula Muris single cell RNA-Seq genome coverage
 visibility dense
 compositeTrack on
-parent singleCell
+parent tabulaMuris
 type bigWig
-html singleCell
+html tabulaMuris
 autoScale off
 
         track pancreaticDCellCov
@@ -766,8 +766,8 @@ shortLabel Tabula Muris Splice Sites
 longLabel Tabula Muris single cell RNA-Seq splice sites
 compositeTrack on
 visibility hide
-parent singleCell off
-html singleCell
+parent tabulaMuris off
+html tabulaMuris
 spectrum on
 type bigBed 12
 
