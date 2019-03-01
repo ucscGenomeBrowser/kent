@@ -182,6 +182,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"grcHhh", grcNames},
     {"hg", hgNames},
     {"mm", mmNames},
+    {"GRCm", mmNames},
     {"rn", rnNames},
     {"choHof", choHofNames},
     {"chrPic", chrPicNames},
