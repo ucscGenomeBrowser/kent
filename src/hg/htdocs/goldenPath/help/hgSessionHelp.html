@@ -94,7 +94,7 @@ There are several ways for you to view this session:</p>
 <pre><code>user: Example
 session name: hg17_chr2_primate </code></pre>
   <p> 
-  Click the <code>submit</code> button next to the session name box to load the session. To view 
+  Click the <button>submit</button> button next to the session name box to load the session. To view 
   the session in the Genome Browser, click the <code>Genome Browser</code> link in the top blue 
   navigation bar.</li> 
   <li>
@@ -121,7 +121,7 @@ target="_blank">http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&h
   is located:</p> 
   <pre><code>http://genome.ucsc.edu/goldenPath/help/examples/session_example1.txt</code></pre>
   <br>
-  Then, click the <code>submit</code> button to load the session settings. To view the session in 
+  Then, click the <button>submit</button> button to load the session settings. To view the session in 
   the Genome Browser, press the <em>Browser</em> link in the <code>Updated Session</code> 
   section.</li> 
 </ul>
@@ -190,18 +190,18 @@ blue navigation bar. Follow these steps to save your session:</p>
   session name. Note that your session is <em>not</em> automatically available to the general public
   if you choose this option: you must provide the user and session name to other individuals for
   them to view it. This helps to ensure the confidentiality of your private data. After naming the
-  session and choosing your sharing option, click the <code>submit</code> button. Your session will
+  session and choosing your sharing option, click the <button>submit</button> button. Your session will
   then be listed by name under <em>My Sessions</em>.</li>
   <li>
   <strong>Save session settings to a file.</strong> Alternatively, you can create a file from your
   session settings that can be saved to your local machine or posted to a URL for
   <a href="#Open">access or sharing</a>. To do this, go to the <code>Save Settings</code> section.
   Type a name into the <code>Save current settings to a local file</code> box. Click the
-  <code>submit</code> button to save or display the file. The session will be saved in plain text
+  <button>submit</button> button to save or display the file. The session will be saved in plain text
   (ascii) format by default. To select a compressed format, select one of the options from the
-  <code>file type returned</code> menu before clicking <code>submit</code>. If you simply wish to
+  <code>file type returned</code> menu before clicking <button>submit</button>. If you simply wish to
   preview the contents of the file in your browser window, leave the file name blank and click
-  <code>submit</code>.</li>
+  <button>submit</button>.</li>
   </ul>
   <h3>How to backup text-based Custom Track data to a file</h3>
   <ul>
@@ -211,15 +211,15 @@ blue navigation bar. Follow these steps to save your session:</p>
   custom tracks that would otherwise be lost in case of an
   unexpected system failure at UCSC. Saving your data is easy and ensures that your hard work
   is safe and recoverable. To download your custom track data, navigate to the <code>Save
-  Settings</code> section. Click the <code>submit</code> button to the right of "backup custom
+  Settings</code> section. Click the <button>submit</button> button to the right of "backup custom
   tracks archive .tar.gz". For each genome assembly, the custom track names will be shown along
-  with individual and total file size. To proceed, click the <code>create custom track backup
-  archive</code> button. All of the custom track data for the active session will be archived and
+  with individual and total file size. To proceed, click the <button>create custom track backup
+  archive</button> button. All of the custom track data for the active session will be archived and
   compressed. Large custom tracks may take several minutes to finish. To download the archive to
-  your computer, type in a name for the downloaded archive file and click the <code>download
-  backup archive</code> button. The file will have a ".tar.gz" extension. Note that Safari
+  your computer, type in a name for the downloaded archive file and click the <button>download
+  backup archive</button> button. The file will have a ".tar.gz" extension. Note that Safari
   browsers will unzip the archive leaving you with a .tar file in your Downloads directory. Click
-  the <code>return</code> button to return to the Session Management page. To save viewing
+  the <button>return</button> button to return to the Session Management page. To save viewing
   settings like track visibilities, highlighting, and sequence positions, use the "Save session
   settings to a local file" feature mentioned above.</li>
   <li>
@@ -237,17 +237,17 @@ tar -xzf ../someproject.tar.gz</code></pre>
   <pre><code>tar -xf ../someproject.tar</code></pre>
   The assembly directory contains .ct files, one for each custom track.
   To restore a single custom track, go to the <a href=../../cgi-bin/hgCustom>Custom Tracks tool</a>,
-  select the correct genome database, and click the <code>add custom track</code> button.
-  If you already have existing custom tracks, click the <code>add custom track</code> button, then
-  click the <code>Choose File</code> button next to the top window near the
+  select the correct genome database, and click the <button>add custom track</button> button.
+  If you already have existing custom tracks, click the <button>add custom track</button> button, then
+  click the <button>Choose File</button> button next to the top window near the
   "Paste URLs or data" text. A file selection box will open. Navigate to the directory where
-  the desired custom track .ct file is, choose it, and click the <code>Submit</code> button.<br>
+  the desired custom track .ct file is, choose it, and click the <button>Submit</button> button.<br>
   <br>
   If an optional help text or HTML page was saved with the custom track, you will see a
-  corresponding custom track .html file. You can restore this by selecting the <code>Choose
-  File</code> button near the "Optional track documentation" text. A file selection box will
-  open. Navigate to the directory where the .html file is located, choose it, and click the <code>
-  Submit</code> button.</li>
+  corresponding custom track .html file. You can restore this by selecting the <button>Choose
+  File</button> button near the "Optional track documentation" text. A file selection box will
+  open. Navigate to the directory where the .html file is located, choose it, and click the <button>
+  Submit</button> button.</li>
   <li>
   <strong>Restore Multiple Custom Tracks.</strong> Restore all the custom tracks in an assembly
   directory by concatenating the .ct files together. From the command-line, change
@@ -260,7 +260,7 @@ cat *.ct > hg38_all.ct</code></pre>
   <pre><code>gzip hg38_all.ct</code></pre>
   Navigate to the <a href=../../cgi-bin/hgCustom>Custom Tracks tool </a> and select the big 
   concatenated compressed file (hg38_all.ct.gz in our example). Note that large custom track sets 
-  may require a long time to upload. Once uploaded, click the <code>Go</code> button on the next page to view
+  may require a long time to upload. Once uploaded, click the <button>Go</button> button on the next page to view
   your custom tracks in the Browser. You will still be able to save and share your Sessions 
   online, which will include your Browser Settings and Custom Tracks. This feature is solely for 
   backing up Custom Tracks as files. 
@@ -291,11 +291,11 @@ session entry is listed by name and offers the following options to open, share,
   <li>
   <strong>Session name.</strong> Click the session name to view it in the Genome Browser.</li>  
   <li>
-  <strong>View/edit details.</strong> Click the <code>details</code> button to edit the session
+  <strong>View/edit details.</strong> Click the <button>details</button> button to edit the session
   description and view session details such as creation date/time, assemblies with custom tracks and
   more.</li> 
   <li>
-  <strong>Delete the session.</strong> Click the <code>delete</code> button to permanently remove 
+  <strong>Delete the session.</strong> Click the <button>delete</button> button to permanently remove 
   this session from the list.</li>  
   <li>
   <strong>Share with others</strong>: Check this box to allow others to access this session. By 
@@ -433,12 +433,12 @@ session. Be sure to preserve your original session first if you don't want to ov
   <li>
   <strong>Open a session from a settings file.</strong> Open the Session tool, then scroll down to 
   <em>Restore Settings</em> in the <em>Session Management</em> section.  
-  Click <code>Browse...</code> to find the file on your computer. Click 
-  <code>submit</code> to display the Genome Browser using these session settings.</li> 
+  Click <button>Choose File</button> to find the file on your computer. Click 
+  <button>submit</button> to display the Genome Browser using these session settings.</li> 
   <li>
   <strong>Open a session specified by a URL.</strong> Open the Session tool, then scroll down to 
   <em>Restore Settings</em> in the <em>Session Management</em> section. Type in the URL in the 
-  <code>Use settings from a URL</code> box, then click <code>submit</code> to display the Genome 
+  <code>Use settings from a URL</code> box, then click <button>submit</button> to display the Genome 
   Browser using the new session settings. 
   </li>
 </ul>
@@ -485,7 +485,7 @@ generate a custom track from your BLAT results</a>, they will be saved in your s
 <h2>Deleting a session</h2> 
 <p>
 In the <strong>Session Management</strong> section under <em>My Sessions</em>, press the 
-<code>delete</code> button next to the session name you would like to delete. This will permanently 
+<button>delete</button> button next to the session name you would like to delete. This will permanently 
 delete all details of the session from the UCSC server. Any saved links to that session will no 
 longer work.</p> 
 <p>
