@@ -46,7 +46,7 @@ team that assigns symbols, such as MGI for mouse.
 <a name="genestrans"></a>
 <h6>What is the difference between a gene and a transcript? </h6>
 <p>
-Transcripts are defined as RNA molecules that are copied from a DNA template of a gene. Every gene 
+Transcripts are defined as RNA molecules that are copied from the DNA template of a gene. Every gene 
 is comprised of a set of transcripts. In the Genome Browser, data tracks are often called 
 "Genes", e.g. "Ensembl Genes" or "UCSC Genes", but they really represent transcripts 
 on an assembly. Every transcript has an accession number, a sequence, and a list of exon
@@ -56,9 +56,9 @@ are assigned to genes. </p>
 <a name="mostCommon"></a>
 <h6>What are the most common gene transcript tracks?</h6>
 <p>
-Originally, researchers sequenced cDNA sequences, submitted them to Genbank and the
-Genome Browser shows these in the Genbank track, or in the EST track, if the cDNA is just
-a single read from the 5' or 3' end. From the alignment of the cDNAs and ESTs, 
+Originally, researchers sequenced cDNA sequences, submitted them to Genbank, and the
+Genome Browser shows these in the Genbank or the EST trac (if the cDNA is just
+a single read from the 5' or 3' end). From the alignment of the cDNAs and ESTs, 
 the NCBI RefSeq group manually creates a smaller set of representative transcripts.
 Automated programs like UCSC's or Ensembl's gene build software do the same, just
 in software, which is more systematic but more error-prone.
@@ -81,10 +81,13 @@ errors.</p>
 The most common gene names encountered by users are either from Ensembl, GENCODE, RefSeq, or 
 gene symbols. For gene symbols, such as DDX11L1, see the above question "What is a gene?".
 Ensembl/GENCODE accession numbers in the human genome start with ENST followed by a
-number. Every transcript is assigned to a gene with identifiers that start with ENSG and 
-every ENSG has at least one ENST assigned to it. Manually curated RefSeq transcript identifiers
-start with NM_ (coding) or NR_ (noncoding), followed by a number, or XM_ if
-they are predicted by software.</p>
+number, e.g. "ENST00000619216.1". Every transcript is assigned to a gene with identifiers that 
+start with ENSG and every ENSG has at least one ENST assigned to it. Manually curated RefSeq 
+transcript identifiers start with NM_ (coding) or NR_ (noncoding), followed by a number, or XM_ if
+they are predicted by software, e.g. "NR_046018.2". A table of all RefSeq prefixes can be found on the <a target=_blank
+href="https://www.ncbi.nlm.nih.gov/books/NBK21091/table/ch18.T.refseq_accession_numbers_and_mole/?report=objectonly">
+NCBI website</a>.
+</p>
 
 <a name="ens"></a>
 <h2>The differences</h2>
@@ -93,19 +96,20 @@ they are predicted by software.</p>
 <p style="color:red">TODO Lou or Max: compare the Ensembl GFF with the GENCODE GFF.</p>
 
 <p> 
-Officially, the Ensembl and GENCODE gene models are the same.
-On the most current human and mouse genome assemblies (hg38 and mm10), and the primary chromosomes
-(not alternate sequences or patches (LINK TO EXPLAIN WHAT THIS IS?) the
-identifiers, transcript sequences and exon coordinates of equivalent Ensembl
-and GENCODE versions are indeed almost identical. GENCODE uses the UCSC convention of prefixing
-chromosome names with "chr", e.g. "chr1" and "chrM", but Ensembl calls these
-"1" or "MT". At a time of writing (Ensembl 89), a few transcripts differ due to
-conversion issues. In addition, around 160 PAR genes are duplicated in GENCODE
-but only once in GENCODE. The differences affect fewer than 1% of the
-transcripts. Apart from gene annotation itself, the links to external databases
-differ. 
+Officially, the Ensembl and GENCODE gene models are the same. On the latest human and mouse genome 
+assemblies (hg38 and mm10), the identifiers, transcript sequences, and exon coordinates are almost
+identical between equivalent Ensembl and GENCODE versions (excluding <a target=_blank 
+href="FAQdownloads.html#downloadAlt">alternative sequences</a> or <a target=_blank 
+href="FAQdownloads.html#downloadFix">or fix sequences</a>).</p>
 
-The <a target=_blank
+<p>GENCODE uses the UCSC convention of prefixing chromosome names with "chr", e.g. "chr1" and 
+"chrM", but Ensembl calls these "1" or "MT". At the time of writing (Ensembl 89), a few transcripts 
+differ due to conversion issues. In addition, around 160 PAR genes are duplicated in GENCODE
+but only once in GENCODE (<b>should be ensembl here?</b>). The differences affect 
+fewer than 1% of the transcripts. Apart from gene annotation itself, the links to external databases
+differ.</p> 
+
+<p>The <a target=_blank
 href="https://www.gencodegenes.org/human/releases.html">GENCODE Release
 History</a> shows the release dates and can be linked to corresponding Ensembl
 releases.  You can download the gene transcript models from the website
@@ -114,7 +118,7 @@ releases.  You can download the gene transcript models from the website
 For many applications, the files distributed on the GENCODE website
 should be easier to use, as the third party database links are easier to parse
 and the sequence identifiers match the UCSC genome files, at least for the
-primary chromosomes.
+primary chromosomes.</p>
 
 <a name="ensRefseq"></a>
 <h6>What are the differences among Ensembl, GENCODE and RefSeq?</h6>
