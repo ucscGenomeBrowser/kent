@@ -378,58 +378,17 @@ hFreeConn(&conn);
 return list;
 }
 
-boolean searchPosition(char *range, struct region *region)
-/* Try and fill in region via call to hgFind. Return FALSE
- * if it can't find a single position. */
-{
-struct hgPositions *hgp = NULL;
-char retAddr[512];
-char position[512];
-safef(retAddr, sizeof(retAddr), "%s", getScriptName());
-hgp = findGenomePosWeb(database, range, &region->chrom, &region->start, &region->end,
-	cart, TRUE, retAddr);
-if (hgp != NULL && hgp->singlePos != NULL)
-    {
-    safef(position, sizeof(position),
-	    "%s:%d-%d", region->chrom, region->start+1, region->end);
-    cartSetString(cart, hgtaRange, position);
-    return TRUE;
-    }
-else if (region->start == 0)	/* Confusing way findGenomePosWeb says pos not found. */
-    {
-    cartSetString(cart, hgtaRange, hDefaultPos(database));
-    return FALSE;
-    }
-else
-    return FALSE;
-}
-
-boolean lookupPosition()
-/* Look up position (aka range) if need be.  Return FALSE if it puts
- * up multiple positions. */
+struct hgPositions *lookupPosition(struct dyString *dyWarn)
+/* Look up position (aka range) if need be.  Return a container of matching tables and positions.
+ * Warnings/errors are appended to dyWarn. */
 {
 char *range = windowsToAscii(cloneString(cartUsualString(cart, hgtaRange, "")));
-boolean isSingle = TRUE;
 range = trimSpaces(range);
-if (range[0] != 0)
-    {
-    struct region r;
-    cartSetLastPosition(cart, range, oldVars);
-    isSingle = searchPosition(range, &r);
-    if (!isSingle)
-	{
-	// In case user manually edits the browser location as described in #13009,
-	// revert the position.  If they instead choose from the list as we expect,
-	// that will set the position to their choice.
-	char *lastPosition = cartUsualString(cart, "lastPosition", hDefaultPos(database));
-	cartSetString(cart, "position", lastPosition);
-	}
-    }
-else
-    {
-    cartSetString(cart, hgtaRange, hDefaultPos(database));
-    }
-return isSingle;
+if (isEmpty(range))
+    range = hDefaultPos(database);
+struct hgPositions *hgp = hgFindSearch(cart, &range, NULL, NULL, NULL, getScriptName(), dyWarn);
+cartSetString(cart, hgtaRange, range);
+return hgp;
 }
 
 struct region *getRegions()
@@ -1803,7 +1762,9 @@ if (sameOk(backgroundExec,"gsSendToDM"))
 
 /* Init track and group lists and figure out what page to put up. */
 initGroupsTracksTables();
-if (lookupPosition())
+struct dyString *dyWarn = dyStringNew(0);
+struct hgPositions *hgp = lookupPosition(dyWarn);
+if (hgp->singlePos && isEmpty(dyWarn->string))
     {
     if (cartUsualBoolean(cart, hgtaDoGreatOutput, FALSE))
 	doGetGreatOutput(dispatch);
@@ -1812,12 +1773,19 @@ if (lookupPosition())
     }
 else
     {
-    struct sqlConnection *conn = NULL;
-    if (!trackHubDatabase(database))
-	conn = curTrack ? hAllocConnTrack(database, curTrack) : hAllocConn(database);
-    webPushErrHandlersCartDb(cart, database);
-    mainPageAfterOpen(conn);
-    hFreeConn(&conn);
+    cartWebStartHeader(cart, database, "Table Browser");
+    if (isNotEmpty(dyWarn->string))
+        warn("%s", dyWarn->string);
+    if (hgp->posCount > 1)
+        hgPositionsHtml(database, hgp, hgTablesName(), cart);
+    else
+        {
+        struct sqlConnection *conn = NULL;
+        if (!trackHubDatabase(database))
+            conn = curTrack ? hAllocConnTrack(database, curTrack) : hAllocConn(database);
+        mainPageAfterOpen(conn);
+        hFreeConn(&conn);
+        }
     cartWebEnd();
     }
 

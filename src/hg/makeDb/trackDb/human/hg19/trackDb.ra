@@ -24,7 +24,7 @@ searchDescription COSMIC Regions
 
 track mastermind
 shortLabel Mastermind Variants
-longLabel Genomenom Mastermind Variants extracted from fulltext publications
+longLabel Genomenon Mastermind Variants extracted from full text publications
 group phenDis
 visibility hide
 type bigBed 9 +

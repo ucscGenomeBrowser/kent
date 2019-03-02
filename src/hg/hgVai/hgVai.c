@@ -38,6 +38,7 @@
 #include "annoFormatVep.h"
 #include "annoStreamBigBed.h"
 #include "annoStreamDb.h"
+#include "annoStreamVcf.h"
 #include "windowsToAscii.h"
 #include "obscure.h"
 
@@ -2995,6 +2996,19 @@ else if (! isCommandLine)
     textOutClose(&compressPipeline, NULL);
 }
 
+struct hgPositions *lookupPosition(struct dyString *dyWarn)
+/* Look up position (aka range) if need be.  Return a container of matching tables and positions.
+ * Warnings/errors are appended to dyWarn. */
+{
+char *range = windowsToAscii(cloneString(cartUsualString(cart, hgvaRange, "")));
+range = trimSpaces(range);
+if (isEmpty(range))
+    range = hDefaultPos(database);
+struct hgPositions *hgp = hgFindSearch(cart, &range, NULL, NULL, NULL, cgiScriptName(), dyWarn);
+cartSetString(cart, hgvaRange, range);
+return hgp;
+}
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
@@ -3038,7 +3052,9 @@ knetUdcInstall();
 char *range = trimSpaces(windowsToAscii(cartUsualString(cart, hgvaRange, "")));
 cartSetLastPosition(cart, range, oldVars);
 cartTrackDbInit(cart, &fullTrackList, &fullGroupList, TRUE);
-if (lookupPosition(cart, hgvaRange))
+struct dyString *dyWarn = dyStringNew(0);
+struct hgPositions *hgp = lookupPosition(dyWarn);
+if (hgp->singlePos && isEmpty(dyWarn->string))
     {
     if (startQuery)
 	doQuery();
@@ -3047,18 +3063,18 @@ if (lookupPosition(cart, hgvaRange))
     }
 else
     {
-    // Revert to lastPosition if we have multiple matches or warnings,
-    // especially in case user manually edits browser location as in #13009:
-    char *position = cartUsualString(cart, "lastPosition", hDefaultPos(database));
-    cartSetString(cart, hgvaRange, position);
-    if (webGotWarnings())
-	{
-	// We land here when lookupPosition pops up a warning box.
-	// Reset the problematic position and show the main page.
-	doMainPage();
-	}
-    // If lookupPosition returned FALSE and didn't report warnings,
-    // then it wrote HTML showing multiple position matches & links.
+    if (startQuery)
+        // Need Content-type (html)
+        cartWebStartHeader(cart, database, "Variant Annotation Integrator");
+    else
+        cartWebStart(cart, database, "Variant Annotation Integrator");
+    if (isNotEmpty(dyWarn->string))
+        warn("%s", dyWarn->string);
+    if (hgp->posCount > 1)
+        hgPositionsHtml(database, hgp, hgVaiName(), cart);
+    else
+        doMainPage();
+    cartWebEnd();
     }
 
 cartCheckout(&cart);
