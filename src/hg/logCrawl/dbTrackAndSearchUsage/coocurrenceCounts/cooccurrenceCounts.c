@@ -38,8 +38,8 @@ errAbort(
   "   cooccurrenceCounts -db=dbName inFile outFile\n"
   "options:\n"
   "   -db=XXX    = ucsc db name to filter on\n"
-  "   -tc=XXX    = min filter for track counts\n"
-  "   -hc=XXX    = min filter for hgsid counts\n"
+  "   -tc=XXX    = min (ie >=) filter for track counts\n"
+  "   -hc=XXX    = min (ie >=) filter for hgsid counts\n"
   "   -hgsids    = don't make track matrix, instead print a tab separated \n"
   "                file of hgsids:hgsidUseCount and track usages, for example: \n"
   "                hgsid:hgsidUseCount trackCount1 trackCount2 ... \n"
@@ -71,7 +71,11 @@ fprintf(f, "#tracks\t");
 for (ela = aList; ela != NULL; ela = ela->next)
     {
     if (!hashLookup(tracksToRemove, ela->name))
-        fprintf(f, "%s\t",  ela->name);
+        {
+        fprintf(f, "%s",  ela->name);
+        if (ela->next != NULL)
+            fprintf(f, "\t");
+        }
     }
 fprintf(f, "\n");
 
@@ -87,7 +91,14 @@ for (ela = aList; ela != NULL; ela = ela->next)
             if (!hashLookup(tracksToRemove, elb->name))
                 {
                 int bi = hashIntVal(trackNamesToIndexes, elb->name);
-                fprintf(f, "%d\t", matrix[ai][bi]);
+                if (ai == bi)
+                    {
+                    if (matrix[ai][bi] != hashIntVal(trackCounts, ela->name))
+                        errAbort("value along diagonal incorrect for %s, %d != %d\n", ela->name, matrix[ai][bi], hashIntVal(trackCounts, ela->name));
+                    }
+                fprintf(f, "%d", matrix[ai][bi]);
+                if (ela->next != NULL)
+                    fprintf(f, "\t");
                 }
             }
         fprintf(f, "\n");
@@ -96,20 +107,19 @@ for (ela = aList; ela != NULL; ela = ela->next)
 hashElFreeList(&aList);
 }
 
-void outputHgsids(char *outFile, struct hgsidTrackUse *hgsidList)
+void outputHgsids(char *outFile, struct hgsidTrackUse *hgsidList, char *trackNameArray[])
 /* Write a tab separated array of track use counts for each hgsid. Includes header
  * Ex: # hgsid:useCount trackName1 trackName2
  *     hgsid_1:6        6      4
  *     hgsid_2:4        3      1
  *
- * Due to the way filtering is implemented the useCount can be off in you filter
+ * Due to the way filtering is implemented the useCount can be off if you filter
  * based on track usage as well as hgsid usage.
  */
 {
 verbose(2, "printing hgsids\n");
 struct hgsidTrackUse *oneHgsid = NULL;
 int i;
-struct dyString *tixString = dyStringNew(0);
 FILE *f = mustOpen(outFile, "w");
 
 // first print the header
@@ -117,15 +127,13 @@ fprintf(f, "#hgsid:useCount\t");
 oneHgsid = hgsidList;
 for (i = 0; i < oneHgsid->trackMatrix->trackLen; i++)
     {
-    dyStringPrintf(tixString, "%d", i);
-    char *tname = (char *)hashMustFindVal(indexesToTrackNames, tixString->string);
-    if (!hashLookup(tracksToRemove, tname))
+    char *tname = trackNameArray[i];
+    if (tname != NULL)
         {
         fprintf(f, "%s", tname);
         if (i < oneHgsid->trackMatrix->trackLen - 1)
             fprintf(f, "\t");
         }
-    dyStringClear(tixString);
     }
 fprintf(f, "\n");
 
@@ -135,15 +143,13 @@ for (oneHgsid = hgsidList; oneHgsid != NULL; oneHgsid = oneHgsid->next)
     fprintf(f, "%s:%d\t", oneHgsid->hgsid, oneHgsid->useCount);
     for (i = 0; i < oneHgsid->trackMatrix->trackLen; i++)
         {
-        dyStringPrintf(tixString, "%d", i);
-        char *tname = (char *)hashMustFindVal(indexesToTrackNames, tixString->string);
-        if (!hashLookup(tracksToRemove, tname))
+        char *tname = trackNameArray[i];
+        if (tname != NULL)
             {
             fprintf(f, "%d", oneHgsid->trackMatrix->trackArray[i]);
             if (i < oneHgsid->trackMatrix->trackLen - 1)
                 fprintf(f, "\t");
             }
-        dyStringClear(tixString);
         }
     fprintf(f, "\n");
     }
@@ -197,7 +203,7 @@ return ret;
 void filterHgsids(int minCount, int *totalHgsids)
 /* Filter out hgsids that have hardly been used */
 {
-verbose(2, "removing hgsids used %d times or fewer\n", minCount);
+verbose(2, "removing hgsids used fewer than %d times\n", minCount);
 static struct dyString *trackIxToString = NULL;
 if (trackIxToString == NULL)
     trackIxToString = dyStringNew(0);
@@ -210,7 +216,7 @@ for (hgsid = hgsidList; hgsid != NULL; hgsid = hgsid->next)
     struct hgsidTrackUse *use = hashFindVal(hgsidUsage, hgsid->name);
     if (use != NULL && use->useCount < minCount)
         {
-        // decrement count hash for each track this hgsid used:
+        // removing this hgsid so decrement count hash for each track this hgsid used:
         verbose(3, "removing track usage for hgsid: %s\n", use->hgsid);
         struct trackMatrix *tm;
         for (tm = use->trackMatrix; tm != NULL; tm = tm->next)
@@ -219,7 +225,7 @@ for (hgsid = hgsidList; hgsid != NULL; hgsid = hgsid->next)
                 {
                 dyStringClear(trackIxToString);
                 dyStringPrintf(trackIxToString, "%x", tm->trackArray[i]);
-                char *track = hashFindVal(indexesToTrackNames, trackIxToString->string);
+                char *track = hashMustFindVal(indexesToTrackNames, trackIxToString->string);
                 if (track != NULL)
                     {
                     struct hashEl *tCount = hashLookup(trackCounts, track);
@@ -229,7 +235,6 @@ for (hgsid = hgsidList; hgsid != NULL; hgsid = hgsid->next)
                         if (tCount->val == 0)
                             {
                             hashAdd(tracksToRemove, track, trackIxToString->string);
-                            hashRemove(trackCounts, tCount->name);
                             }
                         }
                     }
@@ -242,7 +247,7 @@ for (hgsid = hgsidList; hgsid != NULL; hgsid = hgsid->next)
     }
 hashElFreeList(&hgsidList);
 verbose(2,"filtered %d out of %d total hgsids\n", filterCount, prevTotal);
-if (!(*totalHgsids > 0))
+if (!((*totalHgsids) > 0))
     errAbort("no hgsids leftover after filter, exiting");
 }
 
@@ -252,19 +257,14 @@ void filterTracks(int minCount, int *uniqueTrackCount)
 verbose(2, "filtering tracks\n");
 struct hashEl *track, *trackList;
 int filterCount = 0;
-struct dyString *tix = dyStringNew(0);
 trackList = hashElListHash(trackCounts);
 for (track = trackList; track != NULL; track = track->next)
     {
     int trackCount = hashIntVal(trackCounts, track->name);
     if (trackCount < minCount)
         {
-        int ix = hashIntVal(trackNamesToIndexes, track->name);
-        dyStringPrintf(tix, "%x", ix);
-        hashAdd(tracksToRemove, track->name, hashFindVal(trackNamesToIndexes, track->name));
-        // Keep these around for lookups when we print results later
-        //hashRemove(trackNamesToIndexes, track->name);
-        //hashRemove(indexesToTrackNames, tix->string);
+        if (!hashLookup(tracksToRemove, track->name))
+            hashAdd(tracksToRemove, track->name, hashFindVal(trackNamesToIndexes, track->name));
         filterCount++;
         }
     }
@@ -308,28 +308,19 @@ void makeTrackNameArray(char **trackNameArray, int trackCount)
 int i;
 char *rowTrackName;
 char rowIx[32];
-struct slName *list = NULL, *node;
 for (i = 0; i < trackCount; i++)
     {
     safef(rowIx, sizeof(rowIx), "%x", i);
     rowTrackName = hashFindVal(indexesToTrackNames, rowIx);
     if (rowTrackName != NULL && !hashLookup(tracksToRemove, rowTrackName))
         {
-        node = newSlName(rowTrackName);
-        slAddHead(&list, node);
+        trackNameArray[i] = cloneString(rowTrackName);
         }
     else
         {
-        node = newSlName(NULL);
-        slAddHead(&list, node);
+        trackNameArray[i] = NULL;
         }
     }
-slNameSort(&list);
-for (i = 0, node = list; i < trackCount; i++, node = node->next)
-    {
-    trackNameArray[i] = node->name;
-    }
-slNameFreeList(&list);
 }
 
 int ** cooccurrenceCounts(char *trackNameArray[], int totalHgsids, int uniqueTrackCount)
@@ -370,6 +361,10 @@ for (hgsid = hgsidList; hgsid != NULL; hgsid = hgsid->next)
                 for (j = i + 1; j < tm->trackLen; j++)
                     {
                     int b = tm->trackArray[j];
+                    if (a == b)
+                        {
+                        errAbort("duplicate indices in trackArray for track %s\n", trackNameArray[a]);
+                        }
                     if (trackNameArray[b] != NULL)
                         {
                         matrix[a][b] += 1;
@@ -447,6 +442,27 @@ if (newTm->trackLen > *uniqueTrackCount)
 return newTm;
 }
 
+boolean checkNewTracksForDups(struct trackMatrix *tm, char *trackNames[], int newTrackCount)
+/* Returns TRUE if trackNames does not contain an index already in tm.
+ * This indicates the rare case of the same pid but different usages */
+{
+struct hashEl *hel;
+int i, j;
+for (i = 0; i < newTrackCount; i++)
+    {
+    hel = hashLookup(trackNamesToIndexes, trackNames[i]);
+    if (hel != NULL)
+        {
+        for (j = 0; j < tm->trackLen; j++)
+            if (tm->trackArray[j] == ptToInt(hel->val))
+                {
+                return FALSE;
+                }
+        }
+    }
+return TRUE;
+}
+
 void addUsageToHash(char *pid, char *trackNames[], int trackCount, char *hgsid, char *logPart,
                         int lineCount, int *totalHgsids, int *uniqueTrackCount)
 /* Add a new usage array to appropriate hgsid */
@@ -458,7 +474,7 @@ if (user)
     {
     if (sameString(logPart, "0"))
         {
-        //append on end
+        //prepend new tm
         user->useCount += 1; // raw count of actual usage
         AllocVar(tm);
         tm->trackLen = trackCount;
@@ -468,18 +484,12 @@ if (user)
             AllocArray(tm->trackArray, trackCount);
             appendTrackArray(tm->trackArray, trackNames, trackCount, uniqueTrackCount);
             tm->trackLen = trackCount;
-            if (user->trackMatrix->trackLen != 0)
+            if (user->trackMatrix->trackLen != 0) // if the last use for this was real
                 slAddHead(&(user->trackMatrix), tm);
             else
                 {
-                slPopHead(&(user->trackMatrix));
-                slAddHead(&(user->trackMatrix), tm);
-                }
-            }
-        else
-            {
-            if (user->trackMatrix->trackLen != 0)
-                {
+                slPopHead(&(user->trackMatrix)); // the last use was only hubs/cts so replace it
+                user->useCount -= 1; // don't double count for replacement
                 slAddHead(&(user->trackMatrix), tm);
                 }
             }
@@ -497,9 +507,25 @@ if (user)
                 // for now but it would be nice to fix at some point.
                 if (sameString(user->trackMatrix->pid, pid))
                     {
+                    // sometimes the current use for an hgsid has the same pid
+                    // as the last one, but they are distinct uses (because the same
+                    // tracks are on in both)
                     struct trackMatrix *prevTm = slPopHead(&(user->trackMatrix));
-                    struct trackMatrix *newTm = mergeTrackArrays(prevTm, trackNames, trackCount, hgsid, uniqueTrackCount);
-                    slAddHead(&(user->trackMatrix), newTm);
+                    if (checkNewTracksForDups(prevTm, trackNames, trackCount))
+                        {
+                        struct trackMatrix *newTm = mergeTrackArrays(prevTm, trackNames, trackCount, hgsid, uniqueTrackCount);
+                        slAddHead(&(user->trackMatrix), newTm);
+                        }
+                    else
+                        {
+                        slAddHead(&(user->trackMatrix), prevTm);
+                        AllocVar(tm);
+                        AllocArray(tm->trackArray, trackCount);
+                        appendTrackArray(tm->trackArray, trackNames, trackCount, uniqueTrackCount);
+                        tm->trackLen = trackCount;
+                        tm->pid = pid;
+                        slAddHead(&(user->trackMatrix), tm);
+                        }
                     }
                 }
             else
@@ -636,22 +662,24 @@ verbose(2, "found %d invalid track log lines\n", invalidCounter);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+int tc, hc, totalHgsids = 0, uniqueTrackCount = 0;
+char *outFile, *db;
+boolean printHgsids;
+
 optionInit(&argc, argv, options);
 if (argc < 3)
     usage();
-char *outFile = argv[2];
-char *db = optionVal("db", NULL);
+outFile = argv[2];
+db = optionVal("db", NULL);
+tc = optionInt("tc", 0);
+hc = optionInt("hc", 0);
+printHgsids = optionExists("hgsids");
+
 if (!db)
     {
     warn("missing db parameter");
     usage();
     }
-int tc = optionInt("tc", 0);
-int hc = optionInt("hc", 0);
-boolean printHgsids = optionExists("hgsids");
-
-int totalHgsids = 0;
-int uniqueTrackCount = 0;
 
 // init global hashes
 hgsidUsage = hashNew(0);
@@ -686,6 +714,9 @@ if (tc > 0)
 
 verbose(2, "done parsing input file(s)\n");
 
+if (hgsidUsage->elCount == 0)
+    errAbort("no results found for db=%s\n", db);
+
 char *trackNameArray[uniqueTrackCount];
 makeTrackNameArray(trackNameArray, uniqueTrackCount);
 if (printHgsids)
@@ -693,7 +724,7 @@ if (printHgsids)
     struct hgsidTrackUse *hgsidList = NULL;
     hgsidList = collapseHgsids(uniqueTrackCount, trackNameArray);
     if (hgsidList != NULL)
-        outputHgsids(outFile, hgsidList);
+        outputHgsids(outFile, hgsidList, trackNameArray);
     else
         errAbort("error collapsing hgsids\n");
     }
