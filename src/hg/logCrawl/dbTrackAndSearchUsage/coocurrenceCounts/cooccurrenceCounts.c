@@ -43,9 +43,18 @@ errAbort(
   "   -hgsids    = don't make track matrix, instead print a tab separated \n"
   "                file of hgsids:hgsidUseCount and track usages, for example: \n"
   "                hgsid:hgsidUseCount trackCount1 trackCount2 ... \n"
-  "   -verbose=X = logging level\n"
+  "   -verbose=X = logging level, log messages print to stderr\n"
   "\n"
-  "inFile and outFile can be stdin and stdout"
+  "inFile can be a directory of error log files.\n"
+  "inFile and outFile can be stdin and stdout\n"
+  "\n"
+  "Examples:\n"
+  "Filter for hgsids used at least 50 times and only output tracks used at least 50 times:\n"
+  "    cooccurrenceCounts -db=hg19 -hc=50 -tc=50 /some/path/to/error_log.gz out.matrix -verbose=2\n"
+  "Crawl all hgsids and tracks from a directory of error logs:\n"
+  "    cooccurrenceCounts -db=hg19 /some/path/to/errorLogDirectory out.matrix -verbose=2\n"
+  "Generate a list of hgsids and their individual track usage arrays:\n"
+  "    cooccurrenceCounts -db=hg19 -hc=25 /some/path/dir out.hgsids -verbose=2\n"
   );
 }
 
@@ -97,7 +106,7 @@ for (ela = aList; ela != NULL; ela = ela->next)
                         errAbort("value along diagonal incorrect for %s, %d != %d\n", ela->name, matrix[ai][bi], hashIntVal(trackCounts, ela->name));
                     }
                 fprintf(f, "%d", matrix[ai][bi]);
-                if (ela->next != NULL)
+                if (elb->next != NULL)
                     fprintf(f, "\t");
                 }
             }
