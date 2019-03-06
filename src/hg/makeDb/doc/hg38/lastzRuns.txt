@@ -12028,3 +12028,72 @@ TMPDIR=/dev/shm
     # 99417593 bases of 917263224 (10.839%) in intersection
 
 #############################################################################
+# LASTZ human/hg38 mouse/GRCm38B - (DONE - 2019-03-01 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/lastzGRCm38B.2019-03-01
+    cd /hive/data/genomes/hg38/bed/lastzGRCm38B.2019-03-01
+
+    printf '# human vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+
+# TARGET: Human Hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=40000000
+SEQ1_LAP=10000
+
+# QUERY: Mouse GRCm38B
+SEQ2_DIR=/hive/data/genomes/GRCm38B/GRCm38B.2bit
+SEQ2_LEN=/hive/data/genomes/GRCm38B/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzGRCm38B.2019-03-01
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF -noDbNameCheck \
+        -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev-101 \
+	 -fileServer=hgwdev \
+        -bigClusterHub=ku -chainMinScore=3000 -chainLinearGap=medium) \
+           > do.log 2>&1
+    # real    171m59.392s
+
+    cat fb.hg38.chainGRCm38BLink.txt
+    # 967404497 bases of 3095998939 (31.247%) in intersection
+    cat fb.hg38.chainSynGRCm38BLink.txt
+    # 913717211 bases of 3095998939 (29.513%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` hg38 GRCm38B) \
+     > rbest.log 2>&1 &
+    # real    284m45.623s
+
+    cat fb.hg38.chainRBest.GRCm38B.txt
+    # 891970056 bases of 3095998939 (28.810%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/GRCm38B/bed/blastz.hg38.swap
+    cd /hive/data/genomes/GRCm38B/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzGRCm38B.2019-03-01/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=hgwdev-101 -bigClusterHub=ku \
+            -noDbNameCheck -syntenicNet) > swap.log 2>&1
+    #  real    60m31.849s
+
+    cat fb.GRCm38B.chainHg38Link.txt
+    # 941205213 bases of 2655285420 (35.446%) in intersection
+    cat fb.GRCm38B.chainSynHg38Link.txt
+    # 891450770 bases of 2655285420 (33.573%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` GRCm38B hg38) \
+     > rbest.log 2>&1 &
+    # real    331m35.578s
+
+    cat fb.GRCm38B.chainRBest.Hg38.txt
+    # 893587236 bases of 2655285420 (33.653%) in intersection
+
+#########################################################################

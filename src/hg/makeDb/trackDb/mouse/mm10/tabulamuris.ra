@@ -4,6 +4,7 @@ longLabel Single Cell FACS RNA-Seq of 44,779 cells from Tabula Muris
 superTrack on
 visibility hide
 group regulation
+pennantIcon New red ../goldenPath/newsarch.html#030519  Released March 05, 2019
 
 track tabulamurisBarChart
 type bigBarChart
@@ -23,7 +24,7 @@ html tabulaMuris
 parent tabulaMuris
 
 track TabulaMurisFacsCoverage
-shortLabel Tabula Muris Genome Coverage
+shortLabel Genome Coverage
 longLabel Tabula Muris single cell RNA-Seq genome coverage
 visibility dense
 compositeTrack on
@@ -762,7 +763,7 @@ autoScale off
         visibility dense
 
 track TabulaMurisFacsJunctions
-shortLabel Tabula Muris Splice Sites
+shortLabel Splice Sites
 longLabel Tabula Muris single cell RNA-Seq splice sites
 compositeTrack on
 visibility hide

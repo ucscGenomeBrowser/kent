@@ -84,6 +84,14 @@ void getBackgroundStatus(char *url)
  * fetch progress info instead if background proc still running. */
 {
 char *html = NULL;
+int waited = 0;
+// sometimes the background process is a little slow,
+// we can wait up to 30 seconds for it.
+while ((fileSize(url)==0) && (waited < 30))
+    {
+    sleep(1);
+    ++waited;
+    }
 if (fileSize(url)==0)
     {
     htmlOpen("Background Status");
