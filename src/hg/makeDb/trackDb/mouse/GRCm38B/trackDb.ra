@@ -10,7 +10,7 @@ track chainNetMm10
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
-subGroup1 view Views chain=Chain net=Net psl=PSL
+subGroup1 view Views chain=Chain net=Net psl=PSL bed=BED
 dragAndDrop subTracks
 visibility hide
 group compGeno
@@ -80,4 +80,23 @@ html chainNet
 
 # fails with message: hgTracks object is missing from response when used:
 #	baseColorDefault diffBases
+
+    track chainIdsMm10Viewnet
+    shortLabel chainLinks
+    view bed
+    visibility pack
+    parent chainNetMm10
+
+	track chainLinkIdsMm10
+        parent chainIdsMm10Viewnet
+	shortLabel Mm10 chainLinks
+	longLabel Mm10 liftOver chain links viewed as BE data
+        subGroups view=bed
+	type bed 4 .
+	color 32,32,32
+	visibility pack
+
+# fails with message: hgTracks object is missing from response when used:
+#	baseColorDefault diffBases
+#	baseColorUseSequence lfExtra
 #	baseColorUseSequence lfExtra
