@@ -11,9 +11,22 @@
 <h1>Configuring VCF tracks</h1>
 <p>
 Genome Browser VCF tracks may be configured in a variety of ways to highlight different aspects of 
-the displayed information. Click <a href="vcf.html" target="_blank">here</a> for more information
-on VCF custom track creation.</p>
+the displayed information. By default, VCFs will display alleles with base-specific coloring.
+Homozygote data are shown as one letter, while heterozygotes will be displayed with both letters.
+</p>
 
+<p class='text-center'>
+  <img src="../../images/vcfDefault.png" alt="VCF default display" width=600px>
+  <p class='gbsCaption text-center'>The default VCF custom track will display colored bases and 
+will not show clustering unless specified as VCF/tabix in the custom track page.</p>
+</p>
+<p>
+The following section describes configuration settings available to VCF files compressed and
+indexed in the Tabix format. This requires VCF manipulation, separate index files, and a web
+accessible directory to reference from the bigDataUrl track line. For more information
+on setting up and uploading VCF/Tabix data, click the link on <a href="vcf.html" target="_blank">
+VCF custom track creation</a>.
+</p>
 <h2>Configuring the haplotype sorting display</h2>
 <p>
 If the VCF file contains genotype columns for at least two samples (four haplotypes), then a 

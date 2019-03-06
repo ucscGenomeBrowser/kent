@@ -319,6 +319,10 @@ sqlDropTable(conn, "cdwGroupFileTemp");
 sqlReleaseLock(conn, "makeFileTags");
 sqlDisconnect(&conn);
 dyStringFree(&query);
+
+// reminder to user
+verbose(1, "Reminder: often the full text index needs updating too:\n"
+"~/bin/scripts/cdwUpdateIx now\n ");
 }
 
 int main(int argc, char *argv[])
