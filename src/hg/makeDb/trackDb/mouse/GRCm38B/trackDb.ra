@@ -123,6 +123,9 @@ showCdsMaxZoom 10000.0
 bigDataUrl /gbdb/GRCm38B/gencode/VM20toGRCm38B.liftover.bigpsl
 searchIndex name
 
+searchTable vm20LiftoverMap
+searchType bigPsl
+
 track vm20NcbimapMap
 shortLabel VM20 NCBI map
 longLabel VM20 mapped with NCBI mapping alignments
@@ -143,4 +146,8 @@ showCdsAllScales .
 showCdsMaxZoom 10000.0
 bigDataUrl /gbdb/GRCm38B/gencode/VM20toGRCm38B.ncbimap.bigpsl
 searchIndex name
+
+searchTable vm20NcbimapMap
+searchType bigPsl
+
 
