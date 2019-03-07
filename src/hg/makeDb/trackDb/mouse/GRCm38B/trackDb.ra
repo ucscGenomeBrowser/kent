@@ -100,3 +100,47 @@ html chainNet
 #	baseColorDefault diffBases
 #	baseColorUseSequence lfExtra
 #	baseColorUseSequence lfExtra
+
+
+track vm20LiftoverMap
+shortLabel VM20 liftover
+longLabel VM20 mapped with UCSC liftover chains
+group genes
+type bigPsl
+priority 100.1
+color 0,100,0
+canPack on
+visibility pack
+baseColorDefault diffCodons
+baseColorUseCds given
+baseColorUseSequence lfExtra
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+bigDataUrl /gbdb/GRCm38B/gencode/VM20toGRCm38B.liftover.bigpsl
+searchIndex name
+
+track vm20NcbimapMap
+shortLabel VM20 NCBI map
+longLabel VM20 mapped with NCBI mapping alignments
+group genes
+type bigPsl
+priority 101
+color 0,0,100
+canPack on
+visibility pack
+baseColorDefault diffCodons
+baseColorUseCds given
+baseColorUseSequence lfExtra
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+bigDataUrl /gbdb/GRCm38B/gencode/VM20toGRCm38B.ncbimap.bigpsl
+searchIndex name
+
