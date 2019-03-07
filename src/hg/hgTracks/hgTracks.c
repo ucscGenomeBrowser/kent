@@ -2631,6 +2631,7 @@ if (!position)
     errAbort("position NULL");
     }
 char *vPos = cloneString(position);
+stripChar(vPos, ',');
 char *colon = strchr(vPos, ':');
 if (!colon)
     errAbort("position has no colon");
@@ -2652,6 +2653,7 @@ if (!position)
     errAbort("position NULL");
     }
 char *vPos = cloneString(position);
+stripChar(vPos, ',');
 char *colon = strchr(vPos, ':');
 if (!colon)
     errAbort("position has no colon");
@@ -9018,6 +9020,7 @@ if (!position)
     errAbort("position NULL");
     }
 char *vPos = cloneString(position);
+stripChar(vPos, ',');
 char *colon = strchr(vPos, ':');
 if (!colon)
     errAbort("position has no colon");
