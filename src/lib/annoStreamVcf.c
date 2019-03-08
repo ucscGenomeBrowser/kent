@@ -162,6 +162,7 @@ if (regionChrom != NULL && words != NULL)
 	words = nextRowRaw(self);
         if (words == NULL)
             break;
+        rowChrom = getProperChromName(self, words[0]);
         rec = self->record;
         }
     }

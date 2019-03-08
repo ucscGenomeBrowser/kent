@@ -14,6 +14,7 @@ baseColorDefault genomicCodons
 defaultLinkedTables kgXref
 intronGap 12
 bigGeneDataUrl /gbdb/mm10/knownGene.bb
+priority 1
 
 track knownGeneOld9
 shortLabel Old UCSC Genes

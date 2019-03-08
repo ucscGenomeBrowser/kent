@@ -8,6 +8,7 @@ source `which qaConfig.csh`
 #
 #  Grab hgcentral* tables from dev, beta, rr and store as files.
 # 
+# Edit version in kent/src/utils/qa/backupCentral.csh
 ###############################################
 
 set directory="" 
@@ -62,7 +63,7 @@ foreach table ( namedSessionDb )
     | sort >> $dirPath/$today/rr.$table
 end
 
-foreach table ( blatServers clade dbDb defaultDb genomeClade liftOverChain targetDb )
+foreach table ( blatServers clade dbDb defaultDb genomeClade hubPublic liftOverChain targetDb )
   hgsql  $devString -N -e "SELECT * FROM $table" | sort >> $dirPath/$today/hgwdev.$table
   hgsql $betaString -N -e "SELECT * FROM $table" | sort >> $dirPath/$today/hgwbeta.$table
   hgsql   $rrString -N -e "SELECT * FROM $table" | sort >> $dirPath/$today/rr.$table
