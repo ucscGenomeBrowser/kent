@@ -8,8 +8,8 @@ html gap
 
 track chainNetMm10
 compositeTrack on
-shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date), Chain and Net Alignments
+shortLabel Mm10 Chain/Net
+longLabel Mm10 ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net psl=PSL bed=BED
 dragAndDrop subTracks
 visibility hide
