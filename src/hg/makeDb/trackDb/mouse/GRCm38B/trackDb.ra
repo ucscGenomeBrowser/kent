@@ -8,8 +8,8 @@ html gap
 
 track chainNetMm10
 compositeTrack on
-shortLabel $o_Organism Chain/Net
-longLabel $o_Organism ($o_date), Chain and Net Alignments
+shortLabel Mm10 Chain/Net
+longLabel Mm10 ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net psl=PSL bed=BED
 dragAndDrop subTracks
 visibility hide
@@ -123,6 +123,9 @@ showCdsMaxZoom 10000.0
 bigDataUrl /gbdb/GRCm38B/gencode/VM20toGRCm38B.liftover.bigpsl
 searchIndex name
 
+searchTable vm20LiftoverMap
+searchType bigPsl
+
 track vm20NcbimapMap
 shortLabel VM20 NCBI map
 longLabel VM20 mapped with NCBI mapping alignments
@@ -143,4 +146,8 @@ showCdsAllScales .
 showCdsMaxZoom 10000.0
 bigDataUrl /gbdb/GRCm38B/gencode/VM20toGRCm38B.ncbimap.bigpsl
 searchIndex name
+
+searchTable vm20NcbimapMap
+searchType bigPsl
+
 

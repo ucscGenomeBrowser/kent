@@ -60,8 +60,8 @@ sqlDyStringPrintf(dy,
 "    value varchar(255) not null,\n"
 "    geneId int not null,\n"
 "              #Indices\n"
-"    PRIMARY KEY(name(16)),\n"
-"    INDEX(value(16))\n"
+"    PRIMARY KEY(name),\n"
+"    INDEX(value)\n"
 ")\n",  tableName);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
