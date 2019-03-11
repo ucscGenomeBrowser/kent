@@ -28,7 +28,7 @@ longLabel Genomenon Mastermind Variants extracted from full text publications
 group phenDis
 visibility hide
 type bigBed 9 +
-release alpha
+release alpha,beta
 urls url=https://mastermind.genomenon.com/detail?disease=all%20diseases&$$
 bigDataUrl /gbdb/hg19/bbi/mastermind.bb
 noScoreFilter on
