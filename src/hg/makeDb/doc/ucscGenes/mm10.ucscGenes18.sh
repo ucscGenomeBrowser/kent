@@ -18,26 +18,20 @@ export ydb=canFam3
 export zdb=rn6
 export ratDb=rn6
 export RatDb=Rn6
-export fishDb=danRer10
+export fishDb=danRer11
 export flyDb=dm6
 export wormDb=ce11
 export yeastDb=sacCer3
 export tempFa=$dir/ucscGenes.faa
 export genomes=/hive/data/genomes
 
-#TODO
-export xdbFa=$genomes/$xdb/bed/ucsc.16.1/ucscGenes.faa
-export ratFa=$genomes/$ratDb/bed/ensGene.86/ensembl.faa
-#export ratFa=$genomes/$ratDb/bed/blastpRgdGene2/rgdGene2Pep.faa
-export fishFa=$genomes/$fishDb/bed/ensGene.86/ensembl.faa
-#export fishFa=$genomes/$fishDb/bed/blastp/ensembl.faa
-export flyFa=$genomes/$flyDb/bed/ensGene.86/ensembl.faa
-#export flyFa=$genomes/$flyDb/bed/hgNearBlastp/100806/$flyDb.flyBasePep.faa
-export wormFa=$genomes/$wormDb/bed/ws245Genes/ws245Pep.faa
-#export wormFa=$genomes/$wormDb/bed/blastp/wormPep190.faa
-export yeastFa=$genomes/$yeastDb/bed/sgdAnnotations/blastTab/sacCer3.sgd.faa
+export xdbFa=$genomes/$xdb/bed/ucsc.19.1/ucscGenes.faa
+export ratFa=$genomes/$ratDb/bed/ensGene.95/ensembl.faa
+export fishFa=$genomes/$fishDb/bed/ensGene.95/ensembl.faa
+export flyFa=$genomes/$flyDb/bed/ensGene.95/ensembl.faa
+export wormFa=$genomes/$wormDb/bed/ensGene.95/ensembl.faa
+export yeastFa=$genomes/$yeastDb/bed/ensGene.95/ensembl.faa
 export scratchDir=/hive/users/braney/scratch
-#end TODO
 
 export blastTab=mmBlastTab
 export xBlastTab=hgBlastTab
@@ -333,15 +327,15 @@ doHgNearBlastp.pl -noLoad -clusterHub=ku -distrHost=hgwdev -dbHost=hgwdev -workh
 # Load self
 cd $dir/hgNearBlastp/run.$tempDb.$tempDb
 # builds knownBlastTab
-./loapPairwise.csh
+./loadPairwise.csh
 
-# Load mouse and rat
+# Load human and rat
 cd $dir/hgNearBlastp/run.$tempDb.$xdb
 hgLoadBlastTab $tempDb $xBlastTab -maxPer=1 out/*.tab
 cd $dir/hgNearBlastp/run.$tempDb.$ratDb
 hgLoadBlastTab $tempDb $rnBlastTab -maxPer=1 out/*.tab
 
-# Remove non-syntenic hits for mouse and rat
+# Remove non-syntenic hits for human and rat
 # Takes a few minutes
 mkdir -p /gbdb/$tempDb/liftOver
 rm -f /gbdb/$tempDb/liftOver/${tempDb}To$RatDb.over.chain.gz /gbdb/$tempDb/liftOver/${tempDb}To$Xdb.over.chain.gz
@@ -353,29 +347,16 @@ ln -s $genomes/$db/bed/liftOver/${db}To${Xdb}.over.chain.gz \
 # delete non-syntenic genes from rat and mouse blastp tables
 cd $dir/hgNearBlastp
 synBlastp.csh $tempDb $xdb
-#old number of unique query values: 98928
-#old number of unique target values 24289
-#new number of unique query values: 81280
-#new number of unique target values 20980
-
-export oldDb=hg38
-hgsql -e "select  count(*) from mmBlastTab\G" $oldDb | tail -n +2
-# count(*): 83149
-hgsql -e "select  count(*) from mmBlastTab\G" $tempDb | tail -n +2
-# count(*): 83198
+#old number of unique query values: 61243
+#old number of unique target values 27482
+#new number of unique query values: 53395
+#new number of unique target values 25792
 
 synBlastp.csh $tempDb $ratDb knownGene ensGene
-# old number of unique query values: 98488
-# old number of unique target values 19851
-# new number of unique query values: 88508
-# new number of unique target values 18829
-
-
-
-hgsql -e "select  count(*) from rnBlastTab\G" $oldDb | tail -n +2
-# count(*): 80851
-hgsql -e "select  count(*) from rnBlastTab\G" $tempDb | tail -n +2
-# count(*): 81904
+#old number of unique query values: 61662
+#old number of unique target values 21085
+#new number of unique query values: 55652
+#new number of unique target values 20219
 
 # Make reciprocal best subset for the blastp pairs that are too
 # Far for synteny to help
@@ -389,11 +370,6 @@ cat $bToA/out/*.tab > $bToA/all.tab
 blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.tab
 hgLoadBlastTab $tempDb drBlastTab $aToB/recipBest.tab
 
-hgsql -e "select  count(*) from drBlastTab\G" $oldDb | tail -n +2
-# count(*): 13355
-hgsql -e "select  count(*) from drBlastTab\G" $tempDb | tail -n +2
-# count(*): 13419
-
 # Us vs. fly
 cd $dir/hgNearBlastp
 export aToB=run.$tempDb.$flyDb
@@ -402,11 +378,6 @@ cat $aToB/out/*.tab > $aToB/all.tab
 cat $bToA/out/*.tab > $bToA/all.tab
 blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.tab
 hgLoadBlastTab $tempDb dmBlastTab $aToB/recipBest.tab
-
-hgsql -e "select  count(*) from dmBlastTab\G" $oldDb | tail -n +2
-# count(*): 6033
-hgsql -e "select  count(*) from dmBlastTab\G" $tempDb | tail -n +2
-# count(*): 6043
 
 # Us vs. worm
 cd $dir/hgNearBlastp
@@ -417,11 +388,6 @@ cat $bToA/out/*.tab > $bToA/all.tab
 blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.tab
 hgLoadBlastTab $tempDb ceBlastTab $aToB/recipBest.tab
 
-hgsql -e "select  count(*) from ceBlastTab\G" $oldDb | tail -n +2
-# count(*): 4397
-hgsql -e "select  count(*) from ceBlastTab\G" $tempDb | tail -n +2
-# count(*): 4400
-
 # Us vs. yeast
 cd $dir/hgNearBlastp
 export aToB=run.$tempDb.$yeastDb
@@ -430,11 +396,6 @@ cat $aToB/out/*.tab > $aToB/all.tab
 cat $bToA/out/*.tab > $bToA/all.tab
 blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.tab
 hgLoadBlastTab $tempDb scBlastTab $aToB/recipBest.tab
-
-hgsql -e "select  count(*) from scBlastTab\G" $oldDb | tail -n +2
-# count(*): 2379
-hgsql -e "select  count(*) from scBlastTab\G" $tempDb | tail -n +2
-# count(*): 2375
 
 # Clean up
 cd $dir/hgNearBlastp
@@ -458,28 +419,6 @@ awk '{print $2}' LYNX_GENES.tab | sort > lynxExists.txt
 hgsql -e "select geneSymbol,kgId from kgXref" --skip-column-names $tempDb | awk '{if (NF == 2) print}' | sort > geneSymbolToKgId.txt
 join lynxExists.txt geneSymbolToKgId.txt | awk 'BEGIN {OFS="\t"} {print $2,$1}' | sort > knownToLynx.tab
 hgLoadSqlTab -notOnServer $tempDb  knownToLynx $kent/src/hg/lib/knownTo.sql  knownToLynx.tab
-
-hgsql -e "select  count(*) from knownToLynx\G" $oldDb | tail -n +2
-# count(*): 168468
-hgsql -e "select  count(*) from knownToLynx\G" $tempDb | tail -n +2
-# count(*): 160816
-
-
-# make knownToNextProt
-mkdir -p $dir/nextProt
-cd $dir/nextProt
-
-wget "ftp://ftp.nextprot.org/pub/current_release/ac_lists/nextprot_ac_list_all.txt"
-awk '{print $0, $0}' nextprot_ac_list_all.txt | sed 's/NX_//' | sort > displayIdToNextProt.txt
-hgsql -e "select spID,kgId from kgXref" --skip-column-names $tempDb | awk '{if (NF == 2) print}' | sort > displayIdToKgId.txt
-join displayIdToKgId.txt displayIdToNextProt.txt | awk 'BEGIN {OFS="\t"} {print $2,$3}' > knownToNextProt.tab
-hgLoadSqlTab -notOnServer $tempDb  knownToNextProt $kent/src/hg/lib/knownTo.sql  knownToNextProt.tab
-
-hgsql -e "select  count(*) from knownToNextProt\G" $oldDb | tail -n +2
-# count(*): 43590
-hgsql -e "select  count(*) from knownToNextProt\G" $tempDb | tail -n +2
-# count(*): 43895
-
 
 # make knownToWikipedia
 mkdir $dir/wikipedia
