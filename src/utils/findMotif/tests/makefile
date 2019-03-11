@@ -62,3 +62,5 @@ test11:
 	@rm -f test11.txt
 
 
+clean:
+	rm -f test*.txt
