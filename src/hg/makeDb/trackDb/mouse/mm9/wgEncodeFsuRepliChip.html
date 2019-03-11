@@ -17,7 +17,8 @@ initiaion occurs earlier in S-phase or early in a higher proportion of cells.
 <DD>Wavelet-smoothed of mean early/late S-phase ratios.</DD>
 </p>
 
-<p>Metadata for a particular subtrack can be found by clicking the down arrow in the list of subtracks.</p>
+<p>Metadata for a particular subtrack can be found by clicking the down arrow in the list of
+subtracks.</p>
 
 
 <h2>Methods</h2>
@@ -33,26 +34,33 @@ Methods for individual stages are summarized below:
 <h3>Extraction protocol</h3>
 
 <p>
-Replication timing data were obtained by hybridizing early and late replication intermediates to NimbleGen oligonucleotide arrays. 
-Replication intermediates were prepared from cells that were first pulse-labeled with BrdU and then sorted into 
-early (1st half of S) and late (2nd half of S) stages of S-phase by flow cytometry, followed by anti-BrdU 
-immunoprecipitation of the BrdU-substituted (nascent) replication intermediates that were synthesized either 
-early or late during S-phase. Samples were labeled after unbiased amplification of recovered DNA by whole-genome amplification (WGA; Sigma, GenomePlex). 
+Replication timing data were obtained by hybridizing early and late replication intermediates to
+NimbleGen oligonucleotide arrays. Replication intermediates were prepared from cells that were first
+pulse-labeled with BrdU and then sorted into early (1st half of S) and late (2nd half of S) stages
+of S-phase by flow cytometry, followed by anti-BrdU immunoprecipitation of the BrdU-substituted
+(nascent) replication intermediates that were synthesized either early or late during S-phase.
+Samples were labeled after unbiased amplification of recovered DNA by whole-genome amplification
+(WGA; Sigma, GenomePlex). 
 </p>
 
 <h3>Hybridization protocol</h3>
 
 <p>
-The hydridization set used the <a  href="http://www.nimblegen.com/products/lit/index.html" target=_blank> NimbleGen standard protocol</a>. 
+The hydridization set used the
+<a href="https://sequencing.roche.com/en/products-solutions/by-category/target-enrichment/hybridization.html"
+target=_blank> NimbleGen standard protocol</a>. 
 Cy3- and Cy5-labeled DNA samples (6 &micro;g each) were co-hybridized to Nimblegen CGH arrays 
-containing evenly-spaced oligonucleotide probes across the mouse genome, with a median probe spacing of 1.1-5.8 kb. 
-No differences in smoothed data have been detected with probe densities from 100 bp to 5.8 kb. 
+containing evenly-spaced oligonucleotide probes across the mouse genome, with a median probe spacing
+of 1.1-5.8 kb. No differences in smoothed data have been detected with probe densities from 100 bp
+to 5.8 kb. 
 </p>
 
 <h3>Scan protocol</h3>
 
 <p>
-NimbleGen MS 200 2 &micro;m resolution scanner and GenePix software were used per <a href="http://www.nimblegen.com/products/lit/index.html" target=_blank> NimbleGen's standard protocol</a>.
+NimbleGen MS 200 2 &micro;m resolution scanner and GenePix software were used per
+<a href="https://sequencing.roche.com/en/products-solutions/by-category/target-enrichment/hybridization.html"
+target=_blank> NimbleGen's standard protocol</a>.
 </p>
 
 <h3>Data processing</h3>
@@ -60,18 +68,20 @@ NimbleGen MS 200 2 &micro;m resolution scanner and GenePix software were used pe
 <p>
 NimbleScan software was used to obtain .pair raw data per manufacturer's instructions. 
 Raw early/late data (i.e., from .pair files) from two independent biological replicates in 
-which early- and late-replicating DNA were labeled reciprocally were loess-normalized to remove signal intensity-dependent bias,
-scaled to a reference data set to have the same median absolute deviation and then averaged (limma package, R/Bioconductor). 
-The mean early/late ratios were used to generate a smoothed profile (i.e., processed data) using local polynomial smoothing (loess, 300 kb span) 
-for each chromosome using basic functions in the statistical language R. 
+which early- and late-replicating DNA were labeled reciprocally were loess-normalized to remove
+signal intensity-dependent bias, scaled to a reference data set to have the same median absolute
+deviation and then averaged (limma package, R/Bioconductor). The mean early/late ratios were used to
+generate a smoothed profile (i.e., processed data) using local polynomial smoothing (loess, 300 kb
+span) for each chromosome using basic functions in the statistical language R. 
 </p>
 
 
 <h2>Verification</h2>
 
 <p>
-Technical data quality was assessed by verifying high auto-correlation between neighboring timing values. 
-Biological identity was confirmed by verifying consistent early or late replication by PCR at individual loci, as well as uniformity in replication profiles between replicate experiments.
+Technical data quality was assessed by verifying high auto-correlation between neighboring timing
+values. Biological identity was confirmed by verifying consistent early or late replication by PCR
+at individual loci, as well as uniformity in replication profiles between replicate experiments.
 </p>
 
 <h2>Credits</h2>
