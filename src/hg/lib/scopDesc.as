@@ -1,4 +1,4 @@
-table scopDes
+table scopDesc
 "Structural Classification of Proteins Description 2"
     (
     string acc;	"Unique integer"
