@@ -1,0 +1,11 @@
+track MANE
+bigDataUrl /gbdb/hg38/mane/mane.0.5.bb
+shortLabel MANE select v0.5
+longLabel NCBI RefSeq and Ensembl transcripts from the MANE Project (v0.5)
+searchIndex name
+searchTrix /gbdb/hg38/mane/mane.0.5.ix
+type bigGenePred
+visibility hide
+group genes
+labelFields geneName2,name,ensemblProtAcc,geneName,ncbiId,ncbiProtAcc,ncbiGene
+defaultLabelFields geneName2
