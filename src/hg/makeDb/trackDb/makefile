@@ -152,6 +152,7 @@ DBS = \
 	panRed1 \
 	panTro1 panTro2 panTro3 panTro4 panTro5 panTro6 \
 	papHam1 papAnu2 papAnu3 papAnu4 \
+	perManBai1 \
 	petMar1 petMar2 petMar3 \
 	plasFalc3D7V12 \
 	poeRet1 \
