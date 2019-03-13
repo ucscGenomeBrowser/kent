@@ -7,30 +7,31 @@
 
 <h1>bigGenePred Track Format</h1> 
 <p>
-The bigGenePred format stores annotation items that are a linked collection of exons, much as 
+The bigGenePred format stores positional annotations items for collections of exons, much as 
 <a href="../../FAQ/FAQformat.html#format1">BED</a> files indexed as bigBeds do. However, the
-bigGenePred format includes 8 additional fields that contain details about coding frames and other 
-gene-specific information.</p>
+bigGenePred format includes 8 additional fields that contain details about coding frames,
+annotation status, and other gene-specific information. This is most commonly used in the Browser
+to display individual codons, highlighting start, stop, and amino acid translations.</p>
 <p>
-The bigGenePred files are created using the program <code>bedToBigBed</code>, run with the
-<code>-as</code> option to pull in a special 
-<a href="http://www.linuxjournal.com/article/5949" target="_blank">autoSql</a> (<em>.as</em>) file 
-that defines the extra fields of the bigGenePred.</p> 
+bigGenePred files that have not been compressed can be described as bed12+8 files. They can be
+created using the program <code>bedToBigBed</code>, run with the <code>-as</code> option to pull
+in a special <a href="http://www.linuxjournal.com/article/5949" target="_blank">autoSql</a>
+(<em>.as</em>) file that defines the extra fields of the bigGenePred.</p> 
 <p>
-The bigGenePred files are in an indexed binary format. The main advantage of this format is that 
-only those portions of the file needed to display a particular region are transferred to the Genome 
-Browser server. Because of this, indexed binary files have considerably faster display performance 
+Much like bigBed, bigGenePred files are in an indexed binary format. The main advantage of binary
+format is that only the portions of the file needed to display a particular region are read by the
+Genome Browser server. Because of this, indexed binary files have much faster display performance 
 than regular BED format files when working with large data sets. The bigGenePred file remains on 
-your local web-accessible server (http, https or ftp), not on the UCSC server, and only the portion 
-needed for the currently displayed chromosomal position is locally cached as a &quot;sparse 
-file&quot;. If you do not have access to a web-accessible server and need hosting space for your
+the user's web-accessible server (http, https or ftp) and only the portion 
+needed to display the current genome position is cached as a &quot;sparse file&quot;. If you want
+more information on finding a a web-accessible server or need hosting space for your
 bigGenePred files, please see the <a href="hgTrackHubHelp.html#Hosting">Hosting</a> section of the
 Track Hub Help documentation.</p>
 
 <a name="bigGenePred"></a>
 <h2>bigGenePred file definition</h2>
 <p>
-The following autoSql definition is used to specify bigGenePred gene prediction files. This 
+The following autoSql definition specifies bigGenePred gene prediction files. This 
 definition, contained in the file <a href="examples/bigGenePred.as"><em>bigGenePred.as</em></a>, 
 is pulled in when the <code>bedToBigBed</code> utility is run with the 
 <code>-as=bigGenePred.as</code> option. 
@@ -50,8 +51,8 @@ is pulled in when the <code>bedToBigBed</code> utility is run with the
     int[blockCount] blockSizes; "Comma separated list of block sizes"
     int[blockCount] chromStarts;"Start positions relative to chromStart"
     string name2;       	"Alternative/human readable name"
-    string cdsStartStat; 	"enum('none','unk','incmpl','cmpl')"
-    string cdsEndStat;   	"enum('none','unk','incmpl','cmpl')"
+    string cdsStartStat; 	"Status of CDS start annotation (none, unknown, incomplete, or complete)"
+    string cdsEndStat;   	"Status of CDS end annotation (none, unknown, incomplete, or complete)"
     int[blockCount] exonFrames; "Exon frame {0,1,2}, or -1 if no frame for exon"
     string type;        	"Transcript type"
     string geneName;    	"Primary identifier for gene"
@@ -60,21 +61,17 @@ is pulled in when the <code>bedToBigBed</code> utility is run with the
     )  </code></pre>
 
 <p>
-Click <a href="examples/bigGenePred.txt">here</a> to view an example of a bigGenePred (bed12+8) 
-input file. In alternative-splicing situations, each transcript has its own row.</p>
-<p>
-Note that the <code>bedToBigBed</code> utility uses a substantial amount of memory: approximately 
-25% more RAM than the uncompressed BED input file.</p>
+The following bed12+8 is an example of a <a href="examples/bigGenePred.txt">bigGenePred input file
+</a>.</p>
 
 <h2>Creating a bigGenePred track</h2>
 <p>
 To create a bigGenePred track, follow these steps:</p>
 <p>
 <strong>Step 1.</strong> 
-Create a bigGenePred file. The first 12 fields of the bigGenePred bed12+8 format are 
-described by the basic BED file format shown <a href="../../FAQ/FAQformat.html#format1">here</a>. 
-(You can also read
-about genePred <a href="../../FAQ/FAQformat.html#format9">here</a>.) 
+Format your bigGenePred file. The first 12 fields of the bigGenePred bed12+8 format are described by the
+basic <a href="../../FAQ/FAQformat.html#format1">BED file format</a>. You can also read
+the <a href="../../FAQ/FAQformat.html#format9">genePred format</a>. 
 Your bigGenePred file must also contain the 8 extra fields described in the autoSql file definition 
 shown above: <code>name2, cdsStartStat, cdsEndStat, exonFrames, type, geneName, geneName2, 
 geneType</code>. Your bigGenePred file must be sorted first on the <code>chrom</code> field, and 
@@ -87,9 +84,8 @@ Download the <code>bedToBigBed</code> program from the
 <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
 <p>
 <strong>Step 3.</strong> 
-Use the <code>fetchChromSizes</code> script from the 
-<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">same directory</a> to create a 
-<em>chrom.sizes</em> file for the UCSC database with which you are working (e.g., hg38).
+Download the <em>chrom.sizes</em> file for your genome assembly using the <code>fetchChromSizes</code>
+script from the <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">same directory</a>.
 Alternatively, you can download the <em>chrom.sizes</em> file for any assembly hosted at UCSC from 
 our <a href="http://hgdownload.soe.ucsc.edu/downloads.html">downloads</a> page (click on &quot;Full 
 data set&quot; for any assembly). For example, the <em>hg38.chrom.sizes</em> file for the hg38
@@ -99,12 +95,12 @@ target="_blank">http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chro
 <p>
 <strong>Step 4.</strong> 
 Create the bigGenePred file from your sorted input file using the <code>bedToBigBed</code> 
-utility:</p> 
+utility command:</p> 
 <pre><code><strong>bedToBigBed</strong> -as=bigGenePred.as -type=bed12+8 bigGenePred.txt chrom.sizes myBigGenePred.bb</code></pre>
 <p>
 <strong>Step 5.</strong> 
 Move the newly created bigGenePred file (<em>myBigGenePred.bb</em>) to a web-accessible http, https,
-or ftp location.</p>
+or ftp location. See <a href="hgTrackHubHelp.html#Hosting">hosting section</a> if necessary.</p>
 <p>
 <strong>Step 6.</strong> 
 Construct a <a href="hgTracksHelp.html#CustomTracks">custom track</a> using a single 
@@ -124,31 +120,30 @@ display the usage message.</p>
 <h2>Examples</h2>
 <h3>Example &num;1</h3>
 <p>
-In this example, you will create a bigGenePred custom track using a bigGenePred file,
-<em>bigGenePred.bb</em>, located on the UCSC Genome Browser http server. This file contains data for
+In this example, you will create a bigGenePred custom track using a bigGenePred file located 
+on the UCSC Genome Browser http server, <em>bigGenePred.bb</em>. This file contains data for
 the hg38 assembly.</p>
 <p>
-To create a custom track using this bigGenePred file: 
+To create a custom track using this bigGenePred file:
 <ol>
   <li>
-  Construct a track line that references the file:</p>
+  Construct a track line that references the hosted file:</p>
   <pre><code>track type=bigGenePred name=&quot;bigGenePred Example One&quot; description=&quot;A bigGenePred file&quot; bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigGenePred.bb</code></pre>
   <li>
   Paste the track line into the <a href="../../cgi-bin/hgCustom?db=hg38">custom track management 
   page</a> for the human assembly hg38 (Dec. 2013).</li> 
   <li>
-  Click the &quot;submit&quot; button.</li> 
+  Click the <button>Submit</button> button.</li> 
 </ol>
 <p>
 Custom tracks can also be loaded via one URL line. The link below loads the same bigGenePred track 
 and sets additional parameters in the URL:</p>
-<a href="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hgct_customText=track%20type=bigGenePred%20name=Example%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigGenePred.bb"
-target="_blank"><pre><code>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hgct_customText=track%20type=bigGenePred %20name=Example%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigGenePred.bb</code></pre></a>
+<a href="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hgct_customText=track%20type=bigGenePred%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigGenePred.bb"
+target="_blank"><pre><code>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hgct_customText=track%20type=bigGenePred%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigGenePred.bb</code></pre></a>
 <p>
 After this example bigGenePred track is loaded in the Genome Browser, click on a gene in the
 browser's track display to view the details page for that gene. Note that the page offers links to
-several sequence types, including translated protein, predicted mRNA, and genomic
-sequence.</p>
+several sequence types, including translated protein, predicted mRNA, and genomic sequence.</p>
 
 <h3>Example &num;2</h3>
 <p>
@@ -156,18 +151,17 @@ In this example, you will configure the bigGenePred track loaded in Example #1 t
 amino acid numbering:
 <ol>
   <li>
-  On the track's gene details page, click the &quot;Go to ... track controls&quot; link.</li>
+  On the bottom of the gene details page, click the &quot;Go to ... track controls&quot; link.</li>
   <li>
   Change the &quot;Color track by codons:&quot; option from &quot;OFF&quot; to &quot;genomic 
-  codons&quot; and check that the display mode is set to &quot;full&quot.</li>
-  <li>
-  Click &quot;submit&quot;. 
+  codons&quot; and check that the display mode is set to &quot;full&quot. Then click 
+  <button>Submit</button>. 
   <li>
   On the Genome Browser tracks display, zoom to a track region where amino acids display, such as 
   <code>chr9:133,255,650-133,255,700</code>, and note that the track now displays codons. 
   <li>
   Return to the track controls page and click the box next to &quot;Show codon numbering&quot;, 
-  then click &quot;submit&quot;.</li> 
+  then click <button>Submit</button>.</li> 
   <li>
   The browser tracks display will now show amino acid numbering.</li>
 </ol>
@@ -180,19 +174,20 @@ track type=bigGenePred baseColorDefault=genomicCodons name="bigGenePred Example 
 Paste the above into the hg38 <a href="../../cgi-bin/hgCustom?db=hg38">custom track management 
 page</a> to view an example of bigGenePred amino acid display at the beginning of the SIRT1 gene on 
 chromosome 10.</p>
-
+<p class='text-center'>
+  <img class='text-center' src="../../images/codonColoring.png" alt="An image of a track with codons colored" width="999"> 
+</p>
 <h3>Example &num;3</h3>
 <p>
 In this example, you will create your own bigGenePred file from an existing bigGenePred input 
 file.</p>
 <ol>
   <li> 
-  Save the example bed12+8 input file, 
-  <em><a href="examples/bigGenePred.txt">bigGenePred.txt</a></em>, to your computer (<em>Step 1</em>
-  in <em>Creating a bigGenePred track</em>, above).</li>
+  Save the example bed12+8 input file to your computer,
+  <em><a href="examples/bigGenePred.txt">bigGenePred.txt</a></em>.</li>
   <li> 
   Download the <a href="http://hgdownload.soe.ucsc.edu/admin/exe/"><code>bedToBigBed</code></a>
-  utility (<em>Step 2</em>, above).</li>
+  utility (<em>Step 2</em>, in the <em>Creating a bigGenePred</em> section above).</li>
   <li> 
   Save the <a href="hg38.chrom.sizes"><em>hg38.chrom.sizes</em> text file</a> to your computer.
   This file  contains the chrom.sizes for the human hg38 assembly (<em>Step 3</em>, above).</li>
@@ -215,8 +210,8 @@ file.</p>
 
 <h2>Sharing your data with others</h2>
 <p>
-If you would like to share your bigGenePred data track with a colleague, learn how to create a URL 
-by looking at Example #11 on <a href="customTrack.html#EXAMPLE11">this page</a>.</p>
+If you would like to share your bigGenePred data track with a colleague, learn how to create a URL
+link to your data by looking at <a href="customTrack.html#EXAMPLE11">Example #6</a>.</p>
 
 <h2>Extracting data from bigBed format</h2>
 <p>

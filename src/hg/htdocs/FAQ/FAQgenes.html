@@ -57,7 +57,7 @@ are assigned to genes. </p>
 <h6>What are the most common gene transcript tracks?</h6>
 <p>
 Originally, researchers sequenced cDNA sequences, submitted them to Genbank, and the
-Genome Browser shows these in the Genbank or the EST trac (if the cDNA is just
+Genome Browser shows these in the Genbank or the EST track (if the cDNA is just
 a single read from the 5' or 3' end). From the alignment of the cDNAs and ESTs, 
 the NCBI RefSeq group manually creates a smaller set of representative transcripts.
 Automated programs like UCSC's or Ensembl's gene build software do the same, just
@@ -84,8 +84,9 @@ Ensembl/GENCODE accession numbers in the human genome start with ENST followed b
 number, e.g. "ENST00000619216.1". Every transcript is assigned to a gene with identifiers that 
 start with ENSG and every ENSG has at least one ENST assigned to it. Manually curated RefSeq 
 transcript identifiers start with NM_ (coding) or NR_ (noncoding), followed by a number, or XM_ if
-they are predicted by software, e.g. "NR_046018.2". A table of all RefSeq prefixes can be found on the <a target=_blank
-href="https://www.ncbi.nlm.nih.gov/books/NBK21091/table/ch18.T.refseq_accession_numbers_and_mole/?report=objectonly">
+they are predicted by software, e.g. "NR_046018.2". A table of all RefSeq prefixes can be found on 
+the <a target=_blank href=
+"https://www.ncbi.nlm.nih.gov/books/NBK21091/table/ch18.T.refseq_accession_numbers_and_mole/?report=objectonly">
 NCBI website</a>.
 </p>
 
@@ -124,8 +125,8 @@ primary chromosomes.</p>
 <h6>What are the differences among Ensembl, GENCODE and RefSeq?</h6>
 <p> 
 Different institutions have different rules on how they annotate genes. E.g.
-RefSeq's criteria are more stringent, so there are a lot fewer RefSeq
-transcripts than for Ensembl/GENCODE. Also, RefSeq transcripts have their own
+RefSeq's criteria are more stringent, so there are fewer RefSeq
+transcripts than Ensembl/GENCODE transcripts. Also, RefSeq transcripts have their own
 sequences independent of the genome assembly, so certain population-specific variants
 may be in RefSeq that are entirely missing from the reference genome sequence. 
 This has the important implication that the position of genome variants 
@@ -140,7 +141,7 @@ different. In general, it seems that high-throuput sequencing data results,
 e.g. RNA-seq, are often using Ensembl/GENCODE annotations and human genetics
 results are reported using RefSeq annotations. It depends on your particular
 project which gene model set you want to use. Over time, the two transcript
-databases have been and are becoming more and more similar.
+databases have been and are becoming more similar.
 
 <a name="hg19"></a>
 <h6>For the human assembly hg19/GRCh37: What is the difference between UCSC
@@ -148,30 +149,31 @@ Genes, the "GENCODE All" track and the "Ensembl Genes" track?</h6>
 <p>The "UCSC Genes", also called "Known Genes" track, is available only on
 assemblies before hg38.  It was built with a gene predictor developed at UCSC.
 This gene predictor uses protein, EST and cDNA annotations to derive a
-relatively restricted gene transcript set. The software is not used anymore and
-the track is not available on the newer human assemblies. It was last used for the 
+relatively restricted gene transcript set. The software is no longer in use and
+there are no plans to release the track on newer human assemblies. It was last used for the 
 mm10 mouse assembly. We are condering updating the hg19 annotation produced by this 
 software and are interested in your feedback.</p>
 
 <p>The "GENCODE All" track contains data from all versions of GENCODE. "Ensembl Genes" contains just
-a single Ensembl version. See the previous question for the differences between Ensembl and GENCODE.</p>
+a single Ensembl version. See the previous question for the differences between Ensembl and GENCODE.
+</p>
 
 <a name="hg38"></a>
 <h6>For the human assembly hg38/GRCh38: What are the differences between the "GENCODE" and 
 "All GENCODE" tracks?</h6>
 <p> 
 "GENCODE" is the default gene track on hg38 (similar to "Known Genes" on hg19),
-which means that it shows a lot of third party information when you click on a
-gene. "All GENCODE" contains all versions of GENCODE, but a lot less
-third-party information.
+which means that it is associated with a large amount of third party information when you click on a
+gene. This related information is also avilable using the Table Browser. "All GENCODE" contains all 
+versions of GENCODE, but less third-party information.
 </p>
 
 <a name="gencode"></a>
-<h6>What is the difference between "GENCODE Comprehensive" and "GENCODE Basic?"</h6>
+<h6>What is the difference between "GENCODE Comprehensive" and "GENCODE Basic"?</h6>
 <p> 
 GENCODE Basic is the subset of GENCODE useful to most users and it is what the UCSC Genome
-Browser shows by default.  
-The "basic" tag is defined like this in the <a href="https://www.gencodegenes.org/pages/tags.html">GENCODE FAQ</a>:
+Browser shows by default. The "basic" tag is defined as follows in the 
+<a href="https://www.gencodegenes.org/pages/tags.html">GENCODE FAQ</a>:
 "Identifies a subset of representative transcripts for each gene; prioritises
 full-length protein coding transcripts over partial or non-protein coding
 transcripts within the same gene, and intends to highlight those transcripts
@@ -207,7 +209,7 @@ boundaries at the edge of the problematic region. NCBI's aligner tries very hard
 to find exons that align to any transcript sequence,
 so it calls a few small dubious "exons" in the affected genomic region.
 GENCODE V19 also used an aligner that tried very hard to find exons, but it
-found small dubious "exons" in different places from NCBI.
+found small dubious "exons" in different places than NCBI.
 The RefSeq Alignments track makes the problematic region very clear with double lines
 indicating unalignable transcript sequence.
 </p>
