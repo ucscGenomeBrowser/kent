@@ -4672,7 +4672,7 @@ identifier knownGeneId dependency
     $ccdsDb.ccdsKgMap.geneId
     $kgDb2,!rn4.knownGenePep.name full
     $kgDb3.knownGenePep.name
-    $kgDb3,!hg38.knownCanonical.protein exclude=
+    $kgDb3,!hg38,!mm10.knownCanonical.protein exclude=
     $kgDb3.kgProtMap2.qName
     $kgDb.keggPathway.kgID
     $hg.humanHprdP2P.query
