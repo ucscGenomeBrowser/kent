@@ -14,7 +14,7 @@
 <li><a href="#genestrans">What is the difference between a gene and a transcript?</a></li>
 <li><a href="#mostCommon">What are the most common gene transcript tracks?</a></li>
 <li><a href="#genename">What is a gene name?</a></li>
-<li><a href="#ens">What are Ensembl and GENCODE and is there any difference?</a></li>
+<li><a href="#ens">What are Ensembl and GENCODE and is there a difference?</a></li>
 <li><a href="#ensRefseq">What are the differences among GENCODE, Ensembl and RefSeq?</a></li>
 <li><a href="#hg19">For the human assembly hg19/GRCh37: What is the difference between UCSC 
                     Genes track, the "GENCODE" track and the "Ensembl Genes" track?</a></li>
@@ -37,9 +37,10 @@
 <p>
 Before DNA sequencing, genes were defined as heritable traits. In the present day context of 
 bioinformatics, a gene represents a collection of transcripts usually transcribed within certain 
-genomic coordinates . Transcripts either encode one protein or are non-coding transcripts. 
-For human, most genes have an associated symbol assigned by the Human Gene Nomenclature 
-Commitee (HGNC, formerly HUGO). For other organisms there is usually a database curation 
+genomic coordinates . Transcripts either encode one protein or are non-coding. 
+For human, most genes have an associated symbol assigned by the <a target=_blank 
+href="https://www.genenames.org/">Human Gene Nomenclature Commitee (HGNC, formerly HUGO)</a>. 
+For other organisms there is usually a database curation 
 team that assigns symbols, such as MGI for mouse.
 </p>
 
@@ -56,20 +57,23 @@ are assigned to genes. </p>
 <a name="mostCommon"></a>
 <h6>What are the most common gene transcript tracks?</h6>
 <p>
-Originally, researchers sequenced cDNA sequences, submitted them to Genbank, and the
-Genome Browser shows these in the Genbank or the EST track (if the cDNA is just
+Originally, researchers sequenced cDNA sequences, submitted them to Genbank. The
+Genome Browser shows these sequences in the Genbank or the EST track (if the cDNA is just
 a single read from the 5' or 3' end). From the alignment of the cDNAs and ESTs, 
 the NCBI RefSeq group manually creates a smaller set of representative transcripts.
 Automated programs like UCSC's or Ensembl's gene build software do the same, just
 in software, which is more systematic but more error-prone.
 With the arrival of GENCODE, Ensembl added a manual curation to their
-human and mouse transcripts. NCBI has since also added automated predictions pipeline with 
+human and mouse transcripts. NCBI has since also added an automated predictions pipeline with 
 their tool Gnomon and its resulting "Refseq Predicted" transcripts.</p>
 
 <p>There are many other tracks in the group "Genes and Gene Predictions".
-Genescan and N-Scan are older transcript predictor algorithms that are based on
-only the genome sequence alone. Augustus and AceView are automated
-gene-predictors that use cDNA and EST data. Most of these and similar gene
+<a target=_blank href="../cgi-bin/hgTrackUi?db=hg38&g=genscan">Genscan</a> and <a target=_blank 
+href="../cgi-bin/hgTrackUi?db=hg19&g=nscanGene">N-Scan</a> are older 
+transcript predictor algorithms that are based on the genome sequence alone. 
+<a target=_blank href="../cgi-bin/hgTrackUi?db=hg38&g=augustusGene">Augustus</a> and <a 
+target=_blank href="../cgi-bin/hgTrackUi?db=hg19&g=acembly">AceView</a> are automated 
+gene-predictors that use cDNA and EST data. These and similar gene
 tracks are only relevant when you are working on a particular locus where you
 think that the manually curated gene models (Ensembl and RefSeq) have
 errors.</p>
@@ -78,21 +82,22 @@ errors.</p>
 <h6>What is a gene name? </h6>
 
 <p>
-The most common gene names encountered by users are either from Ensembl, GENCODE, RefSeq, or 
-gene symbols. For gene symbols, such as DDX11L1, see the above question "What is a gene?".
-Ensembl/GENCODE accession numbers in the human genome start with ENST followed by a
-number, e.g. "ENST00000619216.1". Every transcript is assigned to a gene with identifiers that 
-start with ENSG and every ENSG has at least one ENST assigned to it. Manually curated RefSeq 
-transcript identifiers start with NM_ (coding) or NR_ (noncoding), followed by a number, or XM_ if
-they are predicted by software, e.g. "NR_046018.2". A table of all RefSeq prefixes can be found on 
-the <a target=_blank href=
+The most common gene names (sometimes called accession numbers) encountered by users 
+are either from Ensembl, GENCODE, RefSeq, or 
+gene symbols. For gene symbols, such as DDX11L1, see the above question <a 
+href="FAQgenes.html#gene">"What is a gene?"</a>. Ensembl/GENCODE accession numbers in 
+the human genome start with ENST followed by a number, e.g. "ENST00000619216.1". Every transcript 
+is assigned to a gene with identifiers that  start with ENSG and every ENSG has at least 
+one ENST assigned to it. Manually curated RefSeq transcript identifiers start with 
+NM_ (coding) or NR_ (noncoding), followed by a number, or XM_ if they are predicted by 
+software, e.g. "NR_046018.2". A table of all RefSeq prefixes can be found on the <a target=_blank href=
 "https://www.ncbi.nlm.nih.gov/books/NBK21091/table/ch18.T.refseq_accession_numbers_and_mole/?report=objectonly">
 NCBI website</a>.
 </p>
 
 <a name="ens"></a>
 <h2>The differences</h2>
-<h6>What are Ensembl and GENCODE and is there any difference?</h6>
+<h6>What are Ensembl and GENCODE and is there a difference?</h6>
 
 <p style="color:red">TODO Lou or Max: compare the Ensembl GFF with the GENCODE GFF.</p>
 
@@ -101,7 +106,7 @@ Officially, the Ensembl and GENCODE gene models are the same. On the latest huma
 assemblies (hg38 and mm10), the identifiers, transcript sequences, and exon coordinates are almost
 identical between equivalent Ensembl and GENCODE versions (excluding <a target=_blank 
 href="FAQdownloads.html#downloadAlt">alternative sequences</a> or <a target=_blank 
-href="FAQdownloads.html#downloadFix">or fix sequences</a>).</p>
+href="FAQdownloads.html#downloadFix">fix sequences</a>).</p>
 
 <p>GENCODE uses the UCSC convention of prefixing chromosome names with "chr", e.g. "chr1" and 
 "chrM", but Ensembl calls these "1" or "MT". At the time of writing (Ensembl 89), a few transcripts 
@@ -114,8 +119,8 @@ differ.</p>
 href="https://www.gencodegenes.org/human/releases.html">GENCODE Release
 History</a> shows the release dates and can be linked to corresponding Ensembl
 releases.  You can download the gene transcript models from the website
-<a href=https://gencodegenes.org>https://gencodegenes.org</a> or from
-<a href=http://ensembl.org>http://ensembl.org</a>. 
+<a target=_blank href=https://gencodegenes.org>https://gencodegenes.org</a> or from
+<a target=_blank href=http://ensembl.org>http://ensembl.org</a>. 
 For many applications, the files distributed on the GENCODE website
 should be easier to use, as the third party database links are easier to parse
 and the sequence identifiers match the UCSC genome files, at least for the
@@ -173,7 +178,7 @@ versions of GENCODE, but less third-party information.
 <p> 
 GENCODE Basic is the subset of GENCODE useful to most users and it is what the UCSC Genome
 Browser shows by default. The "basic" tag is defined as follows in the 
-<a href="https://www.gencodegenes.org/pages/tags.html">GENCODE FAQ</a>:
+<a target=_blank href="https://www.gencodegenes.org/pages/tags.html">GENCODE FAQ</a>:
 "Identifies a subset of representative transcripts for each gene; prioritises
 full-length protein coding transcripts over partial or non-protein coding
 transcripts within the same gene, and intends to highlight those transcripts
@@ -225,26 +230,31 @@ often change from one version to the next.
 
 <a name="ccds"></a>
 <h6>What is CCDS?</h6>
-<span style="color:red">Todo: MARKD?</span>
 <p>
-The Consensus Coding Sequence Project is a list of coding sequences that are
-shared between RefSeq, Ensembl/GENCODE and UCSC (hg19 "Known Genes") gene
-transcripts. You can consider these a subset of any gene track, filtered for
-high quality. The CCDS identifiers are very stable and allow you to link easily
-between the different databases. As the name implies, it does not cover non-coding
-transcripts.
+The <a target=_blank href="https://www.ncbi.nlm.nih.gov/projects/CCDS/CcdsBrowse.cgi">
+Consensus Coding Sequence Project</a> is a list of coding sequences that are
+shared between RefSeq, Ensembl/GENCODE and UCSC (hg19 "Known Genes", hg38 CCDS 
+was generated with just NCBI and GENCODE) gene transcripts. You can consider 
+these a subset of any gene track, filtered for high quality. The CCDS identifiers 
+are very stable and allow you to link easily between the different databases. As 
+the name implies, it does not cover non-coding transcripts.
 </p>
 
 <a name="justsingle"></a>
 <h6>How can I just show a single transcript per gene?</h6>
 <p> 
-For the tracks "UCSC Genes" (hg19) or "GENCODE Genes" (hg38), click on
-their title and on the configuration page, uncheck the box "Show splice
-variants". Only a single transcript will be shown. The method how this
+For the tracks "<a target=_blank 
+href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=knownGene">
+UCSC Genes</a>" (hg19) or "<a target=_blank 
+href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&g=knownGene">
+GENCODE Genes</a>" (hg38), click on their title and on the configuration page, uncheck the 
+box "Show splice variants". Only a single transcript will be shown. The method how this
 transcript is selected is described in the track documentation below the 
 configuration settings.</p>
 
-<p>For the track NCBI RefSeq (hg38), you can activate the subtrack "RefSeq Clinical".
+<p>For the track <a target=_blank 
+href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&g=refSeqComposite">
+NCBI RefSeq</a> (hg38), you can activate the subtrack "RefSeq Clinical".
 It contains only the transcripts that are part of the Human Gene Mutation Database.
 </p>
 
@@ -252,8 +262,8 @@ It contains only the transcripts that are part of the Human Gene Mutation Databa
 <h6>This is rather complicated. Can you tell me which gene transcript track I should use?</h6>
 <p> 
 For automated analysis, if you are doing NGS analysis and you need to capture
-all possible transcripts, use GENCODE.  For human genetics or variant
-annotation, a more restricted transcript set is usually sufficient and "NCBI
+all possible transcripts, GENCODE provides a comprehensive gene set.  For human 
+genetics or variant annotation, a more restricted transcript set is usually sufficient and "NCBI
 RefSeq" is the standard. If you are only interested in protein coding
 annotations, CCDS or UniProt may be an option, but this is rather unusual.
 </p>
@@ -261,7 +271,7 @@ annotations, CCDS or UniProt may be an option, but this is rather unusual.
 <p>
 For manual inspection of exon boundaries of a single gene, and especially if it
 is a transcript that is repetitive or hard to align (e.g. very small exons),
-look at the UCSC RefSeq track and watch out for differences between the NCBI
+look at the UCSC RefSeq track and watch for differences between the NCBI
 and UCSC exon placement. You can also BLAT the transcript sequence. 
 Manually look at ESTs, mRNAs, TransMap and possibly Augustus, Genscan, SIB, SGP
 or GeneId in obscure cases where you are looking for hints on what an

@@ -1,4 +1,4 @@
-track MANE
+track mane
 bigDataUrl /gbdb/hg38/mane/mane.0.5.bb
 shortLabel MANE select v0.5
 longLabel NCBI RefSeq and Ensembl transcripts from the MANE Project (v0.5)
