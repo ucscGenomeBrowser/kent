@@ -121,7 +121,7 @@ History</a> shows the release dates and can be linked to corresponding Ensembl
 releases.  You can download the gene transcript models from the website
 <a target=_blank href=https://gencodegenes.org>https://gencodegenes.org</a> or from
 <a target=_blank href=http://ensembl.org>http://ensembl.org</a>. 
-For many applications, the files distributed on the GENCODE website
+Foembl many applications, the files distributed on the GENCODE website
 should be easier to use, as the third party database links are easier to parse
 and the sequence identifiers match the UCSC genome files, at least for the
 primary chromosomes.</p>
@@ -135,11 +135,8 @@ transcripts than Ensembl/GENCODE transcripts. Also, RefSeq transcripts have thei
 sequences independent of the genome assembly, so certain population-specific variants
 may be in RefSeq that are entirely missing from the reference genome sequence. 
 This has the important implication that the position of genome variants 
-are harder to map to RefSeq transcripts than for GENCODE, since RefSeq transcripts
-can have additional sequence or missing sequence relative to the genome, 
-and when placing a variant onto a RefSeq transcript, the counting has to 
-take these into account. Not every software that places variants onto
-transcripts takes RefSeq/genome insertions/deletions into account.</p>
+are harder to map to RefSeq transcripts than for GENCODE since RefSeq transcripts
+can have additional sequence or missing sequence relative to the genome.</p> 
 
 <p>The links from either transcript model to other gene-related databases are
 different. In general, it seems that high-throuput sequencing data results,
@@ -150,16 +147,19 @@ databases have been and are becoming more similar.
 
 <a name="hg19"></a>
 <h6>For the human assembly hg19/GRCh37: What is the difference between UCSC
-Genes, the "GENCODE All" track and the "Ensembl Genes" track?</h6>
-<p>The "UCSC Genes", also called "Known Genes" track, is available only on
+Genes, the "GENECODE Gene Annotation" track and the "Ensembl Genes" track?</h6>
+<p>The "<a target=_blank href="../cgi-bin/hgTrackUi?db=hg19&g=knownGene">UCSC Genes</a>" track, 
+also called "Known Genes", is available only on
 assemblies before hg38.  It was built with a gene predictor developed at UCSC.
 This gene predictor uses protein, EST and cDNA annotations to derive a
 relatively restricted gene transcript set. The software is no longer in use and
 there are no plans to release the track on newer human assemblies. It was last used for the 
 mm10 mouse assembly. We are condering updating the hg19 annotation produced by this 
-software and are interested in your feedback.</p>
+software and are interested in any user feedback on the topic.</p>
 
-<p>The "GENCODE All" track contains data from all versions of GENCODE. "Ensembl Genes" contains just
+<p>The "<a target=_blank href="../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeGencodeSuper">
+GENECODE Gene Annotation</a>" track contains data from all versions of GENCODE. "<a target=_blank 
+href="../cgi-bin/hgTrackUi?db=hg19&g=ensGene">Ensembl Genes</a>" track contains just
 a single Ensembl version. See the previous question for the differences between Ensembl and GENCODE.
 </p>
 
@@ -167,10 +167,12 @@ a single Ensembl version. See the previous question for the differences between 
 <h6>For the human assembly hg38/GRCh38: What are the differences between the "GENCODE" and 
 "All GENCODE" tracks?</h6>
 <p> 
-"GENCODE" is the default gene track on hg38 (similar to "Known Genes" on hg19),
-which means that it is associated with a large amount of third party information when you click on a
-gene. This related information is also avilable using the Table Browser. "All GENCODE" contains all 
-versions of GENCODE, but less third-party information.
+"<a target=_blank href="../cgi-bin/hgTrackUi?db=hg38&g=knownGene">GENCODE</a>" is the default 
+gene track on hg38 (similar to "Known Genes" on hg19), which means that it is associated with a 
+large amount of third party information when you click on a gene. This related information is also 
+avilable using the Table Browser. "<a target=_blank 
+href="../cgi-bin/hgTrackUi?db=hg38&g=wgEncodeGencodeSuper">All GENCODE</a>" contains all versions 
+of GENCODE, but less third-party information.
 </p>
 
 <a name="gencode"></a>
@@ -187,10 +189,10 @@ that will be useful to the majority of users.". </p>
 <a name="ncbiRefseq"></a>
 <h6>What is the difference between "NCBI RefSeq" and "UCSC RefSeq"?</h6>
 <p>
-RefSeq gene transcripts, unlike GENCODE/Ensembl/UCSC, are sequences that can differ from the genome. 
-They need to be aligned to the genome to create transcript models.
-Traditionally, UCSC has aligned RefSeq with BLAT and NCBI has aligned with splign.
-The advantages of the UCSC alignments are that
+RefSeq gene transcripts, unlike GENCODE/Ensembl/UCSC Genes, are sequences that can differ from 
+the genome. They need to be aligned to the genome to create transcript models.
+Traditionally, UCSC has aligned RefSeq with BLAT (UCSC RefSeq sub-track) and NCBI has aligned with 
+splign. The advantages of the UCSC alignments are that
 they are updated more frequently and are available for older assemblies (like
 GRCh37/hg19), but they are less stable and they are not the official alignments.
 Therefore we recommend working with the NCBI annotations.
