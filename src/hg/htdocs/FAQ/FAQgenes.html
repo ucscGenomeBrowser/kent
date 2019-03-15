@@ -37,9 +37,9 @@
 <p>
 Before DNA sequencing, genes were defined as heritable traits. In the present day context of 
 bioinformatics, a gene represents a collection of transcripts usually transcribed within certain 
-genomic coordinates . Transcripts either encode one protein or are non-coding. 
+genomic coordinates. Transcripts either encode one protein or are non-coding. 
 For human, most genes have an associated symbol assigned by the <a target=_blank 
-href="https://www.genenames.org/">Human Gene Nomenclature Commitee (HGNC, formerly HUGO)</a>. 
+href="https://www.genenames.org/">Human Gene Nomenclature Committee (HGNC, formerly HUGO)</a>. 
 For other organisms there is usually a database curation 
 team that assigns symbols, such as MGI for mouse.
 </p>
@@ -55,7 +55,7 @@ chrom/start/end coordinates on a genome assembly. These transcript accession num
 are assigned to genes. </p>
 <p>
 For example, the gene with the gene symbol <a target=_blank 
-href="https://www.ncbi.nlm.nih.gov/gene/672#">BRCA1</a> has 5 protein-coding transcripts, 
+href="https://www.ncbi.nlm.nih.gov/gene/672#">BRCA1</a> has 5 protein-coding transcripts 
 or isoforms. The first transcript has the NCBI accession number <a target=_blank 
 href="https://www.ncbi.nlm.nih.gov/nuccore/NM_007294.3">NM_007294.3</a> which produces
 the protein <a target=_blank href="https://www.ncbi.nlm.nih.gov/protein/NP_009225.1">
@@ -76,7 +76,7 @@ Automated programs like UCSC's or Ensembl's gene build software do the same, jus
 in software, which is more systematic but also more error-prone.
 With the arrival of GENCODE, Ensembl added a manual curation to their
 human and mouse transcripts. NCBI has since also added an automated predictions pipeline with 
-their tool Gnomon and its resulting "Refseq Predicted" transcripts.</p>
+their tool Gnomon and its resulting "RefSeq Predicted" transcripts.</p>
 
 <p>There are many other tracks in the group "Genes and Gene Predictions".
 <a target=_blank href="../cgi-bin/hgTrackUi?db=hg38&g=genscan">Genscan</a> and <a target=_blank 
@@ -100,7 +100,7 @@ href="FAQgenes.html#gene">"What is a gene?"</a>. Ensembl/GENCODE transcript acce
 the human genome start with ENST followed by a number, e.g. "ENST00000619216.1". Every transcript 
 is assigned to a gene with identifiers that  start with ENSG and every ENSG has at least 
 one ENST assigned to it. Manually curated RefSeq transcript identifiers start with 
-NM_ (coding) or NR_ (noncoding), followed by a number, or XM_ if they are predicted by 
+NM_ (coding) or NR_ (non-coding), followed by a number, or XM_ if they are predicted by 
 software, e.g. "NR_046018.2". A table of all RefSeq prefixes can be found on the <a target=_blank href=
 "https://www.ncbi.nlm.nih.gov/books/NBK21091/table/ch18.T.refseq_accession_numbers_and_mole/?report=objectonly">
 NCBI website</a>.
@@ -127,9 +127,9 @@ gene annotation itself, the links to external databases differ.</p>
 href="https://www.gencodegenes.org/human/releases.html">GENCODE Release
 History</a> shows the release dates and can be linked to corresponding Ensembl
 releases.  You can download the gene transcript models from the website
-<a target=_blank href=https://gencodegenes.org>https://gencodegenes.org</a> or from
+<a target=_blank href=https://gencodegenes.org>https://gencodegenes.org</a> or from 
 <a target=_blank href=http://ensembl.org>http://ensembl.org</a>. 
-Foembl many applications, the files distributed on the GENCODE website
+For most applications, the files distributed on the GENCODE website
 should be easier to use, as the third party database links are easier to parse
 and the sequence identifiers match the UCSC genome files, at least for the
 primary chromosomes.</p>
@@ -151,7 +151,7 @@ are harder to map to RefSeq transcripts than for GENCODE since RefSeq transcript
 can have additional sequence or missing sequence relative to the genome.</p> 
 
 <p>The links from either transcript model to other gene-related databases are
-different. In general, it seems that high-throuput sequencing data results,
+different. In general, it seems that high-throughput sequencing data results,
 e.g. RNA-seq, are often using Ensembl/GENCODE annotations and human genetics
 results are reported using RefSeq annotations. It depends on your particular
 project which gene model set you want to use. Over time, the two transcript
@@ -159,18 +159,18 @@ databases have been and are becoming more similar.
 
 <a name="hg19"></a>
 <h6>For the human assembly hg19/GRCh37: What is the difference between UCSC
-Genes, the "GENECODE Gene Annotation" track and the "Ensembl Genes" track?</h6>
+Genes, the "GENCODE Gene Annotation" track and the "Ensembl Genes" track?</h6>
 <p>The "<a target=_blank href="../cgi-bin/hgTrackUi?db=hg19&g=knownGene">UCSC Genes</a>" track, 
 also called "Known Genes", is available only on
 assemblies before hg38.  It was built with a gene predictor developed at UCSC.
 This gene predictor uses protein, EST and cDNA annotations to derive a
 relatively restricted gene transcript set. The software is no longer in use and
 there are no plans to release the track on newer human assemblies. It was last used for the 
-mm10 mouse assembly. We are condering updating the hg19 annotation produced by this 
+mm10 mouse assembly. We are considering updating the hg19 annotation produced by this 
 software and are interested in any user feedback on the topic.</p>
 
 <p>The "<a target=_blank 
-href="../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeGencodeSuper">GENECODE Gene Annotation</a>" 
+href="../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeGencodeSuper">GENCODE Gene Annotation</a>" 
 track contains data from all versions of GENCODE. "<a target=_blank 
 href="../cgi-bin/hgTrackUi?db=hg19&g=ensGene">Ensembl Genes</a>" track contains just
 a single Ensembl version. See the previous question for the differences between Ensembl and GENCODE.
@@ -183,7 +183,7 @@ a single Ensembl version. See the previous question for the differences between 
 "<a target=_blank href="../cgi-bin/hgTrackUi?db=hg38&g=knownGene">GENCODE</a>" is the default 
 gene track on hg38 (similar to "Known Genes" on hg19), which means that it is associated with a 
 large amount of third party information when you click on a gene. This related information is also 
-avilable using the Table Browser. This GENCODE track is updated periodically to match the latest
+available using the Table Browser. This GENCODE track is updated periodically to match the latest
 GENCODE release. "<a target=_blank 
 href="../cgi-bin/hgTrackUi?db=hg38&g=wgEncodeGencodeSuper">All GENCODE</a>" is a super-track that 
 contains all versions of GENCODE as sub-tracks, but these tracks have less third-party information.
@@ -195,15 +195,14 @@ GENCODE releases.
 <h6>What is the difference between "GENCODE Comprehensive" and "GENCODE Basic"?</h6>
 <p> 
 The "<a target=_blank href="../cgi-bin/hgTrackUi?db=hg38&g=knownGene">GENCODE</a>" track offers a
-"basic" gene set, and a "comprehensive" gene set. GENCODE adds the basic tag to a subset of 
-transcripts to highlight what they believe are a core set that will be useful to the majority of
-users. The "basic" tag is defined as follows in the
+"basic" gene set, and a "comprehensive" gene set. The "basic" gene set represents a subset of 
+transcripts that GENCODE believes will be useful to the majority of
+users. The "basic" gene set is defined as follows in the
 <a target=_blank href="https://www.gencodegenes.org/pages/tags.html">GENCODE FAQ</a>:</p>
 <p><i>
-"Identifies a subset of representative transcripts for each gene; prioritises
-full-length protein coding transcripts over partial or non-protein coding
-transcripts within the same gene, and intends to highlight those transcripts
-that will be useful to the majority of users."</i></p>
+"Identifies a subset of representative transcripts for each gene; prioritises full-length protein 
+coding transcripts over partial or non-protein coding transcripts within the same gene, and 
+intends to highlight those transcripts that will be useful to the majority of users.</i></p>
 <p>
 By default, the track displays only the "basic" set. In order to display the complete 
 "comprehensive" set, the box can be tickets at the top of the <a target=_blank 
@@ -230,8 +229,8 @@ Activating the RefSeq Alignments track shows NCBI's splign alignments in more de
 including double lines where both transcript and genomic sequence are skipped in the alignment.
 When available, the RefSeq Diffs subtrack may be helpful too. The upcoming <a target=_blank 
 href=https://ncbiinsights.ncbi.nlm.nih.gov/2018/10/11/matched-annotation-by-ncbi-and-embl-ebi-mane-a-new-joint-venture-to-define-a-set-of-representative-transcripts-for-human-protein-coding-genes/>MANE gene set</a> 
-will contain a set of high quality transcripts that are 100%
-alignable to the genome and are part of both RefSeq and Ensembl/Gencode but
+will contain a set of high-quality transcripts that are 100%
+alignable to the genome and are part of both RefSeq and Ensembl/GENCODE but
 at the time of writing this project is at an early stage.
 </p>
 
@@ -277,7 +276,7 @@ href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=knownGene">
 UCSC Genes</a>" (hg19) or "<a target=_blank 
 href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&g=knownGene">
 GENCODE Genes</a>" (hg38), click on their title and on the configuration page, uncheck the 
-box "Show splice variants". Only a single transcript will be shown. The method how this
+box "Show splice variants". Only a single transcript will be shown. The method for how this
 transcript is selected is described in the track documentation below the 
 configuration settings.</p>
 
@@ -293,7 +292,7 @@ It contains only the transcripts that are part of the Human Gene Mutation Databa
 For automated analysis, if you are doing NGS analysis and you need to capture
 all possible transcripts, GENCODE provides a comprehensive gene set.  For human 
 genetics or variant annotation, a more restricted transcript set is usually sufficient and "NCBI
-RefSeq" is the standard. If you are only interested in protein coding
+RefSeq" is the standard. If you are only interested in protein-coding
 annotations, CCDS or UniProt may be an option, but this is rather unusual.
 </p>
 
