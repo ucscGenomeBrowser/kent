@@ -453,6 +453,7 @@ if (visibleFacetList)
 		}
 
 	    int valuesShown = 0;
+	    int valuesNotShown = 0;
 	    if (field->showAllValues)  // Sort alphabetically if they want all values 
 	        {
 		slSort(&field->valList, facetValCmp);
@@ -483,10 +484,14 @@ if (visibleFacetList)
 		    htmlPrintf("%s (%d)</a>", val->val, val->selectCount);
 		    printf("</dd>\n");
 		    }
+		else if (val->selectCount > 0)
+		    {
+		    ++valuesNotShown;
+		    }
 		}
 
 	    // show "See More" link when facet has lots of values
-	    if (!(field->showAllValues || valuesShown < FacetFieldLimit))
+	    if (valuesNotShown > 0)
 		{
 		char *op = "showAllValues";
 		htmlPrintf("<dd><a href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
@@ -496,7 +501,7 @@ if (visibleFacetList)
 			"&cdwBrowseFiles_page=1' "
 			">See %d More</a></dd>\n",
 		    cartSessionVarName(), cartSessionId(cart),
-		    op, field->fieldName, "", slCount(field->valList) - FacetFieldLimit 
+		    op, field->fieldName, "", valuesNotShown 
 		    );
 		}
 
