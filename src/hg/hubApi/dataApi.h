@@ -29,6 +29,7 @@
 #include "jsonParse.h"
 #include "jsonWrite.h"
 #include "chromInfo.h"
+#include "versionInfo.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"

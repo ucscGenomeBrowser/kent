@@ -24,7 +24,7 @@ time_t timeNow = time(NULL);
 // gmtime_r(&timeNow, &tm);
 struct jsonWrite *jw = jsonWriteNew();
 jsonWriteObjectStart(jw, NULL);
-jsonWriteString(jw, "apiVersion", "0.1");
+jsonWriteString(jw, "apiVersion", "v"CGI_VERSION);
 jsonWriteString(jw, "source", "UCSantaCruz");
 jsonWriteDateFromUnix(jw, "downloadTime", (long long) timeNow);
 jsonWriteNumber(jw, "downloadTimeStamp", (long long) timeNow);

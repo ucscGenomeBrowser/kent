@@ -215,7 +215,7 @@ if ( ! (isEmpty(start) || isEmpty(end)) )
     }
 
 jsonWriteString(jw, "bigDataUrl", bigDataUrl);
-jsonWriteString(jw, "type", thisTrack->type);
+jsonWriteString(jw, "trackType", thisTrack->type);
 
 if (startsWith("bigBed", thisTrack->type))
     {
@@ -289,6 +289,7 @@ time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
 replaceChar(dataTime, ' ', 'T');	/*	ISO 8601	*/
 jsonWriteString(jw, "dataTime", dataTime);
 jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
+jsonWriteString(jw, "trackType", thisTrack->type);
 
 char query[4096];
 unsigned chromSize = 0;
@@ -325,6 +326,7 @@ else
 	chromList = bbiChromList(bbi);
 	jsonWriteNumber(jw, "chromCount", (long long)slCount(chromList));
 	}
+     jsonWriteString(jw, "bigDataUrl", bigDataUrl);
     }
 
 unsigned uStart = 0;
