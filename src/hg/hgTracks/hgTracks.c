@@ -5787,7 +5787,7 @@ else
     {
     tdbList = hTrackDbForTrack(database, trackNameFilter);
 
-    if (tdbList->parent)        // we want to give the composite parent a chance to load and set options
+    if (tdbList && tdbList->parent)        // we want to give the composite parent a chance to load and set options
         {
         while(tdbList->parent)
             {

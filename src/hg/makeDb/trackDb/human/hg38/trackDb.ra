@@ -7,6 +7,8 @@ include hoffMap.ra
 
 include cancerExpr.ra
 
+include mane.ra
+
 track miRnaAtlas
 compositeTrack on
 shortLabel miRNA Tissue Atlas

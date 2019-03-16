@@ -16,6 +16,7 @@
 */
 
 /* Global Variables */
+static boolean debug = FALSE;
 static struct cart *cart;             /* CGI and other variables */
 static struct hash *oldVars = NULL;
 static struct hash *trackCounter = NULL;
@@ -109,12 +110,12 @@ static void showCounts(struct hash *countTracks)
 {
 if (countTracks->elCount)
     {
-    hPrintf("        <ul>\n");
+    hPrintf("        <li><ul>\n");
     struct hashEl *hel;
     struct hashCookie hc = hashFirst(countTracks);
     while ((hel = hashNext(&hc)) != NULL)
         hPrintf("        <li>%d - %s</li>\n", ptToInt(hel->val), hel->name);
-    hPrintf("        </ul>\n");
+    hPrintf("        </ul></li>\n");
     }
 }
 #endif
@@ -166,7 +167,7 @@ freeMem(stripType);
 static void trackSettings(struct trackDb *tdb, struct hash *countTracks)
 /* process the settingsHash for a trackDb, recursive when subtracks */
 {
-hPrintf("    <ul>\n");
+hPrintf("    <li><ul>\n");
 // if (tdb->children)  haven't yet seen a track with children ?
 //   hPrintf("    <li>%s: has children</li>\n", tdb->track);
 // else
@@ -193,7 +194,7 @@ if (tdb->subtracks)
 	trackSettings(tdbEl, countTracks);
 	}
     }
-hPrintf("    </ul>\n");
+hPrintf("    </ul></li>\n");
 }
 
 static int bbiBriefMeasure(char *type, char *bigDataUrl, char *bigDataIndex, long *chromCount, long *itemCount, struct dyString *errors)
@@ -338,9 +339,9 @@ else
     }
 if (allTrackSettings)
     {
-    hPrintf("    <ul>\n");
+    hPrintf("    <li><ul>\n");
     trackSettings(tdb, countTracks); /* show all settings */
-    hPrintf("    </ul>\n");
+    hPrintf("    </ul></li>\n");
     }
 return;
 }	/*	static void countOneTdb(struct trackDb *tdb,
@@ -350,10 +351,10 @@ return;
 static void hubTrackList(struct trackDb *topTrackDb, struct trackHubGenome *genome)
 /* process the track list in a hub to show all tracks */
 {
+hPrintf("    <li><ul>\n");
 if (topTrackDb)
     {
     struct hash *countTracks = hashNew(0);
-    hPrintf("    <ul>\n");
     struct trackDb *tdb = NULL;
     for ( tdb = topTrackDb; tdb; tdb = tdb->next )
 	{
@@ -369,7 +370,7 @@ if (topTrackDb)
     /* add this single genome count to the overall multi-genome counts */
     if (countTracks->elCount)
 	{
-        hPrintf("        <ol>\n");
+        hPrintf("        <li><ol>\n");
 	struct hashEl *hel, *helList = hashElListHash(countTracks);
 	slSort(&helList, hashElCmpIntValDesc);
 	for (hel = helList; hel; hel = hel->next)
@@ -380,12 +381,13 @@ if (topTrackDb)
 	    hashReplace(trackCounter, hel->name, intToPt(prevCount + ptToInt(hel->val)));
 	    hPrintf("        <li>%d - %s</li>\n", ptToInt(hel->val), hel->name);
 	    }
-        hPrintf("        </ol>\n");
+        hPrintf("        </ol></li>\n");
 	}
-    hPrintf("    </ul>\n");
     }
 else
     hPrintf("    <li>no trackTopDb</li>\n");
+
+hPrintf("    </ul><li>\n");
 }	/*	static struct trackDb *hubTrackList()	*/
 
 static struct trackDb *assemblySettings(struct trackHubGenome *genome)
@@ -393,7 +395,7 @@ static struct trackDb *assemblySettings(struct trackHubGenome *genome)
 {
 struct trackDb *tdb = obtainTdb(genome, NULL);
 
-hPrintf("    <ul>\n");
+hPrintf("    <li><ul>\n");
 struct hashEl *hel;
 struct hashCookie hc = hashFirst(genome->settingsHash);
 while ((hel = hashNext(&hc)) != NULL)
@@ -406,7 +408,7 @@ while ((hel = hashNext(&hc)) != NULL)
     if (timeOutReached())
 	break;
     }
-hPrintf("    </ul>\n");
+hPrintf("    </ul></li>\n");
 return tdb;
 }
 
@@ -449,7 +451,7 @@ for ( ; genome; genome = genome->next )
     if (measureTiming)
 	{
 	long thisTime = clock1000();
-	hPrintf("<em>processing time %s: %ld millis</em><br>\n", genome->name, thisTime - lastTime);
+	hPrintf("<li><em>processing time %s: %ld millis</em></li>\n", genome->name, thisTime - lastTime);
 	}
     if (timeOutReached())
 	break;
@@ -458,14 +460,14 @@ if (trackCounter->elCount)
     {
     hPrintf("    <li>total genome assembly count: %ld</li>\n", totalAssemblyCount);
     hPrintf("    <li>%ld total tracks counted, %d different track types:</li>\n", totalTracks, trackCounter->elCount);
-    hPrintf("    <ol>\n");
+    hPrintf("    <li><ol>\n");
     struct hashEl *hel, *helList = hashElListHash(trackCounter);
     slSort(&helList, hashElCmpIntValDesc);
     for (hel = helList; hel; hel = hel->next)
 	{
 	hPrintf("    <li>%d - %s - total</li>\n", ptToInt(hel->val), hel->name);
 	}
-    hPrintf("    </ol>\n");
+    hPrintf("    </ol></li>\n");
     }
 hPrintf("</ul>\n");
 return retList;
@@ -530,7 +532,25 @@ hashAdd(apiFunctionHash, "list", &apiList);
 hashAdd(apiFunctionHash, "getData", &apiGetData);
 }
 
-static void apiFunctionSwitch(char *pathInfo)
+static struct hashEl *parsePathInfo(char *pathInfo, char *words[MAX_PATH_INFO])
+/* given a pathInfo string: /command/subCommand/etc...
+ *  parse that and return a function pointer and the parsed words
+ * Returns NULL if not recognized
+ */
+{
+char *tmp = cloneString(pathInfo);
+/* skip the first leading slash to simplify chopByChar parsing */
+tmp += 1;
+int wordCount = chopByChar(tmp, '/', words, MAX_PATH_INFO);
+if (wordCount < 1)
+    return NULL;
+
+struct hashEl *hel = hashLookup(apiFunctionHash, words[0]);
+return hel;
+}
+
+#ifdef NOT
+static void apiFunctionSwitch(struct hashEl *hel, char *words[MAX_PATH_INFO])
 /* given a pathInfo string: /command/subCommand/etc...
  *  parse that and decide on which function to acll
  */
@@ -540,6 +560,7 @@ hPrintDisable();	/* turn off all normal HTML output, doing JSON output */
 /* the leading slash has been removed from the pathInfo, therefore, the
  * chop will have the first word in words[0]
  */
+#ifdef NOT
 char *words[MAX_PATH_INFO];/*expect no more than MAX_PATH_INFO number of words*/
 int wordCount = chopByChar(pathInfo, '/', words, ArraySize(words));
 if (wordCount < 2)
@@ -548,12 +569,14 @@ if (wordCount < 2)
 struct hashEl *hel = hashLookup(apiFunctionHash, words[0]);
 if (hel == NULL)
     apiErrAbort("no such command: '%s' for endpoint '/%s'", words[0], pathInfo);
+#endif
 void (*apiFunction)(char **) = hel->val;
 // void (*apiFunction)(char **) = hashMustFindVal(apiFunctionHash, words[0]);
 
 (*apiFunction)(words);
 
 }	/*	static void apiFunctionSwitch(char *pathInfo)	*/
+#endif
 
 static void tracksForUcscDb(char *db)
 /* scan the specified database for all tracks */
@@ -586,42 +609,89 @@ hPrintf("</ul>\n");
 hPrintf("</p>\n");
 }	// static void tracksForUcscDb(char * db)
 
+static void introductionText()
+/* output explanation text */
+{
+char *scriptUri = getenv("SCRIPT_URI");
+
+hPrintf("<h1>JSON data API interface to U.C. Santa Cruz genome browser data</h1>\n");
+hPrintf("<h2>Data access URL: <em>%s</em></h2>\n", scriptUri);
+hPrintf("<h3>Endpoint functions:</h3>\n");
+hPrintf("<ul>\n");
+hPrintf("<li>/list/...</li>\n");
+hPrintf("<li><ol>\n");
+hPrintf("<li>/list/publicHubs - list public hubs</li>\n");
+hPrintf("<li>/list/ucscGenomes - list UCSC database genomes</li>\n");
+hPrintf("<li>/list/hubGenomes - list genomes from specified hub</li>\n");
+hPrintf("<li>/list/tracks - list data tracks available in specified hub or database genome</li>\n");
+hPrintf("<li>/list/chromosomes - list chromosomes from specified data track in specified hub or database genome</li>\n");
+hPrintf("</ol></li>\n");
+hPrintf("<li>/getData/...</li>\n");
+hPrintf("<li><ol>\n");
+hPrintf("<li>/getData/sequence - return sequence from specified hub or database genome</li>\n");
+hPrintf("<li>/getData/track - return data from specified track in hub or database genome</li>\n");
+hPrintf("</ol></li>\n");
+hPrintf("</ul>\n");
+hPrintf("<h3>Parameters to endpoint functions:</h3>\n");
+hPrintf("<ul>\n");
+hPrintf("<li>hubUrl=&lt;url&gt; - specify track hub or assembly hub URL</li>\n");
+hPrintf("<li>genome=&lt;name&gt; - specify genome assemby in track or assembly hub</li>\n");
+hPrintf("<li>db=&lt;ucscDb&gt; - specify database (aka genome assembly) in UCSC genome browser</li>\n");
+hPrintf("<li>track=&lt;trackName&gt; - specify data track in hub or UCSC database genome assembly</li>\n");
+hPrintf("<li>chrom=&lt;chrN&gt; - specify chromosome name for sequence or track data</li>\n");
+hPrintf("<li>start=&lt;123&gt; - specify start coordinate (0 relative) for data from track or sequence retrieval</li>\n");
+hPrintf("<li>end=&lt;456&gt; - specify end coordinate (1 relative) for data from track or sequence retrieval</li>\n");
+hPrintf("<li>(see also: <a href='http://genome.ucsc.edu/blog/the-ucsc-genome-browser-coordinate-counting-systems/' target=_blank>UCSC browser coordinate counting systems)</a></li>");
+hPrintf("</ul>\n");
+}
+
 static void showExamples(char *url, struct trackHubGenome *hubGenome, char *ucscDb)
 {
+char *urlPrefix = "";
+char *httpHost = getenv("HTTP_HOST");
+
+if (! startsWith("hgwdev-api", httpHost)) {
+   if (startsWith("hgwdev",httpHost) || startsWith("genome-test", httpHost))
+	{
+	urlPrefix = "../cgi-bin/hubApi";
+        }
+}
 
 hPrintf("<h2>Example URLs to return json data structures:</h2>\n");
 
 hPrintf("<h3>listing functions</h3>\n");
 hPrintf("<ol>\n");
-hPrintf("<li><a href='/cgi-bin/hubApi/list/publicHubs' target=_blank>list public hubs</a> <em>/cgi-bin/hubApi/list/publicHubs</em></li>\n");
-hPrintf("<li><a href='/cgi-bin/hubApi/list/ucscGenomes' target=_blank>list database genomes</a> <em>/cgi-bin/hubApi/list/ucscGenomes</em></li>\n");
-hPrintf("<li><a href='/cgi-bin/hubApi/list/hubGenomes?hubUrl=%s' target=_blank>list genomes from specified hub</a> <em>/cgi-bin/hubApi/list/hubGenomes?hubUrl=%s</em></li>\n", url, url);
-hPrintf("<li><a href='/cgi-bin/hubApi/list/tracks?hubUrl=%s&hubUrl=%s&genome=%s' target=_blank>list tracks from specified hub and genome</a> <em>/cgi-bin/hubApi/list/tracks?hubUrl=%s&genome=%s</em></li>\n", url, url, hubGenome->name, url, hubGenome->name);
-hPrintf("<li><a href='/cgi-bin/hubApi/list/tracks?db=%s' target=_blank>list tracks from specified UCSC database</a> <em>/cgi-bin/hubApi/list/tracks?db=%s</em></li>\n", ucscDb, ucscDb);
-hPrintf("<li><a href='/cgi-bin/hubApi/list/chromosomes?db=%s' target=_blank>list chromosomes from specified UCSC database</a> <em>/cgi-bin/hubApi/list/chromosomes?db=%s</em></li>\n", ucscDb, ucscDb);
-hPrintf("<li><a href='/cgi-bin/hubApi/list/chromosomes?db=%s&track=gap' target=_blank>list chromosomes from specified track from UCSC databaset</a> <em>/cgi-bin/hubApi/list/chromosomes?db=%s&track=gap</em></li>\n", ucscDb, ucscDb);
+hPrintf("<li><a href='%s/list/publicHubs' target=_blank>list public hubs</a> <em>%s/list/publicHubs</em></li>\n", urlPrefix, urlPrefix);
+hPrintf("<li><a href='%s/list/ucscGenomes' target=_blank>list database genomes</a> <em>%s/list/ucscGenomes</em></li>\n", urlPrefix, urlPrefix);
+hPrintf("<li><a href='%s/list/hubGenomes?hubUrl=%s' target=_blank>list genomes from specified hub</a> <em>%s/list/hubGenomes?hubUrl=%s</em></li>\n", urlPrefix, url, urlPrefix, url);
+hPrintf("<li><a href='%s/list/tracks?hubUrl=%s&amp;genome=%s' target=_blank>list tracks from specified hub and genome</a> <em>%s/list/tracks?hubUrl=%s&amp;genome=%s</em></li>\n", urlPrefix, url, hubGenome->name, urlPrefix, url, hubGenome->name);
+hPrintf("<li><a href='%s/list/tracks?db=%s' target=_blank>list tracks from specified UCSC database</a> <em>%s/list/tracks?db=%s</em></li>\n", urlPrefix, ucscDb, urlPrefix, ucscDb);
+hPrintf("<li><a href='%s/list/chromosomes?db=%s' target=_blank>list chromosomes from specified UCSC database</a> <em>%s/list/chromosomes?db=%s</em></li>\n", urlPrefix, ucscDb, urlPrefix, ucscDb);
+hPrintf("<li><a href='%s/list/chromosomes?db=%s&amp;track=gap' target=_blank>list chromosomes from specified track from UCSC databaset</a> <em>%s/list/chromosomes?db=%s&amp;track=gap</em></li>\n", urlPrefix, ucscDb, urlPrefix, ucscDb);
 hPrintf("</ol>\n");
 
 hPrintf("<h3>getData functions</h3>\n");
 hPrintf("<ol>\n");
-hPrintf("<li><a href='/cgi-bin/hubApi/getData/sequence?db=%s&chrom=chrM' target=_blank>get sequence from specified database and chromosome</a> <em>/cgi-bin/hubApi/getData/sequence?db=%s&chrom=chrM</em></li>\n", ucscDb, ucscDb);
-hPrintf("<li><a href='/cgi-bin/hubApi/getData/sequence?db=%s&chrom=chrM&start=0&end=128' target=_blank>get sequence from specified database, chromosome with start,end coordinates</a> <em>/cgi-bin/hubApi/getData/sequence?db=%s&chrom=chrM&start=0&end=128</em></li>\n", ucscDb, ucscDb);
-hPrintf("<li><a href='/cgi-bin/hubApi/getData/track?db=%s&track=gold' target=_blank>get entire track data from specified database and track name (gold == Assembly)</a> <em>/cgi-bin/hubApi/getData/track?db=%s&track=gold</em></li>\n", ucscDb, ucscDb);
-hPrintf("<li><a href='/cgi-bin/hubApi/getData/track?db=%s&chrom=chrM&track=gold' target=_blank>get track data from specified database, chromosome and track name (gold == Assembly)</a> <em>/cgi-bin/hubApi/getData/track?db=%s&chrom=chrM&track=gold</em></li>\n", ucscDb, ucscDb);
-hPrintf("<li><a href='/cgi-bin/hubApi/getData/track?db=%s&chrom=chrI&track=gold&start=107680&end=186148' target=_blank>get track data from specified database, chromosome, track name, start and end coordinates</a> <em>/cgi-bin/hubApi/getData/track?db=%s&chrom=chrI&track=gold&start=107680&end=186148</em></li>\n", defaultDb, defaultDb);
-hPrintf("<li><a href='/cgi-bin/hubApi/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt&genome=hg19&track=ultraConserved' target=_blank>get entire track data from specified hub and track name</a> <em>/cgi-bin/hubApi/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt&genome=hg19&track=ultraConserved</em></li>\n");
-hPrintf("<li><a href='/cgi-bin/hubApi/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&genome=_araTha1&chrom=chrCp&track=assembly_' target=_blank>get track data from specified hub, chromosome and track name (full chromosome)</a> <em>/cgi-bin/hubApi/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&genome=_araTha1&chrom=chrCp&track=assembly_</em></li>\n");
-hPrintf("<li><a href='/cgi-bin/hubApi/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&genome=_araTha1&chrom=chr1&track=assembly_&start=0&end=14309681' target=_blank>get track data from specified hub, chromosome, track name, start and end coordinates</a> <em>/cgi-bin/hubApi/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&genome=_araTha1&chrom=chr1&track=assembly_&start=0&end=14309681</em></li>\n");
-hPrintf("<li><a href='/cgi-bin/hubApi/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&genome=_araTha1&track=gc5Base_' target=_blank>get all track data from specified hub and track name</a> <em>/cgi-bin/hubApi/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&genome=_araTha1&track=gc5Base</em></li>\n");
-hPrintf("<li><a href='/cgi-bin/hubApi/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&genome=_araTha1&chrom=chrMt&track=gc5Base_&start=143600&end=143685' target=_blank>get track data from specified hub, chromosome, track name, start and end coordinates</a> <em>/cgi-bin/hubApi/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&genome=_araTha1&chrom=chrMt&track=gc5Base&start=143600&end=143685</em></li>\n");
-hPrintf("<li><a href='/cgi-bin/hubApi/getData/track?db=%s&chrom=chrI&track=gc5BaseBw&start=107680&end=186148' target=_blank>get bigWig track data from specified database, chromosome, track name, start and end coordinates</a> <em>/cgi-bin/hubApi/getData/track?db=%s&chrom=chrI&track=gc5BaseBw&start=107680&end=186148</em></li>\n", defaultDb, defaultDb);
-hPrintf("<li><a href='/cgi-bin/hubApi/getData/track?db=%s&chrom=chrII&track=ncbiRefSeqOther&start=14334626&end=14979625' target=_blank>get bigBed track data from specified database, chromosome, track name, start and end coordinates</a> <em>/cgi-bin/hubApi/getData/track?db=%s&chrom=chrII&track=ncbiRefSeqOther&start=14334626&end=14979625</em></li>\n", defaultDb, defaultDb);
+hPrintf("<li><a href='%s/getData/sequence?db=%s&amp;chrom=chrM' target=_blank>get sequence from specified database and chromosome</a> <em>%s/getData/sequence?db=%s&amp;chrom=chrM</em></li>\n", urlPrefix, ucscDb, urlPrefix, ucscDb);
+hPrintf("<li><a href='%s/getData/sequence?db=%s&amp;chrom=chrM&amp;start=0&amp;end=128' target=_blank>get sequence from specified database, chromosome with start,end coordinates</a> <em>%s/getData/sequence?db=%s&amp;chrom=chrM&amp;start=0&amp;end=128</em></li>\n", urlPrefix, ucscDb, urlPrefix, ucscDb);
+hPrintf("<li><a href='%s/getData/track?db=%s&amp;track=gold' target=_blank>get entire track data from specified database and track name (gold == Assembly)</a> <em>%s/getData/track?db=%s&amp;track=gold</em></li>\n", urlPrefix, ucscDb, urlPrefix, ucscDb);
+hPrintf("<li><a href='%s/getData/track?db=%s&amp;chrom=chrM&amp;track=gold' target=_blank>get track data from specified database, chromosome and track name (gold == Assembly)</a> <em>%s/getData/track?db=%s&amp;chrom=chrM&amp;track=gold</em></li>\n", urlPrefix, ucscDb, urlPrefix, ucscDb);
+hPrintf("<li><a href='%s/getData/track?db=%s&amp;chrom=chrI&amp;track=gold&amp;start=107680&amp;end=186148' target=_blank>get track data from specified database, chromosome, track name, start and end coordinates</a> <em>%s/getData/track?db=%s&amp;chrom=chrI&amp;track=gold&amp;start=107680&amp;end=186148</em></li>\n", urlPrefix, defaultDb, urlPrefix, defaultDb);
+hPrintf("<li><a href='%s/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt&amp;genome=hg19&amp;track=ultraConserved' target=_blank>get entire track data from specified hub and track name</a> <em>%s/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt&amp;genome=hg19&amp;track=ultraConserved</em></li>\n", urlPrefix, urlPrefix);
+hPrintf("<li><a href='%s/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&amp;genome=_araTha1&amp;chrom=chrCp&amp;track=assembly_' target=_blank>get track data from specified hub, chromosome and track name (full chromosome)</a> <em>%s/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&amp;genome=_araTha1&amp;chrom=chrCp&amp;track=assembly_</em></li>\n", urlPrefix, urlPrefix);
+hPrintf("<li><a href='%s/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&amp;genome=_araTha1&amp;chrom=chr1&amp;track=assembly_&amp;start=0&amp;end=14309681' target=_blank>get track data from specified hub, chromosome, track name, start and end coordinates</a> <em>%s/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&amp;genome=_araTha1&amp;chrom=chr1&amp;track=assembly_&amp;start=0&amp;end=14309681</em></li>\n", urlPrefix, urlPrefix);
+hPrintf("<li><a href='%s/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&amp;genome=_araTha1&amp;track=gc5Base_' target=_blank>get all track data from specified hub and track name</a> <em>%s/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&amp;genome=_araTha1&amp;track=gc5Base</em></li>\n", urlPrefix, urlPrefix);
+hPrintf("<li><a href='%s/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&amp;genome=_araTha1&amp;chrom=chrMt&amp;track=gc5Base_&amp;start=143600&amp;end=143685' target=_blank>get track data from specified hub, chromosome, track name, start and end coordinates</a> <em>%s/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&amp;genome=_araTha1&amp;chrom=chrMt&amp;track=gc5Base&amp;start=143600&amp;end=143685</em></li>\n", urlPrefix, urlPrefix);
+hPrintf("<li><a href='%s/getData/track?db=%s&amp;chrom=chrI&amp;track=gc5BaseBw&amp;start=107680&amp;end=186148' target=_blank>get bigWig track data from specified database, chromosome, track name, start and end coordinates</a> <em>%s/getData/track?db=%s&amp;chrom=chrI&amp;track=gc5BaseBw&amp;start=107680&amp;end=186148</em></li>\n", urlPrefix, defaultDb, urlPrefix, defaultDb);
+hPrintf("<li><a href='%s/getData/track?db=%s&amp;chrom=chrII&amp;track=ncbiRefSeqOther&amp;start=14334626&amp;end=14979625' target=_blank>get bigBed track data from specified database, chromosome, track name, start and end coordinates</a> <em>%s/getData/track?db=%s&amp;chrom=chrII&amp;track=ncbiRefSeqOther&amp;start=14334626&amp;end=14979625</em></li>\n", urlPrefix, defaultDb, urlPrefix, defaultDb);
+hPrintf("<li><a href='%s/getData/track?db=%s&amp;chrom=chr1&amp;track=wgEncodeAwgDnaseDuke8988tUniPk&amp;start=14334626&amp;end=14979625' target=_blank>get narrowPeak track data from specified database, chromosome, track name, start and end coordinates</a> <em>%s/getData/track?db=%s&amp;chrom=chr1&amp;track=wgEncodeAwgDnaseDuke8988tUniPk&amp;start=14334626&amp;end=14979625</em></li>\n", urlPrefix, "hg19", urlPrefix, "hg19");
+hPrintf("<li><a href='%s/getData/track?db=%s&amp;chrom=chr1&amp;track=wgEncodeBroadHistoneOsteoP300kat3bPk&amp;start=14334626&amp;end=14979625' target=_blank>get broadPeak track data from specified database, chromosome, track name, start and end coordinates</a> <em>%s/getData/track?db=%s&amp;chrom=chr1&amp;track=wgEncodeBroadHistoneOsteoP300kat3bPk&amp;start=14334626&amp;end=14979625</em></li>\n", urlPrefix, "hg19", urlPrefix, "hg19");
 
 hPrintf("</ol>\n");
 
 hPrintf("<h2>Example URLs to generate errors:</h2>\n");
-hPrintf("<li><a href='/cgi-bin/hubApi/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&genome=_araTha1&chrom=chrI&track=assembly_&start=0&end=14309681' target=_blank>get track data from specified hub, chromosome, track name, start and end coordinates</a> <em>/cgi-bin/hubApi/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&genome=_araTha1&chrom=chrI&track=assembly_&start=0&end=14309681</em></li>\n");
 hPrintf("<ol>\n");
+hPrintf("<li><a href='%s/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&amp;genome=_araTha1&amp;chrom=chrI&amp;track=assembly_&amp;start=0&amp;end=14309681' target=_blank>get track data from specified hub, chromosome, track name, start and end coordinates</a> <em>%s/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&amp;genome=_araTha1&amp;chrom=chrI&amp;track=assembly_&amp;start=0&amp;end=14309681</em></li>\n", urlPrefix, urlPrefix);
 hPrintf("</ol>\n");
 }	/*	static void showExamples()	*/
 
@@ -656,17 +726,35 @@ if (udcCacheTimeout() < timeout)
 knetUdcInstall();
 
 char *pathInfo = getenv("PATH_INFO");
+/* nothing on incoming path, then display the WEB page instead */
+if (sameOk("/",pathInfo))
+    pathInfo = NULL;
+
+boolean commandError = FALSE;
+char *words[MAX_PATH_INFO];
 
 if (isNotEmpty(pathInfo))
     {
-    puts("Content-Type:application/json");
-    puts("\n");
-    /* skip the first leading slash to simplify chopByChar parsing */
-    pathInfo += 1;
     setupFunctionHash();
-    apiFunctionSwitch(pathInfo);
-    return;
+    /*expect no more than MAX_PATH_INFO number of words*/
+    struct hashEl *hel = parsePathInfo(pathInfo, words);
+    /* verify valid API command */
+
+    if (hel)	/* have valid command */
+	{
+	puts("Content-Type:application/json");
+	puts("\n");
+	/* skip the first leading slash to simplify chopByChar parsing */
+//	pathInfo += 1;
+//	apiFunctionSwitch(hel, words);
+        void (*apiFunction)(char **) = hel->val;
+        (*apiFunction)(words);
+	return;
+	}
+     else
+	commandError = TRUE;
     }
+
 puts("Content-Type:text/html");
 puts("\n");
 
@@ -687,7 +775,7 @@ for ( ; el != NULL; el = el->next )
     }
 maxDbNameWidth += 1;
 
-cartWebStart(cart, database, "access mechanism to hub data resources");
+cartWebStart(cart, database, "UCSC API v"CGI_VERSION);
 
 char *goOtherHub = cartUsualString(cart, "goOtherHub", defaultHub);
 char *goUcscDb = cartUsualString(cart, "goUcscDb", "");
@@ -700,11 +788,17 @@ char *urlInput = urlDropDown;	/* assume public hub */
 if (sameWord("go", goOtherHub))	/* requested other hub URL */
     urlInput = otherHubUrl;
 
+if (commandError)
+  {
+  hPrintf("<h3>ERROR: no such command: '%s/%s' for endpoint '%s'</h3>", words[0], words[1], pathInfo);
+  }
+
 long lastTime = clock1000();
 struct trackHub *hub = errCatchTrackHubOpen(urlInput);
 if (measureTiming)
     {
     long thisTime = clock1000();
+    if (debug)
     hPrintf("<em>hub open time: %ld millis</em><br>\n", thisTime - lastTime);
     }
 
@@ -712,9 +806,14 @@ if (measureTiming)
 
 struct trackHubGenome *hubGenome = hub->genomeList;
 
+introductionText();
+
 showExamples(urlInput, hubGenome, ucscDb);
 
-showCartDump();
+if (debug)
+    showCartDump();
+
+hPrintf("<h2>Explore hub or database assemblies and tracks</h2>\n");
 
 hPrintf("<form action='%s' name='hubApiUrl' id='hubApiUrl' method='GET'>\n\n", "../cgi-bin/hubApi");
 
@@ -763,17 +862,19 @@ if (sameWord("go", goUcscDb))	/* requested UCSC db track list */
     }
 else
     {
-    hPrintf("<p>URL: %s - %s<br>\n", urlInput, sameWord("go",goPublicHub) ? "public hub" : "other hub");
-    hPrintf("name: %s<br>\n", hub->shortLabel);
-    hPrintf("description: %s<br>\n", hub->longLabel);
-    hPrintf("default db: '%s'<br>\n", isEmpty(hub->defaultDb) ? "(none available)" : hub->defaultDb);
-    printf("docRoot:'%s'<br>\n", docRoot);
+    if (debug)
+	{
+	hPrintf("<p>URL: %s - %s<br>\n", urlInput, sameWord("go",goPublicHub) ? "public hub" : "other hub");
+	hPrintf("name: %s<br>\n", hub->shortLabel);
+	hPrintf("description: %s<br>\n", hub->longLabel);
+	hPrintf("default db: '%s'<br>\n", isEmpty(hub->defaultDb) ? "(none available)" : hub->defaultDb);
+	printf("docRoot:'%s'<br>\n", docRoot);
+	}
 
     if (hub->genomeList)
 	(void) genomeList(hub, NULL, NULL);	/* ignore returned list */
     hPrintf("</p>\n");
     }
-
 
 if (timedOut)
     hPrintf("<h1>Reached time out %ld seconds</h1>", timeOutSeconds);
