@@ -27,7 +27,7 @@ if (hDbExists(db))
 return thisSize;
 }
 
-static void hgSeqFeatureRegionOptions(struct cart *cart, boolean canDoUTR,
+void hgSeqFeatureRegionOptions(struct cart *cart, boolean canDoUTR,
 			       boolean canDoIntrons)
 /* Print out HTML FORM entries for feature region options. */
 {
@@ -140,7 +140,7 @@ puts("Note: if a feature is close to the beginning or end of a chromosome \n"
 }
 
 
-static void hgSeqDisplayOptions(struct cart *cart, boolean canDoUTR,
+void hgSeqDisplayOptions(struct cart *cart, boolean canDoUTR,
                                 boolean canDoIntrons, boolean offerRevComp)
 /* Print out HTML FORM entries for sequence display options. */
 {
