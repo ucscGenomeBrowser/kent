@@ -5,7 +5,9 @@
 static void tableDataOutput(struct sqlConnection *conn, struct jsonWrite *jw, char *query, char *table)
 /* output the table data from the specified query string */
 {
-int columnCount = tableColumns(conn, jw, table);
+char **columnNames = NULL;
+char **columnTypes = NULL;
+int columnCount = tableColumns(conn, jw, table, &columnNames, &columnTypes);
 jsonWriteListStart(jw, "trackData");
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row = NULL;

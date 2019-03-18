@@ -742,6 +742,7 @@ if (isNotEmpty(pathInfo))
 
     if (hel)	/* have valid command */
 	{
+        hPrintDisable();
 	puts("Content-Type:application/json");
 	puts("\n");
 	/* skip the first leading slash to simplify chopByChar parsing */

@@ -2,14 +2,24 @@
 
 #include "dataApi.h"
 
-static void hubPublicJsonData(struct jsonWrite *jw, struct hubPublic *el)
+static void hubPublicJsonData(struct jsonWrite *jw, struct hubPublic *el,
+  int columnCount, char **columnNames)
 /* Print array data for one row from hubPublic table, order here
  * must be same as was stated in the columnName header element
- *  TODO: need to figure out how to use the order of the columns as
- *        they are in the 'desc' request
  * This code should be in hg/lib/hubPublic.c (which does not exist)
  */
 {
+int i = 0;
+jsonWriteObjectStart(jw, NULL);
+jsonWriteString(jw, columnNames[i++], el->hubUrl);
+jsonWriteString(jw, columnNames[i++], el->shortLabel);
+jsonWriteString(jw, columnNames[i++], el->longLabel);
+jsonWriteString(jw, columnNames[i++], el->registrationTime);
+jsonWriteNumber(jw, columnNames[i++], (long long)el->dbCount);
+jsonWriteString(jw, columnNames[i++], el->dbList);
+jsonWriteString(jw, columnNames[i++], el->descriptionUrl);
+jsonWriteObjectEnd(jw);
+#ifdef NOT
 jsonWriteListStart(jw, NULL);
 jsonWriteString(jw, NULL, el->hubUrl);
 jsonWriteString(jw, NULL, el->shortLabel);
@@ -19,6 +29,7 @@ jsonWriteNumber(jw, NULL, (long long)el->dbCount);
 jsonWriteString(jw, NULL, el->dbList);
 jsonWriteString(jw, NULL, el->descriptionUrl);
 jsonWriteListEnd(jw);
+#endif
 }
 
 static void jsonPublicHubs()
@@ -33,12 +44,14 @@ struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "dataTime", dataTime);
 jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
 freeMem(dataTime);
-jsonWriteString(jw, "tableName", hubPublicTableName());
-(void) tableColumns(conn, jw, hubPublicTableName());
-jsonWriteListStart(jw, "publicHubData");
+// redundant: jsonWriteString(jw, "tableName", hubPublicTableName());
+char **columnNames = NULL;
+char **columnTypes = NULL;
+int columnCount = tableColumns(conn, jw, hubPublicTableName(), &columnNames, &columnTypes);
+jsonWriteListStart(jw, "publicHubs");
 for ( ; el != NULL; el = el->next )
     {
-    hubPublicJsonData(jw, el);
+    hubPublicJsonData(jw, el, columnCount, columnNames);
     }
 jsonWriteListEnd(jw);
 jsonWriteObjectEnd(jw);
@@ -46,14 +59,32 @@ fputs(jw->dy->string,stdout);
 hDisconnectCentral(&conn);
 }
 
-static void dbDbJsonData(struct jsonWrite *jw, struct dbDb *el)
+static void dbDbJsonData(struct jsonWrite *jw, struct dbDb *el, int columnCount,
+  char **columnNames)
 /* Print out dbDb table element in JSON format.
  * must be same as was stated in the columnName header element
- *  TODO: need to figure out how to use the order of the columns as
- *        they are in the 'desc' request
  * This code should be over in hg/lib/dbDb.c
  */
 {
+int i = 0;
+jsonWriteObjectStart(jw, el->name);
+i++;
+// redundant: jsonWriteString(jw, NULL, el->name);
+jsonWriteString(jw, columnNames[i++], el->description);
+jsonWriteString(jw, columnNames[i++], el->nibPath);
+jsonWriteString(jw, columnNames[i++], el->organism);
+jsonWriteString(jw, columnNames[i++], el->defaultPos);
+jsonWriteNumber(jw, columnNames[i++], (long long)el->active);
+jsonWriteNumber(jw, columnNames[i++], (long long)el->orderKey);
+jsonWriteString(jw, columnNames[i++], el->genome);
+jsonWriteString(jw, columnNames[i++], el->scientificName);
+jsonWriteString(jw, columnNames[i++], el->htmlPath);
+jsonWriteNumber(jw, columnNames[i++], (long long)el->hgNearOk);
+jsonWriteNumber(jw, columnNames[i++], (long long)el->hgPbOk);
+jsonWriteString(jw, columnNames[i++], el->sourceName);
+jsonWriteNumber(jw, columnNames[i++], (long long)el->taxId);
+jsonWriteObjectEnd(jw);
+#ifdef NOT
 jsonWriteListStart(jw, NULL);
 jsonWriteString(jw, NULL, el->name);
 jsonWriteString(jw, NULL, el->description);
@@ -70,6 +101,7 @@ jsonWriteNumber(jw, NULL, (long long)el->hgPbOk);
 jsonWriteString(jw, NULL, el->sourceName);
 jsonWriteNumber(jw, NULL, (long long)el->taxId);
 jsonWriteListEnd(jw);
+#endif
 }
 
 static void jsonDbDb()
@@ -85,14 +117,21 @@ struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "dataTime", dataTime);
 jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
 freeMem(dataTime);
-jsonWriteString(jw, "tableName", "dbDb");
-(void) tableColumns(conn, jw, "dbDb");
-jsonWriteListStart(jw, "ucscGenomes");
+// not needed: jsonWriteString(jw, "tableName", "dbDb");
+char **columnNames = NULL;
+char **columnTypes = NULL;
+int columnCount = tableColumns(conn, jw, "dbDb", &columnNames, &columnTypes);
+if (columnCount)
+    {
+    }
+// jsonWriteListStart(jw, "ucscGenomes");
+jsonWriteObjectStart(jw, "ucscGenomes");
 for ( el=dbList; el != NULL; el = el->next )
     {
-    dbDbJsonData(jw, el);
+    dbDbJsonData(jw, el, columnCount, columnNames);
     }
-jsonWriteListEnd(jw);
+// jsonWriteListEnd(jw);
+jsonWriteObjectEnd(jw);
 jsonWriteObjectEnd(jw);
 fputs(jw->dy->string,stdout);
 hDisconnectCentral(&conn);
