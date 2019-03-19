@@ -16,8 +16,8 @@
 <li><a href="#genename">What is a gene name?</a></li>
 <li><a href="#ens">What are Ensembl and GENCODE and is there a difference?</a></li>
 <li><a href="#ensRefseq">What are the differences among GENCODE, Ensembl and RefSeq?</a></li>
-<li><a href="#hg19">For the human assembly hg19/GRCh37: What is the difference between UCSC 
-                    Genes track, the "GENCODE" track and the "Ensembl Genes" track?</a></li>
+<li><a href="#hg19">For the human assembly hg19/GRCh37: What is the difference between "UCSC 
+                    Genes" track, the "GENCODE" track and the "Ensembl Genes" track?</a></li>
 <li><a href="#hg38">For the human assembly hg38/GRCh38: What are the differences between the 
 		    "GENCODE" and "All GENCODE" tracks?</a></li>
 <li><a href="#gencode">What is the difference between GENCODE comprehensive and basic?</a></li>
@@ -208,8 +208,12 @@ protein coding transcripts over partial or non-protein coding transcripts within
 intends to highlight those transcripts that will be useful to the majority of users.&quot;</i></p>
 <p>
 By default, the track displays only the &quot;basic&quot; set. In order to display the complete 
-&quot;comprehensive&quot; set, the box can be tickets at the top of the <a target=_blank 
-href="../cgi-bin/hgTrackUi?db=hg38&g=knownGene">GENCODE track description page</a>.
+&quot;comprehensive&quot; set, the box can be ticked at the top of the <a target=_blank 
+href="../cgi-bin/hgTrackUi?db=hg38&g=knownGene">GENCODE track description page</a>.</p>
+
+<p class='text-center'>
+  <img class='text-center' src="../images/ComprehensiveSet.png" 
+alt="Turning on comprehensive gene set" width="750">
 
 <a name="ncbiRefseq"></a>
 <h6>What is the difference between "NCBI RefSeq" and "UCSC RefSeq"?</h6>
@@ -273,6 +277,7 @@ As  the name implies, it does not cover UTR regions or non-coding transcripts.
 
 <a name="justsingle"></a>
 <h6>How can I just show a single transcript per gene?</h6>
+
 <p> 
 For the tracks &quot;<a target=_blank 
 href="../cgi-bin/hgTrackUi?db=hg19&g=knownGene">UCSC Genes</a>&quot; 
@@ -282,6 +287,10 @@ href="../cgi-bin/hgTrackUi?db=hg38&g=knownGene">GENCODE Genes</a>&quot;
 box &quot;Show splice variants&quot;. Only a single transcript will be shown. The method for how this
 transcript is selected is described in the track documentation below the 
 configuration settings.</p>
+
+<p class='text-center'>
+  <img class='text-center' src="../images/SpliceVariants.png" 
+alt="Changing splice variants" width="750">
 
 <p>For the track <a target=_blank 
 href="../cgi-bin/hgTrackUi?db=hg38&g=refSeqComposite">
@@ -306,7 +315,12 @@ look at the UCSC RefSeq track and watch for differences between the NCBI
 and UCSC exon placement. You can also BLAT the transcript sequence. 
 Manually look at ESTs, mRNAs, TransMap and possibly Augustus, Genscan, SIB, SGP
 or GeneId in obscure cases where you are looking for hints on what an
-alternative splicing could look like.
+alternative splicing could look like.</p>
+<p>
+You may also find the <a target="_blank" 
+href="http://genome.ucsc.edu/s/view/GeneSupport">Gene Support</a> public session
+helpful. This session is a collection of tracks centered around supporting evidence
+for genes.</p>
 </p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
