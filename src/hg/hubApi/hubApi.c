@@ -164,6 +164,27 @@ freeMem(stripType);
 // showCounts(countTracks);
 }
 
+static void showSubTracks(struct trackDb *tdb, struct hash *countTracks)
+/* tdb has subtracks, show only subTracks, no details */
+{
+hPrintf("    <li><ul>\n");
+if (tdb->subtracks)
+    {
+    struct trackDb *tdbEl = NULL;
+    for (tdbEl = tdb->subtracks; tdbEl; tdbEl = tdbEl->next)
+	{
+        if (tdbIsCompositeView(tdbEl))
+	    hPrintf("<li>%s : %s : composite view of parent: %s</li>\n", tdbEl->track, tdbEl->type, tdbEl->parent->track);
+	else
+            hPrintf("<li>%s : %s : subtrack of parent: %s</li>\n", tdbEl->track, tdbEl->type, tdbEl->parent->track);
+	hashCountTrack(tdbEl, countTracks);
+        if (tdbEl->subtracks)
+	    showSubTracks(tdbEl, countTracks);
+	}
+    }
+hPrintf("    </ul></li>\n");
+}
+
 static void trackSettings(struct trackDb *tdb, struct hash *countTracks)
 /* process the settingsHash for a trackDb, recursive when subtracks */
 {
@@ -186,7 +207,8 @@ while ((hel = hashNext(&hc)) != NULL)
 if (tdb->subtracks)
     {
     struct trackDb *tdbEl = NULL;
-    hPrintf("   <li>has %d subtrack(s)</li>\n", slCount(tdb->subtracks));
+    if (debug)
+	hPrintf("   <li>has %d subtrack(s)</li>\n", slCount(tdb->subtracks));
     for (tdbEl = tdb->subtracks; tdbEl; tdbEl = tdbEl->next)
 	{
         hPrintf("<li>subtrack: %s of parent: %s : type: '%s'</li>\n", tdbEl->track, tdbEl->parent->track, tdbEl->type);
@@ -327,12 +349,12 @@ if (depthSearch && bigDataUrl)
 else
     {
     if (compositeContainer)
-        hPrintf("    <li>%s : %s : composite track container</li>\n", tdb->track, tdb->type);
+        hPrintf("    <li>%s : %s : composite track container has %d subtracks</li>\n", tdb->track, tdb->type, slCount(tdb->subtracks));
     else if (compositeView)
         hPrintf("    <li>%s : %s : composite view of parent: %s</li>\n", tdb->track, tdb->type, tdb->parent->track);
     else if (superChild)
         hPrintf("    <li>%s : %s : superTrack child of parent: %s</li>\n", tdb->track, tdb->type, tdb->parent->track);
-    else if (! depthSearch)
+    else if (! depthSearch && bigDataUrl)
         hPrintf("    <li>%s : %s : %s</li>\n", tdb->track, tdb->type, bigDataUrl);
     else
         hPrintf("    <li>%s : %s</li>\n", tdb->track, tdb->type);
@@ -342,6 +364,10 @@ if (allTrackSettings)
     hPrintf("    <li><ul>\n");
     trackSettings(tdb, countTracks); /* show all settings */
     hPrintf("    </ul></li>\n");
+    }
+else if (tdb->subtracks)
+    {
+    showSubTracks(tdb, countTracks);
     }
 return;
 }	/*	static void countOneTdb(struct trackDb *tdb,
@@ -366,7 +392,7 @@ if (topTrackDb)
 	if (timeOutReached())
 	    break;
 	}	/*	for ( tdb = topTrackDb; tdb; tdb = tdb->next )	*/
-    hPrintf("    <li>%d different track types</li>\n", countTracks->elCount);
+    hPrintf("    <li>%d different track types</li>\n",countTracks->elCount - 1);
     /* add this single genome count to the overall multi-genome counts */
     if (countTracks->elCount)
 	{
@@ -375,6 +401,8 @@ if (topTrackDb)
 	slSort(&helList, hashElCmpIntValDesc);
 	for (hel = helList; hel; hel = hel->next)
 	    {
+	    if (sameOk("track count", hel->name))
+		continue;
             int prevCount = ptToInt(hashFindVal(trackCounter, hel->name));
 	    if (differentStringNullOk("track count", hel->name))
 		totalTracks += ptToInt(hel->val);
@@ -593,7 +621,8 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next )
 	break;
     }
 int trackCount = ptToInt(hashFindVal(countTracks, "track count"));
-hPrintf("    <li>%d total tracks counted, %d different track types</li>\n", trackCount, countTracks->elCount);
+/* elCount - 1 since the 'track count' element isn't a track */
+hPrintf("    <li>%d total tracks counted, %d different track types</li>\n", trackCount, countTracks->elCount - 1);
 if (countTracks->elCount)
     {
     hPrintf("        <ol>\n");
@@ -601,6 +630,8 @@ if (countTracks->elCount)
     slSort(&helList, hashElCmpIntValDesc);
     for (hel = helList; hel; hel = hel->next)
 	{
+	if (sameOk("track count", hel->name))
+	    continue;
 	hPrintf("        <li>%d - %s</li>\n", ptToInt(hel->val), hel->name);
 	}
     hPrintf("        </ol>\n");
@@ -731,12 +762,12 @@ if (sameOk("/",pathInfo))
     pathInfo = NULL;
 
 boolean commandError = FALSE;
+/*expect no more than MAX_PATH_INFO number of words*/
 char *words[MAX_PATH_INFO];
 
 if (isNotEmpty(pathInfo))
     {
     setupFunctionHash();
-    /*expect no more than MAX_PATH_INFO number of words*/
     struct hashEl *hel = parsePathInfo(pathInfo, words);
     /* verify valid API command */
 
@@ -745,9 +776,6 @@ if (isNotEmpty(pathInfo))
         hPrintDisable();
 	puts("Content-Type:application/json");
 	puts("\n");
-	/* skip the first leading slash to simplify chopByChar parsing */
-//	pathInfo += 1;
-//	apiFunctionSwitch(hel, words);
         void (*apiFunction)(char **) = hel->val;
         (*apiFunction)(words);
 	return;
