@@ -44,7 +44,7 @@ from.
 <p>
 The exact definition of &quot;gene&quot; depends on the context. In the context of 
 genome annotation, a gene has at least a name and is defined by a collection of
-related mRNA transcript sequences (&quot;isoforms&quot;). The naming of genes and the
+related RNA transcript sequences (&quot;isoforms&quot;). The naming of genes and the
 assignment of the most important transcript sequences is often done manually by
 a group of biological literature curators.  For human, genes names are created
 by the <a target=_blank href="https://www.genenames.org/">Human Gene
@@ -92,9 +92,16 @@ these in manuscripts.</p>
 <p>
 The most common accession numbers encountered by users are either from Ensembl,
 GENCODE or RefSeq.  Human Ensembl/GENCODE gene accession numbers start with
-ENSG, e.g. &quot;ENSG00000012048&quot for BRCA1.  Every ENSG-gene has at least
+ENSG followed by a number and version number separated by a dot, e.g. 
+&quot;ENSG00000012048.21&quot for latest BRCA1.  Every ENSG-gene has at least
 one transcript assigned to it. The transcript identifiers start with with ENST
-followed by a number, e.g.  &quot;ENST00000619216.1&quot;. NCBI refers to genes
+and are likewise followed by a version number, e.g. 
+&quot;ENST00000619216.1&quot;. Additional details on Ensembl IDs can be found
+on the <a target="_blank" 
+href="https://uswest.ensembl.org/Help/Faq?id=488">Ensembl FAQ page</a>.</p>
+
+<p>
+NCBI refers to genes
 with plain numbers, e.g.  672 for BRCA1. Manually curated RefSeq transcript
 identifiers start with NM_ (coding) or NR_ (non-coding), followed by a number and version
 number separated by a dot, e.g. &quot;NR_046018.2&quot;.  If the transcript was
@@ -108,7 +115,9 @@ NCBI website</a>.
 <a name="mostCommon"></a>
 <h6>What are the most common gene transcript tracks?</h6>
 <p>
-Researchers sequence cDNA sequences and send these to NCBI Genbank. The
+Researchers sequence <a target="_blank" 
+href="https://en.wikipedia.org/wiki/Complementary_DNA">cDNA sequences</a> 
+and send these to NCBI Genbank. The
 Genome Browser shows these sequences in the Genbank or the <a target=_blank 
 href="../cgi-bin/hgTrackUi?db=hg38&g=est">EST track</a> (if the cDNA is just
 a single read from the 5' or 3' end). From the alignment of the cDNAs and ESTs, 
