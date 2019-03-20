@@ -798,7 +798,7 @@ hPrintf("<li><a href='%s/list/hubGenomes?hubUrl=%s' target=_blank>list genomes f
 hPrintf("<li><a href='%s/list/tracks?hubUrl=%s&amp;genome=%s' target=_blank>list tracks from specified hub and genome</a> <em>%s/list/tracks?hubUrl=%s&amp;genome=%s</em></li>\n", urlPrefix, url, hubGenome->name, urlPrefix, url, hubGenome->name);
 hPrintf("<li><a href='%s/list/tracks?db=%s' target=_blank>list tracks from specified UCSC database</a> <em>%s/list/tracks?db=%s</em></li>\n", urlPrefix, ucscDb, urlPrefix, ucscDb);
 hPrintf("<li><a href='%s/list/chromosomes?db=%s' target=_blank>list chromosomes from specified UCSC database</a> <em>%s/list/chromosomes?db=%s</em></li>\n", urlPrefix, ucscDb, urlPrefix, ucscDb);
-hPrintf("<li><a href='%s/list/chromosomes?db=%s&amp;track=gap' target=_blank>list chromosomes from specified track from UCSC databaset</a> <em>%s/list/chromosomes?db=%s&amp;track=gap</em></li>\n", urlPrefix, ucscDb, urlPrefix, ucscDb);
+hPrintf("<li><a href='%s/list/chromosomes?db=%s&amp;track=gold' target=_blank>list chromosomes from specified track from UCSC databaset</a> <em>%s/list/chromosomes?db=%s&amp;track=gold</em></li>\n", urlPrefix, ucscDb, urlPrefix, ucscDb);
 hPrintf("</ol>\n");
 
 hPrintf("<h3>getData functions</h3>\n");
@@ -851,6 +851,7 @@ initGenbankTableNames(database);
 initSupportedTypes();
 initUrlPrefix();
 
+debug = cartUsualBoolean(cart, "debug", debug);
 int timeout = cartUsualInt(cart, "udcTimeout", 300);
 if (udcCacheTimeout() < timeout)
     udcSetCacheTimeout(timeout);
@@ -904,34 +905,35 @@ for ( ; el != NULL; el = el->next )
     }
 maxDbNameWidth += 1;
 
-cartWebStart(cart, database, "UCSC API v"CGI_VERSION);
+cartWebStart(cart, database, "UCSC JSON API interface");
 
 if (debug)
     {
     char *envVar = getenv("BROWSER_HOST");
-    hPrintf("<h4>BROWSER_HOST:%s</h4>\n", envVar);
+    hPrintf("<ul>\n");
+    hPrintf("<li>BROWSER_HOST:%s</li>\n", envVar);
     envVar = getenv("CONTEXT_DOCUMENT_ROOT");
-    hPrintf("<h4>CONTEXT_DOCUMENT_ROOT:%s</h4>\n", envVar);
+    hPrintf("<li>CONTEXT_DOCUMENT_ROOT:%s</li>\n", envVar);
     envVar = getenv("CONTEXT_PREFIX");
-    hPrintf("<h4>CONTEXT_PREFIX:%s</h4>\n", envVar);
+    hPrintf("<li>CONTEXT_PREFIX:%s</li>\n", envVar);
     envVar = getenv("DOCUMENT_ROOT");
-    hPrintf("<h4>DOCUMENT_ROOT:%s</h4>\n", envVar);
+    hPrintf("<li>DOCUMENT_ROOT:%s</li>\n", envVar);
     envVar = getenv("HTTP_HOST");
-    hPrintf("<h4>HTTP_HOST:%s</h4>\n", envVar);
+    hPrintf("<li>HTTP_HOST:%s</li>\n", envVar);
     envVar = getenv("REQUEST_URI");
-    hPrintf("<h4>REQUEST_URI:%s</h4>\n", envVar);
+    hPrintf("<li>REQUEST_URI:%s</li>\n", envVar);
     envVar = getenv("SCRIPT_FILENAME");
-    hPrintf("<h4>SCRIPT_FILENAME:%s</h4>\n", envVar);
+    hPrintf("<li>SCRIPT_FILENAME:%s</li>\n", envVar);
     envVar = getenv("SCRIPT_NAME");
-    hPrintf("<h4>SCRIPT_NAME:%s</h4>\n", envVar);
+    hPrintf("<li>SCRIPT_NAME:%s</li>\n", envVar);
     envVar = getenv("SCRIPT_URI");
-    hPrintf("<h4>SCRIPT_URI:%s</h4>\n", envVar);
+    hPrintf("<li>SCRIPT_URI:%s</li>\n", envVar);
     envVar = getenv("SCRIPT_URL");
-    hPrintf("<h4>SCRIPT_URL:%s</h4>\n", envVar);
+    hPrintf("<li>SCRIPT_URL:%s</li>\n", envVar);
     envVar = getenv("SERVER_NAME");
-    hPrintf("<h4>SERVER_NAME:%s</h4>\n", envVar);
+    hPrintf("<li>SERVER_NAME:%s</li>\n", envVar);
+    hPrintf("</ul>\n");
     }
-
 
 char *goOtherHub = cartUsualString(cart, "goOtherHub", defaultHub);
 char *goUcscDb = cartUsualString(cart, "goUcscDb", "");
@@ -957,7 +959,7 @@ if (measureTiming)
     {
     long thisTime = clock1000();
     if (debug)
-    hPrintf("<em>hub open time: %ld millis</em><br>\n", thisTime - lastTime);
+       hPrintf("<em>hub open time: %ld millis</em><br>\n", thisTime - lastTime);
     }
 
 // hPrintf("<h3>ucscDb: '%s'</h2>\n", ucscDb);
