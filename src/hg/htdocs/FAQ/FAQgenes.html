@@ -11,7 +11,7 @@
 
 <ul>
 <li><a href="#gene">What is a gene?</a></li>
-<li><a href="#genestrans">What is the difference between a gene and a transcript?</a></li>
+<li><a href="#genestrans">What is a transcript and how is it related to a gene?</a></li>
 <li><a href="#mostCommon">What are the most common gene transcript tracks?</a></li>
 <li><a href="#genename">What is a gene name?</a></li>
 <li><a href="#ens">What are Ensembl and GENCODE and is there a difference?</a></li>
@@ -33,39 +33,55 @@
 
 <a name="gene"></a>
 <h2>The basics</h2>
+
+The genome browser contains many gene annotation tracks. Our users 
+often wonder what these contain and where the information that we present comes
+from.
+
 <h6>What is a gene?</h6>
 <p>
-Before DNA sequencing, genes were defined as heritable traits. In the present day context of 
-bioinformatics, a gene represents a collection of transcripts usually transcribed within certain 
-genomic coordinates. Transcripts either encode one protein or are non-coding. 
-For human, most genes have an associated symbol assigned by the <a target=_blank 
-href="https://www.genenames.org/">Human Gene Nomenclature Committee (HGNC, formerly HUGO)</a>. 
-For other organisms there is usually a database curation 
-team that assigns symbols, such as MGI for mouse.
+The exact definition of "gene" depends on the context. In the context of 
+genome annotation, a gene has at least a name and is defined by a collection of
+related mRNA transcript sequences ("isoforms"). The naming of genes and the
+assignment of the most important transcript sequences is often done manually by
+a group of biological literature curators.  For human, genes names are created
+by the <a target=_blank href="https://www.genenames.org/">Human Gene
+Nomenclature Committee (HGNC, formerly HUGO)</a>.  Non-human species have
+similar annotation groups, e.g. Mouse Genome Informatics, Wormbase, Flybase,
+etc.
 </p>
 
 <a name="genestrans"></a>
-<h6>What is the difference between a gene and a transcript? </h6>
+<h6>What is a transcript and how is it related to a gene? </h6>
 <p>
-Transcripts are defined as RNA molecules that are copied from the DNA template of a gene. Every 
-gene is comprised of a set of transcripts. In the Genome Browser, data tracks are often called 
+Transcripts are defined as RNA molecules that are made from a DNA template.
+Databases like the ones at the National Library of Medicine's NCBI or the
+European Bioinformatics Institute (EBI) collect these transcript sequences from
+biologists working on a gene. Every transcript has a 
+unique identifier (accession), a gene that it is assigned to, a sequence, and
+a list of exon chrom/start/end coordinates on a chromosome. 
+Usually every transcript is assigned to only a single gene. In the Genome Browser, transcript
+tracks often end with the word
 &quot;Genes&quot;, e.g. &quot;Ensembl Genes&quot;, &quot;NCBI RefSeq Genes&quot; or &quot;UCSC 
-Genes&quot;, but they really represent transcripts on an assembly. Every transcript has an 
-accession number, a sequence, and a list of exon chrom/start/end coordinates on a genome assembly. 
-These transcript accession numbers are assigned to genes. </p>
+Genes&quot;, but they really represent transcripts on chromosomes of a genome assembly.</p>
 <p>
-For example, the gene with the gene symbol <a target=_blank 
-href="https://www.ncbi.nlm.nih.gov/gene/672#">BRCA1</a> has 5 protein-coding transcripts 
-or isoforms. The first transcript has the NCBI accession number <a target=_blank 
-href="https://www.ncbi.nlm.nih.gov/nuccore/NM_007294.3">NM_007294.3</a> which produces
-the protein <a target=_blank href="https://www.ncbi.nlm.nih.gov/protein/NP_009225.1">
-NP_009225.1</a>. This transcript is comprised of <a target=_blank 
-href="https://www.ncbi.nlm.nih.gov/nuccore/U14680">23 exons</a>.</p>
+For example, using the databases by NCBI, the gene
+with the gene symbol <a target=_blank
+href="https://www.ncbi.nlm.nih.gov/gene/672#">BRCA1</a> has 5 protein-coding
+transcripts or isoforms. The first transcript has the NCBI accession number <a
+target=_blank
+href="https://www.ncbi.nlm.nih.gov/nuccore/NM_007294.3">NM_007294.3</a> which
+produces the protein with the accession<a target=_blank
+href="https://www.ncbi.nlm.nih.gov/protein/NP_009225.1"> NP_009225.1</a>. In
+the human genome, it is located on chromosome 17, where it is comprised of <a
+target=_blank href="https://www.ncbi.nlm.nih.gov/nuccore/U14680">23 exons</a>.
+On the version GRCh38 of the human genome, these exons cover the DNA
+nucleotides 43044295 to 43125483.</p>
 
 <a name="mostCommon"></a>
 <h6>What are the most common gene transcript tracks?</h6>
 <p>
-Originally, researchers sequenced cDNA and submitted the sequences to Genbank. The
+Researchers sequence cDNA sequences and send these to NCBI Genbank. The
 Genome Browser shows these sequences in the Genbank or the <a target=_blank 
 href="../cgi-bin/hgTrackUi?db=hg38&g=est">EST track</a> (if the cDNA is just
 a single read from the 5' or 3' end). From the alignment of the cDNAs and ESTs, 
@@ -75,9 +91,9 @@ href=../cgi-bin/hgTrackUi?db=hg38&g=refSeqComposite>RefSeq Curated</a> track.
 Automated programs like UCSC's or Ensembl's gene build software do the same, just
 in software, which is more systematic but also more error-prone.
 With the arrival of GENCODE, Ensembl added a manual curation to their
-human and mouse transcripts. NCBI has since also added an automated predictions pipeline with 
-their tool Gnomon and its resulting &quot;<a target=_blank 
-href=../cgi-bin/hgTrackUi?db=hg38&g=refSeqComposite>RefSeq Predicted</a>&quot; transcripts.</p>
+human and mouse transcripts. NCBI has added an automated prediction software (Gnomon)
+which we show in the &quot;<a target=_blank 
+href=../cgi-bin/hgTrackUi?db=hg38&g=refSeqComposite>RefSeq Predicted</a>&quot; track.</p>
 
 <p>There are many other tracks in the group &quot;Genes and Gene Predictions&quot;.
 <a target=_blank href="../cgi-bin/hgTrackUi?db=hg38&g=genscan">Genscan</a> and <a target=_blank 
@@ -91,25 +107,34 @@ think that the manually curated gene models (Ensembl and RefSeq) have
 errors.</p>
 
 <a name="genename"></a>
-<h6>What is a gene name? </h6>
+<h6>What is a gene or transcript accession? </h6>
 
 <p>
-The most common gene names (sometimes called accession numbers) encountered by users 
-are either from Ensembl, GENCODE, RefSeq, or 
-gene symbols. For gene symbols, such as DDX11L1, see the above question <a 
-href="FAQgenes.html#gene">"What is a gene?"</a>. Ensembl/GENCODE transcript accession numbers in 
-the human genome start with ENST followed by a number, e.g. &quot;ENST00000619216.1&quot;. Every 
-transcript is assigned to a gene with identifiers that  start with ENSG and every ENSG has at least 
-one ENST assigned to it. Manually curated RefSeq transcript identifiers start with 
-NM_ (coding) or NR_ (non-coding), followed by a number, or XM_ if they are predicted by 
-software, e.g. &quot;NR_046018.2&quot;. A table of all RefSeq prefixes can be found on the <a 
-target=_blank href=
-"https://www.ncbi.nlm.nih.gov/books/NBK21091/table/ch18.T.refseq_accession_numbers_and_mole/?report=objectonly">
+Gene symbols like BRCA1 are easy to remember but sometimes change and are not
+specific to an organism.  Therefore most databases internally use unique
+identifiers to refer to sequences and some journals require authors to use
+these in manuscripts.<br>
+
+The most common accession numbers encountered by users are either from Ensembl,
+GENCODE or RefSeq.  Human Ensembl/GENCODE gene accession numbers start with
+ENSG, e.g. &quot;ENSG00000012048&quot for BRCA1.  Every ENSG-gene has at least
+one transcript assigned to it. The transcript identifiers start with with ENST
+followed by a number, e.g.  &quot;ENST00000619216.1&quot;. NCBI refers to genes
+with plain numbers, e.g.  672 for BRCA1. Manually curated RefSeq transcript
+identifiers start with NM_ (coding) or NR_ (non-coding), followed by a number and version
+number separated by a dot, e.g. &quot;NR_046018.2&quot;.  If the transcript was
+predicted by the NCBI Gnomon software, the prefix is XM_ but these are rare in human. 
+A table of these and other RefSeq prefixes can be
+found on the <a target=_blank
+href="https://www.ncbi.nlm.nih.gov/books/NBK21091/table/ch18.T.refseq_accession_numbers_and_mole/?report=objectonly">
 NCBI website</a>.
 </p>
 
 <a name="ens"></a>
 <h2>The differences</h2>
+
+Some of our gene tracks look similar and contain very similar information which can be confusing.
+
 <h6>What are Ensembl and GENCODE and is there a difference?</h6>
 
 <p> 
