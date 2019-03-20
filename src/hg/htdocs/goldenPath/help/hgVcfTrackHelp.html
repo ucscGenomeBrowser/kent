@@ -47,14 +47,14 @@ colored purple.
 Each variant is drawn as a vertical column, using color to distinguish between 
 reference alleles and alternate alleles of the horizontally running haplotypes. If unchecked, then 
 the display is the same as for VCF without genotypes: a stacked bar graph of the top two alleles, 
-showing the proportion of alleles if allele counts are available. This is checked (enabled) by 
+showing the proportion of alleles if allele counts are available. This is check enabled by 
 default.</p>
 
 <p>
 The following options are applicable only when the haplotype sorting display is enabled:</p>
 <p> 
 <strong>Haplotype sorting order:</strong> Haplotypes are sorted using a distance function that 
-uses a central variant; differences between haplotypes are penalized with weights that decrease 
+uses a central variant. Differences between haplotypes are penalized with weights that decrease 
 for each successive variant away from the central variant.  By default, the median variant in 
 the window is used. By clicking on a variant in the display, you will get the option to always 
 use that variant when it is in the current view.</p>
@@ -92,10 +92,10 @@ open rectangles [.</p>
 
 
 <p>
-<strong>Haplotype sorting display height:</strong>Height in pixels of the haplotype sorting 
-display. If this is fewer than the number of haplotypes (2 * the number of genotype columns), 
-some horizontal pixel rows must represent multiple haplotypes; differing haplotypes' colors 
-will be combined according to the selected coloring scheme.</p>
+<strong>Haplotype sorting display height:</strong> This number represents the track height in
+pixels. If the number of pixels is fewer than the number of haplotypes (2 * the number of genotype
+columns), some horizontal pixel rows must represent multiple haplotypes; with differing haplotypes'
+colors combined according to the selected coloring scheme.</p>
 
 <p class='text-center'>
   <img src="../../images/vcfOptions.png" alt="VCF options" width=600px>

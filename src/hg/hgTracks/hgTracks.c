@@ -2631,6 +2631,7 @@ if (!position)
     errAbort("position NULL");
     }
 char *vPos = cloneString(position);
+stripChar(vPos, ',');
 char *colon = strchr(vPos, ':');
 if (!colon)
     errAbort("position has no colon");
@@ -2652,6 +2653,7 @@ if (!position)
     errAbort("position NULL");
     }
 char *vPos = cloneString(position);
+stripChar(vPos, ',');
 char *colon = strchr(vPos, ':');
 if (!colon)
     errAbort("position has no colon");
@@ -5785,7 +5787,7 @@ else
     {
     tdbList = hTrackDbForTrack(database, trackNameFilter);
 
-    if (tdbList->parent)        // we want to give the composite parent a chance to load and set options
+    if (tdbList && tdbList->parent)        // we want to give the composite parent a chance to load and set options
         {
         while(tdbList->parent)
             {
@@ -9018,6 +9020,7 @@ if (!position)
     errAbort("position NULL");
     }
 char *vPos = cloneString(position);
+stripChar(vPos, ',');
 char *colon = strchr(vPos, ':');
 if (!colon)
     errAbort("position has no colon");
