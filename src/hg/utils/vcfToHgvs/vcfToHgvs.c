@@ -6,7 +6,10 @@
 #include "genbank.h"
 #include "hdb.h"
 #include "hgHgvs.h"
+#include "hui.h"
+#include "knetUdc.h"
 #include "options.h"
+#include "udc.h"
 #include "variantProjector.h"
 #include "vcf.h"
 
@@ -18,8 +21,9 @@ errAbort(
   "vcfToHgvs - Transform VCF variant calls into HGVS terms\n"
   "usage:\n"
   "   vcfToHgvs db in.vcf out.tab\n"
-//  "options:\n"
-//  "   -xxx=XXX\n"
+  "options:\n"
+  "   -udcDir=/dir/to/cache - place to put cache for remote VCF files.\n"
+  "                           Will create this directory if it does not exist\n"
   );
 }
 
@@ -27,6 +31,7 @@ static boolean breakDelIns = FALSE;
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"udcDir", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -274,6 +279,10 @@ return chrom;
 void vcfToHgvs(char *db, char *vcfIn, char *hgvsOut)
 /* vcfToHgvs - Transform VCF variant calls into HGVS terms. */
 {
+// UDC cache dir: first check for hg.conf setting, then override with command line option if given.
+setUdcCacheDir();
+udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
+knetUdcInstall();
 struct vcfFile *vcff = vcfFileMayOpen(vcfIn, NULL, 0, 0, -1, -1, TRUE);
 if (! vcff)
     errAbort("Sorry, can't open VCF file %s", vcfIn);
