@@ -32,9 +32,63 @@ static long enteredMainTime = 0;	/* will become = clock1000() on entry */
 		/* to allow calculation of when to bail out, taking too long */
 static long timeOutSeconds = 100;
 static boolean timedOut = FALSE;
+static char *urlPrefix = "";	/* initalized to support self references */
+static struct slName *supportedTypes = NULL;
+	/* will be initialized to a known supported set */
+
+static void initSupportedTypes()
+/* initalize the list of supported track types,
+ */
+{
+struct slName *el = newSlName("bed");
+slAddHead(&supportedTypes, el);
+el = newSlName("wig");
+slAddHead(&supportedTypes, el);
+el = newSlName("broadPeak");
+slAddHead(&supportedTypes, el);
+el = newSlName("narrowPeak");
+slAddHead(&supportedTypes, el);
+el = newSlName("bigBed");
+slAddHead(&supportedTypes, el);
+el = newSlName("bigWig");
+slAddHead(&supportedTypes, el);
+el = newSlName("bigNarrowPeak");
+slAddHead(&supportedTypes, el);
+el = newSlName("bigGenePred");
+slAddHead(&supportedTypes, el);
+el = newSlName("bigPsl");
+slAddHead(&supportedTypes, el);
+el = newSlName("bigBarChart");
+slAddHead(&supportedTypes, el);
+el = newSlName("bigInteract");
+slAddHead(&supportedTypes, el);
+el = newSlName("bigMaf");
+slAddHead(&supportedTypes, el);
+el = newSlName("bigChain");
+slAddHead(&supportedTypes, el);
+slNameSort(&supportedTypes);
+}
+
+static boolean isSupportedType(char *type)
+/* is given type in the supportedTypes list ? */
+{
+boolean ret = FALSE;
+if (startsWith("wigMaf", type))
+    return ret;
+struct slName *el;
+for (el = supportedTypes; el; el = el->next)
+    {
+    if (startsWith(el->name, type))
+	{
+	ret = TRUE;
+	break;
+	}
+    }
+return ret;
+}
 
 static int publicHubCmpCase(const void *va, const void *vb)
-/* Compare two slNames, ignore case. */
+/* Compare two shortLabels, ignore case. */
 {
 const struct hubPublic *a = *((struct hubPublic **)va);
 const struct hubPublic *b = *((struct hubPublic **)vb);
@@ -164,7 +218,25 @@ freeMem(stripType);
 // showCounts(countTracks);
 }
 
-static void showSubTracks(struct trackDb *tdb, struct hash *countTracks)
+static void sampleUrl(char *db, struct trackDb *tdb, char *chrom, long long chromSize)
+/* print out a sample getData URL */
+{
+long long start = chromSize / 4;
+long long end = start + 10000;
+if (end > chromSize)
+    end = chromSize;
+
+if (db)
+    {
+    if (tdb->parent)
+	hPrintf("<li>%s : %s subtrack of parent: %s <a href='%s/getData/track?db=%s&amp;chrom=%s&amp;track=%s&amp;start=%lld&amp;end=%lld' target=_blank>(sample getData)</a></li>\n", tdb->track, tdb->type, tdb->parent->track, urlPrefix, db, chrom, tdb->track, start, end );
+    else
+	hPrintf("<li>%s : %s <a href='%s/getData/track?db=%s&amp;chrom=%s&amp;track=%s&amp;start=%lld&amp;end=%lld' target=_blank>(sample getData)</a></li>\n", tdb->track, tdb->type, urlPrefix, db, chrom, tdb->track, start, end );
+    }
+}
+
+static void showSubTracks(char *db, struct trackDb *tdb, struct hash *countTracks,
+    char *chromName, long long chromSize)
 /* tdb has subtracks, show only subTracks, no details */
 {
 hPrintf("    <li><ul>\n");
@@ -176,10 +248,18 @@ if (tdb->subtracks)
         if (tdbIsCompositeView(tdbEl))
 	    hPrintf("<li>%s : %s : composite view of parent: %s</li>\n", tdbEl->track, tdbEl->type, tdbEl->parent->track);
 	else
+	    {
+        if (isSupportedType(tdbEl->type))
+	    {
+            sampleUrl(db, tdbEl, chromName, chromSize);
+//            hPrintf("<li>%s : %s : subtrack of parent: %s (with sample)</li>\n", tdbEl->track, tdbEl->type, tdbEl->parent->track, getData);
+	    }
+	else
             hPrintf("<li>%s : %s : subtrack of parent: %s</li>\n", tdbEl->track, tdbEl->type, tdbEl->parent->track);
+	    }
 	hashCountTrack(tdbEl, countTracks);
         if (tdbEl->subtracks)
-	    showSubTracks(tdbEl, countTracks);
+	    showSubTracks(db, tdbEl, countTracks, chromName, chromSize);
 	}
     }
 hPrintf("    </ul></li>\n");
@@ -314,8 +394,8 @@ errCatchFree(&errCatch);
 return retVal;
 }	/* static int bbiBriefMeasure() */
 
-static void countOneTdb(struct trackDb *tdb, char *bigDataIndex,
-    struct hash *countTracks)
+static void countOneTdb(char *db, struct trackDb *tdb, char *bigDataIndex,
+    struct hash *countTracks, char *chromName, long long chromSize)
 {
 char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
 // char *compositeTrack = trackDbSetting(tdb, "compositeTrack");
@@ -357,7 +437,12 @@ else
     else if (! depthSearch && bigDataUrl)
         hPrintf("    <li>%s : %s : %s</li>\n", tdb->track, tdb->type, bigDataUrl);
     else
-        hPrintf("    <li>%s : %s</li>\n", tdb->track, tdb->type);
+	{
+        if (isSupportedType(tdb->type))
+            sampleUrl(db, tdb, chromName, chromSize);
+	else
+	    hPrintf("    <li>%s : %s</li>\n", tdb->track, tdb->type);
+        }
     }
 if (allTrackSettings)
     {
@@ -367,11 +452,12 @@ if (allTrackSettings)
     }
 else if (tdb->subtracks)
     {
-    showSubTracks(tdb, countTracks);
+    showSubTracks(db, tdb, countTracks, chromName, chromSize);
     }
 return;
-}	/*	static void countOneTdb(struct trackDb *tdb,
-	 *	    char *bigDataIndex, struct hash *countTracks)
+}	/*	static void countOneTdb(char *db, struct trackDb *tdb,
+	 *	char *bigDataIndex, struct hash *countTracks,
+	 *	char *chromName, long long chromSize)
 	 */
 
 static void hubTrackList(struct trackDb *topTrackDb, struct trackHubGenome *genome)
@@ -388,7 +474,7 @@ if (topTrackDb)
 	char *relIdxUrl = trackDbSetting(topTrackDb, "bigDataIndex");
 	if (relIdxUrl != NULL)
 	    bigDataIndex = trackHubRelativeUrl(genome->trackDbFile, relIdxUrl);
-	countOneTdb(tdb, bigDataIndex, countTracks);
+	countOneTdb(NULL, tdb, bigDataIndex, countTracks, NULL, 0);
 	if (timeOutReached())
 	    break;
 	}	/*	for ( tdb = topTrackDb; tdb; tdb = tdb->next )	*/
@@ -407,7 +493,10 @@ if (topTrackDb)
 	    if (differentStringNullOk("track count", hel->name))
 		totalTracks += ptToInt(hel->val);
 	    hashReplace(trackCounter, hel->name, intToPt(prevCount + ptToInt(hel->val)));
-	    hPrintf("        <li>%d - %s</li>\n", ptToInt(hel->val), hel->name);
+	    if (isSupportedType(hel->name))
+		hPrintf("        <li>%d - %s - supported</li>\n", ptToInt(hel->val), hel->name);
+	    else
+		hPrintf("        <li>%d - %s</li>\n", ptToInt(hel->val), hel->name);
 	    }
         hPrintf("        </ol></li>\n");
 	}
@@ -577,46 +666,42 @@ struct hashEl *hel = hashLookup(apiFunctionHash, words[0]);
 return hel;
 }
 
-#ifdef NOT
-static void apiFunctionSwitch(struct hashEl *hel, char *words[MAX_PATH_INFO])
-/* given a pathInfo string: /command/subCommand/etc...
- *  parse that and decide on which function to acll
+static long long largestChrom(char *db, char **nameReturn)
+/* return the length and get the chrom name for the largest chrom
+ * from chromInfo table.  For use is sample getData URLs
  */
 {
-hPrintDisable();	/* turn off all normal HTML output, doing JSON output */
-
-/* the leading slash has been removed from the pathInfo, therefore, the
- * chop will have the first word in words[0]
- */
-#ifdef NOT
-char *words[MAX_PATH_INFO];/*expect no more than MAX_PATH_INFO number of words*/
-int wordCount = chopByChar(pathInfo, '/', words, ArraySize(words));
-if (wordCount < 2)
-    apiErrAbort("unknown endpoint command: '/%s'", pathInfo);
-
-struct hashEl *hel = hashLookup(apiFunctionHash, words[0]);
-if (hel == NULL)
-    apiErrAbort("no such command: '%s' for endpoint '/%s'", words[0], pathInfo);
-#endif
-void (*apiFunction)(char **) = hel->val;
-// void (*apiFunction)(char **) = hashMustFindVal(apiFunctionHash, words[0]);
-
-(*apiFunction)(words);
-
-}	/*	static void apiFunctionSwitch(char *pathInfo)	*/
-#endif
+char query[1024];
+struct sqlConnection *conn = hAllocConn(db);
+// Build a query to select the hubUrl for the given shortLabel
+sqlSafef(query, sizeof(query), "select chrom,size from chromInfo order by size desc limit 1");
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row = sqlNextRow(sr);
+long long length = 0;
+if (row)
+   {
+   *nameReturn = cloneString(row[0]);
+   length = sqlLongLong(row[1]);
+   }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return length;
+}
 
 static void tracksForUcscDb(char *db)
 /* scan the specified database for all tracks */
 {
 struct hash *countTracks = hashNew(0);
-hPrintf("<p>Tracks in UCSC genome: '%s'<br>\n", db);
+char *chromName = NULL;
+long long chromSize = largestChrom(db, &chromName);
+hPrintf("<p>Tracks in UCSC genome: '%s', longest chrom: %s:%lld<br>\n", db, chromName, chromSize);
 struct trackDb *tdbList = obtainTdb(NULL, db);
 struct trackDb *tdb;
 hPrintf("<ul>\n");
+hPrintf("<li>%s:%lld</li>\n", chromName, chromSize);
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next )
     {
-    countOneTdb(tdb, NULL, countTracks);
+    countOneTdb(db, tdb, NULL, countTracks, chromName, chromSize);
     if (timeOutReached())
 	break;
     }
@@ -632,7 +717,10 @@ if (countTracks->elCount)
 	{
 	if (sameOk("track count", hel->name))
 	    continue;
-	hPrintf("        <li>%d - %s</li>\n", ptToInt(hel->val), hel->name);
+	if (isSupportedType(hel->name))
+	    hPrintf("        <li>%d - %s - supported</li>\n", ptToInt(hel->val), hel->name);
+	else
+	    hPrintf("        <li>%d - %s</li>\n", ptToInt(hel->val), hel->name);
 	}
     hPrintf("        </ol>\n");
     }
@@ -674,20 +762,32 @@ hPrintf("<li>start=&lt;123&gt; - specify start coordinate (0 relative) for data 
 hPrintf("<li>end=&lt;456&gt; - specify end coordinate (1 relative) for data from track or sequence retrieval</li>\n");
 hPrintf("<li>(see also: <a href='http://genome.ucsc.edu/blog/the-ucsc-genome-browser-coordinate-counting-systems/' target=_blank>UCSC browser coordinate counting systems)</a></li>");
 hPrintf("</ul>\n");
+hPrintf("<h3>Supported track types, at this time, for getData functions:</h3>\n");
+hPrintf("<ul>\n");
+static struct slName *el;
+for (el = supportedTypes; el; el = el->next)
+    {
+    hPrintf("<li>%s</li>\n", el->name);
+    }
+hPrintf("</ul>\n");
+}
+
+static void initUrlPrefix()
+/* set up urlPrefix for self referenes */
+{
+char *httpHost = getenv("HTTP_HOST");
+
+if (! startsWith("hgwdev-api", httpHost))
+    {
+    if (startsWith("hgwdev",httpHost) || startsWith("genome-test", httpHost))
+	{
+	urlPrefix = "../cgi-bin/hubApi";
+	}
+    }
 }
 
 static void showExamples(char *url, struct trackHubGenome *hubGenome, char *ucscDb)
 {
-char *urlPrefix = "";
-char *httpHost = getenv("HTTP_HOST");
-
-if (! startsWith("hgwdev-api", httpHost)) {
-   if (startsWith("hgwdev",httpHost) || startsWith("genome-test", httpHost))
-	{
-	urlPrefix = "../cgi-bin/hubApi";
-        }
-}
-
 hPrintf("<h2>Example URLs to return json data structures:</h2>\n");
 
 hPrintf("<h3>listing functions</h3>\n");
@@ -748,6 +848,8 @@ cgiVarSet("ignoreCookie", "1");
 
 getDbAndGenome(cart, &database, &genome, oldVars);
 initGenbankTableNames(database);
+initSupportedTypes();
+initUrlPrefix();
 
 char *docRoot = cfgOptionDefault("browser.documentRoot", DOCUMENT_ROOT);
 

@@ -19,6 +19,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	jsonWriteString(jw, columnNames[i], row[i]);
     jsonWriteObjectEnd(jw);
     }
+sqlFreeResult(&sr);
 jsonWriteListEnd(jw);
 }
 
