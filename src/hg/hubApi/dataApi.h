@@ -29,7 +29,7 @@
 #include "jsonParse.h"
 #include "jsonWrite.h"
 #include "chromInfo.h"
-#include "versionInfo.h"
+#include "wiggle.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
@@ -71,8 +71,9 @@ void apiErrAbort(char *format, ...);
 struct jsonWrite *apiStartOutput();
 /* begin json output with standard header information for all requests */
 
-int tableColumns(struct sqlConnection *conn, struct jsonWrite *jw, char *table);
-/* output the column names, and their MySQL data type, for the given table
+int tableColumns(struct sqlConnection *conn, struct jsonWrite *jw, char *table,
+   char ***nameReturn, char ***typeReturn);
+/* return the column names, and their MySQL data type, for the given table
  *  return number of columns (aka 'fields')
  */
 

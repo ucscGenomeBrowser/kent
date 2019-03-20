@@ -16,7 +16,7 @@
 #include <signal.h>
 #include "obscure.h"
 
-int version = 40;  // PLEASE INCREMENT THIS BEFORE PUSHING TO SHARED REPO
+int version = 42;  // PLEASE INCREMENT THIS BEFORE PUSHING TO SHARED REPO
                    // SO THAT OTHERS MAY TEST WITH IT, SO THAT EVERYONE KNOWS THEY HAVE THE
                    // EXACT RIGHT VERSION.
 
@@ -343,7 +343,6 @@ if (optionExists("hardcore") && newContents->stringSize != contentLength)  // al
     sqlUpdate(conn, update->string);
     dyStringFree(&update);
     }
-hDisconnectCentral(&conn);
 dyStringFree(&oneSetting);
 dyStringFree(&newContents);
 freeMem(contentsToChop);
@@ -474,12 +473,12 @@ for (si = sessionList;  si != NULL;  si = si->next)
 	if (pid == 0)
 	    {
 	    parent = FALSE;
-	    conn = unCachedCentralConn(); // avoid cached connections when forking 
 	    }
         }
     
     if (!parent)
 	{
+	conn = unCachedCentralConn(); // avoid cached connections when forking 
     	scanSettingsForCT(si->userName, si->sessionName, &liveCount, &expiredCount, conn);
 	}
     ++sessionsPerForkDone;
