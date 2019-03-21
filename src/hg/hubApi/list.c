@@ -349,8 +349,7 @@ else if (sameWord("tracks", words[1]))
     struct trackHub *hub = errCatchTrackHubOpen(hubUrl);
     if (hub->genomeList)
 	{
-	struct trackDb *tdbList = NULL;
-	(void) genomeList(hub, &tdbList, genome);
+	struct trackDb *tdbList = obtainTdb(hub->genomeList, NULL);
 	slSort(tdbList, trackDbTrackCmp);
         struct jsonWrite *jw = apiStartOutput();
 	jsonWriteString(jw, "hubUrl", hubUrl);
