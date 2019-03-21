@@ -38,6 +38,9 @@
 
 #define MAX_PATH_INFO 32
 
+/* limit amount of output to a maximum to avoid overload */
+extern int maxItemsOutput;	/* can be set in URL maxItemsOutput=N */
+
 /*  functions in hubApi.c */
 struct hubPublic *hubPublicDbLoadAll();
 
