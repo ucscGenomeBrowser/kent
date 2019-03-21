@@ -90,11 +90,20 @@ jsonWriteListEnd(jw);
 static struct bbiFile *bigFileOpen(char *trackType, char *bigDataUrl)
 {
 struct bbiFile *bbi = NULL;
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
 if (startsWith("bigBed", trackType))
     bbi = bigBedFileOpen(bigDataUrl);
 else if (startsWith("bigWig", trackType))
     bbi = bigWigFileOpen(bigDataUrl);
-
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    apiErrAbort("error opening bigFile URL: '%s', '%s'", bigDataUrl,  errCatch->message->string);
+    }
+errCatchFree(&errCatch);
 return bbi;
 }
 

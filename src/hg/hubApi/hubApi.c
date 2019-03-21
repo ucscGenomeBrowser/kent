@@ -204,9 +204,17 @@ freeMem(stripType);
 // showCounts(countTracks);
 }
 
-static void sampleUrl(struct trackHub *hub, char *db, struct trackDb *tdb, char *chrom, long long chromSize)
+static void sampleUrl(struct trackHub *hub, char *db, struct trackDb *tdb, char *chrom, long long chromSize, char *errorString)
 /* print out a sample getData URL */
 {
+char errorPrint[2048];
+errorPrint[0] = 0;
+
+if (isNotEmpty(errorString))
+    {
+    safef(errorPrint, sizeof(errorPrint), " <font color='red'>ERROR: %s</font>", errorString);
+    }
+
 unsigned start = chromSize / 4;
 unsigned end = start + 10000;
 if (end > chromSize)
@@ -220,31 +228,31 @@ if (db)
     if (hub)
 	{
 	if (tdb->parent)
-	    hPrintf("<li>%s : %s subtrack of parent: %s <a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;chrom=%s&amp;track=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)</a></li>\n", tdb->track, tdb->type, tdb->parent->track, urlPrefix, hub->url, genome, chrom, tdb->track, start, end );
+	    hPrintf("<li>%s : %s subtrack of parent: %s <a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;chrom=%s&amp;track=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)%s</a></li>\n", tdb->track, tdb->type, tdb->parent->track, urlPrefix, hub->url, genome, chrom, tdb->track, start, end, errorPrint);
 	else
-	    hPrintf("<li>%s : %s <a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;chrom=%s&amp;track=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)</a></li>\n", tdb->track, tdb->type, urlPrefix, hub->url, genome, chrom, tdb->track, start, end );
+	    hPrintf("<li>%s : %s <a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;chrom=%s&amp;track=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)%s</a></li>\n", tdb->track, tdb->type, urlPrefix, hub->url, genome, chrom, tdb->track, start, end, errorPrint);
 	}
     else
 	{
 	if (tdb->parent)
-	    hPrintf("<li>%s : %s subtrack of parent: %s <a href='%s/getData/track?db=%s&amp;chrom=%s&amp;track=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)</a></li>\n", tdb->track, tdb->type, tdb->parent->track, urlPrefix, db, chrom, tdb->track, start, end );
+	    hPrintf("<li>%s : %s subtrack of parent: %s <a href='%s/getData/track?db=%s&amp;chrom=%s&amp;track=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)%s</a></li>\n", tdb->track, tdb->type, tdb->parent->track, urlPrefix, db, chrom, tdb->track, start, end, errorPrint);
 	else
-	    hPrintf("<li>%s : %s <a href='%s/getData/track?db=%s&amp;chrom=%s&amp;track=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)</a></li>\n", tdb->track, tdb->type, urlPrefix, db, chrom, tdb->track, start, end );
+	    hPrintf("<li>%s : %s <a href='%s/getData/track?db=%s&amp;chrom=%s&amp;track=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)%s</a></li>\n", tdb->track, tdb->type, urlPrefix, db, chrom, tdb->track, start, end, errorPrint);
 	}
     }
 else if (hub)
     {
     if (tdb->parent)
-	hPrintf("<li>%s : %s subtrack of parent: %s <a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;chrom=%s&amp;track=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)</a></li>\n", tdb->track, tdb->type, tdb->parent->track, urlPrefix, hub->url, genome, chrom, tdb->track, start, end );
+	hPrintf("<li>%s : %s subtrack of parent: %s <a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;chrom=%s&amp;track=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)%s</a></li>\n", tdb->track, tdb->type, tdb->parent->track, urlPrefix, hub->url, genome, chrom, tdb->track, start, end, errorPrint);
     else
-	hPrintf("<li>%s : %s <a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;chrom=%s&amp;track=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)</a></li>\n", tdb->track, tdb->type, urlPrefix, hub->url, genome, chrom, tdb->track, start, end );
+	hPrintf("<li>%s : %s <a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;chrom=%s&amp;track=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)%s</a></li>\n", tdb->track, tdb->type, urlPrefix, hub->url, genome, chrom, tdb->track, start, end, errorPrint);
     }
 else
     hPrintf("<li>%s : %s not db hub track ?</li>\n", tdb->track, tdb->type);
 }
 
 static void showSubTracks(struct trackHub *hub, char *db, struct trackDb *tdb, struct hash *countTracks,
-    char *chromName, long long chromSize)
+    char *chromName, long long chromSize, char *errorString)
 /* tdb has subtracks, show only subTracks, no details */
 {
 hPrintf("    <li><ul>\n");
@@ -260,13 +268,13 @@ if (tdb->subtracks)
 	else
 	    {
 	    if (isSupportedType(tdbEl->type))
-		sampleUrl(hub, db, tdbEl, chromName, chromSize);
+		sampleUrl(hub, db, tdbEl, chromName, chromSize, errorString);
 	    else
 		hPrintf("<li>%s : %s : subtrack of parent: %s</li>\n", tdbEl->track, tdbEl->type, tdbEl->parent->track);
 	    }
 	hashCountTrack(tdbEl, countTracks);
         if (tdbEl->subtracks)
-	    showSubTracks(hub, db, tdbEl, countTracks, chromName, chromSize);
+	    showSubTracks(hub, db, tdbEl, countTracks, chromName, chromSize, errorString);
 	}
     }
 hPrintf("    </ul></li>\n");
@@ -431,21 +439,29 @@ return retVal;
 
 static void hubSampleUrl(struct trackHub *hub, struct trackDb *tdb,
     long chromCount, long itemCount, char *chromName, unsigned chromSize,
-      char *genome)
+      char *genome, char *errorString)
 {
 unsigned start = chromSize / 4;
 unsigned end = start + 10000;
 if (end > chromSize)
     end = chromSize;
 
+char errorPrint[2048];
+errorPrint[0] = 0;
+
+if (isNotEmpty(errorString))
+    {
+    safef(errorPrint, sizeof(errorPrint), " : <font color='red'>ERROR: %s</font>", errorString);
+    }
+
 if (isSupportedType(tdb->type))
     {
         if (startsWithWord("bigBed", tdb->type))
-            hPrintf("    <li>%s : %s : %ld chroms : %ld item count <a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;track=%s&amp;chrom=%s&amp;start=%u&amp;end=%u' target=_blank>(Xsample getData)</a></li>\n", tdb->track, tdb->type, chromCount, itemCount, urlPrefix, hub->url, genome, tdb->track, chromName, start, end);
+            hPrintf("    <li>%s : %s : %ld chroms : %ld item count <a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;track=%s&amp;chrom=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)%s</a></li>\n", tdb->track, tdb->type, chromCount, itemCount, urlPrefix, hub->url, genome, tdb->track, chromName, start, end, errorPrint);
         else if (startsWithWord("bigWig", tdb->type))
-            hPrintf("    <li>%s : %s : %ld chroms : %ld bases covered <a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;track=%s&amp;chrom=%s&amp;start=%u&amp;end=%u' target=_blank>(Xsample getData)</a></li>\n", tdb->track, tdb->type, chromCount, itemCount, urlPrefix, hub->url, genome, tdb->track, chromName, start, end);
+            hPrintf("    <li>%s : %s : %ld chroms : %ld bases covered <a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;track=%s&amp;chrom=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)%s</a></li>\n", tdb->track, tdb->type, chromCount, itemCount, urlPrefix, hub->url, genome, tdb->track, chromName, start, end, errorPrint);
         else
-            hPrintf("    <li>%s : %s : %ld chroms : %ld count <<a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;track=%s&amp;chrom=%s&amp;start=%u&amp;end=%u' target=_blank>(Xsample getData)</a></li>\n", tdb->track, tdb->type, chromCount, itemCount, urlPrefix, hub->url, genome, tdb->track, chromName, start, end);
+            hPrintf("    <li>%s : %s : %ld chroms : %ld count <<a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;track=%s&amp;chrom=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)%s</a></li>\n", tdb->track, tdb->type, chromCount, itemCount, urlPrefix, hub->url, genome, tdb->track, chromName, start, end, errorPrint);
     }
 else
     {
@@ -456,7 +472,10 @@ else
         else
             hPrintf("    <li>%s : %s : %ld chroms : %ld count</li>\n", tdb->track, tdb->type, chromCount, itemCount);
     }
-}
+}	/* static void hubSampleUrl(struct trackHub *hub, struct trackDb *tdb,
+	 * long chromCount, long itemCount, char *chromName, unsigned chromSize,
+	 *   char *genome)
+	 */
 
 static void hubCountOneTdb(struct trackHub *hub, char *db, struct trackDb *tdb,
     char *bigDataIndex, struct hash *countTracks, char *chromName,
@@ -476,22 +495,19 @@ unsigned longSize = 0;
 long chromCount = 0;
 long itemCount = 0;
 
+struct dyString *errors = newDyString(1024);
+
 if (! (compositeContainer || compositeView) )
-    {
-    struct dyString *errors = newDyString(1024);
-    int retVal = bbiBriefMeasure(tdb->type, bigDataUrl, bigDataIndex, &chromCount, &itemCount, errors, &longName, &longSize);
-    if (retVal)
-        hPrintf("    <li>%s : %s : <font color='red'>ERROR: %s</font></li>\n", tdb->track, tdb->type, errors->string);
-    }
+    (void) bbiBriefMeasure(tdb->type, bigDataUrl, bigDataIndex, &chromCount, &itemCount, errors, &longName, &longSize);
 
 if (depthSearch && bigDataUrl)
     {
     if (isSupportedType(tdb->type))
 	{
 	if (chromSize > 0)
-	    hubSampleUrl(hub, tdb, chromCount, itemCount, chromName, chromSize, genome);
+	    hubSampleUrl(hub, tdb, chromCount, itemCount, chromName, chromSize, genome, errors->string);
 	else
-	    hubSampleUrl(hub, tdb, chromCount, itemCount, longName, longSize, genome);
+	    hubSampleUrl(hub, tdb, chromCount, itemCount, longName, longSize, genome, errors->string);
 	}
     }
 else
@@ -503,18 +519,27 @@ else
     else if (superChild)
         hPrintf("    <li>%s : %s : superTrack child of parent: %s (sample getData)</li>\n", tdb->track, tdb->type, tdb->parent->track);
     else if (! depthSearch && bigDataUrl)
-        hPrintf("    <li>%s : %s : %s</li>\n", tdb->track, tdb->type, bigDataUrl);
+	{
+        if (isSupportedType(tdb->type))
+	    {
+	    if (chromSize > 0)
+		hubSampleUrl(hub, tdb, chromCount, itemCount, chromName, chromSize, genome, errors->string);
+	    else
+		hubSampleUrl(hub, tdb, chromCount, itemCount, longName, longSize, genome, errors->string);
+	    }
+        // hPrintf("    <li>%s : %s : %s (maybe sample ?)</li>\n", tdb->track, tdb->type, bigDataUrl);
+	}
     else
 	{
         if (isSupportedType(tdb->type))
 	    {
 	    if (chromSize > 0)
-		hubSampleUrl(hub, tdb, chromCount, itemCount, chromName, chromSize, genome);
+		hubSampleUrl(hub, tdb, chromCount, itemCount, chromName, chromSize, genome, errors->string);
 	    else
-		hubSampleUrl(hub, tdb, chromCount, itemCount, longName, longSize, genome);
+		hubSampleUrl(hub, tdb, chromCount, itemCount, longName, longSize, genome, errors->string);
 	    }
 	else
-	    hPrintf("    <li>%s : %s</li>\n", tdb->track, tdb->type);
+	    hPrintf("    <li>%s : %s (what is this)</li>\n", tdb->track, tdb->type);
         }
     }
 if (allTrackSettings)
@@ -525,7 +550,7 @@ if (allTrackSettings)
     }
 else if (tdb->subtracks)
     {
-    showSubTracks(hub, db, tdb, countTracks, chromName, chromSize);
+    showSubTracks(hub, db, tdb, countTracks, chromName, chromSize, errors->string);
     }
 return;
 }	/*	static void hubCountOneTdb(char *db, struct trackDb *tdb,
@@ -535,7 +560,8 @@ return;
 
 
 static void countOneTdb(char *db, struct trackDb *tdb,
-    struct hash *countTracks, char *chromName, unsigned chromSize)
+    struct hash *countTracks, char *chromName, unsigned chromSize,
+      char *errorString)
 /* for this tdb in this db, count it up and provide a sample */
 {
 char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
@@ -558,7 +584,7 @@ else if (! depthSearch && bigDataUrl)
 else
     {
     if (isSupportedType(tdb->type))
-        sampleUrl(NULL, db, tdb, chromName, chromSize);
+        sampleUrl(NULL, db, tdb, chromName, chromSize, errorString);
     else
         hPrintf("    <li>%s : %s</li>\n", tdb->track, tdb->type);
     }
@@ -571,7 +597,7 @@ if (allTrackSettings)
     }
 else if (tdb->subtracks)
     {
-    showSubTracks(NULL, db, tdb, countTracks, chromName, chromSize);
+    showSubTracks(NULL, db, tdb, countTracks, chromName, chromSize, NULL);
     }
 return;
 }	/*	static void countOneTdb(char *db, struct trackDb *tdb,
@@ -831,7 +857,7 @@ hPrintf("<ul>\n");
 hPrintf("<li>%s:%u</li>\n", chromName, chromSize);
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next )
     {
-    countOneTdb(db, tdb, countTracks, chromName, chromSize);
+    countOneTdb(db, tdb, countTracks, chromName, chromSize, NULL);
     if (timeOutReached())
 	break;
     }
