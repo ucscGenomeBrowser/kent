@@ -5,7 +5,7 @@
 
 #Table of public track data hub connections.
 CREATE TABLE hubPublic (
-    hubUrl longblob not null,	        # URL to hub.ra file
+    hubUrl longblob not null,	# URL to hub.ra file
     shortLabel varchar(255) not null,	# Hub short label.
     longLabel varchar(255) not null,	# Hub long label.
     registrationTime varchar(255) not null,	# Time first registered
@@ -13,5 +13,5 @@ CREATE TABLE hubPublic (
     dbList varchar(255) not null,	# Comma separated list of databases.
     descriptionUrl longblob not null,	# URL to description HTML
               #Indices
-    PRIMARY KEY(hubUrl(255))
+    PRIMARY KEY(hubUrl)
 );
