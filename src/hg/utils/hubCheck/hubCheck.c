@@ -18,6 +18,7 @@
 #include "udc.h"
 #include "vcf.h"
 #include "bedTabix.h"
+#include "knetUdc.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
@@ -746,6 +747,8 @@ udcSetCacheTimeout(cacheTime);
 // UDC cache dir: first check for hg.conf setting, then override with command line option if given.
 setUdcCacheDir();
 udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
+
+knetUdcInstall();  // make the htslib library use udc
 
 if (optionExists("settings"))
     {

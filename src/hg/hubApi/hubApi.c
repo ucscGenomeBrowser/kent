@@ -16,7 +16,7 @@
 */
 
 /* Global Variables */
-static boolean debug = FALSE;
+static boolean debug = FALSE;	/* can be set in URL debug=1 */
 static struct cart *cart;             /* CGI and other variables */
 static struct hash *oldVars = NULL;
 static struct hash *trackCounter = NULL;
@@ -37,8 +37,7 @@ static struct slName *supportedTypes = NULL;
 	/* will be initialized to a known supported set */
 
 static void initSupportedTypes()
-/* initalize the list of supported track types,
- */
+/* initalize the list of supported track types */
 {
 struct slName *el = newSlName("bed");
 slAddHead(&supportedTypes, el);
@@ -73,7 +72,7 @@ static boolean isSupportedType(char *type)
 /* is given type in the supportedTypes list ? */
 {
 boolean ret = FALSE;
-if (startsWith("wigMaf", type))
+if (startsWith("wigMaf", type))	/* not wigMaf at this time */
     return ret;
 struct slName *el;
 for (el = supportedTypes; el; el = el->next)
@@ -101,24 +100,7 @@ static void publicHubSortCase(struct hubPublic **pList)
 slSort(pList, publicHubCmpCase);
 }
 
-static struct hubPublic *hubPublicLoad(char **row)
-/* Load a hubPublic from row fetched with select * from hubPublic
- * from database.  Dispose of this with hubPublicFree(). */
-{
-struct hubPublic *ret;
-
-AllocVar(ret);
-ret->hubUrl = cloneString(row[0]);
-ret->shortLabel = cloneString(row[1]);
-ret->longLabel = cloneString(row[2]);
-ret->registrationTime = cloneString(row[3]);
-ret->dbCount = sqlUnsigned(row[4]);
-ret->dbList = cloneString(row[5]);
-ret->descriptionUrl = cloneString(row[6]);
-return ret;
-}
-
-struct hubPublic *hubPublicLoadAll()
+struct hubPublic *hubPublicDbLoadAll()
 /* read entire hubPublic table in hgcentral and return resulting list */
 {
 char query[1024];
@@ -221,17 +203,17 @@ freeMem(stripType);
 static void sampleUrl(char *db, struct trackDb *tdb, char *chrom, long long chromSize)
 /* print out a sample getData URL */
 {
-long long start = chromSize / 4;
-long long end = start + 10000;
+unsigned start = chromSize / 4;
+unsigned end = start + 10000;
 if (end > chromSize)
     end = chromSize;
 
 if (db)
     {
     if (tdb->parent)
-	hPrintf("<li>%s : %s subtrack of parent: %s <a href='%s/getData/track?db=%s&amp;chrom=%s&amp;track=%s&amp;start=%lld&amp;end=%lld' target=_blank>(sample getData)</a></li>\n", tdb->track, tdb->type, tdb->parent->track, urlPrefix, db, chrom, tdb->track, start, end );
+	hPrintf("<li>%s : %s subtrack of parent: %s <a href='%s/getData/track?db=%s&amp;chrom=%s&amp;track=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)</a></li>\n", tdb->track, tdb->type, tdb->parent->track, urlPrefix, db, chrom, tdb->track, start, end );
     else
-	hPrintf("<li>%s : %s <a href='%s/getData/track?db=%s&amp;chrom=%s&amp;track=%s&amp;start=%lld&amp;end=%lld' target=_blank>(sample getData)</a></li>\n", tdb->track, tdb->type, urlPrefix, db, chrom, tdb->track, start, end );
+	hPrintf("<li>%s : %s <a href='%s/getData/track?db=%s&amp;chrom=%s&amp;track=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)</a></li>\n", tdb->track, tdb->type, urlPrefix, db, chrom, tdb->track, start, end );
     }
 }
 
@@ -299,8 +281,32 @@ if (tdb->subtracks)
 hPrintf("    </ul></li>\n");
 }
 
-static int bbiBriefMeasure(char *type, char *bigDataUrl, char *bigDataIndex, long *chromCount, long *itemCount, struct dyString *errors)
-/* check a bigDataUrl to find chrom count and item count */
+static void bbiBiggestChrom(struct bbiChromInfo *chromList, char **chromName,
+    unsigned *chromSize)
+/* find largest chromosome name and size in the chromList */
+{
+if (chromName && chromSize)
+    {
+    *chromSize = 0;
+    char *returnName = NULL;
+    struct bbiChromInfo *el;
+    for (el = chromList; el; el = el->next)
+	{
+	if (el->size > *chromSize)
+	    { 
+	    *chromSize = el->size;
+	    returnName = el->name;
+	    } 
+	}
+    if (chromSize > 0)
+	*chromName = cloneString(returnName);
+    }
+}
+
+static int bbiBriefMeasure(char *type, char *bigDataUrl, char *bigDataIndex, long *chromCount, long *itemCount, struct dyString *errors, char **chromName, unsigned *chromSize)
+/* check a bigDataUrl to find chrom count and item count, return
+ *   name of largest chrom and its size
+ */
 {
 int retVal = 0;
 *chromCount = 0;
@@ -322,6 +328,8 @@ if (errCatchStart(errCatch))
         struct bbiChromInfo *chromList = bbiChromList(bbi);
         *chromCount = slCount(chromList);
         *itemCount = bigBedItemCount(bbi);
+        bbiBiggestChrom(chromList, chromName, chromSize);
+        bbiChromInfoFreeList(&chromList);
         bbiFileClose(&bbi);
         }
     else if (startsWithWord("bigWig", type))
@@ -331,6 +339,8 @@ if (errCatchStart(errCatch))
         struct bbiSummaryElement sum = bbiTotalSummary(bwf);
         *chromCount = slCount(chromList);
         *itemCount = sum.validCount;
+        bbiBiggestChrom(chromList, chromName, chromSize);
+        bbiChromInfoFreeList(&chromList);
         bbiFileClose(&bwf);
         }
     else if (startsWithWord("vcfTabix", type))
@@ -394,8 +404,38 @@ errCatchFree(&errCatch);
 return retVal;
 }	/* static int bbiBriefMeasure() */
 
-static void countOneTdb(char *db, struct trackDb *tdb, char *bigDataIndex,
-    struct hash *countTracks, char *chromName, long long chromSize)
+static void hubSampleUrl(struct trackHub *hub, struct trackDb *tdb,
+    long chromCount, long itemCount, char *chromName, unsigned chromSize,
+      char *genome)
+{
+unsigned start = chromSize / 4;
+unsigned end = start + 10000;
+if (end > chromSize)
+    end = chromSize;
+
+if (isSupportedType(tdb->type))
+    {
+        if (startsWithWord("bigBed", tdb->type))
+            hPrintf("    <li>%s : %s : %ld chroms : %ld item count <a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;track=%s&amp;chrom=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)</a></li>\n", tdb->track, tdb->type, chromCount, itemCount, urlPrefix, hub->url, genome, tdb->track, chromName, start, end);
+        else if (startsWithWord("bigWig", tdb->type))
+            hPrintf("    <li>%s : %s : %ld chroms : %ld bases covered <a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;track=%s&amp;chrom=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)</a></li>\n", tdb->track, tdb->type, chromCount, itemCount, urlPrefix, hub->url, genome, tdb->track, chromName, start, end);
+        else
+            hPrintf("    <li>%s : %s : %ld chroms : %ld count <<a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;track=%s&amp;chrom=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)</a></li>\n", tdb->track, tdb->type, chromCount, itemCount, urlPrefix, hub->url, genome, tdb->track, chromName, start, end);
+    }
+else
+    {
+        if (startsWithWord("bigBed", tdb->type))
+            hPrintf("    <li>%s : %s : %ld chroms : %ld item count</li>\n", tdb->track, tdb->type, chromCount, itemCount);
+        else if (startsWithWord("bigWig", tdb->type))
+            hPrintf("    <li>%s : %s : %ld chroms : %ld bases covered</li>\n", tdb->track, tdb->type, chromCount, itemCount);
+        else
+            hPrintf("    <li>%s : %s : %ld chroms : %ld count</li>\n", tdb->track, tdb->type, chromCount, itemCount);
+    }
+}
+
+static void countOneTdb(struct trackHub *hub, char *db, struct trackDb *tdb,
+    char *bigDataIndex, struct hash *countTracks, char *chromName,
+    unsigned chromSize, char *genome)
 {
 char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
 // char *compositeTrack = trackDbSetting(tdb, "compositeTrack");
@@ -408,23 +448,18 @@ hashCountTrack(tdb, countTracks);
 
 if (depthSearch && bigDataUrl)
     {
+    char *longName = NULL;
+    unsigned longSize = 0;
     long chromCount = 0;
     long itemCount = 0;
     struct dyString *errors = newDyString(1024);
-    int retVal = bbiBriefMeasure(tdb->type, bigDataUrl, bigDataIndex, &chromCount, &itemCount, errors);
+    int retVal = bbiBriefMeasure(tdb->type, bigDataUrl, bigDataIndex, &chromCount, &itemCount, errors, &longName, &longSize);
     if (retVal)
         {
             hPrintf("    <li>%s : %s : <font color='red'>ERROR: %s</font></li>\n", tdb->track, tdb->type, errors->string);
         }
     else
-        {
-        if (startsWithWord("bigBed", tdb->type))
-            hPrintf("    <li>%s : %s : %ld chroms : %ld item count</li>\n", tdb->track, tdb->type, chromCount, itemCount);
-        else if (startsWithWord("bigWig", tdb->type))
-            hPrintf("    <li>%s : %s : %ld chroms : %ld bases covered</li>\n", tdb->track, tdb->type, chromCount, itemCount);
-        else
-            hPrintf("    <li>%s : %s : %ld chroms : %ld count</li>\n", tdb->track, tdb->type, chromCount, itemCount);
-        }
+	hubSampleUrl(hub, tdb, chromCount, itemCount, longName, longSize, genome);
     }
 else
     {
@@ -460,7 +495,7 @@ return;
 	 *	char *chromName, long long chromSize)
 	 */
 
-static void hubTrackList(struct trackDb *topTrackDb, struct trackHubGenome *genome)
+static void hubTrackList(struct trackHub *hub, struct trackDb *topTrackDb, struct trackHubGenome *genome)
 /* process the track list in a hub to show all tracks */
 {
 hPrintf("    <li><ul>\n");
@@ -474,7 +509,10 @@ if (topTrackDb)
 	char *relIdxUrl = trackDbSetting(topTrackDb, "bigDataIndex");
 	if (relIdxUrl != NULL)
 	    bigDataIndex = trackHubRelativeUrl(genome->trackDbFile, relIdxUrl);
-	countOneTdb(NULL, tdb, bigDataIndex, countTracks, NULL, 0);
+        char *defaultGenome = NULL;
+        if (isNotEmpty(genome->name))
+	    defaultGenome = genome->name;
+	countOneTdb(hub, NULL, tdb, bigDataIndex, countTracks, NULL, 0, defaultGenome);
 	if (timeOutReached())
 	    break;
 	}	/*	for ( tdb = topTrackDb; tdb; tdb = tdb->next )	*/
@@ -507,7 +545,7 @@ else
 hPrintf("    </ul><li>\n");
 }	/*	static struct trackDb *hubTrackList()	*/
 
-static struct trackDb *assemblySettings(struct trackHubGenome *genome)
+static struct trackDb *assemblySettings(struct trackHub *hub, struct trackHubGenome *genome)
 /* display all the assembly 'settingsHash' */
 {
 struct trackDb *tdb = obtainTdb(genome, NULL);
@@ -520,7 +558,7 @@ while ((hel = hashNext(&hc)) != NULL)
     hPrintf("    <li>%s : %s</li>\n", hel->name, (char *)hel->val);
     if (sameWord("trackDb", hel->name))	/* examine the trackDb structure */
 	{
-	hubTrackList(tdb, genome);
+	hubTrackList(hub, tdb, genome);
         }
     if (timeOutReached())
 	break;
@@ -562,7 +600,7 @@ for ( ; genome; genome = genome->next )
 	{	/* can there be a description when organism is empty ? */
 	hPrintf("<li>%s</li>\n", genome->name);
 	}
-    struct trackDb *tdb = assemblySettings(genome);
+    struct trackDb *tdb = assemblySettings(hubTop, genome);
     if (dbTrackList)
 	*dbTrackList = tdb;
     if (measureTiming)
@@ -666,7 +704,7 @@ struct hashEl *hel = hashLookup(apiFunctionHash, words[0]);
 return hel;
 }
 
-static long long largestChrom(char *db, char **nameReturn)
+static unsigned largestChrom(char *db, char **nameReturn)
 /* return the length and get the chrom name for the largest chrom
  * from chromInfo table.  For use is sample getData URLs
  */
@@ -677,7 +715,7 @@ struct sqlConnection *conn = hAllocConn(db);
 sqlSafef(query, sizeof(query), "select chrom,size from chromInfo order by size desc limit 1");
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row = sqlNextRow(sr);
-long long length = 0;
+unsigned length = 0;
 if (row)
    {
    *nameReturn = cloneString(row[0]);
@@ -693,15 +731,15 @@ static void tracksForUcscDb(char *db)
 {
 struct hash *countTracks = hashNew(0);
 char *chromName = NULL;
-long long chromSize = largestChrom(db, &chromName);
-hPrintf("<p>Tracks in UCSC genome: '%s', longest chrom: %s:%lld<br>\n", db, chromName, chromSize);
+unsigned chromSize = largestChrom(db, &chromName);
+hPrintf("<h4>Tracks in UCSC genome: '%s', longest chrom: %s:%u</h4>\n", db, chromName, chromSize);
 struct trackDb *tdbList = obtainTdb(NULL, db);
 struct trackDb *tdb;
 hPrintf("<ul>\n");
-hPrintf("<li>%s:%lld</li>\n", chromName, chromSize);
+hPrintf("<li>%s:%u</li>\n", chromName, chromSize);
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next )
     {
-    countOneTdb(db, tdb, NULL, countTracks, chromName, chromSize);
+    countOneTdb(NULL, db, tdb, NULL, countTracks, chromName, chromSize, NULL);
     if (timeOutReached())
 	break;
     }
@@ -798,7 +836,7 @@ hPrintf("<li><a href='%s/list/hubGenomes?hubUrl=%s' target=_blank>list genomes f
 hPrintf("<li><a href='%s/list/tracks?hubUrl=%s&amp;genome=%s' target=_blank>list tracks from specified hub and genome</a> <em>%s/list/tracks?hubUrl=%s&amp;genome=%s</em></li>\n", urlPrefix, url, hubGenome->name, urlPrefix, url, hubGenome->name);
 hPrintf("<li><a href='%s/list/tracks?db=%s' target=_blank>list tracks from specified UCSC database</a> <em>%s/list/tracks?db=%s</em></li>\n", urlPrefix, ucscDb, urlPrefix, ucscDb);
 hPrintf("<li><a href='%s/list/chromosomes?db=%s' target=_blank>list chromosomes from specified UCSC database</a> <em>%s/list/chromosomes?db=%s</em></li>\n", urlPrefix, ucscDb, urlPrefix, ucscDb);
-hPrintf("<li><a href='%s/list/chromosomes?db=%s&amp;track=gap' target=_blank>list chromosomes from specified track from UCSC databaset</a> <em>%s/list/chromosomes?db=%s&amp;track=gap</em></li>\n", urlPrefix, ucscDb, urlPrefix, ucscDb);
+hPrintf("<li><a href='%s/list/chromosomes?db=%s&amp;track=gold' target=_blank>list chromosomes from specified track from UCSC databaset</a> <em>%s/list/chromosomes?db=%s&amp;track=gold</em></li>\n", urlPrefix, ucscDb, urlPrefix, ucscDb);
 hPrintf("</ol>\n");
 
 hPrintf("<h3>getData functions</h3>\n");
@@ -851,8 +889,7 @@ initGenbankTableNames(database);
 initSupportedTypes();
 initUrlPrefix();
 
-char *docRoot = cfgOptionDefault("browser.documentRoot", DOCUMENT_ROOT);
-
+debug = cartUsualBoolean(cart, "debug", debug);
 int timeout = cartUsualInt(cart, "udcTimeout", 300);
 if (udcCacheTimeout() < timeout)
     udcSetCacheTimeout(timeout);
@@ -889,7 +926,7 @@ if (isNotEmpty(pathInfo))
 puts("Content-Type:text/html");
 puts("\n");
 
-(void) hubPublicLoadAll();
+(void) hubPublicDbLoadAll();
 
 struct dbDb *dbList = ucscDbDb();
 char **ucscDbList = NULL;
@@ -906,7 +943,35 @@ for ( ; el != NULL; el = el->next )
     }
 maxDbNameWidth += 1;
 
-cartWebStart(cart, database, "UCSC API v"CGI_VERSION);
+cartWebStart(cart, database, "UCSC JSON API interface");
+
+if (debug)
+    {
+    char *envVar = getenv("BROWSER_HOST");
+    hPrintf("<ul>\n");
+    hPrintf("<li>BROWSER_HOST:%s</li>\n", envVar);
+    envVar = getenv("CONTEXT_DOCUMENT_ROOT");
+    hPrintf("<li>CONTEXT_DOCUMENT_ROOT:%s</li>\n", envVar);
+    envVar = getenv("CONTEXT_PREFIX");
+    hPrintf("<li>CONTEXT_PREFIX:%s</li>\n", envVar);
+    envVar = getenv("DOCUMENT_ROOT");
+    hPrintf("<li>DOCUMENT_ROOT:%s</li>\n", envVar);
+    envVar = getenv("HTTP_HOST");
+    hPrintf("<li>HTTP_HOST:%s</li>\n", envVar);
+    envVar = getenv("REQUEST_URI");
+    hPrintf("<li>REQUEST_URI:%s</li>\n", envVar);
+    envVar = getenv("SCRIPT_FILENAME");
+    hPrintf("<li>SCRIPT_FILENAME:%s</li>\n", envVar);
+    envVar = getenv("SCRIPT_NAME");
+    hPrintf("<li>SCRIPT_NAME:%s</li>\n", envVar);
+    envVar = getenv("SCRIPT_URI");
+    hPrintf("<li>SCRIPT_URI:%s</li>\n", envVar);
+    envVar = getenv("SCRIPT_URL");
+    hPrintf("<li>SCRIPT_URL:%s</li>\n", envVar);
+    envVar = getenv("SERVER_NAME");
+    hPrintf("<li>SERVER_NAME:%s</li>\n", envVar);
+    hPrintf("</ul>\n");
+    }
 
 char *goOtherHub = cartUsualString(cart, "goOtherHub", defaultHub);
 char *goUcscDb = cartUsualString(cart, "goUcscDb", "");
@@ -918,6 +983,8 @@ char *ucscDb = cartUsualString(cart, "ucscGenomes", defaultDb);
 char *urlInput = urlDropDown;	/* assume public hub */
 if (sameWord("go", goOtherHub))	/* requested other hub URL */
     urlInput = otherHubUrl;
+else if (isEmpty(otherHubUrl))
+    otherHubUrl = urlInput;
 
 if (commandError)
   {
@@ -930,7 +997,7 @@ if (measureTiming)
     {
     long thisTime = clock1000();
     if (debug)
-    hPrintf("<em>hub open time: %ld millis</em><br>\n", thisTime - lastTime);
+       hPrintf("<em>hub open time: %ld millis</em><br>\n", thisTime - lastTime);
     }
 
 // hPrintf("<h3>ucscDb: '%s'</h2>\n", ucscDb);
@@ -946,7 +1013,18 @@ if (debug)
 
 hPrintf("<h2>Explore hub or database assemblies and tracks</h2>\n");
 
-hPrintf("<form action='%s' name='hubApiUrl' id='hubApiUrl' method='GET'>\n\n", "../cgi-bin/hubApi");
+// hPrintf("<form action='%s' name='hubApiUrl' id='hubApiUrl' method='GET'>\n\n", "../cgi-bin/hubApi");
+hPrintf("<form action='%s' name='hubApiUrl' id='hubApiUrl' method='GET'>\n\n", urlPrefix);
+
+#ifdef NOT
+if (isEmpty(urlPrefix))
+    {
+    char *scriptUri = getenv("SCRIPT_URI");
+    hPrintf("<form action='%s' name='hubApiUrl' id='hubApiUrl' method='GET'>\n\n", scriptUri);
+    }
+else
+    hPrintf("<form action='%s' name='hubApiUrl' id='hubApiUrl' method='GET'>\n\n", urlPrefix);
+#endif
 
 hPrintf("<b>Select public hub:&nbsp;</b>");
 #define JBUFSIZE 2048
@@ -963,7 +1041,7 @@ hWrites("&nbsp;");
 hButton("goPublicHub", "go");
 
 hPrintf("<br>Or, enter a hub URL:&nbsp;");
-hPrintf("<input type='text' name='urlHub' id='urlHub' size='60' value='%s'>\n", urlInput);
+hPrintf("<input type='text' name='urlHub' id='urlHub' size='60' value='%s'>\n", otherHubUrl);
 hWrites("&nbsp;");
 hButton("goOtherHub", "go");
 
@@ -987,24 +1065,23 @@ hPrintf("&nbsp;display all track settings for each track : %s<br>\n", allTrackSe
 
 hPrintf("<br>\n</form>\n");
 
+hPrintf("<p>\n");
 if (sameWord("go", goUcscDb))	/* requested UCSC db track list */
     {
     tracksForUcscDb(ucscDb);
     }
 else
     {
-    if (debug)
-	{
-	hPrintf("<p>URL: %s - %s<br>\n", urlInput, sameWord("go",goPublicHub) ? "public hub" : "other hub");
-	hPrintf("name: %s<br>\n", hub->shortLabel);
-	hPrintf("description: %s<br>\n", hub->longLabel);
-	hPrintf("default db: '%s'<br>\n", isEmpty(hub->defaultDb) ? "(none available)" : hub->defaultDb);
-	printf("docRoot:'%s'<br>\n", docRoot);
-	}
+    hPrintf("<h4>Examine %s at: %s</h4>\n", sameWord("go",goPublicHub) ? "public hub" : "other hub", urlInput);
+    hPrintf("<ul>\n");
+    hPrintf("<li>%s</li>\n", hub->shortLabel);
+    hPrintf("<li>%s</li>\n", hub->longLabel);
+    if (isNotEmpty(hub->defaultDb))
+        hPrintf("<li>%s - default database</li>\n", hub->defaultDb);
+    hPrintf("</ul>\n");
 
     if (hub->genomeList)
 	(void) genomeList(hub, NULL, NULL);	/* ignore returned list */
-    hPrintf("</p>\n");
     }
 
 if (timedOut)
@@ -1012,12 +1089,14 @@ if (timedOut)
 if (measureTiming)
     hPrintf("<em>Overall total time: %ld millis</em><br>\n", clock1000() - enteredMainTime);
 
+hPrintf("</p>\n");
+
 cartWebEnd();
 }	/*	void doMiddle(struct cart *theCart)	*/
 
 /* Null terminated list of CGI Variables we don't want to save
  * permanently. */
-static char *excludeVars[] = {"Submit", "submit", NULL,};
+static char *excludeVars[] = {"Submit", "submit", "goOtherHub", "goPublicHub", "goUcscDb", "ucscGenomes", "publicHubs", NULL,};
 
 int main(int argc, char *argv[])
 /* Process command line. */

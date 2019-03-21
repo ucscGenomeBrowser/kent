@@ -12,8 +12,8 @@
 <ul>
 <li><a href="#gene">What is a gene?</a></li>
 <li><a href="#genestrans">What is a transcript and how is it related to a gene?</a></li>
-<li><a href="#mostCommon">What are the most common gene transcript tracks?</a></li>
 <li><a href="#genename">What is a gene name?</a></li>
+<li><a href="#mostCommon">What are the most common gene transcript tracks?</a></li>
 <li><a href="#ens">What are Ensembl and GENCODE and is there a difference?</a></li>
 <li><a href="#ensRefseq">What are the differences among GENCODE, Ensembl and RefSeq?</a></li>
 <li><a href="#hg19">For the human assembly hg19/GRCh37: What is the difference between "UCSC 
@@ -24,6 +24,8 @@
 <li><a href="#ncbiRefseq">What is the difference between "NCBI RefSeq" and "UCSC RefSeq"?</a></li>
 <li><a href="#ccds">What is CCDS?</a></li>
 <li><a href="#justsingle">How can I just show a single transcript per gene?</a></li>
+<li><a href="#singledownload">I just want to download a gene set with a single entry per gene.
+			      Where can I find this?</a></li>
 <li><a href="#whatdo">This is rather complicated. Can you tell me which gene transcript track
                       I should use?</a></li>
 </ul>
@@ -40,9 +42,9 @@ from.
 
 <h6>What is a gene?</h6>
 <p>
-The exact definition of "gene" depends on the context. In the context of 
+The exact definition of &quot;gene&quot; depends on the context. In the context of 
 genome annotation, a gene has at least a name and is defined by a collection of
-related mRNA transcript sequences ("isoforms"). The naming of genes and the
+related RNA transcript sequences (&quot;isoforms&quot;). The naming of genes and the
 assignment of the most important transcript sequences is often done manually by
 a group of biological literature curators.  For human, genes names are created
 by the <a target=_blank href="https://www.genenames.org/">Human Gene
@@ -75,13 +77,47 @@ produces the protein with the accession<a target=_blank
 href="https://www.ncbi.nlm.nih.gov/protein/NP_009225.1"> NP_009225.1</a>. In
 the human genome, it is located on chromosome 17, where it is comprised of <a
 target=_blank href="https://www.ncbi.nlm.nih.gov/nuccore/U14680">23 exons</a>.
-On the version GRCh38 of the human genome, these exons cover the DNA
+On the version hg38/GRCh38 of the human genome, these exons cover the DNA
 nucleotides 43044295 to 43125483.</p>
+
+<a name="genename"></a>
+<h6>What is a gene or transcript accession? </h6>
+
+<p>
+Gene symbols like BRCA1 are easy to remember but sometimes change and are not
+specific to an organism.  Therefore most databases internally use unique
+identifiers to refer to sequences and some journals require authors to use
+these in manuscripts.</p>
+
+<p>
+The most common accession numbers encountered by users are either from Ensembl,
+GENCODE or RefSeq.  Human Ensembl/GENCODE gene accession numbers start with
+ENSG followed by a number and version number separated by a dot, e.g. 
+&quot;ENSG00000012048.21&quot for latest BRCA1.  Every ENSG-gene has at least
+one transcript assigned to it. The transcript identifiers start with with ENST
+and are likewise followed by a version number, e.g. 
+&quot;ENST00000619216.1&quot;. Additional details on Ensembl IDs can be found
+on the <a target="_blank" 
+href="https://uswest.ensembl.org/Help/Faq?id=488">Ensembl FAQ page</a>.</p>
+
+<p>
+NCBI refers to genes
+with plain numbers, e.g.  672 for BRCA1. Manually curated RefSeq transcript
+identifiers start with NM_ (coding) or NR_ (non-coding), followed by a number and version
+number separated by a dot, e.g. &quot;NR_046018.2&quot;.  If the transcript was
+predicted by the NCBI Gnomon software, the prefix is XM_ but these are rare in human.
+A table of these and other RefSeq prefixes can be
+found on the <a target=_blank
+href="https://www.ncbi.nlm.nih.gov/books/NBK21091/table/ch18.T.refseq_accession_numbers_and_mole/?report=objectonly">
+NCBI website</a>.
+</p>
 
 <a name="mostCommon"></a>
 <h6>What are the most common gene transcript tracks?</h6>
 <p>
-Researchers sequence cDNA sequences and send these to NCBI Genbank. The
+Researchers sequence <a target="_blank" 
+href="https://en.wikipedia.org/wiki/Complementary_DNA">cDNA sequences</a> 
+and send these to NCBI Genbank. The
 Genome Browser shows these sequences in the Genbank or the <a target=_blank 
 href="../cgi-bin/hgTrackUi?db=hg38&g=est">EST track</a> (if the cDNA is just
 a single read from the 5' or 3' end). From the alignment of the cDNAs and ESTs, 
@@ -106,29 +142,42 @@ tracks are only relevant when you are working on a particular locus where you
 think that the manually curated gene models (Ensembl and RefSeq) have
 errors.</p>
 
-<a name="genename"></a>
-<h6>What is a gene or transcript accession? </h6>
-
 <p>
-Gene symbols like BRCA1 are easy to remember but sometimes change and are not
-specific to an organism.  Therefore most databases internally use unique
-identifiers to refer to sequences and some journals require authors to use
-these in manuscripts.<br>
-
-The most common accession numbers encountered by users are either from Ensembl,
-GENCODE or RefSeq.  Human Ensembl/GENCODE gene accession numbers start with
-ENSG, e.g. &quot;ENSG00000012048&quot for BRCA1.  Every ENSG-gene has at least
-one transcript assigned to it. The transcript identifiers start with with ENST
-followed by a number, e.g.  &quot;ENST00000619216.1&quot;. NCBI refers to genes
-with plain numbers, e.g.  672 for BRCA1. Manually curated RefSeq transcript
-identifiers start with NM_ (coding) or NR_ (non-coding), followed by a number and version
-number separated by a dot, e.g. &quot;NR_046018.2&quot;.  If the transcript was
-predicted by the NCBI Gnomon software, the prefix is XM_ but these are rare in human. 
-A table of these and other RefSeq prefixes can be
-found on the <a target=_blank
-href="https://www.ncbi.nlm.nih.gov/books/NBK21091/table/ch18.T.refseq_accession_numbers_and_mole/?report=objectonly">
-NCBI website</a>.
+To illustrate differences between the most common gene tracks, here is an
+overview of a few different tracks on human (hg38) and how many transcripts
+they contain as of March 2019:
 </p>
+
+<table> 
+    <tr> 
+      <th nowrap><strong>Track name</strong></th> 
+      <th nowrap><strong>Number of transcripts</strong></th> 
+    <tr> 
+      <td>Known Gene (Gencode comprehensive V29)</td>
+      <td>226,811</td> 
+    </tr> 
+    <tr> 
+      <td>Known Gene (Gencode basic V29)</td>
+      <td>112,634</td> 
+    </tr> 
+    <tr> 
+      <td>NCBI RefSeq Predicted Transcripts</td>
+      <td>94,389</td> 
+    </tr> 
+    <tr> 
+      <td>UCSC RefSeq (Curated)</td>
+      <td>80,694</td> 
+    </tr> 
+    <tr> 
+      <td>NCBI RefSeq Curated</td>
+      <td>73,080</td> 
+    </tr> 
+    <tr> 
+      <td>CCDS</td>
+      <td>32,506</td> 
+    </tr> 
+  </table>
+
 
 <a name="ens"></a>
 <h2>The differences</h2>
@@ -322,6 +371,36 @@ href="../cgi-bin/hgTrackUi?db=hg38&g=refSeqComposite">
 NCBI RefSeq</a> (hg38), you can activate the subtrack &quot;RefSeq HGMD&quot;.
 It contains only the transcripts that are part of the Human Gene Mutation Database.
 </p>
+
+<a name="singledownload"></a>
+<h6>I just want to download a gene set with a single entry per gene. Where can I find this?</h6>
+<p>
+We have data tables named knownCanonical available for different assemblies comprised of a single 
+transcript/isoform per gene.</p>
+
+<p>
+For hg19, the knownCanonical table is a subset of the <a target="_blank" 
+href="../cgi-bin/hgTrackUi?db=hg19&g=knownGene">UCSC Genes</a> track. It was generated by 
+identifying a canonical isoform for each cluster ID, or gene. Generally, this is the longest
+isoform. It can be downloaded directly from the <a target="_blank" 
+href="http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/">hg19 downloads database</a> 
+or by using the <a target="_blank" href="../cgi-bin/hgTables">Table Browser</a>.</p>
+
+<p>
+For hg38, the knownCanonical table is a subset of the <a target="_blank" 
+href="../cgi-bin/hgTrackUi?db=hg38&g=knownGene">GENCODE v29</a> track. As opposed to the hg19 
+equivalent which generally used the longest isoform for indentification, this table is defined 
+as follows:</p>
+<p>
+<i>knownCanonical identifies the canonical isoform of each cluster ID or gene using the ENSEMBL 
+gene IDs to define each cluster. The canonical transcript is chosen using the APPRIS principal 
+transcript when available. If no APPRIS tag exists for any transcript associated with the 
+cluster, then a transcript in the BASIC set is chosen. If no BASIC transcript exists, then 
+the longest isoform is used.</i></p>
+<p>
+It can be downloaded directly from the <a target="_blank" 
+href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/">hg38 downloads database</a>
+or by using the <a target="_blank" href="../cgi-bin/hgTables">Table Browser</a>.</p>
 
 <a name="whatdo"></a>
 <h6>This is rather complicated. Can you tell me which gene transcript track I should use?</h6>
