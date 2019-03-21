@@ -29,30 +29,17 @@
 #include "jsonParse.h"
 #include "jsonWrite.h"
 #include "chromInfo.h"
-#include "versionInfo.h"
+#include "wiggle.h"
+#include "hubPublic.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
 #endif
 
-/*this definition should be over in hg/inc/hubPublic.h but that does not exist*/
-struct hubPublic
-/* Table of public track data hub connections. */
-    {
-    struct hubPublic *next;  /* Next in singly linked list. */
-    char *hubUrl;	/* URL to hub.ra file */
-    char *shortLabel;	/* Hub short label. */
-    char *longLabel;	/* Hub long label. */
-    char *registrationTime;	/* Time first registered */
-    unsigned dbCount;	/* Number of databases hub has data for. */
-    char *dbList;	/* Comma separated list of databases. */
-    char *descriptionUrl;	/* URL to description HTML */
-    };
-
 #define MAX_PATH_INFO 32
 
 /*  functions in hubApi.c */
-struct hubPublic *hubPublicLoadAll();
+struct hubPublic *hubPublicDbLoadAll();
 
 struct dbDb *ucscDbDb();
 /* return the dbDb table as an slList */
