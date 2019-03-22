@@ -38,18 +38,14 @@
 
 #define MAX_PATH_INFO 32
 
+/* limit amount of output to a maximum to avoid overload */
+extern int maxItemsOutput;	/* can be set in URL maxItemsOutput=N */
+
 /*  functions in hubApi.c */
 struct hubPublic *hubPublicDbLoadAll();
 
 struct dbDb *ucscDbDb();
 /* return the dbDb table as an slList */
-
-struct slName *genomeList(struct trackHub *hubTop, struct trackDb **dbTrackList, char *selectGenome);
-/* follow the pointers from the trackHub to trackHubGenome and around
- * in a circle from one to the other to find all hub resources
- * return slName list of the genomes in this track hub
- * optionally, return the trackList from this hub for the specified genome
- */
 
 /*  functions in apiUtils.c */
 void apiErrAbort(char *format, ...);
