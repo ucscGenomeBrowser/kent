@@ -950,50 +950,6 @@ hPrintf("</ul>\n");
 hPrintf("</p>\n");
 }	// static void tracksForUcscDb(char * db)
 
-static void introductionText()
-/* output explanation text */
-{
-char *scriptUri = getenv("SCRIPT_URI");
-
-hPrintf("<h1>JSON data API interface to U.C. Santa Cruz genome browser data</h1>\n");
-hPrintf("<h2>Data access URL: <em>%s</em></h2>\n", scriptUri);
-hPrintf("<h3>Endpoint functions:</h3>\n");
-hPrintf("<ul>\n");
-hPrintf("<li>/list/...</li>\n");
-hPrintf("<li><ol>\n");
-hPrintf("<li>/list/publicHubs - list public hubs</li>\n");
-hPrintf("<li>/list/ucscGenomes - list UCSC database genomes</li>\n");
-hPrintf("<li>/list/hubGenomes - list genomes from specified hub</li>\n");
-hPrintf("<li>/list/tracks - list data tracks available in specified hub or database genome</li>\n");
-hPrintf("<li>/list/chromosomes - list chromosomes from specified data track in specified hub or database genome</li>\n");
-hPrintf("</ol></li>\n");
-hPrintf("<li>/getData/...</li>\n");
-hPrintf("<li><ol>\n");
-hPrintf("<li>/getData/sequence - return sequence from specified hub or database genome</li>\n");
-hPrintf("<li>/getData/track - return data from specified track in hub or database genome</li>\n");
-hPrintf("</ol></li>\n");
-hPrintf("</ul>\n");
-hPrintf("<h3>Parameters to endpoint functions:</h3>\n");
-hPrintf("<ul>\n");
-hPrintf("<li>hubUrl=&lt;url&gt; - specify track hub or assembly hub URL</li>\n");
-hPrintf("<li>genome=&lt;name&gt; - specify genome assemby in track or assembly hub</li>\n");
-hPrintf("<li>db=&lt;ucscDb&gt; - specify database (aka genome assembly) in UCSC genome browser</li>\n");
-hPrintf("<li>track=&lt;trackName&gt; - specify data track in hub or UCSC database genome assembly</li>\n");
-hPrintf("<li>chrom=&lt;chrN&gt; - specify chromosome name for sequence or track data</li>\n");
-hPrintf("<li>start=&lt;123&gt; - specify start coordinate (0 relative) for data from track or sequence retrieval</li>\n");
-hPrintf("<li>end=&lt;456&gt; - specify end coordinate (1 relative) for data from track or sequence retrieval</li>\n");
-hPrintf("<li>(see also: <a href='http://genome.ucsc.edu/blog/the-ucsc-genome-browser-coordinate-counting-systems/' target=_blank>UCSC browser coordinate counting systems)</a></li>");
-hPrintf("</ul>\n");
-hPrintf("<h3>Supported track types, at this time, for getData functions:</h3>\n");
-hPrintf("<ul>\n");
-static struct slName *el;
-for (el = supportedTypes; el; el = el->next)
-    {
-    hPrintf("<li>%s</li>\n", el->name);
-    }
-hPrintf("</ul>\n");
-}
-
 static void initUrlPrefix()
 /* set up urlPrefix for self referenes */
 {
@@ -1013,6 +969,7 @@ else
     }
 }
 
+#ifdef NOT
 static void showExamples(char *url, struct trackHubGenome *hubGenome, char *ucscDb)
 {
 hPrintf("<h2>Example URLs to return json data structures:</h2>\n");
@@ -1052,6 +1009,8 @@ hPrintf("<ol>\n");
 hPrintf("<li><a href='%s/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&amp;genome=_araTha1&amp;chrom=chrI&amp;track=assembly_&amp;start=0&amp;end=14309681' target=_blank>get track data from specified hub, chromosome, track name, start and end coordinates</a> <em>%s/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&amp;genome=_araTha1&amp;chrom=chrI&amp;track=assembly_&amp;start=0&amp;end=14309681</em></li>\n", urlPrefix, urlPrefix);
 hPrintf("</ol>\n");
 }	/*	static void showExamples()	*/
+
+#endif
 
 static void showCartDump()
 /* for information purposes only during development, will become obsolete */
@@ -1201,13 +1160,10 @@ if (measureTiming || debug)
        hPrintf("<em>hub open time: %ld millis</em><br>\n", thisTime - lastTime);
     }
 
-// hPrintf("<h3>ucscDb: '%s'</h2>\n", ucscDb);
+webIncludeFile("inc/dataApi.html");
 
-struct trackHubGenome *hubGenome = hub->genomeList;
-
-introductionText();
-
-showExamples(urlInput, hubGenome, ucscDb);
+// struct trackHubGenome *hubGenome = hub->genomeList;
+// showExamples(urlInput, hubGenome, ucscDb);
 
 if (debug)
     showCartDump();
