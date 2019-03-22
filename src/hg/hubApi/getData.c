@@ -217,6 +217,28 @@ if (isEmpty(chrom))
 	wigDataOutput(jw, bwf, chrom, start, end);
 }
 
+static struct trackDb *findTrackDb(char *track, struct trackDb *tdb)
+/* search tdb structure for specific track, recursion on subtracks */
+{
+struct trackDb *trackFound = NULL;
+
+for (trackFound = tdb; trackFound; trackFound = trackFound->next)
+    {
+    if (trackFound->subtracks)
+	{
+        struct trackDb *subTrack = findTrackDb(track, trackFound->subtracks);
+	if (subTrack)
+	    {
+	    if (sameOk(subTrack->track, track))
+		trackFound = subTrack;
+	    }
+	}
+    if (sameOk(trackFound->track, track))
+	break;
+    }
+return trackFound;
+}
+
 static void getHubTrackData(char *hubUrl)
 /* return data from a hub track, optionally just one chrom data,
  *  optionally just one section of that chrom data
@@ -248,12 +270,8 @@ struct trackDb *tdb = obtainTdb(hubGenome, NULL);
 if (NULL == tdb)
     apiErrAbort("failed to find a track hub definition in genome=%s for endpoint '/getdata/track'  given hubUrl='%s'", genome, hubUrl);
 
-struct trackDb *thisTrack = NULL;
-for (thisTrack = tdb; thisTrack; thisTrack = thisTrack->next)
-    {
-    if (sameWord(thisTrack->track, track))
-	break;
-    }
+struct trackDb *thisTrack = findTrackDb(track, tdb);
+
 if (NULL == thisTrack)
     apiErrAbort("failed to find specified track=%s in genome=%s for endpoint '/getdata/track'  given hubUrl='%s'", track, genome, hubUrl);
 

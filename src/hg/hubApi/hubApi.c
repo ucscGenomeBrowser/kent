@@ -18,9 +18,10 @@
 /* Global Variables for all modules */
 
 int maxItemsOutput = 1000;	/* can be set in URL maxItemsOutput=N */
+static int maxItemLimit = 1000000;   /* maximum of 1,000,000 items returned */
 
 /* Global only to this one source file */
-static boolean debug = FALSE;	/* can be set in URL debug=1 */
+static boolean debug = TRUE;	/* can be set in URL debug=1 */
 static struct cart *cart;             /* CGI and other variables */
 static struct hash *oldVars = NULL;
 static struct hash *trackCounter = NULL;
@@ -204,7 +205,7 @@ freeMem(stripType);
 // showCounts(countTracks);
 }
 
-static void sampleUrl(struct trackHub *hub, char *db, struct trackDb *tdb, char *chrom, long long chromSize, char *errorString)
+static void sampleUrl(struct trackHub *hub, char *db, struct trackDb *tdb, char *chrom, unsigned chromSize, char *errorString)
 /* print out a sample getData URL */
 {
 char errorPrint[2048];
@@ -251,68 +252,60 @@ else
     hPrintf("<li>%s : %s not db hub track ?</li>\n", tdb->track, tdb->type);
 }
 
-static void showSubTracks(struct trackHub *hub, char *db, struct trackDb *tdb, struct hash *countTracks,
-    char *chromName, long long chromSize, char *errorString)
-/* tdb has subtracks, show only subTracks, no details */
+static void hubSampleUrl(struct trackHub *hub, struct trackDb *tdb,
+    long chromCount, long itemCount, char *chromName, unsigned chromSize,
+      char *genome, char *errorString)
 {
-hPrintf("    <li><ul>\n");
-if (debug)
-    hPrintf("    <li>subtracks for '%s' db: '%s'</li>\n", tdb->track, db);
-if (tdb->subtracks)
-    {
-    struct trackDb *tdbEl = NULL;
-    for (tdbEl = tdb->subtracks; tdbEl; tdbEl = tdbEl->next)
-	{
-        if (tdbIsCompositeView(tdbEl))
-	    hPrintf("<li>%s : %s : composite view of parent: %s</li>\n", tdbEl->track, tdbEl->type, tdbEl->parent->track);
-	else
-	    {
-	    if (isSupportedType(tdbEl->type))
-		sampleUrl(hub, db, tdbEl, chromName, chromSize, errorString);
-	    else
-		hPrintf("<li>%s : %s : subtrack of parent: %s</li>\n", tdbEl->track, tdbEl->type, tdbEl->parent->track);
-	    }
-	hashCountTrack(tdbEl, countTracks);
-        if (tdbEl->subtracks)
-	    showSubTracks(hub, db, tdbEl, countTracks, chromName, chromSize, errorString);
-	}
-    }
-hPrintf("    </ul></li>\n");
-}
+unsigned start = chromSize / 4;
+unsigned end = start + 10000;
+if (end > chromSize)
+    end = chromSize;
 
-static void trackSettings(struct trackDb *tdb, struct hash *countTracks)
-/* process the settingsHash for a trackDb, recursive when subtracks */
-{
-hPrintf("    <li><ul>\n");
-// if (tdb->children)  haven't yet seen a track with children ?
-//   hPrintf("    <li>%s: has children</li>\n", tdb->track);
-// else
-//   hPrintf("    <li>%s: NO children</li>\n", tdb->track);
-struct hashEl *hel;
-struct hashCookie hc = hashFirst(tdb->settingsHash);
-while ((hel = hashNext(&hc)) != NULL)
+char errorPrint[2048];
+errorPrint[0] = 0;
+
+if (isNotEmpty(errorString))
     {
-    if (sameWord("track", hel->name))
-	continue;	// already output in header
-    if (isEmpty((char *)hel->val))
-	hPrintf("    <li>%s : &lt;empty&gt;</li>\n", hel->name);
+    safef(errorPrint, sizeof(errorPrint), " : <font color='red'>ERROR: %s</font>", errorString);
+    }
+
+char countsMessage[512];
+countsMessage[0] = 0;
+if (chromCount > 0 || itemCount > 0)
+    {
+    if (startsWithWord("bigBed", tdb->type))
+        safef(countsMessage, sizeof(countsMessage), " : %ld chroms : %ld item count ", chromCount, itemCount);
+    else if (startsWithWord("bigWig", tdb->type))
+        safef(countsMessage, sizeof(countsMessage), " : %ld chroms : %ld bases covered ", chromCount, itemCount);
     else
-	hPrintf("    <li>%s : '%s'</li>\n", hel->name, (char *)hel->val);
+        safef(countsMessage, sizeof(countsMessage), " : %ld chroms : %ld count ", chromCount, itemCount);
     }
-if (tdb->subtracks)
+
+if (isSupportedType(tdb->type))
     {
-    struct trackDb *tdbEl = NULL;
-    if (debug)
-	hPrintf("   <li>has %d subtrack(s)</li>\n", slCount(tdb->subtracks));
-    for (tdbEl = tdb->subtracks; tdbEl; tdbEl = tdbEl->next)
-	{
-        hPrintf("<li>subtrack: %s of parent: %s : type: '%s'</li>\n", tdbEl->track, tdbEl->parent->track, tdbEl->type);
-	hashCountTrack(tdbEl, countTracks);
-	trackSettings(tdbEl, countTracks);
-	}
+	char urlReference[2048];
+	safef(urlReference, sizeof(urlReference), "<a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;track=%s&amp;chrom=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, chromName, start, end, errorPrint);
+
+        if (startsWithWord("bigBed", tdb->type))
+            hPrintf("    <li>%s : %s%s%s</li>\n", tdb->track, tdb->type, countsMessage, urlReference);
+        else if (startsWithWord("bigWig", tdb->type))
+            hPrintf("    <li>%s : %s%s%s</li>\n", tdb->track, tdb->type, countsMessage, urlReference);
+        else
+            hPrintf("    <li>%s : %s%s%s</li>\n", tdb->track, tdb->type, countsMessage, urlReference);
     }
-hPrintf("    </ul></li>\n");
-}
+else
+    {
+        if (startsWithWord("bigBed", tdb->type))
+            hPrintf("    <li>%s : %s%s</li>\n", tdb->track, tdb->type, countsMessage);
+        else if (startsWithWord("bigWig", tdb->type))
+            hPrintf("    <li>%s : %s%s</li>\n", tdb->track, tdb->type, countsMessage);
+        else
+            hPrintf("    <li>%s : %s%s</li>\n", tdb->track, tdb->type, countsMessage);
+    }
+}	/* static void hubSampleUrl(struct trackHub *hub, struct trackDb *tdb,
+	 * long chromCount, long itemCount, char *chromName, unsigned chromSize,
+	 *   char *genome)
+	 */
 
 static void bbiBiggestChrom(struct bbiChromInfo *chromList, char **chromName,
     unsigned *chromSize)
@@ -437,45 +430,120 @@ errCatchFree(&errCatch);
 return retVal;
 }	/* static int bbiBriefMeasure() */
 
-static void hubSampleUrl(struct trackHub *hub, struct trackDb *tdb,
-    long chromCount, long itemCount, char *chromName, unsigned chromSize,
-      char *genome, char *errorString)
+static void hubSubTracks(struct trackHub *hub, char *db, struct trackDb *tdb,
+    struct hash *countTracks,  long chromCount, long itemCount,
+    char *chromName, unsigned chromSize, char *genome, char *errorString)
+/* tdb has subtracks, show only subTracks, no details */
 {
-unsigned start = chromSize / 4;
-unsigned end = start + 10000;
-if (end > chromSize)
-    end = chromSize;
-
-char errorPrint[2048];
-errorPrint[0] = 0;
-
-if (isNotEmpty(errorString))
+hPrintf("    <li><ul>\n");
+if (debug)
     {
-    safef(errorPrint, sizeof(errorPrint), " : <font color='red'>ERROR: %s</font>", errorString);
+    hPrintf("    <li>subtracks for '%s' db: '%s'</li>\n", tdb->track, db);
+    hPrintf("    <li>chrom: '%s' size: %u</li>\n", chromName, chromSize);
     }
+if (tdb->subtracks)
+    {
+    struct trackDb *tdbEl = NULL;
+    for (tdbEl = tdb->subtracks; tdbEl; tdbEl = tdbEl->next)
+	{
+	boolean compositeContainer = tdbIsComposite(tdbEl);
+	boolean compositeView = tdbIsCompositeView(tdbEl);
+	if (! (compositeContainer || compositeView) )
+	    {
+	    if (chromSize < 1)
+		{
+		char *bigDataIndex = NULL;
+		char *relIdxUrl = trackDbSetting(tdbEl, "bigDataIndex");
+		if (relIdxUrl != NULL)
+		    bigDataIndex = trackHubRelativeUrl(hub->genomeList->trackDbFile, relIdxUrl);
+		char *bigDataUrl = trackDbSetting(tdbEl, "bigDataUrl");
+		char *longName = NULL;
+		unsigned longSize = 0;
+		struct dyString *errors = newDyString(1024);
+		(void) bbiBriefMeasure(tdbEl->type, bigDataUrl, bigDataIndex, &chromCount, &itemCount, errors, &longName, &longSize);
+		chromSize = longSize;
+		chromName = longName;
+		}
+	    }
+        if (tdbIsCompositeView(tdbEl))
+	    hPrintf("<li>%s : %s : composite view of parent: %s</li>\n", tdbEl->track, tdbEl->type, tdbEl->parent->track);
+	else
+	    {
+	    if (isSupportedType(tdbEl->type))
+		hubSampleUrl(hub, tdbEl, chromCount, itemCount, chromName, chromSize, genome, errorString);
+	    else
+		hPrintf("<li>%s : %s : subtrack of parent: %s</li>\n", tdbEl->track, tdbEl->type, tdbEl->parent->track);
+	    }
+	hashCountTrack(tdbEl, countTracks);
+        if (tdbEl->subtracks)
+	    hubSubTracks(hub, db, tdbEl, countTracks, chromCount, itemCount, chromName, chromSize, genome, errorString);
+	}
+    }
+hPrintf("    </ul></li>\n");
+}	/* hubSubTracks() */
 
-if (isSupportedType(tdb->type))
+static void showSubTracks(struct trackHub *hub, char *db, struct trackDb *tdb, struct hash *countTracks,
+    char *chromName, unsigned chromSize, char *errorString)
+/* tdb has subtracks, show only subTracks, no details */
+{
+hPrintf("    <li><ul>\n");
+if (debug)
+    hPrintf("    <li>subtracks for '%s' db: '%s'</li>\n", tdb->track, db);
+if (tdb->subtracks)
     {
-        if (startsWithWord("bigBed", tdb->type))
-            hPrintf("    <li>%s : %s : %ld chroms : %ld item count <a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;track=%s&amp;chrom=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)%s</a></li>\n", tdb->track, tdb->type, chromCount, itemCount, urlPrefix, hub->url, genome, tdb->track, chromName, start, end, errorPrint);
-        else if (startsWithWord("bigWig", tdb->type))
-            hPrintf("    <li>%s : %s : %ld chroms : %ld bases covered <a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;track=%s&amp;chrom=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)%s</a></li>\n", tdb->track, tdb->type, chromCount, itemCount, urlPrefix, hub->url, genome, tdb->track, chromName, start, end, errorPrint);
-        else
-            hPrintf("    <li>%s : %s : %ld chroms : %ld count <<a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;track=%s&amp;chrom=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)%s</a></li>\n", tdb->track, tdb->type, chromCount, itemCount, urlPrefix, hub->url, genome, tdb->track, chromName, start, end, errorPrint);
+    struct trackDb *tdbEl = NULL;
+    for (tdbEl = tdb->subtracks; tdbEl; tdbEl = tdbEl->next)
+	{
+        if (tdbIsCompositeView(tdbEl))
+	    hPrintf("<li>%s : %s : composite view of parent: %s</li>\n", tdbEl->track, tdbEl->type, tdbEl->parent->track);
+	else
+	    {
+	    if (isSupportedType(tdbEl->type))
+		sampleUrl(hub, db, tdbEl, chromName, chromSize, errorString);
+	    else
+		hPrintf("<li>%s : %s : subtrack of parent: %s</li>\n", tdbEl->track, tdbEl->type, tdbEl->parent->track);
+	    }
+	hashCountTrack(tdbEl, countTracks);
+        if (tdbEl->subtracks)
+	    showSubTracks(hub, db, tdbEl, countTracks, chromName, chromSize, errorString);
+	}
     }
-else
+hPrintf("    </ul></li>\n");
+}
+
+static void trackSettings(struct trackDb *tdb, struct hash *countTracks)
+/* process the settingsHash for a trackDb, recursive when subtracks */
+{
+hPrintf("    <li><ul>\n");
+// if (tdb->children)  haven't yet seen a track with children ?
+//   hPrintf("    <li>%s: has children</li>\n", tdb->track);
+// else
+//   hPrintf("    <li>%s: NO children</li>\n", tdb->track);
+struct hashEl *hel;
+struct hashCookie hc = hashFirst(tdb->settingsHash);
+while ((hel = hashNext(&hc)) != NULL)
     {
-        if (startsWithWord("bigBed", tdb->type))
-            hPrintf("    <li>%s : %s : %ld chroms : %ld item count</li>\n", tdb->track, tdb->type, chromCount, itemCount);
-        else if (startsWithWord("bigWig", tdb->type))
-            hPrintf("    <li>%s : %s : %ld chroms : %ld bases covered</li>\n", tdb->track, tdb->type, chromCount, itemCount);
-        else
-            hPrintf("    <li>%s : %s : %ld chroms : %ld count</li>\n", tdb->track, tdb->type, chromCount, itemCount);
+    if (sameWord("track", hel->name))
+	continue;	// already output in header
+    if (isEmpty((char *)hel->val))
+	hPrintf("    <li>%s : &lt;empty&gt;</li>\n", hel->name);
+    else
+	hPrintf("    <li>%s : '%s'</li>\n", hel->name, (char *)hel->val);
     }
-}	/* static void hubSampleUrl(struct trackHub *hub, struct trackDb *tdb,
-	 * long chromCount, long itemCount, char *chromName, unsigned chromSize,
-	 *   char *genome)
-	 */
+if (tdb->subtracks)
+    {
+    struct trackDb *tdbEl = NULL;
+    if (debug)
+	hPrintf("   <li>has %d subtrack(s)</li>\n", slCount(tdb->subtracks));
+    for (tdbEl = tdb->subtracks; tdbEl; tdbEl = tdbEl->next)
+	{
+        hPrintf("<li>subtrack: %s of parent: %s : type: '%s'</li>\n", tdbEl->track, tdbEl->parent->track, tdbEl->type);
+	hashCountTrack(tdbEl, countTracks);
+	trackSettings(tdbEl, countTracks);
+	}
+    }
+hPrintf("    </ul></li>\n");
+}
 
 static void hubCountOneTdb(struct trackHub *hub, char *db, struct trackDb *tdb,
     char *bigDataIndex, struct hash *countTracks, char *chromName,
@@ -490,25 +558,30 @@ boolean superChild = tdbIsSuperTrackChild(tdb);
 boolean depthSearch = cartUsualBoolean(cart, "depthSearch", FALSE);
 hashCountTrack(tdb, countTracks);
 
-char *longName = NULL;
-unsigned longSize = 0;
 long chromCount = 0;
 long itemCount = 0;
 
 struct dyString *errors = newDyString(1024);
 
+/* if given a chromSize, it belongs to a UCSC db and this is *not* an
+ *   assembly hub, otherwise, look up a chrom and size in the bbi file
+ */
 if (! (compositeContainer || compositeView) )
-    (void) bbiBriefMeasure(tdb->type, bigDataUrl, bigDataIndex, &chromCount, &itemCount, errors, &longName, &longSize);
+    {
+    if (chromSize < 1 || depthSearch)
+	{
+	char *longName = NULL;
+	unsigned longSize = 0;
+        (void) bbiBriefMeasure(tdb->type, bigDataUrl, bigDataIndex, &chromCount, &itemCount, errors, &longName, &longSize);
+	chromSize = longSize;
+	chromName = longName;
+	}
+    }
 
 if (depthSearch && bigDataUrl)
     {
     if (isSupportedType(tdb->type))
-	{
-	if (chromSize > 0)
 	    hubSampleUrl(hub, tdb, chromCount, itemCount, chromName, chromSize, genome, errors->string);
-	else
-	    hubSampleUrl(hub, tdb, chromCount, itemCount, longName, longSize, genome, errors->string);
-	}
     }
 else
     {
@@ -522,21 +595,14 @@ else
 	{
         if (isSupportedType(tdb->type))
 	    {
-	    if (chromSize > 0)
-		hubSampleUrl(hub, tdb, chromCount, itemCount, chromName, chromSize, genome, errors->string);
-	    else
-		hubSampleUrl(hub, tdb, chromCount, itemCount, longName, longSize, genome, errors->string);
+	    hubSampleUrl(hub, tdb, chromCount, itemCount, chromName, chromSize, genome, errors->string);
 	    }
-        // hPrintf("    <li>%s : %s : %s (maybe sample ?)</li>\n", tdb->track, tdb->type, bigDataUrl);
 	}
     else
 	{
         if (isSupportedType(tdb->type))
 	    {
-	    if (chromSize > 0)
-		hubSampleUrl(hub, tdb, chromCount, itemCount, chromName, chromSize, genome, errors->string);
-	    else
-		hubSampleUrl(hub, tdb, chromCount, itemCount, longName, longSize, genome, errors->string);
+	    hubSampleUrl(hub, tdb, chromCount, itemCount, chromName, chromSize, genome, errors->string);
 	    }
 	else
 	    hPrintf("    <li>%s : %s (what is this)</li>\n", tdb->track, tdb->type);
@@ -550,12 +616,12 @@ if (allTrackSettings)
     }
 else if (tdb->subtracks)
     {
-    showSubTracks(hub, db, tdb, countTracks, chromName, chromSize, errors->string);
+    hubSubTracks(hub, db, tdb, countTracks, chromCount, itemCount, chromName, chromSize, genome, errors->string);
     }
 return;
 }	/*	static void hubCountOneTdb(char *db, struct trackDb *tdb,
 	 *	char *bigDataIndex, struct hash *countTracks,
-	 *	char *chromName, long long chromSize)
+	 *	char *chromName, unsigned chromSize)
 	 */
 
 
@@ -722,15 +788,6 @@ long lastTime = clock1000();
 for ( ; genome; genome = genome->next )
     {
     ++totalAssemblyCount;
-#ifdef NOT
-    char *twoBitPath;  /* URL to twoBit.  If not null, this is an assmebly hub*/
-    struct twoBitFile *tbf;  /* open handle to two bit file */
-    char *groups;	     /* URL to group.txt file */
-    char *defaultPos;        /* default position */
-    char *organism;          /* organism name, like Human */
-    char *description;       /* description, also called freeze name */
-    struct trackHub *trackHub; /* associated track hub */
-#endif
     if (isNotEmpty(genome->twoBitPath))
 	{
 	hPrintf("<li>assembly hub twoBitFile: %s</li>\n", genome->twoBitPath);
@@ -744,7 +801,7 @@ for ( ; genome; genome = genome->next )
 	hPrintf("<li>name: %s</li>\n", genome->name);
 	}
     hubAssemblySettings(hubTop, genome);
-    if (measureTiming)
+    if (measureTiming || debug)
 	{
 	long thisTime = clock1000();
 	hPrintf("<li><em>processing time %s: %ld millis</em></li>\n", genome->name, thisTime - lastTime);
@@ -933,11 +990,16 @@ static void initUrlPrefix()
 {
 char *httpHost = getenv("HTTP_HOST");
 
-if (! startsWith("hgwdev-api", httpHost))
+if (isEmpty(httpHost))
+    urlPrefix = "";
+else
     {
-    if (startsWith("hgwdev",httpHost) || startsWith("genome-test", httpHost))
+    if (! startsWith("hgwdev-api", httpHost))
 	{
-	urlPrefix = "../cgi-bin/hubApi";
+	if (startsWith("hgwdev",httpHost) || startsWith("genome-test", httpHost))
+	    {
+	    urlPrefix = "../cgi-bin/hubApi";
+	    }
 	}
     }
 }
@@ -1009,6 +1071,10 @@ initUrlPrefix();
 
 /* global variable for all workers to honor this limit */
 maxItemsOutput = cartUsualInt(cart, "maxItemsOutput", maxItemsOutput);
+if (maxItemsOutput > maxItemLimit)	/* safety check */
+    maxItemsOutput = maxItemLimit;
+if (maxItemsOutput < 1)	/* safety check */
+    maxItemsOutput = 1;
 
 debug = cartUsualBoolean(cart, "debug", debug);
 int timeout = cartUsualInt(cart, "udcTimeout", 300);
@@ -1119,7 +1185,7 @@ if (commandError)
 
 long lastTime = clock1000();
 struct trackHub *hub = errCatchTrackHubOpen(urlInput);
-if (measureTiming)
+if (measureTiming || debug)
     {
     long thisTime = clock1000();
     if (debug)
@@ -1211,7 +1277,7 @@ else
 
 if (timedOut)
     hPrintf("<h1>Reached time out %ld seconds</h1>", timeOutSeconds);
-if (measureTiming)
+if (measureTiming || debug)
     hPrintf("<em>Overall total time: %ld millis</em><br>\n", clock1000() - enteredMainTime);
 
 hPrintf("</p>\n");
