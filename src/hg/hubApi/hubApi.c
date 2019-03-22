@@ -228,25 +228,34 @@ if (db)
     {
     if (hub)
 	{
+	char urlReference[2048];
+	safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;track=%s&amp;chrom=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, chrom, start, end, errorPrint);
+
 	if (tdb->parent)
-	    hPrintf("<li>%s : %s subtrack of parent: %s <a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;chrom=%s&amp;track=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)%s</a></li>\n", tdb->track, tdb->type, tdb->parent->track, urlPrefix, hub->url, genome, chrom, tdb->track, start, end, errorPrint);
+	    hPrintf("<li>%s : %s subtrack of parent: %s%s</li>\n", tdb->track, tdb->type, tdb->parent->track, urlReference);
 	else
-	    hPrintf("<li>%s : %s <a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;chrom=%s&amp;track=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)%s</a></li>\n", tdb->track, tdb->type, urlPrefix, hub->url, genome, chrom, tdb->track, start, end, errorPrint);
+	    hPrintf("<li>%s : %s%s</li>\n", tdb->track, tdb->type, urlReference);
 	}
     else
 	{
+	char urlReference[2048];
+	safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?db=%s&amp;chrom=%s&amp;track=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)%s</a>\n", urlPrefix, db, chrom, tdb->track, start, end, errorPrint);
+
 	if (tdb->parent)
-	    hPrintf("<li>%s : %s subtrack of parent: %s <a href='%s/getData/track?db=%s&amp;chrom=%s&amp;track=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)%s</a></li>\n", tdb->track, tdb->type, tdb->parent->track, urlPrefix, db, chrom, tdb->track, start, end, errorPrint);
+	    hPrintf("<li>%s : %s subtrack of parent: %s%s</li>\n", tdb->track, tdb->type, tdb->parent->track, urlReference);
 	else
-	    hPrintf("<li>%s : %s <a href='%s/getData/track?db=%s&amp;chrom=%s&amp;track=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)%s</a></li>\n", tdb->track, tdb->type, urlPrefix, db, chrom, tdb->track, start, end, errorPrint);
+	    hPrintf("<li>%s : %s%s</li>\n", tdb->track, tdb->type, urlReference );
 	}
     }
 else if (hub)
     {
+    char urlReference[2048];
+    safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;track=%s&amp;chrom=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, chrom, start, end, errorPrint);
+
     if (tdb->parent)
-	hPrintf("<li>%s : %s subtrack of parent: %s <a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;chrom=%s&amp;track=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)%s</a></li>\n", tdb->track, tdb->type, tdb->parent->track, urlPrefix, hub->url, genome, chrom, tdb->track, start, end, errorPrint);
+	hPrintf("<li>%s : %s subtrack of parent: %s%s</li>\n", tdb->track, tdb->type, tdb->parent->track, urlReference);
     else
-	hPrintf("<li>%s : %s <a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;chrom=%s&amp;track=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)%s</a></li>\n", tdb->track, tdb->type, urlPrefix, hub->url, genome, chrom, tdb->track, start, end, errorPrint);
+	hPrintf("<li>%s : %s%s</li>\n", tdb->track, tdb->type, urlReference);
     }
 else
     hPrintf("<li>%s : %s not db hub track ?</li>\n", tdb->track, tdb->type);
@@ -1205,18 +1214,7 @@ if (debug)
 
 hPrintf("<h2>Explore hub or database assemblies and tracks</h2>\n");
 
-// hPrintf("<form action='%s' name='hubApiUrl' id='hubApiUrl' method='GET'>\n\n", "../cgi-bin/hubApi");
 hPrintf("<form action='%s' name='hubApiUrl' id='hubApiUrl' method='GET'>\n\n", urlPrefix);
-
-#ifdef NOT
-if (isEmpty(urlPrefix))
-    {
-    char *scriptUri = getenv("SCRIPT_URI");
-    hPrintf("<form action='%s' name='hubApiUrl' id='hubApiUrl' method='GET'>\n\n", scriptUri);
-    }
-else
-    hPrintf("<form action='%s' name='hubApiUrl' id='hubApiUrl' method='GET'>\n\n", urlPrefix);
-#endif
 
 hPrintf("<b>Select public hub:&nbsp;</b>");
 #define JBUFSIZE 2048
