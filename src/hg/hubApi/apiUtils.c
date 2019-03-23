@@ -24,28 +24,39 @@ time_t timeNow = time(NULL);
 // gmtime_r(&timeNow, &tm);
 struct jsonWrite *jw = jsonWriteNew();
 jsonWriteObjectStart(jw, NULL);
-jsonWriteString(jw, "apiVersion", "v"CGI_VERSION);
+// not recommended: jsonWriteString(jw, "apiVersion", "v"CGI_VERSION);
 jsonWriteString(jw, "source", "UCSantaCruz");
 jsonWriteDateFromUnix(jw, "downloadTime", (long long) timeNow);
 jsonWriteNumber(jw, "downloadTimeStamp", (long long) timeNow);
 return jw;
 }
 
-int tableColumns(struct sqlConnection *conn, struct jsonWrite *jw, char *table)
-/* output the column names, and their MySQL data type, for the given table
+int tableColumns(struct sqlConnection *conn, struct jsonWrite *jw, char *table,
+   char ***nameReturn, char ***typeReturn)
+/* return the column names, and their MySQL data type, for the given table
  *  return number of columns (aka 'fields')
  */
 {
-jsonWriteListStart(jw, "columnNames");
+// not needed jsonWriteListStart(jw, "columnNames");
 struct sqlFieldInfo *fi, *fiList = sqlFieldInfoGet(conn, table);
 int columnCount = slCount(fiList);
+char **namesReturn = NULL;
+char **typesReturn = NULL;
+AllocArray(namesReturn, columnCount);
+AllocArray(typesReturn, columnCount);
+int i = 0;
 for (fi = fiList; fi; fi = fi->next)
     {
-    jsonWriteObjectStart(jw, NULL);
-    jsonWriteString(jw, fi->field, fi->type);
-    jsonWriteObjectEnd(jw);
+    namesReturn[i] = cloneString(fi->field);
+    typesReturn[i] = cloneString(fi->type);
+    i++;
+// not needed     jsonWriteObjectStart(jw, NULL);
+// not needed     jsonWriteString(jw, fi->field, fi->type);
+// not needed     jsonWriteObjectEnd(jw);
     }
-jsonWriteListEnd(jw);
+// not needed jsonWriteListEnd(jw);
+*nameReturn = namesReturn;
+*typeReturn = namesReturn;
 return columnCount;
 }
 

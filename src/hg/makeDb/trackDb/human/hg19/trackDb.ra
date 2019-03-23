@@ -27,8 +27,8 @@ shortLabel Variants in Papers
 longLabel Genetic Variants mentioned in scientific publications
 superTrack on
 group phenDis
-release alpha,beta
 type bed 3
+pennantIcon New red ../goldenPath/newsarch.html#032619  Released March 26, 2019
 
         track mastermind
         shortLabel Mastermind Variants
