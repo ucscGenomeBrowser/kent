@@ -1372,9 +1372,9 @@ int getRecentSubmitFileId(struct sqlConnection *conn, int submitDirId, char *sub
 /* Get the file ID of the most recent index.html file for dataset. */
 {
 char query[PATH_LEN]; 
-sqlSafef(query, sizeof(query), "select max(id)from cdwFile where submitFileName='%s' and submitDirId=%d", submitFileName,
+sqlSafef(query, sizeof(query), "select max(id) from cdwFile where submitFileName='%s' and submitDirId=%d", submitFileName,
     submitDirId);
-return sqlQuickNum(conn, query);
+return sqlQuickNum(conn, query);  // returns 0 if none found
 }
 
 void doBrowseDatasets(struct sqlConnection *conn)
@@ -1414,7 +1414,7 @@ for (dataset = datasetList; dataset != NULL; dataset = dataset->next)
 	printf(">%lld files</A>)",fileCount);
 
 	int fileId = getRecentSubmitFileId(conn, submitDirId, "meta.txt");
-	if (cdwCheckFileAccess(conn, fileId, user))
+	if ((fileId > 0) && cdwCheckFileAccess(conn, fileId, user))
 	    {
 	    printf(" (metadata: <A HREF=\"cdwWebBrowse?cdwCommand=dataSetMetaTree&cdwDataSet=%s&%s\"",
 		    datasetId, cartSidUrlString(cart)); 
@@ -1715,7 +1715,7 @@ for (jointDataset = datasetList; jointDataset != NULL; jointDataset = jointDatas
 	char metaFileName[PATH_LEN];
 	safef(metaFileName, sizeof(metaFileName), "%s/%s", datasetId, "meta.txt");
 	int fileId = cdwFileIdFromPathSuffix(conn, metaFileName);
-	if (cdwCheckFileAccess(conn, fileId, user))
+	if ((fileId > 0) && cdwCheckFileAccess(conn, fileId, user))
 	    {
 	    printf(" (metadata: <A HREF=\"cdwWebBrowse?cdwCommand=dataSetMetaTree&cdwDataSet=%s&%s\"",
 		    datasetId, cartSidUrlString(cart)); 
