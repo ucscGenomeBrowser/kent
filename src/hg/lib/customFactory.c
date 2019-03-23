@@ -2570,8 +2570,10 @@ if ((startsWith("http://", url)
    || startsWith("ftp://", url)))
 return TRUE;
 
-// we allow bigDataUrl's to point to trash
-if (startsWith(trashDir(), url))
+// we allow bigDataUrl's to point to trash (or sessionDataDir, if configured)
+char *sessionDataDir = cfgOption("sessionDataDir");
+if (startsWith(trashDir(), url) ||
+    (isNotEmpty(sessionDataDir) && startsWith(sessionDataDir, url)))
     return TRUE;
 
 char *prefix = cfgOption("udc.localDir");
