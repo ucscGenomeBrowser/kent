@@ -160,7 +160,7 @@ searchTable vm20NcbimapAnn
 searchType bigGenePred
 
 track vm20NcbimapAln
-shortLabel VM20 ncbimap alignm
+shortLabel VM20 ncbimap align
 longLabel VM20 mapped alignments with NCBI alignments
 group genes
 type bigPsl
