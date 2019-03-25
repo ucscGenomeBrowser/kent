@@ -124,8 +124,6 @@ if (cdsHash)
 	bigPsl.thickStart = genomeCds.start;
 	bigPsl.thickEnd = genomeCds.end;
 	}
-    else
-    	warn("CDS missing for %s\n", psl->qName);
     }
 
 bigPslOutput(&bigPsl, fp, '\t', '\n');
