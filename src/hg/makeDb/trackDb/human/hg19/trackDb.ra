@@ -35,7 +35,6 @@ pennantIcon New red ../goldenPath/newsarch.html#032619  Released March 26, 2019
         longLabel Genomenon Mastermind Variants extracted from full text publications
         visibility dense
         type bigBed 9 +
-        release alpha,beta
         urls url=https://mastermind.genomenon.com/detail?disease=all%20diseases&$$
         bigDataUrl /gbdb/hg19/bbi/mastermind.bb
         noScoreFilter on
