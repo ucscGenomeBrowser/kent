@@ -1,5 +1,6 @@
 /* hubApi - access mechanism to hub data resources. */
 #include "dataApi.h"
+#include "botDelay.h"
 
 /*
 +------------------+------------------+------+-----+---------+-------+
@@ -19,9 +20,12 @@
 
 int maxItemsOutput = 1000;	/* can be set in URL maxItemsOutput=N */
 static int maxItemLimit = 1000000;   /* maximum of 1,000,000 items returned */
+/* for debugging purpose, current bot delay value */
+int botDelay = 0;
+boolean debug = TRUE;	/* can be set in URL debug=1, to turn off: debug=0 */
+#define delayFraction	0.03
 
 /* Global only to this one source file */
-static boolean debug = TRUE;	/* can be set in URL debug=1 */
 static struct cart *cart;             /* CGI and other variables */
 static struct hash *oldVars = NULL;
 static struct hash *trackCounter = NULL;
@@ -1021,6 +1025,27 @@ cartDump(cart);
 hPrintf("</pre>\n");
 }
 
+static void sendJsonHogMessage(char *hogHost)
+{
+apiErrAbort("Your host, %s, has been sending too many requests lately and is "
+       "unfairly loading our site, impacting performance for other users. "
+       "Please contact genome@soe.ucsc.edu to ask that your site "
+       "be reenabled.  Also, please consider downloading sequence and/or "
+       "annotations in bulk -- see http://genome.ucsc.edu/downloads.html.",
+       hogHost);
+}
+
+static void sendHogMessage(char *hogHost)
+{
+hPrintf("Your host, %s, has been sending too many requests lately and is "
+       "unfairly loading our site, impacting performance for other users. "
+       "Please contact genome@soe.ucsc.edu to ask that your site "
+       "be reenabled.  Also, please consider downloading sequence and/or "
+       "annotations in bulk -- see http://genome.ucsc.edu/downloads.html.",
+       hogHost);
+exit(0);
+}
+
 static void doMiddle(struct cart *theCart)
 /* Set up globals and make web page */
 {
@@ -1070,6 +1095,18 @@ if (isNotEmpty(pathInfo))
         hPrintDisable();
 	puts("Content-Type:application/json");
 	puts("\n");
+	/* similar delay system as in DAS server */
+	botDelay = hgBotDelayTimeFrac(delayFraction);
+	if (botDelay > 0)
+	    {
+	    if (botDelay > 2000)
+		{
+		char *hogHost = getenv("REMOTE_ADDR");
+		sendJsonHogMessage(hogHost);
+		return;
+		}
+	sleep1000(botDelay);
+	}
         void (*apiFunction)(char **) = hel->val;
         (*apiFunction)(words);
 	return;
@@ -1080,6 +1117,18 @@ if (isNotEmpty(pathInfo))
 
 puts("Content-Type:text/html");
 puts("\n");
+
+/* similar delay system as in DAS server */
+botDelay = hgBotDelayTimeFrac(delayFraction);
+if (botDelay > 0)
+    {
+    if (botDelay > 2000)
+	{
+	char *hogHost = getenv("REMOTE_ADDR");
+	sendHogMessage(hogHost);
+	}
+    sleep1000(botDelay);
+    }
 
 (void) hubPublicDbLoadAll();
 
@@ -1103,6 +1152,7 @@ cartWebStart(cart, database, "UCSC JSON API interface");
 if (debug)
     {
     hPrintf("<ul>\n");
+    hPrintf("<li>hgBotDelay: %d</li>\n", botDelay);
     char *envVar = getenv("BROWSER_HOST");
     hPrintf("<li>BROWSER_HOST:%s</li>\n", envVar);
     envVar = getenv("CONTEXT_DOCUMENT_ROOT");
