@@ -186,6 +186,8 @@ SCRIPT_FILES = \
 	phegenToBed \
 	doLocusName \
 	cancerMafToBigBed \
+	tdbRename \
+	tdbSort \
 	${USER_APP_SCRIPTS}
 
 # List of all directories to build

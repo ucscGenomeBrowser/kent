@@ -35,11 +35,10 @@ To construct an annotation file and display it in the Genome Browser, follow the
 
 <a name="format"></a>
 <p>
-<strong>Step 1. </strong> Format the data set
-Formulate your data set as a tab-separated file using one of the formats supported by the Genome 
+<strong>Step 1. </strong> Format the data set: <br>
+Format your data as a tab-separated file using one of the formats supported by the Genome 
 Browser. Annotation data can be in standard 
-<a href="../../FAQ/FAQformat.html#format3">GFF</a> format or in a format designed specifically for 
-the Human Genome Project or UCSC Genome Browser, including 
+<a href="../../FAQ/FAQformat.html#format3">GFF</a> format or in a format designed specifically for the Human Genome Project or UCSC Genome Browser, including 
 <a href="bedgraph.html">bedGraph</a>,
 <a href="../../FAQ/FAQformat.html#format4">GTF</a>,
 <a href="../../FAQ/FAQformat.html#format2">PSL</a>,
@@ -70,7 +69,7 @@ correctly. Chromosome references must be of the form <em>chrN</em> (the parsing 
 <em><strong>is</strong></em> case-sensitive). You may include more than one data set in your 
 annotation file; these need not be in the same format.</p> 
 <p>
-<strong>Step 2.</strong> Define the Genome Browser display characteristics
+<strong>Step 2.</strong> Define the Genome Browser display characteristics:<br>
 Add one or more optional <a href="#lines">browser lines</a> to the beginning of your formatted data 
 file to configure the overall display of the Genome Browser when it initially shows your annotation 
 data. Browser lines allow you to configure such things as the genome position that the Genome 
@@ -80,7 +79,7 @@ is not explicitly set in the annotation file, the initial display will default t
 setting most recently used by the user, which may not be an appropriate position for viewing the 
 annotation track.</p>
 <p>
-<strong>Step 3.</strong> Define the annotation track display characteristics
+<strong>Step 3.</strong> Define the annotation track display characteristics: <br>
 Following the browser lines--and immediately preceding the formatted data--add a 
 <a href="#TRACK">track line</a> to define the display attributes for your annotation data set. Track
 lines enable you to define annotation track characteristics such as the name, description, colors, 

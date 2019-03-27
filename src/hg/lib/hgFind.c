@@ -21,6 +21,7 @@
 #include "bed.h"
 #include "cytoBand.h"
 #include "cart.h"
+#include "errCatch.h"
 #include "hgFind.h"
 #include "hgFindSpec.h"
 #include "hgHgvs.h"
@@ -107,34 +108,6 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
-
-static void hgPositionsFree(struct hgPositions **pEl)
-/* Free up hgPositions. */
-{
-struct hgPositions *el;
-if ((el = *pEl) != NULL)
-    {
-    freeMem(el->query);
-    freeMem(el->extraCgi);
-    hgPosTableFreeList(&el->tableList);
-    freez(pEl);
-    }
-}
-
-#if 0 /* not used */
-static void hgPositionsFreeList(struct hgPositions **pList)
-/* Free a list of dynamically allocated hgPos's */
-{
-struct hgPositions *el, *next;
-
-for (el = *pList; el != NULL; el = next)
-    {
-    next = el->next;
-    hgPositionsFree(&el);
-    }
-*pList = NULL;
-}
-#endif
 
 #define HGPOSRANGESIZE 64
 static char *hgPosBrowserRange(struct hgPos *pos, char range[HGPOSRANGESIZE])
@@ -1595,16 +1568,10 @@ static int addMrnaPositionTable(char *db, struct hgPositions *hgp,
  * Add to hgp if any found. Return number found */
 {
 struct hgPosTable *table = NULL;
-struct hgPos *pos = NULL;
 struct slName *el = NULL;
 struct slName *elToFree = NULL;
 struct dyString *dy = newDyString(256);
-char query[512];
-char description[512];
-char product[256];
-char organism[128];
 char *ui = getUiUrl(cart);
-char *acc = NULL;
 int organismID = hOrganismID(hgp->database);   /* id from mrna organism table */
 int alignCount = 0;
 char hgAppCombiner = (strchr(hgAppName, '?')) ? '&' : '?';
@@ -1619,7 +1586,7 @@ AllocVar(table);
 for (el = *pAccList; el != NULL; el = el->next)
     {
     freez(&elToFree);
-    acc = el->name;
+    char *acc = el->name;
 
     /* check if item matches xeno criterion */
     int itemOrganismID = hashIntVal(accOrgHash, acc);
@@ -1631,6 +1598,7 @@ for (el = *pAccList; el != NULL; el = el->next)
 	continue;
 
     /* item fits criteria, so enter in table */
+    struct hgPos *pos = NULL;
     AllocVar(pos);
     slAddHead(&table->posList, pos);
     pos->name = cloneString(acc);
@@ -1655,7 +1623,9 @@ for (el = *pAccList; el != NULL; el = el->next)
     dyStringPrintf(dy, "%s</A>", acc);
 
     /* print description for item, or lacking that, the product name */
+    char description[512];
     safef(description, sizeof(description), "%s", "n/a"); 
+    char query[512];
     sqlSafef(query, sizeof(query), 
         "select d.name from %s g,%s d"
         " where g.acc = '%s' and g.description = d.id", gbCdnaInfoTable, descriptionTable, acc);
@@ -1667,6 +1637,7 @@ for (el = *pAccList; el != NULL; el = el->next)
             "select p.name from %s g,%s p"
             " where g.acc = '%s' and g.productName = p.id",
                  gbCdnaInfoTable, productNameTable, acc);
+        char product[256];
         sqlQuickQuery(conn, query, product, sizeof(product));
         if (!sameString(product, "n/a"))
             {
@@ -1674,6 +1645,7 @@ for (el = *pAccList; el != NULL; el = el->next)
             sqlSafef(query, sizeof(query), 
                 "select o.name from %s g,%s o"
                 " where g.acc = '%s' and g.organism = o.id", gbCdnaInfoTable, organismTable, acc);
+            char organism[128];
             *organism = 0;
             sqlQuickQuery(conn, query, organism, sizeof(organism));
             safef(description, sizeof(description), "%s%s%s",
@@ -1698,16 +1670,35 @@ alignCount = slCount(table->posList);
 if (alignCount > 0)
     {
     char *organism = hOrganism(hgp->database);      /* dbDb organism column */
-    char title[256];
-    slReverse(&table->posList);
-    safef(title, sizeof(title), "%s%s %sligned mRNA Search Results",
-			isXeno ? "Non-" : "", organism, 
-			aligns ?  "A" : "Una");
+    if (alignCount == 1)
+        {
+        // So far we have not bothered to look up the coordinates because there are almost always
+        // multiple matches among which the user will have to choose.  However, it is possible
+        // for there to be a unique match (hgwdev 19-02-15, hg38, "elmer" --> U01022).  In that
+        // case we should look up the coordinates so the user doesn't have to click through a page
+        // with one match leading to another search.
+        char shortLabel[256];
+        safef(shortLabel, sizeof shortLabel, "%s%s %sligned mRNAs",
+              isXeno ? "Non-" : "", organism,
+              aligns ?  "A" : "Una");
+        char *acc = table->posList->name;
+        struct psl *pslList = getPslFromTable(conn, hgp->database, mrnaTable, acc);
+        addPslResultToHgp(hgp, hgp->database, mrnaTable, shortLabel, acc, pslList);
+        alignCount = slCount(hgp->tableList->posList);
+        }
+    else
+        {
+        char title[256];
+        slReverse(&table->posList);
+        safef(title, sizeof(title), "%s%s %sligned mRNA Search Results",
+              isXeno ? "Non-" : "", organism,
+              aligns ?  "A" : "Una");
+        table->description = cloneString(title);
+        table->name = cloneString(mrnaTable);
+        table->htmlOnePos = mrnaKeysHtmlOnePos;
+        slAddHead(&hgp->tableList, table);
+        }
     freeMem(organism);
-    table->description = cloneString(title);
-    table->name = cloneString(mrnaTable);
-    table->htmlOnePos = mrnaKeysHtmlOnePos;
-    slAddHead(&hgp->tableList, table);
     }
 freeDyString(&dy);
 return alignCount;
@@ -2381,9 +2372,8 @@ hFreeConn(&conn);
 return(found);
 }
 
-static void hgPositionsHtml(char *db, struct hgPositions *hgp, FILE *f,
-		     boolean useWeb, char *hgAppName, struct cart *cart)
-/* Write out hgp table as HTML to file. */
+void hgPositionsHtml(char *db, struct hgPositions *hgp, char *hgAppName, struct cart *cart)
+/* Write multiple search results as HTML. */
 {
 struct hgPosTable *table;
 struct hgPos *pos;
@@ -2394,12 +2384,8 @@ char *extraCgi = hgp->extraCgi;
 char hgAppCombiner = (strchr(hgAppName, '?')) ? '&' : '?';
 boolean containerDivPrinted = FALSE;
 struct trackDb *tdbList = NULL;
-
-if (useWeb)
-    {
-    webStart(cart, db, "Select Position");
-    db = cartString(cart, "db");
-    }
+// This used to be an argument, but only stdout was used:
+FILE *f = stdout;
 
 for (table = hgp->tableList; table != NULL; table = table->next)
     {
@@ -2421,6 +2407,8 @@ for (table = hgp->tableList; table != NULL; table = table->next)
         if(!containerDivPrinted)
             {
             fprintf(f, "<div id='hgFindResults'>\n");
+            fprintf(f, "<p>Your search resulted in multiple matches.  "
+                    "Please select a position:</p>\n");
             containerDivPrinted = TRUE;
             }
 	if (table->htmlStart) 
@@ -2490,111 +2478,169 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 
 if(containerDivPrinted)
     fprintf(f, "</div>\n");
-
-if (useWeb)
-    webEnd();
 }
 
-
-static struct hgPositions *genomePos(char *db, char *spec, char **retChromName, 
-	int *retWinStart, int *retWinEnd, struct cart *cart, boolean showAlias,
-	boolean useWeb, char *hgAppName)
-/* Search for positions in genome that match user query.   
- * Return an hgp if the query results in a unique position.  
- * Otherwise display list of positions, put # of positions in retWinStart,
- * and return NULL. */
-{ 
+static struct hgPositions *hgPositionsSearch(char *db, char *spec,
+                                             char **retChromName, int *retWinStart, int *retWinEnd,
+                                             boolean *retIsMultiTerm, struct cart *cart,
+                                             char *hgAppName, char **retMultiChrom,
+                                             struct dyString *dyWarn)
+/* Search for positions that match spec (possibly ;-separated in which case *retIsMultiTerm is set).
+ * Return a container of tracks and positions (if any) that match term.  If different components
+ * of a multi-term search land on different chromosomes then *retMultiChrom will be set. */
+{
 struct hgPositions *hgp = NULL;
-char *terms[16];
-int termCount = 0;
-int i = 0;
-boolean multiTerm = FALSE;
 char *chrom = NULL;
 int start = INT_MAX;
 int end = 0;
-
-termCount = chopByChar(cloneString(spec), ';', terms, ArraySize(terms));
-multiTerm = (termCount > 1);
-
+char *terms[16];
+int termCount = chopByChar(cloneString(spec), ';', terms, ArraySize(terms));
+boolean multiTerm = (termCount > 1);
+if (retIsMultiTerm)
+    *retIsMultiTerm = multiTerm;
+if (retMultiChrom)
+    *retMultiChrom = NULL;
+int i;
 for (i = 0;  i < termCount;  i++)
     {
     trimSpaces(terms[i]);
     if (isEmpty(terms[i]))
 	continue;
-    hgp = hgPositionsFind(db, terms[i], "", hgAppName, cart, multiTerm);
-    if (hgp == NULL || hgp->posCount == 0)
+    // Append warning messages to dyWarn, but allow errAborts to continue
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+        hgp = hgPositionsFind(db, terms[i], "", hgAppName, cart, multiTerm);
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+        errAbort("%s", errCatch->message->string);
+    else if (isNotEmpty(errCatch->message->string))
+        dyStringAppend(dyWarn, errCatch->message->string);
+    errCatchFree(&errCatch);
+    if (hgp->singlePos != NULL)
 	{
-	hgPositionsFree(&hgp);
-	warn("Sorry, couldn't locate %s in %s %s\n", terms[i],
-             trackHubSkipHubName(hOrganism(db)), hFreezeDate(db));
-	if (multiTerm)
-	    hUserAbort("%s not uniquely determined -- "
-		     "can't do multi-position search.", terms[i]);
-	*retWinStart = 0;
-	return NULL;
-	}
-    
-    if ((hgp->singlePos != NULL) && (!showAlias || !hgp->useAlias))
-	{
-	if (chrom != NULL && !sameString(chrom, hgp->singlePos->chrom))
-	    hUserAbort("Sites occur on different chromosomes: %s, %s.",
-		     chrom, hgp->singlePos->chrom);
+	if (retMultiChrom && chrom != NULL && differentString(chrom, hgp->singlePos->chrom))
+            *retMultiChrom = cloneString(chrom);
 	chrom = hgp->singlePos->chrom;
 	if (hgp->singlePos->chromStart < start)
 	    start = hgp->singlePos->chromStart;
 	if (hgp->singlePos->chromEnd > end)
 	    end = hgp->singlePos->chromEnd;
 	}
-    else
-	{
-	hgPositionsHtml(db, hgp, stdout, useWeb, hgAppName, cart);
-	if (multiTerm && hgp->posCount != 1)
-	    hUserAbort("%s not uniquely determined (%d locations) -- "
-		     "can't do multi-position search.",
-		     terms[i], hgp->posCount);
-	*retWinStart = hgp->posCount;
-	hgp = NULL;
-	break;
-	}
+    else if (hgp->posCount == 0 || (multiTerm && hgp->posCount > 1))
+        break;
     }
-if (hgp != NULL)
-    {
+if (retChromName)
     *retChromName = chrom;
+if (retWinStart)
     *retWinStart  = start;
+if (retWinEnd)
     *retWinEnd    = end;
-    }
 return hgp;
 }
 
-
-struct hgPositions *findGenomePos(char *db, char *spec, char **retChromName, 
-	int *retWinStart, int *retWinEnd, struct cart *cart)
-/* Search for positions in genome that match user query.   
- * Return an hgp if the query results in a unique position.  
- * Otherwise display list of positions, put # of positions in retWinStart,
- * and return NULL. */
+static struct hgPositions *revertPosition(struct cart *cart, char **pPosition,
+                                          char **retChrom, int *retStart, int *retEnd,
+                                          char *hgAppName, struct dyString *dyWarn)
+/* Revert *pPosition to lastPosition (or default position).  Return a new hgp for the
+ * resolved position.  Append warnings to dyWarn, errAbort if defaultPos doesn't work.  */
 {
-return genomePos(db, spec, retChromName, retWinStart, retWinEnd, cart, TRUE,
-		 FALSE, "hgTracks");
+struct hgPositions *hgp = NULL;
+boolean isMultiTerm = FALSE;
+char *multiDiffChrom = NULL;
+char *db = cartString(cart, "db");
+char *lastPosition = cartOptionalString(cart, "lastPosition");
+if (isNotEmpty(lastPosition) && !IS_CART_VAR_EMPTY(lastPosition))
+    {
+    if (startsWith("virt:", lastPosition))
+        {
+        lastPosition = cartUsualString(cart, "nonVirtPosition", hDefaultPos(db));
+        }
+    hgp = hgPositionsSearch(db, lastPosition, retChrom, retStart, retEnd, &isMultiTerm,
+                            cart, hgAppName, &multiDiffChrom, dyWarn);
+    if (hgp->singlePos && !(isMultiTerm && isNotEmpty(multiDiffChrom)))
+        {
+        freez(pPosition);
+        *pPosition = cloneString(lastPosition);
+        return hgp;
+        }
+    else
+        dyStringPrintf(dyWarn, "  Unable to resolve lastPosition '%s'; "
+                       "reverting to default position.", lastPosition);
+    }
+char *defaultPosition = hDefaultPos(db);
+hgp = hgPositionsSearch(db, defaultPosition, retChrom, retStart, retEnd, &isMultiTerm,
+                        cart, hgAppName, &multiDiffChrom, dyWarn);
+if (hgp->singlePos && !(isMultiTerm && isNotEmpty(multiDiffChrom)))
+    {
+    freez(pPosition);
+    *pPosition = cloneString(defaultPosition);
+    }
+else
+    errAbort("Unable to resolve default position '%s' for database '%s'.",
+             defaultPosition, db);
+return hgp;
 }
 
-struct hgPositions *findGenomePosWeb(char *db, char *spec, char **retChromName, 
-	int *retWinStart, int *retWinEnd, struct cart *cart,
-	boolean useWeb, char *hgAppName)
-/* Search for positions in genome that match user query.   
- * Use the web library to print out HTML headers if necessary, and use 
- * hgAppName when forming URLs (instead of "hgTracks").  
- * Return an hgp if the query results in a unique position.  
- * Otherwise display list of positions, put # of positions in retWinStart,
- * and return NULL. */
+static boolean posIsObsolete(char *pos)
+/* Return TRUE if pos is genome (or other obsolete keyword).  Once upon a time position=genome
+ * was used to indicate genome-wide search, but now we have an independent option. */
 {
-struct hgPositions *hgp;
-if (useWeb)
-    webPushErrHandlersCartDb(cart, db);
-hgp = genomePos(db, spec, retChromName, retWinStart, retWinEnd, cart, TRUE,
-		useWeb, hgAppName);
-if (useWeb)
-    webPopErrHandlers();
+pos = trimSpaces(pos);
+return(sameWord(pos, "genome") || sameWord(pos, "hgBatch"));
+}
+
+struct hgPositions *hgFindSearch(struct cart *cart, char **pPosition,
+                                 char **retChrom, int *retStart, int *retEnd,
+                                 char *hgAppName, struct dyString *dyWarn)
+/* If *pPosition is a search term, then try to resolve it to genomic position(s).
+ * If unable to find a unique position then revert pPosition to lastPosition (or default position).
+ * Return a container of matching tables and positions.  Warnings/errors are appended to dyWarn. */
+{
+struct hgPositions *hgp = NULL;
+if (posIsObsolete(*pPosition))
+    {
+    hgp = revertPosition(cart, pPosition, retChrom, retStart, retEnd, hgAppName, dyWarn);
+    }
+else
+    {
+    boolean isMultiTerm = FALSE;
+    char *multiDiffChrom = NULL;
+    char *db = cartString(cart, "db");
+    hgp = hgPositionsSearch(db, *pPosition, retChrom, retStart, retEnd,
+                            &isMultiTerm, cart, hgAppName, &multiDiffChrom, dyWarn);
+    if (isMultiTerm && isNotEmpty(multiDiffChrom))
+        {
+        dyStringPrintf(dyWarn, "Sites occur on different chromosomes: %s, %s.",
+                       multiDiffChrom, hgp->singlePos->chrom);
+        hgp = revertPosition(cart, pPosition, retChrom, retStart, retEnd, hgAppName, dyWarn);
+        }
+    else if (hgp->posCount > 1 ||
+             // In weird cases it's possible to get a single result that does not have coords, but
+             // leads to another search a la multiple results!  That happened with genbank keyword
+             // search ("elmer" in hg19, hg38 Feb. '19).  I fixed it but there could be other cases.
+             (hgp->posCount == 1 && !hgp->singlePos))
+        {
+        if (isMultiTerm)
+            dyStringPrintf(dyWarn, "%s not uniquely determined (%d locations) -- "
+                           "can't do multi-position search.",
+                           hgp->query, hgp->posCount);
+        // Revert position in cart (#13009), but don't replace hgp -- hgPositionsHtml will need it.
+        revertPosition(cart, pPosition, retChrom, retStart, retEnd, hgAppName, dyWarn);
+        }
+    else if (hgp->posCount == 0)
+        {
+        dyStringPrintf(dyWarn, "Sorry, couldn't locate %s in %s %s", hgp->query,
+                       trackHubSkipHubName(hOrganism(db)), hFreezeDate(db));
+        hgp = revertPosition(cart, pPosition, retChrom, retStart, retEnd, hgAppName, dyWarn);
+        }
+    if (hgp->singlePos && isEmpty(dyWarn->string))
+        {
+        char position[512];
+        safef(position, sizeof(position), "%s:%d-%d",
+              hgp->singlePos->chrom, hgp->singlePos->chromStart+1, hgp->singlePos->chromEnd);
+        *pPosition = cloneString(addCommasToPos(NULL, position));
+        }
+    }
 return hgp;
 }
 
@@ -3116,7 +3162,7 @@ return foundIt;
 
 struct hgPositions *hgPositionsFind(char *db, char *term, char *extraCgi,
 	char *hgAppNameIn, struct cart *cart, boolean multiTerm)
-/* Return table of positions that match term or NULL if none such. */
+/* Return container of tracks and positions (if any) that match term. */
 {
 struct hgPositions *hgp = NULL, *hgpItem = NULL;
 regmatch_t substrs[4];

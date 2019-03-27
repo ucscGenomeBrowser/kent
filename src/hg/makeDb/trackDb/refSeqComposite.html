@@ -12,6 +12,10 @@ Please visit NCBI's <a href="https://www.ncbi.nlm.nih.gov/projects/RefSeq/update
 target="_blank">Feedback for Gene and Reference Sequences (RefSeq)</a> page to make suggestions, 
 submit additions and corrections, or ask for help concerning RefSeq records. </p>
 
+<p>
+For more information on the different gene tracks, see our <a target=_blank 
+href="/FAQ/FAQgenes.html">Genes FAQ</a>.</p>
+
 <h2>Display Conventions and Configuration</h2>
 <p>
 This track is a multi-view composite track that contains differing data set <em>views</em>.
@@ -45,7 +49,7 @@ The views available for this track include:
    and RefSeq transcripts. <b>Note</b>: track not currently available for every assembly.
    </li>
    <li>
-   <em>RefSeq Clinical (HGMD)</em> &ndash; only show RefSeq Curated transcripts mentioned in the Human
+   <em>RefSeq HGMD</em> &ndash; only show RefSeq Curated transcripts mentioned in the Human
    Gene Mutation Database. This track is only available on the human genomes hg19 and hg38.
    </li>
   </ul>
@@ -147,6 +151,14 @@ as follows:
 g. = genomic sequence ; c. = coding DNA sequence ; n. = non-coding RNA reference sequence.</small>
 </p>
 
+<p>
+When reporting HGVS with RefSeq sequences, to make sure that results from
+research articles can be mapped to the genome unambigously, 
+please specify the RefSeq annotation release displayed on the transcript's
+Genome Browser details page and also the RefSeq transcript ID with version
+(e.g. NM_012309.4 not NM_012309). 
+</p>
+
 
 <a name="methods"></a>
 <h2>Methods</h2>
@@ -187,7 +199,7 @@ below. The other subtracks are associated with database tables as follows:</p>
     <li>RefSeq All - <tt>ncbiRefSeq</tt></li>
     <li>RefSeq Curated - <tt>ncbiRefSeqCurated</tt></li>
     <li>RefSeq Predicted - <tt>ncbiRefSeqPredicted</tt></li>
-    <li>RefSeq Clinical - <tt>ncbiRefSeqHgmd</tt></li>
+    <li>RefSeq HGMD - <tt>ncbiRefSeqHgmd</tt></li>
     <li>UCSC RefSeq - <tt>refGene</tt></li>
   </ul>
   <dt><a href="../../FAQ/FAQformat.html#format2" target="_blank">PSL</a> format:</dt>

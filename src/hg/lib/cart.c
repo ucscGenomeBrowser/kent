@@ -31,6 +31,7 @@
 #include "cgiApoptosis.h"
 #include "customComposite.h"
 #include "regexHelper.h"
+#include "windowsToAscii.h"
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -302,14 +303,12 @@ sqlUpdate(conn, dy->string);
 dyStringFree(&dy);
 }
 
-#ifndef GBROWSE
 static void copyCustomComposites(struct cart *cart, struct hashEl *el)
 /* Copy a set of custom composites to a new hub file. Update the 
  * relevant cart variables. */
 {
 struct tempName hubTn;
-char *hubFileVar = cloneString(el->name);
-char *db = el->name + sizeof(CUSTOM_COMPOSITE_SETTING);
+char *hubFileVar = el->name;
 char *oldHubFileName = el->val;
 trashDirDateFile(&hubTn, "hgComposite", "hub", ".txt");
 char *newHubFileName = cloneString(hubTn.forCgi);
@@ -318,16 +317,26 @@ char *newHubFileName = cloneString(hubTn.forCgi);
 int fd = open(oldHubFileName, O_RDONLY);
 if (fd < 0)
     {
-    cartRemove(cart, el->name);
+    cartRemove(cart, hubFileVar);
     return;
     }
 
 close(fd);
 copyFile(oldHubFileName, newHubFileName);
+cartReplaceHubVars(cart, hubFileVar, oldHubFileName, newHubFileName);
+}
 
+void cartReplaceHubVars(struct cart *cart, char *hubFileVar, char *oldHubUrl, char *newHubUrl)
+/* Replace all cart variables corresponding to oldHubUrl (and/or its hub ID) with
+ * equivalents for newHubUrl. */
+{
+if (! startsWith(customCompositeCartName, hubFileVar))
+    errAbort("cartReplaceHubVars: expected hubFileVar to begin with '"customCompositeCartName"' "
+             "but got '%s'", hubFileVar);
+char *db = hubFileVar + strlen(customCompositeCartName "-");
 char *errorMessage;
-unsigned oldHubId =  hubFindOrAddUrlInStatusTable(db, cart, oldHubFileName, &errorMessage);
-unsigned newHubId =  hubFindOrAddUrlInStatusTable(db, cart, newHubFileName, &errorMessage);
+unsigned oldHubId =  hubFindOrAddUrlInStatusTable(db, cart, oldHubUrl, &errorMessage);
+unsigned newHubId =  hubFindOrAddUrlInStatusTable(db, cart, newHubUrl, &errorMessage);
 
 // need to change hgHubConnect.hub.#hubNumber# (connected hubs)
 struct slPair *hv, *hubVarList = cartVarsWithPrefix(cart, hgHubConnectHubVarPrefix);
@@ -357,11 +366,11 @@ for(hv = hubVarList; hv; hv = hv->next)
     }
 
 // need to change hgtgroup_hub_#hubNumber# (blue bar open )
-// need to change expOrder_hub_#hubNumber#, simOrder_hub_#hubNumber# (sorting)
+// need to change expOrder_hub_#hubNumber#, simOrder_hub_#hubNumber# (sorting) -- values too
 
 // need to change trackHubs #hubNumber#   
 cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
-cartSetString(cart, hubFileVar, newHubFileName);
+cartSetString(cart, hubFileVar, newHubUrl);
 }
 
 void cartCopyCustomComposites(struct cart *cart)
@@ -371,51 +380,10 @@ struct hashEl *el, *elList = hashElListHash(cart->hash);
 
 for (el = elList; el != NULL; el = el->next)
     {
-    if (startsWith(CUSTOM_COMPOSITE_SETTING, el->name))
+    if (startsWith(customCompositeCartName, el->name))
         copyCustomComposites(cart, el);
     }
 }
-
-void cartCopyCustomTracks(struct cart *cart)
-/* If cart contains any live custom tracks, save off a new copy of them,
- * to prevent clashes by multiple uses of the same session.  */
-{
-struct hashEl *el, *elList = hashElListHash(cart->hash);
-
-for (el = elList; el != NULL; el = el->next)
-    {
-    if (startsWith(CT_FILE_VAR_PREFIX, el->name))
-	{
-	char *db = &el->name[strlen(CT_FILE_VAR_PREFIX)];
-	struct slName *browserLines = NULL;
-	struct customTrack *ctList = NULL;
-	char *ctFileName = (char *)(el->val);
-	if (fileExists(ctFileName))
-	    ctList = customFactoryParseAnyDb(db, ctFileName, TRUE, &browserLines, FALSE);
-        /* Save off only if the custom tracks are live -- if none are live,
-         * leave cart variables in place so hgSession can detect and inform
-         * the user. */
-	if (ctList)
-	    {
-	    struct customTrack *ct;
-	    static struct tempName tn;
-	    char *ctFileVar = el->name;
-	    char *ctFileName;
-	    for (ct = ctList;  ct != NULL;  ct = ct->next)
-		{
-		copyFileToTrash(&(ct->htmlFile), "ct", CT_PREFIX, ".html");
-		copyFileToTrash(&(ct->wibFile), "ct", CT_PREFIX, ".wib");
-		copyFileToTrash(&(ct->wigFile), "ct", CT_PREFIX, ".wig");
-		}
-	    trashDirFile(&tn, "ct", CT_PREFIX, ".bed");
-	    ctFileName = tn.forCgi;
-	    cartSetString(cart, ctFileVar, ctFileName);
-	    customTracksSaveFile(db, ctList, ctFileName);
-	    }
-	}
-    }
-}
-#endif /* GBROWSE */
 
 static void storeInOldVars(struct cart *cart, struct hash *oldVars, char *var)
 /* Store all cart hash elements for var into oldVars (if it exists). */
@@ -1271,6 +1239,10 @@ if (id != NULL)
     char buffer[1024];
     safef(buffer, sizeof buffer, "hgHubConnect.hub.%s", id);
     cartRemove(cart, buffer);
+
+    // now we need to remove any custom tracks that are on this hub
+    safef(buffer, sizeof buffer, "ctfile_hub_%s", id);
+    cartRemovePrefix(cart, buffer);
     }
 
 cartRemove(cart, "hubId");
@@ -1396,11 +1368,6 @@ if (didSessionLoad)
 pushWarnHandler(cartHubWarn);
 char *newDatabase = hubConnectLoadHubs(cart);
 popWarnHandler();
-
-#ifndef GBROWSE
-if (didSessionLoad)
-    cartCopyCustomTracks(cart);
-#endif /* GBROWSE */
 
 if (newDatabase != NULL)
     {
@@ -2380,13 +2347,23 @@ htmStart(stdout, title);
 didCartHtmlStart = TRUE;
 }
 
+static void cartVaWebStartMaybeHeader(struct cart *cart, char *db, boolean withHttpHeader,
+                                      char *format, va_list args)
+/* Print out optional Content-Type and pretty wrapper around things when working from cart. */
+{
+pushWarnHandler(htmlVaWarn);
+webStartWrapper(cart, trackHubSkipHubName(db), format, args, withHttpHeader, FALSE);
+inWeb = TRUE;
+jsIncludeFile("jquery.js", NULL);
+jsIncludeFile("utils.js", NULL);
+jsIncludeFile("ajax.js", NULL);
+}
+
 void cartVaWebStart(struct cart *cart, char *db, char *format, va_list args)
 /* Print out pretty wrapper around things when working
  * from cart. */
 {
-pushWarnHandler(htmlVaWarn);
-webStartWrapper(cart, trackHubSkipHubName(db), format, args, FALSE, FALSE);
-inWeb = TRUE;
+cartVaWebStartMaybeHeader(cart, db, FALSE, format, args);
 }
 
 void cartWebStart(struct cart *cart, char *db, char *format, ...)
@@ -2397,16 +2374,26 @@ va_list args;
 va_start(args, format);
 cartVaWebStart(cart, db, format, args);
 va_end(args);
-jsIncludeFile("jquery.js", NULL);
-jsIncludeFile("utils.js", NULL);
-jsIncludeFile("ajax.js", NULL);
-// WTF - variable outside of a form on almost every page we make below?
-// Tim put this in.  Talking with him it sounds like some pages might actually
-// depend on it.  Not removing it until we have a chance to test.  Best fix
-// might be to add it to cartSaveSession, though this would then no longer be
-// well named, and not all things have 'db.'  Arrr.  Probably best to remove
-// and test a bunch.
-cgiMakeHiddenVar("db", db);  
+if (isNotEmpty(db))
+    {
+    // Why do we put an input outside of a form on almost every page we make?
+    // Tim put this in.  Talking with him it sounds like some pages might actually
+    // depend on it.  Not removing it until we have a chance to test.  Best fix
+    // might be to add it to cartSaveSession, though this would then no longer be
+    // well named, and not all things have 'db.'  Arrr.  Probably best to remove
+    // and test a bunch.
+    cgiMakeHiddenVar("db", db);
+    }
+}
+
+void cartWebStartHeader(struct cart *cart, char *db, char *format, ...)
+/* Print out Content-type header and then pretty wrapper around things when working
+ * from cart. */
+{
+va_list args;
+va_start(args, format);
+cartVaWebStartMaybeHeader(cart, db, TRUE, format, args);
+va_end(args);
 }
 
 void cartWebEnd()
@@ -2477,6 +2464,19 @@ if(isNotEmpty(cartTheme))
     }
 }
 
+void cartSetLastPosition(struct cart *cart, char *position, struct hash *oldVars)
+/* If position and oldVars are non-NULL, and oldVars' position is different, add it to the cart
+ * as lastPosition.  This is called by cartHtmlShell{,WithHead} but not other cart openers;
+ * it should be called after cartGetPosition or equivalent. */
+{
+if (position != NULL && oldVars != NULL)
+    {
+    struct hashEl *oldPos = hashLookup(oldVars, positionCgiName);
+    if (oldPos != NULL && differentString(position, oldPos->val))
+        cartSetString(cart, "lastPosition", oldPos->val);
+    }
+}
+
 void cartHtmlShellWithHead(char *head, char *title, void (*doMiddle)(struct cart *cart),
 	char *cookieName, char **exclude, struct hash *oldVars)
 /* Load cart from cookie and session cgi variable.  Write web-page
@@ -2493,12 +2493,7 @@ cart = cartAndCookie(cookieName, exclude, oldVars);
 getDbAndGenome(cart, &db, &org, oldVars);
 pos = cartGetPosition(cart, db, NULL);
 pos = addCommasToPos(db, stripCommas(pos));
-if (pos != NULL && oldVars != NULL)
-    {
-    struct hashEl *oldPos = hashLookup(oldVars, positionCgiName);
-    if (oldPos != NULL && differentString(pos, oldPos->val))
-        cartSetString(cart, "lastPosition", oldPos->val);
-    }
+cartSetLastPosition(cart, pos, oldVars);
 safef(titlePlus, sizeof(titlePlus), "%s %s %s %s", 
                     org ? trackHubSkipHubName(org) : "", db ? db : "",  pos ? pos : "", title);
 popWarnHandler();
@@ -3595,7 +3590,7 @@ if (sameOk(cgiOptionalString("position"), "lastDbPos"))
     
 if (position == NULL)
     {
-    position = cloneString(cartUsualString(cart, "position", NULL));
+    position = windowsToAscii(cloneString(cartUsualString(cart, "position", NULL)));
     }
 
 /* default if not set at all, as would happen if it came from a URL with no

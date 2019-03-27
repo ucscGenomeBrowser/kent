@@ -59,31 +59,35 @@ var cirmSiteFunctions = (function() {
 
 // Screw with login/logout button
 $(document).ready(function() {
-    // Add returnto to login and logout link URLs
-    $("a.login").attr('href', function(i,link){
-        return link + "&returnto=" + document.baseURI;
-        });
-    // Adjust for basic or hgLogin Auth, add username to logout
-    var loginRequest = new XMLHttpRequest();
-    loginRequest.onload = function() {
-        if (this.status == 200) {
-            var loginInfo = JSON.parse(this.responseText);
-            if (typeof(loginInfo.username) !== 'undefined') {
-                $("#logoutLink").text(function(i,oldText){
-                    return oldText + " " + loginInfo.username;
-                });
-                $("a.login").toggle();
-            }
-            if (loginInfo.auth === "basic") {
-                $('#logoutLink').click(function(){
-                    cirmSiteFunctions.basicAuthLogout('/', 'http://cirm.ucsc.edu'); return false;
+    if (cirmSiteFunctions.isSecureSite()) {
+        // Add returnto to login and logout link URLs
+        $("a.login").attr('href', function(i,link){
+            return link + "&returnto=" + document.baseURI;
+            });
+        // Adjust for basic or hgLogin Auth, add username to logout
+        var loginRequest = new XMLHttpRequest();
+        loginRequest.onload = function() {
+            if (this.status == 200) {
+                var loginInfo = JSON.parse(this.responseText);
+                if (typeof(loginInfo.username) !== 'undefined') {
+                    $("#logoutLink").text(function(i,oldText){
+                        return oldText + " " + loginInfo.username;
                     });
-            }
+                    $("a.login").toggle();
+                }
+                if (loginInfo.auth === "basic") {
+                    $('#logoutLink').click(function(){
+                        cirmSiteFunctions.basicAuthLogout('/', 'http://cirm.ucsc.edu'); return false;
+                        });
+                }
+            };
         };
-    };
-    var url = cirmSiteFunctions.userNameUrl();
-    loginRequest.open("GET", url, true);
-    loginRequest.send();
+        var url = cirmSiteFunctions.userNameUrl();
+        loginRequest.open("GET", url, true);
+        loginRequest.send();
+    } else {
+        $("a.login").hide();
+    }
 });
 
 // Screw with banner and search box (secure vs not)

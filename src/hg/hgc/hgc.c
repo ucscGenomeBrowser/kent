@@ -8484,7 +8484,14 @@ else if (isHubTrack(table))
     gpList =  getGenePredForPositionBigGene(tdb, geneName);
     }
 else
-    gpList =  getGenePredForPositionSql(table, geneName);
+    {
+    struct trackDb *tdb = hashFindVal(trackHash, table);
+    char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+    if (bigDataUrl)
+        gpList =  getGenePredForPositionBigGene(tdb, geneName);
+    else
+        gpList =  getGenePredForPositionSql(table, geneName);
+    }
 
 return gpList;
 }
@@ -8744,7 +8751,22 @@ printf("\n");
 cgiContinueHiddenVar("o");
 printf("\n");
 
-hgSeqOptions(cart, database, tbl);
+if (isCustomTrack(tbl) || startsWith("hub_", tbl))
+    hgSeqOptions(cart, database, tbl);
+else
+    {
+    struct trackDb *tdb = hashFindVal(trackHash, tbl);
+    char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+    if (bigDataUrl)
+        {
+        // we asssume that this is a bigGenePred table if we got here with it
+        hgSeqFeatureRegionOptions(cart, TRUE, TRUE);
+        hgSeqDisplayOptions(cart, TRUE, TRUE, FALSE);
+        }
+    else
+        hgSeqOptions(cart, database, tbl);
+    }
+
 cgiMakeButton("submit", "submit");
 printf("</FORM>");
 }
@@ -8864,9 +8886,18 @@ else if (isCustomTrack(table))
     }
 else
     {
-    char constraints[256];
-    safef(constraints, sizeof(constraints), "name = %s", quotedItem);
-    itemCount = hgSeqItemsInRange(database, table, seqName, winStart, winEnd, constraints);
+    tdb = hashFindVal(trackHash, table);
+    char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+    if (bigDataUrl)
+        {
+        itemCount = getSeqForBigGene(tdb, geneName);
+        }
+    else
+        {
+        char constraints[256];
+        safef(constraints, sizeof(constraints), "name = %s", quotedItem);
+        itemCount = hgSeqItemsInRange(database, table, seqName, winStart, winEnd, constraints);
+        }
     }
 if (itemCount == 0)
     printf("\n# No results returned from query.\n\n");
@@ -21437,11 +21468,10 @@ else
 	int start = cartInt(cart, "o");
 	int end = cartInt(cart, "t");
 
-	if (ct->fieldCount < 4)
-	    sqlSafefFrag(where, sizeof(where), "chromStart = '%d'", start);
-	else
+	sqlSafefFrag(where, sizeof(where), "chromStart = '%d' and chromEnd = '%d'", start, end);
+	if (ct->fieldCount >= 4)
 	    {
-	    sqlSafefFrag(where, sizeof(where), "name = '%s'", itemName);
+	    sqlSafefAppend(where, sizeof(where), " and name = '%s'", itemName);
 	    }
 	sr = hRangeQuery(conn, ct->dbTableName, seqName, start, end,
                      where, &rowOffset);

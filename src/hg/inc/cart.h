@@ -399,6 +399,10 @@ void cartVaWebStart(struct cart *cart, char *db, char *format, va_list args);
 /* Print out pretty wrapper around things when working
  * from cart. */
 
+void cartWebStartHeader(struct cart *cart, char *db, char *format, ...);
+/* Print out Content-type header and then pretty wrapper around things when working
+ * from cart. */
+
 void cartWebEnd();
 /* End out pretty wrapper around things when working
  * from cart. */
@@ -603,9 +607,9 @@ boolean cartTdbTreeCleanupOverrides(struct trackDb *tdb,struct cart *newCart,str
 void cartCopyCustomComposites(struct cart *cart);
 /* Find any custom composite hubs and copy them so they can be modified. */
 
-void cartCopyCustomTracks(struct cart *cart);
-/* If cart contains any live custom tracks, save off a new copy of them,
- * to prevent clashes by multiple uses of the same session.  */
+void cartReplaceHubVars(struct cart *cart, char *hubFileVar, char *oldHubUrl, char *newHubUrl);
+/* Replace all cart variables corresponding to oldHubUrl (and/or its hub ID) with
+ * equivalents for newHubUrl. */
 
 void cgiExitTime(char *cgiName, long enteredMainTime);
 /* single stderr print out called at end of CGI binaries to record run
@@ -639,6 +643,11 @@ char *cartGetPosition(struct cart *cart, char *database, struct cart **pLastDbPo
 
 void cartSetDbPosition(struct cart *cart, char *database, struct cart *lastDbPosCart);
 /* Set the 'position.db' variable in the cart.*/
+
+void cartSetLastPosition(struct cart *cart, char *position, struct hash *oldVars);
+/* If position and oldVars are non-NULL, and oldVars' position is different, add it to the cart
+ * as lastPosition.  This is called by cartHtmlShell{,WithHead} but not other cart openers;
+ * it should be called after cartGetPosition or equivalent. */
 
 void cartTdbFetchMinMaxPixels(struct cart *theCart, struct trackDb *tdb,
                                 int defaultMin, int defaultMax, int defaultDefault,

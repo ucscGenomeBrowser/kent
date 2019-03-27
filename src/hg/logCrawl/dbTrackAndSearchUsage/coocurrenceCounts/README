@@ -1,0 +1,41 @@
+The coocurrenceCounts program creates a large matrix of Genome Browser tracks usage.
+
+The program parses an input Apache error log or directory full of logs and creates and allxall matrix
+of tracks, where the [i][j] position contains the count of the number of times track i appears with
+track j in the "trackLog" statements in an error log.
+
+Sample error log lines for testing are found here:
+$ grep -o "\[pid [0-9]\{,6\}\].*trackLog [0-9] hg19 .*$" ../temp.errLog | cut -d' ' -f1-8 | tr ',' '\t' | tr ' ' '\t' | tawk '{for (i = 1; i <= NF; i++) {if (!($i ~/^ct_/ || $i ~/^hub_/)) printf "%s\t", $i;} printf "\n"}' | cut -f2,5,7-
+99]     0       669600049_kY
+99]     1       669600049_kY    chromAlias:5
+99]     0       669600049_kY
+99]     0       669600049_kY    chromAlias:4
+100]    0       hgsid_yyx       cytoBandIdeo:1  cloneEndCTD:2   knownGene:5     pubs:5
+100]    0       hgsid_yyx       cytoBandIdeo:1  cloneEndCTD:2   knownGene:5     pubs:5
+100]    0       hgsid_yxx       cytoBandIdeo:1  cloneEndCTD:2   knownGene:5
+100]    1       hgsid_yxx       gap:4   gold:5  cpgIslandExt:1  cpgIsland:4
+201]    0       hgsid_yxx       gap:4
+201]    1       hgsid_yxx       gold:4
+200]    0       hgsid_yxx       altPsl:4
+201]    2       hgsid_yxx       hgUserPsl:4
+200]    1       hgsid_yxx       chromAlias:1
+
+# note the following has been formatted so the columns line up
+$ cooccurrenceCounts -db=hg19 ../temp.errLog stdout
+tracks          altPsl chromAlias cloneEndCTD cpgIsland cpgIslandExt cytoBandIdeo gap gold knownGene pubs
+altPsl          1      1          0           0         0            0            0   0    0         0
+chromAlias      1      3          0           0         0            0            0   0    0         0
+cloneEndCTD     0      0          3           1         1            3            1   1    3         2
+cpgIsland       0      0          1           1         1            1            1   1    1         0
+cpgIslandExt    0      0          1           1         1            1            1   1    1         0
+cytoBandIdeo    0      0          3           1         1            3            1   1    3         2
+gap             0      0          1           1         1            1            2   2    1         0
+gold            0      0          1           1         1            1            2   2    1         0
+hgUserPsl       0      0          0           0         0            0            1   1    0         0
+knownGene       0      0          3           1         1            3            1   1    3         2
+pubs            0      0          2           0         0            2            0   0    2         2
+
+The filterTop.py script extracts sub matrices out of the large matrix so they can be visualized easier by a tool like morpheus:
+https://software.broadinstitute.org/morpheus/
+
+Run filterTop.py -h to see a usage message with examples.

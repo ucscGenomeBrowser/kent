@@ -37,7 +37,6 @@
 #include "obscure.h"
 #include "trashDir.h"
 #include "hubConnect.h"
-
 #include "trackHub.h"
 
 void usage()
@@ -352,7 +351,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *spacePt = strchr(firstUse, ' ');
     if (spacePt != NULL) *spacePt = '\0';
         printf("&nbsp;&nbsp;</TD>"
-	        "<TD><nobr>%s<nobr>&nbsp;&nbsp;</TD><TD align=center>", firstUse);
+	        "<TD><nobr>%s</nobr>&nbsp;&nbsp;</TD><TD align=center>", firstUse);
 
     char *dbIdx = NULL;
     if (startsWith("db=", row[3]))
@@ -800,6 +799,8 @@ if (sqlTableExists(conn, namedSessionTable))
 		   namedSessionTable, encUserName, encSessionName);
     sqlUpdate(conn, dy->string);
 
+    saveSessionData(cart, encUserName, encSessionName);
+
     dyStringClear(dy);
     sqlDyStringPrintf(dy, "INSERT INTO %s ", namedSessionTable);
     dyStringAppend(dy, "(userName, sessionName, contents, shared, "
@@ -821,9 +822,8 @@ if (sqlTableExists(conn, namedSessionTable))
     sqlUpdate(conn, dy->string);
     dyStringFree(&dy);
 
-    /* Prevent modification of custom tracks just saved to namedSessionDb: */
+    /* Prevent modification of custom track collections just saved to namedSessionDb: */
     cartCopyCustomComposites(cart);
-    cartCopyCustomTracks(cart);
 
     if (useCount > INITIAL_USE_COUNT)
 	dyStringPrintf(dyMessage,
@@ -1178,7 +1178,6 @@ if (hel != NULL)
     cartLoadUserSession(conn, userName, sessionName, cart, NULL, wildStr);
     cartCopyCustomComposites(cart);
     hubConnectLoadHubs(cart);
-    cartCopyCustomTracks(cart);
     cartHideDefaultTracks(cart);
     cartCheckForCustomTracks(cart, dyMessage);
     didSomething = TRUE;
@@ -1234,7 +1233,6 @@ dyStringPrintf(dyMessage,
 cartLoadUserSession(conn, otherUser, sessionName, cart, NULL, actionVar);
 cartCopyCustomComposites(cart);
 hubConnectLoadHubs(cart);
-cartCopyCustomTracks(cart);
 cartHideDefaultTracks(cart);
 cartCheckForCustomTracks(cart, dyMessage);
 hDisconnectCentral(&conn);
@@ -1345,7 +1343,6 @@ if (lf != NULL)
         dyStringAppend(dyMessage, dyLoadMessage->string);
         cartCopyCustomComposites(cart);
         hubConnectLoadHubs(cart);
-        cartCopyCustomTracks(cart);
         cartHideDefaultTracks(cart);
         cartCheckForCustomTracks(cart, dyMessage);
         }
@@ -1654,10 +1651,6 @@ char *backgroundExec = cloneString(cgiUsualString("backgroundExec", NULL));
 struct hashEl *showDownloadList = cartFindPrefix(cart, hgsShowDownloadPrefix);
 struct hashEl *makeDownloadList = cartFindPrefix(cart, hgsMakeDownloadPrefix);
 struct hashEl *doDownloadList = cartFindPrefix(cart, hgsDoDownloadPrefix);
-
-// TODO REMOVE THESE LINES GALT
-//struct hashEl *extractUploadList = cartFindPrefix(cart, hgsExtractUploadPrefix);
-//struct hashEl *doUploadList = cartFindPrefix(cart, hgsDoUploadPrefix);
 
 if (showDownloadList)
     showDownloadSessionCtData(showDownloadList);

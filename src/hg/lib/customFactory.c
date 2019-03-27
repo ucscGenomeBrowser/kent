@@ -47,6 +47,7 @@
 #include "barChartUi.h"
 #include "interact.h"
 #include "interactUi.h"
+#include "cgiApoptosis.h"
 
 // placeholder when custom track uploaded file name is not known
 #define CT_NO_FILE_NAME         "custom track"
@@ -2569,8 +2570,10 @@ if ((startsWith("http://", url)
    || startsWith("ftp://", url)))
 return TRUE;
 
-// we allow bigDataUrl's to point to trash
-if (startsWith(trashDir(), url))
+// we allow bigDataUrl's to point to trash (or sessionDataDir, if configured)
+char *sessionDataDir = cfgOption("sessionDataDir");
+if (startsWith(trashDir(), url) ||
+    (isNotEmpty(sessionDataDir) && startsWith(sessionDataDir, url)))
     return TRUE;
 
 char *prefix = cfgOption("udc.localDir");
@@ -4039,6 +4042,8 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	}
     if (!track)
         continue;
+
+    lazarusLives(20 * 60);   // extend keep-alive time. for big uploads on slow connections.
 
     /* verify database for custom track */
     char *ctDb = ctGenome(track);

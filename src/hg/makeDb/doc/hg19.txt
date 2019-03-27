@@ -33324,4 +33324,14 @@ cat /hive/data/outside/hgmd/2018.4-hgmd-public_hg38.tsv | cut -f7 | sort -u > hg
 zcat process/hg19.curated.gp.gz | fgrep -f hgmdTranscripts.txt - > hgmd.curated.gp
 hgLoadGenePred -genePredExt hg19 ncbiRefSeqHgmd hgmd.curated.gp
 #############################################################################
-
+# genomenom mastermind track, Max, Feb 2019
+cd /hive/data/genomes/hg19/bed/mastermind/
+wget 'https://mastermind.genomenon.com/cvr/download?format=csv' -O - > mastermind.2018.11.26.csv.gz
+unzip mastermind.2018.11.26.csv.zip
+mv mastermind_cited_variants_reference-2018.11.26-csv/ 2018-11-26
+hgsql hg19 -NB -e 'select alias, chrom from chromAlias where source = "refseq";' > chromAlias.tab
+python ~/kent/src/hg/makeDb/mastermind/mastermindToBed.py 2018-11-26/mastermind_cited_variants_reference-2018.11.26.csv 
+bedSort mastermind.bed mastermind.bed
+bedToBigBed -type=bed9+ -as=~/kent/src/hg/makeDb/mastermind/mastermind.as -tab mastermind.bed /hive/data/genomes/hg19/chrom.sizes  mastermind.bb
+ln -s `pwd`/mastermind.bb /gbdb/hg19/bbi/mastermind.bb
+#############################################################################

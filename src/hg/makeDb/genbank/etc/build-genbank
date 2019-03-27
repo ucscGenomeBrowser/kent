@@ -56,7 +56,7 @@ join -v 1 $SOMEDIR/wantDbs.txt $SOMEDIR/haveDbs.txt > $SOMEDIR/needDbs.txt
 rm -rf $SOMEDIR
 
 # load the databases
-etc/genbank-dbload
+etc/genbank-dbload -inclEsts
 
 # newly made dbs need to be copied without validation
 # TODO
@@ -64,6 +64,7 @@ etc/genbank-dbload
 # check for gbExtFile for need to run gbExtUpdate
 f=`hgsql hg38 -Ne "select path from gbExtFile" | sed 's?/gbdb/genbank/./data/processed/??' | sed 's?/.*??' | uniq | wc -l`
 if test $f -gt 2; then bin/x86_64/extFileUpdate hg38 ; fi
+# we should re-build orfeome in this case too!
 
 # should delete directories in data/*/ if there are more than three
 # versions of refseq.* or genbank.*
@@ -78,6 +79,12 @@ rsync -av /data/tmp/grepIndex/hgFixed/  hgwdev-101:/data/tmp/grepIndex/hgFixed/
 
 # rsync hgFixed
 etc/copyMetaDev.sh
+
+# to fix errors --
+# cd etc
+# ./deleteLocks.sh hgFixed gbMeta .hg.conf.hgwdev 
+# ./validateDb.sh .hg.conf.hgwdev  hgFixed gbMeta gbMetadataTablesReg.txt  yes 
+# ./copyDbDev.sh hgFixed gbMeta .hg.conf.hgwdev gbMetadataTablesReg.txt  yes
 
 # rsync the assemblies
 etc/copyAssemblies.sh

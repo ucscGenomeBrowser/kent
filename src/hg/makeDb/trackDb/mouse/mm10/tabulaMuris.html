@@ -1,7 +1,7 @@
 
 <h2>Description</h2>
 <p>
-This track contains selected datasets from single RNA-seq cell experiments. For each, a bar graph
+This track contains selected datasets from single cell RNA-seq experiments. For each, a bar graph
 with gene expression, exon-coverage and splice-junctions are available.</p>
 
 <h2>Display Conventions and Configuration</h2>
@@ -15,12 +15,15 @@ tracks. There are three different types of tracks for each dataset:</a></p>
     <dd>
     A rectangle on the genome, at the location of a gene, filled with a bar graph that indicates the
     gene's expression by single cell cluster. The term &quot;cluster&quot; refers to a cluster of
-    single cells. Usually this is a cell or tissue type.</dd>
+    single cells, which usually represents a cell or tissue type. The height of the bar graph on the
+    genome is the median expression level and a click-through on the bar chart displays a boxplot of
+    expression level quartiles with outliers, per cluster. On the boxplot, the number of cells from
+    each experiment is shown.</dd>
 
   <dt><b>Coverage:</b></dt>
     <dd>
     Bar graphs indicate the number of reads at this base pair. You may want to switch on
-    auto-scaling of the y axis. For configuration options, see <a target="_blank"
+    auto-scaling of the y-axis. For configuration options, see <a target="_blank"
     href="https://genome.ucsc.edu/goldenpath/help/hgWiggleTrackHelp.html">the graph tracks
     configuration help page</a>. These tracks are shown in &quot;dense&quot; by default, set any of
     the tracks to &quot;full&quot; to see the detailed coverage plot.</dd>
@@ -34,11 +37,6 @@ tracks. There are three different types of tracks for each dataset:</a></p>
     more reads support an intron. These tracks are shown in dense by default, set this track to
     &quot;pack&quot; to see. Then click the splice junctions to see their score.</dd>
 </dl>
-
-<p>
-Converage and splice junctions are &quot;Views&quot;, which can be configured independently. See
-the <a href="/goldenPath/help/multiView.html" target="_blank">documentation on Multi-View
-tracks</a>.</p>
 
 <h2>Methods</h2>
 <p>
@@ -59,8 +57,8 @@ splice junctions.</p>
 <h2>Data Access</h2>
 <p>
 The merged BAM files, coverage bigWig files and splice junctions in bigBed format can be
-downloaded from the <a href="https://cells.ucsc.edu/hubs/tabulamuris/" target="_blank">track hub
-directory</a>.</p>
+downloaded from the <a href="http://hgdownload.soe.ucsc.edu/gbdb/mm10/tabulamuris/"
+target="_blank">/gbdb fileserver</a>.</p>
 
 <p>
 Since the splice junction .bigBed files have their scores capped at 1000, the original
@@ -70,9 +68,9 @@ also find there *.calls.tsv files with more details about each junction, e.g. th
 uniquely mapping reads.</p>
 
 <h2>Credits</h2>
-<p>WiggleTools was written by Daniel Zerbino, IntronProspector was written by
-Mark Diekhans, track hubs were written to a large extent by Brian Raney and
-colleages at the UCSC Genome Browser. Testing by Jairo Navarro.</p>
+<p>WiggleTools was written by Daniel Zerbino, IntronProspector was written by Mark Diekhans, track
+hubs were written to a large extent by Brian Raney and colleages at the UCSC Genome Browser. Track
+creation was done by Max Haeussler and tested by Jairo Navarro.</p>
 
 <h2>References</h2>
 <p>

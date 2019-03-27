@@ -17709,3 +17709,37 @@ cat /hive/data/genomes/mm10/chrom.sizes ERCC.sizes > mm10ercc.sizes
 
 # the next one requires single cell browser, from https://github.com/maximilianh/cellBrowser
 cbTrackHub mm10 bam/ TM_facs_metadata.fix.tsv cell_ontology_class hub/ --name "TabulaMuris"
+
+#########################################################################
+# LIFTOVER TO GRCm38B (DONE - 2018-03-01 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/mm10/bed/blat.GRCm38B.2019-03-01
+    cd /hive/data/genomes/mm10/bed/blat.GRCm38B.2019-03-01
+    doSameSpeciesLiftOver.pl -verbose=2 \
+	-fileServer=hgwdev \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/mm10/jkStuff/mm10.11.ooc \
+         mm10 GRCm38B
+    doSameSpeciesLiftOver.pl -verbose=2 \
+	-debug -fileServer=hgwdev \
+	-query2Bit=/hive/data/genomes/mm10/mm10.2bit \
+	-querySizes=/hive/data/genomes/mm10/chrom.sizes \
+	-target2Bit=/hive/data/genomes/GRCm38B/GRCm38B.2bit \
+	-targetSizes=/hive/data/genomes/GRCm38B/chrom.sizes \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/mm10/mm10.11.ooc mm10 GRCm38B
+
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+	-fileServer=hgwdev \
+	-query2Bit=/hive/data/genomes/mm10/mm10.2bit \
+	-querySizes=/hive/data/genomes/mm10/chrom.sizes \
+	-target2Bit=/hive/data/genomes/GRCm38B/GRCm38B.2bit \
+	-targetSizes=/hive/data/genomes/GRCm38B/chrom.sizes \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/mm10/mm10.11.ooc \
+         mm10 GRCm38B) > doLiftOverToGRCm38B.log 2>&1
+    # real    156m50.777s
+
+    # see if the liftOver menus function in the browser from mm10 to GRCm38B
+
+#########################################################################

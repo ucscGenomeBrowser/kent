@@ -404,19 +404,22 @@ as well.</p>
 <h6>What is chr_alt?</h6>
 <p>
 The chr_alt chromosomes, such as <em>chr5_KI270794v1_alt</em>, are alternative sequences that differ
-from the reference genome, currently
-available for the hg19 and hg38 human genome assemblies. You can read more about them on the 
-<a href="../cgi-bin/hgGateway?db=hg38" target="_blank">GRChg38/hg38 Gateway page,</a> under 
-the section titled  &quot;GRCh38 Highlights&quot;.  There you will read how several human
-chromosomal regions exhibit sufficient variability to prevent adequate representation by a single
-sequence and to address this, the GRCh38 assembly provides alternate sequence for selected variant
-regions through the inclusion of alternate loci scaffolds (or alt loci such as KI270794.1,
-referenced as chr5_KI270794v1_alt in the browser). More information on these alternative loci can 
-be found on the 
-<a href="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/info/definitions.shtml#ALTERNATE"
-target="_blank">Genome Reference Consortium (GRC) website</a>. To find the regions these alternate
-sequences correspond to in the genome, use the <a href="../cgi-bin/hgTrackUi?db=hg38&g=altSeqLiftOverPsl" 
-target="_blank">Alt Haplotypes track</a>.
+from the reference genome currently available for a few assemblies including danRer11, hg19, and 
+hg38. These are regions of the genome that exhibit sufficient variability to prevent adequate 
+representation by a single sequence. UCSC labels these haplotype sequences by appending 
+&quot;_alt&quot; to their names. These alternative loci scaffolds (such as KI270794.1 in the hg38 
+assembly, referenced as chr5_KI270794v1_alt in the browser), are mapped to the genome and provide 
+suppemental genomic information on these variable locations. To find the regions these alternate 
+sequences correspond to in the genome you may use the 
+<a href="../cgi-bin/hgTrackUi?db=hg38&g=altSeqLiftOverPsl" target="_blank">Alt Haplotypes track</a> 
+if one is available. 
+</p>
+<p>
+Additional information on alternative loci can be found on our <a 
+href="http://genome.ucsc.edu/blog/patches/" target="_blank">hg38 patches blog post</a> 
+as well as the <a 
+href="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/info/definitions.shtml#ALTERNATE"
+target="_blank">Genome Reference Consortium (GRC) website</a>.
 </p>
 
 <a name="downloadFix"></a>
@@ -431,8 +434,12 @@ These fix patch scaffold sequences are given chromosome context through alignmen
 corresponding chromosome regions. A list of all chromosomes including chr_fix sequences can be 
 found in the <a href="../cgi-bin/hgTracks?db=hg19&chromInfoPage=" target="_blank">hg19</a> or 
 <a href="../cgi-bin/hgTracks?db=hg38&chromInfoPage=" target="_blank">hg38</a> assembly sequences 
-pages. More information on these patch sequences can be found on the 
-<a href="https://www.ncbi.nlm.nih.gov/grc/help/faq/#fix-patches" 
+pages. 
+</p>
+<p>
+More information on these patch sequences can be found on our 
+<a href="http://genome.ucsc.edu/blog/patches/" target="_blank">hg38 patches blog post</a> as well 
+as on the the <a href="https://www.ncbi.nlm.nih.gov/grc/help/faq/#fix-patches" 
 target="_blank">Genome Reference Consortium (GRC) website</a>.
 </p>
 

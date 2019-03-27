@@ -16,7 +16,7 @@
 #include <signal.h>
 #include "obscure.h"
 
-int version = 40;  // PLEASE INCREMENT THIS BEFORE PUSHING TO SHARED REPO
+int version = 43;  // PLEASE INCREMENT THIS BEFORE PUSHING TO SHARED REPO
                    // SO THAT OTHERS MAY TEST WITH IT, SO THAT EVERYONE KNOWS THEY HAVE THE
                    // EXACT RIGHT VERSION.
 
@@ -27,8 +27,8 @@ int numUpdates = 0;
 
 int numForks = 10;
 
-int timeoutSecs = 3600; // Timeout for each forked child process
-                        // default 3600 seconds is one hour
+int timeoutSecs = 7200; // Timeout for each forked child process
+                        // default 7200 seconds is two hours
 
 char *testFailure = NULL;
 
@@ -343,7 +343,6 @@ if (optionExists("hardcore") && newContents->stringSize != contentLength)  // al
     sqlUpdate(conn, update->string);
     dyStringFree(&update);
     }
-hDisconnectCentral(&conn);
 dyStringFree(&oneSetting);
 dyStringFree(&newContents);
 freeMem(contentsToChop);

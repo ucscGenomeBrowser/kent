@@ -8560,13 +8560,9 @@ webPrintLinkTableEnd();
 printf("Total: %d\n", count);
 }
 
-static char *makePennantIcon(struct trackDb *tdb, char **hintRet)
+static char *makeOnePennantIcon(char *setting, char **hintRet)
 // Builds a string with pennantIcon HTML and returns it. Also returns hint. */
 {
-char *setting = trackDbSetting(tdb, "pennantIcon");
-if (setting == NULL)
-    return FALSE;
-
 setting = cloneString(setting);
 char *icon = nextWord(&setting);
 char buffer[4096];
@@ -8629,6 +8625,27 @@ if (hint && hintRet)
 return dyStringCannibalize(&ds);
 }
 
+static struct slPair *makePennantIcons(struct trackDb *tdb)
+/* Return a list of pairs of pennantIcon HTML and note strings. */
+{
+char *setting = trackDbSetting(tdb, "pennantIcon");
+if (setting == NULL)
+    return NULL;
+struct slPair *list = NULL;
+int maxPennants = 3;
+char *pennants[maxPennants];
+int numPennants = chopByChar(setting, ';', pennants, ArraySize(pennants));
+int i;
+for (i = 0;  i < numPennants;  i++)
+    {
+    char *hint = NULL;
+    char *html = makeOnePennantIcon(pennants[i], &hint);
+    slPairAdd(&list, html, hint);
+    freeMem(html);
+    }
+slReverse(&list);
+return list;
+}
 
 boolean hPrintPennantIcon(struct trackDb *tdb)
 // Returns TRUE and prints out the "pennantIcon" when found.
@@ -8638,27 +8655,30 @@ if (trackDbSetting(tdb, "wgEncode") != NULL)
     {
     hPrintf("<a title='encode project' href='../ENCODE'><img height='16' width='16' "
             "src='../images/encodeThumbnail.jpg'></a>\n");
-    return TRUE;
     }
-char *pennantIcon = makePennantIcon(tdb, NULL);
-if (!pennantIcon)
-    return FALSE;
-hPrintf("%s\n", pennantIcon);
-return TRUE;
+struct slPair *list = makePennantIcons(tdb), *el;
+boolean gotPennant = (list != NULL);
+for (el = list;  el != NULL;  el = el->next)
+    hPrintf("%s\n", el->name);
+slPairFreeValsAndList(&list);
+return gotPennant;
 }
 
 boolean printPennantIconNote(struct trackDb *tdb)
 // Returns TRUE and prints out the "pennantIcon" and note when found.
 //This is used by hgTrackUi and hgc before printing out trackDb "html"
 {
-char *hintRet;
-char *pennantIcon = makePennantIcon(tdb, &hintRet);
-if (!pennantIcon)
-    return FALSE;
-printf("<br>%s\n", pennantIcon);
-if (hintRet)
-    printf("<b>Note:</b> %s\n", hintRet);
-return TRUE;
+struct slPair *list = makePennantIcons(tdb), *el;
+boolean gotPennant = (list != NULL);
+for (el = list;  el != NULL;  el = el->next)
+    {
+    printf("<br>%s\n", el->name);
+    char *hint = el->val;
+    if (hint)
+        printf("<b>Note:</b> %s\n", hint);
+    }
+slPairFreeValsAndList(&list);
+return gotPennant;
 }
 
 void printUpdateTime(char *database, struct trackDb *tdb,

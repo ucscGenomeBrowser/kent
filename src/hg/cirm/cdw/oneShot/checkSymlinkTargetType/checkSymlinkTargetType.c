@@ -39,7 +39,7 @@ char *path = cloneString(submitFileName);
 
 // apply path to submitDir, giving an absolute path
 char *newPath = expandRelativePath(submitDir, path);
-verbose(3, "submitDir=%s\npath=%s\nnewPath=%s\n", submitDir, path, newPath);
+verbose(3, "submitDir=[%s]\npath=[%s]\nnewPath=[%s]\n", submitDir, path, newPath);
 if (!newPath)
     errAbort("Too many .. in path %s to make relative to submitDir %s\n", path, submitDir);
 freeMem(path);
@@ -58,7 +58,7 @@ while (TRUE)
 	    broken = TRUE;
 	    break;
 	    }
-	errnoAbort("stat failure on %s", path);
+	errnoAbort("lstat failure on %s", path);
 	}
     if ((sb.st_mode & S_IFMT) == S_IFLNK)
 	dyStringPrintf(dy," SYMLINK ");
@@ -101,7 +101,7 @@ while (TRUE)
     }
 if (symlinkLevels < 1)
     {
-    errAbort("Too few symlinks followed: %d symlinks.", symlinkLevels);
+    errAbort("Too few symlinks followed: %d symlinks. dy=[%s]", symlinkLevels, dy->string);
     }
 freeMem(path);
 

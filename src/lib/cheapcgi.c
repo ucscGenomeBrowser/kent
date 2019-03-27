@@ -520,7 +520,8 @@ for (i=0; i<inputSize; ++i)
     {
     r = getc(stdin);
     if (r == EOF)
-	errAbort("Short POST input.");
+	errAbort("Short POST input to %s: CONTENT_LENGTH=%ld, only %ld supplied",
+                 cgiScriptName(), inputSize, i);
     temp[i] = r;
     }
 if (getSize > 0)

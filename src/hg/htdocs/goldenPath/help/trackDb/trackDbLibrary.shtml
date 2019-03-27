@@ -582,26 +582,11 @@
 
     <P>Note: dynamic resizing of iframes is not trivial, as they have to
     be resized with javascript, across domains. We recommend keeping
-    the size static and to use scrollbars. If dynamic resizing is required, the
-    iframed page has to include a few lines of special HTML and javascript
-    code and one has to modify its body-tag, like this (see 
-    <a target="_BLANK" href="http://stackoverflow.com/questions/153152/resizing-an-iframe-based-on-content">stackoverflow</a>):
-    <pre>
-    ... html header ...
-    &lt;body onload="iframeResizePipe()"&gt;
-    &lt;iframe id="helpframe" src='' height='0' width='0' frameborder='0'&gt;&lt;/iframe&gt;
-    &lt;script type="text/javascript"&gt;
-      function iframeResizePipe() {
-       var height = document.body.scrollHeight;
-       var pipe = document.getElementById('helpframe');
-       pipe.src = 'http://genome.ucsc.edu/inc/iframeHelper.html?height='+height+'&amp;cacheb='+Math.random();
-      }
-    &lt;/script&gt;
-    ... rest of webpage ...
-    </pre>
+    the size static and to use scrollbars.
 
     <P><B>Example:</B></P>
     <pre>   iframeOptions width='800' height='800' scrolling='yes'</pre>
+    </pre>
     <P>This example fixes the size to 800x800 pixels and activates scrollbars.</P>
 </DIV>
 

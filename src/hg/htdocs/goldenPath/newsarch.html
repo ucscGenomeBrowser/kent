@@ -51,6 +51,129 @@
 <!-- ============= 2019 archived news ============= -->
 <a name="2019"></a>
 
+<a name="032619"></a>
+<h2>
+Mar, 26 2019 &nbsp;&nbsp; New Genomenon Mastermind Variants track for Human (hg19)
+</h2>
+<p>
+We are pleased to announce the release of the Genomenon Mastermind Variants track for the 
+<a href="../cgi-bin/hgTracks?db=hg19&position=chr21:33032078-33032099&hideTracks=1&varsInPubs=show&mastermind=pack&knownGene=pack&ignoreCookie=1"
+target="_blank">hg19/GRCh37 assembly</a>. This track is
+composed of variants found in full-text scientific publications collected by <a 
+href="https://www.genomenon.com/mastermind" target="_blank">Genomenon Mastermind</a>. Mastermind
+uses software that searches for disease-gene-variant associations in the scientific literature to
+generate a commercial database.
+</p>
+<p>
+Genomic locations of variants are labeled with the nucleotide change (C&gt;A) where one can hover
+over the features to see the gene impacted, the specific amino acid change, and the related support
+scores (SOD1:A2E - 3/3/3). By clicking an item a link titled &quot;Protein change and link to
+details&quot; provides access to the respective Mastermind variant database page for further
+information. More information about this track and its display can be found on the
+<a href="../cgi-bin/hgTrackUi?db=hg19&g=mastermind" target="_blank">track description</a> page.
+<p>
+We would like to thank Mark Kiel, Steve Schwartz and Clayton Wheeler from
+Genomenon for making this data available as well as Max Haeussler, Conner Powell and the rest of the
+UCSC Genome Browser team.
+</p>
+
+
+<a name="030519"></a>
+<h2>
+Mar. 11, 2019 &nbsp;&nbsp; Addition of GRCh38 patch sequences to hg38
+</h2>
+<p>
+We are pleased to announce the addition of GRCh38 patches to the GRCh38/hg38 database. <a 
+href="https://www.ncbi.nlm.nih.gov/grc/human" target="_blank">Without a release date</a> for the 
+next coordinate-changing assembly, incorporating these sequences is an important step towards 
+providing the most up to date human assembly.</p>
+
+<p>
+This release includes new tracks visualizing patch sequences; the <a 
+href="../cgi-bin/hgTrackUi?db=hg38&g=fixSeqLiftOverPsl" target="_blank">Fix Patches</a> track
+represents error corrections, and the <a href="../cgi-bin/hgTrackUi?db=hg38&g=altSeqLiftOverPsl" 
+target="_blank">Alt Haplotypes</a> track represents novel patches (alt loci).</p>
+<p>
+Additional information can be found on our <a href="http://genome.ucsc.edu/blog/patches/" 
+target="_blank">Genome Browser blog</a> including a specific section detailing <a 
+href="http://genome.ucsc.edu/blog/patches/#changes" target="_blank">what changes to expect</a>.</p>
+
+<p class="text-center">
+  <img class='text-center' src="../images/patches.jpg" alt="Patches increase">
+  <p class="gbsCaption text-center">The number of human assembly patch sequences is quickly
+        growing. This is primarily due to alternative haplotypes (_alt) sequences, though fix
+        sequences (_fix) are also being introduced. The fix patches reset from GRCh37.p13 to
+        GRCh38 as they were integrated into the assembly.</p>
+<p>
+We would like to thank Angie Hinrichs and Lou Nassar for their work on this release.</p>
+
+<a name="030519"></a>
+<h2>
+Mar. 05, 2019 &nbsp;&nbsp; Single cell data from Tabula Muris available for mouse (mm10)
+</h2>
+<p>
+We are pleased to announce the release of the
+<a href="../cgi-bin/hgTrackUi?db=mm10&g=tabulaMuris" target="_blank">Tabula Muris</a> superTrack
+for mouse, <a href="../cgi-bin/hgGateway?db=mm10" target="_blank">mm10/GRCm38</a>. These tracks
+incorporate single cell FACS RNA-seq data where 44,779 cells were assigned to single cell
+clusters, representing a cell or tissue type. The Tabula Muris superTrack contains the following
+three composite tracks:</p>
+<dl>
+    <dt>Cell expression</dt>
+        <dd>
+        Bar charts displaying the median expression level per cell type on the genome. A
+        click-through on the bar chart will display a Tukey boxplot of expression level quartiles
+        with outliers, per cluster.</dd>
+    <dt>Genome Coverage</dt>
+        <dd>
+        Bar graphs indicating the number of RNA-seq reads at each base pair.</dd>
+    <dt>Splice Sites</dt>
+        <dd>
+        Thick rectangles display exons around a splice site, connected by a line representing the
+        intron. These introns are annotated with the number of RNA-seq reads that support the
+        gap, in the 'score' field.</dd>
+</dl>
+<p>
+More information about these tracks and their display can be found on the
+<a href="../cgi-bin/hgTrackUi?db=mm10&g=tabulaMuris" target="_blank">track description</a> page, and
+more information about the <a href="https://www.czbiohub.org/tabula-muris-introduction/"
+target="_blank">Tabula Muris dataset</a> can be found at the CZI Biohub. We would like to
+acknowledge our CZI contacts that spent quite a bit of time to get the data to us: Angela Pisco,
+James Webber, and Joshua Batson. Track creation was done by Max Haeussler and tested by Jairo
+Navarro at the UCSC Genome Browser. WiggleTools, written by Daniel Zerbino, and IntronProspector,
+written by Mark Diekhans, were used in the creation of these tracks. Track hubs were written to a
+large extent by Brian Raney and colleages at the UCSC Genome Browser.</p>
+
+<a name="022519"></a>
+<h2>Feb. 25, 2019 &nbsp;&nbsp; New NCBI RefSeq Human Gene Mutation Database (HGMD) track for hg38
+and hg19</h2>
+<p>
+We are pleased to announce the release of a new gene annotation track for the GRCh38/hg38 and 
+GRCh37/hg19 assemblies based on data from The Human Gene Mutation Database (HGMD) and NCBI's 
+Reference Sequence Database (RefSeq). The alignments and coordinates for these tracks are provided
+by RefSeq.
+
+The NCBI RefSeq HGMD tracks show only RefSeq Curated transcripts mentioned in the public version of
+the Human Gene Mutation Database. More details about the tracks, their construction, and how to 
+access their underlying data can be found on the track description pages by clicking into an item 
+after loading the tracks with the following links:
+
+
+</p>
+<ul>
+<li><a href = "../cgi-bin/hgTracks?db=hg38&hideTracks=1&refSeqComposite=full&ncbiRefSeqHgmd_sel=1&ncbiRefSeqCurated_sel=0&ncbiRefSeqHgmd=pack&hgmd=dense" 
+target="_blank">GRCh38/hg38</a></li>
+<li><a href = "../cgi-bin/hgTracks?db=hg19&hideTracks=1&refSeqComposite=full&ncbiRefSeqHgmd_sel=1&ncbiRefSeqCurated_sel=0&ncbiRefSeqHgmd=pack&hgmd=dense"
+target="_blank">GRCh37/hg19</a></li>
+</ul>
+<p>
+A huge thank you to the HGMD group at Cardiff University, Frank Schacherer and Rupert Yip from 
+QIAGEN, Anna Benet-Pages and Andreas Laner from The Medizinisch Genetisches Zentrum (MGZ), Max 
+Haeussler, Conner Powell, and many others from the UCSC Genome Browser staff for bringing this 
+track to life.
+</p>
+
+
 <a name="021119"></a>
 <h2>Feb. 11, 2019 &nbsp;&nbsp; New Ensembl gene tracks for 56 assemblies</h2>
 <p>

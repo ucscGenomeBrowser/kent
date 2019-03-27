@@ -3,13 +3,16 @@ include ../../refSeqComposite.ra
 
 include ../../crispr10K.ra
 
+include knownGene.ra beta,public
+include knownGene.alpha.ra alpha
+
 # chainNet tracks
 include trackDb.gliresChainNet.ra
 include trackDb.euarchontoglireChainNet.ra
 include trackDb.placentalsChainNet.ra
 include trackDb.vertebrateChainNet.ra
 include trackDb.previousVersionsChainNet.ra alpha
-include tabulamuris.ra alpha
+include tabulamuris.ra
 
 # Local declaration so that local gold.html is picked up.
 track gold override
@@ -60,18 +63,6 @@ visibility hide
 color 20,20,170
 type bed 12
 
-track knownGeneOld9
-shortLabel Old UCSC Genes
-longLabel Previous Version of UCSC Genes
-group genes
-visibility hide
-color 82,82,160
-type genePred
-hgsid on
-oldToNew kg9ToKg10
-baseColorUseCds given
-baseColorDefault genomicCodons
-
 track xenoClinvar
 shortLabel Human Variants
 longLabel ClinVar Variants mapped to Mouse
@@ -82,14 +73,6 @@ group x
 mouseOverField _mouseOver
 urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
 release alpha
-
-searchName knownGeneOld9
-searchTable knownGeneOld9
-searchDescription Previous Version of UCSC Genes
-searchMethod fuzzy
-query select chrom, txStart,txEnd, name from %s where name like '%%%s%%'
-searchPriority 3.53
-
 
 include mm10Patch4.ra
 
