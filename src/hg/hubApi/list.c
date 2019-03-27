@@ -147,6 +147,7 @@ struct sqlConnection *conn = hAllocConn(db);
 /* in trackDb language: track == table */
 if (table)
     {
+    /* XXX TBD - expand this to a hub to get chromosomes from hub big* file */
     if (! sqlTableExists(conn, table))
 	apiErrAbort("can not find specified 'track=%s' for endpoint: /list/chromosomes?db=%s&track=%s", table, db, table);
     if (sqlColumnExists(conn, table, "chrom"))
@@ -187,6 +188,7 @@ if (table)
     }
 else
     {
+    /* XXX TBD - expand this to a hub to get chromosomes from hub 2bit file */
     char *dataTime = sqlTableUpdate(conn, "chromInfo");
     time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
     replaceChar(dataTime, ' ', 'T');	/* ISO 8601 */
@@ -349,8 +351,7 @@ else if (sameWord("tracks", words[1]))
     struct trackHub *hub = errCatchTrackHubOpen(hubUrl);
     if (hub->genomeList)
 	{
-	struct trackDb *tdbList = NULL;
-	(void) genomeList(hub, &tdbList, genome);
+	struct trackDb *tdbList = obtainTdb(hub->genomeList, NULL);
 	slSort(tdbList, trackDbTrackCmp);
         struct jsonWrite *jw = apiStartOutput();
 	jsonWriteString(jw, "hubUrl", hubUrl);

@@ -1,0 +1,42 @@
+<h1>JSON data API interface to U.C. Santa Cruz genome browser data</h1>
+<h2>Data access URL: <em>https://hgwdev-api.ucsc.edu/</em></h2>
+<h3>Endpoint functions:</h3>
+<ul>
+<li>/list/...</li>
+<li><ol>
+<li>/list/publicHubs - list public hubs</li>
+<li>/list/ucscGenomes - list UCSC database genomes</li>
+<li>/list/hubGenomes - list genomes from specified hub</li>
+<li>/list/tracks - list data tracks available in specified hub or database genome</li>
+<li>/list/chromosomes - list chromosomes from specified data track in specified hub or database genome</li>
+</ol></li>
+<li>/getData/...</li>
+<li><ol>
+<li>/getData/sequence - return sequence from specified hub or database genome</li>
+<li>/getData/track - return data from specified track in hub or database genome</li>
+</ol></li>
+</ul>
+<h3>Parameters to endpoint functions:</h3>
+<ul>
+<li>hubUrl=&lt;url&gt; - specify track hub or assembly hub URL</li>
+<li>genome=&lt;name&gt; - specify genome assemby in track or assembly hub</li>
+<li>db=&lt;ucscDb&gt; - specify database (aka genome assembly) in UCSC genome browser</li>
+<li>track=&lt;trackName&gt; - specify data track in hub or UCSC database genome assembly</li>
+<li>chrom=&lt;chrN&gt; - specify chromosome name for sequence or track data</li>
+<li>start=&lt;123&gt; - specify start coordinate (0 relative) for data from track or sequence retrieval</li>
+<li>end=&lt;456&gt; - specify end coordinate (1 relative) for data from track or sequence retrieval</li>
+<li>(see also: <a href='http://genome.ucsc.edu/blog/the-ucsc-genome-browser-coordinate-counting-systems/' target=_blank>UCSC browser coordinate counting systems)</a></li>
+<li>maxItemsOutput=1000 - limit number of items to output, default: 1,000, maximum limit: 1,000,000</li>
+</ul>
+
+<h3>Supported track types, at this time (April 2019), for getData functions:</h3>
+<ul>
+<li>bed</li>
+<li>bigBed</li>
+<li>bigGenePred</li>
+<li>bigNarrowPeak</li>
+<li>bigWig</li>
+<li>broadPeak</li>
+<li>narrowPeak</li>
+<li>wig</li>
+</ul>

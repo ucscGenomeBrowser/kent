@@ -276,7 +276,7 @@ boolean sqlTableExists(struct sqlConnection *sc, char *table);
 /* Return TRUE if a table exists. */
 
 bool sqlColumnExists(struct sqlConnection *conn, char *tableName, char *column);
-/* return TRUE if column exists in table. tableName can contain sql wildcards  */
+/* return TRUE if column exists in table. column can contain sql wildcards  */
 
 int sqlTableSizeIfExists(struct sqlConnection *sc, char *table);
 /* Return row count if a table exists, -1 if it doesn't. */
@@ -287,9 +287,6 @@ boolean sqlTablesExist(struct sqlConnection *conn, char *tables);
 boolean sqlTableWildExists(struct sqlConnection *sc, char *table);
 /* Return TRUE if table (which can include SQL wildcards) exists.
  * A bit slower than sqlTableExists. */
-
-boolean sqlTableOk(struct sqlConnection *sc, char *table);
-/* Return TRUE if a table not only exists, but also is not corrupted. */
 
 unsigned long sqlTableDataSizeFromSchema(struct sqlConnection *conn, char *db, char *table);
 /* Get table data size. Table must exist or will abort. */

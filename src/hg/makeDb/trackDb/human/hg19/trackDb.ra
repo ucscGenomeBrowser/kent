@@ -27,15 +27,14 @@ shortLabel Variants in Papers
 longLabel Genetic Variants mentioned in scientific publications
 superTrack on
 group phenDis
-release alpha,beta
 type bed 3
+pennantIcon New red ../goldenPath/newsarch.html#032619  Released March 26, 2019
 
         track mastermind
         shortLabel Mastermind Variants
         longLabel Genomenon Mastermind Variants extracted from full text publications
         visibility dense
         type bigBed 9 +
-        release alpha,beta
         urls url=https://mastermind.genomenon.com/detail?disease=all%20diseases&$$
         bigDataUrl /gbdb/hg19/bbi/mastermind.bb
         noScoreFilter on

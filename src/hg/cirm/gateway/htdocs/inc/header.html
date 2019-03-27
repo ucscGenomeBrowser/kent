@@ -71,7 +71,7 @@
                 <h5 class="nav-button"><a class="nav-link text-white padded-nav-link" href="<!--#echo var="ROOT" -->/index">Home</a></h5>
               </li>
               <li class="nav-item back-dark-pink rounded" style="margin-left: 6px">
-                <h5 class="nav-button"><a class="nav-link text-white padded-nav-link" href="<!--#echo var="ROOT" -->/cgi-bin/cdwWebBrowse">Files</a>
+                <h5 class="nav-button"><a class="nav-link text-white padded-nav-link" href="<!--#echo var="ROOT" -->/cgi-bin/cdwWebBrowse">Data</a>
               </li>
               <li class="nav-item back-light-blue rounded" style="margin-left: 6px">
                 <h5 class="nav-button"><a class="nav-link text-white padded-nav-link" href="<!--#echo var="ROOT" -->/projects">Projects</a></h5>
@@ -94,6 +94,7 @@
                   <a class="dropdown-item" href="<!--#echo var="ROOT" -->/cescg/cescgPubs">Publications</a>
                 </div>
               </li>
+	      <!--#if expr='"$SERVER_NAME" != /cirm.ucsc.edu/'-->
               <li class="nav-item back-gray rounded" style="margin-left: 6px">
                 <h5 class="nav-button"><a class="nav-link text-white padded-nav-link login" href="<!--#echo var="ROOT" -->/cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1">
                 Login</a></h5>
@@ -103,6 +104,7 @@
                 href="<!--#echo var="ROOT" -->/cgi-bin/hgLogin?hgLogin.do.displayLogout=1" style="display:none">
                 Logout</a></h5>
               </li>
+	      <!--#endif -->
             </ul>
             <form class="form-inline my-2 my-lg-0" action="https://google.com/search" method="get">
               <input type="hidden" name="sitesearch" value="cirm.ucsc.edu" />

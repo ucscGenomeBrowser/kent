@@ -33,8 +33,8 @@
 
 struct customTrack
 /* A custom track.  */
-/* NOTE: if you add any *File members to struct customTrack, please update
- * cart.c cartCopyCustomTracks() accordingly! */
+/* NOTE: if you add any trash-stored *File members to struct customTrack, please make sure they
+ * appear in the ctfile track line, or add it to stealthFiles in hgSession/sessionData.c. */
     {
     struct customTrack *next;	/* Next in list. */
     struct trackDb *tdb;	/* TrackDb description of track. */

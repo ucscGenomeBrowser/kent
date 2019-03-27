@@ -25,9 +25,11 @@ time_t timeNow = time(NULL);
 struct jsonWrite *jw = jsonWriteNew();
 jsonWriteObjectStart(jw, NULL);
 // not recommended: jsonWriteString(jw, "apiVersion", "v"CGI_VERSION);
-jsonWriteString(jw, "source", "UCSantaCruz");
+// not needed jsonWriteString(jw, "source", "UCSantaCruz");
 jsonWriteDateFromUnix(jw, "downloadTime", (long long) timeNow);
 jsonWriteNumber(jw, "downloadTimeStamp", (long long) timeNow);
+if (debug)
+    jsonWriteNumber(jw, "botDelay", (long long) botDelay);
 return jw;
 }
 

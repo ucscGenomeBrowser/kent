@@ -7,7 +7,7 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 A = hgSession
 
-O = $A.o backup.o
+O = $A.o backup.o sessionData.o
 
 include ../../inc/cgi_build_rules.mk
 
