@@ -1078,7 +1078,6 @@ cartRemove(cart, "hgLogin_email2");
 cartRemove(cart, "hgLogin_userName");
 cartRemove(cart, "user");
 cartRemove(cart, "token");
-returnToURL(150);
 }
 
 void accountHelp(struct sqlConnection *conn)
