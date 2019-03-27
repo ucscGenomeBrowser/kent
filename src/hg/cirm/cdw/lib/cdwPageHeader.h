@@ -1,3 +1,4 @@
+//  this should correspond to src/hg/cirm/gateway/htdocs/inc/header.html SSI
 "<div class=\"row\"><div class=\"col-12\"><div class='securesite-banner' style='display:none'>\n"
 "<div class=\"securesite-text\">\n"
 "This is the secure site for labs to access pre-publication data.  Public CIRM CESCG data\n"
