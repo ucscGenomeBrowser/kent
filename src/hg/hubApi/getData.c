@@ -402,8 +402,11 @@ if (tableTrack)
     replaceChar(dataTime, ' ', 'T');	/*	ISO 8601	*/
     jsonWriteString(jw, "dataTime", dataTime);
     jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
+    if (differentStringNullOk(sqlTable,track))
+	jsonWriteString(jw, "sqlTable", sqlTable);
     }
 jsonWriteString(jw, "trackType", thisTrack->type);
+jsonWriteString(jw, "track", track);
 
 char query[4096];
 struct bbiFile *bbi = NULL;

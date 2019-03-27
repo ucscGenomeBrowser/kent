@@ -1,6 +1,7 @@
 
 test::	test0 test1 test2 test3 test4 test5 test6 test7 test8 test9 test10 \
-	test11 test12 test13 test14 test15 test16 test17 test18 test19 test20
+	test11 test12 test13 test14 test15 test16 test17 test18 test19 test20 \
+	test21
 
 setOutput:
 	if [ ! -d testOutput ]; then mkdir testOutput; fi
@@ -9,7 +10,7 @@ clean::
 	rm -f testOutput/*.gz
 	rmdir testOutput
 
-excludeLines = downloadTime|downloadTimeStamp
+excludeLines = downloadTime|dataTime
 
 # test::
 # 	@./jsonConsumer.pl 2> /dev/null | gzip -c > testOutput.json.gz
@@ -126,4 +127,10 @@ test20: setOutput
 	@./jsonConsumer.pl -endpoint="/getData/track" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" -genome="_araTha1" -track="assembly_" -chrom="chrI" -start=1 -end=14309681 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
+# wiggle data from a database where the SQL table name is different than the
+#    track name
+# /getData/track? db=hg19 &track=wgEncodeRegMarkH3k4me1H1hesc&chrom=chr1&start=62300000&end=62301000
+test21: setOutput
+	@./jsonConsumer.pl -endpoint="/getData/track" -db="hg19" -track="wgEncodeRegMarkH3k4me1H1hesc" -chrom="chr1" -start=62300000 -end=62301000 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
 
