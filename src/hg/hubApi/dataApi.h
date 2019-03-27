@@ -69,6 +69,15 @@ struct trackHub *errCatchTrackHubOpen(char *hubUrl);
 struct trackDb *obtainTdb(struct trackHubGenome *genome, char *db);
 /* return a full trackDb fiven the hub genome pointer, or ucsc database name */
 
+struct trackDb *findTrackDb(char *track, struct trackDb *tdb);
+/* search tdb structure for specific track, recursion on subtracks */
+
+struct bbiFile *bigFileOpen(char *trackType, char *bigDataUrl);
+/* open bigDataUrl for correct trackType and error catch if failure */
+
+int chromInfoCmp(const void *va, const void *vb);
+/* Compare to sort based on size */
+
 /* ######################################################################### */
 /*  functions in getData.c */
 

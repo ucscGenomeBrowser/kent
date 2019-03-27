@@ -95,3 +95,56 @@ else
     }
 return tdb;
 }
+
+struct trackDb *findTrackDb(char *track, struct trackDb *tdb)
+/* search tdb structure for specific track, recursion on subtracks */
+{
+struct trackDb *trackFound = NULL;
+
+for (trackFound = tdb; trackFound; trackFound = trackFound->next)
+    {
+    if (trackFound->subtracks)
+	{
+        struct trackDb *subTrack = findTrackDb(track, trackFound->subtracks);
+	if (subTrack)
+	    {
+	    if (sameOk(subTrack->track, track))
+		trackFound = subTrack;
+	    }
+	}
+    if (sameOk(trackFound->track, track))
+	break;
+    }
+return trackFound;
+}
+
+struct bbiFile *bigFileOpen(char *trackType, char *bigDataUrl)
+/* open bigDataUrl for correct trackType and error catch if failure */
+{
+struct bbiFile *bbi = NULL;
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+if (startsWith("bigBed", trackType))
+    bbi = bigBedFileOpen(bigDataUrl);
+else if (startsWith("bigWig", trackType))
+    bbi = bigWigFileOpen(bigDataUrl);
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    apiErrAbort("error opening bigFile URL: '%s', '%s'", bigDataUrl,  errCatch->message->string);
+    }
+errCatchFree(&errCatch);
+return bbi;
+}
+
+int chromInfoCmp(const void *va, const void *vb)
+/* Compare to sort based on size */
+{
+const struct chromInfo *a = *((struct chromInfo **)va);
+const struct chromInfo *b = *((struct chromInfo **)vb);
+int dif;
+dif = (long) a->size - (long) b->size;
+return dif;
+}
