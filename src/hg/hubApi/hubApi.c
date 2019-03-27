@@ -320,7 +320,7 @@ else
 	 *   char *genome)
 	 */
 
-static void bbiBiggestChrom(struct bbiChromInfo *chromList, char **chromName,
+static void bbiLargestChrom(struct bbiChromInfo *chromList, char **chromName,
     unsigned *chromSize)
 /* find largest chromosome name and size in the chromList */
 {
@@ -367,7 +367,7 @@ if (errCatchStart(errCatch))
         struct bbiChromInfo *chromList = bbiChromList(bbi);
         *chromCount = slCount(chromList);
         *itemCount = bigBedItemCount(bbi);
-        bbiBiggestChrom(chromList, chromName, chromSize);
+        bbiLargestChrom(chromList, chromName, chromSize);
         bbiChromInfoFreeList(&chromList);
         bbiFileClose(&bbi);
         }
@@ -378,7 +378,7 @@ if (errCatchStart(errCatch))
         struct bbiSummaryElement sum = bbiTotalSummary(bwf);
         *chromCount = slCount(chromList);
         *itemCount = sum.validCount;
-        bbiBiggestChrom(chromList, chromName, chromSize);
+        bbiLargestChrom(chromList, chromName, chromSize);
         bbiChromInfoFreeList(&chromList);
         bbiFileClose(&bwf);
         }
@@ -726,6 +726,8 @@ if (topTrackDb)
         unsigned chromSize = 0;
         if (isEmpty(genome->twoBitPath))
             chromSize = largestChrom(defaultGenome, &chromName);
+	else
+	    hPrintf("    <li>twoBitPath %s genome %s</li>\n", genome->twoBitPath, defaultGenome);
 	hubCountOneTdb(hub, defaultGenome, tdb, bigDataIndex, countTracks, chromName, chromSize, defaultGenome);
 	if (timeOutReached())
 	    break;
@@ -780,6 +782,25 @@ while ((hel = hashNext(&hc)) != NULL)
 hPrintf("    </ul></li>\n");
 }
 
+static unsigned largestChromInfo(struct chromInfo *ci, char **chromName)
+/* find largest chrom in this chromInfo, return name and size */
+{
+unsigned size = 0;
+char *name = NULL;
+struct chromInfo *el;
+for (el = ci; el; el = el->next)
+    {
+    if (el->size > size)
+	{
+	size = el->size;
+	name = el->chrom;
+	}
+    }
+if (chromName)
+    *chromName = name;
+return size;
+}
+
 static void genomeList(struct trackHub *hubTop)
 /* follow the pointers from the trackHub to trackHubGenome and around
  * in a circle from one to the other to find all hub resources
@@ -803,7 +824,13 @@ for ( ; genome; genome = genome->next )
     ++totalAssemblyCount;
     if (isNotEmpty(genome->twoBitPath))
 	{
-	hPrintf("<li>assembly hub twoBitFile: %s</li>\n", genome->twoBitPath);
+	hPrintf("<li>assembly hub %s twoBitFile: %s</li>\n", genome->name, genome->twoBitPath);
+	char *chromName = NULL;
+	struct chromInfo *ci = trackHubAllChromInfo(genome->name);
+        unsigned chromSize = largestChromInfo(ci, &chromName);
+	char sizeString[64];
+	sprintLongWithCommas(sizeString, chromSize);
+	hPrintf("<li>%d chromosomes, largest %s at %s bases</li>\n", slCount(ci), chromName, sizeString);
 	}
     if (genome->organism)
 	{
