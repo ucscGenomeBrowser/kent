@@ -1,20 +1,17 @@
 
 test::	test0 test1 test2 test3 test4 test5 test6 test7 test8 test9 test10 \
 	test11 test12 test13 test14 test15 test16 test17 test18 test19 test20 \
-	test21
+	test21 test22 test23
 
 setOutput:
-	if [ ! -d testOutput ]; then mkdir testOutput; fi
+	@if [ ! -d testOutput ]; then mkdir testOutput; fi
 
 clean::
 	rm -f testOutput/*.gz
 	rmdir testOutput
 
+# exclude these lines from the JSON output for comparison with expected
 excludeLines = downloadTime|dataTime
-
-# test::
-# 	@./jsonConsumer.pl 2> /dev/null | gzip -c > testOutput.json.gz
-# 	@zdiff testOutput.json.gz expected.json.gz
 
 # testing /list/noSubCommand, /list/publicHubs and /list/ucscGenomes
 test0: setOutput
@@ -26,7 +23,7 @@ test1: setOutput
 	@./jsonConsumer.pl -hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt -endpoint="/list/hubGenomes" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
-# testing /list/tracks?genome=_araTha1
+# testing /list/tracks? hubUrl genome=_araTha1
 test2: setOutput
 	@./jsonConsumer.pl -hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt -endpoint="/list/tracks" -genome="_araTha1" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
@@ -36,13 +33,11 @@ test3: setOutput
 	@./jsonConsumer.pl -endpoint="/list/tracks" -db="ce11" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
-# TBD XXX testing /list/chromosomes with a hub
 # testing /list/chromosomes?db=ce11
 test4: setOutput
 	@./jsonConsumer.pl -endpoint="/list/chromosomes" -db="ce11" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
-# TBD XXX testing /list/chromosomes with a hub and track
 # testing /list/chromosomes?db=ce11&track=gold
 test5: setOutput
 	@./jsonConsumer.pl -endpoint="/list/chromosomes" -db="ce11" -track="gold" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
@@ -134,3 +129,12 @@ test21: setOutput
 	@./jsonConsumer.pl -endpoint="/getData/track" -db="hg19" -track="wgEncodeRegMarkH3k4me1H1hesc" -chrom="chr1" -start=62300000 -end=62301000 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
+# testing /list/chromosomes? hubUrl genome=_araTha1
+test22: setOutput
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" -genome="_araTha1" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/chromosomes? hubUrl genome=_araTha1 track=assembly_
+test23: setOutput
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" -genome="_araTha1" -track="assembly_" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
