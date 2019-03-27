@@ -43,9 +43,18 @@ ifeq (${PTHREADLIB},)
   PTHREADLIB=-lpthread
 endif
 
+# required extra library on Mac OSX
+ICONVLIB=
+
 # pthreads is required
 ifneq ($(UNAME_S),Darwin)
   L+=${PTHREADLIB}
+else
+  ifneq ($(wildcard /opt/local/lib/libiconv.a),)
+       ICONVLIB=/opt/local/lib/libiconv.a
+  else
+       ICONVLIB=-liconv
+  endif
 endif
 
 # autodetect if openssl is installed
@@ -279,7 +288,7 @@ endif
 #global external libraries
 L += $(kentSrc)/htslib/libhts.a
 
-L+=${PNGLIB} ${MLIB} ${ZLIB}
+L+=${PNGLIB} ${MLIB} ${ZLIB} ${ICONVLIB}
 HG_INC+=${PNGINCL}
 
 # pass through COREDUMP
