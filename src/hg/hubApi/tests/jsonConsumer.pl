@@ -5,12 +5,26 @@ use warnings;
 use HTTP::Tiny;
 use Time::HiRes;
 use JSON;
+use Getopt::Long;
 
 my $http = HTTP::Tiny->new();
-my $server = 'https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi';
+my $server = 'https://hgwdev-api.gi.ucsc.edu';
 my $global_headers = { 'Content-Type' => 'application/json' };
 my $last_request_time = Time::HiRes::time();
 my $request_count = 0;
+
+##############################################################################
+# command line options
+my $endpoint = "";
+my $hubUrl = "";
+my $genome = "";
+my $db = "";
+my $track = "";
+my $chrom = "";
+my $start = "";
+my $end = "";
+my $maxItemsOutput = "";
+##############################################################################
 
 ##############################################################################
 ###
@@ -57,6 +71,7 @@ sub performRestAction {
     }
     my $param_string = join(';', @params);
     $url.= '?'.$param_string;
+#     printf STDERR "# url: '%s'\n", $url;
   }
   my $response = $http->get($url, {headers => $headers});
   my $status = $response->{status};
@@ -124,6 +139,9 @@ sub topLevelKeys($) {
     # would make it difficult to have a consistent test output.
     next if ($topKey eq "downloadTime");
     next if ($topKey eq "downloadTimeStamp");
+    next if ($topKey eq "botDelay");
+    next if ($topKey eq "dataTime");
+    next if ($topKey eq "dataTimeStamp");
     my $value = $topHash->{$topKey};
     $value = "<array>" if (ref($value) eq "ARRAY");
     $value = "<hash>" if (ref($value) eq "HASH");
@@ -135,7 +153,7 @@ sub topLevelKeys($) {
 sub checkError($$$) {
   my ($json, $endpoint, $expect) = @_;
   my $jsonReturn = performJsonAction($endpoint, "");
-  # printf "%s", $json->pretty->encode( $jsonReturn );
+#   printf "%s", $json->pretty->encode( $jsonReturn );
   if (! defined($jsonReturn->{'error'}) ) {
      printf "ERROR: no error received from endpoint: '%s', received:\n", $endpoint;
      printf "%s", $json->pretty->encode( $jsonReturn );
@@ -151,18 +169,145 @@ sub verifyCommandProcessing()
 {
     my $json = JSON->new;
     # verify command processing can detected bad input
-    my $endpoint = "/noSuchCommand";
-    my $expect = "unknown endpoint command:";
-    checkError($json, $endpoint, $expect);
-    $endpoint = "/list/noSubCommand";
-    $expect = "do not recognize endpoint function:";
+    my $endpoint = "/list/noSubCommand";
+    my $expect = "do not recognize endpoint function:";
     checkError($json, $endpoint,$expect);
 }	#	sub verifyCommandProcessing()
 
 
 #############################################################################
+sub processEndPoint() {
+  if (length($endpoint) > 0) {
+     my $json = JSON->new;
+     my $jsonReturn = {};
+     if ($endpoint eq "/list/hubGenomes") {
+        if (length($hubUrl) > 0) {
+	   my %parameters;
+	   $parameters{"hubUrl"} = "$hubUrl";
+	   $jsonReturn = performJsonAction($endpoint, \%parameters);
+	   printf "%s", $json->pretty->encode( $jsonReturn );
+        } else {
+	  printf STDERR "ERROR: need to specify a hubUrl for endpoint '%s'\n", $endpoint;
+	  exit 255;
+        }
+     } elsif ($endpoint eq "/list/tracks") {
+	my $failing = 0;
+	my %parameters;
+	if (length($db) > 0) {
+	    $parameters{"db"} = "$db";
+	} elsif (length($hubUrl) < 1) {
+          printf STDERR "ERROR: need to specify a hubUrl for endpoint '%s'\n", $endpoint;
+	  ++$failing;
+	} else {
+	  $parameters{"hubUrl"} = "$hubUrl";
+	  if (length($genome) < 1) {
+            printf STDERR "ERROR: need to specify a genome for endpoint '%s'\n", $endpoint;
+	    ++$failing;
+	  } else {
+	    $parameters{"genome"} = "$genome";
+	  }
+	}
+	if ($failing) { exit 255; }
+	$jsonReturn = performJsonAction($endpoint, \%parameters);
+	printf "%s", $json->pretty->encode( $jsonReturn );
+     } elsif ($endpoint eq "/list/chromosomes") {
+	my $failing = 0;
+	my %parameters;
+	if (length($db) > 0) {
+	    $parameters{"db"} = "$db";
+	} else {
+          printf STDERR "ERROR: need to specify a db for endpoint '%s'\n", $endpoint;
+	}
+	if ($failing) { exit 255; }
+	$jsonReturn = performJsonAction($endpoint, \%parameters);
+	printf "%s", $json->pretty->encode( $jsonReturn );
+     } elsif ($endpoint eq "/getData/sequence") {
+	my $failing = 0;
+	my %parameters;
+	if (length($db) > 0) {
+	    $parameters{"db"} = "$db";
+	} elsif (length($hubUrl) < 1) {
+          printf STDERR "ERROR: need to specify a hubUrl for endpoint '%s'\n", $endpoint;
+	  ++$failing;
+	} else {
+	  $parameters{"hubUrl"} = "$hubUrl";
+	  if (length($genome) < 1) {
+            printf STDERR "ERROR: need to specify a genome for endpoint '%s'\n", $endpoint;
+	    ++$failing;
+	  } else {
+	    $parameters{"genome"} = "$genome";
+	  }
+	}
+	if (length($chrom) > 0) {
+	    $parameters{"chrom"} = "$chrom";
+	}
+	if (length($start) > 0) {
+	    $parameters{"start"} = "$start";
+	    $parameters{"end"} = "$end";
+	}
+	if ($failing) { exit 255; }
+	$jsonReturn = performJsonAction($endpoint, \%parameters);
+	printf "%s", $json->pretty->encode( $jsonReturn );
+     } elsif ($endpoint eq "/getData/track") {
+	my $failing = 0;
+	my %parameters;
+	if (length($db) > 0) {
+	    $parameters{"db"} = "$db";
+	} elsif (length($hubUrl) < 1) {
+          printf STDERR "ERROR: need to specify a hubUrl for endpoint '%s'\n", $endpoint;
+	  ++$failing;
+	} else {
+	  $parameters{"hubUrl"} = "$hubUrl";
+	  if (length($genome) < 1) {
+            printf STDERR "ERROR: need to specify a genome for endpoint '%s'\n", $endpoint;
+	    ++$failing;
+	  } else {
+	    $parameters{"genome"} = "$genome";
+	  }
+	}
+	if (length($track) > 0) {
+	    $parameters{"track"} = "$track";
+	}
+	if (length($chrom) > 0) {
+	    $parameters{"chrom"} = "$chrom";
+	}
+	if (length($start) > 0) {
+	    $parameters{"start"} = "$start";
+	    $parameters{"end"} = "$end";
+	}
+	if ($failing) { exit 255; }
+	$jsonReturn = performJsonAction($endpoint, \%parameters);
+	printf "%s", $json->pretty->encode( $jsonReturn );
+     } else {
+	printf STDERR "# TBD: '%s'\n", $endpoint;
+     }
+  } else {
+    printf STDERR "ERROR: no endpoint given ?\n";
+    exit 255;
+  }
+}	# sub processEndPoint()
+
+#############################################################################
 ### main()
 #############################################################################
+
+my $argc = scalar(@ARGV); 
+
+GetOptions ("hubUrl=s" => \$hubUrl,
+    "endpoint=s"  => \$endpoint,
+    "genome=s"  => \$genome,
+    "db=s"  => \$db,
+    "track=s"  => \$track,
+    "chrom=s"  => \$chrom,
+    "start=s"  => \$start,
+    "end=s"    => \$end,
+    "maxItemsOutput=s"   => \$maxItemsOutput)
+    or die "Error in command line arguments\n";
+
+if ($argc > 0) {
+   processEndPoint();
+   exit 0;
+}
 
 my $json = JSON->new;
 my $jsonReturn = {};
@@ -174,26 +319,30 @@ $jsonReturn = performJsonAction("/list/publicHubs", "");
 # this prints everything out indented nicely:
 # printf "%s", $json->pretty->encode( $jsonReturn );
 
+# exit 255;
+# __END__
+
+#	"dataTimeStamp" : 1552320994,
+#	"downloadTime" : "2019:03:26T21:40:10Z",
+#	"botDelay" : 2,
+#	"downloadTimeStamp" : 1553636410,
+#	"dataTime" : "2019-03-11T09:16:34"
+
 # look for the specific public hub named "Plants" to print out
 # for a verify test case
 #
 if (ref($jsonReturn) eq "HASH") {
   topLevelKeys($jsonReturn);
 
-  my $nameArray = [];
-  if (defined($jsonReturn->{"columnNames"})) {
-     $nameArray = $jsonReturn->{"columnNames"};
-     columnNames($nameArray);
-  }
-  if (defined($jsonReturn->{"publicHubData"})) {
-     my $arrayData = $jsonReturn->{"publicHubData"};
+  if (defined($jsonReturn->{"publicHubs"})) {
+     my $arrayData = $jsonReturn->{"publicHubs"};
      foreach my $data (@$arrayData) {
-       if ($data->[1] eq "Plants") {
-         printf "### Plants hub data\n";
-         for (my $j = 0; $j < scalar(@$nameArray); ++$j) {
-	   printf "\"%s\"\t\"%s\"\n", $nameArray->[$j], $data->[$j];
-         }
-       }
+	if ($data->{'shortLabel'} eq "Plants") {
+        printf "### Plants public hub data\n";
+	  foreach my $key (sort keys %$data) {
+	  printf "'%s'\t'%s'\n", $key, $data->{$key};
+	  }
+	}
      }
   }
 } elsif (ref($jsonReturn) eq "ARRAY") {
@@ -202,24 +351,24 @@ if (ref($jsonReturn) eq "HASH") {
 }
 
 $jsonReturn = performJsonAction("/list/ucscGenomes", "");
+# printf "%s", $json->pretty->encode( $jsonReturn );
+
+# "ucscGenomes" : {
+#       "ochPri3" : {
+
+
 if (ref($jsonReturn) eq "HASH") {
   topLevelKeys($jsonReturn);
-  my $nameArray = [];
-  if (defined($jsonReturn->{"columnNames"})) {
-     $nameArray = $jsonReturn->{"columnNames"};
-     columnNames($nameArray);
-  }
   if (defined($jsonReturn->{"ucscGenomes"})) {
-     my $arrayData = $jsonReturn->{"ucscGenomes"};
-     foreach my $data (@$arrayData) {
-       if ($data->[0] eq "hg38") {
-         printf "### hg38/Human information\n";
-         for (my $j = 0; $j < scalar(@$nameArray); ++$j) {
-	   printf "\"%s\"\t\"%s\"\n", $nameArray->[$j], $data->[$j];
+     my $ucscGenomes = $jsonReturn->{"ucscGenomes"};
+     if (exists($ucscGenomes->{'hg38'})) {
+	my $hg38 = $ucscGenomes->{'hg38'};
+        printf "### hg38/Human information\n";
+     foreach my $key (sort keys %$hg38) {
+	   printf "\"%s\"\t\"%s\"\n", $key, $hg38->{$key};
          }
        }
      }
-  }
 } elsif (ref($jsonReturn) eq "ARRAY") {
   printf "ERROR: top level returns ARRAY of size: %d\n", scalar(@$jsonReturn);
   printf "should have been a HASH to the ucscGenomes\n";

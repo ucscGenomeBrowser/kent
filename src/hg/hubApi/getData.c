@@ -427,11 +427,12 @@ if (startsWith("big", thisTrack->type))
 	apiErrAbort("failed to find bigDataUrl=%s for track=%s in database=%s for endpoint '/getdata/track'", bigDataUrl, track, db);
     if (isNotEmpty(chrom))
 	{
-//	jsonWriteString(jw, "chrom", chrom);
+	jsonWriteString(jw, "chrom", chrom);
 	chromSize = bbiChromSize(bbi, chrom);
 	if (0 == chromSize)
 	    apiErrAbort("can not find specified chrom=%s in bigWig file URL %s", chrom, bigDataUrl);
-	uEnd = chromSize;
+	if (uEnd < 1)
+	    uEnd = chromSize;
 	jsonWriteNumber(jw, "chromSize", (long long)chromSize);
 	}
 else

@@ -22,7 +22,7 @@ int maxItemsOutput = 1000;	/* can be set in URL maxItemsOutput=N */
 static int maxItemLimit = 1000000;   /* maximum of 1,000,000 items returned */
 /* for debugging purpose, current bot delay value */
 int botDelay = 0;
-boolean debug = TRUE;	/* can be set in URL debug=1, to turn off: debug=0 */
+boolean debug = FALSE;	/* can be set in URL debug=1, to turn off: debug=0 */
 #define delayFraction	0.03
 
 /* Global only to this one source file */
