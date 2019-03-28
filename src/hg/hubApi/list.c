@@ -2,14 +2,24 @@
 
 #include "dataApi.h"
 
-static void hubPublicJsonData(struct jsonWrite *jw, struct hubPublic *el)
+static void hubPublicJsonData(struct jsonWrite *jw, struct hubPublic *el,
+  int columnCount, char **columnNames)
 /* Print array data for one row from hubPublic table, order here
  * must be same as was stated in the columnName header element
- *  TODO: need to figure out how to use the order of the columns as
- *        they are in the 'desc' request
  * This code should be in hg/lib/hubPublic.c (which does not exist)
  */
 {
+int i = 0;
+jsonWriteObjectStart(jw, NULL);
+jsonWriteString(jw, columnNames[i++], el->hubUrl);
+jsonWriteString(jw, columnNames[i++], el->shortLabel);
+jsonWriteString(jw, columnNames[i++], el->longLabel);
+jsonWriteString(jw, columnNames[i++], el->registrationTime);
+jsonWriteNumber(jw, columnNames[i++], (long long)el->dbCount);
+jsonWriteString(jw, columnNames[i++], el->dbList);
+jsonWriteString(jw, columnNames[i++], el->descriptionUrl);
+jsonWriteObjectEnd(jw);
+#ifdef NOT
 jsonWriteListStart(jw, NULL);
 jsonWriteString(jw, NULL, el->hubUrl);
 jsonWriteString(jw, NULL, el->shortLabel);
@@ -19,6 +29,7 @@ jsonWriteNumber(jw, NULL, (long long)el->dbCount);
 jsonWriteString(jw, NULL, el->dbList);
 jsonWriteString(jw, NULL, el->descriptionUrl);
 jsonWriteListEnd(jw);
+#endif
 }
 
 static void jsonPublicHubs()
@@ -28,17 +39,19 @@ struct sqlConnection *conn = hConnectCentral();
 char *dataTime = sqlTableUpdate(conn, hubPublicTableName());
 time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
 replaceChar(dataTime, ' ', 'T');	/* ISO 8601 */
-struct hubPublic *el = hubPublicLoadAll();
+struct hubPublic *el = hubPublicDbLoadAll();
 struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "dataTime", dataTime);
 jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
 freeMem(dataTime);
-jsonWriteString(jw, "tableName", hubPublicTableName());
-(void) tableColumns(conn, jw, hubPublicTableName());
-jsonWriteListStart(jw, "publicHubData");
+// redundant: jsonWriteString(jw, "tableName", hubPublicTableName());
+char **columnNames = NULL;
+char **columnTypes = NULL;
+int columnCount = tableColumns(conn, jw, hubPublicTableName(), &columnNames, &columnTypes);
+jsonWriteListStart(jw, "publicHubs");
 for ( ; el != NULL; el = el->next )
     {
-    hubPublicJsonData(jw, el);
+    hubPublicJsonData(jw, el, columnCount, columnNames);
     }
 jsonWriteListEnd(jw);
 jsonWriteObjectEnd(jw);
@@ -46,14 +59,32 @@ fputs(jw->dy->string,stdout);
 hDisconnectCentral(&conn);
 }
 
-static void dbDbJsonData(struct jsonWrite *jw, struct dbDb *el)
+static void dbDbJsonData(struct jsonWrite *jw, struct dbDb *el, int columnCount,
+  char **columnNames)
 /* Print out dbDb table element in JSON format.
  * must be same as was stated in the columnName header element
- *  TODO: need to figure out how to use the order of the columns as
- *        they are in the 'desc' request
  * This code should be over in hg/lib/dbDb.c
  */
 {
+int i = 0;
+jsonWriteObjectStart(jw, el->name);
+i++;
+// redundant: jsonWriteString(jw, NULL, el->name);
+jsonWriteString(jw, columnNames[i++], el->description);
+jsonWriteString(jw, columnNames[i++], el->nibPath);
+jsonWriteString(jw, columnNames[i++], el->organism);
+jsonWriteString(jw, columnNames[i++], el->defaultPos);
+jsonWriteNumber(jw, columnNames[i++], (long long)el->active);
+jsonWriteNumber(jw, columnNames[i++], (long long)el->orderKey);
+jsonWriteString(jw, columnNames[i++], el->genome);
+jsonWriteString(jw, columnNames[i++], el->scientificName);
+jsonWriteString(jw, columnNames[i++], el->htmlPath);
+jsonWriteNumber(jw, columnNames[i++], (long long)el->hgNearOk);
+jsonWriteNumber(jw, columnNames[i++], (long long)el->hgPbOk);
+jsonWriteString(jw, columnNames[i++], el->sourceName);
+jsonWriteNumber(jw, columnNames[i++], (long long)el->taxId);
+jsonWriteObjectEnd(jw);
+#ifdef NOT
 jsonWriteListStart(jw, NULL);
 jsonWriteString(jw, NULL, el->name);
 jsonWriteString(jw, NULL, el->description);
@@ -70,6 +101,7 @@ jsonWriteNumber(jw, NULL, (long long)el->hgPbOk);
 jsonWriteString(jw, NULL, el->sourceName);
 jsonWriteNumber(jw, NULL, (long long)el->taxId);
 jsonWriteListEnd(jw);
+#endif
 }
 
 static void jsonDbDb()
@@ -85,17 +117,162 @@ struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "dataTime", dataTime);
 jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
 freeMem(dataTime);
-jsonWriteString(jw, "tableName", "dbDb");
-(void) tableColumns(conn, jw, "dbDb");
-jsonWriteListStart(jw, "ucscGenomes");
+// not needed: jsonWriteString(jw, "tableName", "dbDb");
+char **columnNames = NULL;
+char **columnTypes = NULL;
+int columnCount = tableColumns(conn, jw, "dbDb", &columnNames, &columnTypes);
+if (columnCount)
+    {
+    }
+// jsonWriteListStart(jw, "ucscGenomes");
+jsonWriteObjectStart(jw, "ucscGenomes");
 for ( el=dbList; el != NULL; el = el->next )
     {
-    dbDbJsonData(jw, el);
+    dbDbJsonData(jw, el, columnCount, columnNames);
     }
-jsonWriteListEnd(jw);
+// jsonWriteListEnd(jw);
+jsonWriteObjectEnd(jw);
 jsonWriteObjectEnd(jw);
 fputs(jw->dy->string,stdout);
 hDisconnectCentral(&conn);
+}
+
+static void hubChromInfoJsonOutput(FILE *f, char *hubUrl, char *genome)
+/* for given hubUrl list the chromosomes in the sequence for specified genome
+ */
+{
+struct trackHub *hub = errCatchTrackHubOpen(hubUrl);
+struct trackHubGenome *ge = NULL;
+char *track = cgiOptionalString("track");
+
+if (isEmpty(genome))
+    apiErrAbort("must specify a 'genome=name' with hubUrl for endpoint: /list/chromosomes?hubUrl=%s&genome=<empty>", hubUrl);
+
+struct trackHubGenome *foundGenome = NULL;
+
+for (ge = hub->genomeList; ge; ge = ge->next)
+    {
+    if (sameOk(genome, ge->name))
+	{
+	foundGenome = ge;
+	continue;	/* found genome */
+	}
+    }
+if (NULL == foundGenome)
+    apiErrAbort("can not find specified 'genome=%s' for endpoint: /list/chromosomes?hubUrl=%s&genome=%s", genome, hubUrl, genome);
+
+struct jsonWrite *jw = apiStartOutput();
+jsonWriteString(jw, "hubUrl", hubUrl);
+jsonWriteString(jw, "genome", genome);
+if (isNotEmpty(track))
+    {
+    jsonWriteString(jw, "track", track);
+    struct trackDb *tdb = obtainTdb(foundGenome, NULL);
+    if (NULL == tdb)
+	apiErrAbort("failed to find a track hub definition in genome=%s for endpoint '/list/chromosomes' give hubUrl=%s'", genome, hubUrl);
+
+    struct trackDb *thisTrack = findTrackDb(track, tdb);
+    if (NULL == thisTrack)
+	apiErrAbort("failed to find specified track=%s in genome=%s for endpoint '/getdata/track'  given hubUrl='%s'", track, genome, hubUrl);
+
+    char *bigDataUrl = trackDbSetting(thisTrack, "bigDataUrl");
+    struct bbiFile *bbi = bigFileOpen(thisTrack->type, bigDataUrl);
+    struct bbiChromInfo *chrList = bbiChromList(bbi);
+    slSort(chrList, chromInfoCmp);
+    struct bbiChromInfo *el = chrList;
+    jsonWriteNumber(jw, "chromCount", (long long)slCount(chrList));
+    jsonWriteObjectStart(jw, "chromosomes");
+    for ( ; el; el = el->next )
+	{
+	jsonWriteNumber(jw, el->name, (long long)el->size);
+	}
+    jsonWriteObjectEnd(jw);	/* chromosomes */
+    }
+else
+    {
+    struct chromInfo *ci = trackHubAllChromInfo(foundGenome->name);
+    slSort(ci, chromInfoCmp);
+    jsonWriteNumber(jw, "chromCount", (long long)slCount(ci));
+    jsonWriteObjectStart(jw, "chromosomes");
+    struct chromInfo *el = ci;
+    for ( ; el != NULL; el = el->next )
+	{
+	jsonWriteNumber(jw, el->chrom, (long long)el->size);
+	}
+    jsonWriteObjectEnd(jw);	/* chromosomes */
+    }
+jsonWriteObjectEnd(jw);	/* top level */
+fputs(jw->dy->string,stdout);
+
+#ifdef NOT
+char *table = cgiOptionalString("track");
+struct sqlConnection *conn = hAllocConn(db);
+/* in trackDb language: track == table */
+if (table)
+    {
+    if (! sqlTableExists(conn, table))
+	apiErrAbort("can not find specified 'track=%s' for endpoint: /list/chromosomes?db=%s&track=%s", table, db, table);
+    if (sqlColumnExists(conn, table, "chrom"))
+	{
+	char *dataTime = sqlTableUpdate(conn, table);
+	time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
+	replaceChar(dataTime, ' ', 'T');	/* ISO 8601 */
+        struct jsonWrite *jw = apiStartOutput();
+	jsonWriteString(jw, "genome", db);
+	jsonWriteString(jw, "track", table);
+	jsonWriteString(jw, "dataTime", dataTime);
+	jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
+	freeMem(dataTime);
+        struct slPair *list = NULL;
+	char query[2048];
+        sqlSafef(query, sizeof(query), "select distinct chrom from %s", table);
+	struct sqlResult *sr = sqlGetResult(conn, query);
+	char **row;
+	while ((row = sqlNextRow(sr)) != NULL)
+    	{
+            int size = hChromSize(db, row[0]);
+	    slAddHead(&list, slPairNew(row[0], intToPt(size)));
+    	}
+	sqlFreeResult(&sr);
+        slPairIntSort(&list);
+        slReverse(&list);
+        jsonWriteNumber(jw, "chromCount", (long long)slCount(list));
+	jsonWriteObjectStart(jw, "chromosomes");
+        struct slPair *el = list;
+        for ( ; el != NULL; el = el->next )
+            jsonWriteNumber(jw, el->name, (long long)ptToInt(el->val));
+	jsonWriteObjectEnd(jw);	/* chromosomes */
+        jsonWriteObjectEnd(jw);	/* top level */
+        fputs(jw->dy->string,stdout);
+	}
+    else
+	apiErrAbort("track '%s' is not a position track, request table without chrom specification, genome: '%s'", table, db);
+    }
+else
+    {
+    char *dataTime = sqlTableUpdate(conn, "chromInfo");
+    time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
+    replaceChar(dataTime, ' ', 'T');	/* ISO 8601 */
+    struct chromInfo *ciList = createChromInfoList(NULL, db);
+    slSort(ciList, chromInfoCmp);
+    struct chromInfo *el = ciList;
+    struct jsonWrite *jw = apiStartOutput();
+    jsonWriteString(jw, "genome", db);
+    jsonWriteString(jw, "dataTime", dataTime);
+    jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
+    freeMem(dataTime);
+    jsonWriteNumber(jw, "chromCount", (long long)slCount(ciList));
+    jsonWriteObjectStart(jw, "chromosomes");
+    for ( ; el != NULL; el = el->next )
+	{
+        jsonWriteNumber(jw, el->chrom, (long long)el->size);
+	}
+    jsonWriteObjectEnd(jw);	/* chromosomes */
+    jsonWriteObjectEnd(jw);	/* top level */
+    fputs(jw->dy->string,stdout);
+    }
+hFreeConn(&conn);
+#endif
 }
 
 static void chromInfoJsonOutput(FILE *f, char *db)
@@ -152,6 +329,7 @@ else
     time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
     replaceChar(dataTime, ' ', 'T');	/* ISO 8601 */
     struct chromInfo *ciList = createChromInfoList(NULL, db);
+    slSort(ciList, chromInfoCmp);
     struct chromInfo *el = ciList;
     struct jsonWrite *jw = apiStartOutput();
     jsonWriteString(jw, "genome", db);
@@ -171,25 +349,44 @@ else
 hFreeConn(&conn);
 }
 
-static void recursiveTrackList(struct jsonWrite *jw, struct trackDb *tdb, char *type)
-/* output trackDb tags, recursive when composite track */
+static void recursiveTrackList(struct jsonWrite *jw, struct trackDb *tdb)
+/* output trackDb tags only for real tracks, not containers,
+ * recursive when subtracks exist
+ */
 {
-jsonWriteListStart(jw, type);
-struct trackDb *el = NULL;
-for (el = tdb; el != NULL; el = el->next )
+if (! ( tdbIsComposite(tdb) || tdbIsCompositeView(tdb) ) )
     {
-    jsonWriteObjectStart(jw, NULL);
-    jsonWriteString(jw, "track", el->track);
-    jsonWriteString(jw, "shortLabel", el->shortLabel);
-    jsonWriteString(jw, "type", el->type);
-    jsonWriteString(jw, "longLabel", el->longLabel);
-    if (el->parent)
-        jsonWriteString(jw, "parent", el->parent->track);
-    if (el->subtracks)
-	recursiveTrackList(jw, el->subtracks, "subtracks");
+    jsonWriteObjectStart(jw, tdb->track);
+    jsonWriteString(jw, "shortLabel", tdb->shortLabel);
+    jsonWriteString(jw, "type", tdb->type);
+    jsonWriteString(jw, "longLabel", tdb->longLabel);
+    if (tdb->parent)
+	jsonWriteString(jw, "parent", tdb->parent->track);
+    if (tdb->settingsHash)
+	{
+	struct hashEl *hel;
+	struct hashCookie hc = hashFirst(tdb->settingsHash);
+	while ((hel = hashNext(&hc)) != NULL)
+	    {
+	    if (sameWord("track", hel->name))
+		continue;	// already output in header
+	    if (isEmpty((char *)hel->val))
+		jsonWriteString(jw, hel->name, "empty");
+	    else
+		jsonWriteString(jw, hel->name, (char *)hel->val);
+	    }
+	}
     jsonWriteObjectEnd(jw);
     }
-jsonWriteListEnd(jw);
+
+if (tdb->subtracks)
+    {
+    struct trackDb *el = NULL;
+    for (el = tdb->subtracks; el != NULL; el = el->next )
+	{
+	recursiveTrackList(jw, el);
+	}
+    }
 }	/*	static void recursiveTrackList()	*/
 
 static int trackDbTrackCmp(const void *va, const void *vb)
@@ -221,7 +418,11 @@ jsonWriteString(jw, "db", db);
 jsonWriteString(jw, "dataTime", dataTime);
 jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
 freeMem(dataTime);
-recursiveTrackList(jw, tdbList, "tracks");
+struct trackDb *el = NULL;
+for (el = tdbList; el != NULL; el = el->next )
+    {
+    recursiveTrackList(jw, el);
+    }
 jsonWriteObjectEnd(jw);
 fputs(jw->dy->string,stdout);
 }	/*	static void trackDbJsonOutput(char *db, FILE *f)	*/
@@ -242,17 +443,24 @@ else if (sameWord("hubGenomes", words[1]))
     struct trackHub *hub = errCatchTrackHubOpen(hubUrl);
     if (hub->genomeList)
 	{
+	slNameSort((struct slName **)&hub->genomeList);
         struct jsonWrite *jw = apiStartOutput();
 	jsonWriteString(jw, "hubUrl", hubUrl);
-        jsonWriteListStart(jw, "genomes");
-	struct slName *theList = genomeList(hub, NULL, NULL);
-	slNameSort(&theList);
-	struct slName *el = theList;
-	for ( ; el ; el = el->next )
+        jsonWriteObjectStart(jw, "genomes");
+	struct trackHubGenome *el;
+        for ( el = hub->genomeList; el; el = el->next)
 	    {
-	    jsonWriteString(jw, NULL, el->name);
+	    jsonWriteObjectStart(jw, el->name);
+	    jsonWriteString(jw, "organism", el->organism);
+	    jsonWriteString(jw, "description", el->description);
+	    jsonWriteString(jw, "trackDbFile", el->trackDbFile);
+	    jsonWriteString(jw, "twoBitPath", el->twoBitPath);
+	    jsonWriteString(jw, "groups", el->groups);
+	    jsonWriteString(jw, "defaultPos", el->defaultPos);
+	    jsonWriteNumber(jw, "orderKey", el->orderKey);
+	    jsonWriteObjectEnd(jw);
 	    }
-	jsonWriteListEnd(jw);
+	jsonWriteObjectEnd(jw);
 	jsonWriteObjectEnd(jw);
         fputs(jw->dy->string,stdout);
 	}
@@ -279,13 +487,17 @@ else if (sameWord("tracks", words[1]))
     struct trackHub *hub = errCatchTrackHubOpen(hubUrl);
     if (hub->genomeList)
 	{
-	struct trackDb *tdbList = NULL;
-	(void) genomeList(hub, &tdbList, genome);
+	struct trackDb *tdbList = obtainTdb(hub->genomeList, NULL);
 	slSort(tdbList, trackDbTrackCmp);
         struct jsonWrite *jw = apiStartOutput();
 	jsonWriteString(jw, "hubUrl", hubUrl);
-	jsonWriteString(jw, "genome", genome);
-        recursiveTrackList(jw, tdbList, "tracks");
+	jsonWriteObjectStart(jw, genome);
+	struct trackDb *el = NULL;
+	for (el = tdbList; el != NULL; el = el->next )
+	    {
+	    recursiveTrackList(jw, el);
+	    }
+	jsonWriteObjectEnd(jw);
 	jsonWriteObjectEnd(jw);
         fputs(jw->dy->string,stdout);
 	}
@@ -293,14 +505,19 @@ else if (sameWord("tracks", words[1]))
 else if (sameWord("chromosomes", words[1]))
     {
     char *hubUrl = cgiOptionalString("hubUrl");
-//    char *genome = cgiOptionalString("genome");
+    char *genome = cgiOptionalString("genome");
     char *db = cgiOptionalString("db");
     if (isEmpty(hubUrl) && isEmpty(db))
-        apiErrAbort("ERROR: must supply hubUrl or db name to return chromosome list");
+        apiErrAbort("ERROR: must '%s' '%s' supply hubUrl or db name to return chromosome list", hubUrl, db);
 
     if (isEmpty(hubUrl))	// missing hubUrl implies UCSC database
 	{
         chromInfoJsonOutput(stdout, db);
+	return;
+	}
+    else
+	{
+        hubChromInfoJsonOutput(stdout, hubUrl, genome);
 	return;
 	}
     }

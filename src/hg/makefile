@@ -254,7 +254,7 @@ compile: ${BROWSER_BINS:%=%.compile} ${BROWSER_LOADERS:%=%.compile}
 # Build cgi's
 #   cgi: Destination for the binaries is /usr/local/apache/cgi-bin-${USER}
 
-cgi: ${BROWSER_BINS:%=%.bins} ${BROWSER_LOADERS:%=%.cgi} ${BROWSER_LOADERS:%=%.cgi} ${ENCODE_FILES:%=%.cgi}
+cgi: ${BROWSER_BINS:%=%.bins} ${BROWSER_LOADERS:%=%.cgi} ${ENCODE_FILES:%=%.cgi}
 %.bins: hgLib
 	cd $* && echo $* && $(MAKE)
 %.cgi: hgLib

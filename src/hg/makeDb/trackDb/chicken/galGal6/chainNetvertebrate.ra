@@ -17,7 +17,8 @@ chainMinScore 5000
 dimensions dimensionX=clade dimensionY=species
 sortOrder species=+ view=+ clade=+
 configurable on
-html vertebrateChainNet
+html chainNet
+otherDb galGal6
 
     track vertebrateChainNetViewchain
     shortLabel Chains
