@@ -69,9 +69,9 @@ sub performRestAction {
       my $value = $parameters->{$key};
       push(@params, "$key=$value");
     }
-    my $param_string = join(';', @params);
+    my $param_string = join('&', @params);
     $url.= '?'.$param_string;
-#     printf STDERR "# url: '%s'\n", $url;
+##     printf STDERR "# url: '%s'\n", $url;
   }
   my $response = $http->get($url, {headers => $headers});
   my $status = $response->{status};
@@ -216,7 +216,21 @@ sub processEndPoint() {
 	if (length($db) > 0) {
 	    $parameters{"db"} = "$db";
 	} else {
-          printf STDERR "ERROR: need to specify a db for endpoint '%s'\n", $endpoint;
+          if (length($hubUrl)) {
+	    $parameters{"hubUrl"} = "$hubUrl";
+            if (length($genome)) {
+	      $parameters{"genome"} = "$genome";
+	    } else {
+              printf STDERR "ERROR: need to specify a genome with hubUrl for endpoint '%s'\n", $endpoint;
+		++$failing;
+	    }
+            if (length($track)) {
+	      $parameters{"track"} = "$track";
+	    }
+	  } else {
+            printf STDERR "ERROR: need to specify a db or hubUrl for endpoint '%s'\n", $endpoint;
+	    ++$failing;
+	  }
 	}
 	if ($failing) { exit 255; }
 	$jsonReturn = performJsonAction($endpoint, \%parameters);
