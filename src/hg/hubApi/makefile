@@ -18,8 +18,11 @@ compile:: $O
 	${CC} $O ${MYLIBS} ${L}
 	mv ${AOUT} $A${EXE}
 
-alpha::
-	if [ -d ${cgiApi} ]; then rm -f ${cgiApi}/$A; cp -p ${CGI_BIN}/$A ${cgiApi}/$A; fi
+# building your own sandbox also copies result to cgiApi directory
+# if it exists
+
+my::
+	if [ -d ${cgiApi} ]; then rm -f ${cgiApi}/$A; cp -p ${CGI_BIN_USER}/$A ${cgiApi}/$A; fi
 
 test::
 	cd tests && make test

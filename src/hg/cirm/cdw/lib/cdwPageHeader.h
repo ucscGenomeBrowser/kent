@@ -1,3 +1,4 @@
+//  this should correspond to src/hg/cirm/gateway/htdocs/inc/header.html SSI
 "<div class=\"row\"><div class=\"col-12\"><div class='securesite-banner' style='display:none'>\n"
 "<div class=\"securesite-text\">\n"
 "This is the secure site for labs to access pre-publication data.  Public CIRM CESCG data\n"
@@ -22,7 +23,7 @@
 "            <h5 class='nav-button'><a class='nav-link text-white padded-nav-link' href='../index'>Home</a></h5>\n"
 "          </li>\n"
 "          <li class='nav-item back-dark-pink rounded' style='margin-left: 6px'>\n"
-"            <h5 class='nav-button'><a class='nav-link text-white padded-nav-link' href='../cgi-bin/cdwWebBrowse'>Files</a>\n"
+"            <h5 class='nav-button'><a class='nav-link text-white padded-nav-link' href='../cgi-bin/cdwWebBrowse'>Data</a>\n"
 "          </li>\n"
 "          <li class='nav-item back-light-blue rounded' style='margin-left: 6px'>\n"
 "            <h5 class='nav-button'><a class='nav-link text-white padded-nav-link' href='../projects'>Projects</a></h5>\n"

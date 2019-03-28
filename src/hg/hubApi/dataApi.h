@@ -40,6 +40,9 @@
 
 /* limit amount of output to a maximum to avoid overload */
 extern int maxItemsOutput;	/* can be set in URL maxItemsOutput=N */
+/* for debugging purpose, current bot delay value */
+extern int botDelay;
+boolean debug;	/* can be set in URL debug=1, to turn off: debug=0 */
 
 /*  functions in hubApi.c */
 struct hubPublic *hubPublicDbLoadAll();
@@ -65,6 +68,15 @@ struct trackHub *errCatchTrackHubOpen(char *hubUrl);
 
 struct trackDb *obtainTdb(struct trackHubGenome *genome, char *db);
 /* return a full trackDb fiven the hub genome pointer, or ucsc database name */
+
+struct trackDb *findTrackDb(char *track, struct trackDb *tdb);
+/* search tdb structure for specific track, recursion on subtracks */
+
+struct bbiFile *bigFileOpen(char *trackType, char *bigDataUrl);
+/* open bigDataUrl for correct trackType and error catch if failure */
+
+int chromInfoCmp(const void *va, const void *vb);
+/* Compare to sort based on size */
 
 /* ######################################################################### */
 /*  functions in getData.c */
