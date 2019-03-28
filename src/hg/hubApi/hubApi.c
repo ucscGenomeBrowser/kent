@@ -1,5 +1,6 @@
 /* hubApi - access mechanism to hub data resources. */
 #include "dataApi.h"
+#include "botDelay.h"
 
 /*
 +------------------+------------------+------+-----+---------+-------+
@@ -19,9 +20,12 @@
 
 int maxItemsOutput = 1000;	/* can be set in URL maxItemsOutput=N */
 static int maxItemLimit = 1000000;   /* maximum of 1,000,000 items returned */
+/* for debugging purpose, current bot delay value */
+int botDelay = 0;
+boolean debug = FALSE;	/* can be set in URL debug=1, to turn off: debug=0 */
+#define delayFraction	0.03
 
 /* Global only to this one source file */
-static boolean debug = TRUE;	/* can be set in URL debug=1 */
 static struct cart *cart;             /* CGI and other variables */
 static struct hash *oldVars = NULL;
 static struct hash *trackCounter = NULL;
@@ -316,7 +320,7 @@ else
 	 *   char *genome)
 	 */
 
-static void bbiBiggestChrom(struct bbiChromInfo *chromList, char **chromName,
+static void bbiLargestChrom(struct bbiChromInfo *chromList, char **chromName,
     unsigned *chromSize)
 /* find largest chromosome name and size in the chromList */
 {
@@ -363,7 +367,7 @@ if (errCatchStart(errCatch))
         struct bbiChromInfo *chromList = bbiChromList(bbi);
         *chromCount = slCount(chromList);
         *itemCount = bigBedItemCount(bbi);
-        bbiBiggestChrom(chromList, chromName, chromSize);
+        bbiLargestChrom(chromList, chromName, chromSize);
         bbiChromInfoFreeList(&chromList);
         bbiFileClose(&bbi);
         }
@@ -374,7 +378,7 @@ if (errCatchStart(errCatch))
         struct bbiSummaryElement sum = bbiTotalSummary(bwf);
         *chromCount = slCount(chromList);
         *itemCount = sum.validCount;
-        bbiBiggestChrom(chromList, chromName, chromSize);
+        bbiLargestChrom(chromList, chromName, chromSize);
         bbiChromInfoFreeList(&chromList);
         bbiFileClose(&bwf);
         }
@@ -722,6 +726,8 @@ if (topTrackDb)
         unsigned chromSize = 0;
         if (isEmpty(genome->twoBitPath))
             chromSize = largestChrom(defaultGenome, &chromName);
+	else
+	    hPrintf("    <li>twoBitPath %s genome %s</li>\n", genome->twoBitPath, defaultGenome);
 	hubCountOneTdb(hub, defaultGenome, tdb, bigDataIndex, countTracks, chromName, chromSize, defaultGenome);
 	if (timeOutReached())
 	    break;
@@ -776,6 +782,25 @@ while ((hel = hashNext(&hc)) != NULL)
 hPrintf("    </ul></li>\n");
 }
 
+static unsigned largestChromInfo(struct chromInfo *ci, char **chromName)
+/* find largest chrom in this chromInfo, return name and size */
+{
+unsigned size = 0;
+char *name = NULL;
+struct chromInfo *el;
+for (el = ci; el; el = el->next)
+    {
+    if (el->size > size)
+	{
+	size = el->size;
+	name = el->chrom;
+	}
+    }
+if (chromName)
+    *chromName = name;
+return size;
+}
+
 static void genomeList(struct trackHub *hubTop)
 /* follow the pointers from the trackHub to trackHubGenome and around
  * in a circle from one to the other to find all hub resources
@@ -799,7 +824,13 @@ for ( ; genome; genome = genome->next )
     ++totalAssemblyCount;
     if (isNotEmpty(genome->twoBitPath))
 	{
-	hPrintf("<li>assembly hub twoBitFile: %s</li>\n", genome->twoBitPath);
+	hPrintf("<li>assembly hub %s twoBitFile: %s</li>\n", genome->name, genome->twoBitPath);
+	char *chromName = NULL;
+	struct chromInfo *ci = trackHubAllChromInfo(genome->name);
+        unsigned chromSize = largestChromInfo(ci, &chromName);
+	char sizeString[64];
+	sprintLongWithCommas(sizeString, chromSize);
+	hPrintf("<li>%d chromosomes, largest %s at %s bases</li>\n", slCount(ci), chromName, sizeString);
 	}
     if (genome->organism)
 	{
@@ -1021,6 +1052,27 @@ cartDump(cart);
 hPrintf("</pre>\n");
 }
 
+static void sendJsonHogMessage(char *hogHost)
+{
+apiErrAbort("Your host, %s, has been sending too many requests lately and is "
+       "unfairly loading our site, impacting performance for other users. "
+       "Please contact genome@soe.ucsc.edu to ask that your site "
+       "be reenabled.  Also, please consider downloading sequence and/or "
+       "annotations in bulk -- see http://genome.ucsc.edu/downloads.html.",
+       hogHost);
+}
+
+static void sendHogMessage(char *hogHost)
+{
+hPrintf("Your host, %s, has been sending too many requests lately and is "
+       "unfairly loading our site, impacting performance for other users. "
+       "Please contact genome@soe.ucsc.edu to ask that your site "
+       "be reenabled.  Also, please consider downloading sequence and/or "
+       "annotations in bulk -- see http://genome.ucsc.edu/downloads.html.",
+       hogHost);
+exit(0);
+}
+
 static void doMiddle(struct cart *theCart)
 /* Set up globals and make web page */
 {
@@ -1070,6 +1122,18 @@ if (isNotEmpty(pathInfo))
         hPrintDisable();
 	puts("Content-Type:application/json");
 	puts("\n");
+	/* similar delay system as in DAS server */
+	botDelay = hgBotDelayTimeFrac(delayFraction);
+	if (botDelay > 0)
+	    {
+	    if (botDelay > 2000)
+		{
+		char *hogHost = getenv("REMOTE_ADDR");
+		sendJsonHogMessage(hogHost);
+		return;
+		}
+	sleep1000(botDelay);
+	}
         void (*apiFunction)(char **) = hel->val;
         (*apiFunction)(words);
 	return;
@@ -1080,6 +1144,18 @@ if (isNotEmpty(pathInfo))
 
 puts("Content-Type:text/html");
 puts("\n");
+
+/* similar delay system as in DAS server */
+botDelay = hgBotDelayTimeFrac(delayFraction);
+if (botDelay > 0)
+    {
+    if (botDelay > 2000)
+	{
+	char *hogHost = getenv("REMOTE_ADDR");
+	sendHogMessage(hogHost);
+	}
+    sleep1000(botDelay);
+    }
 
 (void) hubPublicDbLoadAll();
 
@@ -1103,6 +1179,7 @@ cartWebStart(cart, database, "UCSC JSON API interface");
 if (debug)
     {
     hPrintf("<ul>\n");
+    hPrintf("<li>hgBotDelay: %d</li>\n", botDelay);
     char *envVar = getenv("BROWSER_HOST");
     hPrintf("<li>BROWSER_HOST:%s</li>\n", envVar);
     envVar = getenv("CONTEXT_DOCUMENT_ROOT");

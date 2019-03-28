@@ -226,12 +226,12 @@ verbose(2, "pairedEndQa on %u %s %s\n", ef->id, ef->cdwFileName, ef->submitFileN
 /* Get other end, return if not found. */
 struct cdwValidFile *otherVf = cdwOppositePairedEnd(conn, ef, vf);
 if (otherVf == NULL) {
-    verbose(1, "no opposite paired end file found");
+    verbose(1, "no opposite paired end file found\n");
     return;
     }
 
 if (otherVf->fileId > vf->fileId) {
-    verbose(1, "this is not the first file of the pair");
+    verbose(1, "this is not the first file of the pair\n");
     return;
     }
 
