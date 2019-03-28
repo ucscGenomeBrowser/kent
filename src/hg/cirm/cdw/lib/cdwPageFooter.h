@@ -1,3 +1,4 @@
+//  this should correspond to src/hg/cirm/gateway/htdocs/inc/footer.html SSI
 "<div class='footer' style='border-radius: 10px'>\n"
 "<hr>\n"
 "<div class='container'>\n"
