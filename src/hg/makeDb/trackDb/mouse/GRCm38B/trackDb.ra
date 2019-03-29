@@ -183,3 +183,22 @@ searchIndex name
 searchTable vm20NcbimapMap
 searchType bigPsl
 
+track vm20MergedProblems
+shortLabel VM20 merge problems
+longLabel VM20 problem cases from merged mappings
+group genes
+type bigBed 12 +
+priority 1001.3
+color 25,0,100
+itemRgb on
+canPack on
+visibility pack
+bigDataUrl /gbdb/GRCm38B/gencode/problems.merged.bigbed 
+searchIndex name
+mouseOverField combined
+labelFields name, inTop, transMethod, transStatus, mapMethod, mapStatus, combined
+defaultLabelFields name
+
+searchTable vm20MergedProblems
+searchType bigBed
+
