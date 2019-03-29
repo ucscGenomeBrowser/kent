@@ -111,7 +111,7 @@ test18: setOutput
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # bigBed data from a database
-# /getData/track? db=galGal6 &track=gc5BaseBw&chrom=chr1&start=1&end=1024
+# /getData/track? db=galGal6 &track=ncbiRefSeqOther&chrom=chr1&start=750000&end=5700000
 test19: setOutput
 	@./jsonConsumer.pl -endpoint="/getData/track" -db="galGal6" -track="ncbiRefSeqOther" -chrom="chr1" -start=750000 -end=55700000 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
@@ -137,4 +137,14 @@ test22: setOutput
 # testing /list/chromosomes? hubUrl genome=_araTha1 track=assembly_
 test23: setOutput
 	@./jsonConsumer.pl -endpoint="/list/chromosomes" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" -genome="_araTha1" -track="assembly_" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /getData/sequence? hubUrl genome=hg19&chrom=chrCp&start=4321&end=5647
+test24: setOutput
+	@./jsonConsumer.pl -endpoint="/getData/sequence" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" -genome="_araTha1" -chrom="chrCp" -start=4321 -end=5678 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /getData/sequence? hubUrl Bejerano genome=hg19&chrom=chrM&start=4321&end=5647
+test25: setOutput
+	@./jsonConsumer.pl -endpoint="/getData/sequence" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt" -genome="hg19" -chrom="chrM" -start=4321 -end=5678 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz

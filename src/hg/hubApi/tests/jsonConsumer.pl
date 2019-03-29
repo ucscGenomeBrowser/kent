@@ -8,7 +8,7 @@ use JSON;
 use Getopt::Long;
 
 my $http = HTTP::Tiny->new();
-my $server = 'https://hgwdev-api.gi.ucsc.edu';
+my $server = 'https://api-test.gi.ucsc.edu';
 my $global_headers = { 'Content-Type' => 'application/json' };
 my $last_request_time = Time::HiRes::time();
 my $request_count = 0;
