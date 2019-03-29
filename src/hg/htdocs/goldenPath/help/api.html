@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<!--#set var="TITLE" value="JSON data interface" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
+
+<h1>JSON data interface</h1> 
+
+<h2>Contents</h2>
+
+<h6><a href="#Intro">What is JSON data ?</a></h6> 
+<h6><a href="#Access">What is the access URL ?</a></h6>
+<h6><a href="#Return">What type of data can be accessed</a></h6>
+<h6><a href="#Endpoint">Example endpoint access functions</a></h6>
+<hr>
+<p>
+<strong>Additional resources</strong></p> 
+<ul>
+</ul>
+
+<!-- ========== What is JSON data ? ============================== -->
+<a name="Intro"></a>
+<h2>What is JSON data ?</h2> 
+<p>
+JSON data is a data transfer syntax from a data provider to a consumer.
+See also: <a href="https://www.w3schools.com/js/js_json_intro.asp"
+target=_blank>JSON Introduction</a>
+</p>
+
+<!-- ========== What is the access URL ? ============================== -->
+<a name="Access"></a>
+<h2>What is the access URL ?</h2> 
+<p>
+The gateway html page to the interface is available at
+<a href="https://hgwdev-api.gi.ucsc.edu/"
+target=_blank>hgwdev-api.gi.ucsc.edu</a>.  This page can be used
+to explore track hubs, assembly hubs, and UCSC browser data resources.
+Example URL links for JSON output are provided on that page for track
+types that are currently supported for data output.  Work is underway
+to provide access to additional data track types.
+</p>
+
+<!-- ========== What type of data can be accessed ? ===================== -->
+<a name="Return"></a>
+<h2>What type of data can be accessed ?</h2> 
+<p>
+The following data sets can be accessed at this time:
+<ul>
+<li>Listing of available public hubs</li>
+<li>Listing of available UCSC browser genome assemblies</li>
+<li>List genomes from a specified track or assembly hub</li>
+<li>List available data tracks from a specified hub or UCSC browser genome assembly</li>
+<li>List of chromosomes contained in an assembly hub or UCSC browser genome assembly.
+<li>List of chromosomes contained in a specific track of a track or assembly hub or UCSC browser genome assembly.
+<li>Return DNA sequence from an assembly hub 2bit file, or UCSC genome browser assembly</li>
+<li>Return Track data from a specified assembly or track hub or UCSC genome browser assembly</li>
+</ul>
+</p>
+
+<!-- ========== Example endpoint access functions ======================= -->
+<a name="Endpoint"></a>
+<h2>Example endpoint URLs to return data</h2> 
+<p>
+<ul>
+<li><a href="https://hgwdev-api.gi.ucsc.edu/list/publicHubs"
+    target=_blank>/list/publicHubs</a></li>
+<li><a href="https://hgwdev-api.gi.ucsc.edu/list/ucscGenomes"
+    target=_blank>/list/ucscGenomes</a></li>
+<li><b>/list/hubGenomes</b></li>
+</ul>
+</p>
+
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
