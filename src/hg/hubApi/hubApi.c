@@ -824,7 +824,7 @@ for ( ; genome; genome = genome->next )
     ++totalAssemblyCount;
     if (isNotEmpty(genome->twoBitPath))
 	{
-	hPrintf("<li>assembly hub %s twoBitFile: %s</li>\n", genome->name, genome->twoBitPath);
+	hPrintf("<li>assembly hub %s twoBitPath: %s</li>\n", genome->name, genome->twoBitPath);
 	char *chromName = NULL;
 	struct chromInfo *ci = trackHubAllChromInfo(genome->name);
         unsigned chromSize = largestChromInfo(ci, &chromName);
