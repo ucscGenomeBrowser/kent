@@ -1,18 +1,22 @@
 <!DOCTYPE html>
-<!--#set var="TITLE" value="JSON data interface" -->
+<!--#set var="TITLE" value="JSON API data interface" -->
 <!--#set var="ROOT" value="../.." -->
 
 <!-- Relative paths to support mirror sites with non-standard GB docs install -->
 <!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
-<h1>JSON data interface</h1> 
+<h1>JSON API data interface</h1> 
 
 <h2>Contents</h2>
 
 <h6><a href="#Intro">What is JSON data ?</a></h6> 
 <h6><a href="#Access">What is the access URL ?</a></h6>
-<h6><a href="#Return">What type of data can be accessed</a></h6>
-<h6><a href="#Endpoint">Example endpoint access functions</a></h6>
+<h6><a href="#Return">What type of data can be accessed ?</a></h6>
+<h6><a href="#Endpoint">Endpoint functions</a></h6>
+<h6><a href="#Parameters">Parameters to endpoint functions</a></h6>
+<h6><a href="#Parameter use">Required and optional parameters</a></h6>
+<h6><a href="#Track types">Supported track types</a></h6>
+<h6><a href="#Examples">Example data access</a></h6>
 <hr>
 <p>
 <strong>Additional resources</strong></p> 
@@ -33,8 +37,8 @@ target=_blank>JSON Introduction</a>
 <h2>What is the access URL ?</h2> 
 <p>
 The gateway html page to the interface is available at
-<a href="https://hgwdev-api.gi.ucsc.edu/"
-target=_blank>hgwdev-api.gi.ucsc.edu</a>.  This page can be used
+<a href="https://api-test.gi.ucsc.edu/"
+target=_blank>api-test.gi.ucsc.edu</a>.  This page can be used
 to explore track hubs, assembly hubs, and UCSC browser data resources.
 Example URL links for JSON output are provided on that page for track
 types that are currently supported for data output.  Work is underway
@@ -49,26 +53,106 @@ The following data sets can be accessed at this time:
 <ul>
 <li>Listing of available public hubs</li>
 <li>Listing of available UCSC browser genome assemblies</li>
-<li>List genomes from a specified track or assembly hub</li>
+<li>List genomes from a specified assembly or track hub</li>
 <li>List available data tracks from a specified hub or UCSC browser genome assembly</li>
 <li>List of chromosomes contained in an assembly hub or UCSC browser genome assembly.
-<li>List of chromosomes contained in a specific track of a track or assembly hub or UCSC browser genome assembly.
+<li>List of chromosomes contained in a specific track of an assembly or track hub or UCSC browser genome assembly.
 <li>Return DNA sequence from an assembly hub 2bit file, or UCSC genome browser assembly</li>
-<li>Return Track data from a specified assembly or track hub or UCSC genome browser assembly</li>
+<li>Return track data from a specified assembly or track hub or UCSC genome browser assembly</li>
 </ul>
 </p>
 
-<!-- ========== Example endpoint access functions ======================= -->
+<!-- ========== Endpoint functions ======================= -->
 <a name="Endpoint"></a>
-<h2>Example endpoint URLs to return data</h2> 
+<h2>Endpoint functions to return data</h2> 
 <p>
 <ul>
-<li><a href="https://hgwdev-api.gi.ucsc.edu/list/publicHubs"
-    target=_blank>/list/publicHubs</a></li>
-<li><a href="https://hgwdev-api.gi.ucsc.edu/list/ucscGenomes"
-    target=_blank>/list/ucscGenomes</a></li>
-<li><b>/list/hubGenomes</b></li>
+<li><b>/list/publicHubs</b> - list public hubs</li>
+<li><b>/list/ucscGenomes</b> - list UCSC database genomes</li>
+<li><b>/list/hubGenomes</b> - list genomes from specified hub</li>
+<li><b>/list/tracks</b> - list data tracks available in specified hub or database genome</li>
+<li><b>/list/chromosomes</b> - list chromosomes from a data track in specified hub or database genome</li>
+<li><b>/getData/sequence</b> - return sequence from specified hub or database genome</li>
+<li><b>/getData/track</b> - return data from specified track in hub or database genome</li>
 </ul>
+</p>
+
+<!-- ========== Parameters to endpoint functions ======================= -->
+<a name="Parameters"></a>
+<h2>Parameters to endpoint functions</h2>
+<p>
+<ul>
+<li>hubUrl=&lt;url&gt; - specify track hub or assembly hub URL</li>
+<li>genome=&lt;name&gt; - specify genome assemby in track or assembly hub (only used with hubUrl)</li>
+<li>db=&lt;ucscDb&gt; - specify database (aka genome assembly) in UCSC genome browser (either hubUrl or db specified, not both)</li>
+<li>track=&lt;trackName&gt; - specify data track in hub or UCSC database genome assembly</li>
+<li>chrom=&lt;chrN&gt; - specify chromosome name for sequence or track data</li>
+<li>start=&lt;123&gt; - specify start coordinate (0 relative) for data from track or sequence retrieval (start and end required together)</li>
+<li>end=&lt;456&gt; - specify end coordinate (1 relative) for data from track or sequence retrieval (start and end required together)</li>
+<li>(see also: <a href='http://genome.ucsc.edu/blog/the-ucsc-genome-browser-coordinate-counting-systems/' target=_blank>UCSC browser coordinate counting systems)</a></li>
+<li>maxItemsOutput=1000 - limit number of items to output, default: 1,000, maximum limit: 1,000,000</li>
+</ul>
+</p>
+
+<!-- ========== Required and optional parameters  ======================= -->
+<a name="Parameter use"></a>
+<h2>Required and optional parameters</h2>
+<p>
+<table border=1>
+<tr><th>Endpoint function</th><th>Required</th><th>Optional</th></tr>
+<tr><th>/list/publicHubs</th><td>(none)</td><td>(none)</td></tr>
+<tr><th>/list/ucscGenomes</th><td>(none)</td><td>(none)</td></tr>
+<tr><th>/list/hubGenomes</th><td>hubUrl</td><td>(none)</td></tr>
+<tr><th>/list/tracks</th><td>(hubUrl and genome) or db</td><td>(none)</td></tr>
+<tr><th>/list/chromosomes</th><td>((hubUrl and genome) or db) and track</td><td>(none)</td></tr>
+<tr><th>/getData/sequence</th><td>(hubUrl and genome) or db</td><td>chrom, (start and end)</td></tr>
+<tr><th>/getData/track</th><td>((hubUrl and genome) or db) and track</td><td>chrom, (start and end)</td></tr>
+</table>
+</p>
+
+<!-- ========== Supported track types ======================= -->
+<a name="Track types"></a>
+<h2>Supported track types, at this time (April 2019), for getData functions</h2>
+<p>
+<ul>
+<li><a href='/FAQ/FAQformat.html#format1' target=_blank>bed</a></li>
+<li><a href='/FAQ/FAQformat.html#format1.5' target=_blank>bigBed</a></li>
+<li><a href='/FAQ/FAQformat.html#format9.1' target=_blank>bigGenePred</a></li>
+<li><a href='/FAQ/FAQformat.html#format9.5' target=_blank>bigNarrowPeak</a></li>
+<li><a href='/FAQ/FAQformat.html#format6.1' target=_blank>bigWig</a></li>
+<li>broadPeak</li>
+<li><a href='/FAQ/FAQformat.html#format9.5' target=_blank>narrowPeak</a></li>
+<li><a href='/FAQ/FAQformat.html#format6' target=_blank>wig</a></li>
+<li>(Work is under way to support additional track types)</li>
+</ul>
+</p>
+
+<!-- ========== Example data access ======================= -->
+<a name="Examples"></a>
+<h2>Example data access</h2>
+<h3>Listing functions</h3>
+<ol>
+<li><a href='/list/publicHubs' target=_blank>list public hubs</a> - <b>api.genome.ucsc.edu/list/publicHubs</b></li>
+<li><a href='/list/ucscGenomes' target=_blank>list UCSC database genomes</a> - <b>api.genome.ucsc.edu/list/ucscGenomes</b></li>
+<li><a href='/list/hubGenomes?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt' target=_blank>list genomes from specified hub</a> - <b>api.genome.ucsc.edu/list/hubGenomes?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt</b></li>
+<li><a href='/list/tracks?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=_araTha1' target=_blank>list tracks from specified hub</a> - <b>api.genome.ucsc.edu/list/tracks?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=_araTha1</b></li>
+<li><a href='/list/tracks?db=ce11' target=_blank>list tracks from UCSC database genome</a> - <b>api.genome.ucsc.edu/list/tracks?db=ce11</b></li>
+<li><a href='/list/chromosomes?db=ce11' target=_blank>list chromosomes from UCSC database genome</a> - <b>api.genome.ucsc.edu/list/chromosomes?db=ce11</b></li>
+<li><a href='/list/chromosomes?db=ce11;track=gold' target=_blank>list chromosomes from specified track in UCSC database genome</a> - <b>api.genome.ucsc.edu/list/chromosomes?db=ce11;track=gold</b></li>
+<li><a href='/list/chromosomes?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=_araTha1' target=_blank>list chromosomes from assembly hub genome</a> -<br><b>api.genome.ucsc.edu/list/chromosomes?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=_araTha1</b></li>
+<li><a href='/list/chromosomes?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=_araTha1;track=assembly_' target=_blank>list chromosomes from specified track in assembly hub genome</a> -<br><b>api.genome.ucsc.edu/list/chromosomes?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=_araTha1;track=assembly_</b></li>
+</ol>
+<h3>getData functions</h3>
+<ol>
+<li><a href='/getData/sequence?db=ce11;chrom=chrM' target=_blank>Get DNA sequence from specified chromosome in UCSC database genome</a> -<br><b>api.genome.ucsc.edu/getData/sequence?db=ce11;chrom=chrM</b></li>
+<li><a href='/getData/sequence?db=ce11;chrom=chrM;start=4321;end=5678' target=_blank>Get DNA sequence from specified chromosome and start,end coordinates in UCSC database genome</a> -<br><b>api.genome.ucsc.edu/getData/sequence?db=ce11;chrom=chrM;start=4321;end=5678</b></li>
+<li><a href='/getData/sequence?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=_araTha1;chrom=chrCp;start=4321;end=5678' target=_blank><b>TBD</b> Get DNA sequence from specified chromosome and start,end coordinates in an assembly hub genome</a> -<br><b>api.genome.ucsc.edu/getData/sequence?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=_araTha1;chrom=chrCp;start=4321;end=5678</b></li>
+<li><a href='/getData/track?db=ce11;track=gold;maxItemsOutput=100' target=_blank>Get track data for specified track in UCSC database genome</a> -<br><b>api.genome.ucsc.edu/getData/track?db=ce11;track=gold;maxItemsOutput=100</b></li>
+<li><a href='/getData/track?db=ce11;track=gold;chrom=chrM' target=_blank>Get track data for specified track and chromosome in UCSC database genome</a> -<br><b>api.genome.ucsc.edu/getData/track?db=ce11;track=gold;chrom=chrM</b></li>
+<li><a href='/getData/track?db=ce11;track=gold;chrom=chrI;start=47000;end=48000' target=_blank>Get track data for specified track, chromosome and start,end coordinates in UCSC database genome</a> -<br><b>api.genome.ucsc.edu/getData/track?db=ce11;track=gold;chrom=chrI;start=47000;end=48000</b></li>
+<li><a href='/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=_araTha1;track=assembly_' target=_blank>Get track data for specified track in an assembly hub genome</a> -<br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=_araTha1;track=assembly_</b></li>
+</ol>
+<p>
 </p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
