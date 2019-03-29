@@ -44,6 +44,7 @@ else if (0 == (start + end))	/* have chrom, no start,end == full chr */
     /* need to extend the chrom column check to allow tName also */
     if (! sqlColumnExists(conn, table, "chrom"))
 	apiErrAbort("track '%s' is not a position track, request track without chrom specification, genome: '%s'", table, db);
+    jsonWriteString(jw, "chrom", chrom);
     struct chromInfo *ci = hGetChromInfo(db, chrom);
     jsonWriteNumber(jw, "start", (long long)0);
     jsonWriteNumber(jw, "end", (long long)ci->size);
@@ -53,6 +54,7 @@ else	/* fully specified chrom:start-end */
     {
     if (! sqlColumnExists(conn, table, "chrom"))
 	apiErrAbort("track '%s' is not a position track, request track without chrom specification, genome: '%s'", table, db);
+    jsonWriteString(jw, "chrom", chrom);
     jsonWriteNumber(jw, "start", (long long)start);
     jsonWriteNumber(jw, "end", (long long)end);
     if (startsWith("wig", tdb->type))
