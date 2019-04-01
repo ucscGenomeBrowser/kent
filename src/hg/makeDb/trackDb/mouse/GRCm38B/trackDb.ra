@@ -180,7 +180,7 @@ showCdsMaxZoom 10000.0
 bigDataUrl /gbdb/GRCm38B/gencode/VM20toGRCm38B.ncbimap.bigpsl
 searchIndex name
 
-searchTable vm20NcbimapMap
+searchTable vm20NcbimapAln
 searchType bigPsl
 
 track vm20MergedProblems
@@ -201,4 +201,28 @@ defaultLabelFields name
 
 searchTable vm20MergedProblems
 searchType bigBed
+
+track vm20BlatAln
+shortLabel VM20 BLAT
+longLabel VM20 BLAT alignments
+group genes
+type bigPsl
+priority 1001.6
+color 150,50,100
+canPack on
+visibility hide
+baseColorDefault diffCodons
+baseColorUseCds given
+baseColorUseSequence lfExtra
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+bigDataUrl /gbdb/GRCm38B/gencode/gencodeVM20.blat.bigpsl
+searchIndex name
+
+searchTable vm20BlatAln
+searchType bigPsl
 
