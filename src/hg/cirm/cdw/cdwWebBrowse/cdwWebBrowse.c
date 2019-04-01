@@ -2033,7 +2033,6 @@ printf("</TR></TABLE>\n");
 printf("<CENTER><I>charts are based on proportion of files in each category</I></CENTER>\n");
 printf("</td></tr></table>\n");
 
-//printFile("cirm-motd.html");
 }
 
 #ifdef OLD
