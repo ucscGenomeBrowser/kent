@@ -39,7 +39,7 @@ printf STDERR "arguments:
 -end=<coordinate> - restrict the operation to a range, use both start and end
 -maxItemsOutput=<N> - limit output to this number of items.  Default 1,000
                       maximum allowed 1,000,000
--endpoint=<function> - were <function> is one of the following:
+-endpoint=<function> - where <function> is one of the following:
    /list/publicHubs - provide a listing of all available public hubs
    /list/ucscGenomes - provide a listing of all available UCSC genomes
    /list/hubGenomes - list genomes from a specified hub (with hubUrl=...)
@@ -120,7 +120,7 @@ sub performRestAction {
   return;
 }
 
-# generic output of a has pointer
+# generic output of a hash pointer
 sub hashOutput($) {
   my ($hashRef) = @_;
   foreach my $key (sort keys %$hashRef) {
