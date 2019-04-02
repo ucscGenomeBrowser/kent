@@ -1,0 +1,4 @@
+#chr	chromStart	chromEnd	name	score	strand	name2	expCount	expScores;A B C	_offset	_lineLength
+chr1	100	175	t1	999	+	gene1	3	7.2e-09,0,0	21	20
+chr1	100	175	t2	999	+	gene2	3	0,0.01,0	41	12
+chr1_alt	100	175	t3	999	+	gene3	3	0,0,7.2e-09	53	14
