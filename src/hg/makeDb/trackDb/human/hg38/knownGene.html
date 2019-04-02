@@ -1,8 +1,8 @@
 <h2>Description</h2>
 <p>
 The GENCODE track is composed of all the gene models in the <a target="_blank"
-href="http://www.gencodegenes.org/">GENCODE v29 release</a>. By default, only the "basic" gene set 
-is displayed, which is a subset of the "comprehensive" gene set. The "basic" set represents 
+href="http://www.gencodegenes.org/">GENCODE v29 release</a>. By default, only the basic gene set 
+is displayed, which is a subset of the comprehensive gene set. The basic set represents 
 transcripts that GENCODE believes will be useful to the majority of users.</p>
 
 <p>
@@ -35,13 +35,20 @@ href="/FAQ/FAQgenes.html">Genes FAQ</a>.</p>
 <h2>Display Conventions and Configuration</h2>
 
 <p>
-By default, this track displays only the "basic" GENCODE set, splice variants, and non-coding 
-genes; with options to display the "comprehensive" GENCODE set and pseudogenes. To customize 
+By default, this track displays only the basic GENCODE set, splice variants, and non-coding 
+genes. It includes options to display the comprehensive GENCODE set and pseudogenes. To customize 
 these options, the respective boxes can be checked or unchecked at the top of this description 
 page. Our FAQ includes examples on <a target=_blank 
 href="/FAQ/FAQgenes.html#justsingle">how to display a single transcript per gene</a> and 
 <a target=_blank href="https://hgwdev.gi.ucsc.edu/FAQ/FAQgenes.html#gencode">
-switching between the "basic" and "comprehensive" gene sets</a>.</p>
+switching between the basic and comprehensive gene sets</a>.</p>
+
+<p>
+This track also includes a variety of labels which identify the transcripts when visibility is 
+set to "full" or "pack". Gene symbols (e.g. NIPA1) are displayed by default, but additional 
+options include GENCODE Transcript ID (ENST00000561183.5), UCSC Known Gene ID (uc001yve.4), 
+UniProt Display ID (Q7RTP0) and OMIM ID (608145). Additional information about gene and transcript 
+names can be found in our <a target=_blank href="/FAQ/FAQgenes.html#genename">FAQ</a>.</p>
 
 <p>
 This track in general follows the display conventions for <a target="_blank"
@@ -63,7 +70,9 @@ while those for coding open reading frames are thicker. The following color key 
 <p>
 This track contains an optional <a target="_blank"
 href="../goldenPath/help/hgCodonColoring.html">codon coloring feature</a> that allows users to
-quickly validate and compare gene predictions.</p>
+quickly validate and compare gene predictions. There is also an option to display the data as 
+a <a target="_blank" href="../goldenPath/help/hgWiggleTrackHelp.html">density graph</a>, which
+can be helpful for visualizing the distribution of items over a region.</p>
 
 <h2>Methods</h2>
 <p>
@@ -74,7 +83,8 @@ Data from other sources are correlated with the GENCODE data to build the knownT
 
 <p>
 This release is the first
-to use the Ensembl id as the primary id in the knownGene and supporting tables.</p>
+to use the Ensembl/GENCODE IDs as opposed to UCSC Known Gene IDs as the primary ID in the 
+knownGene and supporting tables.</p>
 
 <h2>Related Data</h2>
 <p>
