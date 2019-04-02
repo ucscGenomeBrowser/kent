@@ -824,7 +824,7 @@ for ( ; genome; genome = genome->next )
     ++totalAssemblyCount;
     if (isNotEmpty(genome->twoBitPath))
 	{
-	hPrintf("<li>assembly hub %s twoBitFile: %s</li>\n", genome->name, genome->twoBitPath);
+	hPrintf("<li>assembly hub %s twoBitPath: %s</li>\n", genome->name, genome->twoBitPath);
 	char *chromName = NULL;
 	struct chromInfo *ci = trackHubAllChromInfo(genome->name);
         unsigned chromSize = largestChromInfo(ci, &chromName);
@@ -1132,8 +1132,9 @@ if (isNotEmpty(pathInfo))
 		sendJsonHogMessage(hogHost);
 		return;
 		}
-	sleep1000(botDelay);
-	}
+	    sleep1000(botDelay);
+	    }
+
         void (*apiFunction)(char **) = hel->val;
         (*apiFunction)(words);
 	return;
@@ -1237,10 +1238,7 @@ if (measureTiming || debug)
        hPrintf("<em>hub open time: %ld millis</em><br>\n", thisTime - lastTime);
     }
 
-webIncludeFile("inc/dataApi.html");
-
-// struct trackHubGenome *hubGenome = hub->genomeList;
-// showExamples(urlInput, hubGenome, ucscDb);
+hPrintf("<p>Please refer to <a href='../../goldenPath/help/api.html'>API help</a> documentation for more discussion.</p>\n");
 
 if (debug)
     showCartDump();
