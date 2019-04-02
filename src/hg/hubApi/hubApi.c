@@ -150,21 +150,6 @@ if ((nowTime - enteredMainTime) > (1000 * timeOutSeconds))
 return timedOut;
 }
 
-#ifdef NOT
-static void showCounts(struct hash *countTracks)
-{
-if (countTracks->elCount)
-    {
-    hPrintf("        <li><ul>\n");
-    struct hashEl *hel;
-    struct hashCookie hc = hashFirst(countTracks);
-    while ((hel = hashNext(&hc)) != NULL)
-        hPrintf("        <li>%d - %s</li>\n", ptToInt(hel->val), hel->name);
-    hPrintf("        </ul></li>\n");
-    }
-}
-#endif
-
 static void hashCountTrack(struct trackDb *tdb, struct hash *countTracks)
 /* this is counting up track types into the hash countTracks */
 {
@@ -206,7 +191,6 @@ else
     hashIncInt(countTracks, "track count");
     }
 freeMem(stripType);
-// showCounts(countTracks);
 }
 
 static void sampleUrl(struct trackHub *hub, char *db, struct trackDb *tdb, char *chrom, unsigned chromSize, char *errorString)
@@ -1000,49 +984,6 @@ else
     }
 }
 
-#ifdef NOT
-static void showExamples(char *url, struct trackHubGenome *hubGenome, char *ucscDb)
-{
-hPrintf("<h2>Example URLs to return json data structures:</h2>\n");
-
-hPrintf("<h3>listing functions</h3>\n");
-hPrintf("<ol>\n");
-hPrintf("<li><a href='%s/list/publicHubs' target=_blank>list public hubs</a> <em>%s/list/publicHubs</em></li>\n", urlPrefix, urlPrefix);
-hPrintf("<li><a href='%s/list/ucscGenomes' target=_blank>list database genomes</a> <em>%s/list/ucscGenomes</em></li>\n", urlPrefix, urlPrefix);
-hPrintf("<li><a href='%s/list/hubGenomes?hubUrl=%s' target=_blank>list genomes from specified hub</a> <em>%s/list/hubGenomes?hubUrl=%s</em></li>\n", urlPrefix, url, urlPrefix, url);
-hPrintf("<li><a href='%s/list/tracks?hubUrl=%s&amp;genome=%s' target=_blank>list tracks from specified hub and genome</a> <em>%s/list/tracks?hubUrl=%s&amp;genome=%s</em></li>\n", urlPrefix, url, hubGenome->name, urlPrefix, url, hubGenome->name);
-hPrintf("<li><a href='%s/list/tracks?db=%s' target=_blank>list tracks from specified UCSC database</a> <em>%s/list/tracks?db=%s</em></li>\n", urlPrefix, ucscDb, urlPrefix, ucscDb);
-hPrintf("<li><a href='%s/list/chromosomes?db=%s' target=_blank>list chromosomes from specified UCSC database</a> <em>%s/list/chromosomes?db=%s</em></li>\n", urlPrefix, ucscDb, urlPrefix, ucscDb);
-hPrintf("<li><a href='%s/list/chromosomes?db=%s&amp;track=gold' target=_blank>list chromosomes from specified track from UCSC databaset</a> <em>%s/list/chromosomes?db=%s&amp;track=gold</em></li>\n", urlPrefix, ucscDb, urlPrefix, ucscDb);
-hPrintf("</ol>\n");
-
-hPrintf("<h3>getData functions</h3>\n");
-hPrintf("<ol>\n");
-hPrintf("<li><a href='%s/getData/sequence?db=%s&amp;chrom=chrM' target=_blank>get sequence from specified database and chromosome</a> <em>%s/getData/sequence?db=%s&amp;chrom=chrM</em></li>\n", urlPrefix, ucscDb, urlPrefix, ucscDb);
-hPrintf("<li><a href='%s/getData/sequence?db=%s&amp;chrom=chrM&amp;start=0&amp;end=128' target=_blank>get sequence from specified database, chromosome with start,end coordinates</a> <em>%s/getData/sequence?db=%s&amp;chrom=chrM&amp;start=0&amp;end=128</em></li>\n", urlPrefix, ucscDb, urlPrefix, ucscDb);
-hPrintf("<li><a href='%s/getData/track?db=%s&amp;track=gold' target=_blank>get entire track data from specified database and track name (gold == Assembly)</a> <em>%s/getData/track?db=%s&amp;track=gold</em></li>\n", urlPrefix, ucscDb, urlPrefix, ucscDb);
-hPrintf("<li><a href='%s/getData/track?db=%s&amp;chrom=chrM&amp;track=gold' target=_blank>get track data from specified database, chromosome and track name (gold == Assembly)</a> <em>%s/getData/track?db=%s&amp;chrom=chrM&amp;track=gold</em></li>\n", urlPrefix, ucscDb, urlPrefix, ucscDb);
-hPrintf("<li><a href='%s/getData/track?db=%s&amp;chrom=chrI&amp;track=gold&amp;start=107680&amp;end=186148' target=_blank>get track data from specified database, chromosome, track name, start and end coordinates</a> <em>%s/getData/track?db=%s&amp;chrom=chrI&amp;track=gold&amp;start=107680&amp;end=186148</em></li>\n", urlPrefix, defaultDb, urlPrefix, defaultDb);
-hPrintf("<li><a href='%s/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt&amp;genome=hg19&amp;track=ultraConserved' target=_blank>get entire track data from specified hub and track name</a> <em>%s/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt&amp;genome=hg19&amp;track=ultraConserved</em></li>\n", urlPrefix, urlPrefix);
-hPrintf("<li><a href='%s/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&amp;genome=_araTha1&amp;chrom=chrCp&amp;track=assembly_' target=_blank>get track data from specified hub, chromosome and track name (full chromosome)</a> <em>%s/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&amp;genome=_araTha1&amp;chrom=chrCp&amp;track=assembly_</em></li>\n", urlPrefix, urlPrefix);
-hPrintf("<li><a href='%s/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&amp;genome=_araTha1&amp;chrom=chr1&amp;track=assembly_&amp;start=0&amp;end=14309681' target=_blank>get track data from specified hub, chromosome, track name, start and end coordinates</a> <em>%s/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&amp;genome=_araTha1&amp;chrom=chr1&amp;track=assembly_&amp;start=0&amp;end=14309681</em></li>\n", urlPrefix, urlPrefix);
-hPrintf("<li><a href='%s/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&amp;genome=_araTha1&amp;track=gc5Base_' target=_blank>get all track data from specified hub and track name</a> <em>%s/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&amp;genome=_araTha1&amp;track=gc5Base</em></li>\n", urlPrefix, urlPrefix);
-hPrintf("<li><a href='%s/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&amp;genome=_araTha1&amp;chrom=chrMt&amp;track=gc5Base_&amp;start=143600&amp;end=143685' target=_blank>get track data from specified hub, chromosome, track name, start and end coordinates</a> <em>%s/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&amp;genome=_araTha1&amp;chrom=chrMt&amp;track=gc5Base&amp;start=143600&amp;end=143685</em></li>\n", urlPrefix, urlPrefix);
-hPrintf("<li><a href='%s/getData/track?db=%s&amp;chrom=chrI&amp;track=gc5BaseBw&amp;start=107680&amp;end=186148' target=_blank>get bigWig track data from specified database, chromosome, track name, start and end coordinates</a> <em>%s/getData/track?db=%s&amp;chrom=chrI&amp;track=gc5BaseBw&amp;start=107680&amp;end=186148</em></li>\n", urlPrefix, defaultDb, urlPrefix, defaultDb);
-hPrintf("<li><a href='%s/getData/track?db=%s&amp;chrom=chrII&amp;track=ncbiRefSeqOther&amp;start=14334626&amp;end=14979625' target=_blank>get bigBed track data from specified database, chromosome, track name, start and end coordinates</a> <em>%s/getData/track?db=%s&amp;chrom=chrII&amp;track=ncbiRefSeqOther&amp;start=14334626&amp;end=14979625</em></li>\n", urlPrefix, defaultDb, urlPrefix, defaultDb);
-hPrintf("<li><a href='%s/getData/track?db=%s&amp;chrom=chr1&amp;track=wgEncodeAwgDnaseDuke8988tUniPk&amp;start=14334626&amp;end=14979625' target=_blank>get narrowPeak track data from specified database, chromosome, track name, start and end coordinates</a> <em>%s/getData/track?db=%s&amp;chrom=chr1&amp;track=wgEncodeAwgDnaseDuke8988tUniPk&amp;start=14334626&amp;end=14979625</em></li>\n", urlPrefix, "hg19", urlPrefix, "hg19");
-hPrintf("<li><a href='%s/getData/track?db=%s&amp;chrom=chr1&amp;track=wgEncodeBroadHistoneOsteoP300kat3bPk&amp;start=14334626&amp;end=14979625' target=_blank>get broadPeak track data from specified database, chromosome, track name, start and end coordinates</a> <em>%s/getData/track?db=%s&amp;chrom=chr1&amp;track=wgEncodeBroadHistoneOsteoP300kat3bPk&amp;start=14334626&amp;end=14979625</em></li>\n", urlPrefix, "hg19", urlPrefix, "hg19");
-
-hPrintf("</ol>\n");
-
-hPrintf("<h2>Example URLs to generate errors:</h2>\n");
-hPrintf("<ol>\n");
-hPrintf("<li><a href='%s/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&amp;genome=_araTha1&amp;chrom=chrI&amp;track=assembly_&amp;start=0&amp;end=14309681' target=_blank>get track data from specified hub, chromosome, track name, start and end coordinates</a> <em>%s/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt&amp;genome=_araTha1&amp;chrom=chrI&amp;track=assembly_&amp;start=0&amp;end=14309681</em></li>\n", urlPrefix, urlPrefix);
-hPrintf("</ol>\n");
-}	/*	static void showExamples()	*/
-
-#endif
-
 static void showCartDump()
 /* for information purposes only during development, will become obsolete */
 {
@@ -1064,13 +1005,47 @@ apiErrAbort("Your host, %s, has been sending too many requests lately and is "
 
 static void sendHogMessage(char *hogHost)
 {
+hPrintf("<!DOCTYPE HTML>\n");
+hPrintf("<html lang='en'>\n");
+hPrintf("<head>\n");
+hPrintf("<meta charset=\"utf-8\">\n");
+hPrintf("<title>Status 459 Too Many Requests</title></head>\n");
+
+hPrintf("<body><h1>Status 459 Too many Requests</h1><p>\n");
 hPrintf("Your host, %s, has been sending too many requests lately and is "
        "unfairly loading our site, impacting performance for other users. "
        "Please contact genome@soe.ucsc.edu to ask that your site "
        "be reenabled.  Also, please consider downloading sequence and/or "
        "annotations in bulk -- see http://genome.ucsc.edu/downloads.html.",
        hogHost);
+hPrintf("</p></body></html>\n");
 exit(0);
+}
+
+static void hogExit()
+/* bottleneck server requests exit */
+{
+char *hogHost = getenv("REMOTE_ADDR");
+char *pathInfo = getenv("PATH_INFO");
+/* nothing on incoming path, then display the WEB page instead */
+if (sameOk("/",pathInfo))
+    pathInfo = NULL;
+if (isNotEmpty(pathInfo))
+    {
+    puts("Content-Type:application/json");
+    puts("Status: 459 Too Many Requests");
+    /* maybe a Retry-After: 3600 statement here ? */
+    puts("\n");
+    sendJsonHogMessage(hogHost);
+    }
+else
+    {
+    puts("Content-Type:text/html");
+    puts("Status: 459 Too Many Requests");
+    /* maybe a Retry-After: 3600 statement here ? */
+    puts("\n");
+    sendHogMessage(hogHost);
+    }
 }
 
 static void doMiddle(struct cart *theCart)
@@ -1120,21 +1095,9 @@ if (isNotEmpty(pathInfo))
     if (hel)	/* have valid command */
 	{
         hPrintDisable();
+        /* could check botDelay here to see if 459 status is advised */
 	puts("Content-Type:application/json");
 	puts("\n");
-	/* similar delay system as in DAS server */
-	botDelay = hgBotDelayTimeFrac(delayFraction);
-	if (botDelay > 0)
-	    {
-	    if (botDelay > 2000)
-		{
-		char *hogHost = getenv("REMOTE_ADDR");
-		sendJsonHogMessage(hogHost);
-		return;
-		}
-	    sleep1000(botDelay);
-	    }
-
         void (*apiFunction)(char **) = hel->val;
         (*apiFunction)(words);
 	return;
@@ -1143,20 +1106,9 @@ if (isNotEmpty(pathInfo))
 	commandError = TRUE;
     }
 
+/* could check botDelay here to see if 459 status is advised */
 puts("Content-Type:text/html");
 puts("\n");
-
-/* similar delay system as in DAS server */
-botDelay = hgBotDelayTimeFrac(delayFraction);
-if (botDelay > 0)
-    {
-    if (botDelay > 2000)
-	{
-	char *hogHost = getenv("REMOTE_ADDR");
-	sendHogMessage(hogHost);
-	}
-    sleep1000(botDelay);
-    }
 
 (void) hubPublicDbLoadAll();
 
@@ -1325,6 +1277,18 @@ enteredMainTime = clock1000();
 cgiSpoof(&argc, argv);
 measureTiming = TRUE;
 verboseTimeInit();
+/* similar delay system as in DAS server */
+botDelay = hgBotDelayTimeFrac(delayFraction);
+if (botDelay > 0)
+    {
+    if (botDelay > 2000)
+        {
+	hogExit();
+        return 0;
+        }
+    sleep1000(botDelay);
+    }
+
 trackCounter = hashNew(0);
 cartEmptyShellNoContent(doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;
