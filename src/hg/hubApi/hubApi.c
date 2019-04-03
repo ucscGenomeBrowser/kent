@@ -1,6 +1,7 @@
 /* hubApi - access mechanism to hub data resources. */
 #include "dataApi.h"
 #include "botDelay.h"
+#include "jsHelper.h"
 
 /*
 +------------------+------------------+------+-----+---------+-------+
@@ -36,6 +37,7 @@ static char **shortLabels = NULL;	/* public hub short labels in array */
 // struct hubPublic *publicHubList = NULL;
 static int publicHubCount = 0;
 static char *defaultHub = "Plants";
+// static char *defaultHubUrl = " http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt";
 static char *defaultDb = "ce11";
 static long enteredMainTime = 0;	/* will become = clock1000() on entry */
 		/* to allow calculation of when to bail out, taking too long */
@@ -63,6 +65,8 @@ slAddHead(&supportedTypes, el);
 el = newSlName("bigNarrowPeak");
 slAddHead(&supportedTypes, el);
 el = newSlName("bigGenePred");
+slAddHead(&supportedTypes, el);
+el = newSlName("genePred");
 slAddHead(&supportedTypes, el);
 // el = newSlName("bigPsl");
 // slAddHead(&supportedTypes, el);
@@ -668,7 +672,7 @@ return;
 	 *	unsigned chromSize)
 	 */
 
-static unsigned largestChrom(char *db, char **nameReturn)
+static unsigned largestChrom(char *db, char **nameReturn, int *chromCount)
 /* return the length and get the chrom name for the largest chrom
  * from chromInfo table.  For use is sample getData URLs
  */
@@ -685,6 +689,11 @@ if (row)
    length = sqlLongLong(row[1]);
    }
 sqlFreeResult(&sr);
+if (chromCount)
+    {
+    sqlSafef(query, sizeof(query), "select count(*) from chromInfo");
+    *chromCount = sqlQuickNum(conn, query);
+    }
 hFreeConn(&conn);
 return length;
 }
@@ -708,8 +717,9 @@ if (topTrackDb)
 	    defaultGenome = genome->name;
         char *chromName = NULL;
         unsigned chromSize = 0;
+	int chromCount = 0;
         if (isEmpty(genome->twoBitPath))
-            chromSize = largestChrom(defaultGenome, &chromName);
+            chromSize = largestChrom(defaultGenome, &chromName, &chromCount);
 	else
 	    hPrintf("    <li>twoBitPath %s genome %s</li>\n", genome->twoBitPath, defaultGenome);
 	hubCountOneTdb(hub, defaultGenome, tdb, bigDataIndex, countTracks, chromName, chromSize, defaultGenome);
@@ -930,12 +940,16 @@ static void tracksForUcscDb(char *db)
 {
 struct hash *countTracks = hashNew(0);
 char *chromName = NULL;
-unsigned chromSize = largestChrom(db, &chromName);
-hPrintf("<h4>Tracks in UCSC genome: '%s', longest chrom: %s:%u</h4>\n", db, chromName, chromSize);
+int chromCount = 0;
+unsigned chromSize = largestChrom(db, &chromName, &chromCount);
+char countString[64];
+sprintLongWithCommas(countString, chromCount);
+char sizeString[64];
+sprintLongWithCommas(sizeString, chromSize);
+hPrintf("<h4>Tracks in UCSC genome: '%s', chrom count: %s, longest chrom: %s : %s</h4>\n", db, countString, chromName, sizeString);
 struct trackDb *tdbList = obtainTdb(NULL, db);
 struct trackDb *tdb;
 hPrintf("<ul>\n");
-hPrintf("<li>%s:%u</li>\n", chromName, chromSize);
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next )
     {
     countOneTdb(db, tdb, countTracks, chromName, chromSize, NULL);
@@ -1107,8 +1121,8 @@ if (isNotEmpty(pathInfo))
     }
 
 /* could check botDelay here to see if 459 status is advised */
-puts("Content-Type:text/html");
-puts("\n");
+// puts("Content-Type:text/html");
+// puts("\n");
 
 (void) hubPublicDbLoadAll();
 
@@ -1127,7 +1141,9 @@ for ( ; el != NULL; el = el->next )
     }
 maxDbNameWidth += 1;
 
-cartWebStart(cart, database, "UCSC JSON API interface");
+webStartJWest(cart, database, "UCSC JSON API interface");
+
+hPrintf("<div class='container-fluid gbPage'>\n");
 
 if (debug)
     {
@@ -1163,19 +1179,33 @@ if (debug)
     hPrintf("</ul>\n");
     }
 
-char *goOtherHub = cartUsualString(cart, "goOtherHub", defaultHub);
+char *goOtherHub = cartUsualString(cart, "goOtherHub", "");
 char *goUcscDb = cartUsualString(cart, "goUcscDb", "");
-char *otherHubUrl = cartUsualString(cart, "urlHub", defaultHub);
-char *goPublicHub = cartUsualString(cart, "goPublicHub", defaultHub);
+char *otherHubUrl = cartUsualString(cart, "urlHub", "");
+char *goPublicHub = cartUsualString(cart, "goPublicHub", "");
 char *hubDropDown = cartUsualString(cart, "publicHubs", defaultHub);
 char *urlDropDown = urlFromShortLabel(hubDropDown);
-char *ucscDb = cartUsualString(cart, "ucscGenomes", defaultDb);
+char *ucscDb = cartUsualString(cart, "ucscGenome", defaultDb);
 char *urlInput = urlDropDown;	/* assume public hub */
+if (debug)
+    {
+    hPrintf("<ul>\n");
+    hPrintf("<li>goOtherHub: '%s'</li>\n", goOtherHub);
+    hPrintf("<li>goUcscDb: '%s'</li>\n", goUcscDb);
+    hPrintf("<li>otherHubUrl: '%s'</li>\n", otherHubUrl);
+    hPrintf("<li>goPublicHub: '%s'</li>\n", goPublicHub);
+    hPrintf("<li>hubDropDown: '%s'</li>\n", hubDropDown);
+    hPrintf("<li>urlDropDown: '%s'</li>\n", urlDropDown);
+    hPrintf("<li>ucscDb: '%s'</li>\n", ucscDb);
+    hPrintf("<li>urlInput: '%s'</li>\n", urlInput);
+    hPrintf("</ul>\n");
+    }
 if (sameWord("go", goOtherHub))	/* requested other hub URL */
     urlInput = otherHubUrl;
 else if (isEmpty(otherHubUrl))
     otherHubUrl = urlInput;
 
+skipLeadingChars
 if (commandError)
   {
   hPrintf("<h3>ERROR: no such command: '%s/%s' for endpoint '%s'</h3>", words[0], words[1], pathInfo);
@@ -1190,7 +1220,7 @@ if (measureTiming || debug)
        hPrintf("<em>hub open time: %ld millis</em><br>\n", thisTime - lastTime);
     }
 
-hPrintf("<p>Please refer to <a href='../../goldenPath/help/api.html'>API help</a> documentation for more discussion.</p>\n");
+hPrintf("<h3>Please refer to <a href='../../goldenPath/help/api.html'>API help</a> documentation for more information about data data API operation.</h3>\n");
 
 if (debug)
     showCartDump();
@@ -1222,7 +1252,7 @@ hPrintf("<br>Or, select a UCSC database name:&nbsp;");
 maxDbNameWidth *= 9;  // 9 should be font width here
 char widthPx[SMALLBUF];
 safef(widthPx, sizeof(widthPx), "width: %dpx", maxDbNameWidth);
-cgiMakeDropListClassWithIdStyleAndJavascript("ucscGenomes", "ucscGenomes",
+cgiMakeDropListClassWithIdStyleAndJavascript("ucscGenome", "ucscGenome",
     ucscDbList, ucscDataBaseCount, ucscDb, NULL, widthPx, events);
 hWrites("&nbsp;");
 hButton("goUcscDb", "go");
@@ -1236,7 +1266,10 @@ allTrackSettings = cartUsualBoolean(cart, "allTrackSettings", FALSE);
 hCheckBox("allTrackSettings", allTrackSettings);
 hPrintf("&nbsp;display all track settings for each track : %s<br>\n", allTrackSettings ? "TRUE" : "FALSE");
 
-hPrintf("<br>\n</form>\n");
+hPrintf("<br>\n");
+// if (debug)
+//    cgiMakeHiddenVar("debug", "1");
+hPrintf("</form>\n");
 
 hPrintf("<p>\n");
 if (sameWord("go", goUcscDb))	/* requested UCSC db track list */
@@ -1262,13 +1295,16 @@ if (measureTiming || debug)
     hPrintf("<em>Overall total time: %ld millis</em><br>\n", clock1000() - enteredMainTime);
 
 hPrintf("</p>\n");
+hPrintf("</div> <!-- end this page contents -->\n");
 
-cartWebEnd();
+webIncludeFile("inc/jWestFooter.html");
+webEndJWest();
+// cartWebEnd();
 }	/*	void doMiddle(struct cart *theCart)	*/
 
 /* Null terminated list of CGI Variables we don't want to save
  * permanently. */
-static char *excludeVars[] = {"Submit", "submit", "goOtherHub", "goPublicHub", "goUcscDb", "ucscGenomes", "publicHubs", NULL,};
+static char *excludeVars[] = {"Submit", "submit", "goOtherHub", "goPublicHub", "goUcscDb", "ucscGenome", "publicHubs", "clade", NULL,};
 
 int main(int argc, char *argv[])
 /* Process command line. */
