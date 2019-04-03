@@ -1,0 +1,140 @@
+<h2>Description</h2>
+<p>
+This track shows regions of transcription factor binding derived from a large collection
+of ChIP-seq experiments performed by the ENCODE project between February 2011 and November 2018.</p>
+<p>
+Transcription factors (TFs) are proteins that bind to DNA and interact with RNA polymerases to
+regulate gene expression.  Some TFs contain a DNA binding domain and can bind directly to 
+specific short DNA sequences ('motifs');
+others bind to DNA indirectly through interactions with TFs containing a DNA binding domain.
+High-throughput antibody capture and sequencing methods (e.g. chromatin immunoprecipitation
+followed by sequencing, or 'ChIP-seq') can be used to identify regions of
+TF binding genome-wide.  These regions are commonly called ChIP-seq peaks.</p>
+<p>
+ENCODE TF ChIP-seq data were processed using the 
+<a target="_blank" href="https://www.encodeproject.org/chip-seq/transcription_factor/">ENCODE Transcription Factor ChIP-seq Processing Pipeline</a> to generate peaks of TF binding.
+Peaks from 1264 experiments (1256 in hg38) representing 338 transcription factors 
+(340 in hg38) in 130 cell types (129 in hg38) are combined here into clusters to produce a 
+summary display showing occupancy regions for each factor and motif sites 
+within the regions when identified.
+<!--
+# Restore this if we make a track out of underlying peaks
+
+Additional views of the underlying ChIP-seq data are available from the
+<a href="../cgi-bin/hgTrackUi?db=hg19&g=encode3TfbsPk" 
+target="_blank">ENCODE TFBS</a> track.
+-->
+<!-- 
+# Restore this if when we add the motifs
+The 
+<a href="../cgi-bin/hgTrackUi?db=hg19&g=factorbookMotifPos" target=_blank">
+Factorbook Motif</a> track shows the complete set of motif locations
+identified in the uniform ENCODE ChIP-seq peaks.
+-->
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+A gray box encloses each peak cluster of transcription factor occupancy, with the
+darkness of the box being proportional to the maximum signal strength observed in any cell line
+contributing to the cluster. The HGNC gene name for the transcription factor is shown 
+to the left of each cluster.
+<!-- Within a cluster, a green highlight indicates 
+the highest scoring site of a Factorbook-identified canonical motif for
+the corresponding factor. (NOTE: motif highlights are shown
+only in browser windows of size 50,000 bp or less, and their display can be suppressed by unchecking
+the highlight motifs box on the track configuration page).
+Arrows on the highlight designate the matching strand of the motif.
+-->
+</p>
+<p>
+The cell lines where signal was detected for the factor are identified by single-letter 
+abbreviations shown to the right of the cluster.  
+The darkness of each letter is proportional to the signal strength observed in the cell line. 
+Abbreviations starting with capital letters designate
+<a href="https://www.encodeproject.org/search/?type=Biosample&organism.scientific_name=Homo+sapiens"
+target="_blank">ENCODE cell types</a> initially identified for intensive study, 
+while those starting with lowercase letters designate cell lines added later in the project.</p>
+<p>
+Click on a peak cluster to see more information about the TF/cell assays contributing to the
+cluster and the cell line abbreviation table.
+</p>
+
+<h2>Methods</h2>
+<p>
+<p>
+Peaks of transcription factor occupancy from ENCODE ChIP-seq datasets provided by the
+ENCODE Data Analysis Center in November 2018
+were clustered using the UCSC hgBedsToBedExps tool.  
+Scores were assigned to peaks by multiplying the input signal values by a normalization
+factor calculated as the ratio of the maximum score value (1000) to the signal value at one
+standard deviation from the mean, with values exceeding 1000 capped at 1000. This has the
+effect of distributing scores up to mean plus one 1 standard deviation across the score range,
+but assigning all above to the maximum score.
+The cluster score is the highest score for any peak contributing to the cluster.</p>  
+<!--
+<p>
+The Factorbook motif discovery and annotation pipeline uses
+the MEME-ChIP and FIMO tools from the <a href="http://meme-suite.org/doc/overview.html"
+target="_blank">MEME</a> software suite in conjunction with machine learning methods and
+manual curation to merge discovered motifs with known motifs reported in 
+<a target="blank" href="http://jaspar.genereg.net/">Jaspar</a> and
+<a href="https://portal.biobase-international.com/build_t/idb/1.0/html/bkldoc/source/bkl/transfac%20suite/transfac/tf_intro.html"
+target="_blank">TransFac</a>.
+Motif identifications reported in Wang et al. 2012 (below) were supplemented in this track
+with more recent data (derived from newer ENCODE datasets - Jan 2011 through Mar 2012 freezes),
+provided by the Factorbook team.  Motif identifications from all datasets were merged, with
+the most significant value (qvalue) reported being picked when motifs were duplicated in
+multiple cell lines.  The scores for the selected best-scoring motif sites were then transformed
+to -log10.
+</p>
+-->
+
+<h2>Release Notes</h2>
+<p>
+Release 5 (2019) of this track comprises 1264 datasets (1256 in hg38), 
+representing work performed through the 3rd phase of ENCODE.
+Release 4 (February 2014) of this track adds display of the Factorbook motifs.
+Release 3 (August 2013) added 124 datasets (690 total, vs. 486 in Release 2),
+</p>
+
+<h2>Credits</h2>
+
+<h2>References</h2>
+
+<p>
+Gerstein MB, Kundaje A, Hariharan M, Landt SG, Yan KK, Cheng C, Mu XJ, Khurana E, Rozowsky J,
+Alexander R <em>et al</em>.
+<a href="https://www.nature.com/articles/nature11245" target="_blank">
+Architecture of the human regulatory network derived from ENCODE data</a>.
+<em>Nature</em>. 2012 Sep 6;489(7414):91-100.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/22955619" target="_blank">22955619</a>
+</p>
+<p>
+Wang J, Zhuang J, Iyer S, Lin X, Whitfield TW, Greven MC, Pierce BG, Dong X, Kundaje A, Cheng Y
+<em>et al</em>.
+<a href="https://genome.cshlp.org/content/22/9/1798.long" target="_blank">
+Sequence features and chromatin structure around the genomic regions bound by 119 human
+transcription factors</a>.
+<em>Genome Res</em>. 2012 Sep;22(9):1798-812.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/22955990" target="_blank">22955990</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3431495/" target="_blank">PMC3431495</a>
+</p>
+<p>
+Wang J, Zhuang J, Iyer S, Lin XY, Greven MC, Kim BH, Moore J, Pierce BG, Dong X, Virgil D <em>et
+al</em>.
+<a href="https://academic.oup.com/nar/article/41/D1/D171/1069417" target="_blank">
+Factorbook.org: a Wiki-based database for transcription factor-binding data generated by the ENCODE
+consortium</a>.
+<em>Nucleic Acids Res</em>. 2013 Jan;41(Database issue):D171-6.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/23203885" target="_blank">23203885</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3531197/" target="_blank">PMC3531197</a>
+</p>
+
+<h2>Data Release Policy</h2>
+<p>
+While primary ENCODE data was subject to a restriction period as described in the 
+<a href="../ENCODE/terms.html" target="_blank">
+ENCODE data release policy</a>, this restriction does not apply to the integrative 
+analysis results, and all primary data underlying this track have passed the restriction date. 
+The data in this track are freely available.</p>
