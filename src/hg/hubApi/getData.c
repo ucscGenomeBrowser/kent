@@ -52,8 +52,14 @@ else if (0 == (start + end))	/* have chrom, no start,end == full chr */
     }
 else	/* fully specified chrom:start-end */
     {
+    boolean useTxStartEnd = FALSE;
     if (! sqlColumnExists(conn, table, "chrom"))
 	apiErrAbort("track '%s' is not a position track, request track without chrom specification, genome: '%s'", table, db);
+    if (! sqlColumnExists(conn, table, "chromStart"))
+	{
+        if (sqlColumnExists(conn, table, "txStart"))
+	    useTxStartEnd = TRUE;
+	}
     jsonWriteString(jw, "chrom", chrom);
     jsonWriteNumber(jw, "start", (long long)start);
     jsonWriteNumber(jw, "end", (long long)end);
@@ -64,7 +70,10 @@ else	/* fully specified chrom:start-end */
 	}
     else
 	{
-	sqlSafef(query, sizeof(query), "select * from %s where chrom='%s' AND chromEnd > %u AND chromStart < %u", table, chrom, start, end);
+	if (useTxStartEnd)
+	    sqlSafef(query, sizeof(query), "select * from %s where chrom='%s' AND txEnd > %u AND txStart < %u", table, chrom, start, end);
+	else
+	    sqlSafef(query, sizeof(query), "select * from %s where chrom='%s' AND chromEnd > %u AND chromStart < %u", table, chrom, start, end);
 	}
     }
 
