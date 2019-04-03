@@ -1325,31 +1325,31 @@ subGroup2 factor Factor \
     ZZZ3=ZZZ3
 
     track encode3TfbsPkENCFF512IAI
-    parent encode3TfbsPk off
+    parent encode3TfbsPk on
     shortLabel K562 TCF7
     longLabel TFBS Peaks of TCF7 in K562 from ENCODE3 (ENCFF512IAI)
     subGroups cellType=K562 factor=TCF7
 
     track encode3TfbsPkENCFF403BWK
-    parent encode3TfbsPk off
+    parent encode3TfbsPk on
     shortLabel MCF-7 MNT
     longLabel TFBS Peaks of MNT in MCF-7 from ENCODE3 (ENCFF403BWK)
     subGroups cellType=MCF-7 factor=MNT
 
     track encode3TfbsPkENCFF116VEG
-    parent encode3TfbsPk off
+    parent encode3TfbsPk on
     shortLabel vagina EP300
     longLabel TFBS Peaks of EP300 in vagina from ENCODE3 (ENCFF116VEG)
     subGroups cellType=vagina factor=EP300
 
     track encode3TfbsPkENCFF389ULP
-    parent encode3TfbsPk off
+    parent encode3TfbsPk on
     shortLabel body_of_pancreas POLR2A
     longLabel TFBS Peaks of POLR2A in body_of_pancreas from ENCODE3 (ENCFF389ULP)
     subGroups cellType=body_of_pancreas factor=POLR2A
 
     track encode3TfbsPkENCFF327GZX
-    parent encode3TfbsPk off
+    parent encode3TfbsPk on
     shortLabel endothelial_cell_of_umbilical_vein FOS
     longLabel TFBS Peaks of FOS in endothelial_cell_of_umbilical_vein from ENCODE3 (ENCFF327GZX)
     subGroups cellType=endothelial_cell_of_umbilical_vein factor=FOS
