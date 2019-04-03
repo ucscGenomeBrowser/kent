@@ -1,24 +1,16 @@
 <h2>Description</h2>
 <p>
-MANE, Matched Annotation from the NCBI and Ensembl-EBI, provides a matched set of well-supported
-transcripts for human protein-coding genes and defines one representative transcript for each
-gene. This data is intended to be a common reference transcript dataset, including one or a few key
-transcripts for each gene where RefSeq and Ensembl/GENCODE transcripts are identical in length
-and sequence, and completely match the human reference genome sequence. 
-
-To pick representative transcripts, the MANE collaborators developed computational methods to 
-evaluate transcript expression levels, protein conservation, support from archived transcript 
-submissions, clinical relevance, and other factors.  Complex genes are subject to review by
-annotation experts from both groups and often make improvements to both annotation sets.
-
-This minimal, identically annotated transcript set will eliminate the need to choose between RefSeq
-and Ensembl/GENCODE datasets for genomic analyses. This should make it easy for researchers who
-currently prefer one dataset over the other to exchange data or translate coordinates
-(or HGVS variation expressions) between RefSeq and Ensembl annotation results.
-
-Note that this data (from MANE 0.5) is a beta release and only covers 53% or protein coding genes.
-Both RefSeq and Ensembl will continue to provide a rich set of alternate transcripts
-in the RefSeq-All and the GENCODE tracks.
+The Matched Annotation from NCBI and EMBL-EBI (MANE) project aims to produce a matched set of 
+high-confidence transcripts that are identically annotated between RefSeq (NCBI) and 
+Ensembl/GENCODE (led by EMBL-EBI). Transcripts for MANE are chosen by a combination of 
+automated and manual methods based on conservation, expression levels, clinical significance, 
+and other factors. Transcripts are matched between the NCBI RefSeq and Ensembl/GENCODE annotations
+based on the GRCh38 genome assembly, with precise 5’ and 3’ ends defined by high-throughput
+sequencing or other available data.
+<br><br>
+Note that MANE v0.5 (December 2018) is a beta release and only covers 53% or protein coding genes.
+RefSeq and Ensembl will continue to develop this single transcript gene set and provide
+comprehensive sets of alternate transcripts in the RefSeq-All and the GENCODE tracks.
 
 <h2>Data Access</h2>
 <p>
@@ -29,10 +21,12 @@ a bigGenePred file that can be downloaded from the
 <a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/mane/" target="_blank">download
 server</a>. Regional or genome-wide annotations can be converted from binary data to human readable
 text using our command line utility <em>bigBedToBed</em> which can be compiled from source code or
-downloaded as a precompiled binary for your system. Instructions for download can be found in the
+downloaded as a precompiled binary for your system. Files and instructions can be found in the
 <a href="http://hgdownload.soe.ucsc.edu/admin/exe/" target="_blank">utilities directory</a>.
+
 The utility can be used to obtain features within a given range, for example:</p>
 <code>bigBedToBed -chrom=chr6 -start=0 -end=1000000 http://hgdownload.soe.ucsc.edu/gbdb/hg38/mane/mane.0.5.bb stdout</code>
+
 <p>
 Please refer to our <a href="../FAQ/FAQdownloads.html#download36" target="_blank">Data Access FAQ
 </a> for more information or our
