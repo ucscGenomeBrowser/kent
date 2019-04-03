@@ -25,6 +25,7 @@ return factorSourceLoad(row);
 /* Save info about factors and their motifs */
 struct factorSourceInfo {
     boolean showCellAbbrevs;
+    boolean showCellCounts;
     struct hash *factorChoices;
     struct hash *motifTargets;
     struct bed6FloatScore *motifs;
@@ -51,10 +52,12 @@ struct factorSourceInfo *fsInfo = NULL;
 AllocVar(fsInfo);
 track->extraUiData = fsInfo;
 
-// Check UI setting to show cell abbreviations
+// Check UI setting to show cell abbreviations or counts
 char varName[64];
 safef(varName, sizeof(varName), "%s.showCellAbbrevs", track->track);
 fsInfo->showCellAbbrevs = cartUsualBoolean(cart, varName, TRUE);
+safef(varName, sizeof(varName), "%s.showCellCounts", track->track);
+fsInfo->showCellCounts = cartUsualBoolean(cart, varName, TRUE);
 
 // Filter factors based on multi-select
 filterBy_t *filter = filterBySetGet(track->tdb, cart, NULL);
