@@ -1205,7 +1205,6 @@ if (sameWord("go", goOtherHub))	/* requested other hub URL */
 else if (isEmpty(otherHubUrl))
     otherHubUrl = urlInput;
 
-skipLeadingChars
 if (commandError)
   {
   hPrintf("<h3>ERROR: no such command: '%s/%s' for endpoint '%s'</h3>", words[0], words[1], pathInfo);
