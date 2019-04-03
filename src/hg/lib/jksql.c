@@ -3175,7 +3175,7 @@ else
 updateIx = getUpdateFieldIndex(sr);
 row = sqlNextRow(sr);
 if (row == NULL)
-    sqlAbort(conn, "Database table %s doesn't exist", table);
+    errAbort("Database table %s doesn't exist", table);
 ret = cloneString(row[updateIx]);
 sqlFreeResult(&sr);
 if (changeDb)
