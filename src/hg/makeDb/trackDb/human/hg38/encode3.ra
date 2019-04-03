@@ -4,8 +4,8 @@
     # This will be released track
     track encode3RegTfbsCluster
     release alpha
-    shortLabel TFBS Clusters
-    longLabel Transcription Factor ChIP-seq (340 factors, 129 cell types) from ENCODE 3
+    shortLabel TF ChIP Clusters (E3)
+    longLabel Transcription Factor ChIP-seq (340 factors, 129 cell types) Clusters from ENCODE 3
     type factorSource
     superTrack wgEncodeReg dense
     sourceTable encode3RegTfbsExp
@@ -16,8 +16,9 @@
     idInUrlSql select value from factorbookGeneAlias where name='%s'
     visibility dense
     useScore 1
-    priority 1.69
+    priority 1.91
     maxWindowToDraw 10000000
+    dataVersion ENCODE 3 Nov 2018
     filterBy name:factor=\
         AFF1,\
         AGO1,\
@@ -364,8 +365,8 @@
     # Includes modified cell types. Not for release
     track encode3RegTfbsWithModsCluster
     release alpha
-    shortLabel E3 Txn Factor +Mods
-    longLabel Transcription Factor ChIP-seq (453 factors, 129 cell types ) from ENCODE 3 (+Mods)
+    shortLabel TF ChIP Clusters (E3) +Mods
+    longLabel Transcription Factor ChIP-seq (453 factors, 129 cell types ) Clusters from ENCODE 3 (+Mods)
     type factorSource
     superTrack wgEncodeReg dense
     sourceTable encode3RegTfbsWithModsExp
@@ -376,7 +377,7 @@
     idInUrlSql select value from factorbookGeneAlias where name='%s'
     visibility dense
     useScore 1
-    priority 1.71
+    priority 1.92
     maxWindowToDraw 10000000
     dataVersion ENCODE 3 Nov 2018
     filterBy name:factor=\

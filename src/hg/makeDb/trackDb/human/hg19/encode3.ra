@@ -4,7 +4,7 @@
     # For release
     track encode3RegTfbsCluster
     release alpha
-    shortLabel TFBS Clusters (E3)
+    shortLabel TF ChIP Clusters (E3)
     longLabel Transcription Factor Binding Site Clusters from ChIP-seq by ENCODE 3 (338 factors, 130 cell types)
     type factorSource
     superTrack wgEncodeReg dense
@@ -363,7 +363,7 @@
     # Includes modded cell lines.  Not for release
     track encode3RegTfbsWithModsCluster
     release alpha
-    shortLabel TFBS Clusters (E3) (+Mods)
+    shortLabel TF ChIP Clusters (E3) (+Mods)
     longLabel Transcription Factor Binding Site Clusters from ChIP-seq by ENCODE 3 (454 factors) (+Mods)
     type factorSource
     superTrack wgEncodeReg dense
