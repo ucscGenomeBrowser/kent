@@ -50,8 +50,8 @@ class CommandLine():
             self.parser.print_help()
             sys.exit(1)
 
-        if self.args.filter_track_list:
-            filterFh = open(self.args.filter_track_list)
+        if self.args.default_track_list:
+            filterFh = open(self.args.default_track_list)
             setDefaultTracks(filterFh)
 
 def setDefaultTracks(inFh):
@@ -137,7 +137,7 @@ def main(args=None):
         args = CommandLine(args).args
 
     removeDefaults = False
-    if args.filter_track_list is not None:
+    if args.default_track_list is not None:
         removeDefaults = True
     inFh = ""
     #sys.stderr.write("parsing input file: %s\n"% args.inFile)
