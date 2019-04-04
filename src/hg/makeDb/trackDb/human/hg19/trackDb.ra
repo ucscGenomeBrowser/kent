@@ -2632,4 +2632,4 @@ include ../../crispr10K.ra alpha
 track ensGene override
 ensemblIdUrl https://grch37.ensembl.org/Homo_sapiens
 
-include encode3.ra
+include encode3.ra alpha
