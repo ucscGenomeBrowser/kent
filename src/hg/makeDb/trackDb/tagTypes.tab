@@ -42,7 +42,7 @@ baseQualRange bam
 bedFilter bed
 bedNameLabel bed barChart bigBarChart bigBed
 bedPackDense bed bigBed
-bigDataUrl customTracks bigBed bigWig bam vcfTabix bigPsl halSnake bigBarChart gtexTranscExpr bigInteract bigChain bigGenePred
+bigDataUrl customTracks bigBed bigWig bam vcfTabix bigPsl halSnake bigBarChart gtexTranscExpr bigInteract bigChain bigGenePred bigLolly
 bigGeneDataUrl genePred
 blastRef psl bigPsl
 boxedCfg *
@@ -242,6 +242,8 @@ linkIdInName bed bigBed
 labelFields bigBed bigPsl bigGenePred bigBarChart bigInteract
 labelOnFeature bed bigBed
 labelSeparator bigBed bigPsl bigGenePred
+lollipopField bigBed bigLolly
+lollyField bigBed bigLolly
 longLabel *
 longlabel genePred
 longLabelClip *
@@ -478,7 +480,7 @@ url2 bed genePred bigBarChart
 url2Label bed genePred bigBarChart
 urlLabel *
 urlName genePred psl bigPsl
-urls bigBed bed bigPsl genePred psl bigBarChart bigGenePred
+urls bigBed bed bigPsl genePred psl bigBarChart bigGenePred bigLolly
 useScore *
 view *
 viewLimits *
