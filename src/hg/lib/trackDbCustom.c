@@ -763,6 +763,8 @@ else if (sameWord("barChart", type) || sameWord("bigBarChart", type))
     cType = cfgBarChart;
 else if (sameWord("interact", type) || sameWord("bigInteract", type))
     cType = cfgInteract;
+else if (sameWord("bigLolly", type))
+    cType = cfgLollipop;
 // TODO: Only these are configurable so far
 
 if (cType == cfgNone && warnIfNecessary)
