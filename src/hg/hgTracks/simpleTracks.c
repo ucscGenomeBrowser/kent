@@ -13990,7 +13990,7 @@ else if (sameWord(type, "bigLolly"))
     {
     tdb->canPack = TRUE;
     track->isBigBed = TRUE;
-    lollipopMethods(track, tdb, wordCount, words);
+    lollyMethods(track, tdb, wordCount, words);
     }
 else if (sameWord(type, "bigInteract"))
     {

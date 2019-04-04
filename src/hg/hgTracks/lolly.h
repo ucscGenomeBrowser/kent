@@ -7,8 +7,10 @@
 #define LOLLY_H
 
 
-/*	lollyOptions structure */
-struct lollyOptions
+/*	lollyCartOptions structure */
+struct lollyCartOptions
     {
+    int height;
+    double upperLimit, lowerLimit;
     };
 #endif 
