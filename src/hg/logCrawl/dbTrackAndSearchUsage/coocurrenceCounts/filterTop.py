@@ -17,8 +17,7 @@ import numpy as np
 trackNames = [] # ["knownGene", "snp150", ... ]
 matrix = [] # will become numpy array of len(trackNames) x len(trackNames)
 offsets = [] # offsets of specific rows into input matrix
-
-hg19DefaultTracks = ["hg19Patch13Haplotypes","hg19Patch13Patches","hg19Patch13","cytoBandIdeo","knownGene","ncbiRefSeq","ncbiRefSeqCurated","ncbiRefSeqOther","ncbiRefSeqPsl","refGene","ncbiRefSeqHgmd","refSeqComposite","pubsBlat","pubsMarkerSnp","pubs","gtexGene","wgEncodeRegMarkH3k27acGm12878","wgEncodeRegMarkH3k27acH1hesc","wgEncodeRegMarkH3k27acHsmm","wgEncodeRegMarkH3k27acHuvec","wgEncodeRegMarkH3k27acK562","wgEncodeRegMarkH3k27acNhek","wgEncodeRegMarkH3k27acNhlf","wgEncodeRegMarkH3k27ac","wgEncodeRegDnaseClustered","wgEncodeRegTfbsClusteredV3","phyloP100wayAll","multiz100way","cons100way","snp151Common","rmsk"]
+defaultTrackList = [] # list of tracks to filter out, provided by user
 
 class CommandLine():
     """Parse command line, handle program usage, and help"""
@@ -31,8 +30,8 @@ class CommandLine():
             help="Number of related tracks to keep, defaults to 25.")
         self.parser.add_argument('-t', '--track', action='store',
             help="Show -n size matrix (default 25) for this track only.")
-        self.parser.add_argument('--remove-defaults', action='store_true', default=False,
-            help="Remove default tracks. If -t option is used then that track will be included but others will be removed. Currently hardcoded to the hg19 default track set.")
+        self.parser.add_argument('--default-track-list', action='store',
+            help="List of tracks (ie: default tracks) to remove from results, one track per line.")
         self.parser.add_argument('inFile', action='store',
             help="Input cooccurrence matrix file to parse, use \"stdin\" to read from stdin.")
         self.parser.add_argument('outFile', action='store',
@@ -47,9 +46,19 @@ class CommandLine():
             self.parser.print_help()
 
         if not self.args.inFile:
-            print("Missing inFile.")
+            print("ERROR: Missing inFile.")
             self.parser.print_help()
             sys.exit(1)
+
+        if self.args.filter_track_list:
+            filterFh = open(self.args.filter_track_list)
+            setDefaultTracks(filterFh)
+
+def setDefaultTracks(inFh):
+    """Builds up the defaultTrackList global"""
+    for line in inFh:
+        track = line.strip()
+        defaultTrackList.append(track)
 
 def writeMatrix(outFh, mat):
     """pretty print matrix to out file"""
@@ -72,66 +81,53 @@ def loadMatrix(inFh):
         if "str" not in str(type(line)):
             line = line.decode("ASCII")
         if lineIx == 0:
-            l = line.strip().split('\t')
-            if l[0] == "tracks" or l[0][0] == "#": # first line
-                if l[0] == "tracks":
-                    trackNames =  l[1:]
-                elif l[0][0] == "#":
-                    trackName = l[0][1:]
-                    if trackName[0] != "":
-                        trackNames += l[1:]
-                    else:
-                        trackNames = l[1:]
+            splitLine = line.strip().split('\t')
+            # first line
+            if splitLine[0] == "tracks" or splitLine[0] == "#tracks" or splitLine[0] == "#":
+                trackNames =  splitLine[1:]
+            elif splitLine[0][0] == "#" and splitLine[0] != "#tracks":
+                # skip the leading "#"
+                firstTrack = splitLine[0][1:]
+                trackNames = [firstTrack] + splitLine[1:]
             else:
-                trackNames = l
+                trackNames = splitLine
             trackNames = np.array(trackNames, dtype=np.str_)
             lineIx += 1
             numColumns = len(trackNames)
-            #sys.stderr.write("numColumns = %d\n" % numColumns)
             matrix = np.zeros((numColumns, numColumns))
         else:
             matrix[lineIx-1] = np.fromstring(line, dtype=np.int64, count=numColumns, sep='\t')
             lineIx += 1
 
 def filterOneTrack(inFh, cutoff, tName, removeDefaults=False):
-    """For a given tName, make a matrix of the top cutoff tracks used
+    """For a given tName, slice out a matrix of the top cutoff tracks used
        along with it."""
-    global matrix
-    global trackNames
-    global hg19DefaultTracks
-    if tName in hg19DefaultTracks:
-        hg19DefaultTracks.remove(tName)
-    tIxTuple = np.where(trackNames == tName) # returns a tuple ([tIx],None)
-    tIx = tIxTuple[0][0] # get first elem of tuple, first elem of array
-    sortIx = []
-    if removeDefaults:
-        temp = np.argsort(matrix[tIx])[::-1]
-        nonDefaults = list(set(trackNames) - set(hg19DefaultTracks))
-        sortIx = [index for index in temp if trackNames[index] in nonDefaults]
-        sortIx = np.array(sortIx)[:cutoff]
-    else:
-        sortIx = np.argsort(matrix[tIx])[::-1][:cutoff] # top cutoff track indexes used with tName
-    trackNames = trackNames[sortIx]
-    return matrix[np.ix_(sortIx, sortIx)].astype(int)
+    if tName in defaultTrackList:
+        defaultTrackList.remove(tName)
+    # returns a tuple ([tIx],None)
+    tIxTuple = np.where(trackNames == tName)
+    # get first elem of tuple, first elem of array
+    tIx = tIxTuple[0][0]
+    matrixIndices = np.argsort(matrix[tIx])[::-1]
+    return sliceMatrix(matrixIndices, cutoff, removeDefaults)
 
 def filterTopTracks(inFh, cutoff, removeDefaults=False):
     """Move along diagonal of matrix and collect tracks counts.
-       Then sort and find the cutoff number of tracks.
-       Lastly go back through the matrix and make a new matrix
-       of these cutoff number of tracks."""
-    global matrix
+       Then slice the matrix, according to the cutoff value."""
+    diagIndices = np.argsort(np.diagonal(matrix).copy())[::-1]
+    return sliceMatrix(diagIndices, cutoff, removeDefaults)
+
+def sliceMatrix(matrixIndices, cutoff, removeDefaults=False):
+    """For a given matrix, slice out the region we are interested in"""
     global trackNames
-    diag = np.diagonal(matrix).copy()
-    sortIx = []
     if removeDefaults:
-        temp = np.argsort(diag)[::-1]
-        nonDefaults = list(set(trackNames) - set(hg19DefaultTracks))
-        sortIx = [index for index in temp if trackNames[index] in nonDefaults]
-        sortIx = np.array(sortIx)[:cutoff]
+        nonDefaults = list(set(trackNames) - set(defaultTrackList))
+        indices = [index for index in matrixIndices if trackNames[index] in nonDefaults]
+        sortedCutoffIndices = np.array(indices)[:cutoff]
     else:
-        sortIx = np.argsort(diag)[::-1][:cutoff] # indexes of tracks with counts above cutoff
-    trackNames = trackNames[sortIx]
-    return matrix[np.ix_(sortIx,sortIx)].astype(int)
+        sortedCutoffIndices = matrixIndices[:cutoff]
+    trackNames = trackNames[sortedCutoffIndices]
+    return matrix[np.ix_(sortedCutoffIndices,sortedCutoffIndices)].astype(int)
 
 def main(args=None):
     """Sets up command line processing and does input processing"""
@@ -140,10 +136,12 @@ def main(args=None):
     else:
         args = CommandLine(args).args
 
-    removeDefaults = args.remove_defaults
+    removeDefaults = False
+    if args.filter_track_list is not None:
+        removeDefaults = True
     inFh = ""
     #sys.stderr.write("parsing input file: %s\n"% args.inFile)
-    if args.inFile[-3:] == ".gz":
+    if args.inFile.endswith(".gz"):
         inFh = gzip.open(args.inFile, "rb")
     else:
         if args.inFile == "stdin":
@@ -156,7 +154,8 @@ def main(args=None):
         cutoff = args.n if args.n < len(trackNames) else len(trackNames)
         ret = filterOneTrack(inFh, cutoff, args.track, removeDefaults)
         if (len(ret) > cutoff):
-            sys.stderr.write("error in filterOneTrack, len(ret) = %d, cutoff = %d\n" % (len(ret), args.n))
+            sys.stderr.write("ERROR: filterOneTrack: len(ret) = %d, cutoff = %d\n" %
+                (len(ret), args.n))
             sys.exit(1)
     else:
         ret = filterTopTracks(inFh, args.n, removeDefaults)
