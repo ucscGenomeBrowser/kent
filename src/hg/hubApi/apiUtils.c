@@ -2,6 +2,28 @@
 
 #include "dataApi.h"
 
+#ifdef NOT
+static void jsonFinishOutput(int errorCode, char *errorString, struct jsonWrite *jw)
+/* potential output an error code other than 200 */
+{
+/* this is the first time any output to stdout has taken place for
+ * json output, therefore, start with the appropriate header
+ */
+puts("Content-Type:application/json");
+/* potentially with an error code return */
+if (errorCode)
+    {
+    char errString[2048];
+    safef(errString, sizeof(errString), "Status: %d %s",errorCode,errorString);
+    puts(errString);
+    }
+puts("\n");
+
+jsonWriteObjectEnd(jw);
+fputs(jw->dy->string,stdout);
+}
+#endif
+
 void apiErrAbort(char *format, ...)
 /* Issue an error message in json format, and exit(0) */
 {
@@ -11,6 +33,7 @@ va_start(args, format);
 vsnprintf(errMsg, sizeof(errMsg), format, args);
 struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "error", errMsg);
+// jsonFinishOutput(400, "Bad Request", jw);
 jsonWriteObjectEnd(jw);
 fputs(jw->dy->string,stdout);
 exit(0);
