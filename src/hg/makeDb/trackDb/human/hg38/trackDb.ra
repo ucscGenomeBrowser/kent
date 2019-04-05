@@ -9,6 +9,8 @@ include cancerExpr.ra
 
 include mane.ra
 
+include gdcCancer.ra
+
 track miRnaAtlas
 compositeTrack on
 shortLabel miRNA Tissue Atlas
