@@ -7,18 +7,18 @@
 
 <h1>bigGenePred Track Format</h1> 
 <p>
-The bigGenePred format stores positional annotations items for collections of exons, much as 
-<a href="../../FAQ/FAQformat.html#format1">BED</a> files indexed as bigBeds do. However, the
-bigGenePred format includes 8 additional fields that contain details about coding frames,
-annotation status, and other gene-specific information. This is most commonly used in the Browser
-to display individual codons, highlighting start, stop, and amino acid translations.</p>
+The bigGenePred format stores positional annotation items for collections of exons in a compressed
+format, similar to how <a href="../../FAQ/FAQformat.html#format1">BED</a> files can be compressed
+into bigBeds. The bigGenePred format includes 8 additional fields that contain details about coding
+frames,annotation status, and other gene-specific information. This is commonly used in the Browser
+to display start codons, stop codons, and amino acid translations.</p>
 <p>
-bigGenePred files that have not been compressed can be described as bed12+8 files. They can be
-created using the program <code>bedToBigBed</code>, run with the <code>-as</code> option to pull
-in a special <a href="http://www.linuxjournal.com/article/5949" target="_blank">autoSql</a>
-(<em>.as</em>) file that defines the extra fields of the bigGenePred.</p> 
+Before compression, bigGenePred files can be described as bed12+8 files. bigGenePred
+files can be created using the program <code>bedToBigBed</code>, run with the <code>-as</code>
+option to pull in a special <a href="http://www.linuxjournal.com/article/5949" target="_blank">
+autoSql</a> (<em>.as</em>) file that defines the extra fields of the bigGenePred.</p> 
 <p>
-Much like bigBed, bigGenePred files are in an indexed binary format. The main advantage of binary
+Much like bigBed, bigGenePred files are in an indexed binary format. The advantage of using a binary
 format is that only the portions of the file needed to display a particular region are read by the
 Genome Browser server. Because of this, indexed binary files have much faster display performance 
 than regular BED format files when working with large data sets. The bigGenePred file remains on 
@@ -74,9 +74,10 @@ basic <a href="../../FAQ/FAQformat.html#format1">BED file format</a>. You can al
 the <a href="../../FAQ/FAQformat.html#format9">genePred format</a>. 
 Your bigGenePred file must also contain the 8 extra fields described in the autoSql file definition 
 shown above: <code>name2, cdsStartStat, cdsEndStat, exonFrames, type, geneName, geneName2, 
-geneType</code>. Your bigGenePred file must be sorted first on the <code>chrom</code> field, and 
-secondarily on the <code>chromStart</code> field. You can use the UNIX <code>sort</code> command to 
-do this:</p> 
+geneType</code>. For reference, you can use this example bed12+8 input file, 
+<a href="examples/bigGenePred.txt">bigGenePred.txt</a>. Your bigGenePred file must be sorted 
+first on the <code>chrom</code> field, and secondarily on the <code>chromStart</code> field. You
+can use the UNIX <code>sort</code> command to do this:</p> 
 <pre><code>sort -k1,1 -k2,2n unsorted.bed &gt; input.bed</code></pre>
 <p>
 <strong>Step 2.</strong> 
@@ -208,6 +209,42 @@ file.</p>
   (<em>step 7</em>, above).</li>
 </ol>
 
+<h3>Example &num;4</h3>
+<p>In this example, you will convert a genePred file to bigGenePred using command line utilities.
+You can download utilities from the
+<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">utilities directory</a>.</p>
+<ol>
+  <li>
+  Obtain a genePred extended file. Here we are downloading the Comprehensive Gencode V28 gene data.
+  <pre><code>wget http://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/wgEncodeGencodeCompV28.txt.gz</code></pre></li>
+  <li>
+  Uncompress the file.
+  <pre><code>gunzip wgEncodeGencodeCompV28.txt.gz </code></pre></li>
+  <li>
+Isolate columns 2 till the end, removing the bin column, and saving as <em>wgCompV28Cut.txt</em>.
+  <pre><code>cut -f 2- wgEncodeGencodeCompV28.txt > wgCompV28Cut.txt </code></pre></li>
+  <li>
+  Convert the genePred extended file to a bigGenePred text file, reordering and adding columns.
+  <pre><code>genePredToBigGenePred wgCompV28Cut.txt wgEncodeGencodeCompV28BigGP.txt</code></pre></li>
+  <li>
+  Obtain input files for the binary conversion.
+  <pre><code>fetchChromSizes hg38 > hg38.chrom.sizes
+wget https://hgwdev.gi.ucsc.edu/goldenPath/help/examples/bigGenePred.as</code></pre></li>
+  <li>
+  Convert your text bigGenePred to a binary indexed format.
+  <pre><code>bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as wgEncodeGencodeCompV28BigGP.txt hg38.chrom.sizes wgEncodeGencodeCompV28.bgp</code></pre></li>
+  <li> 
+  Put your binary indexed file in a web-accessible location. See the <a href=”https://genome.ucsc.edu/goldenpath/help/hgTrackHubHelp.html#Hosting”>hosting section</a> for more information.</li>
+  <li>
+  View your dataset in the Browser by entering your data URL in the bigDataUrl field of the URL.
+  <pre><code>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hgct_customText=track%20type=bigGenePred%20bigDataUrl=https://hgwdev.gi.ucsc.edu/~dschmelt/wgEncodeGencodeCompV28.bgp</code></pre>
+You can also add your data in the <a href="../../cgi-bin/hgCustom?db=hg38">custom track management
+page</a>. This allows you to set position, configuration options, and write a more complete 
+desciption. If you want to see codons, you will have to right click to configure codon view or
+set this option using the <code>baseColorDefault=genomicCodons</code> code as is done below.
+<pre><code>browser position chr10:67,884,600-67,884,900 
+track type=bigGenePred baseColorDefault=genomicCodons name="bigGenePred Example Four" description="BGP Made from genePred" visibility=pack bigDataUrl=https://hgwdev.gi.ucsc.edu/~dschmelt/wgEncodeGencodeCompV28.bgp</code></pre></li>
+</ol>
 <h2>Sharing your data with others</h2>
 <p>
 If you would like to share your bigGenePred data track with a colleague, learn how to create a URL

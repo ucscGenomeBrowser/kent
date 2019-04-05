@@ -30,6 +30,18 @@ for (el = wds->ascii; itemCount < maxItemsOutput && el; el = el->next)
 jsonWriteListEnd(jw);
 }
 
+static void jsonDatumOut(struct jsonWrite *jw, char *name, char *val,
+    int jsonType)
+/* output a json item, determine type, appropriate output */
+{
+if (JSON_DOUBLE == jsonType)
+    jsonWriteDouble(jw, name, sqlDouble(val));
+else if (JSON_NUMBER == jsonType)
+    jsonWriteNumber(jw, name, sqlLongLong(val));
+else
+    jsonWriteString(jw, name, val);
+}
+
 static void tableDataOutput(char *db, struct trackDb *tdb,
     struct sqlConnection *conn, struct jsonWrite *jw, char *table,
     char *chrom, unsigned start, unsigned end)
@@ -44,6 +56,7 @@ else if (0 == (start + end))	/* have chrom, no start,end == full chr */
     /* need to extend the chrom column check to allow tName also */
     if (! sqlColumnExists(conn, table, "chrom"))
 	apiErrAbort("track '%s' is not a position track, request track without chrom specification, genome: '%s'", table, db);
+    jsonWriteString(jw, "chrom", chrom);
     struct chromInfo *ci = hGetChromInfo(db, chrom);
     jsonWriteNumber(jw, "start", (long long)0);
     jsonWriteNumber(jw, "end", (long long)ci->size);
@@ -51,8 +64,15 @@ else if (0 == (start + end))	/* have chrom, no start,end == full chr */
     }
 else	/* fully specified chrom:start-end */
     {
+    boolean useTxStartEnd = FALSE;
     if (! sqlColumnExists(conn, table, "chrom"))
 	apiErrAbort("track '%s' is not a position track, request track without chrom specification, genome: '%s'", table, db);
+    if (! sqlColumnExists(conn, table, "chromStart"))
+	{
+        if (sqlColumnExists(conn, table, "txStart"))
+	    useTxStartEnd = TRUE;
+	}
+    jsonWriteString(jw, "chrom", chrom);
     jsonWriteNumber(jw, "start", (long long)start);
     jsonWriteNumber(jw, "end", (long long)end);
     if (startsWith("wig", tdb->type))
@@ -62,14 +82,31 @@ else	/* fully specified chrom:start-end */
 	}
     else
 	{
-	sqlSafef(query, sizeof(query), "select * from %s where chrom='%s' AND chromEnd > %u AND chromStart < %u", table, chrom, start, end);
+	if (useTxStartEnd)
+	    sqlSafef(query, sizeof(query), "select * from %s where chrom='%s' AND txEnd > %u AND txStart < %u", table, chrom, start, end);
+	else
+	    sqlSafef(query, sizeof(query), "select * from %s where chrom='%s' AND chromEnd > %u AND chromStart < %u", table, chrom, start, end);
 	}
     }
 
 /* continuing, not a wiggle output */
 char **columnNames = NULL;
 char **columnTypes = NULL;
-int columnCount = tableColumns(conn, jw, table, &columnNames, &columnTypes);
+int *jsonTypes = NULL;
+int columnCount = tableColumns(conn, jw, table, &columnNames, &columnTypes, &jsonTypes);
+if (debug)
+    {
+    jsonWriteObjectStart(jw, "columnTypes");
+    int i = 0;
+    for (i = 0; i < columnCount; ++i)
+	{
+	char bothTypes[1024];
+	safef(bothTypes, sizeof(bothTypes), "%s - %s", columnTypes[i], jsonTypeStrings[jsonTypes[i]]);
+	jsonWriteString(jw, columnNames[i], bothTypes);
+//	jsonWriteString(jw, columnNames[i], columnTypes[i]);
+	}
+    jsonWriteObjectEnd(jw);
+    }
 jsonWriteListStart(jw, table);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row = NULL;
@@ -79,7 +116,9 @@ while (itemCount < maxItemsOutput && (row = sqlNextRow(sr)) != NULL)
     jsonWriteObjectStart(jw, NULL);
     int i = 0;
     for (i = 0; i < columnCount; ++i)
-	jsonWriteString(jw, columnNames[i], row[i]);
+	{
+	jsonDatumOut(jw, columnNames[i], row[i], jsonTypes[i]);
+	}
     jsonWriteObjectEnd(jw);
     ++itemCount;
     }
@@ -87,47 +126,19 @@ sqlFreeResult(&sr);
 jsonWriteListEnd(jw);
 }
 
-/* from hgTables.h */
-struct sqlFieldType
-/* List field names and types */
-    {
-    struct sqlFieldType *next;
-    char *name;         /* Name of field. */
-    char *type;         /* Type of field (MySQL notion) */
-    }; 
-
-/* from hgTables.c */
-static struct sqlFieldType *sqlFieldTypeNew(char *name, char *type)
-/* Create a new sqlFieldType */
-{
-struct sqlFieldType *ft;
-AllocVar(ft);
-ft->name = cloneString(name);
-ft->type = cloneString(type);
-return ft;
-}
-
-/* from hgTables.c */
-static struct sqlFieldType *sqlFieldTypesFromAs(struct asObject *as)
-/* Convert asObject to list of sqlFieldTypes */
-{
-struct sqlFieldType *ft, *list = NULL;
-struct asColumn *col;
-for (col = as->columnList; col != NULL; col = col->next)
-    {
-    struct dyString *type = asColumnToSqlType(col);
-    ft = sqlFieldTypeNew(col->name, type->string);
-    slAddHead(&list, ft);
-    dyStringFree(&type);
-    }
-slReverse(&list);
-return list;
-}
-
 static void bedDataOutput(struct jsonWrite *jw, struct bbiFile *bbi,
     char *chrom, unsigned start, unsigned end, struct sqlFieldType *fiList)
 /* output bed data for one chrom in the given bbi file */
 {
+int *jsonTypes = NULL;
+int columnCount = slCount(fiList);
+AllocArray(jsonTypes, columnCount);
+int i = 0;
+struct sqlFieldType *fi;
+for ( fi = fiList; fi; fi = fi->next)
+    {
+    jsonTypes[i++] = autoSqlToJsonType(fi->type);
+    }
 struct lm *bbLm = lmInit(0);
 struct bigBedInterval *iv, *ivList = NULL;
 ivList = bigBedIntervalQuery(bbi,chrom, start, end, 0, bbLm);
@@ -142,7 +153,8 @@ for (iv = ivList; itemCount < maxItemsOutput && iv; iv = iv->next)
     struct sqlFieldType *fi = fiList;
     for (i = 0; i < bbi->fieldCount; ++i)
         {
-        jsonWriteString(jw, fi->name, row[i]);
+        jsonDatumOut(jw, fi->name, row[i], jsonTypes[i]);
+//        jsonWriteString(jw, fi->name, row[i]);
         fi = fi->next;
         }
     jsonWriteObjectEnd(jw);
@@ -197,6 +209,21 @@ if (isEmpty(chrom))
 	wigDataOutput(jw, bwf, chrom, start, end);
 }
 
+static void bigColumnTypes(struct jsonWrite *jw, struct sqlFieldType *fiList)
+/* show the column types from a big file autoSql definitions */
+{
+jsonWriteObjectStart(jw, "columnTypes");
+struct sqlFieldType *fi = fiList;
+for ( ; fi; fi = fi->next)
+    {
+    char bothTypes[1024];
+    int jsonType = autoSqlToJsonType(fi->type);
+    safef(bothTypes, sizeof(bothTypes), "%s - %s", fi->type, jsonTypeStrings[jsonType]);
+    jsonWriteString(jw, fi->name, bothTypes);
+    }
+jsonWriteObjectEnd(jw);
+}
+
 static void getHubTrackData(char *hubUrl)
 /* return data from a hub track, optionally just one chrom data,
  *  optionally just one section of that chrom data
@@ -209,9 +236,9 @@ char *start = cgiOptionalString("start");
 char *end = cgiOptionalString("end");
 
 if (isEmpty(genome))
-    apiErrAbort("missing genome=<name> for endpoint '/getdata/track'  given hubUrl='%s'", hubUrl);
+    apiErrAbort("missing genome=<name> for endpoint '/getData/track'  given hubUrl='%s'", hubUrl);
 if (isEmpty(track))
-    apiErrAbort("missing track=<name> for endpoint '/getdata/track'  given hubUrl='%s'", hubUrl);
+    apiErrAbort("missing track=<name> for endpoint '/getData/track'  given hubUrl='%s'", hubUrl);
 
 struct trackHub *hub = errCatchTrackHubOpen(hubUrl);
 struct trackHubGenome *hubGenome = NULL;
@@ -221,22 +248,22 @@ for (hubGenome = hub->genomeList; hubGenome; hubGenome = hubGenome->next)
 	break;
     }
 if (NULL == hubGenome)
-    apiErrAbort("failed to find specified genome=%s for endpoint '/getdata/track'  given hubUrl '%s'", genome, hubUrl);
+    apiErrAbort("failed to find specified genome=%s for endpoint '/getData/track'  given hubUrl '%s'", genome, hubUrl);
 
 struct trackDb *tdb = obtainTdb(hubGenome, NULL);
 
 if (NULL == tdb)
-    apiErrAbort("failed to find a track hub definition in genome=%s for endpoint '/getdata/track'  given hubUrl='%s'", genome, hubUrl);
+    apiErrAbort("failed to find a track hub definition in genome=%s for endpoint '/getData/track'  given hubUrl='%s'", genome, hubUrl);
 
 struct trackDb *thisTrack = findTrackDb(track, tdb);
 
 if (NULL == thisTrack)
-    apiErrAbort("failed to find specified track=%s in genome=%s for endpoint '/getdata/track'  given hubUrl='%s'", track, genome, hubUrl);
+    apiErrAbort("failed to find specified track=%s in genome=%s for endpoint '/getData/track'  given hubUrl='%s'", track, genome, hubUrl);
 
 char *bigDataUrl = trackDbSetting(thisTrack, "bigDataUrl");
 struct bbiFile *bbi = bigFileOpen(thisTrack->type, bigDataUrl);
 if (NULL == bbi)
-    apiErrAbort("track type %s management not implemented yet TBD track=%s in genome=%s for endpoint '/getdata/track'  given hubUrl='%s'", track, genome, hubUrl);
+    apiErrAbort("track type %s management not implemented yet TBD track=%s in genome=%s for endpoint '/getData/track'  given hubUrl='%s'", track, genome, hubUrl);
 
 struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "hubUrl", hubUrl);
@@ -275,6 +302,9 @@ if (startsWith("bigBed", thisTrack->type))
     {
     struct asObject *as = bigBedAsOrDefault(bbi);
     struct sqlFieldType *fiList = sqlFieldTypesFromAs(as);
+    if (debug)
+        bigColumnTypes(jw, fiList);
+
     jsonWriteListStart(jw, track);
     if (isEmpty(chrom))
 	{
@@ -385,7 +415,7 @@ if (startsWith("big", thisTrack->type))
 	    }
 	}
     if (NULL == bbi)
-	apiErrAbort("failed to find bigDataUrl=%s for track=%s in database=%s for endpoint '/getdata/track'", bigDataUrl, track, db);
+	apiErrAbort("failed to find bigDataUrl=%s for track=%s in database=%s for endpoint '/getData/track'", bigDataUrl, track, db);
     if (isNotEmpty(chrom))
 	{
 	jsonWriteString(jw, "chrom", chrom);
@@ -415,6 +445,8 @@ if (startsWith("bigBed", thisTrack->type))
     {
     struct asObject *as = bigBedAsOrDefault(bbi);
     struct sqlFieldType *fiList = sqlFieldTypesFromAs(as);
+    if (debug)
+        bigColumnTypes(jw, fiList);
     jsonWriteListStart(jw, track);
     if (isEmpty(chrom))
 	{
@@ -443,19 +475,16 @@ fputs(jw->dy->string,stdout);
 hFreeConn(&conn);
 }
 
-static void getSequenceData()
+static void getSequenceData(char *db, char *hubUrl)
 /* return DNA sequence, given at least a db=name and chrom=chr,
-   optionally start and end  */
+   optionally start and end, might be a track hub for UCSC database  */
 {
-char *db = cgiOptionalString("db");
 char *chrom = cgiOptionalString("chrom");
 char *start = cgiOptionalString("start");
 char *end = cgiOptionalString("end");
 
-if (isEmpty(db))
-    apiErrAbort("missing URL db=<ucscDb> name for endpoint '/getData/sequence");
 if (isEmpty(chrom))
-    apiErrAbort("missing URL chrom=<name> for endpoint '/getData/sequence?db=%s", db);
+    apiErrAbort("missing URL chrom=<name> for endpoint '/getData/sequence?db=%s'", db);
 if (chromSeqFileExists(db, chrom))
     {
     struct chromInfo *ci = hGetChromInfo(db, chrom);
@@ -465,8 +494,10 @@ if (chromSeqFileExists(db, chrom))
     else
 	seq = hChromSeqMixed(db, chrom, sqlSigned(start), sqlSigned(end));
     if (NULL == seq)
-        apiErrAbort("can not find sequence for chrom=%s for endpoint '/getData/sequence?db=%s&chrom=%s", chrom, db, chrom);
+        apiErrAbort("can not find sequence for chrom=%s for endpoint '/getData/sequence?db=%s&chrom=%s'", chrom, db, chrom);
     struct jsonWrite *jw = apiStartOutput();
+    if (isNotEmpty(hubUrl))
+	jsonWriteString(jw, "hubUrl", hubUrl);
     jsonWriteString(jw, "db", db);
     jsonWriteString(jw, "chrom", chrom);
     if (isEmpty(start) || isEmpty(end))
@@ -486,21 +517,98 @@ if (chromSeqFileExists(db, chrom))
     }
 else
     apiErrAbort("can not find specified chrom=%s in sequence for endpoint '/getData/sequence?db=%s&chrom=%s", chrom, db, chrom);
+}	/*	static void getSequenceData(char *db, char *hubUrl)	*/
+
+static void getHubSequenceData(char *hubUrl)
+/* return DNA sequence, given at least a genome=name and chrom=chr,
+   optionally start and end  */
+{
+char *genome = cgiOptionalString("genome");
+char *chrom = cgiOptionalString("chrom");
+char *start = cgiOptionalString("start");
+char *end = cgiOptionalString("end");
+
+if (isEmpty(genome))
+    apiErrAbort("missing genome=<name> for endpoint '/getData/sequence'  given hubUrl='%s'", hubUrl);
+if (isEmpty(chrom))
+    apiErrAbort("missing chrom=<name> for endpoint '/getData/sequence?genome=%s' given hubUrl='%s'", genome, hubUrl);
+
+struct trackHub *hub = errCatchTrackHubOpen(hubUrl);
+struct trackHubGenome *hubGenome = NULL;
+for (hubGenome = hub->genomeList; hubGenome; hubGenome = hubGenome->next)
+    {
+    if (sameString(genome, hubGenome->name))
+	break;
+    }
+if (NULL == hubGenome)
+    apiErrAbort("failed to find specified genome=%s for endpoint '/getData/sequence'  given hubUrl '%s'", genome, hubUrl);
+
+/* might be a UCSC database track hub, where hubGenome=name is the database */
+if (isEmpty(hubGenome->twoBitPath))
+    {
+    getSequenceData(hubGenome->name, hubUrl);
+    return;
+    }
+
+/* this MaybeChromInfo will open the twoBit file, if not already done */
+struct chromInfo *ci = trackHubMaybeChromInfo(hubGenome->name, chrom);
+if (NULL == ci)
+    apiErrAbort("can not find sequence for chrom=%s for endpoint '/getData/sequence?genome=%s&chrom=%s' given hubUrl='%s'", chrom, genome, chrom, hubUrl);
+
+struct jsonWrite *jw = apiStartOutput();
+jsonWriteString(jw, "hubUrl", hubUrl);
+jsonWriteString(jw, "genome", genome);
+jsonWriteString(jw, "chrom", chrom);
+int fragStart = 0;
+int fragEnd = 0;
+if (isNotEmpty(start) && isNotEmpty(end))
+    {
+    fragStart = sqlSigned(start);
+    fragEnd = sqlSigned(end);
+    jsonWriteNumber(jw, "start", (long long)fragStart);
+    jsonWriteNumber(jw, "end", (long long)fragEnd);
+    }
+else
+    {
+    jsonWriteNumber(jw, "start", (long long)0);
+    jsonWriteNumber(jw, "end", (long long)ci->size);
+    }
+struct dnaSeq *seq = twoBitReadSeqFrag(hubGenome->tbf, chrom, fragStart, fragEnd);
+if (NULL == seq)
+    {
+    if (fragEnd > fragStart)
+	apiErrAbort("can not find sequence for chrom=%s;start=%s;end=%s for endpoint '/getData/sequence?genome=%s&chrom=%s;start=%s;end=%s' give hubUrl='%s'", chrom, start, end, genome, chrom, start, end, hubUrl);
+    else
+	apiErrAbort("can not find sequence for chrom=%s for endpoint '/getData/sequence?genome=%s&chrom=%s' give hubUrl='%s'", chrom, genome, chrom, hubUrl);
+    }
+jsonWriteString(jw, "dna", seq->dna);
+jsonWriteObjectEnd(jw);	/* closing the overall global object */
+fputs(jw->dy->string,stdout);
 }
 
 void apiGetData(char *words[MAX_PATH_INFO])
 /* 'getData' function, words[1] is the subCommand */
 {
+char *hubUrl = cgiOptionalString("hubUrl");
 if (sameWord("track", words[1]))
     {
-    char *hubUrl = cgiOptionalString("hubUrl");
     if (isNotEmpty(hubUrl))
 	getHubTrackData(hubUrl);
     else
 	getTrackData();
     }
 else if (sameWord("sequence", words[1]))
-    getSequenceData();
+    {
+    if (isNotEmpty(hubUrl))
+	getHubSequenceData(hubUrl);
+    else
+	{
+	char *db = cgiOptionalString("db");
+	if (isEmpty(db))
+	    apiErrAbort("missing URL db=<ucscDb> name for endpoint '/getData/sequence");
+	getSequenceData(db, NULL);
+	}
+    }
 else
     apiErrAbort("do not recognize endpoint function: '/%s/%s'", words[0], words[1]);
 }

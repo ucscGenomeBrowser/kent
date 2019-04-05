@@ -8,7 +8,7 @@ use JSON;
 use Getopt::Long;
 
 my $http = HTTP::Tiny->new();
-my $server = 'https://hgwdev-api.gi.ucsc.edu';
+my $server = 'https://api-test.gi.ucsc.edu';
 my $global_headers = { 'Content-Type' => 'application/json' };
 my $last_request_time = Time::HiRes::time();
 my $request_count = 0;
@@ -23,8 +23,32 @@ my $track = "";
 my $chrom = "";
 my $start = "";
 my $end = "";
+my $test0 = 0;
 my $maxItemsOutput = "";
 ##############################################################################
+
+sub usage() {
+printf STDERR "usage: ./jsonConsumer.pl [arguments]\n";
+printf STDERR "arguments:
+-test0 - perform test of /list/publicHubs and /list/ucscGenomes endpoints
+-hubUrl=<URL> - use the URL to access the track or assembly hub
+-db=<dbName> - use one of the UCSC databases for data access
+-track=<trackName> - specify a single track in a hub or database
+-chrom=<chromName> - restrict the operation to a single chromosome
+-start=<coordinate> - restrict the operation to a range, use both start and end
+-end=<coordinate> - restrict the operation to a range, use both start and end
+-maxItemsOutput=<N> - limit output to this number of items.  Default 1,000
+                      maximum allowed 1,000,000
+-endpoint=<function> - where <function> is one of the following:
+   /list/publicHubs - provide a listing of all available public hubs
+   /list/ucscGenomes - provide a listing of all available UCSC genomes
+   /list/hubGenomes - list genomes from a specified hub (with hubUrl=...)
+   /list/tracks - list data tracks available in specified hub or database genome
+   /list/chromosomes - list chromosomes from specified data track
+   /getData/sequence - return sequence from specified hub or database genome
+   /getData/track - return data from specified track in hub or database genome
+";
+}
 
 ##############################################################################
 ###
@@ -61,6 +85,7 @@ sub performRestAction {
     $request_count = 0;
   }
 
+  $endpoint =~ s#^/##;
   my $url = "$server/$endpoint";
 
   if(%{$parameters}) {
@@ -69,10 +94,10 @@ sub performRestAction {
       my $value = $parameters->{$key};
       push(@params, "$key=$value");
     }
-    my $param_string = join('&', @params);
+    my $param_string = join(';', @params);
     $url.= '?'.$param_string;
-##     printf STDERR "# url: '%s'\n", $url;
   }
+  printf STDERR "### '%s'\n", $url;
   my $response = $http->get($url, {headers => $headers});
   my $status = $response->{status};
   if(!$response->{success}) {
@@ -95,7 +120,7 @@ sub performRestAction {
   return;
 }
 
-# generic output of a has pointer
+# generic output of a hash pointer
 sub hashOutput($) {
   my ($hashRef) = @_;
   foreach my $key (sort keys %$hashRef) {
@@ -161,6 +186,7 @@ sub checkError($$$) {
      if ($jsonReturn->{'error'} ne "$expect '$endpoint'") {
 	printf "incorrect error received from endpoint '%s':\n\t'%s'\n", $endpoint, $jsonReturn->{'error'};
      }
+     printf "%s", $json->pretty->encode( $jsonReturn );
   }
 }
 
@@ -301,27 +327,9 @@ sub processEndPoint() {
   }
 }	# sub processEndPoint()
 
-#############################################################################
-### main()
-#############################################################################
-
-my $argc = scalar(@ARGV); 
-
-GetOptions ("hubUrl=s" => \$hubUrl,
-    "endpoint=s"  => \$endpoint,
-    "genome=s"  => \$genome,
-    "db=s"  => \$db,
-    "track=s"  => \$track,
-    "chrom=s"  => \$chrom,
-    "start=s"  => \$start,
-    "end=s"    => \$end,
-    "maxItemsOutput=s"   => \$maxItemsOutput)
-    or die "Error in command line arguments\n";
-
-if ($argc > 0) {
-   processEndPoint();
-   exit 0;
-}
+###########################################################################
+### test /list/publicHubs and /list/ucscGenomes
+sub test0() {
 
 my $json = JSON->new;
 my $jsonReturn = {};
@@ -367,9 +375,6 @@ if (ref($jsonReturn) eq "HASH") {
 $jsonReturn = performJsonAction("/list/ucscGenomes", "");
 # printf "%s", $json->pretty->encode( $jsonReturn );
 
-# "ucscGenomes" : {
-#       "ochPri3" : {
-
 
 if (ref($jsonReturn) eq "HASH") {
   topLevelKeys($jsonReturn);
@@ -388,48 +393,34 @@ if (ref($jsonReturn) eq "HASH") {
   printf "should have been a HASH to the ucscGenomes\n";
 }
 
-exit 255;
-# the return is a hash with one key 'publicHubs',
-#   the hash element for that key is an array:
-my $resultArray = $jsonReturn->{"publicHubs"};
-# each array element is a hash of the tag/value pairs for each track hub
-# print out two of the tag/value pairs for each track hub
-my $i = 0;
-foreach my $arrayElement (@$resultArray) {
-  printf STDERR "# %d - '%s' - '%s'\n", ++$i, $arrayElement->{"shortLabel"},
-     $arrayElement->{"dbList"};
+}	#	sub test0()
+
+#############################################################################
+### main()
+#############################################################################
+
+my $argc = scalar(@ARGV);
+
+GetOptions ("hubUrl=s" => \$hubUrl,
+    "endpoint=s"  => \$endpoint,
+    "genome=s"  => \$genome,
+    "db=s"  => \$db,
+    "track=s"  => \$track,
+    "chrom=s"  => \$chrom,
+    "start=s"  => \$start,
+    "end=s"    => \$end,
+    "test0"    => \$test0,
+    "maxItemsOutput=s"   => \$maxItemsOutput)
+    or die "Error in command line arguments\n";
+
+if ($test0) {
+   test0;
+   exit 0;
 }
 
-exit 0;
-
-#  to investigate the complete structure, walk through it and
-#  decide on what to do depending upon what type of elements are
-#  discovered
-if (ref($jsonReturn) eq "HASH") {
-   printf STDERR "# jsonReturn is HASH\n";
-   for my $key (sort keys %$jsonReturn) {
-       my $element = $jsonReturn->{$key};
-       printf STDERR "# type of $key element is: '%s'\n", ref($element);
-       if (ref($element) eq "ARRAY") {
-	  arrayOutput($element);
-       } else {
-  printf STDERR "# puzzling, expecting the single element in the HASH to be an ARRAY ?\n";
-  printf STDERR "# instead it reports ref(\$jsonReturn->{'publicHubs') is: '%s'\n", ref($jsonReturn->{'publicHubs'});
-       }
-   }
-} else {
-  printf STDERR "# puzzling, expecting the jsonReturn to be a HASH ?\n";
-  printf STDERR "# instead it reports ref(\$jsonReturn) is: '%s'\n", ref($jsonReturn);
+if ($argc > 0) {
+   processEndPoint();
+   exit 0;
 }
 
-__END__
-# 0     HASH
-dbCount - 1
-dbList - hg19,
-descriptionUrl -
-hubUrl - http://web.stanford.edu/~htilgner/2012_454paper/data/hub.txt
-longLabel - Whole-Cell 454 Hela and K562 RNAseq
-registrationTime - 2013-09-26 16:05:56
-shortLabel - 454 K562andHelaS3RNAseq
-# 1     HASH
-
+usage();

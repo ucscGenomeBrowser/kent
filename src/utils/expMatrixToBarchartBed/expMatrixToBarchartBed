@@ -107,28 +107,6 @@ def determineScore(tpmCutoffs, tpm):
         count = count + 1
     return 999
 
-def floatRound(inFloat):
-    """
-    Return a float that has at most 2 decimal places.
-    """
-    beforeDecimal = True
-    result = ""
-    count = 0
-    for char in inFloat:
-        if char is ".":
-            beforeDecimal = False
-            result += char
-            continue
-        if beforeDecimal:
-            result += char
-        else:
-            if count >= 2:
-                return result
-            else:
-                count += 1
-                result += char
-    return result
-
 def condenseMatrixIntoBedCols(matrix, groupOrder, autoSql, sampleToGroup, validTpms, bedLikeFile, useMean):
     """
     Take an expression matrix and a dictionary that maps the samples to groups.
@@ -237,16 +215,16 @@ def condenseMatrixIntoBedCols(matrix, groupOrder, autoSql, sampleToGroup, validT
                     value = groupAverages[group.strip("\n")]
                 else:
                     value = median(groupAverages[group.strip("\n")])
-                bedLine = bedLine + "," + floatRound(str(value))
+                bedLine = bedLine + "," + "%0.2g" % value
                 count += 1.0
                 fullAverage += value
         else:
             for key, value in sorted(groupAverages.iteritems()):
                 if (useMean):
-                    bedLine = bedLine + "," + floatRound(str(value))
+                    bedLine = bedLine + "," + "%0.2g" % value
                     fullAverage += value
                 else:
-                    bedLine = bedLine + "," + floatRound(str(median(value)))
+                    bedLine = bedLine + "," + "%0.2g" % median(value)
                     fullAverage += median(value)
 
                 count += 1.0
@@ -329,9 +307,6 @@ def expMatrixToBarchartBed(options):
     bedFile = tempfile.NamedTemporaryFile(mode="w+", bufsize=1)
     for line in joinedFile:
         splitLine = line.strip("\n").split("\t")
-        if ("_" in splitLine[0]):
-            sys.stderr.write("This transcript: " + splitLine[0] + " was dropped for having a '_' in the name.\n")
-            continue # Ignore alt sequences.
         # Drop sequences where start is greater than end.
         if (float(splitLine[1]) > float(splitLine[2])):
             sys.stderr.write("This transcript: " + splitLine[0] + " was dropped since chr end, " + \

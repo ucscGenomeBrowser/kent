@@ -1,5 +1,7 @@
 /* manage endpoint /list/ functions */
 
+/* test */
+
 #include "dataApi.h"
 
 static void hubPublicJsonData(struct jsonWrite *jw, struct hubPublic *el,
@@ -47,7 +49,8 @@ freeMem(dataTime);
 // redundant: jsonWriteString(jw, "tableName", hubPublicTableName());
 char **columnNames = NULL;
 char **columnTypes = NULL;
-int columnCount = tableColumns(conn, jw, hubPublicTableName(), &columnNames, &columnTypes);
+int *jsonTypes = NULL;
+int columnCount = tableColumns(conn, jw, hubPublicTableName(), &columnNames, &columnTypes, &jsonTypes);
 jsonWriteListStart(jw, "publicHubs");
 for ( ; el != NULL; el = el->next )
     {
@@ -120,10 +123,8 @@ freeMem(dataTime);
 // not needed: jsonWriteString(jw, "tableName", "dbDb");
 char **columnNames = NULL;
 char **columnTypes = NULL;
-int columnCount = tableColumns(conn, jw, "dbDb", &columnNames, &columnTypes);
-if (columnCount)
-    {
-    }
+int *jsonTypes = NULL;
+int columnCount = tableColumns(conn, jw, "dbDb", &columnNames, &columnTypes, &jsonTypes);
 // jsonWriteListStart(jw, "ucscGenomes");
 jsonWriteObjectStart(jw, "ucscGenomes");
 for ( el=dbList; el != NULL; el = el->next )

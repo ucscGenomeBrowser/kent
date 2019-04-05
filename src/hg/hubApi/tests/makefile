@@ -1,7 +1,7 @@
 
 test::	test0 test1 test2 test3 test4 test5 test6 test7 test8 test9 test10 \
 	test11 test12 test13 test14 test15 test16 test17 test18 test19 test20 \
-	test21 test22 test23
+	test21 test22 test23 test24 test25
 
 setOutput:
 	@if [ ! -d testOutput ]; then mkdir testOutput; fi
@@ -15,7 +15,7 @@ excludeLines = downloadTime|dataTime
 
 # testing /list/noSubCommand, /list/publicHubs and /list/ucscGenomes
 test0: setOutput
-	@./jsonConsumer.pl 2> /dev/null | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@./jsonConsumer.pl -test0 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing /list/hubGenomes
@@ -111,7 +111,7 @@ test18: setOutput
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # bigBed data from a database
-# /getData/track? db=galGal6 &track=gc5BaseBw&chrom=chr1&start=1&end=1024
+# /getData/track? db=galGal6 &track=ncbiRefSeqOther&chrom=chr1&start=750000&end=5700000
 test19: setOutput
 	@./jsonConsumer.pl -endpoint="/getData/track" -db="galGal6" -track="ncbiRefSeqOther" -chrom="chr1" -start=750000 -end=55700000 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
@@ -137,4 +137,14 @@ test22: setOutput
 # testing /list/chromosomes? hubUrl genome=_araTha1 track=assembly_
 test23: setOutput
 	@./jsonConsumer.pl -endpoint="/list/chromosomes" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" -genome="_araTha1" -track="assembly_" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /getData/sequence? hubUrl genome=hg19&chrom=chrCp&start=4321&end=5647
+test24: setOutput
+	@./jsonConsumer.pl -endpoint="/getData/sequence" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" -genome="_araTha1" -chrom="chrCp" -start=4321 -end=5678 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /getData/sequence? hubUrl Bejerano genome=hg19&chrom=chrM&start=4321&end=5647
+test25: setOutput
+	@./jsonConsumer.pl -endpoint="/getData/sequence" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt" -genome="hg19" -chrom="chrM" -start=4321 -end=5678 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
