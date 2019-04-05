@@ -1086,6 +1086,7 @@ if (maxItemsOutput < 1)	/* safety check */
     maxItemsOutput = 1;
 
 debug = cartUsualBoolean(cart, "debug", debug);
+
 int timeout = cartUsualInt(cart, "udcTimeout", 300);
 if (udcCacheTimeout() < timeout)
     udcSetCacheTimeout(timeout);
@@ -1256,14 +1257,16 @@ cgiMakeDropListClassWithIdStyleAndJavascript("ucscGenome", "ucscGenome",
 hWrites("&nbsp;");
 hButton("goUcscDb", "go");
 
-boolean depthSearch = cartUsualBoolean(cart, "depthSearch", FALSE);
+// boolean depthSearch = cartUsualBoolean(cart, "depthSearch", FALSE);
+// hPrintf("<br>\n&nbsp;&nbsp;");
+// hCheckBox("depthSearch", cartUsualBoolean(cart, "depthSearch", FALSE));
+// hPrintf("&nbsp;perform full bbi file measurement : %s (will time out if taking longer than %ld seconds)<br>\n", depthSearch ? "TRUE" : "FALSE", timeOutSeconds);
+
 hPrintf("<br>\n&nbsp;&nbsp;");
-hCheckBox("depthSearch", cartUsualBoolean(cart, "depthSearch", FALSE));
-hPrintf("&nbsp;perform full bbi file measurement : %s (will time out if taking longer than %ld seconds)<br>\n", depthSearch ? "TRUE" : "FALSE", timeOutSeconds);
-hPrintf("\n&nbsp;&nbsp;");
+
 allTrackSettings = cartUsualBoolean(cart, "allTrackSettings", FALSE);
 hCheckBox("allTrackSettings", allTrackSettings);
-hPrintf("&nbsp;display all track settings for each track : %s<br>\n", allTrackSettings ? "TRUE" : "FALSE");
+hPrintf("&nbsp;display all track settings for each track<br>\n");
 
 hPrintf("<br>\n");
 // if (debug)
