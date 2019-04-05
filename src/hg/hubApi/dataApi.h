@@ -57,10 +57,22 @@ void apiErrAbort(char *format, ...);
 struct jsonWrite *apiStartOutput();
 /* begin json output with standard header information for all requests */
 
+extern char *jsonTypeStrings[];
+#define JSON_STRING	0	//    "string",	/* type 0 */
+#define JSON_NUMBER	1	//    "number",	/* type 1 */
+#define JSON_OBJECT	2	//    "object",	/* type 2 */
+#define JSON_ARRAY	3	//    "array",	/* type 3 */
+#define JSON_BOOLEAN	4	//    "boolean",	/* type 4 */
+#define JSON_NULL	5	//    "null"	/* type 5 */
+#define JSON_DOUBLE	6	//    UCSC json type double	/* type 6 */
+
+int autoSqlToJsonType(char *asType);
+/* convert an autoSql field type to a Json type */
+
 int tableColumns(struct sqlConnection *conn, struct jsonWrite *jw, char *table,
-   char ***nameReturn, char ***typeReturn);
-/* return the column names, and their MySQL data type, for the given table
- *  return number of columns (aka 'fields')
+   char ***nameReturn, char ***typeReturn, int **jsonTypes);
+/* return the column names, the MySQL data type, and json data type
+ *   for the given table return number of columns (aka 'fields')
  */
 
 struct trackHub *errCatchTrackHubOpen(char *hubUrl);

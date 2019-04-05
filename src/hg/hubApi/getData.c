@@ -30,6 +30,18 @@ for (el = wds->ascii; itemCount < maxItemsOutput && el; el = el->next)
 jsonWriteListEnd(jw);
 }
 
+static void jsonDatumOut(struct jsonWrite *jw, char *name, char *val,
+    int jsonType)
+/* output a json item, determine type, appropriate output */
+{
+if (JSON_DOUBLE == jsonType)
+    jsonWriteDouble(jw, name, sqlDouble(val));
+else if (JSON_NUMBER == jsonType)
+    jsonWriteNumber(jw, name, sqlLongLong(val));
+else
+    jsonWriteString(jw, name, val);
+}
+
 static void tableDataOutput(char *db, struct trackDb *tdb,
     struct sqlConnection *conn, struct jsonWrite *jw, char *table,
     char *chrom, unsigned start, unsigned end)
@@ -80,7 +92,21 @@ else	/* fully specified chrom:start-end */
 /* continuing, not a wiggle output */
 char **columnNames = NULL;
 char **columnTypes = NULL;
-int columnCount = tableColumns(conn, jw, table, &columnNames, &columnTypes);
+int *jsonTypes = NULL;
+int columnCount = tableColumns(conn, jw, table, &columnNames, &columnTypes, &jsonTypes);
+if (debug)
+    {
+    jsonWriteObjectStart(jw, "columnTypes");
+    int i = 0;
+    for (i = 0; i < columnCount; ++i)
+	{
+	char bothTypes[1024];
+	safef(bothTypes, sizeof(bothTypes), "%s - %s", columnTypes[i], jsonTypeStrings[jsonTypes[i]]);
+	jsonWriteString(jw, columnNames[i], bothTypes);
+//	jsonWriteString(jw, columnNames[i], columnTypes[i]);
+	}
+    jsonWriteObjectEnd(jw);
+    }
 jsonWriteListStart(jw, table);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row = NULL;
@@ -90,7 +116,9 @@ while (itemCount < maxItemsOutput && (row = sqlNextRow(sr)) != NULL)
     jsonWriteObjectStart(jw, NULL);
     int i = 0;
     for (i = 0; i < columnCount; ++i)
-	jsonWriteString(jw, columnNames[i], row[i]);
+	{
+	jsonDatumOut(jw, columnNames[i], row[i], jsonTypes[i]);
+	}
     jsonWriteObjectEnd(jw);
     ++itemCount;
     }
@@ -98,47 +126,19 @@ sqlFreeResult(&sr);
 jsonWriteListEnd(jw);
 }
 
-/* from hgTables.h */
-struct sqlFieldType
-/* List field names and types */
-    {
-    struct sqlFieldType *next;
-    char *name;         /* Name of field. */
-    char *type;         /* Type of field (MySQL notion) */
-    }; 
-
-/* from hgTables.c */
-static struct sqlFieldType *sqlFieldTypeNew(char *name, char *type)
-/* Create a new sqlFieldType */
-{
-struct sqlFieldType *ft;
-AllocVar(ft);
-ft->name = cloneString(name);
-ft->type = cloneString(type);
-return ft;
-}
-
-/* from hgTables.c */
-static struct sqlFieldType *sqlFieldTypesFromAs(struct asObject *as)
-/* Convert asObject to list of sqlFieldTypes */
-{
-struct sqlFieldType *ft, *list = NULL;
-struct asColumn *col;
-for (col = as->columnList; col != NULL; col = col->next)
-    {
-    struct dyString *type = asColumnToSqlType(col);
-    ft = sqlFieldTypeNew(col->name, type->string);
-    slAddHead(&list, ft);
-    dyStringFree(&type);
-    }
-slReverse(&list);
-return list;
-}
-
 static void bedDataOutput(struct jsonWrite *jw, struct bbiFile *bbi,
     char *chrom, unsigned start, unsigned end, struct sqlFieldType *fiList)
 /* output bed data for one chrom in the given bbi file */
 {
+int *jsonTypes = NULL;
+int columnCount = slCount(fiList);
+AllocArray(jsonTypes, columnCount);
+int i = 0;
+struct sqlFieldType *fi;
+for ( fi = fiList; fi; fi = fi->next)
+    {
+    jsonTypes[i++] = autoSqlToJsonType(fi->type);
+    }
 struct lm *bbLm = lmInit(0);
 struct bigBedInterval *iv, *ivList = NULL;
 ivList = bigBedIntervalQuery(bbi,chrom, start, end, 0, bbLm);
@@ -153,7 +153,8 @@ for (iv = ivList; itemCount < maxItemsOutput && iv; iv = iv->next)
     struct sqlFieldType *fi = fiList;
     for (i = 0; i < bbi->fieldCount; ++i)
         {
-        jsonWriteString(jw, fi->name, row[i]);
+        jsonDatumOut(jw, fi->name, row[i], jsonTypes[i]);
+//        jsonWriteString(jw, fi->name, row[i]);
         fi = fi->next;
         }
     jsonWriteObjectEnd(jw);
@@ -206,6 +207,21 @@ if (isEmpty(chrom))
     }
     else
 	wigDataOutput(jw, bwf, chrom, start, end);
+}
+
+static void bigColumnTypes(struct jsonWrite *jw, struct sqlFieldType *fiList)
+/* show the column types from a big file autoSql definitions */
+{
+jsonWriteObjectStart(jw, "columnTypes");
+struct sqlFieldType *fi = fiList;
+for ( ; fi; fi = fi->next)
+    {
+    char bothTypes[1024];
+    int jsonType = autoSqlToJsonType(fi->type);
+    safef(bothTypes, sizeof(bothTypes), "%s - %s", fi->type, jsonTypeStrings[jsonType]);
+    jsonWriteString(jw, fi->name, bothTypes);
+    }
+jsonWriteObjectEnd(jw);
 }
 
 static void getHubTrackData(char *hubUrl)
@@ -286,6 +302,9 @@ if (startsWith("bigBed", thisTrack->type))
     {
     struct asObject *as = bigBedAsOrDefault(bbi);
     struct sqlFieldType *fiList = sqlFieldTypesFromAs(as);
+    if (debug)
+        bigColumnTypes(jw, fiList);
+
     jsonWriteListStart(jw, track);
     if (isEmpty(chrom))
 	{
@@ -426,6 +445,8 @@ if (startsWith("bigBed", thisTrack->type))
     {
     struct asObject *as = bigBedAsOrDefault(bbi);
     struct sqlFieldType *fiList = sqlFieldTypesFromAs(as);
+    if (debug)
+        bigColumnTypes(jw, fiList);
     jsonWriteListStart(jw, track);
     if (isEmpty(chrom))
 	{
