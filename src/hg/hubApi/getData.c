@@ -45,7 +45,7 @@ else
 static void tableDataOutput(char *db, struct trackDb *tdb,
     struct sqlConnection *conn, struct jsonWrite *jw, char *table,
     char *chrom, unsigned start, unsigned end)
-/* output the table data from the specified query string */
+/* output the SQL table data */
 {
 char query[4096];
 /* no chrom specified, return entire table */
@@ -103,7 +103,6 @@ if (debug)
 	char bothTypes[1024];
 	safef(bothTypes, sizeof(bothTypes), "%s - %s", columnTypes[i], jsonTypeStrings[jsonTypes[i]]);
 	jsonWriteString(jw, columnNames[i], bothTypes);
-//	jsonWriteString(jw, columnNames[i], columnTypes[i]);
 	}
     jsonWriteObjectEnd(jw);
     }
@@ -124,12 +123,14 @@ while (itemCount < maxItemsOutput && (row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 jsonWriteListEnd(jw);
-}
+}	/*  static void tableDataOutput(char *db, struct trackDb *tdb, ... ) */
 
 static void bedDataOutput(struct jsonWrite *jw, struct bbiFile *bbi,
-    char *chrom, unsigned start, unsigned end, struct sqlFieldType *fiList)
+    char *chrom, unsigned start, unsigned end, struct sqlFieldType *fiList,
+     struct trackDb *tdb)
 /* output bed data for one chrom in the given bbi file */
 {
+char *itemRgb = trackDbSetting(tdb, "itemRgb");
 int *jsonTypes = NULL;
 int columnCount = slCount(fiList);
 AllocArray(jsonTypes, columnCount);
@@ -137,7 +138,15 @@ int i = 0;
 struct sqlFieldType *fi;
 for ( fi = fiList; fi; fi = fi->next)
     {
-    jsonTypes[i++] = autoSqlToJsonType(fi->type);
+    if (itemRgb)
+	{
+	if (8 == i && sameWord("on", itemRgb))
+	    jsonTypes[i++] = JSON_STRING;
+	else
+	    jsonTypes[i++] = autoSqlToJsonType(fi->type);
+	}
+    else
+	jsonTypes[i++] = autoSqlToJsonType(fi->type);
     }
 struct lm *bbLm = lmInit(0);
 struct bigBedInterval *iv, *ivList = NULL;
@@ -154,7 +163,6 @@ for (iv = ivList; itemCount < maxItemsOutput && iv; iv = iv->next)
     for (i = 0; i < bbi->fieldCount; ++i)
         {
         jsonDatumOut(jw, fi->name, row[i], jsonTypes[i]);
-//        jsonWriteString(jw, fi->name, row[i]);
         fi = fi->next;
         }
     jsonWriteObjectEnd(jw);
@@ -311,11 +319,11 @@ if (startsWith("bigBed", thisTrack->type))
 	struct bbiChromInfo *bci;
 	for (bci = chromList; bci; bci = bci->next)
 	    {
-	    bedDataOutput(jw, bbi, bci->name, 0, bci->size, fiList);
+	    bedDataOutput(jw, bbi, bci->name, 0, bci->size, fiList, thisTrack);
 	    }
 	}
     else
-	bedDataOutput(jw, bbi, chrom, uStart, uEnd, fiList);
+	bedDataOutput(jw, bbi, chrom, uStart, uEnd, fiList, thisTrack);
     jsonWriteListEnd(jw);
     }
 else if (startsWith("bigWig", thisTrack->type))
@@ -453,11 +461,11 @@ if (startsWith("bigBed", thisTrack->type))
 	struct bbiChromInfo *bci;
 	for (bci = chromList; bci; bci = bci->next)
 	    {
-	    bedDataOutput(jw, bbi, bci->name, 0, bci->size, fiList);
+	    bedDataOutput(jw, bbi, bci->name, 0, bci->size, fiList, thisTrack);
 	    }
 	}
     else
-	bedDataOutput(jw, bbi, chrom, uStart, uEnd, fiList);
+	bedDataOutput(jw, bbi, chrom, uStart, uEnd, fiList, thisTrack);
     jsonWriteListEnd(jw);
     }
 else if (startsWith("bigWig", thisTrack->type))
