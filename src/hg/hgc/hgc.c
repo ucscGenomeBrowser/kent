@@ -1479,7 +1479,7 @@ int extraFieldsStart(struct trackDb *tdb, int fieldCount, struct asObject *as)
 int start = 0;
 char *type = cloneString(tdb->type);
 char *word = nextWord(&type);
-if (word && (sameWord(word,"bed") || sameWord(word,"bigBed") || sameWord(word,"bigGenePred") || sameWord(word,"bigPsl")  || sameWord(word,"bigBarChart")))
+if (word && (sameWord(word,"bed") || sameWord(word,"bigBed") || sameWord(word,"bigGenePred") || sameWord(word,"bigPsl")  || sameWord(word,"bigBarChart")|| sameWord(word,"bigLolly")))
     {
     if (NULL != (word = nextWord(&type)))
         start = sqlUnsigned(word);
@@ -4285,6 +4285,11 @@ else if (wordCount > 0)
         {
         doBedDetail(tdb, NULL, item);
         }
+    else if (sameString(type, "bigLolly") )
+	{
+	int num = 12;
+        genericBigBedClick(conn, tdb, item, start, end, num);
+	}
     else if (sameString(type, "interaction") )
 	{
 	int num = 12;
