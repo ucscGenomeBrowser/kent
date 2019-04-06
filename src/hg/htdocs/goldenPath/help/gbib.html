@@ -262,20 +262,30 @@ a DSL line. <strong>During the download</strong>, the file <em>gbib-data.vdi</em
 and <strong>you will not be able to use GBiB</strong>. Once the download is complete, the default 
 tracks should load in less than three seconds for a typical genomic position.</p>
 <p>
-If you are in your GBiB on the command-line you can use a direct rsync command for files of interest.
-For example, if you knew you wanted all the GENCODE tracks on hg19 you could run this command:
-<ul>
+If you are in your GBiB on the command-line you can use a direct rsync command for files of
+interest. For example, if you knew you wanted all the GENCODE tracks on hg19 you could run either
+of the two rsync commands for the North American or European hgdownload servers:
+<pre>
 <code>sudo rsync hgdownload.soe.ucsc.edu::mysql/hg19/wgEncodeGencode* /data/mysql/hg19/.</code>
-</ul>
+</pre>
+<pre>
+<code>sudo rsync hgdownload-euro.soe.ucsc.edu::mysql/hg19/wgEncodeGencode* /data/mysql/hg19/.</code>
+</pre>
 <p>
-It would rsync all of the files at the UCSC hgdownload server in the hg19 assembly that start with
-wgEncodeGencode to your GBiB into the hg19 directory. There are some supporting files in a hgFixed
-directory, such as for the publication tracks, that could be mirrored with such commands.</p>
+The above commands will rsync all of the files at the UCSC hgdownload server in the hg19 assembly
+that start with wgEncodeGencode to your GBiB into the hg19 directory. There are some supporting
+files in a hgFixed directory, such as for the publication tracks, that could be mirrored with such
+commands.</p>
 <p>
 You can also download gbdb files in this manner.
-<ul>
+<pre>
 <code>sudo rsync hgdownload.soe.ucsc.edu::gbdb/hg19/multiz100way/phyloP100way.wib /data/gbdb/hg19/multiz100way/.</code>
-</ul>
+</pre>
+
+<pre>
+<code>sudo rsync hgdownload-euro.soe.ucsc.edu::gbdb/hg19/multiz100way/phyloP100way.wib /data/gbdb/hg19/multiz100way/.</code>
+</pre>
+
 <p>The above command would copy the phyloP100way track to display in the GBiB from a local file.</p>
 
 <h3>Offline mode</h3>
@@ -742,11 +752,14 @@ In older GBiB's, there is an error in the <code>gbibAddTools</code> command. To 
 edit the <code>/home/browser/.bashrc</code> file and change the following line:
 <pre><code>alias gbibAddTools='mkdir ~/bin -p; rsync -avP hgdownload.soe.ucsc.edu::genome/admin/exe/linux.x86_64/ ~/bin/'</code></pre>
 </p>
-<p>to:
+<p>
+to either of the follwing lines:
 <pre><code>alias gbibAddTools='sudo mkdir -p /data/tools; sudo rsync -avP hgdownload.soe.ucsc.edu::genome/admin/exe/linux.x86_64/ /data/tools/ && ln -s /data/tools ~/bin'</code></pre>
+<pre><code>alias gbibAddTools='sudo mkdir -p /data/tools; sudo rsync -avP hgdownload-euro.soe.ucsc.edu::genome/admin/exe/linux.x86_64/ /data/tools/ && ln -s /data/tools ~/bin'</code></pre>
 </p>
 <p>
-This updated command installs the tools to a location with more disk space available.
+The updated commands will install the tools to a location with more disk space available using
+either the North American or European hgdownload servers.
 </p>
 
 <a name="Commands"></a>

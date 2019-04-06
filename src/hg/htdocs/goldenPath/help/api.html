@@ -19,11 +19,6 @@
 <h6><a href="#list examples">Example data access, list functions</a></h6>
 <h6><a href="#getData examples">Example data access, getData functions</a></h6>
 <h6><a href="#Error examples">Error return examples</a></h6>
-<hr>
-<p>
-<strong>Additional resources</strong></p> 
-<ul>
-</ul>
 
 <!-- ========== What is JSON data ? ============================== -->
 <a name="Intro"></a>
@@ -62,7 +57,7 @@ The following data sets can be accessed at this time:
 <li>Listing of available public hubs</li>
 <li>Listing of available UCSC browser genome assemblies</li>
 <li>List genomes from a specified assembly or track hub</li>
-<li>List available data tracks from a specified hub or UCSC browser genome assembly</li>
+<li>List available data tracks from a specified hub or UCSC browser genome assembly (see also: <a href='trackDb/trackDbHub.html' target=_blank>track definition help</a>)</li>
 <li>List of chromosomes contained in an assembly hub or UCSC browser genome assembly.
 <li>List of chromosomes contained in a specific track of an assembly or track hub or UCSC browser genome assembly.
 <li>Return DNA sequence from an assembly hub 2bit file, or UCSC genome browser assembly</li>
@@ -85,7 +80,7 @@ the endpoint functions.  For example:
 <li><b>/list/publicHubs</b> - list public hubs</li>
 <li><b>/list/ucscGenomes</b> - list UCSC database genomes</li>
 <li><b>/list/hubGenomes</b> - list genomes from specified hub</li>
-<li><b>/list/tracks</b> - list data tracks available in specified hub or database genome</li>
+<li><b>/list/tracks</b> - list data tracks available in specified hub or database genome (see also: <a href='trackDb/trackDbHub.html' target=_blank>track definition help</a>)</li>
 <li><b>/list/chromosomes</b> - list chromosomes from a data track in specified hub or database genome</li>
 <li><b>/getData/sequence</b> - return sequence from specified hub or database genome</li>
 <li><b>/getData/track</b> - return data from specified track in hub or database genome</li>
@@ -155,10 +150,12 @@ position, both <b>start=4321</b> and <b>end=5678</b> must be given together.
 <ul>
 <li><a href='/FAQ/FAQformat.html#format1' target=_blank>bed</a></li>
 <li><a href='/FAQ/FAQformat.html#format1.5' target=_blank>bigBed</a></li>
+<!--  not yet
 <li><a href='/FAQ/FAQformat.html#format9.1' target=_blank>bigGenePred</a></li>
+-->
 <li><a href='/FAQ/FAQformat.html#format9.5' target=_blank>bigNarrowPeak</a></li>
 <li><a href='/FAQ/FAQformat.html#format6.1' target=_blank>bigWig</a></li>
-<li>broadPeak</li>
+<li><a href='/FAQ/FAQformat.html#format9' target=_blank>genePred</a></li>
 <li><a href='/FAQ/FAQformat.html#format9.5' target=_blank>narrowPeak</a></li>
 <li><a href='/FAQ/FAQformat.html#format6' target=_blank>wig</a></li>
 <li>(Work is under way to support additional track types)</li>

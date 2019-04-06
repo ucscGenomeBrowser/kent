@@ -10,3 +10,8 @@ group genes
 labelFields geneName2,name,ensemblProtAcc,geneName,ncbiId,ncbiProtAcc,ncbiGene
 defaultLabelFields geneName2
 maxItems 5000
+
+searchTable mane
+searchType bigBed
+searchDescription NCBI RefSeq and Ensembl transcripts from the MANE Project (v0.5)
+searchPriority 1.3

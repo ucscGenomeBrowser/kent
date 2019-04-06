@@ -1,0 +1,11 @@
+
+track gdcCancer
+shortLabel GDC Cancer
+longLabel GDC Cancer mutations: 33 TCGA Cancer Projects Summary (Pan-Can 33)
+#type bigBed 12 +
+group phenDis
+type bigLolly
+lollyField 13
+release alpha
+bigDataUrl /gbdb/$D/bbi/cancerMutations/pancan33.bb
+urls case_id=https://portal.gdc.cancer.gov/cases/$$

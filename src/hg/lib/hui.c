@@ -1994,6 +1994,22 @@ cgiMakeDropList(var, chimpOptions, ArraySize(chimpOptions),
 }
 
 
+/*
+#define POP_METHOD_AUTO "auto"
+#define POP_METHOD_MANUAL "manual"
+
+static char *popMethodLabels[] =
+{
+"auto",
+"manual",
+};
+
+static char *popMethodValues[] =
+{
+POP_METHOD_AUTO,
+POP_METHOD_MANUAL,
+};
+*/
 
 /****** Some stuff for mRNA and EST related controls *******/
 
@@ -4177,6 +4193,41 @@ slSort(tdbRefList, trackDbRefCmp);
 return cartPriorities;
 }
 
+void lollyCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
+/* UI for the wiggle track */
+{
+int maxHeightPixels;
+int minHeightPixels;
+char option[256];
+int defaultHeight;  /*  pixels per item */
+int settingsDefault;
+cartTdbFetchMinMaxPixels(cart, tdb, MIN_HEIGHT_PER, atoi(DEFAULT_HEIGHT_PER), atoi(DEFAULT_HEIGHT_PER),
+                                &minHeightPixels, &maxHeightPixels, &settingsDefault, &defaultHeight);
+
+boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
+printf("<TABLE BORDER=0>");
+
+printf("<TR valign=center><th align=right>Track height:</th><td align=left colspan=3>");
+safef(option, sizeof(option), "%s.%s", name, HEIGHTPER );
+cgiMakeIntVarWithLimits(option, defaultHeight, "Track height",0, minHeightPixels, maxHeightPixels);
+printf("pixels&nbsp;(range: %d to %d)",
+       minHeightPixels, maxHeightPixels);
+
+/*
+printf("<TR valign=center><th align=right>Drawing method:</th><td align=left>");
+safef(option, sizeof(option), "%s.%s", name, POPMETHOD);
+char *popMethodVal = cartOrTdbString(cart, tdb, "popMethod", NULL);
+        
+cgiMakeDropListFull(option, popMethodLabels, popMethodValues,
+    ArraySize(popMethodValues), popMethodVal, NULL, NULL);
+    */
+
+puts("</td></TR>");
+
+printf("</TABLE>");
+cfgEndBox(boxed);
+}
+
 void cfgByCfgType(eCfgType cType,char *db, struct cart *cart, struct trackDb *tdb,char *prefix,
 	      char *title, boolean boxed)
 // Methods for putting up type specific cfgs used by composites/subtracks in hui.c
@@ -4252,6 +4303,8 @@ switch(cType)
     case cfgBarChart:   barChartCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;
     case cfgInteract:   interactCfgUi(db,cart,tdb,prefix,title,boxed);
+                        break;
+    case cfgLollipop:   lollyCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;
     default:            warn("Track type is not known to multi-view composites. type is: %d ",
 			     cType);

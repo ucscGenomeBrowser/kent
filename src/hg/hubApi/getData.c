@@ -30,10 +30,22 @@ for (el = wds->ascii; itemCount < maxItemsOutput && el; el = el->next)
 jsonWriteListEnd(jw);
 }
 
+static void jsonDatumOut(struct jsonWrite *jw, char *name, char *val,
+    int jsonType)
+/* output a json item, determine type, appropriate output */
+{
+if (JSON_DOUBLE == jsonType)
+    jsonWriteDouble(jw, name, sqlDouble(val));
+else if (JSON_NUMBER == jsonType)
+    jsonWriteNumber(jw, name, sqlLongLong(val));
+else
+    jsonWriteString(jw, name, val);
+}
+
 static void tableDataOutput(char *db, struct trackDb *tdb,
     struct sqlConnection *conn, struct jsonWrite *jw, char *table,
     char *chrom, unsigned start, unsigned end)
-/* output the table data from the specified query string */
+/* output the SQL table data */
 {
 char query[4096];
 /* no chrom specified, return entire table */
@@ -52,8 +64,14 @@ else if (0 == (start + end))	/* have chrom, no start,end == full chr */
     }
 else	/* fully specified chrom:start-end */
     {
+    boolean useTxStartEnd = FALSE;
     if (! sqlColumnExists(conn, table, "chrom"))
 	apiErrAbort("track '%s' is not a position track, request track without chrom specification, genome: '%s'", table, db);
+    if (! sqlColumnExists(conn, table, "chromStart"))
+	{
+        if (sqlColumnExists(conn, table, "txStart"))
+	    useTxStartEnd = TRUE;
+	}
     jsonWriteString(jw, "chrom", chrom);
     jsonWriteNumber(jw, "start", (long long)start);
     jsonWriteNumber(jw, "end", (long long)end);
@@ -64,14 +82,30 @@ else	/* fully specified chrom:start-end */
 	}
     else
 	{
-	sqlSafef(query, sizeof(query), "select * from %s where chrom='%s' AND chromEnd > %u AND chromStart < %u", table, chrom, start, end);
+	if (useTxStartEnd)
+	    sqlSafef(query, sizeof(query), "select * from %s where chrom='%s' AND txEnd > %u AND txStart < %u", table, chrom, start, end);
+	else
+	    sqlSafef(query, sizeof(query), "select * from %s where chrom='%s' AND chromEnd > %u AND chromStart < %u", table, chrom, start, end);
 	}
     }
 
 /* continuing, not a wiggle output */
 char **columnNames = NULL;
 char **columnTypes = NULL;
-int columnCount = tableColumns(conn, jw, table, &columnNames, &columnTypes);
+int *jsonTypes = NULL;
+int columnCount = tableColumns(conn, jw, table, &columnNames, &columnTypes, &jsonTypes);
+if (debug)
+    {
+    jsonWriteObjectStart(jw, "columnTypes");
+    int i = 0;
+    for (i = 0; i < columnCount; ++i)
+	{
+	char bothTypes[1024];
+	safef(bothTypes, sizeof(bothTypes), "%s - %s", columnTypes[i], jsonTypeStrings[jsonTypes[i]]);
+	jsonWriteString(jw, columnNames[i], bothTypes);
+	}
+    jsonWriteObjectEnd(jw);
+    }
 jsonWriteListStart(jw, table);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row = NULL;
@@ -81,55 +115,39 @@ while (itemCount < maxItemsOutput && (row = sqlNextRow(sr)) != NULL)
     jsonWriteObjectStart(jw, NULL);
     int i = 0;
     for (i = 0; i < columnCount; ++i)
-	jsonWriteString(jw, columnNames[i], row[i]);
+	{
+	jsonDatumOut(jw, columnNames[i], row[i], jsonTypes[i]);
+	}
     jsonWriteObjectEnd(jw);
     ++itemCount;
     }
 sqlFreeResult(&sr);
 jsonWriteListEnd(jw);
-}
-
-/* from hgTables.h */
-struct sqlFieldType
-/* List field names and types */
-    {
-    struct sqlFieldType *next;
-    char *name;         /* Name of field. */
-    char *type;         /* Type of field (MySQL notion) */
-    }; 
-
-/* from hgTables.c */
-static struct sqlFieldType *sqlFieldTypeNew(char *name, char *type)
-/* Create a new sqlFieldType */
-{
-struct sqlFieldType *ft;
-AllocVar(ft);
-ft->name = cloneString(name);
-ft->type = cloneString(type);
-return ft;
-}
-
-/* from hgTables.c */
-static struct sqlFieldType *sqlFieldTypesFromAs(struct asObject *as)
-/* Convert asObject to list of sqlFieldTypes */
-{
-struct sqlFieldType *ft, *list = NULL;
-struct asColumn *col;
-for (col = as->columnList; col != NULL; col = col->next)
-    {
-    struct dyString *type = asColumnToSqlType(col);
-    ft = sqlFieldTypeNew(col->name, type->string);
-    slAddHead(&list, ft);
-    dyStringFree(&type);
-    }
-slReverse(&list);
-return list;
-}
+}	/*  static void tableDataOutput(char *db, struct trackDb *tdb, ... ) */
 
 static void bedDataOutput(struct jsonWrite *jw, struct bbiFile *bbi,
-    char *chrom, unsigned start, unsigned end, struct sqlFieldType *fiList)
+    char *chrom, unsigned start, unsigned end, struct sqlFieldType *fiList,
+     struct trackDb *tdb)
 /* output bed data for one chrom in the given bbi file */
 {
+char *itemRgb = trackDbSetting(tdb, "itemRgb");
+int *jsonTypes = NULL;
+int columnCount = slCount(fiList);
+AllocArray(jsonTypes, columnCount);
+int i = 0;
+struct sqlFieldType *fi;
+for ( fi = fiList; fi; fi = fi->next)
+    {
+    if (itemRgb)
+	{
+	if (8 == i && sameWord("on", itemRgb))
+	    jsonTypes[i++] = JSON_STRING;
+	else
+	    jsonTypes[i++] = autoSqlToJsonType(fi->type);
+	}
+    else
+	jsonTypes[i++] = autoSqlToJsonType(fi->type);
+    }
 struct lm *bbLm = lmInit(0);
 struct bigBedInterval *iv, *ivList = NULL;
 ivList = bigBedIntervalQuery(bbi,chrom, start, end, 0, bbLm);
@@ -144,7 +162,7 @@ for (iv = ivList; itemCount < maxItemsOutput && iv; iv = iv->next)
     struct sqlFieldType *fi = fiList;
     for (i = 0; i < bbi->fieldCount; ++i)
         {
-        jsonWriteString(jw, fi->name, row[i]);
+        jsonDatumOut(jw, fi->name, row[i], jsonTypes[i]);
         fi = fi->next;
         }
     jsonWriteObjectEnd(jw);
@@ -197,6 +215,21 @@ if (isEmpty(chrom))
     }
     else
 	wigDataOutput(jw, bwf, chrom, start, end);
+}
+
+static void bigColumnTypes(struct jsonWrite *jw, struct sqlFieldType *fiList)
+/* show the column types from a big file autoSql definitions */
+{
+jsonWriteObjectStart(jw, "columnTypes");
+struct sqlFieldType *fi = fiList;
+for ( ; fi; fi = fi->next)
+    {
+    char bothTypes[1024];
+    int jsonType = autoSqlToJsonType(fi->type);
+    safef(bothTypes, sizeof(bothTypes), "%s - %s", fi->type, jsonTypeStrings[jsonType]);
+    jsonWriteString(jw, fi->name, bothTypes);
+    }
+jsonWriteObjectEnd(jw);
 }
 
 static void getHubTrackData(char *hubUrl)
@@ -277,17 +310,20 @@ if (startsWith("bigBed", thisTrack->type))
     {
     struct asObject *as = bigBedAsOrDefault(bbi);
     struct sqlFieldType *fiList = sqlFieldTypesFromAs(as);
+    if (debug)
+        bigColumnTypes(jw, fiList);
+
     jsonWriteListStart(jw, track);
     if (isEmpty(chrom))
 	{
 	struct bbiChromInfo *bci;
 	for (bci = chromList; bci; bci = bci->next)
 	    {
-	    bedDataOutput(jw, bbi, bci->name, 0, bci->size, fiList);
+	    bedDataOutput(jw, bbi, bci->name, 0, bci->size, fiList, thisTrack);
 	    }
 	}
     else
-	bedDataOutput(jw, bbi, chrom, uStart, uEnd, fiList);
+	bedDataOutput(jw, bbi, chrom, uStart, uEnd, fiList, thisTrack);
     jsonWriteListEnd(jw);
     }
 else if (startsWith("bigWig", thisTrack->type))
@@ -417,17 +453,19 @@ if (startsWith("bigBed", thisTrack->type))
     {
     struct asObject *as = bigBedAsOrDefault(bbi);
     struct sqlFieldType *fiList = sqlFieldTypesFromAs(as);
+    if (debug)
+        bigColumnTypes(jw, fiList);
     jsonWriteListStart(jw, track);
     if (isEmpty(chrom))
 	{
 	struct bbiChromInfo *bci;
 	for (bci = chromList; bci; bci = bci->next)
 	    {
-	    bedDataOutput(jw, bbi, bci->name, 0, bci->size, fiList);
+	    bedDataOutput(jw, bbi, bci->name, 0, bci->size, fiList, thisTrack);
 	    }
 	}
     else
-	bedDataOutput(jw, bbi, chrom, uStart, uEnd, fiList);
+	bedDataOutput(jw, bbi, chrom, uStart, uEnd, fiList, thisTrack);
     jsonWriteListEnd(jw);
     }
 else if (startsWith("bigWig", thisTrack->type))

@@ -59,6 +59,8 @@
 
 #define BIGBEDMAXIMUMITEMS 100000
 
+#include "lolly.h"
+
 struct track
 /* Structure that displays of tracks. The central data structure
  * of the graphical genome browser. */
@@ -283,6 +285,8 @@ struct track
     struct slInt *labelColumns; /* The columns in a bigBed that can be used for labels. */
     boolean subTrackVisSet;     /* have we calculated visibility on this subtrack */
     boolean subTrackVis;        /* if we calculated it, what is it */
+
+    struct lollyCartOptions *lollyCart;
     };
 
 struct window  // window in multiwindow image
@@ -1548,7 +1552,7 @@ void gtexEqtlClusterMethods(struct track *tg);
 void gtexEqtlTissueMethods(struct track *tg);
 /* Install handler for GTEx eQTL Tissues track */
 
-void lollipopMethods(struct track *track, struct trackDb *tdb,
+void lollyMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);
 /* Lollipop track type methods */
 
