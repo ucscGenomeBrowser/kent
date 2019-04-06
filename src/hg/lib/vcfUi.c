@@ -128,24 +128,27 @@ static struct vcfFile *vcfHopefullyOpenHeader(struct cart *cart, struct trackDb 
 knetUdcInstall();
 if (udcCacheTimeout() < 300)
     udcSetCacheTimeout(300);
-char *db = cartString(cart, "db");
-char *table = tdb->table;
-char *dbTableName = trackDbSetting(tdb, "dbTableName");
-struct sqlConnection *conn;
-if (isCustomTrack(tdb->track) && isNotEmpty(dbTableName))
+char *fileOrUrl = trackDbSetting(tdb, "bigDataUrl");
+if (isEmpty(fileOrUrl))
     {
-    conn =  hAllocConn(CUSTOM_TRASH);
-    table = dbTableName;
+    char *db = cartString(cart, "db");
+    char *table = tdb->table;
+    char *dbTableName = trackDbSetting(tdb, "dbTableName");
+    struct sqlConnection *conn;
+    if (isCustomTrack(tdb->track) && isNotEmpty(dbTableName))
+        {
+        conn =  hAllocConn(CUSTOM_TRASH);
+        table = dbTableName;
+        }
+    else
+        conn = hAllocConnTrack(db, tdb);
+    char *chrom = cartOptionalString(cart, "c");
+    if (chrom != NULL)
+        fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, table, chrom);
+    if (fileOrUrl == NULL)
+        fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, table, hDefaultChrom(db));
+    hFreeConn(&conn);
     }
-else
-    conn = hAllocConnTrack(db, tdb);
-char *fileOrUrl = NULL;
-char *chrom = cartOptionalString(cart, "c");
-if (chrom != NULL)
-    fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, table, chrom);
-if (fileOrUrl == NULL)
-    fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, table, hDefaultChrom(db));
-hFreeConn(&conn);
 if (fileOrUrl == NULL)
     return NULL;
 int vcfMaxErr = 100;
