@@ -85,9 +85,12 @@ safef(upper, sizeof(upper), "%g -",   tg->lollyCart->upperLimit);
 hvGfxTextRight(hvg, xOff, yOff + 2 * 5 , width - 1, fontHeight, color,
     font, upper);
 char lower[1024];
-safef(lower, sizeof(lower), "%g _", tg->lollyCart->lowerLimit);
-hvGfxTextRight(hvg, xOff, yOff+height-fontHeight - 2 * 5, width - 1, fontHeight,
-    color, font, lower);
+if (tg->lollyCart->lowerLimit < tg->lollyCart->upperLimit)
+    {
+    safef(lower, sizeof(lower), "%g _", tg->lollyCart->lowerLimit);
+    hvGfxTextRight(hvg, xOff, yOff+height-fontHeight - 2 * 5, width - 1, fontHeight,
+        color, font, lower);
+    }
 }
 
 
@@ -131,22 +134,27 @@ char *bedRow[bbi->fieldCount];
 char startBuf[16], endBuf[16];
 struct lolly *popList = NULL, *pop;
 unsigned lollyField = 5;
+struct lollyCartOptions *lollyCart = tg->lollyCart;
 char *setting = trackDbSetting(tg->tdb, "lollyField");
 if (setting != NULL)
     lollyField = atoi(setting);
+double minVal = DBL_MAX, maxVal = -DBL_MAX;
+
 
 double sumData = 0.0, sumSquares = 0.0;
-double minVal = DBL_MAX, maxVal = -DBL_MAX;
 unsigned count = 0;
 
 int trackHeight = tg->lollyCart->height;
                     
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
-    AllocVar(pop);
-    slAddHead(&popList, pop);
     bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
     double val = atof(bedRow[lollyField - 1]);
+    if (!((lollyCart->autoScale == wiggleScaleAuto) ||  ((val >= lollyCart->minY) && (val <= lollyCart->maxY) )))
+        continue;
+
+    AllocVar(pop);
+    slAddHead(&popList, pop);
     pop->val = val;
     pop->start = atoi(bedRow[1]);
     pop->end = atoi(bedRow[2]);
@@ -222,9 +230,18 @@ int maxHeightPixels;
 int minHeightPixels;
 int defaultHeight;  /*  pixels per item */
 int settingsDefault;
+
 cartTdbFetchMinMaxPixels(cart, tdb, MIN_HEIGHT_PER, atoi(DEFAULT_HEIGHT_PER), atoi(DEFAULT_HEIGHT_PER),
                                 &minHeightPixels, &maxHeightPixels, &settingsDefault, &defaultHeight);
 lollyCart->height = defaultHeight;
+
+lollyCart->autoScale = wigFetchAutoScaleWithCart(cart,tdb, tdb->track, NULL);
+
+double tDbMinY;     /*  data range limits from trackDb type line */
+double tDbMaxY;     /*  data range limits from trackDb type line */
+char *trackWords[8];     /*  to parse the trackDb type line  */
+int trackWordCount = 0;  /*  to parse the trackDb type line  */
+wigFetchMinMaxYWithCart(cart, tdb, tdb->track, &lollyCart->minY, &lollyCart->maxY, &tDbMinY, &tDbMaxY, trackWordCount, trackWords);
 
 return lollyCart;
 }
