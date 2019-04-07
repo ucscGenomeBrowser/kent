@@ -8,6 +8,6 @@ lollyField 13
 release alpha
 bigDataUrl /gbdb/$D/bbi/cancerMutations/pancan33.bb
 urls case_id=https://portal.gdc.cancer.gov/cases/$$
-sampleCountFilterValues TCGA-ACC,TCGA-BLCA,TCGA-BRCA,TCGA-CESC,TCGA-CHOL,TCGA-COAD,TCGA-DLBC,TCGA-ESCA,TCGA-GBM,TCGA-HNSC,TCGA-KICH,TCGA-KIRC,TCGA-KIRP,TCGA-LAML,TCGA-LGG,TCGA-LIHC,TCGA-LUAD,TCGA-LUSC,TCGA-MESO,TCGA-OV,TCGA-PAAD,TCGA-PCPG,TCGA-PRAD,TCGA-READ,TCGA-SARC,TCGA-SKCM,TCGA-STAD,TCGA-TGCT,TCGA-THCA,TCGA-THYM,TCGA-UCEC,TCGA-UCS,TCGA-UVM,
-sampleCountFilterType multipleListOr
+project_idFilterValues TCGA-LAML|Acute,TCGA-ACC|Adrenocortical,TCGA-BLCA|Bladder,TCGA-LGG|Brain,TCGA-BRCA|Breast,TCGA-CESC|Cervical,TCGA-CHOL|Cholangiocarcinoma,TCGA-LCML|Chronic,TCGA-COAD|Colon,TCGA-CNTL|Controls,TCGA-ESCA|Esophageal,TCGA-FPPP|FFPE,TCGA-GBM|Glioblastoma,TCGA-HNSC|Head,TCGA-KICH|Kidney,TCGA-KIRC|Kidney,TCGA-KIRP|Kidney,TCGA-LIHC|Liver,TCGA-LUAD|Lung,TCGA-LUSC|Lung,TCGA-DLBC|Lymphoid,TCGA-MESO|Mesothelioma,TCGA-MISC|Miscellaneous,TCGA-OV|Ovarian,TCGA-PAAD|Pancreatic,TCGA-PCPG|Pheochromocytoma,TCGA-PRAD|Prostate,TCGA-READ|Rectum,TCGA-SARC|Sarcoma,TCGA-SKCM|Skin,TCGA-STAD|Stomach,TCGA-TGCT|Testicular,TCGA-THYM|Thymoma,TCGA-THCA|Thyroid,TCGA-UCS|Uterine,TCGA-UCEC|Uterine,TCGA-UVM|Uveal,
+project_idFilterType multipleListOr
 
