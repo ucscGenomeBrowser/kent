@@ -11,6 +11,7 @@
 #include "lolly.h"
 #include "limits.h"
 #include "float.h"
+#include "bigBedFilter.h"
 
 
 static int lollyPalette[] =
@@ -149,6 +150,11 @@ int trackHeight = tg->lollyCart->height;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+
+    struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, tg->tdb);
+    if (!bigBedFilterInterval(bedRow, filters))
+        continue;
+
     double val = atof(bedRow[lollyField - 1]);
     if (!((lollyCart->autoScale == wiggleScaleAuto) ||  ((val >= lollyCart->minY) && (val <= lollyCart->maxY) )))
         continue;

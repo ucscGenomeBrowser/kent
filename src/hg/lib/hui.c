@@ -4329,6 +4329,7 @@ switch(cType)
     case cfgInteract:   interactCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;
     case cfgLollipop:   lollyCfgUi(db,cart,tdb,prefix,title,boxed);
+			scoreCfgUi(db, cart,tdb,prefix,title,1000,boxed);
                         break;
     default:            warn("Track type is not known to multi-view composites. type is: %d ",
 			     cType);
