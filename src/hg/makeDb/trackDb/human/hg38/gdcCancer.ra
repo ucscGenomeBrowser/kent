@@ -2,10 +2,12 @@
 track gdcCancer
 shortLabel GDC Cancer
 longLabel GDC Cancer mutations: 33 TCGA Cancer Projects Summary (Pan-Can 33)
-#type bigBed 12 +
 group phenDis
 type bigLolly
 lollyField 13
 release alpha
 bigDataUrl /gbdb/$D/bbi/cancerMutations/pancan33.bb
 urls case_id=https://portal.gdc.cancer.gov/cases/$$
+sampleCountFilterValues TCGA-ACC,TCGA-BLCA,TCGA-BRCA,TCGA-CESC,TCGA-CHOL,TCGA-COAD,TCGA-DLBC,TCGA-ESCA,TCGA-GBM,TCGA-HNSC,TCGA-KICH,TCGA-KIRC,TCGA-KIRP,TCGA-LAML,TCGA-LGG,TCGA-LIHC,TCGA-LUAD,TCGA-LUSC,TCGA-MESO,TCGA-OV,TCGA-PAAD,TCGA-PCPG,TCGA-PRAD,TCGA-READ,TCGA-SARC,TCGA-SKCM,TCGA-STAD,TCGA-TGCT,TCGA-THCA,TCGA-THYM,TCGA-UCEC,TCGA-UCS,TCGA-UVM,
+sampleCountFilterType multipleListOr
+
