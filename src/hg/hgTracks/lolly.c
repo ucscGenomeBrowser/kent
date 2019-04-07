@@ -146,12 +146,12 @@ double sumData = 0.0, sumSquares = 0.0;
 unsigned count = 0;
 
 int trackHeight = tg->lollyCart->height;
+struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, tg->tdb);
                     
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
 
-    struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, tg->tdb);
     if (!bigBedFilterInterval(bedRow, filters))
         continue;
 
