@@ -13988,8 +13988,8 @@ else if (sameWord(type, "bigBarChart"))
     }
 else if (sameWord(type, "bigLolly"))
     {
-    tdb->canPack = TRUE;
     track->isBigBed = TRUE;
+    track->mapsSelf = TRUE;
     lollyMethods(track, tdb, wordCount, words);
     }
 else if (sameWord(type, "bigInteract"))

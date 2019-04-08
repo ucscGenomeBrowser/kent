@@ -4213,6 +4213,30 @@ cgiMakeIntVarWithLimits(option, defaultHeight, "Track height",0, minHeightPixels
 printf("pixels&nbsp;(range: %d to %d)",
        minHeightPixels, maxHeightPixels);
 
+char *autoScale;
+wigFetchAutoScaleWithCart(cart,tdb,name, &autoScale);
+
+printf("<TR valign=center><th align=right>Data view scaling:</th><td align=left colspan=3>");
+safef(option, sizeof(option), "%s.%s", name, AUTOSCALE );
+wiggleScaleDropDown(option, autoScale);
+void wiggleScaleDropDownJavascript(char *name);
+wiggleScaleDropDownJavascript(name);
+puts("</TD></TR>");
+
+double minY;        /*  from trackDb or cart    */
+double maxY;        /*  from trackDb or cart    */
+double tDbMinY;     /*  data range limits from trackDb type line */
+double tDbMaxY;     /*  data range limits from trackDb type line */
+char *words[8];     /*  to parse the trackDb type line  */
+int wordCount = 0;  /*  to parse the trackDb type line  */
+wigFetchMinMaxYWithCart(cart, tdb, name, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);
+printf("<TR class=\"%sAutoScaleDesc\" valign=center><th align=right>Vertical viewing range:</th>"
+       "<td align=left>&nbsp;min:&nbsp;", name);
+safef(option, sizeof(option), "%s.%s", name, MIN_Y );
+cgiMakeDoubleVarWithLimits(option, minY, "Range min", 0, NO_VALUE, NO_VALUE);
+printf("</td><td align=leftv colspan=2>max:&nbsp;");
+safef(option, sizeof(option), "%s.%s", name, MAX_Y );
+cgiMakeDoubleVarWithLimits(option, maxY, "Range max", 0, NO_VALUE, NO_VALUE);
 /*
 printf("<TR valign=center><th align=right>Drawing method:</th><td align=left>");
 safef(option, sizeof(option), "%s.%s", name, POPMETHOD);
@@ -4305,6 +4329,7 @@ switch(cType)
     case cfgInteract:   interactCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;
     case cfgLollipop:   lollyCfgUi(db,cart,tdb,prefix,title,boxed);
+			scoreCfgUi(db, cart,tdb,prefix,title,1000,boxed);
                         break;
     default:            warn("Track type is not known to multi-view composites. type is: %d ",
 			     cType);
