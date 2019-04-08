@@ -56,8 +56,106 @@ if (debug)
 return jw;
 }
 
+/* these json type strings beyond 'null' are types for UCSC jsonWrite()
+ * functions.  The real 'official' json types are just the first six
+ */
+char *jsonTypeStrings[] =
+    {
+    "string",	/* type 0 */
+    "number",	/* type 1 */
+    "object",	/* type 2 */
+    "array",	/* type 3 */
+    "boolean",	/* type 4 */
+    "null",	/* type 5 */
+    "double"	/* type 6 */
+    };
+
+/* this set of SQL types was taken from a survey of all the table
+ *  descriptions on all tables on hgwdev.  This is not necessarily
+ *  a full range of all SQL types possible, just what we have used in
+ *  UCSC databases.  The fallback default will be string.
+ * bigint binary bit blob char date datetime decimal double enum float int
+ * longblob longtext mediumblob mediumint mediumtext set smallint text
+ * timestamp tinyblob tinyint tinytext unsigned varbinary varchar
+ * Many of these are not yet encountered since they are often in
+ * non-positional tables.  This system doesn't yet output non-positional
+ * tables.
+ */
+static int sqlTypeToJsonType(char *sqlType)
+/* convert SQL data type to JSON data type (index into jsonTypes[]) */
+{
+/* assume string, good enough for just about anything */
+int typeIndex = JSON_STRING;
+
+if (startsWith("tinyint(1)", sqlType))
+    typeIndex = JSON_BOOLEAN;
+else if (startsWith("bigint", sqlType) ||
+     startsWith("int", sqlType) ||
+     startsWith("mediumint", sqlType) ||
+     startsWith("smallint", sqlType) ||
+     startsWith("tinyint", sqlType) ||
+     startsWith("unsigned", sqlType)
+   )
+    typeIndex = JSON_NUMBER;
+else if (startsWith("decimal", sqlType) ||
+     startsWith("double", sqlType) ||
+     startsWith("float", sqlType)
+   )
+    typeIndex = JSON_DOUBLE;
+else if (startsWith("binary", sqlType) ||
+	startsWith("bit", sqlType) ||
+	startsWith("blob", sqlType) ||
+	startsWith("char", sqlType) ||
+	startsWith("date", sqlType) ||
+	startsWith("datetime", sqlType) ||
+	startsWith("enum", sqlType) ||
+	startsWith("longblob", sqlType) ||
+	startsWith("longtext", sqlType) ||
+	startsWith("mediumblob", sqlType) ||
+	startsWith("set", sqlType) ||
+	startsWith("text", sqlType) ||
+	startsWith("time", sqlType) ||
+	startsWith("timestamp", sqlType) ||
+	startsWith("tinyblob", sqlType) ||
+	startsWith("tinytext", sqlType) ||
+	startsWith("varbinary", sqlType) ||
+	startsWith("varchar", sqlType)
+	)
+    typeIndex = JSON_STRING;
+
+return typeIndex;
+}	/*	static int sqlTypeToJsonType(char *sqlType)	*/
+
+int autoSqlToJsonType(char *asType)
+/* convert an autoSql field type to a Json type */
+{
+/* assume string, good enough for just about anything */
+int typeIndex = JSON_STRING;
+
+if (startsWith("int", asType) ||
+    startsWith("uint", asType) ||
+    startsWith("short", asType) ||
+    startsWith("ushort", asType) ||
+    startsWith("byte", asType) ||
+    startsWith("ubyte", asType) ||
+    startsWith("bigit", asType)
+   )
+    typeIndex = JSON_NUMBER;
+else if (startsWith("float", asType))
+	typeIndex = JSON_DOUBLE;
+else if (startsWith("char", asType) ||
+	 startsWith("string", asType) ||
+	 startsWith("lstring", asType) ||
+	 startsWith("enum", asType) ||
+	 startsWith("set", asType)
+	)
+	typeIndex = JSON_STRING;
+
+return typeIndex;
+}	/*	int asToJsonType(char *asType)	*/
+
 int tableColumns(struct sqlConnection *conn, struct jsonWrite *jw, char *table,
-   char ***nameReturn, char ***typeReturn)
+   char ***nameReturn, char ***typeReturn, int **jsonType)
 /* return the column names, and their MySQL data type, for the given table
  *  return number of columns (aka 'fields')
  */
@@ -67,13 +165,16 @@ struct sqlFieldInfo *fi, *fiList = sqlFieldInfoGet(conn, table);
 int columnCount = slCount(fiList);
 char **namesReturn = NULL;
 char **typesReturn = NULL;
+int *jsonReturn = NULL;
 AllocArray(namesReturn, columnCount);
 AllocArray(typesReturn, columnCount);
+AllocArray(jsonReturn, columnCount);
 int i = 0;
 for (fi = fiList; fi; fi = fi->next)
     {
     namesReturn[i] = cloneString(fi->field);
     typesReturn[i] = cloneString(fi->type);
+    jsonReturn[i] = sqlTypeToJsonType(fi->type);
     i++;
 // not needed     jsonWriteObjectStart(jw, NULL);
 // not needed     jsonWriteString(jw, fi->field, fi->type);
@@ -81,7 +182,8 @@ for (fi = fiList; fi; fi = fi->next)
     }
 // not needed jsonWriteListEnd(jw);
 *nameReturn = namesReturn;
-*typeReturn = namesReturn;
+*typeReturn = typesReturn;
+*jsonType = jsonReturn;
 return columnCount;
 }
 

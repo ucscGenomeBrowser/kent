@@ -13,6 +13,7 @@ UTIL_DIRS = \
     cdwAddQaEnrichTarget \
     cdwAddSubscriber \
     cdwBackup \
+    cdwChangeAccess \
     cdwChangeFormat \
     cdwCheckDataset \
 	cdwCheckValidation \

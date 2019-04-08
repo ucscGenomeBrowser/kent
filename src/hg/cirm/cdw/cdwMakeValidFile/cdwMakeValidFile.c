@@ -950,20 +950,34 @@ if (vf->format)	// We only can validate if we have something for format
     if (!submitDir)
 	errAbort("submitDir not found for id %d", ef->submitDirId);
 
-    char *lastPath = findSubmitSymlink(ef->submitFileName, submitDir, oldPath);
-    freeMem(submitDir);
-    if (!lastPath)
-	noWarnAbort();
 
-    verbose(3, "lastPath=%s newPath=%s\n", lastPath, newPath);
-    if (unlink(lastPath) == -1)  // drop about to be invalid symlink
-	errnoAbort("unlink failure %s", lastPath);
+    boolean metaException = sameString(ef->submitFileName, "meta.txt");
+    // if meta.txt is being expliictly submitted, this is probably for dataset page meta links.
+    // this makes it an odd exception, because unlike normally submitted files,
+    // this will NOT be converted to a symlink pointing to the cdw/ dir file
+    // during the original cdwSubmit.
+
+    char *lastPath = NULL;
+    if (!metaException)
+	{
+	lastPath = findSubmitSymlink(ef->submitFileName, submitDir, oldPath);
+	freeMem(submitDir);
+	if (!lastPath)
+	    noWarnAbort();
+
+	verbose(3, "lastPath=%s newPath=%s\n", lastPath, newPath);
+	if (unlink(lastPath) == -1)  // drop about to be invalid symlink
+	    errnoAbort("unlink failure %s", lastPath);
+	}
 
     mustRename(oldPath, newPath);
 
-    if (symlink(newPath, lastPath) == -1)  // replace with symlink
-	errnoAbort("symlink failure from %s to %s", lastPath, newPath);
-    freeMem(lastPath);
+    if (!metaException)
+	{
+	if (symlink(newPath, lastPath) == -1)  // replace with symlink
+	    errnoAbort("symlink failure from %s to %s", lastPath, newPath);
+	freeMem(lastPath);
+	}
 
     verbose(2, "Renamed %s to %s\n", oldPath, newPath);
 
