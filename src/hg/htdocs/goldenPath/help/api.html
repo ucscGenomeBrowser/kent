@@ -33,20 +33,12 @@ target=_blank>JSON Introduction</a>
 <a name="Access"></a>
 <h2>What is the access URL ?</h2> 
 <p>
-The gateway html page to the interface is available at
-<a href="https://api-test.gi.ucsc.edu/"
-target=_blank>api-test.gi.ucsc.edu</a>.  This page can be used
-to explore track hubs, assembly hubs, and UCSC browser data resources.
-Example URL links for JSON output are provided on that page for track
-types that are currently supported for data output.  Work is underway
-to provide access to additional data track types.
-</p>
-<p>
 This access url: <b>https://api-test.gi.ucsc.edu/</b> is used to access
 the endpoint functions.  For example:
 <pre>
     wget -O- 'https://api-test.gi.ucsc.edu/list/publicHubs'
 </pre>
+</p>
 
 <!-- ========== What type of data can be accessed ? ===================== -->
 <a name="Return"></a>
@@ -157,6 +149,7 @@ position, both <b>start=4321</b> and <b>end=5678</b> must be given together.
 <li><a href='/FAQ/FAQformat.html#format6.1' target=_blank>bigWig</a></li>
 <li><a href='/FAQ/FAQformat.html#format9' target=_blank>genePred</a></li>
 <li><a href='/FAQ/FAQformat.html#format9.5' target=_blank>narrowPeak</a></li>
+<li><a href='/FAQ/FAQformat.html#format2' target=_blank>psl</a></li>
 <li><a href='/FAQ/FAQformat.html#format6' target=_blank>wig</a></li>
 <li>(Work is under way to support additional track types)</li>
 </ul>
