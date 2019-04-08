@@ -2,10 +2,12 @@
 track gdcCancer
 shortLabel GDC Cancer
 longLabel GDC Cancer mutations: 33 TCGA Cancer Projects Summary (Pan-Can 33)
-#type bigBed 12 +
 group phenDis
 type bigLolly
 lollyField 13
 release alpha
 bigDataUrl /gbdb/$D/bbi/cancerMutations/pancan33.bb
 urls case_id=https://portal.gdc.cancer.gov/cases/$$
+project_idFilterValues TCGA-LAML|Acute Myeloid Leukemia,TCGA-ACC|Adrenocortical carcinoma,TCGA-BLCA|Bladder Urothelial Carcinoma,TCGA-LGG|Brain Lower Grade Glioma,TCGA-BRCA|Breast invasive carcinoma,TCGA-CESC|Cervical squamous cell carcinoma and endocervical adenocarcinoma,TCGA-CHOL|Cholangiocarcinoma,TCGA-LCML|Chronic Myelogenous Leukemia,TCGA-COAD|Colon adenocarcinoma,TCGA-CNTL|Controls,TCGA-ESCA|Esophageal carcinoma,TCGA-FPPP|FFPE Pilot Phase II,TCGA-GBM|Glioblastoma multiforme,TCGA-HNSC|Head and Neck squamous cell carcinoma,TCGA-KICH|Kidney Chromophobe,TCGA-KIRC|Kidney renal clear cell carcinoma,TCGA-KIRP|Kidney renal papillary cell carcinoma,TCGA-LIHC|Liver hepatocellular carcinoma,TCGA-LUAD|Lung adenocarcinoma,TCGA-LUSC|Lung squamous cell carcinoma,TCGA-DLBC|Lymphoid Neoplasm Diffuse Large B-cell Lymphoma,TCGA-MESO|Mesothelioma,TCGA-MISC|Miscellaneous,TCGA-OV|Ovarian serous cystadenocarcinoma,TCGA-PAAD|Pancreatic adenocarcinoma,TCGA-PCPG|Pheochromocytoma and Paraganglioma,TCGA-PRAD|Prostate adenocarcinoma,TCGA-READ|Rectum adenocarcinoma,TCGA-SARC|Sarcoma,TCGA-SKCM|Skin Cutaneous Melanoma,TCGA-STAD|Stomach adenocarcinoma,TCGA-TGCT|Testicular Germ Cell Tumors,TCGA-THYM|Thymoma,TCGA-THCA|Thyroid carcinoma,TCGA-UCS|Uterine Carcinosarcoma,TCGA-UCEC|Uterine Corpus Endometrial Carcinoma,TCGA-UVM|Uveal Melanoma,
+project_idFilterType multipleListOr
+

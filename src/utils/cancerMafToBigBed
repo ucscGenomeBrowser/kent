@@ -59,9 +59,13 @@ fieldDescs = {
 # ==== functions =====
 def parseArgs():
     " setup logging, parse command line arguments and options. -h shows auto-generated help page "
-    parser = optparse.OptionParser("""usage: %prog [options] inDir outBb - summarize GDC MAF files to bigBed
+    parser = optparse.OptionParser("""usage: %prog [options] inDir annotationFile exposureFile outBb - summarize GDC MAF files to bigBed
 
     inDir will be recursively searched for .maf.gz files. Their variants will be extracted, written to outBb
+
+    annotationFile and exposureFile are two .tsv files, both are distributed by the GDC.
+    See /hive/data/outside/gdc/pancan33-variants/annotations/ for the versions from Jan 2019
+
 
     """)
 
