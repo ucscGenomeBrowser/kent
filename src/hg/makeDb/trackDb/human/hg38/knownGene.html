@@ -38,7 +38,7 @@ href="/FAQ/FAQgenes.html">Genes FAQ</a>.</p>
 By default, this track displays only the basic GENCODE set, splice variants, and non-coding 
 genes. It includes options to display the comprehensive GENCODE set and pseudogenes. To customize 
 these options, the respective boxes can be checked or unchecked at the top of this description 
-page. Our FAQ includes examples on <a target=_blank 
+page. Our FAQ includes examples of <a target=_blank 
 href="/FAQ/FAQgenes.html#justsingle">how to display a single transcript per gene</a> and 
 <a target=_blank href="https://hgwdev.gi.ucsc.edu/FAQ/FAQgenes.html#gencode">
 switching between the basic and comprehensive gene sets</a>.</p>
@@ -51,7 +51,7 @@ UniProt Display ID (Q7RTP0) and OMIM ID (608145). Additional information about g
 names can be found in our <a target=_blank href="/FAQ/FAQgenes.html#genename">FAQ</a>.</p>
 
 <p>
-This track in general follows the display conventions for <a target="_blank"
+This track, in general, follows the display conventions for <a target="_blank"
 href="../goldenPath/help/hgTracksHelp.html#GeneDisplay">gene prediction tracks</a>. The exons
 for putative non-coding genes and untranslated regions are represented by relatively thin blocks,
 while those for coding open reading frames are thicker. The following color key is used:</p>
@@ -78,7 +78,7 @@ can be helpful for visualizing the distribution of items over a region.</p>
 <p>
 All the GENCODE genes in the comprehensive set are downloaded from the GENCODE 
 <a href="http://www.gencodegenes.org/human/">website</a>.  
-Data from other sources are correlated with the GENCODE data to build the knownTo tables.
+Data from other sources are correlated with the GENCODE data to build the <i>knownTo_</i> tables.
 </p>
 
 <p>
@@ -88,16 +88,20 @@ knownGene and supporting tables.</p>
 
 <h2>Related Data</h2>
 <p>
-The GENCODE Genes transcripts are annotated in numerous tables, each of which is also available as a
-<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/">downloadable file</a>.  These
+The GENCODE Genes transcripts are annotated in numerous tables. These
 include tables that link GENCODE Genes transcripts to external datasets (such as
 <i>knownToLocusLink</i>, which maps GENCODE Genes transcripts to Entrez identifiers, previously
 known as Locus Link identifiers), and tables that detail some property of GENCODE Genes transcript
 sequences (such as <i>knownToPfam</i>, which identifies any Pfam domains found in the GENCODE Genes
-protein-coding transcripts). One can see a full list of the associated tables in the
+protein-coding transcripts).</p>
+
+<p>
+One can see a full list of the associated tables by clicking the <a target=_blank 
+href="/cgi-bin/hgTables?db=hg38&hgta_group=genes&hgta_track=knownGene&hgta_table=knownGene&hgta_doSchema=describe+table+schema">
+View table schema</a> link at the top of the page, or in the
 <a href="/cgi-bin/hgTables">Table Browser</a> by selecting GENCODE Genes from the <b>track</b> menu;
 this list is then available on the <b>table</b> menu. Note that some of these tables refer to
-GENCODE Genes by its former name of <i>Known Genes</i>, sometimes abbreviated as <i>known</i> or
+GENCODE Genes by its table name <i>KnownGene</i>, sometimes abbreviated as <i>known</i> or
 <i>kg</i>. While the complete set of annotation tables is too long to describe, some of the more
 important tables are described below.</p>
 <ul> 
@@ -119,6 +123,23 @@ important tables are described below.</p>
   If no APPRIS tag exists for any transcript associated with the cluster, then a transcript in the 
   BASIC set is chosen. If no BASIC transcript exists, then the longest isoform is used.</li>
 </ul>
+
+<h2>Data access</h2>
+
+<p>
+GENCODE Genes and its associated tables can be explored interactively using the 
+<a href="/cgi-bin/hgTables">Table Browser</a> or the 
+<a href="/cgi-bin/hgIntegrator">Data Integrator</a>. The data are also all available as
+<a target=_blank href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/">
+downloadable files</a>. For example, if you would like to download the entire GENCODE Genes set 
+as seen in the <a target=_blank 
+href="/cgi-bin/hgTables?db=hg38&hgta_group=genes&hgta_track=knownGene&hgta_table=knownGene&hgta_doSchema=describe+table+schema">
+View table schema</a> page, the 
+knownGene.txt.gz file in the downloads directory contains a compressed version of the data. All 
+the tables can also be queried directly from our public MySQL servers. Information on accessing 
+this data through MySQL can be found on our <a target=_blank href="/goldenPath/help/mysql.html">
+help page</a> as well as on <a target=_blank href="http://genome.ucsc.edu/blog/tag/mysql/">
+our blog</a>.</p>
 
 <h2>Credits</h2>
 <p>
@@ -146,7 +167,7 @@ PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/16925838" target="_blank">169
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1810553/" target="_blank">PMC1810553</a>
 </p>
 
-<p>A full list of GENCODE publications are available
+<p>A full list of GENCODE publications is available
 at <a href="https://www.gencodegenes.org/pages/publications.html" target="_blank">The GENCODE
 Project web site</a>.
 </p>

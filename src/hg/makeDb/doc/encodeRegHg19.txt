@@ -1082,6 +1082,7 @@ insert into kateTemp (select * from wgEncodeTfbsClusteredV3)
 # of exp id's and scores
 
     clusterShrinkExps.pl clusters.target.sorted.bed > clusters.shrunk.bed
+# NOTE: moving this tool to makeDb/hgBedsToBedExps/bedExpsToFactorSource.pl
 
     hgLoadBed -sqlTable=~/kent/src/hg/lib/factorSource.sql -renameSqlTable \
         hg19 wgEncodeRegTfbsClusteredShrunkMini test.shrink.bed

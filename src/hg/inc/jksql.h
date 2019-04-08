@@ -24,7 +24,7 @@
 #include "sqlList.h"
 #include "hash.h"
 #include "dystring.h"
-
+#include "asParse.h"
 
 char *getDefaultProfileName();  // name of default profile
 
@@ -761,5 +761,32 @@ __attribute__((format(printf, 1, 2)))
 struct sqlConnection *sqlFailoverConn(struct sqlConnection *sc);
 /* returns the failover connection of a connection or NULL.
  * (Needed because the sqlConnection is not in the .h file) */
+
+/* structure moved here from hgTables.h 2019-03-04 - Hiram */
+struct sqlFieldType
+/* List field names and types */
+    {
+    struct sqlFieldType *next;
+    char *name;         /* Name of field. */
+    char *type;         /* Type of field (MySQL notion) */
+    };
+
+struct sqlFieldType *sqlFieldTypeNew(char *name, char *type);
+/* Create a new sqlFieldType */
+
+void sqlFieldTypeFree(struct sqlFieldType **pFt);
+/* Free resources used by sqlFieldType */
+
+void sqlFieldTypeFreeList(struct sqlFieldType **pList);
+/* Free a list of dynamically allocated sqlFieldType's */
+
+struct sqlFieldType *sqlFieldTypesFromAs(struct asObject *as);
+/* Convert asObject to list of sqlFieldTypes */
+
+struct sqlFieldType *sqlListFieldsAndTypes(struct sqlConnection *conn, char *table);
+/* Get list of fields including their names and types.  The type currently is
+ * just a MySQL type string. */
+
+
 
 #endif /* JKSQL_H */

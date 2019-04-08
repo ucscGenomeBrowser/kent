@@ -1,39 +1,48 @@
 <h2>Description</h2>
 <p>
-The RefSeq project at the NCBI and the Ensembl/GENCODE project at EMBL-EBI have
-provided independent high-quality human reference gene datasets to biologists
-since the sequencing of the human genome. Now we are joining together on an
-exciting new project we are calling Matched Annotation from the NCBI and
-EMBL-EBI or MANE, to provide a matched set of well-supported transcripts for
-human protein-coding genes and define one representative transcript for each
-gene. Both RefSeq and Ensembl will continue to provide a rich set of alternate
-transcripts per gene.
+The Matched Annotation from NCBI and EMBL-EBI (MANE) project aims to produce a matched set of 
+high-confidence transcripts that are identically annotated between RefSeq (NCBI) and 
+Ensembl/GENCODE (led by EMBL-EBI). Transcripts for MANE are chosen by a combination of 
+automated and manual methods based on conservation, expression levels, clinical significance, 
+and other factors. Transcripts are matched between the NCBI RefSeq and Ensembl/GENCODE annotations
+based on the GRCh38 genome assembly, with precise 5’ and 3’ ends defined by high-throughput
+sequencing or other available data.
+<br><br>
+Note that MANE v0.5 (December 2018) is a beta release and only covers 53% or protein coding genes.
+RefSeq and Ensembl will continue to develop this single transcript gene set and provide
+comprehensive sets of alternate transcripts in the RefSeq-All and the GENCODE tracks.
+
 <h2>Data Access</h2>
 <p>
 The raw data can be explored interactively with the <a href="../cgi-bin/hgTables"
 target="_blank">Table Browser</a>, or the <a href="../cgi-bin/hgIntegrator"
-target="_blank">Data Integrator</a>. For automated analysis, genome annotation is stored in a bigGenePred file that can be downloaded from the
+target="_blank">Data Integrator</a>. For computational analysis, genome annotations are stored in
+a bigGenePred file that can be downloaded from the
 <a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/mane/" target="_blank">download
-server</a>. Individual regions or the whole genome annotation can be obtained using our tool
-<em>bigBedToBed</em> which can be compiled from the source code or
-downloaded as a precompiled binary for your system. Instructions for downloading source code and
-binaries can be found <a href="http://hgdownload.soe.ucsc.edu/admin/exe/" target="_blank">here</a>.
-The tool can also be used to obtain only features within a given range, for example:</p> 
-<tt>bigBedToBed -chrom=chr6 -start=0 -end=1000000 http://hgdownload.soe.ucsc.edu/gbdb/$db/mane/mane.0.5.bb stdout</tt>
+server</a>. Regional or genome-wide annotations can be converted from binary data to human readable
+text using our command line utility <em>bigBedToBed</em> which can be compiled from source code or
+downloaded as a precompiled binary for your system. Files and instructions can be found in the
+<a href="http://hgdownload.soe.ucsc.edu/admin/exe/" target="_blank">utilities directory</a>.
+
+The utility can be used to obtain features within a given range, for example:</p>
+<code>bigBedToBed -chrom=chr6 -start=0 -end=1000000 http://hgdownload.soe.ucsc.edu/gbdb/hg38/mane/mane.0.5.bb stdout</code>
+
 <p>
-Please refer to our <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome"
-target="_blank">mailing list archives</a> for questions, or our
-<a href="../FAQ/FAQdownloads.html#download36" target="_blank">Data Access FAQ</a> for more
-information.</p>
+Please refer to our <a href="../FAQ/FAQdownloads.html#download36" target="_blank">Data Access FAQ
+</a> for more information or our
+<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome"
+target="_blank">mailing list</a> for archived user questions.</p>
 
 <h2>Credits</h2>
 <p>
-The RefSeq project at the NCBI and the Ensembl/GENCODE project at EMBL-EBI
+Thank you to the RefSeq project at NCBI and the Ensembl/GENCODE project at EMBL-EBI.
+You can contact the authors directly at <A HREF="mailto:&#77;A&#78;&#69;&#45;h&#101;&#108;&#112;&#64;&#110;&#99;&#98;&#105;.
+&#110;&#108;&#109;.&#110;ih.&#103;&#111;&#118;">
+&#77;A&#78;&#69;&#45;h&#101;&#108;&#112;&#64;&#110;&#99;&#98;&#105;.&#110;&#108;&#109;.&#110;ih.&#103;&#111;&#118;</A>
+or <A HREF="mailto:&#109;&#97;&#110;&#101;&#45;&#104;el&#112;&#64;&#101;&#98;&#105;.a&#99;.&#117;&#107;">
+&#109;&#97;&#110;&#101;&#45;&#104;el&#112;&#64;&#101;&#98;&#105;.a&#99;.&#117;&#107;</A>.
 
 <h2>References</h2>
-Useful Links:<br>
-* MANE Select v0.5: ftp://ftp.ncbi.nlm.nih.gov/refseq/MANE<br>
-* NCBI Insights | Matched Annotation by NCBI and EMBL-EBI (MANE): http://go.usa.gov/xPX8k`<br>
-NCBI Insights Blog -- http://bit.ly/rs-mane <br><br>
-Ensembl Blog -- http://bit.ly/ens-mane<br>
+Release announcement by NCBI: <a href="https://ncbiinsights.ncbi.nlm.nih.gov/2019/03/12/mane-select-v0-5">https://ncbiinsights.ncbi.nlm.nih.gov/2019/03/12/mane-select-v0-5</a> <br>
+Download links for MANE Select v0.5: <a href="ftp://ftp.ncbi.nlm.nih.gov/refseq/MANE">ftp://ftp.ncbi.nlm.nih.gov/refseq/MANE</a><br>
 <p>

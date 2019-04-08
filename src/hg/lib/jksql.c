@@ -3175,7 +3175,7 @@ else
 updateIx = getUpdateFieldIndex(sr);
 row = sqlNextRow(sr);
 if (row == NULL)
-    sqlAbort(conn, "Database table %s doesn't exist", table);
+    errAbort("Database table %s doesn't exist", table);
 ret = cloneString(row[updateIx]);
 sqlFreeResult(&sr);
 if (changeDb)
@@ -4379,4 +4379,76 @@ if (sameString(noSqlInjLevel, "abort"))
 
 va_end(args);
 
+}
+
+/* functions moved here from hgTables.c 2019-04-04 - Hiram */
+struct sqlFieldType *sqlFieldTypeNew(char *name, char *type)
+/* Create a new sqlFieldType */
+{
+struct sqlFieldType *ft;
+AllocVar(ft);
+ft->name = cloneString(name);
+ft->type = cloneString(type);
+return ft;
+}
+
+void sqlFieldTypeFree(struct sqlFieldType **pFt)
+/* Free resources used by sqlFieldType */
+{
+struct sqlFieldType *ft = *pFt;
+if (ft != NULL)
+    {
+    freeMem(ft->name);
+    freeMem(ft->type);
+    freez(pFt);
+    }
+}
+
+void sqlFieldTypeFreeList(struct sqlFieldType **pList)
+/* Free a list of dynamically allocated sqlFieldType's */
+{
+struct sqlFieldType *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    sqlFieldTypeFree(&el);
+    }
+*pList = NULL;
+}
+
+struct sqlFieldType *sqlFieldTypesFromAs(struct asObject *as)
+/* Convert asObject to list of sqlFieldTypes */
+{
+struct sqlFieldType *ft, *list = NULL;
+struct asColumn *col;
+for (col = as->columnList; col != NULL; col = col->next)
+    {
+    struct dyString *type = asColumnToSqlType(col);
+    ft = sqlFieldTypeNew(col->name, type->string);
+    slAddHead(&list, ft);
+    dyStringFree(&type);
+    }
+slReverse(&list);
+return list;
+}
+
+struct sqlFieldType *sqlListFieldsAndTypes(struct sqlConnection *conn, char *table)
+/* Get list of fields including their names and types.  The type currently is
+ * just a MySQL type string. */
+{
+struct sqlFieldType *ft, *list = NULL;
+char query[512];
+struct sqlResult *sr;
+char **row;
+sqlSafef(query, sizeof(query), "describe %s", table);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    ft = sqlFieldTypeNew(row[0], row[1]);
+    slAddHead(&list, ft);
+    }
+sqlFreeResult(&sr);
+slReverse(&list);
+return list;
 }

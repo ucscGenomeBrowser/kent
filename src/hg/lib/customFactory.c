@@ -3205,8 +3205,22 @@ if (type != NULL && !sameType(type, fac->name))
     return FALSE;
 boolean isVcf = headerStartsWith(cpp, "##fileformat=VCFv");
 if (type != NULL && !isVcf)
-    lineFileAbort(cpp->fileStack, "type is '%s' but header does not start with '##fileformat=VCFv'",
-                  type);
+    {
+    if (cpp->fileStack)
+        lineFileAbort(cpp->fileStack,
+                      "type is '%s' but header does not start with '##fileformat=VCFv'", type);
+    else
+        {
+        if (isNotEmpty(trackDbSetting(track->tdb, "bigDataUrl")))
+            errAbort("type is '%s' but can't find header with '##fileformat=VCFv' "
+                     "following track line. "
+                     "(For bgzip-compressed VCF+tabix index, please use 'type=vcfTabix' "
+                     "instead of 'type=%s')", type, type);
+        else
+            errAbort("type is '%s' but can't find header with '##fileformat=VCFv' "
+                     "following track line", type);
+        }
+    }
 return isVcf;
 }
 

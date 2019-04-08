@@ -178,7 +178,7 @@ autoScale off
         visibility dense
 
         track epithelialCellOfLargeIntestineCov
-        shortLabel epithelial Cv
+        shortLabel L.I. epithelia Cv
         metadata cell_ontology=epithelial_cell_of_large_intestine
         longLabel epithelial cell of large intestine Coverage (2019 cells)
         type bigWig
@@ -664,7 +664,7 @@ autoScale off
         visibility dense
 
         track lungEndothelialCellCov
-        shortLabel endothelial Cv
+        shortLabel lung endothelia C
         metadata cell_ontology=lung_endothelial_cell
         longLabel lung endothelial cell Coverage (693 cells)
         type bigWig
@@ -950,7 +950,7 @@ type bigBed 12
         visibility dense
 
         track epithelialCellOfLargeIntestineJunc
-        shortLabel epithelial Sp
+        shortLabel L.I. epithelia Sp
         metadata cell_ontology=epithelial_cell_of_large_intestine
         longLabel epithelial cell of large intestine Splice Junctions (2019 cells)
         type bigBed 12 +
@@ -1544,7 +1544,7 @@ type bigBed 12
         visibility dense
 
         track lungEndothelialCellJunc
-        shortLabel endothelial Sp
+        shortLabel lung endothelia S
         metadata cell_ontology=lung_endothelial_cell
         longLabel lung endothelial cell Splice Junctions (693 cells)
         type bigBed 12 +

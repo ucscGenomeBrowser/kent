@@ -427,6 +427,7 @@ typedef enum _eCfgType
     cfgLong     =13,
     cfgBarChart =14,
     cfgInteract =15,
+    cfgLollipop =16,
     cfgUndetermined // Not specifically denied, but not determinable in lib code
     } eCfgType;
 
@@ -649,6 +650,7 @@ return startsWithWord("bigBed", tdb->type) ||
         startsWithWord("bigNarrowPeak", tdb->type) || 
         startsWithWord("bigBarChart", tdb->type) || 
         startsWithWord("bigInteract", tdb->type) || 
+        startsWithWord("bigLolly", tdb->type) || 
         startsWithWord("bigChain", tdb->type);
 }
 
