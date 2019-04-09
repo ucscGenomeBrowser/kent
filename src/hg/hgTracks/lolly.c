@@ -81,6 +81,14 @@ if ( tg->visibility == tvDense)
     }
 
 hvGfxText(hvg, xOff, yOff+centerLabel, color, font, tg->shortLabel);
+
+if (isnan(tg->lollyCart->upperLimit))
+    {
+    hvGfxTextRight(hvg, xOff, yOff + 2 * 5 , width - 1, fontHeight, color,
+        font, "NO DATA");
+    return;
+    }
+
 char upper[1024];
 safef(upper, sizeof(upper), "%g -",   tg->lollyCart->upperLimit);
 hvGfxTextRight(hvg, xOff, yOff + 2 * 5 , width - 1, fontHeight, color,
@@ -140,8 +148,6 @@ char *setting = trackDbSetting(tg->tdb, "lollyField");
 if (setting != NULL)
     lollyField = atoi(setting);
 double minVal = DBL_MAX, maxVal = -DBL_MAX;
-
-
 double sumData = 0.0, sumSquares = 0.0;
 unsigned count = 0;
 
@@ -174,8 +180,14 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         minVal = val;
     }
 
-tg->lollyCart->upperLimit = maxVal;
-tg->lollyCart->lowerLimit = minVal;
+if (count == 0)
+    tg->lollyCart->upperLimit = tg->lollyCart->lowerLimit = NAN;
+else
+    {
+    tg->lollyCart->upperLimit = maxVal;
+    tg->lollyCart->lowerLimit = minVal;
+    }
+
 double range = maxVal - minVal;
 int usableHeight = trackHeight - 2 * 5 * 2; 
 for(pop = popList; pop; pop = pop->next)

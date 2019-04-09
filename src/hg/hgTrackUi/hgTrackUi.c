@@ -2712,6 +2712,10 @@ if (trackDbSetting(tdb, "motifTable") != NULL)
     printf("<BR>");
     }
 
+printf("<BR><B>Show count of cells where factor detected (and count where assayed, if different): </B> ");
+safef(varName, sizeof(varName), "%s.showExpCounts", tdb->track);
+cartMakeCheckBox(cart, varName, FALSE);
+
 printf("<BR><B>Show cell abbreviations (to right of cluster): </B> ");
 safef(varName, sizeof(varName), "%s.showCellAbbrevs", tdb->track);
 cartMakeCheckBox(cart, varName, TRUE);
