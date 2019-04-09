@@ -70,6 +70,8 @@ el = newSlName("genePred");
 slAddHead(&supportedTypes, el);
 el = newSlName("psl");
 slAddHead(&supportedTypes, el);
+el = newSlName("rmsk");
+slAddHead(&supportedTypes, el);
 // el = newSlName("bigPsl");
 // slAddHead(&supportedTypes, el);
 // el = newSlName("bigBarChart");
