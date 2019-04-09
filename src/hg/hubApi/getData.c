@@ -43,33 +43,58 @@ else
 }
 
 static void tableDataOutput(char *db, struct trackDb *tdb,
-    struct sqlConnection *conn, struct jsonWrite *jw, char *table,
+    struct sqlConnection *conn, struct jsonWrite *jw, char *track,
     char *chrom, unsigned start, unsigned end)
-/* output the SQL table data */
+/* output the SQL table data for given track */
 {
 char query[4096];
+/* might have a specific table defined instead of the track name */
+char *sqlTable = cloneString(track);
+char *tableName = trackDbSetting(tdb, "table");
+if (isNotEmpty(tableName))
+    {
+    freeMem(sqlTable);
+    sqlTable = cloneString(tableName);
+    jsonWriteString(jw, "sqlTable", sqlTable);
+    }
+
 /* no chrom specified, return entire table */
 if (isEmpty(chrom))
-    sqlSafef(query, sizeof(query), "select * from %s", table);
+    sqlSafef(query, sizeof(query), "select * from %s", sqlTable);
 else if (0 == (start + end))	/* have chrom, no start,end == full chr */
     {
+    boolean useTname = FALSE;
     /* need to extend the chrom column check to allow tName also */
-    if (! sqlColumnExists(conn, table, "chrom"))
-	apiErrAbort("track '%s' is not a position track, request track without chrom specification, genome: '%s'", table, db);
+    if (! sqlColumnExists(conn, sqlTable, "chrom"))
+	{
+        if (sqlColumnExists(conn, sqlTable, "tName"))	// track type psl
+	    useTname = TRUE;
+	else
+	    apiErrAbort("track '%s' is not a position track, request track without chrom specification, genome: '%s'", track, db);
+	}
     jsonWriteString(jw, "chrom", chrom);
     struct chromInfo *ci = hGetChromInfo(db, chrom);
     jsonWriteNumber(jw, "start", (long long)0);
     jsonWriteNumber(jw, "end", (long long)ci->size);
-    sqlSafef(query, sizeof(query), "select * from %s where chrom='%s'", table, chrom);
+    if (useTname)
+	sqlSafef(query, sizeof(query), "select * from %s where tName='%s'", sqlTable, chrom);
+    else
+	sqlSafef(query, sizeof(query), "select * from %s where chrom='%s'", sqlTable, chrom);
     }
 else	/* fully specified chrom:start-end */
     {
     boolean useTxStartEnd = FALSE;
-    if (! sqlColumnExists(conn, table, "chrom"))
-	apiErrAbort("track '%s' is not a position track, request track without chrom specification, genome: '%s'", table, db);
-    if (! sqlColumnExists(conn, table, "chromStart"))
+    boolean useTnameStartEnd = FALSE;
+    if (! sqlColumnExists(conn, sqlTable, "chrom"))
 	{
-        if (sqlColumnExists(conn, table, "txStart"))
+        if (sqlColumnExists(conn, sqlTable, "tName"))	// track type psl
+	    useTnameStartEnd = TRUE;
+	else
+	    apiErrAbort("track '%s' is not a position track, request track without chrom specification, genome: '%s'", track, db);
+        }
+    if (useTnameStartEnd || ! sqlColumnExists(conn, sqlTable, "chromStart"))
+	{
+        if (sqlColumnExists(conn, sqlTable, "txStart"))	// track type genePred
 	    useTxStartEnd = TRUE;
 	}
     jsonWriteString(jw, "chrom", chrom);
@@ -77,15 +102,17 @@ else	/* fully specified chrom:start-end */
     jsonWriteNumber(jw, "end", (long long)end);
     if (startsWith("wig", tdb->type))
 	{
-        wigTableDataOutput(jw, db, table, chrom, start, end);
+        wigTableDataOutput(jw, db, sqlTable, chrom, start, end);
         return;	/* DONE */
 	}
     else
 	{
-	if (useTxStartEnd)
-	    sqlSafef(query, sizeof(query), "select * from %s where chrom='%s' AND txEnd > %u AND txStart < %u", table, chrom, start, end);
+	if (useTnameStartEnd)
+	    sqlSafef(query, sizeof(query), "select * from %s where tName='%s' AND tEnd > %u AND tEnd < %u", sqlTable, chrom, start, end);
+	else if (useTxStartEnd)
+	    sqlSafef(query, sizeof(query), "select * from %s where chrom='%s' AND txEnd > %u AND txStart < %u", sqlTable, chrom, start, end);
 	else
-	    sqlSafef(query, sizeof(query), "select * from %s where chrom='%s' AND chromEnd > %u AND chromStart < %u", table, chrom, start, end);
+	    sqlSafef(query, sizeof(query), "select * from %s where chrom='%s' AND chromEnd > %u AND chromStart < %u", sqlTable, chrom, start, end);
 	}
     }
 
@@ -93,7 +120,7 @@ else	/* fully specified chrom:start-end */
 char **columnNames = NULL;
 char **columnTypes = NULL;
 int *jsonTypes = NULL;
-int columnCount = tableColumns(conn, jw, table, &columnNames, &columnTypes, &jsonTypes);
+int columnCount = tableColumns(conn, jw, sqlTable, &columnNames, &columnTypes, &jsonTypes);
 if (debug)
     {
     jsonWriteObjectStart(jw, "columnTypes");
@@ -106,7 +133,7 @@ if (debug)
 	}
     jsonWriteObjectEnd(jw);
     }
-jsonWriteListStart(jw, table);
+jsonWriteListStart(jw, track);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row = NULL;
 unsigned itemCount = 0;

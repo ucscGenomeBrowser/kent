@@ -68,6 +68,8 @@ el = newSlName("bigGenePred");
 slAddHead(&supportedTypes, el);
 el = newSlName("genePred");
 slAddHead(&supportedTypes, el);
+el = newSlName("psl");
+slAddHead(&supportedTypes, el);
 // el = newSlName("bigPsl");
 // slAddHead(&supportedTypes, el);
 // el = newSlName("bigBarChart");
@@ -1160,6 +1162,8 @@ for ( ; el != NULL; el = el->next )
 maxDbNameWidth += 1;
 
 webStartJWest(cart, database, "UCSC JSON API interface");
+// webStartGbNoBanner(cart, database, "UCSC JSON API interface");
+// webStartGbOptionalBanner(cart, database, "UCSC JSON API interface", TRUE, FALSE);
 
 hPrintf("<div class='container-fluid gbPage'>\n");
 

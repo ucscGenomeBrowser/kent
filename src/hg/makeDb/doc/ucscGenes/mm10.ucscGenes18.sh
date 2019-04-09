@@ -635,11 +635,11 @@ hgLoadSqlTab $tempDb bioCycMapDesc ~/kent/src/hg/lib/bioCycMapDesc.sql ./bioCycM
     # Make the keggMapDesc table, which maps KEGG pathway IDs to descriptive names
     cp /cluster/data/mm10/bed/ucsc.13.1/kegg/map_title.tab .
     # wget --timestamping ftp://ftp.genome.jp/pub/kegg/pathway/map_title.tab
-    cat map_title.tab | sed -e 's/\t/\thsa\t/' > j.tmp
-    cut -f 2 j.tmp >j.hsa
+    cat map_title.tab | sed -e 's/\t/\tmmu\t/' > j.tmp
+    cut -f 2 j.tmp >j.mmu
     cut -f 1,3 j.tmp >j.1
-    paste j.hsa j.1 |sed -e 's/\t//' > keggMapDesc.tab
-    rm j.hsa j.1 j.tmp
+    paste j.mmu j.1 |sed -e 's/\t//' > keggMapDesc.tab
+    rm j.mmu j.1 j.tmp
     hgLoadSqlTab -notOnServer $tempDb keggMapDesc $kent/src/hg/lib/keggMapDesc.sql keggMapDesc.tab
 
     # Following in two-step process, build/load a table that maps UCSC Gene IDs
@@ -864,14 +864,14 @@ ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
 # 4. On hgwdev, insert new records into blatServers and targetDb, using the 
 # host (field 2) and port (field 3) specified by cluster-admin.  Identify the
 # blatServer by the keyword "$db"Kg with the version number appended
-# untrans gfServer for hg38KgSeq10 on host blat1c, port 17873
-# Starting untrans gfServer for kgTargetSeq11 on host blat1a, port 17891
+# Starting untrans gfServer for kgTargetSeq11 on host blat1d, port 17905
+
 hgsql hgcentraltest -e \
-      'INSERT into blatServers values ("hg38KgSeq11", "blat1a", 17891, 0, 1);'
-hgsql hgcentraltest -e \                                                    
-      'INSERT into targetDb values("hg38KgSeq11", "UCSC Genes", \
-         "hg38", "kgTargetAli", "", "", \
-         "/gbdb/hg38/targetDb/kgTargetSeq11.2bit", 1, now(), "");'
+      'INSERT into blatServers values ("mm10KgSeq11", "blat1d", 17905, 0, 1);'
+hgsql hgcentraltest -e \
+      'INSERT into targetDb values("mm10KgSeq11", "UCSC Genes", \
+         "mm10", "kgTargetAli", "", "", \
+         "/gbdb/mm10/targetDb/kgTargetSeq11.2bit", 1, now(), "");'
 
 #
 ##
@@ -895,17 +895,16 @@ hgLoadBlastTab $fishDb $blastTab run.$fishDb.$tempDb/recipBest.tab
 
 # Do synteny on mouse/human/rat
 synBlastp.csh $xdb $db
-#old number of unique query values: 45399
-#old number of unique target values 22999
-#new number of unique query values: 42015
-#new number of unique target values 22470
+#old number of unique query values: 99540
+#old number of unique target values 27444
+#new number of unique query values: 92543
+#new number of unique target values 26752
 
 synBlastp.csh $ratDb $db ensGene knownGene
-#old number of unique query values:  27888  
-#old number of unique target values  18988  
-#new number of unique query values:  24530  
-#new number of unique target values  18411  
-
+#old number of unique query values: 28429
+#old number of unique target values 20661
+#new number of unique query values: 25758
+#new number of unique target values 20061
 
 # need to generate multiz downloads
 #/usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz46way/alignments/knownCanonical.exonAA.fa.gz
