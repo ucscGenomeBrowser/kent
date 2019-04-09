@@ -44,6 +44,11 @@ extern int maxItemsOutput;	/* can be set in URL maxItemsOutput=N */
 extern int botDelay;
 boolean debug;	/* can be set in URL debug=1, to turn off: debug=0 */
 
+/* default is to list all trackDb entries, composite containers too.
+ * This option will limit to only the actual track entries with data
+ */
+extern boolean trackLeavesOnly;	/* set by CGI parameter 'trackLeavesOnly' */
+
 /*  functions in hubApi.c */
 struct hubPublic *hubPublicDbLoadAll();
 
@@ -89,6 +94,11 @@ struct bbiFile *bigFileOpen(char *trackType, char *bigDataUrl);
 
 int chromInfoCmp(const void *va, const void *vb);
 /* Compare to sort based on size */
+
+boolean allowedBigBedType(char *type);
+/* return TRUE if the big* type is to be supported
+ * add to this list as the big* supported types are expanded
+ */
 
 /* ######################################################################### */
 /*  functions in getData.c */

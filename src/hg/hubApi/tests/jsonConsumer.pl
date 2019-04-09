@@ -8,7 +8,9 @@ use JSON;
 use Getopt::Long;
 
 my $http = HTTP::Tiny->new();
-my $server = 'https://api-test.gi.ucsc.edu';
+# my $server = 'https://api-test.gi.ucsc.edu';
+my $server = 'https://hgwdev-api.gi.ucsc.edu';
+# my $server = 'https://hgwbeta.soe.ucsc.edu/cgi-bin/hubApi';
 my $global_headers = { 'Content-Type' => 'application/json' };
 my $last_request_time = Time::HiRes::time();
 my $request_count = 0;
@@ -24,6 +26,8 @@ my $chrom = "";
 my $start = "";
 my $end = "";
 my $test0 = 0;
+my $debug = 0;
+my $trackLeavesOnly = 0;
 my $maxItemsOutput = "";
 ##############################################################################
 
@@ -97,6 +101,7 @@ sub performRestAction {
     my $param_string = join(';', @params);
     $url.= '?'.$param_string;
   }
+  if ($debug) { $url .= ";debug=1"; }
   printf STDERR "### '%s'\n", $url;
   my $response = $http->get($url, {headers => $headers});
   my $status = $response->{status};
@@ -219,6 +224,9 @@ sub processEndPoint() {
      } elsif ($endpoint eq "/list/tracks") {
 	my $failing = 0;
 	my %parameters;
+	if ($trackLeavesOnly) {
+	    $parameters{"trackLeavesOnly"} = "1";
+	}
 	if (length($db) > 0) {
 	    $parameters{"db"} = "$db";
 	} elsif (length($hubUrl) < 1) {
@@ -410,6 +418,8 @@ GetOptions ("hubUrl=s" => \$hubUrl,
     "start=s"  => \$start,
     "end=s"    => \$end,
     "test0"    => \$test0,
+    "debug"    => \$debug,
+    "trackLeavesOnly"    => \$trackLeavesOnly,
     "maxItemsOutput=s"   => \$maxItemsOutput)
     or die "Error in command line arguments\n";
 

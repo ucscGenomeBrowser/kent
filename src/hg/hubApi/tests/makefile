@@ -1,7 +1,8 @@
 
 test::	test0 test1 test2 test3 test4 test5 test6 test7 test8 test9 test10 \
 	test11 test12 test13 test14 test15 test16 test17 test18 test19 test20 \
-	test21 test22 test23 test24 test25
+	test21 test22 test23 test24 test25 test26 test27 test28 test29 test30 \
+	test31
 
 setOutput:
 	@if [ ! -d testOutput ]; then mkdir testOutput; fi
@@ -23,14 +24,14 @@ test1: setOutput
 	@./jsonConsumer.pl -hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt -endpoint="/list/hubGenomes" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
-# testing /list/tracks? hubUrl genome=_araTha1
+# testing /list/tracks? hubUrl genome=_araTha1 trackLeavesOnly
 test2: setOutput
-	@./jsonConsumer.pl -hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt -endpoint="/list/tracks" -genome="_araTha1" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@./jsonConsumer.pl -hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt -endpoint="/list/tracks" -genome="_araTha1" -trackLeavesOnly | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
-# testing /list/tracks?db=ce11
+# testing /list/tracks?db=ce11 trackLeavesOnly=1
 test3: setOutput
-	@./jsonConsumer.pl -endpoint="/list/tracks" -db="ce11" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@./jsonConsumer.pl -endpoint="/list/tracks" -db="ce11" -trackLeavesOnly | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing /list/chromosomes?db=ce11
@@ -148,3 +149,38 @@ test24: setOutput
 test25: setOutput
 	@./jsonConsumer.pl -endpoint="/getData/sequence" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt" -genome="hg19" -chrom="chrM" -start=4321 -end=5678 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing genePred track
+#    /getData/track?db=ce11&chrom=chrV&track=refGene&start=5231045&end=5241045
+test26: setOutput
+	@./jsonConsumer.pl -endpoint="/getData/track" -db="ce11" -track="refGene"  -chrom="chrV" -start=5231045 -end=5241045 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing PSL track
+#    /getData/track?db=ce11&chrom=chrV&track=ncbiRefSeqPsl&start=5231045&end=5241045
+test27: setOutput
+	@./jsonConsumer.pl -endpoint="/getData/track" -db="ce11" -track="ncbiRefSeqPsl"  -chrom="chrV" -start=5231045 -end=5241045 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing RMSK track
+#    /getData/track?db=ce11&debug=0&chrom=chrV&track=rmsk&start=5231045&end=5241045
+test28: setOutput
+	@./jsonConsumer.pl -endpoint="/getData/track" -db="ce11" -track="rmsk"  -chrom="chrV" -start=5231045 -end=5241045 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# test superTrack child getData
+#    /getData/track?db=ce11&chrom=chrV&track=cpgIslandExt&start=5001045&end=5241045
+test29: setOutput
+	@./jsonConsumer.pl -endpoint="/getData/track" -db="ce11" -track="cpgIslandExt"  -chrom="chrV" -start=5001045 -end=5241045 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/tracks? hubUrl genome=_araTha1
+test30: setOutput
+	@./jsonConsumer.pl -hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt -endpoint="/list/tracks" -genome="_araTha1" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/tracks?db=ce11
+test31: setOutput
+	@./jsonConsumer.pl -endpoint="/list/tracks" -db="ce11" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
