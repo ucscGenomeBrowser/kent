@@ -245,8 +245,12 @@ for(filter = filters; filter; filter = filter->next)
             {
             struct slName *values = commaSepToSlNames(bedRow[filter->fieldNum]);
             unsigned found = 0;
+            struct hash *seenHash = newHash(3);
             for(; values; values = values->next)
                 {
+                if (hashLookup(seenHash, values->name))
+                    continue;
+                hashStore(seenHash, values->name);
                 if (hashLookup(filter->valueHash, values->name))
                     {
                     found++;
