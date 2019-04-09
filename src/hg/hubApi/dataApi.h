@@ -44,6 +44,11 @@ extern int maxItemsOutput;	/* can be set in URL maxItemsOutput=N */
 extern int botDelay;
 boolean debug;	/* can be set in URL debug=1, to turn off: debug=0 */
 
+/* default is to list all trackDb entries, composite containers too.
+ * This option will limit to only the actual track entries with data
+ */
+extern boolean trackLeavesOnly;	/* set by CGI parameter 'trackLeavesOnly' */
+
 /*  functions in hubApi.c */
 struct hubPublic *hubPublicDbLoadAll();
 

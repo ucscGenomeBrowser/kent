@@ -353,28 +353,34 @@ static void recursiveTrackList(struct jsonWrite *jw, struct trackDb *tdb)
  * recursive when subtracks exist
  */
 {
-if (! ( tdbIsComposite(tdb) || tdbIsCompositeView(tdb) ) )
+boolean isContainer = tdbIsComposite(tdb) || tdbIsCompositeView(tdb);
+
+if (! (trackLeavesOnly && isContainer) )
     {
     jsonWriteObjectStart(jw, tdb->track);
+    if (tdbIsComposite(tdb))
+        jsonWriteString(jw, "compositeContainer", "TRUE");
+    if (tdbIsCompositeView(tdb))
+        jsonWriteString(jw, "compositeViewContainer", "TRUE");
     jsonWriteString(jw, "shortLabel", tdb->shortLabel);
     jsonWriteString(jw, "type", tdb->type);
     jsonWriteString(jw, "longLabel", tdb->longLabel);
     if (tdb->parent)
-	jsonWriteString(jw, "parent", tdb->parent->track);
+        jsonWriteString(jw, "parent", tdb->parent->track);
     if (tdb->settingsHash)
-	{
-	struct hashEl *hel;
-	struct hashCookie hc = hashFirst(tdb->settingsHash);
-	while ((hel = hashNext(&hc)) != NULL)
-	    {
-	    if (sameWord("track", hel->name))
-		continue;	// already output in header
-	    if (isEmpty((char *)hel->val))
-		jsonWriteString(jw, hel->name, "empty");
-	    else
-		jsonWriteString(jw, hel->name, (char *)hel->val);
-	    }
-	}
+        {
+        struct hashEl *hel;
+        struct hashCookie hc = hashFirst(tdb->settingsHash);
+        while ((hel = hashNext(&hc)) != NULL)
+            {
+            if (sameWord("track", hel->name))
+                continue;	// already output in header
+            if (isEmpty((char *)hel->val))
+                jsonWriteString(jw, hel->name, "empty");
+            else
+                jsonWriteString(jw, hel->name, (char *)hel->val);
+            }
+        }
     jsonWriteObjectEnd(jw);
     }
 

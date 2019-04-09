@@ -26,6 +26,11 @@ int botDelay = 0;
 boolean debug = FALSE;	/* can be set in URL debug=1, to turn off: debug=0 */
 #define delayFraction	0.03
 
+/* default is to list all trackDb entries, composite containers too.
+ * This option will limit to only the actual track entries with data
+ */
+boolean trackLeavesOnly = FALSE;  /* set by CGI parameter 'trackLeavesOnly' */
+
 /* Global only to this one source file */
 static struct cart *cart;             /* CGI and other variables */
 static struct hash *oldVars = NULL;
@@ -1108,12 +1113,18 @@ initGenbankTableNames(database);
 initSupportedTypes();
 initUrlPrefix();
 
+trackLeavesOnly = cartUsualBoolean(cart, "trackLeavesOnly", trackLeavesOnly);
+
 /* global variable for all workers to honor this limit */
 maxItemsOutput = cartUsualInt(cart, "maxItemsOutput", maxItemsOutput);
+if (maxItemsOutput < 0)	/* can use -1 to indicate as much as allowed */
+    maxItemsOutput = maxItemLimit;
+/* maxItemsOutput of 0 might be useful, to be seen, let it go through */
+// if (maxItemsOutput < 1)	/* safety check */
+//     maxItemsOutput = 1;
+
 if (maxItemsOutput > maxItemLimit)	/* safety check */
     maxItemsOutput = maxItemLimit;
-if (maxItemsOutput < 1)	/* safety check */
-    maxItemsOutput = 1;
 
 debug = cartUsualBoolean(cart, "debug", debug);
 
