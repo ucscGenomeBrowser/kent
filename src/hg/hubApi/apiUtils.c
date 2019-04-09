@@ -243,6 +243,19 @@ for (trackFound = tdb; trackFound; trackFound = trackFound->next)
 return trackFound;
 }
 
+boolean allowedBigBedType(char *type)
+/* return TRUE if the big* bed-like type is to be supported
+ * add to this list as the big* bed-like supported types are expanded
+ */
+{
+if (startsWithWord("bigBed", type) ||
+    startsWithWord("bigPsl", type)
+   )
+    return TRUE;
+else
+    return FALSE;
+}
+
 struct bbiFile *bigFileOpen(char *trackType, char *bigDataUrl)
 /* open bigDataUrl for correct trackType and error catch if failure */
 {
@@ -250,7 +263,7 @@ struct bbiFile *bbi = NULL;
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-if (startsWith("bigBed", trackType))
+if (allowedBigBedType(trackType))
     bbi = bigBedFileOpen(bigDataUrl);
 else if (startsWith("bigWig", trackType))
     bbi = bigWigFileOpen(bigDataUrl);

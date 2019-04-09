@@ -346,7 +346,7 @@ if ( ! (isEmpty(start) || isEmpty(end)) )
 jsonWriteString(jw, "bigDataUrl", bigDataUrl);
 jsonWriteString(jw, "trackType", thisTrack->type);
 
-if (startsWith("bigBed", thisTrack->type))
+if (allowedBigBedType(thisTrack->type))
     {
     struct asObject *as = bigBedAsOrDefault(bbi);
     struct sqlFieldType *fiList = sqlFieldTypesFromAs(as);
@@ -489,12 +489,13 @@ if ( uEnd > uStart )
     jsonWriteNumber(jw, "end", uEnd);
     }
 
-if (startsWith("bigBed", thisTrack->type))
+if (allowedBigBedType(thisTrack->type))
     {
     struct asObject *as = bigBedAsOrDefault(bbi);
     struct sqlFieldType *fiList = sqlFieldTypesFromAs(as);
     if (debug)
         bigColumnTypes(jw, fiList);
+
     jsonWriteListStart(jw, track);
     if (isEmpty(chrom))
 	{

@@ -72,8 +72,8 @@ el = newSlName("psl");
 slAddHead(&supportedTypes, el);
 el = newSlName("rmsk");
 slAddHead(&supportedTypes, el);
-// el = newSlName("bigPsl");
-// slAddHead(&supportedTypes, el);
+el = newSlName("bigPsl");
+slAddHead(&supportedTypes, el);
 // el = newSlName("bigBarChart");
 // slAddHead(&supportedTypes, el);
 // el = newSlName("bigInteract");
@@ -279,7 +279,7 @@ char countsMessage[512];
 countsMessage[0] = 0;
 if (chromCount > 0 || itemCount > 0)
     {
-    if (startsWithWord("bigBed", tdb->type))
+    if (allowedBigBedType(tdb->type))
         safef(countsMessage, sizeof(countsMessage), " : %ld chroms : %ld item count ", chromCount, itemCount);
     else if (startsWithWord("bigWig", tdb->type))
         safef(countsMessage, sizeof(countsMessage), " : %ld chroms : %ld bases covered ", chromCount, itemCount);
@@ -292,7 +292,7 @@ if (isSupportedType(tdb->type))
 	char urlReference[2048];
 	safef(urlReference, sizeof(urlReference), "<a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;track=%s&amp;chrom=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, chromName, start, end, errorPrint);
 
-        if (startsWithWord("bigBed", tdb->type))
+	if (allowedBigBedType(tdb->type))
             hPrintf("    <li><b>%s</b>: %s%s%s</li>\n", tdb->track, tdb->type, countsMessage, urlReference);
         else if (startsWithWord("bigWig", tdb->type))
             hPrintf("    <li><b>%s</b>: %s%s%s</li>\n", tdb->track, tdb->type, countsMessage, urlReference);
@@ -301,7 +301,7 @@ if (isSupportedType(tdb->type))
     }
 else
     {
-        if (startsWithWord("bigBed", tdb->type))
+        if (allowedBigBedType(tdb->type))
             hPrintf("    <li><b>%s</b>: %s%s</li>\n", tdb->track, tdb->type, countsMessage);
         else if (startsWithWord("bigWig", tdb->type))
             hPrintf("    <li><b>%s</b>: %s%s</li>\n", tdb->track, tdb->type, countsMessage);

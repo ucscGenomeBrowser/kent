@@ -90,6 +90,11 @@ struct bbiFile *bigFileOpen(char *trackType, char *bigDataUrl);
 int chromInfoCmp(const void *va, const void *vb);
 /* Compare to sort based on size */
 
+boolean allowedBigBedType(char *type);
+/* return TRUE if the big* type is to be supported
+ * add to this list as the big* supported types are expanded
+ */
+
 /* ######################################################################### */
 /*  functions in getData.c */
 
