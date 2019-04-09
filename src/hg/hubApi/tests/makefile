@@ -1,7 +1,7 @@
 
 test::	test0 test1 test2 test3 test4 test5 test6 test7 test8 test9 test10 \
 	test11 test12 test13 test14 test15 test16 test17 test18 test19 test20 \
-	test21 test22 test23 test24 test25 test26 test27 test28
+	test21 test22 test23 test24 test25 test26 test27 test28 test29
 
 setOutput:
 	@if [ ! -d testOutput ]; then mkdir testOutput; fi
@@ -165,4 +165,10 @@ test27: setOutput
 #    /getData/track?db=ce11&debug=0&chrom=chrV&track=rmsk&start=5231045&end=5241045
 test28: setOutput
 	@./jsonConsumer.pl -endpoint="/getData/track" -db="ce11" -track="rmsk"  -chrom="chrV" -start=5231045 -end=5241045 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# test superTrack child getData
+#    /getData/track?db=ce11&chrom=chrV&track=cpgIslandExt&start=5001045&end=5241045
+test29: setOutput
+	@./jsonConsumer.pl -endpoint="/getData/track" -db="ce11" -track="cpgIslandExt"  -chrom="chrV" -start=5001045 -end=5241045 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
