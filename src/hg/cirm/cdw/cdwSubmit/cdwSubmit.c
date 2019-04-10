@@ -406,8 +406,13 @@ chmod(cdwPath, 0444);
 
 // save space by finding the last real file in symlinks chain
 // and replace IT with a symlink to the new file. 
-replaceOriginalWithSymlink(ef->submitFileName, submitDir, cdwPath);
-
+// However, make an exception for meta.txt which can get 
+// be listed in maniSummary.txt
+boolean metaException = sameString(ef->submitFileName, "meta.txt");
+if (!metaException)
+    {
+    replaceOriginalWithSymlink(ef->submitFileName, submitDir, cdwPath);
+    }
 ef->cdwFileName = cloneString(cdwFile);
 ef->endUploadTime = cdwNow();
 char *access = metaManiFieldVal("access", table, row, metaIx, metaHash);
