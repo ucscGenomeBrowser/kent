@@ -92,7 +92,8 @@ the endpoint functions.  For example:
 <li>start=&lt;123&gt; - specify start coordinate (0 relative) for data from track or sequence retrieval (start and end required together)</li>
 <li>end=&lt;456&gt; - specify end coordinate (1 relative) for data from track or sequence retrieval (start and end required together)</li>
 <li>(see also: <a href='http://genome.ucsc.edu/blog/the-ucsc-genome-browser-coordinate-counting-systems/' target=_blank>UCSC browser coordinate counting systems)</a></li>
-<li>maxItemsOutput=1000 - limit number of items to output, default: 1,000, maximum limit: 1,000,000</li>
+<li>maxItemsOutput=1000 - limit number of items to output, default: 1,000, maximum limit: 1,000,000 (use <em>-1</em> to get maximum output)</li>
+<li>trackLeavesOnly=1 - on <em>/list/tracks</em> function, only show tracks, do not show composite container information</li>
 </ul>
 </p>
 <p>
@@ -113,7 +114,7 @@ https://api-test.gi.ucsc.edu/getData/sequence?db=ce11;chrom=chrM
 <tr><th>/list/publicHubs</th><td>(none)</td><td>(none)</td></tr>
 <tr><th>/list/ucscGenomes</th><td>(none)</td><td>(none)</td></tr>
 <tr><th>/list/hubGenomes</th><td>hubUrl</td><td>(none)</td></tr>
-<tr><th>/list/tracks</th><td>(hubUrl and genome) or db</td><td>(none)</td></tr>
+<tr><th>/list/tracks</th><td>(hubUrl and genome) or db</td><td>trackLeavesOnly=1</td></tr>
 <tr><th>/list/chromosomes</th><td>((hubUrl and genome) or db) and track</td><td>(none)</td></tr>
 <tr><th>/getData/sequence</th><td>((hubUrl and genome) or db) and chrom</td><td>start and end</td></tr>
 <tr><th>/getData/track</th><td>((hubUrl and genome) or db) and track</td><td>chrom, (start and end), maxItemsOutput</td></tr>
