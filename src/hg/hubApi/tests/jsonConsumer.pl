@@ -54,6 +54,30 @@ printf STDERR "arguments:
 ";
 }
 
+#########################################################################
+# generic output of a hash pointer
+sub hashOutput($) {
+  my ($hashRef) = @_;
+  foreach my $key (sort keys %$hashRef) {
+    my $value = $hashRef->{$key};
+    $value = "<array>" if (ref($value) eq "ARRAY");
+    $value = "<hash>" if (ref($value) eq "HASH");
+     printf STDERR "%s - %s\n", $key, $hashRef->{$key};
+  }
+}
+
+sub arrayOutput($) {
+  my ($ary) = @_;
+  my $i = 0;
+  foreach my $element (@$ary) {
+     printf STDERR "# %d\t%s\n", $i++, ref($element);
+     if (ref($element) eq "HASH") {
+       hashOutput($element);
+     }
+  }
+}
+#########################################################################
+
 ##############################################################################
 ###
 ### these functions were copied from Ensembl HTTP::Tiny example code:
@@ -108,14 +132,21 @@ sub performRestAction {
   if(!$response->{success}) {
     # Quickly check for rate limit exceeded & Retry-After (lowercase due to our client)
     if($status == 429 && exists $response->{headers}->{'retry-after'}) {
+      my ($status, $reason) = ($response->{status}, $response->{reason});
       my $retry = $response->{headers}->{'retry-after'};
+      printf STDERR "Failed for $endpoint! Status code: ${status}. Reason: ${reason}, retry-after: $retry seconds\n";
+#      hashOutput($response->{headers});
       Time::HiRes::sleep($retry);
       # After sleeping see that we re-request
       return performRestAction($endpoint, $parameters, $headers);
     }
     else {
       my ($status, $reason) = ($response->{status}, $response->{reason});
-      die "Failed for $endpoint! Status code: ${status}. Reason: ${reason}\n";
+#      die "Failed for $endpoint! Status code: ${status}. Reason: ${reason}\n";
+      printf STDERR "Failed for $endpoint! Status code: ${status}. Reason: ${reason}\n";
+# hashOutput($response->{headers});
+# printf STDERR "'%s'\n", $response->{headers};
+      return return $response->{content};
     }
   }
   $request_count++;
@@ -123,28 +154,6 @@ sub performRestAction {
     return $response->{content};
   }
   return;
-}
-
-# generic output of a hash pointer
-sub hashOutput($) {
-  my ($hashRef) = @_;
-  foreach my $key (sort keys %$hashRef) {
-    my $value = $hashRef->{$key};
-    $value = "<array>" if (ref($value) eq "ARRAY");
-    $value = "<hash>" if (ref($value) eq "HASH");
-     printf STDERR "%s - %s\n", $key, $hashRef->{$key};
-  }
-}
-
-sub arrayOutput($) {
-  my ($ary) = @_;
-  my $i = 0;
-  foreach my $element (@$ary) {
-     printf STDERR "# %d\t%s\n", $i++, ref($element);
-     if (ref($element) eq "HASH") {
-       hashOutput($element);
-     }
-  }
 }
 
 #############################################################################
