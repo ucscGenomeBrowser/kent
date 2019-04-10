@@ -58,4 +58,14 @@ char *soTermToString(enum soTerm termNumber);
 int soTermStringToId(char *soTermStr);
 /* Translate soTermStr into its numeric ID.  Return -1 if soTermStr is not recognized. */
 
+enum soTerm soTermStringIdToId(char *soIdStr);
+/* Given a string like "SO:0001627", parse out the numeric ID and convert to enum soTerm. */
+
+char *soTermToMisoLink(enum soTerm term);
+/* Return an HTML <a> link to the MISO browser page for term
+ * (except if it's soUnknown, just return text not a link). */
+
+int soTermCmp(const void *a, const void *b);
+/* Compare two enum soTerms for sorting by descending order of functional impact. */
+
 #endif /* SOTERM_H */
