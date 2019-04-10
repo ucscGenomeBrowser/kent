@@ -26,6 +26,11 @@ int botDelay = 0;
 boolean debug = FALSE;	/* can be set in URL debug=1, to turn off: debug=0 */
 #define delayFraction	0.03
 
+/* default is to list all trackDb entries, composite containers too.
+ * This option will limit to only the actual track entries with data
+ */
+boolean trackLeavesOnly = FALSE;  /* set by CGI parameter 'trackLeavesOnly' */
+
 /* Global only to this one source file */
 static struct cart *cart;             /* CGI and other variables */
 static struct hash *oldVars = NULL;
@@ -72,8 +77,8 @@ el = newSlName("psl");
 slAddHead(&supportedTypes, el);
 el = newSlName("rmsk");
 slAddHead(&supportedTypes, el);
-// el = newSlName("bigPsl");
-// slAddHead(&supportedTypes, el);
+el = newSlName("bigPsl");
+slAddHead(&supportedTypes, el);
 // el = newSlName("bigBarChart");
 // slAddHead(&supportedTypes, el);
 // el = newSlName("bigInteract");
@@ -176,10 +181,8 @@ else if (startsWith("wig ", tdb->type))
     stripType = cloneString("wig");
 else
     stripType = cloneString(tdb->type);
-// char *compositeTrack = trackDbLocalSetting(tdb, "compositeTrack");
 boolean compositeContainer = tdbIsComposite(tdb);
 boolean compositeView = tdbIsCompositeView(tdb);
-// char *superTrack = trackDbLocalSetting(tdb, "superTrack");
 boolean superChild = tdbIsSuperTrackChild(tdb);
 if (compositeContainer)
     hashIncInt(countTracks, "composite container");
@@ -212,6 +215,7 @@ if (isNotEmpty(errorString))
     safef(errorPrint, sizeof(errorPrint), " <font color='red'>ERROR: %s</font>", errorString);
     }
 
+boolean superChild = tdbIsSuperTrackChild(tdb);
 unsigned start = chromSize / 4;
 unsigned end = start + 10000;
 if (end > chromSize)
@@ -237,7 +241,9 @@ if (db)
 	char urlReference[2048];
 	safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?db=%s&amp;chrom=%s&amp;track=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)%s</a>\n", urlPrefix, db, chrom, tdb->track, start, end, errorPrint);
 
-	if (tdb->parent)
+	if (superChild)
+	    hPrintf("<li><b>%s</b>: %s superTrack child of parent: %s%s</li>\n", tdb->track, tdb->type, tdb->parent->track, urlReference);
+	else if (tdb->parent)
 	    hPrintf("<li><b>%s</b>: %s subtrack of parent: %s%s</li>\n", tdb->track, tdb->type, tdb->parent->track, urlReference);
 	else
 	    hPrintf("<li><b>%s</b>: %s%s</li>\n", tdb->track, tdb->type, urlReference );
@@ -278,7 +284,7 @@ char countsMessage[512];
 countsMessage[0] = 0;
 if (chromCount > 0 || itemCount > 0)
     {
-    if (startsWithWord("bigBed", tdb->type))
+    if (allowedBigBedType(tdb->type))
         safef(countsMessage, sizeof(countsMessage), " : %ld chroms : %ld item count ", chromCount, itemCount);
     else if (startsWithWord("bigWig", tdb->type))
         safef(countsMessage, sizeof(countsMessage), " : %ld chroms : %ld bases covered ", chromCount, itemCount);
@@ -291,7 +297,7 @@ if (isSupportedType(tdb->type))
 	char urlReference[2048];
 	safef(urlReference, sizeof(urlReference), "<a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;track=%s&amp;chrom=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, chromName, start, end, errorPrint);
 
-        if (startsWithWord("bigBed", tdb->type))
+	if (allowedBigBedType(tdb->type))
             hPrintf("    <li><b>%s</b>: %s%s%s</li>\n", tdb->track, tdb->type, countsMessage, urlReference);
         else if (startsWithWord("bigWig", tdb->type))
             hPrintf("    <li><b>%s</b>: %s%s%s</li>\n", tdb->track, tdb->type, countsMessage, urlReference);
@@ -300,7 +306,7 @@ if (isSupportedType(tdb->type))
     }
 else
     {
-        if (startsWithWord("bigBed", tdb->type))
+        if (allowedBigBedType(tdb->type))
             hPrintf("    <li><b>%s</b>: %s%s</li>\n", tdb->track, tdb->type, countsMessage);
         else if (startsWithWord("bigWig", tdb->type))
             hPrintf("    <li><b>%s</b>: %s%s</li>\n", tdb->track, tdb->type, countsMessage);
@@ -595,7 +601,12 @@ else
     else if (compositeView)
         hPrintf("    <li><b>%s</b>: %s : composite view of parent: %s</li>\n", tdb->track, tdb->type, tdb->parent->track);
     else if (superChild)
-        hPrintf("    <li><b>%s</b>: %s : superTrack child of parent: %s (sample getData)</li>\n", tdb->track, tdb->type, tdb->parent->track);
+	{
+	if (isSupportedType(tdb->type))
+	    hubSampleUrl(hub, tdb, chromCount, itemCount, chromName, chromSize, genome,  errors->string);
+	else
+	    hPrintf("    <li><b>%s</b>: %s : superTrack child of parent: %s</li>\n", tdb->track, tdb->type, tdb->parent->track);
+	}
     else if (! depthSearch && bigDataUrl)
 	{
         if (isSupportedType(tdb->type))
@@ -636,10 +647,8 @@ static void countOneTdb(char *db, struct trackDb *tdb,
 /* for this tdb in this db, count it up and provide a sample */
 {
 char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
-// char *compositeTrack = trackDbSetting(tdb, "compositeTrack");
 boolean compositeContainer = tdbIsComposite(tdb);
 boolean compositeView = tdbIsCompositeView(tdb);
-// char *superTrack = trackDbSetting(tdb, "superTrack");
 boolean superChild = tdbIsSuperTrackChild(tdb);
 boolean depthSearch = cartUsualBoolean(cart, "depthSearch", FALSE);
 hashCountTrack(tdb, countTracks);
@@ -649,7 +658,12 @@ if (compositeContainer)
 else if (compositeView)
     hPrintf("    <li><b>%s</b>: %s : composite view of parent: %s</li>\n", tdb->track, tdb->type, tdb->parent->track);
 else if (superChild)
-    hPrintf("    <li><b>%s</b>: %s : superTrack child of parent: %s</li>\n", tdb->track, tdb->type, tdb->parent->track);
+    {
+    if (isSupportedType(tdb->type))
+        sampleUrl(NULL, db, tdb, chromName, chromSize, errorString);
+    else
+	hPrintf("    <li><b>%s</b>: %s : superTrack child of parent: %s</li>\n", tdb->track, tdb->type, tdb->parent->track);
+    }
 else if (! depthSearch && bigDataUrl)
     hPrintf("    <li><b>%s</b>: %s : %s</li>\n", tdb->track, tdb->type, bigDataUrl);
 else
@@ -732,7 +746,7 @@ if (topTrackDb)
     /* add this single genome count to the overall multi-genome counts */
     if (countTracks->elCount)
 	{
-        hPrintf("        <li><ol>\n");
+        hPrintf("        <li><ul>\n");
 	struct hashEl *hel, *helList = hashElListHash(countTracks);
 	slSort(&helList, hashElCmpIntValDesc);
 	for (hel = helList; hel; hel = hel->next)
@@ -748,7 +762,7 @@ if (topTrackDb)
 	    else
 		hPrintf("        <li>%d - %s</li>\n", ptToInt(hel->val), hel->name);
 	    }
-        hPrintf("        </ol></li>\n");
+        hPrintf("        </ul></li>\n");
 	}
     }
 else
@@ -868,14 +882,14 @@ if (trackCounter->elCount)
     {
     hPrintf("    <li>total genome assembly count: %ld</li>\n", totalAssemblyCount);
     hPrintf("    <li>%ld total tracks counted, %d different track types:</li>\n", totalTracks, trackCounter->elCount);
-    hPrintf("    <li><ol>\n");
+    hPrintf("    <li><ul>\n");
     struct hashEl *hel, *helList = hashElListHash(trackCounter);
     slSort(&helList, hashElCmpIntValDesc);
     for (hel = helList; hel; hel = hel->next)
 	{
 	hPrintf("    <li>%d - %s - total</li>\n", ptToInt(hel->val), hel->name);
 	}
-    hPrintf("    </ol></li>\n");
+    hPrintf("    </ul></li>\n");
     }
 hPrintf("</ul>\n");
 }	/*	static void genomeList (hubTop)	*/
@@ -982,7 +996,7 @@ int trackCount = ptToInt(hashFindVal(countTracks, "track count"));
 hPrintf("    <li>%d total tracks counted, %d different track types</li>\n", trackCount, countTracks->elCount - 1);
 if (countTracks->elCount)
     {
-    hPrintf("        <ol>\n");
+    hPrintf("        <ul>\n");
     struct hashEl *hel, *helList = hashElListHash(countTracks);
     slSort(&helList, hashElCmpIntValDesc);
     for (hel = helList; hel; hel = hel->next)
@@ -994,7 +1008,7 @@ if (countTracks->elCount)
 	else
 	    hPrintf("        <li>%d - %s</li>\n", ptToInt(hel->val), hel->name);
 	}
-    hPrintf("        </ol>\n");
+    hPrintf("        </ul>\n");
     }
 hPrintf("</ul>\n");
 hPrintf("</p>\n");
@@ -1099,12 +1113,18 @@ initGenbankTableNames(database);
 initSupportedTypes();
 initUrlPrefix();
 
+trackLeavesOnly = cartUsualBoolean(cart, "trackLeavesOnly", trackLeavesOnly);
+
 /* global variable for all workers to honor this limit */
 maxItemsOutput = cartUsualInt(cart, "maxItemsOutput", maxItemsOutput);
+if (maxItemsOutput < 0)	/* can use -1 to indicate as much as allowed */
+    maxItemsOutput = maxItemLimit;
+/* maxItemsOutput of 0 might be useful, to be seen, let it go through */
+// if (maxItemsOutput < 1)	/* safety check */
+//     maxItemsOutput = 1;
+
 if (maxItemsOutput > maxItemLimit)	/* safety check */
     maxItemsOutput = maxItemLimit;
-if (maxItemsOutput < 1)	/* safety check */
-    maxItemsOutput = 1;
 
 debug = cartUsualBoolean(cart, "debug", debug);
 

@@ -181,14 +181,14 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     }
 
 if (count == 0)
-    tg->lollyCart->upperLimit = tg->lollyCart->lowerLimit = NAN;
-else
+    lollyCart->upperLimit = lollyCart->lowerLimit = NAN;
+else if (lollyCart->autoScale == wiggleScaleAuto)
     {
-    tg->lollyCart->upperLimit = maxVal;
-    tg->lollyCart->lowerLimit = minVal;
+    lollyCart->upperLimit = maxVal;
+    lollyCart->lowerLimit = minVal;
     }
 
-double range = maxVal - minVal;
+double range = lollyCart->upperLimit - lollyCart->lowerLimit;
 int usableHeight = trackHeight - 2 * 5 * 2; 
 for(pop = popList; pop; pop = pop->next)
     {
@@ -201,8 +201,8 @@ for(pop = popList; pop; pop = pop->next)
         }
     else
         {
-        pop->height = usableHeight * (pop->val  - minVal) / range + 5 * 2;
-        int colorIndex = 8 * (pop->val  - minVal) / range;
+        pop->height = usableHeight * (pop->val  - lollyCart->lowerLimit) / range + 5 * 2;
+        int colorIndex = 8 * (pop->val  - lollyCart->lowerLimit) / range;
         pop->color = lollyPalette[colorIndex] | 0xff000000;
         }
     }
@@ -260,6 +260,8 @@ double tDbMaxY;     /*  data range limits from trackDb type line */
 char *trackWords[8];     /*  to parse the trackDb type line  */
 int trackWordCount = 0;  /*  to parse the trackDb type line  */
 wigFetchMinMaxYWithCart(cart, tdb, tdb->track, &lollyCart->minY, &lollyCart->maxY, &tDbMinY, &tDbMaxY, trackWordCount, trackWords);
+lollyCart->upperLimit = lollyCart->maxY;
+lollyCart->lowerLimit = lollyCart->minY;
 
 return lollyCart;
 }
