@@ -8,6 +8,7 @@ use JSON;
 use Getopt::Long;
 
 my $http = HTTP::Tiny->new();
+# my $server = 'https://apibeta.soe.ucsc.edu';
 # my $server = 'https://api-test.gi.ucsc.edu';
 my $server = 'https://hgwdev-api.gi.ucsc.edu';
 # my $server = 'https://hgwbeta.soe.ucsc.edu/cgi-bin/hubApi';
@@ -379,6 +380,7 @@ if (ref($jsonReturn) eq "HASH") {
 	if ($data->{'shortLabel'} eq "Plants") {
         printf "### Plants public hub data\n";
 	  foreach my $key (sort keys %$data) {
+	  next if ($key eq "registrationTime");
 	  printf "'%s'\t'%s'\n", $key, $data->{$key};
 	  }
 	}
