@@ -16,7 +16,7 @@ excludeLines = downloadTime|dataTime
 
 # testing /list/noSubCommand, /list/publicHubs and /list/ucscGenomes
 test0: setOutput
-	@./jsonConsumer.pl -test0 2>&1 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@./jsonConsumer.pl -test0 2>&1 | egrep -v "^### 'https://" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 	@echo '### test0: ./jsonConsumer.pl -test0 - OK'
 
@@ -121,7 +121,7 @@ test19: setOutput
 # generate an error: ask for non-existent chrom in a track hub
 # /getData/track? hubUrl Plants &track=assembly_&chrom=chrI&start=1&end=14309681
 test20: setOutput
-	@./jsonConsumer.pl -endpoint="/getData/track" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" -genome="_araTha1" -track="assembly_" -chrom="chrI" -start=1 -end=14309681 2>&1 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@./jsonConsumer.pl -endpoint="/getData/track" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" -genome="_araTha1" -track="assembly_" -chrom="chrI" -start=1 -end=14309681 2>&1 | egrep -v "^### 'https://" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 	@echo '### test20: ./jsonConsumer.pl -endpoint="/getData/track" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" -genome="_araTha1" -track="assembly_" -chrom="chrI" -start=1 -end=14309681'
 
