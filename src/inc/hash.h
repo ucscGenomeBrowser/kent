@@ -178,6 +178,9 @@ int hashIntValDefault(struct hash *hash, char *name, int defaultInt);
 long long hashIntSum(struct hash *hash);
 /* Return sum of all the ints in a hash of ints. */
 
+void hashIntReset(struct hash *hash);
+/* Reset all values in hash of ints to 0.  Reset element count to 0. */
+
 void hashTraverseEls(struct hash *hash, void (*func)(struct hashEl *hel));
 /* Apply func to every element of hash with hashEl as parameter. */
 

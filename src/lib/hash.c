@@ -347,6 +347,13 @@ for (i=0; i<hash->size; ++i)
 return sum;
 }
 
+void hashIntReset(struct hash *hash)
+/* Reset all values in hash of ints to 0.  Reset element count to 0. */
+{
+memset(hash->table, 0, hash->size * sizeof hash->table[0]);
+hash->elCount = 0;
+}
+
 struct hash *newHashExt(int powerOfTwoSize, boolean useLocalMem)
 /* Returns new hash table. Uses local memory optionally. */
 {
