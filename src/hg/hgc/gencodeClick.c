@@ -11,6 +11,7 @@
 #include "ensFace.h"
 #include "htmshell.h"
 #include "jksql.h"
+#include "regexHelper.h"
 #include "encode/wgEncodeGencodeAttrs.h"
 #include "encode/wgEncodeGencodeGeneSource.h"
 #include "encode/wgEncodeGencodePdb.h"
@@ -97,6 +98,13 @@ if (sameString(database, "hg19"))
     return stringIn("lift37", getGencodeVersion(tdb)) == NULL;
 else
     return FALSE;
+}
+
+static boolean isFakeGeneSymbol(char* sym)
+/* is this a static gene symbol? */
+{
+static const char *regexp = "^AC[0-9]+\\.[0-9]+$";
+return regexMatch(sym, regexp);
 }
 
 static int transAnnoCmp(const void *va, const void *vb)
@@ -425,7 +433,8 @@ if (haveTsl)
     printf("<tr><th><a href=\"#tsl\">Transcription Support Level</a><td><a href=\"#%s\">%s</a><td></tr>\n", tslDesc, tslDesc);
     }
 printf("<tr><th>HGNC gene symbol<td colspan=2>");
-prExtIdAnchor(transAttrs->geneName, hgncUrl);
+if (!isFakeGeneSymbol(transAttrs->geneName))
+    prExtIdAnchor(transAttrs->geneName, hgncUrl);
 printf("</tr>\n");
 
 printf("<tr><th>CCDS<td>");
@@ -438,7 +447,8 @@ if (!isEmpty(transAttrs->ccdsId))
 printf("<td></tr>\n");
 
 printf("<tr><th>GeneCards<td colspan=2>");
-prExtIdAnchor(transAttrs->geneName, geneCardsUrl);
+if (!isFakeGeneSymbol(transAttrs->geneName))
+    prExtIdAnchor(transAttrs->geneName, geneCardsUrl);
 printf("</tr>\n");
 
 if (isProteinCodingTrans(transAttrs))
