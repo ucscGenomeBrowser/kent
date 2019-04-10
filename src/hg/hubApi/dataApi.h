@@ -56,7 +56,10 @@ struct dbDb *ucscDbDb();
 /* return the dbDb table as an slList */
 
 /*  functions in apiUtils.c */
-void apiErrAbort(char *format, ...);
+void apiFinishOutput(int errorCode, char *errorString, struct jsonWrite *jw);
+/* finish json output, potential output an error code other than 200 */
+
+void apiErrAbort(int errorCode, char *errString, char *format, ...);
 /* Issue an error message in json format, and exit(0) */
 
 struct jsonWrite *apiStartOutput();

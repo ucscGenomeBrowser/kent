@@ -39,18 +39,18 @@ static long totalTracks = 0;
 static boolean measureTiming = FALSE;	/* set by CGI parameters */
 static boolean allTrackSettings = FALSE;	/* checkbox setting */
 static char **shortLabels = NULL;	/* public hub short labels in array */
-// struct hubPublic *publicHubList = NULL;
 static int publicHubCount = 0;
 static char *defaultHub = "Plants";
-// static char *defaultHubUrl = " http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt";
 static char *defaultDb = "ce11";
 static long enteredMainTime = 0;	/* will become = clock1000() on entry */
 		/* to allow calculation of when to bail out, taking too long */
 static long timeOutSeconds = 100;
 static boolean timedOut = FALSE;
 static char *urlPrefix = "";	/* initalized to support self references */
+
+	/* supportedTypes will be initialized to a known supported set */
 static struct slName *supportedTypes = NULL;
-	/* will be initialized to a known supported set */
+
 
 static void initSupportedTypes()
 /* initalize the list of supported track types */
@@ -229,7 +229,7 @@ if (db)
     if (hub)
 	{
 	char urlReference[2048];
-	safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;track=%s&amp;chrom=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, chrom, start, end, errorPrint);
+	safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;track=%s&amp;chrom=%s&amp;start=%u&amp;end=%u' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, chrom, start, end, errorPrint);
 
 	if (tdb->parent)
 	    hPrintf("<li><b>%s</b>: %s subtrack of parent: %s%s</li>\n", tdb->track, tdb->type, tdb->parent->track, urlReference);
@@ -239,7 +239,7 @@ if (db)
     else
 	{
 	char urlReference[2048];
-	safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?db=%s&amp;chrom=%s&amp;track=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)%s</a>\n", urlPrefix, db, chrom, tdb->track, start, end, errorPrint);
+	safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?db=%s&amp;chrom=%s&amp;track=%s&amp;start=%u&amp;end=%u' target=_blank>(sample data)%s</a>\n", urlPrefix, db, chrom, tdb->track, start, end, errorPrint);
 
 	if (superChild)
 	    hPrintf("<li><b>%s</b>: %s superTrack child of parent: %s%s</li>\n", tdb->track, tdb->type, tdb->parent->track, urlReference);
@@ -252,7 +252,7 @@ if (db)
 else if (hub)
     {
     char urlReference[2048];
-    safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;track=%s&amp;chrom=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, chrom, start, end, errorPrint);
+    safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;track=%s&amp;chrom=%s&amp;start=%u&amp;end=%u' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, chrom, start, end, errorPrint);
 
     if (tdb->parent)
 	hPrintf("<li><b>%s</b>: %s subtrack of parent: %s%s</li>\n", tdb->track, tdb->type, tdb->parent->track, urlReference);
@@ -295,7 +295,7 @@ if (chromCount > 0 || itemCount > 0)
 if (isSupportedType(tdb->type))
     {
 	char urlReference[2048];
-	safef(urlReference, sizeof(urlReference), "<a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;track=%s&amp;chrom=%s&amp;start=%u&amp;end=%u' target=_blank>(sample getData)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, chromName, start, end, errorPrint);
+	safef(urlReference, sizeof(urlReference), "<a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;track=%s&amp;chrom=%s&amp;start=%u&amp;end=%u' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, chromName, start, end, errorPrint);
 
 	if (allowedBigBedType(tdb->type))
             hPrintf("    <li><b>%s</b>: %s%s%s</li>\n", tdb->track, tdb->type, countsMessage, urlReference);
@@ -561,10 +561,8 @@ static void hubCountOneTdb(struct trackHub *hub, char *db, struct trackDb *tdb,
     unsigned chromSize, char *genome)
 {
 char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
-// char *compositeTrack = trackDbSetting(tdb, "compositeTrack");
 boolean compositeContainer = tdbIsComposite(tdb);
 boolean compositeView = tdbIsCompositeView(tdb);
-// char *superTrack = trackDbSetting(tdb, "superTrack");
 boolean superChild = tdbIsSuperTrackChild(tdb);
 boolean depthSearch = cartUsualBoolean(cart, "depthSearch", FALSE);
 hashCountTrack(tdb, countTracks);
@@ -847,6 +845,10 @@ if (NULL == genome)
     return;
     }
 
+
+// testing /list/tracks?db=ce11
+// testing /list/tracks? hubUrl genome=_araTha1
+
 hPrintf("<ul>\n");
 long lastTime = clock1000();
 for ( ; genome; genome = genome->next )
@@ -862,6 +864,9 @@ for ( ; genome; genome = genome->next )
 	sprintLongWithCommas(sizeString, chromSize);
 	hPrintf("<li><b>Sequence count</b> %d, <b>largest</b>: %s at %s bases</li>\n", slCount(ci), chromName, sizeString);
 	}
+    char urlReference[2048];
+    safef(urlReference, sizeof(urlReference), " <a href='%s/list/tracks?hubUrl=%s&amp;genome=%s' target=_blank>JSON output: list tracks</a>", urlPrefix, hubTop->url, genome->name);
+    hPrintf("<li>%s</li>\n", urlReference);
     hubInfo("organism", genome->organism);
     hubInfo("name", genome->name);
     hubInfo("description", genome->description);
@@ -982,6 +987,11 @@ sprintLongWithCommas(countString, chromCount);
 char sizeString[64];
 sprintLongWithCommas(sizeString, chromSize);
 hPrintf("<h4>Tracks in UCSC genome: '%s', chrom count: %s, longest chrom: %s : %s</h4>\n", db, countString, chromName, sizeString);
+
+char urlReference[2048];
+safef(urlReference, sizeof(urlReference), " <a href='%s/list/tracks?db=%s' target=_blank>JSON output: list tracks</a>", urlPrefix, db);
+hPrintf("<h4>%s</h4>\n", urlReference);
+
 struct trackDb *tdbList = obtainTdb(NULL, db);
 struct trackDb *tdb;
 hPrintf("<ul>\n");
@@ -1044,7 +1054,7 @@ hPrintf("</pre>\n");
 
 static void sendJsonHogMessage(char *hogHost)
 {
-apiErrAbort("Your host, %s, has been sending too many requests lately and is "
+apiErrAbort(429, "Too Many Requests", "Your host, %s, has been sending too many requests lately and is "
        "unfairly loading our site, impacting performance for other users. "
        "Please contact genome@soe.ucsc.edu to ask that your site "
        "be reenabled.  Also, please consider downloading sequence and/or "
@@ -1054,6 +1064,11 @@ apiErrAbort("Your host, %s, has been sending too many requests lately and is "
 
 static void sendHogMessage(char *hogHost)
 {
+puts("Content-Type:text/html");
+puts("Status: 429 Too Many Requests");
+puts("Retry-After: 30");
+puts("\n");
+
 hPrintf("<!DOCTYPE HTML>\n");
 hPrintf("<html lang='en'>\n");
 hPrintf("<head>\n");
@@ -1081,20 +1096,121 @@ if (sameOk("/",pathInfo))
     pathInfo = NULL;
 if (isNotEmpty(pathInfo))
     {
-    puts("Content-Type:application/json");
-    puts("Status: 459 Too Many Requests");
-    /* maybe a Retry-After: 3600 statement here ? */
-    puts("\n");
     sendJsonHogMessage(hogHost);
     }
 else
     {
-    puts("Content-Type:text/html");
-    puts("Status: 459 Too Many Requests");
-    /* maybe a Retry-After: 3600 statement here ? */
-    puts("\n");
     sendHogMessage(hogHost);
     }
+}	/*	static void hogExit()	*/
+
+/* name of button group */
+#define RADIO_GROUP	"selectRadio"
+/* button functions */
+#define RADIO_PUBHUB	"pubHub"
+#define RADIO_OTHERHUB	"otherHub"
+#define RADIO_UCSCDB	"ucscDb"
+
+static void selectionForm()
+/* setup the selection pull-downs for source */
+{
+char *hubDropDown = cartUsualString(cart, "publicHubs", defaultHub);
+char *urlDropDown = urlFromShortLabel(hubDropDown);
+char *otherHubUrl = cartUsualString(cart, "urlHub", "");
+char *ucscDb = cartUsualString(cart, "ucscGenome", defaultDb);
+
+if (isEmpty(otherHubUrl))
+    otherHubUrl = urlDropDown;
+
+char *radioOn = cartUsualString(cart, RADIO_GROUP, RADIO_PUBHUB);
+
+/* create border around table, but not inside the table with the data */
+hPrintf("<table border=4>\n");
+hPrintf("<tr><td><table border=0>\n");
+
+int maxDbNameWidth = 0;
+struct dbDb *dbList = ucscDbDb();
+char **ucscDbList = NULL;
+int listSize = slCount(dbList);
+AllocArray(ucscDbList, listSize);
+struct dbDb *el = dbList;
+int ucscDataBaseCount = 0;
+for ( ; el != NULL; el = el->next )
+    {
+    ucscDbList[ucscDataBaseCount++] = el->name;
+    if (strlen(el->name) > maxDbNameWidth)
+	maxDbNameWidth = strlen(el->name);
+    }
+maxDbNameWidth += 1;
+
+hPrintf("<form action='%s' name='hubApiUrl' id='hubApiUrl' method='GET'>\n\n", urlPrefix);
+
+hWrites("<tr><td>");
+jsMakeTrackingRadioButton(RADIO_GROUP, "typeOneJs", RADIO_PUBHUB, radioOn);
+hWrites("</td><th>");
+hWrites("Select public hub:");
+hWrites("</th><td>");
+
+#define JBUFSIZE 2048
+#define SMALLBUF 256
+char javascript[JBUFSIZE];
+struct slPair *events = NULL;
+safef(javascript, sizeof(javascript), "this.lastIndex=this.selectedIndex;");
+slPairAdd(&events, "focus", cloneString(javascript));
+
+cgiMakeDropListClassWithIdStyleAndJavascript("publicHubs", "publicHubs",
+    shortLabels, publicHubCount, hubDropDown, NULL, "width: 400px", events);
+
+jsOnEventById("change", "publicHubs", "document.getElementById('"RADIO_GROUP"_"RADIO_PUBHUB"').checked=true;");
+hWrites("</td></tr>\n");
+
+hWrites("<tr><td>");
+jsMakeTrackingRadioButton(RADIO_GROUP, "typeOneJs", RADIO_OTHERHUB, radioOn);
+hWrites("</td><th>");
+hWrites("enter a hub URL:");
+hWrites("</th><td>");
+hPrintf("<input type='text' name='urlHub' id='urlHub' size='60' value='%s'>\n", otherHubUrl);
+jsOnEventById("change", "urlHub", "document.getElementById('"RADIO_GROUP"_"RADIO_OTHERHUB"').checked=true;");
+hWrites("</td></tr>\n");
+
+hWrites("<tr><td>");
+jsMakeTrackingRadioButton(RADIO_GROUP, "typeOneJs", RADIO_UCSCDB, radioOn);
+hWrites("</td><th>");
+hWrites("select a UCSC database name:");
+hWrites("</th><td>");
+maxDbNameWidth *= 9;  // 9 should be font width here
+char widthPx[SMALLBUF];
+safef(widthPx, sizeof(widthPx), "width: %dpx", maxDbNameWidth);
+cgiMakeDropListClassWithIdStyleAndJavascript("ucscGenome", "ucscGenome",
+    ucscDbList, ucscDataBaseCount, ucscDb, NULL, widthPx, events);
+jsOnEventById("change", "ucscGenome", "document.getElementById('"RADIO_GROUP"_"RADIO_UCSCDB"').checked=true;");
+hWrites("</td></tr>\n");
+
+allTrackSettings = cartUsualBoolean(cart, "allTrackSettings", FALSE);
+hWrites("<tr><td>&nbsp;</td><th>display control:</th><td>");
+hCheckBox("allTrackSettings", allTrackSettings);
+hWrites("&nbsp;display all track settings for each track");
+hWrites("</td></tr>\n");
+
+
+trackLeavesOnly = cartUsualBoolean(cart, "trackLeavesOnly", trackLeavesOnly);
+hWrites("<tr><td>&nbsp;</td><th>JSON list output:</th><td>");
+hCheckBox("trackLeavesOnly", trackLeavesOnly);
+hWrites("&nbsp;show only data tracks, do not show composite container information");
+hWrites("</td></tr>\n");
+
+/* go button at the bottom of the table */
+hWrites("<tr><td>&nbsp;</td><td align=center>");
+hButton("sourceSelected", "go");
+hWrites("</td><td>press 'go' after selections made</td></tr>\n");
+
+hPrintf("</form>\n");
+hPrintf("</table>\n");
+hPrintf("</td></tr></table>\n");
+
+/* how does debug carry forward ? */
+// if (debug)
+//    cgiMakeHiddenVar("debug", "1");
 }
 
 static void doMiddle(struct cart *theCart)
@@ -1151,9 +1267,6 @@ if (isNotEmpty(pathInfo))
     if (hel)	/* have valid command */
 	{
         hPrintDisable();
-        /* could check botDelay here to see if 459 status is advised */
-	puts("Content-Type:application/json");
-	puts("\n");
         void (*apiFunction)(char **) = hel->val;
         (*apiFunction)(words);
 	return;
@@ -1162,26 +1275,7 @@ if (isNotEmpty(pathInfo))
 	commandError = TRUE;
     }
 
-/* could check botDelay here to see if 459 status is advised */
-// puts("Content-Type:text/html");
-// puts("\n");
-
 (void) hubPublicDbLoadAll();
-
-struct dbDb *dbList = ucscDbDb();
-char **ucscDbList = NULL;
-int listSize = slCount(dbList);
-AllocArray(ucscDbList, listSize);
-struct dbDb *el = dbList;
-int ucscDataBaseCount = 0;
-int maxDbNameWidth = 0;
-for ( ; el != NULL; el = el->next )
-    {
-    ucscDbList[ucscDataBaseCount++] = el->name;
-    if (strlen(el->name) > maxDbNameWidth)
-	maxDbNameWidth = strlen(el->name);
-    }
-maxDbNameWidth += 1;
 
 webStartJWest(cart, database, "UCSC JSON API interface");
 // webStartGbNoBanner(cart, database, "UCSC JSON API interface");
@@ -1223,31 +1317,27 @@ if (debug)
     hPrintf("</ul>\n");
     }
 
-char *goOtherHub = cartUsualString(cart, "goOtherHub", "");
-char *goUcscDb = cartUsualString(cart, "goUcscDb", "");
 char *otherHubUrl = cartUsualString(cart, "urlHub", "");
-char *goPublicHub = cartUsualString(cart, "goPublicHub", "");
 char *hubDropDown = cartUsualString(cart, "publicHubs", defaultHub);
 char *urlDropDown = urlFromShortLabel(hubDropDown);
 char *ucscDb = cartUsualString(cart, "ucscGenome", defaultDb);
+char *selectRadio = cartUsualString(cart, RADIO_GROUP, RADIO_PUBHUB);
 char *urlInput = urlDropDown;	/* assume public hub */
 if (debug)
     {
     hPrintf("<ul>\n");
-    hPrintf("<li>goOtherHub: '%s'</li>\n", goOtherHub);
-    hPrintf("<li>goUcscDb: '%s'</li>\n", goUcscDb);
     hPrintf("<li>otherHubUrl: '%s'</li>\n", otherHubUrl);
-    hPrintf("<li>goPublicHub: '%s'</li>\n", goPublicHub);
     hPrintf("<li>hubDropDown: '%s'</li>\n", hubDropDown);
     hPrintf("<li>urlDropDown: '%s'</li>\n", urlDropDown);
     hPrintf("<li>ucscDb: '%s'</li>\n", ucscDb);
     hPrintf("<li>urlInput: '%s'</li>\n", urlInput);
     hPrintf("</ul>\n");
     }
-if (sameWord("go", goOtherHub))	/* requested other hub URL */
-    urlInput = otherHubUrl;
-else if (isEmpty(otherHubUrl))
+if (isEmpty(otherHubUrl))
     otherHubUrl = urlInput;
+
+if (sameWord(RADIO_OTHERHUB, selectRadio))	/* requested other hub URL */
+    urlInput = otherHubUrl;
 
 if (commandError)
   {
@@ -1270,61 +1360,18 @@ if (debug)
     showCartDump();
 
 hPrintf("<h2>Explore hub or database assemblies and tracks</h2>\n");
+hPrintf("<h3>Select one of these three sources, and display options:</h3>\n");
 
-hPrintf("<form action='%s' name='hubApiUrl' id='hubApiUrl' method='GET'>\n\n", urlPrefix);
-
-hPrintf("<b>Select public hub:&nbsp;</b>");
-#define JBUFSIZE 2048
-#define SMALLBUF 256
-char javascript[JBUFSIZE];
-struct slPair *events = NULL;
-safef(javascript, sizeof(javascript), "this.lastIndex=this.selectedIndex;");
-slPairAdd(&events, "focus", cloneString(javascript));
-
-cgiMakeDropListClassWithIdStyleAndJavascript("publicHubs", "publicHubs",
-    shortLabels, publicHubCount, hubDropDown, NULL, "width: 400px", events);
-
-hWrites("&nbsp;");
-hButton("goPublicHub", "go");
-
-hPrintf("<br>Or, enter a hub URL:&nbsp;");
-hPrintf("<input type='text' name='urlHub' id='urlHub' size='60' value='%s'>\n", otherHubUrl);
-hWrites("&nbsp;");
-hButton("goOtherHub", "go");
-
-hPrintf("<br>Or, select a UCSC database name:&nbsp;");
-maxDbNameWidth *= 9;  // 9 should be font width here
-char widthPx[SMALLBUF];
-safef(widthPx, sizeof(widthPx), "width: %dpx", maxDbNameWidth);
-cgiMakeDropListClassWithIdStyleAndJavascript("ucscGenome", "ucscGenome",
-    ucscDbList, ucscDataBaseCount, ucscDb, NULL, widthPx, events);
-hWrites("&nbsp;");
-hButton("goUcscDb", "go");
-
-// boolean depthSearch = cartUsualBoolean(cart, "depthSearch", FALSE);
-// hPrintf("<br>\n&nbsp;&nbsp;");
-// hCheckBox("depthSearch", cartUsualBoolean(cart, "depthSearch", FALSE));
-// hPrintf("&nbsp;perform full bbi file measurement : %s (will time out if taking longer than %ld seconds)<br>\n", depthSearch ? "TRUE" : "FALSE", timeOutSeconds);
-
-hPrintf("<br>\n&nbsp;&nbsp;");
-
-allTrackSettings = cartUsualBoolean(cart, "allTrackSettings", FALSE);
-hCheckBox("allTrackSettings", allTrackSettings);
-hPrintf("&nbsp;display all track settings for each track<br>\n");
-
-hPrintf("<br>\n");
-// if (debug)
-//    cgiMakeHiddenVar("debug", "1");
-hPrintf("</form>\n");
+selectionForm();
 
 hPrintf("<p>\n");
-if (sameWord("go", goUcscDb))	/* requested UCSC db track list */
+if (sameWord(RADIO_UCSCDB, selectRadio))  /* requested UCSC db track list */
     {
     tracksForUcscDb(ucscDb);
     }
 else
     {
-    hPrintf("<h3>%s url: <em>%s</em></h3>\n", sameWord("go",goPublicHub) ? "Public hub" : "Other hub", urlInput);
+    hPrintf("<h3>%s url: <em>%s</em></h3>\n", sameWord(RADIO_PUBHUB,selectRadio) ? "Public hub" : "Other hub", urlInput);
     hPrintf("<ul>\n");
     hubInfo("hub name", hub->name);
     hubInfo("short label", hub->shortLabel);
@@ -1358,7 +1405,7 @@ webEndJWest();
 
 /* Null terminated list of CGI Variables we don't want to save
  * permanently. */
-static char *excludeVars[] = {"Submit", "submit", "goOtherHub", "goPublicHub", "goUcscDb", "ucscGenome", "publicHubs", "clade", NULL,};
+static char *excludeVars[] = {"Submit", "submit", "sourceSelected", "selectRadio", "ucscGenome", "publicHubs", "clade", NULL,};
 
 int main(int argc, char *argv[])
 /* Process command line. */
