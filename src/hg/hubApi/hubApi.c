@@ -1129,6 +1129,7 @@ char *radioOn = cartUsualString(cart, RADIO_GROUP, RADIO_PUBHUB);
 /* create border around table, but not inside the table with the data */
 hPrintf("<table border=4>\n");
 hPrintf("<tr><td><table border=0>\n");
+hPrintf("<tr><th colspan=3>Select one of these three sources, and display options:</th></tr>\n");
 
 int maxDbNameWidth = 0;
 struct dbDb *dbList = ucscDbDb();
@@ -1207,6 +1208,9 @@ hButton("sourceSelected", "go");
 hWrites("</td><td>press 'go' after selections made</td></tr>\n");
 
 hPrintf("</form>\n");
+
+hPrintf("<tr><th colspan=3>(example JSON list output: <a href='/list/publicHubs' target=_blank>Public hubs</a>, and <a href='/list/ucscGenomes' target=_blank>UCSC database genomes</a>)</th></tr>\n");
+
 hPrintf("</table>\n");
 hPrintf("</td></tr></table>\n");
 
@@ -1357,19 +1361,18 @@ if (measureTiming || debug)
        hPrintf("<em>hub open time: %ld millis</em><br>\n", thisTime - lastTime);
     }
 
-hPrintf("<h3>Please refer to <a href='../../goldenPath/help/api.html'>API help</a> documentation for more information about the JSON data API operation.</h3>\n");
-hPrintf("<h3>See also: <a href='../../goldenPath/help/trackDb/trackDbHub.html' target=_blank>Track definition document</a> for definitions of track settings.</h3>\n");
+hPrintf("<h3>Documentation: <a href='../../goldenPath/help/api.html'>API definitions/help</a>, and <a href='../../goldenPath/help/trackDb/trackDbHub.html' target=_blank>Track definition document</a> for definitions of track settings.</h3>\n");
 
 if (debug)
     showCartDump();
 
 hPrintf("<h2>Explore hub or database assemblies and tracks</h2>\n");
-hPrintf("<h3>Select one of these three sources, and display options:</h3>\n");
 
 selectionForm();
 
 /* these style mentions need to go into custom css file */
-hPrintf("<div style='border:1px solid black;height:500px;overflow:scroll'>\n");
+hPrintf("<div style='height:500px;overflow:scroll'>\n");
+
 if (sameWord(RADIO_UCSCDB, selectRadio))  /* requested UCSC db track list */
     {
     tracksForUcscDb(ucscDb);
