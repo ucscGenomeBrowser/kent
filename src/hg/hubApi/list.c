@@ -467,7 +467,7 @@ else if (sameWord("tracks", words[1]))
     char *genome = cgiOptionalString("genome");
     char *db = cgiOptionalString("db");
     if (isEmpty(hubUrl) && isEmpty(db))
-      apiErrAbort(400, "Bad Request", "ERROR: must supply hubUrl or db name to return track list");
+      apiErrAbort(400, "Bad Request", "ERROR: missing hubUrl or db name for endpoint /list/tracks");
     if (isEmpty(hubUrl))	// missing hubUrl implies UCSC database
 	{
         trackDbJsonOutput(db, stdout);	// only need db for this function
@@ -476,9 +476,9 @@ else if (sameWord("tracks", words[1]))
     if (isEmpty(genome) || isEmpty(hubUrl))
 	{
         if (isEmpty(genome))
-	    warn("# must supply genome='someName' the name of a genome in a hub for /list/tracks\n");
+	    apiErrAbort(400, "Bad Request", "ERROR: must supply genome='someName' the name of a genome in a hub for /list/tracks\n");
 	if (isEmpty(hubUrl))
-            apiErrAbort(400, "Bad Request", "ERROR: must supply hubUrl='http:...' some URL to a hub for /list/genomes");
+            apiErrAbort(400, "Bad Request", "ERROR: must supply hubUrl='http:...' some URL to a hub for /list/tracks");
 	}
     struct trackHub *hub = errCatchTrackHubOpen(hubUrl);
     if (hub->genomeList)
