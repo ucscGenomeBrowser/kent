@@ -33,6 +33,8 @@ def parseCommandLine():
     parser.add_argument("parameters", nargs='?',
         help="Parameters to endpoints. semi-colon separated key=value formatted string, "
         "like \"db=hg38;chrom=chrM;maxItemsOutput=2\"",type=str)
+    parser.add_argument("-test0", action="store_true", default=False,
+        help="Run special test")
     parser.add_argument("-p", "--pretty-print", action="store_true", default=False,
         help="Print json response with newlines")
     parser.add_argument("--show-endpoints", action="store_true", default=False,
@@ -43,6 +45,65 @@ def parseCommandLine():
         help="Print final URL of the request.")
     return parser
 
+def tryJsonRequest(requestUrl):
+    """
+    Wrap call to urlopen in try/except and exit on an HTTP error.
+    Returns json response if request is good.
+    """
+    data = None
+    try:
+        request = Request(requestUrl)
+        response = urlopen(request)
+        content = response.read()
+        if content:
+            data = json.loads(content)
+    except HTTPError as e:
+        if e.code == 400: # does this work for other status codes?
+            msg = json.loads(e.read())
+            sys.stderr.write("Error: %s\n" % msg["error"])
+            sys.exit(1)
+        else:
+            sys.stderr.write("Request %s failed with HTTP status %s\nreason:%s\n" %
+                (requestUrl, e.code, e.reason))
+        sys.exit(1)
+    return data
+
+def runTest0(prettyPrint=False):
+    """
+    Run test of getting public hub data for "Plants" and print UCSC info
+    for the hg38 db and exit
+    """
+    hubRequest =  serverName + "/list/publicHubs"
+    hg38Request = serverName + "/list/ucscGenomes"
+
+    # do plants hub test first
+    data = tryJsonRequest(hubRequest)
+    if data:
+        plantData = None
+        for obj in data['publicHubs']:
+            if obj['shortLabel'] == 'Plants':
+                plantData = obj
+        if plantData is not None:
+            print("Plants public hub data")
+            if prettyPrint:
+                print(json.dumps(plantData,indent=4, separators=(",",":")))
+            else:
+                print(json.dumps(plantData))
+
+    # now do ucsc hg38 test
+    data = tryJsonRequest(hg38Request)
+    if data:
+        hg38Data = None
+        if data['ucscGenomes']['hg38']:
+            hg38Data = data['ucscGenomes']['hg38']
+        if hg38Data is not None:
+            print("hg38/Human information")
+            if prettyPrint:
+                print(json.dumps(hg38Data,indent=4, separators=(",",":")))
+            else:
+                print(json.dumps(hg38Data))
+    sys.exit(0)
+
 def main():
     cmd = parseCommandLine()
     args = cmd.parse_args()
@@ -51,6 +112,10 @@ def main():
     if len(sys.argv) == 1:
         cmd.print_help()
         sys.exit(0)
+
+    # run special test
+    if args.test0:
+        runTest0(args.pretty_print)
 
     # check for the show arguments first and exit early
     if args.show_endpoints:
@@ -89,22 +154,7 @@ def main():
     data = None
     if args.debug:
         print("request URL: %s\n" % req)
-    try:
-        request = Request(req)
-        response = urlopen(request)
-        content = response.read()
-        if content:
-            data = json.loads(content)
-    except HTTPError as e:
-        if e.code == 400: # does this work for other status codes?
-            data = json.loads(e.read())
-            sys.stderr.write("Error: %s\n" % data["error"])
-            sys.exit(1)
-        else:
-            sys.stderr.write("Request %s failed with HTTP status %s\nreason:%s\n" %
-                (req, e.code, e.reason))
-        sys.exit(1)
-
+    data = tryJsonRequest(req)
     if data:
         if args.pretty_print:
             print(json.dumps(data, indent=4, separators=(",",":")))
