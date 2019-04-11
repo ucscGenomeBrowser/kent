@@ -146,6 +146,8 @@ sub performRestAction {
 #      die "Failed for $endpoint! Status code: ${status}. Reason: ${reason}\n";
       printf STDERR "Failed for $endpoint! Status code: ${status}. Reason: ${reason}\n";
 # hashOutput($response->{headers});
+# hashOutput($response->{content});
+# printf STDERR "'%s'\n", $response->{content};
 # printf STDERR "'%s'\n", $response->{headers};
       return return $response->{content};
     }
@@ -218,122 +220,98 @@ sub verifyCommandProcessing()
 
 #############################################################################
 sub processEndPoint() {
-  if (length($endpoint) > 0) {
+  if (length($endpoint)) {
      my $json = JSON->new;
      my $jsonReturn = {};
      if ($endpoint eq "/list/hubGenomes") {
-        if (length($hubUrl) > 0) {
-	   my %parameters;
+	my %parameters;
+	# allow no hubUrl argument to test error reports
+        if (length($hubUrl)) {
 	   $parameters{"hubUrl"} = "$hubUrl";
-	   $jsonReturn = performJsonAction($endpoint, \%parameters);
-	   printf "%s", $json->pretty->encode( $jsonReturn );
-        } else {
-	  printf STDERR "ERROR: need to specify a hubUrl for endpoint '%s'\n", $endpoint;
-	  exit 255;
         }
+	$jsonReturn = performJsonAction($endpoint, \%parameters);
+	printf "%s", $json->pretty->encode( $jsonReturn );
      } elsif ($endpoint eq "/list/tracks") {
-	my $failing = 0;
+	# no need to verify arguments here, pass them along, or not,
+	# so that error returns can be verified
 	my %parameters;
 	if ($trackLeavesOnly) {
 	    $parameters{"trackLeavesOnly"} = "1";
 	}
-	if (length($db) > 0) {
+	if (length($db)) {
 	    $parameters{"db"} = "$db";
-	} elsif (length($hubUrl) < 1) {
-          printf STDERR "ERROR: need to specify a hubUrl for endpoint '%s'\n", $endpoint;
-	  ++$failing;
-	} else {
-	  $parameters{"hubUrl"} = "$hubUrl";
-	  if (length($genome) < 1) {
-            printf STDERR "ERROR: need to specify a genome for endpoint '%s'\n", $endpoint;
-	    ++$failing;
-	  } else {
-	    $parameters{"genome"} = "$genome";
-	  }
 	}
-	if ($failing) { exit 255; }
+	# allow no hubUrl argument to test error reports
+        if (length($hubUrl)) {
+	  $parameters{"hubUrl"} = "$hubUrl";
+	}
+	# allow call to go through without a genome specified to test error
+	if (length($genome)) {
+	  $parameters{"genome"} = "$genome";
+	}
 	$jsonReturn = performJsonAction($endpoint, \%parameters);
 	printf "%s", $json->pretty->encode( $jsonReturn );
      } elsif ($endpoint eq "/list/chromosomes") {
-	my $failing = 0;
 	my %parameters;
-	if (length($db) > 0) {
+	if (length($db)) {
 	    $parameters{"db"} = "$db";
 	} else {
           if (length($hubUrl)) {
 	    $parameters{"hubUrl"} = "$hubUrl";
+	  # allow call to go through without a genome specified to test error
             if (length($genome)) {
 	      $parameters{"genome"} = "$genome";
-	    } else {
-              printf STDERR "ERROR: need to specify a genome with hubUrl for endpoint '%s'\n", $endpoint;
-		++$failing;
 	    }
             if (length($track)) {
 	      $parameters{"track"} = "$track";
 	    }
-	  } else {
-            printf STDERR "ERROR: need to specify a db or hubUrl for endpoint '%s'\n", $endpoint;
-	    ++$failing;
 	  }
 	}
-	if ($failing) { exit 255; }
 	$jsonReturn = performJsonAction($endpoint, \%parameters);
 	printf "%s", $json->pretty->encode( $jsonReturn );
      } elsif ($endpoint eq "/getData/sequence") {
-	my $failing = 0;
 	my %parameters;
-	if (length($db) > 0) {
+	if (length($db)) {
 	    $parameters{"db"} = "$db";
-	} elsif (length($hubUrl) < 1) {
-          printf STDERR "ERROR: need to specify a hubUrl for endpoint '%s'\n", $endpoint;
-	  ++$failing;
-	} else {
-	  $parameters{"hubUrl"} = "$hubUrl";
-	  if (length($genome) < 1) {
-            printf STDERR "ERROR: need to specify a genome for endpoint '%s'\n", $endpoint;
-	    ++$failing;
-	  } else {
-	    $parameters{"genome"} = "$genome";
-	  }
 	}
-	if (length($chrom) > 0) {
+	if (length($hubUrl)) {
+	  $parameters{"hubUrl"} = "$hubUrl";
+	}
+	# allow call to go through without a genome specified to test error
+	if (length($genome)) {
+	  $parameters{"genome"} = "$genome";
+	}
+	if (length($chrom)) {
 	    $parameters{"chrom"} = "$chrom";
 	}
-	if (length($start) > 0) {
+	if (length($start)) {
 	    $parameters{"start"} = "$start";
 	    $parameters{"end"} = "$end";
 	}
-	if ($failing) { exit 255; }
 	$jsonReturn = performJsonAction($endpoint, \%parameters);
 	printf "%s", $json->pretty->encode( $jsonReturn );
      } elsif ($endpoint eq "/getData/track") {
-	my $failing = 0;
 	my %parameters;
-	if (length($db) > 0) {
+	if (length($db)) {
 	    $parameters{"db"} = "$db";
-	} elsif (length($hubUrl) < 1) {
-          printf STDERR "ERROR: need to specify a hubUrl for endpoint '%s'\n", $endpoint;
-	  ++$failing;
-	} else {
-	  $parameters{"hubUrl"} = "$hubUrl";
-	  if (length($genome) < 1) {
-            printf STDERR "ERROR: need to specify a genome for endpoint '%s'\n", $endpoint;
-	    ++$failing;
-	  } else {
-	    $parameters{"genome"} = "$genome";
-	  }
 	}
-	if (length($track) > 0) {
+	if (length($hubUrl)) {
+	  $parameters{"hubUrl"} = "$hubUrl";
+	}
+	# allow call to go through without a genome specified to test error
+	if (length($genome)) {
+	    $parameters{"genome"} = "$genome";
+	}
+	if (length($track)) {
 	    $parameters{"track"} = "$track";
 	}
-	if (length($chrom) > 0) {
+	if (length($chrom)) {
 	    $parameters{"chrom"} = "$chrom";
 	}
-	if (length($start) > 0) {
+	if (length($start)) {
 	    $parameters{"start"} = "$start";
 	    $parameters{"end"} = "$end";
 	}
-	if ($failing) { exit 255; }
 	$jsonReturn = performJsonAction($endpoint, \%parameters);
 	printf "%s", $json->pretty->encode( $jsonReturn );
      } else {
