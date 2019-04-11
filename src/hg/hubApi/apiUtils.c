@@ -22,7 +22,7 @@ puts("\n");
 
 jsonWriteObjectEnd(jw);
 fputs(jw->dy->string,stdout);
-}
+}	/*	void apiFinishOutput(int errorCode, char *errorString, ... ) */
 
 void apiErrAbort(int errorCode, char *errString, char *format, ...)
 /* Issue an error message in json format, and exit(0) */
@@ -197,7 +197,7 @@ if (errCatchStart(errCatch))
 errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
-    apiErrAbort(400, "Bad Request", "error opening hubUrl: '%s', '%s'", hubUrl,  errCatch->message->string);
+    apiErrAbort(404, "Not Found", "error opening hubUrl: '%s', '%s'", hubUrl,  errCatch->message->string);
     }
 errCatchFree(&errCatch);
 return hub;
@@ -269,7 +269,7 @@ else if (startsWith("bigWig", trackType))
 errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
-    apiErrAbort(400, "Bad Request", "error opening bigFile URL: '%s', '%s'", bigDataUrl,  errCatch->message->string);
+    apiErrAbort(404, "Not Found", "error opening bigFile URL: '%s', '%s'", bigDataUrl,  errCatch->message->string);
     }
 errCatchFree(&errCatch);
 return bbi;
