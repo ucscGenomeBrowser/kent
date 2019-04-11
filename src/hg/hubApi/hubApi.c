@@ -854,6 +854,7 @@ long lastTime = clock1000();
 for ( ; genome; genome = genome->next )
     {
     ++totalAssemblyCount;
+    char urlReference[2048];
     if (isNotEmpty(genome->twoBitPath))
 	{
 	hPrintf("<li><b>Assembly genome</b> '%s' <b>twoBitPath</b>: '%s'</li>\n", genome->name, genome->twoBitPath);
@@ -863,9 +864,10 @@ for ( ; genome; genome = genome->next )
 	char sizeString[64];
 	sprintLongWithCommas(sizeString, chromSize);
 	hPrintf("<li><b>Sequence count</b> %d, <b>largest</b>: %s at %s bases</li>\n", slCount(ci), chromName, sizeString);
+       safef(urlReference, sizeof(urlReference), " <a href='%s/getData/sequence?hubUrl=%s;genome=%s;chrom=%s;start=%u;end=%u' target=_blank>JSON example sequence output: %s:%u-%u</a>", urlPrefix, hubTop->url, genome->name, chromName, chromSize/4, (chromSize/4)+128, chromName, chromSize/4, (chromSize/4)+128);
+        hPrintf("<li>%s</li>\n", urlReference);
 	}
-    char urlReference[2048];
-    safef(urlReference, sizeof(urlReference), " <a href='%s/list/tracks?hubUrl=%s&amp;genome=%s' target=_blank>JSON output: list tracks</a>", urlPrefix, hubTop->url, genome->name);
+    safef(urlReference, sizeof(urlReference), " <a href='%s/list/tracks?hubUrl=%s&amp;genome=%s' target=_blank>JSON example list tracks output</a>", urlPrefix, hubTop->url, genome->name);
     hPrintf("<li>%s</li>\n", urlReference);
     hubInfo("organism", genome->organism);
     hubInfo("name", genome->name);
@@ -1282,6 +1284,8 @@ webStartJWest(cart, database, "UCSC JSON API interface");
 // webStartGbOptionalBanner(cart, database, "UCSC JSON API interface", TRUE, FALSE);
 
 hPrintf("<div class='container-fluid gbPage'>\n");
+/* these style mentions need to go into custom css file */
+hPrintf("<div style='border:10px solid white'>\n");
 
 if (debug)
     {
@@ -1364,7 +1368,8 @@ hPrintf("<h3>Select one of these three sources, and display options:</h3>\n");
 
 selectionForm();
 
-hPrintf("<p>\n");
+/* these style mentions need to go into custom css file */
+hPrintf("<div style='border:1px solid black;height:500px;overflow:scroll'>\n");
 if (sameWord(RADIO_UCSCDB, selectRadio))  /* requested UCSC db track list */
     {
     tracksForUcscDb(ucscDb);
@@ -1395,7 +1400,8 @@ if (timedOut)
 if (measureTiming || debug)
     hPrintf("<em>Overall total time: %ld millis</em><br>\n", clock1000() - enteredMainTime);
 
-hPrintf("</p>\n");
+hPrintf("</div> <!-- end of text analysis output -->\n");
+hPrintf("</div> <!-- end of surrounding border-->\n");
 hPrintf("</div> <!-- end this page contents -->\n");
 
 webIncludeFile("inc/jWestFooter.html");
