@@ -3,7 +3,7 @@ compositeTrack on
 shortLabel NCBI RefSeq
 longLabel RefSeq gene predictions from NCBI
 group genes
-visibility dense
+visibility pack
 type genePred
 dragAndDrop subTracks
 noInherit on
@@ -17,6 +17,7 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
     track ncbiRefSeqView
     shortLabel NCBI RefSeq genes and alignments
     view aNcbiRefSeq
+    visibility dense
     parent refSeqComposite on
     configurable on
     baseColorDefault genomicCodons
