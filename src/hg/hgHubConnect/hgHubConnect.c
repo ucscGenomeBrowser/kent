@@ -1394,9 +1394,9 @@ if (cartVarExists(cart, hgHubDoRedirect))
 cartWebStart(cart, NULL, "%s", pageTitle);
 
 printf(
-"<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.4/themes/default/style.min.css\" />\n"
+"<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/themes/default/style.min.css\" />\n"
 "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js\"></script>\n"
-"<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.4/jstree.min.js\"></script>\n"
+"<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/jstree.min.js\"></script>\n"
 "<style>.jstree-default .jstree-anchor { height: initial; } </style>\n"
 );
 jsIncludeFile("utils.js", NULL);
