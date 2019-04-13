@@ -694,6 +694,13 @@ else
 boxPscm = NULL;
 }
 
+void pscmCircle(struct pscmGfx *pscm, int xCen, int yCen, int rad,
+        Color color, boolean filled)
+{
+pscmSetColor(pscm, color);
+psFillCircle(pscm->ps, (double)xCen, (double)yCen, (double)rad);
+}
+
 void pscmEllipse(struct pscmGfx *pscm, int x1, int y1, int x2, int y2, Color color, 
                         int mode, boolean isDashed)
 /* Draw an ellipse specified as a rectangle. Args are left-most and top-most points.
@@ -765,6 +772,7 @@ vg->verticalSmear = (vg_verticalSmear)pscmVerticalSmear;
 vg->fillUnder = (vg_fillUnder)pscmFillUnder;
 vg->drawPoly = (vg_drawPoly)pscmDrawPoly;
 vg->ellipse = (vg_ellipse)pscmEllipse;
+vg->circle = (vg_circle)pscmCircle;
 vg->curve = (vg_curve)pscmCurve;
 vg->setHint = (vg_setHint)pscmSetHint;
 vg->getHint = (vg_getHint)pscmGetHint;

@@ -8,6 +8,7 @@ use JSON;
 use Getopt::Long;
 
 my $http = HTTP::Tiny->new();
+# my $server = 'https://apibeta.soe.ucsc.edu';
 # my $server = 'https://api-test.gi.ucsc.edu';
 my $server = 'https://hgwdev-api.gi.ucsc.edu';
 # my $server = 'https://hgwbeta.soe.ucsc.edu/cgi-bin/hubApi';
@@ -53,6 +54,30 @@ printf STDERR "arguments:
    /getData/track - return data from specified track in hub or database genome
 ";
 }
+
+#########################################################################
+# generic output of a hash pointer
+sub hashOutput($) {
+  my ($hashRef) = @_;
+  foreach my $key (sort keys %$hashRef) {
+    my $value = $hashRef->{$key};
+    $value = "<array>" if (ref($value) eq "ARRAY");
+    $value = "<hash>" if (ref($value) eq "HASH");
+     printf STDERR "%s - %s\n", $key, $hashRef->{$key};
+  }
+}
+
+sub arrayOutput($) {
+  my ($ary) = @_;
+  my $i = 0;
+  foreach my $element (@$ary) {
+     printf STDERR "# %d\t%s\n", $i++, ref($element);
+     if (ref($element) eq "HASH") {
+       hashOutput($element);
+     }
+  }
+}
+#########################################################################
 
 ##############################################################################
 ###
@@ -108,14 +133,23 @@ sub performRestAction {
   if(!$response->{success}) {
     # Quickly check for rate limit exceeded & Retry-After (lowercase due to our client)
     if($status == 429 && exists $response->{headers}->{'retry-after'}) {
+      my ($status, $reason) = ($response->{status}, $response->{reason});
       my $retry = $response->{headers}->{'retry-after'};
+      printf STDERR "Failed for $endpoint! Status code: ${status}. Reason: ${reason}, retry-after: $retry seconds\n";
+#      hashOutput($response->{headers});
       Time::HiRes::sleep($retry);
       # After sleeping see that we re-request
       return performRestAction($endpoint, $parameters, $headers);
     }
     else {
       my ($status, $reason) = ($response->{status}, $response->{reason});
-      die "Failed for $endpoint! Status code: ${status}. Reason: ${reason}\n";
+#      die "Failed for $endpoint! Status code: ${status}. Reason: ${reason}\n";
+      printf STDERR "Failed for $endpoint! Status code: ${status}. Reason: ${reason}\n";
+# hashOutput($response->{headers});
+# hashOutput($response->{content});
+# printf STDERR "'%s'\n", $response->{content};
+# printf STDERR "'%s'\n", $response->{headers};
+      return return $response->{content};
     }
   }
   $request_count++;
@@ -123,28 +157,6 @@ sub performRestAction {
     return $response->{content};
   }
   return;
-}
-
-# generic output of a hash pointer
-sub hashOutput($) {
-  my ($hashRef) = @_;
-  foreach my $key (sort keys %$hashRef) {
-    my $value = $hashRef->{$key};
-    $value = "<array>" if (ref($value) eq "ARRAY");
-    $value = "<hash>" if (ref($value) eq "HASH");
-     printf STDERR "%s - %s\n", $key, $hashRef->{$key};
-  }
-}
-
-sub arrayOutput($) {
-  my ($ary) = @_;
-  my $i = 0;
-  foreach my $element (@$ary) {
-     printf STDERR "# %d\t%s\n", $i++, ref($element);
-     if (ref($element) eq "HASH") {
-       hashOutput($element);
-     }
-  }
 }
 
 #############################################################################
@@ -208,122 +220,98 @@ sub verifyCommandProcessing()
 
 #############################################################################
 sub processEndPoint() {
-  if (length($endpoint) > 0) {
+  if (length($endpoint)) {
      my $json = JSON->new;
      my $jsonReturn = {};
      if ($endpoint eq "/list/hubGenomes") {
-        if (length($hubUrl) > 0) {
-	   my %parameters;
+	my %parameters;
+	# allow no hubUrl argument to test error reports
+        if (length($hubUrl)) {
 	   $parameters{"hubUrl"} = "$hubUrl";
-	   $jsonReturn = performJsonAction($endpoint, \%parameters);
-	   printf "%s", $json->pretty->encode( $jsonReturn );
-        } else {
-	  printf STDERR "ERROR: need to specify a hubUrl for endpoint '%s'\n", $endpoint;
-	  exit 255;
         }
+	$jsonReturn = performJsonAction($endpoint, \%parameters);
+	printf "%s", $json->pretty->encode( $jsonReturn );
      } elsif ($endpoint eq "/list/tracks") {
-	my $failing = 0;
+	# no need to verify arguments here, pass them along, or not,
+	# so that error returns can be verified
 	my %parameters;
 	if ($trackLeavesOnly) {
 	    $parameters{"trackLeavesOnly"} = "1";
 	}
-	if (length($db) > 0) {
+	if (length($db)) {
 	    $parameters{"db"} = "$db";
-	} elsif (length($hubUrl) < 1) {
-          printf STDERR "ERROR: need to specify a hubUrl for endpoint '%s'\n", $endpoint;
-	  ++$failing;
-	} else {
-	  $parameters{"hubUrl"} = "$hubUrl";
-	  if (length($genome) < 1) {
-            printf STDERR "ERROR: need to specify a genome for endpoint '%s'\n", $endpoint;
-	    ++$failing;
-	  } else {
-	    $parameters{"genome"} = "$genome";
-	  }
 	}
-	if ($failing) { exit 255; }
+	# allow no hubUrl argument to test error reports
+        if (length($hubUrl)) {
+	  $parameters{"hubUrl"} = "$hubUrl";
+	}
+	# allow call to go through without a genome specified to test error
+	if (length($genome)) {
+	  $parameters{"genome"} = "$genome";
+	}
 	$jsonReturn = performJsonAction($endpoint, \%parameters);
 	printf "%s", $json->pretty->encode( $jsonReturn );
      } elsif ($endpoint eq "/list/chromosomes") {
-	my $failing = 0;
 	my %parameters;
-	if (length($db) > 0) {
+	if (length($db)) {
 	    $parameters{"db"} = "$db";
 	} else {
           if (length($hubUrl)) {
 	    $parameters{"hubUrl"} = "$hubUrl";
+	  # allow call to go through without a genome specified to test error
             if (length($genome)) {
 	      $parameters{"genome"} = "$genome";
-	    } else {
-              printf STDERR "ERROR: need to specify a genome with hubUrl for endpoint '%s'\n", $endpoint;
-		++$failing;
 	    }
             if (length($track)) {
 	      $parameters{"track"} = "$track";
 	    }
-	  } else {
-            printf STDERR "ERROR: need to specify a db or hubUrl for endpoint '%s'\n", $endpoint;
-	    ++$failing;
 	  }
 	}
-	if ($failing) { exit 255; }
 	$jsonReturn = performJsonAction($endpoint, \%parameters);
 	printf "%s", $json->pretty->encode( $jsonReturn );
      } elsif ($endpoint eq "/getData/sequence") {
-	my $failing = 0;
 	my %parameters;
-	if (length($db) > 0) {
+	if (length($db)) {
 	    $parameters{"db"} = "$db";
-	} elsif (length($hubUrl) < 1) {
-          printf STDERR "ERROR: need to specify a hubUrl for endpoint '%s'\n", $endpoint;
-	  ++$failing;
-	} else {
-	  $parameters{"hubUrl"} = "$hubUrl";
-	  if (length($genome) < 1) {
-            printf STDERR "ERROR: need to specify a genome for endpoint '%s'\n", $endpoint;
-	    ++$failing;
-	  } else {
-	    $parameters{"genome"} = "$genome";
-	  }
 	}
-	if (length($chrom) > 0) {
+	if (length($hubUrl)) {
+	  $parameters{"hubUrl"} = "$hubUrl";
+	}
+	# allow call to go through without a genome specified to test error
+	if (length($genome)) {
+	  $parameters{"genome"} = "$genome";
+	}
+	if (length($chrom)) {
 	    $parameters{"chrom"} = "$chrom";
 	}
-	if (length($start) > 0) {
+	if (length($start)) {
 	    $parameters{"start"} = "$start";
 	    $parameters{"end"} = "$end";
 	}
-	if ($failing) { exit 255; }
 	$jsonReturn = performJsonAction($endpoint, \%parameters);
 	printf "%s", $json->pretty->encode( $jsonReturn );
      } elsif ($endpoint eq "/getData/track") {
-	my $failing = 0;
 	my %parameters;
-	if (length($db) > 0) {
+	if (length($db)) {
 	    $parameters{"db"} = "$db";
-	} elsif (length($hubUrl) < 1) {
-          printf STDERR "ERROR: need to specify a hubUrl for endpoint '%s'\n", $endpoint;
-	  ++$failing;
-	} else {
-	  $parameters{"hubUrl"} = "$hubUrl";
-	  if (length($genome) < 1) {
-            printf STDERR "ERROR: need to specify a genome for endpoint '%s'\n", $endpoint;
-	    ++$failing;
-	  } else {
-	    $parameters{"genome"} = "$genome";
-	  }
 	}
-	if (length($track) > 0) {
+	if (length($hubUrl)) {
+	  $parameters{"hubUrl"} = "$hubUrl";
+	}
+	# allow call to go through without a genome specified to test error
+	if (length($genome)) {
+	    $parameters{"genome"} = "$genome";
+	}
+	if (length($track)) {
 	    $parameters{"track"} = "$track";
 	}
-	if (length($chrom) > 0) {
+	if (length($chrom)) {
 	    $parameters{"chrom"} = "$chrom";
 	}
-	if (length($start) > 0) {
+	if (length($start)) {
 	    $parameters{"start"} = "$start";
 	    $parameters{"end"} = "$end";
 	}
-	if ($failing) { exit 255; }
 	$jsonReturn = performJsonAction($endpoint, \%parameters);
 	printf "%s", $json->pretty->encode( $jsonReturn );
      } else {
@@ -370,6 +358,7 @@ if (ref($jsonReturn) eq "HASH") {
 	if ($data->{'shortLabel'} eq "Plants") {
         printf "### Plants public hub data\n";
 	  foreach my $key (sort keys %$data) {
+	  next if ($key eq "registrationTime");
 	  printf "'%s'\t'%s'\n", $key, $data->{$key};
 	  }
 	}

@@ -969,6 +969,7 @@ dyStringAppend(policy, " cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min
 dyStringAppend(policy, " cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js");
 dyStringAppend(policy, " cdnjs.cloudflare.com/ajax/libs/bowser/1.6.1/bowser.min.js");
 dyStringAppend(policy, " cdnjs.cloudflare.com/ajax/libs/jstree/3.3.4/jstree.min.js");
+dyStringAppend(policy, " cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/jstree.min.js");
 dyStringAppend(policy, " login.persona.org/include.js");
 dyStringAppend(policy, " cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js");
 // expMatrix

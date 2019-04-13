@@ -2,29 +2,29 @@
 
 #include "dataApi.h"
 
-#ifdef NOT
-static void jsonFinishOutput(int errorCode, char *errorString, struct jsonWrite *jw)
-/* potential output an error code other than 200 */
+void apiFinishOutput(int errorCode, char *errorString, struct jsonWrite *jw)
+/* finish json output, potential output an error code other than 200 */
 {
 /* this is the first time any output to stdout has taken place for
- * json output, therefore, start with the appropriate header
+ * json output, therefore, start with the appropriate header.
  */
 puts("Content-Type:application/json");
-/* potentially with an error code return */
+/* potentially with an error code return in the header */
 if (errorCode)
     {
     char errString[2048];
     safef(errString, sizeof(errString), "Status: %d %s",errorCode,errorString);
     puts(errString);
+    if (429 == errorCode)
+	puts("Retry-After: 30");
     }
 puts("\n");
 
 jsonWriteObjectEnd(jw);
 fputs(jw->dy->string,stdout);
-}
-#endif
+}	/*	void apiFinishOutput(int errorCode, char *errorString, ... ) */
 
-void apiErrAbort(char *format, ...)
+void apiErrAbort(int errorCode, char *errString, char *format, ...)
 /* Issue an error message in json format, and exit(0) */
 {
 char errMsg[2048];
@@ -33,9 +33,7 @@ va_start(args, format);
 vsnprintf(errMsg, sizeof(errMsg), format, args);
 struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "error", errMsg);
-// jsonFinishOutput(400, "Bad Request", jw);
-jsonWriteObjectEnd(jw);
-fputs(jw->dy->string,stdout);
+apiFinishOutput(errorCode, errString, jw);
 exit(0);
 }
 
@@ -199,7 +197,7 @@ if (errCatchStart(errCatch))
 errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
-    apiErrAbort("error opening hubUrl: '%s', '%s'", hubUrl,  errCatch->message->string);
+    apiErrAbort(404, "Not Found", "error opening hubUrl: '%s', '%s'", hubUrl,  errCatch->message->string);
     }
 errCatchFree(&errCatch);
 return hub;
@@ -271,7 +269,7 @@ else if (startsWith("bigWig", trackType))
 errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
-    apiErrAbort("error opening bigFile URL: '%s', '%s'", bigDataUrl,  errCatch->message->string);
+    apiErrAbort(404, "Not Found", "error opening bigFile URL: '%s', '%s'", bigDataUrl,  errCatch->message->string);
     }
 errCatchFree(&errCatch);
 return bbi;
