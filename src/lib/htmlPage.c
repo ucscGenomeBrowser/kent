@@ -752,7 +752,7 @@ for (tag = form->startTag->next; tag != form->endTag; tag = tag->next)
 	var->type = type;
 	if (sameWord(type, "TEXT") || sameWord(type, "PASSWORD") 
 		|| sameWord(type, "FILE") || sameWord(type, "HIDDEN")
-		|| sameWord(type, "IMAGE"))
+		|| sameWord(type, "IMAGE") || sameWord(type, "SEARCH"))
 	    {
 	    var->curVal = cloneString(value);
 	    }
