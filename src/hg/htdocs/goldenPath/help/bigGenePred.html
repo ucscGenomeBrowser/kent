@@ -140,8 +140,8 @@ To create a custom track using this bigGenePred file:
 <p>
 Custom tracks can also be loaded via one URL line. The link below loads the same bigGenePred track 
 and sets additional parameters in the URL:</p>
-<a href="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hgct_customText=track%20type=bigGenePred%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigGenePred.bb"
-target="_blank"><pre><code>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hgct_customText=track%20type=bigGenePred%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigGenePred.bb</code></pre></a>
+<a href="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hgct_customText=track&type=bigGenePred&bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigGenePred.bb"
+target="_blank"><pre><code>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hgct_customText=track&type=bigGenePred&bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigGenePred.bb</code></pre></a>
 <p>
 After this example bigGenePred track is loaded in the Genome Browser, click on a gene in the
 browser's track display to view the details page for that gene. Note that the page offers links to
@@ -235,7 +235,7 @@ wget http://genome.ucsc.edu/goldenPath/help/examples/bigGenePred.as</code></pre>
   <pre><code>bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as ex4BigGenePred.txt hg38.chrom.sizes bigGenePred.bb</code></pre></li>
   <li> 
   Put your binary indexed file in a web-accessible location. See the 
-  <a href=”https://genome.ucsc.edu/goldenpath/help/hgTrackHubHelp.html#Hosting”>hosting section</a> for more information.</li>
+  <a href="https://genome.ucsc.edu/goldenpath/help/hgTrackHubHelp.html#Hosting">hosting section</a> for more information.</li>
   <li>
   View your dataset in the Browser by entering your hosted data URL in the bigDataUrl field of the 
   URL. For example, you can paste this link into your web browser.
@@ -257,6 +257,9 @@ link to your data by looking at <a href="customTrack.html#EXAMPLE6">Example #6</
 Because the bigGenePred files are an extension of bigBed files, which are indexed binary files, it 
 can be difficult to extract data from them. UCSC has developed the following programs to
 assist in working with bigBed formats, available from the 
+<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
+<ul>
+  <li>
   <code>bigBedToBed</code> &mdash; converts a bigBed file to ASCII BED format.</li>
   <li>
   <code>bigBedSummary</code> &mdash; extracts summary information from a bigBed 
