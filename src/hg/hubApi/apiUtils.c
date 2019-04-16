@@ -15,10 +15,18 @@ if (errorCode)
     char errString[2048];
     safef(errString, sizeof(errString), "Status: %d %s",errorCode,errorString);
     puts(errString);
-    if (429 == errorCode)
+    if (err429 == errorCode)
 	puts("Retry-After: 30");
     }
 puts("\n");
+
+if (debug)
+    {
+    char sizeString[64];
+    unsigned long long vmPeak = currentVmPeak();
+    sprintLongWithCommas(sizeString, vmPeak);
+    jsonWriteString(jw, "vmPeak", sizeString);
+    }
 
 jsonWriteObjectEnd(jw);
 fputs(jw->dy->string,stdout);
@@ -33,6 +41,8 @@ va_start(args, format);
 vsnprintf(errMsg, sizeof(errMsg), format, args);
 struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "error", errMsg);
+jsonWriteNumber(jw, "statusCode", errorCode);
+jsonWriteString(jw, "statusMessage", errString);
 apiFinishOutput(errorCode, errString, jw);
 exit(0);
 }
@@ -197,7 +207,7 @@ if (errCatchStart(errCatch))
 errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
-    apiErrAbort(404, "Not Found", "error opening hubUrl: '%s', '%s'", hubUrl,  errCatch->message->string);
+    apiErrAbort(err404, err404Msg, "error opening hubUrl: '%s', '%s'", hubUrl,  errCatch->message->string);
     }
 errCatchFree(&errCatch);
 return hub;
@@ -269,7 +279,7 @@ else if (startsWith("bigWig", trackType))
 errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
-    apiErrAbort(404, "Not Found", "error opening bigFile URL: '%s', '%s'", bigDataUrl,  errCatch->message->string);
+    apiErrAbort(err404, err404Msg, "error opening bigFile URL: '%s', '%s'", bigDataUrl,  errCatch->message->string);
     }
 errCatchFree(&errCatch);
 return bbi;
@@ -284,3 +294,50 @@ int dif;
 dif = (long) a->size - (long) b->size;
 return dif;
 }
+
+#ifdef NOT
+unsigned largestChrom(char *db, char **nameReturn, int *chromCount)
+/* return the length and get the chrom name for the largest chrom
+ * from chromInfo table.  For use is sample getData URLs
+ */
+{
+char query[1024];
+struct sqlConnection *conn = hAllocConn(db);
+sqlSafef(query, sizeof(query), "select chrom,size from chromInfo order by size desc limit 1");
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row = sqlNextRow(sr);
+unsigned length = 0;
+if (row)
+   {
+   *nameReturn = cloneString(row[0]);
+   length = sqlLongLong(row[1]);
+   }
+sqlFreeResult(&sr);
+if (chromCount)
+    {
+    sqlSafef(query, sizeof(query), "select count(*) from chromInfo");
+    *chromCount = sqlQuickNum(conn, query);
+    }
+hFreeConn(&conn);
+return length;
+}/*static unsigned largestChrom(char *db, char **nameReturn, int *chromCount)*/
+
+unsigned largestChromInfo(struct chromInfo *ci, char **chromName)
+/* find largest chrom in this chromInfo, return name and size */
+{
+unsigned size = 0;
+char *name = NULL;
+struct chromInfo *el;
+for (el = ci; el; el = el->next)
+    {
+    if (el->size > size)
+	{
+	size = el->size;
+	name = el->chrom;
+	}
+    }
+if (chromName)
+    *chromName = name;
+return size;
+}	/* unsigned largestChromInfo(struct chromInfo *ci, char **chromName) */
+#endif

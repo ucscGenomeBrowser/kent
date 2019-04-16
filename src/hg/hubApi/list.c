@@ -143,7 +143,7 @@ struct trackHubGenome *ge = NULL;
 char *track = cgiOptionalString("track");
 
 if (isEmpty(genome))
-    apiErrAbort(400, "Bad Request", "must specify a 'genome=name' with hubUrl for endpoint: /list/chromosomes?hubUrl=%s&genome=<empty>", hubUrl);
+    apiErrAbort(err400, err400Msg, "must specify a 'genome=name' with hubUrl for endpoint: /list/chromosomes?hubUrl=%s;genome=<empty>", hubUrl);
 
 struct trackHubGenome *foundGenome = NULL;
 
@@ -156,7 +156,7 @@ for (ge = hub->genomeList; ge; ge = ge->next)
 	}
     }
 if (NULL == foundGenome)
-    apiErrAbort(400, "Bad Request", "can not find specified 'genome=%s' for endpoint: /list/chromosomes?hubUrl=%s&genome=%s", genome, hubUrl, genome);
+    apiErrAbort(err400, err400Msg, "can not find specified 'genome=%s' for endpoint: /list/chromosomes?hubUrl=%s;genome=%s", genome, hubUrl, genome);
 
 struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "hubUrl", hubUrl);
@@ -166,11 +166,11 @@ if (isNotEmpty(track))
     jsonWriteString(jw, "track", track);
     struct trackDb *tdb = obtainTdb(foundGenome, NULL);
     if (NULL == tdb)
-	apiErrAbort(400, "Bad Request", "failed to find a track hub definition in genome=%s for endpoint '/list/chromosomes' give hubUrl=%s'", genome, hubUrl);
+	apiErrAbort(err400, err400Msg, "failed to find a track hub definition in genome=%s for endpoint '/list/chromosomes' give hubUrl=%s'", genome, hubUrl);
 
     struct trackDb *thisTrack = findTrackDb(track, tdb);
     if (NULL == thisTrack)
-	apiErrAbort(400, "Bad Request", "failed to find specified track=%s in genome=%s for endpoint '/getdata/track'  given hubUrl='%s'", track, genome, hubUrl);
+	apiErrAbort(err400, err400Msg, "failed to find specified track=%s in genome=%s for endpoint '/getdata/track'  given hubUrl='%s'", track, genome, hubUrl);
 
     char *bigDataUrl = trackDbSetting(thisTrack, "bigDataUrl");
     struct bbiFile *bbi = bigFileOpen(thisTrack->type, bigDataUrl);
@@ -207,7 +207,7 @@ struct sqlConnection *conn = hAllocConn(db);
 if (table)
     {
     if (! sqlTableExists(conn, table))
-	apiErrAbort(400, "Bad Request", "can not find specified 'track=%s' for endpoint: /list/chromosomes?db=%s&track=%s", table, db, table);
+	apiErrAbort(err400, err400Msg, "can not find specified 'track=%s' for endpoint: /list/chromosomes?db=%s;track=%s", table, db, table);
     if (sqlColumnExists(conn, table, "chrom"))
 	{
 	char *dataTime = sqlTableUpdate(conn, table);
@@ -241,7 +241,7 @@ if (table)
 	apiFinishOutput(0, NULL, jw);
 	}
     else
-	apiErrAbort(400, "Bad Request", "track '%s' is not a position track, request table without chrom specification, genome: '%s'", table, db);
+	apiErrAbort(err400, err400Msg, "track '%s' is not a position track, request table without chrom specification, genome: '%s'", table, db);
     }
 else
     {
@@ -280,7 +280,7 @@ struct sqlConnection *conn = hAllocConn(db);
 if (table)
     {
     if (! sqlTableExists(conn, table))
-	apiErrAbort(400, "Bad Request", "can not find specified 'track=%s' for endpoint: /list/chromosomes?db=%s&track=%s", table, db, table);
+	apiErrAbort(err400, err400Msg, "can not find specified 'track=%s' for endpoint: /list/chromosomes?db=%s;track=%s", table, db, table);
     if (sqlColumnExists(conn, table, "chrom"))
 	{
 	char *dataTime = sqlTableUpdate(conn, table);
@@ -314,7 +314,7 @@ if (table)
 	apiFinishOutput(0, NULL, jw);
 	}
     else
-	apiErrAbort(400, "Bad Request", "track '%s' is not a position track, request table without chrom specification, genome: '%s'", table, db);
+	apiErrAbort(err400, err400Msg, "track '%s' is not a position track, request table without chrom specification, genome: '%s'", table, db);
     }
 else
     {
@@ -435,7 +435,7 @@ else if (sameWord("hubGenomes", words[1]))
     {
     char *hubUrl = cgiOptionalString("hubUrl");
     if (isEmpty(hubUrl))
-	apiErrAbort(400, "Bad Request", "must supply hubUrl='http:...' some URL to a hub for /list/hubGenomes");
+	apiErrAbort(err400, err400Msg, "must supply hubUrl='http:...' some URL to a hub for /list/hubGenomes");
 
     struct trackHub *hub = errCatchTrackHubOpen(hubUrl);
     if (hub->genomeList)
@@ -467,7 +467,7 @@ else if (sameWord("tracks", words[1]))
     char *genome = cgiOptionalString("genome");
     char *db = cgiOptionalString("db");
     if (isEmpty(hubUrl) && isEmpty(db))
-      apiErrAbort(400, "Bad Request", "ERROR: missing hubUrl or db name for endpoint /list/tracks");
+      apiErrAbort(err400, err400Msg, "ERROR: missing hubUrl or db name for endpoint /list/tracks");
     if (isEmpty(hubUrl))	// missing hubUrl implies UCSC database
 	{
         trackDbJsonOutput(db, stdout);	// only need db for this function
@@ -476,9 +476,9 @@ else if (sameWord("tracks", words[1]))
     if (isEmpty(genome) || isEmpty(hubUrl))
 	{
         if (isEmpty(genome))
-	    apiErrAbort(400, "Bad Request", "ERROR: must supply genome='someName' the name of a genome in a hub for /list/tracks\n");
+	    apiErrAbort(err400, err400Msg, "ERROR: must supply genome='someName' the name of a genome in a hub for /list/tracks\n");
 	if (isEmpty(hubUrl))
-            apiErrAbort(400, "Bad Request", "ERROR: must supply hubUrl='http:...' some URL to a hub for /list/tracks");
+            apiErrAbort(err400, err400Msg, "ERROR: must supply hubUrl='http:...' some URL to a hub for /list/tracks");
 	}
     struct trackHub *hub = errCatchTrackHubOpen(hubUrl);
     if (hub->genomeList)
@@ -503,7 +503,7 @@ else if (sameWord("chromosomes", words[1]))
     char *genome = cgiOptionalString("genome");
     char *db = cgiOptionalString("db");
     if (isEmpty(hubUrl) && isEmpty(db))
-        apiErrAbort(400, "Bad Request", "ERROR: must '%s' '%s' supply hubUrl or db name to return chromosome list", hubUrl, db);
+        apiErrAbort(err400, err400Msg, "ERROR: must '%s' '%s' supply hubUrl or db name to return chromosome list", hubUrl, db);
 
     if (isEmpty(hubUrl))	// missing hubUrl implies UCSC database
 	{
@@ -517,5 +517,5 @@ else if (sameWord("chromosomes", words[1]))
 	}
     }
 else
-    apiErrAbort(400, "Bad Request", "do not recognize endpoint function: '/%s/%s'", words[0], words[1]);
+    apiErrAbort(err400, err400Msg, "do not recognize endpoint function: '/%s/%s'", words[0], words[1]);
 }	/*	void apiList(char *words[MAX_PATH_INFO])        */
