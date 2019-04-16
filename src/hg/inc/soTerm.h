@@ -14,6 +14,8 @@
 
 enum soTerm	// the various variant effects
     {
+    soUnknown=0,
+    frameshift=865,
     regulatory_region_variant=1566,
     stop_retained_variant=1567,
     exon_loss_variant=1572,
@@ -26,6 +28,7 @@ enum soTerm	// the various variant effects
     missense_variant=1583,
     stop_gained=1587,
     frameshift_variant=1589,
+    terminator_codon_variant=1590,
     nc_transcript_variant=1619,
     mature_miRNA_variant=1620,
     NMD_transcript_variant=1621,
@@ -48,7 +51,11 @@ enum soTerm	// the various variant effects
     inframe_deletion=1822,
     feature_variant=1878,
     transcript_ablation=1893,
+    upstream_transcript_variant=1986,
+    downstream_transcript_variant=1987,
     no_sequence_alteration=2073,
+    genic_downstream_transcript_variant=2152,
+    genic_upstream_transcript_variant=2153,
     };
 
 char *soTermToString(enum soTerm termNumber);
