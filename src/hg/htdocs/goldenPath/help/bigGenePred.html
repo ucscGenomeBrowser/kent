@@ -120,7 +120,7 @@ display the usage message.</p>
 
 <h2>Examples</h2>
 <a name="Example1"></a>
-<h3>Example &num;1</h3>
+<h3>Example &num;1: Create Custom Track</h3>
 <p>
 In this example, you will create a bigGenePred custom track using a bigGenePred file located 
 on the UCSC Genome Browser http server, <em>bigGenePred.bb</em>. This file contains data for
@@ -147,7 +147,7 @@ After this example bigGenePred track is loaded in the Genome Browser, click on a
 browser's track display to view the details page for that gene. Note that the page offers links to
 several sequence types, including translated protein, predicted mRNA, and genomic sequence.</p>
 <a name="Example2"></a>
-<h3>Example &num;2</h3>
+<h3>Example &num;2: Display Amino Acids</h3>
 <p>
 In this example, you will configure the bigGenePred track loaded in Example #1 to display codons and
 amino acid numbering:
@@ -180,9 +180,9 @@ chromosome 10.</p>
   <img class='text-center' src="../../images/codonColoring.png" alt="An image of a track with codons colored" width="999"> 
 </p>
 <a name="Example3"></a>
-<h3>Example &num;3</h3>
+<h3>Example &num;3: Pre-bigGenePred to BigGenePred</h3>
 <p>
-In this example, you will create your own bigGenePred file from an existing bigGenePred input 
+In this example, you will create your own bigGenePred file from an existing pre-bigGenePred input
 file.</p>
 <ol>
   <li> 
@@ -211,7 +211,7 @@ file.</p>
   (<em>step 7</em>, above).</li>
 </ol>
 <a name="Example4"></a>
-<h3>Example &num;4</h3>
+<h3>Example &num;4: GTF to BigGenePred </h3>
 <p>In this example, you will convert a GTF file to bigGenePred using command line utilities.
 You will need <em>gtfToGenePred</em>, <em>genePredTobigGenePred</em>,
 and <em>bedToBigBed</em>. You can download utilities from the
@@ -225,27 +225,28 @@ and <em>bedToBigBed</em>. You can download utilities from the
   <pre><code>gtfToGenePred -genePredExt bigGenePredExample4.gtf example4.genePred</code></pre></li>
   <li>
   Convert the genePred extended file to a pre-bigGenePred text file.
-  <pre><code>genePredToBigGenePred example4.genePred bigGenePred.txt</code></pre></li>
+  <pre><code>genePredToBigGenePred example4.genePred bigGenePredEx4.txt</code></pre></li>
   <li>
   Obtain helper files for the conversion from pre-bigGenePred to binary bigGenePred.
   <pre><code>wget http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes
 wget http://genome.ucsc.edu/goldenPath/help/examples/bigGenePred.as</code></pre></li>
   <li>
   Convert your text bigGenePred to a binary indexed format.
-  <pre><code>bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as ex4BigGenePred.txt hg38.chrom.sizes bigGenePred.bb</code></pre></li>
+  <pre><code>bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as bigGenePredEx4.txt hg38.chrom.sizes bigGenePredEx4.bb</code></pre></li>
   <li> 
   Put your binary indexed file in a web-accessible location. See the 
   <a href="https://genome.ucsc.edu/goldenpath/help/hgTrackHubHelp.html#Hosting">hosting section</a> for more information.</li>
   <li>
-  View your dataset in the Browser by entering your hosted data URL in the bigDataUrl field of the 
-  URL. For example, you can paste this link into your web browser.
-<pre> <a href="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hgct_customText=track%20type=bigGenePred%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigGenePred.bb">http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hgct_customText=track%20type=bigGenePred%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigGenePred.bb</a></pre>
+  To view this example, you can click this into this Browser link. To view your own data, paste the
+  link into your web browser and replace the URL after "bigDataUrl=" with a link to your own 
+  hosted data.
+<pre> <a href="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=chr19:44905790-44909388&hgct_customText=track&type=bigGenePred&bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigGenePredEx4.bb">http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=chr19:44905790-44909388&hgct_customText=track&type=bigGenePred&bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigGenePredEx4.bb</a></pre>
 You can also add your data in the <a href="../../cgi-bin/hgCustom?db=hg38">custom track management
 page</a>. This allows you to set position, configuration options, and write a more complete 
 desciption. If you want to see codons, you can right click, then click configure codon view or
-set these options using the <code>baseColorDefault=genomicCodons</code> code as is done below.
-<pre><code>browser position chr19:44905795-44909393 
-track type=bigGenePred baseColorDefault=genomicCodons name="bigGenePred Example Four" description="BGP Made from genePred" visibility=pack bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigGenePred.bb</code></pre></li>
+set this options using <code>baseColorDefault=genomicCodons</code> as is done below.
+<pre><code>browser position chr19:44905790-44909388 
+track type=bigGenePred baseColorDefault=genomicCodons name="bigGenePred Example Four" description="BGP Made from genePred" visibility=pack bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigGenePredEx4.bb</code></pre></li>
 </ol>
 <h2>Sharing your data with others</h2>
 <p>
