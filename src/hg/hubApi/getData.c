@@ -99,8 +99,6 @@ if (isEmpty(chrom))
     sqlSafef(query, sizeof(query), "select * from %s", sqlTable);
 else if (0 == (start + end))	/* have chrom, no start,end == full chr */
     {
-//    boolean useTname = FALSE;
-    /* need to extend the chrom column check to allow tName also */
     if (! sqlColumnExists(conn, sqlTable, chromName))
 	apiErrAbort(err400, err400Msg, "track '%s' is not a position track, request track without chrom specification, genome: '%s'", track, db);
 
@@ -134,7 +132,7 @@ char **columnNames = NULL;
 char **columnTypes = NULL;
 int *jsonTypes = NULL;
 int columnCount = tableColumns(conn, jw, sqlTable, &columnNames, &columnTypes, &jsonTypes);
-if (debug)
+if (jsonOutputArrays || debug)
     {
     jsonWriteObjectStart(jw, "columnTypes");
     int i = 0;
@@ -152,13 +150,22 @@ char **row = NULL;
 unsigned itemCount = 0;
 while (itemCount < maxItemsOutput && (row = sqlNextRow(sr)) != NULL)
     {
-    jsonWriteObjectStart(jw, NULL);
+    if (jsonOutputArrays)
+	jsonWriteListStart(jw, NULL);
+    else
+	jsonWriteObjectStart(jw, NULL);
     int i = 0;
     for (i = 0; i < columnCount; ++i)
 	{
-	jsonDatumOut(jw, columnNames[i], row[i], jsonTypes[i]);
+	if (jsonOutputArrays)
+	    jsonDatumOut(jw, NULL, row[i], jsonTypes[i]);
+	else
+	    jsonDatumOut(jw, columnNames[i], row[i], jsonTypes[i]);
 	}
-    jsonWriteObjectEnd(jw);
+    if (jsonOutputArrays)
+	jsonWriteListEnd(jw);
+    else
+	jsonWriteObjectEnd(jw);
     ++itemCount;
     }
 sqlFreeResult(&sr);
@@ -197,19 +204,28 @@ for (iv = ivList; itemCount < maxItemsOutput && iv; iv = iv->next)
     {
     char startBuf[16], endBuf[16];
     bigBedIntervalToRow(iv, chrom, startBuf, endBuf, row, bbi->fieldCount);
-    jsonWriteObjectStart(jw, NULL);
+    if (jsonOutputArrays)
+	jsonWriteListStart(jw, NULL);
+    else
+	jsonWriteObjectStart(jw, NULL);
     int i;
     struct sqlFieldType *fi = fiList;
     for (i = 0; i < bbi->fieldCount; ++i)
         {
-        jsonDatumOut(jw, fi->name, row[i], jsonTypes[i]);
+	if (jsonOutputArrays)
+	    jsonDatumOut(jw, NULL, row[i], jsonTypes[i]);
+	else
+	    jsonDatumOut(jw, fi->name, row[i], jsonTypes[i]);
         fi = fi->next;
         }
-    jsonWriteObjectEnd(jw);
+    if (jsonOutputArrays)
+	jsonWriteListEnd(jw);
+    else
+	jsonWriteObjectEnd(jw);
     ++itemCount;
     }
 lmCleanup(&bbLm);
-}
+}	/* static void bedDataOutput(struct jsonWrite *jw, . . . ) */
 
 static void wigDataOutput(struct jsonWrite *jw, struct bbiFile *bwf,
     char *chrom, unsigned start, unsigned end)
@@ -345,6 +361,8 @@ if ( ! (isEmpty(start) || isEmpty(end)) )
 
 jsonWriteString(jw, "bigDataUrl", bigDataUrl);
 jsonWriteString(jw, "trackType", thisTrack->type);
+if (debug)
+    jsonWriteString(jw, "jsonOutputArrays", jsonOutputArrays ? "TRUE":"FALSE");
 
 if (allowedBigBedType(thisTrack->type))
     {
@@ -445,6 +463,8 @@ if (tableTrack)
     }
 jsonWriteString(jw, "trackType", thisTrack->type);
 jsonWriteString(jw, "track", track);
+if (debug)
+    jsonWriteString(jw, "jsonOutputArrays", jsonOutputArrays ? "TRUE":"FALSE");
 
 char query[4096];
 struct bbiFile *bbi = NULL;
@@ -622,11 +642,15 @@ if (isNotEmpty(start) && isNotEmpty(end))
     {
     fragStart = sqlSigned(start);
     fragEnd = sqlSigned(end);
+    if ((fragEnd - fragStart) > MAX_DNA_LENGTH)
+	apiErrAbort(err400, err400Msg, "DNA sequence request %d too large, limit: %u for endpoint '/getData/sequence?genome=%s;chrom=%s;start=%d;end=%d' given hubUrl='%s'", fragEnd-fragEnd, MAX_DNA_LENGTH, genome, chrom, fragStart, fragEnd, hubUrl);
     jsonWriteNumber(jw, "start", (long long)fragStart);
     jsonWriteNumber(jw, "end", (long long)fragEnd);
     }
 else
     {
+    if (ci->size > MAX_DNA_LENGTH)
+	apiErrAbort(err400, err400Msg, "DNA sequence request %d too large, limit: %u for endpoint '/getData/sequence?genome=%s;chrom=%s' given hubUrl='%s'", ci->size, MAX_DNA_LENGTH, genome, chrom, hubUrl);
     jsonWriteNumber(jw, "start", (long long)0);
     jsonWriteNumber(jw, "end", (long long)ci->size);
     }
