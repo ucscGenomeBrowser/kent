@@ -220,6 +220,7 @@ sub verifyCommandProcessing()
 
 #############################################################################
 sub processEndPoint() {
+  my $errReturn = 0;
   if (length($endpoint)) {
      my $json = JSON->new;
      my $jsonReturn = {};
@@ -230,6 +231,7 @@ sub processEndPoint() {
 	   $parameters{"hubUrl"} = "$hubUrl";
         }
 	$jsonReturn = performJsonAction($endpoint, \%parameters);
+	$errReturn = 1 if (defined ($jsonReturn->{'error'}));
 	printf "%s", $json->pretty->encode( $jsonReturn );
      } elsif ($endpoint eq "/list/tracks") {
 	# no need to verify arguments here, pass them along, or not,
@@ -250,6 +252,7 @@ sub processEndPoint() {
 	  $parameters{"genome"} = "$genome";
 	}
 	$jsonReturn = performJsonAction($endpoint, \%parameters);
+	$errReturn = 1 if (defined ($jsonReturn->{'error'}));
 	printf "%s", $json->pretty->encode( $jsonReturn );
      } elsif ($endpoint eq "/list/chromosomes") {
 	my %parameters;
@@ -268,6 +271,7 @@ sub processEndPoint() {
 	  }
 	}
 	$jsonReturn = performJsonAction($endpoint, \%parameters);
+	$errReturn = 1 if (defined ($jsonReturn->{'error'}));
 	printf "%s", $json->pretty->encode( $jsonReturn );
      } elsif ($endpoint eq "/getData/sequence") {
 	my %parameters;
@@ -289,6 +293,7 @@ sub processEndPoint() {
 	    $parameters{"end"} = "$end";
 	}
 	$jsonReturn = performJsonAction($endpoint, \%parameters);
+	$errReturn = 1 if (defined ($jsonReturn->{'error'}));
 	printf "%s", $json->pretty->encode( $jsonReturn );
      } elsif ($endpoint eq "/getData/track") {
 	my %parameters;
@@ -313,6 +318,7 @@ sub processEndPoint() {
 	    $parameters{"end"} = "$end";
 	}
 	$jsonReturn = performJsonAction($endpoint, \%parameters);
+	$errReturn = 1 if (defined ($jsonReturn->{'error'}));
 	printf "%s", $json->pretty->encode( $jsonReturn );
      } else {
 	printf STDERR "# TBD: '%s'\n", $endpoint;
@@ -321,6 +327,7 @@ sub processEndPoint() {
     printf STDERR "ERROR: no endpoint given ?\n";
     exit 255;
   }
+  return $errReturn;
 }	# sub processEndPoint()
 
 ###########################################################################
@@ -418,8 +425,11 @@ if ($test0) {
 }
 
 if ($argc > 0) {
-   processEndPoint();
-   exit 0;
+   if (processEndPoint()) {
+	exit 255;
+   } else {
+	exit 0;
+   }
 }
 
 usage();
