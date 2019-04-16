@@ -1075,9 +1075,9 @@ hPrintf("<!DOCTYPE HTML>\n");
 hPrintf("<html lang='en'>\n");
 hPrintf("<head>\n");
 hPrintf("<meta charset=\"utf-8\">\n");
-hPrintf("<title>Status 459 Too Many Requests</title></head>\n");
+hPrintf("<title>Status 429 Too Many Requests</title></head>\n");
 
-hPrintf("<body><h1>Status 459 Too many Requests</h1><p>\n");
+hPrintf("<body><h1>Status 429 Too many Requests</h1><p>\n");
 hPrintf("Your host, %s, has been sending too many requests lately and is "
        "unfairly loading our site, impacting performance for other users. "
        "Please contact genome@soe.ucsc.edu to ask that your site "
