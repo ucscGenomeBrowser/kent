@@ -30,6 +30,8 @@ boolean debug = FALSE;	/* can be set in URL debug=1, to turn off: debug=0 */
  * This option will limit to only the actual track entries with data
  */
 boolean trackLeavesOnly = FALSE;  /* set by CGI parameter 'trackLeavesOnly' */
+/* this selects output type 'arrays', where the default type is: objects */
+boolean jsonOutputArrays = FALSE; /* set by CGI parameter 'jsonOutputArrays' */
 
 /* Global only to this one source file */
 static struct cart *cart;             /* CGI and other variables */
@@ -224,12 +226,19 @@ char *genome = NULL;
 if (hub)
     genome = hub->genomeList->name;
 
+struct dyString *extraDyFlags = newDyString(128);
+if (debug)
+    dyStringAppend(extraDyFlags, ";debug=1");
+if (jsonOutputArrays)
+    dyStringAppend(extraDyFlags, ";jsonOutputArrays=1");
+char *extraFlags = dyStringCannibalize(&extraDyFlags);
+
 if (db)
     {
     if (hub)
 	{
 	char urlReference[2048];
-	safef(urlReference,	sizeof(urlReference), " <a href='%s/getData/track?hubUrl=%s;genome=%s;track=%s;chrom=%s;start=%u;end=%u' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, chrom, start, end, errorPrint);
+	safef(urlReference,	sizeof(urlReference), " <a href='%s/getData/track?hubUrl=%s;genome=%s;track=%s;chrom=%s;start=%u;end=%u%s' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, chrom, start, end, extraFlags, errorPrint);
 
 	if (tdb->parent)
 	    hPrintf("<li><b>%s</b>: %s subtrack of parent: %s%s</li>\n", tdb->track, tdb->type, tdb->parent->track, urlReference);
@@ -239,7 +248,7 @@ if (db)
     else
 	{
 	char urlReference[2048];
-	safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?db=%s;chrom=%s;track=%s;start=%u;end=%u' target=_blank>(sample data)%s</a>\n", urlPrefix, db, chrom, tdb->track, start, end, errorPrint);
+	safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?db=%s;chrom=%s;track=%s;start=%u;end=%u%s' target=_blank>(sample data)%s</a>\n", urlPrefix, db, chrom, tdb->track, start, end, extraFlags, errorPrint);
 
 	if (superChild)
 	    hPrintf("<li><b>%s</b>: %s superTrack child of parent: %s%s</li>\n", tdb->track, tdb->type, tdb->parent->track, urlReference);
@@ -252,7 +261,7 @@ if (db)
 else if (hub)
     {
     char urlReference[2048];
-    safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?hubUrl=%s;genome=%s;track=%s;chrom=%s;start=%u;end=%u' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, chrom, start, end, errorPrint);
+    safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?hubUrl=%s;genome=%s;track=%s;chrom=%s;start=%u;end=%u%s' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, chrom, start, end, extraFlags, errorPrint);
 
     if (tdb->parent)
 	hPrintf("<li><b>%s</b>: %s subtrack of parent: %s%s</li>\n", tdb->track, tdb->type, tdb->parent->track, urlReference);
@@ -271,6 +280,14 @@ unsigned start = chromSize / 4;
 unsigned end = start + 10000;
 if (end > chromSize)
     end = chromSize;
+
+
+struct dyString *extraDyFlags = newDyString(128);
+if (debug)
+    dyStringAppend(extraDyFlags, ";debug=1");
+if (jsonOutputArrays)
+    dyStringAppend(extraDyFlags, ";jsonOutputArrays=1");
+char *extraFlags = dyStringCannibalize(&extraDyFlags);
 
 char errorPrint[2048];
 errorPrint[0] = 0;
@@ -295,7 +312,7 @@ if (chromCount > 0 || itemCount > 0)
 if (isSupportedType(tdb->type))
     {
 	char urlReference[2048];
-	safef(urlReference, sizeof(urlReference), "<a href='%s/getData/track?hubUrl=%s;genome=%s;track=%s;chrom=%s;start=%u;end=%u' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, chromName, start, end, errorPrint);
+	safef(urlReference, sizeof(urlReference), "<a href='%s/getData/track?hubUrl=%s;genome=%s;track=%s;chrom=%s;start=%u;end=%u%s' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, chromName, start, end, extraFlags, errorPrint);
 
 	if (allowedBigBedType(tdb->type))
             hPrintf("    <li><b>%s</b>: %s%s%s</li>\n", tdb->track, tdb->type, countsMessage, urlReference);
@@ -1106,7 +1123,7 @@ else
     }
 }	/*	static void hogExit()	*/
 
-/* name of button group */
+/* name of radio button group */
 #define RADIO_GROUP	"selectRadio"
 /* button functions */
 #define RADIO_PUBHUB	"pubHub"
@@ -1195,11 +1212,16 @@ hCheckBox("allTrackSettings", allTrackSettings);
 hWrites("&nbsp;display all track settings for each track");
 hWrites("</td></tr>\n");
 
-
 trackLeavesOnly = cartUsualBoolean(cart, "trackLeavesOnly", trackLeavesOnly);
 hWrites("<tr><td>&nbsp;</td><th>JSON list output:</th><td>");
 hCheckBox("trackLeavesOnly", trackLeavesOnly);
 hWrites("&nbsp;show only data tracks, do not show composite container information");
+hWrites("</td></tr>\n");
+
+jsonOutputArrays = cartUsualBoolean(cart, "jsonOutputArrays", jsonOutputArrays);
+hWrites("<tr><td>&nbsp;</td><th>JSON output type:</th><td>");
+hCheckBox("jsonOutputArrays", jsonOutputArrays);
+hWrites("&nbsp;more array data than objects (default: mostly object output)");
 hWrites("</td></tr>\n");
 
 /* go button at the bottom of the table */
@@ -1236,6 +1258,7 @@ initSupportedTypes();
 initUrlPrefix();
 
 trackLeavesOnly = cartUsualBoolean(cart, "trackLeavesOnly", trackLeavesOnly);
+jsonOutputArrays = cartUsualBoolean(cart, "jsonOutputArrays", jsonOutputArrays);
 
 /* global variable for all workers to honor this limit */
 maxItemsOutput = cartUsualInt(cart, "maxItemsOutput", maxItemsOutput);

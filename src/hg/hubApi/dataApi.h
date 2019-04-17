@@ -66,6 +66,9 @@ boolean debug;	/* can be set in URL debug=1, to turn off: debug=0 */
  */
 extern boolean trackLeavesOnly;	/* set by CGI parameter 'trackLeavesOnly' */
 
+/* this selects output type 'arrays', where the default type is: objects */
+extern boolean jsonOutputArrays; /* set by CGI parameter 'jsonOutputArrays' */
+
 /*  functions in hubApi.c */
 struct hubPublic *hubPublicDbLoadAll();
 
