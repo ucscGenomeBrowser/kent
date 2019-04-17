@@ -15,10 +15,18 @@ if (errorCode)
     char errString[2048];
     safef(errString, sizeof(errString), "Status: %d %s",errorCode,errorString);
     puts(errString);
-    if (429 == errorCode)
+    if (err429 == errorCode)
 	puts("Retry-After: 30");
     }
 puts("\n");
+
+if (debug)
+    {
+    char sizeString[64];
+    unsigned long long vmPeak = currentVmPeak();
+    sprintLongWithCommas(sizeString, vmPeak);
+    jsonWriteString(jw, "vmPeak", sizeString);
+    }
 
 jsonWriteObjectEnd(jw);
 fputs(jw->dy->string,stdout);
@@ -33,6 +41,8 @@ va_start(args, format);
 vsnprintf(errMsg, sizeof(errMsg), format, args);
 struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "error", errMsg);
+jsonWriteNumber(jw, "statusCode", errorCode);
+jsonWriteString(jw, "statusMessage", errString);
 apiFinishOutput(errorCode, errString, jw);
 exit(0);
 }
@@ -197,7 +207,7 @@ if (errCatchStart(errCatch))
 errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
-    apiErrAbort(404, "Not Found", "error opening hubUrl: '%s', '%s'", hubUrl,  errCatch->message->string);
+    apiErrAbort(err404, err404Msg, "error opening hubUrl: '%s', '%s'", hubUrl,  errCatch->message->string);
     }
 errCatchFree(&errCatch);
 return hub;
@@ -269,7 +279,7 @@ else if (startsWith("bigWig", trackType))
 errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
-    apiErrAbort(404, "Not Found", "error opening bigFile URL: '%s', '%s'", bigDataUrl,  errCatch->message->string);
+    apiErrAbort(err404, err404Msg, "error opening bigFile URL: '%s', '%s'", bigDataUrl,  errCatch->message->string);
     }
 errCatchFree(&errCatch);
 return bbi;

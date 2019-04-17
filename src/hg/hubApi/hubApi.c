@@ -30,6 +30,8 @@ boolean debug = FALSE;	/* can be set in URL debug=1, to turn off: debug=0 */
  * This option will limit to only the actual track entries with data
  */
 boolean trackLeavesOnly = FALSE;  /* set by CGI parameter 'trackLeavesOnly' */
+/* this selects output type 'arrays', where the default type is: objects */
+boolean jsonOutputArrays = FALSE; /* set by CGI parameter 'jsonOutputArrays' */
 
 /* Global only to this one source file */
 static struct cart *cart;             /* CGI and other variables */
@@ -224,12 +226,19 @@ char *genome = NULL;
 if (hub)
     genome = hub->genomeList->name;
 
+struct dyString *extraDyFlags = newDyString(128);
+if (debug)
+    dyStringAppend(extraDyFlags, ";debug=1");
+if (jsonOutputArrays)
+    dyStringAppend(extraDyFlags, ";jsonOutputArrays=1");
+char *extraFlags = dyStringCannibalize(&extraDyFlags);
+
 if (db)
     {
     if (hub)
 	{
 	char urlReference[2048];
-	safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;track=%s&amp;chrom=%s&amp;start=%u&amp;end=%u' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, chrom, start, end, errorPrint);
+	safef(urlReference,	sizeof(urlReference), " <a href='%s/getData/track?hubUrl=%s;genome=%s;track=%s;chrom=%s;start=%u;end=%u%s' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, chrom, start, end, extraFlags, errorPrint);
 
 	if (tdb->parent)
 	    hPrintf("<li><b>%s</b>: %s subtrack of parent: %s%s</li>\n", tdb->track, tdb->type, tdb->parent->track, urlReference);
@@ -239,7 +248,7 @@ if (db)
     else
 	{
 	char urlReference[2048];
-	safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?db=%s&amp;chrom=%s&amp;track=%s&amp;start=%u&amp;end=%u' target=_blank>(sample data)%s</a>\n", urlPrefix, db, chrom, tdb->track, start, end, errorPrint);
+	safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?db=%s;chrom=%s;track=%s;start=%u;end=%u%s' target=_blank>(sample data)%s</a>\n", urlPrefix, db, chrom, tdb->track, start, end, extraFlags, errorPrint);
 
 	if (superChild)
 	    hPrintf("<li><b>%s</b>: %s superTrack child of parent: %s%s</li>\n", tdb->track, tdb->type, tdb->parent->track, urlReference);
@@ -252,7 +261,7 @@ if (db)
 else if (hub)
     {
     char urlReference[2048];
-    safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;track=%s&amp;chrom=%s&amp;start=%u&amp;end=%u' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, chrom, start, end, errorPrint);
+    safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?hubUrl=%s;genome=%s;track=%s;chrom=%s;start=%u;end=%u%s' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, chrom, start, end, extraFlags, errorPrint);
 
     if (tdb->parent)
 	hPrintf("<li><b>%s</b>: %s subtrack of parent: %s%s</li>\n", tdb->track, tdb->type, tdb->parent->track, urlReference);
@@ -271,6 +280,14 @@ unsigned start = chromSize / 4;
 unsigned end = start + 10000;
 if (end > chromSize)
     end = chromSize;
+
+
+struct dyString *extraDyFlags = newDyString(128);
+if (debug)
+    dyStringAppend(extraDyFlags, ";debug=1");
+if (jsonOutputArrays)
+    dyStringAppend(extraDyFlags, ";jsonOutputArrays=1");
+char *extraFlags = dyStringCannibalize(&extraDyFlags);
 
 char errorPrint[2048];
 errorPrint[0] = 0;
@@ -295,7 +312,7 @@ if (chromCount > 0 || itemCount > 0)
 if (isSupportedType(tdb->type))
     {
 	char urlReference[2048];
-	safef(urlReference, sizeof(urlReference), "<a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;track=%s&amp;chrom=%s&amp;start=%u&amp;end=%u' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, chromName, start, end, errorPrint);
+	safef(urlReference, sizeof(urlReference), "<a href='%s/getData/track?hubUrl=%s;genome=%s;track=%s;chrom=%s;start=%u;end=%u%s' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, chromName, start, end, extraFlags, errorPrint);
 
 	if (allowedBigBedType(tdb->type))
             hPrintf("    <li><b>%s</b>: %s%s%s</li>\n", tdb->track, tdb->type, countsMessage, urlReference);
@@ -867,7 +884,7 @@ for ( ; genome; genome = genome->next )
        safef(urlReference, sizeof(urlReference), " <a href='%s/getData/sequence?hubUrl=%s;genome=%s;chrom=%s;start=%u;end=%u' target=_blank>JSON example sequence output: %s:%u-%u</a>", urlPrefix, hubTop->url, genome->name, chromName, chromSize/4, (chromSize/4)+128, chromName, chromSize/4, (chromSize/4)+128);
         hPrintf("<li>%s</li>\n", urlReference);
 	}
-    safef(urlReference, sizeof(urlReference), " <a href='%s/list/tracks?hubUrl=%s&amp;genome=%s' target=_blank>JSON example list tracks output</a>", urlPrefix, hubTop->url, genome->name);
+    safef(urlReference, sizeof(urlReference), " <a href='%s/list/tracks?hubUrl=%s;genome=%s' target=_blank>JSON example list tracks output</a>", urlPrefix, hubTop->url, genome->name);
     hPrintf("<li>%s</li>\n", urlReference);
     hubInfo("organism", genome->organism);
     hubInfo("name", genome->name);
@@ -1056,7 +1073,7 @@ hPrintf("</pre>\n");
 
 static void sendJsonHogMessage(char *hogHost)
 {
-apiErrAbort(429, "Too Many Requests", "Your host, %s, has been sending too many requests lately and is "
+apiErrAbort(err429, err429Msg, "Your host, %s, has been sending too many requests lately and is "
        "unfairly loading our site, impacting performance for other users. "
        "Please contact genome@soe.ucsc.edu to ask that your site "
        "be reenabled.  Also, please consider downloading sequence and/or "
@@ -1067,7 +1084,7 @@ apiErrAbort(429, "Too Many Requests", "Your host, %s, has been sending too many 
 static void sendHogMessage(char *hogHost)
 {
 puts("Content-Type:text/html");
-puts("Status: 429 Too Many Requests");
+hPrintf("Status: %d %s\n", err429, err429Msg);
 puts("Retry-After: 30");
 puts("\n");
 
@@ -1075,9 +1092,9 @@ hPrintf("<!DOCTYPE HTML>\n");
 hPrintf("<html lang='en'>\n");
 hPrintf("<head>\n");
 hPrintf("<meta charset=\"utf-8\">\n");
-hPrintf("<title>Status 429 Too Many Requests</title></head>\n");
+hPrintf("<title>Status %d %s</title></head>\n", err429, err429Msg);
 
-hPrintf("<body><h1>Status 429 Too many Requests</h1><p>\n");
+hPrintf("<body><h1>Status %d %s</h1><p>\n", err429, err429Msg);
 hPrintf("Your host, %s, has been sending too many requests lately and is "
        "unfairly loading our site, impacting performance for other users. "
        "Please contact genome@soe.ucsc.edu to ask that your site "
@@ -1106,7 +1123,7 @@ else
     }
 }	/*	static void hogExit()	*/
 
-/* name of button group */
+/* name of radio button group */
 #define RADIO_GROUP	"selectRadio"
 /* button functions */
 #define RADIO_PUBHUB	"pubHub"
@@ -1195,11 +1212,16 @@ hCheckBox("allTrackSettings", allTrackSettings);
 hWrites("&nbsp;display all track settings for each track");
 hWrites("</td></tr>\n");
 
-
 trackLeavesOnly = cartUsualBoolean(cart, "trackLeavesOnly", trackLeavesOnly);
 hWrites("<tr><td>&nbsp;</td><th>JSON list output:</th><td>");
 hCheckBox("trackLeavesOnly", trackLeavesOnly);
 hWrites("&nbsp;show only data tracks, do not show composite container information");
+hWrites("</td></tr>\n");
+
+jsonOutputArrays = cartUsualBoolean(cart, "jsonOutputArrays", jsonOutputArrays);
+hWrites("<tr><td>&nbsp;</td><th>JSON output type:</th><td>");
+hCheckBox("jsonOutputArrays", jsonOutputArrays);
+hWrites("&nbsp;more array data than objects (default: mostly object output)");
 hWrites("</td></tr>\n");
 
 /* go button at the bottom of the table */
@@ -1236,6 +1258,7 @@ initSupportedTypes();
 initUrlPrefix();
 
 trackLeavesOnly = cartUsualBoolean(cart, "trackLeavesOnly", trackLeavesOnly);
+jsonOutputArrays = cartUsualBoolean(cart, "jsonOutputArrays", jsonOutputArrays);
 
 /* global variable for all workers to honor this limit */
 maxItemsOutput = cartUsualInt(cart, "maxItemsOutput", maxItemsOutput);

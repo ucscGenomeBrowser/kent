@@ -36,7 +36,24 @@
 #include "halBlockViz.h"
 #endif
 
+/* error return codes */
+#define err400	400
+#define err400Msg	"Bad Request"
+#define err404	404
+#define err404Msg	"Not Found"
+#define err429	429
+#define err429Msg	"Two Many Requests"
+
+/* maximum number of words expected in PATH_INFO parsing
+ *   so far only using 2
+ */
 #define MAX_PATH_INFO 32
+
+/* maximum amount of DNA allowed in a get sequence request */
+#define MAX_DNA_LENGTH	499999999
+/* this size is directly related to the max limit in needMem used in
+ * jsonWriteString
+ */
 
 /* limit amount of output to a maximum to avoid overload */
 extern int maxItemsOutput;	/* can be set in URL maxItemsOutput=N */
@@ -49,12 +66,16 @@ boolean debug;	/* can be set in URL debug=1, to turn off: debug=0 */
  */
 extern boolean trackLeavesOnly;	/* set by CGI parameter 'trackLeavesOnly' */
 
+/* this selects output type 'arrays', where the default type is: objects */
+extern boolean jsonOutputArrays; /* set by CGI parameter 'jsonOutputArrays' */
+
 /*  functions in hubApi.c */
 struct hubPublic *hubPublicDbLoadAll();
 
 struct dbDb *ucscDbDb();
 /* return the dbDb table as an slList */
 
+/* ######################################################################### */
 /*  functions in apiUtils.c */
 void apiFinishOutput(int errorCode, char *errorString, struct jsonWrite *jw);
 /* finish json output, potential output an error code other than 200 */
@@ -102,6 +123,14 @@ boolean allowedBigBedType(char *type);
 /* return TRUE if the big* type is to be supported
  * add to this list as the big* supported types are expanded
  */
+
+// unsigned largestChrom(char *db, char **nameReturn, int *chromCount);
+/* return the length and get the chrom name for the largest chrom
+ * from chromInfo table.  For use is sample getData URLs
+ */
+
+// unsigned largestChromInfo(struct chromInfo *ci, char **chromName);
+/* find largest chrom in this chromInfo, return name and size */
 
 /* ######################################################################### */
 /*  functions in getData.c */
