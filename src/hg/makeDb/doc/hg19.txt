@@ -33335,3 +33335,32 @@ bedSort mastermind.bed mastermind.bed
 bedToBigBed -type=bed9+ -as=~/kent/src/hg/makeDb/mastermind/mastermind.as -tab mastermind.bed /hive/data/genomes/hg19/chrom.sizes  mastermind.bb
 ln -s `pwd`/mastermind.bb /gbdb/hg19/bbi/mastermind.bb
 #############################################################################
+2019-04-08: import of UCSC GENCODE group processing of GENCODE V30lift37 (markd)
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV30lift37
+    pushd /hive/data/genomes/hg19/bed/gencodeV30lift37
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg19 30lift37 96 'Apr 2019'
+
+    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release. [ONLY if it's going to be pushed]
+
+    # edit human/hg19/trackDb.wgEncode.ra to add new .ra file include
+    make DBS=hg19
+
+    # edit  all.joiner to add ~/tmp/gencodeV30lift37.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg19/bed/gencodeV30lift37
+    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # commit all
+
+##############################################################################

@@ -31,7 +31,7 @@ set db=`databaseAday.csh today`
 rm -f $basePath/$db
 echo "\n$db\n" >> $basePath/$db
 # checkSync.csh $db times >> $basePath/$db
-checkSync.csh $db hgwbeta hgw2 times >> $basePath/$db
+checkSync.csh $db hgwbeta hgw2 >> $basePath/$db
 cat $basePath/$db
 echo "http://genecats.soe.ucsc.edu/qa/test-results/sync/$db" 
 echo 

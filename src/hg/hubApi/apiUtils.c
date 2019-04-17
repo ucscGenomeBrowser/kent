@@ -2,29 +2,37 @@
 
 #include "dataApi.h"
 
-#ifdef NOT
-static void jsonFinishOutput(int errorCode, char *errorString, struct jsonWrite *jw)
-/* potential output an error code other than 200 */
+void apiFinishOutput(int errorCode, char *errorString, struct jsonWrite *jw)
+/* finish json output, potential output an error code other than 200 */
 {
 /* this is the first time any output to stdout has taken place for
- * json output, therefore, start with the appropriate header
+ * json output, therefore, start with the appropriate header.
  */
 puts("Content-Type:application/json");
-/* potentially with an error code return */
+/* potentially with an error code return in the header */
 if (errorCode)
     {
     char errString[2048];
     safef(errString, sizeof(errString), "Status: %d %s",errorCode,errorString);
     puts(errString);
+    if (err429 == errorCode)
+	puts("Retry-After: 30");
     }
 puts("\n");
 
+if (debug)
+    {
+    char sizeString[64];
+    unsigned long long vmPeak = currentVmPeak();
+    sprintLongWithCommas(sizeString, vmPeak);
+    jsonWriteString(jw, "vmPeak", sizeString);
+    }
+
 jsonWriteObjectEnd(jw);
 fputs(jw->dy->string,stdout);
-}
-#endif
+}	/*	void apiFinishOutput(int errorCode, char *errorString, ... ) */
 
-void apiErrAbort(char *format, ...)
+void apiErrAbort(int errorCode, char *errString, char *format, ...)
 /* Issue an error message in json format, and exit(0) */
 {
 char errMsg[2048];
@@ -33,9 +41,9 @@ va_start(args, format);
 vsnprintf(errMsg, sizeof(errMsg), format, args);
 struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "error", errMsg);
-// jsonFinishOutput(400, "Bad Request", jw);
-jsonWriteObjectEnd(jw);
-fputs(jw->dy->string,stdout);
+jsonWriteNumber(jw, "statusCode", errorCode);
+jsonWriteString(jw, "statusMessage", errString);
+apiFinishOutput(errorCode, errString, jw);
 exit(0);
 }
 
@@ -199,7 +207,7 @@ if (errCatchStart(errCatch))
 errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
-    apiErrAbort("error opening hubUrl: '%s', '%s'", hubUrl,  errCatch->message->string);
+    apiErrAbort(err404, err404Msg, "error opening hubUrl: '%s', '%s'", hubUrl,  errCatch->message->string);
     }
 errCatchFree(&errCatch);
 return hub;
@@ -243,6 +251,19 @@ for (trackFound = tdb; trackFound; trackFound = trackFound->next)
 return trackFound;
 }
 
+boolean allowedBigBedType(char *type)
+/* return TRUE if the big* bed-like type is to be supported
+ * add to this list as the big* bed-like supported types are expanded
+ */
+{
+if (startsWithWord("bigBed", type) ||
+    startsWithWord("bigPsl", type)
+   )
+    return TRUE;
+else
+    return FALSE;
+}
+
 struct bbiFile *bigFileOpen(char *trackType, char *bigDataUrl)
 /* open bigDataUrl for correct trackType and error catch if failure */
 {
@@ -250,7 +271,7 @@ struct bbiFile *bbi = NULL;
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-if (startsWith("bigBed", trackType))
+if (allowedBigBedType(trackType))
     bbi = bigBedFileOpen(bigDataUrl);
 else if (startsWith("bigWig", trackType))
     bbi = bigWigFileOpen(bigDataUrl);
@@ -258,7 +279,7 @@ else if (startsWith("bigWig", trackType))
 errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
-    apiErrAbort("error opening bigFile URL: '%s', '%s'", bigDataUrl,  errCatch->message->string);
+    apiErrAbort(err404, err404Msg, "error opening bigFile URL: '%s', '%s'", bigDataUrl,  errCatch->message->string);
     }
 errCatchFree(&errCatch);
 return bbi;

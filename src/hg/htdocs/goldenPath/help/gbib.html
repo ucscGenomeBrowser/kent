@@ -110,17 +110,23 @@ GBiB will run on most modern PCs and major operating systems that meet these bas
   Your network firewall must allow outgoing connections to the following servers and ports:
   <ul>
     <li>MySQL connections, used to load tracks not local to your computer:
-    <ul>
-      <li>US server: Port 3306 on genome-mysql.soe.ucsc.edu (128.114.119.174)</li>
-      <li>European server: Port 3306 on genome-euro-mysql.soe.ucsc.edu (129.70.40.120)</li>
-    </ul>
-    <li>
-    TCP port 873 on hgdownload.soe.ucsc.edu (128.114.119.163), used by rsync to download track 
-    data</li>
-    <li>
-    TCP port 80 on hgdownload.soe.ucsc.edu (128.114.119.163), used to download html descriptions on 
-    the fly</li>
-  </ul></li>
+      <ul>
+        <li>US server: Port 3306 on genome-mysql.soe.ucsc.edu (128.114.119.174)</li>
+        <li>European server: Port 3306 on genome-euro-mysql.soe.ucsc.edu (129.70.40.120)</li>
+      </ul>
+    </li>
+    <li>Rsync, used to download track data:
+      <ul>
+        <li>US server: TCP port 873 on hgdownload.soe.ucsc.edu (128.114.119.163)</li>
+        <li>European server: TCP port 873 on hgdownload-euro.soe.ucsc.edu (129.70.40.99)</li>
+      </ul></li>
+    <li>Download HTML descriptions on the fly:
+      <ul>
+        <li>US server: TCP port 80 on hgdownload.soe.ucsc.edu (128.114.119.163)</li>
+        <li>European server: TCP port 80 on hgdownload-euro.soe.ucsc.edu (129.70.40.99)</li>
+      </ul>
+    </li>
+  </ul>
 </ul>
 
 <h3>Installation</h3>
