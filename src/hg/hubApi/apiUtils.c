@@ -2,6 +2,15 @@
 
 #include "dataApi.h"
 
+/* when measureTiming is used */
+static long processingStart = 0;
+
+void startProcessTiming()
+/* for measureTiming, beginning processing */
+{
+processingStart = clock1000();
+}
+
 void apiFinishOutput(int errorCode, char *errorString, struct jsonWrite *jw)
 /* finish json output, potential output an error code other than 200 */
 {
@@ -26,6 +35,13 @@ if (debug)
     unsigned long long vmPeak = currentVmPeak();
     sprintLongWithCommas(sizeString, vmPeak);
     jsonWriteString(jw, "vmPeak", sizeString);
+    }
+
+if (measureTiming)
+    {
+    long nowTime = clock1000();
+    long long et = nowTime - processingStart;
+    jsonWriteNumber(jw, "totalTimeMs", et);
     }
 
 jsonWriteObjectEnd(jw);
@@ -162,13 +178,53 @@ else if (startsWith("char", asType) ||
 return typeIndex;
 }	/*	int asToJsonType(char *asType)	*/
 
+/* temporarily from table browser until proven works, then move to library */
+struct asObject *asForTable(struct sqlConnection *conn, char *table,
+    struct trackDb *tdb)
+/* Get autoSQL description if any associated with table. */
+/* Wrap some error catching around asForTable. */
+{
+if (tdb != NULL)
+    return asForTdb(conn,tdb);
+
+// Some cases are for tables with no tdb!
+struct asObject *asObj = NULL;
+if (sqlTableExists(conn, "tableDescriptions"))
+    {
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+        {
+        char query[256];
+
+        sqlSafef(query, sizeof(query),
+              "select autoSqlDef from tableDescriptions where tableName='%s'", table);
+        char *asText = asText = sqlQuickString(conn, query);
+
+        // If no result try split table. (not likely)
+        if (asText == NULL)
+            {
+            sqlSafef(query, sizeof(query),
+                  "select autoSqlDef from tableDescriptions where tableName='chrN_%s'", table);
+            asText = sqlQuickString(conn, query);
+            }
+        if (asText != NULL && asText[0] != 0)
+            {
+            asObj = asParseText(asText);
+            }
+        freez(&asText);
+        }
+    errCatchEnd(errCatch);
+    errCatchFree(&errCatch);
+    }
+return asObj;
+}
+
 int tableColumns(struct sqlConnection *conn, struct jsonWrite *jw, char *table,
-   char ***nameReturn, char ***typeReturn, int **jsonType)
+   char ***nameReturn, char ***typeReturn, int **jsonTypes)
 /* return the column names, and their MySQL data type, for the given table
  *  return number of columns (aka 'fields')
  */
 {
-// not needed jsonWriteListStart(jw, "columnNames");
 struct sqlFieldInfo *fi, *fiList = sqlFieldInfoGet(conn, table);
 int columnCount = slCount(fiList);
 char **namesReturn = NULL;
@@ -184,14 +240,10 @@ for (fi = fiList; fi; fi = fi->next)
     typesReturn[i] = cloneString(fi->type);
     jsonReturn[i] = sqlTypeToJsonType(fi->type);
     i++;
-// not needed     jsonWriteObjectStart(jw, NULL);
-// not needed     jsonWriteString(jw, fi->field, fi->type);
-// not needed     jsonWriteObjectEnd(jw);
     }
-// not needed jsonWriteListEnd(jw);
 *nameReturn = namesReturn;
 *typeReturn = typesReturn;
-*jsonType = jsonReturn;
+*jsonTypes = jsonReturn;
 return columnCount;
 }
 

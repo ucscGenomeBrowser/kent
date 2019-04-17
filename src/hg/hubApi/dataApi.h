@@ -69,6 +69,8 @@ extern boolean trackLeavesOnly;	/* set by CGI parameter 'trackLeavesOnly' */
 /* this selects output type 'arrays', where the default type is: objects */
 extern boolean jsonOutputArrays; /* set by CGI parameter 'jsonOutputArrays' */
 
+extern boolean measureTiming;	/* set by CGI parameters */
+
 /*  functions in hubApi.c */
 struct hubPublic *hubPublicDbLoadAll();
 
@@ -77,6 +79,10 @@ struct dbDb *ucscDbDb();
 
 /* ######################################################################### */
 /*  functions in apiUtils.c */
+
+void startProcessTiming();
+/* for measureTiming, beginning processing */
+
 void apiFinishOutput(int errorCode, char *errorString, struct jsonWrite *jw);
 /* finish json output, potential output an error code other than 200 */
 
@@ -124,13 +130,11 @@ boolean allowedBigBedType(char *type);
  * add to this list as the big* supported types are expanded
  */
 
-// unsigned largestChrom(char *db, char **nameReturn, int *chromCount);
-/* return the length and get the chrom name for the largest chrom
- * from chromInfo table.  For use is sample getData URLs
- */
-
-// unsigned largestChromInfo(struct chromInfo *ci, char **chromName);
-/* find largest chrom in this chromInfo, return name and size */
+/* temporarily from table browser until proven works, then move to library */
+struct asObject *asForTable(struct sqlConnection *conn, char *table,
+    struct trackDb *tdb);
+/* Get autoSQL description if any associated with table. */
+/* Wrap some error catching around asForTable. */
 
 /* ######################################################################### */
 /*  functions in getData.c */
