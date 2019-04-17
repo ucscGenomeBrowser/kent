@@ -54,6 +54,16 @@ else
         errExit("Sorry, user %s does not have access to this file.", user->email);
 }
 
+struct patcher 
+/* deal with patching replacement bits in html */
+    {
+    struct patcher *next;
+    char *match; // string to match
+    int size;   // string size
+    int count;   // match count
+    char *(*cdwLocalFunction)(struct cart *cart, boolean makeAbsolute);  // function to make
+    };
+
 static void printFileReplaceVar(char *filePath) 
 /* dump a text file to stdout with the html header, replace <!--menuBar--> with the menubar */
 {
@@ -64,17 +74,45 @@ FILE *file = fopen(filePath, "r");
 if (file == 0) 
     errExit("Cannot open file %s", filePath);
 
-char searchStr[] = "<!--menuBar-->";
-int matchCount = 0;
+struct patcher *patcherList = NULL, *p = NULL;
+
+AllocVar(p);
+p->match = cloneString("<!--headDependencies-->");
+p->cdwLocalFunction = &cdwHeadTagDependencies;
+slAddHead(&patcherList, p);
+AllocVar(p);
+p->match = cloneString("<!--pageHeader-->");
+p->cdwLocalFunction = &cdwPageHeader;
+slAddHead(&patcherList, p);
+AllocVar(p);
+p->match = cloneString("<!--menuBar-->");
+p->cdwLocalFunction = &cdwLocalMenuBar;
+slAddHead(&patcherList, p);
+AllocVar(p);
+p->match = cloneString("<!--pageFooter-->");
+p->cdwLocalFunction = &cdwPageFooter;
+slAddHead(&patcherList, p);
+
+for(p=patcherList; p; p=p->next)
+    {
+    p->size = strlen(p->match);
+    }
 while ((c = getc(file)) != EOF)
     {
-    if (c==searchStr[matchCount])
-        matchCount++;
-    else
-        matchCount = 0;
     putchar(c);
-    if (matchCount==sizeof(searchStr)-1)
-        puts(cdwLocalMenuBar(cart, TRUE));
+
+    for(p=patcherList; p; p=p->next)
+	{
+	if (c==p->match[p->count])
+	    p->count++;
+	else
+	    p->count = 0;
+	if (p->count==p->size)
+	    {
+	    puts((*p->cdwLocalFunction)(cart, TRUE));
+	    }
+	}
+
     }
 fclose(file);
 }

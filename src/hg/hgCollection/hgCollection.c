@@ -545,7 +545,7 @@ jsReloadOnBackButton(cart);
 webIncludeFile("inc/hgCollection.html");
 
 // output the form that will take us back to hgTracks
-printf("<form id='redirectForm' action='../cgi-bin/hgTracks'><input type='hidden'  name='hgsid' value='%s'</input></form>",cartSessionId(cart));
+printf("<form id='redirectForm' action='../cgi-bin/hgTracks'><input type='hidden'  name='hgsid' value='%s'></form>",cartSessionId(cart));
 
 char *assembly = stringBetween("(", ")", hFreezeFromDb(db));
 if (assembly != NULL)
