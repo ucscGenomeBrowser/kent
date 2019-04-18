@@ -228,13 +228,13 @@ test38: setOutput
 	@zdiff expected/$@.gz testOutput/$@.gz
 	@echo "### $@: missing hubUrl and genome argument OK"
 
-# testing /getData/track?db=ce3&track=gold for split table operation
+# testing /getData/track?db=ce4&track=gold for split table operation
 test39: setOutput
-	@./jsonConsumer.pl -maxItemsOutput=123 -endpoint="/getData/track" -db="ce3" -track="gold" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@./jsonConsumer.pl -maxItemsOutput=123 -endpoint="/getData/track" -db="ce4" -track="gold" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
-# testing /getData/track?db=ce3&track=gold for split table operation
+# testing /getData/track?db=ce4&track=gold for split table operation
 # plus jsonArrayOutput
 test40: setOutput
-	@./jsonConsumer.pl -jsonOutputArrays -maxItemsOutput=123 -endpoint="/getData/track" -db="ce3" -track="gold" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@./jsonConsumer.pl -jsonOutputArrays -maxItemsOutput=123 -endpoint="/getData/track" -db="ce4" -track="gold" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
