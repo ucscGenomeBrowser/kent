@@ -57,9 +57,28 @@ static void wigColumnTypes(struct jsonWrite *jw)
 /* output column headers for a wiggle data output schema */
 {
 jsonWriteListStart(jw, "columnTypes");
-jsonWriteString(jw, NULL, "start - int - number");
-jsonWriteString(jw, NULL, "end - int - number");
-jsonWriteString(jw, NULL, "value - float - number");
+
+jsonWriteObjectStart(jw, NULL);
+jsonWriteString(jw, "name", "start");
+jsonWriteString(jw, "sqlType", "int");
+jsonWriteString(jw, "jsonType", "number");
+jsonWriteString(jw, "description", "chromStart: 0-based chromosome start position");
+jsonWriteObjectEnd(jw);
+
+jsonWriteObjectStart(jw, NULL);
+jsonWriteString(jw, "name", "end");
+jsonWriteString(jw, "sqlType", "int");
+jsonWriteString(jw, "jsonType", "number");
+jsonWriteString(jw, "description", "chromEnd: 1-based chromosome end position");
+jsonWriteObjectEnd(jw);
+
+jsonWriteObjectStart(jw, NULL);
+jsonWriteString(jw, "name", "value");
+jsonWriteString(jw, "sqlType", "float");
+jsonWriteString(jw, "jsonType", "number");
+jsonWriteString(jw, "description", "numerical data value for this location:start-end");
+jsonWriteObjectEnd(jw);
+
 jsonWriteListEnd(jw);
 }	/* static void wigColumnTypes(struct jsonWrite jw) */
 
@@ -129,14 +148,14 @@ char *splitSqlTable = cloneString(sqlTable);
  * here for the chrom name means to use the first chrom name in chromInfo
  */
 struct hTableInfo *hti = hFindTableInfoWithConn(conn, NULL, sqlTable);
-if (debug)
+if (debug && hti)
     {
     jsonWriteBoolean(jw, "isPos", hti->isPos);
     jsonWriteBoolean(jw, "isSplit", hti->isSplit);
     jsonWriteBoolean(jw, "hasBin", hti->hasBin);
     }
 /* check if table name needs to be modified */
-if (hti->isSplit)
+if (hti && hti->isSplit)
     {
     if (isNotEmpty(chrom))
 	{
@@ -240,16 +259,26 @@ if (jsonOutputArrays || debug)
     int i = 0;
     for (i = 0; i < columnCount; ++i)
 	{
-	char typeString[1024];
-	if ((0 == i) && (asColumnCount == (columnCount - 1)) && (sameWord("bin", columnNames[i])))
-	    safef(typeString, sizeof(typeString), "%s - %s - %s - Indexing field to speed chromosome range queries", columnNames[i], columnTypes[i], jsonTypeStrings[jsonTypes[i]]);
+	jsonWriteObjectStart(jw, NULL);
+	jsonWriteString(jw, "name", columnNames[i]);
+	jsonWriteString(jw, "sqlType", columnTypes[i]);
+	jsonWriteString(jw, "jsonType", jsonTypeStrings[jsonTypes[i]]);
+	if ((0 == i) && (hti && hti->hasBin))
+	    jsonWriteString(jw, "description", "Indexing field to speed chromosome range queries");
 	else if (columnEl && isNotEmpty(columnEl->comment))
-	    safef(typeString, sizeof(typeString), "%s - %s - %s - %s", columnNames[i], columnTypes[i], jsonTypeStrings[jsonTypes[i]], columnEl->comment);
+	    jsonWriteString(jw, "description", columnEl->comment);
 	else
-	    safef(typeString, sizeof(typeString), "%s - %s - %s", columnNames[i], columnTypes[i], jsonTypeStrings[jsonTypes[i]]);
-	jsonWriteString(jw, NULL, typeString);
-        if (columnEl && ! ((0 == i) && (sameWord("bin", columnNames[i]))))
-	    columnEl = columnEl->next;
+	    jsonWriteString(jw, "description", "");
+
+	/* perhaps move the comment pointer forward */
+        if (columnEl)
+	    {
+	    if (asColumnCount == columnCount)
+		columnEl = columnEl->next;
+	    else if (! ((0 == i) && (hti && hti->hasBin)))
+		columnEl = columnEl->next;
+	    }
+	jsonWriteObjectEnd(jw);
 	}
     jsonWriteListEnd(jw);
     }
@@ -258,7 +287,7 @@ jsonWriteListStart(jw, track);
 unsigned itemsDone = 0;
 
 /* empty chrom and isSplit, needs to run through all chrom names */
-if (hti->isSplit && isEmpty(chrom))
+if ((hti && hti->isSplit) && isEmpty(chrom))
     {
     struct chromInfo *ciList = createChromInfoList(NULL, db);
     slSort(ciList, chromInfoCmp);
@@ -424,13 +453,16 @@ jsonWriteListStart(jw, "columnTypes");
 struct sqlFieldType *fi = fiList;
 for ( ; fi; fi = fi->next, columnEl = columnEl->next)
     {
-    char typeString[1024];
     int jsonType = autoSqlToJsonType(fi->type);
-    if (columnEl->comment)
-	safef(typeString, sizeof(typeString), "%s - %s - %s - %s", fi->name, fi->type, jsonTypeStrings[jsonType], columnEl->comment);
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteString(jw, "name", fi->name);
+    jsonWriteString(jw, "sqlType", fi->type);
+    jsonWriteString(jw, "jsonType",jsonTypeStrings[jsonType]);
+    if (columnEl && isNotEmpty(columnEl->comment))
+	jsonWriteString(jw, "description", columnEl->comment);
     else
-	safef(typeString, sizeof(typeString), "%s - %s - %s", fi->name, fi->type, jsonTypeStrings[jsonType]);
-    jsonWriteString(jw, NULL, typeString);
+	jsonWriteString(jw, "description", "");
+    jsonWriteObjectEnd(jw);
     }
 jsonWriteListEnd(jw);
 }
@@ -595,7 +627,7 @@ struct hTableInfo *hti = hFindTableInfoWithConn(conn, NULL, sqlTable);
 
 char *splitSqlTable = NULL;
 
-if (hti->isSplit)
+if (hti && hti->isSplit)
     {
     if (isNotEmpty(chrom))
 	{
@@ -625,7 +657,7 @@ jsonWriteString(jw, "db", db);
 if (tableTrack)
     {
     char *dataTime = NULL;
-    if (hti->isSplit)
+    if (hti && hti->isSplit)
 	dataTime = sqlTableUpdate(conn, splitSqlTable);
     else
 	dataTime = sqlTableUpdate(conn, sqlTable);
