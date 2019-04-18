@@ -387,16 +387,28 @@ int doCheckTrackDb(struct dyString *errors, struct trackHub *hub,
  * Eventually will check every stanza and not die if there's an error with the first one*/
 {
 int errorCount = 0;
-struct trackDb *tdb = NULL;
+struct trackDb *tdb = NULL, *tdbList = NULL;
 struct errCatch *errCatch = errCatchNew();
+struct errCatch *trackFileCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    tdb = trackHubTracksForGenome(hub, genome);
-    tdb = trackDbLinkUpGenerations(tdb);
-    tdb = trackDbPolishAfterLinkup(tdb, genome->name);
+    tdbList = trackHubTracksForGenome(hub, genome);
+    for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+        {
+        dyStringPrintf(errors, "<ul>\n<li>track name: %s\n", tdb->track);
+        if (errCatchStart(trackFileCatch))
+            hubCheckBigDataUrl(hub, genome, tdb);
+        errCatchEnd(trackFileCatch);
+        if (trackFileCatch->gotError)
+            {
+            errorCount += 1;
+            dyStringPrintf(errors, "<ul>\n<li><span class=\"hubError\"><b>bigDataUrl error</b>: %s</span></li></ul></ul>\n", trackFileCatch->message->string);
+            dyStringClear(trackFileCatch->message);
+            }
+        }
+    errCatchFree(&trackFileCatch);
     if (tdb != NULL)
         {
-        dyStringPrintf(errors, "<ul>\n<li>%s</li>\n", tdb->track);
         dyStringPrintf(errors, "<ul>\n<li>No errors found</li>\n</ul></ul>");
         }
     }

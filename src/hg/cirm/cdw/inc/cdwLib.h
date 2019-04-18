@@ -521,6 +521,10 @@ void cdwReallyRemoveFile(struct sqlConnection *conn, char *submitDir, long long 
 /* Remove all records of file from database and from Unix file system if 
  * the really flag is set.  Otherwise just print some info on the file. */
 
+char *cdwHeadTagDependencies(struct cart *cart, boolean makeAbsolute);
+/* Return page head dependencies string.  This is content that actually appears at the top
+ * of the page, in the head tag.  Optionally make links point to absolute URLs instead of relative. */
+
 char *cdwPageHeader(struct cart *cart, boolean makeAbsolute);
 /* Return page header string. This is content that actually appears at the top
  * of the page, like menu stuff.  Optionally make links point to absolute URLs instead of relative. */

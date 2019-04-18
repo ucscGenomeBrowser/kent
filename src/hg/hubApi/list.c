@@ -48,7 +48,8 @@ freeMem(dataTime);
 char **columnNames = NULL;
 char **columnTypes = NULL;
 int *jsonTypes = NULL;
-int columnCount = tableColumns(conn, jw, hubPublicTableName(), &columnNames, &columnTypes, &jsonTypes);
+int columnCount = tableColumns(conn, jw, hubPublicTableName(), &columnNames,
+    &columnTypes, &jsonTypes);
 jsonWriteListStart(jw, "publicHubs");
 for ( ; el != NULL; el = el->next )
     {
@@ -59,8 +60,8 @@ apiFinishOutput(0, NULL, jw);
 hDisconnectCentral(&conn);
 }
 
-static void dbDbJsonData(struct jsonWrite *jw, struct dbDb *el, int columnCount,
-  char **columnNames)
+static void dbDbJsonData(struct jsonWrite *jw, struct dbDb *el,
+    int columnCount, char **columnNames)
 /* Print out dbDb table element in JSON format.
  * must be same as was stated in the columnName header element
  * This code should be over in hg/lib/dbDb.c
@@ -117,18 +118,16 @@ struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "dataTime", dataTime);
 jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
 freeMem(dataTime);
-// not needed: jsonWriteString(jw, "tableName", "dbDb");
 char **columnNames = NULL;
 char **columnTypes = NULL;
 int *jsonTypes = NULL;
-int columnCount = tableColumns(conn, jw, "dbDb", &columnNames, &columnTypes, &jsonTypes);
-// jsonWriteListStart(jw, "ucscGenomes");
+int columnCount = tableColumns(conn, jw, "dbDb", &columnNames, &columnTypes,
+    &jsonTypes);
 jsonWriteObjectStart(jw, "ucscGenomes");
 for ( el=dbList; el != NULL; el = el->next )
     {
     dbDbJsonData(jw, el, columnCount, columnNames);
     }
-// jsonWriteListEnd(jw);
 jsonWriteObjectEnd(jw);
 apiFinishOutput(0, NULL, jw);
 hDisconnectCentral(&conn);

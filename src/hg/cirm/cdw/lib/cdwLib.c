@@ -2681,6 +2681,25 @@ return loginBits;
 }
 #endif
 
+char *cdwHeadTagDependencies(struct cart *cart, boolean makeAbsolute)
+/* Return page head dependencies string.  This is content that actually appears at the top
+ * of the page, in the head tag.  Optionally make links point to absolute URLs instead of relative. */
+{
+// page header dependencies html is in a stringified .h file
+struct dyString *dy = dyStringNew(4*1024);
+dyStringPrintf(dy, 
+#include "cdwHeadTagDependencies.h"
+       );
+
+char *headStr = cloneString(dy->string);
+if (!makeAbsolute)
+    return headStr;
+
+char *headStr2 = replaceChars(headStr, "../", "/");
+freez(&headStr);
+return headStr2;
+}
+
 char *cdwPageHeader(struct cart *cart, boolean makeAbsolute)
 /* Return page header string.  This is content that actually appears at the top
  * of the page, like menu stuff.  Optionally make links point to absolute URLs instead of relative. */
