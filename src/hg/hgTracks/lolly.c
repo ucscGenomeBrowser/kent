@@ -165,6 +165,9 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     if (!((lollyCart->autoScale == wiggleScaleAuto) ||  ((val >= lollyCart->minY) && (val <= lollyCart->maxY) )))
         continue;
 
+    if (atoi(bedRow[1]) < winStart)
+        continue;
+
     AllocVar(pop);
     slAddHead(&popList, pop);
     pop->val = val;

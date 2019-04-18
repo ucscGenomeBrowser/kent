@@ -381,6 +381,162 @@ printf("</tbody></TABLE>\n");
 printf("</div>");
 }
 
+int doCheckTrackDb(struct dyString *errors, struct trackHub *hub,
+                    struct trackHubGenome *genome)
+/* Attempt to open a trackDb from a hub and report errors back.
+ * Eventually will check every stanza and not die if there's an error with the first one*/
+{
+int errorCount = 0;
+struct trackDb *tdb = NULL, *tdbList = NULL;
+struct errCatch *errCatch = errCatchNew();
+struct errCatch *trackFileCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    tdbList = trackHubTracksForGenome(hub, genome);
+    for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+        {
+        dyStringPrintf(errors, "<ul>\n<li>track name: %s\n", tdb->track);
+        if (errCatchStart(trackFileCatch))
+            hubCheckBigDataUrl(hub, genome, tdb);
+        errCatchEnd(trackFileCatch);
+        if (trackFileCatch->gotError)
+            {
+            errorCount += 1;
+            dyStringPrintf(errors, "<ul>\n<li><span class=\"hubError\"><b>bigDataUrl error</b>: %s</span></li></ul></ul>\n", trackFileCatch->message->string);
+            dyStringClear(trackFileCatch->message);
+            }
+        }
+    errCatchFree(&trackFileCatch);
+    if (tdb != NULL)
+        {
+        dyStringPrintf(errors, "<ul>\n<li>No errors found</li>\n</ul></ul>");
+        }
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    errorCount += 1;
+    dyStringPrintf(errors, "<ul><li><span class=\"hubError\">Error: %s</span></li></ul>\n",
+        errCatch->message->string);
+    }
+errCatchFree(&errCatch);
+return errorCount;
+}
+
+int doCheckGenomesFile(struct dyString *errors, struct trackHub *hub)
+/* Mostly just calls doCheckTrackDb() but applies correct styling to error messages */
+{
+struct trackHubGenome *genome = NULL;
+int errorCount = 0;
+int trackDbErrorCount = 0;
+struct dyString *trackDbErrorString = dyStringNew(0);
+for (genome = hub->genomeList; genome != NULL; genome = genome->next)
+    {
+    trackDbErrorCount = 0;
+    dyStringPrintf(errors, "<ul>\n<li>genome %s", genome->name);
+    // check each track for this genome
+    trackDbErrorCount = doCheckTrackDb(trackDbErrorString, hub, genome);
+    errorCount += trackDbErrorCount;
+    if (trackDbErrorCount > 0)
+        {
+        if (trackDbErrorCount == 1)
+            dyStringPrintf(errors, " (%d error)\n%s</ul>\n",  trackDbErrorCount, trackDbErrorString->string);
+        else
+            dyStringPrintf(errors, " (%d errors)\n%s</ul>\n",  trackDbErrorCount, trackDbErrorString->string);
+        }
+    else
+        dyStringPrintf(errors, "<ul><li>No trackDb errors</ul></ul>");
+    dyStringClear(trackDbErrorString);
+    }
+dyStringFree(&trackDbErrorString);
+return errorCount;
+}
+
+struct trackHub *trackHubCheckHubFile(struct dyString *errors, char *hubUrl)
+/* Wrap trackHubOpen in an errCatch, HTML style the error message */
+{
+struct trackHub *hub = NULL;
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    hub = trackHubOpen(hubUrl, "");
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    dyStringPrintf(errors, "<span class=\"hubError\">Error: %s", errCatch->message->string);
+errCatchFree(&errCatch);
+return hub;
+}
+
+void doValidateNewHub(char *hubUrl)
+/* Open up a track hub and report errors to user. */
+{
+struct trackHub *hub = NULL;
+struct dyString *errors = dyStringNew(0); // string with HTML of all the errors
+udcSetCacheTimeout(1);
+printf("<tr><td>");
+hub = trackHubCheckHubFile(errors, hubUrl);
+if (hub)
+    {
+    // go through each genome and check each trackDb stanza, building up errors string
+    int errorCount = doCheckGenomesFile(errors, hub);
+    if (errorCount > 0)
+        {
+        printf("<div style=\"text-align: left\" class=\"hubTdbTree\">");
+        if (errorCount == 1)
+            printf("<ul>\n<li>Found %d error in %s<ul><li>hub name: \"%s\"\n", errorCount, hub->url, hub->shortLabel);
+        else
+            printf("<ul>\n<li>Found %d errors in %s<ul><li>hub name: \"%s\"\n", errorCount, hub->url, hub->shortLabel);
+        printf("%s", errors->string);
+        printf("</ul>\n");
+        }
+    else
+        printf("<div>No configuration errors for hub: %s</div>", hub->shortLabel);
+    }
+else
+    {
+    printf("<div>%s</div>", errors->string);
+    }
+dyStringFree(&errors);
+printf("</div></td></tr>");
+}
+
+void hgHubConnectValidateNewHub()
+{
+// put out the top of our page
+char *hubUrl = cartOptionalString(cart, "validateHubUrl");
+printf("<div id=\"validateHub\" class=\"hubList\"> \n"
+    "<table id=\"validateHub\"> \n"
+    "<thead><tr> \n");
+printf("<th colspan=\"6\" id=\"addHubBar\"><label for=\"validateHubUrl\">URL:</label> \n");
+if (hubUrl != NULL)
+    {
+	printf("<input name=\"validateText\" id=\"validateHubUrl\" class=\"hubField\" "
+	    "type=\"text\" size=\"65\" value=\"%s\"> \n", hubUrl);
+    }
+else
+    {
+    printf("<input name=\"validateText\" id=\"validateHubUrl\" class=\"hubField\" "
+        "type=\"text\" size=\"65\"> \n");
+    }
+printf("<input name=\"hubValidateButton\" id='hubValidateButton' "
+    "class=\"hubField\" type=\"button\" value=\"Validate Hub\">\n"
+    "</th> \n"
+    "</tr> \n");
+
+if (hubUrl == NULL)
+    printf("<tr><td>Enter URL to hub to check settings</td></tr> \n");
+else
+    doValidateNewHub(hubUrl);
+printf("</table>");
+
+jsOnEventById("click", "hubValidateButton",
+    "var validateText = document.getElementById('validateHubUrl');"
+    "validateText.value=$.trim(validateText.value);"
+    "if(validateUrl($('#validateHubUrl').val())) { "
+    " document.validateHubForm.elements['validateHubUrl'].value=validateText.value;"
+    " document.validateHubForm.submit(); return true; }"
+    "else { return false; }"
+    );
+}
 
 static void addPublicHubsToHubStatus(struct sqlConnection *conn, char *publicTable, char  *statusTable)
 /* Add urls in the hubPublic table to the hubStatus table if they aren't there already */
@@ -1475,6 +1631,16 @@ cgiMakeHiddenVar(hgHubDbFilter, "");
 cartSaveSession(cart);
 puts("</FORM>");
 
+// this is the form for the validate button
+boolean doValidate = cfgOptionBooleanDefault("hgHubConnect.validateHub", FALSE);
+if (doValidate)
+    {
+    printf("<FORM ACTION=\"%s\" NAME=\"validateHubForm\">\n",  "../cgi-bin/hgHubConnect");
+    cgiMakeHiddenVar("validateHubUrl", "");
+    cartSaveSession(cart);
+    puts("</FORM>");
+    }
+
 // ... and now the main form
 printf("<FORM ACTION=\"%s\" METHOD=\"POST\" NAME=\"mainForm\">\n", "../cgi-bin/hgGateway");
 cartSaveSession(cart);
@@ -1482,11 +1648,15 @@ cartSaveSession(cart);
 // we have two tabs for the public and unlisted hubs
 printf("<div id=\"tabs\">"
        "<ul> <li><a href=\"#publicHubs\">Public Hubs</a></li>"
-       "<li><a href=\"#unlistedHubs\">My Hubs</a></li> "
-       "</ul> ");
+       "<li><a href=\"#unlistedHubs\">My Hubs</a></li> ");
+if (doValidate) // put up the validate tab if hg.conf statement present
+    printf("<li><a href=\"#validateHub\">Validate Hub</a></li>");
+printf("</ul> ");
 
 struct hash *publicHash = hgHubConnectPublic();
 hgHubConnectUnlisted(hubList, publicHash);
+if (doValidate)
+    hgHubConnectValidateNewHub();
 printf("</div>");
 
 printf("<div class=\"tabFooter\">");

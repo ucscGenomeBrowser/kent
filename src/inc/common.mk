@@ -77,6 +77,10 @@ ifeq (${USE_HAL},1)
     HG_DEFS+=-DUSE_HAL
     HG_INC+=-I${HALDIR}/inc
 endif
+# on hgwdev, include HAL by defaults
+ifeq (${IS_HGWDEV},yes)
+   L+=${HALLIBS}
+endif
 
 
 # libssl: disabled by default

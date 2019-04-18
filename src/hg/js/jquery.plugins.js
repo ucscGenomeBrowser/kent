@@ -93,11 +93,6 @@
 	var sf = $.fn.superfish;
 	sf.o = [];
 	sf.op = {};
-	sf.IE7fix = function(){
-		var o = sf.op;
-		if ($.browser.msie && $.browser.version > 6 && o.dropShadows && o.animation.opacity!=undefined)
-			this.toggleClass(sf.c.shadowClass+'-off');
-		};
 	sf.c = {
 		bcClass     : 'sf-breadcrumb',
 		menuClass   : 'sf-js-enabled',
@@ -135,9 +130,8 @@
 				sh = sf.c.shadowClass+'-off',
 				$ul = this.addClass(o.hoverClass)
 					.find('>ul:hidden').css('visibility','visible');
-			sf.IE7fix.call($ul);
 			o.onBeforeShow.call($ul);
-			$ul.animate(o.animation,o.speed,function(){ sf.IE7fix.call($ul); o.onShow.call($ul); });
+			$ul.animate(o.animation,o.speed,function(){  o.onShow.call($ul); });
 			return this;
 		}
 	});

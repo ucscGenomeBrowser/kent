@@ -30,13 +30,16 @@ boolean debug = FALSE;	/* can be set in URL debug=1, to turn off: debug=0 */
  * This option will limit to only the actual track entries with data
  */
 boolean trackLeavesOnly = FALSE;  /* set by CGI parameter 'trackLeavesOnly' */
+/* this selects output type 'arrays', where the default type is: objects */
+boolean jsonOutputArrays = FALSE; /* set by CGI parameter 'jsonOutputArrays' */
+
+boolean measureTiming = FALSE;	/* set by CGI parameters */
 
 /* Global only to this one source file */
 static struct cart *cart;             /* CGI and other variables */
 static struct hash *oldVars = NULL;
 static struct hash *trackCounter = NULL;
 static long totalTracks = 0;
-static boolean measureTiming = FALSE;	/* set by CGI parameters */
 static boolean allTrackSettings = FALSE;	/* checkbox setting */
 static char **shortLabels = NULL;	/* public hub short labels in array */
 static int publicHubCount = 0;
@@ -224,12 +227,19 @@ char *genome = NULL;
 if (hub)
     genome = hub->genomeList->name;
 
+struct dyString *extraDyFlags = newDyString(128);
+if (debug)
+    dyStringAppend(extraDyFlags, ";debug=1");
+if (jsonOutputArrays)
+    dyStringAppend(extraDyFlags, ";jsonOutputArrays=1");
+char *extraFlags = dyStringCannibalize(&extraDyFlags);
+
 if (db)
     {
     if (hub)
 	{
 	char urlReference[2048];
-	safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;track=%s&amp;chrom=%s&amp;start=%u&amp;end=%u' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, chrom, start, end, errorPrint);
+	safef(urlReference,	sizeof(urlReference), " <a href='%s/getData/track?hubUrl=%s;genome=%s;track=%s;chrom=%s;start=%u;end=%u;maxItemsOutput=5%s' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, chrom, start, end, extraFlags, errorPrint);
 
 	if (tdb->parent)
 	    hPrintf("<li><b>%s</b>: %s subtrack of parent: %s%s</li>\n", tdb->track, tdb->type, tdb->parent->track, urlReference);
@@ -239,7 +249,7 @@ if (db)
     else
 	{
 	char urlReference[2048];
-	safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?db=%s&amp;chrom=%s&amp;track=%s&amp;start=%u&amp;end=%u' target=_blank>(sample data)%s</a>\n", urlPrefix, db, chrom, tdb->track, start, end, errorPrint);
+	safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?db=%s;chrom=%s;track=%s;start=%u;end=%u;maxItemsOutput=5%s' target=_blank>(sample data)%s</a>\n", urlPrefix, db, chrom, tdb->track, start, end, extraFlags, errorPrint);
 
 	if (superChild)
 	    hPrintf("<li><b>%s</b>: %s superTrack child of parent: %s%s</li>\n", tdb->track, tdb->type, tdb->parent->track, urlReference);
@@ -252,7 +262,7 @@ if (db)
 else if (hub)
     {
     char urlReference[2048];
-    safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;track=%s&amp;chrom=%s&amp;start=%u&amp;end=%u' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, chrom, start, end, errorPrint);
+    safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?hubUrl=%s;genome=%s;track=%s;chrom=%s;start=%u;end=%u;maxItemsOutput=5%s' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, chrom, start, end, extraFlags, errorPrint);
 
     if (tdb->parent)
 	hPrintf("<li><b>%s</b>: %s subtrack of parent: %s%s</li>\n", tdb->track, tdb->type, tdb->parent->track, urlReference);
@@ -271,6 +281,14 @@ unsigned start = chromSize / 4;
 unsigned end = start + 10000;
 if (end > chromSize)
     end = chromSize;
+
+
+struct dyString *extraDyFlags = newDyString(128);
+if (debug)
+    dyStringAppend(extraDyFlags, ";debug=1");
+if (jsonOutputArrays)
+    dyStringAppend(extraDyFlags, ";jsonOutputArrays=1");
+char *extraFlags = dyStringCannibalize(&extraDyFlags);
 
 char errorPrint[2048];
 errorPrint[0] = 0;
@@ -295,7 +313,7 @@ if (chromCount > 0 || itemCount > 0)
 if (isSupportedType(tdb->type))
     {
 	char urlReference[2048];
-	safef(urlReference, sizeof(urlReference), "<a href='%s/getData/track?hubUrl=%s&amp;genome=%s&amp;track=%s&amp;chrom=%s&amp;start=%u&amp;end=%u' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, chromName, start, end, errorPrint);
+	safef(urlReference, sizeof(urlReference), "<a href='%s/getData/track?hubUrl=%s;genome=%s;track=%s;chrom=%s;start=%u;end=%u;maxItemsOutput=5%s' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, chromName, start, end, extraFlags, errorPrint);
 
 	if (allowedBigBedType(tdb->type))
             hPrintf("    <li><b>%s</b>: %s%s%s</li>\n", tdb->track, tdb->type, countsMessage, urlReference);
@@ -526,10 +544,6 @@ static void trackSettings(struct trackDb *tdb, struct hash *countTracks)
 /* process the settingsHash for a trackDb, recursive when subtracks */
 {
 hPrintf("    <li><ul>\n");
-// if (tdb->children)  haven't yet seen a track with children ?
-//   hPrintf("    <li>%s: has children</li>\n", tdb->track);
-// else
-//   hPrintf("    <li>%s: NO children</li>\n", tdb->track);
 struct hashEl *hel;
 struct hashCookie hc = hashFirst(tdb->settingsHash);
 while ((hel = hashNext(&hc)) != NULL)
@@ -548,7 +562,7 @@ if (tdb->subtracks)
 	hPrintf("   <li>has %d subtrack(s)</li>\n", slCount(tdb->subtracks));
     for (tdbEl = tdb->subtracks; tdbEl; tdbEl = tdbEl->next)
 	{
-        hPrintf("<li>subtrack: %s of parent: %s : type: '%s'</li>\n", tdbEl->track, tdbEl->parent->track, tdbEl->type);
+        hPrintf("<li>subtrack: %s of parent: %s : type: '%s' (TBD: sample data)</li>\n", tdbEl->track, tdbEl->parent->track, tdbEl->type);
 	hashCountTrack(tdbEl, countTracks);
 	trackSettings(tdbEl, countTracks);
 	}
@@ -867,7 +881,7 @@ for ( ; genome; genome = genome->next )
        safef(urlReference, sizeof(urlReference), " <a href='%s/getData/sequence?hubUrl=%s;genome=%s;chrom=%s;start=%u;end=%u' target=_blank>JSON example sequence output: %s:%u-%u</a>", urlPrefix, hubTop->url, genome->name, chromName, chromSize/4, (chromSize/4)+128, chromName, chromSize/4, (chromSize/4)+128);
         hPrintf("<li>%s</li>\n", urlReference);
 	}
-    safef(urlReference, sizeof(urlReference), " <a href='%s/list/tracks?hubUrl=%s&amp;genome=%s' target=_blank>JSON example list tracks output</a>", urlPrefix, hubTop->url, genome->name);
+    safef(urlReference, sizeof(urlReference), " <a href='%s/list/tracks?hubUrl=%s;genome=%s' target=_blank>JSON example list tracks output</a>", urlPrefix, hubTop->url, genome->name);
     hPrintf("<li>%s</li>\n", urlReference);
     hubInfo("organism", genome->organism);
     hubInfo("name", genome->name);
@@ -876,7 +890,7 @@ for ( ; genome; genome = genome->next )
     hubInfo("defaultPos", genome->defaultPos);
     hubInfo("trackDbFile", genome->trackDbFile);
     hubAssemblySettings(hubTop, genome);
-    if (measureTiming || debug)
+    if (measureTiming)
 	{
 	long thisTime = clock1000();
 	hPrintf("<li><em>processing time %s: %ld millis</em></li>\n", genome->name, thisTime - lastTime);
@@ -1056,7 +1070,7 @@ hPrintf("</pre>\n");
 
 static void sendJsonHogMessage(char *hogHost)
 {
-apiErrAbort(429, "Too Many Requests", "Your host, %s, has been sending too many requests lately and is "
+apiErrAbort(err429, err429Msg, "Your host, %s, has been sending too many requests lately and is "
        "unfairly loading our site, impacting performance for other users. "
        "Please contact genome@soe.ucsc.edu to ask that your site "
        "be reenabled.  Also, please consider downloading sequence and/or "
@@ -1067,7 +1081,7 @@ apiErrAbort(429, "Too Many Requests", "Your host, %s, has been sending too many 
 static void sendHogMessage(char *hogHost)
 {
 puts("Content-Type:text/html");
-puts("Status: 429 Too Many Requests");
+hPrintf("Status: %d %s\n", err429, err429Msg);
 puts("Retry-After: 30");
 puts("\n");
 
@@ -1075,9 +1089,9 @@ hPrintf("<!DOCTYPE HTML>\n");
 hPrintf("<html lang='en'>\n");
 hPrintf("<head>\n");
 hPrintf("<meta charset=\"utf-8\">\n");
-hPrintf("<title>Status 429 Too Many Requests</title></head>\n");
+hPrintf("<title>Status %d %s</title></head>\n", err429, err429Msg);
 
-hPrintf("<body><h1>Status 429 Too many Requests</h1><p>\n");
+hPrintf("<body><h1>Status %d %s</h1><p>\n", err429, err429Msg);
 hPrintf("Your host, %s, has been sending too many requests lately and is "
        "unfairly loading our site, impacting performance for other users. "
        "Please contact genome@soe.ucsc.edu to ask that your site "
@@ -1106,7 +1120,7 @@ else
     }
 }	/*	static void hogExit()	*/
 
-/* name of button group */
+/* name of radio button group */
 #define RADIO_GROUP	"selectRadio"
 /* button functions */
 #define RADIO_PUBHUB	"pubHub"
@@ -1195,11 +1209,16 @@ hCheckBox("allTrackSettings", allTrackSettings);
 hWrites("&nbsp;display all track settings for each track");
 hWrites("</td></tr>\n");
 
-
 trackLeavesOnly = cartUsualBoolean(cart, "trackLeavesOnly", trackLeavesOnly);
 hWrites("<tr><td>&nbsp;</td><th>JSON list output:</th><td>");
 hCheckBox("trackLeavesOnly", trackLeavesOnly);
 hWrites("&nbsp;show only data tracks, do not show composite container information");
+hWrites("</td></tr>\n");
+
+jsonOutputArrays = cartUsualBoolean(cart, "jsonOutputArrays", jsonOutputArrays);
+hWrites("<tr><td>&nbsp;</td><th>JSON output type:</th><td>");
+hCheckBox("jsonOutputArrays", jsonOutputArrays);
+hWrites("&nbsp;more array data than objects (default: mostly object output)");
 hWrites("</td></tr>\n");
 
 /* go button at the bottom of the table */
@@ -1223,10 +1242,12 @@ static void doMiddle(struct cart *theCart)
 /* Set up globals and make web page */
 {
 cart = theCart;
-measureTiming = hPrintStatus() && isNotEmpty(cartOptionalString(cart, "measureTiming"));
-measureTiming = TRUE;
+measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
 char *database = NULL;
 char *genome = NULL;
+
+if (measureTiming)
+    startProcessTiming();
 
 cgiVarSet("ignoreCookie", "1");
 
@@ -1236,6 +1257,7 @@ initSupportedTypes();
 initUrlPrefix();
 
 trackLeavesOnly = cartUsualBoolean(cart, "trackLeavesOnly", trackLeavesOnly);
+jsonOutputArrays = cartUsualBoolean(cart, "jsonOutputArrays", jsonOutputArrays);
 
 /* global variable for all workers to honor this limit */
 maxItemsOutput = cartUsualInt(cart, "maxItemsOutput", maxItemsOutput);
@@ -1354,11 +1376,10 @@ if (commandError)
 
 long lastTime = clock1000();
 struct trackHub *hub = errCatchTrackHubOpen(urlInput);
-if (measureTiming || debug)
+if (measureTiming)
     {
     long thisTime = clock1000();
-    if (debug)
-       hPrintf("<em>hub open time: %ld millis</em><br>\n", thisTime - lastTime);
+    hPrintf("<em>hub open time: %ld millis</em><br>\n", thisTime - lastTime);
     }
 
 hPrintf("<h3>Documentation: <a href='../../goldenPath/help/api.html'>API definitions/help</a>, and <a href='../../goldenPath/help/trackDb/trackDbHub.html' target=_blank>Track definition document</a> for definitions of track settings.</h3>\n");
@@ -1400,7 +1421,7 @@ else
 
 if (timedOut)
     hPrintf("<h1>Reached time out %ld seconds</h1>", timeOutSeconds);
-if (measureTiming || debug)
+if (measureTiming)
     hPrintf("<em>Overall total time: %ld millis</em><br>\n", clock1000() - enteredMainTime);
 
 hPrintf("</div> <!-- end of text analysis output -->\n");
@@ -1421,7 +1442,6 @@ int main(int argc, char *argv[])
 {
 enteredMainTime = clock1000();
 cgiSpoof(&argc, argv);
-measureTiming = TRUE;
 verboseTimeInit();
 /* similar delay system as in DAS server */
 botDelay = hgBotDelayTimeFrac(delayFraction);
@@ -1437,5 +1457,6 @@ if (botDelay > 0)
 
 trackCounter = hashNew(0);
 cartEmptyShellNoContent(doMiddle, hUserCookie(), excludeVars, oldVars);
+cgiExitTime("hubApi", enteredMainTime);
 return 0;
 }

@@ -190,5 +190,9 @@ struct slPair *trackHubDbDbToValueLabel(struct dbDb *hubDbDbList);
 /* Given a trackHub (list of) track hub dbDb which may be missing some info,
  * return an slPair of value and label suitable for making a select/menu option. */
 
+void hubCheckBigDataUrl(struct trackHub *hub, struct trackHubGenome *genome,
+    struct trackDb *tdb);
+/* Check remote file exists and is of correct type. Wrap this in error catcher */
+
 #endif /* TRACKHUB_H */
 
