@@ -130,6 +130,10 @@ safef(chromName, sizeof(chromName), "chrom");
 safef(startName, sizeof(startName), "chromStart");
 safef(endName, sizeof(endName), "chromEnd");
 
+/* XXX - need to add wiggle data table processing here to output the
+ *       the data points instead of what it does now: the wig SQL table
+ */
+
 /* 'track' name in trackDb often refers to a SQL 'table' */
 char *sqlTable = cloneString(track);
 /* might have a specific table defined instead of the track name */
