@@ -12,9 +12,10 @@ my $http = HTTP::Tiny->new();
 # my $server = 'https://api-test.gi.ucsc.edu';
 my $server = 'https://hgwdev-api.gi.ucsc.edu';
 # my $server = 'https://hgwbeta.soe.ucsc.edu/cgi-bin/hubApi';
-my $global_headers = { 'Content-Type' => 'application/json' };
-my $last_request_time = Time::HiRes::time();
-my $request_count = 0;
+my $globalHeaders = { 'Content-Type' => 'application/json' };
+my $lastRequestTime = Time::HiRes::time();
+my $processStartTime = Time::HiRes::time();
+my $requestCount = 0;
 
 ##############################################################################
 # command line options
@@ -29,7 +30,9 @@ my $end = "";
 my $test0 = 0;
 my $debug = 0;
 my $trackLeavesOnly = 0;
-my $maxItemsOutput = "";
+my $measureTiming = 0;
+my $jsonOutputArrays = 0;
+my $maxItemsOutput = 0;
 ##############################################################################
 
 sub usage() {
@@ -44,6 +47,9 @@ printf STDERR "arguments:
 -end=<coordinate> - restrict the operation to a range, use both start and end
 -maxItemsOutput=<N> - limit output to this number of items.  Default 1,000
                       maximum allowed 1,000,000
+-trackLeavesOnly - for list tracks function, no containers listed
+-measureTimeing - turn on timing measurement
+-debug - turn on debugging business
 -endpoint=<function> - where <function> is one of the following:
    /list/publicHubs - provide a listing of all available public hubs
    /list/ucscGenomes - provide a listing of all available UCSC genomes
@@ -89,7 +95,7 @@ sub arrayOutput($) {
 ##############################################################################
 sub performJsonAction {
   my ($endpoint, $parameters) = @_;
-  my $headers = $global_headers;
+  my $headers = $globalHeaders;
   my $content = performRestAction($endpoint, $parameters, $headers);
   return {} unless $content;
   my $json = decode_json($content);
@@ -102,16 +108,16 @@ sub performRestAction {
   $parameters ||= {};
   $headers ||= {};
   $headers->{'Content-Type'} = 'application/json' unless exists $headers->{'Content-Type'};
-  if($request_count == 15) { # check every 15
-    my $current_time = Time::HiRes::time();
-    my $diff = $current_time - $last_request_time;
+  if($requestCount == 15) { # check every 15
+    my $currentTime = Time::HiRes::time();
+    my $diff = $currentTime - $lastRequestTime;
     # if less than a second then sleep for the remainder of the second
     if($diff < 1) {
       Time::HiRes::sleep(1-$diff);
     }
     # reset
-    $last_request_time = Time::HiRes::time();
-    $request_count = 0;
+    $lastRequestTime = Time::HiRes::time();
+    $requestCount = 0;
   }
 
   $endpoint =~ s#^/##;
@@ -127,6 +133,9 @@ sub performRestAction {
     $url.= '?'.$param_string;
   }
   if ($debug) { $url .= ";debug=1"; }
+  if ($measureTiming) { $url .= ";measureTiming=1"; }
+  if ($jsonOutputArrays) { $url .= ";jsonOutputArrays=1"; }
+  if ($maxItemsOutput) { $url .= ";maxItemsOutput=$maxItemsOutput"; }
   printf STDERR "### '%s'\n", $url;
   my $response = $http->get($url, {headers => $headers});
   my $status = $response->{status};
@@ -152,7 +161,7 @@ sub performRestAction {
       return return $response->{content};
     }
   }
-  $request_count++;
+  $requestCount++;
   if(length $response->{content}) {
     return $response->{content};
   }
@@ -321,7 +330,7 @@ sub processEndPoint() {
 	$errReturn = 1 if (defined ($jsonReturn->{'error'}));
 	printf "%s", $json->pretty->encode( $jsonReturn );
      } else {
-	printf STDERR "# TBD: '%s'\n", $endpoint;
+	printf STDERR "# endpoint not supported at this time: '%s'\n", $endpoint;
      }
   } else {
     printf STDERR "ERROR: no endpoint given ?\n";
@@ -399,6 +408,14 @@ if (ref($jsonReturn) eq "HASH") {
 
 }	#	sub test0()
 
+sub elapsedTime() {
+if ($measureTiming) {
+  my $endTime = Time::HiRes::time();
+  my $et = $endTime - $processStartTime;
+  printf STDERR "# procesing time: %.3fs\n", $et;
+}
+}
+
 #############################################################################
 ### main()
 #############################################################################
@@ -416,18 +433,23 @@ GetOptions ("hubUrl=s" => \$hubUrl,
     "test0"    => \$test0,
     "debug"    => \$debug,
     "trackLeavesOnly"    => \$trackLeavesOnly,
+    "measureTiming"    => \$measureTiming,
+    "jsonOutputArrays"    => \$jsonOutputArrays,
     "maxItemsOutput=s"   => \$maxItemsOutput)
     or die "Error in command line arguments\n";
 
 if ($test0) {
    test0;
+   elapsedTime();
    exit 0;
 }
 
 if ($argc > 0) {
    if (processEndPoint()) {
+	elapsedTime();
 	exit 255;
    } else {
+	elapsedTime();
 	exit 0;
    }
 }
