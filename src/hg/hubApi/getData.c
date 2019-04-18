@@ -63,13 +63,42 @@ jsonWriteString(jw, NULL, "value - float - number");
 jsonWriteListEnd(jw);
 }	/* static void wigColumnTypes(struct jsonWrite jw) */
 
+static unsigned sqlQueryJsonOutput(struct sqlConnection *conn,
+    struct jsonWrite *jw, char *query, int columnCount, char **columnNames,
+	int *jsonTypes, unsigned itemsDone)
+/* with the SQL query set up, run through those selected items */
+{
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row = NULL;
+unsigned itemCount = 0;
+while ((itemCount+itemsDone) < maxItemsOutput && (row = sqlNextRow(sr)) != NULL)
+    {
+    int i = 0;
+    if (jsonOutputArrays)
+	{
+	jsonWriteListStart(jw, NULL);
+	for (i = 0; i < columnCount; ++i)
+	    jsonDatumOut(jw, NULL, row[i], jsonTypes[i]);
+	jsonWriteListEnd(jw);
+	}
+    else
+	{
+	jsonWriteObjectStart(jw, NULL);
+	for (i = 0; i < columnCount; ++i)
+	    jsonDatumOut(jw, columnNames[i], row[i], jsonTypes[i]);
+	jsonWriteObjectEnd(jw);
+	}
+    ++itemCount;
+    }
+sqlFreeResult(&sr);
+return itemCount;
+}
+
 static void tableDataOutput(char *db, struct trackDb *tdb,
     struct sqlConnection *conn, struct jsonWrite *jw, char *track,
     char *chrom, unsigned start, unsigned end)
 /* output the SQL table data for given track */
 {
-char query[4096];
-
 /* for MySQL select statements, name for 'chrom' 'start' 'end' to use
  *     for a table which has different names than that
  */
@@ -82,8 +111,9 @@ safef(chromName, sizeof(chromName), "chrom");
 safef(startName, sizeof(startName), "chromStart");
 safef(endName, sizeof(endName), "chromEnd");
 
-/* might have a specific table defined instead of the track name */
+/* 'track' name in trackDb often refers to a SQL 'table' */
 char *sqlTable = cloneString(track);
+/* might have a specific table defined instead of the track name */
 char *tableName = trackDbSetting(tdb, "table");
 if (isNotEmpty(tableName))
     {
@@ -92,16 +122,53 @@ if (isNotEmpty(tableName))
     jsonWriteString(jw, "sqlTable", sqlTable);
     }
 
-/* determine name for 'chrom' in table select */
-if (! sqlColumnExists(conn, sqlTable, "chrom"))
+/* to be determined if this name is used or changes */
+char *splitSqlTable = cloneString(sqlTable);
+
+/* this function knows how to deal with split chromosomes, the NULL
+ * here for the chrom name means to use the first chrom name in chromInfo
+ */
+struct hTableInfo *hti = hFindTableInfoWithConn(conn, NULL, sqlTable);
+if (debug)
     {
-    if (sqlColumnExists(conn, sqlTable, "tName"))	// track type psl
+    jsonWriteBoolean(jw, "isPos", hti->isPos);
+    jsonWriteBoolean(jw, "isSplit", hti->isSplit);
+    jsonWriteBoolean(jw, "hasBin", hti->hasBin);
+    }
+/* check if table name needs to be modified */
+if (hti->isSplit)
+    {
+    if (isNotEmpty(chrom))
+	{
+	char fullTableName[256];
+	safef(fullTableName, sizeof(fullTableName), "%s_%s", chrom, hti->rootName);
+	freeMem(splitSqlTable);
+	splitSqlTable = cloneString(fullTableName);
+	if (debug)
+	    jsonWriteString(jw, "splitSqlTable", splitSqlTable);
+	}
+    else
+	{
+	char *defaultChrom = hDefaultChrom(db);
+	char fullTableName[256];
+	safef(fullTableName, sizeof(fullTableName), "%s_%s", defaultChrom, hti->rootName);
+	freeMem(splitSqlTable);
+	splitSqlTable = cloneString(fullTableName);
+	if (debug)
+	    jsonWriteString(jw, "splitSqlTable", splitSqlTable);
+	}
+    }
+
+/* determine name for 'chrom' in table select */
+if (! sqlColumnExists(conn, splitSqlTable, "chrom"))
+    {
+    if (sqlColumnExists(conn, splitSqlTable, "tName"))	// track type psl
 	{
 	safef(chromName, sizeof(chromName), "tName");
 	safef(startName, sizeof(startName), "tStart");
 	safef(endName, sizeof(endName), "tEnd");
 	}
-    else if (sqlColumnExists(conn, sqlTable, "genoName"))// track type rmsk
+    else if (sqlColumnExists(conn, splitSqlTable, "genoName"))// track type rmsk
 	{
 	safef(chromName, sizeof(chromName), "genoName");
 	safef(startName, sizeof(startName), "genoStart");
@@ -109,25 +176,32 @@ if (! sqlColumnExists(conn, sqlTable, "chrom"))
 	}
     }
 
-if (sqlColumnExists(conn, sqlTable, "txStart"))	// track type genePred
+if (sqlColumnExists(conn, splitSqlTable, "txStart"))	// track type genePred
     {
     safef(startName, sizeof(startName), "txStart");
     safef(endName, sizeof(endName), "txEnd");
     }
 
+struct dyString *query = dyStringNew(64);
+
 /* no chrom specified, return entire table */
 if (isEmpty(chrom))
-    sqlSafef(query, sizeof(query), "select * from %s", sqlTable);
+    {
+    /* this setup here is for the case of non-split tables, will later
+     * determine if split, and then will go through each chrom
+     */
+    sqlDyStringPrintf(query, "select * from %s", splitSqlTable);
+    }
 else if (0 == (start + end))	/* have chrom, no start,end == full chr */
     {
-    if (! sqlColumnExists(conn, sqlTable, chromName))
+    if (! sqlColumnExists(conn, splitSqlTable, chromName))
 	apiErrAbort(err400, err400Msg, "track '%s' is not a position track, request track without chrom specification, genome: '%s'", track, db);
 
     jsonWriteString(jw, "chrom", chrom);
     struct chromInfo *ci = hGetChromInfo(db, chrom);
     jsonWriteNumber(jw, "start", (long long)0);
     jsonWriteNumber(jw, "end", (long long)ci->size);
-    sqlSafef(query, sizeof(query), "select * from %s where %s='%s'", sqlTable, chromName, chrom);
+    sqlDyStringPrintf(query, "select * from %s where %s='%s'", splitSqlTable, chromName, chrom);
     }
 else	/* fully specified chrom:start-end */
     {
@@ -138,26 +212,28 @@ else	/* fully specified chrom:start-end */
 	wigColumnTypes(jw);
     if (startsWith("wig", tdb->type))
 	{
-        wigTableDataOutput(jw, db, sqlTable, chrom, start, end);
+        wigTableDataOutput(jw, db, splitSqlTable, chrom, start, end);
         return;	/* DONE */
 	}
     else
 	{
-	sqlSafef(query, sizeof(query), "select * from %s where %s='%s' AND %s > %u AND %s < %u", sqlTable, chromName, chrom, endName, start, startName, end);
+	sqlDyStringPrintf(query, "select * from %s where ", splitSqlTable);
+        hAddBinToQuery(start, end, query);
+	sqlDyStringPrintf(query, "%s='%s' AND %s > %u AND %s < %u", chromName, chrom, endName, start, startName, end);
 	}
     }
 
 if (debug)
-    jsonWriteString(jw, "select", query);
+    jsonWriteString(jw, "select", query->string);
 
 /* continuing, not a wiggle output */
 char **columnNames = NULL;
 char **columnTypes = NULL;
 int *jsonTypes = NULL;
-struct asObject *as = asForTable(conn, sqlTable, tdb);
+struct asObject *as = asForTable(conn, splitSqlTable, tdb);
 struct asColumn *columnEl = as->columnList;
 int asColumnCount = slCount(columnEl);
-int columnCount = tableColumns(conn, jw, sqlTable, &columnNames, &columnTypes, &jsonTypes);
+int columnCount = tableColumns(conn, jw, splitSqlTable, &columnNames, &columnTypes, &jsonTypes);
 if (jsonOutputArrays || debug)
     {
     jsonWriteListStart(jw, "columnTypes");
@@ -178,29 +254,32 @@ if (jsonOutputArrays || debug)
     jsonWriteListEnd(jw);
     }
 jsonWriteListStart(jw, track);
-struct sqlResult *sr = sqlGetResult(conn, query);
-char **row = NULL;
-unsigned itemCount = 0;
-while (itemCount < maxItemsOutput && (row = sqlNextRow(sr)) != NULL)
+
+unsigned itemsDone = 0;
+
+/* empty chrom and isSplit, needs to run through all chrom names */
+if (hti->isSplit && isEmpty(chrom))
     {
-    int i = 0;
-    if (jsonOutputArrays)
+    struct chromInfo *ciList = createChromInfoList(NULL, db);
+    slSort(ciList, chromInfoCmp);
+    struct chromInfo *el = ciList;
+    char fullTableName[256];
+    for ( ; itemsDone < maxItemsOutput && el != NULL; el = el->next )
 	{
-	jsonWriteListStart(jw, NULL);
-	for (i = 0; i < columnCount; ++i)
-	    jsonDatumOut(jw, NULL, row[i], jsonTypes[i]);
-	jsonWriteListEnd(jw);
+	freeDyString(&query);
+	query = dyStringNew(64);
+	safef(fullTableName, sizeof(fullTableName), "%s_%s", el->chrom, hti->rootName);
+	sqlDyStringPrintf(query, "select * from %s", fullTableName);
+	itemsDone += sqlQueryJsonOutput(conn, jw, query->string, columnCount,
+	    columnNames, jsonTypes, itemsDone);
 	}
-    else
-	{
-	jsonWriteObjectStart(jw, NULL);
-	for (i = 0; i < columnCount; ++i)
-	    jsonDatumOut(jw, columnNames[i], row[i], jsonTypes[i]);
-	jsonWriteObjectEnd(jw);
-	}
-    ++itemCount;
     }
-sqlFreeResult(&sr);
+else
+    {
+    itemsDone += sqlQueryJsonOutput(conn, jw, query->string, columnCount,
+	columnNames, jsonTypes, itemsDone);
+    }
+freeDyString(&query);
 jsonWriteListEnd(jw);
 }	/*  static void tableDataOutput(char *db, struct trackDb *tdb, ... ) */
 
@@ -471,9 +550,10 @@ char *db = cgiOptionalString("db");
 char *chrom = cgiOptionalString("chrom");
 char *start = cgiOptionalString("start");
 char *end = cgiOptionalString("end");
-/* 'track' name in trackDb refers to a SQL 'table' */
+/* 'track' name in trackDb often refers to a SQL 'table' */
 char *track = cgiOptionalString("track");
-char *sqlTable = cloneString(track);
+char *sqlTable = cloneString(track); /* might be something else */
+     /* depends upon 'table' setting in track db, or split table business */
 
 unsigned chromSize = 0;	/* maybe set later */
 unsigned uStart = 0;
@@ -507,8 +587,32 @@ if (isNotEmpty(tableName))
     sqlTable = cloneString(tableName);
     }
 
-struct sqlConnection *conn = hAllocConn(db);
-if (! sqlTableExists(conn, sqlTable))
+struct sqlConnection *conn = hAllocConnMaybe(db);
+if (NULL == conn)
+    apiErrAbort(err400, err400Msg, "can not find database 'db=%s' for endpoint '/getData/track", db);
+
+struct hTableInfo *hti = hFindTableInfoWithConn(conn, NULL, sqlTable);
+
+char *splitSqlTable = NULL;
+
+if (hti->isSplit)
+    {
+    if (isNotEmpty(chrom))
+	{
+	char fullTableName[256];
+	safef(fullTableName, sizeof(fullTableName), "%s_%s", chrom, hti->rootName);
+	splitSqlTable = cloneString(fullTableName);
+	}
+    else
+	{
+	char *defaultChrom = hDefaultChrom(db);
+	char fullTableName[256];
+	safef(fullTableName, sizeof(fullTableName), "%s_%s", defaultChrom, hti->rootName);
+	splitSqlTable = cloneString(fullTableName);
+	}
+    }
+
+if (! hTableOrSplitExists(db, sqlTable))
     {
     if (! bigDataUrl)
 	apiErrAbort(err400, err400Msg, "can not find specified 'track=%s' for endpoint: /getData/track?db=%s;track=%s", track, db, track);
@@ -520,7 +624,11 @@ struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "db", db);
 if (tableTrack)
     {
-    char *dataTime = sqlTableUpdate(conn, sqlTable);
+    char *dataTime = NULL;
+    if (hti->isSplit)
+	dataTime = sqlTableUpdate(conn, splitSqlTable);
+    else
+	dataTime = sqlTableUpdate(conn, sqlTable);
     time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
     replaceChar(dataTime, ' ', 'T');	/*	ISO 8601	*/
     jsonWriteString(jw, "dataTime", dataTime);
@@ -531,7 +639,7 @@ if (tableTrack)
 jsonWriteString(jw, "trackType", thisTrack->type);
 jsonWriteString(jw, "track", track);
 if (debug)
-    jsonWriteString(jw, "jsonOutputArrays", jsonOutputArrays ? "TRUE":"FALSE");
+    jsonWriteBoolean(jw, "jsonOutputArrays", jsonOutputArrays);
 
 char query[4096];
 struct bbiFile *bbi = NULL;
@@ -610,7 +718,6 @@ else if (startsWith("bigWig", thisTrack->type))
     }
 else
     tableDataOutput(db, thisTrack, conn, jw, track, chrom, uStart, uEnd);
-
 
 apiFinishOutput(0, NULL, jw);
 hFreeConn(&conn);

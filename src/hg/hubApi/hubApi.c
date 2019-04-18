@@ -19,8 +19,8 @@
 
 /* Global Variables for all modules */
 
-int maxItemsOutput = 1000;	/* can be set in URL maxItemsOutput=N */
 static int maxItemLimit = 1000000;   /* maximum of 1,000,000 items returned */
+int maxItemsOutput = 1000000;   /* can be set in URL maxItemsOutput=N */
 /* for debugging purpose, current bot delay value */
 int botDelay = 0;
 boolean debug = FALSE;	/* can be set in URL debug=1, to turn off: debug=0 */
@@ -348,10 +348,10 @@ if (chromName && chromSize)
     for (el = chromList; el; el = el->next)
 	{
 	if (el->size > *chromSize)
-	    { 
+	    {
 	    *chromSize = el->size;
 	    returnName = el->name;
-	    } 
+	    }
 	}
     if (chromSize > 0)
 	*chromName = cloneString(returnName);
@@ -1271,6 +1271,7 @@ if (maxItemsOutput > maxItemLimit)	/* safety check */
     maxItemsOutput = maxItemLimit;
 
 debug = cartUsualBoolean(cart, "debug", debug);
+// debug = TRUE;
 
 int timeout = cartUsualInt(cart, "udcTimeout", 300);
 if (udcCacheTimeout() < timeout)

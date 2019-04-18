@@ -274,7 +274,10 @@ static void chromInfoJsonOutput(FILE *f, char *db)
  */
 {
 char *table = cgiOptionalString("track");
-struct sqlConnection *conn = hAllocConn(db);
+struct sqlConnection *conn = hAllocConnMaybe(db);
+if (NULL == conn)
+    apiErrAbort(err400, err400Msg, "can not find database 'db=%s' for endpoint '/list/chromosomes", db);
+
 /* in trackDb language: track == table */
 if (table)
     {
@@ -404,7 +407,10 @@ else
 static void trackDbJsonOutput(char *db, FILE *f)
 /* return track list from specified UCSC database name */
 {
-struct sqlConnection *conn = hAllocConn(db);
+struct sqlConnection *conn = hAllocConnMaybe(db);
+if (NULL == conn)
+    apiErrAbort(err400, err400Msg, "can not find database 'db=%s' for endpoint '/list/hubGenomes", db);
+
 char *dataTime = sqlTableUpdate(conn, "trackDb");
 time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
 replaceChar(dataTime, ' ', 'T');	/* ISO 8601 */
