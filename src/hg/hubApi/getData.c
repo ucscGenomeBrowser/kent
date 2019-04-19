@@ -11,37 +11,41 @@ wds->setMaxOutput(wds, maxItemsOutput);
 wds->setChromConstraint(wds, chrom);
 wds->setPositionConstraint(wds, start, end);
 int operations = wigFetchAscii;
-long long valuesMatched = wds->getData(wds, database, table, operations);
-jsonWriteNumber(jw, "valuesMatched", valuesMatched);
+(void) wds->getData(wds, database, table, operations);
 struct wigAsciiData *el;
-jsonWriteListStart(jw, chrom);
 unsigned itemCount = 0;
 for (el = wds->ascii; (itemCount + itemsDone) < maxItemsOutput && el; el = el->next)
     {
-    int s = el->data->chromStart;
-    int e = s + el->span;
-    double val = el->data->value;
-    if (jsonOutputArrays)
+    unsigned span = el->span;
+    unsigned count = el->count;
+    unsigned i = 0;
+    struct asciiDatum *data = el->data;
+    for ( ; ((itemCount + itemsDone) < maxItemsOutput) && i < count; ++i,++data)
 	{
-	jsonWriteListStart(jw, NULL);
-	jsonWriteNumber(jw, NULL, (long long)s);
-	jsonWriteNumber(jw, NULL, (long long)e);
-	jsonWriteDouble(jw, NULL, val);
-	jsonWriteListEnd(jw);
+	int s = data->chromStart;
+	int e = s + span;
+	double val = data->value;
+	if (jsonOutputArrays)
+	    {
+	    jsonWriteListStart(jw, NULL);
+	    jsonWriteNumber(jw, NULL, (long long)s);
+	    jsonWriteNumber(jw, NULL, (long long)e);
+	    jsonWriteDouble(jw, NULL, val);
+	    jsonWriteListEnd(jw);
+	    }
+	else
+	    {
+	    jsonWriteObjectStart(jw, NULL);
+	    jsonWriteNumber(jw, "start", (long long)s);
+	    jsonWriteNumber(jw, "end", (long long)e);
+	    jsonWriteDouble(jw, "value", val);
+	    jsonWriteObjectEnd(jw);
+	    }
+	++itemCount;
 	}
-    else
-	{
-	jsonWriteObjectStart(jw, NULL);
-	jsonWriteNumber(jw, "start", (long long)s);
-	jsonWriteNumber(jw, "end", (long long)e);
-	jsonWriteDouble(jw, "value", val);
-	jsonWriteObjectEnd(jw);
-	}
-    ++itemCount;
     }
-jsonWriteListEnd(jw);
 return itemCount;
-}
+}	/* static unsigned wigTableDataOutput(struct jsonWrite *jw, ...) */
 
 static void jsonDatumOut(struct jsonWrite *jw, char *name, char *val,
     int jsonType)
@@ -228,9 +232,11 @@ else if (0 == (start + end))	/* have chrom, no start,end == full chr */
     jsonWriteNumber(jw, "end", (long long)ci->size);
     if (startsWith("wig", tdb->type))
 	{
+	jsonWriteListStart(jw, NULL);
 	if (jsonOutputArrays || debug)
 	    wigColumnTypes(jw);
         wigTableDataOutput(jw, db, splitSqlTable, chrom, 0, ci->size, 0);
+	jsonWriteListEnd(jw);
         return;	/* DONE */
 	}
     else
@@ -245,9 +251,11 @@ else	/* fully specified chrom:start-end */
     jsonWriteNumber(jw, "end", (long long)end);
     if (startsWith("wig", tdb->type))
 	{
+	jsonWriteListStart(jw, NULL);
 	if (jsonOutputArrays || debug)
 	    wigColumnTypes(jw);
         wigTableDataOutput(jw, db, splitSqlTable, chrom, start, end, 0);
+	jsonWriteListEnd(jw);
         return;	/* DONE */
 	}
     else
@@ -306,25 +314,24 @@ if (jsonOutputArrays || debug)
 	}
     }
 
-/* data output list starting */
-jsonWriteListStart(jw, track);
-
 unsigned itemsDone = 0;
 
 /* empty chrom, needs to run through all chrom names */
 if (isEmpty(chrom))
     {
+    jsonWriteObjectStart(jw, track);	/* begin track data output */
     char fullTableName[256];
     struct chromInfo *ciList = createChromInfoList(NULL, db);
     slSort(ciList, chromInfoCmp);
-    struct chromInfo *el = ciList;
-    for ( ; itemsDone < maxItemsOutput && el != NULL; el = el->next )
+    struct chromInfo *ci = ciList;
+    for ( ; itemsDone < maxItemsOutput && ci != NULL; ci = ci->next )
 	{
+	jsonWriteListStart(jw, ci->chrom);	/* starting a chrom output */
 	freeDyString(&query);
 	query = dyStringNew(64);
 	if (hti && hti->isSplit) /* when split, make up split chr name */
 	    {
-	    safef(fullTableName, sizeof(fullTableName), "%s_%s", el->chrom, hti->rootName);
+	    safef(fullTableName, sizeof(fullTableName), "%s_%s", ci->chrom, hti->rootName);
 	    sqlDyStringPrintf(query, "select * from %s", fullTableName);
 	    }
 	else
@@ -335,15 +342,18 @@ if (isEmpty(chrom))
 	else
 	    itemsDone += sqlQueryJsonOutput(conn, jw, query->string,
 		columnCount, columnNames, jsonTypes, itemsDone);
+	jsonWriteListEnd(jw);	/* chrom data output list end */
 	}
+    jsonWriteObjectEnd(jw);	/* end track data output */
     }
 else
-    {
+    {	/* a single chrom has been requested, run it */
+    jsonWriteListStart(jw, track);	/* data output list starting */
     itemsDone += sqlQueryJsonOutput(conn, jw, query->string, columnCount,
 	columnNames, jsonTypes, itemsDone);
+    jsonWriteListEnd(jw);	/* data output list end */
     }
 freeDyString(&query);
-jsonWriteListEnd(jw);	/* data output list end */
 }	/*  static void tableDataOutput(char *db, struct trackDb *tdb, ... ) */
 
 static boolean typedBig9Plus(struct trackDb *tdb)

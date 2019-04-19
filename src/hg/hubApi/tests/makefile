@@ -2,7 +2,8 @@
 test::	test0 test1 test2 test3 test4 test5 test6 test7 test8 test9 test10 \
 	test11 test12 test13 test14 test15 test16 test17 test18 test19 test20 \
 	test21 test22 test23 test24 test25 test26 test27 test28 test29 test30 \
-	test31 test32 test33 test34 test35 test36 test37 test38 test39 test40
+	test31 test32 test33 test34 test35 test36 test37 test38 test39 test40 \
+	test41 test42
 
 setOutput:
 	@if [ ! -d testOutput ]; then mkdir testOutput; fi
@@ -237,4 +238,16 @@ test39: setOutput
 # plus jsonArrayOutput
 test40: setOutput
 	@./jsonConsumer.pl -jsonOutputArrays -maxItemsOutput=123 -endpoint="/getData/track" -db="ce4" -track="gold" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /getData/track?db=ce11&track=gc5BaseBw - bigWig data output
+# plus jsonArrayOutput
+test41: setOutput
+	@./jsonConsumer.pl -jsonOutputArrays -maxItemsOutput=123 -endpoint="/getData/track" -db="ce11" -track="gc5BaseBw" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /getData/track?db=ce6&track=gc5Base - wiggle database table
+# plus jsonArrayOutput
+test42: setOutput
+	@./jsonConsumer.pl -jsonOutputArrays -maxItemsOutput=123 -endpoint="/getData/track" -db="ce6" -track="gc5Base" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
