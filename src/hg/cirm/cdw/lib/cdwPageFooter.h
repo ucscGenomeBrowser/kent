@@ -58,4 +58,4 @@
     "</div>\n"
     "</div>\n"
 "</div>\n"
-"</div> <!-- footer -->\n"
+"</div>\n"
