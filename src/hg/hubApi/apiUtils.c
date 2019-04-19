@@ -179,6 +179,9 @@ return typeIndex;
 }	/*	int asToJsonType(char *asType)	*/
 
 /* temporarily from table browser until proven works, then move to library */
+/* UNFORTUNATELY, this version needs an extra argument: tdb
+ *  the table browser has a global hash to satisify that requirement
+ */
 struct asObject *asForTable(struct sqlConnection *conn, char *table,
     struct trackDb *tdb)
 /* Get autoSQL description if any associated with table. */

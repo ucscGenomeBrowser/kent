@@ -239,7 +239,7 @@ if (db)
     if (hub)
 	{
 	char urlReference[2048];
-	safef(urlReference,	sizeof(urlReference), " <a href='%s/getData/track?hubUrl=%s;genome=%s;track=%s;chrom=%s;start=%u;end=%u;maxItemsOutput=5%s' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, chrom, start, end, extraFlags, errorPrint);
+	safef(urlReference,	sizeof(urlReference), " <a href='%s/getData/track?hubUrl=%s;genome=%s;track=%s;maxItemsOutput=5%s' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, extraFlags, errorPrint);
 
 	if (tdb->parent)
 	    hPrintf("<li><b>%s</b>: %s subtrack of parent: %s%s</li>\n", tdb->track, tdb->type, tdb->parent->track, urlReference);
@@ -249,7 +249,7 @@ if (db)
     else
 	{
 	char urlReference[2048];
-	safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?db=%s;chrom=%s;track=%s;start=%u;end=%u;maxItemsOutput=5%s' target=_blank>(sample data)%s</a>\n", urlPrefix, db, chrom, tdb->track, start, end, extraFlags, errorPrint);
+	safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?db=%s;track=%s;maxItemsOutput=5%s' target=_blank>(sample data)%s</a>\n", urlPrefix, db, tdb->track, extraFlags, errorPrint);
 
 	if (superChild)
 	    hPrintf("<li><b>%s</b>: %s superTrack child of parent: %s%s</li>\n", tdb->track, tdb->type, tdb->parent->track, urlReference);
@@ -262,7 +262,7 @@ if (db)
 else if (hub)
     {
     char urlReference[2048];
-    safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?hubUrl=%s;genome=%s;track=%s;chrom=%s;start=%u;end=%u;maxItemsOutput=5%s' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, chrom, start, end, extraFlags, errorPrint);
+    safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?hubUrl=%s;genome=%s;track=%s;maxItemsOutput=5%s' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, extraFlags, errorPrint);
 
     if (tdb->parent)
 	hPrintf("<li><b>%s</b>: %s subtrack of parent: %s%s</li>\n", tdb->track, tdb->type, tdb->parent->track, urlReference);
@@ -313,7 +313,7 @@ if (chromCount > 0 || itemCount > 0)
 if (isSupportedType(tdb->type))
     {
 	char urlReference[2048];
-	safef(urlReference, sizeof(urlReference), "<a href='%s/getData/track?hubUrl=%s;genome=%s;track=%s;chrom=%s;start=%u;end=%u;maxItemsOutput=5%s' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, chromName, start, end, extraFlags, errorPrint);
+	safef(urlReference, sizeof(urlReference), "<a href='%s/getData/track?hubUrl=%s;genome=%s;track=%s;maxItemsOutput=5%s' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, extraFlags, errorPrint);
 
 	if (allowedBigBedType(tdb->type))
             hPrintf("    <li><b>%s</b>: %s%s%s</li>\n", tdb->track, tdb->type, countsMessage, urlReference);
@@ -1289,10 +1289,61 @@ char *words[MAX_PATH_INFO];
 
 if (isNotEmpty(pathInfo))
     {
+    /* can immediately verify valid parameters right here right now */
+    char *start = cgiOptionalString("start");
+    char *end = cgiOptionalString("end");
+    char *db = cgiOptionalString("db");
+    struct dyString *errorMsg = newDyString(128);
+
+    if (isNotEmpty(db))
+	{
+	struct sqlConnection *conn = hAllocConnMaybe(db);
+        if (NULL == conn)
+	    dyStringPrintf(errorMsg, "can not find database db='%s'", db);
+	else
+	    hFreeConn(&conn);
+	}
+    if (isNotEmpty(start) || isNotEmpty(end))
+	{
+	long long llStart = -1;
+	long long llEnd = -1;
+	struct errCatch *errCatch = errCatchNew();
+	if (errCatchStart(errCatch))
+	    {
+	    if (isNotEmpty(start))
+		llStart = sqlLongLong(start);
+	    if (isNotEmpty(end))
+		llEnd = sqlLongLong(end);
+	    }
+	errCatchEnd(errCatch);
+	if (errCatch->gotError)
+	    {
+	    if (isNotEmpty(errorMsg->string))
+		dyStringPrintf(errorMsg, ", ");
+	    dyStringPrintf(errorMsg, "%s", errCatch->message->string);
+	    if (isNotEmpty(start) && (-1 == llStart))
+		dyStringPrintf(errorMsg, ", can not recognize start coordinate: '%s'", start);
+	    if (isNotEmpty(end) && (-1 == llEnd))
+		dyStringPrintf(errorMsg, ", can not recognize end coordinate: '%s'", end);
+	    }
+	else
+	    {
+	    if ( (llStart < 0) || (llEnd < 0) || (llEnd <= llStart) )
+		{
+		if (isNotEmpty(errorMsg->string))
+		    dyStringPrintf(errorMsg, ", ");
+		dyStringPrintf(errorMsg, "illegal start,end coordinates given: %s,%s, 'end' must be greater than 'start', and start greater than or equal to zero", start, end);
+		}
+	    }
+	errCatchFree(&errCatch);
+	}
+
+    if (isNotEmpty(errorMsg->string))
+	apiErrAbort(err400, err400Msg, "%s", errorMsg->string);
+
     setupFunctionHash();
     struct hashEl *hel = parsePathInfo(pathInfo, words);
     /* verify valid API command */
-
     if (hel)	/* have valid command */
 	{
         hPrintDisable();
@@ -1301,7 +1352,7 @@ if (isNotEmpty(pathInfo))
 	return;
 	}
      else
-	commandError = TRUE;
+	apiErrAbort(err400, err400Msg, "no such command: '/%s/%s for endpoint '%s'", words[0], words[1], pathInfo);
     }
 
 (void) hubPublicDbLoadAll();
