@@ -2,7 +2,8 @@
 
 #include "dataApi.h"
 
-static void wigTableDataOutput(struct jsonWrite *jw, char *database, char *table, char *chrom, int start, int end)
+static unsigned wigTableDataOutput(struct jsonWrite *jw, char *database,
+	char *table, char *chrom, int start, int end, unsigned itemsDone)
 /* output wiggle data from the given table and specified chrom:start-end */
 {
 struct wiggleDataStream *wds = wiggleDataStreamNew();
@@ -15,7 +16,7 @@ jsonWriteNumber(jw, "valuesMatched", valuesMatched);
 struct wigAsciiData *el;
 jsonWriteListStart(jw, chrom);
 unsigned itemCount = 0;
-for (el = wds->ascii; itemCount < maxItemsOutput && el; el = el->next)
+for (el = wds->ascii; (itemCount + itemsDone) < maxItemsOutput && el; el = el->next)
     {
     int s = el->data->chromStart;
     int e = s + el->span;
@@ -39,6 +40,7 @@ for (el = wds->ascii; itemCount < maxItemsOutput && el; el = el->next)
     ++itemCount;
     }
 jsonWriteListEnd(jw);
+return itemCount;
 }
 
 static void jsonDatumOut(struct jsonWrite *jw, char *name, char *val,
@@ -224,18 +226,28 @@ else if (0 == (start + end))	/* have chrom, no start,end == full chr */
     struct chromInfo *ci = hGetChromInfo(db, chrom);
     jsonWriteNumber(jw, "start", (long long)0);
     jsonWriteNumber(jw, "end", (long long)ci->size);
-    sqlDyStringPrintf(query, "select * from %s where %s='%s'", splitSqlTable, chromName, chrom);
+    if (startsWith("wig", tdb->type))
+	{
+	if (jsonOutputArrays || debug)
+	    wigColumnTypes(jw);
+        wigTableDataOutput(jw, db, splitSqlTable, chrom, 0, ci->size, 0);
+        return;	/* DONE */
+	}
+    else
+	{
+	sqlDyStringPrintf(query, "select * from %s where %s='%s'", splitSqlTable, chromName, chrom);
+	}
     }
 else	/* fully specified chrom:start-end */
     {
     jsonWriteString(jw, "chrom", chrom);
     jsonWriteNumber(jw, "start", (long long)start);
     jsonWriteNumber(jw, "end", (long long)end);
-    if (jsonOutputArrays || debug)
-	wigColumnTypes(jw);
     if (startsWith("wig", tdb->type))
 	{
-        wigTableDataOutput(jw, db, splitSqlTable, chrom, start, end);
+	if (jsonOutputArrays || debug)
+	    wigColumnTypes(jw);
+        wigTableDataOutput(jw, db, splitSqlTable, chrom, start, end, 0);
         return;	/* DONE */
 	}
     else
@@ -259,52 +271,70 @@ int asColumnCount = slCount(columnEl);
 int columnCount = tableColumns(conn, jw, splitSqlTable, &columnNames, &columnTypes, &jsonTypes);
 if (jsonOutputArrays || debug)
     {
-    jsonWriteListStart(jw, "columnTypes");
-    int i = 0;
-    for (i = 0; i < columnCount; ++i)
+    if (startsWith("wig", tdb->type))
 	{
-	jsonWriteObjectStart(jw, NULL);
-	jsonWriteString(jw, "name", columnNames[i]);
-	jsonWriteString(jw, "sqlType", columnTypes[i]);
-	jsonWriteString(jw, "jsonType", jsonTypeStrings[jsonTypes[i]]);
-	if ((0 == i) && (hti && hti->hasBin))
-	    jsonWriteString(jw, "description", "Indexing field to speed chromosome range queries");
-	else if (columnEl && isNotEmpty(columnEl->comment))
-	    jsonWriteString(jw, "description", columnEl->comment);
-	else
-	    jsonWriteString(jw, "description", "");
-
-	/* perhaps move the comment pointer forward */
-        if (columnEl)
-	    {
-	    if (asColumnCount == columnCount)
-		columnEl = columnEl->next;
-	    else if (! ((0 == i) && (hti && hti->hasBin)))
-		columnEl = columnEl->next;
-	    }
-	jsonWriteObjectEnd(jw);
+	    wigColumnTypes(jw);
 	}
-    jsonWriteListEnd(jw);
+    else
+	{
+	jsonWriteListStart(jw, "columnTypes");
+	int i = 0;
+	for (i = 0; i < columnCount; ++i)
+	    {
+	    jsonWriteObjectStart(jw, NULL);
+	    jsonWriteString(jw, "name", columnNames[i]);
+	    jsonWriteString(jw, "sqlType", columnTypes[i]);
+	    jsonWriteString(jw, "jsonType", jsonTypeStrings[jsonTypes[i]]);
+	    if ((0 == i) && (hti && hti->hasBin))
+		jsonWriteString(jw, "description", "Indexing field to speed chromosome range queries");
+	    else if (columnEl && isNotEmpty(columnEl->comment))
+		jsonWriteString(jw, "description", columnEl->comment);
+	    else
+		jsonWriteString(jw, "description", "");
+
+	    /* perhaps move the comment pointer forward */
+	    if (columnEl)
+		{
+		if (asColumnCount == columnCount)
+		    columnEl = columnEl->next;
+		else if (! ((0 == i) && (hti && hti->hasBin)))
+		    columnEl = columnEl->next;
+		}
+	    jsonWriteObjectEnd(jw);
+	}
+	jsonWriteListEnd(jw);
+	}
     }
+
+/* data output list starting */
 jsonWriteListStart(jw, track);
 
 unsigned itemsDone = 0;
 
-/* empty chrom and isSplit, needs to run through all chrom names */
-if ((hti && hti->isSplit) && isEmpty(chrom))
+/* empty chrom, needs to run through all chrom names */
+if (isEmpty(chrom))
     {
+    char fullTableName[256];
     struct chromInfo *ciList = createChromInfoList(NULL, db);
     slSort(ciList, chromInfoCmp);
     struct chromInfo *el = ciList;
-    char fullTableName[256];
     for ( ; itemsDone < maxItemsOutput && el != NULL; el = el->next )
 	{
 	freeDyString(&query);
 	query = dyStringNew(64);
-	safef(fullTableName, sizeof(fullTableName), "%s_%s", el->chrom, hti->rootName);
-	sqlDyStringPrintf(query, "select * from %s", fullTableName);
-	itemsDone += sqlQueryJsonOutput(conn, jw, query->string, columnCount,
-	    columnNames, jsonTypes, itemsDone);
+	if (hti && hti->isSplit) /* when split, make up split chr name */
+	    {
+	    safef(fullTableName, sizeof(fullTableName), "%s_%s", el->chrom, hti->rootName);
+	    sqlDyStringPrintf(query, "select * from %s", fullTableName);
+	    }
+	else
+	    sqlDyStringPrintf(query, "select * from %s", splitSqlTable);
+	if (startsWith("wig", tdb->type))
+            itemsDone += wigTableDataOutput(jw, db, splitSqlTable, chrom,
+		start, end, itemsDone);
+	else
+	    itemsDone += sqlQueryJsonOutput(conn, jw, query->string,
+		columnCount, columnNames, jsonTypes, itemsDone);
 	}
     }
 else
@@ -313,7 +343,7 @@ else
 	columnNames, jsonTypes, itemsDone);
     }
 freeDyString(&query);
-jsonWriteListEnd(jw);
+jsonWriteListEnd(jw);	/* data output list end */
 }	/*  static void tableDataOutput(char *db, struct trackDb *tdb, ... ) */
 
 static boolean typedBig9Plus(struct trackDb *tdb)
