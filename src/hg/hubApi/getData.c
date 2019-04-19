@@ -663,6 +663,9 @@ if (isNotEmpty(tableName))
     sqlTable = cloneString(tableName);
     }
 
+/* database existence has already been checked before now, might
+ * have disappeared in the mean time
+ */
 struct sqlConnection *conn = hAllocConnMaybe(db);
 if (NULL == conn)
     apiErrAbort(err400, err400Msg, "can not find database 'db=%s' for endpoint '/getData/track", db);
@@ -953,6 +956,7 @@ else if (sameWord("sequence", words[1]))
 	char *db = cgiOptionalString("db");
 	if (isEmpty(db))
 	    apiErrAbort(err400, err400Msg, "missing URL db=<ucscDb> name for endpoint '/getData/sequence");
+	/* existence of db has already been proven before getting here */
 	getSequenceData(db, NULL);
 	}
     }

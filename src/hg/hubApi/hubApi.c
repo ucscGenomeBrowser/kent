@@ -1299,7 +1299,7 @@ if (isNotEmpty(pathInfo))
 	{
 	struct sqlConnection *conn = hAllocConnMaybe(db);
         if (NULL == conn)
-	    dyStringPrintf(errorMsg, "can not find database db='%s'", db);
+	    dyStringPrintf(errorMsg, "can not find database db='%s' for endpoint '%s'", db, pathInfo);
 	else
 	    hFreeConn(&conn);
 	}
