@@ -2,7 +2,8 @@
 
 #include "dataApi.h"
 
-static void wigTableDataOutput(struct jsonWrite *jw, char *database, char *table, char *chrom, int start, int end)
+static unsigned wigTableDataOutput(struct jsonWrite *jw, char *database,
+	char *table, char *chrom, int start, int end, unsigned itemsDone)
 /* output wiggle data from the given table and specified chrom:start-end */
 {
 struct wiggleDataStream *wds = wiggleDataStreamNew();
@@ -10,29 +11,45 @@ wds->setMaxOutput(wds, maxItemsOutput);
 wds->setChromConstraint(wds, chrom);
 wds->setPositionConstraint(wds, start, end);
 int operations = wigFetchAscii;
-long long valuesMatched = wds->getData(wds, database, table, operations);
-jsonWriteNumber(jw, "valuesMatched", valuesMatched);
+(void) wds->getData(wds, database, table, operations);
 struct wigAsciiData *el;
-jsonWriteListStart(jw, chrom);
 unsigned itemCount = 0;
-for (el = wds->ascii; itemCount < maxItemsOutput && el; el = el->next)
+for (el = wds->ascii; (itemCount + itemsDone) < maxItemsOutput && el; el = el->next)
     {
-    jsonWriteObjectStart(jw, NULL);
-    int s = el->data->chromStart;
-    int e = s + el->span;
-    double val = el->data->value;
-    jsonWriteNumber(jw, "start", (long long)s);
-    jsonWriteNumber(jw, "end", (long long)e);
-    jsonWriteDouble(jw, "value", val);
-    jsonWriteObjectEnd(jw);
-    ++itemCount;
+    unsigned span = el->span;
+    unsigned count = el->count;
+    unsigned i = 0;
+    struct asciiDatum *data = el->data;
+    for ( ; ((itemCount + itemsDone) < maxItemsOutput) && i < count; ++i,++data)
+	{
+	int s = data->chromStart;
+	int e = s + span;
+	double val = data->value;
+	if (jsonOutputArrays)
+	    {
+	    jsonWriteListStart(jw, NULL);
+	    jsonWriteNumber(jw, NULL, (long long)s);
+	    jsonWriteNumber(jw, NULL, (long long)e);
+	    jsonWriteDouble(jw, NULL, val);
+	    jsonWriteListEnd(jw);
+	    }
+	else
+	    {
+	    jsonWriteObjectStart(jw, NULL);
+	    jsonWriteNumber(jw, "start", (long long)s);
+	    jsonWriteNumber(jw, "end", (long long)e);
+	    jsonWriteDouble(jw, "value", val);
+	    jsonWriteObjectEnd(jw);
+	    }
+	++itemCount;
+	}
     }
-jsonWriteListEnd(jw);
-}
+return itemCount;
+}	/* static unsigned wigTableDataOutput(struct jsonWrite *jw, ...) */
 
 static void jsonDatumOut(struct jsonWrite *jw, char *name, char *val,
     int jsonType)
-/* output a json item, determine type, appropriate output */
+/* output a json item, determine type, appropriate output, name can be NULL */
 {
 if (JSON_DOUBLE == jsonType)
     jsonWriteDouble(jw, name, sqlDouble(val));
@@ -42,13 +59,71 @@ else
     jsonWriteString(jw, name, val);
 }
 
+static void wigColumnTypes(struct jsonWrite *jw)
+/* output column headers for a wiggle data output schema */
+{
+jsonWriteListStart(jw, "columnTypes");
+
+jsonWriteObjectStart(jw, NULL);
+jsonWriteString(jw, "name", "start");
+jsonWriteString(jw, "sqlType", "int");
+jsonWriteString(jw, "jsonType", "number");
+jsonWriteString(jw, "description", "chromStart: 0-based chromosome start position");
+jsonWriteObjectEnd(jw);
+
+jsonWriteObjectStart(jw, NULL);
+jsonWriteString(jw, "name", "end");
+jsonWriteString(jw, "sqlType", "int");
+jsonWriteString(jw, "jsonType", "number");
+jsonWriteString(jw, "description", "chromEnd: 1-based chromosome end position");
+jsonWriteObjectEnd(jw);
+
+jsonWriteObjectStart(jw, NULL);
+jsonWriteString(jw, "name", "value");
+jsonWriteString(jw, "sqlType", "float");
+jsonWriteString(jw, "jsonType", "number");
+jsonWriteString(jw, "description", "numerical data value for this location:start-end");
+jsonWriteObjectEnd(jw);
+
+jsonWriteListEnd(jw);
+}	/* static void wigColumnTypes(struct jsonWrite jw) */
+
+static unsigned sqlQueryJsonOutput(struct sqlConnection *conn,
+    struct jsonWrite *jw, char *query, int columnCount, char **columnNames,
+	int *jsonTypes, unsigned itemsDone)
+/* with the SQL query set up, run through those selected items */
+{
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row = NULL;
+unsigned itemCount = 0;
+while ((itemCount+itemsDone) < maxItemsOutput && (row = sqlNextRow(sr)) != NULL)
+    {
+    int i = 0;
+    if (jsonOutputArrays)
+	{
+	jsonWriteListStart(jw, NULL);
+	for (i = 0; i < columnCount; ++i)
+	    jsonDatumOut(jw, NULL, row[i], jsonTypes[i]);
+	jsonWriteListEnd(jw);
+	}
+    else
+	{
+	jsonWriteObjectStart(jw, NULL);
+	for (i = 0; i < columnCount; ++i)
+	    jsonDatumOut(jw, columnNames[i], row[i], jsonTypes[i]);
+	jsonWriteObjectEnd(jw);
+	}
+    ++itemCount;
+    }
+sqlFreeResult(&sr);
+return itemCount;
+}
+
 static void tableDataOutput(char *db, struct trackDb *tdb,
     struct sqlConnection *conn, struct jsonWrite *jw, char *track,
     char *chrom, unsigned start, unsigned end)
 /* output the SQL table data for given track */
 {
-char query[4096];
-
 /* for MySQL select statements, name for 'chrom' 'start' 'end' to use
  *     for a table which has different names than that
  */
@@ -61,8 +136,13 @@ safef(chromName, sizeof(chromName), "chrom");
 safef(startName, sizeof(startName), "chromStart");
 safef(endName, sizeof(endName), "chromEnd");
 
-/* might have a specific table defined instead of the track name */
+/* XXX - need to add wiggle data table processing here to output the
+ *       the data points instead of what it does now: the wig SQL table
+ */
+
+/* 'track' name in trackDb often refers to a SQL 'table' */
 char *sqlTable = cloneString(track);
+/* might have a specific table defined instead of the track name */
 char *tableName = trackDbSetting(tdb, "table");
 if (isNotEmpty(tableName))
     {
@@ -71,16 +151,53 @@ if (isNotEmpty(tableName))
     jsonWriteString(jw, "sqlTable", sqlTable);
     }
 
-/* determine name for 'chrom' in table select */
-if (! sqlColumnExists(conn, sqlTable, "chrom"))
+/* to be determined if this name is used or changes */
+char *splitSqlTable = cloneString(sqlTable);
+
+/* this function knows how to deal with split chromosomes, the NULL
+ * here for the chrom name means to use the first chrom name in chromInfo
+ */
+struct hTableInfo *hti = hFindTableInfoWithConn(conn, NULL, sqlTable);
+if (debug && hti)
     {
-    if (sqlColumnExists(conn, sqlTable, "tName"))	// track type psl
+    jsonWriteBoolean(jw, "isPos", hti->isPos);
+    jsonWriteBoolean(jw, "isSplit", hti->isSplit);
+    jsonWriteBoolean(jw, "hasBin", hti->hasBin);
+    }
+/* check if table name needs to be modified */
+if (hti && hti->isSplit)
+    {
+    if (isNotEmpty(chrom))
+	{
+	char fullTableName[256];
+	safef(fullTableName, sizeof(fullTableName), "%s_%s", chrom, hti->rootName);
+	freeMem(splitSqlTable);
+	splitSqlTable = cloneString(fullTableName);
+	if (debug)
+	    jsonWriteString(jw, "splitSqlTable", splitSqlTable);
+	}
+    else
+	{
+	char *defaultChrom = hDefaultChrom(db);
+	char fullTableName[256];
+	safef(fullTableName, sizeof(fullTableName), "%s_%s", defaultChrom, hti->rootName);
+	freeMem(splitSqlTable);
+	splitSqlTable = cloneString(fullTableName);
+	if (debug)
+	    jsonWriteString(jw, "splitSqlTable", splitSqlTable);
+	}
+    }
+
+/* determine name for 'chrom' in table select */
+if (! sqlColumnExists(conn, splitSqlTable, "chrom"))
+    {
+    if (sqlColumnExists(conn, splitSqlTable, "tName"))	// track type psl
 	{
 	safef(chromName, sizeof(chromName), "tName");
 	safef(startName, sizeof(startName), "tStart");
 	safef(endName, sizeof(endName), "tEnd");
 	}
-    else if (sqlColumnExists(conn, sqlTable, "genoName"))// track type rmsk
+    else if (sqlColumnExists(conn, splitSqlTable, "genoName"))// track type rmsk
 	{
 	safef(chromName, sizeof(chromName), "genoName");
 	safef(startName, sizeof(startName), "genoStart");
@@ -88,25 +205,44 @@ if (! sqlColumnExists(conn, sqlTable, "chrom"))
 	}
     }
 
-if (sqlColumnExists(conn, sqlTable, "txStart"))	// track type genePred
+if (sqlColumnExists(conn, splitSqlTable, "txStart"))	// track type genePred
     {
     safef(startName, sizeof(startName), "txStart");
     safef(endName, sizeof(endName), "txEnd");
     }
 
+struct dyString *query = dyStringNew(64);
+
 /* no chrom specified, return entire table */
 if (isEmpty(chrom))
-    sqlSafef(query, sizeof(query), "select * from %s", sqlTable);
+    {
+    /* this setup here is for the case of non-split tables, will later
+     * determine if split, and then will go through each chrom
+     */
+    sqlDyStringPrintf(query, "select * from %s", splitSqlTable);
+    }
 else if (0 == (start + end))	/* have chrom, no start,end == full chr */
     {
-    if (! sqlColumnExists(conn, sqlTable, chromName))
+    if (! sqlColumnExists(conn, splitSqlTable, chromName))
 	apiErrAbort(err400, err400Msg, "track '%s' is not a position track, request track without chrom specification, genome: '%s'", track, db);
 
     jsonWriteString(jw, "chrom", chrom);
     struct chromInfo *ci = hGetChromInfo(db, chrom);
     jsonWriteNumber(jw, "start", (long long)0);
     jsonWriteNumber(jw, "end", (long long)ci->size);
-    sqlSafef(query, sizeof(query), "select * from %s where %s='%s'", sqlTable, chromName, chrom);
+    if (startsWith("wig", tdb->type))
+	{
+	jsonWriteListStart(jw, NULL);
+	if (jsonOutputArrays || debug)
+	    wigColumnTypes(jw);
+        wigTableDataOutput(jw, db, splitSqlTable, chrom, 0, ci->size, 0);
+	jsonWriteListEnd(jw);
+        return;	/* DONE */
+	}
+    else
+	{
+	sqlDyStringPrintf(query, "select * from %s where %s='%s'", splitSqlTable, chromName, chrom);
+	}
     }
 else	/* fully specified chrom:start-end */
     {
@@ -115,69 +251,139 @@ else	/* fully specified chrom:start-end */
     jsonWriteNumber(jw, "end", (long long)end);
     if (startsWith("wig", tdb->type))
 	{
-        wigTableDataOutput(jw, db, sqlTable, chrom, start, end);
+	jsonWriteListStart(jw, NULL);
+	if (jsonOutputArrays || debug)
+	    wigColumnTypes(jw);
+        wigTableDataOutput(jw, db, splitSqlTable, chrom, start, end, 0);
+	jsonWriteListEnd(jw);
         return;	/* DONE */
 	}
     else
 	{
-	sqlSafef(query, sizeof(query), "select * from %s where %s='%s' AND %s > %u AND %s < %u", sqlTable, chromName, chrom, endName, start, startName, end);
+	sqlDyStringPrintf(query, "select * from %s where ", splitSqlTable);
+        hAddBinToQuery(start, end, query);
+	sqlDyStringPrintf(query, "%s='%s' AND %s > %u AND %s < %u", chromName, chrom, endName, start, startName, end);
 	}
     }
 
 if (debug)
-    jsonWriteString(jw, "select", query);
+    jsonWriteString(jw, "select", query->string);
 
 /* continuing, not a wiggle output */
 char **columnNames = NULL;
 char **columnTypes = NULL;
 int *jsonTypes = NULL;
-int columnCount = tableColumns(conn, jw, sqlTable, &columnNames, &columnTypes, &jsonTypes);
+struct asObject *as = asForTable(conn, splitSqlTable, tdb);
+struct asColumn *columnEl = as->columnList;
+int asColumnCount = slCount(columnEl);
+int columnCount = tableColumns(conn, jw, splitSqlTable, &columnNames, &columnTypes, &jsonTypes);
 if (jsonOutputArrays || debug)
     {
-    jsonWriteObjectStart(jw, "columnTypes");
-    int i = 0;
-    for (i = 0; i < columnCount; ++i)
+    if (startsWith("wig", tdb->type))
 	{
-	char bothTypes[1024];
-	safef(bothTypes, sizeof(bothTypes), "%s - %s", columnTypes[i], jsonTypeStrings[jsonTypes[i]]);
-	jsonWriteString(jw, columnNames[i], bothTypes);
+	    wigColumnTypes(jw);
 	}
-    jsonWriteObjectEnd(jw);
-    }
-jsonWriteListStart(jw, track);
-struct sqlResult *sr = sqlGetResult(conn, query);
-char **row = NULL;
-unsigned itemCount = 0;
-while (itemCount < maxItemsOutput && (row = sqlNextRow(sr)) != NULL)
-    {
-    if (jsonOutputArrays)
-	jsonWriteListStart(jw, NULL);
     else
-	jsonWriteObjectStart(jw, NULL);
-    int i = 0;
-    for (i = 0; i < columnCount; ++i)
 	{
-	if (jsonOutputArrays)
-	    jsonDatumOut(jw, NULL, row[i], jsonTypes[i]);
-	else
-	    jsonDatumOut(jw, columnNames[i], row[i], jsonTypes[i]);
+	jsonWriteListStart(jw, "columnTypes");
+	int i = 0;
+	for (i = 0; i < columnCount; ++i)
+	    {
+	    jsonWriteObjectStart(jw, NULL);
+	    jsonWriteString(jw, "name", columnNames[i]);
+	    jsonWriteString(jw, "sqlType", columnTypes[i]);
+	    jsonWriteString(jw, "jsonType", jsonTypeStrings[jsonTypes[i]]);
+	    if ((0 == i) && (hti && hti->hasBin))
+		jsonWriteString(jw, "description", "Indexing field to speed chromosome range queries");
+	    else if (columnEl && isNotEmpty(columnEl->comment))
+		jsonWriteString(jw, "description", columnEl->comment);
+	    else
+		jsonWriteString(jw, "description", "");
+
+	    /* perhaps move the comment pointer forward */
+	    if (columnEl)
+		{
+		if (asColumnCount == columnCount)
+		    columnEl = columnEl->next;
+		else if (! ((0 == i) && (hti && hti->hasBin)))
+		    columnEl = columnEl->next;
+		}
+	    jsonWriteObjectEnd(jw);
 	}
-    if (jsonOutputArrays)
 	jsonWriteListEnd(jw);
-    else
-	jsonWriteObjectEnd(jw);
-    ++itemCount;
+	}
     }
-sqlFreeResult(&sr);
-jsonWriteListEnd(jw);
+
+unsigned itemsDone = 0;
+
+/* empty chrom, needs to run through all chrom names */
+if (isEmpty(chrom))
+    {
+    jsonWriteObjectStart(jw, track);	/* begin track data output */
+    char fullTableName[256];
+    struct chromInfo *ciList = createChromInfoList(NULL, db);
+    slSort(ciList, chromInfoCmp);
+    struct chromInfo *ci = ciList;
+    for ( ; itemsDone < maxItemsOutput && ci != NULL; ci = ci->next )
+	{
+	jsonWriteListStart(jw, ci->chrom);	/* starting a chrom output */
+	freeDyString(&query);
+	query = dyStringNew(64);
+	if (hti && hti->isSplit) /* when split, make up split chr name */
+	    {
+	    safef(fullTableName, sizeof(fullTableName), "%s_%s", ci->chrom, hti->rootName);
+	    sqlDyStringPrintf(query, "select * from %s", fullTableName);
+	    }
+	else
+	    sqlDyStringPrintf(query, "select * from %s", splitSqlTable);
+	if (startsWith("wig", tdb->type))
+            itemsDone += wigTableDataOutput(jw, db, splitSqlTable, chrom,
+		start, end, itemsDone);
+	else
+	    itemsDone += sqlQueryJsonOutput(conn, jw, query->string,
+		columnCount, columnNames, jsonTypes, itemsDone);
+	jsonWriteListEnd(jw);	/* chrom data output list end */
+	}
+    jsonWriteObjectEnd(jw);	/* end track data output */
+    }
+else
+    {	/* a single chrom has been requested, run it */
+    jsonWriteListStart(jw, track);	/* data output list starting */
+    itemsDone += sqlQueryJsonOutput(conn, jw, query->string, columnCount,
+	columnNames, jsonTypes, itemsDone);
+    jsonWriteListEnd(jw);	/* data output list end */
+    }
+freeDyString(&query);
 }	/*  static void tableDataOutput(char *db, struct trackDb *tdb, ... ) */
 
-static void bedDataOutput(struct jsonWrite *jw, struct bbiFile *bbi,
+static boolean typedBig9Plus(struct trackDb *tdb)
+/* check if track type is 'bed 9+ ...' to determine itemRgb for big* types */
+{
+if (isNotEmpty(tdb->type) && (allowedBigBedType(tdb->type)))
+    {
+    char *words[8];
+    int wordCount;
+    wordCount = chopLine(cloneString(tdb->type), words);
+    if ( (wordCount > 1) && startsWith("bigBed", words[0]))
+	{
+	if (isAllDigits(words[1]))
+	   if (8 < sqlUnsigned(words[1]))
+		return TRUE;
+	}
+    else
+	return TRUE;	/* something other than bigBed */
+    }
+return FALSE;
+}
+
+static void bbiDataOutput(struct jsonWrite *jw, struct bbiFile *bbi,
     char *chrom, unsigned start, unsigned end, struct sqlFieldType *fiList,
      struct trackDb *tdb)
 /* output bed data for one chrom in the given bbi file */
 {
 char *itemRgb = trackDbSetting(tdb, "itemRgb");
+if (typedBig9Plus(tdb))
+    itemRgb = "on";
 int *jsonTypes = NULL;
 int columnCount = slCount(fiList);
 AllocArray(jsonTypes, columnCount);
@@ -204,28 +410,26 @@ for (iv = ivList; itemCount < maxItemsOutput && iv; iv = iv->next)
     {
     char startBuf[16], endBuf[16];
     bigBedIntervalToRow(iv, chrom, startBuf, endBuf, row, bbi->fieldCount);
-    if (jsonOutputArrays)
-	jsonWriteListStart(jw, NULL);
-    else
-	jsonWriteObjectStart(jw, NULL);
     int i;
     struct sqlFieldType *fi = fiList;
-    for (i = 0; i < bbi->fieldCount; ++i)
-        {
-	if (jsonOutputArrays)
-	    jsonDatumOut(jw, NULL, row[i], jsonTypes[i]);
-	else
-	    jsonDatumOut(jw, fi->name, row[i], jsonTypes[i]);
-        fi = fi->next;
-        }
     if (jsonOutputArrays)
+        {
+	jsonWriteListStart(jw, NULL);
+	for (i = 0; i < bbi->fieldCount; ++i)
+	    jsonDatumOut(jw, NULL, row[i], jsonTypes[i]);
 	jsonWriteListEnd(jw);
+        }
     else
+        {
+	jsonWriteObjectStart(jw, NULL);
+	for (i = 0; i < bbi->fieldCount; ++i, fi = fi->next)
+	    jsonDatumOut(jw, fi->name, row[i], jsonTypes[i]);
 	jsonWriteObjectEnd(jw);
+        }
     ++itemCount;
     }
 lmCleanup(&bbLm);
-}	/* static void bedDataOutput(struct jsonWrite *jw, . . . ) */
+}	/* static void bbiDataOutput(struct jsonWrite *jw, . . . ) */
 
 static void wigDataOutput(struct jsonWrite *jw, struct bbiFile *bwf,
     char *chrom, unsigned start, unsigned end)
@@ -241,14 +445,25 @@ unsigned itemCount = 0;
 jsonWriteListStart(jw, chrom);
 for (iv = ivList; iv && itemCount < maxItemsOutput; iv = iv->next)
     {
-    jsonWriteObjectStart(jw, NULL);
     int s = max(iv->start, start);
     int e = min(iv->end, end);
     double val = iv->val;
-    jsonWriteNumber(jw, "start", (long long)s);
-    jsonWriteNumber(jw, "end", (long long)e);
-    jsonWriteDouble(jw, "value", val);
-    jsonWriteObjectEnd(jw);
+    if (jsonOutputArrays)
+	{
+	jsonWriteListStart(jw, NULL);
+	jsonWriteNumber(jw, NULL, (long long)s);
+	jsonWriteNumber(jw, NULL, (long long)e);
+	jsonWriteDouble(jw, NULL, val);
+	jsonWriteListEnd(jw);
+	}
+    else
+	{
+	jsonWriteObjectStart(jw, NULL);
+	jsonWriteNumber(jw, "start", (long long)s);
+	jsonWriteNumber(jw, "end", (long long)e);
+	jsonWriteDouble(jw, "value", val);
+	jsonWriteObjectEnd(jw);
+	}
     ++itemCount;
     }
 jsonWriteListEnd(jw);
@@ -273,19 +488,27 @@ if (isEmpty(chrom))
 	wigDataOutput(jw, bwf, chrom, start, end);
 }
 
-static void bigColumnTypes(struct jsonWrite *jw, struct sqlFieldType *fiList)
+static void bigColumnTypes(struct jsonWrite *jw, struct sqlFieldType *fiList,
+    struct asObject *as)
 /* show the column types from a big file autoSql definitions */
 {
-jsonWriteObjectStart(jw, "columnTypes");
+struct asColumn *columnEl = as->columnList;
+jsonWriteListStart(jw, "columnTypes");
 struct sqlFieldType *fi = fiList;
-for ( ; fi; fi = fi->next)
+for ( ; fi; fi = fi->next, columnEl = columnEl->next)
     {
-    char bothTypes[1024];
     int jsonType = autoSqlToJsonType(fi->type);
-    safef(bothTypes, sizeof(bothTypes), "%s - %s", fi->type, jsonTypeStrings[jsonType]);
-    jsonWriteString(jw, fi->name, bothTypes);
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteString(jw, "name", fi->name);
+    jsonWriteString(jw, "sqlType", fi->type);
+    jsonWriteString(jw, "jsonType",jsonTypeStrings[jsonType]);
+    if (columnEl && isNotEmpty(columnEl->comment))
+	jsonWriteString(jw, "description", columnEl->comment);
+    else
+	jsonWriteString(jw, "description", "");
+    jsonWriteObjectEnd(jw);
     }
-jsonWriteObjectEnd(jw);
+jsonWriteListEnd(jw);
 }
 
 static void getHubTrackData(char *hubUrl)
@@ -361,15 +584,13 @@ if ( ! (isEmpty(start) || isEmpty(end)) )
 
 jsonWriteString(jw, "bigDataUrl", bigDataUrl);
 jsonWriteString(jw, "trackType", thisTrack->type);
-if (debug)
-    jsonWriteString(jw, "jsonOutputArrays", jsonOutputArrays ? "TRUE":"FALSE");
 
 if (allowedBigBedType(thisTrack->type))
     {
     struct asObject *as = bigBedAsOrDefault(bbi);
     struct sqlFieldType *fiList = sqlFieldTypesFromAs(as);
-    if (debug)
-        bigColumnTypes(jw, fiList);
+    if (jsonOutputArrays || debug)
+        bigColumnTypes(jw, fiList, as);
 
     jsonWriteListStart(jw, track);
     if (isEmpty(chrom))
@@ -377,15 +598,17 @@ if (allowedBigBedType(thisTrack->type))
 	struct bbiChromInfo *bci;
 	for (bci = chromList; bci; bci = bci->next)
 	    {
-	    bedDataOutput(jw, bbi, bci->name, 0, bci->size, fiList, thisTrack);
+	    bbiDataOutput(jw, bbi, bci->name, 0, bci->size, fiList, thisTrack);
 	    }
 	}
     else
-	bedDataOutput(jw, bbi, chrom, uStart, uEnd, fiList, thisTrack);
+	bbiDataOutput(jw, bbi, chrom, uStart, uEnd, fiList, thisTrack);
     jsonWriteListEnd(jw);
     }
 else if (startsWith("bigWig", thisTrack->type))
     {
+    if (jsonOutputArrays || debug)
+	wigColumnTypes(jw);
     jsonWriteObjectStart(jw, track);
     wigData(jw, bbi, chrom, uStart, uEnd);
     jsonWriteObjectEnd(jw);
@@ -403,9 +626,10 @@ char *db = cgiOptionalString("db");
 char *chrom = cgiOptionalString("chrom");
 char *start = cgiOptionalString("start");
 char *end = cgiOptionalString("end");
-/* 'track' name in trackDb refers to a SQL 'table' */
+/* 'track' name in trackDb often refers to a SQL 'table' */
 char *track = cgiOptionalString("track");
-char *sqlTable = cloneString(track);
+char *sqlTable = cloneString(track); /* might be something else */
+     /* depends upon 'table' setting in track db, or split table business */
 
 unsigned chromSize = 0;	/* maybe set later */
 unsigned uStart = 0;
@@ -427,7 +651,6 @@ struct trackDb *thisTrack = hTrackDbForTrackAndAncestors(db, track);
 if (NULL == thisTrack)
     apiErrAbort(err400, err400Msg, "can not find track=%s name for endpoint '/getData/track", track);
 
-
 /* might be a big* track with no table */
 char *bigDataUrl = trackDbSetting(thisTrack, "bigDataUrl");
 boolean tableTrack = TRUE;
@@ -440,8 +663,35 @@ if (isNotEmpty(tableName))
     sqlTable = cloneString(tableName);
     }
 
-struct sqlConnection *conn = hAllocConn(db);
-if (! sqlTableExists(conn, sqlTable))
+/* database existence has already been checked before now, might
+ * have disappeared in the mean time
+ */
+struct sqlConnection *conn = hAllocConnMaybe(db);
+if (NULL == conn)
+    apiErrAbort(err400, err400Msg, "can not find database 'db=%s' for endpoint '/getData/track", db);
+
+struct hTableInfo *hti = hFindTableInfoWithConn(conn, NULL, sqlTable);
+
+char *splitSqlTable = NULL;
+
+if (hti && hti->isSplit)
+    {
+    if (isNotEmpty(chrom))
+	{
+	char fullTableName[256];
+	safef(fullTableName, sizeof(fullTableName), "%s_%s", chrom, hti->rootName);
+	splitSqlTable = cloneString(fullTableName);
+	}
+    else
+	{
+	char *defaultChrom = hDefaultChrom(db);
+	char fullTableName[256];
+	safef(fullTableName, sizeof(fullTableName), "%s_%s", defaultChrom, hti->rootName);
+	splitSqlTable = cloneString(fullTableName);
+	}
+    }
+
+if (! hTableOrSplitExists(db, sqlTable))
     {
     if (! bigDataUrl)
 	apiErrAbort(err400, err400Msg, "can not find specified 'track=%s' for endpoint: /getData/track?db=%s;track=%s", track, db, track);
@@ -453,7 +703,11 @@ struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "db", db);
 if (tableTrack)
     {
-    char *dataTime = sqlTableUpdate(conn, sqlTable);
+    char *dataTime = NULL;
+    if (hti && hti->isSplit)
+	dataTime = sqlTableUpdate(conn, splitSqlTable);
+    else
+	dataTime = sqlTableUpdate(conn, sqlTable);
     time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
     replaceChar(dataTime, ' ', 'T');	/*	ISO 8601	*/
     jsonWriteString(jw, "dataTime", dataTime);
@@ -464,7 +718,7 @@ if (tableTrack)
 jsonWriteString(jw, "trackType", thisTrack->type);
 jsonWriteString(jw, "track", track);
 if (debug)
-    jsonWriteString(jw, "jsonOutputArrays", jsonOutputArrays ? "TRUE":"FALSE");
+    jsonWriteBoolean(jw, "jsonOutputArrays", jsonOutputArrays);
 
 char query[4096];
 struct bbiFile *bbi = NULL;
@@ -515,8 +769,8 @@ if (allowedBigBedType(thisTrack->type))
     {
     struct asObject *as = bigBedAsOrDefault(bbi);
     struct sqlFieldType *fiList = sqlFieldTypesFromAs(as);
-    if (debug)
-        bigColumnTypes(jw, fiList);
+    if (jsonOutputArrays || debug)
+        bigColumnTypes(jw, fiList, as);
 
     jsonWriteListStart(jw, track);
     if (isEmpty(chrom))
@@ -524,15 +778,18 @@ if (allowedBigBedType(thisTrack->type))
 	struct bbiChromInfo *bci;
 	for (bci = chromList; bci; bci = bci->next)
 	    {
-	    bedDataOutput(jw, bbi, bci->name, 0, bci->size, fiList, thisTrack);
+	    bbiDataOutput(jw, bbi, bci->name, 0, bci->size, fiList, thisTrack);
 	    }
 	}
     else
-	bedDataOutput(jw, bbi, chrom, uStart, uEnd, fiList, thisTrack);
+	bbiDataOutput(jw, bbi, chrom, uStart, uEnd, fiList, thisTrack);
     jsonWriteListEnd(jw);
     }
 else if (startsWith("bigWig", thisTrack->type))
     {
+    if (jsonOutputArrays || debug)
+	wigColumnTypes(jw);
+
     jsonWriteObjectStart(jw, track);
     wigData(jw, bbi, chrom, uStart, uEnd);
     jsonWriteObjectEnd(jw);
@@ -540,7 +797,6 @@ else if (startsWith("bigWig", thisTrack->type))
     }
 else
     tableDataOutput(db, thisTrack, conn, jw, track, chrom, uStart, uEnd);
-
 
 apiFinishOutput(0, NULL, jw);
 hFreeConn(&conn);
@@ -554,6 +810,8 @@ char *chrom = cgiOptionalString("chrom");
 char *start = cgiOptionalString("start");
 char *end = cgiOptionalString("end");
 
+long timeStart = clock1000();
+
 if (isEmpty(chrom))
     apiErrAbort(err400, err400Msg, "missing URL chrom=<name> for endpoint '/getData/sequence?db=%s'", db);
 if (chromSeqFileExists(db, chrom))
@@ -561,6 +819,7 @@ if (chromSeqFileExists(db, chrom))
     struct chromInfo *ci = hGetChromInfo(db, chrom);
     unsigned chromSize = ci->size;
     struct dnaSeq *seq = NULL;
+
     if (isEmpty(start) || isEmpty(end))
 	if (chromSize > MAX_DNA_LENGTH)
 	    apiErrAbort(err400, err400Msg, "DNA sequence request %d too large, limit: %u for endpoint '/getData/sequence?db=%s;chrom=%s'", chromSize, MAX_DNA_LENGTH, db, chrom);
@@ -571,11 +830,17 @@ if (chromSeqFileExists(db, chrom))
 	    apiErrAbort(err400, err400Msg, "DNA sequence request %d too large, limit: %u for endpoint '/getData/sequence?db=%s;chrom=%s;start=%s;end=%s'", sqlSigned(end) - sqlSigned(start), MAX_DNA_LENGTH, db, chrom, start, end);
 	else
 	    seq = hChromSeqMixed(db, chrom, sqlSigned(start), sqlSigned(end));
+
+    long endTime = clock1000();
+    long long et = endTime - timeStart;
+
     if (NULL == seq)
         apiErrAbort(err400, err400Msg, "can not find sequence for chrom=%s for endpoint '/getData/sequence?db=%s;chrom=%s'", chrom, db, chrom);
     struct jsonWrite *jw = apiStartOutput();
     if (isNotEmpty(hubUrl))
 	jsonWriteString(jw, "hubUrl", hubUrl);
+    if (measureTiming)
+	jsonWriteNumber(jw, "dnaFetchTimeMs", et);
     jsonWriteString(jw, "db", db);
     jsonWriteString(jw, "chrom", chrom);
     if (isEmpty(start) || isEmpty(end))
@@ -588,7 +853,12 @@ if (chromSeqFileExists(db, chrom))
         jsonWriteNumber(jw, "start", (long long)sqlSigned(start));
         jsonWriteNumber(jw, "end", (long long)sqlSigned(end));
 	}
+    timeStart = clock1000();
     jsonWriteString(jw, "dna", seq->dna);
+    endTime = clock1000();
+    et = endTime - timeStart;
+    if (measureTiming)
+	jsonWriteNumber(jw, "dnaJsonWriteTimeMs", et);
     apiFinishOutput(0, NULL, jw);
     freeDnaSeq(&seq);
     }
@@ -686,6 +956,7 @@ else if (sameWord("sequence", words[1]))
 	char *db = cgiOptionalString("db");
 	if (isEmpty(db))
 	    apiErrAbort(err400, err400Msg, "missing URL db=<ucscDb> name for endpoint '/getData/sequence");
+	/* existence of db has already been proven before getting here */
 	getSequenceData(db, NULL);
 	}
     }
