@@ -772,7 +772,7 @@ if (topTrackDb)
 	    if (isSupportedType(hel->name))
 		hPrintf("        <li>%d - %s - supported</li>\n", ptToInt(hel->val), hel->name);
 	    else
-		hPrintf("        <li>%d - %s</li>\n", ptToInt(hel->val), hel->name);
+		hPrintf("        <li>%d - %s - not supported</li>\n", ptToInt(hel->val), hel->name);
 	    }
         hPrintf("        </ul></li>\n");
 	}
@@ -1032,7 +1032,7 @@ if (countTracks->elCount)
 	if (isSupportedType(hel->name))
 	    hPrintf("        <li>%d - %s - supported</li>\n", ptToInt(hel->val), hel->name);
 	else
-	    hPrintf("        <li>%d - %s</li>\n", ptToInt(hel->val), hel->name);
+	    hPrintf("        <li>%d - %s - not supported</li>\n", ptToInt(hel->val), hel->name);
 	}
     hPrintf("        </ul>\n");
     }
