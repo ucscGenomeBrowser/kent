@@ -1374,9 +1374,6 @@ boolean isCenterLabelsPackOff(struct track *track);
 boolean isCenterLabelIncluded(struct track *track);
 /* Center labels may be conditionally included */
 
-boolean doCollapseEmptySubtracks(struct track *track);
-/* Suppress display of empty subtracks. Initial support only for bed's. */
-
 Color maybeDarkerLabels(struct track *track, struct hvGfx *hvg, Color color);
 /* For tracks having light track display but needing a darker label */
 

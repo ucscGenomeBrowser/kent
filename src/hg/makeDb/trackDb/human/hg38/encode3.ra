@@ -377,6 +377,7 @@ scoreFilter 0
 scoreFilterLimits 0:1000
 dataVersion ENCODE 3 Nov 2018
 collapseEmptySubtracks on
+#collapseEmptySubtracks /gbdb/hg38/encode3/tfbs/multiBed.bb /gbdb/hg38/encode3/tfbs/multiBedSources.tab
 wgEncode 1 
 subGroup1 cellType Cell_Type \
     X22Rv1=22Rv1 \
