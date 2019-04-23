@@ -1294,7 +1294,8 @@ if (hel)	/* have valid command */
     return;
     }
  else
-    apiErrAbort(err400, err400Msg, "no such command: '/%s/%s for endpoint '%s'", words[0], words[1], pathInfo);
+    apiErrAbort(err400, err400Msg, "no such command: '/%s", pathInfo);
+    /* due to Apache rewrite rules, will never be called with this error */
 }	/*	static void apiRequest(char *pathInfo)	*/
 
 static void doMiddle(struct cart *theCart)
