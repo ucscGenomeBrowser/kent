@@ -16,8 +16,8 @@ getFunctions: test6 test7 test8 test9 test10 test11 test12 test13 test14 \
 
 getSequence: getSeq01 getSeq02 getSeq03
 
-errorTests: err01 err02 err03 err04 err05 err06 err07 err08 err09 \
-	err10 err11
+errorTests: err01 err02 err03 err04 err05 err06 err07 err08 err09 err10 \
+	err11 err12 err13 err14 err15 err16
 
 setOutput:
 	@if [ ! -d testOutput ]; then mkdir testOutput; fi
@@ -207,13 +207,6 @@ test42: setOutput
 	@./jsonConsumer.pl -jsonOutputArrays -maxItemsOutput=123 -endpoint="/getData/track" -db="ce6" -track="gc5Base" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
-# testing /getData/track?db=cxe6&track=gc5Base - error test illegal database
-# plus jsonArrayOutput
-err11: setOutput
-	@./jsonConsumer.pl -jsonOutputArrays -maxItemsOutput=123 -endpoint="/getData/track" -db="cxe6" 2>&1 -track="gc5Base" | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
-	@zdiff expected/$@.gz testOutput/$@.gz
-	@echo '### err11 ./jsonConsumer.pl -jsonOutputArrays -maxItemsOutput=123 -endpoint="/getData/track" -db="cxe6" 2>&1 -track="gc5Base"'
-
 ###############################################################################
 #  /getData/sequence testing
 ###############################################################################
@@ -299,4 +292,46 @@ err09: setOutput
 err10: setOutput
 	@printf "### $@ https://hgwdev-api.gi.ucsc.edu/list/tracks?db=cxe6;jsonOutputArrays=1;maxItemsOutput=123\n"
 	@./jsonConsumer.pl -jsonOutputArrays -maxItemsOutput=123 -endpoint="/list/tracks" -db="cxe6" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /getData/track?db=ce6 - error test illegal maxItemsOutput
+err11: setOutput
+	@printf "### $@ https://hgwdev-api.gi.ucsc.edu/getData/track?db=ce6;track=gold;maxItemsOutput=1x23\n"
+	@./jsonConsumer.pl -maxItemsOutput=1x23 -endpoint="/getData/track" -db="ce6" -track=gold 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /getData/track?db=ce6 - error test illegal maxItemsOutput
+err12: setOutput
+	@printf "### $@ https://hgwdev-api.gi.ucsc.edu/getData/track?db=ce6;track=gold;maxItemsOutput=-2\n"
+	@./jsonConsumer.pl -maxItemsOutput=-2 -endpoint="/getData/track" -db="ce6" -track=gold 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /getData/track?db=ce6 - error test illegal maxItemsOutput
+err13: setOutput
+	@printf "### $@ https://hgwdev-api.gi.ucsc.edu/getData/track?db=ce6;track=gold;maxItemsOutput=0\n"
+	@./jsonConsumer.pl -maxItemsOutput=0 -endpoint="/getData/track" -db="ce6" -track=gold 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /getData/track?db=ce6 - error test illegal maxItemsOutput
+err14: setOutput
+	@printf "### $@ https://hgwdev-api.gi.ucsc.edu/getData/track?db=ce6;track=gold;maxItemsOutput=0\n"
+	@./jsonConsumer.pl -maxItemsOutput=0 -endpoint="/getData/track" -db="ce6" -track=gold 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /getData/tracks?db=ce6 - error test no such function on endpoint
+err15: setOutput
+	@printf "### $@ https://hgwdev-api.gi.ucsc.edu/getData/tracks?db=ce6;track=gold\n"
+	@./jsonConsumer.pl -endpoint="/getData/tracks" -db="ce6" -track=gold 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/endpoints - error test no such function
+err16: setOutput
+	@printf "### $@ https://hgwdev-api.gi.ucsc.edu/list/endpoints\n"
+	@./jsonConsumer.pl -endpoint="/list/endpoints" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/endpoints - error test no such function
+err17: setOutput
+	@printf "### $@ https://hgwdev-api.gi.ucsc.edu/noSuchCommand\n"
+	@./jsonConsumer.pl -endpoint="/noSuchCommand" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
