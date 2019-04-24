@@ -17,7 +17,8 @@ getFunctions: test6 test7 test8 test9 test10 test11 test12 test13 test14 \
 getSequence: getSeq01 getSeq02 getSeq03
 
 errorTests: err01 err02 err03 err04 err05 err06 err07 err08 err09 err10 \
-	err11 err12 err13 err14 err15 err16
+	err11 err12 err13 err14 err15 err16 err17 err18 err19 err20 \
+	err21 err22 err23 err24 err25
 
 setOutput:
 	@if [ ! -d testOutput ]; then mkdir testOutput; fi
@@ -330,8 +331,58 @@ err16: setOutput
 	@./jsonConsumer.pl -endpoint="/list/endpoints" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
-# testing /list/endpoints - error test no such function
+# testing /list/hubGenomes with hubUrl but no genome specified
 err17: setOutput
-	@printf "### $@ https://hgwdev-api.gi.ucsc.edu/noSuchCommand\n"
-	@./jsonConsumer.pl -endpoint="/noSuchCommand" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@printf "### $@ 'https://hgwdev-api.gi.ucsc.edu/list/hubGenomes?genome=araTha1'\n"
+	@./jsonConsumer.pl -endpoint="/list/tracks" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt" 2>&1 | sed -e 's#https://.*/list#/list#;' | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/chromosomes? hubUrl missing genome=
+err18: setOutput
+	@printf "### $@ https://hgwdev-api.gi.ucsc.edu/list/chromosomes?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/chromosomes? hubUrl missing incorrect genome=araTha
+err19: setOutput
+	@printf "### $@ https://hgwdev-api.gi.ucsc.edu/list/chromosomes?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" -genome=araTha 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/chromosomes? hubUrl can not
+#  find specified track for genome=_braRap1 track=_assembly (wrong name)
+err20: setOutput
+	@printf "### $@ https://hgwdev-api.gi.ucsc.edu/list/chromosomes?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/bPlants/hub.txt;genome=_braRap1;track=_assembly\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/bPlants/hub.txt" -genome=_braRap1 -track=_assembly 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/chromosomes? hubUrl can not
+#  find specified database in track hub
+err21: setOutput
+	@printf "### $@ http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt?genome=hg19\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt" -genome=hg19 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/chromosomes? bad hubUrl
+err22: setOutput
+	@printf "### $@ http://genome-test.gi.ucsc.edu/~hiram/hubs/xGillBejerano/hub.txt\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/xGillBejerano/hub.txt" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/chromosomes? db=ce11 track=gbLoaded - not a position track
+err23: setOutput
+	@printf "### $@ 'https://hgwdev-api.gi.ucsc.edu/list/chromosomes?db=ce11;track=gbLoaded'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -db=ce11 -track=gbLoaded 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/hubGenomes illegal db=araTha1
+err24: setOutput
+	@printf "### $@ 'https://hgwdev-api.gi.ucsc.edu/list/hubGenomes?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt'\n"
+	@./jsonConsumer.pl -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt" -endpoint="/list/hubGenomes" -db=araTha1 2>&1 | sed -e 's#https://.*/list#/list#;' | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/chromosomes missing hubUrl or db
+err25: setOutput
+	@printf "### $@ 'https://hgwdev-api.gi.ucsc.edu/list/chromosomes'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
