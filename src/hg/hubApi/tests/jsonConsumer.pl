@@ -10,6 +10,7 @@ use Getopt::Long;
 my $http = HTTP::Tiny->new();
 # my $server = 'https://apibeta.soe.ucsc.edu';
 # my $server = 'https://api-test.gi.ucsc.edu';
+# my $server="https://genome-euro.ucsc.edu/cgi-bin/loader/hubApi";
 my $server = 'https://hgwdev-api.gi.ucsc.edu';
 # my $server = 'https://hgwbeta.soe.ucsc.edu/cgi-bin/hubApi';
 my $globalHeaders = { 'Content-Type' => 'application/json' };
@@ -32,7 +33,7 @@ my $debug = 0;
 my $trackLeavesOnly = 0;
 my $measureTiming = 0;
 my $jsonOutputArrays = 0;
-my $maxItemsOutput = 0;
+my $maxItemsOutput = "";
 ##############################################################################
 
 sub usage() {
@@ -135,7 +136,7 @@ sub performRestAction {
   if ($debug) { $url .= ";debug=1"; }
   if ($measureTiming) { $url .= ";measureTiming=1"; }
   if ($jsonOutputArrays) { $url .= ";jsonOutputArrays=1"; }
-  if ($maxItemsOutput) { $url .= ";maxItemsOutput=$maxItemsOutput"; }
+  if (length($maxItemsOutput)) { $url .= ";maxItemsOutput=$maxItemsOutput"; }
   printf STDERR "### '%s'\n", $url;
   my $response = $http->get($url, {headers => $headers});
   my $status = $response->{status};
@@ -330,7 +331,12 @@ sub processEndPoint() {
 	$errReturn = 1 if (defined ($jsonReturn->{'error'}));
 	printf "%s", $json->pretty->encode( $jsonReturn );
      } else {
-	printf STDERR "# endpoint not supported at this time: '%s'\n", $endpoint;
+#	printf STDERR "# endpoint not supported at this time: '%s'\n", $endpoint;
+#	Pass along the bogus request just to test the error handling.
+	my %parameters;
+	$jsonReturn = performJsonAction($endpoint, \%parameters);
+	$errReturn = 1 if (defined ($jsonReturn->{'error'}));
+	printf "%s", $json->pretty->encode( $jsonReturn );
      }
   } else {
     printf STDERR "ERROR: no endpoint given ?\n";

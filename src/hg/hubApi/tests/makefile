@@ -1,23 +1,23 @@
 
 test::	test0 test1 test2 test3 test4 test5 test6 test7 test8 test9 test10 \
-	test11 test12 test13 test14 test15 test16 test17 test18 test19 test20 \
-	test21 test22 test23 test24 test25 test26 test27 test28 test29 test30 \
-	test31 test32 test33 test34 test35 test36 test37 test38 test39 test40 \
-	test41 test42 test42 test43 test45
+	test11 test12 test13 test14 test15 test16 test17 test18 test19 \
+	test21 test22 test23 test26 \
+	test27 test28 test29 test30 \
+	test31 test39 test40 \
+	test41 test42 test42 getSequence errorTests
 
-all:: listFunctions getFunctions getSequence
+all:: listFunctions getFunctions getSequence errorTests
 
-listFunctions:	test1 test2 test3 test4 test5 test22 test23 test30 test31 \
-	test36 test37 test38 test44
+listFunctions:	test1 test2 test3 test4 test5 test22 test23 test30 test31
 
 getFunctions: test6 test7 test8 test9 test10 test11 test12 test13 test14 \
-	test15 test16 test17 test18 test19 test20 test21 test26 test27 test28 \
-	test29 test32 test33 test34 test39 test40 test41 test42 test45
+	test15 test16 test17 test18 test19 test21 test26 test27 test28 \
+	test29 test39 test40 test41 test42
 
-getSequence: test24 test25 test35 test43
+getSequence: getSeq01 getSeq02 getSeq03
 
-errorTests: test20 test32 test33 test34 test35 test36 test37 test38 test43 \
-	test44 test45
+errorTests: err01 err02 err03 err04 err05 err06 err07 err08 err09 err10 \
+	err11 err12 err13 err14 err15 err16
 
 setOutput:
 	@if [ ! -d testOutput ]; then mkdir testOutput; fi
@@ -133,13 +133,6 @@ test19: setOutput
 	@./jsonConsumer.pl -endpoint="/getData/track" -db="galGal6" -track="ncbiRefSeqOther" -chrom="chr1" -start=750000 -end=55700000 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
-# generate an error: ask for non-existent chrom in a track hub
-# /getData/track? hubUrl Plants &track=assembly_&chrom=chrI&start=1&end=14309681
-test20: setOutput
-	@./jsonConsumer.pl -endpoint="/getData/track" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" -genome="_araTha1" -track="assembly_" -chrom="chrI" -start=1 -end=14309681 2>&1 | sed -e 's#https://.*/getData#/getData#;' | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
-	@zdiff expected/$@.gz testOutput/$@.gz
-	@echo '### test20: ./jsonConsumer.pl -endpoint="/getData/track" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" -genome="_araTha1" -track="assembly_" -chrom="chrI" -start=1 -end=14309681'
-
 # wiggle data from a database where the SQL table name is different than the
 #    track name
 # /getData/track? db=hg19 &track=wgEncodeRegMarkH3k4me1H1hesc&chrom=chr1&start=62300000&end=62301000
@@ -155,16 +148,6 @@ test22: setOutput
 # testing /list/chromosomes? hubUrl genome=_araTha1 track=assembly_
 test23: setOutput
 	@./jsonConsumer.pl -endpoint="/list/chromosomes" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" -genome="_araTha1" -track="assembly_" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
-	@zdiff expected/$@.gz testOutput/$@.gz
-
-# testing /getData/sequence? hubUrl genome=hg19&chrom=chrCp&start=4321&end=5647
-test24: setOutput
-	@./jsonConsumer.pl -endpoint="/getData/sequence" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" -genome="_araTha1" -chrom="chrCp" -start=4321 -end=5678 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
-	@zdiff expected/$@.gz testOutput/$@.gz
-
-# testing /getData/sequence? hubUrl Bejerano genome=hg19&chrom=chrM&start=4321&end=5647
-test25: setOutput
-	@./jsonConsumer.pl -endpoint="/getData/sequence" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt" -genome="hg19" -chrom="chrM" -start=4321 -end=5678 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing genePred track
@@ -201,48 +184,6 @@ test31: setOutput
 	@./jsonConsumer.pl -endpoint="/list/tracks" -db="ce11" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
-# error test, can not open bigWig file
-test32: setOutput
-	@./jsonConsumer.pl -endpoint="/getData/track" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/bPlants/hub.txt" -genome="_braRap1" -track="gc5Base_" -chrom=chrA9 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
-	@zdiff expected/$@.gz testOutput/$@.gz
-	@echo "### $@: can not open bigWig file OK"
-
-# error test, can not find hubUrl
-test33: setOutput
-	@./jsonConsumer.pl -endpoint="/getData/track" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/xPlants/hub.txt" -genome="_braRap1" -track="gc5Base_" -chrom=chrA9 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
-	@zdiff expected/$@.gz testOutput/$@.gz
-	@echo "### $@: can not open hubUrl OK"
-
-# error test, missing argument genome for /getData/track  with hubUrl
-test34: setOutput
-	@./jsonConsumer.pl -endpoint="/getData/track" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" -track="gc5Base_" -chrom=chrA9 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
-	@zdiff expected/$@.gz testOutput/$@.gz
-	@echo "### $@: missing genome argument OK"
-
-# error test, missing argument genome for /getData/sequence  with hubUrl
-test35: setOutput
-	@./jsonConsumer.pl -endpoint="/getData/sequence" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" -chrom=chrA9 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
-	@zdiff expected/$@.gz testOutput/$@.gz
-	@echo "### $@: missing genome argument OK"
-
-# error test, missing argument genome for /list/tracks  with hubUrl
-test36: setOutput
-	@./jsonConsumer.pl -hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt -endpoint="/list/tracks" -trackLeavesOnly 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
-	@zdiff expected/$@.gz testOutput/$@.gz
-	@echo "### $@: missing genome argument OK"
-
-# error test, missing argument hubUrl for /list/tracks
-test37: setOutput
-	@./jsonConsumer.pl -genome="_araTha1" -endpoint="/list/tracks" -trackLeavesOnly 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
-	@zdiff expected/$@.gz testOutput/$@.gz
-	@echo "### $@: missing hubUrl argument OK"
-
-# error test, missing argument hubUrl and genome for /list/tracks
-test38: setOutput
-	@./jsonConsumer.pl -endpoint="/list/tracks" -trackLeavesOnly 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
-	@zdiff expected/$@.gz testOutput/$@.gz
-	@echo "### $@: missing hubUrl and genome argument OK"
-
 # testing /getData/track?db=ce4&track=gold for split table operation
 test39: setOutput
 	@./jsonConsumer.pl -maxItemsOutput=123 -endpoint="/getData/track" -db="ce4" -track="gold" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
@@ -266,24 +207,131 @@ test42: setOutput
 	@./jsonConsumer.pl -jsonOutputArrays -maxItemsOutput=123 -endpoint="/getData/track" -db="ce6" -track="gc5Base" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
+###############################################################################
+#  /getData/sequence testing
+###############################################################################
+# testing /getData/sequence? hubUrl genome=hg19&chrom=chrCp&start=4321&end=5647
+getSeq01: setOutput
+	@printf "### $@ "
+	@./jsonConsumer.pl -endpoint="/getData/sequence" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" -genome="_araTha1" -chrom="chrCp" -start=4321 -end=5678 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /getData/sequence? hubUrl Bejerano genome=hg19&chrom=chrM&start=4321&end=5647
+getSeq02: setOutput
+	@printf "### $@ "
+	@./jsonConsumer.pl -endpoint="/getData/sequence" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt" -genome="hg19" -chrom="chrM" -start=4321 -end=5678 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /getData/sequence? db=monDom5&chrom=chr1&start=4321&end=5647
+getSeq03: setOutput
+	@printf "### $@ "
+	@./jsonConsumer.pl -endpoint="/getData/sequence" -db="monDom5" -chrom="chr1" -start=748055061 -end=748055161 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+###############################################################################
+#  ERROR testing
+###############################################################################
+# generate an error: ask for non-existent chrom in a track hub
+# /getData/track? hubUrl Plants &track=assembly_&chrom=chrI&start=1&end=14309681
+err01: setOutput
+	@printf "### $@ https://hgwdev-api.gi.ucsc.edu/getData/track?track=assembly_;chrom=chrI;genome=_araTha1;hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;end=14309681;start=1\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" -genome="_araTha1" -track="assembly_" -chrom="chrI" -start=1 -end=14309681 2>&1 | sed -e 's#https://.*/getData#/getData#;' | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# error test, can not open bigWig file
+err02: setOutput
+	@printf "### $@ https://hgwdev-api.gi.ucsc.edu/getData/track?track=gc5Base_;chrom=chrA9;genome=_braRap1;hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/bPlants/hub.txt\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/bPlants/hub.txt" -genome="_braRap1" -track="gc5Base_" -chrom=chrA9 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# error test, can not find hubUrl
+err03: setOutput
+	@printf "### $@ https://hgwdev-api.gi.ucsc.edu/getData/track?track=gc5Base_;chrom=chrA9;genome=_braRap1;hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/xPlants/hub.txt\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/xPlants/hub.txt" -genome="_braRap1" -track="gc5Base_" -chrom=chrA9 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# error test, missing argument genome for /getData/track  with hubUrl
+err04: setOutput
+	@printf "### $@ https://hgwdev-api.gi.ucsc.edu/getData/track?track=gc5Base_;chrom=chrA9;hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" -track="gc5Base_" -chrom=chrA9 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# error test, missing argument genome for /getData/sequence  with hubUrl
+err05: setOutput
+	@printf "### $@ https://hgwdev-api.gi.ucsc.edu/getData/sequence?chrom=chrA9;hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt\n"
+	@./jsonConsumer.pl -endpoint="/getData/sequence" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" -chrom=chrA9 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# error test, missing argument genome for /list/tracks  with hubUrl
+err06: setOutput
+	@printf "### $@ https://hgwdev-api.gi.ucsc.edu/list/tracks?trackLeavesOnly=1;hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt\n"
+	@./jsonConsumer.pl -hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt -endpoint="/list/tracks" -trackLeavesOnly 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# error test, missing argument hubUrl for /list/tracks
+err07: setOutput
+	@printf "### $@ https://hgwdev-api.gi.ucsc.edu/list/tracks?trackLeavesOnly=1;genome=_araTha1\n"
+	@./jsonConsumer.pl -genome="_araTha1" -endpoint="/list/tracks" -trackLeavesOnly 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# error test, missing argument hubUrl and genome for /list/tracks
+err08: setOutput
+	@printf "### $@ https://hgwdev-api.gi.ucsc.edu/list/tracks?trackLeavesOnly=1\n"
+	@./jsonConsumer.pl -endpoint="/list/tracks" -trackLeavesOnly 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
 # testing /getData/sequence?db=cxe6 - error test illegal database name
 # plus jsonArrayOutput
-test43: setOutput
+err09: setOutput
+	@printf "### $@ https://hgwdev-api.gi.ucsc.edu/getData/sequence?db=cxe6;jsonOutputArrays=1;maxItemsOutput=123\n"
 	@./jsonConsumer.pl -jsonOutputArrays -maxItemsOutput=123 -endpoint="/getData/sequence" -db="cxe6" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
-	@echo '### test43 ./jsonConsumer.pl -jsonOutputArrays -maxItemsOutput=123 -endpoint="/getData/sequence" -db="cxe6"'
 
 # testing /list/tracks?db=cxe6 - error test illegal database name
 # plus jsonArrayOutput
-test44: setOutput
+err10: setOutput
+	@printf "### $@ https://hgwdev-api.gi.ucsc.edu/list/tracks?db=cxe6;jsonOutputArrays=1;maxItemsOutput=123\n"
 	@./jsonConsumer.pl -jsonOutputArrays -maxItemsOutput=123 -endpoint="/list/tracks" -db="cxe6" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
-	@echo '### test44 ./jsonConsumer.pl -jsonOutputArrays -maxItemsOutput=123 -endpoint="/list/tracks" -db="cxe6"'
 
-# testing /getData/track?db=cxe6&track=gc5Base - error test illegal database
-# plus jsonArrayOutput
-test45: setOutput
-	@./jsonConsumer.pl -jsonOutputArrays -maxItemsOutput=123 -endpoint="/getData/track" -db="cxe6" 2>&1 -track="gc5Base" | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
+# testing /getData/track?db=ce6 - error test illegal maxItemsOutput
+err11: setOutput
+	@printf "### $@ https://hgwdev-api.gi.ucsc.edu/getData/track?db=ce6;track=gold;maxItemsOutput=1x23\n"
+	@./jsonConsumer.pl -maxItemsOutput=1x23 -endpoint="/getData/track" -db="ce6" -track=gold 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
-	@echo '### test45 ./jsonConsumer.pl -jsonOutputArrays -maxItemsOutput=123 -endpoint="/getData/track" -db="cxe6" 2>&1 -track="gc5Base"'
 
+# testing /getData/track?db=ce6 - error test illegal maxItemsOutput
+err12: setOutput
+	@printf "### $@ https://hgwdev-api.gi.ucsc.edu/getData/track?db=ce6;track=gold;maxItemsOutput=-2\n"
+	@./jsonConsumer.pl -maxItemsOutput=-2 -endpoint="/getData/track" -db="ce6" -track=gold 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /getData/track?db=ce6 - error test illegal maxItemsOutput
+err13: setOutput
+	@printf "### $@ https://hgwdev-api.gi.ucsc.edu/getData/track?db=ce6;track=gold;maxItemsOutput=0\n"
+	@./jsonConsumer.pl -maxItemsOutput=0 -endpoint="/getData/track" -db="ce6" -track=gold 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /getData/track?db=ce6 - error test illegal maxItemsOutput
+err14: setOutput
+	@printf "### $@ https://hgwdev-api.gi.ucsc.edu/getData/track?db=ce6;track=gold;maxItemsOutput=0\n"
+	@./jsonConsumer.pl -maxItemsOutput=0 -endpoint="/getData/track" -db="ce6" -track=gold 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /getData/tracks?db=ce6 - error test no such function on endpoint
+err15: setOutput
+	@printf "### $@ https://hgwdev-api.gi.ucsc.edu/getData/tracks?db=ce6;track=gold\n"
+	@./jsonConsumer.pl -endpoint="/getData/tracks" -db="ce6" -track=gold 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/endpoints - error test no such function
+err16: setOutput
+	@printf "### $@ https://hgwdev-api.gi.ucsc.edu/list/endpoints\n"
+	@./jsonConsumer.pl -endpoint="/list/endpoints" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/endpoints - error test no such function
+err17: setOutput
+	@printf "### $@ https://hgwdev-api.gi.ucsc.edu/noSuchCommand\n"
+	@./jsonConsumer.pl -endpoint="/noSuchCommand" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz

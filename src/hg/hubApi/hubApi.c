@@ -207,7 +207,7 @@ else
 freeMem(stripType);
 }
 
-static void sampleUrl(struct trackHub *hub, char *db, struct trackDb *tdb, char *chrom, unsigned chromSize, char *errorString)
+static void sampleUrl(struct trackHub *hub, char *db, struct trackDb *tdb, char *errorString)
 /* print out a sample getData URL */
 {
 char errorPrint[2048];
@@ -219,10 +219,6 @@ if (isNotEmpty(errorString))
     }
 
 boolean superChild = tdbIsSuperTrackChild(tdb);
-unsigned start = chromSize / 4;
-unsigned end = start + 10000;
-if (end > chromSize)
-    end = chromSize;
 char *genome = NULL;
 if (hub)
     genome = hub->genomeList->name;
@@ -274,15 +270,8 @@ else
 }
 
 static void hubSampleUrl(struct trackHub *hub, struct trackDb *tdb,
-    long chromCount, long itemCount, char *chromName, unsigned chromSize,
-      char *genome, char *errorString)
+    long chromCount, long itemCount, char *genome, char *errorString)
 {
-unsigned start = chromSize / 4;
-unsigned end = start + 10000;
-if (end > chromSize)
-    end = chromSize;
-
-
 struct dyString *extraDyFlags = newDyString(128);
 if (debug)
     dyStringAppend(extraDyFlags, ";debug=1");
@@ -332,8 +321,7 @@ else
             hPrintf("    <li><b>%s</b>: %s%s</li>\n", tdb->track, tdb->type, countsMessage);
     }
 }	/* static void hubSampleUrl(struct trackHub *hub, struct trackDb *tdb,
-	 * long chromCount, long itemCount, char *chromName, unsigned chromSize,
-	 *   char *genome)
+	 * long chromCount, long itemCount, char *genome)
 	 */
 
 static void bbiLargestChrom(struct bbiChromInfo *chromList, char **chromName,
@@ -499,7 +487,7 @@ if (tdb->subtracks)
 	else
 	    {
 	    if (isSupportedType(tdbEl->type))
-		hubSampleUrl(hub, tdbEl, chromCount, itemCount, chromName, chromSize, genome, errorString);
+		hubSampleUrl(hub, tdbEl, chromCount, itemCount, genome, errorString);
 	    else
 		hPrintf("<li><b>%s</b>: %s : subtrack of parent: %s</li>\n", tdbEl->track, tdbEl->type, tdbEl->parent->track);
 	    }
@@ -528,7 +516,7 @@ if (tdb->subtracks)
 	else
 	    {
 	    if (isSupportedType(tdbEl->type))
-		sampleUrl(hub, db, tdbEl, chromName, chromSize, errorString);
+		sampleUrl(hub, db, tdbEl, errorString);
 	    else
 		hPrintf("<li><b>%s</b>: %s : subtrack of parent: %s</li>\n", tdbEl->track, tdbEl->type, tdbEl->parent->track);
 	    }
@@ -604,7 +592,7 @@ if (! (compositeContainer || compositeView) )
 if (depthSearch && bigDataUrl)
     {
     if (isSupportedType(tdb->type))
-	    hubSampleUrl(hub, tdb, chromCount, itemCount, chromName, chromSize, genome, errors->string);
+	    hubSampleUrl(hub, tdb, chromCount, itemCount, genome, errors->string);
     }
 else
     {
@@ -615,7 +603,7 @@ else
     else if (superChild)
 	{
 	if (isSupportedType(tdb->type))
-	    hubSampleUrl(hub, tdb, chromCount, itemCount, chromName, chromSize, genome,  errors->string);
+	    hubSampleUrl(hub, tdb, chromCount, itemCount, genome,  errors->string);
 	else
 	    hPrintf("    <li><b>%s</b>: %s : superTrack child of parent: %s</li>\n", tdb->track, tdb->type, tdb->parent->track);
 	}
@@ -623,14 +611,14 @@ else
 	{
         if (isSupportedType(tdb->type))
 	    {
-	    hubSampleUrl(hub, tdb, chromCount, itemCount, chromName, chromSize, genome, errors->string);
+	    hubSampleUrl(hub, tdb, chromCount, itemCount, genome, errors->string);
 	    }
 	}
     else
 	{
         if (isSupportedType(tdb->type))
 	    {
-	    hubSampleUrl(hub, tdb, chromCount, itemCount, chromName, chromSize, genome, errors->string);
+	    hubSampleUrl(hub, tdb, chromCount, itemCount, genome, errors->string);
 	    }
 	else
 	    hPrintf("    <li><b>%s</b>: %s (what is this)</li>\n", tdb->track, tdb->type);
@@ -672,7 +660,7 @@ else if (compositeView)
 else if (superChild)
     {
     if (isSupportedType(tdb->type))
-        sampleUrl(NULL, db, tdb, chromName, chromSize, errorString);
+        sampleUrl(NULL, db, tdb, errorString);
     else
 	hPrintf("    <li><b>%s</b>: %s : superTrack child of parent: %s</li>\n", tdb->track, tdb->type, tdb->parent->track);
     }
@@ -681,7 +669,7 @@ else if (! depthSearch && bigDataUrl)
 else
     {
     if (isSupportedType(tdb->type))
-        sampleUrl(NULL, db, tdb, chromName, chromSize, errorString);
+        sampleUrl(NULL, db, tdb, errorString);
     else
         hPrintf("    <li><b>%s</b>: %s</li>\n", tdb->track, tdb->type);
     }
@@ -1238,11 +1226,83 @@ hPrintf("</td></tr></table>\n");
 //    cgiMakeHiddenVar("debug", "1");
 }
 
+static void apiRequest(char *pathInfo)
+{
+hPrintDisable();
+/*expect no more than MAX_PATH_INFO number of words*/
+char *words[MAX_PATH_INFO];
+/* can immediately verify valid parameters right here right now */
+char *start = cgiOptionalString("start");
+char *end = cgiOptionalString("end");
+char *db = cgiOptionalString("db");
+struct dyString *errorMsg = newDyString(128);
+
+if (isNotEmpty(db))
+    {
+    struct sqlConnection *conn = hAllocConnMaybe(db);
+    if (NULL == conn)
+        dyStringPrintf(errorMsg, "can not find database db='%s' for endpoint '%s'", db, pathInfo);
+    else
+        hFreeConn(&conn);
+    }
+if (isNotEmpty(start) || isNotEmpty(end))
+    {
+    long long llStart = -1;
+    long long llEnd = -1;
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+        {
+        if (isNotEmpty(start))
+            llStart = sqlLongLong(start);
+        if (isNotEmpty(end))
+            llEnd = sqlLongLong(end);
+        }
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+        {
+        if (isNotEmpty(errorMsg->string))
+            dyStringPrintf(errorMsg, ", ");
+        dyStringPrintf(errorMsg, "%s", errCatch->message->string);
+        if (isNotEmpty(start) && (-1 == llStart))
+            dyStringPrintf(errorMsg, ", can not recognize start coordinate: '%s'", start);
+        if (isNotEmpty(end) && (-1 == llEnd))
+            dyStringPrintf(errorMsg, ", can not recognize end coordinate: '%s'", end);
+        }
+    else
+        {
+        if ( (llStart < 0) || (llEnd < 0) || (llEnd <= llStart) )
+            {
+            if (isNotEmpty(errorMsg->string))
+                dyStringPrintf(errorMsg, ", ");
+            dyStringPrintf(errorMsg, "illegal start,end coordinates given: %s,%s, 'end' must be greater than 'start', and start greater than or equal to zero", start, end);
+            }
+        }
+    errCatchFree(&errCatch);
+    }
+
+if (isNotEmpty(errorMsg->string))
+    apiErrAbort(err400, err400Msg, "%s", errorMsg->string);
+
+setupFunctionHash();
+struct hashEl *hel = parsePathInfo(pathInfo, words);
+/* verify valid API command */
+if (hel)	/* have valid command */
+    {
+    hPrintDisable();
+    void (*apiFunction)(char **) = hel->val;
+    (*apiFunction)(words);
+    return;
+    }
+ else
+    apiErrAbort(err400, err400Msg, "no such command: '/%s", pathInfo);
+    /* due to Apache rewrite rules, will never be called with this error */
+}	/*	static void apiRequest(char *pathInfo)	*/
+
 static void doMiddle(struct cart *theCart)
 /* Set up globals and make web page */
 {
 cart = theCart;
-measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
+// measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
 char *database = NULL;
 char *genome = NULL;
 
@@ -1259,101 +1319,10 @@ initUrlPrefix();
 trackLeavesOnly = cartUsualBoolean(cart, "trackLeavesOnly", trackLeavesOnly);
 jsonOutputArrays = cartUsualBoolean(cart, "jsonOutputArrays", jsonOutputArrays);
 
-/* global variable for all workers to honor this limit */
-maxItemsOutput = cartUsualInt(cart, "maxItemsOutput", maxItemsOutput);
-if (maxItemsOutput < 0)	/* can use -1 to indicate as much as allowed */
-    maxItemsOutput = maxItemLimit;
-/* maxItemsOutput of 0 might be useful, to be seen, let it go through */
-// if (maxItemsOutput < 1)	/* safety check */
-//     maxItemsOutput = 1;
-
-if (maxItemsOutput > maxItemLimit)	/* safety check */
-    maxItemsOutput = maxItemLimit;
-
-debug = cartUsualBoolean(cart, "debug", debug);
-// debug = TRUE;
-
-int timeout = cartUsualInt(cart, "udcTimeout", 300);
-if (udcCacheTimeout() < timeout)
-    udcSetCacheTimeout(timeout);
-knetUdcInstall();
-
 char *pathInfo = getenv("PATH_INFO");
 /* nothing on incoming path, then display the WEB page instead */
 if (sameOk("/",pathInfo))
     pathInfo = NULL;
-
-boolean commandError = FALSE;
-/*expect no more than MAX_PATH_INFO number of words*/
-char *words[MAX_PATH_INFO];
-
-if (isNotEmpty(pathInfo))
-    {
-    /* can immediately verify valid parameters right here right now */
-    char *start = cgiOptionalString("start");
-    char *end = cgiOptionalString("end");
-    char *db = cgiOptionalString("db");
-    struct dyString *errorMsg = newDyString(128);
-
-    if (isNotEmpty(db))
-	{
-	struct sqlConnection *conn = hAllocConnMaybe(db);
-        if (NULL == conn)
-	    dyStringPrintf(errorMsg, "can not find database db='%s' for endpoint '%s'", db, pathInfo);
-	else
-	    hFreeConn(&conn);
-	}
-    if (isNotEmpty(start) || isNotEmpty(end))
-	{
-	long long llStart = -1;
-	long long llEnd = -1;
-	struct errCatch *errCatch = errCatchNew();
-	if (errCatchStart(errCatch))
-	    {
-	    if (isNotEmpty(start))
-		llStart = sqlLongLong(start);
-	    if (isNotEmpty(end))
-		llEnd = sqlLongLong(end);
-	    }
-	errCatchEnd(errCatch);
-	if (errCatch->gotError)
-	    {
-	    if (isNotEmpty(errorMsg->string))
-		dyStringPrintf(errorMsg, ", ");
-	    dyStringPrintf(errorMsg, "%s", errCatch->message->string);
-	    if (isNotEmpty(start) && (-1 == llStart))
-		dyStringPrintf(errorMsg, ", can not recognize start coordinate: '%s'", start);
-	    if (isNotEmpty(end) && (-1 == llEnd))
-		dyStringPrintf(errorMsg, ", can not recognize end coordinate: '%s'", end);
-	    }
-	else
-	    {
-	    if ( (llStart < 0) || (llEnd < 0) || (llEnd <= llStart) )
-		{
-		if (isNotEmpty(errorMsg->string))
-		    dyStringPrintf(errorMsg, ", ");
-		dyStringPrintf(errorMsg, "illegal start,end coordinates given: %s,%s, 'end' must be greater than 'start', and start greater than or equal to zero", start, end);
-		}
-	    }
-	errCatchFree(&errCatch);
-	}
-
-    if (isNotEmpty(errorMsg->string))
-	apiErrAbort(err400, err400Msg, "%s", errorMsg->string);
-
-    setupFunctionHash();
-    struct hashEl *hel = parsePathInfo(pathInfo, words);
-    /* verify valid API command */
-    if (hel)	/* have valid command */
-	{
-        hPrintDisable();
-        void (*apiFunction)(char **) = hel->val;
-        (*apiFunction)(words);
-	return;
-	}
-     else
-	apiErrAbort(err400, err400Msg, "no such command: '/%s/%s for endpoint '%s'", words[0], words[1], pathInfo);
-    }
 
 (void) hubPublicDbLoadAll();
 
@@ -1421,11 +1390,6 @@ if (isEmpty(otherHubUrl))
 if (sameWord(RADIO_OTHERHUB, selectRadio))	/* requested other hub URL */
     urlInput = otherHubUrl;
 
-if (commandError)
-  {
-  hPrintf("<h3>ERROR: no such command: '%s/%s' for endpoint '%s'</h3>", words[0], words[1], pathInfo);
-  }
-
 long lastTime = clock1000();
 struct trackHub *hub = errCatchTrackHubOpen(urlInput);
 if (measureTiming)
@@ -1485,6 +1449,50 @@ webEndJWest();
 // cartWebEnd();
 }	/*	void doMiddle(struct cart *theCart)	*/
 
+static void setGlobalCgiVars()
+/* check for CGI variables and set global flags */
+{
+char *trackLeaves = cgiOptionalString("trackLeavesOnly");
+if (sameOk("1", trackLeaves))
+    trackLeavesOnly = TRUE;
+
+char *jsonArray = cgiOptionalString("jsonOutputArrays");
+if (sameOk("1", jsonArray))
+    jsonOutputArrays = TRUE;
+
+int maybeDebug = cgiOptionalInt("debug", 0);
+if (1 == maybeDebug)
+    debug = TRUE;
+
+char *measTime = cgiOptionalString("measureTiming");
+if (isNotEmpty(measTime) && sameWord("1", measTime))
+    measureTiming = TRUE;
+char *maxOut = cgiOptionalString("maxItemsOutput");
+if (isNotEmpty(maxOut))
+    {
+    long long n = -2;
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+        {
+	n = sqlLongLong(maxOut);
+        }
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+	apiErrAbort(err400, err400Msg, "can not recognize maxItemsOutput '%s' as a number", maxOut);
+    else
+	{
+	if (n == -1)	/* can use -1 to indicate as much as allowed */
+	    maxItemsOutput = maxItemLimit;
+	else if (n > maxItemLimit)	/* safety check */
+	    apiErrAbort(err400, err400Msg, "requested maxItemsOutput '%s' greater than maximum limit allowed: %d", maxOut, maxItemLimit);
+	else if (n < 1)
+	    apiErrAbort(err400, err400Msg, "requested maxItemsOutput '%s' can not be less than one", maxOut, maxItemLimit);
+	else
+	    maxItemsOutput = n;
+	}
+    }
+}	/*	static void setGlobalCgiVars()	*/
+
 /* Null terminated list of CGI Variables we don't want to save
  * permanently. */
 static char *excludeVars[] = {"Submit", "submit", "sourceSelected", "selectRadio", "ucscGenome", "publicHubs", "clade", NULL,};
@@ -1507,8 +1515,21 @@ if (botDelay > 0)
     sleep1000(botDelay);
     }
 
-trackCounter = hashNew(0);
-cartEmptyShellNoContent(doMiddle, hUserCookie(), excludeVars, oldVars);
+setGlobalCgiVars();
+
+int timeout = cgiOptionalInt("udcTimeout", 300);
+if (udcCacheTimeout() < timeout)
+    udcSetCacheTimeout(timeout);
+knetUdcInstall();
+
+char *pathInfo = getenv("PATH_INFO");
+if (isNotEmpty(pathInfo)) /* can get to this immediately, no cart needed */
+    apiRequest(pathInfo);
+else
+    {
+    trackCounter = hashNew(0);
+    cartEmptyShellNoContent(doMiddle, hUserCookie(), excludeVars, oldVars);
+    }
 cgiExitTime("hubApi", enteredMainTime);
 return 0;
 }
