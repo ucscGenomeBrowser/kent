@@ -1,0 +1,44 @@
+<h2>Description</h2>
+<p>
+This tracks show a count of the number of different amino acids from
+each other strain found at each amino acid location of the
+reference sequence: ASM1346v1/USA300_FPR3757 protein coding regions.
+</p>
+<p>
+The 369-way alignment is used to extract the data for these counts.
+The 369-way MAF file is processed with the <em>mafGene</em> command
+to extract the protein sequence for each strain that was aligned to the
+reference sequence coding regions.  The <em>ncbiGene</em> track is
+used as the reference location for coding regions.  The processing
+<em>mafGene</em> command is operated:
+<pre>
+For each chromosome in the reference sequence:
+
+  mafGene -chrom=&lt;chrName&gt; -exons staAur2 369way.maf ncbiGene species.list &lt;chrName&gt;.exonAA.fa
+</pre>
+</p>
+<p>
+Typical output in the exonAA.fa file is as follows:
+<pre>
+&gt;SAUSA300_RS15440_staAur2_1_1 21 0 0 NC_007793v1:1994975-1995037+
+LYFKNSSLNYIPTTFGGEPFK
+&gt;SAUSA300_RS15440_Sa_USA300_SUR12_1_1 21 0 0 NZ_CP014407v1:1999012-1999023+
+L--KNSSLNYIPTTFGGEPFK
+&gt;SAUSA300_RS15440_Sa_USA300_TCH1516_1_1 21 0 0 NC_010079v1:1995723-1995734+
+L--KNSSLNYIPTTFGGEPFK
+&gt;SAUSA300_RS15440_Sa_JE2_1_1 21 0 0 NZ_CP020619v1:1996662-1996717+
+LYFKNSSLNYIPTTFGGE---
+&gt;SAUSA300_RS15440_Sa_C2406_1_1 21 0 0 NZ_CP019590v1:2001635-2001646+
+LYFKNSSLNYIPTTFGGEPFK
+. . .  etc  . . .
+</pre>
+This fasta file is scanned with a perl script to count those amino
+acids in each location.  For each AA location on the reference species,
+there are 23 different counts obtained.  One count for each of the 20
+amino acids, plus three extra counts for the categories:
+<ul>
+<li>AA 'X' - Unknown/not in coding sequence</li>
+<li>AA 'Z' - Termination/Stop codon found in the middle of a coding sequence</li>
+<li>AA '-' - no translation available, missing sequence</li>
+</ul>
+</p>

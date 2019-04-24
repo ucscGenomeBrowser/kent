@@ -424,8 +424,8 @@ sqlDyStringPrintf(dy,
 "    name varchar(255) not null,\n"
 "    value varchar(255) not null,\n"
 "              #Indices\n"
-"    %s(name(16)),\n"
-"    INDEX(value(16))\n"
+"    %s(name),\n"
+"    INDEX(value)\n"
 ")\n",  tableName, indexType);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);

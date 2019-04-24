@@ -376,9 +376,9 @@ if (isNotEmpty(tdb->type) && (allowedBigBedType(tdb->type)))
 return FALSE;
 }
 
-static void bbiDataOutput(struct jsonWrite *jw, struct bbiFile *bbi,
+static unsigned bbiDataOutput(struct jsonWrite *jw, struct bbiFile *bbi,
     char *chrom, unsigned start, unsigned end, struct sqlFieldType *fiList,
-     struct trackDb *tdb)
+     struct trackDb *tdb, unsigned itemsDone)
 /* output bed data for one chrom in the given bbi file */
 {
 char *itemRgb = trackDbSetting(tdb, "itemRgb");
@@ -429,6 +429,7 @@ for (iv = ivList; itemCount < maxItemsOutput && iv; iv = iv->next)
     ++itemCount;
     }
 lmCleanup(&bbLm);
+return itemCount;
 }	/* static void bbiDataOutput(struct jsonWrite *jw, . . . ) */
 
 static void wigDataOutput(struct jsonWrite *jw, struct bbiFile *bwf,
@@ -593,16 +594,19 @@ if (allowedBigBedType(thisTrack->type))
         bigColumnTypes(jw, fiList, as);
 
     jsonWriteListStart(jw, track);
+    unsigned itemsDone = 0;
     if (isEmpty(chrom))
 	{
 	struct bbiChromInfo *bci;
-	for (bci = chromList; bci; bci = bci->next)
+	for (bci = chromList; (itemsDone < maxItemsOutput) && bci; bci = bci->next)
 	    {
-	    bbiDataOutput(jw, bbi, bci->name, 0, bci->size, fiList, thisTrack);
+	    itemsDone += bbiDataOutput(jw, bbi, bci->name, 0, bci->size,
+		fiList, thisTrack, itemsDone);
 	    }
 	}
     else
-	bbiDataOutput(jw, bbi, chrom, uStart, uEnd, fiList, thisTrack);
+	itemsDone += bbiDataOutput(jw, bbi, chrom, uStart, uEnd, fiList,
+		thisTrack, itemsDone);
     jsonWriteListEnd(jw);
     }
 else if (startsWith("bigWig", thisTrack->type))
@@ -773,16 +777,19 @@ if (allowedBigBedType(thisTrack->type))
         bigColumnTypes(jw, fiList, as);
 
     jsonWriteListStart(jw, track);
+    unsigned itemsDone = 0;
     if (isEmpty(chrom))
 	{
 	struct bbiChromInfo *bci;
-	for (bci = chromList; bci; bci = bci->next)
+	for (bci = chromList; (itemsDone < maxItemsOutput) && bci; bci = bci->next)
 	    {
-	    bbiDataOutput(jw, bbi, bci->name, 0, bci->size, fiList, thisTrack);
+	    itemsDone += bbiDataOutput(jw, bbi, bci->name, 0, bci->size,
+		fiList, thisTrack, itemsDone);
 	    }
 	}
     else
-	bbiDataOutput(jw, bbi, chrom, uStart, uEnd, fiList, thisTrack);
+	itemsDone += bbiDataOutput(jw, bbi, chrom, uStart, uEnd, fiList,
+		thisTrack, itemsDone);
     jsonWriteListEnd(jw);
     }
 else if (startsWith("bigWig", thisTrack->type))
