@@ -788,8 +788,8 @@ memSwapChar(longLabel, strlen(longLabel), '\t', ' ');
 /* Forbid any dangerous settings that should not be allowed */
 forbidSetting(hub, genome, tdb, "idInUrlSql");
 
-if (trackDbLocalSetting(tdb, "superTrack") != NULL || trackDbLocalSetting(tdb, "compositeTrack")
-    || trackDbLocalSetting(tdb, "container"))
+if (trackDbLocalSetting(tdb, "superTrack") || trackDbLocalSetting(tdb, "compositeTrack")
+    || trackDbLocalSetting(tdb, "container") || trackDbLocalSetting(tdb, "view"))
     {
     // subtracks is not NULL if a track said we were its parent
     // but generate a more helpful error if a track should have children but doesn't
