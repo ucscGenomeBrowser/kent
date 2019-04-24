@@ -1,7 +1,7 @@
 #!/bin/env python
 
 """
-This code is heavily inspired by the Ensembl python client
+This code is inspired by the Ensembl python client
 https://github.com/Ensembl/ensembl-rest/wiki/Example-Python-Client
 """
 import argparse
