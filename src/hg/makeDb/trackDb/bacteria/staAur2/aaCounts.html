@@ -1,16 +1,17 @@
 <h2>Description</h2>
 <p>
-This tracks show a count of the number of different amino acids from
-each other strain found at each amino acid location of the
-reference sequence: ASM1346v1/USA300_FPR3757 protein coding regions.
+This track shows a count of the number of different amino acids from
+each non-reference strain found at each amino acid location of the
+reference sequence, ASM1346v1/USA300_FPR3757, protein coding regions.
 </p>
 <p>
 The 369-way alignment is used to extract the data for these counts.
 The 369-way MAF file is processed with the <em>mafGene</em> command
 to extract the protein sequence for each strain that was aligned to the
 reference sequence coding regions.  The <em>ncbiGene</em> track is
-used as the reference location for coding regions.  The processing
-<em>mafGene</em> command is operated:
+used as the reference location for coding regions.  The
+<em>mafGene</em> command is used to extract the amino-acid
+alignments:
 <pre>
 For each chromosome in the reference sequence:
 
@@ -42,3 +43,58 @@ amino acids, plus three extra counts for the categories:
 <li>AA '-' - no translation available, missing sequence</li>
 </ul>
 </p>
+<p>
+Click into any item on the screen to see details of the strains
+carrying the various amio acids at that position.
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+The track will show in the window any amino acids that have a
+non-reference amino acid in at least one of the aligned
+strains.  The number of rows displayed will necessarily change as
+the size of the window changes.
+</p>
+<p>
+Amino acids are shown, one per row, in order of the biochemical
+nature of the side chain:
+ <ul>
+  <li> aliphatic hydrophobic (ala, ile, leu, val)
+  <li> aromatic hydrophobic (phe, trp, tyr)
+  <li> neutral (asn, cys, gln, met, ser, thr)
+  <li> charged positive (arg, his, lys)
+  <li> charged negative (asp, glu)
+  <li> unique (gly, pro)
+ </ul>
+</p>
+
+<p>
+In <b><em>all</em></b> display modes, <b><font color=blue>darker
+colors</font></b> indicate a higher level of occurrance of the
+amino acid residue in the strain set.  If there are no
+actual non-reference amino acids to display (<em>i.e.</em>, excluding
+the NUL row), the reference amino acid is shown in white background.
+</p>
+
+<p>
+A mouseover will give the number
+and percentage of non-reference amino acids in the set.  <em>E.g.</em>,
+in the default location <em>polC</em> gene, the serine at AA17 shows
+"68% (247/362)."
+</p>
+<p>
+In <b><em>dense</em></b> and <b><em>pack</em></b> modes, the track
+shows the amino-acid names to the left of the data row in three- and
+one-letter AA codes and in single-letter code in any
+items in the display.
+</p>
+<p>
+In <b><em>full</em></b> mode, the individual amino-acid names and their
+biochemical group (hydrophobic, neutral, positive, negative, etc)
+are displayed above each amino-acid row.
+</p>
+<p>
+In <b><em>squish</em></b> mode, only a thin colored bar is shown
+for each amino acid.
+</p>
+
