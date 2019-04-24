@@ -240,6 +240,12 @@ sub processEndPoint() {
         if (length($hubUrl)) {
 	   $parameters{"hubUrl"} = "$hubUrl";
         }
+        if (length($genome)) {
+	   $parameters{"genome"} = "$genome";
+        }
+        if (length($db)) {
+	   $parameters{"db"} = "$db";
+        }
 	$jsonReturn = performJsonAction($endpoint, \%parameters);
 	$errReturn = 1 if (defined ($jsonReturn->{'error'}));
 	printf "%s", $json->pretty->encode( $jsonReturn );
@@ -268,17 +274,16 @@ sub processEndPoint() {
 	my %parameters;
 	if (length($db)) {
 	    $parameters{"db"} = "$db";
-	} else {
-          if (length($hubUrl)) {
+	}
+	if (length($hubUrl)) {
 	    $parameters{"hubUrl"} = "$hubUrl";
-	  # allow call to go through without a genome specified to test error
-            if (length($genome)) {
-	      $parameters{"genome"} = "$genome";
-	    }
-            if (length($track)) {
-	      $parameters{"track"} = "$track";
-	    }
-	  }
+	}
+	# allow call to go through without a genome specified to test error
+	if (length($genome)) {
+	    $parameters{"genome"} = "$genome";
+	}
+	if (length($track)) {
+	    $parameters{"track"} = "$track";
 	}
 	$jsonReturn = performJsonAction($endpoint, \%parameters);
 	$errReturn = 1 if (defined ($jsonReturn->{'error'}));
