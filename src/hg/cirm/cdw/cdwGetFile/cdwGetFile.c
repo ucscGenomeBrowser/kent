@@ -109,6 +109,7 @@ while ((c = getc(file)) != EOF)
 	    p->count = 0;
 	if (p->count==p->size)
 	    {
+	    putchar('\n'); // make view source more readable
 	    puts((*p->cdwLocalFunction)(cart, TRUE));
 	    }
 	}

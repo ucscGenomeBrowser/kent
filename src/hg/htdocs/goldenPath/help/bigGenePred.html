@@ -108,7 +108,10 @@ like this:</p>
 <p>
 <strong>Step 7.</strong> 
 Paste this custom track line into the text box on the <a href="../../cgi-bin/hgCustom">custom 
-track management page</a>. Click <button>Go</button> and you should be taken to a </p>
+track page</a> with your modified URL. Click <button>Submit</button> and your track should 
+load successfully. Then click <button>Go</button> to be taken to the browser window
+with your custom track at the top. Note that there might not be data at all positions.
+</p>
 
 <h2>Examples</h2>
 <a name="Example1"></a>
@@ -122,8 +125,8 @@ the hg38 assembly.</p>
   Construct a track line that references the hosted file:</p>
   <pre><code>track type=bigGenePred name=&quot;bigGenePred Example One&quot; description=&quot;A bigGenePred file&quot; bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigGenePred.bb</code></pre>
   <li>
-  Paste the track line into the <a href="../../cgi-bin/hgCustom?db=hg38">custom track management 
-  page</a> for the human assembly hg38.</li> 
+  Paste the track line into the <a href="../../cgi-bin/hgCustom?db=hg38">custom track
+  page</a> for the human assembly, hg38.</li> 
   <li>
   Click the <button>Submit</button> button.</li> 
 </ol>
@@ -164,7 +167,7 @@ to set amino acids to display by default:</p>
 <pre><code>browser position chr10:67,884,600-67,884,900
 track type=bigGenePred baseColorDefault=genomicCodons name="bigGenePred Example Two" description="A bigGenePred file" visibility=pack bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigGenePred.bb </code></pre>
 <p>
-Paste the above into the hg38 <a href="../../cgi-bin/hgCustom?db=hg38">custom track management 
+Paste the above into the hg38 <a href="../../cgi-bin/hgCustom?db=hg38">custom track 
 page</a> to view an example of bigGenePred amino acid display at the beginning of the SIRT1 gene on 
 chromosome 10.</p>
 <p class='text-center'>
@@ -204,18 +207,19 @@ file, a bed12+8 file.</p>
 <a name="Example4"></a>
 <h3>Example &num;4: GTF (or GFF) to BigGenePred </h3>
 <p>In this example, you will convert a GTF file to bigGenePred using command line utilities.
-You will need <em>gtfToGenePred</em>, <em>genePredTobigGenePred</em>,
-and <em>bedToBigBed</em>. If you would like to convert a GFF file to bigGenePred, you will use
-<em>gff3ToGenePred</em> in place of the <em>gtfToGenePred</em>. You can download utilities from the
+You will need <code>gtfToGenePred</code>, <code>genePredTobigGenePred</code>,
+and <code>bedToBigBed</code>. If you would like to convert a GFF file to bigGenePred, you will use
+<code>gff3ToGenePred</code> in place of the <code>gtfToGenePred</code>. You can download utilities from the
 <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">utilities directory</a>.</p>
 <ol>
   <li>
-  Obtain a GTF file using the wget command. Skip this step if you already have a GTF or GFF file.
+  Obtain a GTF file using the <code>wget</code> command. Skip this step if you already have a GTF
+  or GFF file.
   <pre><code>wget http://genome.ucsc.edu/goldenPath/help/examples/bigGenePredExample4.gtf</code></pre></li>
   <li>
-  Convert the GTF file to genePred extended format using the gtfToGenePred command.
+  Convert the GTF file to genePred extended format using the <code>gtfToGenePred</code> command.
   <pre><code>gtfToGenePred -genePredExt bigGenePredExample4.gtf example4.genePred</code></pre>
-  If you are converting a GFF file, use the gff3ToGenePred command.
+  If you are converting a GFF file, use the <code>gff3ToGenePred</code> command.
   <pre><code>gff3ToGenePred yourFile.gff example4.genePred </pre></code></li>
   <li>
   Convert the genePred extended file to a pre-bigGenePred text file.
@@ -242,7 +246,8 @@ page</a>. This allows you to set position, configuration options, and write a mo
 desciption. If you want to see codons, you can right click, then click configure codon view or
 set this options using <code>baseColorDefault=genomicCodons</code> as is done below.
 <pre><code>browser position chr19:44905790-44909388 
-track type=bigGenePred baseColorDefault=genomicCodons name="bigGenePred Example Four" description="BGP Made from genePred" visibility=pack bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigGenePredEx4.bb</code></pre></li>
+track type=bigGenePred baseColorDefault=genomicCodons name="bigGenePred Example Four" description="Ex4:BigGenePred Made from GTF" visibility=pack bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigGenePredEx4.bb</code></pre>
+Once you are done, you should have a track on the Genome Browser like the one below.</li>
 </ol>
 <p class='text-center'>
   <img class='text-center' src="../../images/bigGenePredEx4.png" alt="An image of a bigGenePred track on the browser" width="999">

@@ -2643,9 +2643,9 @@ if (setting == NULL)
     }
 members = needMem(sizeof(members_t));
 members->setting = cloneString(setting);
-char *words[SMALLBUF];
+char *words[512];
 count = chopLine(members->setting, words);
-assert(count <= ArraySize(words));
+assert(count < ArraySize(words));
 if (count <= 1)
     {
     freeMem(members->setting);
@@ -3111,9 +3111,9 @@ if (membership->setting == NULL)
     }
 
 int ix,cnt;
-char *words[SMALLBUF];
+char *words[512];
 cnt = chopLine(membership->setting, words);
-assert(cnt <= ArraySize(words));
+assert(cnt < ArraySize(words));
 if (cnt <= 0)
     {
     freeMem(membership->setting);
@@ -4201,7 +4201,9 @@ int minHeightPixels;
 char option[256];
 int defaultHeight;  /*  pixels per item */
 int settingsDefault;
-cartTdbFetchMinMaxPixels(cart, tdb, MIN_HEIGHT_PER, atoi(DEFAULT_HEIGHT_PER), atoi(DEFAULT_HEIGHT_PER),
+
+#define MIN_HEIGHT_LOLLY        32
+cartTdbFetchMinMaxPixels(cart, tdb, MIN_HEIGHT_LOLLY, atoi(DEFAULT_HEIGHT_PER), atoi(DEFAULT_HEIGHT_PER),
                                 &minHeightPixels, &maxHeightPixels, &settingsDefault, &defaultHeight);
 
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);

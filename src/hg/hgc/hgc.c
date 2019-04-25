@@ -8997,19 +8997,23 @@ if (pslList)
     printAlignments(pslList, start, "htcCdnaAli", tdb->table, item);
 
     char *hgsid = cartSessionId(cart);
-    int rangeStart = 0, rangeEnd = 0;
-    if (pslTrimListToTargetRange(pslList, winStart, winEnd, &rangeStart, &rangeEnd))
+    if (hgIsOfficialChromName(database, item))
         {
-        printf("<A HREF='hgTracks?hgsid=%s&position=%s:%d-%d'>"
-               "View corresponding position range on %s</A><BR>\n",
-               hgsid, item, rangeStart+1, rangeEnd, item);
+        int rangeStart = 0, rangeEnd = 0;
+        if (pslTrimListToTargetRange(pslList, winStart, winEnd, &rangeStart, &rangeEnd))
+            {
+            printf("<A HREF='hgTracks?hgsid=%s&position=%s:%d-%d'>"
+                   "View corresponding position range on %s</A><BR>\n",
+                   hgsid, item, rangeStart+1, rangeEnd, item);
+            }
         }
     char *altFix = item;
     if (!endsWith(altFix, "alt") && !endsWith(altFix, "fix"))
         altFix = pslList->tName;
-    printf("<A HREF=\"hgTracks?hgsid=%s&virtModeType=singleAltHaplo&singleAltHaploId=%s\">"
-           "Show %s placed on its chromosome</A><BR>\n",
-           hgsid, altFix, altFix);
+    if (hgIsOfficialChromName(database, altFix))
+        printf("<A HREF=\"hgTracks?hgsid=%s&virtModeType=singleAltHaplo&singleAltHaploId=%s\">"
+               "Show %s placed on its chromosome</A><BR>\n",
+               hgsid, altFix, altFix);
 
     puts("<P><B>Alignment stats:</B><BR>");
     // Sometimes inversions cause alignments to be split up; just sum up all the stats.

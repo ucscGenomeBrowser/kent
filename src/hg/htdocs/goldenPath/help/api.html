@@ -94,6 +94,7 @@ the endpoint functions.  For example:
 <li>(see also: <a href='http://genome.ucsc.edu/blog/the-ucsc-genome-browser-coordinate-counting-systems/' target=_blank>UCSC browser coordinate counting systems)</a></li>
 <li>maxItemsOutput=1000 - limit number of items to output, default: 1,000, maximum limit: 1,000,000 (use <em>-1</em> to get maximum output)</li>
 <li>trackLeavesOnly=1 - on <em>/list/tracks</em> function, only show tracks, do not show composite container information</li>
+<li>jsonOutputArrays=1 - on <em>/getData/track</em> function, JSON format is array type for each item of data, instead of the default object type
 </ul>
 </p>
 <p>
@@ -117,7 +118,7 @@ https://api-test.gi.ucsc.edu/getData/sequence?db=ce11;chrom=chrM
 <tr><th>/list/tracks</th><td>(hubUrl and genome) or db</td><td>trackLeavesOnly=1</td></tr>
 <tr><th>/list/chromosomes</th><td>((hubUrl and genome) or db) and track</td><td>(none)</td></tr>
 <tr><th>/getData/sequence</th><td>((hubUrl and genome) or db) and chrom</td><td>start and end</td></tr>
-<tr><th>/getData/track</th><td>((hubUrl and genome) or db) and track</td><td>chrom, (start and end), maxItemsOutput</td></tr>
+<tr><th>/getData/track</th><td>((hubUrl and genome) or db) and track</td><td>chrom, (start and end), maxItemsOutput, jsonOutputArrays</td></tr>
 </table>
 </p>
 <p>

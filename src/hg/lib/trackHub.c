@@ -49,6 +49,11 @@
 #include "bigBedFind.h"
 #include "customComposite.h"
 #include "interactUi.h"
+#include "bedTabix.h"
+
+#ifdef USE_HAL
+#include "halBlockViz.h"
+#endif
 
 static struct hash *hubCladeHash;  // mapping of clade name to hub pointer
 static struct hash *hubAssemblyHash; // mapping of assembly name to genome struct
@@ -783,21 +788,28 @@ memSwapChar(longLabel, strlen(longLabel), '\t', ' ');
 /* Forbid any dangerous settings that should not be allowed */
 forbidSetting(hub, genome, tdb, "idInUrlSql");
 
-// subtracks is not NULL if a track said we were its parent
-if (tdb->subtracks != NULL)
+if (trackDbLocalSetting(tdb, "superTrack") || trackDbLocalSetting(tdb, "compositeTrack")
+    || trackDbLocalSetting(tdb, "container") || trackDbLocalSetting(tdb, "view"))
     {
-    boolean isSuper = FALSE;
-    char *superTrack = trackDbSetting(tdb, "superTrack");
-    if ((superTrack != NULL) && startsWith("on", superTrack))
-	isSuper = TRUE;
-
-    if (!(trackDbSetting(tdb, "compositeTrack") ||
-          trackDbSetting(tdb, "container") || 
-	  isSuper))
+    // subtracks is not NULL if a track said we were its parent
+    // but generate a more helpful error if a track should have children but doesn't
+    if (tdb->subtracks != NULL)
         {
-	errAbort("Parent track %s is not compositeTrack, container, or superTrack in hub %s genome %s", 
-		tdb->track, hub->url, genome->name);
-	}
+        boolean isSuper = FALSE;
+        char *superTrack = trackDbSetting(tdb, "superTrack");
+        if ((superTrack != NULL) && startsWith("on", superTrack))
+        isSuper = TRUE;
+
+        if (!(trackDbSetting(tdb, "compositeTrack") ||
+              trackDbSetting(tdb, "container") || 
+          isSuper))
+            {
+        errAbort("Parent track %s is not compositeTrack, container, or superTrack in hub %s genome %s", 
+            tdb->track, hub->url, genome->name);
+        }
+        }
+    else
+        errAbort("Track %s is declared superTrack, compositeTrack or container but has no subtracks in hub %s genome %s", tdb->track, hub->url, genome->name);
     }
 else
     {
@@ -1165,4 +1177,111 @@ if (hostPort == NULL)
 *pPort = hostPort;
 
 return TRUE;
+}
+
+void hubCheckBigDataUrl(struct trackHub *hub, struct trackHubGenome *genome, struct trackDb *tdb)
+/* Check remote file exists and is of correct type. Wrap this in error catcher */
+{
+char *relativeUrl = trackDbSetting(tdb, "bigDataUrl");
+if (relativeUrl != NULL)
+    {
+    char *type = trackDbRequiredSetting(tdb, "type");
+    char *bigDataUrl = trackHubRelativeUrl(genome->trackDbFile, relativeUrl);
+
+    char *bigDataIndex = NULL;
+    char *relIdxUrl = trackDbSetting(tdb, "bigDataIndex");
+    if (relIdxUrl != NULL)
+        bigDataIndex = trackHubRelativeUrl(genome->trackDbFile, relIdxUrl);
+
+    verbose(2, "checking %s.%s type %s at %s\n", genome->name, tdb->track, type, bigDataUrl);
+    if (startsWithWord("bigWig", type))
+        {
+        /* Just open and close to verify file exists and is correct type. */
+        struct bbiFile *bbi = bigWigFileOpen(bigDataUrl);
+        bbiFileClose(&bbi);
+        }
+    else if (startsWithWord("bigNarrowPeak", type) || startsWithWord("bigBed", type) ||
+                startsWithWord("bigGenePred", type)  || startsWithWord("bigPsl", type)||
+                startsWithWord("bigChain", type)|| startsWithWord("bigMaf", type) ||
+                startsWithWord("bigBarChart", type) || startsWithWord("bigInteract", type))
+        {
+        /* Just open and close to verify file exists and is correct type. */
+        struct bbiFile *bbi = bigBedFileOpen(bigDataUrl);
+        char *typeString = cloneString(type);
+        nextWord(&typeString);
+        if (startsWithWord("bigBed", type) && (typeString != NULL))
+            {
+            unsigned numFields = sqlUnsigned(nextWord(&typeString));
+            if (numFields > bbi->fieldCount)
+                errAbort("fewer fields in bigBed (%d) than in type statement (%d) for track %s with bigDataUrl %s", bbi->fieldCount, numFields, trackHubSkipHubName(tdb->track), bigDataUrl);
+            }
+        bbiFileClose(&bbi);
+        }
+    else if (startsWithWord("vcfTabix", type))
+        {
+        /* Just open and close to verify file exists and is correct type. */
+        struct vcfFile *vcf = vcfTabixFileAndIndexMayOpen(bigDataUrl, bigDataIndex, NULL, 0, 0, 1, 1);
+        if (vcf == NULL)
+            // Warnings already indicated whether the tabix file is missing etc.
+            errAbort("Couldn't open %s and/or its tabix index (.tbi) file.  "
+                     "See http://genome.ucsc.edu/goldenPath/help/vcf.html",
+                     bigDataUrl);
+        vcfFileFree(&vcf);
+        }
+    else if (startsWithWord("bam", type))
+        {
+        bamFileAndIndexMustExist(bigDataUrl, bigDataIndex);
+        }
+    else if (startsWithWord("longTabix", type))
+        {
+        struct bedTabixFile *btf = bedTabixFileMayOpen(bigDataUrl, NULL, 0, 0);
+        if (btf == NULL)
+            errAbort("Couldn't open %s and/or its tabix index (.tbi) file.", bigDataUrl);
+        bedTabixFileClose(&btf);
+        }
+#ifdef USE_HAL
+    else if (startsWithWord("halSnake", type))
+        {
+        char *errString;
+        int handle = halOpenLOD(bigDataUrl, &errString);
+        if (handle < 0)
+            errAbort("HAL open error: %s", errString);
+        if (halClose(handle, &errString) < 0)
+            errAbort("HAL close error: %s", errString);
+        }
+#endif
+    else
+        errAbort("unrecognized type %s in genome %s track %s", type, genome->name, tdb->track);
+    freez(&bigDataUrl);
+    }
+}
+
+void hubCheckGenomeDescription(struct trackHub *hub, struct trackHubGenome *genome)
+/* Warn about missing or incorrect htmlPath settings for each genome in an assembly hub */
+{
+if (genome->twoBitPath != NULL)
+    {
+    char *htmlPath = hashFindVal(genome->settingsHash, "htmlPath");
+    if (htmlPath == NULL)
+        warn("warning: htmlPath setting missing for genome %s", genome->name);
+    else
+        {
+        // check that file actually exists
+        if (!udcExists(htmlPath))
+            warn("warning: htmlPath file does not exist %s", htmlPath);
+        }
+    }
+}
+
+void hubCheckHubDescription(struct trackHub *hub)
+/* Warn about missing or incorrect description page for hub */
+{
+if (!hub->descriptionUrl)
+    warn("warning: descriptionUrl setting missing from %s", hub->url);
+else
+    {
+    // check that file actually exists
+    if (!udcExists(hub->descriptionUrl))
+        warn("warning: descriptionUrl error: file does not exist %s", hub->descriptionUrl);
+    }
 }
