@@ -89,4 +89,62 @@ When you have finished making your configuration changes, click the <em>Apply</e
 your changes, or click the <em>Submit</em> button to return
 to the annotation track display page.</p> 
 
+<a name="TRACK_CONT"></a>
+<h3>Annotation track display modes</h3>
+<p>
+Each annotation track within the window may have up to five display modes:
+<p>
+<ul class="gbsNoBullet">
+  <li>
+  <strong>Hide:</strong> the track is not displayed at all. To hide all the annotation tracks, click
+  the <em>hide all</em> button. This mode is useful for restricting the display to only those tracks
+  in which you are interested. For example, someone who is not interested in SNPs or mouse synteny
+  may want to hide these tracks to reduce track clutter and improve speed. There are a few
+  annotation tracks that pertain only to one specific chromosome, e.g. Sanger22, Rosetta. In these
+  cases, the track and its associated controller will be hidden automatically when the track window
+  is not open to the relevant chromosome.</li>
+  <li>
+  <strong>Dense:</strong> the track is displayed with all features collapsed into a single line.
+  This mode is useful for reducing the amount of space used by a track when you don't need
+  individual line item details or when you just want to get an overall view of an annotation. For
+  example, by opening an entire chromosome and setting the RefSeq Genes track to dense, you can get
+  a feel for the known gene density of the chromosome without displaying excessive detail. <br>
+  <img src="../../images/wiggle_dense-1.png" width="800px">
+  </li>
+  <li>
+  <strong>Full:</strong> the track is displayed with each annotation feature on a separate line. It
+  is recommended that you use this option sparingly, due to the large number of individual track
+  items that may potentially align at the selected position. For example, hundreds of ESTs might
+  align with a specified gene. When the number of lines within a requested track location exceeds
+  250, the track automatically defaults to a more tightly-packed display mode. In this situation,
+  you can restore the track display to full mode by narrowing the chromosomal range displayed or by
+  using a track filter to reduce the number of items displayed. On tracks that contain only hide,
+  dense, and full modes, you can toggle between full and dense display modes by clicking on the
+  track's center label.<br>
+  <img src="../../images/wiggle_full-1.png" width="800px">
+  </li>
+  <li>
+  <strong>Squish:</strong> the track is displayed with each annotation feature shown separately, but
+  at 50% the height of full mode. Features are unlabeled, and more than one may be drawn on the same
+  line. This mode is useful for reducing the amount of space used by a track when you want to view a
+  large number of individual features and get an overall view of an annotation. It is particularly
+  good for displaying tracks in which a large number of features align to a particular section of a
+  chromosome, e.g. EST tracks.<br>
+  <img src="../../images/wiggle_squish-1.png" width="800px">
+  </li>
+  <li>
+  <strong>Pack:</strong> the track is displayed with each annotation feature shown separately and
+  labeled, but not necessarily displayed on a separate line. This mode is useful for reducing the
+  amount of space used by a track when you want to view the large number of individual features
+  allowed by squish mode, but need the labeling and display size provided by full mode. When the
+  number of lines within the requested track location exceeds 250, the track automatically defaults
+  to squish display mode. In this situation, you can restore the track display to pack mode by
+  narrowing the chromosomal range displayed or by using a track filter to reduce the number of items
+  displayed. To toggle between pack and full display modes, click on the track's center label.<br>
+
+  <img src="../../images/wiggle_pack-1.png" width="800px" >
+  </li>
+
+
+
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
