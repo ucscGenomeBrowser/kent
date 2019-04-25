@@ -7229,6 +7229,7 @@ return (startsWithWord("bigWig"  , track->tdb->type)
      || startsWithWord("bigChain"  , track->tdb->type)
      || startsWithWord("bam"     , track->tdb->type)
      || startsWithWord("halSnake", track->tdb->type)
+     || startsWithWord("bigLolly", track->tdb->type)
      || startsWithWord("vcfTabix", track->tdb->type))
      // XX code-review: shouldn't we error abort if the URL is not valid?
      && (bdu && isValidBigDataUrl(bdu, FALSE))

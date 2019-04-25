@@ -389,24 +389,26 @@ int doCheckTrackDb(struct dyString *errors, struct trackHub *hub,
 int errorCount = 0;
 struct trackDb *tdb = NULL, *tdbList = NULL;
 struct errCatch *errCatch = errCatchNew();
-struct errCatch *trackFileCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
     tdbList = trackHubTracksForGenome(hub, genome);
+    tdbList = trackDbLinkUpGenerations(tdbList);
+    tdbList = trackDbPolishAfterLinkup(tdbList, genome->name);
+    trackHubPolishTrackNames(genome->trackHub, tdbList);
     for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
         {
-        dyStringPrintf(errors, "<ul>\n<li>track name: %s\n", tdb->track);
+        struct errCatch *trackFileCatch = errCatchNew();
         if (errCatchStart(trackFileCatch))
             hubCheckBigDataUrl(hub, genome, tdb);
         errCatchEnd(trackFileCatch);
         if (trackFileCatch->gotError)
             {
             errorCount += 1;
+            dyStringPrintf(errors, "<ul>\n<li>track name: %s\n", tdb->track);
             dyStringPrintf(errors, "<ul>\n<li><span class=\"hubError\"><b>bigDataUrl error</b>: %s</span></li></ul></ul>\n", trackFileCatch->message->string);
-            dyStringClear(trackFileCatch->message);
             }
+        errCatchFree(&trackFileCatch);
         }
-    errCatchFree(&trackFileCatch);
     if (tdb != NULL)
         {
         dyStringPrintf(errors, "<ul>\n<li>No errors found</li>\n</ul></ul>");

@@ -521,6 +521,9 @@ int retVal = 0;
 if (errCatchStart(errCatch))
     {
     tdbList = trackHubTracksForGenome(hub, genome);
+    tdbList = trackDbLinkUpGenerations(tdbList);
+    tdbList = trackDbPolishAfterLinkup(tdbList, genome->name);
+    hubCheckGenomeDescription(hub, genome);
     trackHubPolishTrackNames(hub, tdbList);
     }
 errCatchEnd(errCatch);
@@ -529,6 +532,8 @@ if (errCatch->gotError)
     retVal = 1;
     dyStringPrintf(errors, "%s", errCatch->message->string);
     }
+if (errCatch->gotWarning && !errCatch->gotError)
+    dyStringPrintf(errors, "%s", errCatch->message->string);
 errCatchFree(&errCatch);
 
 verbose(2, "%d tracks in %s\n", slCount(tdbList), genome->name);
@@ -555,6 +560,7 @@ int retVal = 0;
 if (errCatchStart(errCatch))
     {
     hub = trackHubOpen(hubUrl, "hub_0");
+    hubCheckHubDescription(hub);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
@@ -562,6 +568,8 @@ if (errCatch->gotError)
     retVal = 1;
     dyStringPrintf(errors, "%s\n", errCatch->message->string);
     }
+if (errCatch->gotWarning && !errCatch->gotError)
+    dyStringPrintf(errors, "%s", errCatch->message->string);
 errCatchFree(&errCatch);
 
 if (hub == NULL)

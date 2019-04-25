@@ -1,0 +1,17 @@
+
+
+mkdir /cluster/data/hg38/bed/gdcCancer
+cd /cluster/data/hg38/bed/gdcCancer
+
+#go to https://portal.gdc.cancer.gov/repository?filters=%7B%22op%22%3A%22and%22%2C%22content%22%3A%5B%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22files.access%22%2C%22value%22%3A%5B%22open%22%5D%7D%7D%2C%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22files.analysis.workflow_type%22%2C%22value%22%3A%5B%22MuTect2%20Variant%20Aggregation%20and%20Masking%22%5D%7D%7D%2C%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22files.data_format%22%2C%22value%22%3A%5B%22MAF%22%5D%7D%7D%2C%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22files.data_type%22%2C%22value%22%3A%5B%22Masked%20Somatic%20Mutation%22%5D%7D%7D%5D%7D
+# add files to cart, click on cart, hit download button
+
+# press clinical button and select TSV.  Download will contain clinical.tsv exposure.tsv
+
+tar xvf gdc_download_20190408_221221.617568.tar.gz
+tar xvf clinical.cart.2019-04-22.tar.gz
+
+cancerMafToBigBed . clinical.tsv exposure.tsv gdcCancer.bb
+
+rm /gbdb/hg38/gdcCancer.bb
+ln -s `pwd`/gdcCancer.bb /gbdb/hg38

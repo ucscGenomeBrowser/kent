@@ -194,5 +194,11 @@ void hubCheckBigDataUrl(struct trackHub *hub, struct trackHubGenome *genome,
     struct trackDb *tdb);
 /* Check remote file exists and is of correct type. Wrap this in error catcher */
 
+void hubCheckGenomeDescription(struct trackHub *hub, struct trackHubGenome *genome);
+/* Warn about missing or incorrect htmlPath settings for each genome in an assembly hub */
+
+void hubCheckHubDescription(struct trackHub *hub);
+/* Warn about missing or incorrect description page for hub */
+
 #endif /* TRACKHUB_H */
 

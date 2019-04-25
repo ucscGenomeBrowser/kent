@@ -154,6 +154,7 @@ for (ge = hub->genomeList; ge; ge = ge->next)
 	continue;	/* found genome */
 	}
     }
+
 if (NULL == foundGenome)
     apiErrAbort(err400, err400Msg, "can not find specified 'genome=%s' for endpoint: /list/chromosomes?hubUrl=%s;genome=%s", genome, hubUrl, genome);
 
@@ -165,11 +166,11 @@ if (isNotEmpty(track))
     jsonWriteString(jw, "track", track);
     struct trackDb *tdb = obtainTdb(foundGenome, NULL);
     if (NULL == tdb)
-	apiErrAbort(err400, err400Msg, "failed to find a track hub definition in genome=%s for endpoint '/list/chromosomes' give hubUrl=%s'", genome, hubUrl);
+	apiErrAbort(err400, err400Msg, "failed to find a track hub definition in genome=%s for endpoint '/list/chromosomes' given hubUrl=%s'", genome, hubUrl);
 
     struct trackDb *thisTrack = findTrackDb(track, tdb);
     if (NULL == thisTrack)
-	apiErrAbort(err400, err400Msg, "failed to find specified track=%s in genome=%s for endpoint '/getdata/track'  given hubUrl='%s'", track, genome, hubUrl);
+	apiErrAbort(err400, err400Msg, "failed to find specified track=%s in genome=%s for endpoint '/list/chromosomes'  given hubUrl='%s'", track, genome, hubUrl);
 
     char *bigDataUrl = trackDbSetting(thisTrack, "bigDataUrl");
     struct bbiFile *bbi = bigFileOpen(thisTrack->type, bigDataUrl);
@@ -186,7 +187,22 @@ if (isNotEmpty(track))
     }
 else
     {
-    struct chromInfo *ci = trackHubAllChromInfo(foundGenome->name);
+    struct chromInfo *ci = NULL;
+    /* might be a track hub on a UCSC database */
+    if (isEmpty(foundGenome->twoBitPath))
+	{
+	struct sqlConnection *conn = hAllocConnMaybe(foundGenome->trackHub->defaultDb);
+	if (NULL == conn)
+	    apiErrAbort(err400, err400Msg, "can not find database 'genome=%s' for endpoint '/list/chromosomes", foundGenome->trackHub->defaultDb);
+	else
+	    hFreeConn(&conn);
+	ci = createChromInfoList(NULL, foundGenome->trackHub->defaultDb);
+	}
+    else
+	{
+	ci = trackHubAllChromInfo(foundGenome->name);
+	}
+fprintf(stderr, "# DBG: sorting ci length: %d\n", slCount(ci));
     slSort(ci, chromInfoCmp);
     jsonWriteNumber(jw, "chromCount", (long long)slCount(ci));
     jsonWriteObjectStart(jw, "chromosomes");
@@ -198,74 +214,6 @@ else
     jsonWriteObjectEnd(jw);	/* chromosomes */
     }
 apiFinishOutput(0, NULL, jw);
-
-#ifdef NOT
-char *table = cgiOptionalString("track");
-struct sqlConnection *conn = hAllocConn(db);
-/* in trackDb language: track == table */
-if (table)
-    {
-    if (! sqlTableExists(conn, table))
-	apiErrAbort(err400, err400Msg, "can not find specified 'track=%s' for endpoint: /list/chromosomes?db=%s;track=%s", table, db, table);
-    if (sqlColumnExists(conn, table, "chrom"))
-	{
-	char *dataTime = sqlTableUpdate(conn, table);
-	time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
-	replaceChar(dataTime, ' ', 'T');	/* ISO 8601 */
-        struct jsonWrite *jw = apiStartOutput();
-	jsonWriteString(jw, "genome", db);
-	jsonWriteString(jw, "track", table);
-	jsonWriteString(jw, "dataTime", dataTime);
-	jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
-	freeMem(dataTime);
-        struct slPair *list = NULL;
-	char query[2048];
-        sqlSafef(query, sizeof(query), "select distinct chrom from %s", table);
-	struct sqlResult *sr = sqlGetResult(conn, query);
-	char **row;
-	while ((row = sqlNextRow(sr)) != NULL)
-    	{
-            int size = hChromSize(db, row[0]);
-	    slAddHead(&list, slPairNew(row[0], intToPt(size)));
-    	}
-	sqlFreeResult(&sr);
-        slPairIntSort(&list);
-        slReverse(&list);
-        jsonWriteNumber(jw, "chromCount", (long long)slCount(list));
-	jsonWriteObjectStart(jw, "chromosomes");
-        struct slPair *el = list;
-        for ( ; el != NULL; el = el->next )
-            jsonWriteNumber(jw, el->name, (long long)ptToInt(el->val));
-	jsonWriteObjectEnd(jw);	/* chromosomes */
-	apiFinishOutput(0, NULL, jw);
-	}
-    else
-	apiErrAbort(err400, err400Msg, "track '%s' is not a position track, request table without chrom specification, genome: '%s'", table, db);
-    }
-else
-    {
-    char *dataTime = sqlTableUpdate(conn, "chromInfo");
-    time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
-    replaceChar(dataTime, ' ', 'T');	/* ISO 8601 */
-    struct chromInfo *ciList = createChromInfoList(NULL, db);
-    slSort(ciList, chromInfoCmp);
-    struct chromInfo *el = ciList;
-    struct jsonWrite *jw = apiStartOutput();
-    jsonWriteString(jw, "genome", db);
-    jsonWriteString(jw, "dataTime", dataTime);
-    jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
-    freeMem(dataTime);
-    jsonWriteNumber(jw, "chromCount", (long long)slCount(ciList));
-    jsonWriteObjectStart(jw, "chromosomes");
-    for ( ; el != NULL; el = el->next )
-	{
-        jsonWriteNumber(jw, el->chrom, (long long)el->size);
-	}
-    jsonWriteObjectEnd(jw);	/* chromosomes */
-    apiFinishOutput(0, NULL, jw);
-    }
-hFreeConn(&conn);
-#endif
 }
 
 static void chromInfoJsonOutput(FILE *f, char *db)
@@ -409,7 +357,7 @@ static void trackDbJsonOutput(char *db, FILE *f)
 {
 struct sqlConnection *conn = hAllocConnMaybe(db);
 if (NULL == conn)
-    apiErrAbort(err400, err400Msg, "can not find database 'db=%s' for endpoint '/list/hubGenomes", db);
+    apiErrAbort(err400, err400Msg, "can not find database 'db=%s' for endpoint '/list/tracks", db);
 
 char *dataTime = sqlTableUpdate(conn, "trackDb");
 time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
@@ -471,6 +419,14 @@ else if (sameWord("tracks", words[1]))
     char *hubUrl = cgiOptionalString("hubUrl");
     char *genome = cgiOptionalString("genome");
     char *db = cgiOptionalString("db");
+    if (isNotEmpty(db))
+	{
+	struct sqlConnection *conn = hAllocConnMaybe(db);
+        if (NULL == conn)
+	    apiErrAbort(err400, err400Msg, "can not find database 'db=%s' for endpoint '/list/tracks", db);
+	else
+	    hFreeConn(&conn);
+	}
     if (isEmpty(hubUrl) && isEmpty(db))
       apiErrAbort(err400, err400Msg, "ERROR: missing hubUrl or db name for endpoint /list/tracks");
     if (isEmpty(hubUrl))	// missing hubUrl implies UCSC database
@@ -507,8 +463,16 @@ else if (sameWord("chromosomes", words[1]))
     char *hubUrl = cgiOptionalString("hubUrl");
     char *genome = cgiOptionalString("genome");
     char *db = cgiOptionalString("db");
+    if (isNotEmpty(db))
+	{
+	struct sqlConnection *conn = hAllocConnMaybe(db);
+        if (NULL == conn)
+	    apiErrAbort(err400, err400Msg, "can not find database 'db=%s' for endpoint '/list/chromosomes", db);
+	else
+	    hFreeConn(&conn);
+	}
     if (isEmpty(hubUrl) && isEmpty(db))
-        apiErrAbort(err400, err400Msg, "ERROR: must '%s' '%s' supply hubUrl or db name to return chromosome list", hubUrl, db);
+        apiErrAbort(err400, err400Msg, "must supply hubUrl or db name for endpoint '/list/chromosomes", hubUrl, db);
 
     if (isEmpty(hubUrl))	// missing hubUrl implies UCSC database
 	{

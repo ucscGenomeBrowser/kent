@@ -788,21 +788,28 @@ memSwapChar(longLabel, strlen(longLabel), '\t', ' ');
 /* Forbid any dangerous settings that should not be allowed */
 forbidSetting(hub, genome, tdb, "idInUrlSql");
 
-// subtracks is not NULL if a track said we were its parent
-if (tdb->subtracks != NULL)
+if (trackDbLocalSetting(tdb, "superTrack") || trackDbLocalSetting(tdb, "compositeTrack")
+    || trackDbLocalSetting(tdb, "container") || trackDbLocalSetting(tdb, "view"))
     {
-    boolean isSuper = FALSE;
-    char *superTrack = trackDbSetting(tdb, "superTrack");
-    if ((superTrack != NULL) && startsWith("on", superTrack))
-	isSuper = TRUE;
-
-    if (!(trackDbSetting(tdb, "compositeTrack") ||
-          trackDbSetting(tdb, "container") || 
-	  isSuper))
+    // subtracks is not NULL if a track said we were its parent
+    // but generate a more helpful error if a track should have children but doesn't
+    if (tdb->subtracks != NULL)
         {
-	errAbort("Parent track %s is not compositeTrack, container, or superTrack in hub %s genome %s", 
-		tdb->track, hub->url, genome->name);
-	}
+        boolean isSuper = FALSE;
+        char *superTrack = trackDbSetting(tdb, "superTrack");
+        if ((superTrack != NULL) && startsWith("on", superTrack))
+        isSuper = TRUE;
+
+        if (!(trackDbSetting(tdb, "compositeTrack") ||
+              trackDbSetting(tdb, "container") || 
+          isSuper))
+            {
+        errAbort("Parent track %s is not compositeTrack, container, or superTrack in hub %s genome %s", 
+            tdb->track, hub->url, genome->name);
+        }
+        }
+    else
+        errAbort("Track %s is declared superTrack, compositeTrack or container but has no subtracks in hub %s genome %s", tdb->track, hub->url, genome->name);
     }
 else
     {
@@ -1246,5 +1253,35 @@ if (relativeUrl != NULL)
     else
         errAbort("unrecognized type %s in genome %s track %s", type, genome->name, tdb->track);
     freez(&bigDataUrl);
+    }
+}
+
+void hubCheckGenomeDescription(struct trackHub *hub, struct trackHubGenome *genome)
+/* Warn about missing or incorrect htmlPath settings for each genome in an assembly hub */
+{
+if (genome->twoBitPath != NULL)
+    {
+    char *htmlPath = hashFindVal(genome->settingsHash, "htmlPath");
+    if (htmlPath == NULL)
+        warn("warning: htmlPath setting missing for genome %s", genome->name);
+    else
+        {
+        // check that file actually exists
+        if (!udcExists(htmlPath))
+            warn("warning: htmlPath file does not exist %s", htmlPath);
+        }
+    }
+}
+
+void hubCheckHubDescription(struct trackHub *hub)
+/* Warn about missing or incorrect description page for hub */
+{
+if (!hub->descriptionUrl)
+    warn("warning: descriptionUrl setting missing from %s", hub->url);
+else
+    {
+    // check that file actually exists
+    if (!udcExists(hub->descriptionUrl))
+        warn("warning: descriptionUrl error: file does not exist %s", hub->descriptionUrl);
     }
 }

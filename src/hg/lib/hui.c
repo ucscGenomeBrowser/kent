@@ -2643,9 +2643,11 @@ if (setting == NULL)
     }
 members = needMem(sizeof(members_t));
 members->setting = cloneString(setting);
-char *words[SMALLBUF];
+#define MAX_SUBGROUP_MEMBERS 1000
+char *words[MAX_SUBGROUP_MEMBERS+3];    // members preceded by tag and title, one extra to detect
 count = chopLine(members->setting, words);
-assert(count <= ArraySize(words));
+if (count == ArraySize(words))
+    warn("Subgroup %s exceeds maximum %d members", words[1], MAX_SUBGROUP_MEMBERS); 
 if (count <= 1)
     {
     freeMem(members->setting);
@@ -3113,7 +3115,7 @@ if (membership->setting == NULL)
 int ix,cnt;
 char *words[SMALLBUF];
 cnt = chopLine(membership->setting, words);
-assert(cnt <= ArraySize(words));
+assert(cnt < ArraySize(words));
 if (cnt <= 0)
     {
     freeMem(membership->setting);
@@ -4201,7 +4203,9 @@ int minHeightPixels;
 char option[256];
 int defaultHeight;  /*  pixels per item */
 int settingsDefault;
-cartTdbFetchMinMaxPixels(cart, tdb, MIN_HEIGHT_PER, atoi(DEFAULT_HEIGHT_PER), atoi(DEFAULT_HEIGHT_PER),
+
+#define MIN_HEIGHT_LOLLY        32
+cartTdbFetchMinMaxPixels(cart, tdb, MIN_HEIGHT_LOLLY, atoi(DEFAULT_HEIGHT_PER), atoi(DEFAULT_HEIGHT_PER),
                                 &minHeightPixels, &maxHeightPixels, &settingsDefault, &defaultHeight);
 
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
