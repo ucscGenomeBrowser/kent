@@ -2643,9 +2643,11 @@ if (setting == NULL)
     }
 members = needMem(sizeof(members_t));
 members->setting = cloneString(setting);
-char *words[512];
+#define MAX_SUBGROUP_MEMBERS 1000
+char *words[MAX_SUBGROUP_MEMBERS+3];    // members preceded by tag and title, one extra to detect
 count = chopLine(members->setting, words);
-assert(count < ArraySize(words));
+if (count == ArraySize(words))
+    warn("Subgroup %s exceeds maximum %d members", words[1], MAX_SUBGROUP_MEMBERS); 
 if (count <= 1)
     {
     freeMem(members->setting);
@@ -3111,7 +3113,7 @@ if (membership->setting == NULL)
     }
 
 int ix,cnt;
-char *words[512];
+char *words[SMALLBUF];
 cnt = chopLine(membership->setting, words);
 assert(cnt < ArraySize(words));
 if (cnt <= 0)

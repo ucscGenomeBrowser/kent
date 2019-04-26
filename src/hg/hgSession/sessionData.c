@@ -353,13 +353,19 @@ if (fileExists(oldFile))
         makeDirsForFile(newFile);
         FILE *newF = mustOpen(newFile, "w");
         char *line;
-        while (lineFileNextReal(lf, &line))
+        while (lineFileNext(lf, &line, NULL))
             {
-            char *trackLine = cloneString(line);
-            saveTrashPaths(&trackLine, sessionDir, FALSE);
-            saveDbTableName(&trackLine, sessionDataDbPrefix, sessionDir);
-            fprintf(newF, "%s\n", trackLine);
-            freeMem(trackLine);
+            char *s = skipLeadingSpaces(line);
+            if (*s != '\0' && *s != '#')
+                {
+                char *trackLine = cloneString(line);
+                saveTrashPaths(&trackLine, sessionDir, FALSE);
+                saveDbTableName(&trackLine, sessionDataDbPrefix, sessionDir);
+                fprintf(newF, "%s\n", trackLine);
+                freeMem(trackLine);
+                }
+            else
+                fprintf(newF, "%s\n", line);
             }
         carefulClose(&newF);
         if (isNotEmpty(sessionDir))
