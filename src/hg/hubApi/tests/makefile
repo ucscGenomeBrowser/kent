@@ -18,7 +18,7 @@ getSequence: getSeq01 getSeq02 getSeq03
 
 errorTests: err01 err02 err03 err04 err05 err06 err07 err08 err09 err10 \
 	err11 err12 err13 err14 err15 err16 err17 err18 err19 err20 \
-	err21 err22 err23 err24 err25 err26 err27 err28
+	err21 err22 err23 err24 err25 err26 err27 err28 err29
 
 setOutput:
 	@if [ ! -d testOutput ]; then mkdir testOutput; fi
@@ -340,7 +340,7 @@ err17: setOutput
 # testing /list/chromosomes? hubUrl missing genome=
 err18: setOutput
 	@printf "### $@ https://hgwdev-api.gi.ucsc.edu/list/chromosomes?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt\n"
-	@./jsonConsumer.pl -endpoint="/list/chromosomes" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing /list/chromosomes? hubUrl missing incorrect genome=araTha
@@ -403,4 +403,10 @@ err27: setOutput
 err28: setOutput
 	@printf "### $@ 'https://hgwdev-api.gi.ucsc.edu/getData/track?track=_assembly;genome=_araTha1;hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt'\n"
 	@./jsonConsumer.pl -endpoint="/getData/track" -hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt -genome=_araTha1 -track=_assembly 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/chromosomes hubUrl bad genome name
+err29: setOutput
+	@printf "### $@ 'https://hgwdev-api.gi.ucsc.edu/list/chromosomes?genome=araTha1;hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt'"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt -genome=araTha1 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
