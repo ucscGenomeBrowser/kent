@@ -202,7 +202,6 @@ else
 	{
 	ci = trackHubAllChromInfo(foundGenome->name);
 	}
-fprintf(stderr, "# DBG: sorting ci length: %d\n", slCount(ci));
     slSort(ci, chromInfoCmp);
     jsonWriteNumber(jw, "chromCount", (long long)slCount(ci));
     jsonWriteObjectStart(jw, "chromosomes");
@@ -337,6 +336,8 @@ if (tdb->subtracks)
     }
 }	/*	static void recursiveTrackList()	*/
 
+
+#ifdef NOT
 static int trackDbTrackCmp(const void *va, const void *vb)
 /* Compare to sort based on 'track' name; use shortLabel as secondary sort key.
  * Note: parallel code to hgTracks.c:tgCmpPriority */
@@ -351,6 +352,7 @@ else if (dif == 0.0)
 else
    return 1;
 }
+#endif
 
 static void trackDbJsonOutput(char *db, FILE *f)
 /* return track list from specified UCSC database name */
@@ -442,21 +444,20 @@ else if (sameWord("tracks", words[1]))
             apiErrAbort(err400, err400Msg, "ERROR: must supply hubUrl='http:...' some URL to a hub for /list/tracks");
 	}
     struct trackHub *hub = errCatchTrackHubOpen(hubUrl);
-    if (hub->genomeList)
-	{
-	struct trackDb *tdbList = obtainTdb(hub->genomeList, NULL);
-	slSort(tdbList, trackDbTrackCmp);
-        struct jsonWrite *jw = apiStartOutput();
-	jsonWriteString(jw, "hubUrl", hubUrl);
-	jsonWriteObjectStart(jw, genome);
-	struct trackDb *el = NULL;
-	for (el = tdbList; el != NULL; el = el->next )
+    struct trackHubGenome *hubGenome = findHubGenome(hub, genome,
+	"/list/tracks", hubUrl);
+    struct trackDb *tdbList = obtainTdb(hubGenome, NULL);
+//	slSort(tdbList, trackDbTrackCmp);
+    struct jsonWrite *jw = apiStartOutput();
+    jsonWriteString(jw, "hubUrl", hubUrl);
+    jsonWriteObjectStart(jw, genome);
+    struct trackDb *el = NULL;
+    for (el = tdbList; el != NULL; el = el->next )
 	    {
 	    recursiveTrackList(jw, el);
 	    }
-	jsonWriteObjectEnd(jw);
-	apiFinishOutput(0, NULL, jw);
-	}
+    jsonWriteObjectEnd(jw);
+    apiFinishOutput(0, NULL, jw);
     }
 else if (sameWord("chromosomes", words[1]))
     {

@@ -268,6 +268,21 @@ errCatchFree(&errCatch);
 return hub;
 }
 
+static int trackDbTrackCmp(const void *va, const void *vb)
+/* Compare to sort based on 'track' name; use shortLabel as secondary sort key.
+ * Note: parallel code to hgTracks.c:tgCmpPriority */
+{
+const struct trackDb *a = *((struct trackDb **)va);
+const struct trackDb *b = *((struct trackDb **)vb);
+int dif = strcmp(a->track, b->track);
+if (dif < 0)
+   return -1;
+else if (dif == 0.0)
+   return strcasecmp(a->shortLabel, b->shortLabel);
+else
+   return 1;
+}
+
 struct trackDb *obtainTdb(struct trackHubGenome *genome, char *db)
 /* return a full trackDb fiven the hub genome pointer, or ucsc database name */
 {
@@ -279,8 +294,9 @@ else
     tdb = trackHubTracksForGenome(genome->trackHub, genome);
     tdb = trackDbLinkUpGenerations(tdb);
     tdb = trackDbPolishAfterLinkup(tdb, genome->name);
-    slSort(&tdb, trackDbCmp);
     }
+slSort(tdb, trackDbTrackCmp);
+// slSort(&tdb, trackDbCmp);
 return tdb;
 }
 
@@ -348,4 +364,19 @@ const struct chromInfo *b = *((struct chromInfo **)vb);
 int dif;
 dif = (long) a->size - (long) b->size;
 return dif;
+}
+
+struct trackHubGenome *findHubGenome(struct trackHub *hub, char *genome,
+    char *endpoint, char *hubUrl)
+/* given open 'hub', find the specified 'genome' called from 'endpoint' */
+{
+struct trackHubGenome *hubGenome = NULL;
+for (hubGenome = hub->genomeList; hubGenome; hubGenome = hubGenome->next)
+    {
+    if (sameString(genome, hubGenome->name))
+	break;
+    }
+if (NULL == hubGenome)
+    apiErrAbort(err400, err400Msg, "failed to find specified genome=%s for endpoint '%s'  given hubUrl '%s'", genome, endpoint, hubUrl);
+return hubGenome;
 }

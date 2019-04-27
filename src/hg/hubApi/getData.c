@@ -529,14 +529,8 @@ if (isEmpty(track))
     apiErrAbort(err400, err400Msg, "missing track=<name> for endpoint '/getData/track'  given hubUrl='%s'", hubUrl);
 
 struct trackHub *hub = errCatchTrackHubOpen(hubUrl);
-struct trackHubGenome *hubGenome = NULL;
-for (hubGenome = hub->genomeList; hubGenome; hubGenome = hubGenome->next)
-    {
-    if (sameString(genome, hubGenome->name))
-	break;
-    }
-if (NULL == hubGenome)
-    apiErrAbort(err400, err400Msg, "failed to find specified genome=%s for endpoint '/getData/track'  given hubUrl '%s'", genome, hubUrl);
+struct trackHubGenome *hubGenome = findHubGenome(hub, genome, "/getData/track",
+  hubUrl);
 
 struct trackDb *tdb = obtainTdb(hubGenome, NULL);
 
