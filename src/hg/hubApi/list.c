@@ -19,17 +19,6 @@ jsonWriteNumber(jw, columnNames[i++], (long long)el->dbCount);
 jsonWriteString(jw, columnNames[i++], el->dbList);
 jsonWriteString(jw, columnNames[i++], el->descriptionUrl);
 jsonWriteObjectEnd(jw);
-#ifdef NOT
-jsonWriteListStart(jw, NULL);
-jsonWriteString(jw, NULL, el->hubUrl);
-jsonWriteString(jw, NULL, el->shortLabel);
-jsonWriteString(jw, NULL, el->longLabel);
-jsonWriteString(jw, NULL, el->registrationTime);
-jsonWriteNumber(jw, NULL, (long long)el->dbCount);
-jsonWriteString(jw, NULL, el->dbList);
-jsonWriteString(jw, NULL, el->descriptionUrl);
-jsonWriteListEnd(jw);
-#endif
 }
 
 static void jsonPublicHubs()
@@ -85,24 +74,6 @@ jsonWriteNumber(jw, columnNames[i++], (long long)el->hgPbOk);
 jsonWriteString(jw, columnNames[i++], el->sourceName);
 jsonWriteNumber(jw, columnNames[i++], (long long)el->taxId);
 jsonWriteObjectEnd(jw);
-#ifdef NOT
-jsonWriteListStart(jw, NULL);
-jsonWriteString(jw, NULL, el->name);
-jsonWriteString(jw, NULL, el->description);
-jsonWriteString(jw, NULL, el->nibPath);
-jsonWriteString(jw, NULL, el->organism);
-jsonWriteString(jw, NULL, el->defaultPos);
-jsonWriteNumber(jw, NULL, (long long)el->active);
-jsonWriteNumber(jw, NULL, (long long)el->orderKey);
-jsonWriteString(jw, NULL, el->genome);
-jsonWriteString(jw, NULL, el->scientificName);
-jsonWriteString(jw, NULL, el->htmlPath);
-jsonWriteNumber(jw, NULL, (long long)el->hgNearOk);
-jsonWriteNumber(jw, NULL, (long long)el->hgPbOk);
-jsonWriteString(jw, NULL, el->sourceName);
-jsonWriteNumber(jw, NULL, (long long)el->taxId);
-jsonWriteListEnd(jw);
-#endif
 }
 
 static void jsonDbDb()
@@ -324,36 +295,23 @@ if (! (trackLeavesOnly && isContainer) )
                 jsonWriteString(jw, hel->name, (char *)hel->val);
             }
         }
+
+    if (tdb->subtracks)
+	{
+	struct trackDb *el = NULL;
+	for (el = tdb->subtracks; el != NULL; el = el->next )
+	    recursiveTrackList(jw, el);
+	}
+
     jsonWriteObjectEnd(jw);
     }
-
-if (tdb->subtracks)
+else if (tdb->subtracks)
     {
     struct trackDb *el = NULL;
     for (el = tdb->subtracks; el != NULL; el = el->next )
-	{
 	recursiveTrackList(jw, el);
-	}
     }
 }	/*	static void recursiveTrackList()	*/
-
-
-#ifdef NOT
-static int trackDbTrackCmp(const void *va, const void *vb)
-/* Compare to sort based on 'track' name; use shortLabel as secondary sort key.
- * Note: parallel code to hgTracks.c:tgCmpPriority */
-{
-const struct trackDb *a = *((struct trackDb **)va);
-const struct trackDb *b = *((struct trackDb **)vb);
-int dif = strcmp(a->track, b->track);
-if (dif < 0)
-   return -1;
-else if (dif == 0.0)
-   return strcasecmp(a->shortLabel, b->shortLabel);
-else
-   return 1;
-}
-#endif
 
 static void trackDbJsonOutput(char *db, FILE *f)
 /* return track list from specified UCSC database name */
@@ -394,7 +352,7 @@ else if (sameWord("hubGenomes", words[1]))
 	apiErrAbort(err400, err400Msg, "must supply hubUrl='http:...' some URL to a hub for /list/hubGenomes");
 
 #ifdef NOT
-    /* this could be done for every function */
+    /* this could be done for every function, beware, cgiSpoof can be here */
     struct cgiVar *varList = cgiVarList();
     struct cgiVar *var = varList;
     for ( ; var; var = var->next)

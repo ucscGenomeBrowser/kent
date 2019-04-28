@@ -865,7 +865,7 @@ for ( ; genome; genome = genome->next )
        safef(urlReference, sizeof(urlReference), " <a href='%s/getData/sequence?hubUrl=%s;genome=%s;chrom=%s;start=%u;end=%u' target=_blank>JSON example sequence output: %s:%u-%u</a>", urlPrefix, hubTop->url, genome->name, chromName, chromSize/4, (chromSize/4)+128, chromName, chromSize/4, (chromSize/4)+128);
         hPrintf("<li>%s</li>\n", urlReference);
 	}
-    safef(urlReference, sizeof(urlReference), " <a href='%s/list/tracks?hubUrl=%s;genome=%s' target=_blank>JSON example list tracks output</a>", urlPrefix, hubTop->url, genome->name);
+    safef(urlReference, sizeof(urlReference), " <a href='%s/list/tracks?hubUrl=%s;genome=%s%s' target=_blank>JSON example list tracks output</a>", urlPrefix, hubTop->url, genome->name, trackLeavesOnly ? ";trackLeavesOnly=1" : "");
     hPrintf("<li>%s</li>\n", urlReference);
     hubInfo("organism", genome->organism);
     hubInfo("name", genome->name);
@@ -989,7 +989,7 @@ sprintLongWithCommas(sizeString, chromSize);
 hPrintf("<h4>Tracks in UCSC genome: '%s', chrom count: %s, longest chrom: %s : %s</h4>\n", db, countString, chromName, sizeString);
 
 char urlReference[2048];
-safef(urlReference, sizeof(urlReference), " <a href='%s/list/tracks?genome=%s' target=_blank>JSON output: list tracks</a>", urlPrefix, db);
+safef(urlReference, sizeof(urlReference), " <a href='%s/list/tracks?genome=%s%s' target=_blank>JSON output: list tracks</a>", urlPrefix, db, trackLeavesOnly ? ";trackLeavesOnly=1" : "");
 hPrintf("<h4>%s</h4>\n", urlReference);
 
 struct trackDb *tdbList = obtainTdb(NULL, db);
