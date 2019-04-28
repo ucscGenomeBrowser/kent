@@ -245,7 +245,7 @@ if (db)
     else
 	{
 	char urlReference[2048];
-	safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?db=%s;track=%s;maxItemsOutput=5%s' target=_blank>(sample data)%s</a>\n", urlPrefix, db, tdb->track, extraFlags, errorPrint);
+	safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?genome=%s;track=%s;maxItemsOutput=5%s' target=_blank>(sample data)%s</a>\n", urlPrefix, db, tdb->track, extraFlags, errorPrint);
 
 	if (superChild)
 	    hPrintf("<li><b>%s</b>: %s superTrack child of parent: %s%s</li>\n", tdb->track, tdb->type, tdb->parent->track, urlReference);
@@ -839,17 +839,13 @@ static void genomeList(struct trackHub *hubTop)
 long totalAssemblyCount = 0;
 struct trackHubGenome *genome = hubTop->genomeList;
 
-hPrintf("<h4>genome sequences (and tracks) present in this track hub</h4>\n");
+hPrintf("<h4>genome sequences (and tracks) present in this track hub (<a href='%s/list/hubGenomes?hubUrl=%s' target=_blank>JSON example list hub genomes)</a></h4>\n", urlPrefix, hubTop->url);
 
 if (NULL == genome)
     {
     hPrintf("<h4>odd error, can not find a gnomeList ? at url: '%s'</h4>\n", hubTop->url);
     return;
     }
-
-
-// testing /list/tracks?db=ce11
-// testing /list/tracks? hubUrl genome=_araTha1
 
 hPrintf("<ul>\n");
 long lastTime = clock1000();
@@ -993,7 +989,7 @@ sprintLongWithCommas(sizeString, chromSize);
 hPrintf("<h4>Tracks in UCSC genome: '%s', chrom count: %s, longest chrom: %s : %s</h4>\n", db, countString, chromName, sizeString);
 
 char urlReference[2048];
-safef(urlReference, sizeof(urlReference), " <a href='%s/list/tracks?db=%s' target=_blank>JSON output: list tracks</a>", urlPrefix, db);
+safef(urlReference, sizeof(urlReference), " <a href='%s/list/tracks?genome=%s' target=_blank>JSON output: list tracks</a>", urlPrefix, db);
 hPrintf("<h4>%s</h4>\n", urlReference);
 
 struct trackDb *tdbList = obtainTdb(NULL, db);
@@ -1234,14 +1230,15 @@ char *words[MAX_PATH_INFO];
 /* can immediately verify valid parameters right here right now */
 char *start = cgiOptionalString("start");
 char *end = cgiOptionalString("end");
-char *db = cgiOptionalString("db");
+char *db = cgiOptionalString("genome");
+char *hubUrl = cgiOptionalString("hubUrl");
 struct dyString *errorMsg = newDyString(128);
 
-if (isNotEmpty(db))
+if (isEmpty(hubUrl) && isNotEmpty(db))
     {
     struct sqlConnection *conn = hAllocConnMaybe(db);
     if (NULL == conn)
-        dyStringPrintf(errorMsg, "can not find database db='%s' for endpoint '%s'", db, pathInfo);
+        dyStringPrintf(errorMsg, "can not find genome genome='%s' for endpoint '%s'", db, pathInfo);
     else
         hFreeConn(&conn);
     }
