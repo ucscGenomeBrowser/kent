@@ -1323,7 +1323,7 @@ if (sameOk("/",pathInfo))
 
 (void) hubPublicDbLoadAll();
 
-webStartJWest(cart, database, "UCSC JSON API interface");
+webStartJWest(cart, database, "Genome Browser API");
 // webStartGbNoBanner(cart, database, "UCSC JSON API interface");
 // webStartGbOptionalBanner(cart, database, "UCSC JSON API interface", TRUE, FALSE);
 
