@@ -20,7 +20,7 @@ for (el = wds->ascii; (itemCount + itemsDone) < maxItemsOutput && el; el = el->n
     unsigned count = el->count;
     unsigned i = 0;
     struct asciiDatum *data = el->data;
-    for ( ; ((itemCount + itemsDone) < maxItemsOutput) && i < count; ++i,++data)
+    for ( ; (i < count) && ((itemCount + itemsDone) < maxItemsOutput); i++,data++)
 	{
 	int s = data->chromStart;
 	int e = s + span;
@@ -324,7 +324,7 @@ if (isEmpty(chrom))
     struct chromInfo *ciList = createChromInfoList(NULL, db);
     slSort(ciList, chromInfoCmp);
     struct chromInfo *ci = ciList;
-    for ( ; itemsDone < maxItemsOutput && ci != NULL; ci = ci->next )
+    for ( ; ci && itemsDone < maxItemsOutput; ci = ci->next )
 	{
 	jsonWriteListStart(jw, ci->chrom);	/* starting a chrom output */
 	freeDyString(&query);
@@ -356,33 +356,13 @@ else
 freeDyString(&query);
 }	/*  static void tableDataOutput(char *db, struct trackDb *tdb, ... ) */
 
-static boolean typedBig9Plus(struct trackDb *tdb)
-/* check if track type is 'bed 9+ ...' to determine itemRgb for big* types */
-{
-if (isNotEmpty(tdb->type) && (allowedBigBedType(tdb->type)))
-    {
-    char *words[8];
-    int wordCount;
-    wordCount = chopLine(cloneString(tdb->type), words);
-    if ( (wordCount > 1) && startsWith("bigBed", words[0]))
-	{
-	if (isAllDigits(words[1]))
-	   if (8 < sqlUnsigned(words[1]))
-		return TRUE;
-	}
-    else
-	return TRUE;	/* something other than bigBed */
-    }
-return FALSE;
-}
-
 static unsigned bbiDataOutput(struct jsonWrite *jw, struct bbiFile *bbi,
     char *chrom, unsigned start, unsigned end, struct sqlFieldType *fiList,
      struct trackDb *tdb, unsigned itemsDone)
 /* output bed data for one chrom in the given bbi file */
 {
 char *itemRgb = trackDbSetting(tdb, "itemRgb");
-if (typedBig9Plus(tdb))
+if (bbi->definedFieldCount > 8)
     itemRgb = "on";
 int *jsonTypes = NULL;
 int columnCount = slCount(fiList);
@@ -592,7 +572,7 @@ if (allowedBigBedType(thisTrack->type))
     if (isEmpty(chrom))
 	{
 	struct bbiChromInfo *bci;
-	for (bci = chromList; (itemsDone < maxItemsOutput) && bci; bci = bci->next)
+	for (bci = chromList; bci && (itemsDone < maxItemsOutput); bci = bci->next)
 	    {
 	    itemsDone += bbiDataOutput(jw, bbi, bci->name, 0, bci->size,
 		fiList, thisTrack, itemsDone);
@@ -698,7 +678,7 @@ if (! hTableOrSplitExists(db, sqlTable))
     }
 
 struct jsonWrite *jw = apiStartOutput();
-jsonWriteString(jw, "db", db);
+jsonWriteString(jw, "genome", db);
 if (tableTrack)
     {
     char *dataTime = NULL;
@@ -775,7 +755,7 @@ if (allowedBigBedType(thisTrack->type))
     if (isEmpty(chrom))
 	{
 	struct bbiChromInfo *bci;
-	for (bci = chromList; (itemsDone < maxItemsOutput) && bci; bci = bci->next)
+	for (bci = chromList; bci && (itemsDone < maxItemsOutput); bci = bci->next)
 	    {
 	    itemsDone += bbiDataOutput(jw, bbi, bci->name, 0, bci->size,
 		fiList, thisTrack, itemsDone);
@@ -842,7 +822,7 @@ if (chromSeqFileExists(db, chrom))
 	jsonWriteString(jw, "hubUrl", hubUrl);
     if (measureTiming)
 	jsonWriteNumber(jw, "dnaFetchTimeMs", et);
-    jsonWriteString(jw, "db", db);
+    jsonWriteString(jw, "genome", db);
     jsonWriteString(jw, "chrom", chrom);
     if (isEmpty(start) || isEmpty(end))
 	{

@@ -297,6 +297,7 @@ static void recursiveTrackList(struct jsonWrite *jw, struct trackDb *tdb)
 {
 boolean isContainer = tdbIsComposite(tdb) || tdbIsCompositeView(tdb);
 
+/* do *NOT* print containers when 'trackLeavesOnly' requested */
 if (! (trackLeavesOnly && isContainer) )
     {
     jsonWriteObjectStart(jw, tdb->track);
@@ -367,7 +368,7 @@ replaceChar(dataTime, ' ', 'T');	/* ISO 8601 */
 hFreeConn(&conn);
 struct trackDb *tdbList = obtainTdb(NULL, db);
 struct jsonWrite *jw = apiStartOutput();
-jsonWriteString(jw, "db", db);
+jsonWriteString(jw, "genome", db);
 jsonWriteString(jw, "dataTime", dataTime);
 jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
 freeMem(dataTime);
@@ -391,6 +392,17 @@ else if (sameWord("hubGenomes", words[1]))
     char *hubUrl = cgiOptionalString("hubUrl");
     if (isEmpty(hubUrl))
 	apiErrAbort(err400, err400Msg, "must supply hubUrl='http:...' some URL to a hub for /list/hubGenomes");
+
+#ifdef NOT
+    /* this could be done for every function */
+    struct cgiVar *varList = cgiVarList();
+    struct cgiVar *var = varList;
+    for ( ; var; var = var->next)
+	{
+	if (differentStringNullOk("hubUrl", var->name))
+	    fprintf(stderr, "# extraneous CGI variable: '%s'='%s'\n", var->name, var->val);
+	}
+#endif
 
     struct trackHub *hub = errCatchTrackHubOpen(hubUrl);
     if (hub->genomeList)
@@ -447,10 +459,9 @@ else if (sameWord("tracks", words[1]))
     struct trackHubGenome *hubGenome = findHubGenome(hub, genome,
 	"/list/tracks", hubUrl);
     struct trackDb *tdbList = obtainTdb(hubGenome, NULL);
-//	slSort(tdbList, trackDbTrackCmp);
     struct jsonWrite *jw = apiStartOutput();
     jsonWriteString(jw, "hubUrl", hubUrl);
-    jsonWriteObjectStart(jw, genome);
+    jsonWriteObjectStart(jw, hubGenome->name);
     struct trackDb *el = NULL;
     for (el = tdbList; el != NULL; el = el->next )
 	    {
