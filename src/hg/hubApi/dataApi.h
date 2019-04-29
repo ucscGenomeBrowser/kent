@@ -136,6 +136,10 @@ struct asObject *asForTable(struct sqlConnection *conn, char *table,
 /* Get autoSQL description if any associated with table. */
 /* Wrap some error catching around asForTable. */
 
+struct trackHubGenome *findHubGenome(struct trackHub *hub, char *genome,
+    char *endpoint, char *hubUrl);
+/* given open 'hub', find the specified 'genome' called from 'endpoint' */
+
 /* ######################################################################### */
 /*  functions in getData.c */
 
