@@ -1,4 +1,4 @@
-/* lolly -- load and draw lollys */
+/* lollyTrack -- load and draw lollys */
 
 /* Copyright (C) 2019 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
@@ -13,7 +13,11 @@
 #include "float.h"
 #include "bigBedFilter.h"
 
+#define LOLLY_RADIUS    5
+#define LOLLY_DIAMETER    2 * LOLLY_RADIUS
 
+
+/* the lolly colors */
 static int lollyPalette[] =
 {
 0x1f77b4, 0xff7f0e, 0x2ca02c, 0xd62728, 0x9467bd, 0x8c564b, 0xe377c2, 0x7f7f7f, 0xbcbd22, 0x17becf
@@ -22,13 +26,13 @@ static int lollyPalette[] =
 struct lolly
 {
 struct lolly *next;
-char *name;
-double val;
-unsigned start;
-unsigned end;
-unsigned radius;
-unsigned height;
-Color color;
+char *name;       /* the mouseover name */
+double val;       /* value in the data file */   
+unsigned start;   /* genomic start address */
+unsigned end;     /* genomic end address */
+unsigned radius;  /* radius of the top of the lolly */
+unsigned height;  /* height of the lolly */
+Color color;      /* color of the lolly */
 };
 
 static void lollyDrawItems(struct track *tg, int seqStart, int seqEnd,
@@ -40,10 +44,10 @@ double scale = scaleForWindow(width, seqStart, seqEnd);
 struct lolly *popList = tg->items, *pop;
 int trackHeight = tg->lollyCart->height;
 
-if (popList == NULL)
+if (popList == NULL)   // nothing to draw
     return;
 
-if ( tg->visibility == tvDense)
+if ( tg->visibility == tvDense)  // in dense mode we just track lines
     {
     for (pop = popList; pop; pop = pop->next)
         {
@@ -53,17 +57,20 @@ if ( tg->visibility == tvDense)
     return;
     }
 
+// first draw the lines so they won't overlap any lollies
 for (pop = popList; pop; pop = pop->next)
     {
     int sx = ((pop->start - seqStart) + .5) * scale + xOff; // x coord of center (lower region)
     hvGfxLine(hvg, sx, yOff + trackHeight, sx , yOff+(trackHeight - pop->height), MG_GRAY);
     }
+
+// now draw the sucker part!
 for (pop = popList; pop; pop = pop->next)
     {
     int sx = ((pop->start - seqStart) + .5) * scale + xOff; // x coord of center (lower region)
     hvGfxCircle(hvg, sx, yOff + trackHeight - pop->radius - pop->height, pop->radius, pop->color, TRUE);
     mapBoxHgcOrHgGene(hvg, pop->start, pop->end, sx - pop->radius, yOff + trackHeight - pop->radius - pop->height - pop->radius, 2 * pop->radius,2 * pop->radius,
-                       tg->track, pop->name, pop->name, NULL, TRUE, NULL);
+                      tg->track, pop->name, pop->name, NULL, TRUE, NULL);
     }
 }
 
@@ -71,6 +78,7 @@ void lollyLeftLabels(struct track *tg, int seqStart, int seqEnd,
 	struct hvGfx *hvg, int xOff, int yOff, int width, int height,
 	boolean withCenterLabels, MgFont *font, Color color,
 	enum trackVisibility vis)
+// draw the labels on the left margin
 {
 int fontHeight = tl.fontHeight+1;
 int centerLabel = (height/2)-(fontHeight/2);
@@ -84,20 +92,20 @@ hvGfxText(hvg, xOff, yOff+centerLabel, color, font, tg->shortLabel);
 
 if (isnan(tg->lollyCart->upperLimit))
     {
-    hvGfxTextRight(hvg, xOff, yOff + 2 * 5 , width - 1, fontHeight, color,
+    hvGfxTextRight(hvg, xOff, yOff + LOLLY_DIAMETER, width - 1, fontHeight, color,
         font, "NO DATA");
     return;
     }
 
 char upper[1024];
 safef(upper, sizeof(upper), "%g -",   tg->lollyCart->upperLimit);
-hvGfxTextRight(hvg, xOff, yOff + 2 * 5 , width - 1, fontHeight, color,
+hvGfxTextRight(hvg, xOff, yOff + LOLLY_DIAMETER, width - 1, fontHeight, color,
     font, upper);
 char lower[1024];
 if (tg->lollyCart->lowerLimit < tg->lollyCart->upperLimit)
     {
     safef(lower, sizeof(lower), "%g _", tg->lollyCart->lowerLimit);
-    hvGfxTextRight(hvg, xOff, yOff+height-fontHeight - 2 * 5, width - 1, fontHeight,
+    hvGfxTextRight(hvg, xOff, yOff+height-fontHeight - LOLLY_DIAMETER, width - 1, fontHeight,
         color, font, lower);
     }
 }
@@ -109,9 +117,11 @@ static int lollyHeight(struct track *tg, enum trackVisibility vis)
 if ( tg->visibility == tvDense)
     return  tl.fontHeight;
 
+// return the height we calculated at load time
 return tg->lollyCart->height;
 }
 
+#ifdef NOTUSED
 double calcVarianceFromSums(double sum, double sumSquares, bits64 n)
 /* Calculate variance. */
 {   
@@ -126,8 +136,10 @@ double calcStdFromSums(double sum, double sumSquares, bits64 n)
 {   
 return sqrt(calcVarianceFromSums(sum, sumSquares, n));
 }
+#endif // NOTUSED
 
 int cmpHeight(const void *va, const void *vb)
+// sort the lollies by height 
 {
 const struct lolly *a = *((struct lolly **)va);
 const struct lolly *b = *((struct lolly **)vb);
@@ -135,6 +147,7 @@ return a->height - b->height;
 }
 
 void lollyLoadItems(struct track *tg)
+// load lollies from the data file
 {
 struct lm *lm = lmInit(0);
 struct bbiFile *bbi =  fetchBbiForTrack(tg);
@@ -142,13 +155,15 @@ struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, winSta
 char *bedRow[bbi->fieldCount];
 char startBuf[16], endBuf[16];
 struct lolly *popList = NULL, *pop;
-unsigned lollyField = 5;
+
+unsigned lollyField = 5;  // we use the score field by default
 struct lollyCartOptions *lollyCart = tg->lollyCart;
 char *setting = trackDbSetting(tg->tdb, "lollyField");
 if (setting != NULL)
     lollyField = atoi(setting);
+
 double minVal = DBL_MAX, maxVal = -DBL_MAX;
-double sumData = 0.0, sumSquares = 0.0;
+//double sumData = 0.0, sumSquares = 0.0;
 unsigned count = 0;
 
 int trackHeight = tg->lollyCart->height;
@@ -158,13 +173,16 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     {
     bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
 
+    // throw away items that don't pass the filters
     if (!bigBedFilterInterval(bedRow, filters))
         continue;
 
+    // clip out lollies that aren't in our display range
     double val = atof(bedRow[lollyField - 1]);
     if (!((lollyCart->autoScale == wiggleScaleAuto) ||  ((val >= lollyCart->minY) && (val <= lollyCart->maxY) )))
         continue;
 
+    // don't draw lollies off the screen
     if (atoi(bedRow[1]) < winStart)
         continue;
 
@@ -175,8 +193,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     pop->end = atoi(bedRow[2]);
     pop->name = cloneString(bedRow[3]);
     count++;
-    sumData += val;
-    sumSquares += val * val;
+    // sumData += val;
+    // sumSquares += val * val;
     if (val > maxVal)
         maxVal = val;
     if (val < minVal)
@@ -184,7 +202,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     }
 
 if (count == 0)
-    lollyCart->upperLimit = lollyCart->lowerLimit = NAN;
+    lollyCart->upperLimit = lollyCart->lowerLimit = NAN; // no lollies in range
 else if (lollyCart->autoScale == wiggleScaleAuto)
     {
     lollyCart->upperLimit = maxVal;
@@ -192,10 +210,10 @@ else if (lollyCart->autoScale == wiggleScaleAuto)
     }
 
 double range = lollyCart->upperLimit - lollyCart->lowerLimit;
-int usableHeight = trackHeight - 2 * 5 * 2; 
+int usableHeight = trackHeight - 2 * LOLLY_DIAMETER; 
 for(pop = popList; pop; pop = pop->next)
     {
-    pop->radius = 5;
+    pop->radius = LOLLY_RADIUS;
     pop->color = MG_RED;
     if (range == 0.0)
         {
@@ -204,13 +222,13 @@ for(pop = popList; pop; pop = pop->next)
         }
     else
         {
-        pop->height = usableHeight * (pop->val  - lollyCart->lowerLimit) / range + 5 * 2;
+        pop->height = usableHeight * (pop->val  - lollyCart->lowerLimit) / range + LOLLY_DIAMETER;
         int colorIndex = 8 * (pop->val  - lollyCart->lowerLimit) / range;
         pop->color = lollyPalette[colorIndex] | 0xff000000;
         }
     }
 
-/*
+#ifdef NOTUSED   // a method of scaling assuming a sort of normal distribution
 double average = sumData/count;
 double stdDev = calcStdFromSums(sumData, sumSquares, count);
 
@@ -236,13 +254,15 @@ for(pop = popList; pop; pop = pop->next)
         }
         
     }
-    */
+#endif // NOTUSED
+
 slSort(&popList, cmpHeight);
 tg->items = popList;
 }
 
 static struct lollyCartOptions *lollyCartOptionsNew(struct cart *cart, struct trackDb *tdb, 
                                 int wordCount, char *words[])
+// the structure that is attached to the track structure
 {
 struct lollyCartOptions *lollyCart;
 AllocVar(lollyCart);
