@@ -232,9 +232,9 @@ else if (0 == (start + end))	/* have chrom, no start,end == full chr */
     jsonWriteNumber(jw, "end", (long long)ci->size);
     if (startsWith("wig", tdb->type))
 	{
-	jsonWriteListStart(jw, NULL);
 	if (jsonOutputArrays || debug)
 	    wigColumnTypes(jw);
+	jsonWriteListStart(jw, chrom);
         wigTableDataOutput(jw, db, splitSqlTable, chrom, 0, ci->size, 0);
 	jsonWriteListEnd(jw);
         return;	/* DONE */
@@ -247,13 +247,13 @@ else if (0 == (start + end))	/* have chrom, no start,end == full chr */
 else	/* fully specified chrom:start-end */
     {
     jsonWriteString(jw, "chrom", chrom);
-    jsonWriteNumber(jw, "start", (long long)start);
-    jsonWriteNumber(jw, "end", (long long)end);
+//    jsonWriteNumber(jw, "start", (long long)start); already printed out
+//    jsonWriteNumber(jw, "end", (long long)end); already printed out
     if (startsWith("wig", tdb->type))
 	{
-	jsonWriteListStart(jw, NULL);
 	if (jsonOutputArrays || debug)
 	    wigColumnTypes(jw);
+	jsonWriteListStart(jw, chrom);
         wigTableDataOutput(jw, db, splitSqlTable, chrom, start, end, 0);
 	jsonWriteListEnd(jw);
         return;	/* DONE */
