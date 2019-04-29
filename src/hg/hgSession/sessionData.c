@@ -91,9 +91,7 @@ if (fileExists(trashPath))
         newPath = sessionDataPathFromTrash(trashPath, sessionDir);
         if (fileExists(newPath))
             errAbort("saveTrashFile: new path '%s' already exists", newPath);
-        // If trashPath has subdirs, make sure those exist in newPath
-        if (strchr(trashPath+strlen(trashDir())+1, '/'))
-            makeDirsForFile(newPath);
+        makeDirsForFile(newPath);
         moveAndLink(trashPath, newPath);
         }
     }
@@ -423,11 +421,6 @@ char *sessionDataDbPrefix = cfgOption("sessionDataDbPrefix");
 char *sessionDataDir = cfgOption("sessionDataDir");
 // Use (URL-encoded) userName and sessionName to make directory hierarchy under sessionDataDir
 char *sessionDir = sessionDirFromNames(sessionDataDir, encUserName, encSessionName);
-if (isNotEmpty(sessionDir))
-    {
-    makeDirsOnPath(sessionDir);
-    }
-
 if (isNotEmpty(sessionDataDbPrefix) || isNotEmpty(sessionDir))
     {
     struct slPair *allVars = cartVarsLike(cart, "*");
