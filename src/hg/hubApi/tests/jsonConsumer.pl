@@ -9,9 +9,9 @@ use Getopt::Long;
 
 my $http = HTTP::Tiny->new();
 # my $server = 'https://apibeta.soe.ucsc.edu';
-# my $server = 'https://api-test.gi.ucsc.edu';
+my $server = 'https://api-test.gi.ucsc.edu';
 # my $server="https://genome-euro.ucsc.edu/cgi-bin/loader/hubApi";
-my $server = 'https://hgwdev-api.gi.ucsc.edu';
+# my $server = 'https://hgwdev-api.gi.ucsc.edu';
 # my $server = 'https://hgwbeta.soe.ucsc.edu/cgi-bin/hubApi';
 my $globalHeaders = { 'Content-Type' => 'application/json' };
 my $lastRequestTime = Time::HiRes::time();
@@ -23,7 +23,6 @@ my $requestCount = 0;
 my $endpoint = "";
 my $hubUrl = "";
 my $genome = "";
-my $db = "";
 my $track = "";
 my $chrom = "";
 my $start = "";
@@ -41,7 +40,7 @@ printf STDERR "usage: ./jsonConsumer.pl [arguments]\n";
 printf STDERR "arguments:
 -test0 - perform test of /list/publicHubs and /list/ucscGenomes endpoints
 -hubUrl=<URL> - use the URL to access the track or assembly hub
--db=<dbName> - use one of the UCSC databases for data access
+-genome=<name> - name for UCSC database genome or assembly/track hub genome
 -track=<trackName> - specify a single track in a hub or database
 -chrom=<chromName> - restrict the operation to a single chromosome
 -start=<coordinate> - restrict the operation to a range, use both start and end
@@ -243,9 +242,6 @@ sub processEndPoint() {
         if (length($genome)) {
 	   $parameters{"genome"} = "$genome";
         }
-        if (length($db)) {
-	   $parameters{"db"} = "$db";
-        }
 	$jsonReturn = performJsonAction($endpoint, \%parameters);
 	$errReturn = 1 if (defined ($jsonReturn->{'error'}));
 	printf "%s", $json->pretty->encode( $jsonReturn );
@@ -255,9 +251,6 @@ sub processEndPoint() {
 	my %parameters;
 	if ($trackLeavesOnly) {
 	    $parameters{"trackLeavesOnly"} = "1";
-	}
-	if (length($db)) {
-	    $parameters{"db"} = "$db";
 	}
 	# allow no hubUrl argument to test error reports
         if (length($hubUrl)) {
@@ -272,9 +265,6 @@ sub processEndPoint() {
 	printf "%s", $json->pretty->encode( $jsonReturn );
      } elsif ($endpoint eq "/list/chromosomes") {
 	my %parameters;
-	if (length($db)) {
-	    $parameters{"db"} = "$db";
-	}
 	if (length($hubUrl)) {
 	    $parameters{"hubUrl"} = "$hubUrl";
 	}
@@ -290,9 +280,6 @@ sub processEndPoint() {
 	printf "%s", $json->pretty->encode( $jsonReturn );
      } elsif ($endpoint eq "/getData/sequence") {
 	my %parameters;
-	if (length($db)) {
-	    $parameters{"db"} = "$db";
-	}
 	if (length($hubUrl)) {
 	  $parameters{"hubUrl"} = "$hubUrl";
 	}
@@ -312,9 +299,6 @@ sub processEndPoint() {
 	printf "%s", $json->pretty->encode( $jsonReturn );
      } elsif ($endpoint eq "/getData/track") {
 	my %parameters;
-	if (length($db)) {
-	    $parameters{"db"} = "$db";
-	}
 	if (length($hubUrl)) {
 	  $parameters{"hubUrl"} = "$hubUrl";
 	}
@@ -436,7 +420,6 @@ my $argc = scalar(@ARGV);
 GetOptions ("hubUrl=s" => \$hubUrl,
     "endpoint=s"  => \$endpoint,
     "genome=s"  => \$genome,
-    "db=s"  => \$db,
     "track=s"  => \$track,
     "chrom=s"  => \$chrom,
     "start=s"  => \$start,
