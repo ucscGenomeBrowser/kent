@@ -77,6 +77,12 @@ struct hubPublic *hubPublicDbLoadAll();
 struct dbDb *ucscDbDb();
 /* return the dbDb table as an slList */
 
+char *verifyLegalArgs(char *validArgList);
+/* validArgList is a semicolon;separated;list;of;valid;arguments
+ * returning string of any other arguments not on that list found in
+ * cgiVarList(), NULL when none found.
+ */
+
 /* ######################################################################### */
 /*  functions in apiUtils.c */
 

@@ -24,6 +24,10 @@ jsonWriteObjectEnd(jw);
 static void jsonPublicHubs()
 /* output the hubPublic SQL table */
 {
+char *extraArgs = verifyLegalArgs(NULL); /* no extras allowed */
+if (extraArgs)
+    apiErrAbort(err400, err400Msg, "extraneous arguments found for function /list/publicHubs '%s'", extraArgs);
+
 struct sqlConnection *conn = hConnectCentral();
 char *dataTime = sqlTableUpdate(conn, hubPublicTableName());
 time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
@@ -79,6 +83,10 @@ jsonWriteObjectEnd(jw);
 static void jsonDbDb()
 /* output the dbDb SQL table */
 {
+char *extraArgs = verifyLegalArgs(NULL); /* no extras allowed */
+if (extraArgs)
+    apiErrAbort(err400, err400Msg, "extraneous arguments found for function /list/ucscGenomes '%s'", extraArgs);
+
 struct sqlConnection *conn = hConnectCentral();
 char *dataTime = sqlTableUpdate(conn, "dbDb");
 time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
@@ -347,20 +355,13 @@ else if (sameWord("ucscGenomes", words[1]))
     jsonDbDb();
 else if (sameWord("hubGenomes", words[1]))
     {
+    char *extraArgs = verifyLegalArgs("hubUrl"); /* only one arg allowed */
+    if (extraArgs)
+	apiErrAbort(err400, err400Msg, "extraneous arguments found for function /list/hubGenomes '%s'", extraArgs);
+
     char *hubUrl = cgiOptionalString("hubUrl");
     if (isEmpty(hubUrl))
 	apiErrAbort(err400, err400Msg, "must supply hubUrl='http:...' some URL to a hub for /list/hubGenomes");
-
-#ifdef NOT
-    /* this could be done for every function, beware, cgiSpoof can be here */
-    struct cgiVar *varList = cgiVarList();
-    struct cgiVar *var = varList;
-    for ( ; var; var = var->next)
-	{
-	if (differentStringNullOk("hubUrl", var->name))
-	    fprintf(stderr, "# extraneous CGI variable: '%s'='%s'\n", var->name, var->val);
-	}
-#endif
 
     struct trackHub *hub = errCatchTrackHubOpen(hubUrl);
     if (hub->genomeList)
@@ -388,6 +389,10 @@ else if (sameWord("hubGenomes", words[1]))
     }
 else if (sameWord("tracks", words[1]))
     {
+    char *extraArgs = verifyLegalArgs("genome;hubUrl;trackLeavesOnly");
+    if (extraArgs)
+	apiErrAbort(err400, err400Msg, "extraneous arguments found for function /list/tracks '%s'", extraArgs);
+
     char *hubUrl = cgiOptionalString("hubUrl");
     char *genome = cgiOptionalString("genome");
     char *db = cgiOptionalString("genome");
@@ -430,6 +435,10 @@ else if (sameWord("tracks", words[1]))
     }
 else if (sameWord("chromosomes", words[1]))
     {
+    char *extraArgs = verifyLegalArgs("genome;hubUrl;track");
+    if (extraArgs)
+	apiErrAbort(err400, err400Msg, "extraneous arguments found for function /list/chromosomes '%s'", extraArgs);
+
     char *hubUrl = cgiOptionalString("hubUrl");
     char *genome = cgiOptionalString("genome");
     char *db = cgiOptionalString("genome");
