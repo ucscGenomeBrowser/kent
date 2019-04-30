@@ -15,28 +15,44 @@ aspects of the displayed information. Some track types, such as BAM tracks and c
 offer dynamic calculation of items in the current window to display a density graph where the height
 is proportional to the number of items mapped to each genomic position. The following information 
 explains each of the available configuration options.</p> 
-<p> 
-<strong>Overlay method</strong>: The default &quot;transparent&quot; setting displays the colored 
-transparent graphs of multiple subtracks overlayed in the same vertical space. The 
-&quot;solid&quot; setting displays the colored opaque graphs of multiple subtracks overlayed in 
-the same vertical space.  The &quot;stacked&quot; setting displays each graph stacked on top of 
-each other where the high point of the graph is the sum of all the values. The &quot;none&quot; 
-setting displays each graph in its own vertical space. Note that not all graph-based tracks 
-include this option.</p>
-<p> 
+
+<h3>Overlay method</h3> 
+
+<ul class="gbsNoBullet">
+  <li>
+  <strong>Transparent</strong>: This setting displays the colored 
+  transparent graphs of multiple subtracks overlayed in the same vertical space.<br>
+  <img src="../../images/trans_encode-1.png" width="800px" height="100px">
+  </li>
+  <li>
+  <strong>Solid</strong>: This setting displays the colored opaque graphs of multiple subtracks 
+  overlayed in the same vertical space.<br>
+  <img src="../../images/encode_solid-1.png" width="800px" height="100px">  
+  </li>
+  <li>
+  <strong>Stacked</strong>: This setting displays each graph stacked on top of each other where the
+  high point of the graph is the sum of all the values.<br>
+  <img src="../../images/encode_stack-1.png" width="800px" height="100px">
+  </li>
+  <strong>None</strong>: This setting displays each graph in its own vertical space. Note that not
+  all graph-based tracks include this option.<br>
+  <img src="../../images/encode_none-1.png" width="800px" height="100px"><br>
+</ul> 
+
 <strong>Type of graph</strong>: The default &quot;Bar&quot; setting depicts the graph data using 
 color-filled bars. To view the data as a series of points or lines, select the 
 &quot;Points&quot; setting.</p>  
+<p>
+<img src="../../images/conf_enco.png" width="800px" height="100px"><br>
+<strong>Track height (boxed in blue)</strong>: To change the default display height of the graph in
+pixels, type in a value from within the indicated range.</p>  
 <p> 
-<strong>Track height</strong>: To change the default display height of the graph in pixels, type 
-in a value from within the indicated range.</p>  
-<p> 
-<strong>Vertical viewing range</strong>: The min and max values specify the vertical portion of 
+<strong>Vertical viewing range (boxed in red)</strong>: The min and max values specify the vertical portion of 
 the graph that is displayed (default range is 30-70). These numbers can be used to set data 
 threshold indicators. For example, to display only those GC values greater than 50 percent, set 
 the min value to &quot;50&quot;.</p> 
 <p> 
-<strong>Data view scaling</strong>: The default &quot;Use vertical viewing range setting&quot; 
+<strong>Data view scaling (boxed in red)</strong>: The default &quot;Use vertical viewing range setting&quot; 
 option displays the data using the parameters specified in the Vertical viewing range setting. To 
 configure the graph to automatically scale to a range defined by the minimum and maximum data 
 points in the current view, select the &quot;Auto-scale to data view&quot; option. To keep the 
@@ -74,7 +90,7 @@ transcription or other activities on the Crick strand. Be aware that wiggles wit
 are drawn in <strong>altColor</strong>  not <strong>color</strong> as positive values
 e.</p> 
 <p> 
-<strong>Draw indicator lines</strong>:</p> 
+<strong>Draw indicator lines (boxed in orange)</strong>:</p> 
 <ul> 
   <li> 
   <strong>at y=0.0</strong>: Select the &quot;ON&quot; setting to display a line marking the 0.0 
@@ -97,54 +113,28 @@ Each annotation track within the window may have up to five display modes:
 <ul class="gbsNoBullet">
   <li>
   <strong>Hide:</strong> the track is not displayed at all. To hide all the annotation tracks, click
-  the <em>hide all</em> button. This mode is useful for restricting the display to only those tracks
-  in which you are interested. For example, someone who is not interested in SNPs or mouse synteny
-  may want to hide these tracks to reduce track clutter and improve speed. There are a few
-  annotation tracks that pertain only to one specific chromosome, e.g. Sanger22, Rosetta. In these
-  cases, the track and its associated controller will be hidden automatically when the track window
-  is not open to the relevant chromosome.</li>
+  the <em>hide all</em> button.</li>
   <li>
   <strong>Dense:</strong> the track is displayed with all features collapsed into a single line.
-  This mode is useful for reducing the amount of space used by a track when you don't need
-  individual line item details or when you just want to get an overall view of an annotation. For
-  example, by opening an entire chromosome and setting the RefSeq Genes track to dense, you can get
-  a feel for the known gene density of the chromosome without displaying excessive detail. <br>
+  The darker the line color the greater the wiggle value at that location.<br>
   <img src="../../images/wiggle_dense-1.png" width="800px">
   </li>
   <li>
-  <strong>Full:</strong> the track is displayed with each annotation feature on a separate line. It
-  is recommended that you use this option sparingly, due to the large number of individual track
-  items that may potentially align at the selected position. For example, hundreds of ESTs might
-  align with a specified gene. When the number of lines within a requested track location exceeds
-  250, the track automatically defaults to a more tightly-packed display mode. In this situation,
-  you can restore the track display to full mode by narrowing the chromosomal range displayed or by
-  using a track filter to reduce the number of items displayed. On tracks that contain only hide,
-  dense, and full modes, you can toggle between full and dense display modes by clicking on the
-  track's center label.<br>
+  <strong>Full:</strong> the track displays the wiggle value associated with each annotation 
+  feature creating a histogram-like image. <br>
   <img src="../../images/wiggle_full-1.png" width="800px">
   </li>
   <li>
-  <strong>Squish:</strong> the track is displayed with each annotation feature shown separately, but
-  at 50% the height of full mode. Features are unlabeled, and more than one may be drawn on the same
-  line. This mode is useful for reducing the amount of space used by a track when you want to view a
-  large number of individual features and get an overall view of an annotation. It is particularly
-  good for displaying tracks in which a large number of features align to a particular section of a
-  chromosome, e.g. EST tracks.<br>
+  <strong>Squish:</strong> the track is displayed with all the features collapsed into a single
+  line, much like the dense display mode with greater compression.<br>
   <img src="../../images/wiggle_squish-1.png" width="800px">
   </li>
   <li>
-  <strong>Pack:</strong> the track is displayed with each annotation feature shown separately and
-  labeled, but not necessarily displayed on a separate line. This mode is useful for reducing the
-  amount of space used by a track when you want to view the large number of individual features
-  allowed by squish mode, but need the labeling and display size provided by full mode. When the
-  number of lines within the requested track location exceeds 250, the track automatically defaults
-  to squish display mode. In this situation, you can restore the track display to pack mode by
-  narrowing the chromosomal range displayed or by using a track filter to reduce the number of items
-  displayed. To toggle between pack and full display modes, click on the track's center label.<br>
-
+  <strong>Pack:</strong> the track displays the wiggle value associated with each annotation 
+  feature creating a histogram-like image, much like the dense display mode with greater compression.<br>
   <img src="../../images/wiggle_pack-1.png" width="800px" >
   </li>
 
-
+</ul>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
