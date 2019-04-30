@@ -420,6 +420,11 @@ var genomePos = {
         }
         var newStart = hgTracks.winStart + startDelta;
         var newEnd = hgTracks.winStart + 1 + endDelta;
+
+        // if user selects space between two bases, start>end can happen
+        if (newStart >= newEnd)
+            newStart = newEnd-1;
+
         if (newEnd > winEnd) {
             newEnd = winEnd;
         }
