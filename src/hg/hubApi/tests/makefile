@@ -10,7 +10,7 @@ listFunctions:	test1 test2 test3 test4 test5 test22 test23 test30 test31
 
 getFunctions: test6 test7 test8 test9 test10 test11 test12 test13 test14 \
 	test15 test16 test19 test21 test26 test27 test28 \
-	test29 test39 test40 test41 test42
+	test29 test39 test40
 
 getSequence: getSeq01 getSeq02 getSeq03
 
