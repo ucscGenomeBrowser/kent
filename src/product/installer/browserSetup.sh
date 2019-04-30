@@ -1240,6 +1240,9 @@ function installBrowser ()
        mysqlChangeRootPwd
     fi
 
+    # Ideally, setup modern R fonts like at UCSC:
+    # Rscript -e "install.packages(c('showtext', 'curl'), repos='http://cran.us.r-project.org')
+
     # before we do anything else with mysql
     # we need to check if we can access it. 
     # so test if we can connect to the mysql server

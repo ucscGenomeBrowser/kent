@@ -390,7 +390,7 @@ var genomePos = {
         var imgWidth = jQuery(img).width() - hgTracks.insideX;
         var width = hgTracks.winEnd - hgTracks.winStart;
         var mult = width / imgWidth;   // mult is bp/pixel multiplier
-        var halfBpWidth = (imgWidth / width) / 2; // how many pixels does one bp take up;
+        var halfBpWidth = (imgWidth / width) / 2; // how many pixels does one 1/2 bp take up;
         var startDelta;   // startDelta is how many bp's to the right/left
         var x1;
 
@@ -420,6 +420,11 @@ var genomePos = {
         }
         var newStart = hgTracks.winStart + startDelta;
         var newEnd = hgTracks.winStart + 1 + endDelta;
+        
+        // if highlight is between two bases, at high zoom level, start can be > end
+        if (newStart>=newEnd > 0)
+            newStart -= 1;
+
         if (newEnd > winEnd) {
             newEnd = winEnd;
         }
