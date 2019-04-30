@@ -269,7 +269,7 @@ else	/* fully specified chrom:start-end */
 if (debug)
     jsonWriteString(jw, "select", query->string);
 
-/* continuing, not a wiggle output */
+/* continuing, could be wiggle output with no chrom specified */
 char **columnNames = NULL;
 char **columnTypes = NULL;
 int *jsonTypes = NULL;
@@ -412,16 +412,15 @@ lmCleanup(&bbLm);
 return itemCount;
 }	/* static void bbiDataOutput(struct jsonWrite *jw, . . . ) */
 
-static void wigDataOutput(struct jsonWrite *jw, struct bbiFile *bwf,
+static unsigned wigDataOutput(struct jsonWrite *jw, struct bbiFile *bwf,
     char *chrom, unsigned start, unsigned end)
-/* output wig data for one chrom in the given bwf file */
+/* output wig data for one chrom in the given bwf file, return itemCount out */
 {
+unsigned itemCount = 0;
 struct lm *lm = lmInit(0);
 struct bbiInterval *iv, *ivList = bigWigIntervalQuery(bwf, chrom, start, end, lm);
 if (NULL == ivList)
-    return;
-
-unsigned itemCount = 0;
+    return itemCount;
 
 jsonWriteListStart(jw, chrom);
 for (iv = ivList; iv && itemCount < maxItemsOutput; iv = iv->next)
@@ -448,6 +447,7 @@ for (iv = ivList; iv && itemCount < maxItemsOutput; iv = iv->next)
     ++itemCount;
     }
 jsonWriteListEnd(jw);
+return itemCount;
 }
 
 static void wigData(struct jsonWrite *jw, struct bbiFile *bwf, char *chrom,
@@ -455,18 +455,18 @@ static void wigData(struct jsonWrite *jw, struct bbiFile *bwf, char *chrom,
 /* output the data for a bigWig bbi file */
 {
 struct bbiChromInfo *chromList = NULL;
-// struct bbiSummaryElement sum = bbiTotalSummary(bwf);
 if (isEmpty(chrom))
     {
     chromList = bbiChromList(bwf);
     struct bbiChromInfo *bci;
-    for (bci = chromList; bci; bci = bci->next)
+    unsigned itemsDone = 0;
+    for (bci = chromList; bci && (itemsDone < maxItemsOutput); bci = bci->next)
 	{
-	wigDataOutput(jw, bwf, bci->name, 0, bci->size);
+	itemsDone += wigDataOutput(jw, bwf, bci->name, 0, bci->size);
 	}
     }
     else
-	wigDataOutput(jw, bwf, chrom, start, end);
+	(void) wigDataOutput(jw, bwf, chrom, start, end);
 }
 
 static void bigColumnTypes(struct jsonWrite *jw, struct sqlFieldType *fiList,
