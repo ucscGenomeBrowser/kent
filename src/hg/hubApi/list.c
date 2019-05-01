@@ -293,6 +293,8 @@ if (table && chromName && ! (tableInfo && tableInfo->isSplit) )
     else
 	apiErrAbort(err400, err400Msg, "track '%s' is not a position track, request table without chrom specification, genome: '%s'", table, db);
     }
+else if (table && !chromName)	/* only allowing position tables at this time */
+	apiErrAbort(err400, err400Msg, "track '%s' is not a position track, request table without chrom specification, genome: '%s'", table, db);
 else
     {
     char *dataTime = sqlTableUpdate(conn, "chromInfo");
