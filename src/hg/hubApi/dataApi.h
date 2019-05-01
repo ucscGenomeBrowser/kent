@@ -37,6 +37,8 @@
 #endif
 
 /* error return codes */
+#define err301	301
+#define err301Msg	"Moved Permanently"
 #define err400	400
 #define err400Msg	"Bad Request"
 #define err404	404

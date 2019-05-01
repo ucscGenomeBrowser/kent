@@ -13,5 +13,8 @@ tar xvf clinical.cart.2019-04-22.tar.gz
 
 cancerMafToBigBed . clinical.tsv exposure.tsv gdcCancer.bb
 
+#rebuild the bb with a polished AS file
+bedToBigBed -as=$HOME/kent/src/hg/lib/gdcCancer.as -type=bed12+ -tab gdcCancer.s.bed /cluster/data/hg38/chrom.sizes gdcCancer.bb
+
 rm /gbdb/hg38/gdcCancer.bb
 ln -s `pwd`/gdcCancer.bb /gbdb/hg38

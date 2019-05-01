@@ -1490,6 +1490,21 @@ if (isNotEmpty(maxOut))
     }
 }	/*	static void setGlobalCgiVars()	*/
 
+static void redirectToHelp()
+/* redirect to the help page */
+{
+puts("Content-Type:text/html");
+hPrintf("Status: %d %s\n", err301, err301Msg);
+hPrintf("Location: /goldenPath/help/api.html\n");
+puts("\n");
+
+hPrintf("<!DOCTYPE HTML>\n");
+hPrintf("<html lang='en'>\n");
+hPrintf("<head>\n");
+hPrintf("<meta http-equiv='Refresh' content='0; url=/goldenPath/help/api.html' />\n");
+hPrintf("</head>\n");
+}
+
 /* Null terminated list of CGI Variables we don't want to save
  * permanently. */
 static char *excludeVars[] = {"Submit", "submit", "sourceSelected", "selectRadio", "ucscGenome", "publicHubs", "clade", NULL,};
@@ -1524,8 +1539,14 @@ if (isNotEmpty(pathInfo)) /* can get to this immediately, no cart needed */
     apiRequest(pathInfo);
 else
     {
-    trackCounter = hashNew(0);
-    cartEmptyShellNoContent(doMiddle, hUserCookie(), excludeVars, oldVars);
+    char *allowApiHtml = cfgOptionDefault("hubApi.allowHtml", "off");
+    if (sameWord("on", allowApiHtml))
+	{
+	trackCounter = hashNew(0);
+	cartEmptyShellNoContent(doMiddle, hUserCookie(), excludeVars, oldVars);
+	}
+    else
+	redirectToHelp();
     }
 cgiExitTime("hubApi", enteredMainTime);
 return 0;
