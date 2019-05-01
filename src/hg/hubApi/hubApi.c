@@ -1495,6 +1495,7 @@ static void redirectToHelp()
 {
 puts("Content-Type:text/html");
 hPrintf("Status: %d %s\n", err301, err301Msg);
+hPrintf("Location: /goldenPath/help/api.html\n");
 puts("\n");
 
 hPrintf("<!DOCTYPE HTML>\n");
