@@ -788,28 +788,23 @@ memSwapChar(longLabel, strlen(longLabel), '\t', ' ');
 /* Forbid any dangerous settings that should not be allowed */
 forbidSetting(hub, genome, tdb, "idInUrlSql");
 
-if (trackDbLocalSetting(tdb, "superTrack") || trackDbLocalSetting(tdb, "compositeTrack")
-    || trackDbLocalSetting(tdb, "container") || trackDbLocalSetting(tdb, "view"))
+// check that current stanza (via trackDbLocalSetting) is not using the old
+// style "superTrack parentName visibility" subtrack declaration
+boolean isSuper = FALSE;
+char *superTrack = trackDbLocalSetting(tdb, "superTrack");
+if ((superTrack != NULL) && startsWith("on", superTrack))
+    isSuper = TRUE;
+
+if (isSuper || trackDbLocalSetting(tdb, "compositeTrack") || trackDbLocalSetting(tdb, "container") || trackDbLocalSetting(tdb, "view"))
     {
     // subtracks is not NULL if a track said we were its parent
     // but generate a more helpful error if a track should have children but doesn't
-    if (tdb->subtracks != NULL)
-        {
-        boolean isSuper = FALSE;
-        char *superTrack = trackDbSetting(tdb, "superTrack");
-        if ((superTrack != NULL) && startsWith("on", superTrack))
-        isSuper = TRUE;
-
-        if (!(trackDbSetting(tdb, "compositeTrack") ||
-              trackDbSetting(tdb, "container") || 
-          isSuper))
-            {
-        errAbort("Parent track %s is not compositeTrack, container, or superTrack in hub %s genome %s", 
-            tdb->track, hub->url, genome->name);
-        }
-        }
-    else
+    if (tdb->subtracks == NULL)
         errAbort("Track %s is declared superTrack, compositeTrack or container but has no subtracks in hub %s genome %s", tdb->track, hub->url, genome->name);
+    }
+else if (tdb->subtracks != NULL)
+    {
+    errAbort("Parent track %s is not compositeTrack, container, or superTrack in hub %s genome %s",  tdb->track, hub->url, genome->name);
     }
 else
     {
