@@ -968,8 +968,8 @@ char *tmp = cloneString(pathInfo);
 /* skip the first leading slash to simplify chopByChar parsing */
 tmp += 1;
 int wordCount = chopByChar(tmp, '/', words, MAX_PATH_INFO);
-if (wordCount < 1)
-    return NULL;
+if (wordCount < 1 || wordCount > 2)
+    return NULL;	/* only 2 words allowed */
 
 struct hashEl *hel = hashLookup(apiFunctionHash, words[0]);
 return hel;
