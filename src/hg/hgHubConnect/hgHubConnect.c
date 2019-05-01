@@ -409,7 +409,7 @@ if (errCatchStart(errCatch))
             }
         errCatchFree(&trackFileCatch);
         }
-    if (tdb != NULL)
+    if (tdbList != NULL && errorCount == 0)
         {
         dyStringPrintf(errors, "<ul>\n<li>No errors found</li>\n</ul></ul>");
         }
