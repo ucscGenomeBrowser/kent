@@ -523,7 +523,6 @@ if (errCatchStart(errCatch))
     tdbList = trackHubTracksForGenome(hub, genome);
     tdbList = trackDbLinkUpGenerations(tdbList);
     tdbList = trackDbPolishAfterLinkup(tdbList, genome->name);
-    hubCheckGenomeDescription(hub, genome);
     trackHubPolishTrackNames(hub, tdbList);
     }
 errCatchEnd(errCatch);
@@ -560,7 +559,6 @@ int retVal = 0;
 if (errCatchStart(errCatch))
     {
     hub = trackHubOpen(hubUrl, "hub_0");
-    hubCheckHubDescription(hub);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
