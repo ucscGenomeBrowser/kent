@@ -526,7 +526,7 @@ while ((psl = pslNext(lf)) != NULL)
 lineFileClose(&lf);
 if (pslList == NULL)
     {
-    puts("<table><tr><td><hr>Sorry, no matches found<hr><td></tr></table>");
+    puts("<table><tr><td><hr>Sorry, no matches found (scoring higher than 20)<hr><td></tr></table>");
     return;
     }
 
