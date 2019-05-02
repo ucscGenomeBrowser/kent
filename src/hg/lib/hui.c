@@ -8792,6 +8792,7 @@ else if (startsWith("big", tdb->type))
     if (startsWith("bigBed", tdb->type) || sameString("bigBarChart", tdb->type) 
         || sameString("bigMaf", tdb->type) || sameString("bigPsl", tdb->type)
         || sameString("bigChain", tdb->type) || sameString("bigGenePred", tdb->type)
+        || sameString("bigLolly", tdb->type)
         || sameString("bigInteract", tdb->type))
 	bbi = bigBedFileOpen(bbiFileName);
     else if (startsWith("bigWig", tdb->type))

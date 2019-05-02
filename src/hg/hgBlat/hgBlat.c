@@ -526,7 +526,7 @@ while ((psl = pslNext(lf)) != NULL)
 lineFileClose(&lf);
 if (pslList == NULL)
     {
-    puts("<table><tr><td><hr>Sorry, no matches found<hr><td></tr></table>");
+    puts("<table><tr><td><hr>Sorry, no matches found (scoring higher than 20)<hr><td></tr></table>");
     return;
     }
 
@@ -1521,7 +1521,7 @@ puts("<INPUT TYPE=HIDDEN NAME=changeInfo VALUE=\"\">\n");
 puts("<TABLE BORDER=0 WIDTH=80>\n<TR>\n");
 printf("<TD ALIGN=CENTER style='overflow:hidden;white-space:nowrap;'>Genome:");
 printf(" <INPUT TYPE=CHECKBOX id=allGenomes NAME=allGenomes VALUE=\"\">");
-printf(" <span id=searchAllText> Search ALL<span>");
+printf(" <span id=searchAllText> Search all<span>");
 printf("</TD>");
 // clicking on the Search ALL text clicks the checkbox.
 jsOnEventById("click", "searchAllText", 
@@ -1586,18 +1586,8 @@ printf("%s",
 "is <tt>GTCCTCGGAACCAGGACCTCGGCGTGGCCTAGCG</tt> (human SOD1).\n</P>\n");
 
 printf("%s", 
-"<P>The <b>Search ALL</b> checkbox above the Genome drop-down list allows you to search the\n"
-"genomes of the default assemblies for all of our organisms. It also searches any attached hubs' blat servers.\n"
-"This shows you which organisms have the highest homology with your query sequence.\n"
-"The results are ordered so that the organism whose best alignment has the most hits is at the top,\n"
-"and shows the best region found.\n"
-"It makes quick approximate alignments based only on the raw hits,\n"
-"which are a perfectly matching short sub-sequence of a fixed size: \n"
-"11 for DNA and 4 for protein. \n"
-"The entire alignment, including mismatches and gaps, must score 20 \n"
-"or higher in order to appear in the BLAT output.\n"
-"Having too few hits will often yield no BLAT results.\n"
-"Click the Assembly column link on the results page to see the full BLAT output for that organism.\n</P>\n");
+"<P>The <b>Search all</b> checkbox allows you to search all\n"
+"genomes at the same time. It will query the default assembly of every organism and BLAT servers of attached hubs.\n");
 
 if (hgPcrOk(db))
     printf("<P>For locating PCR primers, use <A HREF=\"../cgi-bin/hgPcr?db=%s\">In-Silico PCR</A>"
@@ -1862,7 +1852,7 @@ else
     {
     if (allGenomes)
 	{
-	cartWebStart(cart, db, "ALL Genomes BLAT Results");
+	cartWebStart(cart, db, "All Genomes BLAT Results");
 
 	struct dbDb *dbList = hGetBlatIndexedDatabases();
 
@@ -1943,7 +1933,13 @@ else
 	slSort(&pfdDone, genomeHitsCmp);
 
 	// Print instructions
-	printf("Click the link in the Assembly column to see the full BLAT output for that Genome.<br><br>\n");
+        printf("The single best alignment found for each assembly is shown below.<br>\n"
+		"The approximate results below are sorted by number of matching 'tiles', "
+                "perfectly matching sub-sequences of length 11 (DNA) "
+                "or 4 (protein). <br>");
+	printf("Click the 'assembly' link to trigger a full BLAT alignment for that genome. \n");
+	printf("If its alignment score is &lt; 20 bp, including gaps and mismatches, no match will be found.<br>\n");
+	printf("For more details see the <a href='/FAQ/FAQblat.html#blat9'>BLAT FAQ</a>.<br>\n");
 
 	// Print report  // TODO move to final report at the end of ALL Assemblies
 	int lastSeqNumber = -1;
@@ -1969,7 +1965,7 @@ else
 		    );
 		
 		printf(
-		    "<th style='text-align:right'>Hits</th>"
+		    "<th style='text-align:right'>Tiles</th>"
 		    "<th style='text-align:left'>Chrom</th>"
 			);
 		if (debuggingGfResults)

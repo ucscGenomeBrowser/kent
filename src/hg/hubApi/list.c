@@ -24,6 +24,10 @@ jsonWriteObjectEnd(jw);
 static void jsonPublicHubs()
 /* output the hubPublic SQL table */
 {
+char *extraArgs = verifyLegalArgs(NULL); /* no extras allowed */
+if (extraArgs)
+    apiErrAbort(err400, err400Msg, "extraneous arguments found for function /list/publicHubs '%s'", extraArgs);
+
 struct sqlConnection *conn = hConnectCentral();
 char *dataTime = sqlTableUpdate(conn, hubPublicTableName());
 time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
@@ -79,6 +83,10 @@ jsonWriteObjectEnd(jw);
 static void jsonDbDb()
 /* output the dbDb SQL table */
 {
+char *extraArgs = verifyLegalArgs(NULL); /* no extras allowed */
+if (extraArgs)
+    apiErrAbort(err400, err400Msg, "extraneous arguments found for function /list/ucscGenomes '%s'", extraArgs);
+
 struct sqlConnection *conn = hConnectCentral();
 char *dataTime = sqlTableUpdate(conn, "dbDb");
 time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
@@ -186,24 +194,73 @@ else
 apiFinishOutput(0, NULL, jw);
 }
 
+static char *validChromName(struct sqlConnection *conn, char *db, char *table,
+   char **splitTableName, struct hTableInfo **tableInfo)
+/* determine what the 'chrom' name should be for this table
+ * this function could be used in getData() also TBD
+ */
+{
+static char *returnChrom = NULL;
+/* to be determined if this table name is used or changes */
+char *tableName = cloneString(table);
+
+/* this function knows how to deal with split chromosomes, the NULL
+ * here for the chrom name means to use the first chrom name in chromInfo
+ */
+struct hTableInfo *hti = hFindTableInfoWithConn(conn, NULL, table);
+*tableInfo = hti;
+/* check if table name needs to be modified */
+if (hti && hti->isSplit)
+    {
+    char *defaultChrom = hDefaultChrom(db);
+    char fullTableName[256];
+    safef(fullTableName, sizeof(fullTableName), "%s_%s", defaultChrom, hti->rootName);
+    freeMem(tableName);
+    tableName = cloneString(fullTableName);
+    *splitTableName = cloneString(fullTableName);
+    }
+else
+    {
+    tableName = cloneString(table);
+    *splitTableName = table;
+    }
+
+if (sqlColumnExists(conn, tableName, "chrom"))	/* standard bed tables */
+    returnChrom = cloneString("chrom");
+else if (sqlColumnExists(conn, tableName, "tName"))	/* track type psl */
+    returnChrom = cloneString("tName");
+else if (sqlColumnExists(conn, tableName, "genoName"))	/* track type rmsk */
+    returnChrom = cloneString("genoName");
+
+return returnChrom;
+}
+
 static void chromInfoJsonOutput(FILE *f, char *db)
 /* for given db, if there is a track, list the chromosomes in that track,
  * for no track, simply list the chromosomes in the sequence
  */
 {
+char *splitSqlTable = NULL;
+struct hTableInfo *tableInfo = NULL;
+char *chromName = NULL;
 char *table = cgiOptionalString("track");
 struct sqlConnection *conn = hAllocConnMaybe(db);
 if (NULL == conn)
     apiErrAbort(err400, err400Msg, "can not find 'genome=%s' for endpoint '/list/chromosomes", db);
 
-/* in trackDb language: track == table */
 if (table)
+    chromName = validChromName(conn, db, table, &splitSqlTable, &tableInfo);
+
+/* in trackDb language: track == table */
+/* punting on split tables, just return chromInfo */
+if (table && chromName && ! (tableInfo && tableInfo->isSplit) )
     {
-    if (! sqlTableExists(conn, table))
+    if (! sqlTableExists(conn, splitSqlTable))
 	apiErrAbort(err400, err400Msg, "can not find specified 'track=%s' for endpoint: /list/chromosomes?genome=%s;track=%s", table, db, table);
-    if (sqlColumnExists(conn, table, "chrom"))
+
+    if (sqlColumnExists(conn, splitSqlTable, chromName))
 	{
-	char *dataTime = sqlTableUpdate(conn, table);
+	char *dataTime = sqlTableUpdate(conn, splitSqlTable);
 	time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
 	replaceChar(dataTime, ' ', 'T');	/* ISO 8601 */
         struct jsonWrite *jw = apiStartOutput();
@@ -214,7 +271,7 @@ if (table)
 	freeMem(dataTime);
         struct slPair *list = NULL;
 	char query[2048];
-        sqlSafef(query, sizeof(query), "select distinct chrom from %s", table);
+        sqlSafef(query, sizeof(query), "select distinct %s from %s", chromName, splitSqlTable);
 	struct sqlResult *sr = sqlGetResult(conn, query);
 	char **row;
 	while ((row = sqlNextRow(sr)) != NULL)
@@ -236,6 +293,8 @@ if (table)
     else
 	apiErrAbort(err400, err400Msg, "track '%s' is not a position track, request table without chrom specification, genome: '%s'", table, db);
     }
+else if (table && !chromName)	/* only allowing position tables at this time */
+	apiErrAbort(err400, err400Msg, "track '%s' is not a position track, request table without chrom specification, genome: '%s'", table, db);
 else
     {
     char *dataTime = sqlTableUpdate(conn, "chromInfo");
@@ -347,20 +406,13 @@ else if (sameWord("ucscGenomes", words[1]))
     jsonDbDb();
 else if (sameWord("hubGenomes", words[1]))
     {
+    char *extraArgs = verifyLegalArgs("hubUrl"); /* only one arg allowed */
+    if (extraArgs)
+	apiErrAbort(err400, err400Msg, "extraneous arguments found for function /list/hubGenomes '%s'", extraArgs);
+
     char *hubUrl = cgiOptionalString("hubUrl");
     if (isEmpty(hubUrl))
 	apiErrAbort(err400, err400Msg, "must supply hubUrl='http:...' some URL to a hub for /list/hubGenomes");
-
-#ifdef NOT
-    /* this could be done for every function, beware, cgiSpoof can be here */
-    struct cgiVar *varList = cgiVarList();
-    struct cgiVar *var = varList;
-    for ( ; var; var = var->next)
-	{
-	if (differentStringNullOk("hubUrl", var->name))
-	    fprintf(stderr, "# extraneous CGI variable: '%s'='%s'\n", var->name, var->val);
-	}
-#endif
 
     struct trackHub *hub = errCatchTrackHubOpen(hubUrl);
     if (hub->genomeList)
@@ -388,6 +440,10 @@ else if (sameWord("hubGenomes", words[1]))
     }
 else if (sameWord("tracks", words[1]))
     {
+    char *extraArgs = verifyLegalArgs("genome;hubUrl;trackLeavesOnly");
+    if (extraArgs)
+	apiErrAbort(err400, err400Msg, "extraneous arguments found for function /list/tracks '%s'", extraArgs);
+
     char *hubUrl = cgiOptionalString("hubUrl");
     char *genome = cgiOptionalString("genome");
     char *db = cgiOptionalString("genome");
@@ -430,6 +486,10 @@ else if (sameWord("tracks", words[1]))
     }
 else if (sameWord("chromosomes", words[1]))
     {
+    char *extraArgs = verifyLegalArgs("genome;hubUrl;track");
+    if (extraArgs)
+	apiErrAbort(err400, err400Msg, "extraneous arguments found for function /list/chromosomes '%s'", extraArgs);
+
     char *hubUrl = cgiOptionalString("hubUrl");
     char *genome = cgiOptionalString("genome");
     char *db = cgiOptionalString("genome");
