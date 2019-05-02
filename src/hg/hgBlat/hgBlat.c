@@ -526,7 +526,7 @@ while ((psl = pslNext(lf)) != NULL)
 lineFileClose(&lf);
 if (pslList == NULL)
     {
-    puts("<table><tr><td><hr>Sorry, no matches found<hr><td></tr></table>");
+    puts("<table><tr><td><hr>Sorry, no matches found (scoring higher than 20)<hr><td></tr></table>");
     return;
     }
 
@@ -1933,11 +1933,12 @@ else
 	slSort(&pfdDone, genomeHitsCmp);
 
 	// Print instructions
-        printf("The approximate results below are sorted by number of matching 'tiles', "
+        printf("The single best alignment found for each assembly is shown below.<br>\n"
+		"The approximate results below are sorted by number of matching 'tiles', "
                 "perfectly matching sub-sequences of length 11 (DNA) "
                 "or 4 (protein). <br>");
 	printf("Click the 'assembly' link to trigger a full BLAT alignment for that genome. \n");
-	printf("If its alignment score is &lt; 20 bp, no match will be found.<br>\n");
+	printf("If its alignment score is &lt; 20 bp, including gaps and mismatches, no match will be found.<br>\n");
 	printf("For more details see the <a href='/FAQ/FAQblat.html#blat9'>BLAT FAQ</a>.<br>\n");
 
 	// Print report  // TODO move to final report at the end of ALL Assemblies

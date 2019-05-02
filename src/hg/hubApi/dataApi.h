@@ -37,6 +37,8 @@
 #endif
 
 /* error return codes */
+#define err301	301
+#define err301Msg	"Moved Permanently"
 #define err400	400
 #define err400Msg	"Bad Request"
 #define err404	404
@@ -76,6 +78,12 @@ struct hubPublic *hubPublicDbLoadAll();
 
 struct dbDb *ucscDbDb();
 /* return the dbDb table as an slList */
+
+char *verifyLegalArgs(char *validArgList);
+/* validArgList is a semicolon;separated;list;of;valid;arguments
+ * returning string of any other arguments not on that list found in
+ * cgiVarList(), NULL when none found.
+ */
 
 /* ######################################################################### */
 /*  functions in apiUtils.c */

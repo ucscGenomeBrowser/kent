@@ -923,6 +923,10 @@ void apiGetData(char *words[MAX_PATH_INFO])
 char *hubUrl = cgiOptionalString("hubUrl");
 if (sameWord("track", words[1]))
     {
+    char *extraArgs = verifyLegalArgs("genome;hubUrl;track;chrom;start;end;maxItemsOutput;jsonOutputArrays");
+    if (extraArgs)
+	apiErrAbort(err400, err400Msg, "extraneous arguments found for function /getData/track '%s'", extraArgs);
+
     if (isNotEmpty(hubUrl))
 	getHubTrackData(hubUrl);
     else
@@ -930,6 +934,10 @@ if (sameWord("track", words[1]))
     }
 else if (sameWord("sequence", words[1]))
     {
+    char *extraArgs = verifyLegalArgs("genome;hubUrl;track;chrom;start;end");
+    if (extraArgs)
+	apiErrAbort(err400, err400Msg, "extraneous arguments found for function /getData/sequence '%s'", extraArgs);
+
     if (isNotEmpty(hubUrl))
 	getHubSequenceData(hubUrl);
     else

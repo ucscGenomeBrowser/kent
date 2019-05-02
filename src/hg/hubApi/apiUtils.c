@@ -380,3 +380,57 @@ if (NULL == hubGenome)
     apiErrAbort(err400, err400Msg, "failed to find specified genome=%s for endpoint '%s'  given hubUrl '%s'", genome, endpoint, hubUrl);
 return hubGenome;
 }
+
+char *verifyLegalArgs(char *validArgList)
+/* validArgList is a semicolon;separated;list;of;valid;arguments
+ * returning string of any other arguments not on that list found in
+ * cgiVarList(), NULL when none found.
+ */
+{
+struct hash *validHash = NULL;
+char *words[32];
+int wordCount = 0;
+if (validArgList)
+    {
+    wordCount = chopByChar(cloneString(validArgList), ';', words, 32);
+    }
+
+if (wordCount)
+    {
+    validHash = hashNew(0);
+    int i;
+    for (i = 0; i < wordCount; ++i)
+	hashAddInt(validHash, words[i], 1);
+    }
+
+int extrasFound = 0;
+struct dyString *extras = newDyString(128);
+struct cgiVar *varList = cgiVarList();
+struct cgiVar *var = varList;
+for ( ; var; var = var->next)
+    {
+    if (sameWord("cgiSpoof", var->name))
+	continue;
+    if (sameWord("debug", var->name))
+	continue;
+    if (sameWord("measureTiming", var->name))
+	continue;
+    if (NULL == validHash)
+	{
+	dyStringPrintf(extras, ";%s=%s", var->name, var->val);
+	++extrasFound;
+	}
+    else if (0 == hashIntValDefault(validHash, var->name, 0))
+	{
+	if (extrasFound)
+	    dyStringPrintf(extras, ";%s=%s", var->name, var->val);
+	else
+	    dyStringPrintf(extras, "%s=%s", var->name, var->val);
+	++extrasFound;
+	}
+    }
+if (extrasFound)
+    return dyStringCannibalize(&extras);
+else
+    return NULL;
+}

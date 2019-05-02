@@ -57,6 +57,16 @@ if ( tg->visibility == tvDense)  // in dense mode we just track lines
     return;
     }
 
+boolean noMapBoxes = FALSE;
+int numItems =  slCount(popList);
+if ( numItems > 5000)
+    {
+    char buffer[4096];
+    safef(buffer, sizeof buffer, "Too many (%d) items in window.  Zoom in or set viewing range to be more restrictive.", numItems);
+    noMapBoxes = TRUE;
+    mapBoxHgcOrHgGene(hvg, winStart, winEnd, xOff, yOff, width,  trackHeight,
+                  tg->track, "", buffer, "hgTracks", FALSE, NULL);
+    }
 // first draw the lines so they won't overlap any lollies
 for (pop = popList; pop; pop = pop->next)
     {
@@ -69,8 +79,9 @@ for (pop = popList; pop; pop = pop->next)
     {
     int sx = ((pop->start - seqStart) + .5) * scale + xOff; // x coord of center (lower region)
     hvGfxCircle(hvg, sx, yOff + trackHeight - pop->radius - pop->height, pop->radius, pop->color, TRUE);
-    mapBoxHgcOrHgGene(hvg, pop->start, pop->end, sx - pop->radius, yOff + trackHeight - pop->radius - pop->height - pop->radius, 2 * pop->radius,2 * pop->radius,
-                      tg->track, pop->name, pop->name, NULL, TRUE, NULL);
+    if (!noMapBoxes)
+        mapBoxHgcOrHgGene(hvg, pop->start, pop->end, sx - pop->radius, yOff + trackHeight - pop->radius - pop->height - pop->radius, 2 * pop->radius,2 * pop->radius,
+                          tg->track, pop->name, pop->name, NULL, TRUE, NULL);
     }
 }
 
