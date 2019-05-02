@@ -1936,9 +1936,9 @@ else
         printf("The single best alignment found for each assembly is shown below.<br>\n"
 		"The approximate results below are sorted by number of matching 'tiles', "
                 "perfectly matching sub-sequences of length 11 (DNA) "
-                "or 4 (protein). <br>");
+                "or 4 (protein). Using only tile hits, this speedy method can not see mismatches.<br>");
 	printf("Click the 'assembly' link to trigger a full BLAT alignment for that genome. \n");
-	printf("If its alignment score is < 20, including gaps and mismatches, no match will be found.<br>\n");
+	printf("If its alignment score which includes gaps and mismatches is less than 20, no match will be found.<br>\n");
 
 	// Print report  // TODO move to final report at the end of ALL Assemblies
 	int lastSeqNumber = -1;
