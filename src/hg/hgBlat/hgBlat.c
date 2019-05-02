@@ -1937,7 +1937,8 @@ else
                 "perfectly matching sub-sequences of length 11 (DNA) "
                 "or 4 (protein). <br>");
 	printf("Click the 'assembly' link to trigger a full BLAT alignment for that genome. \n");
-	printf("If its alignment score is < 20 bp, no match will be found.<br>\n");
+	printf("If its alignment score is &lt; 20 bp, no match will be found.<br>\n");
+	printf("For more details see the <a href='/FAQ/FAQblat.html#blat9'>BLAT FAQ</a>.<br>\n");
 
 	// Print report  // TODO move to final report at the end of ALL Assemblies
 	int lastSeqNumber = -1;
