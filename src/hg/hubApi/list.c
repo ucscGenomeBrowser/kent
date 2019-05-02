@@ -196,40 +196,51 @@ apiFinishOutput(0, NULL, jw);
 
 static char *validChromName(struct sqlConnection *conn, char *db, char *table,
    char **splitTableName, struct hTableInfo **tableInfo)
-/* determine what the 'chrom' name should be for this table
+/* determine what the 'chrom' name should be for this table (aka track)
  * this function could be used in getData() also TBD
  */
 {
 static char *returnChrom = NULL;
-/* to be determined if this table name is used or changes */
-char *tableName = cloneString(table);
+/* to be determined if this table name is used or is some other name */
+char *sqlTableName = cloneString(table);
+
+/* 'track' name in trackDb usually refers to a SQL 'table' */
+struct trackDb *tdb = obtainTdb(NULL, db);
+struct trackDb *thisTrack = findTrackDb(table,tdb);
+/* however, the trackDb might have a specific table defined instead */
+char *tableName = trackDbSetting(thisTrack, "table");
+if (isNotEmpty(tableName))
+    {
+    freeMem(sqlTableName);
+    sqlTableName = cloneString(tableName);
+    }
 
 /* this function knows how to deal with split chromosomes, the NULL
  * here for the chrom name means to use the first chrom name in chromInfo
  */
-struct hTableInfo *hti = hFindTableInfoWithConn(conn, NULL, table);
-*tableInfo = hti;
+struct hTableInfo *hti = hFindTableInfoWithConn(conn, NULL, sqlTableName);
+*tableInfo = hti;	/* returning to caller */
 /* check if table name needs to be modified */
 if (hti && hti->isSplit)
     {
     char *defaultChrom = hDefaultChrom(db);
     char fullTableName[256];
     safef(fullTableName, sizeof(fullTableName), "%s_%s", defaultChrom, hti->rootName);
-    freeMem(tableName);
-    tableName = cloneString(fullTableName);
-    *splitTableName = cloneString(fullTableName);
+    freeMem(sqlTableName);
+    sqlTableName = cloneString(fullTableName);
+    *splitTableName = cloneString(fullTableName);	/* return to caller */
     }
 else
     {
-    tableName = cloneString(table);
-    *splitTableName = table;
+    *splitTableName = sqlTableName;	/* return to caller */
     }
 
-if (sqlColumnExists(conn, tableName, "chrom"))	/* standard bed tables */
+/* may need to extend this in the future for other track types */
+if (sqlColumnExists(conn, sqlTableName, "chrom"))	/* standard bed tables */
     returnChrom = cloneString("chrom");
-else if (sqlColumnExists(conn, tableName, "tName"))	/* track type psl */
+else if (sqlColumnExists(conn, sqlTableName, "tName"))	/* track type psl */
     returnChrom = cloneString("tName");
-else if (sqlColumnExists(conn, tableName, "genoName"))	/* track type rmsk */
+else if (sqlColumnExists(conn, sqlTableName, "genoName"))	/* track type rmsk */
     returnChrom = cloneString("genoName");
 
 return returnChrom;
@@ -306,6 +317,8 @@ else
     struct jsonWrite *jw = apiStartOutput();
     jsonWriteString(jw, "genome", db);
     jsonWriteString(jw, "dataTime", dataTime);
+    if (tableInfo && tableInfo->isSplit)	/* the split table punt */
+	jsonWriteString(jw, "track", table);
     jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
     freeMem(dataTime);
     jsonWriteNumber(jw, "chromCount", (long long)slCount(ciList));
