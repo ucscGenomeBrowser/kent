@@ -1672,9 +1672,9 @@ if (as)
                 // assure count = #items in list; lightweight validation (better than none)
                 int ix = asColumnFindIx(as->columnList, asCol->linkedSizeName);
                 int count = sqlUnsigned(row[ix]);
-		if (count == 0)
+		if (count < 0)
                     lineFileAbort(lf, 
-                        "expecting positive number in count field for %s list, found %d", 
+                        "expecting nonnegative number in count field for %s list, found %d",
                                         asCol->name, asCol->fixedSize);
                 int itemCount = countSeparatedItems(row[i], ',');
                 if (count != itemCount)

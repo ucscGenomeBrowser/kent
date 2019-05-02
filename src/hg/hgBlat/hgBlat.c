@@ -1938,7 +1938,8 @@ else
                 "perfectly matching sub-sequences of length 11 (DNA) "
                 "or 4 (protein). Using only tile hits, this speedy method can not see mismatches.<br>");
 	printf("Click the 'assembly' link to trigger a full BLAT alignment for that genome. \n");
-	printf("If its alignment score which includes gaps and mismatches is less than 20, no match will be found.<br>\n");
+	printf("The entire alignment, including mismatches and gaps, must score 20 or higher in order to appear in the Blat output.<br>\n");
+	printf("For more details see the <a href='/FAQ/FAQblat.html#blat9'>BLAT FAQ</a>.<br>\n");
 
 	// Print report  // TODO move to final report at the end of ALL Assemblies
 	int lastSeqNumber = -1;

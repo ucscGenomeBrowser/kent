@@ -993,10 +993,10 @@ char *skipBeyondDelimit(char *s,char delimit);
 /* Returns NULL or pointer to first char beyond one (or more contiguous) delimit char.
    If delimit is ' ' then skips beyond first patch of whitespace. */
 
-char *skipLeadingSpaces(char *s);
+char *skipLeadingSpaces(const char *s);
 /* Return first white space or NULL if none.. */
 
-char *skipToSpaces(char *s);
+char *skipToSpaces(const char *s);
 /* Return first white space. */
 
 int eraseTrailingSpaces(char *s);
