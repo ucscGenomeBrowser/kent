@@ -478,13 +478,13 @@ err34: setOutput
 # testing extraneous parameters on functions
 err35: setOutput
 	@printf "### $@ 'https://hgwdev-api.gi.ucsc.edu/getData/sequence?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=_araTha1;trackLeavesOnly=1;chrom=chr1;start=4567;end=8901;trackLeavesOnly'\n"
-	@./jsonConsumer.pl -endpoint="/getData/sequence" -hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt -genome=_araTha1 -trackLeavesOnly -chrom=chr1 -start=4567 -end=8901 -trackLeavesOnly 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@./jsonConsumer.pl -endpoint="/getData/sequence" -hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt -genome=_araTha1 -trackLeavesOnly -chrom=chr1 -start=4567 -end=8901 -trackLeavesOnly 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing extraneous parameters on functions
 err36: setOutput
 	@printf "### $@ 'https://hgwdev-api.gi.ucsc.edu/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=_araTha1;trackLeavesOnly=1;chrom=chr1;start=4567;end=8901;trackLeavesOnly;track=assembly_;maxItemsOutput=5;jsonOutputArrays=1;trackLeavesOnly=1'\n"
-	@./jsonConsumer.pl -endpoint="/getData/track" -hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt -genome=_araTha1 -trackLeavesOnly -chrom=chr1 -start=4567 -end=8901 -trackLeavesOnly -track=assembly_ -maxItemsOutput=5 -jsonOutputArrays -trackLeavesOnly 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@./jsonConsumer.pl -endpoint="/getData/track" -hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt -genome=_araTha1 -trackLeavesOnly -chrom=chr1 -start=4567 -end=8901 -trackLeavesOnly -track=assembly_ -maxItemsOutput=5 -jsonOutputArrays -trackLeavesOnly 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 
