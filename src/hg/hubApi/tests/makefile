@@ -2,9 +2,11 @@
 test:: test0 test6 test7 test8 test9 test10  \
 	test11 test12 test13 test14 test15 test16 test19 test21 \
 	test26 test27 test28 test29 test39 test40 \
-	listFunctions getFunctions getSequence wigData errorTests
+	listFunctions getFunctions getSequence wigData errorTests \
+	notSupported
 
-all:: listFunctions getFunctions getSequence wigData errorTests
+all:: listFunctions getFunctions getSequence wigData errorTests \
+	notSupported
 
 listFunctions: list01 list02 list03 list04 list05 list06 list07 list08 list09 \
 	list10 list11 list12 list13 list14 list15
@@ -390,8 +392,8 @@ err20: setOutput
 # testing /list/chromosomes? hubUrl can not
 #  find specified database in track hub
 err21: setOutput
-	@printf "### $@ http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt?genome=hg19\n"
-	@./jsonConsumer.pl -endpoint="/list/chromosomes" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt" -genome=hg19 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@printf "### $@ 'https://apibeta.soe.ucsc.edu/list/chromosomes?genome=hg18;hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt" -genome=hg18 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing /list/chromosomes? bad hubUrl
