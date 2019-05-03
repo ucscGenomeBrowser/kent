@@ -9,10 +9,12 @@ use Getopt::Long;
 
 my $http = HTTP::Tiny->new();
 # my $server = 'https://apibeta.soe.ucsc.edu';
+# my $server = 'http://localhost:1236/cgi-bin/hubApi';
 my $server = 'https://api-test.gi.ucsc.edu';
 # my $server="https://genome-euro.ucsc.edu/cgi-bin/loader/hubApi";
 # my $server = 'https://hgwdev-api.gi.ucsc.edu';
 # my $server = 'https://hgwbeta.soe.ucsc.edu/cgi-bin/hubApi';
+# my $server = 'https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi';
 my $globalHeaders = { 'Content-Type' => 'application/json' };
 my $lastRequestTime = Time::HiRes::time();
 my $processStartTime = Time::HiRes::time();
@@ -249,6 +251,9 @@ sub processEndPoint() {
 	# no need to verify arguments here, pass them along, or not,
 	# so that error returns can be verified
 	my %parameters;
+	if (length($chrom)) {
+	    $parameters{"chrom"} = "$chrom";
+	}
 	if ($trackLeavesOnly) {
 	    $parameters{"trackLeavesOnly"} = "1";
 	}
@@ -265,6 +270,12 @@ sub processEndPoint() {
 	printf "%s", $json->pretty->encode( $jsonReturn );
      } elsif ($endpoint eq "/list/chromosomes") {
 	my %parameters;
+	if (length($chrom)) {
+	    $parameters{"chrom"} = "$chrom";
+	}
+	if ($trackLeavesOnly) {
+	    $parameters{"trackLeavesOnly"} = "1";
+	}
 	if (length($hubUrl)) {
 	    $parameters{"hubUrl"} = "$hubUrl";
 	}
@@ -280,6 +291,9 @@ sub processEndPoint() {
 	printf "%s", $json->pretty->encode( $jsonReturn );
      } elsif ($endpoint eq "/getData/sequence") {
 	my %parameters;
+	if ($trackLeavesOnly) {
+	    $parameters{"trackLeavesOnly"} = "1";
+	}
 	if (length($hubUrl)) {
 	  $parameters{"hubUrl"} = "$hubUrl";
 	}
@@ -302,6 +316,9 @@ sub processEndPoint() {
 	if (length($hubUrl)) {
 	  $parameters{"hubUrl"} = "$hubUrl";
 	}
+	if ($trackLeavesOnly) {
+	    $parameters{"trackLeavesOnly"} = "1";
+	}
 	# allow call to go through without a genome specified to test error
 	if (length($genome)) {
 	    $parameters{"genome"} = "$genome";
@@ -323,6 +340,22 @@ sub processEndPoint() {
 #	printf STDERR "# endpoint not supported at this time: '%s'\n", $endpoint;
 #	Pass along the bogus request just to test the error handling.
 	my %parameters;
+	if (length($hubUrl)) {
+	  $parameters{"hubUrl"} = "$hubUrl";
+	}
+	if (length($genome)) {
+	    $parameters{"genome"} = "$genome";
+	}
+	if (length($track)) {
+	    $parameters{"track"} = "$track";
+	}
+	if (length($chrom)) {
+	    $parameters{"chrom"} = "$chrom";
+	}
+	if (length($start)) {
+	    $parameters{"start"} = "$start";
+	    $parameters{"end"} = "$end";
+	}
 	$jsonReturn = performJsonAction($endpoint, \%parameters);
 	$errReturn = 1 if (defined ($jsonReturn->{'error'}));
 	printf "%s", $json->pretty->encode( $jsonReturn );

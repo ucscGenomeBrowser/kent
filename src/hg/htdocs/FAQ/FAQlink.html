@@ -10,139 +10,114 @@
 <h2>Topics</h2>
 
 <ul>
-<li><a href="#link1">Linking to the Genome Browser from another software application</a></li>
-<li><a href="#link3">Linking to the Browser at the position of a knownCanonical transcript 
-associated with a gene symbol</a></li>
-<li><a href="#link2">The <em>hgsid</em> parameter</a></li>
-<li><a href="#link4">Creating a custom URL to view specific tracks</a></li>
-<li><a href="#trackViz">Changing Track Visibilites with URL</a></li>
+<li><a href="#link1">Creating a custom URL to view specific tracks</a></li>
+<li><a href="#link2">Linking to the Browser at a specific position</a></li>
+<li><a href="#link3">Linking to gene specific information</a></li>
+<li><a href="#trackViz">Changing Track Visibilites via URL</a></li>
 <li><a href="#ctUrl">Adding Custom Tracks via URL</a></li>
 <li><a href="#hubUrl">Connection to a Track Hub via URL</a></li>
-</ul>
-<hr>
-<p>
-See also:</p>
-<ul>
-  <li> 
-  The <a href="../../goldenPath/help/customTrack.html#optParams" target ="_blank">URL optional 
-  parameters</a> section of the Custom Tracks User's Guide.</p>
-  <li>
-  The <a href="https://en.wikipedia.org/wiki/UCSC_Genome_Browser#Customizing_direct_links"
-  target="_blank">Customizing direct links</a> section of the UCSC Genome Browser wiki page.</p>
-  <li><a href="index.html">FAQ Table of Contents</a></li>
+<li><a href="../goldenPath/help/customTrack.html#optParams">Additional URL parameters</a></li>
 </ul>
 
 <a name="link1"></a>
+<h2>Creating a custom URL to view specific tracks</h2>
+<p> 
+The easiest way to save and share tracks via URL is by
+<a href="../cgi-bin/hgLogin" TARGET="_blank">logging in</a> to your Genome Browser account and
+creating a <a href="../goldenPath/help/hgSessionHelp.html">saved session</a>.
+Saved sessions are a versatile way to share data and may include native data, Custom Tracks, and
+Track Hubs.</p>
+<p>
+You will be able to save and restore Genome Browser sessions with the following formats:
+<pre>http://genome.ucsc.edu/s/<em>userName</em>/<em>sessionName</em></pre></p>
+<p>
+Or if you prefer the modifiable, longer format URL, use this format:</p>
+<pre>http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=[<em>UserName</em>]&hgS_otherUserSessionName=[<em>SessionName</em>]</pre>
+<p>
+For instructions on creating a saved session, go to the 
+<a href="../goldenPath/help/hgSessionHelp.html#Create">Saved Session Help page</a>.</p>
+<p> 
+If you want to specify track settings in a URL directly, you can do so by naming the track and
+visibility option directly in the URL. Note that these track parameters do not work on the shorter
+session URLs. For example, the following URL parameters displays the hg38 genome database with the 
+Known Gene track in pack mode and the RefSeq Genes in full mode:
+<pre><code><a href="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&knownGene=pack&refGene=full">http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&knownGene=pack&refGene=full</a></code></pre>
+
+<a name="link2"></a>
 <h2>Linking to a specific position in the Genome Browser</h2>
 <p>
-You can make a link to a specific position in Genome Browser using a URL with the <code>db=</code>
+You can link to a specific position in the Genome Browser using a URL with the <code>db=</code>
 and <code>position=</code> parameters:</p>
-<pre><code>../cgi-bin/hgTracks?db=[<em>db</em>]&position=[<em>position</em>]</code></pre> 
+<p><code>http://genome.ucsc.edu/cgi-bin/hgTracks?db=[<em>db</em>]&position=[<em>position</em>]</code></p>
 <p>
 Where:</p>
 <ul>
   <li>
-  <em>db</em> - designates a specific assembly version. For example, to refer to the Feb. 2009 human
-  release, you would use <code>db=hg19</code>. For a list of the db parameter values that 
+  <code>db</code> - designates a specific genome assembly. For example, <code>db=hg19</code> 
+  refers to the Feb. 2009 human genome release. For a list of the db parameter values that 
   correspond to UCSC assemblies, see the <a href="FAQreleases.html#release1">list of UCSC 
   releases</a>.</li>
-  <li><em>position</em> - can be any search value valid for the genome specified. This often takes
-  the form of <code>position=chr1:35000-40000</code>.</li>
+  <li><code>position</code> - can be any search value valid for the genome specified, including
+  a position range or a gene identifier. This often takes the form of
+  <code>position=chr1:35000-40000</code>.</li>
 </ul>
 <p>The following link is an example of a URL that declares assembly and position:</p>
-<pre><a href=../cgi-bin/hgTracks?db=hg19&position=chr1:35000-40000>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&position=chr1:35000-40000</a></pre>
+<p><code><a href=../cgi-bin/hgTracks?db=hg19&position=chr1:35000-40000>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&position=chr1:35000-40000</a></code></p>
 
-<a name="link3"></a>
-<h2>Linking to the Browser on a particular gene symbol or displaying gene information</h2>
-<p>
-Set the position parameter in the URL to the gene symbol and add the parameter 
-<code>singleSearch=knownCanonical</code>. For example, this link will open the 
-Genome Browser for the	hg19 human assembly at the position of the knownCanonical transcript 
-associated with GABRA3:</p> 
-<pre><code><a href="../cgi-bin/hgTracks?db=hg19&singleSearch=knownCanonical&position=GABRA3" target="_blank">http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&singleSearch=knownCanonical&position=GABRA3</a></code></pre>
-<p>
-The following URL connecting to 'hgGene' will open up the Genome Browser description page 
-containing descriptions, expression, and links to associated information for the above gene.
-Note the use of the URL parameter <code>hgg_gene=</code>:</p>
-<pre><code><a href="../cgi-bin/hgGene?db=hg19&hgg_gene=GABRA3" target="_blank">http://genome.ucsc.edu/cgi-bin/hgGene?db=hg19&hgg_gene=GABRA3</a> </code></pre>
-
-<a name="link2"></a>
+<a name="hgsid"></a>
 <h2>The <em>hgsid</em> parameter</h2>
-<h6>What is the <em>hgsid</em> parameter? Should I include it in URLs when I make a link to the 
-Genome Browser?</h6>
-<p>
-The <em>hgsid</em> parameter is a temporary, internally used parameter that stores information
-about what tracks the user last viewed, what position they were at, and what display settings they
-had enabled. This should not be used when constructing links to the Genome Browser and could
-unintentionally give someone access to private user data.</p>
+<p><code>hgsid=724184099_ZY6sql8XPIZcZx9b2RJm2aQBBZ78</code></p>
 
-<a name="link3"></a>
-<h2>Creating a custom URL to view specific tracks</h2>
-<h6>How can I create a custom URL to view a specific subset of tracks in the Genome Browser?</h6>
-<p> 
-Each assembly in the Genome Browser will display using a default set of tracks unless you 
-specifically modify the track set in your URL. The easiest way to construct your custom URL is by 
-<a href="../cgi-bin/hgLogin" TARGET="_blank">logging in</a> to your Genome Browser account and 
-creating a <a href="../goldenPath/help/hgSessionHelp.html">session</a>:</p>
-<ul>
-  <li>
-  Browse to the assembly of your choice (e.g. hg19).</li>
-  <li>
-  Click the &quot;hide all&quot; button. All tracks should now be hidden.</li>
-  <li>
-  Click the &quot;My Data&quot; pulldown in the blue navigation bar at the top of the screen to 
-  access Sessions.</li>
-  <li>
-  In the &quot;Save Settings&quot; section under &quot;Save current settings as named 
-  session:&quot;, enter a name for your session.</li>
-  <li>
-  Check &quot;allow this session to be loaded by others&quot; if you want others to be able to 
-  access your session and URL.</li>
-  <li>
-  Click the &quot;submit&quot; button.</li>
-  <li>
-  Click the &quot;Browser&quot; link under &quot;My Sessions&quot; to open your session in the 
-  Browser. Your session URL should look similar to this: 
-<pre><code>http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=[<em>User Name</em>]&hgS_otherUserSessionName=[<em>Session Name</em>]</code></pre>
-  <li>
-  To display the tracks of your choice, simply add the names of the tables associated with the 
-  tracks to the end of the session URL in the format &quot;&amp;[table name]=[display mode]&quot;. 
-  For example, to add the Assembly track in full display mode, add the table name 
-  &quot;&amp;gold=full&quot; to the end of the URL:
-<pre><code>http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=[<em>User Name</em>]&hgS_otherUserSessionName=[<em>Session Name</em>]&gold=full </code></pre>
-  If you don't know the table name for a track, in most cases you can view it by hovering the mouse 
-  cursor over either the gray bar to the left of the Browser's graphical display or the track's name
-  in the group listings below the graphical display. In these cases the Browser will display a URL 
-  in the bottom left corner of the window, ending with the table name in the format 
-  &quot;g=[table name]&quot;.</li>
-</ul>
-<p> 
-Here is an example of a URL that displays the UCSC Genes track in pack mode and the RefSeq Genes in 
-full mode: 
-<pre><code>http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=[<em>User Name</em>]&hgS_otherUserSessionName=[<em>Session Name</em>]&knownGene=pack&refGene=full </code></pre>
+<p>The hgsid is a temporary user ID that stores display setting and custom track information.
+Including it in any shared URLs is a privacy concern, and should be removed when 
+constructing any links to the Genome Browser. Creating 
+<a href="../goldenPath/help/hgSessionHelp.html#Create">Saved Sessions</a> is a much safer way to
+share particular Genome Browser views.
+</p>
 
 <a name="trackViz"></a>
-<h2>Setting visibitlies via the URL</h2>
+<h2>Setting Track Visibitlies via URL</h2>
 <p>
 You can control the visibility of tracks via the URL with the following parameters, 
 each linked by the &amp; sign, similar to previous commands. Here are a few commands you  can use
-to control track visibility. Note that <strong>bold text</strong> indicates a variable and not
-actually an example.</p>
+to control track visibility. Note that <em>italic text</em> indicates a user variable and not
+a valid a option.</p>
 <ul>
 <li>hideTracks=1</li>
-<li><strong>trackName</strong>=hide|dense|pack|full</li>
-<li>textSize=<strong>number</strong></li>
+<li><em>trackName</em>=hide|dense|pack|full</li>
+<li>textSize=<em>number</em></li>
 <li>ignoreCookie=1</li>
-<li>position=chr1:250000-300000</li>
-<li>position=<strong>geneSymbol</strong>&singleSearch=knownCanonical</li>
+<li>position=chr1:25000-30000</li>
+<li>position=<em>geneSymbol</em>&singleSearch=knownCanonical</li>
 </ul>
 <p>
 For example, you can use the following command to only show the knownGene track:</p>
-<pre><a href=http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hideTracks=1&knownGene=pack>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hideTracks=1&knownGene=pack</a></pre>
+<pre><a href=../cgi-bin/hgTracks?db=hg38&hideTracks=1&knownGene=pack>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hideTracks=1&knownGene=pack</a></pre>
 <p>You can use the following command to go to a particular position: </p>
-<pre><a href=http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&position=chr1:11000-20000>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&position=chr1:11000-20000</a></pre>
+<pre><a href=../cgi-bin/hgTracks?db=hg19&position=chr1:25000-30000>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&position=chr1:25000-30000</a></pre>
 <p>You can use the following command to go to a particular gene:</p>
-<pre><a href=http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=KRAS&singleSearch=knownCanonical>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=KRAS&singleSearch=knownCanonical</a></pre>
+<pre><a href=../cgi-bin/hgTracks?db=hg38&position=KRAS&singleSearch=knownCanonical>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=KRAS&singleSearch=knownCanonical</a></pre>
+<p><a href="../../goldenPath/help/customTrack.html#optParams" target ="_blank">URL optional 
+parameters</a> section of the Custom Tracks User's Guide.</p>
+
+
+<a name="link3"></a>
+<h2>Linking to the Browser to get gene information</h2>
+<p>
+To jump directly to a gene's position on the Genome Browser, set the position parameter in the 
+URL to a gene symbol (TP53, MTOR, KRAS, etc.) and add the       
+parameter <code>singleSearch=knownCanonical</code>. For example, this link will open the
+Genome Browser for the  hg19 human assembly at the position of the knownCanonical transcript
+associated with TP53:</p>
+<pre><code><a href="../cgi-bin/hgTracks?db=hg19&singleSearch=knownCanonical&position=TP53" target="_blank">http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&singleSearch=knownCanonical&position=TP53</a></code></pre>
+<p>
+<a name="gene"></a>
+You can also link directly to gene description pages from the URL. The following URL     
+connecting to 'hgGene' will open up the Genome Browser description page
+containing funtion information, expression profile, and links to associated information for the above gene.
+Note the use of the URL parameter <code>hgg_gene=</code>:</p>
+<pre><code><a href="../cgi-bin/hgGene?db=hg19&hgg_gene=TP53" target="_blank">http://genome.ucsc.edu/cgi-bin/hgGene?db=hg19&hgg_gene=TP53</a> </code></pre>
+
 
 <h2>Loading data using a URL</h2>
 <a name="ctUrl"></a>

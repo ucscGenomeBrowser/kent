@@ -2173,10 +2173,10 @@ if (s != NULL)
 return NULL;
 }
 
-char *skipLeadingSpaces(char *s)
+char *skipLeadingSpaces(const char *stringIn)
 /* Return first non-white space. */
 {
-char c;
+char c, *s = (char *)stringIn;
 if (s == NULL) return NULL;
 for (;;)
     {
@@ -2187,10 +2187,10 @@ for (;;)
     }
 }
 
-char *skipToSpaces(char *s)
+char *skipToSpaces(const char *stringIn)
 /* Return first white space or NULL if none.. */
 {
-char c;
+char c, *s = (char *)stringIn;
 if (s == NULL)
     return NULL;
 for (;;)

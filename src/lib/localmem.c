@@ -69,9 +69,9 @@ void lmCleanup(struct lm **pLm)
     struct lm *lm = *pLm;
     if (lm == NULL)
         return;
+    *pLm = NULL;
     slFreeList(&lm->blocks);
     freeMem(lm);
-    *pLm = NULL;
 }
 
 size_t lmAvailable(struct lm *lm)
@@ -135,7 +135,7 @@ memcpy(d, pt, size);
 return d;
 }
 
-char *lmCloneStringZ(struct lm *lm, char *string, int size)
+char *lmCloneStringZ(struct lm *lm, const char *string, int size)
 /* Return local mem copy of string. */
 {
 if (string == NULL)
@@ -148,7 +148,7 @@ else
     }
 }
 
-char *lmCloneString(struct lm *lm, char *string)
+char *lmCloneString(struct lm *lm, const char *string)
 /* Return local mem copy of string. */
 {
 if (string == NULL)
@@ -157,7 +157,7 @@ else
     return lmCloneStringZ(lm, string, strlen(string));
 }
 
-char *lmCloneFirstWord(struct lm *lm, char *line)
+char *lmCloneFirstWord(struct lm *lm, const char *line)
 /* Clone first word in line */
 {
 char *startFirstWord = skipLeadingSpaces(line);
@@ -170,7 +170,7 @@ else
     return lmCloneStringZ(lm, startFirstWord, endFirstWord - startFirstWord);
 }
     
-char *lmCloneSomeWord(struct lm *lm, char *line, int wordIx)
+char *lmCloneSomeWord(struct lm *lm, const char *line, int wordIx)
 /* Return a clone of the given space-delimited word within line.  Returns NULL if
  * not that many words in line. */
 {
@@ -188,7 +188,7 @@ return lmCloneFirstWord(lm, line);
 }
 
 
-struct slName *lmSlName(struct lm *lm, char *name)
+struct slName *lmSlName(struct lm *lm, const char *name)
 /* Return slName in memory. */
 {
 struct slName *n;
