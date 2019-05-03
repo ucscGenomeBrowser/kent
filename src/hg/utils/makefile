@@ -24,6 +24,7 @@ UTILS_APPLIST = \
 	bedWeedOverlapping \
 	bigMafToMaf \
 	bigPslToPsl \
+	binFromRange \
 	chromGraphFromBin \
 	chromGraphToBin \
 	crTreeIndexBed \
