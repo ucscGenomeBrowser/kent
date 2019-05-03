@@ -2,8 +2,8 @@
 track wgEncodeGencodeSuper
 superTrack on show
 group genes
-shortLabel GENCODE (Ensembl)
-longLabel GENCODE Gene Annotations (Ensembl)
+shortLabel All GENCODE
+longLabel All GENCODE transcripts, including comprehensive set and previous version
 priority 2
 
 # doen't set wgEncode attribute here, since newer GENCODEs are not ENCODE
