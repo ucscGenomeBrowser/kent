@@ -1638,7 +1638,6 @@ for (;col != NULL && count < fieldCount;col=col->next)
         printf("<td>%s</td></tr>\n", fields[ix]);
     }
 asObjectFree(&as);
-freeMem(fieldToUrl);
 if (skipIds)
     slFreeList(skipIds);
 if (sepFields)
