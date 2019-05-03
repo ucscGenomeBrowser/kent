@@ -21,6 +21,7 @@
 
 <a name="link1"></a>
 <h2>Creating a sharable URL to view specific tracks</h2>
+<h6>How do I create a link to the Genome Browser to share my data?</h6>
 <p> 
 The easiest way to save and share tracks from the URL is by
 <a href="../cgi-bin/hgLogin" TARGET="_blank">logging in</a> to your Genome Browser account and
@@ -43,6 +44,7 @@ Note that these URL parameters do not work with the shorter session URLs.
 
 <a name="link2"></a>
 <h2>Linking to the Browser at a specific position</h2>
+<h6>How do I make a link to a specific genome or position?</h6>
 <p>
 You can link to a specific genome assembly and position in the Genome Browser using a URL with
 the <code>db=</code> and <code>position=</code> parameters:</p>
@@ -64,6 +66,7 @@ Where:</p>
 
 <a name="hgsid"></a>
 <h2>The <em>hgsid</em> parameter</h2>
+<h6>What is the hgsid parameter and should I include it in Genome Browser links?</h6>
 <p>The hgsid is a temporary user ID that stores setting and custom track information in the URL.
 Including it in any shared URLs is a privacy concern, and it should be removed when 
 constructing any links to the Genome Browser. Creating 
@@ -74,6 +77,7 @@ share Genome Browser information.
 
 <a name="trackViz"></a>
 <h2>Setting Track Visibitlies via URL</h2>
+<h6>How do I create a custom URL to control the visibility of specific tracks?</h6>
 <p>
 You can control the visibility of tracks from the URL with the following parameters, 
 each linked by the "&amp;" sign, similar to position commands. For the full list, please see the 
@@ -106,7 +110,7 @@ track's default subtracks (&amp;refSeqComposite_hideKids=1), turns on one specif
 
 <a name="link3"></a>
 <h2>Linking to the Browser to get gene information</h2>
-<p>
+<h6>How do I link to a specific gene or specific gene description page?</h6><p>
 To jump directly to a gene's position on the Genome Browser, set the position parameter in the 
 URL to a gene symbol (e.g., TP53, MTOR, KRAS) and add the parameter 
 <code>&amp;singleSearch=knownCanonical</code>. For example, the following link will open the
@@ -126,6 +130,7 @@ expression profile, and links to additional information for the gene TP53.
 <h2>Loading data using a URL</h2>
 <a name="ctUrl"></a>
 <h3>Load Custom Track data with a URL</h3>
+<h6>How do I create a link to my custom track data?</h6>
 <p>
 You can combine the URL visibility settings with the <code>&amp;hgct_customText=</code> parameter using
 a track line you would otherwise put in the <a href=../cgi-bin/hgCustom>custom track 
@@ -138,6 +143,7 @@ Try the following example of the hgct_customText URL variable.
 
 <a name="hubUrl"></a>
 <h3>Load a Track Hub with a URL</h3>
+<h6>How do I create a link to my track hub or assembly hub?</h6>
 <p>Similar to custom tracks, track hubs can be loaded into the URL using the 
 <code>&amp;hubUrl=</code> parameter. This parameter takes input similar to the
 <a href=../cgi-bin/hgHubConnect#unlistedHubs>track hub interface</a>. Try the following example
