@@ -2712,13 +2712,13 @@ if (trackDbSetting(tdb, "motifTable") != NULL)
     printf("<BR>");
     }
 
-printf("<BR><B>Show count of cells where factor detected (and count where assayed, if different): </B> ");
-safef(varName, sizeof(varName), "%s.showExpCounts", tdb->track);
+printf("<BR><B>Cluster right label: </B>");
 cartMakeCheckBox(cart, varName, FALSE);
-
-printf("<BR><B>Show cell abbreviations (to right of cluster): </B> ");
-safef(varName, sizeof(varName), "%s.showCellAbbrevs", tdb->track);
+printf("cell count (detected/assayed)&nbsp;&nbsp;");
+safef(varName, sizeof(varName), "%s.showExpCounts", tdb->track);
 cartMakeCheckBox(cart, varName, TRUE);
+printf("cell abbreviations");
+safef(varName, sizeof(varName), "%s.showCellAbbrevs", tdb->track);
 
 puts("<p><table>");
 jsBeginCollapsibleSectionFontSize(cart, tdb->track, "cellSources", "Cell Abbreviations", FALSE,
