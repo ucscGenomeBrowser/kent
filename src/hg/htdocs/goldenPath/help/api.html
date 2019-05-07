@@ -192,9 +192,9 @@ the functions of the API interface.
 <li><a href='/list/hubGenomes?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt'
 target=_blank>list genomes from specified hub</a> -
 <b>api.genome.ucsc.edu/list/hubGenomes?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt</b></li>
-<li><a href='/list/tracks?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=_araTha1'
+<li><a href='/list/tracks?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1'
 target=_blank>list tracks from specified hub and genome</a> -
-<b>api.genome.ucsc.edu/list/tracks?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=_araTha1</b></li>
+<b>api.genome.ucsc.edu/list/tracks?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1</b></li>
 <li><a href='/list/tracks?genome=ce11' target=_blank>list tracks from UCSC database genome</a> -
 <b>api.genome.ucsc.edu/list/tracks?genome=ce11</b></li>
 <li><a href='/list/chromosomes?genome=ce11' target=_blank>list chromosomes from UCSC database genome</a> -
@@ -202,12 +202,12 @@ target=_blank>list tracks from specified hub and genome</a> -
 <li><a href='/list/chromosomes?genome=ce11;track=gold'
 target=_blank>list chromosomes from specified track in UCSC database genome</a> -
 <b>api.genome.ucsc.edu/list/chromosomes?genome=ce11;track=gold</b></li>
-<li><a href='/list/chromosomes?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=_araTha1'
+<li><a href='/list/chromosomes?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1'
 target=_blank>list chromosomes from assembly hub genome</a> -
-<br><b>api.genome.ucsc.edu/list/chromosomes?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=_araTha1</b></li>
-<li><a href='/list/chromosomes?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=_araTha1;track=assembly_'
+<br><b>api.genome.ucsc.edu/list/chromosomes?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1</b></li>
+<li><a href='/list/chromosomes?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;track=assembly'
 target=_blank>list chromosomes from specified track in assembly hub genome</a> -
-<br><b>api.genome.ucsc.edu/list/chromosomes?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=_araTha1;track=assembly_</b></li>
+<br><b>api.genome.ucsc.edu/list/chromosomes?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;track=assembly</b></li>
 </ol>
 <a id="getData_examples"></a>
 <h3>getData functions</h3>
@@ -221,9 +221,9 @@ target=_blank>Get DNA sequence from specified chromosome and start,end coordinat
 <li><a href='/getData/sequence?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt;genome=hg19;chrom=chrM;start=4321;end=5678'
 target=_blank>Get DNA sequence from a track hub where 'genome' is a UCSC database</a> -
 <br><b>api.genome.ucsc.edu/getData/sequence?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt;genome=hg19;chrom=chrM;start=4321;end=5678</b></li>
-<li><a href='/getData/sequence?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=_araTha1;chrom=chrCp;start=4321;end=5678'
+<li><a href='/getData/sequence?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;chrom=chrCp;start=4321;end=5678'
 target=_blank><b></b> Get DNA sequence from specified chromosome and start,end coordinates in an assembly hub genome</a> -
-<br><b>api.genome.ucsc.edu/getData/sequence?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=_araTha1;chrom=chrCp;start=4321;end=5678</b></li>
+<br><b>api.genome.ucsc.edu/getData/sequence?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;chrom=chrCp;start=4321;end=5678</b></li>
 <li><a href='/getData/track?genome=ce11;track=gold;maxItemsOutput=100'
 target=_blank>Get track data for specified track in UCSC database genome</a> -
 <br><b>api.genome.ucsc.edu/getData/track?genome=ce11;track=gold;maxItemsOutput=100</b></li>
@@ -233,21 +233,21 @@ target=_blank>Get track data for specified track and chromosome in UCSC database
 <li><a href='/getData/track?genome=ce11;track=gold;chrom=chrI;start=47000;end=48000'
 target=_blank>Get track data for specified track, chromosome and start,end coordinates in UCSC database genome</a> -
 <br><b>api.genome.ucsc.edu/getData/track?genome=ce11;track=gold;chrom=chrI;start=47000;end=48000</b></li>
-<li><a href='/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=_araTha1;track=assembly_'
+<li><a href='/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;track=assembly'
 target=_blank>Get track data for specified track in an assembly hub genome</a> -
-<br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=_araTha1;track=assembly_</b></li>
-<li><a href='/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=_araTha1;track=assembly_;chrom=chrCp'
+<br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;track=assembly</b></li>
+<li><a href='/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;track=assembly;chrom=chrCp'
 target=_blank>Get track data for specified track and chromosome in an assembly hub genome</a> -
-<br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=_araTha1;track=assembly_;chrom=chrCp</b></li>
+<br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;track=assembly;chrom=chrCp</b></li>
 <li><a href='/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt;genome=hg19;track=ultraConserved'
 target=_blank>Get track data for specified track in a track hub</a> -
 <br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt;genome=hg19;track=ultraConserved</b></li>
 <li><a href='/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt;genome=hg19;track=ultraConserved;chrom=chr8'
 target=_blank>Get track data for specified track and chromosome in a track hub</a> -
 <br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt;genome=hg19;track=ultraConserved;chrom=chr8</b></li>
-<li><a href='/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=_araTha1;track=gc5Base_;chrom=chrCp;start=4321;end=5678'
+<li><a href='/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;track=gc5Base;chrom=chrCp;start=4321;end=5678'
 target=_blank>Wiggle track data for specified track, chromosome with start and end limits in an assembly hub genome</a> -
-<br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=_araTha1;track=assembly_;chrom=chrCp;start=4321;end=5678</b></li>
+<br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;track=assembly;chrom=chrCp;start=4321;end=5678</b></li>
 <li><a href='/getData/track?genome=galGal6;track=gc5BaseBw;maxItemsOutput=100'
 target=_blank>Wiggle track data for specified track in a UCSC database genome</a> -
 <br><b>api.genome.ucsc.edu/getData/track?genome=galGal6;track=gc5BaseBw;maxItemsOutput=100</b></li>
@@ -262,9 +262,9 @@ target=_blank>bigBed data from a UCSC database, chrom and start,end limits</a> -
 <h3>Error return examples</h3>
 <p>
 <ol>
-<li><a href='/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=_araTha1;track=gc5Base_;chrom=chrI;start=4321;end=5678'
+<li><a href='/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;track=gc5Base;chrom=chrI;start=4321;end=5678'
 target=_blank>Request track data for non-existent chromosome in an assembly hub genome</a> -
-<br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=_araTha1;track=assembly_;chrom=chrI;start=43521;end=54321</b></li>
+<br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;track=assembly;chrom=chrI;start=43521;end=54321</b></li>
 </ol>
 </p>
 
