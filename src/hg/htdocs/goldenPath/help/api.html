@@ -33,10 +33,10 @@ target=_blank>JSON Introduction</a>
 <a id="Access"></a>
 <h2>What is the access URL ?</h2>
 <p>
-This access url: <b>https://api-test.gi.ucsc.edu/</b> is used to access
+This access url: <b>https://api.genome.ucsc.edu/</b> is used to access
 the endpoint functions.  For example:
 <pre>
-    wget -O- 'https://api-test.gi.ucsc.edu/list/publicHubs'
+    wget -O- 'https://api.genome.ucsc.edu/list/publicHubs'
 </pre>
 </p>
 
@@ -64,10 +64,10 @@ Browser genome assembly
 <a id="Endpoint"></a>
 <h2>Endpoint functions to return data</h2>
 <p>
-The url <b>https://api-test.gi.ucsc.edu/</b> is used to access
+The url <b>https://api.genome.ucsc.edu/</b> is used to access
 the endpoint functions.  For example:
 <pre>
-    wget -O- 'https://api-test.gi.ucsc.edu/list/publicHubs'
+    wget -O- 'https://api.genome.ucsc.edu/list/publicHubs'
 </pre>
 </p>
 <p>
@@ -115,7 +115,7 @@ The parameters are added to the endpoint URL beginning with a
 question mark <b>?</b>, and multiple parameters are separated with
 the semi-colon <b>;</b>.  For example:
 <pre>
-https://api-test.gi.ucsc.edu/getData/sequence?genome=ce11;chrom=chrM
+https://api.genome.ucsc.edu/getData/sequence?genome=ce11;chrom=chrM
 </pre>
 </p>
 
@@ -176,6 +176,13 @@ Any extra parameters not allowed in a function will be flagged as an error.
 <!-- ========== Example data access ======================= -->
 <a id="list_examples"></a>
 <h2>Example data access</h2>
+<p>
+Your WEB browser can be configured to interpret JSON data and format
+in a convenient browsing format.  Firefox has this function built in,
+other browsers have add-ons that can be turned on to format JSON data.
+With your browser thus configured, the following links can demonstrate
+the functions of the API interface.
+</p>
 <h3>Listing functions</h3>
 <ol>
 <li><a href='/list/publicHubs' target=_blank>list public hubs</a> -

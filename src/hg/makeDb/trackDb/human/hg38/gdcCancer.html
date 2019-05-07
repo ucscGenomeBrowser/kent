@@ -1,11 +1,27 @@
 <h2>Description</h2>
 
 <p>
-This track shows the genomic positions of variants found in the
-<a href="https://portal.gdc.cancer.gov" target="_blank">Genomic Data Commons Cancer Database</a> gathered from
-a set of thirty-three data sets collect by the TCGA project.
+This track shows the genomic positions of somatic variants found through whole genome sequencing of tumors
+as part of The Cancer Genome Atlas (TCGA) by
+the National Cancer Institute, made 
+available through the <a href="https://portal.gdc.cancer.gov" target="_blank">Genomic Data Commons Portal</a>.
+The data shown here is sometimes called the "Pan-Cancer dataset", a collection
+of thirty-three TCGA projects processed in a uniform way. 
 
 <h2>Display Conventions and Configuration</h2>
+<p>The variants can be shown with two display modes:
+<ol>
+<li>Lollipop-Mode: variants are shown with circles, the y-axis represents the
+number of samples within the cohort.  The exact sample count is shown when you
+hover over the circle.
+<li>BED-Mode: variants are shown as normal genomic features. The shade of grey
+represents the frequency, black is for the most common variants, light-grey for
+the rare ones.
+</ol>
+</p>
+
+<p>Variants can be filtered by frequency, variant type, project, disease and
+many other sample annotations through the track details page.</p>
 
 <H2>Data access</H2>
 <p>
@@ -30,12 +46,9 @@ can also be used to obtain only features within a given range, e.g.
 <h2>Methods</h2>
 
 <p>
-GDC files were reformatted at UCSC to the <a href="../goldenPath/help/bigBed.html">bigBed</a> format.
-The data is updated every month, one week after the ClinVar release date.
-The program that performs the update is available on
-<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/utils/cancerMafToBigBed"
-target="_blank">Github</a>.
-</p>
+All Mutect Variant calls were downloaded from the GDC portal in January 2019 and
+reformatted at UCSC to the <a href="../goldenPath/help/bigBed.html">bigBed</a>
+format with a script that can be found on Github (which one?).</p>
 
 <h2>Credits</h2>
 <p>
