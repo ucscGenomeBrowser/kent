@@ -1447,15 +1447,45 @@ webEndJWest();
 }	/*	void doMiddle(struct cart *theCart)	*/
 
 static void setGlobalCgiVars()
-/* check for CGI variables and set global flags */
+/* check for legal CGI variables and set global flags */
 {
+/* count the arguments to see if any occur more than once */
+struct hash *varCounter = hashNew(0);
+struct cgiVar *varList = cgiVarList();
+struct cgiVar *el = varList;
+for ( ; el; el = el->next)
+    {
+    hashIncInt(varCounter, el->name);
+    }
+struct hashCookie cookie = hashFirst(varCounter);
+struct hashEl *hel = NULL;
+for ( hel = hashNext(&cookie); hel; hel = hashNext(&cookie))
+    {
+    if (ptToInt(hel->val) > 1)
+	apiErrAbort(err400, err400Msg, "parameter '%s' found %d times, only one instance allowed", hel->name, ptToInt(hel->val));
+    }
+
 char *trackLeaves = cgiOptionalString("trackLeavesOnly");
-if (sameOk("1", trackLeaves))
-    trackLeavesOnly = TRUE;
+if (isNotEmpty(trackLeaves))
+    {
+    if (sameString("1", trackLeaves))
+	trackLeavesOnly = TRUE;
+    else if (sameString("0", trackLeaves))
+	trackLeavesOnly = FALSE;
+    else
+	apiErrAbort(err400, err400Msg, "unrecognized 'trackLeavesOnly=%s' argument, can only be =1 or =0", trackLeaves);
+    }
 
 char *jsonArray = cgiOptionalString("jsonOutputArrays");
-if (sameOk("1", jsonArray))
-    jsonOutputArrays = TRUE;
+if (isNotEmpty(jsonArray))
+    {
+    if (sameString("1", jsonArray))
+	jsonOutputArrays = TRUE;
+    else if (sameString("0", jsonArray))
+	jsonOutputArrays = FALSE;
+    else
+	apiErrAbort(err400, err400Msg, "unrecognized 'jsonOutputArrays=%s' argument, can only be =1 or =0", jsonArray);
+    }
 
 int maybeDebug = cgiOptionalInt("debug", 0);
 if (1 == maybeDebug)

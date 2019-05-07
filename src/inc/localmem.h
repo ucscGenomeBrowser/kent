@@ -36,20 +36,20 @@ void *lmCloneMem(struct lm *lm, void *pt, size_t size);
 /* Return a local mem copy of memory block. */
 
 
-char *lmCloneStringZ(struct lm *lm, char *string, int size);
+char *lmCloneStringZ(struct lm *lm, const char *string, int size);
 /* Return local mem copy of string of given size, adding null terminator. */
 
-char *lmCloneString(struct lm *lm, char *string);
+char *lmCloneString(struct lm *lm, const char *string);
 /* Return local mem copy of string. */
 
-char *lmCloneFirstWord(struct lm *lm, char *line);
+char *lmCloneFirstWord(struct lm *lm, const char *line);
 /* Clone first word in line */
 
-char *lmCloneSomeWord(struct lm *lm, char *line, int wordIx);
+char *lmCloneSomeWord(struct lm *lm, const char *line, int wordIx);
 /* Return a clone of the given space-delimited word within line.  Returns NULL if
  * not that many words in line. */
 
-struct slName *lmSlName(struct lm *lm, char *name);
+struct slName *lmSlName(struct lm *lm, const char *name);
 /* Return slName in memory. */
 
 #define lmAllocVar(lm, pt) (pt = lmAlloc(lm, sizeof(*pt)));

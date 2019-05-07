@@ -1,12 +1,15 @@
 
-test:: test0 test1 test2 test3 test4 test5 test6 test7 test8 test9 test10  \
-	test11 test12 test13 test14 test15 test16 test19 test21 test22 test23 \
-	test26 test27 test28 test29 test30 test31 test39 test40 \
-	listFunctions getFunctions getSequence wigData errorTests
+test:: test0 test6 test7 test8 test9 test10  \
+	test11 test12 test13 test14 test15 test16 test19 test21 \
+	test26 test27 test28 test29 test39 test40 \
+	listFunctions getFunctions getSequence wigData errorTests \
+	notSupported
 
-all:: listFunctions getFunctions getSequence wigData errorTests
+all:: listFunctions getFunctions getSequence wigData errorTests \
+	notSupported
 
-listFunctions:	test1 test2 test3 test4 test5 test22 test23 test30 test31
+listFunctions: list01 list02 list03 list04 list05 list06 list07 list08 list09 \
+	list10 list11 list12 list13 list14 list15
 
 getFunctions: test6 test7 test8 test9 test10 test11 test12 test13 test14 \
 	test15 test16 test19 test21 test26 test27 test28 \
@@ -20,7 +23,8 @@ wigData: wig01 wig02 wig03 wig04 wig05 wig06 wig07 wig08 wig09 wig10 \
 
 errorTests: err01 err02 err03 err04 err05 err06 err07 err08 err09 err10 \
 	err11 err12 err13 err14 err15 err16 err17 err18 err19 err20 \
-	err21 err22 err23 err24 err25 err26 err27 err28 err29
+	err21 err22 err23 err24 err25 err26 err27 err28 err29 err30 \
+	err31 err32 err33 err34 err35 err36
 
 notSupported: notSup01 notSup02
 
@@ -40,31 +44,101 @@ test0: setOutput
 	@zdiff expected/$@.gz testOutput/$@.gz
 	@echo '### test0: ./jsonConsumer.pl -test0 - OK'
 
+################################################### list functions ###########
 # testing /list/hubGenomes
-test1: setOutput
-	@./jsonConsumer.pl -hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt -endpoint="/list/hubGenomes" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+list01: setOutput
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi/list/hubGenomes?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt'\n"
+	@./jsonConsumer.pl -hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt -endpoint="/list/hubGenomes" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing /list/tracks? hubUrl genome=_araTha1 trackLeavesOnly
-test2: setOutput
-	@./jsonConsumer.pl -hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt -endpoint="/list/tracks" -genome="_araTha1" -trackLeavesOnly | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+list02: setOutput
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi/list/tracks?trackLeavesOnly=1;genome=_araTha1;hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt'\n"
+	@./jsonConsumer.pl -hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt -endpoint="/list/tracks" -genome="_araTha1" -trackLeavesOnly 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing /list/tracks?genome=ce11 trackLeavesOnly=1
-test3: setOutput
-	@./jsonConsumer.pl -endpoint="/list/tracks" -genome="ce11" -trackLeavesOnly | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+list03: setOutput
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi/list/tracks?trackLeavesOnly=1;genome=ce11'\n"
+	@./jsonConsumer.pl -endpoint="/list/tracks" -genome="ce11" -trackLeavesOnly 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing /list/chromosomes?genome=ce11
-test4: setOutput
-	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="ce11" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+list04: setOutput
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi/list/chromosomes?genome=ce11'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="ce11" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing /list/chromosomes?genome=ce11&track=gold
-test5: setOutput
-	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="ce11" -track="gold" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+list05: setOutput
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi/list/chromosomes?track=gold;genome=ce11'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="ce11" -track="gold" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
+# testing /list/chromosomes? hubUrl genome=_araTha1
+list06: setOutput
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi/list/chromosomes?genome=_araTha1;hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" -genome="_araTha1" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/chromosomes? hubUrl genome=_araTha1 track=assembly_
+list07: setOutput
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi/list/chromosomes?track=assembly_;genome=_araTha1;hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" -genome="_araTha1" -track="assembly_" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/tracks? hubUrl genome=_araTha1
+list08: setOutput
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi/list/tracks?genome=_araTha1;hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt'\n"
+	@./jsonConsumer.pl -hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt -endpoint="/list/tracks" -genome="_araTha1" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/tracks?genome=ce11
+list09: setOutput
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi/list/tracks?genome=ce11'\n"
+	@./jsonConsumer.pl -endpoint="/list/tracks" -genome="ce11" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/chromosomes?genome=ce11&track=mrna SQL table name is all_mrna
+list10: setOutput
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi/list/chromosomes?track=mrna;genome=ce11'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="ce11" -track="mrna" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/chromosomes?genome=ce4&track=mrna SQL table name is all_mrna
+# and ce4 has split tables
+list11: setOutput
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi/list/chromosomes?track=mrna;genome=ce4'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="ce4" -track="mrna" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/chromosomes?genome=ce11&track=rmsk different chrom name column
+list12: setOutput
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi/list/chromosomes?track=rmsk;genome=ce11'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="ce11" -track="rmsk" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/chromosomes?genome=ce4&track=rmsk different chrom name column
+# and ce4 has split tables
+list13: setOutput
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi/list/chromosomes?track=rmsk;genome=ce4'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="ce4" -track="rmsk" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/chromosomes?genome=ce11&track=est different chrom name column
+list14: setOutput
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi/list/chromosomes?track=est;genome=ce11'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="ce11" -track="est" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/chromosomes?genome=ce4&track=est different chrom name column
+# and ce4 has split tables
+list15: setOutput
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi/list/chromosomes?track=est;genome=ce4'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="ce4" -track="est" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+##########################   getData functions  #############################
 # testing /getData/sequence?genome=ce11&chrom=chrM
 test6: setOutput
 	@./jsonConsumer.pl -endpoint="/getData/sequence" -genome="ce11" -chrom="chrM" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
@@ -133,16 +207,6 @@ test21: setOutput
 	@./jsonConsumer.pl -endpoint="/getData/track" -genome="hg19" -track="wgEncodeRegMarkH3k4me1H1hesc" -chrom="chr1" -start=62300000 -end=62301000 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
-# testing /list/chromosomes? hubUrl genome=_araTha1
-test22: setOutput
-	@./jsonConsumer.pl -endpoint="/list/chromosomes" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" -genome="_araTha1" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
-	@zdiff expected/$@.gz testOutput/$@.gz
-
-# testing /list/chromosomes? hubUrl genome=_araTha1 track=assembly_
-test23: setOutput
-	@./jsonConsumer.pl -endpoint="/list/chromosomes" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" -genome="_araTha1" -track="assembly_" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
-	@zdiff expected/$@.gz testOutput/$@.gz
-
 # testing genePred track
 #    /getData/track?genome=ce11&chrom=chrV&track=refGene&start=5231045&end=5241045
 test26: setOutput
@@ -165,16 +229,6 @@ test28: setOutput
 #    /getData/track?genome=ce11&chrom=chrV&track=cpgIslandExt&start=5001045&end=5241045
 test29: setOutput
 	@./jsonConsumer.pl -endpoint="/getData/track" -genome="ce11" -track="cpgIslandExt"  -chrom="chrV" -start=5001045 -end=5241045 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
-	@zdiff expected/$@.gz testOutput/$@.gz
-
-# testing /list/tracks? hubUrl genome=_araTha1
-test30: setOutput
-	@./jsonConsumer.pl -hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt -endpoint="/list/tracks" -genome="_araTha1" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
-	@zdiff expected/$@.gz testOutput/$@.gz
-
-# testing /list/tracks?genome=ce11
-test31: setOutput
-	@./jsonConsumer.pl -endpoint="/list/tracks" -genome="ce11" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing /getData/track?genome=ce4&track=gold for split table operation
@@ -339,8 +393,8 @@ err20: setOutput
 # testing /list/chromosomes? hubUrl can not
 #  find specified database in track hub
 err21: setOutput
-	@printf "### $@ http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt?genome=hg19\n"
-	@./jsonConsumer.pl -endpoint="/list/chromosomes" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt" -genome=hg19 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@printf "### $@ 'https://apibeta.soe.ucsc.edu/list/chromosomes?genome=hg18;hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt" -genome=hg18 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing /list/chromosomes? bad hubUrl
@@ -391,6 +445,50 @@ err29: setOutput
 	@./jsonConsumer.pl -endpoint="/list/chromosomes" -hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt -genome=araTha1 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
+# testing extraneous parameters on functions
+err30: setOutput
+	@printf "### $@ 'https://hgwdev-api.gi.ucsc.edu/list/publicHubs?hubUrl=araTha1;genome=abc'\n"
+	@./jsonConsumer.pl -endpoint="/list/publicHubs" -hubUrl=araTha1 -genome=abc 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing extraneous parameters on functions
+err31: setOutput
+	@printf "### $@ 'https://hgwdev-api.gi.ucsc.edu/list/ucscGenomes?hubUrl=araTha1;genome=abc'\n"
+	@./jsonConsumer.pl -endpoint="/list/ucscGenomes" -hubUrl=araTha1 -genome=abc 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing extraneous parameters on functions
+err32: setOutput
+	@printf "### $@ 'https://hgwdev-api.gi.ucsc.edu/list/hubGenomes?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=_araTha1'\n"
+	@./jsonConsumer.pl -endpoint="/list/hubGenomes" -hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt -genome=_araTha1 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing extraneous parameters on functions
+err33: setOutput
+	@printf "### $@ 'https://hgwdev-api.gi.ucsc.edu/list/tracks?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=_araTha1;trackLeavesOnly=1;chrom=chr1'\n"
+	@./jsonConsumer.pl -endpoint="/list/tracks" -hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt -genome=_araTha1 -trackLeavesOnly -chrom=chr1 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing extraneous parameters on functions
+err34: setOutput
+	@printf "### $@ 'https://hgwdev-api.gi.ucsc.edu/list/chromosomes?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=_araTha1;trackLeavesOnly=1;chrom=chr1'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt -genome=_araTha1 -trackLeavesOnly -chrom=chr1 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing extraneous parameters on functions
+err35: setOutput
+	@printf "### $@ 'https://hgwdev-api.gi.ucsc.edu/getData/sequence?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=_araTha1;trackLeavesOnly=1;chrom=chr1;start=4567;end=8901;trackLeavesOnly'\n"
+	@./jsonConsumer.pl -endpoint="/getData/sequence" -hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt -genome=_araTha1 -trackLeavesOnly -chrom=chr1 -start=4567 -end=8901 -trackLeavesOnly 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing extraneous parameters on functions
+err36: setOutput
+	@printf "### $@ 'https://hgwdev-api.gi.ucsc.edu/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=_araTha1;trackLeavesOnly=1;chrom=chr1;start=4567;end=8901;trackLeavesOnly;track=assembly_;maxItemsOutput=5;jsonOutputArrays=1;trackLeavesOnly=1'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt -genome=_araTha1 -trackLeavesOnly -chrom=chr1 -start=4567 -end=8901 -trackLeavesOnly -track=assembly_ -maxItemsOutput=5 -jsonOutputArrays -trackLeavesOnly 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+
+#####################  wiggle data ###########################################
 # classic wiggle with wig table and wib file
 wig01: setOutput
 	@printf "### $@ 'https://api-test.gi.ucsc.edu/getData/track?track=gc5Base;genome=ce4;maxItemsOutput=5'\n"

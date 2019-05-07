@@ -18,3 +18,40 @@ bedToBigBed -as=$HOME/kent/src/hg/lib/gdcCancer.as -type=bed12+ -tab gdcCancer.s
 
 rm /gbdb/hg38/gdcCancer.bb
 ln -s `pwd`/gdcCancer.bb /gbdb/hg38
+
+for i in */*.maf.gz; do 
+dir=`dirname $i`; name=`basename $i | sed 's/TCGA.//' | sed 's/\..*//'`; 
+echo cancerMafToBigBed $dir clinical.tsv exposure.tsv $name.bb;
+echo bedToBigBed -as=$HOME/kent/src/hg/lib/gdcCancer.as -type=bed12+ -tab $name.s.bed /cluster/data/hg38/chrom.sizes $name.bb
+done > jobs
+
+sh -x jobs
+
+for i in *.bb; do ln -s `pwd`/$i /gbdb/hg38/gdcCancer; done
+
+ls */*.maf.gz | while read name; do 
+f=`basename $name`; echo $f; done | sort > sortedNames.txt
+
+sum=1
+for j in `cat sortedNames.txt`; do 
+i=*/$j
+dir=`dirname $i`; 
+name=`basename $i | sed 's/TCGA.//' | sed 's/\..*//'`; 
+sum=`expr $sum + 1`
+long=`grep $name project2LongLabel.txt | tawk '{print $2}'`
+echo "track $name"
+echo "priority $sum"
+echo "parent gdcCancer off"
+echo "shortLabel $name"
+echo "longLabel $long"
+echo "group phenDis"
+echo "type bigLolly"
+echo "lollyField 13"
+echo "release alpha"
+echo "bigDataUrl /gbdb/hg38/gdcCancer/$name.bb"
+echo "autoScale on"
+echo "urls case_id=https://portal.gdc.cancer.gov/cases/$$"
+echo "genderFilterValues male,female"
+echo "genderFilterType multipleListOr"
+echo ""
+done >> $HOME/kent/src/hg/makeDb/trackDb/human/hg38/gdcCancer.ra

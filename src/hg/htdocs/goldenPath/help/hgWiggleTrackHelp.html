@@ -14,36 +14,15 @@ Genome Browser graph-based tracks may be configured in a variety of ways to high
 aspects of the displayed information. Some track types, such as BAM tracks and certain gene tracks, 
 offer dynamic calculation of items in the current window to display a density graph where the height
 is proportional to the number of items mapped to each genomic position. The following information 
-explains each of the available configuration options.</p> 
-
-<h3>Overlay method</h3> 
-
-<ul class="gbsNoBullet">
-  <li>
-  <strong>Transparent</strong>: This setting displays the colored 
-  transparent graphs of multiple subtracks overlayed in the same vertical space.<br>
-  <img src="../../images/trans_encode-1.png" width="800px" height="100px">
-  </li>
-  <li>
-  <strong>Solid</strong>: This setting displays the colored opaque graphs of multiple subtracks 
-  overlayed in the same vertical space.<br>
-  <img src="../../images/encode_solid-1.png" width="800px" height="100px">  
-  </li>
-  <li>
-  <strong>Stacked</strong>: This setting displays each graph stacked on top of each other where the
-  high point of the graph is the sum of all the values.<br>
-  <img src="../../images/encode_stack-1.png" width="800px" height="100px">
-  </li>
-  <strong>None</strong>: This setting displays each graph in its own vertical space. Note that not
-  all graph-based tracks include this option.<br>
-  <img src="../../images/encode_none-1.png" width="800px" height="100px"><br>
-</ul> 
-
+explains each of the available configuration options.</p>
+ 
+<h3>Display settings</h3>
+<p>
+<img src="../../images/2conf_enco.png" width="800px" ><br>
 <strong>Type of graph</strong>: The default &quot;Bar&quot; setting depicts the graph data using 
 color-filled bars. To view the data as a series of points or lines, select the 
 &quot;Points&quot; setting.</p>  
 <p>
-<img src="../../images/conf_enco.png" width="800px" height="100px"><br>
 <strong>Track height (boxed in blue)</strong>: To change the default display height of the graph in
 pixels, type in a value from within the indicated range.</p>  
 <p> 
@@ -88,7 +67,12 @@ lines. This is equivalent to a trend line calculation on the graph. The default 
 positive values become negative and vice-versa. This is useful for wiggles representing 
 transcription or other activities on the Crick strand. Be aware that wiggles with negative values
 are drawn in <strong>altColor</strong>  not <strong>color</strong> as positive values
-e.</p> 
+are. The below image shows ENCODE RNA-seq data around two genes on different strands, SIRT1 and 
+HERC4, with a minus signal track using Negate values to flip the wiggle display to emphasize HERC4 
+expresses on the minus strand. This image also displays the signal graphed in points and a 
+smoothing window of 16 pixels.<br>
+<img src="../../images/wig_negate-1.png" width="800px" >
+</p> 
 <p> 
 <strong>Draw indicator lines (boxed in orange)</strong>:</p> 
 <ul> 
@@ -98,7 +82,10 @@ e.</p>
   <li> 
   <strong>at y= </strong>: Select the  &quot;ON&quot; setting to display a line on the graph at 
   the specified numerical value (defaults are &quot;0&quot; and &quot;OFF&quot;). This line can be
-   used to mark a significant threshold on the graph.</li> 
+  used to mark a significant threshold on the graph. For example, in the image below, 
+  <strong>y=3</strong>.<br>
+   <img src="../../images/wiggle_y-1.png" width="800px" >
+   </li> 
 </ul> 
 <p> 
 When you have finished making your configuration changes, click the <em>Apply</em> button to preview
@@ -110,31 +97,58 @@ to the annotation track display page.</p>
 <p>
 Each annotation track within the window may have up to five display modes:
 <p>
-<ul class="gbsNoBullet">
-  <li>
-  <strong>Hide:</strong> the track is not displayed at all. To hide all the annotation tracks, click
-  the <em>hide all</em> button.</li>
-  <li>
-  <strong>Dense:</strong> the track is displayed with all features collapsed into a single line.
+<dl class="gbsNoBullet">
+  <dt>Dense</dt> 
+  <dd>The track is displayed with all features collapsed into a single line.
   The darker the line color the greater the wiggle value at that location.<br>
-  <img src="../../images/wiggle_dense-1.png" width="800px">
-  </li>
-  <li>
-  <strong>Full:</strong> the track displays the wiggle value associated with each annotation 
-  feature creating a histogram-like image. <br>
-  <img src="../../images/wiggle_full-1.png" width="800px">
-  </li>
-  <li>
-  <strong>Squish:</strong> the track is displayed with all the features collapsed into a single
+  <img src="../../images/wiggle_dense-1.png" alt="Wiggle in dense display" width="800"> 
+  </dd>
+  <dt>Squish</dt> 
+  <dd>The track is displayed with all the features collapsed into a single
   line, much like the dense display mode with greater compression.<br>
   <img src="../../images/wiggle_squish-1.png" width="800px">
-  </li>
-  <li>
-  <strong>Pack:</strong> the track displays the wiggle value associated with each annotation 
-  feature creating a histogram-like image, much like the dense display mode with greater compression.<br>
+  </dd>
+  <dt>Pack</dt> 
+  <dd>The track displays the wiggle value associated with each annotation feature creating a 
+  histogram-like image, much like the dense display mode with greater compression.<br>
   <img src="../../images/wiggle_pack-1.png" width="800px" >
-  </li>
+  </dd>
+  <dt>Full</dt> 
+  <dd>The track displays the wiggle value associated with each annotation feature creating a 
+  histogram-like image. <br>
+  <img src="../../images/wiggle_full-1.png" width="800px">
+  </dd>
+  <dt>Hide</dt> 
+  <dd>The track is not displayed at all. To hide all the annotation tracks, click
+  the <em>hide all</em> button.</dd>
+</dl>
 
-</ul>
+<h3>Overlay method</h3> 
+<p>
+Note that not all graph-based tracks include the Overlay options.</p>
+
+<dl class="gbsNoBullet">
+  <dt>Transparent</dt>
+  <dd>This setting displays the colored 
+  transparent graphs of multiple subtracks overlayed in the same vertical space.<br>
+  <img src="../../images/trans_encode-1.png" width="800px" height="100px">
+  </dd>
+  <dt>Solid</dt> 
+  <dd>This setting displays the colored opaque graphs of multiple subtracks 
+  overlayed in the same vertical space.<br>
+  <img src="../../images/encode_solid-1.png" width="800px" height="100px">  
+  </dd>
+  <dt>Stacked</dt>
+  <dd>This setting displays each graph stacked on top of each other where the
+  high point of the graph is the sum of all the values.<br>
+  <img src="../../images/encode_stack-1.png" width="800px" height="100px">
+  </dd>
+  <dt>None</dt> 
+  <dd>This setting displays each graph in its own vertical space. <br>
+  <img src="../../images/encode_none-1.png" width="800px" height="130px">
+  </dd>
+</dl> 
+
+
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

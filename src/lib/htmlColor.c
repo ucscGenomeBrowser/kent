@@ -88,3 +88,14 @@ boolean htmlColorExists(char *name)
 {
 return htmlColorForName(name, NULL);
 }
+
+void htmlColorToRGB(unsigned value, int *r, int *g, int *b)
+/* Convert an unsigned RGB value into separate R, G, and B components */
+{
+    if (r != NULL)
+        *r = (value >> 16) & 0xff;
+    if (g != NULL)
+        *g = (value >> 8) & 0xff;
+    if (b != NULL)
+        *b = value & 0xff;
+}
