@@ -3954,6 +3954,14 @@ else
     printf("<B>%s items by:</B> (select multiple categories and items - %s)"
 	   "<TABLE cellpadding=3><TR valign='top'>\n",filterTypeTitle,FILTERBY_HELP_LINK);
 
+printf("<B>    Advanced options</B>");
+char varName[1024];
+safef(varName, sizeof(varName), "%s.doAdvanced", tdb->track);
+cgiMakeCheckBox(varName, FALSE);
+printf("<BR>");
+jsInlineF("$(function () { advancedSearchOnChange('%s'); });\n", varName);
+
+
 filterBy_t *filterBy = NULL;
 if (cartOptionalString(cart, "ajax") == NULL)
     {
@@ -3986,11 +3994,11 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next, ix++)
         {
         char cartSettingString[4096];
         safef(cartSettingString, sizeof cartSettingString, "%s.%s", prefix, settingString);
-        printf("<b>Match if  ");
+        printf("<div class='advanced' style='display:none'><b>Match if  ");
         cgiMakeRadioButton(cartSettingString, FILTERBY_MULTIPLE_LIST_AND, sameString(setting, FILTERBY_MULTIPLE_LIST_AND));
         printf(" all ");
         cgiMakeRadioButton(cartSettingString, FILTERBY_MULTIPLE_LIST_OR, sameString(setting, FILTERBY_MULTIPLE_LIST_OR));
-        printf(" one or more match</b> ");
+        printf(" one or more match</b></div> ");
         }
     // TODO: columnCount (Number of filterBoxes per row) should be configurable through tdb setting
 

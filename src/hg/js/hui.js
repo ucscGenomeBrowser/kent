@@ -1357,3 +1357,18 @@ function multiWigSetupOnChange(track) {
         $("#message").text('$ cant find my selectors for ' + track + '!');
     }
 }
+
+function advancedSearchOnChange(track) {
+        // turn on or off "advanced" controls in filters
+        $(document.getElementsByName(track)[0]).change(function() {
+            advancedControls = document.getElementsByClassName('advanced'); 
+            var newStyle = 'display:none'; 
+            if(this.checked) 
+                newStyle='display:visible';
+            for (var control in advancedControls ) 
+                advancedControls[control].style = newStyle;
+            }
+        );
+}
+
+
