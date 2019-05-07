@@ -3954,10 +3954,10 @@ else
     printf("<B>%s items by:</B> (select multiple categories and items - %s)"
 	   "<TABLE cellpadding=3><TR valign='top'>\n",filterTypeTitle,FILTERBY_HELP_LINK);
 
-printf("<B>    Advanced options</B>");
 char varName[1024];
 safef(varName, sizeof(varName), "%s.doAdvanced", tdb->track);
-cgiMakeCheckBox(varName, FALSE);
+puts("&nbsp;&nbsp;&nbsp;");
+printf("<A id='%s' title='Show advanced options..'>%s<img src='../images/downBlue.png'/></A>" ,varName,"Advanced ");
 printf("<BR>");
 jsInlineF("$(function () { advancedSearchOnChange('%s'); });\n", varName);
 
