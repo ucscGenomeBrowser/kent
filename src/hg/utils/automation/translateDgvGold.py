@@ -53,7 +53,7 @@ def parseExtraInfo(extraInfoList, doHeader=False):
 
 ### main ###
 
-if len(sys.argv) != 1:
+if len(sys.argv) != 2:
     print("Usage: translateDgvGold.py input.gff | sort -k1,1 -k2,2n | uniq > out.bed12\n"\
             "\nWrites a bed12 to stdout.\n")
     sys.exit(1)

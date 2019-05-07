@@ -80,7 +80,7 @@ configurable *
 configureByPopup *
 container *
 controlledVocabulary *
-coriellUrlBase bed
+coriellUrlBase bed bigBed
 darkerLabels *
 dataUrl customTracks
 dataVersion *
@@ -113,7 +113,7 @@ dragAndDrop *
 endFudge bed
 ensemblIdUrl genePred
 ensArchive genePred
-exonArrows genePred bed broadPeak
+exonArrows genePred bed broadPeak bigBed
 exonArrowsDense bed
 exonNumbers genePred bed broadPeak psl bigPsl bigBed
 expDrawExons expRatio
