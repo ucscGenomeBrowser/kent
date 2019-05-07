@@ -7,6 +7,11 @@ longLabel Database of Genomic Variants: Gold Standard Variants
 bigDataUrl /gbdb/hg19/dgv/dgvGold.bb
 type bigBed 12 +
 url http://dgv.tcag.ca/gb2/gbrowse_details/dgv2_hg19?ref=$S;start=${;end=$};name=$$;class=Sequence
+searchIndex name
+
+searchTable dgvGold
+searchType bigBed
+searchDescription DGV Gold Variants
 
 track cosmicRegions
 shortLabel COSMIC Regions
