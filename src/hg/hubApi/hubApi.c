@@ -917,34 +917,6 @@ hDisconnectCentral(&conn);
 return cloneString(hubUrl);
 }
 
-static int dbDbCmpName(const void *va, const void *vb)
-/* Compare two dbDb elements: name, ignore case. */
-{
-const struct dbDb *a = *((struct dbDb **)va);
-const struct dbDb *b = *((struct dbDb **)vb);
-return strcasecmp(a->name, b->name);
-}
-
-struct dbDb *ucscDbDb()
-/* return the dbDb table as an slList */
-{
-char query[1024];
-struct sqlConnection *conn = hConnectCentral();
-sqlSafef(query, sizeof(query), "select * from dbDb");
-struct dbDb *dbList = NULL, *el = NULL;
-struct sqlResult *sr = sqlGetResult(conn, query);
-char **row;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    el = dbDbLoad(row);
-    slAddHead(&dbList, el);
-    }
-sqlFreeResult(&sr);
-hDisconnectCentral(&conn);
-slSort(&dbList, dbDbCmpName);
-return dbList;
-}
-
 static struct hash *apiFunctionHash = NULL;
 
 static void setupFunctionHash()
