@@ -844,8 +844,18 @@ regions or the whole genome annotation can be obtained using our tool bigBedToBe
 compiled from the source code or downloaded as a precompiled binary for your system. Instructions 
 for downloading source code and binaries can be found 
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>. The tool can 
-also be used to obtain only features within a given range, example:</p> 
-<pre><code>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/path/to/file/bigBedfile.bb -chrom=chr21 -start=0 -end=1000000 stdout </code></pre> 
+also be used to obtain only features within a given range using one of the hgdownload servers,
+example:</p> 
+<ul>
+  <li>
+    North American server:
+    <pre><code>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/path/to/file/bigBedfile.bb -chrom=chr21 -start=0 -end=1000000 stdout </code></pre> 
+  </li>
+  <li>
+    European server:
+    <pre><code>bigBedToBed http://hgdownload-euro.soe.ucsc.edu/gbdb/path/to/file/bigBedfile.bb -chrom=chr21 -start=0 -end=1000000 stdout </code></pre> 
+  </li>
+</ul>
 <p> 
 <strong>SNP data:</strong> If queries against the SNP table on one of our public MySQL servers or on your
 own MySQL installation are slow, then they can be sped up by using the &quot;bin&quot; field; you 
