@@ -74,15 +74,18 @@ Where:</p>
 <h6>How do I create a custom URL to control the visibility of specific tracks?</h6>
 <p>
 You can control the visibility of tracks from the URL with the following parameters, 
-each linked by the "&amp;" sign, similar to position parameters. For the full list, please see the 
-<a href="../../goldenPath/help/customTrack.html#optParams" target ="_blank">optional URL 
+each linked by the "&amp;" sign, similar to position parameters. For more information, please see
+the <a href="../../goldenPath/help/customTrack.html#optParams" target ="_blank">optional URL 
 parameters</a> section of the Custom Tracks User's Guide. Note that <em>italic text</em> indicates
 a user choice, not a working example.</p>
 <ul>
-<li>hideTracks=1</li>
-<li><em>trackName</em>=hide|dense|pack|full</li>
-<li>textSize=<em>number</em></li>
-<li>ignoreCookie=1</li>
+<li><code>hideTracks=1</code> - hides all tracks</li>
+<li><code><em>trackName</em>=hide|dense|pack|full</code> - sets specified track or subtrack to a
+chosen visibility</li>
+<li><code>textSize=<em>number</em></code> - sets browser text size to a chosen number, default of 
+8 and maximum of 24.</li>
+<li><code>ignoreCookie=1</code> - removes pre-existing user settings like track seletion, custom
+tracks, and track hubs.</li>
 </ul>
 <p>
 For example, you can use the following command to hide every track (hideTracks=1) and set the knownGene track to 
@@ -92,8 +95,9 @@ the pack visibility (knownGene=pack):</p>
 <p>Composite tracks have additional URL parameters that encode options to hide, select, and 
 display subtracks.</p>
 <ul>
-<li><em>trackName</em>_hideKids=1</li>
-<li><em>trackName</em>_sel=1</li>
+<li><code><em>trackName</em>_hideKids=1</code> - hides a specific composite track's subtracks</li>
+<li><code><em>trackName</em>_sel=1</code> - selects specific subtrack to be 'checked', allowing
+display</li>
 </ul>
 <p>For example, the following URL hides all tracks (&amp;hideTracks=1), hides a specific composite
 track's default subtracks (&amp;refSeqComposite_hideKids=1), turns on one specific subtrack 
