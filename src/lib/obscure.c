@@ -647,6 +647,7 @@ while ((size/d) >= 1024)
     ++i;
     d *= 1024;
     }
+assert(i<(sizeof(greek)/sizeof(char*)));
 double result = ((double)size)/d;
 if (result < 10)
     safef(s,slength,"%3.1f %s",((double)size)/d, greek[i]);
@@ -659,6 +660,33 @@ void printWithGreekByte(FILE *f, long long l)
 {
 char buf[32];
 sprintWithGreekByte(buf, sizeof(buf), l);
+fprintf(f, "%s", buf);
+}
+
+void sprintWithSiBaseUnit(char *s, int slength, long long size)
+/* Numbers formatted with Pb, Tb, Gb, Mb, kb, bp */
+{
+char *unit[] = {"bp", "kB", "Mb", "Gb", "Tb", "Pb"};
+int i = 0;
+long long d = 1;
+while ((size/d) >= 1000)
+    {
+    ++i;
+    d *= 1000;
+    }
+assert(i<(sizeof(unit)/sizeof(char*)));
+double result = ((double)size)/d;
+if (result < 10)
+    safef(s,slength,"%3.1f %s",((double)size)/d, unit[i]);
+else
+    safef(s,slength,"%3.0f %s",((double)size)/d, unit[i]);
+}
+
+void printWithSiBaseUnit(FILE *f, long long l)
+/* Print with formatting in megabase, kilobase, etc. */
+{
+char buf[32];
+sprintWithSiBaseUnit(buf, sizeof(buf), l);
 fprintf(f, "%s", buf);
 }
 

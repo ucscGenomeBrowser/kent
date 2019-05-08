@@ -57,6 +57,8 @@
  * jsonWriteString
  */
 
+extern long enteredMainTime;	/* will become = clock1000() on entry */
+
 /* limit amount of output to a maximum to avoid overload */
 extern int maxItemsOutput;	/* can be set in URL maxItemsOutput=N */
 /* for debugging purpose, current bot delay value */

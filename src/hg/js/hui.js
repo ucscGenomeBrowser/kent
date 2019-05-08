@@ -1357,3 +1357,26 @@ function multiWigSetupOnChange(track) {
         $("#message").text('$ cant find my selectors for ' + track + '!');
     }
 }
+
+// toggle the visibility of advanced controls in the filters
+function advancedSearchOnChange(controlName) {
+        $(document.getElementById(controlName)).click(function() {
+            // get the list of advanced controls 
+            advancedControls = document.getElementsByClassName('advanced'); 
+
+            var newStyle; 
+            if ($(advancedControls).css('display') === 'none') {
+                newStyle='display:visible';
+                $(this).find('img').attr('src','../images/upBlue.png');
+            } else {
+                newStyle = 'display:none'; 
+                $(this).find('img').attr('src','../images/downBlue.png');
+            }
+
+            for (var control in advancedControls ) 
+                advancedControls[control].style = newStyle;
+            }
+        );
+}
+
+

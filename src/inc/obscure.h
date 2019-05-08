@@ -28,6 +28,12 @@ void sprintWithGreekByte(char *s, int slength, long long size);
 void printWithGreekByte(FILE *f, long long l);
 /* Print with formatting in gigabyte, terabyte, etc. */
 
+void sprintWithSiBaseUnit(char *s, int slength, long long size);
+/* Numbers formatted with Pb, Tb, Gb, Mb, kb, bp */
+
+void printWithSiBaseUnit(FILE *f, long long l);
+/* Print with formatting in megabase, kilobase, etc. */
+
 void writeGulp(char *file, char *buf, int size);
 /* Write out a bunch of memory. */
 

@@ -3,9 +3,13 @@ shortLabel GDC Cancer
 longLabel GDC Cancer mutations: 33 TCGA Cancer Projects Summary (Pan-Can 33)
 compositeTrack on
 group phenDis
-type bed
+type bigLolly
 visibility hide
 release alpha
+project_idFilterValues TCGA-LAML|Acute Myeloid Leukemia,TCGA-ACC|Adrenocortical carcinoma,TCGA-BLCA|Bladder Urothelial Carcinoma,TCGA-LGG|Brain Lower Grade Glioma,TCGA-BRCA|Breast invasive carcinoma,TCGA-CESC|Cervical squamous cell carcinoma and endocervical adenocarcinoma,TCGA-CHOL|Cholangiocarcinoma,TCGA-LCML|Chronic Myelogenous Leukemia,TCGA-COAD|Colon adenocarcinoma,TCGA-CNTL|Controls,TCGA-ESCA|Esophageal carcinoma,TCGA-FPPP|FFPE Pilot Phase II,TCGA-GBM|Glioblastoma multiforme,TCGA-HNSC|Head and Neck squamous cell carcinoma,TCGA-KICH|Kidney Chromophobe,TCGA-KIRC|Kidney renal clear cell carcinoma,TCGA-KIRP|Kidney renal papillary cell carcinoma,TCGA-LIHC|Liver hepatocellular carcinoma,TCGA-LUAD|Lung adenocarcinoma,TCGA-LUSC|Lung squamous cell carcinoma,TCGA-DLBC|Lymphoid Neoplasm Diffuse Large B-cell Lymphoma,TCGA-MESO|Mesothelioma,TCGA-MISC|Miscellaneous,TCGA-OV|Ovarian serous cystadenocarcinoma,TCGA-PAAD|Pancreatic adenocarcinoma,TCGA-PCPG|Pheochromocytoma and Paraganglioma,TCGA-PRAD|Prostate adenocarcinoma,TCGA-READ|Rectum adenocarcinoma,TCGA-SARC|Sarcoma,TCGA-SKCM|Skin Cutaneous Melanoma,TCGA-STAD|Stomach adenocarcinoma,TCGA-TGCT|Testicular Germ Cell Tumors,TCGA-THYM|Thymoma,TCGA-THCA|Thyroid carcinoma,TCGA-UCS|Uterine Carcinosarcoma,TCGA-UCEC|Uterine Corpus Endometrial Carcinoma,TCGA-UVM|Uveal Melanoma
+project_idFilterType multipleListOr
+genderFilterValues male,female
+genderFilterType multipleListOr
 
 track all
 parent gdcCancer on
@@ -19,10 +23,7 @@ bigDataUrl /gbdb/hg38/gdcCancer/gdcCancer.bb
 autoScale on
 priority 1
 urls case_id=https://portal.gdc.cancer.gov/cases/$$
-project_idFilterValues TCGA-LAML|Acute Myeloid Leukemia,TCGA-ACC|Adrenocortical carcinoma,TCGA-BLCA|Bladder Urothelial Carcinoma,TCGA-LGG|Brain Lower Grade Glioma,TCGA-BRCA|Breast invasive carcinoma,TCGA-CESC|Cervical squamous cell carcinoma and endocervical adenocarcinoma,TCGA-CHOL|Cholangiocarcinoma,TCGA-LCML|Chronic Myelogenous Leukemia,TCGA-COAD|Colon adenocarcinoma,TCGA-CNTL|Controls,TCGA-ESCA|Esophageal carcinoma,TCGA-FPPP|FFPE Pilot Phase II,TCGA-GBM|Glioblastoma multiforme,TCGA-HNSC|Head and Neck squamous cell carcinoma,TCGA-KICH|Kidney Chromophobe,TCGA-KIRC|Kidney renal clear cell carcinoma,TCGA-KIRP|Kidney renal papillary cell carcinoma,TCGA-LIHC|Liver hepatocellular carcinoma,TCGA-LUAD|Lung adenocarcinoma,TCGA-LUSC|Lung squamous cell carcinoma,TCGA-DLBC|Lymphoid Neoplasm Diffuse Large B-cell Lymphoma,TCGA-MESO|Mesothelioma,TCGA-MISC|Miscellaneous,TCGA-OV|Ovarian serous cystadenocarcinoma,TCGA-PAAD|Pancreatic adenocarcinoma,TCGA-PCPG|Pheochromocytoma and Paraganglioma,TCGA-PRAD|Prostate adenocarcinoma,TCGA-READ|Rectum adenocarcinoma,TCGA-SARC|Sarcoma,TCGA-SKCM|Skin Cutaneous Melanoma,TCGA-STAD|Stomach adenocarcinoma,TCGA-TGCT|Testicular Germ Cell Tumors,TCGA-THYM|Thymoma,TCGA-THCA|Thyroid carcinoma,TCGA-UCS|Uterine Carcinosarcoma,TCGA-UCEC|Uterine Corpus Endometrial Carcinoma,TCGA-UVM|Uveal Melanoma
-project_idFilterType multipleListOr
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 
 track ACC
 priority 2
@@ -36,8 +37,7 @@ release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/ACC.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 
 track BLCA
 priority 3
@@ -51,8 +51,7 @@ release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/BLCA.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 
 track BRCA
 priority 4
@@ -66,8 +65,7 @@ release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/BRCA.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 
 track CESC
 priority 5
@@ -81,8 +79,7 @@ release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/CESC.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 
 track CHOL
 priority 6
@@ -96,8 +93,7 @@ release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/CHOL.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 
 track COAD
 priority 7
@@ -111,8 +107,7 @@ release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/COAD.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 
 track DLBC
 priority 8
@@ -126,8 +121,7 @@ release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/DLBC.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 
 track ESCA
 priority 9
@@ -141,8 +135,7 @@ release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/ESCA.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 
 track GBM
 priority 10
@@ -156,8 +149,7 @@ release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/GBM.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 
 track HNSC
 priority 11
@@ -171,8 +163,7 @@ release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/HNSC.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 
 track KICH
 priority 12
@@ -186,8 +177,7 @@ release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/KICH.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 
 track KIRC
 priority 13
@@ -201,8 +191,7 @@ release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/KIRC.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 
 track KIRP
 priority 14
@@ -216,8 +205,7 @@ release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/KIRP.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 
 track LAML
 priority 15
@@ -231,8 +219,7 @@ release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/LAML.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 
 track LGG
 priority 16
@@ -246,8 +233,7 @@ release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/LGG.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 
 track LIHC
 priority 17
@@ -261,8 +247,7 @@ release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/LIHC.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 
 track LUAD
 priority 18
@@ -276,8 +261,7 @@ release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/LUAD.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 
 track LUSC
 priority 19
@@ -291,8 +275,7 @@ release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/LUSC.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 
 track MESO
 priority 20
@@ -306,8 +289,7 @@ release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/MESO.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 
 track OV
 priority 21
@@ -321,8 +303,7 @@ release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/OV.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 
 track PAAD
 priority 22
@@ -336,8 +317,7 @@ release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/PAAD.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 
 track PCPG
 priority 23
@@ -351,8 +331,7 @@ release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/PCPG.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 
 track PRAD
 priority 24
@@ -366,8 +345,7 @@ release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/PRAD.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 
 track READ
 priority 25
@@ -381,8 +359,7 @@ release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/READ.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 
 track SARC
 priority 26
@@ -396,8 +373,7 @@ release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/SARC.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 
 track SKCM
 priority 27
@@ -411,8 +387,7 @@ release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/SKCM.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 
 track STAD
 priority 28
@@ -426,8 +401,7 @@ release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/STAD.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 
 track TGCT
 priority 29
@@ -441,8 +415,7 @@ release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/TGCT.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 
 track THCA
 priority 30
@@ -456,8 +429,7 @@ release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/THCA.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 
 track THYM
 priority 31
@@ -471,8 +443,7 @@ release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/THYM.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 
 track UCEC
 priority 32
@@ -486,8 +457,7 @@ release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/UCEC.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 
 track UCS
 priority 33
@@ -501,8 +471,7 @@ release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/UCS.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 
 track UVM
 priority 34
@@ -516,6 +485,5 @@ release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/UVM.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
-genderFilterValues male,female
-genderFilterType multipleListOr
+configurable off
 

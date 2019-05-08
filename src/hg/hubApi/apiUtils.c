@@ -60,6 +60,7 @@ jsonWriteString(jw, "error", errMsg);
 jsonWriteNumber(jw, "statusCode", errorCode);
 jsonWriteString(jw, "statusMessage", errString);
 apiFinishOutput(errorCode, errString, jw);
+cgiExitTime("hubApi err", enteredMainTime);
 exit(0);
 }
 

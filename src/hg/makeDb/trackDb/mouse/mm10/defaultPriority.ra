@@ -5,6 +5,7 @@ visibility hide
 
 track xenoRefGene override
 priority 3
+visibility hide
 
 # mRNA and EST
 

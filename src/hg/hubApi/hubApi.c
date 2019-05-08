@@ -45,7 +45,7 @@ static char **shortLabels = NULL;	/* public hub short labels in array */
 static int publicHubCount = 0;
 static char *defaultHub = "Plants";
 static char *defaultDb = "ce11";
-static long enteredMainTime = 0;	/* will become = clock1000() on entry */
+long enteredMainTime = 0;	/* will become = clock1000() on entry */
 		/* to allow calculation of when to bail out, taking too long */
 static long timeOutSeconds = 100;
 static boolean timedOut = FALSE;
@@ -1083,6 +1083,7 @@ hPrintf("Your host, %s, has been sending too many requests lately and is "
        "annotations in bulk -- see http://genome.ucsc.edu/downloads.html.",
        hogHost);
 hPrintf("</p></body></html>\n");
+cgiExitTime("hubApi hogExit", enteredMainTime);
 exit(0);
 }
 

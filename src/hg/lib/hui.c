@@ -3954,6 +3954,14 @@ else
     printf("<B>%s items by:</B> (select multiple categories and items - %s)"
 	   "<TABLE cellpadding=3><TR valign='top'>\n",filterTypeTitle,FILTERBY_HELP_LINK);
 
+char varName[1024];
+safef(varName, sizeof(varName), "%s.doAdvanced", tdb->track);
+puts("&nbsp;&nbsp;&nbsp;");
+printf("<A id='%s' title='Show advanced options..'>%s<img src='../images/downBlue.png'/></A>" ,varName,"Advanced ");
+printf("<BR>");
+jsInlineF("$(function () { advancedSearchOnChange('%s'); });\n", varName);
+
+
 filterBy_t *filterBy = NULL;
 if (cartOptionalString(cart, "ajax") == NULL)
     {
@@ -3986,11 +3994,11 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next, ix++)
         {
         char cartSettingString[4096];
         safef(cartSettingString, sizeof cartSettingString, "%s.%s", prefix, settingString);
-        printf("<b>Match if  ");
+        printf("<div class='advanced' style='display:none'><b>Match if  ");
         cgiMakeRadioButton(cartSettingString, FILTERBY_MULTIPLE_LIST_AND, sameString(setting, FILTERBY_MULTIPLE_LIST_AND));
         printf(" all ");
         cgiMakeRadioButton(cartSettingString, FILTERBY_MULTIPLE_LIST_OR, sameString(setting, FILTERBY_MULTIPLE_LIST_OR));
-        printf(" one or more match</b> ");
+        printf(" one or more match</b></div> ");
         }
     // TODO: columnCount (Number of filterBoxes per row) should be configurable through tdb setting
 
@@ -7467,14 +7475,14 @@ return cloneString(label);
 #define MATRIX_RIGHT_BUTTONS_AFTER 8
 #define MATRIX_BOTTOM_BUTTONS_AFTER 20
 
-static void buttonsForAll(boolean left)
+static void buttonsForAll(boolean left, boolean top)
 {
 char id[256];
 char javascript[1024];
 char fullname[256];
-safef(fullname, sizeof fullname, "plus_all_%s" , left?"left":"right");
+safef(fullname, sizeof fullname, "plus_all_%s_%s", left ? "left" : "right", top ? "top" : "bottom");
 PM_MAKE_BUTTON_UC("true", "", "", "", "", "",  fullname,    "add_sm.gif")
-safef(fullname, sizeof fullname, "minus_all_%s", left?"left":"right");
+safef(fullname, sizeof fullname, "minus_all_%s_%s", left ? "left" : "right", top ? "top" : "bottom");
 PM_MAKE_BUTTON_UC("false","", "", "", "", "", fullname, "remove_sm.gif")
 }
 
@@ -7532,7 +7540,7 @@ if (dimensionX && dimensionY)
     {
     printf("<TH ALIGN=LEFT valign=%s>",top?"TOP":"BOTTOM");
     //printf("<TH ALIGN=LEFT valign=%s>",(top == squeeze)?"BOTTOM":"TOP");//"TOP":"BOTTOM");
-    buttonsForAll(TRUE);
+    buttonsForAll(TRUE, top);
     puts("&nbsp;All</TH>");
     }
 
@@ -7589,7 +7597,7 @@ if (dimensionX)
             else
                 printf("<TH align=LEFT><B><EM>%s</EM></B></TH>", dimensionX->groupTitle);
             printf("<TH ALIGN=RIGHT valign=%s>All&nbsp;",top?"TOP":"BOTTOM");
-            buttonsForAll(FALSE);
+            buttonsForAll(FALSE, top);
             puts("</TH>");
             }
         else
@@ -7602,7 +7610,7 @@ else if (dimensionY)
     printf("<TH ALIGN=RIGHT WIDTH=100 nowrap>");
     printf("<B><EM>%s</EM></B>", dimensionY->groupTitle);
     printf("</TH><TH ALIGN=CENTER WIDTH=60>");
-    buttonsForAll(FALSE);
+    buttonsForAll(FALSE, top);
     puts("</TH>");
     }
 puts("</TR>\n");
@@ -7687,7 +7695,7 @@ if (dimensionX && dimensionY && childTdb != NULL) // Both X and Y, then column o
 else if (dimensionX)
     {
     printf("<TH ALIGN=%s>",left?"RIGHT":"LEFT");
-    buttonsForAll(TRUE);
+    buttonsForAll(TRUE, TRUE);  // WARNING: not tested (is this used ?)
     puts("</TH>");
     }
 else if (left && dimensionY && childTdb != NULL)
