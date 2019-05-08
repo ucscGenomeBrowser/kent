@@ -150,6 +150,9 @@ struct trackHubGenome *findHubGenome(struct trackHub *hub, char *genome,
     char *endpoint, char *hubUrl);
 /* given open 'hub', find the specified 'genome' called from 'endpoint' */
 
+struct dbDb *ucscDbDb();
+/* return the dbDb table as an slList */
+
 /* ######################################################################### */
 /*  functions in getData.c */
 
