@@ -19,24 +19,26 @@ explains each of the available configuration options.</p>
 <h3>Display settings</h3>
 <p>
 <img src="../../images/2conf_enco.png" width="800px" ><br>
+<br>
 <strong>Type of graph</strong>: The default &quot;Bar&quot; setting depicts the graph data using 
 color-filled bars. To view the data as a series of points or lines, select the 
 &quot;Points&quot; setting.</p>  
 <p>
 <strong>Track height (boxed in blue)</strong>: To change the default display height of the graph in
 pixels, type in a value from within the indicated range.</p>  
-<p> 
-<strong>Vertical viewing range (boxed in red)</strong>: The min and max values specify the vertical portion of 
-the graph that is displayed (default range is 30-70). These numbers can be used to set data 
-threshold indicators. For example, to display only those GC values greater than 50 percent, set 
-the min value to &quot;50&quot;.</p> 
+
 <p> 
 <strong>Data view scaling (boxed in red)</strong>: The default &quot;Use vertical viewing range setting&quot; 
 option displays the data using the parameters specified in the Vertical viewing range setting. To 
 configure the graph to automatically scale to a range defined by the minimum and maximum data 
 points in the current view, select the &quot;Auto-scale to data view&quot; option. To keep the 
 y=0 value in view at all times when Auto-scale is selected, set &quot;Always include 
-zero&quot; to &quot;ON&quot;.</p>  
+zero&quot; to &quot;ON&quot;.</p> 
+<p> 
+<strong>Vertical viewing range (boxed in red)</strong>: The min and max values specify the vertical portion of 
+the graph that is displayed (default range is 30-70). These numbers can be used to set data 
+threshold indicators. For example, to display only those GC values greater than 50 percent, set 
+the min value to &quot;50&quot;.</p> 
 <p> 
 <strong>Transform function</strong>: Transforms the data points by the function selected in the 
 drop-down menu. Usually the default setting is &quot;None&quot;.</p> 
@@ -51,11 +53,11 @@ be used (default is &quot;Mean&quot;):</p>
   the mean plus a standard deviation, and the max are visible. This mode is not available if the 
   Overlay method is stacked.</li>  
   <li> 
-  &quot;Maximum&quot; - displays the maximum value of all the points to be combined</li> 
+  &quot;Maximum&quot; - displays the maximum value of all the points to be combined.</li> 
   <li> 
-  &quot;Mean&quot; - displays the mean</li> 
+  &quot;Mean&quot; - displays the mean.</li> 
   <li> 
-  &quot;Minimum&quot; - displays the minimum of all the points to be combined</li> 
+  &quot;Minimum&quot; - displays the minimum of all the points to be combined.</li> 
 </ul> 
 <p> 
 <strong>Smoothing window</strong>: When set to a numerical value, this option determines the size,
@@ -65,19 +67,19 @@ lines. This is equivalent to a trend line calculation on the graph. The default 
 <p> 
 <strong>Negate values</strong>: When checked, all values in the wiggle are negated, meaning that 
 positive values become negative and vice-versa. This is useful for wiggles representing 
-transcription or other activities on the Crick strand. Be aware that wiggles with negative values
+transcription or other activities on the minus strand. Be aware that wiggles with negative values
 are drawn in <strong>altColor</strong>  not <strong>color</strong> as positive values
 are. The below image shows ENCODE RNA-seq data around two genes on different strands, SIRT1 and 
-HERC4, with a minus signal track using Negate values to flip the wiggle display to emphasize HERC4 
-expresses on the minus strand. This image also displays the signal graphed in points and a 
+HERC4, with a minus signal track using Negate values to flip the wiggle display to emphasize that 
+HERC4 expresses on the minus strand. This image also displays the signal graphed in points and a 
 smoothing window of 16 pixels.<br>
 <img src="../../images/wig_negate-1.png" width="800px" >
 </p> 
 <p> 
-<strong>Draw indicator lines (boxed in orange)</strong>:</p> 
+<strong>Draw y indicator lines (boxed in orange)</strong>:</p> 
 <ul> 
   <li> 
-  <strong>at y=0.0</strong>: Select the &quot;ON&quot; setting to display a line marking the 0.0 
+  <strong>at y= 0.0</strong>: Select the &quot;ON&quot; setting to display a line marking the 0.0 
   position on the graph (default is &quot;OFF&quot;).</li> 
   <li> 
   <strong>at y= </strong>: Select the  &quot;ON&quot; setting to display a line on the graph at 
@@ -110,7 +112,7 @@ Each annotation track within the window may have up to five display modes:
   </dd>
   <dt>Pack</dt> 
   <dd>The track displays the wiggle value associated with each annotation feature creating a 
-  histogram-like image, much like the dense display mode with greater compression.<br>
+  histogram-like image, much like the full display mode with greater compression.<br>
   <img src="../../images/wiggle_pack-1.png" width="800px" >
   </dd>
   <dt>Full</dt> 
