@@ -95,7 +95,7 @@ int fontHeight = tl.fontHeight+1;
 int centerLabel = (height/2)-(fontHeight/2);
 if ( tg->visibility == tvDense)
     {
-    hvGfxText(hvg, xOff, yOff+fontHeight, color, font, tg->shortLabel);
+    hvGfxTextRight(hvg, xOff, yOff+fontHeight, width - 1, fontHeight,  color, font, tg->shortLabel);
     return;
     }
 
@@ -131,10 +131,7 @@ if ( tg->visibility == tvDense)
 // if we're pack, then use bigBed drawing
 if (tg->visibility == tvPack)
     {
-    char *ourWords[2];
-    ourWords[0] = "bigBed";
-    ourWords[1] = "4";
-    bigBedMethods(tg, tg->tdb,2,ourWords);
+    bigBedMethods(tg, tg->tdb, tg->lollyCart->wordCount, tg->lollyCart->words);
     tg->mapsSelf = FALSE;
     tg->drawLeftLabels = NULL;
     return tg->totalHeight(tg, vis);
@@ -321,13 +318,12 @@ void lollyMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[])
 /* bigLolly track type methods */
 {
-char *ourWords[2];
-ourWords[0] = "bigBed";
-ourWords[1] = "4";
-bigBedMethods(track, tdb,2,ourWords);
+bigBedMethods(track, tdb, wordCount, words);
 
 struct lollyCartOptions *lollyCart = lollyCartOptionsNew(cart, tdb, wordCount, words);
 lollyCart->radius = 5;
+lollyCart->words = words;
+lollyCart->wordCount = wordCount;
 track->loadItems = lollyLoadItems;
 track->drawItems = lollyDrawItems;
 track->totalHeight = lollyHeight; 
