@@ -44,7 +44,7 @@
 #define err404	404
 #define err404Msg	"Not Found"
 #define err429	429
-#define err429Msg	"Two Many Requests"
+#define err429Msg	"Too Many Requests"
 
 /* maximum number of words expected in PATH_INFO parsing
  *   so far only using 2
@@ -56,6 +56,8 @@
 /* this size is directly related to the max limit in needMem used in
  * jsonWriteString
  */
+
+extern long enteredMainTime;	/* will become = clock1000() on entry */
 
 /* limit amount of output to a maximum to avoid overload */
 extern int maxItemsOutput;	/* can be set in URL maxItemsOutput=N */
@@ -147,6 +149,9 @@ struct asObject *asForTable(struct sqlConnection *conn, char *table,
 struct trackHubGenome *findHubGenome(struct trackHub *hub, char *genome,
     char *endpoint, char *hubUrl);
 /* given open 'hub', find the specified 'genome' called from 'endpoint' */
+
+struct dbDb *ucscDbDb();
+/* return the dbDb table as an slList */
 
 /* ######################################################################### */
 /*  functions in getData.c */

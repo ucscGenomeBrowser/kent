@@ -13,8 +13,7 @@
 #include "float.h"
 #include "bigBedFilter.h"
 
-#define LOLLY_RADIUS    5
-#define LOLLY_DIAMETER    2 * LOLLY_RADIUS
+#define LOLLY_DIAMETER    2 * lollyCart->radius
 
 
 /* the lolly colors */
@@ -91,17 +90,18 @@ void lollyLeftLabels(struct track *tg, int seqStart, int seqEnd,
 	enum trackVisibility vis)
 // draw the labels on the left margin
 {
+struct lollyCartOptions *lollyCart = tg->lollyCart;
 int fontHeight = tl.fontHeight+1;
 int centerLabel = (height/2)-(fontHeight/2);
 if ( tg->visibility == tvDense)
     {
-    hvGfxText(hvg, xOff, yOff+fontHeight, color, font, tg->shortLabel);
+    hvGfxTextRight(hvg, xOff, yOff+fontHeight, width - 1, fontHeight,  color, font, tg->shortLabel);
     return;
     }
 
 hvGfxText(hvg, xOff, yOff+centerLabel, color, font, tg->shortLabel);
 
-if (isnan(tg->lollyCart->upperLimit))
+if (isnan(lollyCart->upperLimit))
     {
     hvGfxTextRight(hvg, xOff, yOff + LOLLY_DIAMETER, width - 1, fontHeight, color,
         font, "NO DATA");
@@ -109,13 +109,13 @@ if (isnan(tg->lollyCart->upperLimit))
     }
 
 char upper[1024];
-safef(upper, sizeof(upper), "%g -",   tg->lollyCart->upperLimit);
+safef(upper, sizeof(upper), "%g -",   lollyCart->upperLimit);
 hvGfxTextRight(hvg, xOff, yOff + LOLLY_DIAMETER, width - 1, fontHeight, color,
     font, upper);
 char lower[1024];
-if (tg->lollyCart->lowerLimit < tg->lollyCart->upperLimit)
+if (lollyCart->lowerLimit < lollyCart->upperLimit)
     {
-    safef(lower, sizeof(lower), "%g _", tg->lollyCart->lowerLimit);
+    safef(lower, sizeof(lower), "%g _", lollyCart->lowerLimit);
     hvGfxTextRight(hvg, xOff, yOff+height-fontHeight - LOLLY_DIAMETER, width - 1, fontHeight,
         color, font, lower);
     }
@@ -127,6 +127,15 @@ static int lollyHeight(struct track *tg, enum trackVisibility vis)
 {
 if ( tg->visibility == tvDense)
     return  tl.fontHeight;
+
+// if we're pack, then use bigBed drawing
+if (tg->visibility == tvPack)
+    {
+    bigBedMethods(tg, tg->tdb, tg->lollyCart->wordCount, tg->lollyCart->words);
+    tg->mapsSelf = FALSE;
+    tg->drawLeftLabels = NULL;
+    return tg->totalHeight(tg, vis);
+    }
 
 // return the height we calculated at load time
 return tg->lollyCart->height;
@@ -160,6 +169,12 @@ return a->height - b->height;
 void lollyLoadItems(struct track *tg)
 // load lollies from the data file
 {
+struct lollyCartOptions *lollyCart = tg->lollyCart;
+if (tg->visibility == tvSquish)
+    {
+    lollyCart->radius = 2;
+    lollyCart->height /= 3;
+    }
 struct lm *lm = lmInit(0);
 struct bbiFile *bbi =  fetchBbiForTrack(tg);
 struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, winStart, winEnd, 0, lm);
@@ -168,7 +183,6 @@ char startBuf[16], endBuf[16];
 struct lolly *popList = NULL, *pop;
 
 unsigned lollyField = 5;  // we use the score field by default
-struct lollyCartOptions *lollyCart = tg->lollyCart;
 char *setting = trackDbSetting(tg->tdb, "lollyField");
 if (setting != NULL)
     lollyField = atoi(setting);
@@ -224,7 +238,7 @@ double range = lollyCart->upperLimit - lollyCart->lowerLimit;
 int usableHeight = trackHeight - 2 * LOLLY_DIAMETER; 
 for(pop = popList; pop; pop = pop->next)
     {
-    pop->radius = LOLLY_RADIUS;
+    pop->radius = lollyCart->radius;
     pop->color = MG_RED;
     if (range == 0.0)
         {
@@ -304,13 +318,12 @@ void lollyMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[])
 /* bigLolly track type methods */
 {
+bigBedMethods(track, tdb, wordCount, words);
+
 struct lollyCartOptions *lollyCart = lollyCartOptionsNew(cart, tdb, wordCount, words);
-char *ourWords[2];
-ourWords[0] = "bigBed";
-ourWords[1] = "4";
-bigBedMethods(track, tdb,2,ourWords);
-if (tdb->visibility == tvDense)
-    return;
+lollyCart->radius = 5;
+lollyCart->words = words;
+lollyCart->wordCount = wordCount;
 track->loadItems = lollyLoadItems;
 track->drawItems = lollyDrawItems;
 track->totalHeight = lollyHeight; 

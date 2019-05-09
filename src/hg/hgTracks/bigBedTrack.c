@@ -438,7 +438,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     else
 	{
         char startBuf[16], endBuf[16];
-        char *bedRow[32];
+        char *bedRow[bbi->fieldCount];
 
         bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
         if (bigBedFilterInterval(bedRow, filters))

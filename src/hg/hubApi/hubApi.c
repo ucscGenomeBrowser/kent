@@ -45,7 +45,7 @@ static char **shortLabels = NULL;	/* public hub short labels in array */
 static int publicHubCount = 0;
 static char *defaultHub = "Plants";
 static char *defaultDb = "ce11";
-static long enteredMainTime = 0;	/* will become = clock1000() on entry */
+long enteredMainTime = 0;	/* will become = clock1000() on entry */
 		/* to allow calculation of when to bail out, taking too long */
 static long timeOutSeconds = 100;
 static boolean timedOut = FALSE;
@@ -917,34 +917,6 @@ hDisconnectCentral(&conn);
 return cloneString(hubUrl);
 }
 
-static int dbDbCmpName(const void *va, const void *vb)
-/* Compare two dbDb elements: name, ignore case. */
-{
-const struct dbDb *a = *((struct dbDb **)va);
-const struct dbDb *b = *((struct dbDb **)vb);
-return strcasecmp(a->name, b->name);
-}
-
-struct dbDb *ucscDbDb()
-/* return the dbDb table as an slList */
-{
-char query[1024];
-struct sqlConnection *conn = hConnectCentral();
-sqlSafef(query, sizeof(query), "select * from dbDb");
-struct dbDb *dbList = NULL, *el = NULL;
-struct sqlResult *sr = sqlGetResult(conn, query);
-char **row;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    el = dbDbLoad(row);
-    slAddHead(&dbList, el);
-    }
-sqlFreeResult(&sr);
-hDisconnectCentral(&conn);
-slSort(&dbList, dbDbCmpName);
-return dbList;
-}
-
 static struct hash *apiFunctionHash = NULL;
 
 static void setupFunctionHash()
@@ -1083,6 +1055,7 @@ hPrintf("Your host, %s, has been sending too many requests lately and is "
        "annotations in bulk -- see http://genome.ucsc.edu/downloads.html.",
        hogHost);
 hPrintf("</p></body></html>\n");
+cgiExitTime("hubApi hogExit", enteredMainTime);
 exit(0);
 }
 
@@ -1551,6 +1524,7 @@ if (botDelay > 0)
     {
     if (botDelay > 2000)
         {
+	sleep1000(botDelay);
 	hogExit();
         return 0;
         }
