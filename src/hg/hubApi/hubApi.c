@@ -1524,6 +1524,7 @@ if (botDelay > 0)
     {
     if (botDelay > 2000)
         {
+	sleep1000(botDelay);
 	hogExit();
         return 0;
         }
