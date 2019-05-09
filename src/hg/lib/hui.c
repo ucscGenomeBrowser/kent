@@ -80,10 +80,13 @@
     safef(id, sizeof id, "btn_%s", (anc)); \
     jsOnEventByIdF("click", id, PM_BUTTON_JS, (nameOrId),"false", (beg),(contains)); 
 
-boolean isEncode2(char *database)
-// Return true for ENCODE2 assemblies
+boolean isEncode2(char *database, char *track)
+/* Return true for tracks created by UCSC DCC during ENCODE production phase */
 {
-return (sameString(database, "hg18") || sameString(database, "hg19") || sameString(database, "mm9"));
+if (startsWith("wgEncode", track))
+    return (sameString(database, "hg18") || sameString(database, "hg19") || 
+                sameString(database, "mm9"));
+return FALSE;
 }
 
 static char *htmlStringForDownloadsLink(char *database, struct trackDb *tdb,
@@ -99,7 +102,7 @@ if (!nameIsFile && trackDbSetting(tdb, FILE_SORT_ORDER) != NULL)
 	  // Note the hgsid would be needed if downloads page ever saved fileSortOrder to cart.
     return link;
     }
-else if (trackDbSetting(tdb, "wgEncode") != NULL && isEncode2(database))  // Downloads directory if this is ENCODE
+else if (trackDbSetting(tdb, "wgEncode") != NULL && isEncode2(database, tdb->track))  // Downloads directory if this is ENCODE
     {
     const char *compositeDir = metadataFindValue(tdb, MDB_OBJ_TYPE_COMPOSITE);
     if (compositeDir == NULL && tdbIsComposite(tdb))
