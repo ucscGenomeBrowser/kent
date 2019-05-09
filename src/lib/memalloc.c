@@ -293,8 +293,14 @@ if (newAlloced > carefulMaxToAlloc)
     sprintLongWithCommas(maxAlloc, (long long)carefulMaxToAlloc);
     sprintLongWithCommas(allocRequest, (long long)newAlloced);
     pthread_mutex_unlock( &carefulMutex );
-    errAbort("carefulAlloc: Allocated too much memory - more than %s bytes (%s)",
+
+    // Avoid out-of-memory issues by exiting immediately.
+    char errMsg[1024];
+    safef(errMsg, sizeof errMsg, "carefulAlloc: Allocated too much memory - more than %s bytes (%s). Exiting.\n",
 	maxAlloc, allocRequest);
+    write(STDERR_FILENO, errMsg, strlen(errMsg)); 
+    exit(1);   // out of memory is a serious problem, exit immediately, but allow atexit cleanup.
+    // avoid errAbort which allocates memory causing problems.
     }
 carefulAlloced = newAlloced;
 aliSize = ((size + sizeof(*cmb) + 4 + carefulAlignAdd)&carefulAlignMask);
