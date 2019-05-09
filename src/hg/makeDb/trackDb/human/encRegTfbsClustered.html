@@ -1,7 +1,10 @@
 <h2>Description</h2>
 <p>
 This track shows regions of transcription factor binding derived from a large collection
-of ChIP-seq experiments performed by the ENCODE project between February 2011 and November 2018.</p>
+of ChIP-seq experiments performed by the ENCODE project between February 2011 and November 2018,
+spanning the first production phase of ENCODE ("ENCODE 2") through the second full production
+phase ("ENCODE 3").
+</p>
 <p>
 Transcription factors (TFs) are proteins that bind to DNA and interact with RNA polymerases to
 regulate gene expression.  Some TFs contain a DNA binding domain and can bind directly to 
@@ -15,42 +18,24 @@ ENCODE TF ChIP-seq data were processed using the
 <a target="_blank" href="https://www.encodeproject.org/chip-seq/transcription_factor/">ENCODE Transcription Factor ChIP-seq Processing Pipeline</a> to generate peaks of TF binding.
 Peaks from 1264 experiments (1256 in hg38) representing 338 transcription factors 
 (340 in hg38) in 130 cell types (129 in hg38) are combined here into clusters to produce a 
-summary display showing occupancy regions for each factor and motif sites 
-within the regions when identified.
-<!--
-# Restore this if we make a track out of underlying peaks
-
-Additional views of the underlying ChIP-seq data are available from the
-<a href="../cgi-bin/hgTrackUi?db=hg19&g=encode3TfbsPk" 
-target="_blank">ENCODE TFBS</a> track.
--->
-<!-- 
-# Restore this if when we add the motifs
-The 
-<a href="../cgi-bin/hgTrackUi?db=hg19&g=factorbookMotifPos" target=_blank">
-Factorbook Motif</a> track shows the complete set of motif locations
-identified in the uniform ENCODE ChIP-seq peaks.
--->
-</p>
+summary display showing occupancy regions for each factor.
+The underlying ChIP-seq peak data are available from the
+<i>ENCODE 3 TF ChIP Peaks</i> tracks (
+<a target="_blank" href="../cgi-bin/hgTrackUi?db=hg19&g=encTfChipPk">hg19</a>,
+<a target="_blank" href="../cgi-bin/hgTrackUi?db=hg19&g=encTfChipPk">hg38</a>)</p>
 
 <h2>Display Conventions</h2>
 <p>
 A gray box encloses each peak cluster of transcription factor occupancy, with the
-darkness of the box being proportional to the maximum signal strength observed in any cell line
+darkness of the box being proportional to the maximum signal strength observed in any cell type
 contributing to the cluster. The HGNC gene name for the transcription factor is shown 
-to the left of each cluster.
-<!-- Within a cluster, a green highlight indicates 
-the highest scoring site of a Factorbook-identified canonical motif for
-the corresponding factor. (NOTE: motif highlights are shown
-only in browser windows of size 50,000 bp or less, and their display can be suppressed by unchecking
-the highlight motifs box on the track configuration page).
-Arrows on the highlight designate the matching strand of the motif.
--->
-</p>
+to the left of each cluster.<p>
 <p>
-The cell lines where signal was detected for the factor are identified by single-letter 
-abbreviations shown to the right of the cluster.  
-The darkness of each letter is proportional to the signal strength observed in the cell line. 
+To the right of the cluster a configurable label can optionally display information about the
+cell types contributing to the cluster and how many cell types were assayed for the factor
+(count where detected / count where assayed).
+For brevity in the display, each cell type is abbreviated to a single letter.
+The darkness of the letter is proportional to the signal strength observed in the cell line. 
 Abbreviations starting with capital letters designate
 <a href="https://www.encodeproject.org/search/?type=Biosample&organism.scientific_name=Homo+sapiens"
 target="_blank">ENCODE cell types</a> initially identified for intensive study, 
@@ -63,8 +48,7 @@ cluster and the cell line abbreviation table.
 <h2>Methods</h2>
 <p>
 <p>
-Peaks of transcription factor occupancy from ENCODE ChIP-seq datasets provided by the
-ENCODE Data Analysis Center in November 2018
+Peaks of transcription factor occupancy ("optimal peak set") from ENCODE ChIP-seq datasets
 were clustered using the UCSC hgBedsToBedExps tool.  
 Scores were assigned to peaks by multiplying the input signal values by a normalization
 factor calculated as the ratio of the maximum score value (1000) to the signal value at one
@@ -72,36 +56,40 @@ standard deviation from the mean, with values exceeding 1000 capped at 1000. Thi
 effect of distributing scores up to mean plus one 1 standard deviation across the score range,
 but assigning all above to the maximum score.
 The cluster score is the highest score for any peak contributing to the cluster.</p>  
-<!--
-<p>
-The Factorbook motif discovery and annotation pipeline uses
-the MEME-ChIP and FIMO tools from the <a href="http://meme-suite.org/doc/overview.html"
-target="_blank">MEME</a> software suite in conjunction with machine learning methods and
-manual curation to merge discovered motifs with known motifs reported in 
-<a target="blank" href="http://jaspar.genereg.net/">Jaspar</a> and
-<a href="https://portal.biobase-international.com/build_t/idb/1.0/html/bkldoc/source/bkl/transfac%20suite/transfac/tf_intro.html"
-target="_blank">TransFac</a>.
-Motif identifications reported in Wang et al. 2012 (below) were supplemented in this track
-with more recent data (derived from newer ENCODE datasets - Jan 2011 through Mar 2012 freezes),
-provided by the Factorbook team.  Motif identifications from all datasets were merged, with
-the most significant value (qvalue) reported being picked when motifs were duplicated in
-multiple cell lines.  The scores for the selected best-scoring motif sites were then transformed
-to -log10.
-</p>
--->
 
-<h2>Release Notes</h2>
+<H2>Credits</H2>
 <p>
-Release 5 (2019) of this track comprises 1264 datasets (1256 in hg38), 
-representing work performed through the 3rd phase of ENCODE.
-Release 4 (February 2014) of this track adds display of the Factorbook motifs.
-Release 3 (August 2013) added 124 datasets (690 total, vs. 486 in Release 2),
-</p>
-
-<h2>Credits</h2>
+Thanks to the ENCODE Consortium, the ENCODE ChIP-seq production laboratories, and the
+ENCODE Data Coordination Center for generating and processing the TF ChIP-seq datasets used here.
+The ENCODE accession numbers of the constituent datasets are available from the peak details page.
+Special thanks to Henry Pratt, Jill Moore, Michael Purcaro, and Zhiping Weng, PI, at the 
+<a target="_blank" href="https://www.umassmed.edu/zlab/">ENCODE Data Analysis Center (ZLab at UMass Medical Center)</a> for providing the peak datasets, metadata, and guidance
+developing this track.</p>
+<P>
+The integrative view presented here was developed by Jim Kent at UCSC.</P>
 
 <h2>References</h2>
 
+<p>ENCODE Project Consortium.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/21526222" title="https://www.ncbi.nlm.nih.gov/pubmed/21526222"  rel="nofollow" TARGET="_BLANK">
+A user's guide to the encyclopedia of DNA elements (ENCODE)</a>.
+<em>PLoS Biol</em>. 2011 Apr;9(4):e1001046. PMID: 21526222; PMCID: PMC3079585
+</p>
+
+<p>ENCODE Project Consortium.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/22955616" title="https://www.ncbi.nlm.nih.gov/pubmed/22955616"  rel="nofollow" TARGET="_BLANK">
+An integrated encyclopedia of DNA elements in the human genome</a>.
+<em>Nature</em>. 2012 Sep 6;489(7414):57-74. PMID: 22955616; PMCID: PMC3439153
+</p>
+<p>
+Sloan CA, Chan ET, Davidson JM, Malladi VS, Strattan JS, Hitz BC, Gabdank I, Narayanan AK, Ho M, Lee
+BT <em>et al</em>.
+<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gkv1160" target="_blank">
+ENCODE data at the ENCODE portal</a>.
+<em>Nucleic Acids Res</em>. 2016 Jan 4;44(D1):D726-32.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26527727" target="_blank">26527727</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4702836/" target="_blank">PMC4702836</a>
+</p>
 <p>
 Gerstein MB, Kundaje A, Hariharan M, Landt SG, Yan KK, Cheng C, Mu XJ, Khurana E, Rozowsky J,
 Alexander R <em>et al</em>.
@@ -131,10 +119,10 @@ PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/23203885" target="_blank">232
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3531197/" target="_blank">PMC3531197</a>
 </p>
 
-<h2>Data Release Policy</h2>
-<p>
-While primary ENCODE data was subject to a restriction period as described in the 
-<a href="../ENCODE/terms.html" target="_blank">
-ENCODE data release policy</a>, this restriction does not apply to the integrative 
-analysis results, and all primary data underlying this track have passed the restriction date. 
-The data in this track are freely available.</p>
+<H2> Data Use Policy </H2>
+<P> <B>Users may freely download, analyze and publish results based on any ENCODE data without 
+restrictions.</B>
+Researchers using unpublished ENCODE data are encouraged to contact the data producers to discuss possible coordinated publications; however, this is optional. </p>
+<B><I>Users of ENCODE datasets are requested to cite the ENCODE Consortium and ENCODE
+production laboratory(s) that generated the datasets used, as described in
+<A target="_blank" href="https://www.encodeproject.org/help/citing-encode/">Citing ENCODE</A>.</B></I></p>

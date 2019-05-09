@@ -204,6 +204,13 @@ cat > trackDb.ra << 'EOF'
     filterBy name:factor=\
 'EOF'
 
+# rename tables for consistency with earlier regulatory supertrack tracks (but distinguish from
+# ENCODE 2 by prefix
+
+hgsql hg19 -e "alter table encode3RegTfbsCluster rename to encRegTfbsClustered"
+hgsql hg19 -e "alter table encode3RegTfbsClusterInput rename to encRegTfbsClusteredInputs"
+hgsql hg19 -e "alter table encode3RegTfbsExp rename to encRegTfbsClusteredSources"
+
 ###############
 # hg38
 
@@ -308,6 +315,13 @@ awk '{print $2}' fileCellAbTarget.tab | sed 's/+.*//' | sort | uniq > cells.txt
 wc -l cells.txt
 #129 cells.txt
 
+# rename tables for consistency with earlier regulatory supertrack tracks (but distinguish from
+# ENCODE 2 by prefix
+
+hgsql hg38 -e "alter table encode3RegTfbsCluster rename to encRegTfbsClustered"
+hgsql hg38 -e "alter table encode3RegTfbsClusterInput rename to encRegTfbsClusteredInputs"
+hgsql hg38 -e "alter table encode3RegTfbsExp rename to encRegTfbsClusteredSources"
+
 ################
 # Load per-factor tables (needed for clusters track details
 # Consider also creating a track for these (composite with 1200 subtracks)
@@ -334,8 +348,39 @@ cd peaks
 
 awk '{print $1}' ../fileCellAbTarget.tab | sed 's/peaks\///' | \
         xargs -L 1 ../../scorePeaks.csh hg19 >&! ../scorePeaks.log &
-
+cd ..
 perl ../makeTrackDb.pl < clusters.inputs.tab > trackDb.ra
+
+# trim shortLabels:
+grep shortLabel trackDb.ra | sed 's/shortLabel //' | sort > shortLabels.orig.txt
+sort | awk -F'\n' '{print $1, "\t", $1}' shortLabels.orig.txt > \
+        shortLabels.twocol.txt
+# 2. import to google sheet
+# 3. trim 2nd column to 17 chars
+# 4. export as tab-sep
+
+tdbRename trackDb.ra shortLabel encode3TfChipShortLabels.hg19.txt trackDb.new.ra
+
+# Fix up subGroup members w/ punctuation and initial numbers:
+#       Peyer's_patch -> Peyers_patch
+#       NT2/D1 -> NT2_D1
+#       22Rv1 -> X22Rv1
+#       MM.1S -> MM_1S
+
+# rename tables (encode3Tfbs -> encTfChipPk)
+
+hgsql hg19 -e 'show tables like "encode3TfbsPk%"' > tables.old.txt
+sed -e 's/^/alter table /' -e 's/$/ rename to /' tables.old.txt > rename.1.sql
+sed -e 's/encode3TfbsPk/encTfChipPk/' tables.old.txt | paste rename.1.sql -  | \
+    sed 's/$/;/' > rename.sql
+hgsql hg19 < rename.sql
+
+#  reload cluster input table
+hgLoadSqlTab hg19 encode3RegTfbsClusterInput \
+        ~/kent/src/hg/lib/clusterInputTrackTable5.sql clusters.inputs.tab
+
+###############
+# hg38
 
 cd ../hg38
 mkdir scoredPeaks
@@ -343,10 +388,37 @@ cd peaks
 awk '{print $1}' ../fileCellAbTarget.tab | sed 's/peaks\///' | \
         xargs -L 1 ../../scorePeaks.csh hg38 >&! ../scorePeaks.log &
 
+cd ..
 perl ../makeTrackDb.pl < clusters.inputs.tab > trackDb.ra
 
 paste cells.txt cells.txt > cellGroup.txt
 # edit for subgroup format
+
+grep shortLabel trackDb.ra | sed 's/shortLabel //' | sort > shortLabels.orig.txt
+
+comm -2 -3 shortLabels.orig.txt ../hg19/shortLabels.orig.txt > shortLabels.hg38.only.txt 
+
+# add to google spreadsheet for trimming to 17 chars (input to tdbRename)
+
+tdbRename trackDb.ra shortLabel encode3TfShortLabels.uniq.tsv trackDb.new.ra
+
+# Fix up subGroup members w/ punctuation and initial numbers:
+#       Peyer's_patch -> Peyers_patch
+#       NT2/D1 -> NT2_D1
+#       22Rv1 -> X22Rv1
+#       MM.1S -> MM_1S
+
+# rename tables (encode3Tfbs -> encTfChipPk)
+
+hgsql hg38 -e 'show tables like "encode3TfbsPk%"' > tables.old.txt
+sed -e 's/^/alter table /' -e 's/$/ rename to /' tables.old.txt > rename.1.sql
+sed -e 's/encode3TfbsPk/encTfChipPk/' tables.old.txt | paste rename.1.sql -  | \       
+    sed 's/$/;/' > rename.sql
+hgsql hg38 < rename.sql
+
+#  reload cluster input table
+hgLoadSqlTab hg38 encode3RegTfbsClusterInput \
+        ~/kent/src/hg/lib/clusterInputTrackTable5.sql clusters.inputs.tab
 
 ####################
 # Motifs (hg38) from Henry Pratt at Zlab
