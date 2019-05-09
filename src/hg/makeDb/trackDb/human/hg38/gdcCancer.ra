@@ -10,6 +10,7 @@ project_idFilterValues TCGA-LAML|Acute Myeloid Leukemia,TCGA-ACC|Adrenocortical 
 project_idFilterType multipleListOr
 genderFilterValues male,female
 genderFilterType multipleListOr
+maxItems 5000000
 
 track all
 parent gdcCancer on

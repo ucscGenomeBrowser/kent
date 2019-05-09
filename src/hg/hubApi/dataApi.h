@@ -44,7 +44,7 @@
 #define err404	404
 #define err404Msg	"Not Found"
 #define err429	429
-#define err429Msg	"Two Many Requests"
+#define err429Msg	"Too Many Requests"
 
 /* maximum number of words expected in PATH_INFO parsing
  *   so far only using 2

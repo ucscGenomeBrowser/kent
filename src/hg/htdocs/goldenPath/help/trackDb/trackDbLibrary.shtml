@@ -187,8 +187,9 @@
     <A onclick="return jumpTo(this);" HREF="#">vcfTabix</A>,
     <A onclick="return jumpTo(this);" HREF="#">wig</A>,
     <A onclick="return jumpTo(this);" HREF="#">wigMaf</A></P>
-    <P>Detailed descriptions of each type can be found
-    below.  In many cases the type setting includes additional
+    <P>Not all track types are supported in hubs. The types specifically
+    supported are called out at the top of the Hub Track Database Definition
+    page.  In many cases the type setting includes additional
     parameters to further specify the data format.  Some track types
     have additional setting requirements, to be discussed
     below.</P>
