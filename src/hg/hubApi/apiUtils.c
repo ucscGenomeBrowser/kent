@@ -60,6 +60,7 @@ jsonWriteString(jw, "error", errMsg);
 jsonWriteNumber(jw, "statusCode", errorCode);
 jsonWriteString(jw, "statusMessage", errString);
 apiFinishOutput(errorCode, errString, jw);
+cgiExitTime("hubApi err", enteredMainTime);
 exit(0);
 }
 
@@ -433,4 +434,36 @@ if (extrasFound)
     return dyStringCannibalize(&extras);
 else
     return NULL;
+}
+
+static int dbDbCmpName(const void *va, const void *vb)
+/* Compare two dbDb elements: name, ignore case. */
+{
+const struct dbDb *a = *((struct dbDb **)va);
+const struct dbDb *b = *((struct dbDb **)vb);
+return strcasecmp(a->name, b->name);
+}
+
+struct dbDb *ucscDbDb()
+/* return the dbDb table as an slList */
+{
+char query[1024];
+struct sqlConnection *conn = hConnectCentral();
+char *showActive0 = cfgOptionDefault("hubApi.showActive0", "off");
+if (sameWord("on", showActive0))
+    sqlSafef(query, sizeof(query), "select * from dbDb");
+else
+    sqlSafef(query, sizeof(query), "select * from dbDb where active=1");
+struct dbDb *dbList = NULL, *el = NULL;
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = dbDbLoad(row);
+    slAddHead(&dbList, el);
+    }
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
+slSort(&dbList, dbDbCmpName);
+return dbList;
 }

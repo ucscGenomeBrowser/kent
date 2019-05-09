@@ -69,9 +69,9 @@ void lmCleanup(struct lm **pLm)
     struct lm *lm = *pLm;
     if (lm == NULL)
         return;
+    *pLm = NULL;
     slFreeList(&lm->blocks);
     freeMem(lm);
-    *pLm = NULL;
 }
 
 size_t lmAvailable(struct lm *lm)

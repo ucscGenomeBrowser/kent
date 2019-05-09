@@ -64,5 +64,9 @@ void chromAliasJsonOutput(struct chromAlias *el, FILE *f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-#endif /* CHROMALIAS_H */
+struct hash *chromAliasMakeLookupTable(char *database);
+/* Given a database name and a connection to that database, construct a lookup table
+ * that takes chromosome alias names to a matching struct chromAlias.  Returns NULL
+ * if the given database does not have a chromAlias table. */
 
+#endif /* CHROMALIAS_H */
