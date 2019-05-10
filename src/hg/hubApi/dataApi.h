@@ -46,6 +46,15 @@
 #define err429	429
 #define err429Msg	"Too Many Requests"
 
+/* listing of allowed legal arguments for each function */
+#define argsListPublicHubs ""
+#define argsListUcscGenomes ""
+#define argsListHubGenomes "hubUrl"
+#define argsListTracks "genome;hubUrl;trackLeavesOnly"
+#define argsListChromosomes "genome;hubUrl;track"
+#define argsGetDataTrack "genome;hubUrl;track;chrom;start;end;maxItemsOutput;jsonOutputArrays"
+#define argsGetDataSequence "genome;hubUrl;track;chrom;start;end"
+
 /* maximum number of words expected in PATH_INFO parsing
  *   so far only using 2
  */
