@@ -18,6 +18,7 @@
     priority 1.90
     maxWindowToDraw 10000000
     dataVersion ENCODE 3 Nov 2018
+    pennantIcon New red  ../goldenPath/newsarch.html
     filterBy name:factor=\
         AFF1,\
         AGO1,\
@@ -378,6 +379,7 @@ dataVersion ENCODE 3 Nov 2018
 wgEncode 1 
 priority 1.91
 superTrack wgEncodeReg dense
+pennantIcon New red  ../goldenPath/newsarch.html
 subGroup1 cellType Cell_Type \
     X22Rv1=22Rv1 \
     A549=A549 \

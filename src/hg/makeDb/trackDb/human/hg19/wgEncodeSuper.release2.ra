@@ -3,6 +3,7 @@ superTrack on
 group regulation
 shortLabel ENC TF Binding
 longLabel ENCODE Transcription Factor Binding
+pennantIcon Updated red ../goldenPath/newsarch.html "Added ENCODE 3 TFBS track"
 wgEncode 1
 
 track wgEncodeDNAseSuper
