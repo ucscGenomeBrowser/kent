@@ -3957,12 +3957,15 @@ else
     printf("<B>%s items by:</B> (select multiple categories and items - %s)"
 	   "<TABLE cellpadding=3><TR valign='top'>\n",filterTypeTitle,FILTERBY_HELP_LINK);
 
-char varName[1024];
-safef(varName, sizeof(varName), "%s.doAdvanced", tdb->track);
-puts("&nbsp;&nbsp;&nbsp;");
-printf("<A id='%s' title='Show advanced options..'>%s<img src='../images/downBlue.png'/></A>" ,varName,"Advanced ");
-printf("<BR>");
-jsInlineF("$(function () { advancedSearchOnChange('%s'); });\n", varName);
+if (tdbIsBigBed(tdb))
+    {
+    char varName[1024];
+    safef(varName, sizeof(varName), "%s.doAdvanced", tdb->track);
+    puts("&nbsp;&nbsp;&nbsp;");
+    printf("<a id='%s' style='text-decoration: underline; color: #121E9A' title='Show advanced options..'>%s<img src='../images/downBlue.png'/></a>" ,varName,"Advanced ");
+    printf("<BR>");
+    jsInlineF("$(function () { advancedSearchOnChange('%s'); });\n", varName);
+    }
 
 
 filterBy_t *filterBy = NULL;
