@@ -24,7 +24,7 @@ jsonWriteObjectEnd(jw);
 static void jsonPublicHubs()
 /* output the hubPublic SQL table */
 {
-char *extraArgs = verifyLegalArgs(NULL); /* no extras allowed */
+char *extraArgs = verifyLegalArgs(argsListPublicHubs); /* no extras allowed */
 if (extraArgs)
     apiErrAbort(err400, err400Msg, "extraneous arguments found for function /list/publicHubs '%s'", extraArgs);
 
@@ -83,7 +83,7 @@ jsonWriteObjectEnd(jw);
 static void jsonDbDb()
 /* output the dbDb SQL table */
 {
-char *extraArgs = verifyLegalArgs(NULL); /* no extras allowed */
+char *extraArgs = verifyLegalArgs(argsListUcscGenomes); /* no extras allowed */
 if (extraArgs)
     apiErrAbort(err400, err400Msg, "extraneous arguments found for function /list/ucscGenomes '%s'", extraArgs);
 
@@ -419,7 +419,7 @@ else if (sameWord("ucscGenomes", words[1]))
     jsonDbDb();
 else if (sameWord("hubGenomes", words[1]))
     {
-    char *extraArgs = verifyLegalArgs("hubUrl"); /* only one arg allowed */
+    char *extraArgs = verifyLegalArgs(argsListHubGenomes); /* only one allowed */
     if (extraArgs)
 	apiErrAbort(err400, err400Msg, "extraneous arguments found for function /list/hubGenomes '%s'", extraArgs);
 
@@ -453,7 +453,7 @@ else if (sameWord("hubGenomes", words[1]))
     }
 else if (sameWord("tracks", words[1]))
     {
-    char *extraArgs = verifyLegalArgs("genome;hubUrl;trackLeavesOnly");
+    char *extraArgs = verifyLegalArgs(argsListTracks);
     if (extraArgs)
 	apiErrAbort(err400, err400Msg, "extraneous arguments found for function /list/tracks '%s'", extraArgs);
 
@@ -499,7 +499,7 @@ else if (sameWord("tracks", words[1]))
     }
 else if (sameWord("chromosomes", words[1]))
     {
-    char *extraArgs = verifyLegalArgs("genome;hubUrl;track");
+    char *extraArgs = verifyLegalArgs(argsListChromosomes);
     if (extraArgs)
 	apiErrAbort(err400, err400Msg, "extraneous arguments found for function /list/chromosomes '%s'", extraArgs);
 
