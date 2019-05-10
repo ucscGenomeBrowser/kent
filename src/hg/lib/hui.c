@@ -8722,7 +8722,7 @@ static struct slPair *makePennantIcons(struct trackDb *tdb)
 /* Return a list of pairs of pennantIcon HTML and note strings. */
 {
 char *setting = trackDbSetting(tdb, "pennantIcon");
-if (setting == NULL)
+if (setting == NULL || sameString(setting, "none"))
     return NULL;
 struct slPair *list = NULL;
 int maxPennants = 3;
