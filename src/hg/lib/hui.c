@@ -3957,12 +3957,15 @@ else
     printf("<B>%s items by:</B> (select multiple categories and items - %s)"
 	   "<TABLE cellpadding=3><TR valign='top'>\n",filterTypeTitle,FILTERBY_HELP_LINK);
 
-char varName[1024];
-safef(varName, sizeof(varName), "%s.doAdvanced", tdb->track);
-puts("&nbsp;&nbsp;&nbsp;");
-printf("<A id='%s' title='Show advanced options..'>%s<img src='../images/downBlue.png'/></A>" ,varName,"Advanced ");
-printf("<BR>");
-jsInlineF("$(function () { advancedSearchOnChange('%s'); });\n", varName);
+if (tdbIsBigBed(tdb))
+    {
+    char varName[1024];
+    safef(varName, sizeof(varName), "%s.doAdvanced", tdb->track);
+    puts("&nbsp;&nbsp;&nbsp;");
+    printf("<a id='%s' style='text-decoration: underline; color: #121E9A' title='Show advanced options..'>%s<img src='../images/downBlue.png'/></a>" ,varName,"Advanced ");
+    printf("<BR>");
+    jsInlineF("$(function () { advancedSearchOnChange('%s'); });\n", varName);
+    }
 
 
 filterBy_t *filterBy = NULL;
@@ -7489,16 +7492,18 @@ safef(fullname, sizeof fullname, "minus_all_%s_%s", left ? "left" : "right", top
 PM_MAKE_BUTTON_UC("false","", "", "", "", "", fullname, "remove_sm.gif")
 }
 
-static void buttonsForOne(char *class, boolean vertical, boolean left)
+static void buttonsForOne(char *class, boolean vertical, boolean left, boolean top)
 {
 char id[256];
 char javascript[1024];
 char fullname[256];
-safef(fullname, sizeof fullname, "plus_%s_all_%s" , class, left?"left":"right");
+safef(fullname, sizeof fullname, "plus_%s_all_%s_%s" , class, left ? "left" : "right",
+                        top ? "top" : "bottom");
 PM_MAKE_BUTTON_UC("true",  ",'", class, "'", "", "", fullname,    "add_sm.gif")
 if (vertical)
     puts("<BR>");
-safef(fullname, sizeof fullname, "minus_%s_all_%s", class, left?"left":"right");
+safef(fullname, sizeof fullname, "minus_%s_all_%s_%s", class, left ? "left" : "right",
+                        top ? "top" : "bottom");
 PM_MAKE_BUTTON_UC("false", ",'", class, "'", "", "", fullname, "remove_sm.gif")
 }
 
@@ -7531,8 +7536,8 @@ if (dimensionX && dimensionY)
 return FALSE;
 }
 
-static void matrixXheadingsRow1(char *db,struct trackDb *parentTdb,boolean squeeze,
-                                membersForAll_t* membersForAll,boolean top)
+static void matrixXheadingsRow1(char *db, struct trackDb *parentTdb, boolean squeeze,
+                                membersForAll_t* membersForAll, boolean top)
 // prints the top row of a matrix: 'All' buttons; X titles; buttons 'All'
 {
 members_t *dimensionX = membersForAll->members[dimX];
@@ -7620,7 +7625,7 @@ puts("</TR>\n");
 }
 
 static void matrixXheadingsRow2(struct trackDb *parentTdb, boolean squeeze,
-                                membersForAll_t* membersForAll)
+                                membersForAll_t* membersForAll, boolean top)
 // prints the 2nd row of a matrix: Y title; X buttons; title Y
 {
 members_t *dimensionX = membersForAll->members[dimX];
@@ -7639,7 +7644,7 @@ if (dimensionX && dimensionY)
         &&  dimensionX->subtrackList[ixX]->val)
             {
             printf("<TD nowrap class='matCell %s all'>\n",dimensionX->tags[ixX]);
-            buttonsForOne( dimensionX->tags[ixX], squeeze, TRUE);
+            buttonsForOne(dimensionX->tags[ixX], squeeze, TRUE, top);
             puts("</TD>");
             cntX++;
             }
@@ -7658,18 +7663,18 @@ static boolean matrixXheadings(char *db,struct trackDb *parentTdb, membersForAll
 boolean squeeze = matrixSqueeze(membersForAll);
 
 if (top)
-    matrixXheadingsRow1(db,parentTdb,squeeze,membersForAll,top);
+    matrixXheadingsRow1(db, parentTdb, squeeze, membersForAll, top);
 
-matrixXheadingsRow2(parentTdb,squeeze,membersForAll);
+matrixXheadingsRow2(parentTdb, squeeze, membersForAll, top);
 
 if (!top)
-    matrixXheadingsRow1(db,parentTdb,squeeze,membersForAll,top);
+    matrixXheadingsRow1(db, parentTdb, squeeze, membersForAll, top);
 
 return squeeze;
 }
 
 static void matrixYheadings(char *db,struct trackDb *parentTdb, membersForAll_t* membersForAll,
-                            int ixY,boolean left)
+                            int ixY, boolean left)
 // prints the column of Y labels and buttons
 {
 members_t *dimensionX = membersForAll->members[dimX];
@@ -7689,7 +7694,7 @@ if (dimensionX && dimensionY && childTdb != NULL) // Both X and Y, then column o
     if (left)
         printf("%s&nbsp;",compositeLabelWithVocabLink(db,parentTdb,childTdb,dimensionY->groupTag,
                                                       dimensionY->titles[ixY]));
-    buttonsForOne( dimensionY->tags[ixY], FALSE, left);
+    buttonsForOne(dimensionY->tags[ixY], FALSE, left, FALSE);
     if (!left)
         printf("&nbsp;%s",compositeLabelWithVocabLink(db,parentTdb,childTdb,dimensionY->groupTag,
                                                       dimensionY->titles[ixY]));

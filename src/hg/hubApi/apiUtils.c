@@ -391,7 +391,7 @@ char *verifyLegalArgs(char *validArgList)
 struct hash *validHash = NULL;
 char *words[32];
 int wordCount = 0;
-if (validArgList)
+if (isNotEmpty(validArgList))
     {
     wordCount = chopByChar(cloneString(validArgList), ';', words, 32);
     }

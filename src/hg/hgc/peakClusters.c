@@ -224,7 +224,7 @@ return wgEncodeVocabLink(vocabFile, vocabType, fieldVal, fieldVal, fieldVal, "")
 
 static void printFactorSourceTableHits(struct factorSource *cluster, struct sqlConnection *conn,
 	char *sourceTable, char *inputTrackTable, 
-	struct slName *fieldList, boolean invert, char *vocab)
+	struct slName *fieldList, boolean invert, char *vocab, struct hash *fieldToUrl)
 /* Put out a lines in an html table that shows assayed sources that have hits in this
  * cluster, or if invert is set, that have misses. */
 {
@@ -246,7 +246,7 @@ sqlDyStringPrintf(query, " where %s.source = %s.description", inputTrackTable, s
 sqlDyStringPrintf(query, " and factor='%s' order by %s.source", cluster->name, inputTrackTable);
 
 boolean encodeStanford = FALSE;
-if (startsWith("encode3", sourceTable) || startsWith("encode4", sourceTable))
+if (startsWith("enc", sourceTable))
     encodeStanford = TRUE;
 
 int displayNo = 0;
@@ -282,13 +282,28 @@ while ((row = sqlNextRow(sr)) != NULL)
 	for (i=0; i<fieldCount && field != NULL; ++i, field = field->next)
 	    {
 	    char *fieldVal = row[i+offset];
+            char *link = NULL;
 	    if (vocab)
 	        {
-                char *link = cloneString(factorSourceVocabLink(vocabFile, field->name, fieldVal));
-		webPrintLinkCell(link);
+                link = cloneString(factorSourceVocabLink(vocabFile, field->name, fieldVal));
 		}
-	    else
-		webPrintLinkCell(fieldVal);
+            else if (fieldToUrl != NULL)
+                {
+                // (outside) links on vocab items
+                char *urlPattern = hashFindVal(fieldToUrl, field->name);
+                if (urlPattern != NULL)
+                    {
+                    char *url = replaceInUrl(urlPattern, fieldVal, cart, database, seqName, 
+                                                winStart, winEnd, NULL, TRUE, NULL);
+                    if (url != NULL)
+                        {
+                        struct dyString *ds = dyStringCreate("<a target='_blank' href='%s'>%s</a>\n",
+                                                                url, fieldVal);
+                        link = dyStringCannibalize(&ds);
+                        }
+                    }
+                }
+            webPrintLinkCell(link ? link : fieldVal);
 	    }
         char *table = row[2];
         if (encodeStanford)
@@ -520,6 +535,8 @@ sqlSafef(query, sizeof(query), "select tableName from %s where factor='%s' order
 char *inputTableFieldDisplay = trackDbSetting(tdb, "inputTableFieldDisplay");
 if (inputTableFieldDisplay != NULL)
     {
+    char *fieldUrls = trackDbSetting(tdb, "inputTableFieldUrls");
+    struct hash *fieldToUrl = hashFromString(fieldUrls);
     struct slName *fieldList = stringToSlNames(inputTableFieldDisplay);
     char *vocab = trackDbSetting(tdb, "controlledVocabulary");
 
@@ -528,7 +545,7 @@ if (inputTableFieldDisplay != NULL)
     webPrintLinkTableStart();
     printClusterTableHeader(fieldList, TRUE, FALSE, TRUE);
     printFactorSourceTableHits(cluster, conn, sourceTable, 
-            inputTrackTable, fieldList, FALSE, vocab);
+            inputTrackTable, fieldList, FALSE, vocab, fieldToUrl);
     webPrintLinkTableEnd();
 
     webNewSectionHeaderStart();
@@ -540,7 +557,7 @@ if (inputTableFieldDisplay != NULL)
     webPrintLinkTableStart();
     printClusterTableHeader(fieldList, TRUE, FALSE, FALSE);
     printFactorSourceTableHits(cluster, conn, sourceTable, 
-            inputTrackTable, fieldList, TRUE, vocab);
+            inputTrackTable, fieldList, TRUE, vocab, fieldToUrl);
     webPrintLinkTableEnd();
     jsEndCollapsibleSection();
     }
