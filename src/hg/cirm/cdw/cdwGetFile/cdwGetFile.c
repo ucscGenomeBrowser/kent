@@ -189,7 +189,7 @@ void sendFileByAcc(struct sqlConnection *conn, char* acc, boolean useSubmitFname
 {
 struct cdwValidFile *vf = cdwValidFileFromLicensePlate(conn, acc);
 if (vf==NULL)
-    errExit("%s is not a valid accession in the CDW.", acc);
+    errExitExt("%s is not a valid accession in the CDW.", acc, "404 Not Found");
 
 struct cdwFile *ef = cdwFileFromId(conn, vf->fileId);
 char* filePath = cdwPathForFileId(conn, vf->fileId);
