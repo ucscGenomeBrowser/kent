@@ -27,9 +27,20 @@ struct cart *cart;	// User variables saved from click to click
 struct hash *oldVars;	// Previous cart, before current round of CGI vars folded in
 struct cdwUser *user;	// Our logged in user if any
 
-void errExit(char *msg, char *field) 
+void errExitExt(char *msg, char *field, char *status) 
 /* print http header + message and exit. msg can contain %s */
 {
+if (status)
+    {
+    printf("Status: %s\n", status);
+    }
+else
+    {
+    // provide a generic error code when status not specified
+    // this will signal an error to the caller.
+    printf("Status: %s\n", "400 BAD REQUEST");  
+    }
+
 printf("Content-Type: text/html\n\n");
 puts("ERROR: ");
 if (!field)
@@ -37,6 +48,12 @@ if (!field)
 else
     printf(msg, field);
 exit(0);
+}
+
+void errExit(char *msg, char *field) 
+/* print http header + message and exit. msg can contain %s */
+{
+errExitExt(msg, field, NULL);
 }
 
 void mustHaveAccess(struct sqlConnection *conn, struct cdwFile *ef)
@@ -49,9 +66,9 @@ if (cdwCheckAccess(conn, ef, user, cdwAccessRead))
     return;
 else
     if (user==NULL)
-        errExit("Sorry, this file has access restrictions. Please <a href='/cgi-bin/hgLogin'>log in</a> first.", NULL);
+        errExitExt("Sorry, this file has access restrictions. Please <a href='/cgi-bin/hgLogin'>log in</a> first.", NULL, "401 Unauthorized");
     else
-        errExit("Sorry, user %s does not have access to this file.", user->email);
+        errExitExt("Sorry, user %s does not have access to this file.", user->email, "403 Forbidden");
 }
 
 struct patcher 
@@ -226,7 +243,7 @@ int fileId = cdwFileIdFromPathSuffix(conn, path);
 
 
 if (fileId == 0)
-    errExit("A file with suffix %s does not exist in the database", path);
+    errExitExt("A file with suffix %s does not exist in the database", path, "404 Not Found");
     
 char *localPath = cdwPathForFileId(conn, fileId);
 
