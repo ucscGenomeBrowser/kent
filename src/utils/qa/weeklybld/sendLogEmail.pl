@@ -12,7 +12,7 @@ if ($argc != 2) {
 my $lastNN = shift;
 my $branchNN = shift;
 
-my $buildMeisterEmail = $ENV{'BUILDMEISTEREMAIL'} . ',ann@soe.ucsc.edu,brianlee@soe.ucsc.edu';
+my $buildMeisterEmail = $ENV{'BUILDMEISTEREMAIL'} . ',azweig@ucsc.edu,brianlee@soe.ucsc.edu';
 my $returnEmail = ' brianlee@soe.ucsc.edu';
 
 my @victims;
