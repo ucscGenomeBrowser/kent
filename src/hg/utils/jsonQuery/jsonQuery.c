@@ -3,6 +3,7 @@
 #include "jsHelper.h"
 #include "jsonQuery.h"
 #include "linefile.h"
+#include "net.h"
 #include "obscure.h"
 #include "options.h"
 
@@ -32,7 +33,7 @@ static struct optionSpec options[] = {
 void jsonQuery(char *inFile, char *path, char *outFile)
 /* jsonQuery - Use a path syntax to retrieve elements/values from each line of JSON input. */
 {
-struct lineFile *lf = lineFileOpen(inFile, TRUE);
+struct lineFile *lf = netLineFileOpen(inFile);
 struct hash *uniqHash = NULL;
 boolean countUniq = optionExists("countUniq");
 boolean uniq = optionExists("uniq") || countUniq;
