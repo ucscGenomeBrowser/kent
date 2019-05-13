@@ -567,6 +567,7 @@ The following track line attribute=value pairs are defined in the Genome Browser
   lighter shade of whatever the <em>color</em> attribute is set to.</li>
 --> 
   <li>
+
   <strong>useScore=<<em>use_score</em>></strong> - If this attribute is present and is set to 1, 
   the <em>score</em> field in each of the track's data lines will be used to determine the level of 
   shading in which the data is displayed. The track will display in shades of gray unless the 
@@ -691,6 +692,10 @@ You can add other optional parameters to the URL: (Note: Display may vary if you
 cart variables, for example having both hide all and highlight features.)
 <ul>
   <li>
+  <code>ignoreCookie=1</code> - uses default user settings like track selections, custom
+tracks, and track hubs - <a href="../../cgi-bin/hgTracks?db=hg19&ignoreCookie=1" 
+  target="_blank">example link</a> to show the default tracks and positions for hg19</li>
+  <li>
   <code>hgFind.matches=listOfNames</code> - highlight features given their names - 
   <a href="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&hgFind.matches=uc010naf.1,uc011mcz.1" 
   target="_blank">example link</a> to highlight two transcripts of the ABO gene</li>
@@ -712,6 +717,16 @@ cart variables, for example having both hide all and highlight features.)
   other tracks - 
   <a href="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&hideTracks=1&cytoBand=pack" 
   target="_blank">example link</a> to show only the Chromosome Bands track and nothing else</li>
+  <li>
+  <code>&lt;trackName&gt;_hideKids=1</code> - hides a specific super track's individual tracks - <a
+  href="../../cgi-bin/hgTracks?db=hg19&wgEncodeReg_hideKids=1&ignoreCookie=1" target="_blank">
+  example link</a> to hide the Encode Regulation super track</li>
+  <li>
+  <code>&lt;trackName&gt;_sel=1</code> - selects specific subtrack to be 'checked', allowing 
+  display - <a href="../../cgi-bin/hgTracks?db=hg38&refGene_sel=1" target="_blank">example 
+  link</a> to select the checkbox for UCSC refSeq in the refSeq composite track, allowing display
+  alongside default tracks
+  </li>
   <li>
   <code>hgt.reset=1</code> - show only the default tracks - 
   <a href="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&hgt.reset=1" 

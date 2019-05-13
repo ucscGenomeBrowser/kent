@@ -3245,6 +3245,8 @@ else if (sameString(tdb->type, "halSnake"))
     tdb->canPack = TRUE;
 else if (sameString(tdb->type, "bigPsl"))
     tdb->canPack = TRUE;
+else if (sameString(tdb->type, "bigLolly"))
+    tdb->canPack = TRUE;
 else if (sameString(tdb->type, "bigChain"))
     tdb->canPack = TRUE;
 

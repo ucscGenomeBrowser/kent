@@ -640,6 +640,9 @@ if (isNotEmpty(tableName))
     freeMem(sqlTable);
     sqlTable = cloneString(tableName);
     }
+boolean protectedData = FALSE;
+if (trackDbSetting(thisTrack, "tableBrowser"))
+    protectedData = TRUE;
 
 /* database existence has already been checked before now, might
  * have disappeared in the mean time
@@ -676,6 +679,8 @@ if (! hTableOrSplitExists(db, sqlTable))
     else
 	tableTrack = FALSE;
     }
+if (protectedData)
+	apiErrAbort(err403, err403Msg, "this data request: 'db=%s;track=%s' is protected data", db, track);
 
 struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "genome", db);

@@ -13,7 +13,7 @@
 <li><a href="#link1">Creating a sharable URL to view specific tracks</a></li>
 <li><a href="#link2">Linking to the Browser at a specific position</a></li>
 <li><a href="#trackViz">Setting track visibility via URL</a></li>
-<li><a href="#ctUrl">Loading Custom Tracks with the URL</a></li>
+<li><a href="#custUrl">Loading Custom Tracks with the URL</a></li>
 <li><a href="#hubUrl">Loading Track Hubs and Assembly Hubs with the URL</a></li>
 <li><a href="#link3">Linking to gene specific information</a></li>
 <li><a href="#hgsid">The hgsid parameter</a></li>
@@ -75,7 +75,7 @@ Where:</p>
 <p>
 You can control the visibility of tracks from the URL with the following parameters, 
 each linked by the "&amp;" sign, similar to position parameters. For more information, please see
-the <a href="../../goldenPath/help/customTrack.html#optParams" target ="_blank">optional URL 
+the <a href="../goldenPath/help/customTrack.html#optParams" target ="_blank">optional URL 
 parameters</a> section of the Custom Tracks User's Guide. Note that <em>italic text</em> indicates
 a user choice, not a working example.</p>
 <ul>
@@ -104,11 +104,11 @@ track's default subtracks (&amp;refSeqComposite_hideKids=1), turns on one specif
 (&amp;ncbiRefSeqCurated=full), and checks a box to display that subtrack 
 (&amp;ncbiRefSeqCurated_sel=1).
 
-<pre><a href="https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hideTracks=1&refSeqComposite_hideKids=1&ncbiRefSeqCurated=full&ncbiRefSeqCurated_sel=1">https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hideTracks=1&refSeqComposite_hideKids=1&ncbiRefSeqCurated=full&ncbiRefSeqCurated_sel=1</a></pre>
+<pre><a href="../cgi-bin/hgTracks?db=hg38&hideTracks=1&refSeqComposite_hideKids=1&ncbiRefSeqCurated=full&ncbiRefSeqCurated_sel=1">https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hideTracks=1&refSeqComposite_hideKids=1&ncbiRefSeqCurated=full&ncbiRefSeqCurated_sel=1</a></pre>
 
 
 <h2>Loading data with the URL</h2>
-<a name="ctUrl"></a>
+<a name="custUrl"></a>
 <h3>Loading Custom Track data with the URL</h3>
 <h6>How do I create a link to my custom track data?</h6>
 <p>
@@ -117,11 +117,11 @@ a track line you would otherwise put in the <a href="../cgi-bin/hgCustom">custom
 input box</a>. The following example shows the <code>hgct_customText</code> parameter accepting
 a bigBed file URL as a custom track:
 </p>
-<pre><a href="../cgi-bin/hgTracks?db=hg38&hgct_customText=https://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb">http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hgct_customText=https://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb</a></pre>
+<pre><a href="../cgi-bin/hgTracks?db=hg38&position=chr21:34821279-34888690&hgct_customText=https://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb">http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=chr21:34821279-34888690&hgct_customText=https://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb</a></pre>
 
 <p>
 If you want to add more information to the Custom Track, you can do so using the 
-<code>hgct_customText</code> parameter. Since this is a URL, you must use "%20" to encode 
+<code>hgct_customText</code> parameter. Since this is a URL, you must use "%20" to encode
 for spaces and "%0A" for a new line character. For example, the following example shows Custom
 Track input pasted in the <a href="../cgi-bin/hgCustom">custom track input box</a> and the 
 equivalent input in the URL:
@@ -158,11 +158,11 @@ your genomes.txt file in the line <code>genome araTha1</code>.</p>
 <pre><a href=../cgi-bin/hgTracks?genome=araTha1&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/hub.txt>https://genome.ucsc.edu/cgi-bin/hgTracks?genome=araTha1&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/hub.txt</a></pre>
 <p>
 To see the files behind that assembly hub, please visit the
-<a href="http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/">
+<a href="../goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/">
 hub's directory</a>. For more information on assembly hubs in general, please see the
 <a href="http://genomewiki.ucsc.edu/index.php/Assembly_Hubs" target ="_blank">assembly hub wiki</a>, the <a
-href="http://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html">track hub user guide</a>,
-or the <a href=http://genome.ucsc.edu/goldenPath/help/hubQuickStartAssembly.html>quick start guide
+href="../goldenPath/help/hgTrackHubHelp.html">track hub user guide</a>,
+or the <a href=../goldenPath/help/hubQuickStartAssembly.html>quick start guide
 to assembly hubs</a>.
 
 <a name="link3"></a>

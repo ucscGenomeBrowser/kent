@@ -230,7 +230,9 @@ if (jsonOutputArrays)
     dyStringAppend(extraDyFlags, ";jsonOutputArrays=1");
 char *extraFlags = dyStringCannibalize(&extraDyFlags);
 
-if (db)
+if (trackDbSetting(tdb, "tableBrowser"))
+    hPrintf("<li>%s : %s &lt;protected data&gt;</li>\n", tdb->track, tdb->type);
+else if (db)
     {
     if (hub)
 	{
@@ -299,7 +301,9 @@ if (chromCount > 0 || itemCount > 0)
         safef(countsMessage, sizeof(countsMessage), " : %ld chroms : %ld count ", chromCount, itemCount);
     }
 
-if (isSupportedType(tdb->type))
+if (trackDbSetting(tdb, "tableBrowser"))
+    hPrintf("    <li><b>%s</b>: %s protected data</li>\n", tdb->track, tdb->type);
+else if (isSupportedType(tdb->type))
     {
 	char urlReference[2048];
 	safef(urlReference, sizeof(urlReference), "<a href='%s/getData/track?hubUrl=%s;genome=%s;track=%s;maxItemsOutput=5%s' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, extraFlags, errorPrint);
@@ -532,13 +536,20 @@ static void trackSettings(struct trackDb *tdb, struct hash *countTracks)
 /* process the settingsHash for a trackDb, recursive when subtracks */
 {
 hPrintf("    <li><ul>\n");
+boolean protectedData = FALSE;
+if (trackDbSetting(tdb, "tableBrowser"))
+    protectedData = TRUE;
 struct hashEl *hel;
 struct hashCookie hc = hashFirst(tdb->settingsHash);
 while ((hel = hashNext(&hc)) != NULL)
     {
     if (sameWord("track", hel->name))
 	continue;	// already output in header
-    if (isEmpty((char *)hel->val))
+    if (sameWord("tableBrowser", hel->name))
+	hPrintf("    <li><b>protectedData</b>: 'true'</li>\n");
+    else if (protectedData && sameWord("bigDataUrl", hel->name))
+	hPrintf("    <li><b>bigDataUrl</b>: &lt;protected data&gt;</li>\n");
+    else if (isEmpty((char *)hel->val))
 	hPrintf("    <li><b>%s</b>: &lt;empty&gt;</li>\n", hel->name);
     else
 	hPrintf("    <li><b>%s</b>: '%s'</li>\n", hel->name, (char *)hel->val);
@@ -651,6 +662,9 @@ boolean compositeContainer = tdbIsComposite(tdb);
 boolean compositeView = tdbIsCompositeView(tdb);
 boolean superChild = tdbIsSuperTrackChild(tdb);
 boolean depthSearch = cartUsualBoolean(cart, "depthSearch", FALSE);
+boolean protectedData = FALSE;
+if (trackDbSetting(tdb, "tableBrowser"))
+    protectedData = TRUE;
 hashCountTrack(tdb, countTracks);
 
 if (compositeContainer)
@@ -665,7 +679,12 @@ else if (superChild)
 	hPrintf("    <li><b>%s</b>: %s : superTrack child of parent: %s</li>\n", tdb->track, tdb->type, tdb->parent->track);
     }
 else if (! depthSearch && bigDataUrl)
-    hPrintf("    <li><b>%s</b>: %s : %s</li>\n", tdb->track, tdb->type, bigDataUrl);
+    {
+    if (protectedData)
+	hPrintf("    <li><b>%s</b>: %s : &lt;protected data&gt;</li>\n", tdb->track, tdb->type);
+    else
+	hPrintf("    <li><b>%s</b>: %s : %s</li>\n", tdb->track, tdb->type, bigDataUrl);
+    }
 else
     {
     if (isSupportedType(tdb->type))
