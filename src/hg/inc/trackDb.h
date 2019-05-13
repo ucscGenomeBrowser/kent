@@ -428,6 +428,7 @@ typedef enum _eCfgType
     cfgBarChart =14,
     cfgInteract =15,
     cfgLollipop =16,
+    cfgHic      =17,
     cfgUndetermined // Not specifically denied, but not determinable in lib code
     } eCfgType;
 

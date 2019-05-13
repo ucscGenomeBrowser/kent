@@ -766,6 +766,8 @@ else if (sameWord("interact", type) || sameWord("bigInteract", type))
     cType = cfgInteract;
 else if (sameWord("bigLolly", type))
     cType = cfgLollipop;
+else if (sameWord("hic", type))
+    cType = cfgHic;
 // TODO: Only these are configurable so far
 
 if (cType == cfgNone && warnIfNecessary)

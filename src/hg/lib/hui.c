@@ -49,6 +49,7 @@
 #include "barChartUi.h"
 #include "interactUi.h"
 #include "interact.h"
+#include "hicUi.h"
 #include "customComposite.h"
 #include "trackVersion.h"
 #include "hubConnect.h"
@@ -4348,6 +4349,8 @@ switch(cType)
                         break;
     case cfgLollipop:   lollyCfgUi(db,cart,tdb,prefix,title,boxed);
 			scoreCfgUi(db, cart,tdb,prefix,title,1000,boxed);
+                        break;
+    case cfgHic:        hicCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;
     default:            warn("Track type is not known to multi-view composites. type is: %d ",
 			     cType);
