@@ -219,6 +219,7 @@ interTableKind encodeFiveC
 inputTracksSubgroupDisplay bed factorSource
 inputTrackTable bed factorSource
 inputTableFieldDisplay bed factorSource
+inputTableFieldUrls factorSource
 interactDirectional interact bigInteract
 interactUp interact bigInteract
 intronGap psl genePred bigPsl
