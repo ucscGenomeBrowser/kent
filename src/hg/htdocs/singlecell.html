@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<!--#set var="TITLE" value="GTEx Resources at UCSC" -->
+<!--#set var="ROOT" value="." -->
+
+<!--#include virtual="$ROOT/inc/gbPageStart.html"-->
+
+<link rel="stylesheet" href="<!--#echo var="ROOT" -->/style/hgGtexTrackSettings.css">
+
+<style>
+.gbsPage dl {
+    padding-left: 60px;
+}
+
+.gbsPage dt {
+    float: left;
+    clear: left;
+    width: 250px;
+    margin-top: 0;
+    padding: 0 0 0.5em 0;
+}
+.gbsPage dd {
+    margin: 0 0 0 200px;
+    padding: 0 0 0.5em 0;
+}
+
+.gbsPage dl dt {
+    position: relative;
+}
+
+.gbsPage dl dt::before {   /* square bullets, from hgGateway */
+    position: absolute;
+    top: 0.4em;
+    left: -1em;
+    width: 8px;
+    height: 8px;
+    background-color: #7e1f16;  /* dark red */
+    content: '';
+}
+
+.gbsPage dl.gbsNoBullet dt::before {
+    content: none;
+}
+
+</style>
+
+<h1>Single cell resources at UCSC</h1>
+<p>
+Single cell experiments measure thousands of gene loci in thousands of cells at
+the same time. It is challenging explore and share these high-dimensional data.
+The UCSC Genome Browser is adding published datasets as tracks and a new
+visualisation tool:
+</p>
+<p>
+<dl>
+<dt><a target="_blank" 
+    href="https://cells.ucsc.edu">
+            UCSC Cell Browser</a></dt>
+    <dd>Interactively color dimensionality reduction plots by cell annotation or genes</dd>
+<dt><a target="_blank" 
+    href="../cgi-bin/hgTrackUi?db=mm10&g=tabulaMuris">
+            Tabula Muris</a></dt>
+    <dd>A Genome Browser track showing single cell RNA-seq gene expression, genome coverage and splice sites</dd>
+</dl>
+
+<div class="row">
+    <div class="col-md-6">
+        <h2>UCSC Cell Browser</h2>
+        <p>With the <a target=_blank href="https://cells.ucsc.edu">Cell Browser</a>
+        you can plot cells arranged by algorithms like t-SNE or UMAP. Color
+        these by annotated meta data or genes via the left side bar.  Select
+        cells via the legend on the right or with the rectangle selection tool.
+        You can export the current cell selection or annotate it via the "Tools" menu.
+</p>
+        <p class="text-center">
+        <a target=_blank href="https://cells.ucsc.edu" alt="Screenshot of UCSC Cell Browser">
+            <img style="width:100%" src="<!--#echo var="ROOT" -->/images/cellbrowser.png">
+        </a>
+        </p>
+    </div>
+    <div class="col-md-6">
+        <h2>Single cell datasets in the UCSC Genome Browser</h2>
+        <p>
+Below is a screenshot of a  
+<a target="_blank" 
+href="http://genome.ucsc.edu/s/Max/tabMuris">public session</a>
+that highlights the Tabula Muris gene expression track
+The session shows the Sox10 locus. The gene expression track at the top shows that the
+gene is only well expressed in basal cells (orange), mammary gland (blue) and oligodendrocytes (pink).
+These cell type names are shown when you hover with the mouse over the bars on
+the genome browser. The coverage tracks below show that all exons are
+transcribed in these, but the last exon is also transcribed in stromal cells
+and some non-coding transcription is seen in goblet cells 3' of the gene. The
+splicing tracks below show that proper splicing is limited to the four cell types
+described above. This is also a non-coding region conserved in zebrafish and chicken.
+    <p class="text-center">
+    <a target="_blank" href="http://genome.ucsc.edu/s/Max/tabMuris" alt="genome browser session link">
+            <img src="../images/screenshot-tabMuris.png" style='width:100%'>
+    </a>
+    </p>
+    </div>
+</div>
+
+<!--#include virtual="$ROOT/inc/gbPageEnd.html"-->
+
+<script type='text/javascript' src='/js/hgGtexTrackSettings.js'></script>
+
+
