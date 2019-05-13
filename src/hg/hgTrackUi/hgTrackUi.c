@@ -3101,6 +3101,8 @@ if (!ajax)
     webIncludeResourceFile("jquery-ui.css");
     jsIncludeFile("jquery-ui.js", NULL);
     jsIncludeFile("utils.js",NULL);
+    webIncludeResourceFile("spectrum.min.css");
+    jsIncludeFile("spectrum.min.js",NULL);
     jsonObjectAddGlobal("track", newJsonString(tdb->track));
     jsonObjectAddGlobal("db", newJsonString(database));
     }

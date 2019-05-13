@@ -41,6 +41,8 @@
 #define err301Msg	"Moved Permanently"
 #define err400	400
 #define err400Msg	"Bad Request"
+#define err403	403
+#define err403Msg	"Forbidden"
 #define err404	404
 #define err404Msg	"Not Found"
 #define err429	429

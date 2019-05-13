@@ -48,6 +48,7 @@
 <li><a href="#download37">Known issues with Table Browser GTF output</a></li>
 <li><a href="#download38">Table Browser output file not ordered</a></li>
 <li><a href="#download39">'Permisssion denied' error when trying to use command-line utilities</a></li>
+<li><a href="#download40">Restricted Track Data</a></li>
 </ul>
 <hr>
 <p>
@@ -381,7 +382,7 @@ EST.</p>
 <p> 
 It may have been added after we last downloaded data from GenBank, or it may have been replaced or 
 removed. You can check the submission date and status of an accession on the 
-<a href="https://www.ncbi.nlm.nih.gov:80/entrez/" target="_blank">NCBI Entrez Nucleotide
+<a href="https://www.ncbi.nlm.nih.gov/nucleotide/" target="_blank">NCBI Entrez Nucleotide
 site</a>.</p>
 
 <a name="download9"></a>
@@ -557,7 +558,7 @@ chromosomes to more closely match their human counterparts. As a result, chromos
       </tr>
       <tr>
         <td>6</td><td>5</td><td>6</td>
-      </tr
+      </tr>
       <tr>
         <td>7</td><td>6</td><td>7</td>
       </tr>
@@ -623,7 +624,7 @@ you've just released a new version. Is there an easy way to locate my area of in
 assembly?</h6>
 <p>
 You can migrate data from one assembly to another by using the <a href="../cgi-bin/hgBlat">blat</a> 
-alignment tool or by converting assembly coordinates</a>. There are two conversion tools available 
+alignment tool or by converting assembly coordinates. There are two conversion tools available 
 on the Genome Browser web site: the Convert utility and the LiftOver tool. The Convert utility, 
 which is accessed from the menu on the Genome Browser annotation tracks page, supports forward, 
 reverse, and cross-species conversions, but does not accept batch input. The 
@@ -869,7 +870,7 @@ to acquire data.
 
 <a name="download37"></a>
 <h2>Obtaining GTF (Gene Transfer Format)</h2>
-<h6>What is the best method for obtaining GTF output?</h5>
+<h6>What is the best method for obtaining GTF output?</h6>
 <p>
 Currently, the <a href="../cgi-bin/hgTables">Table Browser</a> does not have an option return data as
 <a href="../FAQ/FAQformat.html#format4">GTF</a> files. Currently, the best method to obtain 
@@ -929,6 +930,15 @@ Example:
        <pre><code>$ chmod +x /home/user/liftover/liftOver</code></pre>
         See also: <a href="http://en.wikipedia.org/wiki/Chmod" target="_blank">http://en.wikipedia.org/wiki/Chmod</a>
 
+</p>
+
+<a name="download40"></a>
+<h2>Restricted Track Data</h2>
+<h6>Why can I not download some data in the Table Browser or find the download files?</h6>
+<p>
+Some data is provided by external groups and is not available for download or mirroring
+by any third party without the permission of the owners, such as the OMIM track data, which
+is the property of Johns Hopkins University.
 </p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
