@@ -12,7 +12,7 @@
 "        </div>\n"
 "      </li>\n"
 "      <li class=\"dropdown\">\n"
-"        <li><a  class=\"dropdown-toggle nav-link white-link\" data-toggle=\"dropdown\" href=\"#\" href=\"#\">Analysis<span class=\"caret\"></span></a>\n"
+"        <a  class=\"dropdown-toggle nav-link white-link\" data-toggle=\"dropdown\" href=\"#\" href=\"#\">Analysis<span class=\"caret\"></span></a>\n"
 "        <div class=\"dropdown-menu\">\n"
 "          <a class=\"dropdown-item white-link\" href=\"../cgi-bin/cdwWebBrowse?cdwCommand=analysisQuery\">Query</a>\n"
 "          <a class=\"dropdown-item white-link\" href=\"../cgi-bin/cdwWebBrowse?cdwCommand=analysisJointPages\">Joint Data Sets</a>\n"

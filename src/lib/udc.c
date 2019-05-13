@@ -2003,7 +2003,7 @@ if (udcIsLocal(url))
     return fileSize(url);
 
 // don't go to the network if we can avoid it
-int cacheSize = udcSizeFromCache(url, NULL);
+off_t cacheSize = udcSizeFromCache(url, NULL);
 if (cacheSize!=-1)
     return cacheSize;
 

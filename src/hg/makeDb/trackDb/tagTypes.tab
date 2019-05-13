@@ -42,7 +42,7 @@ baseQualRange bam
 bedFilter bed
 bedNameLabel bed barChart bigBarChart bigBed
 bedPackDense bed bigBed
-bigDataUrl customTracks bigBed bigWig bam vcfTabix bigPsl halSnake bigBarChart gtexTranscExpr bigInteract bigChain bigGenePred bigLolly bigNarrowPeak
+bigDataUrl customTracks bigBed bigWig bam vcfTabix bigPsl halSnake bigBarChart gtexTranscExpr bigInteract bigChain bigGenePred bigLolly bigNarrowPeak hic
 bigGeneDataUrl genePred
 blastRef psl bigPsl
 boxedCfg *
@@ -219,6 +219,7 @@ interTableKind encodeFiveC
 inputTracksSubgroupDisplay bed factorSource
 inputTrackTable bed factorSource
 inputTableFieldDisplay bed factorSource
+inputTableFieldUrls factorSource
 interactDirectional interact bigInteract
 interactUp interact bigInteract
 intronGap psl genePred bigPsl

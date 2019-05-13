@@ -355,16 +355,23 @@ if (! (trackLeavesOnly && isContainer) )
         jsonWriteString(jw, "parent", tdb->parent->track);
     if (tdb->settingsHash)
         {
+	boolean protectedData = FALSE;
+	if (trackDbSetting(tdb, "tableBrowser"))
+	    protectedData = TRUE;
         struct hashEl *hel;
         struct hashCookie hc = hashFirst(tdb->settingsHash);
         while ((hel = hashNext(&hc)) != NULL)
             {
             if (sameWord("track", hel->name))
-                continue;	// already output in header
-            if (isEmpty((char *)hel->val))
-                jsonWriteString(jw, hel->name, "empty");
-            else
-                jsonWriteString(jw, hel->name, (char *)hel->val);
+		continue;	// already output in header
+            if (sameWord("tableBrowser", hel->name))
+		jsonWriteBoolean(jw, "protectedData", TRUE);
+            else if (isEmpty((char *)hel->val))
+		jsonWriteString(jw, hel->name, "empty");
+            else if (protectedData && sameWord(hel->name, "bigDataUrl"))
+		jsonWriteString(jw, hel->name, "protectedData");
+	    else
+		jsonWriteString(jw, hel->name, (char *)hel->val);
             }
         }
 

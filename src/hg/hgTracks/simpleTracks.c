@@ -14111,6 +14111,10 @@ else if (sameWord(type, "bam"))
     if (trackShouldUseAjaxRetrieval(track))
         track->loadItems = dontLoadItems;
     }
+else if (sameWord(type, "hic"))
+    {
+    hicMethods(track);
+    }
 #ifdef USE_HAL
 else if (sameWord(type, "pslSnake"))
     {

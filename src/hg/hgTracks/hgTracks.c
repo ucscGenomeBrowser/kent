@@ -6974,7 +6974,7 @@ for (track = trackList; track != NULL; track = track->next)
         s = cartOptionalString(cart, buffer);
         if (s == NULL && startsWith("hub_", track->track))
             s = cartOptionalString(cart, usedThis = trackHubSkipHubName(buffer));
-        if ((s != NULL) && (sameString(s, "0")))
+        if (s != NULL)
             hideKids = TRUE;
         cartRemove(cart, usedThis);   // we don't want these _hideKids variables in the cart
 

@@ -48,7 +48,7 @@ struct facetField *ffList = facetFieldsFromSqlTableInit(fields, fieldCount, sele
 char **row;
 int i = 0;
 int id = 0;
-char *nullVal = "n/a"; // TODO what do we want here? 
+char *nullVal = "n/a"; 
 /* Scan through result saving it in list. */
 while ((row = sqlNextRow(sr)) != NULL)
     {
