@@ -3,14 +3,14 @@
     # This is ENCODE 3 version of TFBS Clusters track, with normalization
     # This will be released track
     track encRegTfbsClustered
-    shortLabel Txn Factr ChIP E3
+    shortLabel TF Clusters
     longLabel Transcription Factor ChIP-seq Clusters (340 factors, 129 cell types) from ENCODE 3
     type factorSource
     superTrack wgEncodeReg dense
     sourceTable encRegTfbsClusteredSources
     inputTrackTable encRegTfbsClusteredInputs
-    inputTableFieldDisplay cellType factor treatment lab
-    inputTableFieldUrls treatment="https://www.encodeproject.org/experiments/$$"
+    inputTableFieldDisplay cellType factor experiment lab
+    inputTableFieldUrls experiment="https://www.encodeproject.org/experiments/$$"
     urlLabel Factorbook Link:
     url http://www.factorbook.org/mediawiki/index.php/$$
     idInUrlSql select value from factorbookGeneAlias where name='%s'
@@ -367,7 +367,7 @@
 track encTfChipPk
 compositeTrack on
 group regulation
-shortLabel TF ChIP Peaks E3
+shortLabel TF ChIP
 longLabel Transcription Factor ChIP-seq Peaks (340 factors in 129 cell types) from ENCODE 3
 dragAndDrop subTracks 
 dimensions dimX=cellType dimY=factor
