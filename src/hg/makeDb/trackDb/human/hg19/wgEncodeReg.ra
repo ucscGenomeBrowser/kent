@@ -7,6 +7,7 @@ longLabel Integrated Regulation from ENCODE
 wgEncode 1
 group regulation
 priority 1
+pennantIcon Updated red ../goldenPath/newsarch.html Added Transcription Factor ChIP-seq Clusters from ENCODE 3
 canPack On
 
     track wgEncodeRegTxn
@@ -25,6 +26,7 @@ canPack On
     priority 1.1
     dragAndDrop subTracks
     allButtonPair on
+    pennantIcon none
 
 	track wgEncodeRegTxnCaltechRnaSeqGm12878R2x75Il200SigPooled
 	shortLabel GM12878
@@ -100,6 +102,7 @@ canPack On
 	color 255,128,212
 
     track wgEncodeRegMarkH3k4me1
+    pennantIcon none
     container multiWig
     noInherit on
     type bigWig 0 10000
@@ -172,6 +175,7 @@ canPack On
 	type bigWig 0 6866
 
     track wgEncodeRegMarkH3k4me3
+    pennantIcon none
     container multiWig
     noInherit on
     type bigWig 0 10000
@@ -244,6 +248,7 @@ canPack On
 	type bigWig 0 19229
 
     track wgEncodeRegMarkH3k27ac
+    pennantIcon none
     container multiWig
     noInherit on
     type bigWig 0 10000
@@ -317,6 +322,7 @@ canPack On
 
     # This is first version of the DNase clusters track
     track wgEncodeRegDnaseClusteredV1
+    pennantIcon none
     table wgEncodeRegDnaseClustered
     release alpha
     shortLabel DNase Clusters V1
@@ -336,6 +342,7 @@ canPack On
     # This is second version of the DNase clusters track -- newer data, missing single-cell
     #   clusters (a mistake, fixed in V3)
     track wgEncodeRegDnaseClusteredV2
+    pennantIcon none
     release alpha
     shortLabel DNase Clusters V2
     longLabel Digital DNaseI Hypersensitivity Clusters in 125 cell types from ENCODE (V2)
@@ -367,6 +374,7 @@ canPack On
     scoreFilterLimits 100:1000
     html wgEncodeRegDnaseClusteredV3
     priority 1.6
+    pennantIcon none
     #nameFilter 1:125
     #nameFilterLimits 1:125
     #nameFilterByRange on
@@ -386,10 +394,12 @@ canPack On
     priority 1.73
     html wgEncodeRegTfbsClustered.release2
     dataVersion ENCODE Jan 2011 Freeze
+    pennantIcon none
 
     # This is current TFBS track with TF Motif feature
     track wgEncodeRegTfbsClusteredV3
     shortLabel Txn Factor ChIP
+    pennantIcon none
     longLabel Transcription Factor ChIP-seq (161 factors) from ENCODE with Factorbook Motifs
     type factorSource
     superTrack wgEncodeReg dense
@@ -602,6 +612,7 @@ canPack On
     #color 0,128,0
     color 22,182,33
     priority 1.8
+    pennantIcon none
 
     # track wgEncodeRegTfbsClusteredMotifs_larry
     # release alpha

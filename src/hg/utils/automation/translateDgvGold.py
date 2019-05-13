@@ -39,6 +39,8 @@ def parseExtraInfo(extraInfoList, doHeader=False):
     info.remove(innerEnd)
     info.remove(outerEnd)
     extraString = "\t".join(info)
+    extraString = extraString.replace(",", ", ")
+    extraString = extraString.replace(":", ", ")
 
     if doHeader:
         global header

@@ -1443,8 +1443,8 @@ boolean vocabSettingIsEncode(char *setting);
     (table-based vocabs)
 */
 
-boolean isEncode2(char *database);
-// Return true for ENCODE2 assemblies
+boolean isEncode2(char *database, char *track);
+/* Return true for tracks created by UCSC DCC during ENCODE production phase */
 
 char *replaceInUrl(char *url, char *idInUrl, struct cart *cart, char *db, char *seqName, 
                         int winStart, int winEnd, char *track, boolean encode, struct slPair *fields) ;

@@ -472,7 +472,10 @@ if (base == NULL)
 
 char buffer[4096];
 
-safef(buffer, sizeof(buffer), "%s_%s", hubName, base);
+if (isNotEmpty(hubName))
+    safef(buffer, sizeof(buffer), "%s_%s", hubName, base);
+else
+    safef(buffer, sizeof(buffer), "%s", base);
 
 return cloneString(buffer);
 }

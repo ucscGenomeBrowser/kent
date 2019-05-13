@@ -25,6 +25,7 @@ type bed 3
 wgEncode 1
 html wgEncodeOpenChromChip.release2
 dataVersion ENCODE July 2011 Freeze
+pennantIcon none
 
     track wgEncodeOpenChromChipViewPeaks
     shortLabel Peaks

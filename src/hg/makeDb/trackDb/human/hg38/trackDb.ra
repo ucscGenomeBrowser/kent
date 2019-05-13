@@ -154,8 +154,6 @@ pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 track interactions override
 directUrl hgGeneGraph?db=hg38&gene=%s
 
-include trackDb.wgEncode.ra
-
 track par override
 group x
 visibility hide
@@ -703,4 +701,6 @@ group varRep
 track gtexTranscExpr override
 bigDataUrl /gbdb/hg38/gtex/gtexTranscExpr.bb
 
-include encode3.ra alpha
+include trackDb.gencode.ra
+include trackDb.wgEncode.ra
+

@@ -1358,13 +1358,21 @@ function multiWigSetupOnChange(track) {
     }
 }
 
-function advancedSearchOnChange(track) {
-        // turn on or off "advanced" controls in filters
-        $(document.getElementsByName(track)[0]).change(function() {
+// toggle the visibility of advanced controls in the filters
+function advancedSearchOnChange(controlName) {
+        $(document.getElementById(controlName)).click(function() {
+            // get the list of advanced controls 
             advancedControls = document.getElementsByClassName('advanced'); 
-            var newStyle = 'display:none'; 
-            if(this.checked) 
+
+            var newStyle; 
+            if ($(advancedControls).css('display') === 'none') {
                 newStyle='display:visible';
+                $(this).find('img').attr('src','../images/upBlue.png');
+            } else {
+                newStyle = 'display:none'; 
+                $(this).find('img').attr('src','../images/downBlue.png');
+            }
+
             for (var control in advancedControls ) 
                 advancedControls[control].style = newStyle;
             }

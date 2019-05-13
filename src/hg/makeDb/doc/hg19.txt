@@ -33449,7 +33449,7 @@ table dgvGold
 EOF
 
     CHROMSIZES=/hive/data/genomes/hg19/chrom.sizes
-    bedToBigBed -type=bed12+17 -as=dgvGold.as -tab dgvGold.bed12 $CHROMSIZES dgvGold.bb
+    bedToBigBed -type=bed12+17 -as=dgvGold.as -tab -extraIndex=name dgvGold.bed12 $CHROMSIZES dgvGold.bb
     bigBedInfo dgvGold.bb
     # version: 4
     # fieldCount: 29

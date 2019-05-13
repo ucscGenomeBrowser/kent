@@ -386,7 +386,7 @@ else /* Do everything that requires full parsing. */
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-pushCarefulMemHandler(200000000);
+pushCarefulMemHandler(400000000);
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
