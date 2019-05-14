@@ -387,9 +387,19 @@ else
 	struct sqlConnection *conn = hAllocConnMaybe(db);
 	if (conn)
 	    {
-	    char query[2048];
+	    /* punting on split tables, return zero */
+	    struct hTableInfo *hti =
+		hFindTableInfoWithConn(conn, NULL, tableName);
+	    if (hti && hti->isSplit)
+		{
+		itemCount = 0;
+		}
+	    else
+		{
+		char query[2048];
 	   sqlSafef(query, sizeof(query), "select count(*) from %s", tableName);
-	    itemCount = sqlQuickNum(conn, query);
+		itemCount = sqlQuickNum(conn, query);
+		}
 	    hFreeConn(&conn);
 	    }
 	}
