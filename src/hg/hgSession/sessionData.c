@@ -477,7 +477,10 @@ if (isNotEmpty(sessionDataDbPrefix) || isNotEmpty(sessionDir))
             char *newVal = cloneString(var->val);
             saveTrashPaths(&newVal, sessionDir, FALSE);
             saveTrashPaths(&newVal, sessionDir, TRUE);
-            if (newVal != var->val && differentString(newVal, var->val))
+            // Special case for lost hgPcr result trash files: prevent errAbort in hgTracks
+            if (startsWith("hgPcrResult_", var->name) && sameString(newVal, " "))
+                cartRemove(cart, var->name);
+            else if (newVal != var->val && differentString(newVal, var->val))
                 cartSetString(cart, var->name, newVal);
             freeMem(newVal);
             }
