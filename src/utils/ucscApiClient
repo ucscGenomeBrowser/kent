@@ -24,7 +24,7 @@ serverName = "https://api.genome.ucsc.edu"
 def parseCommandLine():
     parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
         description="Command line utility for UCSC Genome Browser API access",
-        epilog="Example usage:\npythonClient.py \"/getData/track\" "
+        epilog="Example usage:\nucscApiClient \"/getData/track\" "
         "\"track=gold;genome=hg38;chrom=chrM;maxItemsOutput=2\"")
     parser.add_argument("endpoint", nargs='?', default="",
         help="Endpoint string like \"/list/tracks\" or \"/getData/track/\"", type=str)
