@@ -10,7 +10,7 @@
 /*	lollyCartOptions structure */
 struct lollyCartOptions
     {
-    int height;
+    int origHeight, height;
     double upperLimit, lowerLimit;
     double minY, maxY;
     enum wiggleScaleOptEnum autoScale;
