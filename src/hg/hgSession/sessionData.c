@@ -355,7 +355,7 @@ static char *saveTrackFile(struct cart *cart, char *varName, char *oldFile,
 char *newFile = NULL;
 if (fileExists(oldFile))
     {
-    if (isTrashPath(oldFile) && !maybeReadlink(oldFile))
+    if (isTrashPath(oldFile))
         {
         struct lineFile *lf = lineFileOpen(oldFile, TRUE);
         if (isNotEmpty(sessionDir))
