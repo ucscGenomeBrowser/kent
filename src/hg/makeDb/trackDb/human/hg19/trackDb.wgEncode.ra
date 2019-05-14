@@ -1,5 +1,6 @@
 # Genome-wide ENCODE tracks
-include wgEncodeSuper.release2.ra 
+include wgEncodeSuper.release2.new.ra alpha
+include wgEncodeSuper.release2.ra beta,public
 
 # GENCODE genes tracks
 include trackDb.gencode.ra
@@ -11,8 +12,9 @@ include wgEncodeUncBsuProt.release2.ra
 include wgEncodeUncBsuProtGenc.ra
 
 # Integrated Regulation (wrangler: kate)
-# NOTE: the supertrack versioning is being retired
-include wgEncodeReg.ra
+include wgEncodeReg.ra beta,public
+include wgEncodeReg.new.ra alpha
+include wgEncodeReg.dev.ra alpha
 
 # UW Repli-Seq track (wrangler: venkat)
 include wgEncodeUwRepliSeq.ra
@@ -41,7 +43,6 @@ include wgEncodeBuOrchid.ra
 # Affy Rna Chip (wrangler: cricket)
 include wgEncodeAffyRnaChip.ra
 
-
 # Chromatin Interactions ------
 
 # GIS ChIA-pet (wrangler: braney)
@@ -52,7 +53,6 @@ include wgEncodeUmassDekker5C.release2.ra
 
 # UW 5C (wrangler: Venkat and Kate)
 include wgEncodeUw5C.ra 
-
 
 # Encode Affy Exon --------------------------------------------
 
@@ -80,9 +80,6 @@ include wgEncodeUwDgf.release4.ra
 
 ###End Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
 
-
-
-
 # ENCODE RNA SEQ -----------------------------------
 
 # Riken CAGE (wrangler: cricket)
@@ -107,9 +104,6 @@ include wgEncodeSydhRnaSeq.ra
 #HAIB RNA-seq (wrangler: Cricket)
 include wgEncodeHaibRnaSeq.ra 
 
-
-
-
 # ENCODE DNA Methyl ---------------------------------------
 
 #HAIB Methyl-Seq (wrangler: Vankat) most likely never leaving alpha
@@ -122,11 +116,6 @@ include wgEncodeHaibMethyl450.ra
 include wgEncodeHaibMethylRrbs.release3.ra
 #HAIB Bisulfite test track
 #include wgEncodeHaibMethylWgbs.ra alpha
-
-
-
-
-
 
 # ENCODE HISTONE --------------------------------------
 

@@ -379,6 +379,11 @@ hgsql hg19 < rename.sql
 hgLoadSqlTab hg19 encode3RegTfbsClusterInput \
         ~/kent/src/hg/lib/clusterInputTrackTable5.sql clusters.inputs.tab
 
+# rename field in cluster input table
+# NOTE syntax change in MariaDb (now requires type)
+hgsql -e hg19 "alter table encRegTfbsClusteredInputs change treatment experiment varchar(255)"
+
+
 ###############
 # hg38
 
@@ -419,6 +424,10 @@ hgsql hg38 < rename.sql
 #  reload cluster input table
 hgLoadSqlTab hg38 encode3RegTfbsClusterInput \
         ~/kent/src/hg/lib/clusterInputTrackTable5.sql clusters.inputs.tab
+
+# rename field in cluster input table
+# NOTE syntax change in MariaDb (now requires type)
+hgsql -e hg19 "alter table encRegTfbsClusteredInputs change treatment experiment varchar(255)"
 
 ####################
 # Motifs (hg38) from Henry Pratt at Zlab

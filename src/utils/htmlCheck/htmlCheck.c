@@ -251,7 +251,7 @@ for (link = linkList; link != NULL; link = link->next)
 		    struct hash *headerHash = newHash(8);
 		    int status = netUrlHeadExt(url, "GET", headerHash);
 		    hashAdd(uniqHash, url, NULL);
-		    if (status != 200 && status != 302 && status != 301)
+		    if (status != 200 && status != 303 && status != 302 && status != 301)
 			warn("%d from %s", status, url);
 		    else
 			{
