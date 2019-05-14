@@ -1,7 +1,7 @@
-include wgEncodeReg.ra beta,public
-
 include wgEncodeReg.new.ra alpha
 include wgEncodeReg.dev.ra alpha
 include encode3.ra alpha
+
+include wgEncodeReg.ra beta,public
 
 

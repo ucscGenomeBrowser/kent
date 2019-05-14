@@ -68,7 +68,7 @@ struct membuf : std::streambuf
 };
 
 // version number
-int version;
+static int version;
 
 // map of block numbers to pointers
 map <int, indexEntry> blockMap;

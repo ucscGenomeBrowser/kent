@@ -9,7 +9,8 @@
     superTrack wgEncodeReg dense
     sourceTable encRegTfbsClusteredSources
     inputTrackTable encRegTfbsClusteredInputs
-    inputTableFieldDisplay cellType factor antibody treatment lab
+    inputTableFieldDisplay cellType factor experiment lab
+    inputTableFieldUrls experiment="https://www.encodeproject.org/experiments/$$"
     urlLabel Factorbook Link:
     url http://www.factorbook.org/mediawiki/index.php/$$
     idInUrlSql select value from factorbookGeneAlias where name='%s'
