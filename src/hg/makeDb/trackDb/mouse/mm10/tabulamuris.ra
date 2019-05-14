@@ -574,7 +574,7 @@ autoScale off
         visibility dense
 
         track largeIntestineGobletCellCov
-        shortLabel globet cell Cv
+        shortLabel goblet cell Cv
         metadata cell_ontology=large_intestine_goblet_cell
         longLabel large intestine goblet cell Coverage (833 cells)
         type bigWig
