@@ -375,6 +375,30 @@ sed -e 's/encode3TfbsPk/encTfChipPk/' tables.old.txt | paste rename.1.sql -  | \
     sed 's/$/;/' > rename.sql
 hgsql hg19 < rename.sql
 
+# add colors to tier1-3 cell experiments (using ENCODE 2 color conventions)
+#
+# GM12878           color 153,38,0
+# H1-hESC           color 0,107,27
+# K562              color 46,0,184
+# HeLa-S3           color 0,119,158
+# HepG2             color 189,0,157
+# HUVEC             color 224,75,0
+
+raToLines encode3.ra encode3.lines
+sed -e '/GM12878/s/$/| color 153,38,0/' \
+    -e '/H1-hESC/s/$/| color 0,107,27/' \
+    -e '/K562/s/$/| color 46,0,184/' \
+    -e '/HeLa-S3/s/$/| color 0,119,158/' \
+    -e '/HepG2/s/$/| color 189,0,157/' \
+    -e '/HUVEC/s/$/| color 224,75,0/' \
+        encode3.lines > encode3.color.lines
+
+# buf size exceeded on linesToRa, so prune down to just composite subtracks
+
+linesToRa encode3.color.lines encode3.color.ra
+
+# concatenate to orig ra file
+
 #  reload cluster input table
 hgLoadSqlTab hg19 encode3RegTfbsClusterInput \
         ~/kent/src/hg/lib/clusterInputTrackTable5.sql clusters.inputs.tab
@@ -420,6 +444,22 @@ sed -e 's/^/alter table /' -e 's/$/ rename to /' tables.old.txt > rename.1.sql
 sed -e 's/encode3TfbsPk/encTfChipPk/' tables.old.txt | paste rename.1.sql -  | \       
     sed 's/$/;/' > rename.sql
 hgsql hg38 < rename.sql
+
+# add colors, using DNase similarity track 
+raToLines encode3.ra encode3.lines
+
+# edit to leave only subtracks
+# generate edit script from DNase similarity .ra file
+
+cd ~/kent/src/hg/makeDb/trackDb/human/hg38
+csh addColors.csh encode3.lines > encode3.color.lines
+linesToRa encode3.color.lines encode3.color.ra
+
+# missed a few (punctuation diffs, etc.)
+csh addColors2.csh encode3.color.lines encode3.color2.lines
+linesToRa encode3.color2.lines encode3.color.ra
+
+# merge in to encode3.ra
 
 #  reload cluster input table
 hgLoadSqlTab hg38 encode3RegTfbsClusterInput \
