@@ -241,7 +241,7 @@ char c;
 dyStringAppendC(dy, quotChar);
 while ((c = *text++) != 0)
     {
-    if (c == quotChar)
+    if (c == quotChar || c == '\\')
         dyStringAppendC(dy, '\\');
     dyStringAppendC(dy, c);
     }
