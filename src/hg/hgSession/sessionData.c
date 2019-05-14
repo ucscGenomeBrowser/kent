@@ -200,17 +200,37 @@ struct dyString *dy = dyStringCreate("%s%s.%s", sessionDataDbPrefix, dbSuffix, t
 return dyStringCannibalize(&dy);
 }
 
+static char *findTableInSessionDataDbs(struct sqlConnection *conn, char *sessionDataDbPrefix,
+                                       char *tableName)
+/* Given a tableName (no db. prefix), if it exists in any of the sessionDataPrefix* dbs
+ * then return the full db.tableName, otherwise NULL. */
+{
+int day;
+for (day = 1;  day <= 31;  day++)
+    {
+    char dbDotTable[strlen(sessionDataDbPrefix) + 3 + strlen(tableName) + 1];
+    safef(dbDotTable, sizeof dbDotTable, "%s%02d.%s", sessionDataDbPrefix, day, tableName);
+    if (sqlTableExists(conn, dbDotTable))
+        return cloneString(dbDotTable);
+    }
+return NULL;
+}
+
 static char *saveTrashTable(char *tableName, char *sessionDataDbPrefix, char *dbSuffix)
 /* Move trash tableName out of customTrash to a sessionDataDbPrefix database, unless that
- * has been done already.  Return the new database.table name. */
+ * has been done already.  If table does not exist in either customTrash or customData*,
+ * then return NULL; otherwise return the new database.table name. */
 {
 char *newDbTableName = sessionDataDbTableName(tableName, sessionDataDbPrefix, dbSuffix);
 struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
 if (! sqlTableExists(conn, newDbTableName))
     {
     if (! sqlTableExists(conn, tableName))
-        errAbort("saveTrashTable: neither "CUSTOM_TRASH".%s nor %s exist",
-                 tableName, newDbTableName);
+        {
+        // It's possible that this table was already saved and moved out of customTrash as part
+        // of some other saved session.  We don't have a way of leaving a symlink in customTrash.
+        return findTableInSessionDataDbs(conn, sessionDataDbPrefix, tableName);
+        }
     struct dyString *dy = sqlDyStringCreate("rename table %s to %s", tableName, newDbTableName);
     sqlUpdate(conn, dy->string);
     dyStringFree(&dy);
@@ -304,11 +324,14 @@ if (sessionDataDbPrefix)
         if (!startsWith(sessionDataDbPrefix, tableName))
             {
             char *newDbTableName = saveTrashTable(tableName, sessionDataDbPrefix, dbSuffix);
-            updateSessionDataTablePaths(newDbTableName, sessionDir);
-            char *newString = replaceChars(*retString, tableName, newDbTableName);
-            freez(retString);
-            *retString = newString;
-            freeMem(newDbTableName);
+            if (newDbTableName)
+                {
+                updateSessionDataTablePaths(newDbTableName, sessionDir);
+                char *newString = replaceChars(*retString, tableName, newDbTableName);
+                freez(retString);
+                *retString = newString;
+                freeMem(newDbTableName);
+                }
             }
         freeMem(tableName);
         }
