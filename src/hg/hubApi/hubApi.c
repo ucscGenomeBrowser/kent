@@ -21,6 +21,7 @@
 
 static int maxItemLimit = 1000000;   /* maximum of 1,000,000 items returned */
 int maxItemsOutput = 1000000;   /* can be set in URL maxItemsOutput=N */
+boolean reachedMaxItems = FALSE;	/* during getData, signal to return */
 /* for debugging purpose, current bot delay value */
 int botDelay = 0;
 boolean debug = FALSE;	/* can be set in URL debug=1, to turn off: debug=0 */
@@ -34,6 +35,7 @@ boolean trackLeavesOnly = FALSE;  /* set by CGI parameter 'trackLeavesOnly' */
 boolean jsonOutputArrays = FALSE; /* set by CGI parameter 'jsonOutputArrays' */
 
 boolean measureTiming = FALSE;	/* set by CGI parameters */
+
 
 /* Global only to this one source file */
 static struct cart *cart;             /* CGI and other variables */
