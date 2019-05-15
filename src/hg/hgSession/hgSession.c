@@ -757,6 +757,67 @@ else
 }
 
 #define INITIAL_USE_COUNT 0
+static int saveCartAsSession(struct sqlConnection *conn, char *encUserName, char *encSessionName,
+                             boolean shareSession)
+/* Save all settings in cart, either adding a new session or overwriting an existing session.
+ * Return useCount so that the caller can distinguish between adding and overWriting. */
+{
+struct sqlResult *sr = NULL;
+struct dyString *dy = dyStringNew(16 * 1024);
+char **row;
+char *firstUse = "now()";
+int useCount = INITIAL_USE_COUNT;
+char firstUseBuf[32];
+
+/* If this session already existed, preserve its firstUse and useCount. */
+sqlDyStringPrintf(dy, "SELECT firstUse, useCount FROM %s "
+                  "WHERE userName = '%s' AND sessionName = '%s';",
+                  namedSessionTable, encUserName, encSessionName);
+sr = sqlGetResult(conn, dy->string);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    safef(firstUseBuf, sizeof(firstUseBuf), "'%s'", row[0]);
+    firstUse = firstUseBuf;
+    useCount = atoi(row[1]) + 1;
+    }
+sqlFreeResult(&sr);
+
+/* Remove pre-existing session (if any) before updating. */
+dyStringClear(dy);
+sqlDyStringPrintf(dy, "DELETE FROM %s WHERE userName = '%s' AND "
+                  "sessionName = '%s';",
+                  namedSessionTable, encUserName, encSessionName);
+sqlUpdate(conn, dy->string);
+
+saveSessionData(cart, encUserName, encSessionName,
+                cgiOptionalString(hgsSessionDataDbSuffix));
+
+dyStringClear(dy);
+sqlDyStringPrintf(dy, "INSERT INTO %s ", namedSessionTable);
+dyStringAppend(dy, "(userName, sessionName, contents, shared, "
+               "firstUse, lastUse, useCount, settings) VALUES (");
+dyStringPrintf(dy, "'%s', '%s', ", encUserName, encSessionName);
+dyStringAppend(dy, "'");
+cleanHgSessionFromCart(cart);
+struct dyString *encoded = newDyString(4096);
+cartEncodeState(cart, encoded);
+
+// Now add all the default visibilities to output.
+outDefaultTracks(cart, encoded);
+
+sqlDyAppendEscaped(dy, encoded->string);
+dyStringFree(&encoded);
+dyStringAppend(dy, "', ");
+dyStringPrintf(dy, "%d, ", (shareSession ? 1 : 0));
+dyStringPrintf(dy, "%s, now(), %d, '');", firstUse, useCount);
+sqlUpdate(conn, dy->string);
+dyStringFree(&dy);
+
+/* Prevent modification of custom track collections just saved to namedSessionDb: */
+cartCopyCustomComposites(cart);
+return useCount;
+}
+
 char *doNewSession(char *userName)
 /* Save current settings in a new named session.
  * Return a message confirming what we did. */
@@ -772,60 +833,7 @@ struct sqlConnection *conn = hConnectCentral();
 
 if (sqlTableExists(conn, namedSessionTable))
     {
-    struct sqlResult *sr = NULL;
-    struct dyString *dy = dyStringNew(16 * 1024);
-    char **row;
-    char *firstUse = "now()";
-    int useCount = INITIAL_USE_COUNT;
-    char firstUseBuf[32];
-
-    /* If this session already existed, preserve its firstUse and useCount. */
-    sqlDyStringPrintf(dy, "SELECT firstUse, useCount FROM %s "
-		       "WHERE userName = '%s' AND sessionName = '%s';",
-		   namedSessionTable, encUserName, encSessionName);
-    sr = sqlGetResult(conn, dy->string);
-    if ((row = sqlNextRow(sr)) != NULL)
-	{
-	safef(firstUseBuf, sizeof(firstUseBuf), "'%s'", row[0]);
-	firstUse = firstUseBuf;
-	useCount = atoi(row[1]) + 1;
-	}
-    sqlFreeResult(&sr);
-
-    /* Remove pre-existing session (if any) before updating. */
-    dyStringClear(dy);
-    sqlDyStringPrintf(dy, "DELETE FROM %s WHERE userName = '%s' AND "
-		       "sessionName = '%s';",
-		   namedSessionTable, encUserName, encSessionName);
-    sqlUpdate(conn, dy->string);
-
-    saveSessionData(cart, encUserName, encSessionName,
-                    cgiOptionalString(hgsSessionDataDbSuffix));
-
-    dyStringClear(dy);
-    sqlDyStringPrintf(dy, "INSERT INTO %s ", namedSessionTable);
-    dyStringAppend(dy, "(userName, sessionName, contents, shared, "
-		       "firstUse, lastUse, useCount, settings) VALUES (");
-    dyStringPrintf(dy, "'%s', '%s', ", encUserName, encSessionName);
-    dyStringAppend(dy, "'");
-    cleanHgSessionFromCart(cart);
-    struct dyString *encoded = newDyString(4096);
-    cartEncodeState(cart, encoded);
-
-    // Now add all the default visibilities to output.
-    outDefaultTracks(cart, encoded);
-
-    sqlDyAppendEscaped(dy, encoded->string);
-    dyStringFree(&encoded);
-    dyStringAppend(dy, "', ");
-    dyStringPrintf(dy, "%d, ", (shareSession ? 1 : 0));
-    dyStringPrintf(dy, "%s, now(), %d, '');", firstUse, useCount);
-    sqlUpdate(conn, dy->string);
-    dyStringFree(&dy);
-
-    /* Prevent modification of custom track collections just saved to namedSessionDb: */
-    cartCopyCustomComposites(cart);
-
+    int useCount = saveCartAsSession(conn, encUserName, encSessionName, shareSession);
     if (useCount > INITIAL_USE_COUNT)
 	dyStringPrintf(dyMessage,
 	  "Overwrote the contents of session <B>%s</B> "
@@ -1534,6 +1542,56 @@ if (shared)
 return dyStringCannibalize(&dyMessage);
 }
 
+static boolean isSessionShared(struct sqlConnection *conn, char *encUserName, char *encSessionName)
+/* Return the value of 'shared' from the namedSessionDb row for user & session;
+ * errAbort if there is no such session. */
+{
+char query[2048];
+sqlSafef(query, sizeof(query), "select shared from %s where userName='%s' and sessionName = '%s';",
+         namedSessionTable, encUserName, encSessionName);
+char buf[256];
+char *sharedStr = sqlQuickQuery(conn, query, buf, sizeof buf);
+if (sharedStr == NULL)
+    errAbort("Unable to find session for userName='%s' and sessionName='%s'; no result from query '%s'",
+             encUserName, encSessionName, query);
+return atoi(sharedStr);
+}
+
+char *doReSaveSession(char *userName, char *actionVar)
+/* Load a session (which may have old trash and customTrash references) and re-save it
+ * so that customTrash tables will be moved to customData* databases and trash paths
+ * will be replaced with userdata (hg.conf sessionDataDir) paths.
+ * NOTE: this is not intended to be reachable by the UI; it is for a script to update
+ * old sessions to use the new sessionData locations. */
+{
+if (userName == NULL)
+    return "Unable to re-save session -- please log in and try again.";
+struct sqlConnection *conn = hConnectCentral();
+char *sessionName = cloneString(trimSpaces(cartString(cart, hgsNewSessionName)));
+char *encUserName = cgiEncodeFull(userName);
+char *encSessionName = cgiEncodeFull(sessionName);
+boolean shareSession = isSessionShared(conn, encUserName, encSessionName);
+cartLoadUserSession(conn, userName, sessionName, cart, NULL, actionVar);
+// Don't cartCopyCustomComposites because we're not going to make any track collection changes
+hubConnectLoadHubs(cart);
+cartHideDefaultTracks(cart);
+struct dyString *dyMessage = dyStringNew(1024);
+dyStringPrintf(dyMessage,
+               "Re-saved settings from user <B>%s</B>'s session <B>%s</B> "
+               "that %s be shared with others.  %s %s",
+	       userName, htmlEncode(sessionName), (shareSession ? "may" : "may not"),
+	       getSessionLink(userName, encSessionName),
+	       getSessionEmailLink(encUserName, encSessionName));
+cartCheckForCustomTracks(cart, dyMessage);
+int useCount = saveCartAsSession(conn, encUserName, encSessionName, shareSession);
+if (useCount <= INITIAL_USE_COUNT)
+    errAbort("Expected useCount of at least %d after re-saving session for "
+             "userName='%s', sessionName='%s', but got %d",
+             INITIAL_USE_COUNT+1, encUserName, encSessionName, useCount);
+hDisconnectCentral(&conn);
+return dyStringCannibalize(&dyMessage);
+}
+
 // ======================================
 
 void prepBackGroundCall(char **pBackgroundProgress, char *cleanPrefix)
@@ -1729,6 +1787,11 @@ else if (cartVarExists(cart, hgsOldSessionName))
 	safef(message, len, "%s%s", message1, message2);
 	}
     doMainPage(userName, message);
+    }
+else if (cartVarExists(cart, hgsDoReSaveSession))
+    {
+    char *message = doReSaveSession(userName, hgsDoReSaveSession);
+    printf("\n%s\n\n", message);
     }
 else
     {
