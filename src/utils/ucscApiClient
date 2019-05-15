@@ -64,6 +64,18 @@ def tryJsonRequest(requestUrl):
         sys.exit(1)
     return data
 
+def printJsonData(data, prettyPrint=False):
+    """Dump json to stdout, potentially pretty printing. Handle pipes gracefully."""
+    if data is not None:
+        try:
+            if prettyPrint:
+                print(json.dumps(data,indent=4, separators=(",",":")))
+            else:
+                print(json.dumps(data))
+        except IOError:
+            pass
+
+
 def runGetDnaExample(prettyPrint=False):
     """
     Run test of getting short DNA sequence from the hg38 assembly and exit.
@@ -72,10 +84,7 @@ def runGetDnaExample(prettyPrint=False):
     data = tryJsonRequest(req)
     if data:
         print("Example request for obtaining DNA sequence:\n%s" % req)
-        if prettyPrint:
-            print(json.dumps(data, indent=4, separators=(" , "," : ")))
-        else:
-            print(json.dumps(data))
+        printJsonData(data, prettyPrint)
     sys.exit(0)
 
 def runTest0(prettyPrint=False):
@@ -95,10 +104,7 @@ def runTest0(prettyPrint=False):
                 plantData = obj
         if plantData is not None:
             print("Plants public hub data")
-            if prettyPrint:
-                print(json.dumps(plantData,indent=4, separators=(",",":")))
-            else:
-                print(json.dumps(plantData))
+            printJsonData(plantData, prettyPrint)
 
     # now do ucsc hg38 test
     data = tryJsonRequest(hg38Request)
@@ -108,10 +114,7 @@ def runTest0(prettyPrint=False):
             hg38Data = data['ucscGenomes']['hg38']
         if hg38Data is not None:
             print("hg38/Human information")
-            if prettyPrint:
-                print(json.dumps(hg38Data,indent=4, separators=(",",":")))
-            else:
-                print(json.dumps(hg38Data))
+            printJsonData(hg38Data, prettyPrint)
     sys.exit(0)
 
 def main():
@@ -137,11 +140,8 @@ def main():
     if args.debug:
         print("request URL: %s\n" % req)
     data = tryJsonRequest(req)
-    if data:
-        if args.pretty_print:
-            print(json.dumps(data, indent=4, separators=(",",":")))
-        else:
-            print(json.dumps(data))
+    printJsonData(data, args.pretty_print)
+    sys.exit(0)
 
 if __name__ == "__main__":
     main()
