@@ -856,21 +856,21 @@ subGroup2 factor Factor \
     ZZZ3=ZZZ3
 
     track encTfChipPkENCFF512IAI
-    parent encTfChipPk on
+    parent encTfChipPk off
     shortLabel K562 TCF7
     longLabel Transcription Factor ChIP-seq Peaks of TCF7 in K562 from ENCODE 3 (ENCFF512IAI)
     subGroups cellType=K562 factor=TCF7
     color 255,85,85
 
     track encTfChipPkENCFF403BWK
-    parent encTfChipPk on
+    parent encTfChipPk off
     shortLabel MCF-7 MNT 1
     longLabel Transcription Factor ChIP-seq Peaks of MNT in MCF-7 from ENCODE 3 (ENCFF403BWK)
     subGroups cellType=MCF-7 factor=MNT
     color 190,85,255
 
     track encTfChipPkENCFF116VEG
-    parent encTfChipPk on
+    parent encTfChipPk off
     shortLabel vagina EP300 1
     longLabel Transcription Factor ChIP-seq Peaks of EP300 in vagina from ENCODE 3 (ENCFF116VEG)
     subGroups cellType=vagina factor=EP300
@@ -1154,7 +1154,7 @@ subGroup2 factor Factor \
     subGroups cellType=Peyers_patch factor=CTCF
 
     track encTfChipPkENCFF368LWM
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel H1-hESC CTCF 1
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in H1-hESC from ENCODE 3 (ENCFF368LWM)
     subGroups cellType=H1-hESC factor=CTCF
@@ -1310,7 +1310,7 @@ subGroup2 factor Factor \
     color 255,85,85
 
     track encTfChipPkENCFF152BOT
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel HepG2 FOXA1 1
     longLabel Transcription Factor ChIP-seq Peaks of FOXA1 in HepG2 from ENCODE 3 (ENCFF152BOT)
     subGroups cellType=HepG2 factor=FOXA1
@@ -1558,7 +1558,7 @@ subGroup2 factor Factor \
     subGroups cellType=MCF_10A factor=STAT3
 
     track encTfChipPkENCFF843VHC
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel K562 CTCF 1
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in K562 from ENCODE 3 (ENCFF843VHC)
     subGroups cellType=K562 factor=CTCF
@@ -1599,7 +1599,7 @@ subGroup2 factor Factor \
     subGroups cellType=body_of_pancreas factor=POLR2A
 
     track encTfChipPkENCFF356LIU
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel GM12878 CTCF 1
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in GM12878 from ENCODE 3 (ENCFF356LIU)
     subGroups cellType=GM12878 factor=CTCF
@@ -1645,7 +1645,7 @@ subGroup2 factor Factor \
     subGroups cellType=liver factor=HNF4G
 
     track encTfChipPkENCFF259LNG
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel GM12878 RFX5
     longLabel Transcription Factor ChIP-seq Peaks of RFX5 in GM12878 from ENCODE 3 (ENCFF259LNG)
     subGroups cellType=GM12878 factor=RFX5
@@ -1746,7 +1746,7 @@ subGroup2 factor Factor \
 
     track encTfChipPkENCFF481CNC
     parent encTfChipPk off
-    shortLabel stomach CTCF
+    shortLabel stomach CTCF 1
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in stomach from ENCODE 3 (ENCFF481CNC)
     subGroups cellType=stomach factor=CTCF
 
@@ -1839,7 +1839,7 @@ subGroup2 factor Factor \
     color 85,152,255
 
     track encTfChipPkENCFF779CWH
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel H1-hESC REST 1
     longLabel Transcription Factor ChIP-seq Peaks of REST in H1-hESC from ENCODE 3 (ENCFF779CWH)
     subGroups cellType=H1-hESC factor=REST
@@ -2699,7 +2699,6 @@ subGroup2 factor Factor \
     shortLabel MCF-7 HCFC1
     longLabel Transcription Factor ChIP-seq Peaks of HCFC1 in MCF-7 from ENCODE 3 (ENCFF401IAI)
     subGroups cellType=MCF-7 factor=HCFC1
-    color 255,229,85
     color 190,85,255
 
     track encTfChipPkENCFF086CTA
@@ -2888,7 +2887,7 @@ subGroup2 factor Factor \
 
     track encTfChipPkENCFF006YGI
     parent encTfChipPk off
-    shortLabel ovary CTCF
+    shortLabel ovary CTCF 1
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in ovary from ENCODE 3 (ENCFF006YGI)
     subGroups cellType=ovary factor=CTCF
 
@@ -3175,14 +3174,14 @@ subGroup2 factor Factor \
     color 85,198,255
 
     track encTfChipPkENCFF302RQH
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel HeLa-S3 TBP
     longLabel Transcription Factor ChIP-seq Peaks of TBP in HeLa-S3 from ENCODE 3 (ENCFF302RQH)
     subGroups cellType=HeLa-S3 factor=TBP
     color 157,85,255
 
     track encTfChipPkENCFF540AAP
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel GM12878 TAF1
     longLabel Transcription Factor ChIP-seq Peaks of TAF1 in GM12878 from ENCODE 3 (ENCFF540AAP)
     subGroups cellType=GM12878 factor=TAF1
@@ -3274,7 +3273,6 @@ subGroup2 factor Factor \
     shortLabel HFF-Myc CTCF
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in HFF-Myc from ENCODE 3 (ENCFF750KVF)
     subGroups cellType=HFF-Myc factor=CTCF
-    color 255,163,85
     color 255,165,85
 
     track encTfChipPkENCFF624WDI
@@ -3769,7 +3767,6 @@ subGroup2 factor Factor \
     shortLabel GM12878 BHLHE40 1
     longLabel Transcription Factor ChIP-seq Peaks of BHLHE40 in GM12878 from ENCODE 3 (ENCFF622HGF)
     subGroups cellType=GM12878 factor=BHLHE40
-    color 204,255,85
     color 85,152,255
 
     track encTfChipPkENCFF177UJN
@@ -3796,7 +3793,6 @@ subGroup2 factor Factor \
     shortLabel GM12878 HCFC1
     longLabel Transcription Factor ChIP-seq Peaks of HCFC1 in GM12878 from ENCODE 3 (ENCFF722QBB)
     subGroups cellType=GM12878 factor=HCFC1
-    color 255,229,85
     color 85,152,255
 
     track encTfChipPkENCFF259HUS
@@ -4012,7 +4008,7 @@ subGroup2 factor Factor \
 
     track encTfChipPkENCFF886WWT
     parent encTfChipPk off
-    shortLabel ovary CTCF
+    shortLabel ovary CTCF 2
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in ovary from ENCODE 3 (ENCFF886WWT)
     subGroups cellType=ovary factor=CTCF
 
@@ -4244,7 +4240,7 @@ subGroup2 factor Factor \
     color 85,198,255
 
     track encTfChipPkENCFF091UDB
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel HeLa-S3 GABPA
     longLabel Transcription Factor ChIP-seq Peaks of GABPA in HeLa-S3 from ENCODE 3 (ENCFF091UDB)
     subGroups cellType=HeLa-S3 factor=GABPA
@@ -4277,7 +4273,7 @@ subGroup2 factor Factor \
 
     track encTfChipPkENCFF663DIG
     parent encTfChipPk off
-    shortLabel tblNerve POLR2A 1
+    shortLabel tblNerve POLR2A 2
     longLabel Transcription Factor ChIP-seq Peaks of POLR2A in tibial_nerve from ENCODE 3 (ENCFF663DIG)
     subGroups cellType=tibial_nerve factor=POLR2A
 
@@ -4320,7 +4316,7 @@ subGroup2 factor Factor \
 
     track encTfChipPkENCFF540DVR
     parent encTfChipPk off
-    shortLabel spleen CTCF
+    shortLabel spleen CTCF 1
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in spleen from ENCODE 3 (ENCFF540DVR)
     subGroups cellType=spleen factor=CTCF
 
@@ -4422,7 +4418,6 @@ subGroup2 factor Factor \
     longLabel Transcription Factor ChIP-seq Peaks of SIN3A in A549 from ENCODE 3 (ENCFF567BJI)
     subGroups cellType=A549 factor=SIN3A
     color 254,93,85
-    color 255,184,85
 
     track encTfChipPkENCFF023ALY
     parent encTfChipPk off
@@ -4480,7 +4475,7 @@ subGroup2 factor Factor \
     color 255,85,85
 
     track encTfChipPkENCFF175VXL
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel HepG2 SP1 1
     longLabel Transcription Factor ChIP-seq Peaks of SP1 in HepG2 from ENCODE 3 (ENCFF175VXL)
     subGroups cellType=HepG2 factor=SP1
@@ -5366,7 +5361,7 @@ subGroup2 factor Factor \
 
     track encTfChipPkENCFF825XAC
     parent encTfChipPk off
-    shortLabel stomach CTCF
+    shortLabel stomach CTCF 2
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in stomach from ENCODE 3 (ENCFF825XAC)
     subGroups cellType=stomach factor=CTCF
 
@@ -5479,7 +5474,7 @@ subGroup2 factor Factor \
 
     track encTfChipPkENCFF234VTM
     parent encTfChipPk off
-    shortLabel spleen CTCF
+    shortLabel spleen CTCF 2
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in spleen from ENCODE 3 (ENCFF234VTM)
     subGroups cellType=spleen factor=CTCF
 
@@ -5716,7 +5711,7 @@ subGroup2 factor Factor \
     subGroups cellType=GM12892 factor=YY1
 
     track encTfChipPkENCFF700TLG
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel K562 MYC 1
     longLabel Transcription Factor ChIP-seq Peaks of MYC in K562 from ENCODE 3 (ENCFF700TLG)
     subGroups cellType=K562 factor=MYC
@@ -6148,7 +6143,7 @@ subGroup2 factor Factor \
 
     track encTfChipPkENCFF049JNK
     parent encTfChipPk off
-    shortLabel tbialNerv EP300 1
+    shortLabel tbialNerv EP300 2
     longLabel Transcription Factor ChIP-seq Peaks of EP300 in tibial_nerve from ENCODE 3 (ENCFF049JNK)
     subGroups cellType=tibial_nerve factor=EP300
 
@@ -6289,7 +6284,7 @@ subGroup2 factor Factor \
 
     track encTfChipPkENCFF248QUD
     parent encTfChipPk off
-    shortLabel spleen CTCF
+    shortLabel spleen CTCF 3
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in spleen from ENCODE 3 (ENCFF248QUD)
     subGroups cellType=spleen factor=CTCF
 
@@ -6461,7 +6456,7 @@ subGroup2 factor Factor \
 
     track encTfChipPkENCFF340BQM
     parent encTfChipPk off
-    shortLabel spleen CTCF
+    shortLabel spleen CTCF 4
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in spleen from ENCODE 3 (ENCFF340BQM)
     subGroups cellType=spleen factor=CTCF
 
@@ -6518,7 +6513,7 @@ subGroup2 factor Factor \
     subGroups cellType=liver factor=REST
 
     track encTfChipPkENCFF328IZQ
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel HeLa-S3 MAFK
     longLabel Transcription Factor ChIP-seq Peaks of MAFK in HeLa-S3 from ENCODE 3 (ENCFF328IZQ)
     subGroups cellType=HeLa-S3 factor=MAFK
@@ -6772,7 +6767,6 @@ subGroup2 factor Factor \
     shortLabel GM12878 NFATC1
     longLabel Transcription Factor ChIP-seq Peaks of NFATC1 in GM12878 from ENCODE 3 (ENCFF138ZBJ)
     subGroups cellType=GM12878 factor=NFATC1
-    color 255,184,85
     color 85,152,255
 
     track encTfChipPkENCFF745ANU
@@ -7100,7 +7094,6 @@ subGroup2 factor Factor \
     shortLabel HepG2 HCFC1
     longLabel Transcription Factor ChIP-seq Peaks of HCFC1 in HepG2 from ENCODE 3 (ENCFF485SRU)
     subGroups cellType=HepG2 factor=HCFC1
-    color 255,229,85
     color 85,198,255
 
     track encTfChipPkENCFF313RFR
@@ -7675,7 +7668,7 @@ subGroup2 factor Factor \
 
     track encTfChipPkENCFF970XBE
     parent encTfChipPk off
-    shortLabel ovary EP300
+    shortLabel ovary EP300 1
     longLabel Transcription Factor ChIP-seq Peaks of EP300 in ovary from ENCODE 3 (ENCFF970XBE)
     subGroups cellType=ovary factor=EP300
 
@@ -7694,7 +7687,7 @@ subGroup2 factor Factor \
 
     track encTfChipPkENCFF220VAH
     parent encTfChipPk off
-    shortLabel stomach CTCF
+    shortLabel stomach CTCF 3
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in stomach from ENCODE 3 (ENCFF220VAH)
     subGroups cellType=stomach factor=CTCF
 
@@ -7914,7 +7907,7 @@ subGroup2 factor Factor \
 
     track encTfChipPkENCFF113NNM
     parent encTfChipPk off
-    shortLabel liverRLobe CTCF
+    shortLabel liverRLobe CTCF 1
     longLabel Transcription Factor ChIP-seq Peaks of POLR2A in right_lobe_of_liver from ENCODE 3 (ENCFF113NNM)
     subGroups cellType=right_lobe_of_liver factor=POLR2A
 
@@ -7997,7 +7990,7 @@ subGroup2 factor Factor \
     color 254,93,85
 
     track encTfChipPkENCFF173TXA
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel K562 GATA2
     longLabel Transcription Factor ChIP-seq Peaks of GATA2 in K562 from ENCODE 3 (ENCFF173TXA)
     subGroups cellType=K562 factor=GATA2
@@ -8018,7 +8011,7 @@ subGroup2 factor Factor \
     color 255,85,85
 
     track encTfChipPkENCFF830TFU
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel GM12878 TRIM22 1
     longLabel Transcription Factor ChIP-seq Peaks of TRIM22 in GM12878 from ENCODE 3 (ENCFF830TFU)
     subGroups cellType=GM12878 factor=TRIM22
@@ -8124,7 +8117,7 @@ subGroup2 factor Factor \
 
     track encTfChipPkENCFF136LAP
     parent encTfChipPk off
-    shortLabel liverRLobe CTCF
+    shortLabel liverRLobe CTCF 2
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in right_lobe_of_liver from ENCODE 3 (ENCFF136LAP)
     subGroups cellType=right_lobe_of_liver factor=CTCF
 
@@ -8235,7 +8228,7 @@ subGroup2 factor Factor \
     subGroups cellType=stomach factor=EP300
 
     track encTfChipPkENCFF323QQU
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel GM12878 STAT1
     longLabel Transcription Factor ChIP-seq Peaks of STAT1 in GM12878 from ENCODE 3 (ENCFF323QQU)
     subGroups cellType=GM12878 factor=STAT1
@@ -8270,7 +8263,7 @@ subGroup2 factor Factor \
 
     track encTfChipPkENCFF831BFL
     parent encTfChipPk off
-    shortLabel stomach CTCF
+    shortLabel stomach CTCF 4
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in stomach from ENCODE 3 (ENCFF831BFL)
     subGroups cellType=stomach factor=CTCF
 
@@ -8472,7 +8465,6 @@ subGroup2 factor Factor \
     longLabel Transcription Factor ChIP-seq Peaks of HCFC1 in K562 from ENCODE 3 (ENCFF167RXK)
     subGroups cellType=K562 factor=HCFC1
     color 255,85,85
-    color 255,229,85
 
     track encTfChipPkENCFF412TMX
     parent encTfChipPk off
@@ -8537,7 +8529,7 @@ subGroup2 factor Factor \
 
     track encTfChipPkENCFF198EUQ
     parent encTfChipPk off
-    shortLabel uterus POLR2A 1
+    shortLabel uterus POLR2A 2
     longLabel Transcription Factor ChIP-seq Peaks of POLR2A in uterus from ENCODE 3 (ENCFF198EUQ)
     subGroups cellType=uterus factor=POLR2A
 
@@ -8711,7 +8703,7 @@ subGroup2 factor Factor \
     subGroups cellType=HEK293T factor=FOXA1
 
     track encTfChipPkENCFF635YMI
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel HepG2 SIN3A
     longLabel Transcription Factor ChIP-seq Peaks of SIN3A in HepG2 from ENCODE 3 (ENCFF635YMI)
     subGroups cellType=HepG2 factor=SIN3A
@@ -8797,7 +8789,6 @@ subGroup2 factor Factor \
     shortLabel HepG2 FOXA2 2
     longLabel Transcription Factor ChIP-seq Peaks of FOXA2 in HepG2 from ENCODE 3 (ENCFF259BJR)
     subGroups cellType=HepG2 factor=FOXA2
-    color 255,184,85
     color 85,198,255
 
     track encTfChipPkENCFF926LHG
@@ -8989,7 +8980,7 @@ subGroup2 factor Factor \
 
     track encTfChipPkENCFF353CLB
     parent encTfChipPk off
-    shortLabel ovary EP300
+    shortLabel ovary EP300 2
     longLabel Transcription Factor ChIP-seq Peaks of EP300 in ovary from ENCODE 3 (ENCFF353CLB)
     subGroups cellType=ovary factor=EP300
 
@@ -9201,7 +9192,7 @@ subGroup2 factor Factor \
 
     track encTfChipPkENCFF068YLN
     parent encTfChipPk off
-    shortLabel spleen CTCF
+    shortLabel spleen CTCF 5
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in spleen from ENCODE 3 (ENCFF068YLN)
     subGroups cellType=spleen factor=CTCF
 
