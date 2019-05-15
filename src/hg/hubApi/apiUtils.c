@@ -44,6 +44,12 @@ if (measureTiming)
     jsonWriteNumber(jw, "totalTimeMs", et);
     }
 
+if (reachedMaxItems)
+    {
+    jsonWriteBoolean(jw, "maxItemsLimit", TRUE);
+    jsonWriteNumber(jw, "itemsReturned", maxItemsOutput);
+    }
+
 jsonWriteObjectEnd(jw);
 fputs(jw->dy->string,stdout);
 }	/*	void apiFinishOutput(int errorCode, char *errorString, ... ) */

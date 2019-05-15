@@ -333,7 +333,82 @@ else
 hFreeConn(&conn);
 }
 
-static void recursiveTrackList(struct jsonWrite *jw, struct trackDb *tdb)
+static long long bbiItemCount(char *bigDataUrl, char *type)
+/* check the bigDataUrl to see what the itemCount is there */
+{
+long long itemCount = 0;
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    if (allowedBigBedType(type))
+        {
+        struct bbiFile *bbi = NULL;
+        bbi = bigBedFileOpen(bigDataUrl);
+        itemCount = bigBedItemCount(bbi);
+        bbiFileClose(&bbi);
+        }
+    else if (startsWithWord("bigWig", type))
+        {
+        struct bbiFile *bwf = bigWigFileOpen(bigDataUrl);
+        struct bbiSummaryElement sum = bbiTotalSummary(bwf);
+        itemCount = sum.validCount;
+        bbiFileClose(&bwf);
+        }
+    }
+errCatchEnd(errCatch);
+errCatchFree(&errCatch);
+return itemCount;
+}
+
+static long long dataItemCount(char *db, struct trackDb *tdb)
+/* determine how many items are in this data set */
+{
+boolean isContainer = tdbIsComposite(tdb) || tdbIsCompositeView(tdb);
+if (trackDbSetting(tdb, "container"))
+    isContainer = TRUE;
+long long itemCount = 0;
+if (isContainer)	/* containers have no data items */
+    return itemCount;
+if (sameWord("downloadsOnly", tdb->type))
+    return itemCount;
+
+char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+if (isNotEmpty(bigDataUrl))
+    itemCount = bbiItemCount(bigDataUrl, tdb->type);
+else
+    {
+    /* prepare for getting table row count, find table name */
+    /* the trackDb might have a specific table defined */
+    char *tableName = trackDbSetting(tdb, "table");
+    if (isEmpty(tableName))
+	tableName = trackDbSetting(tdb, "track");
+    if (isNotEmpty(tableName))
+	{
+	struct sqlConnection *conn = hAllocConnMaybe(db);
+	if (conn)
+	    {
+	    /* punting on split tables, return zero */
+	    struct hTableInfo *hti =
+		hFindTableInfoWithConn(conn, NULL, tableName);
+	    if (hti && hti->isSplit)
+		{
+		itemCount = 0;
+		}
+	    else
+		{
+		char query[2048];
+	   sqlSafef(query, sizeof(query), "select count(*) from %s", tableName);
+		itemCount = sqlQuickNum(conn, query);
+		}
+	    hFreeConn(&conn);
+	    }
+	}
+    }
+return itemCount;
+}
+
+static void recursiveTrackList(struct jsonWrite *jw, struct trackDb *tdb,
+    char *db)
 /* output trackDb tags only for real tracks, not containers,
  * recursive when subtracks exist
  */
@@ -343,6 +418,12 @@ boolean isContainer = tdbIsComposite(tdb) || tdbIsCompositeView(tdb);
 /* do *NOT* print containers when 'trackLeavesOnly' requested */
 if (! (trackLeavesOnly && isContainer) )
     {
+    boolean protectedData = FALSE;
+    long long itemCount = 0;
+    if (trackDbSetting(tdb, "tableBrowser"))
+	protectedData = TRUE;
+    else
+	itemCount = dataItemCount(db, tdb);
     jsonWriteObjectStart(jw, tdb->track);
     if (tdbIsComposite(tdb))
         jsonWriteString(jw, "compositeContainer", "TRUE");
@@ -351,13 +432,11 @@ if (! (trackLeavesOnly && isContainer) )
     jsonWriteString(jw, "shortLabel", tdb->shortLabel);
     jsonWriteString(jw, "type", tdb->type);
     jsonWriteString(jw, "longLabel", tdb->longLabel);
+    jsonWriteNumber(jw, "itemCount", itemCount);
     if (tdb->parent)
         jsonWriteString(jw, "parent", tdb->parent->track);
     if (tdb->settingsHash)
         {
-	boolean protectedData = FALSE;
-	if (trackDbSetting(tdb, "tableBrowser"))
-	    protectedData = TRUE;
         struct hashEl *hel;
         struct hashCookie hc = hashFirst(tdb->settingsHash);
         while ((hel = hashNext(&hc)) != NULL)
@@ -379,7 +458,7 @@ if (! (trackLeavesOnly && isContainer) )
 	{
 	struct trackDb *el = NULL;
 	for (el = tdb->subtracks; el != NULL; el = el->next )
-	    recursiveTrackList(jw, el);
+	    recursiveTrackList(jw, el, db);
 	}
 
     jsonWriteObjectEnd(jw);
@@ -388,7 +467,7 @@ else if (tdb->subtracks)
     {
     struct trackDb *el = NULL;
     for (el = tdb->subtracks; el != NULL; el = el->next )
-	recursiveTrackList(jw, el);
+	recursiveTrackList(jw, el, db);
     }
 }	/*	static void recursiveTrackList()	*/
 
@@ -412,7 +491,7 @@ freeMem(dataTime);
 struct trackDb *el = NULL;
 for (el = tdbList; el != NULL; el = el->next )
     {
-    recursiveTrackList(jw, el);
+    recursiveTrackList(jw, el, db);
     }
 apiFinishOutput(0, NULL, jw);
 }	/*	static void trackDbJsonOutput(char *db, FILE *f)	*/
@@ -499,7 +578,7 @@ else if (sameWord("tracks", words[1]))
     struct trackDb *el = NULL;
     for (el = tdbList; el != NULL; el = el->next )
 	    {
-	    recursiveTrackList(jw, el);
+	    recursiveTrackList(jw, el, db);
 	    }
     jsonWriteObjectEnd(jw);
     apiFinishOutput(0, NULL, jw);

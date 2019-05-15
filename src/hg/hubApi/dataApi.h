@@ -72,6 +72,7 @@ extern long enteredMainTime;	/* will become = clock1000() on entry */
 
 /* limit amount of output to a maximum to avoid overload */
 extern int maxItemsOutput;	/* can be set in URL maxItemsOutput=N */
+extern boolean reachedMaxItems;	/* during getData, signal to return */
 /* for debugging purpose, current bot delay value */
 extern int botDelay;
 boolean debug;	/* can be set in URL debug=1, to turn off: debug=0 */

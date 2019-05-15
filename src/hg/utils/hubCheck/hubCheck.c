@@ -455,6 +455,31 @@ else
 return retVal;
 }
 
+void hubCheckParentsAndChildren(struct trackDb *tdb)
+/* Check that a single trackDb stanza has the correct parent and subtrack pointers */
+{
+if (tdbIsSuper(tdb) || tdbIsComposite(tdb) || tdbIsCompositeView(tdb) || tdbIsContainer(tdb))
+    {
+    if (tdb->subtracks == NULL)
+        {
+        errAbort("Track \"%s\" is declared superTrack, compositeTrack, view or "
+            "container, but has no subtracks", tdb->track);
+        }
+
+    // Containers should not have a bigDataUrl setting
+    if (trackDbLocalSetting(tdb, "bigDataUrl"))
+        {
+        errAbort("Track \"%s\" is declared superTrack, compositeTrack, view or "
+            "container, and also has a bigDataUrl", tdb->track);
+        }
+    }
+else if (tdb->subtracks != NULL)
+    {
+    errAbort("Track \"%s\" has children tracks (e.g: \"%s\"), but is not a "
+        "compositeTrack, container, view or superTrack", tdb->track, tdb->subtracks->track);
+    }
+}
+
 int hubCheckTrack(struct trackHub *hub, struct trackHubGenome *genome, struct trackDb *tdb, 
                         struct trackHubCheckOptions *options, struct dyString *errors)
 /* Check track settings and optionally, files */
@@ -496,6 +521,7 @@ if (!options->checkFiles)
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
+    hubCheckParentsAndChildren(tdb);
     hubCheckBigDataUrl(hub, genome, tdb);
     }
 errCatchEnd(errCatch);
