@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!--#set var="TITLE" value="GTEx Resources at UCSC" -->
+<!--#set var="TITLE" value="Single cell resources at UCSC" -->
 <!--#set var="ROOT" value="." -->
 
 <!--#include virtual="$ROOT/inc/gbPageStart.html"-->
@@ -21,6 +21,10 @@
 .gbsPage dd {
     margin: 0 0 0 200px;
     padding: 0 0 0.5em 0;
+}
+
+.gbsPage img {
+    margin-left: 0;
 }
 
 .gbsPage dl dt {
@@ -45,10 +49,9 @@
 
 <h1>Single cell resources at UCSC</h1>
 <p>
-Single cell experiments measure thousands of gene loci in thousands of cells at
-the same time. It is challenging explore and share these high-dimensional data.
-The UCSC Genome Browser is adding published datasets as tracks and a new
-visualisation tool:
+Single cell experiments measure tens of thousands of gene loci in thousands of cells at
+the same time. That resulting data is challenging to visualize.
+The UCSC Genome Browser is adding published datasets as tracks and an entirely new data exploration tool:
 </p>
 <p>
 <dl>
@@ -59,7 +62,7 @@ visualisation tool:
 <dt><a target="_blank" 
     href="../cgi-bin/hgTrackUi?db=mm10&g=tabulaMuris">
             Tabula Muris</a></dt>
-    <dd>A Genome Browser track showing single cell RNA-seq gene expression, genome coverage and splice sites</dd>
+    <dd>Genome Browser track showing single cell RNA-seq gene expression, genome coverage and splice sites</dd>
 </dl>
 
 <div class="row">
@@ -67,10 +70,15 @@ visualisation tool:
         <h2>UCSC Cell Browser</h2>
         <p>With the <a target=_blank href="https://cells.ucsc.edu">Cell Browser</a>
         you can plot cells arranged by algorithms like t-SNE or UMAP. Color
-        these by annotated meta data or genes via the left side bar.  Select
+        these by annotated meta data or genes via the left side bar. Select
         cells via the legend on the right or with the rectangle selection tool.
         You can export the current cell selection or annotate it via the "Tools" menu.
-</p>
+        We are happy to add your favorite dataset, if you have suggestions, contact us at
+        <a href="mailto:cells@ucsc.edu">cells@ucsc.edu</a>.
+        To set up your own cell browser, follow the instructions at 
+        <a href="https://cellbrowser.rtfd.org">cellbrowser.readthedocs.org</a>.
+        </p>
+
         <p class="text-center">
         <a target=_blank href="https://cells.ucsc.edu" alt="Screenshot of UCSC Cell Browser">
             <img style="width:100%" src="<!--#echo var="ROOT" -->/images/cellbrowser.png">
@@ -83,7 +91,7 @@ visualisation tool:
 Below is a screenshot of a  
 <a target="_blank" 
 href="http://genome.ucsc.edu/s/Max/tabMuris">public session</a>
-that highlights the Tabula Muris gene expression track
+that highlights the Tabula Muris gene expression track.
 The session shows the Sox10 locus. The gene expression track at the top shows that the
 gene is only well expressed in basal cells (orange), mammary gland (blue) and oligodendrocytes (pink).
 These cell type names are shown when you hover with the mouse over the bars on

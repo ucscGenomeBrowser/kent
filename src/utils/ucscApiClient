@@ -7,6 +7,7 @@ https://github.com/Ensembl/ensembl-rest/wiki/Example-Python-Client
 import argparse
 import json
 import sys
+from collections import OrderedDict
 
 # support python2 and 3
 try:
@@ -18,32 +19,26 @@ except ImportError:
     from urllib import urlencode
     from urllib2 import urlopen, Request, HTTPError
 
-serverName = "https://api-test.gi.ucsc.edu"
-endpoints = ["/list/publicHubs", "/list/ucscGenomes", "/list/hubGenomes",
-    "/list/tracks", "/list/chromosomes", "/getData/sequence", "/getData/track"]
-parameterList = ["hubUrl", "genome", "db", "track", "chrom", "start", "end",
-    "maxItemsOutput", "trackLeavesOnly"]
+serverName = "https://api.genome.ucsc.edu"
 
 def parseCommandLine():
     parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
-        description="Test accessing UCSC Genome Browser API",
-        epilog="Example usage:\npythonClient.py \"/getData/track\" "
-        "\"track=gold;db=hg38;chrom=chrM;maxItemsOutput=2\"")
-    parser.add_argument("endpoint", nargs='?',
+        description="Command line utility for UCSC Genome Browser API access",
+        epilog="Example usage:\nucscApiClient \"/getData/track\" "
+        "\"track=gold;genome=hg38;chrom=chrM;maxItemsOutput=2\"")
+    parser.add_argument("endpoint", nargs='?', default="",
         help="Endpoint string like \"/list/tracks\" or \"/getData/track/\"", type=str)
-    parser.add_argument("parameters", nargs='?',
+    parser.add_argument("parameters", nargs='?', default="",
         help="Parameters to endpoints. semi-colon separated key=value formatted string, "
-        "like \"db=hg38;chrom=chrM;maxItemsOutput=2\"",type=str)
-    parser.add_argument("-test0", action="store_true", default=False,
-        help="Run special test")
+        "like \"genome=hg38;chrom=chrM;maxItemsOutput=2\"",type=str)
     parser.add_argument("-p", "--pretty-print", action="store_true", default=False,
         help="Print json response with newlines")
-    parser.add_argument("--show-endpoints", action="store_true", default=False,
-        help="List the supported endpoints")
-    parser.add_argument("--show-arguments", action="store_true", default=False,
-        help="List the supported arguments")
     parser.add_argument("--debug", action="store_true", default=False,
-        help="Print final URL of the request.")
+        help="Print final URL of the request")
+    parser.add_argument("-test0", action="store_true", default=False,
+        help="Run special test")
+    parser.add_argument("-getDnaExample", action="store_true", default=False,
+        help="Show example query for fetching Human GRCh38(hg38) DNA sequence")
     return parser
 
 def tryJsonRequest(requestUrl):
@@ -57,10 +52,10 @@ def tryJsonRequest(requestUrl):
         response = urlopen(request)
         content = response.read()
         if content:
-            data = json.loads(content)
+            data = json.loads(content, object_pairs_hook=OrderedDict)
     except HTTPError as e:
         if e.code == 400: # does this work for other status codes?
-            msg = json.loads(e.read())
+            msg = json.loads(e.read(), object_pairs_hook=OrderedDict)
             sys.stderr.write("Error: %s\n" % msg["error"])
             sys.exit(1)
         else:
@@ -69,10 +64,24 @@ def tryJsonRequest(requestUrl):
         sys.exit(1)
     return data
 
+def runGetDnaExample(prettyPrint=False):
+    """
+    Run test of getting short DNA sequence from the hg38 assembly and exit.
+    """
+    req = serverName + "/getData/sequence?genome=hg38;chrom=chr1;start=11110531;end=11110538"
+    data = tryJsonRequest(req)
+    if data:
+        print("Example request for obtaining DNA sequence:\n%s" % req)
+        if prettyPrint:
+            print(json.dumps(data, indent=4, separators=(" , "," : ")))
+        else:
+            print(json.dumps(data))
+    sys.exit(0)
+
 def runTest0(prettyPrint=False):
     """
     Run test of getting public hub data for "Plants" and print UCSC info
-    for the hg38 db and exit
+    for the hg38 genome and exit
     """
     hubRequest =  serverName + "/list/publicHubs"
     hg38Request = serverName + "/list/ucscGenomes"
@@ -118,38 +127,10 @@ def main():
     if args.test0:
         runTest0(args.pretty_print)
 
-    # check for the show arguments first and exit early
-    if args.show_endpoints:
-        print("Currently supported endpoints:\n\t%s" % ("\n\t".join(endpoints)))
-        sys.exit(0)
-    if args.show_arguments:
-        print("Currently supported parameters to endpoint functions:\n\t%s" %
-            ("\n\t".join(parameterList)))
-        sys.exit(0)
+    if args.getDnaExample:
+        runGetDnaExample(args.pretty_print)
 
-    # check endpoints
-    if args.endpoint:
-        if args.endpoint not in endpoints:
-            sys.stderr.write("Error: Endpoint '%s' not supported.\n"
-                "Currently supported endpoints are:\n\t%s\n\n" %
-                (args.endpoint, "\n\t".join(endpoints)))
-            cmd.print_help()
-            sys.exit(1)
-        req += args.endpoint
-
-    # check params formatted correctly
-    if args.parameters:
-        params = args.parameters.split(";")
-        for param in params:
-            arg = param.split("=")[0]
-            if arg == param or arg not in parameterList:
-                sys.stderr.write("Unsupported parameter '%s'. "
-                    "Currently supported parameters to endpoints:\n\t%s\n"
-                    "Please format parameters as arg=val.\n\n" %
-                    (arg, "\n\t".join(parameterList)))
-                cmd.print_help()
-                sys.exit(1)
-        req += "?" + args.parameters
+    req += args.endpoint + "?" + args.parameters
 
     # make http request and print the output
     data = None

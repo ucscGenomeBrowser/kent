@@ -950,7 +950,8 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 if (newCts || removedCt || changedCt || ctConfigUpdate(ctFileName))
     {
     customTracksSaveCart(genomeDb, cart, ctList);
-    ctFileName = cartString(cart, customTrackFileVar(genomeDb));
+    // If all CTs have been removed then customTrackFileVar is also removed from cart, so optional:
+    ctFileName = cartOptionalString(cart, customTrackFileVar(genomeDb));
     }
 
 if (cgiScriptName() && !endsWith(cgiScriptName(),"hgCustom"))

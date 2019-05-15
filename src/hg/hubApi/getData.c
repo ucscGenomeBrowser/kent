@@ -44,6 +44,8 @@ for (el = wds->ascii; (itemCount + itemsDone) < maxItemsOutput && el; el = el->n
 	++itemCount;
 	}
     }
+if ((itemCount + itemsDone) >= maxItemsOutput)
+    reachedMaxItems = TRUE;
 return itemCount;
 }	/* static unsigned wigTableDataOutput(struct jsonWrite *jw, ...) */
 
@@ -116,6 +118,8 @@ while ((itemCount+itemsDone) < maxItemsOutput && (row = sqlNextRow(sr)) != NULL)
     ++itemCount;
     }
 sqlFreeResult(&sr);
+if ((itemCount + itemsDone) >= maxItemsOutput)
+    reachedMaxItems = TRUE;
 return itemCount;
 }
 
@@ -344,6 +348,8 @@ if (isEmpty(chrom))
 		columnCount, columnNames, jsonTypes, itemsDone);
 	jsonWriteListEnd(jw);	/* chrom data output list end */
 	}
+	if (itemsDone >= maxItemsOutput)
+	    reachedMaxItems = TRUE;
     jsonWriteObjectEnd(jw);	/* end track data output */
     }
 else
@@ -408,6 +414,8 @@ for (iv = ivList; itemCount < maxItemsOutput && iv; iv = iv->next)
         }
     ++itemCount;
     }
+    if (itemCount >= maxItemsOutput)
+	reachedMaxItems = TRUE;
 lmCleanup(&bbLm);
 return itemCount;
 }	/* static void bbiDataOutput(struct jsonWrite *jw, . . . ) */
@@ -447,6 +455,8 @@ for (iv = ivList; iv && itemCount < maxItemsOutput; iv = iv->next)
     ++itemCount;
     }
 jsonWriteListEnd(jw);
+if (itemCount >= maxItemsOutput)
+    reachedMaxItems = TRUE;
 return itemCount;
 }
 
@@ -464,6 +474,8 @@ if (isEmpty(chrom))
 	{
 	itemsDone += wigDataOutput(jw, bwf, bci->name, 0, bci->size);
 	}
+	if (itemsDone >= maxItemsOutput)
+	    reachedMaxItems = TRUE;
     }
     else
 	(void) wigDataOutput(jw, bwf, chrom, start, end);
@@ -577,6 +589,8 @@ if (allowedBigBedType(thisTrack->type))
 	    itemsDone += bbiDataOutput(jw, bbi, bci->name, 0, bci->size,
 		fiList, thisTrack, itemsDone);
 	    }
+	    if (itemsDone >= maxItemsOutput)
+		reachedMaxItems = TRUE;
 	}
     else
 	itemsDone += bbiDataOutput(jw, bbi, chrom, uStart, uEnd, fiList,
@@ -765,6 +779,8 @@ if (allowedBigBedType(thisTrack->type))
 	    itemsDone += bbiDataOutput(jw, bbi, bci->name, 0, bci->size,
 		fiList, thisTrack, itemsDone);
 	    }
+	    if (itemsDone >= maxItemsOutput)
+		reachedMaxItems = TRUE;
 	}
     else
 	itemsDone += bbiDataOutput(jw, bbi, chrom, uStart, uEnd, fiList,

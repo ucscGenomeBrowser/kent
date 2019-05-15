@@ -173,7 +173,7 @@ struct lollyCartOptions *lollyCart = tg->lollyCart;
 if (tg->visibility == tvSquish)
     {
     lollyCart->radius = 2;
-    lollyCart->height /= 3;
+    lollyCart->height =  lollyCart->origHeight / 3;
     }
 struct lm *lm = lmInit(0);
 struct bbiFile *bbi =  fetchBbiForTrack(tg);
@@ -299,7 +299,7 @@ int settingsDefault;
 
 cartTdbFetchMinMaxPixels(cart, tdb, MIN_HEIGHT_PER, atoi(DEFAULT_HEIGHT_PER), atoi(DEFAULT_HEIGHT_PER),
                                 &minHeightPixels, &maxHeightPixels, &settingsDefault, &defaultHeight);
-lollyCart->height = defaultHeight;
+lollyCart->origHeight = lollyCart->height = defaultHeight;
 
 lollyCart->autoScale = wigFetchAutoScaleWithCart(cart,tdb, tdb->track, NULL);
 

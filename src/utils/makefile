@@ -149,6 +149,7 @@ UCSC_APPS = \
 USER_APP_SCRIPTS = \
 	bedJoinTabOffset \
 	expMatrixToBarchartBed \
+	ucscApiClient \
 	webSync
 
 SCRIPT_FILES = \

@@ -652,9 +652,10 @@ notSup01: setOutput
 
 # request a track that is not yet supported: vcfTabix
 notSup02: setOutput
-	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi/getData/track?track=CTVT_SNV_Som;chrom=chr1;genome=canFam3;hubUrl=https://data.broadinstitute.org/vgb/dog/dog/hub.txt;jsonOutputArrays=1;maxItemsOutput=5'\n"
-	@./jsonConsumer.pl -endpoint="/getData/track" -hubUrl="https://data.broadinstitute.org/vgb/dog/dog/hub.txt" -genome="canFam3" -track="CTVT_SNV_Som" -chrom="chr1" -jsonOutputArrays -maxItemsOutput=5 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi/getData/track?track=variants;chrom=chr1;genome=danRer11;hubUrl=http://research.nhgri.nih.gov/manuscripts/Burgess/zebrafish/downloads/NHGRI-1/hub.txt;jsonOutputArrays=1;maxItemsOutput=5'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -hubUrl="http://research.nhgri.nih.gov/manuscripts/Burgess/zebrafish/downloads/NHGRI-1/hub.txt" -genome="danRer11" -track="variants" -chrom="chr1" -jsonOutputArrays -maxItemsOutput=5 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
+
 
 #     34 bam - not supported</li>
 #      2 bigBarChart - not supported</li>
