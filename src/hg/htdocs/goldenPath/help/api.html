@@ -19,6 +19,7 @@
 <h6><a href="#list_examples">Example data access, list functions</a></h6>
 <h6><a href="#getData_examples">Example data access, getData functions</a></h6>
 <h6><a href="#Error_examples">Error return examples</a></h6>
+<h6><a href="#Practical_examples">Practical examples</a></h6>
 
 <!-- ========== What is JSON data ? ============================== -->
 <a id="Intro"></a>
@@ -274,5 +275,48 @@ target=_blank>FAQ</a> -
 <br><b>api.genome.ucsc.edu/getData/track?genome=hg19;track=decipherSnvs</b></li>
 </ol>
 </p>
+
+<!-- ========== Practical Examples ======================= -->
+
+<a id="Practical_examples"></a>
+<h2>Practical examples</h2>
+
+<h3>Looking up the schema of a specific track</h3>
+
+<p>
+When querying track data with the <b>/getData/track</b> function, the <b>jsonOutputArrays</b> 
+can be used in conjunction to see the track schema. This includes a description of each field 
+present in the track. The data will also be returned in JSON array type.</p>
+
+<p>
+<a href='https://api.genome.ucsc.edu/getData/track?genome=hg38;track=gold;chrom=chrM;jsonOutputArrays=1'
+target=_blank>Request data from hg38 gold track in array type</a> -
+<br><b>api.genome.ucsc.edu/getData/track?genome=hg38;track=gold;chrom=chrM;jsonOutputArrays=1</b></p>
+
+<h3>Hide track container information with trackLeavesOnly parameter</h3>
+
+<p>
+When using the <b>/list/tracks</b> function to see the available tracks in an assembly, it can 
+be useful to return all tracks in the same hierarchical level. By default, composite and 
+supertracks will have the subtracks nested below, however, the <b>trackLeavesOnly=1</b> parameter
+can be passed to hide the container information, and display all tracks and subtracks at the
+same level.</p>
+
+<p>
+In the following example, the first link does not include the trackLeavesOnly parameter. The 
+output can be compared to the second link to see the difference. This can be observed in the 
+conservation track. In the first link, the multiz20way track is nested within the cons20way 
+track. In the second link, however, the multiz20way subtrack is seen at an equivelant level 
+with all other tracks, and the container, cons20way, is not present in the list.</p>
+
+<p>
+<a href='https://api.genome.ucsc.edu/list/tracks?genome=rn6'
+target=_blank>Request available tracks in the rn6 genome</a> -
+<br><b>api.genome.ucsc.edu/list/tracks?genome=rn6</b></p>
+
+<p>
+<a href='https://api.genome.ucsc.edu/list/tracks?genome=rn6;trackLeavesOnly=1'
+target=_blank>Request available tracks in the rn6 genome, hiding container information</a> -
+<br><b>api.genome.ucsc.edu/list/tracks?genome=rn6;trackLeavesOnly=1</b></p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
