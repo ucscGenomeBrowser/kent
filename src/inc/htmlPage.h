@@ -200,6 +200,9 @@ struct slName *htmlPageScanAttribute(struct htmlPage *page,
 struct slName *htmlPageLinks(struct htmlPage *page);
 /* Scan through tags list and pull out HREF attributes. */
 
+struct slName *htmlPageSrcLinks(struct htmlPage *page);
+/* Scan through tags list and pull out SRC attributes. */
+
 void htmlPageFormOrAbort(struct htmlPage *page);
 /* Aborts if no FORM found */
 

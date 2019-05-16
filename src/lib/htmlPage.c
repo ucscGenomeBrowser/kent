@@ -1474,6 +1474,12 @@ struct slName *htmlPageLinks(struct htmlPage *page)
 return htmlPageScanAttribute(page, NULL, "HREF");
 }
 
+struct slName *htmlPageSrcLinks(struct htmlPage *page)
+/* Scan through tags list and pull out SRC attributes. */
+{
+return htmlPageScanAttribute(page, NULL, "SRC");
+}
+
 struct htmlTableRow
 /* Data on a row */
     {

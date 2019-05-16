@@ -8,13 +8,10 @@ use JSON;
 use Getopt::Long;
 
 my $http = HTTP::Tiny->new();
+# my $server = 'https://api.genome.ucsc.edu';
 # my $server = 'https://apibeta.soe.ucsc.edu';
-# my $server = 'http://localhost:1236/cgi-bin/hubApi';
 my $server = 'https://api-test.gi.ucsc.edu';
-# my $server="https://genome-euro.ucsc.edu/cgi-bin/loader/hubApi";
 # my $server = 'https://hgwdev-api.gi.ucsc.edu';
-# my $server = 'https://hgwbeta.soe.ucsc.edu/cgi-bin/hubApi';
-# my $server = 'https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi';
 my $globalHeaders = { 'Content-Type' => 'application/json' };
 my $lastRequestTime = Time::HiRes::time();
 my $processStartTime = Time::HiRes::time();
