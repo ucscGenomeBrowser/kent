@@ -121,7 +121,7 @@ sqlFreeResult(&sr);
 if ((itemCount + itemsDone) >= maxItemsOutput)
     reachedMaxItems = TRUE;
 return itemCount;
-}
+}	/*	static unsigned sqlQueryJsonOutput(...) */
 
 static void tableDataOutput(char *db, struct trackDb *tdb,
     struct sqlConnection *conn, struct jsonWrite *jw, char *track,
@@ -239,7 +239,7 @@ else if (0 == (start + end))	/* have chrom, no start,end == full chr */
 	if (jsonOutputArrays || debug)
 	    wigColumnTypes(jw);
 	jsonWriteListStart(jw, chrom);
-        wigTableDataOutput(jw, db, splitSqlTable, chrom, 0, ci->size, 0);
+        itemsReturned += wigTableDataOutput(jw, db, splitSqlTable, chrom, 0, ci->size, 0);
 	jsonWriteListEnd(jw);
         return;	/* DONE */
 	}
@@ -251,14 +251,12 @@ else if (0 == (start + end))	/* have chrom, no start,end == full chr */
 else	/* fully specified chrom:start-end */
     {
     jsonWriteString(jw, "chrom", chrom);
-//    jsonWriteNumber(jw, "start", (long long)start); already printed out
-//    jsonWriteNumber(jw, "end", (long long)end); already printed out
     if (startsWith("wig", tdb->type))
 	{
 	if (jsonOutputArrays || debug)
 	    wigColumnTypes(jw);
 	jsonWriteListStart(jw, chrom);
-        wigTableDataOutput(jw, db, splitSqlTable, chrom, start, end, 0);
+        itemsReturned += wigTableDataOutput(jw, db, splitSqlTable, chrom, start, end, 0);
 	jsonWriteListEnd(jw);
         return;	/* DONE */
 	}
@@ -348,9 +346,10 @@ if (isEmpty(chrom))
 		columnCount, columnNames, jsonTypes, itemsDone);
 	jsonWriteListEnd(jw);	/* chrom data output list end */
 	}
-	if (itemsDone >= maxItemsOutput)
-	    reachedMaxItems = TRUE;
+    if (itemsDone >= maxItemsOutput)
+	reachedMaxItems = TRUE;
     jsonWriteObjectEnd(jw);	/* end track data output */
+    itemsReturned += itemsDone;
     }
 else
     {	/* a single chrom has been requested, run it */
@@ -358,6 +357,7 @@ else
     itemsDone += sqlQueryJsonOutput(conn, jw, query->string, columnCount,
 	columnNames, jsonTypes, itemsDone);
     jsonWriteListEnd(jw);	/* data output list end */
+    itemsReturned += itemsDone;
     }
 freeDyString(&query);
 }	/*  static void tableDataOutput(char *db, struct trackDb *tdb, ... ) */
@@ -458,18 +458,18 @@ jsonWriteListEnd(jw);
 if (itemCount >= maxItemsOutput)
     reachedMaxItems = TRUE;
 return itemCount;
-}
+}	/*	static unsigned wigDataOutput(...) */
 
 static void wigData(struct jsonWrite *jw, struct bbiFile *bwf, char *chrom,
     unsigned start, unsigned end)
 /* output the data for a bigWig bbi file */
 {
 struct bbiChromInfo *chromList = NULL;
+unsigned itemsDone = 0;
 if (isEmpty(chrom))
     {
     chromList = bbiChromList(bwf);
     struct bbiChromInfo *bci;
-    unsigned itemsDone = 0;
     for (bci = chromList; bci && (itemsDone < maxItemsOutput); bci = bci->next)
 	{
 	itemsDone += wigDataOutput(jw, bwf, bci->name, 0, bci->size);
@@ -478,7 +478,9 @@ if (isEmpty(chrom))
 	    reachedMaxItems = TRUE;
     }
     else
-	(void) wigDataOutput(jw, bwf, chrom, start, end);
+	itemsDone += wigDataOutput(jw, bwf, chrom, start, end);
+
+itemsReturned += itemsDone;
 }
 
 static void bigColumnTypes(struct jsonWrite *jw, struct sqlFieldType *fiList,
@@ -542,12 +544,10 @@ if (NULL == bbi)
 struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "hubUrl", hubUrl);
 jsonWriteString(jw, "genome", genome);
-// jsonWriteString(jw, "track", track);
 unsigned chromSize = 0;
 struct bbiChromInfo *chromList = NULL;
 if (isNotEmpty(chrom))
     {
-//    jsonWriteString(jw, "chrom", chrom);
     chromSize = bbiChromSize(bbi, chrom);
     if (0 == chromSize)
 	apiErrAbort(err400, err400Msg, "can not find specified chrom=%s in bigBed file URL %s", chrom, bigDataUrl);
@@ -595,6 +595,7 @@ if (allowedBigBedType(thisTrack->type))
     else
 	itemsDone += bbiDataOutput(jw, bbi, chrom, uStart, uEnd, fiList,
 		thisTrack, itemsDone);
+    itemsReturned += itemsDone;
     jsonWriteListEnd(jw);
     }
 else if (startsWith("bigWig", thisTrack->type))
@@ -785,6 +786,7 @@ if (allowedBigBedType(thisTrack->type))
     else
 	itemsDone += bbiDataOutput(jw, bbi, chrom, uStart, uEnd, fiList,
 		thisTrack, itemsDone);
+    itemsReturned += itemsDone;
     jsonWriteListEnd(jw);
     }
 else if (startsWith("bigWig", thisTrack->type))

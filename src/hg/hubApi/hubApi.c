@@ -22,6 +22,7 @@
 static int maxItemLimit = 1000000;   /* maximum of 1,000,000 items returned */
 int maxItemsOutput = 1000000;   /* can be set in URL maxItemsOutput=N */
 boolean reachedMaxItems = FALSE;	/* during getData, signal to return */
+long long itemsReturned = 0;	/* for getData functions, number of items returned */
 /* for debugging purpose, current bot delay value */
 int botDelay = 0;
 boolean debug = FALSE;	/* can be set in URL debug=1, to turn off: debug=0 */
