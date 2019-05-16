@@ -157,7 +157,10 @@ set tools = ~/kent/src/hg/makeDb/hgBedsToBedExps
 $tools/factorSourceCheckScore.pl < clusters.factorSource.bed
 # Errors: 0 in 10560472 lines
 
-hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/factorSource.sql -renameSqlTable \
+#hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/factorSource.sql -renameSqlTable \
+    #hg19 encode3RegTfbsCluster clusters.factorSource.bed
+# use this schema for compatibility with previous tracks
+hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/bed5SourceVals.sql -renameSqlTable \
     hg19 encode3RegTfbsCluster clusters.factorSource.bed
 
 # Read 10560472 elements of size 8 from clusters.factorSource.bed
@@ -207,6 +210,7 @@ cat > trackDb.ra << 'EOF'
 # rename tables for consistency with earlier regulatory supertrack tracks (but distinguish from
 # ENCODE 2 by prefix
 
+hgsql hg19 -e "alter table encode3RegTfbsCluster rename to encRegTfbsClustered"
 hgsql hg19 -e "alter table encode3RegTfbsCluster rename to encRegTfbsClustered"
 hgsql hg19 -e "alter table encode3RegTfbsClusterInput rename to encRegTfbsClusteredInputs"
 hgsql hg19 -e "alter table encode3RegTfbsExp rename to encRegTfbsClusteredSources"
@@ -288,7 +292,9 @@ cat makeFactorSource.log
 $tools/factorSourceCheckScore.pl < clusters.factorSource.bed
 # Errors: 0 in 10565630 lines
 
-hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/factorSource.sql -renameSqlTable \
+#hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/factorSource.sql -renameSqlTable \
+    #hg38 encode3RegTfbsCluster clusters.factorSource.bed
+hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/bed5SourceVals.sql -renameSqlTable \
     hg38 encode3RegTfbsCluster clusters.factorSource.bed
 # Read 10565630 elements of size 8 from clusters.factorSource.bed
 
@@ -302,6 +308,9 @@ hgLoadSqlTab hg38 encode3RegTfbsExp ~/kent/src/hg/lib/expRecord.sql clusters.exp
 perl ../makeInputs.pl < fileCellAbTarget.tab > clusters.inputs.tab
 hgLoadSqlTab hg38 encode3RegTfbsClusterInput \
         ~/kent/src/hg/lib/clusterInputTrackTable5.sql clusters.inputs.tab
+# next time, use this:
+#hgLoadSqlTab hg38 encode3RegTfbsClusterInput \
+        #~/kent/src/hg/lib/clusterInputTrackEncode3Tfbs.sql clusters.inputs.tab
 
 # list factors for trackDb filterBy
 awk '{print $4}' fileCellAbTarget.tab | sort | uniq | sed 's/$/,\\/' > factors.trackDb
