@@ -75,7 +75,7 @@ if (symlink(newPath, oldPath) != 0)
 }
 
 static char *saveTrashFile(char *trashPath, char *sessionDir)
-/* If trashPath exists and is not already a soft-link, alloc and return a new path in
+/* If trashPath exists and is not already a soft-link to sessionDir, alloc and return a new path in
  * sessionDir; move trashPath to new path and soft-link from trashPath to new path.
  * If trashPath is already a soft-link, return the path that it links to.
  * Return NULL if trashPath does not exist (can happen with expired custom track files). */
@@ -85,7 +85,19 @@ if (fileExists(trashPath))
     {
     char *existingLink = maybeReadlink(trashPath);
     if (existingLink)
-        newPath = existingLink;
+        {
+        // It may be a multi-directory-level relative symlink created by the trashCleaner scripts
+        if (existingLink[0] != '/')
+            {
+            char trashPathDir[PATH_LEN];
+            splitPath(trashPath, trashPathDir, NULL, NULL);
+            char fullLinkPath[strlen(trashPathDir) + strlen(existingLink) + 1];
+            safef(fullLinkPath, sizeof fullLinkPath, "%s%s", trashPathDir, existingLink);
+            newPath = realpath(fullLinkPath, NULL);
+            }
+        else
+            newPath = existingLink;
+        }
     else
         {
         newPath = sessionDataPathFromTrash(trashPath, sessionDir);
