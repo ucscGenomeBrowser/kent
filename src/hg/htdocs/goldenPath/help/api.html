@@ -266,9 +266,6 @@ target=_blank>bigBed data from a UCSC database, chrom and start,end limits</a> -
 <li><a href='https://api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=assembly;chrom=chrI;start=43521;end=54321'
 target=_blank>Request track data for non-existent chromosome in an assembly hub genome</a> -
 <br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=assembly;chrom=chrI;start=43521;end=54321</b></li>
-<li><a href='https://api.genome.ucsc.edu/getData/track?genome=hg19;track=knownGene'
-target=_blank>Request track data with over 1M items, return first 1M and flag maxItemsLimit:true</a> -
-<br><b>api.genome.ucsc.edu/getData/track?genome=hg19;track=knownGene</b></li>
 <li><a href='https://api.genome.ucsc.edu/getData/track?genome=hg19;track=decipherSnvs'
 target=_blank>Request track data from a restricted track</a>. See <a href='../../FAQ/FAQdownloads.html#download40' 
 target=_blank>FAQ</a> -
@@ -318,5 +315,51 @@ target=_blank>Request available tracks in the rn6 genome</a> -
 <a href='https://api.genome.ucsc.edu/list/tracks?genome=rn6;trackLeavesOnly=1'
 target=_blank>Request available tracks in the rn6 genome, hiding container information</a> -
 <br><b>api.genome.ucsc.edu/list/tracks?genome=rn6;trackLeavesOnly=1</b></p>
+
+<h3>Requesting track data with over one million (1M) items in output</h3>
+
+<p>
+Certain tracks may contain over 1M items. When these tracks are queried using the 
+<b>/getData/track</b> function, only the first million items are returned. The API assumes 
+this default value of 1M unless a different value (less than 1M) is specified in the 
+parameter <b>maxItemsOutput</b>.</p>
+
+<p>
+One of these tracks is the knownGene track for hg19. Removing the <b>maxItemsOutput</b> 
+parameter from the following link will lead to a 384Mb download, and may cause certain
+web browsers to time out.</p>
+
+<p>
+<a href='https://api.genome.ucsc.edu/getData/track?genome=hg19;track=knownGene;maxItemsOutput=5'
+target=_blank>Request items in knownGene track of hg19, remove maxItemsOutput parameter for 1M max return</a> -
+<br><b>api.genome.ucsc.edu/getData/track?genome=hg19;track=knownGene;maxItemsOutput=5</b></p>
+
+<p>
+There are different ways around this item limit, depending on how many items are in the track. For
+the knownGene track, breaking it down to component chromosome queries using the <b>chrom</b> 
+parameter will suffice. In order to get a listing of the chrom names, and what chroms have data 
+for that track, the <b>/list/chromosomes</b> function can be used.</p>
+
+<p>
+<a href='https://api.genome.ucsc.edu/list/chromosomes?genome=hg19;track=knownGene'
+target=_blank>Request listing of chroms that have data for the knownGene track in hg19</a> -
+<br><b>api.genome.ucsc.edu/list/chromosomes?genome=hg19;track=knownGene</b></p>
+
+<p>
+With the list of chrom names that have data, the <b>/getData/track</b> function can be used 
+again while specifying the <b>chrom</b> parameter. In the following example chr1 is queried 
+and the <i>itemsReturned</i> field shows a total of 7967 items in the output. Well below the 
+1M limit, meaning all data for chr1 has been extracted. This can then be repeated for all 
+chroms of interest.</p>
+
+<p>
+<a href='https://api.genome.ucsc.edu/getData/track?genome=hg19;track=knownGene;chrom=chr1'
+target=_blank>Request iems in knownGene track of hg19, only for chr1</a> -
+<br><b>api.genome.ucsc.edu/getData/track?genome=hg19;track=knownGene;chrom=chr1</b></p>
+
+<p>
+For tracks that have additional items, such as SNP tracks, the query can be further broken 
+down using the additional <b>start</b> and <b>end</b> parameters.</p>
+
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
