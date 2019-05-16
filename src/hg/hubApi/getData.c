@@ -694,7 +694,7 @@ if (! hTableOrSplitExists(db, sqlTable))
 	tableTrack = FALSE;
     }
 if (protectedData)
-	apiErrAbort(err403, err403Msg, "this data request: 'db=%s;track=%s' is protected data", db, track);
+	apiErrAbort(err403, err403Msg, "this data request: 'db=%s;track=%s' is protected data, see also: https://genome.ucsc.edu/FAQ/FAQdownloads.html#download40", db, track);
 
 struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "genome", db);

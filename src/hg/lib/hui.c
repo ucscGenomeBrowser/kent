@@ -7706,7 +7706,7 @@ if (dimensionX && dimensionY && childTdb != NULL) // Both X and Y, then column o
 else if (dimensionX)
     {
     printf("<TH ALIGN=%s>",left?"RIGHT":"LEFT");
-    buttonsForAll(TRUE, TRUE);  // WARNING: not tested (is this used ?)
+    buttonsForAll(TRUE, TRUE);
     puts("</TH>");
     }
 else if (left && dimensionY && childTdb != NULL)

@@ -359,6 +359,8 @@ sort | awk -F'\n' '{print $1, "\t", $1}' shortLabels.orig.txt > \
 # 3. trim 2nd column to 17 chars
 # 4. export as tab-sep
 
+# NOTE: double check they are unique
+
 tdbRename trackDb.ra shortLabel encode3TfChipShortLabels.hg19.txt trackDb.new.ra
 
 # Fix up subGroup members w/ punctuation and initial numbers:
