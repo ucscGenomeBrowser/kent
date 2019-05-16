@@ -232,133 +232,35 @@ sub processEndPoint() {
   if (length($endpoint)) {
      my $json = JSON->new;
      my $jsonReturn = {};
-     if ($endpoint eq "/list/hubGenomes") {
-	my %parameters;
-	# allow no hubUrl argument to test error reports
-        if (length($hubUrl)) {
-	   $parameters{"hubUrl"} = "$hubUrl";
-        }
-        if (length($genome)) {
-	   $parameters{"genome"} = "$genome";
-        }
-	$jsonReturn = performJsonAction($endpoint, \%parameters);
-	$errReturn = 1 if (defined ($jsonReturn->{'error'}));
-	printf "%s", $json->pretty->encode( $jsonReturn );
-     } elsif ($endpoint eq "/list/tracks") {
-	# no need to verify arguments here, pass them along, or not,
-	# so that error returns can be verified
-	my %parameters;
-	if (length($chrom)) {
-	    $parameters{"chrom"} = "$chrom";
-	}
-	if ($trackLeavesOnly) {
-	    $parameters{"trackLeavesOnly"} = "1";
-	}
-	# allow no hubUrl argument to test error reports
-        if (length($hubUrl)) {
-	  $parameters{"hubUrl"} = "$hubUrl";
-	}
-	# allow call to go through without a genome specified to test error
-	if (length($genome)) {
-	  $parameters{"genome"} = "$genome";
-	}
-	$jsonReturn = performJsonAction($endpoint, \%parameters);
-	$errReturn = 1 if (defined ($jsonReturn->{'error'}));
-	printf "%s", $json->pretty->encode( $jsonReturn );
-     } elsif ($endpoint eq "/list/chromosomes") {
-	my %parameters;
-	if (length($chrom)) {
-	    $parameters{"chrom"} = "$chrom";
-	}
-	if ($trackLeavesOnly) {
-	    $parameters{"trackLeavesOnly"} = "1";
-	}
-	if (length($hubUrl)) {
-	    $parameters{"hubUrl"} = "$hubUrl";
-	}
-	# allow call to go through without a genome specified to test error
-	if (length($genome)) {
-	    $parameters{"genome"} = "$genome";
-	}
-	if (length($track)) {
-	    $parameters{"track"} = "$track";
-	}
-	$jsonReturn = performJsonAction($endpoint, \%parameters);
-	$errReturn = 1 if (defined ($jsonReturn->{'error'}));
-	printf "%s", $json->pretty->encode( $jsonReturn );
-     } elsif ($endpoint eq "/getData/sequence") {
-	my %parameters;
-	if ($trackLeavesOnly) {
-	    $parameters{"trackLeavesOnly"} = "1";
-	}
-	if (length($hubUrl)) {
-	  $parameters{"hubUrl"} = "$hubUrl";
-	}
-	# allow call to go through without a genome specified to test error
-	if (length($genome)) {
-	  $parameters{"genome"} = "$genome";
-	}
-	if (length($chrom)) {
-	    $parameters{"chrom"} = "$chrom";
-	}
-	if (length($start)) {
-	    $parameters{"start"} = "$start";
-	    $parameters{"end"} = "$end";
-	}
-	$jsonReturn = performJsonAction($endpoint, \%parameters);
-	$errReturn = 1 if (defined ($jsonReturn->{'error'}));
-	printf "%s", $json->pretty->encode( $jsonReturn );
-     } elsif ($endpoint eq "/getData/track") {
-	my %parameters;
-	if (length($hubUrl)) {
-	  $parameters{"hubUrl"} = "$hubUrl";
-	}
-	if ($trackLeavesOnly) {
-	    $parameters{"trackLeavesOnly"} = "1";
-	}
-	# allow call to go through without a genome specified to test error
-	if (length($genome)) {
-	    $parameters{"genome"} = "$genome";
-	}
-	if (length($track)) {
-	    $parameters{"track"} = "$track";
-	}
-	if (length($chrom)) {
-	    $parameters{"chrom"} = "$chrom";
-	}
-	if (length($start)) {
-	    $parameters{"start"} = "$start";
-	    $parameters{"end"} = "$end";
-	}
-	$jsonReturn = performJsonAction($endpoint, \%parameters);
-	$errReturn = 1 if (defined ($jsonReturn->{'error'}));
-	printf "%s", $json->pretty->encode( $jsonReturn );
-     } else {
-#	printf STDERR "# endpoint not supported at this time: '%s'\n", $endpoint;
-#	Pass along the bogus request just to test the error handling.
-	my %parameters;
-	if (length($hubUrl)) {
-	  $parameters{"hubUrl"} = "$hubUrl";
-	}
-	if (length($genome)) {
-	    $parameters{"genome"} = "$genome";
-	}
-	if (length($track)) {
-	    $parameters{"track"} = "$track";
-	}
-	if (length($chrom)) {
-	    $parameters{"chrom"} = "$chrom";
-	}
-	if (length($start)) {
-	    $parameters{"start"} = "$start";
-	    $parameters{"end"} = "$end";
-	}
-	$jsonReturn = performJsonAction($endpoint, \%parameters);
-	$errReturn = 1 if (defined ($jsonReturn->{'error'}));
-	printf "%s", $json->pretty->encode( $jsonReturn );
+     my %parameters;
+     if (length($hubUrl)) {
+	$parameters{"hubUrl"} = "$hubUrl";
      }
+     if (length($genome)) {
+	$parameters{"genome"} = "$genome";
+        }
+     if (length($chrom)) {
+	$parameters{"chrom"} = "$chrom";
+     }
+     if ($trackLeavesOnly) {
+	$parameters{"trackLeavesOnly"} = "1";
+     }
+     if (length($track)) {
+	$parameters{"track"} = "$track";
+     }
+     if (length($start)) {
+	$parameters{"start"} = "$start";
+     }
+     if (length($end)) {
+	$parameters{"end"} = "$end";
+     }
+     #	Pass along any bogus request just to test the error handling.
+     $jsonReturn = performJsonAction($endpoint, \%parameters);
+     $errReturn = 1 if (defined ($jsonReturn->{'error'}));
+     printf "%s", $json->pretty->encode( $jsonReturn );
   } else {
     printf STDERR "ERROR: no endpoint given ?\n";
+    usage();
     exit 255;
   }
   return $errReturn;
