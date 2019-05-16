@@ -48,14 +48,26 @@
 #define err429	429
 #define err429Msg	"Too Many Requests"
 
+/* list of all potential arguments */
+#define argNull	""
+#define argHubUrl	"hubUrl"
+#define argGenome	"genome"
+#define argTrackLeavesOnly	"trackLeavesOnly"
+#define argTrack	"track"
+#define argChrom	"chrom"
+#define argStart	"start"
+#define argEnd	"end"
+#define argMaxItemsOutput	"maxItemsOutput"
+#define argJsonOutputArrays	"jsonOutputArrays"
+
 /* listing of allowed legal arguments for each function */
-#define argsListPublicHubs ""
-#define argsListUcscGenomes ""
-#define argsListHubGenomes "hubUrl"
-#define argsListTracks "genome;hubUrl;trackLeavesOnly"
-#define argsListChromosomes "genome;hubUrl;track"
-#define argsGetDataTrack "genome;hubUrl;track;chrom;start;end;maxItemsOutput;jsonOutputArrays"
-#define argsGetDataSequence "genome;hubUrl;track;chrom;start;end"
+#define argsListPublicHubs argNull
+#define argsListUcscGenomes argNull
+#define argsListHubGenomes argHubUrl
+#define argsListTracks argGenome";"argHubUrl";"argTrackLeavesOnly
+#define argsListChromosomes argGenome";"argHubUrl";"argTrack
+#define argsGetDataTrack argGenome";"argHubUrl";"argTrack";"argChrom";"argStart";"argEnd";"argMaxItemsOutput";"argJsonOutputArrays
+#define argsGetDataSequence argGenome";"argHubUrl";"argTrack";"argChrom";"argStart";"argEnd
 
 /* maximum number of words expected in PATH_INFO parsing
  *   so far only using 2
