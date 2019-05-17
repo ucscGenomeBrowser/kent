@@ -16,7 +16,7 @@
 
 /* Cart variables */
 
-#define HIC_DRAW_MODE               "drawmode"
+#define HIC_DRAW_MODE               "drawMode"
 #define HIC_DRAW_MODE_TRIANGLE      "triangle"
 #define HIC_DRAW_MODE_SQUARE        "square"
 #define HIC_DRAW_MODE_ARC           "arc"
@@ -27,7 +27,7 @@
 #define HIC_DRAW_MAX_VALUE          "max"
 #define HIC_DRAW_MAX_VALUE_DEFAULT  100
 #define HIC_DRAW_COLOR              "color"
-#define HIC_DRAW_BG_COLOR           "bgcolor"
+#define HIC_DRAW_BG_COLOR           "bgColor"
 /* Default to drawing red on a white background */
 #define HIC_DRAW_COLOR_DEFAULT      "#ff0000"
 #define HIC_DRAW_BG_COLOR_DEFAULT   "#ffffff"
