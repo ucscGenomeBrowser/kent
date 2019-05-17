@@ -104,6 +104,8 @@ for (;;)
 	{
 	break;
 	}
+    if (one.core.n_cigar != 0)
+        {
     struct psl *psl = bamToPslUnscored(&one, head);
     if (psl != NULL)
        {
@@ -116,6 +118,7 @@ for (;;)
         pslTabOut(psl, f);  /* no free of this psl data, memory leak */
         pslFree(&psl);
     }
+        }
     ++processCount;
     if (dots)
        if (0 == processCount % dots)
