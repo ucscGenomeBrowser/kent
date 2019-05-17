@@ -591,8 +591,6 @@ for (;;)
 		        break;
 		    else if (c == 0)
 		        break;
-		    else if (isspace(c))
-		        break;
 		    e += 1;
 		    }
 		if (c == 0)
@@ -644,9 +642,15 @@ for (;;)
 			    }
 			}
 		    }
+		
 		AllocVar(att);
 		att->name = cloneString(name);
 		att->val = cloneString(val);
+		// The html standard allows us to break quoted attributes into multiple lines using newlines,
+		// but they are not part of the tag value itself, so 
+		// Strip \n and \r chars from value (att->val);  
+		stripChar(att->val, '\n');
+		stripChar(att->val, '\r');
 		attributeDecode(att->val);
 		slAddTail(&tag->attributes, att);
 		s = e;
@@ -1709,7 +1713,10 @@ static char *singleTons[] =
 };
 
 static char *selfClosers[] =
-/* Tags which can be optionally self-closing in html5 or SVG. */
+/* Tags which can be optionally self-closing in html5 or SVG.
+ * Note that a space is required BEFORE the /> which provides disambiguation,
+ * e.g. We do not know if the trailing slash is part of SRC URL: <img src=http://domain.com/image.jpg/>
+ */
 {
 "CIRCLE",   // SVG
 "ELLIPSE",  // SVG
@@ -1879,7 +1886,19 @@ if (contentType == NULL || startsWith("text/html", contentType))
     {
     /* To simplify things upper case all tag names. */
     for (tag = page->tags; tag != NULL; tag = tag->next)
+	{
 	touppers(tag->name);
+	if (isEmpty(tag->name)) // causes a blank tag
+	    tagAbort(page, tag, "Space not allowed between opening bracket < and tag name");
+	    if (startsWith("/", tag->name))
+		{
+		if (sameString(tag->name,"/")) // causes a blank close tag
+		    tagAbort(page, tag, "Space not allowed between opening bracket </ and closing tag name");
+		if (tag->attributes)
+		    tagAbort(page, tag, "Attributes are not allowed in closing tag: [%s]", tag->name);
+		}
+	}
+
 
     checkExactlyOne(page->tags, "BODY");
 
@@ -1942,8 +1961,14 @@ for (i=0; i<count; ++i)
 struct slName *tagStack = NULL;
 for (tag = page->tags; tag != NULL; tag = tag->next)
     {
+    if (isEmpty(tag->name)) // causes a blank tag
+	tagAbort(page, tag, "Space not allowed between opening bracket < and tag name");
     if (startsWith("/", tag->name))
 	{
+	if (sameString(tag->name,"/")) // causes a blank close tag
+	    tagAbort(page, tag, "Space not allowed between opening bracket </ and closing tag name");
+        if (tag->attributes)
+	    tagAbort(page, tag, "Attributes are not allowed in closing tag: [%s]", tag->name);
 	if (hashLookup(singleTonHash, tag->name+1))
 	    tagAbort(page, tag, "Tag %s closing tag not allowed for singleton tags.", tag->name);
 	if (!sameString("P", tag->name+1))
