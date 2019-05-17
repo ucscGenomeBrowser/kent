@@ -612,7 +612,8 @@ else
 	 col1 != NULL && col2 != NULL && checkCount < numColumnsToCheck; 
 	 col1 = col1->next, col2 = col2->next, ++checkCount)
 	{
-	if (!sameOk(col1->name, col2->name))
+        // allow reserved fields to become used
+	if (!(sameOk(col1->name, col2->name) || sameOk(col1->name, "reserved") || sameOk("reserved", col2->name)))
 	    {
 	    verbose(verboseLevel,"column #%d names do not match: %s=[%s]  %s=[%s]\n"
 		, checkCount+1, name1, col1->name, name2, col2->name);

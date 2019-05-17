@@ -175,6 +175,8 @@ The darkness of the interaction indicates the strength of the interaction.
 <p>
 In this example, you will create a bigInteract track out of an existing bigInteract format file,
 located on the UCSC Genome Browser http server. This file contains data for the hg19 assembly.
+This example also contains the  <a href="./trackDb/trackDbHub.html#interactUp"
+target="_blank"><code>interactUp=true</code></a> setting to flip the arcs of the interact display.</p>
 </p>
 
 <p>
@@ -183,7 +185,7 @@ To create a custom track using this file:
    <li>Construct a track line referencing the file and set the browser position to show region 
        of interest in the file:
    <pre><code>
-track type=bigInteract name=&quot;interact Example Three&quot; description=&quot;A bigInteract file&quot; useScore=true visibility=full bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/interact/interactExample3.inter.bb
+track type=bigInteract interactUp=true name=&quot;interact Example Three&quot; description=&quot;A bigInteract file&quot; useScore=on visibility=full bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/interact/interactExample3.inter.bb
 browser position chr3:63,820,967-63,880,091
    </code></pre></li>
    <li>Paste the track line into the <a href="../../cgi-bin/hgCustom?db=hg19">custom track management 
@@ -191,9 +193,13 @@ browser position chr3:63,820,967-63,880,091
    <li>Click the &quot;submit&quot; button.</li>
 </ol>
 </p>
+<ol>
+<img width="1080" height="170" src="../../images/interactExample3.png">
+</ol>
 <p>
-After the file loads in the Genome Browser, you should see a number of curved interactions, 
-colored black.
+After the file loads in the Genome Browser, you should see a number of interactions, all arching
+as hills instead of valleys, with some curved and many rectangular indicating a connector to a region
+outside of the browser window. Press the 10x zoom out button to see the full connections.
 </p>
 
 <a name="example4"></a>
@@ -227,7 +233,7 @@ bedToBigBed -as=interact.as -type=bed5+13 interactExample4.inter.bed hg19.chrom.
    <li>Construct a custom track line with a bigDataUrl parameter pointing to the newly created
    bigInteract file.
    <pre><code>
-track type=bigInteract name="interact Example Four" description="A bigInteract file" useScore=true bigDataUrl=<your URL>/interactExample4.inter.bb visibility=pack 
+track type=bigInteract name="interact Example Four" description="A bigInteract file" useScore=on bigDataUrl=<your URL>/interactExample4.inter.bb visibility=pack 
 browser position chr3:63,820,967-63,880,091
    </code></pre>
    <li>To fully take advantage of creating a bigInteract file, create a <a href="hgTrackHubHelp.html">Track Hub</a> and

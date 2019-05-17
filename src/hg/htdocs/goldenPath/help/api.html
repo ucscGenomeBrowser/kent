@@ -53,9 +53,9 @@ The following data sets can be accessed at this time:
 <li>List available data tracks from a specified hub or UCSC Genome Browser genome assembly
 (see also: <a
  href='trackDb/trackDbHub.html' target=_blank>track definition help</a>)</li>
-<li>List of chromosomes contained in an assembly hub or UCSC Genome Browser genome assembly
+<li>List of chromosomes contained in an assembly hub or UCSC Genome Browser genome assembly</li>
 <li>List of chromosomes contained in a specific track of an assembly or track hub, or UCSC Genome
-Browser genome assembly
+Browser genome assembly</li>
 <li>Return DNA sequence from an assembly hub 2bit file, or UCSC Genome Browser assembly</li>
 <li>Return track data from a specified assembly or track hub, or UCSC Genome Browser assembly</li>
 </ul>
@@ -108,7 +108,7 @@ target=_blank>UCSC browser coordinate counting systems</a></li>
 <li>trackLeavesOnly=1 - on <em>/list/tracks</em> function, only show tracks, do not show
 composite container information</li>
 <li>jsonOutputArrays=1 - on <em>/getData/track</em> function, JSON format is array type
-for each item of data, instead of the default object type
+for each item of data, instead of the default object type</li>
 </ul>
 </p>
 <p>
@@ -266,9 +266,6 @@ target=_blank>bigBed data from a UCSC database, chrom and start,end limits</a> -
 <li><a href='https://api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=assembly;chrom=chrI;start=43521;end=54321'
 target=_blank>Request track data for non-existent chromosome in an assembly hub genome</a> -
 <br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=assembly;chrom=chrI;start=43521;end=54321</b></li>
-<li><a href='https://api.genome.ucsc.edu/getData/track?genome=hg19;track=knownGene'
-target=_blank>Request track data with over 1M items, return first 1M and flag maxItemsLimit:true</a> -
-<br><b>api.genome.ucsc.edu/getData/track?genome=hg19;track=knownGene</b></li>
 <li><a href='https://api.genome.ucsc.edu/getData/track?genome=hg19;track=decipherSnvs'
 target=_blank>Request track data from a restricted track</a>. See <a href='../../FAQ/FAQdownloads.html#download40' 
 target=_blank>FAQ</a> -
@@ -299,15 +296,16 @@ target=_blank>Request data from hg38 gold track in array type</a> -
 When using the <b>/list/tracks</b> function to see the available tracks in an assembly, it can 
 be useful to return all tracks in the same hierarchical level. By default, composite and 
 supertracks will have the subtracks nested below, however, the <b>trackLeavesOnly=1</b> parameter
-can be passed to hide the container information, and display all tracks and subtracks at the
+can be passed to hide the container information and display all tracks and subtracks at the
 same level.</p>
 
 <p>
-In the following example, the first link does not include the trackLeavesOnly parameter. The 
-output can be compared to the second link to see the difference. This can be observed in the 
-conservation track. In the first link, the multiz20way track is nested within the cons20way 
-track. In the second link, however, the multiz20way subtrack is seen at an equivelant level 
-with all other tracks, and the container, cons20way, is not present in the list.</p>
+In the following example, the first link does not include the <b>trackLeavesOnly</b> parameter. The 
+output can be compared to the second link to see the difference, which can be observed in the 
+conservation track. In the first link, the <i>multiz20way</i> track is nested within the 
+<i>cons20way</i> track. In the second link, however, the <i>multiz20way</i> subtrack is seen at 
+an equivelant level with all other tracks, and the container, <i>cons20way</i>, is not 
+present in the list.</p>
 
 <p>
 <a href='https://api.genome.ucsc.edu/list/tracks?genome=rn6'
@@ -318,5 +316,51 @@ target=_blank>Request available tracks in the rn6 genome</a> -
 <a href='https://api.genome.ucsc.edu/list/tracks?genome=rn6;trackLeavesOnly=1'
 target=_blank>Request available tracks in the rn6 genome, hiding container information</a> -
 <br><b>api.genome.ucsc.edu/list/tracks?genome=rn6;trackLeavesOnly=1</b></p>
+
+<h3>Requesting track data with over one million (1M) items in output</h3>
+
+<p>
+Certain tracks may contain over 1M items. When these tracks are queried using the 
+<b>/getData/track</b> function, only the first million items are returned. The API assumes 
+this default value of 1M unless a different value (less than 1M) is specified with the 
+parameter <b>maxItemsOutput</b>.</p>
+
+<p>
+One of these tracks is the <i>knownGene</i> track for hg19. Removing the <b>maxItemsOutput</b> 
+parameter from the following link will lead to a 384Mb download, and may cause certain
+web browsers to time out.</p>
+
+<p>
+<a href='https://api.genome.ucsc.edu/getData/track?genome=hg19;track=knownGene;maxItemsOutput=5'
+target=_blank>Request items in knownGene track of hg19, remove maxItemsOutput parameter for 1M max return</a> -
+<br><b>api.genome.ucsc.edu/getData/track?genome=hg19;track=knownGene;maxItemsOutput=5</b></p>
+
+<p>
+There are different ways around this item limit, depending on how many items are in the track. For
+the <i>knownGene</i> track, breaking it down to component chromosome queries using the <b>chrom</b> 
+parameter will suffice. In order to get a listing of the chrom names, and what chroms have data 
+for that track, the <b>/list/chromosomes</b> function can be used.</p>
+
+<p>
+<a href='https://api.genome.ucsc.edu/list/chromosomes?genome=hg19;track=knownGene'
+target=_blank>Request listing of chroms that have data for the knownGene track in hg19</a> -
+<br><b>api.genome.ucsc.edu/list/chromosomes?genome=hg19;track=knownGene</b></p>
+
+<p>
+With the list of chrom names that have data, the <b>/getData/track</b> function can be used 
+again while specifying the <b>chrom</b> parameter. In the following example chr1 is queried 
+and the <i>itemsReturned</i> field shows a total of 7967 items in the output. Well below the 
+1M limit, meaning all data for chr1 has been extracted. This can then be repeated for all 
+chroms of interest.</p>
+
+<p>
+<a href='https://api.genome.ucsc.edu/getData/track?genome=hg19;track=knownGene;chrom=chr1'
+target=_blank>Request iems in knownGene track of hg19, only for chr1</a> -
+<br><b>api.genome.ucsc.edu/getData/track?genome=hg19;track=knownGene;chrom=chr1</b></p>
+
+<p>
+For tracks that have additional items, such as SNP tracks, the query can be further broken 
+down using the additional <b>start</b> and <b>end</b> parameters.</p>
+
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
