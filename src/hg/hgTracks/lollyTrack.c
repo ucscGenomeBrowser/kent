@@ -78,6 +78,8 @@ for (pop = popList; pop; pop = pop->next)
     {
     int sx = ((pop->start - seqStart) + .5) * scale + xOff; // x coord of center (lower region)
     hvGfxCircle(hvg, sx, yOff + trackHeight - pop->radius - pop->height, pop->radius, pop->color, TRUE);
+    if ( tg->visibility != tvSquish)  
+        hvGfxCircle(hvg, sx, yOff + trackHeight - pop->radius - pop->height, pop->radius, MG_BLACK, FALSE);
     if (!noMapBoxes)
         mapBoxHgcOrHgGene(hvg, pop->start, pop->end, sx - pop->radius, yOff + trackHeight - pop->radius - pop->height - pop->radius, 2 * pop->radius,2 * pop->radius,
                           tg->track, pop->name, pop->name, NULL, TRUE, NULL);
@@ -248,7 +250,7 @@ for(pop = popList; pop; pop = pop->next)
     else
         {
         pop->height = usableHeight * (pop->val  - lollyCart->lowerLimit) / range + LOLLY_DIAMETER;
-        int colorIndex = 8 * (pop->val  - lollyCart->lowerLimit) / range;
+        int colorIndex = floor(9.99 * (pop->val  - lollyCart->lowerLimit) / range );
         pop->color = lollyPalette[colorIndex] | 0xff000000;
         }
     }

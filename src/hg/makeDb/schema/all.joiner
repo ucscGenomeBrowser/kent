@@ -7244,10 +7244,22 @@ identifier peptideAtlasAccession external=PeptideAtlas
 
 identifier txnFactorGeneId
 "Transcription factor gene name (for human, HGNC)"
-    hg19.wgEncodeRegTfbsClusteredV3.name dupeOk
-    # note: these could be in hgFixed or other non-assembly db
-    hg19.factorbookMotifCanonical.target
-    hg19.factorbookGeneAlias.name minCheck=0.85
+    hg19,hg38.encRegTfbsClustered.name dupeOk
+    hg19.wgEncodeRegTfbsClusteredV3.name
+    hg19.wgEncodeRegClusteredInputsV3.factor
+    hg19,hg38.encRegTfbsClusteredInputs.factor
+    hg19,hg38.factorbookMotifCanonical.target minCheck=.75
+    hg19,hg38.factorbookGeneAlias.name minCheck=0.75
+
+identifier txnFactorClusterSourceId
+"Numeric id of a source contributing to a TFBS cluster"
+    hg19,hg38.encRegTfbsClusteredSources.id
+    hg19,hg38.encRegTfbsClustered.sourceIds comma
+
+identifier txnFactorClusterInputId
+"Identifier of a source contributing to a TFBS cluster"
+    hg19,hg38.encRegTfbsClusteredSources.description
+    hg19,hg38.encRegTfbsClusteredInputs.source
 
 identifier txnFactorMotifId
 "Transcription factor motif name/id"
