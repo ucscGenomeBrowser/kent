@@ -15,7 +15,7 @@ struct lollyCartOptions
     double minY, maxY;
     enum wiggleScaleOptEnum autoScale;
     int radius;
-    int wordCount;
-    char **words;
+    int typeWordCount;
+    char **typeWords;
     };
 #endif 

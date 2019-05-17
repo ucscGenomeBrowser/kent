@@ -133,7 +133,7 @@ if ( tg->visibility == tvDense)
 // if we're pack, then use bigBed drawing
 if (tg->visibility == tvPack)
     {
-    bigBedMethods(tg, tg->tdb, tg->lollyCart->wordCount, tg->lollyCart->words);
+    bigBedMethods(tg, tg->tdb, tg->lollyCart->typeWordCount, tg->lollyCart->typeWords);
     tg->mapsSelf = FALSE;
     tg->drawLeftLabels = NULL;
     return tg->totalHeight(tg, vis);
@@ -324,8 +324,8 @@ bigBedMethods(track, tdb, wordCount, words);
 
 struct lollyCartOptions *lollyCart = lollyCartOptionsNew(cart, tdb, wordCount, words);
 lollyCart->radius = 5;
-lollyCart->words = words;
-lollyCart->wordCount = wordCount;
+lollyCart->typeWords = words;
+lollyCart->typeWordCount = wordCount;
 track->loadItems = lollyLoadItems;
 track->drawItems = lollyDrawItems;
 track->totalHeight = lollyHeight; 
