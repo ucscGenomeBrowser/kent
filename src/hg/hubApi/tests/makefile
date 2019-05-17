@@ -24,7 +24,7 @@ wigData: wig01 wig02 wig03 wig04 wig05 wig06 wig07 wig08 wig09 wig10 \
 errorTests: err01 err02 err03 err04 err05 err06 err07 err08 err09 err10 \
 	err11 err12 err13 err14 err15 err16 err17 err18 err19 err20 \
 	err21 err22 err23 err24 err25 err26 err27 err28 err29 err30 \
-	err31 err32 err33 err34 err35 err36 err37 err38
+	err31 err32 err33 err34 err35 err36 err37 err38 err39
 
 notSupported: notSup01 notSup02
 
@@ -499,6 +499,12 @@ err38: setOutput
 	@htmlCheck getAll 'https://hgwdev-api.gi.ucsc.edu/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;chrom=chr1;start=4567;end=8901;track=assembly;maxItemsOutput=5;jsonOutputArrays=xyz' 2>&1 | sed -e 's/, /,\n/g;' | egrep -v "${excludeLines}" | tail -5 | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
+# testing protected track data
+err39: setOutput
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi/getData/track?track=cosmicRegions;genome=hg19;jsonOutputArrays=1;maxItemsOutput=5'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg19 -track=cosmicRegions -maxItemsOutput=5 -jsonOutputArrays 2>&1 | sed -e 's/, /,\n/g;' | egrep -v "${excludeLines}" | tail -5 | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
 #####################  wiggle data ###########################################
 # classic wiggle with wig table and wib file
 wig01: setOutput
@@ -652,9 +658,10 @@ notSup01: setOutput
 
 # request a track that is not yet supported: vcfTabix
 notSup02: setOutput
-	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi/getData/track?track=CTVT_SNV_Som;chrom=chr1;genome=canFam3;hubUrl=https://data.broadinstitute.org/vgb/dog/dog/hub.txt;jsonOutputArrays=1;maxItemsOutput=5'\n"
-	@./jsonConsumer.pl -endpoint="/getData/track" -hubUrl="https://data.broadinstitute.org/vgb/dog/dog/hub.txt" -genome="canFam3" -track="CTVT_SNV_Som" -chrom="chr1" -jsonOutputArrays -maxItemsOutput=5 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi/getData/track?track=variants;chrom=chr1;genome=danRer11;hubUrl=http://research.nhgri.nih.gov/manuscripts/Burgess/zebrafish/downloads/NHGRI-1/hub.txt;jsonOutputArrays=1;maxItemsOutput=5'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -hubUrl="http://research.nhgri.nih.gov/manuscripts/Burgess/zebrafish/downloads/NHGRI-1/hub.txt" -genome="danRer11" -track="variants" -chrom="chr1" -jsonOutputArrays -maxItemsOutput=5 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
+
 
 #     34 bam - not supported</li>
 #      2 bigBarChart - not supported</li>

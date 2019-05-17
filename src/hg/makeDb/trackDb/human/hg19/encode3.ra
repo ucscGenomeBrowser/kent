@@ -376,7 +376,6 @@ type narrowPeak
 visibility dense 
 scoreFilter 0
 scoreFilterLimits 0:1000
-collapseEmptySubtracks on
 dataVersion ENCODE 3 Nov 2018
 wgEncode 1 
 pennantIcon New red ../goldenPath/newsarch.html
@@ -852,34 +851,37 @@ subGroup2 factor Factor \
     ZZZ3=ZZZ3
 
     track encTfChipPkENCFF079ZWQ
-    parent encTfChipPk on
+    parent encTfChipPk off
     shortLabel breastEpi EP300 1
     longLabel Transcription Factor ChIP-seq Peaks of EP300 in breast_epithelium from ENCODE 3 (ENCFF079ZWQ)
     subGroups cellType=breast_epithelium factor=EP300
 
     track encTfChipPkENCFF208TRU
-    parent encTfChipPk on
-    shortLabel GM12878 HCFC1
+    parent encTfChipPk off
+    shortLabel GM12878 HCFC1 on
     longLabel Transcription Factor ChIP-seq Peaks of HCFC1 in GM12878 from ENCODE 3 (ENCFF208TRU)
     subGroups cellType=GM12878 factor=HCFC1
+    color 153,38,0
 
     track encTfChipPkENCFF913MUA
-    parent encTfChipPk on
+    parent encTfChipPk off
     shortLabel A549 ATF3
     longLabel Transcription Factor ChIP-seq Peaks of ATF3 in A549 from ENCODE 3 (ENCFF913MUA)
     subGroups cellType=A549 factor=ATF3
 
     track encTfChipPkENCFF833FCO
-    parent encTfChipPk on
+    parent encTfChipPk off
     shortLabel K562 GABPA
     longLabel Transcription Factor ChIP-seq Peaks of GABPA in K562 from ENCODE 3 (ENCFF833FCO)
     subGroups cellType=K562 factor=GABPA
+    color 46,0,184
 
     track encTfChipPkENCFF948YVM
-    parent encTfChipPk on
+    parent encTfChipPk off
     shortLabel K562 PHF20
     longLabel Transcription Factor ChIP-seq Peaks of PHF20 in K562 from ENCODE 3 (ENCFF948YVM)
     subGroups cellType=K562 factor=PHF20
+    color 46,0,184
 
     track encTfChipPkENCFF369UWV
     parent encTfChipPk off
@@ -898,12 +900,14 @@ subGroup2 factor Factor \
     shortLabel GM12878 MEF2A
     longLabel Transcription Factor ChIP-seq Peaks of MEF2A in GM12878 from ENCODE 3 (ENCFF328QLX)
     subGroups cellType=GM12878 factor=MEF2A
+    color 153,38,0
 
     track encTfChipPkENCFF553PWA
     parent encTfChipPk off
     shortLabel HepG2 FOXA1 1
     longLabel Transcription Factor ChIP-seq Peaks of FOXA1 in HepG2 from ENCODE 3 (ENCFF553PWA)
     subGroups cellType=HepG2 factor=FOXA1
+    color 189,0,157
 
     track encTfChipPkENCFF346OZB
     parent encTfChipPk off
@@ -916,6 +920,7 @@ subGroup2 factor Factor \
     shortLabel GM12878 CEBPB
     longLabel Transcription Factor ChIP-seq Peaks of CEBPB in GM12878 from ENCODE 3 (ENCFF761MGJ)
     subGroups cellType=GM12878 factor=CEBPB
+    color 153,38,0
 
     track encTfChipPkENCFF047QFE
     parent encTfChipPk off
@@ -934,6 +939,7 @@ subGroup2 factor Factor \
     shortLabel GM12878 BHLHE40 1
     longLabel Transcription Factor ChIP-seq Peaks of BHLHE40 in GM12878 from ENCODE 3 (ENCFF853SOB)
     subGroups cellType=GM12878 factor=BHLHE40
+    color 153,38,0
 
     track encTfChipPkENCFF713ISJ
     parent encTfChipPk off
@@ -946,12 +952,14 @@ subGroup2 factor Factor \
     shortLabel K562 TBP
     longLabel Transcription Factor ChIP-seq Peaks of TBP in K562 from ENCODE 3 (ENCFF380FJL)
     subGroups cellType=K562 factor=TBP
+    color 46,0,184
 
     track encTfChipPkENCFF517YCC
     parent encTfChipPk off
     shortLabel K562 CUX1
     longLabel Transcription Factor ChIP-seq Peaks of CUX1 in K562 from ENCODE 3 (ENCFF517YCC)
     subGroups cellType=K562 factor=CUX1
+    color 46,0,184
 
     track encTfChipPkENCFF086ABE
     parent encTfChipPk off
@@ -964,24 +972,28 @@ subGroup2 factor Factor \
     shortLabel K562 NCOA2 1
     longLabel Transcription Factor ChIP-seq Peaks of NCOA2 in K562 from ENCODE 3 (ENCFF914RFS)
     subGroups cellType=K562 factor=NCOA2
+    color 46,0,184
 
     track encTfChipPkENCFF622RBW
     parent encTfChipPk off
     shortLabel K562 SMARCE1
     longLabel Transcription Factor ChIP-seq Peaks of SMARCE1 in K562 from ENCODE 3 (ENCFF622RBW)
     subGroups cellType=K562 factor=SMARCE1
+    color 46,0,184
 
     track encTfChipPkENCFF434QZL
     parent encTfChipPk off
     shortLabel K562 ZBTB11
     longLabel Transcription Factor ChIP-seq Peaks of ZBTB11 in K562 from ENCODE 3 (ENCFF434QZL)
     subGroups cellType=K562 factor=ZBTB11
+    color 46,0,184
 
     track encTfChipPkENCFF405GHU
     parent encTfChipPk off
     shortLabel HepG2 KAT2B
     longLabel Transcription Factor ChIP-seq Peaks of KAT2B in HepG2 from ENCODE 3 (ENCFF405GHU)
     subGroups cellType=HepG2 factor=KAT2B
+    color 189,0,157
 
     track encTfChipPkENCFF382QJG
     parent encTfChipPk off
@@ -994,24 +1006,28 @@ subGroup2 factor Factor \
     shortLabel K562 STAT1 1
     longLabel Transcription Factor ChIP-seq Peaks of STAT1 in K562 from ENCODE 3 (ENCFF498DOQ)
     subGroups cellType=K562 factor=STAT1
+    color 46,0,184
 
     track encTfChipPkENCFF055MVR
     parent encTfChipPk off
     shortLabel HepG2 U2AF1
     longLabel Transcription Factor ChIP-seq Peaks of U2AF1 in HepG2 from ENCODE 3 (ENCFF055MVR)
     subGroups cellType=HepG2 factor=U2AF1
+    color 189,0,157
 
     track encTfChipPkENCFF191MPD
     parent encTfChipPk off
     shortLabel K562 SIN3A 1
     longLabel Transcription Factor ChIP-seq Peaks of SIN3A in K562 from ENCODE 3 (ENCFF191MPD)
     subGroups cellType=K562 factor=SIN3A
+    color 46,0,184
 
     track encTfChipPkENCFF254MPF
     parent encTfChipPk off
     shortLabel K562 STAT1 2
     longLabel Transcription Factor ChIP-seq Peaks of STAT1 in K562 from ENCODE 3 (ENCFF254MPF)
     subGroups cellType=K562 factor=STAT1
+    color 46,0,184
 
     track encTfChipPkENCFF973DWU
     parent encTfChipPk off
@@ -1024,12 +1040,14 @@ subGroup2 factor Factor \
     shortLabel GM12878 ASH2L
     longLabel Transcription Factor ChIP-seq Peaks of ASH2L in GM12878 from ENCODE 3 (ENCFF917CXD)
     subGroups cellType=GM12878 factor=ASH2L
+    color 153,38,0
 
     track encTfChipPkENCFF199FYD
     parent encTfChipPk off
     shortLabel GM12878 PAX5 1
     longLabel Transcription Factor ChIP-seq Peaks of PAX5 in GM12878 from ENCODE 3 (ENCFF199FYD)
     subGroups cellType=GM12878 factor=PAX5
+    color 153,38,0
 
     track encTfChipPkENCFF144BSH
     parent encTfChipPk off
@@ -1042,12 +1060,14 @@ subGroup2 factor Factor \
     shortLabel K562 MCM5 1
     longLabel Transcription Factor ChIP-seq Peaks of MCM5 in K562 from ENCODE 3 (ENCFF920RYJ)
     subGroups cellType=K562 factor=MCM5
+    color 46,0,184
 
     track encTfChipPkENCFF421KIV
     parent encTfChipPk off
     shortLabel K562 PYGO2
     longLabel Transcription Factor ChIP-seq Peaks of PYGO2 in K562 from ENCODE 3 (ENCFF421KIV)
     subGroups cellType=K562 factor=PYGO2
+    color 46,0,184
 
     track encTfChipPkENCFF016EUX
     parent encTfChipPk off
@@ -1060,12 +1080,14 @@ subGroup2 factor Factor \
     shortLabel K562 PRDM10
     longLabel Transcription Factor ChIP-seq Peaks of PRDM10 in K562 from ENCODE 3 (ENCFF294HEI)
     subGroups cellType=K562 factor=PRDM10
+    color 46,0,184
 
     track encTfChipPkENCFF921WMN
     parent encTfChipPk off
     shortLabel K562 ZNF318 1
     longLabel Transcription Factor ChIP-seq Peaks of ZNF318 in K562 from ENCODE 3 (ENCFF921WMN)
     subGroups cellType=K562 factor=ZNF318
+    color 46,0,184
 
     track encTfChipPkENCFF282BOE
     parent encTfChipPk off
@@ -1108,18 +1130,21 @@ subGroup2 factor Factor \
     shortLabel K562 MLLT1 1
     longLabel Transcription Factor ChIP-seq Peaks of MLLT1 in K562 from ENCODE 3 (ENCFF197OGH)
     subGroups cellType=K562 factor=MLLT1
+    color 46,0,184
 
     track encTfChipPkENCFF786WZD
     parent encTfChipPk off
     shortLabel K562 DEAF1
     longLabel Transcription Factor ChIP-seq Peaks of DEAF1 in K562 from ENCODE 3 (ENCFF786WZD)
     subGroups cellType=K562 factor=DEAF1
+    color 46,0,184
 
     track encTfChipPkENCFF687NII
     parent encTfChipPk off
     shortLabel H1-hESC PHF8
     longLabel Transcription Factor ChIP-seq Peaks of PHF8 in H1-hESC from ENCODE 3 (ENCFF687NII)
     subGroups cellType=H1-hESC factor=PHF8
+    color 0,107,27
 
     track encTfChipPkENCFF450CNK
     parent encTfChipPk off
@@ -1168,12 +1193,14 @@ subGroup2 factor Factor \
     shortLabel GM12878 ARID3A
     longLabel Transcription Factor ChIP-seq Peaks of ARID3A in GM12878 from ENCODE 3 (ENCFF027VZK)
     subGroups cellType=GM12878 factor=ARID3A
+    color 153,38,0
 
     track encTfChipPkENCFF305QDB
     parent encTfChipPk off
     shortLabel HeLa-S3 TAF1
     longLabel Transcription Factor ChIP-seq Peaks of TAF1 in HeLa-S3 from ENCODE 3 (ENCFF305QDB)
     subGroups cellType=HeLa-S3 factor=TAF1
+    color 0,119,158
 
     track encTfChipPkENCFF689ZNH
     parent encTfChipPk off
@@ -1204,6 +1231,7 @@ subGroup2 factor Factor \
     shortLabel GM12878 ZBED1
     longLabel Transcription Factor ChIP-seq Peaks of ZBED1 in GM12878 from ENCODE 3 (ENCFF123WEZ)
     subGroups cellType=GM12878 factor=ZBED1
+    color 153,38,0
 
     track encTfChipPkENCFF207KQM
     parent encTfChipPk off
@@ -1216,6 +1244,7 @@ subGroup2 factor Factor \
     shortLabel GM12878 HDAC6
     longLabel Transcription Factor ChIP-seq Peaks of HDAC6 in GM12878 from ENCODE 3 (ENCFF109YBE)
     subGroups cellType=GM12878 factor=HDAC6
+    color 153,38,0
 
     track encTfChipPkENCFF949QZO
     parent encTfChipPk off
@@ -1228,30 +1257,35 @@ subGroup2 factor Factor \
     shortLabel K562 BCOR
     longLabel Transcription Factor ChIP-seq Peaks of BCOR in K562 from ENCODE 3 (ENCFF057ZUY)
     subGroups cellType=K562 factor=BCOR
+    color 46,0,184
 
     track encTfChipPkENCFF689AXJ
     parent encTfChipPk off
     shortLabel GM12878 MAFK
     longLabel Transcription Factor ChIP-seq Peaks of MAFK in GM12878 from ENCODE 3 (ENCFF689AXJ)
     subGroups cellType=GM12878 factor=MAFK
+    color 153,38,0
 
     track encTfChipPkENCFF584YYH
     parent encTfChipPk off
     shortLabel HepG2 RAD21 1
     longLabel Transcription Factor ChIP-seq Peaks of RAD21 in HepG2 from ENCODE 3 (ENCFF584YYH)
     subGroups cellType=HepG2 factor=RAD21
+    color 189,0,157
 
     track encTfChipPkENCFF812QPN
     parent encTfChipPk off
     shortLabel K562 MAFK
     longLabel Transcription Factor ChIP-seq Peaks of MAFK in K562 from ENCODE 3 (ENCFF812QPN)
     subGroups cellType=K562 factor=MAFK
+    color 46,0,184
 
     track encTfChipPkENCFF598VEK
     parent encTfChipPk off
     shortLabel HepG2 ZBTB40
     longLabel Transcription Factor ChIP-seq Peaks of ZBTB40 in HepG2 from ENCODE 3 (ENCFF598VEK)
     subGroups cellType=HepG2 factor=ZBTB40
+    color 189,0,157
 
     track encTfChipPkENCFF531NFE
     parent encTfChipPk off
@@ -1264,6 +1298,7 @@ subGroup2 factor Factor \
     shortLabel GM12878 IKZF1 1
     longLabel Transcription Factor ChIP-seq Peaks of IKZF1 in GM12878 from ENCODE 3 (ENCFF073XZC)
     subGroups cellType=GM12878 factor=IKZF1
+    color 153,38,0
 
     track encTfChipPkENCFF566WSG
     parent encTfChipPk off
@@ -1272,16 +1307,18 @@ subGroup2 factor Factor \
     subGroups cellType=liver factor=YY1
 
     track encTfChipPkENCFF807AKG
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel GM12878 ELF1
     longLabel Transcription Factor ChIP-seq Peaks of ELF1 in GM12878 from ENCODE 3 (ENCFF807AKG)
     subGroups cellType=GM12878 factor=ELF1
+    color 153,38,0
 
     track encTfChipPkENCFF492YMU
     parent encTfChipPk off
     shortLabel GM12878 STAT5A
     longLabel Transcription Factor ChIP-seq Peaks of STAT5A in GM12878 from ENCODE 3 (ENCFF492YMU)
     subGroups cellType=GM12878 factor=STAT5A
+    color 153,38,0
 
     track encTfChipPkENCFF596OJV
     parent encTfChipPk off
@@ -1300,6 +1337,7 @@ subGroup2 factor Factor \
     shortLabel H1-hESC EGR1
     longLabel Transcription Factor ChIP-seq Peaks of EGR1 in H1-hESC from ENCODE 3 (ENCFF220IXP)
     subGroups cellType=H1-hESC factor=EGR1
+    color 0,107,27
 
     track encTfChipPkENCFF588NYF
     parent encTfChipPk off
@@ -1324,42 +1362,49 @@ subGroup2 factor Factor \
     shortLabel K562 SMARCC2
     longLabel Transcription Factor ChIP-seq Peaks of SMARCC2 in K562 from ENCODE 3 (ENCFF114PTZ)
     subGroups cellType=K562 factor=SMARCC2
+    color 46,0,184
 
     track encTfChipPkENCFF011KRN
     parent encTfChipPk off
     shortLabel K562 SMAD2
     longLabel Transcription Factor ChIP-seq Peaks of SMAD2 in K562 from ENCODE 3 (ENCFF011KRN)
     subGroups cellType=K562 factor=SMAD2
+    color 46,0,184
 
     track encTfChipPkENCFF657VJX
     parent encTfChipPk off
     shortLabel K562 HDAC2 1
     longLabel Transcription Factor ChIP-seq Peaks of HDAC2 in K562 from ENCODE 3 (ENCFF657VJX)
     subGroups cellType=K562 factor=HDAC2
+    color 46,0,184
 
     track encTfChipPkENCFF034PQD
     parent encTfChipPk off
     shortLabel K562 DNMT1
     longLabel Transcription Factor ChIP-seq Peaks of DNMT1 in K562 from ENCODE 3 (ENCFF034PQD)
     subGroups cellType=K562 factor=DNMT1
+    color 46,0,184
 
     track encTfChipPkENCFF065EPE
     parent encTfChipPk off
     shortLabel HepG2 GABPA
     longLabel Transcription Factor ChIP-seq Peaks of GABPA in HepG2 from ENCODE 3 (ENCFF065EPE)
     subGroups cellType=HepG2 factor=GABPA
+    color 189,0,157
 
     track encTfChipPkENCFF581ZZT
     parent encTfChipPk off
     shortLabel K562 ZNF282
     longLabel Transcription Factor ChIP-seq Peaks of ZNF282 in K562 from ENCODE 3 (ENCFF581ZZT)
     subGroups cellType=K562 factor=ZNF282
+    color 46,0,184
 
     track encTfChipPkENCFF880SXP
     parent encTfChipPk off
     shortLabel HepG2 IKZF1
     longLabel Transcription Factor ChIP-seq Peaks of IKZF1 in HepG2 from ENCODE 3 (ENCFF880SXP)
     subGroups cellType=HepG2 factor=IKZF1
+    color 189,0,157
 
     track encTfChipPkENCFF116RLU
     parent encTfChipPk off
@@ -1402,6 +1447,7 @@ subGroup2 factor Factor \
     shortLabel K562 SP1
     longLabel Transcription Factor ChIP-seq Peaks of SP1 in K562 from ENCODE 3 (ENCFF300XUA)
     subGroups cellType=K562 factor=SP1
+    color 46,0,184
 
     track encTfChipPkENCFF201MOM
     parent encTfChipPk off
@@ -1416,7 +1462,7 @@ subGroup2 factor Factor \
     subGroups cellType=esophagus_muscularis_mucosa factor=POLR2A
 
     track encTfChipPkENCFF804UDG
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel liver JUND 1
     longLabel Transcription Factor ChIP-seq Peaks of JUND in liver from ENCODE 3 (ENCFF804UDG)
     subGroups cellType=liver factor=JUND
@@ -1432,18 +1478,21 @@ subGroup2 factor Factor \
     shortLabel K562 IRF1 1
     longLabel Transcription Factor ChIP-seq Peaks of IRF1 in K562 from ENCODE 3 (ENCFF909LKK)
     subGroups cellType=K562 factor=IRF1
+    color 46,0,184
 
     track encTfChipPkENCFF137IBM
     parent encTfChipPk off
     shortLabel K562 SRSF9
     longLabel Transcription Factor ChIP-seq Peaks of SRSF9 in K562 from ENCODE 3 (ENCFF137IBM)
     subGroups cellType=K562 factor=SRSF9
+    color 46,0,184
 
     track encTfChipPkENCFF273TYA
     parent encTfChipPk off
     shortLabel K562 ZNF592
     longLabel Transcription Factor ChIP-seq Peaks of ZNF592 in K562 from ENCODE 3 (ENCFF273TYA)
     subGroups cellType=K562 factor=ZNF592
+    color 46,0,184
 
     track encTfChipPkENCFF673PTK
     parent encTfChipPk off
@@ -1480,6 +1529,7 @@ subGroup2 factor Factor \
     shortLabel HepG2 FOXP1
     longLabel Transcription Factor ChIP-seq Peaks of FOXP1 in HepG2 from ENCODE 3 (ENCFF501KPU)
     subGroups cellType=HepG2 factor=FOXP1
+    color 189,0,157
 
     track encTfChipPkENCFF070SAY
     parent encTfChipPk off
@@ -1492,12 +1542,14 @@ subGroup2 factor Factor \
     shortLabel K562 POLR2A 1
     longLabel Transcription Factor ChIP-seq Peaks of POLR2A in K562 from ENCODE 3 (ENCFF947KPB)
     subGroups cellType=K562 factor=POLR2A
+    color 46,0,184
 
     track encTfChipPkENCFF684BLN
     parent encTfChipPk off
     shortLabel HepG2 USF1
     longLabel Transcription Factor ChIP-seq Peaks of USF1 in HepG2 from ENCODE 3 (ENCFF684BLN)
     subGroups cellType=HepG2 factor=USF1
+    color 189,0,157
 
     track encTfChipPkENCFF575RKM
     parent encTfChipPk off
@@ -1516,6 +1568,7 @@ subGroup2 factor Factor \
     shortLabel HepG2 TBL1XR1
     longLabel Transcription Factor ChIP-seq Peaks of TBL1XR1 in HepG2 from ENCODE 3 (ENCFF424KTS)
     subGroups cellType=HepG2 factor=TBL1XR1
+    color 189,0,157
 
     track encTfChipPkENCFF448MBM
     parent encTfChipPk off
@@ -1528,6 +1581,7 @@ subGroup2 factor Factor \
     shortLabel K562 NFIC
     longLabel Transcription Factor ChIP-seq Peaks of NFIC in K562 from ENCODE 3 (ENCFF370ENX)
     subGroups cellType=K562 factor=NFIC
+    color 46,0,184
 
     track encTfChipPkENCFF885KKQ
     parent encTfChipPk off
@@ -1540,12 +1594,14 @@ subGroup2 factor Factor \
     shortLabel K562 NRF1 1
     longLabel Transcription Factor ChIP-seq Peaks of NRF1 in K562 from ENCODE 3 (ENCFF144PPR)
     subGroups cellType=K562 factor=NRF1
+    color 46,0,184
 
     track encTfChipPkENCFF237UAN
     parent encTfChipPk off
     shortLabel K562 RFX1 1
     longLabel Transcription Factor ChIP-seq Peaks of RFX1 in K562 from ENCODE 3 (ENCFF237UAN)
     subGroups cellType=K562 factor=RFX1
+    color 46,0,184
 
     track encTfChipPkENCFF022MCD
     parent encTfChipPk off
@@ -1554,10 +1610,11 @@ subGroup2 factor Factor \
     subGroups cellType=transverse_colon factor=POLR2A
 
     track encTfChipPkENCFF800XTT
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel HepG2 MAFK 1
     longLabel Transcription Factor ChIP-seq Peaks of MAFK in HepG2 from ENCODE 3 (ENCFF800XTT)
     subGroups cellType=HepG2 factor=MAFK
+    color 189,0,157
 
     track encTfChipPkENCFF835LPJ
     parent encTfChipPk off
@@ -1566,8 +1623,8 @@ subGroup2 factor Factor \
     subGroups cellType=Panc1 factor=TCF7L2
 
     track encTfChipPkENCFF522DLJ
-    parent encTfChipPk off
-    shortLabel ovary CTCF
+    parent encTfChipPk on
+    shortLabel ovary CTCF 1
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in ovary from ENCODE 3 (ENCFF522DLJ)
     subGroups cellType=ovary factor=CTCF
 
@@ -1576,24 +1633,28 @@ subGroup2 factor Factor \
     shortLabel GM12878 PAX8
     longLabel Transcription Factor ChIP-seq Peaks of PAX8 in GM12878 from ENCODE 3 (ENCFF455YHJ)
     subGroups cellType=GM12878 factor=PAX8
+    color 153,38,0
 
     track encTfChipPkENCFF337FIU
     parent encTfChipPk off
     shortLabel HepG2 SNRNP70
     longLabel Transcription Factor ChIP-seq Peaks of SNRNP70 in HepG2 from ENCODE 3 (ENCFF337FIU)
     subGroups cellType=HepG2 factor=SNRNP70
+    color 189,0,157
 
     track encTfChipPkENCFF712LMP
     parent encTfChipPk off
     shortLabel HeLa-S3 NFE2L2
     longLabel Transcription Factor ChIP-seq Peaks of NFE2L2 in HeLa-S3 from ENCODE 3 (ENCFF712LMP)
     subGroups cellType=HeLa-S3 factor=NFE2L2
+    color 0,119,158
 
     track encTfChipPkENCFF514OYL
     parent encTfChipPk off
     shortLabel HepG2 ARID3A
     longLabel Transcription Factor ChIP-seq Peaks of ARID3A in HepG2 from ENCODE 3 (ENCFF514OYL)
     subGroups cellType=HepG2 factor=ARID3A
+    color 189,0,157
 
     track encTfChipPkENCFF126PNX
     parent encTfChipPk off
@@ -1612,6 +1673,7 @@ subGroup2 factor Factor \
     shortLabel K562 SIRT6
     longLabel Transcription Factor ChIP-seq Peaks of SIRT6 in K562 from ENCODE 3 (ENCFF671JEN)
     subGroups cellType=K562 factor=SIRT6
+    color 46,0,184
 
     track encTfChipPkENCFF294RNI
     parent encTfChipPk off
@@ -1630,6 +1692,7 @@ subGroup2 factor Factor \
     shortLabel K562 THAP1
     longLabel Transcription Factor ChIP-seq Peaks of THAP1 in K562 from ENCODE 3 (ENCFF641LJY)
     subGroups cellType=K562 factor=THAP1
+    color 46,0,184
 
     track encTfChipPkENCFF072ZEU
     parent encTfChipPk off
@@ -1642,30 +1705,35 @@ subGroup2 factor Factor \
     shortLabel K562 STAT5A
     longLabel Transcription Factor ChIP-seq Peaks of STAT5A in K562 from ENCODE 3 (ENCFF696KPD)
     subGroups cellType=K562 factor=STAT5A
+    color 46,0,184
 
     track encTfChipPkENCFF747VMG
     parent encTfChipPk off
     shortLabel HepG2 ASH2L
     longLabel Transcription Factor ChIP-seq Peaks of ASH2L in HepG2 from ENCODE 3 (ENCFF747VMG)
     subGroups cellType=HepG2 factor=ASH2L
+    color 189,0,157
 
     track encTfChipPkENCFF384YDT
     parent encTfChipPk off
     shortLabel K562 IRF2
     longLabel Transcription Factor ChIP-seq Peaks of IRF2 in K562 from ENCODE 3 (ENCFF384YDT)
     subGroups cellType=K562 factor=IRF2
+    color 46,0,184
 
     track encTfChipPkENCFF086LMU
     parent encTfChipPk off
     shortLabel HepG2 SUZ12
     longLabel Transcription Factor ChIP-seq Peaks of SUZ12 in HepG2 from ENCODE 3 (ENCFF086LMU)
     subGroups cellType=HepG2 factor=SUZ12
+    color 189,0,157
 
     track encTfChipPkENCFF440JJW
     parent encTfChipPk off
     shortLabel K562 MLLT1 2
     longLabel Transcription Factor ChIP-seq Peaks of MLLT1 in K562 from ENCODE 3 (ENCFF440JJW)
     subGroups cellType=K562 factor=MLLT1
+    color 46,0,184
 
     track encTfChipPkENCFF241ZTW
     parent encTfChipPk off
@@ -1678,30 +1746,35 @@ subGroup2 factor Factor \
     shortLabel HepG2 BRD4
     longLabel Transcription Factor ChIP-seq Peaks of BRD4 in HepG2 from ENCODE 3 (ENCFF665CIR)
     subGroups cellType=HepG2 factor=BRD4
+    color 189,0,157
 
     track encTfChipPkENCFF844HBQ
     parent encTfChipPk off
     shortLabel K562 KLF16
     longLabel Transcription Factor ChIP-seq Peaks of KLF16 in K562 from ENCODE 3 (ENCFF844HBQ)
     subGroups cellType=K562 factor=KLF16
+    color 46,0,184
 
     track encTfChipPkENCFF949EAE
     parent encTfChipPk off
     shortLabel HepG2 TCF12 1
     longLabel Transcription Factor ChIP-seq Peaks of TCF12 in HepG2 from ENCODE 3 (ENCFF949EAE)
     subGroups cellType=HepG2 factor=TCF12
+    color 189,0,157
 
     track encTfChipPkENCFF508IBP
     parent encTfChipPk off
     shortLabel H1-hESC NRF1
     longLabel Transcription Factor ChIP-seq Peaks of NRF1 in H1-hESC from ENCODE 3 (ENCFF508IBP)
     subGroups cellType=H1-hESC factor=NRF1
+    color 0,107,27
 
     track encTfChipPkENCFF210DMP
     parent encTfChipPk off
     shortLabel HepG2 GATA4
     longLabel Transcription Factor ChIP-seq Peaks of GATA4 in HepG2 from ENCODE 3 (ENCFF210DMP)
     subGroups cellType=HepG2 factor=GATA4
+    color 189,0,157
 
     track encTfChipPkENCFF449NOT
     parent encTfChipPk off
@@ -1716,10 +1789,11 @@ subGroup2 factor Factor \
     subGroups cellType=lower_leg_skin factor=CTCF
 
     track encTfChipPkENCFF544NRC
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel GM12878 TAF1
     longLabel Transcription Factor ChIP-seq Peaks of TAF1 in GM12878 from ENCODE 3 (ENCFF544NRC)
     subGroups cellType=GM12878 factor=TAF1
+    color 153,38,0
 
     track encTfChipPkENCFF499OUD
     parent encTfChipPk off
@@ -1732,18 +1806,21 @@ subGroup2 factor Factor \
     shortLabel GM12878 YY1 1
     longLabel Transcription Factor ChIP-seq Peaks of YY1 in GM12878 from ENCODE 3 (ENCFF967ACD)
     subGroups cellType=GM12878 factor=YY1
+    color 153,38,0
 
     track encTfChipPkENCFF894MNP
     parent encTfChipPk off
     shortLabel H1-hESC GABPA
     longLabel Transcription Factor ChIP-seq Peaks of GABPA in H1-hESC from ENCODE 3 (ENCFF894MNP)
     subGroups cellType=H1-hESC factor=GABPA
+    color 0,107,27
 
     track encTfChipPkENCFF391DVL
     parent encTfChipPk off
     shortLabel GM12878 IRF4
     longLabel Transcription Factor ChIP-seq Peaks of IRF4 in GM12878 from ENCODE 3 (ENCFF391DVL)
     subGroups cellType=GM12878 factor=IRF4
+    color 153,38,0
 
     track encTfChipPkENCFF165AUR
     parent encTfChipPk off
@@ -1756,6 +1833,7 @@ subGroup2 factor Factor \
     shortLabel K562 EGR1 1
     longLabel Transcription Factor ChIP-seq Peaks of EGR1 in K562 from ENCODE 3 (ENCFF004WYV)
     subGroups cellType=K562 factor=EGR1
+    color 46,0,184
 
     track encTfChipPkENCFF053TBK
     parent encTfChipPk off
@@ -1780,6 +1858,7 @@ subGroup2 factor Factor \
     shortLabel HepG2 PCBP2
     longLabel Transcription Factor ChIP-seq Peaks of PCBP2 in HepG2 from ENCODE 3 (ENCFF460OWI)
     subGroups cellType=HepG2 factor=PCBP2
+    color 189,0,157
 
     track encTfChipPkENCFF021KDL
     parent encTfChipPk off
@@ -1792,6 +1871,7 @@ subGroup2 factor Factor \
     shortLabel K562 MIER1
     longLabel Transcription Factor ChIP-seq Peaks of MIER1 in K562 from ENCODE 3 (ENCFF365NKO)
     subGroups cellType=K562 factor=MIER1
+    color 46,0,184
 
     track encTfChipPkENCFF223YXP
     parent encTfChipPk off
@@ -1816,30 +1896,35 @@ subGroup2 factor Factor \
     shortLabel K562 NFXL1
     longLabel Transcription Factor ChIP-seq Peaks of NFXL1 in K562 from ENCODE 3 (ENCFF986MHU)
     subGroups cellType=K562 factor=NFXL1
+    color 46,0,184
 
     track encTfChipPkENCFF749OBU
     parent encTfChipPk off
     shortLabel H1-hESC USF2
     longLabel Transcription Factor ChIP-seq Peaks of USF2 in H1-hESC from ENCODE 3 (ENCFF749OBU)
     subGroups cellType=H1-hESC factor=USF2
+    color 0,107,27
 
     track encTfChipPkENCFF593FBF
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel GM12878 BATF
     longLabel Transcription Factor ChIP-seq Peaks of BATF in GM12878 from ENCODE 3 (ENCFF593FBF)
     subGroups cellType=GM12878 factor=BATF
+    color 153,38,0
 
     track encTfChipPkENCFF613RNG
     parent encTfChipPk off
     shortLabel K562 MEIS2
     longLabel Transcription Factor ChIP-seq Peaks of MEIS2 in K562 from ENCODE 3 (ENCFF613RNG)
     subGroups cellType=K562 factor=MEIS2
+    color 46,0,184
 
     track encTfChipPkENCFF490VVG
     parent encTfChipPk off
     shortLabel K562 HDAC2 2
     longLabel Transcription Factor ChIP-seq Peaks of HDAC2 in K562 from ENCODE 3 (ENCFF490VVG)
     subGroups cellType=K562 factor=HDAC2
+    color 46,0,184
 
     track encTfChipPkENCFF276MQI
     parent encTfChipPk off
@@ -1852,6 +1937,7 @@ subGroup2 factor Factor \
     shortLabel H1-hESC EP300 1
     longLabel Transcription Factor ChIP-seq Peaks of EP300 in H1-hESC from ENCODE 3 (ENCFF456JEW)
     subGroups cellType=H1-hESC factor=EP300
+    color 0,107,27
 
     track encTfChipPkENCFF178LCE
     parent encTfChipPk off
@@ -1864,6 +1950,7 @@ subGroup2 factor Factor \
     shortLabel GM12878 ZNF592
     longLabel Transcription Factor ChIP-seq Peaks of ZNF592 in GM12878 from ENCODE 3 (ENCFF566YUW)
     subGroups cellType=GM12878 factor=ZNF592
+    color 153,38,0
 
     track encTfChipPkENCFF716FAV
     parent encTfChipPk off
@@ -1876,6 +1963,7 @@ subGroup2 factor Factor \
     shortLabel HepG2 RFX1
     longLabel Transcription Factor ChIP-seq Peaks of RFX1 in HepG2 from ENCODE 3 (ENCFF507RHE)
     subGroups cellType=HepG2 factor=RFX1
+    color 189,0,157
 
     track encTfChipPkENCFF033XFJ
     parent encTfChipPk off
@@ -1894,36 +1982,42 @@ subGroup2 factor Factor \
     shortLabel H1-hESC BCL11A 1
     longLabel Transcription Factor ChIP-seq Peaks of BCL11A in H1-hESC from ENCODE 3 (ENCFF175OER)
     subGroups cellType=H1-hESC factor=BCL11A
+    color 0,107,27
 
     track encTfChipPkENCFF033EBX
     parent encTfChipPk off
     shortLabel K562 SIX5
     longLabel Transcription Factor ChIP-seq Peaks of SIX5 in K562 from ENCODE 3 (ENCFF033EBX)
     subGroups cellType=K562 factor=SIX5
+    color 46,0,184
 
     track encTfChipPkENCFF777CWV
     parent encTfChipPk off
     shortLabel K562 HNRNPK
     longLabel Transcription Factor ChIP-seq Peaks of HNRNPK in K562 from ENCODE 3 (ENCFF777CWV)
     subGroups cellType=K562 factor=HNRNPK
+    color 46,0,184
 
     track encTfChipPkENCFF209MQX
     parent encTfChipPk off
     shortLabel K562 TEAD4
     longLabel Transcription Factor ChIP-seq Peaks of TEAD4 in K562 from ENCODE 3 (ENCFF209MQX)
     subGroups cellType=K562 factor=TEAD4
+    color 46,0,184
 
     track encTfChipPkENCFF769GYG
     parent encTfChipPk off
     shortLabel K562 MTA1
     longLabel Transcription Factor ChIP-seq Peaks of MTA1 in K562 from ENCODE 3 (ENCFF769GYG)
     subGroups cellType=K562 factor=MTA1
+    color 46,0,184
 
     track encTfChipPkENCFF238MYM
     parent encTfChipPk off
     shortLabel K562 ZNF24 1
     longLabel Transcription Factor ChIP-seq Peaks of ZNF24 in K562 from ENCODE 3 (ENCFF238MYM)
     subGroups cellType=K562 factor=ZNF24
+    color 46,0,184
 
     track encTfChipPkENCFF879VLB
     parent encTfChipPk off
@@ -1942,6 +2036,7 @@ subGroup2 factor Factor \
     shortLabel K562 COPS2
     longLabel Transcription Factor ChIP-seq Peaks of COPS2 in K562 from ENCODE 3 (ENCFF684MLP)
     subGroups cellType=K562 factor=COPS2
+    color 46,0,184
 
     track encTfChipPkENCFF117ZKS
     parent encTfChipPk off
@@ -1954,6 +2049,7 @@ subGroup2 factor Factor \
     shortLabel GM12878 NBN
     longLabel Transcription Factor ChIP-seq Peaks of NBN in GM12878 from ENCODE 3 (ENCFF055NJR)
     subGroups cellType=GM12878 factor=NBN
+    color 153,38,0
 
     track encTfChipPkENCFF682AWN
     parent encTfChipPk off
@@ -1966,6 +2062,7 @@ subGroup2 factor Factor \
     shortLabel K562 RBM34
     longLabel Transcription Factor ChIP-seq Peaks of RBM34 in K562 from ENCODE 3 (ENCFF782GWS)
     subGroups cellType=K562 factor=RBM34
+    color 46,0,184
 
     track encTfChipPkENCFF566FVB
     parent encTfChipPk off
@@ -1984,6 +2081,7 @@ subGroup2 factor Factor \
     shortLabel HepG2 BHLHE40 1
     longLabel Transcription Factor ChIP-seq Peaks of BHLHE40 in HepG2 from ENCODE 3 (ENCFF028BDC)
     subGroups cellType=HepG2 factor=BHLHE40
+    color 189,0,157
 
     track encTfChipPkENCFF757QEJ
     parent encTfChipPk off
@@ -2002,6 +2100,7 @@ subGroup2 factor Factor \
     shortLabel K562 CDC5L
     longLabel Transcription Factor ChIP-seq Peaks of CDC5L in K562 from ENCODE 3 (ENCFF643TEZ)
     subGroups cellType=K562 factor=CDC5L
+    color 46,0,184
 
     track encTfChipPkENCFF874DDR
     parent encTfChipPk off
@@ -2032,15 +2131,17 @@ subGroup2 factor Factor \
     shortLabel HepG2 SMC3
     longLabel Transcription Factor ChIP-seq Peaks of SMC3 in HepG2 from ENCODE 3 (ENCFF525EJQ)
     subGroups cellType=HepG2 factor=SMC3
+    color 189,0,157
 
     track encTfChipPkENCFF305ICK
     parent encTfChipPk off
     shortLabel GM12878 TCF7
     longLabel Transcription Factor ChIP-seq Peaks of TCF7 in GM12878 from ENCODE 3 (ENCFF305ICK)
     subGroups cellType=GM12878 factor=TCF7
+    color 153,38,0
 
     track encTfChipPkENCFF136BEY
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel MCF-7 CTCF 1
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in MCF-7 from ENCODE 3 (ENCFF136BEY)
     subGroups cellType=MCF-7 factor=CTCF
@@ -2050,6 +2151,7 @@ subGroup2 factor Factor \
     shortLabel HepG2 FOXA2 1
     longLabel Transcription Factor ChIP-seq Peaks of FOXA2 in HepG2 from ENCODE 3 (ENCFF002ROJ)
     subGroups cellType=HepG2 factor=FOXA2
+    color 189,0,157
 
     track encTfChipPkENCFF015PGM
     parent encTfChipPk off
@@ -2076,40 +2178,46 @@ subGroup2 factor Factor \
     subGroups cellType=gastroesophageal_sphincter factor=POLR2A
 
     track encTfChipPkENCFF741WKY
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel HepG2 SP1 1
     longLabel Transcription Factor ChIP-seq Peaks of SP1 in HepG2 from ENCODE 3 (ENCFF741WKY)
     subGroups cellType=HepG2 factor=SP1
+    color 189,0,157
 
     track encTfChipPkENCFF280GTU
     parent encTfChipPk off
     shortLabel K562 SIN3B
     longLabel Transcription Factor ChIP-seq Peaks of SIN3B in K562 from ENCODE 3 (ENCFF280GTU)
     subGroups cellType=K562 factor=SIN3B
+    color 46,0,184
 
     track encTfChipPkENCFF315YAF
     parent encTfChipPk off
     shortLabel K562 SMAD1
     longLabel Transcription Factor ChIP-seq Peaks of SMAD1 in K562 from ENCODE 3 (ENCFF315YAF)
     subGroups cellType=K562 factor=SMAD1
+    color 46,0,184
 
     track encTfChipPkENCFF511QHY
     parent encTfChipPk off
     shortLabel K562 ZMYM3
     longLabel Transcription Factor ChIP-seq Peaks of ZMYM3 in K562 from ENCODE 3 (ENCFF511QHY)
     subGroups cellType=K562 factor=ZMYM3
+    color 46,0,184
 
     track encTfChipPkENCFF193YAN
     parent encTfChipPk off
     shortLabel H1-hESC RNF2
     longLabel Transcription Factor ChIP-seq Peaks of RNF2 in H1-hESC from ENCODE 3 (ENCFF193YAN)
     subGroups cellType=H1-hESC factor=RNF2
+    color 0,107,27
 
     track encTfChipPkENCFF048OBR
     parent encTfChipPk off
     shortLabel K562 TBL1XR1 1
     longLabel Transcription Factor ChIP-seq Peaks of TBL1XR1 in K562 from ENCODE 3 (ENCFF048OBR)
     subGroups cellType=K562 factor=TBL1XR1
+    color 46,0,184
 
     track encTfChipPkENCFF324KGZ
     parent encTfChipPk off
@@ -2128,6 +2236,7 @@ subGroup2 factor Factor \
     shortLabel K562 IRF1 2
     longLabel Transcription Factor ChIP-seq Peaks of IRF1 in K562 from ENCODE 3 (ENCFF908UIY)
     subGroups cellType=K562 factor=IRF1
+    color 46,0,184
 
     track encTfChipPkENCFF240UFV
     parent encTfChipPk off
@@ -2140,12 +2249,14 @@ subGroup2 factor Factor \
     shortLabel HepG2 CEBPB 1
     longLabel Transcription Factor ChIP-seq Peaks of CEBPB in HepG2 from ENCODE 3 (ENCFF471HCD)
     subGroups cellType=HepG2 factor=CEBPB
+    color 189,0,157
 
     track encTfChipPkENCFF242VUO
     parent encTfChipPk off
     shortLabel GM12878 EED
     longLabel Transcription Factor ChIP-seq Peaks of EED in GM12878 from ENCODE 3 (ENCFF242VUO)
     subGroups cellType=GM12878 factor=EED
+    color 153,38,0
 
     track encTfChipPkENCFF814REB
     parent encTfChipPk off
@@ -2170,12 +2281,14 @@ subGroup2 factor Factor \
     shortLabel K562 BRD9
     longLabel Transcription Factor ChIP-seq Peaks of BRD9 in K562 from ENCODE 3 (ENCFF666LZV)
     subGroups cellType=K562 factor=BRD9
+    color 46,0,184
 
     track encTfChipPkENCFF589EVD
     parent encTfChipPk off
     shortLabel K562 ZBTB8A
     longLabel Transcription Factor ChIP-seq Peaks of ZBTB8A in K562 from ENCODE 3 (ENCFF589EVD)
     subGroups cellType=K562 factor=ZBTB8A
+    color 46,0,184
 
     track encTfChipPkENCFF080RMP
     parent encTfChipPk off
@@ -2200,12 +2313,14 @@ subGroup2 factor Factor \
     shortLabel GM12878 YY1 2
     longLabel Transcription Factor ChIP-seq Peaks of YY1 in GM12878 from ENCODE 3 (ENCFF902HNO)
     subGroups cellType=GM12878 factor=YY1
+    color 153,38,0
 
     track encTfChipPkENCFF127GYQ
     parent encTfChipPk off
     shortLabel GM12878 ATF2 1
     longLabel Transcription Factor ChIP-seq Peaks of ATF2 in GM12878 from ENCODE 3 (ENCFF127GYQ)
     subGroups cellType=GM12878 factor=ATF2
+    color 153,38,0
 
     track encTfChipPkENCFF884RAO
     parent encTfChipPk off
@@ -2218,6 +2333,7 @@ subGroup2 factor Factor \
     shortLabel GM12878 SRF 1
     longLabel Transcription Factor ChIP-seq Peaks of SRF in GM12878 from ENCODE 3 (ENCFF909FRA)
     subGroups cellType=GM12878 factor=SRF
+    color 153,38,0
 
     track encTfChipPkENCFF030BPR
     parent encTfChipPk off
@@ -2230,18 +2346,21 @@ subGroup2 factor Factor \
     shortLabel K562 SAP30
     longLabel Transcription Factor ChIP-seq Peaks of SAP30 in K562 from ENCODE 3 (ENCFF718NUA)
     subGroups cellType=K562 factor=SAP30
+    color 46,0,184
 
     track encTfChipPkENCFF297JZQ
     parent encTfChipPk off
     shortLabel K562 NCOA1 1
     longLabel Transcription Factor ChIP-seq Peaks of NCOA1 in K562 from ENCODE 3 (ENCFF297JZQ)
     subGroups cellType=K562 factor=NCOA1
+    color 46,0,184
 
     track encTfChipPkENCFF663YBI
     parent encTfChipPk off
     shortLabel HepG2 RBFOX2
     longLabel Transcription Factor ChIP-seq Peaks of RBFOX2 in HepG2 from ENCODE 3 (ENCFF663YBI)
     subGroups cellType=HepG2 factor=RBFOX2
+    color 189,0,157
 
     track encTfChipPkENCFF070KLR
     parent encTfChipPk off
@@ -2254,12 +2373,14 @@ subGroup2 factor Factor \
     shortLabel HepG2 REST 1
     longLabel Transcription Factor ChIP-seq Peaks of REST in HepG2 from ENCODE 3 (ENCFF153JLK)
     subGroups cellType=HepG2 factor=REST
+    color 189,0,157
 
     track encTfChipPkENCFF723RSX
     parent encTfChipPk off
     shortLabel K562 NFATC3 1
     longLabel Transcription Factor ChIP-seq Peaks of NFATC3 in K562 from ENCODE 3 (ENCFF723RSX)
     subGroups cellType=K562 factor=NFATC3
+    color 46,0,184
 
     track encTfChipPkENCFF974SIH
     parent encTfChipPk off
@@ -2272,42 +2393,49 @@ subGroup2 factor Factor \
     shortLabel K562 RUNX1 1
     longLabel Transcription Factor ChIP-seq Peaks of RUNX1 in K562 from ENCODE 3 (ENCFF573DRR)
     subGroups cellType=K562 factor=RUNX1
+    color 46,0,184
 
     track encTfChipPkENCFF310XJC
     parent encTfChipPk off
     shortLabel GM12878 ZZZ3
     longLabel Transcription Factor ChIP-seq Peaks of ZZZ3 in GM12878 from ENCODE 3 (ENCFF310XJC)
     subGroups cellType=GM12878 factor=ZZZ3
+    color 153,38,0
 
     track encTfChipPkENCFF730RUF
     parent encTfChipPk off
     shortLabel K562 IRF1 3
     longLabel Transcription Factor ChIP-seq Peaks of IRF1 in K562 from ENCODE 3 (ENCFF730RUF)
     subGroups cellType=K562 factor=IRF1
+    color 46,0,184
 
     track encTfChipPkENCFF443EYO
     parent encTfChipPk off
     shortLabel HepG2 ZNF24 1
     longLabel Transcription Factor ChIP-seq Peaks of ZNF24 in HepG2 from ENCODE 3 (ENCFF443EYO)
     subGroups cellType=HepG2 factor=ZNF24
+    color 189,0,157
 
     track encTfChipPkENCFF522JUV
     parent encTfChipPk off
     shortLabel K562 RBM22
     longLabel Transcription Factor ChIP-seq Peaks of RBM22 in K562 from ENCODE 3 (ENCFF522JUV)
     subGroups cellType=K562 factor=RBM22
+    color 46,0,184
 
     track encTfChipPkENCFF381SBC
     parent encTfChipPk off
     shortLabel GM12878 NR2C1
     longLabel Transcription Factor ChIP-seq Peaks of NR2C1 in GM12878 from ENCODE 3 (ENCFF381SBC)
     subGroups cellType=GM12878 factor=NR2C1
+    color 153,38,0
 
     track encTfChipPkENCFF671IJY
     parent encTfChipPk off
     shortLabel HepG2 CCAR2
     longLabel Transcription Factor ChIP-seq Peaks of CCAR2 in HepG2 from ENCODE 3 (ENCFF671IJY)
     subGroups cellType=HepG2 factor=CCAR2
+    color 189,0,157
 
     track encTfChipPkENCFF470NNW
     parent encTfChipPk off
@@ -2320,12 +2448,14 @@ subGroup2 factor Factor \
     shortLabel HeLa-S3 GABPA
     longLabel Transcription Factor ChIP-seq Peaks of GABPA in HeLa-S3 from ENCODE 3 (ENCFF793BVO)
     subGroups cellType=HeLa-S3 factor=GABPA
+    color 0,119,158
 
     track encTfChipPkENCFF854KPC
     parent encTfChipPk off
     shortLabel HepG2 REST 2
     longLabel Transcription Factor ChIP-seq Peaks of REST in HepG2 from ENCODE 3 (ENCFF854KPC)
     subGroups cellType=HepG2 factor=REST
+    color 189,0,157
 
     track encTfChipPkENCFF653ZMJ
     parent encTfChipPk off
@@ -2350,24 +2480,28 @@ subGroup2 factor Factor \
     shortLabel H1-hESC SAP30
     longLabel Transcription Factor ChIP-seq Peaks of SAP30 in H1-hESC from ENCODE 3 (ENCFF361QZZ)
     subGroups cellType=H1-hESC factor=SAP30
+    color 0,107,27
 
     track encTfChipPkENCFF195PBG
     parent encTfChipPk off
     shortLabel GM12878 ESRRA
     longLabel Transcription Factor ChIP-seq Peaks of ESRRA in GM12878 from ENCODE 3 (ENCFF195PBG)
     subGroups cellType=GM12878 factor=ESRRA
+    color 153,38,0
 
     track encTfChipPkENCFF954NAJ
     parent encTfChipPk off
     shortLabel K562 NR0B1
     longLabel Transcription Factor ChIP-seq Peaks of NR0B1 in K562 from ENCODE 3 (ENCFF954NAJ)
     subGroups cellType=K562 factor=NR0B1
+    color 46,0,184
 
     track encTfChipPkENCFF310AGG
     parent encTfChipPk off
     shortLabel K562 E2F7
     longLabel Transcription Factor ChIP-seq Peaks of E2F7 in K562 from ENCODE 3 (ENCFF310AGG)
     subGroups cellType=K562 factor=E2F7
+    color 46,0,184
 
     track encTfChipPkENCFF369LXG
     parent encTfChipPk off
@@ -2380,22 +2514,25 @@ subGroup2 factor Factor \
     shortLabel HepG2 HDAC1
     longLabel Transcription Factor ChIP-seq Peaks of HDAC1 in HepG2 from ENCODE 3 (ENCFF384XDG)
     subGroups cellType=HepG2 factor=HDAC1
+    color 189,0,157
 
     track encTfChipPkENCFF583YFS
     parent encTfChipPk off
     shortLabel H1-hESC KDM5A
     longLabel Transcription Factor ChIP-seq Peaks of KDM5A in H1-hESC from ENCODE 3 (ENCFF583YFS)
     subGroups cellType=H1-hESC factor=KDM5A
+    color 0,107,27
 
     track encTfChipPkENCFF468MIF
     parent encTfChipPk off
     shortLabel HepG2 PCBP1
     longLabel Transcription Factor ChIP-seq Peaks of PCBP1 in HepG2 from ENCODE 3 (ENCFF468MIF)
     subGroups cellType=HepG2 factor=PCBP1
+    color 189,0,157
 
     track encTfChipPkENCFF396TUD
     parent encTfChipPk off
-    shortLabel spleen CTCF
+    shortLabel spleen CTCF 1
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in spleen from ENCODE 3 (ENCFF396TUD)
     subGroups cellType=spleen factor=CTCF
 
@@ -2404,6 +2541,7 @@ subGroup2 factor Factor \
     shortLabel H1-hESC REST 1
     longLabel Transcription Factor ChIP-seq Peaks of REST in H1-hESC from ENCODE 3 (ENCFF453HPD)
     subGroups cellType=H1-hESC factor=REST
+    color 0,107,27
 
     track encTfChipPkENCFF759MVB
     parent encTfChipPk off
@@ -2422,6 +2560,7 @@ subGroup2 factor Factor \
     shortLabel GM12878 IRF3 1
     longLabel Transcription Factor ChIP-seq Peaks of IRF3 in GM12878 from ENCODE 3 (ENCFF341HWZ)
     subGroups cellType=GM12878 factor=IRF3
+    color 153,38,0
 
     track encTfChipPkENCFF958VNQ
     parent encTfChipPk off
@@ -2434,18 +2573,21 @@ subGroup2 factor Factor \
     shortLabel K562 YY1 1
     longLabel Transcription Factor ChIP-seq Peaks of YY1 in K562 from ENCODE 3 (ENCFF557DSM)
     subGroups cellType=K562 factor=YY1
+    color 46,0,184
 
     track encTfChipPkENCFF646GCM
     parent encTfChipPk off
     shortLabel H1-hESC MAFK
     longLabel Transcription Factor ChIP-seq Peaks of MAFK in H1-hESC from ENCODE 3 (ENCFF646GCM)
     subGroups cellType=H1-hESC factor=MAFK
+    color 0,107,27
 
     track encTfChipPkENCFF332ICQ
     parent encTfChipPk off
     shortLabel K562 ARID2
     longLabel Transcription Factor ChIP-seq Peaks of ARID2 in K562 from ENCODE 3 (ENCFF332ICQ)
     subGroups cellType=K562 factor=ARID2
+    color 46,0,184
 
     track encTfChipPkENCFF220YOA
     parent encTfChipPk off
@@ -2464,6 +2606,7 @@ subGroup2 factor Factor \
     shortLabel H1-hESC MYC
     longLabel Transcription Factor ChIP-seq Peaks of MYC in H1-hESC from ENCODE 3 (ENCFF569IGP)
     subGroups cellType=H1-hESC factor=MYC
+    color 0,107,27
 
     track encTfChipPkENCFF520JZM
     parent encTfChipPk off
@@ -2500,12 +2643,14 @@ subGroup2 factor Factor \
     shortLabel K562 E2F1 1
     longLabel Transcription Factor ChIP-seq Peaks of E2F1 in K562 from ENCODE 3 (ENCFF106DAY)
     subGroups cellType=K562 factor=E2F1
+    color 46,0,184
 
     track encTfChipPkENCFF085HTY
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel K562 CTCF 1
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in K562 from ENCODE 3 (ENCFF085HTY)
     subGroups cellType=K562 factor=CTCF
+    color 46,0,184
 
     track encTfChipPkENCFF655XWN
     parent encTfChipPk off
@@ -2524,40 +2669,45 @@ subGroup2 factor Factor \
     shortLabel K562 HNRNPUL1
     longLabel Transcription Factor ChIP-seq Peaks of HNRNPUL1 in K562 from ENCODE 3 (ENCFF768TJI)
     subGroups cellType=K562 factor=HNRNPUL1
+    color 46,0,184
 
     track encTfChipPkENCFF408FQC
     parent encTfChipPk off
     shortLabel K562 ZBTB33
     longLabel Transcription Factor ChIP-seq Peaks of ZBTB33 in K562 from ENCODE 3 (ENCFF408FQC)
     subGroups cellType=K562 factor=ZBTB33
+    color 46,0,184
 
     track encTfChipPkENCFF398EQF
     parent encTfChipPk off
     shortLabel K562 U2AF2
     longLabel Transcription Factor ChIP-seq Peaks of U2AF2 in K562 from ENCODE 3 (ENCFF398EQF)
     subGroups cellType=K562 factor=U2AF2
+    color 46,0,184
 
     track encTfChipPkENCFF076YZO
     parent encTfChipPk off
     shortLabel K562 ETS1
     longLabel Transcription Factor ChIP-seq Peaks of ETS1 in K562 from ENCODE 3 (ENCFF076YZO)
     subGroups cellType=K562 factor=ETS1
+    color 46,0,184
 
     track encTfChipPkENCFF883TOD
     parent encTfChipPk off
     shortLabel K562 SMARCA4 1
     longLabel Transcription Factor ChIP-seq Peaks of SMARCA4 in K562 from ENCODE 3 (ENCFF883TOD)
     subGroups cellType=K562 factor=SMARCA4
+    color 46,0,184
 
     track encTfChipPkENCFF593MEB
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel IMR-90 MAFK
     longLabel Transcription Factor ChIP-seq Peaks of MAFK in IMR-90 from ENCODE 3 (ENCFF593MEB)
     subGroups cellType=IMR-90 factor=MAFK
 
     track encTfChipPkENCFF261BWI
     parent encTfChipPk off
-    shortLabel ovary CTCF
+    shortLabel ovary CTCF 2
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in ovary from ENCODE 3 (ENCFF261BWI)
     subGroups cellType=ovary factor=CTCF
 
@@ -2566,30 +2716,35 @@ subGroup2 factor Factor \
     shortLabel GM12878 NFE2
     longLabel Transcription Factor ChIP-seq Peaks of NFE2 in GM12878 from ENCODE 3 (ENCFF766ERZ)
     subGroups cellType=GM12878 factor=NFE2
+    color 153,38,0
 
     track encTfChipPkENCFF417QAJ
     parent encTfChipPk off
     shortLabel K562 JUN 1
     longLabel Transcription Factor ChIP-seq Peaks of JUN in K562 from ENCODE 3 (ENCFF417QAJ)
     subGroups cellType=K562 factor=JUN
+    color 46,0,184
 
     track encTfChipPkENCFF206YXX
     parent encTfChipPk off
     shortLabel K562 POLR2A 2
     longLabel Transcription Factor ChIP-seq Peaks of POLR2A in K562 from ENCODE 3 (ENCFF206YXX)
     subGroups cellType=K562 factor=POLR2A
+    color 46,0,184
 
     track encTfChipPkENCFF394LOQ
     parent encTfChipPk off
     shortLabel K562 POLR2A 3
     longLabel Transcription Factor ChIP-seq Peaks of POLR2A in K562 from ENCODE 3 (ENCFF394LOQ)
     subGroups cellType=K562 factor=POLR2A
+    color 46,0,184
 
     track encTfChipPkENCFF082JDH
     parent encTfChipPk off
     shortLabel GM12878 BRCA1
     longLabel Transcription Factor ChIP-seq Peaks of BRCA1 in GM12878 from ENCODE 3 (ENCFF082JDH)
     subGroups cellType=GM12878 factor=BRCA1
+    color 153,38,0
 
     track encTfChipPkENCFF660HHS
     parent encTfChipPk off
@@ -2602,6 +2757,7 @@ subGroup2 factor Factor \
     shortLabel K562 DPF2 1
     longLabel Transcription Factor ChIP-seq Peaks of DPF2 in K562 from ENCODE 3 (ENCFF774QKS)
     subGroups cellType=K562 factor=DPF2
+    color 46,0,184
 
     track encTfChipPkENCFF698WAX
     parent encTfChipPk off
@@ -2614,6 +2770,7 @@ subGroup2 factor Factor \
     shortLabel K562 REST 1
     longLabel Transcription Factor ChIP-seq Peaks of REST in K562 from ENCODE 3 (ENCFF895QLA)
     subGroups cellType=K562 factor=REST
+    color 46,0,184
 
     track encTfChipPkENCFF797HPJ
     parent encTfChipPk off
@@ -2626,6 +2783,7 @@ subGroup2 factor Factor \
     shortLabel K562 MAX 1
     longLabel Transcription Factor ChIP-seq Peaks of MAX in K562 from ENCODE 3 (ENCFF799HIG)
     subGroups cellType=K562 factor=MAX
+    color 46,0,184
 
     track encTfChipPkENCFF266GGD
     parent encTfChipPk off
@@ -2650,6 +2808,7 @@ subGroup2 factor Factor \
     shortLabel GM12878 EP300 1
     longLabel Transcription Factor ChIP-seq Peaks of EP300 in GM12878 from ENCODE 3 (ENCFF462GHD)
     subGroups cellType=GM12878 factor=EP300
+    color 153,38,0
 
     track encTfChipPkENCFF533NIV
     parent encTfChipPk off
@@ -2662,30 +2821,35 @@ subGroup2 factor Factor \
     shortLabel K562 NFRKB 1
     longLabel Transcription Factor ChIP-seq Peaks of NFRKB in K562 from ENCODE 3 (ENCFF157UUF)
     subGroups cellType=K562 factor=NFRKB
+    color 46,0,184
 
     track encTfChipPkENCFF624NUZ
     parent encTfChipPk off
     shortLabel K562 SAFB2
     longLabel Transcription Factor ChIP-seq Peaks of SAFB2 in K562 from ENCODE 3 (ENCFF624NUZ)
     subGroups cellType=K562 factor=SAFB2
+    color 46,0,184
 
     track encTfChipPkENCFF581YKY
     parent encTfChipPk off
     shortLabel K562 NEUROD1
     longLabel Transcription Factor ChIP-seq Peaks of NEUROD1 in K562 from ENCODE 3 (ENCFF581YKY)
     subGroups cellType=K562 factor=NEUROD1
+    color 46,0,184
 
     track encTfChipPkENCFF874QUM
     parent encTfChipPk off
     shortLabel K562 CC2D1A
     longLabel Transcription Factor ChIP-seq Peaks of CC2D1A in K562 from ENCODE 3 (ENCFF874QUM)
     subGroups cellType=K562 factor=CC2D1A
+    color 46,0,184
 
     track encTfChipPkENCFF259XQC
     parent encTfChipPk off
     shortLabel HepG2 POLR2G
     longLabel Transcription Factor ChIP-seq Peaks of POLR2G in HepG2 from ENCODE 3 (ENCFF259XQC)
     subGroups cellType=HepG2 factor=POLR2G
+    color 189,0,157
 
     track encTfChipPkENCFF750JOB
     parent encTfChipPk off
@@ -2698,18 +2862,21 @@ subGroup2 factor Factor \
     shortLabel HepG2 ATF3
     longLabel Transcription Factor ChIP-seq Peaks of ATF3 in HepG2 from ENCODE 3 (ENCFF857YVK)
     subGroups cellType=HepG2 factor=ATF3
+    color 189,0,157
 
     track encTfChipPkENCFF925DJG
     parent encTfChipPk off
     shortLabel K562 E2F8
     longLabel Transcription Factor ChIP-seq Peaks of E2F8 in K562 from ENCODE 3 (ENCFF925DJG)
     subGroups cellType=K562 factor=E2F8
+    color 46,0,184
 
     track encTfChipPkENCFF350YXB
     parent encTfChipPk off
     shortLabel K562 MTA3
     longLabel Transcription Factor ChIP-seq Peaks of MTA3 in K562 from ENCODE 3 (ENCFF350YXB)
     subGroups cellType=K562 factor=MTA3
+    color 46,0,184
 
     track encTfChipPkENCFF044XMF
     parent encTfChipPk off
@@ -2728,12 +2895,14 @@ subGroup2 factor Factor \
     shortLabel K562 MITF 1
     longLabel Transcription Factor ChIP-seq Peaks of MITF in K562 from ENCODE 3 (ENCFF497XOD)
     subGroups cellType=K562 factor=MITF
+    color 46,0,184
 
     track encTfChipPkENCFF967IKR
     parent encTfChipPk off
     shortLabel K562 NCOA1 2
     longLabel Transcription Factor ChIP-seq Peaks of NCOA1 in K562 from ENCODE 3 (ENCFF967IKR)
     subGroups cellType=K562 factor=NCOA1
+    color 46,0,184
 
     track encTfChipPkENCFF596FFJ
     parent encTfChipPk off
@@ -2746,6 +2915,7 @@ subGroup2 factor Factor \
     shortLabel K562 SREBF1
     longLabel Transcription Factor ChIP-seq Peaks of SREBF1 in K562 from ENCODE 3 (ENCFF985TSH)
     subGroups cellType=K562 factor=SREBF1
+    color 46,0,184
 
     track encTfChipPkENCFF527RGJ
     parent encTfChipPk off
@@ -2776,18 +2946,21 @@ subGroup2 factor Factor \
     shortLabel K562 STAT1 3
     longLabel Transcription Factor ChIP-seq Peaks of STAT1 in K562 from ENCODE 3 (ENCFF290HTJ)
     subGroups cellType=K562 factor=STAT1
+    color 46,0,184
 
     track encTfChipPkENCFF861YKK
     parent encTfChipPk off
     shortLabel K562 RBM17
     longLabel Transcription Factor ChIP-seq Peaks of RBM17 in K562 from ENCODE 3 (ENCFF861YKK)
     subGroups cellType=K562 factor=RBM17
+    color 46,0,184
 
     track encTfChipPkENCFF402FYF
     parent encTfChipPk off
     shortLabel GM12878 RFX5
     longLabel Transcription Factor ChIP-seq Peaks of RFX5 in GM12878 from ENCODE 3 (ENCFF402FYF)
     subGroups cellType=GM12878 factor=RFX5
+    color 153,38,0
 
     track encTfChipPkENCFF840NOO
     parent encTfChipPk off
@@ -2800,6 +2973,7 @@ subGroup2 factor Factor \
     shortLabel GM12878 WRNIP1
     longLabel Transcription Factor ChIP-seq Peaks of WRNIP1 in GM12878 from ENCODE 3 (ENCFF277VDY)
     subGroups cellType=GM12878 factor=WRNIP1
+    color 153,38,0
 
     track encTfChipPkENCFF754GUT
     parent encTfChipPk off
@@ -2812,12 +2986,14 @@ subGroup2 factor Factor \
     shortLabel K562 TAL1 1
     longLabel Transcription Factor ChIP-seq Peaks of TAL1 in K562 from ENCODE 3 (ENCFF482CEV)
     subGroups cellType=K562 factor=TAL1
+    color 46,0,184
 
     track encTfChipPkENCFF501NHW
     parent encTfChipPk off
     shortLabel HepG2 PRPF4
     longLabel Transcription Factor ChIP-seq Peaks of PRPF4 in HepG2 from ENCODE 3 (ENCFF501NHW)
     subGroups cellType=HepG2 factor=PRPF4
+    color 189,0,157
 
     track encTfChipPkENCFF760CPU
     parent encTfChipPk off
@@ -2830,48 +3006,56 @@ subGroup2 factor Factor \
     shortLabel K562 SIN3A 2
     longLabel Transcription Factor ChIP-seq Peaks of SIN3A in K562 from ENCODE 3 (ENCFF803COK)
     subGroups cellType=K562 factor=SIN3A
+    color 46,0,184
 
     track encTfChipPkENCFF833FTF
     parent encTfChipPk off
-    shortLabel GM12878 CTCF 1
+    shortLabel GM12878 CTCF 1 on
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in GM12878 from ENCODE 3 (ENCFF833FTF)
     subGroups cellType=GM12878 factor=CTCF
+    color 153,38,0
 
     track encTfChipPkENCFF079ZWK
     parent encTfChipPk off
     shortLabel GM12878 MXI1
     longLabel Transcription Factor ChIP-seq Peaks of MXI1 in GM12878 from ENCODE 3 (ENCFF079ZWK)
     subGroups cellType=GM12878 factor=MXI1
+    color 153,38,0
 
     track encTfChipPkENCFF972LPT
     parent encTfChipPk off
     shortLabel K562 RNF2 1
     longLabel Transcription Factor ChIP-seq Peaks of RNF2 in K562 from ENCODE 3 (ENCFF972LPT)
     subGroups cellType=K562 factor=RNF2
+    color 46,0,184
 
     track encTfChipPkENCFF184RRU
     parent encTfChipPk off
     shortLabel K562 NFATC3 2
     longLabel Transcription Factor ChIP-seq Peaks of NFATC3 in K562 from ENCODE 3 (ENCFF184RRU)
     subGroups cellType=K562 factor=NFATC3
+    color 46,0,184
 
     track encTfChipPkENCFF884JKW
     parent encTfChipPk off
     shortLabel HepG2 HNF4A
     longLabel Transcription Factor ChIP-seq Peaks of HNF4A in HepG2 from ENCODE 3 (ENCFF884JKW)
     subGroups cellType=HepG2 factor=HNF4A
+    color 189,0,157
 
     track encTfChipPkENCFF332PGQ
     parent encTfChipPk off
     shortLabel GM12878 ETS1
     longLabel Transcription Factor ChIP-seq Peaks of ETS1 in GM12878 from ENCODE 3 (ENCFF332PGQ)
     subGroups cellType=GM12878 factor=ETS1
+    color 153,38,0
 
     track encTfChipPkENCFF355ARZ
     parent encTfChipPk off
     shortLabel HepG2 RNF2
     longLabel Transcription Factor ChIP-seq Peaks of RNF2 in HepG2 from ENCODE 3 (ENCFF355ARZ)
     subGroups cellType=HepG2 factor=RNF2
+    color 189,0,157
 
     track encTfChipPkENCFF639NGJ
     parent encTfChipPk off
@@ -2884,6 +3068,7 @@ subGroup2 factor Factor \
     shortLabel H1-hESC EP300 2
     longLabel Transcription Factor ChIP-seq Peaks of EP300 in H1-hESC from ENCODE 3 (ENCFF843SYD)
     subGroups cellType=H1-hESC factor=EP300
+    color 0,107,27
 
     track encTfChipPkENCFF846FIG
     parent encTfChipPk off
@@ -2908,24 +3093,28 @@ subGroup2 factor Factor \
     shortLabel K562 ZNF316 1
     longLabel Transcription Factor ChIP-seq Peaks of ZNF316 in K562 from ENCODE 3 (ENCFF788EBS)
     subGroups cellType=K562 factor=ZNF316
+    color 46,0,184
 
     track encTfChipPkENCFF987VNY
     parent encTfChipPk off
     shortLabel K562 RNF2 2
     longLabel Transcription Factor ChIP-seq Peaks of RNF2 in K562 from ENCODE 3 (ENCFF987VNY)
     subGroups cellType=K562 factor=RNF2
+    color 46,0,184
 
     track encTfChipPkENCFF898MUV
     parent encTfChipPk off
     shortLabel GM12878 RCOR1
     longLabel Transcription Factor ChIP-seq Peaks of RCOR1 in GM12878 from ENCODE 3 (ENCFF898MUV)
     subGroups cellType=GM12878 factor=RCOR1
+    color 153,38,0
 
     track encTfChipPkENCFF738WCE
     parent encTfChipPk off
     shortLabel K562 KDM1A 1
     longLabel Transcription Factor ChIP-seq Peaks of KDM1A in K562 from ENCODE 3 (ENCFF738WCE)
     subGroups cellType=K562 factor=KDM1A
+    color 46,0,184
 
     track encTfChipPkENCFF035UIJ
     parent encTfChipPk off
@@ -2947,7 +3136,7 @@ subGroup2 factor Factor \
 
     track encTfChipPkENCFF703CWY
     parent encTfChipPk off
-    shortLabel stomach CTCF
+    shortLabel stomach CTCF 1
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in stomach from ENCODE 3 (ENCFF703CWY)
     subGroups cellType=stomach factor=CTCF
 
@@ -2968,6 +3157,7 @@ subGroup2 factor Factor \
     shortLabel K562 CBX3 1
     longLabel Transcription Factor ChIP-seq Peaks of CBX3 in K562 from ENCODE 3 (ENCFF005BKP)
     subGroups cellType=K562 factor=CBX3
+    color 46,0,184
 
     track encTfChipPkENCFF922QEI
     parent encTfChipPk off
@@ -2992,6 +3182,7 @@ subGroup2 factor Factor \
     shortLabel K562 RNF2 3
     longLabel Transcription Factor ChIP-seq Peaks of RNF2 in K562 from ENCODE 3 (ENCFF539WLH)
     subGroups cellType=K562 factor=RNF2
+    color 46,0,184
 
     track encTfChipPkENCFF337WIE
     parent encTfChipPk off
@@ -3010,12 +3201,14 @@ subGroup2 factor Factor \
     shortLabel HepG2 ZKSCAN1
     longLabel Transcription Factor ChIP-seq Peaks of ZKSCAN1 in HepG2 from ENCODE 3 (ENCFF614VFL)
     subGroups cellType=HepG2 factor=ZKSCAN1
+    color 189,0,157
 
     track encTfChipPkENCFF411BAO
     parent encTfChipPk off
     shortLabel HeLa-S3 MAFF
     longLabel Transcription Factor ChIP-seq Peaks of MAFF in HeLa-S3 from ENCODE 3 (ENCFF411BAO)
     subGroups cellType=HeLa-S3 factor=MAFF
+    color 0,119,158
 
     track encTfChipPkENCFF099NBE
     parent encTfChipPk off
@@ -3028,12 +3221,14 @@ subGroup2 factor Factor \
     shortLabel K562 ARID1B
     longLabel Transcription Factor ChIP-seq Peaks of ARID1B in K562 from ENCODE 3 (ENCFF225MPC)
     subGroups cellType=K562 factor=ARID1B
+    color 46,0,184
 
     track encTfChipPkENCFF394CWJ
     parent encTfChipPk off
     shortLabel GM12878 ZBTB33 1
     longLabel Transcription Factor ChIP-seq Peaks of ZBTB33 in GM12878 from ENCODE 3 (ENCFF394CWJ)
     subGroups cellType=GM12878 factor=ZBTB33
+    color 153,38,0
 
     track encTfChipPkENCFF282SXB
     parent encTfChipPk off
@@ -3046,6 +3241,7 @@ subGroup2 factor Factor \
     shortLabel K562 NR2C2
     longLabel Transcription Factor ChIP-seq Peaks of NR2C2 in K562 from ENCODE 3 (ENCFF594LCH)
     subGroups cellType=K562 factor=NR2C2
+    color 46,0,184
 
     track encTfChipPkENCFF603ZTG
     parent encTfChipPk off
@@ -3064,48 +3260,56 @@ subGroup2 factor Factor \
     shortLabel H1-hESC ZNF143
     longLabel Transcription Factor ChIP-seq Peaks of ZNF143 in H1-hESC from ENCODE 3 (ENCFF964BYN)
     subGroups cellType=H1-hESC factor=ZNF143
+    color 0,107,27
 
     track encTfChipPkENCFF038QAU
     parent encTfChipPk off
     shortLabel HepG2 U2AF2
     longLabel Transcription Factor ChIP-seq Peaks of U2AF2 in HepG2 from ENCODE 3 (ENCFF038QAU)
     subGroups cellType=HepG2 factor=U2AF2
+    color 189,0,157
 
     track encTfChipPkENCFF147MAN
     parent encTfChipPk off
     shortLabel HepG2 TCF7
     longLabel Transcription Factor ChIP-seq Peaks of TCF7 in HepG2 from ENCODE 3 (ENCFF147MAN)
     subGroups cellType=HepG2 factor=TCF7
+    color 189,0,157
 
     track encTfChipPkENCFF556YCY
     parent encTfChipPk off
     shortLabel K562 ZNF184 1
     longLabel Transcription Factor ChIP-seq Peaks of ZNF184 in K562 from ENCODE 3 (ENCFF556YCY)
     subGroups cellType=K562 factor=ZNF184
+    color 46,0,184
 
     track encTfChipPkENCFF339FFC
     parent encTfChipPk off
     shortLabel GM12878 IKZF2 1
     longLabel Transcription Factor ChIP-seq Peaks of IKZF2 in GM12878 from ENCODE 3 (ENCFF339FFC)
     subGroups cellType=GM12878 factor=IKZF2
+    color 153,38,0
 
     track encTfChipPkENCFF010MMQ
     parent encTfChipPk off
     shortLabel K562 ARHGAP35
     longLabel Transcription Factor ChIP-seq Peaks of ARHGAP35 in K562 from ENCODE 3 (ENCFF010MMQ)
     subGroups cellType=K562 factor=ARHGAP35
+    color 46,0,184
 
     track encTfChipPkENCFF093OUB
     parent encTfChipPk off
     shortLabel HepG2 FIP1L1
     longLabel Transcription Factor ChIP-seq Peaks of FIP1L1 in HepG2 from ENCODE 3 (ENCFF093OUB)
     subGroups cellType=HepG2 factor=FIP1L1
+    color 189,0,157
 
     track encTfChipPkENCFF244ORA
     parent encTfChipPk off
     shortLabel HepG2 ETS1
     longLabel Transcription Factor ChIP-seq Peaks of ETS1 in HepG2 from ENCODE 3 (ENCFF244ORA)
     subGroups cellType=HepG2 factor=ETS1
+    color 189,0,157
 
     track encTfChipPkENCFF532MZI
     parent encTfChipPk off
@@ -3136,36 +3340,42 @@ subGroup2 factor Factor \
     shortLabel K562 THRA
     longLabel Transcription Factor ChIP-seq Peaks of THRA in K562 from ENCODE 3 (ENCFF671BFH)
     subGroups cellType=K562 factor=THRA
+    color 46,0,184
 
     track encTfChipPkENCFF659WAF
     parent encTfChipPk off
     shortLabel K562 LEF1 1
     longLabel Transcription Factor ChIP-seq Peaks of LEF1 in K562 from ENCODE 3 (ENCFF659WAF)
     subGroups cellType=K562 factor=LEF1
+    color 46,0,184
 
     track encTfChipPkENCFF093VEE
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel H1-hESC CTCF 1
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in H1-hESC from ENCODE 3 (ENCFF093VEE)
     subGroups cellType=H1-hESC factor=CTCF
+    color 0,107,27
 
     track encTfChipPkENCFF063WXY
     parent encTfChipPk off
     shortLabel GM12878 E2F8
     longLabel Transcription Factor ChIP-seq Peaks of E2F8 in GM12878 from ENCODE 3 (ENCFF063WXY)
     subGroups cellType=GM12878 factor=E2F8
+    color 153,38,0
 
     track encTfChipPkENCFF059ONJ
     parent encTfChipPk off
     shortLabel K562 MNT 1
     longLabel Transcription Factor ChIP-seq Peaks of MNT in K562 from ENCODE 3 (ENCFF059ONJ)
     subGroups cellType=K562 factor=MNT
+    color 46,0,184
 
     track encTfChipPkENCFF992QZV
     parent encTfChipPk off
     shortLabel K562 NRF1 2
     longLabel Transcription Factor ChIP-seq Peaks of NRF1 in K562 from ENCODE 3 (ENCFF992QZV)
     subGroups cellType=K562 factor=NRF1
+    color 46,0,184
 
     track encTfChipPkENCFF041ZEP
     parent encTfChipPk off
@@ -3178,18 +3388,21 @@ subGroup2 factor Factor \
     shortLabel HepG2 LCORL
     longLabel Transcription Factor ChIP-seq Peaks of LCORL in HepG2 from ENCODE 3 (ENCFF308BSD)
     subGroups cellType=HepG2 factor=LCORL
+    color 189,0,157
 
     track encTfChipPkENCFF716LRI
     parent encTfChipPk off
     shortLabel K562 RFX5
     longLabel Transcription Factor ChIP-seq Peaks of RFX5 in K562 from ENCODE 3 (ENCFF716LRI)
     subGroups cellType=K562 factor=RFX5
+    color 46,0,184
 
     track encTfChipPkENCFF588OLK
     parent encTfChipPk off
     shortLabel K562 ZZZ3
     longLabel Transcription Factor ChIP-seq Peaks of ZZZ3 in K562 from ENCODE 3 (ENCFF588OLK)
     subGroups cellType=K562 factor=ZZZ3
+    color 46,0,184
 
     track encTfChipPkENCFF265QRY
     parent encTfChipPk off
@@ -3208,6 +3421,7 @@ subGroup2 factor Factor \
     shortLabel K562 EP300
     longLabel Transcription Factor ChIP-seq Peaks of EP300 in K562 from ENCODE 3 (ENCFF549TYR)
     subGroups cellType=K562 factor=EP300
+    color 46,0,184
 
     track encTfChipPkENCFF265NSP
     parent encTfChipPk off
@@ -3232,6 +3446,7 @@ subGroup2 factor Factor \
     shortLabel K562 ZBTB5 1
     longLabel Transcription Factor ChIP-seq Peaks of ZBTB5 in K562 from ENCODE 3 (ENCFF359QCN)
     subGroups cellType=K562 factor=ZBTB5
+    color 46,0,184
 
     track encTfChipPkENCFF751DRF
     parent encTfChipPk off
@@ -3244,12 +3459,14 @@ subGroup2 factor Factor \
     shortLabel K562 MNT 2
     longLabel Transcription Factor ChIP-seq Peaks of MNT in K562 from ENCODE 3 (ENCFF973OME)
     subGroups cellType=K562 factor=MNT
+    color 46,0,184
 
     track encTfChipPkENCFF583GKE
     parent encTfChipPk off
     shortLabel K562 CCAR2
     longLabel Transcription Factor ChIP-seq Peaks of CCAR2 in K562 from ENCODE 3 (ENCFF583GKE)
     subGroups cellType=K562 factor=CCAR2
+    color 46,0,184
 
     track encTfChipPkENCFF067QUU
     parent encTfChipPk off
@@ -3262,18 +3479,21 @@ subGroup2 factor Factor \
     shortLabel H1-hESC KDM4A
     longLabel Transcription Factor ChIP-seq Peaks of KDM4A in H1-hESC from ENCODE 3 (ENCFF838KYH)
     subGroups cellType=H1-hESC factor=KDM4A
+    color 0,107,27
 
     track encTfChipPkENCFF978IWS
     parent encTfChipPk off
     shortLabel HepG2 FOXA1 2
     longLabel Transcription Factor ChIP-seq Peaks of FOXA1 in HepG2 from ENCODE 3 (ENCFF978IWS)
     subGroups cellType=HepG2 factor=FOXA1
+    color 189,0,157
 
     track encTfChipPkENCFF677KJB
     parent encTfChipPk off
     shortLabel GM12878 REST 1
     longLabel Transcription Factor ChIP-seq Peaks of REST in GM12878 from ENCODE 3 (ENCFF677KJB)
     subGroups cellType=GM12878 factor=REST
+    color 153,38,0
 
     track encTfChipPkENCFF500ZLG
     parent encTfChipPk off
@@ -3286,6 +3506,7 @@ subGroup2 factor Factor \
     shortLabel K562 ESRRA
     longLabel Transcription Factor ChIP-seq Peaks of ESRRA in K562 from ENCODE 3 (ENCFF213EPU)
     subGroups cellType=K562 factor=ESRRA
+    color 46,0,184
 
     track encTfChipPkENCFF782GCQ
     parent encTfChipPk off
@@ -3298,6 +3519,7 @@ subGroup2 factor Factor \
     shortLabel K562 HDAC1 1
     longLabel Transcription Factor ChIP-seq Peaks of HDAC1 in K562 from ENCODE 3 (ENCFF996CUX)
     subGroups cellType=K562 factor=HDAC1
+    color 46,0,184
 
     track encTfChipPkENCFF397TFF
     parent encTfChipPk off
@@ -3322,24 +3544,28 @@ subGroup2 factor Factor \
     shortLabel K562 ZBTB7A
     longLabel Transcription Factor ChIP-seq Peaks of ZBTB7A in K562 from ENCODE 3 (ENCFF706ISJ)
     subGroups cellType=K562 factor=ZBTB7A
+    color 46,0,184
 
     track encTfChipPkENCFF911BYP
     parent encTfChipPk off
     shortLabel GM12878 MEF2B
     longLabel Transcription Factor ChIP-seq Peaks of MEF2B in GM12878 from ENCODE 3 (ENCFF911BYP)
     subGroups cellType=GM12878 factor=MEF2B
+    color 153,38,0
 
     track encTfChipPkENCFF881QBT
     parent encTfChipPk off
     shortLabel K562 PML
     longLabel Transcription Factor ChIP-seq Peaks of PML in K562 from ENCODE 3 (ENCFF881QBT)
     subGroups cellType=K562 factor=PML
+    color 46,0,184
 
     track encTfChipPkENCFF453CYS
     parent encTfChipPk off
     shortLabel HepG2 MNT 1
     longLabel Transcription Factor ChIP-seq Peaks of MNT in HepG2 from ENCODE 3 (ENCFF453CYS)
     subGroups cellType=HepG2 factor=MNT
+    color 189,0,157
 
     track encTfChipPkENCFF627DHJ
     parent encTfChipPk off
@@ -3358,6 +3584,7 @@ subGroup2 factor Factor \
     shortLabel HepG2 NCOR1
     longLabel Transcription Factor ChIP-seq Peaks of NCOR1 in HepG2 from ENCODE 3 (ENCFF033BDT)
     subGroups cellType=HepG2 factor=NCOR1
+    color 189,0,157
 
     track encTfChipPkENCFF316LSD
     parent encTfChipPk off
@@ -3382,6 +3609,7 @@ subGroup2 factor Factor \
     shortLabel HepG2 SOX6
     longLabel Transcription Factor ChIP-seq Peaks of SOX6 in HepG2 from ENCODE 3 (ENCFF432DIT)
     subGroups cellType=HepG2 factor=SOX6
+    color 189,0,157
 
     track encTfChipPkENCFF745NPN
     parent encTfChipPk off
@@ -3400,42 +3628,49 @@ subGroup2 factor Factor \
     shortLabel HepG2 CREM
     longLabel Transcription Factor ChIP-seq Peaks of CREM in HepG2 from ENCODE 3 (ENCFF693JHE)
     subGroups cellType=HepG2 factor=CREM
+    color 189,0,157
 
     track encTfChipPkENCFF059WVE
     parent encTfChipPk off
     shortLabel K562 SRSF7
     longLabel Transcription Factor ChIP-seq Peaks of SRSF7 in K562 from ENCODE 3 (ENCFF059WVE)
     subGroups cellType=K562 factor=SRSF7
+    color 46,0,184
 
     track encTfChipPkENCFF809YFY
     parent encTfChipPk off
     shortLabel K562 FOXA1
     longLabel Transcription Factor ChIP-seq Peaks of FOXA1 in K562 from ENCODE 3 (ENCFF809YFY)
     subGroups cellType=K562 factor=FOXA1
+    color 46,0,184
 
     track encTfChipPkENCFF221GWO
     parent encTfChipPk off
     shortLabel HepG2 RBM39
     longLabel Transcription Factor ChIP-seq Peaks of RBM39 in HepG2 from ENCODE 3 (ENCFF221GWO)
     subGroups cellType=HepG2 factor=RBM39
+    color 189,0,157
 
     track encTfChipPkENCFF152VMJ
     parent encTfChipPk off
     shortLabel K562 CTBP1
     longLabel Transcription Factor ChIP-seq Peaks of CTBP1 in K562 from ENCODE 3 (ENCFF152VMJ)
     subGroups cellType=K562 factor=CTBP1
+    color 46,0,184
 
     track encTfChipPkENCFF274AQE
     parent encTfChipPk off
     shortLabel H1-hESC TCF12
     longLabel Transcription Factor ChIP-seq Peaks of TCF12 in H1-hESC from ENCODE 3 (ENCFF274AQE)
     subGroups cellType=H1-hESC factor=TCF12
+    color 0,107,27
 
     track encTfChipPkENCFF872YNU
     parent encTfChipPk off
     shortLabel K562 MCM5 2
     longLabel Transcription Factor ChIP-seq Peaks of MCM5 in K562 from ENCODE 3 (ENCFF872YNU)
     subGroups cellType=K562 factor=MCM5
+    color 46,0,184
 
     track encTfChipPkENCFF690BYG
     parent encTfChipPk off
@@ -3448,18 +3683,21 @@ subGroup2 factor Factor \
     shortLabel H1-hESC FOSL1
     longLabel Transcription Factor ChIP-seq Peaks of FOSL1 in H1-hESC from ENCODE 3 (ENCFF418RZE)
     subGroups cellType=H1-hESC factor=FOSL1
+    color 0,107,27
 
     track encTfChipPkENCFF160WLU
     parent encTfChipPk off
     shortLabel GM12878 TCF12 1
     longLabel Transcription Factor ChIP-seq Peaks of TCF12 in GM12878 from ENCODE 3 (ENCFF160WLU)
     subGroups cellType=GM12878 factor=TCF12
+    color 153,38,0
 
     track encTfChipPkENCFF249EZR
     parent encTfChipPk off
     shortLabel K562 TCF7
     longLabel Transcription Factor ChIP-seq Peaks of TCF7 in K562 from ENCODE 3 (ENCFF249EZR)
     subGroups cellType=K562 factor=TCF7
+    color 46,0,184
 
     track encTfChipPkENCFF362SRJ
     parent encTfChipPk off
@@ -3490,6 +3728,7 @@ subGroup2 factor Factor \
     shortLabel HepG2 SIN3B
     longLabel Transcription Factor ChIP-seq Peaks of SIN3B in HepG2 from ENCODE 3 (ENCFF812UZP)
     subGroups cellType=HepG2 factor=SIN3B
+    color 189,0,157
 
     track encTfChipPkENCFF653ILB
     parent encTfChipPk off
@@ -3504,10 +3743,11 @@ subGroup2 factor Factor \
     subGroups cellType=MCF-7 factor=PKNOX1
 
     track encTfChipPkENCFF120VUT
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel GM12878 POLR2A
     longLabel Transcription Factor ChIP-seq Peaks of POLR2A in GM12878 from ENCODE 3 (ENCFF120VUT)
     subGroups cellType=GM12878 factor=POLR2A
+    color 153,38,0
 
     track encTfChipPkENCFF813MTO
     parent encTfChipPk off
@@ -3520,6 +3760,7 @@ subGroup2 factor Factor \
     shortLabel K562 TAF7
     longLabel Transcription Factor ChIP-seq Peaks of TAF7 in K562 from ENCODE 3 (ENCFF034CQR)
     subGroups cellType=K562 factor=TAF7
+    color 46,0,184
 
     track encTfChipPkENCFF526NYA
     parent encTfChipPk off
@@ -3528,40 +3769,46 @@ subGroup2 factor Factor \
     subGroups cellType=GM12891 factor=SPI1
 
     track encTfChipPkENCFF922GRD
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel HepG2 MAX
     longLabel Transcription Factor ChIP-seq Peaks of MAX in HepG2 from ENCODE 3 (ENCFF922GRD)
     subGroups cellType=HepG2 factor=MAX
+    color 189,0,157
 
     track encTfChipPkENCFF241TBP
     parent encTfChipPk off
     shortLabel K562 SOX6
     longLabel Transcription Factor ChIP-seq Peaks of SOX6 in K562 from ENCODE 3 (ENCFF241TBP)
     subGroups cellType=K562 factor=SOX6
+    color 46,0,184
 
     track encTfChipPkENCFF495MHZ
     parent encTfChipPk off
     shortLabel K562 NFE2
     longLabel Transcription Factor ChIP-seq Peaks of NFE2 in K562 from ENCODE 3 (ENCFF495MHZ)
     subGroups cellType=K562 factor=NFE2
+    color 46,0,184
 
     track encTfChipPkENCFF478DRD
     parent encTfChipPk off
     shortLabel GM12878 SMARCA5
     longLabel Transcription Factor ChIP-seq Peaks of SMARCA5 in GM12878 from ENCODE 3 (ENCFF478DRD)
     subGroups cellType=GM12878 factor=SMARCA5
+    color 153,38,0
 
     track encTfChipPkENCFF775PPJ
     parent encTfChipPk off
     shortLabel HepG2 BRCA1
     longLabel Transcription Factor ChIP-seq Peaks of BRCA1 in HepG2 from ENCODE 3 (ENCFF775PPJ)
     subGroups cellType=HepG2 factor=BRCA1
+    color 189,0,157
 
     track encTfChipPkENCFF394IKH
     parent encTfChipPk off
     shortLabel K562 ZBTB5 2
     longLabel Transcription Factor ChIP-seq Peaks of ZBTB5 in K562 from ENCODE 3 (ENCFF394IKH)
     subGroups cellType=K562 factor=ZBTB5
+    color 46,0,184
 
     track encTfChipPkENCFF239EJM
     parent encTfChipPk off
@@ -3574,6 +3821,7 @@ subGroup2 factor Factor \
     shortLabel K562 FIP1L1
     longLabel Transcription Factor ChIP-seq Peaks of FIP1L1 in K562 from ENCODE 3 (ENCFF883WYX)
     subGroups cellType=K562 factor=FIP1L1
+    color 46,0,184
 
     track encTfChipPkENCFF538YID
     parent encTfChipPk off
@@ -3586,6 +3834,7 @@ subGroup2 factor Factor \
     shortLabel GM12878 MEF2C
     longLabel Transcription Factor ChIP-seq Peaks of MEF2C in GM12878 from ENCODE 3 (ENCFF261ZWR)
     subGroups cellType=GM12878 factor=MEF2C
+    color 153,38,0
 
     track encTfChipPkENCFF365WFM
     parent encTfChipPk off
@@ -3598,6 +3847,7 @@ subGroup2 factor Factor \
     shortLabel K562 GATAD2A
     longLabel Transcription Factor ChIP-seq Peaks of GATAD2A in K562 from ENCODE 3 (ENCFF253FZN)
     subGroups cellType=K562 factor=GATAD2A
+    color 46,0,184
 
     track encTfChipPkENCFF195IKR
     parent encTfChipPk off
@@ -3616,12 +3866,14 @@ subGroup2 factor Factor \
     shortLabel HepG2 HNF4G
     longLabel Transcription Factor ChIP-seq Peaks of HNF4G in HepG2 from ENCODE 3 (ENCFF140ARE)
     subGroups cellType=HepG2 factor=HNF4G
+    color 189,0,157
 
     track encTfChipPkENCFF108RWG
     parent encTfChipPk off
     shortLabel HepG2 BHLHE40 2
     longLabel Transcription Factor ChIP-seq Peaks of BHLHE40 in HepG2 from ENCODE 3 (ENCFF108RWG)
     subGroups cellType=HepG2 factor=BHLHE40
+    color 189,0,157
 
     track encTfChipPkENCFF223CEU
     parent encTfChipPk off
@@ -3634,6 +3886,7 @@ subGroup2 factor Factor \
     shortLabel K562 SMAD5
     longLabel Transcription Factor ChIP-seq Peaks of SMAD5 in K562 from ENCODE 3 (ENCFF178MOP)
     subGroups cellType=K562 factor=SMAD5
+    color 46,0,184
 
     track encTfChipPkENCFF634DDY
     parent encTfChipPk off
@@ -3646,18 +3899,21 @@ subGroup2 factor Factor \
     shortLabel K562 AGO1
     longLabel Transcription Factor ChIP-seq Peaks of AGO1 in K562 from ENCODE 3 (ENCFF836VRV)
     subGroups cellType=K562 factor=AGO1
+    color 46,0,184
 
     track encTfChipPkENCFF580DYE
     parent encTfChipPk off
     shortLabel K562 HDAC3
     longLabel Transcription Factor ChIP-seq Peaks of HDAC3 in K562 from ENCODE 3 (ENCFF580DYE)
     subGroups cellType=K562 factor=HDAC3
+    color 46,0,184
 
     track encTfChipPkENCFF544XKC
     parent encTfChipPk off
     shortLabel K562 PKNOX1
     longLabel Transcription Factor ChIP-seq Peaks of PKNOX1 in K562 from ENCODE 3 (ENCFF544XKC)
     subGroups cellType=K562 factor=PKNOX1
+    color 46,0,184
 
     track encTfChipPkENCFF432XLE
     parent encTfChipPk off
@@ -3676,12 +3932,14 @@ subGroup2 factor Factor \
     shortLabel HepG2 ATF2
     longLabel Transcription Factor ChIP-seq Peaks of ATF2 in HepG2 from ENCODE 3 (ENCFF502ZTC)
     subGroups cellType=HepG2 factor=ATF2
+    color 189,0,157
 
     track encTfChipPkENCFF312RFN
     parent encTfChipPk off
     shortLabel K562 TCF7L2
     longLabel Transcription Factor ChIP-seq Peaks of TCF7L2 in K562 from ENCODE 3 (ENCFF312RFN)
     subGroups cellType=K562 factor=TCF7L2
+    color 46,0,184
 
     track encTfChipPkENCFF603AWL
     parent encTfChipPk off
@@ -3694,6 +3952,7 @@ subGroup2 factor Factor \
     shortLabel K562 ZFP91
     longLabel Transcription Factor ChIP-seq Peaks of ZFP91 in K562 from ENCODE 3 (ENCFF396DNK)
     subGroups cellType=K562 factor=ZFP91
+    color 46,0,184
 
     track encTfChipPkENCFF947IJX
     parent encTfChipPk off
@@ -3730,24 +3989,28 @@ subGroup2 factor Factor \
     shortLabel GM12878 FOXK2
     longLabel Transcription Factor ChIP-seq Peaks of FOXK2 in GM12878 from ENCODE 3 (ENCFF980KSV)
     subGroups cellType=GM12878 factor=FOXK2
+    color 153,38,0
 
     track encTfChipPkENCFF881XQF
     parent encTfChipPk off
     shortLabel K562 PCBP2
     longLabel Transcription Factor ChIP-seq Peaks of PCBP2 in K562 from ENCODE 3 (ENCFF881XQF)
     subGroups cellType=K562 factor=PCBP2
+    color 46,0,184
 
     track encTfChipPkENCFF344QKL
     parent encTfChipPk off
     shortLabel K562 ZNF274 1
     longLabel Transcription Factor ChIP-seq Peaks of ZNF274 in K562 from ENCODE 3 (ENCFF344QKL)
     subGroups cellType=K562 factor=ZNF274
+    color 46,0,184
 
     track encTfChipPkENCFF413VUC
     parent encTfChipPk off
     shortLabel GM12878 MTA3
     longLabel Transcription Factor ChIP-seq Peaks of MTA3 in GM12878 from ENCODE 3 (ENCFF413VUC)
     subGroups cellType=GM12878 factor=MTA3
+    color 153,38,0
 
     track encTfChipPkENCFF240PYU
     parent encTfChipPk off
@@ -3760,24 +4023,28 @@ subGroup2 factor Factor \
     shortLabel HepG2 YY1
     longLabel Transcription Factor ChIP-seq Peaks of YY1 in HepG2 from ENCODE 3 (ENCFF420KEV)
     subGroups cellType=HepG2 factor=YY1
+    color 189,0,157
 
     track encTfChipPkENCFF485WCF
     parent encTfChipPk off
     shortLabel H1-hESC CBX8
     longLabel Transcription Factor ChIP-seq Peaks of CBX8 in H1-hESC from ENCODE 3 (ENCFF485WCF)
     subGroups cellType=H1-hESC factor=CBX8
+    color 0,107,27
 
     track encTfChipPkENCFF484DKT
     parent encTfChipPk off
     shortLabel K562 CBX1
     longLabel Transcription Factor ChIP-seq Peaks of CBX1 in K562 from ENCODE 3 (ENCFF484DKT)
     subGroups cellType=K562 factor=CBX1
+    color 46,0,184
 
     track encTfChipPkENCFF820OMK
     parent encTfChipPk off
     shortLabel H1-hESC SIN3A 1
     longLabel Transcription Factor ChIP-seq Peaks of SIN3A in H1-hESC from ENCODE 3 (ENCFF820OMK)
     subGroups cellType=H1-hESC factor=SIN3A
+    color 0,107,27
 
     track encTfChipPkENCFF248QIW
     parent encTfChipPk off
@@ -3796,18 +4063,21 @@ subGroup2 factor Factor \
     shortLabel HepG2 NR2F6
     longLabel Transcription Factor ChIP-seq Peaks of NR2F6 in HepG2 from ENCODE 3 (ENCFF311LEU)
     subGroups cellType=HepG2 factor=NR2F6
+    color 189,0,157
 
     track encTfChipPkENCFF516AJC
     parent encTfChipPk off
     shortLabel GM12878 ETV6 1
     longLabel Transcription Factor ChIP-seq Peaks of ETV6 in GM12878 from ENCODE 3 (ENCFF516AJC)
     subGroups cellType=GM12878 factor=ETV6
+    color 153,38,0
 
     track encTfChipPkENCFF513RIQ
     parent encTfChipPk off
     shortLabel GM12878 ZNF217
     longLabel Transcription Factor ChIP-seq Peaks of ZNF217 in GM12878 from ENCODE 3 (ENCFF513RIQ)
     subGroups cellType=GM12878 factor=ZNF217
+    color 153,38,0
 
     track encTfChipPkENCFF316NHY
     parent encTfChipPk off
@@ -3826,6 +4096,7 @@ subGroup2 factor Factor \
     shortLabel GM12878 ZBTB33 2
     longLabel Transcription Factor ChIP-seq Peaks of ZBTB33 in GM12878 from ENCODE 3 (ENCFF539CKD)
     subGroups cellType=GM12878 factor=ZBTB33
+    color 153,38,0
 
     track encTfChipPkENCFF708GMO
     parent encTfChipPk off
@@ -3838,12 +4109,14 @@ subGroup2 factor Factor \
     shortLabel K562 XRCC5
     longLabel Transcription Factor ChIP-seq Peaks of XRCC5 in K562 from ENCODE 3 (ENCFF998KKJ)
     subGroups cellType=K562 factor=XRCC5
+    color 46,0,184
 
     track encTfChipPkENCFF179NDS
     parent encTfChipPk off
     shortLabel K562 BHLHE40
     longLabel Transcription Factor ChIP-seq Peaks of BHLHE40 in K562 from ENCODE 3 (ENCFF179NDS)
     subGroups cellType=K562 factor=BHLHE40
+    color 46,0,184
 
     track encTfChipPkENCFF451VDG
     parent encTfChipPk off
@@ -3856,12 +4129,14 @@ subGroup2 factor Factor \
     shortLabel K562 YY1 2
     longLabel Transcription Factor ChIP-seq Peaks of YY1 in K562 from ENCODE 3 (ENCFF328XKC)
     subGroups cellType=K562 factor=YY1
+    color 46,0,184
 
     track encTfChipPkENCFF135DOZ
     parent encTfChipPk off
     shortLabel H1-hESC RBBP5
     longLabel Transcription Factor ChIP-seq Peaks of RBBP5 in H1-hESC from ENCODE 3 (ENCFF135DOZ)
     subGroups cellType=H1-hESC factor=RBBP5
+    color 0,107,27
 
     track encTfChipPkENCFF809ECY
     parent encTfChipPk off
@@ -3874,6 +4149,7 @@ subGroup2 factor Factor \
     shortLabel K562 CHAMP1 1
     longLabel Transcription Factor ChIP-seq Peaks of CHAMP1 in K562 from ENCODE 3 (ENCFF859FVX)
     subGroups cellType=K562 factor=CHAMP1
+    color 46,0,184
 
     track encTfChipPkENCFF315VQM
     parent encTfChipPk off
@@ -3886,18 +4162,21 @@ subGroup2 factor Factor \
     shortLabel GM12878 SIX5
     longLabel Transcription Factor ChIP-seq Peaks of SIX5 in GM12878 from ENCODE 3 (ENCFF606WUV)
     subGroups cellType=GM12878 factor=SIX5
+    color 153,38,0
 
     track encTfChipPkENCFF653MIQ
     parent encTfChipPk off
     shortLabel GM12878 IKZF2 2
     longLabel Transcription Factor ChIP-seq Peaks of IKZF2 in GM12878 from ENCODE 3 (ENCFF653MIQ)
     subGroups cellType=GM12878 factor=IKZF2
+    color 153,38,0
 
     track encTfChipPkENCFF379MPS
     parent encTfChipPk off
     shortLabel K562 RBBP5
     longLabel Transcription Factor ChIP-seq Peaks of RBBP5 in K562 from ENCODE 3 (ENCFF379MPS)
     subGroups cellType=K562 factor=RBBP5
+    color 46,0,184
 
     track encTfChipPkENCFF374BNP
     parent encTfChipPk off
@@ -3922,18 +4201,21 @@ subGroup2 factor Factor \
     shortLabel GM12878 ARNT
     longLabel Transcription Factor ChIP-seq Peaks of ARNT in GM12878 from ENCODE 3 (ENCFF166OZW)
     subGroups cellType=GM12878 factor=ARNT
+    color 153,38,0
 
     track encTfChipPkENCFF481WGW
     parent encTfChipPk off
     shortLabel K562 SKIL
     longLabel Transcription Factor ChIP-seq Peaks of SKIL in K562 from ENCODE 3 (ENCFF481WGW)
     subGroups cellType=K562 factor=SKIL
+    color 46,0,184
 
     track encTfChipPkENCFF166FRO
     parent encTfChipPk off
     shortLabel GM12878 NFXL1
     longLabel Transcription Factor ChIP-seq Peaks of NFXL1 in GM12878 from ENCODE 3 (ENCFF166FRO)
     subGroups cellType=GM12878 factor=NFXL1
+    color 153,38,0
 
     track encTfChipPkENCFF071ZMT
     parent encTfChipPk off
@@ -3952,30 +4234,35 @@ subGroup2 factor Factor \
     shortLabel GM12878 ZNF143 1
     longLabel Transcription Factor ChIP-seq Peaks of ZNF143 in GM12878 from ENCODE 3 (ENCFF544NXC)
     subGroups cellType=GM12878 factor=ZNF143
+    color 153,38,0
 
     track encTfChipPkENCFF526HLP
     parent encTfChipPk off
     shortLabel K562 DACH1
     longLabel Transcription Factor ChIP-seq Peaks of DACH1 in K562 from ENCODE 3 (ENCFF526HLP)
     subGroups cellType=K562 factor=DACH1
+    color 46,0,184
 
     track encTfChipPkENCFF473GCH
     parent encTfChipPk off
     shortLabel K562 FOSL1
     longLabel Transcription Factor ChIP-seq Peaks of FOSL1 in K562 from ENCODE 3 (ENCFF473GCH)
     subGroups cellType=K562 factor=FOSL1
+    color 46,0,184
 
     track encTfChipPkENCFF020GMZ
     parent encTfChipPk off
     shortLabel GM12878 PKNOX1
     longLabel Transcription Factor ChIP-seq Peaks of PKNOX1 in GM12878 from ENCODE 3 (ENCFF020GMZ)
     subGroups cellType=GM12878 factor=PKNOX1
+    color 153,38,0
 
     track encTfChipPkENCFF803LEC
     parent encTfChipPk off
     shortLabel K562 XRCC3
     longLabel Transcription Factor ChIP-seq Peaks of XRCC3 in K562 from ENCODE 3 (ENCFF803LEC)
     subGroups cellType=K562 factor=XRCC3
+    color 46,0,184
 
     track encTfChipPkENCFF924XFS
     parent encTfChipPk off
@@ -3988,6 +4275,7 @@ subGroup2 factor Factor \
     shortLabel GM12878 RELB
     longLabel Transcription Factor ChIP-seq Peaks of RELB in GM12878 from ENCODE 3 (ENCFF456FQB)
     subGroups cellType=GM12878 factor=RELB
+    color 153,38,0
 
     track encTfChipPkENCFF295AWO
     parent encTfChipPk off
@@ -4024,18 +4312,21 @@ subGroup2 factor Factor \
     shortLabel HepG2 ATF7
     longLabel Transcription Factor ChIP-seq Peaks of ATF7 in HepG2 from ENCODE 3 (ENCFF658YLW)
     subGroups cellType=HepG2 factor=ATF7
+    color 189,0,157
 
     track encTfChipPkENCFF077UYM
     parent encTfChipPk off
     shortLabel K562 JUN 2
     longLabel Transcription Factor ChIP-seq Peaks of JUN in K562 from ENCODE 3 (ENCFF077UYM)
     subGroups cellType=K562 factor=JUN
+    color 46,0,184
 
     track encTfChipPkENCFF583CIY
     parent encTfChipPk off
     shortLabel K562 NR3C1 1
     longLabel Transcription Factor ChIP-seq Peaks of NR3C1 in K562 from ENCODE 3 (ENCFF583CIY)
     subGroups cellType=K562 factor=NR3C1
+    color 46,0,184
 
     track encTfChipPkENCFF735WFO
     parent encTfChipPk off
@@ -4066,24 +4357,28 @@ subGroup2 factor Factor \
     shortLabel K562 TBL1XR1 2
     longLabel Transcription Factor ChIP-seq Peaks of TBL1XR1 in K562 from ENCODE 3 (ENCFF626MVT)
     subGroups cellType=K562 factor=TBL1XR1
+    color 46,0,184
 
     track encTfChipPkENCFF768BPC
     parent encTfChipPk off
     shortLabel H1-hESC KDM1A
     longLabel Transcription Factor ChIP-seq Peaks of KDM1A in H1-hESC from ENCODE 3 (ENCFF768BPC)
     subGroups cellType=H1-hESC factor=KDM1A
+    color 0,107,27
 
     track encTfChipPkENCFF226CZE
     parent encTfChipPk off
     shortLabel K562 MCM2 1
     longLabel Transcription Factor ChIP-seq Peaks of MCM2 in K562 from ENCODE 3 (ENCFF226CZE)
     subGroups cellType=K562 factor=MCM2
+    color 46,0,184
 
     track encTfChipPkENCFF583DZD
     parent encTfChipPk off
     shortLabel K562 MYNN
     longLabel Transcription Factor ChIP-seq Peaks of MYNN in K562 from ENCODE 3 (ENCFF583DZD)
     subGroups cellType=K562 factor=MYNN
+    color 46,0,184
 
     track encTfChipPkENCFF902IMW
     parent encTfChipPk off
@@ -4102,12 +4397,14 @@ subGroup2 factor Factor \
     shortLabel GM12878 PAX5 2
     longLabel Transcription Factor ChIP-seq Peaks of PAX5 in GM12878 from ENCODE 3 (ENCFF339KUO)
     subGroups cellType=GM12878 factor=PAX5
+    color 153,38,0
 
     track encTfChipPkENCFF760AQQ
     parent encTfChipPk off
     shortLabel H1-hESC JUND 1
     longLabel Transcription Factor ChIP-seq Peaks of JUND in H1-hESC from ENCODE 3 (ENCFF760AQQ)
     subGroups cellType=H1-hESC factor=JUND
+    color 0,107,27
 
     track encTfChipPkENCFF550UEU
     parent encTfChipPk off
@@ -4120,6 +4417,7 @@ subGroup2 factor Factor \
     shortLabel K562 SAFB
     longLabel Transcription Factor ChIP-seq Peaks of SAFB in K562 from ENCODE 3 (ENCFF478MPX)
     subGroups cellType=K562 factor=SAFB
+    color 46,0,184
 
     track encTfChipPkENCFF231RXA
     parent encTfChipPk off
@@ -4138,12 +4436,14 @@ subGroup2 factor Factor \
     shortLabel HepG2 AGO1
     longLabel Transcription Factor ChIP-seq Peaks of AGO1 in HepG2 from ENCODE 3 (ENCFF639TOU)
     subGroups cellType=HepG2 factor=AGO1
+    color 189,0,157
 
     track encTfChipPkENCFF836LBG
     parent encTfChipPk off
     shortLabel K562 ZNF274 2
     longLabel Transcription Factor ChIP-seq Peaks of ZNF274 in K562 from ENCODE 3 (ENCFF836LBG)
     subGroups cellType=K562 factor=ZNF274
+    color 46,0,184
 
     track encTfChipPkENCFF932EVL
     parent encTfChipPk off
@@ -4156,6 +4456,7 @@ subGroup2 factor Factor \
     shortLabel GM12878 NR2F1
     longLabel Transcription Factor ChIP-seq Peaks of NR2F1 in GM12878 from ENCODE 3 (ENCFF810CEL)
     subGroups cellType=GM12878 factor=NR2F1
+    color 153,38,0
 
     track encTfChipPkENCFF445OFX
     parent encTfChipPk off
@@ -4168,18 +4469,21 @@ subGroup2 factor Factor \
     shortLabel H1-hESC POLR2A
     longLabel Transcription Factor ChIP-seq Peaks of POLR2A in H1-hESC from ENCODE 3 (ENCFF468LYO)
     subGroups cellType=H1-hESC factor=POLR2A
+    color 0,107,27
 
     track encTfChipPkENCFF684ASX
     parent encTfChipPk off
     shortLabel HepG2 MAFF
     longLabel Transcription Factor ChIP-seq Peaks of MAFF in HepG2 from ENCODE 3 (ENCFF684ASX)
     subGroups cellType=HepG2 factor=MAFF
+    color 189,0,157
 
     track encTfChipPkENCFF164HLQ
     parent encTfChipPk off
     shortLabel K562 TRIM28 1
     longLabel Transcription Factor ChIP-seq Peaks of TRIM28 in K562 from ENCODE 3 (ENCFF164HLQ)
     subGroups cellType=K562 factor=TRIM28
+    color 46,0,184
 
     track encTfChipPkENCFF244DQW
     parent encTfChipPk off
@@ -4192,18 +4496,21 @@ subGroup2 factor Factor \
     shortLabel GM12878 CUX1
     longLabel Transcription Factor ChIP-seq Peaks of CUX1 in GM12878 from ENCODE 3 (ENCFF721SDD)
     subGroups cellType=GM12878 factor=CUX1
+    color 153,38,0
 
     track encTfChipPkENCFF449ITJ
     parent encTfChipPk off
     shortLabel HepG2 PHB2
     longLabel Transcription Factor ChIP-seq Peaks of PHB2 in HepG2 from ENCODE 3 (ENCFF449ITJ)
     subGroups cellType=HepG2 factor=PHB2
+    color 189,0,157
 
     track encTfChipPkENCFF399GAE
     parent encTfChipPk off
     shortLabel K562 MCM7 1
     longLabel Transcription Factor ChIP-seq Peaks of MCM7 in K562 from ENCODE 3 (ENCFF399GAE)
     subGroups cellType=K562 factor=MCM7
+    color 46,0,184
 
     track encTfChipPkENCFF088WYS
     parent encTfChipPk off
@@ -4219,7 +4526,7 @@ subGroup2 factor Factor \
 
     track encTfChipPkENCFF823BWT
     parent encTfChipPk off
-    shortLabel tblNerve POLR2A 1
+    shortLabel tblNerve POLR2A 2
     longLabel Transcription Factor ChIP-seq Peaks of POLR2A in tibial_nerve from ENCODE 3 (ENCFF823BWT)
     subGroups cellType=tibial_nerve factor=POLR2A
 
@@ -4228,12 +4535,14 @@ subGroup2 factor Factor \
     shortLabel H1-hESC HDAC6
     longLabel Transcription Factor ChIP-seq Peaks of HDAC6 in H1-hESC from ENCODE 3 (ENCFF012LET)
     subGroups cellType=H1-hESC factor=HDAC6
+    color 0,107,27
 
     track encTfChipPkENCFF582YPB
     parent encTfChipPk off
     shortLabel K562 CREB3L1
     longLabel Transcription Factor ChIP-seq Peaks of CREB3L1 in K562 from ENCODE 3 (ENCFF582YPB)
     subGroups cellType=K562 factor=CREB3L1
+    color 46,0,184
 
     track encTfChipPkENCFF459QKR
     parent encTfChipPk off
@@ -4252,6 +4561,7 @@ subGroup2 factor Factor \
     shortLabel K562 NCOR1 1
     longLabel Transcription Factor ChIP-seq Peaks of NCOR1 in K562 from ENCODE 3 (ENCFF165BCW)
     subGroups cellType=K562 factor=NCOR1
+    color 46,0,184
 
     track encTfChipPkENCFF598ZLV
     parent encTfChipPk off
@@ -4282,18 +4592,21 @@ subGroup2 factor Factor \
     shortLabel HepG2 FOSL2
     longLabel Transcription Factor ChIP-seq Peaks of FOSL2 in HepG2 from ENCODE 3 (ENCFF395KPJ)
     subGroups cellType=HepG2 factor=FOSL2
+    color 189,0,157
 
     track encTfChipPkENCFF085GOJ
     parent encTfChipPk off
     shortLabel HepG2 JUND 1
     longLabel Transcription Factor ChIP-seq Peaks of JUND in HepG2 from ENCODE 3 (ENCFF085GOJ)
     subGroups cellType=HepG2 factor=JUND
+    color 189,0,157
 
     track encTfChipPkENCFF778DJD
     parent encTfChipPk off
     shortLabel GM12878 SIN3A
     longLabel Transcription Factor ChIP-seq Peaks of SIN3A in GM12878 from ENCODE 3 (ENCFF778DJD)
     subGroups cellType=GM12878 factor=SIN3A
+    color 153,38,0
 
     track encTfChipPkENCFF251IXD
     parent encTfChipPk off
@@ -4336,18 +4649,21 @@ subGroup2 factor Factor \
     shortLabel GM12878 CTCF 2
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in GM12878 from ENCODE 3 (ENCFF710VEH)
     subGroups cellType=GM12878 factor=CTCF
+    color 153,38,0
 
     track encTfChipPkENCFF807BXT
     parent encTfChipPk off
     shortLabel HepG2 TBX3 1
     longLabel Transcription Factor ChIP-seq Peaks of TBX3 in HepG2 from ENCODE 3 (ENCFF807BXT)
     subGroups cellType=HepG2 factor=TBX3
+    color 189,0,157
 
     track encTfChipPkENCFF560CMG
     parent encTfChipPk off
     shortLabel HepG2 HNRNPUL1
     longLabel Transcription Factor ChIP-seq Peaks of HNRNPUL1 in HepG2 from ENCODE 3 (ENCFF560CMG)
     subGroups cellType=HepG2 factor=HNRNPUL1
+    color 189,0,157
 
     track encTfChipPkENCFF942FBW
     parent encTfChipPk off
@@ -4366,6 +4682,7 @@ subGroup2 factor Factor \
     shortLabel K562 PTBP1
     longLabel Transcription Factor ChIP-seq Peaks of PTBP1 in K562 from ENCODE 3 (ENCFF694BIA)
     subGroups cellType=K562 factor=PTBP1
+    color 46,0,184
 
     track encTfChipPkENCFF108ZTV
     parent encTfChipPk off
@@ -4378,48 +4695,56 @@ subGroup2 factor Factor \
     shortLabel H1-hESC REST 2
     longLabel Transcription Factor ChIP-seq Peaks of REST in H1-hESC from ENCODE 3 (ENCFF885KLR)
     subGroups cellType=H1-hESC factor=REST
+    color 0,107,27
 
     track encTfChipPkENCFF420YHY
     parent encTfChipPk off
     shortLabel GM12878 CBX5
     longLabel Transcription Factor ChIP-seq Peaks of CBX5 in GM12878 from ENCODE 3 (ENCFF420YHY)
     subGroups cellType=GM12878 factor=CBX5
+    color 153,38,0
 
     track encTfChipPkENCFF222XPQ
     parent encTfChipPk off
     shortLabel GM12878 EP300 2
     longLabel Transcription Factor ChIP-seq Peaks of EP300 in GM12878 from ENCODE 3 (ENCFF222XPQ)
     subGroups cellType=GM12878 factor=EP300
+    color 153,38,0
 
     track encTfChipPkENCFF314ULQ
     parent encTfChipPk off
     shortLabel K562 L3MBTL2
     longLabel Transcription Factor ChIP-seq Peaks of L3MBTL2 in K562 from ENCODE 3 (ENCFF314ULQ)
     subGroups cellType=K562 factor=L3MBTL2
+    color 46,0,184
 
     track encTfChipPkENCFF386WKY
     parent encTfChipPk off
     shortLabel K562 ZNF280A
     longLabel Transcription Factor ChIP-seq Peaks of ZNF280A in K562 from ENCODE 3 (ENCFF386WKY)
     subGroups cellType=K562 factor=ZNF280A
+    color 46,0,184
 
     track encTfChipPkENCFF215YWS
     parent encTfChipPk off
     shortLabel GM12878 MYB
     longLabel Transcription Factor ChIP-seq Peaks of MYB in GM12878 from ENCODE 3 (ENCFF215YWS)
     subGroups cellType=GM12878 factor=MYB
+    color 153,38,0
 
     track encTfChipPkENCFF710IEF
     parent encTfChipPk off
     shortLabel K562 ATF4
     longLabel Transcription Factor ChIP-seq Peaks of ATF4 in K562 from ENCODE 3 (ENCFF710IEF)
     subGroups cellType=K562 factor=ATF4
+    color 46,0,184
 
     track encTfChipPkENCFF019PEL
     parent encTfChipPk off
     shortLabel K562 ELK1
     longLabel Transcription Factor ChIP-seq Peaks of ELK1 in K562 from ENCODE 3 (ENCFF019PEL)
     subGroups cellType=K562 factor=ELK1
+    color 46,0,184
 
     track encTfChipPkENCFF831MEQ
     parent encTfChipPk off
@@ -4432,12 +4757,14 @@ subGroup2 factor Factor \
     shortLabel K562 AFF1 1
     longLabel Transcription Factor ChIP-seq Peaks of AFF1 in K562 from ENCODE 3 (ENCFF076MSV)
     subGroups cellType=K562 factor=AFF1
+    color 46,0,184
 
     track encTfChipPkENCFF939TZS
     parent encTfChipPk off
     shortLabel GM12878 JUNB
     longLabel Transcription Factor ChIP-seq Peaks of JUNB in GM12878 from ENCODE 3 (ENCFF939TZS)
     subGroups cellType=GM12878 factor=JUNB
+    color 153,38,0
 
     track encTfChipPkENCFF996UFS
     parent encTfChipPk off
@@ -4450,12 +4777,14 @@ subGroup2 factor Factor \
     shortLabel HepG2 SKI
     longLabel Transcription Factor ChIP-seq Peaks of SKI in HepG2 from ENCODE 3 (ENCFF363QMG)
     subGroups cellType=HepG2 factor=SKI
+    color 189,0,157
 
     track encTfChipPkENCFF686FLD
     parent encTfChipPk off
     shortLabel GM12878 SMC3
     longLabel Transcription Factor ChIP-seq Peaks of SMC3 in GM12878 from ENCODE 3 (ENCFF686FLD)
     subGroups cellType=GM12878 factor=SMC3
+    color 153,38,0
 
     track encTfChipPkENCFF408PSW
     parent encTfChipPk off
@@ -4468,12 +4797,14 @@ subGroup2 factor Factor \
     shortLabel K562 SMARCA4 2
     longLabel Transcription Factor ChIP-seq Peaks of SMARCA4 in K562 from ENCODE 3 (ENCFF710LRU)
     subGroups cellType=K562 factor=SMARCA4
+    color 46,0,184
 
     track encTfChipPkENCFF242IWJ
     parent encTfChipPk off
     shortLabel K562 TCF12 1
     longLabel Transcription Factor ChIP-seq Peaks of TCF12 in K562 from ENCODE 3 (ENCFF242IWJ)
     subGroups cellType=K562 factor=TCF12
+    color 46,0,184
 
     track encTfChipPkENCFF435EDS
     parent encTfChipPk off
@@ -4486,42 +4817,49 @@ subGroup2 factor Factor \
     shortLabel HepG2 TRIM22
     longLabel Transcription Factor ChIP-seq Peaks of TRIM22 in HepG2 from ENCODE 3 (ENCFF623ALA)
     subGroups cellType=HepG2 factor=TRIM22
+    color 189,0,157
 
     track encTfChipPkENCFF490VYC
     parent encTfChipPk off
     shortLabel GM12878 TBP
     longLabel Transcription Factor ChIP-seq Peaks of TBP in GM12878 from ENCODE 3 (ENCFF490VYC)
     subGroups cellType=GM12878 factor=TBP
+    color 153,38,0
 
     track encTfChipPkENCFF192BTP
     parent encTfChipPk off
     shortLabel K562 JUN 3
     longLabel Transcription Factor ChIP-seq Peaks of JUN in K562 from ENCODE 3 (ENCFF192BTP)
     subGroups cellType=K562 factor=JUN
+    color 46,0,184
 
     track encTfChipPkENCFF033KXY
     parent encTfChipPk off
     shortLabel K562 SNRNP70
     longLabel Transcription Factor ChIP-seq Peaks of SNRNP70 in K562 from ENCODE 3 (ENCFF033KXY)
     subGroups cellType=K562 factor=SNRNP70
+    color 46,0,184
 
     track encTfChipPkENCFF429XKT
     parent encTfChipPk off
     shortLabel K562 CEBPB
     longLabel Transcription Factor ChIP-seq Peaks of CEBPB in K562 from ENCODE 3 (ENCFF429XKT)
     subGroups cellType=K562 factor=CEBPB
+    color 46,0,184
 
     track encTfChipPkENCFF284LRP
     parent encTfChipPk off
     shortLabel K562 TAL1 2
     longLabel Transcription Factor ChIP-seq Peaks of TAL1 in K562 from ENCODE 3 (ENCFF284LRP)
     subGroups cellType=K562 factor=TAL1
+    color 46,0,184
 
     track encTfChipPkENCFF963TZI
     parent encTfChipPk off
     shortLabel H1-hESC TAF7
     longLabel Transcription Factor ChIP-seq Peaks of TAF7 in H1-hESC from ENCODE 3 (ENCFF963TZI)
     subGroups cellType=H1-hESC factor=TAF7
+    color 0,107,27
 
     track encTfChipPkENCFF447FPV
     parent encTfChipPk off
@@ -4534,18 +4872,21 @@ subGroup2 factor Factor \
     shortLabel K562 MCM2 2
     longLabel Transcription Factor ChIP-seq Peaks of MCM2 in K562 from ENCODE 3 (ENCFF067LIW)
     subGroups cellType=K562 factor=MCM2
+    color 46,0,184
 
     track encTfChipPkENCFF973LDQ
     parent encTfChipPk off
     shortLabel K562 ZNF24 2
     longLabel Transcription Factor ChIP-seq Peaks of ZNF24 in K562 from ENCODE 3 (ENCFF973LDQ)
     subGroups cellType=K562 factor=ZNF24
+    color 46,0,184
 
     track encTfChipPkENCFF968KBN
     parent encTfChipPk off
     shortLabel K562 ATF2
     longLabel Transcription Factor ChIP-seq Peaks of ATF2 in K562 from ENCODE 3 (ENCFF968KBN)
     subGroups cellType=K562 factor=ATF2
+    color 46,0,184
 
     track encTfChipPkENCFF806GXB
     parent encTfChipPk off
@@ -4570,12 +4911,14 @@ subGroup2 factor Factor \
     shortLabel GM12878 ZNF384
     longLabel Transcription Factor ChIP-seq Peaks of ZNF384 in GM12878 from ENCODE 3 (ENCFF371OGO)
     subGroups cellType=GM12878 factor=ZNF384
+    color 153,38,0
 
     track encTfChipPkENCFF289BUU
     parent encTfChipPk off
     shortLabel K562 NUFIP1
     longLabel Transcription Factor ChIP-seq Peaks of NUFIP1 in K562 from ENCODE 3 (ENCFF289BUU)
     subGroups cellType=K562 factor=NUFIP1
+    color 46,0,184
 
     track encTfChipPkENCFF193MKL
     parent encTfChipPk off
@@ -4594,6 +4937,7 @@ subGroup2 factor Factor \
     shortLabel HepG2 RFX5
     longLabel Transcription Factor ChIP-seq Peaks of RFX5 in HepG2 from ENCODE 3 (ENCFF933GHY)
     subGroups cellType=HepG2 factor=RFX5
+    color 189,0,157
 
     track encTfChipPkENCFF587LBC
     parent encTfChipPk off
@@ -4612,12 +4956,14 @@ subGroup2 factor Factor \
     shortLabel H1-hESC SUZ12
     longLabel Transcription Factor ChIP-seq Peaks of SUZ12 in H1-hESC from ENCODE 3 (ENCFF336HCY)
     subGroups cellType=H1-hESC factor=SUZ12
+    color 0,107,27
 
     track encTfChipPkENCFF197YHU
     parent encTfChipPk off
     shortLabel K562 SMARCA4 3
     longLabel Transcription Factor ChIP-seq Peaks of SMARCA4 in K562 from ENCODE 3 (ENCFF197YHU)
     subGroups cellType=K562 factor=SMARCA4
+    color 46,0,184
 
     track encTfChipPkENCFF651LIG
     parent encTfChipPk off
@@ -4630,6 +4976,7 @@ subGroup2 factor Factor \
     shortLabel K562 POLR2A 4
     longLabel Transcription Factor ChIP-seq Peaks of POLR2A in K562 from ENCODE 3 (ENCFF248IWJ)
     subGroups cellType=K562 factor=POLR2A
+    color 46,0,184
 
     track encTfChipPkENCFF251QXA
     parent encTfChipPk off
@@ -4642,12 +4989,14 @@ subGroup2 factor Factor \
     shortLabel HepG2 RBM22
     longLabel Transcription Factor ChIP-seq Peaks of RBM22 in HepG2 from ENCODE 3 (ENCFF688VHI)
     subGroups cellType=HepG2 factor=RBM22
+    color 189,0,157
 
     track encTfChipPkENCFF957YRU
     parent encTfChipPk off
     shortLabel GM12878 TBL1XR1
     longLabel Transcription Factor ChIP-seq Peaks of TBL1XR1 in GM12878 from ENCODE 3 (ENCFF957YRU)
     subGroups cellType=GM12878 factor=TBL1XR1
+    color 153,38,0
 
     track encTfChipPkENCFF102VYH
     parent encTfChipPk off
@@ -4663,7 +5012,7 @@ subGroup2 factor Factor \
 
     track encTfChipPkENCFF379TEL
     parent encTfChipPk off
-    shortLabel liverRLobe CTCF
+    shortLabel liverRLobe CTCF 1
     longLabel Transcription Factor ChIP-seq Peaks of POLR2A in right_lobe_of_liver from ENCODE 3 (ENCFF379TEL)
     subGroups cellType=right_lobe_of_liver factor=POLR2A
 
@@ -4702,6 +5051,7 @@ subGroup2 factor Factor \
     shortLabel K562 ZBTB2
     longLabel Transcription Factor ChIP-seq Peaks of ZBTB2 in K562 from ENCODE 3 (ENCFF561USY)
     subGroups cellType=K562 factor=ZBTB2
+    color 46,0,184
 
     track encTfChipPkENCFF384ALJ
     parent encTfChipPk off
@@ -4726,12 +5076,14 @@ subGroup2 factor Factor \
     shortLabel K562 ETV6 1
     longLabel Transcription Factor ChIP-seq Peaks of ETV6 in K562 from ENCODE 3 (ENCFF660VPM)
     subGroups cellType=K562 factor=ETV6
+    color 46,0,184
 
     track encTfChipPkENCFF567GSX
     parent encTfChipPk off
     shortLabel K562 MNT 3
     longLabel Transcription Factor ChIP-seq Peaks of MNT in K562 from ENCODE 3 (ENCFF567GSX)
     subGroups cellType=K562 factor=MNT
+    color 46,0,184
 
     track encTfChipPkENCFF755DGT
     parent encTfChipPk off
@@ -4744,6 +5096,7 @@ subGroup2 factor Factor \
     shortLabel H1-hESC BRCA1
     longLabel Transcription Factor ChIP-seq Peaks of BRCA1 in H1-hESC from ENCODE 3 (ENCFF658OOS)
     subGroups cellType=H1-hESC factor=BRCA1
+    color 0,107,27
 
     track encTfChipPkENCFF681OWQ
     parent encTfChipPk off
@@ -4752,10 +5105,11 @@ subGroup2 factor Factor \
     subGroups cellType=AG04450 factor=CTCF
 
     track encTfChipPkENCFF732HOE
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel K562 GATA2
     longLabel Transcription Factor ChIP-seq Peaks of GATA2 in K562 from ENCODE 3 (ENCFF732HOE)
     subGroups cellType=K562 factor=GATA2
+    color 46,0,184
 
     track encTfChipPkENCFF543VGD
     parent encTfChipPk off
@@ -4768,34 +5122,38 @@ subGroup2 factor Factor \
     shortLabel GM12878 TRIM22 1
     longLabel Transcription Factor ChIP-seq Peaks of TRIM22 in GM12878 from ENCODE 3 (ENCFF241GZK)
     subGroups cellType=GM12878 factor=TRIM22
+    color 153,38,0
 
     track encTfChipPkENCFF410EDG
     parent encTfChipPk off
     shortLabel K562 MTA2 1
     longLabel Transcription Factor ChIP-seq Peaks of MTA2 in K562 from ENCODE 3 (ENCFF410EDG)
     subGroups cellType=K562 factor=MTA2
+    color 46,0,184
 
     track encTfChipPkENCFF632MBO
     parent encTfChipPk off
     shortLabel GM12878 SMAD1
     longLabel Transcription Factor ChIP-seq Peaks of SMAD1 in GM12878 from ENCODE 3 (ENCFF632MBO)
     subGroups cellType=GM12878 factor=SMAD1
+    color 153,38,0
 
     track encTfChipPkENCFF948QME
     parent encTfChipPk off
     shortLabel HepG2 PLRG1
     longLabel Transcription Factor ChIP-seq Peaks of PLRG1 in HepG2 from ENCODE 3 (ENCFF948QME)
     subGroups cellType=HepG2 factor=PLRG1
+    color 189,0,157
 
     track encTfChipPkENCFF057IJK
     parent encTfChipPk off
-    shortLabel ovary EP300
+    shortLabel ovary EP300 1
     longLabel Transcription Factor ChIP-seq Peaks of EP300 in ovary from ENCODE 3 (ENCFF057IJK)
     subGroups cellType=ovary factor=EP300
 
     track encTfChipPkENCFF560VSK
     parent encTfChipPk off
-    shortLabel stomach CTCF
+    shortLabel stomach CTCF 2
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in stomach from ENCODE 3 (ENCFF560VSK)
     subGroups cellType=stomach factor=CTCF
 
@@ -4810,18 +5168,21 @@ subGroup2 factor Factor \
     shortLabel K562 SUZ12
     longLabel Transcription Factor ChIP-seq Peaks of SUZ12 in K562 from ENCODE 3 (ENCFF966MVC)
     subGroups cellType=K562 factor=SUZ12
+    color 46,0,184
 
     track encTfChipPkENCFF820EVZ
     parent encTfChipPk off
     shortLabel K562 EWSR1
     longLabel Transcription Factor ChIP-seq Peaks of EWSR1 in K562 from ENCODE 3 (ENCFF820EVZ)
     subGroups cellType=K562 factor=EWSR1
+    color 46,0,184
 
     track encTfChipPkENCFF675TLS
     parent encTfChipPk off
     shortLabel HepG2 FOXA1 3
     longLabel Transcription Factor ChIP-seq Peaks of FOXA1 in HepG2 from ENCODE 3 (ENCFF675TLS)
     subGroups cellType=HepG2 factor=FOXA1
+    color 189,0,157
 
     track encTfChipPkENCFF453XKM
     parent encTfChipPk off
@@ -4834,18 +5195,21 @@ subGroup2 factor Factor \
     shortLabel K562 PHF21A
     longLabel Transcription Factor ChIP-seq Peaks of PHF21A in K562 from ENCODE 3 (ENCFF134CUM)
     subGroups cellType=K562 factor=PHF21A
+    color 46,0,184
 
     track encTfChipPkENCFF868QLL
     parent encTfChipPk off
     shortLabel K562 ATF7
     longLabel Transcription Factor ChIP-seq Peaks of ATF7 in K562 from ENCODE 3 (ENCFF868QLL)
     subGroups cellType=K562 factor=ATF7
+    color 46,0,184
 
     track encTfChipPkENCFF150VTD
     parent encTfChipPk off
     shortLabel K562 USF2
     longLabel Transcription Factor ChIP-seq Peaks of USF2 in K562 from ENCODE 3 (ENCFF150VTD)
     subGroups cellType=K562 factor=USF2
+    color 46,0,184
 
     track encTfChipPkENCFF715AKU
     parent encTfChipPk off
@@ -4858,18 +5222,21 @@ subGroup2 factor Factor \
     shortLabel GM12878 IRF3 2
     longLabel Transcription Factor ChIP-seq Peaks of IRF3 in GM12878 from ENCODE 3 (ENCFF303TVZ)
     subGroups cellType=GM12878 factor=IRF3
+    color 153,38,0
 
     track encTfChipPkENCFF662YQK
     parent encTfChipPk off
     shortLabel K562 POLR2A 5
     longLabel Transcription Factor ChIP-seq Peaks of POLR2A in K562 from ENCODE 3 (ENCFF662YQK)
     subGroups cellType=K562 factor=POLR2A
+    color 46,0,184
 
     track encTfChipPkENCFF099SDW
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel K562 MYC 1
     longLabel Transcription Factor ChIP-seq Peaks of MYC in K562 from ENCODE 3 (ENCFF099SDW)
     subGroups cellType=K562 factor=MYC
+    color 46,0,184
 
     track encTfChipPkENCFF638MFT
     parent encTfChipPk off
@@ -4882,36 +5249,42 @@ subGroup2 factor Factor \
     shortLabel K562 ZSCAN29 1
     longLabel Transcription Factor ChIP-seq Peaks of ZSCAN29 in K562 from ENCODE 3 (ENCFF303PMJ)
     subGroups cellType=K562 factor=ZSCAN29
+    color 46,0,184
 
     track encTfChipPkENCFF996IVU
     parent encTfChipPk off
     shortLabel K562 ZNF830 1
     longLabel Transcription Factor ChIP-seq Peaks of ZNF830 in K562 from ENCODE 3 (ENCFF996IVU)
     subGroups cellType=K562 factor=ZNF830
+    color 46,0,184
 
     track encTfChipPkENCFF349MPF
     parent encTfChipPk off
     shortLabel GM12878 DPF2
     longLabel Transcription Factor ChIP-seq Peaks of DPF2 in GM12878 from ENCODE 3 (ENCFF349MPF)
     subGroups cellType=GM12878 factor=DPF2
+    color 153,38,0
 
     track encTfChipPkENCFF073PCP
     parent encTfChipPk off
     shortLabel H1-hESC JUND 2
     longLabel Transcription Factor ChIP-seq Peaks of JUND in H1-hESC from ENCODE 3 (ENCFF073PCP)
     subGroups cellType=H1-hESC factor=JUND
+    color 0,107,27
 
     track encTfChipPkENCFF120IDE
     parent encTfChipPk off
     shortLabel K562 RBFOX2
     longLabel Transcription Factor ChIP-seq Peaks of RBFOX2 in K562 from ENCODE 3 (ENCFF120IDE)
     subGroups cellType=K562 factor=RBFOX2
+    color 46,0,184
 
     track encTfChipPkENCFF547POU
     parent encTfChipPk off
     shortLabel HepG2 EP300 1
     longLabel Transcription Factor ChIP-seq Peaks of EP300 in HepG2 from ENCODE 3 (ENCFF547POU)
     subGroups cellType=HepG2 factor=EP300
+    color 189,0,157
 
     track encTfChipPkENCFF713MCF
     parent encTfChipPk off
@@ -4924,18 +5297,21 @@ subGroup2 factor Factor \
     shortLabel K562 RNF2 4
     longLabel Transcription Factor ChIP-seq Peaks of RNF2 in K562 from ENCODE 3 (ENCFF644WLI)
     subGroups cellType=K562 factor=RNF2
+    color 46,0,184
 
     track encTfChipPkENCFF043YZF
     parent encTfChipPk off
     shortLabel K562 LEF1 2
     longLabel Transcription Factor ChIP-seq Peaks of LEF1 in K562 from ENCODE 3 (ENCFF043YZF)
     subGroups cellType=K562 factor=LEF1
+    color 46,0,184
 
     track encTfChipPkENCFF730URE
     parent encTfChipPk off
     shortLabel K562 U2AF1
     longLabel Transcription Factor ChIP-seq Peaks of U2AF1 in K562 from ENCODE 3 (ENCFF730URE)
     subGroups cellType=K562 factor=U2AF1
+    color 46,0,184
 
     track encTfChipPkENCFF736DQP
     parent encTfChipPk off
@@ -4954,6 +5330,7 @@ subGroup2 factor Factor \
     shortLabel K562 FOXM1
     longLabel Transcription Factor ChIP-seq Peaks of FOXM1 in K562 from ENCODE 3 (ENCFF699ZII)
     subGroups cellType=K562 factor=FOXM1
+    color 46,0,184
 
     track encTfChipPkENCFF359IPV
     parent encTfChipPk off
@@ -4966,6 +5343,7 @@ subGroup2 factor Factor \
     shortLabel GM12878 ZNF143 2
     longLabel Transcription Factor ChIP-seq Peaks of ZNF143 in GM12878 from ENCODE 3 (ENCFF141SAU)
     subGroups cellType=GM12878 factor=ZNF143
+    color 153,38,0
 
     track encTfChipPkENCFF862SRI
     parent encTfChipPk off
@@ -4980,10 +5358,11 @@ subGroup2 factor Factor \
     subGroups cellType=MCF-7 factor=CREB1
 
     track encTfChipPkENCFF686VJY
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel H1-hESC YY1
     longLabel Transcription Factor ChIP-seq Peaks of YY1 in H1-hESC from ENCODE 3 (ENCFF686VJY)
     subGroups cellType=H1-hESC factor=YY1
+    color 0,107,27
 
     track encTfChipPkENCFF297HAT
     parent encTfChipPk off
@@ -4996,12 +5375,14 @@ subGroup2 factor Factor \
     shortLabel HepG2 SOX13
     longLabel Transcription Factor ChIP-seq Peaks of SOX13 in HepG2 from ENCODE 3 (ENCFF132BFM)
     subGroups cellType=HepG2 factor=SOX13
+    color 189,0,157
 
     track encTfChipPkENCFF917COW
     parent encTfChipPk off
     shortLabel K562 E2F6
     longLabel Transcription Factor ChIP-seq Peaks of E2F6 in K562 from ENCODE 3 (ENCFF917COW)
     subGroups cellType=K562 factor=E2F6
+    color 46,0,184
 
     track encTfChipPkENCFF331WKY
     parent encTfChipPk off
@@ -5014,6 +5395,7 @@ subGroup2 factor Factor \
     shortLabel K562 ZNF184 2
     longLabel Transcription Factor ChIP-seq Peaks of ZNF184 in K562 from ENCODE 3 (ENCFF728NEV)
     subGroups cellType=K562 factor=ZNF184
+    color 46,0,184
 
     track encTfChipPkENCFF849EEH
     parent encTfChipPk off
@@ -5026,6 +5408,7 @@ subGroup2 factor Factor \
     shortLabel HepG2 XRCC5
     longLabel Transcription Factor ChIP-seq Peaks of XRCC5 in HepG2 from ENCODE 3 (ENCFF845GIK)
     subGroups cellType=HepG2 factor=XRCC5
+    color 189,0,157
 
     track encTfChipPkENCFF772PCI
     parent encTfChipPk off
@@ -5044,6 +5427,7 @@ subGroup2 factor Factor \
     shortLabel K562 UBTF 1
     longLabel Transcription Factor ChIP-seq Peaks of UBTF in K562 from ENCODE 3 (ENCFF938IOJ)
     subGroups cellType=K562 factor=UBTF
+    color 46,0,184
 
     track encTfChipPkENCFF318QLK
     parent encTfChipPk off
@@ -5056,18 +5440,21 @@ subGroup2 factor Factor \
     shortLabel GM12878 MLLT1
     longLabel Transcription Factor ChIP-seq Peaks of MLLT1 in GM12878 from ENCODE 3 (ENCFF881VZH)
     subGroups cellType=GM12878 factor=MLLT1
+    color 153,38,0
 
     track encTfChipPkENCFF083KVY
     parent encTfChipPk off
     shortLabel GM12878 MAX
     longLabel Transcription Factor ChIP-seq Peaks of MAX in GM12878 from ENCODE 3 (ENCFF083KVY)
     subGroups cellType=GM12878 factor=MAX
+    color 153,38,0
 
     track encTfChipPkENCFF642BNC
     parent encTfChipPk off
     shortLabel K562 CBFA2T2
     longLabel Transcription Factor ChIP-seq Peaks of CBFA2T2 in K562 from ENCODE 3 (ENCFF642BNC)
     subGroups cellType=K562 factor=CBFA2T2
+    color 46,0,184
 
     track encTfChipPkENCFF147RBN
     parent encTfChipPk off
@@ -5086,36 +5473,42 @@ subGroup2 factor Factor \
     shortLabel K562 MEF2A
     longLabel Transcription Factor ChIP-seq Peaks of MEF2A in K562 from ENCODE 3 (ENCFF577UJR)
     subGroups cellType=K562 factor=MEF2A
+    color 46,0,184
 
     track encTfChipPkENCFF318SDF
     parent encTfChipPk off
     shortLabel H1-hESC SIX5
     longLabel Transcription Factor ChIP-seq Peaks of SIX5 in H1-hESC from ENCODE 3 (ENCFF318SDF)
     subGroups cellType=H1-hESC factor=SIX5
+    color 0,107,27
 
     track encTfChipPkENCFF340PPI
     parent encTfChipPk off
     shortLabel K562 ZNF24 3
     longLabel Transcription Factor ChIP-seq Peaks of ZNF24 in K562 from ENCODE 3 (ENCFF340PPI)
     subGroups cellType=K562 factor=ZNF24
+    color 46,0,184
 
     track encTfChipPkENCFF394DLH
     parent encTfChipPk off
     shortLabel GM12878 EBF1 1
     longLabel Transcription Factor ChIP-seq Peaks of EBF1 in GM12878 from ENCODE 3 (ENCFF394DLH)
     subGroups cellType=GM12878 factor=EBF1
+    color 153,38,0
 
     track encTfChipPkENCFF470MLY
     parent encTfChipPk off
     shortLabel K562 MBD2
     longLabel Transcription Factor ChIP-seq Peaks of MBD2 in K562 from ENCODE 3 (ENCFF470MLY)
     subGroups cellType=K562 factor=MBD2
+    color 46,0,184
 
     track encTfChipPkENCFF253NXR
     parent encTfChipPk off
     shortLabel K562 ZSCAN29 2
     longLabel Transcription Factor ChIP-seq Peaks of ZSCAN29 in K562 from ENCODE 3 (ENCFF253NXR)
     subGroups cellType=K562 factor=ZSCAN29
+    color 46,0,184
 
     track encTfChipPkENCFF358ADA
     parent encTfChipPk off
@@ -5128,6 +5521,7 @@ subGroup2 factor Factor \
     shortLabel K562 ZHX1
     longLabel Transcription Factor ChIP-seq Peaks of ZHX1 in K562 from ENCODE 3 (ENCFF195ODE)
     subGroups cellType=K562 factor=ZHX1
+    color 46,0,184
 
     track encTfChipPkENCFF269VDY
     parent encTfChipPk off
@@ -5146,6 +5540,7 @@ subGroup2 factor Factor \
     shortLabel K562 ZBTB40
     longLabel Transcription Factor ChIP-seq Peaks of ZBTB40 in K562 from ENCODE 3 (ENCFF417LEJ)
     subGroups cellType=K562 factor=ZBTB40
+    color 46,0,184
 
     track encTfChipPkENCFF988IOQ
     parent encTfChipPk off
@@ -5166,16 +5561,18 @@ subGroup2 factor Factor \
     subGroups cellType=sigmoid_colon factor=POLR2A
 
     track encTfChipPkENCFF886VSU
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel K562 IKZF1 1
     longLabel Transcription Factor ChIP-seq Peaks of IKZF1 in K562 from ENCODE 3 (ENCFF886VSU)
     subGroups cellType=K562 factor=IKZF1
+    color 46,0,184
 
     track encTfChipPkENCFF732XGR
     parent encTfChipPk off
     shortLabel H1-hESC RAD21 1
     longLabel Transcription Factor ChIP-seq Peaks of RAD21 in H1-hESC from ENCODE 3 (ENCFF732XGR)
     subGroups cellType=H1-hESC factor=RAD21
+    color 0,107,27
 
     track encTfChipPkENCFF150STV
     parent encTfChipPk off
@@ -5188,48 +5585,56 @@ subGroup2 factor Factor \
     shortLabel HepG2 ARNT
     longLabel Transcription Factor ChIP-seq Peaks of ARNT in HepG2 from ENCODE 3 (ENCFF808WQI)
     subGroups cellType=HepG2 factor=ARNT
+    color 189,0,157
 
     track encTfChipPkENCFF402JJK
     parent encTfChipPk off
     shortLabel H1-hESC CTCF 2
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in H1-hESC from ENCODE 3 (ENCFF402JJK)
     subGroups cellType=H1-hESC factor=CTCF
+    color 0,107,27
 
     track encTfChipPkENCFF908HDA
     parent encTfChipPk off
     shortLabel HepG2 PTBP1
     longLabel Transcription Factor ChIP-seq Peaks of PTBP1 in HepG2 from ENCODE 3 (ENCFF908HDA)
     subGroups cellType=HepG2 factor=PTBP1
+    color 189,0,157
 
     track encTfChipPkENCFF233MID
     parent encTfChipPk off
     shortLabel HepG2 HNRNPL
     longLabel Transcription Factor ChIP-seq Peaks of HNRNPL in HepG2 from ENCODE 3 (ENCFF233MID)
     subGroups cellType=HepG2 factor=HNRNPL
+    color 189,0,157
 
     track encTfChipPkENCFF490ZAU
     parent encTfChipPk off
     shortLabel HepG2 TAF15
     longLabel Transcription Factor ChIP-seq Peaks of TAF15 in HepG2 from ENCODE 3 (ENCFF490ZAU)
     subGroups cellType=HepG2 factor=TAF15
+    color 189,0,157
 
     track encTfChipPkENCFF455TDM
     parent encTfChipPk off
     shortLabel K562 CBX3 2
     longLabel Transcription Factor ChIP-seq Peaks of CBX3 in K562 from ENCODE 3 (ENCFF455TDM)
     subGroups cellType=K562 factor=CBX3
+    color 46,0,184
 
     track encTfChipPkENCFF048OIZ
     parent encTfChipPk off
     shortLabel K562 BMI1
     longLabel Transcription Factor ChIP-seq Peaks of BMI1 in K562 from ENCODE 3 (ENCFF048OIZ)
     subGroups cellType=K562 factor=BMI1
+    color 46,0,184
 
     track encTfChipPkENCFF010UHD
     parent encTfChipPk off
     shortLabel K562 RFX1 2
     longLabel Transcription Factor ChIP-seq Peaks of RFX1 in K562 from ENCODE 3 (ENCFF010UHD)
     subGroups cellType=K562 factor=RFX1
+    color 46,0,184
 
     track encTfChipPkENCFF139DOR
     parent encTfChipPk off
@@ -5248,6 +5653,7 @@ subGroup2 factor Factor \
     shortLabel HepG2 EP300 2
     longLabel Transcription Factor ChIP-seq Peaks of EP300 in HepG2 from ENCODE 3 (ENCFF259JWD)
     subGroups cellType=HepG2 factor=EP300
+    color 189,0,157
 
     track encTfChipPkENCFF176YNV
     parent encTfChipPk off
@@ -5260,12 +5666,14 @@ subGroup2 factor Factor \
     shortLabel GM12878 ZSCAN29
     longLabel Transcription Factor ChIP-seq Peaks of ZSCAN29 in GM12878 from ENCODE 3 (ENCFF455HXN)
     subGroups cellType=GM12878 factor=ZSCAN29
+    color 153,38,0
 
     track encTfChipPkENCFF612ASR
     parent encTfChipPk off
     shortLabel HeLa-S3 SUPT20H
     longLabel Transcription Factor ChIP-seq Peaks of SUPT20H in HeLa-S3 from ENCODE 3 (ENCFF612ASR)
     subGroups cellType=HeLa-S3 factor=SUPT20H
+    color 0,119,158
 
     track encTfChipPkENCFF965BBC
     parent encTfChipPk off
@@ -5284,18 +5692,21 @@ subGroup2 factor Factor \
     shortLabel K562 RBM39
     longLabel Transcription Factor ChIP-seq Peaks of RBM39 in K562 from ENCODE 3 (ENCFF209JJD)
     subGroups cellType=K562 factor=RBM39
+    color 46,0,184
 
     track encTfChipPkENCFF080NBZ
     parent encTfChipPk off
     shortLabel K562 NCOR1 2
     longLabel Transcription Factor ChIP-seq Peaks of NCOR1 in K562 from ENCODE 3 (ENCFF080NBZ)
     subGroups cellType=K562 factor=NCOR1
+    color 46,0,184
 
     track encTfChipPkENCFF968JVX
     parent encTfChipPk off
     shortLabel K562 IKZF1 2
     longLabel Transcription Factor ChIP-seq Peaks of IKZF1 in K562 from ENCODE 3 (ENCFF968JVX)
     subGroups cellType=K562 factor=IKZF1
+    color 46,0,184
 
     track encTfChipPkENCFF397XTF
     parent encTfChipPk off
@@ -5308,18 +5719,21 @@ subGroup2 factor Factor \
     shortLabel HepG2 EZH2
     longLabel Transcription Factor ChIP-seq Peaks of EZH2 in HepG2 from ENCODE 3 (ENCFF493FED)
     subGroups cellType=HepG2 factor=EZH2
+    color 189,0,157
 
     track encTfChipPkENCFF237OKO
     parent encTfChipPk off
     shortLabel HepG2 CTCF
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in HepG2 from ENCODE 3 (ENCFF237OKO)
     subGroups cellType=HepG2 factor=CTCF
+    color 189,0,157
 
     track encTfChipPkENCFF721HUX
     parent encTfChipPk off
     shortLabel HepG2 JUND 2
     longLabel Transcription Factor ChIP-seq Peaks of JUND in HepG2 from ENCODE 3 (ENCFF721HUX)
     subGroups cellType=HepG2 factor=JUND
+    color 189,0,157
 
     track encTfChipPkENCFF215GGE
     parent encTfChipPk off
@@ -5332,6 +5746,7 @@ subGroup2 factor Factor \
     shortLabel HepG2 ZNF384
     longLabel Transcription Factor ChIP-seq Peaks of ZNF384 in HepG2 from ENCODE 3 (ENCFF324TBP)
     subGroups cellType=HepG2 factor=ZNF384
+    color 189,0,157
 
     track encTfChipPkENCFF236XBR
     parent encTfChipPk off
@@ -5350,6 +5765,7 @@ subGroup2 factor Factor \
     shortLabel K562 SMARCA5
     longLabel Transcription Factor ChIP-seq Peaks of SMARCA5 in K562 from ENCODE 3 (ENCFF995NIE)
     subGroups cellType=K562 factor=SMARCA5
+    color 46,0,184
 
     track encTfChipPkENCFF274TYW
     parent encTfChipPk off
@@ -5362,6 +5778,7 @@ subGroup2 factor Factor \
     shortLabel K562 HMBOX1
     longLabel Transcription Factor ChIP-seq Peaks of HMBOX1 in K562 from ENCODE 3 (ENCFF558DSF)
     subGroups cellType=K562 factor=HMBOX1
+    color 46,0,184
 
     track encTfChipPkENCFF516GZM
     parent encTfChipPk off
@@ -5374,24 +5791,28 @@ subGroup2 factor Factor \
     shortLabel H1-hESC NANOG
     longLabel Transcription Factor ChIP-seq Peaks of NANOG in H1-hESC from ENCODE 3 (ENCFF379EPK)
     subGroups cellType=H1-hESC factor=NANOG
+    color 0,107,27
 
     track encTfChipPkENCFF414JLN
     parent encTfChipPk off
     shortLabel GM12878 NFYA
     longLabel Transcription Factor ChIP-seq Peaks of NFYA in GM12878 from ENCODE 3 (ENCFF414JLN)
     subGroups cellType=GM12878 factor=NFYA
+    color 153,38,0
 
     track encTfChipPkENCFF132QLW
     parent encTfChipPk off
     shortLabel HepG2 NFRKB
     longLabel Transcription Factor ChIP-seq Peaks of NFRKB in HepG2 from ENCODE 3 (ENCFF132QLW)
     subGroups cellType=HepG2 factor=NFRKB
+    color 189,0,157
 
     track encTfChipPkENCFF465JKF
     parent encTfChipPk off
     shortLabel K562 MYC 2
     longLabel Transcription Factor ChIP-seq Peaks of MYC in K562 from ENCODE 3 (ENCFF465JKF)
     subGroups cellType=K562 factor=MYC
+    color 46,0,184
 
     track encTfChipPkENCFF438XHB
     parent encTfChipPk off
@@ -5404,12 +5825,14 @@ subGroup2 factor Factor \
     shortLabel HepG2 HCFC1
     longLabel Transcription Factor ChIP-seq Peaks of HCFC1 in HepG2 from ENCODE 3 (ENCFF997AAW)
     subGroups cellType=HepG2 factor=HCFC1
+    color 189,0,157
 
     track encTfChipPkENCFF003GNY
     parent encTfChipPk off
     shortLabel HepG2 NRF1 1
     longLabel Transcription Factor ChIP-seq Peaks of NRF1 in HepG2 from ENCODE 3 (ENCFF003GNY)
     subGroups cellType=HepG2 factor=NRF1
+    color 189,0,157
 
     track encTfChipPkENCFF446MKT
     parent encTfChipPk off
@@ -5422,12 +5845,14 @@ subGroup2 factor Factor \
     shortLabel GM12878 SMAD5
     longLabel Transcription Factor ChIP-seq Peaks of SMAD5 in GM12878 from ENCODE 3 (ENCFF134XDY)
     subGroups cellType=GM12878 factor=SMAD5
+    color 153,38,0
 
     track encTfChipPkENCFF877ANE
     parent encTfChipPk off
     shortLabel K562 MYBL2
     longLabel Transcription Factor ChIP-seq Peaks of MYBL2 in K562 from ENCODE 3 (ENCFF877ANE)
     subGroups cellType=K562 factor=MYBL2
+    color 46,0,184
 
     track encTfChipPkENCFF795QZU
     parent encTfChipPk off
@@ -5446,6 +5871,7 @@ subGroup2 factor Factor \
     shortLabel HepG2 PHF8
     longLabel Transcription Factor ChIP-seq Peaks of PHF8 in HepG2 from ENCODE 3 (ENCFF060MLS)
     subGroups cellType=HepG2 factor=PHF8
+    color 189,0,157
 
     track encTfChipPkENCFF060OVF
     parent encTfChipPk off
@@ -5458,6 +5884,7 @@ subGroup2 factor Factor \
     shortLabel K562 IRF1 4
     longLabel Transcription Factor ChIP-seq Peaks of IRF1 in K562 from ENCODE 3 (ENCFF284VUQ)
     subGroups cellType=K562 factor=IRF1
+    color 46,0,184
 
     track encTfChipPkENCFF034GYQ
     parent encTfChipPk off
@@ -5470,18 +5897,21 @@ subGroup2 factor Factor \
     shortLabel K562 KDM4B 1
     longLabel Transcription Factor ChIP-seq Peaks of KDM4B in K562 from ENCODE 3 (ENCFF042RAK)
     subGroups cellType=K562 factor=KDM4B
+    color 46,0,184
 
     track encTfChipPkENCFF697OBV
     parent encTfChipPk off
     shortLabel H1-hESC BCL11A 2
     longLabel Transcription Factor ChIP-seq Peaks of BCL11A in H1-hESC from ENCODE 3 (ENCFF697OBV)
     subGroups cellType=H1-hESC factor=BCL11A
+    color 0,107,27
 
     track encTfChipPkENCFF368TYM
     parent encTfChipPk off
     shortLabel K562 KDM5B
     longLabel Transcription Factor ChIP-seq Peaks of KDM5B in K562 from ENCODE 3 (ENCFF368TYM)
     subGroups cellType=K562 factor=KDM5B
+    color 46,0,184
 
     track encTfChipPkENCFF140MVM
     parent encTfChipPk off
@@ -5494,6 +5924,7 @@ subGroup2 factor Factor \
     shortLabel HepG2 POLR2A
     longLabel Transcription Factor ChIP-seq Peaks of POLR2A in HepG2 from ENCODE 3 (ENCFF992LSQ)
     subGroups cellType=HepG2 factor=POLR2A
+    color 189,0,157
 
     track encTfChipPkENCFF358ZLQ
     parent encTfChipPk off
@@ -5506,30 +5937,35 @@ subGroup2 factor Factor \
     shortLabel K562 TAF15
     longLabel Transcription Factor ChIP-seq Peaks of TAF15 in K562 from ENCODE 3 (ENCFF617CAZ)
     subGroups cellType=K562 factor=TAF15
+    color 46,0,184
 
     track encTfChipPkENCFF714XHL
     parent encTfChipPk off
     shortLabel K562 BRD4
     longLabel Transcription Factor ChIP-seq Peaks of BRD4 in K562 from ENCODE 3 (ENCFF714XHL)
     subGroups cellType=K562 factor=BRD4
+    color 46,0,184
 
     track encTfChipPkENCFF940BIM
     parent encTfChipPk off
     shortLabel HepG2 TCF12 2
     longLabel Transcription Factor ChIP-seq Peaks of TCF12 in HepG2 from ENCODE 3 (ENCFF940BIM)
     subGroups cellType=HepG2 factor=TCF12
+    color 189,0,157
 
     track encTfChipPkENCFF602CFZ
     parent encTfChipPk off
     shortLabel K562 ZNF407 1
     longLabel Transcription Factor ChIP-seq Peaks of ZNF407 in K562 from ENCODE 3 (ENCFF602CFZ)
     subGroups cellType=K562 factor=ZNF407
+    color 46,0,184
 
     track encTfChipPkENCFF617RGJ
     parent encTfChipPk off
     shortLabel H1-hESC CHD1 1
     longLabel Transcription Factor ChIP-seq Peaks of CHD1 in H1-hESC from ENCODE 3 (ENCFF617RGJ)
     subGroups cellType=H1-hESC factor=CHD1
+    color 0,107,27
 
     track encTfChipPkENCFF421PBO
     parent encTfChipPk off
@@ -5548,6 +5984,7 @@ subGroup2 factor Factor \
     shortLabel GM12878 NR2C2
     longLabel Transcription Factor ChIP-seq Peaks of NR2C2 in GM12878 from ENCODE 3 (ENCFF721FTG)
     subGroups cellType=GM12878 factor=NR2C2
+    color 153,38,0
 
     track encTfChipPkENCFF662IOC
     parent encTfChipPk off
@@ -5560,36 +5997,42 @@ subGroup2 factor Factor \
     shortLabel HepG2 KDM5A
     longLabel Transcription Factor ChIP-seq Peaks of KDM5A in HepG2 from ENCODE 3 (ENCFF880BTU)
     subGroups cellType=HepG2 factor=KDM5A
+    color 189,0,157
 
     track encTfChipPkENCFF549KOD
     parent encTfChipPk off
     shortLabel K562 GATAD2B
     longLabel Transcription Factor ChIP-seq Peaks of GATAD2B in K562 from ENCODE 3 (ENCFF549KOD)
     subGroups cellType=K562 factor=GATAD2B
+    color 46,0,184
 
     track encTfChipPkENCFF100ERQ
     parent encTfChipPk off
     shortLabel GM12878 IRF5
     longLabel Transcription Factor ChIP-seq Peaks of IRF5 in GM12878 from ENCODE 3 (ENCFF100ERQ)
     subGroups cellType=GM12878 factor=IRF5
+    color 153,38,0
 
     track encTfChipPkENCFF676YJE
     parent encTfChipPk off
     shortLabel K562 MYC 3
     longLabel Transcription Factor ChIP-seq Peaks of MYC in K562 from ENCODE 3 (ENCFF676YJE)
     subGroups cellType=K562 factor=MYC
+    color 46,0,184
 
     track encTfChipPkENCFF944GZI
     parent encTfChipPk off
     shortLabel K562 ARNT 1
     longLabel Transcription Factor ChIP-seq Peaks of ARNT in K562 from ENCODE 3 (ENCFF944GZI)
     subGroups cellType=K562 factor=ARNT
+    color 46,0,184
 
     track encTfChipPkENCFF788LSH
     parent encTfChipPk off
     shortLabel GM12878 CBFB
     longLabel Transcription Factor ChIP-seq Peaks of CBFB in GM12878 from ENCODE 3 (ENCFF788LSH)
     subGroups cellType=GM12878 factor=CBFB
+    color 153,38,0
 
     track encTfChipPkENCFF423CKN
     parent encTfChipPk off
@@ -5608,6 +6051,7 @@ subGroup2 factor Factor \
     shortLabel HeLa-S3 UBTF
     longLabel Transcription Factor ChIP-seq Peaks of UBTF in HeLa-S3 from ENCODE 3 (ENCFF675ZHC)
     subGroups cellType=HeLa-S3 factor=UBTF
+    color 0,119,158
 
     track encTfChipPkENCFF765BRD
     parent encTfChipPk off
@@ -5632,12 +6076,14 @@ subGroup2 factor Factor \
     shortLabel H1-hESC CHD7
     longLabel Transcription Factor ChIP-seq Peaks of CHD7 in H1-hESC from ENCODE 3 (ENCFF628RLE)
     subGroups cellType=H1-hESC factor=CHD7
+    color 0,107,27
 
     track encTfChipPkENCFF357NRL
     parent encTfChipPk off
     shortLabel K562 HDAC1 2
     longLabel Transcription Factor ChIP-seq Peaks of HDAC1 in K562 from ENCODE 3 (ENCFF357NRL)
     subGroups cellType=K562 factor=HDAC1
+    color 46,0,184
 
     track encTfChipPkENCFF258PIW
     parent encTfChipPk off
@@ -5650,18 +6096,21 @@ subGroup2 factor Factor \
     shortLabel K562 ZNF318 2
     longLabel Transcription Factor ChIP-seq Peaks of ZNF318 in K562 from ENCODE 3 (ENCFF698MLW)
     subGroups cellType=K562 factor=ZNF318
+    color 46,0,184
 
     track encTfChipPkENCFF235ZZP
     parent encTfChipPk off
     shortLabel K562 ASH1L
     longLabel Transcription Factor ChIP-seq Peaks of ASH1L in K562 from ENCODE 3 (ENCFF235ZZP)
     subGroups cellType=K562 factor=ASH1L
+    color 46,0,184
 
     track encTfChipPkENCFF144FQA
     parent encTfChipPk off
     shortLabel HepG2 FOXK2
     longLabel Transcription Factor ChIP-seq Peaks of FOXK2 in HepG2 from ENCODE 3 (ENCFF144FQA)
     subGroups cellType=HepG2 factor=FOXK2
+    color 189,0,157
 
     track encTfChipPkENCFF688LUP
     parent encTfChipPk off
@@ -5674,6 +6123,7 @@ subGroup2 factor Factor \
     shortLabel K562 ZKSCAN1
     longLabel Transcription Factor ChIP-seq Peaks of ZKSCAN1 in K562 from ENCODE 3 (ENCFF163VUK)
     subGroups cellType=K562 factor=ZKSCAN1
+    color 46,0,184
 
     track encTfChipPkENCFF782KFG
     parent encTfChipPk off
@@ -5686,16 +6136,18 @@ subGroup2 factor Factor \
     shortLabel HepG2 TFAP4
     longLabel Transcription Factor ChIP-seq Peaks of TFAP4 in HepG2 from ENCODE 3 (ENCFF712NYW)
     subGroups cellType=HepG2 factor=TFAP4
+    color 189,0,157
 
     track encTfChipPkENCFF495CSO
     parent encTfChipPk off
     shortLabel K562 NCOA4
     longLabel Transcription Factor ChIP-seq Peaks of NCOA4 in K562 from ENCODE 3 (ENCFF495CSO)
     subGroups cellType=K562 factor=NCOA4
+    color 46,0,184
 
     track encTfChipPkENCFF934XEQ
     parent encTfChipPk off
-    shortLabel ovary EP300
+    shortLabel ovary EP300 2
     longLabel Transcription Factor ChIP-seq Peaks of EP300 in ovary from ENCODE 3 (ENCFF934XEQ)
     subGroups cellType=ovary factor=EP300
 
@@ -5710,6 +6162,7 @@ subGroup2 factor Factor \
     shortLabel HepG2 NFE2L2
     longLabel Transcription Factor ChIP-seq Peaks of NFE2L2 in HepG2 from ENCODE 3 (ENCFF297BXM)
     subGroups cellType=HepG2 factor=NFE2L2
+    color 189,0,157
 
     track encTfChipPkENCFF374ZCG
     parent encTfChipPk off
@@ -5722,6 +6175,7 @@ subGroup2 factor Factor \
     shortLabel K562 ZNF639 1
     longLabel Transcription Factor ChIP-seq Peaks of ZNF639 in K562 from ENCODE 3 (ENCFF708BTH)
     subGroups cellType=K562 factor=ZNF639
+    color 46,0,184
 
     track encTfChipPkENCFF495YRW
     parent encTfChipPk off
@@ -5734,10 +6188,11 @@ subGroup2 factor Factor \
     shortLabel K562 CTCF 2
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in K562 from ENCODE 3 (ENCFF738TKN)
     subGroups cellType=K562 factor=CTCF
+    color 46,0,184
 
     track encTfChipPkENCFF881YDR
     parent encTfChipPk off
-    shortLabel spleen CTCF
+    shortLabel spleen CTCF 2
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in spleen from ENCODE 3 (ENCFF881YDR)
     subGroups cellType=spleen factor=CTCF
 
@@ -5770,6 +6225,7 @@ subGroup2 factor Factor \
     shortLabel HepG2 HDAC6
     longLabel Transcription Factor ChIP-seq Peaks of HDAC6 in HepG2 from ENCODE 3 (ENCFF847HDW)
     subGroups cellType=HepG2 factor=HDAC6
+    color 189,0,157
 
     track encTfChipPkENCFF501XJA
     parent encTfChipPk off
@@ -5788,6 +6244,7 @@ subGroup2 factor Factor \
     shortLabel K562 ZEB2 1
     longLabel Transcription Factor ChIP-seq Peaks of ZEB2 in K562 from ENCODE 3 (ENCFF407AOX)
     subGroups cellType=K562 factor=ZEB2
+    color 46,0,184
 
     track encTfChipPkENCFF678WCZ
     parent encTfChipPk off
@@ -5800,12 +6257,14 @@ subGroup2 factor Factor \
     shortLabel GM12878 KDM1A
     longLabel Transcription Factor ChIP-seq Peaks of KDM1A in GM12878 from ENCODE 3 (ENCFF996RRT)
     subGroups cellType=GM12878 factor=KDM1A
+    color 153,38,0
 
     track encTfChipPkENCFF177FZU
     parent encTfChipPk off
     shortLabel HepG2 ZMYM3
     longLabel Transcription Factor ChIP-seq Peaks of ZMYM3 in HepG2 from ENCODE 3 (ENCFF177FZU)
     subGroups cellType=HepG2 factor=ZMYM3
+    color 189,0,157
 
     track encTfChipPkENCFF933VBD
     parent encTfChipPk off
@@ -5836,24 +6295,28 @@ subGroup2 factor Factor \
     shortLabel GM12878 RAD21
     longLabel Transcription Factor ChIP-seq Peaks of RAD21 in GM12878 from ENCODE 3 (ENCFF753RGL)
     subGroups cellType=GM12878 factor=RAD21
+    color 153,38,0
 
     track encTfChipPkENCFF950HDR
     parent encTfChipPk off
     shortLabel HepG2 ATM
     longLabel Transcription Factor ChIP-seq Peaks of ATM in HepG2 from ENCODE 3 (ENCFF950HDR)
     subGroups cellType=HepG2 factor=ATM
+    color 189,0,157
 
     track encTfChipPkENCFF048JKT
     parent encTfChipPk off
     shortLabel GM12878 REST 2
     longLabel Transcription Factor ChIP-seq Peaks of REST in GM12878 from ENCODE 3 (ENCFF048JKT)
     subGroups cellType=GM12878 factor=REST
+    color 153,38,0
 
     track encTfChipPkENCFF253FON
     parent encTfChipPk off
     shortLabel K562 ZBED1
     longLabel Transcription Factor ChIP-seq Peaks of ZBED1 in K562 from ENCODE 3 (ENCFF253FON)
     subGroups cellType=K562 factor=ZBED1
+    color 46,0,184
 
     track encTfChipPkENCFF903ZMF
     parent encTfChipPk off
@@ -5872,12 +6335,14 @@ subGroup2 factor Factor \
     shortLabel GM12878 EZH2
     longLabel Transcription Factor ChIP-seq Peaks of EZH2 in GM12878 from ENCODE 3 (ENCFF678JII)
     subGroups cellType=GM12878 factor=EZH2
+    color 153,38,0
 
     track encTfChipPkENCFF255EOB
     parent encTfChipPk off
     shortLabel K562 NR2F2
     longLabel Transcription Factor ChIP-seq Peaks of NR2F2 in K562 from ENCODE 3 (ENCFF255EOB)
     subGroups cellType=K562 factor=NR2F2
+    color 46,0,184
 
     track encTfChipPkENCFF618DDO
     parent encTfChipPk off
@@ -5896,6 +6361,7 @@ subGroup2 factor Factor \
     shortLabel HepG2 CHD4
     longLabel Transcription Factor ChIP-seq Peaks of CHD4 in HepG2 from ENCODE 3 (ENCFF069RNV)
     subGroups cellType=HepG2 factor=CHD4
+    color 189,0,157
 
     track encTfChipPkENCFF617AHB
     parent encTfChipPk off
@@ -5908,51 +6374,59 @@ subGroup2 factor Factor \
     shortLabel HepG2 FOXA2 2
     longLabel Transcription Factor ChIP-seq Peaks of FOXA2 in HepG2 from ENCODE 3 (ENCFF683KBO)
     subGroups cellType=HepG2 factor=FOXA2
+    color 189,0,157
 
     track encTfChipPkENCFF706RIA
     parent encTfChipPk off
     shortLabel HepG2 RCOR1
     longLabel Transcription Factor ChIP-seq Peaks of RCOR1 in HepG2 from ENCODE 3 (ENCFF706RIA)
     subGroups cellType=HepG2 factor=RCOR1
+    color 189,0,157
 
     track encTfChipPkENCFF899JBI
     parent encTfChipPk off
     shortLabel GM12878 TRIM22 2
     longLabel Transcription Factor ChIP-seq Peaks of TRIM22 in GM12878 from ENCODE 3 (ENCFF899JBI)
     subGroups cellType=GM12878 factor=TRIM22
+    color 153,38,0
 
     track encTfChipPkENCFF107UHX
     parent encTfChipPk off
     shortLabel GM12878 HDAC2
     longLabel Transcription Factor ChIP-seq Peaks of HDAC2 in GM12878 from ENCODE 3 (ENCFF107UHX)
     subGroups cellType=GM12878 factor=HDAC2
+    color 153,38,0
 
     track encTfChipPkENCFF049CRW
     parent encTfChipPk off
     shortLabel K562 TRIM24 1
     longLabel Transcription Factor ChIP-seq Peaks of TRIM24 in K562 from ENCODE 3 (ENCFF049CRW)
     subGroups cellType=K562 factor=TRIM24
+    color 46,0,184
 
     track encTfChipPkENCFF360BTO
     parent encTfChipPk off
     shortLabel K562 AFF1 2
     longLabel Transcription Factor ChIP-seq Peaks of AFF1 in K562 from ENCODE 3 (ENCFF360BTO)
     subGroups cellType=K562 factor=AFF1
+    color 46,0,184
 
     track encTfChipPkENCFF298UPI
     parent encTfChipPk off
     shortLabel GM12878 UBTF
     longLabel Transcription Factor ChIP-seq Peaks of UBTF in GM12878 from ENCODE 3 (ENCFF298UPI)
     subGroups cellType=GM12878 factor=UBTF
+    color 153,38,0
 
     track encTfChipPkENCFF883CDF
     parent encTfChipPk off
     shortLabel HepG2 HNRNPLL
     longLabel Transcription Factor ChIP-seq Peaks of HNRNPLL in HepG2 from ENCODE 3 (ENCFF883CDF)
     subGroups cellType=HepG2 factor=HNRNPLL
+    color 189,0,157
 
     track encTfChipPkENCFF582SHF
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel neuralCell SMC3
     longLabel Transcription Factor ChIP-seq Peaks of SMC3 in neural_cell from ENCODE 3 (ENCFF582SHF)
     subGroups cellType=neural_cell factor=SMC3
@@ -5962,12 +6436,14 @@ subGroup2 factor Factor \
     shortLabel GM12878 RB1
     longLabel Transcription Factor ChIP-seq Peaks of RB1 in GM12878 from ENCODE 3 (ENCFF601XVA)
     subGroups cellType=GM12878 factor=RB1
+    color 153,38,0
 
     track encTfChipPkENCFF786HHN
     parent encTfChipPk off
     shortLabel HepG2 SIN3A
     longLabel Transcription Factor ChIP-seq Peaks of SIN3A in HepG2 from ENCODE 3 (ENCFF786HHN)
     subGroups cellType=HepG2 factor=SIN3A
+    color 189,0,157
 
     track encTfChipPkENCFF146XEP
     parent encTfChipPk off
@@ -5986,6 +6462,7 @@ subGroup2 factor Factor \
     shortLabel K562 EGR1 2
     longLabel Transcription Factor ChIP-seq Peaks of EGR1 in K562 from ENCODE 3 (ENCFF182QDI)
     subGroups cellType=K562 factor=EGR1
+    color 46,0,184
 
     track encTfChipPkENCFF351NCM
     parent encTfChipPk off
@@ -5998,18 +6475,21 @@ subGroup2 factor Factor \
     shortLabel K562 ZNF316 2
     longLabel Transcription Factor ChIP-seq Peaks of ZNF316 in K562 from ENCODE 3 (ENCFF442ZUF)
     subGroups cellType=K562 factor=ZNF316
+    color 46,0,184
 
     track encTfChipPkENCFF922TDM
     parent encTfChipPk off
     shortLabel K562 NCOA2 2
     longLabel Transcription Factor ChIP-seq Peaks of NCOA2 in K562 from ENCODE 3 (ENCFF922TDM)
     subGroups cellType=K562 factor=NCOA2
+    color 46,0,184
 
     track encTfChipPkENCFF941RVL
     parent encTfChipPk off
     shortLabel K562 PCBP1
     longLabel Transcription Factor ChIP-seq Peaks of PCBP1 in K562 from ENCODE 3 (ENCFF941RVL)
     subGroups cellType=K562 factor=PCBP1
+    color 46,0,184
 
     track encTfChipPkENCFF930QUM
     parent encTfChipPk off
@@ -6034,6 +6514,7 @@ subGroup2 factor Factor \
     shortLabel H1-hESC SRF
     longLabel Transcription Factor ChIP-seq Peaks of SRF in H1-hESC from ENCODE 3 (ENCFF725LDD)
     subGroups cellType=H1-hESC factor=SRF
+    color 0,107,27
 
     track encTfChipPkENCFF984EZB
     parent encTfChipPk off
@@ -6046,24 +6527,28 @@ subGroup2 factor Factor \
     shortLabel GM12878 BCL3
     longLabel Transcription Factor ChIP-seq Peaks of BCL3 in GM12878 from ENCODE 3 (ENCFF625SHY)
     subGroups cellType=GM12878 factor=BCL3
+    color 153,38,0
 
     track encTfChipPkENCFF278ONE
     parent encTfChipPk off
     shortLabel K562 MCM7 2
     longLabel Transcription Factor ChIP-seq Peaks of MCM7 in K562 from ENCODE 3 (ENCFF278ONE)
     subGroups cellType=K562 factor=MCM7
+    color 46,0,184
 
     track encTfChipPkENCFF322DSX
     parent encTfChipPk off
     shortLabel K562 NCOA6
     longLabel Transcription Factor ChIP-seq Peaks of NCOA6 in K562 from ENCODE 3 (ENCFF322DSX)
     subGroups cellType=K562 factor=NCOA6
+    color 46,0,184
 
     track encTfChipPkENCFF681NJT
     parent encTfChipPk off
     shortLabel HepG2 RAD51
     longLabel Transcription Factor ChIP-seq Peaks of RAD51 in HepG2 from ENCODE 3 (ENCFF681NJT)
     subGroups cellType=HepG2 factor=RAD51
+    color 189,0,157
 
     track encTfChipPkENCFF522RIA
     parent encTfChipPk off
@@ -6082,12 +6567,14 @@ subGroup2 factor Factor \
     shortLabel GM12878 PBX3
     longLabel Transcription Factor ChIP-seq Peaks of PBX3 in GM12878 from ENCODE 3 (ENCFF717IXP)
     subGroups cellType=GM12878 factor=PBX3
+    color 153,38,0
 
     track encTfChipPkENCFF618EFD
     parent encTfChipPk off
     shortLabel GM12878 EGR1
     longLabel Transcription Factor ChIP-seq Peaks of EGR1 in GM12878 from ENCODE 3 (ENCFF618EFD)
     subGroups cellType=GM12878 factor=EGR1
+    color 153,38,0
 
     track encTfChipPkENCFF822SAU
     parent encTfChipPk off
@@ -6100,6 +6587,7 @@ subGroup2 factor Factor \
     shortLabel H1-hESC TBP
     longLabel Transcription Factor ChIP-seq Peaks of TBP in H1-hESC from ENCODE 3 (ENCFF629MBV)
     subGroups cellType=H1-hESC factor=TBP
+    color 0,107,27
 
     track encTfChipPkENCFF991SQZ
     parent encTfChipPk off
@@ -6112,24 +6600,28 @@ subGroup2 factor Factor \
     shortLabel K562 RB1
     longLabel Transcription Factor ChIP-seq Peaks of RB1 in K562 from ENCODE 3 (ENCFF975IRM)
     subGroups cellType=K562 factor=RB1
+    color 46,0,184
 
     track encTfChipPkENCFF671DOL
     parent encTfChipPk off
     shortLabel K562 UBTF 2
     longLabel Transcription Factor ChIP-seq Peaks of UBTF in K562 from ENCODE 3 (ENCFF671DOL)
     subGroups cellType=K562 factor=UBTF
+    color 46,0,184
 
     track encTfChipPkENCFF809PXE
     parent encTfChipPk off
     shortLabel GM12878 BMI1
     longLabel Transcription Factor ChIP-seq Peaks of BMI1 in GM12878 from ENCODE 3 (ENCFF809PXE)
     subGroups cellType=GM12878 factor=BMI1
+    color 153,38,0
 
     track encTfChipPkENCFF502KHR
     parent encTfChipPk off
     shortLabel K562 ELF4
     longLabel Transcription Factor ChIP-seq Peaks of ELF4 in K562 from ENCODE 3 (ENCFF502KHR)
     subGroups cellType=K562 factor=ELF4
+    color 46,0,184
 
     track encTfChipPkENCFF441MEM
     parent encTfChipPk off
@@ -6142,6 +6634,7 @@ subGroup2 factor Factor \
     shortLabel H1-hESC RAD21 2
     longLabel Transcription Factor ChIP-seq Peaks of RAD21 in H1-hESC from ENCODE 3 (ENCFF824FIL)
     subGroups cellType=H1-hESC factor=RAD21
+    color 0,107,27
 
     track encTfChipPkENCFF739PUT
     parent encTfChipPk off
@@ -6154,12 +6647,14 @@ subGroup2 factor Factor \
     shortLabel H1-hESC ATF3
     longLabel Transcription Factor ChIP-seq Peaks of ATF3 in H1-hESC from ENCODE 3 (ENCFF305HBV)
     subGroups cellType=H1-hESC factor=ATF3
+    color 0,107,27
 
     track encTfChipPkENCFF809OOE
     parent encTfChipPk off
     shortLabel GM12878 IKZF1 2
     longLabel Transcription Factor ChIP-seq Peaks of IKZF1 in GM12878 from ENCODE 3 (ENCFF809OOE)
     subGroups cellType=GM12878 factor=IKZF1
+    color 153,38,0
 
     track encTfChipPkENCFF798SFE
     parent encTfChipPk off
@@ -6172,12 +6667,14 @@ subGroup2 factor Factor \
     shortLabel GM12878 TCF12 2
     longLabel Transcription Factor ChIP-seq Peaks of TCF12 in GM12878 from ENCODE 3 (ENCFF017LZE)
     subGroups cellType=GM12878 factor=TCF12
+    color 153,38,0
 
     track encTfChipPkENCFF706SJZ
     parent encTfChipPk off
     shortLabel K562 ZNF384
     longLabel Transcription Factor ChIP-seq Peaks of ZNF384 in K562 from ENCODE 3 (ENCFF706SJZ)
     subGroups cellType=K562 factor=ZNF384
+    color 46,0,184
 
     track encTfChipPkENCFF374FKH
     parent encTfChipPk off
@@ -6190,12 +6687,14 @@ subGroup2 factor Factor \
     shortLabel HepG2 HNRNPK
     longLabel Transcription Factor ChIP-seq Peaks of HNRNPK in HepG2 from ENCODE 3 (ENCFF099BZU)
     subGroups cellType=HepG2 factor=HNRNPK
+    color 189,0,157
 
     track encTfChipPkENCFF479TZM
     parent encTfChipPk off
     shortLabel HepG2 SRSF4
     longLabel Transcription Factor ChIP-seq Peaks of SRSF4 in HepG2 from ENCODE 3 (ENCFF479TZM)
     subGroups cellType=HepG2 factor=SRSF4
+    color 189,0,157
 
     track encTfChipPkENCFF364QXM
     parent encTfChipPk off
@@ -6226,6 +6725,7 @@ subGroup2 factor Factor \
     shortLabel GM12878 CHD4
     longLabel Transcription Factor ChIP-seq Peaks of CHD4 in GM12878 from ENCODE 3 (ENCFF499ZPP)
     subGroups cellType=GM12878 factor=CHD4
+    color 153,38,0
 
     track encTfChipPkENCFF958LUB
     parent encTfChipPk off
@@ -6244,6 +6744,7 @@ subGroup2 factor Factor \
     shortLabel K562 EP400
     longLabel Transcription Factor ChIP-seq Peaks of EP400 in K562 from ENCODE 3 (ENCFF925ANU)
     subGroups cellType=K562 factor=EP400
+    color 46,0,184
 
     track encTfChipPkENCFF911TTD
     parent encTfChipPk off
@@ -6256,36 +6757,42 @@ subGroup2 factor Factor \
     shortLabel K562 STAT1 4
     longLabel Transcription Factor ChIP-seq Peaks of STAT1 in K562 from ENCODE 3 (ENCFF648NYF)
     subGroups cellType=K562 factor=STAT1
+    color 46,0,184
 
     track encTfChipPkENCFF974OIC
     parent encTfChipPk off
     shortLabel HepG2 ZHX2
     longLabel Transcription Factor ChIP-seq Peaks of ZHX2 in HepG2 from ENCODE 3 (ENCFF974OIC)
     subGroups cellType=HepG2 factor=ZHX2
+    color 189,0,157
 
     track encTfChipPkENCFF714VIT
     parent encTfChipPk off
     shortLabel K562 STAT2
     longLabel Transcription Factor ChIP-seq Peaks of STAT2 in K562 from ENCODE 3 (ENCFF714VIT)
     subGroups cellType=K562 factor=STAT2
+    color 46,0,184
 
     track encTfChipPkENCFF573GQX
     parent encTfChipPk off
     shortLabel K562 JUN 4
     longLabel Transcription Factor ChIP-seq Peaks of JUN in K562 from ENCODE 3 (ENCFF573GQX)
     subGroups cellType=K562 factor=JUN
+    color 46,0,184
 
     track encTfChipPkENCFF680WBN
     parent encTfChipPk off
     shortLabel K562 RBM25
     longLabel Transcription Factor ChIP-seq Peaks of RBM25 in K562 from ENCODE 3 (ENCFF680WBN)
     subGroups cellType=K562 factor=RBM25
+    color 46,0,184
 
     track encTfChipPkENCFF372DRC
     parent encTfChipPk off
     shortLabel GM12878 USF2
     longLabel Transcription Factor ChIP-seq Peaks of USF2 in GM12878 from ENCODE 3 (ENCFF372DRC)
     subGroups cellType=GM12878 factor=USF2
+    color 153,38,0
 
     track encTfChipPkENCFF622LJD
     parent encTfChipPk off
@@ -6298,12 +6805,14 @@ subGroup2 factor Factor \
     shortLabel K562 HCFC1
     longLabel Transcription Factor ChIP-seq Peaks of HCFC1 in K562 from ENCODE 3 (ENCFF474NLG)
     subGroups cellType=K562 factor=HCFC1
+    color 46,0,184
 
     track encTfChipPkENCFF122QSN
     parent encTfChipPk off
     shortLabel K562 HNRNPLL
     longLabel Transcription Factor ChIP-seq Peaks of HNRNPLL in K562 from ENCODE 3 (ENCFF122QSN)
     subGroups cellType=K562 factor=HNRNPLL
+    color 46,0,184
 
     track encTfChipPkENCFF849CHG
     parent encTfChipPk off
@@ -6316,18 +6825,21 @@ subGroup2 factor Factor \
     shortLabel GM12878 CBX3
     longLabel Transcription Factor ChIP-seq Peaks of CBX3 in GM12878 from ENCODE 3 (ENCFF141LEI)
     subGroups cellType=GM12878 factor=CBX3
+    color 153,38,0
 
     track encTfChipPkENCFF549GMO
     parent encTfChipPk off
     shortLabel K562 BRCA1
     longLabel Transcription Factor ChIP-seq Peaks of BRCA1 in K562 from ENCODE 3 (ENCFF549GMO)
     subGroups cellType=K562 factor=BRCA1
+    color 46,0,184
 
     track encTfChipPkENCFF622VSV
     parent encTfChipPk off
     shortLabel HepG2 AGO2
     longLabel Transcription Factor ChIP-seq Peaks of AGO2 in HepG2 from ENCODE 3 (ENCFF622VSV)
     subGroups cellType=HepG2 factor=AGO2
+    color 189,0,157
 
     track encTfChipPkENCFF822OTY
     parent encTfChipPk off
@@ -6340,6 +6852,7 @@ subGroup2 factor Factor \
     shortLabel K562 HDAC1 3
     longLabel Transcription Factor ChIP-seq Peaks of HDAC1 in K562 from ENCODE 3 (ENCFF019ALY)
     subGroups cellType=K562 factor=HDAC1
+    color 46,0,184
 
     track encTfChipPkENCFF530ZTE
     parent encTfChipPk off
@@ -6352,18 +6865,21 @@ subGroup2 factor Factor \
     shortLabel K562 MAX 2
     longLabel Transcription Factor ChIP-seq Peaks of MAX in K562 from ENCODE 3 (ENCFF422NGZ)
     subGroups cellType=K562 factor=MAX
+    color 46,0,184
 
     track encTfChipPkENCFF998HOR
     parent encTfChipPk off
     shortLabel K562 HDAC6
     longLabel Transcription Factor ChIP-seq Peaks of HDAC6 in K562 from ENCODE 3 (ENCFF998HOR)
     subGroups cellType=K562 factor=HDAC6
+    color 46,0,184
 
     track encTfChipPkENCFF468MFY
     parent encTfChipPk off
     shortLabel GM12878 BCL11A
     longLabel Transcription Factor ChIP-seq Peaks of BCL11A in GM12878 from ENCODE 3 (ENCFF468MFY)
     subGroups cellType=GM12878 factor=BCL11A
+    color 153,38,0
 
     track encTfChipPkENCFF188XRD
     parent encTfChipPk off
@@ -6376,6 +6892,7 @@ subGroup2 factor Factor \
     shortLabel K562 EHMT2
     longLabel Transcription Factor ChIP-seq Peaks of EHMT2 in K562 from ENCODE 3 (ENCFF806BDC)
     subGroups cellType=K562 factor=EHMT2
+    color 46,0,184
 
     track encTfChipPkENCFF243NQJ
     parent encTfChipPk off
@@ -6406,12 +6923,14 @@ subGroup2 factor Factor \
     shortLabel GM12878 STAT1
     longLabel Transcription Factor ChIP-seq Peaks of STAT1 in GM12878 from ENCODE 3 (ENCFF817QHW)
     subGroups cellType=GM12878 factor=STAT1
+    color 153,38,0
 
     track encTfChipPkENCFF937MYV
     parent encTfChipPk off
     shortLabel HepG2 HNRNPH1
     longLabel Transcription Factor ChIP-seq Peaks of HNRNPH1 in HepG2 from ENCODE 3 (ENCFF937MYV)
     subGroups cellType=HepG2 factor=HNRNPH1
+    color 189,0,157
 
     track encTfChipPkENCFF887XGB
     parent encTfChipPk off
@@ -6436,10 +6955,11 @@ subGroup2 factor Factor \
     shortLabel GM12878 ATF7
     longLabel Transcription Factor ChIP-seq Peaks of ATF7 in GM12878 from ENCODE 3 (ENCFF726VEK)
     subGroups cellType=GM12878 factor=ATF7
+    color 153,38,0
 
     track encTfChipPkENCFF665OBP
     parent encTfChipPk off
-    shortLabel liverRLobe CTCF
+    shortLabel liverRLobe CTCF 2
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in right_lobe_of_liver from ENCODE 3 (ENCFF665OBP)
     subGroups cellType=right_lobe_of_liver factor=CTCF
 
@@ -6448,6 +6968,7 @@ subGroup2 factor Factor \
     shortLabel H1-hESC CHD1 2
     longLabel Transcription Factor ChIP-seq Peaks of CHD1 in H1-hESC from ENCODE 3 (ENCFF607EOG)
     subGroups cellType=H1-hESC factor=CHD1
+    color 0,107,27
 
     track encTfChipPkENCFF044NEB
     parent encTfChipPk off
@@ -6460,6 +6981,7 @@ subGroup2 factor Factor \
     shortLabel K562 CBFA2T3
     longLabel Transcription Factor ChIP-seq Peaks of CBFA2T3 in K562 from ENCODE 3 (ENCFF993GXU)
     subGroups cellType=K562 factor=CBFA2T3
+    color 46,0,184
 
     track encTfChipPkENCFF262QIB
     parent encTfChipPk off
@@ -6490,6 +7012,7 @@ subGroup2 factor Factor \
     shortLabel K562 ZMIZ1
     longLabel Transcription Factor ChIP-seq Peaks of ZMIZ1 in K562 from ENCODE 3 (ENCFF597DIY)
     subGroups cellType=K562 factor=ZMIZ1
+    color 46,0,184
 
     track encTfChipPkENCFF445ATY
     parent encTfChipPk off
@@ -6502,6 +7025,7 @@ subGroup2 factor Factor \
     shortLabel K562 TRIP13
     longLabel Transcription Factor ChIP-seq Peaks of TRIP13 in K562 from ENCODE 3 (ENCFF561IZB)
     subGroups cellType=K562 factor=TRIP13
+    color 46,0,184
 
     track encTfChipPkENCFF474KHR
     parent encTfChipPk off
@@ -6514,6 +7038,7 @@ subGroup2 factor Factor \
     shortLabel K562 CREBBP
     longLabel Transcription Factor ChIP-seq Peaks of CREBBP in K562 from ENCODE 3 (ENCFF369HGX)
     subGroups cellType=K562 factor=CREBBP
+    color 46,0,184
 
     track encTfChipPkENCFF415WKV
     parent encTfChipPk off
@@ -6526,18 +7051,21 @@ subGroup2 factor Factor \
     shortLabel K562 HDAC2 3
     longLabel Transcription Factor ChIP-seq Peaks of HDAC2 in K562 from ENCODE 3 (ENCFF562JDH)
     subGroups cellType=K562 factor=HDAC2
+    color 46,0,184
 
     track encTfChipPkENCFF452SVO
     parent encTfChipPk off
     shortLabel K562 MCM7 3
     longLabel Transcription Factor ChIP-seq Peaks of MCM7 in K562 from ENCODE 3 (ENCFF452SVO)
     subGroups cellType=K562 factor=MCM7
+    color 46,0,184
 
     track encTfChipPkENCFF966RPL
     parent encTfChipPk off
     shortLabel GM12878 MTA2
     longLabel Transcription Factor ChIP-seq Peaks of MTA2 in GM12878 from ENCODE 3 (ENCFF966RPL)
     subGroups cellType=GM12878 factor=MTA2
+    color 153,38,0
 
     track encTfChipPkENCFF474AYD
     parent encTfChipPk off
@@ -6550,6 +7078,7 @@ subGroup2 factor Factor \
     shortLabel HepG2 RXRA
     longLabel Transcription Factor ChIP-seq Peaks of RXRA in HepG2 from ENCODE 3 (ENCFF964JXI)
     subGroups cellType=HepG2 factor=RXRA
+    color 189,0,157
 
     track encTfChipPkENCFF162RSN
     parent encTfChipPk off
@@ -6559,7 +7088,7 @@ subGroup2 factor Factor \
 
     track encTfChipPkENCFF828UBR
     parent encTfChipPk off
-    shortLabel stomach CTCF
+    shortLabel stomach CTCF 3
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in stomach from ENCODE 3 (ENCFF828UBR)
     subGroups cellType=stomach factor=CTCF
 
@@ -6568,12 +7097,14 @@ subGroup2 factor Factor \
     shortLabel HepG2 TBP
     longLabel Transcription Factor ChIP-seq Peaks of TBP in HepG2 from ENCODE 3 (ENCFF584CNF)
     subGroups cellType=HepG2 factor=TBP
+    color 189,0,157
 
     track encTfChipPkENCFF901AHW
     parent encTfChipPk off
     shortLabel K562 ZNF830 2
     longLabel Transcription Factor ChIP-seq Peaks of ZNF830 in K562 from ENCODE 3 (ENCFF901AHW)
     subGroups cellType=K562 factor=ZNF830
+    color 46,0,184
 
     track encTfChipPkENCFF298VCE
     parent encTfChipPk off
@@ -6592,24 +7123,28 @@ subGroup2 factor Factor \
     shortLabel H1-hESC TAF1
     longLabel Transcription Factor ChIP-seq Peaks of TAF1 in H1-hESC from ENCODE 3 (ENCFF202SNU)
     subGroups cellType=H1-hESC factor=TAF1
+    color 0,107,27
 
     track encTfChipPkENCFF977MDK
     parent encTfChipPk off
     shortLabel H1-hESC BACH1
     longLabel Transcription Factor ChIP-seq Peaks of BACH1 in H1-hESC from ENCODE 3 (ENCFF977MDK)
     subGroups cellType=H1-hESC factor=BACH1
+    color 0,107,27
 
     track encTfChipPkENCFF539NTA
     parent encTfChipPk off
     shortLabel HepG2 ZNF24 2
     longLabel Transcription Factor ChIP-seq Peaks of ZNF24 in HepG2 from ENCODE 3 (ENCFF539NTA)
     subGroups cellType=HepG2 factor=ZNF24
+    color 189,0,157
 
     track encTfChipPkENCFF932UEC
     parent encTfChipPk off
     shortLabel K562 ZNF407 2
     longLabel Transcription Factor ChIP-seq Peaks of ZNF407 in K562 from ENCODE 3 (ENCFF932UEC)
     subGroups cellType=K562 factor=ZNF407
+    color 46,0,184
 
     track encTfChipPkENCFF940TNN
     parent encTfChipPk off
@@ -6622,6 +7157,7 @@ subGroup2 factor Factor \
     shortLabel K562 FUS
     longLabel Transcription Factor ChIP-seq Peaks of FUS in K562 from ENCODE 3 (ENCFF142CPK)
     subGroups cellType=K562 factor=FUS
+    color 46,0,184
 
     track encTfChipPkENCFF189HPG
     parent encTfChipPk off
@@ -6634,6 +7170,7 @@ subGroup2 factor Factor \
     shortLabel HepG2 SMARCC2
     longLabel Transcription Factor ChIP-seq Peaks of SMARCC2 in HepG2 from ENCODE 3 (ENCFF038MCY)
     subGroups cellType=HepG2 factor=SMARCC2
+    color 189,0,157
 
     track encTfChipPkENCFF266ORV
     parent encTfChipPk off
@@ -6646,6 +7183,7 @@ subGroup2 factor Factor \
     shortLabel H1-hESC CBX5
     longLabel Transcription Factor ChIP-seq Peaks of CBX5 in H1-hESC from ENCODE 3 (ENCFF936JMD)
     subGroups cellType=H1-hESC factor=CBX5
+    color 0,107,27
 
     track encTfChipPkENCFF437LHG
     parent encTfChipPk off
@@ -6664,6 +7202,7 @@ subGroup2 factor Factor \
     shortLabel HepG2 NRF1 2
     longLabel Transcription Factor ChIP-seq Peaks of NRF1 in HepG2 from ENCODE 3 (ENCFF972NIR)
     subGroups cellType=HepG2 factor=NRF1
+    color 189,0,157
 
     track encTfChipPkENCFF469TTI
     parent encTfChipPk off
@@ -6676,6 +7215,7 @@ subGroup2 factor Factor \
     shortLabel H1-hESC SIN3A 2
     longLabel Transcription Factor ChIP-seq Peaks of SIN3A in H1-hESC from ENCODE 3 (ENCFF184HWT)
     subGroups cellType=H1-hESC factor=SIN3A
+    color 0,107,27
 
     track encTfChipPkENCFF517HGL
     parent encTfChipPk off
@@ -6688,6 +7228,7 @@ subGroup2 factor Factor \
     shortLabel K562 FOXK2 1
     longLabel Transcription Factor ChIP-seq Peaks of FOXK2 in K562 from ENCODE 3 (ENCFF492GXZ)
     subGroups cellType=K562 factor=FOXK2
+    color 46,0,184
 
     track encTfChipPkENCFF065UFF
     parent encTfChipPk off
@@ -6700,6 +7241,7 @@ subGroup2 factor Factor \
     shortLabel GM12878 E2F4
     longLabel Transcription Factor ChIP-seq Peaks of E2F4 in GM12878 from ENCODE 3 (ENCFF433PFN)
     subGroups cellType=GM12878 factor=E2F4
+    color 153,38,0
 
     track encTfChipPkENCFF722THT
     parent encTfChipPk off
@@ -6718,6 +7260,7 @@ subGroup2 factor Factor \
     shortLabel HeLa-S3 CTCF
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in HeLa-S3 from ENCODE 3 (ENCFF768OPK)
     subGroups cellType=HeLa-S3 factor=CTCF
+    color 0,119,158
 
     track encTfChipPkENCFF314KRZ
     parent encTfChipPk off
@@ -6736,6 +7279,7 @@ subGroup2 factor Factor \
     shortLabel K562 TRIM24 2
     longLabel Transcription Factor ChIP-seq Peaks of TRIM24 in K562 from ENCODE 3 (ENCFF646VQW)
     subGroups cellType=K562 factor=TRIM24
+    color 46,0,184
 
     track encTfChipPkENCFF929YZA
     parent encTfChipPk off
@@ -6748,6 +7292,7 @@ subGroup2 factor Factor \
     shortLabel K562 KAT2B
     longLabel Transcription Factor ChIP-seq Peaks of KAT2B in K562 from ENCODE 3 (ENCFF185GBT)
     subGroups cellType=K562 factor=KAT2B
+    color 46,0,184
 
     track encTfChipPkENCFF386TTQ
     parent encTfChipPk off
@@ -6760,54 +7305,63 @@ subGroup2 factor Factor \
     shortLabel HepG2 SRSF9
     longLabel Transcription Factor ChIP-seq Peaks of SRSF9 in HepG2 from ENCODE 3 (ENCFF868WXR)
     subGroups cellType=HepG2 factor=SRSF9
+    color 189,0,157
 
     track encTfChipPkENCFF679ITJ
     parent encTfChipPk off
     shortLabel K562 MCM3
     longLabel Transcription Factor ChIP-seq Peaks of MCM3 in K562 from ENCODE 3 (ENCFF679ITJ)
     subGroups cellType=K562 factor=MCM3
+    color 46,0,184
 
     track encTfChipPkENCFF605KFA
     parent encTfChipPk off
     shortLabel K562 HDAC1 4
     longLabel Transcription Factor ChIP-seq Peaks of HDAC1 in K562 from ENCODE 3 (ENCFF605KFA)
     subGroups cellType=K562 factor=HDAC1
+    color 46,0,184
 
     track encTfChipPkENCFF718CQQ
     parent encTfChipPk off
     shortLabel HepG2 MAFK 2
     longLabel Transcription Factor ChIP-seq Peaks of MAFK in HepG2 from ENCODE 3 (ENCFF718CQQ)
     subGroups cellType=HepG2 factor=MAFK
+    color 189,0,157
 
     track encTfChipPkENCFF503AZK
     parent encTfChipPk off
     shortLabel HepG2 HDAC2 1
     longLabel Transcription Factor ChIP-seq Peaks of HDAC2 in HepG2 from ENCODE 3 (ENCFF503AZK)
     subGroups cellType=HepG2 factor=HDAC2
+    color 189,0,157
 
     track encTfChipPkENCFF556PIY
     parent encTfChipPk off
     shortLabel GM12878 JUND
     longLabel Transcription Factor ChIP-seq Peaks of JUND in GM12878 from ENCODE 3 (ENCFF556PIY)
     subGroups cellType=GM12878 factor=JUND
+    color 153,38,0
 
     track encTfChipPkENCFF116EXQ
     parent encTfChipPk off
     shortLabel GM12878 GABPA
     longLabel Transcription Factor ChIP-seq Peaks of GABPA in GM12878 from ENCODE 3 (ENCFF116EXQ)
     subGroups cellType=GM12878 factor=GABPA
+    color 153,38,0
 
     track encTfChipPkENCFF712AXK
     parent encTfChipPk off
     shortLabel K562 NR2F6
     longLabel Transcription Factor ChIP-seq Peaks of NR2F6 in K562 from ENCODE 3 (ENCFF712AXK)
     subGroups cellType=K562 factor=NR2F6
+    color 46,0,184
 
     track encTfChipPkENCFF273ULT
     parent encTfChipPk off
     shortLabel GM12878 CHD1
     longLabel Transcription Factor ChIP-seq Peaks of CHD1 in GM12878 from ENCODE 3 (ENCFF273ULT)
     subGroups cellType=GM12878 factor=CHD1
+    color 153,38,0
 
     track encTfChipPkENCFF111IPG
     parent encTfChipPk off
@@ -6826,18 +7380,21 @@ subGroup2 factor Factor \
     shortLabel K562 GATA1
     longLabel Transcription Factor ChIP-seq Peaks of GATA1 in K562 from ENCODE 3 (ENCFF632NQI)
     subGroups cellType=K562 factor=GATA1
+    color 46,0,184
 
     track encTfChipPkENCFF493TZM
     parent encTfChipPk off
     shortLabel K562 TCF12 2
     longLabel Transcription Factor ChIP-seq Peaks of TCF12 in K562 from ENCODE 3 (ENCFF493TZM)
     subGroups cellType=K562 factor=TCF12
+    color 46,0,184
 
     track encTfChipPkENCFF273BVT
     parent encTfChipPk off
     shortLabel GM12878 ZNF207
     longLabel Transcription Factor ChIP-seq Peaks of ZNF207 in GM12878 from ENCODE 3 (ENCFF273BVT)
     subGroups cellType=GM12878 factor=ZNF207
+    color 153,38,0
 
     track encTfChipPkENCFF423BKD
     parent encTfChipPk off
@@ -6856,12 +7413,14 @@ subGroup2 factor Factor \
     shortLabel GM12878 CREM
     longLabel Transcription Factor ChIP-seq Peaks of CREM in GM12878 from ENCODE 3 (ENCFF534CKB)
     subGroups cellType=GM12878 factor=CREM
+    color 153,38,0
 
     track encTfChipPkENCFF365ICU
     parent encTfChipPk off
     shortLabel HeLa-S3 SREBF2
     longLabel Transcription Factor ChIP-seq Peaks of SREBF2 in HeLa-S3 from ENCODE 3 (ENCFF365ICU)
     subGroups cellType=HeLa-S3 factor=SREBF2
+    color 0,119,158
 
     track encTfChipPkENCFF459YEI
     parent encTfChipPk off
@@ -6898,6 +7457,7 @@ subGroup2 factor Factor \
     shortLabel GM12878 NRF1
     longLabel Transcription Factor ChIP-seq Peaks of NRF1 in GM12878 from ENCODE 3 (ENCFF931XAL)
     subGroups cellType=GM12878 factor=NRF1
+    color 153,38,0
 
     track encTfChipPkENCFF651PWG
     parent encTfChipPk off
@@ -6916,6 +7476,7 @@ subGroup2 factor Factor \
     shortLabel K562 POLR2A 6
     longLabel Transcription Factor ChIP-seq Peaks of POLR2A in K562 from ENCODE 3 (ENCFF270QAB)
     subGroups cellType=K562 factor=POLR2A
+    color 46,0,184
 
     track encTfChipPkENCFF807JAC
     parent encTfChipPk off
@@ -6940,18 +7501,21 @@ subGroup2 factor Factor \
     shortLabel K562 MYC 4
     longLabel Transcription Factor ChIP-seq Peaks of MYC in K562 from ENCODE 3 (ENCFF387LTN)
     subGroups cellType=K562 factor=MYC
+    color 46,0,184
 
     track encTfChipPkENCFF634AYU
     parent encTfChipPk off
     shortLabel K562 MYC 5
     longLabel Transcription Factor ChIP-seq Peaks of MYC in K562 from ENCODE 3 (ENCFF634AYU)
     subGroups cellType=K562 factor=MYC
+    color 46,0,184
 
     track encTfChipPkENCFF838COI
     parent encTfChipPk off
     shortLabel K562 KDM1A 2
     longLabel Transcription Factor ChIP-seq Peaks of KDM1A in K562 from ENCODE 3 (ENCFF838COI)
     subGroups cellType=K562 factor=KDM1A
+    color 46,0,184
 
     track encTfChipPkENCFF988HJD
     parent encTfChipPk off
@@ -6976,18 +7540,21 @@ subGroup2 factor Factor \
     shortLabel GM12878 EBF1 2
     longLabel Transcription Factor ChIP-seq Peaks of EBF1 in GM12878 from ENCODE 3 (ENCFF868VSY)
     subGroups cellType=GM12878 factor=EBF1
+    color 153,38,0
 
     track encTfChipPkENCFF422BXE
     parent encTfChipPk off
     shortLabel K562 RUNX1 2
     longLabel Transcription Factor ChIP-seq Peaks of RUNX1 in K562 from ENCODE 3 (ENCFF422BXE)
     subGroups cellType=K562 factor=RUNX1
+    color 46,0,184
 
     track encTfChipPkENCFF743GXH
     parent encTfChipPk off
     shortLabel HepG2 SMARCE1
     longLabel Transcription Factor ChIP-seq Peaks of SMARCE1 in HepG2 from ENCODE 3 (ENCFF743GXH)
     subGroups cellType=HepG2 factor=SMARCE1
+    color 189,0,157
 
     track encTfChipPkENCFF891UNY
     parent encTfChipPk off
@@ -7006,6 +7573,7 @@ subGroup2 factor Factor \
     shortLabel K562 SMARCB1
     longLabel Transcription Factor ChIP-seq Peaks of SMARCB1 in K562 from ENCODE 3 (ENCFF944GJH)
     subGroups cellType=K562 factor=SMARCB1
+    color 46,0,184
 
     track encTfChipPkENCFF132WOI
     parent encTfChipPk off
@@ -7018,6 +7586,7 @@ subGroup2 factor Factor \
     shortLabel GM12878 ZNF687
     longLabel Transcription Factor ChIP-seq Peaks of ZNF687 in GM12878 from ENCODE 3 (ENCFF643OWO)
     subGroups cellType=GM12878 factor=ZNF687
+    color 153,38,0
 
     track encTfChipPkENCFF975PTM
     parent encTfChipPk off
@@ -7042,6 +7611,7 @@ subGroup2 factor Factor \
     shortLabel K562 DPF2 2
     longLabel Transcription Factor ChIP-seq Peaks of DPF2 in K562 from ENCODE 3 (ENCFF823SYE)
     subGroups cellType=K562 factor=DPF2
+    color 46,0,184
 
     track encTfChipPkENCFF023MUY
     parent encTfChipPk off
@@ -7054,36 +7624,42 @@ subGroup2 factor Factor \
     shortLabel HepG2 ZBTB33
     longLabel Transcription Factor ChIP-seq Peaks of ZBTB33 in HepG2 from ENCODE 3 (ENCFF557KGA)
     subGroups cellType=HepG2 factor=ZBTB33
+    color 189,0,157
 
     track encTfChipPkENCFF095GMM
     parent encTfChipPk off
     shortLabel GM12878 BHLHE40 2
     longLabel Transcription Factor ChIP-seq Peaks of BHLHE40 in GM12878 from ENCODE 3 (ENCFF095GMM)
     subGroups cellType=GM12878 factor=BHLHE40
+    color 153,38,0
 
     track encTfChipPkENCFF682SIY
     parent encTfChipPk off
     shortLabel K562 RBM14
     longLabel Transcription Factor ChIP-seq Peaks of RBM14 in K562 from ENCODE 3 (ENCFF682SIY)
     subGroups cellType=K562 factor=RBM14
+    color 46,0,184
 
     track encTfChipPkENCFF948TXN
     parent encTfChipPk off
     shortLabel K562 CREM
     longLabel Transcription Factor ChIP-seq Peaks of CREM in K562 from ENCODE 3 (ENCFF948TXN)
     subGroups cellType=K562 factor=CREM
+    color 46,0,184
 
     track encTfChipPkENCFF556DEP
     parent encTfChipPk off
     shortLabel HepG2 ZNF207
     longLabel Transcription Factor ChIP-seq Peaks of ZNF207 in HepG2 from ENCODE 3 (ENCFF556DEP)
     subGroups cellType=HepG2 factor=ZNF207
+    color 189,0,157
 
     track encTfChipPkENCFF471ZTZ
     parent encTfChipPk off
     shortLabel K562 ARNT 2
     longLabel Transcription Factor ChIP-seq Peaks of ARNT in K562 from ENCODE 3 (ENCFF471ZTZ)
     subGroups cellType=K562 factor=ARNT
+    color 46,0,184
 
     track encTfChipPkENCFF695IQU
     parent encTfChipPk off
@@ -7108,6 +7684,7 @@ subGroup2 factor Factor \
     shortLabel K562 GABPB1
     longLabel Transcription Factor ChIP-seq Peaks of GABPB1 in K562 from ENCODE 3 (ENCFF517KRT)
     subGroups cellType=K562 factor=GABPB1
+    color 46,0,184
 
     track encTfChipPkENCFF956QVQ
     parent encTfChipPk off
@@ -7120,24 +7697,28 @@ subGroup2 factor Factor \
     shortLabel K562 ETV6 2
     longLabel Transcription Factor ChIP-seq Peaks of ETV6 in K562 from ENCODE 3 (ENCFF545VNY)
     subGroups cellType=K562 factor=ETV6
+    color 46,0,184
 
     track encTfChipPkENCFF083YCQ
     parent encTfChipPk off
     shortLabel K562 E4F1
     longLabel Transcription Factor ChIP-seq Peaks of E4F1 in K562 from ENCODE 3 (ENCFF083YCQ)
     subGroups cellType=K562 factor=E4F1
+    color 46,0,184
 
     track encTfChipPkENCFF075PDC
     parent encTfChipPk off
     shortLabel HepG2 NBN
     longLabel Transcription Factor ChIP-seq Peaks of NBN in HepG2 from ENCODE 3 (ENCFF075PDC)
     subGroups cellType=HepG2 factor=NBN
+    color 189,0,157
 
     track encTfChipPkENCFF858QMI
     parent encTfChipPk off
     shortLabel K562 TRIM28 2
     longLabel Transcription Factor ChIP-seq Peaks of TRIM28 in K562 from ENCODE 3 (ENCFF858QMI)
     subGroups cellType=K562 factor=TRIM28
+    color 46,0,184
 
     track encTfChipPkENCFF761JIU
     parent encTfChipPk off
@@ -7162,6 +7743,7 @@ subGroup2 factor Factor \
     shortLabel GM12878 NFATC3
     longLabel Transcription Factor ChIP-seq Peaks of NFATC3 in GM12878 from ENCODE 3 (ENCFF704ZYN)
     subGroups cellType=GM12878 factor=NFATC3
+    color 153,38,0
 
     track encTfChipPkENCFF476MXK
     parent encTfChipPk off
@@ -7174,30 +7756,35 @@ subGroup2 factor Factor \
     shortLabel K562 NBN
     longLabel Transcription Factor ChIP-seq Peaks of NBN in K562 from ENCODE 3 (ENCFF074EZL)
     subGroups cellType=K562 factor=NBN
+    color 46,0,184
 
     track encTfChipPkENCFF447QXT
     parent encTfChipPk off
     shortLabel H1-hESC RFX5
     longLabel Transcription Factor ChIP-seq Peaks of RFX5 in H1-hESC from ENCODE 3 (ENCFF447QXT)
     subGroups cellType=H1-hESC factor=RFX5
+    color 0,107,27
 
     track encTfChipPkENCFF507MGL
     parent encTfChipPk off
     shortLabel K562 ARNT 3
     longLabel Transcription Factor ChIP-seq Peaks of ARNT in K562 from ENCODE 3 (ENCFF507MGL)
     subGroups cellType=K562 factor=ARNT
+    color 46,0,184
 
     track encTfChipPkENCFF708OJJ
     parent encTfChipPk off
     shortLabel HeLa-S3 ZHX1
     longLabel Transcription Factor ChIP-seq Peaks of ZHX1 in HeLa-S3 from ENCODE 3 (ENCFF708OJJ)
     subGroups cellType=HeLa-S3 factor=ZHX1
+    color 0,119,158
 
     track encTfChipPkENCFF711OSR
     parent encTfChipPk off
     shortLabel GM12878 E4F1
     longLabel Transcription Factor ChIP-seq Peaks of E4F1 in GM12878 from ENCODE 3 (ENCFF711OSR)
     subGroups cellType=GM12878 factor=E4F1
+    color 153,38,0
 
     track encTfChipPkENCFF134CPX
     parent encTfChipPk off
@@ -7210,6 +7797,7 @@ subGroup2 factor Factor \
     shortLabel K562 ATF3 1
     longLabel Transcription Factor ChIP-seq Peaks of ATF3 in K562 from ENCODE 3 (ENCFF958KNK)
     subGroups cellType=K562 factor=ATF3
+    color 46,0,184
 
     track encTfChipPkENCFF007ATC
     parent encTfChipPk off
@@ -7219,7 +7807,7 @@ subGroup2 factor Factor \
 
     track encTfChipPkENCFF741BED
     parent encTfChipPk off
-    shortLabel spleen CTCF
+    shortLabel spleen CTCF 3
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in spleen from ENCODE 3 (ENCFF741BED)
     subGroups cellType=spleen factor=CTCF
 
@@ -7228,12 +7816,14 @@ subGroup2 factor Factor \
     shortLabel H1-hESC SIRT6
     longLabel Transcription Factor ChIP-seq Peaks of SIRT6 in H1-hESC from ENCODE 3 (ENCFF719RAM)
     subGroups cellType=H1-hESC factor=SIRT6
+    color 0,107,27
 
     track encTfChipPkENCFF248QFF
     parent encTfChipPk off
     shortLabel GM12878 RUNX3
     longLabel Transcription Factor ChIP-seq Peaks of RUNX3 in GM12878 from ENCODE 3 (ENCFF248QFF)
     subGroups cellType=GM12878 factor=RUNX3
+    color 153,38,0
 
     track encTfChipPkENCFF418WAW
     parent encTfChipPk off
@@ -7243,7 +7833,7 @@ subGroup2 factor Factor \
 
     track encTfChipPkENCFF039SAY
     parent encTfChipPk off
-    shortLabel stomach CTCF
+    shortLabel stomach CTCF 4
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in stomach from ENCODE 3 (ENCFF039SAY)
     subGroups cellType=stomach factor=CTCF
 
@@ -7252,12 +7842,14 @@ subGroup2 factor Factor \
     shortLabel H1-hESC SP1
     longLabel Transcription Factor ChIP-seq Peaks of SP1 in H1-hESC from ENCODE 3 (ENCFF317TBZ)
     subGroups cellType=H1-hESC factor=SP1
+    color 0,107,27
 
     track encTfChipPkENCFF475TQE
     parent encTfChipPk off
     shortLabel K562 ATF3 2
     longLabel Transcription Factor ChIP-seq Peaks of ATF3 in K562 from ENCODE 3 (ENCFF475TQE)
     subGroups cellType=K562 factor=ATF3
+    color 46,0,184
 
     track encTfChipPkENCFF372SHI
     parent encTfChipPk off
@@ -7276,12 +7868,14 @@ subGroup2 factor Factor \
     shortLabel GM12878 SKIL
     longLabel Transcription Factor ChIP-seq Peaks of SKIL in GM12878 from ENCODE 3 (ENCFF142EVF)
     subGroups cellType=GM12878 factor=SKIL
+    color 153,38,0
 
     track encTfChipPkENCFF591BIT
     parent encTfChipPk off
     shortLabel K562 TRIM28 3
     longLabel Transcription Factor ChIP-seq Peaks of TRIM28 in K562 from ENCODE 3 (ENCFF591BIT)
     subGroups cellType=K562 factor=TRIM28
+    color 46,0,184
 
     track encTfChipPkENCFF034NUV
     parent encTfChipPk off
@@ -7342,42 +7936,49 @@ subGroup2 factor Factor \
     shortLabel K562 FOXK2 2
     longLabel Transcription Factor ChIP-seq Peaks of FOXK2 in K562 from ENCODE 3 (ENCFF248VHN)
     subGroups cellType=K562 factor=FOXK2
+    color 46,0,184
 
     track encTfChipPkENCFF626KTJ
     parent encTfChipPk off
     shortLabel K562 PHF8
     longLabel Transcription Factor ChIP-seq Peaks of PHF8 in K562 from ENCODE 3 (ENCFF626KTJ)
     subGroups cellType=K562 factor=PHF8
+    color 46,0,184
 
     track encTfChipPkENCFF459DRJ
     parent encTfChipPk off
     shortLabel HepG2 HDAC2 2
     longLabel Transcription Factor ChIP-seq Peaks of HDAC2 in HepG2 from ENCODE 3 (ENCFF459DRJ)
     subGroups cellType=HepG2 factor=HDAC2
+    color 189,0,157
 
     track encTfChipPkENCFF461FGJ
     parent encTfChipPk off
     shortLabel GM12878 RXRA
     longLabel Transcription Factor ChIP-seq Peaks of RXRA in GM12878 from ENCODE 3 (ENCFF461FGJ)
     subGroups cellType=GM12878 factor=RXRA
+    color 153,38,0
 
     track encTfChipPkENCFF392MUM
     parent encTfChipPk off
     shortLabel K562 ELF1
     longLabel Transcription Factor ChIP-seq Peaks of ELF1 in K562 from ENCODE 3 (ENCFF392MUM)
     subGroups cellType=K562 factor=ELF1
+    color 46,0,184
 
     track encTfChipPkENCFF345GZF
     parent encTfChipPk off
     shortLabel HepG2 TAF1
     longLabel Transcription Factor ChIP-seq Peaks of TAF1 in HepG2 from ENCODE 3 (ENCFF345GZF)
     subGroups cellType=HepG2 factor=TAF1
+    color 189,0,157
 
     track encTfChipPkENCFF119SZQ
     parent encTfChipPk off
     shortLabel K562 WHSC1
     longLabel Transcription Factor ChIP-seq Peaks of WHSC1 in K562 from ENCODE 3 (ENCFF119SZQ)
     subGroups cellType=K562 factor=WHSC1
+    color 46,0,184
 
     track encTfChipPkENCFF403SBB
     parent encTfChipPk off
@@ -7390,12 +7991,14 @@ subGroup2 factor Factor \
     shortLabel GM12878 SRF 2
     longLabel Transcription Factor ChIP-seq Peaks of SRF in GM12878 from ENCODE 3 (ENCFF030NYG)
     subGroups cellType=GM12878 factor=SRF
+    color 153,38,0
 
     track encTfChipPkENCFF676NPW
     parent encTfChipPk off
     shortLabel K562 HES1
     longLabel Transcription Factor ChIP-seq Peaks of HES1 in K562 from ENCODE 3 (ENCFF676NPW)
     subGroups cellType=K562 factor=HES1
+    color 46,0,184
 
     track encTfChipPkENCFF818LBB
     parent encTfChipPk off
@@ -7414,6 +8017,7 @@ subGroup2 factor Factor \
     shortLabel K562 POLR2G
     longLabel Transcription Factor ChIP-seq Peaks of POLR2G in K562 from ENCODE 3 (ENCFF273EYJ)
     subGroups cellType=K562 factor=POLR2G
+    color 46,0,184
 
     track encTfChipPkENCFF652MLT
     parent encTfChipPk off
@@ -7426,6 +8030,7 @@ subGroup2 factor Factor \
     shortLabel K562 SMC3
     longLabel Transcription Factor ChIP-seq Peaks of SMC3 in K562 from ENCODE 3 (ENCFF041YQC)
     subGroups cellType=K562 factor=SMC3
+    color 46,0,184
 
     track encTfChipPkENCFF637KHE
     parent encTfChipPk off
@@ -7444,12 +8049,14 @@ subGroup2 factor Factor \
     shortLabel K562 RAD51
     longLabel Transcription Factor ChIP-seq Peaks of RAD51 in K562 from ENCODE 3 (ENCFF096XMD)
     subGroups cellType=K562 factor=RAD51
+    color 46,0,184
 
     track encTfChipPkENCFF264LQE
     parent encTfChipPk off
     shortLabel HepG2 ZBTB7A
     longLabel Transcription Factor ChIP-seq Peaks of ZBTB7A in HepG2 from ENCODE 3 (ENCFF264LQE)
     subGroups cellType=HepG2 factor=ZBTB7A
+    color 189,0,157
 
     track encTfChipPkENCFF793HCV
     parent encTfChipPk off
@@ -7468,30 +8075,35 @@ subGroup2 factor Factor \
     shortLabel HepG2 ETV4
     longLabel Transcription Factor ChIP-seq Peaks of ETV4 in HepG2 from ENCODE 3 (ENCFF076NCP)
     subGroups cellType=HepG2 factor=ETV4
+    color 189,0,157
 
     track encTfChipPkENCFF484CKD
     parent encTfChipPk off
     shortLabel K562 RCOR1
     longLabel Transcription Factor ChIP-seq Peaks of RCOR1 in K562 from ENCODE 3 (ENCFF484CKD)
     subGroups cellType=K562 factor=RCOR1
+    color 46,0,184
 
     track encTfChipPkENCFF062ARS
     parent encTfChipPk off
     shortLabel K562 CBX5
     longLabel Transcription Factor ChIP-seq Peaks of CBX5 in K562 from ENCODE 3 (ENCFF062ARS)
     subGroups cellType=K562 factor=CBX5
+    color 46,0,184
 
     track encTfChipPkENCFF467NRS
     parent encTfChipPk off
     shortLabel GM12878 NFYB
     longLabel Transcription Factor ChIP-seq Peaks of NFYB in GM12878 from ENCODE 3 (ENCFF467NRS)
     subGroups cellType=GM12878 factor=NFYB
+    color 153,38,0
 
     track encTfChipPkENCFF308IXJ
     parent encTfChipPk off
     shortLabel K562 MAFF
     longLabel Transcription Factor ChIP-seq Peaks of MAFF in K562 from ENCODE 3 (ENCFF308IXJ)
     subGroups cellType=K562 factor=MAFF
+    color 46,0,184
 
     track encTfChipPkENCFF389DLX
     parent encTfChipPk off
@@ -7504,6 +8116,7 @@ subGroup2 factor Factor \
     shortLabel K562 REST 2
     longLabel Transcription Factor ChIP-seq Peaks of REST in K562 from ENCODE 3 (ENCFF558VPP)
     subGroups cellType=K562 factor=REST
+    color 46,0,184
 
     track encTfChipPkENCFF781EZZ
     parent encTfChipPk off
@@ -7528,30 +8141,35 @@ subGroup2 factor Factor \
     shortLabel GM12878 ATF2 2
     longLabel Transcription Factor ChIP-seq Peaks of ATF2 in GM12878 from ENCODE 3 (ENCFF609KOY)
     subGroups cellType=GM12878 factor=ATF2
+    color 153,38,0
 
     track encTfChipPkENCFF229YSW
     parent encTfChipPk off
     shortLabel GM12878 IKZF1 3
     longLabel Transcription Factor ChIP-seq Peaks of IKZF1 in GM12878 from ENCODE 3 (ENCFF229YSW)
     subGroups cellType=GM12878 factor=IKZF1
+    color 153,38,0
 
     track encTfChipPkENCFF175IIE
     parent encTfChipPk off
     shortLabel K562 NR2F1
     longLabel Transcription Factor ChIP-seq Peaks of NR2F1 in K562 from ENCODE 3 (ENCFF175IIE)
     subGroups cellType=K562 factor=NR2F1
+    color 46,0,184
 
     track encTfChipPkENCFF747CHL
     parent encTfChipPk off
     shortLabel HepG2 ELF1
     longLabel Transcription Factor ChIP-seq Peaks of ELF1 in HepG2 from ENCODE 3 (ENCFF747CHL)
     subGroups cellType=HepG2 factor=ELF1
+    color 189,0,157
 
     track encTfChipPkENCFF254HZM
     parent encTfChipPk off
     shortLabel H1-hESC ASH2L
     longLabel Transcription Factor ChIP-seq Peaks of ASH2L in H1-hESC from ENCODE 3 (ENCFF254HZM)
     subGroups cellType=H1-hESC factor=ASH2L
+    color 0,107,27
 
     track encTfChipPkENCFF769NCM
     parent encTfChipPk off
@@ -7564,6 +8182,7 @@ subGroup2 factor Factor \
     shortLabel K562 E2F1 2
     longLabel Transcription Factor ChIP-seq Peaks of E2F1 in K562 from ENCODE 3 (ENCFF998YJY)
     subGroups cellType=K562 factor=E2F1
+    color 46,0,184
 
     track encTfChipPkENCFF985ZJL
     parent encTfChipPk off
@@ -7576,12 +8195,14 @@ subGroup2 factor Factor \
     shortLabel GM12878 KLF5
     longLabel Transcription Factor ChIP-seq Peaks of KLF5 in GM12878 from ENCODE 3 (ENCFF827ZLB)
     subGroups cellType=GM12878 factor=KLF5
+    color 153,38,0
 
     track encTfChipPkENCFF928KZS
     parent encTfChipPk off
     shortLabel HepG2 CBX2
     longLabel Transcription Factor ChIP-seq Peaks of CBX2 in HepG2 from ENCODE 3 (ENCFF928KZS)
     subGroups cellType=HepG2 factor=CBX2
+    color 189,0,157
 
     track encTfChipPkENCFF883EGI
     parent encTfChipPk off
@@ -7600,12 +8221,14 @@ subGroup2 factor Factor \
     shortLabel K562 HNRNPH1
     longLabel Transcription Factor ChIP-seq Peaks of HNRNPH1 in K562 from ENCODE 3 (ENCFF292JRY)
     subGroups cellType=K562 factor=HNRNPH1
+    color 46,0,184
 
     track encTfChipPkENCFF423EMU
     parent encTfChipPk off
     shortLabel K562 BACH1
     longLabel Transcription Factor ChIP-seq Peaks of BACH1 in K562 from ENCODE 3 (ENCFF423EMU)
     subGroups cellType=K562 factor=BACH1
+    color 46,0,184
 
     track encTfChipPkENCFF054PUP
     parent encTfChipPk off
@@ -7624,18 +8247,21 @@ subGroup2 factor Factor \
     shortLabel K562 ZNF639 2
     longLabel Transcription Factor ChIP-seq Peaks of ZNF639 in K562 from ENCODE 3 (ENCFF284PKK)
     subGroups cellType=K562 factor=ZNF639
+    color 46,0,184
 
     track encTfChipPkENCFF010STZ
     parent encTfChipPk off
     shortLabel K562 HNRNPL
     longLabel Transcription Factor ChIP-seq Peaks of HNRNPL in K562 from ENCODE 3 (ENCFF010STZ)
     subGroups cellType=K562 factor=HNRNPL
+    color 46,0,184
 
     track encTfChipPkENCFF337DKJ
     parent encTfChipPk off
     shortLabel K562 JUND
     longLabel Transcription Factor ChIP-seq Peaks of JUND in K562 from ENCODE 3 (ENCFF337DKJ)
     subGroups cellType=K562 factor=JUND
+    color 46,0,184
 
     track encTfChipPkENCFF362XAG
     parent encTfChipPk off
@@ -7648,30 +8274,35 @@ subGroup2 factor Factor \
     shortLabel H1-hESC RXRA
     longLabel Transcription Factor ChIP-seq Peaks of RXRA in H1-hESC from ENCODE 3 (ENCFF369JAI)
     subGroups cellType=H1-hESC factor=RXRA
+    color 0,107,27
 
     track encTfChipPkENCFF996ZGL
     parent encTfChipPk off
     shortLabel K562 C11orf30
     longLabel Transcription Factor ChIP-seq Peaks of C11orf30 in K562 from ENCODE 3 (ENCFF996ZGL)
     subGroups cellType=K562 factor=C11orf30
+    color 46,0,184
 
     track encTfChipPkENCFF760IFZ
     parent encTfChipPk off
     shortLabel GM12878 ETV6 2
     longLabel Transcription Factor ChIP-seq Peaks of ETV6 in GM12878 from ENCODE 3 (ENCFF760IFZ)
     subGroups cellType=GM12878 factor=ETV6
+    color 153,38,0
 
     track encTfChipPkENCFF409QJU
     parent encTfChipPk off
     shortLabel GM12878 NFATC1
     longLabel Transcription Factor ChIP-seq Peaks of NFATC1 in GM12878 from ENCODE 3 (ENCFF409QJU)
     subGroups cellType=GM12878 factor=NFATC1
+    color 153,38,0
 
     track encTfChipPkENCFF227PWE
     parent encTfChipPk off
     shortLabel HepG2 HNF1A
     longLabel Transcription Factor ChIP-seq Peaks of HNF1A in HepG2 from ENCODE 3 (ENCFF227PWE)
     subGroups cellType=HepG2 factor=HNF1A
+    color 189,0,157
 
     track encTfChipPkENCFF671RVI
     parent encTfChipPk off
@@ -7684,6 +8315,7 @@ subGroup2 factor Factor \
     shortLabel K562 MXI1
     longLabel Transcription Factor ChIP-seq Peaks of MXI1 in K562 from ENCODE 3 (ENCFF970LCB)
     subGroups cellType=K562 factor=MXI1
+    color 46,0,184
 
     track encTfChipPkENCFF585YYZ
     parent encTfChipPk off
@@ -7708,12 +8340,14 @@ subGroup2 factor Factor \
     shortLabel K562 PHB2
     longLabel Transcription Factor ChIP-seq Peaks of PHB2 in K562 from ENCODE 3 (ENCFF462FRU)
     subGroups cellType=K562 factor=PHB2
+    color 46,0,184
 
     track encTfChipPkENCFF932CSV
     parent encTfChipPk off
     shortLabel HeLa-S3 REST
     longLabel Transcription Factor ChIP-seq Peaks of REST in HeLa-S3 from ENCODE 3 (ENCFF932CSV)
     subGroups cellType=HeLa-S3 factor=REST
+    color 0,119,158
 
     track encTfChipPkENCFF615FIR
     parent encTfChipPk off
@@ -7722,16 +8356,18 @@ subGroup2 factor Factor \
     subGroups cellType=MCF-7 factor=ZNF592
 
     track encTfChipPkENCFF468CFJ
-    parent encTfChipPk off
+    parent encTfChipPk on
     shortLabel H1-hESC HDAC2 1
     longLabel Transcription Factor ChIP-seq Peaks of HDAC2 in H1-hESC from ENCODE 3 (ENCFF468CFJ)
     subGroups cellType=H1-hESC factor=HDAC2
+    color 0,107,27
 
     track encTfChipPkENCFF613LYW
     parent encTfChipPk off
     shortLabel HepG2 KDM1A
     longLabel Transcription Factor ChIP-seq Peaks of KDM1A in HepG2 from ENCODE 3 (ENCFF613LYW)
     subGroups cellType=HepG2 factor=KDM1A
+    color 189,0,157
 
     track encTfChipPkENCFF078ATU
     parent encTfChipPk off
@@ -7750,12 +8386,14 @@ subGroup2 factor Factor \
     shortLabel K562 NR2C1
     longLabel Transcription Factor ChIP-seq Peaks of NR2C1 in K562 from ENCODE 3 (ENCFF664ZGR)
     subGroups cellType=K562 factor=NR2C1
+    color 46,0,184
 
     track encTfChipPkENCFF937VZI
     parent encTfChipPk off
     shortLabel K562 POLR2A 7
     longLabel Transcription Factor ChIP-seq Peaks of POLR2A in K562 from ENCODE 3 (ENCFF937VZI)
     subGroups cellType=K562 factor=POLR2A
+    color 46,0,184
 
     track encTfChipPkENCFF788CHY
     parent encTfChipPk off
@@ -7768,18 +8406,21 @@ subGroup2 factor Factor \
     shortLabel GM12878 RAD51
     longLabel Transcription Factor ChIP-seq Peaks of RAD51 in GM12878 from ENCODE 3 (ENCFF445UJF)
     subGroups cellType=GM12878 factor=RAD51
+    color 153,38,0
 
     track encTfChipPkENCFF971VJZ
     parent encTfChipPk off
     shortLabel K562 RBM15
     longLabel Transcription Factor ChIP-seq Peaks of RBM15 in K562 from ENCODE 3 (ENCFF971VJZ)
     subGroups cellType=K562 factor=RBM15
+    color 46,0,184
 
     track encTfChipPkENCFF114IWY
     parent encTfChipPk off
     shortLabel K562 ZNF143
     longLabel Transcription Factor ChIP-seq Peaks of ZNF143 in K562 from ENCODE 3 (ENCFF114IWY)
     subGroups cellType=K562 factor=ZNF143
+    color 46,0,184
 
     track encTfChipPkENCFF304IDM
     parent encTfChipPk off
@@ -7792,6 +8433,7 @@ subGroup2 factor Factor \
     shortLabel H1-hESC JUN
     longLabel Transcription Factor ChIP-seq Peaks of JUN in H1-hESC from ENCODE 3 (ENCFF402ELS)
     subGroups cellType=H1-hESC factor=JUN
+    color 0,107,27
 
     track encTfChipPkENCFF628SBD
     parent encTfChipPk off
@@ -7810,6 +8452,7 @@ subGroup2 factor Factor \
     shortLabel K562 KAT8
     longLabel Transcription Factor ChIP-seq Peaks of KAT8 in K562 from ENCODE 3 (ENCFF772QPO)
     subGroups cellType=K562 factor=KAT8
+    color 46,0,184
 
     track encTfChipPkENCFF924OMX
     parent encTfChipPk off
@@ -7840,12 +8483,14 @@ subGroup2 factor Factor \
     shortLabel K562 SETDB1 1
     longLabel Transcription Factor ChIP-seq Peaks of SETDB1 in K562 from ENCODE 3 (ENCFF095WDB)
     subGroups cellType=K562 factor=SETDB1
+    color 46,0,184
 
     track encTfChipPkENCFF785ACI
     parent encTfChipPk off
     shortLabel K562 PRPF4
     longLabel Transcription Factor ChIP-seq Peaks of PRPF4 in K562 from ENCODE 3 (ENCFF785ACI)
     subGroups cellType=K562 factor=PRPF4
+    color 46,0,184
 
     track encTfChipPkENCFF355OQM
     parent encTfChipPk off
@@ -7858,30 +8503,35 @@ subGroup2 factor Factor \
     shortLabel GM12878 HSF1
     longLabel Transcription Factor ChIP-seq Peaks of HSF1 in GM12878 from ENCODE 3 (ENCFF308ZGG)
     subGroups cellType=GM12878 factor=HSF1
+    color 153,38,0
 
     track encTfChipPkENCFF628QJU
     parent encTfChipPk off
     shortLabel GM12878 NFIC
     longLabel Transcription Factor ChIP-seq Peaks of NFIC in GM12878 from ENCODE 3 (ENCFF628QJU)
     subGroups cellType=GM12878 factor=NFIC
+    color 153,38,0
 
     track encTfChipPkENCFF902CVS
     parent encTfChipPk off
     shortLabel H1-hESC HDAC2 2
     longLabel Transcription Factor ChIP-seq Peaks of HDAC2 in H1-hESC from ENCODE 3 (ENCFF902CVS)
     subGroups cellType=H1-hESC factor=HDAC2
+    color 0,107,27
 
     track encTfChipPkENCFF814CZI
     parent encTfChipPk off
     shortLabel GM12878 RBBP5
     longLabel Transcription Factor ChIP-seq Peaks of RBBP5 in GM12878 from ENCODE 3 (ENCFF814CZI)
     subGroups cellType=GM12878 factor=RBBP5
+    color 153,38,0
 
     track encTfChipPkENCFF358BEF
     parent encTfChipPk off
     shortLabel H1-hESC USF1
     longLabel Transcription Factor ChIP-seq Peaks of USF1 in H1-hESC from ENCODE 3 (ENCFF358BEF)
     subGroups cellType=H1-hESC factor=USF1
+    color 0,107,27
 
     track encTfChipPkENCFF334FKO
     parent encTfChipPk off
@@ -7894,12 +8544,14 @@ subGroup2 factor Factor \
     shortLabel HeLa-S3 MAFK
     longLabel Transcription Factor ChIP-seq Peaks of MAFK in HeLa-S3 from ENCODE 3 (ENCFF405BKG)
     subGroups cellType=HeLa-S3 factor=MAFK
+    color 0,119,158
 
     track encTfChipPkENCFF012JXJ
     parent encTfChipPk off
     shortLabel GM12878 BACH1
     longLabel Transcription Factor ChIP-seq Peaks of BACH1 in GM12878 from ENCODE 3 (ENCFF012JXJ)
     subGroups cellType=GM12878 factor=BACH1
+    color 153,38,0
 
     track encTfChipPkENCFF957CWW
     parent encTfChipPk off
@@ -7912,18 +8564,21 @@ subGroup2 factor Factor \
     shortLabel K562 TAF9B
     longLabel Transcription Factor ChIP-seq Peaks of TAF9B in K562 from ENCODE 3 (ENCFF785HXY)
     subGroups cellType=K562 factor=TAF9B
+    color 46,0,184
 
     track encTfChipPkENCFF103OOV
     parent encTfChipPk off
     shortLabel GM12878 ZNF24
     longLabel Transcription Factor ChIP-seq Peaks of ZNF24 in GM12878 from ENCODE 3 (ENCFF103OOV)
     subGroups cellType=GM12878 factor=ZNF24
+    color 153,38,0
 
     track encTfChipPkENCFF417LLT
     parent encTfChipPk off
     shortLabel HeLa-S3 POLR2A
     longLabel Transcription Factor ChIP-seq Peaks of POLR2A in HeLa-S3 from ENCODE 3 (ENCFF417LLT)
     subGroups cellType=HeLa-S3 factor=POLR2A
+    color 0,119,158
 
     track encTfChipPkENCFF238TOS
     parent encTfChipPk off
@@ -7948,6 +8603,7 @@ subGroup2 factor Factor \
     shortLabel K562 CHAMP1 2
     longLabel Transcription Factor ChIP-seq Peaks of CHAMP1 in K562 from ENCODE 3 (ENCFF602FRL)
     subGroups cellType=K562 factor=CHAMP1
+    color 46,0,184
 
     track encTfChipPkENCFF017YUI
     parent encTfChipPk off
@@ -7960,6 +8616,7 @@ subGroup2 factor Factor \
     shortLabel GM12878 SUZ12
     longLabel Transcription Factor ChIP-seq Peaks of SUZ12 in GM12878 from ENCODE 3 (ENCFF746JPU)
     subGroups cellType=GM12878 factor=SUZ12
+    color 153,38,0
 
     track encTfChipPkENCFF252FBJ
     parent encTfChipPk off
@@ -7978,6 +8635,7 @@ subGroup2 factor Factor \
     shortLabel K562 MITF 2
     longLabel Transcription Factor ChIP-seq Peaks of MITF in K562 from ENCODE 3 (ENCFF616LVN)
     subGroups cellType=K562 factor=MITF
+    color 46,0,184
 
     track encTfChipPkENCFF874HRJ
     parent encTfChipPk off
@@ -7990,6 +8648,7 @@ subGroup2 factor Factor \
     shortLabel K562 EGR1 3
     longLabel Transcription Factor ChIP-seq Peaks of EGR1 in K562 from ENCODE 3 (ENCFF558JBX)
     subGroups cellType=K562 factor=EGR1
+    color 46,0,184
 
     track encTfChipPkENCFF901BGG
     parent encTfChipPk off
@@ -8020,6 +8679,7 @@ subGroup2 factor Factor \
     shortLabel GM12878 SRF 3
     longLabel Transcription Factor ChIP-seq Peaks of SRF in GM12878 from ENCODE 3 (ENCFF199WGD)
     subGroups cellType=GM12878 factor=SRF
+    color 153,38,0
 
     track encTfChipPkENCFF063IRW
     parent encTfChipPk off
@@ -8029,7 +8689,7 @@ subGroup2 factor Factor \
 
     track encTfChipPkENCFF003YLJ
     parent encTfChipPk off
-    shortLabel spleen CTCF
+    shortLabel spleen CTCF 4
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in spleen from ENCODE 3 (ENCFF003YLJ)
     subGroups cellType=spleen factor=CTCF
 
@@ -8038,18 +8698,21 @@ subGroup2 factor Factor \
     shortLabel HepG2 RAD21 2
     longLabel Transcription Factor ChIP-seq Peaks of RAD21 in HepG2 from ENCODE 3 (ENCFF072UEX)
     subGroups cellType=HepG2 factor=RAD21
+    color 189,0,157
 
     track encTfChipPkENCFF763GJP
     parent encTfChipPk off
     shortLabel HepG2 MNT 2
     longLabel Transcription Factor ChIP-seq Peaks of MNT in HepG2 from ENCODE 3 (ENCFF763GJP)
     subGroups cellType=HepG2 factor=MNT
+    color 189,0,157
 
     track encTfChipPkENCFF477FYN
     parent encTfChipPk off
     shortLabel K562 KDM4B 2
     longLabel Transcription Factor ChIP-seq Peaks of KDM4B in K562 from ENCODE 3 (ENCFF477FYN)
     subGroups cellType=K562 factor=KDM4B
+    color 46,0,184
 
     track encTfChipPkENCFF528VFN
     parent encTfChipPk off
@@ -8080,12 +8743,14 @@ subGroup2 factor Factor \
     shortLabel K562 MTA2 2
     longLabel Transcription Factor ChIP-seq Peaks of MTA2 in K562 from ENCODE 3 (ENCFF662MVX)
     subGroups cellType=K562 factor=MTA2
+    color 46,0,184
 
     track encTfChipPkENCFF076IFG
     parent encTfChipPk off
     shortLabel K562 ZEB2 2
     longLabel Transcription Factor ChIP-seq Peaks of ZEB2 in K562 from ENCODE 3 (ENCFF076IFG)
     subGroups cellType=K562 factor=ZEB2
+    color 46,0,184
 
     track encTfChipPkENCFF456GRS
     parent encTfChipPk off
@@ -8098,24 +8763,28 @@ subGroup2 factor Factor \
     shortLabel K562 POLR2A 8
     longLabel Transcription Factor ChIP-seq Peaks of POLR2A in K562 from ENCODE 3 (ENCFF853ZMA)
     subGroups cellType=K562 factor=POLR2A
+    color 46,0,184
 
     track encTfChipPkENCFF014RBU
     parent encTfChipPk off
     shortLabel GM12878 STAT3
     longLabel Transcription Factor ChIP-seq Peaks of STAT3 in GM12878 from ENCODE 3 (ENCFF014RBU)
     subGroups cellType=GM12878 factor=STAT3
+    color 153,38,0
 
     track encTfChipPkENCFF609YST
     parent encTfChipPk off
     shortLabel HepG2 EHMT2
     longLabel Transcription Factor ChIP-seq Peaks of EHMT2 in HepG2 from ENCODE 3 (ENCFF609YST)
     subGroups cellType=HepG2 factor=EHMT2
+    color 189,0,157
 
     track encTfChipPkENCFF574YMJ
     parent encTfChipPk off
     shortLabel HepG2 TBX3 2
     longLabel Transcription Factor ChIP-seq Peaks of TBX3 in HepG2 from ENCODE 3 (ENCFF574YMJ)
     subGroups cellType=HepG2 factor=TBX3
+    color 189,0,157
 
     track encTfChipPkENCFF048JWL
     parent encTfChipPk off
@@ -8140,12 +8809,14 @@ subGroup2 factor Factor \
     shortLabel GM12878 ZBTB40
     longLabel Transcription Factor ChIP-seq Peaks of ZBTB40 in GM12878 from ENCODE 3 (ENCFF357WYN)
     subGroups cellType=GM12878 factor=ZBTB40
+    color 153,38,0
 
     track encTfChipPkENCFF556JBS
     parent encTfChipPk off
     shortLabel GM12878 ELK1
     longLabel Transcription Factor ChIP-seq Peaks of ELK1 in GM12878 from ENCODE 3 (ENCFF556JBS)
     subGroups cellType=GM12878 factor=ELK1
+    color 153,38,0
 
     track encTfChipPkENCFF842WEF
     parent encTfChipPk off
@@ -8164,24 +8835,28 @@ subGroup2 factor Factor \
     shortLabel K562 JUN 5
     longLabel Transcription Factor ChIP-seq Peaks of JUN in K562 from ENCODE 3 (ENCFF629BFI)
     subGroups cellType=K562 factor=JUN
+    color 46,0,184
 
     track encTfChipPkENCFF126BCK
     parent encTfChipPk off
     shortLabel K562 GMEB1
     longLabel Transcription Factor ChIP-seq Peaks of GMEB1 in K562 from ENCODE 3 (ENCFF126BCK)
     subGroups cellType=K562 factor=GMEB1
+    color 46,0,184
 
     track encTfChipPkENCFF266KSD
     parent encTfChipPk off
     shortLabel HepG2 ZNF282
     longLabel Transcription Factor ChIP-seq Peaks of ZNF282 in HepG2 from ENCODE 3 (ENCFF266KSD)
     subGroups cellType=HepG2 factor=ZNF282
+    color 189,0,157
 
     track encTfChipPkENCFF784FIE
     parent encTfChipPk off
     shortLabel K562 NR3C1 2
     longLabel Transcription Factor ChIP-seq Peaks of NR3C1 in K562 from ENCODE 3 (ENCFF784FIE)
     subGroups cellType=K562 factor=NR3C1
+    color 46,0,184
 
     track encTfChipPkENCFF081JNO
     parent encTfChipPk off
@@ -8194,10 +8869,11 @@ subGroup2 factor Factor \
     shortLabel K562 NCOR1 3
     longLabel Transcription Factor ChIP-seq Peaks of NCOR1 in K562 from ENCODE 3 (ENCFF366UBB)
     subGroups cellType=K562 factor=NCOR1
+    color 46,0,184
 
     track encTfChipPkENCFF459AHK
     parent encTfChipPk off
-    shortLabel spleen CTCF
+    shortLabel spleen CTCF 5
     longLabel Transcription Factor ChIP-seq Peaks of CTCF in spleen from ENCODE 3 (ENCFF459AHK)
     subGroups cellType=spleen factor=CTCF
 
@@ -8206,6 +8882,7 @@ subGroup2 factor Factor \
     shortLabel HepG2 SP1 2
     longLabel Transcription Factor ChIP-seq Peaks of SP1 in HepG2 from ENCODE 3 (ENCFF573ALP)
     subGroups cellType=HepG2 factor=SP1
+    color 189,0,157
 
     track encTfChipPkENCFF373JXT
     parent encTfChipPk off
@@ -8230,6 +8907,7 @@ subGroup2 factor Factor \
     shortLabel HepG2 CREB1
     longLabel Transcription Factor ChIP-seq Peaks of CREB1 in HepG2 from ENCODE 3 (ENCFF161PGD)
     subGroups cellType=HepG2 factor=CREB1
+    color 189,0,157
 
     track encTfChipPkENCFF401DFB
     parent encTfChipPk off
@@ -8248,6 +8926,7 @@ subGroup2 factor Factor \
     shortLabel K562 ARID3A
     longLabel Transcription Factor ChIP-seq Peaks of ARID3A in K562 from ENCODE 3 (ENCFF835KAT)
     subGroups cellType=K562 factor=ARID3A
+    color 46,0,184
 
     track encTfChipPkENCFF510UBQ
     parent encTfChipPk off
@@ -8260,6 +8939,7 @@ subGroup2 factor Factor \
     shortLabel GM12878 TBX21
     longLabel Transcription Factor ChIP-seq Peaks of TBX21 in GM12878 from ENCODE 3 (ENCFF405NFV)
     subGroups cellType=GM12878 factor=TBX21
+    color 153,38,0
 
     track encTfChipPkENCFF647SXX
     parent encTfChipPk off
@@ -8272,6 +8952,7 @@ subGroup2 factor Factor \
     shortLabel HepG2 FUS
     longLabel Transcription Factor ChIP-seq Peaks of FUS in HepG2 from ENCODE 3 (ENCFF950KWC)
     subGroups cellType=HepG2 factor=FUS
+    color 189,0,157
 
     track encTfChipPkENCFF971ILA
     parent encTfChipPk off
@@ -8284,6 +8965,7 @@ subGroup2 factor Factor \
     shortLabel GM12878 GATAD2B
     longLabel Transcription Factor ChIP-seq Peaks of GATAD2B in GM12878 from ENCODE 3 (ENCFF456YII)
     subGroups cellType=GM12878 factor=GATAD2B
+    color 153,38,0
 
     track encTfChipPkENCFF799TEQ
     parent encTfChipPk off
@@ -8302,6 +8984,7 @@ subGroup2 factor Factor \
     shortLabel HepG2 CEBPB 2
     longLabel Transcription Factor ChIP-seq Peaks of CEBPB in HepG2 from ENCODE 3 (ENCFF319IEF)
     subGroups cellType=HepG2 factor=CEBPB
+    color 189,0,157
 
     track encTfChipPkENCFF804AVM
     parent encTfChipPk off
@@ -8311,7 +8994,7 @@ subGroup2 factor Factor \
 
     track encTfChipPkENCFF981JOH
     parent encTfChipPk off
-    shortLabel tbialNerv EP300 1
+    shortLabel tbialNerv EP300 2
     longLabel Transcription Factor ChIP-seq Peaks of EP300 in tibial_nerve from ENCODE 3 (ENCFF981JOH)
     subGroups cellType=tibial_nerve factor=EP300
 
@@ -8338,6 +9021,7 @@ subGroup2 factor Factor \
     shortLabel HeLa-S3 EZH2
     longLabel Transcription Factor ChIP-seq Peaks of EZH2 in HeLa-S3 from ENCODE 3 (ENCFF751GGI)
     subGroups cellType=HeLa-S3 factor=EZH2
+    color 0,119,158
 
     track encTfChipPkENCFF603KUP
     parent encTfChipPk off
@@ -8368,12 +9052,14 @@ subGroup2 factor Factor \
     shortLabel K562 RLF
     longLabel Transcription Factor ChIP-seq Peaks of RLF in K562 from ENCODE 3 (ENCFF209HKW)
     subGroups cellType=K562 factor=RLF
+    color 46,0,184
 
     track encTfChipPkENCFF670ZCR
     parent encTfChipPk off
     shortLabel K562 MGA
     longLabel Transcription Factor ChIP-seq Peaks of MGA in K562 from ENCODE 3 (ENCFF670ZCR)
     subGroups cellType=K562 factor=MGA
+    color 46,0,184
 
     track encTfChipPkENCFF407MVV
     parent encTfChipPk off
@@ -8389,7 +9075,7 @@ subGroup2 factor Factor \
 
     track encTfChipPkENCFF164YIY
     parent encTfChipPk off
-    shortLabel uterus POLR2A 1
+    shortLabel uterus POLR2A 2
     longLabel Transcription Factor ChIP-seq Peaks of POLR2A in uterus from ENCODE 3 (ENCFF164YIY)
     subGroups cellType=uterus factor=POLR2A
 
@@ -8398,12 +9084,14 @@ subGroup2 factor Factor \
     shortLabel K562 NRF1 3
     longLabel Transcription Factor ChIP-seq Peaks of NRF1 in K562 from ENCODE 3 (ENCFF493ABN)
     subGroups cellType=K562 factor=NRF1
+    color 46,0,184
 
     track encTfChipPkENCFF294EHN
     parent encTfChipPk off
     shortLabel K562 SETDB1 2
     longLabel Transcription Factor ChIP-seq Peaks of SETDB1 in K562 from ENCODE 3 (ENCFF294EHN)
     subGroups cellType=K562 factor=SETDB1
+    color 46,0,184
 
     track encTfChipPkENCFF260TYP
     parent encTfChipPk off
@@ -8416,22 +9104,26 @@ subGroup2 factor Factor \
     shortLabel K562 NFRKB 2
     longLabel Transcription Factor ChIP-seq Peaks of NFRKB in K562 from ENCODE 3 (ENCFF677OWM)
     subGroups cellType=K562 factor=NFRKB
+    color 46,0,184
 
     track encTfChipPkENCFF701NVT
     parent encTfChipPk off
     shortLabel K562 NCOA1 3
     longLabel Transcription Factor ChIP-seq Peaks of NCOA1 in K562 from ENCODE 3 (ENCFF701NVT)
     subGroups cellType=K562 factor=NCOA1
+    color 46,0,184
 
     track encTfChipPkENCFF302XID
     parent encTfChipPk off
     shortLabel GM12878 EP300 3
     longLabel Transcription Factor ChIP-seq Peaks of EP300 in GM12878 from ENCODE 3 (ENCFF302XID)
     subGroups cellType=GM12878 factor=EP300
+    color 153,38,0
 
     track encTfChipPkENCFF426DUB
     parent encTfChipPk off
     shortLabel K562 JUNB
     longLabel Transcription Factor ChIP-seq Peaks of JUNB in K562 from ENCODE 3 (ENCFF426DUB)
     subGroups cellType=K562 factor=JUNB
+    color 46,0,184
 

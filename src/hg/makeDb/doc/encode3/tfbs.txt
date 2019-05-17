@@ -157,7 +157,10 @@ set tools = ~/kent/src/hg/makeDb/hgBedsToBedExps
 $tools/factorSourceCheckScore.pl < clusters.factorSource.bed
 # Errors: 0 in 10560472 lines
 
-hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/factorSource.sql -renameSqlTable \
+#hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/factorSource.sql -renameSqlTable \
+    #hg19 encode3RegTfbsCluster clusters.factorSource.bed
+# use this schema for compatibility with previous tracks
+hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/bed5SourceVals.sql -renameSqlTable \
     hg19 encode3RegTfbsCluster clusters.factorSource.bed
 
 # Read 10560472 elements of size 8 from clusters.factorSource.bed
@@ -207,6 +210,7 @@ cat > trackDb.ra << 'EOF'
 # rename tables for consistency with earlier regulatory supertrack tracks (but distinguish from
 # ENCODE 2 by prefix
 
+hgsql hg19 -e "alter table encode3RegTfbsCluster rename to encRegTfbsClustered"
 hgsql hg19 -e "alter table encode3RegTfbsCluster rename to encRegTfbsClustered"
 hgsql hg19 -e "alter table encode3RegTfbsClusterInput rename to encRegTfbsClusteredInputs"
 hgsql hg19 -e "alter table encode3RegTfbsExp rename to encRegTfbsClusteredSources"
@@ -288,7 +292,9 @@ cat makeFactorSource.log
 $tools/factorSourceCheckScore.pl < clusters.factorSource.bed
 # Errors: 0 in 10565630 lines
 
-hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/factorSource.sql -renameSqlTable \
+#hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/factorSource.sql -renameSqlTable \
+    #hg38 encode3RegTfbsCluster clusters.factorSource.bed
+hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/bed5SourceVals.sql -renameSqlTable \
     hg38 encode3RegTfbsCluster clusters.factorSource.bed
 # Read 10565630 elements of size 8 from clusters.factorSource.bed
 
@@ -302,6 +308,9 @@ hgLoadSqlTab hg38 encode3RegTfbsExp ~/kent/src/hg/lib/expRecord.sql clusters.exp
 perl ../makeInputs.pl < fileCellAbTarget.tab > clusters.inputs.tab
 hgLoadSqlTab hg38 encode3RegTfbsClusterInput \
         ~/kent/src/hg/lib/clusterInputTrackTable5.sql clusters.inputs.tab
+# next time, use this:
+#hgLoadSqlTab hg38 encode3RegTfbsClusterInput \
+        #~/kent/src/hg/lib/clusterInputTrackEncode3Tfbs.sql clusters.inputs.tab
 
 # list factors for trackDb filterBy
 awk '{print $4}' fileCellAbTarget.tab | sort | uniq | sed 's/$/,\\/' > factors.trackDb
@@ -359,6 +368,8 @@ sort | awk -F'\n' '{print $1, "\t", $1}' shortLabels.orig.txt > \
 # 3. trim 2nd column to 17 chars
 # 4. export as tab-sep
 
+# NOTE: double check they are unique
+
 tdbRename trackDb.ra shortLabel encode3TfChipShortLabels.hg19.txt trackDb.new.ra
 
 # Fix up subGroup members w/ punctuation and initial numbers:
@@ -374,6 +385,30 @@ sed -e 's/^/alter table /' -e 's/$/ rename to /' tables.old.txt > rename.1.sql
 sed -e 's/encode3TfbsPk/encTfChipPk/' tables.old.txt | paste rename.1.sql -  | \
     sed 's/$/;/' > rename.sql
 hgsql hg19 < rename.sql
+
+# add colors to tier1-3 cell experiments (using ENCODE 2 color conventions)
+#
+# GM12878           color 153,38,0
+# H1-hESC           color 0,107,27
+# K562              color 46,0,184
+# HeLa-S3           color 0,119,158
+# HepG2             color 189,0,157
+# HUVEC             color 224,75,0
+
+raToLines encode3.ra encode3.lines
+sed -e '/GM12878/s/$/| color 153,38,0/' \
+    -e '/H1-hESC/s/$/| color 0,107,27/' \
+    -e '/K562/s/$/| color 46,0,184/' \
+    -e '/HeLa-S3/s/$/| color 0,119,158/' \
+    -e '/HepG2/s/$/| color 189,0,157/' \
+    -e '/HUVEC/s/$/| color 224,75,0/' \
+        encode3.lines > encode3.color.lines
+
+# buf size exceeded on linesToRa, so prune down to just composite subtracks
+
+linesToRa encode3.color.lines encode3.color.ra
+
+# concatenate to orig ra file
 
 #  reload cluster input table
 hgLoadSqlTab hg19 encode3RegTfbsClusterInput \
@@ -420,6 +455,22 @@ sed -e 's/^/alter table /' -e 's/$/ rename to /' tables.old.txt > rename.1.sql
 sed -e 's/encode3TfbsPk/encTfChipPk/' tables.old.txt | paste rename.1.sql -  | \       
     sed 's/$/;/' > rename.sql
 hgsql hg38 < rename.sql
+
+# add colors, using DNase similarity track 
+raToLines encode3.ra encode3.lines
+
+# edit to leave only subtracks
+# generate edit script from DNase similarity .ra file
+
+cd ~/kent/src/hg/makeDb/trackDb/human/hg38
+csh addColors.csh encode3.lines > encode3.color.lines
+linesToRa encode3.color.lines encode3.color.ra
+
+# missed a few (punctuation diffs, etc.)
+csh addColors2.csh encode3.color.lines encode3.color2.lines
+linesToRa encode3.color2.lines encode3.color.ra
+
+# merge in to encode3.ra
 
 #  reload cluster input table
 hgLoadSqlTab hg38 encode3RegTfbsClusterInput \

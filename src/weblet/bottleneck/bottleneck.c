@@ -189,14 +189,14 @@ for (;;)
 	    }
 	else
 	    {
-        char *ip = nextWord(&s);
-        char *fraction = nextWord(&s);
+	    char *ip = nextWord(&s);
+	    char *fraction = nextWord(&s);
 	    tracker = trackerForIp(ip);
 	    tracker->accessCount += 1;
-        if (fraction != NULL)
-	        tracker->curDelay = calcDelay(tracker, atof(fraction));
-        else
-            tracker->curDelay = calcDelay(tracker, 1.0);
+	    if (fraction != NULL)
+		tracker->curDelay = calcDelay(tracker, atof(fraction));
+	    else
+		tracker->curDelay = calcDelay(tracker, 1.0);
 	    if (tracker->maxDelay < tracker->curDelay)
 	        tracker->maxDelay = tracker->curDelay;
 	    tracker->lastAccess = now;

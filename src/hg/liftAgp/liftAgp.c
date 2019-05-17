@@ -576,8 +576,7 @@ for(i=0; i<numFiles; i++)
     bedCount = slCount(bsList);
     convertedList = convertBeds(bsList, cbList);
     convertedBedCount = slCount(convertedList);
-    warn("");
-    warn("Converted %d of %d beds. %4.2f%%\n", convertedBedCount, bedCount,
+    warn(", Converted %d of %d beds. %4.2f%%\n", convertedBedCount, bedCount,
 	 (100*(float)convertedBedCount/(float)bedCount));
     warn("Writing converted beds to %s", bedFile->string);
 
@@ -712,7 +711,7 @@ warn("Creating conversion table.\n");
 dnaSize = calcAgpSize(newFrag);
 cbList = createCommonBlocks(oldFrag, newFrag);
 dnaLifted = calcCbSize(cbList);
-warn("lifted %u of %u bases from old agp (%4.2f%%) in %d blocks.", dnaLifted, dnaSize, (100*(double)dnaLifted/dnaSize), slCount(cbList));
+warn("lifted %u of %u bases from old agp (%4.2f%%) in %d blocks.\n", dnaLifted, dnaSize, (100*(double)dnaLifted/dnaSize), slCount(cbList));
 
 /* Generate some random data points. */
 tpList = generateRandomTestPoints(oldFrag, numTpPerClone);
@@ -729,8 +728,7 @@ testPointFreeList(&convertedList);
 commonBlockFreeList(&cbList);
 hashFree(&newAgpHash);
 hashFree(&oldAgpHash);
-warn("");
-warn("%d converted, %d correct, %d wrong %d total.", canConvert, correct, wrong, tpCount);
+warn("%d converted, %d correct, %d wrong %d total.\n", canConvert, correct, wrong, tpCount);
 warn("%4.2f%% correct and %4.2f%% converted.", 100*((float)(correct)/(float)canConvert), 100*((float)canConvert/(float)tpCount));
 }
 

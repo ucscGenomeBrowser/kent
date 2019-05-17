@@ -19,6 +19,7 @@
 <h6><a href="#list_examples">Example data access, list functions</a></h6>
 <h6><a href="#getData_examples">Example data access, getData functions</a></h6>
 <h6><a href="#Error_examples">Error return examples</a></h6>
+<h6><a href="#Practical_examples">Practical examples</a></h6>
 
 <!-- ========== What is JSON data ? ============================== -->
 <a id="Intro"></a>
@@ -52,9 +53,9 @@ The following data sets can be accessed at this time:
 <li>List available data tracks from a specified hub or UCSC Genome Browser genome assembly
 (see also: <a
  href='trackDb/trackDbHub.html' target=_blank>track definition help</a>)</li>
-<li>List of chromosomes contained in an assembly hub or UCSC Genome Browser genome assembly
+<li>List of chromosomes contained in an assembly hub or UCSC Genome Browser genome assembly</li>
 <li>List of chromosomes contained in a specific track of an assembly or track hub, or UCSC Genome
-Browser genome assembly
+Browser genome assembly</li>
 <li>Return DNA sequence from an assembly hub 2bit file, or UCSC Genome Browser assembly</li>
 <li>Return track data from a specified assembly or track hub, or UCSC Genome Browser assembly</li>
 </ul>
@@ -107,7 +108,7 @@ target=_blank>UCSC browser coordinate counting systems</a></li>
 <li>trackLeavesOnly=1 - on <em>/list/tracks</em> function, only show tracks, do not show
 composite container information</li>
 <li>jsonOutputArrays=1 - on <em>/getData/track</em> function, JSON format is array type
-for each item of data, instead of the default object type
+for each item of data, instead of the default object type</li>
 </ul>
 </p>
 <p>
@@ -185,73 +186,73 @@ the functions of the API interface.
 </p>
 <h3>Listing functions</h3>
 <ol>
-<li><a href='/list/publicHubs' target=_blank>list public hubs</a> -
+<li><a href='https://api.genome.ucsc.edu/list/publicHubs' target=_blank>list public hubs</a> -
 <b>api.genome.ucsc.edu/list/publicHubs</b></li>
-<li><a href='/list/ucscGenomes' target=_blank>list UCSC database genomes</a> -
+<li><a href='https://api.genome.ucsc.edu/list/ucscGenomes' target=_blank>list UCSC database genomes</a> -
 <b>api.genome.ucsc.edu/list/ucscGenomes</b></li>
-<li><a href='/list/hubGenomes?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt'
+<li><a href='https://api.genome.ucsc.edu/list/hubGenomes?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt'
 target=_blank>list genomes from specified hub</a> -
-<b>api.genome.ucsc.edu/list/hubGenomes?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt</b></li>
-<li><a href='/list/tracks?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1'
+<b>api.genome.ucsc.edu/list/hubGenomes?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt</b></li>
+<li><a href='https://api.genome.ucsc.edu/list/tracks?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ'
 target=_blank>list tracks from specified hub and genome</a> -
-<b>api.genome.ucsc.edu/list/tracks?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1</b></li>
-<li><a href='/list/tracks?genome=ce11' target=_blank>list tracks from UCSC database genome</a> -
-<b>api.genome.ucsc.edu/list/tracks?genome=ce11</b></li>
-<li><a href='/list/chromosomes?genome=ce11' target=_blank>list chromosomes from UCSC database genome</a> -
-<b>api.genome.ucsc.edu/list/chromosomes?genome=ce11</b></li>
-<li><a href='/list/chromosomes?genome=ce11;track=gold'
+<b>api.genome.ucsc.edu/list/tracks?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ</b></li>
+<li><a href='https://api.genome.ucsc.edu/list/tracks?genome=hg38' target=_blank>list tracks from UCSC database genome</a> -
+<b>api.genome.ucsc.edu/list/tracks?genome=hg38</b></li>
+<li><a href='https://api.genome.ucsc.edu/list/chromosomes?genome=hg38' target=_blank>list chromosomes from UCSC database genome</a> -
+<b>api.genome.ucsc.edu/list/chromosomes?genome=hg38</b></li>
+<li><a href='https://api.genome.ucsc.edu/list/chromosomes?genome=hg38;track=gold'
 target=_blank>list chromosomes from specified track in UCSC database genome</a> -
-<b>api.genome.ucsc.edu/list/chromosomes?genome=ce11;track=gold</b></li>
-<li><a href='/list/chromosomes?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1'
+<b>api.genome.ucsc.edu/list/chromosomes?genome=hg38;track=gold</b></li>
+<li><a href='https://api.genome.ucsc.edu/list/chromosomes?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ'
 target=_blank>list chromosomes from assembly hub genome</a> -
-<br><b>api.genome.ucsc.edu/list/chromosomes?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1</b></li>
-<li><a href='/list/chromosomes?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;track=assembly'
+<br><b>api.genome.ucsc.edu/list/chromosomes?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ</b></li>
+<li><a href='https://api.genome.ucsc.edu/list/chromosomes?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=assembly'
 target=_blank>list chromosomes from specified track in assembly hub genome</a> -
-<br><b>api.genome.ucsc.edu/list/chromosomes?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;track=assembly</b></li>
+<br><b>api.genome.ucsc.edu/list/chromosomes?hubUrl=hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=assembly</b></li>
 </ol>
 <a id="getData_examples"></a>
 <h3>getData functions</h3>
 <ol>
-<li><a href='/getData/sequence?genome=ce11;chrom=chrM'
+<li><a href='https://api.genome.ucsc.edu/getData/sequence?genome=hg38;chrom=chrM'
 target=_blank>Get DNA sequence from specified chromosome in UCSC database genome</a> -
-<br><b>api.genome.ucsc.edu/getData/sequence?genome=ce11;chrom=chrM</b></li>
-<li><a href='/getData/sequence?genome=ce11;chrom=chrM;start=4321;end=5678'
+<br><b>api.genome.ucsc.edu/getData/sequence?genome=hg38;chrom=chrM</b></li>
+<li><a href='https://api.genome.ucsc.edu/getData/sequence?genome=hg38;chrom=chrM;start=4321;end=5678'
 target=_blank>Get DNA sequence from specified chromosome and start,end coordinates in UCSC database genome</a> -
-<br><b>api.genome.ucsc.edu/getData/sequence?genome=ce11;chrom=chrM;start=4321;end=5678</b></li>
-<li><a href='/getData/sequence?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt;genome=hg19;chrom=chrM;start=4321;end=5678'
+<br><b>api.genome.ucsc.edu/getData/sequence?genome=hg38;chrom=chrM;start=4321;end=5678</b></li>
+<li><a href='https://api.genome.ucsc.edu/getData/sequence?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=mm10;chrom=chrM;start=4321;end=5678'
 target=_blank>Get DNA sequence from a track hub where 'genome' is a UCSC database</a> -
-<br><b>api.genome.ucsc.edu/getData/sequence?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt;genome=hg19;chrom=chrM;start=4321;end=5678</b></li>
-<li><a href='/getData/sequence?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;chrom=chrCp;start=4321;end=5678'
-target=_blank><b></b> Get DNA sequence from specified chromosome and start,end coordinates in an assembly hub genome</a> -
-<br><b>api.genome.ucsc.edu/getData/sequence?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;chrom=chrCp;start=4321;end=5678</b></li>
-<li><a href='/getData/track?genome=ce11;track=gold;maxItemsOutput=100'
+<br><b>api.genome.ucsc.edu/getData/sequence?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=mm10;chrom=chrM;start=4321;end=5678</b></li>
+<li><a href='https://api.genome.ucsc.edu/getData/sequence?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;chrom=chr1;start=4321;end=5678'
+target=_blank>Get DNA sequence from specified chromosome and start,end coordinates in an assembly hub genome</a> -
+<br><b>api.genome.ucsc.edu/getData/sequence?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;chrom=chr1;start=4321;end=5678</b></li>
+<li><a href='https://api.genome.ucsc.edu/getData/track?genome=hg38;track=gold;maxItemsOutput=100'
 target=_blank>Get track data for specified track in UCSC database genome</a> -
-<br><b>api.genome.ucsc.edu/getData/track?genome=ce11;track=gold;maxItemsOutput=100</b></li>
-<li><a href='/getData/track?genome=ce11;track=gold;chrom=chrM'
+<br><b>api.genome.ucsc.edu/getData/track?genome=hg38;track=gold;maxItemsOutput=100</b></li>
+<li><a href='https://api.genome.ucsc.edu/getData/track?genome=hg38;track=gold;chrom=chrM'
 target=_blank>Get track data for specified track and chromosome in UCSC database genome</a> -
-<br><b>api.genome.ucsc.edu/getData/track?genome=ce11;track=gold;chrom=chrM</b></li>
-<li><a href='/getData/track?genome=ce11;track=gold;chrom=chrI;start=47000;end=48000'
+<br><b>api.genome.ucsc.edu/getData/track?genome=hg38;track=gold;chrom=chrM</b></li>
+<li><a href='https://api.genome.ucsc.edu/getData/track?genome=hg38;track=gold;chrom=chr1;start=47000;end=48000'
 target=_blank>Get track data for specified track, chromosome and start,end coordinates in UCSC database genome</a> -
-<br><b>api.genome.ucsc.edu/getData/track?genome=ce11;track=gold;chrom=chrI;start=47000;end=48000</b></li>
-<li><a href='/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;track=assembly'
+<br><b>api.genome.ucsc.edu/getData/track?genome=hg38;track=gold;chrom=chr1;start=47000;end=48000</b></li>
+<li><a href='https://api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=assembly'
 target=_blank>Get track data for specified track in an assembly hub genome</a> -
-<br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;track=assembly</b></li>
-<li><a href='/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;track=assembly;chrom=chrCp'
+<br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=assembly</b></li>
+<li><a href='https://api.genome.ucsc.edu/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;track=assembly;chrom=chrCp'
 target=_blank>Get track data for specified track and chromosome in an assembly hub genome</a> -
-<br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;track=assembly;chrom=chrCp</b></li>
-<li><a href='/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt;genome=hg19;track=ultraConserved'
+<br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=assembly;chrom=chr1</b></li>
+<li><a href='https://api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=ensGene'
 target=_blank>Get track data for specified track in a track hub</a> -
-<br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt;genome=hg19;track=ultraConserved</b></li>
-<li><a href='/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt;genome=hg19;track=ultraConserved;chrom=chr8'
+<br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=ensGene</b></li>
+<li><a href='https://api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=ensGene;chrom=chr1'
 target=_blank>Get track data for specified track and chromosome in a track hub</a> -
-<br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/GillBejerano/hub.txt;genome=hg19;track=ultraConserved;chrom=chr8</b></li>
-<li><a href='/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;track=gc5Base;chrom=chrCp;start=4321;end=5678'
+<br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=ensGene;chrom=chr1</b></li>
+<li><a href='https://api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=gc5Base;chrom=chr1;start=4321;end=5678'
 target=_blank>Wiggle track data for specified track, chromosome with start and end limits in an assembly hub genome</a> -
-<br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;track=assembly;chrom=chrCp;start=4321;end=5678</b></li>
-<li><a href='/getData/track?genome=galGal6;track=gc5BaseBw;maxItemsOutput=100'
+<br><b>api.genome.ucsc.edu/getData/track?hubUrl=hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=gc5Base;chrom=chr1;start=4321;end=5678</b></li>
+<li><a href='https://api.genome.ucsc.edu/getData/track?genome=galGal6;track=gc5BaseBw;maxItemsOutput=100'
 target=_blank>Wiggle track data for specified track in a UCSC database genome</a> -
 <br><b>api.genome.ucsc.edu/getData/track?genome=galGal6;track=gc5BaseBw;maxItemsOutput=100</b></li>
-<li><a href='/getData/track?genome=galGal6;track=ncbiRefSeqOther;chrom=chr1;start=750000;end=55700000'
+<li><a href='https://api.genome.ucsc.edu/getData/track?genome=galGal6;track=ncbiRefSeqOther;chrom=chr1;start=750000;end=55700000'
 target=_blank>bigBed data from a UCSC database, chrom and start,end limits</a> -
 <br><b>api.genome.ucsc.edu/getData/track?genome=galGal6;track=ncbiRefSeqOther;chrom=chr1;start=750000;end=55700000</b></li>
 </ol>
@@ -262,10 +263,103 @@ target=_blank>bigBed data from a UCSC database, chrom and start,end limits</a> -
 <h3>Error return examples</h3>
 <p>
 <ol>
-<li><a href='/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;track=gc5Base;chrom=chrI;start=4321;end=5678'
+<li><a href='https://api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=assembly;chrom=chrI;start=43521;end=54321'
 target=_blank>Request track data for non-existent chromosome in an assembly hub genome</a> -
-<br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;track=assembly;chrom=chrI;start=43521;end=54321</b></li>
+<br><b>api.genome.ucsc.edu/getData/track?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=assembly;chrom=chrI;start=43521;end=54321</b></li>
+<li><a href='https://api.genome.ucsc.edu/getData/track?genome=hg19;track=decipherSnvs'
+target=_blank>Request track data from a restricted track</a>. See <a href='../../FAQ/FAQdownloads.html#download40' 
+target=_blank>FAQ</a> -
+<br><b>api.genome.ucsc.edu/getData/track?genome=hg19;track=decipherSnvs</b></li>
 </ol>
 </p>
+
+<!-- ========== Practical Examples ======================= -->
+
+<a id="Practical_examples"></a>
+<h2>Practical examples</h2>
+
+<h3>Looking up the schema of a specific track</h3>
+
+<p>
+When querying track data with the <b>/getData/track</b> function, the <b>jsonOutputArrays</b> 
+can be used in conjunction to see the track schema. This includes a description of each field 
+present in the track. The data will also be returned in JSON array type.</p>
+
+<p>
+<a href='https://api.genome.ucsc.edu/getData/track?genome=hg38;track=gold;chrom=chrM;jsonOutputArrays=1'
+target=_blank>Request data from hg38 gold track in array type</a> -
+<br><b>api.genome.ucsc.edu/getData/track?genome=hg38;track=gold;chrom=chrM;jsonOutputArrays=1</b></p>
+
+<h3>Hide track container information with trackLeavesOnly parameter</h3>
+
+<p>
+When using the <b>/list/tracks</b> function to see the available tracks in an assembly, it can 
+be useful to return all tracks in the same hierarchical level. By default, composite and 
+supertracks will have the subtracks nested below, however, the <b>trackLeavesOnly=1</b> parameter
+can be passed to hide the container information, and display all tracks and subtracks at the
+same level.</p>
+
+<p>
+In the following example, the first link does not include the trackLeavesOnly parameter. The 
+output can be compared to the second link to see the difference. This can be observed in the 
+conservation track. In the first link, the multiz20way track is nested within the cons20way 
+track. In the second link, however, the multiz20way subtrack is seen at an equivelant level 
+with all other tracks, and the container, cons20way, is not present in the list.</p>
+
+<p>
+<a href='https://api.genome.ucsc.edu/list/tracks?genome=rn6'
+target=_blank>Request available tracks in the rn6 genome</a> -
+<br><b>api.genome.ucsc.edu/list/tracks?genome=rn6</b></p>
+
+<p>
+<a href='https://api.genome.ucsc.edu/list/tracks?genome=rn6;trackLeavesOnly=1'
+target=_blank>Request available tracks in the rn6 genome, hiding container information</a> -
+<br><b>api.genome.ucsc.edu/list/tracks?genome=rn6;trackLeavesOnly=1</b></p>
+
+<h3>Requesting track data with over one million (1M) items in output</h3>
+
+<p>
+Certain tracks may contain over 1M items. When these tracks are queried using the 
+<b>/getData/track</b> function, only the first million items are returned. The API assumes 
+this default value of 1M unless a different value (less than 1M) is specified in the 
+parameter <b>maxItemsOutput</b>.</p>
+
+<p>
+One of these tracks is the knownGene track for hg19. Removing the <b>maxItemsOutput</b> 
+parameter from the following link will lead to a 384Mb download, and may cause certain
+web browsers to time out.</p>
+
+<p>
+<a href='https://api.genome.ucsc.edu/getData/track?genome=hg19;track=knownGene;maxItemsOutput=5'
+target=_blank>Request items in knownGene track of hg19, remove maxItemsOutput parameter for 1M max return</a> -
+<br><b>api.genome.ucsc.edu/getData/track?genome=hg19;track=knownGene;maxItemsOutput=5</b></p>
+
+<p>
+There are different ways around this item limit, depending on how many items are in the track. For
+the knownGene track, breaking it down to component chromosome queries using the <b>chrom</b> 
+parameter will suffice. In order to get a listing of the chrom names, and what chroms have data 
+for that track, the <b>/list/chromosomes</b> function can be used.</p>
+
+<p>
+<a href='https://api.genome.ucsc.edu/list/chromosomes?genome=hg19;track=knownGene'
+target=_blank>Request listing of chroms that have data for the knownGene track in hg19</a> -
+<br><b>api.genome.ucsc.edu/list/chromosomes?genome=hg19;track=knownGene</b></p>
+
+<p>
+With the list of chrom names that have data, the <b>/getData/track</b> function can be used 
+again while specifying the <b>chrom</b> parameter. In the following example chr1 is queried 
+and the <i>itemsReturned</i> field shows a total of 7967 items in the output. Well below the 
+1M limit, meaning all data for chr1 has been extracted. This can then be repeated for all 
+chroms of interest.</p>
+
+<p>
+<a href='https://api.genome.ucsc.edu/getData/track?genome=hg19;track=knownGene;chrom=chr1'
+target=_blank>Request iems in knownGene track of hg19, only for chr1</a> -
+<br><b>api.genome.ucsc.edu/getData/track?genome=hg19;track=knownGene;chrom=chr1</b></p>
+
+<p>
+For tracks that have additional items, such as SNP tracks, the query can be further broken 
+down using the additional <b>start</b> and <b>end</b> parameters.</p>
+
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
