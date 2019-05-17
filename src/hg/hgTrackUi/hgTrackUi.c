@@ -2713,12 +2713,14 @@ if (trackDbSetting(tdb, "motifTable") != NULL)
     }
 
 printf("<BR><B>Cluster right label: </B>");
-cartMakeCheckBox(cart, varName, FALSE);
-printf("cell count (detected/assayed)&nbsp;&nbsp;");
+
 safef(varName, sizeof(varName), "%s.showExpCounts", tdb->track);
 cartMakeCheckBox(cart, varName, TRUE);
-printf("cell abbreviations");
+printf("cell count (detected/assayed)&nbsp;&nbsp;");
+
 safef(varName, sizeof(varName), "%s.showCellAbbrevs", tdb->track);
+cartMakeCheckBox(cart, varName, TRUE);
+printf("cell abbreviations");
 
 puts("<p><table>");
 jsBeginCollapsibleSectionFontSize(cart, tdb->track, "cellSources", "Cell Abbreviations", FALSE,
