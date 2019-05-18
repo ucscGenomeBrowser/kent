@@ -1958,17 +1958,33 @@ count=ArraySize(selfClosers);
 for (i=0; i<count; ++i)
     hashAdd(selfCloserHash, selfClosers[i], NULL);
 
+boolean inA = FALSE;  // inside A tag. (A tags may not be nested.)
 struct slName *tagStack = NULL;
 for (tag = page->tags; tag != NULL; tag = tag->next)
     {
     if (isEmpty(tag->name)) // causes a blank tag
 	tagAbort(page, tag, "Space not allowed between opening bracket < and tag name");
+    if (sameString(tag->name,"A")) // A open tag
+	{
+	if (inA) 
+	    tagAbort(page, tag, "A tags may not be nested inside one another.");
+	else
+	    inA = TRUE;
+	}
+
     if (startsWith("/", tag->name))
 	{
 	if (sameString(tag->name,"/")) // causes a blank close tag
 	    tagAbort(page, tag, "Space not allowed between opening bracket </ and closing tag name");
         if (tag->attributes)
 	    tagAbort(page, tag, "Attributes are not allowed in closing tag: [%s]", tag->name);
+	if (sameString(tag->name,"/A")) // A close tag
+	    {
+	    if (inA) 
+		inA = FALSE;
+	    else
+		tagAbort(page, tag, "/A close tag with no open tag.");
+	    }
 	if (hashLookup(singleTonHash, tag->name+1))
 	    tagAbort(page, tag, "Tag %s closing tag not allowed for singleton tags.", tag->name);
 	if (!sameString("P", tag->name+1))
