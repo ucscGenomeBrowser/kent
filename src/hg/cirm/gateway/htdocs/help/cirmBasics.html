@@ -1,8 +1,9 @@
 <!DOCTYPE html> 
 <!--#set var="TITLE" value="CIRM CESCG People and Labs" -->
-<!--#set var="ROOT" value=".." -->
 
-<!--#include virtual="$ROOT/inc/header.html" -->
+<!--#include virtual="setRoot.html" -->
+
+<!--#include virtual="${ROOT}inc/header.html" -->
 
 <div class="cirm-page-body">
   <div class="cirm-page-title back-dark-blue">
@@ -143,7 +144,7 @@
         <h5><b>Finding data</b></h5>
         <p>
         The primary method for finding your data is through the
-        <a href="../../cgi-bin/cdwWebBrowse?cdwCommand=browseFiles" target="_blank">File Search</a>
+        <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?cdwCommand=browseFiles" target="_blank">File Search</a>
         page, which can be found through &quot;Browse &gt; Files&quot; in the menu at
         the top of the page.
 
@@ -371,4 +372,4 @@
   </div>
 </div>
 
-<!--#include virtual="$ROOT/inc/footer.html" -->
+<!--#include virtual="${ROOT}inc/footer.html" -->

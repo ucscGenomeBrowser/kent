@@ -1,8 +1,9 @@
 <!DOCTYPE html> 
 <!--#set var="TITLE" value="CIRM CESCG People and Labs" -->
-<!--#set var="ROOT" value=".." -->
 
-<!--#include virtual="$ROOT/inc/header.html" -->
+<!--#include virtual="setRoot.html" -->
+
+<!--#include virtual="${ROOT}inc/header.html" -->
 
 <div class="cirm-page-body">
   <div class="cirm-page-title back-dark-pink">
@@ -33,7 +34,7 @@
   <div class="card-deck no-gutters">
     <div class="card text-center">
       <span class="padded-top-img">
-      <img class="rounded border border-primary" style="max-height: 200px" src="<!--#echo var="ROOT"-->/images/piPortraits/JoeEcker_CIRM.jpg"
+      <img class="rounded border border-primary" style="max-height: 200px" src="<!--#echo var='ROOT'-->images/piPortraits/JoeEcker_CIRM.jpg"
       >
       </span>
       <div class="card-body">
@@ -681,5 +682,5 @@
   </div>
 </div>
 
-<!--#include virtual="$ROOT/inc/footer.html" -->
+<!--#include virtual="${ROOT}inc/footer.html" -->
 
