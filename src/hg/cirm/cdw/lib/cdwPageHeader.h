@@ -7,7 +7,7 @@
 "<div class='cirm-banner'></div>\n"
 "<div class='container-fluid' style='width: 90%%'>\n"
 "  <div class='row'>\n"
-"    <a href='/index'><img src='../images/cirmSChubLogo.png'\n"
+"    <a href='../index'><img src='../images/cirmSChubLogo.png'\n"
 "    style='margin-top: 15px; max-width: 450px;'/></a>\n"
 "  </div>\n"
 "  <div class='row'>\n"
