@@ -82,7 +82,7 @@ for (i=1; i<meta->nRes+1; i++)
     {
     char buffer[1024];
     long long value = atoll(meta->resolutions[i-1]);
-    sprintWithSiBaseUnit(buffer, sizeof(buffer), value);
+    sprintWithMetricBaseUnit(buffer, sizeof(buffer), value);
     menu[i] = cloneString(buffer);
     values[i] = cloneString(meta->resolutions[i-1]);
     }

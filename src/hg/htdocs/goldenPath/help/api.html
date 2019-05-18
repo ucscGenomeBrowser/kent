@@ -296,15 +296,16 @@ target=_blank>Request data from hg38 gold track in array type</a> -
 When using the <b>/list/tracks</b> function to see the available tracks in an assembly, it can 
 be useful to return all tracks in the same hierarchical level. By default, composite and 
 supertracks will have the subtracks nested below, however, the <b>trackLeavesOnly=1</b> parameter
-can be passed to hide the container information, and display all tracks and subtracks at the
+can be passed to hide the container information and display all tracks and subtracks at the
 same level.</p>
 
 <p>
-In the following example, the first link does not include the trackLeavesOnly parameter. The 
-output can be compared to the second link to see the difference. This can be observed in the 
-conservation track. In the first link, the multiz20way track is nested within the cons20way 
-track. In the second link, however, the multiz20way subtrack is seen at an equivelant level 
-with all other tracks, and the container, cons20way, is not present in the list.</p>
+In the following example, the first link does not include the <b>trackLeavesOnly</b> parameter. The 
+output can be compared to the second link to see the difference, which can be observed in the 
+conservation track. In the first link, the <i>multiz20way</i> track is nested within the 
+<i>cons20way</i> track. In the second link, however, the <i>multiz20way</i> subtrack is seen at 
+an equivelant level with all other tracks, and the container, <i>cons20way</i>, is not 
+present in the list.</p>
 
 <p>
 <a href='https://api.genome.ucsc.edu/list/tracks?genome=rn6'
@@ -321,11 +322,11 @@ target=_blank>Request available tracks in the rn6 genome, hiding container infor
 <p>
 Certain tracks may contain over 1M items. When these tracks are queried using the 
 <b>/getData/track</b> function, only the first million items are returned. The API assumes 
-this default value of 1M unless a different value (less than 1M) is specified in the 
+this default value of 1M unless a different value (less than 1M) is specified with the 
 parameter <b>maxItemsOutput</b>.</p>
 
 <p>
-One of these tracks is the knownGene track for hg19. Removing the <b>maxItemsOutput</b> 
+One of these tracks is the <i>knownGene</i> track for hg19. Removing the <b>maxItemsOutput</b> 
 parameter from the following link will lead to a 384Mb download, and may cause certain
 web browsers to time out.</p>
 
@@ -336,7 +337,7 @@ target=_blank>Request items in knownGene track of hg19, remove maxItemsOutput pa
 
 <p>
 There are different ways around this item limit, depending on how many items are in the track. For
-the knownGene track, breaking it down to component chromosome queries using the <b>chrom</b> 
+the <i>knownGene</i> track, breaking it down to component chromosome queries using the <b>chrom</b> 
 parameter will suffice. In order to get a listing of the chrom names, and what chroms have data 
 for that track, the <b>/list/chromosomes</b> function can be used.</p>
 

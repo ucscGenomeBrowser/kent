@@ -33,25 +33,26 @@ newMeta->nChroms = nChroms;
 newMeta->chromNames = chromosomes;
 newMeta->ucscToAlias = NULL;
 
-if (!trackHubDatabase(genome))
-    {
-    struct hash *aliasToUcsc = chromAliasMakeLookupTable(newMeta->assembly);
-    if (aliasToUcsc != NULL)
-        {
-        struct hash *ucscToAlias = newHash(0);
-        int i;
-        for (i=0; i<nChroms; i++)
-            {
-            struct chromAlias *cA = hashFindVal(aliasToUcsc, chromosomes[i]);
-            if (cA != NULL)
-                {
-                hashAdd(ucscToAlias, cA->chrom, cloneString(chromosomes[i]));
-                }
-            }
-        newMeta->ucscToAlias = ucscToAlias;
-        hashFree(&aliasToUcsc);
-        }
-    }
 *header = newMeta;
+if (trackHubDatabase(genome))
+    return NULL;
+
+// add alias hash in case file uses 1 vs chr1, etc.
+struct hash *aliasToUcsc = chromAliasMakeLookupTable(newMeta->assembly);
+if (aliasToUcsc != NULL)
+    {
+    struct hash *ucscToAlias = newHash(0);
+    int i;
+    for (i=0; i<nChroms; i++)
+        {
+        struct chromAlias *cA = hashFindVal(aliasToUcsc, chromosomes[i]);
+        if (cA != NULL)
+            {
+            hashAdd(ucscToAlias, cA->chrom, cloneString(chromosomes[i]));
+            }
+        }
+    newMeta->ucscToAlias = ucscToAlias;
+    hashFree(&aliasToUcsc);
+    }
 return NULL;
 }

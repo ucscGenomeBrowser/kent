@@ -75,7 +75,7 @@ if (symlink(newPath, oldPath) != 0)
 }
 
 static char *saveTrashFile(char *trashPath, char *sessionDir)
-/* If trashPath exists and is not already a soft-link, alloc and return a new path in
+/* If trashPath exists and is not already a soft-link to sessionDir, alloc and return a new path in
  * sessionDir; move trashPath to new path and soft-link from trashPath to new path.
  * If trashPath is already a soft-link, return the path that it links to.
  * Return NULL if trashPath does not exist (can happen with expired custom track files). */
@@ -85,7 +85,19 @@ if (fileExists(trashPath))
     {
     char *existingLink = maybeReadlink(trashPath);
     if (existingLink)
-        newPath = existingLink;
+        {
+        // It may be a multi-directory-level relative symlink created by the trashCleaner scripts
+        if (existingLink[0] != '/')
+            {
+            char trashPathDir[PATH_LEN];
+            splitPath(trashPath, trashPathDir, NULL, NULL);
+            char fullLinkPath[strlen(trashPathDir) + strlen(existingLink) + 1];
+            safef(fullLinkPath, sizeof fullLinkPath, "%s%s", trashPathDir, existingLink);
+            newPath = realpath(fullLinkPath, NULL);
+            }
+        else
+            newPath = existingLink;
+        }
     else
         {
         newPath = sessionDataPathFromTrash(trashPath, sessionDir);
@@ -193,32 +205,44 @@ if (retString && sessionDir)
     }
 }
 
-static unsigned dayOfMonth()
-/* Return the day of the month [1..31].  (Yeah, not [0..30]!  See man 3 localtime.) */
-{
-time_t now = time(NULL);
-struct tm *tm = localtime(&now);
-return tm->tm_mday;
-}
-
-static char *sessionDataDbTableName(char *tableName, char *sessionDataDbPrefix)
+static char *sessionDataDbTableName(char *tableName, char *sessionDataDbPrefix, char *dbSuffix)
 /* Alloc and return a new table name that includes a db derived from sessionDataDbPrefix. */
 {
-struct dyString *dy = dyStringCreate("%s%02u.%s", sessionDataDbPrefix, dayOfMonth(), tableName);
+struct dyString *dy = dyStringCreate("%s%s.%s", sessionDataDbPrefix, dbSuffix, tableName);
 return dyStringCannibalize(&dy);
 }
 
-static char *saveTrashTable(char *tableName, char *sessionDataDbPrefix)
-/* Move trash tableName out of customTrash to a sessionDataDbPrefix database, unless that
- * has been done already.  Return the new database.table name. */
+static char *findTableInSessionDataDbs(struct sqlConnection *conn, char *sessionDataDbPrefix,
+                                       char *tableName)
+/* Given a tableName (no db. prefix), if it exists in any of the sessionDataPrefix* dbs
+ * then return the full db.tableName, otherwise NULL. */
 {
-char *newDbTableName = sessionDataDbTableName(tableName, sessionDataDbPrefix);
+int day;
+for (day = 1;  day <= 31;  day++)
+    {
+    char dbDotTable[strlen(sessionDataDbPrefix) + 3 + strlen(tableName) + 1];
+    safef(dbDotTable, sizeof dbDotTable, "%s%02d.%s", sessionDataDbPrefix, day, tableName);
+    if (sqlTableExists(conn, dbDotTable))
+        return cloneString(dbDotTable);
+    }
+return NULL;
+}
+
+static char *saveTrashTable(char *tableName, char *sessionDataDbPrefix, char *dbSuffix)
+/* Move trash tableName out of customTrash to a sessionDataDbPrefix database, unless that
+ * has been done already.  If table does not exist in either customTrash or customData*,
+ * then return NULL; otherwise return the new database.table name. */
+{
+char *newDbTableName = sessionDataDbTableName(tableName, sessionDataDbPrefix, dbSuffix);
 struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
 if (! sqlTableExists(conn, newDbTableName))
     {
     if (! sqlTableExists(conn, tableName))
-        errAbort("saveTrashTable: neither "CUSTOM_TRASH".%s nor %s exist",
-                 tableName, newDbTableName);
+        {
+        // It's possible that this table was already saved and moved out of customTrash as part
+        // of some other saved session.  We don't have a way of leaving a symlink in customTrash.
+        return findTableInSessionDataDbs(conn, sessionDataDbPrefix, tableName);
+        }
     struct dyString *dy = sqlDyStringCreate("rename table %s to %s", tableName, newDbTableName);
     sqlUpdate(conn, dy->string);
     dyStringFree(&dy);
@@ -282,7 +306,8 @@ if (sessionDir)
     }
 }
 
-static void saveDbTableName(char **retString, char *sessionDataDbPrefix, char *sessionDir)
+static void saveDbTableName(char **retString, char *sessionDataDbPrefix, char *dbSuffix,
+                            char *sessionDir)
 /* If sessionDataDbPrefix is given then scan for dbTableName setting; if found, move table and
  * update retString with new location.  Also, if table contains a trash path and sessionDir
  * is given, then replace the old trash path in the table with the new sessionDir location. */
@@ -310,12 +335,15 @@ if (sessionDataDbPrefix)
         char *tableName = cloneStringZ(start, (end - start));
         if (!startsWith(sessionDataDbPrefix, tableName))
             {
-            char *newDbTableName = saveTrashTable(tableName, sessionDataDbPrefix);
-            updateSessionDataTablePaths(newDbTableName, sessionDir);
-            char *newString = replaceChars(*retString, tableName, newDbTableName);
-            freez(retString);
-            *retString = newString;
-            freeMem(newDbTableName);
+            char *newDbTableName = saveTrashTable(tableName, sessionDataDbPrefix, dbSuffix);
+            if (newDbTableName)
+                {
+                updateSessionDataTablePaths(newDbTableName, sessionDir);
+                char *newString = replaceChars(*retString, tableName, newDbTableName);
+                freez(retString);
+                *retString = newString;
+                freeMem(newDbTableName);
+                }
             }
         freeMem(tableName);
         }
@@ -331,7 +359,7 @@ return cloneString(tn.forCgi);
 }
 
 static char *saveTrackFile(struct cart *cart, char *varName, char *oldFile,
-                           char *sessionDataDbPrefix, char *sessionDir)
+                           char *sessionDataDbPrefix, char *dbSuffix, char *sessionDir)
 /* oldFile contains custom track lines or track collection hub trackDb; scan for trashDir paths
  * and/or customTrash tables and move files and tables to safe locations per sessionDataDbPrefix and
  * sessionDir.  If oldFile does not exist or has already been saved, return NULL. */
@@ -339,7 +367,7 @@ static char *saveTrackFile(struct cart *cart, char *varName, char *oldFile,
 char *newFile = NULL;
 if (fileExists(oldFile))
     {
-    if (isTrashPath(oldFile) && !maybeReadlink(oldFile))
+    if (isTrashPath(oldFile))
         {
         struct lineFile *lf = lineFileOpen(oldFile, TRUE);
         if (isNotEmpty(sessionDir))
@@ -358,7 +386,7 @@ if (fileExists(oldFile))
                 {
                 char *trackLine = cloneString(line);
                 saveTrashPaths(&trackLine, sessionDir, FALSE);
-                saveDbTableName(&trackLine, sessionDataDbPrefix, sessionDir);
+                saveDbTableName(&trackLine, sessionDataDbPrefix, dbSuffix, sessionDir);
                 fprintf(newF, "%s\n", trackLine);
                 freeMem(trackLine);
                 }
@@ -366,6 +394,7 @@ if (fileExists(oldFile))
                 fprintf(newF, "%s\n", line);
             }
         carefulClose(&newF);
+        fprintf(stderr, "Wrote new file %s\n", newFile);
         if (isNotEmpty(sessionDir))
             {
             if (unlink(oldFile) != 0)
@@ -373,6 +402,7 @@ if (fileExists(oldFile))
             if (symlink(newFile, oldFile) != 0)
                 errnoAbort("saveTrackFile: symlink(newFile='%s', oldFile='%s') failed",
                            newFile, oldFile);
+            fprintf(stderr, "symlinked %s to %s\n", oldFile, newFile);
             }
         cartSetString(cart, varName, newFile);
         }
@@ -412,7 +442,18 @@ INLINE boolean cartVarIsCustomComposite(char *cartVar)
 return startsWith(customCompositeCartName "-", cartVar);
 }
 
-void saveSessionData(struct cart *cart, char *encUserName, char *encSessionName)
+static char *dayOfMonthString()
+/* Return a two-character string with the current day of the month [01..31].  Do not free.
+ * (Yeah, not [0..30]!  See man 3 localtime.) */
+{
+static char dayString[16];
+time_t now = time(NULL);
+struct tm *tm = localtime(&now);
+safef(dayString, sizeof dayString, "%02u", tm->tm_mday);
+return dayString;
+}
+
+void saveSessionData(struct cart *cart, char *encUserName, char *encSessionName, char *dbSuffix)
 /* If hg.conf specifies safe places to store files and/or tables that belong to user sessions,
  * then scan cart for trashDir files and/or customTrash tables, store them in safe locations,
  * and update cart to point to the new locations. */
@@ -423,6 +464,8 @@ char *sessionDataDir = cfgOption("sessionDataDir");
 char *sessionDir = sessionDirFromNames(sessionDataDir, encUserName, encSessionName);
 if (isNotEmpty(sessionDataDbPrefix) || isNotEmpty(sessionDir))
     {
+    if (isNotEmpty(sessionDataDbPrefix) && dbSuffix == NULL)
+        dbSuffix = dayOfMonthString();
     struct slPair *allVars = cartVarsLike(cart, "*");
     struct slPair *var;
     for (var = allVars;  var != NULL;  var = var->next)
@@ -434,7 +477,7 @@ if (isNotEmpty(sessionDataDbPrefix) || isNotEmpty(sessionDir))
             // replace with new file containing references to saved files and tables.
             char *oldTrackFile = cloneString(var->val);
             char *newTrackFile = saveTrackFile(cart, var->name, var->val,
-                                               sessionDataDbPrefix, sessionDir);
+                                               sessionDataDbPrefix, dbSuffix, sessionDir);
             if (newTrackFile && cartVarIsCustomComposite(var->name))
                 cartReplaceHubVars(cart, var->name, oldTrackFile, newTrackFile);
             freeMem(oldTrackFile);
@@ -446,7 +489,10 @@ if (isNotEmpty(sessionDataDbPrefix) || isNotEmpty(sessionDir))
             char *newVal = cloneString(var->val);
             saveTrashPaths(&newVal, sessionDir, FALSE);
             saveTrashPaths(&newVal, sessionDir, TRUE);
-            if (newVal != var->val && differentString(newVal, var->val))
+            // Special case for lost hgPcr result trash files: prevent errAbort in hgTracks
+            if (startsWith("hgPcrResult_", var->name) && sameString(newVal, " "))
+                cartRemove(cart, var->name);
+            else if (newVal != var->val && differentString(newVal, var->val))
                 cartSetString(cart, var->name, newVal);
             freeMem(newVal);
             }

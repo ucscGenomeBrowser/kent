@@ -51,7 +51,7 @@ errAbort(
 
 /* Global variables. */
 struct cart *cart;
-char *excludeVars[] = {"Submit", "submit", NULL};
+char *excludeVars[] = {"Submit", "submit", hgsSessionDataDbSuffix, NULL};
 struct slName *existingSessionNames = NULL;
 
 /* Javascript to confirm that the user truly wants to delete a session. */
@@ -799,7 +799,8 @@ if (sqlTableExists(conn, namedSessionTable))
 		   namedSessionTable, encUserName, encSessionName);
     sqlUpdate(conn, dy->string);
 
-    saveSessionData(cart, encUserName, encSessionName);
+    saveSessionData(cart, encUserName, encSessionName,
+                    cgiOptionalString(hgsSessionDataDbSuffix));
 
     dyStringClear(dy);
     sqlDyStringPrintf(dy, "INSERT INTO %s ", namedSessionTable);
