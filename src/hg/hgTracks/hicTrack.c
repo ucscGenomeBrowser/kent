@@ -161,7 +161,8 @@ tg->networkErrMsg = Cstraw(normalization, filename, binSize, dyStringContents(wi
 struct interact *hicItems = NULL;
 int i = 0, filtNumRecords = 0;
 tg->maxRange = 0.0; // the max height of an interaction in this window
-double *countsCopy = (double*) calloc(numRecords, sizeof(double));
+double *countsCopy = NULL;
+AllocArray(countsCopy, numRecords);
 for (i=0; i<numRecords; i++)
     {
     char *drawMode = hicUiFetchDrawMode(cart, tg->track);
@@ -229,7 +230,7 @@ loadAndFilterItems(tg);
 }
 
 
-Color *ColorSetForHic(struct hvGfx *hvg, struct track *tg, int bucketCount)
+Color *colorSetForHic(struct hvGfx *hvg, struct track *tg, int bucketCount)
 /* Create the gradient color array for drawing a Hi-C heatmap */
 {
 struct rgbColor rgbLow;
@@ -259,7 +260,8 @@ htmlColorToRGB(highRgbVal, &r, &g, &b);
 rgbHigh.r=(unsigned char)r;
 rgbHigh.g=(unsigned char)g;
 rgbHigh.b=(unsigned char)b;
-Color *colorIxs = (Color*) calloc (bucketCount, sizeof(Color));
+Color *colorIxs = NULL;
+AllocArray(colorIxs, bucketCount);
 hvGfxMakeColorGradient(hvg, &rgbLow, &rgbHigh, bucketCount, colorIxs);
 return colorIxs;
 }
@@ -272,6 +274,23 @@ if (hicUiFetchAutoScale(cart, tg->track))
     return tg->graphUpperLimit;
 else
     return hicUiFetchMaxValue(cart, tg->track);
+}
+
+void calcItemLeftRightBoundaries(int *leftStart, int *leftEnd, int *rightStart, int *rightEnd,
+        int binSize, struct interact *hicItem)
+{
+*leftStart = hicItem->sourceStart - winStart;
+*leftEnd = *leftStart + binSize;
+*rightStart = hicItem->targetStart - winStart;
+*rightEnd = *rightStart + binSize;
+if (*leftStart < 0)
+    *leftStart = 0;
+if (*leftEnd > winEnd-winStart)
+    *leftEnd = winEnd-winStart;
+if (*rightStart < 0)
+    *rightStart = 0;
+if (*rightEnd > winEnd-winStart)
+    *rightEnd = winEnd-winStart;
 }
 
 
@@ -294,24 +313,14 @@ if (vis == tvDense)
     }
 
 double maxScore = getHicMaxScore(tg);
-Color *colorIxs = ColorSetForHic(hvg, tg, HIC_SCORE_BINS+1);
+Color *colorIxs = colorSetForHic(hvg, tg, HIC_SCORE_BINS+1);
 if (colorIxs == NULL)
     return; // something went wrong with colors
 
 for (hicItem = (struct interact *)tg->items; hicItem; hicItem = hicItem->next)
     {
-    int leftStart = hicItem->sourceStart - winStart;
-    int leftEnd = leftStart + binSize;
-    int rightStart = hicItem->targetStart - winStart;
-    int rightEnd = rightStart + binSize;
-    if (leftStart < 0)
-        leftStart = 0;
-    if (leftEnd > winEnd-winStart)
-        leftEnd = winEnd-winStart;
-    if (rightStart < 0)
-        rightStart = 0;
-    if (rightEnd > winEnd-winStart)
-        rightEnd = winEnd-winStart;
+    int leftStart, leftEnd, rightStart, rightEnd;
+    calcItemLeftRightBoundaries(&leftStart, &leftEnd, &rightStart, &rightEnd, binSize, hicItem);
 
     int colorIx;
     if (hicItem->value > maxScore)
@@ -366,24 +375,14 @@ if (vis == tvDense)
     }
 
 double maxScore = getHicMaxScore(tg);
-Color *colorIxs = ColorSetForHic(hvg, tg, HIC_SCORE_BINS+1);
+Color *colorIxs = colorSetForHic(hvg, tg, HIC_SCORE_BINS+1);
 if (colorIxs == NULL)
     return; // something went wrong with colors
 
 for (hicItem = (struct interact *)tg->items; hicItem; hicItem = hicItem->next)
     {
-    int leftStart = hicItem->sourceStart - winStart;
-    int leftEnd = leftStart + binSize;
-    int rightStart = hicItem->targetStart - winStart;
-    int rightEnd = rightStart + binSize;
-    if (leftStart < 0)
-        leftStart = 0;
-    if (leftEnd > winEnd-winStart)
-        leftEnd = winEnd-winStart;
-    if (rightStart < 0)
-        rightStart = 0;
-    if (rightEnd > winEnd-winStart)
-        rightEnd = winEnd-winStart;
+    int leftStart, leftEnd, rightStart, rightEnd;
+    calcItemLeftRightBoundaries(&leftStart, &leftEnd, &rightStart, &rightEnd, binSize, hicItem);
 
     int colorIx;
     if (hicItem->value > maxScore)
@@ -437,7 +436,7 @@ if (vis == tvDense)
     }
 
 double maxScore = getHicMaxScore(tg);
-Color *colorIxs = ColorSetForHic(hvg, tg, HIC_SCORE_BINS+1);
+Color *colorIxs = colorSetForHic(hvg, tg, HIC_SCORE_BINS+1);
 if (colorIxs == NULL)
     return; // something went wrong with colors
 
