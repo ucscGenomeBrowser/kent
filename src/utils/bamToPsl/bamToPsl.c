@@ -106,18 +106,18 @@ for (;;)
 	}
     if (one.core.n_cigar != 0)
         {
-    struct psl *psl = bamToPslUnscored(&one, head);
-    if (psl != NULL)
-       {
-       if (chromAlias)
-           {
-           struct hashEl *hel = NULL;
-           if ((hel = hashLookup(chromAlias, psl->tName)) != NULL)
-              psl->tName = cloneString((char *)hel->val); /* memory leak */
-           }
-        pslTabOut(psl, f);  /* no free of this psl data, memory leak */
-        pslFree(&psl);
-    }
+        struct psl *psl = bamToPslUnscored(&one, head);
+        if (psl != NULL)
+            {
+            if (chromAlias)
+                {
+                struct hashEl *hel = NULL;
+                if ((hel = hashLookup(chromAlias, psl->tName)) != NULL)
+                    psl->tName = cloneString((char *)hel->val); /* memory leak */
+                }
+            pslTabOut(psl, f);  /* no free of this psl data, memory leak */
+            pslFree(&psl);
+            }
         }
     ++processCount;
     if (dots)
