@@ -324,8 +324,11 @@ bigBedMethods(track, tdb, wordCount, words);
 
 struct lollyCartOptions *lollyCart = lollyCartOptionsNew(cart, tdb, wordCount, words);
 lollyCart->radius = 5;
-lollyCart->typeWords = words;
 lollyCart->typeWordCount = wordCount;
+AllocArray(lollyCart->typeWords, wordCount);
+int ii;
+for(ii=0; ii < wordCount; ii++)
+    lollyCart->typeWords[ii] = cloneString(words[ii]);
 track->loadItems = lollyLoadItems;
 track->drawItems = lollyDrawItems;
 track->totalHeight = lollyHeight; 
