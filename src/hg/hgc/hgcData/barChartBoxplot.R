@@ -124,8 +124,8 @@ name2 <- args[6]
 # see #22838
 useOldFonts <- (!is.na(args[7]) && args[7]=="1")
 
-if (!useOldFonts && require("showtext",character.only=TRUE)) {
-    library(showtext)
+if (!useOldFonts && require("showtext",character.only=TRUE, quietly=TRUE)) {
+    library(showtext, quietly=TRUE)
     showtext_auto()
     showtext_opts(dpi = 72)
 }
