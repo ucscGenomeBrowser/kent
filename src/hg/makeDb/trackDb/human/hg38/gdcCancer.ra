@@ -3,7 +3,7 @@ shortLabel GDC Cancer
 longLabel GDC Cancer mutations: 33 TCGA Cancer Projects Summary (Pan-Can 33)
 compositeTrack on
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 visibility hide
 release alpha
 project_idFilterValues TCGA-LAML|Acute Myeloid Leukemia,TCGA-ACC|Adrenocortical carcinoma,TCGA-BLCA|Bladder Urothelial Carcinoma,TCGA-LGG|Brain Lower Grade Glioma,TCGA-BRCA|Breast invasive carcinoma,TCGA-CESC|Cervical squamous cell carcinoma and endocervical adenocarcinoma,TCGA-CHOL|Cholangiocarcinoma,TCGA-LCML|Chronic Myelogenous Leukemia,TCGA-COAD|Colon adenocarcinoma,TCGA-CNTL|Controls,TCGA-ESCA|Esophageal carcinoma,TCGA-FPPP|FFPE Pilot Phase II,TCGA-GBM|Glioblastoma multiforme,TCGA-HNSC|Head and Neck squamous cell carcinoma,TCGA-KICH|Kidney Chromophobe,TCGA-KIRC|Kidney renal clear cell carcinoma,TCGA-KIRP|Kidney renal papillary cell carcinoma,TCGA-LIHC|Liver hepatocellular carcinoma,TCGA-LUAD|Lung adenocarcinoma,TCGA-LUSC|Lung squamous cell carcinoma,TCGA-DLBC|Lymphoid Neoplasm Diffuse Large B-cell Lymphoma,TCGA-MESO|Mesothelioma,TCGA-MISC|Miscellaneous,TCGA-OV|Ovarian serous cystadenocarcinoma,TCGA-PAAD|Pancreatic adenocarcinoma,TCGA-PCPG|Pheochromocytoma and Paraganglioma,TCGA-PRAD|Prostate adenocarcinoma,TCGA-READ|Rectum adenocarcinoma,TCGA-SARC|Sarcoma,TCGA-SKCM|Skin Cutaneous Melanoma,TCGA-STAD|Stomach adenocarcinoma,TCGA-TGCT|Testicular Germ Cell Tumors,TCGA-THYM|Thymoma,TCGA-THCA|Thyroid carcinoma,TCGA-UCS|Uterine Carcinosarcoma,TCGA-UCEC|Uterine Corpus Endometrial Carcinoma,TCGA-UVM|Uveal Melanoma
@@ -17,7 +17,7 @@ parent gdcCancer on
 shortLabel All Cancers
 longLabel All GDC Cancer mutations: 33 TCGA Cancer Projects Summary (Pan-Can 33)
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/gdcCancer.bb
@@ -32,7 +32,7 @@ parent gdcCancer off
 shortLabel ACC
 longLabel Adrenocortical carcinoma
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/ACC.bb
@@ -46,7 +46,7 @@ parent gdcCancer off
 shortLabel BLCA
 longLabel Bladder Urothelial Carcinoma
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/BLCA.bb
@@ -60,7 +60,7 @@ parent gdcCancer off
 shortLabel BRCA
 longLabel Breast invasive carcinoma
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/BRCA.bb
@@ -74,7 +74,7 @@ parent gdcCancer off
 shortLabel CESC
 longLabel Cervical squamous cell carcinoma and endocervical adenocarcinoma
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/CESC.bb
@@ -88,7 +88,7 @@ parent gdcCancer off
 shortLabel CHOL
 longLabel Cholangiocarcinoma
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/CHOL.bb
@@ -102,7 +102,7 @@ parent gdcCancer off
 shortLabel COAD
 longLabel Colon adenocarcinoma
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/COAD.bb
@@ -116,7 +116,7 @@ parent gdcCancer off
 shortLabel DLBC
 longLabel Lymphoid Neoplasm Diffuse Large B-cell Lymphoma
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/DLBC.bb
@@ -130,7 +130,7 @@ parent gdcCancer off
 shortLabel ESCA
 longLabel Esophageal carcinoma
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/ESCA.bb
@@ -144,7 +144,7 @@ parent gdcCancer off
 shortLabel GBM
 longLabel Glioblastoma multiforme
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/GBM.bb
@@ -158,7 +158,7 @@ parent gdcCancer off
 shortLabel HNSC
 longLabel Head and Neck squamous cell carcinoma
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/HNSC.bb
@@ -167,12 +167,12 @@ urls case_id=https://portal.gdc.cancer.gov/cases/193294
 configurable off
 
 track KICH
-priority 12
+priority 
 parent gdcCancer off
 shortLabel KICH
 longLabel Kidney Chromophobe
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/KICH.bb
@@ -186,7 +186,7 @@ parent gdcCancer off
 shortLabel KIRC
 longLabel Kidney renal clear cell carcinoma
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/KIRC.bb
@@ -200,7 +200,7 @@ parent gdcCancer off
 shortLabel KIRP
 longLabel Kidney renal papillary cell carcinoma
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/KIRP.bb
@@ -214,7 +214,7 @@ parent gdcCancer off
 shortLabel LAML
 longLabel Acute Myeloid Leukemia
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/LAML.bb
@@ -228,7 +228,7 @@ parent gdcCancer off
 shortLabel LGG
 longLabel Brain Lower Grade Glioma
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/LGG.bb
@@ -242,7 +242,7 @@ parent gdcCancer off
 shortLabel LIHC
 longLabel Liver hepatocellular carcinoma
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/LIHC.bb
@@ -256,7 +256,7 @@ parent gdcCancer off
 shortLabel LUAD
 longLabel Lung adenocarcinoma
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/LUAD.bb
@@ -270,7 +270,7 @@ parent gdcCancer off
 shortLabel LUSC
 longLabel Lung squamous cell carcinoma
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/LUSC.bb
@@ -284,7 +284,7 @@ parent gdcCancer off
 shortLabel MESO
 longLabel Mesothelioma
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/MESO.bb
@@ -298,7 +298,7 @@ parent gdcCancer off
 shortLabel OV
 longLabel Ovarian serous cystadenocarcinoma
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/OV.bb
@@ -312,7 +312,7 @@ parent gdcCancer off
 shortLabel PAAD
 longLabel Pancreatic adenocarcinoma
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/PAAD.bb
@@ -326,7 +326,7 @@ parent gdcCancer off
 shortLabel PCPG
 longLabel Pheochromocytoma and Paraganglioma
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/PCPG.bb
@@ -340,7 +340,7 @@ parent gdcCancer off
 shortLabel PRAD
 longLabel Prostate adenocarcinoma
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/PRAD.bb
@@ -354,7 +354,7 @@ parent gdcCancer off
 shortLabel READ
 longLabel Rectum adenocarcinoma
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/READ.bb
@@ -368,7 +368,7 @@ parent gdcCancer off
 shortLabel SARC
 longLabel Sarcoma
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/SARC.bb
@@ -382,7 +382,7 @@ parent gdcCancer off
 shortLabel SKCM
 longLabel Skin Cutaneous Melanoma
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/SKCM.bb
@@ -396,7 +396,7 @@ parent gdcCancer off
 shortLabel STAD
 longLabel Stomach adenocarcinoma
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/STAD.bb
@@ -410,7 +410,7 @@ parent gdcCancer off
 shortLabel TGCT
 longLabel Testicular Germ Cell Tumors
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/TGCT.bb
@@ -424,7 +424,7 @@ parent gdcCancer off
 shortLabel THCA
 longLabel Thyroid carcinoma
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/THCA.bb
@@ -438,7 +438,7 @@ parent gdcCancer off
 shortLabel THYM
 longLabel Thymoma
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/THYM.bb
@@ -452,7 +452,7 @@ parent gdcCancer off
 shortLabel UCEC
 longLabel Uterine Corpus Endometrial Carcinoma
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/UCEC.bb
@@ -466,7 +466,7 @@ parent gdcCancer off
 shortLabel UCS
 longLabel Uterine Carcinosarcoma
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/UCS.bb
@@ -480,7 +480,7 @@ parent gdcCancer off
 shortLabel UVM
 longLabel Uveal Melanoma
 group phenDis
-type bigLolly
+type bigLolly 12 + 
 lollyField 13
 release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/UVM.bb
