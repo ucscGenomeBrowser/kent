@@ -10,7 +10,7 @@
 
 
 
-char *wgEncodeGencodeGeneSymbolCommaSepFieldNames = "transcriptId,symbol";
+char *wgEncodeGencodeGeneSymbolCommaSepFieldNames = "transcriptId,symbol,geneId";
 
 void wgEncodeGencodeGeneSymbolStaticLoad(char **row, struct wgEncodeGencodeGeneSymbol *ret)
 /* Load a row from wgEncodeGencodeGeneSymbol table into ret.  The contents of ret will
@@ -19,6 +19,7 @@ void wgEncodeGencodeGeneSymbolStaticLoad(char **row, struct wgEncodeGencodeGeneS
 
 ret->transcriptId = row[0];
 ret->symbol = row[1];
+ret->geneId = row[2];
 }
 
 struct wgEncodeGencodeGeneSymbol *wgEncodeGencodeGeneSymbolLoad(char **row)
@@ -30,6 +31,7 @@ struct wgEncodeGencodeGeneSymbol *ret;
 AllocVar(ret);
 ret->transcriptId = cloneString(row[0]);
 ret->symbol = cloneString(row[1]);
+ret->geneId = cloneString(row[2]);
 return ret;
 }
 
@@ -39,7 +41,7 @@ struct wgEncodeGencodeGeneSymbol *wgEncodeGencodeGeneSymbolLoadAll(char *fileNam
 {
 struct wgEncodeGencodeGeneSymbol *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[2];
+char *row[3];
 
 while (lineFileRow(lf, row))
     {
@@ -57,7 +59,7 @@ struct wgEncodeGencodeGeneSymbol *wgEncodeGencodeGeneSymbolLoadAllByChar(char *f
 {
 struct wgEncodeGencodeGeneSymbol *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[2];
+char *row[3];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -80,6 +82,7 @@ if (ret == NULL)
     AllocVar(ret);
 ret->transcriptId = sqlStringComma(&s);
 ret->symbol = sqlStringComma(&s);
+ret->geneId = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -93,6 +96,7 @@ struct wgEncodeGencodeGeneSymbol *el;
 if ((el = *pEl) == NULL) return;
 freeMem(el->transcriptId);
 freeMem(el->symbol);
+freeMem(el->geneId);
 freez(pEl);
 }
 
@@ -118,6 +122,10 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->symbol);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->geneId);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
