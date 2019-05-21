@@ -241,11 +241,14 @@ if (! sqlTableExists(conn, newDbTableName))
         {
         // It's possible that this table was already saved and moved out of customTrash as part
         // of some other saved session.  We don't have a way of leaving a symlink in customTrash.
-        return findTableInSessionDataDbs(conn, sessionDataDbPrefix, tableName);
+        newDbTableName = findTableInSessionDataDbs(conn, sessionDataDbPrefix, tableName);
         }
-    struct dyString *dy = sqlDyStringCreate("rename table %s to %s", tableName, newDbTableName);
-    sqlUpdate(conn, dy->string);
-    dyStringFree(&dy);
+    else
+        {
+        struct dyString *dy = sqlDyStringCreate("rename table %s to %s", tableName, newDbTableName);
+        sqlUpdate(conn, dy->string);
+        dyStringFree(&dy);
+        }
     }
 else if (sqlTableExists(conn, tableName))
     errAbort("saveTrashTable: both %s and %s exist", tableName, newDbTableName);
