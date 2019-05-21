@@ -702,6 +702,12 @@ track gtexTranscExpr override
 bigDataUrl /gbdb/hg38/gtex/gtexTranscExpr.bb
 
 include trackDb.gencode.ra
-include trackDb.wgEncode.ra
+#include trackDb.wgEncode.ra
+
+include wgEncodeReg.new.ra alpha
+include wgEncodeReg.dev.ra alpha
+include encode3.ra alpha,beta
+
+include wgEncodeReg.ra beta,public
 
 
