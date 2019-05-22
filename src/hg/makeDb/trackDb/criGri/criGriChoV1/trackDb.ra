@@ -37,11 +37,10 @@ track rmsk override
 visibility dense
 
 track xenoRefGene override
+visibility dense
+
+track refGene override
 visibility pack
 
 track mrna override
 visibility hide
-
-# change these two to switch to the new refSeqComposite 2018-02
-include trackDb.refGene.ra beta,public
-include ../../refSeqComposite.ra alpha
