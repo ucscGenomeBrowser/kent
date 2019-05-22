@@ -27,6 +27,7 @@ my $chrom = "";
 my $start = "";
 my $end = "";
 my $test0 = 0;
+my $trackDump = 0;
 my $debug = 0;
 my $trackLeavesOnly = 0;
 my $measureTiming = 0;
@@ -38,6 +39,8 @@ sub usage() {
 printf STDERR "usage: ./jsonConsumer.pl [arguments]\n";
 printf STDERR "arguments:
 -test0 - perform test of /list/publicHubs and /list/ucscGenomes endpoints
+-trackDump - obtain all data for a single track from: track, genome (hubUrl)
+           - proof of concept, will not work for all cases
 -hubUrl=<URL> - use the URL to access the track or assembly hub
 -genome=<name> - name for UCSC database genome or assembly/track hub genome
 -track=<trackName> - specify a single track in a hub or database
@@ -92,7 +95,7 @@ sub arrayOutput($) {
 ##############################################################################
 
 ##############################################################################
-sub performJsonAction {
+sub performJsonAction($$) {
   my ($endpoint, $parameters) = @_;
   my $headers = $globalHeaders;
   my $content = performRestAction($endpoint, $parameters, $headers);
@@ -102,7 +105,7 @@ sub performJsonAction {
 }
 
 ##############################################################################
-sub performRestAction {
+sub performRestAction($$$) {
   my ($endpoint, $parameters, $headers) = @_;
   $parameters ||= {};
   $headers ||= {};
@@ -225,6 +228,93 @@ sub verifyCommandProcessing()
     checkError($json, $endpoint,$expect);
 }	#	sub verifyCommandProcessing()
 
+#############################################################################
+#  Find the highest chromStart in the returned to data to obtain a continuation
+#  point.
+#  The item 'chromStart' is not necessarily always named as such,
+#    depending upon track type, it could be: tStart or genoStart or txStart
+sub findHighestChromStart($$) {
+  my $highStart = -1;
+  my ($hashPtr, $track) = @_;
+  my $trackData = $hashPtr->{$track};
+  foreach my $item (@$trackData) {
+    if (defined($item->{'tStart'})) {
+       $highStart = $item->{'tStart'} if ($item->{'tStart'} > $highStart);
+    } elsif (defined($item->{'genoStart'})) {
+       $highStart = $item->{'genoStart'} if ($item->{'genoStart'} > $highStart);
+    } elsif (defined($item->{'txStart'})) {
+       $highStart = $item->{'txStart'} if ($item->{'txStart'} > $highStart);
+    } elsif (defined($item->{'chromStart'})) {
+     $highStart = $item->{'chromStart'} if ($item->{'chromStart'} > $highStart);
+    } else {
+       die "ERROR: do not recognize table type for track '%s', can not find chrom start.\n", $track;
+    }
+  }
+  return $highStart;
+}
+
+#############################################################################
+# walk through all the chromosomes for a track to extract all data
+# XXX - NOT ADDRESSED - this produces duplicate items at the breaks when
+#       maxItemsLimit is used
+sub trackDump($$) {
+  my ($endpoint, $parameters) = @_;
+  my $errReturn = 0;
+  my %localParameters;
+  if (length($hubUrl)) {
+     $localParameters{"hubUrl"} = "$hubUrl";
+  }
+  if (length($genome)) {
+     $localParameters{"genome"} = "$genome";
+  }
+  if (length($track)) {
+     $localParameters{"track"} = "$track";
+  }
+  my $endPoint = "/list/chromosomes";
+  my $jsonChromosomes = performJsonAction($endPoint, \%localParameters);
+  $errReturn = 1 if (defined ($jsonChromosomes->{'error'}));
+  my $json = JSON->new;
+  my %chromInfo;	# key is chrom name, value is size
+  if (0 == $errReturn) {
+    my $chromHash = $jsonChromosomes->{'chromosomes'};
+    foreach my $chr (keys %$chromHash) {
+      $chromInfo{$chr} = $chromHash->{$chr};
+    }
+    # for each chromosome, in order by size, smallest first
+    $endPoint = "/getData/track";
+    $maxItemsOutput = 14000;
+    foreach my $chr (sort {$chromInfo{$a} <=> $chromInfo{$b}} keys %chromInfo) {
+      $localParameters{"chrom"} = "$chr";
+      delete $localParameters{'start'};
+      delete $localParameters{'end'};
+      printf STDERR "# working\t%s\t%d\n", $chr, $chromInfo{$chr};
+      my $oneChrom = performJsonAction($endPoint, \%localParameters);
+      my $itemsReturned = $oneChrom->{'itemsReturned'};
+      my $reachedMaxItems = 0;
+      $reachedMaxItems = 1 if (defined($oneChrom->{'maxItemsLimit'}));
+      if ($reachedMaxItems) {
+         while ($reachedMaxItems) {
+           my $highestChromStart = findHighestChromStart($oneChrom, $track);
+           printf STDERR "# chrom: %s\t%d items -> max item limit last chromStart %d\n", $chr, $itemsReturned, $highestChromStart;
+	   $localParameters{'start'} = "$highestChromStart";
+	   $localParameters{'end'} = "$chromInfo{$chr}";
+           $reachedMaxItems = 0;
+           $oneChrom = performJsonAction($endPoint, \%localParameters);
+           $itemsReturned = $oneChrom->{'itemsReturned'};
+           $reachedMaxItems = 1 if (defined($oneChrom->{'maxItemsLimit'}));
+           if (0 == $reachedMaxItems) {
+             $highestChromStart = findHighestChromStart($oneChrom, $track);
+             printf STDERR "# chrom: %s\t%d items completed at last chromStart %d\n", $chr, $itemsReturned, $highestChromStart;
+           }
+         }
+      } else {
+         printf STDERR "# chrom: %s\t%d items - completed\n", $chr, $itemsReturned;
+      }
+    }	# foreach chrom in chromInfo
+  }	# if (0 == $errReturn)  chromInfo was successful
+
+  return $errReturn;
+}	#	sub trackDump($$)
 
 #############################################################################
 sub processEndPoint() {
@@ -255,9 +345,13 @@ sub processEndPoint() {
 	$parameters{"end"} = "$end";
      }
      #	Pass along any bogus request just to test the error handling.
-     $jsonReturn = performJsonAction($endpoint, \%parameters);
-     $errReturn = 1 if (defined ($jsonReturn->{'error'}));
-     printf "%s", $json->pretty->encode( $jsonReturn );
+     if ($trackDump) {
+        $errReturn = trackDump($endpoint, \%parameters);
+     } else {
+        $jsonReturn = performJsonAction($endpoint, \%parameters);
+        $errReturn = 1 if (defined ($jsonReturn->{'error'}));
+        printf "%s", $json->pretty->encode( $jsonReturn );
+     }
   } else {
     printf STDERR "ERROR: no endpoint given ?\n";
     usage();
@@ -357,6 +451,7 @@ GetOptions ("hubUrl=s" => \$hubUrl,
     "start=s"  => \$start,
     "end=s"    => \$end,
     "test0"    => \$test0,
+    "trackDump"    => \$trackDump,
     "debug"    => \$debug,
     "trackLeavesOnly"    => \$trackLeavesOnly,
     "measureTiming"    => \$measureTiming,
