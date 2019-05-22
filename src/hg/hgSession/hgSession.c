@@ -38,6 +38,7 @@
 #include "trashDir.h"
 #include "hubConnect.h"
 #include "trackHub.h"
+#include "errCatch.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -729,7 +730,21 @@ static void outDefaultTracks(struct cart *cart, struct dyString *dy)
  * in trackDb if the track is not mentioned in the cart. */
 {
 char *database = cartString(cart, "db");
-struct trackDb *tdb = hTrackDb(database);
+struct trackDb *tdb = NULL;
+// Some old sessions reference databases that are no longer present, and that triggers an errAbort
+// when calling hgTrackDb.  Just move on instead of errAborting.
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    tdb = hTrackDb(database);
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    fprintf(stderr, "outDefaultTracks: Error from hTrackDb: '%s'; Continuing...",
+            errCatch->message->string);
+    tdb = NULL;
+    }
+errCatchFree(&errCatch);
+
 struct hash *parentHash = newHash(5);
 
 for(; tdb; tdb = tdb->next)
@@ -1574,7 +1589,17 @@ boolean shareSession = isSessionShared(conn, encUserName, encSessionName);
 cartLoadUserSession(conn, userName, sessionName, cart, NULL, actionVar);
 // Don't cartCopyCustomComposites because we're not going to make any track collection changes
 hubConnectLoadHubs(cart);
-cartHideDefaultTracks(cart);
+// Some old sessions reference databases that are no longer present, and that triggers an errAbort
+// when cartHideDefaultTracks calls hgTrackDb.  Don't let that stop the process of updating other
+// stuff in the session.
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    cartHideDefaultTracks(cart);
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    fprintf(stderr, "doReSaveSession: Error from cartHideDefaultTracks: '%s'; Continuing...",
+            errCatch->message->string);
+errCatchFree(&errCatch);
 struct dyString *dyMessage = dyStringNew(1024);
 dyStringPrintf(dyMessage,
                "Re-saved settings from user <B>%s</B>'s session <B>%s</B> "

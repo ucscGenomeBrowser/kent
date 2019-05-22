@@ -430,9 +430,9 @@ return levels;
 }
 
 
-static bits32 writeIndexLevel(bits16 blockSize, 
+static bits64 writeIndexLevel(bits16 blockSize, 
 	void *itemArray, int itemSize, long itemCount, 
-	bits32 indexOffset, int level, 
+	bits64 indexOffset, int level, 
 	void (*fetchKey)(const void *va, char *keyBuf), bits32 keySize, bits32 valSize,
 	FILE *f)
 /* Write out a non-leaf level. */
@@ -565,7 +565,7 @@ int levels = bptCountLevels(blockSize, itemCount);
 int i;
 for (i=levels-1; i > 0; --i)
     {
-    bits32 endLevelOffset = writeIndexLevel(blockSize, itemArray, itemSize, itemCount, indexOffset, 
+    bits64 endLevelOffset = writeIndexLevel(blockSize, itemArray, itemSize, itemCount, indexOffset, 
     	i, fetchKey, keySize, valSize, f);
     indexOffset = ftell(f);
     if (endLevelOffset != indexOffset)

@@ -37,7 +37,7 @@ function getSetting()
 # Get the hex string md5sum for input without adding a newline at the end.
 function getMd5Sum()
 {
-    echo -n $* | md5sum | awk '{print $1;}'
+    echo -n "$*" | md5sum | awk '{print $1;}'
 }
 
 # Decode %xx encodings into original characters
