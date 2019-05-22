@@ -7,6 +7,9 @@ use Time::HiRes;
 use JSON;
 use Getopt::Long;
 
+# forward declaration
+sub performRestAction($$$);
+
 my $http = HTTP::Tiny->new();
 # my $server = 'https://api.genome.ucsc.edu';
 # my $server = 'https://apibeta.soe.ucsc.edu';
