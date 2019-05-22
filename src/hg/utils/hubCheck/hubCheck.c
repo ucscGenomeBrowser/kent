@@ -532,6 +532,11 @@ if (errCatch->gotError)
     }
 errCatchFree(&errCatch);
 
+if (tdb->subtracks != NULL)
+    {
+    retVal |= hubCheckTrack(hub, genome, tdb->subtracks,  options, errors);
+    }
+
 return retVal;
 }
 
