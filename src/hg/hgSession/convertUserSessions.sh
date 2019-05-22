@@ -7,7 +7,7 @@ userName must be %-encoded as it is in namedSessionDb"
 cgiDir=/usr/local/apache/cgi-bin
 
 # delay (in seconds) between calls to sessionDataConvert.sh to avoid hammering server & hgcentral
-delay=5
+delay=3
 
 # Look for a setting in hg.conf (and hg.conf.private if not in hg.conf).
 function getSetting()
