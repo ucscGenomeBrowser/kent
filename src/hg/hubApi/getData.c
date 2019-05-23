@@ -140,10 +140,6 @@ safef(chromName, sizeof(chromName), "chrom");
 safef(startName, sizeof(startName), "chromStart");
 safef(endName, sizeof(endName), "chromEnd");
 
-/* XXX - need to add wiggle data table processing here to output the
- *       the data points instead of what it does now: the wig SQL table
- */
-
 /* 'track' name in trackDb often refers to a SQL 'table' */
 char *sqlTable = cloneString(track);
 /* might have a specific table defined instead of the track name */
@@ -245,7 +241,7 @@ else if (0 == (start + end))	/* have chrom, no start,end == full chr */
 	}
     else
 	{
-	sqlDyStringPrintf(query, "select * from %s where %s='%s'", splitSqlTable, chromName, chrom);
+	sqlDyStringPrintf(query, "select * from %s where %s='%s' order by %s", splitSqlTable, chromName, chrom, startName);
 	}
     }
 else	/* fully specified chrom:start-end */
@@ -264,7 +260,7 @@ else	/* fully specified chrom:start-end */
 	{
 	sqlDyStringPrintf(query, "select * from %s where ", splitSqlTable);
         hAddBinToQuery(start, end, query);
-	sqlDyStringPrintf(query, "%s='%s' AND %s > %u AND %s < %u", chromName, chrom, endName, start, startName, end);
+	sqlDyStringPrintf(query, "%s='%s' AND %s > %u AND %s < %u ORDER BY %s", chromName, chrom, endName, start, startName, end, startName);
 	}
     }
 

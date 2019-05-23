@@ -241,11 +241,14 @@ if (! sqlTableExists(conn, newDbTableName))
         {
         // It's possible that this table was already saved and moved out of customTrash as part
         // of some other saved session.  We don't have a way of leaving a symlink in customTrash.
-        return findTableInSessionDataDbs(conn, sessionDataDbPrefix, tableName);
+        newDbTableName = findTableInSessionDataDbs(conn, sessionDataDbPrefix, tableName);
         }
-    struct dyString *dy = sqlDyStringCreate("rename table %s to %s", tableName, newDbTableName);
-    sqlUpdate(conn, dy->string);
-    dyStringFree(&dy);
+    else
+        {
+        struct dyString *dy = sqlDyStringCreate("rename table %s to %s", tableName, newDbTableName);
+        sqlUpdate(conn, dy->string);
+        dyStringFree(&dy);
+        }
     }
 else if (sqlTableExists(conn, tableName))
     errAbort("saveTrashTable: both %s and %s exist", tableName, newDbTableName);
@@ -489,8 +492,9 @@ if (isNotEmpty(sessionDataDbPrefix) || isNotEmpty(sessionDir))
             char *newVal = cloneString(var->val);
             saveTrashPaths(&newVal, sessionDir, FALSE);
             saveTrashPaths(&newVal, sessionDir, TRUE);
-            // Special case for lost hgPcr result trash files: prevent errAbort in hgTracks
-            if (startsWith("hgPcrResult_", var->name) && sameString(newVal, " "))
+            // Special case for lost hgPcr/blat result trash files: prevent errAbort in hgTracks
+            if ((startsWith("hgPcrResult_", var->name) || sameString("ss", var->name)) &&
+                sameString(newVal, " "))
                 cartRemove(cart, var->name);
             else if (newVal != var->val && differentString(newVal, var->val))
                 cartSetString(cart, var->name, newVal);

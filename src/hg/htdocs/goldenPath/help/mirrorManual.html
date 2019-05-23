@@ -85,10 +85,10 @@ Annotation database size differs a lot between the assemblies: The full size
 of the hg19 database in 2016 is 6 TB, for ce2 it is 5GB. It also depends on
 the tracks: The size of the hg19 annotations can be reduced to 2TB if you
 do not download any ENCODE tracks. The size of only the main gene and SNP
-annotations is around 5GB for hg19 and hg38. To increase download speed, there are two download
-servers located in North America and Europe, <a href="ftp://hgdownload.soe.ucsc.edu/"
-target="_blank">hgdownload</a> and <a href="ftp://hgdownload-euro.soe.ucsc.edu/" target="_blank">
-hgdownload-euro</a>.
+annotations is around 5GB for hg19 and hg38. To increase download speeds, there are two download
+servers available; <a href="ftp://hgdownload.soe.ucsc.edu/" target="_blank">hgdownload</a> located
+in North America and
+<a href="ftp://hgdownload-euro.soe.ucsc.edu/" target="_blank">hgdownload-euro</a> located in Europe.
 </p>
 
 <p>
@@ -368,8 +368,8 @@ An alternative to loading the database tables from text files,
 is to directly rsync the MySQL tables themselves from either the North American or European download
 servers and place them in your MySQL /var/ directory. These tables are much larger than the text
 files due to the sizes of indexes created during a table load, but it can save a lot of time since
-the data loading step is quite compute intensive. Typical rsync commands for an entire database
-(e.g. ce4) would be something like:
+the data loading step is quite computationally intensive. Typical rsync commands for an entire
+database (e.g. ce4) would be something like:
 </p>
 
 <pre><code>rsync -avP --delete --max-delete=20 rsync://hgdownload.soe.ucsc.edu/mysql/ce4/ /var/lib/mysql/ce4/</code></pre>
