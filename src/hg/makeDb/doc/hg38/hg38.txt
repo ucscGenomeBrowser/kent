@@ -7149,5 +7149,6 @@ cd kent/src/hg/makeDb/trackDb
     make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
 
     # commit all
+    # if pushing public, add ticket and MARK QA READY
 
 #########################################################################

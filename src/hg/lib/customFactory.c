@@ -2572,8 +2572,10 @@ return TRUE;
 
 // we allow bigDataUrl's to point to trash (or sessionDataDir, if configured)
 char *sessionDataDir = cfgOption("sessionDataDir");
+char *sessionDataDirOld = cfgOption("sessionDataDirOld");
 if (startsWith(trashDir(), url) ||
-    (isNotEmpty(sessionDataDir) && startsWith(sessionDataDir, url)))
+    (isNotEmpty(sessionDataDir) && startsWith(sessionDataDir, url)) ||
+    (isNotEmpty(sessionDataDirOld) && startsWith(sessionDataDirOld, url)))
     return TRUE;
 
 char *prefix = cfgOption("udc.localDir");
