@@ -434,7 +434,11 @@ if (! (trackLeavesOnly && isContainer) )
     jsonWriteString(jw, "longLabel", tdb->longLabel);
     jsonWriteNumber(jw, "itemCount", itemCount);
     if (tdb->parent)
+        {
         jsonWriteString(jw, "parent", tdb->parent->track);
+	if (tdb->parent->parent)
+	    jsonWriteString(jw, "parentParent", tdb->parent->parent->track);
+        }
     if (tdb->settingsHash)
         {
         struct hashEl *hel;
