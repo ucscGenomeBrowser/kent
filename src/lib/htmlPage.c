@@ -1890,13 +1890,13 @@ if (contentType == NULL || startsWith("text/html", contentType))
 	touppers(tag->name);
 	if (isEmpty(tag->name)) // causes a blank tag
 	    tagAbort(page, tag, "Space not allowed between opening bracket < and tag name");
-	    if (startsWith("/", tag->name))
-		{
-		if (sameString(tag->name,"/")) // causes a blank close tag
-		    tagAbort(page, tag, "Space not allowed between opening bracket </ and closing tag name");
-		if (tag->attributes)
-		    tagAbort(page, tag, "Attributes are not allowed in closing tag: [%s]", tag->name);
-		}
+	if (startsWith("/", tag->name))
+	    {
+	    if (sameString(tag->name,"/")) // causes a blank close tag
+		tagAbort(page, tag, "Space not allowed between opening bracket </ and closing tag name");
+	    if (tag->attributes)
+		tagAbort(page, tag, "Attributes are not allowed in closing tag: [%s]", tag->name);
+	    }
 	}
 
 
