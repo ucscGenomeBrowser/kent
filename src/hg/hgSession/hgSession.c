@@ -773,7 +773,7 @@ else
 
 #define INITIAL_USE_COUNT 0
 static int saveCartAsSession(struct sqlConnection *conn, char *encUserName, char *encSessionName,
-                             boolean shareSession)
+                             int sharingLevel)
 /* Save all settings in cart, either adding a new session or overwriting an existing session.
  * Return useCount so that the caller can distinguish between adding and overWriting. */
 {
@@ -823,7 +823,7 @@ outDefaultTracks(cart, encoded);
 sqlDyAppendEscaped(dy, encoded->string);
 dyStringFree(&encoded);
 dyStringAppend(dy, "', ");
-dyStringPrintf(dy, "%d, ", (shareSession ? 1 : 0));
+dyStringPrintf(dy, "%d, ", sharingLevel);
 dyStringPrintf(dy, "%s, now(), %d, '');", firstUse, useCount);
 sqlUpdate(conn, dy->string);
 dyStringFree(&dy);
@@ -1557,9 +1557,9 @@ if (shared)
 return dyStringCannibalize(&dyMessage);
 }
 
-static boolean isSessionShared(struct sqlConnection *conn, char *encUserName, char *encSessionName)
+static int getSharingLevel(struct sqlConnection *conn, char *encUserName, char *encSessionName)
 /* Return the value of 'shared' from the namedSessionDb row for user & session;
- * errAbort if there is no such session. */
+ * errAbort if there is no such session. (0 = not shared, 1 = shared by link, 2 = public session) */
 {
 char query[2048];
 sqlSafef(query, sizeof(query), "select shared from %s where userName='%s' and sessionName = '%s';",
@@ -1585,7 +1585,7 @@ struct sqlConnection *conn = hConnectCentral();
 char *sessionName = cloneString(trimSpaces(cartString(cart, hgsNewSessionName)));
 char *encUserName = cgiEncodeFull(userName);
 char *encSessionName = cgiEncodeFull(sessionName);
-boolean shareSession = isSessionShared(conn, encUserName, encSessionName);
+int sharingLevel = getSharingLevel(conn, encUserName, encSessionName);
 cartLoadUserSession(conn, userName, sessionName, cart, NULL, actionVar);
 // Don't cartCopyCustomComposites because we're not going to make any track collection changes
 hubConnectLoadHubs(cart);
@@ -1604,11 +1604,11 @@ struct dyString *dyMessage = dyStringNew(1024);
 dyStringPrintf(dyMessage,
                "Re-saved settings from user <B>%s</B>'s session <B>%s</B> "
                "that %s be shared with others.  %s %s",
-	       userName, htmlEncode(sessionName), (shareSession ? "may" : "may not"),
+	       userName, htmlEncode(sessionName), (sharingLevel ? "may" : "may not"),
 	       getSessionLink(userName, encSessionName),
 	       getSessionEmailLink(encUserName, encSessionName));
 cartCheckForCustomTracks(cart, dyMessage);
-int useCount = saveCartAsSession(conn, encUserName, encSessionName, shareSession);
+int useCount = saveCartAsSession(conn, encUserName, encSessionName, sharingLevel);
 if (useCount <= INITIAL_USE_COUNT)
     errAbort("Expected useCount of at least %d after re-saving session for "
              "userName='%s', sessionName='%s', but got %d",
