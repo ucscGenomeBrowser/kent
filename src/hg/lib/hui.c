@@ -3092,16 +3092,8 @@ freeMem(setting);
 return (cnt - 1);
 }
 
-typedef struct _membership
-    {
-    int count;
-    char **subgroups;  // Ary of Tags in parentTdb->subGroupN and in childTdb->subGroups (ie view)
-    char **membership; // Ary of Tags of subGroups that child belongs to (ie PK)
-    char **titles;     // Ary of Titles of subGroups a child belongs to (ie Peak)
-    char * setting;
-    } membership_t;
 
-static membership_t *subgroupMembershipGet(struct trackDb *childTdb)
+membership_t *subgroupMembershipGet(struct trackDb *childTdb)
 // gets all the subgroup membership for a child track
 {
 membership_t *membership = tdbExtrasMembership(childTdb);
