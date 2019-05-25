@@ -942,7 +942,7 @@ void apiGetData(char *words[MAX_PATH_INFO])
 char *hubUrl = cgiOptionalString("hubUrl");
 if (sameWord("track", words[1]))
     {
-    char *extraArgs = verifyLegalArgs(argsGetDataTrack);
+    char *extraArgs = verifyLegalArgs(argGetDataTrack);
     if (extraArgs)
 	apiErrAbort(err400, err400Msg, "extraneous arguments found for function /getData/track '%s'", extraArgs);
 
@@ -953,7 +953,7 @@ if (sameWord("track", words[1]))
     }
 else if (sameWord("sequence", words[1]))
     {
-    char *extraArgs = verifyLegalArgs(argsGetDataSequence);
+    char *extraArgs = verifyLegalArgs(argGetDataSequence);
     if (extraArgs)
 	apiErrAbort(err400, err400Msg, "extraneous arguments found for function /getData/sequence '%s'", extraArgs);
 
