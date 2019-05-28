@@ -26,7 +26,7 @@ true of a particular variant, or if only one of them need be present to satisfy 
 <p>
 The vertical viewing range in full mode can also be used to filter what variants are shown. Variants
 that have a sampleCount more or less than the min and max values specificed in the viewing range are
-not displayed</p>
+not displayed.</p>
 
 <H2>Data access</H2>
 <p>
@@ -44,15 +44,16 @@ directory. Individual regions or the whole genome annotation can be obtained usi
 binary for your system. Instructions for downloading source code and binaries can be found
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads"
 target="_blank">here</a>. The tool can also be used to obtain only features within a given range,
-e.g.
-<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/gdcCancer/gdcCancer.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>
-</p>
+e.g.,</p>
+<pre>
+bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/gdcCancer/gdcCancer.bb -chrom=chr21 -start=0 -end=100000000 stdout
+</pre>
 
 
 <h2>Methods</h2>
 
 <p>
-All Mutect Variant calls were downloaded from the GDC portal in January 2019 and reformatted at UCSC
+All MuTect Variant calls were downloaded from the GDC portal in January 2019 and reformatted at UCSC
 to the <a href="../goldenPath/help/bigBed.html" target="_blank">bigBed</a> format with a short
 script, <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/utils/cancerMafToBigBed"
 target="_blank">cancerMafToBigBed</a>.
