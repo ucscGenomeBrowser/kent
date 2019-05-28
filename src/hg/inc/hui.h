@@ -1000,6 +1000,18 @@ boolean superTrackDropDownWithExtra(struct cart *cart, struct trackDb *tdb,
 boolean dimensionsExist(struct trackDb *parentTdb);
 /* Does this parent track contain dimensions? */
 
+typedef struct _membership
+    {
+    int count;
+    char **subgroups;  // Ary of Tags in parentTdb->subGroupN and in childTdb->subGroups (ie view)
+    char **membership; // Ary of Tags of subGroups that child belongs to (ie PK)
+    char **titles;     // Ary of Titles of subGroups a child belongs to (ie Peak)
+    char * setting;
+    } membership_t;
+
+membership_t *subgroupMembershipGet(struct trackDb *childTdb);
+/* gets all the subgroup membership for a child track */
+
 int subgroupCount(struct trackDb *parentTdb);
 /* How many subGroup setting does this parent have? */
 

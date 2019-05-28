@@ -396,7 +396,7 @@ outputQueryStats(queryStatsTbl, statsFile);
 static char *overallStatsHdr = "#queryCnt\t" "minQSize\t" "maxQSize\t" "meanQSize\t"
 "alnCnt\t" "minIdent\t" "maxIndent\t" "meanIdent\t"
 "minQCover\t" "maxQCover\t" "meanQCover\t" "minRepMatch\t" "maxRepMatch\t" "meanRepMatch\t"
-"minTCover\t" "maxTCover\t" "aligned\t" "aligned1\t" "alignedN\n";
+"minTCover\t" "maxTCover\t" "aligned\t" "aligned1\t" "alignedN\t" "totalAlignedSize\n";
 
 static void outputOverallStats(char *statsFile, struct sumStats *os, int aligned1, int alignedN)
 /* output overall statistic */
@@ -405,13 +405,14 @@ FILE *fh = mustOpen(statsFile, "w");
 fputs(overallStatsHdr, fh);
 fprintf(fh, "%d\t%d\t%d\t%d\t%d\t" "%0.4f\t%0.4f\t%0.4f\t"
         "%0.4f\t%0.4f\t%0.4f\t"  "%0.4f\t%0.4f\t%0.4f\t" "%0.4f\t%0.4f\t"
-        "%d\t%d\t%d\n",
+        "%d\t%d\t%d\t%lld\n",
         os->queryCnt, os->minQSize, os->maxQSize, calcMeanQSize(os),
         os->alnCnt,
         os->minIdent, os->maxIndent, calcMeanIdent(os),
         os->minQCover, os->maxQCover, calcMeanQCover(os),
         os->minRepMatch, os->maxRepMatch, calcMeanRepMatch(os),
-        os->minTCover, os->maxTCover, aligned1+alignedN, aligned1, alignedN);
+        os->minTCover, os->maxTCover, aligned1+alignedN, aligned1, alignedN,
+        os->totalAlign);
 carefulClose(&fh);
 }
 

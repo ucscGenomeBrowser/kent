@@ -49,7 +49,6 @@
 #define err429Msg	"Too Many Requests"
 
 /* list of all potential arguments */
-#define argNull	""
 #define argHubUrl	"hubUrl"
 #define argGenome	"genome"
 #define argTrackLeavesOnly	"trackLeavesOnly"
@@ -60,14 +59,16 @@
 #define argMaxItemsOutput	"maxItemsOutput"
 #define argJsonOutputArrays	"jsonOutputArrays"
 
-/* listing of allowed legal arguments for each function */
-#define argsListPublicHubs argNull
-#define argsListUcscGenomes argNull
-#define argsListHubGenomes argHubUrl
-#define argsListTracks argGenome";"argHubUrl";"argTrackLeavesOnly
-#define argsListChromosomes argGenome";"argHubUrl";"argTrack
-#define argsGetDataTrack argGenome";"argHubUrl";"argTrack";"argChrom";"argStart";"argEnd";"argMaxItemsOutput";"argJsonOutputArrays
-#define argsGetDataSequence argGenome";"argHubUrl";"argTrack";"argChrom";"argStart";"argEnd
+/* valid argument listings to verify extraneous arguments
+ *  initialized in hubApi.c
+ */
+extern char *argListPublicHubs[];
+extern char *argListUcscGenomes[];
+extern char *argListHubGenomes[];
+extern char *argListTracks[];
+extern char *argListChromosomes[];
+extern char *argGetDataTrack[];
+extern char *argGetDataSequence[];
 
 /* maximum number of words expected in PATH_INFO parsing
  *   so far only using 2
@@ -106,8 +107,8 @@ struct hubPublic *hubPublicDbLoadAll();
 struct dbDb *ucscDbDb();
 /* return the dbDb table as an slList */
 
-char *verifyLegalArgs(char *validArgList);
-/* validArgList is a semicolon;separated;list;of;valid;arguments
+char *verifyLegalArgs(char *validArgList[]);
+/* validArgList is an array of strings for valid arguments
  * returning string of any other arguments not on that list found in
  * cgiVarList(), NULL when none found.
  */

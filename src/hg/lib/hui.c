@@ -3092,16 +3092,8 @@ freeMem(setting);
 return (cnt - 1);
 }
 
-typedef struct _membership
-    {
-    int count;
-    char **subgroups;  // Ary of Tags in parentTdb->subGroupN and in childTdb->subGroups (ie view)
-    char **membership; // Ary of Tags of subGroups that child belongs to (ie PK)
-    char **titles;     // Ary of Titles of subGroups a child belongs to (ie Peak)
-    char * setting;
-    } membership_t;
 
-static membership_t *subgroupMembershipGet(struct trackDb *childTdb)
+membership_t *subgroupMembershipGet(struct trackDb *childTdb)
 // gets all the subgroup membership for a child track
 {
 membership_t *membership = tdbExtrasMembership(childTdb);
@@ -4753,7 +4745,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     dyStringClear(dyHtml);
     dyStringAppend(dyHtml, "subCB"); // always first
     int di;
-    if (membersForAll->dimensions)
+    if (membersForAll->dimensions && membership != NULL)
 	{
 	for (di=dimX;di<membersForAll->dimMax;di++)
 	    {
@@ -4763,7 +4755,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 		dyStringPrintf(dyHtml," %s",membership->membership[ix]);
 	    }
 	}
-    else if (membersForAll->abcCount) // "dimensions" don't exist but may be subgroups anyway
+    else if (membersForAll->abcCount && membership != NULL) // "dimensions" don't exist but may be subgroups anyway
 	{
 	for (di=dimA;di<membersForAll->dimMax;di++)
 	    {
@@ -4773,7 +4765,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 		dyStringPrintf(dyHtml," %s",membership->membership[ix]);
 	    }
 	}
-    if (membersForAll->members[dimV] && -1 !=
+    if (membersForAll->members[dimV] && membership != NULL && -1 !=
 				(ix = stringArrayIx(membersForAll->members[dimV]->groupTag,
 						    membership->subgroups, membership->count)))
 	dyStringPrintf(dyHtml, " %s",membership->membership[ix]);  // Saved view for last
@@ -4832,47 +4824,60 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 
     // If sortable, then there must be a column per sortable dimension
     if (sortOrder != NULL)
-	{
-	int sIx=0;
-	for (sIx=0; sIx <sortOrder->count; sIx++)
-	    {
-	    char *col = sortOrder->column[sIx];
-	    ix = stringArrayIx(col, membership->subgroups, membership->count);
-				// TODO: Sort needs to expand from subGroups to labels as well
-	    if (ix >= 0)
-		{
-		char *term = membership->membership[ix];
-		char *title = membership->titles[ix];
-		char *titleRoot=NULL;
-		if (cvTermIsEmpty(col, title))
-		    titleRoot = cloneString(" &nbsp;");
-		else
-		    titleRoot = labelRoot(title, NULL);
-		// Each sortable column requires hidden goop (in the "abbr" field currently)
-		// which is the actual sort on value
-		printf("<TD id='%s_%s' abbr='%s' align='left'>", subtrack->track, col, term);
-		printf("&nbsp");
-		char *link = NULL;
-		if (vocabHash)
-		    {
-		    struct hash *colHash = hashFindVal(vocabHash, col);
-		    if (colHash)
-			link = vocabLink(colHash, term, titleRoot);
-		    }
-		printf("%s", link ? link : titleRoot);
-		puts("</TD>");
-		freeMem(titleRoot);
-		}
-	    else if (sameString(col, SUBTRACK_COLOR_SUBGROUP))
-		{
-		char *hue = subtrackColorToCompare(subtrack);
-		printf("<TD id='%s_%s' abbr='%s' bgcolor='#%02X%02X%02X'>"
-			"&nbsp;&nbsp;&nbsp;&nbsp;</TD>",
-		    subtrack->track, col, hue, 
-			subtrack->colorR, subtrack->colorG, subtrack->colorB);
-		}
-	    }
-	}
+        {
+        int sIx=0;
+        for (sIx=0; sIx <sortOrder->count; sIx++)
+            {
+            ix = -1;
+            char *col = sortOrder->column[sIx];
+            if (membership)
+                ix = stringArrayIx(col, membership->subgroups, membership->count);
+                // TODO: Sort needs to expand from subGroups to labels as well
+
+            // only print the warning message for trackDb errors and not for the
+            // default sortable columns of trackName and dateUnrestricted
+            if ( (!membership || (membership && ix == -1) ) &&
+                !(sameString(col, "trackName") || sameString(col, "dateUnrestricted")) )
+                {
+                printf("<TD><span style=\"color:red\">Missing subgroup</span></TD>");
+                }
+            else
+                {
+                if (ix >= 0)
+                    {
+                    char *term = membership->membership[ix];
+                    char *title = membership->titles[ix];
+                    char *titleRoot=NULL;
+                    if (cvTermIsEmpty(col, title))
+                        titleRoot = cloneString(" &nbsp;");
+                    else
+                        titleRoot = labelRoot(title, NULL);
+                    // Each sortable column requires hidden goop (in the "abbr" field currently)
+                    // which is the actual sort on value
+                    printf("<TD id='%s_%s' abbr='%s' align='left'>", subtrack->track, col, term);
+                    printf("&nbsp");
+                    char *link = NULL;
+                    if (vocabHash)
+                        {
+                        struct hash *colHash = hashFindVal(vocabHash, col);
+                        if (colHash)
+                        link = vocabLink(colHash, term, titleRoot);
+                        }
+                    printf("%s", link ? link : titleRoot);
+                    puts("</TD>");
+                    freeMem(titleRoot);
+                    }
+                else if (sameString(col, SUBTRACK_COLOR_SUBGROUP))
+                    {
+                    char *hue = subtrackColorToCompare(subtrack);
+                    printf("<TD id='%s_%s' abbr='%s' bgcolor='#%02X%02X%02X'>"
+                        "&nbsp;&nbsp;&nbsp;&nbsp;</TD>",
+                        subtrack->track, col, hue, 
+                        subtrack->colorR, subtrack->colorG, subtrack->colorB);
+                    }
+                }
+            }
+        }
     else  // Non-sortable tables do not have sort by columns but will display a short label
 	{ // (which may be a configurable link)
 	if (settings->colorPatch)

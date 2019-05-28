@@ -37,6 +37,14 @@ boolean jsonOutputArrays = FALSE; /* set by CGI parameter 'jsonOutputArrays' */
 
 boolean measureTiming = FALSE;	/* set by CGI parameters */
 
+/* valid argument listings to verify extraneous arguments */
+char *argListPublicHubs[] = { NULL };
+char *argListUcscGenomes[] = { NULL };
+char *argListHubGenomes[] = { argHubUrl, NULL };
+char *argListTracks[] = { argGenome, argHubUrl, argTrackLeavesOnly, NULL };
+char *argListChromosomes[] = { argGenome, argHubUrl, argTrack, NULL };
+char *argGetDataTrack[] = { argGenome, argHubUrl, argTrack, argChrom, argStart, argEnd, argMaxItemsOutput, argJsonOutputArrays, NULL };
+char *argGetDataSequence[] = { argGenome, argHubUrl, argTrack, argChrom, argStart, argEnd, NULL };
 
 /* Global only to this one source file */
 static struct cart *cart;             /* CGI and other variables */

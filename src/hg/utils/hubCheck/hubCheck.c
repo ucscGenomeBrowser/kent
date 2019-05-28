@@ -455,6 +455,37 @@ else
 return retVal;
 }
 
+void hubCheckCompositeSettings(struct trackHub *hub, struct trackHubGenome *genome, struct trackDb *tdb, struct dyString *errors)
+/* Check composite level settings like subgroups, dimensions, sortOrder, etc */
+{
+if (!tdbIsComposite(tdb))
+    return;
+
+sortOrder_t *sortOrder = NULL;
+membership_t *membership = NULL;
+struct slRef *subtrackRef, *subtrackRefList = NULL;
+
+// check that if a sortOrder is defined, then subtracks exist in the subgroup
+sortOrder = sortOrderGet(NULL, tdb);
+if (sortOrder)
+    {
+    subtrackRefList = trackDbListGetRefsToDescendantLeaves(tdb->subtracks);
+    for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackRef->next)
+        {
+        struct trackDb *subtrack = subtrackRef->val;
+        membership = subgroupMembershipGet(subtrack);
+        int i;
+        for (i = 0; i < sortOrder->count; i++)
+            {
+            char *col = sortOrder->column[i];
+            if (membership == NULL || stringArrayIx(col, membership->subgroups, membership->count) == -1)
+                dyStringPrintf(errors,
+                    "sortOrder %s defined for all subtracks of the composite track \"%s\", but the track \"%s\" is not a member of this subGroup\n", col, tdb->shortLabel, subtrack->shortLabel);
+            }
+        }
+    }
+}
+
 void hubCheckParentsAndChildren(struct trackDb *tdb)
 /* Check that a single trackDb stanza has the correct parent and subtrack pointers */
 {
@@ -522,6 +553,8 @@ struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
     hubCheckParentsAndChildren(tdb);
+    if (tdbIsComposite(tdb))
+        hubCheckCompositeSettings(hub, genome, tdb, errors);
     hubCheckBigDataUrl(hub, genome, tdb);
     }
 errCatchEnd(errCatch);

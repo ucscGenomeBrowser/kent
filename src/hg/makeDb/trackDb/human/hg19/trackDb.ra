@@ -61,7 +61,7 @@ pennantIcon New red ../goldenPath/newsarch.html#032619  Released March 26, 2019
 
 # chainNet tracks
 include trackDb.chainNet.ra
-#include trackDb.wgEncode.ra
+include trackDb.wgEncode.ra
 include trackDb.denisova.ra
 
 #large composites
