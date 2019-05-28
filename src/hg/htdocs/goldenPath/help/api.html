@@ -9,9 +9,9 @@
 
 <h2>Contents</h2>
 
-<h6><a href="#Intro">What is JSON data ?</a></h6>
-<h6><a href="#Access">What is the access URL ?</a></h6>
-<h6><a href="#Return">What type of data can be accessed ?</a></h6>
+<h6><a href="#Intro">What is JSON data?</a></h6>
+<h6><a href="#Access">What is the access URL?</a></h6>
+<h6><a href="#Return">What type of data can be accessed?</a></h6>
 <h6><a href="#Endpoint">Endpoint functions</a></h6>
 <h6><a href="#Parameters">Parameters to endpoint functions</a></h6>
 <h6><a href="#Parameter_use">Required and optional parameters</a></h6>
@@ -21,29 +21,29 @@
 <h6><a href="#Error_examples">Error return examples</a></h6>
 <h6><a href="#Practical_examples">Practical examples</a></h6>
 
-<!-- ========== What is JSON data ? ============================== -->
+<!-- ========== What is JSON data? ============================== -->
 <a id="Intro"></a>
-<h2>What is JSON data ?</h2>
+<h2>What is JSON data?</h2>
 <p>
 JSON data is a data transfer syntax from a data provider to a data consumer.
 See also: <a href="https://www.w3schools.com/js/js_json_intro.asp"
 target=_blank>JSON Introduction</a>
 </p>
 
-<!-- ========== What is the access URL ? ============================== -->
+<!-- ========== What is the access URL? ============================== -->
 <a id="Access"></a>
-<h2>What is the access URL ?</h2>
+<h2>What is the access URL?</h2>
 <p>
-This access url: <b>https://api.genome.ucsc.edu/</b> is used to access
+This access URL: <b>https://api.genome.ucsc.edu/</b> is used to access
 the endpoint functions.  For example:
 <pre>
     wget -O- 'https://api.genome.ucsc.edu/list/publicHubs'
 </pre>
 </p>
 
-<!-- ========== What type of data can be accessed ? ===================== -->
+<!-- ========== What type of data can be accessed? ===================== -->
 <a id="Return"></a>
-<h2>What type of data can be accessed ?</h2>
+<h2>What type of data can be accessed?</h2>
 <p>
 The following data sets can be accessed at this time:
 <ul>
@@ -65,7 +65,7 @@ Browser genome assembly</li>
 <a id="Endpoint"></a>
 <h2>Endpoint functions to return data</h2>
 <p>
-The url <b>https://api.genome.ucsc.edu/</b> is used to access
+The URL <b>https://api.genome.ucsc.edu/</b> is used to access
 the endpoint functions.  For example:
 <pre>
     curl -L 'https://api.genome.ucsc.edu/list/ucscGenomes'
@@ -155,7 +155,7 @@ Any extra parameters not allowed in a function will be flagged as an error.
 
 <!-- ========== Supported track types ======================= -->
 <a id="Track_types"></a>
-<h2>Supported track types, at this time (April 2019), for getData functions</h2>
+<h2>Supported track types for getData functions</h2>
 <p>
 <ul>
 <li><a href='/FAQ/FAQformat.html#format1' target=_blank>bed</a></li>
@@ -170,7 +170,7 @@ Any extra parameters not allowed in a function will be flagged as an error.
 <li><a href='/FAQ/FAQformat.html#format2' target=_blank>psl</a></li>
 <li><a href='http://hgdownload.cse.ucsc.edu/goldenPath/hg38/database/rmsk.sql' target=_blank>rmsk - repeat masker</a></li>
 <li><a href='/FAQ/FAQformat.html#format6' target=_blank>wig</a></li>
-<li>(Work is under way to support additional track types)</li>
+<li>(Work is underway to support additional track types)</li>
 </ul>
 </p>
 
@@ -348,14 +348,14 @@ target=_blank>Request listing of chroms that have data for the knownGene track i
 
 <p>
 With the list of chrom names that have data, the <b>/getData/track</b> function can be used 
-again while specifying the <b>chrom</b> parameter. In the following example chr1 is queried 
-and the <i>itemsReturned</i> field shows a total of 7967 items in the output. Well below the 
+again while specifying the <b>chrom</b> parameter. In the following example, chr1 is queried 
+and the <i>itemsReturned</i> field shows a total of 7967 items in the output, well below the 
 1M limit, meaning all data for chr1 has been extracted. This can then be repeated for all 
 chroms of interest.</p>
 
 <p>
 <a href='https://api.genome.ucsc.edu/getData/track?genome=hg19;track=knownGene;chrom=chr1'
-target=_blank>Request iems in knownGene track of hg19, only for chr1</a> -
+target=_blank>Request items in knownGene track of hg19, only for chr1</a> -
 <br><b>api.genome.ucsc.edu/getData/track?genome=hg19;track=knownGene;chrom=chr1</b></p>
 
 <p>
