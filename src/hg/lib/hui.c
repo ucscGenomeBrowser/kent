@@ -2710,6 +2710,11 @@ static members_t *subgroupMembersWeedOutEmpties(struct trackDb *parentTdb, membe
 					    struct cart *cart)
 // Weed out members of a subgroup without any subtracks, alters memory in place!
 {
+if (members->count == 0)
+    {
+    warn("No subtracks in group: %s.  This indicates a problem in the subGroup line for this group.", members->groupTitle);
+    return members;
+    }
 // First tally all subtrack counts
 int ixIn=0;
 struct slRef *subtrackRef, *subtrackRefList =
