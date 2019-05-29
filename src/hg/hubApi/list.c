@@ -354,9 +354,29 @@ if (errCatchStart(errCatch))
         itemCount = sum.validCount;
         bbiFileClose(&bwf);
         }
+    // NOTE: htslib does not appear to have a function to extract a count from BAI or TBI (tabix)
+    // indexes.  One could probably be added by adding code similar to samtools' idxstats subcommand,
+    // But in the meantime, this is not supported for types vcfTabix and bam.
     }
 errCatchEnd(errCatch);
 errCatchFree(&errCatch);
+return itemCount;
+}
+
+static long long bbiTableItemCount(struct sqlConnection *conn, char *type, char *tableName)
+/* Given a tableName that has a fileName column pointing to big*, bam or vcfTabix files, return the
+ * total itemCount from all rows (BAM and VCF tables may have one row per chrom). */
+{
+long long itemCount = 0;
+char query[2048];
+sqlSafef(query, sizeof query, "select fileName from %s", tableName);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    itemCount += bbiItemCount(row[0], type);
+    }
+sqlFreeResult(&sr);
 return itemCount;
 }
 
@@ -387,20 +407,29 @@ else
 	struct sqlConnection *conn = hAllocConnMaybe(db);
 	if (conn)
 	    {
-	    /* punting on split tables, return zero */
-	    struct hTableInfo *hti =
-		hFindTableInfoWithConn(conn, NULL, tableName);
-	    if (hti && hti->isSplit)
-		{
-		itemCount = 0;
-		}
-	    else
-		{
-		char query[2048];
-	   sqlSafef(query, sizeof(query), "select count(*) from %s", tableName);
-		itemCount = sqlQuickNum(conn, query);
-		}
-	    hFreeConn(&conn);
+            if ((startsWith("big", tdb->type) ||
+                 sameString("vcfTabix", tdb->type) || sameString("bam", tdb->type)) &&
+                sqlColumnExists(conn, tableName, "fileName"))
+                {
+                itemCount = bbiTableItemCount(conn, tdb->type, tableName);
+                }
+            else
+                {
+                /* punting on split tables, return zero */
+                struct hTableInfo *hti =
+                    hFindTableInfoWithConn(conn, NULL, tableName);
+                if (hti && hti->isSplit)
+                    {
+                    itemCount = 0;
+                    }
+                else
+                    {
+                    char query[2048];
+                    sqlSafef(query, sizeof(query), "select count(*) from %s", tableName);
+                    itemCount = sqlQuickNum(conn, query);
+                    }
+                }
+            hFreeConn(&conn);
 	    }
 	}
     }
