@@ -358,7 +358,7 @@ else
     }
 }
 
-void psFillCircle(struct psGfx *ps, double x, double y, double rad)
+void psCircle(struct psGfx *ps, double x, double y, double rad, boolean filled)
 {
 FILE *f = ps->f;
 fprintf(f, "newpath\n");
@@ -368,7 +368,10 @@ psFloatOut(f, 0.0);
 psFloatOut(f, 360.0);
 fprintf(f, "arc\n");
 fprintf(f, "closepath\n");
-fprintf(f, "fill\n");
+if (filled)
+    fprintf(f, "fill\n");
+else
+    fprintf(f, "stroke\n");
 }
 
 void psFillEllipse(struct psGfx *ps, double x, double y, double xrad, double yrad)
