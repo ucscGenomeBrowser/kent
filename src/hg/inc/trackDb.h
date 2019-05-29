@@ -696,5 +696,20 @@ struct slPair *trackDbMetaPairs(struct trackDb *tdb);
 
 char *trackDbViewSetting(struct trackDb *tdb, char *name);
 /* Return view setting from tdb, but *not* any of it's parents. */
+
+struct trackDb *lmCloneTdb(struct lm *lm, struct trackDb *tdb, struct trackDb *parent, struct hash *superHash);
+/* clone a single tdb structure.  Will clone its children if it has any */
+
+struct trackDb *lmCloneTdbList(struct lm *lm, struct trackDb *list, struct trackDb *parent, struct hash *superHash);
+/* clone a list of tdb structures. */
+
+struct trackDb *lmCloneSuper(struct lm *lm, struct trackDb *tdb, struct hash *superHash);
+/* clone a super track tdb structure. */
+
+struct trackDb *cloneTdbListToSharedMem(struct trackDb *list, unsigned long size);
+/* Allocate shared memory and clone trackDb list into it. */
+
+struct trackDb *mapSharedMemTrackDb(char *file, unsigned long address, unsigned long size);
+/* Use a hunk of shared memory as our trackDb list. */
 #endif /* TRACKDB_H */
 

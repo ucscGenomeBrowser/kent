@@ -5,6 +5,7 @@
 /* Copyright (C) 2014 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
 
+#include <sys/mman.h>
 #include "common.h"
 #include "linefile.h"
 #include "jksql.h"
@@ -1561,4 +1562,133 @@ if (metadataInTdb)
     return convertNameValueString(metadataInTdb);
 
 return NULL;
+}
+
+struct trackDb *lmCloneSuper(struct lm *lm, struct trackDb *tdb, struct hash *superHash)
+/* clone a super track tdb structure. */
+{
+if (superHash == NULL)
+    errAbort("parsing supertrack without superHash");
+
+struct trackDb *super = (struct trackDb *)hashFindVal(superHash, tdb->parent->track);
+
+if (super == NULL)
+    {
+    super = lmCloneTdb(lm, tdb->parent, NULL, NULL);
+    hashAdd(superHash, super->track, super);
+
+    tdb->parent->shortLabel = NULL;
+    }
+refAdd(&super->children, tdb);
+
+return super;
+}
+
+struct trackDb *lmCloneTdb(struct lm *lm, struct trackDb *tdb, struct trackDb *parent,  struct hash *superHash)
+/* clone a single tdb structure.  Will clone its children if it has any */
+{
+struct trackDb *newTdb = lmAlloc(lm, sizeof(struct trackDb));
+
+*newTdb = *tdb;
+
+if (tdb->subtracks)
+    newTdb->subtracks = lmCloneTdbList(lm, tdb->subtracks, newTdb, NULL);
+
+if ((tdb->parent != NULL) && (superHash != NULL))
+    {
+    newTdb->parent = lmCloneSuper(lm, newTdb, superHash);
+    }
+else
+    newTdb->parent = parent;
+
+newTdb->track = lmCloneString(lm, tdb->track);
+newTdb->table = lmCloneString(lm, tdb->table);
+newTdb->shortLabel = lmCloneString(lm, tdb->shortLabel);
+newTdb->longLabel = lmCloneString(lm, "trere");// tdb->longLabel);
+newTdb->type = lmCloneString(lm, tdb->type);
+if ( newTdb->restrictCount )
+    {
+    lmAllocArray(lm, newTdb->restrictList, newTdb->restrictCount);
+    int ii;
+    for(ii=0; ii < newTdb->restrictCount; ii++)
+        newTdb->restrictList[ii] = lmCloneString(lm, tdb->restrictList[ii]);
+    }
+newTdb->url = lmCloneString(lm, tdb->url);
+newTdb->html = lmCloneString(lm, tdb->html);
+newTdb->grp = lmCloneString(lm, tdb->grp);
+newTdb->settings = lmCloneString(lm, tdb->settings);
+newTdb->parentName = lmCloneString(lm, tdb->parentName);
+
+newTdb->viewHash =  NULL;
+newTdb->children = NULL;
+newTdb->overrides = NULL;
+
+// TODO: these two need a fixin
+//tdbExtrasMembership(newTdb);
+//newTdb->settingsHash = trackDbSettingsFromString(newTdb, newTdb->settings);
+newTdb->settingsHash = NULL;
+return newTdb;
+}
+
+struct trackDb *lmCloneTdbList(struct lm *lm, struct trackDb *list, struct trackDb *parent, struct hash *superHash)
+/* clone a list of tdb structures. */
+{
+struct trackDb *tdb, *prevTdb = NULL, *newList = NULL;
+
+for(tdb = list; tdb; tdb = tdb->next)
+    {
+    struct trackDb *newTdb = lmCloneTdb(lm, tdb, parent, superHash); 
+
+    if (prevTdb)
+        prevTdb->next = newTdb;
+    else
+        newList = newTdb;
+
+    prevTdb = newTdb;
+    }
+
+return newList;
+}
+
+struct trackDb *mapSharedMemTrackDb(char *file, unsigned long address, unsigned long size)
+/* Use a hunk of shared memory as our trackDb list. */
+{
+int oflags=O_RDWR | O_CREAT;
+int     fd = shm_open(file, oflags, 0666 );
+u_char *mem = (u_char *) mmap((void *)address, size, PROT_READ|PROT_WRITE, MAP_PRIVATE, fd, 0);
+u_char *ret = mem + 32;  // lm header is 32 bytes long
+
+return (struct trackDb *)ret;
+}
+
+struct trackDb *cloneTdbListToSharedMem(struct trackDb *list, unsigned long size)
+/* Allocate shared memory and clone trackDb list into it. */
+{
+int oflags=O_RDWR | O_CREAT;
+// should use a unique name
+char *file ="brtest/flart";
+int     fd = shm_open(file, oflags, 0666 );
+size_t psize = getpagesize();
+unsigned long pageMask = psize - 1;
+// we should choose an address semi-randomly and make sure we can grab it rather than assume we can
+unsigned long address = 0x7000000;
+address = (address + psize - 1) & ~pageMask;
+u_char *mem;
+struct trackDb *newList = NULL;
+mem = (u_char *)newList;
+
+ftruncate(fd, 0);
+ftruncate(fd, size);
+
+mem = (u_char *) mmap((void *)address, size, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
+
+struct lm *lm = lmInitWMem(mem, size);
+struct hash *superHash = newHash(8);
+
+newList = lmCloneTdbList(lm, list, NULL, superHash);
+msync((void *)address, size, MS_SYNC);
+munmap((void *)address, size);
+close(fd);
+
+return mapSharedMemTrackDb(file, address, size);
 }
