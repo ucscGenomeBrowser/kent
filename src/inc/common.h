@@ -176,6 +176,9 @@
 #define uglyAbort errAbort /* debugging error abort. */
 #define uglyOut stdout /* debugging fprintf target. */
 
+unsigned long memCheckPoint();
+/* Return the amount of memory allocated since last called. */
+
 void *needMem(size_t size);
 /* Need mem calls abort if the memory allocation fails. The memory
  * is initialized to zero. */
