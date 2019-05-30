@@ -1,6 +1,8 @@
 /* manage endpoint /list/ functions */
 
 #include "dataApi.h"
+#include "bamFile.h"
+#include "htslib/tbx.h"
 
 static void hubPublicJsonData(struct jsonWrite *jw, struct hubPublic *el,
   int columnCount, char **columnNames)
@@ -333,7 +335,7 @@ else
 hFreeConn(&conn);
 }
 
-static long long bbiItemCount(char *bigDataUrl, char *type)
+static long long bbiItemCount(char *bigDataUrl, char *type, char *indexFileOrUrl)
 /* check the bigDataUrl to see what the itemCount is there */
 {
 long long itemCount = 0;
@@ -354,11 +356,18 @@ if (errCatchStart(errCatch))
         itemCount = sum.validCount;
         bbiFileClose(&bwf);
         }
-    // NOTE: htslib does not appear to have a function to extract a count from BAI or TBI (tabix)
-    // indexes.  One could probably be added by adding code similar to samtools' idxstats subcommand,
-    // But in the meantime, this is not supported for types vcfTabix and bam.
+    else if (sameString("bam", type))
+        {
+        itemCount = bamFileItemCount(bigDataUrl, indexFileOrUrl);
+        }
+    else if (sameString("vcfTabix", type))
+        {
+        itemCount = vcfTabixItemCount(bigDataUrl, indexFileOrUrl);
+        }
     }
 errCatchEnd(errCatch);
+if (isNotEmpty(errCatch->message->string))
+    fprintf(stderr, "%s", errCatch->message->string);
 errCatchFree(&errCatch);
 return itemCount;
 }
@@ -374,7 +383,7 @@ struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    itemCount += bbiItemCount(row[0], type);
+    itemCount += bbiItemCount(hReplaceGbdb(row[0]), type, NULL);
     }
 sqlFreeResult(&sr);
 return itemCount;
@@ -392,9 +401,12 @@ if (isContainer)	/* containers have no data items */
 if (sameWord("downloadsOnly", tdb->type))
     return itemCount;
 
-char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+char *bigDataUrl = hReplaceGbdb(trackDbSetting(tdb, "bigDataUrl"));
 if (isNotEmpty(bigDataUrl))
-    itemCount = bbiItemCount(bigDataUrl, tdb->type);
+    {
+    char *indexFileOrUrl = hReplaceGbdb(trackDbSetting(tdb, "bigDataIndex"));
+    itemCount = bbiItemCount(bigDataUrl, tdb->type, indexFileOrUrl);
+    }
 else
     {
     /* prepare for getting table row count, find table name */
@@ -418,7 +430,7 @@ else
                 /* punting on split tables, return zero */
                 struct hTableInfo *hti =
                     hFindTableInfoWithConn(conn, NULL, tableName);
-                if (hti && hti->isSplit)
+                if (!hti || hti->isSplit)
                     {
                     itemCount = 0;
                     }
