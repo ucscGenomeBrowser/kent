@@ -61,7 +61,6 @@ pennantIcon New red ../goldenPath/newsarch.html#032619  Released March 26, 2019
 
 # chainNet tracks
 include trackDb.chainNet.ra
-include trackDb.wgEncode.ra
 include trackDb.denisova.ra
 
 #large composites
@@ -2645,9 +2644,16 @@ include ../../crispr10K.ra alpha
 track ensGene override
 ensemblIdUrl https://grch37.ensembl.org/Homo_sapiens
 
-include wgEncodeReg.new.ra alpha
-include wgEncodeReg.dev.ra alpha
+# ENCODE tracks
+
+include trackDb.wgEncode.ra
+
+include wgEncodeReg.ra public
+
+include wgEncodeReg.new.ra alpha,beta
 include encode3.ra alpha,beta
 
-include wgEncodeReg.ra beta,public
+include wgEncodeReg.dev.ra alpha
+
+
 

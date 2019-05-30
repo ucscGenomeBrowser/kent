@@ -1,6 +1,6 @@
 # Genome-wide ENCODE tracks
-include wgEncodeSuper.release2.new.ra alpha
-include wgEncodeSuper.release2.ra beta,public
+include wgEncodeSuper.release2.new.ra alpha,beta
+include wgEncodeSuper.release2.ra public
 
 # GENCODE genes tracks
 include trackDb.gencode.ra
@@ -12,8 +12,8 @@ include wgEncodeUncBsuProt.release2.ra
 include wgEncodeUncBsuProtGenc.ra
 
 # Integrated Regulation (wrangler: kate)
-#include wgEncodeReg.ra beta,public
-#include wgEncodeReg.new.ra alpha
+# now in trackDb.ra
+#include wgEncodeReg.ra
 #include wgEncodeReg.dev.ra alpha
 
 # UW Repli-Seq track (wrangler: venkat)
