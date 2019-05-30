@@ -18,6 +18,7 @@ struct lm
     size_t blockSize;
     size_t allignMask;
     size_t allignAdd;
+    boolean doMemoryAllocs; // if true, do our own memory allocs, otherwise use passed in pointer
     };
 
 struct lmBlock
@@ -43,7 +44,7 @@ lm->blocks = mb;
 return mb;
 }
 
-struct lm *lmInit(int blockSize)
+struct lm *lmGuts(int blockSize, void *mem)
 /* Create a local memory pool. */
 {
 struct lm *lm;
@@ -59,8 +60,34 @@ if (blockSize <= 0)
 lm->blockSize = blockSize;
 lm->allignAdd = (aliSize-1);
 lm->allignMask = ~lm->allignAdd;
-newBlock(lm, blockSize);
+if (mem != NULL)
+    {
+    lm->doMemoryAllocs = FALSE;
+    struct lmBlock *mb = mem;
+    mb->free = (char *)(mb+1);
+    mb->end = ((char *)mb) + blockSize;
+    mb->next = lm->blocks;
+    lm->blocks = mb;
+    }
+else
+    {
+    lm->doMemoryAllocs = TRUE;
+    newBlock(lm, blockSize);
+    }
+
 return lm;
+}
+
+struct lm *lmInit(int blockSize)
+/* Create a local memory pool. */
+{
+return lmGuts(blockSize, NULL);
+}
+
+struct lm *lmInitWMem(void *mem, int blockSize)
+/* Create a local memory pool. */
+{
+return lmGuts(blockSize, mem);
 }
 
 void lmCleanup(struct lm **pLm)
@@ -100,7 +127,13 @@ struct lmBlock *mb = lm->blocks;
 void *ret;
 size_t memLeft = mb->end - mb->free;
 if (memLeft < size)
-    mb = newBlock(lm, size);
+    {
+    if (lm->doMemoryAllocs)
+        mb = newBlock(lm, size);
+    else
+        errAbort("attempted local memory alloc in fixed size allocator");
+    }
+
 ret = mb->free;
 mb->free += ((size+lm->allignAdd)&lm->allignMask);
 if (mb->free > mb->end)

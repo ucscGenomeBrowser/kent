@@ -698,7 +698,7 @@ void pscmCircle(struct pscmGfx *pscm, int xCen, int yCen, int rad,
         Color color, boolean filled)
 {
 pscmSetColor(pscm, color);
-psFillCircle(pscm->ps, (double)xCen, (double)yCen, (double)rad);
+psCircle(pscm->ps, (double)xCen, (double)yCen, (double)rad, filled);
 }
 
 void pscmEllipse(struct pscmGfx *pscm, int x1, int y1, int x2, int y2, Color color, 

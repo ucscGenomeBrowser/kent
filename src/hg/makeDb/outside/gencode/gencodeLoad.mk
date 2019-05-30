@@ -38,43 +38,31 @@ mach = $(shell uname -m)
 #db = hg38
 db = hg19
 #db = mm10
-#db = grcHhh38
-preRelease = no
-#preRelease = yes
+#preRelease = no
+preRelease = yes
 ifeq (${db},mm10)
     grcRefAssembly = GRCm38
-    ver = M21
-    prevVer = M20
+    ver = M22
+    prevVer = M21
     gencodeOrg = Gencode_mouse
     ftpReleaseSubdir = release_${ver}
     annGffTypeName = chr_patch_hapl_scaff.annotation
-    ensemblVer = 96_38
-    ensemblPrevVer = 95_38
+    ensemblVer = 97_38
+    ensemblPrevVer = 96_38
     ensemblCDnaDb = mus_musculus_cdna_${ensemblPrevVer}
 else ifeq (${db},hg38)
     grcRefAssembly = GRCh38
-    ver = 30
-    prevVer = 29
+    ver = 31
+    prevVer = 30
     gencodeOrg = Gencode_human
     ftpReleaseSubdir = release_${ver}
     annGffTypeName = chr_patch_hapl_scaff.annotation
-    ensemblVer = 96_38
-    ensemblPrevVer = 94_38
-    ensemblCDnaDb = homo_sapiens_cdna_${ensemblPrevVer}
-else ifeq (${db},grcHhh38)
-    # hg38 with patches
-    grcRefAssembly = GRCh38
-    ver = 28
-    prevVer = 27
-    gencodeOrg = Gencode_human
-    ftpReleaseSubdir = release_${ver}
-    annGffTypeName = chr_patch_hapl_scaff.annotation
-    ensemblVer = 94_38
-    ensemblPrevVer = 93_38
+    ensemblVer = 97_38
+    ensemblPrevVer = 96_38
     ensemblCDnaDb = homo_sapiens_cdna_${ensemblPrevVer}
 else ifeq (${db},hg19)
     grcRefAssembly = GRCh37
-    verBase = 30
+    verBase = 31
     ver = ${verBase}lift37
     ftpReleaseSubdir = release_${verBase}/GRCh37_mapping
     prevVer = 29lift37

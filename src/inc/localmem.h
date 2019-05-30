@@ -16,6 +16,12 @@ struct lm *lmInit(int blockSize);
  *                  pass in zero and a reasonable default will be used.
  */
 
+struct lm *lmInitWMem(void *mem, int blockSize);
+/* Create a local memory pool. Don't do any memory allocation.  Parameters are:
+ *      mem -- the memory to use for the blocks
+ *      blockSize - how much memory has been allocated.  If this is exhausted, an errAbort occurs.
+ */
+
 void lmCleanup(struct lm **pLm);
 /* Clean up a local memory pool. */
 

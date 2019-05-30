@@ -123,6 +123,6 @@ void psLineTo(struct psGfx *ps, double x, double y);
 /* Draw line from current point to given point,
  * and make given point new current point. */
 
-void psFillCircle(struct psGfx *ps, double x, double y, double rad);
+void psCircle(struct psGfx *ps, double x, double y, double rad, boolean filled);
 #endif /* PSGFX_H */
 

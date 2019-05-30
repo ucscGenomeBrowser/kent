@@ -52,6 +52,11 @@ extern char *database;		/* Current database, often but not always dbDatabase. */
 
 #define hgsDo hgSessionPrefix "do"
 
+// Non-UI reachable function to load a session and save it, for the purpose of moving files
+// and tables out of trash/customTrash into userdata/customData after sessionData* params are
+// added to hg.conf.
+#define hgsDoReSaveSession hgSessionPrefix "doReSaveSession"
+
 // Back-door CGI param to randomize the suffix (usually day of month) for sessionDataDbPrefix.
 // This is for bulk re-saving old sessions to move files and tables to safe storage;
 // we don't want all of the old sessions' tables to end up in the same day-of-month database.

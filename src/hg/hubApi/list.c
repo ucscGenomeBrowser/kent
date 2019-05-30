@@ -24,7 +24,7 @@ jsonWriteObjectEnd(jw);
 static void jsonPublicHubs()
 /* output the hubPublic SQL table */
 {
-char *extraArgs = verifyLegalArgs(argsListPublicHubs); /* no extras allowed */
+char *extraArgs = verifyLegalArgs(argListPublicHubs); /* no extras allowed */
 if (extraArgs)
     apiErrAbort(err400, err400Msg, "extraneous arguments found for function /list/publicHubs '%s'", extraArgs);
 
@@ -83,7 +83,7 @@ jsonWriteObjectEnd(jw);
 static void jsonDbDb()
 /* output the dbDb SQL table */
 {
-char *extraArgs = verifyLegalArgs(argsListUcscGenomes); /* no extras allowed */
+char *extraArgs = verifyLegalArgs(argListUcscGenomes); /* no extras allowed */
 if (extraArgs)
     apiErrAbort(err400, err400Msg, "extraneous arguments found for function /list/ucscGenomes '%s'", extraArgs);
 
@@ -354,9 +354,29 @@ if (errCatchStart(errCatch))
         itemCount = sum.validCount;
         bbiFileClose(&bwf);
         }
+    // NOTE: htslib does not appear to have a function to extract a count from BAI or TBI (tabix)
+    // indexes.  One could probably be added by adding code similar to samtools' idxstats subcommand,
+    // But in the meantime, this is not supported for types vcfTabix and bam.
     }
 errCatchEnd(errCatch);
 errCatchFree(&errCatch);
+return itemCount;
+}
+
+static long long bbiTableItemCount(struct sqlConnection *conn, char *type, char *tableName)
+/* Given a tableName that has a fileName column pointing to big*, bam or vcfTabix files, return the
+ * total itemCount from all rows (BAM and VCF tables may have one row per chrom). */
+{
+long long itemCount = 0;
+char query[2048];
+sqlSafef(query, sizeof query, "select fileName from %s", tableName);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    itemCount += bbiItemCount(row[0], type);
+    }
+sqlFreeResult(&sr);
 return itemCount;
 }
 
@@ -387,20 +407,29 @@ else
 	struct sqlConnection *conn = hAllocConnMaybe(db);
 	if (conn)
 	    {
-	    /* punting on split tables, return zero */
-	    struct hTableInfo *hti =
-		hFindTableInfoWithConn(conn, NULL, tableName);
-	    if (hti && hti->isSplit)
-		{
-		itemCount = 0;
-		}
-	    else
-		{
-		char query[2048];
-	   sqlSafef(query, sizeof(query), "select count(*) from %s", tableName);
-		itemCount = sqlQuickNum(conn, query);
-		}
-	    hFreeConn(&conn);
+            if ((startsWith("big", tdb->type) ||
+                 sameString("vcfTabix", tdb->type) || sameString("bam", tdb->type)) &&
+                sqlColumnExists(conn, tableName, "fileName"))
+                {
+                itemCount = bbiTableItemCount(conn, tdb->type, tableName);
+                }
+            else
+                {
+                /* punting on split tables, return zero */
+                struct hTableInfo *hti =
+                    hFindTableInfoWithConn(conn, NULL, tableName);
+                if (hti && hti->isSplit)
+                    {
+                    itemCount = 0;
+                    }
+                else
+                    {
+                    char query[2048];
+                    sqlSafef(query, sizeof(query), "select count(*) from %s", tableName);
+                    itemCount = sqlQuickNum(conn, query);
+                    }
+                }
+            hFreeConn(&conn);
 	    }
 	}
     }
@@ -434,7 +463,11 @@ if (! (trackLeavesOnly && isContainer) )
     jsonWriteString(jw, "longLabel", tdb->longLabel);
     jsonWriteNumber(jw, "itemCount", itemCount);
     if (tdb->parent)
+        {
         jsonWriteString(jw, "parent", tdb->parent->track);
+	if (tdb->parent->parent)
+	    jsonWriteString(jw, "parentParent", tdb->parent->parent->track);
+        }
     if (tdb->settingsHash)
         {
         struct hashEl *hel;
@@ -505,7 +538,7 @@ else if (sameWord("ucscGenomes", words[1]))
     jsonDbDb();
 else if (sameWord("hubGenomes", words[1]))
     {
-    char *extraArgs = verifyLegalArgs(argsListHubGenomes); /* only one allowed */
+    char *extraArgs = verifyLegalArgs(argListHubGenomes); /* only one allowed */
     if (extraArgs)
 	apiErrAbort(err400, err400Msg, "extraneous arguments found for function /list/hubGenomes '%s'", extraArgs);
 
@@ -539,7 +572,7 @@ else if (sameWord("hubGenomes", words[1]))
     }
 else if (sameWord("tracks", words[1]))
     {
-    char *extraArgs = verifyLegalArgs(argsListTracks);
+    char *extraArgs = verifyLegalArgs(argListTracks);
     if (extraArgs)
 	apiErrAbort(err400, err400Msg, "extraneous arguments found for function /list/tracks '%s'", extraArgs);
 
@@ -585,7 +618,7 @@ else if (sameWord("tracks", words[1]))
     }
 else if (sameWord("chromosomes", words[1]))
     {
-    char *extraArgs = verifyLegalArgs(argsListChromosomes);
+    char *extraArgs = verifyLegalArgs(argListChromosomes);
     if (extraArgs)
 	apiErrAbort(err400, err400Msg, "extraneous arguments found for function /list/chromosomes '%s'", extraArgs);
 

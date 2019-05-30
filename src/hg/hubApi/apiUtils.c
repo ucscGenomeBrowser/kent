@@ -387,8 +387,8 @@ if (NULL == hubGenome)
 return hubGenome;
 }
 
-char *verifyLegalArgs(char *validArgList)
-/* validArgList is a semicolon;separated;list;of;valid;arguments
+char *verifyLegalArgs(char *validArgList[])
+/* validArgList is an array of strings for valid arguments
  * returning string of any other arguments not on that list found in
  * cgiVarList(), NULL when none found.
  */
@@ -396,9 +396,11 @@ char *verifyLegalArgs(char *validArgList)
 struct hash *validHash = NULL;
 char *words[32];
 int wordCount = 0;
-if (isNotEmpty(validArgList))
+int i = 0;
+for ( ; isNotEmpty(validArgList[i]); ++i )
     {
-    wordCount = chopByChar(cloneString(validArgList), ';', words, 32);
+    ++wordCount;
+    words[i] = validArgList[i];
     }
 
 if (wordCount)

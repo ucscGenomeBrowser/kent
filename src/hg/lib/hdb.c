@@ -4104,31 +4104,42 @@ struct trackDb *hTrackDb(char *db)
  *	NOTE: this result is cached, do not free it !
  */
 {
-// FIXME: This is NOT CACHED and should be!  Since some callers (e.g. hgTables) consume the list,
-// I would suggest:
-// 1) static hash by db/hub
-// 2) call creates list if not in hash
-// 3) static (to this file) routine gives the actual tdb list
-// 4) public lib routine that returns fully cloned list
-// 5) public lib routine that returns cloned individual tdb complete with up/down inheritance
-// UNFORTUNATELY, cloning the memory with prove costly in time as well, because of all the pointers
-// to relink.  THEREFORE what should be done is to make the tdb list with const ->next pointers and
-// force discpline on the callers.  Sorts should be by hdb.c routines and any new lists (such as
-// hgTables makes) should be via tdbRefs.
-// SO we are back to being STALLED because of the volume of work.
-
-// static char *existingDb = NULL;
-// static struct trackDb *tdbList = NULL;
 struct trackDb *tdbList = NULL;
-//if (differentStringNullOk(existingDb, db))
-//    {
 
-    tdbList = loadTrackDb(db, NULL);
-    tdbList = trackDbLinkUpGenerations(tdbList);
-    tdbList = trackDbPolishAfterLinkup(tdbList, db);
-//    freeMem(existingDb);
-//    existingDb = cloneString(db);
-//    }
+boolean doCache = FALSE;
+if (sameOk(cfgOption("cacheTrackDb"), "on"))
+    doCache = TRUE;
+
+if (doCache)
+    {
+    // look for this db in the cache, if it's found it will have a file name, an address, and a size
+    boolean foundDb = FALSE;
+
+    if (foundDb)
+        {
+        unsigned long size = 24402580;
+        char *file = "brtest/flart";
+        unsigned long address = 0x7000000;
+        struct trackDb *clone = mapSharedMemTrackDb(file, address, size);
+        if (clone != NULL)
+            return clone;
+        }
+    memCheckPoint(); // we want to know how much memory is used to build the tdbList
+    }
+
+tdbList = loadTrackDb(db, NULL);
+tdbList = trackDbLinkUpGenerations(tdbList);
+tdbList = trackDbPolishAfterLinkup(tdbList, db);
+
+if (doCache)
+    {
+    struct trackDb *clone = cloneTdbListToSharedMem(tdbList, memCheckPoint());
+
+    // record clone in registy
+    if (clone == NULL)
+        warn("unable to clone trackDb");
+    }
+
 return tdbList;
 }
 
