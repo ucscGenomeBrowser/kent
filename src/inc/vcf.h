@@ -227,6 +227,12 @@ struct vcfFile *vcfTabixFileMayOpen(char *fileOrUrl, char *chrom, int start, int
  * there are maxErr+1 errors.  A maxErr less than zero does not stop
  * and reports all errors. Set maxErr to VCF_IGNORE_ERRS for silence. */
 
+long long vcfTabixItemCount(char *fileOrUrl, char *tbiFileOrUrl);
+/* Return the total number of items across all sequences in fileOrUrl, using index file.
+ * If tbiFileOrUrl is NULL, the index file is assumed to be fileOrUrl.tbi.
+ * NOTE: not all tabix index files include mapped item counts, so this may return 0 even for
+ * large files. */
+
 int vcfTabixBatchRead(struct vcfFile *vcff, char *chrom, int start, int end,
                       int maxErr, int maxRecords);
 // Reads a batch of records from an opened and indexed VCF file, adding them to

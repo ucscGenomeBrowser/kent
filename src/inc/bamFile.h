@@ -50,6 +50,13 @@ samfile_t *bamMustOpenLocal(char *fileName, char *mode, void *extraHeader);
  * The implementation is just a wrapper around samopen from the samtools library
  * that aborts with error message if there's a problem with the open. */
 
+long long bamFileItemCount(char *fileOrUrl, char *baiFileOrUrl);
+/* Return the total number of mapped items across all sequences in fileOrUrl, using index file.
+ * If baiFileOrUrl is NULL, the index file is assumed to be fileOrUrl.bai.
+ * NOTE: not all bam index files include mapped item counts, so this may return 0 even for large
+ * bam.  As of May 2019, our copy of hts_idx_get_stat does not support cram indexes
+ * (perhaps they never include counts?), so this always returns 0 for cram. */
+
 void bamFetchAlreadyOpen(samfile_t *samfile, bam_hdr_t *header,  bam_index_t *idx, char *bamFileName, 
 			 char *position, bam_fetch_f callbackFunc, void *callbackData);
 /* With the open bam file, return items the same way with the callbacks as with bamFetch() */
