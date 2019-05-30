@@ -44,7 +44,7 @@ Or if you prefer the older style, which allows you to link to different tools, y
 following format:</p>
 <p><code>http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&amp;hgS_otherUserName=&lt;userName&gt;&amp;gS_otherUserSessionName=&lt;sessionName&gt;</code></p>
 <p>
-This longer format has the flexibility of replacing "hgTracks" with different tool names to share 
+This longer format has the flexibility of replacing &quot;hgTracks&quot; with different tool names to share 
 saved settings on the Table Browser (hgTables), Variant Annotation Integrator (hgVai), or Data 
 Integrator (hgIntegrator). This will preserve your option selections and can be useful to share.
 The following format will bring the recipient to a user's custom Table Browser selections:</p>
@@ -54,7 +54,7 @@ The following format will bring the recipient to a user's custom Table Browser s
 The shorter link format requires a question mark before any URL parameters, with ampersand 
 characters separating different parameters like so: </p>
 <p><code><a href=http://genome.ucsc.edu/s/view/clinicalzoom?textSize=18>http://genome.ucsc.edu/s/view/clinicalzoom?textSize=18</a></code></p>
-<p>The longer format requires an ampersand between each parameter, like so:</p>
+<p>Both formats require an ampersand between each additional parameter, seen in the longer format like so:</p>
 <p><code><a href=http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&amp;hgS_otherUserName=view&amp;hgS_otherUserSessionName=clinicalzoom&amp;textSize=18>http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&amp;hgS_otherUserName=view&amp;hgS_otherUserSessionName=clinicalzoom&amp;textSize=18</a></code></p>
 
 <a name="link2"></a>
@@ -91,8 +91,8 @@ parameters</a> section of the Custom Tracks User's Guide.</p>
 <li><code>hideTracks=1</code> - hides all tracks</li>
 <li><code>&lt;trackName&gt;=hide|dense|pack|full</code> - sets specified track or subtrack to a
 chosen visibility</li>
-<li><code>textSize=&lt;number&gt;</code> - sets browser text size to either 6,8,10,12,14,18,24,or 
-34. Default is a textSize of 8.</li>
+<li><code>textSize=&lt;number&gt;</code> - sets browser text size to either 6, 8, 10, 12, 14, 18,
+24, or 34. Default is a textSize of 8.</li>
 <li><code>ignoreCookie=1</code> - removes pre-existing user settings like track seletion, custom
 tracks, and track hubs</li>
 </ul>
