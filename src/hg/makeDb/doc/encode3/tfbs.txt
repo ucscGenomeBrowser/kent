@@ -341,6 +341,7 @@ cat > scorePeaks.csh << 'EOF'
     set t = $f:r:r
     set table = encode3TfbsPk$t
     echo $table
+# next time grep out chrEBV
     zcat $f > $table.bed
     bedScore -col=7 -verbose=2 -method=reg -uniform $f $table.scored.bed
     hgLoadBed -noNameIx -trimSqlTable \
@@ -385,6 +386,10 @@ sed -e 's/^/alter table /' -e 's/$/ rename to /' tables.old.txt > rename.1.sql
 sed -e 's/encode3TfbsPk/encTfChipPk/' tables.old.txt | paste rename.1.sql -  | \
     sed 's/$/;/' > rename.sql
 hgsql hg19 < rename.sql
+
+# drop chrEBV from tables
+# edit/copy rename.sql to dropEbv.csh:  delete from <table> where chrom='chrEBV'
+hgsql hg19 < dropEbv.sql
 
 # add colors to tier1-3 cell experiments (using ENCODE 2 color conventions)
 #
@@ -455,6 +460,10 @@ sed -e 's/^/alter table /' -e 's/$/ rename to /' tables.old.txt > rename.1.sql
 sed -e 's/encode3TfbsPk/encTfChipPk/' tables.old.txt | paste rename.1.sql -  | \       
     sed 's/$/;/' > rename.sql
 hgsql hg38 < rename.sql
+
+# drop chrEBV from tables
+# edit/copy rename.sql to dropEbv.csh:  delete from <table> where chrom='chrEBV'
+hgsql hg38 < dropEbv.sql
 
 # add colors, using DNase similarity track 
 raToLines encode3.ra encode3.lines
