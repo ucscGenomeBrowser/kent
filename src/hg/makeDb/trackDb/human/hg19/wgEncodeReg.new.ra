@@ -342,6 +342,23 @@ canPack On
     #nameFilterLimits 1:125
     #nameFilterByRange on
 
+    # This is previous version of TFBS track
+    track wgEncodeRegTfbsClusteredV2
+    shortLabel Txn Fac ChIP V2
+    longLabel Transcription Factor ChIP-seq from ENCODE (V2)
+    type factorSource
+    superTrack wgEncodeReg hide
+    sourceTable wgEncodeRegTfbsCells
+    inputTrackTable wgEncodeRegTfbsClusteredInputs
+    inputTableFieldDisplay cellType factor treatment lab
+    controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
+    visibility hide
+    useScore 1
+    priority 1.73
+    html wgEncodeRegTfbsClustered.release2
+    dataVersion ENCODE Jan 2011 Freeze
+    pennantIcon none
+
     # This is current TFBS track with TF Motif feature
     track wgEncodeRegTfbsClusteredV3
     shortLabel Txn Factor ChIP

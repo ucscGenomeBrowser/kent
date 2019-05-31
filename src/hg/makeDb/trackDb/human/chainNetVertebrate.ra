@@ -91,13 +91,13 @@ priority 9
         type chain melGal1
         otherDb melGal1
 
-        track chainGalGal5
+        track chainGalGal6
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=s008 clade=c01
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain galGal5
-        otherDb galGal5
+        type chain galGal6
+        otherDb galGal6
 
         track chainGalGal4
         subTrack vertebrateChainNetViewchain off
@@ -657,13 +657,13 @@ priority 9
         type netAlign melGal1 chainMelGal1
         otherDb melGal1
 
-        track netGalGal5
+        track netGalGal6
         subTrack vertebrateChainNetViewnet on
         subGroups view=net species=s008 clade=c01
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign galGal5 chainGalGal5
-        otherDb galGal5
+        type netAlign galGal6 chainGalGal6
+        otherDb galGal6
 
         track netGalGal4
         subTrack vertebrateChainNetViewnet off
