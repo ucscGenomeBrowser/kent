@@ -1520,6 +1520,17 @@ for(; hub; hub = hub->next)
     }
 }
 
+int hubConnectStatusCmp(const void *va, const void *vb)
+/* Compare to sort based on shortLabel */
+{
+const struct hubConnectStatus *a = *((struct hubConnectStatus **)va);
+const struct hubConnectStatus *b = *((struct hubConnectStatus **)vb);
+struct trackHub *ta = a->trackHub;
+struct trackHub *tb = b->trackHub;
+
+return strcasecmp(tb->shortLabel, ta->shortLabel);
+}
+
 void doMiddle(struct cart *theCart)
 /* Write header and body of html page. */
 {
@@ -1592,6 +1603,8 @@ hPutc('\n');
 struct hubConnectStatus *hubList =  hubConnectStatusListFromCartAll(cart);
 
 checkTrackDbs(hubList);
+
+slSort(&hubList, hubConnectStatusCmp);
 
 // here's a little form for the add new hub button
 printf("<FORM ACTION=\"%s\" NAME=\"addHubForm\">\n",  "../cgi-bin/hgHubConnect");
