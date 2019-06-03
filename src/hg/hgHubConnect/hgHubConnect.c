@@ -1210,6 +1210,15 @@ if (hubSearchResult != NULL)
     }
 }
 
+int hubEntryCmp(const void *va, const void *vb)
+/* Compare to sort based on shortLabel */
+{
+const struct hubEntry *a = *((struct hubEntry **)va);
+const struct hubEntry *b = *((struct hubEntry **)vb);
+
+return strcasecmp(a->shortLabel, b->shortLabel);
+}
+
 
 void printHubList(struct slName *hubsToPrint, struct hash *hubLookup, struct hash *searchResultHash)
 /* Print out a list of hubs, possibly along with search hits to those hubs.
@@ -1223,6 +1232,8 @@ char *udcOldDir = cloneString(udcDefaultDir());
 char *searchUdcDir = cfgOptionDefault("hgHubConnect.cacheDir", udcOldDir);
 udcSetDefaultDir(searchUdcDir);
 udcSetCacheTimeout(1<<30);
+struct hubEntry *hubList = NULL;
+struct hubEntry *hubInfo;
 if (hubsToPrint != NULL)
     {
     printHubListHeader();
@@ -1240,10 +1251,16 @@ if (hubsToPrint != NULL)
              * Skip this hub. */
             continue;
             }
+        slAddHead(&hubList, hubInfo);
+    }
+    slSort(&hubList, hubEntryCmp);
+
+    for (hubInfo = hubList; hubInfo != NULL; hubInfo = hubInfo->next)
+        {
         struct hubSearchText *searchResult = NULL;
         if (searchResultHash != NULL)
             {
-            searchResult = (struct hubSearchText *) hashMustFindVal(searchResultHash, thisHubName->name);
+            searchResult = (struct hubSearchText *) hashMustFindVal(searchResultHash, hubInfo->hubUrl);
             }
         printOutputForHub(hubInfo, searchResult, count);
         count++;
@@ -1260,14 +1277,8 @@ if (hubsToPrint != NULL)
      * the individual hub tables when they're split by detailed search results. */
     printf("<div id='hideThisDiv'>\n");
     printf("<table class='hubList' id='hideThisTable'><tbody>\n");
-    struct slName *thisHubName = NULL;
-    for (thisHubName = hubsToPrint; thisHubName != NULL; thisHubName = thisHubName->next)
+    for (hubInfo = hubList; hubInfo != NULL; hubInfo = hubInfo->next)
         {
-        struct hubEntry *hubInfo = (struct hubEntry *) hashFindVal(hubLookup, thisHubName->name);
-        if (hubInfo == NULL)
-            {
-            continue;
-            }
         printOutputForHub(hubInfo, NULL, count);
         count++;
         }
@@ -1520,6 +1531,17 @@ for(; hub; hub = hub->next)
     }
 }
 
+int hubConnectStatusCmp(const void *va, const void *vb)
+/* Compare to sort based on shortLabel */
+{
+const struct hubConnectStatus *a = *((struct hubConnectStatus **)va);
+const struct hubConnectStatus *b = *((struct hubConnectStatus **)vb);
+struct trackHub *ta = a->trackHub;
+struct trackHub *tb = b->trackHub;
+
+return strcasecmp(tb->shortLabel, ta->shortLabel);
+}
+
 void doMiddle(struct cart *theCart)
 /* Write header and body of html page. */
 {
@@ -1592,6 +1614,8 @@ hPutc('\n');
 struct hubConnectStatus *hubList =  hubConnectStatusListFromCartAll(cart);
 
 checkTrackDbs(hubList);
+
+slSort(&hubList, hubConnectStatusCmp);
 
 // here's a little form for the add new hub button
 printf("<FORM ACTION=\"%s\" NAME=\"addHubForm\">\n",  "../cgi-bin/hgHubConnect");
