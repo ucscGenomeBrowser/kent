@@ -455,35 +455,66 @@ else
 return retVal;
 }
 
-void hubCheckCompositeSettings(struct trackHub *hub, struct trackHubGenome *genome, struct trackDb *tdb, struct dyString *errors)
-/* Check composite level settings like subgroups, dimensions, sortOrder, etc */
+int hubCheckCompositeSettings(struct trackHub *hub, struct trackHubGenome *genome, struct trackDb *tdb, struct dyString *errors)
+/* Check composite level settings like subgroups, dimensions, sortOrder, etc.
+ * Note that this function returns an int because we want to warn about all errors in a single
+ * composite stanza rather than errAbort on the first error */
 {
+int retVal = 0;
 if (!tdbIsComposite(tdb))
-    return;
+    return retVal;
 
 sortOrder_t *sortOrder = NULL;
 membership_t *membership = NULL;
 struct slRef *subtrackRef, *subtrackRefList = NULL;
 
 // check that if a sortOrder is defined, then subtracks exist in the subgroup
-sortOrder = sortOrderGet(NULL, tdb);
-if (sortOrder)
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
     {
-    subtrackRefList = trackDbListGetRefsToDescendantLeaves(tdb->subtracks);
-    for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackRef->next)
+    (void)membersForAllSubGroupsGet(tdb, NULL);
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotWarning || errCatch->gotError)
+    {
+    // don't add a new line because one will already be inserted by the errCatch->message
+    dyStringPrintf(errors, "track %s error: %s", tdb->shortLabel, errCatch->message->string);
+    retVal = 1;
+    }
+
+if (errCatchStart(errCatch))
+    {
+    sortOrder = sortOrderGet(NULL, tdb);
+    if (sortOrder)
         {
-        struct trackDb *subtrack = subtrackRef->val;
-        membership = subgroupMembershipGet(subtrack);
-        int i;
-        for (i = 0; i < sortOrder->count; i++)
+        subtrackRefList = trackDbListGetRefsToDescendantLeaves(tdb->subtracks);
+        for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackRef->next)
             {
-            char *col = sortOrder->column[i];
-            if (membership == NULL || stringArrayIx(col, membership->subgroups, membership->count) == -1)
-                dyStringPrintf(errors,
-                    "sortOrder %s defined for all subtracks of the composite track \"%s\", but the track \"%s\" is not a member of this subGroup\n", col, tdb->shortLabel, subtrack->shortLabel);
+            struct trackDb *subtrack = subtrackRef->val;
+            membership = subgroupMembershipGet(subtrack);
+            int i;
+            for (i = 0; i < sortOrder->count; i++)
+                {
+                char *col = sortOrder->column[i];
+                if ( (!sameString(col, SUBTRACK_COLOR_SUBGROUP)) && (membership == NULL || stringArrayIx(col, membership->subgroups, membership->count) == -1))
+                    {
+                    dyStringPrintf(errors, "sortOrder %s defined for all subtracks of the composite track \"%s\", but the track \"%s\" is not a member of this subGroup\n",
+                        col, tdb->shortLabel, subtrack->shortLabel);
+                    retVal = 1;
+                    }
+                }
             }
         }
     }
+errCatchEnd(errCatch);
+if (errCatch->gotWarning || errCatch->gotError)
+    {
+    // don't add a new line because one will already be inserted by the errCatch->message
+    dyStringPrintf(errors, "track %s error: %s", tdb->shortLabel, errCatch->message->string);
+    retVal = 1;
+    }
+errCatchFree(&errCatch);
+return retVal;
 }
 
 void hubCheckParentsAndChildren(struct trackDb *tdb)
@@ -546,16 +577,19 @@ if (options->printMeta)
     slPairFreeValsAndList(&metaPairs);
     }
 
-if (!options->checkFiles)
-    return retVal;
 
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
     hubCheckParentsAndChildren(tdb);
     if (tdbIsComposite(tdb))
-        hubCheckCompositeSettings(hub, genome, tdb, errors);
-    hubCheckBigDataUrl(hub, genome, tdb);
+        {
+        retVal |= hubCheckCompositeSettings(hub, genome, tdb, errors);
+        }
+    if (options->checkFiles)
+        {
+        hubCheckBigDataUrl(hub, genome, tdb);
+        }
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)

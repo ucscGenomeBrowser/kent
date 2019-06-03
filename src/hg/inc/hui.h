@@ -997,6 +997,14 @@ boolean superTrackDropDownWithExtra(struct cart *cart, struct trackDb *tdb,
 #define superTrackDropDown(cart,tdb,visibleChild) \
         superTrackDropDownWithExtra(cart,tdb,visibleChild,NULL)
 
+typedef struct _dimensions
+    {
+    int count;
+    char**names;
+    char**subgroups;
+    char* setting;
+    } dimensions_t;
+
 boolean dimensionsExist(struct trackDb *parentTdb);
 /* Does this parent track contain dimensions? */
 
@@ -1008,6 +1016,25 @@ typedef struct _membership
     char **titles;     // Ary of Titles of subGroups a child belongs to (ie Peak)
     char * setting;
     } membership_t;
+
+typedef struct _membersForAll
+    {
+    int abcCount;
+    int dimMax;               // Arrays of "members" structs will be ordered as
+			      //    [view][dimX][dimY][dimA]... with first 3 in fixed spots
+			      //    and rest as found (and non-empty)
+    boolean filters;          // ABCs use filterComp boxes (as upposed to check boxes
+    dimensions_t *dimensions; // One struct describing "deimensions" setting"
+			      //    (e.g. dimX:cell dimY:antibody dimA:treatment)
+    members_t* members[27];   // One struct for each dimension describing groups in dimension
+			      //    (e.g. cell: GM12878,K562)
+    char* checkedTags[27];  // FIXME: Should move checkedTags into
+			    // membersForAll->members[ix]->selected;
+    char letters[27];
+    } membersForAll_t;
+
+membersForAll_t* membersForAllSubGroupsGet(struct trackDb *parentTdb, struct cart *cart);
+// Returns all the parents subGroups and members
 
 membership_t *subgroupMembershipGet(struct trackDb *childTdb);
 /* gets all the subgroup membership for a child track */

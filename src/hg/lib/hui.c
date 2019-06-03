@@ -2518,13 +2518,6 @@ strcpy(newName+1,name);
 return newName;
 }
 
-typedef struct _dimensions
-    {
-    int count;
-    char**names;
-    char**subgroups;
-    char* setting;
-    } dimensions_t;
 
 boolean dimensionsExist(struct trackDb *parentTdb)
 // Does this parent track contain dimensions?
@@ -2672,6 +2665,10 @@ for (ix = 2,members->count=0; ix < count; ix++)
 	members->titles[members->count] = strSwapChar(value,'_',' ');
 	members->count++;
 	}
+    else
+        {
+        warn("Subgroup \"%s\" is missing a tag=val pair", words[1]);
+        }
     }
 tdbExtrasMembersSet(parentTdb, groupNameOrTag, members);
 
@@ -2789,21 +2786,6 @@ enum
     dimA=3, // dimA is start of first of the optional non-matrix, non-view dimensions
     };
 
-typedef struct _membersForAll
-    {
-    int abcCount;
-    int dimMax;               // Arrays of "members" structs will be ordered as
-			      //    [view][dimX][dimY][dimA]... with first 3 in fixed spots
-			      //    and rest as found (and non-empty)
-    boolean filters;          // ABCs use filterComp boxes (as upposed to check boxes
-    dimensions_t *dimensions; // One struct describing "deimensions" setting"
-			      //    (e.g. dimX:cell dimY:antibody dimA:treatment)
-    members_t* members[27];   // One struct for each dimension describing groups in dimension
-			      //    (e.g. cell: GM12878,K562)
-    char* checkedTags[27];  // FIXME: Should move checkedTags into
-			    // membersForAll->members[ix]->selected;
-    char letters[27];
-    } membersForAll_t;
 
 
 static char* abcMembersChecked(struct trackDb *parentTdb, struct cart *cart, members_t* members,
@@ -2912,7 +2894,7 @@ membersForAll->abcCount = membersForAll->dimMax - dimA;
 return membersForAll;
 }
 
-static membersForAll_t* membersForAllSubGroupsGet(struct trackDb *parentTdb, struct cart *cart)
+membersForAll_t* membersForAllSubGroupsGet(struct trackDb *parentTdb, struct cart *cart)
 // Returns all the parents subGroups and members
 {
 membersForAll_t *membersForAll = tdbExtrasMembersForAll(parentTdb);
