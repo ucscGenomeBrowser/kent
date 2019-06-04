@@ -15,8 +15,15 @@ searchPriority 8
 track refGene override
 visibility pack
 
+track xenoRefGene override
+visibility hide
+
 track intronEst override
 visibility hide
 
 track chainNetHg38 override
 visibility dense
+
+track ensGene override
+visibility pack
+ensemblIdUrl http://www.ensembl.org/Cricetulus_griseus_chok1gshd
