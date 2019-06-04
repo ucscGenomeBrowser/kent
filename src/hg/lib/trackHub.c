@@ -754,6 +754,7 @@ static void expandBigDataUrl(struct trackHub *hub, struct trackHubGenome *genome
 /* Expand bigDataUrls so that no longer relative to genome->trackDbFile */
 {
 expandOneUrl(tdb->settingsHash, genome->trackDbFile, "bigDataUrl");
+expandOneUrl(tdb->settingsHash, genome->trackDbFile, "bigDataIndex");
 expandOneUrl(tdb->settingsHash, genome->trackDbFile, "frames");
 expandOneUrl(tdb->settingsHash, genome->trackDbFile, "summary");
 expandOneUrl(tdb->settingsHash, genome->trackDbFile, "linkDataUrl");

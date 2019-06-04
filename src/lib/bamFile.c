@@ -27,11 +27,27 @@ if (sam->format.format == cram)
 
 // assume that index is a .bai file 
 char indexName[4096];
+bam_index_t *ret = NULL;
 if (baiFileOrUrl==NULL)
+    {
+    // first try tacking .bai on the end of the bam file name
     safef(indexName, sizeof indexName, "%s.bai", fileOrUrl);
+    if ((ret =  sam_index_load2(sam, fileOrUrl, indexName)) == NULL)
+        {
+        // since the open didn't work, try replacing suffix (if any) with .bai
+        safef(indexName, sizeof indexName - sizeof(".bai"), "%s", fileOrUrl);
+        char *lastDot = strrchr(indexName, '.');
+        if (lastDot)
+            {
+            strcpy(lastDot, ".bai");
+            ret = sam_index_load2(sam, fileOrUrl, indexName);
+            }
+        }
+    }
 else
-    safef(indexName, sizeof indexName, "%s", baiFileOrUrl);
-return sam_index_load2(sam, fileOrUrl, indexName);
+    ret = sam_index_load2(sam, fileOrUrl, baiFileOrUrl);
+
+return ret;
 }
 
 
