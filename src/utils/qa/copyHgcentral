@@ -111,7 +111,7 @@ def runTest(testOptions, testTable, testField1, testField2, testOrder):
     testQuery = "select * from " + testTable + " where " + testField1 + "=\"" + \
                  testField2 + "\" order by " + testOrder
     queryDev = createFile(fileDev, "hgcentraltest", testQuery, "hgwdev")
-    queryBeta = createFile(fileBeta, "hgcentralbeta", testQuery, "mysqlbeta")
+    queryBeta = createFile(fileBeta, "hgcentralbeta", testQuery, "hgwbeta")
     queryRr = createFile(fileRr, "hgcentral", testQuery, "genome-centdb")
     if queryDev == "" and queryBeta == "" and queryRr == "":
         printHeader(testTable)
@@ -166,7 +166,7 @@ def runExecute(execOptions, execTable, execField1, execField2, execOrder):
     queryTestDev = openFile(fileTestDev)
     queryExecuteDev = chopper(callHgsql("hgcentraltest", execQuery, "hgwdev"), "strip", "")
     queryTestBeta = openFile(fileTestBeta)
-    queryExecuteBeta = chopper(callHgsql("hgcentralbeta", execQuery, "mysqlbeta"), "strip", "")
+    queryExecuteBeta = chopper(callHgsql("hgcentralbeta", execQuery, "hgwbeta"), "strip", "")
     queryTestRr = openFile(fileTestRr)
     queryExecuteRr = chopper(callHgsql("hgcentral", execQuery, "genome-centdb"), "strip", "")
     if queryTestDev != queryExecuteDev or queryTestBeta != queryExecuteBeta or \
@@ -196,7 +196,7 @@ def runExecute(execOptions, execTable, execField1, execField2, execOrder):
     cladesBeta = ""
     if execTable == "genomeClade":
         clade = chopper(callHgsql("hgcentraltest", cladeQuery, "hgwdev"), "strip", "")
-        cladesBeta = chopper(callHgsql("hgcentralbeta", cladeBetaQuery, "mysqlbeta"), "split", "\n")
+        cladesBeta = chopper(callHgsql("hgcentralbeta", cladeBetaQuery, "hgwbeta"), "split", "\n")
     if execOptions.orig == "dev" and execTable == "genomeClade" and \
             queryExecuteBeta == "" and clade not in cladesBeta:
         printOutput(execTable, queryExecuteDev, queryExecuteBeta, queryExecuteRr)
@@ -226,9 +226,9 @@ def runExecute(execOptions, execTable, execField1, execField2, execOrder):
             return
     if execOptions.dest == "beta":
         if eraseFirst == 1:
-            callHgsql("hgcentralbeta", deleteQuery, "mysqlbeta")
-        callHgsql("hgcentralbeta", loadQueryBeta, "mysqlbeta")
-        queryExecuteBeta = chopper(callHgsql("hgcentralbeta", execQuery, "mysqlbeta"), "strip", "")
+            callHgsql("hgcentralbeta", deleteQuery, "hgwbeta")
+        callHgsql("hgcentralbeta", loadQueryBeta, "hgwbeta")
+        queryExecuteBeta = chopper(callHgsql("hgcentralbeta", execQuery, "hgwbeta"), "strip", "")
     else:
         if eraseFirst == 1:
             callHgsql("hgcentral", deleteQuery, "genome-centdb")
