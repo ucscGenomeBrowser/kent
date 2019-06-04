@@ -352,8 +352,10 @@ struct trackDbRef *tdbRefList = NULL, *tdbRef;
 
 for(tdb = trackList; tdb; tdb = tdb->next)
     {
-    struct grp *grp = hashMustFindVal(groupHash, tdb->grp);
-    double priority =  grp->priority + tdb->priority/100.0;
+    double priority = tdb->priority/100.0;
+    struct grp *grp = hashFindVal(groupHash, tdb->grp);
+    if (grp)
+        priority += grp->priority;
 
     checkForVisible(cart, grp, &tdbRefList, tdb,  priority, 1.0/100.0);
     }
