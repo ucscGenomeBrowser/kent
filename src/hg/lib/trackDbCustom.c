@@ -805,15 +805,23 @@ if (ctPopup > cfgNone)
 return ctPopup;
 }
 
+boolean trackDbNoInheritField(char *field)
+/* Suppress inheritance of specific fields.
+ * NOTE: make more efficient if more of these are added */
+{
+return (sameString(field, "pennantIcon"));
+}
+
 char *trackDbSetting(struct trackDb *tdb, char *name)
-/* Look for a trackDb setting from lowest level on up chain of parents. */
+/* Look for a trackDb setting from lowest level on up chain of parents,
+ * excepting fields specifically defined as not inheritable  */
 {
 struct trackDb *generation;
 char *trackSetting = NULL;
 for (generation = tdb; generation != NULL; generation = generation->parent)
     {
-    trackSetting = trackDbLocalSetting(generation,name);
-    if (trackSetting != NULL)
+    trackSetting = trackDbLocalSetting(generation, name);
+    if (trackSetting != NULL || trackDbNoInheritField(name))
         break;
     }
 return trackSetting;
