@@ -3945,7 +3945,7 @@ if (!trackDbSettingClosestToHome(subtrackTdb, "noInherit"))
     struct hashCookie hc = hashFirst(compositeTdb->settingsHash);
     while ((hel = hashNext(&hc)) != NULL)
 	{
-	if (!hashLookup(subtrackTdb->settingsHash, hel->name))
+	if (!hashLookup(subtrackTdb->settingsHash, hel->name) && !trackDbNoInheritField(hel->name))
 	    hashAdd(subtrackTdb->settingsHash, hel->name, hel->val);
 	}
     }
