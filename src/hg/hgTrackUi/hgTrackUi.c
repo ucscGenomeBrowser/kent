@@ -2786,6 +2786,7 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
                                         event);
 
         printf("</TD>\n<TD>");
+        hPrintPennantIcon(tdb);
 	safef(id, sizeof id, "%s_link", tdb->track);
         printf("<A HREF='%s?%s=%s&c=%s&g=%s' id='%s'>%s</A>&nbsp;", 
                     tdbIsDownloadsOnly(tdb) ? hgFileUiName(): hTrackUiForTrack(tdb->track),
