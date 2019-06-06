@@ -4112,18 +4112,11 @@ if (sameOk(cfgOption("cacheTrackDb"), "on"))
 
 if (doCache)
     {
-    // look for this db in the cache, if it's found it will have a file name, an address, and a size
-    boolean foundDb = FALSE;
+    struct trackDb *cacheTdb = trackDbCache(db);
 
-    if (foundDb)
-        {
-        unsigned long size = 24402580;
-        char *file = "brtest/flart";
-        unsigned long address = 0x7000000;
-        struct trackDb *clone = mapSharedMemTrackDb(file, address, size);
-        if (clone != NULL)
-            return clone;
-        }
+    if (cacheTdb != NULL)
+        return cacheTdb;
+    
     memCheckPoint(); // we want to know how much memory is used to build the tdbList
     }
 
@@ -4132,13 +4125,7 @@ tdbList = trackDbLinkUpGenerations(tdbList);
 tdbList = trackDbPolishAfterLinkup(tdbList, db);
 
 if (doCache)
-    {
-    struct trackDb *clone = cloneTdbListToSharedMem(tdbList, memCheckPoint());
-
-    // record clone in registy
-    if (clone == NULL)
-        warn("unable to clone trackDb");
-    }
+    trackDbCloneTdbListToSharedMem(db, tdbList, memCheckPoint());
 
 return tdbList;
 }

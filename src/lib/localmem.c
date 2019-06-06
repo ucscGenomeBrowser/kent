@@ -101,6 +101,24 @@ void lmCleanup(struct lm **pLm)
     freeMem(lm);
 }
 
+unsigned int lmBlockHeaderSize()
+// Return the size of an lmBlock.
+{
+return sizeof(struct lmBlock);
+}
+
+size_t lmUsed(struct lm *lm)
+// Returns amount of memory allocated
+{
+size_t used = 0;
+
+struct lmBlock *mb = lm->blocks;
+for (;mb != NULL;mb = mb->next)
+    used += (mb->free - (char *)(mb+1));
+
+return used;
+}
+
 size_t lmAvailable(struct lm *lm)
 // Returns currently available memory in pool
 {
