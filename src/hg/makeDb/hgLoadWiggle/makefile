@@ -9,7 +9,7 @@ O = hgLoadWiggle.o
 
 A = hgLoadWiggle
 
-all::	${A} hgWiggle wigEncode
+all::	${A} hgWiggle wigEncode fixStepToBedGraph varStepToBedGraph
 
 hgLoadWiggle: $O ${MYLIBS}
 	${CC} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} $L
@@ -32,6 +32,12 @@ wigEncode:	wigEncode.o ${MYLIBS}
 	${STRIP} ${DESTDIR}${BINDIR}/wigEncode${EXE}
 
 wigEncode.o:	../../inc/wiggle.h wigEncode.c
+
+varStepToBedGraph: varStepToBedGraph.pl
+	rm -f "${DESTDIR}${BINDIR}/$@.pl" &&  cp $@.pl "${DESTDIR}${BINDIR}" &&  chmod +x "${DESTDIR}${BINDIR}/$@.pl" 
+
+fixStepToBedGraph: fixStepToBedGraph.pl
+	rm -f "${DESTDIR}${BINDIR}/$@.pl" &&  cp $@.pl "${DESTDIR}${BINDIR}" &&  chmod +x "${DESTDIR}${BINDIR}/$@.pl" 
 
 compile:	${O} hgWiggle.o wigEncode.o ${MYLIBS}
 	${CC} -o ${A} $O ${MYLIBS} $L
