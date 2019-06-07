@@ -4673,7 +4673,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 	int cfgSubtrack = configurableByAjax(subtrack,cType);
 	if (cfgSubtrack <= cfgNone)
 	    cType = cfgNone;
-	else if (membersForAll->members[dimV])
+	else if (membersForAll->members[dimV] && membership != NULL)
 	    {  // subtrack only configurable if more than one subtrack in view
 	       // find "view" in subgroup membership: e.g. "signal"
 	    if (-1 != (ix = stringArrayIx(membersForAll->members[dimV]->groupTag,
@@ -4781,7 +4781,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 	printf("</TD><TD>"); // An extra column for subVis/wrench so dragAndDrop works
 	enum trackVisibility vis = tdbVisLimitedByAncestors(cart,subtrack,FALSE,FALSE);
 	char *view = NULL;
-	if (membersForAll->members[dimV]
+	if (membersForAll->members[dimV] && membership !=NULL
 	&& -1 != (ix = stringArrayIx(membersForAll->members[dimV]->groupTag, membership->subgroups,
 				     membership->count)))
 	    view = membership->membership[ix];
@@ -4899,7 +4899,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 	#define MAKE_CFG_SUBTRACK_DIV(table,view) \
 					printf(CFG_SUBTRACK_DIV,(table),(view)?(view):"noView")
 	char * view = NULL;
-	if (membersForAll->members[dimV] && -1 !=
+	if (membersForAll->members[dimV] && membership != NULL && -1 !=
 			    (ix = stringArrayIx(membersForAll->members[dimV]->groupTag,
 						membership->subgroups, membership->count)))
 	    view = membership->membership[ix];
