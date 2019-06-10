@@ -5,7 +5,6 @@ compositeTrack on
 group phenDis
 type bigLolly 12 + 
 visibility hide
-release alpha
 project_idFilterValues TCGA-LAML|Acute Myeloid Leukemia,TCGA-ACC|Adrenocortical carcinoma,TCGA-BLCA|Bladder Urothelial Carcinoma,TCGA-LGG|Brain Lower Grade Glioma,TCGA-BRCA|Breast invasive carcinoma,TCGA-CESC|Cervical squamous cell carcinoma and endocervical adenocarcinoma,TCGA-CHOL|Cholangiocarcinoma,TCGA-LCML|Chronic Myelogenous Leukemia,TCGA-COAD|Colon adenocarcinoma,TCGA-CNTL|Controls,TCGA-ESCA|Esophageal carcinoma,TCGA-FPPP|FFPE Pilot Phase II,TCGA-GBM|Glioblastoma multiforme,TCGA-HNSC|Head and Neck squamous cell carcinoma,TCGA-KICH|Kidney Chromophobe,TCGA-KIRC|Kidney renal clear cell carcinoma,TCGA-KIRP|Kidney renal papillary cell carcinoma,TCGA-LIHC|Liver hepatocellular carcinoma,TCGA-LUAD|Lung adenocarcinoma,TCGA-LUSC|Lung squamous cell carcinoma,TCGA-DLBC|Lymphoid Neoplasm Diffuse Large B-cell Lymphoma,TCGA-MESO|Mesothelioma,TCGA-MISC|Miscellaneous,TCGA-OV|Ovarian serous cystadenocarcinoma,TCGA-PAAD|Pancreatic adenocarcinoma,TCGA-PCPG|Pheochromocytoma and Paraganglioma,TCGA-PRAD|Prostate adenocarcinoma,TCGA-READ|Rectum adenocarcinoma,TCGA-SARC|Sarcoma,TCGA-SKCM|Skin Cutaneous Melanoma,TCGA-STAD|Stomach adenocarcinoma,TCGA-TGCT|Testicular Germ Cell Tumors,TCGA-THYM|Thymoma,TCGA-THCA|Thyroid carcinoma,TCGA-UCS|Uterine Carcinosarcoma,TCGA-UCEC|Uterine Corpus Endometrial Carcinoma,TCGA-UVM|Uveal Melanoma
 project_idFilterType multipleListOr
 genderFilterValues male,female
@@ -19,7 +18,6 @@ longLabel All GDC Cancer mutations: 33 TCGA Cancer Projects Summary (Pan-Can 33)
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/gdcCancer.bb
 autoScale on
 priority 1
@@ -34,7 +32,6 @@ longLabel Adrenocortical carcinoma
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/ACC.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
@@ -48,7 +45,6 @@ longLabel Bladder Urothelial Carcinoma
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/BLCA.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
@@ -62,7 +58,6 @@ longLabel Breast invasive carcinoma
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/BRCA.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
@@ -76,7 +71,6 @@ longLabel Cervical squamous cell carcinoma and endocervical adenocarcinoma
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/CESC.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
@@ -90,7 +84,6 @@ longLabel Cholangiocarcinoma
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/CHOL.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
@@ -104,7 +97,6 @@ longLabel Colon adenocarcinoma
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/COAD.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
@@ -118,7 +110,6 @@ longLabel Lymphoid Neoplasm Diffuse Large B-cell Lymphoma
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/DLBC.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
@@ -132,7 +123,6 @@ longLabel Esophageal carcinoma
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/ESCA.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
@@ -146,7 +136,6 @@ longLabel Glioblastoma multiforme
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/GBM.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
@@ -160,7 +149,6 @@ longLabel Head and Neck squamous cell carcinoma
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/HNSC.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
@@ -174,7 +162,6 @@ longLabel Kidney Chromophobe
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/KICH.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
@@ -188,7 +175,6 @@ longLabel Kidney renal clear cell carcinoma
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/KIRC.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
@@ -202,7 +188,6 @@ longLabel Kidney renal papillary cell carcinoma
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/KIRP.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
@@ -216,7 +201,6 @@ longLabel Acute Myeloid Leukemia
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/LAML.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
@@ -230,7 +214,6 @@ longLabel Brain Lower Grade Glioma
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/LGG.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
@@ -244,7 +227,6 @@ longLabel Liver hepatocellular carcinoma
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/LIHC.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
@@ -258,7 +240,6 @@ longLabel Lung adenocarcinoma
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/LUAD.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
@@ -272,7 +253,6 @@ longLabel Lung squamous cell carcinoma
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/LUSC.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
@@ -286,7 +266,6 @@ longLabel Mesothelioma
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/MESO.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
@@ -300,7 +279,6 @@ longLabel Ovarian serous cystadenocarcinoma
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/OV.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
@@ -314,7 +292,6 @@ longLabel Pancreatic adenocarcinoma
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/PAAD.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
@@ -328,7 +305,6 @@ longLabel Pheochromocytoma and Paraganglioma
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/PCPG.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
@@ -342,7 +318,6 @@ longLabel Prostate adenocarcinoma
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/PRAD.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
@@ -356,7 +331,6 @@ longLabel Rectum adenocarcinoma
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/READ.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
@@ -370,7 +344,6 @@ longLabel Sarcoma
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/SARC.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
@@ -384,7 +357,6 @@ longLabel Skin Cutaneous Melanoma
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/SKCM.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
@@ -398,7 +370,6 @@ longLabel Stomach adenocarcinoma
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/STAD.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
@@ -412,7 +383,6 @@ longLabel Testicular Germ Cell Tumors
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/TGCT.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
@@ -426,7 +396,6 @@ longLabel Thyroid carcinoma
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/THCA.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
@@ -440,7 +409,6 @@ longLabel Thymoma
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/THYM.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
@@ -454,7 +422,6 @@ longLabel Uterine Corpus Endometrial Carcinoma
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/UCEC.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
@@ -468,7 +435,6 @@ longLabel Uterine Carcinosarcoma
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/UCS.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
@@ -482,7 +448,6 @@ longLabel Uveal Melanoma
 group phenDis
 type bigLolly 12 + 
 lollyField 13
-release alpha
 bigDataUrl /gbdb/hg38/gdcCancer/UVM.bb
 autoScale on
 urls case_id=https://portal.gdc.cancer.gov/cases/193294
