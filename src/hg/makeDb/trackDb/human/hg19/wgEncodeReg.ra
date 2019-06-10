@@ -7,13 +7,14 @@ longLabel Integrated Regulation from ENCODE
 wgEncode 1
 group regulation
 priority 1
+pennantIcon Updated red ../goldenPath/newsarch.html Added Transcription Factor ChIP-seq Clusters from ENCODE 3
 canPack On
 
     track wgEncodeRegTxn
     container multiWig
     noInherit on
     type bigWig 0 65500
-    parent wgEncodeReg
+    superTrack wgEncodeReg hide
     shortLabel Transcription
     longLabel Transcription Levels Assayed by RNA-seq on 9 Cell Lines from ENCODE
     visibility full
@@ -25,6 +26,7 @@ canPack On
     priority 1.1
     dragAndDrop subTracks
     allButtonPair on
+    pennantIcon none
 
 	track wgEncodeRegTxnCaltechRnaSeqGm12878R2x75Il200SigPooled
 	shortLabel GM12878
@@ -100,10 +102,11 @@ canPack On
 	color 255,128,212
 
     track wgEncodeRegMarkH3k4me1
+    pennantIcon none
     container multiWig
     noInherit on
     type bigWig 0 10000
-    parent wgEncodeReg
+    superTrack wgEncodeReg hide
     shortLabel Layered H3K4Me1
     longLabel H3K4Me1 Mark (Often Found Near Regulatory Elements) on 7 cell lines from ENCODE
     visibility hide
@@ -172,10 +175,11 @@ canPack On
 	type bigWig 0 6866
 
     track wgEncodeRegMarkH3k4me3
+    pennantIcon none
     container multiWig
     noInherit on
     type bigWig 0 10000
-    parent wgEncodeReg
+    superTrack wgEncodeReg hide
     shortLabel Layered H3K4Me3
     longLabel H3K4Me3 Mark (Often Found Near Promoters) on 7 cell lines from ENCODE
     visibility hide
@@ -244,10 +248,11 @@ canPack On
 	type bigWig 0 19229
 
     track wgEncodeRegMarkH3k27ac
+    pennantIcon none
     container multiWig
     noInherit on
     type bigWig 0 10000
-    parent wgEncodeReg
+    superTrack wgEncodeReg full
     shortLabel Layered H3K27Ac
     longLabel H3K27Ac Mark (Often Found Near Active Regulatory Elements) on 7 cell lines from ENCODE
     visibility full
@@ -321,7 +326,7 @@ canPack On
     shortLabel DNase Clusters
     longLabel DNaseI Hypersensitivity Clusters in 125 cell types from ENCODE (V3)
     type bed 5 .
-    parent wgEncodeReg
+    superTrack wgEncodeReg dense
     inputTrackTable wgEncodeRegDnaseClusteredInputsV2
     inputTableFieldDisplay cellType treatment lab
     sourceTable wgEncodeRegDnaseClusteredSources
@@ -332,6 +337,7 @@ canPack On
     scoreFilterLimits 100:1000
     html wgEncodeRegDnaseClusteredV3
     priority 1.6
+    pennantIcon none
     #nameFilter 1:125
     #nameFilterLimits 1:125
     #nameFilterByRange on
@@ -341,7 +347,7 @@ canPack On
     shortLabel Txn Fac ChIP V2
     longLabel Transcription Factor ChIP-seq from ENCODE (V2)
     type factorSource
-    parent wgEncodeReg
+    superTrack wgEncodeReg hide
     sourceTable wgEncodeRegTfbsCells
     inputTrackTable wgEncodeRegTfbsClusteredInputs
     inputTableFieldDisplay cellType factor treatment lab
@@ -351,13 +357,15 @@ canPack On
     priority 1.73
     html wgEncodeRegTfbsClustered.release2
     dataVersion ENCODE Jan 2011 Freeze
+    pennantIcon none
 
     # This is current TFBS track with TF Motif feature
     track wgEncodeRegTfbsClusteredV3
     shortLabel Txn Factor ChIP
+    pennantIcon none
     longLabel Transcription Factor ChIP-seq Clusters (161 factors) from ENCODE with Factorbook Motifs
     type factorSource
-    parent wgEncodeReg
+    superTrack wgEncodeReg dense
     sourceTable wgEncodeRegTfbsCellsV3
     inputTrackTable wgEncodeRegTfbsClusteredInputsV3
     inputTableFieldDisplay cellType factor antibody treatment lab
