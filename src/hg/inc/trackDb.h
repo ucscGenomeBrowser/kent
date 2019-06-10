@@ -706,10 +706,10 @@ struct trackDb *lmCloneTdbList(struct lm *lm, struct trackDb *list, struct track
 struct trackDb *lmCloneSuper(struct lm *lm, struct trackDb *tdb, struct hash *superHash);
 /* clone a super track tdb structure. */
 
-struct trackDb *cloneTdbListToSharedMem(struct trackDb *list, unsigned long size);
+void trackDbCloneTdbListToSharedMem(char *db, struct trackDb *list, unsigned long size);
 /* Allocate shared memory and clone trackDb list into it. */
 
-struct trackDb *mapSharedMemTrackDb(char *file, unsigned long address, unsigned long size);
-/* Use a hunk of shared memory as our trackDb list. */
+struct trackDb *trackDbCache(char *db);
+/* Check to see if this db has a cached trackDb. */
 #endif /* TRACKDB_H */
 

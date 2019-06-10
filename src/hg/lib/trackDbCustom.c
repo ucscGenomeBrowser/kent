@@ -1650,32 +1650,78 @@ for(tdb = list; tdb; tdb = tdb->next)
 return newList;
 }
 
-struct trackDb *mapSharedMemTrackDb(char *file, unsigned long address, unsigned long size)
-/* Use a hunk of shared memory as our trackDb list. */
+struct trackDb *trackDbCache(char *db)
+/* Check to see if this db has a cached trackDb. */
 {
-int oflags=O_RDWR | O_CREAT;
-int     fd = shm_open(file, oflags, 0666 );
-u_char *mem = (u_char *) mmap((void *)address, size, PROT_READ|PROT_WRITE, MAP_PRIVATE, fd, 0);
-u_char *ret = mem + 32;  // lm header is 32 bytes long
+char dirName[4096];
 
-return (struct trackDb *)ret;
+safef(dirName, sizeof dirName, "/dev/shm/trackDbCache/%s", db);
+if (!isDirectory(dirName))
+    return NULL;
+
+// look for files named by the address they use
+struct slName *files = listDir(dirName, "*");
+for(; files; files = files->next)
+    {
+    char sharedMemoryName[4096];
+    safef(sharedMemoryName, sizeof sharedMemoryName, "trackDbCache/%s/%s", db, files->name);
+    
+    int oflags = O_RDWR;
+    int fd = shm_open(sharedMemoryName, oflags, 0666 );
+    if (fd < 0)
+        continue;
+
+    unsigned long address = atoi(files->name); // the name of the file is the address it uses
+    char fileName[4096];
+    safef(fileName, sizeof fileName, "/dev/shm/trackDbCache/%s/%s",  db, files->name);
+    unsigned long size = fileSize(fileName);
+
+    u_char *mem = (u_char *) mmap((void *)address, size, PROT_READ|PROT_WRITE, MAP_PRIVATE, fd, 0);
+
+    if ((unsigned long)mem == address)  // make sure we can get this address
+        {
+        u_char *ret = mem + lmBlockHeaderSize();
+        return (struct trackDb *)ret;
+        }
+    munmap((void *)address, size);
+    close(fd);
+    }
+
+return NULL;
 }
 
-struct trackDb *cloneTdbListToSharedMem(struct trackDb *list, unsigned long size)
+void trackDbCloneTdbListToSharedMem(char *db, struct trackDb *list, unsigned long size)
 /* Allocate shared memory and clone trackDb list into it. */
 {
 int oflags=O_RDWR | O_CREAT;
 // should use a unique name
-char *file ="brtest/flart";
-int     fd = shm_open(file, oflags, 0666 );
+char dirName[4096];
+
+safef(dirName, sizeof dirName, "/dev/shm/trackDbCache/%s", db);
+if (!isDirectory(dirName))
+    {
+    makeDir(dirName);
+    chmod(dirName, 0777);
+    }
+
+char sharedMemoryName[4096];
+safef(sharedMemoryName, sizeof sharedMemoryName, "trackDbCache/%s",  rTempName(db, "temp", ""));
+
+char tempFileName[4096];
+safef(tempFileName, sizeof tempFileName, "/dev/shm/%s",  sharedMemoryName);
+
+int fd = shm_open(sharedMemoryName, oflags, 0666 );
+if (fd < 0)
+    {
+    unlink(tempFileName);
+    return;
+    }
 size_t psize = getpagesize();
 unsigned long pageMask = psize - 1;
 // we should choose an address semi-randomly and make sure we can grab it rather than assume we can
 unsigned long address = 0x7000000;
 address = (address + psize - 1) & ~pageMask;
 u_char *mem;
-struct trackDb *newList = NULL;
-mem = (u_char *)newList;
 
 ftruncate(fd, 0);
 ftruncate(fd, size);
@@ -1685,10 +1731,18 @@ mem = (u_char *) mmap((void *)address, size, PROT_READ|PROT_WRITE, MAP_SHARED, f
 struct lm *lm = lmInitWMem(mem, size);
 struct hash *superHash = newHash(8);
 
-newList = lmCloneTdbList(lm, list, NULL, superHash);
-msync((void *)address, size, MS_SYNC);
+lmCloneTdbList(lm, list, NULL, superHash);
+
+unsigned long memUsed = lmUsed(lm);
+
+msync((void *)address, memUsed, MS_SYNC);
+ftruncate(fd, memUsed);
+
 munmap((void *)address, size);
 close(fd);
 
-return mapSharedMemTrackDb(file, address, size);
+char fileName[4096];
+safef(fileName, sizeof fileName, "/dev/shm/trackDbCache/%s/%ld",  db, address);
+
+mustRename(tempFileName, fileName);
 }

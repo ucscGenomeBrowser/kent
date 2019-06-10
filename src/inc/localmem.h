@@ -28,8 +28,14 @@ void lmCleanup(struct lm **pLm);
 size_t lmAvailable(struct lm *lm);
 // Returns currently available memory in pool
 
+size_t lmUsed(struct lm *lm);
+// Returns amount of memory allocated
+
 size_t lmSize(struct lm *lm);
 // Returns current size of pool, even for memory already allocated
+
+unsigned int lmBlockHeaderSize();
+// Return the size of an lmBlock.
 
 void *lmAlloc(struct lm *lm, size_t size);
 /* Allocate memory from local pool. */

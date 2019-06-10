@@ -1393,7 +1393,7 @@ struct asObject *asStandard = NULL;
 if (numColumnsToCheck > 15)
     errAbort("There are only 15 standard BED columns defined and you have asked for %d.", numColumnsToCheck);
 if (numColumnsToCheck < 3)
-    errAbort("All BED files have at least the first 3 columns the same.");
+    errAbort("All BED files must have at least 3 columns. (Is it possible that you provided a chrom.sizes file instead of a BED file?)");
 char *asStandardText = bedAsDef(15,15);
 asStandard = asParseText(asStandardText);
 result = asCompareObjs("Yours", asYours, "BED Standard", asStandard, numColumnsToCheck, NULL, abortOnDifference);
