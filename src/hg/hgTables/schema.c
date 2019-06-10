@@ -681,7 +681,7 @@ else if (isCustomTrack(table))
     showSchemaCt(db, table);
 else if (sameWord(table, WIKI_TRACK_TABLE))
     showSchemaWiki(tdb, table);
-else if (tdb &&startsWithWord("bigWig", tdb->type) && !hTableExists(db, table))
+else if (isBigWig(database, table, curTrack, ctLookupName) && !hTableExists(db, table))
 	showSchemaBigWigNoTable(db, table, tdb);
 else
     showSchemaDb(db, tdb, table);
@@ -781,20 +781,4 @@ if (sqlTableExists(conn, "tableDescriptions"))
     errCatchFree(&errCatch);
     }
 return asObj;
-}
-
-struct sqlFieldType *sqlFieldTypesFromAs(struct asObject *as)
-/* Convert asObject to list of sqlFieldTypes */
-{
-struct sqlFieldType *ft, *list = NULL;
-struct asColumn *col;
-for (col = as->columnList; col != NULL; col = col->next)
-    {
-    struct dyString *type = asColumnToSqlType(col);
-    ft = sqlFieldTypeNew(col->name, type->string);
-    slAddHead(&list, ft);
-    dyStringFree(&type);
-    }
-slReverse(&list);
-return list;
 }

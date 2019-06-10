@@ -36,48 +36,36 @@ mach = $(shell uname -m)
 #   as this doesn't change between release.
 ##
 #db = hg38
-#db = hg19
-db = mm10
-#db = grcHhh38
+db = hg19
+#db = mm10
 #preRelease = no
 preRelease = yes
 ifeq (${db},mm10)
     grcRefAssembly = GRCm38
-    ver = M20
-    prevVer = M19
+    ver = M22
+    prevVer = M21
     gencodeOrg = Gencode_mouse
     ftpReleaseSubdir = release_${ver}
     annGffTypeName = chr_patch_hapl_scaff.annotation
-    ensemblVer = 95_38
-    ensemblPrevVer = 94_38
+    ensemblVer = 97_38
+    ensemblPrevVer = 96_38
     ensemblCDnaDb = mus_musculus_cdna_${ensemblPrevVer}
 else ifeq (${db},hg38)
     grcRefAssembly = GRCh38
-    ver = 29
-    prevVer = 28
+    ver = 31
+    prevVer = 30
     gencodeOrg = Gencode_human
     ftpReleaseSubdir = release_${ver}
     annGffTypeName = chr_patch_hapl_scaff.annotation
-    ensemblVer = 94_38
-    ensemblPrevVer = 93_38
-    ensemblCDnaDb = homo_sapiens_cdna_${ensemblPrevVer}
-else ifeq (${db},grcHhh38)
-    # hg38 with patches
-    grcRefAssembly = GRCh38
-    ver = 28
-    prevVer = 27
-    gencodeOrg = Gencode_human
-    ftpReleaseSubdir = release_${ver}
-    annGffTypeName = chr_patch_hapl_scaff.annotation
-    ensemblVer = 94_38
-    ensemblPrevVer = 93_38
+    ensemblVer = 97_38
+    ensemblPrevVer = 96_38
     ensemblCDnaDb = homo_sapiens_cdna_${ensemblPrevVer}
 else ifeq (${db},hg19)
     grcRefAssembly = GRCh37
-    verBase = 29
+    verBase = 31
     ver = ${verBase}lift37
     ftpReleaseSubdir = release_${verBase}/GRCh37_mapping
-    prevVer = 28lift37
+    prevVer = 29lift37
     gencodeOrg = Gencode_human
     annGffTypeName = annotation
     ensemblVer = 74_37      # only used to get genome chromsome name mappings
@@ -87,9 +75,9 @@ else ifeq (${db},hg19)
 else
     $(error unimplement genome database: ${db})
 endif
-
-
 # END EDIT THESE EACH RELEASE
+
+
 ifeq (${preRelease},yes)
     # pre-release
     baseUrl = ftp://ftp.ebi.ac.uk/pub/databases/havana/gencode_pre

@@ -8,6 +8,7 @@ html gold
 track crispr override
 html crispr
 scoreFilterLimits 0:100
+visibility dense
 
 # Local declaration so that local gap.html is picked up.
 track gap override
@@ -42,12 +43,6 @@ visibility hide
 
 track rmsk override
 visibility dense
-
-track xenoRefGene override
-visibility pack
-
-track refGene override
-visibility hide
 
 track mrna override
 visibility hide

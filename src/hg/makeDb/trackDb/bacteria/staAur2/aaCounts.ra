@@ -1,0 +1,229 @@
+track aaCounts
+compositeTrack on
+shortLabel AA counts
+longLabel amino acid profile
+subGroup1 sideChain Side_chain aliHydro=Aliphatic_Hydrophic aroHydro=Aromatic_Hydrophic neut=Neutral pos=Positive neg=Negative unq=Unique oth=Other
+subGroup2 aa AA a00=ALA_A a01=ILE_I a02=LEU_L a03=VAL_V a04=PHE_F a05=TRP_W a06=TYR_Y a07=ASN_N a08=CYS_C a09=GLN_Q a10=MET_M a11=SER_S a12=THR_T a13=ARG_R a14=HIS_H a15=LYS_K a16=ASP_D a17=GLU_E a18=GLY_G a19=PRO_P a20=UNK_X a21=TER_* a22=NUL_-
+dimensions dimensionX=sideChain dimensionY=aa
+dragAndDrop subTracks
+visibility dense
+group compGeno
+priority 4
+type bigBed 9 +
+mouseOverField mouseOver
+scoreFilter 0:1000
+scoreFilterByRange on
+itemRgb on
+labelOnFeature on
+centerLabelsPack off
+collapseEmptySubtracks on
+bedPackDense on
+html aaCounts
+
+        track aaCountsALA
+        parent aaCounts
+        subGroups sideChain=aliHydro aa=a00
+        shortLabel ALA - A
+        longLabel ALA - A - Alanine - Aliphatic Hydrophobic
+        type bigBed 9 +
+        bedNameLabel ALA - A - Alanine - Aliphatic Hydrophobic
+        priority 5
+
+        track aaCountsILE
+        parent aaCounts
+        subGroups sideChain=aliHydro aa=a01
+        shortLabel ILE - I
+        longLabel ILE - I - Isoleucine - Aliphatic Hydrophobic
+        type bigBed 9 +
+        bedNameLabel ILE - I - Isoleucine - Aliphatic Hydrophobic
+        priority 6
+
+        track aaCountsLEU
+        parent aaCounts
+        subGroups sideChain=aliHydro aa=a02
+        shortLabel LEU - L
+        longLabel LEU - L - Leucine - Aliphatic Hydrophobic
+        type bigBed 9 +
+        bedNameLabel LEU - L - Leucine - Aliphatic Hydrophobic
+        priority 7
+
+        track aaCountsVAL
+        parent aaCounts
+        subGroups sideChain=aliHydro aa=a03
+        shortLabel VAL - V
+        longLabel VAL - V - Valine - Aliphatic Hydrophobic
+        type bigBed 9 +
+        bedNameLabel VAL - V - Valine - Aliphatic Hydrophobic
+        priority 8
+
+        track aaCountsPHE
+        parent aaCounts
+        subGroups sideChain=aroHydro aa=a04 aa=a00
+        shortLabel PHE - F
+        longLabel PHE - F - Phenylalanine - Aromatic Hydrophobic
+        type bigBed 9 +
+        bedNameLabel PHE - F - Phenylalanine - Aromatic Hydrophobic
+        priority 9
+
+        track aaCountsTRP
+        parent aaCounts
+        subGroups sideChain=aroHydro aa=a05 aa=a00
+        shortLabel TRP - W
+        longLabel TRP - W - Tryptophan - Aromatic Hydrophobic
+        type bigBed 9 +
+        bedNameLabel TRP - W - Tryptophan - Aromatic Hydrophobic
+        priority 10
+
+        track aaCountsTYR
+        parent aaCounts
+        subGroups sideChain=aroHydro aa=a06 aa=a00
+        shortLabel TYR - Y
+        longLabel TYR - Y - Tyrosine - Aromatic Hydrophobic
+        type bigBed 9 +
+        bedNameLabel TYR - Y - Tyrosine - Aromatic Hydrophobic
+        priority 11
+
+        track aaCountsASN
+        parent aaCounts
+        subGroups sideChain=neut aa=a07
+        shortLabel ASN - N
+        longLabel ASN - N - Asparagine - Neutral side chain
+        type bigBed 9 +
+        bedNameLabel ASN - N - Asparagine - Neutral side chain
+        priority 12
+
+        track aaCountsCYS
+        parent aaCounts
+        subGroups sideChain=neut aa=a08
+        shortLabel CYS - C
+        longLabel CYS - C - Cysteine - Neutral side chain
+        type bigBed 9 +
+        bedNameLabel CYS - C - Cysteine - Neutral side chain
+        priority 13
+
+        track aaCountsGLN
+        parent aaCounts
+        subGroups sideChain=neut aa=a09
+        shortLabel GLN - Q
+        longLabel GLN - Q - Glutamine - Neutral side chain
+        type bigBed 9 +
+        bedNameLabel GLN - Q - Glutamine - Neutral side chain
+        priority 14
+
+        track aaCountsMET
+        parent aaCounts
+        subGroups sideChain=neut aa=a10
+        shortLabel MET - M
+        longLabel MET - M - Methionine - Neutral side chain
+        type bigBed 9 +
+        bedNameLabel MET - M - Methionine - Neutral side chain
+        priority 15
+
+        track aaCountsSER
+        parent aaCounts
+        subGroups sideChain=neut aa=a11
+        shortLabel SER - S
+        longLabel SER - S - Serine - Neutral side chain
+        type bigBed 9 +
+        bedNameLabel SER - S - Serine - Neutral side chain
+        priority 16
+
+        track aaCountsTHR
+        parent aaCounts
+        subGroups sideChain=neut aa=a12
+        shortLabel THR - T
+        longLabel THR - T - Threonine - Neutral side chain
+        type bigBed 9 +
+        bedNameLabel THR - T - Threonine - Neutral side chain
+        priority 17
+
+        track aaCountsARG
+        parent aaCounts
+        subGroups sideChain=pos aa=a13
+        shortLabel ARG - R
+        longLabel ARG - R - Arginine - Positive side chain
+        type bigBed 9 +
+        bedNameLabel ARG - R - Arginine - Positive side chain
+        priority 18
+
+        track aaCountsHIS
+        parent aaCounts
+        subGroups sideChain=pos aa=a14
+        shortLabel HIS - H
+        longLabel HIS - H - Histidine - Positive side chain
+        type bigBed 9 +
+        bedNameLabel HIS - H - Histidine - Positive side chain
+        priority 19
+
+        track aaCountsLYS
+        parent aaCounts
+        subGroups sideChain=pos aa=a15
+        shortLabel LYS - K
+        longLabel LYS - K - Lysine - Positive side chain
+        type bigBed 9 +
+        bedNameLabel LYS - K - Lysine - Positive side chain
+        priority 20
+
+        track aaCountsASP
+        parent aaCounts
+        subGroups sideChain=neg aa=a16
+        shortLabel ASP - D
+        longLabel ASP - D - Aspartic - Negative side chain
+        type bigBed 9 +
+        bedNameLabel ASP - D - Aspartic - Negative side chain
+        priority 21
+
+        track aaCountsGLU
+        parent aaCounts
+        subGroups sideChain=neg aa=a17
+        shortLabel GLU - E
+        longLabel GLU - E - Glutamic - Negative side chain
+        type bigBed 9 +
+        bedNameLabel GLU - E - Glutamic - Negative side chain
+        priority 22
+
+        track aaCountsGLY
+        parent aaCounts
+        subGroups sideChain=unq aa=a18
+        shortLabel GLY - G
+        longLabel GLY - G - Glycine - Unique
+        type bigBed 9 +
+        bedNameLabel GLY - G - Glycine - Unique
+        priority 23
+
+        track aaCountsPRO
+        parent aaCounts
+        subGroups sideChain=unq aa=a19
+        shortLabel PRO - P
+        longLabel PRO - P - Proline - Unique
+        type bigBed 9 +
+        bedNameLabel PRO - P - Proline - Unique
+        priority 24
+
+        track aaCountsUNK
+        parent aaCounts
+        subGroups sideChain=oth aa=a20
+        shortLabel UNK - X
+        longLabel UNK - X - Unknown - other misc.
+        type bigBed 9 +
+        bedNameLabel UNK - X - Unknown - other misc.
+        priority 25
+
+        track aaCountsTER
+        parent aaCounts
+        subGroups sideChain=oth aa=a21
+        shortLabel TER - Z
+        longLabel TER - Z - STOP - other misc.
+        type bigBed 9 +
+        bedNameLabel TER - Z - STOP - other misc.
+        priority 26
+
+        track aaCountsNUL
+        parent aaCounts
+        subGroups sideChain=oth aa=a22
+        shortLabel NUL n/a
+        longLabel NUL - n/a - no translation available, missing sequence - other misc.
+        type bigBed 9 +
+        bedNameLabel NUL - n/a - no translation available, missing sequence - other misc.
+        priority 27
+

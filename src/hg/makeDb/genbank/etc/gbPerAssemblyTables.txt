@@ -28,4 +28,3 @@
 ^ccdsGene$
 ^ccdsInfo$
 ^ccdsNotes$
-^ccdsKgMap$

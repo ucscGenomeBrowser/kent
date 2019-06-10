@@ -7,7 +7,7 @@
 #include "dystring.h"
 #include "jksql.h"
 #include "chromAlias.h"
-
+#include "hdb.h"
 
 
 char *chromAliasCommaSepFieldNames = "alias,chrom,source";
@@ -162,3 +162,27 @@ fputc('}',f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+struct hash *chromAliasMakeLookupTable(char *database)
+/* Given a database name and a connection to that database, construct a lookup table
+ * that takes chromosome alias names to a matching struct chromAlias.  Returns NULL
+ * if the given database does not have a chromAlias table. */
+{
+struct hash *hash = NULL;
+if (!hTableExists(database, "chromAlias"))
+    return NULL;
+
+struct sqlConnection *conn = hAllocConn(database);
+hash = hashNew(0);
+char query[2048];
+sqlSafef(query, sizeof(query), "select * from chromAlias");
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct chromAlias *new = chromAliasLoad(row);
+    hashAdd(hash, new->alias, new);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return hash;
+}

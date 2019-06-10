@@ -1,0 +1,228 @@
+# Local declaration so that local gold.html is picked up.
+track gold override
+html gold
+
+# Local declaration so that local gap.html is picked up.
+track gap override
+html gap
+
+track chainNetMm10
+compositeTrack on
+shortLabel Mm10 Chain/Net
+longLabel Mm10 ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net psl=PSL bed=BED
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 370.3
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb mm10
+chainMinScore 3000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainNetMm10Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetMm10
+    spectrum on
+
+        track chainMm10
+        parent chainNetMm10Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain mm10
+        html chainNet
+
+    track chainNetMm10Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetMm10
+
+        track netMm10
+        parent chainNetMm10Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign mm10 chainMm10
+        html chainNet
+
+    track pslChainNetMm10Viewnet
+    shortLabel PSL
+    view psl
+    visibility pack
+    parent chainNetMm10
+
+	track pslChainMm10
+        parent pslChainNetMm10Viewnet
+	shortLabel Mm10 PSL liftOver
+	longLabel Mm10 liftOver chain viewed as PSL data
+        subGroups view=psl
+	type psl
+	indelDoubleInsert on
+	indelQueryInsert on
+	showDiffBasesAllScales .
+	showDiffBasesMaxZoom 10000.0
+	showCdsMaxZoom 10000.0
+	showCdsAllScales .
+	color 0,0,100
+	visibility pack
+
+# fails with message: hgTracks object is missing from response when used:
+#	baseColorDefault diffBases
+
+    track chainIdsMm10Viewnet
+    shortLabel chainLinks
+    view bed
+    visibility pack
+    parent chainNetMm10
+
+	track chainLinkIdsMm10
+        parent chainIdsMm10Viewnet
+	shortLabel Mm10 chainLinks
+	longLabel Mm10 liftOver chain links viewed as BE data
+        subGroups view=bed
+	type bed 4 .
+	color 32,32,32
+	visibility pack
+
+# fails with message: hgTracks object is missing from response when used:
+#	baseColorDefault diffBases
+#	baseColorUseSequence lfExtra
+#	baseColorUseSequence lfExtra
+
+###
+track vm20LiftoverAnn
+shortLabel VM20 liftover
+longLabel VM20 mapped with UCSC liftover chains
+group genes
+type bigGenePred
+priority 1000.1
+color 0,100,0
+baseColorDefault genomicCodons
+canPack on
+visibility pack
+bigDataUrl /gbdb/GRCm38B/gencode/VM20toGRCm38B.liftover.biggp
+searchIndex name
+
+searchTable vm20LiftoverAnn
+searchType bigGenePred
+
+track vm20LiftoverAln
+shortLabel VM20 liftover align
+longLabel VM20 mapped alignments with UCSC liftover chains
+group genes
+type bigPsl
+priority 1000.2
+color 25,100,0
+canPack on
+visibility hide
+baseColorDefault diffCodons
+baseColorUseCds given
+baseColorUseSequence lfExtra
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+bigDataUrl /gbdb/GRCm38B/gencode/VM20toGRCm38B.liftover.bigpsl
+searchIndex name
+
+searchTable vm20LiftoverAln
+searchType bigPsl
+
+###
+track vm20NcbimapAnn
+shortLabel VM20 ncbimap
+longLabel VM20 mapped with NCBI alignments
+group genes
+type bigGenePred
+priority 1001.1
+color 0,0,100
+baseColorDefault genomicCodons
+canPack on
+visibility pack
+bigDataUrl /gbdb/GRCm38B/gencode/VM20toGRCm38B.ncbimap.biggp
+searchIndex name
+
+searchTable vm20NcbimapAnn
+searchType bigGenePred
+
+track vm20NcbimapAln
+shortLabel VM20 ncbimap align
+longLabel VM20 mapped alignments with NCBI alignments
+group genes
+type bigPsl
+priority 1001.2
+color 25,0,100
+canPack on
+visibility hide
+baseColorDefault diffCodons
+baseColorUseCds given
+baseColorUseSequence lfExtra
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+bigDataUrl /gbdb/GRCm38B/gencode/VM20toGRCm38B.ncbimap.bigpsl
+searchIndex name
+
+searchTable vm20NcbimapAln
+searchType bigPsl
+
+track vm20MergedProblems
+shortLabel VM20 merge problems
+longLabel VM20 problem cases from merged mappings
+group genes
+type bigBed 12 +
+priority 1001.3
+color 25,0,100
+itemRgb on
+canPack on
+visibility pack
+bigDataUrl /gbdb/GRCm38B/gencode/problems.merged.bigbed 
+searchIndex name
+mouseOverField combined
+labelFields name, inTop, transMethod, transStatus, mapMethod, mapStatus, combined
+defaultLabelFields name
+
+searchTable vm20MergedProblems
+searchType bigBed
+
+track vm20BlatAln
+shortLabel VM20 BLAT
+longLabel VM20 BLAT alignments
+group genes
+type bigPsl
+priority 1001.6
+color 150,50,100
+canPack on
+visibility hide
+baseColorDefault diffCodons
+baseColorUseCds given
+baseColorUseSequence lfExtra
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+bigDataUrl /gbdb/GRCm38B/gencode/gencodeVM20.blat.bigpsl
+searchIndex name
+
+searchTable vm20BlatAln
+searchType bigPsl
+

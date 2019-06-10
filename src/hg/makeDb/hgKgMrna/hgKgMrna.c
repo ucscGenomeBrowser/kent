@@ -188,7 +188,11 @@ char *s = gbCds;
 char *startP, *endP;
 
 endP = gbCds + strlen(gbCds) - 1;
-if (*endP == ',') printf("\n^^^%s\n", gbCds);fflush(stdout);
+if (*endP == ',')
+    {
+    printf("\n^^^%s\n", gbCds);
+    fflush(stdout);
+    }
 
 while (!isdigit(*endP)) endP--;
 while (isdigit(*endP)) endP--;

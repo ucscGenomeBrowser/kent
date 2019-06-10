@@ -43,9 +43,18 @@ ifeq (${PTHREADLIB},)
   PTHREADLIB=-lpthread
 endif
 
+# required extra library on Mac OSX
+ICONVLIB=
+
 # pthreads is required
 ifneq ($(UNAME_S),Darwin)
   L+=${PTHREADLIB}
+else
+  ifneq ($(wildcard /opt/local/lib/libiconv.a),)
+       ICONVLIB=/opt/local/lib/libiconv.a
+  else
+       ICONVLIB=-liconv
+  endif
 endif
 
 # autodetect if openssl is installed
@@ -68,6 +77,10 @@ ifeq (${USE_HAL},1)
     HG_DEFS+=-DUSE_HAL
     HG_INC+=-I${HALDIR}/inc
 endif
+# on hgwdev, include HAL by defaults
+ifeq (${IS_HGWDEV},yes)
+   L+=${HALLIBS}
+endif
 
 
 # libssl: disabled by default
@@ -83,7 +96,20 @@ endif
 ifeq (${IS_HGWDEV},yes)
    L+=/usr/lib64/libssl.a /usr/lib64/libcrypto.a -lkrb5 -lk5crypto -ldl
 else
-   L+=-lssl -lcrypto
+   ifneq ($(wildcard /opt/local/lib/libssl.a),)
+       L+=/opt/local/lib/libssl.a
+   else
+     ifneq ($(wildcard /usr/lib/x86_64-linux-gnu/libssl.a),)
+	L+=/usr/lib/x86_64-linux-gnu/libssl.a
+     else
+	L+=-lssl
+     endif
+   endif
+   ifneq ($(wildcard /opt/local/lib/libcrypto.a),)
+       L+=/opt/local/lib/libcrypto.a
+   else
+       L+=-lcrypto
+   endif
 endif
 
 # autodetect where libm is installed
@@ -139,6 +165,11 @@ ifneq ($(MAKECMDGOALS),clean)
   ifeq (${IS_HGWDEV},yes)
     MYSQLINC=/usr/include/mysql
     MYSQLLIBS=/usr/lib64/libmysqlclient.a /usr/lib64/libssl.a /usr/lib64/libcrypto.a -lkrb5 -ldl -lz
+  endif
+  ifeq (${MYSQLLIBS},)
+    ifneq ($(wildcard /usr/lib/x86_64-linux-gnu/libmysqlclient.a),)
+	  MYSQLLIBS=/usr/lib/x86_64-linux-gnu/libmysqlclient.a -ldl
+    endif
   endif
   # this does *not* work on Mac OSX with the dynamic libraries
   ifneq ($(UNAME_S),Darwin)
@@ -261,7 +292,7 @@ endif
 #global external libraries
 L += $(kentSrc)/htslib/libhts.a
 
-L+=${PNGLIB} ${MLIB} ${ZLIB}
+L+=${PNGLIB} ${MLIB} ${ZLIB} ${ICONVLIB}
 HG_INC+=${PNGINCL}
 
 # pass through COREDUMP

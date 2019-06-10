@@ -1,16 +1,31 @@
 <h2>Description</h2>
 <p>
-This track shows multiple alignments of 135 species: 119 nematodes, 15 flatworms and one Ciona intestinalis sequence and measurements of
+This track shows multiple alignments of 135 species: 112 nematodes,
+22 flatworms and one Ciona intestinalis sequence and measurements of
 evolutionary conservation using
 two methods (<em>phastCons</em> and <em>phyloP</em>) from the
 <a href="http://compgen.cshl.edu/phast/" target=_BLANK>
 PHAST package</a>, for all 135 species.
 The multiple alignments were generated using multiz and
 other tools in the UCSC/<a href="http://www.bx.psu.edu/miller_lab/"
-target=_blank>Penn State Bioinformatics</a>
+target="_blank">Penn State Bioinformatics</a>
 comparative genomics alignment pipeline.
 Conserved elements identified by phastCons are also displayed in
 this track.
+</p>
+<p>
+The phylogenetic tree was derived from kmers in common counting
+between the sequences to obtain a 'distance' matrix, then using the
+phylip command 'neighbors' operation for the simple neighbor joining
+algorithm to establish this binary tree.  This tree is not necessarily
+biologically correct, but it does serve as a useful guide tree for the
+multiz alignment procedure.  See also:
+<a href="http://evolution.genetics.washington.edu/phylip/progs.data.dist.html"
+target="_blank">Phylip distance operations</a>, 
+<a href="https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-015-1647-5"
+target="_blank">assembly and alignment-free phylogeny reconstruction</a>, and 
+<a href="https://f1000research.com/articles/5-2789/v2"
+target="_blank">recapitulating phylogenies using k-mers</a>.
 </p>
 <p>
 PhastCons (which has been used in previous Conservation tracks) is a hidden
@@ -42,6 +57,13 @@ and 1.
 Both phastCons and phyloP treat alignment gaps and unaligned nucleotides as
 missing data.
 </p>
+<p>
+See also: <a href="http://genomewiki.ucsc.edu/index.php/Ce11_135-way_conservation_lastz_parameters"
+target="_blank">lastz parameters</a> and other details, and
+chain <a href="http://genomewiki.ucsc.edu/index.php/Ce11_135-way_Genome_size_statistics"
+target="_blank">minimum score and gap</a> parameters used in these alignments.
+</p>
+
 
 <p>
 Missing sequence in the assemblies is highlighted in the track display
@@ -53,677 +75,677 @@ level (see <em>Gap Annotation</em>, below). </p>
 <tr align=left><td>C. elegans</td><td>Caenorhabditis elegans</td>
     <td>Feb. 2013 (WBcel235/ce11)</td>
     <td><a href="../cgi-bin/hgTracks?db=ce11"
-    target=_blank>Feb. 2013 (WBcel235/ce11)</a></td>
+    target="_blank">Feb. 2013 (WBcel235/ce11)</a></td>
     <td>reference</td></tr>
 <tr align=left><td>A. ceylanicum</td><td>Ancylostoma ceylanicum</td>
     <td>Mar. 2014 (WS243/Acey_2013.11.30.genDNA/ancCey1)</td>
     <td><a href="../cgi-bin/hgTracks?db=ancCey1"
-    target=_blank>Mar. 2014 (WS243/Acey_2013.11.30.genDNA/ancCey1)</a></td>
+    target="_blank">Mar. 2014 (WS243/Acey_2013.11.30.genDNA/ancCey1)</a></td>
     <td>net</td></tr>
 <tr align=left><td>Acrobeloides_nanus</td><td>Acrobeloides nanus</td>
     <td>Jun. 2018 (v1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/900/406/225/GCA_900406225.1_v1/"
-    target=_blank>GCA_900406225.1</a></td>
+    target="_blank">GCA_900406225.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Ancylostoma_caninum</td><td>Ancylostoma caninum</td>
     <td>Jul. 2018 (A_caninum_9.3.2.ec.cg.pg)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/003/336/725/GCA_003336725.1_A_caninum_9.3.2.ec.cg.pg/"
-    target=_blank>GCA_003336725.1</a></td>
+    target="_blank">GCA_003336725.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Ancylostoma_duodenale</td><td>Ancylostoma duodenale</td>
     <td>Jan. 2015 (A_duodenale_2.2.ec.cg.pg)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/816/745/GCA_000816745.1_A_duodenale_2.2.ec.cg.pg/"
-    target=_blank>GCA_000816745.1</a></td>
+    target="_blank">GCA_000816745.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Angiostrongylus_cantonensis</td><td>Angiostrongylus cantonensis</td>
     <td>Nov. 2016 (ASM188428v1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/884/285/GCA_001884285.1_ASM188428v1/"
-    target=_blank>GCA_001884285.1</a></td>
+    target="_blank">GCA_001884285.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Ascaris_suum</td><td>Ascaris suum</td>
     <td>Nov. 2017 (ASM18702v3)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/187/025/GCA_000187025.3_ASM18702v3/"
-    target=_blank>GCA_000187025.3</a></td>
+    target="_blank">GCA_000187025.3</a></td>
     <td>net</td></tr>
 <tr align=left><td>Barber pole worm</td><td>Haemonchus contortus</td>
     <td>Jul. 2013 (WormBase WS239/haeCon2)</td>
     <td><a href="../cgi-bin/hgTracks?db=haeCon2"
-    target=_blank>Jul. 2013 (WormBase WS239/haeCon2)</a></td>
+    target="_blank">Jul. 2013 (WormBase WS239/haeCon2)</a></td>
     <td>net</td></tr>
 <tr align=left><td>Brugia_malayi</td><td>Brugia malayi</td>
     <td>Mar. 2008 (ASM299v2)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/002/995/GCF_000002995.3_ASM299v2/"
-    target=_blank>GCF_000002995.3</a></td>
+    target="_blank">GCF_000002995.3</a></td>
     <td>net</td></tr>
 <tr align=left><td>Brugia_pahangi</td><td>Brugia pahangi</td>
     <td>Sep. 2015 (Brugia_pa_1.0)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/280/985/GCA_001280985.1_Brugia_pa_1.0/"
-    target=_blank>GCA_001280985.1</a></td>
+    target="_blank">GCA_001280985.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Bursaphelenchus_xylophilus</td><td>Bursaphelenchus xylophilus</td>
     <td>Oct. 2011 (ASM23113v1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/231/135/GCA_000231135.1_ASM23113v1/"
-    target=_blank>GCA_000231135.1</a></td>
+    target="_blank">GCA_000231135.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>C. angaria</td><td>Caenorhabditis angaria</td>
     <td>Apr. 2012 (WS232/ps1010rel8/caeAng2)</td>
     <td><a href="../cgi-bin/hgTracks?db=caeAng2"
-    target=_blank>Apr. 2012 (WS232/ps1010rel8/caeAng2)</a></td>
+    target="_blank">Apr. 2012 (WS232/ps1010rel8/caeAng2)</a></td>
     <td>net</td></tr>
 <tr align=left><td>C. brenneri</td><td>Caenorhabditis brenneri</td>
     <td>Nov. 2010 (C. brenneri 6.0.1b/caePb3)</td>
     <td><a href="../cgi-bin/hgTracks?db=caePb3"
-    target=_blank>Nov. 2010 (C. brenneri 6.0.1b/caePb3)</a></td>
+    target="_blank">Nov. 2010 (C. brenneri 6.0.1b/caePb3)</a></td>
     <td>net</td></tr>
 <tr align=left><td>C. briggsae</td><td>Caenorhabditis briggsae</td>
     <td>Apr. 2011 (WS225/cb4)</td>
     <td><a href="../cgi-bin/hgTracks?db=cb4"
-    target=_blank>Apr. 2011 (WS225/cb4)</a></td>
+    target="_blank">Apr. 2011 (WS225/cb4)</a></td>
     <td>net</td></tr>
 <tr align=left><td>C. intestinalis</td><td>Ciona intestinalis</td>
     <td>Apr. 2011 (Kyoto KH/ci3)</td>
     <td><a href="../cgi-bin/hgTracks?db=ci3"
-    target=_blank>Apr. 2011 (Kyoto KH/ci3)</a></td>
+    target="_blank">Apr. 2011 (Kyoto KH/ci3)</a></td>
     <td>net</td></tr>
 <tr align=left><td>C. japonica</td><td>Caenorhabditis japonica</td>
     <td>Aug. 2010 (WUSTL 7.0.1/caeJap4)</td>
     <td><a href="../cgi-bin/hgTracks?db=caeJap4"
-    target=_blank>Aug. 2010 (WUSTL 7.0.1/caeJap4)</a></td>
+    target="_blank">Aug. 2010 (WUSTL 7.0.1/caeJap4)</a></td>
     <td>net</td></tr>
 <tr align=left><td>C. remanei</td><td>Caenorhabditis remanei</td>
     <td>Jul. 2007 (WS220/caeRem4)</td>
     <td><a href="../cgi-bin/hgTracks?db=caeRem4"
-    target=_blank>Jul. 2007 (WS220/caeRem4)</a></td>
+    target="_blank">Jul. 2007 (WS220/caeRem4)</a></td>
     <td>net</td></tr>
 <tr align=left><td>C. sp. 5 ju800</td><td>Caenorhabditis sp5 ju800</td>
     <td>Jan. 2012 (WS230/Caenorhabditis_sp_5-JU800-1.0/caeSp51)</td>
     <td><a href="../cgi-bin/hgTracks?db=caeSp51"
-    target=_blank>Jan. 2012 (WS230/Caenorhabditis_sp_5-JU800-1.0/caeSp51)</a></td>
+    target="_blank">Jan. 2012 (WS230/Caenorhabditis_sp_5-JU800-1.0/caeSp51)</a></td>
     <td>net</td></tr>
 <tr align=left><td>C. tropicalis</td><td>Caenorhabditis tropicalis</td>
     <td>Nov. 2010 (WS226/WUSTL 3.0.1/caeSp111)</td>
     <td><a href="../cgi-bin/hgTracks?db=caeSp111"
-    target=_blank>Nov. 2010 (WS226/WUSTL 3.0.1/caeSp111)</a></td>
+    target="_blank">Nov. 2010 (WS226/WUSTL 3.0.1/caeSp111)</a></td>
     <td>net</td></tr>
 <tr align=left><td>C_briggsae</td><td>Caenorhabditis briggsae</td>
     <td>Jul. 2014 (CB4)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/004/555/GCA_000004555.3_CB4/"
-    target=_blank>GCA_000004555.3</a></td>
+    target="_blank">GCA_000004555.3</a></td>
     <td>net</td></tr>
 <tr align=left><td>C_latens</td><td>Caenorhabditis latens</td>
     <td>Aug. 2017 (CaeLat1.0)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/002/259/235/GCA_002259235.1_CaeLat1.0/"
-    target=_blank>GCA_002259235.1</a></td>
+    target="_blank">GCA_002259235.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>C_nigoni</td><td>Caenorhabditis nigoni</td>
     <td>Nov. 2017 (nigoni.pc_2016.07.14)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/002/742/825/GCA_002742825.1_nigoni.pc_2016.07.14/"
-    target=_blank>GCA_002742825.1</a></td>
+    target="_blank">GCA_002742825.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>C_sp21_LS_2015</td><td>Caenorhabditis sp. 21 LS-2015</td>
     <td>Aug. 2018 (CPARV_v1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/900/536/235/GCA_900536235.1_CPARV_v1/"
-    target=_blank>GCA_900536235.1</a></td>
+    target="_blank">GCA_900536235.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>C_sp26_LS_2015</td><td>Caenorhabditis sp. 26 LS-2015</td>
     <td>Aug. 2018 (CZANZ_v1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/900/536/285/GCA_900536285.1_CZANZ_v1/"
-    target=_blank>GCA_900536285.1</a></td>
+    target="_blank">GCA_900536285.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>C_sp31_LS_2015</td><td>Caenorhabditis sp. 31 LS-2015</td>
     <td>Aug. 2018 (CUTEL_v1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/900/536/295/GCA_900536295.1_CUTEL_v1/"
-    target=_blank>GCA_900536295.1</a></td>
+    target="_blank">GCA_900536295.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>C_sp32_LS_2015</td><td>Caenorhabditis sp. 32 LS-2015</td>
     <td>Aug. 2018 (CSULS_v1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/900/536/325/GCA_900536325.1_CSULS_v1/"
-    target=_blank>GCA_900536325.1</a></td>
+    target="_blank">GCA_900536325.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>C_sp34_TK_2017</td><td>Caenorhabditis sp. 34 TK-2017</td>
     <td>Jun. 2017 (Sp34_v7)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/003/052/745/GCA_003052745.1_Sp34_v7/"
-    target=_blank>GCA_003052745.1</a></td>
+    target="_blank">GCA_003052745.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>C_sp38_MB_2015</td><td>Caenorhabditis sp. 38 MB-2015</td>
     <td>Aug. 2018 (CQUIO_v1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/900/536/415/GCA_900536415.1_CQUIO_v1/"
-    target=_blank>GCA_900536415.1</a></td>
+    target="_blank">GCA_900536415.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>C_sp39_LS_2015</td><td>Caenorhabditis sp. 39 LS-2015</td>
     <td>Aug. 2018 (CWAIT_v1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/900/536/345/GCA_900536345.1_CWAIT_v1/"
-    target=_blank>GCA_900536345.1</a></td>
+    target="_blank">GCA_900536345.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>C_sp40_LS_2015</td><td>Caenorhabditis sp. 40 LS-2015</td>
     <td>Aug. 2018 (CTRIB_v1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/900/536/305/GCA_900536305.1_CTRIB_v1/"
-    target=_blank>GCA_900536305.1</a></td>
+    target="_blank">GCA_900536305.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Clonorchis_sinensis</td><td>Clonorchis sinensis</td>
     <td>Nov. 2011 (C_sinensis-2.0)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/236/345/GCA_000236345.1_C_sinensis-2.0/"
-    target=_blank>GCA_000236345.1</a></td>
+    target="_blank">GCA_000236345.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Dicrocoelium_dendriticum</td><td>Dicrocoelium dendriticum</td>
     <td>Sep. 2014 (D_dendriticum_Leon_v1_0_4)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/950/715/GCA_000950715.1_D_dendriticum_Leon_v1_0_4/"
-    target=_blank>GCA_000950715.1</a></td>
+    target="_blank">GCA_000950715.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Dictyocaulus_viviparus</td><td>Dictyocaulus viviparus</td>
     <td>Mar. 2015 (D_viviparus_9.2.1.ec.pg)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/816/705/GCA_000816705.1_D_viviparus_9.2.1.ec.pg/"
-    target=_blank>GCA_000816705.1</a></td>
+    target="_blank">GCA_000816705.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Diploscapter_coronatus</td><td>Diploscapter coronatus</td>
     <td>Jun. 2017 (ASM220778v1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/002/207/785/GCA_002207785.1_ASM220778v1/"
-    target=_blank>GCA_002207785.1</a></td>
+    target="_blank">GCA_002207785.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Diploscapter_pachys</td><td>Diploscapter pachys</td>
     <td>Sep. 2017 (DipSp1Ass11Ann3)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/002/287/525/GCA_002287525.1_DipSp1Ass11Ann3/"
-    target=_blank>GCA_002287525.1</a></td>
+    target="_blank">GCA_002287525.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Dirofilaria_immitis</td><td>Dirofilaria immitis</td>
     <td>Aug. 2013 (ASM107739v1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/077/395/GCA_001077395.1_ASM107739v1/"
-    target=_blank>GCA_001077395.1</a></td>
+    target="_blank">GCA_001077395.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Ditylenchus_destructor</td><td>Ditylenchus destructor</td>
     <td>Mar. 2016 (ASM157970v1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/579/705/GCA_001579705.1_ASM157970v1/"
-    target=_blank>GCA_001579705.1</a></td>
+    target="_blank">GCA_001579705.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Dog heartworm</td><td>Dirofilaria immitis</td>
     <td>Sep. 2013 (WS240/D. immitis v2.2/dirImm1)</td>
     <td><a href="../cgi-bin/hgTracks?db=dirImm1"
-    target=_blank>Sep. 2013 (WS240/D. immitis v2.2/dirImm1)</a></td>
+    target="_blank">Sep. 2013 (WS240/D. immitis v2.2/dirImm1)</a></td>
     <td>net</td></tr>
 <tr align=left><td>Dugesia_japonica</td><td>Dugesia japonica</td>
     <td>Jan. 2017 (Djap_assembly_v1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/938/525/GCA_001938525.1_Djap_assembly_v1/"
-    target=_blank>GCA_001938525.1</a></td>
+    target="_blank">GCA_001938525.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Echinococcus_canadensis</td><td>Echinococcus canadensis</td>
     <td>May 2016 (ECANG7)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/900/004/735/GCA_900004735.1_ECANG7/"
-    target=_blank>GCA_900004735.1</a></td>
+    target="_blank">GCA_900004735.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Echinococcus_granulosus</td><td>Echinococcus granulosus</td>
     <td>Jan. 2014 (ASM52419v1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/524/195/GCA_000524195.1_ASM52419v1/"
-    target=_blank>GCA_000524195.1</a></td>
+    target="_blank">GCA_000524195.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Echinococcus_multilocularis</td><td>Echinococcus multilocularis</td>
     <td>Dec. 2015 (EMULTI002)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/469/725/GCA_000469725.3_EMULTI002/"
-    target=_blank>GCA_000469725.3</a></td>
+    target="_blank">GCA_000469725.3</a></td>
     <td>net</td></tr>
 <tr align=left><td>Elaeophora_elaphi</td><td>Elaeophora elaphi</td>
     <td>Nov. 2013 (EEL001)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/499/685/GCA_000499685.1_EEL001/"
-    target=_blank>GCA_000499685.1</a></td>
+    target="_blank">GCA_000499685.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Eye worm</td><td>Loa loa</td>
     <td>Jul. 2012 (WS235/L_loa_Cameroon_isolate/loaLoa1)</td>
     <td><a href="../cgi-bin/hgTracks?db=loaLoa1"
-    target=_blank>Jul. 2012 (WS235/L_loa_Cameroon_isolate/loaLoa1)</a></td>
+    target="_blank">Jul. 2012 (WS235/L_loa_Cameroon_isolate/loaLoa1)</a></td>
     <td>net</td></tr>
 <tr align=left><td>Fasciola_gigantica</td><td>Fasciola gigantica</td>
     <td>Jan. 2018 (ASM286751v1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/002/867/515/GCA_002867515.1_ASM286751v1/"
-    target=_blank>GCA_002867515.1</a></td>
+    target="_blank">GCA_002867515.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Fasciola_hepatica</td><td>Fasciola hepatica</td>
     <td>Apr. 2018 (Fasciola_10x_pilon)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/900/302/435/GCA_900302435.1_Fasciola_10x_pilon/"
-    target=_blank>GCA_900302435.1</a></td>
+    target="_blank">GCA_900302435.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Filarial worm</td><td>Brugia malayi</td>
     <td>May. 2014 (WS244/B_malayi-3.1/bruMal2)</td>
     <td><a href="../cgi-bin/hgTracks?db=bruMal2"
-    target=_blank>May. 2014 (WS244/B_malayi-3.1/bruMal2)</a></td>
+    target="_blank">May. 2014 (WS244/B_malayi-3.1/bruMal2)</a></td>
     <td>net</td></tr>
 <tr align=left><td>Girardia_tigrina</td><td>Girardia tigrina</td>
     <td>Jan. 2017 (gtig.1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/938/485/GCA_001938485.1_gtig.1/"
-    target=_blank>GCA_001938485.1</a></td>
+    target="_blank">GCA_001938485.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Globodera_ellingtonae</td><td>Globodera ellingtonae</td>
     <td>Sep. 2016 (ASM172322v1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/723/225/GCA_001723225.1_ASM172322v1/"
-    target=_blank>GCA_001723225.1</a></td>
+    target="_blank">GCA_001723225.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Globodera_pallida</td><td>Globodera pallida</td>
     <td>May 2014 (GPAL001)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/724/045/GCA_000724045.1_GPAL001/"
-    target=_blank>GCA_000724045.1</a></td>
+    target="_blank">GCA_000724045.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Globodera_rostochiensis</td><td>Globodera rostochiensis</td>
     <td>Apr. 2016 (nGr)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/900/079/975/GCA_900079975.1_nGr/"
-    target=_blank>GCA_900079975.1</a></td>
+    target="_blank">GCA_900079975.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Gyrodactylus_salaris</td><td>Gyrodactylus salaris</td>
     <td>Jun. 2014 (Gsalaris_v1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/715/275/GCA_000715275.1_Gsalaris_v1/"
-    target=_blank>GCA_000715275.1</a></td>
+    target="_blank">GCA_000715275.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>H. bacteriophora/m31e</td><td>Heterorhabditis bacteriophora</td>
     <td>Aug. 2011 (WS229/H. bacteriophora 7.0/hetBac1)</td>
     <td><a href="../cgi-bin/hgTracks?db=hetBac1"
-    target=_blank>Aug. 2011 (WS229/H. bacteriophora 7.0/hetBac1)</a></td>
+    target="_blank">Aug. 2011 (WS229/H. bacteriophora 7.0/hetBac1)</a></td>
     <td>net</td></tr>
 <tr align=left><td>Haemonchus_contortus</td><td>Haemonchus contortus</td>
     <td>Aug. 2013 (HCON)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/469/685/GCA_000469685.1_HCON/"
-    target=_blank>GCA_000469685.1</a></td>
+    target="_blank">GCA_000469685.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Heligmosomoides_polygyrus_bakeri</td><td>Heligmosomoides polygyrus bakeri</td>
     <td>Sep. 2016 (nHp_v2.0)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/900/096/555/GCA_900096555.1_nHp_v2.0/"
-    target=_blank>GCA_900096555.1</a></td>
+    target="_blank">GCA_900096555.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Heterodera_glycines</td><td>Heterodera glycines</td>
     <td>Apr. 2008 (HG2)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/150/805/GCA_000150805.1_HG2/"
-    target=_blank>GCA_000150805.1</a></td>
+    target="_blank">GCA_000150805.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Hymenolepis_microstoma</td><td>Hymenolepis microstoma</td>
     <td>Dec. 2015 (HMIC002)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/469/805/GCA_000469805.2_HMIC002/"
-    target=_blank>GCA_000469805.2</a></td>
+    target="_blank">GCA_000469805.2</a></td>
     <td>net</td></tr>
 <tr align=left><td>Loa_loa</td><td>Loa loa</td>
     <td>Jul. 2012 (Loa_loa_V3.1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/183/805/GCF_000183805.2_Loa_loa_V3.1/"
-    target=_blank>GCF_000183805.2</a></td>
+    target="_blank">GCF_000183805.2</a></td>
     <td>net</td></tr>
 <tr align=left><td>M. hapla</td><td>Meloidogyne hapla</td>
     <td>Sep. 2008 (M. hapla VW9 WS210/melHap1)</td>
     <td><a href="../cgi-bin/hgTracks?db=melHap1"
-    target=_blank>Sep. 2008 (M. hapla VW9 WS210/melHap1)</a></td>
+    target="_blank">Sep. 2008 (M. hapla VW9 WS210/melHap1)</a></td>
     <td>net</td></tr>
 <tr align=left><td>M. incognita</td><td>Meloidogyne incognita</td>
     <td>Feb. 2008 (M. incognita WS245/PRJEA28837/melInc2)</td>
     <td><a href="../cgi-bin/hgTracks?db=melInc2"
-    target=_blank>Feb. 2008 (M. incognita WS245/PRJEA28837/melInc2)</a></td>
+    target="_blank">Feb. 2008 (M. incognita WS245/PRJEA28837/melInc2)</a></td>
     <td>net</td></tr>
 <tr align=left><td>Macrostomum_lignano</td><td>Macrostomum lignano</td>
     <td>Aug. 2017 (Mlig_3_7)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/002/269/645/GCA_002269645.1_Mlig_3_7/"
-    target=_blank>GCA_002269645.1</a></td>
+    target="_blank">GCA_002269645.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Meloidogyne_arenaria</td><td>Meloidogyne arenaria</td>
     <td>May 2018 (ASM313380v1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/003/133/805/GCA_003133805.1_ASM313380v1/"
-    target=_blank>GCA_003133805.1</a></td>
+    target="_blank">GCA_003133805.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Meloidogyne_floridensis</td><td>Meloidogyne floridensis</td>
     <td>Jun. 2014 (nMf_1_1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/751/915/GCA_000751915.1_nMf_1_1/"
-    target=_blank>GCA_000751915.1</a></td>
+    target="_blank">GCA_000751915.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Meloidogyne_graminicola</td><td>Meloidogyne graminicola</td>
     <td>Nov. 2017 (Mgraminicola_V1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/002/778/205/GCA_002778205.1_Mgraminicola_V1/"
-    target=_blank>GCA_002778205.1</a></td>
+    target="_blank">GCA_002778205.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Meloidogyne_incognita</td><td>Meloidogyne incognita</td>
     <td>May 2017 (Meloidogyne_incognita_V3)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/900/182/535/GCA_900182535.1_Meloidogyne_incognita_V3/"
-    target=_blank>GCA_900182535.1</a></td>
+    target="_blank">GCA_900182535.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Meloidogyne_javanica</td><td>Meloidogyne javanica</td>
     <td>Apr. 2017 (ASM90000394v1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/900/003/945/GCA_900003945.1_ASM90000394v1/"
-    target=_blank>GCA_900003945.1</a></td>
+    target="_blank">GCA_900003945.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Microworm</td><td>Panagrellus redivivus</td>
     <td>Feb. 2013 (WS240/Pred3/panRed1)</td>
     <td><a href="../cgi-bin/hgTracks?db=panRed1"
-    target=_blank>Feb. 2013 (WS240/Pred3/panRed1)</a></td>
+    target="_blank">Feb. 2013 (WS240/Pred3/panRed1)</a></td>
     <td>net</td></tr>
 <tr align=left><td>N. americanus</td><td>Necator americanus</td>
     <td>Dec. 2013 (WS242/N_americanus_v1/necAme1)</td>
     <td><a href="../cgi-bin/hgTracks?db=necAme1"
-    target=_blank>Dec. 2013 (WS242/N_americanus_v1/necAme1)</a></td>
+    target="_blank">Dec. 2013 (WS242/N_americanus_v1/necAme1)</a></td>
     <td>net</td></tr>
 <tr align=left><td>Necator_americanus</td><td>Necator americanus</td>
     <td>Dec. 2013 (N_americanus_v1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/507/365/GCF_000507365.1_N_americanus_v1/"
-    target=_blank>GCF_000507365.1</a></td>
+    target="_blank">GCF_000507365.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Nippostrongylus_brasiliensis</td><td>Nippostrongylus brasiliensis</td>
     <td>Aug. 2017 (NbL5_MIMR_Canu1.5)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/900/200/055/GCA_900200055.1_NbL5_MIMR_Canu1.5/"
-    target=_blank>GCA_900200055.1</a></td>
+    target="_blank">GCA_900200055.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>O. volvulus</td><td>Onchocerca volvulus</td>
     <td>Nov. 2013 (WS241/O_volvulus_Cameroon_v3/oncVol1)</td>
     <td><a href="../cgi-bin/hgTracks?db=oncVol1"
-    target=_blank>Nov. 2013 (WS241/O_volvulus_Cameroon_v3/oncVol1)</a></td>
+    target="_blank">Nov. 2013 (WS241/O_volvulus_Cameroon_v3/oncVol1)</a></td>
     <td>net</td></tr>
 <tr align=left><td>Oesophagostomum_dentatum</td><td>Oesophagostomum dentatum</td>
     <td>Dec. 2014 (O_dentatum_10.0.ec.cg.pg)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/797/555/GCA_000797555.1_O_dentatum_10.0.ec.cg.pg/"
-    target=_blank>GCA_000797555.1</a></td>
+    target="_blank">GCA_000797555.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Onchocerca_flexuosa</td><td>Onchocerca flexuosa</td>
     <td>Aug. 2017 (O_flexuosa_1.0.allpaths.pg.lrna)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/002/249/935/GCA_002249935.1_O_flexuosa_1.0.allpaths.pg.lrna/"
-    target=_blank>GCA_002249935.1</a></td>
+    target="_blank">GCA_002249935.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Onchocerca_ochengi</td><td>Onchocerca ochengi</td>
     <td>Mar. 2016 (O_ochengi_Ngaoundere)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/950/515/GCA_000950515.2_O_ochengi_Ngaoundere/"
-    target=_blank>GCA_000950515.2</a></td>
+    target="_blank">GCA_000950515.2</a></td>
     <td>net</td></tr>
 <tr align=left><td>Onchocerca_volvulus</td><td>Onchocerca volvulus</td>
     <td>Feb. 2014 (ASM49940v2)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/499/405/GCA_000499405.2_ASM49940v2/"
-    target=_blank>GCA_000499405.2</a></td>
+    target="_blank">GCA_000499405.2</a></td>
     <td>net</td></tr>
 <tr align=left><td>Opisthorchis_viverrini</td><td>Opisthorchis viverrini</td>
     <td>Jul. 2014 (OpiViv1.0)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/715/545/GCA_000715545.1_OpiViv1.0/"
-    target=_blank>GCA_000715545.1</a></td>
+    target="_blank">GCA_000715545.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Oscheius_MCB</td><td>Oscheius sp. MCB</td>
     <td>Feb. 2015 (ASM93487v1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/934/875/GCA_000934875.1_ASM93487v1/"
-    target=_blank>GCA_000934875.1</a></td>
+    target="_blank">GCA_000934875.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Oscheius_TEL_2014</td><td>Oscheius sp. TEL-2014</td>
     <td>Jan. 2016 (ASM151353v1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/513/535/GCA_001513535.1_ASM151353v1/"
-    target=_blank>GCA_001513535.1</a></td>
+    target="_blank">GCA_001513535.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Oscheius_tipulae</td><td>Oscheius tipulae</td>
     <td>May 2017 (Oscheius_tipulae_assembly_v2)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/900/184/235/GCA_900184235.1_Oscheius_tipulae_assembly_v2/"
-    target=_blank>GCA_900184235.1</a></td>
+    target="_blank">GCA_900184235.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>P. exspectatus</td><td>Pristionchus exspectatus</td>
     <td>Mar. 2014 (WS243/P_exspectatus_v1/priExs1)</td>
     <td><a href="../cgi-bin/hgTracks?db=priExs1"
-    target=_blank>Mar. 2014 (WS243/P_exspectatus_v1/priExs1)</a></td>
+    target="_blank">Mar. 2014 (WS243/P_exspectatus_v1/priExs1)</a></td>
     <td>net</td></tr>
 <tr align=left><td>P. pacificus</td><td>Pristionchus pacificus</td>
     <td>Aug. 2014 (WS221/P_pacificus-v2/priPac3)</td>
     <td><a href="../cgi-bin/hgTracks?db=priPac3"
-    target=_blank>Aug. 2014 (WS221/P_pacificus-v2/priPac3)</a></td>
+    target="_blank">Aug. 2014 (WS221/P_pacificus-v2/priPac3)</a></td>
     <td>net</td></tr>
 <tr align=left><td>Parapristionchus_giblindavisi</td><td>Parapristionchus giblindavisi</td>
     <td>Jun. 2018 (Parapristionchus_genome)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/900/491/355/GCA_900491355.1_Parapristionchus_genome/"
-    target=_blank>GCA_900491355.1</a></td>
+    target="_blank">GCA_900491355.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Parascaris_univalens</td><td>Parascaris univalens</td>
     <td>Aug. 2017 (ASM225921v1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/002/259/215/GCA_002259215.1_ASM225921v1/"
-    target=_blank>GCA_002259215.1</a></td>
+    target="_blank">GCA_002259215.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Parastrongyloides_trichosuri</td><td>Parastrongyloides trichosuri</td>
     <td>Sep. 2014 (P_trichosuri_KNP)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/941/615/GCA_000941615.1_P_trichosuri_KNP/"
-    target=_blank>GCA_000941615.1</a></td>
+    target="_blank">GCA_000941615.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Pig roundworm</td><td>Ascaris suum</td>
     <td>Sep. 2012 (WS229/AscSuum_1.0/ascSuu1)</td>
     <td><a href="../cgi-bin/hgTracks?db=ascSuu1"
-    target=_blank>Sep. 2012 (WS229/AscSuum_1.0/ascSuu1)</a></td>
+    target="_blank">Sep. 2012 (WS229/AscSuum_1.0/ascSuu1)</a></td>
     <td>net</td></tr>
 <tr align=left><td>Pine wood nematode</td><td>Bursaphelenchus xylophilus</td>
     <td>Nov. 2011 (WS229/B. xylophilus Ka4C1/burXyl1)</td>
     <td><a href="../cgi-bin/hgTracks?db=burXyl1"
-    target=_blank>Nov. 2011 (WS229/B. xylophilus Ka4C1/burXyl1)</a></td>
+    target="_blank">Nov. 2011 (WS229/B. xylophilus Ka4C1/burXyl1)</a></td>
     <td>net</td></tr>
 <tr align=left><td>Plectus_sambesii</td><td>Plectus sambesii</td>
     <td>Nov. 2017 (Psam_v1.0)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/002/796/945/GCA_002796945.1_Psam_v1.0/"
-    target=_blank>GCA_002796945.1</a></td>
+    target="_blank">GCA_002796945.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Pristionchus_arcanus</td><td>Pristionchus arcanus</td>
     <td>Jun. 2018 (P._arcanus_genome)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/900/490/705/GCA_900490705.1_P._arcanus_genome/"
-    target=_blank>GCA_900490705.1</a></td>
+    target="_blank">GCA_900490705.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Pristionchus_entomophagus</td><td>Pristionchus entomophagus</td>
     <td>Jun. 2018 (P._entomophagus_genome)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/900/490/825/GCA_900490825.1_P._entomophagus_genome/"
-    target=_blank>GCA_900490825.1</a></td>
+    target="_blank">GCA_900490825.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Pristionchus_exspectatus</td><td>Pristionchus exspectatus</td>
     <td>May 2018 (Pristionchus_exspectatus_de_novo_assembly)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/900/380/275/GCA_900380275.1_Pristionchus_exspectatus_de_novo_assembly/"
-    target=_blank>GCA_900380275.1</a></td>
+    target="_blank">GCA_900380275.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Pristionchus_maxplancki</td><td>Pristionchus maxplancki</td>
     <td>Jun. 2018 (Prisstionchus_maxplancki_genome)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/900/490/775/GCA_900490775.1_Prisstionchus_maxplancki_genome/"
-    target=_blank>GCA_900490775.1</a></td>
+    target="_blank">GCA_900490775.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Pristionchus_pacificus</td><td>Pristionchus pacificus</td>
     <td>Oct. 2017 (El_Paco)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/180/635/GCA_000180635.3_El_Paco/"
-    target=_blank>GCA_000180635.3</a></td>
+    target="_blank">GCA_000180635.3</a></td>
     <td>net</td></tr>
 <tr align=left><td>Rhabditophanes_KR3021</td><td>Rhabditophanes sp. KR3021</td>
     <td>Sep. 2014 (Rhabditophanes_sp_KR3021)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/944/355/GCA_000944355.1_Rhabditophanes_sp_KR3021/"
-    target=_blank>GCA_000944355.1</a></td>
+    target="_blank">GCA_000944355.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Romanomermis_culicivorax</td><td>Romanomermis culicivorax</td>
     <td>Jan. 2014 (nRc.2.0)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/039/655/GCA_001039655.1_nRc.2.0/"
-    target=_blank>GCA_001039655.1</a></td>
+    target="_blank">GCA_001039655.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Rotylenchulus_reniformis</td><td>Rotylenchulus reniformis</td>
     <td>Jun. 2015 (RREN1.0)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/026/735/GCA_001026735.1_RREN1.0/"
-    target=_blank>GCA_001026735.1</a></td>
+    target="_blank">GCA_001026735.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Schistosoma_haematobium</td><td>Schistosoma haematobium</td>
     <td>Jun. 2014 (SchHae_1.0)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/699/445/GCA_000699445.1_SchHae_1.0/"
-    target=_blank>GCA_000699445.1</a></td>
+    target="_blank">GCA_000699445.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Schistosoma_japonicum</td><td>Schistosoma japonicum</td>
     <td>Apr. 2009 (ASM15177v1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/151/775/GCA_000151775.1_ASM15177v1/"
-    target=_blank>GCA_000151775.1</a></td>
+    target="_blank">GCA_000151775.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Schistosoma_mansoni</td><td>Schistosoma mansoni</td>
     <td>Dec. 2011 (ASM23792v2)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/237/925/GCA_000237925.2_ASM23792v2/"
-    target=_blank>GCA_000237925.2</a></td>
+    target="_blank">GCA_000237925.2</a></td>
     <td>net</td></tr>
 <tr align=left><td>Schmidtea_mediterranea</td><td>Schmidtea mediterranea</td>
     <td>Oct. 2017 (ASM260089v1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/002/600/895/GCA_002600895.1_ASM260089v1/"
-    target=_blank>GCA_002600895.1</a></td>
+    target="_blank">GCA_002600895.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Setaria_digitata</td><td>Setaria digitata</td>
     <td>Jan. 2018 (Sdigitata)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/900/083/525/GCA_900083525.1_Sdigitata/"
-    target=_blank>GCA_900083525.1</a></td>
+    target="_blank">GCA_900083525.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Setaria_equina</td><td>Setaria equina</td>
     <td>Mar. 2018 (Setequ3.0)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/003/012/265/GCA_003012265.1_Setequ3.0/"
-    target=_blank>GCA_003012265.1</a></td>
+    target="_blank">GCA_003012265.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Spirometra_erinaceieuropaei</td><td>Spirometra erinaceieuropaei</td>
     <td>Sep. 2014 (S_erinaceieuropaei)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/951/995/GCA_000951995.1_S_erinaceieuropaei/"
-    target=_blank>GCA_000951995.1</a></td>
+    target="_blank">GCA_000951995.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Steinernema_carpocapsae</td><td>Steinernema carpocapsae</td>
     <td>Sep. 2014 (S_carpo_v1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/757/645/GCA_000757645.1_S_carpo_v1/"
-    target=_blank>GCA_000757645.1</a></td>
+    target="_blank">GCA_000757645.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Steinernema_feltiae</td><td>Steinernema feltiae</td>
     <td>Sep. 2014 (S_felt_v1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/757/705/GCA_000757705.1_S_felt_v1/"
-    target=_blank>GCA_000757705.1</a></td>
+    target="_blank">GCA_000757705.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Steinernema_glaseri</td><td>Steinernema glaseri</td>
     <td>Sep. 2014 (S_glas_v1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/757/755/GCA_000757755.1_S_glas_v1/"
-    target=_blank>GCA_000757755.1</a></td>
+    target="_blank">GCA_000757755.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Steinernema_monticolum</td><td>Steinernema monticolum</td>
     <td>Dec. 2013 (S_monti_v1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/505/645/GCA_000505645.1_S_monti_v1/"
-    target=_blank>GCA_000505645.1</a></td>
+    target="_blank">GCA_000505645.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Steinernema_scapterisci</td><td>Steinernema scapterisci</td>
     <td>Sep. 2014 (S_scapt_v1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/757/745/GCA_000757745.1_S_scapt_v1/"
-    target=_blank>GCA_000757745.1</a></td>
+    target="_blank">GCA_000757745.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Strongyloides_papillosus</td><td>Strongyloides papillosus</td>
     <td>Nov. 2014 (S_papillosus_LIN)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/936/265/GCA_000936265.1_S_papillosus_LIN/"
-    target=_blank>GCA_000936265.1</a></td>
+    target="_blank">GCA_000936265.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Strongyloides_stercoralis</td><td>Strongyloides stercoralis</td>
     <td>Nov. 2014 (S_stercoralis_PV0001)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/947/215/GCA_000947215.1_S_stercoralis_PV0001/"
-    target=_blank>GCA_000947215.1</a></td>
+    target="_blank">GCA_000947215.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Strongyloides_venezuelensis</td><td>Strongyloides venezuelensis</td>
     <td>Jun. 2015 (S_venezuelensis_HH1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/028/725/GCA_001028725.1_S_venezuelensis_HH1/"
-    target=_blank>GCA_001028725.1</a></td>
+    target="_blank">GCA_001028725.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Subanguina_moxae</td><td>Subanguina moxae</td>
     <td>Apr. 2015 (SAMX_assembly_v0.8)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/981/365/GCA_000981365.1_SAMX_assembly_v0.8/"
-    target=_blank>GCA_000981365.1</a></td>
+    target="_blank">GCA_000981365.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Taenia_asiatica</td><td>Taenia asiatica</td>
     <td>Sep. 2016 (Taenia_asiatica_TASYD01_v1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/693/035/GCA_001693035.2_Taenia_asiatica_TASYD01_v1/"
-    target=_blank>GCA_001693035.2</a></td>
+    target="_blank">GCA_001693035.2</a></td>
     <td>net</td></tr>
 <tr align=left><td>Taenia_multiceps</td><td>Taenia multiceps</td>
     <td>Jul. 2018 (T_multiceps_v2.0)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/923/025/GCA_001923025.2_T_multiceps_v2.0/"
-    target=_blank>GCA_001923025.2</a></td>
+    target="_blank">GCA_001923025.2</a></td>
     <td>net</td></tr>
 <tr align=left><td>Taenia_saginata</td><td>Taenia saginata</td>
     <td>Oct. 2016 (ASM169307v2)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/693/075/GCA_001693075.2_ASM169307v2/"
-    target=_blank>GCA_001693075.2</a></td>
+    target="_blank">GCA_001693075.2</a></td>
     <td>net</td></tr>
 <tr align=left><td>Taenia_solium</td><td>Taenia solium</td>
     <td>Nov. 2016 (MEX_genome_complete.1-6-13)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/870/725/GCA_001870725.1_MEX_genome_complete.1-6-13/"
-    target=_blank>GCA_001870725.1</a></td>
+    target="_blank">GCA_001870725.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Teladorsagia_circumcincta</td><td>Teladorsagia circumcincta</td>
     <td>Sep. 2017 (T_circumcincta.14.0.ec.cg.pg)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/002/352/805/GCA_002352805.1_T_circumcincta.14.0.ec.cg.pg/"
-    target=_blank>GCA_002352805.1</a></td>
+    target="_blank">GCA_002352805.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Threadworm</td><td>Strongyloides ratti</td>
     <td>Sep. 2014 (S. ratti ED321/strRat2)</td>
     <td><a href="../cgi-bin/hgTracks?db=strRat2"
-    target=_blank>Sep. 2014 (S. ratti ED321/strRat2)</a></td>
+    target="_blank">Sep. 2014 (S. ratti ED321/strRat2)</a></td>
     <td>net</td></tr>
 <tr align=left><td>Toxocara_canis</td><td>Toxocara canis</td>
     <td>Dec. 2014 (Toxocara_canis_adult_r1.0)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/803/305/GCA_000803305.1_Toxocara_canis_adult_r1.0/"
-    target=_blank>GCA_000803305.1</a></td>
+    target="_blank">GCA_000803305.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Trichinella</td><td>Trichinella spiralis</td>
     <td>Jan. 2011 (WS225/Trichinella_spiralis-3.7.1/triSpi1)</td>
     <td><a href="../cgi-bin/hgTracks?db=triSpi1"
-    target=_blank>Jan. 2011 (WS225/Trichinella_spiralis-3.7.1/triSpi1)</a></td>
+    target="_blank">Jan. 2011 (WS225/Trichinella_spiralis-3.7.1/triSpi1)</a></td>
     <td>net</td></tr>
 <tr align=left><td>Trichinella_T6</td><td>Trichinella sp. T6</td>
     <td>Nov. 2015 (T6_ISS34_r1.0)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/447/435/GCA_001447435.1_T6_ISS34_r1.0/"
-    target=_blank>GCA_001447435.1</a></td>
+    target="_blank">GCA_001447435.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Trichinella_T8</td><td>Trichinella sp. T8</td>
     <td>Nov. 2015 (T8_ISS272_r1.0)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/447/745/GCA_001447745.1_T8_ISS272_r1.0/"
-    target=_blank>GCA_001447745.1</a></td>
+    target="_blank">GCA_001447745.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Trichinella_T9</td><td>Trichinella sp. T9</td>
     <td>Nov. 2015 (T9_ISS409_r1.0)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/447/505/GCA_001447505.1_T9_ISS409_r1.0/"
-    target=_blank>GCA_001447505.1</a></td>
+    target="_blank">GCA_001447505.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Trichinella_britovi</td><td>Trichinella britovi</td>
     <td>Nov. 2015 (T3_ISS120_r1.0)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/447/585/GCA_001447585.1_T3_ISS120_r1.0/"
-    target=_blank>GCA_001447585.1</a></td>
+    target="_blank">GCA_001447585.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Trichinella_murrelli</td><td>Trichinella murrelli</td>
     <td>Jul. 2017 (ASM222148v1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/002/221/485/GCA_002221485.1_ASM222148v1/"
-    target=_blank>GCA_002221485.1</a></td>
+    target="_blank">GCA_002221485.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Trichinella_nativa</td><td>Trichinella nativa</td>
     <td>Nov. 2015 (T2_ISS10_r1.0)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/447/565/GCA_001447565.1_T2_ISS10_r1.0/"
-    target=_blank>GCA_001447565.1</a></td>
+    target="_blank">GCA_001447565.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Trichinella_nelsoni</td><td>Trichinella nelsoni</td>
     <td>Nov. 2015 (T7_ISS37_r1.0)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/447/455/GCA_001447455.1_T7_ISS37_r1.0/"
-    target=_blank>GCA_001447455.1</a></td>
+    target="_blank">GCA_001447455.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Trichinella_papuae</td><td>Trichinella papuae</td>
     <td>Nov. 2015 (T10_ISS1980_r1.0)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/447/755/GCA_001447755.1_T10_ISS1980_r1.0/"
-    target=_blank>GCA_001447755.1</a></td>
+    target="_blank">GCA_001447755.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Trichinella_patagoniensis</td><td>Trichinella patagoniensis</td>
     <td>Nov. 2015 (T12_ISS2496_r1.0)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/447/655/GCA_001447655.1_T12_ISS2496_r1.0/"
-    target=_blank>GCA_001447655.1</a></td>
+    target="_blank">GCA_001447655.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Trichinella_pseudospiralis</td><td>Trichinella pseudospiralis</td>
     <td>Nov. 2015 (T4_ISS588_r1.0)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/447/725/GCA_001447725.1_T4_ISS588_r1.0/"
-    target=_blank>GCA_001447725.1</a></td>
+    target="_blank">GCA_001447725.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Trichinella_spiralis</td><td>Trichinella spiralis</td>
     <td>Jan. 2011 (Trichinella_spiralis-3.7.1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/181/795/GCF_000181795.1_Trichinella_spiralis-3.7.1/"
-    target=_blank>GCF_000181795.1</a></td>
+    target="_blank">GCF_000181795.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Trichinella_zimbabwensis</td><td>Trichinella zimbabwensis</td>
     <td>Nov. 2015 (T11_ISS1029_r1.0)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/447/665/GCA_001447665.1_T11_ISS1029_r1.0/"
-    target=_blank>GCA_001447665.1</a></td>
+    target="_blank">GCA_001447665.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Trichuris_muris</td><td>Trichuris muris</td>
     <td>Mar. 2014 (TMUE2.2)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/612/645/GCA_000612645.1_TMUE2.2/"
-    target=_blank>GCA_000612645.1</a></td>
+    target="_blank">GCA_000612645.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Trichuris_trichiura</td><td>Trichuris trichiura</td>
     <td>Mar. 2014 (TTRE2.1)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/613/005/GCA_000613005.1_TTRE2.1/"
-    target=_blank>GCA_000613005.1</a></td>
+    target="_blank">GCA_000613005.1</a></td>
     <td>net</td></tr>
 <tr align=left><td>Whipworm</td><td>Trichuris suis</td>
     <td>Jul. 2014 (WS243/T. suis DCEP-RM93M male/triSui1)</td>
     <td><a href="../cgi-bin/hgTracks?db=triSui1"
-    target=_blank>Jul. 2014 (WS243/T. suis DCEP-RM93M male/triSui1)</a></td>
+    target="_blank">Jul. 2014 (WS243/T. suis DCEP-RM93M male/triSui1)</a></td>
     <td>net</td></tr>
 <tr align=left><td>Wuchereria_bancrofti</td><td>Wuchereria bancrofti</td>
     <td>Feb. 2016 (Wb_PNG_Genome_assembly_pt22)</td>
     <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/555/675/GCA_001555675.1_Wb_PNG_Genome_assembly_pt22/"
-    target=_blank>GCA_001555675.1</a></td>
+    target="_blank">GCA_001555675.1</a></td>
     <td>net</td></tr>
 </table><br>
 <b>Table 1.</b> <em>Genome assemblies included in the 135-way Conservation track.</em>
@@ -742,14 +764,14 @@ Downloads for data in this track are available:
 <h2>Display Conventions and Configuration</h2>
 <p>
 The track configuration options allow the user to display the three different
-sets of scores, all, birds or vertebrate, individually or all simultaneously.
+sets of scores by all, subclass, individually, or any combination of these.
 In full and pack display modes, conservation scores are displayed as a
 <em>wiggle track</em> (histogram) in which the height reflects the
 value of the score.
 The conservation wiggles can be configured in a variety of ways to
 highlight different aspects of the displayed information.
 Click the <a href="../goldenPath/help/hgWiggleTrackHelp.html"
-target=_blank>Graph configuration help</a> link for an explanation
+target="_blank">Graph configuration help</a> link for an explanation
 of the configuration options.</p>
 <p>
 Pairwise alignments of each species to the $organism genome are
@@ -850,9 +872,8 @@ translation, depending on the species chosen (<b>Table 2</b>).
 
 <blockquote><table border=1 cellpadding=4 bordercolor="#aaaaaa">
 <tr align=left><td><b>Gene Track</b></td><td><b>Species</b></td></tr>
-<tr align=left><td>NCBI RefSeq Genes</td><td>D. persimilis</td></tr>
-<tr align=left><td>Ensembl Genes v68</td><td>D. erecta, D. ananassae, D. melanogaster</td></tr>
-<tr align=left><td>Xeno RefGene</td><td>D. sechellia</td></tr>
+<tr align=left><td>Ensembl Genes v92</td><td>C. elegans, Ciona intestinalis</td></tr>
+<tr align=left><td>WormBase WS245 genes</td><td>C. angaria, C. japonica, C. briggsae, C. sp. 5 ju800, C. remanei, C. brenneri, C. tropicalis, P. exspectatus, P. pacificus, Pine wood nematode, N. americanus, A. ceylanicum, Pig roundworm, Barber pole worm, Whipworm, Microworm, Filarial worm, Dog heartworm, O. volvulus, Eye worm, M. incognita, M. hapla, H. bacteriophora/m31e, Trichinella</td></tr>
 <tr align=left><td>no annotations</td><td>all others</td></tr>
 </td></tr>
 </table>
@@ -866,22 +887,15 @@ each species using lastz from repeat-masked genomic sequence.
 Pairwise alignments were then linked into chains using a dynamic programming
 algorithm that finds maximally scoring chains of gapless subsections
 of the alignments organized in a kd-tree.
-The scoring matrix and parameters for pairwise alignment and chaining
-were tuned for each species based on phylogenetic distance from the reference.
+Please note the <a href="http://genomewiki.ucsc.edu/index.php/Ce11_135-way_Genome_size_statistics"
+target="_blank">specific parameters</a> for the alignments.
 High-scoring chains were then placed along the genome, with
 gaps filled by lower-scoring chains, to produce an alignment net.
 For more information about the chaining and netting process and
-parameters for each species, see the description pages for the Chain and Net
-tracks.</p>
-<p>
-An additional filtering step was introduced in the generation of the 135-way
-conservation track to reduce the number of paralogs and pseudogenes from the
-high-quality assemblies and the suspect alignments from the low-quality
-assemblies:
-the pairwise alignments of the bird assemblies were filtered based on synteny;
-those for the human and mouse genomes were filtered to retain only
-alignments of best quality in both the target and query (&quot;reciprocal
-best&quot;).</p>
+parameters for each species, see the description pages for the 
+<a href="../cgi-bin/hgTrackUi?db=ce11&g=nematodesChainNet" target="_blank">
+Chain and Net tracks.</a>
+</p>
 <p>
 The resulting best-in-genome pairwise alignments
 were progressively aligned using multiz/autoMZ,
@@ -891,7 +905,7 @@ add annotations indicating alignment gaps, genomic breaks,
 and base quality of the component sequences.
 The annotated multiple alignments, in MAF format, are available for
 <a href="http://hgdownload.soe.ucsc.edu/goldenPath/ce11/multiz135way"
-target=_blank>bulk download</a>.
+target="_blank">bulk download</a>.
 An alignment summary table containing an entry for each
 alignment block in each species was generated to improve
 track display performance at large scales.
@@ -906,7 +920,7 @@ evolutionary distance at neutrally evolving sites, the background distribution
 of nucleotides, and a substitution rate matrix.
 The
 <a href="http://hgdownload.soe.ucsc.edu/goldenPath/ce11/phastCons135way/ce11.phastCons135way.mod"
-target=_blank>all species tree model</a> for this track was
+target="_blank">all species tree model</a> for this track was
 generated using the <em>phyloFit</em> program from the PHAST package
 (REV model, EM algorithm, medium precision) using multiple alignments of
 4-fold degenerate sites extracted from the 135-way alignment
@@ -918,7 +932,7 @@ This same tree model was used in the phyloP calculations, however their
 background frequencies were modified to maintain reversibility.
 The resulting tree model for
 <a href="http://hgdownload.soe.ucsc.edu/goldenPath/ce11/phyloP135way/ce11.phyloP135way.mod"
-target=_blank>all species</a>.
+target="_blank">all species</a>.
 </p>
 <h3> PhastCons Conservation </h3>
 <p>
@@ -978,12 +992,12 @@ details page or in the browser when the track's display mode is set to
 <ul>
 <li> Alignment tools: lastz (formerly blastz) and multiz by Minmei Hou, Scott Schwartz and Webb
 Miller of the <a href="http://www.bx.psu.edu/miller_lab/"
-target=_blank>Penn State Bioinformatics Group</a>
+target="_blank">Penn State Bioinformatics Group</a>
 <li> Chaining and Netting:  axtChain, chainNet by Jim Kent at UCSC
 <li> Conservation scoring: phastCons, phyloP, phyloFit, tree_doctor, msa_view and
 other programs in PHAST by
 <a href="http://siepellab.labsites.cshl.edu/"
-target=_blank>Adam Siepel</a> at Cold Spring Harbor Laboratory (original development
+target="_blank">Adam Siepel</a> at Cold Spring Harbor Laboratory (original development
 done at the Haussler lab at UCSC).
 <li> MAF Annotation tools: mafAddIRows by Brian Raney, UCSC; mafAddQRows
 by Richard Burhans, Penn State; genePredToMafFrames by Mark Diekhans, UCSC
@@ -1049,7 +1063,7 @@ href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1206396/" target="_blank">PMC
 <h3>Chain/Net:</h3>
 <p>
 Kent WJ, Baertsch R, Hinrichs A, Miller W, Haussler D.
-<a href="http://www.pnas.org/content/100/20/11484"
+<a href="https://www.pnas.org/content/100/20/11484"
 target="_blank">Evolution's cauldron:
 duplication, deletion, and rearrangement in the mouse and human genomes</a>.
 <em>Proc Natl Acad Sci U S A</em>. 2003 Sep 30;100(20):11484-9.
@@ -1096,6 +1110,22 @@ href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC430961/" target="_blank">PMC4
 
 
 <h3>Phylogenetic Tree:</h3>
+<p>
+Bernard G, Ragan MA, Chan CX.
+<a href="https://f1000research.com/articles/5-2789/v2"
+target="_blank">Recapitulating phylogenies using k-mers: from trees to networks</a>.
+<em>F1000Res</em>. 2016;5:2789.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/28105314" target="_blank">28105314</a>
+</p>
+
+<p>
+Fan H, Ives AR, Surget-Groba Y, Cannon CH.
+<a href="https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-015-1647-5"
+target="_blank">An assembly and alignment-free method of phylogeny reconstruction from 
+next-generation sequencing data</a>. <em>BMC Genomics</em>. 2015;16(1):522.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26169061" target="_blank">26169061</a>
+</p>
+
 <p>
 Murphy WJ, Eizirik E, O'Brien SJ, Madsen O, Scally M, Douady CJ, Teeling E,
 Ryder OA, Stanhope MJ, de Jong WW, Springer MS.

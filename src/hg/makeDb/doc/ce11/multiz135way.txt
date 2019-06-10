@@ -2473,6 +2473,22 @@ do
   grep "$N" division.dbName.ordered.tab | cut -f2 > ${N}.ordered
 done
 
+    # those *.ordered listings are used in trackDb to establish
+    # the chainNet composite:
+
+    cd ~/kent/src/hg/makeDb/trackDb/worm/ce11
+
+    ~/kent/src/hg/utils/phyloTrees/chainNetCompositeTrackDb.pl net nematodes \
+      ce11 Rhabditina.ordered Spirurina.ordered Tylenchina.ordered \
+        Strongylida.ordered Plectida.ordered Dorylaimia.ordered \
+          Platyhelminthes.ordered Deuterostomia.ordered \
+     >  chainNetNematodes.ra
+
+    # edit that .ra file to remove the .ordered from each name in this list:
+    subGroup3 clade Clade c00=Rhabditina c01=Spirurina c02=Tylenchina c03=Strongylida c04=Plectida c05=Dorylaimia c06=Platyhelminthes c07=Deuterostomia
+
+    # can avoid this edit by calling those files *.list instead
+
 #############################################################################
 # construct download files for 135-way (TBD - 2018-11-27 - Hiram)
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/multiz135way
@@ -2500,21 +2516,21 @@ do
         | gzip -c > upstream${S}.${geneTbl}.maf.gz
     echo "done upstream${S}.${geneTbl}.maf.gz"
 done
-XXX - running - Fri Dec 14 17:28:40 PST 2018
+    # real    107m51.664s
 
-    #   real    186m37.993s
-
-# -rw-rw-r-- 1  646104882 Nov 27 15:46 upstream1000.ncbiRefSeq.maf.gz
-# -rw-rw-r-- 1 1103012060 Nov 27 16:41 upstream2000.ncbiRefSeq.maf.gz
-# -rw-rw-r-- 1 3022261832 Nov 27 18:09 upstream5000.ncbiRefSeq.maf.gz
+# -rw-rw-r-- 1  289630077 Dec 14 18:00 upstream1000.ensGene.maf.gz
+# -rw-rw-r-- 1  545877544 Dec 14 18:30 upstream2000.ensGene.maf.gz
+# -rw-rw-r-- 1 1334065100 Dec 14 19:16 upstream5000.ensGene.maf.gz
 
     ######################################################################
     ## compress the maf files
     cd /hive/data/genomes/ce11/bed/multiz135way/downloads/multiz135way
-    mkdir maf
-    rsync -a -P ../../anno/maf/result/ ./maf/
+    time rsync -a -P ../../anno/mafNet/result/ ./maf/
+    # real    3m21.807s
+
+
     du -hsc maf/
-    # 63G     maf
+    # 49G     maf/
 
     cd maf
     time gzip *.maf &
@@ -2544,13 +2560,25 @@ do
    cp -p ${src}/*_assembly_report.txt "sequences/${destName}/"
 done
 
+   du -hsc sequences
+   #  7.2G    sequences/
+
    cd sequences
-   md5sum */*.2bit */*.txt > md5sum.txt
+   time md5sum */*.2bit */*.txt > md5sum.txt
+   # real    0m30.828s
 
    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/multiz135way/maf
     cd maf
-    ln -s `pwd`/* /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/multiz135way/maf
-    cd --
+    ln -s `pwd`/* /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/multiz135way/maf/
+   mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/multiz135way/sequences
+    cd ../sequences
+    ln -s `pwd`/* /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/multiz135way/sequences/
+
+    cd ..
+
+    # obtain the README.txt from the multiz26way and fix it up with appropriate
+    # listings
+
     ln -s `pwd`/*.maf.gz `pwd`/*.nh `pwd`/*.txt \
          /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/multiz135way/
 
@@ -2560,6 +2588,18 @@ done
     grep TREE ../../4d/all.mod | awk '{print $NF}' \
       | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
          > ce11.135way.nh
+    cat ce11.135way.nh \
+      |  sed -e 's/(/(\n/g; s/,/,\n/g; s/)/\n)/g; s/ //g;' \
+        | grep -v "^$" | ~/kent/src/hg/utils/phyloTrees/binaryTree.pl \
+          -nameTranslate=../../sequenceName.sciName.tab -noInternal \
+             -lineOutput /dev/stdin > ce11.135way.scientificName.nh
+    cat ce11.135way.nh \
+      |  sed -e 's/(/(\n/g; s/,/,\n/g; s/)/\n)/g; s/ //g;' \
+        | grep -v "^$" | ~/kent/src/hg/utils/phyloTrees/binaryTree.pl \
+          -nameTranslate=../../sequenceName.taxId.tab -noInternal \
+             -lineOutput /dev/stdin > ce11.135way.taxId.nh
+
+
     ~/kent/src/hg/utils/phyloTrees/commonNames.sh ce11.135way.nh \
       | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
          > ce11.135way.commonNames.nh
@@ -2584,37 +2624,25 @@ done
     #####################################################################
     cd /hive/data/genomes/ce11/bed/multiz135way/downloads/phastCons135way
 
-    mkdir ce11.135way.phastCons
-    cd ce11.135way.phastCons
-    ln -s ../../../cons/all/downloads/*.wigFix.gz .
-    md5sum *.gz > md5sum.txt
+    ln -s ../../cons/all/downloads/*.wigFix.gz .
 
-    cd /hive/data/genomes/ce11/bed/multiz135way/downloads/phastCons135way
     ln -s ../../cons/all/phastCons135way.bw ./ce11.phastCons135way.bw
     ln -s ../../cons/all/all.mod ./ce11.phastCons135way.mod
-    time md5sum *.mod *.bw > md5sum.txt
+
+    time md5sum *.mod *.bw *.gz > md5sum.txt
     #   real    0m20.354s
 
-    # obtain the README.txt from ce11/phastCons20way and update for this
-    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/phastCons135way/ce11.135way.phastCons
-    cd ce11.135way.phastCons
-    ln -s `pwd`/* /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/phastCons135way/ce11.135way.phastCons
+    # obtain the README.txt from ce11/phastCons26way and update for this
+    #   situation, and edit accordingly.
 
-    cd ..
-    #   situation
-    ln -s `pwd`/*.mod `pwd`/*.bw `pwd`/*.txt \
-      /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/phastCons135way
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/phastCons135way
+    ln -s `pwd`/* /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/phastCons135way
 
     #####################################################################
     cd /hive/data/genomes/ce11/bed/multiz135way/downloads/phyloP135way
 
-    mkdir ce11.135way.phyloP
-    cd ce11.135way.phyloP
-
     ln -s ../../../consPhyloP/all/downloads/*.wigFix.gz .
     md5sum *.wigFix.gz > md5sum.txt
-
-    cd ..
 
     ln -s ../../consPhyloP/run.phyloP/all.mod ce11.phyloP135way.mod
     ln -s ../../consPhyloP/all/phyloP135way.bw ce11.phyloP135way.bw
@@ -2622,17 +2650,12 @@ done
     md5sum *.mod *.bw > md5sum.txt
 
     # obtain the README.txt from ce11/phyloP20way and update for this
-    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/phyloP135way/ce11.135way.phyloP
-    cd ce11.135way.phyloP
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/phyloP135way
     ln -s `pwd`/* \
-/usr/local/apache/htdocs-hgdownload/goldenPath/ce11/phyloP135way/ce11.135way.phyloP
-    cd ..
-
-    ln -s `pwd`/*.mod `pwd`/*.bw `pwd`/*.txt \
-      /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/phyloP135way
+/usr/local/apache/htdocs-hgdownload/goldenPath/ce11/phyloP135way/
 
 #############################################################################
-# hgPal downloads (TBD - 2018-11-27 - Hiram)
+# hgPal downloads (DONE - 2018-12-17 - Hiram)
 #   FASTA from 135-way for knownGene, refGene and knownCanonical
 
     ssh hgwdev
@@ -2668,24 +2691,23 @@ done
     echo "wait" >> $gp.jobs
 
     time (sh -x ./$gp.jobs) > $gp.jobs.log 2>&1
-XXX - running - Fri Dec 14 17:27:13 PST 2018
-    # real    38m28.377s
+    # real    41m45.902s
 
     export mz=multiz135way
-    export gp=ncbiRefSeq
+    export gp=ensGene
     time find ./exonAA -type f | grep exonAA.fa.gz | xargs zcat \
      | gzip -c > $gp.$mz.exonAA.fa.gz
-    # real    1m49.576s
+    # real    1m26.225s
 
     time find ./exonNuc -type f | grep exonNuc.fa.gz | xargs zcat \
      | gzip -c > $gp.$mz.exonNuc.fa.gz
-    #   real    12m10.083s
+    #   real    5m55.586s
 
-    # -rw-rw-r-- 1 397928833 Nov  6 18:44 knownGene.multiz135way.exonAA.fa.gz
-    # -rw-rw-r-- 1 5803135720 Nov  6 18:49 knownGene.multiz135way.exonNuc.fa.gz
+    # -rw-rw-r-- 1  546125992 Dec 17 10:24 ensGene.multiz135way.exonAA.fa.gz
+    # -rw-rw-r-- 1 1049129671 Dec 17 10:35 ensGene.multiz135way.exonNuc.fa.gz
 
     export mz=multiz135way
-    export gp=ncbiRefSeq
+    export gp=ensGene
     export db=ce11
     export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
     mkdir -p $pd

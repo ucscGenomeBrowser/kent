@@ -142,13 +142,16 @@ UCSC_APPS = \
 	venn \
 	verticalSplitSqlTable \
 	weedLines \
-	wigTestMaker
+
 
 # list of scripts to install
 
 USER_APP_SCRIPTS = \
 	bedJoinTabOffset \
 	expMatrixToBarchartBed \
+	ucscApiClient \
+	tdbRename \
+	tdbSort \
 	webSync
 
 SCRIPT_FILES = \
@@ -185,6 +188,8 @@ SCRIPT_FILES = \
 	cgiSmokeTest \
 	phegenToBed \
 	doLocusName \
+	cancerMafToBigBed \
+	pq \
 	${USER_APP_SCRIPTS}
 
 # List of all directories to build

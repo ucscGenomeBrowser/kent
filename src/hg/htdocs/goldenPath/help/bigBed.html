@@ -90,9 +90,16 @@ Paste this custom track line into the text box on the <a href="../../cgi-bin/hgC
 track</a> management page.</p>
 <p>
 The <code>bedToBigBed</code> program can be run with several additional options. Some of these,
-such as the <code>-as</code> and <code>-type</code> options, are used in examples below. For a full 
-list of the available options, type <code>bedToBigBed</code> (with no arguments) on the command line
-to display the usage message.</p>
+such as the <code>-as</code> and <code>-type</code> options, are used in examples below. The 
+<code>-type</code> option, describes the size of the bigBed file, <code>-type=bedN[+[P]]</code>,
+where <code>N</code> is an integer between 3 and 12 and the optional <code>+[P]</code> parameter
+specifies the number of extra fields, not required, but preferred. Describing the size of the bigBed file
+is needed for access to extra fields like name, itemRgb, etc.
+Examples:<code>-type=bed6</code> or <code>-type=bed6+</code> or <code>-type=bed6+3 </code>.  
+For a full list of the available options, type <code>bedToBigBed</code> (with no arguments) on the
+command line to display the usage message.</p>
+
+
 
 <h2>Examples</h2>
 <h3>Example #1</h3>
@@ -162,7 +169,12 @@ In this example, you will create your own bigBed file from an existing bed file.
 <p>
 In this example, you will create your own bigBed file from a fully featured existing BED file that 
 contains the standard BED fields up to and including the <em>color</em> field (field 9), plus two 
-additional non-standard fields (two alternate names for each item in the file). BigBed files can 
+additional non-standard fields (two alternate names for each item in the file). Since the resulting
+bigBed file will have nine standard BED columns, which would include what is referenced as the 
+itemRgb field to inform the browser to display a R,G,B color value (e.g. 255,0,0), and two
+additional non-standard user-defined columns, the bedToBigBed program is given <code>-type=bed9+2
+</code> and a file called <code>-as=bedExample2.as</code> to help correctly interpret all the 
+columns in the data. BigBed files can 
 store extra fields in addition to the <a href="../../FAQ/FAQformat.html#format1">predefined BED 
 fields</a>. If you add extra fields to your bigBed file, you must include an AutoSql format
 (<em>.as</em>) file describing the fields. For more information on AutoSql, see 
@@ -234,7 +246,7 @@ improper input.</p>
 <h2>Sharing Your Data with Others</h2>
 <p>
 If you would like to share your bigBed data track with a colleague, learn how to create a URL by 
-looking at Example #11 on <a href="customTrack.html#EXAMPLE11">this page</a>.</p>
+looking at Example #6 on <a href="customTrack.html#EXAMPLE6">this page</a>.</p>
 
 <h2>Extracting Data from the bigBed Format</h2>
 <p>

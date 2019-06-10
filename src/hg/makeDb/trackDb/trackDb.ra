@@ -242,16 +242,6 @@ group map
 visibility dense
 type bed 6 .
 
-track altLocations
-type bed 4
-group map
-color 32,32,190
-shortLabel Alt Haplotypes
-longLabel Alternate Haplotypes to Reference Sequence Correspondence
-url ../cgi-bin/hgTracks?db=$D&position=$$
-urlLabel Corresponding position:
-release beta,public
-
 track altSeqLiftOverPsl
 shortLabel Alt Haplotypes
 longLabel Reference Assembly Alternate Haplotype Sequence Alignments
@@ -267,7 +257,6 @@ baseColorDefault diffBases
 baseColorUseSequence db
 color 0,0,100
 visibility dense
-release alpha
 
 track fixSeqLiftOverPsl
 shortLabel Fix Patches
@@ -286,7 +275,6 @@ color 255,255,0
 darkerLabels on
 priority 1
 visibility pack
-release alpha
 
 track knownGene
 shortLabel UCSC Genes
@@ -383,6 +371,7 @@ html crispors
     itemRgb on
     priority 2
 
+include crisprAll.ra alpha
 include crispr10K.ra beta,public
 # prospective testing of crispr 10K on hg38
 # include nullModelCrispr10K.ra alpha

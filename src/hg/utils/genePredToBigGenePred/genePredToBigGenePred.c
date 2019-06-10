@@ -172,7 +172,7 @@ while (lineFileChopTab(lf, row))
     //  this memory will be leaked if the hash is free'd
     int numBlocks;
     sqlSignedDynamicArray(row[4], &cds->exonFrames, &numBlocks);
-    assert(numBlocks = cds->exonCount);
+    assert(numBlocks == cds->exonCount);
     hashAdd(hash, name, cds);
     }
 lineFileClose(&lf);

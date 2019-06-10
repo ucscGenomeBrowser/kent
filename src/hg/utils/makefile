@@ -24,6 +24,7 @@ UTILS_APPLIST = \
 	bedWeedOverlapping \
 	bigMafToMaf \
 	bigPslToPsl \
+	binFromRange \
 	chromGraphFromBin \
 	chromGraphToBin \
 	crTreeIndexBed \
@@ -37,6 +38,7 @@ UTILS_APPLIST = \
 	gtfToGenePred \
 	hgvsToVcf \
 	hubCheck \
+	hubClone \
 	hubPublicCheck \
 	mafToBigMaf \
 	makeTableList \

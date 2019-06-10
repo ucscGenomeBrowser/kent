@@ -1,0 +1,239 @@
+#!/usr/bin/env python
+
+import logging, sys, optparse, getpass, os, shutil, tempfile, datetime, subprocess, socket, tarfile
+from collections import defaultdict
+from os.path import join, basename, dirname, isfile, abspath, isdir
+
+PQDIR = "/tmp/pq"
+
+username = getpass.getuser()
+stageDir = join(PQDIR, "staging", username)
+waitDir = join(PQDIR, "waiting")
+doneDir = join(PQDIR, "done")
+lastIdFname = join(PQDIR, "currentId.txt")
+
+# ==== functions =====
+    
+def parseArgs():
+    " setup logging, parse command line arguments and options. -h shows auto-generated help page "
+    parser = optparse.OptionParser("""usage: %prog [options] [add|commit|accept] - prepare a push request
+    
+    Run on hgwdev/hgwbeta:
+
+      add <fnames>: stage a file for pushing
+      commit: create a push request from all staged files
+      list: list all push requests and their IDs
+
+    Run on the RR:
+
+      pull <ID>: copy all files from a request to the RR, make backups of these files first
+      rollback <ID>: restore the files from the backup
+    """)
+
+    parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
+    #parser.add_option("-f", "--file", dest="file", action="store", help="run on file") 
+    #parser.add_option("", "--test", dest="test", action="store_true", help="do something") 
+    (options, args) = parser.parse_args()
+
+    if args==[]:
+        parser.print_help()
+        exit(1)
+
+    if options.debug:
+        logging.basicConfig(level=logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.INFO)
+    return args, options
+
+def incLastId(waitDir):
+    " return the next free integer not already used in waitDir "
+    if not isfile(lastIdFname):
+        lastId = 0
+    else:
+        ofh = open(lastIdFname, "r")
+        lastId = int(ofh.readline())
+        ofh.close()
+
+    newId = lastId+1
+
+    ofh = open(lastIdFname, "w")
+    ofh.write(str(newId))
+    ofh.close()
+
+    return newId
+
+    #dirNames = os.listdir(waitDir)
+    #if len(dirNames)==0:
+        #return 0
+    #usedInts = [int(x) for x in dirNames]
+    #topId = max(usedInts)
+    return topId
+
+def errAbort(msg):
+    print(msg)
+    sys.exit(1)
+
+def writeLogMesg(outDir, fname, mesg):
+    " write log entry to outdir/fname with mesg in it "
+    now = datetime.datetime.now()
+    timeStr = now.strftime("%Y-%m-%d %H:%M")
+    hostName = socket.gethostname()
+    row = [username, hostName, timeStr, mesg]
+    #msgFname = join(stageDir, "_stageMesg.txt")
+    msgFname = join(outDir, fname)
+    ofh = open(msgFname, "w")
+    ofh.write("\t".join(row))
+    ofh.write("\n")
+    ofh.close()
+
+
+def add(fnames):
+    " copy files to user's staging area "
+    if not isdir(stageDir):
+        logging.info("Making new staging directory %s" % stageDir)
+        os.mkdir(stageDir)
+
+    for fname in fnames:
+        if isdir(fname):
+            errAbort("%s is a directory, not a file" % fname)
+        if not isfile(fname):
+            errAbort("%s does not exist" % fname)
+
+        strippedRoot = abspath(fname).lstrip("/")
+        stagePath = join(stageDir, strippedRoot)
+        logging.info("Staging %s -> %s" % (fname, stagePath))
+        stagePathDir = dirname(stagePath)
+        if not isdir(stagePathDir):
+            os.makedirs(stagePathDir)
+        shutil.copy(fname, stagePath)
+
+def commit():
+    " prompt user for message and move staging dir to waiting dir "
+    # create the message file
+    tmpFh = tempfile.NamedTemporaryFile(prefix="pq-commit-", suffix=".txt")
+    tmpFname= tmpFh.name
+    ofh = open(tmpFname, "w")
+    ofh.write("\n")
+    ofh.write("# Please enter the commit message for your changes. Lines starting\n")
+    ofh.write("# with '#' will be ignored, and an empty message aborts the commit.\n")
+    ofh.write("# Try to mention the Redmine ticket number if you have one\n")
+    ofh.write("# The following files are staged:\n")
+    for dirPath, dirNames, fileNames in os.walk(stageDir):
+        if len(fileNames)==0:
+            continue
+        for fname in fileNames:
+            fullPath = join(dirPath, fname)
+            ofh.write("# "+fullPath+"\n")
+    ofh.flush()
+
+    # let user edit the message
+    editor = os.getenv("EDITOR", "vim")
+    editCmd = [editor, tmpFname]
+    ret = subprocess.call(editCmd)
+    assert(ret==0)
+
+    ofh.close()
+
+    # write the message to staging dir
+    ifh = open(tmpFname)
+    msg = []
+    for line in ifh:
+        if line.startswith("#"):
+            continue
+        msg.append(line)
+
+    writeLogMesg(stageDir, "_stageMesg.txt", " ".join(msg))
+
+    # move staging to queue
+    newId = incLastId(waitDir)
+    newWaitDir = join(waitDir, str(newId))
+    shutil.move(stageDir, newWaitDir)
+    logging.info("Moved %s to %s" % (stageDir, newWaitDir))
+
+def list():
+    " list all waiting requests "
+    print("Push queue directory: %s" % waitDir)
+    rowCount = 0
+    for dirName in os.listdir(waitDir):
+        if not dirName.isdigit():
+            continue
+        msgFname = join(waitDir, dirName, "_stageMesg.txt")
+        ifh = open(msgFname)
+        row = [dirName]
+        row.extend(ifh.readline().rstrip("\n").split("\t"))
+        print("\t".join(row))
+        rowCount += 1
+
+    if rowCount==0:
+        print(" - No waiting push requests")
+
+def pull(reqId):
+    " pull a request: make backups then copy the files"
+    #reqId = findLastId(waitDir)
+    bakDir = tempfile.mkdtemp(prefix="pq-")
+
+    idWaitDir = join(waitDir, str(reqId))
+    if not isdir(idWaitDir):
+        errAbort("Directory %s does not exist" % idWaitDir)
+
+    bakFnames = []
+    for dirPath, dirNames, fileNames in os.walk(idWaitDir):
+        if len(fileNames)==0:
+            continue
+        for fname in fileNames:
+            #fullPath = join(dirPath, fname)
+            #ofh.write("# "+fullPath+"\n")
+            for fname in fileNames:
+                if fname=="_stageMesg.txt":
+                    continue
+                fullPath = join(dirPath, fname)
+                newPath = fullPath.replace(idWaitDir, "")
+                bakPath = join(bakDir, newPath.strip("/"))
+                print bakPath
+
+                print("Making backup of %s to %s" % (fullPath, bakPath))
+                bakFnames.append(bakPath)
+                bakFnameDir = dirname(bakPath)
+                if not isdir(bakFnameDir):
+                    os.makedirs(bakFnameDir)
+                shutil.copy(fullPath, bakPath)
+
+                print("Copying %s to %s" % (fullPath, newPath))
+                #shutil.copy(fullPath, newPath)
+
+    # tar the backups
+    tarPath = join(idWaitDir, "backup.tar.gz")
+    tarTmp = join(idWaitDir, "_backup.tar.gz.tmp")
+    print("Making tarball from files in %s" % bakPath)
+    tf = tarfile.open(tarTmp, "w")
+    for fname in bakFnames:
+        tf.add(fname)
+    tf.close()
+    os.rename(tarTmp, tarPath)
+
+    writeLogMesg(idWaitDir, "_pullLog.txt", "")
+
+    # move the queue directory
+    print("Moving %s to %s" % (idWaitDir, doneDir))
+    shutil.move(idWaitDir, doneDir)
+
+# ----------- main --------------
+def main():
+    args, options = parseArgs()
+
+    cmd = args[0]
+
+    if cmd=="add":
+        add(args[1:])
+    elif cmd=="commit":
+        commit()
+    elif cmd=="list":
+        list()
+    elif cmd=="pull":
+        pull(args[1])
+    elif cmd=="rollback":
+        rollback(args[1])
+    else:
+        print("Unknown command: %s" % cmd)
+
+main()

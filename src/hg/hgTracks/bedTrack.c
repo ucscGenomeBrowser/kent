@@ -84,9 +84,9 @@ else if (tg->isBigBed)
     { // avoid opening an unneeded db connection for bigBed; required not to use mysql for parallel fetch tracks
     struct lm *lm = lmInit(0);
     struct bigBedInterval *bb, *bbList = bigBedSelectRange(tg, chromName, winStart, winEnd, lm);
-    char *bedRow[32];
-    char startBuf[16], endBuf[16];
     struct bbiFile *bbi = fetchBbiForTrack(tg);
+    char *bedRow[bbi->fieldCount];
+    char startBuf[16], endBuf[16];
     struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, tg->tdb);
 
      if (tg->itemName == bedName && !trackDbSettingClosestToHomeOn(tg->tdb, "linkIdInName"))
@@ -101,6 +101,7 @@ else if (tg->isBigBed)
         bed = loader(bedRow);
         // FIXME BRANEY: either disable for all tracks with NUM_FIELDS > label field or better,
         // fix how label is stored so it doesn't trash custom bed field
+        // BRANEY says: the loader should be returning bed structures which include the label field.
         if (differentString(tg->tdb->type, "bigInteract"))
             bed->label = bigBedMakeLabel(tg->tdb, tg->labelColumns, bb, chromName);
 

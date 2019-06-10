@@ -91,7 +91,7 @@ char *excludeVars[] = { "submit", "Submit", "dirty", "hgt.reset",
             "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter", "hgt.imageV1", "hgt.suggestTrack", "hgt.setWidth",
              TRACK_SEARCH,         TRACK_SEARCH_ADD_ROW,     TRACK_SEARCH_DEL_ROW, TRACK_SEARCH_PAGER,
             "hgt.contentType", "hgt.positionInput", "hgt.internal",
-            "sortExp", "sortSim",
+            "sortExp", "sortSim", "hideTracks", "ignoreCookie",
             NULL };
 
 /* These variables persist from one incarnation of this program to the
@@ -144,7 +144,7 @@ boolean hideControls = FALSE;           /* Hide all controls? */
 boolean trackImgOnly = FALSE;           /* caller wants just the track image and track table html */
 boolean ideogramToo =  FALSE;           /* caller wants the ideoGram (when requesting just one track) */
 
-/* Structure returned from findGenomePos.
+/* Structure returned from resolvePosition.
  * We use this to to expand any tracks to full
  * that were found to contain the searched-upon
  * position string */
@@ -499,7 +499,8 @@ static int trackPlusLabelHeight(struct track *track, int fontHeight)
 if (trackShouldUseAjaxRetrieval(track))
     return REMOTE_TRACK_HEIGHT;
 
-int y = track->totalHeight(track, limitVisibility(track));
+enum trackVisibility vis = limitVisibility(track);
+int y = track->totalHeight(track, vis);
 if (isCenterLabelIncluded(track))
     y += fontHeight;
 if (tdbIsComposite(track->tdb) && !isCompositeInAggregate(track))
@@ -1246,6 +1247,15 @@ if (trackDbSetting(track->tdb, "darkerLabels"))
 return color;
 }
 
+boolean isCenterLabelsPackOff(struct track *track)
+/* Check for trackDb setting to suppress center labels of composite in pack mode */
+{
+if (!track || !track->tdb)
+    return FALSE;
+char *centerLabelsPack = trackDbSetting(track->tdb, "centerLabelsPack");
+return (centerLabelsPack && sameWord(centerLabelsPack, "off"));
+}
+
 static int doLeftLabels(struct track *track, struct hvGfx *hvg, MgFont *font,
                                 int y)
 /* Draw left labels.  Return y coord. */
@@ -1338,6 +1348,18 @@ switch (vis)
     case tvHide:
         break;  /* Do nothing; */
     case tvPack:
+        if (isCenterLabelsPackOff(track))
+            // draw left labels for pack mode track with center labels off
+            {
+            if (isCenterLabelIncluded(track))
+                y += fontHeight;
+            hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, track->lineHeight, labelColor, font, 
+                                track->shortLabel);
+            y += track->height;
+            }
+        else
+            y += tHeight;
+        break;
     case tvSquish:
 	y += tHeight;
         break;
@@ -1433,8 +1455,8 @@ switch (vis)
          * (always puts 0-100% range)*/
         if (track->subType == lfSubSample && track->heightPer > (3 * fontHeight))
             {
-            ymax = y - (track->heightPer / 2) + (fontHeight / 2);
-            ymin = y + (track->heightPer / 2) - (fontHeight / 2);
+            int ymax = y - (track->heightPer / 2) + (fontHeight / 2);
+            int ymin = y + (track->heightPer / 2) - (fontHeight / 2);
             hvGfxTextRight(hvg, leftLabelX, ymin,
                         leftLabelWidth-1, track->lineHeight,
                         track->ixAltColor, font, minRangeStr );
@@ -2609,6 +2631,7 @@ if (!position)
     errAbort("position NULL");
     }
 char *vPos = cloneString(position);
+stripChar(vPos, ',');
 char *colon = strchr(vPos, ':');
 if (!colon)
     errAbort("position has no colon");
@@ -2630,6 +2653,7 @@ if (!position)
     errAbort("position NULL");
     }
 char *vPos = cloneString(position);
+stripChar(vPos, ',');
 char *colon = strchr(vPos, ':');
 if (!colon)
     errAbort("position has no colon");
@@ -4519,6 +4543,7 @@ if (
 || sameWord(type, "bigBarChart")
 || sameWord(type, "interact")
 || sameWord(type, "bigInteract")
+|| sameWord(type, "bigLolly")
 //|| track->loadItems == loadSimpleBed
 //|| track->bedSize >= 3 // should pick up several ENCODE BED-Plus types.
 )
@@ -4571,6 +4596,12 @@ setGlobalsFromWindow(windows); // first window
 flatTrack->maxHeight = maxHeight;
 }
 
+boolean doCollapseEmptySubtracks(struct track *track)
+/* Suppress display of empty subtracks. Initial support only for bed's. */
+{
+char *collapseEmptySubtracks = trackDbSetting(track->tdb, "collapseEmptySubtracks");
+return (collapseEmptySubtracks && sameWord(collapseEmptySubtracks, "on"));
+}
 
 void makeActiveImage(struct track *trackList, char *psOutput)
 /* Make image and image map. */
@@ -4798,12 +4829,14 @@ for (track = trackList; track != NULL; track = track->next)
             flatTracksAdd(&flatTracks,track,cart, orderedWiggles);
         else
             {
+            boolean doCollapse = doCollapseEmptySubtracks(track);
             for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
                 {
                 if (!isSubtrackVisible(subtrack))
                     continue;
 
-                if (!isLimitedVisHiddenForAllWindows(subtrack))
+                if (!isLimitedVisHiddenForAllWindows(subtrack) && 
+                        !(doCollapse && slCount(subtrack->items) == 0))
                     {
                     flatTracksAdd(&flatTracks,subtrack,cart, orderedWiggles);
                     }
@@ -5393,7 +5426,6 @@ if (withCenterLabels)
 	if (isLimitedVisHiddenForAllWindows(track))
             continue;
 
-
         int centerLabelHeight = (isCenterLabelIncluded(track) ? fontHeight : 0);
         int yStart = y + centerLabelHeight;
         // ORIG int yEnd   = y + trackPlusLabelHeight(track, fontHeight);
@@ -5464,7 +5496,9 @@ if (withCenterLabels)
 	    y = savey + flatTrack->maxHeight;
 	    }
 
-        if (theImgBox && track->limitedVis == tvDense && tdbIsCompositeChild(track->tdb))
+        if (theImgBox && tdbIsCompositeChild(track->tdb) &&
+                (track->limitedVis == tvDense ||
+                 (track->limitedVis == tvPack && centerLabelHeight == 0)))
             mapBoxToggleVis(hvg, 0, yStart,tl.picWidth, sliceHeight,track);
             // Strange mapBoxToggleLogic handles reverse complement itself so x=0,width=tl.picWidth
 
@@ -5504,12 +5538,7 @@ if (withLeftLabels)
 
         if (trackShouldUseAjaxRetrieval(track))
             y += REMOTE_TRACK_HEIGHT;
-    #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
-        else if (track->drawLeftLabels != NULL
-             &&  (theImgBox == NULL || track->limitedVis == tvDense))
-    #else ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
         else if (track->drawLeftLabels != NULL)
-    #endif ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
 	    {
 	    setGlobalsFromWindow(windows);
             y = doOwnLeftLabels(track, hvgSide, font, y);
@@ -5519,8 +5548,6 @@ if (withLeftLabels)
 	    y += flatTrack->maxHeight;
         }
     }
-
-
 
 /* Make map background. */
 
@@ -5757,7 +5784,20 @@ struct trackDb *tdbList;
 if(trackNameFilter == NULL)
     tdbList = hTrackDb(database);
 else
+    {
     tdbList = hTrackDbForTrack(database, trackNameFilter);
+
+    if (tdbList && tdbList->parent)        // we want to give the composite parent a chance to load and set options
+        {
+        while(tdbList->parent)
+            {
+            if (tdbList->parent->subtracks == NULL)     // we don't want to go up to a supertrack
+                break;
+            tdbList = tdbList->parent;
+            }
+        trackNameFilter = tdbList->track;
+        }
+    }
 addTdbListToTrackList(tdbList, trackNameFilter, pTrackList);
 }
 
@@ -6111,6 +6151,7 @@ else if (sameString(type, "bigWig"))
 else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") ||
         sameString(type, "bigNarrowPeak") || sameString(type, "bigPsl") ||
         sameString(type, "bigMaf")|| sameString(type, "bigChain") ||
+        sameString(type, "bigLolly") || 
         sameString(type, "bigBarChart") || sameString(type, "bigInteract"))
     {
     struct bbiFile *bbi = ct->bbiFile;
@@ -6130,6 +6171,8 @@ else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") ||
 	safef(typeBuf, sizeof(typeBuf), "bigPsl");
     else if (sameString(type, "bigBarChart"))
 	safef(typeBuf, sizeof(typeBuf), "bigBarChart");
+    else if (sameString(type, "bigLolly"))
+	safef(typeBuf, sizeof(typeBuf), "bigLolly");
     else if (sameString(type, "bigInteract"))
 	safef(typeBuf, sizeof(typeBuf), "bigInteract");
     else
@@ -6829,49 +6872,134 @@ if (cartOptionalString(cart, "hgt.trackNameFilter") == NULL)
 loadCustomTracks(&trackList);
 groupTracks( &trackList, pGroupList, grpList, vis);
 setSearchedTrackToPackOrFull(trackList);
-if (cgiOptionalString( "hideTracks"))
-    changeTrackVis(groupList, NULL, tvHide);
+boolean hideTracks = cgiOptionalString( "hideTracks") != NULL;
+if (hideTracks)
+    changeTrackVis(groupList, NULL, tvHide);    // set all top-level tracks to hide
 
 /* Get visibility values if any from ui. */
+struct hash *superTrackHash = newHash(5);  // cache whether supertrack is hiding tracks or not
+char buffer[4096];
+
 for (track = trackList; track != NULL; track = track->next)
     {
-    char *s = cartOptionalString(cart, track->track);
-    if (startsWith("hub_", track->track) && (s == NULL))
-        s = cartOptionalString(cart, trackHubSkipHubName(track->track));
-    if (cgiOptionalString("hideTracks"))
-	{
-        if (tdbIsSuperTrackChild(track->tdb))
+    // deal with any supertracks we're seeing for the first time
+    if (tdbIsSuperTrackChild(track->tdb))
+        {
+        struct hashEl *hel = NULL;
+
+        if ((hel = hashLookup(superTrackHash, track->tdb->parent->track)) == NULL)   // we haven't seen this guy
             {
-            s = cgiOptionalString(track->tdb->parent->track);
+            // first deal with visibility of super track
+            char *s = hideTracks ? cgiOptionalString(track->tdb->parent->track) : cartOptionalString(cart, track->tdb->parent->track);
             if (s)
                 {
-                cartSetString(cart, track->tdb->parent->track, s);
                 track->tdb->parent->visibility = hTvFromString(s) ;
+                cartSetString(cart, track->tdb->parent->track, s);
                 }
+            else if (startsWith("hub_", track->tdb->parent->track))
+                {
+                s = hideTracks ? cgiOptionalString( trackHubSkipHubName(track->tdb->parent->track)) :  cartOptionalString( cart, trackHubSkipHubName(track->tdb->parent->track));
+                if (s)
+                    {
+                    cartSetString(cart, track->tdb->parent->track, s);
+                    cartRemove(cart, trackHubSkipHubName(track->tdb->parent->track)); // remove the undecorated version
+                    track->tdb->parent->visibility = hTvFromString(s) ;
+                    }
+                }
+            
+            // now look to see if we have a _hideKids statement to turn off all subtracks (including the current one)
+            unsigned hideKids = 0;
+            char *usedThis = buffer;
+            safef(buffer, sizeof buffer, "%s_hideKids", track->tdb->parent->track);
+
+            s = cartOptionalString(cart, buffer);
+            if (s == NULL && startsWith("hub_", track->tdb->parent->track))
+                s = cartOptionalString(cart, usedThis = trackHubSkipHubName(buffer));
+
+            if (s != NULL)
+                {
+                hideKids = 1;
+                cartRemove(cart, usedThis);  // we don't want this hanging out in the cart
+                }
+
+            // mark this as having been addressed
+            hel = hashAddInt(superTrackHash, track->tdb->parent->track, hideKids );  
             }
-	s = cgiOptionalString(track->track);
-	if (s != NULL)
-	    {
-	    if (hTvFromString(s) == track->tdb->visibility)
-		cartRemove(cart, track->track);
-	    else
-		cartSetString(cart, track->track, s);
-	    }
-	}
-    if (s != NULL && !track->limitedVisSet)
-	track->visibility = hTvFromString(s);
-    if (tdbIsCompositeChild(track->tdb))
-        track->visibility = tdbVisLimitedByAncestry(cart, track->tdb, FALSE);
-    else if (tdbIsComposite(track->tdb) && track->visibility != tvHide)
-	{
-	struct trackDb *parent = track->tdb->parent;
-	char *parentShow = NULL;
-	if (parent)
-	    parentShow = cartUsualString(cart, parent->track,
-			 parent->isShow ? "show" : "hide");
-	if (!parent || sameString(parentShow, "show"))
-	    compositeTrackVis(track);
-	}
+
+        if ( ptToInt(hel->val) == 1)    // we want to hide this track
+            {
+            if (tvHide == track->tdb->visibility)
+                /* remove if setting to default vis */
+                cartRemove(cart, track->track);
+            else
+                cartSetString(cart, track->track, "hide");
+            track->visibility = tvHide;
+            }
+        }
+    
+    // we use cgiOptionString because the above code may have turned off the track in the cart if
+    // the user requested that all the default tracks be turned off
+    char *s = hideTracks ? cgiOptionalString(track->track) : cartOptionalString(cart, track->track);
+
+    if (s != NULL)
+        {
+        if (!track->limitedVisSet)
+            {
+            track->visibility = hTvFromString(s); 
+            cartSetString(cart, track->track, s);
+            }
+        }
+    else
+        {
+        // maybe this track is on the URL without the hub_ prefix
+        if (startsWith("hub_", track->track))
+            s = cgiOptionalString(trackHubSkipHubName(track->track));
+        if (s != NULL && !track->limitedVisSet)
+            {
+            track->visibility = hTvFromString(s);
+            cartSetString(cart, track->track, s);   // add the decorated visibility to the cart
+            cartRemove(cart, trackHubSkipHubName(track->track)); // remove the undecorated version
+            }
+        }
+
+    // now deal with composite track children
+    if (tdbIsComposite(track->tdb))
+        {
+        char *usedThis = buffer;
+
+        // first check to see if we've been asked to hide all the subtracks
+        boolean hideKids = FALSE;
+        safef(buffer, sizeof buffer, "%s_hideKids", track->track);
+
+        s = cartOptionalString(cart, buffer);
+        if (s == NULL && startsWith("hub_", track->track))
+            s = cartOptionalString(cart, usedThis = trackHubSkipHubName(buffer));
+        if (s != NULL)
+            hideKids = TRUE;
+        cartRemove(cart, usedThis);   // we don't want these _hideKids variables in the cart
+
+        // now see if we have any specified visibilities
+        struct track *subtrack;
+        for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
+            {
+            char *s = hideTracks ? cgiOptionalString( subtrack->track) : cartOptionalString(cart, subtrack->track);
+            if (s == NULL && startsWith("hub_", subtrack->track))
+                s = hideTracks ? cgiOptionalString(trackHubSkipHubName(subtrack->track)) : cartOptionalString(cart, trackHubSkipHubName(subtrack->track));
+
+            safef(buffer, sizeof buffer, "%s_sel", subtrack->track);
+            if (s != NULL)
+                {
+                subtrack->visibility = hTvFromString(s);
+                cartSetString(cart, subtrack->track, s);
+                if (sameString("hide", s))
+                    cartSetString(cart, buffer, "0");
+                else
+                    cartSetString(cart, buffer, "1");
+                }
+            else if (hideKids && isSubtrackVisible(subtrack))
+                cartSetString(cart, buffer, "0");
+            }
+        }
     }
 return trackList;
 }
@@ -7101,6 +7229,7 @@ return (startsWithWord("bigWig"  , track->tdb->type)
      || startsWithWord("bigChain"  , track->tdb->type)
      || startsWithWord("bam"     , track->tdb->type)
      || startsWithWord("halSnake", track->tdb->type)
+     || startsWithWord("bigLolly", track->tdb->type)
      || startsWithWord("vcfTabix", track->tdb->type))
      // XX code-review: shouldn't we error abort if the URL is not valid?
      && (bdu && isValidBigDataUrl(bdu, FALSE))
@@ -8796,13 +8925,6 @@ printf("<a href='%s?%s=%s'><input type='button' VALUE='Return to Browser'></a>\n
            hgTracksName(), cartSessionVarName(), cartSessionId(cart));
 }
 
-boolean isGenome(char *pos)
-/* Return TRUE if pos is genome. */
-{
-pos = trimSpaces(pos);
-return(sameWord(pos, "genome") || sameWord(pos, "hgBatch"));
-}
-
 void setRulerMode()
 /* Set the rulerMode variable from cart. */
 {
@@ -8840,6 +8962,35 @@ fullInsideX = trackOffsetX();
 fullInsideWidth = tl.picWidth-gfxBorder-fullInsideX;
 }
 
+static boolean resolvePosition(char **pPosition)
+/* Position may be an already-resolved chr:start-end, or a search term.
+ * If it is a search term:
+ * 1 match ==> set globals chromName, winStart, winEnd, return TRUE.
+ * 0 matches ==> switch back to lastPosition, hopefully get 1 match from that;
+ * set globals chromName, winStart, winEnd, return TRUE.  If no lastPosition, try w/hDefaultPos().
+ * multiple matches ==> Display a page with links to match positions, return FALSE. */
+{
+boolean resolved = TRUE;
+struct dyString *dyWarn = dyStringNew(0);
+hgp = hgFindSearch(cart, pPosition, &chromName, &winStart, &winEnd, hgTracksName(), dyWarn);
+if (isNotEmpty(dyWarn->string))
+    warn("%s", dyWarn->string);
+if (hgp->singlePos)
+    {
+    createHgFindMatchHash();
+    }
+else
+    {
+    char *menuStr = menuBar(cart, database);
+    if (menuStr)
+        puts(menuStr);
+    hgPositionsHtml(database, hgp, hgTracksName(), cart);
+    resolved = FALSE;
+    }
+cartSetString(cart, "position", *pPosition);
+return resolved;
+}
+
 void parseVirtPosition(char *position)
 /* parse virtual position
  *  TODO this is just temporary */
@@ -8849,6 +9000,7 @@ if (!position)
     errAbort("position NULL");
     }
 char *vPos = cloneString(position);
+stripChar(vPos, ',');
 char *colon = strchr(vPos, ':');
 if (!colon)
     errAbort("position has no colon");
@@ -8869,6 +9021,7 @@ if (!position)
     errAbort("position NULL");
     }
 char *vPos = cloneString(position);
+stripChar(vPos, ',');
 char *colon = strchr(vPos, ':');
 if (!colon)
     errAbort("position has no colon");
@@ -8950,7 +9103,6 @@ void tracksDisplay()
 /* Put up main tracks display. This routine handles zooming and
  * scrolling. */
 {
-char *defaultPosition = hDefaultPos(database);
 char titleVar[256];
 char *oldPosition = cartUsualString(cart, "oldPosition", "");
 boolean findNearest = cartUsualBoolean(cart, "findNearest", FALSE);
@@ -8980,38 +9132,8 @@ if (sameString(position, ""))
 
 if (!positionIsVirt)
     {
-    chromName = NULL;
-    winStart = 0;
-    if (isGenome(position) || NULL ==
-	(hgp = findGenomePos(database, position, &chromName, &winStart, &winEnd, cart)))
-	{
-	if (winStart == 0)  /* number of positions found */
-	    {
-	    freeMem(position);
-	    position = cloneString(cartUsualString(cart, "lastPosition", defaultPosition));
-	    hgp = findGenomePos(database, position, &chromName, &winStart, &winEnd,cart);
-	    if (hgp != NULL && differentString(position, defaultPosition))
-		cartSetString(cart, "position", position);
-	    }
-	}
-
-    /* After position is found set up hash of matches that should
-       be drawn with names highlighted for easy identification. */
-    createHgFindMatchHash();
-
-    /* This means that no single result was found
-    I.e., multiple results may have been found and are printed out prior to this code*/
-    if (NULL == chromName)
-	{
-	// In case user manually edits the browser location as described in #13009,
-	// revert the position.  If they instead choose from the list as we expect,
-	// that will set the position to their choice.
-	// lastPosition gets set in cart.c
-	char *lastPosition = cartUsualString(cart, "lastPosition", hDefaultPos(database));
-	cartSetString(cart, "position", lastPosition);
-	return;
-	}
-
+    if (! resolvePosition(&position))
+        return;
     }
 
 virtMode = cartUsualBoolean(cart, "virtMode", FALSE);
@@ -9071,8 +9193,7 @@ while(TRUE)
 	virtModeType = "default";
 	cartSetString(cart, "virtModeType", virtModeType);
 	position = cloneString(hDefaultPos(database));
-	hgp = findGenomePos(database, position, &chromName, &winStart, &winEnd, cart);
-	cartSetString(cart, "position", position);
+        resolvePosition(&position);
 	positionIsVirt=FALSE;
 	virtMode=FALSE;
 	}
@@ -10129,7 +10250,7 @@ if (cartVarExists(cart, "hgt.convertChromToVirtChrom"))
 
 jsonObjectAdd(jsonForClient, "measureTiming", newJsonBoolean(measureTiming));
 // js code needs to know if a highlightRegion is defined for this db
-checkAddHighlight(); // call again in case tracksDisplay's call to findGenomePos changed vars
+checkAddHighlight(); // call again in case tracksDisplay's call to resolvePosition changed vars
 char *highlightDef = cartOptionalString(cart, "highlight");
 if (highlightDef && startsWith(database,highlightDef) && highlightDef[strlen(database)] == '.')
     jsonObjectAdd(jsonForClient, "highlight", newJsonString(highlightDef));

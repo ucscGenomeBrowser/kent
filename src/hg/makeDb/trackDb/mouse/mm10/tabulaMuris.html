@@ -1,0 +1,102 @@
+
+<h2>Description</h2>
+<p>
+<a target=_blank href="https://tabula-muris.ds.czbiohub.org/">Tabula Muris</a>
+is a compendium of single cell transcriptome data from the model organism <i>Mus
+musculus</i>, containing nearly 100,000 cells from 20 organs and tissues. The data
+allow for direct and controlled comparison of gene expression in cell types
+shared between tissues, such as immune cells from distinct anatomical
+locations.</p>
+
+<p>This track shows the results from FACS sorted cells sequenced with the
+SmartSeq2 protocol, as it has much higher transcript coverage. The sequencing
+data comprises more than 2TB and was summarized into a track at UCSC.</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+As indicated by the &quot;...&quot; after its name, this is a 'super track', a container for 
+subtracks. There are three different subtracks:</a></p>
+
+<dl>
+  <dt><b>Cell type expression:</b></dt>
+    <dd>
+    A rectangle on the genome, at the location of a gene, filled with a bar graph that indicates the
+    gene's expression by single cell cluster. The term &quot;cluster&quot; refers to a cluster of
+    single cells, which usually represents a cell or tissue type. The height of the bar graph on the
+    genome is the median expression level and a click-through on the bar chart displays a boxplot of
+    expression level quartiles with outliers, per cluster. On the boxplot, the number of cells from
+    each experiment is shown.</dd>
+
+  <dt><b>Coverage:</b></dt>
+    <dd>
+    Bar graphs indicate the number of reads at this base pair. You may want to switch on
+    auto-scaling of the y-axis. For configuration options, see <a target="_blank"
+    href="https://genome.ucsc.edu/goldenpath/help/hgWiggleTrackHelp.html">the graph tracks
+    configuration help page</a>. These tracks are shown in &quot;dense&quot; by default, set any of
+    the tracks to &quot;full&quot; to see the detailed coverage plot.</dd>
+
+  <dt><b>Splice Junctions:</b></dt>
+    <dd>
+    Thick rectangles show exons around a splice site, connected by a line that indicates the
+    intron. These gaps are shown and are annotated with the number of reads, in the 'score' field.
+    You can use the 'score' filter on the track configuration page to show only introns with a
+    certain number of supporting reads. The maximum number of reads that are shown is 1,000, even if
+    more reads support an intron. These tracks are shown in dense by default, set this track to
+    &quot;pack&quot; to see. Then click the splice junctions to see their score.</dd>
+</dl>
+
+<h2>Methods</h2>
+<p>
+BAM files were provided by the data submitters, one (single end) or two files (paired end) per
+cell. The BAM alignments were used as submitted. They were merged with &quot;samtools merge&quot;
+into a single BAM file per cluster. The readgroup (RG) BAM tag indicates the original cell.</p>
+
+<p>
+From the resulting merged BAM file, coverage was obtained using &quot;wiggletools coverage&quot; a
+tool written by Daniel Zerbino and the result was converted with the UCSC tool
+&quot;wigToBigWig&quot;.</p>
+
+<p>
+Also on the merged BAM file, the software IntronProspector was run with default settings. It
+retains reads with a gap longer than 70 bp and shorter than 500 kbp and merges them into annotated
+splice junctions.</p>
+
+<h2>Data Access</h2>
+<p>
+The merged BAM files, coverage bigWig files and splice junctions in bigBed format can be
+downloaded from the <a href="http://hgdownload.soe.ucsc.edu/gbdb/mm10/tabulamuris/"
+target="_blank">/gbdb fileserver</a>.</p>
+
+<p>
+Since the splice junction .bigBed files have their scores capped at 1000, the original
+IntronProspector .bed files are available in the same
+<a href="https://cells.ucsc.edu/hubs/tabulamuris/" target="_blank">track hub directory</a>. You can
+also find there *.calls.tsv files with more details about each junction, e.g. the number of
+uniquely mapping reads.</p>
+
+<h2>Credits</h2>
+<p>WiggleTools was written by Daniel Zerbino, IntronProspector was written by Mark Diekhans, track
+hubs were written to a large extent by Brian Raney and colleages at the UCSC Genome Browser. Track
+creation was done by Max Haeussler and tested by Jairo Navarro.</p>
+
+<h2>References</h2>
+<p>
+Zerbino DR, Johnson N, Juettemann T, Wilder SP, Flicek P.
+<a href="https://academic.oup.com/bioinformatics/article/30/7/1008/235372"
+target="_blank">WiggleTools: parallel processing of large collections of genome-wide datasets for
+visualization and statistical analysis</a>. <em>Bioinformatics</em>. 2014 Apr 1;30(7):1008-9.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/24363377" target="_blank">24363377</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3967112/" target="_blank">PMC3967112</a>
+</p>
+
+<p>
+Mark Diekhans, <a href="https://github.com/diekhans/intronProspector"
+target="_blank">IntronProspector GitHub Repository</a>. <em>Github</em> 2018</p>
+
+<p>
+The Tabula Muris Consortium, Stephen R. Quake, Tony Wyss-Coray, Spyros Darmanis:
+<a href="https://www.biorxiv.org/content/10.1101/237446v2" target="_blank">Single-cell
+transcriptomic characterization of 20 organs and tissues from individual mice creates a Tabula
+Muris</a>. <em>bioRxiv preprint March 2018</em>, accepted paper in 
+<a target=_blank href="https://doi.org/10.1038/s41586-018-0590-4">Nature 2018 (562) p.367-372</a></p>

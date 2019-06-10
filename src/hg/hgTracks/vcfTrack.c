@@ -1196,6 +1196,13 @@ if (errCatchStart(errCatch))
 	    }
 	// Don't vcfFileFree here -- we are using its string pointers!
 	}
+    else
+        {
+        if (tbiFileOrUrl)
+            errAbort("Unable to open VCF file/URL '%s' with tabix index '%s'", fileOrUrl, tbiFileOrUrl);
+        else
+            errAbort("Unable to open VCF file/URL '%s'", fileOrUrl);
+        }
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError || vcff == NULL)
@@ -1262,6 +1269,8 @@ if (errCatchStart(errCatch))
 	    }
 	// Don't vcfFileFree here -- we are using its string pointers!
 	}
+    else
+        errAbort("Unable to open VCF file '%s'", vcfFile);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError || vcff == NULL)

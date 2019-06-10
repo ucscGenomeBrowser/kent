@@ -1479,7 +1479,7 @@ int extraFieldsStart(struct trackDb *tdb, int fieldCount, struct asObject *as)
 int start = 0;
 char *type = cloneString(tdb->type);
 char *word = nextWord(&type);
-if (word && (sameWord(word,"bed") || sameWord(word,"bigBed") || sameWord(word,"bigGenePred") || sameWord(word,"bigPsl")  || sameWord(word,"bigBarChart")))
+if (word && (sameWord(word,"bed") || sameWord(word,"bigBed") || sameWord(word,"bigGenePred") || sameWord(word,"bigPsl")  || sameWord(word,"bigBarChart")|| sameWord(word,"bigLolly")))
     {
     if (NULL != (word = nextWord(&type)))
         start = sqlUnsigned(word);
@@ -1638,7 +1638,6 @@ for (;col != NULL && count < fieldCount;col=col->next)
         printf("<td>%s</td></tr>\n", fields[ix]);
     }
 asObjectFree(&as);
-freeMem(fieldToUrl);
 if (skipIds)
     slFreeList(skipIds);
 if (sepFields)
@@ -2357,7 +2356,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
             }
         else
             {
-            if (!intronTruncated == TRUE)
+            if (!(intronTruncated == TRUE))
                 {
                 printf("...intron truncated...<br>");
                 intronTruncated = TRUE;
@@ -4113,13 +4112,12 @@ if (itemForUrl == NULL)
 dupe = cloneString(tdb->type);
 wordCount = chopLine(dupe, words);
 headerItem = cloneString(item);
-
+type = words[0];
 
 /* Suppress printing item name in page header, as it is not informative for these types of
  * tracks... */
 if (container == NULL && wordCount > 0)
     {
-    type = words[0];
     if (sameString(type, "maf") || sameString(type, "wigMaf") || sameString(type, "bigMaf") || sameString(type, "netAlign")
         || sameString(type, "encodePeak"))
         headerItem = NULL;
@@ -4286,6 +4284,11 @@ else if (wordCount > 0)
         {
         doBedDetail(tdb, NULL, item);
         }
+    else if (sameString(type, "bigLolly") )
+	{
+	int num = 12;
+        genericBigBedClick(conn, tdb, item, start, end, num);
+	}
     else if (sameString(type, "interaction") )
 	{
 	int num = 12;
@@ -4950,7 +4953,6 @@ if (sameString(action, EXTENDED_DNA_BUTTON))
 // But we want to keep it very simple and close to a plain text dump.
 
 cartHtmlStart("DNA");
-hgBotDelay();
 puts("<PRE>");
 if (tbl[0] == 0)
     {
@@ -7651,7 +7653,6 @@ char *otherDb = NULL, *org = NULL, *otherOrg = NULL;
 struct dnaSeq *qSeq = NULL;
 char name[128];
 
-hgBotDelay();	/* Prevent abuse. */
 
 /* Figure out other database. */
 if (chopLine(type, typeWords) < ArraySize(typeWords))
@@ -8487,7 +8488,14 @@ else if (isHubTrack(table))
     gpList =  getGenePredForPositionBigGene(tdb, geneName);
     }
 else
-    gpList =  getGenePredForPositionSql(table, geneName);
+    {
+    struct trackDb *tdb = hashFindVal(trackHash, table);
+    char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+    if (bigDataUrl)
+        gpList =  getGenePredForPositionBigGene(tdb, geneName);
+    else
+        gpList =  getGenePredForPositionSql(table, geneName);
+    }
 
 return gpList;
 }
@@ -8747,7 +8755,22 @@ printf("\n");
 cgiContinueHiddenVar("o");
 printf("\n");
 
-hgSeqOptions(cart, database, tbl);
+if (isCustomTrack(tbl) || startsWith("hub_", tbl))
+    hgSeqOptions(cart, database, tbl);
+else
+    {
+    struct trackDb *tdb = hashFindVal(trackHash, tbl);
+    char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+    if (bigDataUrl)
+        {
+        // we asssume that this is a bigGenePred table if we got here with it
+        hgSeqFeatureRegionOptions(cart, TRUE, TRUE);
+        hgSeqDisplayOptions(cart, TRUE, TRUE, FALSE);
+        }
+    else
+        hgSeqOptions(cart, database, tbl);
+    }
+
 cgiMakeButton("submit", "submit");
 printf("</FORM>");
 }
@@ -8867,9 +8890,18 @@ else if (isCustomTrack(table))
     }
 else
     {
-    char constraints[256];
-    safef(constraints, sizeof(constraints), "name = %s", quotedItem);
-    itemCount = hgSeqItemsInRange(database, table, seqName, winStart, winEnd, constraints);
+    tdb = hashFindVal(trackHash, table);
+    char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+    if (bigDataUrl)
+        {
+        itemCount = getSeqForBigGene(tdb, geneName);
+        }
+    else
+        {
+        char constraints[256];
+        safef(constraints, sizeof(constraints), "name = %s", quotedItem);
+        itemCount = hgSeqItemsInRange(database, table, seqName, winStart, winEnd, constraints);
+        }
     }
 if (itemCount == 0)
     printf("\n# No results returned from query.\n\n");
@@ -8964,19 +8996,23 @@ if (pslList)
     printAlignments(pslList, start, "htcCdnaAli", tdb->table, item);
 
     char *hgsid = cartSessionId(cart);
-    int rangeStart = 0, rangeEnd = 0;
-    if (pslTrimListToTargetRange(pslList, winStart, winEnd, &rangeStart, &rangeEnd))
+    if (hgIsOfficialChromName(database, item))
         {
-        printf("<A HREF='hgTracks?hgsid=%s&position=%s:%d-%d'>"
-               "View corresponding position range on %s</A><BR>\n",
-               hgsid, item, rangeStart+1, rangeEnd, item);
+        int rangeStart = 0, rangeEnd = 0;
+        if (pslTrimListToTargetRange(pslList, winStart, winEnd, &rangeStart, &rangeEnd))
+            {
+            printf("<A HREF='hgTracks?hgsid=%s&position=%s:%d-%d'>"
+                   "View corresponding position range on %s</A><BR>\n",
+                   hgsid, item, rangeStart+1, rangeEnd, item);
+            }
         }
     char *altFix = item;
     if (!endsWith(altFix, "alt") && !endsWith(altFix, "fix"))
         altFix = pslList->tName;
-    printf("<A HREF=\"hgTracks?hgsid=%s&virtModeType=singleAltHaplo&singleAltHaploId=%s\">"
-           "Show %s placed on its chromosome</A><BR>\n",
-           hgsid, altFix, altFix);
+    if (hgIsOfficialChromName(database, altFix))
+        printf("<A HREF=\"hgTracks?hgsid=%s&virtModeType=singleAltHaplo&singleAltHaploId=%s\">"
+               "Show %s placed on its chromosome</A><BR>\n",
+               hgsid, altFix, altFix);
 
     puts("<P><B>Alignment stats:</B><BR>");
     // Sometimes inversions cause alignments to be split up; just sum up all the stats.
@@ -13728,10 +13764,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Left Primer Sequence:</B> %s<BR>\n", snp.primerL);
     printf("<B>Right Primer Sequence:</B> %s<BR>\n", snp.primerR);
     if (snp.snpType[0] != 'S')
+        {
         if (snp.questionM[0] == 'H')
 	    printf("<B>Indel Confidence</B>: High\n");
         if (snp.questionM[0] == 'L')
 	    printf("<B>Indel Confidence</B>: Low\n");
+        }
     }
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
@@ -19516,8 +19554,10 @@ hFreeConn(&conn);
 bool matchTableOrHandler(char *word, struct trackDb *tdb)
 /* return true if word matches either the table name or the trackHandler setting of the tdb struct */
 {
+if (NULL == tdb)
+    return FALSE;
 char* handler = trackDbSetting(tdb, "trackHandler");
-return (sameWord(word, tdb->table) || (handler==NULL || sameWord(word, handler)));
+return (sameWord(word, tdb->table) || (handler!=NULL && sameWord(word, handler)));
 }
 
 void doLinkedFeaturesSeries(char *track, char *clone, struct trackDb *tdb)
@@ -21436,11 +21476,10 @@ else
 	int start = cartInt(cart, "o");
 	int end = cartInt(cart, "t");
 
-	if (ct->fieldCount < 4)
-	    sqlSafefFrag(where, sizeof(where), "chromStart = '%d'", start);
-	else
+	sqlSafefFrag(where, sizeof(where), "chromStart = '%d' and chromEnd = '%d'", start, end);
+	if (ct->fieldCount >= 4)
 	    {
-	    sqlSafefFrag(where, sizeof(where), "name = '%s'", itemName);
+	    sqlSafefAppend(where, sizeof(where), " and name = '%s'", itemName);
 	    }
 	sr = hRangeQuery(conn, ct->dbTableName, seqName, start, end,
                      where, &rowOffset);
@@ -25461,6 +25500,8 @@ char *item = cloneString(cartOptionalString(cart, "i"));
 char *parentWigMaf = cartOptionalString(cart, "parentWigMaf");
 struct trackDb *tdb = NULL;
 
+hgBotDelayFrac(0.5);
+
 if (hIsGisaidServer())
     {
     validateGisaidUser(cart);
@@ -25842,7 +25883,7 @@ else if (sameWord(table, "knownGene"))
     {
     doKnownGene(tdb, item);
     }
-else if (sameWord(table, "ncbiRefSeq") ||
+else if (matchTableOrHandler("ncbiRefSeq", tdb) ||
          sameWord(table, "ncbiRefSeqPsl") ||
          sameWord(table, "ncbiRefSeqCurated") ||
          sameWord(table, "ncbiRefSeqPredicted") )

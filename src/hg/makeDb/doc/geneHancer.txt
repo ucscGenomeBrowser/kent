@@ -11,7 +11,7 @@
 # GeneHancer: genome-wide integration of enhancers and target genes in GeneCards
 
 ##############################################################################
-# RM #22048: GeneHancer (IN PROGRESS 2018-09-10 kate)
+# RM #22048: GeneHancer (2018-09-10 kate)
 
 # Files obtained from development hub prepared by Simon F:
 # https://genecards.weizmann.ac.il/geneloc/gh_hub_interactions/hub.txt  
@@ -90,3 +90,72 @@ ln -s /hive/data/outside/geneHancer/gbdb/*.hg38.bb hg38/geneHancer
 
 # cleanup
 rm -fr genecards.weizmann.ac.il
+
+##############################################################################
+# Data correction from Simon 12/31/18 
+#
+# (2019-01-02 kate)
+ 
+"Unfortunately we discovered a bug with the data of the GeneHancer 
+# native track (which belongs to the current version of GeneCards, V4.8)
+# One field (`Experiment') is not populated properly in all 4 interaction bb files."
+#
+# The 'experiment' field in the GeneHancer hub is fixed (for GeneCards version 4.8, 
+# used in the UCSC live main track).  We also fixed the issue with interaction interval.
+#
+# RM #22712
+
+# retrieve corrected files from 'OwnCloud' platform:  GeneHancer_hub_V4_8_fix.zip 
+
+cd /hive/data/outside/geneHancer
+mkdir v2
+cd v2
+unzip GeneHancer_hub_V4_8_fix.zip
+ls *.bb
+#GH_interactions1_all.bb       GH_interactions1_doubleElite.bb
+#GH_interactions1_all_hg19.bb  GH_interactions1_doubleElite_hg19.bb
+
+# sanity check by converting a file to bigBed and comparing to previous version
+# -> OK
+
+ln -s `pwd`/v2/GH_interactions1_doubleElite_hg19.bb gbdb/geneHancerInteractionsDoubleElite.v2.hg19.bb
+ln -s `pwd`/v2/GH_interactions1_all_hg19.bb gbdb/geneHancerInteractionsAll.v2.hg19.bb
+ln -s `pwd`/v2/GH_interactions1_doubleElite.bb gbdb/geneHancerInteractionsDoubleElite.v2.hg38.bb
+ln -s `pwd`/v2/GH_interactions1_all.bb gbdb/geneHancerInteractionsAll.v2.hg38.bb
+
+cd /gbdb
+ln -s /hive/data/outside/geneHancer/gbdb/*.v2.hg19.bb hg19/geneHancer
+ln -s /hive/data/outside/geneHancer/gbdb/*.v2.hg38.bb hg38/geneHancer
+#
+
+# Minor changes for compatiility with previous version of track:
+#       1. Separator in item label is slash not colon
+#       2. GeneHancer* fields in .as should have initial char lower case (geneHancer*)
+# (2019-01-15 kate)
+
+cat > makeV2.csh << 'EOF'
+mkdir -f v2.fixed
+cd gbdb
+foreach v (All.v2.hg19 All.v2.hg38 DoubleElite.v2.hg19 DoubleElite.v2.hg38)
+  set db = $v:e
+  set f = geneHancerInteractions$v
+  echo $f
+  set sizes = /hive/data/genomes/$db/chrom.sizes
+  bigBedToBed $f.bb ../v2/$f.bed
+  sed 's/:/\//' ../v2/$f.bed | interactFixRanges stdin stdout | \
+        bedSort stdin ../v2.fixed/$f.bed
+  bedToBigBed -type=bed5+3 -as=../geneHancerGb.as ../v2.fixed/$f.bed $sizes ../gbdb/$f.v2.fixed.bb
+end
+'EOF'
+
+rm /gbdb/{hg19,hg38}/geneHancer/*.v2.*
+
+set dir = /hive/data/outside/geneHancer/gbdb
+ln -s $dir/geneHancerInteractionsAll.v2.hg19.v2.fixed.bb /gbdb/hg19/geneHancer/geneHancerInteractionsAll.v2.hg19.bb
+ln -s $dir/geneHancerInteractionsDoubleElite.v2.hg19.v2.fixed.bb /gbdb/hg19/geneHancer/geneHancerInteractionsDoubleElite.v2.hg19.bb
+ln -s $dir/geneHancerInteractionsAll.v2.hg38.v2.fixed.bb /gbdb/hg38/geneHancer/geneHancerInteractionsAll.v2.hg38.bb
+ln -s $dir/geneHancerInteractionsDoubleElite.v2.hg38.v2.fixed.bb /gbdb/hg38/geneHancer/geneHancerInteractionsDoubleElite.v2.hg38.bb
+
+
+
+

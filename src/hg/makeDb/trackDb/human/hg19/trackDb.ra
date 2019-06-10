@@ -1,5 +1,18 @@
 #	"$Id: trackDb.ra,v 1.125 2010/06/11 22:12:18 mary Exp $";
 
+track dgvGold
+parent dgvPlus
+shortLabel DGV Gold Standard
+longLabel Database of Genomic Variants: Gold Standard Variants
+bigDataUrl /gbdb/hg19/dgv/dgvGold.bb
+type bigBed 12 +
+url http://dgv.tcag.ca/gb2/gbrowse_details/dgv2_hg19?ref=$S;start=${;end=$};name=$$;class=Sequence
+searchIndex name
+
+searchTable dgvGold
+searchType bigBed
+searchDescription DGV Gold Variants
+
 track cosmicRegions
 shortLabel COSMIC Regions
 longLabel Catalogue of Somatic Mutations in Cancer V82
@@ -22,26 +35,8 @@ searchPriority 2.07207
 searchType bigBed
 searchDescription COSMIC Regions
 
-track mastermind
-shortLabel Mastermind Variants
-longLabel Genomenom Mastermind Variants extracted from fulltext publications
-group phenDis
-visibility hide
-type bigBed 9 +
-release alpha
-urls url=https://mastermind.genomenon.com/detail?disease=all%20diseases&$$
-bigDataUrl /gbdb/hg19/bbi/mastermind.bb
-noScoreFilter on
-exonNumbers off
-mouseOverField _mouseOver
-itemRgb on
-mmcnt1Filter 0
-mmcnt2Filter 0
-mmcnt3Filter 0
-
 # chainNet tracks
 include trackDb.chainNet.ra
-include trackDb.wgEncode.ra
 include trackDb.denisova.ra
 
 #large composites
@@ -1119,6 +1114,23 @@ informant Human N-SCAN Human N-SCAN uses mouse (mm9) as the informant and iterat
 
 track chainNetVenter override
 priority 450
+
+# Add override for patchwork fix and alt haplotypes track and remove old haplotype track ref#18855
+track altSeqLiftOverPsl override
+release alpha
+
+track fixSeqLiftOverPsl override
+release alpha
+
+track altLocations
+type bed 4
+group map
+color 32,32,190
+shortLabel Alt Haplotypes
+longLabel Alternate Haplotypes to Reference Sequence Correspondence
+url ../cgi-bin/hgTracks?db=$D&position=$$
+urlLabel Corresponding position:
+release beta,public
 
 # Some, but not all subtracks of pgSnp (Personal Genome Variants) were lifted
 track pgAk1 override
@@ -2607,3 +2619,17 @@ include ../../crispr10K.ra alpha
 
 track ensGene override
 ensemblIdUrl https://grch37.ensembl.org/Homo_sapiens
+
+# ENCODE tracks
+
+include trackDb.wgEncode.ra
+
+include wgEncodeReg.ra public
+
+include wgEncodeReg.new.ra alpha,beta
+include encode3.ra alpha,beta
+
+include wgEncodeReg.dev.ra alpha
+
+
+

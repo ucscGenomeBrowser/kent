@@ -33,7 +33,7 @@ DBS = \
 	ailMel1 \
 	allMis1 \
 	amaVit1 geoFor1 melUnd1 \
-	ambMex1 \
+	ambMex1 ambMex2 \
 	ancCey1 \
 	anoCar1 anoCar2 \
 	anoGam1 anoGam3 \
@@ -128,7 +128,7 @@ DBS = \
 	melInc1 melInc2 \
 	micMur1 micMur2 micMur3 \
 	micOch1 \
-	mm6 mm7 mm8 mm9 mm10 mm10Patch1 mm10Strains1 mm10Patch4 \
+	mm6 mm7 mm8 mm9 mm10 mm10Patch1 mm10Strains1 mm10Patch4 GRCm38B \
 	monDom1 monDom4 monDom5 \
 	musFur1 \
 	myoLuc1 myoLuc2 \
@@ -152,6 +152,7 @@ DBS = \
 	panRed1 \
 	panTro1 panTro2 panTro3 panTro4 panTro5 panTro6 \
 	papHam1 papAnu2 papAnu3 papAnu4 \
+	perManBai1 \
 	petMar1 petMar2 petMar3 \
 	plasFalc3D7V12 \
 	poeRet1 \

@@ -65,12 +65,10 @@ static void loadAndFilterItems(struct track *tg)
 {
 loadSimpleBedWithLoader(tg, (bedItemLoader)interactLoadAndValidate);
 
-if (slCount(tg->items) == 0 && tg->limitedVisSet)
+// if the summary is filled in then the number of items in the region is greater than maxItems.
+if (tg->summary != NULL)
     {
     // too many items to display
-    // borrowed behaviors in bamTrack and vcfTrack
-    // TODO BRANEY: make this behavior generic for bigBeds
-    // (bigBedSelectRange)
     tg->drawItems = bigDrawWarning;
     tg->networkErrMsg = "Too many items in display (zoom in)"; 
     tg->totalHeight = bigWarnTotalHeight;
@@ -84,9 +82,18 @@ int count = slCount(tg->items);
 // exclude if missing endpoint(s) in window
 char *endsVisible = cartUsualStringClosestToHome(cart, tg->tdb, FALSE,
                             INTERACT_ENDS_VISIBLE, INTERACT_ENDS_VISIBLE_DEFAULT);
+char *scoreFilter = cartOrTdbString(cart, tg->tdb, "scoreFilter", NULL);
+int minScore = 0;
+if (scoreFilter)
+    minScore = atoi(scoreFilter);
+
 for (inter = tg->items; inter; inter = next)
     {
     next = inter->next;
+
+    if (inter->score < minScore)
+        continue;
+
     if (differentString(endsVisible, INTERACT_ENDS_VISIBLE_ANY))
         {
         boolean sOnScreen = interactSourceInWindow(inter);
@@ -842,7 +849,7 @@ if (tInfo->clusterMode)
 else
     {
     struct simpleFeature *sf1 = lf->components, *sf2 = sf1->next;
-    if (sf2->start > lf->tallStart && sf2->end < lf->tallEnd)
+    if (sf2 && sf2->start > lf->tallStart && sf2->end < lf->tallEnd)
         drawScaledBox(hvg, sf2->start, sf2->end, scale, xOff, y, tg->heightPer, MG_WHITE);
     if (vis == tvPack || vis == tvFull)
         {

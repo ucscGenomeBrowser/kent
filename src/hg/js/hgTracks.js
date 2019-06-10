@@ -1,4 +1,6 @@
-// Javascript for use in hgTracks CGI
+// hgTracks.js - Javascript for use in hgTracks CGI
+
+// Copyright (C) 2008 The Regents of the University of California
 
 // "use strict";
 // Don't complain about line break before '||' etc:
@@ -388,6 +390,7 @@ var genomePos = {
         var imgWidth = jQuery(img).width() - hgTracks.insideX;
         var width = hgTracks.winEnd - hgTracks.winStart;
         var mult = width / imgWidth;   // mult is bp/pixel multiplier
+        var halfBpWidth = (imgWidth / width) / 2; // how many pixels does one bp take up;
         var startDelta;   // startDelta is how many bp's to the right/left
         var x1;
 
@@ -400,23 +403,28 @@ var genomePos = {
 
         if (hgTracks.revCmplDisp) {
             x1 = Math.min(imgWidth, selStart);
-            startDelta = Math.floor(mult * (imgWidth - x1));
+            startDelta = Math.floor(mult * (imgWidth - x1 - halfBpWidth));
         } else {
             x1 = Math.max(hgTracks.insideX, selStart);
-            startDelta = Math.floor(mult * (x1 - hgTracks.insideX));
+            startDelta = Math.floor(mult * (x1 - hgTracks.insideX + halfBpWidth));
         }
         var endDelta;
         var x2;
         if (hgTracks.revCmplDisp) {
             endDelta = startDelta;
             x2 = Math.min(imgWidth, selEnd);
-            startDelta = Math.floor(mult * (imgWidth - x2));
+            startDelta = Math.floor(mult * (imgWidth - x2 + halfBpWidth));
         } else {
             x2 = Math.max(hgTracks.insideX, selEnd);
-            endDelta = Math.floor(mult * (x2 - hgTracks.insideX));
+            endDelta = Math.floor(mult * (x2 - hgTracks.insideX - halfBpWidth));
         }
         var newStart = hgTracks.winStart + startDelta;
         var newEnd = hgTracks.winStart + 1 + endDelta;
+
+        // if user selects space between two bases, start>end can happen
+        if (newStart >= newEnd)
+            newStart = newEnd-1;
+
         if (newEnd > winEnd) {
             newEnd = winEnd;
         }

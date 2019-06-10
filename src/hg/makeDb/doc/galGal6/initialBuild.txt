@@ -392,6 +392,8 @@ sys     0m14.042s
     printf "chrM\t0\t16775\tX52392.1\n" >> ucscToINSDC.bed
     # verify:
     grep chrM *
+# ucsc.genbank.tab:chrM   X52392.1
+# ucsc.refseq.tab:chrM    NC_001323.1
 # ucscToINSDC.bed:chrM    0       16775   X52392.1
 # ucscToRefSeq.bed:chrM   0       16775   NC_001323.1
 
@@ -429,10 +431,22 @@ sys     0m14.042s
     hgsql -N -e 'select chrom,name from ucscToINSDC;' galGal6 \
         | sort -k1,1 > ucsc.genbank.tab
 
+    ### Adding Ensembl alias with v95 release, after idKeys made: 2019-01-16
+    join -t$'\t' ../idKeys/galGal6.idKeys.txt \
+        ../../ens95/ensGalGal6.idKeys.txt | cut -f2- \
+          | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+               | sort -k1,1 -k2,2n > ucscToEns.bed
+    cut -f1,4 ucscToEns.bed | sort > ucsc.ensembl.tab
+    wc -l *.bed
+#   2210 ucscToEns.bed
+#   2211 ucscToINSDC.bed
+#   2211 ucscToRefSeq.bed
+
     ~/kent/src/hg/utils/automation/chromAlias.pl ucsc.*.tab \
         > galGal6.chromAlias.tab
 
-for t in refseq genbank
+for t in refseq genbank ensembl
 do
   c0=`cat ucsc.$t.tab | wc -l`
   c1=`grep $t galGal6.chromAlias.tab | wc -l`
@@ -444,6 +458,7 @@ do
 done
 # checking refseq: 464 =? 464 OK
 # checking genbank: 464 =? 464 OK
+# checking ensembl: 464 =? 464 OK
 
     hgLoadSqlTab galGal6 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
         galGal6.chromAlias.tab
@@ -930,6 +945,7 @@ galGal6.downloadDir = galGal6
 	-continue=effScores -stop=load \
 	    -buildDir=`pwd` -smallClusterHub=ku galGal6 ncbiRefSeq) \
 	> load.log
+    # real    307m41.143s
 
 #########################################################################
 # all.joiner update, downloads and in pushQ - (DONE - 2018-10-17 - Hiram)

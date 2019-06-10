@@ -1,0 +1,730 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the staAur2
+
+#########################################################################
+# reuse photo from staAur1 browser (DONE - 2018-12-13 - Hiram)
+
+mkdir -p /hive/data/genomes/staAur2
+cd /hive/data/genomes/staAur2
+cp -p ../staAur1/photoReference.txt .
+
+
+cat photoReference.txt
+
+photoCreditURL  https://phil.cdc.gov/phil/details.asp?pid=11157
+photoCreditName Centers for Disease Control and Prevention's Public Health Image Library
+
+#########################################################################
+#  Initial steps (DONE - 2018-12-13 - Hiram)
+
+# This initialBuild.txt document was started from hpv1
+#  version of initialBuild.txt
+
+sed -e 's/Aur1/Aur2/g; s/DONE/TBD/g;' \
+	../staAur1/initialBuild.txt  > initialBuild.txt
+
+mkdir /hive/data/genomes/staAur2/refseq
+cd /hive/data/genomes/staAur2/refseq
+
+# accession name: GCF_000013465.1_ASM1346v1
+# ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/013/465/GCF_000013465.1_ASM1346v1
+
+export accession="GCF_000013465.1"
+export asmId="ASM1346v1"
+export level0="GCF"
+export level1="000"
+export level2="013"
+export level3="465"
+
+time rsync -L -a -P rsync://ftp.ncbi.nlm.nih.gov/genomes/all/$level0/$level1/$level2/$level3/${accession}_${asmId}/ ./
+
+# sent 335 bytes  received 5,919,626 bytes  3,946,640.67 bytes/sec
+# total size is 5,916,881  speedup is 1.00
+
+# real    0m2.911s
+
+# check assembly size for later reference:
+
+faSize GCF*v1_genomic.fna.gz
+
+# 2917469 bases (0 N's 2917469 real 2917469 upper 0 lower) in 4 sequences in 1 files
+
+# this information is from the top of
+#    staAur2/refseq/GCF_000013465.1_ASM1346v1_assembly_report.txt
+
+# Assembly name:  ASM1346v1
+# Organism name:  Staphylococcus aureus subsp. aureus USA300_FPR3757 (firmicutes)
+# Infraspecific name:  strain=USA300_FPR3757
+# Taxid:          451515
+# BioSample:      SAMN02604150
+# BioProject:     PRJNA16313
+# Submitter:      University of California, San Francisco
+# Date:           2006-2-10
+# Assembly type:  n/a
+# Release type:   major
+# Assembly level: Complete Genome
+# Genome representation: full
+# GenBank assembly accession: GCA_000013465.1
+# RefSeq assembly accession: GCF_000013465.1
+# RefSeq assembly and GenBank assemblies identical: yes
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_000013475.1      GCF_000013475.1 Primary Assembly
+
+#############################################################################
+# establish config.ra file (TBD - Hiram - 2017-08-04)
+    # arguments here are: <db> <clade> <trackDbDir> <assembly_report.txt>
+    cd /hive/data/genomes/staAur2
+    $HOME/kent/src/hg/utils/automation/prepConfig.pl staAur2 bacteria \
+        bacteria ./refseq/*_assembly_report.txt > staAur2.config.ra
+# going to need a mitoAcc ?
+
+    # this clade 'bacteria' does not yet exist in hgcentraltest.clade
+
+    hgsql hgcentraltest -e 'INSERT INTO clade (name, label, priority)
+        VALUES ("bacteria", "Bacteria", 1500)'
+
+    # fixup the genomeCladePriority to 1500
+    # fixup scientificName from:
+    #   scientificName Staphylococcus aureus subsp. aureus USA300_FPR3757
+    # to:
+    #   scientificName Staphylococcus aureus
+    # fixup commonName from commonName Firmicutes to: Staph
+    # set mitoAcc none
+    # reset order key 6452 to: 19764
+
+
+    # to see order keys to verify this one is correct:
+# hgsql -e 'select name,organism,orderKey from dbDb order by orderKey;' \
+#	hgcentraltest | less
+# saiBol1 Squirrel monkey 19725
+# staAur2 Staph   19764
+# staAur1 Staph   19765
+# conCri1 Star-nosed mole 19805
+
+    # verify it looks sane
+    cat staAur2.config.ra
+db staAur2
+clade bacteria
+genomeCladePriority 1500
+scientificName Staphylococcus aureus
+commonName Staph
+assemblyDate Feb. 2006
+assemblyLabel University of California, San Francisco
+assemblyShortLabel ASM1346v1
+orderKey 19764
+mitoAcc none
+fastaFiles /hive/data/genomes/staAur2/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/staAur2/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir bacteria
+photoCreditURL  https://phil.cdc.gov/phil/details.asp?pid=11157
+photoCreditName Centers for Disease Control and Prevention's Public Health Image Library
+ncbiGenomeId 154
+ncbiAssemblyId 34568
+ncbiAssemblyName ASM1346v1
+ncbiBioProject 16313
+ncbiBioSample SAMN02604150
+genBankAccessionID GCF_000013465.1
+taxId 451515
+
+#############################################################################
+# setup UCSC named files (DONE - 2018-12-13 - Hiram)
+
+    mkdir /hive/data/genomes/staAur2/ucsc
+    cd /hive/data/genomes/staAur2/ucsc
+
+    faCount ../refseq/GCF_000013465.1_ASM1346v1_genomic.fna.gz
+# #seq    len     A       C       G       T       N       cpg
+# NC_007793.1     2872769 960377  470674  470186  971532  0       72505
+# NC_007790.1     3125    1088    379     519     1139    0       60
+# NC_007791.1     4439    1651    541     791     1456    0       78
+# NC_007792.1     37136   14962   4767    5879    11528   0       594
+# total   2917469 978078  476361  477375  985655  0       73237
+
+    # one simple sequence:
+    zcat ../refseq/GCF_000013465.1_ASM1346v1_genomic.fna.gz \
+      | sed -e 's/^>NC_007790.1.*/>NC_007790v1/; s/^>NC_007791.1.*/>NC_007791v1/; s/^>NC_007792.1.*/>NC_007792v1/; s/^>NC_007793.1.*/>NC_007793v1/;' \
+        | faSplit sequence stdin 4 chr
+    gzip chr*.fa
+
+    zcat *.fa.gz | hgFakeAgp -singleContigs stdin stdout \
+	| sed -e 's/D/F/;' > staAur2.agp
+
+    # verify OK:
+    zcat *.fa.gz | checkAgpAndFa staAur2.agp stdin | tail -2
+# Valid Fasta file entry
+# All AGP and FASTA entries agree - both files are valid
+
+#############################################################################
+#  Initial database build (DONE - 2018-12-13 - Hiram)
+
+    cd /hive/data/genomes/staAur2
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp staAur2.config.ra) > agp.log 2>&1
+    # real    0m9.508s
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db staAur2.config.ra) > db.log 2>&1
+    # real    0m18.173s
+
+    # check in the trackDb files created in TemporaryTrackDbCheckout/
+    #    and add staAur2 to trackDb/makefile
+
+    # temporary symlink until masked sequence is available
+    cd /hive/data/genomes/staAur2
+    ln -s `pwd`/staAur2.unmasked.2bit /gbdb/staAur2/staAur2.2bit
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2018-12-13 - Hiram)
+    mkdir /hive/data/genomes/staAur2/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/staAur2/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/staAur2/staAur2.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku staAur2) > do.log 2>&1
+XXX - running - Thu Dec 13 14:47:15 PST 2018
+    # real    0m37.441s
+
+    cat fb.staAur2.cpgIslandExtUnmasked.txt
+    # 17793 bases of 2821361 (0.631%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2018-12-13 - Hiram)
+    mkdir /hive/data/genomes/staAur2/bed/cytoBand
+    cd /hive/data/genomes/staAur2/bed/cytoBand
+    makeCytoBandIdeo.csh staAur2
+
+#########################################################################
+# ucscToINSDC and ucscToRefSeq table/track (DONE - 2018-12-13 - Hiram)
+
+    # really simple situation here, only four names to deal with
+    # and they are specified in the assembly_report.txt file
+
+    mkdir /hive/data/genomes/staAur2/bed/ucscToINSDC
+    cd /hive/data/genomes/staAur2/bed/ucscToINSDC
+
+    grep -v "^#" ../../refseq/GCF_000013465.1_ASM1346v1_assembly_report.txt \
+	| cut -f7,9 | awk '{printf "%s\t0\t%d\t%s\n", $1, $2,$1}' \
+	| sed -e 's/\./v/;' > ucscToRefSeq.bed
+
+    grep -v "^#" ../../refseq/GCF_000013465.1_ASM1346v1_assembly_report.txt \
+	| cut -f5,7,9 | awk '{printf "%s\t0\t%d\t%s\n", $2,$3,$1}' \
+	| sed -e 's/\./v/;' > ucscToINSDC.bed
+
+    export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    # 11
+    # use the chrSize in this sed
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab staAur2 ucscToINSDC stdin ucscToINSDC.bed
+    # should be the same for ucscToRefSeq:
+    export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    #  11
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' \
+        | hgLoadSqlTab staAur2 ucscToRefSeq stdin ucscToRefSeq.bed
+
+    # checkTableCoords should be silent
+    checkTableCoords staAur2
+    # each should cover %100 entirely:
+    featureBits -countGaps staAur2 ucscToINSDC
+    # 2917469 bases of 2917469 (100.000%) in intersection
+
+    featureBits -countGaps staAur2 ucscToRefSeq
+    # 2917469 bases of 2917469 (100.000%) in intersection
+
+#########################################################################
+# add chromAlias table (DONE - 2018-12-13 - Hiram)
+
+    mkdir /hive/data/genomes/staAur2/bed/chromAlias
+    cd /hive/data/genomes/staAur2/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name,"refseq" from ucscToRefSeq;' staAur2 \
+        > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name,"genbank" from ucscToINSDC;' staAur2 \
+        > ucsc.genbank.tab
+
+    grep -v "^#" ../../refseq/GCF_000013465.1_ASM1346v1_assembly_report.txt \
+	| cut -f1,3,7 | awk '{printf "%s\t%s\tucsc\n", $3,$2}' \
+	| sed -e 's/\./v/;' | sed -e 's/na/chr1/;' > ucsc.ucsc.tab
+
+    awk '{printf "%s\t%s\t%s\n", $2,$1,$3}' ucsc.genbank.tab ucsc.refseq.tab \
+        ucsc.ucsc.tab | sort > staAur2.chromAlias.tab
+
+    cat  staAur2.chromAlias.tab | sed -e 's/^/# /;'
+# CP000255.1    NC_007793v1     genbank
+# CP000256.1    NC_007790v1     genbank
+# CP000257.1    NC_007791v1     genbank
+# CP000258.1    NC_007792v1     genbank
+# NC_007790.1   NC_007790v1     refseq
+# NC_007791.1   NC_007791v1     refseq
+# NC_007792.1   NC_007792v1     refseq
+# NC_007793.1   NC_007793v1     refseq
+# chr1  NC_007793v1     ucsc
+# pUSA01        NC_007790v1     ucsc
+# pUSA02        NC_007791v1     ucsc
+# pUSA03        NC_007792v1     ucsc
+
+    hgLoadSqlTab staAur2 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        staAur2.chromAlias.tab
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2018-12-13 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/bacteria/staAur2
+
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" staAur2 \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c
+#       1 NC_v1
+
+    # implies a rule: 'NC_[0-9]+(v[0-9]+)?'
+
+    # verify this rule will find them all and eliminate them all:
+    hgsql -N -e "select frag from gold;" staAur2 | wc -l
+    # 4
+
+    hgsql -N -e "select frag from gold;" staAur2 \
+       | egrep -e 'NC_[0-9]+(v[0-9]+)?' | wc -l
+    # 4
+
+    hgsql -N -e "select frag from gold;" staAur2 \
+       | egrep -v -e 'NC_[0-9]+(v[0-9]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/bacteria/staAur2/trackDb.ra
+
+searchTable gold
+shortCircuit 1
+termRegex NC_[0-9]+(v[0-9]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box
+
+##########################################################################
+# running repeat masker (TBD - 2017-08-04 - Hiram)
+
+    # RepeatMasker doesn't know about this virus sequence name as is,
+    #   scientificName Staphylococcus aureus
+    # found this in taxonomy.dat table in RM:
+    #   'low g+c gram-positive bacteria' name, taxId 1239
+    # from: /hive/data/staging/data/RepeatMasker140131/Libraries/taxonomy.dat
+
+    mkdir /hive/data/genomes/staAur2/bed/repeatMasker
+    cd /hive/data/genomes/staAur2/bed/repeatMasker
+    # fixing the script to work with new location of RepeatMasker
+    # no longer on /scratch/data/ and picked up a new version.
+    time  (~/kent/src/hg/utils/automation/doRepeatMasker.pl -buildDir=`pwd` \
+        -species "low g+c gram-positive bacteria" -bigClusterHub=ku \
+	-dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku staAur2) > do.log 2>&1 &
+# Completed: 7 of 7 jobs
+# CPU time in finished jobs:        400s       6.67m     0.11h    0.00d  0.000 y
+# IO & Wait Time:                    15s       0.25m     0.00h    0.00d  0.000 y
+# Average job time:                  59s       0.99m     0.02h    0.00d
+# Longest finished job:              67s       1.12m     0.02h    0.00d
+# Submission to last job:            74s       1.23m     0.02h    0.00d
+    # real    1m34.367s
+
+    time  (~/kent/src/hg/utils/automation/doRepeatMasker.pl -buildDir=`pwd` \
+        -species "low g+c gram-positive bacteria" -bigClusterHub=ku \
+	-continue=cat -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku staAur2) > cat.log 2>&1 &
+    # real    0m14.490s
+
+    # fails with an empty nestedRepeats file during load
+    # help the doLoad step finish:
+    ln -s `pwd`/staAur2.rmsk.2bit /hive/data/genomes/staAur2/staAur2.rmsk.2bit
+
+    # continue with cleanUp:
+    time  (~/kent/src/hg/utils/automation/doRepeatMasker.pl -buildDir=`pwd` \
+        -species "low g+c gram-positive bacteria" -bigClusterHub=ku \
+	-continue=cleanup -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku staAur2) > cleanup.log 2>&1 &
+    # real    0m4.545s
+
+XXX - need to straighten this out
+    egrep -i "versi|relea" do.log
+RepeatMasker version development-$Id: RepeatMasker,v 1.332 2017/04/17 19:01:11 rhubley Exp $
+
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;                                            *
+
+    cat faSize.rmsk.txt
+# 2917469 bases (0 N's 2917469 real 2903502 upper 13967 lower) in 4 sequences in 1 files
+# Total size: mean 729367.2 sd 1429021.1 min 3125 (NC_007790v1) max 2872769 (NC_007793v1) median 37136
+# %0.48 masked total, %0.48 masked real
+
+    time featureBits -countGaps staAur2 rmsk
+    # 13967 bases of 2917469 (0.479%) in intersection
+    #	real    0m0.204s
+
+##########################################################################
+# running simple repeat (DONE - 2018-12-13 - Hiram)
+
+    mkdir /hive/data/genomes/staAur2/bed/simpleRepeat
+    cd /hive/data/genomes/staAur2/bed/simpleRepeat
+    # using trf409 1 here (human == 6)
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        -trf409 1 staAur2) > do.log 2>&1 &
+    # real    0m23.322s
+
+    cat fb.simpleRepeat
+    #	29041 bases of 2917469 (0.995%) in intersection
+
+#########################################################################
+# CREATE MICROSAT TRACK (DONE - 2018-12-13 - Hiram)
+    # XXX - this makes an empty microsat.bed file, nothing to load
+    ssh hgwdev
+    mkdir /cluster/data/staAur2/bed/microsat
+    cd /cluster/data/staAur2/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed staAur2 microsat microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2018-12-13 - Hiram)
+
+    mkdir /hive/data/genomes/staAur2/bed/windowMasker
+    cd /hive/data/genomes/staAur2/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev staAur2) > do.log 2>&1
+    # real    0m28.122s
+
+    cat faSize.staAur2.cleanWMSdust.txt
+# 2917469 bases (0 N's 2917469 real 2450039 upper 467430 lower)
+#	in 4 sequences in 1 files
+# Total size: mean 729367.2 sd 1429021.1 min 3125 (NC_007790v1)
+#	max 2872769 (NC_007793v1) median 37136
+# %16.02 masked total, %16.02 masked real
+
+    cat fb.staAur2.rmsk.windowmaskerSdust.txt
+# 8293 bases of 2821361 (0.294%) in intersection
+
+##########################################################################
+# masking 2bit file (TBD - 2017-08-04 - Hiram)
+    cd /hive/data/genomes/staAur2
+
+    twoBitMask staAur2.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed staAur2.rmsk.trf.2bit
+
+    twoBitMask staAur2.rmsk.trf.2bit -type=.bed \
+        -add bed/windowMasker/cleanWMask.bed.gz staAur2.2bit
+
+    twoBitToFa staAur2.2bit stdout | faSize stdin > faSize.staAur2.2bit.txt
+    cat faSize.staAur2.2bit.txt
+# 2821361 bases (1 N's 2821360 real 2359001 upper 462359 lower) in 1 sequences in 1 files
+# %16.39 masked total, %16.39 masked real
+
+    # reset the symlink
+    rm /gbdb/staAur2/staAur2.2bit
+    ln -s `pwd`/staAur2.2bit /gbdb/staAur2/staAur2.2bit
+
+##########################################################################
+# run up idKeys files for ncbiRefSeq (TBD - 2017-08-04 - Hiram)
+    mkdir /hive/data/genomes/staAur2/bed/idKeys
+    cd /hive/data/genomes/staAur2/bed/idKeys
+
+    time (doIdKeys.pl -buildDir=`pwd`  staAur2) > do.log 2>&1 &
+    # real    0m17.167s
+
+    cat staAur2.keySignature.txt
+    #   3d70b1f5bdeec2114c63b7ce2017ea96
+
+##########################################################################
+# cpgIslands - (TBD - 2017-08-04 - Hiram)
+    mkdir /hive/data/genomes/staAur2/bed/cpgIslands
+    cd /hive/data/genomes/staAur2/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku staAur2) > do.log 2>&1 &
+    # real    0m36.836s
+
+    cat fb.staAur2.cpgIslandExt.txt
+    # 16205 bases of 2821361 (0.574%) in intersection
+
+#########################################################################
+# crispr 10K shoulders (DONE - 2018-10-16 - Hiram)
+    # working on this script, adding the indexFa step:
+    mkdir /hive/data/genomes/staAur2/bed/crispr10K
+    cd /hive/data/genomes/staAur2/bed/crispr10K
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+	-stop=indexFa -buildDir=`pwd` -smallClusterHub=ku staAur2 ncbiGene) \
+	> indexFa.log 2>&1
+    # real    0m6.541s
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+       -continue=ranges -stop=specScores -buildDir=`pwd` -smallClusterHub=ku \
+           staAur2 ncbiGene) > specScores.log 2>&1
+    # real    2m50.758s
+
+    # adding the /dev/shm/ setup rsync for the indexed Fa
+    # performed manually to work out the procedure
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+        -continue=specScores -stop=specScores -buildDir=`pwd` \
+           -smallClusterHub=ku staAur2 ncbiGene) > specScores.log
+# Completed: 2048 of 2048 jobs
+# CPU time in finished jobs:      10750s     179.17m     2.99h    0.12d  0.000 y
+# IO & Wait Time:                  2462s      41.03m     0.68h    0.03d  0.000 y
+# Average job time:                   6s       0.11m     0.00h    0.00d
+# Longest finished job:              13s       0.22m     0.00h    0.00d
+# Submission to last job:           122s       2.03m     0.03h    0.00d
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+	-continue=effScores -stop=load \
+	    -buildDir=`pwd` -smallClusterHub=ku staAur2 ncbiGene) \
+	> load.log 2>&1
+XXX - running - Thu Dec 13 16:01:30 PST 2018
+    # real    10m6.692s
+
+
+#########################################################################
+##############################################################################
+# genscan - (TBD - 2017-08-04 - Hiram)
+    mkdir /hive/data/genomes/staAur2/bed/genscan
+    cd /hive/data/genomes/staAur2/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku staAur2) > do.log 2>&1 &
+    # real    2m7.070s
+
+    cat fb.staAur2.genscan.txt
+    # 395771 bases of 2821361 (14.028%) in intersection
+
+    cat fb.staAur2.genscanSubopt.txt
+    # 104700 bases of 2821361 (3.711%) in intersection
+
+#############################################################################
+# augustus gene track (TBD - 2017-04-13 - Hiram)
+    # XXX augustus can not do bacteria sequence ?
+
+    mkdir /hive/data/genomes/staAur2/bed/augustus
+    cd /hive/data/genomes/staAur2/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+    -species=human -dbHost=hgwdev -workhorse=hgwdev staAur2) > do.log 2>&1 &
+    # real    72m23.671s
+
+    cat fb.staAur2.augustusGene.txt
+    # 29811614 bases of 2318132242 (1.286%) in intersection
+
+##############################################################################
+# Create kluster run files (TBD - 2017-08-04 - Hiram)
+
+    # numerator is staAur2 gapless bases "real" as reported by:
+    featureBits -noRandom -noHap staAur2 gap
+    # 0 bases of 2821361 (0.000%) in intersection
+    #            ^^^
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2821361 / 2861349177 \) \* 1024
+    #  ( 2821361 / 2861349177 ) * 1024 = 1.009689
+
+    # repMatch=1 produces 410921 overused 11-mers
+    # repMatch=2 produces 73051 overused 11-mers
+    # repMatch=3 produces 18919 overused 11-mers
+    # repMatch=3 produces 6121 overused 11-mers
+    # repMatch=5 produces 2319 overused 11-mers
+    # repMatch=6 produces 923 overused 11-mers
+    # repMatch=7 produces 379 overused 11-mers
+    # repMatch=8 produces 168 overused 11-mers
+    # repMatch=9 produces 80 overused 11-mers
+    # repMatch=10 produces 43 overused 11-mers
+    #    ...
+    # repMatch=20 produces 0 overused 11-mers
+    # ==> use -repMatch=20, do not need to mask anything
+    cd /hive/data/genomes/staAur2
+    blat staAur2.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/staAur2.11.ooc \
+        -repMatch=20
+    #   Wrote 0 overused 11-mers to jkStuff/staAur2.11.ooc
+
+    #   check non-bridged gaps to see what the typical size is:
+    # there are no gaps in this assembly:
+    hgsql -N -e 'select bridge from gap;' staAur2 | sort | uniq -c
+    #	no output, nothing to see here
+
+#########################################################################
+# GENBANK AUTO UPDATE (TBD - 2017-08-04 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # organism             mrnaCnt   estCnt  refSeqCnt
+    # Staphylococcus  2       0       0
+    # Staphylococcus aureus   185     0       0
+    # Staphylococcus aureus subsp. aureus NCTC 8325   32      0       0
+    # Staphylococcus aureus subsp. aureus RN4220      1       0       0
+    # Staphylococcus epidermidis      46      1255    0
+    # Staphylococcus lentus   1       0       0
+    # Staphylococcus lugdunensis      9       0       0
+    # Staphylococcus phage phi-42     1       0       0
+    # Staphylococcus pseudintermedius 9       0       0
+    # Staphylococcus sp. B2_30        1       0       0
+    # Staphylococcus sp. B2_43        1       0       0
+    # Staphylococcus sp. SH24 1       0       0
+    # Staphylococcus warneri  1       0       0
+
+    # add these four to src/lib/gbGenome.c for staAurNames[]
+    # Staphylococcus  2       0       0
+    # Staphylococcus aureus   185     0       0
+    # Staphylococcus aureus subsp. aureus NCTC 8325   32      0       0
+    # Staphylococcus aureus subsp. aureus RN4220      1       0       0
+
+    # edit etc/genbank.conf to add staAur2 just after aplCal1 and before hbv1
+
+# staAur2 (Staphylococcus aureus -  Taxid: 93061)
+staAur2.serverGenome = /hive/data/genomes/staAur2/staAur2.2bit
+staAur2.clusterGenome = /hive/data/genomes/staAur2/staAur2.2bit
+staAur2.ooc = /hive/data/genomes/staAur2/jkStuff/staAur2.11.ooc
+staAur2.lift = no
+staAur2.downloadDir = staAur2
+staAur2.perChromTables = no
+staAur2.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+staAur2.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+staAur2.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+staAur2.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+staAur2.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+# defaults yes: genbank.mrna.native.load, genbank.mrna.native.loadDesc,
+# genbank.est.native.load, refseq.mrna.native.load, refseq.mrna.native.loadDesc,
+# refseq.mrna.xeno.load , refseq.mrna.xeno.loadDesc
+# staAur2.upstreamGeneTbl = ensGene
+# staAur2.upstreamMaf = multiz9way /hive/data/genomes/staAur2/bed/multiz9way/species.list
+
+    git commit -m 'adding staAur2 Staphylococcus aureus- refs #19937' etc/genbank.conf src/lib/gbGenome.c
+    git push
+
+    make install-server
+    make etc-update
+
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial staAur2
+    # logFile: var/build/logs/2017.08.04-14:20:13.staAur2.initalign.log
+    #  real    296m21.433s
+
+    tail -2 var/build/logs/2017.08.04-14:20:13.staAur2.initalign.log
+hgwdev 2017.08.04-19:16:28 staAur2.initalign: Succeeded: staAur2
+hgwdev 2017.08.04-19:16:35 staAur2.initalign: finish
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.staAur2
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad staAur2
+    # logFile: var/dbload/hgwdev/logs/2017.08.05-00:32:05.staAur2.dbload.log
+    # real    19m45.284s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add staAur2 to:
+    #   etc/align.dbs etc/hgwdev.dbs
+    git commit -m 'adding staAur2 to the update alignments refs #19337' etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#############################################################################
+# ncbiGene (TBD - 2017-08-05 - Hiram)
+
+    mkdir /hive/data/genomes/staAur2/bed/ncbiGene
+    cd /hive/data/genomes/staAur2/bed/ncbiGene
+
+      | sed -e 's/NC_007790.1/NC_007790v1/g; s/NC_007791.1/NC_007791v1/g; s/NC_007792.1/NC_007792v1/g; s/NC_007793.1/NC_007793v1/g;' \
+
+    # switching the names from column 1 to 12 and 12 to 1 with the awk:
+    gff3ToGenePred -useName -attrsOut=staAur2.attrs.tab -geneNameAttr=gene \
+       ../../refseq/GCF_000013465.1_ASM1346v1_genomic.gff.gz \
+           stdout | sed -e 's/NC_007790.1/NC_007790v1/g; s/NC_007791.1/NC_007791v1/g; s/NC_007792.1/NC_007792v1/g; s/NC_007793.1/NC_007793v1/g;' \
+             | awk -F'\t' '{print $12,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$1,$13,$14,$15}' | tr '[ ]' '[\t]' > staAur2.ncbiGene.gp
+# rpmH    NC_007795v1     -       2821009 2821147 2821009 2821147 1       2821009,
+#         2821147,        0       YP_501500.1     cmpl    cmpl    0,
+# rnpA    NC_007795v1     -       2820535 2820889 2820535 2820889 1       2820535,
+#         2820889,        0       YP_501499.1     cmpl    cmpl    0,
+
+    genePredCheck -db=staAur2 staAur2.ncbiGene.gp 2>&1 | sed -e 's/^/    # /;'
+    # checked: 3060 failed: 0
+
+    hgLoadGenePred -genePredExt staAur2 ncbiGene staAur2.ncbiGene.gp
+    genePredCheck -db=staAur2 ncbiGene 2>&1 | sed -e 's/^/    # /;'
+    # checked: 3060 failed: 0
+XXX - need to get gene descriptions out of the genbank record
+
+#########################################################################
+#  BLATSERVERS ENTRY (TBD - 2017-08-07 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("staAur2", "blat1a", "17876", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("staAur2", "blat1a", "17877", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## set default position to SRC gene sequence from human protein blat
+##  (TBD - 2017-04-19 - Hiram)
+
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="NW_003613641v1:1277445-1295702"
+	where name="staAur2";' hgcentraltest
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (TBD - 2017-04-25 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=staAur2 -tableCoverage all.joiner
+    joinerCheck -database=staAur2 -times all.joiner
+    joinerCheck -database=staAur2 -keys all.joiner
+
+    cd /hive/data/genomes/staAur2
+    # needed a symlink for RM output:
+    cd NC_007795v1
+    ln -s ../bed/repeatMasker/staAur2.sorted.fa.out NC_007795v1.fa.out
+    cd ..
+    time (makeDownloads.pl -workhorse=hgwdev staAur2) > downloads.log 2>&1
+    #  real    0m12.888s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/staAur2/pushQ
+    cd /hive/data/genomes/staAur2/pushQ
+    time (makePushQSql.pl -redmineList staAur2) \
+	> staAur2.pushQ.sql 2> stderr.out
+    #  real    3m37.776s
+
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+# writing redmine listings to
+# redmine.staAur2.file.list
+# redmine.staAur2.table.list
+# redmine.staAur2.releaseLog.txt
+# WARNING: staAur2 does not have augustusGene
+# WARNING: staAur2 does not have microsat
+# WARNING: staAur2 does not have nestedRepeats
+# WARNING: staAur2 does not have seq
+# WARNING: staAur2 does not have extFile
+# WARNING: staAur2 does not have estOrientInfo
+
+# WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
+# supporting and genbank tables) which tracks to assign these tables to:
+#   ncbiGene
+
+    # enter the path names to the redmine listings in the redmine issue
+    # refs 19937
+
+#########################################################################

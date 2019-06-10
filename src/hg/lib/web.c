@@ -104,6 +104,16 @@ printf("<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html;CHARSET=iso-8859-1
      );
 }
 
+void webCirmPragmasEtc()
+/* Print out stuff similar to webPragmasEtc (don't cache us, character set, etc.), but
+ * use values appropriate for a more modern website (like CIRM). */
+{
+printf("\t\t<meta charset=\"windows-1252\">\n"   // Be nice to be utf-8, but that's a bigger issue to tackle
+    "\t\t<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n"
+    "\t\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n"
+    "\t\t<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->\n");
+}
+
 void webStartText()
 /* output the head for a text page */
 {
@@ -316,7 +326,7 @@ void webStart(struct cart *theCart, char *db, char *format, ...)
 {
 va_list args;
 va_start(args, format);
-webStartWrapper(theCart, db, format, args, TRUE, TRUE);
+webStartWrapper(theCart, db, format, args, TRUE, FALSE);
 va_end(args);
 }
 

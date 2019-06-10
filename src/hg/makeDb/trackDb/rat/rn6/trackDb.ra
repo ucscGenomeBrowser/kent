@@ -6,6 +6,8 @@ include trackDb.20way.ra
 
 include vertebrateChainNet.ra
 
+include ../../crispr10K.ra alpha
+
 # Local declaration so that local gold.html is picked up.
 track gold override
 html gold

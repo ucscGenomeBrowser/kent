@@ -3945,7 +3945,7 @@ if (!trackDbSettingClosestToHome(subtrackTdb, "noInherit"))
     struct hashCookie hc = hashFirst(compositeTdb->settingsHash);
     while ((hel = hashNext(&hc)) != NULL)
 	{
-	if (!hashLookup(subtrackTdb->settingsHash, hel->name))
+	if (!hashLookup(subtrackTdb->settingsHash, hel->name) && !trackDbNoInheritField(hel->name))
 	    hashAdd(subtrackTdb->settingsHash, hel->name, hel->val);
 	}
     }
@@ -4104,31 +4104,29 @@ struct trackDb *hTrackDb(char *db)
  *	NOTE: this result is cached, do not free it !
  */
 {
-// FIXME: This is NOT CACHED and should be!  Since some callers (e.g. hgTables) consume the list,
-// I would suggest:
-// 1) static hash by db/hub
-// 2) call creates list if not in hash
-// 3) static (to this file) routine gives the actual tdb list
-// 4) public lib routine that returns fully cloned list
-// 5) public lib routine that returns cloned individual tdb complete with up/down inheritance
-// UNFORTUNATELY, cloning the memory with prove costly in time as well, because of all the pointers
-// to relink.  THEREFORE what should be done is to make the tdb list with const ->next pointers and
-// force discpline on the callers.  Sorts should be by hdb.c routines and any new lists (such as
-// hgTables makes) should be via tdbRefs.
-// SO we are back to being STALLED because of the volume of work.
-
-// static char *existingDb = NULL;
-// static struct trackDb *tdbList = NULL;
 struct trackDb *tdbList = NULL;
-//if (differentStringNullOk(existingDb, db))
-//    {
 
-    tdbList = loadTrackDb(db, NULL);
-    tdbList = trackDbLinkUpGenerations(tdbList);
-    tdbList = trackDbPolishAfterLinkup(tdbList, db);
-//    freeMem(existingDb);
-//    existingDb = cloneString(db);
-//    }
+boolean doCache = FALSE;
+if (sameOk(cfgOption("cacheTrackDb"), "on"))
+    doCache = TRUE;
+
+if (doCache)
+    {
+    struct trackDb *cacheTdb = trackDbCache(db);
+
+    if (cacheTdb != NULL)
+        return cacheTdb;
+    
+    memCheckPoint(); // we want to know how much memory is used to build the tdbList
+    }
+
+tdbList = loadTrackDb(db, NULL);
+tdbList = trackDbLinkUpGenerations(tdbList);
+tdbList = trackDbPolishAfterLinkup(tdbList, db);
+
+if (doCache)
+    trackDbCloneTdbListToSharedMem(db, tdbList, memCheckPoint());
+
 return tdbList;
 }
 
@@ -5248,6 +5246,14 @@ struct slName *sln2 = *(struct slName **)el2;
 return chrNameCmp(sln1->name, sln2->name);
 }
 
+static boolean isAltFixRandom(char *str)
+/* Return TRUE if str ends with _alt, _fix or _random or contains "_hap". */
+{
+return (endsWith(str, "_alt") || endsWith(str, "_fix") || endsWith(str, "_random") ||
+        stringIn("_hap", str));
+
+}
+
 int chrNameCmpWithAltRandom(char *str1, char *str2)
 /* Compare chromosome or linkage group names str1 and str2 
  * to achieve this order:
@@ -5255,7 +5261,7 @@ int chrNameCmpWithAltRandom(char *str1, char *str2)
  * chrX
  * chrY
  * chrM
- * chr1_{alt, random} .. chr22_{alt, random}
+ * chr1_{alt,fix,hap*,random} .. chr22_{alt,fix,hap*,random}
  * chrUns
  */
 {
@@ -5270,9 +5276,9 @@ if (!startsWith("chrUn", str1) && startsWith("chrUn", str2))
     return  -1;
 
 /* if it is _alt or _random then it goes at the end */
-if ( (endsWith(str1, "_alt")||endsWith(str1, "_random")) && !(endsWith(str2, "_alt") || endsWith(str2, "_random")))
+if (isAltFixRandom(str1) && !isAltFixRandom(str2))
     return 1;
-if (!(endsWith(str1, "_alt")||endsWith(str1, "_random")) &&  (endsWith(str2, "_alt") || endsWith(str2, "_random")))
+if (!isAltFixRandom(str1) && isAltFixRandom(str2))
     return -1;
 
 /* get past "chr" or "Group" prefix: */
@@ -5340,8 +5346,8 @@ int chrSlNameCmpWithAltRandom(const void *el1, const void *el2)
  * chrX
  * chrY
  * chrM
- * chr1_{alt, random} .. chr22_{alt, random}
- * chrUns
+ * chr1_{alt,fix,hap*,random} .. chr22_{alt,fix,hap*,random}
+ * chrUn*
  */
 {
 struct slName *sln1 = *(struct slName **)el1;
@@ -5513,6 +5519,17 @@ boolean hIsBigBed(char *database, char *table, struct trackDb *parent, struct cu
 {
 return trackIsType(database, table, parent, "bigBed", ctLookupName) ||
     trackIsType(database, table, parent, "bigMaf", ctLookupName);
+}
+
+boolean hIsBigWig(char *database, char *table, struct trackDb *parent, struct customTrack *(*ctLookupName)(char *table))
+/* Return TRUE if table corresponds to a bigWig file.
+ * if table has no parent trackDb pass NULL for parent
+ * If this is a custom track, pass in function ctLookupName(table) which looks up a
+ * custom track by name, otherwise pass NULL
+ */
+{
+return trackIsType(database, table, parent, "bigWig", ctLookupName) ||
+    trackIsType(database, table, parent, "mathWig", ctLookupName);
 }
 
 static char *bbiNameFromTableChrom(struct sqlConnection *conn, char *table, char *seqName)

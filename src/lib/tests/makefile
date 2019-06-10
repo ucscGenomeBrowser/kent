@@ -13,7 +13,7 @@ BIN_DIR = bin/${MACHTYPE}
 
 test: errCatchTest htmlPageTest htmlExpandUrlTest pipelineTests dyStringTest \
     mimeTests base64Tests quotedPTests safeTest hashTest fetchUrlTest gff3Test \
-    ${TABIX_TESTS} hacTreeTest testSumDoubles
+    ${TABIX_TESTS} hacTreeTest testSumDoubles jsonQueryTest
 	rm -r output fetchUrlTest testSumDoubles
 	@echo tested all
 
@@ -335,4 +335,14 @@ ${BIN_DIR}/testDecodedString: mkdirs testDecodedString.o ${MYLIBS}
 
 testDecodedString:	${BIN_DIR}/testDecodedString mkdirs
 	${BIN_DIR}/testDecodedString -verbose=2 quote this\\ following
+
+# jsonQuery:
+jsonQueryTester=${BIN_DIR}/jsonQueryTest
+jsonQueryTest: ${jsonQueryTester} mkdirs
+	${jsonQueryTester} input/$@Json.txt input/$@Path.txt output/$@.out
+	diff expected/$@.out output/$@.out
+
+${BIN_DIR}/jsonQueryTest: jsonQueryTest.o ${MYLIBS}
+	${MKDIR} ${BIN_DIR}
+	${CC} ${COPT} -o ${BIN_DIR}/jsonQueryTest jsonQueryTest.o ${MYLIBS} ${L}
 

@@ -1,8 +1,9 @@
 <!DOCTYPE html> 
 <!--#set var="TITLE" value="CIRM CESCG People and Labs" -->
-<!--#set var="ROOT" value=".." -->
 
-<!--#include virtual="$ROOT/inc/header.html" -->
+<!--#include virtual="setRoot.html" -->
+
+<!--#include virtual="${ROOT}inc/header.html" -->
 
 <div class="cirm-page-body">
   <div class="cirm-page-title back-light-blue" style="//background: #FF8C00;">
@@ -89,7 +90,7 @@
     <div class="col-md-12">
       <p>
       First, you will need to filter the available files on the
-      <a href="/cgi-bin/cdwWebBrowse?&cdwCommand=browseFiles">Files</a> page to display only
+      <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?cdwCommand=browseFiles">Files</a> page to display only
       your lab's files. To do this, enter your lab name (e.g. &quot;kriegstein&quot;) into the
       filter box above the &quot;lab&quot; column. If your lab has more than one dataset associated
       with it, then you can also use the filter box above the &quot;data_set_id&quot; to filter for
@@ -101,4 +102,4 @@
   </div>
 </div>
 
-<!--#include virtual="$ROOT/inc/footer.html" -->
+<!--#include virtual="${ROOT}inc/footer.html" -->

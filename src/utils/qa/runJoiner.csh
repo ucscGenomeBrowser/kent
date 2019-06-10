@@ -114,6 +114,7 @@ if (-e xxIDxx) then
 endif
 
 foreach identifier (`cat xxIDxx`)
+  echo "\n identifier= $identifier"
   nice joinerCheck $range -identifier=$identifier -keys $joinerFile 
 end
 

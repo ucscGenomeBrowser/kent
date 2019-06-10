@@ -7,6 +7,10 @@
 #include "portable.h"
 #include "bamFile.h"
 #include "htmshell.h"
+#include "cram/cram_samtools.h"
+#include "cram/sam_header.h"
+#include "cram/cram_structs.h"
+#include "htslib/cram.h"
 #include "udc.h"
 #include "psl.h"
 
@@ -23,11 +27,27 @@ if (sam->format.format == cram)
 
 // assume that index is a .bai file 
 char indexName[4096];
+bam_index_t *ret = NULL;
 if (baiFileOrUrl==NULL)
+    {
+    // first try tacking .bai on the end of the bam file name
     safef(indexName, sizeof indexName, "%s.bai", fileOrUrl);
+    if ((ret =  sam_index_load2(sam, fileOrUrl, indexName)) == NULL)
+        {
+        // since the open didn't work, try replacing suffix (if any) with .bai
+        safef(indexName, sizeof indexName - sizeof(".bai"), "%s", fileOrUrl);
+        char *lastDot = strrchr(indexName, '.');
+        if (lastDot)
+            {
+            strcpy(lastDot, ".bai");
+            ret = sam_index_load2(sam, fileOrUrl, indexName);
+            }
+        }
+    }
 else
-    safef(indexName, sizeof indexName, "%s", baiFileOrUrl);
-return sam_index_load2(sam, fileOrUrl, indexName);
+    ret = sam_index_load2(sam, fileOrUrl, baiFileOrUrl);
+
+return ret;
 }
 
 
@@ -229,6 +249,61 @@ else
     bamCloseIdx(&idx);
     }
 bamClose(&fh);
+}
+
+static int bamGetTargetCount(char *fileOrUrl)
+/* Return the number of target sequences in a bam or cram file. */
+{
+int tCount = 0;
+htsFile *htsF = hts_open(fileOrUrl, "r");
+if (htsF->format.format == crai)
+    {
+    SAM_hdr *cramHdr = cram_fd_get_header(htsF->fp.cram);
+    tCount = cramHdr->nref;
+    }
+else
+    {
+    bam_hdr_t *bamHdr = bam_hdr_read(htsF->fp.bgzf);
+    tCount = bamHdr->n_targets;
+    }
+hts_close(htsF);
+return tCount;
+}
+
+long long bamFileItemCount(char *fileOrUrl, char *baiFileOrUrl)
+/* Return the total number of mapped items across all sequences in fileOrUrl, using index file.
+ * If baiFileOrUrl is NULL, the index file is assumed to be fileOrUrl.bai.
+ * NOTE: not all bam index files include mapped item counts, so this may return 0 even for large
+ * bam.  As of May 2019, our copy of hts_idx_get_stat does not support cram indexes
+ * (perhaps they never include counts?), so this always returns 0 for cram. */
+{
+long long itemCount = 0;
+hts_idx_t *idx = NULL;
+if (isNotEmpty(baiFileOrUrl))
+    idx = hts_idx_load2(fileOrUrl, baiFileOrUrl);
+else
+    {
+    int format = endsWith(fileOrUrl, ".cram") ? HTS_FMT_CRAI : HTS_FMT_BAI;
+    idx = hts_idx_load(fileOrUrl, format);
+    }
+if (idx == NULL)
+    warn("bamFileItemCount: hts_idx_load(%s) failed.", baiFileOrUrl ? baiFileOrUrl : fileOrUrl);
+else
+    {
+    int tCount = bamGetTargetCount(fileOrUrl);
+    int tid;
+    for (tid = 0;  tid < tCount;  tid++)
+        {
+        uint64_t mapped, unmapped;
+        int ret = hts_idx_get_stat(idx, tid, &mapped, &unmapped);
+        if (ret == 0)
+            itemCount += mapped;
+        // ret is -1 if counts are unavailable.
+        }
+    hts_idx_destroy(idx);
+    idx = NULL;
+    }
+return itemCount;
 }
 
 void bamFetchPlus(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,

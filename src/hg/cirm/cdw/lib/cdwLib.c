@@ -2114,6 +2114,8 @@ if (sameString(end, "1"))
     return "2";
 else if (sameString(end, "2"))
     return "1";
+else if (sameString(end, "cell_barcode") || sameString(end, "sample_barcode"))
+    return NULL;
 else
     {
     errAbort("Expecting 1 or 2, got %s in oppositeEnd", end);
@@ -2125,6 +2127,8 @@ struct cdwValidFile *cdwOppositePairedEnd(struct sqlConnection *conn, struct cdw
 /* Given one file of a paired end set of fastqs, find the file with opposite ends. */
 {
 char *otherEnd = cdwOppositePairedEndString(vf->pairedEnd);
+if (otherEnd == NULL)
+    return NULL;
 char query[1024];
 sqlSafef(query, sizeof(query), 
     "select cdwValidFile.* from cdwValidFile join cdwFile on cdwValidFile.fileId=cdwFile.id"
@@ -2638,6 +2642,7 @@ while (result != NULL)
     }
 }
 
+#ifdef NOT_CURRENTLY_USED
 
 static struct dyString *getLoginBits(struct cart *cart)
 /* Get a little HTML fragment that has login/logout bit of menu */
@@ -2646,25 +2651,25 @@ static struct dyString *getLoginBits(struct cart *cart)
 char *command = cartUsualString(cart, "cdwCommand", "home");
 char *sidString = cartSidUrlString(cart);
 char returnUrl[PATH_LEN*2];
-safef(returnUrl, sizeof(returnUrl), "/cgi-bin/cdwWebBrowse?cdwCommand=%s&%s",
+safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=%s&%s",
     command, sidString );
 char *encodedReturn = cgiEncode(returnUrl);
 
 /* Write a little html into loginBits */
 struct dyString *loginBits = dyStringNew(0);
-dyStringAppend(loginBits, "<li id=\"query\"><a href=\"");
+dyStringAppend(loginBits, "<a class=\"a-unstyled\" href=\"");
 char *userName = wikiLinkUserName();
 if (userName == NULL)
     {
     dyStringPrintf(loginBits, "../cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1&returnto=%s&%s",
 	    encodedReturn, sidString);
-    dyStringPrintf(loginBits, "\">Login</a></li>");
+    dyStringPrintf(loginBits, "\"><span class=\"label label-login\">Login</span></a>");
     }
 else
     {
     dyStringPrintf(loginBits, "../cgi-bin/hgLogin?hgLogin.do.displayLogout=1&returnto=%s&%s",
 	    encodedReturn, sidString);
-    dyStringPrintf(loginBits, "\" id=\"logoutLink\">Logout %s</a></li>", userName);
+    dyStringPrintf(loginBits, "\" id=\"logoutLink\"><span class=\"label back-gray\">Logout %s</span></a>", userName);
 
     if (loginUseBasicAuth())
         wikiFixLogoutLinkWithJs();
@@ -2674,18 +2679,74 @@ else
 freez(&encodedReturn);
 return loginBits;
 }
+#endif
+
+char *cdwHeadTagDependencies(struct cart *cart, boolean makeAbsolute)
+/* Return page head dependencies string.  This is content that actually appears at the top
+ * of the page, in the head tag.  Optionally make links point to absolute URLs instead of relative. */
+{
+// page header dependencies html is in a stringified .h file
+struct dyString *dy = dyStringNew(4*1024);
+dyStringPrintf(dy, 
+#include "cdwHeadTagDependencies.h"
+       );
+
+char *headStr = cloneString(dy->string);
+if (!makeAbsolute)
+    return headStr;
+
+char *headStr2 = replaceChars(headStr, "../", "/");
+freez(&headStr);
+return headStr2;
+}
+
+char *cdwPageHeader(struct cart *cart, boolean makeAbsolute)
+/* Return page header string.  This is content that actually appears at the top
+ * of the page, like menu stuff.  Optionally make links point to absolute URLs instead of relative. */
+{
+// page header html is in a stringified .h file
+struct dyString *dy = dyStringNew(4*1024);
+dyStringPrintf(dy, 
+#include "cdwPageHeader.h"
+       );
+
+char *menubarStr = menuBarAddUiVars(dy->string, "/cgi-bin/cdw", cartSidUrlString(cart));
+if (!makeAbsolute)
+    return menubarStr;
+
+char *menubarStr2 = replaceChars(menubarStr, "../", "/");
+freez(&menubarStr);
+return menubarStr2;
+}
+
+char *cdwPageFooter(struct cart *cart, boolean makeAbsolute)
+/* Return page footer string.  This is content that appears in the page footer, like
+ * links to other institutions etc.  Optionally make any relative URLs into absolute
+ * URLs. */
+{
+// page footer html is in a stringified .h file
+struct dyString *dy = dyStringNew(4*1024);
+dyStringPrintf(dy, 
+#include "cdwPageFooter.h"
+    );
+
+char *menubarStr = menuBarAddUiVars(dy->string, "/cgi-bin/cdw", cartSidUrlString(cart));
+if (!makeAbsolute)
+    return menubarStr;
+
+char *menubarStr2 = replaceChars(menubarStr, "../", "/");
+freez(&menubarStr);
+return menubarStr2;
+}
 
 char *cdwLocalMenuBar(struct cart *cart, boolean makeAbsolute)
 /* Return menu bar string. Optionally make links in menubar to point to absolute URLs, not relative. */
 {
-struct dyString *loginBits = getLoginBits(cart);
-
 // menu bar html is in a stringified .h file
 struct dyString *dy = dyStringNew(4*1024);
 dyStringPrintf(dy, 
 #include "cdwNavBar.h"
-       , loginBits->string);
-
+        );
 
 char *menubarStr = menuBarAddUiVars(dy->string, "/cgi-bin/cdw", cartSidUrlString(cart));
 if (!makeAbsolute)

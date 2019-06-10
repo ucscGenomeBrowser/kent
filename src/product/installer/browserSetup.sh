@@ -615,7 +615,7 @@ function installRedhat () {
     # imagemagick is required for the session gallery
     # MySQL-python is required for hgGeneGraph
     yum update
-    yum -y install --enablerepo=extras epel-release
+    yum -y install epel-release
     yum -y install ghostscript rsync ImageMagick R-core MySQL-python curl
 
     # centos 7 and fedora 20 do not provide libpng by default
@@ -1239,6 +1239,9 @@ function installBrowser ()
     if [[ "${SET_MYSQL_ROOT}" == "1" ]]; then
        mysqlChangeRootPwd
     fi
+
+    # Ideally, setup modern R fonts like at UCSC:
+    # Rscript -e "install.packages(c('showtext', 'curl'), repos='http://cran.us.r-project.org')
 
     # before we do anything else with mysql
     # we need to check if we can access it. 

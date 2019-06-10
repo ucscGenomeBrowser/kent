@@ -1,0 +1,38 @@
+<h2>Description</h2>
+<p>
+This track shows the <em>blat</em> alignment of protein sequences
+from other strains to this reference sequence: ASM1346v1/USA300_FPR3757.
+It shows the alignments of the protein sequences of each of the other
+strains mapped against this reference strain.  The results are separated
+into different tracks, based on the percent match to the reference.
+A click into any item gives access to the pairwise alignment between
+the selected strain and the reference.
+</p>
+<h2>Methods</h2>
+<p>
+The <em>blat</em> procedure was operated via the <em>gfServer/gfClient</em>
+system where the <em>gfServer</em> service was started:
+<pre>
+&nbsp;&nbsp; gfServer start &lt;serverName&gt; 17897 -stepSize=5 staAur2.2bit
+</pre>
+and
+<pre>
+&nbsp;&nbsp; gfServer start &lt;serverName&gt; 17896 -trans -mask staAur2.2bit
+</pre>
+And the <em>gfClient</em> command is directed to the <em>translated</em>
+server, and is operated simply:
+<pre>
+&nbsp;&nbsp; gfClient -t=dnax -q=prot &lt;serverName&gt; 17896 . &lt;query.faa&gt; &lt;result.psl&gt;
+</pre>
+</p>
+<p>
+The other strain protein sequences are obtained from their NCBI RefSeq
+release as supplied in the release <em>.gff.gz</em> file.
+</p>
+
+<h2>References</h2>
+<p>
+Kent WJ. 
+<a href="http://www.genome.org/cgi/content/abstract/12/4/656" target="_blank">BLAT - the BLAST-like 
+alignment tool</a>. 
+<em>Genome Res.</em> 2002 Apr;12(4):656-64.</p>

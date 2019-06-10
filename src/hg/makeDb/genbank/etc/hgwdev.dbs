@@ -24,7 +24,6 @@ aquChr2
 ascSuu1
 balAcu1
 bisBis1
-bosTau8
 bosTau9
 braFlo2
 caeJap1
@@ -131,7 +130,7 @@ saiBol1
 sarHar1
 sorAra2
 speTri2
-staAur1
+staAur2
 strPur4
 susScr11
 taeGut2
@@ -151,6 +150,7 @@ xenTro9
 anoCar1
 anoGam1
 apiMel1
+bosTau8
 bosTau7
 bosTau6
 bosTau4
@@ -209,6 +209,7 @@ macEug1
 melGal1
 micMur1
 micMur2
+GRCm38B
 mm9
 mm8
 mm7
@@ -244,6 +245,7 @@ rn3
 sacCer2
 sacCer1
 sorAra1
+staAur1
 strPur2
 strPur1
 susScr3
@@ -256,4 +258,3 @@ xenTro7
 xenTro3
 xenTro2
 xenTro1
-grcHhh38

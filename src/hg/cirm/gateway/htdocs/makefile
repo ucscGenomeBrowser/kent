@@ -1,24 +1,26 @@
-kentSrc = ../../..
+kentSrc = ../../../..
 include ../../../../inc/common.mk
 
-#Get list of files to copy over. Will only copy over files which have been committed.
+#Get list of files to copy over. Will only copy over files which are being tracked by git.
 FIND=gitFiles
-CSS_FILES=style/cirmStyle.css
-HOSTNAME:=$(shell hostname)
 
-# Set proper htdocs directory based on what machine we're using
-ifeq (${HOSTNAME}, hgwdev)
-  HTDOCSDIR=${DOCUMENTROOT}-cirm
-endif
-ifeq (${HOSTNAME}, cirm)
-  HTDOCSDIR=${DOCUMENTROOT}
-endif
-ifeq (${HOSTNAME}, cirm-01)
-  HTDOCSDIR=${DOCUMENTROOT}
-endif
+user:
+	if test -d ${DOCUMENTROOT}-${USER}; then \
+	    ${MAKE} doInstall DEST=${DOCUMENTROOT}-${USER}; \
+	fi
 
-docs:
-	umask 002; rsync --times --recursive --omit-dir-times --relative --cvs-exclude --exclude='makefile' --exclude='style/*' `$(FIND)` ${HTDOCSDIR}
+alpha:
+	${MAKE} doInstall DEST=${DOCUMENTROOT}
 
-styles:
-	umask 002; rsync --update --times --recursive --omit-dir-times --relative --cvs-exclude --exclude='makefile' $(CSS_FILES) ${HTDOCSDIR}
+clean:
+
+compile:
+
+install:
+	${MAKE} doInstall DEST=${DOCUMENTROOT}
+
+doInstall:
+	@mkdir -p ${DEST}/
+	umask 002; rsync --times --recursive --omit-dir-times --relative --cvs-exclude --exclude='makefile' --exclude='style/*' `$(FIND)` ${DEST}/
+
+

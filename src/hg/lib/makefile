@@ -68,8 +68,8 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     hashJoin.o hCommon.o \
     hCytoBand.o hdb.o hgColors.o hgConfig.o hgExp.o hgFind.o \
     hgFindSpec.o hgFindSpecCustom.o hgHgvs.o hgHgvsParse.o \
-    hgGene.o hgMaf.o hgRelate.o hgSeq.o hgdpGeo.o hPrint.o hVarSubst.o hvGfx.o \
-    HInv.o hubConnect.o hubSearchText.o hui.o humanParalog.o \
+    hgGene.o hic.o hicUi.o hgMaf.o hgRelate.o hgSeq.o hgdpGeo.o hPrint.o hVarSubst.o hvGfx.o \
+    HInv.o hubConnect.o hubSearchText.o hui.o humanParalog.o hubPublic.o \
     imageClone.o indelShift.o interact.o interactUi.o isochores.o ispyTables.o \
     itemAttr.o itemConf.o itemDetailsHtml.o jalview.o \
     jaxOrtholog.o jaxQTL.o jaxQTL3.o jksql.o joiner.o jsHelper.o kg1ToKg2.o \
@@ -98,7 +98,7 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     sgdClone.o sgdDescription.o sgdOther.o simpleNucDiff.o simpleRepeat.o snakeUi.o \
     snp.o snp125.o snp125CodingCoordless.o snp132Ext.o snpExceptions.o snpFasta.o snpMap.o snpTmp.o \
     snpUi.o snp125Exceptions.o snp125Ui.o softPromoter.o softberryHom.o soTerm.o \
-    spDb.o splignAlign.o sqlSanity.o stanMad.o stsAlias.o \
+    spDb.o splignAlign.o sqlSanity.o stanMad.o straw.o stsAlias.o \
     stsInfo.o stsInfo2.o stsInfoMouse.o stsInfoMouseNew.o stsInfoRat.o \
     stsMap.o stsMapMouse.o stsMapMouseNew.o stsMapRat.o stsMarker.o suggest.o \
     switchDbTss.o synMap.o synteny100000.o syntenyBerk.o syntenySanger.o \
@@ -138,6 +138,9 @@ jWestBanner.h: jWestBanner.html
 	sed -e 's/\\/\\\\/g; s/"/\\"/g; s/^/"/; s/$$/\\n"/;' jWestBanner.html > jWestBanner.h
 
 web.o: jWestHeader.h jWestBanner.h
+
+straw.o: straw/straw.cpp straw/straw.h
+	cd straw && ${MAKE} straw.o
 
 clean:
 	rm -f $(O);

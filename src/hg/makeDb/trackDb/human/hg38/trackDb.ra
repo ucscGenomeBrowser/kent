@@ -7,6 +7,10 @@ include hoffMap.ra
 
 include cancerExpr.ra
 
+include mane.ra
+
+include gdcCancer.ra alpha,beta
+
 track miRnaAtlas
 compositeTrack on
 shortLabel miRNA Tissue Atlas
@@ -17,7 +21,6 @@ maxLimit 52000
 barChartLabel Tissue
 configurable off
 subGroup1 view View a_A=Sample1 b_B=Sample2
-pennantIcon New red ../goldenPath/releaseLog.html Created October 2018
 
     track miRnaAtlasSample1
     type bigBarChart
@@ -151,8 +154,6 @@ pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 track interactions override
 directUrl hgGeneGraph?db=hg38&gene=%s
 
-include trackDb.wgEncode.ra
-
 track par override
 group x
 visibility hide
@@ -160,6 +161,7 @@ visibility hide
 track windowmaskerSdust override
 group rep
 priority 8
+pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
 
 track nestedRepeats override
 group rep
@@ -168,6 +170,7 @@ priority 2
 track simpleRepeat override
 group rep
 priority 7
+pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
 
 track rmskJoinedBaseline override
 group rep
@@ -189,6 +192,7 @@ termRegex [A-Z][A-Z0-9]+(\.[0-9]+)?
 track gap override
 html gap
 visibility hide
+pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
 
 include rmskTracks.ra
 
@@ -300,42 +304,6 @@ sGroup_mammal rheMac3 mm10 canFam3
 treeImage phylo/hg38_4way.gif
 
 include defaultPriority.ra
-
-track altSequence
-superTrack on
-shortLabel Alt Map
-longLabel GRCh38 Haplotype to Reference Sequence Mapping Correspondence
-visibility hide
-otherDb hg38
-group map
-release beta,public
-
-    track altLocations
-    superTrack altSequence pack
-    type bed 4
-    color 32,32,190
-    shortLabel Haplotypes
-    longLabel GRCh38 Haplotype to Reference Sequence Mapping Correspondence
-    html altSequence
-    url /cgi-bin/hgTracks?db=$D&position=$$
-    urlLabel Corresponding position:
-    release beta,public
-
-    track altSeqLiftOverPsl
-    superTrack altSequence pack
-    shortLabel Alt Map
-    longLabel GRCh38 Alignments to the Alternate Sequences/Haplotypes
-    type psl
-    html altSequence
-    indelDoubleInsert on
-    indelQueryInsert on
-    showDiffBasesAllScales .
-    showDiffBasesMaxZoom 10000.0
-    showCdsMaxZoom 10000.0
-    showCdsAllScales .
-    baseColorDefault diffBases
-    baseColorUseSequence extFile seqNcbiAltSequence extNcbiAltSequence
-    release beta,public
 
 track altSeqLiftOverBigPsl
 #superTrack altSequence pack
@@ -568,10 +536,63 @@ urlLabel SIB link:
 track sibTxGraph override
 url http://ccg.vital-it.ch/cgi-bin/tromer/tromergraph2draw.pl?db=hg38&species=H.+sapiens&tromer=$$
 
+track altSeqLiftOverPsl override
+pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
+
+track fixSeqLiftOverPsl override
+pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
+
+track gtexGene override
+pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
+
+track cpgIslandSuper override
+pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
+
+track est override
+pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
+
+track xenoMrna override
+pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
+
+track xenoEst override
+pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
+
+track augustusGene override
+pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
+
+track genscan override
+pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
+
+track ucscGenePfam override
+pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
+
+track orfeomeMrna override
+pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
+
+track mgcFullMrna override
+pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
+
+track xenoRefGene override
+pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
+
+track knownAlt override
+pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
+
+track cytoBand override
+pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
+
+track gc5BaseBw override
+pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
+
+track ucscToRefSeq override
+pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
+
+track ucscToINSDC override
+pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
 
 include trackDb.cloneEnd.ra
 
-include hg38Patch11.ra beta,public
+include hg38Patch11.ra alpha
 
 include knownGene.ra
 
@@ -679,4 +700,16 @@ group varRep
 
 track gtexTranscExpr override
 bigDataUrl /gbdb/hg38/gtex/gtexTranscExpr.bb
+
+# ENCODE tracks
+
+include trackDb.gencode.ra
+
+include wgEncodeReg.ra public
+
+include wgEncodeReg.new.ra alpha,beta
+include encode3.ra alpha,beta
+
+include wgEncodeReg.dev.ra alpha
+
 

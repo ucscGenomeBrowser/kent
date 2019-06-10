@@ -962,7 +962,7 @@ contains three fields:</p>
   <li>
   <strong>nameSize</strong> - a byte containing the length of the name field</li>
   <li>
-  <strong>name</strong> - the sequence name itself (in ASCII compatible byte string), of variable 
+  <strong>name</strong> - the sequence name itself (in ASCII-compatible byte string), of variable 
   length depending on nameSize</li>
   <li>
   <strong>offset</strong> - the 32-bit offset of the sequence data relative to the start of the 
@@ -1076,8 +1076,8 @@ genePredExt format.</p>
     uint[exonCount] exonEnds;   "Exon end positions"
     int score;            	"Score"
     string name2;       	"Alternate name (e.g. gene_id from GTF)"
-    string cdsStartStat; 	"enum('none','unk','incmpl','cmpl')"
-    string cdsEndStat;   	"enum('none','unk','incmpl','cmpl')"
+    string cdsStartStat; 	"Status of CDS start annotation (none, unknown, incomplete, or complete)"
+    string cdsEndStat;   	"Status of CDS end annotation (none, unknown, incomplete, or complete)"
     lstring exonFrames; 	"Exon frame offsets {0,1,2}"
     )
 </code></pre>

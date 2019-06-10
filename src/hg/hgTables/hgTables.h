@@ -168,9 +168,6 @@ struct trackDb *mustFindTrack(char *name, struct trackDb *trackList);
 struct asObject *asForTable(struct sqlConnection *conn, char *table);
 /* Get autoSQL description if any associated with table. */
 
-struct sqlFieldType *sqlFieldTypesFromAs(struct asObject *as);
-/* Convert asObject to list of sqlFieldTypes */
-
 char *connectingTableForTrack(char *rawTable);
 /* Return table name to use with all.joiner for track.
  * You can freeMem this when done. */
@@ -269,17 +266,6 @@ boolean isSqlNumType(char *type);
 
 boolean isSqlIntType(char *type);
 /* Return TRUE if it is an integer SQL type. */
-
-struct sqlFieldType
-/* List field names and types */
-    {
-    struct sqlFieldType *next;
-    char *name;		/* Name of field. */
-    char *type;		/* Type of field (MySQL notion) */
-    };
-
-struct sqlFieldType *sqlFieldTypeNew(char *name, char *type);
-/* Create a new sqlFieldType */
 
 void sqlFieldTypeFree(struct sqlFieldType **pFt);
 /* Free resources used by sqlFieldType */
@@ -733,6 +719,10 @@ void wigShowFilter(struct sqlConnection *conn);
 /* print out wiggle data value filter */
 
 /* ----------- BigWig business in bigWig.c -------------------- */
+
+boolean isBigWig(char *database, char *table, struct trackDb *parent,
+	struct customTrack *(*ctLookupName)(char *table));
+/* Local test to see if something is bigWig.  Handles hub tracks unlike hIsBigWig. */
 
 boolean isBigWigTable(char *table);
 /* Return TRUE if table is bedGraph in current database's trackDb. */

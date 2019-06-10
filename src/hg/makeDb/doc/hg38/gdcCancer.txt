@@ -1,0 +1,57 @@
+
+
+mkdir /cluster/data/hg38/bed/gdcCancer
+cd /cluster/data/hg38/bed/gdcCancer
+
+#go to https://portal.gdc.cancer.gov/repository?filters=%7B%22op%22%3A%22and%22%2C%22content%22%3A%5B%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22files.access%22%2C%22value%22%3A%5B%22open%22%5D%7D%7D%2C%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22files.analysis.workflow_type%22%2C%22value%22%3A%5B%22MuTect2%20Variant%20Aggregation%20and%20Masking%22%5D%7D%7D%2C%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22files.data_format%22%2C%22value%22%3A%5B%22MAF%22%5D%7D%7D%2C%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22files.data_type%22%2C%22value%22%3A%5B%22Masked%20Somatic%20Mutation%22%5D%7D%7D%5D%7D
+# add files to cart, click on cart, hit download button
+
+# press clinical button and select TSV.  Download will contain clinical.tsv exposure.tsv
+
+tar xvf gdc_download_20190408_221221.617568.tar.gz
+tar xvf clinical.cart.2019-04-22.tar.gz
+
+cancerMafToBigBed . clinical.tsv exposure.tsv gdcCancer.bb
+
+#rebuild the bb with a polished AS file
+bedToBigBed -as=$HOME/kent/src/hg/lib/gdcCancer.as -type=bed12+ -tab gdcCancer.s.bed /cluster/data/hg38/chrom.sizes gdcCancer.bb
+
+rm /gbdb/hg38/gdcCancer.bb
+ln -s `pwd`/gdcCancer.bb /gbdb/hg38
+
+for i in */*.maf.gz; do 
+dir=`dirname $i`; name=`basename $i | sed 's/TCGA.//' | sed 's/\..*//'`; 
+echo cancerMafToBigBed $dir clinical.tsv exposure.tsv $name.bb;
+echo bedToBigBed -as=$HOME/kent/src/hg/lib/gdcCancer.as -type=bed12+ -tab $name.s.bed /cluster/data/hg38/chrom.sizes $name.bb
+done > jobs
+
+sh -x jobs
+
+for i in *.bb; do ln -s `pwd`/$i /gbdb/hg38/gdcCancer; done
+
+ls */*.maf.gz | while read name; do 
+f=`basename $name`; echo $f; done | sort > sortedNames.txt
+
+sum=1
+for j in `cat sortedNames.txt`; do 
+i=*/$j
+dir=`dirname $i`; 
+name=`basename $i | sed 's/TCGA.//' | sed 's/\..*//'`; 
+sum=`expr $sum + 1`
+long=`grep $name project2LongLabel.txt | tawk '{print $2}'`
+echo "track $name"
+echo "priority $sum"
+echo "parent gdcCancer off"
+echo "shortLabel $name"
+echo "longLabel $long"
+echo "group phenDis"
+echo "type bigLolly"
+echo "lollyField 13"
+echo "release alpha"
+echo "bigDataUrl /gbdb/hg38/gdcCancer/$name.bb"
+echo "autoScale on"
+echo "urls case_id=https://portal.gdc.cancer.gov/cases/$$"
+echo "genderFilterValues male,female"
+echo "genderFilterType multipleListOr"
+echo ""
+done >> $HOME/kent/src/hg/makeDb/trackDb/human/hg38/gdcCancer.ra

@@ -187,8 +187,9 @@
     <A onclick="return jumpTo(this);" HREF="#">vcfTabix</A>,
     <A onclick="return jumpTo(this);" HREF="#">wig</A>,
     <A onclick="return jumpTo(this);" HREF="#">wigMaf</A></P>
-    <P>Detailed descriptions of each type can be found
-    below.  In many cases the type setting includes additional
+    <P>Not all track types are supported in hubs. The types specifically
+    supported are called out at the top of the Hub Track Database Definition
+    page.  In many cases the type setting includes additional
     parameters to further specify the data format.  Some track types
     have additional setting requirements, to be discussed
     below.</P>
@@ -582,26 +583,11 @@
 
     <P>Note: dynamic resizing of iframes is not trivial, as they have to
     be resized with javascript, across domains. We recommend keeping
-    the size static and to use scrollbars. If dynamic resizing is required, the
-    iframed page has to include a few lines of special HTML and javascript
-    code and one has to modify its body-tag, like this (see 
-    <a target="_BLANK" href="http://stackoverflow.com/questions/153152/resizing-an-iframe-based-on-content">stackoverflow</a>):
-    <pre>
-    ... html header ...
-    &lt;body onload="iframeResizePipe()"&gt;
-    &lt;iframe id="helpframe" src='' height='0' width='0' frameborder='0'&gt;&lt;/iframe&gt;
-    &lt;script type="text/javascript"&gt;
-      function iframeResizePipe() {
-       var height = document.body.scrollHeight;
-       var pipe = document.getElementById('helpframe');
-       pipe.src = 'http://genome.ucsc.edu/inc/iframeHelper.html?height='+height+'&amp;cacheb='+Math.random();
-      }
-    &lt;/script&gt;
-    ... rest of webpage ...
-    </pre>
+    the size static and to use scrollbars.
 
     <P><B>Example:</B></P>
     <pre>   iframeOptions width='800' height='800' scrolling='yes'</pre>
+    </pre>
     <P>This example fixes the size to 800x800 pixels and activates scrollbars.</P>
 </DIV>
 
@@ -1061,7 +1047,9 @@
     type should end with a '<code>+</code>' (plus).  Even if there are no
     additional non-standard fields, the parameter '<code>.</code>' (dot)
     must be specified if this track is meant to be configurable.</P>
-    <P><em>Examples can be found below.</em></P>
+    <P><B>Example:</B></P>
+    <pre>  type bigBed 9 +</pre>
+
 </DIV>
 
 <DIV class="bigPsl"><span class="types bigPsl"></span>
@@ -1452,7 +1440,10 @@ There are no extra options that can appear on the type bigInteract line.
     item coloring using the value in the ninth field, <code>itemRgb</code>. The
     value of the  item field must be an R,G,B triplet.  When loaded
     into a table, this field appears as an integer with the RGB values
-    in specific bits of the integer.</P>
+    in specific bits of the integer. To observe this field, specify the type as,
+     <code>type bigBed 9</code>, or, <code>type bigBed 9+</code>, for additional
+    <A HREF="../../../FAQ/FAQformat.html#format1" target="_blank">non-standard columns</A>, 
+    in the trackDb stanza for the bigBed file.</P>
     <P><B>Example:</B></P>
     <pre>   itemRgb on</pre>
 </DIV>

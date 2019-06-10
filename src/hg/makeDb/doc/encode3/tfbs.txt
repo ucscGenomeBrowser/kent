@@ -1,0 +1,588 @@
+# ENCODE TFBS from DAC
+
+# (2018-12-04 in progress) kate
+
+# NOTE: ENCODE2 track is described in doc/encodeRegHg19.txt
+
+# from Henry Pratt, student in Zhiping's lab:
+
+Hi Kate,
+
+
+Here are links to tarballs for all the narrowPeak files we have used for motif discovery in GRCh38, hg19, and mm10. Each one has a metadata.tsv with file ID, experiment ID, antibody ID, factor name, donor ID, cell type, and lab for each narrowPeak. Does this look good? Let me know if I need to tweak anything.
+
+
+http://users.wenglab.org/pratth/tf.GRCh38.tar.gz
+
+http://users.wenglab.org/pratth/tf.hg19.tar.gz
+
+http://users.wenglab.org/pratth/tf.mm10.tar.gz
+
+
+Henry
+
+###############
+# Download files and metadata
+
+mkdir hg38 hg19 mm10
+
+wget -nd -P hg38 http://users.wenglab.org/pratth/tf.GRCh38.tar.gz
+wget -nd -P hg19 http://users.wenglab.org/pratth/tf.hg19.tar.gz
+wget -nd -P mm10 http://users.wenglab.org/pratth/tf.mm10.tar.gz
+
+# retrieve and unroll narrowpeak files
+
+cd hg19
+gunzip *.gz
+tar xvfz tf.hg19.tar
+ls *.bed.gz | wc -l
+# 1400
+
+ls *.bed.gz | head -1
+ENCFF002ROJ.bed.gz
+
+grep ENCFF108RWG ../portal/ENCODE_TF_optimal.hg19.tsv
+# found --> these are optimal (not conservative) peaks (confirm w/ Henry)
+
+# peek at a file
+
+gunzip -c ENCFF108RWG.* | head -4
+#chr5    14664291        14664587        .       719     .       5.86423 -1.00000        0.00437 148
+#chr2    86668055        86668351        .       1000    .       5.86602 -1.00000        0.00413 148
+
+# it's an unsorted narrowPeak.  pValue not used.  peak always at 148 (fixed size peaks: 296)
+
+# stash files
+mkdir peaks
+mv *.bed.gz peaks
+
+# peek at metadata
+ 
+head -2 metadata.tsv
+#file_id experiment_id   antibody_id     factor_name     donor_id        biosample_name  lab_name
+#ENCFF125NZH     ENCSR925QAW     ENCAB697XQW     3xFLAG-HMG20B   ENCDO000AAC     HepG2   richard-myers
+
+# NOTE: need treatment (request from Henry, 12/4)
+
+# To uniquify, need donor (for normal tissues)
+
+# count factors
+awk -F"\t" '{print $3}' metadata.tsv  | sort | uniq | wc -l
+# 481
+
+###############
+# Run configuration tool
+# (2019-03-20)
+# Redone to remove 3xFLAG and eGFP prefixes on factor names
+# (2019-03-25)
+
+cd hg19
+
+# create input files for config tool
+
+# re-use cell codes from previous run (doc is ~kent/src/hg/makeDb/doc/encodeRegHg19.txt)
+set prev = /hive/data/genomes/hg19/bed/wgEncodeRegV2/tfbs2012/
+cp $prev/cellCodesTop.txt .
+
+# create file list with metadata, format is 4 tab-sep fields:
+#       file    cell+treatment+lab      antibody        target
+
+# per JK -- remove modified cell assays (3xFLAG, eGFP).  
+# These will be in separate, per-cell-line tracks
+grep -v eGFP metadata.tsv| grep -v 3xFLAG > metadata.pruned.tsv
+perl ../makeFilelist.pl < metadata.pruned.tsv > fileCellAbTarget.tab
+wc -l fileCellAbTarget.tab
+# 1264 fileCellAbTarget.tab
+
+# run config tool (this takes a few minutes).  Tools are in ~/kent/src/hg/regulate/
+
+regClusterBedExpCfg -useTarget -tabList \
+        fileCellAbTarget.tab -cellLetter=cellCodesTop.txt -noLetterOk clusters.cfg
+
+# NOTE: this tool is pretty useless w/o normalization.  Consider updating next tool in
+# pipeline to take saner input
+
+###############
+# Run cluster tool
+# This takes some time (a few hours ?)
+
+hgBedsToBedExps -verbose=2 -dupeLetterOk clusters.cfg clusters.bed clusters.exps >&! clusters.log &
+# Got 1264 sources
+# Got 338 factors
+
+wc -l clusters.bed
+# 10560472 clusters.bed
+
+# previous run (with modded cells)
+# 13214618 clusters.bed
+# ~13M
+
+hgBedsToBedExps -verbose=2 -dupeLetterOk clusters.cfg clusters.bed clusters.exps >&! clusters.log &
+
+cat clusters.log
+### kent source version 378 ###
+#Loaded 1264 records from clusters.cfg
+#Got 1264 sources
+#Got 338 factors
+
+# Previous run (with modified cell types)
+#Got 1400 sources
+#Got 454 factors
+# NOTE: normalized track has much better dynamic range of scores -- similar to ENCODE 2 track
+
+# compare to previous -- 2x sources, 3x factors -> 3x cluster count.  Seems reasonable 
+wc -l $prev/clusters.target.bed
+#  4380444 clusters.target.bed
+# Got 690 sources
+# Got 161 factors
+#    2x sources, 3x factors -> 3x cluster count.  Seems reasonable 
+
+hgLoadSqlTab hg19 encode3RegTfbsExp ~/kent/src/hg/lib/expRecord.sql clusters.exps
+
+# Create inputTrackTable with columns to match trackDb setting 'inputTableFieldDisplay'.
+# e.g. cell factor treatment lab
+- 7 columns: <table> <source> <factor> <antibody> <cell> <treatment> <lab>
+
+perl ../makeInputs.pl < fileCellAbTarget.tab > clusters.inputs.tab
+hgLoadSqlTab hg19 encode3RegTfbsClusterInput \
+        ~/kent/src/hg/lib/clusterInputTrackTable5.sql clusters.inputs.tab
+
+# Compact to factorSource format
+set tools = ~/kent/src/hg/makeDb/hgBedsToBedExps
+(date; $tools/bedExpsToFactorSource.pl clusters.bed > clusters.factorSource.bed; date) >& makeFactorSource.log &
+# Mon Apr  1 15:01:59 PDT 2019
+# Mon Apr  1 16:19:20 PDT 2019
+
+# check for max score issue (RM #13224)
+$tools/factorSourceCheckScore.pl < clusters.factorSource.bed
+# Errors: 0 in 10560472 lines
+
+#hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/factorSource.sql -renameSqlTable \
+    #hg19 encode3RegTfbsCluster clusters.factorSource.bed
+# use this schema for compatibility with previous tracks
+hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/bed5SourceVals.sql -renameSqlTable \
+    hg19 encode3RegTfbsCluster clusters.factorSource.bed
+
+# Read 10560472 elements of size 8 from clusters.factorSource.bed
+
+# compare coverage
+# TODO
+featureBits hg19 -noRandom -enrichment wgEncodeRegTfbsClusteredV3 encode3RegTfbsCluster
+#wgEncodeRegTfbsClusteredV3 12.740%, encode3RegTfbsCluster 27.457%, both 11.716%, cover 91.96%, enrich 3.35x
+
+# list cells
+awk '{print $2}' fileCellAbTarget.tab | sed 's/+.*//' | sort | uniq > cells.txt
+wc -l cells.txt
+#130 cells.txt
+
+# list factors for trackDb filterBy
+
+awk '{print $4}' fileCellAbTarget.tab | sort | uniq | sed 's/$/,\\/' > factors.trackDb
+wc -l factors.trackDb
+# 338 factors.trackDb
+
+cat > trackDb.ra << 'EOF'
+    track wgEncodeRegTfbsClusteredV3
+    shortLabel Txn Factor ChIP
+    longLabel Transcription Factor ChIP-seq (161 factors) from ENCODE with Factorbook Motifs
+    type factorSource
+    superTrack wgEncodeReg dense
+    sourceTable wgEncodeRegTfbsCellsV3
+    inputTrackTable wgEncodeRegTfbsClusteredInputsV3
+    inputTableFieldDisplay cellType factor antibody treatment lab
+    motifTable factorbookMotifPos
+    motifPwmTable factorbookMotifPwm
+    motifMapTable factorbookMotifCanonical
+    motifMaxWindow 50000
+    motifDrawDefault on
+    urlLabel Factorbook Link:
+    url http://www.factorbook.org/mediawiki/index.php/$$
+    idInUrlSql select value from factorbookGeneAlias where name='%s'
+    controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
+    visibility dense
+    useScore 1
+    priority 1.71
+    maxWindowToDraw 10000000
+    dataVersion ENCODE Mar 2012 Freeze
+    filterBy name:factor=\
+'EOF'
+
+# rename tables for consistency with earlier regulatory supertrack tracks (but distinguish from
+# ENCODE 2 by prefix
+
+hgsql hg19 -e "alter table encode3RegTfbsCluster rename to encRegTfbsClustered"
+hgsql hg19 -e "alter table encode3RegTfbsCluster rename to encRegTfbsClustered"
+hgsql hg19 -e "alter table encode3RegTfbsClusterInput rename to encRegTfbsClusteredInputs"
+hgsql hg19 -e "alter table encode3RegTfbsExp rename to encRegTfbsClusteredSources"
+
+###############
+# hg38
+
+# (2019-03-25 kate) 
+
+cd ../hg38
+mkdir peaks
+mv tf.GRCh38.tar peaks
+cd peaks
+tar xvf tf.GRCh38.tar
+cd ..
+mv peaks/metadata.tsv .
+
+# config
+
+cp ../hg19/cellCodesTop.txt .
+
+#regClusterBedExpCfg -useTarget -tabList \
+        #fileCellAbTarget.tab -cellLetter=cellCodesTop.txt -noLetterOk clusters.cfg
+
+#wc -l clusters.cfg
+# 1391 clusters.cfg
+
+# cluster
+
+(date; hgBedsToBedExps -verbose=2 -dupeLetterOk clusters.cfg clusters.bed clusters.exps; date) >&! clusters.log &
+# ERR: couldn't open peaks/ENCFF520CZS.bed.gz , No such file or directory
+# NOTE: ENCFF520CZS not at ENCODE portal
+
+# remove from metadata file
+# also, per JK -- remove modified cell assays (3xFLAG, eGFP)
+grep -v ENCFF520CZS metadata.tsv | grep -v eGFP | grep -v 3xFLAG > metadata.pruned.tsv
+wc -l metadata.pruned.tsv
+# 1257
+perl ../makeFilelist.pl < metadata.pruned.tsv > fileCellAbTarget.tab
+wc -l fileCellAbTarget.tab
+# 1256 (tool removes header line)
+
+regClusterBedExpCfg -useTarget -tabList \
+        fileCellAbTarget.tab -cellLetter=cellCodesTop.txt -noLetterOk clusters.cfg
+
+(date; hgBedsToBedExps -verbose=2 -dupeLetterOk clusters.cfg clusters.bed clusters.exps; date) >&! clusters.log &
+
+#Mon Mar 25 16:31:45 PDT 2019
+### kent source version 378 ###
+#Loaded 1256 records from clusters.cfg
+#Got 1256 sources
+#Got 340 factors
+#
+#Mon Mar 25 17:20:24 PDT 2019
+
+# Previous run - included 3xflag and eGFP
+# 2019-03-20
+#Got 1390 sources
+#Got 453 factors
+# Files moved to withMods/ directory
+
+wc -l clusters.bed
+# 10565630 clusters.bed
+
+# compare to hg19
+# TODO
+
+# Compact to factorSource format
+set tools = ~/kent/src/hg/makeDb/hgBedsToBedExps
+(date; $tools/bedExpsToFactorSource.pl clusters.bed > clusters.factorSource.bed; date) >& makeFactorSource.log &
+
+cat makeFactorSource.log
+#Mon Apr  1 13:39:39 PDT 2019
+#Mon Apr  1 14:56:53 PDT 2019
+
+# Elapsed 1:17
+
+# check for max score issue (RM #13224)
+$tools/factorSourceCheckScore.pl < clusters.factorSource.bed
+# Errors: 0 in 10565630 lines
+
+#hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/factorSource.sql -renameSqlTable \
+    #hg38 encode3RegTfbsCluster clusters.factorSource.bed
+hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/bed5SourceVals.sql -renameSqlTable \
+    hg38 encode3RegTfbsCluster clusters.factorSource.bed
+# Read 10565630 elements of size 8 from clusters.factorSource.bed
+
+# load experiments tables
+hgLoadSqlTab hg38 encode3RegTfbsExp ~/kent/src/hg/lib/expRecord.sql clusters.exps
+
+# Create inputTrackTable with columns to match trackDb setting 'inputTableFieldDisplay'.
+# e.g. cell factor treatment lab
+- 7 columns: <table> <source> <factor> <antibody> <cell> <treatment> <lab>
+
+perl ../makeInputs.pl < fileCellAbTarget.tab > clusters.inputs.tab
+hgLoadSqlTab hg38 encode3RegTfbsClusterInput \
+        ~/kent/src/hg/lib/clusterInputTrackTable5.sql clusters.inputs.tab
+# next time, use this:
+#hgLoadSqlTab hg38 encode3RegTfbsClusterInput \
+        #~/kent/src/hg/lib/clusterInputTrackEncode3Tfbs.sql clusters.inputs.tab
+
+# list factors for trackDb filterBy
+awk '{print $4}' fileCellAbTarget.tab | sort | uniq | sed 's/$/,\\/' > factors.trackDb
+wc -l factors.trackDb
+# 340 factors.trackDb
+
+# add to trackDb filterBy setting
+
+# list cells
+awk '{print $2}' fileCellAbTarget.tab | sed 's/+.*//' | sort | uniq > cells.txt
+wc -l cells.txt
+#129 cells.txt
+
+# rename tables for consistency with earlier regulatory supertrack tracks (but distinguish from
+# ENCODE 2 by prefix
+
+hgsql hg38 -e "alter table encode3RegTfbsCluster rename to encRegTfbsClustered"
+hgsql hg38 -e "alter table encode3RegTfbsClusterInput rename to encRegTfbsClusteredInputs"
+hgsql hg38 -e "alter table encode3RegTfbsExp rename to encRegTfbsClusteredSources"
+
+################
+# Load per-factor tables (needed for clusters track details
+# Consider also creating a track for these (composite with 1200 subtracks)
+
+cat > scorePeaks.csh << 'EOF'
+    set db = $1
+    set f = $2
+    set t = $f:r:r
+    set table = encode3TfbsPk$t
+    echo $table
+# next time grep out chrEBV
+    zcat $f > $table.bed
+    bedScore -col=7 -verbose=2 -method=reg -uniform $f $table.scored.bed
+    hgLoadBed -noNameIx -trimSqlTable \
+            -sqlTable=$HOME/kent/src/hg/lib/encode/narrowPeak.sql -renameSqlTable \
+            -as=$HOME/kent/src/hg/lib/encode/narrowPeak.as $db $table $table.scored.bed
+    gzip -c $table.scored.bed > ../scoredPeaks/$table.bed.gz
+    rm $table.bed $table.scored.bed
+    end
+'EOF'
+
+cd hg19
+mkdir scoredPeaks
+cd peaks
+
+awk '{print $1}' ../fileCellAbTarget.tab | sed 's/peaks\///' | \
+        xargs -L 1 ../../scorePeaks.csh hg19 >&! ../scorePeaks.log &
+cd ..
+perl ../makeTrackDb.pl < clusters.inputs.tab > trackDb.ra
+
+# trim shortLabels:
+grep shortLabel trackDb.ra | sed 's/shortLabel //' | sort > shortLabels.orig.txt
+sort | awk -F'\n' '{print $1, "\t", $1}' shortLabels.orig.txt > \
+        shortLabels.twocol.txt
+# 2. import to google sheet
+# 3. trim 2nd column to 17 chars
+# 4. export as tab-sep
+
+# NOTE: double check they are unique
+
+tdbRename trackDb.ra shortLabel encode3TfChipShortLabels.hg19.txt trackDb.new.ra
+
+# Fix up subGroup members w/ punctuation and initial numbers:
+#       Peyer's_patch -> Peyers_patch
+#       NT2/D1 -> NT2_D1
+#       22Rv1 -> X22Rv1
+#       MM.1S -> MM_1S
+
+# rename tables (encode3Tfbs -> encTfChipPk)
+
+hgsql hg19 -e 'show tables like "encode3TfbsPk%"' > tables.old.txt
+sed -e 's/^/alter table /' -e 's/$/ rename to /' tables.old.txt > rename.1.sql
+sed -e 's/encode3TfbsPk/encTfChipPk/' tables.old.txt | paste rename.1.sql -  | \
+    sed 's/$/;/' > rename.sql
+hgsql hg19 < rename.sql
+
+# drop chrEBV from tables
+# edit/copy rename.sql to dropEbv.csh:  delete from <table> where chrom='chrEBV'
+hgsql hg19 < dropEbv.sql
+
+# add colors to tier1-3 cell experiments (using ENCODE 2 color conventions)
+#
+# GM12878           color 153,38,0
+# H1-hESC           color 0,107,27
+# K562              color 46,0,184
+# HeLa-S3           color 0,119,158
+# HepG2             color 189,0,157
+# HUVEC             color 224,75,0
+
+raToLines encode3.ra encode3.lines
+sed -e '/GM12878/s/$/| color 153,38,0/' \
+    -e '/H1-hESC/s/$/| color 0,107,27/' \
+    -e '/K562/s/$/| color 46,0,184/' \
+    -e '/HeLa-S3/s/$/| color 0,119,158/' \
+    -e '/HepG2/s/$/| color 189,0,157/' \
+    -e '/HUVEC/s/$/| color 224,75,0/' \
+        encode3.lines > encode3.color.lines
+
+# buf size exceeded on linesToRa, so prune down to just composite subtracks
+
+linesToRa encode3.color.lines encode3.color.ra
+
+# concatenate to orig ra file
+
+#  reload cluster input table
+hgLoadSqlTab hg19 encode3RegTfbsClusterInput \
+        ~/kent/src/hg/lib/clusterInputTrackTable5.sql clusters.inputs.tab
+
+# rename field in cluster input table
+# NOTE syntax change in MariaDb (now requires type)
+hgsql -e hg19 "alter table encRegTfbsClusteredInputs change treatment experiment varchar(255)"
+
+
+###############
+# hg38
+
+cd ../hg38
+mkdir scoredPeaks
+cd peaks
+awk '{print $1}' ../fileCellAbTarget.tab | sed 's/peaks\///' | \
+        xargs -L 1 ../../scorePeaks.csh hg38 >&! ../scorePeaks.log &
+
+cd ..
+perl ../makeTrackDb.pl < clusters.inputs.tab > trackDb.ra
+
+paste cells.txt cells.txt > cellGroup.txt
+# edit for subgroup format
+
+grep shortLabel trackDb.ra | sed 's/shortLabel //' | sort > shortLabels.orig.txt
+
+comm -2 -3 shortLabels.orig.txt ../hg19/shortLabels.orig.txt > shortLabels.hg38.only.txt 
+
+# add to google spreadsheet for trimming to 17 chars (input to tdbRename)
+
+tdbRename trackDb.ra shortLabel encode3TfShortLabels.uniq.tsv trackDb.new.ra
+
+# Fix up subGroup members w/ punctuation and initial numbers:
+#       Peyer's_patch -> Peyers_patch
+#       NT2/D1 -> NT2_D1
+#       22Rv1 -> X22Rv1
+#       MM.1S -> MM_1S
+
+# rename tables (encode3Tfbs -> encTfChipPk)
+
+hgsql hg38 -e 'show tables like "encode3TfbsPk%"' > tables.old.txt
+sed -e 's/^/alter table /' -e 's/$/ rename to /' tables.old.txt > rename.1.sql
+sed -e 's/encode3TfbsPk/encTfChipPk/' tables.old.txt | paste rename.1.sql -  | \       
+    sed 's/$/;/' > rename.sql
+hgsql hg38 < rename.sql
+
+# drop chrEBV from tables
+# edit/copy rename.sql to dropEbv.csh:  delete from <table> where chrom='chrEBV'
+hgsql hg38 < dropEbv.sql
+
+# add colors, using DNase similarity track 
+raToLines encode3.ra encode3.lines
+
+# edit to leave only subtracks
+# generate edit script from DNase similarity .ra file
+
+cd ~/kent/src/hg/makeDb/trackDb/human/hg38
+csh addColors.csh encode3.lines > encode3.color.lines
+linesToRa encode3.color.lines encode3.color.ra
+
+# missed a few (punctuation diffs, etc.)
+csh addColors2.csh encode3.color.lines encode3.color2.lines
+linesToRa encode3.color2.lines encode3.color.ra
+
+# merge in to encode3.ra
+
+#  reload cluster input table
+hgLoadSqlTab hg38 encode3RegTfbsClusterInput \
+        ~/kent/src/hg/lib/clusterInputTrackTable5.sql clusters.inputs.tab
+
+# rename field in cluster input table
+# NOTE syntax change in MariaDb (now requires type)
+hgsql -e hg19 "alter table encRegTfbsClusteredInputs change treatment experiment varchar(255)"
+
+####################
+# Motifs (hg38) from Henry Pratt at Zlab
+# 2019-03-13
+
+# Notes from Henry:
+
+#The structure is mostly the same as the existing tables: canonical.tsv contains lists 
+# of canonical motifs for each factor, pwms.tsv contains the PWM list for the motifs, 
+# and fimo.tsv contains a large list of occurrences for each motif. We have expanded 
+# the number of canonical motifs in many cases to more than two, including some novel 
+# motifs MEME discovered which aren't annotated in the databases I searched. 
+# That's a primary area where we'll probably look to filter and/or merge PWMs to 
+# reduce the size a little bit more."
+
+cd /hive/data/outside/encode3/tfbs/dac
+
+wget https://users.wenglab.org/pratth/hg38.motifs.tar.gz
+tar xvfz hg38.motifs.tar.gz
+cd hg38.motifs
+wc -l *
+# 470 canonical.tsv
+# 72022536 fimo.tsv
+# 1204 pwms.tsv
+
+# Hmm, 72M localizations... (was 12M deduped to 2M in previous track)
+
+# Format of localizations file?
+
+# from MEME doc (http://meme-suite.org/doc/fimo-output-format.html#tsv_results)
+#motif_id        motif_alt_id    sequence_name   start   stop    strand  score   p-value q-value matched_sequence
+#MA0060.1        NFYA    chr2    60221163        60221178        -       18.75   3.36e-09        0.00195 CTCGGCCAATCAGAGC
+
+# So Henry's looks like:
+# chr5    138465927       138465955       ZNF263  0       +       17.3537 1.6e-07 4.69e-05
+# Probably this (will confirm)
+# chr   start   end     factor  0       strand  score   p-value q-value
+
+# convert to chrom, start, end, name, float_Score, strand (bed6FloatScore)
+
+cd ..
+awk '{OFS="\t"; print $1, $2-1, $3, $4, $9, $6}' hg38.motifs/fimo.tsv > motifs.bed
+
+# try filtering out dupes
+
+awk '{$5=0; print}' motifs.bed | uniq > motifs.uniq.bed
+wc -l
+# 68223131
+# 68M -- not much help!
+
+# See if we can load
+
+sort -k1,4 -k6,6 -k5,5 motifs.bed > motifs.sorted.bed
+hgLoadBed hg38 -noSort -sqlTable=$HOME/kent/src/hg/lib/bed6FloatScore.sql -renameSqlTable \
+    encode3RegTfbsMotifs motifs.sorted.bed
+
+# check qvalue score range
+> select min(score) from encode3RegTfbsMotifs;
+| 0.000000000000002019999937447319 |
+>select max(score) from encode3RegTfbsMotifs;
+|          1 |
+select count(*) from encode3RegTfbsMotifs where score > .1
+|  9487460 |
+
+# verify above are OK (previous track they were dropped)
+
+
+# score and de-dup, as in earlier version of track
+
+cp /hive/data/genomes/hg19/bed/factorbook/dedupAndScore.pl .
+sort -k1,4 -k6,6 -k5,5 motifs.bed > motifs.resorted.bed
+perl dedupAndScore.pl < motifs.resorted.bed > motifs.load.bed
+hgLoadBed hg38 -noSort -sqlTable=$HOME/kent/src/hg/lib/bed6FloatScore.sql -renameSqlTable \
+        encode3FactorbookMotifPos motifs.load.bed
+
+# create load file for UCSC transRegCodeMotif
+# pwms.tsv is similar -- just lacks initial count field
+# NOTE: wc -l pwms.tsv
+1204 pwms.tsv
+
+vs. wc -l transRegCodeMotif.tab
+132 transRegCodeMotif.tab
+
+#10x as many pwms...
+
+# Investigate constructs -- do some of them also have antibodies (duped experiments) ?
+# (2019-03-20)
+#
+awk '{print $2, $4}' fileCellAbTarget.tab | sed 's/\+.* / /' | sed -e 's/3xFLAG-//' -e 's/eGFP-//' | sort | uniq | wc -l
+#1057
+awk '{print $2, $4}' fileCellAbTarget.tab | sed 's/\+.* / /' | sort | uniq | wc -l
+#1065
+
+# Yes, but only 8 out of 1000 experiments
+
+
+
+

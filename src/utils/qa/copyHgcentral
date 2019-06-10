@@ -108,10 +108,10 @@ def runTest(testOptions, testTable, testField1, testField2, testOrder):
        servers are queried and tested for special cases.  The state of all three
        servers and any relevant error messages are output."""
     fileDev, fileBeta, fileRr = getFilename(testTable, testOptions.assembly)
-    testQuery = "select * from " + testTable + " where " + testField1 + "='" + \
-                 testField2 + "' order by " + testOrder
+    testQuery = "select * from " + testTable + " where " + testField1 + "=\"" + \
+                 testField2 + "\" order by " + testOrder
     queryDev = createFile(fileDev, "hgcentraltest", testQuery, "hgwdev")
-    queryBeta = createFile(fileBeta, "hgcentralbeta", testQuery, "mysqlbeta")
+    queryBeta = createFile(fileBeta, "hgcentralbeta", testQuery, "hgwbeta")
     queryRr = createFile(fileRr, "hgcentral", testQuery, "genome-centdb")
     if queryDev == "" and queryBeta == "" and queryRr == "":
         printHeader(testTable)
@@ -148,14 +148,14 @@ def runExecute(execOptions, execTable, execField1, execField2, execOrder):
        destination server is blank, the data is copied from the origin to the
        destination."""
     fileTestDev, fileTestBeta, fileTestRr = getFilename(execTable, execOptions.assembly)
-    execQuery = "select * from " + execTable + " where " + execField1 + "='" + \
-                 execField2 + "' order by " + execOrder
-    cladeQuery =  "select clade from genomeClade where genome='" + execField2 + "' limit 1"
+    execQuery = "select * from " + execTable + " where " + execField1 + "=\"" + \
+                 execField2 + "\" order by " + execOrder
+    cladeQuery =  "select clade from genomeClade where genome=\"" + execField2 + "\" limit 1"
     cladeBetaQuery = "select distinct(clade) from genomeClade order by clade"
-    deleteQuery = "delete from " + execTable + " where " + execField1 + "='" + execField2 + "'"
+    deleteQuery = "delete from " + execTable + " where " + execField1 + "=\"" + execField2 + "\""
     loadQueryBeta = "load data local infile '" + fileTestDev + "' into table " + execTable
     loadQueryRr = "load data local infile '" + fileTestBeta + "' into table " + execTable
-    activeZeroQuery = "update dbDb set active=0 where name='" + execField2 + "'"
+    activeZeroQuery = "update dbDb set active=0 where name=\"" + execField2 + "\""
     if not os.path.isfile(fileTestDev) or not os.path.isfile(fileTestBeta) or not \
             os.path.isfile(fileTestRr):
         printHeader(execTable)
@@ -166,7 +166,7 @@ def runExecute(execOptions, execTable, execField1, execField2, execOrder):
     queryTestDev = openFile(fileTestDev)
     queryExecuteDev = chopper(callHgsql("hgcentraltest", execQuery, "hgwdev"), "strip", "")
     queryTestBeta = openFile(fileTestBeta)
-    queryExecuteBeta = chopper(callHgsql("hgcentralbeta", execQuery, "mysqlbeta"), "strip", "")
+    queryExecuteBeta = chopper(callHgsql("hgcentralbeta", execQuery, "hgwbeta"), "strip", "")
     queryTestRr = openFile(fileTestRr)
     queryExecuteRr = chopper(callHgsql("hgcentral", execQuery, "genome-centdb"), "strip", "")
     if queryTestDev != queryExecuteDev or queryTestBeta != queryExecuteBeta or \
@@ -196,7 +196,7 @@ def runExecute(execOptions, execTable, execField1, execField2, execOrder):
     cladesBeta = ""
     if execTable == "genomeClade":
         clade = chopper(callHgsql("hgcentraltest", cladeQuery, "hgwdev"), "strip", "")
-        cladesBeta = chopper(callHgsql("hgcentralbeta", cladeBetaQuery, "mysqlbeta"), "split", "\n")
+        cladesBeta = chopper(callHgsql("hgcentralbeta", cladeBetaQuery, "hgwbeta"), "split", "\n")
     if execOptions.orig == "dev" and execTable == "genomeClade" and \
             queryExecuteBeta == "" and clade not in cladesBeta:
         printOutput(execTable, queryExecuteDev, queryExecuteBeta, queryExecuteRr)
@@ -226,9 +226,9 @@ def runExecute(execOptions, execTable, execField1, execField2, execOrder):
             return
     if execOptions.dest == "beta":
         if eraseFirst == 1:
-            callHgsql("hgcentralbeta", deleteQuery, "mysqlbeta")
-        callHgsql("hgcentralbeta", loadQueryBeta, "mysqlbeta")
-        queryExecuteBeta = chopper(callHgsql("hgcentralbeta", execQuery, "mysqlbeta"), "strip", "")
+            callHgsql("hgcentralbeta", deleteQuery, "hgwbeta")
+        callHgsql("hgcentralbeta", loadQueryBeta, "hgwbeta")
+        queryExecuteBeta = chopper(callHgsql("hgcentralbeta", execQuery, "hgwbeta"), "strip", "")
     else:
         if eraseFirst == 1:
             callHgsql("hgcentral", deleteQuery, "genome-centdb")

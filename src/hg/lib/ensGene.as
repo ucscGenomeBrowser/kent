@@ -13,7 +13,7 @@ table ensGene
     uint[exonCount] exonEnds;   "Exon end positions (or start positions for minus strand item)"
     uint score;         "always 0 for Ensembl genes"
     string name2;       "Ensembl gene ID"
-    string cdsStartStat; "enum('none','unk','incmpl','cmpl')"
-    string cdsEndStat;   "enum('none','unk','incmpl','cmpl')"
+    string cdsStartStat; "Status of CDS start annotation (none, unknown, incomplete, or complete)" 
+    string cdsEndStat;   "Status of CDS end annotation (none, unknown, incomplete, or complete)"
     int[exonCount] exonFrames; "Exon frame {0,1,2}, or -1 if no frame for exon"
     )

@@ -11,29 +11,52 @@
 <h1>Configuring VCF tracks</h1>
 <p>
 Genome Browser VCF tracks may be configured in a variety of ways to highlight different aspects of 
-the displayed information. Click <a href="vcf.html" target="_blank">here</a> for more information
-on VCF custom track creation.</p>
+the displayed information. By default, VCFs will display alleles with base-specific coloring.
+Homozygote data are shown as one letter, while heterozygotes will be displayed with both letters.
+</p>
 
+<p class='text-center'>
+  <img src="../../images/vcfDefault.png" alt="VCF default display" width=600px>
+  <p class='gbsCaption text-center'>The default VCF custom track will display colored bases and 
+will not show clustering unless specified as VCF/tabix in the custom track page.</p>
+</p>
+<p>
+The following section describes configuration settings available to VCF files compressed and
+indexed in the Tabix format. This requires VCF manipulation, separate index files, and a web
+accessible directory to reference from the bigDataUrl track line. For more information
+on setting up and uploading VCF/Tabix data, click the link on <a href="vcf.html" target="_blank">
+VCF custom track creation</a>.
+</p>
 <h2>Configuring the haplotype sorting display</h2>
 <p>
 If the VCF file contains genotype columns for at least two samples (four haplotypes), then a 
-haplotype sorting display can be configured.</p> 
+haplotype sorting display can be configured. This can be useful for determining the similarity 
+between the samples and inferring inheritance at a particular locus.
+</p> 
 <p>
 <strong>Enable Haplotype sorting display:</strong> When this option is checked, each sample's phased
 and/or homozygous genotypes are split into haplotypes, clustered by similarity around a central 
-variant, and sorted for display by their position in the clustering tree. The tree (or as much of 
-the tree as space allows) is drawn in the label area next to the track image. Leaf clusters, in 
-which all haplotypes are identical (at least for the span of variants used in clustering), are 
-colored purple. Each variant is drawn as a vertical column, using color to distinguish between 
+variant, and sorted for display by their position in the clustering tree. The tree (as 
+space allows) is drawn in the label area next to the track image. Leaf clusters, in 
+which all haplotypes are identical (at least for the variants used in clustering), are 
+colored purple. 
+</p>
+<p class='text-center'>
+  <img src="../../images/vcfTree.png" alt="VCF tree diagram" width=600px>
+  <p class='gbsCaption text-center'>The haplotype tree can be seen to the left of the track.</p>
+</p>
+<p>
+Each variant is drawn as a vertical column, using color to distinguish between 
 reference alleles and alternate alleles of the horizontally running haplotypes. If unchecked, then 
 the display is the same as for VCF without genotypes: a stacked bar graph of the top two alleles, 
-showing the proportion of alleles if allele counts are available. This is checked (enabled) by 
+showing the proportion of alleles if allele counts are available. This setting is enabled by 
 default.</p>
+
 <p>
 The following options are applicable only when the haplotype sorting display is enabled:</p>
 <p> 
 <strong>Haplotype sorting order:</strong> Haplotypes are sorted using a distance function that 
-uses a central variant; differences between haplotypes are penalized with weights that decrease 
+uses a central variant. Differences between haplotypes are penalized with weights that decrease 
 for each successive variant away from the central variant.  By default, the median variant in 
 the window is used. By clicking on a variant in the display, you will get the option to always 
 use that variant when it is in the current view.</p>
@@ -64,11 +87,21 @@ used for those alleles.</p>
 <strong>Haplotype clustering leaf shape:</strong> Leaf clusters are collections of identical 
 haplotypes. By default, they are drawn as open triangles &lt;. They can also be displayed as 
 open rectangles [.</p>
+
+<p class='text-center'>
+  <img src="../../images/vcfSquare.png" alt="VCF options" width=600px>
+</p>
+
+
 <p>
-<strong>Haplotype sorting display height:</strong>Height in pixels of the haplotype sorting 
-display. If this is fewer than the number of haplotypes (2 * the number of genotype columns), 
-some horizontal pixel rows must represent multiple haplotypes; differing haplotypes' colors 
-will be combined according to the selected coloring scheme.</p>
+<strong>Haplotype sorting display height:</strong> This number represents the track height in
+pixels. If the number of pixels is fewer than the number of haplotypes (2 * the number of genotype
+columns), some horizontal pixel rows must represent multiple haplotypes; with differing haplotypes'
+colors combined according to the selected coloring scheme.</p>
+
+<p class='text-center'>
+  <img src="../../images/vcfOptions.png" alt="VCF options" width=600px>
+</p>
 
 <h2>Filtering out variants</h2>
 <p>
@@ -92,8 +125,11 @@ Variants can be filtered out of the display according to several properties:</p>
   threshold. If the minor allele frequency is less than the threshold, the variant will not be 
   displayed.</li>
 </ul>
+<p class='text-center'>
+  <img src="../../images/vcfFilters.png" alt="VCF options" width=600px>
+</p>
 <p>
-When you have finished making your configuration changes, click the <em>Submit</em> button to return
-to the annotation track display page.</p>
+When you have finished making your configuration changes, click the <button>Submit</button> button 
+to return to the annotation track display page.</p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

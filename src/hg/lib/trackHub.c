@@ -49,6 +49,11 @@
 #include "bigBedFind.h"
 #include "customComposite.h"
 #include "interactUi.h"
+#include "bedTabix.h"
+
+#ifdef USE_HAL
+#include "halBlockViz.h"
+#endif
 
 static struct hash *hubCladeHash;  // mapping of clade name to hub pointer
 static struct hash *hubAssemblyHash; // mapping of assembly name to genome struct
@@ -467,7 +472,10 @@ if (base == NULL)
 
 char buffer[4096];
 
-safef(buffer, sizeof(buffer), "%s_%s", hubName, base);
+if (isNotEmpty(hubName))
+    safef(buffer, sizeof(buffer), "%s_%s", hubName, base);
+else
+    safef(buffer, sizeof(buffer), "%s", base);
 
 return cloneString(buffer);
 }
@@ -746,6 +754,7 @@ static void expandBigDataUrl(struct trackHub *hub, struct trackHubGenome *genome
 /* Expand bigDataUrls so that no longer relative to genome->trackDbFile */
 {
 expandOneUrl(tdb->settingsHash, genome->trackDbFile, "bigDataUrl");
+expandOneUrl(tdb->settingsHash, genome->trackDbFile, "bigDataIndex");
 expandOneUrl(tdb->settingsHash, genome->trackDbFile, "frames");
 expandOneUrl(tdb->settingsHash, genome->trackDbFile, "summary");
 expandOneUrl(tdb->settingsHash, genome->trackDbFile, "linkDataUrl");
@@ -826,6 +835,7 @@ else
                   startsWithWord("bigGenePred", type) ||
                   startsWithWord("bigNarrowPeak", type) ||
                   startsWithWord("bigChain", type) ||
+                  startsWithWord("bigLolly", type) ||
                   startsWithWord("bigBarChart", type) ||
                   startsWithWord("bigInteract", type) ||
                   startsWithWord("bam", type)))
@@ -1164,4 +1174,81 @@ if (hostPort == NULL)
 *pPort = hostPort;
 
 return TRUE;
+}
+
+void hubCheckBigDataUrl(struct trackHub *hub, struct trackHubGenome *genome, struct trackDb *tdb)
+/* Check remote file exists and is of correct type. Wrap this in error catcher */
+{
+char *relativeUrl = trackDbSetting(tdb, "bigDataUrl");
+if (relativeUrl != NULL)
+    {
+    char *type = trackDbRequiredSetting(tdb, "type");
+    char *bigDataUrl = trackHubRelativeUrl(genome->trackDbFile, relativeUrl);
+
+    char *bigDataIndex = NULL;
+    char *relIdxUrl = trackDbSetting(tdb, "bigDataIndex");
+    if (relIdxUrl != NULL)
+        bigDataIndex = trackHubRelativeUrl(genome->trackDbFile, relIdxUrl);
+
+    verbose(2, "checking %s.%s type %s at %s\n", genome->name, tdb->track, type, bigDataUrl);
+    if (startsWithWord("bigWig", type))
+        {
+        /* Just open and close to verify file exists and is correct type. */
+        struct bbiFile *bbi = bigWigFileOpen(bigDataUrl);
+        bbiFileClose(&bbi);
+        }
+    else if (startsWithWord("bigNarrowPeak", type) || startsWithWord("bigBed", type) ||
+                startsWithWord("bigGenePred", type)  || startsWithWord("bigPsl", type)||
+                startsWithWord("bigChain", type)|| startsWithWord("bigMaf", type) ||
+                startsWithWord("bigBarChart", type) || startsWithWord("bigInteract", type))
+        {
+        /* Just open and close to verify file exists and is correct type. */
+        struct bbiFile *bbi = bigBedFileOpen(bigDataUrl);
+        char *typeString = cloneString(type);
+        nextWord(&typeString);
+        if (startsWithWord("bigBed", type) && (typeString != NULL))
+            {
+            unsigned numFields = sqlUnsigned(nextWord(&typeString));
+            if (numFields > bbi->fieldCount)
+                errAbort("fewer fields in bigBed (%d) than in type statement (%d) for track %s with bigDataUrl %s", bbi->fieldCount, numFields, trackHubSkipHubName(tdb->track), bigDataUrl);
+            }
+        bbiFileClose(&bbi);
+        }
+    else if (startsWithWord("vcfTabix", type))
+        {
+        /* Just open and close to verify file exists and is correct type. */
+        struct vcfFile *vcf = vcfTabixFileAndIndexMayOpen(bigDataUrl, bigDataIndex, NULL, 0, 0, 1, 1);
+        if (vcf == NULL)
+            // Warnings already indicated whether the tabix file is missing etc.
+            errAbort("Couldn't open %s and/or its tabix index (.tbi) file.  "
+                     "See http://genome.ucsc.edu/goldenPath/help/vcf.html",
+                     bigDataUrl);
+        vcfFileFree(&vcf);
+        }
+    else if (startsWithWord("bam", type))
+        {
+        bamFileAndIndexMustExist(bigDataUrl, bigDataIndex);
+        }
+    else if (startsWithWord("longTabix", type))
+        {
+        struct bedTabixFile *btf = bedTabixFileMayOpen(bigDataUrl, NULL, 0, 0);
+        if (btf == NULL)
+            errAbort("Couldn't open %s and/or its tabix index (.tbi) file.", bigDataUrl);
+        bedTabixFileClose(&btf);
+        }
+#ifdef USE_HAL
+    else if (startsWithWord("halSnake", type))
+        {
+        char *errString;
+        int handle = halOpenLOD(bigDataUrl, &errString);
+        if (handle < 0)
+            errAbort("HAL open error: %s", errString);
+        if (halClose(handle, &errString) < 0)
+            errAbort("HAL close error: %s", errString);
+        }
+#endif
+    else
+        errAbort("unrecognized type %s in genome %s track %s", type, genome->name, tdb->track);
+    freez(&bigDataUrl);
+    }
 }

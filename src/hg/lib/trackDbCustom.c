@@ -5,6 +5,7 @@
 /* Copyright (C) 2014 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
 
+#include <sys/mman.h>
 #include "common.h"
 #include "linefile.h"
 #include "jksql.h"
@@ -244,6 +245,7 @@ boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
 		   sameString("bed8Attrs", s) || sameString("gvf", s) ||
 		   sameString("vcfTabix", s) || sameString("vcf", s) || sameString("pgSnp", s) ||
 		   sameString("narrowPeak", s) || sameString("broadPeak", s) || 
+                   sameString("bigLolly", s) || 
                    sameString("peptideMapping", s) || sameString("barChart", s) ||
                    sameString("interact", s) || sameString("bigInteract", s)
                    );
@@ -763,6 +765,10 @@ else if (sameWord("barChart", type) || sameWord("bigBarChart", type))
     cType = cfgBarChart;
 else if (sameWord("interact", type) || sameWord("bigInteract", type))
     cType = cfgInteract;
+else if (sameWord("bigLolly", type))
+    cType = cfgLollipop;
+else if (sameWord("hic", type))
+    cType = cfgHic;
 // TODO: Only these are configurable so far
 
 if (cType == cfgNone && warnIfNecessary)
@@ -799,15 +805,23 @@ if (ctPopup > cfgNone)
 return ctPopup;
 }
 
+boolean trackDbNoInheritField(char *field)
+/* Suppress inheritance of specific fields.
+ * NOTE: make more efficient if more of these are added */
+{
+return (sameString(field, "pennantIcon"));
+}
+
 char *trackDbSetting(struct trackDb *tdb, char *name)
-/* Look for a trackDb setting from lowest level on up chain of parents. */
+/* Look for a trackDb setting from lowest level on up chain of parents,
+ * excepting fields specifically defined as not inheritable  */
 {
 struct trackDb *generation;
 char *trackSetting = NULL;
 for (generation = tdb; generation != NULL; generation = generation->parent)
     {
-    trackSetting = trackDbLocalSetting(generation,name);
-    if (trackSetting != NULL)
+    trackSetting = trackDbLocalSetting(generation, name);
+    if (trackSetting != NULL || trackDbNoInheritField(name))
         break;
     }
 return trackSetting;
@@ -1556,4 +1570,187 @@ if (metadataInTdb)
     return convertNameValueString(metadataInTdb);
 
 return NULL;
+}
+
+struct trackDb *lmCloneSuper(struct lm *lm, struct trackDb *tdb, struct hash *superHash)
+/* clone a super track tdb structure. */
+{
+if (superHash == NULL)
+    errAbort("parsing supertrack without superHash");
+
+struct trackDb *super = (struct trackDb *)hashFindVal(superHash, tdb->parent->track);
+
+if (super == NULL)
+    {
+    super = lmCloneTdb(lm, tdb->parent, NULL, NULL);
+    hashAdd(superHash, super->track, super);
+
+    tdb->parent->shortLabel = NULL;
+    }
+refAdd(&super->children, tdb);
+
+return super;
+}
+
+struct trackDb *lmCloneTdb(struct lm *lm, struct trackDb *tdb, struct trackDb *parent,  struct hash *superHash)
+/* clone a single tdb structure.  Will clone its children if it has any */
+{
+struct trackDb *newTdb = lmAlloc(lm, sizeof(struct trackDb));
+
+*newTdb = *tdb;
+
+if (tdb->subtracks)
+    newTdb->subtracks = lmCloneTdbList(lm, tdb->subtracks, newTdb, NULL);
+
+if ((tdb->parent != NULL) && (superHash != NULL))
+    {
+    newTdb->parent = lmCloneSuper(lm, newTdb, superHash);
+    }
+else
+    newTdb->parent = parent;
+
+newTdb->track = lmCloneString(lm, tdb->track);
+newTdb->table = lmCloneString(lm, tdb->table);
+newTdb->shortLabel = lmCloneString(lm, tdb->shortLabel);
+newTdb->longLabel = lmCloneString(lm, "trere");// tdb->longLabel);
+newTdb->type = lmCloneString(lm, tdb->type);
+if ( newTdb->restrictCount )
+    {
+    lmAllocArray(lm, newTdb->restrictList, newTdb->restrictCount);
+    int ii;
+    for(ii=0; ii < newTdb->restrictCount; ii++)
+        newTdb->restrictList[ii] = lmCloneString(lm, tdb->restrictList[ii]);
+    }
+newTdb->url = lmCloneString(lm, tdb->url);
+newTdb->html = lmCloneString(lm, tdb->html);
+newTdb->grp = lmCloneString(lm, tdb->grp);
+newTdb->settings = lmCloneString(lm, tdb->settings);
+newTdb->parentName = lmCloneString(lm, tdb->parentName);
+
+newTdb->viewHash =  NULL;
+newTdb->children = NULL;
+newTdb->overrides = NULL;
+
+// TODO: these two need a fixin
+//tdbExtrasMembership(newTdb);
+//newTdb->settingsHash = trackDbSettingsFromString(newTdb, newTdb->settings);
+newTdb->settingsHash = NULL;
+return newTdb;
+}
+
+struct trackDb *lmCloneTdbList(struct lm *lm, struct trackDb *list, struct trackDb *parent, struct hash *superHash)
+/* clone a list of tdb structures. */
+{
+struct trackDb *tdb, *prevTdb = NULL, *newList = NULL;
+
+for(tdb = list; tdb; tdb = tdb->next)
+    {
+    struct trackDb *newTdb = lmCloneTdb(lm, tdb, parent, superHash); 
+
+    if (prevTdb)
+        prevTdb->next = newTdb;
+    else
+        newList = newTdb;
+
+    prevTdb = newTdb;
+    }
+
+return newList;
+}
+
+struct trackDb *trackDbCache(char *db)
+/* Check to see if this db has a cached trackDb. */
+{
+char dirName[4096];
+
+safef(dirName, sizeof dirName, "/dev/shm/trackDbCache/%s", db);
+if (!isDirectory(dirName))
+    return NULL;
+
+// look for files named by the address they use
+struct slName *files = listDir(dirName, "*");
+for(; files; files = files->next)
+    {
+    char sharedMemoryName[4096];
+    safef(sharedMemoryName, sizeof sharedMemoryName, "trackDbCache/%s/%s", db, files->name);
+    
+    int oflags = O_RDWR;
+    int fd = shm_open(sharedMemoryName, oflags, 0666 );
+    if (fd < 0)
+        continue;
+
+    unsigned long address = atoi(files->name); // the name of the file is the address it uses
+    char fileName[4096];
+    safef(fileName, sizeof fileName, "/dev/shm/trackDbCache/%s/%s",  db, files->name);
+    unsigned long size = fileSize(fileName);
+
+    u_char *mem = (u_char *) mmap((void *)address, size, PROT_READ|PROT_WRITE, MAP_PRIVATE, fd, 0);
+
+    if ((unsigned long)mem == address)  // make sure we can get this address
+        {
+        u_char *ret = mem + lmBlockHeaderSize();
+        return (struct trackDb *)ret;
+        }
+    munmap((void *)address, size);
+    close(fd);
+    }
+
+return NULL;
+}
+
+void trackDbCloneTdbListToSharedMem(char *db, struct trackDb *list, unsigned long size)
+/* Allocate shared memory and clone trackDb list into it. */
+{
+int oflags=O_RDWR | O_CREAT;
+// should use a unique name
+char dirName[4096];
+
+safef(dirName, sizeof dirName, "/dev/shm/trackDbCache/%s", db);
+if (!isDirectory(dirName))
+    {
+    makeDir(dirName);
+    chmod(dirName, 0777);
+    }
+
+char sharedMemoryName[4096];
+safef(sharedMemoryName, sizeof sharedMemoryName, "trackDbCache/%s",  rTempName(db, "temp", ""));
+
+char tempFileName[4096];
+safef(tempFileName, sizeof tempFileName, "/dev/shm/%s",  sharedMemoryName);
+
+int fd = shm_open(sharedMemoryName, oflags, 0666 );
+if (fd < 0)
+    {
+    unlink(tempFileName);
+    return;
+    }
+size_t psize = getpagesize();
+unsigned long pageMask = psize - 1;
+// we should choose an address semi-randomly and make sure we can grab it rather than assume we can
+unsigned long address = 0x7000000;
+address = (address + psize - 1) & ~pageMask;
+u_char *mem;
+
+ftruncate(fd, 0);
+ftruncate(fd, size);
+
+mem = (u_char *) mmap((void *)address, size, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
+
+struct lm *lm = lmInitWMem(mem, size);
+struct hash *superHash = newHash(8);
+
+lmCloneTdbList(lm, list, NULL, superHash);
+
+unsigned long memUsed = lmUsed(lm);
+
+msync((void *)address, memUsed, MS_SYNC);
+ftruncate(fd, memUsed);
+
+munmap((void *)address, size);
+close(fd);
+
+char fileName[4096];
+safef(fileName, sizeof fileName, "/dev/shm/trackDbCache/%s/%ld",  db, address);
+
+mustRename(tempFileName, fileName);
 }

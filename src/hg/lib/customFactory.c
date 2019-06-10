@@ -47,6 +47,7 @@
 #include "barChartUi.h"
 #include "interact.h"
 #include "interactUi.h"
+#include "cgiApoptosis.h"
 
 // placeholder when custom track uploaded file name is not known
 #define CT_NO_FILE_NAME         "custom track"
@@ -2569,8 +2570,12 @@ if ((startsWith("http://", url)
    || startsWith("ftp://", url)))
 return TRUE;
 
-// we allow bigDataUrl's to point to trash
-if (startsWith(trashDir(), url))
+// we allow bigDataUrl's to point to trash (or sessionDataDir, if configured)
+char *sessionDataDir = cfgOption("sessionDataDir");
+char *sessionDataDirOld = cfgOption("sessionDataDirOld");
+if (startsWith(trashDir(), url) ||
+    (isNotEmpty(sessionDataDir) && startsWith(sessionDataDir, url)) ||
+    (isNotEmpty(sessionDataDirOld) && startsWith(sessionDataDirOld, url)))
     return TRUE;
 
 char *prefix = cfgOption("udc.localDir");
@@ -3202,8 +3207,22 @@ if (type != NULL && !sameType(type, fac->name))
     return FALSE;
 boolean isVcf = headerStartsWith(cpp, "##fileformat=VCFv");
 if (type != NULL && !isVcf)
-    lineFileAbort(cpp->fileStack, "type is '%s' but header does not start with '##fileformat=VCFv'",
-                  type);
+    {
+    if (cpp->fileStack)
+        lineFileAbort(cpp->fileStack,
+                      "type is '%s' but header does not start with '##fileformat=VCFv'", type);
+    else
+        {
+        if (isNotEmpty(trackDbSetting(track->tdb, "bigDataUrl")))
+            errAbort("type is '%s' but can't find header with '##fileformat=VCFv' "
+                     "following track line. "
+                     "(For bgzip-compressed VCF+tabix index, please use 'type=vcfTabix' "
+                     "instead of 'type=%s')", type, type);
+        else
+            errAbort("type is '%s' but can't find header with '##fileformat=VCFv' "
+                     "following track line", type);
+        }
+    }
 return isVcf;
 }
 
@@ -4040,6 +4059,8 @@ while ((line = customPpNextReal(cpp)) != NULL)
     if (!track)
         continue;
 
+    lazarusLives(20 * 60);   // extend keep-alive time. for big uploads on slow connections.
+
     /* verify database for custom track */
     char *ctDb = ctGenome(track);
     if (mustBeCurrentDb)
@@ -4317,12 +4338,13 @@ freez(pTrack);
 }
 
 void customFactoryTestExistence(char *genomeDb, char *fileName, boolean *retGotLive,
-				boolean *retGotExpired)
+				boolean *retGotExpired, struct customTrack **retTrackList)
 /* Test existence of custom track fileName.  If it exists, parse it just
  * enough to tell whether it refers to database tables and if so, whether
  * they are alive or have expired.  If they are live, touch them to keep
  * them active. */
 {
+struct customTrack *trackList = NULL;
 boolean trackNotFound = TRUE;
 char *line = NULL;
 struct sqlConnection *ctConn = NULL;
@@ -4332,6 +4354,8 @@ if (!fileExists(fileName))
     {
     if (retGotExpired)
 	*retGotExpired = TRUE;
+    if (retTrackList)
+	*retTrackList = trackList;
     return;
     }
 
@@ -4431,8 +4455,16 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	if (retGotExpired)
 	    *retGotExpired = TRUE;
 	}
-    freeCustomTrack(&track);
+    if (retTrackList)
+	slAddHead(&trackList, track);
+    else
+	freeCustomTrack(&track);
     trackNotFound = FALSE;
+    }
+if (retTrackList)
+    {
+    slReverse(&trackList);
+    *retTrackList = trackList;
     }
 customPpFree(&cpp);
 freez(&cpp);

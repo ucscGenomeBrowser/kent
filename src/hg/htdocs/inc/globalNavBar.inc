@@ -43,6 +43,7 @@
 	<li><a id="ispMenuLink" href="../cgi-bin/hgPcr">In-Silico PCR</a></li>
 	<li><a id="liftOverMenuLink" href="../cgi-bin/hgLiftOver">LiftOver</a></li>
 	<li><a id="visiGeneMenuLink" href="../cgi-bin/hgVisiGene">VisiGene</a></li>
+	<li><a id="apiHelpMenuLink" href="../goldenPath/help/api.html">JSON API</a></li>
 	<li class="last"><a href="../util.html">Other Utilities</a></li>
 	</ul>
 </li>
@@ -75,6 +76,15 @@
 </li>
 
 <!-- OPTIONAL_VIEW_MENU -->
+
+<!-- OPTIONAL_PROJECT_MENU_START -->
+<li class="menuparent" id="projects"><span>Projects</span>
+	<ul style="display: none; visibility: hidden;">
+	<li class="first"><a href="../gtex.html">Genotype Tissue Expression (GTEx)</a></li>
+	<li><a href="../ENCODE/index.html">Encyclopedia of DNA Elements (ENCODE)</a></li>
+        <li class="last"><a href="https://cells.ucsc.edu">UCSC Cell Browser</a></li>
+	</ul>
+<!-- OPTIONAL_PROJECT_MENU_END -->
 
 <li class="menuparent" id="help"><span>Help</span><ul style="display: none; visibility: hidden;">
 <!-- CONTEXT_SPECIFIC_HELP -->

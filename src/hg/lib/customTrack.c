@@ -566,12 +566,9 @@ for (track = trackList; track != NULL; track = track->next)
     if (isNotEmpty(track->tdb->html))
         {
         /* write doc file in trash and add reference to the track line*/
-        if (!track->htmlFile)
-            {
-            static struct tempName tn;
-            trashDirFile(&tn, "ct", CT_PREFIX, ".html");
-            track->htmlFile = cloneString(tn.forCgi);
-            }
+        static struct tempName tn;
+        trashDirFile(&tn, "ct", CT_PREFIX, ".html");
+        track->htmlFile = cloneString(tn.forCgi);
         writeGulp(track->htmlFile, track->tdb->html, strlen(track->tdb->html));
         ctAddToSettings(track, "htmlFile", track->htmlFile);
         }
@@ -596,18 +593,13 @@ carefulClose(&f);
 void customTracksSaveCart(char *genomeDb, struct cart *cart, struct customTrack *ctList)
 /* Save custom tracks to trash file for database in cart */
 {
-char *ctFileName = NULL;
 char *ctFileVar = customTrackFileVar(cartString(cart, "db"));
 if (ctList)
     {
-    if (!customTracksExist(cart, &ctFileName))
-        {
-        /* expired custom tracks file */
-        static struct tempName tn;
-	trashDirFile(&tn, "ct", CT_PREFIX, ".bed");
-        ctFileName = tn.forCgi;
-        cartSetString(cart, ctFileVar, ctFileName);
-        }
+    static struct tempName tn;
+    trashDirFile(&tn, "ct", CT_PREFIX, ".bed");
+    char *ctFileName = tn.forCgi;
+    cartSetString(cart, ctFileVar, ctFileName);
     customTracksSaveFile(genomeDb, ctList, ctFileName);
     }
 else
@@ -956,7 +948,11 @@ for (ct = ctList; ct != NULL; ct = ct->next)
         changedCt = TRUE;
         }
 if (newCts || removedCt || changedCt || ctConfigUpdate(ctFileName))
+    {
     customTracksSaveCart(genomeDb, cart, ctList);
+    // If all CTs have been removed then customTrackFileVar is also removed from cart, so optional:
+    ctFileName = cartOptionalString(cart, customTrackFileVar(genomeDb));
+    }
 
 if (cgiScriptName() && !endsWith(cgiScriptName(),"hgCustom"))
     {

@@ -33151,4 +33151,355 @@ EOF
 
     # commit all
 
-#########################################################################
+##############################################################################
+# LASTZ human/hg19 vs. chimp/panTro6 - (DONE - 2018-12-14 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzPanTro6.2018-12-14
+    cd /hive/data/genomes/hg19/bed/lastzPanTro6.2018-12-14
+
+    printf '# human vs chimp
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_L=4500
+BLASTZ_T=2
+BLASTZ_Q=/hive/data/staging/data/blastz/human_chimp.v2.q
+#    A    C    G    T
+#    90 -330 -236 -356
+#  -330  100 -318 -236
+#  -236 -318  100 -330
+#  -356 -236 -330   90
+
+# TARGET: Human Hg19
+SEQ1_DIR=/hive/data/genomes/hg19/hg19.2bit
+SEQ1_LEN=/hive/data/genomes/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: Chimp PanTro6
+SEQ2_DIR=/hive/data/genomes/panTro6/panTro6.2bit
+SEQ2_LEN=/hive/data/genomes/panTro6/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzPanTro6.2018-12-14
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=hgwdev-101 -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    131m22.214s
+
+    cat fb.hg19.chainPanTro6Link.txt
+    # 2918066802 bases of 2991694177 (97.539%) in intersection
+    cat fb.hg19.chainSynPanTro6Link.txt
+    # 2899302671 bases of 2991694177 (96.912%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	hg19 panTro6) > rbest.log 2>&1 &
+    # real    59m20.269s
+
+    cat fb.hg19.chainRBest.PanTro6.txt
+    # 2740453344 bases of 2991694177 (91.602%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/panTro6/bed/blastz.hg19.swap
+    cd /hive/data/genomes/panTro6/bed/blastz.hg19.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg19/bed/lastzPanTro6.2018-12-14/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=hgwdev-101 -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    68m21.941s
+
+    cat fb.panTro6.chainHg19Link.txt
+    # 2810896564 bases of 3018592990 (93.119%) in intersection
+
+    cat fb.panTro6.chainSynHg19Link.txt
+    # 2796543348 bases of 3018592990 (92.644%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev \
+	-buildDir=`pwd` panTro6 hg19) > rbest.log 2>&1
+    # real    58m58.852s
+
+    cat fb.panTro6.chainRBest.Hg19.txt
+    # 2745994828 bases of 3018592990 (90.969%) in intersection
+
+##############################################################################
+# LASTZ human/hg19 vs. orangutan/ponAbe3 - (DONE - 2018-12-14 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzPonAbe3.2018-12-14
+    cd /hive/data/genomes/hg19/bed/lastzPonAbe3.2018-12-14
+
+    printf '# human vs orangutan
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_L=4500
+BLASTZ_T=2
+BLASTZ_Q=/hive/data/staging/data/blastz/human_chimp.v2.q
+#    A    C    G    T
+#    90 -330 -236 -356
+#  -330  100 -318 -236
+#  -236 -318  100 -330
+#  -356 -236 -330   90
+
+# TARGET: Human Hg19
+SEQ1_DIR=/hive/data/genomes/hg19/hg19.2bit
+SEQ1_LEN=/hive/data/genomes/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: Orangutan PonAbe3
+SEQ2_DIR=/hive/data/genomes/ponAbe3/ponAbe3.2bit
+SEQ2_LEN=/hive/data/genomes/ponAbe3/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzPonAbe3.2018-12-14
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=hgwdev-101 -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    130m5.904s
+
+    cat fb.hg19.chainPonAbe3Link.txt
+    # 2832921438 bases of 2991694177 (94.693%) in intersection
+    cat fb.hg19.chainSynPonAbe3Link.txt
+    # 2809245575 bases of 2991694177 (93.901%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	hg19 ponAbe3) > rbest.log 2>&1 &
+    # real    76m2.846s
+
+    cat fb.hg19.chainRBest.PonAbe3.txt
+    # 2638828970 bases of 2991694177 (88.205%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/ponAbe3/bed/blastz.hg19.swap
+    cd /hive/data/genomes/ponAbe3/bed/blastz.hg19.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg19/bed/lastzPonAbe3.2018-12-14/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=hgwdev-101 -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    62m32.858s
+
+    cat fb.ponAbe3.chainHg19Link.txt
+    # 2690870339 bases of 3043444524 (88.415%) in intersection
+
+    cat fb.ponAbe3.chainSynHg19Link.txt
+    # 2675805099 bases of 3043444524 (87.920%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev \
+	-buildDir=`pwd` ponAbe3 hg19) > rbest.log 2>&1
+    # real    76m24.498s
+
+    cat fb.ponAbe3.chainRBest.Hg19.txt
+    # 2641865423 bases of 3043444524 (86.805%) in intersection
+
+##############################################################################
+# addition of HGMD-restricted subset, Max, Jan 29 2019
+cd /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2018-10-01/
+cat /hive/data/outside/hgmd/2018.4-hgmd-public_hg38.tsv | cut -f7 | sort -u > hgmdTranscripts.txt
+zcat process/hg19.curated.gp.gz | fgrep -f hgmdTranscripts.txt - > hgmd.curated.gp
+hgLoadGenePred -genePredExt hg19 ncbiRefSeqHgmd hgmd.curated.gp
+#############################################################################
+# genomenom mastermind track, Max, Feb 2019
+cd /hive/data/genomes/hg19/bed/mastermind/
+wget 'https://mastermind.genomenon.com/cvr/download?format=csv' -O - > mastermind.2018.11.26.csv.gz
+unzip mastermind.2018.11.26.csv.zip
+mv mastermind_cited_variants_reference-2018.11.26-csv/ 2018-11-26
+hgsql hg19 -NB -e 'select alias, chrom from chromAlias where source = "refseq";' > chromAlias.tab
+python ~/kent/src/hg/makeDb/mastermind/mastermindToBed.py 2018-11-26/mastermind_cited_variants_reference-2018.11.26.csv 
+bedSort mastermind.bed mastermind.bed
+bedToBigBed -type=bed9+ -as=~/kent/src/hg/makeDb/mastermind/mastermind.as -tab mastermind.bed /hive/data/genomes/hg19/chrom.sizes  mastermind.bb
+ln -s `pwd`/mastermind.bb /gbdb/hg19/bbi/mastermind.bb
+#############################################################################
+2019-04-08: import of UCSC GENCODE group processing of GENCODE V30lift37 (markd)
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV30lift37
+    pushd /hive/data/genomes/hg19/bed/gencodeV30lift37
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg19 30lift37 96 'Apr 2019'
+
+    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release. [ONLY if it's going to be pushed]
+
+    # edit human/hg19/trackDb.wgEncode.ra to add new .ra file include
+    make DBS=hg19
+
+    # edit  all.joiner to add ~/tmp/gencodeV30lift37.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg19/bed/gencodeV30lift37
+    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # commit all
+
+##############################################################################
+# DGV GOLD (DATABASE OF GENOMIC VARIANTS GOLD STANDARD) (DONE 5/06/19 ChrisL)
+# Redmine #23371
+##############################################################################
+    TODAY=`date +%y%m%d`
+    mkdir -p /hive/data/genomes/hg19/bed/dgv/$TODAY
+    cd /hive/data/genomes/hg19/bed/dgv/$TODAY
+    wget http://dgv.tcag.ca/dgv/docs/DGV.GS.March2016.50percent.GainLossSep.Final.hg19.gff3
+
+    # GFF3 with the 9th field full of extra info that we need to recreate the blocks
+    # as seen at the DGV website. See note-6 in the redmine (23371) for an example
+    # of the different cnv representations (1, 2, or 3 blocks).
+
+    # what sub-fields are in the 9th field:
+    head -1 DGV.GS.March2016.50percent.GainLossSep.Final.hg19.gff3 | cut -f9 | tr ';' '\n' | cut -d'=' -f1
+    # ID
+    # Name
+    # variant_type
+    # variant_sub_type
+    # outer_start
+    # inner_start
+    # inner_end
+    # outer_end
+    # inner_rank
+    # num_variants
+    # variants
+    # num_studies
+    # Studies
+    # num_platforms
+    # Platforms
+    # number_of_algorithms
+    # algorithms
+    # num_samples
+    # samples
+    # Frequency
+    # PopulationSummary
+    # num_unique_samples_tested
+
+    # and how many unique CNV regions?
+    cut -f9 DGV.GS.March2016.50percent.GainLossSep.Final.hg19.gff3 | tr ';' '\t' | cut -f1 | cut -d'=' -f2 | sort -u | wc -l
+    # 38185
+    wc -l DGV.GS.March2016.50percent.GainLossSep.Final.hg19.gff3
+    # 114555 DGV.GS.March2016.50percent.GainLossSep.Final.hg19.gff3
+    calc 114555 /3
+    # 114555 /3 = 38185.000000
+
+    # run script to process the bedlines out of each of the gff lines
+    ~/kent/src/hg/utils/automation/translateDgvGold.py DGV.GS.March2016.50percent.GainLossSep.Final.hg19.gff3 | sort -k1,1 -k2,2n | uniq > dgvGold.bed12
+
+    cat << EOF > dgvGold.as
+table dgvGold
+"Database of Genomic Variants Gold Standard Curated Variants"
+    (
+    string chrom; "Chromosome name"
+    uint chromStart; "Maximum boundary of CNV"
+    uint chromEnd; "Maximum boundary of CNV"
+    string name; "Name from gff"
+    uint score; "Not used"
+    char[1] strand; "Not used"
+    uint thickStart; "Same as chromEnd"
+    uint thickEnd; "Same as chromEnd"
+    uint reserved;  "Color of item. Blue for gain and red for loss"
+    int blockCount; "Number of blocks"
+    int[blockCount] blockSizes; "Size of each block"
+    int[blockCount] chromStarts; "Start position of each block relative to chromStart"
+    string dgvID; "Name of CNV from DGV"
+    string variant_type; "CNV"
+    string variant_sub_type; "Gain or Loss"
+    int inner_rank; "Rank of the used to assign the blocks"
+    int num_variants; "Number of variants coalesced to form the entire region"
+    string[num_variants] variants; "Supporting variants"
+    int num_studies; "Number of studies"
+    string[num_studies] Studies; "Study names in 'Name Year' format"
+    int num_platforms; "Number of sequencing platforms"
+    string[num_platforms] Platforms; "Sequencing platform names"
+    int number_of_algorithms; "Number of CNV detection algorithms"
+    string[number_of_algorithms] algorithms; "CNV detection algorithms used"
+    int num_samples; "Number of samples"
+    string[num_samples] samples; "Sample names"
+    string Frequency; "Overall frequency of variants across all studies"
+    string PopulationSummary; "Populations tested across all studies"
+    int num_unique_samples_tested; "Number of samples "
+    )
+EOF
+
+    CHROMSIZES=/hive/data/genomes/hg19/chrom.sizes
+    bedToBigBed -type=bed12+17 -as=dgvGold.as -tab -extraIndex=name dgvGold.bed12 $CHROMSIZES dgvGold.bb
+    bigBedInfo dgvGold.bb
+    # version: 4
+    # fieldCount: 29
+    # hasHeaderExtension: yes
+    # isCompressed: yes
+    # isSwapped: 0
+    # extraIndexCount: 0
+    # itemCount: 38,185
+    # primaryDataSize: 30,841,362
+    # primaryIndexSize: 6,892
+    # zoomLevels: 8
+    # chromCount: 24
+    # basesCovered: 580,564,080
+    # meanDepth (of bases covered): 3.668451
+    # minDepth: 1.000000
+    # maxDepth: 81.000000
+    # std of depth: 5.825349
+
+    # link into gbdb
+    mkdir -p /gbdb/hg19/dgv
+    ln -s `pwd`/dgvGold.bb /gbdb/hg19/dgv/
+
+#############################################################################
+2019-05-23: import of UCSC GENCODE group processing of GENCODE V31lift37 (markd)
+    # import of pre-release, it will be promoted if there are no changes in the final release.
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV31lift37-pre
+    pushd /hive/data/genomes/hg19/bed/gencodeV31lift37-pre
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg19 31lift37 97 'June 2019'
+
+    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release. [ONLY if it's going to be pushed]
+
+    # edit human/hg19/trackDb.wgEncode.ra to add new .ra file include
+    make DBS=hg19
+
+    # edit  all.joiner to add ~/tmp/gencodeV31lift37.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg19/bed/gencodeV31lift37
+    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # commit all
+
+##############################################################################

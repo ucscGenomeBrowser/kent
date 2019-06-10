@@ -13,8 +13,8 @@ table genePredExt
     uint[exonCount] exonEnds;   "Exon end positions (or start positions for minus strand item)"
     uint score;         "score"
     string name2;       "Alternate name (e.g. gene_id from GTF)"
-    string cdsStartStat; "enum('none','unk','incmpl','cmpl')"
-    string cdsEndStat;   "enum('none','unk','incmpl','cmpl')"
+    string cdsStartStat; "Status of CDS start annotation (none, unknown, incomplete, or complete)" 
+    string cdsEndStat;   "Status of CDS end annotation (none, unknown, incomplete, or complete)"
     int[exonCount] exonFrames; "Exon frame {0,1,2}, or -1 if no frame for exon"
     )
 

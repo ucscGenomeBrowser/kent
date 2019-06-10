@@ -3,7 +3,7 @@ compositeTrack on
 shortLabel NCBI RefSeq
 longLabel RefSeq gene predictions from NCBI
 group genes
-visibility dense
+visibility pack
 type genePred
 dragAndDrop subTracks
 noInherit on
@@ -17,6 +17,7 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
     track ncbiRefSeqView
     shortLabel NCBI RefSeq genes and alignments
     view aNcbiRefSeq
+    visibility dense
     parent refSeqComposite on
     configurable on
     baseColorDefault genomicCodons
@@ -97,6 +98,27 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         parent ncbiRefSeqView off
         bigDataUrl /gbdb/$D/ncbiRefSeq/ncbiRefSeqGenomicDiff.bb
         itemRgb on
+
+        track ncbiRefSeqHgmd
+        subGroups view=aNcbiRefSeq
+        priority 7
+        type genePred
+        shortLabel RefSeq HGMD
+        longLabel Only NCBI RefSeq manually annotated transcripts with at least one HGMD clinical variant
+        parent ncbiRefSeqView off
+        trackHandler ncbiRefSeq
+        idXref ncbiRefSeqLink mrnaAcc name
+        color 20,20,160
+        baseColorUseCds given
+
+        track ncbiRefSeqMane
+        subGroups view=aNcbiRefSeq
+        priority 8
+        type genePred
+        shortLabel RefSeq MANE
+        longLabel RefSeq selected representative transcript for each gene, MANE 0.5
+        parent ncbiRefSeqView off
+        trackHandler ncbiRefSeq
 
     track ucscRefSeqView
     parent refSeqComposite off

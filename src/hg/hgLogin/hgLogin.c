@@ -40,7 +40,7 @@ char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update",
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
 char *database;		/* Name of genome database - hg15, mm3, or the like. */
 struct hash *oldCart;	/* Old cart hash. */
-char *errMsg;           /* Error message to show user when form data rejected */
+char *errMsg = NULL;    /* Error message to show user when form data rejected */
 char brwName[64];
 char brwAddr[256];
 char signature[256];
@@ -339,6 +339,8 @@ hPrintf(
 hPrintf(
     "<p id=\"confirmationMsg\" class=\"confirmationTxt\">A confirmation email has been sent to you. \n"
     "Please click the confirmation link in the email to activate your account.</p>"
+    "<p>You may have to look in your spam folder for an email from genome-www@soe.ucsc.edu, "
+    "especially if you use Microsoft Outlook or Hotmail.</p>"
     "\n"
     "<p><a href=\"%s\">Return</a></p>", returnURL);
 cartRemove(cart, "hgLogin_email");
@@ -362,9 +364,8 @@ if (result == -1)
         "<h3>Error emailing to: %s</h3>"
         "Click <a href=%s?hgLogin.do.displayAccHelpPage=1>here</a> to return.<br>",
         hgLoginUrl, email );
+    exit(0);
     }
-else
-    redirectToLoginPage("hgLogin.do.displayActMailSuccess=1");
 }
 
 void  displayMailSuccess()
@@ -941,8 +942,9 @@ cartSaveSession(cart);
 void signup(struct sqlConnection *conn)
 /* process the signup form */
 {
-char query[256];
+char query[1024];
 char *user = cartUsualString(cart, "hgLogin_userName", "");
+char *encUserName = cgiEncodeFull(user);
 if (!user || sameString(user,""))
     {
     freez(&errMsg);
@@ -951,10 +953,12 @@ if (!user || sameString(user,""))
     return;
     }
 /* Make sure the escaped usrename is less than 32 characters */
-if (strlen(user) > 32)
+if (strlen(encUserName) > 32)
     {
+    char buf[1024];
+    safef(buf,sizeof(buf), "Encoded user name: '%s' is %d characters.  Please use a shorter name: less than 32 characters after URL encoding.", encUserName, (int)strlen(encUserName));
     freez(&errMsg);
-    errMsg = cloneString("Encoded username longer than 32 characters.");
+    errMsg = cloneString(buf);
     signupPage(conn);
     return;
     }
@@ -1065,17 +1069,12 @@ if (sameWord(returnAddr, "NOEMAIL"))
 
 setupNewAccount(conn, email, user);
 /* send out activate code mail, and display the mail confirmation box */
-hPrintf("<h2>%s</h2>", brwName);
-hPrintf(
-    "<p align=\"left\">\n"
-    "</p>\n"
-    "<h3>User %s successfully added.</h3>\n", user);
 cartRemove(cart, "hgLogin_email");
 cartRemove(cart, "hgLogin_email2");
 cartRemove(cart, "hgLogin_userName");
 cartRemove(cart, "user");
 cartRemove(cart, "token");
-returnToURL(150);
+redirectToLoginPage("hgLogin.do.displayActMailSuccess=1");
 }
 
 void accountHelp(struct sqlConnection *conn)

@@ -41,6 +41,7 @@ priority 0
 type bed 3
 wgEncode 1
 noInherit on
+pennantIcon none
 html wgEncodeUchicagoTfbs.release2
 
     track wgEncodeUchicagoTfbsPeaks

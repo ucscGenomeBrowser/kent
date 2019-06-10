@@ -3,4 +3,5 @@ table wgEncodeGencodeGeneSymbol
    (
     string transcriptId; "GENCODE transcript identifier"
     string symbol; "HGNC/MGI gene symbol"
+    string geneId; "HGNC/MGI symbol id used by database"
    )

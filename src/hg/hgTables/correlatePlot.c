@@ -639,7 +639,7 @@ if (F_statistic)
 	F = MSR / (SSE / (result->count - 2));
     else
 	F = 0.0;
-	*F_statistic = F;
+    *F_statistic = F;
     }
 
 lmCleanup(&lm);

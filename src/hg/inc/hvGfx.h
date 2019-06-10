@@ -68,6 +68,12 @@ if (hvg->rc)
 return x;
 }
 
+INLINE void hvGfxCircle(struct hvGfx *hvg, int xCen, int yCen, int rad, int colorIx,  boolean filled)
+/* Draw a circle. */
+{
+vgCircle(hvg->vg, hvGfxAdjX(hvg, xCen), yCen, rad, colorIx, filled);
+}
+
 INLINE void hvGfxDot(struct hvGfx *hvg, int x, int y, int colorIx)
 /* Draw a single pixel.  Try to work at a higher level when possible! */
 {

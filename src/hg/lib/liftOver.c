@@ -1581,51 +1581,55 @@ return bed;
 
 void liftOverGenePred(char *fileName, struct hash *chainHash, 
                         double minMatch, double minBlocks, bool fudgeThick,
-                        FILE *mapped, FILE *unmapped)
+                      FILE *mapped, FILE *unmapped, boolean multiple)
 /* Lift over file in genePred format. */
 {
-//#*** TODO make multiple an argument; could also add db and chainTable args.
-bool multiple = FALSE;
 char *db = NULL, *chainTable = NULL;
 
 struct bed *bed;
 struct genePred *gp = NULL;
 char *error;
-FILE *f;
 struct genePred *gpList = genePredExtLoadAll(fileName);
 for (gp = gpList ; gp != NULL ; gp = gp->next)
     {
     // uglyf("%s %s %d %d %s\n", gp->name, gp->chrom, gp->txStart, gp->txEnd, gp->strand);
-    f = mapped;
     bed = genePredToBed(gp);
     error = remapBlockedBed(chainHash, bed, minMatch, minBlocks, fudgeThick,
                             multiple, db, chainTable);
     if (error)
 	{
-	f = unmapped;
 	fprintf(unmapped, "# %s\n", error);
+        bedFree(&bed);
+        genePredTabOut(gp, unmapped);
 	}
    else
 	{
-	int count, i, start;
-	freeMem(gp->chrom);
-	gp->chrom = cloneString(bed->chrom);
-	gp->txStart = start = bed->chromStart;
-	gp->txEnd = bed->chromEnd;
-	gp->strand[0] = bed->strand[0];
-	gp->cdsStart = bed->thickStart;
-	gp->cdsEnd = bed->thickEnd;
-	gp->exonCount = count = bed->blockCount;
-	for (i=0; i<count; ++i)
-	    {
-	    int s = start + bed->chromStarts[i];
-	    int e = s + bed->blockSizes[i];
-	    gp->exonStarts[i] = s;
-	    gp->exonEnds[i] = e;
+        int exonCount = gp->exonCount;
+        struct bed *bedList = bed;
+        for (;  bed != NULL;  bed = bed->next)
+            {
+            if (bed->blockCount > exonCount)
+                errAbort("program error: need to allocate extra blocks for bed.");
+            freeMem(gp->chrom);
+            gp->chrom = cloneString(bed->chrom);
+            int start = gp->txStart = bed->chromStart;
+            gp->txEnd = bed->chromEnd;
+            gp->strand[0] = bed->strand[0];
+            gp->cdsStart = bed->thickStart;
+            gp->cdsEnd = bed->thickEnd;
+            int count = gp->exonCount = bed->blockCount;
+            int i;
+            for (i=0; i<count; ++i)
+                {
+                int s = start + bed->chromStarts[i];
+                int e = s + bed->blockSizes[i];
+                gp->exonStarts[i] = s;
+                gp->exonEnds[i] = e;
+                }
+            genePredTabOut(gp, mapped);
 	    }
+        bedFreeList(&bedList);
 	}
-    genePredTabOut(gp, f);
-    bedFree(&bed);
 //    genePredFree(&gp);
     }
 }

@@ -45,11 +45,15 @@ errAbort(
   "options:\n"
   "   cookies=cookie.txt - Cookies is a two column file\n"
   "           containing <cookieName><space><value><newLine>\n"
+  "   withSrc - causes the get and checkLinks commands to also include SRC= links.\n"
   "note: url will need to be in quotes if it contains an ampersand or question mark."
   );
 }
 
+boolean withSrc = FALSE;
+
 static struct optionSpec options[] = {
+   {"withSrc", OPTION_BOOLEAN},
    {"cookies", OPTION_STRING},
    {NULL, 0},
 };
@@ -80,6 +84,11 @@ void getLinks(struct htmlPage *page)
 /* Print out all links. */
 {
 struct slName *link, *linkList = htmlPageLinks(page);
+if (withSrc)
+    {
+    struct slName *srcLinkList = htmlPageSrcLinks(page);
+    linkList = slCat(linkList, srcLinkList);
+    }
 for (link = linkList; link != NULL; link = link->next)
     {
     printf("%s\n", link->name);
@@ -229,6 +238,12 @@ void checkRecursiveLinks(struct hash *uniqHash, struct htmlPage *page,
 /* Check links recursively up to depth. */
 {
 struct slName *linkList = htmlPageLinks(page), *link;
+if (withSrc)
+    {
+    struct slName *srcLinkList = htmlPageSrcLinks(page);
+    linkList = slCat(linkList, srcLinkList);
+    }
+
 for (link = linkList; link != NULL; link = link->next)
     {
     if (link->name[0] == '#')
@@ -251,7 +266,7 @@ for (link = linkList; link != NULL; link = link->next)
 		    struct hash *headerHash = newHash(8);
 		    int status = netUrlHeadExt(url, "GET", headerHash);
 		    hashAdd(uniqHash, url, NULL);
-		    if (status != 200 && status != 302 && status != 301)
+		    if (status != 200 && status != 303 && status != 302 && status != 301)
 			warn("%d from %s", status, url);
 		    else
 			{
@@ -326,6 +341,16 @@ char *fullText;
 struct htmlCookie *cookies = NULL;
 boolean isLocal = (stringIn("://", url) == NULL);
 
+if (withSrc)
+    {
+    if (!(sameString(command, "getLinks")
+       || sameString(command, "checkLinks")
+       || sameString(command, "checkLinks2")
+       || sameString(command, "checkLocalLinks")
+       || sameString(command, "checkLocalLinks2")))
+    errAbort("-withSrc can only be used with these commands: getLinks, checkLinks, checkLinks2, checkLocalLinks, checkLocalLinks2");
+    }
+
 if (cookieFile != NULL)
     cookies = readCookies(cookieFile);
 if (isLocal)
@@ -386,10 +411,11 @@ else /* Do everything that requires full parsing. */
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-pushCarefulMemHandler(200000000);
+pushCarefulMemHandler(400000000);
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+withSrc = optionExists("withSrc");
 htmlCheck(argv[1], argv[2], optionVal("cookies",NULL));
 carefulCheckHeap();
 return 0;
