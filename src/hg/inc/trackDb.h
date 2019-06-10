@@ -370,6 +370,9 @@ struct hash *trackDbSettingsFromString(struct trackDb *tdb, char *string);
  * from raFromString in that it passes the key/val
  * pair through the backwards compatability routines. */
 
+boolean trackDbNoInheritField(char *field);
+/* Suppress inheritance of specific fields */
+
 char *trackDbSetting(struct trackDb *tdb, char *name);
 /* Return setting string or NULL if none exists. */
 
