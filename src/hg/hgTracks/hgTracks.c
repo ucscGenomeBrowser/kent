@@ -9315,9 +9315,9 @@ else
 
     if (sameString(virtModeType,"default"))  // we are leaving virtMode
 	{
-
 	virtMode = FALSE;
-
+        cartRemove(cart, "virtWinFull");
+        cartRemove(cart, "virtShortDesc");
 	}
     else
 	{
@@ -9330,8 +9330,11 @@ else
 
 	// For now, do this manually here:
 	// sets window to full genome size, which for these demos should be small except for allChroms
-	if (sameString(virtModeType, "exonMostly") || sameString(virtModeType, "geneMostly")
-       	 || sameString(virtModeType, "customUrl") || sameString(virtModeType, "kcGenes"))
+	if (sameString(virtModeType, "exonMostly") || 
+            sameString(virtModeType, "geneMostly") || 
+            sameString(virtModeType, "kcGenes") ||
+            (sameString(virtModeType, "customUrl") && 
+                    !cartUsualBoolean(cart, "virtWinFull", FALSE)))
 	    {
 	    // trying to find best vchrom location corresponding to chromName, winStart, winEnd);
 	    // try to find the nearest match
