@@ -303,7 +303,7 @@ if (distance > 0)
 // print link to multi-region view of ends if appropriate 
 // (or provide a link to remove if already in this mode) 
 
-if (!interactEndsOverlap(inter))
+if (trackDbSettingOn(tdb, "interactMultiRegion") && !interactEndsOverlap(inter))
     {
     char *virtShortDesc = cartOptionalString(cart, "virtShortDesc");
     //warn("virtShortDesc: %s", virtShortDesc);
@@ -314,8 +314,6 @@ if (!interactEndsOverlap(inter))
                         "virtMode=0&"
                         "virtModeType=default'>"
                     "Show interaction in normal browser view (exit multi-region view)</a>");
-
-
         }
     else
         {
