@@ -22,6 +22,8 @@
 #include "regexHelper.h"
 #include "fieldedTable.h"
 #include "tagRepo.h"
+#include "hex.h"
+#include <openssl/sha.h>
 
 
 /* ----------- End of AutoSQL generated code --------------------- */
@@ -1584,10 +1586,8 @@ if (super == NULL)
     {
     super = lmCloneTdb(lm, tdb->parent, NULL, NULL);
     hashAdd(superHash, super->track, super);
-
-    tdb->parent->shortLabel = NULL;
     }
-refAdd(&super->children, tdb);
+lmRefAdd(lm, &super->children, tdb);
 
 return super;
 }
@@ -1624,16 +1624,19 @@ if ( newTdb->restrictCount )
 newTdb->url = lmCloneString(lm, tdb->url);
 newTdb->html = lmCloneString(lm, tdb->html);
 newTdb->grp = lmCloneString(lm, tdb->grp);
-newTdb->settings = lmCloneString(lm, tdb->settings);
 newTdb->parentName = lmCloneString(lm, tdb->parentName);
 
 newTdb->viewHash =  NULL;
 newTdb->children = NULL;
 newTdb->overrides = NULL;
+newTdb->tdbExtras = NULL;
 
-// TODO: these two need a fixin
-//tdbExtrasMembership(newTdb);
-//newTdb->settingsHash = trackDbSettingsFromString(newTdb, newTdb->settings);
+struct dyString *dy = newDyString(1000);
+struct hashEl *hel = hashElListHash(tdb->settingsHash);
+dyStringPrintf(dy,"%s\n", tdb->settings);
+for(; hel; hel = hel->next)
+    dyStringPrintf(dy,"%s %s\n", hel->name, (char *)hel->val);
+newTdb->settings = lmCloneString(lm, dy->string);
 newTdb->settingsHash = NULL;
 return newTdb;
 }
@@ -1658,12 +1661,14 @@ for(tdb = list; tdb; tdb = tdb->next)
 return newList;
 }
 
-struct trackDb *trackDbCache(char *db)
-/* Check to see if this db has a cached trackDb. */
+
+static struct trackDb *checkCache(char *string)
+/* Check to see if this db or hub has a cached trackDb. string is either a db 
+ * or a SHA1 calculated from a hubUrl. */
 {
 char dirName[4096];
 
-safef(dirName, sizeof dirName, "/dev/shm/trackDbCache/%s", db);
+safef(dirName, sizeof dirName, "/dev/shm/trackDbCache/%s", string);
 if (!isDirectory(dirName))
     return NULL;
 
@@ -1672,7 +1677,7 @@ struct slName *files = listDir(dirName, "*");
 for(; files; files = files->next)
     {
     char sharedMemoryName[4096];
-    safef(sharedMemoryName, sizeof sharedMemoryName, "trackDbCache/%s/%s", db, files->name);
+    safef(sharedMemoryName, sizeof sharedMemoryName, "trackDbCache/%s/%s", string, files->name);
     
     int oflags = O_RDWR;
     int fd = shm_open(sharedMemoryName, oflags, 0666 );
@@ -1681,7 +1686,7 @@ for(; files; files = files->next)
 
     unsigned long address = atoi(files->name); // the name of the file is the address it uses
     char fileName[4096];
-    safef(fileName, sizeof fileName, "/dev/shm/trackDbCache/%s/%s",  db, files->name);
+    safef(fileName, sizeof fileName, "/dev/shm/trackDbCache/%s/%s",  string, files->name);
     unsigned long size = fileSize(fileName);
 
     u_char *mem = (u_char *) mmap((void *)address, size, PROT_READ|PROT_WRITE, MAP_PRIVATE, fd, 0);
@@ -1698,14 +1703,35 @@ for(; files; files = files->next)
 return NULL;
 }
 
-void trackDbCloneTdbListToSharedMem(char *db, struct trackDb *list, unsigned long size)
+struct trackDb *trackDbCache(char *db)
+/* Check to see if this db has a cached trackDb. */
+{
+return checkCache(db);
+}
+
+struct trackDb *trackDbHubCache(char *hubUrl, char *genome)
+{
+char buffer[10 * 1024];
+
+safef(buffer, sizeof buffer, "%s-%s", hubUrl, genome);
+
+unsigned char hash[SHA_DIGEST_LENGTH];
+SHA1((const unsigned char *)buffer, strlen(buffer), hash);
+
+char newName[(SHA_DIGEST_LENGTH + 1) * 2];
+hexBinaryString(hash,  SHA_DIGEST_LENGTH, newName, (SHA_DIGEST_LENGTH + 1) * 2);
+
+return checkCache(newName);
+}
+
+static void cloneTdbListToSharedMem(char *string, struct trackDb *list, unsigned long size)
 /* Allocate shared memory and clone trackDb list into it. */
 {
 int oflags=O_RDWR | O_CREAT;
 // should use a unique name
 char dirName[4096];
 
-safef(dirName, sizeof dirName, "/dev/shm/trackDbCache/%s", db);
+safef(dirName, sizeof dirName, "/dev/shm/trackDbCache/%s", string);
 if (!isDirectory(dirName))
     {
     makeDir(dirName);
@@ -1713,7 +1739,7 @@ if (!isDirectory(dirName))
     }
 
 char sharedMemoryName[4096];
-safef(sharedMemoryName, sizeof sharedMemoryName, "trackDbCache/%s",  rTempName(db, "temp", ""));
+safef(sharedMemoryName, sizeof sharedMemoryName, "trackDbCache/%s",  rTempName(string, "temp", ""));
 
 char tempFileName[4096];
 safef(tempFileName, sizeof tempFileName, "/dev/shm/%s",  sharedMemoryName);
@@ -1724,17 +1750,27 @@ if (fd < 0)
     unlink(tempFileName);
     return;
     }
-size_t psize = getpagesize();
-unsigned long pageMask = psize - 1;
-// we should choose an address semi-randomly and make sure we can grab it rather than assume we can
-unsigned long address = 0x7000000;
-address = (address + psize - 1) & ~pageMask;
-u_char *mem;
-
 ftruncate(fd, 0);
 ftruncate(fd, size);
 
-mem = (u_char *) mmap((void *)address, size, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
+size_t psize = getpagesize();
+unsigned long pageMask = psize - 1;
+
+// we should choose an address semi-randomly and make sure we can grab it rather than assume we can
+unsigned long address;
+unsigned long paddress;
+unsigned char *mem;
+for(address = 0x7000000; address < 0xf000000; address += 0x500000)
+    {
+    paddress = (address + psize - 1) & ~pageMask;
+
+    mem = (u_char *) mmap((void *)address, size, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
+    if ((unsigned long)mem == address)
+        break;
+    }
+
+if (address >= 0xf000000)
+    errAbort("can't get address");
 
 struct lm *lm = lmInitWMem(mem, size);
 struct hash *superHash = newHash(8);
@@ -1743,14 +1779,38 @@ lmCloneTdbList(lm, list, NULL, superHash);
 
 unsigned long memUsed = lmUsed(lm);
 
-msync((void *)address, memUsed, MS_SYNC);
+msync((void *)paddress, memUsed, MS_SYNC);
 ftruncate(fd, memUsed);
 
-munmap((void *)address, size);
-close(fd);
+// for the moment we're not unmapping these so multiple attached hubs will get
+// different addresses
+//munmap((void *)paddress, size);
+//close(fd);
 
 char fileName[4096];
-safef(fileName, sizeof fileName, "/dev/shm/trackDbCache/%s/%ld",  db, address);
+safef(fileName, sizeof fileName, "/dev/shm/trackDbCache/%s/%ld",  string, paddress);
 
 mustRename(tempFileName, fileName);
 }
+
+void trackDbCloneTdbListToSharedMem(char *db, struct trackDb *list, unsigned long size)
+/* Allocate shared memory and clone trackDb list into it. */
+{
+cloneTdbListToSharedMem(db, list, size);
+}
+
+void trackDbHubCloneTdbListToSharedMem(char *hubUrl, char *genome, struct trackDb *list, unsigned long size)
+{
+char buffer[10 * 1024];
+
+safef(buffer, sizeof buffer, "%s-%s", hubUrl, genome);
+
+unsigned char hash[SHA_DIGEST_LENGTH];
+SHA1((const unsigned char *)buffer, strlen(buffer), hash);
+
+char newName[(SHA_DIGEST_LENGTH + 1) * 2];
+hexBinaryString(hash,  SHA_DIGEST_LENGTH, newName, (SHA_DIGEST_LENGTH + 1) * 2);
+
+cloneTdbListToSharedMem(newName, list, size);
+}
+

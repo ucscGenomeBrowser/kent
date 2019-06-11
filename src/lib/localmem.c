@@ -270,3 +270,12 @@ char **lmCloneRow(struct lm *lm, char **row, int rowSize)
 {
 return lmCloneRowExt(lm, row, rowSize, rowSize);
 }
+
+void lmRefAdd(struct lm *lm, struct slRef **pRefList, void *val)
+/* Add reference to list. */
+{
+struct slRef *ref;
+lmAllocVar(lm, ref);
+ref->val = val;
+slAddHead(pRefList, ref);
+}

@@ -83,4 +83,7 @@ char **lmCloneRowExt(struct lm *lm, char **row, int rowOutSize, int rowInSize);
  * row into the new array; leave remaining elements NULL if rowOutSize is greater than rowInSize.
  * rowOutSize must be greater than or equal to rowInSize. */
 
+void lmRefAdd(struct lm *lm, struct slRef **pRefList, void *val);
+/* Add reference to list. */
+
 #endif//ndef LOCALMEM_H
