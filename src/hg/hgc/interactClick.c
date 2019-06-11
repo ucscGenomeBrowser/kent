@@ -156,6 +156,70 @@ for (ipr = iprs; ipr; ipr = next)
 return filtered;
 }
 
+static char *makeInteractRegionFile(struct interact *inter)
+/* Create bed file in trash directory with end coordinates for multi-region mode */
+{
+struct tempName mrTn;
+trashDirFile(&mrTn, "hgt", "custRgn_interact", ".bed");
+FILE *f = fopen(mrTn.forCgi, "w");
+if (f == NULL)
+    errAbort("can't create temp file %s", mrTn.forCgi);
+char regionInfo[1024];
+// TODO: check chrom bounds
+int padding = 5;
+safef(regionInfo, sizeof regionInfo, "#padding %d\n", padding);
+mustWrite(f, regionInfo, strlen(regionInfo));
+//warn("%s", regionInfo);
+
+safef(regionInfo, sizeof regionInfo, "#shortDesc %s\n", inter->name);
+mustWrite(f, regionInfo, strlen(regionInfo));
+//warn("%s", regionInfo);
+char *region1Chrom = inter->sourceChrom, *region2Chrom = inter->targetChrom;
+int region1Start = inter->sourceStart, region1End = inter->sourceEnd;
+int region2Start = inter->targetStart, region2End = inter->targetEnd;
+if (sameString(inter->sourceChrom, inter->targetChrom))
+    {
+    if (inter->sourceStart > inter->targetStart)
+        {
+        region1Start = inter->targetStart;
+        region1End = inter->targetEnd;
+        region2Start = inter->sourceStart;
+        region2End = inter->sourceEnd;
+        }
+    }
+else
+    {
+    if (sameString(inter->chrom, inter->targetChrom))
+        {
+        region1Chrom = inter->targetChrom;
+        region1Start = inter->targetStart;
+        region1End = inter->targetEnd;
+        region2Chrom = inter->sourceChrom;
+        region2Start = inter->sourceStart;
+        region2End = inter->sourceEnd;
+        }
+    }
+safef(regionInfo, sizeof regionInfo, "%s\t%d\t%d\n"
+           "%s\t%d\t%d\n",
+                region1Chrom, region1Start, region1End,
+                region2Chrom, region2Start, region2End);
+mustWrite(f, regionInfo, strlen(regionInfo));
+//warn("%s", regionInfo);
+fclose(f);
+
+// create SHA1 file; used to see if file has changed
+unsigned char hash[SHA_DIGEST_LENGTH];
+SHA1((const unsigned char *)regionInfo, strlen(regionInfo), hash);
+char newSha1[(SHA_DIGEST_LENGTH + 1) * 2];
+hexBinaryString(hash, SHA_DIGEST_LENGTH, newSha1, (SHA_DIGEST_LENGTH + 1) * 2);
+char sha1File[1024];
+safef(sha1File, sizeof sha1File, "%s.sha1", mrTn.forCgi);
+f = mustOpen(sha1File, "w");
+mustWrite(f, newSha1, strlen(newSha1));
+carefulClose(&f);
+return cloneString(mrTn.forCgi);
+}
+
 void doInteractRegionDetails(struct trackDb *tdb, struct interact *inter)
 {
 /* print info for both regions */
@@ -236,43 +300,40 @@ if (distance > 0)
     printf("<b>Distance between midpoints:</b> %s bp<br>\n", sizeBuf); 
     }
 
-// print link to multi-region view of ends
+// print link to multi-region view of ends if appropriate 
+// (or provide a link to remove if already in this mode) 
 
-// create bed file in trash directory with end coordinates
-struct tempName mrTn;
-trashDirFile(&mrTn, "hgt", "custRgn_interact", ".bed");
-FILE *f = fopen(mrTn.forCgi, "w");
-if (f == NULL)
-    errAbort("can't create temp file %s", mrTn.forCgi);
-char regionInfo[1024];
-// TODO: check chrom bounds
-int padding = 2;
-safef(regionInfo, sizeof regionInfo, "%s\t%d\t%d\n"
-           "%s\t%d\t%d\n",
-                region1Chrom, region1Start-padding, region1End+padding, 
-                region2Chrom, region2Start-padding, region2End+padding);
-mustWrite(f, regionInfo, strlen(regionInfo));
-fclose(f);
+if (!interactEndsOverlap(inter))
+    {
+    char *virtShortDesc = cartOptionalString(cart, "virtShortDesc");
+    //warn("virtShortDesc: %s", virtShortDesc);
+    if (virtShortDesc && sameString(virtShortDesc, inter->name))
+        {
+        printf("<br><a target='_blank' "
+                    "href='hgTracks?"
+                        "virtMode=0&"
+                        "virtModeType=default'>"
+                    "Show interaction in normal browser view (exit multi-region view)</a>");
 
-// create SHA1 file; used to see if file has changed
-unsigned char hash[SHA_DIGEST_LENGTH];
-SHA1((const unsigned char *)regionInfo, strlen(regionInfo), hash);
-char newSha1[(SHA_DIGEST_LENGTH + 1) * 2];
-hexBinaryString(hash, SHA_DIGEST_LENGTH, newSha1, (SHA_DIGEST_LENGTH + 1) * 2);
-char sha1File[1024];
-safef(sha1File, sizeof sha1File, "%s.sha1", mrTn.forCgi);
-f = mustOpen(sha1File, "w");
-mustWrite(f, newSha1, strlen(newSha1));
-carefulClose(&f);
 
-// TODO: add cart variable to set viewport to entire virtual chromosome (TBD galt)
-printf("<br><a target='_blank' "
-        "href='hgTracks?"
-            "virtMode=1&"
-            "virtModeType=customUrl&"
-            "multiRegionsBedUrl=%s'>"
-        "Show both ends of interaction in multi-region browser view</a>",
-                cgiEncode(mrTn.forCgi));
+        }
+    else
+        {
+        char *regionFile = makeInteractRegionFile(inter);
+        //warn("regionFile: %s", regionFile);
+        printf("<br><a target='_blank' "
+                "href='hgTracks?"
+                    "virtMode=1&"
+                    "virtModeType=customUrl&"
+                    "virtWinFull=on&"
+                    "virtShortDesc=%s&"
+                    "multiRegionsBedUrl=%s'>"
+                "Show both ends of interaction in multi-region browser view (custom region mode)</a>",
+                        inter->name, cgiEncode(regionFile));
+        }
+    printf("&nbsp;&nbsp;&nbsp;");
+    printf("<a href=\"../goldenPath/help/multiRegionHelp.html\" target=_blank>(Help)</a>\n");
+    }
 
 #ifdef TODO /* TODO: get count and score stats of all interactions in window ?*/
 double *scores;
