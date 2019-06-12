@@ -86,8 +86,8 @@ void getBackgroundStatus(char *url)
 char *html = NULL;
 int waited = 0;
 // sometimes the background process is a little slow,
-// we can wait up to 30 seconds for it.
-while ((fileSize(url)==0) && (waited < 30))
+// we can wait up to 60 seconds for it.
+while ((fileSize(url)==0) && (waited < 60))
     {
     sleep(1);
     ++waited;
