@@ -708,8 +708,7 @@ hDisconnectCentral(&conn);
 }
 
 struct trackDb *hubAddTracks(struct hubConnectStatus *hub, char *database)
-/* Load up stuff from data hub and append to list. The hubUrl points to
- * a trackDb.ra format file.  */
+/* Load up stuff from data hub and return list. */
 {
 /* Load trackDb.ra file and make it into proper trackDb tree */
 struct trackDb *tdbList = NULL;
@@ -720,11 +719,27 @@ if (trackHub != NULL)
     struct trackHubGenome *hubGenome = trackHubFindGenome(trackHub, database);
     if (hubGenome != NULL)
 	{
-	tdbList = trackHubTracksForGenome(trackHub, hubGenome);
-	tdbList = trackDbLinkUpGenerations(tdbList);
-	tdbList = trackDbPolishAfterLinkup(tdbList, database);
-	trackDbPrioritizeContainerItems(tdbList);
-	trackHubPolishTrackNames(trackHub, tdbList);
+        boolean doCache = FALSE;
+        if (sameOk(cfgOption("cacheTrackDb"), "on"))
+            doCache = TRUE;
+        if (doCache)
+            {
+            struct trackDb *cacheTdb = trackDbHubCache(hub->hubUrl, hubGenome->name);
+
+            if (cacheTdb != NULL)
+                return cacheTdb;
+
+            memCheckPoint(); // we want to know how much memory is used to build the tdbList
+            }
+
+        tdbList = trackHubTracksForGenome(trackHub, hubGenome);
+        tdbList = trackDbLinkUpGenerations(tdbList);
+        tdbList = trackDbPolishAfterLinkup(tdbList, database);
+        trackDbPrioritizeContainerItems(tdbList);
+        trackHubPolishTrackNames(trackHub, tdbList);
+
+        if (doCache)
+            trackDbHubCloneTdbListToSharedMem(hub->hubUrl, hubGenome->name, tdbList, memCheckPoint());
 	}
     }
 return tdbList;

@@ -1243,7 +1243,7 @@ if (hubsToPrint != NULL)
     struct slName *thisHubName = NULL;
     for (thisHubName = hubsToPrint; thisHubName != NULL; thisHubName = thisHubName->next)
         {
-        struct hubEntry *hubInfo = (struct hubEntry *) hashFindVal(hubLookup, thisHubName->name);
+        hubInfo = (struct hubEntry *) hashFindVal(hubLookup, thisHubName->name);
         if (hubInfo == NULL)
             {
             /* This shouldn't happen often, but maybe the search hits list was built from an outdated
@@ -1252,7 +1252,7 @@ if (hubsToPrint != NULL)
             continue;
             }
         slAddHead(&hubList, hubInfo);
-    }
+        }
     slSort(&hubList, hubEntryCmp);
 
     for (hubInfo = hubList; hubInfo != NULL; hubInfo = hubInfo->next)
