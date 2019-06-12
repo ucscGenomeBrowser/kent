@@ -6332,6 +6332,12 @@ else if (sameString(type, "interact"))
     interactCtMethods(tg);
     tg->customPt = ct;
     }
+else if (sameString(type, "hic"))
+    {
+    tg = trackFromTrackDb(tdb);
+    hicCtMethods(tg);
+    tg->customPt = ct;
+    }
 else
     {
     errAbort("Unrecognized custom track type %s", type);
