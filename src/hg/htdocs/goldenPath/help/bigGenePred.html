@@ -19,11 +19,10 @@ option to pull in a special <a href="http://www.linuxjournal.com/article/5949" t
 autoSql</a> (<em>.as</em>) file that defines the extra fields of the bigGenePred.</p> 
 <p>
 Much like bigBed, bigGenePred files are in an indexed binary format. The advantage of using a binary
-format is that only the portions of the file needed to display a particular region are read by the
-Genome Browser server. Because of this, indexed binary files have much faster display performance 
-than regular BED format files when working with large data sets. As with all big files, bigGenePred
-files must be hosted on a web-accessible server (http, https, or ftp) to be displayed. For
-more information on finding a web-accessible location to host your bigGenePred files, please see
+format is that only the portions of the file needed to display a particular region are read, 
+allowing for much faster performance when working with large data sets. As with all big files, 
+bigGenePred files must be hosted on a web-accessible server (http, https, or ftp) to be displayed.
+For more information on finding a hosting location for your bigGenePred files, please see
 the <a href="hgTrackHubHelp.html#Hosting">hosting section</a> of the Track Hub Help documentation.
 </p>
 
@@ -252,6 +251,43 @@ Once you are done, you should have a track on the Genome Browser like the one be
 <p class='text-center'>
   <img class='text-center' src="../../images/bigGenePredEx4.png" alt="An image of a bigGenePred track on the Browser" width="999">
 </p>
+<a name="Example5"></a>
+<h3>Example &num;5: Create a BigGenePred Track Hub</h3>
+<p>In this example, you will set up a Track Hub that displays bigGenePred data and uses one of the
+bigGenePred-specific settings to display gene codons. For more instruction on bigGenePred track 
+hubs, please visit the <a href=examples/hubExamples/hubBigGenePred/hg38/bigGenePredEHub.html>
+bigGenePred example description page</a>. For complete instructions on Track Hubs, visit
+the <a href=hgTrackHubHelp.html#Setup>Track Hub set-up page</a>.</p>
+<ol>
+<li>Make sure you have access to a web-hosted file location like GitHub, CyVerse, or an 
+institutional website. This is where you will store your bigData files and configuration files.
+For more information, please visit the <a href=hgTrackHubHelp.html#Hosting>hosting section</a> of 
+our Track Hub help guide.</li>
+<li>Copy the text from the <a href=examples/hubExamples/hubBigGenePred/>bigGenePred example hub files
+</a>into files on your hosting website. You will need a hub.txt and a genomes.txt file, along with 
+a directory for each assembly you would like to display data on (e.g., hg38). Within your assembly
+directory, you will need your data file(s), (e.g., bigGenePredEHub.bb). Then you will need a 
+trackDb.txt file which will define your track settings, such as the setting that displays
+genomic codons and amino acid letters, <code>baseColorDefault genomicCodons</code>.</li>
+<li>Verify that you have the four required files in the following structure, where <strong>hg38</strong> is a directory:
+</br>
+--<a href=examples/hubExamples/hubBigGenePred/hub.txt>hub.txt</a></br>
+--<a href=examples/hubExamples/hubBigGenePred/genomes.txt>genomes.txt</a></br>
+<strong>--<a href=examples/hubExamples/hubBigGenePred/hg38/>hg38</a></strong></br>
+----<a href=examples/hubExamples/hubBigGenePred/hg38/trackDb.txt>trackDb.txt</a></br>
+----<a href=examples/hubExamples/hubBigGenePred/hg38/bigGenePred.bb>bigGenePred.bb</a></br>
+</li>
+<li>Copy the link to your hub.txt file URL of your hub.txt file and paste it into the text input
+box on the <a href=../../../cgi-bin/hgHubConnect>Track Hub page.</a> For an example, you can paste
+the following link into the input box: 
+<a href=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubBigGenePred/hub.txt>
+http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubBigGenePred/hub.txt</a>.
+This should connect you to your hub, with the data available by navagating to your
+assembly of interest.</li>
+<p class='text-center'>
+  <img class='text-center' src="../../images/bigGenePredHub.png" alt="An image of a bigGenePred track hub on the Browser" width="999">
+</p>
+</ol>
 <h2>Sharing your data with others</h2>
 <p>
 If you would like to share your bigGenePred data track with a colleague, learn how to create a URL
