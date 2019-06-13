@@ -765,7 +765,7 @@ else if (sameWord("barChart", type) || sameWord("bigBarChart", type))
     cType = cfgBarChart;
 else if (sameWord("interact", type) || sameWord("bigInteract", type))
     cType = cfgInteract;
-else if (sameWord("bigLolly", type))
+else if (startsWith("bigLolly", type))
     cType = cfgLollipop;
 else if (sameWord("hic", type))
     cType = cfgHic;
