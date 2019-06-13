@@ -22,7 +22,7 @@
 #include "obscure.h"
 #include "hgConfig.h"
 #include "grp.h"
-
+#include "udc.h"
 
 boolean isHubTrack(char *trackName)
 /* Return TRUE if it's a hub track. */
@@ -724,7 +724,12 @@ if (trackHub != NULL)
             doCache = TRUE;
         if (doCache)
             {
-            struct trackDb *cacheTdb = trackDbHubCache(hub->hubUrl, hubGenome->name);
+            // we have to open the trackDb file to get the udc cache to check for an update
+            struct udcFile *checkCache = udcFileMayOpen(hubGenome->trackDbFile, NULL);
+            udcFileClose(&checkCache);
+
+            time_t time = udcTimeFromCache(hubGenome->trackDbFile, NULL);
+            struct trackDb *cacheTdb = trackDbHubCache(hubGenome->trackDbFile, time);
 
             if (cacheTdb != NULL)
                 return cacheTdb;
@@ -739,7 +744,7 @@ if (trackHub != NULL)
         trackHubPolishTrackNames(trackHub, tdbList);
 
         if (doCache)
-            trackDbHubCloneTdbListToSharedMem(hub->hubUrl, hubGenome->name, tdbList, memCheckPoint());
+            trackDbHubCloneTdbListToSharedMem(hubGenome->trackDbFile, tdbList, memCheckPoint());
 	}
     }
 return tdbList;

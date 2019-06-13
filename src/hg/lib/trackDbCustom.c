@@ -767,7 +767,7 @@ else if (sameWord("barChart", type) || sameWord("bigBarChart", type))
     cType = cfgBarChart;
 else if (sameWord("interact", type) || sameWord("bigInteract", type))
     cType = cfgInteract;
-else if (sameWord("bigLolly", type))
+else if (startsWith("bigLolly", type))
     cType = cfgLollipop;
 else if (sameWord("hic", type))
     cType = cfgHic;
@@ -1662,9 +1662,9 @@ return newList;
 }
 
 
-static struct trackDb *checkCache(char *string)
+static struct trackDb *checkCache(char *string, time_t time)
 /* Check to see if this db or hub has a cached trackDb. string is either a db 
- * or a SHA1 calculated from a hubUrl. */
+ * or a SHA1 calculated from a hubUrl. Use time to see if cache should be flushed. */
 {
 char dirName[4096];
 
@@ -1674,19 +1674,34 @@ if (!isDirectory(dirName))
 
 // look for files named by the address they use
 struct slName *files = listDir(dirName, "*");
+char fileName[4096];
 for(; files; files = files->next)
     {
     char sharedMemoryName[4096];
     safef(sharedMemoryName, sizeof sharedMemoryName, "trackDbCache/%s/%s", string, files->name);
+    safef(fileName, sizeof fileName, "/dev/shm/trackDbCache/%s/%s",  string, files->name);
     
+    struct stat statBuf;
+    if (stat(fileName, &statBuf) < 0)
+        {
+        // if we can't stat the shared memory, let's just toss it
+        unlink(fileName);
+        continue;
+        }
+
+    if (statBuf.st_mtime < time)
+        {
+        // if the cache is older than the data, toss it
+        unlink(fileName);
+        continue;
+        }
+
     int oflags = O_RDWR;
     int fd = shm_open(sharedMemoryName, oflags, 0666 );
     if (fd < 0)
         continue;
 
     unsigned long address = atoi(files->name); // the name of the file is the address it uses
-    char fileName[4096];
-    safef(fileName, sizeof fileName, "/dev/shm/trackDbCache/%s/%s",  string, files->name);
     unsigned long size = fileSize(fileName);
 
     u_char *mem = (u_char *) mmap((void *)address, size, PROT_READ|PROT_WRITE, MAP_PRIVATE, fd, 0);
@@ -1703,35 +1718,31 @@ for(; files; files = files->next)
 return NULL;
 }
 
-struct trackDb *trackDbCache(char *db)
+struct trackDb *trackDbCache(char *db, time_t time)
 /* Check to see if this db has a cached trackDb. */
 {
-return checkCache(db);
+return checkCache(db, time);
 }
 
-struct trackDb *trackDbHubCache(char *hubUrl, char *genome)
+struct trackDb *trackDbHubCache(char *trackDbUrl, time_t time)
 {
-char buffer[10 * 1024];
-
-safef(buffer, sizeof buffer, "%s-%s", hubUrl, genome);
-
 unsigned char hash[SHA_DIGEST_LENGTH];
-SHA1((const unsigned char *)buffer, strlen(buffer), hash);
+SHA1((const unsigned char *)trackDbUrl, strlen(trackDbUrl), hash);
 
 char newName[(SHA_DIGEST_LENGTH + 1) * 2];
 hexBinaryString(hash,  SHA_DIGEST_LENGTH, newName, (SHA_DIGEST_LENGTH + 1) * 2);
 
-return checkCache(newName);
+return checkCache(newName, time);
 }
 
 static void cloneTdbListToSharedMem(char *string, struct trackDb *list, unsigned long size)
 /* Allocate shared memory and clone trackDb list into it. */
 {
 int oflags=O_RDWR | O_CREAT;
-// should use a unique name
-char dirName[4096];
 
+char dirName[4096];
 safef(dirName, sizeof dirName, "/dev/shm/trackDbCache/%s", string);
+
 if (!isDirectory(dirName))
     {
     makeDir(dirName);
@@ -1799,14 +1810,10 @@ void trackDbCloneTdbListToSharedMem(char *db, struct trackDb *list, unsigned lon
 cloneTdbListToSharedMem(db, list, size);
 }
 
-void trackDbHubCloneTdbListToSharedMem(char *hubUrl, char *genome, struct trackDb *list, unsigned long size)
+void trackDbHubCloneTdbListToSharedMem(char *trackDbUrl, struct trackDb *list, unsigned long size)
 {
-char buffer[10 * 1024];
-
-safef(buffer, sizeof buffer, "%s-%s", hubUrl, genome);
-
 unsigned char hash[SHA_DIGEST_LENGTH];
-SHA1((const unsigned char *)buffer, strlen(buffer), hash);
+SHA1((const unsigned char *)trackDbUrl, strlen(trackDbUrl), hash);
 
 char newName[(SHA_DIGEST_LENGTH + 1) * 2];
 hexBinaryString(hash,  SHA_DIGEST_LENGTH, newName, (SHA_DIGEST_LENGTH + 1) * 2);

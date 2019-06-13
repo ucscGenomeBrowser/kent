@@ -4112,7 +4112,13 @@ if (sameOk(cfgOption("cacheTrackDb"), "on"))
 
 if (doCache)
     {
-    struct trackDb *cacheTdb = trackDbCache(db);
+    char *table = hTrackDbPath();
+
+    struct sqlConnection *conn = hAllocConn(db);
+    time_t tableTime = sqlTableUpdateTime(conn, table);
+    hFreeConn(&conn);
+
+    struct trackDb *cacheTdb = trackDbCache(db, tableTime);
 
     if (cacheTdb != NULL)
         return cacheTdb;

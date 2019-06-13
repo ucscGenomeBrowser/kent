@@ -494,18 +494,18 @@ return;
 }
 
 void hicMethods(struct track *tg)
-/* Interact track type methods */
+/* Hi-C track type methods */
 {
 tg->bedSize = 12;
 tg->loadItems = hicLoadItems;
 tg->drawItems = hicDrawItems;
 tg->totalHeight = hicTotalHeight;
 tg->drawLeftLabels = doLeftLabelsExceptNot; // If we don't pretend to do it ourselves, hgTracks tries and fails badly
-tg->mapsSelf=1;
+tg->mapsSelf = 1;
 }
 
 void hicCtMethods(struct track *tg)
-/* Interact track methods for custom track */
+/* Hi-C track methods for custom track */
 {
 hicMethods(tg);
 }
