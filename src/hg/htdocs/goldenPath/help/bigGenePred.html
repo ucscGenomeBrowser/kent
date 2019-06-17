@@ -254,9 +254,7 @@ Once you are done, you should have a track on the Genome Browser like the one be
 <a name="Example5"></a>
 <h3>Example &num;5: Create a BigGenePred Track Hub</h3>
 <p>In this example, you will set up a Track Hub that displays bigGenePred data and uses one of the
-bigGenePred-specific settings to display gene codons. For more instruction on bigGenePred track 
-hubs, please visit the <a href=examples/hubExamples/hubBigGenePred/hg38/bigGenePredEHub.html>
-bigGenePred example description page</a>. For complete instructions on Track Hubs, visit
+bigGenePred-specific settings to display gene codon. For complete instructions on Track Hubs, visit
 the <a href=hgTrackHubHelp.html#Setup>Track Hub set-up page</a>.</p>
 <ol>
 <li>Make sure you have access to a web-hosted file location like GitHub, CyVerse, or an 
@@ -269,20 +267,24 @@ a directory for each assembly you would like to display data on (e.g., hg38). Wi
 directory, you will need your data file(s), (e.g., bigGenePredEHub.bb). Then you will need a 
 trackDb.txt file which will define your track settings, such as the setting that displays
 genomic codons and amino acid letters, <code>baseColorDefault genomicCodons</code>.</li>
-<li>Verify that you have the four required files in the following structure, where <strong>hg38</strong> is a directory:
+<li>Verify that you have the four required files in the following structure, where 
+<strong>hg38</strong> is a directory:
 </br>
 --<a href=examples/hubExamples/hubBigGenePred/hub.txt>hub.txt</a></br>
 --<a href=examples/hubExamples/hubBigGenePred/genomes.txt>genomes.txt</a></br>
 <strong>--<a href=examples/hubExamples/hubBigGenePred/hg38/>hg38</a></strong></br>
 ----<a href=examples/hubExamples/hubBigGenePred/hg38/trackDb.txt>trackDb.txt</a></br>
 ----<a href=examples/hubExamples/hubBigGenePred/hg38/bigGenePred.bb>bigGenePred.bb</a></br>
+You may also include a hub description page and a 
+<a href=examples/hubExamples/hubBigGenePred/hg38/bigGenePredEHub.html>track description page</a>, 
+where you will find additional instructions.
 </li>
 <li>Copy the link to your hub.txt file URL of your hub.txt file and paste it into the text input
 box on the <a href=../../../cgi-bin/hgHubConnect>Track Hub page.</a> For an example, you can paste
 the following link into the input box: 
 <a href=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubBigGenePred/hub.txt>
 http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubBigGenePred/hub.txt</a>.
-This should connect you to your hub, with the data available by navagating to your
+This should connect you to your hub, with the data available by navigating to your
 assembly of interest.</li>
 <p class='text-center'>
   <img class='text-center' src="../../images/bigGenePredHub.png" alt="An image of a bigGenePred track hub on the Browser" width="999">
