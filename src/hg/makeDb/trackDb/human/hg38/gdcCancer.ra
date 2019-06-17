@@ -11,7 +11,7 @@ genderFilterValues male,female
 genderFilterType multipleListOr
 maxItems 500000
 
-track all
+track allCancer
 parent gdcCancer on
 shortLabel All Cancers
 longLabel All GDC Cancer mutations: 33 TCGA Cancer Projects Summary (Pan-Can 33)

@@ -16,7 +16,7 @@
 #include <signal.h>
 #include "obscure.h"
 
-int version = 43;  // PLEASE INCREMENT THIS BEFORE PUSHING TO SHARED REPO
+int version = 44;  // PLEASE INCREMENT THIS BEFORE PUSHING TO SHARED REPO
                    // SO THAT OTHERS MAY TEST WITH IT, SO THAT EVERYONE KNOWS THEY HAVE THE
                    // EXACT RIGHT VERSION.
 
@@ -329,7 +329,7 @@ if (optionExists("hardcore") && newContents->stringSize != contentLength)  // al
     {
     struct dyString *update = dyStringNew(contentLength*2);
     if (newContents->stringSize > contentLength)
-	errAbort("ERROR: Uh, why is newContents (%d) longer than original (%d)",
+	errAbort("ERROR: Uh, why is newContents (%ld) longer than original (%d)",
 		 newContents->stringSize, contentLength);
     sqlDyStringPrintf(update, "UPDATE %s set contents='", savedSessionTable);
     dyStringAppendN(update, newContents->string, newContents->stringSize);
@@ -337,7 +337,7 @@ if (optionExists("hardcore") && newContents->stringSize != contentLength)  // al
 		   "where userName=\"%s\" and sessionName=\"%s\";",
 		   userName, sessionName);
     verbose(3, "Removing one or more dead CT file settings from %s %s "
-	    "(original length %d, now %d)\n", 
+	    "(original length %d, now %ld)\n", 
 	    userName, sessionName,
 	    contentLength, newContents->stringSize);
     sqlUpdate(conn, update->string);

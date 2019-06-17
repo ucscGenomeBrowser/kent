@@ -1539,6 +1539,9 @@ const struct hubConnectStatus *b = *((struct hubConnectStatus **)vb);
 struct trackHub *ta = a->trackHub;
 struct trackHub *tb = b->trackHub;
 
+if ((ta == NULL) || (tb == NULL))
+    return 0;
+
 return strcasecmp(tb->shortLabel, ta->shortLabel);
 }
 

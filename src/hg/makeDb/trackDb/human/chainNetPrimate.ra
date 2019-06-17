@@ -227,6 +227,14 @@ priority 7
         type chain rheMac2
         otherDb rheMac2
 
+        track chainPapAnu4
+        subTrack primateChainNetViewchain off
+        subGroups view=chain species=s024 clade=c01
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain papAnu4
+        otherDb papAnu4
+
         track chainPapAnu3
         subTrack primateChainNetViewchain off
         subGroups view=chain species=s024 clade=c01
@@ -616,6 +624,14 @@ priority 7
         longLabel $o_db ($o_date) Alignment Net
         type netAlign rheMac2 chainRheMac2
         otherDb rheMac2
+
+        track netPapAnu4
+        subTrack primateChainNetViewnet off
+        subGroups view=net species=s024 clade=c01
+        shortLabel $o_db Net
+        longLabel $o_db ($o_date) Alignment Net
+        type netAlign papAnu4 chainPapAnu4
+        otherDb papAnu4
 
         track netPapAnu3
         subTrack primateChainNetViewnet off
