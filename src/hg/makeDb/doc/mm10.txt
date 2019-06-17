@@ -17919,7 +17919,7 @@ cbTrackHub mm10 bam/ TM_facs_metadata.fix.tsv cell_ontology_class hub/ --name "T
     # if pushing public, add ticket and MARK QA READY
 
 #########################################################################
-2019-05-23: import of UCSC GENCODE group processing of GENCODE VM21 (markd)
+2019-05-23: import of UCSC GENCODE group processing of GENCODE VM22 (markd)
     # import of pre-release, it will be promoted if there are no changes in the final release.
     # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
 
