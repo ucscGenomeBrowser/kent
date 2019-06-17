@@ -50,7 +50,7 @@ struct querySizeCnt
     unsigned alnCnt;
 };
 
-static void querySizeConflict(char *qName, unsigned qSize, unsigned qSize22)
+static void querySizeConflict(char *qName, unsigned qSize, unsigned qSize2)
 /* generate a error or warning on conflicting query sizes */
 {
 if (warnOnConflicts)
