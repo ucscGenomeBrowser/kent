@@ -4104,6 +4104,8 @@ struct trackDb *hTrackDb(char *db)
  *	NOTE: this result is cached, do not free it !
  */
 {
+if (trackHubDatabase(db))
+    return NULL;
 struct trackDb *tdbList = NULL;
 
 boolean doCache = FALSE;
