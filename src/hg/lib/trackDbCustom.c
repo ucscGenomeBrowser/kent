@@ -1721,8 +1721,8 @@ for(; files; files = files->next)
         continue;
         }
 
-    int oflags = O_RDWR;
-    int fd = shm_open(sharedMemoryName, oflags, 0666 );
+    int oflags = O_RDONLY;
+    int fd = open(fileName, oflags);
     if (fd < 0)
         {
         cacheLog("cannot open %s", sharedMemoryName);
@@ -1790,16 +1790,16 @@ safef(sharedMemoryName, sizeof sharedMemoryName, "trackDbCache/%s",  rTempName(s
 char tempFileName[4096];
 safef(tempFileName, sizeof tempFileName, "/dev/shm/%s",  sharedMemoryName);
 
-int fd = shm_open(sharedMemoryName, oflags, 0666 );
+int fd = open(tempFileName, oflags, 0666 );
 if (fd < 0)
     {
     unlink(tempFileName);
-    cacheLog("unable to oen shared memory %s errno %d", sharedMemoryName, errno);
+    cacheLog("unable to open shared memory %s errno %d", tempFileName, errno);
     return;
     }
 else
     {
-    cacheLog("oen shared memory %s", sharedMemoryName);
+    cacheLog("open shared memory %s", tempFileName);
     }
 ftruncate(fd, 0);
 ftruncate(fd, size);
@@ -1832,7 +1832,7 @@ struct hash *superHash = newHash(8);
 lmCloneTdbList(lm, list, NULL, superHash);
 
 unsigned long memUsed = lmUsed(lm) + lmBlockHeaderSize();
-cacheLog("cloning tdbList using %ld bytes",memUsed);
+cacheLog("cloning tdbList %p used %ld bytes called with %ld", list, memUsed, size);
 
 msync((void *)paddress, memUsed, MS_SYNC);
 ftruncate(fd, memUsed);
@@ -1859,6 +1859,8 @@ cloneTdbListToSharedMem(db, list, size);
 void trackDbHubCloneTdbListToSharedMem(char *trackDbUrl, struct trackDb *list, unsigned long size)
 /* For this hub, Allocate shared memory and clone trackDb list into it. */
 {
+if ((*trackDbUrl == '.') || (list == NULL)) // don't cache empty lists or collections
+    return;
 cacheLog("cloning memory for hub %s %ld", trackDbUrl, size);
 unsigned char hash[SHA_DIGEST_LENGTH];
 SHA1((const unsigned char *)trackDbUrl, strlen(trackDbUrl), hash);

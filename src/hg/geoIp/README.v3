@@ -1,0 +1,190 @@
+
+Steps to upgrade geoIp to use MaxMind free db. 2019-06-18
+
+MaxMind has a free country to IP database.
+
+It is more complete than the software77.net free country-to-IP db that we used previously.
+
+These are the steps to upgrade the IPV4 geoIp system on RR and official mirrors.
+One of the problems earlier was that the software77 was not very up-to-date
+and did not have a bunch of new IPs that were allocated for china and other places in asia.
+This upgrade should be fairly easy.
+
+Following a mixure of steps from the previous READMEs.
+
+cd $HOME/kent/src/hg/geoIp
+
+mkdir update2019
+cd update2019
+
+wget 'https://geolite.maxmind.com/download/geoip/database/GeoLite2-Country-CSV.zip'
+unzip GeoLite2-Country-CSV.zip
+cd GeoLite2-Country-CSV_20190611/
+
+geoIpToCountryMaxMind GeoLite2-Country-Blocks-IPv4.csv > geoIpCountry.tab
+cp geoIpCountry.tab ../../
+cd ../..
+
+# keep backup comparison copy in geoIpOld database
+./save-old-for-compare
+
+# update .sql and .c just in case
+./make-sql
+
+# reload the 8 tables
+# tweaked script to drop existing table first
+./load-tables
+
+# output says these 3 are not found.
+'continentToNode.tab' not found 
+'countryToNode.tab' not found
+'geoIpNode.tab' not found
+
+They should be created by other queries.
+
+hgsql hgFixed
+
+forgot to strip off the 1st row of the csv file.
+Cleanup left-over header row.
+delete from countryToContinent where  continentId = '"continent code"';
+
+The European Commission and many other organisations 
+ are using 'XK' as a temporary country code for Kosovo till ISO officially assigns a code. 
+GeoNames will switch to the official ISO code as soon as it has been released.
+insert into country values ('XK', 'Kosovo');
+insert into countryToContinent values ('XK', 'EU');
+
+mysql> select * from countryToContinent where countryId not in (select id from country);
++-----------+-------------+
+| countryId | continentId |
++-----------+-------------+
+| AN        | NA          |
+| FX        | EU          |
++-----------+-------------+
+
+AN Netherlands Antilles
+
+insert into country values ('AN', 'Netherlands Antilles');
+
+insert into country values ('FX', 'France, Metropolitan');
+
+mysql> select * from countryToContinent where continentId not in (select id from continent);
++-----------+-------------+
+| countryId | continentId |
++-----------+-------------+
+| A1        | --          |
+| A2        | --          |
+| O1        | --          |
++-----------+-------------+
+
+insert into continent values ('--','not applicable');
+
+mysql> select count(*) from geoIpCountry where countryId not in (select id from country);
++----------+
+| count(*) |
++----------+
+|        0 |
++----------+
+
+
+
+--
+
+start off with crude continent-level assignments:
+
+make everything 1 by default
+
+insert into continentToNode select id, 1 from continent;
+
+Europe
+update continentToNode set node=2 where continentId = "EU";
+
+Asia
+update continentToNode set node=3 where continentId = "AS";
+
+Now we just can make a join
+
+insert into countryToNode (select countryId, node from countryToContinent cc, continentToNode cn where cc.continentId = cn.continentId);
+
+# fix ones requested by Bob to be included in euro instead of defaulting to america.
+# these are mostly around the middle east.
+update countryToNode set node=2 where countryId in ('AE','AM','BH','CY','GE','IL','IQ','JO','KW','LB','OM','PS','QA','SA','SY','YE');
+
+I compared the before and after updating with public_html/geoMap/test.csh at
+ http://hgwdev.soe.ucsc.edu/~galt/geoMap/countryToNodeMap.html
+And it looked identical. So we did not lose anything.
+
+
+mysql> select distinct countryId from geoIpCountry where countryId not in (select distinct countryId from countryToNode);
++-----------+
+| countryId |
++-----------+
+| SS        |
+| CW        |
+| SX        |
+| BQ        |
++-----------+
+
+mysql> select * from country where id in ('SS','CW','SX','BQ');
++----+--------------+
+| id | name         |
++----+--------------+
+| BQ | Bonaire      |
+| CW | Curacao      |
+| SS | South Sudan  |
+| SX | Sint Maarten |
++----+--------------+
+
+
+So, what happened to these countries, and why are they not in countryToNode?
+Shall we add them?
+
+insert into countryToContinent values ('SS', 'AF');
+insert into countryToContinent values ('SX', 'NA');
+insert into countryToContinent values ('CW', 'NA');
+insert into countryToContinent values ('BQ', 'NA');
+
+insert into countryToNode values ('SS', '1');
+insert into countryToNode values ('SX', '1');
+insert into countryToNode values ('CW', '1');
+insert into countryToNode values ('BQ', '1');
+
+
+
+mysql> select distinct countryId from geoIpCountry where countryId not in (select distinct countryId from countryToNode);
+Empty set (0.13 sec)
+
+Re-ran test.csh and checked again:
+http://hgwdev.soe.ucsc.edu/~galt/geoMap/countryToNodeMap.html
+
+This means we should have full integrity.
+
+insert into geoIpNode (select ipStart, ipEnd, node from geoIpCountry gic, countryToNode ctn where gic.countryId=ctn.countryId);
+Query OK, 326637 rows affected (1.49 sec)
+Records: 326637  Duplicates: 0  Warnings: 0
+
+Yay!
+
+TODO at the end:
+rename tables to real:
+gbNodeReal
+geoIpNodeReal
+
+
+Make an extra backup of just the git untracked files just in case:
+
+mkdir /hive/data/outside/geoIp/untracked/2019-06-18
+gitu | xargs -I X cp X /hive/data/outside/geoIp/untracked/2019-06-18/
+
+
+Make a backup of the data too:
+
+mkdir /hive/data/outside/geoIp/geoIpTableDumps/2019-06-18
+# sadly we need to temporarily make it write-able by all so mysqld can write dump there.
+chmod 777 /hive/data/outside/geoIp/geoIpTableDumps/2019-06-18
+pushd /hive/data/outside/geoIp/geoIpTableDumps
+hgsqldump hgFixed -T 2019-06-18 continent continentToNode country countryToContinent countryToNode gbNode geoIpCountry geoIpNode
+popd
+chmod 775 /hive/data/outside/geoIp/geoIpTableDumps/2019-06-18
+
+
