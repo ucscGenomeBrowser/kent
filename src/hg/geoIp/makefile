@@ -1,13 +1,13 @@
 kentSrc = ../..
-include ../../inc/common.mk
+include ${kentSrc}/inc/common.mk
 
-HG_INC+=-I../../inc
+HG_INC+=-I${kentSrc}/inc
 
 L += -lm ${SOCKETLIB}
-MYLIBDIR = ../../lib/${MACHTYPE}
+MYLIBDIR = ${kentSrc}/lib/${MACHTYPE}
 MYLIBS = $(MYLIBDIR)/jkweb.a 
 
-A = geoIpToCountry
+A = geoIpToCountryMaxMind
 
 O = $(A).o
 

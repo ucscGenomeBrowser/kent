@@ -83,7 +83,7 @@
 	<ul style="display: none; visibility: hidden;">
 	<li class="first"><a href="../gtex.html">Genotype Tissue Expression (GTEx)</a></li>
 	<li><a href="../ENCODE/index.html">Encyclopedia of DNA Elements (ENCODE)</a></li>
-        <li class="last"><a href="https://cells.ucsc.edu">UCSC Cell Browser</a></li>
+	<li class="last"><a href="../singlecell.html">UCSC Cell Browser</a></li>
 	</ul>
 <!-- OPTIONAL_PROJECT_MENU_END -->
 
