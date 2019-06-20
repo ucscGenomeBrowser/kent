@@ -4104,10 +4104,13 @@ struct trackDb *hTrackDb(char *db)
  *	NOTE: this result is cached, do not free it !
  */
 {
+if (trackHubDatabase(db))
+    return NULL;
 struct trackDb *tdbList = NULL;
 
+char *trackDbCacheDir = cfgOption("cacheTrackDbDir");
 boolean doCache = FALSE;
-if (sameOk(cfgOption("cacheTrackDb"), "on"))
+if (trackDbCacheDir != NULL)
     doCache = TRUE;
 
 if (doCache)
@@ -4118,7 +4121,7 @@ if (doCache)
     time_t tableTime = sqlTableUpdateTime(conn, table);
     hFreeConn(&conn);
 
-    struct trackDb *cacheTdb = trackDbCache(db, tableTime);
+    struct trackDb *cacheTdb = trackDbCache(db, tableTime, trackDbCacheDir);
 
     if (cacheTdb != NULL)
         return cacheTdb;
@@ -4131,7 +4134,7 @@ tdbList = trackDbLinkUpGenerations(tdbList);
 tdbList = trackDbPolishAfterLinkup(tdbList, db);
 
 if (doCache)
-    trackDbCloneTdbListToSharedMem(db, tdbList, memCheckPoint());
+    trackDbCloneTdbListToSharedMem(db, tdbList, memCheckPoint(), trackDbCacheDir);
 
 return tdbList;
 }
