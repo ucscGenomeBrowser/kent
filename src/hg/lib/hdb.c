@@ -1692,39 +1692,30 @@ else
     }
 }
 
-static bioSeq *seqGet(char *db, char *acc, boolean isDna, char *seqTbl, char *extFileTbl)
-/* Return sequence from the specified seq and extFile tables.   The
- * seqTbl/extFileTbl arguments may include the database, in which case they
- * override what is in db (which could even be NULL). NULL if not
+static bioSeq *seqGetConn(struct sqlConnection *seqConn, struct sqlConnection *extFileConn,
+                          char *acc, boolean isDna, char *seqTbl, char *extFileTbl)
+/* Return sequence from the specified seq and extFile tables NULL if not
  * found. */
 {
 /* look up sequence */
-char dbBuf[64];
-char *seqDb = dbTblParse(db, seqTbl, &seqTbl, dbBuf, sizeof(dbBuf));
-struct sqlConnection *conn = hAllocConn(seqDb);
 char query[256];
 sqlSafef(query, sizeof(query),
       "select extFile,file_offset,file_size from %s where acc = '%s'",
       seqTbl, acc);
-struct sqlResult *sr = sqlMustGetResult(conn, query);
+struct sqlResult *sr = sqlMustGetResult(seqConn, query);
 char **row = sqlNextRow(sr);
 if (row == NULL)
     {
     sqlFreeResult(&sr);
-    hFreeConn(&conn);
     return NULL;
     }
 HGID extId = sqlUnsigned(row[0]);
 off_t offset = sqlLongLong(row[1]);
 size_t size = sqlUnsigned(row[2]);
 sqlFreeResult(&sr);
-hFreeConn(&conn);
 
 /* look up extFile */
-char *extDb = dbTblParse(db, extFileTbl, &extFileTbl, dbBuf, sizeof(dbBuf));
-conn = hAllocConn(extDb);
-struct largeSeqFile *lsf = largeFileHandle(conn, extId, extFileTbl);
-hFreeConn(&conn);
+struct largeSeqFile *lsf = largeFileHandle(extFileConn, extId, extFileTbl);
 
 if (lsf == NULL)
     return NULL;
@@ -1732,6 +1723,35 @@ if (lsf == NULL)
 char *buf = readOpenFileSection(lsf->fd, offset, size, lsf->path, acc);
 return faSeqFromMemText(buf, isDna);
 }
+
+static bioSeq *seqMustGetConn(struct sqlConnection *seqConn, struct sqlConnection *extFileConn,
+                              char *acc, boolean isDna, char *seqTbl, char *extFileTbl)
+/* Return sequence from the specified seq and extFile tables.Return Abort if not
+ * found. */
+{
+bioSeq *seq = seqGetConn(seqConn, extFileConn, acc, isDna, seqTbl, extFileTbl);
+if (seq == NULL)
+    errAbort("can't find \"%s\" in seq table %s.%s", acc, sqlGetDatabase(seqConn), seqTbl);
+return seq;
+}
+
+static bioSeq *seqGet(char *db, char *acc, boolean isDna, char *seqTbl, char *extFileTbl)
+/* Return sequence from the specified seq and extFile tables.   The
+ * seqTbl/extFileTbl arguments may include the database, in which case they
+ * override what is in db (which could even be NULL). NULL if not
+ * found. */
+{
+char seqDbBuf[64], extFileDbBuf[64];
+char *seqDb = dbTblParse(db, seqTbl, &seqTbl, seqDbBuf, sizeof(seqDbBuf));
+char *extFileDb = dbTblParse(db, extFileTbl, &extFileTbl, extFileDbBuf, sizeof(extFileDbBuf));
+struct sqlConnection *seqConn = hAllocConn(seqDb);
+struct sqlConnection *extFileConn = hAllocConn(extFileDb);
+bioSeq *seq = seqGetConn(seqConn, extFileConn, acc, isDna, seqTbl, extFileTbl);
+hFreeConn(&seqConn);
+hFreeConn(&extFileConn);
+return seq;
+}
+
 
 static bioSeq *seqMustGet(char *db, char *acc, boolean isDna, char *seqTbl, char *extFileTbl)
 /* Return sequence from the specified seq and extFile tables.  The
@@ -1761,6 +1781,20 @@ struct dnaSeq *hDnaSeqMustGet(char *db, char *acc, char *seqTbl, char *extFileTb
  * Abort if not found. */
 {
 return seqMustGet(db, acc, TRUE, seqTbl, extFileTbl);
+}
+
+struct dnaSeq *hDnaSeqGetConn(struct sqlConnection *conn, char *acc, char *seqTbl, char *extFileTbl)
+/* Get a cDNA or DNA sequence from the specified seq and extFile tables. Return NULL if not
+ * found. */
+{
+return seqGetConn(conn, conn, acc, TRUE, seqTbl, extFileTbl);
+}
+
+struct dnaSeq *hDnaSeqMustGetConn(struct sqlConnection *conn, char *acc, char *seqTbl, char *extFileTbl)
+/* Get a cDNA or DNA sequence from the specified seq and extFile tables. 
+ * Abort if not found. */
+{
+return seqMustGetConn(conn, conn, acc, TRUE, seqTbl, extFileTbl);
 }
 
 aaSeq *hPepSeqGet(char *db, char *acc, char *seqTbl, char *extFileTbl)
