@@ -1667,7 +1667,7 @@ else
 newTdb->track = lmCloneString(lm, tdb->track);
 newTdb->table = lmCloneString(lm, tdb->table);
 newTdb->shortLabel = lmCloneString(lm, tdb->shortLabel);
-newTdb->longLabel = lmCloneString(lm, "trere");// tdb->longLabel);
+newTdb->longLabel = lmCloneString(lm, tdb->longLabel);
 newTdb->type = lmCloneString(lm, tdb->type);
 if ( newTdb->restrictCount )
     {
@@ -1801,7 +1801,7 @@ hexBinaryString(hash,  SHA_DIGEST_LENGTH, newName, (SHA_DIGEST_LENGTH + 1) * 2);
 return checkCache(newName, time, trackDbCacheDir);
 }
 
-static void cloneTdbListToSharedMem(char *string, struct trackDb *list, unsigned long size, char *trackDbCacheDir)
+static void cloneTdbListToSharedMem(char *string, struct trackDb *list, unsigned long size, char *trackDbCacheDir, char *name)
 /* Allocate shared memory and clone trackDb list into it. */
 {
 static int inited = 0;
@@ -1894,13 +1894,19 @@ safef(fileName, sizeof fileName, "/dev/shm/%s/%s/%ld", trackDbCacheDir, string, 
 
 cacheLog("renaming %s to %s", tempFileName, fileName);
 mustRename(tempFileName, fileName);
+
+// write out the name of the trackDb being cached.
+safef(fileName, sizeof fileName, "/dev/shm/%s/%s/name.txt", trackDbCacheDir, string);
+FILE *stream = mustOpen(fileName, "w");
+fprintf(stream, "%s\n", name);
+carefulClose(&stream);
 }
 
 void trackDbCloneTdbListToSharedMem(char *db, struct trackDb *list, unsigned long size, char *trackDbCacheDir)
 /* For this native db, allocate shared memory and clone trackDb list into it. */
 {
 cacheLog("cloning memory for db %s %ld", db, size);
-cloneTdbListToSharedMem(db, list, size, trackDbCacheDir);
+cloneTdbListToSharedMem(db, list, size, trackDbCacheDir, db);
 }
 
 void trackDbHubCloneTdbListToSharedMem(char *trackDbUrl, struct trackDb *list, unsigned long size, char *trackDbCacheDir)
@@ -1915,6 +1921,6 @@ SHA1((const unsigned char *)trackDbUrl, strlen(trackDbUrl), hash);
 char newName[(SHA_DIGEST_LENGTH + 1) * 2];
 hexBinaryString(hash,  SHA_DIGEST_LENGTH, newName, (SHA_DIGEST_LENGTH + 1) * 2);
 
-cloneTdbListToSharedMem(newName, list, size, trackDbCacheDir);
+cloneTdbListToSharedMem(newName, list, size, trackDbCacheDir, trackDbUrl);
 }
 
