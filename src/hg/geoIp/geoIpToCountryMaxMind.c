@@ -1,6 +1,8 @@
 /* program geoIpToCountryMaxMind 
  * by Galt Barber 2011-04-15
- * Read csv input geoip data and output format for use with genome-browser cgis 
+ * Read csv input geoip data (free from MaxMind) and 
+ * output geoIpCountry.tab to load into hgFixed for testing,
+ * and hgcentral for use with genome-browser cgis 
  * to map user IP addresses to country-code. */
 
 #include "common.h"
@@ -10,6 +12,7 @@
 #include "hash.h"
 #include "obscure.h"
 #include "csv.h"
+#include "net.h"
 #include "internet.h"
 
 #define MAXWORDS 1024
@@ -93,61 +96,15 @@ while (lineFileNext(lf, &line, &lineSize))
 lineFileClose(&lf);
 }
 
-bits32 internetPackIp(unsigned char unpacked[4])
-/* Convert from 4-byte format with most significant
- * byte first to native 32-bit format. */
-{
-int i;
-bits32 packed = 0;
-for (i=0; i<=3; ++i)
-    {
-    packed <<= 8;
-    packed |= unpacked[i];
-    }
-return packed;
-}
-
 void parseCIDR(char *cidr, bits32 *pStartIp, bits32 *pEndIp)
 /* parse input CIDR format IP range (or subnet) */
 {
-char *s = cloneString(cidr);
-char *c = strchr(s, '/');
-if (!c)
-    errAbort("expected slash char '/' in input cidr %s\n", cidr);
-*c++ = 0;
-char *ip = s;
-unsigned int bits = sqlUnsigned(c);
-//printf("ip=%s, bits=%d \n", ip, bits);   // DEBUG REMOVE
-unsigned char quadIp[4];
-internetParseDottedQuad(ip, quadIp);
-//int i;
-//for(i=0;i<4;++i)
-//    printf("ip[%d]=%d\n", i, quadIp[i]);   // DEBUG REMOVE
-bits32 packedIp = 0;
-packedIp = internetPackIp(quadIp);  // TODO should this go in the library internet.c? 
-//printf("packed32 bits=%u %08x\n", packedIp, packedIp);   // DEBUG REMOVE
-int r = 32 - bits;
-bits32 start = packedIp & (((unsigned int) 0xFFFFFFFF) << r);
-bits32 end;
-// on this platform shr or shl 32 of a 32-bit value actually does nothing at all rather than turning it to 0s.
-if (bits == 32)
-    end = packedIp;
-else
-    end = packedIp | (((unsigned int) 0xFFFFFFFF) >> bits);
-//printf("start=%u %08x\n", start, start);   // DEBUG REMOVE
-//printf("end  =%u %08x\n", end,   end  );   // DEBUG REMOVE
+struct cidr *subnet = internetParseSubnetCidr(cidr);
 
-char startIpS[17];
-char endIpS[17];
-internetIpToDottedQuad(start, startIpS);
-internetIpToDottedQuad(end, endIpS);
-
-//printf("dottedQuad start %s end %s\n", startIpS, endIpS);
-
-*pStartIp = start;
-*pEndIp = end;
+internetCidrRange(subnet, pStartIp, pEndIp);
 
 }
+
 
 
 void geoIpToCountry(char *fileName) 
@@ -182,6 +139,13 @@ while (lineFileNext(lf, &line, &lineSize))
 
     parseCIDR(network, &startIp, &endIp);
 
+    // Handy for debugging
+    //char startIpS[17];
+    //char endIpS[17];
+    //internetIpToDottedQuad(startIp, startIpS);
+    //internetIpToDottedQuad(endIp, endIpS);
+    //printf("dottedQuad start %s end %s\n", startIpS, endIpS);
+
     // get country info
     char *geoname_id = words[1];
     char *registered_country_geoname_id = words[2];
@@ -201,10 +165,8 @@ while (lineFileNext(lf, &line, &lineSize))
     char *countryCode = el->val;
 
 
-    //if (!sameString(countryCode, "ZZ")) // Filter out Reserved Ip ranges
     printf("%u\t%u\t%s\n", startIp, endIp, countryCode);
 
-    //printf("----------------------------------------\n");
     }
 
 lineFileClose(&lf);

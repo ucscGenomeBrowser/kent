@@ -9,6 +9,7 @@
 
 #include "linefile.h"
 #include "dystring.h"
+#include "internet.h"
 
 #define DEFAULTCONNECTTIMEOUTMSEC 10000  /* default connect timeout for tcp in milliseconds */
 #define DEFAULTREADWRITETTIMEOUTSEC 120  /* default read/write timeout for tcp in seconds */
@@ -40,7 +41,7 @@ int netAcceptingSocketFrom(int port, int queueSize, char *host);
 int netAccept(int sd);
 /* Accept incoming connection from socket descriptor. */
 
-int netAcceptFrom(int sd, unsigned char subnet[4]);
+int netAcceptFrom(int acceptor, struct cidr *subnet);
 /* Wait for incoming connection from socket descriptor
  * from IP address in subnet.  Subnet is something
  * returned from netParseDottedQuad.  */
@@ -108,10 +109,6 @@ boolean netPipeIsBroken();
 
 void  netClearPipeFlag();
 /* Clear broken pipe flag. */
-
-void netParseSubnet(char *in, unsigned char out[4]);
-/* Parse subnet, which is a prefix of a normal dotted quad form.
- * Out will contain 255's for the don't care bits. */
 
 struct netParsedUrl
 /* A parsed URL. */
@@ -273,5 +270,6 @@ boolean netGetFtpInfo(char *url, long long *retSize, time_t *retTime);
 
 boolean hasProtocol(char *urlOrPath);
 /* Return TRUE if it looks like it has http://, ftp:// etc. */
+
 #endif /* NET_H */
 
