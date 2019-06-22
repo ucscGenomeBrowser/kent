@@ -9,7 +9,7 @@ include cancerExpr.ra
 
 include mane.ra
 
-include gdcCancer.ra alpha,beta
+include gdcCancer.ra
 
 track miRnaAtlas
 compositeTrack on

@@ -22,6 +22,7 @@ UTILS_APPLIST = \
 	bedExtendRanges \
 	bedToPsl \
 	bedWeedOverlapping \
+	bedMergeAdjacent \
 	bigMafToMaf \
 	bigPslToPsl \
 	binFromRange \
@@ -84,6 +85,7 @@ DIRS = ${buildRefresh} \
 	wigBedToStep
 
 TEST_DIRS = \
+	bedMergeAdjacent \
 	genePredFilter \
 	genePredToProt \
 	gff3ToGenePred \
