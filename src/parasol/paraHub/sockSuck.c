@@ -2,16 +2,16 @@
  * and puts them in the hub queue. */
 #include "paraCommon.h"
 #include "paraHub.h"
+#include "net.h"
 
 static pthread_t sockSuckThread;
-unsigned char localHost[4] = {127,0,0,1};   /* Address for local host in network order */
 
-boolean ipAddressOk(in_addr_t packed, unsigned char *spec)
+boolean ipAddressOk(in_addr_t packed, struct cidr *spec)
 /* Return TRUE if packed IP address matches spec. */
 {
 unsigned char unpacked[4];
 internetUnpackIp(packed, unpacked);
-return internetIpInSubnet(unpacked, spec);
+return internetIpInSubnetCidr(unpacked, spec);
 }
 
 static void *sockSuckDaemon(void *vptr)
@@ -26,7 +26,7 @@ for (;;)
     if (pmReceive(pm, ru))
 	{
 	if (ipAddressOk(ntohl(pm->ipAddress.sin_addr.s_addr), hubSubnet) || 
-	    ipAddressOk(ntohl(pm->ipAddress.sin_addr.s_addr), localHost))
+	    ipAddressOk(ntohl(pm->ipAddress.sin_addr.s_addr), localHostSubnet))
 	    {
 	    hubMessagePut(pm);
 	    }

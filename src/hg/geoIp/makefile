@@ -18,5 +18,4 @@ $(A): ${O} ${MYLIBS}
 
 clean::
 	rm -f ${O}
-	rm *.sql
 
