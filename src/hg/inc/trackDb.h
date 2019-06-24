@@ -709,16 +709,19 @@ struct trackDb *lmCloneTdbList(struct lm *lm, struct trackDb *list, struct track
 struct trackDb *lmCloneSuper(struct lm *lm, struct trackDb *tdb, struct hash *superHash);
 /* clone a super track tdb structure. */
 
-void trackDbHubCloneTdbListToSharedMem(char *trackDbUrl, struct trackDb *list, unsigned long size, char *trackDbCacheDir);
+void trackDbHubCloneTdbListToSharedMem(char *trackDbUrl, struct trackDb *list, unsigned long size);
 /* For this hub, Allocate shared memory and clone trackDb list into it. */
 
-void trackDbCloneTdbListToSharedMem(char *db, struct trackDb *list, unsigned long size, char *trackDbCacheDir);
+void trackDbCloneTdbListToSharedMem(char *db, struct trackDb *list, unsigned long size);
 /* For this native db, allocate shared memory and clone trackDb list into it. */
 
-struct trackDb *trackDbCache(char *db, time_t time, char *trackDbCacheDir);
+struct trackDb *trackDbCache(char *db, time_t time);
 /* Check to see if this db has a cached trackDb. */
 
-struct trackDb *trackDbHubCache(char *trackDbUrl, time_t time, char *trackDbCacheDir);
+struct trackDb *trackDbHubCache(char *trackDbUrl, time_t time);
 /* Check to see if this hub has a cached trackDb. */
+
+boolean trackDbCacheOn();
+/* Check to see if we're caching trackDb contents. */
 #endif /* TRACKDB_H */
 

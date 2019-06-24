@@ -719,10 +719,7 @@ if (trackHub != NULL)
     struct trackHubGenome *hubGenome = trackHubFindGenome(trackHub, database);
     if (hubGenome != NULL)
 	{
-        char *trackDbCacheDir = cfgOption("cacheTrackDbDir");
-        boolean doCache = FALSE;
-        if (trackDbCacheDir != NULL)
-            doCache = TRUE;
+        boolean doCache = trackDbCacheOn();
 
         if (doCache)
             {
@@ -731,7 +728,7 @@ if (trackHub != NULL)
             time_t time = udcUpdateTime(checkCache);
             udcFileClose(&checkCache);
 
-            struct trackDb *cacheTdb = trackDbHubCache(hubGenome->trackDbFile, time, trackDbCacheDir);
+            struct trackDb *cacheTdb = trackDbHubCache(hubGenome->trackDbFile, time);
 
             if (cacheTdb != NULL)
                 return cacheTdb;
@@ -746,7 +743,7 @@ if (trackHub != NULL)
         trackHubPolishTrackNames(trackHub, tdbList);
 
         if (doCache)
-            trackDbHubCloneTdbListToSharedMem(hubGenome->trackDbFile, tdbList, memCheckPoint(), trackDbCacheDir);
+            trackDbHubCloneTdbListToSharedMem(hubGenome->trackDbFile, tdbList, memCheckPoint());
 	}
     }
 return tdbList;
