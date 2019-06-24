@@ -91,7 +91,7 @@ DBS = \
 	droPer1 \
 	droSec1 \
 	droSim1 droSim2 \
-	droVir1 droVir2 \
+	droVir1 droVir2 droVir3 \
 	droYak1 droYak2 \
 	eboVir3 eboVir2 eboVir1 bunEbo1 sudEbo1 resEbo1 taiEbo1 zaiEbo1 \
 	echTel1 echTel2 \

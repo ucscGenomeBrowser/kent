@@ -14,7 +14,7 @@ int port = 17776;	/* Default bottleneck port. */
 char *host = "localhost";   /* Default host. */
 int penalty = 75;	    /* Penalty in milliseconds per access. */
 int recovery = 10;	    /* Recovery in milliseconds per second. */
-char *subnet = NULL;        /* Subnet as dotted quads. */
+struct cidr *subnet = NULL;        /* Subnet as CIDR struct. */
 
 void usage()
 /* Explain usage and exit. */
@@ -34,7 +34,8 @@ errAbort(
   "options:\n"
   "   -port=XXXX - Use specific tcp/ip port. Default %d.\n"
   "   -host=XXXXX - Use specific host.  Default %s.\n"
-  "   -subnet=WWW.XXX.YYY.ZZZ Restrict access to subnet (example 192.168.255.255)\n"
+  "   -subnet=WWW.XXX.YYY.ZZZ Restrict access to subnet (example 192.168.255.255).\n"
+  "      Also accepts CIDR notation example 192.168.255.255/16\n"
   "   -penalty=N - Penalty (in milliseconds) for each access, default %d\n"
   "   -recovery=N - Amount to recover (in milliseconds) for each second\n"
   "                 between accesses.  Default %d\n"
@@ -149,19 +150,13 @@ void startServer()
 /* Start up bottleneck server. */
 {
 int acceptor;
-unsigned char parsedSubnetBuf[4];	/* Buffer for holding parsed subnet. */
-unsigned char *parsedSubnet = NULL;	/* Parsed subnet. */
-if (subnet != NULL)
-    {
-    internetParseDottedQuad(subnet, parsedSubnetBuf);
-    parsedSubnet = parsedSubnetBuf;
-    }
+subnet = internetParseSubnetCidr(optionVal("subnet", NULL));
 trackerHash = newHash(18);
 acceptor = netAcceptingSocket(port, 64);
 for (;;)
     {
     struct tracker *tracker;
-    int socket = netAcceptFrom(acceptor, parsedSubnet);
+    int socket = netAcceptFrom(acceptor, subnet);
     char buf[256], *s;
     s = netGetString(socket, buf);
     if (s != NULL)
@@ -280,7 +275,6 @@ port = optionInt("port", port);
 host = optionVal("host", host);
 penalty = optionInt("penalty", penalty);
 recovery = optionInt("recovery", recovery);
-subnet = optionVal("subnet", subnet);
 command = argv[1];
 if (sameString(command, "start"))
     {

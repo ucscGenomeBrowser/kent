@@ -46,6 +46,7 @@ visibility hide
 track dgvPlus override
 group varRep
 visibility hide
+html dgvPlusGold
 
     track dgvMerged override
     parent dgvPlus on

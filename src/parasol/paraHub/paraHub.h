@@ -155,7 +155,8 @@ void sockSuckStart(struct rudp *ru);
 extern char *hubHost;	/* Name of machine running this. */
 extern char hubHAddress[32]; /* Host address of machine running this. Not IP address. 
 			      * Just for use between hub daemon and spokes*/
-extern unsigned char hubSubnet[4];   /* Subnet to check. */
+extern struct cidr *hubSubnet;         /* Subnet to check. */
+extern struct cidr *localHostSubnet;   /* Subnet to check for localHost. */
 
 void logIt(char *format, ...);
 /* Print message to log file. */
