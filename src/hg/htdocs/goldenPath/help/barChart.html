@@ -181,7 +181,7 @@ can be loaded as a custom track into the Genome Browser.
 <p>
 The matrix file is a tab-separated (must be tabs, not spaces) file of the following form, perhaps 
 resulting from an RNA-Seq analysis pipeline. Please note that the first line must  describe each 
-column like in the example snippet below.
+column as in the example snippet below.
 <pre>
 transcript	sample1	sample2	sample3	sample4	sample5	...
 transcriptName	value1	value2	value3	value4	value5	...
@@ -216,7 +216,7 @@ along with the rest of this example.
 To create a custom track in this form, follow the below steps:
 <ol>
    <li>Create a bed6+1 file to use as a map for the items in your matrix (does not need to be 
-   all-inclusive). This file, with example lines like:
+   all-inclusive). This file, with example lines such as:
    <pre><code>
 chr14	95086227	95158010	ENSG00000100697.10	999	-	DICER1
    </code></pre>
@@ -269,7 +269,7 @@ track type=barChart name=&quot;barChart Example&quot; description=&quot;A barCha
 
 <p>
 <em>expMatrixToBarchartBed</em> automatically computes the median values for all the samples in
-the matrix file, which is useful when your experiment contains data from 8000 samples (like
+the matrix file, which is useful when your experiment contains data from 8000 samples (such as
 the GTEx data). Furthermore, <em>expMatrixToBarchartBed</em> can compute the mean value of all 
 samples in a category of the matrix file (instead of the default median), in addition to allowing 
 for a specific ordering of the expScores field. NOTE: Set the barChartMetric setting to 'mean' if

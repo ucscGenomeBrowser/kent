@@ -3,9 +3,9 @@ A = bedMergeAdjacent
 include $(kentSrc)/inc/userApp.mk
 
 clean::
-	rm -f tests/test-output.bed 
+	rm -f tests/output.bed 
 
 test::
-	rm -f tests/test-output.bed 
-	${DESTBINDIR}/bedMergeAdjacent tests/test-input.bed tests/test-output.bed
-	diff tests/test-expected.bed tests/test-output.bed
+	rm -f tests/output.bed 
+	${DESTBINDIR}/bedMergeAdjacent tests/input.bed tests/output.bed
+	diff tests/expected.bed tests/output.bed

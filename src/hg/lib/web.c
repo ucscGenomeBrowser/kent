@@ -465,7 +465,9 @@ if (hgGateway)
     {
     printf(
         #include "jWestHeader.h"
-               , csp, title);
+               , csp, title
+               , webTimeStampedLinkToResource("HGStyle.css", TRUE)
+               , webTimeStampedLinkToResource("jWest.css", TRUE));
     }
 else
     {

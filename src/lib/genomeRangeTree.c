@@ -80,7 +80,7 @@ struct range *genomeRangeTreeAdd(struct genomeRangeTree *tree, char *chrom, int 
 return rangeTreeAdd(genomeRangeTreeFindOrAddRangeTree(tree,chrom), start, end);
 }
 
-struct range *genomeRangeTreeAddVal(struct genomeRangeTree *tree, char *chrom, int start, int end, void *val, void *(*mergeVals)(void *existing, void*new))
+struct range *genomeRangeTreeAddVal(struct genomeRangeTree *tree, char *chrom, int start, int end, void *val, void *(*mergeVals)(void *existing, void *newVal))
 /* Add range to tree, merging with existing ranges if need be. 
  * Adds new rangeTree if chrom not found. 
  * If this is a new range, set the value to this val.
