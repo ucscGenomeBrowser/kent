@@ -32580,6 +32580,8 @@ hgBbiDbLink hg19 hgmd /gbdb/hg19/bbi/hgmd.bb
 # Forgot, finally done Oct 24: also updated hgBeacon
 bigBedToBed /gbdb/hg19/bbi/hgmd.bb /tmp/temp.bed
 /usr/local/apache/cgi-bin/hgBeacon -f hgmd temp.bed hgmd
+# Forgot, finally done June 26: updated GBIB as qateam
+scp /gbdb/hg19/bbi/hgmd.bb hgdownload:/usr/local/apache/gbib/prot/
 
 ###########################################################################
 2018-03-08: update UCSC GENCODE V19 to include protein id (for VAI)
