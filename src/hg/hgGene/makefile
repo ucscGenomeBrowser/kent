@@ -18,6 +18,7 @@ include ../../inc/cgi_build_rules.mk
 my::
 	rm -fr ${CGI_BIN}-${USER}/hgGeneData
 	rsync -ar --exclude=CVS/ --exclude=.svn/ --delete hgGeneData ${CGI_BIN}-${USER}/
+	chmod -R g+w ${CGI_BIN}-${USER}/hgGeneData
 	chmod -R a+rX ${CGI_BIN}-${USER}/hgGeneData
 
 install::

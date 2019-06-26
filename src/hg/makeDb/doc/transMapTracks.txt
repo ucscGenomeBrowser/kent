@@ -111,8 +111,8 @@ General steps for setup, only done once:
     tmdir=~/compbio/projs/transMap/transMap-dev
     mkdir -p  /hive/data/inside/transMap/V5/logs
     pushd /hive/data/inside/transMap/V5
-    (time nice ${tmdir}/bin/luigiTransMap --workers=32 --logConfFile=${tmdir}/etc/logging.conf ${tmdir}/etc/transMapBuildConf.py) >&logs/2019-06-10.log &
-    # takes maybe 10-14 hours,  at the end, check for parasol jobs
+    (time nice ${tmdir}/bin/luigiTransMap --workers=64 --logConfFile=${tmdir}/etc/logging.conf ${tmdir}/etc/transMapBuildConf.py) >&logs/2019-06-24.log &
+    # takes maybe a day or more,  at the end, check for parasol jobs
     # that are lost (using one or two stranglers for a few batches), then do
     para stop -batch=/the/batch/name
     para push -batch=/the/batch/name
@@ -126,13 +126,6 @@ General steps for setup, only done once:
     src/hg/makeDb/trackDb/trackDb.transMap.ra 
   # create push lists for databases and gbdb files for genomes on hgwbeta:
     ${tmdir}/bin/mkPushList ${tmdir}/etc/transMapBuildConf.py db.push.lst gbdb.push.lst
-
-  # and creating the following html files:
-    transMapV5.html
-    transMapEnsemblV5.html
-    transMapEstV5.html
-    transMapRefseqV5.html
-    transMapRnaV5.html
 
 
 ##############################################################################################

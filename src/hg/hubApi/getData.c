@@ -259,7 +259,8 @@ else	/* fully specified chrom:start-end */
     else
 	{
 	sqlDyStringPrintf(query, "select * from %s where ", splitSqlTable);
-        hAddBinToQuery(start, end, query);
+        if (hti->hasBin)
+           hAddBinToQuery(start, end, query);
 	sqlDyStringPrintf(query, "%s='%s' AND %s > %u AND %s < %u ORDER BY %s", chromName, chrom, endName, start, startName, end, startName);
 	}
     }

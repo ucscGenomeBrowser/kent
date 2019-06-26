@@ -7,9 +7,7 @@ HELP_STR="usage: sessionDataConvert.sh userName sessionName
 Both userName and sessionName must be %-encoded as they are in namedSessionDb"
 
 cgiDir=/usr/local/apache/cgi-bin
-cgiUrl=https://hgwdev-angie.gi.ucsc.edu/cgi-bin
-cartDumpUrl=$cgiUrl/cartDump
-hgSessionUrl=$cgiUrl/hgSession
+hgSessionUrl=https://$(hostname -f)/cgi-bin/hgSession
 
 cookieJar=./.sessionDataConvert.cookieJar
 
@@ -20,12 +18,6 @@ function getSetting()
     local settingVal=$(grep ^$settingName $cgiDir/hg.conf | sed -e 's/.*=//;')
     if [ "$settingVal" == "" -a -f $cgiDir/hg.conf.private ] ; then
         settingVal=$(grep ^$settingName $cgiDir/hg.conf.private | sed -e 's/.*=//;')
-    fi
-    if [ "$settingVal" == "" -a -f $cgiDir/../cgi-bin/hg.conf ]; then
-        settingVal=$(grep ^$settingName $cgiDir/../cgi-bin/hg.conf | sed -e 's/.*=//;')
-    fi
-    if [ "$settingVal" == "" -a -f $cgiDir/../cgi-bin/hg.conf.private ]; then
-        settingVal=$(grep ^$settingName $cgiDir/../cgi-bin/hg.conf.private | sed -e 's/.*=//;')
     fi
     if [ "$settingVal" == "" ]; then
         echo "Unable to find $settingName setting in cgi-bin hg.conf or hg.conf.private"
