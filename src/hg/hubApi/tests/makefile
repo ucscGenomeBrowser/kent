@@ -688,14 +688,14 @@ notSup06: setOutput
 
 # request chromosome list from a track that is a container, not a data track
 notSup07: setOutput
-	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/getData/track?track=gdcCancer;genome=hg38'\n"
-	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome=hg38 -track="gdcCancer" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/list/chromosomes?track=gdcCancer;genome=hg38'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome=hg38 -track="gdcCancer" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # request chromosome list from a track that is a container, not a data track
 notSup08: setOutput
-	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/getData/track?track=allCancer;genome=hg38'\n"
-	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome=hg38 -track="allCancer" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/list/chromosomes?track=allCancer;genome=hg38'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome=hg38 -track="allCancer" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 
