@@ -3,7 +3,7 @@ test:: test0 test6 test7 test8 test9 test10  \
 	test11 test12 test13 test14 test15 test16 test19 test21 \
 	test26 test27 test28 test29 test39 test40 \
 	listFunctions getFunctions getSequence wigData errorTests \
-	notSupported
+	notSupported bugReports
 
 all:: listFunctions getFunctions getSequence wigData errorTests \
 	notSupported
@@ -27,6 +27,8 @@ errorTests: err01 err02 err03 err04 err05 err06 err07 err08 err09 err10 \
 	err31 err32 err33 err34 err35 err36 err37 err38 err39
 
 notSupported: notSup01 notSup02
+
+bugReports: redmine23733
 
 setOutput:
 	@if [ ! -d testOutput ]; then mkdir testOutput; fi
@@ -489,14 +491,14 @@ err36: setOutput
 
 # testing duplicated parameters on functions
 err37: setOutput
-	@printf "### $@ 'https://hgwdev-api.gi.ucsc.edu/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;chrom=chr1;start=4567;end=8901;track=assembly;maxItemsOutput=5;jsonOutputArrays=1;maxItemsOutput=0'\n"
-	@htmlCheck getAll 'https://hgwdev-api.gi.ucsc.edu/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;chrom=chr1;start=4567;end=8901;track=assembly;maxItemsOutput=5;jsonOutputArrays=1;maxItemsOutput=0' 2>&1 | sed -e 's/, /,\n/g;' | egrep -v "${excludeLines}" | tail -5 | gzip -c > testOutput/$@.gz
+	@printf "### $@ 'https://api-test.gi.ucsc.edu/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;chrom=chr1;start=4567;end=8901;track=assembly;maxItemsOutput=5;jsonOutputArrays=1;maxItemsOutput=0'\n"
+	@htmlCheck getAll 'https://api-test.gi.ucsc.edu/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;chrom=chr1;start=4567;end=8901;track=assembly;maxItemsOutput=5;jsonOutputArrays=1;maxItemsOutput=0' 2>&1 | sed -e 's/, /,\n/g;' | egrep -v "${excludeLines}" | tail -5 | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing illegal values on parameters
 err38: setOutput
-	@printf "### $@ 'https://hgwdev-api.gi.ucsc.edu/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;chrom=chr1;start=4567;end=8901;track=assembly;maxItemsOutput=5;jsonOutputArrays=xyz'\n"
-	@htmlCheck getAll 'https://hgwdev-api.gi.ucsc.edu/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;chrom=chr1;start=4567;end=8901;track=assembly;maxItemsOutput=5;jsonOutputArrays=xyz' 2>&1 | sed -e 's/, /,\n/g;' | egrep -v "${excludeLines}" | tail -5 | gzip -c > testOutput/$@.gz
+	@printf "### $@ 'https://api-test.gi.ucsc.edu/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;chrom=chr1;start=4567;end=8901;track=assembly;maxItemsOutput=5;jsonOutputArrays=xyz'\n"
+	@htmlCheck getAll 'https://api-test.gi.ucsc.edu/getData/track?hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;genome=araTha1;chrom=chr1;start=4567;end=8901;track=assembly;maxItemsOutput=5;jsonOutputArrays=xyz' 2>&1 | sed -e 's/, /,\n/g;' | egrep -v "${excludeLines}" | tail -5 | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing protected track data
@@ -673,3 +675,7 @@ notSup02: setOutput
 #     31 superTrack child - not supported</li>
 #      5 vcfTabix - not supported</li>
 
+redmine23733: setOutput
+	@printf "### $@ 'https://api-test.gi.ucsc.edu/getData/track?track=knownGene;genome=hg38;chrom=chr1;end=48000;start=47000'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg38 -track=knownGene -chrom=chr1 -start=47000 -end=48000 2>&1 | sed -e 's/, /,\n/g;' | egrep -v "${excludeLines}" | tail -5 | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
