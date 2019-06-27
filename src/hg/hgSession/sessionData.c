@@ -492,11 +492,11 @@ if (isNotEmpty(sessionDataDbPrefix) || isNotEmpty(sessionDir))
             char *newVal = cloneString(var->val);
             saveTrashPaths(&newVal, sessionDir, FALSE);
             saveTrashPaths(&newVal, sessionDir, TRUE);
-            // Special case for lost hgPcr/blat result trash files: prevent errAbort in hgTracks
-            if ((startsWith("hgPcrResult_", var->name) || sameString("ss", var->name)) &&
-                sameString(newVal, " "))
-                cartRemove(cart, var->name);
-            else if (newVal != var->val && differentString(newVal, var->val))
+            // If the variable would end up with an empty value, leave the old deleted trash file
+            // name in place because the CGIs know how to deal with that but may error out if the
+            // value is just empty.
+            if (newVal != var->val && isNotEmpty(skipLeadingSpaces(newVal)) &&
+                differentString(newVal, var->val))
                 cartSetString(cart, var->name, newVal);
             freeMem(newVal);
             }
