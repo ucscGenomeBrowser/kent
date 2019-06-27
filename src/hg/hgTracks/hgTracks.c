@@ -3993,12 +3993,6 @@ else if (strstr(multiRegionsBedUrl,"://"))
     oldType = url;
 else
     oldType = trashFile;
-if ((oldType == trashFile) && !(fileExists(multiRegionsBedUrl) && fileExists(multiRegionsBedUrlSha1Name)))
-    {  // if the trash files no longer exists, reset to empty string default value.
-    multiRegionsBedUrl = "";
-    cartSetString(cart, "multiRegionsBedUrl", multiRegionsBedUrl);
-    oldType = empty;
-    }
 
 // NEW input
 
