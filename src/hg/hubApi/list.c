@@ -209,6 +209,14 @@ char *sqlTableName = cloneString(table);
 /* 'track' name in trackDb usually refers to a SQL 'table' */
 struct trackDb *tdb = obtainTdb(NULL, db);
 struct trackDb *thisTrack = findTrackDb(table,tdb);
+
+/* thisTrack can be NULL at this time, taken care of later */
+
+if (thisTrack && (tdbIsComposite(thisTrack) || tdbIsCompositeView(thisTrack)))
+    apiErrAbort(err400, err400Msg, "container track '%s' does not contain data, use the children of this container for data access", table);
+if (thisTrack && ! isSupportedType(thisTrack->type))
+    apiErrAbort(err415, err415Msg, "track type '%s' for track=%s not supported at this time", thisTrack->type, table);
+
 /* however, the trackDb might have a specific table defined instead */
 char *tableName = trackDbSetting(thisTrack, "table");
 if (isNotEmpty(tableName))
