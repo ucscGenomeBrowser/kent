@@ -529,9 +529,12 @@ if (NULL == tdb)
     apiErrAbort(err400, err400Msg, "failed to find a track hub definition in genome=%s for endpoint '/getData/track'  given hubUrl='%s'", genome, hubUrl);
 
 struct trackDb *thisTrack = findTrackDb(track, tdb);
-
 if (NULL == thisTrack)
     apiErrAbort(err400, err400Msg, "failed to find specified track=%s in genome=%s for endpoint '/getData/track'  given hubUrl='%s'", track, genome, hubUrl);
+if (tdbIsComposite(thisTrack) || tdbIsCompositeView(thisTrack))
+    apiErrAbort(err400, err400Msg, "container track '%s' does not contain data, use the children of this container for data access", track);
+if (! isSupportedType(thisTrack->type))
+    apiErrAbort(err415, err415Msg, "track type '%s' for track=%s not supported at this time", thisTrack->type, track);
 
 char *bigDataUrl = trackDbSetting(thisTrack, "bigDataUrl");
 struct bbiFile *bbi = bigFileOpen(thisTrack->type, bigDataUrl);
@@ -637,9 +640,15 @@ if (isEmpty(db))
 if (isEmpty(track))
     apiErrAbort(err400, err400Msg, "missing URL variable track=<trackName> name for endpoint '/getData/track");
 
-struct trackDb *thisTrack = hTrackDbForTrackAndAncestors(db, track);
+struct trackDb *thisTrack = hTrackDbForTrack(db, track);
+
 if (NULL == thisTrack)
     apiErrAbort(err400, err400Msg, "can not find track=%s name for endpoint '/getData/track", track);
+if (tdbIsComposite(thisTrack) || tdbIsCompositeView(thisTrack))
+    apiErrAbort(err400, err400Msg, "container track '%s' does not contain data, use the children of this container", track);
+if (! isSupportedType(thisTrack->type))
+    apiErrAbort(err415, err415Msg, "track type '%s' for track=%s not supported at this time subtracks %llx", thisTrack->type, track, (unsigned long long)thisTrack->subtracks);
+ // tdb->subtracks && COMPOSITE_NODE( tdb->treeNodeType);
 
 /* might be a big* track with no table */
 char *bigDataUrl = trackDbSetting(thisTrack, "bigDataUrl");
