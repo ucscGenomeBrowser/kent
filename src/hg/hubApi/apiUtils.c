@@ -325,6 +325,7 @@ for (trackFound = tdb; trackFound; trackFound = trackFound->next)
     if (sameOk(trackFound->track, track))
 	break;
     }
+
 return trackFound;
 }
 
@@ -473,4 +474,22 @@ sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
 slSort(&dbList, dbDbCmpName);
 return dbList;
+}
+
+boolean isSupportedType(char *type)
+/* is given type in the supportedTypes list ? */
+{
+boolean ret = FALSE;
+if (startsWith("wigMaf", type))	/* not wigMaf at this time */
+    return ret;
+struct slName *el;
+for (el = supportedTypes; el; el = el->next)
+    {
+    if (startsWith(el->name, type))
+	{
+	ret = TRUE;
+	break;
+	}
+    }
+return ret;
 }

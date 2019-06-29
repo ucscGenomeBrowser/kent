@@ -1378,6 +1378,7 @@ $HgAutomate::git archive --remote=git://genome-source.soe.ucsc.edu/kent.git \\
 src/hg/makeDb/trackDb/$dbDbSpeciesDir \\
 src/hg/makeDb/trackDb/trackDb.transMap.ra \\
 src/hg/makeDb/trackDb/trackDb.chainNet.ra \\
+src/hg/makeDb/trackDb/crisprAll.ra \\
 src/hg/makeDb/trackDb/trackDb.chainNet.primates.ra \\
 src/hg/makeDb/trackDb/trackDb.chainNet.other.ra \\
 src/hg/makeDb/trackDb/trackDb.chainNet.euarchontoglires.ra \\
@@ -1398,6 +1399,7 @@ src/hg/makeDb/trackDb/trackDb.genbank.ra \\
 src/hg/makeDb/trackDb/trackDb.genbank.new.ra \\
 src/hg/makeDb/trackDb/trackDb.uniprot.ra \\
 src/hg/makeDb/trackDb/crispr10K.ra \\
+src/hg/makeDb/trackDb/crisprAll.ra \\
 src/hg/makeDb/trackDb/tagTypes.tab \\
 src/hg/lib/trackDb.sql \\
 src/hg/lib/hgFindSpec.sql \\
