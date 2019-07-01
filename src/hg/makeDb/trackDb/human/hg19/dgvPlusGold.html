@@ -44,10 +44,10 @@ Color is used in these subtracks to indicate the type of variation:
 </UL>
 </P>
 <p>
-The DGV Gold Standard subtrack utilizes an &quot;exon/intron&quot;
+The DGV Gold Standard subtrack utilizes a boxplot-like
 display to represent the merging of records as explained in the <em>Methods</em>
-section below. In this track, the middle block (where applicable), represents
-the high confidence location of the CNV, while the thin lines and end blocks
+section below. In this track, the middle box (where applicable), represents
+the high confidence location of the CNV, while the thin lines and end boxes
 represent the possible range of the CNV.
 </p>
 
@@ -131,16 +131,16 @@ process.
 
 <p>
 The initial criteria for the Gold Standard set require that a variant is found
-in at least 2 different studies and found in at least two different samples. After
+in at least two different studies and found in at least two different samples. After
 filtering out low-quality variants, the remaining variants are clustered according
 to 50% minimum overlap, and then merged into a single record. Gains and losses are merged 
 separately.
 </p>
 
 <p>
-The highest ranking variant in the cluster defines the inner &quot;block&quot;, while 
-the outer blocks define the maximum possible start and stop coordinates of the CNV.
-In this way, the inner block forms a high-confidence CNV location and the thin connecting 
+The highest ranking variant in the cluster defines the inner box, while 
+the outer lines define the maximum possible start and stop coordinates of the CNV.
+In this way, the inner box forms a high-confidence CNV location and the thin connecting 
 lines indicate confidence intervals for the location of CNV.
 </p>
 
