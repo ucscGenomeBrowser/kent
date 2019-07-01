@@ -723,7 +723,6 @@
 
 <DIV class="tableBrowser"><span class="types all"></span>
 <div class="format"><code>tableBrowser &lt;off/on/noGenome&gt; [table1 ...]</code></div>
-    <P><I>NOT FOR HUBS.</I></P>
     <P>The Table Browser typically allows querying and downloading of some or all 
     of the raw data for a track. The <code>off</code> value blocks Table Browser access to datasets 
     with restrictions (for example, those with confidentiality or licensing limitations).  
