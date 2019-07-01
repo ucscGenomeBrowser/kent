@@ -122,9 +122,6 @@ char *verifyLegalArgs(char *validArgList[]);
  * cgiVarList(), NULL when none found.
  */
 
-boolean isSupportedType(char *type);
-/* is given type in the supportedTypes list ? */
-
 /* ######################################################################### */
 /*  functions in apiUtils.c */
 
