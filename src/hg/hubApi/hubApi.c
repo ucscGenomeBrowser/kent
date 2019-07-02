@@ -43,6 +43,7 @@ char *argListUcscGenomes[] = { NULL };
 char *argListHubGenomes[] = { argHubUrl, NULL };
 char *argListTracks[] = { argGenome, argHubUrl, argTrackLeavesOnly, NULL };
 char *argListChromosomes[] = { argGenome, argHubUrl, argTrack, NULL };
+char *argListSchema[] = { argGenome, argHubUrl, argTrack, NULL };
 char *argGetDataTrack[] = { argGenome, argHubUrl, argTrack, argChrom, argStart, argEnd, argMaxItemsOutput, argJsonOutputArrays, NULL };
 char *argGetDataSequence[] = { argGenome, argHubUrl, argTrack, argChrom, argStart, argEnd, NULL };
 
