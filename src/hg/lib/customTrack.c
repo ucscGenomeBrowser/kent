@@ -777,7 +777,7 @@ if (isNotEmpty(fileName))
             {
             /* unreadable file */
             struct dyString *ds = dyStringNew(0);
-            dyStringPrintf(ds, "Unrecognized binary data format in file %s", fileName);
+            dyStringPrintf(ds, "Unrecognized binary data format in file %s. You can only upload text files on this page. If you have a binary file, like bigBed, bigWig, BAM, etc, copy them to a webserver and paste the URL of the file into the text box here or create a track hub for them. For more details, our <a href='https://genome.ucsc.edu/goldenpath/help/hgTrackHubHelp.html#Hosting'>documentation</a> discusses where you can host binary files.", fileName);
             err = dyStringCannibalize(&ds);
             }
 	}
