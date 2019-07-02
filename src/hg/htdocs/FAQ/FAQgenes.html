@@ -23,9 +23,8 @@
 <li><a href="#gencode">What is the difference between GENCODE comprehensive and basic?</a></li>
 <li><a href="#ncbiRefseq">What is the difference between "NCBI RefSeq" and "UCSC RefSeq"?</a></li>
 <li><a href="#ccds">What is CCDS?</a></li>
-<li><a href="#justsingle">How can I just show a single transcript per gene?</a></li>
-<li><a href="#singledownload">I just want to download a gene set with a single entry per gene.
-			      Where can I find this?</a></li>
+<li><a href="#justsingle">How can I show a single transcript per gene?</a></li>
+<li><a href="#singledownload">How can I download a file with a single transcript per gene?</a></li>
 <li><a href="#whatdo">This is rather complicated. Can you tell me which gene transcript track
                       I should use?</a></li>
 </ul>
@@ -354,7 +353,7 @@ As  the name implies, it does not cover UTR regions or non-coding transcripts.
 </p>
 
 <a name="justsingle"></a>
-<h6>How can I just show a single transcript per gene?</h6>
+<h6>How can I show a single transcript per gene?</h6>
 
 <p> 
 For the tracks &quot;<a target=_blank 
@@ -377,10 +376,23 @@ It contains only the transcripts that are part of the Human Gene Mutation Databa
 </p>
 
 <a name="singledownload"></a>
-<h6>I just want to download a gene set with a single entry per gene. Where can I find this?</h6>
+<h6>How can I download a file with a single transcript per gene?</h6>
 <p>
-We have data tables named knownCanonical available for different assemblies comprised of a single 
-transcript/isoform per gene.</p>
+This is a common request, but very often this is not necessary when designing
+an analysis.  You will have to make a choice of this single transcript using
+some mechanism, and this choice will affect your pipeline results. It may be
+easier to keep all transcripts. For example, instead of annotating enhancers
+with the closest "best-transcript", you can annotate them with the closest exon
+of any transcript. When mapping variants to transcripts, you can map to all
+transcripts and sort these by accession ID, showing mainly the first.  When
+segmenting the chromosomes into gene loci, you can use the union of all
+transcripts of a gene rather than select a single "best" transcript.
+</p>
+
+<p>
+That being said, data tables called "knownCanonical" are available for
+many assemblies. They try to select only a single transcript/isoform per gene, 
+if possible.</p>
 
 <p>
 For hg19, the knownCanonical table is a subset of the <a target="_blank" 
@@ -410,10 +422,12 @@ or by using the <a target="_blank" href="../cgi-bin/hgTables">Table Browser</a>.
 <h6>This is rather complicated. Can you tell me which gene transcript track I should use?</h6>
 <p> 
 For automated analysis, if you are doing NGS analysis and you need to capture
-all possible transcripts, GENCODE provides a comprehensive gene set.  For human 
+all possible transcripts, GENCODE provides one of the most comprehensive gene sets.  For human 
 genetics or variant annotation, a more restricted transcript set is usually sufficient and &quot;NCBI
 RefSeq&quot; is the standard. If you are only interested in protein-coding
 annotations, CCDS or UniProt may be an option, but this is rather unusual.
+If you are interested in the best splice site coverage, AceView is worth a
+look.
 </p>
 
 <p>
