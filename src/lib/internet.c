@@ -183,10 +183,9 @@ boolean internetIpInSubnetCidr(unsigned char unpackedIp[4], struct cidr *cidr)
 /* Return true if unpacked IP address is in subnet cidr. */
 {
 bits32 subnetIp = cidr->ip;
-//printf("packed32 bits=%u %08x\n", subnetIp, subnetIp);   // DEBUG REMOVE
 int r = 32 - cidr->subnetLength;
-bits32 caremask = subnetIp & (((unsigned int) 0xFFFFFFFF) << r);
 
+bits32 caremask = ((unsigned int) 0xFFFFFFFF) << r;
 bits32 packedIp = internetPackIp(unpackedIp);
 
 if ((subnetIp & caremask) == (packedIp & caremask))

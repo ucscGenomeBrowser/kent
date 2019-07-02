@@ -197,8 +197,8 @@ void sqlExecProgProfile(char *profile, char *prog, char **progArgs, int userArgc
  * The program is execvp-ed, this function does not return. 
  */
 {
-int i, j = 0, nargc=cntArgv(progArgs)+userArgc+6, returnStatus;
-pid_t child_id;
+int i, j = 0, nargc=cntArgv(progArgs)+userArgc+6, status;
+pid_t childId;
 char **nargv, defaultFileName[256], defaultFileArg[256], *homeDir;
 
 // install cleanup signal handlers
@@ -238,9 +238,9 @@ nargv[j++] = NULL;
 fflush(stdout);
 fflush(stderr);
 
-child_id = fork();
-killChildPid = child_id;
-if (child_id == 0)
+childId = fork();
+killChildPid = childId;
+if (childId == 0)
     {
     execvp(nargv[0], nargv);
     _exit(42);  /* Why 42?  Why not?  Need something user defined that mysql isn't going to return */
@@ -248,18 +248,38 @@ if (child_id == 0)
 else
     {
     /* Wait until the child process completes, then delete the temp file */
-    wait(&returnStatus);
-    unlink (defaultFileName);
-    if (WIFEXITED(returnStatus))
-        {
-	int childExitStatus = WEXITSTATUS(returnStatus);
-        if (childExitStatus == 42)
-            errAbort("sqlExecProgProfile: exec failed");
+
+    pid_t endId = waitpid(childId, &status, 0);
+    if (endId == -1)             /* error calling waitpid       */
+	{
+	errAbort("waitpid error");
+	exit(1);
+	}
+    else if (endId == childId)   /* child ended                 */
+	{
+	if (WIFEXITED(status))
+	    {
+	    // Child ended normally.
+	    unlink (defaultFileName);
+	    int childExitStatus = WEXITSTATUS(status);
+	    if (childExitStatus == 42)
+		errAbort("sqlExecProgProfile: exec failed");
+	    else
+		{
+		// Propagate child's exit status:
+		_exit(childExitStatus);
+		}
+	    }
+	else if (WIFSIGNALED(status))
+	    errAbort("Child mysql process ended because of an uncaught signal.n");
+	else if (WIFSTOPPED(status))
+	    errAbort("Child mysql process has stopped.n");
 	else
-	    // Propagate child's exit status:
-	    _exit(childExitStatus);
-        }
-    else
-        errAbort("sqlExecProgProfile: child process exited with abnormal status %d", returnStatus);
+	    errAbort("sqlExecProgProfile: child mysql process exited with abnormal status %d", status);
+	}
+    else if (endId == 0)         /* child still running should not happen */
+	{
+	errAbort("Unexpected error, child still running");
+	}
     }
 }

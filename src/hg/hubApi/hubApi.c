@@ -62,9 +62,8 @@ static long timeOutSeconds = 100;
 static boolean timedOut = FALSE;
 static char *urlPrefix = "";	/* initalized to support self references */
 
-	/* supportedTypes will be initialized to a known supported set */
-static struct slName *supportedTypes = NULL;
-
+/* supportedTypes will be initialized to a known supported set */
+struct slName *supportedTypes = NULL;
 
 static void initSupportedTypes()
 /* initalize the list of supported track types */
@@ -102,25 +101,7 @@ slAddHead(&supportedTypes, el);
 // el = newSlName("bigChain");
 // slAddHead(&supportedTypes, el);
 slNameSort(&supportedTypes);
-}
-
-static boolean isSupportedType(char *type)
-/* is given type in the supportedTypes list ? */
-{
-boolean ret = FALSE;
-if (startsWith("wigMaf", type))	/* not wigMaf at this time */
-    return ret;
-struct slName *el;
-for (el = supportedTypes; el; el = el->next)
-    {
-    if (startsWith(el->name, type))
-	{
-	ret = TRUE;
-	break;
-	}
-    }
-return ret;
-}
+}	/*	static void initSupportedTypes()	*/
 
 static int publicHubCmpCase(const void *va, const void *vb)
 /* Compare two shortLabels, ignore case. */
@@ -1313,7 +1294,6 @@ cgiVarSet("ignoreCookie", "1");
 
 getDbAndGenome(cart, &database, &genome, oldVars);
 initGenbankTableNames(database);
-initSupportedTypes();
 initUrlPrefix();
 
 trackLeavesOnly = cartUsualBoolean(cart, "trackLeavesOnly", trackLeavesOnly);
@@ -1567,6 +1547,8 @@ int timeout = cgiOptionalInt("udcTimeout", 300);
 if (udcCacheTimeout() < timeout)
     udcSetCacheTimeout(timeout);
 knetUdcInstall();
+
+initSupportedTypes();
 
 char *pathInfo = getenv("PATH_INFO");
 if (isNotEmpty(pathInfo)) /* can get to this immediately, no cart needed */

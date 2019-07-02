@@ -29,6 +29,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
+static boolean printSaveList = FALSE; // if this is true, we print to stderr the number of custom tracks saved
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -600,6 +601,8 @@ if (ctList)
     trashDirFile(&tn, "ct", CT_PREFIX, ".bed");
     char *ctFileName = tn.forCgi;
     cartSetString(cart, ctFileVar, ctFileName);
+    if (printSaveList)
+        fprintf(stderr, "customTrack: saved %d in %s\n", slCount(ctList), ctFileName);
     customTracksSaveFile(genomeDb, ctList, ctFileName);
     }
 else
@@ -940,6 +943,12 @@ if (customTracksExist(cart, &ctFileName))
 
 /* merge new and old tracks */
 numAdded = slCount(newCts);
+if (numAdded)
+    {
+    fprintf(stderr, "customTrack: new %d from %s\n", numAdded, customText);
+    printSaveList = TRUE;
+    }
+
 ctList = customTrackAddToList(ctList, newCts, &replacedCts, FALSE);
 for (ct = ctList; ct != NULL; ct = ct->next)
     if (trackDbSetting(ct->tdb, CT_UNPARSED))

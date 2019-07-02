@@ -36,6 +36,9 @@
 #include "halBlockViz.h"
 #endif
 
+/* reference for these error codes:
+ * https://www.restapitutorial.com/httpstatuscodes.html
+ */
 /* error return codes */
 #define err301	301
 #define err301Msg	"Moved Permanently"
@@ -45,6 +48,8 @@
 #define err403Msg	"Forbidden"
 #define err404	404
 #define err404Msg	"Not Found"
+#define err415	415
+#define err415Msg	"Unsupported track type"
 #define err429	429
 #define err429Msg	"Too Many Requests"
 
@@ -87,6 +92,10 @@ extern long enteredMainTime;	/* will become = clock1000() on entry */
 extern int maxItemsOutput;	/* can be set in URL maxItemsOutput=N */
 extern long long itemsReturned;	/* for getData functions, number of items returned */
 extern boolean reachedMaxItems;	/* during getData, signal to return */
+
+/* supportedTypes will be initialized to a known supported set */
+extern struct slName *supportedTypes;
+
 /* for debugging purpose, current bot delay value */
 extern int botDelay;
 boolean debug;	/* can be set in URL debug=1, to turn off: debug=0 */
@@ -178,6 +187,9 @@ struct trackHubGenome *findHubGenome(struct trackHub *hub, char *genome,
 
 struct dbDb *ucscDbDb();
 /* return the dbDb table as an slList */
+
+boolean isSupportedType(char *type);
+/* is given type in the supportedTypes list ? */
 
 /* ######################################################################### */
 /*  functions in getData.c */
