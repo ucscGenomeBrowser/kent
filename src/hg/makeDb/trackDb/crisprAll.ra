@@ -6,11 +6,12 @@ visibility hide
 type bed 3
 superTrack on
 html crisprAll
+tableBrowser noGenome
 
     track crisprAllRanges
     shortLabel CRISPR Regions All
     longLabel Genome regions processed to find CRISPR/Cas9 target sites, whole genome
-    visibility dense
+    visibility hide
     color 110,110,110
     type bed 3
     parent crisprAll
@@ -30,3 +31,5 @@ html crisprAll
     url http://crispor.org/crispor.py?org=$D&pos=$S:${&pam=NGG
     urlLabel Click here to show this guide on Crispor.org, with expression oligos, validation primers and more
     html crisprAll
+    denseCoverage 0
+
