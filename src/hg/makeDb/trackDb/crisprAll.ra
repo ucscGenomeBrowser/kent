@@ -1,32 +1,17 @@
-track crisprAll
-shortLabel CRISPR All
-longLabel CRISPR/Cas9 Sp. Pyog. target sites, whole genome
-group genes
+track crisprAllTargets
 visibility hide
-type bed 3
-superTrack on
+shortLabel CRISPR All
+longLabel CRISPR/Cas9 -NGG Targets, whole genome
+group genes
+type bigBed 9 +
 html crisprAll
-
-    track crisprAllRanges
-    shortLabel CRISPR Regions All
-    longLabel Genome regions processed to find CRISPR/Cas9 target sites, whole genome
-    visibility dense
-    color 110,110,110
-    type bed 3
-    parent crisprAll
-    html crisprAll
-
-    track crisprAllTargets
-    shortLabel CRISPR Targets All
-    longLabel CRISPR/Cas9 -NGG Targets, whole genome
-    visibility pack
-    type bigBed 9 +
-    itemRgb on
-    parent crisprAll
-    mouseOverField _mouseOver
-    scoreLabel MIT Guide Specificity Score
-    # details page is not using a mysql table but a tab-sep file
-    detailsTabUrls _offset=/gbdb/$db/crisprAll/crisprDetails.tab
-    url http://crispor.org/crispor.py?org=$D&pos=$S:${&pam=NGG
-    urlLabel Click here to show this guide on Crispor.org, with expression oligos, validation primers and more
-    html crisprAll
+itemRgb on
+mouseOverField _mouseOver
+scoreLabel MIT Guide Specificity Score
+# details page is not using a mysql table but a tab-sep file
+detailsTabUrls _offset=/gbdb/$db/crisprAll/crisprDetails.tab
+url http://crispor.org/crispor.py?org=$D&pos=$S:${&pam=NGG
+urlLabel Click here to show this guide on Crispor.org, with expression oligos, validation primers and more
+tableBrowser noGenome
+denseCoverage 0
+scoreFilterMax 100

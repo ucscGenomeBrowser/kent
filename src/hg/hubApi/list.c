@@ -43,7 +43,7 @@ freeMem(dataTime);
 char **columnNames = NULL;
 char **columnTypes = NULL;
 int *jsonTypes = NULL;
-int columnCount = tableColumns(conn, jw, hubPublicTableName(), &columnNames,
+int columnCount = tableColumns(conn, hubPublicTableName(), &columnNames,
     &columnTypes, &jsonTypes);
 jsonWriteListStart(jw, "publicHubs");
 for ( ; el != NULL; el = el->next )
@@ -102,7 +102,7 @@ freeMem(dataTime);
 char **columnNames = NULL;
 char **columnTypes = NULL;
 int *jsonTypes = NULL;
-int columnCount = tableColumns(conn, jw, "dbDb", &columnNames, &columnTypes,
+int columnCount = tableColumns(conn, "dbDb", &columnNames, &columnTypes,
     &jsonTypes);
 jsonWriteObjectStart(jw, "ucscGenomes");
 for ( el=dbList; el != NULL; el = el->next )
@@ -256,6 +256,229 @@ else if (sqlColumnExists(conn, sqlTableName, "genoName"))	/* track type rmsk */
 return returnChrom;
 }
 
+static long long bbiItemCount(char *bigDataUrl, char *type, char *indexFileOrUrl)
+/* check the bigDataUrl to see what the itemCount is there */
+{
+long long itemCount = 0;
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    if (allowedBigBedType(type))
+        {
+        struct bbiFile *bbi = NULL;
+        bbi = bigBedFileOpen(bigDataUrl);
+        itemCount = bigBedItemCount(bbi);
+        bbiFileClose(&bbi);
+        }
+    else if (startsWithWord("bigWig", type))
+        {
+        struct bbiFile *bwf = bigWigFileOpen(bigDataUrl);
+        struct bbiSummaryElement sum = bbiTotalSummary(bwf);
+        itemCount = sum.validCount;
+        bbiFileClose(&bwf);
+        }
+    else if (sameString("bam", type))
+        {
+        itemCount = bamFileItemCount(bigDataUrl, indexFileOrUrl);
+        }
+    else if (sameString("vcfTabix", type))
+        {
+        itemCount = vcfTabixItemCount(bigDataUrl, indexFileOrUrl);
+        }
+    }
+errCatchEnd(errCatch);
+if (isNotEmpty(errCatch->message->string))
+    fprintf(stderr, "%s", errCatch->message->string);
+errCatchFree(&errCatch);
+return itemCount;
+}
+
+static void outputTrackDbVars(struct jsonWrite *jw, struct trackDb *tdb,
+    long long itemCount)
+/* JSON output the fundamental trackDb variables */
+{
+if (NULL == tdb)	/* might not be any trackDb */
+    return;
+
+boolean protectedData = FALSE;
+if (trackDbSetting(tdb, "tableBrowser"))
+    protectedData = TRUE;
+jsonWriteString(jw, "shortLabel", tdb->shortLabel);
+jsonWriteString(jw, "type", tdb->type);
+jsonWriteString(jw, "longLabel", tdb->longLabel);
+jsonWriteNumber(jw, "itemCount", itemCount);
+if (tdb->parent)
+    {
+    jsonWriteString(jw, "parent", tdb->parent->track);
+    if (tdb->parent->parent)
+        jsonWriteString(jw, "parentParent", tdb->parent->parent->track);
+    }
+if (tdb->settingsHash)
+    {
+    struct hashEl *hel;
+    struct hashCookie hc = hashFirst(tdb->settingsHash);
+    while ((hel = hashNext(&hc)) != NULL)
+        {
+        if (sameWord("track", hel->name))
+            continue;	// already output in header
+        if (sameWord("tableBrowser", hel->name))
+            jsonWriteBoolean(jw, "protectedData", TRUE);
+        else if (isEmpty((char *)hel->val))
+            jsonWriteString(jw, hel->name, "empty");
+        else if (protectedData && sameWord(hel->name, "bigDataUrl"))
+            jsonWriteString(jw, hel->name, "protectedData");
+        else
+            jsonWriteString(jw, hel->name, (char *)hel->val);
+        }
+    }
+}
+
+static void hubSchemaJsonOutput(FILE *f, char *hubUrl, char *genome, char *track)
+/* for given hubUrl and track, output the schema for the hub track */
+{
+struct trackHub *hub = errCatchTrackHubOpen(hubUrl);
+struct trackHubGenome *ge = NULL;
+
+if (isEmpty(genome))
+    apiErrAbort(err400, err400Msg, "must specify a 'genome=name' with hubUrl for endpoint: /list/schema?hubUrl=%s;genome=<empty>", hubUrl);
+
+struct trackHubGenome *foundGenome = NULL;
+
+for (ge = hub->genomeList; ge; ge = ge->next)
+    {
+    if (sameOk(genome, ge->name))
+	{
+	foundGenome = ge;
+	continue;	/* found genome */
+	}
+    }
+
+if (NULL == foundGenome)
+    apiErrAbort(err400, err400Msg, "can not find specified 'genome=%s' for endpoint: /list/schema?hubUrl=%s;genome=%s", genome, hubUrl, genome);
+
+struct jsonWrite *jw = apiStartOutput();
+jsonWriteString(jw, "hubUrl", hubUrl);
+jsonWriteString(jw, "genome", genome);
+jsonWriteString(jw, "track", track);
+
+struct trackDb *tdb = obtainTdb(foundGenome, NULL);
+if (NULL == tdb)
+    apiErrAbort(err400, err400Msg, "failed to find a track hub definition in genome=%s track=%s for endpoint '/list/schema' given hubUrl=%s'", genome, track, hubUrl);
+
+struct trackDb *thisTrack = findTrackDb(track, tdb);
+if (NULL == thisTrack)
+    apiErrAbort(err400, err400Msg, "failed to find specified track=%s in genome=%s for endpoint '/list/schema'  given hubUrl='%s'", track, genome, hubUrl);
+
+char *bigDataUrl = hReplaceGbdb(trackDbSetting(thisTrack, "bigDataUrl"));
+if (NULL == bigDataUrl)
+    apiErrAbort(err400, err400Msg, "failed to find bigDataUrl for specified track=%s in genome=%s for endpoint '/list/schema'  given hubUrl='%s'", track, genome, hubUrl);
+char *indexFileOrUrl = hReplaceGbdb(trackDbSetting(tdb, "bigDataIndex"));
+struct bbiFile *bbi = bigFileOpen(thisTrack->type, bigDataUrl);
+long long itemCount = bbiItemCount(bigDataUrl, thisTrack->type, indexFileOrUrl);
+
+outputTrackDbVars(jw, thisTrack, itemCount);
+
+struct asObject *as = bigBedAsOrDefault(bbi);
+struct sqlFieldType *fiList = sqlFieldTypesFromAs(as);
+bigColumnTypes(jw, fiList, as);
+
+apiFinishOutput(0, NULL, jw);
+}	/* static void hubSchemaJsonOutput(FILE *f, char *hubUrl,
+	 *	char *genome, char *track) */
+
+static void schemaJsonOutput(FILE *f, char *db, char *track)
+/* for given db and track, output the schema for the associated table */
+{
+struct sqlConnection *conn = hAllocConnMaybe(db);
+if (NULL == conn)
+    apiErrAbort(err400, err400Msg, "can not find 'genome=%s' for endpoint '/list/schema", db);
+
+struct trackDb *tdb = obtainTdb(NULL, db);
+struct trackDb *thisTrack = findTrackDb(track, tdb);
+if (NULL == thisTrack)	/* OK to work with tables without trackDb definitions */
+    {
+    if (! sqlTableExists(conn, track))
+	apiErrAbort(err400, err400Msg, "failed to find specified track=%s in genome=%s for endpoint '/list/schema'", track, db);
+    }
+/* in case of no trackDb, be wary of trying to use it */
+if (thisTrack && (tdbIsComposite(thisTrack) || tdbIsCompositeView(thisTrack)))
+    apiErrAbort(err400, err400Msg, "container track '%s' does not contain data, use the children of this container for data access", track);
+
+char *sqlTableName = cloneString(track);
+/* the trackDb might have a specific table defined instead */
+char *tableName = trackDbSetting(thisTrack, "table");
+if (isNotEmpty(tableName))
+    {
+    freeMem(sqlTableName);
+    sqlTableName = cloneString(tableName);
+    }
+
+/* this function knows how to deal with split chromosomes, the NULL
+ * here for the chrom name means to use the first chrom name in chromInfo
+ */
+struct hTableInfo *hti = hFindTableInfoWithConn(conn, NULL, sqlTableName);
+/* check if table name needs to be modified */
+char *splitTableName = NULL;
+if (hti && hti->isSplit)
+    {
+    char *defaultChrom = hDefaultChrom(db);
+    char fullTableName[256];
+    safef(fullTableName, sizeof(fullTableName), "%s_%s", defaultChrom, hti->rootName);
+    freeMem(sqlTableName);
+    sqlTableName = cloneString(fullTableName);
+    splitTableName = cloneString(fullTableName);
+    }
+else
+    {
+    splitTableName = sqlTableName;
+    }
+
+char **columnNames = NULL;
+char **columnTypes = NULL;
+int *jsonTypes = NULL;
+int columnCount = tableColumns(conn, splitTableName, &columnNames, &columnTypes, &jsonTypes);
+struct asObject *as = asForTable(conn, splitTableName, thisTrack);
+struct asColumn *columnEl = as->columnList;
+int asColumnCount = slCount(columnEl);
+
+char *dataTime = sqlTableUpdate(conn, splitTableName);
+
+time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
+replaceChar(dataTime, ' ', 'T');	/* ISO 8601 */
+struct jsonWrite *jw = apiStartOutput();
+jsonWriteString(jw, "genome", db);
+jsonWriteString(jw, "track", track);
+jsonWriteString(jw, "dataTime", dataTime);
+jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
+freeMem(dataTime);
+
+long long itemCount = 0;
+/* do not show counts for protected data */
+if (! trackDbSetting(thisTrack, "tableBrowser"))
+    {
+    char query[2048];
+    sqlSafef(query, sizeof(query), "select count(*) from %s", splitTableName);
+    if (hti && hti->isSplit)	/* punting on split table item count */
+	itemCount = 0;
+    else
+	{
+	itemCount = sqlQuickNum(conn, query);
+	}
+    }
+hFreeConn(&conn);
+
+outputTrackDbVars(jw, thisTrack, itemCount);
+
+if (hti && (hti->isSplit || debug))
+    jsonWriteBoolean(jw, "splitTable", hti->isSplit);
+
+outputSchema(thisTrack, jw, columnNames, columnTypes, jsonTypes, hti,
+  columnCount, asColumnCount, columnEl);
+
+apiFinishOutput(0, NULL, jw);
+
+}	/*	static void schemaJsonOutput(FILE *f, char *db, char *track) */
+
 static void chromInfoJsonOutput(FILE *f, char *db)
 /* for given db, if there is a track, list the chromosomes in that track,
  * for no track, simply list the chromosomes in the sequence
@@ -341,43 +564,6 @@ else
     apiFinishOutput(0, NULL, jw);
     }
 hFreeConn(&conn);
-}
-
-static long long bbiItemCount(char *bigDataUrl, char *type, char *indexFileOrUrl)
-/* check the bigDataUrl to see what the itemCount is there */
-{
-long long itemCount = 0;
-struct errCatch *errCatch = errCatchNew();
-if (errCatchStart(errCatch))
-    {
-    if (allowedBigBedType(type))
-        {
-        struct bbiFile *bbi = NULL;
-        bbi = bigBedFileOpen(bigDataUrl);
-        itemCount = bigBedItemCount(bbi);
-        bbiFileClose(&bbi);
-        }
-    else if (startsWithWord("bigWig", type))
-        {
-        struct bbiFile *bwf = bigWigFileOpen(bigDataUrl);
-        struct bbiSummaryElement sum = bbiTotalSummary(bwf);
-        itemCount = sum.validCount;
-        bbiFileClose(&bwf);
-        }
-    else if (sameString("bam", type))
-        {
-        itemCount = bamFileItemCount(bigDataUrl, indexFileOrUrl);
-        }
-    else if (sameString("vcfTabix", type))
-        {
-        itemCount = vcfTabixItemCount(bigDataUrl, indexFileOrUrl);
-        }
-    }
-errCatchEnd(errCatch);
-if (isNotEmpty(errCatch->message->string))
-    fprintf(stderr, "%s", errCatch->message->string);
-errCatchFree(&errCatch);
-return itemCount;
 }
 
 static long long bbiTableItemCount(struct sqlConnection *conn, char *type, char *tableName)
@@ -467,45 +653,16 @@ boolean isContainer = tdbIsComposite(tdb) || tdbIsCompositeView(tdb);
 /* do *NOT* print containers when 'trackLeavesOnly' requested */
 if (! (trackLeavesOnly && isContainer) )
     {
-    boolean protectedData = FALSE;
     long long itemCount = 0;
-    if (trackDbSetting(tdb, "tableBrowser"))
-	protectedData = TRUE;
-    else
+    /* do not show counts for protected data */
+    if (! trackDbSetting(tdb, "tableBrowser"))
 	itemCount = dataItemCount(db, tdb);
     jsonWriteObjectStart(jw, tdb->track);
     if (tdbIsComposite(tdb))
         jsonWriteString(jw, "compositeContainer", "TRUE");
     if (tdbIsCompositeView(tdb))
         jsonWriteString(jw, "compositeViewContainer", "TRUE");
-    jsonWriteString(jw, "shortLabel", tdb->shortLabel);
-    jsonWriteString(jw, "type", tdb->type);
-    jsonWriteString(jw, "longLabel", tdb->longLabel);
-    jsonWriteNumber(jw, "itemCount", itemCount);
-    if (tdb->parent)
-        {
-        jsonWriteString(jw, "parent", tdb->parent->track);
-	if (tdb->parent->parent)
-	    jsonWriteString(jw, "parentParent", tdb->parent->parent->track);
-        }
-    if (tdb->settingsHash)
-        {
-        struct hashEl *hel;
-        struct hashCookie hc = hashFirst(tdb->settingsHash);
-        while ((hel = hashNext(&hc)) != NULL)
-            {
-            if (sameWord("track", hel->name))
-		continue;	// already output in header
-            if (sameWord("tableBrowser", hel->name))
-		jsonWriteBoolean(jw, "protectedData", TRUE);
-            else if (isEmpty((char *)hel->val))
-		jsonWriteString(jw, hel->name, "empty");
-            else if (protectedData && sameWord(hel->name, "bigDataUrl"))
-		jsonWriteString(jw, hel->name, "protectedData");
-	    else
-		jsonWriteString(jw, hel->name, (char *)hel->val);
-            }
-        }
+    outputTrackDbVars(jw, tdb, itemCount);
 
     if (tdb->subtracks)
 	{
@@ -664,6 +821,43 @@ else if (sameWord("chromosomes", words[1]))
     else
 	{
         hubChromInfoJsonOutput(stdout, hubUrl, genome);
+	return;
+	}
+    }
+else if (sameWord("schema", words[1]))
+    {
+    char *extraArgs = verifyLegalArgs(argListSchema);
+    if (extraArgs)
+	apiErrAbort(err400, err400Msg, "extraneous arguments found for function /list/schema '%s'", extraArgs);
+
+    char *hubUrl = cgiOptionalString("hubUrl");
+    char *genome = cgiOptionalString("genome");
+    char *db = cgiOptionalString("genome");
+    char *track = cgiOptionalString("track");
+
+    if (isEmpty(track))
+	apiErrAbort(err400, err400Msg, "missing track=<name> for endpoint '/list/schema'");
+
+    if (isEmpty(hubUrl) && isNotEmpty(db))
+	{
+	struct sqlConnection *conn = hAllocConnMaybe(db);
+        if (NULL == conn)
+	    apiErrAbort(err400, err400Msg, "can not find 'genome=%s' for endpoint '/list/schema", db);
+	else
+	    hFreeConn(&conn);
+	}
+
+    if (isEmpty(hubUrl) && isEmpty(db))
+        apiErrAbort(err400, err400Msg, "must supply hubUrl or genome name for endpoint '/list/schema", hubUrl, db);
+
+    if (isEmpty(hubUrl))	// missing hubUrl implies UCSC database
+	{
+        schemaJsonOutput(stdout, db, track);
+	return;
+	}
+    else
+	{
+        hubSchemaJsonOutput(stdout, hubUrl, genome, track);
 	return;
 	}
     }

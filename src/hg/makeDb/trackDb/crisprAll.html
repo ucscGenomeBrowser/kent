@@ -13,11 +13,7 @@ target="_blank">CRISPOR</a>.
 <h2>Display Conventions and Configuration</h2>
 
 <p>
-The track &quot;CRISPR Regions&quot; shows the regions of the genome where
-target sites were analyzed.</p>
-
-<p>
-The track &quot;CRISPR Targets&quot; shows the target sites in these regions.
+The track &quot;CRISPR Targets&quot; shows all potential -NGG target sites across the genome.
 The target sequence of the guide is shown with a thick (exon) bar. The PAM
 motif match (NGG) is shown with a thinner bar. Guides
 are colored to reflect both predicted specificity and efficiency. Specificity
@@ -73,7 +69,7 @@ knock-outs with a single guide efficiently.<p>
 <p>Off-target sites are sorted by the CFD score (<a href="https://www.nature.com/articles/nbt.3437"
 target="_blank">Doench et al. 2016</a>).
 The higher the CFD score, the more likely there is off-target cleavage at that site.
-Off-targets with a CFD score &lt; 0.023 are not shown on this page, but are availble  when
+Off-targets with a CFD score &lt; 0.023 are not shown on this page, but are available when
 following the link to the external CRISPOR tool.
 When compared against experimentally validated off-targets by
 <a href="#References">Haeussler et al. 2016</a>, the large majority of predicted
@@ -114,7 +110,7 @@ Moreno-Mateos accuracy for each score percentile range.</p>
 
 <h3>Track methods</h3>
 <p>
-The entire $organism ($db) genome was for the -NGG motif. Flanking 20mer
+The entire $organism ($db) genome was scanned for the -NGG motif. Flanking 20mer
 guide sequences were
 aligned to the genome with BWA and scored with MIT Specificity scores using the
 command-line version of crispor.org.  Non-unique guide sequences were skipped.
