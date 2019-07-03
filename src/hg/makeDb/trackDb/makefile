@@ -163,7 +163,7 @@ DBS = \
 	proCoq1 \
 	pteVam1 tarSyr1 tarSyr2 \
 	repeats2 \
-	rheMac2 rheMac3 rheMac7 rheMac8 \
+	rheMac2 rheMac3 rheMac7 rheMac8 rheMac10 \
 	rhiBie1 \
 	rhiRox1 \
 	rn3 rn4 rn5 rn6 \

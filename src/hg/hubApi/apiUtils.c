@@ -228,7 +228,7 @@ if (sqlTableExists(conn, "tableDescriptions"))
 return asObj;
 }
 
-int tableColumns(struct sqlConnection *conn, struct jsonWrite *jw, char *table,
+int tableColumns(struct sqlConnection *conn, char *table,
    char ***nameReturn, char ***typeReturn, int **jsonTypes)
 /* return the column names, and their MySQL data type, for the given table
  *  return number of columns (aka 'fields')
@@ -325,6 +325,7 @@ for (trackFound = tdb; trackFound; trackFound = trackFound->next)
     if (sameOk(trackFound->track, track))
 	break;
     }
+
 return trackFound;
 }
 
@@ -474,3 +475,115 @@ hDisconnectCentral(&conn);
 slSort(&dbList, dbDbCmpName);
 return dbList;
 }
+
+boolean isSupportedType(char *type)
+/* is given type in the supportedTypes list ? */
+{
+boolean ret = FALSE;
+if (startsWith("wigMaf", type))	/* not wigMaf at this time */
+    return ret;
+struct slName *el;
+for (el = supportedTypes; el; el = el->next)
+    {
+    if (startsWith(el->name, type))
+	{
+	ret = TRUE;
+	break;
+	}
+    }
+return ret;
+}
+
+void wigColumnTypes(struct jsonWrite *jw)
+/* output column headers for a wiggle data output schema */
+{
+jsonWriteListStart(jw, "columnTypes");
+
+jsonWriteObjectStart(jw, NULL);
+jsonWriteString(jw, "name", "start");
+jsonWriteString(jw, "sqlType", "int");
+jsonWriteString(jw, "jsonType", "number");
+jsonWriteString(jw, "description", "chromStart: 0-based chromosome start position");
+jsonWriteObjectEnd(jw);
+
+jsonWriteObjectStart(jw, NULL);
+jsonWriteString(jw, "name", "end");
+jsonWriteString(jw, "sqlType", "int");
+jsonWriteString(jw, "jsonType", "number");
+jsonWriteString(jw, "description", "chromEnd: 1-based chromosome end position");
+jsonWriteObjectEnd(jw);
+
+jsonWriteObjectStart(jw, NULL);
+jsonWriteString(jw, "name", "value");
+jsonWriteString(jw, "sqlType", "float");
+jsonWriteString(jw, "jsonType", "number");
+jsonWriteString(jw, "description", "numerical data value for this location:start-end");
+jsonWriteObjectEnd(jw);
+
+jsonWriteListEnd(jw);
+}	/* void wigColumnTypes(struct jsonWrite jw) */
+
+void outputSchema(struct trackDb *tdb, struct jsonWrite *jw,
+    char *columnNames[], char *columnTypes[], int jsonTypes[],
+	struct hTableInfo *hti, int columnCount, int asColumnCount,
+	    struct asColumn *columnEl)
+/* print out the SQL schema for this trackDb */
+{
+if (startsWith("wig", tdb->type))
+    {
+        wigColumnTypes(jw);
+    }
+else
+    {
+    jsonWriteListStart(jw, "columnTypes");
+    int i = 0;
+    for (i = 0; i < columnCount; ++i)
+        {
+        jsonWriteObjectStart(jw, NULL);
+        jsonWriteString(jw, "name", columnNames[i]);
+        jsonWriteString(jw, "sqlType", columnTypes[i]);
+        jsonWriteString(jw, "jsonType", jsonTypeStrings[jsonTypes[i]]);
+        if ((0 == i) && (hti && hti->hasBin))
+            jsonWriteString(jw, "description", "Indexing field to speed chromosome range queries");
+        else if (columnEl && isNotEmpty(columnEl->comment))
+            jsonWriteString(jw, "description", columnEl->comment);
+        else
+            jsonWriteString(jw, "description", "");
+
+        /* perhaps move the comment pointer forward */
+        if (columnEl)
+            {
+            if (asColumnCount == columnCount)
+                columnEl = columnEl->next;
+            else if (! ((0 == i) && (hti && hti->hasBin)))
+                columnEl = columnEl->next;
+            }
+        jsonWriteObjectEnd(jw);
+	}
+    jsonWriteListEnd(jw);
+    }
+}
+
+void bigColumnTypes(struct jsonWrite *jw, struct sqlFieldType *fiList,
+    struct asObject *as)
+/* show the column types from a big file autoSql definitions */
+{
+struct asColumn *columnEl = as->columnList;
+jsonWriteListStart(jw, "columnTypes");
+struct sqlFieldType *fi = fiList;
+for ( ; fi; fi = fi->next, columnEl = columnEl->next)
+    {
+    int jsonType = autoSqlToJsonType(fi->type);
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteString(jw, "name", fi->name);
+    jsonWriteString(jw, "sqlType", fi->type);
+    jsonWriteString(jw, "jsonType",jsonTypeStrings[jsonType]);
+    if (columnEl && isNotEmpty(columnEl->comment))
+	jsonWriteString(jw, "description", columnEl->comment);
+    else
+	jsonWriteString(jw, "description", "");
+    jsonWriteObjectEnd(jw);
+    }
+jsonWriteListEnd(jw);
+}
+

@@ -61,35 +61,6 @@ else
     jsonWriteString(jw, name, val);
 }
 
-static void wigColumnTypes(struct jsonWrite *jw)
-/* output column headers for a wiggle data output schema */
-{
-jsonWriteListStart(jw, "columnTypes");
-
-jsonWriteObjectStart(jw, NULL);
-jsonWriteString(jw, "name", "start");
-jsonWriteString(jw, "sqlType", "int");
-jsonWriteString(jw, "jsonType", "number");
-jsonWriteString(jw, "description", "chromStart: 0-based chromosome start position");
-jsonWriteObjectEnd(jw);
-
-jsonWriteObjectStart(jw, NULL);
-jsonWriteString(jw, "name", "end");
-jsonWriteString(jw, "sqlType", "int");
-jsonWriteString(jw, "jsonType", "number");
-jsonWriteString(jw, "description", "chromEnd: 1-based chromosome end position");
-jsonWriteObjectEnd(jw);
-
-jsonWriteObjectStart(jw, NULL);
-jsonWriteString(jw, "name", "value");
-jsonWriteString(jw, "sqlType", "float");
-jsonWriteString(jw, "jsonType", "number");
-jsonWriteString(jw, "description", "numerical data value for this location:start-end");
-jsonWriteObjectEnd(jw);
-
-jsonWriteListEnd(jw);
-}	/* static void wigColumnTypes(struct jsonWrite jw) */
-
 static unsigned sqlQueryJsonOutput(struct sqlConnection *conn,
     struct jsonWrite *jw, char *query, int columnCount, char **columnNames,
 	int *jsonTypes, unsigned itemsDone)
@@ -259,7 +230,8 @@ else	/* fully specified chrom:start-end */
     else
 	{
 	sqlDyStringPrintf(query, "select * from %s where ", splitSqlTable);
-        hAddBinToQuery(start, end, query);
+        if (hti->hasBin)
+           hAddBinToQuery(start, end, query);
 	sqlDyStringPrintf(query, "%s='%s' AND %s > %u AND %s < %u ORDER BY %s", chromName, chrom, endName, start, startName, end, startName);
 	}
     }
@@ -274,42 +246,11 @@ int *jsonTypes = NULL;
 struct asObject *as = asForTable(conn, splitSqlTable, tdb);
 struct asColumn *columnEl = as->columnList;
 int asColumnCount = slCount(columnEl);
-int columnCount = tableColumns(conn, jw, splitSqlTable, &columnNames, &columnTypes, &jsonTypes);
+int columnCount = tableColumns(conn, splitSqlTable, &columnNames, &columnTypes, &jsonTypes);
 if (jsonOutputArrays || debug)
     {
-    if (startsWith("wig", tdb->type))
-	{
-	    wigColumnTypes(jw);
-	}
-    else
-	{
-	jsonWriteListStart(jw, "columnTypes");
-	int i = 0;
-	for (i = 0; i < columnCount; ++i)
-	    {
-	    jsonWriteObjectStart(jw, NULL);
-	    jsonWriteString(jw, "name", columnNames[i]);
-	    jsonWriteString(jw, "sqlType", columnTypes[i]);
-	    jsonWriteString(jw, "jsonType", jsonTypeStrings[jsonTypes[i]]);
-	    if ((0 == i) && (hti && hti->hasBin))
-		jsonWriteString(jw, "description", "Indexing field to speed chromosome range queries");
-	    else if (columnEl && isNotEmpty(columnEl->comment))
-		jsonWriteString(jw, "description", columnEl->comment);
-	    else
-		jsonWriteString(jw, "description", "");
-
-	    /* perhaps move the comment pointer forward */
-	    if (columnEl)
-		{
-		if (asColumnCount == columnCount)
-		    columnEl = columnEl->next;
-		else if (! ((0 == i) && (hti && hti->hasBin)))
-		    columnEl = columnEl->next;
-		}
-	    jsonWriteObjectEnd(jw);
-	}
-	jsonWriteListEnd(jw);
-	}
+    outputSchema(tdb, jw, columnNames, columnTypes, jsonTypes, hti,
+	columnCount, asColumnCount, columnEl);
     }
 
 unsigned itemsDone = 0;
@@ -479,29 +420,6 @@ if (isEmpty(chrom))
 itemsReturned += itemsDone;
 }
 
-static void bigColumnTypes(struct jsonWrite *jw, struct sqlFieldType *fiList,
-    struct asObject *as)
-/* show the column types from a big file autoSql definitions */
-{
-struct asColumn *columnEl = as->columnList;
-jsonWriteListStart(jw, "columnTypes");
-struct sqlFieldType *fi = fiList;
-for ( ; fi; fi = fi->next, columnEl = columnEl->next)
-    {
-    int jsonType = autoSqlToJsonType(fi->type);
-    jsonWriteObjectStart(jw, NULL);
-    jsonWriteString(jw, "name", fi->name);
-    jsonWriteString(jw, "sqlType", fi->type);
-    jsonWriteString(jw, "jsonType",jsonTypeStrings[jsonType]);
-    if (columnEl && isNotEmpty(columnEl->comment))
-	jsonWriteString(jw, "description", columnEl->comment);
-    else
-	jsonWriteString(jw, "description", "");
-    jsonWriteObjectEnd(jw);
-    }
-jsonWriteListEnd(jw);
-}
-
 static void getHubTrackData(char *hubUrl)
 /* return data from a hub track, optionally just one chrom data,
  *  optionally just one section of that chrom data
@@ -528,9 +446,12 @@ if (NULL == tdb)
     apiErrAbort(err400, err400Msg, "failed to find a track hub definition in genome=%s for endpoint '/getData/track'  given hubUrl='%s'", genome, hubUrl);
 
 struct trackDb *thisTrack = findTrackDb(track, tdb);
-
 if (NULL == thisTrack)
     apiErrAbort(err400, err400Msg, "failed to find specified track=%s in genome=%s for endpoint '/getData/track'  given hubUrl='%s'", track, genome, hubUrl);
+if (tdbIsComposite(thisTrack) || tdbIsCompositeView(thisTrack))
+    apiErrAbort(err400, err400Msg, "container track '%s' does not contain data, use the children of this container for data access", track);
+if (! isSupportedType(thisTrack->type))
+    apiErrAbort(err415, err415Msg, "track type '%s' for track=%s not supported at this time", thisTrack->type, track);
 
 char *bigDataUrl = trackDbSetting(thisTrack, "bigDataUrl");
 struct bbiFile *bbi = bigFileOpen(thisTrack->type, bigDataUrl);
@@ -636,9 +557,15 @@ if (isEmpty(db))
 if (isEmpty(track))
     apiErrAbort(err400, err400Msg, "missing URL variable track=<trackName> name for endpoint '/getData/track");
 
-struct trackDb *thisTrack = hTrackDbForTrackAndAncestors(db, track);
+struct trackDb *thisTrack = hTrackDbForTrack(db, track);
+
 if (NULL == thisTrack)
     apiErrAbort(err400, err400Msg, "can not find track=%s name for endpoint '/getData/track", track);
+if (tdbIsComposite(thisTrack) || tdbIsCompositeView(thisTrack))
+    apiErrAbort(err400, err400Msg, "container track '%s' does not contain data, use the children of this container", track);
+if (! isSupportedType(thisTrack->type))
+    apiErrAbort(err415, err415Msg, "track type '%s' for track=%s not supported at this time subtracks %llx", thisTrack->type, track, (unsigned long long)thisTrack->subtracks);
+ // tdb->subtracks && COMPOSITE_NODE( tdb->treeNodeType);
 
 /* might be a big* track with no table */
 char *bigDataUrl = trackDbSetting(thisTrack, "bigDataUrl");

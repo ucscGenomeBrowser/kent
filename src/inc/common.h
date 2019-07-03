@@ -1256,12 +1256,12 @@ int intAbs(int a);
 #define roundll(a) ((long long)((a)+0.5))
 /* Round floating point val to nearest long long. */
 
-#ifndef min
+#if !(defined(min) || defined(__cplusplus))
 #define min(a,b) ( (a) < (b) ? (a) : (b) )
 /* Return min of a and b. */
 #endif
 
-#ifndef max
+#if !(defined(max) || defined(__cplusplus))
 #define max(a,b) ( (a) > (b) ? (a) : (b) )
 /* Return max of a and b. */
 #endif

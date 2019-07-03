@@ -36,6 +36,9 @@
 #include "halBlockViz.h"
 #endif
 
+/* reference for these error codes:
+ * https://www.restapitutorial.com/httpstatuscodes.html
+ */
 /* error return codes */
 #define err301	301
 #define err301Msg	"Moved Permanently"
@@ -45,6 +48,8 @@
 #define err403Msg	"Forbidden"
 #define err404	404
 #define err404Msg	"Not Found"
+#define err415	415
+#define err415Msg	"Unsupported track type"
 #define err429	429
 #define err429Msg	"Too Many Requests"
 
@@ -67,6 +72,7 @@ extern char *argListUcscGenomes[];
 extern char *argListHubGenomes[];
 extern char *argListTracks[];
 extern char *argListChromosomes[];
+extern char *argListSchema[];
 extern char *argGetDataTrack[];
 extern char *argGetDataSequence[];
 
@@ -87,6 +93,10 @@ extern long enteredMainTime;	/* will become = clock1000() on entry */
 extern int maxItemsOutput;	/* can be set in URL maxItemsOutput=N */
 extern long long itemsReturned;	/* for getData functions, number of items returned */
 extern boolean reachedMaxItems;	/* during getData, signal to return */
+
+/* supportedTypes will be initialized to a known supported set */
+extern struct slName *supportedTypes;
+
 /* for debugging purpose, current bot delay value */
 extern int botDelay;
 boolean debug;	/* can be set in URL debug=1, to turn off: debug=0 */
@@ -140,7 +150,7 @@ extern char *jsonTypeStrings[];
 int autoSqlToJsonType(char *asType);
 /* convert an autoSql field type to a Json type */
 
-int tableColumns(struct sqlConnection *conn, struct jsonWrite *jw, char *table,
+int tableColumns(struct sqlConnection *conn, char *table,
    char ***nameReturn, char ***typeReturn, int **jsonTypes);
 /* return the column names, the MySQL data type, and json data type
  *   for the given table return number of columns (aka 'fields')
@@ -178,6 +188,22 @@ struct trackHubGenome *findHubGenome(struct trackHub *hub, char *genome,
 
 struct dbDb *ucscDbDb();
 /* return the dbDb table as an slList */
+
+boolean isSupportedType(char *type);
+/* is given type in the supportedTypes list ? */
+
+void wigColumnTypes(struct jsonWrite *jw);
+/* output column headers for a wiggle data output schema */
+
+void outputSchema(struct trackDb *tdb, struct jsonWrite *jw,
+    char *columnNames[], char *columnTypes[], int jsonTypes[],
+	struct hTableInfo *hti, int columnCount, int asColumnCount,
+	    struct asColumn *columnEl);
+/* print out the SQL schema for this trackDb */
+
+void bigColumnTypes(struct jsonWrite *jw, struct sqlFieldType *fiList,
+    struct asObject *as);
+/* show the column types from a big file autoSql definitions */
 
 /* ######################################################################### */
 /*  functions in getData.c */

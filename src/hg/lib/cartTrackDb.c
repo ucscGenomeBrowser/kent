@@ -21,7 +21,10 @@ static struct slRef *accessControlTrackRefList = NULL;
 static struct trackDb *getFullTrackList(struct cart *cart, char *db, struct grp **pHubGroups)
 {
 struct trackDb *list = hTrackDb(db);
-struct customTrack *ctList, *ct;
+
+// get hub tracks
+struct trackDb *hubTdbList = hubCollectTracks(db, pHubGroups);
+list = slCat(list, hubTdbList);
 
 /* exclude any track with a 'tableBrowser off' setting */
 struct trackDb *tdb, *nextTdb, *newList = NULL;
@@ -48,19 +51,16 @@ for (tdb = list;  tdb != NULL;  tdb = nextTdb)
     else
 	slAddHead(&newList, tdb);
     }
-slReverse(&newList);
 list = newList;
 
 /* add wikiTrack if enabled */
 if (wikiTrackEnabled(db, NULL))
     slAddHead(&list, wikiTrackDb());
+
 slSort(&list, trackDbCmp);
 
-// Add hub tracks at head of list
-struct trackDb *hubTdbList = hubCollectTracks(db, pHubGroups);
-list = slCat(list, hubTdbList);
-
 // Add custom tracks at head of list
+struct customTrack *ctList, *ct;
 ctList = customTracksParseCart(db, cart, NULL, NULL);
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
