@@ -61,35 +61,6 @@ else
     jsonWriteString(jw, name, val);
 }
 
-static void wigColumnTypes(struct jsonWrite *jw)
-/* output column headers for a wiggle data output schema */
-{
-jsonWriteListStart(jw, "columnTypes");
-
-jsonWriteObjectStart(jw, NULL);
-jsonWriteString(jw, "name", "start");
-jsonWriteString(jw, "sqlType", "int");
-jsonWriteString(jw, "jsonType", "number");
-jsonWriteString(jw, "description", "chromStart: 0-based chromosome start position");
-jsonWriteObjectEnd(jw);
-
-jsonWriteObjectStart(jw, NULL);
-jsonWriteString(jw, "name", "end");
-jsonWriteString(jw, "sqlType", "int");
-jsonWriteString(jw, "jsonType", "number");
-jsonWriteString(jw, "description", "chromEnd: 1-based chromosome end position");
-jsonWriteObjectEnd(jw);
-
-jsonWriteObjectStart(jw, NULL);
-jsonWriteString(jw, "name", "value");
-jsonWriteString(jw, "sqlType", "float");
-jsonWriteString(jw, "jsonType", "number");
-jsonWriteString(jw, "description", "numerical data value for this location:start-end");
-jsonWriteObjectEnd(jw);
-
-jsonWriteListEnd(jw);
-}	/* static void wigColumnTypes(struct jsonWrite jw) */
-
 static unsigned sqlQueryJsonOutput(struct sqlConnection *conn,
     struct jsonWrite *jw, char *query, int columnCount, char **columnNames,
 	int *jsonTypes, unsigned itemsDone)
@@ -275,42 +246,11 @@ int *jsonTypes = NULL;
 struct asObject *as = asForTable(conn, splitSqlTable, tdb);
 struct asColumn *columnEl = as->columnList;
 int asColumnCount = slCount(columnEl);
-int columnCount = tableColumns(conn, jw, splitSqlTable, &columnNames, &columnTypes, &jsonTypes);
+int columnCount = tableColumns(conn, splitSqlTable, &columnNames, &columnTypes, &jsonTypes);
 if (jsonOutputArrays || debug)
     {
-    if (startsWith("wig", tdb->type))
-	{
-	    wigColumnTypes(jw);
-	}
-    else
-	{
-	jsonWriteListStart(jw, "columnTypes");
-	int i = 0;
-	for (i = 0; i < columnCount; ++i)
-	    {
-	    jsonWriteObjectStart(jw, NULL);
-	    jsonWriteString(jw, "name", columnNames[i]);
-	    jsonWriteString(jw, "sqlType", columnTypes[i]);
-	    jsonWriteString(jw, "jsonType", jsonTypeStrings[jsonTypes[i]]);
-	    if ((0 == i) && (hti && hti->hasBin))
-		jsonWriteString(jw, "description", "Indexing field to speed chromosome range queries");
-	    else if (columnEl && isNotEmpty(columnEl->comment))
-		jsonWriteString(jw, "description", columnEl->comment);
-	    else
-		jsonWriteString(jw, "description", "");
-
-	    /* perhaps move the comment pointer forward */
-	    if (columnEl)
-		{
-		if (asColumnCount == columnCount)
-		    columnEl = columnEl->next;
-		else if (! ((0 == i) && (hti && hti->hasBin)))
-		    columnEl = columnEl->next;
-		}
-	    jsonWriteObjectEnd(jw);
-	}
-	jsonWriteListEnd(jw);
-	}
+    outputSchema(tdb, jw, columnNames, columnTypes, jsonTypes, hti,
+	columnCount, asColumnCount, columnEl);
     }
 
 unsigned itemsDone = 0;
@@ -478,29 +418,6 @@ if (isEmpty(chrom))
 	itemsDone += wigDataOutput(jw, bwf, chrom, start, end);
 
 itemsReturned += itemsDone;
-}
-
-static void bigColumnTypes(struct jsonWrite *jw, struct sqlFieldType *fiList,
-    struct asObject *as)
-/* show the column types from a big file autoSql definitions */
-{
-struct asColumn *columnEl = as->columnList;
-jsonWriteListStart(jw, "columnTypes");
-struct sqlFieldType *fi = fiList;
-for ( ; fi; fi = fi->next, columnEl = columnEl->next)
-    {
-    int jsonType = autoSqlToJsonType(fi->type);
-    jsonWriteObjectStart(jw, NULL);
-    jsonWriteString(jw, "name", fi->name);
-    jsonWriteString(jw, "sqlType", fi->type);
-    jsonWriteString(jw, "jsonType",jsonTypeStrings[jsonType]);
-    if (columnEl && isNotEmpty(columnEl->comment))
-	jsonWriteString(jw, "description", columnEl->comment);
-    else
-	jsonWriteString(jw, "description", "");
-    jsonWriteObjectEnd(jw);
-    }
-jsonWriteListEnd(jw);
 }
 
 static void getHubTrackData(char *hubUrl)

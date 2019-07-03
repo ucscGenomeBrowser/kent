@@ -72,6 +72,7 @@ extern char *argListUcscGenomes[];
 extern char *argListHubGenomes[];
 extern char *argListTracks[];
 extern char *argListChromosomes[];
+extern char *argListSchema[];
 extern char *argGetDataTrack[];
 extern char *argGetDataSequence[];
 
@@ -149,7 +150,7 @@ extern char *jsonTypeStrings[];
 int autoSqlToJsonType(char *asType);
 /* convert an autoSql field type to a Json type */
 
-int tableColumns(struct sqlConnection *conn, struct jsonWrite *jw, char *table,
+int tableColumns(struct sqlConnection *conn, char *table,
    char ***nameReturn, char ***typeReturn, int **jsonTypes);
 /* return the column names, the MySQL data type, and json data type
  *   for the given table return number of columns (aka 'fields')
@@ -190,6 +191,19 @@ struct dbDb *ucscDbDb();
 
 boolean isSupportedType(char *type);
 /* is given type in the supportedTypes list ? */
+
+void wigColumnTypes(struct jsonWrite *jw);
+/* output column headers for a wiggle data output schema */
+
+void outputSchema(struct trackDb *tdb, struct jsonWrite *jw,
+    char *columnNames[], char *columnTypes[], int jsonTypes[],
+	struct hTableInfo *hti, int columnCount, int asColumnCount,
+	    struct asColumn *columnEl);
+/* print out the SQL schema for this trackDb */
+
+void bigColumnTypes(struct jsonWrite *jw, struct sqlFieldType *fiList,
+    struct asObject *as);
+/* show the column types from a big file autoSql definitions */
 
 /* ######################################################################### */
 /*  functions in getData.c */
