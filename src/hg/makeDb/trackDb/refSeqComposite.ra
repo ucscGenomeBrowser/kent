@@ -59,7 +59,7 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         subGroups view=aNcbiRefSeq
         longLabel NCBI RefSeq other annotations (not NM_*, NR_*, XM_*, XR_*, or YP_*)
         priority 4
-        searchIndex name,gene,ID,Name2,geneSynonym,product
+        searchIndex name
         searchTrix /gbdb/$D/ncbiRefSeq/ncbiRefSeqOther.ix
         bigDataUrl /gbdb/$D/ncbiRefSeq/ncbiRefSeqOther.bb
         type bigBed 12 +
