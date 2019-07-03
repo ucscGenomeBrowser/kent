@@ -271,7 +271,7 @@ showCdsMaxZoom 10000.0
 showCdsAllScales .
 baseColorDefault diffBases
 baseColorUseSequence db
-color 255,255,0
+color 231,203,21
 darkerLabels on
 priority 1
 visibility pack
