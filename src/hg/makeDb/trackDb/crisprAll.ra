@@ -25,6 +25,7 @@ html crisprAll
     parent crisprAll
     mouseOverField _mouseOver
     scoreLabel MIT Guide Specificity Score
+    scoreFilterMax 100
     # details page is not using a mysql table but a tab-sep file
     detailsTabUrls _offset=/gbdb/$db/crisprAll/crisprDetails.tab
     url http://crispor.org/crispor.py?org=$D&pos=$S:${&pam=NGG
