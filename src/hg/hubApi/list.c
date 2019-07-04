@@ -293,6 +293,46 @@ errCatchFree(&errCatch);
 return itemCount;
 }
 
+static void outputTrackDbVars(struct jsonWrite *jw, struct trackDb *tdb,
+    long long itemCount)
+/* JSON output the fundamental trackDb variables */
+{
+if (NULL == tdb)	/* might not be any trackDb */
+    return;
+
+boolean protectedData = FALSE;
+if (trackDbSetting(tdb, "tableBrowser"))
+    protectedData = TRUE;
+jsonWriteString(jw, "shortLabel", tdb->shortLabel);
+jsonWriteString(jw, "type", tdb->type);
+jsonWriteString(jw, "longLabel", tdb->longLabel);
+jsonWriteNumber(jw, "itemCount", itemCount);
+if (tdb->parent)
+    {
+    jsonWriteString(jw, "parent", tdb->parent->track);
+    if (tdb->parent->parent)
+        jsonWriteString(jw, "parentParent", tdb->parent->parent->track);
+    }
+if (tdb->settingsHash)
+    {
+    struct hashEl *hel;
+    struct hashCookie hc = hashFirst(tdb->settingsHash);
+    while ((hel = hashNext(&hc)) != NULL)
+        {
+        if (sameWord("track", hel->name))
+            continue;	// already output in header
+        if (sameWord("tableBrowser", hel->name))
+            jsonWriteBoolean(jw, "protectedData", TRUE);
+        else if (isEmpty((char *)hel->val))
+            jsonWriteString(jw, hel->name, "empty");
+        else if (protectedData && sameWord(hel->name, "bigDataUrl"))
+            jsonWriteString(jw, hel->name, "protectedData");
+        else
+            jsonWriteString(jw, hel->name, (char *)hel->val);
+        }
+    }
+}
+
 static void hubSchemaJsonOutput(FILE *f, char *hubUrl, char *genome, char *track)
 /* for given hubUrl and track, output the schema for the hub track */
 {
@@ -336,7 +376,7 @@ char *indexFileOrUrl = hReplaceGbdb(trackDbSetting(tdb, "bigDataIndex"));
 struct bbiFile *bbi = bigFileOpen(thisTrack->type, bigDataUrl);
 long long itemCount = bbiItemCount(bigDataUrl, thisTrack->type, indexFileOrUrl);
 
-jsonWriteNumber(jw, "itemCount", itemCount);
+outputTrackDbVars(jw, thisTrack, itemCount);
 
 struct asObject *as = bigBedAsOrDefault(bbi);
 struct sqlFieldType *fiList = sqlFieldTypesFromAs(as);
@@ -355,11 +395,14 @@ if (NULL == conn)
 
 struct trackDb *tdb = obtainTdb(NULL, db);
 struct trackDb *thisTrack = findTrackDb(track, tdb);
-if (NULL == thisTrack)
-    apiErrAbort(err400, err400Msg, "failed to find specified track=%s in genome=%s for endpoint '/list/schema'", track, db);
+if (NULL == thisTrack)	/* OK to work with tables without trackDb definitions */
+    {
+    if (! sqlTableExists(conn, track))
+	apiErrAbort(err400, err400Msg, "failed to find specified track=%s in genome=%s for endpoint '/list/schema'", track, db);
+    }
+/* in case of no trackDb, be wary of trying to use it */
 if (thisTrack && (tdbIsComposite(thisTrack) || tdbIsCompositeView(thisTrack)))
     apiErrAbort(err400, err400Msg, "container track '%s' does not contain data, use the children of this container for data access", track);
-
 
 char *sqlTableName = cloneString(track);
 /* the trackDb might have a specific table defined instead */
@@ -410,17 +453,21 @@ jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
 freeMem(dataTime);
 
 long long itemCount = 0;
-char query[2048];
-sqlSafef(query, sizeof(query), "select count(*) from %s", splitTableName);
-itemCount = sqlQuickNum(conn, query);
-if (hti && hti->isSplit)	/* punting on split table item count */
-    itemCount = 0;
-else
+/* do not show counts for protected data */
+if (! trackDbSetting(thisTrack, "tableBrowser"))
     {
-    itemCount = sqlQuickNum(conn, query);
-    jsonWriteNumber(jw, "itemCount", itemCount);
+    char query[2048];
+    sqlSafef(query, sizeof(query), "select count(*) from %s", splitTableName);
+    if (hti && hti->isSplit)	/* punting on split table item count */
+	itemCount = 0;
+    else
+	{
+	itemCount = sqlQuickNum(conn, query);
+	}
     }
 hFreeConn(&conn);
+
+outputTrackDbVars(jw, thisTrack, itemCount);
 
 if (hti && (hti->isSplit || debug))
     jsonWriteBoolean(jw, "splitTable", hti->isSplit);
@@ -606,45 +653,16 @@ boolean isContainer = tdbIsComposite(tdb) || tdbIsCompositeView(tdb);
 /* do *NOT* print containers when 'trackLeavesOnly' requested */
 if (! (trackLeavesOnly && isContainer) )
     {
-    boolean protectedData = FALSE;
     long long itemCount = 0;
-    if (trackDbSetting(tdb, "tableBrowser"))
-	protectedData = TRUE;
-    else
+    /* do not show counts for protected data */
+    if (! trackDbSetting(tdb, "tableBrowser"))
 	itemCount = dataItemCount(db, tdb);
     jsonWriteObjectStart(jw, tdb->track);
     if (tdbIsComposite(tdb))
         jsonWriteString(jw, "compositeContainer", "TRUE");
     if (tdbIsCompositeView(tdb))
         jsonWriteString(jw, "compositeViewContainer", "TRUE");
-    jsonWriteString(jw, "shortLabel", tdb->shortLabel);
-    jsonWriteString(jw, "type", tdb->type);
-    jsonWriteString(jw, "longLabel", tdb->longLabel);
-    jsonWriteNumber(jw, "itemCount", itemCount);
-    if (tdb->parent)
-        {
-        jsonWriteString(jw, "parent", tdb->parent->track);
-	if (tdb->parent->parent)
-	    jsonWriteString(jw, "parentParent", tdb->parent->parent->track);
-        }
-    if (tdb->settingsHash)
-        {
-        struct hashEl *hel;
-        struct hashCookie hc = hashFirst(tdb->settingsHash);
-        while ((hel = hashNext(&hc)) != NULL)
-            {
-            if (sameWord("track", hel->name))
-		continue;	// already output in header
-            if (sameWord("tableBrowser", hel->name))
-		jsonWriteBoolean(jw, "protectedData", TRUE);
-            else if (isEmpty((char *)hel->val))
-		jsonWriteString(jw, hel->name, "empty");
-            else if (protectedData && sameWord(hel->name, "bigDataUrl"))
-		jsonWriteString(jw, hel->name, "protectedData");
-	    else
-		jsonWriteString(jw, hel->name, (char *)hel->val);
-            }
-        }
+    outputTrackDbVars(jw, tdb, itemCount);
 
     if (tdb->subtracks)
 	{

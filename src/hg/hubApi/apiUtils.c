@@ -529,7 +529,7 @@ void outputSchema(struct trackDb *tdb, struct jsonWrite *jw,
 	    struct asColumn *columnEl)
 /* print out the SQL schema for this trackDb */
 {
-if (startsWith("wig", tdb->type))
+if (tdb && startsWith("wig", tdb->type))
     {
         wigColumnTypes(jw);
     }
