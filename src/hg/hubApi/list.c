@@ -212,7 +212,7 @@ struct trackDb *thisTrack = findTrackDb(table,tdb);
 
 /* thisTrack can be NULL at this time, taken care of later */
 
-if (thisTrack && (tdbIsComposite(thisTrack) || tdbIsCompositeView(thisTrack)))
+if (trackHasNoData(thisTrack))
     apiErrAbort(err400, err400Msg, "container track '%s' does not contain data, use the children of this container for data access", table);
 if (thisTrack && ! isSupportedType(thisTrack->type))
     apiErrAbort(err415, err415Msg, "track type '%s' for track=%s not supported at this time", thisTrack->type, table);
@@ -400,8 +400,8 @@ if (NULL == thisTrack)	/* OK to work with tables without trackDb definitions */
     if (! sqlTableExists(conn, track))
 	apiErrAbort(err400, err400Msg, "failed to find specified track=%s in genome=%s for endpoint '/list/schema'", track, db);
     }
-/* in case of no trackDb, be wary of trying to use it */
-if (thisTrack && (tdbIsComposite(thisTrack) || tdbIsCompositeView(thisTrack)))
+
+if (trackHasNoData(thisTrack))
     apiErrAbort(err400, err400Msg, "container track '%s' does not contain data, use the children of this container for data access", track);
 
 char *sqlTableName = cloneString(track);
@@ -586,11 +586,10 @@ return itemCount;
 static long long dataItemCount(char *db, struct trackDb *tdb)
 /* determine how many items are in this data set */
 {
-boolean isContainer = tdbIsComposite(tdb) || tdbIsCompositeView(tdb);
-if (trackDbSetting(tdb, "container"))
-    isContainer = TRUE;
 long long itemCount = 0;
-if (isContainer)	/* containers have no data items */
+if (trackHasNoData(tdb))	/* container 'tracks' have no data items */
+    return itemCount;
+if (trackDbSetting(tdb, "tableBrowser"))	/* private data */
     return itemCount;
 if (sameWord("downloadsOnly", tdb->type))
     return itemCount;

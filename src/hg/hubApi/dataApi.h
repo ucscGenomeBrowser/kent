@@ -205,6 +205,14 @@ void bigColumnTypes(struct jsonWrite *jw, struct sqlFieldType *fiList,
     struct asObject *as);
 /* show the column types from a big file autoSql definitions */
 
+boolean trackHasData(struct trackDb *tdb);
+/* check if this is actually a data track:
+ *	TRUE when has data, FALSE if has no data
+ * When NO trackDb, can't tell at this point, will check that later
+ */
+
+#define trackHasNoData(tdb) (!trackHasData(tdb))
+
 /* ######################################################################### */
 /*  functions in getData.c */
 
