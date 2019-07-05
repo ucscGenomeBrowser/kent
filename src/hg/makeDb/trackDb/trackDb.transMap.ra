@@ -132,7 +132,7 @@ track transMapV5
 superTrack on
 shortLabel TransMap V5
 longLabel TransMap Alignments Version 5
-html transMap
+html transMapV5
 group genes
 
     track transMapEnsemblV5
