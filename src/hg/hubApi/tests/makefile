@@ -19,7 +19,8 @@ wigData: wig01 wig02 wig03 wig04 wig05 wig06 wig07 wig08 wig09 wig10 \
 	wig11 wig12 wig13 wig14 wig15 wig16 wig17 wig18 wig19 wig20 \
 	wig21 wig22 wig23 wig24
 
-supportedTypes: altGraphX barChart chain
+supportedTypes: altGraphX barChart chain ctgPos expRatio factorSource gvf \
+	interact netAlign peptideMapping pgSnp
 
 errorTests: err01 err02 err03 err04 err05 err06 err07 err08 err09 err10 \
 	err11 err12 err13 err14 err15 err16 err17 err18 err19 err20 \
@@ -27,7 +28,7 @@ errorTests: err01 err02 err03 err04 err05 err06 err07 err08 err09 err10 \
 	err31 err32 err33 err34 err35 err36 err37 err38 err39
 
 notSupported: notSup01 notSup02 notSup03 notSup04 notSup05 notSup06 \
-	notSup07 notSup08 notSup09
+	notSup07 notSup08 notSup09 notSup10
 
 bugReports: redmine23733
 
@@ -718,6 +719,70 @@ clonePos: setOutput
 	@./jsonConsumer.pl -endpoint="/getData/track" -genome="hg19" -track="clonePos" -chrom="chr1" -jsonOutputArrays -maxItemsOutput=5 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c >> testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
+ctgPos: setOutput
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/list/chromosomes?track=ctgPos;genome=hg19'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="hg19" -track="ctgPos" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/getData/track?track=ctgPos;chrom=chr1;genome=hg19;jsonOutputArrays=1;maxItemsOutput=5'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome="hg19" -track="ctgPos" -chrom="chr1" -jsonOutputArrays -maxItemsOutput=5 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c >> testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+expRatio: setOutput
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/list/chromosomes?track=gnfAtlas2;genome=hg19'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="hg19" -track="gnfAtlas2" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/getData/track?track=gnfAtlas2;chrom=chr1;genome=hg19;jsonOutputArrays=1;maxItemsOutput=5'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome="hg19" -track="gnfAtlas2" -chrom="chr1" -jsonOutputArrays -maxItemsOutput=5 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c >> testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+factorSource: setOutput
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/list/chromosomes?track=encRegTfbsClustered;genome=hg19'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="hg19" -track="encRegTfbsClustered" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/getData/track?track=encRegTfbsClustered;chrom=chr1;genome=hg19;jsonOutputArrays=1;maxItemsOutput=5'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome="hg19" -track="encRegTfbsClustered" -chrom="chr1" -jsonOutputArrays -maxItemsOutput=5 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c >> testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+gvf: setOutput
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/list/chromosomes?track=iscaCuratedBenign;genome=hg19'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="hg19" -track="iscaCuratedBenign" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/getData/track?track=iscaCuratedBenign;chrom=chr1;genome=hg19;jsonOutputArrays=1;maxItemsOutput=5'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome="hg19" -track="iscaCuratedBenign" -chrom="chr1" -jsonOutputArrays -maxItemsOutput=5 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c >> testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+interact: setOutput
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/list/chromosomes?track=gtexTransEqtl;genome=hg19'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="hg19" -track="gtexTransEqtl" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/getData/track?track=gtexTransEqtl;chrom=chr1;genome=hg19;jsonOutputArrays=1;maxItemsOutput=5'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome="hg19" -track="gtexTransEqtl" -chrom="chr1" -jsonOutputArrays -maxItemsOutput=5 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c >> testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# hapmapLdPhCeu does not have an 'as' definiton in tableDescriptions
+ld2: setOutput
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/list/chromosomes?track=hapmapLdPhCeu;genome=hg19'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="hg19" -track="hapmapLdPhCeu" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/getData/track?track=hapmapLdPhCeu;chrom=chr1;genome=hg19;jsonOutputArrays=1;maxItemsOutput=5'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome="hg19" -track="hapmapLdPhCeu" -chrom="chr1" -jsonOutputArrays -maxItemsOutput=5 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c >> testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+netAlign: setOutput
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/list/chromosomes?track=netMelGal1;genome=hg38'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="hg38" -track="netMelGal1" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/getData/track?track=netMelGal1;chrom=chr1;genome=hg38;jsonOutputArrays=1;maxItemsOutput=5'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome="hg38" -track="netMelGal1" -chrom="chr1" -jsonOutputArrays -maxItemsOutput=5 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c >> testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+peptideMapping: setOutput
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/list/chromosomes?track=wgEncodeUncBsuProtGm12878MembranefractionSig;genome=hg19'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="hg19" -track="wgEncodeUncBsuProtGm12878MembranefractionSig" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/getData/track?track=wgEncodeUncBsuProtGm12878MembranefractionSig;chrom=chr1;genome=hg19;jsonOutputArrays=1;maxItemsOutput=5'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome="hg19" -track="wgEncodeUncBsuProtGm12878MembranefractionSig" -chrom="chr1" -jsonOutputArrays -maxItemsOutput=5 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c >> testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+pgSnp: setOutput
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/list/chromosomes?track=pgKb1454;genome=hg19'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="hg19" -track="pgKb1454" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/getData/track?track=pgKb1454;chrom=chr1;genome=hg19;jsonOutputArrays=1;maxItemsOutput=5'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome="hg19" -track="pgKb1454" -chrom="chr1" -jsonOutputArrays -maxItemsOutput=5 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c >> testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
 ##############################################################################
 ### notSupported
 ##############################################################################
@@ -733,10 +798,10 @@ notSup02: setOutput
 	@./jsonConsumer.pl -endpoint="/getData/track" -hubUrl="http://research.nhgri.nih.gov/manuscripts/Burgess/zebrafish/downloads/NHGRI-1/hub.txt" -genome="danRer11" -track="variants" -chrom="chr1" -jsonOutputArrays -maxItemsOutput=5 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
-# request a track type that is not yet supported: gvf
+# request a track type that is not yet supported: ld2
 notSup03: setOutput
-	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/getData/track?track=cnvDevDelayCase;genome=hg38'\n"
-	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg38 -track="cnvDevDelayCase" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/getData/track?track=hapmapLdPhCeu;genome=hg19'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg19 -track="hapmapLdPhCeu" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # request a track type that is not yet supported: bigBarChart
@@ -773,6 +838,12 @@ notSup08: setOutput
 notSup09: setOutput
 	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/list/chromosomes?track=clonePos;genome=hg19'\n"
 	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="hg19" -track="clonePos" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# hapmapLdPhCeu does not have an 'as' definiton in tableDescriptions
+notSup10: setOutput
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/getData/track?track=hapmapLdPhCeu;chrom=chr1;genome=hg19;jsonOutputArrays=1;maxItemsOutput=5'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome="hg19" -track="hapmapLdPhCeu" -chrom="chr1" -jsonOutputArrays -maxItemsOutput=5 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 
