@@ -587,3 +587,20 @@ for ( ; fi; fi = fi->next, columnEl = columnEl->next)
 jsonWriteListEnd(jw);
 }
 
+boolean trackHasData(struct trackDb *tdb)
+/* check if this is actually a data track:
+ *	TRUE when has data, FALSE if has no data
+ * When NO trackDb, can't tell at this point, will check that later
+ */
+{
+if (tdb)
+    {
+    if (tdbIsContainer(tdb) || tdbIsComposite(tdb)
+	|| tdbIsCompositeView(tdb) || tdbIsSuper(tdb))
+	return FALSE;
+    else
+	return TRUE;
+    }
+else
+    return TRUE;	/* might be true */
+}
