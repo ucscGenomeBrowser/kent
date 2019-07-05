@@ -84,10 +84,10 @@ information on accessing track data see our
 <a href="../FAQ/FAQdownloads.html#download36">Track Data Access FAQ</a>.
 The files are associated with these tracks in the following way:
 <ul>
-<li>TransMap Ensembl - <tt>$db.ensembl.transMapV4.bigPsl</tt></li>
-<li>TransMap RefGene - <tt>$db.refseq.transMapV4.bigPsl</tt></li>
-<li>TransMap RNA - <tt>$db.rna.transMapV4.bigPsl</tt></li>
-<li>TransMap ESTs - <tt>$db.est.transMapV4.bigPsl</tt></li>
+<li>TransMap Ensembl - <tt>$db.ensembl.transMapV5.bigPsl</tt></li>
+<li>TransMap RefGene - <tt>$db.refseq.transMapV5.bigPsl</tt></li>
+<li>TransMap RNA - <tt>$db.rna.transMapV5.bigPsl</tt></li>
+<li>TransMap ESTs - <tt>$db.est.transMapV5.bigPsl</tt></li>
 </ul>
 Individual regions or the whole genome annotation can be obtained using our tool
 <tt>bigBedToBed</tt> which can be compiled from the source code or downloaded as
@@ -96,7 +96,7 @@ binaries can be found
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
 The tool can also be used to obtain only features within a given range, for example:
 <p><tt>
-bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/$db/transMap/V4/$db.refseq.transMapV4.bigPsl
+bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/$db/transMap/V5/$db.refseq.transMapV5.bigPsl
 -chrom=chr6 -start=0 -end=1000000 stdout
 </tt>
 
