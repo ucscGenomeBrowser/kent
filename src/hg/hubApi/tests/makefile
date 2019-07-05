@@ -1,9 +1,8 @@
 
-test:: test0 listFunctions getFunctions listSchema getSequence wigData \
-	errorTests notSupported bugReports
+test:: all
 
-all:: listFunctions getFunctions getSequence wigData errorTests \
-	notSupported
+all:: test0 listFunctions getFunctions listSchema getSequence wigData \
+	supportedTypes errorTests notSupported bugReports
 
 listFunctions: list01 list02 list03 list04 list05 list06 list07 list08 list09 \
 	list10 list11 list12 list13 list14 list15
@@ -20,13 +19,15 @@ wigData: wig01 wig02 wig03 wig04 wig05 wig06 wig07 wig08 wig09 wig10 \
 	wig11 wig12 wig13 wig14 wig15 wig16 wig17 wig18 wig19 wig20 \
 	wig21 wig22 wig23 wig24
 
+supportedTypes: altGraphX barChart chain
+
 errorTests: err01 err02 err03 err04 err05 err06 err07 err08 err09 err10 \
 	err11 err12 err13 err14 err15 err16 err17 err18 err19 err20 \
 	err21 err22 err23 err24 err25 err26 err27 err28 err29 err30 \
 	err31 err32 err33 err34 err35 err36 err37 err38 err39
 
 notSupported: notSup01 notSup02 notSup03 notSup04 notSup05 notSup06 \
-	notSup07 notSup08
+	notSup07 notSup08 notSup09
 
 bugReports: redmine23733
 
@@ -683,6 +684,43 @@ wig24: setOutput
 	@./jsonConsumer.pl -endpoint="/getData/track" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" -genome="araTha1" -track="gc5Base" -chrom="chrCp" -start=1234 -end=5647 -jsonOutputArrays -maxItemsOutput=5 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
+##############################################################################
+### supportedTypes - test both /list/chromosomes and /getData/track
+###                - for each type
+##############################################################################
+
+altGraphX: setOutput
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/list/chromosomes?track=sibTxGraph;genome=hg19'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="hg19" -track="sibTxGraph" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/getData/track?track=sibTxGraph;chrom=chr1;genome=hg19;jsonOutputArrays=1;maxItemsOutput=5'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome="hg19" -track="sibTxGraph" -chrom="chr1" -jsonOutputArrays -maxItemsOutput=5 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c >> testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+barChart: setOutput
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/list/chromosomes?track=gtexBrain;genome=hg38'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="hg38" -track="gtexBrain" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/getData/track?track=gtexBrain;chrom=chr1;genome=hg38;jsonOutputArrays=1;maxItemsOutput=5'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome="hg38" -track="gtexBrain" -chrom="chr1" -jsonOutputArrays -maxItemsOutput=5 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c >> testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+chain: setOutput
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/list/chromosomes?track=chainMelGal1;genome=hg38'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="hg38" -track="chainMelGal1" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/getData/track?track=chainMelGal1;chrom=chr1;genome=hg38;jsonOutputArrays=1;maxItemsOutput=5'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome="hg38" -track="chainMelGal1" -chrom="chr1" -jsonOutputArrays -maxItemsOutput=5 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c >> testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# clonePos does not have an 'as' definiton in tableDescriptions
+clonePos: setOutput
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/list/chromosomes?track=clonePos;genome=hg19'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="hg19" -track="clonePos" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/getData/track?track=clonePos;chrom=chr1;genome=hg19;jsonOutputArrays=1;maxItemsOutput=5'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome="hg19" -track="clonePos" -chrom="chr1" -jsonOutputArrays -maxItemsOutput=5 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c >> testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+##############################################################################
+### notSupported
+##############################################################################
 # request a track type that is not yet supported: bam
 notSup01: setOutput
 	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi/getData/track?track=shMethylSubtrack;chrom=chr1;genome=hg19;hubUrl=http://lasallelab.genomecenter.ucdavis.edu/UCSChub/hub.txt;jsonOutputArrays=1;maxItemsOutput=5'\n"
@@ -729,6 +767,12 @@ notSup07: setOutput
 notSup08: setOutput
 	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/list/chromosomes?track=allCancer;genome=hg38'\n"
 	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome=hg38 -track="allCancer" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# clonePos does not have an 'as' definiton in tableDescriptions
+notSup09: setOutput
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/list/chromosomes?track=clonePos;genome=hg19'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="hg19" -track="clonePos" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 
