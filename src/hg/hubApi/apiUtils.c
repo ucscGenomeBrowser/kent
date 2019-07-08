@@ -47,7 +47,11 @@ if (measureTiming)
 if (itemsReturned)
     jsonWriteNumber(jw, "itemsReturned", itemsReturned);
 if (reachedMaxItems)
+    {
     jsonWriteBoolean(jw, "maxItemsLimit", TRUE);
+    if (downloadUrl && downloadUrl->string)
+	jsonWriteString(jw, "dataDownloadUrl", downloadUrl->string);
+    }
 
 jsonWriteObjectEnd(jw);
 fputs(jw->dy->string,stdout);

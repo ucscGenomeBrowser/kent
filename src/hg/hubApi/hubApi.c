@@ -37,6 +37,9 @@ boolean jsonOutputArrays = FALSE; /* set by CGI parameter 'jsonOutputArrays' */
 
 boolean measureTiming = FALSE;	/* set by CGI parameters */
 
+/* downloadUrl for use in error exits when reachedMaxItems */
+struct dyString *downloadUrl = NULL;
+
 /* valid argument listings to verify extraneous arguments */
 char *argListPublicHubs[] = { NULL };
 char *argListUcscGenomes[] = { NULL };
