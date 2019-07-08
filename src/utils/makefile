@@ -17,6 +17,7 @@ UTILS_APPLIST = \
 	bamToPsl \
 	bedClip \
 	bedGraphToBigWig \
+	bedJoinTabOffset \
 	bedToBigBed \
 	bigBedInfo \
 	bigBedNamedItems \
@@ -147,7 +148,7 @@ UCSC_APPS = \
 # list of scripts to install
 
 USER_APP_SCRIPTS = \
-	bedJoinTabOffset \
+	bedJoinTabOffset.py \
 	expMatrixToBarchartBed \
 	ucscApiClient \
 	tdbRename \

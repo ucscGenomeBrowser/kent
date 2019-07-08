@@ -132,7 +132,7 @@ track transMapV5
 superTrack on
 shortLabel TransMap V5
 longLabel TransMap Alignments Version 5
-html transMap
+html transMapV5
 group genes
 
     track transMapEnsemblV5
@@ -196,7 +196,7 @@ searchTable transMapRefSeqV5
 searchType bigPsl
 
     track transMapRnaV5
-    superTrack transMapV5 pack
+    superTrack transMapV5 hide
     shortLabel TransMap RNA
     longLabel TransMap GenBank RNA Mappings Version 5
     html transMapRna
@@ -206,7 +206,7 @@ searchType bigPsl
     priority 10.004
     color 0,100,0
     canPack on
-    visibility pack
+    visibility hide
     baseColorDefault diffCodons
     baseColorUseCds given
     baseColorUseSequence lfExtra
