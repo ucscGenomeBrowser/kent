@@ -1,6 +1,6 @@
 track crisprAllTargets
 visibility hide
-shortLabel CRISPR All
+shortLabel CRISPR Targets
 longLabel CRISPR/Cas9 -NGG Targets, whole genome
 group genes
 type bigBed 9 +
