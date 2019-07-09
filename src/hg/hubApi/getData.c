@@ -212,11 +212,17 @@ else if (0 == (start + end))	/* have chrom, no start,end == full chr */
 	}
     else
 	{
-	sqlDyStringPrintf(query, "select * from %s where %s='%s' order by %s", splitSqlTable, chromName, chrom, startName);
+	if (sqlColumnExists(conn, splitSqlTable, startName))
+	    sqlDyStringPrintf(query, "select * from %s where %s='%s' order by %s", splitSqlTable, chromName, chrom, startName);
+        else
+	    sqlDyStringPrintf(query, "select * from %s where %s='%s'", splitSqlTable, chromName, chrom);
 	}
     }
 else	/* fully specified chrom:start-end */
     {
+    if (! sqlColumnExists(conn, splitSqlTable, chromName))
+	apiErrAbort(err400, err400Msg, "track '%s' is not a position track, request track without chrom and start,end specifications, genome: '%s'", track, db);
+
     jsonWriteString(jw, "chrom", chrom);
     if (tdb && startsWith("wig", tdb->type))
 	{
@@ -230,9 +236,14 @@ else	/* fully specified chrom:start-end */
     else
 	{
 	sqlDyStringPrintf(query, "select * from %s where ", splitSqlTable);
-        if (hti->hasBin)
-           hAddBinToQuery(start, end, query);
-	sqlDyStringPrintf(query, "%s='%s' AND %s > %u AND %s < %u ORDER BY %s", chromName, chrom, endName, start, startName, end, startName);
+	if (sqlColumnExists(conn, splitSqlTable, startName))
+	    {
+	    if (hti->hasBin)
+		hAddBinToQuery(start, end, query);
+	    sqlDyStringPrintf(query, "%s='%s' AND %s > %u AND %s < %u ORDER BY %s", chromName, chrom, endName, start, startName, end, startName);
+	    }
+	else
+	    apiErrAbort(err400, err400Msg, "track '%s' is not a position track, request track without start,end specification, genome: '%s'", track, db);
 	}
     }
 
@@ -295,6 +306,11 @@ else
 	columnNames, jsonTypes, itemsDone);
     jsonWriteListEnd(jw);	/* data output list end */
     itemsReturned += itemsDone;
+    }
+if (reachedMaxItems)
+    {
+    downloadUrl = newDyString(128);
+    dyStringPrintf(downloadUrl, "http://hgdownload.soe.ucsc.edu/goldenPath/%s/database/%s.txt.gz", db, splitSqlTable);
     }
 freeDyString(&query);
 }	/*  static void tableDataOutput(char *db, struct trackDb *tdb, ... ) */
@@ -741,7 +757,7 @@ else
 
 apiFinishOutput(0, NULL, jw);
 hFreeConn(&conn);
-}
+}	/*	static void getTrackData()	*/
 
 static void getSequenceData(char *db, char *hubUrl)
 /* return DNA sequence, given at least a genome=name and chrom=chr,
