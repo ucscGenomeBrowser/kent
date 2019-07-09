@@ -8,13 +8,18 @@
 <h1>Downloading Data using MySQL</h1>
 
 <p>
+The UCSC Genome Browser uses MariaDB as our backend database server. MariaDB is a community-developed,
+commercially supported fork of the MySQL relational database management system, intended to remain
+free and open-source software under the GNU General Public License.
+</P>
+<p>
 We have two  MariaDB databases for public access:
 <ul>
   <li><strong>genome-mysql.soe.ucsc.edu</strong> (located on the US west coast)</li>
   <li><strong>genome-euro-mysql.soe.ucsc.edu</strong> (located in Europe)</li>
 </ul></p>
 <p>
-These servers allow MariaDB access to the same set of data currently available on our public
+These servers allow MySQL access to the same set of data currently available on our public
 Genome Browser site. The data are synchronized weekly with the main databases on our public site.
 During synchronization, the MariaDB server can be intermittently out of sync with the main website for
 a short period of time. The weekly synchronization takes place on Monday mornings from 4:00 am to
@@ -71,7 +76,7 @@ forceTwoBit=on
 </code></pre>
 <p>
 Or these lines if you'd like to access the European MariaDB server:</p>
-<pre><code>#European MySQL server
+<pre><code>#European MariaDB server
 db.host=genome-euro-mysql.soe.ucsc.edu
 db.user=genomep
 db.password=password
