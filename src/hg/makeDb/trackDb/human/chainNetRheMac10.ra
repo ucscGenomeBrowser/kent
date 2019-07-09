@@ -1,16 +1,15 @@
-        track chainRheMac8
+        track chainRheMac10
         subTrack primateChainNetViewchain off
         subGroups view=chain species=s021 clade=c01
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain rheMac8
-        otherDb rheMac8
+        type chain rheMac10
+        otherDb rheMac10
 
-        track netRheMac8
+        track netRheMac10
         subTrack primateChainNetViewnet on
         subGroups view=net species=s021 clade=c01
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign rheMac8 chainRheMac8
-        otherDb rheMac8
-
+        type netAlign rheMac10 chainRheMac10
+        otherDb rheMac10
