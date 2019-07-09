@@ -4824,7 +4824,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
             // only print the warning message for trackDb errors and not for the
             // default sortable columns of trackName and dateUnrestricted
             if ( (!membership || (membership && ix == -1) ) &&
-                !(sameString(col, "trackName") || sameString(col, "dateUnrestricted")) )
+                !(sameString(col, "trackName") || sameString(col, "dateUnrestricted") || sameString(col, "subtrackColor")) )
                 {
                 printf("<TD><span style=\"color:red\">Missing subgroup</span></TD>");
                 }
