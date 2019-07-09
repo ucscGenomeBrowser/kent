@@ -6846,6 +6846,8 @@ registerTrackHandlers();
 /* Load regular tracks, blatted tracks, and custom tracks.
  * Best to load custom last. */
 loadFromTrackDb(&trackList);
+if (measureTiming)
+    measureTime("Time after trackDbLoad ");
 if (pcrResultParseCart(database, cart, NULL, NULL, NULL))
     slSafeAddHead(&trackList, pcrResultTg());
 if (userSeqString != NULL)
@@ -7505,7 +7507,7 @@ if (!trackList)
     boolean defaultTracks = cgiVarExists("hgt.reset");
     trackList = getTrackList(&groupList, defaultTracks ? -1 : -2);
     if (measureTiming)
-	measureTime("getTrackList");
+	measureTime("Time after visibilities");
     makeGlobalTrackHash(trackList);
     }
 }

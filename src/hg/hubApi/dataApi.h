@@ -94,6 +94,9 @@ extern int maxItemsOutput;	/* can be set in URL maxItemsOutput=N */
 extern long long itemsReturned;	/* for getData functions, number of items returned */
 extern boolean reachedMaxItems;	/* during getData, signal to return */
 
+/* downloadUrl for use in error exits when reachedMaxItems */
+extern struct dyString *downloadUrl;
+
 /* supportedTypes will be initialized to a known supported set */
 extern struct slName *supportedTypes;
 
@@ -204,6 +207,14 @@ void outputSchema(struct trackDb *tdb, struct jsonWrite *jw,
 void bigColumnTypes(struct jsonWrite *jw, struct sqlFieldType *fiList,
     struct asObject *as);
 /* show the column types from a big file autoSql definitions */
+
+boolean trackHasData(struct trackDb *tdb);
+/* check if this is actually a data track:
+ *	TRUE when has data, FALSE if has no data
+ * When NO trackDb, can't tell at this point, will check that later
+ */
+
+#define trackHasNoData(tdb) (!trackHasData(tdb))
 
 /* ######################################################################### */
 /*  functions in getData.c */

@@ -47,7 +47,11 @@ if (measureTiming)
 if (itemsReturned)
     jsonWriteNumber(jw, "itemsReturned", itemsReturned);
 if (reachedMaxItems)
+    {
     jsonWriteBoolean(jw, "maxItemsLimit", TRUE);
+    if (downloadUrl && downloadUrl->string)
+	jsonWriteString(jw, "dataDownloadUrl", downloadUrl->string);
+    }
 
 jsonWriteObjectEnd(jw);
 fputs(jw->dy->string,stdout);
@@ -529,7 +533,7 @@ void outputSchema(struct trackDb *tdb, struct jsonWrite *jw,
 	    struct asColumn *columnEl)
 /* print out the SQL schema for this trackDb */
 {
-if (startsWith("wig", tdb->type))
+if (tdb && startsWith("wig", tdb->type))
     {
         wigColumnTypes(jw);
     }
@@ -587,3 +591,20 @@ for ( ; fi; fi = fi->next, columnEl = columnEl->next)
 jsonWriteListEnd(jw);
 }
 
+boolean trackHasData(struct trackDb *tdb)
+/* check if this is actually a data track:
+ *	TRUE when has data, FALSE if has no data
+ * When NO trackDb, can't tell at this point, will check that later
+ */
+{
+if (tdb)
+    {
+    if (tdbIsContainer(tdb) || tdbIsComposite(tdb)
+	|| tdbIsCompositeView(tdb) || tdbIsSuper(tdb))
+	return FALSE;
+    else
+	return TRUE;
+    }
+else
+    return TRUE;	/* might be true */
+}

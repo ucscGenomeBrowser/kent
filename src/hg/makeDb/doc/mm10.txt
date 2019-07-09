@@ -17919,13 +17919,13 @@ cbTrackHub mm10 bam/ TM_facs_metadata.fix.tsv cell_ontology_class hub/ --name "T
     # if pushing public, add ticket and MARK QA READY
 
 #########################################################################
-2019-05-23: import of UCSC GENCODE group processing of GENCODE VM22 (markd)
-    # import of pre-release, it will be promoted if there are no changes in the final release.
+2019-07-03: import of UCSC GENCODE group processing of GENCODE VM22 (markd)
+    # Replaced import of pre-release
     # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
 
     # download, build and load tables
-    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM22-pre
-    pushd /hive/data/genomes/mm10/bed/gencodeVM22-pre
+    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM22
+    pushd /hive/data/genomes/mm10/bed/gencodeVM22
     (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
 
     ##  gencode-cmp.tsv check to see if sizes make sense
@@ -17944,7 +17944,7 @@ cbTrackHub mm10 bam/ TM_facs_metadata.fix.tsv cell_ontology_class hub/ --name "T
     ## only if being pushed to RR:
     # edit  all.joiner to add ~/tmp/gencodeVM22.joiner
     # verify with:
-    pushd /hive/data/genomes/mm10/bed/gencodeVM22-pre
+    pushd /hive/data/genomes/mm10/bed/gencodeVM22
     make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck db=mm10
 
     # commit all and make push request, the file tables.lst will have the
@@ -17956,4 +17956,128 @@ cbTrackHub mm10 bam/ TM_facs_metadata.fix.tsv cell_ontology_class hub/ --name "T
     # commit all
     # if pushing public, add ticket and MARK QA READY
 
-#########################################################################
+##############################################################################
+# LASTZ Rat regenRn0 (DONE - 2019-07-01 - Jonathan)
+    mkdir /hive/data/genomes/mm10/bed/lastzRegenRn0.2019-07-01
+    cd /hive/data/genomes/mm10/bed/lastzRegenRn0.2019-07-01
+
+    printf '# rat vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Rat RegenRn0
+SEQ2_DIR=/hive/data/genomes/regenRn0/regenRn0.2bit
+SEQ2_LEN=/hive/data/genomes/regenRn0/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=500
+
+BASE=/hive/data/genomes/mm10/bed/lastzRegenRn0.2019-07-01
+TMPDIR=/dev/shm
+' > DEF
+
+    #	establish a screen to control this job
+    screen -S mm10RegenRn0
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-noDbNameCheck -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-syntenicNet -chainMinScore=5000 -chainLinearGap=medium) > do.log 2>&1
+    #   real    196m22.733s
+
+    cat fb.mm10.chainRegenRn0Link.txt
+    #	1843678500 bases of 2652783500 (69.500%) in intersection
+    cat fb.mm10.chainSynRegenRn0Link.txt
+    #   1720395177 bases of 2652783500 (64.852%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` mm10 regenRn0) > rbest.log 2>&1 &
+    # real    494m43.241s
+
+    cat fb.mm10.chainRBest.RegenRn0.txt
+    # 1694384084 bases of 2652783500 (63.872%) in intersection
+
+    mkdir /hive/data/genomes/regenRn0/bed/blastz.mm10.swap
+    cd /hive/data/genomes/regenRn0/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzRegenRn0.2019-07-01/DEF \
+	-swap -syntenicNet -noDbNameCheck \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=5000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    106m31.449s
+
+    cat fb.regenRn0.chainMm10Link.txt
+    #   1803664991 bases of 2534810853 (71.156%) in intersection
+    cat fb.regenRn0.chainSynMm10Link.txt
+    #   1712372147 bases of 2534810853 (67.554%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` regenRn0 mm10) > rbest.log 2>&1
+    # real    536m51.292s
+
+    cat fb.regenRn0.chainRBest.Mm10.txt
+    # 1695272967 bases of 2534810853 (66.880%) in intersection
+
+##############################################################################
+# LASTZ Rhesus rheMac10 (DONE - 2019-07-03 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzRheMac10.2019-07-03
+    cd /hive/data/genomes/mm10/bed/lastzRheMac10.2019-07-03
+
+    printf '# rhesus vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+# TARGET: Mouse Mm10
+SEQ1_DIR=/hive/data/genomes/mm10/mm10.2bit
+SEQ1_LEN=/hive/data/genomes/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Rhesus RheMac10
+SEQ2_DIR=/hive/data/genomes/rheMac10/rheMac10.2bit
+SEQ2_LEN=/hive/data/genomes/rheMac10/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=500
+
+BASE=/hive/data/genomes/mm10/bed/lastzRheMac10.2019-07-03
+TMPDIR=/dev/shm
+' > DEF
+
+    #	establish a screen to control this job
+    screen -S mm10RheMac10
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    #   real    211m21.922s
+
+    cat fb.mm10.chainRheMac10Link.txt
+    #	923559693 bases of 2652783500 (34.815%) in intersection
+    cat fb.mm10.chainSynRheMac10Link.txt
+    #   878479553 bases of 2652783500 (33.115%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` mm10 rheMac10) > rbest.log 2>&1 &
+    # real    315m43.465s
+
+    cat fb.mm10.chainRBest.RheMac10.txt
+    # 879885863 bases of 2652783500 (33.168%) in intersection
+
+    mkdir /hive/data/genomes/rheMac10/bed/blastz.mm10.swap
+    cd /hive/data/genomes/rheMac10/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzRheMac10.2019-07-03/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    52m48.045s
+
+    cat fb.rheMac10.chainMm10Link.txt
+    #	918551088 bases of 2936892733 (31.276%) in intersection
+    cat fb.rheMac10.chainSynMm10Link.txt
+    #   876230433 bases of 2936892733 (29.835%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` rheMac10 mm10) > rbest.log 2>&1
+    # real    303m40.303s
+
+    cat fb.rheMac10.chainRBest.Mm10.txt
+    # 878542993 bases of 2936892733 (29.914%) in intersection
+
+##############################################################################

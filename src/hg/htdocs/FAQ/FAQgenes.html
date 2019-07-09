@@ -235,7 +235,7 @@ project which gene model set you want to use. Over time, the two transcript
 databases have been and are becoming more similar.
 
 <a name="hg19"></a>
-<h6>For the human assembly hg19/GRCh37: What is the difference between UCSC
+<h6>For the human assembly hg19/GRCh37 and mouse mm9/NCBI37: What is the difference between UCSC
 Genes, the "GENCODE Gene Annotation" track and the "Ensembl Genes" track?</h6>
 <p>The &quot;<a target=_blank href="../cgi-bin/hgTrackUi?db=hg19&g=knownGene">UCSC Genes</a>&quot; 
 track, also called &quot;Known Genes&quot;, is available only on
@@ -254,7 +254,7 @@ a single Ensembl version. See the previous question for the differences between 
 </p>
 
 <a name="hg38"></a>
-<h6>For the human assembly hg38/GRCh38: What are the differences between the "GENCODE" and 
+<h6>For the human assembly hg38/GRCh38 and mouse mm10/GRCm38: What are the differences between the "GENCODE" and 
 "All GENCODE" tracks?</h6>
 <p> 
 &quot;<a target=_blank href="../cgi-bin/hgTrackUi?db=hg38&g=knownGene">GENCODE</a>&quot; is the 
@@ -382,7 +382,7 @@ This is a common request, but very often this is not necessary when designing
 an analysis.  You will have to make a choice of this single transcript using
 some mechanism, and this choice will affect your pipeline results. It may be
 easier to keep all transcripts. For example, instead of annotating enhancers
-with the closest "best-transcript", you can annotate them with the closest exon
+with the closest &quot;best-transcript&quot;, you can annotate them with the closest exon
 of any transcript. When mapping variants to transcripts, you can map to all
 transcripts and sort these by accession ID, showing mainly the first.  When
 segmenting the chromosomes into gene loci, you can use the union of all
@@ -390,7 +390,7 @@ transcripts of a gene rather than select a single "best" transcript.
 </p>
 
 <p>
-That being said, data tables called "knownCanonical" are available for
+That being said, data tables called &quot;knownCanonical&quot; are available for
 many assemblies. They try to select only a single transcript/isoform per gene, 
 if possible.</p>
 
@@ -405,8 +405,11 @@ or by using the <a target="_blank" href="../cgi-bin/hgTables">Table Browser</a>.
 <p>
 For hg38, the knownCanonical table is a subset of the <a target="_blank" 
 href="../cgi-bin/hgTrackUi?db=hg38&g=knownGene">GENCODE v29</a> track. As opposed to the hg19 
-equivalent which generally used the longest isoform for indentification, this table is defined 
-as follows:</p>
+knownCanonical table, which used computationally generated gene clusters and generally chose the 
+longest isoform as the canonical isoform, the hg38 table uses ENSEMBL gene IDs to define clusters 
+(that is to say, one canonical isoform per ENSEMBL gene ID), and the method of choosing the 
+isoform is described as such:</p>
+
 <p>
 <i>knownCanonical identifies the canonical isoform of each cluster ID or gene using the ENSEMBL 
 gene IDs to define each cluster. The canonical transcript is chosen using the APPRIS principal 

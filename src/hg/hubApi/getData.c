@@ -201,7 +201,7 @@ else if (0 == (start + end))	/* have chrom, no start,end == full chr */
     struct chromInfo *ci = hGetChromInfo(db, chrom);
     jsonWriteNumber(jw, "start", (long long)0);
     jsonWriteNumber(jw, "end", (long long)ci->size);
-    if (startsWith("wig", tdb->type))
+    if (tdb && startsWith("wig", tdb->type))
 	{
 	if (jsonOutputArrays || debug)
 	    wigColumnTypes(jw);
@@ -212,13 +212,19 @@ else if (0 == (start + end))	/* have chrom, no start,end == full chr */
 	}
     else
 	{
-	sqlDyStringPrintf(query, "select * from %s where %s='%s' order by %s", splitSqlTable, chromName, chrom, startName);
+	if (sqlColumnExists(conn, splitSqlTable, startName))
+	    sqlDyStringPrintf(query, "select * from %s where %s='%s' order by %s", splitSqlTable, chromName, chrom, startName);
+        else
+	    sqlDyStringPrintf(query, "select * from %s where %s='%s'", splitSqlTable, chromName, chrom);
 	}
     }
 else	/* fully specified chrom:start-end */
     {
+    if (! sqlColumnExists(conn, splitSqlTable, chromName))
+	apiErrAbort(err400, err400Msg, "track '%s' is not a position track, request track without chrom and start,end specifications, genome: '%s'", track, db);
+
     jsonWriteString(jw, "chrom", chrom);
-    if (startsWith("wig", tdb->type))
+    if (tdb && startsWith("wig", tdb->type))
 	{
 	if (jsonOutputArrays || debug)
 	    wigColumnTypes(jw);
@@ -230,9 +236,14 @@ else	/* fully specified chrom:start-end */
     else
 	{
 	sqlDyStringPrintf(query, "select * from %s where ", splitSqlTable);
-        if (hti->hasBin)
-           hAddBinToQuery(start, end, query);
-	sqlDyStringPrintf(query, "%s='%s' AND %s > %u AND %s < %u ORDER BY %s", chromName, chrom, endName, start, startName, end, startName);
+	if (sqlColumnExists(conn, splitSqlTable, startName))
+	    {
+	    if (hti->hasBin)
+		hAddBinToQuery(start, end, query);
+	    sqlDyStringPrintf(query, "%s='%s' AND %s > %u AND %s < %u ORDER BY %s", chromName, chrom, endName, start, startName, end, startName);
+	    }
+	else
+	    apiErrAbort(err400, err400Msg, "track '%s' is not a position track, request track without start,end specification, genome: '%s'", track, db);
 	}
     }
 
@@ -275,7 +286,7 @@ if (isEmpty(chrom))
 	    }
 	else
 	    sqlDyStringPrintf(query, "select * from %s", splitSqlTable);
-	if (startsWith("wig", tdb->type))
+	if (tdb && startsWith("wig", tdb->type))
             itemsDone += wigTableDataOutput(jw, db, splitSqlTable, chrom,
 		start, end, itemsDone);
 	else
@@ -295,6 +306,11 @@ else
 	columnNames, jsonTypes, itemsDone);
     jsonWriteListEnd(jw);	/* data output list end */
     itemsReturned += itemsDone;
+    }
+if (reachedMaxItems)
+    {
+    downloadUrl = newDyString(128);
+    dyStringPrintf(downloadUrl, "http://hgdownload.soe.ucsc.edu/goldenPath/%s/database/%s.txt.gz", db, splitSqlTable);
     }
 freeDyString(&query);
 }	/*  static void tableDataOutput(char *db, struct trackDb *tdb, ... ) */
@@ -448,7 +464,7 @@ if (NULL == tdb)
 struct trackDb *thisTrack = findTrackDb(track, tdb);
 if (NULL == thisTrack)
     apiErrAbort(err400, err400Msg, "failed to find specified track=%s in genome=%s for endpoint '/getData/track'  given hubUrl='%s'", track, genome, hubUrl);
-if (tdbIsComposite(thisTrack) || tdbIsCompositeView(thisTrack))
+if (trackHasNoData(thisTrack))
     apiErrAbort(err400, err400Msg, "container track '%s' does not contain data, use the children of this container for data access", track);
 if (! isSupportedType(thisTrack->type))
     apiErrAbort(err415, err415Msg, "track type '%s' for track=%s not supported at this time", thisTrack->type, track);
@@ -557,37 +573,49 @@ if (isEmpty(db))
 if (isEmpty(track))
     apiErrAbort(err400, err400Msg, "missing URL variable track=<trackName> name for endpoint '/getData/track");
 
-struct trackDb *thisTrack = hTrackDbForTrack(db, track);
-
-if (NULL == thisTrack)
-    apiErrAbort(err400, err400Msg, "can not find track=%s name for endpoint '/getData/track", track);
-if (tdbIsComposite(thisTrack) || tdbIsCompositeView(thisTrack))
-    apiErrAbort(err400, err400Msg, "container track '%s' does not contain data, use the children of this container", track);
-if (! isSupportedType(thisTrack->type))
-    apiErrAbort(err415, err415Msg, "track type '%s' for track=%s not supported at this time subtracks %llx", thisTrack->type, track, (unsigned long long)thisTrack->subtracks);
- // tdb->subtracks && COMPOSITE_NODE( tdb->treeNodeType);
-
-/* might be a big* track with no table */
-char *bigDataUrl = trackDbSetting(thisTrack, "bigDataUrl");
-boolean tableTrack = TRUE;
-
-/* might have a specific table defined instead of the track name */
-char *tableName = trackDbSetting(thisTrack, "table");
-if (isNotEmpty(tableName))
-    {
-    freeMem(sqlTable);
-    sqlTable = cloneString(tableName);
-    }
-boolean protectedData = FALSE;
-if (trackDbSetting(thisTrack, "tableBrowser"))
-    protectedData = TRUE;
-
 /* database existence has already been checked before now, might
- * have disappeared in the mean time
+ * have disappeared in the mean time (well, not really . . .)
  */
 struct sqlConnection *conn = hAllocConnMaybe(db);
 if (NULL == conn)
     apiErrAbort(err400, err400Msg, "can not find genome 'genome=%s' for endpoint '/getData/track", db);
+
+struct trackDb *thisTrack = hTrackDbForTrack(db, track);
+
+if (NULL == thisTrack)
+    {
+    if (! sqlTableExists(conn, track))
+	apiErrAbort(err400, err400Msg, "can not find track=%s name for endpoint '/getData/track", track);
+    }
+if (thisTrack && ! isSupportedType(thisTrack->type))
+    apiErrAbort(err415, err415Msg, "track type '%s' for track=%s not supported at this time", thisTrack->type, track);
+if (trackHasNoData(thisTrack))
+    apiErrAbort(err400, err400Msg, "container track '%s' does not contain data, use the children of this container", track);
+
+/* might be a big* track with no table */
+char *bigDataUrl = NULL;
+boolean tableTrack = TRUE;
+boolean protectedData = FALSE;
+
+if (thisTrack)
+    {
+    bigDataUrl = trackDbSetting(thisTrack, "bigDataUrl");
+
+    /* might have a specific table defined instead of the track name */
+    char *tableName = trackDbSetting(thisTrack, "table");
+    if (isNotEmpty(tableName))
+	{
+	freeMem(sqlTable);
+	sqlTable = cloneString(tableName);
+	}
+    if (trackDbSetting(thisTrack, "tableBrowser"))
+        protectedData = TRUE;
+    }
+else
+    {
+    freeMem(sqlTable);
+    sqlTable = cloneString(track);
+    }
 
 struct hTableInfo *hti = hFindTableInfoWithConn(conn, NULL, sqlTable);
 
@@ -636,7 +664,9 @@ if (tableTrack)
     if (differentStringNullOk(sqlTable,track))
 	jsonWriteString(jw, "sqlTable", sqlTable);
     }
-jsonWriteString(jw, "trackType", thisTrack->type);
+if (thisTrack)
+    jsonWriteString(jw, "trackType", thisTrack->type);
+
 jsonWriteString(jw, "track", track);
 if (debug)
     jsonWriteBoolean(jw, "jsonOutputArrays", jsonOutputArrays);
@@ -645,7 +675,7 @@ char query[4096];
 struct bbiFile *bbi = NULL;
 struct bbiChromInfo *chromList = NULL;
 
-if (startsWith("big", thisTrack->type))
+if (thisTrack && startsWith("big", thisTrack->type))
     {
     if (bigDataUrl)
 	bbi = bigFileOpen(thisTrack->type, bigDataUrl);
@@ -686,7 +716,7 @@ if ( uEnd > uStart )
     jsonWriteNumber(jw, "end", uEnd);
     }
 
-if (allowedBigBedType(thisTrack->type))
+if (thisTrack && allowedBigBedType(thisTrack->type))
     {
     struct asObject *as = bigBedAsOrDefault(bbi);
     struct sqlFieldType *fiList = sqlFieldTypesFromAs(as);
@@ -712,7 +742,7 @@ if (allowedBigBedType(thisTrack->type))
     itemsReturned += itemsDone;
     jsonWriteListEnd(jw);
     }
-else if (startsWith("bigWig", thisTrack->type))
+else if (thisTrack && startsWith("bigWig", thisTrack->type))
     {
     if (jsonOutputArrays || debug)
 	wigColumnTypes(jw);
@@ -727,7 +757,7 @@ else
 
 apiFinishOutput(0, NULL, jw);
 hFreeConn(&conn);
-}
+}	/*	static void getTrackData()	*/
 
 static void getSequenceData(char *db, char *hubUrl)
 /* return DNA sequence, given at least a genome=name and chrom=chr,

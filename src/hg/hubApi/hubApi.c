@@ -37,6 +37,9 @@ boolean jsonOutputArrays = FALSE; /* set by CGI parameter 'jsonOutputArrays' */
 
 boolean measureTiming = FALSE;	/* set by CGI parameters */
 
+/* downloadUrl for use in error exits when reachedMaxItems */
+struct dyString *downloadUrl = NULL;
+
 /* valid argument listings to verify extraneous arguments */
 char *argListPublicHubs[] = { NULL };
 char *argListUcscGenomes[] = { NULL };
@@ -92,6 +95,28 @@ slAddHead(&supportedTypes, el);
 el = newSlName("rmsk");
 slAddHead(&supportedTypes, el);
 el = newSlName("bigPsl");
+slAddHead(&supportedTypes, el);
+el = newSlName("altGraphX");
+slAddHead(&supportedTypes, el);
+el = newSlName("barChart");
+slAddHead(&supportedTypes, el);
+el = newSlName("chain");
+slAddHead(&supportedTypes, el);
+el = newSlName("ctgPos");
+slAddHead(&supportedTypes, el);
+el = newSlName("expRatio");
+slAddHead(&supportedTypes, el);
+el = newSlName("factorSource");
+slAddHead(&supportedTypes, el);
+el = newSlName("gvf");
+slAddHead(&supportedTypes, el);
+el = newSlName("interact");
+slAddHead(&supportedTypes, el);
+el = newSlName("netAlign");
+slAddHead(&supportedTypes, el);
+el = newSlName("peptideMapping");
+slAddHead(&supportedTypes, el);
+el = newSlName("pgSnp");
 slAddHead(&supportedTypes, el);
 // el = newSlName("bigBarChart");
 // slAddHead(&supportedTypes, el);
