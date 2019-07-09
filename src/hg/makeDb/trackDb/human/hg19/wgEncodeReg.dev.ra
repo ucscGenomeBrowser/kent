@@ -15,7 +15,6 @@
     scoreFilter 100
     scoreFilterLimits 100:1000
     html wgEncodeRegDnaseClustered
-    pennantIcon none
     priority 1.6
 
     # This is second version of the DNase clusters track -- newer data, missing single-cell
@@ -32,7 +31,6 @@
     useScore 1
     scoreFilter 100
     scoreFilterLimits 100:1000
-    pennantIcon none
     priority 1.6
 
     # This is alternate cluster version of TFBS track -- antibody-based, as done in V2
@@ -60,7 +58,6 @@
     superTrack wgEncodeReg hide
     #color 0,128,0
     color 22,182,33
-    pennantIcon none
     priority 1.8
 
     # track wgEncodeRegTfbsClusteredMotifs_larry

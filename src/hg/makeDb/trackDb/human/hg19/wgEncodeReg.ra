@@ -26,7 +26,6 @@ canPack On
     priority 1.1
     dragAndDrop subTracks
     allButtonPair on
-    pennantIcon none
 
 	track wgEncodeRegTxnCaltechRnaSeqGm12878R2x75Il200SigPooled
 	shortLabel GM12878
@@ -102,7 +101,6 @@ canPack On
 	color 255,128,212
 
     track wgEncodeRegMarkH3k4me1
-    pennantIcon none
     container multiWig
     noInherit on
     type bigWig 0 10000
@@ -175,7 +173,6 @@ canPack On
 	type bigWig 0 6866
 
     track wgEncodeRegMarkH3k4me3
-    pennantIcon none
     container multiWig
     noInherit on
     type bigWig 0 10000
@@ -248,7 +245,6 @@ canPack On
 	type bigWig 0 19229
 
     track wgEncodeRegMarkH3k27ac
-    pennantIcon none
     container multiWig
     noInherit on
     type bigWig 0 10000
@@ -337,7 +333,6 @@ canPack On
     scoreFilterLimits 100:1000
     html wgEncodeRegDnaseClusteredV3
     priority 1.6
-    pennantIcon none
     #nameFilter 1:125
     #nameFilterLimits 1:125
     #nameFilterByRange on
@@ -357,12 +352,10 @@ canPack On
     priority 1.73
     html wgEncodeRegTfbsClustered.release2
     dataVersion ENCODE Jan 2011 Freeze
-    pennantIcon none
 
     # This is current TFBS track with TF Motif feature
     track wgEncodeRegTfbsClusteredV3
     shortLabel Txn Factor ChIP
-    pennantIcon none
     longLabel Transcription Factor ChIP-seq Clusters (161 factors) from ENCODE with Factorbook Motifs
     type factorSource
     superTrack wgEncodeReg dense

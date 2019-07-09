@@ -9,4 +9,3 @@ longLabel TFBS Validation from ENCODE/Univ. Massachusetts
 group regulation
 fileSortOrder cell=Cell_Line dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 wgEncode 1
-pennantIcon none

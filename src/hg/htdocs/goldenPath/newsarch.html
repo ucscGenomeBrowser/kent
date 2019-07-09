@@ -51,10 +51,28 @@
 <!-- ============= 2019 archived news ============= -->
 <a name="2019"></a>
 
-<a name="070119"></a>
-<h2>Jul. 1, 2019 &nbsp;&nbsp New DGV Gold Standard track for human (GRCh19/hg19)</h2>
+<a name="070919"></a>
+<h2>Jul. 9, 2019 &nbsp;&nbsp; Expanded CRISPR track released for human (hg19/GRCh37)</h2> 
 <p>
-We are pleased to announce the DGV Gold Standard track for human (GRCh19/hg19). This track displays
+We are pleased to announce the release of an expanded
+ <a href="../cgi-bin/hgTracks?db=hg19&hideTracks=1&knownGene=pack&crisprAllTargets=pack&position=chr7:116397500-116398000" target="_blank">CRISPR Targets track</a> for the human 
+hg19/GRCh37 assembly. This track shows the DNA sequences targetable by CRISPR RNA guides 
+using the Cas9 enzyme from S. pyogenes (PAM: NGG) over the entire human genome. CRISPR target
+sites were annotated with predicted specificity (off-target effects) and predicted efficiency
+(on-target cleavage) by various algorithms through the tool 
+<a href="http://crispor.tefor.net/" target="_blank">CRISPOR</a>. 
+</p>
+<p class="text-center">
+  <img class='text-center' src="../images/crisprAll.png" width='850' alt="CrisprAllTargets track">
+</p>
+<p>
+We would like to thank Maximilian Haeussler, Hiram Clawson, and Daniel Schmelter for their effort
+creating, developing, and releasing this data track.</p> 
+
+<a name="070119"></a>
+<h2>Jul. 1, 2019 &nbsp;&nbsp; New DGV Gold Standard track for human (hg19/GRCh37)</h2>
+<p>
+We are pleased to announce the DGV Gold Standard track for human (hg19/GRCh37). This track displays
 copy number variants (CNVs), insertions/deletions (InDels), inversions and inversion breakpoints
 annotated by the <a href="http://dgv.tcag.ca/dgv/app/home" target="_blank">Database of Genomic Variants</a>
 (DGV). The initial criteria for the Gold Standard set require that a variant be found in at least
@@ -3016,7 +3034,7 @@ on a tissue by tissue basis. In the composite track each subtrack is colored bas
 the site across all samples of the tissue, shaded on a spectrum of gray (low) to GTEx convention
 tissue color (high).</p>
 <p>
-To access and view this hub, navigate to the <a href="http://genome.ucsc.edu/cgi-bin/hgHubConnect" 
+To access and view this hub, navigate to the <a href="../cgi-bin/hgHubConnect" 
 target="_blank">Track Hub gateway page</a> and select &quot;GTEx Analysis Hub&quot; from the
 Public Hubs list. Please direct any queries to <a href="mailto:scastel@nygenome.org">Stephane 
 Castel</a>.</p>
@@ -3124,7 +3142,7 @@ Comparing the new gene set with the previous version:</p>
 </ul>
 <p>
 More details about the GENCODE Genes track can be found on the
-<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&g=knownGene">
+<a href="../cgi-bin/hgTrackUi?db=hg38&g=knownGene">
 GENCODE v24 track description page</a>.</p>
 <p>
 Many thanks to Brian Raney and Luvina Guruvadoo for their work on this track!</p>
@@ -3881,7 +3899,7 @@ the previous version: </p>
 </ul>
 <p>
 More details about the new GENCODE Basic track can be found on the
-<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&g=knownGene">
+<a href="../cgi-bin/hgTrackUi?db=hg38&g=knownGene">
 GENCODE Basic track description page</a>.</p>
 
 <a name="062615"></a>
@@ -4243,7 +4261,7 @@ colorectal and ovarian cancer biospecimens that were initially sequenced by
 extends the accessibility of CPTAC data to more researchers and provides an additional level of 
 analysis to assist the cancer biology community.</p>
 <p>
-To access and view this hub, navigate to the <a href="http://genome.ucsc.edu/cgi-bin/hgHubConnect" 
+To access and view this hub, navigate to the <a href="../cgi-bin/hgHubConnect" 
 target="_blank">Track Hub gateway page</a> and select &quot;CPTAC Hub v1&quot; from the Public Hubs 
 list.  Please direct any queries to the Fenyo Lab at 
 <a href="mailto:info@fenyolab.org">info@fenyolab.org</a>.</p>
@@ -4254,7 +4272,7 @@ target="_blank">PeptideAtlas</a> track which displays peptide identifications fr
 target="_blank">PeptideAtlas August 2014 (Build 433) Human build</a>. This build, based on 971 
 samples containing more than 420 million spectra, identified over a million distinct peptides 
 covering more than 15,000 canonical proteins. To read more about this track, please see the 
-<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=peptideAtlas" 
+<a href="../cgi-bin/hgTrackUi?db=hg19&g=peptideAtlas" 
 target="_blank">track description page</a>. Many thanks to Eric Deutsch, Zhi Sun, and the 
 PeptideAtlas team at the Institute for Systems Biology, Seattle for providing this data.</p>
 
@@ -4596,7 +4614,7 @@ the new gene set with the previous version:</p>
 </ul>
 <p>
 More details about the new UCSC Genes track can be found on the
-<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&g=knownGene" 
+<a href="../cgi-bin/hgTrackUi?db=hg38&g=knownGene" 
 >UCSC Genes track description page</a>.</p>
 <p>
 Many thanks to Brian Raney, Jim Kent, and Luvina Guruvadoo for their work on this track.</p>
@@ -4715,7 +4733,7 @@ Here are more details about the two fixes that we made:</p>
 genome segmentations from ENCODE</h2>
 <p>
 The Browser's default displayed Transcription Factor ChIP-seq track is updating to the
-<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeRegTfbsClusteredV3">latest data 
+<a href="../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeRegTfbsClusteredV3">latest data 
 release</a>, which has been enhanced with the display of Factorbook motifs. Within a cluster, a 
 green highlight indicates the highest scoring site of a Factorbook-identified canonical motif for 
 the corresponding factor. Upon clicking a transcription factor's cluster with a motif, the 
@@ -4723,11 +4741,11 @@ details page now displays the motif's sequence logo, alignment and underlying Po
 Weight Matrix. Also, the track configuration page now enables the filtering of factors.</p>
 <p>
 The newly added 
-<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeAwgSegmentation">
+<a href="../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeAwgSegmentation">
 Genome Segmentations from ENCODE</a> tracks display multivariate genome-segmentation performed on
-<a target=ucscVocab href="http://genome.ucsc.edu/cgi-bin/hgEncodeVocab?term=GM12878,H1-hESC,K562,HeLa-S3,HepG2,HUVEC">six human cell types</a>
+<a target=ucscVocab href="../cgi-bin/hgEncodeVocab?term=GM12878,H1-hESC,K562,HeLa-S3,HepG2,HUVEC">six human cell types</a>
 (GM12878, K562, H1-hESC, HeLa-S3, HepG2, and HUVEC), integrating ChIP-seq data for
-<a target=ucscVocab href="http://genome.ucsc.edu/cgi-bin/hgEncodeVocab?term=CTCF,H3K4me1,H3K4me2,H3K4me3,H3K27ac,H3K9ac,H3K36me3,H4K20me1,H3K27me3,Pol2,Input">
+<a target=ucscVocab href="../cgi-bin/hgEncodeVocab?term=CTCF,H3K4me1,H3K4me2,H3K4me3,H3K27ac,H3K9ac,H3K36me3,H4K20me1,H3K27me3,Pol2,Input">
 eight chromatin marks, RNA Polymerase II, the CTCF transcription factor and input data</a>. 
 In total, twenty-five states were used to segment the genome, and these states were then grouped and
 colored to highlight predicted functional elements. These Genome Segmentations are the same data as
@@ -4914,7 +4932,7 @@ Blat to the human genome (hg19) and numerous other species including mouse (mm9)
 zebrafish (danRer7). The data were extracted from a variety of sources including patents, online 
 textbooks, help forums, and any other webpages that contain DNA sequence. In essence, this track 
 displays the Blat alignments of nearly every DNA sequence on the internet! The
-<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=pubsBingBlat">Web Sequences</a>
+<a href="../cgi-bin/hgTrackUi?db=hg19&g=pubsBingBlat">Web Sequences</a>
 track description page contains more details on how the track was generated.</p>
 <p>
 We would like to acknowledge Max Haeussler and Matt Speir from the UCSC Genome Browser staff
@@ -4940,7 +4958,7 @@ track display and its configuration options can be found on our Genome Browser
 target="_blank">help</a> page.</p>
 <p>
 To access and view these hubs, navigate to the
-<a href="http://genome.ucsc.edu/cgi-bin/hgHubConnect">Track Hub gateway page</a>
+<a href="../cgi-bin/hgHubConnect">Track Hub gateway page</a>
 and select one of the two E. coli comparative assembly hubs from the Public Hubs list.</p>
 <p>
 We would like to acknowledge Ngan Nguyen, Glenn Hickey, Brian Raney, Joel Armstrong, 
@@ -4960,7 +4978,7 @@ This new Conservation track shows multiple alignments of 100 species and measure
 evolutionary conservation using two methods (phastCons and phyloP) from the PHAST package.
 This adds 40 more species to the existing 60-way on the mm10 mouse browser. For more information 
 about the 100 species Conservation track, see its 
-<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=cons100way" 
+<a href="../cgi-bin/hgTrackUi?db=hg19&g=cons100way" 
 target="_blank">description page</a>.</p>
 <p>
 We'd also like to acknowledge the hard work of the UCSC Genome Browser staff who pulled 
@@ -5219,7 +5237,7 @@ gene set with the previous version:</p>
 </ul>
 <p>
 More details about the new UCSC Genes track can be found on the 
-<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=knownGene" >UCSC Genes track description
+<a href="../cgi-bin/hgTrackUi?db=hg19&g=knownGene" >UCSC Genes track description
 page</a>.</p>
 <p>
 Many thanks to Brian Raney, Jim Kent, and Luvina Guruvadoo for their work on this track.</p>
