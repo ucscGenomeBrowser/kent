@@ -27,7 +27,6 @@ type bed 3
 wgEncode 1
 nextItemButton on
 noInherit on
-pennantIcon none
 html wgEncodeHaibTfbs.release3
 #dataVersion through the ENCODE Jan 2010 Freeze
 

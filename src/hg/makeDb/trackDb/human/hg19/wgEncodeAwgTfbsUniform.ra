@@ -6,7 +6,6 @@ group regulation
 priority 2.7
 shortLabel Uniform TFBS
 longLabel Transcription Factor ChIP-seq Uniform Peaks from ENCODE/Analysis
-pennantIcon none
 subGroup1 tier Tier a10=1 a20=2 a25=2* a30=3 
 subGroup4 lab Lab Broad=Broad Harvard=Harvard HudsonAlpha=HudsonAlpha Stanford=Stanford UChicago=UChicago USC=USC UT-A=UT-A UW=UW Yale=Yale
 subGroup2 cellType Cell_Line \
