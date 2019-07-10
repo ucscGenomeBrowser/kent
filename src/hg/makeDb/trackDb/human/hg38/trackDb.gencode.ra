@@ -18,4 +18,6 @@ include wgEncodeGencodeV26.ra
 include wgEncodeGencodeV27.ra
 include wgEncodeGencodeV28.ra
 include wgEncodeGencodeV29.ra
+include wgEncodeGencodeV30.ra
+include wgEncodeGencodeV31.ra
 

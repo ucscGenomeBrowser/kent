@@ -2114,6 +2114,8 @@ if (sameString(end, "1"))
     return "2";
 else if (sameString(end, "2"))
     return "1";
+else if (sameString(end, "cell_barcode") || sameString(end, "sample_barcode"))
+    return NULL;
 else
     {
     errAbort("Expecting 1 or 2, got %s in oppositeEnd", end);
@@ -2125,6 +2127,8 @@ struct cdwValidFile *cdwOppositePairedEnd(struct sqlConnection *conn, struct cdw
 /* Given one file of a paired end set of fastqs, find the file with opposite ends. */
 {
 char *otherEnd = cdwOppositePairedEndString(vf->pairedEnd);
+if (otherEnd == NULL)
+    return NULL;
 char query[1024];
 sqlSafef(query, sizeof(query), 
     "select cdwValidFile.* from cdwValidFile join cdwFile on cdwValidFile.fileId=cdwFile.id"
@@ -2676,6 +2680,25 @@ freez(&encodedReturn);
 return loginBits;
 }
 #endif
+
+char *cdwHeadTagDependencies(struct cart *cart, boolean makeAbsolute)
+/* Return page head dependencies string.  This is content that actually appears at the top
+ * of the page, in the head tag.  Optionally make links point to absolute URLs instead of relative. */
+{
+// page header dependencies html is in a stringified .h file
+struct dyString *dy = dyStringNew(4*1024);
+dyStringPrintf(dy, 
+#include "cdwHeadTagDependencies.h"
+       );
+
+char *headStr = cloneString(dy->string);
+if (!makeAbsolute)
+    return headStr;
+
+char *headStr2 = replaceChars(headStr, "../", "/");
+freez(&headStr);
+return headStr2;
+}
 
 char *cdwPageHeader(struct cart *cart, boolean makeAbsolute)
 /* Return page header string.  This is content that actually appears at the top

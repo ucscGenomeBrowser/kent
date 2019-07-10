@@ -1692,39 +1692,30 @@ else
     }
 }
 
-static bioSeq *seqGet(char *db, char *acc, boolean isDna, char *seqTbl, char *extFileTbl)
-/* Return sequence from the specified seq and extFile tables.   The
- * seqTbl/extFileTbl arguments may include the database, in which case they
- * override what is in db (which could even be NULL). NULL if not
+static bioSeq *seqGetConn(struct sqlConnection *seqConn, struct sqlConnection *extFileConn,
+                          char *acc, boolean isDna, char *seqTbl, char *extFileTbl)
+/* Return sequence from the specified seq and extFile tables NULL if not
  * found. */
 {
 /* look up sequence */
-char dbBuf[64];
-char *seqDb = dbTblParse(db, seqTbl, &seqTbl, dbBuf, sizeof(dbBuf));
-struct sqlConnection *conn = hAllocConn(seqDb);
 char query[256];
 sqlSafef(query, sizeof(query),
       "select extFile,file_offset,file_size from %s where acc = '%s'",
       seqTbl, acc);
-struct sqlResult *sr = sqlMustGetResult(conn, query);
+struct sqlResult *sr = sqlMustGetResult(seqConn, query);
 char **row = sqlNextRow(sr);
 if (row == NULL)
     {
     sqlFreeResult(&sr);
-    hFreeConn(&conn);
     return NULL;
     }
 HGID extId = sqlUnsigned(row[0]);
 off_t offset = sqlLongLong(row[1]);
 size_t size = sqlUnsigned(row[2]);
 sqlFreeResult(&sr);
-hFreeConn(&conn);
 
 /* look up extFile */
-char *extDb = dbTblParse(db, extFileTbl, &extFileTbl, dbBuf, sizeof(dbBuf));
-conn = hAllocConn(extDb);
-struct largeSeqFile *lsf = largeFileHandle(conn, extId, extFileTbl);
-hFreeConn(&conn);
+struct largeSeqFile *lsf = largeFileHandle(extFileConn, extId, extFileTbl);
 
 if (lsf == NULL)
     return NULL;
@@ -1732,6 +1723,35 @@ if (lsf == NULL)
 char *buf = readOpenFileSection(lsf->fd, offset, size, lsf->path, acc);
 return faSeqFromMemText(buf, isDna);
 }
+
+static bioSeq *seqMustGetConn(struct sqlConnection *seqConn, struct sqlConnection *extFileConn,
+                              char *acc, boolean isDna, char *seqTbl, char *extFileTbl)
+/* Return sequence from the specified seq and extFile tables.Return Abort if not
+ * found. */
+{
+bioSeq *seq = seqGetConn(seqConn, extFileConn, acc, isDna, seqTbl, extFileTbl);
+if (seq == NULL)
+    errAbort("can't find \"%s\" in seq table %s.%s", acc, sqlGetDatabase(seqConn), seqTbl);
+return seq;
+}
+
+static bioSeq *seqGet(char *db, char *acc, boolean isDna, char *seqTbl, char *extFileTbl)
+/* Return sequence from the specified seq and extFile tables.   The
+ * seqTbl/extFileTbl arguments may include the database, in which case they
+ * override what is in db (which could even be NULL). NULL if not
+ * found. */
+{
+char seqDbBuf[64], extFileDbBuf[64];
+char *seqDb = dbTblParse(db, seqTbl, &seqTbl, seqDbBuf, sizeof(seqDbBuf));
+char *extFileDb = dbTblParse(db, extFileTbl, &extFileTbl, extFileDbBuf, sizeof(extFileDbBuf));
+struct sqlConnection *seqConn = hAllocConn(seqDb);
+struct sqlConnection *extFileConn = hAllocConn(extFileDb);
+bioSeq *seq = seqGetConn(seqConn, extFileConn, acc, isDna, seqTbl, extFileTbl);
+hFreeConn(&seqConn);
+hFreeConn(&extFileConn);
+return seq;
+}
+
 
 static bioSeq *seqMustGet(char *db, char *acc, boolean isDna, char *seqTbl, char *extFileTbl)
 /* Return sequence from the specified seq and extFile tables.  The
@@ -1761,6 +1781,20 @@ struct dnaSeq *hDnaSeqMustGet(char *db, char *acc, char *seqTbl, char *extFileTb
  * Abort if not found. */
 {
 return seqMustGet(db, acc, TRUE, seqTbl, extFileTbl);
+}
+
+struct dnaSeq *hDnaSeqGetConn(struct sqlConnection *conn, char *acc, char *seqTbl, char *extFileTbl)
+/* Get a cDNA or DNA sequence from the specified seq and extFile tables. Return NULL if not
+ * found. */
+{
+return seqGetConn(conn, conn, acc, TRUE, seqTbl, extFileTbl);
+}
+
+struct dnaSeq *hDnaSeqMustGetConn(struct sqlConnection *conn, char *acc, char *seqTbl, char *extFileTbl)
+/* Get a cDNA or DNA sequence from the specified seq and extFile tables. 
+ * Abort if not found. */
+{
+return seqMustGetConn(conn, conn, acc, TRUE, seqTbl, extFileTbl);
 }
 
 aaSeq *hPepSeqGet(char *db, char *acc, char *seqTbl, char *extFileTbl)
@@ -3945,7 +3979,7 @@ if (!trackDbSettingClosestToHome(subtrackTdb, "noInherit"))
     struct hashCookie hc = hashFirst(compositeTdb->settingsHash);
     while ((hel = hashNext(&hc)) != NULL)
 	{
-	if (!hashLookup(subtrackTdb->settingsHash, hel->name))
+	if (!hashLookup(subtrackTdb->settingsHash, hel->name) && !trackDbNoInheritField(hel->name))
 	    hashAdd(subtrackTdb->settingsHash, hel->name, hel->val);
 	}
     }
@@ -4104,31 +4138,35 @@ struct trackDb *hTrackDb(char *db)
  *	NOTE: this result is cached, do not free it !
  */
 {
-// FIXME: This is NOT CACHED and should be!  Since some callers (e.g. hgTables) consume the list,
-// I would suggest:
-// 1) static hash by db/hub
-// 2) call creates list if not in hash
-// 3) static (to this file) routine gives the actual tdb list
-// 4) public lib routine that returns fully cloned list
-// 5) public lib routine that returns cloned individual tdb complete with up/down inheritance
-// UNFORTUNATELY, cloning the memory with prove costly in time as well, because of all the pointers
-// to relink.  THEREFORE what should be done is to make the tdb list with const ->next pointers and
-// force discpline on the callers.  Sorts should be by hdb.c routines and any new lists (such as
-// hgTables makes) should be via tdbRefs.
-// SO we are back to being STALLED because of the volume of work.
-
-// static char *existingDb = NULL;
-// static struct trackDb *tdbList = NULL;
+if (trackHubDatabase(db))
+    return NULL;
 struct trackDb *tdbList = NULL;
-//if (differentStringNullOk(existingDb, db))
-//    {
 
-    tdbList = loadTrackDb(db, NULL);
-    tdbList = trackDbLinkUpGenerations(tdbList);
-    tdbList = trackDbPolishAfterLinkup(tdbList, db);
-//    freeMem(existingDb);
-//    existingDb = cloneString(db);
-//    }
+boolean doCache = trackDbCacheOn();
+
+if (doCache)
+    {
+    char *table = hTrackDbPath();
+
+    struct sqlConnection *conn = hAllocConn(db);
+    time_t tableTime = sqlTableUpdateTime(conn, table);
+    hFreeConn(&conn);
+
+    struct trackDb *cacheTdb = trackDbCache(db, tableTime);
+
+    if (cacheTdb != NULL)
+        return cacheTdb;
+    
+    memCheckPoint(); // we want to know how much memory is used to build the tdbList
+    }
+
+tdbList = loadTrackDb(db, NULL);
+tdbList = trackDbLinkUpGenerations(tdbList);
+tdbList = trackDbPolishAfterLinkup(tdbList, db);
+
+if (doCache)
+    trackDbCloneTdbListToSharedMem(db, tdbList, memCheckPoint());
+
 return tdbList;
 }
 

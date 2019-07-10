@@ -1076,8 +1076,8 @@ genePredExt format.</p>
     uint[exonCount] exonEnds;   "Exon end positions"
     int score;            	"Score"
     string name2;       	"Alternate name (e.g. gene_id from GTF)"
-    string cdsStartStat; 	"enum('none','unk','incmpl','cmpl')"
-    string cdsEndStat;   	"enum('none','unk','incmpl','cmpl')"
+    string cdsStartStat; 	"Status of CDS start annotation (none, unknown, incomplete, or complete)"
+    string cdsEndStat;   	"Status of CDS end annotation (none, unknown, incomplete, or complete)"
     lstring exonFrames; 	"Exon frame offsets {0,1,2}"
     )
 </code></pre>

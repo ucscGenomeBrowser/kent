@@ -288,7 +288,7 @@ html vertebrateChainNet
         type netAlign melUnd1 chainMelUnd1
         otherDb melUnd1
 
-include chainNetGalGal5.ra
+include chainNetGalGal6.ra
 
         track netTaeGut1
         subTrack vertebrateChainNetViewnet on

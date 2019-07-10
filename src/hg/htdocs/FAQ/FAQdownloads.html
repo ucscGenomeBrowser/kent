@@ -42,12 +42,13 @@
 <li><a href="#download20">Minus strand coordinates - axtNet files</a></li>
 <li><a href="#download21">Mapping UCSC STS marker IDS to those of other groups</a></li>
 <li><a href="#download22">deCODE map data</a></li>
-<li><a href="#download29">Direct MySQL access to data</a></li>
+<li><a href="#download29">Direct MariaDB (MySQL) access to data</a></li>
 <li><a href="#download34">Name of fourth column in BED output</a></li>
 <li><a href="#download36">Track data access</a></li>
 <li><a href="#download37">Known issues with Table Browser GTF output</a></li>
 <li><a href="#download38">Table Browser output file not ordered</a></li>
 <li><a href="#download39">'Permisssion denied' error when trying to use command-line utilities</a></li>
+<li><a href="#download40">Restricted Track Data</a></li>
 </ul>
 <hr>
 <p>
@@ -76,10 +77,16 @@ assembly</a>.</p>
 For more information on using the UCSC DAS server, see <a href="#download23">Downloading data from 
 the UCSC DAS server</a>.</p> 
 <p> 
+<p>
+Another option for querying sequence and annotation data is the <a href='../goldenPath/help/api.html' 
+target=_blank>JSON API</a>. This interface allows for extraction of sequence and annotations from
+both UCSC assemblies and from hubs.</p>
+<p>
 <strong>To quickly download large volumes of data you can use UDR (UDT Enabled Rysnc):</strong> UDR 
 provides users much faster download rates. Here is an example using UDR, once installed, to download
 all the mouse mm9 ENCODE information that amounts to several terabytes:</p>
 <pre><code>$ udr rsync -avP hgdownload.soe.ucsc.edu::goldenPath/mm9/encodeDCC/ /my/local/mm9/</code></pre>
+<pre><code>$ udr rsync -avP hgdownload-euro.soe.ucsc.edu::goldenPath/mm9/encodeDCC/ /my/local/mm9/</code></pre>
 <p>
 Please read more about the new UDR method <a href="../../goldenPath/newsarch.html#030315" 
 target="_blank">here</a>.</p>
@@ -146,7 +153,7 @@ These tables are also accessible from: </p>
   The <a href="../cgi-bin/hgTables" >Table Browser</a>, as connected tables and joined fields 
   described when clicking the &quot;describe table schema &quot; button</li>
   <li>
-  One of our two <a href="../goldenPath/help/mysql.html">public access MySQL servers</a>
+  One of our two <a href="../goldenPath/help/mysql.html">public access MariaDB servers</a>
   in the US and Europe</li>
 </ul>
 
@@ -205,6 +212,9 @@ position chr1:1-100000 on the hg16 assembly:
 For more information on DAS, see the <a href="http://www.biodas.org" 
 target="_blank">Biodas website</a> and the <a href="http://www.biodas.org/documents/spec.html" 
 target="_blank">DAS specification</a>.</p>
+<p>
+A more recent alternative to the DAS server is the <a href='../goldenPath/help/api.html' 
+target=_blank>JSON API</a>.</p>
 
 <a name="download27"></a>
 <h2>Downloading the UCSC Genome Browser source</h2>
@@ -249,10 +259,10 @@ DNA sequence to display which portions are repeats, known genes, genetic markers
 <a name="download4"></a>
 <h2>Data differences between downloaded data and browser display</h2>
 <p>
-<h6>I downloaded the genome annotations from your MySQL database tables, but the mRNA locations 
+<h6>I downloaded the genome annotations from your MariaDB database tables, but the mRNA locations 
 didn't match what was showing in the Genome Browser. Shouldn't they be in synch?</h6>
 <p> 
-Yes. The Genome Browser and Table Browser are both driven by the same underlying MySQL database. 
+Yes. The Genome Browser and Table Browser are both driven by the same underlying MariaDB database. 
 Check that your downloaded tables are from the same assembly version as the one you are viewing in 
 the Genome Browser. If the assembly dates don't match, the coordinates of the data within the 
 tables may differ. In a very rare instance, you could also be affected by the brief lag time between
@@ -380,7 +390,7 @@ EST.</p>
 <p> 
 It may have been added after we last downloaded data from GenBank, or it may have been replaced or 
 removed. You can check the submission date and status of an accession on the 
-<a href="https://www.ncbi.nlm.nih.gov:80/entrez/" target="_blank">NCBI Entrez Nucleotide
+<a href="https://www.ncbi.nlm.nih.gov/nucleotide/" target="_blank">NCBI Entrez Nucleotide
 site</a>.</p>
 
 <a name="download9"></a>
@@ -556,7 +566,7 @@ chromosomes to more closely match their human counterparts. As a result, chromos
       </tr>
       <tr>
         <td>6</td><td>5</td><td>6</td>
-      </tr
+      </tr>
       <tr>
         <td>7</td><td>6</td><td>7</td>
       </tr>
@@ -622,7 +632,7 @@ you've just released a new version. Is there an easy way to locate my area of in
 assembly?</h6>
 <p>
 You can migrate data from one assembly to another by using the <a href="../cgi-bin/hgBlat">blat</a> 
-alignment tool or by converting assembly coordinates</a>. There are two conversion tools available 
+alignment tool or by converting assembly coordinates. There are two conversion tools available 
 on the Genome Browser web site: the Convert utility and the LiftOver tool. The Convert utility, 
 which is accessed from the menu on the Genome Browser annotation tracks page, supports forward, 
 reverse, and cross-species conversions, but does not accept batch input. The 
@@ -776,16 +786,16 @@ sequence information, etc. This table is related to the first table by an ID (th
 both files).</p>
 
 <a name="download29"></a>
-<h2>Direct MySQL access to data</h2>
+<h2>Direct MariaDB (MySQL) access to data</h2>
 <h6>Is it possible to run SQL queries directly on the database rather than using the Table 
 Browser interface?</h6>
 <p> 
 Yes. See our documentation on <a href="../goldenPath/help/mysql.html">Downloading Data using 
-MySQL</a>.</p> 
+MariaDB</a>.</p> 
 <p>
-Connect to the US MySQL server using the command:</p>
+Connect to the US MariaDB server using the command:</p>
 <pre><code>mysql --user=genome --host=genome-mysql.soe.ucsc.edu -A </code></pre>
-<p>Or to the European MySQL server using the command:</p>
+<p>Or to the European MariaDB server using the command:</p>
 <pre><code>mysql --user=genome --host=genome-euro-mysql.soe.ucsc.edu -A </code></pre>
 
 <a name="download34"></a>
@@ -835,19 +845,30 @@ The raw data underlying a track can be explored interactively with the
 <a href="../cgi-bin/hgTables">Table Browser</a>, <a href="../cgi-bin/hgIntegrator">Data 
 Integrator</a>, or <a href="../cgi-bin/hgVai">Variant Annotation Integrator</a>. For automated 
 analysis, the genome annotation can be downloaded from the 
-<a href="http://hgdownload.soe.ucsc.edu/">downloads server</a> or one of our two
-<a href="http://genome.ucsc.edu/goldenPath/help/mysql.html">public MySQL servers</a>.</p>
+<a href="http://hgdownload.soe.ucsc.edu/">downloads server</a>, one of our two
+<a href="http://genome.ucsc.edu/goldenPath/help/mysql.html">public MariaDB servers</a>, or 
+using our <a href='../goldenPath/help/api.html' target=_blank>JSON API</a>.</p>
 <p> 
 <strong>bigBed data:</strong> For <a href="FAQformat.html#format1.5">bigBed</a> files, individual 
 regions or the whole genome annotation can be obtained using our tool bigBedToBed which can be 
 compiled from the source code or downloaded as a precompiled binary for your system. Instructions 
 for downloading source code and binaries can be found 
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>. The tool can 
-also be used to obtain only features within a given range, example:</p> 
-<pre><code>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/path/to/file/bigBedfile.bb -chrom=chr21 -start=0 -end=1000000 stdout </code></pre> 
+also be used to obtain only features within a given range using one of the hgdownload servers,
+example:</p> 
+<ul>
+  <li>
+    North American server:
+    <pre><code>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/path/to/file/bigBedfile.bb -chrom=chr21 -start=0 -end=1000000 stdout </code></pre> 
+  </li>
+  <li>
+    European server:
+    <pre><code>bigBedToBed http://hgdownload-euro.soe.ucsc.edu/gbdb/path/to/file/bigBedfile.bb -chrom=chr21 -start=0 -end=1000000 stdout </code></pre> 
+  </li>
+</ul>
 <p> 
-<strong>SNP data:</strong> If queries against the SNP table on one of our public MySQL servers or on your
-own MySQL installation are slow, then they can be sped up by using the &quot;bin&quot; field; you 
+<strong>SNP data:</strong> If queries against the SNP table on one of our public MariaDB servers or on your
+own MariaDB installation are slow, then they can be sped up by using the &quot;bin&quot; field; you 
 can <a href="../contacts.html">contact us</a> for more information.</p>
 
 <p>
@@ -858,7 +879,7 @@ to acquire data.
 
 <a name="download37"></a>
 <h2>Obtaining GTF (Gene Transfer Format)</h2>
-<h6>What is the best method for obtaining GTF output?</h5>
+<h6>What is the best method for obtaining GTF output?</h6>
 <p>
 Currently, the <a href="../cgi-bin/hgTables">Table Browser</a> does not have an option return data as
 <a href="../FAQ/FAQformat.html#format4">GTF</a> files. Currently, the best method to obtain 
@@ -888,7 +909,7 @@ Please see the <a href="http://genomewiki.ucsc.edu/index.php/Genes_in_gtf_or_gff
 or GFF Format wiki page</a> for examples and various methods for conversion. The <code>genePredToGtf</code>
 utility can convert files from several sources, such as Table Browser output from a genePred table,
 a local downloaded gene set table like refGene.txt, or from querying
-<a href="../goldenpath/help/mysql.html">public MySQL tables.</a></p>
+<a href="../goldenpath/help/mysql.html">public MariaDB tables.</a></p>
 
 <a name="download38"></a>
 <h2>Table Browser output file order</h2>
@@ -918,6 +939,19 @@ Example:
        <pre><code>$ chmod +x /home/user/liftover/liftOver</code></pre>
         See also: <a href="http://en.wikipedia.org/wiki/Chmod" target="_blank">http://en.wikipedia.org/wiki/Chmod</a>
 
+</p>
+
+<a name="download40"></a>
+<h2>Restricted Track Data</h2>
+<h6>Why can I not download some data in the Table Browser or find the download files?</h6>
+<p>
+Some data is provided by external groups and is not available for download or mirroring
+by any third party without the permission of the owners, such as the OMIM track data, which
+is the property of Johns Hopkins University. For some tools, such as attempting a getData fetch
+with our API of restricted tracks, a 403 'Forbidden' error will be returned. Please email our private internal
+<a href="mailto:&#103;&#101;&#110;&#111;me&#45;&#119;&#119;&#119;&#64;&#115;&#111;&#101;.uc&#115;&#99;.&#101;d&#117;"
+>&#103;&#101;&#110;&#111;me&#45;&#119;&#119;&#119;&#64;&#115;&#111;&#101;.uc&#115;&#99;.&#101;d&#117;</a>
+mailing list if you have any questions.
 </p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

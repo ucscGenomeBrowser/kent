@@ -18,6 +18,7 @@
 #include "udc.h"
 #include "vcf.h"
 #include "bedTabix.h"
+#include "knetUdc.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
@@ -454,84 +455,92 @@ else
 return retVal;
 }
 
-
-void hubCheckTrackFile(struct trackHub *hub, struct trackHubGenome *genome, struct trackDb *tdb)
-/* Check remote file exists and is of correct type. Wrap this in error catcher */
+int hubCheckCompositeSettings(struct trackHub *hub, struct trackHubGenome *genome, struct trackDb *tdb, struct dyString *errors)
+/* Check composite level settings like subgroups, dimensions, sortOrder, etc.
+ * Note that this function returns an int because we want to warn about all errors in a single
+ * composite stanza rather than errAbort on the first error */
 {
-char *relativeUrl = trackDbSetting(tdb, "bigDataUrl");
-if (relativeUrl != NULL)
+int retVal = 0;
+if (!tdbIsComposite(tdb))
+    return retVal;
+
+sortOrder_t *sortOrder = NULL;
+membership_t *membership = NULL;
+struct slRef *subtrackRef, *subtrackRefList = NULL;
+
+// check that if a sortOrder is defined, then subtracks exist in the subgroup
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
     {
-    char *type = trackDbRequiredSetting(tdb, "type");
-    char *bigDataUrl = trackHubRelativeUrl(genome->trackDbFile, relativeUrl);
-
-    char *bigDataIndex = NULL;
-    char *relIdxUrl = trackDbSetting(tdb, "bigDataIndex");
-    if (relIdxUrl != NULL)
-        bigDataIndex = trackHubRelativeUrl(genome->trackDbFile, relIdxUrl);
-
-    verbose(2, "checking %s.%s type %s at %s\n", genome->name, tdb->track, type, bigDataUrl);
-    if (startsWithWord("bigWig", type))
-        {
-        /* Just open and close to verify file exists and is correct type. */
-        struct bbiFile *bbi = bigWigFileOpen(bigDataUrl);
-        bbiFileClose(&bbi);
-        }
-    else if (startsWithWord("bigNarrowPeak", type) || startsWithWord("bigBed", type) || 
-                startsWithWord("bigGenePred", type)  || startsWithWord("bigPsl", type)|| 
-                startsWithWord("bigChain", type)|| startsWithWord("bigMaf", type) || 
-                startsWithWord("bigBarChart", type) || startsWithWord("bigInteract", type))
-        {
-        /* Just open and close to verify file exists and is correct type. */
-        struct bbiFile *bbi = bigBedFileOpen(bigDataUrl);
-        char *typeString = cloneString(type);
-        nextWord(&typeString);
-        if (startsWithWord("bigBed", type) && (typeString != NULL))
-            {
-            unsigned numFields = sqlUnsigned(nextWord(&typeString));
-            if (numFields > bbi->fieldCount)
-                errAbort("fewer fields in bigBed (%d) than in type statement (%d) for track %s with bigDataUrl %s", bbi->fieldCount, numFields, trackHubSkipHubName(tdb->track), bigDataUrl);
-            }
-        bbiFileClose(&bbi);
-        }
-    else if (startsWithWord("vcfTabix", type))
-        {
-        /* Just open and close to verify file exists and is correct type. */
-        struct vcfFile *vcf = vcfTabixFileAndIndexMayOpen(bigDataUrl, bigDataIndex, NULL, 0, 0, 1, 1);
-        if (vcf == NULL)
-            // Warnings already indicated whether the tabix file is missing etc.
-            errAbort("Couldn't open %s and/or its tabix index (.tbi) file.  "
-                     "See http://genome.ucsc.edu/goldenPath/help/vcf.html",
-                     bigDataUrl);
-        vcfFileFree(&vcf);
-        }
-    else if (startsWithWord("bam", type))
-        {
-        bamFileAndIndexMustExist(bigDataUrl, bigDataIndex);
-        }
-    else if (startsWithWord("longTabix", type))
-        {
-        struct bedTabixFile *btf = bedTabixFileMayOpen(bigDataUrl, NULL, 0, 0);
-        if (btf == NULL)
-            errAbort("Couldn't open %s and/or its tabix index (.tbi) file.", bigDataUrl);
-        bedTabixFileClose(&btf);
-        }
-#ifdef USE_HAL
-    else if (startsWithWord("halSnake", type))
-        {
-        char *errString;
-        int handle = halOpenLOD(bigDataUrl, &errString);
-        if (handle < 0)
-            errAbort("HAL open error: %s", errString);
-        if (halClose(handle, &errString) < 0)
-            errAbort("HAL close error: %s", errString);
-        }
-#endif
-    else
-        errAbort("unrecognized type %s in genome %s track %s", type, genome->name, tdb->track);
-    freez(&bigDataUrl);
+    (void)membersForAllSubGroupsGet(tdb, NULL);
     }
+errCatchEnd(errCatch);
+if (errCatch->gotWarning || errCatch->gotError)
+    {
+    // don't add a new line because one will already be inserted by the errCatch->message
+    dyStringPrintf(errors, "track %s error: %s", tdb->shortLabel, errCatch->message->string);
+    retVal = 1;
+    }
+
+if (errCatchStart(errCatch))
+    {
+    sortOrder = sortOrderGet(NULL, tdb);
+    if (sortOrder)
+        {
+        subtrackRefList = trackDbListGetRefsToDescendantLeaves(tdb->subtracks);
+        for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackRef->next)
+            {
+            struct trackDb *subtrack = subtrackRef->val;
+            membership = subgroupMembershipGet(subtrack);
+            int i;
+            for (i = 0; i < sortOrder->count; i++)
+                {
+                char *col = sortOrder->column[i];
+                if ( (!sameString(col, SUBTRACK_COLOR_SUBGROUP)) && (membership == NULL || stringArrayIx(col, membership->subgroups, membership->count) == -1))
+                    {
+                    dyStringPrintf(errors, "sortOrder %s defined for all subtracks of the composite track \"%s\", but the track \"%s\" is not a member of this subGroup\n",
+                        col, tdb->shortLabel, subtrack->shortLabel);
+                    retVal = 1;
+                    }
+                }
+            }
+        }
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotWarning || errCatch->gotError)
+    {
+    // don't add a new line because one will already be inserted by the errCatch->message
+    dyStringPrintf(errors, "track %s error: %s", tdb->shortLabel, errCatch->message->string);
+    retVal = 1;
+    }
+errCatchFree(&errCatch);
+return retVal;
 }
 
+void hubCheckParentsAndChildren(struct trackDb *tdb)
+/* Check that a single trackDb stanza has the correct parent and subtrack pointers */
+{
+if (tdbIsSuper(tdb) || tdbIsComposite(tdb) || tdbIsCompositeView(tdb) || tdbIsContainer(tdb))
+    {
+    if (tdb->subtracks == NULL)
+        {
+        errAbort("Track \"%s\" is declared superTrack, compositeTrack, view or "
+            "container, but has no subtracks", tdb->track);
+        }
+
+    // Containers should not have a bigDataUrl setting
+    if (trackDbLocalSetting(tdb, "bigDataUrl"))
+        {
+        errAbort("Track \"%s\" is declared superTrack, compositeTrack, view or "
+            "container, and also has a bigDataUrl", tdb->track);
+        }
+    }
+else if (tdb->subtracks != NULL)
+    {
+    errAbort("Track \"%s\" has children tracks (e.g: \"%s\"), but is not a "
+        "compositeTrack, container, view or superTrack", tdb->track, tdb->subtracks->track);
+    }
+}
 
 int hubCheckTrack(struct trackHub *hub, struct trackHubGenome *genome, struct trackDb *tdb, 
                         struct trackHubCheckOptions *options, struct dyString *errors)
@@ -568,13 +577,19 @@ if (options->printMeta)
     slPairFreeValsAndList(&metaPairs);
     }
 
-if (!options->checkFiles)
-    return retVal;
 
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    hubCheckTrackFile(hub, genome, tdb);
+    hubCheckParentsAndChildren(tdb);
+    if (tdbIsComposite(tdb))
+        {
+        retVal |= hubCheckCompositeSettings(hub, genome, tdb, errors);
+        }
+    if (options->checkFiles)
+        {
+        hubCheckBigDataUrl(hub, genome, tdb);
+        }
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
@@ -583,6 +598,11 @@ if (errCatch->gotError)
     dyStringPrintf(errors, "%s", errCatch->message->string);
     }
 errCatchFree(&errCatch);
+
+if (tdb->subtracks != NULL)
+    {
+    retVal |= hubCheckTrack(hub, genome, tdb->subtracks,  options, errors);
+    }
 
 return retVal;
 }
@@ -599,6 +619,8 @@ int retVal = 0;
 if (errCatchStart(errCatch))
     {
     tdbList = trackHubTracksForGenome(hub, genome);
+    tdbList = trackDbLinkUpGenerations(tdbList);
+    tdbList = trackDbPolishAfterLinkup(tdbList, genome->name);
     trackHubPolishTrackNames(hub, tdbList);
     }
 errCatchEnd(errCatch);
@@ -607,6 +629,8 @@ if (errCatch->gotError)
     retVal = 1;
     dyStringPrintf(errors, "%s", errCatch->message->string);
     }
+if (errCatch->gotWarning && !errCatch->gotError)
+    dyStringPrintf(errors, "%s", errCatch->message->string);
 errCatchFree(&errCatch);
 
 verbose(2, "%d tracks in %s\n", slCount(tdbList), genome->name);
@@ -640,6 +664,8 @@ if (errCatch->gotError)
     retVal = 1;
     dyStringPrintf(errors, "%s\n", errCatch->message->string);
     }
+if (errCatch->gotWarning && !errCatch->gotError)
+    dyStringPrintf(errors, "%s", errCatch->message->string);
 errCatchFree(&errCatch);
 
 if (hub == NULL)
@@ -746,6 +772,8 @@ udcSetCacheTimeout(cacheTime);
 // UDC cache dir: first check for hg.conf setting, then override with command line option if given.
 setUdcCacheDir();
 udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
+
+knetUdcInstall();  // make the htslib library use udc
 
 if (optionExists("settings"))
     {

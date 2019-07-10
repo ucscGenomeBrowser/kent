@@ -1,8 +1,9 @@
 <!DOCTYPE html> 
 <!--#set var="TITLE" value="CIRM CESCG People and Labs" -->
-<!--#set var="ROOT" value=".." -->
 
-<!--#include virtual="$ROOT/inc/header.html" -->
+<!--#include virtual="setRoot.html" -->
+
+<!--#include virtual="${ROOT}inc/header.html" -->
 
 <div class="cirm-page-body">
   <div class="cirm-page-title back-dark-blue">
@@ -30,7 +31,10 @@
           <ul style="list-style: none">
             <li><h6><a href="#find">Finding data</a></h6></li>
             <li><h6><a href="#download">Downloading data</a></h6></li>
-            <li><h6><a href="#formats">Standard analysis file formats and outputs </a></h6></li>
+            <li><h6><a href="#metadata">Downloading and exploring metadata</a></h6></li>
+            <li><h6><a href="#query">Using the &quot;Metadata Query&quot; tool to cut and slice metadata</a></h6></li>
+            <li><h6><a href="#example1">Example: Download an expression matrix and metadata</a></h6></li>
+            <li><h6><a href="#formats">Standard analysis file formats and outputs</a></h6></li>
           </ul>
           <li><h6><a href="#contact">Contact us</a></h6></li>
           <li><h6><a href="#resources">Other CESCG resources</a></h6></li>
@@ -66,7 +70,7 @@
         Any CIRM Genomics Initiative associated lab can submit data to the Stem Cell Hub. Once
         submitted, data is treated as prepublication data, with access only allowed to
         authorized users (data privacy is described in more detail in the
-        <a href="privacy">Privacy</a> section below). <a href="contact">Contact us</a>
+        <a href="#privacy">Privacy</a> section below). <a href="#contact">Contact us</a>
         if you are a Genomics Initiative lab and would like to submit data.</p>
         </li>
 
@@ -100,11 +104,11 @@
         <a name="account"></a>
         <h5><b>Accounts on the Stem Cell Hub websites</b></h5>
         <p>
-        An account is not needed to access much of the data available through the Stem Cell Hub
+        An account is not needed to access any of the data available through the Stem Cell Hub
         <a href="http://cirm.ucsc.edu">public site</a>.</p>
         <p>
         An account is needed to access data stored on our <a href="https://cirmdcm.soe.ucsc.edu"
-        target="_blank">development server</a>, which is intended for CESCG contributing labs to
+        target="_blank">private server</a>, which is intended for CESCG contributing labs to
         access their prepublication data. If you are associated with a contributing lab, please
         <a href="#contact">contact us</a> for an account to access your data.</p>
         </li>
@@ -115,14 +119,14 @@
         <p>
         Once data is submitted to the Stem Cell Hub, access is only allowed to members of that
         lab. If you are part of a CIRM Genomics Initiative lab and would like access to
-        your data, please <a href="contact">contact us</a>.</p>
+        your data, please <a href="#contact">contact us</a>.</p>
 
         <p>
         Once notified by the lab, the data will be released to the public meaning that anyone
         can download and access the data, even without an account. While this will be true for
         nearly all data, there will still be some data files that will need an approved account
         to access them. If there are files that you are interested in, but don't have access to
-        you can <a href="">request access</a> to them.</p>
+        you can <a href="#contact">request access</a> to them.</p>
         </li>
     </div>
   </div>
@@ -143,7 +147,7 @@
         <h5><b>Finding data</b></h5>
         <p>
         The primary method for finding your data is through the
-        <a href="../../cgi-bin/cdwWebBrowse?cdwCommand=browseFiles" target="_blank">File Search</a>
+        <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?cdwCommand=browseFiles" target="_blank">File Search</a>
         page, which can be found through &quot;Browse &gt; Files&quot; in the menu at
         the top of the page.
 
@@ -151,18 +155,27 @@
         The &quot;Files&quot; page by default displays a list of all available files in the
         Stem Cell Hub.
         The list of files can be filtered using the metadata facets on the left-hand side of the
-        page. These metadata facets include the submitting lab, organism (e.g. human, mouse),
+        page.</p>
+
+        <p>
+        <img src="<!--#echo var='ROOT'-->images/cirmBasicsFacets.png"
+        class="border border-dark rounded"></p>
+
+        <p>
+        These metadata facets include the submitting lab, organism (e.g. human, mouse),
         and assay type (e.g. ATAC-seq, RRBS). By default, all of these facets are unselected and
         all available data in the Stem Cell hub is displayed. To show data that matches only a
         specific metadata value, check the box next to that value. The list of files will
         automatically be filtered to show only the matching files. Multiple facets can be combined
-        to further filter the list of files.
-        </p>
+        to further filter the list of files.</p>
 
         <p>
         The &quot;Files&quot; page also supports free-text search of metadata through the search box
-        at the top.
-        </p>
+        at the top:</p>
+
+        <p>
+        <img src="<!--#echo var='ROOT'-->images/cirmBasicsSearchBox.png"
+        class="border border-dark rounded"></p>
 
         <p>
         Once you've filtered your files to the list of those you're interested in, you can
@@ -176,28 +189,227 @@
         Once you've filtered down the list of files to those that you are interested in, you can
         download them in one of two ways:</p>
         <ol>
-          <li>If you have only a few files to download, you can download them one-by-one. First,
-              click the file name in the first column to be take to the file details page. From
-              there click the &quot;download&quot; link next to the name in the &quot;accession&quot;
-              row to start the download. Files will be named after the Stem Cell Hub applied accession.</li>
-          <li>If you have many files to download, or a few large files that may take hours to download,
-              you can use a variety of methods to download the files.</p>
-              <p>First, click the &quot;Download All&quot; link at the top of the page, from there
-              you will be taken a page that lists the total number of files and their combined size
-              as well as a few different download options:
-              <ul>
-                <li>Name files by accession, one single directory</li>
-                <li>Name files as submitted, one single directory</li>
-                <li>Name files as submitted and put into subdirectories</li>
-              </ul>
-              <p>
-              Follow the instructions on that page to download the files. There are options for
-              downloading your files using the command-line or web browser extensions. The URLs
-              provided to you are valid for a week.</p>
-              </li>
+          <li>
+            <p>
+            If you have only a few files to download, you can download them one-by-one. First,
+            click the file name in the first column to be take to the file details page.</p>
+	        <p>
+	        <img src="<!--#echo var='ROOT'-->images/cirmBasicsNameCol.png"
+            class="border border-dark rounded"></p>
+
+            <p>
+	        From there click the &quot;download&quot; link next to the name in the &quot;accession&quot;
+            row to start the download. Files will be named after the Stem Cell Hub applied accession.</p>
+	        <p>
+	        <img src="<!--#echo var='ROOT'-->images/cirmBasicsSingleFileDetails.png"
+            class="border border-dark rounded"></p>
+          </li>
+          <li>
+            <p>
+            If you have many files to download, or a few large files that may take hours to download,
+            you can use a variety of methods to download the files.</p>
+
+            <p>
+            First, click the &quot;Download All&quot; link at the top of the page, from there
+            you will be taken a page that lists the total number of files and their combined size
+            as well as a few different download options:</p>
+
+            <p>
+            <img src="<!--#echo var='ROOT'-->images/cirmBasicsDownload.png"
+            class="border border-dark rounded"></p>
+
+            <p>
+            Follow the instructions on that page to download the files. There are options for
+            downloading your files using the command-line or web browser extensions. The URLs
+            provided to you are valid for a week.</p>
+          </li>
         </ol>
         </li>
 
+        <li class="list-group-item">
+        <a name="metadata"></a>
+        <h5><b>Downloading and exploring metadata</b></h5>
+        <p>
+        There are multiple ways to download and explore the metadata available in the scHub.
+        These include the html/text/tsv/csv links on the
+        <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?cdwCommand=browseDataSets">datasets page</a>:</p>
+
+        <p>
+        <img src="<!--#echo var='ROOT'-->images/cirmBasicsMetadataLinks.png"
+        class="border border-dark rounded"></p>
+
+        <p>
+        And the <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?cdwCommand=analysisQuery">Metadata Query</a> tool.
+        The Metadata Query tool is discussed in more detail in the <a href="#query">next help
+        section</a>. In this section we will discuss accessing metadata through the datasets page.
+        </p>
+
+        <p>
+        On the datasets page, there are four links that offer up metadata in a variety of formats.
+        The first link (html) allows you explore the heirarchical
+        <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/tagStorm">tag storm
+        format</a> and collapse various sections of the metadata:</p>
+        <p>
+        <img src="<!--#echo var='ROOT'-->images/cirmBasicsMetadataHtmlViewer.png"
+        class="border border-dark rounded"></p>
+
+        <p>
+        You can test this out for yourself by exploring
+        <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?cdwCommand=dataSetMetaTree&cdwDataSet=kriegsteinRadialGliaStudy1"
+        >the metadata for the kriegsteinRadialGliaStudy1 dataset</a>.</p>
+
+        <p>
+        The next three links are all to view or download the metadata in plain text formats:
+        <ul>
+          <li>text (or tag storm)</li>
+          <li>comma-separated value (csv)</li>
+          <li>tab-separated value (tsv)</li>
+        </ul>
+        <br>
+        <p>
+        Clicking these links should display the metadata in your web browser window. To download the
+        metadata in one of these formats, you can right-click the link and select &quot;Save Link
+        As&quot;.</p>
+        </li>
+
+        <li class="list-group-item">
+        <a name="query"></a>
+        <h5><b>Using the &quot;Metadata Query&quot; tool to cut and slice metadata</b></h5>
+        <p>
+        The <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?cdwCommand=analysisQuery"
+        >Metadata Query</a> tool allows to search across the metadata, quality metrics,
+        and more for all of the datasets contained in the Stem Cell Hub. This information can be
+        filtered and sliced using a SQL-like query interface. The output of your queries can be
+        displayed in three different formats: (1) UCSC's heirachical <a
+        href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/tagStorm">tag storm</a> (ra)
+        format, (2) tab-separated value (tsv) format, or (3) comma-separated value (csv) format.</p>
+
+        <p>
+        The interface has three boxes at the top. The first, after &quot;select&quot;, is where you
+        enter a comma-separated list of the metadata fields you want, e.g. lab, data_set_id,
+        accession. Second, after &quot;from files where&quot; is where you put your conditionals,
+        e.g. if you only wanted data from the Quake lab, you would enter lab=&quot;quake&quot;.
+        Third, and last after &quot;limit&quot;, you can enter how many records matching your
+        query you want to display.
+        </p>
+
+        <p>
+        <img src="<!--#echo var='ROOT'-->images/cirmBasicsMetadataQuery.png"
+        class="border border-dark rounded"></p>
+
+        <p>
+        <h6>Example 1:</h6>
+        <p>
+        One example query might be pulling out some of the quality control (QC) information
+        (<tt>enriched_in</tt>, <tt>fastq_qual_mean</tt>, <tt>fastq_qual_type</tt>,
+        <tt>map_ratio</tt>, <tt>map_to_mouse</tt>, <tt>map_to_repeat</tt>, and
+        <tt>map_to_ribosome</tt> fields) for the fastq files in the quakeBrainGeo1 dataset in
+        addition to basic information such as <tt>accession</tt>, <tt>data_set_id</tt>,
+        <tt>lab</tt>, and <tt>assay</tt> in the <tt>tsv</tt> format.
+        This would allow us to discern the relative quality of each of these files and decide which
+        of them meet our standards to download. The query to obtain this information would look
+        like this:</p>
+        <p>
+        <img src="<!--#echo var='ROOT'-->images/cirmBasicsMetadataQueryExample1.png"
+        class="border border-dark rounded"></p>
+
+        As you can see, the comma-separated list of fields we want in the output is put in the
+        first box and our conditional filters are placed in the second box.
+        <a href="https://cirm.ucsc.edu/cgi-bin/cdwWebBrowse?cdwCommand=analysisQuery&cdwQueryFields=accession%2C+lab%2C+data_set_id%2C+assay%2C+enriched_in%2C+fastq_qual_mean%2C+fastq_qual_type%2C+map_ratio%2C+map_to_mouse%2C+map_to_repeat%2C+map_to_ribosome&cdwQueryWhere=data_set_id%3D%22quakeBrainGeo1%22+and+format%3D%22fastq%22&cdwQueryLimit=10&cdwQueryFormat=tsv&View=View"
+        target="_blank">Through this link you can view the query results yourself and play with
+        the query settings</a>.
+
+        <li class="list-group-item">
+        <a name="example1"></a>
+        <h5><b>Example: Download an expression matrix and metadata</b></h5>
+        <p>
+        This example will guide you through the process of finding and downloading the cell
+        by gene expression matrix and the cell-level metadata for the single-cell dataset
+        kriegsteinRadialGliaStudy1. It also describes some basic analysis options after you
+        have dowloaded an expression matrix and metadata.
+        </p>
+
+        <h6><b>Step 1: Use the File Browser to find the gene-level expression matrix</b></h6>
+        <p>
+        For this step, we will start at the
+        <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?cdwCommand=browseFiles"
+        >File Browser</a>
+        and use the metadata facets to filter the visible files to display only the
+        <b>gene-level expression matrix</b> for the <b>kriegsteinRadialGliaStudy1</b> dataset:
+        <ol>
+          <li>Under <b>format</b>, check the box for <b>expression_matrix</b></li>
+          <li>Under <b>output</b>, check the box for <b>geneMatrix</b></li>
+          <li>Under <b>data_set_id</b>, check the box for <b>kriegsteinRadialGliaStudy1</b></li>
+        </ol>
+        <br>
+        <p>
+        As you check the boxes for these filters, you should see the files on the right-hand
+        side of the screen slowly disappear until you see only one left. This single file should be
+        <tt>sc002YED.tsv</tt>, the gene-level expression matrix for the
+        <tt>kriegsteinRadialGliaStudy1</tt> dataset.
+        </p>
+
+        <p>
+        More details about using the metadata facets for filtering can be found in the
+        <a href="#find">Finding data</a> section above.
+
+        <h6><b>Step 2: Download the expression matrix</b></h6>
+        <p>
+        After filtering files down to just the gene-level expression matrix, <tt>sc002YED.tsv</tt>,
+        on the
+        <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?cdwCommand=browseFiles"
+        >File Browser</a>
+        for the <tt>kriegsteinRadialGliaStudy1</tt>, we will now download this file:
+        <ol>
+          <li>Click on the file name, <tt>sc002YED.tsv</tt>.</li>
+          <li>In the cell next to <tt>accession</tt>, click the &quot;download&quot; link. This
+          will automatically start downloading the file to your computer.</li>
+        </ol>
+        <br>
+        <p>
+        See the <a href="#download">Downloading data</a> section for information on downloading
+        multiple files at once.
+        </p>
+
+        <h6><b>Step 3: Download cell-level metadata</b></h6>
+        <p>
+        Now that you've downloaded the gene-level expression matrix, you can download the
+        cell-level metadata for this dataset. The easiest way to this is though the
+        <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?cdwCommand=browseDataSets"
+        >Dataset Browser</a>:
+        <ol>
+          <li>Find the <tt>kriegsteinRadialGliaStudy1</tt> dataset in the alpphabetical list.</li>
+          <li>Choose your downloadable metadata format (text/tagStorm, tsv, or csv), and
+          right-click the file type link. In the right-click menu, choose &quot;Save Link As&quot;
+          and enter a file name.
+        </ol>
+        <br>
+        <p>
+        The <a href="metadata">Downloading and exploring metadata</a> section has more information
+        on the different ways you can download metadata.
+        </p>
+
+        <h6><b>What next?</b></h6>
+        <p>
+        Now that that you have a gene-level expression matrix and cell-level metadata,
+        <b>what next?</b> There are many things you can do with these files from determining
+        cellular trajectories using <a href="https://github.com/dimenwarper/scimitar"
+        target="_blank">SCIMITAR</a> to running dimensionality reduction and clustering algorithms
+        in <a href="https://scanpy.readthedocs.io/en/stable/" target="_blank">Scanpy</a> or
+        <a href="https://satijalab.org/seurat/" target="_blank">Seurat</a>.
+        </p>
+
+        <p>
+        For example, you could use the <a
+        href="https://cellbrowser.readthedocs.io/" target="_blank">UCSC Cell Browser</a> to run
+        dimensionality reduction and clustering algorithms from Seurat or Scanpy on your
+        expression matrix. The results of those can then be combined with the metadata and turned
+        into a cell browser so that the metadata and clustering can be explored interactively.
+        The UCSC Cell Browser <a href="https://cells.ucsc.edu/" target="_blank">website</a>
+        provides some exemplar public datasets that you can explore.
+        </p>
+
+        </li>
         <li class="list-group-item">
         <a name="formats"></a>
         <h5><b>Standard analysis file formats and outputs</b></h5>
@@ -215,7 +427,7 @@
           <tr>
             <td>vcf</td>
             <td><a href="http://www.internationalgenome.org/wiki/Analysis/vcf4.0/"
-            target="_blank">vcf</a> <i class="fa fa-external-link icon-sm" aria-hidden="true"></i>
+            target="_blank">vcf</a> <i class="fas fa-external-link-alt icon-sm" aria-hidden="true"></i>
             </td>
             <td>variants</td>
           </tr>
@@ -231,7 +443,7 @@
           <tr>
             <td>signal.Unique.str1.out.wig</td>
             <td><a href="http://genome.ucsc.edu/goldenPath/help/bigWig.html" target="_blank"
-            >bigWig</a> <i class="fa fa-external-link icon-sm" aria-hidden="true"></i></td>
+            >bigWig</a> <i class="fas fa-external-link-alt icon-sm" aria-hidden="true"></i></td>
             <td>Plus strand unique mappings</td>
           </tr>
           <tr>
@@ -284,7 +496,7 @@
           <tr>
             <td>aligned.out.bam</td>
             <td><a href="http://genome.ucsc.edu/goldenPath/help/bam.html" target="_blank">bam</a>
-            <i class="fa fa-external-link icon-sm" aria-hidden="true"></i></td>
+            <i class="fas fa-external-link-alt icon-sm" aria-hidden="true"></i></td>
             <td>read alignments</td>
           </tr>
           <tr>
@@ -313,8 +525,8 @@
           </tr>
           <tr>
             <td>fastq.gz</td>
-            <td><a href="http://maq.sourceforge.net/fastq.shtml" targer="_blank">gzipped fastq</a>
-            <i class="fa fa-external-link icon-sm" aria-hidden="true"></i></td>
+            <td><a href="http://maq.sourceforge.net/fastq.shtml" target="_blank">gzipped fastq</a>
+            <i class="fas fa-external-link-alt icon-sm" aria-hidden="true"></i></td>
             <td>unaligned reads</td>
           </tr>
         </table>
@@ -371,4 +583,4 @@
   </div>
 </div>
 
-<!--#include virtual="$ROOT/inc/footer.html" -->
+<!--#include virtual="${ROOT}inc/footer.html" -->

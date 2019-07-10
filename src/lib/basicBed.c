@@ -1393,7 +1393,7 @@ struct asObject *asStandard = NULL;
 if (numColumnsToCheck > 15)
     errAbort("There are only 15 standard BED columns defined and you have asked for %d.", numColumnsToCheck);
 if (numColumnsToCheck < 3)
-    errAbort("All BED files have at least the first 3 columns the same.");
+    errAbort("All BED files must have at least 3 columns. (Is it possible that you provided a chrom.sizes file instead of a BED file?)");
 char *asStandardText = bedAsDef(15,15);
 asStandard = asParseText(asStandardText);
 result = asCompareObjs("Yours", asYours, "BED Standard", asStandard, numColumnsToCheck, NULL, abortOnDifference);
@@ -1672,9 +1672,9 @@ if (as)
                 // assure count = #items in list; lightweight validation (better than none)
                 int ix = asColumnFindIx(as->columnList, asCol->linkedSizeName);
                 int count = sqlUnsigned(row[ix]);
-		if (count == 0)
+		if (count < 0)
                     lineFileAbort(lf, 
-                        "expecting positive number in count field for %s list, found %d", 
+                        "expecting nonnegative number in count field for %s list, found %d",
                                         asCol->name, asCol->fixedSize);
                 int itemCount = countSeparatedItems(row[i], ',');
                 if (count != itemCount)

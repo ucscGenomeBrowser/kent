@@ -472,7 +472,7 @@ def joinerCheckTemplateGen(params):
         "identifier wgEncodeGencodeTagV{gencodeVer}",
         '"Link together Gencode Tag table with Attributes table"',
         "    {orgHgDb}.wgEncodeGencodeTagV{gencodeVer}.transcriptId dupeOk",
-        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId minCheck=0.373378",
+        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId minCheck=0.36",
         "    {orgHgDb}.wgEncodeGencodeRefSeqV{gencodeVer}.transcriptId minCheck=0.9",
         "",
         "identifier wgEncodeGencodeTranscriptSourceV{gencodeVer}",
@@ -493,7 +493,7 @@ def joinerCheckTemplateGen(params):
         "identifier wgEncodeGencodeUniProtV{gencodeVer}",
         '"Link together Gencode UniProt Support table with Attributes table"',
         "    {orgHgDb}.wgEncodeGencodeUniProtV{gencodeVer}.transcriptId dupeOk",
-        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId minCheck=0.358209",
+        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId minCheck=0.35",
         "",
         "identifier wgEncodeGencodeAnnotationRemarkV{gencodeVer}",
         '"Link together Gencode Annotation Remark table with Attributes table"',
@@ -503,13 +503,13 @@ def joinerCheckTemplateGen(params):
         "identifier wgEncodeGencodeEntrezGeneV{gencodeVer}",
         '"Link together Gencode UniProt Support table with Attributes table"',
         "    {orgHgDb}.wgEncodeGencodeEntrezGeneV{gencodeVer}.transcriptId dupeOk",
-        "    {orgHgDb}.wgEncodeGencodeEntrezGeneV{gencodeVer}.transcriptId minCheck=0.358209",
+        "    {orgHgDb}.wgEncodeGencodeEntrezGeneV{gencodeVer}.transcriptId minCheck=0.35",
     ""))
     yield forStd(params, (
         "identifier wgEncodeGencodeExonSupportV{gencodeVer}",
         '"Link together Gencode Exon Support table with Attributes table"',
         "    {orgHgDb}.wgEncodeGencodeExonSupportV{gencodeVer}.transcriptId dupeOk",
-        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId minCheck=0.95",
+        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId minCheck=0.90",
         ""))
     yield forBoth(params, (
         "# end Gencode V{gencodeVer}",

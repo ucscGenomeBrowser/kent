@@ -43,9 +43,18 @@ ifeq (${PTHREADLIB},)
   PTHREADLIB=-lpthread
 endif
 
+# required extra library on Mac OSX
+ICONVLIB=
+
 # pthreads is required
 ifneq ($(UNAME_S),Darwin)
   L+=${PTHREADLIB}
+else
+  ifneq ($(wildcard /opt/local/lib/libiconv.a),)
+       ICONVLIB=/opt/local/lib/libiconv.a
+  else
+       ICONVLIB=-liconv
+  endif
 endif
 
 # autodetect if openssl is installed
@@ -67,6 +76,10 @@ ifeq (${USE_HAL},1)
     HALLIBS=${HALDIR}/lib/halMaf.a ${HALDIR}/lib/halChain.a ${HALDIR}/lib/halMaf.a ${HALDIR}/lib/halLiftover.a ${HALDIR}/lib/halLod.a ${HALDIR}/lib/halLib.a ${HALDIR}/lib/sonLib.a ${HALDIR}/lib/libhdf5_cpp.a ${HALDIR}/lib/libhdf5.a ${HALDIR}/lib/libhdf5_hl.a -lstdc++
     HG_DEFS+=-DUSE_HAL
     HG_INC+=-I${HALDIR}/inc
+endif
+# on hgwdev, include HAL by defaults
+ifeq (${IS_HGWDEV},yes)
+   L+=${HALLIBS}
 endif
 
 
@@ -279,7 +292,7 @@ endif
 #global external libraries
 L += $(kentSrc)/htslib/libhts.a
 
-L+=${PNGLIB} ${MLIB} ${ZLIB}
+L+=${PNGLIB} ${MLIB} ${ZLIB} ${ICONVLIB}
 HG_INC+=${PNGINCL}
 
 # pass through COREDUMP

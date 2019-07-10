@@ -29,50 +29,134 @@
 #include "jsonParse.h"
 #include "jsonWrite.h"
 #include "chromInfo.h"
+#include "wiggle.h"
+#include "hubPublic.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
 #endif
 
-/*this definition should be over in hg/inc/hubPublic.h but that does not exist*/
-struct hubPublic
-/* Table of public track data hub connections. */
-    {
-    struct hubPublic *next;  /* Next in singly linked list. */
-    char *hubUrl;	/* URL to hub.ra file */
-    char *shortLabel;	/* Hub short label. */
-    char *longLabel;	/* Hub long label. */
-    char *registrationTime;	/* Time first registered */
-    unsigned dbCount;	/* Number of databases hub has data for. */
-    char *dbList;	/* Comma separated list of databases. */
-    char *descriptionUrl;	/* URL to description HTML */
-    };
+/* reference for these error codes:
+ * https://www.restapitutorial.com/httpstatuscodes.html
+ */
+/* error return codes */
+#define err301	301
+#define err301Msg	"Moved Permanently"
+#define err400	400
+#define err400Msg	"Bad Request"
+#define err403	403
+#define err403Msg	"Forbidden"
+#define err404	404
+#define err404Msg	"Not Found"
+#define err415	415
+#define err415Msg	"Unsupported track type"
+#define err429	429
+#define err429Msg	"Too Many Requests"
 
+/* list of all potential arguments */
+#define argHubUrl	"hubUrl"
+#define argGenome	"genome"
+#define argTrackLeavesOnly	"trackLeavesOnly"
+#define argTrack	"track"
+#define argChrom	"chrom"
+#define argStart	"start"
+#define argEnd	"end"
+#define argMaxItemsOutput	"maxItemsOutput"
+#define argJsonOutputArrays	"jsonOutputArrays"
+
+/* valid argument listings to verify extraneous arguments
+ *  initialized in hubApi.c
+ */
+extern char *argListPublicHubs[];
+extern char *argListUcscGenomes[];
+extern char *argListHubGenomes[];
+extern char *argListTracks[];
+extern char *argListChromosomes[];
+extern char *argListSchema[];
+extern char *argGetDataTrack[];
+extern char *argGetDataSequence[];
+
+/* maximum number of words expected in PATH_INFO parsing
+ *   so far only using 2
+ */
 #define MAX_PATH_INFO 32
 
+/* maximum amount of DNA allowed in a get sequence request */
+#define MAX_DNA_LENGTH	499999999
+/* this size is directly related to the max limit in needMem used in
+ * jsonWriteString
+ */
+
+extern long enteredMainTime;	/* will become = clock1000() on entry */
+
+/* limit amount of output to a maximum to avoid overload */
+extern int maxItemsOutput;	/* can be set in URL maxItemsOutput=N */
+extern long long itemsReturned;	/* for getData functions, number of items returned */
+extern boolean reachedMaxItems;	/* during getData, signal to return */
+
+/* downloadUrl for use in error exits when reachedMaxItems */
+extern struct dyString *downloadUrl;
+
+/* supportedTypes will be initialized to a known supported set */
+extern struct slName *supportedTypes;
+
+/* for debugging purpose, current bot delay value */
+extern int botDelay;
+boolean debug;	/* can be set in URL debug=1, to turn off: debug=0 */
+
+/* default is to list all trackDb entries, composite containers too.
+ * This option will limit to only the actual track entries with data
+ */
+extern boolean trackLeavesOnly;	/* set by CGI parameter 'trackLeavesOnly' */
+
+/* this selects output type 'arrays', where the default type is: objects */
+extern boolean jsonOutputArrays; /* set by CGI parameter 'jsonOutputArrays' */
+
+extern boolean measureTiming;	/* set by CGI parameters */
+
 /*  functions in hubApi.c */
-struct hubPublic *hubPublicLoadAll();
+struct hubPublic *hubPublicDbLoadAll();
 
 struct dbDb *ucscDbDb();
 /* return the dbDb table as an slList */
 
-struct slName *genomeList(struct trackHub *hubTop, struct trackDb **dbTrackList, char *selectGenome);
-/* follow the pointers from the trackHub to trackHubGenome and around
- * in a circle from one to the other to find all hub resources
- * return slName list of the genomes in this track hub
- * optionally, return the trackList from this hub for the specified genome
+char *verifyLegalArgs(char *validArgList[]);
+/* validArgList is an array of strings for valid arguments
+ * returning string of any other arguments not on that list found in
+ * cgiVarList(), NULL when none found.
  */
 
+/* ######################################################################### */
 /*  functions in apiUtils.c */
-void apiErrAbort(char *format, ...);
+
+void startProcessTiming();
+/* for measureTiming, beginning processing */
+
+void apiFinishOutput(int errorCode, char *errorString, struct jsonWrite *jw);
+/* finish json output, potential output an error code other than 200 */
+
+void apiErrAbort(int errorCode, char *errString, char *format, ...);
 /* Issue an error message in json format, and exit(0) */
 
 struct jsonWrite *apiStartOutput();
 /* begin json output with standard header information for all requests */
 
-int tableColumns(struct sqlConnection *conn, struct jsonWrite *jw, char *table);
-/* output the column names, and their MySQL data type, for the given table
- *  return number of columns (aka 'fields')
+extern char *jsonTypeStrings[];
+#define JSON_STRING	0	//    "string",	/* type 0 */
+#define JSON_NUMBER	1	//    "number",	/* type 1 */
+#define JSON_OBJECT	2	//    "object",	/* type 2 */
+#define JSON_ARRAY	3	//    "array",	/* type 3 */
+#define JSON_BOOLEAN	4	//    "boolean",	/* type 4 */
+#define JSON_NULL	5	//    "null"	/* type 5 */
+#define JSON_DOUBLE	6	//    UCSC json type double	/* type 6 */
+
+int autoSqlToJsonType(char *asType);
+/* convert an autoSql field type to a Json type */
+
+int tableColumns(struct sqlConnection *conn, char *table,
+   char ***nameReturn, char ***typeReturn, int **jsonTypes);
+/* return the column names, the MySQL data type, and json data type
+ *   for the given table return number of columns (aka 'fields')
  */
 
 struct trackHub *errCatchTrackHubOpen(char *hubUrl);
@@ -80,6 +164,57 @@ struct trackHub *errCatchTrackHubOpen(char *hubUrl);
 
 struct trackDb *obtainTdb(struct trackHubGenome *genome, char *db);
 /* return a full trackDb fiven the hub genome pointer, or ucsc database name */
+
+struct trackDb *findTrackDb(char *track, struct trackDb *tdb);
+/* search tdb structure for specific track, recursion on subtracks */
+
+struct bbiFile *bigFileOpen(char *trackType, char *bigDataUrl);
+/* open bigDataUrl for correct trackType and error catch if failure */
+
+int chromInfoCmp(const void *va, const void *vb);
+/* Compare to sort based on size */
+
+boolean allowedBigBedType(char *type);
+/* return TRUE if the big* type is to be supported
+ * add to this list as the big* supported types are expanded
+ */
+
+/* temporarily from table browser until proven works, then move to library */
+struct asObject *asForTable(struct sqlConnection *conn, char *table,
+    struct trackDb *tdb);
+/* Get autoSQL description if any associated with table. */
+/* Wrap some error catching around asForTable. */
+
+struct trackHubGenome *findHubGenome(struct trackHub *hub, char *genome,
+    char *endpoint, char *hubUrl);
+/* given open 'hub', find the specified 'genome' called from 'endpoint' */
+
+struct dbDb *ucscDbDb();
+/* return the dbDb table as an slList */
+
+boolean isSupportedType(char *type);
+/* is given type in the supportedTypes list ? */
+
+void wigColumnTypes(struct jsonWrite *jw);
+/* output column headers for a wiggle data output schema */
+
+void outputSchema(struct trackDb *tdb, struct jsonWrite *jw,
+    char *columnNames[], char *columnTypes[], int jsonTypes[],
+	struct hTableInfo *hti, int columnCount, int asColumnCount,
+	    struct asColumn *columnEl);
+/* print out the SQL schema for this trackDb */
+
+void bigColumnTypes(struct jsonWrite *jw, struct sqlFieldType *fiList,
+    struct asObject *as);
+/* show the column types from a big file autoSql definitions */
+
+boolean trackHasData(struct trackDb *tdb);
+/* check if this is actually a data track:
+ *	TRUE when has data, FALSE if has no data
+ * When NO trackDb, can't tell at this point, will check that later
+ */
+
+#define trackHasNoData(tdb) (!trackHasData(tdb))
 
 /* ######################################################################### */
 /*  functions in getData.c */

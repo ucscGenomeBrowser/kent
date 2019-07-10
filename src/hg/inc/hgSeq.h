@@ -42,4 +42,11 @@ int hgSeqBedDb(char *db, struct hTableInfo *hti, struct bed *bedList);
  * hti describes the bed-compatibility level of bedList items.  
  * Returns number of FASTA records printed out. */
 
+void hgSeqFeatureRegionOptions(struct cart *cart, boolean canDoUTR,
+			       boolean canDoIntrons);
+/* Print out HTML FORM entries for feature region options. */
+
+void hgSeqDisplayOptions(struct cart *cart, boolean canDoUTR,
+                                boolean canDoIntrons, boolean offerRevComp);
+/* Print out HTML FORM entries for sequence display options. */
 #endif /* HGSEQ_H */

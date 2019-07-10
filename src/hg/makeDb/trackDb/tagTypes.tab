@@ -42,7 +42,7 @@ baseQualRange bam
 bedFilter bed
 bedNameLabel bed barChart bigBarChart bigBed
 bedPackDense bed bigBed
-bigDataUrl customTracks bigBed bigWig bam vcfTabix bigPsl halSnake bigBarChart gtexTranscExpr bigInteract bigChain bigGenePred
+bigDataUrl customTracks bigBed bigWig bam vcfTabix bigPsl halSnake bigBarChart gtexTranscExpr bigInteract bigChain bigGenePred bigLolly bigNarrowPeak hic
 bigGeneDataUrl genePred
 blastRef psl bigPsl
 boxedCfg *
@@ -80,7 +80,7 @@ configurable *
 configureByPopup *
 container *
 controlledVocabulary *
-coriellUrlBase bed
+coriellUrlBase bed bigBed
 darkerLabels *
 dataUrl customTracks
 dataVersion *
@@ -97,6 +97,7 @@ defaultLabelFields bigBed bigPsl bigGenePred bigBarChart
 defaultMaf wigMaf
 defaultMaxWeight bed
 defaultLinkedTables genePred
+denseCoverage bigBed
 densePack bed bigBed
 dimensionAchecked *
 dimensionBchecked *
@@ -113,7 +114,7 @@ dragAndDrop *
 endFudge bed
 ensemblIdUrl genePred
 ensArchive genePred
-exonArrows genePred bed broadPeak
+exonArrows genePred bed broadPeak bigBed
 exonArrowsDense bed
 exonNumbers genePred bed broadPeak psl bigPsl bigBed
 expDrawExons expRatio
@@ -219,8 +220,10 @@ interTableKind encodeFiveC
 inputTracksSubgroupDisplay bed factorSource
 inputTrackTable bed factorSource
 inputTableFieldDisplay bed factorSource
+inputTableFieldUrls factorSource
 interactDirectional interact bigInteract
 interactUp interact bigInteract
+interactMultiRegion interact bigInteract
 intronGap psl genePred bigPsl
 irows wigMaf
 isGencode2 genePred
@@ -242,6 +245,8 @@ linkIdInName bed bigBed
 labelFields bigBed bigPsl bigGenePred bigBarChart bigInteract
 labelOnFeature bed bigBed
 labelSeparator bigBed bigPsl bigGenePred
+lollipopField bigBed bigLolly
+lollyField bigBed bigLolly
 longLabel *
 longlabel genePred
 longLabelClip *
@@ -478,7 +483,7 @@ url2 bed genePred bigBarChart
 url2Label bed genePred bigBarChart
 urlLabel *
 urlName genePred psl bigPsl
-urls bigBed bed bigPsl genePred psl bigBarChart bigGenePred
+urls bigBed bed bigPsl genePred psl bigBarChart bigGenePred bigLolly
 useScore *
 view *
 viewLimits *

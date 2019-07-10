@@ -18,3 +18,7 @@ test::
 	 expMatrixToBarchartBed test.meta test.matrix noExtraFields.coords foo --verbose --groupOrder test.groupOrder --useMean --autoSql ../../../hg/lib/barChartBed.as
 	 diff foo allOptions2.output
 	 rm foo
+	 @printf "\ntest6: mixed scientific notation and regular floats in matrix\n"
+	 expMatrixToBarchartBed floats.meta floats.matrix floats.coords foo
+	 diff foo floats.output
+	 rm foo

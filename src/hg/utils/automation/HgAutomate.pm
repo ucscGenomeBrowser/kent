@@ -238,12 +238,12 @@ sub getLoadFactor {
 
 sub getWorkhorseLoads {
   #*** Would be nice to parameterize instead of hardcoding hostnames...
-  # Return a hash of workhorses (kolossus and all idle small cluster machines),
+  # Return a hash of workhorses (all idle small cluster machines),
   # associated with their load factors.
   # a valid workhorse needs to have access to hive.
   confess "Too many arguments" if (scalar(@_) != 0);
   my %horses = ();
-  foreach my $machLine ('ku', 'kolossus', 'hgwdev') {
+  foreach my $machLine ('ku', 'hgwdev') {
     my $mach = $machLine;
     $mach =~ s/[\. ].*//;
     chomp $mach;
@@ -261,7 +261,7 @@ sub chooseWorkhorse {
   if ($main::opt_workhorse) {
     return $main::opt_workhorse;
   }
-  &verbose(2, "chooseWorkhorse: polling load factors of kolossus and " .
+  &verbose(2, "chooseWorkhorse: polling load factors of " .
 	   "idle small cluster machines.  This may take a minute...\n");
   while (1) {
     my %horses = &getWorkhorseLoads();

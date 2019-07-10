@@ -5,10 +5,15 @@
 <!-- Relative paths to support mirror sites with non-standard GB docs install -->
 <!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
-<h1>Downloading Data using MySQL</h1>
+<h1>Downloading Data using MariaDB (MySQL)</h1>
 
 <p>
-We have two  MySQL databases for public access:
+The UCSC Genome Browser uses MariaDB as the backend database server. MariaDB is a community-developed,
+commercially supported fork of the MySQL relational database management system, intended to remain
+free and open-source software under the GNU General Public License.
+</P>
+<p>
+We have two  MariaDB databases for public access:
 <ul>
   <li><strong>genome-mysql.soe.ucsc.edu</strong> (located on the US west coast)</li>
   <li><strong>genome-euro-mysql.soe.ucsc.edu</strong> (located in Europe)</li>
@@ -16,7 +21,7 @@ We have two  MySQL databases for public access:
 <p>
 These servers allow MySQL access to the same set of data currently available on our public
 Genome Browser site. The data are synchronized weekly with the main databases on our public site.
-During synchronization, the MySQL server can be intermittently out of sync with the main website for
+During synchronization, the MariaDB server can be intermittently out of sync with the main website for
 a short period of time. The weekly synchronization takes place on Monday mornings from 4:00 am to
 9:00 am Pacific Time (GMT -7:00 in summer, GMT -8:00 in winter).</p>
 	
@@ -26,9 +31,9 @@ You must have MySQL client libraries installed on your computer. We recommend us
 version of the <a href="http://dev.mysql.com/downloads/mysql/5.0.html" target="_blank">v5.0 MySQL 
 clients</a>.</p>
 <p>
-You can connect to the US MySQL server using the command:</p>
+You can connect to the US MariaDB server using the command:</p>
 <pre><code>mysql --user=genome --host=genome-mysql.soe.ucsc.edu -A -P 3306</code></pre> 
-<p>Or the European MySQl server with this command:</p>
+<p>Or the European MariaDB server with this command:</p>
 <pre><code>mysql --user=genome --host=genome-euro-mysql.soe.ucsc.edu -A -P 3306</code></pre>
 <p>
 The <em>-A</em> flag is optional but is recommended for speed.</p> 
@@ -51,14 +56,14 @@ database:</strong> --> </p>
 </ul>
 
 <a name="utilities"></a>
-<h2>Using the MySQL server with our utilities</h2> 
+<h2>Using the MariaDB server with our utilities</h2> 
 <p>
-The MySQL database can also be used by the numerous utilities in the 
+The MariaDB database can also be used by the numerous utilities in the 
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads">Genome Browser source</a> 
 tree. Some of these utilities require a password, so you will need to add the following 
 specifications to your $HOME/.hg.conf file (remember to chmod your .hg.conf file to 600 
-permissions) if you would like to access the US public MySQL server:</p>
-<pre><code>#US MySQL server
+permissions) if you would like to access the US public MariaDB server:</p>
+<pre><code>#US MariaDB server
 db.host=genome-mysql.soe.ucsc.edu
 db.user=genomep
 db.password=password
@@ -70,8 +75,8 @@ gbdbLoc1=http://hgdownload.soe.ucsc.edu/gbdb/
 forceTwoBit=on
 </code></pre>
 <p>
-Or these lines if you'd like to access the European MySQL server:</p>
-<pre><code>#European MySQL server
+Or these lines if you'd like to access the European MariaDB server:</p>
+<pre><code>#European MariaDB server
 db.host=genome-euro-mysql.soe.ucsc.edu
 db.user=genomep
 db.password=password
@@ -84,7 +89,7 @@ forceTwoBit=on
 </code></pre>
 
 <p>
-The <code>db.*</code> and <code>central.*</code> settings tell our utilities how to connect to the public MySQL server.
+The <code>db.*</code> and <code>central.*</code> settings tell our utilities how to connect to the public MariaDB server.
 The <code>gbdbLoc1</code> setting tells our utilities where to find data files.
 The <code>forceTwoBit</code> setting is necessary for utilities that retrieve genomic sequence.
 </p>
@@ -93,7 +98,7 @@ The <code>forceTwoBit</code> setting is necessary for utilities that retrieve ge
 If you have set up your .hg.conf file as above, you can use the <code>hgsql</code> utility,
 available from our downloads server in the
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">Utilities section</a>,
-to access the public MySQL server. The benefit of using the <code> hgsql</code> command is that
+to access the public MariaDB server. The benefit of using the <code> hgsql</code> command is that
 you don't have to include the username or password as part of your command. You only need to
 specify the host:</p>
 <p><pre><code>hgsql -h genome-mysql.soe.ucsc.edu</code></pre></p>

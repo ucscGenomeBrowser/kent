@@ -24,7 +24,7 @@
 #include "sqlList.h"
 #include "hash.h"
 #include "dystring.h"
-
+#include "asParse.h"
 
 char *getDefaultProfileName();  // name of default profile
 
@@ -276,7 +276,7 @@ boolean sqlTableExists(struct sqlConnection *sc, char *table);
 /* Return TRUE if a table exists. */
 
 bool sqlColumnExists(struct sqlConnection *conn, char *tableName, char *column);
-/* return TRUE if column exists in table. tableName can contain sql wildcards  */
+/* return TRUE if column exists in table. column can contain sql wildcards  */
 
 int sqlTableSizeIfExists(struct sqlConnection *sc, char *table);
 /* Return row count if a table exists, -1 if it doesn't. */
@@ -287,9 +287,6 @@ boolean sqlTablesExist(struct sqlConnection *conn, char *tables);
 boolean sqlTableWildExists(struct sqlConnection *sc, char *table);
 /* Return TRUE if table (which can include SQL wildcards) exists.
  * A bit slower than sqlTableExists. */
-
-boolean sqlTableOk(struct sqlConnection *sc, char *table);
-/* Return TRUE if a table not only exists, but also is not corrupted. */
 
 unsigned long sqlTableDataSizeFromSchema(struct sqlConnection *conn, char *db, char *table);
 /* Get table data size. Table must exist or will abort. */
@@ -764,5 +761,32 @@ __attribute__((format(printf, 1, 2)))
 struct sqlConnection *sqlFailoverConn(struct sqlConnection *sc);
 /* returns the failover connection of a connection or NULL.
  * (Needed because the sqlConnection is not in the .h file) */
+
+/* structure moved here from hgTables.h 2019-03-04 - Hiram */
+struct sqlFieldType
+/* List field names and types */
+    {
+    struct sqlFieldType *next;
+    char *name;         /* Name of field. */
+    char *type;         /* Type of field (MySQL notion) */
+    };
+
+struct sqlFieldType *sqlFieldTypeNew(char *name, char *type);
+/* Create a new sqlFieldType */
+
+void sqlFieldTypeFree(struct sqlFieldType **pFt);
+/* Free resources used by sqlFieldType */
+
+void sqlFieldTypeFreeList(struct sqlFieldType **pList);
+/* Free a list of dynamically allocated sqlFieldType's */
+
+struct sqlFieldType *sqlFieldTypesFromAs(struct asObject *as);
+/* Convert asObject to list of sqlFieldTypes */
+
+struct sqlFieldType *sqlListFieldsAndTypes(struct sqlConnection *conn, char *table);
+/* Get list of fields including their names and types.  The type currently is
+ * just a MySQL type string. */
+
+
 
 #endif /* JKSQL_H */

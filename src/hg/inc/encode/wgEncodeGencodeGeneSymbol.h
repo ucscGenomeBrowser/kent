@@ -5,7 +5,7 @@
 #ifndef WGENCODEGENCODEGENESYMBOL_H
 #define WGENCODEGENCODEGENESYMBOL_H
 
-#define WGENCODEGENCODEGENESYMBOL_NUM_COLS 2
+#define WGENCODEGENCODEGENESYMBOL_NUM_COLS 3
 
 extern char *wgEncodeGencodeGeneSymbolCommaSepFieldNames;
 
@@ -15,6 +15,7 @@ struct wgEncodeGencodeGeneSymbol
     struct wgEncodeGencodeGeneSymbol *next;  /* Next in singly linked list. */
     char *transcriptId;	/* GENCODE transcript identifier */
     char *symbol;	/* HGNC/MGI gene symbol */
+    char *geneId;	/* HGNC/MGI symbol id used by database */
     };
 
 void wgEncodeGencodeGeneSymbolStaticLoad(char **row, struct wgEncodeGencodeGeneSymbol *ret);

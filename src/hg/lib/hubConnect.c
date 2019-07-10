@@ -22,7 +22,7 @@
 #include "obscure.h"
 #include "hgConfig.h"
 #include "grp.h"
-
+#include "udc.h"
 
 boolean isHubTrack(char *trackName)
 /* Return TRUE if it's a hub track. */
@@ -372,7 +372,8 @@ struct trackHubGenome *hubGenome = trackHubFindGenome(hub->trackHub, database);
 struct trackDb *tdbList = trackHubTracksForGenome(hub->trackHub, hubGenome);
 tdbList = trackDbLinkUpGenerations(tdbList);
 tdbList = trackDbPolishAfterLinkup(tdbList, database);
-trackDbPrioritizeContainerItems(tdbList);
+//this next line causes warns to print outside of warn box on hgTrackUi
+//trackDbPrioritizeContainerItems(tdbList);
 trackHubPolishTrackNames(hub->trackHub, tdbList);
 char *fixTrackName = cloneString(trackName);
 trackHubFixName(fixTrackName);
@@ -707,8 +708,7 @@ hDisconnectCentral(&conn);
 }
 
 struct trackDb *hubAddTracks(struct hubConnectStatus *hub, char *database)
-/* Load up stuff from data hub and append to list. The hubUrl points to
- * a trackDb.ra format file.  */
+/* Load up stuff from data hub and return list. */
 {
 /* Load trackDb.ra file and make it into proper trackDb tree */
 struct trackDb *tdbList = NULL;
@@ -719,11 +719,31 @@ if (trackHub != NULL)
     struct trackHubGenome *hubGenome = trackHubFindGenome(trackHub, database);
     if (hubGenome != NULL)
 	{
-	tdbList = trackHubTracksForGenome(trackHub, hubGenome);
-	tdbList = trackDbLinkUpGenerations(tdbList);
-	tdbList = trackDbPolishAfterLinkup(tdbList, database);
-	trackDbPrioritizeContainerItems(tdbList);
-	trackHubPolishTrackNames(trackHub, tdbList);
+        boolean doCache = trackDbCacheOn();
+
+        if (doCache)
+            {
+            // we have to open the trackDb file to get the udc cache to check for an update
+            struct udcFile *checkCache = udcFileMayOpen(hubGenome->trackDbFile, NULL);
+            time_t time = udcUpdateTime(checkCache);
+            udcFileClose(&checkCache);
+
+            struct trackDb *cacheTdb = trackDbHubCache(hubGenome->trackDbFile, time);
+
+            if (cacheTdb != NULL)
+                return cacheTdb;
+
+            memCheckPoint(); // we want to know how much memory is used to build the tdbList
+            }
+
+        tdbList = trackHubTracksForGenome(trackHub, hubGenome);
+        tdbList = trackDbLinkUpGenerations(tdbList);
+        tdbList = trackDbPolishAfterLinkup(tdbList, database);
+        trackDbPrioritizeContainerItems(tdbList);
+        trackHubPolishTrackNames(trackHub, tdbList);
+
+        if (doCache)
+            trackDbHubCloneTdbListToSharedMem(hubGenome->trackDbFile, tdbList, memCheckPoint());
 	}
     }
 return tdbList;

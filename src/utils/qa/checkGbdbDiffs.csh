@@ -46,7 +46,7 @@ if ($mode == "override" ) then
 endif
 
 if (! -e $outpath/gbdb.all.$todayDate) then
-  ssh hgwbeta find /gbdb -type f -print | sort > $outpath/gbdb.all.$todayDate
+  ssh hgwbeta find /gbdb/ -type f -print | sort > $outpath/gbdb.all.$todayDate
 endif
 
 set twoFiles=`ls -ltr $outpath | grep all | tail -2 | awk '{print $NF}'`

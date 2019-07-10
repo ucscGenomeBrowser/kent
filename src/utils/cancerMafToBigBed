@@ -31,9 +31,6 @@ varFields = [
 
 # these clinical annotations are summarized as counts
 annotCountFields = [
-    "gender",
-    "project_id",
-    "ethnicity",
 ]
 
 # these clinical annotations are copied as a list into every variant
@@ -47,7 +44,10 @@ annotListFields = [
     "alcohol_intensity",
     "bmi",
     "years_smoked",
-    "height"
+    "height",
+    "gender",
+    "project_id",
+    "ethnicity",
 ]
 
 
@@ -59,9 +59,13 @@ fieldDescs = {
 # ==== functions =====
 def parseArgs():
     " setup logging, parse command line arguments and options. -h shows auto-generated help page "
-    parser = optparse.OptionParser("""usage: %prog [options] inDir outBb - summarize GDC MAF files to bigBed
+    parser = optparse.OptionParser("""usage: %prog [options] inDir annotationFile exposureFile outBb - summarize GDC MAF files to bigBed
 
     inDir will be recursively searched for .maf.gz files. Their variants will be extracted, written to outBb
+
+    annotationFile and exposureFile are two .tsv files, both are distributed by the GDC.
+    See /hive/data/outside/gdc/pancan33-variants/annotations/ for the versions from Jan 2019
+
 
     """)
 
@@ -124,10 +128,7 @@ def makeRec(fname):
 def joinMaxLen(vals, maxLen=255):
     " join strings together. If total length is > maxLen, just take the first 3 and add ... "
     newLen = len(vals[0])*len(vals)
-    if newLen>250:
-        newStr = ",".join(vals[:3])
-    else:
-        newStr = ",".join(vals)
+    newStr = ",".join(vals)
     return newStr
 
 def mafsToBed(mafFnames, annots, outBed):
@@ -178,8 +179,8 @@ def mafsToBed(mafFnames, annots, outBed):
         varSampleCount = len(varList) # score is number of variants with this nucl change
         score = min(1000, varSampleCount) # don't exceed 1000
 
-        ftLen = str(int(end)-int(start))
-        row = [chrom, start, end, name, str(score), ".", start, end, "0,0,0", "1", ftLen, "0"]
+        ftLen = str(int(end)-int(start) + 1)
+        row = [chrom, str(int(start) - 1), end, name, str(score), ".", str(int(start) - 1), end, "0,0,0", "1", ftLen, "0"]
 
         # add the count/frequency fields that we derive from the data
         row.append( str(varSampleCount) ) # raw count

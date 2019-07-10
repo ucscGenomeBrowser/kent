@@ -39,11 +39,21 @@ section of the help page for the gene interaction graph.</p>
 <p>
 The underlying data for this track can be accessed interactively through the
 <a href="hgTables" target="_blank">Table Browser</a> or
-<a href="hgIntegrator" target="_blank">Data Integrator</a>.
-For automated analysis, the genome annotation is stored in a bigBed file that can be obtained
+<a href="hgIntegrator" target="_blank">Data Integrator</a>. 
+The data for this track is spread across a number of relational tables. The best way to 
+export or analyze the data is using our <a href="../goldenPath/help/mysql.html">public MySQL server</a>.
+The list of tables and how they are linked together are described in the 
+<a href="../goldenPath/help/hgGeneGraph.html#dataAccess">documentation</a> 
+linked at the bottom of the <a href="hgGeneGraph">gene interaction viewer</a>.
+</p>
+
+<p>
+The genome annotation is just a summary of the actual interactions database and therefore often not 
+of interest to most users. It is stored in a bigBed file that can be obtained
 from the
 <a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/" target="_blank">download server</a>.
-The data for this track is spread across a number of files and tables. The data underlying the
+
+The data underlying the
 graphical display is in <a href="../../goldenPath/help/bigBed.html" target="_blank">bigBed</a>
 formatted file named <tt>interactions.bb</tt>. Individual regions or the whole genome annotation
 can be obtained using our tool <tt>bigBedToBed</tt>. Instructions

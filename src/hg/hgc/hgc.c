@@ -1479,7 +1479,7 @@ int extraFieldsStart(struct trackDb *tdb, int fieldCount, struct asObject *as)
 int start = 0;
 char *type = cloneString(tdb->type);
 char *word = nextWord(&type);
-if (word && (sameWord(word,"bed") || sameWord(word,"bigBed") || sameWord(word,"bigGenePred") || sameWord(word,"bigPsl")  || sameWord(word,"bigBarChart")))
+if (word && (sameWord(word,"bed") || sameWord(word,"bigBed") || sameWord(word,"bigGenePred") || sameWord(word,"bigPsl")  || sameWord(word,"bigBarChart")|| sameWord(word,"bigLolly")))
     {
     if (NULL != (word = nextWord(&type)))
         start = sqlUnsigned(word);
@@ -1638,7 +1638,6 @@ for (;col != NULL && count < fieldCount;col=col->next)
         printf("<td>%s</td></tr>\n", fields[ix]);
     }
 asObjectFree(&as);
-freeMem(fieldToUrl);
 if (skipIds)
     slFreeList(skipIds);
 if (sepFields)
@@ -4285,6 +4284,11 @@ else if (wordCount > 0)
         {
         doBedDetail(tdb, NULL, item);
         }
+    else if (sameString(type, "bigLolly") )
+	{
+	int num = 12;
+        genericBigBedClick(conn, tdb, item, start, end, num);
+	}
     else if (sameString(type, "interaction") )
 	{
 	int num = 12;
@@ -8484,7 +8488,14 @@ else if (isHubTrack(table))
     gpList =  getGenePredForPositionBigGene(tdb, geneName);
     }
 else
-    gpList =  getGenePredForPositionSql(table, geneName);
+    {
+    struct trackDb *tdb = hashFindVal(trackHash, table);
+    char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+    if (bigDataUrl)
+        gpList =  getGenePredForPositionBigGene(tdb, geneName);
+    else
+        gpList =  getGenePredForPositionSql(table, geneName);
+    }
 
 return gpList;
 }
@@ -8744,7 +8755,22 @@ printf("\n");
 cgiContinueHiddenVar("o");
 printf("\n");
 
-hgSeqOptions(cart, database, tbl);
+if (isCustomTrack(tbl) || startsWith("hub_", tbl))
+    hgSeqOptions(cart, database, tbl);
+else
+    {
+    struct trackDb *tdb = hashFindVal(trackHash, tbl);
+    char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+    if (bigDataUrl)
+        {
+        // we asssume that this is a bigGenePred table if we got here with it
+        hgSeqFeatureRegionOptions(cart, TRUE, TRUE);
+        hgSeqDisplayOptions(cart, TRUE, TRUE, FALSE);
+        }
+    else
+        hgSeqOptions(cart, database, tbl);
+    }
+
 cgiMakeButton("submit", "submit");
 printf("</FORM>");
 }
@@ -8864,9 +8890,18 @@ else if (isCustomTrack(table))
     }
 else
     {
-    char constraints[256];
-    safef(constraints, sizeof(constraints), "name = %s", quotedItem);
-    itemCount = hgSeqItemsInRange(database, table, seqName, winStart, winEnd, constraints);
+    tdb = hashFindVal(trackHash, table);
+    char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+    if (bigDataUrl)
+        {
+        itemCount = getSeqForBigGene(tdb, geneName);
+        }
+    else
+        {
+        char constraints[256];
+        safef(constraints, sizeof(constraints), "name = %s", quotedItem);
+        itemCount = hgSeqItemsInRange(database, table, seqName, winStart, winEnd, constraints);
+        }
     }
 if (itemCount == 0)
     printf("\n# No results returned from query.\n\n");
@@ -8961,19 +8996,23 @@ if (pslList)
     printAlignments(pslList, start, "htcCdnaAli", tdb->table, item);
 
     char *hgsid = cartSessionId(cart);
-    int rangeStart = 0, rangeEnd = 0;
-    if (pslTrimListToTargetRange(pslList, winStart, winEnd, &rangeStart, &rangeEnd))
+    if (hgIsOfficialChromName(database, item))
         {
-        printf("<A HREF='hgTracks?hgsid=%s&position=%s:%d-%d'>"
-               "View corresponding position range on %s</A><BR>\n",
-               hgsid, item, rangeStart+1, rangeEnd, item);
+        int rangeStart = 0, rangeEnd = 0;
+        if (pslTrimListToTargetRange(pslList, winStart, winEnd, &rangeStart, &rangeEnd))
+            {
+            printf("<A HREF='hgTracks?hgsid=%s&position=%s:%d-%d'>"
+                   "View corresponding position range on %s</A><BR>\n",
+                   hgsid, item, rangeStart+1, rangeEnd, item);
+            }
         }
     char *altFix = item;
     if (!endsWith(altFix, "alt") && !endsWith(altFix, "fix"))
         altFix = pslList->tName;
-    printf("<A HREF=\"hgTracks?hgsid=%s&virtModeType=singleAltHaplo&singleAltHaploId=%s\">"
-           "Show %s placed on its chromosome</A><BR>\n",
-           hgsid, altFix, altFix);
+    if (hgIsOfficialChromName(database, altFix))
+        printf("<A HREF=\"hgTracks?hgsid=%s&virtModeType=singleAltHaplo&singleAltHaploId=%s\">"
+               "Show %s placed on its chromosome</A><BR>\n",
+               hgsid, altFix, altFix);
 
     puts("<P><B>Alignment stats:</B><BR>");
     // Sometimes inversions cause alignments to be split up; just sum up all the stats.

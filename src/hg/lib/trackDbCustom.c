@@ -5,6 +5,7 @@
 /* Copyright (C) 2014 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
 
+#include <sys/mman.h>
 #include "common.h"
 #include "linefile.h"
 #include "jksql.h"
@@ -21,9 +22,6 @@
 #include "regexHelper.h"
 #include "fieldedTable.h"
 #include "tagRepo.h"
-
-
-/* ----------- End of AutoSQL generated code --------------------- */
 
 struct trackDb *trackDbNew()
 /* Allocate a new trackDb with just very minimal stuff filled in. */
@@ -244,6 +242,7 @@ boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
 		   sameString("bed8Attrs", s) || sameString("gvf", s) ||
 		   sameString("vcfTabix", s) || sameString("vcf", s) || sameString("pgSnp", s) ||
 		   sameString("narrowPeak", s) || sameString("broadPeak", s) || 
+                   sameString("bigLolly", s) || 
                    sameString("peptideMapping", s) || sameString("barChart", s) ||
                    sameString("interact", s) || sameString("bigInteract", s)
                    );
@@ -763,6 +762,10 @@ else if (sameWord("barChart", type) || sameWord("bigBarChart", type))
     cType = cfgBarChart;
 else if (sameWord("interact", type) || sameWord("bigInteract", type))
     cType = cfgInteract;
+else if (startsWith("bigLolly", type))
+    cType = cfgLollipop;
+else if (sameWord("hic", type))
+    cType = cfgHic;
 // TODO: Only these are configurable so far
 
 if (cType == cfgNone && warnIfNecessary)
@@ -799,15 +802,23 @@ if (ctPopup > cfgNone)
 return ctPopup;
 }
 
+boolean trackDbNoInheritField(char *field)
+/* Suppress inheritance of specific fields.
+ * NOTE: make more efficient if more of these are added */
+{
+return (sameString(field, "pennantIcon"));
+}
+
 char *trackDbSetting(struct trackDb *tdb, char *name)
-/* Look for a trackDb setting from lowest level on up chain of parents. */
+/* Look for a trackDb setting from lowest level on up chain of parents,
+ * excepting fields specifically defined as not inheritable  */
 {
 struct trackDb *generation;
 char *trackSetting = NULL;
 for (generation = tdb; generation != NULL; generation = generation->parent)
     {
-    trackSetting = trackDbLocalSetting(generation,name);
-    if (trackSetting != NULL)
+    trackSetting = trackDbLocalSetting(generation, name);
+    if (trackSetting != NULL || trackDbNoInheritField(name))
         break;
     }
 return trackSetting;
@@ -1557,3 +1568,4 @@ if (metadataInTdb)
 
 return NULL;
 }
+

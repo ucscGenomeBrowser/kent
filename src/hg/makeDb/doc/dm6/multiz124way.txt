@@ -2239,6 +2239,9 @@ done | sort -k1,1 -k2,2n > multiz124wayFrames.bed
     time hgLoadMafFrames dm6 multiz124wayFrames multiz124wayFrames.bed.gz
     #   real    0m17.036s
 
+    # this table needs a better index for performanc:
+    hgsql dm6 -e 'CREATE INDEX src on multiz124wayFrames (src, bin);'
+
 
     hgsql -e 'select count(*) from multiz124wayFrames;' dm6
     # +----------+

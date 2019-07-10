@@ -89,9 +89,10 @@ jsonWriteTag(jw, var);
 if (string)
     {
     size_t encSize = jsonStringEscapeSize(string);
-    char encoded[encSize];
+    char *encoded = needMem(encSize);  /* needMem limit is 500,000,000 */
     jsonStringEscapeBuf(string, encoded, encSize);
     dyStringPrintf(jw->dy, "\"%s\"", encoded);
+    freeMem(encoded);
     }
 else
     dyStringAppend(jw->dy, "null");

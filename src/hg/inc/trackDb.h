@@ -370,6 +370,9 @@ struct hash *trackDbSettingsFromString(struct trackDb *tdb, char *string);
  * from raFromString in that it passes the key/val
  * pair through the backwards compatability routines. */
 
+boolean trackDbNoInheritField(char *field);
+/* Suppress inheritance of specific fields */
+
 char *trackDbSetting(struct trackDb *tdb, char *name);
 /* Return setting string or NULL if none exists. */
 
@@ -427,6 +430,8 @@ typedef enum _eCfgType
     cfgLong     =13,
     cfgBarChart =14,
     cfgInteract =15,
+    cfgLollipop =16,
+    cfgHic      =17,
     cfgUndetermined // Not specifically denied, but not determinable in lib code
     } eCfgType;
 
@@ -649,6 +654,7 @@ return startsWithWord("bigBed", tdb->type) ||
         startsWithWord("bigNarrowPeak", tdb->type) || 
         startsWithWord("bigBarChart", tdb->type) || 
         startsWithWord("bigInteract", tdb->type) || 
+        startsWithWord("bigLolly", tdb->type) || 
         startsWithWord("bigChain", tdb->type);
 }
 
@@ -693,5 +699,29 @@ struct slPair *trackDbMetaPairs(struct trackDb *tdb);
 
 char *trackDbViewSetting(struct trackDb *tdb, char *name);
 /* Return view setting from tdb, but *not* any of it's parents. */
+
+struct trackDb *lmCloneTdb(struct lm *lm, struct trackDb *tdb, struct trackDb *parent, struct hash *superHash);
+/* clone a single tdb structure.  Will clone its children if it has any */
+
+struct trackDb *lmCloneTdbList(struct lm *lm, struct trackDb *list, struct trackDb *parent, struct hash *superHash);
+/* clone a list of tdb structures. */
+
+struct trackDb *lmCloneSuper(struct lm *lm, struct trackDb *tdb, struct hash *superHash);
+/* clone a super track tdb structure. */
+
+void trackDbHubCloneTdbListToSharedMem(char *trackDbUrl, struct trackDb *list, unsigned long size);
+/* For this hub, Allocate shared memory and clone trackDb list into it. */
+
+void trackDbCloneTdbListToSharedMem(char *db, struct trackDb *list, unsigned long size);
+/* For this native db, allocate shared memory and clone trackDb list into it. */
+
+struct trackDb *trackDbCache(char *db, time_t time);
+/* Check to see if this db has a cached trackDb. */
+
+struct trackDb *trackDbHubCache(char *trackDbUrl, time_t time);
+/* Check to see if this hub has a cached trackDb. */
+
+boolean trackDbCacheOn();
+/* Check to see if we're caching trackDb contents. */
 #endif /* TRACKDB_H */
 

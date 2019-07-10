@@ -13990,7 +13990,8 @@ else if (sameWord(type, "bigLolly"))
     {
     tdb->canPack = TRUE;
     track->isBigBed = TRUE;
-    lollipopMethods(track, tdb, wordCount, words);
+    track->mapsSelf = TRUE;
+    lollyMethods(track, tdb, wordCount, words);
     }
 else if (sameWord(type, "bigInteract"))
     {
@@ -14110,6 +14111,10 @@ else if (sameWord(type, "bam"))
     bamMethods(track);
     if (trackShouldUseAjaxRetrieval(track))
         track->loadItems = dontLoadItems;
+    }
+else if (sameWord(type, "hic"))
+    {
+    hicMethods(track);
     }
 #ifdef USE_HAL
 else if (sameWord(type, "pslSnake"))

@@ -78,6 +78,7 @@
 #include "log.h"
 #include "obscure.h"
 #include "sqlNum.h"
+#include "internet.h"
 
 
 /* command line option specifications */
@@ -105,7 +106,8 @@ int machineCheckPeriod = 20;  /* Minutes between checking dead machines. */
 int assumeDeadPeriod = 60;    /* If haven't heard from job in this long assume
                                  * machine running it is dead. */
 int initialSpokes = 30;		/* Number of spokes to start with. */
-unsigned char hubSubnet[4] = {255,255,255,255};   /* Subnet to check. */
+struct cidr *hubSubnet = NULL;   /* Subnet to check. */
+struct cidr *localHostSubnet = NULL;
 int nextJobId = 0;		/* Next free job id. */
 time_t startupTime;		/* Clock tick of paraHub startup. */
 
@@ -134,7 +136,8 @@ errAbort("paraHub - parasol hub server version %s\n"
 	 "   -spokes=N  Number of processes that feed jobs to nodes - default %d.\n"
 	 "   -jobCheckPeriod=N  Minutes between checking on job - default %d.\n"
 	 "   -machineCheckPeriod=N  Minutes between checking on machine - default %d.\n"
-	 "   -subnet=XXX.YYY.ZZZ  Only accept connections from subnet (example 192.168).\n"
+	 "   -subnet=XXX.YYY.ZZZ Only accept connections from subnet (example 192.168).\n"
+	 "     Or CIDR notation (example 192.168.1.2/24).\n"
 	 "   -nextJobId=N  Starting job ID number.\n"
 	 "   -logFacility=facility  Log to the specified syslog facility - default local0.\n"
          "   -logMinPriority=pri minimum syslog priority to log, also filters file logging.\n"
@@ -3454,9 +3457,8 @@ void fillInSubnet()
 /* Parse subnet paramenter if any into subnet variable. */
 {
 char *sns = optionVal("subnet", NULL);
-if (sns == NULL)
-    sns = optionVal("subNet", NULL);
-netParseSubnet(sns, hubSubnet);
+hubSubnet = internetParseSubnetCidr(sns);
+localHostSubnet = internetParseSubnetCidr("127.0.0.1"); /* Address for local host */
 }
 
 int main(int argc, char *argv[])

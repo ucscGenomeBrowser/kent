@@ -49,7 +49,10 @@ def main():
 
     inFn, onlyTag, replFn, outFn = args
     newMeta = options.newMeta
-    suffList = options.suffList.split(",")
+
+    suffList = []
+    if options.suffList:
+        suffList = options.suffList.split(",")
 
     replDict = parseRepl(replFn)
     

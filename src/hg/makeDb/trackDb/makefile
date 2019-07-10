@@ -33,7 +33,7 @@ DBS = \
 	ailMel1 \
 	allMis1 \
 	amaVit1 geoFor1 melUnd1 \
-	ambMex1 \
+	ambMex1 ambMex2 \
 	ancCey1 \
 	anoCar1 anoCar2 \
 	anoGam1 anoGam3 \
@@ -91,7 +91,7 @@ DBS = \
 	droPer1 \
 	droSec1 \
 	droSim1 droSim2 \
-	droVir1 droVir2 \
+	droVir1 droVir2 droVir3 \
 	droYak1 droYak2 \
 	eboVir3 eboVir2 eboVir1 bunEbo1 sudEbo1 resEbo1 taiEbo1 zaiEbo1 \
 	echTel1 echTel2 \
@@ -163,7 +163,7 @@ DBS = \
 	proCoq1 \
 	pteVam1 tarSyr1 tarSyr2 \
 	repeats2 \
-	rheMac2 rheMac3 rheMac7 rheMac8 \
+	rheMac2 rheMac3 rheMac7 rheMac8 rheMac10 \
 	rhiBie1 \
 	rhiRox1 \
 	rn3 rn4 rn5 rn6 \

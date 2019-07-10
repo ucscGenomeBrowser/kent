@@ -14,12 +14,14 @@
 
 /* size for query name hashs */
 static int queryHashPowTwo = 22;
+static boolean warnOnConflicts = FALSE;
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"queryStats", OPTION_BOOLEAN},
     {"overallStats", OPTION_BOOLEAN},
     {"queries", OPTION_STRING},
+    {"warnOnConflicts", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -36,7 +38,9 @@ errAbort(
   "  -queryStats - output per-query statistics, the default is per-alignment stats\n"
   "  -overallStats - output overall statistics.\n"
   "  -queries=querySizeFile - tab separated file with of expected qNames and sizes.\n"
-  "   If specified, statistic will include queries that didn't align.\n");
+  "   If specified, statistic will include queries that didn't align.\n"
+  "  -warnOnConflicts - warn and ignore when a two PSLs with the same qName conflict.\n"
+  "   This can happen with bogus generated names.\n");
 }
 
 struct querySizeCnt
@@ -45,6 +49,15 @@ struct querySizeCnt
     unsigned qSize;
     unsigned alnCnt;
 };
+
+static void querySizeConflict(char *qName, unsigned qSize, unsigned qSize2)
+/* generate a error or warning on conflicting query sizes */
+{
+if (warnOnConflicts)
+    warn("conflicting query sizes for %s: %d and %d", qName, qSize, qSize2);
+else
+    errAbort("conflicting query sizes for %s: %d and %d", qName, qSize, qSize2);
+}
 
 static struct querySizeCnt *querySizeCntGet(struct hash* querySizesTbl,
                                             char *qName, unsigned qSize)
@@ -55,7 +68,10 @@ struct querySizeCnt *qs = hel->val;
 if (qs != NULL)
     {
     if (qs->qSize != qSize)
-        errAbort("conflicting query sizes for %s: %d and %d", qName, qs->qSize, qSize);
+        {
+        querySizeConflict(qName, qs->qSize, qSize);
+        return NULL;
+        }
     }
 else
     {
@@ -117,7 +133,10 @@ if (qs == NULL)
     hel->val = qs;
     }
 else if (qs->minQSize != qSize)
-    errAbort("conflicting query sizes for %s: %d and %d", qName, qs->minQSize, qSize);
+    {
+    querySizeConflict(qName, qs->minQSize, qSize);
+    return NULL;
+    }
 return hel->val;
 }
 
@@ -396,7 +415,7 @@ outputQueryStats(queryStatsTbl, statsFile);
 static char *overallStatsHdr = "#queryCnt\t" "minQSize\t" "maxQSize\t" "meanQSize\t"
 "alnCnt\t" "minIdent\t" "maxIndent\t" "meanIdent\t"
 "minQCover\t" "maxQCover\t" "meanQCover\t" "minRepMatch\t" "maxRepMatch\t" "meanRepMatch\t"
-"minTCover\t" "maxTCover\t" "aligned\t" "aligned1\t" "alignedN\n";
+"minTCover\t" "maxTCover\t" "aligned\t" "aligned1\t" "alignedN\t" "totalAlignedSize\n";
 
 static void outputOverallStats(char *statsFile, struct sumStats *os, int aligned1, int alignedN)
 /* output overall statistic */
@@ -405,13 +424,14 @@ FILE *fh = mustOpen(statsFile, "w");
 fputs(overallStatsHdr, fh);
 fprintf(fh, "%d\t%d\t%d\t%d\t%d\t" "%0.4f\t%0.4f\t%0.4f\t"
         "%0.4f\t%0.4f\t%0.4f\t"  "%0.4f\t%0.4f\t%0.4f\t" "%0.4f\t%0.4f\t"
-        "%d\t%d\t%d\n",
+        "%d\t%d\t%d\t%lld\n",
         os->queryCnt, os->minQSize, os->maxQSize, calcMeanQSize(os),
         os->alnCnt,
         os->minIdent, os->maxIndent, calcMeanIdent(os),
         os->minQCover, os->maxQCover, calcMeanQCover(os),
         os->minRepMatch, os->maxRepMatch, calcMeanRepMatch(os),
-        os->minTCover, os->maxTCover, aligned1+alignedN, aligned1, alignedN);
+        os->minTCover, os->maxTCover, aligned1+alignedN, aligned1, alignedN,
+        os->totalAlign);
 carefulClose(&fh);
 }
 
@@ -450,6 +470,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, optionSpecs);
 if (argc != 3)
     usage();
+warnOnConflicts = optionExists("warnOnConflicts");
 char *querySizeFile = optionVal("queries", NULL);
 if (optionExists("queryStats") && optionExists("overallStats"))
     errAbort("can't specify both -queryStats and -overallStats");

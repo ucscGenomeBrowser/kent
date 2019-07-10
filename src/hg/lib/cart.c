@@ -303,14 +303,12 @@ sqlUpdate(conn, dy->string);
 dyStringFree(&dy);
 }
 
-#ifndef GBROWSE
 static void copyCustomComposites(struct cart *cart, struct hashEl *el)
 /* Copy a set of custom composites to a new hub file. Update the 
  * relevant cart variables. */
 {
 struct tempName hubTn;
-char *hubFileVar = cloneString(el->name);
-char *db = el->name + sizeof(CUSTOM_COMPOSITE_SETTING);
+char *hubFileVar = el->name;
 char *oldHubFileName = el->val;
 trashDirDateFile(&hubTn, "hgComposite", "hub", ".txt");
 char *newHubFileName = cloneString(hubTn.forCgi);
@@ -319,16 +317,26 @@ char *newHubFileName = cloneString(hubTn.forCgi);
 int fd = open(oldHubFileName, O_RDONLY);
 if (fd < 0)
     {
-    cartRemove(cart, el->name);
+    cartRemove(cart, hubFileVar);
     return;
     }
 
 close(fd);
 copyFile(oldHubFileName, newHubFileName);
+cartReplaceHubVars(cart, hubFileVar, oldHubFileName, newHubFileName);
+}
 
+void cartReplaceHubVars(struct cart *cart, char *hubFileVar, char *oldHubUrl, char *newHubUrl)
+/* Replace all cart variables corresponding to oldHubUrl (and/or its hub ID) with
+ * equivalents for newHubUrl. */
+{
+if (! startsWith(customCompositeCartName, hubFileVar))
+    errAbort("cartReplaceHubVars: expected hubFileVar to begin with '"customCompositeCartName"' "
+             "but got '%s'", hubFileVar);
+char *db = hubFileVar + strlen(customCompositeCartName "-");
 char *errorMessage;
-unsigned oldHubId =  hubFindOrAddUrlInStatusTable(db, cart, oldHubFileName, &errorMessage);
-unsigned newHubId =  hubFindOrAddUrlInStatusTable(db, cart, newHubFileName, &errorMessage);
+unsigned oldHubId =  hubFindOrAddUrlInStatusTable(db, cart, oldHubUrl, &errorMessage);
+unsigned newHubId =  hubFindOrAddUrlInStatusTable(db, cart, newHubUrl, &errorMessage);
 
 // need to change hgHubConnect.hub.#hubNumber# (connected hubs)
 struct slPair *hv, *hubVarList = cartVarsWithPrefix(cart, hgHubConnectHubVarPrefix);
@@ -358,11 +366,11 @@ for(hv = hubVarList; hv; hv = hv->next)
     }
 
 // need to change hgtgroup_hub_#hubNumber# (blue bar open )
-// need to change expOrder_hub_#hubNumber#, simOrder_hub_#hubNumber# (sorting)
+// need to change expOrder_hub_#hubNumber#, simOrder_hub_#hubNumber# (sorting) -- values too
 
 // need to change trackHubs #hubNumber#   
 cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
-cartSetString(cart, hubFileVar, newHubFileName);
+cartSetString(cart, hubFileVar, newHubUrl);
 }
 
 void cartCopyCustomComposites(struct cart *cart)
@@ -372,51 +380,10 @@ struct hashEl *el, *elList = hashElListHash(cart->hash);
 
 for (el = elList; el != NULL; el = el->next)
     {
-    if (startsWith(CUSTOM_COMPOSITE_SETTING, el->name))
+    if (startsWith(customCompositeCartName, el->name))
         copyCustomComposites(cart, el);
     }
 }
-
-void cartCopyCustomTracks(struct cart *cart)
-/* If cart contains any live custom tracks, save off a new copy of them,
- * to prevent clashes by multiple uses of the same session.  */
-{
-struct hashEl *el, *elList = hashElListHash(cart->hash);
-
-for (el = elList; el != NULL; el = el->next)
-    {
-    if (startsWith(CT_FILE_VAR_PREFIX, el->name))
-	{
-	char *db = &el->name[strlen(CT_FILE_VAR_PREFIX)];
-	struct slName *browserLines = NULL;
-	struct customTrack *ctList = NULL;
-	char *ctFileName = (char *)(el->val);
-	if (fileExists(ctFileName))
-	    ctList = customFactoryParseAnyDb(db, ctFileName, TRUE, &browserLines, FALSE);
-        /* Save off only if the custom tracks are live -- if none are live,
-         * leave cart variables in place so hgSession can detect and inform
-         * the user. */
-	if (ctList)
-	    {
-	    struct customTrack *ct;
-	    static struct tempName tn;
-	    char *ctFileVar = el->name;
-	    char *ctFileName;
-	    for (ct = ctList;  ct != NULL;  ct = ct->next)
-		{
-		copyFileToTrash(&(ct->htmlFile), "ct", CT_PREFIX, ".html");
-		copyFileToTrash(&(ct->wibFile), "ct", CT_PREFIX, ".wib");
-		copyFileToTrash(&(ct->wigFile), "ct", CT_PREFIX, ".wig");
-		}
-	    trashDirFile(&tn, "ct", CT_PREFIX, ".bed");
-	    ctFileName = tn.forCgi;
-	    cartSetString(cart, ctFileVar, ctFileName);
-	    customTracksSaveFile(db, ctList, ctFileName);
-	    }
-	}
-    }
-}
-#endif /* GBROWSE */
 
 static void storeInOldVars(struct cart *cart, struct hash *oldVars, char *var)
 /* Store all cart hash elements for var into oldVars (if it exists). */
@@ -1401,11 +1368,6 @@ if (didSessionLoad)
 pushWarnHandler(cartHubWarn);
 char *newDatabase = hubConnectLoadHubs(cart);
 popWarnHandler();
-
-#ifndef GBROWSE
-if (didSessionLoad)
-    cartCopyCustomTracks(cart);
-#endif /* GBROWSE */
 
 if (newDatabase != NULL)
     {

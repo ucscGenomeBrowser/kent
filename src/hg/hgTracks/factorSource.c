@@ -25,6 +25,8 @@ return factorSourceLoad(row);
 /* Save info about factors and their motifs */
 struct factorSourceInfo {
     boolean showCellAbbrevs;
+    boolean showExpCounts;
+    struct hash *factorExpCounts;
     struct hash *factorChoices;
     struct hash *motifTargets;
     struct bed6FloatScore *motifs;
@@ -51,10 +53,24 @@ struct factorSourceInfo *fsInfo = NULL;
 AllocVar(fsInfo);
 track->extraUiData = fsInfo;
 
-// Check UI setting to show cell abbreviations
+// Check UI setting to show cell abbreviations or counts
 char varName[64];
 safef(varName, sizeof(varName), "%s.showCellAbbrevs", track->track);
 fsInfo->showCellAbbrevs = cartUsualBoolean(cart, varName, TRUE);
+safef(varName, sizeof(varName), "%s.showExpCounts", track->track);
+fsInfo->showExpCounts = cartUsualBoolean(cart, varName, TRUE);
+
+if (fsInfo->showExpCounts)
+    {
+    struct sqlConnection *conn = hAllocConn(database);
+    char query[256];
+    char *inputTrackTable = trackDbRequiredSetting(track->tdb, "inputTrackTable");
+    sqlSafef(query, sizeof(query), 
+                "select factor, count(*) as num from %s group by factor", inputTrackTable);
+    fsInfo->factorExpCounts = sqlQuickHash(conn, query);
+    // TODO: If we're worried about performance, can remake as hash of ints
+    hFreeConn(&conn);
+    }
 
 // Filter factors based on multi-select
 filterBy_t *filter = filterBySetGet(track->tdb, cart, NULL);
@@ -126,17 +142,38 @@ if ((track->items != NULL) & sqlTableExists(conn, motifTable))
 hFreeConn(&conn);
 }
 
-static int rightPixels(struct track *track, void *item)
+static int factorSourceRightPixels(struct track *track, void *item)
 /* Return number of pixels we need to the right. */
 {
+struct factorSourceInfo *fsInfo = (struct factorSourceInfo *)track->extraUiData;
+
+// can we test this here ?
+#ifdef BETTER_LAYOUT
+if (!(vis == tvFull || vis == tvPack))
+    return 0;
+#endif
 struct factorSource *fs = item;
 struct dyString *dy = dyStringNew(0);
-int i;
-for (i=0; i<fs->expCount; ++i)
+if (fsInfo->showExpCounts)
     {
-    int expNum = fs->expNums[i];
-    char *label = track->sources[expNum]->name;
-    dyStringAppend(dy, label);
+    dyStringPrintf(dy, "%d", fs->expCount);
+    char *s = hashFindVal(fsInfo->factorExpCounts, fs->name);
+    int allCount = s ? sqlUnsigned(s) : 0;
+    if (fs->expCount != allCount)
+        dyStringPrintf(dy, "/%d", allCount);
+    if (fsInfo->showCellAbbrevs)
+        dyStringAppend(dy, " ");
+    }
+
+if (fsInfo->showCellAbbrevs)
+    {
+    int i;
+    for (i=0; i<fs->expCount; ++i)
+        {
+        int expNum = fs->expNums[i];
+        char *label = track->sources[expNum]->name;
+        dyStringAppend(dy, label);
+        }
     }
 int result = mgFontStringWidth(tl.font, dy->string);
 dyStringFree(&dy);
@@ -161,24 +198,41 @@ int w = x2-x1;
 if (w < 1)
     w = 1;
 hvGfxBox(hvg, x1, y, w, heightPer, color);
+if (vis != tvFull && vis != tvPack)
+    return;
 
 /* Draw text to the right */
+int x = x2 + tl.mWidth/2;
 struct factorSourceInfo *fsInfo = (struct factorSourceInfo *)track->extraUiData;
-if ((vis == tvFull || vis == tvPack) && fsInfo->showCellAbbrevs)
+if (fsInfo->showExpCounts)
     {
-    int x = x2 + tl.mWidth/2;
+    struct dyString *ds = dyStringNew(0);
+    dyStringPrintf(ds, "%d", fs->expCount);
+    char *s = hashFindVal(fsInfo->factorExpCounts, fs->name);
+    int allCount = s ? sqlUnsigned(s) : 0;
+    if (fs->expCount != allCount)
+        dyStringPrintf(ds, "/%d", allCount);
+    if (fsInfo->showCellAbbrevs)
+        dyStringAppend(ds, " ");
+    char *label = dyStringCannibalize(&ds);
+    int w = mgFontStringWidth(font, label);
+    hvGfxTextCentered(hvg, x, y, w, heightPer, MG_BLACK, font, label);
+    x += w;
+    }
+if (fsInfo->showCellAbbrevs)
+    {
     int i;
     for (i=0; i<fs->expCount; ++i)
-	{
+        {
         int id = fs->expNums[i];
-	char *label = track->sources[id]->name;
-	int w = mgFontStringWidth(font, label);
-	float score = fs->expScores[i];
+        char *label = track->sources[id]->name;
+        int w = mgFontStringWidth(font, label);
+        float score = fs->expScores[i];
         int grayIx = grayInRange(score, 0, 1000);
         int color = shadesOfGray[grayIx];
         hvGfxTextCentered(hvg, x, y, w, heightPer, color, font, label);
         x += w;
-	}
+        }
     }
 }
 
@@ -292,7 +346,7 @@ bedMethods(track);
 track->drawItemAt = factorSourceDrawItemAt;
 track->drawItems = factorSourceDraw;
 track->loadItems = factorSourceLoadItems;
-track->itemRightPixels = rightPixels;
+track->itemRightPixels = factorSourceRightPixels;
 
 /* Get the associated data describing the various sources. */
 track->expTable = trackDbRequiredSetting(track->tdb, SOURCE_TABLE);
@@ -308,9 +362,11 @@ for (exp=expList, expIx=0; exp != NULL; exp = exp->next, expIx += 1)
 hFreeConn(&conn);
 
 /* Figure out how many pixels need to the right. */
+#ifdef UNUSED
 int rightCount = tl.mWidth/2;
 for (expIx=0; expIx < track->sourceCount; ++expIx)
     rightCount += mgFontStringWidth(tl.font, track->sources[expIx]->name);
 track->sourceRightPixels = rightCount;
+#endif
 }
 

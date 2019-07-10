@@ -3,10 +3,18 @@
  * and the like.   See also net for stuff that is higher level. */
 
 #ifndef INTERNET_H
+#define INTERNET_H
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+
+struct cidr
+/* Store CIDR address as IP and length */
+    {
+    bits32 ip;
+    int subnetLength;		
+    };
 
 bits32 internetHostIp(char *hostName);
 /* Get IP v4 address (in host byte order) for hostName.
@@ -36,8 +44,17 @@ void internetUnpackIp(bits32 packed, unsigned char unpacked[4]);
 /* Convert from 32 bit to 4-byte format with most significant
  * byte first. */
 
-boolean internetIpInSubnet(unsigned char unpackedIp[4], 
-	unsigned char subnet[4]);
-/* Return true if unpacked IP address is in subnet. */
+bits32 internetPackIp(unsigned char unpacked[4]);
+/* Convert from 4-byte format with most significant
+ * byte first to native 32-bit format. */
+
+void internetCidrRange(struct cidr *cidr, bits32 *pStartIp, bits32 *pEndIp);
+/* get range of CIDR formatted subnet as start and end IPs. */
+
+boolean internetIpInSubnetCidr(unsigned char unpackedIp[4], struct cidr *cidr);
+/* Return true if unpacked IP address is in subnet cidr. */
+
+struct cidr *internetParseSubnetCidr(char *cidr);
+/* parse input CIDR format IP for range or subnet */
 
 #endif /* INTERNET_H */

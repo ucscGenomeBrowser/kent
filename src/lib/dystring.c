@@ -7,7 +7,7 @@
 #include "dystring.h"
 
 
-struct dyString *newDyString(int initialBufSize)
+struct dyString *newDyString(long initialBufSize)
 /* Allocate dynamic string with initial buffer size.  (Pass zero for default) */
 {
 struct dyString *ds;
@@ -55,30 +55,30 @@ for(ds = *pDs; ds != NULL; ds = next)
 *pDs = NULL;
 }
 
-static void dyStringExpandBuf(struct dyString *ds, int newSize)
+static void dyStringExpandBuf(struct dyString *ds, long newSize)
 /* Expand buffer to new size. */
 {
 ds->string = needMoreMem(ds->string, ds->stringSize+1, newSize+1);
 ds->bufSize = newSize;
 }
 
-void dyStringBumpBufSize(struct dyString *ds, int size)
+void dyStringBumpBufSize(struct dyString *ds, long size)
 /* Force dyString buffer to be at least given size. */
 {
 if (ds->bufSize < size)
     dyStringExpandBuf(ds, size);
 }
 
-void dyStringAppendN(struct dyString *ds, char *string, int stringSize)
+void dyStringAppendN(struct dyString *ds, char *string, long stringSize)
 /* Append string of given size to end of string. */
 {
-int oldSize = ds->stringSize;
-int newSize = oldSize + stringSize;
+long oldSize = ds->stringSize;
+long newSize = oldSize + stringSize;
 char *buf;
 if (newSize > ds->bufSize)
     {
-    int newAllocSize = newSize + oldSize;
-    int oldSizeTimesOneAndAHalf = oldSize * 1.5;
+    long newAllocSize = newSize + oldSize;
+    long oldSizeTimesOneAndAHalf = oldSize * 1.5;
     if (newAllocSize < oldSizeTimesOneAndAHalf)
         newAllocSize = oldSizeTimesOneAndAHalf;
     dyStringExpandBuf(ds,newAllocSize);
@@ -104,9 +104,9 @@ return c;
 void dyStringAppendMultiC(struct dyString *ds, char c, int n)
 /* Append N copies of char to end of string. */
 {
-int oldSize = ds->stringSize;
-int newSize = oldSize + n;
-int newAllocSize = newSize + oldSize;
+long oldSize = ds->stringSize;
+long newSize = oldSize + n;
+long newAllocSize = newSize + oldSize;
 char *buf;
 if (newSize > ds->bufSize)
     dyStringExpandBuf(ds,newAllocSize);
@@ -141,7 +141,7 @@ void dyStringVaPrintf(struct dyString *ds, char *format, va_list args)
 {
 /* attempt to format the string in the current space.  If there
  * is not enough room, increase the buffer size and try again */
-int avail, sz;
+long avail, sz;
 while (TRUE)
     {
     va_list argscp;
@@ -193,7 +193,7 @@ struct dyString * dyStringSub(char *orig, char *in, char *out)
 /* Make up a duplicate of orig with all occurences of in substituted
  * with out. */
 {
-int inLen = strlen(in), outLen = strlen(out), origLen = strlen(orig);
+long inLen = strlen(in), outLen = strlen(out), origLen = strlen(orig);
 struct dyString *dy = newDyString(origLen + 2*outLen);
 char *s, *e;
 
@@ -217,10 +217,10 @@ for (s = orig; ;)
 return dy;
 }
 
-void dyStringResize(struct dyString *ds, int newSize)
+void dyStringResize(struct dyString *ds, long newSize)
 /* resize a string, if the string expands, blanks are appended */
 {
-int oldSize = ds->stringSize;
+long oldSize = ds->stringSize;
 if (newSize > oldSize)
     {
     /* grow */
@@ -241,7 +241,7 @@ char c;
 dyStringAppendC(dy, quotChar);
 while ((c = *text++) != 0)
     {
-    if (c == quotChar)
+    if (c == quotChar || c == '\\')
         dyStringAppendC(dy, '\\');
     dyStringAppendC(dy, c);
     }

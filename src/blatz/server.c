@@ -20,7 +20,8 @@
 int port = bzpDefaultPort;
 int cpuCount = 2;
 char *host = "localhost";
-unsigned char subnet[4] = {255,255,255,255};
+
+struct cidr *subnet = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -38,7 +39,7 @@ printf("Options: (defaults are shown for numerical parameters)\n");
 bzpServerOptionsHelp(bzp);
 bzpClientOptionsHelp(bzp);
 printf("  -debug Writes diagnostic output to console and no daemon fork\n");
-printf("  -subnet=255.255.255.255 Restrict access to subnet\n");
+printf("  -subnet=255.255.255.255 Restrict access to subnet. Also supports CIDR notation, e.g. 255.255.255.255/24\n");
 printf("  -port=%d Use specified TCP/IP port\n", bzpDefaultPort);
 printf("  -host=%s Query specified host\n", host);
 printf("  -cpu=%d Use specified number of CPUs (processes)\n", cpuCount);
@@ -314,7 +315,7 @@ setMaxAlloc(2LL*1024LL*1024LL*1024LL);
 optionInit(&argc, argv, options);
 port = optionInt("port", port);
 host = optionVal("host", host);
-netParseSubnet(optionVal("subnet", NULL), subnet);
+subnet = internetParseSubnetCidr(optionVal("subnet", NULL));
 cpuCount = optionInt("cpu", cpuCount);
 if (argc < 2)
     usage();

@@ -13,6 +13,7 @@
 #include "localmem.h"
 #include "net.h"
 #include "regexHelper.h"
+#include "htslib/tbx.h"
 #include "vcf.h"
 
 /* Reserved but optional INFO keys: */
@@ -1098,6 +1099,42 @@ if (lineFileSetTabixRegion(vcff->lf, chrom, start, end))
     }
 
 return slCount(vcff->records) - oldCount;
+}
+
+long long vcfTabixItemCount(char *fileOrUrl, char *tbiFileOrUrl)
+/* Return the total number of items across all sequences in fileOrUrl, using index file.
+ * If tbiFileOrUrl is NULL, the index file is assumed to be fileOrUrl.tbi.
+ * NOTE: not all tabix index files include mapped item counts, so this may return 0 even for
+ * large files. */
+{
+long long itemCount = 0;
+hts_idx_t *idx = NULL;
+if (isNotEmpty(tbiFileOrUrl))
+    idx = hts_idx_load2(fileOrUrl, tbiFileOrUrl);
+else
+    {
+    idx = hts_idx_load(fileOrUrl, HTS_FMT_TBI);
+    }
+if (idx == NULL)
+    warn("vcfTabixItemCount: hts_idx_load(%s) failed.", tbiFileOrUrl ? tbiFileOrUrl : fileOrUrl);
+else
+    {
+    int tCount;
+    const char **seqNames = tbx_seqnames((tbx_t *)idx, &tCount);
+    int tid;
+    for (tid = 0;  tid < tCount;  tid++)
+        {
+        uint64_t mapped, unmapped;
+        int ret = hts_idx_get_stat(idx, tid, &mapped, &unmapped);
+        if (ret == 0)
+            itemCount += mapped;
+        // ret is -1 if counts are unavailable.
+        }
+    freeMem(seqNames);
+    hts_idx_destroy(idx);
+    idx = NULL;
+    }
+return itemCount;
 }
 
 void vcfFileFree(struct vcfFile **pVcff)

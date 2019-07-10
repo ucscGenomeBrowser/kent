@@ -14,6 +14,8 @@
 
 enum soTerm	// the various variant effects
     {
+    soUnknown=0,
+    frameshift=865,
     regulatory_region_variant=1566,
     stop_retained_variant=1567,
     exon_loss_variant=1572,
@@ -26,6 +28,7 @@ enum soTerm	// the various variant effects
     missense_variant=1583,
     stop_gained=1587,
     frameshift_variant=1589,
+    terminator_codon_variant=1590,
     nc_transcript_variant=1619,
     mature_miRNA_variant=1620,
     NMD_transcript_variant=1621,
@@ -48,7 +51,11 @@ enum soTerm	// the various variant effects
     inframe_deletion=1822,
     feature_variant=1878,
     transcript_ablation=1893,
+    upstream_transcript_variant=1986,
+    downstream_transcript_variant=1987,
     no_sequence_alteration=2073,
+    genic_downstream_transcript_variant=2152,
+    genic_upstream_transcript_variant=2153,
     };
 
 char *soTermToString(enum soTerm termNumber);
@@ -57,5 +64,15 @@ char *soTermToString(enum soTerm termNumber);
 
 int soTermStringToId(char *soTermStr);
 /* Translate soTermStr into its numeric ID.  Return -1 if soTermStr is not recognized. */
+
+enum soTerm soTermStringIdToId(char *soIdStr);
+/* Given a string like "SO:0001627", parse out the numeric ID and convert to enum soTerm. */
+
+char *soTermToMisoLink(enum soTerm term);
+/* Return an HTML <a> link to the MISO browser page for term
+ * (except if it's soUnknown, just return text not a link). */
+
+int soTermCmp(const void *a, const void *b);
+/* Compare two enum soTerms for sorting by descending order of functional impact. */
 
 #endif /* SOTERM_H */

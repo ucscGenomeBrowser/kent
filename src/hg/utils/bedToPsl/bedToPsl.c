@@ -12,12 +12,14 @@
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
+    {"tabs", OPTION_BOOLEAN},
     {"keepQuery", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
 /* command line options */
 static boolean keepQuery = FALSE;
+static boolean doTabs = FALSE;
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -25,14 +27,15 @@ void usage(char *msg)
 errAbort("%s:\n"
     "bedToPsl - convert bed format files to psl format\n"
     "usage:\n"
-    "   bedToPsl chromSizes bedFile pslFile\n"
+    "   bedToPsl [options] chromSizes bedFile pslFile\n"
     "\n"
     "Convert a BED file to a PSL file. This the result is an alignment.\n"
     " It is intended to allow processing by tools that operate on PSL.\n"
     "If the BED has at least 12 columns, then a PSL with blocks is created.\n"
     "Otherwise single-exon PSLs are created.\n\n"
     "Options:\n"
-    "-keepQuery  -  instead of creating a fake query, create PSL with identical query and\n"
+    "-tabs        -  use tab as a separator\n"
+    "-keepQuery   -  instead of creating a fake query, create PSL with identical query and\n"
     "                target specs. Useful if bed features are to be lifted with pslMap and one \n"
     "                wants to keep the source location in the lift result.\n" , msg);
 }
@@ -111,7 +114,11 @@ return psl;
 void cnvBedRec(char *line, struct hash *chromSizes, FILE *pslFh)
 {
 char *row[12];
-int numCols = chopByWhite(line, row, ArraySize(row));
+int numCols;
+if (doTabs)
+    numCols = chopString(line, "\t", row, ArraySize(row));
+else
+    numCols = chopByWhite(line, row, ArraySize(row));
 if (numCols < 4)
     errAbort("bed must have at least 4 columns");
 struct bed *bed = bedLoadN(row, numCols);
@@ -142,6 +149,8 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, optionSpecs);
 if (argc != 4)
     usage("Too few arguments");
+if (optionExists("tabs"))
+    doTabs = TRUE;
 if (optionExists("keepQuery"))
     keepQuery = TRUE;
 cnvBedToPsl(argv[1], argv[2], argv[3]);

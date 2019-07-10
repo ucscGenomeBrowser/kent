@@ -627,6 +627,7 @@ var hgGateway = (function() {
     var favIconTaxId = [ ['Human', 9606],
                          ['Mouse', 10090],
                          ['Rat', 10116],
+                         ['Zebrafish', 7955],
                          ['Fly', 7227],
                          ['Worm', 6239],
                          ['Yeast', 559292] ];

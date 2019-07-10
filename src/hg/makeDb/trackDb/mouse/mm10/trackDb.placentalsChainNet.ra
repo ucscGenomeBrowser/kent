@@ -66,13 +66,13 @@ html chainNet
         type chain canFam3
         otherDb canFam3
 
-        track chainFelCat5
+        track chainFelCat9
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=eCat clade=eCarn
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain felCat5
-        otherDb felCat5
+        type chain felCat9
+        otherDb felCat9
 
         track chainManPen1
         subTrack placentalChainNetViewchain off
@@ -280,13 +280,13 @@ html chainNet
         type netAlign canFam3 chainCanFam3
         otherDb canFam3
 
-        track netFelCat5
+        track netFelCat9
         subTrack placentalChainNetViewnet on
         subGroups view=net species=eCat clade=eCarn
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign felCat5 chainFelCat5
-        otherDb felCat5
+        type netAlign felCat9 chainFelCat9
+        otherDb felCat9
 
         track netManPen1
         subTrack placentalChainNetViewnet off

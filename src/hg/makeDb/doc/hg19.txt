@@ -32580,6 +32580,8 @@ hgBbiDbLink hg19 hgmd /gbdb/hg19/bbi/hgmd.bb
 # Forgot, finally done Oct 24: also updated hgBeacon
 bigBedToBed /gbdb/hg19/bbi/hgmd.bb /tmp/temp.bed
 /usr/local/apache/cgi-bin/hgBeacon -f hgmd temp.bed hgmd
+# Forgot, finally done June 26: updated GBIB as qateam
+scp /gbdb/hg19/bbi/hgmd.bb hgdownload:/usr/local/apache/gbib/prot/
 
 ###########################################################################
 2018-03-08: update UCSC GENCODE V19 to include protein id (for VAI)
@@ -33335,3 +33337,171 @@ bedSort mastermind.bed mastermind.bed
 bedToBigBed -type=bed9+ -as=~/kent/src/hg/makeDb/mastermind/mastermind.as -tab mastermind.bed /hive/data/genomes/hg19/chrom.sizes  mastermind.bb
 ln -s `pwd`/mastermind.bb /gbdb/hg19/bbi/mastermind.bb
 #############################################################################
+2019-04-08: import of UCSC GENCODE group processing of GENCODE V30lift37 (markd)
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV30lift37
+    pushd /hive/data/genomes/hg19/bed/gencodeV30lift37
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg19 30lift37 96 'Apr 2019'
+
+    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release. [ONLY if it's going to be pushed]
+
+    # edit human/hg19/trackDb.wgEncode.ra to add new .ra file include
+    make DBS=hg19
+
+    # edit  all.joiner to add ~/tmp/gencodeV30lift37.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg19/bed/gencodeV30lift37
+    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # commit all
+
+##############################################################################
+# DGV GOLD (DATABASE OF GENOMIC VARIANTS GOLD STANDARD) (DONE 5/06/19 ChrisL)
+# Redmine #23371
+##############################################################################
+    TODAY=`date +%y%m%d`
+    mkdir -p /hive/data/genomes/hg19/bed/dgv/$TODAY
+    cd /hive/data/genomes/hg19/bed/dgv/$TODAY
+    wget http://dgv.tcag.ca/dgv/docs/DGV.GS.March2016.50percent.GainLossSep.Final.hg19.gff3
+
+    # GFF3 with the 9th field full of extra info that we need to recreate the blocks
+    # as seen at the DGV website. See note-6 in the redmine (23371) for an example
+    # of the different cnv representations (1, 2, or 3 blocks).
+
+    # what sub-fields are in the 9th field:
+    head -1 DGV.GS.March2016.50percent.GainLossSep.Final.hg19.gff3 | cut -f9 | tr ';' '\n' | cut -d'=' -f1
+    # ID
+    # Name
+    # variant_type
+    # variant_sub_type
+    # outer_start
+    # inner_start
+    # inner_end
+    # outer_end
+    # inner_rank
+    # num_variants
+    # variants
+    # num_studies
+    # Studies
+    # num_platforms
+    # Platforms
+    # number_of_algorithms
+    # algorithms
+    # num_samples
+    # samples
+    # Frequency
+    # PopulationSummary
+    # num_unique_samples_tested
+
+    # and how many unique CNV regions?
+    cut -f9 DGV.GS.March2016.50percent.GainLossSep.Final.hg19.gff3 | tr ';' '\t' | cut -f1 | cut -d'=' -f2 | sort -u | wc -l
+    # 38185
+    wc -l DGV.GS.March2016.50percent.GainLossSep.Final.hg19.gff3
+    # 114555 DGV.GS.March2016.50percent.GainLossSep.Final.hg19.gff3
+    calc 114555 /3
+    # 114555 /3 = 38185.000000
+
+    # run script to process the bedlines out of each of the gff lines
+    ~/kent/src/hg/utils/automation/translateDgvGold.py DGV.GS.March2016.50percent.GainLossSep.Final.hg19.gff3 | sort -k1,1 -k2,2n | uniq > dgvGold.bed12
+
+    cat << EOF > dgvGold.as
+table dgvGold
+"Database of Genomic Variants Gold Standard Curated Variants"
+    (
+    string chrom; "Chromosome name"
+    uint chromStart; "Maximum boundary of CNV"
+    uint chromEnd; "Maximum boundary of CNV"
+    string name; "Name from gff"
+    uint score; "Not used"
+    char[1] strand; "Not used"
+    uint thickStart; "Same as chromEnd"
+    uint thickEnd; "Same as chromEnd"
+    uint reserved;  "Color of item. Blue for gain and red for loss"
+    int blockCount; "Number of blocks"
+    int[blockCount] blockSizes; "Size of each block"
+    int[blockCount] chromStarts; "Start position of each block relative to chromStart"
+    string dgvID; "Name of CNV from DGV"
+    string variant_type; "CNV"
+    string variant_sub_type; "Gain or Loss"
+    int inner_rank; "Rank of the used to assign the blocks"
+    int num_variants; "Number of variants coalesced to form the entire region"
+    string[num_variants] variants; "Supporting variants"
+    int num_studies; "Number of studies"
+    string[num_studies] Studies; "Study names in 'Name Year' format"
+    int num_platforms; "Number of sequencing platforms"
+    string[num_platforms] Platforms; "Sequencing platform names"
+    int number_of_algorithms; "Number of CNV detection algorithms"
+    string[number_of_algorithms] algorithms; "CNV detection algorithms used"
+    int num_samples; "Number of samples"
+    string[num_samples] samples; "Sample names"
+    string Frequency; "Overall frequency of variants across all studies"
+    string PopulationSummary; "Populations tested across all studies"
+    int num_unique_samples_tested; "Number of samples "
+    )
+EOF
+
+    CHROMSIZES=/hive/data/genomes/hg19/chrom.sizes
+    bedToBigBed -type=bed12+17 -as=dgvGold.as -tab -extraIndex=name dgvGold.bed12 $CHROMSIZES dgvGold.bb
+    bigBedInfo dgvGold.bb
+    # version: 4
+    # fieldCount: 29
+    # hasHeaderExtension: yes
+    # isCompressed: yes
+    # isSwapped: 0
+    # extraIndexCount: 0
+    # itemCount: 38,185
+    # primaryDataSize: 30,841,362
+    # primaryIndexSize: 6,892
+    # zoomLevels: 8
+    # chromCount: 24
+    # basesCovered: 580,564,080
+    # meanDepth (of bases covered): 3.668451
+    # minDepth: 1.000000
+    # maxDepth: 81.000000
+    # std of depth: 5.825349
+
+    # link into gbdb
+    mkdir -p /gbdb/hg19/dgv
+    ln -s `pwd`/dgvGold.bb /gbdb/hg19/dgv/
+
+#############################################################################
+2019-07-05: import of UCSC GENCODE group processing of GENCODE V31lift37 (markd)
+    # Replaced import of pre-release
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV31lift37
+    pushd /hive/data/genomes/hg19/bed/gencodeV31lift37
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg19 31lift37 97 'June 2019'
+
+    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release. [ONLY if it's going to be pushed]
+
+    # edit human/hg19/trackDb.wgEncode.ra to add new .ra file include
+    make DBS=hg19
+
+    # edit  all.joiner to add ~/tmp/gencodeV31lift37.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg19/bed/gencodeV31lift37
+    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # commit all
+
+##############################################################################

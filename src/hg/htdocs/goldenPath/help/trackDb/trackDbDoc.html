@@ -76,7 +76,7 @@
 
     <P>Every track should have
     these four settings.  The key of this track (<code>myFirstTrack</code>)
-    is the name of the dataset.  If the data is loaded into a MySQL
+    is the name of the dataset.  If the data is loaded into a MariaDB
     table then the track name is almost always the table name.  If the
     data is in one of the remote indexed file types (e.g. bigWig, bam,
     etc.)  then the name is typically the root file name.  However, this
@@ -245,7 +245,7 @@ used as a ready reference.</P>
         <div class="format"><code>table &lt;tableName&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="tableBrowser"><A name="tableBrowser"></A><IMG class='toggle detail'>
-        <div class="format"><code>tableBrowser &lt;off/on&gt; [table1 ...]</code></div>
+        <div class="format"><code>tableBrowser &lt;off/on/noGenome&gt; [table1 ...]</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="url">
             <A name="url"></A>
@@ -1886,7 +1886,7 @@ bigWig</P>
         <TD>bed5FloatScoreWithFdr, bed5FloatScore <I>ENCODE only</I></TD>
         <TD>Currently only used by pilot encode 1%.
             <P>Presents user option to limit to the top
-            scoring N items.  Might be useful in other MySQL table based
+            scoring N items.  Might be useful in other MariaDB table based
             tracks but how valuable is it?</P>
         </TD>
     </TR>

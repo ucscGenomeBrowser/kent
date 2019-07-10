@@ -16,7 +16,7 @@
 #include <signal.h>
 #include "obscure.h"
 
-int version = 40;  // PLEASE INCREMENT THIS BEFORE PUSHING TO SHARED REPO
+int version = 44;  // PLEASE INCREMENT THIS BEFORE PUSHING TO SHARED REPO
                    // SO THAT OTHERS MAY TEST WITH IT, SO THAT EVERYONE KNOWS THEY HAVE THE
                    // EXACT RIGHT VERSION.
 
@@ -27,8 +27,8 @@ int numUpdates = 0;
 
 int numForks = 10;
 
-int timeoutSecs = 3600; // Timeout for each forked child process
-                        // default 3600 seconds is one hour
+int timeoutSecs = 7200; // Timeout for each forked child process
+                        // default 7200 seconds is two hours
 
 char *testFailure = NULL;
 
@@ -329,7 +329,7 @@ if (optionExists("hardcore") && newContents->stringSize != contentLength)  // al
     {
     struct dyString *update = dyStringNew(contentLength*2);
     if (newContents->stringSize > contentLength)
-	errAbort("ERROR: Uh, why is newContents (%d) longer than original (%d)",
+	errAbort("ERROR: Uh, why is newContents (%ld) longer than original (%d)",
 		 newContents->stringSize, contentLength);
     sqlDyStringPrintf(update, "UPDATE %s set contents='", savedSessionTable);
     dyStringAppendN(update, newContents->string, newContents->stringSize);
@@ -337,13 +337,12 @@ if (optionExists("hardcore") && newContents->stringSize != contentLength)  // al
 		   "where userName=\"%s\" and sessionName=\"%s\";",
 		   userName, sessionName);
     verbose(3, "Removing one or more dead CT file settings from %s %s "
-	    "(original length %d, now %d)\n", 
+	    "(original length %d, now %ld)\n", 
 	    userName, sessionName,
 	    contentLength, newContents->stringSize);
     sqlUpdate(conn, update->string);
     dyStringFree(&update);
     }
-hDisconnectCentral(&conn);
 dyStringFree(&oneSetting);
 dyStringFree(&newContents);
 freeMem(contentsToChop);

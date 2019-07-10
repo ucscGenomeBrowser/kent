@@ -7,6 +7,10 @@ include hoffMap.ra
 
 include cancerExpr.ra
 
+include mane.ra
+
+include gdcCancer.ra
+
 track miRnaAtlas
 compositeTrack on
 shortLabel miRNA Tissue Atlas
@@ -149,8 +153,6 @@ pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track interactions override
 directUrl hgGeneGraph?db=hg38&gene=%s
-
-include trackDb.wgEncode.ra
 
 track par override
 group x
@@ -698,4 +700,15 @@ group varRep
 
 track gtexTranscExpr override
 bigDataUrl /gbdb/hg38/gtex/gtexTranscExpr.bb
+
+# ENCODE tracks
+
+include trackDb.gencode.ra
+
+include wgEncodeReg.ra 
+
+include encode3.ra 
+
+include wgEncodeReg.dev.ra alpha
+
 

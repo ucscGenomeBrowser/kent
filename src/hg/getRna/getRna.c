@@ -17,6 +17,8 @@ static struct optionSpec optionSpecs[] = {
     {"cdsUpperAll", OPTION_BOOLEAN},
     {"inclVer", OPTION_BOOLEAN},
     {"peptides", OPTION_BOOLEAN},
+    {"seqTbl", OPTION_STRING},
+    {"extFileTbl", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -25,6 +27,8 @@ static boolean cdsUpper = FALSE;
 static boolean cdsUpperAll = FALSE;
 static boolean inclVer = FALSE;
 static boolean peptides = FALSE;
+char *seqTbl = NULL;
+char *extFileTbl = NULL;
 
 /* derived from command line, it clearer as -cdsUpperAll and -peptides defines
  * multiple behaviors */
@@ -50,6 +54,8 @@ errAbort(
   "  -cdsUpperAll - like -cdsUpper, except keep sequeneces without CDS\n"
   "  -inclVer - include version with sequence id.\n"
   "  -peptides - translate mRNAs to peptides\n"
+  "  -seqTbl=tbl - use this table instead of gbSeq and seq. Many other options don't work if this is used.\n"
+  "  -extFileTbl=tbl - use this table instead of gbExtFile and extFile\n"
   "\n");
 }
 
@@ -216,6 +222,14 @@ else
 dnaSeqFree(&dna);
 }
 
+static void getAccSeqTable(char *acc, struct sqlConnection *conn, FILE *outFa)
+/* get mrna for an accession from a seqTable */
+{
+struct dnaSeq *dna =  hDnaSeqMustGetConn(conn, acc, seqTbl, extFileTbl);
+faWriteNext(outFa, acc, dna->dna, dna->size);
+dnaSeqFree(&dna);
+}
+
 static void getRna(char *database, char *accFile, char *outFaFile)
 /* obtain mrna for a list of accessions */
 {
@@ -227,7 +241,10 @@ int lineSize;
 
 while (lineFileNext(accLf, &line, &lineSize))
     {
-    getAccMrna(trimSpaces(line), conn, outFa);
+    if (seqTbl == NULL)
+        getAccMrna(trimSpaces(line), conn, outFa);
+    else
+        getAccSeqTable(trimSpaces(line), conn, outFa);
     }
 
 if (ferror(outFa))
@@ -249,14 +266,26 @@ if (argc != 4)
 database = argv[1];
 accFile = argv[2];
 outFaFile = argv[3];
+if ((optionExists("seqTbl") && !optionExists("extFileTbl"))
+    || (!optionExists("seqTbl") && optionExists("extFileTbl")))
+    errAbort("must specified both or neither of -seqTbl and -extFileTbl");
+seqTbl = optionVal("seqTbl", seqTbl);
+extFileTbl = optionVal("extFileTbl", extFileTbl);
+
 cdsUpper = optionExists("cdsUpper");
 cdsUpperAll = optionExists("cdsUpperAll");
+if ((seqTbl != NULL) && (cdsUpper || cdsUpperAll))
+    errAbort("-cdsUpper and -cdsUpperAll not support with -seqTbl");
 warnOnNoCds = !cdsUpperAll;
 skipNoCds = cdsUpper;
 if (cdsUpperAll)
     cdsUpper = TRUE;
 inclVer = optionExists("inclVer");
+if ((seqTbl != NULL) && inclVer)
+    errAbort("-inclVer not support with -seqTbl, version is always included");
 peptides = optionExists("peptides");
+if ((seqTbl != NULL) && peptides)
+    errAbort("-peptides not support with -seqTbl");
 if (peptides)
     skipNoCds = TRUE;
 if (peptides && (cdsUpper || cdsUpperAll))

@@ -1,0 +1,72 @@
+# ENCODE Integrated Regulation Track (wrangler Kate):  Dev only tracks
+
+    # This is first version of the DNase clusters track
+    track wgEncodeRegDnaseClusteredV1
+    table wgEncodeRegDnaseClustered
+    shortLabel DNase Clusters V1
+    longLabel Digital DNaseI Hypersensitivity Clusters in 74 cell types (2 reps) from ENCODE
+    type bed 5 .
+    superTrack wgEncodeReg hide
+    inputTrackTable wgEncodeRegDnaseClusteredInputs
+    inputTableFieldDisplay cellType treatment replicate lab dateUnrestricted
+    controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
+    visibility dense
+    useScore 1
+    scoreFilter 100
+    scoreFilterLimits 100:1000
+    html wgEncodeRegDnaseClustered
+    priority 1.6
+
+    # This is second version of the DNase clusters track -- newer data, missing single-cell
+    #   clusters (a mistake, fixed in V3)
+    track wgEncodeRegDnaseClusteredV2
+    shortLabel DNase Clusters V2
+    longLabel Digital DNaseI Hypersensitivity Clusters in 125 cell types from ENCODE (V2)
+    type bed 5 .
+    superTrack wgEncodeReg hide
+    inputTrackTable wgEncodeRegDnaseClusteredInputsV2
+    inputTableFieldDisplay cellType treatment lab
+    controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
+    visibility dense
+    useScore 1
+    scoreFilter 100
+    scoreFilterLimits 100:1000
+    priority 1.6
+
+    # This is alternate cluster version of TFBS track -- antibody-based, as done in V2
+    # track wgEncodeRegTfbsClusteredV3a
+    # release alpha
+    # shortLabel Txn Fac ChIP V3a
+    # longLabel Transcription Factor ChIP-seq Clusters V3a (189 antibodies, 162 targets) from ENCODE
+    # type factorSource
+    # superTrack wgEncodeReg hide
+    # sourceTable wgEncodeRegTfbsCellsV4
+    # inputTrackTable wgEncodeRegTfbsClusteredInputsV4
+    # inputTableFieldDisplay cellType factor treatment lab
+    # controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
+    # visibility hide
+    # useScore 1
+    # priority 1.72
+    # dataVersion ENCODE Jul 2012 Freeze
+
+    track factorbookMotifPos
+    shortLabel Factorbook Motif
+    longLabel Transcription Factor Motifs identified in ENCODE ChIP-seq (Factorbook)
+    type bed6FloatScore
+    motifPwmTable factorbookMotifPwm
+    #colorByStrand 22,182,33 17,136,25
+    superTrack wgEncodeReg hide
+    #color 0,128,0
+    color 22,182,33
+    priority 1.8
+
+    # track wgEncodeRegTfbsClusteredMotifs_larry
+    # release alpha
+    # shortLabel Txn Fac Motifs LM
+    # longLabel Transcription Factor Motifs (LarryM)
+    # type bed 6
+    # color 0,250,50
+    # color 25, 204, 37
+    # superTrack wgEncodeReg hide
+    # priority 1.8
+

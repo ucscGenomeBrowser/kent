@@ -3,29 +3,21 @@ compositeTrack on
 shortLabel NCBI RefSeq
 longLabel RefSeq gene predictions from NCBI
 group genes
-visibility dense
+visibility pack
 type genePred
 dragAndDrop subTracks
 noInherit on
-subGroup1 view Views aNcbiRefSeq=NCBI_RefSeq zUcscRefSeq=UCSC_RefSeq
+#subGroup1 view Views aNcbiRefSeq=NCBI_RefSeq zUcscRefSeq=UCSC_RefSeq
 allButtonPair on
 dataVersion /gbdb/$D/ncbiRefSeq/ncbiRefSeqVersion.txt
 priority 2
 dbPrefixUrls hg="http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" dm="http://flybase.org/reports/$$" ce="http://www.wormbase.org/db/gene/gene?name=$$" rn="https://rgd.mcw.edu/rgdweb/search/search.html?term=$$" sacCer="https://www.yeastgenome.org/locus/$$" danRer="https://zfin.org/$$" mm="http://www.informatics.jax.org/marker/$$" xenTro="https://www.xenbase.org/gene/showgene.do?method=display&geneId=$$"
 dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer="ZFIN" mm="MGI" xenTro="XenBase"
 
-    track ncbiRefSeqView
-    shortLabel NCBI RefSeq genes and alignments
-    view aNcbiRefSeq
-    parent refSeqComposite on
-    configurable on
-    baseColorDefault genomicCodons
-
         track ncbiRefSeq
-        parent ncbiRefSeqView off
+        parent refSeqComposite off
         color 12,12,120
         shortLabel RefSeq All
-        subGroups view=aNcbiRefSeq
         longLabel NCBI RefSeq genes, curated and predicted sets (NM_*, XM_*, NR_*, XR_*, and YP_*)
         idXref ncbiRefSeqLink mrnaAcc name
         baseColorUseCds given
@@ -33,9 +25,8 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
 
         track ncbiRefSeqCurated
         color 12,12,120
-        parent ncbiRefSeqView on
+        parent refSeqComposite on
         shortLabel RefSeq Curated
-        subGroups view=aNcbiRefSeq
         longLabel NCBI RefSeq genes, curated subset (NM_*, NR_*, and YP_*)
         idXref ncbiRefSeqLink mrnaAcc name
         baseColorUseCds given
@@ -43,9 +34,8 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
 
         track ncbiRefSeqPredicted
         color 12,12,120
-        parent ncbiRefSeqView off
+        parent refSeqComposite off
         shortLabel RefSeq Predicted
-        subGroups view=aNcbiRefSeq
         longLabel NCBI RefSeq genes, predicted subset (XM_* and XR_*)
         idXref ncbiRefSeqLink mrnaAcc name
         baseColorUseCds given
@@ -53,12 +43,11 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
 
         track ncbiRefSeqOther
         color 32,32,32
-        parent ncbiRefSeqView off
+        parent refSeqComposite off
         shortLabel RefSeq Other
-        subGroups view=aNcbiRefSeq
         longLabel NCBI RefSeq other annotations (not NM_*, NR_*, XM_*, XR_*, or YP_*)
         priority 4
-        searchIndex name,gene,ID,Name2,geneSynonym,product
+        searchIndex name
         searchTrix /gbdb/$D/ncbiRefSeq/ncbiRefSeqOther.ix
         bigDataUrl /gbdb/$D/ncbiRefSeq/ncbiRefSeqOther.bb
         type bigBed 12 +
@@ -68,9 +57,8 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
 
         track ncbiRefSeqPsl
         priority 5
-        parent ncbiRefSeqView off
+        parent refSeqComposite off
         shortLabel RefSeq Alignments
-        subGroups view=aNcbiRefSeq
         longLabel RefSeq Alignments of RNAs
         type psl
         indelDoubleInsert on
@@ -88,52 +76,43 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         pepTable ncbiRefSeqPepTable
 
         track ncbiRefSeqGenomicDiff
-        subGroups view=aNcbiRefSeq
+        parent refSeqComposite off
         priority 6
         type bigBed 9 +
         skipEmptyFields on
         shortLabel RefSeq Diffs
         longLabel Differences between NCBI RefSeq Transcripts and the Reference Genome
-        parent ncbiRefSeqView off
         bigDataUrl /gbdb/$D/ncbiRefSeq/ncbiRefSeqGenomicDiff.bb
         itemRgb on
 
         track ncbiRefSeqHgmd
-        subGroups view=aNcbiRefSeq
+        parent refSeqComposite off
         priority 7
         type genePred
         shortLabel RefSeq HGMD
         longLabel Only NCBI RefSeq manually annotated transcripts with at least one HGMD clinical variant
-        parent ncbiRefSeqView off
         trackHandler ncbiRefSeq
         idXref ncbiRefSeqLink mrnaAcc name
         color 20,20,160
         baseColorUseCds given
 
         track ncbiRefSeqMane
-        subGroups view=aNcbiRefSeq
+        parent refSeqComposite off
         priority 8
         type genePred
         shortLabel RefSeq MANE
         longLabel RefSeq selected representative transcript for each gene, MANE 0.5
-        parent ncbiRefSeqView off
         trackHandler ncbiRefSeq
 
-    track ucscRefSeqView
-    parent refSeqComposite off
-    shortLabel UCSC RefSeq Genes
-    view zUcscRefSeq
-
         track refGene override
-        parent ucscRefSeqView off
+        parent refSeqComposite off
         shortLabel UCSC RefSeq
         longLabel UCSC annotations of RefSeq RNAs (NM_* and NR_*)
-        subGroups view=zUcscRefSeq
         color 12,12,120
         type genePred refPep refMrna
         idXref hgFixed.refLink mrnaAcc name
         dataVersion 
-        priority 6
+        priority 9
 
 searchName ncbiRefSeqCuratedName2
 searchTable ncbiRefSeqCurated

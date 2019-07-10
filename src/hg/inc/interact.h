@@ -127,5 +127,8 @@ int interactRegionDistance(struct interact *inter);
 int interactDistanceCmp(const void *va, const void *vb);
 /* Compare based on distance between region midpoints */
 
+boolean interactEndsOverlap(struct interact *inter);
+/* Determine if there is any overlap of interact endpoints */
+
 #endif /* INTERACT_H */
 
