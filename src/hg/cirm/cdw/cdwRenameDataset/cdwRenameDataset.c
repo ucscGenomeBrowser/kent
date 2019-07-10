@@ -57,11 +57,11 @@ sqlSafef(query, sizeof(query),
 update(conn, query);
 
 /* Figure out submitDir that ends with the dataset name */
-sqlSafef(query, sizeof(query), "select count(*) from cdwSubmitDir where url like '/%%%s'", oldName);
+sqlSafef(query, sizeof(query), "select count(*) from cdwSubmitDir where url like '/%%/%s'", oldName);
 int dirCount = sqlQuickNum(conn, query);
 if (dirCount != 1)
     errAbort("Got %d cdwSubmitDir URLs ending in /%s, expecting 1", dirCount, oldName);
-sqlSafef(query, sizeof(query), "select id from cdwSubmitDir where url like '/%%%s'", oldName);
+sqlSafef(query, sizeof(query), "select id from cdwSubmitDir where url like '/%%/%s'", oldName);
 int submitDirId = sqlQuickNum(conn, query);
 
 /* Update cdwSubmitDir.url with substituted url. */
