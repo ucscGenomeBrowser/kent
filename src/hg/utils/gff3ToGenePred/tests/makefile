@@ -11,7 +11,8 @@ all::
 test:: geneMRnaTest noGeneMRnaTest geneMRnaHonorTest discontinuousTest multCdsOutOfExonTest \
 	noIdTest errCases1Test bogusQuotesTest noExonsTest geneTranscriptTest transcriptCdsParentTest \
 	minimalGenesTest geneDefaultStatusUnknownTest useNameTest nameAttrIdTest nameAttrNameTest \
-	frameShiftTest mm10GencodeTest ncbiSegmentsTest ncbiProblemsTest makeBadTest
+	frameShiftTest mm10GencodeTest ncbiSegmentsTest ncbiProblemsTest makeBadTest \
+	transcriptOnlyTest
 
 geneMRnaTest: mkout
 	${gff3ToGenePred} input/geneMRna.gff3 output/$@.gp
@@ -119,6 +120,12 @@ makeBadTest:  mkout
 	diff expected/$@.gp output/$@.gp
 	diff expected/$@.attrs output/$@.attrs
 	diff expected/$@.out output/$@.out
+
+# pseudogene annotations as transcripts-only.  Yet another non-standard variation
+transcriptOnlyTest: mkout
+	${gff3ToGenePred} -allowMinimalGenes input/transcriptOnly.gff3 output/$@.gp
+	diff expected/$@.gp output/$@.gp
+
 
 mkout:
 	@mkdir -p output
