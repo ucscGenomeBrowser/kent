@@ -36,8 +36,8 @@ mach = $(shell uname -m)
 #   as this doesn't change between release.
 ##
 #db = hg38
-db = hg19
-#db = mm10
+#db = hg19
+db = mm10
 preRelease = no
 #preRelease = yes
 ifeq (${db},mm10)
@@ -280,7 +280,7 @@ ${tableAttrsTab}: ${gencodeGp} ${gencodeTsv}
 
 ${table2WayConsPseudoGp}: ${pseudo2WayGff}
 	@mkdir -p $(dir $@)
-	zcat $< | tawk '$$3=="transcript"{$$3 = "exon"} {print $$0}' | gff3ToGenePred stdin $@.${tmpExt}
+	gff3ToGenePred -allowMinimalGenes $< $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
 ${tablePolyAGp}: ${polyAGff} ${ensemblToUcscChain}

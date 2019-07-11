@@ -12315,7 +12315,7 @@ char *kgIdToSpId(struct sqlConnection *conn, char* kgId)
 /* get the swissprot id for a known genes id; resulting string should be
  * freed */
 {
-char query[64];
+char query[512];
 sqlSafef(query, sizeof(query), "select spID from kgXref where kgID='%s'", kgId);
 return sqlNeedQuickString(conn, query);
 }

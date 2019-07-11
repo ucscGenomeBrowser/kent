@@ -130,12 +130,13 @@ the new scores. Crispor.org can display both scores and many more with the
 
 <H2>Data Access</H2>
 <p>
-The raw data can be explored interactively with the <a href="../cgi-bin/hgTables">Table Browser</a>.
-For automated analysis, the genome annotation is stored in a bigBed file that
-can be downloaded from
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/${track}/" target="_blank">our download server</a>.
-The files for this track are called <tt>crispr.bb</tt> and <tt>crisprDetails.tab</tt>. Individual
-regions or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>,
+Positional data can be explored interactively with the 
+<a href="../cgi-bin/hgTables?db=hg19&hgta_track=crisprAllTargets&hgta_regionType=range">Table Browser</a>.
+For genome-wide data or automated analysis, CRISPR genome annotations can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/crisprAll/" target="_blank">our download server</a>
+as a bigBedFile. The files for this track are called <tt>crispr.bb</tt>, which lists positions and
+scores, and <tt>crisprDetails.tab</tt>, which has information about off-target matches. Individual
+regions or whole genome annotations can be obtained using our tool <tt>bigBedToBed</tt>,
 which can be compiled from the source code or downloaded as a pre-compiled
 binary for your system. Instructions for downloading source code and binaries can be found
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>. The tool
