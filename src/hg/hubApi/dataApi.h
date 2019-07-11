@@ -40,6 +40,8 @@
  * https://www.restapitutorial.com/httpstatuscodes.html
  */
 /* error return codes */
+#define err206	206
+#define err206Msg	"Partial Content"
 #define err301	301
 #define err301Msg	"Moved Permanently"
 #define err400	400

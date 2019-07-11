@@ -27,6 +27,12 @@ if (errorCode)
     if (err429 == errorCode)
 	puts("Retry-After: 30");
     }
+else if (reachedMaxItems)
+    {
+    char errString[2048];
+    safef(errString, sizeof(errString), "Status: %d %s",err206,err206Msg);
+    puts(errString);
+    }
 puts("\n");
 
 if (debug)
