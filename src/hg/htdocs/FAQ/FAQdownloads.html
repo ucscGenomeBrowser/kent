@@ -42,7 +42,7 @@
 <li><a href="#download20">Minus strand coordinates - axtNet files</a></li>
 <li><a href="#download21">Mapping UCSC STS marker IDS to those of other groups</a></li>
 <li><a href="#download22">deCODE map data</a></li>
-<li><a href="#download29">Direct MySQL access to data</a></li>
+<li><a href="#download29">Direct MariaDB (MySQL) access to data</a></li>
 <li><a href="#download34">Name of fourth column in BED output</a></li>
 <li><a href="#download36">Track data access</a></li>
 <li><a href="#download37">Known issues with Table Browser GTF output</a></li>
@@ -153,7 +153,7 @@ These tables are also accessible from: </p>
   The <a href="../cgi-bin/hgTables" >Table Browser</a>, as connected tables and joined fields 
   described when clicking the &quot;describe table schema &quot; button</li>
   <li>
-  One of our two <a href="../goldenPath/help/mysql.html">public access MySQL servers</a>
+  One of our two <a href="../goldenPath/help/mysql.html">public access MariaDB servers</a>
   in the US and Europe</li>
 </ul>
 
@@ -259,10 +259,10 @@ DNA sequence to display which portions are repeats, known genes, genetic markers
 <a name="download4"></a>
 <h2>Data differences between downloaded data and browser display</h2>
 <p>
-<h6>I downloaded the genome annotations from your MySQL database tables, but the mRNA locations 
+<h6>I downloaded the genome annotations from your MariaDB database tables, but the mRNA locations 
 didn't match what was showing in the Genome Browser. Shouldn't they be in synch?</h6>
 <p> 
-Yes. The Genome Browser and Table Browser are both driven by the same underlying MySQL database. 
+Yes. The Genome Browser and Table Browser are both driven by the same underlying MariaDB database. 
 Check that your downloaded tables are from the same assembly version as the one you are viewing in 
 the Genome Browser. If the assembly dates don't match, the coordinates of the data within the 
 tables may differ. In a very rare instance, you could also be affected by the brief lag time between
@@ -786,16 +786,16 @@ sequence information, etc. This table is related to the first table by an ID (th
 both files).</p>
 
 <a name="download29"></a>
-<h2>Direct MySQL access to data</h2>
+<h2>Direct MariaDB (MySQL) access to data</h2>
 <h6>Is it possible to run SQL queries directly on the database rather than using the Table 
 Browser interface?</h6>
 <p> 
 Yes. See our documentation on <a href="../goldenPath/help/mysql.html">Downloading Data using 
-MySQL</a>.</p> 
+MariaDB</a>.</p> 
 <p>
-Connect to the US MySQL server using the command:</p>
+Connect to the US MariaDB server using the command:</p>
 <pre><code>mysql --user=genome --host=genome-mysql.soe.ucsc.edu -A </code></pre>
-<p>Or to the European MySQL server using the command:</p>
+<p>Or to the European MariaDB server using the command:</p>
 <pre><code>mysql --user=genome --host=genome-euro-mysql.soe.ucsc.edu -A </code></pre>
 
 <a name="download34"></a>
@@ -846,7 +846,7 @@ The raw data underlying a track can be explored interactively with the
 Integrator</a>, or <a href="../cgi-bin/hgVai">Variant Annotation Integrator</a>. For automated 
 analysis, the genome annotation can be downloaded from the 
 <a href="http://hgdownload.soe.ucsc.edu/">downloads server</a>, one of our two
-<a href="http://genome.ucsc.edu/goldenPath/help/mysql.html">public MySQL servers</a>, or 
+<a href="http://genome.ucsc.edu/goldenPath/help/mysql.html">public MariaDB servers</a>, or 
 using our <a href='../goldenPath/help/api.html' target=_blank>JSON API</a>.</p>
 <p> 
 <strong>bigBed data:</strong> For <a href="FAQformat.html#format1.5">bigBed</a> files, individual 
@@ -867,8 +867,8 @@ example:</p>
   </li>
 </ul>
 <p> 
-<strong>SNP data:</strong> If queries against the SNP table on one of our public MySQL servers or on your
-own MySQL installation are slow, then they can be sped up by using the &quot;bin&quot; field; you 
+<strong>SNP data:</strong> If queries against the SNP table on one of our public MariaDB servers or on your
+own MariaDB installation are slow, then they can be sped up by using the &quot;bin&quot; field; you 
 can <a href="../contacts.html">contact us</a> for more information.</p>
 
 <p>
@@ -909,7 +909,7 @@ Please see the <a href="http://genomewiki.ucsc.edu/index.php/Genes_in_gtf_or_gff
 or GFF Format wiki page</a> for examples and various methods for conversion. The <code>genePredToGtf</code>
 utility can convert files from several sources, such as Table Browser output from a genePred table,
 a local downloaded gene set table like refGene.txt, or from querying
-<a href="../goldenpath/help/mysql.html">public MySQL tables.</a></p>
+<a href="../goldenpath/help/mysql.html">public MariaDB tables.</a></p>
 
 <a name="download38"></a>
 <h2>Table Browser output file order</h2>

@@ -22,7 +22,12 @@ static struct trackDb *getFullTrackList(struct cart *cart, char *db, struct grp 
 {
 struct trackDb *list = hTrackDb(db);
 
-// get hub tracks
+/* add wikiTrack if enabled */
+if (wikiTrackEnabled(db, NULL))
+    slAddHead(&list, wikiTrackDb());
+slSort(&list, trackDbCmp);
+
+// Add hub tracks at head of list
 struct trackDb *hubTdbList = hubCollectTracks(db, pHubGroups);
 list = slCat(list, hubTdbList);
 
@@ -51,13 +56,8 @@ for (tdb = list;  tdb != NULL;  tdb = nextTdb)
     else
 	slAddHead(&newList, tdb);
     }
+slReverse(&newList);
 list = newList;
-
-/* add wikiTrack if enabled */
-if (wikiTrackEnabled(db, NULL))
-    slAddHead(&list, wikiTrackDb());
-
-slSort(&list, trackDbCmp);
 
 // Add custom tracks at head of list
 struct customTrack *ctList, *ct;

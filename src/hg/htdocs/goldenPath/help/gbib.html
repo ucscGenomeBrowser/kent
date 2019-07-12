@@ -60,9 +60,9 @@ Rather than installing the entire UCSC genome annotation database (several terab
 instead depends upon remote connections to various UCSC servers for much of its functionality and 
 data. It connects to the UCSC <a href="http://hgdownload.soe.ucsc.edu/downloads.html" 
 target="_blank">download server</a> to obtain genomic sequences, liftOver files, and many of the 
-other large data files, and connects to one of UCSC's <a href="mysql.html">public MySQL servers</a>
+other large data files, and connects to one of UCSC's <a href="mysql.html">public MariaDB servers</a>
 to download data displayed by the various annotation tracks. A few Genome Browser tracks are
-unavailable on the UCSC public MySQL servers due to agreements with the data distributors (DECIPHER
+unavailable on the UCSC public MariaDB servers due to agreements with the data distributors (DECIPHER
 and LOVD Variants), and thus are unavailable for use with GBiB.</p>
 <p>
 The majority of protected data use in the research community currently focuses on the human genomes,
@@ -109,7 +109,7 @@ GBiB will run on most modern PCs and major operating systems that meet these bas
   <li>
   Your network firewall must allow outgoing connections to the following servers and ports:
   <ul>
-    <li>MySQL connections, used to load tracks not local to your computer:
+    <li>MariaDB connections, used to load tracks not local to your computer:
       <ul>
         <li>US server: Port 3306 on genome-mysql.soe.ucsc.edu (128.114.119.174)</li>
         <li>European server: Port 3306 on genome-euro-mysql.soe.ucsc.edu (129.70.40.120)</li>
@@ -300,7 +300,7 @@ GBiB has an offline mode that is particularly useful when you want to ensure tha
 connects to the Internet once the initial download and setup are complete (for instance, to comply 
 with corporate IT policy). Before going offline, first mirror all the tracks that you will want to 
 access. Then, in the GBiB terminal window type the command: <code>gbibOffline</code>. This command 
-will remove GBiB's network access to the UCSC MySQL server and download servers.</p>
+will remove GBiB's network access to the UCSC MariaDB server and download servers.</p>
 <p>
 Once GBiB is in offline mode, the Genome Browser will display an error message if you attempt to
 access a data file not located on your local disk; therefore, we do not recommend this option for 
@@ -678,7 +678,7 @@ resolve this problem:</p>
 <strong>Genome Browser Error:</strong> &quot;<em>Couldn't connect to database hg19 on 
 genome-mysql.soe.ucsc.edu as genomep.</em>&quot;
 <p>
-<em>Solution 1:</em> This indicates that the virtual machine could not connect to the UCSC MySQL 
+<em>Solution 1:</em> This indicates that the virtual machine could not connect to the UCSC MariaDB 
 server. This error can be caused by a change of the IP address (e.g. on a wifi connection) that has 
 not yet been picked up by the virtual machine. In this situation, you can restart the box or run 
 the command <code>sudo ifup --force eth0</code> to reset the network connection.</p>
@@ -706,7 +706,7 @@ institution and ask them to open outgoing TCP connections to a list of UCSC host
 The commands below will allow you to find out the names of these hosts and ports.</p>
 <p>
 <em>Solution:</em> To find the hostname-port combination to open from your GBiB machine, use this 
-Mysql query:</p> 
+SQL query:</p> 
 <pre><code>mysql hgcentral -e 'select * from blatServers where db="YOURDB"'</code></pre>
 <p>
 For example, if you want to enable BLAT for hg19 and hg38, you can issue this command:
@@ -812,16 +812,16 @@ GBiB terminal's home directory, which can also be accessed via
     update</td> 
   </tr><tr>
     <td><code>gbibFixMysql1</code></td>
-    <td>Fix all mysql databases, fast version</td>
+    <td>Fix all MariaDB databases, fast version</td>
   </tr><tr>
     <td><code>gbibFixMysql2</code></td>
-    <td>Fix all mysql databases, intensive version</td>
+    <td>Fix all MariaDB databases, intensive version</td>
   </tr><tr>
     <td><code>gbibResetNetwork</code></td>
     <td>Reinit the eth0 network interface, in case VirtualBox dropped the network connection</td>
   </tr><tr>
     <td><code>gbibUcscLog</code></td>
-    <td>Show a real-time log of all MySQL queries on the console </td>
+    <td>Show a real-time log of all SQL queries on the console </td>
   </tr><tr>
     <td><code>gbibUcscTablesLog</code></td>
     <td>Show the tables that had to be loaded through the internet from UCSC</td>

@@ -23,12 +23,14 @@ you wish to hide.</P>
     <dt><i>2-way</i></dt> 
 </dl>
 <ul>
-    <li><em>GENCODE 2-way Pseudogenes</em> contains pseudogenes predicted by both the Yale
-        Pseudopipe and UCSC Retrofinder pipelines. 
-        The set was derived by looking for 50 base pairs
+    <li><em>GENCODE 2-way Pseudogenes</em> contains pseudogenes predicted by both the 
+        <a href="https://academic.oup.com/bioinformatics/article-abstract/22/12/1437/207326">Yale
+        PseudoPipe</a> and
+        <a href="https://bmcgenomics.biomedcentral.com/articles/10.1186/1471-2164-9-466">
+        UCSC RetroFinder</a> pipelines. The set was derived by looking for 50 base pairs
         of overlap between pseudogenes derived from both sets based on their 
-        chromosomal coordinates.  When multiple Pseudopipe
-        predictions map to a single Retrofinder prediction, only one match is kept
+        chromosomal coordinates.  When multiple PseudoPipe
+        predictions map to a single RetroFinder prediction, only one match is kept
         for the 2-way consensus set.
     </li>
 </ul>
@@ -71,7 +73,7 @@ using the following criteria:</p>
    </ul>
    </li>
   <li> Transcript Biotype: filter transcripts by
-       <a href="http://www.gencodegenes.org/gencode_biotypes.html" target="_blank">biotype</a></li>
+       <a href="https://www.gencodegenes.org/pages/biotypes.html" target="_blank">Biotype</a></li>
   <li> Support Level: filter transcripts by <a href="#tsl">transcription support level</a></li>
 </ul>
 
@@ -112,7 +114,7 @@ gene locus.
        locus:
     <ul>
       <li> All full-length coding transcripts (except problem transcripts or transcripts that are
-           nonsense-mediated decay) was included in the basic set.</li>
+           nonsense-mediated decay) were included in the basic set.</li>
       <li> If there were no transcripts meeting the above criteria, then the partial coding
            transcript with the largest CDS was included in the basic set (excluding problem transcripts).</li>
     </ul>
@@ -120,13 +122,13 @@ gene locus.
   <li> Criteria for selection of non-coding transcripts at a given locus:
     <ul>
       <li> All full-length non-coding transcripts (except problem transcripts)
-           with a well characterized biotype (see below) were included in the
+           with a well characterized Biotype (see below) were included in the
            basic set.</li>
       <li> If there were no transcripts meeting the above criteria, then the largest non-coding
            transcript was included in the basic set (excluding problem transcripts).</li>
     </ul>
   </li>
-  <li> If no transcripts were included by either the above criteria, the longest
+  <li> If no transcripts were included by either of the above criteria, the longest
     problem transcript is included.
   </li>
 </ul>
@@ -134,7 +136,7 @@ gene locus.
 <P>
 <b>Non-coding transcript categorization:</b> 
 Non-coding transcripts are categorized using
-their <a href="http://www.gencodegenes.org/gencode_biotypes.html" target="_blank">biotype</a>
+their <a href="http://www.gencodegenes.org/gencode_biotypes.html" target="_blank">Biotype</a>
 and the following criteria:
 </p>
 <ul>
