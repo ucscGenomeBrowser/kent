@@ -134,6 +134,7 @@ shortLabel TransMap V5
 longLabel TransMap Alignments Version 5
 html transMapV5
 group genes
+pennantIcon New red ../goldenPath/newsarch.html#071519 "Released Jul. 15, 2019"
 
     track transMapEnsemblV5
     superTrack transMapV5 pack
