@@ -43,7 +43,7 @@ conn2= hAllocConn(database);
 outFn   = argv[2];
 outf    = mustOpen(outFn, "w");
 
-sqlSafef(query2, sizeof query2, "select omimId, geneSymbol from omimGeneMapNew");
+sqlSafef(query2, sizeof query2, "select omimId, geneSymbol from omimGeneMap2New");
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)
