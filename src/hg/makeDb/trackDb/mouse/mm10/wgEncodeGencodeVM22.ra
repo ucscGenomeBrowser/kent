@@ -89,7 +89,7 @@ wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneVM22
 
         track wgEncodeGencodePseudoGeneVM22
         trackHandler wgEncodeGencode
-        subTrack wgEncodeGencodeVM22ViewGenes on
+        subTrack wgEncodeGencodeVM22ViewGenes off
         subGroups view=aGenes name=Pseudogenes
         shortLabel Pseudogenes
         longLabel Pseudogene Annotation Set from GENCODE Version M22 (Ensembl 97)
