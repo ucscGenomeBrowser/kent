@@ -52,7 +52,7 @@ monthYearSet = set() # Set containing monthYear strings (e.g. "Aug 2017")
 publicHubs = dict()
 # Use hgsql to grab hub ID from hubStatus table and shortLabel from hubPublic
 # for each hub in hubPublic table
-cmd = ["hgsql", "hgcentral", "-h", "genome-centdb", "-Ne", "select s.id,p.hubUrl,p.shortLabel\
+cmd = ["/cluster/bin/x86_64/hgsql", "hgcentral", "-h", "genome-centdb", "-Ne", "select s.id,p.hubUrl,p.shortLabel\
        from hubPublic p join hubStatus s where s.hubUrl=p.hubUrl", ]
 p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 cmdout, cmderr = p.communicate()
