@@ -8324,6 +8324,8 @@ tablesIgnored $mm
     polyASeqSitesMuscleRev
     polyASeqSitesTestisFwd
     polyASeqSitesTestisRev
+    wgEncodeGencodePolya%
+    wgEncodeGencode2wayConsPseudo%
 
 tablesIgnored $ci
     tableList
