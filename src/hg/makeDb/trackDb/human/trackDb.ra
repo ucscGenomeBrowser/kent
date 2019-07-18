@@ -1,5 +1,3 @@
-# Human refSeqComposite w/ YP_* accessions
-include refSeqCompositeHuman.ra
 
 # ENCODE tracks
 include trackDb.encode.ra
