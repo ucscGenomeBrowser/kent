@@ -52,8 +52,8 @@ static char *ensemblH37SupportingEvidUrl = "http://grch37.ensembl.org/%s/Transcr
 static char *vegaTranscriptIdUrl = "http://vega.sanger.ac.uk/%s/Transcript/Summary?db=core;t=%s";
 static char *vegaGeneIdUrl = "http://vega.sanger.ac.uk/%s/Gene/Summary?db=core;g=%s";
 
-static char *gencodeBiotypesUrl = "http://www.gencodegenes.org/gencode_biotypes.html";
-static char *gencodeTagsUrl = "http://www.gencodegenes.org/gencode_tags.html";
+static char *gencodeBiotypesUrl = "http://www.gencodegenes.org/pages/biotypes.html";
+static char *gencodeTagsUrl = "http://www.gencodegenes.org/pages/tags.html";
 
 static char *yalePseudoUrl = "http://tables.pseudogene.org/%s";
 static char *hgncUrl = " https://www.genenames.org/data/gene-symbol-report/#!/symbol/%s";
