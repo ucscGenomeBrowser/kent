@@ -1,3 +1,6 @@
+# Human refSeqComposite w/ YP_* accessions
+include refSeqCompositeHuman.ra
+
 track refSeqComposite
 compositeTrack on
 shortLabel NCBI RefSeq
@@ -18,7 +21,7 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         parent refSeqComposite off
         color 12,12,120
         shortLabel RefSeq All
-        longLabel NCBI RefSeq genes, curated and predicted sets (NM_*, XM_*, NR_*, XR_*, and NP_*)
+        longLabel NCBI RefSeq genes, curated and predicted sets (NM_*, XM_*, NR_*, XR_*, and YP_*)
         idXref ncbiRefSeqLink mrnaAcc name
         baseColorUseCds given
         priority 1
@@ -27,7 +30,7 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         color 12,12,120
         parent refSeqComposite on
         shortLabel RefSeq Curated
-        longLabel NCBI RefSeq genes, curated subset (NM_*, NR_*, and NP_*)
+        longLabel NCBI RefSeq genes, curated subset (NM_*, NR_*, and YP_*)
         idXref ncbiRefSeqLink mrnaAcc name
         baseColorUseCds given
         priority 2
@@ -45,7 +48,7 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         color 32,32,32
         parent refSeqComposite off
         shortLabel RefSeq Other
-        longLabel NCBI RefSeq other annotations (not NM_*, NR_*, XM_*, XR_*, or NP_*)
+        longLabel NCBI RefSeq other annotations (not NM_*, NR_*, XM_*, XR_*, or YP_*)
         priority 4
         searchIndex name
         searchTrix /gbdb/$D/ncbiRefSeq/ncbiRefSeqOther.ix
