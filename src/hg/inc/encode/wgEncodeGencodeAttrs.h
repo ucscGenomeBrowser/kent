@@ -17,11 +17,11 @@ struct wgEncodeGencodeAttrs
     char *geneId;	/* Gene identifier */
     char *geneName;	/* Gene name */
     char *geneType;	/* BioType of gene */
-    char *geneStatus;	/* Status of gene */
+    char *geneStatus;	/* Status of gene (obsolete) */
     char *transcriptId;	/* Transcript identifier */
     char *transcriptName;	/* Transcript name */
     char *transcriptType;	/* BioType of transcript */
-    char *transcriptStatus;	/* Status of transcript */
+    char *transcriptStatus;	/* Status of transcript (obsolete) */
     char *havanaGeneId;	/* HAVANA identifier if gene is in HAVANA */
     char *havanaTranscriptId;	/* HAVANA identifier if transcript is in HAVANA */
     char *ccdsId;	/* CCDS identifier if transcript is in CCDS */
