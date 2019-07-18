@@ -1,5 +1,5 @@
 # Human refSeqComposite w/ YP_* accessions
-include refSeqCompositeHuman.ra
+include refSeqCompositeHuman.html
 
 track refSeqComposite
 compositeTrack on
