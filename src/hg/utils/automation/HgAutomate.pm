@@ -58,7 +58,13 @@ sub readMainCluster(); # forward declaration to keep code order
 %cluster =
     ( readMainCluster() =>
         { 'enabled' => 1, 'gigaHz' => 1.4, 'ram' => 8,
-	  'hostCount' => 512, },
+	  'hostCount' => 992, },
+      'hgwdev-101' =>
+        { 'enabled' => 1, 'gigaHz' => 2.1, 'ram' => 1,
+	  'hostCount' => 32, },
+      'hgwdev' =>
+        { 'enabled' => 1, 'gigaHz' => 2.1, 'ram' => 1,
+	  'hostCount' => 32, },
     );
 
 my %obsoleteCluster =
