@@ -43,6 +43,8 @@ my $stepper = new HgStepManager(
       { name => 'idKeys',   func => \&doIdKeys },
       { name => 'windowMasker',   func => \&doWindowMasker },
       { name => 'addMask',   func => \&doAddMask },
+      { name => 'gapOverlap',   func => \&doGapOverlap },
+      { name => 'tandemDups',   func => \&doTandemDups },
       { name => 'cpgIslands',   func => \&doCpgIslands },
       { name => 'augustus',   func => \&doAugustus },
       { name => 'trackDb',   func => \&doTrackDb },
@@ -918,7 +920,7 @@ fi
 _EOF_
   );
   $bossScript->execute();
-} # idKeys
+} # doIdKeys
 
 #########################################################################
 # * step: addMask [workhorse]
@@ -1026,6 +1028,54 @@ _EOF_
   );
   $bossScript->execute();
 } # windowMasker
+
+#########################################################################
+# * step: gapOverlap [workhorse]
+sub doGapOverlap {
+  my $runDir = "$buildDir/trackData/gapOverlap";
+  &HgAutomate::mustMkdir($runDir);
+
+  my $whatItDoes = "construct gap overlap track (duplicate sequence on each side of a gap)";
+  my $bossScript = newBash HgRemoteScript("$runDir/doGapOverlap.bash",
+                    $workhorse, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+export asmId=$asmId
+
+if [ ../../\$asmId.unmasked.2bit -nt \$asmId.gapOverlap.bed.gz ]; then
+  doGapOverlap.pl -buildDir=`pwd` -bigClusterHub=$bigClusterHub -smallClusterHub=$smallClusterHub -workhorse=$workhorse -twoBit=../../\$asmId.2bit \$asmId
+else
+  printf "# gapOverlap step previously completed\\n" 1>&2
+  exit 0
+fi
+_EOF_
+  );
+  $bossScript->execute();
+} # doGapOverlap
+
+#########################################################################
+# * step: tandemDups [workhorse]
+sub doTandemDups {
+  my $runDir = "$buildDir/trackData/gapOverlap";
+  &HgAutomate::mustMkdir($runDir);
+
+  my $whatItDoes = "construct gap overlap track (duplicate sequence on each side of a gap)";
+  my $bossScript = newBash HgRemoteScript("$runDir/doTandemDups.bash",
+                    $workhorse, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+export asmId=$asmId
+
+if [ ../../\$asmId.unmasked.2bit -nt \$asmId.gapOverlap.bed.gz ]; then
+  doTandemDup.pl -buildDir=`pwd` -bigClusterHub=$bigClusterHub -smallClusterHub=$smallClusterHub -workhorse=$workhorse -twoBit=../../\$asmId.2bit \$asmId
+else
+  printf "# tandemDups step previously completed\\n" 1>&2
+  exit 0
+fi
+_EOF_
+  );
+  $bossScript->execute();
+} # doTandemDups
 
 #########################################################################
 # * step: cpgIslands [workhorse]

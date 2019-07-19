@@ -87,6 +87,54 @@ html html/%s.gc5Base\n\n" "${asmId}" "${asmId}"
 $scriptDir/asmHubGc5Percent.pl $asmId $buildDir/html/$asmId.names.tab $buildDir > $buildDir/html/$asmId.gc5Base.html
 fi
 
+# see if there are gapOverlap or tandemDup bb files
+export gapOverlapCount=0
+export tanDupCount=0
+if [ -s $buildDir/trackData/gapOverlap/${asmId}.gapOverlap.bb ]; then
+  gapOverlapCount=`zcat $buildDir/trackData/gapOverlap/${asmId}.gapOverlap.bed.gz | wc -l`
+  rm -f $buildDir/bbi/${asmId}.gapOverlap.bb
+  ln -s $buildDir/trackData/gapOverlap/${asmId}.gapOverlap.bb $buildDir/bbi/${asmId}.gapOverlap.bb
+fi
+if [ -s $buildDir/trackData/tandemDups/${asmId}.tandemDups.bb ]; then
+  tanDupCount=`zcat $buildDir/trackData/tandemDups/${asmId}.tandemDups.bed.gz | wc -l`
+  rm -f $buildDir/bbi/${asmId}.tandemDups.bb
+  ln -s $buildDir/trackData/tandemDups/${asmId}.tandemDups.bb $buildDir/bbi/${asmId}.tandemDups.bb
+fi
+
+if [ "${gapOverlapCount}" -gt 0 -o "${tanDupCount}" -gt 0 ]; then
+
+  printf "track tanDups
+shortLabel Tandem Dups
+longLabel Paired identical sequences
+compositeTrack on
+visibility hide
+type bigBed 12
+group map
+html html/%s.tanDups\n\n" "${asmId}"
+
+  if [ "${gapOverlapCount}" -gt 0 ]; then
+    printf "    track gapOverlap
+    parent tanDups on
+    shortLabel Gap Overlaps
+    longLabel Paired exactly identical sequence on each side of a gap
+    bigDataUrl bbi/%s.gapOverlap.bb\n\n" "${asmId}"
+  fi
+
+  if [ "${tanDupCount}" -gt 0 ]; then
+    printf "    track tandemDups
+    parent tanDups on
+    shortLabel Tandem Dups
+    longLabel Paired exactly identical sequence survey over entire genome assembly
+    bigDataUrl bbi/%s.tandemDups.bb\n\n" "${asmId}"
+  fi
+
+  $scriptDir/asmHubTanDups.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/trackData > $buildDir/html/$asmId.tanDups.html
+
+fi
+
+export rmskCount=`(ls $buildDir/trackData/repeatMasker/bbi/${asmId}.rmsk.*.bb | wc -l) || true`
+
+
 # see if there are repeatMasker bb files
 export rmskCount=`(ls $buildDir/trackData/repeatMasker/bbi/${asmId}.rmsk.*.bb | wc -l) || true`
 
