@@ -631,12 +631,12 @@ chromosomes to more closely match their human counterparts. As a result, chromos
 you've just released a new version. Is there an easy way to locate my area of interest on the new 
 assembly?</h6>
 <p>
-You can migrate data from one assembly to another by using the <a href="../cgi-bin/hgBlat">blat</a> 
+You can migrate sequences from one assembly to another by using the <a href="../cgi-bin/hgBlat">Blat</a> 
 alignment tool or by converting assembly coordinates. There are two conversion tools available 
 on the Genome Browser web site: the Convert utility and the LiftOver tool. The Convert utility, 
-which is accessed from the menu on the Genome Browser annotation tracks page, supports forward, 
+which is accessed from the View menu on the Genome Browser annotation tracks page, supports forward, 
 reverse, and cross-species conversions, but does not accept batch input. The 
-<a href="../cgi-bin/hgLiftOver">LiftOver</a> tool, accessed via the Utilities link on the Genome 
+<a href="../cgi-bin/hgLiftOver">LiftOver</a> tool, accessed via the Tools link on the Genome 
 Browser home page, also supports forward, reverse, and cross-species conversions, as well as batch 
 conversions.</p> 
 <p>
@@ -644,11 +644,57 @@ If you wish to update a large number of coordinates to a different assembly and 
 Linux platform, you may find it useful to try the command-line version of the LiftOver tool. The 
 executable file for this utility can be downloaded 
 <a href="https://genome-store.ucsc.edu" target="_blank">here</a>. LiftOver requires a 
-UCSC-generated <em>over.chain</em> file as input. Pre-generated files are available for selected 
+pre-generated <em>over.chain</em> file as input, available for selected 
 assemblies from the 
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#liftover">Downloads</a> page. If the desired 
 file is not available, send a request to the <a href="../contacts.html">genome mailing list</a> and 
 we may be able to  provide you with one.</p>
+<p>
+Here is an example on how to set up and run LiftOver from the command line:
+<ol>
+<li>Download the LiftOver program for your computer's operating system.
+<pre>
+#For Linux computers
+wget http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/liftOver
+#For MacOS computers
+wget http://hgdownload.soe.ucsc.edu/admin/exe/macOSX.x86_64/liftOver
+</pre></li>
+<li>Change permissions on that file so that it can be executed
+<pre>
+chmod +x liftOver
+</pre></li>
+<li>Run the program with no arguments to see the usage statement
+<pre>
+./liftOver
+</pre>
+<pre>
+liftOver - Move annotations from one assembly to another
+usage:
+   liftOver oldFile map.chain newFile unMapped
+...
+</pre></li>
+<li>Download your genome conversion chain file from the 
+<a href="http://hgdownload.cse.ucsc.edu/downloads.html">downloads directory</a>.
+For example, the human to mouse conversion (hg38ToMm10) can be downloaded like so:
+<pre>wget http://hgdownload.cse.ucsc.edu/goldenPath/hg19/liftOver/hg19ToHg38.over.chain.gz</code>
+</li>
+<li>Prepare your BED file input. Here is a few lines from a BED file you can
+copy into a text file, saved as "preLift.bed".
+<code>
+chr1	11166587	11191615	MTOR
+chr9	136130562	136150630	ABO
+chr12	25358179	25403854	KRAS
+chrX	151335633	151619831	GABRA3
+</code></li>
+<li>You can now use the following command to LiftOver a BED file with annotations in your original
+ genome, "preLift.bed", with your successful conversions in "conversions.bed" and unsuccessful conversions in 
+"unMapped".
+<pre>
+./liftOver preLift.bed hg19ToHg38.over.chain.gz conversions.bed unMapped
+</pre></li>
+</ol>
+</p>
+
 
 <a name="download33"></a>
 <h2>Linking gene name with accession number</h2>
