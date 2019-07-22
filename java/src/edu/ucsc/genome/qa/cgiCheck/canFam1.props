@@ -1,5 +1,5 @@
 server hgw1.soe.ucsc.edu
-machine mysqlbeta.soe.ucsc.edu
+machine hgwbeta.soe.ucsc.edu
 quick false
 dbSpec canFam1
 table all
