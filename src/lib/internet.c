@@ -430,10 +430,11 @@ return FALSE;
 static void notGoodSubnetCidr(char *sns)
 /* Complain about subnet format. */
 {
-errAbort("'%s' is not a properly formatted subnet.  Subnets must consist of\n"
-         "one to four dot-separated numbers between 0 and 255 \n"
-	 "optionally followed by an slash and subnet bit length integer between 1 and 32.\n"
-	 "A trailing dot on the subnet IP address is not allowed.", sns);
+errAbort("'%s' is not a properly formatted subnet.\n"
+         "Subnets in IPv4 must consist of one to four dot-separated numbers between 0 and 255 \n"
+	 "optionally followed by a CIDR slash and subnet bit length integer between 1 and 32, and trailing dot is not allowed.\n"
+	 "Subnets in IPv6 must consist of an IPv6 address followed by a CIDR slash and 1 and 128 for IPv6 addresses.\n"
+	 "Multiple subnets may be provided in a comma-separated list.", sns);
 }
 
 struct cidr *internetParseOneSubnetCidr(char *cidr)
