@@ -227,6 +227,11 @@ struct sqlResult *sqlGetResult(struct sqlConnection *sc, char *query);
  *     old info, only applies with mysql_store_result not mysql_use_result)
  * Otherwise returns a structure that you can do sqlRow() on. */
 
+unsigned long sqlEscapeStringFull(char *to, const char* from, long fromLength);
+/* Prepares a string for inclusion in a sql statement.  Output string
+ * must be 2*strlen(from)+1. fromLength is the length of the from data.
+ * Specifying fromLength allows one to encode a binary string that can contain any character including 0. */
+
 char *sqlEscapeString(const char* from);
 /* Prepares string for inclusion in a SQL statement . Remember to free
  * returned string.  Returned string contains strlen(length)*2+1 as many bytes

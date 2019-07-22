@@ -25,9 +25,15 @@ errAbort(
 void dnsInfo(char *machine)
 /* dnsInfo - Get info from DNS about a machine. */
 {
-struct hostent *h;
-char **aliases, **addresses;
-char str[INET6_ADDRSTRLEN];
+
+
+struct addrinfo hints;
+ZeroVar(&hints);
+hints.ai_flags    = AI_NUMERICSERV;
+hints.ai_family   = AF_UNSPEC;
+hints.ai_socktype = SOCK_STREAM;  // Get apparent dupes without this.
+
+struct addrinfo *ai, *p = NULL;
 
 if (sameString(machine, "localhost"))
     {
@@ -43,26 +49,21 @@ if (sameString(machine, "localhost"))
 	printf("domain name: %s\n", buf);
 	}
     }
-if ((h = gethostbyname(machine)) == NULL)
-    errAbort("Couldn't gethostbyname: %s", hstrerror(h_errno));
-printf("official hostname: %s\n", h->h_name);
-for (aliases = h->h_aliases; *aliases != NULL; ++aliases)
-    printf("\talias: %s\n", *aliases);
-switch (h->h_addrtype)
+
+/********************************************************************/
+/* Get the address information for the server using getaddrinfo().  */
+/********************************************************************/
+int rc = getaddrinfo(machine, NULL, &hints, &ai);
+if (rc != 0)
+    errAbort("getaddrinfo() failed");
+
+for (p = ai; p; p = p->ai_next)
     {
-    case AF_INET:
-    case AF_INET6:
-        addresses = h->h_addr_list;
-        for (addresses = h->h_addr_list; *addresses != NULL; ++addresses)
-            {
-	    printf("\taddress: %s\n",
-	    	inet_ntop(h->h_addrtype, *addresses, str, sizeof(str)));
-            }
-	break;
-    default:
-        errAbort("unknown address type %d", (int)h->h_addrtype);
-	break;
+    char host[256];
+    getnameinfo(p->ai_addr, p->ai_addrlen, host, sizeof (host), NULL, 0, NI_NUMERICHOST);
+    puts(host);
     }
+freeaddrinfo(ai);
 }
 
 int main(int argc, char *argv[])

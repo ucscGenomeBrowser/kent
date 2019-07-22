@@ -31,12 +31,8 @@ int netMustConnectTo(char *hostName, char *portName);
 /* Start connection with a server and a port that needs to be converted to integer */
 
 int netAcceptingSocket(int port, int queueSize);
-/* Create a socket for to accept connections. */
-
-int netAcceptingSocketFrom(int port, int queueSize, char *host);
-/* Create a socket that can accept connections from a 
- * IP address on the current machine if the current machine
- * has multiple IP addresses. */
+/* Create an IPV6 socket that can accept connections from 
+ * both IPV4 and IPV6 clients on the current machine. */
 
 int netAccept(int sd);
 /* Accept incoming connection from socket descriptor. */
@@ -44,7 +40,8 @@ int netAccept(int sd);
 int netAcceptFrom(int acceptor, struct cidr *subnet);
 /* Wait for incoming connection from socket descriptor
  * from IP address in subnet.  Subnet is something
- * returned from netParseDottedQuad.  */
+ * returned from internetParseSubnetCidr. 
+ * Subnet may be NULL. */
 
 FILE *netFileFromSocket(int socket);
 /* Wrap a FILE around socket.  This should be fclose'd

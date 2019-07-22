@@ -66,6 +66,33 @@ if (!sanityCheck)
 return selected;
 }
 
+int hicUiFetchResolutionAsInt(struct cart *cart, char *track, struct hicMeta *meta, int windowSize)
+/* Return the current resolution selection as an integer.  If there is no selection, or if "Auto"
+ * has been selected, return the largest available value that still partitions the window into at
+ * least 5000 bins. */
+{
+char *resolutionString = hicUiFetchResolution(cart, track, meta);
+int result;
+if (sameString(resolutionString, "Auto"))
+    {
+    int idealRes = windowSize/5000;
+    char *autoRes = meta->resolutions[meta->nRes-1];
+    int i;
+    for (i=meta->nRes-1; i>= 0; i--)
+        {
+        if (atoi(meta->resolutions[i]) < idealRes)
+            {
+            autoRes = meta->resolutions[i];
+            break;
+            }
+        }
+    result = atoi(autoRes);
+    }
+else
+    result = atoi(resolutionString);
+return result;
+}
+
 void hicUiResolutionMenu(struct cart *cart, char *track, struct hicMeta *meta)
 /* Draw a menu to select which binSize to use for fetching data */
 {

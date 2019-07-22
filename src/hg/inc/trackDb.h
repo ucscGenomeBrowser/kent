@@ -682,6 +682,12 @@ INLINE boolean tdbIsVcf(struct trackDb *tdb)
 return startsWithWord("vcfTabix", tdb->type) || startsWithWord("vcf", tdb->type);
 }
 
+INLINE boolean tdbIsHic(struct trackDb *tdb)
+// Return TRUE if tdb corresponds to a HIC file.
+{
+return startsWithWord("hic", tdb->type);
+}
+
 INLINE boolean tdbIsBedGraph(struct trackDb *tdb)
 // Return TRUE if tdb corresponds to a bedGraph track.
 {

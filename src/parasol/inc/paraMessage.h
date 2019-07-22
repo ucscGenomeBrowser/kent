@@ -13,7 +13,7 @@ struct paraMessage
 /* A parasol message. */
     {
     struct paraMessage *next;	/* Next in list. */
-    struct sockaddr_in ipAddress;	/* IP address of machine message is from/to */
+    struct sockaddr_storage ipAddress;	/* IP address of machine message is from/to */
     int size;			/* Size of data. */
     char data[rudpMaxSize+1];	/* Data. Extra byte for zero tag at end. */
     };
@@ -22,19 +22,18 @@ struct paraMultiMessage
 /* A parasol multi-packet response message. */
     {
     struct paraMessage *pm;
-    struct sockaddr_in ipAddress;  /* IP address of machine message is from/to */
+    struct sockaddr_storage ipAddress;  /* IP address of machine message is from/to */
     bits32 id;                     /* Message id.  Returned with ack. */
     };
 
-void pmInit(struct paraMessage *pm, rudpHost ipAddress, bits16 port);
-/* Initialize message (that might be on stack). ipAddress is in host
- * order. */
+void pmInit(struct paraMessage *pm, char *ipStr, char *portStr);
+/* Initialize message (that might be on stack).  */
 
-void pmInitFromName(struct paraMessage *pm, char *hostName, bits16 port);
+void pmInitFromName(struct paraMessage *pm, char *hostName, char *portStr);
 /* Initialize message with ascii ip address. */
 
-struct paraMessage *pmNew(rudpHost ipAddress, bits16 port);
-/* Create new message in memory.  ipAddress is in host order.  */
+struct paraMessage *pmNew(char *ipStr, char *portStr);
+/* Create new message in memory.   */
 
 struct paraMessage *pmNewFromName(char *hostName, bits16 port);
 /* Create new message in memory */
@@ -77,7 +76,7 @@ boolean pmReceiveTimeOut(struct paraMessage *pm, struct rudp *ru, int timeOut);
 /* Wait up to timeOut microseconds for message.  To wait forever
  * set timeOut to zero. */
 
-void pmmInit(struct paraMultiMessage *pmm, struct paraMessage *pm, struct in_addr sin_addr);
+void pmmInit(struct paraMultiMessage *pmm, struct paraMessage *pm);
 /* Initialize structure for multi-message response  */
 
 boolean pmmReceiveTimeOut(struct paraMultiMessage *pmm, struct rudp *ru, int timeOut);

@@ -861,6 +861,32 @@ struct bed *bamGetFilteredBedsOnRegions(struct sqlConnection *conn,
 struct slName *randomBamIds(char *table, struct sqlConnection *conn, int count);
 /* Return some semi-random qName based IDs from a BAM file. */
 
+/* Hi-C stuff from hic.c */
+
+struct hTableInfo *hicToHti(char *table);
+/* Get standard fields of hic into hti structure. */
+
+boolean isHicTable(char *table);
+/* Return TRUE if table corresponds to a hic file. */
+
+struct slName *hicGetFields();
+/* Get fields of hic as simple name list.  We represent hic with an interact structure, so
+ * this is really just an interact as object. */
+
+struct sqlFieldType *hicListFieldsAndTypes();
+/* Get fields of hic as list of sqlFieldType (again, this is really just the list of interact fields. */
+
+void showSchemaHic(char *table, struct trackDb *tdb);
+/* Show schema on hic. */
+
+void hicTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f);
+/* Print out selected fields from hic.  If fields is NULL, then print out all fields. */
+
+struct bed *hicGetFilteredBedsOnRegions(struct sqlConnection *conn,
+        char *db, char *table, struct region *regionList, struct lm *lm,
+        int *retFieldCount);
+/* Get list of beds from HIC, in all regions, that pass filtering. */
+
 /* VCF (Variant Call Format) stuff from vcf.c */
 
 extern char *vcfDataLineAutoSqlString;

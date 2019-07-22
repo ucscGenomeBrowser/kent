@@ -41,7 +41,7 @@ printf(
   "where\n"
   "   host is the name of the machine running the gfServer\n"
   "   port is the same port that you started the gfServer with\n"
-  "   seqDir is the path of the .nib or .2bit files relative to the current dir\n"
+  "   seqDir is the path of the .2bit or .nib files relative to the current dir\n"
   "       (note these are needed by the client as well as the server)\n"
   "   in.fa is a fasta format file.  May contain multiple records\n"
   "   out.psl is where to put the output\n"

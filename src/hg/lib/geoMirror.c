@@ -44,12 +44,16 @@ return cfgOption("browser.node");
 }
 
 
-int defaultNode(struct sqlConnection *centralConn, char *ipStr)
+int geoMirrorDefaultNode4(struct sqlConnection *centralConn, char *ipStr)
 // return default node for given IP
 {
 char query[1024];
 bits32 ip = 0;
 int defaultNode = 1;
+
+if (isIpv6Address(ipStr))  // ipv6 which we do not handle yet. TODO
+    return defaultNode;  // at least tolerate IPV6 remote addr
+
 internetDottedQuadToIp(ipStr, &ip);
 
 char *geoSuffix = cfgOptionDefault("browser.geoSuffix","");
@@ -81,6 +85,86 @@ sqlFreeResult(&sr);
 return defaultNode;
 }
  
+int geoMirrorDefaultNode6(struct sqlConnection *centralConn, char *ipStr)
+// return default node for given IP
+{
+char query[1024];
+char newIpStr[NI_MAXHOST];
+struct in6_addr ip;
+ZeroVar(&ip);
+char ipHex[33];
+
+int defaultNode = 1;
+
+if (isIpv6Address(ipStr))
+    safef(newIpStr, sizeof newIpStr, "%s", ipStr);
+else if (isIpv4Address(ipStr))
+    safef(newIpStr, sizeof newIpStr, "%s%s", IPV4MAPPED_PREFIX, ipStr); // "::ffff:"
+else 
+    {
+    warn("Unexpected strange ip address string: %s", ipStr);
+    return defaultNode;
+    }
+
+if (!internetIpStringToIp6(newIpStr, &ip))
+    errAbort("internetIpStringToIp6 failed for %s", ipStr);
+
+ip6AddrToHexStr(&ip, ipHex, sizeof ipHex);
+
+char *geoSuffix = cfgOptionDefault("browser.geoSuffix","");
+
+// We (sort-of) assume no overlaps in geoIpNode table, so we can use limit 1 to make query very efficient;
+// we do accomodate a range that is completely contained in another (to accomodate the hgroaming entry for testing);
+// this is accomplished by "<= ipEnd" in the sql query. 
+// TODO The hgroaming thing is probably obsolete and testing is done with browser.geoSuffix= instead.
+// If so, we may wish to remove the loop below since that was added by Larry and reformulate
+// it as it was originally done by Galt.  However it does not seem to affect performance so we can leave it for now.
+
+sqlSafef(query, sizeof query, 
+    "select ipStart, ipEnd, node from geoIpNode6%s where unhex('%s') >= ipStart and unhex('%s') <= ipEnd order by ipStart desc limit 1"
+    , geoSuffix, ipHex, ipHex);
+char **row;
+struct sqlResult *sr = sqlGetResult(centralConn, query);
+
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct in6_addr ipStart;
+    ip6AddrCopy((struct in6_addr *)row[0], &ipStart);
+
+    struct in6_addr ipEnd;
+    ip6AddrCopy((struct in6_addr *)row[1], &ipEnd  );
+
+    if (
+	(ip6AddrCmpBits(&ipStart, &ip) <= 0)
+	&&
+	(ip6AddrCmpBits(&ipEnd  , &ip) >= 0)
+       )
+        {
+        defaultNode = sqlSigned(row[2]);
+        }
+    }
+sqlFreeResult(&sr);
+
+return defaultNode;
+}
+
+int geoMirrorDefaultNode(struct sqlConnection *centralConn, char *ipStr)
+// return default node for given IP
+{
+char *geoSuffix = cfgOptionDefault("browser.geoSuffix","");
+char fullTableName[1024];
+safef(fullTableName, sizeof fullTableName, "%s%s", "geoIpNode6", geoSuffix);
+int defaultNode = 1;
+if (sqlTableExists(centralConn, fullTableName))
+    {
+    defaultNode = geoMirrorDefaultNode6(centralConn, ipStr);
+    }
+else
+    {
+    defaultNode = geoMirrorDefaultNode4(centralConn, ipStr);
+    }
+return defaultNode;
+}
 
 char *geoMirrorMenu()
 /* Create customized geoMirror menu string for substitution of  into 
