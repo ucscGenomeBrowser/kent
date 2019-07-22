@@ -211,6 +211,9 @@ target=_blank>list chromosomes from assembly hub genome</a> -
 <li><a href='https://api.genome.ucsc.edu/list/chromosomes?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=assembly'
 target=_blank>list chromosomes from specified track in assembly hub genome</a> -
 <br><b>api.genome.ucsc.edu/list/chromosomes?hubUrl=hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=CAST_EiJ;track=assembly</b></li>
+<li><a href='https://api.genome.ucsc.edu/list/schema?genome=hg38;track=knownGene'
+target=_blank>list schema from specified track in UCSC database genome</a> -
+<br><b>api.genome.ucsc.edu/list/schema?genome=hg38;track=knownGene</b></li>
 </ol>
 <a id="getData_examples"></a>
 <h3>getData functions</h3>
@@ -283,6 +286,16 @@ target=_blank>FAQ</a> -
 <h3>Looking up the schema of a specific track</h3>
 
 <p>
+The easiest way to get the schema for a track is to use the <b>/list/schema</b> function. This 
+can be used on both file tracks and table tracks:
+
+<p>
+<a href='https://api.genome.ucsc.edu/list/schema?genome=hg38;track=crispr10KTargets'
+target=_blank>Request schema for the hg38 CRISPR 10K Targets track</a> -
+<br><b>api.genome.ucsc.edu/list/schema?genome=hg38;track=crispr10KTargets</b></p>
+
+<p>
+There is a second indirect way to get the schema which may be preferable in certain cases. 
 When querying track data with the <b>/getData/track</b> function, the <b>jsonOutputArrays</b> 
 can be used in conjunction to see the track schema. This includes a description of each field 
 present in the track. The data will also be returned in JSON array type.</p>
