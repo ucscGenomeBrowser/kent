@@ -996,7 +996,7 @@ export asmId=$asmId
 if [ ../../\$asmId.unmasked.2bit -nt faSize.\$asmId.wmsk.sdust.txt ]; then
   \$HOME/kent/src/hg/utils/automation/doWindowMasker.pl -stop=twobit -buildDir=`pwd` -dbHost=$dbHost \\
     -workhorse=$workhorse -unmaskedSeq=$buildDir/\$asmId.unmasked.2bit \$asmId
-  bedInvert.pl ../../\$asmId.chrom.sizes ../allGaps/\$asmId.allGaps.bed \\
+  bedInvert.pl ../../\$asmId.chrom.sizes ../allGaps/\$asmId.allGaps.bed.gz \\
     > not.gap.bed
   bedIntersect -minCoverage=0.0000000014 windowmasker.sdust.bed \\
      not.gap.bed stdout | sort -k1,1  -k2,2n > cleanWMask.bed
