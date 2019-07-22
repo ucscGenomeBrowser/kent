@@ -1,13 +1,13 @@
 kentSrc = ../..
 include ${kentSrc}/inc/common.mk
 
-HG_INC+=-I${kentSrc}/inc
+HG_INC+=-I${kentSrc}/hg/inc -I${kentSrc}/inc
 
-L += -lm ${SOCKETLIB}
+L += $(MYSQLLIBS) -lm ${SOCKETLIB}
 MYLIBDIR = ${kentSrc}/lib/${MACHTYPE}
-MYLIBS = $(MYLIBDIR)/jkweb.a 
+MYLIBS = $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
-A = geoIpToCountryMaxMind
+A = geoIpToCountryMaxMind6
 
 O = $(A).o
 

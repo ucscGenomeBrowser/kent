@@ -35,7 +35,7 @@ errAbort(
   "   -port=XXXX - Use specific tcp/ip port. Default %d.\n"
   "   -host=XXXXX - Use specific host.  Default %s.\n"
   "   -subnet=WWW.XXX.YYY.ZZZ Restrict access to subnet (example 192.168.255.255).\n"
-  "      Also accepts CIDR notation example 192.168.255.255/16\n"
+  "      Supports comma-separated list of IPv4 or IPv6 subnets in CIDR notation, for example 192.168.255.255/16\n"
   "   -penalty=N - Penalty (in milliseconds) for each access, default %d\n"
   "   -recovery=N - Amount to recover (in milliseconds) for each second\n"
   "                 between accesses.  Default %d\n"

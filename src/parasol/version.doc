@@ -327,3 +327,4 @@
 12.17   Added a little to parasol command line.  It now has a 'wait' option to the 'add job' 
 	command that will wait for the job to finish before it returns.
 12.18   Made paraHub not crash when you send it an empty message.
+12.19   Added support for ipv6. Listen sockets are dual-stack hybrid supporting ipv4-mapped addresses.

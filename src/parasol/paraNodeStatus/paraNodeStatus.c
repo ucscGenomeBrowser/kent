@@ -44,7 +44,7 @@ int running, recent, i;
 struct paraMultiMessage pmm;
 
 /* ensure the multi-message response comes from the correct ip and has no duplicate msgs*/
-pmmInit(&pmm, pm, pm->ipAddress.sin_addr);
+pmmInit(&pmm, pm);
 
 if (!pmmReceive(&pmm, ru))
     {
@@ -104,7 +104,7 @@ while (lineFileRow(lf, row))
 
     if (optionExists("retries"))
         ru->maxRetries = optionInt("retries", 7);
-    pmInitFromName(&pm, name, paraNodePort);
+    pmInitFromName(&pm, name, paraNodePortStr);
     if (longFormat)
 	{
 	pmPrintf(&pm, "%s", "listJobs");
