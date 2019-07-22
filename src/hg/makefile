@@ -149,6 +149,7 @@ UTIL_DIRS = \
 	gbOneAcc \
 	gbToFaRa \
 	geneBounds \
+	geoMirrorNode \
 	getFeatDna \
 	gpStats \
 	gpToGtf \

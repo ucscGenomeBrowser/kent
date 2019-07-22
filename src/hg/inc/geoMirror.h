@@ -14,7 +14,7 @@ boolean geoMirrorEnabled();
 char *geoMirrorNode();
 // return which geo mirror node this is (or NULL if geo mirroring is turned off)
 
-int defaultNode(struct sqlConnection *centralConn, char *ipStr);
+int geoMirrorDefaultNode(struct sqlConnection *centralConn, char *ipStr);
 // return default node for given IP
 
 char *geoMirrorMenu();

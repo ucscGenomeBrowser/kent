@@ -7,7 +7,9 @@
 extern char *cuserid(char *__s);  /* Linux should define this but... */
 
 extern int paraHubPort;		      /* Port for hub. */
+extern char *paraHubPortStr;	      /* Port for hub as a string. */
 extern int paraNodePort;	      /* Port for nodes. */
+extern char *paraNodePortStr;	      /* Port for nodes as a string. */
 
 boolean sendWithSig(int fd, char *string);
 /* Send a string with the signature prepended.  Warn 
@@ -18,13 +20,13 @@ void mustSendWithSig(int fd, char *string);
 /* Send a string with the signature prepended. 
  * Abort on failure. */
 
-char *getMachine();
+char *getMachine(void);
 /* Return host machine name. */
 
-char *getUser();
+char *getUser(void);
 /* Get user name */
 
-int forkOrDie();
+int forkOrDie(void);
 /* Fork, aborting if it fails. */
 
 struct runJobMessage
@@ -50,10 +52,10 @@ void fillInErrFile(char errFile[512], int jobId, char *tempDir);
 
 extern time_t now;	/* Time when started processing current message */
 
-void findNow();
+void findNow(void);
 /* Just set now to current time. */
 
-char* paraFormatIp(bits32 ip);
+char* paraFormatIp(struct in6_addr *ip);
 /* format a binary IP added into dotted quad format.  ip should be
  * in host byte order. Warning: static return. */
 

@@ -34,7 +34,7 @@ while (lineFileRow(lf, row))
     struct paraMessage pm;
     ru->maxRetries = 6;
     printf("Telling %s to quit \n", name);
-    pmInitFromName(&pm, name, paraNodePort);
+    pmInitFromName(&pm, name, paraNodePortStr);
     pmPrintf(&pm, "%s", "quit");
     pmSend(&pm, ru);
     rudpClose(&ru);

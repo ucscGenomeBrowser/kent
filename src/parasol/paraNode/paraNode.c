@@ -76,8 +76,8 @@ int randomDelay = 5000;		/* How much to delay job startup. */
 
 /* Other globals. */
 char *hostName;			/* Name of this machine. */
-in_addr_t hubIp;		/* Hub IP address. */
-in_addr_t localIp;		/* localhost IP address. */
+char   hubIp[NI_MAXHOST];	/* Hub IP address as a string. */
+char localIp[NI_MAXHOST];	/* localhost IP address as a string. */
 int busyProcs = 0;		/* Number of processers in use. */
 struct rudp *mainRudp;		/* Rudp wrapper around main socket. */ 
 struct paraMessage pmIn;	/* Input message */
@@ -458,7 +458,7 @@ else
     if (ru != NULL)
 	{
 	ru->maxRetries = 20;
-	pmInit(&pm, localIp, paraNodePort);
+	pmInit(&pm, localIp, paraNodePortStr);
 	pmPrintf(&pm, "jobDone %s %s %d %lu %lu", managingHost, 
 	    jobIdString, status, uTime, sTime);
 	pmSend(&pm, ru);
@@ -478,18 +478,13 @@ for (;;)
     }
 }
 
-in_addr_t lookupIp(char *host)
-/* Return IP address of host. */
+void lookupIp(char *host, char *ipStr, int ipStrSize)
+/* convert host into IP address string. */
 {
-static char *lastHost = NULL;
-static in_addr_t lastAddress;
-
-if (lastHost != NULL && sameString(lastHost, host))
-    return lastAddress;
-freez(&lastHost);
-lastHost = cloneString(host);
-lastAddress = internetHostIp(host);
-return lastAddress;
+struct sockaddr_storage sai;
+if (!internetFillInAddress6n4(host, NULL, AF_UNSPEC, SOCK_DGRAM, &sai, FALSE))
+    errAbort("host %s lookup failed.", host);
+getAddrAsString6n4(&sai, ipStr, ipStrSize);
 }
 
 
@@ -497,13 +492,7 @@ void tellManagerJobIsDone(char *managingHost, char *jobIdString, char *line)
 /* Try and send message to host saying job is done. */
 {
 struct paraMessage pm;
-bits32 ip;
-if (!internetDottedQuadToIp(managingHost, &ip))
-    {
-    warn("%s doesn't seem to be in dotted quad form\n", managingHost);
-    return;
-    }
-pmInit(&pm, ip, paraHubPort);
+pmInitFromName(&pm, managingHost, paraHubPortStr);
 pmPrintf(&pm, "jobDone %s %s", jobIdString, line);
 if (!pmSend(&pm, mainRudp))
     warn("Couldn't send message to %s to say %s is done\n", managingHost, jobIdString);
@@ -557,7 +546,7 @@ if (jobIdString != NULL && line != NULL && line[0] != 0)
     }
 }
 
-void doCheck(char *line, struct sockaddr_in *hubIp)
+void doCheck(char *line, struct sockaddr_storage *ipAddress)
 /* Send back check result - either a check in message or
  * jobDone. */
 {
@@ -567,7 +556,10 @@ if (jobIdString != NULL)
     int jobId = atoi(jobIdString);
     struct job *job = findRunningJob(jobId);
     struct paraMessage pm;
-    pmInit(&pm, ntohl(hubIp->sin_addr.s_addr), paraHubPort);
+
+    char     ipStr[NI_MAXHOST];
+    getAddrAsString6n4(ipAddress, ipStr, sizeof ipStr);
+    pmInit(&pm, ipStr, paraHubPortStr);
     if (job != NULL)
 	pmPrintf(&pm, "checkIn %s %s running", hostName, jobIdString);
     else
@@ -582,13 +574,15 @@ if (jobIdString != NULL)
     }
 }
 
-void doResurrect(char *line, struct sockaddr_in *hubIp)
+void doResurrect(char *line, struct sockaddr_storage *ipAddress)
 /* Send back I'm alive message */
 {
 struct paraMessage pm;
 struct dlNode *node;
 int jobsReported = 0;
-pmInit(&pm, ntohl(hubIp->sin_addr.s_addr), paraHubPort);
+char     ipStr[NI_MAXHOST];
+getAddrAsString6n4(ipAddress, ipStr, sizeof ipStr);
+pmInit(&pm, ipStr, paraHubPortStr);
 pmPrintf(&pm, "alive %s", hostName);
 for (node = jobsRunning->head; !dlEnd(node); node = node->next)
     {
@@ -607,19 +601,18 @@ for (node = jobsFinished->head; !dlEnd(node); node = node->next)
 pmSend(&pm, mainRudp);
 }
 
-void doRun(char *line, struct sockaddr_in *hubIp)
+void doRun(char *line, struct sockaddr_storage *ipAddress)
 /* Execute command. */
 {
 char *jobMessage = cloneString(line);
 static char *args[1024];
 int argCount;
-char hubDottedQuad[17];
+char ipStr[NI_MAXHOST];
+getAddrAsString6n4(ipAddress, ipStr, sizeof ipStr);
 
 nextRandom();
 if (line == NULL)
     warn("Executing nothing...");
-else if (!internetIpToDottedQuad(ntohl(hubIp->sin_addr.s_addr), hubDottedQuad))
-    warn("Can't convert ipToDottedQuad");
 else
     {
     struct runJobMessage rjm;
@@ -648,7 +641,7 @@ else
 			for (i=0; i<argCount; ++i)
 			    args[i] = subTextString(st, args[i]);
 
-			execProc(hubDottedQuad, rjm.jobIdString, rjm.reserved,
+			execProc(ipStr, rjm.jobIdString, rjm.reserved,
 			    rjm.user, rjm.dir, rjm.in, rjm.out, rjm.err, rjm.ram,
 			    args[0], args);
 			exit(0);
@@ -809,7 +802,7 @@ void paraNode()
 {
 char *line;
 char *command;
-struct sockaddr_in sai;
+struct sockaddr_storage sai;
 
 /* We have to know who we are... */
 hostName = getMachine();
@@ -830,9 +823,10 @@ jobsFinished = newDlList();
 
 /* Set up socket and self to listen to it. */
 ZeroVar(&sai);
-sai.sin_family = AF_INET;
-sai.sin_port = htons(paraNodePort);
-sai.sin_addr.s_addr = INADDR_ANY;
+
+if (!internetFillInAddress6n4(NULL, paraNodePortStr, AF_INET6, SOCK_DGRAM, &sai, FALSE))
+    errAbort("NULL host addrinfo lookup failed trying to bind listener.");
+
 mainRudp = rudpMustOpenBound(&sai);
 mainRudp->maxRetries = 12;
 
@@ -846,15 +840,15 @@ for (;;)
     if (pmReceive(&pmIn, mainRudp))
 	{
 	findNow();
-	if (hubName == NULL || ntohl(pmIn.ipAddress.sin_addr.s_addr) == hubIp 
-		|| ntohl(pmIn.ipAddress.sin_addr.s_addr) == localIp)
+	char pmIpStr[NI_MAXHOST];
+	getAddrAsString6n4(&pmIn.ipAddress, pmIpStr, sizeof pmIpStr);
+
+	if (hubName == NULL || sameString(pmIpStr, hubIp) || sameString(pmIpStr, localIp))
 	    {
 	    /* Host and signature look ok,  read a string and
 	     * parse out first word as command. */
 	    line = pmIn.data;
-	    logDebug("message from %s: \"%s\"",
-                     paraFormatIp(ntohl(pmIn.ipAddress.sin_addr.s_addr)),
-                     line);
+	    logDebug("message from %s: \"%s\"", pmIpStr, line);
 	    command = nextWord(&line);
 	    if (command != NULL)
 		{
@@ -883,8 +877,7 @@ for (;;)
 	    }
 	else
 	    {
-	    logWarn("command from unauthorized host %s",
-                    paraFormatIp(ntohl(pmIn.ipAddress.sin_addr.s_addr)));
+	    logWarn("command from unauthorized host %s", pmIpStr);
 	    }
 	}
     }
@@ -905,10 +898,10 @@ envExtra = optionMultiVal("env", NULL);
 randomDelay = optionInt("randomDelay", randomDelay);
 
 /* Look up IP addresses. */
-localIp = lookupIp("localhost");
+lookupIp("localhost", localIp, sizeof localIp);
 hubName = optionVal("hub", NULL);
 if (hubName != NULL)
-    hubIp = lookupIp(hubName);
+    lookupIp(hubName, hubIp, sizeof hubIp);
 paraDaemonize("paraNode");
 paraNode();
 return 0;

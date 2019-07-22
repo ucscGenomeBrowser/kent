@@ -113,12 +113,12 @@ safecpy(results, PATH_LEN, optionVal("results", defaultResults));
 boolean commandHubExt(char *command, struct paraMessage *pm, struct paraMultiMessage *pmm)
 /* Send a command to hub. */
 {
-pmInitFromName(pm, paraHubHost, paraHubPort);
+pmInitFromName(pm, paraHubHost, paraHubPortStr);
 
 if (pmm)
     {
     /* ensure the multi-message response comes from the correct ip and has no duplicate msgs*/
-    pmmInit(pmm, pm, pm->ipAddress.sin_addr);
+    pmmInit(pmm, pm);
     }
 
 return pmSendString(pm, hubRudp, command);
@@ -131,8 +131,8 @@ struct paraMessage pm;
 return commandHubExt(command, &pm, NULL);
 }
 
-char *hubCommandGetReciept(char *command)
-/* Send command to hub,  wait for one line respons and
+char *hubCommandGetReceipt(char *command)
+/* Send command to hub, wait for one line response and
  * return it.  freeMem return value when done. */
 {
 struct paraMessage pm;
@@ -148,7 +148,7 @@ void hubCommandCheckReceipt(char *command)
 /* Send command to hub, and wait for one line response which should
  * be 'ok'. */
 {
-char *line = hubCommandGetReciept(command);
+char *line = hubCommandGetReceipt(command);
 if (line == NULL || !sameString(line, "ok"))
     errAbort("Hub didn't acknowledge %s", command);
 freeMem(line);
@@ -276,7 +276,7 @@ for (i=0; i<argc; ++i)
     dyStringPrintf(dy, " %s", argv[i]);
 pmCheckCommandSize(dy->string, dy->stringSize);
 
-jobIdString = hubCommandGetReciept(dy->string);
+jobIdString = hubCommandGetReceipt(dy->string);
 dyStringFree(&dy);
 if (sameString(jobIdString, "0"))
     errAbort("sick batch?: hub returned jobId==%s", jobIdString);
@@ -307,7 +307,7 @@ char results[PATH_LEN];
 getResultsFile(results);
 
 dyStringPrintf(dy, "clearSickNodes %s %s", userName, results);
-response = hubCommandGetReciept(dy->string);
+response = hubCommandGetReceipt(dy->string);
 if (!sameString(response, "0"))
     errAbort("Couldn't clear sick nodes for %s %s", userName, results);
 dyStringFree(&dy);
@@ -500,7 +500,7 @@ char results[PATH_LEN];
 getResultsFile(results);
 char command[2*PATH_LEN];
 safef(command, sizeof(command), "freeBatch %s %s", getUser(), results);
-char *result = hubCommandGetReciept(command);
+char *result = hubCommandGetReceipt(command);
 if (result == NULL)
     errAbort("result == NULL");
 if (sameOk(result, "-3"))
@@ -521,7 +521,7 @@ char results[PATH_LEN];
 getResultsFile(results);
 char command[2*PATH_LEN];
 safef(command, sizeof(command), "flushResults %s %s", getUser(), results);
-char *result = hubCommandGetReciept(command);
+char *result = hubCommandGetReceipt(command);
 if (result == NULL)
     errAbort("result == NULL");
 if (sameOk(result, "-3"))

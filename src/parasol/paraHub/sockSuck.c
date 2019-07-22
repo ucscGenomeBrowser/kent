@@ -6,14 +6,6 @@
 
 static pthread_t sockSuckThread;
 
-boolean ipAddressOk(in_addr_t packed, struct cidr *spec)
-/* Return TRUE if packed IP address matches spec. */
-{
-unsigned char unpacked[4];
-internetUnpackIp(packed, unpacked);
-return internetIpInSubnetCidr(unpacked, spec);
-}
-
 static void *sockSuckDaemon(void *vptr)
 /* Shovel messages from short socket queue to our
  * larger hub message queue. */
@@ -25,17 +17,20 @@ for (;;)
     AllocVar(pm);
     if (pmReceive(pm, ru))
 	{
-	if (ipAddressOk(ntohl(pm->ipAddress.sin_addr.s_addr), hubSubnet) || 
-	    ipAddressOk(ntohl(pm->ipAddress.sin_addr.s_addr), localHostSubnet))
+	// Listening on AF_INET6 with hybrid dual stack, ipv4 addresses are ipv4-mapped.
+	struct sockaddr_in6 *sai6 = (struct sockaddr_in6 *)&pm->ipAddress;
+	if (internetIpInSubnetCidr(&sai6->sin6_addr, hubSubnet))
 	    {
 	    hubMessagePut(pm);
 	    }
 	else
 	    {
-	    char dottedQuad[17];
-	    internetIpToDottedQuad(ntohl(pm->ipAddress.sin_addr.s_addr), dottedQuad);
-	    warn("unauthorized access by %s", dottedQuad);
-	    freez(&pm);
+	    char ipStr[INET6_ADDRSTRLEN];
+	    if (inet_ntop(AF_INET6, &sai6->sin6_addr, ipStr, sizeof(ipStr))) 
+		{
+		warn("unauthorized access by %s", ipStr);
+		freez(&pm);
+		}
 	    }
 	}
     else

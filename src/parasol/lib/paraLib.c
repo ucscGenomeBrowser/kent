@@ -20,8 +20,8 @@ now = time(NULL);
 char paraSig[17] = "0d2f070562685f29";  /* Mild security measure. */
 int paraSigSize = 16;
 
-int paraHubPort = 0x46DC;		      /* Our hub port */
-int paraNodePort = 0x46DD;		      /* Our node port */
+char *paraHubPortStr  = "18140";      /* Our hub  port as string */
+char *paraNodePortStr = "18141";      /* Our node port as string */
 
 char *getMachine()
 /* Return host name. */
@@ -75,14 +75,18 @@ void fillInErrFile(char errFile[512], int jobId, char *tempDir )
 sprintf(errFile, "%s/para%d.err", tempDir, jobId);
 }
 
-char* paraFormatIp(bits32 ip)
+char* paraFormatIp(struct in6_addr * ip)
 /* format a binary IP added into dotted quad format.  ip should be
  * in host byte order. Warning: static return. */
 {
-static char dottedQuad[32];
-if (!internetIpToDottedQuad(ip, dottedQuad))
-    safef(dottedQuad, sizeof(dottedQuad), "<invalid-ip:0x%x>", ip);
-return dottedQuad;
+static char ipStr[INET6_ADDRSTRLEN];
+if (inet_ntop(AF_INET6, ip, ipStr, sizeof(ipStr)) < 0)
+    {
+    char tempHex[33];
+    ip6AddrToHexStr(ip, tempHex, sizeof tempHex);
+    safef(ipStr, sizeof(ipStr), "<invalid-ip:0x%s>", tempHex);
+    }
+return ipStr;
 }
 
 void paraDaemonize(char *progName)
