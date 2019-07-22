@@ -647,6 +647,8 @@ else if (sameString(type, "bam"))
     showSchemaBam(table, tdb);
 else if (sameString(type, "vcfTabix"))
     showSchemaVcf(table, tdb, TRUE);
+else if (sameString(type, "hic"))
+    showSchemaHic(table, tdb);
 else
     {
     hPrintf("Binary file of type %s stored at %s<BR>\n",
@@ -677,6 +679,8 @@ else if (isBamTable(table))
     showSchemaBam(table, tdb);
 else if (isVcfTable(table, &isTabix))
     showSchemaVcf(table, tdb, isTabix);
+else if (isHicTable(table))
+    showSchemaHic(table, tdb);
 else if (isCustomTrack(table))
     showSchemaCt(db, table);
 else if (sameWord(table, WIKI_TRACK_TABLE))

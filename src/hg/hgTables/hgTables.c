@@ -553,6 +553,8 @@ if (tdb->subtracks == NULL)
 	hti = bamToHti(tdb->table);
     else if (startsWithWord("vcfTabix", tdb->type))
 	hti = vcfToHti(tdb->table, TRUE);
+    else if (sameWord("hic", tdb->type))
+	hti = hicToHti(tdb->table);
     }
 if (hti == NULL)
     {
@@ -588,6 +590,8 @@ else if (isVcfTable(table, &isTabix))
     boolean isTabix = trackIsType(database, table, curTrack, "vcfTabix", ctLookupName);
     hti = vcfToHti(table, isTabix);
     }
+else if (isHicTable(table))
+    hti = hicToHti(table);
 else if (isCustomTrack(table))
     {
     struct customTrack *ct = ctLookupName(table);
@@ -1103,6 +1107,8 @@ else if (isBamTable(table))
     bamTabOut(db, table, conn, fields, f);
 else if (isVcfTable(table, &isTabix))
     vcfTabOut(db, table, conn, fields, f, isTabix);
+else if (isHicTable(table))
+    hicTabOut(db, table, conn, fields, f);
 else if (isCustomTrack(table))
     {
     doTabOutCustomTracks(db, table, conn, fields, f);
@@ -1132,6 +1138,8 @@ else if (isBamTable(table))
     fieldList = bamGetFields(table);
 else if (isVcfTable(table, NULL))
     fieldList = vcfGetFields(table);
+else if (isHicTable(table))
+    fieldList = hicGetFields(table);
 else if (isCustomTrack(table))
     {
     struct customTrack *ct = ctLookupName(table);
