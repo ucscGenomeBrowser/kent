@@ -372,7 +372,7 @@ html crispors
     priority 2
 
 include crisprAll.ra
-include crispr10K.ra alpha
+include crispr10K.ra 
 # prospective testing of crispr 10K on hg38
 # include nullModelCrispr10K.ra alpha
 
