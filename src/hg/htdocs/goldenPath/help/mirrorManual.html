@@ -15,7 +15,7 @@
 <h6><a href='#hardware-and-disk-space-requirements'>Hardware and disk space requirements</a></h6>
 <h6><a href='#overview-of-the-genome-browser-directories-and-databases'>Overview of the Genome Browser directories and databases</a></h6>
 <h6><a href='#installing-the-ucsc-genome-browser'>Installing the UCSC Genome browser</a></h6>
-<h6><a href='#mysql-setup'>MySQL Setup</a></h6>
+<h6><a href='#mysql-setup'>MySQL (MariaDB) Setup</a></h6>
 <h6><a href='#adding-a-custom-genome-to-the-browser'>Adding a custom genome to the browser</a></h6>
 <h6><a href='#modifying-the-source-code'>Modifying the source code</a></h6>
 <h6><a href='#custom-track-database'>Custom Track Database</a></h6>
@@ -462,8 +462,16 @@ e.g. /usr/local/apache/htdocs/trash
 </ol>
 
 <a name='mysql-setup'></a>
-<h2>MySQL Setup</h2>
+<h2>MySQL (MariaDB) Setup</h2>
+<p>
+The UCSC Genome Browser uses MariaDB as the backend database server. MariaDB is a
+community-developed, commercially supported fork of the MySQL relational database management system,
+intended to remain free and open-source software under the GNU General Public License.You must have
+MariaDb (MySQL) client libraries installed on your computer. You can read more about MariaDB on the
+<a href="https://mariadb.org/">MariaDB site</a>. We will often state 'MySQL' even though we are
+referring to 'MariaDB'. 
 
+</p>
 <ol>
 <li><p>
 Enable &quot;LOAD DATA LOCAL INFILE&quot;:
