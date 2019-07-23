@@ -36,6 +36,7 @@ my $stepper = new HgStepManager(
       { name => 'sequence',   func => \&doSequence },
       { name => 'assemblyGap',   func => \&doAssemblyGap },
       { name => 'gatewayPage',   func => \&doGatewayPage },
+      { name => 'cytoBand',   func => \&doCytoBand },
       { name => 'gc5Base',   func => \&doGc5Base },
       { name => 'repeatMasker',   func => \&doRepeatMasker },
       { name => 'simpleRepeat',   func => \&doSimpleRepeat },
@@ -107,6 +108,7 @@ Automates build of assembly hub.  Steps:
     assemblyGap: create assembly and gap bigBed files and indexes
                  for assembly track names
     gatewayPage: create html/asmId.description.html contents
+    cytoBand: create cytoBand track and navigation ideogram
     gc5Base: create bigWig file for gc5Base track
     repeatMasker: run repeat masker cluster run and create bigBed files for
                   the composite track categories of repeats
@@ -717,6 +719,39 @@ _EOF_
 } # gatewayPage
 
 #########################################################################
+# * step: cytoBand [workhorse]
+sub doCytoBand {
+  my $runDir = "$buildDir/trackData/cytoBand";
+  &HgAutomate::mustMkdir($runDir);
+
+  my $whatItDoes = "construct cytoBand track and navigation ideogram";
+  my $bossScript = newBash HgRemoteScript("$runDir/doCytoBand.bash",
+                    $workhorse, $runDir, $whatItDoes);
+
+  if ( ! -s "$buildDir/$asmId.chrom.sizes" ) {
+      printf STDERR "ERROR: sequence step not completed\n";
+      printf STDERR "can not find: $buildDir/$asmId.chrom.sizes\n";
+      exit 255;
+  }
+
+  $bossScript->add(<<_EOF_
+export asmId=$asmId
+
+if [ ../../\$asmId.chrom.sizes -nt \$asmId.cytoBand.bb ]; then
+  awk '{printf "%s\\t0\\t%d\\t\\tgneg\\n", \$1, \$2}' ../../\$asmId.chrom.sizes | sort -k1,1 -k2,2n > \$asmId.cytoBand.bed
+  bedToBigBed -type=bed4+1 -as=\$HOME/kent/src/hg/lib/cytoBand.as -tab \$asmId.cytoBand.bed ../../\$asmId.chrom.sizes \$asmId.cytoBand.bb
+
+  touch -r ../../\$asmId.chrom.sizes \$asmId.cytoBand.bb
+else
+  printf "# cytoBand step previously completed\\n" 1>&2
+  exit 0
+fi
+_EOF_
+  );
+  $bossScript->execute();
+} # cytoBand
+
+#########################################################################
 # * step: gc5Base [workhorse]
 sub doGc5Base {
   my $runDir = "$buildDir/trackData/gc5Base";
@@ -993,7 +1028,7 @@ sub doWindowMasker {
 export asmId=$asmId
 
 ### if [ ../../\$asmId.unmasked.2bit -nt fb.\$asmId.rmsk.windowmaskerSdust.txt ]; then
-if [ ../../\$asmId.unmasked.2bit -nt faSize.\$asmId.wmsk.sdust.txt ]; then
+if [ ../../\$asmId.unmasked.2bit -nt faSize.\$asmId.cleanWMSdust.txt ]; then
   \$HOME/kent/src/hg/utils/automation/doWindowMasker.pl -stop=twobit -buildDir=`pwd` -dbHost=$dbHost \\
     -workhorse=$workhorse -unmaskedSeq=$buildDir/\$asmId.unmasked.2bit \$asmId
   bedInvert.pl ../../\$asmId.chrom.sizes ../allGaps/\$asmId.allGaps.bed.gz \\

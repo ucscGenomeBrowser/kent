@@ -65,6 +65,32 @@ html html/%s.gap\n\n" "${asmId}" "${asmId}"
 $scriptDir/asmHubGap.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/$asmId.agp.gz ../hubs/ncbiAssemblies/$genbankRefseq/$asmId > $buildDir/html/$asmId.gap.html
 fi
 
+if [ -s ${buildDir}/trackData/cytoBand/${asmId}.cytoBand.bb ]; then
+rm -f $buildDir/bbi/${asmId}.cytoBand.bb
+ln -s $buildDir/trackData/cytoBand/${asmId}.cytoBand.bb $buildDir/bbi/${asmId}.cytoBand.bb
+
+# printf "track cytoBand
+# shortLabel Chromosome Band
+# longLabel Ideogram
+# group map
+# visibility dense
+# type bigBed 4 +
+# bigDataUrl bbi/%s.cytoBandIdeo.bb
+# html html/%s.cytoBand\n\n" "${asmId}" "${asmId}"
+
+# only the ideoGram is needed, not the track
+
+printf "track cytoBandIdeo
+shortLabel Chromosome Band (Ideogram)
+longLabel Ideogram for Orientation
+group map
+visibility dense
+type bigBed 4 +
+bigDataUrl bbi/%s.cytoBand.bb\n\n" "${asmId}"
+
+# $scriptDir/asmHubCytoBand.pl $asmId $buildDir/html/$asmId.names.tab $buildDir > $buildDir/html/$asmId.cytoBand.html
+fi
+
 if [ -s ${buildDir}/trackData/gc5Base/${asmId}.gc5Base.bw ]; then
 rm -f $buildDir/bbi/${asmId}.gc5Base.bw
 ln -s $buildDir/trackData/gc5Base/${asmId}.gc5Base.bw $buildDir/bbi/${asmId}.gc5Base.bw
@@ -84,6 +110,7 @@ viewLimits 30:70
 type bigWig 0 100
 bigDataUrl bbi/%s.gc5Base.bw
 html html/%s.gc5Base\n\n" "${asmId}" "${asmId}"
+
 $scriptDir/asmHubGc5Percent.pl $asmId $buildDir/html/$asmId.names.tab $buildDir > $buildDir/html/$asmId.gc5Base.html
 fi
 
