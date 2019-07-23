@@ -1574,7 +1574,7 @@ if (thisNodeStr)   // if geo-mirroring is enabled
         int thisNode = sqlUnsigned(thisNodeStr);
         struct sqlConnection *centralConn = hConnectCentral();
         char *ipStr = cgiRemoteAddr();
-        int node = defaultNode(centralConn, ipStr);
+        int node = geoMirrorDefaultNode(centralConn, ipStr);
 
         // if our node is not the node that's closest.
         if (thisNode != node)

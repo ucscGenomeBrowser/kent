@@ -1,0 +1,135 @@
+
+
+Append ipv4 and ipv6 data together, without duplicating the header.
+
+cat GeoLite2-Country-Blocks-IPv4.csv > GeoLite2-Country-Blocks-IPv6n4.csv
+tail -n +2 GeoLite2-Country-Blocks-IPv6.csv >> GeoLite2-Country-Blocks-IPv6n4.csv
+
+
+[hgwdev:geoIp> geoIpToCountryMaxMind6 GeoLite2-Country-Blocks-IPv6n4.csv > geoIpCountry6.tab
+80.231.5.0/24 missing  and  in location lookup, substituting US
+193.200.150.0/24 missing  and  in location lookup, substituting US
+
+
+./make-sql
+
+autoSql does not have any support for binary strings,
+we have to either add it or come up with a substitution.
+
+IMPORTANT: DO NOT SKIP THIS STEP
+# change ipStart and ipEnd from varchar to varbinary
+vi geoIpCountry6.sql
+# change ipStart and ipEnd from varchar to varbinary
+vi geoIpNode6.sql
+
+made a copy of load-tables script as load-tables6
+temporarily tweaked it to only do *6.as (to pick up the two new *6.as files,
+and ran it.
+
+[hgwdev:geoIp> ./load-tables6
+
+[hgwdev:geoIp> hgsql hgFixed -e 'desc geoIpCountry6'
++-----------+----------------+------+-----+---------+-------+
+| Field     | Type           | Null | Key | Default | Extra |
++-----------+----------------+------+-----+---------+-------+
+| ipStart   | varbinary(255) | NO   | PRI | NULL    |       |
+| ipEnd     | varbinary(255) | NO   |     | NULL    |       |
+| countryId | varchar(255)   | NO   |     | NULL    |       |
++-----------+----------------+------+-----+---------+-------+
+[hgwdev:geoIp> hgsql hgFixed -e 'desc geoIpNode6'
++---------+----------------+------+-----+---------+-------+
+| Field   | Type           | Null | Key | Default | Extra |
++---------+----------------+------+-----+---------+-------+
+| ipStart | varbinary(255) | NO   | PRI | NULL    |       |
+| ipEnd   | varbinary(255) | NO   |     | NULL    |       |
+| node    | char(1)        | NO   |     | NULL    |       |
++---------+----------------+------+-----+---------+-------+
+[hgwdev:geoIp> hgsql hgFixed -e 'select count(*) from geoIpCountry6'
++----------+
+| count(*) |
++----------+
+|   420291 |
++----------+
+[hgwdev:geoIp> hgsql hgFixed -e 'select count(*) from geoIpNode6'
++----------+
+| count(*) |
++----------+
+|        0 |
++----------+
+
+I compared what I loaded to what I dumped anew,
+and it was identical. This indicates that our simple dump-encoder is working OK.
+
+hgsqldump -T tempDump/ hgFixed geoIpCountry6
+diff geoIpCountry6.tab tempDump/geoIpCountry6.txt
+# no output indicates that what got loaded and re-dumped is identical.
+
+
+# fill geoIpNode6 table.
+MariaDB [hgFixed]> insert into geoIpNode6 (select ipStart, ipEnd, node from geoIpCountry6 gic, countryToNode ctn where gic.countryId=ctn.countryId);
+Query OK, 420291 rows affected (5.66 sec)
+Records: 420291  Duplicates: 0  Warnings: 0
+
+MariaDB [hgFixed]> select count(*) from geoIpNode6;
++----------+
+| count(*) |
++----------+
+|   420291 |
++----------+
+1 row in set (0.00 sec)
+
+MariaDB [hgFixed]> select count(*) from geoIpNode;
++----------+
+| count(*) |
++----------+
+|   326637 |
++----------+
+
+MariaDB [hgFixed]> select hex(ipStart), hex(ipEnd), node from geoIpNode6 order by ipStart desc limit 5;
++----------------------------------+----------------------------------+------+
+| hex(ipStart)                     | hex(ipEnd)                       | node |
++----------------------------------+----------------------------------+------+
+| 2C0FFFF0000000000000000000000000 | 2C0FFFF0FFFFFFFFFFFFFFFFFFFFFFFF | 1    |
+| 2C0FFFE8000000000000000000000000 | 2C0FFFE8FFFFFFFFFFFFFFFFFFFFFFFF | 1    |
+| 2C0FFFD8000000000000000000000000 | 2C0FFFD8FFFFFFFFFFFFFFFFFFFFFFFF | 1    |
+| 2C0FFFD0000000000000000000000000 | 2C0FFFD0FFFFFFFFFFFFFFFFFFFFFFFF | 1    |
+| 2C0FFFC8000000000000000000000000 | 2C0FFFC8FFFFFFFFFFFFFFFFFFFFFFFF | 1    |
++----------------------------------+----------------------------------+------+
+5 rows in set (0.01 sec)
+
+MariaDB [hgFixed]>
+MariaDB [hgFixed]>
+MariaDB [hgFixed]> select hex(ipStart), hex(ipEnd), node from geoIpNode6 order by ipStart limit 5;
++----------------------------------+----------------------------------+------+
+| hex(ipStart)                     | hex(ipEnd)                       | node |
++----------------------------------+----------------------------------+------+
+| 00000000000000000000FFFF01000000 | 00000000000000000000FFFF010000FF | 1    |
+| 00000000000000000000FFFF01000100 | 00000000000000000000FFFF010001FF | 3    |
+| 00000000000000000000FFFF01000200 | 00000000000000000000FFFF010003FF | 3    |
+| 00000000000000000000FFFF01000400 | 00000000000000000000FFFF010007FF | 1    |
+| 00000000000000000000FFFF01000800 | 00000000000000000000FFFF01000FFF | 3    |
++----------------------------------+----------------------------------+------+
+
+TODO at the end:
+rename tables to real:
+gbNodeReal
+geoIpNodeReal
+
+
+Make an extra backup of just the git untracked files just in case:
+
+mkdir /hive/data/outside/geoIp/untracked/2019-07-17
+gitu | xargs -I X cp X /hive/data/outside/geoIp/untracked/2019-07-17/
+
+
+Make a backup of the data too:
+
+mkdir /hive/data/outside/geoIp/geoIpTableDumps/2019-07-17
+# sadly we need to temporarily make it write-able by all so mysqld can write dump there.
+chmod 777 /hive/data/outside/geoIp/geoIpTableDumps/2019-07-17
+pushd /hive/data/outside/geoIp/geoIpTableDumps
+hgsqldump hgFixed -T 2019-07-17 continent continentToNode country countryToContinent countryToNode gbNode geoIpCountry6 geoIpNode6
+popd
+chmod 775 /hive/data/outside/geoIp/geoIpTableDumps/2019-07-17
+
+

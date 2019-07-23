@@ -33,7 +33,7 @@ via the GBiC program vs. using GBiB.
 </p>
 
 <p>
-The program works by setting up MySQL, Apache, and Ghostscript, and then copying the Genome
+The program works by setting up MySQL (MariaDB), Apache, and Ghostscript, and then copying the Genome
 Browser CGIs onto the machine under <code>/usr/local/apache/</code>. Because it also deactivates the default
 Apache htdocs/cgi folders, it is best run on a new machine, or at least a host that is not
 already used as a web server. The tool can also download full or partial assembly databases,
@@ -67,7 +67,7 @@ Run the program as root, like this:
 <pre><code>sudo bash browserSetup.sh install</code></pre>
 
 <p>
-The <code>install</code> command downloads and configures Apache, MySQL and Ghostscript, copies the Genome Browser
+The <code>install</code> command downloads and configures Apache, MySQL (MariaDB) and Ghostscript, copies the Genome Browser
 CGIs, and configures the mirror to load data remotely from UCSC. The <code>install</code> command must be
 run before any other command is used.
 </p>
@@ -89,27 +89,27 @@ allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
 <h2>How does the GBiC program work?</h2>
 
 <p>
-The GBiC program downloads the Genome Browser CGIs and sets up the central MySQL database. All
+The GBiC program downloads the Genome Browser CGIs and sets up the central MySQL (MariaDB) database. All
 potentially destructive steps require confirmation by the user (unless the <code>-b</code>
 batch mode option is specified).
 </p>
 
 <p>
-In particular, MySQL and Apache are installed and set up with the right package
+In particular, MySQL (MariaDB) and Apache are installed and set up with the right package
 manager (yum or apt-get). A default random password is set for the
-MySQL root user and added to the <code>~/.my.cnf</code> file of the Unix root account.
-If you have already set up MySQL, you must create the
+MySQL (MariaDB) root user and added to the <code>~/.my.cnf</code> file of the Unix root account.
+If you have already set up MySQL (MariaDB), you must create the
 <code>~/.my.cnf</code> file. The program will detect this and create a template file for you.
 The program also performs some minor tasks such as placing symlinks, detecting
 MariaDB, deactivating SELinux, finding the correct path for your Apache install
-and adapting the MySQL socket config.
+and adapting the MySQL (MariaDB) socket config.
 </p>
 
 <p>
 This will result in a Genome Browser accessible on localhost that loads its data
 through genome-mysql.soe.ucsc.edu:3306 and hgdownload.soe.ucsc.edu:80. If
 your geographic location is not on the US West Coast, the performance will be too slow for normal
-use, though sufficient to test that the setup is functional. A special MySQL server is
+use, though sufficient to test that the setup is functional. A special MySQL (MariaDB) server is
 set up in Germany for users in Europe. You can change the <code>/usr/local/apache/cgi-bin/hg.conf</code>
 genome-mysql.soe.ucsc.edu lines to genome-euro-mysql.soe.ucsc.edu in order to get better
 performance. You can then use the program to download
@@ -121,7 +121,7 @@ as fast as the UCSC site.
 <p>
 Your network firewall must allow outgoing connections to the following servers and ports:
   <ul>
-    <li>MySQL connections, used to load tracks not local to your computer:
+    <li>MySQL (MariaDB) connections, used to load tracks not local to your computer:
       <ul>
         <li>US server: Port 3306 on genome-mysql.soe.ucsc.edu (128.114.119.174)</li>
         <li>European server: Port 3306 on genome-euro-mysql.soe.ucsc.edu (129.70.40.120)</li>
@@ -144,7 +144,7 @@ Your network firewall must allow outgoing connections to the following servers a
 <p>
 The first argument of the program is called <code>command</code> in the following section of this document.
 The first command that you will need is <code>install</code>, which installs the Genome Browser dependencies,
-binary files and basic MySQL infrastructure:
+binary files and basic MySQL (MariaDB) infrastructure:
 </p>
 
 <pre><code>sudo bash browserSetup.sh install</code></pre>
@@ -165,7 +165,7 @@ To improve the performance of your Genome Browser, the program accepts the comma
 <code>minimal</code>. It will download the minimal tables required for reasonable
 performance from places in the US and possibly others, e.g., from
 Japan. Call it like this to trade space for performance and download a few
-of the most used MySQL tables for hg38:
+of the most used MariaDB tables for hg38:
 </p>
 
 <pre><code>sudo bash browserSetup.sh minimal hg38</code></pre>

@@ -8,11 +8,11 @@ CREATE TABLE wgEncodeGencodeAttrs (
     geneId varchar(255) not null,	# Gene identifier
     geneName varchar(255) not null,	# Gene name
     geneType varchar(255) not null,	# BioType of gene
-    geneStatus varchar(255) not null,	# Status of gene
+    geneStatus varchar(255) not null,	# Status of gene (obsolete)
     transcriptId varchar(255) not null,	# Transcript identifier
     transcriptName varchar(255) not null,	# Transcript name
     transcriptType varchar(255) not null,	# BioType of transcript
-    transcriptStatus varchar(255) not null,	# Status of transcript
+    transcriptStatus varchar(255) not null,	# Status of transcript (obsolete)
     havanaGeneId varchar(255) not null,	# HAVANA identifier if gene is in HAVANA
     havanaTranscriptId varchar(255) not null,	# HAVANA identifier if transcript is in HAVANA
     ccdsId varchar(255) not null,	# CCDS identifier if transcript is in CCDS

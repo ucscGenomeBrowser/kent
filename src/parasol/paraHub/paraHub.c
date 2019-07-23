@@ -138,6 +138,7 @@ errAbort("paraHub - parasol hub server version %s\n"
 	 "   -machineCheckPeriod=N  Minutes between checking on machine - default %d.\n"
 	 "   -subnet=XXX.YYY.ZZZ Only accept connections from subnet (example 192.168).\n"
 	 "     Or CIDR notation (example 192.168.1.2/24).\n"
+         "     Supports comma-separated list of IPv4 or IPv6 subnets in CIDR notation.\n"
 	 "   -nextJobId=N  Starting job ID number.\n"
 	 "   -logFacility=facility  Log to the specified syslog facility - default local0.\n"
          "   -logMinPriority=pri minimum syslog priority to log, also filters file logging.\n"
@@ -227,6 +228,15 @@ deadSpokes = newDlList();
 queuedUsers = newDlList();
 unqueuedUsers = newDlList();
 userHash = newHash(6);
+}
+
+void lookupIp(char *host, char *ipStr, int ipStrSize)
+/* convert host into IP address string. */
+{
+struct sockaddr_storage sai;
+if (!internetFillInAddress6n4(host, NULL, AF_UNSPEC, SOCK_DGRAM, &sai, FALSE))
+    errAbort("host %s lookup failed.", host);
+getAddrAsString6n4(&sai, ipStr, ipStrSize);
 }
 
 int avgBatchTime(struct batch *batch)
@@ -1134,13 +1144,13 @@ if (mach != NULL)
     }
 }
 
-struct machine *doAddMachine(char *name, char *tempDir, bits32 ip, struct machSpec *m)
+struct machine *doAddMachine(char *name, char *tempDir, char *ipStr, struct machSpec *m)
 /* Add machine to pool.  If you don't know ip yet just pass
  * in 0 for that argument. */
 {
 struct machine *mach;
 mach = machineNew(name, tempDir, m);
-mach->ip = ip;
+safecpy(mach->ipStr, sizeof mach->ipStr, ipStr);
 dlAddTail(freeMachines, mach->node);
 slAddHead(&machineList, mach);
 needsPlanning = TRUE;  
@@ -1189,7 +1199,7 @@ else
 	}
     }
 
-doAddMachine(name, m->tempDir, 0, m);
+doAddMachine(name, m->tempDir, "0", m);  // "0" means no ipStr here
 runner(1);
 }
 
@@ -3000,12 +3010,12 @@ boolean firstTime = TRUE;
 while (lineFileRow(lf, row))
     {
     struct machSpec *ms;
-    bits32 ip;
     ms = machSpecLoad(row);
-    ip = internetHostIp(ms->name);
+    char ipStr[NI_MAXHOST];
+    lookupIp(ms->name, ipStr, sizeof ipStr);
     if (hashLookup(machineHash, ms->name))
 	errAbort("machine list contains duplicate: %s",  ms->name);
-    struct machine *machine = doAddMachine(ms->name, ms->tempDir, ip, ms);
+    struct machine *machine = doAddMachine(ms->name, ms->tempDir, ipStr, ms);
     hashStoreName(machineHash, ms->name);
 
     // TODO Add a command-line param for these that overrides default?
@@ -3212,7 +3222,7 @@ char resultsFile[512];
 struct paraMultiMessage pmm;
 
 /* ensure the multi-message response comes from the correct ip and has no duplicate msgs*/
-pmmInit(&pmm, pm, pm->ipAddress.sin_addr);
+pmmInit(&pmm, pm);
 
 if (!pmmReceiveTimeOut(&pmm, ru, 2000000))
     {
@@ -3292,7 +3302,7 @@ for (mach = machineList; mach != NULL; mach = mach->next)
     struct paraMessage pm;
     struct rudp *ru = rudpNew(rudpOut->socket);	/* Get own resend timing */
     logDebug("check for jobs on %s", mach->name);
-    pmInitFromName(&pm, mach->name, paraNodePort);
+    pmInitFromName(&pm, mach->name, paraNodePortStr);
     if (!pmSendString(&pm, ru, "listJobs"))
         {
 	machineDown(mach);
@@ -3316,7 +3326,7 @@ logDebug("%d running jobs, %d jobs that finished while hub was down",
 void startHub(char *machineList)
 /* Do hub daemon - set up socket, and loop around on it until we get a quit. */
 {
-struct sockaddr_in sai;
+struct sockaddr_storage sai;
 char *line, *command;
 struct rudp *rudpIn = NULL;
 
@@ -3349,9 +3359,10 @@ if (!optionExists("noResume"))
 
 /* Initialize socket etc. */
 ZeroVar(&sai);
-sai.sin_family = AF_INET;
-sai.sin_port = htons(paraHubPort);
-sai.sin_addr.s_addr = INADDR_ANY;
+
+if (!internetFillInAddress6n4(NULL, paraHubPortStr, AF_INET6, SOCK_DGRAM, &sai, FALSE))
+    errAbort("NULL host addrinfo lookup failed trying to bind listener.");
+
 rudpIn = rudpMustOpenBound(&sai);
 
 /* Start up daemons. */
@@ -3456,9 +3467,15 @@ saveJobId();
 void fillInSubnet()
 /* Parse subnet paramenter if any into subnet variable. */
 {
+char hubSubnetStr[1024];
 char *sns = optionVal("subnet", NULL);
-hubSubnet = internetParseSubnetCidr(sns);
-localHostSubnet = internetParseSubnetCidr("127.0.0.1"); /* Address for local host */
+char *localHostSubnet = "127.0.0.1,::1/128"; /* Address for local host */
+if (sns)
+    safef(hubSubnetStr, sizeof hubSubnetStr, "%s,%s", localHostSubnet, sns); 
+else
+    safef(hubSubnetStr, sizeof hubSubnetStr, "%s", localHostSubnet); 
+
+hubSubnet = internetParseSubnetCidr(hubSubnetStr);
 }
 
 int main(int argc, char *argv[])

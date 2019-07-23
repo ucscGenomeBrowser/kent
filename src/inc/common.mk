@@ -64,7 +64,7 @@ endif
 
 # autodetect UCSC installation of hal:
 ifeq (${HALDIR},)
-    HALDIR = /hive/groups/browser/hal/halRelease
+    HALDIR = /hive/groups/browser/hal/halRelease/hal.2015-11-11
     ifneq ($(wildcard ${HALDIR}),)
         ifeq (${USE_HAL},)
           USE_HAL=1

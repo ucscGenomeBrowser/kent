@@ -9,36 +9,40 @@
 #include "errAbort.h"
 #include "log.h"
 
-void pmInit(struct paraMessage *pm, rudpHost ipAddress, bits16 port)
-/* Initialize message (that might be on stack). ipAddress is in host
- * order. */
+static void pmInitExt(struct paraMessage *pm, char *hostStr, char *portStr, boolean ipOnly)
+/* Initialize message (that might be on stack). ipStr is host ip as string. portStr is port number as string */
 {
-ZeroVar(pm);
-pm->ipAddress.sin_family = AF_INET;
-pm->ipAddress.sin_port = htons(port);
-pm->ipAddress.sin_addr.s_addr = htonl(ipAddress);
+ZeroVar(pm); 
+if (!hostStr && !portStr)  // special case used by spoke etc for message that goes on queue but not sent via network.
+    return;
+// ipOnly = TRUE = only allow ipv4 or ipv6 addresses, not names
+// ipOnly = FALSE = names allowed too.
+if (!internetFillInAddress6n4(hostStr, portStr, AF_UNSPEC, SOCK_DGRAM, &pm->ipAddress, ipOnly))
+    errAbort("ip address %s port %s lookup failed.", hostStr, portStr);
 }
 
-void pmInitFromName(struct paraMessage *pm, char *hostName, bits16 port)
+void pmInit(struct paraMessage *pm, char *ipStr, char *portStr)
+/* Initialize message (that might be on stack). ipStr is host ip as string. portStr is port number as string */
+{
+// ipOnly = TRUE = only allow ipv4 or ipv6 addresses, not names
+pmInitExt(pm, ipStr, portStr, TRUE);
+}
+
+void pmInitFromName(struct paraMessage *pm, char *hostName, char *portStr)
 /* Initialize message with ascii ip address. */
 {
-pmInit(pm, internetHostIp(hostName), port);
+// ipOnly = FALSE = names allowed too.
+pmInitExt(pm, hostName, portStr, FALSE);
 }
 
 
-struct paraMessage *pmNew(rudpHost ipAddress, bits16 port)
+struct paraMessage *pmNew(char *ipStr, char *portStr)
 /* Create new message in memory */
 {
 struct paraMessage *pm;
 AllocVar(pm);
-pmInit(pm, ipAddress, port);
+pmInit(pm, ipStr, portStr);
 return pm;
-}
-
-struct paraMessage *pmNewFromName(char *hostName, bits16 port)
-/* Create new message in memory */
-{
-return pmNew(internetHostIp(hostName), port);
 }
 
 void pmFree(struct paraMessage **pPm)
@@ -145,12 +149,32 @@ boolean pmReceive(struct paraMessage *pm, struct rudp *ru)
 return pmReceiveTimeOut(pm, ru, 0);
 }
 
-void pmmInit(struct paraMultiMessage *pmm, struct paraMessage *pm, struct in_addr sin_addr)
+static void setPort6n4(struct sockaddr_storage *sai, char *portStr)
+/* set port to zero */
+{
+int port = atoi(portStr);
+if (sai->ss_family == AF_INET6)   //ipv6
+    {
+    struct sockaddr_in6 *sai6 = (struct sockaddr_in6 *)sai;
+    sai6->sin6_port = htons(port);
+    }
+else if (sai->ss_family == AF_INET)  // ipv4
+    {
+    struct sockaddr_in *sai4 = (struct sockaddr_in *)sai;
+    sai4->sin_port = htons(port);
+    }
+else
+   errAbort("unknown sai->ss_family=%d in setPort6n4", sai->ss_family);
+}
+
+void pmmInit(struct paraMultiMessage *pmm, struct paraMessage *pm)
 /* Initialize structure for multi-message response  */
 {
 pmm->pm = pm;
-pmm->ipAddress.sin_addr.s_addr = sin_addr.s_addr;
-pmm->ipAddress.sin_port = 0;    /* we don't yet know what port the responder is going to use */
+memcpy(&pmm->ipAddress, &pm->ipAddress, sizeof(struct sockaddr_storage));
+setPort6n4(&pmm->ipAddress, "0"); /* we don't yet know what port the responder is going to use */
+if (pm->ipAddress.ss_family != pmm->ipAddress.ss_family)   // must match
+    errAbort("unexpected error pmmInit, ss_family does not match pm family=%d, pmm family=%d ", pm->ipAddress.ss_family, pmm->ipAddress.ss_family);
 pmm->id = 0; 
 }
 
@@ -162,32 +186,40 @@ boolean pmmReceiveTimeOut(struct paraMultiMessage *pmm, struct rudp *ru, int tim
  * and the packet id for sequential series. 
  */
 {
+
 for(;;)
     {
     if (!pmReceiveTimeOut(pmm->pm, ru, timeOut))
 	return FALSE;
-    if (pmm->ipAddress.sin_addr.s_addr != pmm->pm->ipAddress.sin_addr.s_addr)
+
+    char     pmmIpStr[NI_MAXHOST];
+    char   pmmpmIpStr[NI_MAXHOST];
+    char   pmmPortStr[NI_MAXSERV];
+    char pmmpmPortStr[NI_MAXSERV];
+    getAddrAndPortAsString6n4(&pmm->ipAddress    , pmmIpStr  , sizeof pmmIpStr  , pmmPortStr  , sizeof pmmPortStr  );
+    getAddrAndPortAsString6n4(&pmm->pm->ipAddress, pmmpmIpStr, sizeof pmmpmIpStr, pmmpmPortStr, sizeof pmmpmPortStr);
+
+    if (!sameString(pmmIpStr, pmmpmIpStr))  // diff
 	{
-	logDebug("rudp: pmmReceiveTimeOut ignoring unwanted packet from wrong sender expected %ux got %ux",
-	    (unsigned int)pmm->ipAddress.sin_addr.s_addr, (unsigned int)pmm->pm->ipAddress.sin_addr.s_addr);
+	logDebug("rudp: pmmReceiveTimeOut ignoring unwanted packet from wrong sender expected %s got %s", pmmIpStr, pmmpmIpStr);
 	continue;
 	}
-    if (pmm->ipAddress.sin_port == 0)  /* we don't yet know what port the responder is going to use */
+    if (sameString(pmmPortStr,"0"))  /* we don't yet know what port the responder is going to use */
        	/* Should be ASSERTABLE first packet received since pmmInit was called */
 	{
-	pmm->ipAddress.sin_port = pmm->pm->ipAddress.sin_port;
+	setPort6n4(&pmm->ipAddress, pmmpmPortStr);
 	}
     else
 	{
-	if (pmm->ipAddress.sin_port != pmm->pm->ipAddress.sin_port)
+        if (!sameString(pmmPortStr,pmmpmPortStr))  /* we don't yet know what port the responder is going to use */
 	    {
-	    logDebug("rudp: pmmReceiveTimeOut ignoring unwanted packet from wrong port expected %x got %x",
-		pmm->ipAddress.sin_port, pmm->pm->ipAddress.sin_port);
+	    logDebug("rudp: pmmReceiveTimeOut ignoring unwanted packet from wrong port expected %s got %s",
+		pmmPortStr, pmmpmPortStr);
 	    continue;
 	    }
 	if (pmm->id == ru->lastIdReceived && ru->resend)
 	    {
-	    logDebug("rudp: pmmReceiveTimeOut ignoring duplicate packet lastIdReceived=%d",	pmm->id);
+	    logDebug("rudp: pmmReceiveTimeOut ignoring duplicate packet lastIdReceived=%d", pmm->id);
 	    continue;
 	    }
 	if (pmm->id+1 != ru->lastIdReceived)
@@ -209,35 +241,13 @@ return pmmReceiveTimeOut(pmm, ru, 0);
 }
 
 
-#if 0 /* unused static functions */
-static char *addLongData(char *data, bits32 val)
-/* Add val to data stream, converting to network format.  Return
- * new position of data stream. */
-{
-val = htonl(val);
-memcpy(data, &val, sizeof(val));
-return data + sizeof(val);
-}
-
-static bits32 getLongData(char **pData)
-/* Get val from data stream, converting from network to host format.
- * Update data stream position. */
-{
-bits32 val;
-memcpy(&val, *pData, sizeof(val));
-*pData += sizeof(val);
-val = ntohl(val);
-return val;
-}
-#endif
-
 void pmFetchOpenFile(struct paraMessage *pm, struct rudp *ru, char *fileName)
 /* Read everything you can from socket and output to file. */
 {
 struct paraMultiMessage pmm;
 FILE *f = mustOpen(fileName, "w");
 /* ensure the multi-message response comes from the correct ip and has no duplicate msgs*/
-pmmInit(&pmm, pm, pm->ipAddress.sin_addr);
+pmmInit(&pmm, pm);
 while (pmmReceive(&pmm, ru))
     {
     if (pm->size == 0)
@@ -250,11 +260,11 @@ carefulClose(&f);
 void pmFetchFile(char *host, char *sourceName, char *destName)
 /* Fetch small file. Only works if you are on hub if they've set up any security. */
 {
-struct rudp *ru = rudpOpen();
 struct paraMessage pm;
+struct rudp *ru = rudpOpen();
 if (ru != NULL)
     {
-    pmInitFromName(&pm, host, paraNodePort);
+    pmInitFromName(&pm, host, paraNodePortStr);
     pmPrintf(&pm, "fetch %s %s", getUser(), sourceName);
     if (pmSend(&pm, ru))
 	pmFetchOpenFile(&pm, ru, destName);
@@ -291,7 +301,7 @@ char *pmHubSendSimple(char *message, char *host)
 {
 struct rudp *ru = rudpMustOpen();
 struct paraMessage pm;
-pmInitFromName(&pm, host, paraHubPort);
+pmInitFromName(&pm, host, paraHubPortStr);
 if (!pmSendStringWithRetries(&pm, ru, message))
     noWarnAbort();
 rudpClose(&ru);
@@ -304,8 +314,7 @@ char *pmHubSingleLineQuery(char *query, char *host)
 {
 struct rudp *ru = rudpMustOpen();
 struct paraMessage pm;
-
-pmInitFromName(&pm, host, paraHubPort);
+pmInitFromName(&pm, host, paraHubPortStr);
 if (!pmSendStringWithRetries(&pm, ru, query))
     noWarnAbort();
 if (!pmReceive(&pm, ru))
@@ -324,9 +333,9 @@ struct paraMessage pm;
 struct paraMultiMessage pmm;
 char *row[256];
 int count = 0;
-pmInitFromName(&pm, host, paraHubPort);
+pmInitFromName(&pm, host, paraHubPortStr);
 /* ensure the multi-message response comes from the correct ip and has no duplicate msgs*/
-pmmInit(&pmm, &pm, pm.ipAddress.sin_addr);
+pmmInit(&pmm, &pm);
 if (!pmSendStringWithRetries(&pm, ru, query))
     noWarnAbort();
 for (;;)

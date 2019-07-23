@@ -49,11 +49,8 @@ static char *ensemblH37GeneIdUrl = "http://grch37.ensembl.org/%s/Gene/Summary?db
 static char *ensemblH37ProteinIdUrl = "http://grch37.ensembl.org/%s/Transcript/ProteinSummary?db=core;t=%s";
 static char *ensemblH37SupportingEvidUrl = "http://grch37.ensembl.org/%s/Transcript/SupportingEvidence?db=core;t=%s";
 
-static char *vegaTranscriptIdUrl = "http://vega.sanger.ac.uk/%s/Transcript/Summary?db=core;t=%s";
-static char *vegaGeneIdUrl = "http://vega.sanger.ac.uk/%s/Gene/Summary?db=core;g=%s";
-
-static char *gencodeBiotypesUrl = "http://www.gencodegenes.org/gencode_biotypes.html";
-static char *gencodeTagsUrl = "http://www.gencodegenes.org/gencode_tags.html";
+static char *gencodeBiotypesUrl = "http://www.gencodegenes.org/pages/biotypes.html";
+static char *gencodeTagsUrl = "http://www.gencodegenes.org/pages/tags.html";
 
 static char *yalePseudoUrl = "http://tables.pseudogene.org/%s";
 static char *hgncUrl = " https://www.genenames.org/data/gene-symbol-report/#!/symbol/%s";
@@ -267,7 +264,7 @@ prExtIdAnchor(id, urlTemplate);
 #endif
 
 static void prEnsIdAnchor(char *id, char *urlTemplate)
-/* if an id to an ensembl or vega database is not empty, print an HTML anchor to it */
+/* if an id to an ensembl database is not empty, print an HTML anchor to it */
 {
 if (!isEmpty(id))
     {
@@ -284,7 +281,7 @@ if (!isEmpty(id))
 }
 
 static void prTdEnsIdAnchor(char *id, char *urlTemplate)
-/* print a table data element with an ensembl/vega anchor for a id */
+/* print a table data element with an ensembl anchor for a id */
 {
 printf("<td>");
 prEnsIdAnchor(id, urlTemplate);
@@ -408,8 +405,8 @@ if (transAttrs->proteinId != NULL)
     }
 
 printf("<tr><th>HAVANA manual id");
-prTdEnsIdAnchor(transAttrs->havanaTranscriptId, vegaTranscriptIdUrl);
-prTdEnsIdAnchor(transAttrs->havanaGeneId, vegaGeneIdUrl);
+printf("<td>%s", transAttrs->havanaTranscriptId);
+printf("<td>%s", transAttrs->havanaGeneId);
 printf("</tr>\n");
 
 printf("<tr><th>Position");

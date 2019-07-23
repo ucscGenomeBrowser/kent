@@ -65,6 +65,7 @@ do
   cd $db
 
   ln -s ../genemap.txt ./genemap.txt
+  ln -s ../genemap2.txt ./genemap2.txt
   ln -s ../allelicVariants.txt ./allelicVariants.txt
   ln -s ../mim2gene.txt ./mim2gene.txt
   ln -s ../../doOmimPhenotype.pl ./doOmimPhenotype.pl

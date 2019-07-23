@@ -82,6 +82,7 @@ static int dnaUtilBases[4];	/* translation values from dnautil.h */
 #define G_BASE  2
 #define T_BASE  3
 #define U_BASE  3
+#define N_BASE  4
 
 static char bases[4];  /* for two-bits to ascii conversion */
 
@@ -170,7 +171,11 @@ dna = seq->dna;
 for (i=0; i < seq->size; ++i)
     {
     ++chromPosition;
-    val = dnaUtilBases[ntVal[(int)dna[i]]];
+    int nVal = ntVal[(int)dna[i]];
+    if (nVal < 0)
+	val = N_BASE;
+    else
+	val = dnaUtilBases[ntVal[(int)dna[i]]];
     switch (val)
 	{
 	case T_BASE:

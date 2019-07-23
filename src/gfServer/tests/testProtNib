@@ -1,3 +1,4 @@
+#!/bin/bash
 gfServer start -trans localhost 17768 -canStop input/mCreaGeno.nib input/hCreaGeno.nib > /dev/null 2>&1 &
 sleep 1
 gfServer protQuery localhost 17768 input/mCrea.pep > $1

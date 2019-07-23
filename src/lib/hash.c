@@ -354,14 +354,24 @@ memset(hash->table, 0, hash->size * sizeof hash->table[0]);
 hash->elCount = 0;
 }
 
+static int adjustPowerOfTwoSize(int powerOfTwoSize)
+/* If powerOfTwoSize is 0, return a reasonable default to use instead.  If powerOfTwoSize
+ * is out of range, errAbort.  Otherwise return powerOfTwoSize. */
+{
+if (powerOfTwoSize == 0)
+    powerOfTwoSize = 12;
+if (powerOfTwoSize > hashMaxSize || powerOfTwoSize < 0)
+    errAbort("hash powerOfTwoSize must be >= 0 and <= %d, but %d was passed in.",
+             hashMaxSize, powerOfTwoSize);
+return powerOfTwoSize;
+}
+
 struct hash *newHashLm(int powerOfTwoSize, struct lm *lm)
 /* Returns new hash table using the given lm.  Recommended lm block size is 256B to 64kB,
  * depending on powerOfTwoSize. */
 {
 struct hash *hash = lm ? lmAlloc(lm, sizeof(*hash)) : needMem(sizeof(*hash));
-if (powerOfTwoSize == 0)
-    powerOfTwoSize = 12;
-assert(powerOfTwoSize <= hashMaxSize && powerOfTwoSize > 0);
+powerOfTwoSize = adjustPowerOfTwoSize(powerOfTwoSize);
 hash->powerOfTwoSize = powerOfTwoSize;
 hash->size = (1<<powerOfTwoSize);
 hash->lm = lm;
@@ -382,9 +392,7 @@ struct hash *hash = NULL;
 if (useLocalMem)
     {
     int memBlockPower = 16;
-    if (powerOfTwoSize == 0)
-        powerOfTwoSize = 12;
-    assert(powerOfTwoSize <= hashMaxSize && powerOfTwoSize > 0);
+    powerOfTwoSize = adjustPowerOfTwoSize(powerOfTwoSize);
     /* Make size of memory block for allocator vary between
      * 256 bytes and 64k depending on size of table. */
     if (powerOfTwoSize < 8)
@@ -419,10 +427,9 @@ void hashResize(struct hash *hash, int powerOfTwoSize)
 int oldHashSize = hash->size;
 struct hashEl **oldTable = hash->table;
 
-if (powerOfTwoSize == 0)
-    powerOfTwoSize = 12;
 if (powerOfTwoSize > hashMaxSize)
     powerOfTwoSize =  hashMaxSize;
+powerOfTwoSize = adjustPowerOfTwoSize(powerOfTwoSize);
 if (hash->powerOfTwoSize == powerOfTwoSize)
     return;
 

@@ -65,149 +65,63 @@ if (errMsg != NULL)
 return metaResult;
 }
 
-
-int fetchResolution(struct track *tg)
-/* Retrieve the binsize to draw the track in.  If the track UI has the resolution
- * set as "auto", find the widest resolution that still splits the window into 5000
- * pieces (if possible, otherwise select the smallest resolution). */
-{
-if (tg->customPt == NULL)
-    tg->customPt = grabHeader(tg);
-if (tg->customPt == 0)
-    return -1;
-
-struct hicMeta *meta = (struct hicMeta*) tg->customPt;
-char *binSizeString = hicUiFetchResolution(cart, tg->track, meta);
-if (binSizeString == NULL)
-    {
-    warn("Empty binSize string");
-    return 0;
-    }
-int result;
-if (sameString(binSizeString, "Auto"))
-    {
-    int idealRes = (winEnd-winStart)/5000;
-    char *autoRes = meta->resolutions[meta->nRes-1];
-    int i;
-    for (i=meta->nRes-1; i>= 0; i--)
-        {
-        if (atoi(meta->resolutions[i]) < idealRes)
-            {
-            autoRes = meta->resolutions[i];
-            break;
-            }
-        }
-    result = atoi(autoRes);
-    }
-else
-    result = atoi(binSizeString);
-return result;
-}
-
-char *fetchNormalization(struct track *tg)
-/* Fetch the normalization to use for this track. */
-{
-if (tg->customPt == NULL)
-    tg->customPt = grabHeader(tg);
-if (tg->customPt == NULL)
-    return NULL;
-struct hicMeta *meta = (struct hicMeta*) tg->customPt;
-return hicUiFetchNormalization(cart, tg->track, meta);
-}
-
-
 static void loadAndFilterItems(struct track *tg)
 /* Load all Hi-C items in the current region and identify the window height
  * and median value for this region. */
 {
-int *x, *y, numRecords;
-double *counts;
-int binSize = fetchResolution(tg);
-if (binSize == 0)
+if (tg->customPt == NULL)
+    tg->customPt = grabHeader(tg);
+if (tg->customPt == NULL)
     return;
-struct hicMeta *meta = (struct hicMeta*)tg->customPt;
-char *normalization = fetchNormalization(tg);
+struct hicMeta *hicFileInfo = (struct hicMeta*)tg->customPt;
+
+int binSize = hicUiFetchResolutionAsInt(cart, tg->track, hicFileInfo, winEnd-winStart);
+char *normalization = hicUiFetchNormalization(cart, tg->track, hicFileInfo);
 
 // Later, we should validate that this file is for the current assembly (see the hicMeta structure)
 
 // Note: This is giving it a 0-based, full-closed window. Straw seems to use 1-based coordinates
 // by default, but accepts 0 as the start of a window without complaint.
-struct dyString *windowPos = dyStringNew(0);
 // Pad the start because we want to display partial interactions if the end of an interacting block is
 // in view but not the start.  Straw won't report interactions if the start of the block isn't in the
 // supplied position range.
 int strawStart = winStart - binSize + 1;
 if (strawStart < 0) strawStart = 0;
 
-char *hicChromName = chromName;
-if (meta->ucscToAlias != NULL)
-    {
-    hicChromName = (char*) hashFindVal(meta->ucscToAlias, chromName);
-    if (hicChromName == NULL)
-        {
-        hicChromName = chromName;
-        }
-    }
-dyStringPrintf(windowPos, "%s:%d:%d", hicChromName, strawStart, winEnd-1);
-
-char *filename = trackDbSettingOrDefault(tg->tdb, "bigDataUrl", NULL);
-if (filename == NULL)
-    return;
-
-tg->networkErrMsg = Cstraw(normalization, filename, binSize, dyStringContents(windowPos), dyStringContents(windowPos), "BP", &x, &y, &counts, &numRecords);
+struct interact *hicItems = NULL;
+tg->networkErrMsg = hicLoadData(hicFileInfo, binSize, normalization, chromName, strawStart, winEnd-1, chromName,
+        strawStart, winEnd-1, &hicItems);
 
 // Using the interact structure because it has convenient fields, but this is not interact data and
 // shouldn't be passed to those functions.
-struct interact *hicItems = NULL;
-int i = 0, filtNumRecords = 0;
+int numRecords = slCount(hicItems), filtNumRecords = 0;
 tg->maxRange = 0.0; // the max height of an interaction in this window
 double *countsCopy = NULL;
 AllocArray(countsCopy, numRecords);
-for (i=0; i<numRecords; i++)
+
+struct interact *thisHic = hicItems;
+while (thisHic != NULL)
     {
     char *drawMode = hicUiFetchDrawMode(cart, tg->track);
-    if (isnan(counts[i]))
-        {
-        // Yes, apparently NAN is possible with normalized values in some methods.  Ignore those.
-        continue;
-        }
     if (sameString(drawMode, HIC_DRAW_MODE_ARC))
         {
         // we omit self-interactions in arc mode (they'd just be weird vertical lines)
-        if (x[i] == y[i])
+        if (sameString(thisHic->sourceChrom, thisHic->targetChrom) &&
+                (thisHic->sourceStart == thisHic->targetStart))
             continue;
         }
-    countsCopy[filtNumRecords++] = counts[i];
-    struct interact *new = NULL;
-    AllocVar(new);
-    new->chrom = cloneString(chromName);
-    // x is always <= y, so x is always the start
-    new->chromStart = x[i];
-    new->chromEnd = y[i]+binSize;
-    new->name = NULL;
-    new->score = 0; // ignored
-    new->value = counts[i];
-    new->exp = NULL;
-    new->color = 0;
-    new->sourceChrom = cloneString(chromName);
-    new->sourceStart = x[i];
-    new->sourceEnd = x[i]+binSize;
-    new->targetChrom = cloneString(chromName);
-    new->targetStart = y[i];
-    new->targetEnd = y[i]+binSize;
-    new->targetName = new->targetStrand = NULL;
+    countsCopy[filtNumRecords++] = thisHic->value;
 
     // Calculate the track draw height required to see this item
-    int leftx = new->chromStart > winStart ? new->chromStart : winStart;
-    int rightx = new->chromEnd < winEnd ? new->chromEnd : winEnd;
+    int leftx = thisHic->chromStart > winStart ? thisHic->chromStart : winStart;
+    int rightx = thisHic->chromEnd < winEnd ? thisHic->chromEnd : winEnd;
     double thisHeight = scaleForWindow(insideWidth, winStart, winEnd)*(rightx - leftx)/2.0; // triangle or arc
     if (sameString(drawMode,HIC_DRAW_MODE_SQUARE))
         thisHeight = scaleForWindow(insideWidth, winStart, winEnd)*(winEnd-winStart); // square - always draw the full square
 
     if (thisHeight > tg->maxRange)
         tg->maxRange = thisHeight;
-
-    slAddHead(&hicItems, new);
+    thisHic = thisHic->next;
     }
 
 // Heuristic for auto-scaling the color gradient based on the scores in view - draw the max color value
@@ -303,9 +217,8 @@ double xScale = scaleForWindow(width, seqStart, seqEnd);
 double yScale = xScale;
 int maxHeight = tg->height;
 struct interact *hicItem = NULL;
-int binSize = fetchResolution(tg);
-if (binSize == 0)
-    return;
+struct hicMeta *hicFileInfo = (struct hicMeta*)tg->customPt;
+int binSize = hicUiFetchResolutionAsInt(cart, tg->track, hicFileInfo, winEnd-winStart);
 
 if (vis == tvDense)
     {
@@ -365,7 +278,8 @@ double xScale = scaleForWindow(width, seqStart, seqEnd);
 double yScale = xScale;
 int maxHeight = tg->height;
 struct interact *hicItem = NULL;
-int binSize = fetchResolution(tg);
+struct hicMeta *hicFileInfo = (struct hicMeta*)tg->customPt;
+int binSize = hicUiFetchResolutionAsInt(cart, tg->track, hicFileInfo, winEnd-winStart);
 if (binSize == 0)
     return;
 
@@ -426,7 +340,8 @@ double xScale = scaleForWindow(width, seqStart, seqEnd);
 double yScale = xScale;
 int maxHeight = tg->height;
 struct interact *hicItem = NULL;
-int binSize = fetchResolution(tg);
+struct hicMeta *hicFileInfo = (struct hicMeta*)tg->customPt;
+int binSize = hicUiFetchResolutionAsInt(cart, tg->track, hicFileInfo, winEnd-winStart);
 if (binSize == 0)
     return;
 

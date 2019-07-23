@@ -70,7 +70,7 @@ errAbort(
   "gfServer v %s - Make a server to quickly find where DNA occurs in genome\n"
   "   To set up a server:\n"
   "      gfServer start host port file(s)\n"
-  "      where the files are .nib or .2bit format files specified relative to the current directory\n"
+  "      where the files are .2bit or .nib format files specified relative to the current directory\n"
   "   To remove a server:\n"
   "      gfServer stop host port\n"
   "   To query a server with DNA sequence:\n"
@@ -81,10 +81,10 @@ errAbort(
   "      gfServer transQuery host port probe.fa\n"
   "   To query server with PCR primers:\n"
   "      gfServer pcr host port fPrimer rPrimer maxDistance\n"
-  "   To process one probe fa file against a .nib format genome (not starting server):\n"
-  "      gfServer direct probe.fa file(s).nib\n"
+  "   To process one probe fa file against a .2bit format genome (not starting server):\n"
+  "      gfServer direct probe.fa file(s).2bit\n"
   "   To test PCR without starting server:\n"
-  "      gfServer pcrDirect fPrimer rPrimer file(s).nib\n"
+  "      gfServer pcrDirect fPrimer rPrimer file(s).2bit\n"
   "   To figure out usage level:\n"
   "      gfServer status host port\n"
   "   To get input file list:\n"
@@ -105,7 +105,7 @@ errAbort(
   "   -debugLog       Include debugging info in log file.\n"
   "   -syslog         Log to syslog.\n"
   "   -logFacility=facility  Log to the specified syslog facility - default local0.\n"
-  "   -mask           Use masking from nib file.\n"
+  "   -mask           Use masking from .2bit file.\n"
   "   -repMatch=N     Number of occurrences of a tile (n-mer) that triggers repeat masking the\n"
   "                   tile. Default is %d.\n"
   "   -maxDnaHits=N   Maximum number of hits for a DNA query that are sent from the server.\n"
@@ -223,7 +223,6 @@ if (!isdigit(portName[0]))
 return atoi(portName);
 }
 
-struct sockaddr_in sai;		/* Some system socket info. */
 
 /* Some variables to gather statistics on usage. */
 long baseCount = 0, blatCount = 0, aaCount = 0, pcrCount = 0;
@@ -508,7 +507,7 @@ struct genoFind *gf = NULL;
 static struct genoFind *transGf[2][3];
 char buf[256];
 char *line, *command;
-struct sockaddr_in fromAddr;
+struct sockaddr_in6 fromAddr;
 socklen_t fromLen;
 int readSize;
 int socketHandle = 0, connectionHandle = 0;
@@ -570,13 +569,13 @@ for (;;)
 	}
     if (ipLog)
 	{
-        if (fromAddr.sin_family == AF_INET)
-	    {
-	    char dottedQuad[17];
-	    internetIpToDottedQuad(ntohl(fromAddr.sin_addr.s_addr), dottedQuad);
-	    logInfo("gfServer version %s on host %s, port %s connection from %s", 
-		gfVersion, hostName, portName, dottedQuad);
-	    }
+	struct sockaddr_in6 clientAddr;
+	unsigned int addrlen=sizeof(clientAddr);
+	getpeername(connectionHandle, (struct sockaddr *)&clientAddr, &addrlen);
+	char ipStr[NI_MAXHOST];
+	getAddrAsString6n4((struct sockaddr_storage *)&clientAddr, ipStr, sizeof ipStr);
+	logInfo("gfServer version %s on host %s, port %s connection from %s", 
+	    gfVersion, hostName, portName, ipStr);
 	}
     readSize = read(connectionHandle, buf, sizeof(buf)-1);
     if (readSize < 0)

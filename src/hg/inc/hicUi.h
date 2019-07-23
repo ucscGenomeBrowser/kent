@@ -41,6 +41,11 @@ char *hicUiFetchResolution(struct cart *cart, char *track, struct hicMeta *meta)
 /* Return the current resolution selection, or the default if none
  * has been selected. */
 
+int hicUiFetchResolutionAsInt(struct cart *cart, char *track, struct hicMeta *meta, int windowSize);
+/* Return the current resolution selection as an integer.  If there is no selection, or if "Auto"
+ * has been selected, return the largest available value that still partitions the window into at
+ * least 5000 bins. */
+
 char *hicUiFetchNormalization(struct cart *cart, char *track, struct hicMeta *meta);
 /* Return the current normalization selection, or the default if none
  * has been selected.  Right now this is a hard-coded set specifically for

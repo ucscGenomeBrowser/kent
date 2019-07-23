@@ -345,6 +345,8 @@ else if (isBamTable(rootTable))
     fieldList = bamGetFields();
 else if (isVcfTable(rootTable, NULL))
     fieldList = vcfGetFields();
+else if (isHicTable(rootTable))
+    fieldList = hicGetFields();
 else
     {
     char *table = chromTable(conn, rootTable);
@@ -956,6 +958,7 @@ boolean isBb = tdb ? tdbIsBigBed(tdb) : isBigBed(database, table, curTrack, ctLo
 boolean isBam = tdb ? tdbIsBam(tdb) : isBamTable(rootTable);
 boolean isLongTabix = tdb ? tdbIsLongTabix(tdb) : isLongTabixTable(rootTable);
 boolean isVcf = tdb ? tdbIsVcf(tdb) : isVcfTable(rootTable, NULL);
+boolean isHic = tdb ? tdbIsHic(tdb) : isHicTable(rootTable);
 
 if (isWig)
     {
@@ -986,13 +989,15 @@ else
 	ftList = bamListFieldsAndTypes();
     else if (isVcf)
 	ftList = vcfListFieldsAndTypes();
+    else if (isHic)
+	ftList = hicListFieldsAndTypes();
     else
         ftList = sqlListFieldsAndTypes(conn, table);
     printSqlFieldListAsControlTable(ftList, db, rootTable, tdb, isBedGr);
     }
 
 /* Printf free-form query row. */
-if (!(isWig||isBedGr||isBam||isVcf||isLongTabix))
+if (!(isWig||isBedGr||isBam||isVcf||isLongTabix||isHic))
     {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD>\n");
@@ -1008,7 +1013,7 @@ if (!(isWig||isBedGr||isBam||isVcf||isLongTabix))
     hPrintf("</TD></TR></TABLE>\n");
     }
 
-if (isWig||isBedGr||isBam||isVcf||isLongTabix)
+if (isWig||isBedGr||isBam||isVcf||isLongTabix||isHic)
     {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD> Limit data output to:&nbsp\n");
@@ -1087,6 +1092,11 @@ else if (isVcfTable(table, NULL))
     struct sqlFieldType *ftList = vcfListFieldsAndTypes();
     printSqlFieldListAsControlTable(ftList, db, table, ct->tdb, FALSE);
     }
+else if (isHicTable(table))
+    {
+    struct sqlFieldType *ftList = hicListFieldsAndTypes();
+    printSqlFieldListAsControlTable(ftList, db, table, ct->tdb, FALSE);
+    }
 else
     {
     if (ct->fieldCount >= 3)
@@ -1132,7 +1142,7 @@ else
 
 puts("</TABLE>");
 
-if (ct->wiggle || isBigWigTable(table) || isBamTable(table) || isVcfTable(table, NULL) || isLongTabixTable(table))
+if (ct->wiggle || isBigWigTable(table) || isBamTable(table) || isVcfTable(table, NULL) || isLongTabixTable(table) || isHicTable(table))
     {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD> Limit data output to:&nbsp\n");
