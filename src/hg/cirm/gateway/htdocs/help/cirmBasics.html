@@ -192,7 +192,7 @@
           <li>
             <p>
             If you have only a few files to download, you can download them one-by-one. First,
-            click the file name in the first column to be take to the file details page.</p>
+            click the file name in the first column to be taken to the file details page.</p>
 	        <p>
 	        <img src="<!--#echo var='ROOT'-->images/cirmBasicsNameCol.png"
             class="border border-dark rounded"></p>
@@ -232,14 +232,16 @@
         <p>
         There are multiple ways to download and explore the metadata available in the scHub.
         These include the html/text/tsv/csv links on the
-        <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?cdwCommand=browseDataSets">datasets page</a>:</p>
+        <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?cdwCommand=browseDataSets"
+        target="_blank">datasets page</a>:</p>
 
         <p>
         <img src="<!--#echo var='ROOT'-->images/cirmBasicsMetadataLinks.png"
         class="border border-dark rounded"></p>
 
         <p>
-        And the <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?cdwCommand=analysisQuery">Metadata Query</a> tool.
+        And the <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?cdwCommand=analysisQuery"
+        target="_blank">Metadata Query</a> tool.
         The Metadata Query tool is discussed in more detail in the <a href="#query">next help
         section</a>. In this section we will discuss accessing metadata through the datasets page.
         </p>
@@ -247,7 +249,8 @@
         <p>
         On the datasets page, there are four links that offer up metadata in a variety of formats.
         The first link (html) allows you explore the heirarchical
-        <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/tagStorm">tag storm
+        <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/tagStorm"
+        target="_blank">tag storm
         format</a> and collapse various sections of the metadata:</p>
         <p>
         <img src="<!--#echo var='ROOT'-->images/cirmBasicsMetadataHtmlViewer.png"
@@ -256,7 +259,7 @@
         <p>
         You can test this out for yourself by exploring
         <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?cdwCommand=dataSetMetaTree&cdwDataSet=kriegsteinRadialGliaStudy1"
-        >the metadata for the kriegsteinRadialGliaStudy1 dataset</a>.</p>
+        target="_blank">the metadata for the kriegsteinRadialGliaStudy1 dataset</a>.</p>
 
         <p>
         The next three links are all to view or download the metadata in plain text formats:
@@ -277,11 +280,12 @@
         <h5><b>Using the &quot;Metadata Query&quot; tool to cut and slice metadata</b></h5>
         <p>
         The <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?cdwCommand=analysisQuery"
-        >Metadata Query</a> tool allows to search across the metadata, quality metrics,
+        target="_blank">Metadata Query</a> tool allows to search across the metadata, quality metrics,
         and more for all of the datasets contained in the Stem Cell Hub. This information can be
         filtered and sliced using a SQL-like query interface. The output of your queries can be
         displayed in three different formats: (1) UCSC's heirachical <a
-        href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/tagStorm">tag storm</a> (ra)
+        href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/tagStorm"
+        target="_blank">tag storm</a> (ra)
         format, (2) tab-separated value (tsv) format, or (3) comma-separated value (csv) format.</p>
 
         <p>
@@ -333,7 +337,7 @@
         <p>
         For this step, we will start at the
         <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?cdwCommand=browseFiles"
-        >File Browser</a>
+        target="_blank">File Browser</a>
         and use the metadata facets to filter the visible files to display only the
         <b>gene-level expression matrix</b> for the <b>kriegsteinRadialGliaStudy1</b> dataset:
         <ol>
@@ -358,7 +362,7 @@
         After filtering files down to just the gene-level expression matrix, <tt>sc002YED.tsv</tt>,
         on the
         <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?cdwCommand=browseFiles"
-        >File Browser</a>
+        target="_blank">File Browser</a>
         for the <tt>kriegsteinRadialGliaStudy1</tt>, we will now download this file:
         <ol>
           <li>Click on the file name, <tt>sc002YED.tsv</tt>.</li>
@@ -376,7 +380,7 @@
         Now that you've downloaded the gene-level expression matrix, you can download the
         cell-level metadata for this dataset. The easiest way to this is though the
         <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?cdwCommand=browseDataSets"
-        >Dataset Browser</a>:
+        target="_blank">Dataset Browser</a>:
         <ol>
           <li>Find the <tt>kriegsteinRadialGliaStudy1</tt> dataset in the alpphabetical list.</li>
           <li>Choose your downloadable metadata format (text/tagStorm, tsv, or csv), and
@@ -385,7 +389,7 @@
         </ol>
         <br>
         <p>
-        The <a href="metadata">Downloading and exploring metadata</a> section has more information
+        The <a href="#metadata">Downloading and exploring metadata</a> section has more information
         on the different ways you can download metadata.
         </p>
 
