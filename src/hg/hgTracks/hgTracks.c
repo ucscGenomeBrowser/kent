@@ -6984,9 +6984,13 @@ for (track = trackList; track != NULL; track = track->next)
         struct track *subtrack;
         for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
             {
+            boolean undecoratedVis = FALSE;
             char *s = hideTracks ? cgiOptionalString( subtrack->track) : cartOptionalString(cart, subtrack->track);
             if (s == NULL && startsWith("hub_", subtrack->track))
+                {
+                undecoratedVis = TRUE;
                 s = hideTracks ? cgiOptionalString(trackHubSkipHubName(subtrack->track)) : cartOptionalString(cart, trackHubSkipHubName(subtrack->track));
+                }
 
             safef(buffer, sizeof buffer, "%s_sel", subtrack->track);
             if (s != NULL)
@@ -6997,6 +7001,8 @@ for (track = trackList; track != NULL; track = track->next)
                     cartSetString(cart, buffer, "0");
                 else
                     cartSetString(cart, buffer, "1");
+                if (undecoratedVis)
+                    cartRemove(cart, trackHubSkipHubName(subtrack->track)); // remove the undecorated version
                 }
             else if (hideKids && isSubtrackVisible(subtrack))
                 cartSetString(cart, buffer, "0");
