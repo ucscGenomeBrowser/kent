@@ -5688,7 +5688,8 @@ identifier hugoName external=HUGO fuzzy
 identifier kgGeneSymbol
 "UCSC Genes Gene Symbol"
     $hg.kgXref.geneSymbol dupeOk
-    $hg.omimGeneMap.geneSymbol comma minCheck=0.38
+    $hg.omimGeneMap.geneSymbol comma minCheck=0.37
+    $hg.omimGeneMap2.geneSymbol comma minCheck=0.37
     $hg.omimMorbidMap.geneSymbols comma minCheck=0.25
     hgFixed.ggLink.gene1 minCheck=0.8
     hgFixed.ggLink.gene2 minCheck=0.8
@@ -6606,7 +6607,8 @@ identifier locusLinkId external=LocusLink
 identifier omimLocationId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) Location ID"
     $hg.omimLocation.name dupeOk exclude=0
-    $hg.omimGeneMap.omimId full minCheck=0.08
+    $hg.omimGeneMap.omimId full minCheck=0.07
+    $hg.omimGeneMap2.omimId full minCheck=0.07
 
 identifier omimAvSnpId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) AV SNP ID"
@@ -6618,6 +6620,7 @@ identifier omimId external=OMIM
     $hg.omimGene2.name minCheck=0.90
     $hg.omimPhenotype.omimId minCheck=0.75
     $hg.omimGeneMap.omimId minCheck=0.85
+    $hg.omimGeneMap2.omimId minCheck=0.85
     $hg.omim2gene.omimId minCheck=0.60
 
 identifier omimAvId external=OMIM
