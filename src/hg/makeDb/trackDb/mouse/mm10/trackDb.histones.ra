@@ -8,9 +8,11 @@ subGroup1 tissue Tissue forebrain=forebrain midbrain=midbrain hindbrain=hindbrai
 subGroup2 mark Mark H3K27ac=H3K27ac H3K27me3=H3K27me3 H3K36me3=H3K36me3 H3K4me1=H3K4me1 H3K4me2=H3K4me2 H3K4me3=H3K4me3 H3K9ac=H3K9ac H3K9me3=H3K9me3
 subGroup3 age Age E10=E10 E11=E11 E12=E12 E13=E13 E14=E14 E15=E15 E16=E16 P0=P0
 subGroup4 view View Peaks=Peaks Signal=Signal
+subGroup5 subtrackColor Histone
 dimensions dimX=mark dimY=tissue dimA=age
 filterComposite dimA
-sortOrder view=+ tissue=+ mark=+ age=+
+sortOrder view=+ subtrackColor=+ tissue=+ mark=+ age=+
+showSubtrackColorOnUi on
 priority 6
 wgEncode 1
 dragAndDrop subTracks
