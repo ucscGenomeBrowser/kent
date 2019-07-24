@@ -67,8 +67,10 @@
 
 
 ##############################################################################
-# Extend main database download files (DONE - 2019-04-10 - Angie)
+# Extend main database download files (DONE - 2019-07-24 - Angie)
 # Previously done 2018-11-11
+
+# NOTE FOR NEXT TIME: set up hg38*.chrom.sizes links correctly the first time (see 7/24/19)
 
     cd /hive/data/genomes/hg38/goldenPath/bigZips
     mkdir p12
@@ -159,6 +161,16 @@
     rm -f /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/bigZips/latest
     ln -s /hive/data/genomes/hg38/goldenPath/bigZips/latest \
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/bigZips/latest
+
+    # 7/24/19: make correct links for chrom.sizes
+    ln -sf /hive/data/genomes/hg38/chrom.sizes.initial \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/bigZips/hg38.chrom.sizes
+    ln -sf /hive/data/genomes/hg38/chrom.sizes.initial \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/bigZips/initial/hg38.chrom.sizes
+    ln -sf /hive/data/genomes/hg38/chrom.sizes \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/bigZips/latest/hg38.chrom.sizes
+    ln -sf /hive/data/genomes/hg38/chrom.sizes.p12 \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/bigZips/p12/hg38.p12.chrom.sizes
 
 
 #########################################################################
