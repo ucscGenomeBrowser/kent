@@ -6600,7 +6600,7 @@ while ((psl = pslNext(lf)) != NULL)
 	pslFree(&psl);
 	}
     }
-slReverse(&pslList);
+slSort(&pslList, pslCmpScore);
 lineFileClose(&lf);
 printAlignments(pslList, start, "htcUserAli", "user", item);
 pslFreeList(&pslList);
