@@ -60,6 +60,39 @@ return NULL;
 }
 
 
+struct interact *interactFromHic(char *chrom1, int start1, char *chrom2, int start2, int size, double value)
+/* Given some data values from an interaction in a hic file, build a corresponding interact structure. */
+{
+struct interact *new = NULL;
+AllocVar(new);
+
+new->chrom = cloneString(chrom1);
+// start1 is always before start2 on same-chromosome records, so start1 is always the start.
+// On records that link between chromosomes, just use the coordinates for this chromosome.
+new->chromStart = start1;
+if (sameWord(chrom1, chrom2))
+    new->chromEnd = start2+size;
+else
+    new->chromEnd = start1+size;
+new->name = cloneString("");
+new->score = 0; // ignored
+new->value = value;
+new->exp = cloneString(".");
+new->color = 0;
+new->sourceChrom = cloneString(chrom1);
+new->sourceStart = start1;
+new->sourceEnd = start1+size;
+new->sourceName = cloneString("");
+new->sourceStrand = cloneString(".");
+new->targetChrom = cloneString(chrom2);
+new->targetStart = start2;
+new->targetEnd = start2+size;
+new->targetName = cloneString("");
+new->targetStrand = cloneString(".");
+
+return new;
+}
+
 char *hicLoadData(struct hicMeta *fileInfo, int resolution, char *normalization, char *chrom1, int start1,
          int end1, char *chrom2, int start2, int end2, struct interact **resultPtr)
 /* Fetch heatmap data from a hic file.  The hic file info must be provided in fileInfo, which should be
@@ -102,55 +135,13 @@ for (i=0; i<numRecords; i++)
         continue;
         }
 
-    struct interact *new = NULL;
-    AllocVar(new);
-    new->chrom = cloneString(chrom1);
-    // x is always <= y on same-chromosome records, so x is always the start
-    new->chromStart = x[i];
-    if (sameWord(chrom1, chrom2))
-        new->chromEnd = y[i]+resolution;
-    else
-        new->chromEnd = x[i]+resolution;
-    new->name = cloneString("");
-    new->score = 0; // ignored
-    new->value = counts[i];
-    new->exp = cloneString(".");
-    new->color = 0;
-    new->sourceChrom = cloneString(chrom1);
-    new->sourceStart = x[i];
-    new->sourceEnd = x[i]+resolution;
-    new->sourceName = cloneString("");
-    new->sourceStrand = cloneString(".");
-    new->targetChrom = cloneString(chrom2);
-    new->targetStart = y[i];
-    new->targetEnd = y[i]+resolution;
-    new->targetName = cloneString("");
-    new->targetStrand = cloneString(".");
+    struct interact *new = interactFromHic(chrom1, x[i], chrom2, y[i], resolution, counts[i]);
     slAddHead(resultPtr, new);
 
     if (differentWord(chrom1, chrom2))
         {
-        // a second interact structure must be created for the other chromosome
-        AllocVar(new);
-        new->chrom = cloneString(chrom2);
-        // x is always <= y, so x is always the start
-        new->chromStart = y[i];
-        new->chromEnd = y[i]+resolution;
-        new->name = cloneString("");
-        new->score = 0; // ignored
-        new->value = counts[i];
-        new->exp = cloneString(".");
-        new->color = 0;
-        new->sourceChrom = cloneString(chrom1);
-        new->sourceStart = x[i];
-        new->sourceEnd = x[i]+resolution;
-        new->sourceName = cloneString("");
-        new->sourceStrand = cloneString(".");
-        new->targetChrom = cloneString(chrom2);
-        new->targetStart = y[i];
-        new->targetEnd = y[i]+resolution;
-        new->targetName = cloneString("");
-        new->targetStrand = cloneString(".");
+        // a second interact structure must be created on the other chromosome
+        new = interactFromHic(chrom2, y[i], chrom1, x[i], resolution, counts[i]);
         slAddHead(resultPtr, new);
         }
     }
