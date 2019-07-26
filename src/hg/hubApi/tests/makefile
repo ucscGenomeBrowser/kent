@@ -540,6 +540,12 @@ err39: setOutput
 	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg19 -track=cosmicRegions -maxItemsOutput=5 -jsonOutputArrays 2>&1 | sed -e 's/, /,\n/g;' | egrep -v "${excludeLines}" | tail -5 | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
+# bigDataUrl for bigGenePred track with no table, only trackDb
+err40: setOutput
+	@printf "### $@ ### 'https://apibeta.soe.ucsc.edu/getData/track?track=mane;genome=hg38;jsonOutputArrays=1;maxItemsOutput=5'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg38 -track=mane -maxItemsOutput=5 -jsonOutputArrays 2>&1 | sed -e 's/, /,\n/g;' | egrep -v "${excludeLines}" | tail -5 | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
 #####################  wiggle data ###########################################
 # classic wiggle with wig table and wib file
 wig01: setOutput
