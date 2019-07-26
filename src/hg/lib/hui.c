@@ -9019,6 +9019,7 @@ else if (sameWord("barChart", tdb->type))
 else if (sameWord("interact", tdb->type))
     asObj = interactAsObj();
 else if (sameWord("hic", tdb->type))
+    // HI-C data are stored in .hic files, but parsed into interact objects
     asObj = interactAsObj();
 else
     asObj = asFromTableDescriptions(conn, tdb->table);

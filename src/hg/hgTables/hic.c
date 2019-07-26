@@ -246,7 +246,7 @@ else
     slSort(&results, &hicCompare);
     char *row[INTERACT_NUM_COLS];
     char numBuf[HIC_NUM_BUF_SIZE];
-    for (result=results; results != NULL; result = result->next)
+    for (result=results; result != NULL; result = result->next)
         {
         hicRecordToRow(result, numBuf, row);
         if (asFilterOnRow(filter, row))
