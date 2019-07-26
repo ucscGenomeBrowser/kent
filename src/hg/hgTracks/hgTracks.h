@@ -1264,6 +1264,9 @@ void lfsMapItemName(struct track *tg, struct hvGfx *hvg, void *item, char *itemN
 struct track *trackFromTrackDb(struct trackDb *tdb);
 /* Create a track based on the tdb */
 
+void finishTrack(struct track *track);
+/* Finish grabbing track variables for a visible track. */
+
 int spreadStringCharWidth(int width, int count);
 
 Color getOrangeColor();

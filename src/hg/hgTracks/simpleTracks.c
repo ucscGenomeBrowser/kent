@@ -14250,8 +14250,6 @@ struct track *subtrack;
 long thisTime = 0, lastTime = 0;
 for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
-    if (!subtrack->loadItems) // This could happen if track type has no handler (eg, for new types or mnissing a type s)
-        errAbort("Error: No loadItems() handler for subtrack (%s) of composite track (%s) (was a type specified for this track?)\n", subtrack->track, track->track);
     if (isSubtrackVisible(subtrack) &&
 	( limitedVisFromComposite(subtrack) != tvHide))
 	{
@@ -14500,8 +14498,6 @@ struct track *trackFromTrackDb(struct trackDb *tdb)
 /* Create a track based on the tdb */
 {
 struct track *track = NULL;
-char *exonArrows;
-char *nextItem;
 
 if (!tdb)
     return NULL;
@@ -14510,6 +14506,10 @@ track->track = cloneString(tdb->track);
 track->table = cloneString(tdb->table);
 track->visibility = tdb->visibility;
 track->shortLabel = cloneString(tdb->shortLabel);
+track->tdb = tdb;
+track->groupName = cloneString(tdb->grp);
+track->priority = track->defaultPriority = tdb->priority;
+
 if (sameWord(tdb->track, "ensGene"))
     {
     struct trackVersion *trackVersion = getTrackVersion(database, "ensGene");
@@ -14550,6 +14550,18 @@ else if (startsWith("ncbiRef", tdb->track))
     }
 else
     track->longLabel = cloneString(tdb->longLabel);
+
+return track;
+}
+
+void finishTrack(struct track *track)
+/* Finish grabbing track variables for a visible track. */
+{
+char *exonArrows;
+char *nextItem;
+struct trackDb *tdb = track->tdb;
+
+
 track->color.r = tdb->colorR;
 track->color.g = tdb->colorG;
 track->color.b = tdb->colorB;
@@ -14564,7 +14576,6 @@ char lookUpName[256];
 safef(lookUpName, sizeof(lookUpName), "%s.priority", tdb->track);
 tdb->priority = cartUsualDouble(cart, lookUpName, tdb->priority);
 track->priority = tdb->priority;
-track->groupName = cloneString(tdb->grp);
 /* save default priority and group so we can reset it later */
 track->defaultGroupName = cloneString(tdb->grp);
 track->canPack = tdb->canPack;
@@ -14610,7 +14621,6 @@ if (iatName != NULL)
     track->itemAttrTbl = itemAttrTblNew(iatName);
 #endif /* GBROWSE */
 fillInFromType(track, tdb);
-return track;
 }
 
 struct hash *handlerHash = NULL;

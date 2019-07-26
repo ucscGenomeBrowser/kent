@@ -697,6 +697,7 @@ else
     if(withIdeogram && ideoTrack->items == NULL)
 	{
 	ideoTrack->visibility = tvDense;
+        finishTrack(ideoTrack);
 	ideoTrack->loadItems(ideoTrack);
 	}
     limitVisibility(ideoTrack);
@@ -5733,8 +5734,6 @@ void addTdbListToTrackList(struct trackDb *tdbList, char *trackNameFilter,
 {
 struct trackDb *tdb, *next;
 struct track *track;
-TrackHandler handler;
-tdbSortPrioritiesFromCart(cart, &tdbList);
 for (tdb = tdbList; tdb != NULL; tdb = next)
     {
     next = tdb->next;
@@ -5745,28 +5744,9 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
         continue;
     track = trackFromTrackDb(tdb);
     track->hasUi = TRUE;
-    if (slCount(tdb->subtracks) != 0)
-        {
-        tdbSortPrioritiesFromCart(cart, &(tdb->subtracks));
-	if (trackDbLocalSetting(tdb, "compositeTrack"))
-	    makeCompositeTrack(track, tdb);
-	else if (trackDbLocalSetting(tdb, "container"))
-	    makeContainerTrack(track, tdb);
-        }
-    else
-        {
-        handler = lookupTrackHandlerClosestToHome(tdb);
-        if (handler != NULL)
-            handler(track);
-        }
     if (cgiVarExists("hgGenomeClick"))
 	makeHgGenomeTrackVisible(track);
-    if (track->loadItems == NULL)
-        warn("No load handler for %s; possible missing trackDb `type' or `subTrack' attribute", tdb->track);
-    else if (track->drawItems == NULL)
-        warn("No draw handler for %s", tdb->track);
-    else
-        slAddHead(pTrackList, track);
+    slAddHead(pTrackList, track);
     }
 }
 
@@ -7503,6 +7483,59 @@ for (track = trackList; track != NULL; track = track->next)
 hPrintf("</span>\n");
 }
 
+static struct track *onlyVisible(struct track *trackList)
+/* Check visibilities of track list and only call the methods on the visible ones.
+ * Return the list of visible tracks, and prune the composites to only have visible children. */
+{
+struct track *newList = NULL;
+struct track *track,  *next = NULL;
+
+for(track = trackList; track; track = next)
+    {
+    next = track->next;
+    if (tdbVisLimitedByAncestors(cart,track->tdb,TRUE,TRUE) != tvHide)
+        {
+        slAddHead(&newList, track);
+        finishTrack(track);
+        
+        struct trackDb *tdb = track->tdb;
+        if (slCount(tdb->subtracks) != 0)
+            {
+            tdbSortPrioritiesFromCart(cart, &(tdb->subtracks));
+            if (trackDbLocalSetting(tdb, "compositeTrack"))
+                makeCompositeTrack(track, tdb);
+            else if (trackDbLocalSetting(tdb, "container"))
+                makeContainerTrack(track, tdb);
+            }
+        else
+            {
+            TrackHandler handler;
+            handler = lookupTrackHandlerClosestToHome(tdb);
+            if (handler != NULL)
+                handler(track);
+            }
+
+        struct track *subtrack, *nextSub;
+        struct track *newSubtracks = NULL;
+        for (subtrack = track->subtracks; subtrack != NULL; subtrack = nextSub)
+            {
+            nextSub = subtrack->next;
+            
+            if (tdbVisLimitedByAncestors(cart,subtrack->tdb,TRUE,TRUE) != tvHide)
+                {
+                slAddHead(&newSubtracks, subtrack);
+                finishTrack(subtrack);
+                }
+            }
+        slReverse(&newSubtracks);
+        track->subtracks = newSubtracks;
+        }
+    }
+
+slReverse(&newList);
+return newList;
+}
+
 void initTrackList()
 /* need to init tracklist, sometimes early */
 {
@@ -7772,6 +7805,8 @@ if (hideAll || defaultTracks)
     int vis = (hideAll ? tvHide : -1);
     changeTrackVis(groupList, NULL, vis);
     }
+
+trackList = onlyVisible(trackList);
 
 if(!psOutput && !cartUsualBoolean(cart, "hgt.imageV1", FALSE))
     {
@@ -8174,6 +8209,7 @@ if ((trackImgOnly && !ideogramToo)
     for(window=windows;window;window=window->next)
 	{
 	struct track *ideoTrack = chromIdeoTrack(window->trackList);
+        finishTrack(ideoTrack);
 	if (ideoTrack)
 	    {
 	    ideoTrack->limitedVisSet = TRUE;
