@@ -166,7 +166,9 @@ if (f == NULL)
     errAbort("can't create temp file %s", mrTn.forCgi);
 char regionInfo[1024];
 // TODO: check chrom bounds
-int padding = 5;
+int padding = 200;
+//cartSetBoolean(cart, "emAltHighlight", TRUE);
+
 safef(regionInfo, sizeof regionInfo, "#padding %d\n", padding);
 mustWrite(f, regionInfo, strlen(regionInfo));
 //warn("%s", regionInfo);
