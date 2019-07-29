@@ -1,3 +1,4 @@
+
 # ENCODE tracks
 include trackDb.encode.ra
 
@@ -133,6 +134,30 @@ release alpha
 mouseOverField trait
 bigDataUrl /gbdb/$D/bbi/phegeni.bb
 urls studyId=https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=$$ geneId1=https://www.ncbi.nlm.nih.gov/gene/?term=$$%5Buid%5D geneId2=https://www.ncbi.nlm.nih.gov/gene/?term=$$%5Buid%5D analysisId=https://www.ncbi.nlm.nih.gov/projects/SNP/gViewer/gView.cgi?aid=$$ catalogId=https://www.ebi.ac.uk/gwas/search?query=$$
+
+track varsInPubs
+shortLabel Variants in Papers
+longLabel Genetic Variants mentioned in scientific publications
+superTrack on
+group phenDis
+type bed 3
+
+        track mastermind
+        shortLabel Mastermind Variants
+        longLabel Genomenon Mastermind Variants extracted from full text publications
+        visibility dense
+        type bigBed 9 +
+        urls url=https://mastermind.genomenon.com/detail?disease=all%20diseases&$$
+        bigDataUrl /gbdb/$D/bbi/mastermind.bb
+        noScoreFilter on
+        exonNumbers off
+        mouseOverField _mouseOver
+        itemRgb on
+        mmcnt1Filter 0
+        mmcnt2Filter 0
+        mmcnt3Filter 0
+        dataVersion /gbdb/hg19/bbi/mastermindRelease.txt
+        parent varsInPubs
 
 track caseControl
 compositeTrack on
@@ -3370,7 +3395,7 @@ color 0, 80, 0
 type bed 4
 hgsid on
 url http://www.omim.org/entry/
-tableBrowser noGenome omimGeneMap omimPhenotype omimGeneSymbol omim2gene
+tableBrowser noGenome omimGeneMap omimGeneMap2 omimPhenotype omimGeneSymbol omim2gene
 
 track omimAvSnp
 shortLabel OMIM Alleles

@@ -1,6 +1,6 @@
 track wgEncodeGencodeV28
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel All GENCODE V28
 longLabel All GENCODE annotations from V28 (Ensembl 92)
 group genes

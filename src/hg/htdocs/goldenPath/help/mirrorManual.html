@@ -15,7 +15,7 @@
 <h6><a href='#hardware-and-disk-space-requirements'>Hardware and disk space requirements</a></h6>
 <h6><a href='#overview-of-the-genome-browser-directories-and-databases'>Overview of the Genome Browser directories and databases</a></h6>
 <h6><a href='#installing-the-ucsc-genome-browser'>Installing the UCSC Genome browser</a></h6>
-<h6><a href='#mysql-setup'>MySQL Setup</a></h6>
+<h6><a href='#mysql-setup'>MySQL (MariaDB) Setup</a></h6>
 <h6><a href='#adding-a-custom-genome-to-the-browser'>Adding a custom genome to the browser</a></h6>
 <h6><a href='#modifying-the-source-code'>Modifying the source code</a></h6>
 <h6><a href='#custom-track-database'>Custom Track Database</a></h6>
@@ -85,7 +85,10 @@ Annotation database size differs a lot between the assemblies: The full size
 of the hg19 database in 2016 is 6 TB, for ce2 it is 5GB. It also depends on
 the tracks: The size of the hg19 annotations can be reduced to 2TB if you
 do not download any ENCODE tracks. The size of only the main gene and SNP
-annotations is around 5GB for hg19 and hg38.
+annotations is around 5GB for hg19 and hg38. To increase download speeds, there are two download
+servers available; <a href="ftp://hgdownload.soe.ucsc.edu/" target="_blank">hgdownload</a> located
+in North America and
+<a href="ftp://hgdownload-euro.soe.ucsc.edu/" target="_blank">hgdownload-euro</a> located in Europe.
 </p>
 
 <p>
@@ -97,11 +100,12 @@ particular assembly:
 <pre><code>rsync -hna --stats rsync://hgdownload.soe.ucsc.edu/gbdb/ | egrep &quot;Number of files:|total size is&quot;</code></pre>
 
 <p>
-For example, to get the size of all of the files for hg19, you would
-use the following command:
+For example, to get the size of all of the files for hg19, you would use either of the following
+commands:
 </p>
 
 <pre><code>rsync -hna --stats rsync://hgdownload.soe.ucsc.edu/gbdb/hg19/ | egrep &quot;Number of files:|total size is&quot;</code></pre>
+<pre><code>rsync -hna --stats rsync://hgdownload-euro.soe.ucsc.edu/gbdb/hg19/ | egrep &quot;Number of files:|total size is&quot;</code></pre>
 
 <p>
 After running that command, you should see output like this:
@@ -111,11 +115,12 @@ After running that command, you should see output like this:
 total size is 6515.70G  speedup is 5181080.38 (DRY RUN)</code></pre>
 
 <p>
-The next command will give you the size of the entire mySQL database,
+The next commands will give you the size of the entire mySQL database,
 but can be changed to get the size for a particular assembly:
 </p>
 
 <pre><code>rsync -hna --stats rsync://hgdownload.soe.ucsc.edu/mysql/ | egrep &quot;Number of files:|total size is&quot;</code></pre>
+<pre><code>rsync -hna --stats rsync://hgdownload-euro.soe.ucsc.edu/mysql/ | egrep &quot;Number of files:|total size is&quot;</code></pre>
 
 <a name='overview-of-the-genome-browser-directories-and-databases'></a>
 <h2>Overview of the Genome Browser directories and databases</h2>
@@ -281,13 +286,15 @@ Download static WEB page content:
 See also: src/product/scripts/updateHtml.sh
 </p></li>
 <li><p>
-Copy CGI binaries: This set of binaries are for x86_64 types of Linux machines.
+Copy CGI binaries: This set of binaries are for x86_64 types of Linux machines. Both rsync commands
+accomplish the same task, querying either the North American or European download server.
 If you need to instead build binaries for your platform,
 follow the instructions in: README.building.source
 See also: src/product/scripts/kentSrcUpdate.sh
 </p>
 
-<pre><code>rsync -avP rsync://hgdownload.soe.ucsc.edu/cgi-bin/ ${WEBROOT}/cgi-bin/</code></pre></li>
+<pre><code>rsync -avP rsync://hgdownload.soe.ucsc.edu/cgi-bin/ ${WEBROOT}/cgi-bin/</code></pre>
+<pre><code>rsync -avP rsync://hgdownload-euro.soe.ucsc.edu/cgi-bin/ ${WEBROOT}/cgi-bin/</code></pre></li>
 <li><p>
 Create hgcentral database and tables. This is the primary gateway
 database that allows the browser to find specific organism
@@ -358,15 +365,15 @@ database text dumps and load them into the database.
 
 <p>
 An alternative to loading the database tables from text files,
-is to directly rsync the MySQL tables themselves and place them
-in your MySQL /var/ directory. These tables are much larger
-than the text files due to the sizes of indexes created during a
-table load, but it can save a lot of time since the data loading
-step is quite compute intensive. A typical rsync command for an
-entire database (e.g. ce4) would be something like:
+is to directly rsync the MySQL tables themselves from either the North American or European download
+servers and place them in your MySQL /var/ directory. These tables are much larger than the text
+files due to the sizes of indexes created during a table load, but it can save a lot of time since
+the data loading step is quite computationally intensive. Typical rsync commands for an entire
+database (e.g. ce4) would be something like:
 </p>
 
-<pre><code>rsync -avP --delete --max-delete=20 rsync://hgdownload.soe.ucsc.edu/mysql/ce4/ /var/lib/mysql/ce4/</code></pre></li>
+<pre><code>rsync -avP --delete --max-delete=20 rsync://hgdownload.soe.ucsc.edu/mysql/ce4/ /var/lib/mysql/ce4/</code></pre>
+<pre><code>rsync -avP --delete --max-delete=20 rsync://hgdownload-euro.soe.ucsc.edu/mysql/ce4/ /var/lib/mysql/ce4/</code></pre></li>
 <li><p>
 Download extra databases to work with a full genome assembly
 such as human/hg38: hgFixed go140213 proteins140122 sp140122
@@ -455,8 +462,16 @@ e.g. /usr/local/apache/htdocs/trash
 </ol>
 
 <a name='mysql-setup'></a>
-<h2>MySQL Setup</h2>
+<h2>MySQL (MariaDB) Setup</h2>
+<p>
+The UCSC Genome Browser uses MariaDB as the backend database server. MariaDB is a
+community-developed, commercially supported fork of the MySQL relational database management system,
+intended to remain free and open-source software under the GNU General Public License.You must have
+MariaDb (MySQL) client libraries installed on your computer. You can read more about MariaDB on the
+<a href="https://mariadb.org/">MariaDB site</a>. We will often state 'MySQL' even though we are
+referring to 'MariaDB'. 
 
+</p>
 <ol>
 <li><p>
 Enable &quot;LOAD DATA LOCAL INFILE&quot;:
@@ -922,10 +937,11 @@ Create an empty hgcentral database:
 
 <p>
 Load all tables into the hgcentral database.
-Copy all the mysql data files from
+Copy all the mysql data files from either the North American or European download server
 </p>
 
 <pre><code>rsync -avP rsync://hgdownload.soe.ucsc.edu/mysql/hgcentral/ .</code></pre>
+<pre><code>rsync -avP rsync://hgdownload-euro.soe.ucsc.edu/mysql/hgcentral/ .</code></pre>
 
 <p>
 directly into the MySQL data area for your hgcentral database.
@@ -938,6 +954,7 @@ text file dump of these tables from:
 </p>
 
 <pre><code>rsync -avP rsync://hgdownload.soe.ucsc.edu/genome/admin/hgcentral.sql .</code></pre>
+<pre><code>rsync -avP rsync://hgdownload-euro.soe.ucsc.edu/genome/admin/hgcentral.sql .</code></pre>
 
 <p>
 And then six tables for the latest human database.
@@ -958,18 +975,19 @@ Start with an empty database, for example hg18:
 <pre><code>hgsql -e &quot;create database hg18;&quot; mysql</code></pre>
 
 <p>
-Again, copy the MySQL files directly from the download
-server, for example hg18:
+Again, copy the MySQL files directly from one of the download servers, for example, hg18:
 </p>
 
 <pre><code>rsync -avP rsync://hgdownload.soe.ucsc.edu/mysql/hg18/ .</code></pre>
+<pre><code>rsync -avP rsync://hgdownload-euro.soe.ucsc.edu/mysql/hg18/ .</code></pre>
 
 <p>
-(beware, this is several TB of data) into your MySQL data area. Or load these tables from the text SQL
-dumps from:
+(beware, this is several TB of data) into your MySQL data area. Or load these tables from the text
+SQL dumps from:
 </p>
 
 <pre><code>rsync -avP rsync://hgdownload.soe.ucsc.edu/goldenPath/hg18/database/ .</code></pre>
+<pre><code>rsync -avP rsync://hgdownload-euro.soe.ucsc.edu/goldenPath/hg18/database/ .</code></pre>
 
 <p>
 (beware, this is several TB of data)

@@ -1,10 +1,9 @@
 track tabulaMuris
 shortLabel Tabula Muris
 longLabel Single Cell FACS RNA-Seq of 44,779 cells from Tabula Muris
-superTrack on
-visibility hide
+superTrack on show
 group regulation
-pennantIcon New red ../goldenPath/newsarch.html#030519  Released March 05, 2019
+priority 1
 
 track tabulamurisBarChart
 type bigBarChart
@@ -26,7 +25,7 @@ parent tabulaMuris
 track TabulaMurisFacsCoverage
 shortLabel Genome Coverage
 longLabel Tabula Muris single cell RNA-Seq genome coverage
-visibility dense
+visibility hide
 compositeTrack on
 parent tabulaMuris
 type bigWig
@@ -574,7 +573,7 @@ autoScale off
         visibility dense
 
         track largeIntestineGobletCellCov
-        shortLabel globet cell Cv
+        shortLabel goblet cell Cv
         metadata cell_ontology=large_intestine_goblet_cell
         longLabel large intestine goblet cell Coverage (833 cells)
         type bigWig

@@ -58,7 +58,7 @@ char varName[64];
 safef(varName, sizeof(varName), "%s.showCellAbbrevs", track->track);
 fsInfo->showCellAbbrevs = cartUsualBoolean(cart, varName, TRUE);
 safef(varName, sizeof(varName), "%s.showExpCounts", track->track);
-fsInfo->showExpCounts = cartUsualBoolean(cart, varName, FALSE);
+fsInfo->showExpCounts = cartUsualBoolean(cart, varName, TRUE);
 
 if (fsInfo->showExpCounts)
     {

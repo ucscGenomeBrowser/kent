@@ -138,7 +138,7 @@
     <P class="isRequired">Required: <span class="red">Yes</span></P>
     <P>This is the name of
     the dataset and must be unique within the Genome Browser or
-    dataHub.  Typically this is the MySQL table name or remote data
+    dataHub.  Typically this is the MariaDB table name or remote data
     file root name (without path or suffix).  Must begin with a letter
     and contain only the following chars:
     [<code>a-zA-Z0-9_</code>].</P>
@@ -187,8 +187,9 @@
     <A onclick="return jumpTo(this);" HREF="#">vcfTabix</A>,
     <A onclick="return jumpTo(this);" HREF="#">wig</A>,
     <A onclick="return jumpTo(this);" HREF="#">wigMaf</A></P>
-    <P>Detailed descriptions of each type can be found
-    below.  In many cases the type setting includes additional
+    <P>Not all track types are supported in hubs. The types specifically
+    supported are called out at the top of the Hub Track Database Definition
+    page.  In many cases the type setting includes additional
     parameters to further specify the data format.  Some track types
     have additional setting requirements, to be discussed
     below.</P>
@@ -712,7 +713,7 @@
     reference the same table in more than one track.
     An example of this is showing a table as a single signal track and
     as part of a combination overlay track, as described later in this
-    document.  For data contained in MySQL tables, this setting must be used
+    document.  For data contained in MariaDB tables, this setting must be used
     if the <code>track</code> setting is not the name of the table.</P>
     <P><B>Example:</B></P>
     <pre>
@@ -721,17 +722,21 @@
 </DIV>
 
 <DIV class="tableBrowser"><span class="types all"></span>
-<div class="format"><code>tableBrowser &lt;off/on&gt; [table1 ...]</code></div>
-    <P><I>NOT FOR HUBS.</I></P>
+<div class="format"><code>tableBrowser &lt;off/on/noGenome&gt; [table1 ...]</code></div>
     <P>The Table Browser typically allows querying and downloading of some or all 
-    of the raw data for a track. This setting can be used to block Table Browser access to datasets 
+    of the raw data for a track. The <code>off</code> value blocks Table Browser access to datasets 
     with restrictions (for example, those with confidentiality or licensing limitations).  
+    The <code>noGenome</code> value allows queries within specific genomic regions,
+    but not genome-wide.
     By naming additional tables in this setting, access to those 
     tables can be denied as well.</P>
-    <P><B>Example:</B></P>
+    <P><B>Examples:</B></P>
     <pre>   tableBrowser off decipherRaw knownToDecipher</pre>
     <P>The table for this track, as well as the decipherRaw and knownToDecipher tables, 
     are blocked from Table Browser access.</P>
+    <pre>   tableBrowser noGenome omimAv omimAvRepl</pre>
+    <p>Genome-wide queries are disabled for the track table as well as omimAv and omimAvRepl.
+    Queries on genomic regions are permitted.</p>
 </DIV>
 
 <DIV class="url"><span class="types all"></span>
@@ -2002,7 +2007,7 @@ There are no extra options that can appear on the type bigInteract line.
 <div class="format">
     <code>type wig &lt;low#&gt; &lt;high#&gt;</code><BR>
     <code>type bigWig &lt;#&gt; &lt;#&gt;</code></div>
-    <P>MySQL tables of type
+    <P>MariaDB tables of type
     <code>wig</code> and remote data files of type <code>bigWig</code>
     must declare the expected signal range for
     the data.</P>
@@ -2025,7 +2030,7 @@ There are no extra options that can appear on the type bigInteract line.
     <code>maxLimit&lt;#&gt;</code></div>
     <P>The bedGraph type
     track has the same file format as a bed file, but is loaded into
-    the MySQL database in a form that can be graphed.  By default the
+    the MariaDB database in a form that can be graphed.  By default the
     value to be graphed is the fifth standard bed field,
     <code>score</code>;  however, you can specify a different field to use.
     Typically only the first 3 standard bed fields are included
@@ -2255,7 +2260,7 @@ There are no extra options that can appear on the type bigInteract line.
     wigColorBy myBed
       ...  </pre>
     <P>This wiggle track is
-    composed of a MySQL table and binary "wib" files that
+    composed of a MariaDB table and binary "wib" files that
     are referenced in the table.  The default windowing
     function is the maximum signal in each window (under each pixel)
     shown.  The span of bases covered by each row in
@@ -2292,7 +2297,7 @@ There are no extra options that can appear on the type bigInteract line.
     maxHeightPixels 100:16:8
       ...  </pre>
     <P>This bedGraph style signal track is composed of
-    a MySQL table of items, each with a score defined in the fourth
+    a MariaDB table of items, each with a score defined in the fourth
     column.  While a wiggle track is usually composed of fixed
     interval windows of signal (e.g. 200 bp), the bedGraph table may
     define a signal in varying granularities of windows with or
@@ -2341,7 +2346,7 @@ There are no extra options that can appear on the type bigInteract line.
 
 <DIV class="genePred"><span class="types genePred"></span>
 <div class="format"><code>type genePred [pepTable [mrnaTable]]</code></div>
-    <P>This type of track, based on MySQL tables, is for gene models and predictions.
+    <P>This type of track, based on MariaDB tables, is for gene models and predictions.
     </P>
     <UL>
     <LI>pepTable - Optional protein sequence table</LI>
@@ -2370,7 +2375,7 @@ There are no extra options that can appear on the type bigInteract line.
 
 <DIV class="itemClassTbl"><span class="types genePred bed"></span>
 <div class="format"><code>itemClassTbl &lt;table&gt;</code></div>
-    <P>Declare a MySQL table that will link classes
+    <P>Declare a MariaDB table that will link classes
     to named gene models.</P>
 </DIV>
 
@@ -2431,7 +2436,7 @@ There are no extra options that can appear on the type bigInteract line.
     their class is also selected from the "rnaTypes" table.  Using the
     <code>filterBy</code> setting creates a user selectable drop-down list box of
     3 choices or "all".  When the user filters by tRNA and snRNA (the
-    green and blue choices), the mySQL select statement used by the
+    green and blue choices), the SQL select statement used by the
     Browser will be limited by the where clause "<code>where
     rnaTypes.rnaType in ('tRNA','snRNA')</code>".
     </P>
@@ -2488,7 +2493,7 @@ There are no extra options that can appear on the type bigInteract line.
 <div class="format"><code>oldToNew &lt;tableName&gt;</code></div>
     <P>In successive versions of gene models, it can
     be helpful to map older genes to their newer models.  This can be
-    done by providing a MySQL table that maps the change, and then using
+    done by providing a MariaDB table that maps the change, and then using
     this setting to ensure the gene details page shows any changes.</P>
     <P><B>Example:</B></P>
     <pre>
@@ -3814,7 +3819,7 @@ There are no extra options that can appear on the type bigInteract line.
     character.  The fifth column contains the number of variants found
     in the <code>name</code> column, while the sixth and seventh columns contain
     comma-delimited arrays of frequencies and scores respectively.
-    Files in this format can be loaded into MySQL with hgLoadBed using
+    Files in this format can be loaded into MariaDB with hgLoadBed using
     the "pgSnp.sql" schema.
     </P>
     <P>The browser image

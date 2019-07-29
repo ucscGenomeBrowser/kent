@@ -62,6 +62,7 @@
 	<li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">Utilities</a></li>
 	<li class="last"><a href="../goldenPath/help/ftp.html">FTP</a></li>
 	<li class="last"><a href="../goldenPath/help/mysql.html">MySQL Access</a></li>
+	<li class="last"><a href="../goldenPath/help/api.html">JSON API</a></li>
 	</ul>
 </li>
 <li class="menuparent" id="myData"><span>My Data</span>
@@ -81,7 +82,7 @@
 	<ul style="display: none; visibility: hidden;">
 	<li class="first"><a href="../gtex.html">Genotype Tissue Expression (GTEx)</a></li>
 	<li><a href="../ENCODE/index.html">Encyclopedia of DNA Elements (ENCODE)</a></li>
-        <li class="last"><a href="https://cells.ucsc.edu">UCSC Single Cell Browser</a></li>
+	<li class="last"><a href="../singlecell.html">UCSC Cell Browser</a></li>
 	</ul>
 <!-- OPTIONAL_PROJECT_MENU_END -->
 

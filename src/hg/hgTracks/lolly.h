@@ -10,9 +10,12 @@
 /*	lollyCartOptions structure */
 struct lollyCartOptions
     {
-    int height;
+    int origHeight, height;
     double upperLimit, lowerLimit;
     double minY, maxY;
     enum wiggleScaleOptEnum autoScale;
+    int radius;
+    int typeWordCount;
+    char **typeWords;
     };
 #endif 

@@ -352,8 +352,10 @@ struct trackDbRef *tdbRefList = NULL, *tdbRef;
 
 for(tdb = trackList; tdb; tdb = tdb->next)
     {
-    struct grp *grp = hashMustFindVal(groupHash, tdb->grp);
-    double priority =  grp->priority + tdb->priority/100.0;
+    double priority = tdb->priority/100.0;
+    struct grp *grp = hashFindVal(groupHash, tdb->grp);
+    if (grp)
+        priority += grp->priority;
 
     checkForVisible(cart, grp, &tdbRefList, tdb,  priority, 1.0/100.0);
     }
@@ -545,7 +547,7 @@ jsReloadOnBackButton(cart);
 webIncludeFile("inc/hgCollection.html");
 
 // output the form that will take us back to hgTracks
-printf("<form id='redirectForm' action='../cgi-bin/hgTracks'><input type='hidden'  name='hgsid' value='%s'</input></form>",cartSessionId(cart));
+printf("<form id='redirectForm' action='../cgi-bin/hgTracks'><input type='hidden'  name='hgsid' value='%s'></form>",cartSessionId(cart));
 
 char *assembly = stringBetween("(", ")", hFreezeFromDb(db));
 if (assembly != NULL)
@@ -558,7 +560,7 @@ puts("<link rel='stylesheet' href='https://code.jquery.com/ui/1.10.3/themes/smoo
 puts("<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css' />");
 puts("<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js'></script>");
 puts("<script src=\"//code.jquery.com/ui/1.10.3/jquery-ui.min.js\"></script>");
-puts("<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.4/jstree.min.js\"></script>\n");
+puts("<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/jstree.min.js\"></script>\n");
 jsIncludeFile("utils.js", NULL);
 jsIncludeFile("ajax.js", NULL);
 jsIncludeFile("spectrum.min.js", NULL);

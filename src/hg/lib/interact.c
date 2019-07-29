@@ -311,6 +311,18 @@ int interactRegionCenter(int start, int end)
 return ((double)(end - start + .5) / 2) + start;
 }
 
+boolean interactEndsOverlap(struct interact *inter)
+/* Determine if there is any overlap of interact endpoints */
+{
+if (differentString(inter->sourceChrom, inter->targetChrom))
+    return FALSE;
+if (inter->sourceStart < inter->targetStart && inter->sourceEnd < inter->targetEnd)
+    return FALSE;
+if (inter->targetStart < inter->sourceStart && inter->targetEnd < inter->sourceEnd)
+    return FALSE;
+return TRUE;
+}
+
 int interactRegionDistance(struct interact *inter)
 /* Return distance between region midpoints. Return -1 for other chromosome */
 {

@@ -2712,13 +2712,15 @@ if (trackDbSetting(tdb, "motifTable") != NULL)
     printf("<BR>");
     }
 
-printf("<BR><B>Show count of cells where factor detected (and count where assayed, if different): </B> ");
-safef(varName, sizeof(varName), "%s.showExpCounts", tdb->track);
-cartMakeCheckBox(cart, varName, FALSE);
+printf("<BR><B>Cluster right label: </B>");
 
-printf("<BR><B>Show cell abbreviations (to right of cluster): </B> ");
+safef(varName, sizeof(varName), "%s.showExpCounts", tdb->track);
+cartMakeCheckBox(cart, varName, TRUE);
+printf("cell count (detected/assayed)&nbsp;&nbsp;");
+
 safef(varName, sizeof(varName), "%s.showCellAbbrevs", tdb->track);
 cartMakeCheckBox(cart, varName, TRUE);
+printf("cell abbreviations");
 
 puts("<p><table>");
 jsBeginCollapsibleSectionFontSize(cart, tdb->track, "cellSources", "Cell Abbreviations", FALSE,
@@ -2784,6 +2786,7 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
                                         event);
 
         printf("</TD>\n<TD>");
+        hPrintPennantIcon(tdb);
 	safef(id, sizeof id, "%s_link", tdb->track);
         printf("<A HREF='%s?%s=%s&c=%s&g=%s' id='%s'>%s</A>&nbsp;", 
                     tdbIsDownloadsOnly(tdb) ? hgFileUiName(): hTrackUiForTrack(tdb->track),
@@ -3101,6 +3104,8 @@ if (!ajax)
     webIncludeResourceFile("jquery-ui.css");
     jsIncludeFile("jquery-ui.js", NULL);
     jsIncludeFile("utils.js",NULL);
+    webIncludeResourceFile("spectrum.min.css");
+    jsIncludeFile("spectrum.min.js",NULL);
     jsonObjectAddGlobal("track", newJsonString(tdb->track));
     jsonObjectAddGlobal("db", newJsonString(database));
     }
@@ -3243,6 +3248,8 @@ else if (sameString(tdb->type, "halSnake"))
     tdb->canPack = TRUE;
 else if (sameString(tdb->type, "bigPsl"))
     tdb->canPack = TRUE;
+else if (startsWith(tdb->type, "bigLolly"))
+    tdb->canPack = TRUE;
 else if (sameString(tdb->type, "bigChain"))
     tdb->canPack = TRUE;
 
@@ -3340,7 +3347,7 @@ if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb) && !ajax)
     ||  (trackDbSetting(tdb, "wgEncode") && tdbIsComposite(tdb)))
         {
         printf("\n&nbsp;&nbsp;<span id='navDown' style='float:right; display:none;'>");
-        if (trackDbSetting(tdb, "wgEncode"))
+        if (trackDbSetting(tdb, "wgEncode") && isEncode2(database, tdb->track))
             {
             printf("<A TARGET=_BLANK HREF='../ENCODE/index.html' TITLE='ENCODE Portal'>ENCODE at UCSC</A>");
             printf("&nbsp;&nbsp;");
@@ -3354,7 +3361,7 @@ if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb) && !ajax)
                "page'>Subtracks%s</A>", downArrow);
         printf("&nbsp;&nbsp;<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>"
                "Description%s</A>", downArrow);
-        if (trackDbSetting(tdb, "wgEncode") && isEncode2(database))
+        if (trackDbSetting(tdb, "wgEncode") && isEncode2(database, tdb->track))
             {
             printf("&nbsp;&nbsp;<A HREF='#TRACK_CREDITS' TITLE='Jump to ENCODE lab contacts for this data'>"
                "Contact%s</A>", downArrow);

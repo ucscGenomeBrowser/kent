@@ -220,7 +220,7 @@ This line will allow the ssl connection to send the hostname at tls negotiation 
 It tells the remote server which hostname the client is connecting to.
 The hostname must not be an IP address.
 */ 
-if (!internetIsDottedQuad(params->hostName))
+if (!isIpv4Address(params->hostName) && !isIpv6Address(params->hostName))
     SSL_set_tlsext_host_name(ssl,params->hostName);
 
 BIO_set_nbio(sbio, 1);     /* non-blocking mode */

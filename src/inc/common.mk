@@ -64,7 +64,7 @@ endif
 
 # autodetect UCSC installation of hal:
 ifeq (${HALDIR},)
-    HALDIR = /hive/groups/browser/hal/halRelease
+    HALDIR = /hive/groups/browser/hal/halRelease/hal.2015-11-11
     ifneq ($(wildcard ${HALDIR}),)
         ifeq (${USE_HAL},)
           USE_HAL=1
@@ -76,6 +76,10 @@ ifeq (${USE_HAL},1)
     HALLIBS=${HALDIR}/lib/halMaf.a ${HALDIR}/lib/halChain.a ${HALDIR}/lib/halMaf.a ${HALDIR}/lib/halLiftover.a ${HALDIR}/lib/halLod.a ${HALDIR}/lib/halLib.a ${HALDIR}/lib/sonLib.a ${HALDIR}/lib/libhdf5_cpp.a ${HALDIR}/lib/libhdf5.a ${HALDIR}/lib/libhdf5_hl.a -lstdc++
     HG_DEFS+=-DUSE_HAL
     HG_INC+=-I${HALDIR}/inc
+endif
+# on hgwdev, include HAL by defaults
+ifeq (${IS_HGWDEV},yes)
+   L+=${HALLIBS}
 endif
 
 

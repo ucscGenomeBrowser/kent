@@ -1,13 +1,13 @@
 kentSrc = ../..
-include ../../inc/common.mk
+include ${kentSrc}/inc/common.mk
 
-HG_INC+=-I../../inc
+HG_INC+=-I${kentSrc}/hg/inc -I${kentSrc}/inc
 
-L += -lm ${SOCKETLIB}
-MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS = $(MYLIBDIR)/jkweb.a 
+L += $(MYSQLLIBS) -lm ${SOCKETLIB}
+MYLIBDIR = ${kentSrc}/lib/${MACHTYPE}
+MYLIBS = $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
-A = geoIpToCountry
+A = geoIpToCountryMaxMind6
 
 O = $(A).o
 
@@ -18,5 +18,4 @@ $(A): ${O} ${MYLIBS}
 
 clean::
 	rm -f ${O}
-	rm *.sql
 

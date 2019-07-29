@@ -183,7 +183,11 @@ struct fileOffsetSize *bbiOverlappingBlocks(struct bbiFile *bbi, struct cirTreeF
 {
 struct bbiChromIdSize idSize;
 if (!bptFileFind(bbi->chromBpt, chrom, strlen(chrom), &idSize, sizeof(idSize)))
-    return NULL;
+    {
+    // if chrom is not found and the chrom starts with "chr", try without "chr"
+    if (!startsWith("chr", chrom) || !bptFileFind(bbi->chromBpt, &chrom[3], strlen(chrom) - 3, &idSize, sizeof(idSize)))
+        return NULL;
+    }
 chromIdSizeHandleSwapped(bbi->isSwapped, &idSize);
 if (retChromId != NULL)
     *retChromId = idSize.chromId;

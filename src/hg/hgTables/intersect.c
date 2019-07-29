@@ -63,6 +63,8 @@ if (isBigBed(database, table, curTrack, ctLookupName))
     return TRUE;
 if (isVcfTable(table, NULL))
     return TRUE;
+if (isHicTable(table))
+    return TRUE;
 if (isHubTrack(table))
     return TRUE;
 if (sameWord(table, WIKI_TRACK_TABLE))

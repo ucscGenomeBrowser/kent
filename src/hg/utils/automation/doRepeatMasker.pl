@@ -224,13 +224,32 @@ $RepeatMasker $RepeatMaskerEngine $repeatLib /dev/null
 foreach spec (`cat \$inLst`)
   # Remove path and .2bit filename to get just the seq:start-end spec:
   set base = `echo \$spec | sed -r -e 's/^[^:]+://'`
+  # RM has a limitation of the length of a sequence name
+  # in the case of name too long, create a shorter name, then lift
+  set nameLength = `echo \$base | wc -c`
+  set shortName = `echo \$base  | sed -e 's/>//;' | md5sum | cut -d' ' -f1`
   # If \$spec is the whole sequence, twoBitToFa removes the :start-end part,
   # which causes liftUp to barf later.  So tweak the header back to
   # seq:start-end for liftUp's sake:
-  twoBitToFa \$spec stdout \\
-  | sed -e "s/^>.*/>\$base/" > \$base.fa
+  if ( \$nameLength > 45 ) then
+    twoBitToFa \$spec stdout | sed -e "s/^>.*/>\$shortName/" > \$base.fa
+    set fastaSize = `faSize \$base.fa | grep bases | cut -d' ' -f1`
+    /bin/printf "0\\t\$shortName\\t\$fastaSize\\t\$base\\t\$fastaSize" > lift.\$base.txt
+  else
+    twoBitToFa \$spec stdout | sed -e "s/^>.*/>\$base/" > \$base.fa
+  endif
   $RepeatMasker $RepeatMaskerEngine -align $repeatLib \$base.fa
+  if ( \$nameLength > 45 ) then
+    liftUp -type=.out stdout lift.\$base.txt error \$base.fa.out > lift.\$base.out
+    liftUp -type=.align stdout lift.\$base.txt error \$base.fa.align > lift.\$base.align
+    mv -f lift.\$base.out \$base.fa.out
+    mv -f lift.\$base.align \$base.fa.align
+  endif
   if (-e \$base.fa.cat) then
+    if ( \$nameLength > 45 ) then
+      liftUp -type=.align stdout lift.\$base.txt error \$base.fa.cat > lift.\$base.cat
+      mv -f lift.\$base.cat \$base.fa.cat
+    endif
     mv \$base.fa.cat \$catOut
   endif
 end
@@ -362,7 +381,7 @@ sub doCat {
 "uniquifies (per input file) the .out IDs which can then be used to join\n" .
 "fragmented repeats in the Nested Repeats track.";
   my $fileServer = &HgAutomate::chooseFileServer($runDir);
-  my $bossScript = new HgRemoteScript("$runDir/doCat.csh", $fileServer,
+  my $bossScript = newBash HgRemoteScript("$runDir/doCat.bash", $fileServer,
 				      $runDir, $whatItDoes);
 
   # Use symbolic link created in cluster step:
@@ -379,7 +398,8 @@ sub doCat {
   for (my $l = $levels - 2;  $l >= 0;  $l--) {
     my $dir = ($l == ($levels - 2)) ? $partDir : "\$d" . ($l + 1);
     $bossScript->add(<<_EOF_
-${indent}foreach d$l ($dir/???)
+${indent}for d$l in $dir/???
+do
 _EOF_
     );
     $indent .= '  ';
@@ -389,7 +409,7 @@ _EOF_
     $bossScript->add(<<_EOF_
 ${indent}  liftUp ${path}cat.out /dev/null carry ${path}???/*.out
 ${indent}  liftUp ${path}cat.align /dev/null carry ${path}???/*.align
-${indent}end
+${indent}done
 _EOF_
     );
     $indent =~ s/  //;
@@ -406,13 +426,29 @@ _EOF_
   $bossScript->add(<<_EOF_
 
 # Use the ID column to join up fragments of interrupted repeats for the
-# Nested Repeats track.
-$Bin/extractNestedRepeats.pl $db.fa.out | sort -k1,1 -k2,2n > $db.nestedRepeats.bed
+# Nested Repeats track.  Try to avoid the Undefined id errors.
+($Bin/extractNestedRepeats.pl $db.fa.out 2> nestRep.err || true) | sort -k1,1 -k2,2n > $db.nestedRepeats.bed
+if [ -s "nestRep.err" ]; then
+  export lineCount=`(grep "Undefined id, line" nestRep.err || true) | cut -d' ' -f6 | wc -l`
+   if [ "\${lineCount}" -gt 0 ]; then
+     if [ "\${lineCount}" -gt 10 ]; then
+        printf "ERROR: too many Undefined id lines (> 10) reported by extractNestedRepeats.pl" 1>&2
+        exit 255
+     fi
+     export sedExpr=`grep "Undefined id, line" nestRep.err | cut -d' ' -f6 | sed -e 's/\$/d;/;' | xargs echo`
+     export sedCmd="sed -i.broken -e '\$sedExpr'"
+     eval \$sedCmd $db.fa.out
+     ($Bin/extractNestedRepeats.pl $db.fa.out 2> nestRep2.err || true) | sort -k1,1 -k2,2n > $db.nestedRepeats.bed
+     if [ -s "nestRep2.err" ]; then
+        printf "ERROR: the attempt of cleaning nestedRepeats did not work" 1>&2
+        exit 255
+     fi
+   fi
+fi
 _EOF_
   );
   $bossScript->execute();
 } # doCat
-
 
 #########################################################################
 # * step: mask [workhorse]

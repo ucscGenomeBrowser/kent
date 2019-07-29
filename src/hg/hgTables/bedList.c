@@ -302,6 +302,8 @@ else if (isBamTable(table))
 else if (isVcfTable(table, &isTabix))
     bedList = vcfGetFilteredBedsOnRegions(conn, database, table, region, lm, retFieldCount,
 					  isTabix);
+else if (isHicTable(table))
+    bedList = hicGetFilteredBedsOnRegions(conn, database, table, region, lm, retFieldCount);
 else if (isCustomTrack(table))
     bedList = customTrackGetFilteredBeds(database, table, region, lm, retFieldCount);
 else if (sameWord(table, WIKI_TRACK_TABLE))

@@ -271,7 +271,7 @@ showCdsMaxZoom 10000.0
 showCdsAllScales .
 baseColorDefault diffBases
 baseColorUseSequence db
-color 255,255,0
+color 231,203,21
 darkerLabels on
 priority 1
 visibility pack
@@ -371,8 +371,8 @@ html crispors
     itemRgb on
     priority 2
 
-include crisprAll.ra alpha
-include crispr10K.ra beta,public
+include crisprAll.ra
+include crispr10K.ra 
 # prospective testing of crispr 10K on hg38
 # include nullModelCrispr10K.ra alpha
 

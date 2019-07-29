@@ -2888,6 +2888,14 @@ if (conn != NULL)
     }
 }
 
+unsigned long sqlEscapeStringFull(char *to, const char* from, long fromLength)
+/* Prepares a string for inclusion in a sql statement.  Output string
+ * must be 2*strlen(from)+1. fromLength is the length of the from data.
+ * Specifying fromLength allows one to encode a binary string that can contain any character including 0. */
+{
+return mysql_escape_string(to, from, fromLength);
+}
+
 // where am I using this? probably just cart.c and maybe cartDb.c ?
 // but it is worth keeping just for the cart.
 void sqlDyAppendEscaped(struct dyString *dy, char *s)
@@ -2902,14 +2910,14 @@ unsigned long sqlEscapeString3(char *to, const char* from)
 /* Prepares a string for inclusion in a sql statement.  Output string
  * must be 2*strlen(from)+1.  Returns actual escaped size not counting term 0. */
 {
-return mysql_escape_string(to, from, strlen(from));
+return sqlEscapeStringFull(to, from, strlen(from));
 }
 
 char *sqlEscapeString2(char *to, const char* from)
 /* Prepares a string for inclusion in a sql statement.  Output string
  * must be 2*strlen(from)+1 */
 {
-mysql_escape_string(to, from, strlen(from));
+sqlEscapeStringFull(to, from, strlen(from));
 return to;
 }
 

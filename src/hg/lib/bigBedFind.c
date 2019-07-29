@@ -46,9 +46,10 @@ static struct hgPos *getPosFromBigBed(struct cart * cart, struct trackDb *tdb, c
 {
 struct errCatch *errCatch = errCatchNew();
 struct hgPos *posList = NULL;
+struct bbiFile *bbi = NULL;
 if (errCatchStart(errCatch))
     {
-    struct bbiFile *bbi = bigBedFileOpen(bigDataUrl);
+    bbi = bigBedFileOpen(bigDataUrl);
     int fieldIx;
     struct bptFile *bpt = bigBedOpenExtraIndex(bbi, indexField, &fieldIx);
     struct lm *lm = lmInit(0);
@@ -61,8 +62,11 @@ if (errCatchStart(errCatch))
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError) 
+    {
+    bbiFileClose(&bbi);
     // we fail silently if bigBed is missing
     return NULL;
+    }
 
 return posList;
 }

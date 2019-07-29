@@ -47,6 +47,7 @@
 #include "barChartUi.h"
 #include "interact.h"
 #include "interactUi.h"
+#include "hic.h"
 #include "cgiApoptosis.h"
 
 // placeholder when custom track uploaded file name is not known
@@ -144,6 +145,83 @@ freeMem(bCopy);
 return same;
 }
 
+boolean isValidBigDataUrl(char *url, boolean doAbort)
+/* return True if the URL is a valid bigDataUrl.
+ * It can be a local filename if this is allowed by udc.localDir
+ */
+{
+if ((startsWith("http://", url)
+   || startsWith("https://", url)
+   || startsWith("ftp://", url)))
+return TRUE;
+
+// we allow bigDataUrl's to point to trash (or sessionDataDir, if configured)
+char *sessionDataDir = cfgOption("sessionDataDir");
+char *sessionDataDirOld = cfgOption("sessionDataDirOld");
+if (startsWith(trashDir(), url) ||
+    (isNotEmpty(sessionDataDir) && startsWith(sessionDataDir, url)) ||
+    (isNotEmpty(sessionDataDirOld) && startsWith(sessionDataDirOld, url)))
+    return TRUE;
+
+char *prefix = cfgOption("udc.localDir");
+if (prefix == NULL)
+    {
+    if (doAbort)
+        errAbort("Only network protocols http, https, or ftp allowed in bigDataUrl: '%s'", url);
+    return FALSE;
+    }
+
+if (!startsWith(prefix, url))
+    {
+    if (doAbort)
+        errAbort("bigDataUrl '%s' on local file system has to start with '%s' (see udc.localDir directive in cgi-bin/hg.conf)", url, prefix);
+    return FALSE;
+    }
+
+return TRUE;
+}
+
+static void checkAllowedBigDataUrlProtocols(char *url)
+/* Abort if url is not using one of the allowed bigDataUrl network protocols.
+ * In particular, do not allow a local file reference, unless explicitely
+ * allowed by hg.conf's udc.localDir directive. */
+{
+isValidBigDataUrl(url, TRUE);
+}
+
+static char *bigDataDocPath(char *type)
+/* If type is a bigData type, provide a relative path to its custom track/format doc page. */
+{
+char *docUrl = NULL;
+if (sameString(type, "bigWig"))
+    docUrl = "../goldenPath/help/bigWig.html";
+else if (sameString(type, "bigBed"))
+    docUrl = "../goldenPath/help/bigBed.html";
+else if (sameString(type, "bam"))
+    docUrl = "../goldenPath/help/bam.html";
+else if (sameString(type, "vcfTabix"))
+    docUrl = "../goldenPath/help/vcf.html";
+return docUrl;
+}
+
+static void requireBigDataUrl(char *bigDataUrl, char *type, char *trackName)
+/* If bigDataUrl is empty, errAbort with helpful message about bigDataUrl requirement */
+{
+if (isEmpty(bigDataUrl))
+    {
+    struct dyString *doc = dyStringNew(0);
+    char *docUrl = bigDataDocPath(type);
+    if (docUrl != NULL)
+	dyStringPrintf(doc, "  For more information about the bigDataUrl setting, see "
+		       "<A HREF=\"%s\" TARGET=_BLANK>%s custom track documentation</A>.",
+		       docUrl, type);
+    errAbort("Missing bigDataUrl setting from track of type=%s (%s).  "
+	     "Please check for case and spelling and that there is no new-line "
+	     "between the 'track' and the 'bigDataUrl' if the bigDataUrl appears to be there."
+	     "%s",
+	     type, trackName, doc->string);
+    }
+}
 /*** BED Factory ***/
 
 static boolean rowIsBed(char **row, int wordCount, char *db, struct dyString *reason)
@@ -1563,6 +1641,50 @@ struct customFactory interactFactory =
     interactLoader,
     };
 
+
+/*********************/
+/**** hic Factory ****/
+
+static boolean hicRecognizer(struct customFactory *fac,
+	struct customPp *cpp, char *type,
+    	struct customTrack *track)
+/* Return TRUE if looks like we're handling a hic track */
+{
+return (sameType(type, "hic"));
+}
+
+static struct customTrack *hicLoader(struct customFactory *fac,
+	struct hash *chromHash,
+    	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
+/* Load up hic data until get next track line. */
+{
+struct hash *settings = track->tdb->settingsHash;
+char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
+requireBigDataUrl(bigDataUrl, fac->name, track->tdb->shortLabel);
+checkAllowedBigDataUrlProtocols(bigDataUrl);
+
+if (doExtraChecking)
+    {
+    struct hicMeta *meta;
+    char *hicErrMsg = hicLoadHeader(bigDataUrl, &meta);
+    if (hicErrMsg != NULL)
+        {
+        track->networkErrMsg = cloneString(hicErrMsg);
+        }
+    }
+return track;
+}
+
+struct customFactory hicFactory =
+/* Factory for Hi-C tracks */
+{
+    NULL,
+    "hic",
+    hicRecognizer,
+    hicLoader,
+    };
+
+
 /*** GFF/GTF Factory - converts to BED ***/
 
 static boolean rowIsGff(char *db, char **row, int wordCount, char *type, struct lineFile *lf)
@@ -2560,82 +2682,6 @@ if (hashLookup(settings, "viewLimits") == NULL)
     }
 }
 
-boolean isValidBigDataUrl(char *url, boolean doAbort)
-/* return True if the URL is a valid bigDataUrl.
- * It can be a local filename if this is allowed by udc.localDir
- */
-{
-if ((startsWith("http://", url)
-   || startsWith("https://", url)
-   || startsWith("ftp://", url)))
-return TRUE;
-
-// we allow bigDataUrl's to point to trash (or sessionDataDir, if configured)
-char *sessionDataDir = cfgOption("sessionDataDir");
-if (startsWith(trashDir(), url) ||
-    (isNotEmpty(sessionDataDir) && startsWith(sessionDataDir, url)))
-    return TRUE;
-
-char *prefix = cfgOption("udc.localDir");
-if (prefix == NULL)
-    {
-    if (doAbort)
-        errAbort("Only network protocols http, https, or ftp allowed in bigDataUrl: '%s'", url);
-    return FALSE;
-    }
-
-if (!startsWith(prefix, url))
-    {
-    if (doAbort)
-        errAbort("bigDataUrl '%s' on local file system has to start with '%s' (see udc.localDir directive in cgi-bin/hg.conf)", url, prefix);
-    return FALSE;
-    }
-
-return TRUE;
-}
-
-static void checkAllowedBigDataUrlProtocols(char *url)
-/* Abort if url is not using one of the allowed bigDataUrl network protocols.
- * In particular, do not allow a local file reference, unless explicitely
- * allowed by hg.conf's udc.localDir directive. */
-{
-isValidBigDataUrl(url, TRUE);
-}
-
-static char *bigDataDocPath(char *type)
-/* If type is a bigData type, provide a relative path to its custom track/format doc page. */
-{
-char *docUrl = NULL;
-if (sameString(type, "bigWig"))
-    docUrl = "../goldenPath/help/bigWig.html";
-else if (sameString(type, "bigBed"))
-    docUrl = "../goldenPath/help/bigBed.html";
-else if (sameString(type, "bam"))
-    docUrl = "../goldenPath/help/bam.html";
-else if (sameString(type, "vcfTabix"))
-    docUrl = "../goldenPath/help/vcf.html";
-return docUrl;
-}
-
-static void requireBigDataUrl(char *bigDataUrl, char *type, char *trackName)
-/* If bigDataUrl is empty, errAbort with helpful message about bigDataUrl requirement */
-{
-if (isEmpty(bigDataUrl))
-    {
-    struct dyString *doc = dyStringNew(0);
-    char *docUrl = bigDataDocPath(type);
-    if (docUrl != NULL)
-	dyStringPrintf(doc, "  For more information about the bigDataUrl setting, see "
-		       "<A HREF=\"%s\" TARGET=_BLANK>%s custom track documentation</A>.",
-		       docUrl, type);
-    errAbort("Missing bigDataUrl setting from track of type=%s (%s).  "
-	     "Please check for case and spelling and that there is no new-line "
-	     "between the 'track' and the 'bigDataUrl' if the bigDataUrl appears to be there."
-	     "%s",
-	     type, trackName, doc->string);
-    }
-}
-
 static struct customTrack *bigWigLoader(struct customFactory *fac,
 	struct hash *chromHash,
     	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
@@ -3441,6 +3487,7 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &bigBarChartFactory);
     slAddTail(&factoryList, &interactFactory);
     slAddTail(&factoryList, &bigInteractFactory);
+    slAddTail(&factoryList, &hicFactory);
     }
 }
 

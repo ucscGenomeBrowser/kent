@@ -157,7 +157,10 @@ set tools = ~/kent/src/hg/makeDb/hgBedsToBedExps
 $tools/factorSourceCheckScore.pl < clusters.factorSource.bed
 # Errors: 0 in 10560472 lines
 
-hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/factorSource.sql -renameSqlTable \
+#hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/factorSource.sql -renameSqlTable \
+    #hg19 encode3RegTfbsCluster clusters.factorSource.bed
+# use this schema for compatibility with previous tracks
+hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/bed5SourceVals.sql -renameSqlTable \
     hg19 encode3RegTfbsCluster clusters.factorSource.bed
 
 # Read 10560472 elements of size 8 from clusters.factorSource.bed
@@ -203,6 +206,14 @@ cat > trackDb.ra << 'EOF'
     dataVersion ENCODE Mar 2012 Freeze
     filterBy name:factor=\
 'EOF'
+
+# rename tables for consistency with earlier regulatory supertrack tracks (but distinguish from
+# ENCODE 2 by prefix
+
+hgsql hg19 -e "alter table encode3RegTfbsCluster rename to encRegTfbsClustered"
+hgsql hg19 -e "alter table encode3RegTfbsCluster rename to encRegTfbsClustered"
+hgsql hg19 -e "alter table encode3RegTfbsClusterInput rename to encRegTfbsClusteredInputs"
+hgsql hg19 -e "alter table encode3RegTfbsExp rename to encRegTfbsClusteredSources"
 
 ###############
 # hg38
@@ -281,7 +292,9 @@ cat makeFactorSource.log
 $tools/factorSourceCheckScore.pl < clusters.factorSource.bed
 # Errors: 0 in 10565630 lines
 
-hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/factorSource.sql -renameSqlTable \
+#hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/factorSource.sql -renameSqlTable \
+    #hg38 encode3RegTfbsCluster clusters.factorSource.bed
+hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/bed5SourceVals.sql -renameSqlTable \
     hg38 encode3RegTfbsCluster clusters.factorSource.bed
 # Read 10565630 elements of size 8 from clusters.factorSource.bed
 
@@ -295,6 +308,9 @@ hgLoadSqlTab hg38 encode3RegTfbsExp ~/kent/src/hg/lib/expRecord.sql clusters.exp
 perl ../makeInputs.pl < fileCellAbTarget.tab > clusters.inputs.tab
 hgLoadSqlTab hg38 encode3RegTfbsClusterInput \
         ~/kent/src/hg/lib/clusterInputTrackTable5.sql clusters.inputs.tab
+# next time, use this:
+#hgLoadSqlTab hg38 encode3RegTfbsClusterInput \
+        #~/kent/src/hg/lib/clusterInputTrackEncode3Tfbs.sql clusters.inputs.tab
 
 # list factors for trackDb filterBy
 awk '{print $4}' fileCellAbTarget.tab | sort | uniq | sed 's/$/,\\/' > factors.trackDb
@@ -308,6 +324,13 @@ awk '{print $2}' fileCellAbTarget.tab | sed 's/+.*//' | sort | uniq > cells.txt
 wc -l cells.txt
 #129 cells.txt
 
+# rename tables for consistency with earlier regulatory supertrack tracks (but distinguish from
+# ENCODE 2 by prefix
+
+hgsql hg38 -e "alter table encode3RegTfbsCluster rename to encRegTfbsClustered"
+hgsql hg38 -e "alter table encode3RegTfbsClusterInput rename to encRegTfbsClusteredInputs"
+hgsql hg38 -e "alter table encode3RegTfbsExp rename to encRegTfbsClusteredSources"
+
 ################
 # Load per-factor tables (needed for clusters track details
 # Consider also creating a track for these (composite with 1200 subtracks)
@@ -318,6 +341,7 @@ cat > scorePeaks.csh << 'EOF'
     set t = $f:r:r
     set table = encode3TfbsPk$t
     echo $table
+# next time grep out chrEBV
     zcat $f > $table.bed
     bedScore -col=7 -verbose=2 -method=reg -uniform $f $table.scored.bed
     hgLoadBed -noNameIx -trimSqlTable \
@@ -334,8 +358,74 @@ cd peaks
 
 awk '{print $1}' ../fileCellAbTarget.tab | sed 's/peaks\///' | \
         xargs -L 1 ../../scorePeaks.csh hg19 >&! ../scorePeaks.log &
-
+cd ..
 perl ../makeTrackDb.pl < clusters.inputs.tab > trackDb.ra
+
+# trim shortLabels:
+grep shortLabel trackDb.ra | sed 's/shortLabel //' | sort > shortLabels.orig.txt
+sort | awk -F'\n' '{print $1, "\t", $1}' shortLabels.orig.txt > \
+        shortLabels.twocol.txt
+# 2. import to google sheet
+# 3. trim 2nd column to 17 chars
+# 4. export as tab-sep
+
+# NOTE: double check they are unique
+
+tdbRename trackDb.ra shortLabel encode3TfChipShortLabels.hg19.txt trackDb.new.ra
+
+# Fix up subGroup members w/ punctuation and initial numbers:
+#       Peyer's_patch -> Peyers_patch
+#       NT2/D1 -> NT2_D1
+#       22Rv1 -> X22Rv1
+#       MM.1S -> MM_1S
+
+# rename tables (encode3Tfbs -> encTfChipPk)
+
+hgsql hg19 -e 'show tables like "encode3TfbsPk%"' > tables.old.txt
+sed -e 's/^/alter table /' -e 's/$/ rename to /' tables.old.txt > rename.1.sql
+sed -e 's/encode3TfbsPk/encTfChipPk/' tables.old.txt | paste rename.1.sql -  | \
+    sed 's/$/;/' > rename.sql
+hgsql hg19 < rename.sql
+
+# drop chrEBV from tables
+# edit/copy rename.sql to dropEbv.csh:  delete from <table> where chrom='chrEBV'
+hgsql hg19 < dropEbv.sql
+
+# add colors to tier1-3 cell experiments (using ENCODE 2 color conventions)
+#
+# GM12878           color 153,38,0
+# H1-hESC           color 0,107,27
+# K562              color 46,0,184
+# HeLa-S3           color 0,119,158
+# HepG2             color 189,0,157
+# HUVEC             color 224,75,0
+
+raToLines encode3.ra encode3.lines
+sed -e '/GM12878/s/$/| color 153,38,0/' \
+    -e '/H1-hESC/s/$/| color 0,107,27/' \
+    -e '/K562/s/$/| color 46,0,184/' \
+    -e '/HeLa-S3/s/$/| color 0,119,158/' \
+    -e '/HepG2/s/$/| color 189,0,157/' \
+    -e '/HUVEC/s/$/| color 224,75,0/' \
+        encode3.lines > encode3.color.lines
+
+# buf size exceeded on linesToRa, so prune down to just composite subtracks
+
+linesToRa encode3.color.lines encode3.color.ra
+
+# concatenate to orig ra file
+
+#  reload cluster input table
+hgLoadSqlTab hg19 encode3RegTfbsClusterInput \
+        ~/kent/src/hg/lib/clusterInputTrackTable5.sql clusters.inputs.tab
+
+# rename field in cluster input table
+# NOTE syntax change in MariaDb (now requires type)
+hgsql -e hg19 "alter table encRegTfbsClusteredInputs change treatment experiment varchar(255)"
+
+
+###############
+# hg38
 
 cd ../hg38
 mkdir scoredPeaks
@@ -343,10 +433,61 @@ cd peaks
 awk '{print $1}' ../fileCellAbTarget.tab | sed 's/peaks\///' | \
         xargs -L 1 ../../scorePeaks.csh hg38 >&! ../scorePeaks.log &
 
+cd ..
 perl ../makeTrackDb.pl < clusters.inputs.tab > trackDb.ra
 
 paste cells.txt cells.txt > cellGroup.txt
 # edit for subgroup format
+
+grep shortLabel trackDb.ra | sed 's/shortLabel //' | sort > shortLabels.orig.txt
+
+comm -2 -3 shortLabels.orig.txt ../hg19/shortLabels.orig.txt > shortLabels.hg38.only.txt 
+
+# add to google spreadsheet for trimming to 17 chars (input to tdbRename)
+
+tdbRename trackDb.ra shortLabel encode3TfShortLabels.uniq.tsv trackDb.new.ra
+
+# Fix up subGroup members w/ punctuation and initial numbers:
+#       Peyer's_patch -> Peyers_patch
+#       NT2/D1 -> NT2_D1
+#       22Rv1 -> X22Rv1
+#       MM.1S -> MM_1S
+
+# rename tables (encode3Tfbs -> encTfChipPk)
+
+hgsql hg38 -e 'show tables like "encode3TfbsPk%"' > tables.old.txt
+sed -e 's/^/alter table /' -e 's/$/ rename to /' tables.old.txt > rename.1.sql
+sed -e 's/encode3TfbsPk/encTfChipPk/' tables.old.txt | paste rename.1.sql -  | \       
+    sed 's/$/;/' > rename.sql
+hgsql hg38 < rename.sql
+
+# drop chrEBV from tables
+# edit/copy rename.sql to dropEbv.csh:  delete from <table> where chrom='chrEBV'
+hgsql hg38 < dropEbv.sql
+
+# add colors, using DNase similarity track 
+raToLines encode3.ra encode3.lines
+
+# edit to leave only subtracks
+# generate edit script from DNase similarity .ra file
+
+cd ~/kent/src/hg/makeDb/trackDb/human/hg38
+csh addColors.csh encode3.lines > encode3.color.lines
+linesToRa encode3.color.lines encode3.color.ra
+
+# missed a few (punctuation diffs, etc.)
+csh addColors2.csh encode3.color.lines encode3.color2.lines
+linesToRa encode3.color2.lines encode3.color.ra
+
+# merge in to encode3.ra
+
+#  reload cluster input table
+hgLoadSqlTab hg38 encode3RegTfbsClusterInput \
+        ~/kent/src/hg/lib/clusterInputTrackTable5.sql clusters.inputs.tab
+
+# rename field in cluster input table
+# NOTE syntax change in MariaDb (now requires type)
+hgsql -e hg19 "alter table encRegTfbsClusteredInputs change treatment experiment varchar(255)"
 
 ####################
 # Motifs (hg38) from Henry Pratt at Zlab

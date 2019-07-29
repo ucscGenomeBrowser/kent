@@ -3994,12 +3994,6 @@ else if (strstr(multiRegionsBedUrl,"://"))
     oldType = url;
 else
     oldType = trashFile;
-if ((oldType == trashFile) && !(fileExists(multiRegionsBedUrl) && fileExists(multiRegionsBedUrlSha1Name)))
-    {  // if the trash files no longer exists, reset to empty string default value.
-    multiRegionsBedUrl = "";
-    cartSetString(cart, "multiRegionsBedUrl", multiRegionsBedUrl);
-    oldType = empty;
-    }
 
 // NEW input
 
@@ -6438,6 +6432,12 @@ else if (sameString(type, "interact"))
     interactCtMethods(tg);
     tg->customPt = ct;
     }
+else if (sameString(type, "hic"))
+    {
+    tg = trackFromTrackDb(tdb);
+    hicCtMethods(tg);
+    tg->customPt = ct;
+    }
 else
     {
     errAbort("Unrecognized custom track type %s", type);
@@ -6952,6 +6952,8 @@ registerTrackHandlers();
 /* Load regular tracks, blatted tracks, and custom tracks.
  * Best to load custom last. */
 loadFromTrackDb(&trackList);
+if (measureTiming)
+    measureTime("Time after trackDbLoad ");
 if (pcrResultParseCart(database, cart, NULL, NULL, NULL))
     slSafeAddHead(&trackList, pcrResultTg());
 if (userSeqString != NULL)
@@ -7080,7 +7082,7 @@ for (track = trackList; track != NULL; track = track->next)
         s = cartOptionalString(cart, buffer);
         if (s == NULL && startsWith("hub_", track->track))
             s = cartOptionalString(cart, usedThis = trackHubSkipHubName(buffer));
-        if ((s != NULL) && (sameString(s, "0")))
+        if (s != NULL)
             hideKids = TRUE;
         cartRemove(cart, usedThis);   // we don't want these _hideKids variables in the cart
 
@@ -7088,9 +7090,13 @@ for (track = trackList; track != NULL; track = track->next)
         struct track *subtrack;
         for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
             {
+            boolean undecoratedVis = FALSE;
             char *s = hideTracks ? cgiOptionalString( subtrack->track) : cartOptionalString(cart, subtrack->track);
             if (s == NULL && startsWith("hub_", subtrack->track))
+                {
+                undecoratedVis = TRUE;
                 s = hideTracks ? cgiOptionalString(trackHubSkipHubName(subtrack->track)) : cartOptionalString(cart, trackHubSkipHubName(subtrack->track));
+                }
 
             safef(buffer, sizeof buffer, "%s_sel", subtrack->track);
             if (s != NULL)
@@ -7101,6 +7107,8 @@ for (track = trackList; track != NULL; track = track->next)
                     cartSetString(cart, buffer, "0");
                 else
                     cartSetString(cart, buffer, "1");
+                if (undecoratedVis)
+                    cartRemove(cart, trackHubSkipHubName(subtrack->track)); // remove the undecorated version
                 }
             else if (hideKids && isSubtrackVisible(subtrack))
                 cartSetString(cart, buffer, "0");
@@ -7357,6 +7365,7 @@ return (startsWithWord("bigWig"  , track->tdb->type)
      || startsWithWord("bigChain"  , track->tdb->type)
      || startsWithWord("bam"     , track->tdb->type)
      || startsWithWord("halSnake", track->tdb->type)
+     || startsWithWord("bigLolly", track->tdb->type)
      || startsWithWord("vcfTabix", track->tdb->type))
      // XX code-review: shouldn't we error abort if the URL is not valid?
      && (bdu && isValidBigDataUrl(bdu, FALSE))
@@ -7633,7 +7642,7 @@ if (!trackList)
     boolean defaultTracks = cgiVarExists("hgt.reset");
     trackList = getTrackList(&groupList, defaultTracks ? -1 : -2);
     if (measureTiming)
-	measureTime("getTrackList");
+	measureTime("Time after visibilities");
     makeGlobalTrackHash(trackList);
     }
 }
@@ -9445,9 +9454,9 @@ else
 
     if (sameString(virtModeType,"default"))  // we are leaving virtMode
 	{
-
 	virtMode = FALSE;
-
+        cartRemove(cart, "virtWinFull");
+        cartRemove(cart, "virtShortDesc");
 	}
     else
 	{
@@ -9460,8 +9469,11 @@ else
 
 	// For now, do this manually here:
 	// sets window to full genome size, which for these demos should be small except for allChroms
-	if (sameString(virtModeType, "exonMostly") || sameString(virtModeType, "geneMostly")
-       	 || sameString(virtModeType, "customUrl") || sameString(virtModeType, "kcGenes"))
+	if (sameString(virtModeType, "exonMostly") || 
+            sameString(virtModeType, "geneMostly") || 
+            sameString(virtModeType, "kcGenes") ||
+            (sameString(virtModeType, "customUrl") && 
+                    !cartUsualBoolean(cart, "virtWinFull", FALSE)))
 	    {
 	    // trying to find best vchrom location corresponding to chromName, winStart, winEnd);
 	    // try to find the nearest match

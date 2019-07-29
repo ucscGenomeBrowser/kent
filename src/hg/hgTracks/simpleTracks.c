@@ -12638,7 +12638,7 @@ dyStringClear(dy);
 // get gene symbol(s) first
 conn = hAllocConn(database);
 sqlSafef(query,sizeof(query),
-        "select geneSymbol from omimGeneMap where omimId =%s", name);
+        "select geneSymbol from omimGeneMap2 where omimId =%s", name);
 char buf[256];
 char *ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
 if (isNotEmpty(ret))
@@ -12962,7 +12962,7 @@ if (useGeneSymbol)
         dyStringAppendC(name, '/');
     else
         labelStarted = TRUE;
-    // get appoved gene symbol from omim2gene table first, if not available then get it from omimGeneMap table.
+    // get appoved gene symbol from omim2gene table first, if not available then get it from omimGeneMap2 table.
     char query[256];
     sqlSafef(query, sizeof(query), "select approvedGeneSymbol from omim2gene where omimId = %s", el->name);
     geneSymbol = sqlQuickString(conn, query);
@@ -12971,7 +12971,7 @@ if (useGeneSymbol)
     else
         {
         char *chp;
-        sqlSafef(query, sizeof(query), "select geneSymbol from omimGeneMap where omimId = %s", el->name);
+        sqlSafef(query, sizeof(query), "select geneSymbol from omimGeneMap2 where omimId = %s", el->name);
         geneSymbol = sqlQuickString(conn, query);
         if (geneSymbol && differentString(geneSymbol, "0"))
             {
@@ -13141,7 +13141,7 @@ omimLocationBuffer[0] = '\0';
 
 conn = hAllocConn(database);
 sqlSafef(query,sizeof(query),
-        "select concat(title1, ' ', title2) from omimGeneMap where omimId=%s", name);
+        "select geneName from omimGeneMap2 where omimId=%s", name);
 (void)sqlQuickQuery(conn, query, omimLocationBuffer, sizeof(omimLocationBuffer));
 hFreeConn(&conn);
 return(omimLocationBuffer);
@@ -13295,7 +13295,7 @@ else
     else
         {
         sqlSafef(query, sizeof(query),
-	"select geneSymbol from omimGeneMap where omimId='%s'", el->name);
+	"select geneSymbol from omimGeneMap2 where omimId='%s'", el->name);
 	geneLabel = sqlQuickString(conn, query);
 	}
 
@@ -13988,6 +13988,7 @@ else if (sameWord(type, "bigBarChart"))
     }
 else if (sameWord(type, "bigLolly"))
     {
+    tdb->canPack = TRUE;
     track->isBigBed = TRUE;
     track->mapsSelf = TRUE;
     lollyMethods(track, tdb, wordCount, words);
@@ -14110,6 +14111,10 @@ else if (sameWord(type, "bam"))
     bamMethods(track);
     if (trackShouldUseAjaxRetrieval(track))
         track->loadItems = dontLoadItems;
+    }
+else if (sameWord(type, "hic"))
+    {
+    hicMethods(track);
     }
 #ifdef USE_HAL
 else if (sameWord(type, "pslSnake"))

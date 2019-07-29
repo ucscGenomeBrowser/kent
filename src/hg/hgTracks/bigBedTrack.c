@@ -137,6 +137,9 @@ struct bigBedFilter *filter;
 char *setting = trackDbSettingClosestToHome(tdb, filterName);
 char *value = cartUsualStringClosestToHome(cart, tdb, FALSE, filterName, setting);
 
+if (isEmpty(value)) 
+    return NULL;
+
 char filterType[4096];
 safef(filterType, sizeof filterType, "%s%s", field, FILTER_TYPE_NAME);
 char *typeValue = cartOrTdbString(cart, tdb, filterType, FILTERTEXT_WILDCARD);
@@ -435,7 +438,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     else
 	{
         char startBuf[16], endBuf[16];
-        char *bedRow[32];
+        char *bedRow[bbi->fieldCount];
 
         bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
         if (bigBedFilterInterval(bedRow, filters))

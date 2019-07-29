@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Stem Cell Hub, California Institute for Regenerative Medicine CESCG at UC Santa Cruz</title>
-    <link rel="shortcut icon" href="<!--#echo var="ROOT" -->/images/schub.ico" type="image/png" />
+    <link rel="shortcut icon" href="<!--#echo var='ROOT'-->images/schub.ico" type="image/png" />
 
     <!-- Local stylesheet -->
-    <link rel="stylesheet" href="<!--#echo var="ROOT" -->/style/cirmStyle.css">
+    <link rel="stylesheet" href="<!--#echo var='ROOT'-->style/cirmStyle.css">
 
     <!-- Font Awesome -->
     <!--<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">-->
@@ -32,7 +32,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
     integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
     crossorigin="anonymous"></script>
-    <script src="<!--#echo var="ROOT" -->/js/cirmStuff.js"></script>
+
+    <script src="<!--#echo var='ROOT'-->js/cirmStuff.js"></script>
 
   </head>
 
@@ -56,7 +57,7 @@
     <!--#endif -->
     <div class="container-fluid" style="width: 90%">
       <div class="row">
-        <a href="/index"><img src="<!--#echo var="ROOT" -->/images/cirmSChubLogo.png"
+        <a href="<!--#echo var='ROOT'-->index"><img src="<!--#echo var='ROOT'-->images/cirmSChubLogo.png"
         style="margin-top: 15px; max-width: 450px;" /></a>
       </div>
       <div class="row">
@@ -69,40 +70,40 @@
           <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
               <li class="nav-item back-dark-blue rounded">
-                <h5 class="nav-button"><a class="nav-link text-white padded-nav-link" href="<!--#echo var="ROOT" -->/index">Home</a></h5>
+                <h5 class="nav-button"><a class="nav-link text-white padded-nav-link" href="<!--#echo var='ROOT'-->index">Home</a></h5>
               </li>
               <li class="nav-item back-dark-pink rounded" style="margin-left: 6px">
-                <h5 class="nav-button"><a class="nav-link text-white padded-nav-link" href="<!--#echo var="ROOT" -->/cgi-bin/cdwWebBrowse">Data</a>
+                <h5 class="nav-button"><a class="nav-link text-white padded-nav-link" href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse">Data</a></h5>
               </li>
               <li class="nav-item back-light-blue rounded" style="margin-left: 6px">
-                <h5 class="nav-button"><a class="nav-link text-white padded-nav-link" href="<!--#echo var="ROOT" -->/projects">Projects</a></h5>
+                <h5 class="nav-button"><a class="nav-link text-white padded-nav-link" href="<!--#echo var='ROOT'-->projects">Projects</a></h5>
               </li>
               <li class="nav-item back-light-green rounded" style="margin-left: 6px">
-                <h5 class="nav-button"><a class="nav-link text-white padded-nav-link" href="<!--#echo var="ROOT" -->/tools">Tools</a></h5>
+                <h5 class="nav-button"><a class="nav-link text-white padded-nav-link" href="<!--#echo var='ROOT'-->tools">Tools</a></h5>
               </li>
               <li class="nav-item back-orange rounded" style="margin-left: 6px">
-                <h5 class="nav-button"><a class="nav-link text-white padded-nav-link" href="<!--#echo var="ROOT" -->/bestPractices">Standards</a></h5>
+                <h5 class="nav-button"><a class="nav-link text-white padded-nav-link" href="<!--#echo var='ROOT'-->bestPractices">Standards</a></h5>
               </li>
               <li class="nav-item back-dark-blue rounded" style="margin-left: 6px">
-                <h5 class="nav-button"><a class="nav-link text-white padded-nav-link" href="<!--#echo var="ROOT" -->/help/cirmBasics">Help</a></h5>
+                <h5 class="nav-button"><a class="nav-link text-white padded-nav-link" href="<!--#echo var='ROOT'-->help/cirmBasics">Help</a></h5>
               </li>
               <li class="nav-item dropdown back-dark-pink rounded" style="margin-left: 6px">
                 <h5 class="nav-button"><a class="nav-link dropdown-toggle text-white padded-nav-link" href="#" id="navbarDropdownMenuLink"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="<!--#echo var="ROOT" -->/cescg/cescgOrg">Organization</a>
-                  <a class="dropdown-item" href="<!--#echo var="ROOT" -->/cescg/cescgPeople">People</a>
-                  <a class="dropdown-item" href="<!--#echo var="ROOT" -->/cescg/cescgPubs">Publications</a>
-                </div>
+                  <a class="dropdown-item" href="<!--#echo var='ROOT'-->cescg/cescgOrg">Organization</a>
+                  <a class="dropdown-item" href="<!--#echo var='ROOT'-->cescg/cescgPeople">People</a>
+                  <a class="dropdown-item" href="<!--#echo var='ROOT'-->cescg/cescgPubs">Publications</a>
+                </div></h5>
               </li>
 	      <!--#if expr='"$SERVER_NAME" != /cirm.ucsc.edu/'-->
               <li class="nav-item back-gray rounded" style="margin-left: 6px">
-                <h5 class="nav-button"><a class="nav-link text-white padded-nav-link login" href="<!--#echo var="ROOT" -->/cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1">
+                <h5 class="nav-button"><a class="nav-link text-white padded-nav-link login" href="<!--#echo var='ROOT'-->cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1">
                 Login</a></h5>
               </li>
               <li class="nav-item back-gray rounded" style="margin-left: 6px">
                 <h5 class="nav-button"><a class="nav-link text-white padded-nav-link login" id="logoutLink"
-                href="<!--#echo var="ROOT" -->/cgi-bin/hgLogin?hgLogin.do.displayLogout=1" style="display:none">
+                href="<!--#echo var='ROOT'-->cgi-bin/hgLogin?hgLogin.do.displayLogout=1" style="display:none">
                 Logout</a></h5>
               </li>
 	      <!--#endif -->

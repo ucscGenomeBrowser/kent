@@ -1684,7 +1684,10 @@ if (alignCount > 0)
         char *acc = table->posList->name;
         struct psl *pslList = getPslFromTable(conn, hgp->database, mrnaTable, acc);
         addPslResultToHgp(hgp, hgp->database, mrnaTable, shortLabel, acc, pslList);
-        alignCount = slCount(hgp->tableList->posList);
+        if (hgp->tableList)
+            alignCount = slCount(hgp->tableList->posList);
+        else 
+            alignCount = 0;
         }
     else
         {

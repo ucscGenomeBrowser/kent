@@ -1638,7 +1638,6 @@ for (;col != NULL && count < fieldCount;col=col->next)
         printf("<td>%s</td></tr>\n", fields[ix]);
     }
 asObjectFree(&as);
-freeMem(fieldToUrl);
 if (skipIds)
     slFreeList(skipIds);
 if (sepFields)
@@ -6601,7 +6600,7 @@ while ((psl = pslNext(lf)) != NULL)
 	pslFree(&psl);
 	}
     }
-slReverse(&pslList);
+slSort(&pslList, pslCmpScore);
 lineFileClose(&lf);
 printAlignments(pslList, start, "htcUserAli", "user", item);
 pslFreeList(&pslList);
@@ -8997,19 +8996,23 @@ if (pslList)
     printAlignments(pslList, start, "htcCdnaAli", tdb->table, item);
 
     char *hgsid = cartSessionId(cart);
-    int rangeStart = 0, rangeEnd = 0;
-    if (pslTrimListToTargetRange(pslList, winStart, winEnd, &rangeStart, &rangeEnd))
+    if (hgIsOfficialChromName(database, item))
         {
-        printf("<A HREF='hgTracks?hgsid=%s&position=%s:%d-%d'>"
-               "View corresponding position range on %s</A><BR>\n",
-               hgsid, item, rangeStart+1, rangeEnd, item);
+        int rangeStart = 0, rangeEnd = 0;
+        if (pslTrimListToTargetRange(pslList, winStart, winEnd, &rangeStart, &rangeEnd))
+            {
+            printf("<A HREF='hgTracks?hgsid=%s&position=%s:%d-%d'>"
+                   "View corresponding position range on %s</A><BR>\n",
+                   hgsid, item, rangeStart+1, rangeEnd, item);
+            }
         }
     char *altFix = item;
     if (!endsWith(altFix, "alt") && !endsWith(altFix, "fix"))
         altFix = pslList->tName;
-    printf("<A HREF=\"hgTracks?hgsid=%s&virtModeType=singleAltHaplo&singleAltHaploId=%s\">"
-           "Show %s placed on its chromosome</A><BR>\n",
-           hgsid, altFix, altFix);
+    if (hgIsOfficialChromName(database, altFix))
+        printf("<A HREF=\"hgTracks?hgsid=%s&virtModeType=singleAltHaplo&singleAltHaploId=%s\">"
+               "Show %s placed on its chromosome</A><BR>\n",
+               hgsid, altFix, altFix);
 
     puts("<P><B>Alignment stats:</B><BR>");
     // Sometimes inversions cause alignments to be split up; just sum up all the stats.
@@ -10426,7 +10429,6 @@ char **row;
 char *url = tdb->url;
 char *kgId= NULL;
 char *title1 = NULL;
-char *title2 = NULL;
 char *geneSymbols = NULL;
 char *chrom, *chromStart, *chromEnd;
 char *kgDescription = NULL;
@@ -10480,8 +10482,8 @@ if (url != NULL && url[0] != 0)
 	}
     else
 	{
-	/* display gene symbol(s) from omimGenemap  */
-        sqlSafef(query, sizeof(query), "select geneSymbol from omimGeneMap where omimId=%s;", itemName);
+	/* display gene symbol(s) from omimGeneMap2  */
+        sqlSafef(query, sizeof(query), "select geneSymbol from omimGeneMap2 where omimId=%s;", itemName);
         sr = sqlMustGetResult(conn, query);
         row = sqlNextRow(sr);
         if (row != NULL)
@@ -10510,22 +10512,17 @@ if (url != NULL && url[0] != 0)
     printf("%s</A></B>", itemName);
 
     sqlSafef(query, sizeof(query),
-          "select title1, title2 from omimGeneMap where omimId=%s;", itemName);
+          "select geneName from omimGeneMap2 where omimId=%s;", itemName);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)
         {
-	if (row[0] != NULL)
-	    {
-	    title1 = cloneString(row[0]);
+        if (row[0] != NULL)
+            {
+            title1 = cloneString(row[0]);
             printf(": %s", title1);
-	    }
-	if (row[1] != NULL)
-	    {
-	    title2 = cloneString(row[1]);
-            printf(" %s ", title2);
-	    }
-	}
+            }
+        }
     sqlFreeResult(&sr);
 
     printf("<BR>\n");
@@ -10606,7 +10603,6 @@ struct sqlResult *sr;
 char **row;
 char *url = tdb->url;
 char *title1 = NULL;
-char *title2 = NULL;
 char *geneSymbol = NULL;
 char *chrom, *chromStart, *chromEnd;
 
@@ -10620,22 +10616,17 @@ if (url != NULL && url[0] != 0)
     printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
     printf("%s</A></B>", itemName);
     sqlSafef(query, sizeof(query),
-          "select title1, title2 from omimGeneMap where omimId=%s;", itemName);
+          "select geneName from omimGeneMap2 where omimId=%s;", itemName);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)
         {
-	if (row[0] != NULL)
-	    {
-	    title1 = cloneString(row[0]);
-            printf(" %s", title1);
-	    }
-	if (row[1] != NULL)
-	    {
-	    title2 = cloneString(row[1]);
-            printf(" %s ", title2);
-	    }
-	}
+        if (row[0] != NULL)
+            {
+            title1 = cloneString(row[0]);
+                printf(" %s", title1);
+            }
+        }
     else
         {
 	printf("<BR>");
@@ -10651,7 +10642,7 @@ if (url != NULL && url[0] != 0)
     */
 
     sqlSafef(query, sizeof(query),
-          "select geneSymbol from omimGeneMap where omimId=%s;", itemName);
+          "select geneSymbol from omimGeneMap2 where omimId=%s;", itemName);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)
@@ -10800,7 +10791,6 @@ char **row;
 char *url = tdb->url;
 char *kgId= NULL;
 char *title1 = NULL;
-char *title2 = NULL;
 char *geneSymbol = NULL;
 char *chrom, *chromStart, *chromEnd;
 char *kgDescription = NULL;
@@ -10819,22 +10809,17 @@ if (url != NULL && url[0] != 0)
     printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
     printf("%s</A></B>", itemName);
     sqlSafef(query, sizeof(query),
-          "select title1, title2 from omimGeneMap where omimId=%s;", itemName);
+          "select geneName from omimGeneMap2 where omimId=%s;", itemName);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)
         {
-	if (row[0] != NULL)
-	    {
-	    title1 = cloneString(row[0]);
+        if (row[0] != NULL)
+            {
+            title1 = cloneString(row[0]);
             printf(": %s", title1);
-	    }
-	if (row[1] != NULL)
-	    {
-	    title2 = cloneString(row[1]);
-            printf(" %s ", title2);
-	    }
-	}
+            }
+        }
     sqlFreeResult(&sr);
     printf("<BR>");
 
@@ -10847,7 +10832,7 @@ if (url != NULL && url[0] != 0)
 
     printf("<B>Location: </B>");
     sqlSafef(query, sizeof(query),
-          "select location from omimGeneMap where omimId=%s;", itemName);
+          "select location from omimGeneMap2 where omimId=%s;", itemName);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)
@@ -10863,7 +10848,7 @@ if (url != NULL && url[0] != 0)
 
     printf("<BR>\n");
     sqlSafef(query, sizeof(query),
-          "select geneSymbol from omimGeneMap where omimId=%s;", itemName);
+          "select geneSymbol from omimGeneMap2 where omimId=%s;", itemName);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)
@@ -10912,7 +10897,7 @@ if (url != NULL && url[0] != 0)
     else
 	{
 	/* display gene symbol(s) from omimGenemap  */
-        sqlSafef(query, sizeof(query), "select geneSymbol from omimGeneMap where omimId=%s;", itemName);
+        sqlSafef(query, sizeof(query), "select geneSymbol from omimGeneMap2 where omimId=%s;", itemName);
         sr = sqlMustGetResult(conn, query);
         row = sqlNextRow(sr);
         if (row != NULL)
@@ -11019,7 +11004,6 @@ struct sqlResult *sr;
 char **row;
 char *url = tdb->url;
 char *title1 = NULL;
-char *title2 = NULL;
 char *chrom, *chromStart, *chromEnd;
 char *avId;
 char *dbSnpId;
@@ -11048,24 +11032,20 @@ chp = strstr(avString, ".");
 if (url != NULL && url[0] != 0)
     {
     sqlSafef(query, sizeof(query),
-          "select title1, title2,  format(seqNo/10000,4), v.description"
-           " from omimGeneMap m, omimAv v"
+          "select m.geneName,  format(seqNo/10000,4), v.description"
+           " from omimGeneMap2 m, omimAv v"
           " where m.omimId=%s and m.omimId=v.omimId and v.avId='%s';", itemName, avId);
 
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)
         {
-	if (row[0] != NULL)
-	    {
-	    title1 = cloneString(row[0]);
-	    }
-	if (row[1] != NULL)
-	    {
-	    title2 = cloneString(row[1]);
-	    }
-	avDesc = cloneString(row[3]);
-	}
+        if (row[0] != NULL)
+            {
+            title1 = cloneString(row[0]);
+            }
+        avDesc = cloneString(row[2]);
+        }
     sqlFreeResult(&sr);
 
     printf("<B>OMIM Allelic Variant: ");
@@ -11077,7 +11057,6 @@ if (url != NULL && url[0] != 0)
     printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
     printf("%s</A></B>", itemName);
     if (title1 != NULL) printf(": %s", title1);
-    if (title2 != NULL) printf(" %s ", title2);
 
     // disable NCBI link until they work it out with OMIM
     /*
@@ -12312,7 +12291,7 @@ char *kgIdToSpId(struct sqlConnection *conn, char* kgId)
 /* get the swissprot id for a known genes id; resulting string should be
  * freed */
 {
-char query[64];
+char query[512];
 sqlSafef(query, sizeof(query), "select spID from kgXref where kgID='%s'", kgId);
 return sqlNeedQuickString(conn, query);
 }

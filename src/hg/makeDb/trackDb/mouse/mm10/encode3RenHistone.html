@@ -1,0 +1,132 @@
+
+<h2>Description</h2>
+<p>
+The ENCODE project has established an epigenomic resource for mammalian development,
+profiling a diverse panel of mouse tissues at eight developmental stages from 10.5 days post
+conception until birth.  This track set presents the results of a comprehensive study of chromatin
+state across these developmental stages, based on 1,128 ChiP-seq assays of 8 histone modifications 
+in 12 tissues.</p>
+<p>Histone modifications are post-translational chemical modifications (e.g. methylation, 
+acetylation) of histone proteins present in chromatin. Histone modifications are core 
+components of a cell's epigenome, and influence gene expression by modulating the activity of 
+DNA sequences. </p>
+
+<h2> Display Conventions and Configuration </h2>
+<p>
+This track is a multi-view composite track that containing two data types
+(<em>views</em>).  For each view, there are multiple subtracks that
+display individually on the browser.  Instructions for configuring multi-view
+tracks are <a href="/goldenPath/help/multiView.html" target=_blank>here</a>.
+The views in this track are:
+<dl>
+<dt><em>Peaks</em></dt><dd> Regions of statistically significant signal
+enrichment</DD>
+<dt><em>Signal</em></dt><dd> Density graph of signal enrichment.</dd>
+</DL>
+<p>Peaks displayed in this track set are those present in both replicates, or observed in two 
+pseudoreplicates of the pooled peaks from both replicates (the "replicated peaks" files 
+from the ENCODE data portal).  Signals displayed in this track correspond to the "fold change 
+over control" files from merged replicates, reflecting the fold enrichment of ChIP signal over 
+the input control. Data for individual replicates are available through the 
+<a target="_blank" href="https://www.encodeproject.org/">
+ENCODE portal</a>.
+</p>
+<p>
+Tracks are colored by histone modification, as follows:
+<ul>
+<li>H3K27me3, dark red
+<li>H3K9me3, light red
+<li>H3K4me3, dark blue
+<li>H3K4me2, royal blue
+<li>H3K4me1, light blue
+<li>H3K36me3, gold
+<li>H3K27ac, dark green
+<li>H3K9ac, light green
+</ul>
+
+</p>
+
+<h2>Methods</h2>
+
+<h3>ChIP-seq data generation</h3>
+ChIP-seq experiments for all marks and tissues from E11.5 - P0 were performed as previously 
+described (PMID: 22763441). The ChIP-seq protocol was modified slightly for all E10.5 
+experiments due to the low amount of input ("micro" ChIP-seq). Detailed protocols for both 
+standard and micro ChIP-seq from the ENCODE project portal, at the links below. 
+
+<ul>
+<li><i>Standard ChIP-seq (E11.5-P0)</i>
+
+<a target="_blank" href="https://www.encodeproject.org/documents/3125496b-c833-4414-bf5f-84dd633eb30d/@@download/attachment/Ren_Tissue_Fixation_and_Sonication_v060614.pdf">
+Tissue fixation & sonication</a>, 
+<a target="_blank" href="https://www.encodeproject.org/documents/89795b31-e65a-42ca-9d7b-d75196f6f4b3/@@download/attachment/Ren%20Lab%20ENCODE%20Chromatin%20Immunoprecipitation%20Protocol_V2.pdf">
+Immunoprecipitation</a>, 
+<a target="_blank" href="https://www.encodeproject.org/documents/4f73fbc3-956e-47ae-aa2d-41a7df552c81/@@download/attachment/Ren_ChIP_Library_Preparation_v060614.pdf">
+Library preparation</a>.
+
+<li><i>Micro-ChIP-seq (E10.5)</i>
+
+<a target="_blank" href="https://www.encodeproject.org/documents/1fcaab50-6ca0-4778-88cb5f6b85170d21/@@download/attachment/Ren%20Lab%20ENCODE%20Tissue%20Fixation%20and%20Sonication%20Protocol%20MicroChIP.pdf">
+Tissue fixation & sonication</a>, 
+<a target="_blank" href="https://www.encodeproject.org/documents/18580e80-0907-4258-a412-46bcc37bd040/@@download/attachment/Ren%20Lab%20ENCODE%20Chromatin%20Immunoprecipitation%20Protocol%20MicroChIP.pdf">
+Immunoprecipitation & Library preparation</a>.
+</ul>
+
+<h3>ChIP-seq antibodies</h3>
+The antibody catalog and lot numbers are available at www.encodedcc.org linked to the page 
+for each experiment. A full list of antibodies used by the Ren Lab for ENCODE can be found
+<a target="_blank" href="https://www.encodeproject.org/search/?type=AntibodyLot&status=released&characterizations.lab.title=Bing+Ren%2C+UCSD">
+here</a>.
+
+<h3>ChIP-seq data processing</h3> 
+
+ChIP-seq data were analyzed using a software pipeline implemented by the ENCODE Data 
+Coordinating Center (DCC) for the ENCODE Consortium. Each step of the pipeline corresponds 
+to a script written in the Python programming language that assembles the input files, runs 
+external programs, and calculates quality-control metrics. The ENCODE histone ChIP-seq pipeline 
+is among the collection of ENCODE Uniform Processing Pipelines that can be found
+<a target="_blank" href="https://github.com/ENCODE-DCC/chip-seq-pipeline">
+here</a>.
+
+<h3>ChIP-seq peak calling</h3>
+
+Replicated peaks were called using an approach based on 
+<a target="_blank" href="https://www.encodeproject.org/software/idr/">
+Irreproducible Discovery Rate</a>
+to ensure an adequate sampling of noise for subsequent replicate comparisons. 
+Briefly, peaks were initially called at a relaxed p-value threshold of 1 x 10-2.  
+Such relaxed peak sets were generated for each biological replicate, for the replicates pooled, 
+and for pooled pseudoreplicates of each true replicate (each pseudoreplicate consists of half 
+the reads sampled without replacement). 
+Peaks from the pooled replicate set were retained in the replicated peak set if they overlapped 
+by at least half their length (in bases) peaks from both biological replicates.  
+Additionally, peaks that overlapped both pooled pseudoreplicates were added to the replicated 
+peak set.  
+In this way very strong biological replicates "rescue" peaks that were only marginal in a second replicate.
+
+<h2>Data Access</h2>
+
+<p>Data from this and all phases of ENCODE are publicly available through the 
+<a target="_blank" href="https://www.encodeproject.org/"</a>
+ENCODE portal</a>.
+The specific experiments included in this track set are listed
+<a target="_blank" href="ettps://www.encodeproject.org/search/?type=Experiment&status=released&assay_slims=DNA+binding&award.rfa=ENCODE3&lab.title=Bing+Ren%2C+UCSD&limit=all">
+here</a>.
+</p>
+
+<h2>Credits</h2>
+
+<p>Histone ChIP-seq experiments in this track were performed by the Ren Lab 
+(UC San Diego/Ludwig Institute for Cancer Research) as part of the ENCODE Consortium (phase 3). 
+The raw data were processed by uniform pipelines provided by the ENCODE Analysis and Data 
+Coordination centers.</p>
+
+<h2>References</h2>
+<p>
+An atlas of dynamic chromatin landscapes in the developing mouse fetus
+Gorkin et al.  In Press, Nature. 
+(pre-print: doi: 
+<a target="_blank">https://doi.org/10.1101/166652)</p>
+</p>
+ENCODE data at the ENCODE portal. (PMID: 26527727)</p> 
+

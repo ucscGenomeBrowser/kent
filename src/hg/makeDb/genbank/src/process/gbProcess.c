@@ -506,7 +506,7 @@ if ((gPepFa != NULL) && (gbProteinIdField->val->stringSize > 0)
     gbFaWriteSeq(gPepFa, gbProteinIdField->val->string, NULL,
                  gbTranslationField->val->string, -1);
     
-    safef(pepSizeStr, sizeof(pepSizeStr), "%u", 
+    safef(pepSizeStr, sizeof(pepSizeStr), "%lu", 
           gbTranslationField->val->stringSize);
     kvtAdd(kvt, "prs", pepSizeStr);
 

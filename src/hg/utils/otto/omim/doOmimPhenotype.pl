@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 # Gene map file path
-my $geneMapFilePath = './genemap.txt';
+my $geneMapFilePath = './genemap2.txt';
 
 # Check for command parameters
 for ( my $argc = 0; $argc <= $#ARGV; $argc++ ) {
@@ -22,6 +22,7 @@ for ( my $argc = 0; $argc <= $#ARGV; $argc++ ) {
 		printf("\n");
 		printf("\t[--gene-map-file=path] gene map file path, defaults to: '%s'.\n", $geneMapFilePath);
 		printf("\n");
+        exit (0);
 	}
 	else {
 		printf("Error: Invalid action: '%s', type '%s  --help' for help.\n", $option, $0);
@@ -35,12 +36,12 @@ while (my $line = <GENE_MAP_FILE>)
 {
  	chomp $line;
   next if $line =~ /^\s*#/;
- 
- 	my @fields = split(/\t/, $line, 13);
 
-  my $mimNumber = $fields[8];
- 	my $phenotypes = _cleanText($fields[11]);
- 
+    my @fields = split(/\t/, $line, 14);
+
+  my $mimNumber = $fields[5];
+    my $phenotypes = _cleanText($fields[12]);
+
  	foreach my $phenotype ( split(/;\s*/, $phenotypes) )
   {
 		my $phenotypeMimNumber = '';

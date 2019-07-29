@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <!--#set var="TITLE" value="CIRM Stem Cell Hub Projects" -->
-<!--#set var="ROOT" value="" -->
 
-<!--#include virtual="$ROOT/inc/header.html" -->
+<!--#include virtual="setRoot.html" -->
+
+<!--#include virtual="${ROOT}inc/header.html" -->
 
 <div class="cirm-page-body">
   <div class="cirm-page-title back-light-blue" style="//background: #1E90FF;">
@@ -50,6 +51,7 @@
     <table class="table table-hover table-header-rotated" style="overflow: visible">
       <thead>
         <tr>
+          <!--
           <th style="width: 1%;" class="text-nowrap">
             Research Theme
           </th>
@@ -59,6 +61,8 @@
           <th style="width: 1%;" class="text-nowrap ">
             Data Set
           </th>
+          -->
+          <th colspan=3 rowspan=2 class="text-nowrap "></th>
           <th style="width: 1%;" class="text-dark-blue text-nowrap">
             Single cell
             <a href="https://en.wikipedia.org/wiki/Single-cell_analysis" target="_blank"
@@ -286,7 +290,18 @@
           <td colspan="1" class="text-dark-blue"></td>
         </tr>
         <tr>
+          <!--
           <td colspan="3"></td>
+          -->
+          <td class="text-nowrap">
+            <b>Research Theme</b>
+          </td>
+          <td>
+            <b>Lab</b>
+          </td>
+          <td>
+            <b>Dataset</b>
+          </td>
           <td class="text-dark-blue text-nowrap"></td>
           <td colspan="2" class="text-dark-pink text-center">Genomics</td>
           <td colspan="3" class="text-light-blue text-center">Transcriptomics</td>
@@ -444,7 +459,7 @@
             <i class="fas fa-external-link-alt icon-sm" aria-hidden="true"></i>
           </td>
           <td class="datasetid">
-            <a href="/d/kriegsteinBrainOrganoids1">kriegsteinBrainOrganoids1</a>
+            <a href="<!--#echo var='ROOT'-->d/kriegsteinBrainOrganoids1">kriegsteinBrainOrganoids1</a>
             <i class="fas fa-info-circle popoveradjust" aria-hidden="true"
             data-toggle="popover" data-trigger="hover"
             data-placement="top"  data-container="body" data-html="true"
@@ -469,7 +484,7 @@
             data-content="Click database icon to view on GEO.">
             <i class="fas fa-database" aria-hidden="true"></i></a>&nbsp;
             <!-- SCHub Icon/Link -->
-            <a href="../cgi-bin/cdwWebBrowse?browseFiles_facet_op=resetAll&browseFiles_facet_fieldName=&browseFiles_facet_fieldVal=&cdwCommand=browseFiles&cdwFile_filter=data_set_id%3D%27kriegsteinBrainOrganoids1%27%20"
+            <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?browseFiles_facet_op=resetAll&browseFiles_facet_fieldName=&browseFiles_facet_fieldVal=&cdwCommand=browseFiles&cdwFile_filter=data_set_id%3D%27kriegsteinBrainOrganoids1%27%20"
             target="_blank"
             data-toggle="popover" data-trigger="hover" class="popoveradjust"
             data-placement="top" data-container="body" data-html="true"
@@ -549,7 +564,7 @@
           <td></td>
           <td class="lab text-nowrap"></td>
           <td class="datasetid">
-            <a href="/d/kriegsteinRadialGliaStudy1" >kriegsteinRadialGliaStudy1</a>
+            <a href="<!--#echo var='ROOT'-->d/kriegsteinRadialGliaStudy1" >kriegsteinRadialGliaStudy1</a>
             <i class="fas fa-info-circle" aria-hidden="true"
             data-toggle="popover" data-trigger="hover" class="popoveradjust"
             data-placement="top"  data-container="body" data-html="true"
@@ -574,7 +589,7 @@
             data-content="Click database icon to view on dbGaP">
             <i class="fas fa-database" aria-hidden="true"></i></a>&nbsp;
             <!-- SCHub Icon/Link -->
-            <a href="../cgi-bin/cdwWebBrowse?browseFiles_facet_op=resetAll&browseFiles_facet_fieldName=&browseFiles_facet_fieldVal=&cdwCommand=browseFiles&cdwFile_filter=data_set_id%3D%27kriegsteinRadialGliaStudy1%27%20"
+            <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?browseFiles_facet_op=resetAll&browseFiles_facet_fieldName=&browseFiles_facet_fieldVal=&cdwCommand=browseFiles&cdwFile_filter=data_set_id%3D%27kriegsteinRadialGliaStudy1%27%20"
             target="_blank"
             data-toggle="popover" data-trigger="hover" class="popoveradjust"
             data-placement="top" data-container="body" data-html="true"
@@ -606,7 +621,7 @@
           <td></td>
           <td class="lab text-nowrap"></td>
           <td class="datasetid">
-            <a href="/d/kriegstein6k">kriegstein6k</a>
+            <a href="<!--#echo var='ROOT'-->d/kriegstein6k">kriegstein6k</a>
             <i class="fas fa-info-circle popoveradjust" aria-hidden="true"
             data-toggle="popover" data-trigger="hover"
             data-placement="top"  data-container="body" data-html="true"
@@ -630,7 +645,7 @@
             data-content="Click database icon to view on dbGaP">
             <i class="fas fa-database" aria-hidden="true"></i></a>&nbsp;
             <!-- SCHub Icon/Link -->
-            <a href="../cgi-bin/cdwWebBrowse?browseFiles_facet_op=resetAll&browseFiles_facet_fieldName=&browseFiles_facet_fieldVal=&cdwCommand=browseFiles&cdwFile_filter=data_set_id%3D%27kriegstein6k%27%20"
+            <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?browseFiles_facet_op=resetAll&browseFiles_facet_fieldName=&browseFiles_facet_fieldVal=&cdwCommand=browseFiles&cdwFile_filter=data_set_id%3D%27kriegstein6k%27%20"
             target="_blank"
             data-toggle="popover" data-trigger="hover" class="popoveradjust"
             data-placement="top" data-container="body" data-html="true"
@@ -705,7 +720,7 @@
               <i class="fas fa-external-link-alt icon-sm" aria-hidden="true"></i>
             </td>
             <td class="datasetid">
-              <a href="/d/quakeBrainGeo1">quakeBrainGeo1</a> 
+              <a href="<!--#echo var='ROOT'-->d/quakeBrainGeo1">quakeBrainGeo1</a> 
               <i class="fas fa-info-circle" aria-hidden="true"
               data-toggle="popover" data-trigger="hover" class="popoveradjust"
               data-placement="top" data-container="body" data-html="true"
@@ -728,7 +743,7 @@
              data-content="Click database icon to view on GEO.">
              <i class="fas fa-database" aria-hidden="true"></i></a>&nbsp;
              <!-- SCHub Icon/Link -->
-             <a href="../cgi-bin/cdwWebBrowse?browseFiles_facet_op=resetAll&browseFiles_facet_fieldName=&browseFiles_facet_fieldVal=&cdwCommand=browseFiles&cdwFile_filter=data_set_id%3D%27quakeBrainGeo1%27%20"
+             <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?browseFiles_facet_op=resetAll&browseFiles_facet_fieldName=&browseFiles_facet_fieldVal=&cdwCommand=browseFiles&cdwFile_filter=data_set_id%3D%27quakeBrainGeo1%27%20"
              target="_blank" data-toggle="popover" data-trigger="hover" class="popoveradjust"
              data-placement="top" data-container="body" data-html="true"
              title=""
@@ -759,7 +774,7 @@
           <td></td>
           <td class="lab text-nowrap"></td>
           <td class="datasetid">
-            <a href="/d/quakeGlioblastomaGeo1">quakeGlioblastomaGeo1</a>
+            <a href="<!--#echo var='ROOT'-->d/quakeGlioblastomaGeo1">quakeGlioblastomaGeo1</a>
             <i class="fas fa-info-circle popoveradjust" aria-hidden="true"
             data-toggle="popover" data-trigger="hover"
             data-placement="top"  data-container="body" data-html="true"
@@ -781,9 +796,9 @@
             title="<img src='https://www.ncbi.nlm.nih.gov/geo/img/geo_main.gif' style='height: 2em;'>
             View GSE84465"
             data-content="Click database icon to view on GEO.">
-            <i class="fas fa-database" aria-hidden="true"></i>&nbsp;
+            <i class="fas fa-database" aria-hidden="true"></i></a>&nbsp;
             <!-- SCHub Icon/Link -->
-            <a href="../cgi-bin/cdwWebBrowse?browseFiles_facet_op=resetAll&browseFiles_facet_fieldName=&browseFiles_facet_fieldVal=&cdwCommand=browseFiles&cdwFile_filter=data_set_id%3D%27quakeGlioblastomaGeo1%27%20"
+            <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?browseFiles_facet_op=resetAll&browseFiles_facet_fieldName=&browseFiles_facet_fieldVal=&cdwCommand=browseFiles&cdwFile_filter=data_set_id%3D%27quakeGlioblastomaGeo1%27%20"
             target="_blank"
             data-toggle="popover" data-trigger="hover" class="popoveradjust"
             data-placement="top" data-container="body" data-html="true"
@@ -1196,7 +1211,7 @@
             <i class="fas fa-external-link-alt icon-sm" aria-hidden="true"></i>
           </td>
           <td class="datasetid">
-            <a href="/d/cornErythroidMaturation">cornErythroidMaturation</a>
+            <a href="<!--#echo var='ROOT'-->d/cornErythroidMaturation">cornErythroidMaturation</a>
             <i class="fas fa-info-circle popoveradjust" aria-hidden="true"
             data-toggle="popover" data-trigger="hover"
             data-placement="top" data-container="body" data-html="true"
@@ -1204,7 +1219,7 @@
             data-content="Investigating erythoid maturation with RNA-seq."></i>
             <br>&nbsp;&nbsp;
             <!-- SCHub Icon/Link -->
-            <a href="../cgi-bin/cdwWebBrowse?browseFiles_facet_op=resetAll&browseFiles_facet_fieldName=&browseFiles_facet_fieldVal=&cdwCommand=browseFiles&cdwFile_filter=data_set_id%3D%27cornErythroidMaturation%27%20"
+            <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?browseFiles_facet_op=resetAll&browseFiles_facet_fieldName=&browseFiles_facet_fieldVal=&cdwCommand=browseFiles&cdwFile_filter=data_set_id%3D%27cornErythroidMaturation%27%20"
             target="_blank"
             data-toggle="popover" data-trigger="hover" class="popoveradjust"
             data-placement="top" data-container="body" data-html="true"
@@ -1236,7 +1251,7 @@
           <td></td>
           <td class="lab text-nowrap"></td>
           <td class="datasetid">
-            <a href="/d/cornOffTarget">cornOffTarget</a>
+            <a href="<!--#echo var='ROOT'-->d/cornOffTarget">cornOffTarget</a>
             <i class="fas fa-info-circle popoveradjust" aria-hidden="true"
             data-toggle="popover" data-trigger="hover"
             data-placement="top" data-container="body" data-html="true"
@@ -1245,7 +1260,7 @@
             GUIDE-seq, Amplicon-seq and Capture-seq."></i>
             <br>&nbsp;&nbsp;
             <!-- SCHub Icon/Link -->
-            <a href="../cgi-bin/cdwWebBrowse?browseFiles_facet_op=resetAll&browseFiles_facet_fieldName=&browseFiles_facet_fieldVal=&cdwCommand=browseFiles&cdwFile_filter=data_set_id%3D%27cornOffTarget%27%20"
+            <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?browseFiles_facet_op=resetAll&browseFiles_facet_fieldName=&browseFiles_facet_fieldVal=&cdwCommand=browseFiles&cdwFile_filter=data_set_id%3D%27cornOffTarget%27%20"
             target="_blank"
             data-toggle="popover" data-trigger="hover" class="popoveradjust"
             data-placement="top" data-container="body" data-html="true"
@@ -1547,7 +1562,7 @@
             <i class="fas fa-external-link-alt icon-sm" aria-hidden="true"></i>
           </td>
           <td class="datasetid">
-            <a href="/d/quakePancreas1">quakePancreas1</a>
+            <a href="<!--#echo var='ROOT'-->d/quakePancreas1">quakePancreas1</a>
             <i class="fas fa-info-circle popoveradjust" aria-hidden="true"
             data-toggle="popover" data-trigger="hover"
             data-placement="top"  data-container="body" data-html="true"
@@ -1572,7 +1587,7 @@
             data-content="Click database icon to view on GEO.">
             <i class="fas fa-database" aria-hidden="true"></i></a>&nbsp;
             <!-- SCHub Icon/Link -->
-            <a href="../cgi-bin/cdwWebBrowse?browseFiles_facet_op=resetAll&browseFiles_facet_fieldName=&browseFiles_facet_fieldVal=&cdwCommand=browseFiles&cdwFile_filter=data_set_id%3D%27quakePancreas1%27%20"
+            <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?browseFiles_facet_op=resetAll&browseFiles_facet_fieldName=&browseFiles_facet_fieldVal=&cdwCommand=browseFiles&cdwFile_filter=data_set_id%3D%27quakePancreas1%27%20"
             target="_blank"
             data-toggle="popover" data-trigger="hover" class="popoveradjust"
             data-placement="top" data-container="body" data-html="true"
@@ -1605,7 +1620,8 @@
           <td class="lab text-nowrap"></td>
           <!--
           <td class="datasetid">
-            <a href="/d/quakeFetalPancreasSpatial">quakeFetalPancreasSpatial</a>-->
+            FYI the following SSI command comment was disabled to avoid nesting comments. replace ~~ with dash dash to restore it
+            <a href="<!~~ #echo var='ROOT'~~>d/quakeFetalPancreasSpatial">quakeFetalPancreasSpatial</a>-->
           <td class="datasetid">
             quakeFetalPancreasSpatial
             <i class="fas fa-info-circle popoveradjust" aria-hidden="true"
@@ -1626,7 +1642,7 @@
             data-content="View publication from this dataset">
             <i class="fas fa-file-alt" aria-hidden="true"></i></a>&nbsp;
             <!-- SCHub Icon/Link -->
-            <a href="../cgi-bin/cdwWebBrowse?browseFiles_facet_op=resetAll&browseFiles_facet_fieldName=&browseFiles_facet_fieldVal=&cdwCommand=browseFiles&cdwFile_filter=data_set_id%3D%27quakeFetalPancreasSpatial%27%20"
+            <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?browseFiles_facet_op=resetAll&browseFiles_facet_fieldName=&browseFiles_facet_fieldVal=&cdwCommand=browseFiles&cdwFile_filter=data_set_id%3D%27quakeFetalPancreasSpatial%27%20"
             target="_blank"
             data-toggle="popover" data-trigger="hover" class="popoveradjust" 
             data-placement="top" data-container="body" data-html="true"
@@ -1701,4 +1717,4 @@
   </div>
 </div>
 
-<!--#include virtual="$ROOT/inc/footer.html" -->
+<!--#include virtual="${ROOT}inc/footer.html" -->

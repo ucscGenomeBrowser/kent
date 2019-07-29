@@ -74,11 +74,12 @@ struct hash
     boolean autoExpand;         /* Automatically expand hash */
     float expansionFactor;      /* Expand when elCount > size*expansionFactor */
     int numResizes;             /* number of times resize was called */
+    boolean ownLm;              /* TRUE if lm was allocated by newHashExt */
     };
 
 #define defaultExpansionFactor 1.0
 
-#define hashMaxSize 28 
+#define hashMaxSize 30
 
 struct hashCookie
 /* used by hashFirst/hashNext in tracking location in traversing hash */
@@ -178,6 +179,9 @@ int hashIntValDefault(struct hash *hash, char *name, int defaultInt);
 long long hashIntSum(struct hash *hash);
 /* Return sum of all the ints in a hash of ints. */
 
+void hashIntReset(struct hash *hash);
+/* Reset all values in hash of ints to 0.  Reset element count to 0. */
+
 void hashTraverseEls(struct hash *hash, void (*func)(struct hashEl *hel));
 /* Apply func to every element of hash with hashEl as parameter. */
 
@@ -232,6 +236,11 @@ struct hash *newHashExt(int powerOfTwoSize, boolean useLocalMem);
 #define newHash(a) newHashExt(a, TRUE)
 /* Returns new hash table using local memory. */
 #define hashNew(a) newHash(a)	/* Synonym */
+
+struct hash *newHashLm(int powerOfTwoSize, struct lm *lm);
+/* Returns new hash table using the given lm.  Recommended lm block size is 256B to 64kB,
+ * depending on powerOfTwoSize. */
+#define hashNewLm(size, lm) newHashLm(size, lm)
 
 void hashReverseAllBucketLists(struct hash *hash);
 /* Reverse all hash bucket list.  You might do this to

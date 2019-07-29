@@ -1,0 +1,11 @@
+track encode3Reg
+superTrack on show
+shortLabel ENCODE Regulation
+longLabel Integrated Regulation from ENCODE
+wgEncode 1
+group regulation
+priority 2
+pennantIcon New red
+
+include trackDb.histones.ra
+include trackDb.chromHmm.ra

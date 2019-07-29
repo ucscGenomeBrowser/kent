@@ -48,7 +48,7 @@ struct machine
     boolean isDead;		/* True if machine dead. */
     char *tempDir;		/* Name of local temp dir. */
     struct slInt *deadJobIds;	/* List of job Ids that machine was running when it died. */
-    bits32	ip;		/* IP address in host order. */
+    char ipStr[NI_MAXHOST];	/* IP address as a string. */
     struct machSpec *machSpec;  /* Machine spec of resources */
     struct slRef *plannedBatches; /* List of planned batches. */
     };
@@ -155,7 +155,7 @@ void sockSuckStart(struct rudp *ru);
 extern char *hubHost;	/* Name of machine running this. */
 extern char hubHAddress[32]; /* Host address of machine running this. Not IP address. 
 			      * Just for use between hub daemon and spokes*/
-extern unsigned char hubSubnet[4];   /* Subnet to check. */
+extern struct cidr *hubSubnet;         /* Subnet to check. */
 
 void logIt(char *format, ...);
 /* Print message to log file. */

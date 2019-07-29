@@ -2,6 +2,15 @@
 
 #include "dataApi.h"
 
+/* when measureTiming is used */
+static long processingStart = 0;
+
+void startProcessTiming()
+/* for measureTiming, beginning processing */
+{
+processingStart = clock1000();
+}
+
 void apiFinishOutput(int errorCode, char *errorString, struct jsonWrite *jw)
 /* finish json output, potential output an error code other than 200 */
 {
@@ -15,10 +24,40 @@ if (errorCode)
     char errString[2048];
     safef(errString, sizeof(errString), "Status: %d %s",errorCode,errorString);
     puts(errString);
-    if (429 == errorCode)
+    if (err429 == errorCode)
 	puts("Retry-After: 30");
     }
+else if (reachedMaxItems)
+    {
+    char errString[2048];
+    safef(errString, sizeof(errString), "Status: %d %s",err206,err206Msg);
+    puts(errString);
+    }
 puts("\n");
+
+if (debug)
+    {
+    char sizeString[64];
+    unsigned long long vmPeak = currentVmPeak();
+    sprintLongWithCommas(sizeString, vmPeak);
+    jsonWriteString(jw, "vmPeak", sizeString);
+    }
+
+if (measureTiming)
+    {
+    long nowTime = clock1000();
+    long long et = nowTime - processingStart;
+    jsonWriteNumber(jw, "totalTimeMs", et);
+    }
+
+if (itemsReturned)
+    jsonWriteNumber(jw, "itemsReturned", itemsReturned);
+if (reachedMaxItems)
+    {
+    jsonWriteBoolean(jw, "maxItemsLimit", TRUE);
+    if (downloadUrl && downloadUrl->string)
+	jsonWriteString(jw, "dataDownloadUrl", downloadUrl->string);
+    }
 
 jsonWriteObjectEnd(jw);
 fputs(jw->dy->string,stdout);
@@ -33,7 +72,10 @@ va_start(args, format);
 vsnprintf(errMsg, sizeof(errMsg), format, args);
 struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "error", errMsg);
+jsonWriteNumber(jw, "statusCode", errorCode);
+jsonWriteString(jw, "statusMessage", errString);
 apiFinishOutput(errorCode, errString, jw);
+cgiExitTime("hubApi err", enteredMainTime);
 exit(0);
 }
 
@@ -152,13 +194,56 @@ else if (startsWith("char", asType) ||
 return typeIndex;
 }	/*	int asToJsonType(char *asType)	*/
 
-int tableColumns(struct sqlConnection *conn, struct jsonWrite *jw, char *table,
-   char ***nameReturn, char ***typeReturn, int **jsonType)
+/* temporarily from table browser until proven works, then move to library */
+/* UNFORTUNATELY, this version needs an extra argument: tdb
+ *  the table browser has a global hash to satisify that requirement
+ */
+struct asObject *asForTable(struct sqlConnection *conn, char *table,
+    struct trackDb *tdb)
+/* Get autoSQL description if any associated with table. */
+/* Wrap some error catching around asForTable. */
+{
+if (tdb != NULL)
+    return asForTdb(conn,tdb);
+
+// Some cases are for tables with no tdb!
+struct asObject *asObj = NULL;
+if (sqlTableExists(conn, "tableDescriptions"))
+    {
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+        {
+        char query[256];
+
+        sqlSafef(query, sizeof(query),
+              "select autoSqlDef from tableDescriptions where tableName='%s'", table);
+        char *asText = asText = sqlQuickString(conn, query);
+
+        // If no result try split table. (not likely)
+        if (asText == NULL)
+            {
+            sqlSafef(query, sizeof(query),
+                  "select autoSqlDef from tableDescriptions where tableName='chrN_%s'", table);
+            asText = sqlQuickString(conn, query);
+            }
+        if (asText != NULL && asText[0] != 0)
+            {
+            asObj = asParseText(asText);
+            }
+        freez(&asText);
+        }
+    errCatchEnd(errCatch);
+    errCatchFree(&errCatch);
+    }
+return asObj;
+}
+
+int tableColumns(struct sqlConnection *conn, char *table,
+   char ***nameReturn, char ***typeReturn, int **jsonTypes)
 /* return the column names, and their MySQL data type, for the given table
  *  return number of columns (aka 'fields')
  */
 {
-// not needed jsonWriteListStart(jw, "columnNames");
 struct sqlFieldInfo *fi, *fiList = sqlFieldInfoGet(conn, table);
 int columnCount = slCount(fiList);
 char **namesReturn = NULL;
@@ -174,14 +259,10 @@ for (fi = fiList; fi; fi = fi->next)
     typesReturn[i] = cloneString(fi->type);
     jsonReturn[i] = sqlTypeToJsonType(fi->type);
     i++;
-// not needed     jsonWriteObjectStart(jw, NULL);
-// not needed     jsonWriteString(jw, fi->field, fi->type);
-// not needed     jsonWriteObjectEnd(jw);
     }
-// not needed jsonWriteListEnd(jw);
 *nameReturn = namesReturn;
 *typeReturn = typesReturn;
-*jsonType = jsonReturn;
+*jsonTypes = jsonReturn;
 return columnCount;
 }
 
@@ -197,10 +278,25 @@ if (errCatchStart(errCatch))
 errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
-    apiErrAbort(404, "Not Found", "error opening hubUrl: '%s', '%s'", hubUrl,  errCatch->message->string);
+    apiErrAbort(err404, err404Msg, "error opening hubUrl: '%s', '%s'", hubUrl,  errCatch->message->string);
     }
 errCatchFree(&errCatch);
 return hub;
+}
+
+static int trackDbTrackCmp(const void *va, const void *vb)
+/* Compare to sort based on 'track' name; use shortLabel as secondary sort key.
+ * Note: parallel code to hgTracks.c:tgCmpPriority */
+{
+const struct trackDb *a = *((struct trackDb **)va);
+const struct trackDb *b = *((struct trackDb **)vb);
+int dif = strcmp(a->track, b->track);
+if (dif < 0)
+   return -1;
+else if (dif == 0.0)
+   return strcasecmp(a->shortLabel, b->shortLabel);
+else
+   return 1;
 }
 
 struct trackDb *obtainTdb(struct trackHubGenome *genome, char *db)
@@ -214,8 +310,9 @@ else
     tdb = trackHubTracksForGenome(genome->trackHub, genome);
     tdb = trackDbLinkUpGenerations(tdb);
     tdb = trackDbPolishAfterLinkup(tdb, genome->name);
-    slSort(&tdb, trackDbCmp);
     }
+slSort(tdb, trackDbTrackCmp);
+// slSort(&tdb, trackDbCmp);
 return tdb;
 }
 
@@ -238,6 +335,7 @@ for (trackFound = tdb; trackFound; trackFound = trackFound->next)
     if (sameOk(trackFound->track, track))
 	break;
     }
+
 return trackFound;
 }
 
@@ -269,7 +367,7 @@ else if (startsWith("bigWig", trackType))
 errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
-    apiErrAbort(404, "Not Found", "error opening bigFile URL: '%s', '%s'", bigDataUrl,  errCatch->message->string);
+    apiErrAbort(err404, err404Msg, "error opening bigFile URL: '%s', '%s'", bigDataUrl,  errCatch->message->string);
     }
 errCatchFree(&errCatch);
 return bbi;
@@ -283,4 +381,236 @@ const struct chromInfo *b = *((struct chromInfo **)vb);
 int dif;
 dif = (long) a->size - (long) b->size;
 return dif;
+}
+
+struct trackHubGenome *findHubGenome(struct trackHub *hub, char *genome,
+    char *endpoint, char *hubUrl)
+/* given open 'hub', find the specified 'genome' called from 'endpoint' */
+{
+struct trackHubGenome *hubGenome = NULL;
+for (hubGenome = hub->genomeList; hubGenome; hubGenome = hubGenome->next)
+    {
+    if (sameString(genome, hubGenome->name))
+	break;
+    }
+if (NULL == hubGenome)
+    apiErrAbort(err400, err400Msg, "failed to find specified genome=%s for endpoint '%s'  given hubUrl '%s'", genome, endpoint, hubUrl);
+return hubGenome;
+}
+
+char *verifyLegalArgs(char *validArgList[])
+/* validArgList is an array of strings for valid arguments
+ * returning string of any other arguments not on that list found in
+ * cgiVarList(), NULL when none found.
+ */
+{
+struct hash *validHash = NULL;
+char *words[32];
+int wordCount = 0;
+int i = 0;
+for ( ; isNotEmpty(validArgList[i]); ++i )
+    {
+    ++wordCount;
+    words[i] = validArgList[i];
+    }
+
+if (wordCount)
+    {
+    validHash = hashNew(0);
+    int i;
+    for (i = 0; i < wordCount; ++i)
+	hashAddInt(validHash, words[i], 1);
+    }
+
+int extrasFound = 0;
+struct dyString *extras = newDyString(128);
+struct cgiVar *varList = cgiVarList();
+struct cgiVar *var = varList;
+for ( ; var; var = var->next)
+    {
+    if (sameWord("cgiSpoof", var->name))
+	continue;
+    if (sameWord("debug", var->name))
+	continue;
+    if (sameWord("measureTiming", var->name))
+	continue;
+    if (NULL == validHash)
+	{
+	dyStringPrintf(extras, ";%s=%s", var->name, var->val);
+	++extrasFound;
+	}
+    else if (0 == hashIntValDefault(validHash, var->name, 0))
+	{
+	if (extrasFound)
+	    dyStringPrintf(extras, ";%s=%s", var->name, var->val);
+	else
+	    dyStringPrintf(extras, "%s=%s", var->name, var->val);
+	++extrasFound;
+	}
+    }
+if (extrasFound)
+    return dyStringCannibalize(&extras);
+else
+    return NULL;
+}
+
+static int dbDbCmpName(const void *va, const void *vb)
+/* Compare two dbDb elements: name, ignore case. */
+{
+const struct dbDb *a = *((struct dbDb **)va);
+const struct dbDb *b = *((struct dbDb **)vb);
+return strcasecmp(a->name, b->name);
+}
+
+struct dbDb *ucscDbDb()
+/* return the dbDb table as an slList */
+{
+char query[1024];
+struct sqlConnection *conn = hConnectCentral();
+char *showActive0 = cfgOptionDefault("hubApi.showActive0", "off");
+if (sameWord("on", showActive0))
+    sqlSafef(query, sizeof(query), "select * from dbDb");
+else
+    sqlSafef(query, sizeof(query), "select * from dbDb where active=1");
+struct dbDb *dbList = NULL, *el = NULL;
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = dbDbLoad(row);
+    slAddHead(&dbList, el);
+    }
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
+slSort(&dbList, dbDbCmpName);
+return dbList;
+}
+
+boolean isSupportedType(char *type)
+/* is given type in the supportedTypes list ? */
+{
+boolean ret = FALSE;
+if (startsWith("wigMaf", type))	/* not wigMaf at this time */
+    return ret;
+struct slName *el;
+for (el = supportedTypes; el; el = el->next)
+    {
+    if (startsWith(el->name, type))
+	{
+	ret = TRUE;
+	break;
+	}
+    }
+return ret;
+}
+
+void wigColumnTypes(struct jsonWrite *jw)
+/* output column headers for a wiggle data output schema */
+{
+jsonWriteListStart(jw, "columnTypes");
+
+jsonWriteObjectStart(jw, NULL);
+jsonWriteString(jw, "name", "start");
+jsonWriteString(jw, "sqlType", "int");
+jsonWriteString(jw, "jsonType", "number");
+jsonWriteString(jw, "description", "chromStart: 0-based chromosome start position");
+jsonWriteObjectEnd(jw);
+
+jsonWriteObjectStart(jw, NULL);
+jsonWriteString(jw, "name", "end");
+jsonWriteString(jw, "sqlType", "int");
+jsonWriteString(jw, "jsonType", "number");
+jsonWriteString(jw, "description", "chromEnd: 1-based chromosome end position");
+jsonWriteObjectEnd(jw);
+
+jsonWriteObjectStart(jw, NULL);
+jsonWriteString(jw, "name", "value");
+jsonWriteString(jw, "sqlType", "float");
+jsonWriteString(jw, "jsonType", "number");
+jsonWriteString(jw, "description", "numerical data value for this location:start-end");
+jsonWriteObjectEnd(jw);
+
+jsonWriteListEnd(jw);
+}	/* void wigColumnTypes(struct jsonWrite jw) */
+
+void outputSchema(struct trackDb *tdb, struct jsonWrite *jw,
+    char *columnNames[], char *columnTypes[], int jsonTypes[],
+	struct hTableInfo *hti, int columnCount, int asColumnCount,
+	    struct asColumn *columnEl)
+/* print out the SQL schema for this trackDb */
+{
+if (tdb && startsWith("wig", tdb->type))
+    {
+        wigColumnTypes(jw);
+    }
+else
+    {
+    jsonWriteListStart(jw, "columnTypes");
+    int i = 0;
+    for (i = 0; i < columnCount; ++i)
+        {
+        jsonWriteObjectStart(jw, NULL);
+        jsonWriteString(jw, "name", columnNames[i]);
+        jsonWriteString(jw, "sqlType", columnTypes[i]);
+        jsonWriteString(jw, "jsonType", jsonTypeStrings[jsonTypes[i]]);
+        if ((0 == i) && (hti && hti->hasBin))
+            jsonWriteString(jw, "description", "Indexing field to speed chromosome range queries");
+        else if (columnEl && isNotEmpty(columnEl->comment))
+            jsonWriteString(jw, "description", columnEl->comment);
+        else
+            jsonWriteString(jw, "description", "");
+
+        /* perhaps move the comment pointer forward */
+        if (columnEl)
+            {
+            if (asColumnCount == columnCount)
+                columnEl = columnEl->next;
+            else if (! ((0 == i) && (hti && hti->hasBin)))
+                columnEl = columnEl->next;
+            }
+        jsonWriteObjectEnd(jw);
+	}
+    jsonWriteListEnd(jw);
+    }
+}
+
+void bigColumnTypes(struct jsonWrite *jw, struct sqlFieldType *fiList,
+    struct asObject *as)
+/* show the column types from a big file autoSql definitions */
+{
+struct asColumn *columnEl = as->columnList;
+jsonWriteListStart(jw, "columnTypes");
+struct sqlFieldType *fi = fiList;
+for ( ; fi; fi = fi->next, columnEl = columnEl->next)
+    {
+    int jsonType = autoSqlToJsonType(fi->type);
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteString(jw, "name", fi->name);
+    jsonWriteString(jw, "sqlType", fi->type);
+    jsonWriteString(jw, "jsonType",jsonTypeStrings[jsonType]);
+    if (columnEl && isNotEmpty(columnEl->comment))
+	jsonWriteString(jw, "description", columnEl->comment);
+    else
+	jsonWriteString(jw, "description", "");
+    jsonWriteObjectEnd(jw);
+    }
+jsonWriteListEnd(jw);
+}
+
+boolean trackHasData(struct trackDb *tdb)
+/* check if this is actually a data track:
+ *	TRUE when has data, FALSE if has no data
+ * When NO trackDb, can't tell at this point, will check that later
+ */
+{
+if (tdb)
+    {
+    if (tdbIsContainer(tdb) || tdbIsComposite(tdb)
+	|| tdbIsCompositeView(tdb) || tdbIsSuper(tdb))
+	return FALSE;
+    else
+	return TRUE;
+    }
+else
+    return TRUE;	/* might be true */
 }

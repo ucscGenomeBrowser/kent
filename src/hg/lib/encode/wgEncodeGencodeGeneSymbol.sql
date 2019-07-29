@@ -7,6 +7,7 @@
 CREATE TABLE wgEncodeGencodeGeneSymbol (
     transcriptId varchar(255) not null,	# GENCODE transcript identifier
     symbol varchar(255) not null,	# HGNC/MGI gene symbol
+    geneId varchar(255) not null,	# HGNC/MGI symbol id used by database
               #Indices
     INDEX(transcriptId)
 );

@@ -33,21 +33,19 @@ pmPrintf(pm, "recycleSpoke %s", spokeName);
 hubMessagePut(pm);
 }
 
-static void spokeSendRemote(char *spokeName, char *machine, char *dottedQuad, char *message)
+static void spokeSendRemote(char *spokeName, char *machine, char *ipStr, char *message)
 /* Send message to remote machine. */
 {
 boolean ok;
 struct paraMessage pm;
 struct rudp *ru = rudpOpen();
-bits32 ip;
 
 if (ru != NULL)
     {
-    internetDottedQuadToIp(dottedQuad, &ip);
-    if (ip == 0)
-	pmInitFromName(&pm, machine, paraNodePort);
+    if (!sameString(ipStr,"0"))
+        pmInit(&pm, ipStr, paraNodePortStr);
     else
-        pmInit(&pm, ip, paraNodePort);
+	pmInitFromName(&pm, machine, paraNodePortStr);
     pmSet(&pm, message);
     ok = pmSend(&pm, ru);
     if (!ok)
@@ -67,7 +65,7 @@ static void *spokeProcess(void *vptr)
 /* Loop around forever listening to socket and forwarding messages to machines. */
 {
 struct spoke *spoke = vptr;
-char *line, *machine, *dottedQuad;
+char *line, *machine, *ipStr;
 struct paraMessage *message = NULL;
 
 /* Wait on message and process it. */
@@ -84,11 +82,11 @@ for (;;)
     line = message->data;
     logDebug("%s: %s", spoke->name, line);
     machine = nextWord(&line);
-    dottedQuad = nextWord(&line);
-    if (dottedQuad != NULL)
+    ipStr = nextWord(&line);
+    if (ipStr != NULL)
 	{
 	if (line != NULL && line[0] != 0)
-	    spokeSendRemote(spoke->name, machine, dottedQuad, line);
+	    spokeSendRemote(spoke->name, machine, ipStr, line);
 	}
     pmFree(&message);
     }
@@ -130,9 +128,7 @@ static struct paraMessage *messageWithHeader(struct machine *machine)
 /* Return a message with machine name filled in. */
 {
 struct paraMessage *pm = pmNew(0,0);
-char dottedQuad[17];
-internetIpToDottedQuad(machine->ip, dottedQuad);
-pmPrintf(pm, "%s %s ", machine->name, dottedQuad);
+pmPrintf(pm, "%s %s ", machine->name, machine->ipStr);
 return pm;
 }
 
@@ -158,6 +154,7 @@ spokeSyncSendMessage(spoke, pm);
 void spokeSendJob(struct spoke *spoke, struct machine *machine, struct job *job)
 /* Tell spoke to start up a job. */
 {
+
 struct paraMessage *pm = messageWithHeader(machine);
 char *reserved = "0";	/* An extra parameter to fill in some day */
 char err[512];

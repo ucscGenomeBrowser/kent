@@ -90,7 +90,11 @@ for (hel = helList; hel != NULL; hel = hel->next)
                 // some assembly hubs use different directory names than the typical
                 // genomeName/trackDb.txt setup, hardcode this so assembly hub will
                 // still load locally
-                char *tdbFileName = strrchr((char *)hel->val, '/') + 1;
+                char *tdbFileName = NULL;
+                if ((tdbFileName = strrchr((char *)hel->val, '/')) != NULL)
+                    tdbFileName += 1;
+                else
+                    tdbFileName = (char *)hel->val;
                 fprintf(out, "%s %s/%s\n", hel->name, genome, tdbFileName);
                 }
             }

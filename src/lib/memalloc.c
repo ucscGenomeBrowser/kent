@@ -15,6 +15,18 @@
 #include "dlist.h"
 
 
+static unsigned long memAlloced;
+
+unsigned long memCheckPoint()
+/* Return the amount of memory allocated since last called. */
+{
+unsigned long ret = memAlloced;
+
+memAlloced = 0;
+
+return ret;
+}
+
 static void *defaultAlloc(size_t size)
 /* Default allocator. */
 {
@@ -92,6 +104,7 @@ if (size == 0 || size >= maxAlloc)
 if ((pt = mhStack->alloc(size)) == NULL)
     errAbort("needLargeMem: Out of memory - request size %llu bytes, errno: %d\n",
              (unsigned long long)size, errno);
+memAlloced += size;
 return pt;
 }
 
@@ -137,6 +150,7 @@ if (size == 0)
 if ((pt = mhStack->alloc(size)) == NULL)
     errAbort("needHugeMem: Out of huge memory - request size %llu bytes, errno: %d\n",
              (unsigned long long)size, errno);
+memAlloced += size;
 return pt;
 }
 
@@ -189,6 +203,7 @@ if ((pt = mhStack->alloc(size)) == NULL)
     errAbort("needMem: Out of memory - request size %llu bytes, errno: %d\n",
              (unsigned long long)size, errno);
 memset(pt, 0, size);
+memAlloced += size;
 return pt;
 }
 
@@ -204,6 +219,7 @@ void *wantMem(size_t size)
 /* Want mem just calls malloc - no zeroing of memory, no
  * aborting if request fails. */
 {
+memAlloced += size;
 return mhStack->alloc(size);
 }
 
@@ -293,12 +309,19 @@ if (newAlloced > carefulMaxToAlloc)
     sprintLongWithCommas(maxAlloc, (long long)carefulMaxToAlloc);
     sprintLongWithCommas(allocRequest, (long long)newAlloced);
     pthread_mutex_unlock( &carefulMutex );
-    errAbort("carefulAlloc: Allocated too much memory - more than %s bytes (%s)",
+
+    // Avoid out-of-memory issues by exiting immediately.
+    char errMsg[1024];
+    safef(errMsg, sizeof errMsg, "carefulAlloc: Allocated too much memory - more than %s bytes (%s). Exiting.\n",
 	maxAlloc, allocRequest);
+    write(STDERR_FILENO, errMsg, strlen(errMsg)); 
+    exit(1);   // out of memory is a serious problem, exit immediately, but allow atexit cleanup.
+    // avoid errAbort which allocates memory causing problems.
     }
 carefulAlloced = newAlloced;
 aliSize = ((size + sizeof(*cmb) + 4 + carefulAlignAdd)&carefulAlignMask);
 cmb = carefulParent->alloc(aliSize);
+memAlloced += size;
 cmb->size = size;
 cmb->startCookie = cmbStartCookie;
 pEndCookie = (char *)(cmb+1);
@@ -452,6 +475,7 @@ struct dlNode *node;
 
 size += sizeof (*node);
 node = memTracker->parent->alloc(size);
+memAlloced += size;
 if (node == NULL)
     return node;
 dlAddTail(memTracker->list, node);

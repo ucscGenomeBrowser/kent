@@ -176,6 +176,9 @@
 #define uglyAbort errAbort /* debugging error abort. */
 #define uglyOut stdout /* debugging fprintf target. */
 
+unsigned long memCheckPoint();
+/* Return the amount of memory allocated since last called. */
+
 void *needMem(size_t size);
 /* Need mem calls abort if the memory allocation fails. The memory
  * is initialized to zero. */
@@ -993,10 +996,10 @@ char *skipBeyondDelimit(char *s,char delimit);
 /* Returns NULL or pointer to first char beyond one (or more contiguous) delimit char.
    If delimit is ' ' then skips beyond first patch of whitespace. */
 
-char *skipLeadingSpaces(char *s);
+char *skipLeadingSpaces(const char *s);
 /* Return first white space or NULL if none.. */
 
-char *skipToSpaces(char *s);
+char *skipToSpaces(const char *s);
 /* Return first white space. */
 
 int eraseTrailingSpaces(char *s);
@@ -1253,12 +1256,12 @@ int intAbs(int a);
 #define roundll(a) ((long long)((a)+0.5))
 /* Round floating point val to nearest long long. */
 
-#ifndef min
+#if !(defined(min) || defined(__cplusplus))
 #define min(a,b) ( (a) < (b) ? (a) : (b) )
 /* Return min of a and b. */
 #endif
 
-#ifndef max
+#if !(defined(max) || defined(__cplusplus))
 #define max(a,b) ( (a) > (b) ? (a) : (b) )
 /* Return max of a and b. */
 #endif

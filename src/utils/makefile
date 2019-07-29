@@ -17,6 +17,7 @@ UTILS_APPLIST = \
 	bamToPsl \
 	bedClip \
 	bedGraphToBigWig \
+	bedJoinTabOffset \
 	bedToBigBed \
 	bigBedInfo \
 	bigBedNamedItems \
@@ -142,13 +143,16 @@ UCSC_APPS = \
 	venn \
 	verticalSplitSqlTable \
 	weedLines \
-	wigTestMaker
+
 
 # list of scripts to install
 
 USER_APP_SCRIPTS = \
-	bedJoinTabOffset \
+	bedJoinTabOffset.py \
 	expMatrixToBarchartBed \
+	ucscApiClient \
+	tdbRename \
+	tdbSort \
 	webSync
 
 SCRIPT_FILES = \
@@ -186,8 +190,7 @@ SCRIPT_FILES = \
 	phegenToBed \
 	doLocusName \
 	cancerMafToBigBed \
-	tdbRename \
-	tdbSort \
+	pq \
 	${USER_APP_SCRIPTS}
 
 # List of all directories to build

@@ -1,6 +1,6 @@
 track wgEncodeGencodeVM21
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel All GENCODE VM21
 longLabel All GENCODE annotations from VM21 (Ensembl 96)
 group genes

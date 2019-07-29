@@ -51,6 +51,389 @@
 <!-- ============= 2019 archived news ============= -->
 <a name="2019"></a>
 
+<a name="071919"></a>
+<h2>Jul. 19, 2019 &nbsp;&nbsp; New GENCODE V31 gene tracks for human, hg19 and hg38</h2>
+<p>
+We are pleased to announce the release of the new GENCODE Gene annotation tracks, which corresponds
+to the <a href="http://www.ensembl.info/2019/05/20/whats-coming-in-ensembl-97-ensembl-genomes-44/"
+target="_blank">Ensembl 97 release</a> for human assemblies, <a target="_blank"
+href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeGencodeV31lift37">hg19/GRCh37</a> and
+<a target="_blank" href="../../cgi-bin/hgTrackUi?db=hg38&g=wgEncodeGencodeV31">hg38/GRCh38</a>.
+All GENCODE V31 annotations are available for hg38/GRCh38, and the annotation release was
+back-mapped to the hg19/GRCh37 assembly. For both hg19 and hg38, the GENCODE v31 gene set contains
+the following tracks:</p>
+<ul>
+  <li>Basic - a subset of the <em>Comprehensive set</em>.</li>
+  <li>Comprehensive - all GENCODE coding and non-coding transcript annotations, including
+      polymorphic pseudogenes. This includes both manual and automatic annotations.</li>
+  <li>Pseudogenes - all annotations except polymorphic pseudogenes.</li></ul>
+<p>
+The hg38 assembly also includes the following tracks that are not available on hg19:
+</p>
+<ul>
+  <li>2-way Pseudogenes - pseudogenes predicted by both the Yale Pseudopipe and UCSC
+      Retrofinder pipelines.</li>
+  <li>PolyA - polyA signals and sites manually annotated on the genome based on transcribed
+      evidence (ESTs and cDNAs) of 3' end of transcripts containing at least 3 A's not matching the
+      genome.</li></ul>
+<p>Thanks to Mark Diekhans and Jairo Navarro for the development and release of these tracks.</p>
+
+<a name="071719"></a>
+<h2>Jul. 17, 2019 &nbsp;&nbsp; New GENCODE gene set tracks available for mouse (VM22)</h2>
+<p>We are happy to announce the release of the most up-to-date GENCODE M22 gene set for the
+mouse genome (mm10/GRCm38).</p>
+<p>
+The GENCODE Genes track (version M22, June 2019) shows high-quality manual annotations merged with
+evidence-based automated annotations across the entire mouse genome.
+This track includes 5 subtracks: a basic gene set, a comprehensive
+gene set, a pseudogene set, a high confidence pseudogene set, and a set of polyA site 
+locations. You can read more about the VM22 by navigating there from the 
+<a href="../../cgi-bin/hgTrackUi?db=mm10&g=wgEncodeGencodeSuper">All GENCODE supertrack
+</a> or by going directly to the 
+<a href="../../cgi-bin/hgTrackUi?db=mm10&g=wgEncodeGencodeVM22">track description page</a>.
+
+<p>Thanks to Mark Diekhans and Daniel Schmelter for their work developing and releasing this track.
+</p>
+
+<a name="071519"></a>
+<h2>Jul. 15, 2019 &nbsp;&nbsp; Updated TransMap tracks (V5)</h2>
+<p>
+We are pleased to announce the release of a new set of TransMap (V5) tracks for 94 different 
+assemblies.</p>
+
+<p> 
+The TransMap tracks are an attempt to map features, such as mRNAs, ESTs, and gene annotations
+from one organism to another through pairwise, whole-genome alignments. These new TransMap tracks
+are:</p>
+<ul>
+  <li>Ensembl Mappings</li>
+  <li>RefSeq Gene Mappings</li>
+  <li>GenBank RNA Mappings</li>
+  <li>EST Mappings</li>
+</ul>
+
+<p>
+You can read more about how these tracks were created on the
+<a href="../../cgi-bin/hgTrackUi?db=hg38&g=transMapV5" target="_blank">track description page</a> 
+for the hg38/GRCh38 version of these tracks. The TransMapV4 data can still be found in our 
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/" target="_blank">download server</a>.</p>
+
+<p>
+Thanks to Mark Diekhans and Lou Nassar for their work in creating and releasing these tracks.</p>
+
+<a name="070919"></a>
+<h2>Jul. 9, 2019 &nbsp;&nbsp; Expanded CRISPR track released for human (hg19/GRCh37)</h2> 
+<p>
+We are pleased to announce the release of an expanded
+ <a href="../cgi-bin/hgTracks?db=hg19&hideTracks=1&knownGene=pack&crisprAllTargets=pack&position=chr7:116397500-116398000" target="_blank">CRISPR Targets track</a> for the human 
+hg19/GRCh37 assembly. This track shows the DNA sequences targetable by CRISPR RNA guides 
+using the Cas9 enzyme from S. pyogenes (PAM: NGG) over the entire human genome. CRISPR target
+sites were annotated with predicted specificity (off-target effects) and predicted efficiency
+(on-target cleavage) by various algorithms through the tool 
+<a href="http://crispor.tefor.net/" target="_blank">CRISPOR</a>. 
+</p>
+<p class="text-center">
+  <img class='text-center' src="../images/crisprAll.png" width='850' alt="CrisprAllTargets track">
+</p>
+<p>
+We would like to thank Maximilian Haeussler, Hiram Clawson, and Daniel Schmelter for their effort
+creating, developing, and releasing this data track.</p> 
+
+<a name="070119"></a>
+<h2>Jul. 1, 2019 &nbsp;&nbsp; New DGV Gold Standard track for human (hg19/GRCh37)</h2>
+<p>
+We are pleased to announce the DGV Gold Standard track for human (hg19/GRCh37). This track displays
+copy number variants (CNVs), insertions/deletions (InDels), inversions and inversion breakpoints
+annotated by the <a href="http://dgv.tcag.ca/dgv/app/home" target="_blank">Database of Genomic Variants</a>
+(DGV). The initial criteria for the Gold Standard set require that a variant be found in at least
+two different studies and found in at least two different samples. After filtering out low-quality
+variants, the remaining variants are clustered according to 50% minimum overlap, and then merged
+into a single record. Gains and losses are merged separately.
+</p>
+
+<p>
+The <a href="../cgi-bin/hgTrackUi?db=hg19&g=dgvPlus" target="_blank">DGV Gold Standard track</a>
+utilizes a boxplot-like display to represent the merging of records. The highest ranking variant in
+the cluster defines the inner &quot;box&quot;, while the outer lines define the outermost start and stop
+coordinates of the CNV. In this way, the inner box forms a high-confidence CNV location and the
+thin connecting lines indicate confidence intervals for the location of the CNV.
+</p>
+<p class="text-center">
+  <img class='text-center' src="../images/dgvGold.png" width='850' alt="DGV Gold Standard track">
+</p>
+
+<p>
+We would like to thank Jeff MacDonald and the <a href="http://dgv.tcag.ca/dgv/app/home" target="_blank">Database of Genomic Variants</a>
+group for providing guidance and these data. We would also like to thank Christopher Lee and Conner
+Powell as well as the entire UCSC Genome Browser team for creating and releasing this track.
+</p>
+
+<a name="062819"></a>
+<h2>Jun. 28, 2019 &nbsp;&nbsp; New Genome Browsers: Cow, bosTau9 (<em>Bos taurus</em>) and 
+Baboon, papAnu4 (<em>Papio anubis</em>)</h2>
+<p>
+Genome browsers are now available for the <em>Bos taurus</em> assembly released in Apr. 2018 by the
+<a href="https://www.ars.usda.gov/" target="_blank"> USDA Agricultural Research Service</a> (ARS-UCD1.2), 
+and the <em>Papio anubis</em> assembly released in Apr. 2017 by the
+<a href="https://www.hgsc.bcm.edu/" target="_blank"> Human Genome Sequencing Center</a> (Panu_3.0).
+<h3>About the assembly (bosTau9):</h3>
+<ul>
+  <li><b>UCSC Genome Browser assembly ID:</b>  <a href="../../cgi-bin/hgGateway?db=bosTau9" 
+  target="_blank">bosTau9</a></li>
+  <li><b>Sequencing/Assembly provider ID:</b> <a href="https://www.ars.usda.gov/">
+USDA Agricultural Research Service</a></li>
+  <li><b>Assembly date:</b> Apr. 2018</li>
+  <li><B>Accession ID:</B> GCF_002263795.1</li>
+  <li><B>NCBI Genome ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/genome/82"
+TARGET="_blank">82</A> (<em>Bos taurus</em>)</li>
+  <li><B>NCBI Assembly ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/assembly/1677391"
+TARGET="_blank">1677391</A></li>
+  <li><B>NCBI BioProject ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/bioproject/391427"
+TARGET="_blank">391427</A></li>
+  <li><B>NCBI BioSample ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/biosample/SAMN03145444"
+TARGET="_blank">SAMN03145444</A></li>
+  <li><b>Scaffold count: </b>2,211</li>
+  <li><b>Total size: </b>2,358,151,106</li>
+  <li><a href="../goldenPath/credits.html#Cow_credits" 
+target="_blank" >Acknowledgments</a></li>
+</ul>
+<h3>About the assembly (papAnu4):</h3>
+<ul>
+  <li><b>UCSC Genome Browser assembly ID:</b>  <a href="../../cgi-bin/hgGateway?db=papAnu4" 
+  target="_blank">papAnu4</a></li>
+  <li><b>Sequencing/Assembly provider ID:</b> <a href="https://www.hgsc.bcm.edu/">
+Human Genome Sequencing Center</a></li>
+  <li><b>Assembly date:</b> Apr. 2017</li>
+  <li><B>Accession ID:</B> GCF_000264685.3</li>
+  <li><B>NCBI Genome ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/genome/394"
+TARGET="_blank">394</A> (<em>Papio anubis</em>)</li>
+  <li><B>NCBI Assembly ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/assembly/1082401"
+TARGET="_blank">1082401</A></li>
+  <li><B>NCBI BioProject ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/bioproject/54005"
+TARGET="_blank">54005</A></li>
+  <li><B>NCBI BioSample ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/biosample/SAMN02981400"
+TARGET="_blank">SAMN02981400</A></li>
+  <li><b>Scaffold count: </b>71,135</li>
+  <li><b>Total size: </b>2,959,373,024</li>
+  <li><a href="../goldenPath/credits.html#Baboon_credits" 
+target="_blank" >Acknowledgments</a></li>
+</ul>
+<h3>Data and Downloads:</h3>
+<ul>
+  <li><a href="../goldenPath/credits.html" 
+target="_blank" >Data use conditions and restrictions</a></li>
+  <li><a href="../goldenPath/help/ftp.html" 
+target="_blank" >Rsync</a></li>
+  <li>FTP: <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/bosTau9/" 
+target="_blank" >Cow</a> and 
+<a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/papAnu4/" 
+target="_blank" >Baboon</a></li>
+  <li>Downloads page: <a href="http://hgdownload.soe.ucsc.edu/downloads.html#cow"
+target="_blank" >Cow</a> and 
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#baboon"
+target="_blank" >Baboon</li>
+</ul>
+</p>
+
+<a name="062519"></a>
+<h2> Jun. 25, 2019 &nbsp;&nbsp; JSON API now available</h2>
+<p>
+The UCSC Genome Browser is pleased to announce its new <a href="help/api.html" 
+target="_blank">JavaScript Object Notation (JSON) Application Programming 
+Interface (API)</a>. The API provides direct access to different 
+data including annotations and sequence data for both native Genome Browser assemblies as 
+well as hubs.</p>
+
+<p>
+Some functions possible with the API include:
+<ul>
+  <li>List of all available UCSC Genome Browser assemblies</li>
+  <li>List of chromosomes contained in a UCSC Genome Browser assembly or assembly hub</li>
+  <li>List of all data tracks in a specific assembly</li>
+  <li>Extraction of any track data from a UCSC Genome Browser assembly or hub</li>
+</ul></p>
+
+<p>
+See our <a href="help/api.html#Return" target="_blank">help page</a> for 
+a complete list of what data can be accessed, as well as as 
+<a href="help/api.html#list_examples" 
+target="_blank">examples of how to access the data</a>.</p>
+
+<p>
+The UCSC Genome Browser would like to thank Hiram Clawson and Lou Nassar for the development and 
+testing of this new feature.</p>
+
+<a name="062019"></a>
+<h2> Jun. 20, 2019 &nbsp;&nbsp; New GDC Cancer variants track and lollipop display for human
+(GRCh38/hg38)</h2>
+<p>
+We are pleased to announce the
+<a href="../cgi-bin/hgTrackUi?db=hg38&position=chr1%3A11102837-11267747&g=gdcCancer" target="_blank">
+GDC Cancer mutations</a> track for human (<em>GRCh38/hg38</em>). This
+track shows the genomic positions of somatic variants found through whole genome sequencing of
+tumors as part of
+<a href="https://www.cancer.gov/about-nci/organization/ccg/research/structural-genomics/tcga"
+target="_blank">The Cancer Genome Atlas (TCGA)</a> by the National Cancer Institute, made available
+through the <a href="https://portal.gdc.cancer.gov/" taret="_blank">Genomic Data Commons Portal</a>.
+The data shown is sometimes called the &quot;Pan-Cancer dataset&quot;, a collection of
+thirty-three TCGA projects processed in a uniform way.
+</p>
+<p>
+With the release of the GDC Cancer track, we are introducing a new lollipop display mode, available
+when this track is in 'full' or 'squish' mode. These variants can be shown in two display
+modes:
+<ul>
+  <li>Lollipop Mode: variants are shown with circles, the y-axis represents the number of samples
+    within the cohort. (<em>Available in 'full' or 'squish' modes</em>.)</li>
+  <li>BED Mode: variants are shown as normal genomic features.
+    (<em>Available in 'pack' or 'dense' modes</em>.)</li>
+</ul></p>
+<p class="text-center">
+  <img class='text-center' src="../images/gdcCancerLollipop.jpg" width='699' alt="GDC Cancer lollipop display">
+</p>
+<p>
+We would like to thank the <a href="https://portal.gdc.cancer.gov/" target="_blank">Genomic Data
+Commons Portal</a> for making the TCGA data available on their web site. We would also like to thank
+Brian Raney and Jairo Navarro at the UCSC Genome Browser for creating and testing this track and
+the new lollipop display mode.</p>
+
+
+<a name="061719"></a>
+
+<h2> Jun. 17, 2019 &nbsp;&nbsp; New ENCODE 3 transcription factor binding site track sets for human (<em>GRCh37/hg19, GRCh38/hg38</em>)</h2>
+<p>
+We are pleased to announce two new ENCODE 3 transcription factor binding site track sets for human 
+(GRCh37/hg19, GRCh38/hg38). These track sets show regions of transcription factor binding 
+derived from a large collection of ChIP-seq experiments performed by the ENCODE project between 
+February 2011 and November 2018.
+</p>
+<p>
+The ENCODE TF ChIP-seq data were processed using the
+<a href="https://www.encodeproject.org/chip-seq/transcription_factor/" target="_blank"
+>ENCODE Transcription Factor ChIP-seq Processing Pipeline</a> to generate peaks of TF binding.
+Peaks from 1264 experiments (1256 in hg38) representing 338 transcription factors (340 in hg38) in
+130 cell types (129 in hg38) were used to generate these two track sets.<br> 
+<ul>
+  <li>The <b>ENCODE 3 TF ChIP Clusters tracks</b> are collections of ChIP-seq peaks consolidated into a
+   summary display or &lsquo;cluster&rsquo; showing occupancy regions for each factor. The cluster
+   labels now include the count of cell types contributing to the cluster (those with ChIP-seq peaks
+   in the region) and the total count of cell types tested for the factor. The new label feature
+   can be disabled via a user option on the track configuration page. You can read more about the
+   TF ChIP Clusters tracks here:
+   <a href="../cgi-bin/hgTrackUi?db=hg19&g=encRegTfbsClustered" target="_blank">hg19</a>, 
+   <a href="../cgi-bin/hgTrackUi?db=hg38&g=encRegTfbsClustered" target="_blank">hg38</a>.</li>
+  <li>The <b>ENCODE 3 TF ChIP Peaks track sets</b> are collections of the underlying ChIP-seq peak tracks
+      which can be viewed individually or collectively by cell type or transcription factor. You can read more about the TF ChIP Peaks track sets here:
+      <a href="../cgi-bin/hgTrackUi?db=hg19&g=encTfChipPk" target="_blank">hg19</a>,                                    
+      <a href="../cgi-bin/hgTrackUi?db=hg38&g=encTfChipPk" target="_blank">hg38</a>.</li>
+</ul>
+</p>
+<p>
+An example of these two track sets is shown in the following sessions where CTCF binds to the MYC Proto-Oncogene
+across a few selected cell types. CTCF is a transcription factor identified as a repressor of MYC
+shown to inhibit cell growth (<a href="https://www.pnas.org/content/100/2/633" 
+target="_blank">Qi et al., 2002</a>).<br>
+<ul>
+ <li><a href="../cgi-bin/hgTracks?db=hg19&hideTracks=1&wgEncodeReg=show&wgEncodeReg_hideKids=1&encRegTfbsClustered=dense&encRegTfbsClustered=full&encRegTfbsClustered.filterBy.name=CTCF&wgEncodeTfBindingSuper=show&wgEncodeTfBindingSuper_hideKids=1&encTfChipPk=dense&encTfChipPk_hideKids=1&encTfChipPkENCFF003YLJ=dense&encTfChipPkENCFF003YLJ_sel=1&position=chr8%3A128748315-128753680&knownGene=full&encTfChipPkENCFF016EUX=dense&encTfChipPkENCFF016EUX_sel=1&encTfChipPkENCFF030BPR=dense&encTfChipPkENCFF030BPR_sel=1&encTfChipPkENCFF032DEW=dense&encTfChipPkENCFF032DEW_sel=1&encTfChipPkENCFF777TZZ=dense&encTfChipPkENCFF777TZZ_sel=1&pix=900"
+target="_blank"
+     >CTCF transcription factor binding to MYC on hg19</a></li>
+ <li><a href="../cgi-bin/hgTracks?db=hg38&hideTracks=1&wgEncodeReg=show&wgEncodeReg_hideKids=1&encTfChipPk=pack&encTfChipPk_hideKids=1&encTfChipPkENCFF535MZG=dense&encTfChipPkENCFF535MZG_sel=1&encTfChipPkENCFF579XTC=dense&encTfChipPkENCFF579XTC_sel=1&encTfChipPkENCFF574FIL=dense&encTfChipPkENCFF574FIL_sel=1&encTfChipPkENCFF560GGY=dense&encTfChipPkENCFF560GGY_sel=1&encTfChipPkENCFF552XDP=dense&encTfChipPkENCFF552XDP_sel=1&encTfChipPkENCFF540DVR=dense&encTfChipPkENCFF540DVR_sel=1&encRegTfbsClustered_sel=1&encRegTfbsClustered=full&encRegTfbsClustered.filterBy.name=CTCF&position=chr8%3A127736594-127740958&knownGene=full&pix=900"
+target="_blank"
+     >CTCF transcription factor binding to MYC on hg38</a></li>
+</ul>
+</p>
+<p>
+Thanks to the <a href="https://www.encodeproject.org/" target="_blank">ENCODE Consortium</a>,
+the ENCODE ChIP-seq production laboratories, and the ENCODE Data Coordination Center for generating
+and processing the TF ChIP-seq datasets. The ENCODE accession numbers of the constituent
+datasets are available on the peak details page as links in the Clusters tracks and in the track
+title for the Peaks tracks. Special thanks to Henry Pratt, Jill Moore, Michael Purcaro, and Zhiping
+Weng, PI, at the 
+<a href="https://www.umassmed.edu/zlab/" target="_blank">ENCODE Data Analysis Center (ZLab at UMass Medical Center)</a>
+for providing the peak datasets, metadata, and guidance developing these track sets. Thanks to Kate
+Rosenbloom and Conner Powell of the UCSC Genome Browser group for their work in creating and
+releasing these track sets.
+</p>
+
+
+<a name="060619"></a>
+<h2>Jun. 6, 2019 &nbsp;&nbsp; New Genome Browser: Chinese Hamster Ovary (CHO) cell line, criGriChoV2 (<em>Cricetulus griseus</em>)</h2>
+<p>
+A genome browser is now available for the <em>Chinese Hamster Ovary cell line</em> assembly released in June 2017 by the
+<a href="https://www.eaglegenomics.com/eagle-case-studies/horizon-case-study/" target="_blank">Eagle Genomics Ltd</a> (CHOK1S_HZDv1).
+<h3>About the assembly:</h3>
+<ul>
+  <li><b>UCSC Genome Browser assembly ID:</b> <a href=../cgi-bin/hgTracks?db=criGriChoV2>criGriChoV2</a></li>
+  <li><b>Sequencing/Assembly provider ID:</b> <a href="https://www.eaglegenomics.com/" target="_blank">
+  Eagle Genomics Ltd</a></li>
+  <li><b>Assembly date:</b> June 2017</li>
+  <li><b>Accession ID:</b> GCA_900186095.1</li>
+  <li><b>NCBI Genome information:</b><a href="https://www.ncbi.nlm.nih.gov/genome/2791" 
+target="_blank" > 2791</a> <em>(Cricetulus griseus)</em></li>
+  <li><b>NCBI Assembly information:</b><a href="https://www.ncbi.nlm.nih.gov/assembly/1422381" 
+target="_blank" > 1422381</a></li>
+  <li><b>NCBI BioProject information:</b><a href="https://www.ncbi.nlm.nih.gov/bioproject/PRJEB21211" 
+target="_blank" > PRJEB21211</a></li>
+  <li><b>NCBI BioSample information:</b><a href="https://www.ncbi.nlm.nih.gov/biosample/SAMEA104116709"
+target="_blank" > SAMEA104116709</a></li>
+  <li><b>Contig+scaffold count:</b> 71,598</li>
+  <li><b>Total size:</b> 2,358,908,658</li>
+  <li><a href="../goldenPath/credits.html#chinese_hamster_credits" 
+target="_blank" >Acknowledgments</a></li>
+</ul>
+<h3>Data and Downloads:</h3>
+<ul>
+  <li><a href="../goldenPath/credits.html#chinese_hamster_use" 
+target="_blank" >Data use conditions and restrictions</a></li>
+  <li><a href="../goldenPath/help/ftp.html" 
+target="_blank" >Rsync</a> and
+<a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/criGriChoV2/" 
+target="_blank" >FTP</a></li>
+  <li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#chinese_hamster"
+target="_blank" >Downloads page</a></li>
+</ul>
+</p>
+
+<a name="052119"></a>
+<h2>May 21, 2019 &nbsp;&nbsp; New Genome Browser: Cat, felCat9 (<em>Felis catus</em>)</h2>
+<p>
+A genome browser is now available for the <em>Felis catus</em> assembly released in November 2017 by the
+<a href="https://www.genome.wustl.edu/" target="_blank">Genome Sequencing Center (GSC) at Washington University (WashU) School of Medicine</a> (Felis_catus_9.0).
+<h3>About the assembly:</h3>
+<ul>
+  <li><b>UCSC Genome Browser assembly ID:</b> felCat9</li>
+  <li><b>Sequencing/Assembly provider ID:</b> <a href="https://www.genome.wustl.edu/" target="_blank">
+  Genome Sequencing Center (GSC) at Washington University (WashU) School of Medicine</a></li>
+  <li><b>Assembly date:</b> November 2017</li>
+  <li><b>Accession ID:</b> GCF_000181335.3</li>
+  <li><b>NCBI Genome information:</b><a href="https://www.ncbi.nlm.nih.gov/genome/78" 
+target="_blank" > 78</a> <em>(Felis catus)</em></li>
+  <li><b>NCBI Assembly information:</b><a href="https://www.ncbi.nlm.nih.gov/assembly/1448961" 
+target="_blank" > 1448961 </a></li>
+  <li><b>NCBI BioProject information:</b><a href="https://www.ncbi.nlm.nih.gov/bioproject/16726" 
+target="_blank" > 16726</a></li>
+  <li><b>NCBI BioSample information:</b><a href="https://www.ncbi.nlm.nih.gov/biosample/SAMN02953640"
+target="_blank" > SAMN02953640</a></li>
+  <li><b>Contig+scaffold count:</b> 9434</li>
+  <li><b>Total size:</b> 2,521,863,845</li>
+  <li><a href="../goldenPath/credits.html#cat_credits" 
+target="_blank" >Acknowledgments</a></li>
+</ul>
+<h3>Data and Downloads:</h3>
+<ul>
+  <li><a href="../goldenPath/credits.html#cat_use" 
+target="_blank" >Data use conditions and restrictions</a></li>
+  <li><a href="../goldenPath/help/ftp.html" 
+target="_blank" >Rsync</a> and
+<a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/felCat9/" 
+target="_blank" >FTP</a></li>
+  <li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#cat"
+target="_blank" >Downloads page</a></li>
+</ul>
+</p>
+
+
+
 <a name="041019"></a>
 <h2>Apr. 10, 2019 &nbsp;&nbsp; GENCODE Genes VM20 track released for mouse (GRCm38/mm10)</h2>
 <p>
@@ -95,7 +478,18 @@ We would like to thank Mark Kiel, Steve Schwartz and Clayton Wheeler from
 Genomenon for making this data available as well as Max Haeussler, Conner Powell and the rest of the
 UCSC Genome Browser team.
 </p>
-
+<a name="031819"></a>
+<h2>
+Mar. 18, 2019 &nbsp;&nbsp; New feature: Backup Sessions and Custom Track Data 
+</h2>
+<p>
+Genome Browser users can now download custom track data from the 
+<a href="../cgi-bin/hgSession">Session Management page</a>. You can backup Custom Tracks from a 
+particular session by clicking into a named session with uploaded custom tracks, returning to the
+Session Management page, then clicking the <button>Submit</button> button next to "Save Custom 
+Tracks". You will be directed to a review page where you will be able download your custom track 
+data. Read more in the <a href="help/hgSessionHelp.html#Create">"How to backup text-based Custom 
+Track data to a file"</a> section of the Session User Guide.</p>
 
 <a name="030519"></a>
 <h2>
@@ -404,7 +798,7 @@ and analyzing the data. We'd like to thank the dbSNP group at NCBI for providing
 </p> 
 
 <a name="112118"></a>
-<h2>Nov. 21. 2018 &nbsp;&nbsp; New Genome Browser: Chicken, galGal6 (<em>Gallus gallus</em>)</h2>
+<h2>Nov. 21, 2018 &nbsp;&nbsp; New Genome Browser: Chicken, galGal6 (<em>Gallus gallus</em>)</h2>
 <p>
 A genome browser is now available for the <em>Gallus gallus</em> assembly released in March 2018 by the
 <a href="https://www.ncbi.nlm.nih.gov/grc" target="_blank"> Genome Reference Consortium</a> (GRCg6a).
@@ -414,7 +808,7 @@ A genome browser is now available for the <em>Gallus gallus</em> assembly releas
   <li><b>Sequencing/Assembly provider ID:</b> <a href="https://www.ncbi.nlm.nih.gov/grc">
 Genome Reference Consortium</a></li>
   <li><b>Assembly date:</b> March 2018</li>
-  <li><b>Accession ID:</b>GCF_000002315.5</li>
+  <li><b>Accession ID:</b> GCF_000002315.5</li>
   <li><b>NCBI Genome information:</b><a href="https://www.ncbi.nlm.nih.gov/genome/111" 
 target="_blank" > 111</a> <em>(Gallus gallus)</em></li>
   <li><b>NCBI Assembly information:</b><a href="https://www.ncbi.nlm.nih.gov/assembly/1668981" 
@@ -442,7 +836,7 @@ target="_blank" >Downloads page</a></li>
 </p>
 
 <a name="111918"></a>
-<h2>Nov. 19. 2018 &nbsp;&nbsp; New Genome Browser: Orangutan, ponAbe3 (<em>Pongo pygmaeus abelii
+<h2>Nov. 19, 2018 &nbsp;&nbsp; New Genome Browser: Orangutan, ponAbe3 (<em>Pongo pygmaeus abelii
 </em>)</h2>
 <p>
 A genome browser is now available for the <em>Pongo pygmaeus abelii</em> assembly released in January 2018 by the
@@ -1735,17 +2129,17 @@ organizations and individuals who contributed to this release.
 </p>
 
 <a name="102717"></a>
-<h2>Oct. 27, 2017 &nbsp;&nbsp; Public European UCSC MySQL server now available!</h2>
+<h2>Oct. 27, 2017 &nbsp;&nbsp; Public European UCSC MariaDB server now available!</h2>
 <p>
-We are pleased to announce that a public MySQL server of UCSC Genome Browser
+We are pleased to announce that a public MariaDB server of UCSC Genome Browser
 data is now available in Europe! This should speed up programmatic access to
-the underlying MySQL databases for users in Europe. Connect to this new MySQL
+the underlying MariaDB databases for users in Europe. Connect to this new MariaDB
 server using the command:</p>
 <pre><code> mysql --user=genome --host=genome-euro-mysql.soe.ucsc.edu -A</code></pre>
 
 <p>
-More information about connecting to our public MySQL servers can be found on our
-<a href="help/mysql.html">MySQL access</a> page.</p>
+More information about connecting to our public MariaDB servers can be found on our
+<a href="help/mysql.html">MariaDB access</a> page.</p>
 
 <p>
 Additionally, we have configured both the <a href="help/gbib.html">Genome Browser in a Box</a>
@@ -1754,7 +2148,7 @@ take advantage of this new server. If you are in Europe and have auto-updates
 enabled for your GBiB, it should automatically switch to using this new server
 the next time it updates. The GBiC will only auto-configure this
 connection when first created, otherwise, you will need to manually configure
-which MySQL server you want your mirror to use.</p>
+which MariaDB server you want your mirror to use.</p>
 
 <a name="101817"></a>
 <h2>Oct. 18, 2017 &nbsp;&nbsp; New GTEx eQTL 44 tissues and summary tracks on hg19</h2>
@@ -2710,7 +3104,7 @@ on a tissue by tissue basis. In the composite track each subtrack is colored bas
 the site across all samples of the tissue, shaded on a spectrum of gray (low) to GTEx convention
 tissue color (high).</p>
 <p>
-To access and view this hub, navigate to the <a href="http://genome.ucsc.edu/cgi-bin/hgHubConnect" 
+To access and view this hub, navigate to the <a href="../cgi-bin/hgHubConnect" 
 target="_blank">Track Hub gateway page</a> and select &quot;GTEx Analysis Hub&quot; from the
 Public Hubs list. Please direct any queries to <a href="mailto:scastel@nygenome.org">Stephane 
 Castel</a>.</p>
@@ -2818,7 +3212,7 @@ Comparing the new gene set with the previous version:</p>
 </ul>
 <p>
 More details about the GENCODE Genes track can be found on the
-<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&g=knownGene">
+<a href="../cgi-bin/hgTrackUi?db=hg38&g=knownGene">
 GENCODE v24 track description page</a>.</p>
 <p>
 Many thanks to Brian Raney and Luvina Guruvadoo for their work on this track!</p>
@@ -3575,7 +3969,7 @@ the previous version: </p>
 </ul>
 <p>
 More details about the new GENCODE Basic track can be found on the
-<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&g=knownGene">
+<a href="../cgi-bin/hgTrackUi?db=hg38&g=knownGene">
 GENCODE Basic track description page</a>.</p>
 
 <a name="062615"></a>
@@ -3937,7 +4331,7 @@ colorectal and ovarian cancer biospecimens that were initially sequenced by
 extends the accessibility of CPTAC data to more researchers and provides an additional level of 
 analysis to assist the cancer biology community.</p>
 <p>
-To access and view this hub, navigate to the <a href="http://genome.ucsc.edu/cgi-bin/hgHubConnect" 
+To access and view this hub, navigate to the <a href="../cgi-bin/hgHubConnect" 
 target="_blank">Track Hub gateway page</a> and select &quot;CPTAC Hub v1&quot; from the Public Hubs 
 list.  Please direct any queries to the Fenyo Lab at 
 <a href="mailto:info@fenyolab.org">info@fenyolab.org</a>.</p>
@@ -3948,7 +4342,7 @@ target="_blank">PeptideAtlas</a> track which displays peptide identifications fr
 target="_blank">PeptideAtlas August 2014 (Build 433) Human build</a>. This build, based on 971 
 samples containing more than 420 million spectra, identified over a million distinct peptides 
 covering more than 15,000 canonical proteins. To read more about this track, please see the 
-<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=peptideAtlas" 
+<a href="../cgi-bin/hgTrackUi?db=hg19&g=peptideAtlas" 
 target="_blank">track description page</a>. Many thanks to Eric Deutsch, Zhi Sun, and the 
 PeptideAtlas team at the Institute for Systems Biology, Seattle for providing this data.</p>
 
@@ -4290,7 +4684,7 @@ the new gene set with the previous version:</p>
 </ul>
 <p>
 More details about the new UCSC Genes track can be found on the
-<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&g=knownGene" 
+<a href="../cgi-bin/hgTrackUi?db=hg38&g=knownGene" 
 >UCSC Genes track description page</a>.</p>
 <p>
 Many thanks to Brian Raney, Jim Kent, and Luvina Guruvadoo for their work on this track.</p>
@@ -4409,7 +4803,7 @@ Here are more details about the two fixes that we made:</p>
 genome segmentations from ENCODE</h2>
 <p>
 The Browser's default displayed Transcription Factor ChIP-seq track is updating to the
-<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeRegTfbsClusteredV3">latest data 
+<a href="../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeRegTfbsClusteredV3">latest data 
 release</a>, which has been enhanced with the display of Factorbook motifs. Within a cluster, a 
 green highlight indicates the highest scoring site of a Factorbook-identified canonical motif for 
 the corresponding factor. Upon clicking a transcription factor's cluster with a motif, the 
@@ -4417,11 +4811,11 @@ details page now displays the motif's sequence logo, alignment and underlying Po
 Weight Matrix. Also, the track configuration page now enables the filtering of factors.</p>
 <p>
 The newly added 
-<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeAwgSegmentation">
+<a href="../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeAwgSegmentation">
 Genome Segmentations from ENCODE</a> tracks display multivariate genome-segmentation performed on
-<a target=ucscVocab href="http://genome.ucsc.edu/cgi-bin/hgEncodeVocab?term=GM12878,H1-hESC,K562,HeLa-S3,HepG2,HUVEC">six human cell types</a>
+<a target=ucscVocab href="../cgi-bin/hgEncodeVocab?term=GM12878,H1-hESC,K562,HeLa-S3,HepG2,HUVEC">six human cell types</a>
 (GM12878, K562, H1-hESC, HeLa-S3, HepG2, and HUVEC), integrating ChIP-seq data for
-<a target=ucscVocab href="http://genome.ucsc.edu/cgi-bin/hgEncodeVocab?term=CTCF,H3K4me1,H3K4me2,H3K4me3,H3K27ac,H3K9ac,H3K36me3,H4K20me1,H3K27me3,Pol2,Input">
+<a target=ucscVocab href="../cgi-bin/hgEncodeVocab?term=CTCF,H3K4me1,H3K4me2,H3K4me3,H3K27ac,H3K9ac,H3K36me3,H4K20me1,H3K27me3,Pol2,Input">
 eight chromatin marks, RNA Polymerase II, the CTCF transcription factor and input data</a>. 
 In total, twenty-five states were used to segment the genome, and these states were then grouped and
 colored to highlight predicted functional elements. These Genome Segmentations are the same data as
@@ -4608,7 +5002,7 @@ Blat to the human genome (hg19) and numerous other species including mouse (mm9)
 zebrafish (danRer7). The data were extracted from a variety of sources including patents, online 
 textbooks, help forums, and any other webpages that contain DNA sequence. In essence, this track 
 displays the Blat alignments of nearly every DNA sequence on the internet! The
-<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=pubsBingBlat">Web Sequences</a>
+<a href="../cgi-bin/hgTrackUi?db=hg19&g=pubsBingBlat">Web Sequences</a>
 track description page contains more details on how the track was generated.</p>
 <p>
 We would like to acknowledge Max Haeussler and Matt Speir from the UCSC Genome Browser staff
@@ -4634,7 +5028,7 @@ track display and its configuration options can be found on our Genome Browser
 target="_blank">help</a> page.</p>
 <p>
 To access and view these hubs, navigate to the
-<a href="http://genome.ucsc.edu/cgi-bin/hgHubConnect">Track Hub gateway page</a>
+<a href="../cgi-bin/hgHubConnect">Track Hub gateway page</a>
 and select one of the two E. coli comparative assembly hubs from the Public Hubs list.</p>
 <p>
 We would like to acknowledge Ngan Nguyen, Glenn Hickey, Brian Raney, Joel Armstrong, 
@@ -4654,7 +5048,7 @@ This new Conservation track shows multiple alignments of 100 species and measure
 evolutionary conservation using two methods (phastCons and phyloP) from the PHAST package.
 This adds 40 more species to the existing 60-way on the mm10 mouse browser. For more information 
 about the 100 species Conservation track, see its 
-<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=cons100way" 
+<a href="../cgi-bin/hgTrackUi?db=hg19&g=cons100way" 
 target="_blank">description page</a>.</p>
 <p>
 We'd also like to acknowledge the hard work of the UCSC Genome Browser staff who pulled 
@@ -4913,7 +5307,7 @@ gene set with the previous version:</p>
 </ul>
 <p>
 More details about the new UCSC Genes track can be found on the 
-<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=knownGene" >UCSC Genes track description
+<a href="../cgi-bin/hgTrackUi?db=hg19&g=knownGene" >UCSC Genes track description
 page</a>.</p>
 <p>
 Many thanks to Brian Raney, Jim Kent, and Luvina Guruvadoo for their work on this track.</p>
@@ -5338,7 +5732,7 @@ into the UCSC Genes details page accessible from the Genome Browser, and into th
 Gene Sorter. Our decision to retire this tool was based on its low usage and our desire to focus 
 our work on the more frequently used UCSC Genes track and the Gene Sorter. Access to the databases 
 that supported the Proteome Browser (uniProt and proteome) will still be available through the Table
-Browser and our public MySQL server.</p>
+Browser and our public MariaDB server.</p>
 
 <a name="081612"></a>
 <h2>Aug. 16, 2012  &nbsp;&nbsp; Announcing a Genome Browser for the medium ground finch</h2>

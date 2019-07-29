@@ -29,6 +29,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
+static boolean printSaveList = FALSE; // if this is true, we print to stderr the number of custom tracks saved
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -600,6 +601,8 @@ if (ctList)
     trashDirFile(&tn, "ct", CT_PREFIX, ".bed");
     char *ctFileName = tn.forCgi;
     cartSetString(cart, ctFileVar, ctFileName);
+    if (printSaveList)
+        fprintf(stderr, "customTrack: saved %d in %s\n", slCount(ctList), ctFileName);
     customTracksSaveFile(genomeDb, ctList, ctFileName);
     }
 else
@@ -777,7 +780,7 @@ if (isNotEmpty(fileName))
             {
             /* unreadable file */
             struct dyString *ds = dyStringNew(0);
-            dyStringPrintf(ds, "Unrecognized binary data format in file %s", fileName);
+            dyStringPrintf(ds, "Unrecognized binary data format in file %s. You can only upload text files on this page. If you have a binary file, like bigBed, bigWig, BAM, etc, copy them to a webserver and paste the URL of the file into the text box here or create a track hub for them. For more details, our <a href='https://genome.ucsc.edu/goldenpath/help/hgTrackHubHelp.html#Hosting'>documentation</a> discusses where you can host binary files.", fileName);
             err = dyStringCannibalize(&ds);
             }
 	}
@@ -940,6 +943,12 @@ if (customTracksExist(cart, &ctFileName))
 
 /* merge new and old tracks */
 numAdded = slCount(newCts);
+if (numAdded)
+    {
+    fprintf(stderr, "customTrack: new %d from %s\n", numAdded, customText);
+    printSaveList = TRUE;
+    }
+
 ctList = customTrackAddToList(ctList, newCts, &replacedCts, FALSE);
 for (ct = ctList; ct != NULL; ct = ct->next)
     if (trackDbSetting(ct->tdb, CT_UNPARSED))
@@ -950,7 +959,8 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 if (newCts || removedCt || changedCt || ctConfigUpdate(ctFileName))
     {
     customTracksSaveCart(genomeDb, cart, ctList);
-    ctFileName = cartString(cart, customTrackFileVar(genomeDb));
+    // If all CTs have been removed then customTrackFileVar is also removed from cart, so optional:
+    ctFileName = cartOptionalString(cart, customTrackFileVar(genomeDb));
     }
 
 if (cgiScriptName() && !endsWith(cgiScriptName(),"hgCustom"))

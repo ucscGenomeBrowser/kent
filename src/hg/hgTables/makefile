@@ -11,7 +11,7 @@ T = tstbug.o
 
 O = $A.o asFilter.o bam.o bedList.o bigBed.o bigWig.o \
     chromGraph.o compositeTrack.o custom.o filterFields.o \
-    gffOut.o hal.o identifiers.o intersect.o correlate.o correlatePlot.o \
+    gffOut.o hal.o hic.o identifiers.o intersect.o correlate.o correlatePlot.o \
     joining.o longRange.o maf.o mainPage.o microarrayTables.o rangeHistogram.o schema.o pal.o \
     seqOut.o sumStats.o usage.o vcf.o wiggle.o wikiTrack.o galaxy.o great.o genomeSpace.o userRegions.o
 
@@ -85,6 +85,7 @@ usage.o:	hgTables.h
 wiggle.o:	hgTables.h correlate.h
 correlate.o:	hgTables.h correlate.h
 correlatePlot.o:	hgTables.h correlate.h
+hic.o:		hgTables.h
 
 compiletest: $T
 	${CC} -Wall $T ${MYLIBS} ${L}

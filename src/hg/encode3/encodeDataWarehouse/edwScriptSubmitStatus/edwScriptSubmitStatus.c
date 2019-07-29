@@ -110,7 +110,7 @@ else
     }
 
 /* Write out HTTP response */
-printf("Content-Length: %d\r\n", dy->stringSize);
+printf("Content-Length: %ld\r\n", dy->stringSize);
 puts("Content-Type: application/json; charset=UTF-8\r");
 puts("\r");
 printf("%s", dy->string);

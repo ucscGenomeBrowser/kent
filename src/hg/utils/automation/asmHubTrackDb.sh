@@ -65,6 +65,32 @@ html html/%s.gap\n\n" "${asmId}" "${asmId}"
 $scriptDir/asmHubGap.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/$asmId.agp.gz ../hubs/ncbiAssemblies/$genbankRefseq/$asmId > $buildDir/html/$asmId.gap.html
 fi
 
+if [ -s ${buildDir}/trackData/cytoBand/${asmId}.cytoBand.bb ]; then
+rm -f $buildDir/bbi/${asmId}.cytoBand.bb
+ln -s $buildDir/trackData/cytoBand/${asmId}.cytoBand.bb $buildDir/bbi/${asmId}.cytoBand.bb
+
+# printf "track cytoBand
+# shortLabel Chromosome Band
+# longLabel Ideogram
+# group map
+# visibility dense
+# type bigBed 4 +
+# bigDataUrl bbi/%s.cytoBandIdeo.bb
+# html html/%s.cytoBand\n\n" "${asmId}" "${asmId}"
+
+# only the ideoGram is needed, not the track
+
+printf "track cytoBandIdeo
+shortLabel Chromosome Band (Ideogram)
+longLabel Ideogram for Orientation
+group map
+visibility dense
+type bigBed 4 +
+bigDataUrl bbi/%s.cytoBand.bb\n\n" "${asmId}"
+
+# $scriptDir/asmHubCytoBand.pl $asmId $buildDir/html/$asmId.names.tab $buildDir > $buildDir/html/$asmId.cytoBand.html
+fi
+
 if [ -s ${buildDir}/trackData/gc5Base/${asmId}.gc5Base.bw ]; then
 rm -f $buildDir/bbi/${asmId}.gc5Base.bw
 ln -s $buildDir/trackData/gc5Base/${asmId}.gc5Base.bw $buildDir/bbi/${asmId}.gc5Base.bw
@@ -84,8 +110,57 @@ viewLimits 30:70
 type bigWig 0 100
 bigDataUrl bbi/%s.gc5Base.bw
 html html/%s.gc5Base\n\n" "${asmId}" "${asmId}"
+
 $scriptDir/asmHubGc5Percent.pl $asmId $buildDir/html/$asmId.names.tab $buildDir > $buildDir/html/$asmId.gc5Base.html
 fi
+
+# see if there are gapOverlap or tandemDup bb files
+export gapOverlapCount=0
+export tanDupCount=0
+if [ -s $buildDir/trackData/gapOverlap/${asmId}.gapOverlap.bb ]; then
+  gapOverlapCount=`zcat $buildDir/trackData/gapOverlap/${asmId}.gapOverlap.bed.gz | wc -l`
+  rm -f $buildDir/bbi/${asmId}.gapOverlap.bb
+  ln -s $buildDir/trackData/gapOverlap/${asmId}.gapOverlap.bb $buildDir/bbi/${asmId}.gapOverlap.bb
+fi
+if [ -s $buildDir/trackData/tandemDups/${asmId}.tandemDups.bb ]; then
+  tanDupCount=`zcat $buildDir/trackData/tandemDups/${asmId}.tandemDups.bed.gz | wc -l`
+  rm -f $buildDir/bbi/${asmId}.tandemDups.bb
+  ln -s $buildDir/trackData/tandemDups/${asmId}.tandemDups.bb $buildDir/bbi/${asmId}.tandemDups.bb
+fi
+
+if [ "${gapOverlapCount}" -gt 0 -o "${tanDupCount}" -gt 0 ]; then
+
+  printf "track tanDups
+shortLabel Tandem Dups
+longLabel Paired identical sequences
+compositeTrack on
+visibility hide
+type bigBed 12
+group map
+html html/%s.tanDups\n\n" "${asmId}"
+
+  if [ "${gapOverlapCount}" -gt 0 ]; then
+    printf "    track gapOverlap
+    parent tanDups on
+    shortLabel Gap Overlaps
+    longLabel Paired exactly identical sequence on each side of a gap
+    bigDataUrl bbi/%s.gapOverlap.bb\n\n" "${asmId}"
+  fi
+
+  if [ "${tanDupCount}" -gt 0 ]; then
+    printf "    track tandemDups
+    parent tanDups on
+    shortLabel Tandem Dups
+    longLabel Paired exactly identical sequence survey over entire genome assembly
+    bigDataUrl bbi/%s.tandemDups.bb\n\n" "${asmId}"
+  fi
+
+  $scriptDir/asmHubTanDups.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/trackData > $buildDir/html/$asmId.tanDups.html
+
+fi
+
+export rmskCount=`(ls $buildDir/trackData/repeatMasker/bbi/${asmId}.rmsk.*.bb | wc -l) || true`
+
 
 # see if there are repeatMasker bb files
 export rmskCount=`(ls $buildDir/trackData/repeatMasker/bbi/${asmId}.rmsk.*.bb | wc -l) || true`

@@ -1,0 +1,128 @@
+<h2>Description</h2>
+<p>
+This track shows regions of transcription factor binding derived from a large collection
+of ChIP-seq experiments performed by the ENCODE project between February 2011 and November 2018,
+spanning the first production phase of ENCODE ("ENCODE 2") through the second full production
+phase ("ENCODE 3").
+</p>
+<p>
+Transcription factors (TFs) are proteins that bind to DNA and interact with RNA polymerases to
+regulate gene expression.  Some TFs contain a DNA binding domain and can bind directly to 
+specific short DNA sequences ('motifs');
+others bind to DNA indirectly through interactions with TFs containing a DNA binding domain.
+High-throughput antibody capture and sequencing methods (e.g. chromatin immunoprecipitation
+followed by sequencing, or 'ChIP-seq') can be used to identify regions of
+TF binding genome-wide.  These regions are commonly called ChIP-seq peaks.</p>
+<p>
+ENCODE TF ChIP-seq data were processed using the 
+<a target="_blank" href="https://www.encodeproject.org/chip-seq/transcription_factor/">ENCODE Transcription Factor ChIP-seq Processing Pipeline</a> to generate peaks of TF binding.
+Peaks from 1264 experiments (1256 in hg38) representing 338 transcription factors 
+(340 in hg38) in 130 cell types (129 in hg38) are combined here into clusters to produce a 
+summary display showing occupancy regions for each factor.
+The underlying ChIP-seq peak data are available from the
+<i>ENCODE 3 TF ChIP Peaks</i> tracks (
+<a target="_blank" href="../cgi-bin/hgTrackUi?db=hg19&g=encTfChipPk">hg19</a>,
+<a target="_blank" href="../cgi-bin/hgTrackUi?db=hg38&g=encTfChipPk">hg38</a>)</p>
+
+<h2>Display Conventions</h2>
+<p>
+A gray box encloses each peak cluster of transcription factor occupancy, with the
+darkness of the box being proportional to the maximum signal strength observed in any cell type
+contributing to the cluster. The HGNC gene name for the transcription factor is shown 
+to the left of each cluster.<p>
+<p>
+To the right of the cluster a configurable label can optionally display information about the
+cell types contributing to the cluster and how many cell types were assayed for the factor
+(count where detected / count where assayed).
+For brevity in the display, each cell type is abbreviated to a single letter.
+The darkness of the letter is proportional to the signal strength observed in the cell line. 
+Abbreviations starting with capital letters designate
+<a href="https://www.encodeproject.org/search/?type=Biosample&organism.scientific_name=Homo+sapiens"
+target="_blank">ENCODE cell types</a> initially identified for intensive study, 
+while those starting with lowercase letters designate cell lines added later in the project.</p>
+<p>
+Click on a peak cluster to see more information about the TF/cell assays contributing to the
+cluster and the cell line abbreviation table.
+</p>
+
+<h2>Methods</h2>
+<p>
+<p>
+Peaks of transcription factor occupancy ("optimal peak set") from ENCODE ChIP-seq datasets
+were clustered using the UCSC hgBedsToBedExps tool.  
+Scores were assigned to peaks by multiplying the input signal values by a normalization
+factor calculated as the ratio of the maximum score value (1000) to the signal value at one
+standard deviation from the mean, with values exceeding 1000 capped at 1000. This has the
+effect of distributing scores up to mean plus one 1 standard deviation across the score range,
+but assigning all above to the maximum score.
+The cluster score is the highest score for any peak contributing to the cluster.</p>  
+
+<H2>Credits</H2>
+<p>
+Thanks to the ENCODE Consortium, the ENCODE ChIP-seq production laboratories, and the
+ENCODE Data Coordination Center for generating and processing the TF ChIP-seq datasets used here.
+The ENCODE accession numbers of the constituent datasets are available from the peak details page.
+Special thanks to Henry Pratt, Jill Moore, Michael Purcaro, and Zhiping Weng, PI, at the 
+<a target="_blank" href="https://www.umassmed.edu/zlab/">ENCODE Data Analysis Center (ZLab at UMass Medical Center)</a> for providing the peak datasets, metadata, and guidance
+developing this track.</p>
+<P>
+The integrative view presented here was developed by Jim Kent at UCSC.</P>
+
+<h2>References</h2>
+
+<p>ENCODE Project Consortium.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/21526222" title="https://www.ncbi.nlm.nih.gov/pubmed/21526222"  rel="nofollow" TARGET="_BLANK">
+A user's guide to the encyclopedia of DNA elements (ENCODE)</a>.
+<em>PLoS Biol</em>. 2011 Apr;9(4):e1001046. PMID: 21526222; PMCID: PMC3079585
+</p>
+
+<p>ENCODE Project Consortium.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/22955616" title="https://www.ncbi.nlm.nih.gov/pubmed/22955616"  rel="nofollow" TARGET="_BLANK">
+An integrated encyclopedia of DNA elements in the human genome</a>.
+<em>Nature</em>. 2012 Sep 6;489(7414):57-74. PMID: 22955616; PMCID: PMC3439153
+</p>
+<p>
+Sloan CA, Chan ET, Davidson JM, Malladi VS, Strattan JS, Hitz BC, Gabdank I, Narayanan AK, Ho M, Lee
+BT <em>et al</em>.
+<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gkv1160" target="_blank">
+ENCODE data at the ENCODE portal</a>.
+<em>Nucleic Acids Res</em>. 2016 Jan 4;44(D1):D726-32.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26527727" target="_blank">26527727</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4702836/" target="_blank">PMC4702836</a>
+</p>
+<p>
+Gerstein MB, Kundaje A, Hariharan M, Landt SG, Yan KK, Cheng C, Mu XJ, Khurana E, Rozowsky J,
+Alexander R <em>et al</em>.
+<a href="https://www.nature.com/articles/nature11245" target="_blank">
+Architecture of the human regulatory network derived from ENCODE data</a>.
+<em>Nature</em>. 2012 Sep 6;489(7414):91-100.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/22955619" target="_blank">22955619</a>
+</p>
+<p>
+Wang J, Zhuang J, Iyer S, Lin X, Whitfield TW, Greven MC, Pierce BG, Dong X, Kundaje A, Cheng Y
+<em>et al</em>.
+<a href="https://genome.cshlp.org/content/22/9/1798.long" target="_blank">
+Sequence features and chromatin structure around the genomic regions bound by 119 human
+transcription factors</a>.
+<em>Genome Res</em>. 2012 Sep;22(9):1798-812.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/22955990" target="_blank">22955990</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3431495/" target="_blank">PMC3431495</a>
+</p>
+<p>
+Wang J, Zhuang J, Iyer S, Lin XY, Greven MC, Kim BH, Moore J, Pierce BG, Dong X, Virgil D <em>et
+al</em>.
+<a href="https://academic.oup.com/nar/article/41/D1/D171/1069417" target="_blank">
+Factorbook.org: a Wiki-based database for transcription factor-binding data generated by the ENCODE
+consortium</a>.
+<em>Nucleic Acids Res</em>. 2013 Jan;41(Database issue):D171-6.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/23203885" target="_blank">23203885</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3531197/" target="_blank">PMC3531197</a>
+</p>
+
+<H2> Data Use Policy </H2>
+<P> <B>Users may freely download, analyze and publish results based on any ENCODE data without 
+restrictions.</B>
+Researchers using unpublished ENCODE data are encouraged to contact the data producers to discuss possible coordinated publications; however, this is optional. </p>
+<B><I>Users of ENCODE datasets are requested to cite the ENCODE Consortium and ENCODE
+production laboratory(s) that generated the datasets used, as described in
+<A target="_blank" href="https://www.encodeproject.org/help/citing-encode/">Citing ENCODE</A>.</B></I></p>

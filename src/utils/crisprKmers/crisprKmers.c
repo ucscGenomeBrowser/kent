@@ -1325,7 +1325,10 @@ if (verboseLevel() > 1)
 	 *    the query guides have been extracted from the allGuides */
         queryGuides = rangeExtraction(& allGuides);
 	if (dumpGuides)
+	    {
 	    writeGuides(queryGuides, dumpGuides);
+	    return;
+	    }
         }
     if (queryGuides)
         copyToArray(queryGuides);

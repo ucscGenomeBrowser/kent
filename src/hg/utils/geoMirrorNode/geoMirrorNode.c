@@ -8,9 +8,11 @@
 #include "options.h"
 #include "hdb.h"
 #include "geoMirror.h"
+#include "internet.h"
 #include <netdb.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>
 #include <arpa/inet.h>
 
 void usage()
@@ -66,16 +68,18 @@ for (i=0; i<fileCount; i++)
     struct lineFile *lf = lineFileOpen(files[i], TRUE);
     char *host;
     while (lineFileNextReal(lf, &host))
-        {
-        struct hostent *hostent = gethostbyname(host);
-        if(hostent == NULL)
-            errAbort("gethostbyname failed for '%s'; errno: %d (%s)", host, errno, strerror(errno));
-        if(hostent->h_length == 0)
-            errAbort("gethostbyname failed for '%s'; h_length == 0", host);
-        char *ip = inet_ntoa(*((struct in_addr *) hostent->h_addr_list[0]));
-        int node = defaultNode(centralConn, ip);
-        printf("%s\t%d\t%s\n", host, node, nodes[node - 1]);
-        }
+	{
+	struct sockaddr_storage sai;
+	if (!internetFillInAddress6n4(host, NULL, AF_UNSPEC, SOCK_DGRAM, &sai, FALSE))
+	    errAbort("ip address %s lookup failed.", host);
+
+	char ipStr[NI_MAXHOST];
+	getAddrAsString6n4(&sai, ipStr, sizeof ipStr);
+	verbose(2, "ip=[%s]\n", ipStr);
+
+	int node = geoMirrorDefaultNode(centralConn, ipStr);
+	printf("%s\t%d\t%s\n", host, node, nodes[node - 1]);
+	}
     lineFileClose(&lf);
     }
 }
