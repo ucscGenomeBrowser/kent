@@ -1494,26 +1494,35 @@ safef(javascript, sizeof javascript,
 cgiMakeOnClickButton(id, javascript, " Clear ");
 }
 
-void cgiMakeButtonWithMsg(char *name, char *value, char *msg)
-/* Make 'submit' type button. Display msg on mouseover, if present*/
+static void cgiMakeSubmitButtonWithOptionalMsgAndOnClick(char *name, char *value, char *msg, char *onClick)
+/* Make 'submit' type button, with optional messsage and onclick javascript */
 {
 printf("<input type='submit' name='%s' id='%s' value='%s'",
         name, name, value);
 if (msg)
     printf(" title='%s'", msg);
 printf(">");
+if (onClick)
+    jsOnEventById("click", name, onClick);
+}
+
+void cgiMakeButtonWithMsg(char *name, char *value, char *msg)
+/* Make 'submit' type button. Display msg on mouseover, if present*/
+{
+cgiMakeSubmitButtonWithOptionalMsgAndOnClick(name, value, msg, NULL);
+}
+
+void cgiMakeOnClickSubmitButton(char *command, char *name, char *value)
+/* Make submit button with both variable name and value with client side
+ * onClick (java)script. */
+{
+cgiMakeSubmitButtonWithOptionalMsgAndOnClick(name, value, NULL, command);
 }
 
 void cgiMakeButtonWithOnClick(char *name, char *value, char *msg, char *onClick)
 /* Make 'submit' type button, with onclick javascript */
 {
-printf("<input type='submit' name='%s' id='%s' value='%s'",
-        name, name, value);
-if (msg)
-    printf(" title='%s'", msg);
-printf(">");
-
-jsOnEventById("click", name, onClick);
+cgiMakeSubmitButtonWithOptionalMsgAndOnClick(name, value, msg, onClick);
 }
 
 void cgiMakeButton(char *name, char *value)
@@ -1527,15 +1536,6 @@ void cgiMakeOnClickButton(char *id, char *command, char *value)
 {
 printf("<INPUT TYPE='button' id='%s' VALUE=\"%s\">", id, value);
 jsOnEventById("click", id, command);
-}
-
-void cgiMakeOnClickSubmitButton(char *command, char *name, char *value)
-/* Make submit button with both variable name and value with client side
- * onClick (java)script. */
-{
-printf("<INPUT TYPE=SUBMIT NAME='%s' id='%s' VALUE=\"%s\">",
-       name, name, value);
-jsOnEventById("click", name, command);
 }
 
 void cgiMakeOptionalButton(char *name, char *value, boolean disabled)
