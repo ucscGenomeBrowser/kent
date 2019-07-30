@@ -179,6 +179,9 @@ in protein-space).</p>
   <li>Blat search:<br>
   &nbsp;&nbsp;&nbsp;<code>blat -stepSize=5 -repMatch=2253 -minScore=0 -minIdentity=0 
   database.2bit query.fa output.psl </code><br>
+  <li><strong>Note:</strong> To replicate web results, PSL output should be used. BLAT handles
+  alternative output formats (such as blast8) slightly differently, and this can lead to minor 
+  differences in results; particularly for short alignments.
 </ul>
 <p>
 Notes on repMatch:</p>

@@ -113,8 +113,8 @@ while (thisHic != NULL)
     countsCopy[filtNumRecords++] = thisHic->value;
 
     // Calculate the track draw height required to see this item
-    int leftx = thisHic->chromStart > winStart ? thisHic->chromStart : winStart;
-    int rightx = thisHic->chromEnd < winEnd ? thisHic->chromEnd : winEnd;
+    int leftx = max(thisHic->chromStart, winStart);
+    int rightx = min(thisHic->chromEnd, winEnd);
     double thisHeight = scaleForWindow(insideWidth, winStart, winEnd)*(rightx - leftx)/2.0; // triangle or arc
     if (sameString(drawMode,HIC_DRAW_MODE_SQUARE))
         thisHeight = scaleForWindow(insideWidth, winStart, winEnd)*(winEnd-winStart); // square - always draw the full square
