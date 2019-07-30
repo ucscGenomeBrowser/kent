@@ -8489,15 +8489,18 @@ if (!hideControls)
     hButtonWithMsg("hgTracksConfigPage", "configure","Configure image and track selection");
     hPrintf(" ");
 
-    hButtonWithOnClick("hgTracksConfigMultiRegionPage",
-	"multi-region", "Configure multi-region display options", "popUpHgt.hgTracks('multi-region config'); return false;");
+    hButtonMaybePressed("hgTracksConfigMultiRegionPage", "multi-region", 
+                        "Configure multi-region display options", 
+                        "popUpHgt.hgTracks('multi-region config'); return false;", 
+                        virtMode);
     hPrintf(" ");
 
     if (!hIsGsidServer())
         {
-        hButtonWithMsg("hgt.toggleRevCmplDisp", "reverse",
-                       revCmplDisp ? "Show forward strand at this location"
-                                   : "Show reverse strand at this location");
+        hButtonMaybePressed("hgt.toggleRevCmplDisp", "reverse",
+                               revCmplDisp ? "Show forward strand at this location"
+                                           : "Show reverse strand at this location",
+                               NULL, revCmplDisp ? TRUE : FALSE);
         hPrintf(" ");
         }
 

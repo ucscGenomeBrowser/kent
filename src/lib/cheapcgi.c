@@ -1494,11 +1494,16 @@ safef(javascript, sizeof javascript,
 cgiMakeOnClickButton(id, javascript, " Clear ");
 }
 
-static void cgiMakeSubmitButtonWithOptionalMsgAndOnClick(char *name, char *value, char *msg, char *onClick)
-/* Make 'submit' type button, with optional messsage and onclick javascript */
+void cgiMakeSubmitButtonMaybePressed(char *name, char *value, char *msg, 
+                char *onClick, boolean pressed)
+/* Make 'submit' type button, with optional messsage and onclick javascript.
+   Set styling to indicate whether button has been pressed (for buttons that change browser mode).
+ */
 {
 printf("<input type='submit' name='%s' id='%s' value='%s'",
         name, name, value);
+if (pressed)
+    printf(" class='pressed'");
 if (msg)
     printf(" title='%s'", msg);
 printf(">");
@@ -1509,20 +1514,20 @@ if (onClick)
 void cgiMakeButtonWithMsg(char *name, char *value, char *msg)
 /* Make 'submit' type button. Display msg on mouseover, if present*/
 {
-cgiMakeSubmitButtonWithOptionalMsgAndOnClick(name, value, msg, NULL);
+cgiMakeSubmitButtonMaybePressed(name, value, msg, NULL, FALSE);
 }
 
 void cgiMakeOnClickSubmitButton(char *command, char *name, char *value)
 /* Make submit button with both variable name and value with client side
  * onClick (java)script. */
 {
-cgiMakeSubmitButtonWithOptionalMsgAndOnClick(name, value, NULL, command);
+cgiMakeSubmitButtonMaybePressed(name, value, NULL, command, FALSE);
 }
 
 void cgiMakeButtonWithOnClick(char *name, char *value, char *msg, char *onClick)
 /* Make 'submit' type button, with onclick javascript */
 {
-cgiMakeSubmitButtonWithOptionalMsgAndOnClick(name, value, msg, onClick);
+cgiMakeSubmitButtonMaybePressed(name, value, msg, onClick, FALSE);
 }
 
 void cgiMakeButton(char *name, char *value)
