@@ -345,6 +345,7 @@ boolean allowedBigBedType(char *type)
  */
 {
 if (startsWithWord("bigBed", type) ||
+    startsWithWord("bigGenePred", type) ||
     startsWithWord("bigPsl", type)
    )
     return TRUE;
