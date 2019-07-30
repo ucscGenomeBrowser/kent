@@ -730,7 +730,8 @@ if (options->printMeta)
     }
 
 struct trackDb *tempTdb = NULL;
-char *idName, *textName, *parentName = NULL;
+char *textName, *parentName = NULL;
+char idName[512];
 struct errCatch *errCatch = errCatchNew();
 boolean trackIsContainer = (tdbIsComposite(tdb) || tdbIsCompositeView(tdb) || tdbIsContainer(tdb));
 
@@ -741,9 +742,12 @@ if (tdb->subtracks != NULL)
         retVal |= hubCheckTrack(hub, genome, tempTdb, options, errors);
     }
 
+// for when assembly hubs have tracks with the same name, prepend assembly name to id
+safef(idName, sizeof(idName), "%s_%s", trackHubSkipHubName(genome->name), trackHubSkipHubName(tdb->track));
+
 if (options->htmlOut)
     {
-    dyStringPrintf(errors, "trackData['%s'] = [", trackHubSkipHubName(tdb->track));
+    dyStringPrintf(errors, "trackData['%s'] = [", idName);
     }
 
 if (errCatchStart(errCatch))
@@ -774,7 +778,6 @@ if (options->htmlOut)
         {
         for (tempTdb = tdb->subtracks; tempTdb != NULL; tempTdb = tempTdb->next)
             {
-            idName = trackHubSkipHubName(tempTdb->track);
             textName = trackHubSkipHubName(tempTdb->longLabel);
             parentName = trackHubSkipHubName(tdb->track);
             dyStringPrintf(errors, "%s,", makeFolderObjectString(idName, textName, parentName, "TRACK", TRUE, retVal));
@@ -783,7 +786,6 @@ if (options->htmlOut)
     else if (!retVal)
         {
         // add "Error" to the trackname to force uniqueness for the jstree
-        idName = trackHubSkipHubName(tdb->track);
         dyStringPrintf(errors, "{icon: 'fa fa-plus', "
             "id:'%sError', text:'No trackDb configuration errors', parent:'%s'}", idName, idName);
         }
@@ -860,7 +862,9 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     genomeErrorCount += tdbCheckVal;
     if (options->htmlOut)
         {
-        char *name = trackHubSkipHubName(tdb->track);
+        // when assembly hubs have tracks with the same name, prepend assembly name to id
+        char name[512];
+        safef(name, sizeof(name), "%s_%s", trackHubSkipHubName(genome->name), trackHubSkipHubName(tdb->track));
         dyStringPrintf(errors, "%s", makeFolderObjectString(name, tdb->longLabel, genomeName, "TRACK", TRUE, tdbCheckVal ? TRUE : FALSE));
         if (tdb->next != NULL)
             dyStringPrintf(errors, ",");
