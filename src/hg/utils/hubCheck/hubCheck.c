@@ -730,7 +730,7 @@ if (options->printMeta)
     }
 
 struct trackDb *tempTdb = NULL;
-char *textName, *parentName = NULL;
+char *textName = NULL;
 char idName[512];
 struct errCatch *errCatch = errCatchNew();
 boolean trackIsContainer = (tdbIsComposite(tdb) || tdbIsCompositeView(tdb) || tdbIsContainer(tdb));
@@ -778,9 +778,10 @@ if (options->htmlOut)
         {
         for (tempTdb = tdb->subtracks; tempTdb != NULL; tempTdb = tempTdb->next)
             {
+            char subtrackName[512];
+            safef(subtrackName, sizeof(subtrackName), "%s_%s", trackHubSkipHubName(genome->name), trackHubSkipHubName(tempTdb->track));
             textName = trackHubSkipHubName(tempTdb->longLabel);
-            parentName = trackHubSkipHubName(tdb->track);
-            dyStringPrintf(errors, "%s,", makeFolderObjectString(idName, textName, parentName, "TRACK", TRUE, retVal));
+            dyStringPrintf(errors, "%s,", makeFolderObjectString(subtrackName, textName, idName, "TRACK", TRUE, retVal));
             }
         }
     else if (!retVal)
@@ -874,6 +875,7 @@ if (options->htmlOut)
     dyStringPrintf(errors, "];\n");
 
 dyStringPrintf(errors, "%s", tdbDyString->string);
+dyStringClear(tdbDyString);
 
 return genomeErrorCount;
 }
