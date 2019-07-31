@@ -1,0 +1,23 @@
+#data_set_id	fluidics_chip	meta	title	assay	enriched_in	access	lab	cell_count	pmid	submitter	species	organ_anatomical_name	pipeline	submission_date	update_date	geo_series	GEO_Series_summary	ncbi_bio_project	sra_study	lab_quake_fluidics_chip	GEO_Sample_age	biosample_source_age_value	biosample_source_age_unit	biosample_source_life_stage	GEO_Sample_platform_id	biosample_source_id	biosample_source_gender	sample_label	assay_platform	biosample_cell_type	ncbi_bio_sample	seq_sample	geo_sample	lab_quake_cell
+
+project	data_set_id
+data_set_id	project_name
+title	
+GEO_Series_summary summary
+lab
+geo_series
+ncbi_bio_project
+
+donor	biosample_source_id
+biosample_source_id	donor
+biosample_source_age_value	age
+biosample_source_age_unit	age_unit
+biosample_source_gender	sex
+
+sample	geo_sample
+geo_sample	sample
+sample_label
+cell_count
+access
+lab_quake_cell
+
