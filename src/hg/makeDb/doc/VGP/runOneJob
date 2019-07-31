@@ -1,0 +1,79 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $argc = scalar(@ARGV);
+
+if ($argc != 1) {
+  printf STDERR "usage: ./ensRunOne <asmIdName>\n";
+  printf STDERR "where <asmIdName> is asmAcc_asmName, e.g:\n";
+  printf STDERR " ./ensRunOne GCF_004115215.1_mOrnAna1.p.v1\n";
+  exit 255;
+}
+
+my $asmIdName = shift;
+my @nameParts = split('_', $asmIdName);
+
+my $sourceDir=`grep "^$asmIdName" toDo.list | cut -f2`;
+chomp $sourceDir;
+my @dirParts = split('/', $sourceDir);
+my $genbankRefseq = $dirParts[6];
+my $cladeDir = $dirParts[7];
+my $sciName = $dirParts[8];
+my $buildDir="/hive/data/genomes/asmHubs/VGP/ucscNames/${asmIdName}";
+my $stepStart = "gatewayPage";
+my $stepEnd = "gatewayPage";
+my $hubSpecs = "-bigClusterHub=ku -smallClusterHub=hgwdev -ucscNames";
+my $augustusSpecies = "notFound";
+if ($cladeDir =~ "vertebrate_mammalian") {
+  $augustusSpecies = "human";
+} elsif ($cladeDir =~ "vertebrate_other") {
+   if ($nameParts[2] =~ m/^f/) {	# fish
+     $augustusSpecies = "zebrafish"
+   } elsif ($nameParts[2] =~ m/^b/) {	# bird
+     $augustusSpecies = "chicken"
+   } elsif ($nameParts[2] =~ m/^a/) {	# amphibian
+     $augustusSpecies = "chicken"
+   }
+}
+if ($augustusSpecies =~ m/notFound/) {
+  die "can not determine augustus species for $asmIdName";
+}
+
+`mkdir -p ${buildDir}`;
+if ( -s "${buildDir}/steps.$stepStart-$stepEnd.sh" ) {
+  printf STDERR "# NOTE already run ${buildDir}/steps.$stepStart-$stepEnd.sh\n";
+  exit 0;
+}
+
+open (FH, ">${buildDir}/steps.$stepStart-$stepEnd.sh") or die "can not write to ${buildDir}/steps.$stepStart-$stepEnd.sh";
+printf FH "#!/bin/bash\n\n";
+printf FH "cd $buildDir\n";
+printf FH "time (~/kent/src/hg/utils/automation/doAssemblyHub.pl $genbankRefseq \\\n";
+printf FH "   $cladeDir ${sciName} $asmIdName -verbose=2 \\\n";
+printf FH "     -continue=$stepStart -stop=$stepEnd ${hubSpecs} -fileServer=hgwdev \\\n";
+printf FH "         -augustusSpecies=${augustusSpecies} -buildDir=${buildDir} \\\n";
+printf FH "           -sourceDir=${sourceDir}) \\\n";
+printf FH "     >> ${buildDir}/${asmIdName}.${stepStart}-${stepEnd}.log 2>&1\n";
+close (FH);
+`chmod 775 ${buildDir}/steps.$stepStart-$stepEnd.sh`;
+
+my $ret = system("${buildDir}/steps.$stepStart-$stepEnd.sh");
+$ret >>= 8;
+
+exit $ret;
+
+__END__
+# /hive/data/outside/ncbi/genomes/refseq/vertebrate_mammalian/Ornithorhynchus_anatinus/all_assembly_versions/GCF_004115215.1_mOrnAna1.p.v1
+
+
+  time (~/kent/src/hg/utils/automation/doAssemblyHub.pl genbankRefseq \
+    vertebrate_other "${sciName}" "${asmIdName}" -verbose=2 \
+     -continue=$stepStart -stop=$stepEnd ${hubSpecs} -fileServer=hgwdev \
+      -augustusSpecies=${augustusSpecies} -buildDir="${buildDir}" \
+        -sourceDir="${sourceDir}") \
+          >> ${buildDir}/${asmIdName}.${stepStart}-${stepEnd}.log 2>&1 &
+
+  echo ${buildDir}/${asmIdName}.${stepStart}-${stepEnd}.log
+  printf "###########################################################\n" >> ${buildDir}/${asmIdName}.${stepStart}-${stepEnd}.log

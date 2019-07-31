@@ -4,7 +4,7 @@
 
 <!-- Relative paths to support mirror sites with non-standard GB docs install -->
 <!--#include virtual="$ROOT/inc/gbPageStart.html" -->
-
+<body>
 <h1>Frequently Asked Questions: BLAT</h1>
 
 <h2>Topics</h2>
@@ -15,7 +15,7 @@
 <li><a href="#blat2">BLAT use restrictions</a></li>
 <li><a href="#blat3">Downloading Blat source and documentation</a></li>
 <li><a href="#blat5">Replicating web-based Blat parameters in command-line version</a></li>
-<li><a href="#blat6">Using the <em>-ooc</em> flag</strong></a></li>
+<li><a href="#blat6">Using the <em>-ooc</em> flag</a></li>
 <li><a href="#blat4">Replicating web-based Blat percent identity and score calculations</a></li>
 <li><a href="#blat7">Replicating web-based Blat &quot;I'm feeling lucky&quot; search 
 results</a></li>
@@ -77,7 +77,7 @@ something wrong?</h6>
 <p>
 First, check if you are using the correct version of the genome. For example, two versions of the 
 human genome are currently in wide use (hg19 and hg38) and your sequence may be only in one of
-them. Many published articles do not specify the assembly version so trying a few may be necessary.</p>
+them. Many published articles do not specify the assembly version so trying both may be necessary.</p>
 <p>
 Very short sequences that go over a splice site in a cDNA sequence can't be found, as they are not 
 in the genome. qPCR primers are a typical example. For these cases, try using 
@@ -85,7 +85,8 @@ in the genome. qPCR primers are a typical example. For these cases, try using
 the In-Silico PCR tool is more sensitive and should be preferred for pairs of primers.</p>
 <p>
 If you have verified that you are using the correct genome and that the sequence is indeed there, 
-for example by using the "Short match" track, the problem may be a result of BLAT's query-masking. 
+for example by using the <a href="../cgi-bin/hgTrackUi?db=hg38&g=oligoMatch">"Short match" track
+</a>, the problem may be a result of BLAT's query-masking. 
 This happens if your input sequence is part of a repeat and present thousands of times in the genome.
 The online version of Blat masks 11mers from the query that occur more than 1024 times in the 
 genome. This is done to improve speed, but may result in missed hits when you are searching for 
@@ -130,25 +131,37 @@ at /kent/src/blat within the most recent jksrci*.zip source tree). For Blat exec
 and choose your machine type.</p>
 <p>
 Documentation on Blat program specifications is available 
-<a href="../goldenPath/help/blatSpec.html">here</a>.</p>
+<a href="../goldenPath/help/blatSpec.html">here</a>. Note that the command-line BLAT 
+does not return matches to U nucleotides in the query sequence.</p>
 
 <a name="blat5"></a>
 <h2>Replicating web-based Blat parameters in command-line version</h2>
 <h6>I'm setting up my own Blat server and would like to use the same parameter values that the 
 UCSC web-based Blat server uses.</h6> 
 <p>
-We almost always expect there to be some small differences between the hgBlat/gfServer and the 
-stand-alone command-line Blat. The best matches can be found using pslReps and pslCDnaFilter 
+We almost always expect small differences between the hgBlat/gfServer and the 
+stand-alone, command-line Blat. The best matches can be found using pslReps and pslCDnaFilter 
 utilities. The web-based Blat is tuned permissively with a minimum cut-off score of 20, which will 
-display most of the alignments. Other than to confirm that your command-line Blat is working, there 
-is little use in perfectly replicating the web-based Blat results. We advise deciding which 
+display most of the alignments. We advise deciding which 
 filtering parameters make the most sense for the experiment or analysis. Often these settings will 
 be different and more stringent than those of the web-based Blat. With that in mind, use the 
 following settings to replicate the search results of the web-based Blat:</p>
 <p>
+<em>standalone Blat</em>:</p>
+<ul>
+  <li>Blat search:<br>
+  &nbsp;&nbsp;&nbsp;<code>blat -stepSize=5 -repMatch=2253 -minScore=20 -minIdentity=0
+  database.2bit query.fa output.psl </code><br></li>
+  <li><strong>Note:</strong> To replicate web results, PSL output should be used. BLAT handles
+  alternative output formats (such as blast8) slightly differently, and this can lead to minor
+  differences in results; particularly for short alignments. Furthermore, the query sequence
+  should have all U nucleotides converted to T nucleotides or have the "-q=rna" flag used
+  to match the web-Blat.</li>
+</ul>
+<p>
 <em>faToTwoBit</em>:</p>
 <ul>
-  <li>Use soft masking.</li>
+  <li>Uses soft masking to converst Fasta format to the 2bit format for Blat input.</li>
 </ul>
 <p>
 <em>gfServer</em> (this is how the UCSC web-based Blat servers are configured):
@@ -169,19 +182,9 @@ in protein-space).</p>
 <p>
 <em>gfClient</em>:</p>
 <ul>
-  <Li>Set <em>-minScore=0</em> and <em>-minIdentity=0</em>. This will result in some low-scoring, 
+  <li>Set <em>-minScore=0</em> and <em>-minIdentity=0</em>. This will result in some low-scoring, 
   generally spurious hits, but for interactive use it's sufficiently easy to ignore them (because 
   results are sorted by score) and sometimes the low-scoring hits come in handy.</li>
-</ul>
-<p>
-<em>standalone Blat</em>:</p>
-<ul>
-  <li>Blat search:<br>
-  &nbsp;&nbsp;&nbsp;<code>blat -stepSize=5 -repMatch=2253 -minScore=0 -minIdentity=0 
-  database.2bit query.fa output.psl </code><br>
-  <li><strong>Note:</strong> To replicate web results, PSL output should be used. BLAT handles
-  alternative output formats (such as blast8) slightly differently, and this can lead to minor 
-  differences in results; particularly for short alignments.
 </ul>
 <p>
 Notes on repMatch:</p>
@@ -190,7 +193,7 @@ Notes on repMatch:</p>
   The default setting for gfServer dna matches is: repMatch = 1024 * (tileSize/stepSize).</li>
   <li>
   The default setting for Blat dna matches is: repMatch = 1024 (if tileSize=11).</li>
-  <Li>To get command-line results that are equivalent to web-based results, repMatch must be 
+  <li>To get command-line results that are equivalent to web-based results, repMatch must be 
   specified when using BLAT.</li>
 </ul>
 <p>
@@ -230,12 +233,15 @@ have created scripts that include the calculations: </p>
 <ul>
   <li>
   View the perl script from the source tree: 
-  <a href="http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/utils/pslScore/pslScore.pl"><code>pslScore.pl</code></a><li>
+  <a href="http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/utils/pslScore/pslScore.pl">
+  <code>pslScore.pl</code></a></li>
   <li>
   View the corresponding C program:
-  <a href="http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/utils/pslScore/pslScore.c"><code>pslScore.c</code></a>
+  <a href="http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/utils/pslScore/pslScore.c">
+  <code>pslScore.c</code></a>
   and associated library functions <code>pslScore</code> and <code>pslCalcMilliBad</code> in   
-  <a href="http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/lib/psl.c"><code>psl.c</code></a></li>
+  <a href="http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/lib/psl.c">
+  <code>psl.c</code></a></li>
 </ul>
 <p>
 See our <a href="FAQlicense.html">FAQ</a> on source code licensing and downloads for information on 
@@ -244,7 +250,7 @@ obtaining the source.</p>
 <a name="blat7"></a>
 <h2>Replicating web-based Blat &quot;I'm feeling lucky&quot; search results</h2>
 <h6>How do I generate the same search results as web-based Blat's &quot;I'm feeling lucky&quot; 
-option using command-line Blat?</strong> </h6>
+option using command-line Blat?</h6>
 <p>
 The code for the &quot;I'm feeling lucky&quot; Blat search orders the results based on the sort 
 output option that you selected on the query page. It then returns the highest-scoring alignment of 
@@ -372,3 +378,4 @@ but clicking into the assembly would report no matches. This most often occurs w
 only a few (1-3) hits reported by BLAT All.</p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
+</body>

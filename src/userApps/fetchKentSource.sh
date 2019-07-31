@@ -25,6 +25,9 @@ export ofN="of 5"
 # this util changed from being in a directory to being a script
 # the extract can't overwrite the directory with a file
 rm -fr kent/src/utils/uniprotLift
+# v385 this util changed from a script by this name to a directory
+# and the script changed to a .py name
+rm -fr kent/src/utils/bedJoinTabOffset
 
 echo "fetch kent source part ${partNumber} ${ofN}" 1>&2
 git archive --format=zip -9 --remote=git://genome-source.soe.ucsc.edu/kent.git \
