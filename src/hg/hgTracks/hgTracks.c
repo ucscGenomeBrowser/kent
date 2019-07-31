@@ -7493,7 +7493,8 @@ struct track *track,  *next = NULL;
 for(track = trackList; track; track = next)
     {
     next = track->next;
-    if (tdbVisLimitedByAncestors(cart,track->tdb,TRUE,TRUE) != tvHide)
+    if ( sameString(trackHubSkipHubName(track->track), "cytoBandIdeo") ||
+        (tdbVisLimitedByAncestors(cart,track->tdb,TRUE,TRUE) != tvHide))
         {
         slAddHead(&newList, track);
         finishTrack(track);
@@ -7506,13 +7507,6 @@ for(track = trackList; track; track = next)
                 makeCompositeTrack(track, tdb);
             else if (trackDbLocalSetting(tdb, "container"))
                 makeContainerTrack(track, tdb);
-            }
-        else
-            {
-            TrackHandler handler;
-            handler = lookupTrackHandlerClosestToHome(tdb);
-            if (handler != NULL)
-                handler(track);
             }
 
         struct track *subtrack, *nextSub;
@@ -7547,7 +7541,6 @@ if (!trackList)
     trackList = getTrackList(&groupList, defaultTracks ? -1 : -2);
     if (measureTiming)
 	measureTime("Time after visibilities");
-    makeGlobalTrackHash(trackList);
     }
 }
 
@@ -7807,6 +7800,7 @@ if (hideAll || defaultTracks)
     }
 
 trackList = onlyVisible(trackList);
+makeGlobalTrackHash(trackList);
 
 if(!psOutput && !cartUsualBoolean(cart, "hgt.imageV1", FALSE))
     {

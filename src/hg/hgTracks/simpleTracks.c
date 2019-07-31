@@ -14415,29 +14415,13 @@ struct trackDb *subTdb;
 int subCount = slCount(tdbRefList);
 int altColors = subCount - 1;
 struct track *subtrack = NULL;
-TrackHandler handler;
-boolean smart = FALSE;
 
 /* ignore if no subtracks */
 if (!subCount)
     return;
 
-char *compositeTrack = trackDbLocalSetting(tdb, "compositeTrack");
-/* look out for tracks that manage their own subtracks */
-if (startsWith("wig", tdb->type) || startsWith("bedGraph", tdb->type) ||
-    (compositeTrack != NULL && rStringIn("smart", compositeTrack)))
-        smart = TRUE;
-
-/* setup function handlers for composite track */
-handler = lookupTrackHandlerClosestToHome(tdb);
-if (smart && handler != NULL)
-    /* handles it's own load and height */
-    handler(track);
-else
-    {
-    track->loadItems = compositeLoad;
-    track->totalHeight = compositeTotalHeight;
-    }
+track->loadItems = compositeLoad;
+track->totalHeight = compositeTotalHeight;
 
 if (altColors && (finalR || finalG || finalB))
     {
@@ -14454,9 +14438,6 @@ for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     subTdb = tdbRef->val;
 
     subtrack = trackFromTrackDb(subTdb);
-    handler = lookupTrackHandlerClosestToHome(subTdb);
-    if (handler != NULL)
-        handler(subtrack);
 
     /* Add subtrack settings (table, colors, labels, vis & pri).  This is only
      * needed in the "not noInherit" case that hopefully will go away soon. */
@@ -14561,7 +14542,6 @@ char *exonArrows;
 char *nextItem;
 struct trackDb *tdb = track->tdb;
 
-
 track->color.r = tdb->colorR;
 track->color.g = tdb->colorG;
 track->color.b = tdb->colorB;
@@ -14621,6 +14601,9 @@ if (iatName != NULL)
     track->itemAttrTbl = itemAttrTblNew(iatName);
 #endif /* GBROWSE */
 fillInFromType(track, tdb);
+TrackHandler handler = lookupTrackHandlerClosestToHome(tdb);
+if (handler != NULL)
+    handler(track);
 }
 
 struct hash *handlerHash = NULL;
