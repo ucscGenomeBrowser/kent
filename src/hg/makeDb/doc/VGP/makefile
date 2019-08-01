@@ -1,10 +1,14 @@
 
+# for GNU Make automatic variable documentation, see also:
+# https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html
+
 destDir=/hive/data/genomes/asmHubs/VGP/ucscNames
 srcDir=${HOME}/kent/src/hg/makeDb/doc/VGP
 
-all:: ${destDir}/genomes.txt ${destDir}/hub.txt
-	ls -og ${destDir}/hubIndex.html ${destDir}/asmStatsVGP.html
-	ls -og ${destDir}/genomes.txt ${destDir}/commonNameOrder.list
+all:: ${destDir}/genomes.txt ${destDir}/hub.txt ${destDir}/groups.txt
+	@ls -og ${destDir}/hubIndex.html ${destDir}/asmStatsVGP.html
+	@ls -og ${destDir}/commonNameOrder.list
+	@ls -og $^
 
 classList=amphibian.list bird.list fish.list mammal.list reptile.list
 
@@ -21,7 +25,12 @@ ${destDir}/asmStatsVGP.html: ${destDir}/hubIndex.html ${srcDir}/mkAsmStats.pl
 
 ${destDir}/genomes.txt:  ${destDir}/asmStatsVGP.html ${srcDir}/mkGenomes.pl
 	cd ${destDir} && ${srcDir}/mkGenomes.pl > $@
+	cd ${destDir} && ${srcDir}/mkSymLinks.sh
 
 ${destDir}/hub.txt: ${srcDir}/hub.txt
 	rm $@
-	cp -p  ${srcDir}/hub.txt $@
+	cp -p  $< $@
+
+${destDir}/groups.txt: ${srcDir}/groups.txt
+	rm $@
+	cp -p  $< $@
