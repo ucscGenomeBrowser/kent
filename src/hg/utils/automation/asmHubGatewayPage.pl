@@ -223,6 +223,7 @@ while (my $line = <FH>) {
   if ($line =~ m/organism\s+name:\s+/i) {
      next if ($orgName !~ m#\(n/a#);
      $line =~ s/.*organism\s+name:\s+//i;
+     $line =~ s/\s+$//;
      $orgName = $line;
   }
   if ($line =~ m/submitter:\s+/i) {
@@ -255,6 +256,7 @@ if ($commonName =~ m/\(/) {
 if ($orgName =~ m/\(/) {
    $orgName =~ s/\(.*//;
 }
+$orgName =~ s/\s+$//;
 
 printf STDERR "#taxId\tcommonName\tsubmitter\tasmName\torgName\tbioSample\tasmType\tasmLevel\tasmDate\tasmAccession\n";
 printf STDERR "%s\t", $taxId;
@@ -288,17 +290,22 @@ printf "<!-- Display image in righthand corner -->
 \n", $imageWidth+$imageWidthBorder, $imageHeight, $asmAccession, $ftpName, $imageName, $imageWidth, $imageHeight, $commonName, $orgName, $photoCreditURL, $photoCreditName;
 }
 
+my $sciNameUnderscore = $orgName;
+$sciNameUnderscore =~ s/ /_/g;
+$sciNameUnderscore = "Strigops_habroptilus" if ($orgName =~ m/Strigops habroptila/);
+
 printf "<p>
 <b>Common name:</b>&nbsp;%s<br>
-<b>Taxonomic name: %s, taxonomy ID:</b> <a href=\"https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=%s\" target=_\"_blank\"> %s</a><br>
+<b>Taxonomic name: %s, taxonomy ID:</b> <a href='https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=%s' target='_blank'> %s</a><br>
 <b>Sequencing/Assembly provider ID:</b> %s<br>
+<b>Vertebrate Genomes Project information:</b> <a href='https://vgp.github.io/genomeark/%s/' target=_blank>%s</a><br>
 <b>Assembly date:</b> %s<br>
 <b>Assembly type:</b> %s<br>
 <b>Assembly level:</b> %s<br>
 <b>Biosample:</b> <a href=\"https://www.ncbi.nlm.nih.gov/biosample/?term=%s\" target=\"_blank\">%s</a><br>
 <b>Assembly accession ID:</b> <a href=\"https://www.ncbi.nlm.nih.gov/assembly/%s\" target=\"_blank\">%s</a><br>
 <b>Assembly FTP location:</b> <a href=\"ftp://ftp.ncbi.nlm.nih.gov/genomes/all/%s\" target=\"_blank\">%s</a><br>
-\n", $commonName, $orgName, $taxId, $taxId, $submitter, $asmDate, $descrAsmType,
+\n", $commonName, $orgName, $taxId, $taxId, $submitter, $sciNameUnderscore, $orgName, $asmDate, $descrAsmType,
   $asmLevel, $bioSample, $bioSample, $asmAccession, $asmAccession, $urlDirectory, $urlDirectory;
 
 chromSizes($chromSizes);
