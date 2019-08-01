@@ -8203,9 +8203,9 @@ if ((trackImgOnly && !ideogramToo)
     for(window=windows;window;window=window->next)
 	{
 	struct track *ideoTrack = chromIdeoTrack(window->trackList);
-        finishTrack(ideoTrack);
 	if (ideoTrack)
 	    {
+            finishTrack(ideoTrack);
 	    ideoTrack->limitedVisSet = TRUE;
 	    ideoTrack->limitedVis = tvHide; /* Don't draw in main gif. */
 	    }
