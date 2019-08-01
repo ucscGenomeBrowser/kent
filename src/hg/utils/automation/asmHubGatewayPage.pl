@@ -7,6 +7,8 @@ use lib "$Bin";
 use AsmHub;
 use File::Basename;
 
+my $sourceServer = "hgdownload.soe.ucsc.edu";
+
 my @months = qw( 0 Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
 
 sub usage() {
@@ -287,7 +289,7 @@ printf "<!-- Display image in righthand corner -->
 }
 
 printf "<p>
-<b>Common name: %s</b><br>
+<b>Common name:</b>&nbsp;%s<br>
 <b>Taxonomic name: %s, taxonomy ID:</b> <a href=\"https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=%s\" target=_\"_blank\"> %s</a><br>
 <b>Sequencing/Assembly provider ID:</b> %s<br>
 <b>Assembly date:</b> %s<br>
@@ -306,16 +308,22 @@ printf "</p>\n<hr>
 <b>Download files for this assembly hub:</b><br>
 To use the data from this assembly for a local hub instance at your
 institution, download these data as indicated by these instructions.<br>
-See also: <a href=\"/goldenPath/help/hgTrackHubHelp.html\" target=_blank>track hub help</a> documentation.<br>
+See also: <a href='/goldenPath/help/hgTrackHubHelp.html' target=_blank>track hub help</a> documentation.<br>
 <br>
-To download these data, issue this <em>wget</em> command:
+To download this assembly data, use this <em>rsync</em> command:
 <pre>
-wget --timestamping -m -nH -x --cut-dirs=5 -e robots=off -np -k \\
-   --reject \"index.html*\" -P \"$asmId\" \\
-       http://genome-test.soe.ucsc.edu/hubs/ncbiAssemblies/$asmId/
+  rsync -a -P rsync://$sourceServer/hubs/VGP/genomes/$asmId/ ./$asmId/
+
+  which creates the local directory: ./$asmId/
 </pre>
-to download the files for this assembly,<br>
-creating the local directory: \"$asmId\"<br>
+or this <em>wget</em> command:
+<pre>
+  wget --timestamping -m -nH -x --cut-dirs=4 -e robots=off -np -k \\
+    --reject \"index.html*\" -P \"$asmId\" \\
+       http://$sourceServer/hubs/VGP/genomes/$asmId/
+
+  which creates a local directory: ./$asmId/
+</pre>
 <br>
 There is an included $asmId.genomes.txt file in that download
 data to use for your local track hub instance.<br>
@@ -324,7 +332,7 @@ Something like:
 <pre>
 hub myLocalHub
 shortLabel myLocalHub
-longLabel genomes from RefSeq assemblies
+longLabel genomes from Vertebrate Genomes Project assemblies
 genomesFile $asmId.genomes.txt
 email yourEmail\@yourdomain.edu
 descriptionUrl html/$asmId.description.html

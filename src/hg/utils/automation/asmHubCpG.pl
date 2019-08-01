@@ -65,12 +65,6 @@ that exist in repeat regions and would otherwise not be visible
 in the repeat masked version.
 </p>
 
-<p>
-By default, only the masked version of the track is displayed.  To view the
-unmasked version, change the visibility settings in the track controls at
-the top of this page.
-</p>
-
 <h2>Methods</h2>
 
 <p>CpG islands were predicted by searching the sequence one base at a
