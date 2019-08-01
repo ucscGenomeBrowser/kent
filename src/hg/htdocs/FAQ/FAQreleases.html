@@ -330,9 +330,11 @@ Human assemblies displayed in the Genome Browser (hg10 and higher) are near iden
 NCBI assemblies when it comes to primary sequence. Minor differences may be present, however.
 Sources include:</p>
 <ul>
-  <li>We repeat mask our own genomes</li>
-  <li>All UCSC chroms use the 'chr1' nomenclature, whereas certain NCBI schemas may only 
-      have the numbers (chr1 = 1)</li>
+  <li>NCBI genomes are repeat masked with RepeatMasker, however, UCSC genomes are independently 
+      masked with both RepeatMasker (with different flags) and WindowMasker, ultimately using 
+      the program output with the highest percentage masked for the base sequence</li>
+  <li>In genome download files, UCSC uses the 'chr1' nomenclature for sequence identifiers, 
+      whereas the primary NCBI sequence identifiers are RefSeq accessions</li>
   <li>The mitochondrion for hg19 differs from the one in NCBI (GRCh37)</li>
 </ul>
 
