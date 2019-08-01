@@ -6,7 +6,7 @@ use File::stat;
 
 my @orderList;	# asmId of the assemblies in order from the *.list files
 # the order to read the different .list files:
-my @classList = qw( mammal bird amphibian fish );
+my @classList = qw( mammal bird reptile amphibian fish );
 my %class;	# key is asmId, value is from class list
 my $assemblyCount = 0;
 my $overallNucleotides = 0;
@@ -34,27 +34,25 @@ my $timeStamp = `date "+%F"`;
 chomp $timeStamp;
 
 print <<"END"
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<!--#set var="TITLE" value="VGP - Vertebrate Genome Project assembly statistics - $timeStamp" -->
+<!DOCTYPE HTML 4.01 Transitional>
+<!--#set var="TITLE" value="VGP - Vertebrate Genomes Project assembly statistics - $timeStamp" -->
 <!--#set var="ROOT" value="../.." -->
 
 <!--#include virtual="\$ROOT/inc/gbPageStartHardcoded.html" -->
 
-<h1>VGP - Vertebrate Genome Project assembly statistics - $timeStamp</h1>
+<h1>VGP - Vertebrate Genomes Project assembly statistics - $timeStamp</h1>
 <p>
 This assembly hub contains some of the first complete assemblies released
 by the <a href='https://vertebrategenomesproject.org/' target=_blank>
-<br><img src='VGPlogo.png' width=280 alt='VGP logo'><br>
-Vertebrate Genome Project.</a>
+Vertebrate Genomes Project.</a><br>
+<img src='VGPlogo.png' width=280 alt='VGP logo'>
 </p>
-<h3>See also: <a href='hubIndex.html' target=_blank>hub access</a> information</h3>
-
 <p>
-NOTE: <em>Click on the column headers to sort the table by that column</em>
+<h3>See also: <a href='hubIndex.html' target=_blank>hub access</a> information</h3>
 </p>
+
 <h3>Data resource links</h3>
+NOTE: <em>Click on the column headers to sort the table by that column</em>
 END
 }
 
@@ -102,6 +100,8 @@ END
 ##############################################################################
 sub endHtml() {
 print <<"END"
+</div><!-- closing gbsPage from gbPageStartHardcoded.html -->
+</div><!-- closing container-fluid from gbPageStartHardcoded.html -->
 <!--#include virtual="\$ROOT/inc/gbFooterHardcoded.html"-->
 <script type="text/javascript" src="/js/sorttable.js"></script>
 </body></html>
@@ -111,7 +111,6 @@ END
 sub asmCounts($) {
   my ($chromSizes) = @_;
   my ($sequenceCount, $totalSize) = split('\s+', `ave -col=2 $chromSizes | egrep "^count|^total" | awk '{printf "%d\\n", \$NF}' | xargs echo`);
-  printf STDERR "# DBG: asmCounts: $sequenceCount, $totalSize\n";
   return ($sequenceCount, $totalSize);
 }
 
@@ -218,7 +217,7 @@ sub tableContents() {
     }
     close (FH);
     $commonName = $betterName{$asmId} if (exists($betterName{$asmId}));
-    printf "<tr><th>%d</th><td align=center><a href='https://genome-test.gi.ucsc.edu/cgi-bin/hgGateway?hubUrl=http://genome-test.gi.ucsc.edu/hubs/VGP/hub.txt&genome=%s&position=lastDbPos' target=_blank>%s</a></td>\n", ++$asmCount, $asmId, $commonName;
+    printf "<tr><th>%d</th><td align=center><a href='https://genome-test.gi.ucsc.edu/cgi-bin/hgGateway?hubUrl=http://genome-test.gi.ucsc.edu/hubs/VGP/hub.txt&amp;genome=%s&amp;position=lastDbPos' target=_blank>%s</a></td>\n", ++$asmCount, $asmId, $commonName;
     printf "    <td align=center>%s</td>\n", $sciName;
     printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/assembly/%s_%s/' target=_blank>%s</a></td>\n", $gcPrefix, $asmAcc, $asmId;
     printf "    <td align=right>%s</td>\n", commify($seqCount);
@@ -234,8 +233,10 @@ sub tableContents() {
 ### main()
 ##############################################################################
 
+my $home = $ENV{'HOME'};
+my $srcDir = "$home/kent/src/hg/makeDb/doc/VGP";
 
-open (FH, "<commonNames.txt") or die "can not read commonNames.txt";
+open (FH, "<$srcDir/commonNames.txt") or die "can not read $srcDir/commonNames.txt";
 while (my $line = <FH>) {
   chomp $line;
   my ($asmId, $name) = split('\t', $line);
@@ -243,10 +244,8 @@ while (my $line = <FH>) {
 }
 close (FH);
 
-
 foreach my $species (@classList) {
-  my $listFile = "${species}.list";
-  printf STDERR "%s\n", $listFile;
+  my $listFile = "$srcDir/${species}.list";
   open (FH, "<$listFile") or die "can not read $listFile";
   while (my $asmId = <FH>) {
     chomp $asmId;
