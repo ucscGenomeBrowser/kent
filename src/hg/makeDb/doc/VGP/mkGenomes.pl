@@ -6,7 +6,10 @@ use File::Basename;
 
 my %betterName;	# key is asmId, value is common name
 
-open (FH, "<commonNames.txt") or die "can not read commonNames.txt";
+my $home = $ENV{'HOME'};
+my $srcDir = "$home/kent/src/hg/makeDb/doc/VGP";
+
+open (FH, "<$srcDir/commonNames.txt") or die "can not read $srcDir/commonNames.txt";
 while (my $line = <FH>) {
   chomp $line;
   my ($asmId, $name) = split('\t', $line);
