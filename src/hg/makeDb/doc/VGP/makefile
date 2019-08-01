@@ -2,7 +2,7 @@
 destDir=/hive/data/genomes/asmHubs/VGP/ucscNames
 srcDir=${HOME}/kent/src/hg/makeDb/doc/VGP
 
-all:: ${destDir}/genomes.txt
+all:: ${destDir}/genomes.txt ${destDir}/hub.txt
 	ls -og ${destDir}/hubIndex.html ${destDir}/asmStatsVGP.html
 	ls -og ${destDir}/genomes.txt ${destDir}/commonNameOrder.list
 
@@ -22,3 +22,6 @@ ${destDir}/asmStatsVGP.html: ${destDir}/hubIndex.html ${srcDir}/mkAsmStats.pl
 ${destDir}/genomes.txt:  ${destDir}/asmStatsVGP.html ${srcDir}/mkGenomes.pl
 	cd ${destDir} && ${srcDir}/mkGenomes.pl > $@
 
+${destDir}/hub.txt: ${srcDir}/hub.txt
+	rm $@
+	cp -p  ${srcDir}/hub.txt $@
