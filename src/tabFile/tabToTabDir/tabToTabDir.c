@@ -68,6 +68,16 @@ struct fieldVal
     char *val;			/* For constant ones the string value */
     };
 
+struct fieldVal *fieldValFind(struct fieldVal *list, char *name)
+/* Find named element in list, or NULL if not found. */
+{
+struct fieldVal *el;
+for (el = list; el != NULL; el = el->next)
+    if (sameString(name, el->name))
+        return el;
+return NULL;
+}
+
 struct fieldVal *parseFieldVal(char *name, char *input)
 /* return a fieldVal based on the contents of input, which are not destroyed */
 {
@@ -174,15 +184,11 @@ while ((specStanza = raNextStanzAsPairs(lf)) != NULL)
     if (isEmpty(keyFieldName))
        errAbort("No key field for table %s.", tableName);
 
-    /* Make sure that key field is actually in field list */
-    struct slPair *fieldList = table->next;
-    int keyFieldIx = fieldedTableMustFindFieldIx(inTable, keyFieldName);
-    if (keyFieldIx < 0)
-       errAbort("key field %s is not found in field list for %s\n", tableName, keyFieldName);
-
+    /* Have dealt with first line of stanza, which is about table,  rest of lines are fields */
+    struct slPair *fieldList = specStanza->next;
+    int fieldCount = slCount(fieldList);
 
     /* Create empty output table and track which fields of input go to output. */
-    int fieldCount = slCount(fieldList);
     char *fieldNames[fieldCount];
     int i;
     struct slPair *field;
@@ -202,13 +208,20 @@ while ((specStanza = raNextStanzAsPairs(lf)) != NULL)
     struct fieldedTable *outTable = fieldedTableNew(tableName, fieldNames, fieldCount);
     outTable->startsSharp = inTable->startsSharp;
 
+    /* Make sure that key field is actually in field list */
+    struct fieldVal *keyField = fieldValFind(fvList, keyFieldName);
+    if (keyField == NULL)
+       errAbort("key field %s is not found in field list for %s\n", tableName, keyFieldName);
+    int keyFieldIx = keyField->oldIx;
+
     /* Populate table */
     selectUniqueIntoTable(inTable, fvList, keyFieldIx, outTable);
 
     /* Create output file name and save file. */
     char outTabName[FILENAME_LEN];
     safef(outTabName, sizeof(outTabName), "%s/%s.tsv", outDir, tableName);
-    verbose(1, "Writing %s of %d fields %d rows\n",  outTabName, outTable->fieldCount, outTable->rowCount);
+    verbose(1, "Writing %s of %d fields %d rows\n",  
+	outTabName, outTable->fieldCount, outTable->rowCount);
     fieldedTableToTabFile(outTable, outTabName);
     }
 }
