@@ -21,18 +21,15 @@ errAbort(
 "   in.tsv is a tab-separated input file.  The first line is the label names and may start with #\n"
 "   spec.txt is a file that says what columns to put into the output, described in more detail below\n"
 "   outDir is a directory that will be populated with tab-separated files\n"
-"spec.ra file format:\n"
-"   This is in a ra format with one stanza per output table.\n"
-"   Each stanza should look like:\n"
+"The spec.txt file contains one blank line separated stanza per output table.\n"
+"Each stanza should look like:\n"
 "        tableName    key-column\n"
 "        columnName1	sourceField1\n"
 "        columnName2	sourceField2\n"
 "              ...\n"
-"   if the sourceField is missing it is assumed it is named to be a column of the same name in in.tsv\n"
-"   The sourceField can either be a column name in the in.tsv, or a string enclosed literal or something\n"
-"   more complicated enclosed in an eval() call\n"
-"options:\n"
-"   -xxx=XXX\n"
+"if the sourceField is missing it is assumed to be a column of the same name in in.tsv\n"
+"The sourceField can either be a column name in the in.tsv, or a string enclosed literal\n"
+"or an @ followed by a table name, in which case it refers to the key of that table\n"
 );
 }
 
