@@ -201,6 +201,7 @@ dyStringFree(&dy);
 }
 
 
+#ifdef OLD
 void fixProtocols(struct tagStorm *storm, struct tagStanza *stanza, void *context)
 /* Convert the various protocols in sample to and array of protocol descriptions and
  * an array of types.  This helps us be compatible with array express, which has
@@ -237,6 +238,7 @@ dyStringFree(&scratch);
 dyStringFree(&protocol);
 dyStringFree(&type);
 }
+#endif /* OLD */
 
 void geoToHcaStorm(char *inTags, char *output)
 /* geoToHcaStorm - Convert output of geoToTagStorm to something closer to what the Human Cell 
@@ -249,12 +251,6 @@ struct tagStorm *storm = tagStormFromFile(inTags);
 tagStormTraverse(storm, storm->forest, NULL, fixAccessions);
 tagStormTraverse(storm, storm->forest, NULL, fixDates);
 tagStormTraverse(storm, storm->forest, NULL, mergeAddresses);
-tagStormTraverse(storm, storm->forest, NULL, fixProtocols);
-
-/* Get rid of protocols stuff we just fixed */
-char *protoWeeds[] = 
-    {"sample.extract_protocol", "sample.treatment_protocol", "sample.growth_protocol", };
-tagStormWeedArray(storm, protoWeeds, ArraySize(protoWeeds));
 
 /* Do simple subsitutions. */
 tagStormSubArray(storm, substitutions, ArraySize(substitutions));
