@@ -91,7 +91,7 @@ struct slPair *specStanza = NULL;
 while ((specStanza = raNextStanzAsPairs(lf)) != NULL)
     {
     /* Parse out table name and key field name. */
-    verbose(1, "Processing spec stanza of %d lines\n",  slCount(specStanza));
+    verbose(2, "Processing spec stanza of %d lines\n",  slCount(specStanza));
     struct slPair *table = specStanza;
     char *tableName = table->name;
     char *keyFieldName = trimSpaces(table->val);
@@ -107,7 +107,6 @@ while ((specStanza = raNextStanzAsPairs(lf)) != NULL)
 
     /* Create empty output table and track which fields of input go to output. */
     int fieldCount = slCount(fieldList);
-    uglyf("Got %d fields\n", fieldCount);
     char *fieldNames[fieldCount];
     int oldFieldIx[fieldCount];
     int i;
@@ -129,7 +128,7 @@ while ((specStanza = raNextStanzAsPairs(lf)) != NULL)
     /* Create output file name and save file. */
     char outTabName[FILENAME_LEN];
     safef(outTabName, sizeof(outTabName), "%s/%s.tsv", outDir, tableName);
-    uglyf("Saving table to %s\n", outTabName);
+    verbose(1, "Writing %s of %d fields %d rows\n",  outTabName, outTable->fieldCount, outTable->rowCount);
     fieldedTableToTabFile(outTable, outTabName);
     }
 }
