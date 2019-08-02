@@ -52,7 +52,7 @@ while (lineFileNext(lf, &line, NULL))
          fprintf(f, "%s\n", line);
     else
         {
-        // Parse out first word
+        // Parse out first word and write out line unless it is one of the ones deleted
         char *tag = nextWord(&s);
 	char *arrayedTag = tagSchemaFigureArrayName(tag, arrayDy);
         char *tagExists = hashFindVal(deleteHash, arrayedTag);
