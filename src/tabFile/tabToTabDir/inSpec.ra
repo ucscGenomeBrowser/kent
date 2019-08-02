@@ -1,21 +1,23 @@
-project	data_set_id
-data_set_id	project_name
-title	
-GEO_Series_summary summary
+project project_name
+name "Constant name"
+project_name data_set_id
+title
+summary GEO_Series_summary
 lab
 geo_series
 ncbi_bio_project
-
-donor	biosample_source_id
-biosample_source_id	donor
-biosample_source_age_value	age
-biosample_source_age_unit	age_unit
-biosample_source_gender	sex
-
-sample	geo_sample
-geo_sample	sample
+ 
+donor donor
+donor biosample_source_id
+age biosample_source_age_value
+age_unit biosample_source_age_unit
+sex biosample_source_gender
+ 
+sample sample
+sample geo_sample
 sample_label
 cell_count
 access
+donor @donor
 lab_quake_cell
-
+ 
