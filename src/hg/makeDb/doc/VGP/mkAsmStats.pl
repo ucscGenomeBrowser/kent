@@ -48,7 +48,7 @@ Vertebrate Genomes Project.</a><br>
 <img src='VGPlogo.png' width=280 alt='VGP logo'>
 </p>
 <p>
-<h3>See also: <a href='hubIndex.html' target=_blank>hub access</a> information</h3>
+<h3>See also: <a href='hubIndex.html' target=_blank>hub access</a></h3>
 </p>
 
 <h3>Data resource links</h3>

@@ -83,7 +83,7 @@ After adding the hub, you will be redirected to the gateway page.  The
 genome assemblies can be selected from the <em>VGP Hub Assembly</em> dropdown menu.
 </p>
 <p>
-<h3>See also: <a href='asmStatsVGP.html' target=_blank>assembly statistics</a> information</h3>
+<h3>See also: <a href='asmStatsVGP.html' target=_blank>assembly statistics</a></h3>
 </p>
 <h3>Data resource links</h3>
 NOTE: <em>Click on the column headers to sort the table by that column</em>
