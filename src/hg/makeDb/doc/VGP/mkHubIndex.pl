@@ -32,17 +32,19 @@ chomp $timeStamp;
 
 print <<"END"
 <!DOCTYPE HTML 4.01 Transitional>
-<!--#set var="TITLE" value="VGP - Vertebrate Genomes Project assembly hub - $timeStamp" -->
+<!--#set var="TITLE" value="VGP - Vertebrate Genomes Project assembly hub" -->
 <!--#set var="ROOT" value="../.." -->
 
 <!--#include virtual="\$ROOT/inc/gbPageStartHardcoded.html" -->
 
-<h1>VGP - Vertebrate Genomes Project assembly hub - $timeStamp</h1>
+<h1>VGP - Vertebrate Genomes Project assembly hub</h1>
 <p>
-This assembly hub contains some of the first complete assemblies released
+<a href='https://vertebrategenomesproject.org/' target=_blank>
+<img src='VGPlogo.png' width=280 alt='VGP logo'></a></p>
+<p>
+This assembly hub contains assemblies released
 by the <a href='https://vertebrategenomesproject.org/' target=_blank>
-Vertebrate Genomes Project.<br>
-<img src='VGPlogo.png' width=280 alt='VGP logo'></a>
+Vertebrate Genomes Project.</a>
 </p>
 
 <h3>How to view the hub</h3>
@@ -83,7 +85,7 @@ After adding the hub, you will be redirected to the gateway page.  The
 genome assemblies can be selected from the <em>VGP Hub Assembly</em> dropdown menu.
 </p>
 <p>
-<h3>See also: <a href='asmStatsVGP.html' target=_blank>assembly statistics</a> information</h3>
+<h3>See also: <a href='asmStatsVGP.html' target=_blank>assembly statistics</a></h3>
 </p>
 <h3>Data resource links</h3>
 NOTE: <em>Click on the column headers to sort the table by that column</em>
