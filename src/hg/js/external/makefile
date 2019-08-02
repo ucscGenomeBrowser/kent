@@ -7,7 +7,8 @@ JS_FILES= BackboneExtend.js \
 	immutable.3.7.4.min.js \
 	jquery.bifrost.1.0.1.min.js \
 	lodash.3.10.0.compat.min.js \
-	react-with-addons-0.12.2.min.js
+	react-with-addons-0.12.2.min.js \
+	sorttable.js
 
 # Don't bother jshint'ing external libs.
 jshint:

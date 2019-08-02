@@ -489,20 +489,17 @@ if (tdb->subtracks)
 	boolean compositeView = tdbIsCompositeView(tdbEl);
 	if (! (compositeContainer || compositeView) )
 	    {
-	    if (chromSize < 1)
-		{
-		char *bigDataIndex = NULL;
-		char *relIdxUrl = trackDbSetting(tdbEl, "bigDataIndex");
-		if (relIdxUrl != NULL)
-		    bigDataIndex = trackHubRelativeUrl(hub->genomeList->trackDbFile, relIdxUrl);
-		char *bigDataUrl = trackDbSetting(tdbEl, "bigDataUrl");
-		char *longName = NULL;
-		unsigned longSize = 0;
-		struct dyString *errors = newDyString(1024);
-		(void) bbiBriefMeasure(tdbEl->type, bigDataUrl, bigDataIndex, &chromCount, &itemCount, errors, &longName, &longSize);
-		chromSize = longSize;
-		chromName = longName;
-		}
+            char *bigDataIndex = NULL;
+            char *relIdxUrl = trackDbSetting(tdbEl, "bigDataIndex");
+            if (relIdxUrl != NULL)
+                bigDataIndex = trackHubRelativeUrl(hub->genomeList->trackDbFile, relIdxUrl);
+            char *bigDataUrl = trackDbSetting(tdbEl, "bigDataUrl");
+            char *longName = NULL;
+            unsigned longSize = 0;
+            struct dyString *errors = newDyString(1024);
+            (void) bbiBriefMeasure(tdbEl->type, bigDataUrl, bigDataIndex, &chromCount, &itemCount, errors, &longName, &longSize);
+            chromSize = longSize;
+            chromName = longName;
 	    }
         if (tdbIsCompositeView(tdbEl))
 	    hPrintf("<li><b>%s</b>: %s : composite view of parent: %s</li>\n", tdbEl->track, tdbEl->type, tdbEl->parent->track);
