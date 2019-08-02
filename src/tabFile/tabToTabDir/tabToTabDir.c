@@ -52,38 +52,59 @@ for (i=0; i<count; ++i)
 return TRUE;
 }
 
-enum valType
+enum fieldValType
 /* A type */
     {
-    vtVar, vtLink, vtConst, 
+    fvVar, fvLink, fvConst, 
     };
 
-struct fieldVal
+struct newFieldInfo
 /* An expression that can define what fits in a field */
     {
-    struct fieldVal *next;	/* Might want to hang these on a list. */
-    char *name;	
-    enum valType type;			/* Constant, link, or variable */
-    int oldIx;				/* For variable and link ones where field is in old table */
+    struct newFieldInfo *next;	/* Might want to hang these on a list. */
+    char *name;			/* Name of field in new table */
+    enum fieldValType type;	/* Constant, link, or variable */
+    int oldIx;			/* For variable and link ones where field is in old table */
     char *val;			/* For constant ones the string value */
     };
 
-struct fieldVal *fieldValFind(struct fieldVal *list, char *name)
+struct newFieldInfo *findField(struct newFieldInfo *list, char *name)
 /* Find named element in list, or NULL if not found. */
 {
-struct fieldVal *el;
+struct newFieldInfo *el;
 for (el = list; el != NULL; el = el->next)
     if (sameString(name, el->name))
         return el;
 return NULL;
 }
 
-struct fieldVal *parseFieldVal(char *name, char *input)
-/* return a fieldVal based on the contents of input, which are not destroyed */
+struct newTableInfo
+/* Info on a new table we are making */
+    {
+    struct newTableInfo *next;	/* Next in list */
+    char *name;			/* Name of table */
+    char *keyField;		/* Key field within table */
+    int keyFieldIx;		/* Index of key field */
+    struct newFieldInfo *fieldList; /* List of fields */
+    struct fieldedTable *table;	    /* Table to fill in. */
+    };
+
+struct newTableInfo *findTable(struct newTableInfo *list, char *name)
+/* Find named element in list, or NULL if not found. */
+{
+struct newTableInfo *el;
+for (el = list; el != NULL; el = el->next)
+    if (sameString(name, el->name))
+        return el;
+return NULL;
+}
+
+struct newFieldInfo *parseFieldVal(char *name, char *input)
+/* return a newFieldInfo based on the contents of input, which are not destroyed */
 {
 /* Make up return structure. */
 
-struct fieldVal *fv;
+struct newFieldInfo *fv;
 AllocVar(fv);
 fv->name = cloneString(name);
 
@@ -91,7 +112,7 @@ char *s = skipLeadingSpaces(input);
 char c = s[0];
 if (c == 0)
     {
-    fv->type = vtVar;
+    fv->type = fvVar;
     fv->val = cloneString(name);
     }
 else
@@ -101,27 +122,27 @@ else
 	char *val = fv->val = cloneString(s);
 	if (!parseQuotedString(val, val, NULL))
 	    errAbort("in %s", input);
-	fv->type = vtConst;
+	fv->type = fvConst;
 	}
-    else if (c == '=')
+    else if (c == '@')
 	{
 	char *val = fv->val = cloneString(skipLeadingSpaces(s+1));
 	trimSpaces(val);
 	if (isEmpty(val))
-	    errAbort("Empty line following equals");
-	fv->type = vtLink;
+	    errAbort("Nothing following %c", c);
+	fv->type = fvLink;
 	}
     else
         {
 	char *val = fv->val = cloneString(s);
 	trimSpaces(val);
-	fv->type = vtVar;
+	fv->type = fvVar;
 	}
     }
 return fv;
 }
 
-void selectUniqueIntoTable(struct fieldedTable *inTable, struct fieldVal *fieldList,
+void selectUniqueIntoTable(struct fieldedTable *inTable, struct newFieldInfo *fieldList,
     int keyFieldIx, struct fieldedTable *outTable)
 /* Populate out table with selected rows from newTable */
 {
@@ -139,10 +160,10 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
     char **inRow = fr->row;
     char *key = inRow[keyFieldIx];
     int i;
-    struct fieldVal *fv;
+    struct newFieldInfo *fv;
     for (i=0, fv=fieldList; i<outFieldCount && fv != NULL; ++i, fv = fv->next)
 	{
-	if (fv->type == vtConst)
+	if (fv->type == fvConst)
 	    outRow[i] = fv->val;
 	else
 	    outRow[i] = inRow[fv->oldIx];
@@ -173,6 +194,8 @@ verbose(1, "Read %d columns, %d rows from %s\n", inTable->fieldCount, inTable->r
 struct lineFile *lf = lineFileOpen(specFile, TRUE);
 makeDirsOnPath(outDir);
 
+/* Read in file as ra file stanzas that we convert into tableInfos. */
+struct newTableInfo *newTableList = NULL, *newTable;
 struct slPair *specStanza = NULL;
 while ((specStanza = raNextStanzAsPairs(lf)) != NULL)
     {
@@ -192,15 +215,13 @@ while ((specStanza = raNextStanzAsPairs(lf)) != NULL)
     char *fieldNames[fieldCount];
     int i;
     struct slPair *field;
-    struct fieldVal *fvList = NULL;
+    struct newFieldInfo *fvList = NULL;
     for (i=0, field=fieldList; i<fieldCount; ++i, field=field->next)
         {
 	char *newName = field->name;
-	struct fieldVal *fv = parseFieldVal(newName, field->val);
-	if (fv->type == vtVar)
+	struct newFieldInfo *fv = parseFieldVal(newName, field->val);
+	if (fv->type == fvVar)
 	    fv->oldIx = fieldedTableMustFindFieldIx(inTable, fv->val);
-	else if (fv->type == vtLink)
-	    errAbort("Can't handle links yet for %s", fv->val);
 	fieldNames[i] = newName;
 	slAddHead(&fvList, fv);
 	}
@@ -209,17 +230,48 @@ while ((specStanza = raNextStanzAsPairs(lf)) != NULL)
     outTable->startsSharp = inTable->startsSharp;
 
     /* Make sure that key field is actually in field list */
-    struct fieldVal *keyField = fieldValFind(fvList, keyFieldName);
+    struct newFieldInfo *keyField = findField(fvList, keyFieldName);
     if (keyField == NULL)
        errAbort("key field %s is not found in field list for %s\n", tableName, keyFieldName);
-    int keyFieldIx = keyField->oldIx;
 
+    /* Allocate structure to save results of this pass in and so so. */
+    AllocVar(newTable);
+    newTable->name = tableName;
+    newTable->keyField = keyFieldName;
+    newTable->fieldList = fvList;
+    newTable->table = outTable;
+    newTable->keyFieldIx = keyField->oldIx;
+    slAddHead(&newTableList, newTable);
+    }
+slReverse(&newTableList);
+
+/* Do links between tables */
+for (newTable = newTableList; newTable != NULL; newTable = newTable->next)
+    {
+    struct newFieldInfo *field;
+    for (field = newTable->fieldList; field != NULL; field = field->next)
+      {
+      if (field->type == fvLink)
+          {
+	  struct newTableInfo *linkedTable = findTable(newTableList, field->val);
+	  if (linkedTable == NULL)
+	     errAbort("@%s doesn't exist", field->name);
+	  field->oldIx = linkedTable->keyFieldIx;
+	  field->type = fvVar;
+	  }
+      }
+    }
+
+/* Output tables */
+for (newTable = newTableList; newTable != NULL; newTable = newTable->next)
+    {
     /* Populate table */
-    selectUniqueIntoTable(inTable, fvList, keyFieldIx, outTable);
+    struct fieldedTable *outTable = newTable->table;
+    selectUniqueIntoTable(inTable, newTable->fieldList, newTable->keyFieldIx, outTable);
 
     /* Create output file name and save file. */
     char outTabName[FILENAME_LEN];
-    safef(outTabName, sizeof(outTabName), "%s/%s.tsv", outDir, tableName);
+    safef(outTabName, sizeof(outTabName), "%s/%s.tsv", outDir, newTable->name);
     verbose(1, "Writing %s of %d fields %d rows\n",  
 	outTabName, outTable->fieldCount, outTable->rowCount);
     fieldedTableToTabFile(outTable, outTabName);
