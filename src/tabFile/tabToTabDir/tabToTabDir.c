@@ -106,14 +106,14 @@ AllocVar(fv);
 fv->name = cloneString(name);
 
 char *s = skipLeadingSpaces(input);
-char c = s[0];
-if (c == 0)
+if (isEmpty(s))
     {
     fv->type = fvVar;
     fv->val = cloneString(name);
     }
 else
     {
+    char c = s[0];
     if (c == '"' || c == '\'')
 	{
 	char *val = fv->val = cloneString(s);
