@@ -5,7 +5,7 @@ use warnings;
 
 my @orderList;	# asmId of the assemblies in order from the *.list files
 # the order to read the different .list files:
-my @classList = qw( mammal bird amphibian fish );
+my @classList = qw( mammal bird reptile amphibian fish );
 my %class;	# key is asmId, value is from class list
 my $assemblyCount = 0;
 
@@ -28,39 +28,42 @@ sub startHtml() {
 my $timeStamp = `date "+%F"`;
 chomp $timeStamp;
 
+# <html xmlns="http://www.w3.org/1999/xhtml">
+
 print <<"END"
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<!--#set var="TITLE" value="VGP - Vertebrate Genome Project assembly hub - $timeStamp" -->
+<!DOCTYPE HTML 4.01 Transitional>
+<!--#set var="TITLE" value="VGP - Vertebrate Genomes Project assembly hub" -->
 <!--#set var="ROOT" value="../.." -->
 
 <!--#include virtual="\$ROOT/inc/gbPageStartHardcoded.html" -->
 
-<h1>VGP - Vertebrate Genome Project assembly hub - $timeStamp</h1>
+<h1>VGP - Vertebrate Genomes Project assembly hub</h1>
 <p>
-This assembly hub contains some of the first complete assemblies released
+<a href='https://vertebrategenomesproject.org/' target=_blank>
+<img src='VGPlogo.png' width=280 alt='VGP logo'></a></p>
+<p>
+This assembly hub contains assemblies released
 by the <a href='https://vertebrategenomesproject.org/' target=_blank>
-<br><img src='VGPlogo.png' width=280 alt='VGP logo'><br>
-Vertebrate Genome Project.</a>
+Vertebrate Genomes Project.</a>
 </p>
 
 <h3>How to view the hub</h3>
 <p>
 You can load this hub from our
 <a href="https://genome.ucsc.edu/cgi-bin/hgHubConnect#publicHubs" target="_blank">Public Hubs</a> 
-page or by clicking these links to any of our official websites:</p>
+page or by clicking these links to any of our official websites:
 <ul>
   <li>
-    <a href="http://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=http://genome-test.gi.ucsc.edu/hubs/VGP/hub.txt&genome=GCF_004126475.1_mPhyDis1_v1.p"
+    <a href="http://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=http://genome-test.gi.ucsc.edu/hubs/VGP/hub.txt&amp;genome=GCF_004126475.1_mPhyDis1_v1.p"
     target="_blank">genome.ucsc.edu</a></li>
   <li> 
-    <a href="http://genome-euro.ucsc.edu/cgi-bin/hgGateway?hubUrl=http://genome-test.gi.ucsc.edu/hubs/VGP/hub.txt&genome=GCF_004126475.1_mPhyDis1_v1.p"
+    <a href="http://genome-euro.ucsc.edu/cgi-bin/hgGateway?hubUrl=http://genome-test.gi.ucsc.edu/hubs/VGP/hub.txt&amp;genome=GCF_004126475.1_mPhyDis1_v1.p"
     target="_blank">genome-euro.ucsc.edu</a></li>
   <li>
-    <a href="http://genome-asia.ucsc.edu/cgi-bin/hgGateway?hubUrl=http://genome-test.gi.ucsc.edu/hubs/VGP/hub.txt&genome=GCF_004126475.1_mPhyDis1_v1.p"
+    <a href="http://genome-asia.ucsc.edu/cgi-bin/hgGateway?hubUrl=http://genome-test.gi.ucsc.edu/hubs/VGP/hub.txt&amp;genome=GCF_004126475.1_mPhyDis1_v1.p"
     target="_blank">genome-asia.ucsc.edu</a></li>
 </ul>
+</p>
 
 <p>
 To manually attach this hub to other genome browsers:
@@ -74,17 +77,18 @@ To manually attach this hub to other genome browsers:
   <li>
     Once you have added the URL to the entry form, press the <em><strong>Add Hub</strong></em>
     button to add the hub.</li>
-</ol></p>
+</ol>
+</p>
 
 <p>
 After adding the hub, you will be redirected to the gateway page.  The
 genome assemblies can be selected from the <em>VGP Hub Assembly</em> dropdown menu.
 </p>
-<h3>See also: <a href='asmStatsVGP.html' target=_blank>assembly statistics</a> information</h3>
 <p>
-NOTE: <em>Click on the column headers to sort the table by that column</em>
+<h3>See also: <a href='asmStatsVGP.html' target=_blank>assembly statistics</a></h3>
 </p>
 <h3>Data resource links</h3>
+NOTE: <em>Click on the column headers to sort the table by that column</em>
 END
 }
 
@@ -99,7 +103,7 @@ print <<"END"
   <th>NCBI&nbsp;assembly</th>
   <th>bioSample</th><th>bioProject</th>
   <th>Taxon ID</th>
-  <th>assembly&nbsp;date</th>
+  <th>assembly&nbsp;date<br>VGP&nbsp;link</th>
   <th>class</th>
 </tr></thead><tbody>
 END
@@ -122,6 +126,8 @@ END
 ##############################################################################
 sub endHtml() {
 print <<"END"
+</div><!-- closing gbsPage from gbPageStartHardcoded.html -->
+</div><!-- closing container-fluid from gbPageStartHardcoded.html -->
 <!--#include virtual="\$ROOT/inc/gbFooterHardcoded.html"-->
 <script type="text/javascript" src="/js/sorttable.js"></script>
 </body></html>
@@ -191,13 +197,16 @@ sub tableContents() {
     close (FH);
     $commonName = $betterName{$asmId} if (exists($betterName{$asmId}));
     printf CN "%s\t%s\n", $commonName, $asmId;
-    printf "<tr><td align=center><a href='https://genome-test.gi.ucsc.edu/cgi-bin/hgGateway?hubUrl=http://genome-test.gi.ucsc.edu/hubs/VGP/hub.txt&genome=%s&position=lastDbPos' target=_blank>%s</a></td>\n", $asmId, $commonName;
+    printf "<tr><td align=center><a href='https://genome-test.gi.ucsc.edu/cgi-bin/hgGateway?hubUrl=http://genome-test.gi.ucsc.edu/hubs/VGP/hub.txt&amp;genome=%s&amp;position=lastDbPos' target=_blank>%s</a></td>\n", $asmId, $commonName;
     printf "    <td align=center><a href='https://genome-test.gi.ucsc.edu/hubs/VGP/genomes/%s/' target=_blank>%s</a></td>\n", $asmId, $sciName;
     printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/assembly/%s_%s/' target=_blank>%s</a></td>\n", $gcPrefix, $asmAcc, $asmId;
     printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/biosample/?term=%s' target=_blank>%s</a></td>\n", $bioSample, $bioSample;
     printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/bioproject/?term=%s' target=_blank>%s</a></td>\n", $bioProject, $bioProject;
     printf "    <td align=right><a href='https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=%d' target=_blank>%s</a></td>\n", $taxId, $taxId;
-    printf "    <td align=center>%s</td>\n", $asmDate;
+    my $sciNameUnderscore = $sciName;
+    $sciNameUnderscore =~ s/ /_/g;
+    $sciNameUnderscore = "Strigops_habroptilus" if ($sciName =~ m/Strigops habroptila/);
+    printf "    <td align=center><a href='https://vgp.github.io/genomeark/%s/' target=_blank>%s</a></td>\n", $sciNameUnderscore, $asmDate;
     printf "    <td align=right>%s</td>\n", $class{$asmId};
     printf "</tr>\n";
   }
@@ -208,8 +217,10 @@ sub tableContents() {
 ### main()
 ##############################################################################
 
+my $home = $ENV{'HOME'};
+my $srcDir = "$home/kent/src/hg/makeDb/doc/VGP";
 
-open (FH, "<commonNames.txt") or die "can not read commonNames.txt";
+open (FH, "<$srcDir/commonNames.txt") or die "can not read $srcDir/commonNames.txt";
 while (my $line = <FH>) {
   chomp $line;
   my ($asmId, $name) = split('\t', $line);
@@ -219,8 +230,7 @@ close (FH);
 
 
 foreach my $species (@classList) {
-  my $listFile = "${species}.list";
-  printf STDERR "%s\n", $listFile;
+  my $listFile = "$srcDir/${species}.list";
   open (FH, "<$listFile") or die "can not read $listFile";
   while (my $asmId = <FH>) {
     chomp $asmId;

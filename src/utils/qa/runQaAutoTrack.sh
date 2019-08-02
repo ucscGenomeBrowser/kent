@@ -73,14 +73,15 @@ then
 else
 	if [ -e  "$logDir/*.txt" ]
 	then
-		# Identify log files that are greater than 6 months old
-		# $1, $2, $3, and $4 are the db, table, date, and time respectively
+		# Identify log files that are greater than 6 months old.
+		# $1, $2, $3, and $4 are the db, table, date, and time respectively.
+		# $5 is the file extension (txt).
 		oldLogFiles=$(ls $logDir/*.txt | awk -v ymdOld=$logTooOld -F'.' '$3 <= ymdOld {print $1"."$2"."$3"."$4"."$5}')
 		# Remove these old log files
 		# Prevents log file directory from becoming overstuffed with files
 		for file in $(echo $oldLogFiles)
 		do
-			rm $file.txt
+			rm $file
 		done
 	fi
 
@@ -98,8 +99,8 @@ else
 		qaAutoTrack.sh hg38 gwasCatalog 
 	elif [[ $dayOfWeek == "Wednesday" ]]
 	then
-
-		qaAutoTrack.sh -b danRer7 grcIncidentDb
+		qaAutoTrack.sh -b danRer10 grcIncidentDb
+		qaAutoTrack.sh -b galGal5 grcIncidentDb
 		qaAutoTrack.sh -b hg19 grcIncidentDb
 		qaAutoTrack.sh -b hg38 grcIncidentDb
 		qaAutoTrack.sh -b mm9 grcIncidentDb

@@ -223,9 +223,12 @@ then
 fi
 
 # Set tooOld for different tables
-if  [[ "$tableName" == "clinvar" ]] || [[ "$tableName" == "grcIndcidentDb" ]]
-then 
+if  [[ "$tableName" == "clinvar" ]]
+then
 	tooOld=$(date -d "$currDate - 2 months" +%F)
+elif [[ "$tableName" == "grcIndcidentDb" ]]
+then
+	tooOld=$(date -d "$currDate - 6 months" +%F)
 else
 	tooOld=$(date -d "$currDate - 1 month" +%F)
 fi
@@ -253,22 +256,6 @@ then
 
 			rm -f $MYTEMPFILE
 		done
-	# GRC Incident track relies on remote file so curl must be used instead of stat
-	elif [[ $tableName == "grcIncidentDb" ]]
-	then
-		fileName=$(hgsql -Ne "SELECT * FROM $tableName LIMIT 1" $db)
-		# Use curl to get update time on file
-		tblDate=$(date -d "$(curl -s -v -I $fileName 2>&1 | grep '^< Last-Modified:'| cut -d ' ' -f3- )" '+%F %T')
-		MYTEMPFILE=$(mktemp --tmpdir tmp.XXXXXXXXXX.bed)
-		# featureBits doesn't work with bigBeds, need to turn into bed first
-		bigBedToBed $fileName $MYTEMPFILE
-		tblCov=$(featureBits -countGaps $db $MYTEMPFILE 2>&1)
-
-		outputCovDiff "$prevLogFile" "$tblCov" "$tableName" "$tblDate"
-		# Check for issues with table
-		checkForIssues "$tblDate" "$tooOld" "$tableName" "$percentDiff"
-			
-		rm -f $MYTEMPFILE
 	# Tests for all other bigBed based autopushed tracks (assuming they don't use remote bigBed files)
 	else
 		fileName=$(hgsql -Ne "SELECT * FROM $tableName LIMIT 1" $db)
