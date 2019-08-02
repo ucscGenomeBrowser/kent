@@ -20,8 +20,8 @@ errAbort(
   "   geoStormToHcaStorm in.tags srxToSrr.tab out.tags\n"
   "Where in.tags is geoToTagStorm output, srxToSrr.tab is a two column file with\n"
   "NCBI short read archive SRX IDs followed by SRR ones, and out.tags is the output\n"
-  "options:\n"
-  "   -xxx=XXX\n"
+  "\n"
+  "OBSOLETE - you probably want to use geoToHcaStorm instead"
   );
 }
 
