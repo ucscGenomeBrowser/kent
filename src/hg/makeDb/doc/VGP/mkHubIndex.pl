@@ -32,17 +32,19 @@ chomp $timeStamp;
 
 print <<"END"
 <!DOCTYPE HTML 4.01 Transitional>
-<!--#set var="TITLE" value="VGP - Vertebrate Genomes Project assembly hub - $timeStamp" -->
+<!--#set var="TITLE" value="VGP - Vertebrate Genomes Project assembly hub" -->
 <!--#set var="ROOT" value="../.." -->
 
 <!--#include virtual="\$ROOT/inc/gbPageStartHardcoded.html" -->
 
-<h1>VGP - Vertebrate Genomes Project assembly hub - $timeStamp</h1>
+<h1>VGP - Vertebrate Genomes Project assembly hub</h1>
 <p>
-This assembly hub contains some of the first complete assemblies released
+<a href='https://vertebrategenomesproject.org/' target=_blank>
+<img src='VGPlogo.png' width=280 alt='VGP logo'></a></p>
+<p>
+This assembly hub contains assemblies released
 by the <a href='https://vertebrategenomesproject.org/' target=_blank>
-Vertebrate Genomes Project.<br>
-<img src='VGPlogo.png' width=280 alt='VGP logo'></a>
+Vertebrate Genomes Project.</a>
 </p>
 
 <h3>How to view the hub</h3>
