@@ -289,7 +289,7 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
 	    tagStanzaAdd(storm, fileStanza, "file.paired_end", pairedEnd);
 	    char readIndex[16];
 	    safef(readIndex, sizeof(readIndex), "read%d", fileIx+1);
-	    tagStanzaAdd(storm, fileStanza, "flle.read_index", readIndex);
+	    tagStanzaAdd(storm, fileStanza, "file.read_index", readIndex);
 	    }
 	}
     }
