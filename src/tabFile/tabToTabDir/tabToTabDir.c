@@ -10,6 +10,7 @@
 #include "ra.h"
 #include "csv.h"
 #include "fieldedTable.h"
+#include "hmac.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -65,9 +66,11 @@ struct newFieldInfo
     struct newFieldInfo *next;	/* Might want to hang these on a list. */
     char *name;			/* Name of field in new table */
     enum fieldValType type;	/* Constant, link, or variable */
+    boolean justHash;		/* Just do hash of field */
     int oldIx;			/* For variable and link ones where field is in old table */
     char *val;			/* For constant ones the string value */
     int arrayIx;		/* If it's an array then the value */
+    struct newFieldInfo *link;	/* If it's fvLink then pointer to the linked field */
     };
 
 struct newFieldInfo *findField(struct newFieldInfo *list, char *name)
@@ -85,8 +88,7 @@ struct newTableInfo
     {
     struct newTableInfo *next;	/* Next in list */
     char *name;			/* Name of table */
-    char *keyField;		/* Key field within table */
-    int keyFieldIx;		/* Index of key field */
+    struct newFieldInfo *keyField;	/* Key field within table */
     struct newFieldInfo *fieldList; /* List of fields */
     struct fieldedTable *table;	    /* Table to fill in. */
     };
@@ -118,7 +120,15 @@ if (isEmpty(s))
     }
 else
     {
+    /* Set flag if we start with a hash */
     char c = s[0];
+    if (c == '#')
+        {
+	fv->justHash = TRUE;
+	s = skipLeadingSpaces(s+1);
+	c = s[0];
+	}
+
     if (c == '"' || c == '\'')
 	{
 	char *val = fv->val = cloneString(s);
@@ -177,9 +187,15 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
     char **inRow = fr->row;
     char *key = inRow[keyFieldIx];
     int i;
-    struct newFieldInfo *fv;
-    for (i=0, fv=fieldList; i<outFieldCount && fv != NULL; ++i, fv = fv->next)
+    struct newFieldInfo *unlinkedFv;
+    for (i=0, unlinkedFv=fieldList; i<outFieldCount && unlinkedFv != NULL; 
+	++i, unlinkedFv = unlinkedFv->next)
 	{
+	/* Skip through links. */
+	struct newFieldInfo *fv = unlinkedFv;
+	while (fv->type == fvLink)
+	    fv = fv->link;
+	
 	if (fv->type == fvConst)
 	    outRow[i] = fv->val;
 	else if (fv->type == fvVar)
@@ -196,12 +212,16 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 		    outRow[i] = "out of range";
 		    break;
 		    }
-		if (i >= fv->arrayIx)
+		if (j >= fv->arrayIx)
 		    {
 		    outRow[i] = cloneString(el);
 		    break;
 		    }
 		}
+	    }
+	if (fv->justHash)
+	    {
+	    outRow[i] = hmacSha1("key", outRow[i]);
 	    }
 	}
 
@@ -274,10 +294,9 @@ while ((specStanza = raNextStanzAsPairs(lf)) != NULL)
     /* Allocate structure to save results of this pass in and so so. */
     AllocVar(newTable);
     newTable->name = tableName;
-    newTable->keyField = keyFieldName;
+    newTable->keyField = keyField;
     newTable->fieldList = fvList;
     newTable->table = outTable;
-    newTable->keyFieldIx = keyField->oldIx;
     slAddHead(&newTableList, newTable);
     }
 slReverse(&newTableList);
@@ -293,8 +312,7 @@ for (newTable = newTableList; newTable != NULL; newTable = newTable->next)
 	  struct newTableInfo *linkedTable = findTable(newTableList, field->val);
 	  if (linkedTable == NULL)
 	     errAbort("@%s doesn't exist", field->name);
-	  field->oldIx = linkedTable->keyFieldIx;
-	  field->type = fvVar;
+	  field->link = linkedTable->keyField;
 	  }
       }
     }
@@ -304,7 +322,7 @@ for (newTable = newTableList; newTable != NULL; newTable = newTable->next)
     {
     /* Populate table */
     struct fieldedTable *outTable = newTable->table;
-    selectUniqueIntoTable(inTable, newTable->fieldList, newTable->keyFieldIx, outTable);
+    selectUniqueIntoTable(inTable, newTable->fieldList, newTable->keyField->oldIx, outTable);
 
     /* Create output file name and save file. */
     char outTabName[FILENAME_LEN];
