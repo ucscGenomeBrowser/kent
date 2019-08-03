@@ -5,8 +5,10 @@
 #include "hash.h"
 #include "options.h"
 #include "obscure.h"
+#include "sqlNum.h"
 #include "portable.h"
 #include "ra.h"
+#include "csv.h"
 #include "fieldedTable.h"
 
 void usage()
@@ -29,7 +31,9 @@ errAbort(
 "              ...\n"
 "if the sourceField is missing it is assumed to be a column of the same name in in.tsv\n"
 "The sourceField can either be a column name in the in.tsv, or a string enclosed literal\n"
-"or an @ followed by a table name, in which case it refers to the key of that table\n"
+"or an @ followed by a table name, in which case it refers to the key of that table.\n"
+"If the source column is in comma-separated-values format then the sourceField can include a\n"
+"constant array index to pick out an item from the csv list.\n"
 );
 }
 
@@ -52,7 +56,7 @@ return TRUE;
 enum fieldValType
 /* A type */
     {
-    fvVar, fvLink, fvConst, 
+    fvVar, fvArray, fvLink, fvConst, 
     };
 
 struct newFieldInfo
@@ -63,6 +67,7 @@ struct newFieldInfo
     enum fieldValType type;	/* Constant, link, or variable */
     int oldIx;			/* For variable and link ones where field is in old table */
     char *val;			/* For constant ones the string value */
+    int arrayIx;		/* If it's an array then the value */
     };
 
 struct newFieldInfo *findField(struct newFieldInfo *list, char *name)
@@ -129,11 +134,25 @@ else
 	    errAbort("Nothing following %c", c);
 	fv->type = fvLink;
 	}
-    else
+    else 
         {
 	char *val = fv->val = cloneString(s);
 	trimSpaces(val);
-	fv->type = fvVar;
+	char *arrayStart = strchr(val, '[');
+	if (arrayStart != NULL)
+	    {
+	    *arrayStart++ = 0;  // Erase '[' and skip over
+	    if (lastChar(arrayStart) != ']')
+		errAbort("Missing ']' in %s", s);
+	    trimLastChar(arrayStart);
+	    arrayStart = trimSpaces(arrayStart);
+	    fv->arrayIx = sqlUnsigned(arrayStart);
+	    fv->type = fvArray;
+	    }
+	else
+	    {  /* Default case, a normal field name */
+	    fv->type = fvVar;
+	    }
 	}
     }
 return fv;
@@ -151,6 +170,7 @@ char *outRow[outFieldCount];
 if (slCount(fieldList) != outFieldCount)	// A little cheap defensive programming on inputs
     internalErr();
 
+struct dyString *csvScratch = dyStringNew(0);
 for (fr = inTable->rowList; fr != NULL; fr = fr->next)
     {
     /* Create new row from a scan through old table */
@@ -162,8 +182,27 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 	{
 	if (fv->type == fvConst)
 	    outRow[i] = fv->val;
-	else
+	else if (fv->type == fvVar)
 	    outRow[i] = inRow[fv->oldIx];
+	else if (fv->type == fvArray)
+	    {
+	    char *csv = inRow[fv->oldIx];
+	    int j;
+	    for (j=0; ; ++j)
+	        {
+		char *el = csvParseNext(&csv, csvScratch);
+		if (el == NULL)
+		    {
+		    outRow[i] = "out of range";
+		    break;
+		    }
+		if (i >= fv->arrayIx)
+		    {
+		    outRow[i] = cloneString(el);
+		    break;
+		    }
+		}
+	    }
 	}
 
     struct fieldedRow *uniqFr = hashFindVal(uniqHash, key);
@@ -179,6 +218,7 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 		key, inTable->fields[keyFieldIx], outTable->name);
 	}
     }
+dyStringFree(&csvScratch);
 }
 
 void tabToTabDir(char *inTabFile, char *specFile, char *outDir)
@@ -217,7 +257,7 @@ while ((specStanza = raNextStanzAsPairs(lf)) != NULL)
         {
 	char *newName = field->name;
 	struct newFieldInfo *fv = parseFieldVal(newName, field->val);
-	if (fv->type == fvVar)
+	if (fv->type == fvVar || fv->type == fvArray)
 	    fv->oldIx = fieldedTableMustFindFieldIx(inTable, fv->val);
 	fieldNames[i] = newName;
 	slAddHead(&fvList, fv);
