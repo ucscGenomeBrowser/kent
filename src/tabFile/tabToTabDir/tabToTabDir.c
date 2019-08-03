@@ -35,6 +35,7 @@ errAbort(
 "or an @ followed by a table name, in which case it refers to the key of that table.\n"
 "If the source column is in comma-separated-values format then the sourceField can include a\n"
 "constant array index to pick out an item from the csv list.\n"
+"If sourceField begins with a #, a md5 hash of the value is used instead\n"
 );
 }
 
@@ -221,7 +222,7 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 	    }
 	if (fv->justHash)
 	    {
-	    outRow[i] = hmacSha1("key", outRow[i]);
+	    outRow[i] = hmacMd5("", outRow[i]);
 	    }
 	}
 
@@ -258,9 +259,13 @@ while ((specStanza = raNextStanzAsPairs(lf)) != NULL)
     {
     /* Parse out table name and key field name. */
     verbose(2, "Processing spec stanza of %d lines\n",  slCount(specStanza));
-    struct slPair *table = specStanza;
-    char *tableName = table->name;
-    char *keyFieldName = trimSpaces(table->val);
+    struct slPair *tableSl = specStanza;
+    if (!sameString(tableSl->name, "table"))
+        errAbort("stanza that doesn't start with 'table' ending line %d of %s",
+	    lf->lineIx, lf->fileName);
+    char *tableSpec = tableSl->val;
+    char *tableName = nextWord(&tableSpec);
+    char *keyFieldName = nextWord(&tableSpec);
     if (isEmpty(keyFieldName))
        errAbort("No key field for table %s.", tableName);
 
