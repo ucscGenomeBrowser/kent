@@ -542,7 +542,7 @@ if (sai->ss_family == AF_INET6)   //ipv6
 else if (sai->ss_family == AF_INET)  // ipv4
    return sizeof (struct sockaddr_in);
 else
-   errAbort("unknown ss_family %d in getSockSize", sai->ss_family);
+   errAbort("unknown ss_family %d in getSockSize6n4", sai->ss_family);
 return -1;  // make the compiler happy.
 }
 
@@ -580,7 +580,7 @@ else if (sai->ss_family == AF_INET)  // ipv4
         }
     }
 else
-   errAbort("unknown sai->sa_family=%d in getSockSize", sai->ss_family);
+   errAbort("unknown sai->sa_family=%d in getAddrAsString6n4", sai->ss_family);
 }
 
 
@@ -607,7 +607,7 @@ else if (sai->ss_family == AF_INET)  // ipv4
        errAbort("getnameinfo: %s\n", gai_strerror(s));
     }
 else
-   errAbort("unknown sai->sa_family=%d in getSockSize", sai->ss_family);
+   errAbort("unknown sai->sa_family=%d in getAddrAndPortAsString6n4", sai->ss_family);
 }
 
 
