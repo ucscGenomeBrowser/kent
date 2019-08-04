@@ -703,10 +703,10 @@ sub doGatewayPage {
   my $photoJpg = "noPhoto";
   my $photoCredit = "noPhoto";
   my $photoLink = "";
-  if ( -s "$runDir/photo/$species.jpg" ) {
+  if ( -s "$runDir/../photo/$species.jpg" ) {
      $photoJpg = "../photo/\${species}.jpg";
      $photoCredit = "../photo/photoCredits.txt";
-     $photoLink = "ln -s ../photo/\${species}.jpg ."
+     $photoLink = "rm -f \${species}.jpg; ln -s ../photo/\${species}.jpg ."
   } else {
      printf STDERR "# gatewayPage: warning: no photograph available\n";
   }
@@ -715,19 +715,14 @@ sub doGatewayPage {
 export asmId=$asmId
 export species=$species
 
-if [ ../download/\${asmId}_assembly_report.txt -nt \$asmId.description.html ]; then
-  \$HOME/kent/src/hg/utils/automation/asmHubGatewayPage.pl \\
+\$HOME/kent/src/hg/utils/automation/asmHubGatewayPage.pl \\
      ../download/\${asmId}_assembly_report.txt ../\${asmId}.chrom.sizes \\
         $photoJpg $photoCredit \\
            > \$asmId.description.html 2> \$asmId.names.tab
-  \$HOME/kent/src/hg/utils/automation/genbank/buildStats.pl \\
+\$HOME/kent/src/hg/utils/automation/genbank/buildStats.pl \\
        ../\$asmId.chrom.sizes 2> \$asmId.build.stats.txt
-  touch -r ../download/\${asmId}_assembly_report.txt \$asmId.description.html
-  $photoLink
-else
-  printf "# gatewayPage step previously completed\\n" 1>&2
-  exit 0
-fi
+touch -r ../download/\${asmId}_assembly_report.txt \$asmId.description.html
+$photoLink
 _EOF_
   );
   $bossScript->execute();

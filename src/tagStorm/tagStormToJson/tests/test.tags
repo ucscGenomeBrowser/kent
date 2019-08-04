@@ -10,3 +10,11 @@ campus ucsc
     college nine
     hasParking No
     students 120
+
+campus ucb
+	
+	college letters and sciences
+	students 20000
+
+	college engineering
+	students 10000

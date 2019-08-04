@@ -14,7 +14,8 @@ ALL_APPS = \
 	tabInfo \
 	tabQuery \
 	tabRepeatedFieldsToArrayField \
-	tabToHtml
+	tabToHtml \
+	tabToTabDir
 
 all: $(ALL_APPS:%=%.all)
 

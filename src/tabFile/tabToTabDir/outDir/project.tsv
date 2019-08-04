@@ -1,0 +1,2 @@
+#project_name	title	summary	lab	geo_series	ncbi_bio_project
+quakeBrainGeo1	A survey of human brain transcriptome diversity at the single cell level	We used single cell RNA sequencing on 466 cells to capture the cellular complexity of the adult and fetal human brain at a whole transcriptome level. Healthy adult temporal lobe tissue was obtained from epileptic patients during temporal lobectomy for medically refractory seizures. We were able to classify individual cells into all of the major neuronal, glial, and vascular cell types in the brain.	quake	GSE67835	PRJNA281204

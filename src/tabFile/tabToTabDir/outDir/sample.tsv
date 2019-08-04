@@ -1,0 +1,467 @@
+#sample	sample_label	cell_count	access	lab_quake_cell
+GSM1657871	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078217.C03
+GSM1657872	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078217.C04
+GSM1657873	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078217.C06
+GSM1657874	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078217.C07
+GSM1657875	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078217.C08
+GSM1657876	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078217.C09
+GSM1657877	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078217.C14
+GSM1657878	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078217.C16
+GSM1657879	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078217.C17
+GSM1657880	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078217.C18
+GSM1657881	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078217.C20
+GSM1657882	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078217.C23
+GSM1657883	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078217.C28
+GSM1657884	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078217.C29
+GSM1657885	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078217.C32
+GSM1657886	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078217.C33
+GSM1657887	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078217.C39
+GSM1657888	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078217.C40
+GSM1657889	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078217.C47
+GSM1657890	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078217.C52
+GSM1657891	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078217.C56
+GSM1657892	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078217.C58
+GSM1657893	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078217.C59
+GSM1657894	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078217.C60
+GSM1657895	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078217.C61
+GSM1657896	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078217.C66
+GSM1657897	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078217.C72
+GSM1657898	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078217.C80
+GSM1657899	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078217.C87
+GSM1657900	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078217.C89
+GSM1657901	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078217.C91
+GSM1657902	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078217.C94
+GSM1657903	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078217.C96
+GSM1657904	hippocampus - healthy tissue from epileptic patient	1	all	1772078218.C05
+GSM1657905	hippocampus - healthy tissue from epileptic patient	1	all	1772078218.C08
+GSM1657906	hippocampus - healthy tissue from epileptic patient	1	all	1772078218.C09
+GSM1657907	hippocampus - healthy tissue from epileptic patient	1	all	1772078218.C13
+GSM1657908	hippocampus - healthy tissue from epileptic patient	1	all	1772078218.C18
+GSM1657909	hippocampus - healthy tissue from epileptic patient	1	all	1772078218.C23
+GSM1657910	hippocampus - healthy tissue from epileptic patient	1	all	1772078218.C27
+GSM1657911	hippocampus - healthy tissue from epileptic patient	1	all	1772078218.C29
+GSM1657912	hippocampus - healthy tissue from epileptic patient	1	all	1772078218.C32
+GSM1657913	hippocampus - healthy tissue from epileptic patient	1	all	1772078218.C34
+GSM1657914	hippocampus - healthy tissue from epileptic patient	1	all	1772078218.C43
+GSM1657915	hippocampus - healthy tissue from epileptic patient	1	all	1772078218.C44
+GSM1657916	hippocampus - healthy tissue from epileptic patient	1	all	1772078218.C47
+GSM1657917	hippocampus - healthy tissue from epileptic patient	1	all	1772078218.C48
+GSM1657918	hippocampus - healthy tissue from epileptic patient	1	all	1772078218.C53
+GSM1657919	hippocampus - healthy tissue from epileptic patient	1	all	1772078218.C55
+GSM1657920	hippocampus - healthy tissue from epileptic patient	1	all	1772078218.C56
+GSM1657921	hippocampus - healthy tissue from epileptic patient	1	all	1772078218.C58
+GSM1657922	hippocampus - healthy tissue from epileptic patient	1	all	1772078218.C61
+GSM1657923	hippocampus - healthy tissue from epileptic patient	1	all	1772078218.C71
+GSM1657924	hippocampus - healthy tissue from epileptic patient	1	all	1772078218.C85
+GSM1657925	hippocampus - healthy tissue from epileptic patient	1	all	1772078218.C88
+GSM1657926	hippocampus - healthy tissue from epileptic patient	1	all	1772078218.C89
+GSM1657927	hippocampus - healthy tissue from epileptic patient	1	all	1772078218.C93
+GSM1657928	hippocampus - healthy tissue from epileptic patient	1	all	1772078218.C95
+GSM1657929	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C11
+GSM1657930	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C12
+GSM1657931	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C16
+GSM1657932	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C17
+GSM1657933	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C19
+GSM1657934	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C25
+GSM1657935	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C26
+GSM1657936	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C27
+GSM1657937	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C28
+GSM1657938	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C30
+GSM1657939	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C31
+GSM1657940	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C32
+GSM1657941	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C33
+GSM1657942	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C34
+GSM1657943	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C36
+GSM1657944	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C38
+GSM1657945	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C40
+GSM1657946	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C41
+GSM1657947	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C45
+GSM1657948	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C46
+GSM1657949	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C47
+GSM1657950	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C49
+GSM1657951	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C54
+GSM1657952	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C56
+GSM1657953	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C57
+GSM1657954	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C61
+GSM1657955	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C65
+GSM1657956	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C66
+GSM1657957	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C70
+GSM1657958	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C74
+GSM1657959	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C77
+GSM1657960	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C89
+GSM1657961	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C90
+GSM1657962	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078236.C93
+GSM1657963	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078237.C06
+GSM1657964	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078237.C08
+GSM1657965	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078237.C11
+GSM1657966	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078237.C13
+GSM1657967	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078237.C14
+GSM1657968	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078237.C15
+GSM1657969	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078237.C19
+GSM1657970	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078237.C21
+GSM1657971	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078237.C26
+GSM1657972	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078237.C28
+GSM1657973	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078237.C29
+GSM1657974	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078237.C31
+GSM1657975	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078237.C40
+GSM1657976	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078237.C42
+GSM1657977	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078237.C44
+GSM1657978	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078237.C47
+GSM1657979	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078237.C49
+GSM1657980	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078237.C52
+GSM1657981	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078237.C55
+GSM1657982	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078237.C56
+GSM1657983	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078237.C58
+GSM1657984	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078237.C60
+GSM1657985	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078237.C61
+GSM1657986	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078237.C62
+GSM1657987	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078237.C74
+GSM1657988	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078237.C79
+GSM1657989	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078237.C83
+GSM1657990	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078237.C84
+GSM1657991	temporal lobe cortex - healthy tissue from epileptic patient	1	all	1772078237.C92
+GSM1657992	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID12.C05
+GSM1657993	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID12.C23
+GSM1657994	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID12.C73
+GSM1657995	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID12.C84
+GSM1657996	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID12.C87
+GSM1657997	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID14.C08
+GSM1657998	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID14.C13
+GSM1657999	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID14.C29
+GSM1658000	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID14.C45
+GSM1658001	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID14.C89
+GSM1658002	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID15.C20
+GSM1658003	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID15.C54
+GSM1658004	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID15.C69
+GSM1658005	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID15.C86
+GSM1658006	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C01
+GSM1658007	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C02
+GSM1658008	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C03
+GSM1658009	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C07
+GSM1658010	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C08
+GSM1658011	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C09
+GSM1658012	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C10
+GSM1658013	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C11
+GSM1658014	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C12
+GSM1658015	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C13
+GSM1658016	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C14
+GSM1658017	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C15
+GSM1658018	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C16
+GSM1658019	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C17
+GSM1658020	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C18
+GSM1658021	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C19
+GSM1658022	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C21
+GSM1658023	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C22
+GSM1658024	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C24
+GSM1658025	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C26
+GSM1658026	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C27
+GSM1658027	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C28
+GSM1658028	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C29
+GSM1658029	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C30
+GSM1658030	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C31
+GSM1658031	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C32
+GSM1658032	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C33
+GSM1658033	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C34
+GSM1658034	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C36
+GSM1658035	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C38
+GSM1658036	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C39
+GSM1658037	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C40
+GSM1658038	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C41
+GSM1658039	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C42
+GSM1658040	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C43
+GSM1658041	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C44
+GSM1658042	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C45
+GSM1658043	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C46
+GSM1658044	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C47
+GSM1658045	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C48
+GSM1658046	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C49
+GSM1658047	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C50
+GSM1658048	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C51
+GSM1658049	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C52
+GSM1658050	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C56
+GSM1658051	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C57
+GSM1658052	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C58
+GSM1658053	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C59
+GSM1658054	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C60
+GSM1658055	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C61
+GSM1658056	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C62
+GSM1658057	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C63
+GSM1658058	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C64
+GSM1658059	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C65
+GSM1658060	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C66
+GSM1658061	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C67
+GSM1658062	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C68
+GSM1658063	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C69
+GSM1658064	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C71
+GSM1658065	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C73
+GSM1658066	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C75
+GSM1658067	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C76
+GSM1658068	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C77
+GSM1658069	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C78
+GSM1658070	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C79
+GSM1658071	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C80
+GSM1658072	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C81
+GSM1658073	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C82
+GSM1658074	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C83
+GSM1658075	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C84
+GSM1658076	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C85
+GSM1658077	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C86
+GSM1658078	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C87
+GSM1658079	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C89
+GSM1658080	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C90
+GSM1658081	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C92
+GSM1658082	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID2.C93
+GSM1658083	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID3.C01
+GSM1658084	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID3.C05
+GSM1658085	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID3.C06
+GSM1658086	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID3.C07
+GSM1658087	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID3.C09
+GSM1658088	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID3.C11
+GSM1658089	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID3.C12
+GSM1658090	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID3.C14
+GSM1658091	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID3.C23
+GSM1658092	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID3.C25
+GSM1658093	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID3.C32
+GSM1658094	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID3.C37
+GSM1658095	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID3.C38
+GSM1658096	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID3.C51
+GSM1658097	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID3.C52
+GSM1658098	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID3.C53
+GSM1658099	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID3.C54
+GSM1658100	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID3.C56
+GSM1658101	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID3.C61
+GSM1658102	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID3.C62
+GSM1658103	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID3.C65
+GSM1658104	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID3.C69
+GSM1658105	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID3.C71
+GSM1658106	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID3.C72
+GSM1658107	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID3.C74
+GSM1658108	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID3.C75
+GSM1658109	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID3.C76
+GSM1658110	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID3.C80
+GSM1658111	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID3.C81
+GSM1658112	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID3.C84
+GSM1658113	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID3.C85
+GSM1658114	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID3.C86
+GSM1658115	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID3.C91
+GSM1658116	hippocampus - healthy tissue from epileptic patient	1	all	nochipID5.C04
+GSM1658117	hippocampus - healthy tissue from epileptic patient	1	all	nochipID5.C05
+GSM1658118	hippocampus - healthy tissue from epileptic patient	1	all	nochipID5.C18
+GSM1658119	hippocampus - healthy tissue from epileptic patient	1	all	nochipID5.C19
+GSM1658120	hippocampus - healthy tissue from epileptic patient	1	all	nochipID5.C42
+GSM1658121	hippocampus - healthy tissue from epileptic patient	1	all	nochipID5.C44
+GSM1658122	hippocampus - healthy tissue from epileptic patient	1	all	nochipID5.C45
+GSM1658123	hippocampus - healthy tissue from epileptic patient	1	all	nochipID5.C54
+GSM1658124	hippocampus - healthy tissue from epileptic patient	1	all	nochipID5.C65
+GSM1658125	hippocampus - healthy tissue from epileptic patient	1	all	nochipID5.C72
+GSM1658126	hippocampus - healthy tissue from epileptic patient	1	all	nochipID5.C91
+GSM1658127	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C01
+GSM1658128	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C02
+GSM1658129	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C05
+GSM1658130	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C06
+GSM1658131	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C08
+GSM1658132	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C11
+GSM1658133	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C12
+GSM1658134	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C13
+GSM1658135	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C14
+GSM1658136	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C17
+GSM1658137	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C19
+GSM1658138	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C20
+GSM1658139	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C22
+GSM1658140	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C23
+GSM1658141	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C25
+GSM1658142	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C28
+GSM1658143	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C29
+GSM1658144	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C30
+GSM1658145	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C32
+GSM1658146	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C36
+GSM1658147	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C37
+GSM1658148	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C39
+GSM1658149	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C40
+GSM1658150	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C41
+GSM1658151	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C42
+GSM1658152	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C43
+GSM1658153	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C45
+GSM1658154	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C48
+GSM1658155	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C49
+GSM1658156	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C50
+GSM1658157	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C52
+GSM1658158	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C53
+GSM1658159	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C54
+GSM1658160	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C55
+GSM1658161	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C56
+GSM1658162	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C57
+GSM1658163	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C60
+GSM1658164	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C61
+GSM1658165	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C64
+GSM1658166	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C65
+GSM1658167	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C66
+GSM1658168	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C67
+GSM1658169	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C70
+GSM1658170	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C75
+GSM1658171	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C77
+GSM1658172	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C78
+GSM1658173	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C79
+GSM1658174	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C81
+GSM1658175	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C82
+GSM1658176	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C84
+GSM1658177	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C85
+GSM1658178	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C87
+GSM1658179	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C88
+GSM1658180	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C90
+GSM1658181	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C92
+GSM1658182	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C95
+GSM1658183	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID8.C96
+GSM1658184	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID9.C01
+GSM1658185	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID9.C02
+GSM1658186	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID9.C04
+GSM1658187	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID9.C09
+GSM1658188	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID9.C14
+GSM1658189	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID9.C18
+GSM1658190	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID9.C26
+GSM1658191	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID9.C37
+GSM1658192	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID9.C42
+GSM1658193	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID9.C57
+GSM1658194	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID9.C59
+GSM1658195	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID9.C62
+GSM1658196	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID9.C65
+GSM1658197	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID9.C74
+GSM1658198	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID9.C75
+GSM1658199	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID9.C84
+GSM1658200	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID9.C85
+GSM1658201	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID9.C87
+GSM1658202	temporal lobe cortex - healthy tissue from epileptic patient	1	all	nochipID9.C92
+GSM1658203	fetal brain cortex	1	all	nochipID10.C02
+GSM1658204	fetal brain cortex	1	all	nochipID10.C03
+GSM1658205	fetal brain cortex	1	all	nochipID10.C05
+GSM1658206	fetal brain cortex	1	all	nochipID10.C07
+GSM1658207	fetal brain cortex	1	all	nochipID10.C11
+GSM1658208	fetal brain cortex	1	all	nochipID10.C16
+GSM1658209	fetal brain cortex	1	all	nochipID10.C17
+GSM1658210	fetal brain cortex	1	all	nochipID10.C19
+GSM1658211	fetal brain cortex	1	all	nochipID10.C25
+GSM1658212	fetal brain cortex	1	all	nochipID10.C26
+GSM1658213	fetal brain cortex	1	all	nochipID10.C37
+GSM1658214	fetal brain cortex	1	all	nochipID10.C39
+GSM1658215	fetal brain cortex	1	all	nochipID10.C42
+GSM1658216	fetal brain cortex	1	all	nochipID10.C44
+GSM1658217	fetal brain cortex	1	all	nochipID10.C47
+GSM1658218	fetal brain cortex	1	all	nochipID10.C49
+GSM1658219	fetal brain cortex	1	all	nochipID10.C50
+GSM1658220	fetal brain cortex	1	all	nochipID10.C53
+GSM1658221	fetal brain cortex	1	all	nochipID10.C58
+GSM1658222	fetal brain cortex	1	all	nochipID10.C65
+GSM1658223	fetal brain cortex	1	all	nochipID10.C74
+GSM1658224	fetal brain cortex	1	all	nochipID10.C75
+GSM1658225	fetal brain cortex	1	all	nochipID10.C85
+GSM1658226	fetal brain cortex	1	all	nochipID10.C88
+GSM1658227	fetal brain cortex	1	all	nochipID10.C93
+GSM1658228	fetal brain cortex	1	all	nochipID10.C94
+GSM1658229	fetal brain cortex	1	all	nochipID11.C02
+GSM1658230	fetal brain cortex	1	all	nochipID11.C03
+GSM1658231	fetal brain cortex	1	all	nochipID11.C06
+GSM1658232	fetal brain cortex	1	all	nochipID11.C07
+GSM1658233	fetal brain cortex	1	all	nochipID11.C08
+GSM1658234	fetal brain cortex	1	all	nochipID11.C10
+GSM1658235	fetal brain cortex	1	all	nochipID11.C15
+GSM1658236	fetal brain cortex	1	all	nochipID11.C17
+GSM1658237	fetal brain cortex	1	all	nochipID11.C19
+GSM1658238	fetal brain cortex	1	all	nochipID11.C20
+GSM1658239	fetal brain cortex	1	all	nochipID11.C21
+GSM1658240	fetal brain cortex	1	all	nochipID11.C22
+GSM1658241	fetal brain cortex	1	all	nochipID11.C23
+GSM1658242	fetal brain cortex	1	all	nochipID11.C25
+GSM1658243	fetal brain cortex	1	all	nochipID11.C30
+GSM1658244	fetal brain cortex	1	all	nochipID11.C37
+GSM1658245	fetal brain cortex	1	all	nochipID11.C48
+GSM1658246	fetal brain cortex	1	all	nochipID11.C49
+GSM1658247	fetal brain cortex	1	all	nochipID11.C50
+GSM1658248	fetal brain cortex	1	all	nochipID11.C53
+GSM1658249	fetal brain cortex	1	all	nochipID11.C54
+GSM1658251	fetal brain cortex	1	all	nochipID11.C55
+GSM1658253	fetal brain cortex	1	all	nochipID11.C56
+GSM1658255	fetal brain cortex	1	all	nochipID11.C57
+GSM1658257	fetal brain cortex	1	all	nochipID11.C58
+GSM1658259	fetal brain cortex	1	all	nochipID11.C59
+GSM1658262	fetal brain cortex	1	all	nochipID11.C60
+GSM1658264	fetal brain cortex	1	all	nochipID11.C61
+GSM1658266	fetal brain cortex	1	all	nochipID11.C62
+GSM1658268	fetal brain cortex	1	all	nochipID11.C63
+GSM1658270	fetal brain cortex	1	all	nochipID11.C64
+GSM1658272	fetal brain cortex	1	all	nochipID11.C66
+GSM1658275	fetal brain cortex	1	all	nochipID11.C68
+GSM1658277	fetal brain cortex	1	all	nochipID11.C69
+GSM1658279	fetal brain cortex	1	all	nochipID11.C75
+GSM1658281	fetal brain cortex	1	all	nochipID11.C76
+GSM1658284	fetal brain cortex	1	all	nochipID11.C77
+GSM1658286	fetal brain cortex	1	all	nochipID11.C78
+GSM1658288	fetal brain cortex	1	all	nochipID11.C79
+GSM1658290	fetal brain cortex	1	all	nochipID11.C81
+GSM1658292	fetal brain cortex	1	all	nochipID11.C82
+GSM1658294	fetal brain cortex	1	all	nochipID11.C83
+GSM1658297	fetal brain cortex	1	all	nochipID11.C84
+GSM1658299	fetal brain cortex	1	all	nochipID11.C86
+GSM1658301	fetal brain cortex	1	all	nochipID11.C91
+GSM1658304	fetal brain cortex	1	all	nochipID11.C93
+GSM1658305	fetal brain cortex	1	all	nochipID13.C07
+GSM1658306	fetal brain cortex	1	all	nochipID13.C11
+GSM1658307	fetal brain cortex	1	all	nochipID13.C12
+GSM1658308	fetal brain cortex	1	all	nochipID13.C14
+GSM1658309	fetal brain cortex	1	all	nochipID13.C15
+GSM1658310	fetal brain cortex	1	all	nochipID13.C17
+GSM1658311	fetal brain cortex	1	all	nochipID13.C21
+GSM1658312	fetal brain cortex	1	all	nochipID13.C25
+GSM1658313	fetal brain cortex	1	all	nochipID13.C28
+GSM1658314	fetal brain cortex	1	all	nochipID13.C32
+GSM1658315	fetal brain cortex	1	all	nochipID13.C36
+GSM1658316	fetal brain cortex	1	all	nochipID13.C45
+GSM1658317	fetal brain cortex	1	all	nochipID13.C46
+GSM1658318	fetal brain cortex	1	all	nochipID13.C48
+GSM1658319	fetal brain cortex	1	all	nochipID13.C50
+GSM1658320	fetal brain cortex	1	all	nochipID13.C55
+GSM1658321	fetal brain cortex	1	all	nochipID13.C57
+GSM1658322	fetal brain cortex	1	all	nochipID13.C58
+GSM1658323	fetal brain cortex	1	all	nochipID13.C59
+GSM1658324	fetal brain cortex	1	all	nochipID13.C61
+GSM1658325	fetal brain cortex	1	all	nochipID13.C63
+GSM1658326	fetal brain cortex	1	all	nochipID13.C64
+GSM1658327	fetal brain cortex	1	all	nochipID13.C66
+GSM1658328	fetal brain cortex	1	all	nochipID13.C67
+GSM1658329	fetal brain cortex	1	all	nochipID13.C68
+GSM1658330	fetal brain cortex	1	all	nochipID13.C72
+GSM1658331	fetal brain cortex	1	all	nochipID13.C73
+GSM1658332	fetal brain cortex	1	all	nochipID13.C74
+GSM1658333	fetal brain cortex	1	all	nochipID13.C75
+GSM1658334	fetal brain cortex	1	all	nochipID13.C80
+GSM1658335	fetal brain cortex	1	all	nochipID13.C84
+GSM1658336	fetal brain cortex	1	all	nochipID13.C87
+GSM1658337	fetal brain cortex	1	all	nochipID13.C93
+GSM1658338	fetal brain cortex	1	all	nochipID4.C03
+GSM1658339	fetal brain cortex	1	all	nochipID4.C04
+GSM1658340	fetal brain cortex	1	all	nochipID4.C10
+GSM1658341	fetal brain cortex	1	all	nochipID4.C14
+GSM1658342	fetal brain cortex	1	all	nochipID4.C18
+GSM1658343	fetal brain cortex	1	all	nochipID4.C19
+GSM1658344	fetal brain cortex	1	all	nochipID4.C20
+GSM1658345	fetal brain cortex	1	all	nochipID4.C21
+GSM1658346	fetal brain cortex	1	all	nochipID4.C33
+GSM1658347	fetal brain cortex	1	all	nochipID4.C34
+GSM1658348	fetal brain cortex	1	all	nochipID4.C38
+GSM1658349	fetal brain cortex	1	all	nochipID4.C39
+GSM1658350	fetal brain cortex	1	all	nochipID4.C41
+GSM1658351	fetal brain cortex	1	all	nochipID4.C42
+GSM1658352	fetal brain cortex	1	all	nochipID4.C44
+GSM1658353	fetal brain cortex	1	all	nochipID4.C49
+GSM1658354	fetal brain cortex	1	all	nochipID4.C52
+GSM1658355	fetal brain cortex	1	all	nochipID4.C53
+GSM1658356	fetal brain cortex	1	all	nochipID4.C59
+GSM1658357	fetal brain cortex	1	all	nochipID4.C62
+GSM1658358	fetal brain cortex	1	all	nochipID4.C63
+GSM1658359	fetal brain cortex	1	all	nochipID4.C66
+GSM1658360	fetal brain cortex	1	all	nochipID4.C74
+GSM1658361	fetal brain cortex	1	all	nochipID4.C77
+GSM1658362	fetal brain cortex	1	all	nochipID4.C78
+GSM1658363	fetal brain cortex	1	all	nochipID4.C84
+GSM1658364	fetal brain cortex	1	all	nochipID4.C89
+GSM1658365	fetal brain cortex	1	all	nochipID4.C95
+GSM1658366	fetal brain cortex	1	all	nochipID4.C96
