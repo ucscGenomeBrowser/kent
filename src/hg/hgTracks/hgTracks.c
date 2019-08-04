@@ -10290,6 +10290,5 @@ void labelTrackAsFiltered(struct track *tg)
 {
 char *oldLabel = tg->longLabel;
 tg->longLabel = catTwoStrings(oldLabel, " (filter activated)");
-freeMem(oldLabel);
 }
 
