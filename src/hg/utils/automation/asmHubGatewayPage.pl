@@ -277,7 +277,7 @@ printf "<!-- Display image in righthand corner -->
 <table align=right border=0 width=%d height=%d>
   <tr><td align=RIGHT><a href=\"https://www.ncbi.nlm.nih.gov/assembly/%s\"
     target=_blank>
-    <img src=\"../hubs/ncbiAssemblies/%s/html/%s\" width=%d height=%d alt=\"%s\"></a>
+    <img src=\"/hubs/VGP/genomes/%s/html/%s\" width=%d height=%d alt=\"%s\"></a>
   </td></tr>
   <tr><td align=right>
     <font size=-1> <em>%s</em><BR>
@@ -287,7 +287,7 @@ printf "<!-- Display image in righthand corner -->
     </font>
   </td></tr>
 </table>
-\n", $imageWidth+$imageWidthBorder, $imageHeight, $asmAccession, $ftpName, $imageName, $imageWidth, $imageHeight, $commonName, $orgName, $photoCreditURL, $photoCreditName;
+\n", $imageWidth+$imageWidthBorder, $imageHeight, $asmAccession, $asmId, $imageName, $imageWidth, $imageHeight, $commonName, $orgName, $photoCreditURL, $photoCreditName;
 }
 
 my $sciNameUnderscore = $orgName;

@@ -5,6 +5,7 @@
 #include "options.h"
 #include "obscure.h"
 #include "tagStorm.h"
+#include "fieldedTable.h"
 #include "csv.h"
 
 void usage()
@@ -13,7 +14,13 @@ void usage()
 errAbort(
   "geoToHcaStorm - Convert geo tag storm to hca tag storm.  Both are intermediate representations.\n"
   "usage:\n"
-  "   geoToHcaStorm geoIn.tags hcaOut.tags\n"
+  "   geoToHcaStorm geoIn.tags sraTable.tsv seqType hcaOut.tags\n"
+  "where:\n"
+  "   geoIn.tags is the output of geoToTagStorm\n"
+  "   sraTable.tsv contains the fields Experiment_s, Run_s, and possibly more.\n"
+  "      normally it is gotten off the NCBI web site\n"
+  "   seqType is one of single, paired, or 10x\n"
+  "   hcaOut.tags is the output tagStorm\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -200,47 +207,7 @@ if (mergeAddress(stanza, dy, sampleComponents, ArraySize(sampleComponents)))
 dyStringFree(&dy);
 }
 
-
-#ifdef OLD
-void fixProtocols(struct tagStorm *storm, struct tagStanza *stanza, void *context)
-/* Convert the various protocols in sample to and array of protocol descriptions and
- * an array of types.  This helps us be compatible with array express, which has
- * an unbounded set of protocol types */
-{
-struct protocolInfo { char *tag, *type;} info[] = 
-    {
-       {"sample.growth_protocol", "growth protocol",},
-       {"sample.treatment_protocol", "treatment protocol",},
-       {"sample.extract_protocol", "nucleic acid library construction protocol",},
-    };
-struct dyString *protocol = dyStringNew(0);
-struct dyString *type = dyStringNew(0);
-struct dyString *scratch = dyStringNew(0);
-
-int i;
-for (i=0; i<ArraySize(info); ++i)
-    {
-    char *pro = tagFindVal(stanza, info[i].tag);
-    if (pro != NULL)
-	{
-	char *escaped = csvParseNext(&pro, scratch);
-        csvEscapeAndAppend(protocol, escaped);
-	csvEscapeAndAppend(type, info[i].type);
-	}
-    }
-
-if (protocol->stringSize > 0)
-    {
-    tagStanzaAppend(storm, stanza, "sample.protocols", protocol->string);
-    tagStanzaAppend(storm, stanza, "sample.protocol_types", type->string);
-    }
-dyStringFree(&scratch);
-dyStringFree(&protocol);
-dyStringFree(&type);
-}
-#endif /* OLD */
-
-void geoToHcaStorm(char *inTags, char *output)
+void geoToHcaStorm(char *inTags, char *inTable, char *seqType, char *output)
 /* geoToHcaStorm - Convert output of geoToTagStorm to something closer to what the Human Cell 
  *  Atlas wants.. */
 {
@@ -255,6 +222,78 @@ tagStormTraverse(storm, storm->forest, NULL, mergeAddresses);
 /* Do simple subsitutions. */
 tagStormSubArray(storm, substitutions, ArraySize(substitutions));
 
+/* Read in SRA table and make up array of "sra." field names. */
+char *requiredFields[] = {"Experiment_s", "Run_s"};
+struct fieldedTable *table = fieldedTableFromTabFile(inTable, inTable, 
+	requiredFields, ArraySize(requiredFields));
+int joinIx = fieldedTableMustFindFieldIx(table, "Experiment_s");
+int runIx = fieldedTableMustFindFieldIx(table, "Run_s");
+char *sraFields[table->fieldCount];
+int i;
+for (i=0; i<table->fieldCount; ++i)
+    {
+    char *field = table->fields[i];
+    char buf[512];
+    safef(buf, sizeof(buf), "sra.%s", table->fields[i]);
+    if (endsWith(field, "_l") || endsWith(field, "_s"))
+        chopSuffixAt(buf, '_');
+    sraFields[i] = cloneString(buf);
+    }
+
+/* Join based on sra_experiment/Experiment_s which contains an SRX123456 type id */
+struct hash *joinHash = tagStormIndexExtended(storm, "sample.sra_experiment", FALSE, FALSE);
+struct fieldedRow *fr;
+for (fr = table->rowList; fr != NULL; fr = fr->next)
+    {
+    char **row = fr->row;
+    char *joinVal = row[joinIx];
+    struct hashEl *hel;
+    for (hel = hashLookup(joinHash, joinVal); hel != NULL; hel = hashLookupNext(hel))
+	{
+	struct tagStanza *geoStanza = hel->val;
+	struct tagStanza *hcaStanza = tagStanzaNew(storm, geoStanza);
+	int i;
+	for (i=0; i<table->fieldCount; ++i)
+	    {
+	    char *val = row[i];
+	    if (!isEmpty(val))
+		{
+		tagStanzaAdd(storm, hcaStanza, sraFields[i], val);	
+		}
+	    }
+	slReverse(&hcaStanza->tagList);
+
+	/* Figure out stuff related to pairing.  One file or two? */
+	int fileCount = 2;
+	char *pairedEnd = "yes";
+	if (sameString("single", seqType))
+	    {
+	    fileCount = 1;
+	    pairedEnd = "no";
+	    }
+	else if (sameString("paired", seqType))
+	    ;
+	else
+	    errAbort("Unrecognized seqType %s", seqType);
+
+	/* Add in file info */
+	char *runName = row[runIx];
+	int fileIx;
+	for (fileIx = 0; fileIx < fileCount; ++fileIx)
+	    {
+	    struct tagStanza *fileStanza = tagStanzaNew(storm, hcaStanza);
+	    char fileName[FILENAME_LEN];
+	    safef(fileName, sizeof(fileName), "%s_%d.fastq.gz", runName, fileIx+1);
+	    tagStanzaAdd(storm, fileStanza, "file.name", fileName);
+	    tagStanzaAdd(storm, fileStanza, "file.format", ".fastq.gz");
+	    tagStanzaAdd(storm, fileStanza, "file.paired_end", pairedEnd);
+	    char readIndex[16];
+	    safef(readIndex, sizeof(readIndex), "read%d", fileIx+1);
+	    tagStanzaAdd(storm, fileStanza, "file.read_index", readIndex);
+	    }
+	}
+    }
+
 /* Save results */
 tagStormWrite(storm, output, 0);
 }
@@ -264,8 +303,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 5)
     usage();
-geoToHcaStorm(argv[1], argv[2]);
+geoToHcaStorm(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }

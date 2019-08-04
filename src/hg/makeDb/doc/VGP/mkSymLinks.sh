@@ -10,6 +10,8 @@ do
    rm -f /gbdb/hubs/VGP/genomes/$asmId/bbi
    rm -f /gbdb/hubs/VGP/genomes/$asmId/ixIxx
    rm -f /gbdb/hubs/VGP/genomes/$asmId/html/*.html
+   rm -f /gbdb/hubs/VGP/genomes/$asmId/html/*.jpg
+   rm -f /gbdb/hubs/VGP/genomes/$asmId/html/*.png
    rm -f /gbdb/hubs/VGP/genomes/$asmId/$asmId.2bit
    rm -f /gbdb/hubs/VGP/genomes/$asmId/$asmId.genomes.txt
    rm -f /gbdb/hubs/VGP/genomes/$asmId/$asmId.trackDb.txt
@@ -18,6 +20,7 @@ do
    ln -s `pwd -P`/$asmId/bbi /gbdb/hubs/VGP/genomes/$asmId/bbi
    ln -s `pwd -P`/$asmId/ixIxx /gbdb/hubs/VGP/genomes/$asmId/ixIxx
    ln -s `pwd -P`/$asmId/html/*.html /gbdb/hubs/VGP/genomes/$asmId/html/
+   ln -s `pwd -P`/$asmId/html/*.jpg /gbdb/hubs/VGP/genomes/$asmId/html/
    ln -s `pwd -P`/$asmId/trackData/addMask/$asmId.masked.2bit /gbdb/hubs/VGP/genomes/$asmId/$asmId.2bit
    ln -s `pwd -P`/$asmId/$asmId.genomes.txt /gbdb/hubs/VGP/genomes/$asmId
    ln -s `pwd -P`/$asmId/$asmId.chrom.sizes /gbdb/hubs/VGP/genomes/$asmId

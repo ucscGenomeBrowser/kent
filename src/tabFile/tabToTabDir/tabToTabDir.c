@@ -5,9 +5,12 @@
 #include "hash.h"
 #include "options.h"
 #include "obscure.h"
+#include "sqlNum.h"
 #include "portable.h"
 #include "ra.h"
+#include "csv.h"
 #include "fieldedTable.h"
+#include "hmac.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -29,7 +32,10 @@ errAbort(
 "              ...\n"
 "if the sourceField is missing it is assumed to be a column of the same name in in.tsv\n"
 "The sourceField can either be a column name in the in.tsv, or a string enclosed literal\n"
-"or an @ followed by a table name, in which case it refers to the key of that table\n"
+"or an @ followed by a table name, in which case it refers to the key of that table.\n"
+"If the source column is in comma-separated-values format then the sourceField can include a\n"
+"constant array index to pick out an item from the csv list.\n"
+"If sourceField begins with a #, a md5 hash of the value is used instead\n"
 );
 }
 
@@ -52,7 +58,7 @@ return TRUE;
 enum fieldValType
 /* A type */
     {
-    fvVar, fvLink, fvConst, 
+    fvVar, fvArray, fvLink, fvConst, 
     };
 
 struct newFieldInfo
@@ -61,8 +67,11 @@ struct newFieldInfo
     struct newFieldInfo *next;	/* Might want to hang these on a list. */
     char *name;			/* Name of field in new table */
     enum fieldValType type;	/* Constant, link, or variable */
+    boolean justHash;		/* Just do hash of field */
     int oldIx;			/* For variable and link ones where field is in old table */
     char *val;			/* For constant ones the string value */
+    int arrayIx;		/* If it's an array then the value */
+    struct newFieldInfo *link;	/* If it's fvLink then pointer to the linked field */
     };
 
 struct newFieldInfo *findField(struct newFieldInfo *list, char *name)
@@ -80,8 +89,7 @@ struct newTableInfo
     {
     struct newTableInfo *next;	/* Next in list */
     char *name;			/* Name of table */
-    char *keyField;		/* Key field within table */
-    int keyFieldIx;		/* Index of key field */
+    struct newFieldInfo *keyField;	/* Key field within table */
     struct newFieldInfo *fieldList; /* List of fields */
     struct fieldedTable *table;	    /* Table to fill in. */
     };
@@ -113,7 +121,15 @@ if (isEmpty(s))
     }
 else
     {
+    /* Set flag if we start with a hash */
     char c = s[0];
+    if (c == '#')
+        {
+	fv->justHash = TRUE;
+	s = skipLeadingSpaces(s+1);
+	c = s[0];
+	}
+
     if (c == '"' || c == '\'')
 	{
 	char *val = fv->val = cloneString(s);
@@ -129,11 +145,25 @@ else
 	    errAbort("Nothing following %c", c);
 	fv->type = fvLink;
 	}
-    else
+    else 
         {
 	char *val = fv->val = cloneString(s);
 	trimSpaces(val);
-	fv->type = fvVar;
+	char *arrayStart = strchr(val, '[');
+	if (arrayStart != NULL)
+	    {
+	    *arrayStart++ = 0;  // Erase '[' and skip over
+	    if (lastChar(arrayStart) != ']')
+		errAbort("Missing ']' in %s", s);
+	    trimLastChar(arrayStart);
+	    arrayStart = trimSpaces(arrayStart);
+	    fv->arrayIx = sqlUnsigned(arrayStart);
+	    fv->type = fvArray;
+	    }
+	else
+	    {  /* Default case, a normal field name */
+	    fv->type = fvVar;
+	    }
 	}
     }
 return fv;
@@ -151,19 +181,49 @@ char *outRow[outFieldCount];
 if (slCount(fieldList) != outFieldCount)	// A little cheap defensive programming on inputs
     internalErr();
 
+struct dyString *csvScratch = dyStringNew(0);
 for (fr = inTable->rowList; fr != NULL; fr = fr->next)
     {
     /* Create new row from a scan through old table */
     char **inRow = fr->row;
     char *key = inRow[keyFieldIx];
     int i;
-    struct newFieldInfo *fv;
-    for (i=0, fv=fieldList; i<outFieldCount && fv != NULL; ++i, fv = fv->next)
+    struct newFieldInfo *unlinkedFv;
+    for (i=0, unlinkedFv=fieldList; i<outFieldCount && unlinkedFv != NULL; 
+	++i, unlinkedFv = unlinkedFv->next)
 	{
+	/* Skip through links. */
+	struct newFieldInfo *fv = unlinkedFv;
+	while (fv->type == fvLink)
+	    fv = fv->link;
+	
 	if (fv->type == fvConst)
 	    outRow[i] = fv->val;
-	else
+	else if (fv->type == fvVar)
 	    outRow[i] = inRow[fv->oldIx];
+	else if (fv->type == fvArray)
+	    {
+	    char *csv = inRow[fv->oldIx];
+	    int j;
+	    for (j=0; ; ++j)
+	        {
+		char *el = csvParseNext(&csv, csvScratch);
+		if (el == NULL)
+		    {
+		    outRow[i] = "out of range";
+		    break;
+		    }
+		if (j >= fv->arrayIx)
+		    {
+		    outRow[i] = cloneString(el);
+		    break;
+		    }
+		}
+	    }
+	if (fv->justHash)
+	    {
+	    outRow[i] = hmacMd5("", outRow[i]);
+	    }
 	}
 
     struct fieldedRow *uniqFr = hashFindVal(uniqHash, key);
@@ -179,6 +239,7 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 		key, inTable->fields[keyFieldIx], outTable->name);
 	}
     }
+dyStringFree(&csvScratch);
 }
 
 void tabToTabDir(char *inTabFile, char *specFile, char *outDir)
@@ -198,9 +259,13 @@ while ((specStanza = raNextStanzAsPairs(lf)) != NULL)
     {
     /* Parse out table name and key field name. */
     verbose(2, "Processing spec stanza of %d lines\n",  slCount(specStanza));
-    struct slPair *table = specStanza;
-    char *tableName = table->name;
-    char *keyFieldName = trimSpaces(table->val);
+    struct slPair *tableSl = specStanza;
+    if (!sameString(tableSl->name, "table"))
+        errAbort("stanza that doesn't start with 'table' ending line %d of %s",
+	    lf->lineIx, lf->fileName);
+    char *tableSpec = tableSl->val;
+    char *tableName = nextWord(&tableSpec);
+    char *keyFieldName = nextWord(&tableSpec);
     if (isEmpty(keyFieldName))
        errAbort("No key field for table %s.", tableName);
 
@@ -217,7 +282,7 @@ while ((specStanza = raNextStanzAsPairs(lf)) != NULL)
         {
 	char *newName = field->name;
 	struct newFieldInfo *fv = parseFieldVal(newName, field->val);
-	if (fv->type == fvVar)
+	if (fv->type == fvVar || fv->type == fvArray)
 	    fv->oldIx = fieldedTableMustFindFieldIx(inTable, fv->val);
 	fieldNames[i] = newName;
 	slAddHead(&fvList, fv);
@@ -234,10 +299,9 @@ while ((specStanza = raNextStanzAsPairs(lf)) != NULL)
     /* Allocate structure to save results of this pass in and so so. */
     AllocVar(newTable);
     newTable->name = tableName;
-    newTable->keyField = keyFieldName;
+    newTable->keyField = keyField;
     newTable->fieldList = fvList;
     newTable->table = outTable;
-    newTable->keyFieldIx = keyField->oldIx;
     slAddHead(&newTableList, newTable);
     }
 slReverse(&newTableList);
@@ -253,8 +317,7 @@ for (newTable = newTableList; newTable != NULL; newTable = newTable->next)
 	  struct newTableInfo *linkedTable = findTable(newTableList, field->val);
 	  if (linkedTable == NULL)
 	     errAbort("@%s doesn't exist", field->name);
-	  field->oldIx = linkedTable->keyFieldIx;
-	  field->type = fvVar;
+	  field->link = linkedTable->keyField;
 	  }
       }
     }
@@ -264,7 +327,7 @@ for (newTable = newTableList; newTable != NULL; newTable = newTable->next)
     {
     /* Populate table */
     struct fieldedTable *outTable = newTable->table;
-    selectUniqueIntoTable(inTable, newTable->fieldList, newTable->keyFieldIx, outTable);
+    selectUniqueIntoTable(inTable, newTable->fieldList, newTable->keyField->oldIx, outTable);
 
     /* Create output file name and save file. */
     char outTabName[FILENAME_LEN];
