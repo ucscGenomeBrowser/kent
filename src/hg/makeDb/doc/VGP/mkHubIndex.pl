@@ -54,13 +54,13 @@ You can load this hub from our
 page or by clicking these links to any of our official websites:
 <ul>
   <li>
-    <a href="http://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=http://genome-test.gi.ucsc.edu/hubs/VGP/hub.txt&amp;genome=GCF_004126475.1_mPhyDis1_v1.p"
+    <a href="https://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/VGP/hub.txt&amp;genome=GCF_004126475.1_mPhyDis1_v1.p"
     target="_blank">genome.ucsc.edu</a></li>
   <li> 
-    <a href="http://genome-euro.ucsc.edu/cgi-bin/hgGateway?hubUrl=http://genome-test.gi.ucsc.edu/hubs/VGP/hub.txt&amp;genome=GCF_004126475.1_mPhyDis1_v1.p"
+    <a href="https://genome-euro.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/VGP/hub.txt&amp;genome=GCF_004126475.1_mPhyDis1_v1.p"
     target="_blank">genome-euro.ucsc.edu</a></li>
   <li>
-    <a href="http://genome-asia.ucsc.edu/cgi-bin/hgGateway?hubUrl=http://genome-test.gi.ucsc.edu/hubs/VGP/hub.txt&amp;genome=GCF_004126475.1_mPhyDis1_v1.p"
+    <a href="https://genome-asia.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/VGP/hub.txt&amp;genome=GCF_004126475.1_mPhyDis1_v1.p"
     target="_blank">genome-asia.ucsc.edu</a></li>
 </ul>
 </p>
@@ -73,7 +73,7 @@ To manually attach this hub to other genome browsers:
     <em><strong>My Data</strong> -&gt; <strong>Track Hubs</strong></em></li>
   <li>
     Then select the <strong>My Hubs</strong> tab and enter this URL into the textbox:
-    <br><code>http://genome-test.gi.ucsc.edu/hubs/VGP/hub.txt</code></li>
+    <br><code>https://hgdownload.soe.ucsc.edu/hubs/VGP/hub.txt</code></li>
   <li>
     Once you have added the URL to the entry form, press the <em><strong>Add Hub</strong></em>
     button to add the hub.</li>
@@ -197,8 +197,8 @@ sub tableContents() {
     close (FH);
     $commonName = $betterName{$asmId} if (exists($betterName{$asmId}));
     printf CN "%s\t%s\n", $commonName, $asmId;
-    printf "<tr><td align=center><a href='https://genome-test.gi.ucsc.edu/cgi-bin/hgGateway?hubUrl=http://genome-test.gi.ucsc.edu/hubs/VGP/hub.txt&amp;genome=%s&amp;position=lastDbPos' target=_blank>%s</a></td>\n", $asmId, $commonName;
-    printf "    <td align=center><a href='https://genome-test.gi.ucsc.edu/hubs/VGP/genomes/%s/' target=_blank>%s</a></td>\n", $asmId, $sciName;
+    printf "<tr><td align=center><a href='https://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/VGP/hub.txt&amp;genome=%s&amp;position=lastDbPos' target=_blank>%s</a></td>\n", $asmId, $commonName;
+    printf "    <td align=center><a href='https://hgdownload.soe.ucsc.edu/hubs/VGP/genomes/%s/' target=_blank>%s</a></td>\n", $asmId, $sciName;
     printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/assembly/%s_%s/' target=_blank>%s</a></td>\n", $gcPrefix, $asmAcc, $asmId;
     printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/biosample/?term=%s' target=_blank>%s</a></td>\n", $bioSample, $bioSample;
     printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/bioproject/?term=%s' target=_blank>%s</a></td>\n", $bioProject, $bioProject;
