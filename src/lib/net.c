@@ -216,9 +216,10 @@ for (address = addressList; address; address = address->ai_next)
 
     close(sd);
     }
+boolean connected = (address != NULL); // one of the addresses connected successfully
 freeaddrinfo(addressList);
 
-if (!address) // none of the addresses connected successfully
+if (!connected) 
     {
     if (!sameString(errMsg->string, ""))
 	{
@@ -226,7 +227,7 @@ if (!address) // none of the addresses connected successfully
 	}
     }
 dyStringFree(&errMsg);
-if (!address)
+if (!connected)
     return -1;
 
 // Set to blocking mode again
