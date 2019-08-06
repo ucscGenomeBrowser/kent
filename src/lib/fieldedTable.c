@@ -41,8 +41,10 @@ if (table != NULL)
     }
 }
 
-struct fieldedRow *fieldedTableAdd(struct fieldedTable *table,  char **row, int rowSize, int id)
-/* Create a new row and add it to table.  Return row. */
+
+static struct fieldedRow *fieldedTableNewRow(struct fieldedTable *table,  
+    char **row, int rowSize, int id)
+/* Create a new row and populate it, but don't add it to table yet. */
 {
 /* Make sure we got right number of fields. */
 if (table->fieldCount != rowSize)
@@ -59,6 +61,14 @@ int i;
 for (i=0; i<rowSize; ++i)
     fr->row[i] = lmCloneString(lm, row[i]);
 
+return fr;
+}
+
+struct fieldedRow *fieldedTableAdd(struct fieldedTable *table,  char **row, int rowSize, int id)
+/* Create a new row and add it to table.  Return row. */
+{
+struct fieldedRow *fr = fieldedTableNewRow(table, row, rowSize, id);
+
 /* Add it to end of list using cursor to avoid slReverse hassles. */
 *(table->cursor) = fr;
 table->cursor = &fr->next;
@@ -66,6 +76,21 @@ table->rowCount += 1;
 
 return fr;
 }
+
+struct fieldedRow *fieldedTableAddHead(struct fieldedTable *table, char **row, int rowSize, int id)
+/* Create a new row and add it to start of table.  Return row. */
+{
+if (table->rowCount == 0)
+    {
+    // Let fieldedTableAdd() handle the edges of the empty case
+    return fieldedTableAdd(table, row, rowSize, id);
+    }
+struct fieldedRow *fr = fieldedTableNewRow(table, row, rowSize, id);
+slAddHead(&table->rowList, fr);
+table->rowCount += 1;
+return fr;
+}
+
 
 int fieldedTableMaxColChars(struct fieldedTable *table, int colIx)
 /* Calculate the maximum number of characters in a cell for a column */
