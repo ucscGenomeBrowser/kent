@@ -47,7 +47,7 @@ searchIndex name%s
 url https://www.ncbi.nlm.nih.gov/nuccore/\$\$
 urlLabel NCBI Nucleotide database
 group map\n\n" "${asmId}" "${asmId}" "${searchTrix}"
-$scriptDir/asmHubAssembly.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/$asmId.agp.gz ../hubs/ncbiAssemblies/$genbankRefseq/$asmId > $buildDir/html/$asmId.assembly.html
+$scriptDir/asmHubAssembly.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/$asmId.agp.gz https://hgdownload.soe.ucsc.edu/hubs/VGP/genomes/$asmId > $buildDir/html/$asmId.assembly.html
 fi
 
 if [ -s ${buildDir}/trackData/assemblyGap/${asmId}.gap.bb ]; then
@@ -62,7 +62,7 @@ bigDataUrl bbi/%s.gap.bb
 type bigBed 4
 group map
 html html/%s.gap\n\n" "${asmId}" "${asmId}"
-$scriptDir/asmHubGap.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/$asmId.agp.gz ../hubs/ncbiAssemblies/$genbankRefseq/$asmId > $buildDir/html/$asmId.gap.html
+$scriptDir/asmHubGap.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/$asmId.agp.gz https://hgdownload.soe.ucsc.edu/hubs/VGP/genomes/$asmId > $buildDir/html/$asmId.gap.html
 fi
 
 if [ -s ${buildDir}/trackData/cytoBand/${asmId}.cytoBand.bb ]; then
@@ -337,6 +337,8 @@ if [ -s ${buildDir}/trackData/ncbiGene/$asmId.ncbiGene.ix ]; then
 searchTrix ixIxx/$asmId.ncbiGene.ix"
 fi
 
+export haveNcbiGene="no"
+
 if [ -s ${buildDir}/trackData/ncbiGene/$asmId.ncbiGene.bb ]; then
 rm -f $buildDir/bbi/${asmId}.ncbiGene.bb
 rm -f $buildDir/ixIxx/${asmId}.ncbiGene.ix
@@ -361,6 +363,7 @@ group genes\n\n" "${asmId}" "${asmId}" "${searchTrix}"
 
   $scriptDir/asmHubNcbiGene.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/trackData > $buildDir/html/$asmId.ncbiGene.html
 
+haveNcbiGene="yes"
 fi
 
 ###################################################################
@@ -436,7 +439,7 @@ visibility dense
 type bigBed 3
 bigDataUrl bbi/%s.allGaps.bb
 html html/%s.allGaps\n\n" "${asmId}" "${asmId}"
-$scriptDir/asmHubAllGaps.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/$asmId.agp.gz ../hubs/ncbiAssemblies/$genbankRefseq/$asmId $buildDir/bbi/$asmId > $buildDir/html/$asmId.allGaps.html
+$scriptDir/asmHubAllGaps.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/$asmId.agp.gz https://hgdownload.soe.ucsc.edu/hubs/VGP/genomes/$asmId $buildDir/bbi/$asmId > $buildDir/html/$asmId.allGaps.html
 fi
 
 ###################################################################
@@ -445,15 +448,20 @@ if [ -s ${buildDir}/trackData/augustus/${asmId}.augustus.bb ]; then
 rm -f ${buildDir}/bbi/${asmId}.augustus.bb
 ln -s ${buildDir}/trackData/augustus/${asmId}.augustus.bb ${buildDir}/bbi/${asmId}.augustus.bb
 
+export augustusVis="dense"
+
+if [ "${haveNcbiGene}" = "no" ]; then
+   augustusVis="pack"
+fi
 printf "track augustus
 shortLabel Augustus
 longLabel Augustus Gene Predictions
 group genes
-visibility dense
+visibility %s
 color 180,0,0
 type bigGenePred
 bigDataUrl bbi/%s.augustus.bb
-html html/%s.augustus\n\n" "${asmId}" "${asmId}"
+html html/%s.augustus\n\n" "${augustusVis}" "${asmId}" "${asmId}"
 $scriptDir/asmHubAugustusGene.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/bbi/$asmId > $buildDir/html/$asmId.augustus.html
 fi
 

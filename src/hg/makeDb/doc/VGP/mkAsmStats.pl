@@ -220,7 +220,7 @@ sub tableContents() {
     }
     close (FH);
     $commonName = $betterName{$asmId} if (exists($betterName{$asmId}));
-    printf "<tr><th>%d</th><td align=center><a href='https://genome-test.gi.ucsc.edu/cgi-bin/hgGateway?hubUrl=http://genome-test.gi.ucsc.edu/hubs/VGP/hub.txt&amp;genome=%s&amp;position=lastDbPos' target=_blank>%s</a></td>\n", ++$asmCount, $asmId, $commonName;
+    printf "<tr><th>%d</th><td align=center><a href='https://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/VGP/hub.txt&amp;genome=%s&amp;position=lastDbPos' target=_blank>%s</a></td>\n", ++$asmCount, $asmId, $commonName;
     printf "    <td align=center>%s</td>\n", $sciName;
     printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/assembly/%s_%s/' target=_blank>%s</a></td>\n", $gcPrefix, $asmAcc, $asmId;
     printf "    <td align=right>%s</td>\n", commify($seqCount);
