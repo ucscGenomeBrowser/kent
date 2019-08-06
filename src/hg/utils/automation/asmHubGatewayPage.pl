@@ -156,12 +156,15 @@ chomp $thisDir;
 printf STDERR "# thisDir $thisDir\n";
 my $ftpName = dirname($thisDir);
 my $asmId = basename($ftpName);;
+my ($gcXPrefix, $accession, $rest) = split('_', $asmId, 3);
+my $newStyleUrl = sprintf("%s/%s/%s/%s/%s", $gcXPrefix, substr($accession,0,3),
+   substr($accession,3,3), substr($accession,6,3), $asmId);
 $ftpName =~ s#/hive/data/outside/ncbi/##;
 $ftpName =~ s#/hive/data/inside/ncbi/##;
 $ftpName =~ s#/hive/data/genomes/asmHubs/##;
 printf STDERR "# ftpName $ftpName\n";
-my $urlDirectory = `basename $ftpName`;
-chomp $urlDirectory;
+# my $urlDirectory = `basename $ftpName`;
+# chomp $urlDirectory;
 my $speciesSubgroup = $ftpName;
 my $asmType = "genbank";
 $asmType = "refseq" if ( $speciesSubgroup =~ m#refseq/#);
@@ -277,7 +280,7 @@ printf "<!-- Display image in righthand corner -->
 <table align=right border=0 width=%d height=%d>
   <tr><td align=RIGHT><a href=\"https://www.ncbi.nlm.nih.gov/assembly/%s\"
     target=_blank>
-    <img src=\"/hubs/VGP/genomes/%s/html/%s\" width=%d height=%d alt=\"%s\"></a>
+    <img src=\"https://%s/hubs/VGP/genomes/%s/html/%s\" width=%d height=%d alt=\"%s\"></a>
   </td></tr>
   <tr><td align=right>
     <font size=-1> <em>%s</em><BR>
@@ -287,7 +290,7 @@ printf "<!-- Display image in righthand corner -->
     </font>
   </td></tr>
 </table>
-\n", $imageWidth+$imageWidthBorder, $imageHeight, $asmAccession, $asmId, $imageName, $imageWidth, $imageHeight, $commonName, $orgName, $photoCreditURL, $photoCreditName;
+\n", $imageWidth+$imageWidthBorder, $imageHeight, $asmAccession, $sourceServer, $asmId, $imageName, $imageWidth, $imageHeight, $commonName, $orgName, $photoCreditURL, $photoCreditName;
 }
 
 my $sciNameUnderscore = $orgName;
@@ -306,7 +309,7 @@ printf "<p>
 <b>Assembly accession ID:</b> <a href=\"https://www.ncbi.nlm.nih.gov/assembly/%s\" target=\"_blank\">%s</a><br>
 <b>Assembly FTP location:</b> <a href=\"ftp://ftp.ncbi.nlm.nih.gov/genomes/all/%s\" target=\"_blank\">%s</a><br>
 \n", $commonName, $orgName, $taxId, $taxId, $submitter, $sciNameUnderscore, $orgName, $asmDate, $descrAsmType,
-  $asmLevel, $bioSample, $bioSample, $asmAccession, $asmAccession, $urlDirectory, $urlDirectory;
+  $asmLevel, $bioSample, $bioSample, $asmAccession, $asmAccession, $newStyleUrl, $newStyleUrl;
 
 chromSizes($chromSizes);
 
@@ -327,7 +330,7 @@ or this <em>wget</em> command:
 <pre>
   wget --timestamping -m -nH -x --cut-dirs=4 -e robots=off -np -k \\
     --reject \"index.html*\" -P \"$asmId\" \\
-       http://$sourceServer/hubs/VGP/genomes/$asmId/
+       https://$sourceServer/hubs/VGP/genomes/$asmId/
 
   which creates a local directory: ./$asmId/
 </pre>
