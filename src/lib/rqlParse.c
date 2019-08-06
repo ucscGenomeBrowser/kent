@@ -95,7 +95,7 @@ switch (type)
         fprintf(f, "%s", (val.b ? "true" : "false") );
 	break;
     case rqlTypeString:
-        fprintf(f, "%s", val.s);
+        fprintf(f, "%s", (val.s == NULL ? "(null)" : val.s));
 	break;
     case rqlTypeInt:
         fprintf(f, "%lld", val.i);
