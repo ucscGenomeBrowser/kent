@@ -14490,6 +14490,12 @@ track->shortLabel = cloneString(tdb->shortLabel);
 track->tdb = tdb;
 track->groupName = cloneString(tdb->grp);
 track->priority = track->defaultPriority = tdb->priority;
+track->color.r = tdb->colorR;
+track->color.g = tdb->colorG;
+track->color.b = tdb->colorB;
+track->altColor.r = tdb->altColorR;
+track->altColor.g = tdb->altColorG;
+track->altColor.b = tdb->altColorB;
 
 if (sameWord(tdb->track, "ensGene"))
     {
@@ -14542,12 +14548,8 @@ char *exonArrows;
 char *nextItem;
 struct trackDb *tdb = track->tdb;
 
-track->color.r = tdb->colorR;
-track->color.g = tdb->colorG;
-track->color.b = tdb->colorB;
-track->altColor.r = tdb->altColorR;
-track->altColor.g = tdb->altColorG;
-track->altColor.b = tdb->altColorB;
+if ( track->customPt )
+    return;
 track->lineHeight = tl.fontHeight+1;
 track->heightPer = track->lineHeight - 1;
 track->private = tdb->private;

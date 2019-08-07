@@ -6067,6 +6067,14 @@ void dontLoadItems(struct track *tg)
 {
 }
 
+struct track *customTrackFromTrackDb(struct trackDb *tdb)
+{
+struct track *newTrack = trackFromTrackDb(tdb);
+finishTrack(newTrack);
+
+return newTrack;
+}
+
 struct track *newCustomTrack(struct customTrack *ct)
 /* Make up a new custom track. */
 {
@@ -6089,7 +6097,7 @@ useItemRgb = bedItemRgb(tdb);
 
 if (sameString(type, "maf"))
     {
-    tg = trackFromTrackDb(tdb);
+    tg = customTrackFromTrackDb(tdb);
     tg->canPack = TRUE;
 
     wigMafMethods(tg, tdb, 0, NULL);
@@ -6106,7 +6114,7 @@ if (sameString(type, "maf"))
     }
 else if (sameString(type, "wig"))
     {
-    tg = trackFromTrackDb(tdb);
+    tg = customTrackFromTrackDb(tdb);
     if (ct->dbTrack)
         tg->loadItems = wigLoadItems;
     else
@@ -6116,7 +6124,7 @@ else if (sameString(type, "wig"))
     }
 else if (sameString(type, "bigWig"))
     {
-    tg = trackFromTrackDb(tdb);
+    tg = customTrackFromTrackDb(tdb);
     tg->bbiFile = ct->bbiFile;
     tg->nextItemButtonable = FALSE;
     if (trackShouldUseAjaxRetrieval(tg))
@@ -6154,7 +6162,7 @@ else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") ||
     tdb->type = cloneString(typeBuf);
 
     /* Finish wrapping track around tdb. */
-    tg = trackFromTrackDb(tdb);
+    tg = customTrackFromTrackDb(tdb);
     tg->bbiFile = bbi;
     tg->nextItemButtonable = TRUE;
     if (trackShouldUseAjaxRetrieval(tg))
@@ -6162,7 +6170,7 @@ else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") ||
     }
 else if (sameString(type, "bedGraph"))
     {
-    tg = trackFromTrackDb(tdb);
+    tg = customTrackFromTrackDb(tdb);
     tg->canPack = FALSE;
     tg->customPt = ct;
     ct->wigFile = ctFileName;
@@ -6171,7 +6179,7 @@ else if (sameString(type, "bedGraph"))
     }
 else if (sameString(type, "bed"))
     {
-    tg = trackFromTrackDb(tdb);
+    tg = customTrackFromTrackDb(tdb);
     if (ct->fieldCount < 8)
 	{
 	tg->loadItems = ctLoadSimpleBed;
@@ -6189,7 +6197,7 @@ else if (sameString(type, "bed"))
 	char *theType = trackDbSetting(tdb, "type");
 	if (theType && sameString(theType, "expRatio"))
 	    {
-	    tg = trackFromTrackDb(tdb);
+	    tg = customTrackFromTrackDb(tdb);
 	    expRatioMethodsFromCt(tg);
 	    }
 	else
@@ -6207,35 +6215,35 @@ else if (sameString(type, "bed"))
 else if (sameString(type, "chromGraph"))
     {
     tdb->type = NULL;   /* Swap out type for the moment. */
-    tg = trackFromTrackDb(tdb);
+    tg = customTrackFromTrackDb(tdb);
     chromGraphMethodsCt(tg);
     tg->nextItemButtonable = FALSE;
     tdb->type = typeOrig;
     }
 else if (sameString(type, "array"))
     {
-    tg = trackFromTrackDb(tdb);
+    tg = customTrackFromTrackDb(tdb);
     expRatioMethodsFromCt(tg);
     tg->nextItemButtonable = TRUE;
     tg->customPt = ct;
     }
 else if (sameString(type, "coloredExon"))
     {
-    tg = trackFromTrackDb(tdb);
+    tg = customTrackFromTrackDb(tdb);
     coloredExonMethodsFromCt(tg);
     tg->nextItemButtonable = TRUE;
     tg->customPt = ct;
     }
 else if (sameString(type, "encodePeak"))
     {
-    tg = trackFromTrackDb(tdb);
+    tg = customTrackFromTrackDb(tdb);
     encodePeakMethodsCt(tg);
     tg->nextItemButtonable = TRUE;
     tg->customPt = ct;
     }
 else if (sameString(type, "bam"))
     {
-    tg = trackFromTrackDb(tdb);
+    tg = customTrackFromTrackDb(tdb);
     tg->customPt = ct;
     bamMethods(tg);
     if (trackShouldUseAjaxRetrieval(tg))
@@ -6244,7 +6252,7 @@ else if (sameString(type, "bam"))
     }
 else if (sameString(type, "vcfTabix"))
     {
-    tg = trackFromTrackDb(tdb);
+    tg = customTrackFromTrackDb(tdb);
     tg->customPt = ct;
     vcfTabixMethods(tg);
     if (trackShouldUseAjaxRetrieval(tg))
@@ -6253,14 +6261,14 @@ else if (sameString(type, "vcfTabix"))
     }
 else if (sameString(type, "vcf"))
     {
-    tg = trackFromTrackDb(tdb);
+    tg = customTrackFromTrackDb(tdb);
     tg->customPt = ct;
     vcfMethods(tg);
     tg->mapItemName = ctMapItemName;
     }
 else if (sameString(type, "makeItems"))
     {
-    tg = trackFromTrackDb(tdb);
+    tg = customTrackFromTrackDb(tdb);
     makeItemsMethods(tg);
     tg->nextItemButtonable = TRUE;
     tg->customPt = ct;
@@ -6268,13 +6276,13 @@ else if (sameString(type, "makeItems"))
 else if (sameString(type, "bedTabix")  || sameString(type, "longTabix"))
     {
     knetUdcInstall();
-    tg = trackFromTrackDb(tdb);
+    tg = customTrackFromTrackDb(tdb);
     tg->customPt = ct;
     tg->mapItemName = ctMapItemName; /* must be here to see ctMapItemName */
     }
 else if (sameString(type, "bedDetail"))
     {
-    tg = trackFromTrackDb(tdb);
+    tg = customTrackFromTrackDb(tdb);
     bedDetailCtMethods(tg, ct);
     tg->mapItemName = ctMapItemName; /* must be here to see ctMapItemName */
     }
@@ -6282,33 +6290,33 @@ else if (sameString(type, "bedDetail"))
     {
     extern void adjacencyMethods(struct track *track);
 
-    tg = trackFromTrackDb(tdb);
+    tg = customTrackFromTrackDb(tdb);
     adjacencyMethods(tg);
     //tg->mapItemName = ctMapItemName;
     tg->customPt = ct;
     }
 else if (sameString(type, "pgSnp"))
     {
-    tg = trackFromTrackDb(tdb);
+    tg = customTrackFromTrackDb(tdb);
     pgSnpCtMethods(tg);
     //tg->mapItemName = ctMapItemName;
     tg->customPt = ct;
     }
 else if (sameString(type, "barChart"))
     {
-    tg = trackFromTrackDb(tdb);
+    tg = customTrackFromTrackDb(tdb);
     barChartCtMethods(tg);
     tg->customPt = ct;
     }
 else if (sameString(type, "interact"))
     {
-    tg = trackFromTrackDb(tdb);
+    tg = customTrackFromTrackDb(tdb);
     interactCtMethods(tg);
     tg->customPt = ct;
     }
 else if (sameString(type, "hic"))
     {
-    tg = trackFromTrackDb(tdb);
+    tg = customTrackFromTrackDb(tdb);
     hicCtMethods(tg);
     tg->customPt = ct;
     }
@@ -7786,12 +7794,6 @@ if (cgiVarExists("hgt.defaultImgOrder"))
     cartRemoveLike(cart, wildCard);
     }
 
-// Subtrack settings must be removed when composite/view settings are updated
-parentChildCartCleanup(trackList,cart,oldVars);
-if (measureTiming)
-    measureTime("parentChildCartCleanup");
-
-
 /* Honor hideAll and visAll variables */
 if (hideAll || defaultTracks)
     {
@@ -7801,6 +7803,11 @@ if (hideAll || defaultTracks)
 
 trackList = onlyVisible(trackList);
 makeGlobalTrackHash(trackList);
+
+// Subtrack settings must be removed when composite/view settings are updated
+parentChildCartCleanup(trackList,cart,oldVars);
+if (measureTiming)
+    measureTime("parentChildCartCleanup");
 
 if(!psOutput && !cartUsualBoolean(cart, "hgt.imageV1", FALSE))
     {
