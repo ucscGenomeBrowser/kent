@@ -9,4 +9,5 @@ pennantIcon New red
 
 include trackDb.histones.ra
 include trackDb.chromHmm.ra
+include trackDb.atac.ra
 

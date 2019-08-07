@@ -2,7 +2,7 @@
 
 track enhancerGeneInteract
 compositeTrack on
-shortLabel ENC/EPD Enh-Gene
+shortLabel Enhancer-Gene
 longLabel Enhancer/gene interactions from ENCODE 3 (UCSD/LICR) with promoters from EPDNew
 subGroup1 view View a_enhancer=Enhancers b_promoter=Promoter c_interaction=Interaction d_cluster=Cluster
 subGroup2 set Set a_REP=Replicated b_ALL=All
@@ -13,7 +13,6 @@ visibility hide
 group regulation
 pennantIcon New red
 wgEncode 1
-priority 3
 
     track egPromoterView
     type bigBed 9

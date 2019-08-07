@@ -14,7 +14,6 @@ filterComposite dimA
 sortOrder view=+ subtrackColor=+ tissue=+ mark=+ age=+
 showSubtrackColorOnUi on
 priority 6
-wgEncode 1
 dragAndDrop subTracks
 visibility dense
 
@@ -777,7 +776,7 @@ visibility dense
 
         track midbrain.H3K27me3.E11
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF910SGA.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel midbrn K27me3 11
         longLabel ChIP-seq peaks of embryonic midbrain H3K27me3 on day E11 from ENCODE 3 (UCSD/LICR)
         type bigBed 6 +
@@ -807,7 +806,7 @@ visibility dense
 
         track liver.H3K27me3.E11
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF384WYM.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel liver K27me3 11
         longLabel ChIP-seq peaks of embryonic liver H3K27me3 on day E11 from ENCODE 3 (UCSD/LICR)
         type bigBed 6 +
@@ -1017,7 +1016,7 @@ visibility dense
 
         track liver.H3K36me3.P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF361EKE.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel liver K36me3 P0
         longLabel ChIP-seq peaks of embryonic liver H3K36me3 P0 from ENCODE 3 (UCSD/LICR)
         type bigBed 6 +
@@ -1227,7 +1226,7 @@ visibility dense
 
         track liver.H3K27ac.P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF535FJV.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel liver K27ac P0
         longLabel ChIP-seq peaks of embryonic liver H3K27ac P0 from ENCODE 3 (UCSD/LICR)
         type bigBed 6 +
@@ -1277,7 +1276,7 @@ visibility dense
 
         track liver.H3K4me1.P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF969HOM.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel liver K4me1 P0
         longLabel ChIP-seq peaks of embryonic liver H3K4me1 P0 from ENCODE 3 (UCSD/LICR)
         type bigBed 6 +
@@ -1357,7 +1356,7 @@ visibility dense
 
         track liver.H3K9ac.P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF331CRG.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel liver K9ac P0
         longLabel ChIP-seq peaks of embryonic liver H3K9ac P0 from ENCODE 3 (UCSD/LICR)
         type bigBed 6 +
@@ -1377,7 +1376,7 @@ visibility dense
 
         track liver.H3K27me3.P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF321SJE.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel liver K27me3 P0
         longLabel ChIP-seq peaks of embryonic liver H3K27me3 P0 from ENCODE 3 (UCSD/LICR)
         type bigBed 6 +
@@ -1837,7 +1836,7 @@ visibility dense
 
         track liver.H3K9me3.P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF166MIE.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel liver K9me3 P0
         longLabel ChIP-seq peaks of embryonic liver H3K9me3 P0 from ENCODE 3 (UCSD/LICR)
         type bigBed 6 +
@@ -2167,7 +2166,7 @@ visibility dense
 
         track liver.H3K9ac.E11
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF032ATE.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel liver K9ac 11
         longLabel ChIP-seq peaks of embryonic liver H3K9ac on day E11 from ENCODE 3 (UCSD/LICR)
         type bigBed 6 +
@@ -2877,7 +2876,7 @@ visibility dense
 
         track liver.H3K36me3.E11
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF668JPP.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel liver K36me3 11
         longLabel ChIP-seq peaks of embryonic liver H3K36me3 on day E11 from ENCODE 3 (UCSD/LICR)
         type bigBed 6 +
@@ -3227,7 +3226,7 @@ visibility dense
 
         track liver.H3K4me2.E11
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF188GUB.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel liver K4me2 11
         longLabel ChIP-seq peaks of embryonic liver H3K4me2 on day E11 from ENCODE 3 (UCSD/LICR)
         type bigBed 6 +
@@ -3507,7 +3506,7 @@ visibility dense
 
         track liver.H3K9me3.E11
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF790QLV.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel liver K9me3 11
         longLabel ChIP-seq peaks of embryonic liver H3K9me3 on day E11 from ENCODE 3 (UCSD/LICR)
         type bigBed 6 +
@@ -3547,7 +3546,7 @@ visibility dense
 
         track liver.H3K4me3.E11
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF463VQV.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel liver K4me3 11
         longLabel ChIP-seq peaks of embryonic liver H3K4me3 on day E11 from ENCODE 3 (UCSD/LICR)
         type bigBed 6 +
@@ -4227,7 +4226,7 @@ visibility dense
 
         track liver.H3K4me2.P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF123DZJ.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel liver K4me2 P0
         longLabel ChIP-seq peaks of embryonic liver H3K4me2 P0 from ENCODE 3 (UCSD/LICR)
         type bigBed 6 +
@@ -4357,7 +4356,7 @@ visibility dense
 
         track liver.H3K4me3.P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF612SAB.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel liver K4me3 P0
         longLabel ChIP-seq peaks of embryonic liver H3K4me3 P0 from ENCODE 3 (UCSD/LICR)
         type bigBed 6 +
@@ -5307,7 +5306,7 @@ visibility dense
 
         track liver.H3K27ac.E11
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF573PPG.bigBed
-        parent encode3RenHistonePeaks .
+        parent encode3RenHistonePeaks off
         shortLabel liver K27ac 11
         longLabel ChIP-seq peaks of embryonic liver H3K27ac on day E11 from ENCODE 3 (UCSD/LICR)
         type bigBed 6 +
@@ -5357,7 +5356,7 @@ visibility dense
 
         track liver.H3K4me1.E11
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF457HHU.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel liver K4me1 11
         longLabel ChIP-seq peaks of embryonic liver H3K4me1 on day E11 from ENCODE 3 (UCSD/LICR)
         type bigBed 6 +
