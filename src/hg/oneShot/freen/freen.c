@@ -15,6 +15,7 @@
 #include "localmem.h"
 #include "csv.h"
 #include "tokenizer.h"
+#include "strex.h"
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
@@ -40,6 +41,24 @@ enum strexType
     strexTypeDouble = 4,
     };
 
+enum strexBuiltInFunc
+/* One of these for each builtIn.  We'll just do a switch to implement */
+    {
+    strexBuiltInTrim,
+    strexBuiltInBetween,
+    strexBuiltInSpaced,
+    };
+
+struct strexBuiltIn
+/* A built in function */
+    {
+    char *name;
+    enum strexBuiltInFunc func;
+    int paramCount;
+    enum strexType *paramTypes;
+    };
+
+
 union strexVal
 /* Some value of arbirary type that can be of any type corresponding to strexType */
     {
@@ -47,6 +66,7 @@ union strexVal
     char *s;
     long long i;
     double x;
+    struct strexBuiltIn *builtIn;
     };
 
 struct strexEval
@@ -98,10 +118,62 @@ struct strexParse
     union strexVal val;		/* Return value of this operation. */
     };
 
-typedef char* (*StrexEvalLookup)(void *record, char *key);
-/* Callback for strexEvalOnRecord to lookup a variable value. */
+struct strexIn
+/* Input to the strex parser */
+    {
+    struct tokenizer *tkz;  /* Get next text input from here */
+    struct hash *builtInHash;  /* Hash of built in functions */
+    };
 
-void strexValDump(union strexVal val, enum strexType type, FILE *f)
+enum strexType oneString[] = {strexTypeString};
+enum strexType twoStrings[] = {strexTypeString, strexTypeString};
+enum strexType threeStrings[] = {strexTypeString, strexTypeString, strexTypeString};
+enum strexType stringInt[] = {strexTypeString, strexTypeInt};
+
+static struct strexBuiltIn builtins[] = {
+    { "trim", strexBuiltInTrim, 1, oneString, },
+    { "between", strexBuiltInBetween, 3, threeStrings, },
+    { "spaced", strexBuiltInSpaced, 3, stringInt },
+};
+
+
+
+static struct hash *hashBuiltIns()
+/* Build a hash of builtins keyed by name */
+{
+struct hash *hash = hashNew(0);
+int i;
+for (i=0; i<ArraySize(builtins); ++i)
+    hashAdd(hash, builtins[i].name, &builtins[i]);
+return hash;
+}
+
+static struct strexIn *strexInNew(char *expression)
+/* Return a new strexIn structure wrapped around expression */
+{
+struct lineFile *lf = lineFileOnString(expression, TRUE, cloneString(expression));
+struct tokenizer *tkz = tokenizerOnLineFile(lf);
+tkz->leaveQuotes = TRUE;
+struct strexIn *si;
+AllocVar(si);
+si->tkz = tkz;
+si->builtInHash = hashBuiltIns();
+return si;
+}
+
+void strexInFree(struct strexIn **pSi)
+/* Free up memory associated with strexIn structure */
+{
+struct strexIn *si = *pSi;
+if (si != NULL)
+    {
+    hashFree(&si->builtInHash);
+    tokenizerFree(&si->tkz);
+    freez(pSi);
+    }
+}
+
+static void strexValDump(union strexVal val, enum strexType type, FILE *f)
 /* Dump out value to file. */
 {
 switch (type)
@@ -121,7 +193,7 @@ switch (type)
     }
 }
 
-char *strexOpToString(enum strexOp op)
+static char *strexOpToString(enum strexOp op)
 /* Return string representation of parse op. */
 {
 switch (op)
@@ -188,30 +260,29 @@ for (child = p->children; child != NULL; child= child->next)
     strexParseDump(child, depth+1, f);
 }
 
-
-
-static void expectingGot(struct tokenizer *tkz, char *expecting, char *got)
+static void expectingGot(struct strexIn *in, char *expecting, char *got)
 /* Print out error message about unexpected input. */
 {
-errAbort("Expecting %s, got %s, line %d of %s", expecting, got, tkz->lf->lineIx,
-	tkz->lf->fileName);
+errAbort("Expecting %s, got %s, line %d of %s", expecting, got, in->tkz->lf->lineIx,
+	in->tkz->lf->fileName);
 }
 
-static void skipOverRequired(struct tokenizer *tkz, char *expecting)
+static void skipOverRequired(struct strexIn *in, char *expecting)
 /* Make sure that next token is tok, and skip over it. */
 {
-tokenizerMustHaveNext(tkz);
-if (!sameWord(tkz->string, expecting))
-    expectingGot(tkz, expecting, tkz->string);
+tokenizerMustHaveNext(in->tkz);
+if (!sameWord(in->tkz->string, expecting))
+    expectingGot(in, expecting, in->tkz->string);
 }
 
 
-struct strexParse *strexParseExpression(struct tokenizer *tkz);
+struct strexParse *strexParseExpression(struct strexIn *in);
 /* Parse out an expression with a single value */
 
-static struct strexParse *strexParseAtom(struct tokenizer *tkz)
+static struct strexParse *strexParseAtom(struct strexIn *in)
 /* Return low level (symbol or literal) */
 {
+struct tokenizer *tkz = in->tkz;
 char *tok = tokenizerMustHaveNext(tkz);
 struct strexParse *p;
 AllocVar(p);
@@ -265,8 +336,8 @@ else if (isdigit(c))
     }
 else if (c == '(')
     {
-    p = strexParseExpression(tkz);
-    skipOverRequired(tkz, ")");
+    p = strexParseExpression(in);
+    skipOverRequired(in, ")");
     }
 else
     {
@@ -399,7 +470,7 @@ else
     }
 }
 
-static struct strexParse *strexParseFunction(struct tokenizer *tkz)
+static struct strexParse *strexParseFunction(struct strexIn *in)
 /* Handle the (a,b,c) in funcCall(a,b,c).  Convert it into tree:
 *         strexOpBuiltInCall
 *            strexParse(a)
@@ -408,20 +479,28 @@ static struct strexParse *strexParseFunction(struct tokenizer *tkz)
 * or something like that.  With no parameters 
 *            strexParseFunction */
 {
-struct strexParse *function = strexParseAtom(tkz);
+struct tokenizer *tkz = in->tkz;
+struct strexParse *function = strexParseAtom(in);
 char *tok = tokenizerNext(tkz);
 if (tok == NULL)
     tokenizerReuse(tkz);
 else if (tok[0] == '(')
     {
-    uglyf("Making function I hope\n");
     /* Check that the current op, is a pure symbol. */
     if (function->op != strexOpSymbol)
         errAbort("Unexpected '(' line %d of %s", tkz->lf->lineIx, tkz->lf->fileName);
 
+    /* Look up function to call and complain if it doesn't exist */
+    char *functionName = function->val.s;
+    struct strexBuiltIn *builtIn = hashFindVal(in->builtInHash, functionName);
+    if (builtIn == NULL)
+        errAbort("No built in function %s exists line %d of %s", functionName, tkz->lf->lineIx,
+	    tkz->lf->fileName);
+
     /* We're going to reuse this current op */
     function->op = strexOpBuiltInCall;
     function->type = strexTypeString;
+    function->val.builtIn = builtIn;
 
     tok = tokenizerMustHaveNext(tkz);
     if (tok[0] != ')')
@@ -429,11 +508,9 @@ else if (tok[0] == '(')
 	tokenizerReuse(tkz);
 	for (;;)
 	    {
-	    struct strexParse *param = strexParseExpression(tkz);
-	    // struct strexParse *param = strexParseAtom(tkz);
+	    struct strexParse *param = strexParseExpression(in);
 	    slAddHead(&function->children, param);
 	    tok = tokenizerMustHaveNext(tkz);
-	    uglyf("in function got %s\n", tok);
 	    if (tok[0] == ')')
 	        break;
 	    else if (tok[0] != ',')
@@ -448,23 +525,24 @@ else
 return function;
 }
 
-static struct strexParse *strexParseIndex(struct tokenizer *tkz)
+static struct strexParse *strexParseIndex(struct strexIn *in)
 /* Handle the [] in this[6].  Convert it into tree:
 *         strexOpArrayIx
 *            strexParseFunction
 *            strexParseFunction */
 {
-struct strexParse *collection = strexParseFunction(tkz);
+struct tokenizer *tkz = in->tkz;
+struct strexParse *collection = strexParseFunction(in);
 struct strexParse *p = collection;
 char *tok = tokenizerNext(tkz);
 if (tok == NULL)
     tokenizerReuse(tkz);
 else if (tok[0] == '[')
     {
-    struct strexParse *index = strexParseExpression(tkz);
-    // struct strexParse *index = strexParseFunction(tkz);
+    struct strexParse *index = strexParseExpression(in);
+    // struct strexParse *index = strexParseFunction(in);
     index = strexParseCoerce(index, strexTypeInt);
-    skipOverRequired(tkz, "]");
+    skipOverRequired(in, "]");
     AllocVar(p);
     p->op = strexOpArrayIx;
     p->type = strexTypeString;
@@ -478,13 +556,14 @@ return p;
 }
 
 
-static struct strexParse *strexParseUnaryMinus(struct tokenizer *tkz)
+static struct strexParse *strexParseUnaryMinus(struct strexIn *in)
 /* Return unary minus sort of parse tree if there's a leading '-' */
 {
+struct tokenizer *tkz = in->tkz;
 char *tok = tokenizerMustHaveNext(tkz);
 if (tok[0] == '-')
     {
-    struct strexParse *c = strexParseIndex(tkz);
+    struct strexParse *c = strexParseIndex(in);
     struct strexParse *p;
     AllocVar(p);
     if (c->type == strexTypeInt)
@@ -504,14 +583,15 @@ if (tok[0] == '-')
 else
     {
     tokenizerReuse(tkz);
-    return strexParseIndex(tkz);
+    return strexParseIndex(in);
     }
 }
 
-static struct strexParse *strexParseSum(struct tokenizer *tkz)
+static struct strexParse *strexParseSum(struct strexIn *in)
 /* Parse out plus or minus. */
 {
-struct strexParse *p = strexParseUnaryMinus(tkz);
+struct tokenizer *tkz = in->tkz;
+struct strexParse *p = strexParseUnaryMinus(in);
 for (;;)
     {
     char *tok = tokenizerNext(tkz);
@@ -523,7 +603,7 @@ for (;;)
 
     /* What we've parsed so far becomes left side of binary op, next term ends up on right. */
     struct strexParse *l = p;
-    struct strexParse *r = strexParseUnaryMinus(tkz);
+    struct strexParse *r = strexParseUnaryMinus(in);
 
     /* Make left and right side into a common type */
     enum strexType childType = commonTypeForBop(l->type, r->type);
@@ -542,10 +622,10 @@ for (;;)
 }
 
 
-struct strexParse *strexParseExpression(struct tokenizer *tkz)
-/* Parse out a clause, usually a where clause. */
+struct strexParse *strexParseExpression(struct strexIn *in)
+/* Parse out an expression. Leaves input at next expression. */
 {
-return strexParseSum(tkz);
+return strexParseSum(in);
 }
 
 /* ~~~ start of strexEval */
@@ -654,15 +734,60 @@ res.type = strexTypeString;
 return res;
 }
 
-static struct strexEval strexEvalCallBuiltIn(struct strexParse *p, void *record, StrexEvalLookup lookup,
-	struct lm *lm)
+char *wordInString(char *words,  int ix,  struct lm *lm)
+/* Return the word delimited string of index ix as clone into lm */
+{
+char *s = words;
+int i;
+for (i=0; ; ++i)
+    {
+    s = skipLeadingSpaces(s);
+    if (isEmpty(s))
+        errAbort("There aren't %d words in %s", ix+1, words);
+    char *end = skipToSpaces(s);
+    if (i == ix)
+        {
+	if (end == NULL)
+	    return lmCloneString(lm, s);
+	else
+	    return lmCloneMem(lm, s, end - s);
+	}
+    s = end;
+    }
+}
+
+static struct strexEval strexEvalCallBuiltIn(struct strexParse *p, 
+    void *record, StrexEvalLookup lookup, struct lm *lm)
 /* Handle parse tree generated by an indexed array. */
 {
-char buf[256];
-safef(buf, sizeof(buf), "%s(%d parames)", p->val.s,  slCount(p->children));
+struct strexBuiltIn *builtIn = p->val.builtIn;
 struct strexEval res;
-res.val.s = cloneString(buf);
 res.type = strexTypeString;
+switch (builtIn->func)
+    {
+    case strexBuiltInTrim:
+	{
+        struct strexEval a = strexLocalEval(p->children, record, lookup, lm);
+	res.val.s = trimSpaces(a.val.s);
+	break;
+	}
+    case strexBuiltInBetween:
+	{
+        struct strexEval a = strexLocalEval(p->children, record, lookup, lm);
+        struct strexEval b = strexLocalEval(p->children->next, record, lookup, lm);
+        struct strexEval c = strexLocalEval(p->children->next->next, record, lookup, lm);
+	char *between = stringBetween(a.val.s, c.val.s, b.val.s);
+	res.val.s = lmCloneString(lm, between);
+	freeMem(between);
+        break;
+	}
+    case strexBuiltInSpaced:
+        {
+        struct strexEval a = strexLocalEval(p->children, record, lookup, lm);
+        struct strexEval b = strexLocalEval(p->children->next, record, lookup, lm);
+	res.val.s = wordInString(a.val.s, b.val.i, lm);
+	}
+    }
 return res;
 }
 
@@ -737,6 +862,30 @@ switch (p->op)
 	res.val.x = res.val.b;
 	break;
 
+    case strexOpIntToString:
+        {
+	res = strexLocalEval(p->children, record, lookup, lm);
+	res.type = strexTypeString;
+	char buf[32];
+	safef(buf, sizeof(buf), "%lld", res.val.i);
+	res.val.s = lmCloneString(lm, buf);
+	break;
+	}
+    case strexOpDoubleToString:
+        {
+	res = strexLocalEval(p->children, record, lookup, lm);
+	res.type = strexTypeString;
+	char buf[32];
+	safef(buf, sizeof(buf), "%g", res.val.x);
+	res.val.s = lmCloneString(lm, buf);
+	break;
+	}
+    case strexOpBooleanToString:
+	res = strexLocalEval(p->children, record, lookup, lm);
+	res.type = strexTypeString;
+        res.val.s = (res.val.b ? "true" : "false");
+	break;
+
     /* Arithmetical negation. */
     case strexOpUnaryMinusInt:
         res = strexLocalEval(p->children, record, lookup, lm);
@@ -769,11 +918,17 @@ switch (p->op)
 return res;
 }
 
-struct strexEval strexEvalOnRecord(struct strexParse *p, void *record, StrexEvalLookup lookup, 
-	struct lm *lm)
-/* Evaluate parse tree on record, using lm for memory for string operations. */
+char *strexEvalAsString(struct strexParse *p, void *record, StrexEvalLookup lookup)
+/* Evaluating a strex expression on a symbol table with a lookup function for variables and
+ * return result as a string value. */
 {
-return strexLocalEval(p, record, lookup, lm);
+struct lm *lm = lmInit(0);
+struct strexEval res = strexLocalEval(p, record, lookup, lm);
+char numBuf[32];
+struct strexEval strRes = strexEvalCoerceToString(res, numBuf, sizeof(numBuf));
+char *ret = cloneString(strRes.val.s);
+lmCleanup(&lm);
+return ret;
 }
 
 static struct strexEval strexLocalEval(struct strexParse *p, void *record, StrexEvalLookup lookup, 
@@ -805,19 +960,36 @@ struct hash *hash = record;
 return hashFindVal(hash, key);
 }
 
+static void ensureAtEnd(struct strexIn *in)
+/* Make sure that we are at end of input. */
+{
+struct tokenizer *tkz = in->tkz;
+char *leftover = tokenizerNext(tkz);
+if (leftover != NULL)
+    errAbort("Extra input starting with '%s' line %d of %s", leftover, tkz->lf->lineIx,
+	tkz->lf->fileName);
+}
+
+struct strexParse *strexParseString(char *s)
+/* Parse out string expression in s and return root of tree. */
+{
+struct strexIn *si = strexInNew(s);
+struct strexParse *parseTree = strexParseExpression(si);
+ensureAtEnd(si);
+strexInFree(&si);
+return parseTree;
+}
+
 void freen(char *symbols, char *expression)
 /* Test something */
 {
 struct hash *symHash = hashFromFile(symbols);
 verbose(1, "Got %d symbols from %s\n", symHash->elCount, symbols);
-struct lineFile *lf = lineFileOnString(expression, TRUE, cloneString(expression));
-struct tokenizer *tkz = tokenizerOnLineFile(lf);
-tkz->leaveQuotes = TRUE;
-struct strexParse *parseTree = strexParseExpression(tkz);
+uglyf("Parsing...\n");
+struct strexParse *parseTree = strexParseString(expression);
 strexParseDump(parseTree, 0, uglyOut);
-struct lm *evalLm = lmInit(0);
-struct strexEval res =strexEvalOnRecord(parseTree, symHash, symLookup, evalLm);
-uglyf("res = %s\n", res.val.s);
+uglyf("Evaluating...\n");
+uglyf("%s\n", strexEvalAsString(parseTree, symHash, symLookup));
 }
 
 
