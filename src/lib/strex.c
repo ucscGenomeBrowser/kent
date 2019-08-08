@@ -48,10 +48,10 @@ enum strexBuiltInFunc
     {
     strexBuiltInTrim,
     strexBuiltInBetween,
-    strexBuiltInSpaced,
+    strexBuiltInSplit,
     strexBuiltInNow,
     strexBuiltInMd5,
-    strexBuiltInSplit,
+    strexBuiltInSeparate,
     };
 
 struct strexBuiltIn
@@ -139,10 +139,10 @@ static enum strexType stringStringInt[] = {strexTypeString, strexTypeString, str
 static struct strexBuiltIn builtins[] = {
     { "trim", strexBuiltInTrim, 1, oneString, },
     { "between", strexBuiltInBetween, 3, threeStrings, },
-    { "spaced", strexBuiltInSpaced, 2, stringInt },
+    { "split", strexBuiltInSplit, 2, stringInt },
     { "now", strexBuiltInNow, 0, NULL },
     { "md5", strexBuiltInMd5, 1, oneString },
-    { "split", strexBuiltInSplit, 3, stringStringInt },
+    { "separate", strexBuiltInSeparate, 3, stringStringInt },
 };
 
 
@@ -805,8 +805,8 @@ res.type = strexTypeString;
 return res;
 }
 
-static char *wordInString(char *words,  int ix,  struct lm *lm)
-/* Return the word delimited string of index ix as clone into lm */
+static char *splitString(char *words,  int ix,  struct lm *lm)
+/* Return the space-delimited word of index ix as clone into lm */
 {
 char *s = words;
 int i;
@@ -827,7 +827,7 @@ for (i=0; ; ++i)
     }
 }
 
-static char *splitString(char *string, char *splitter, int ix, struct lm *lm)
+static char *separateString(char *string, char *splitter, int ix, struct lm *lm)
 /* Return the ix'th part of string as split apart by splitter */
 {
 int splitterSize = strlen(splitter);
@@ -868,11 +868,11 @@ switch (builtIn->func)
 	freeMem(between);
         break;
 	}
-    case strexBuiltInSpaced:
+    case strexBuiltInSplit:
         {
         struct strexEval a = strexLocalEval(p->children, record, lookup, lm);
         struct strexEval b = strexLocalEval(p->children->next, record, lookup, lm);
-	res.val.s = wordInString(a.val.s, b.val.i, lm);
+	res.val.s = splitString(a.val.s, b.val.i, lm);
 	break;
 	}
     case strexBuiltInNow:
@@ -890,12 +890,12 @@ switch (builtIn->func)
 	freez(&md5);
 	break;
 	}
-    case strexBuiltInSplit:
+    case strexBuiltInSeparate:
         {
         struct strexEval a = strexLocalEval(p->children, record, lookup, lm);
         struct strexEval b = strexLocalEval(p->children->next, record, lookup, lm);
         struct strexEval c = strexLocalEval(p->children->next->next, record, lookup, lm);
-	res.val.s = splitString(a.val.s, b.val.s, c.val.i, lm);
+	res.val.s = separateString(a.val.s, b.val.s, c.val.i, lm);
 	break;
 	}
     }
