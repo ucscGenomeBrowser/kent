@@ -16,6 +16,7 @@
 #include "csv.h"
 #include "tokenizer.h"
 #include "strex.h"
+#include "hmac.h"
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
@@ -47,6 +48,9 @@ enum strexBuiltInFunc
     strexBuiltInTrim,
     strexBuiltInBetween,
     strexBuiltInSpaced,
+    strexBuiltInNow,
+    strexBuiltInMd5,
+    strexBuiltInSplit,
     };
 
 struct strexBuiltIn
@@ -129,11 +133,15 @@ enum strexType oneString[] = {strexTypeString};
 enum strexType twoStrings[] = {strexTypeString, strexTypeString};
 enum strexType threeStrings[] = {strexTypeString, strexTypeString, strexTypeString};
 enum strexType stringInt[] = {strexTypeString, strexTypeInt};
+enum strexType stringStringInt[] = {strexTypeString, strexTypeString, strexTypeInt};
 
 static struct strexBuiltIn builtins[] = {
     { "trim", strexBuiltInTrim, 1, oneString, },
     { "between", strexBuiltInBetween, 3, threeStrings, },
-    { "spaced", strexBuiltInSpaced, 3, stringInt },
+    { "spaced", strexBuiltInSpaced, 2, stringInt },
+    { "now", strexBuiltInNow, 0, NULL },
+    { "md5", strexBuiltInMd5, 1, oneString },
+    { "split", strexBuiltInSplit, 3, stringStringInt },
 };
 
 
@@ -190,6 +198,29 @@ switch (type)
     case strexTypeDouble:
         fprintf(f, "%f", val.x);
 	break;
+    }
+}
+
+static char *strexTypeToString(enum strexType type)
+/* Return a string representation of type */
+{
+switch (type)
+    {
+    case strexTypeBoolean:
+	return "boolean";
+	break;
+    case strexTypeString:
+	return "string";
+	break;
+    case strexTypeInt:
+	return "integer";
+	break;
+    case strexTypeDouble:
+	return "floating point";
+	break;
+    default:
+        internalErr();
+	return NULL;
     }
 }
 
@@ -519,6 +550,25 @@ else if (tok[0] == '(')
 	    }
 	slReverse(&function->children);
 	}
+
+    /* Check function parameter count */
+    int childCount = slCount(function->children);
+    if (childCount != builtIn->paramCount)
+        errAbort("Function %s has %d parameters but needs %d line %d of %s",
+	    builtIn->name, childCount, builtIn->paramCount, tkz->lf->lineIx, tkz->lf->fileName);
+	    
+    /* Check function parameter types */
+    int i;
+    struct strexParse *p;
+    for (i=0, p=function->children; i<childCount; ++i, p = p->next)
+        {
+	if (p->type != builtIn->paramTypes[i])
+	    {
+	    errAbort("Parameter #%d to %s needs to be type %s not %s line %d of %s",
+		i, builtIn->name,  strexTypeToString(builtIn->paramTypes[i]), 
+		strexTypeToString(p->type), tkz->lf->lineIx, tkz->lf->fileName);
+	    }
+	}
     }
 else
     tokenizerReuse(tkz);
@@ -734,7 +784,7 @@ res.type = strexTypeString;
 return res;
 }
 
-char *wordInString(char *words,  int ix,  struct lm *lm)
+static char *wordInString(char *words,  int ix,  struct lm *lm)
 /* Return the word delimited string of index ix as clone into lm */
 {
 char *s = words;
@@ -754,6 +804,22 @@ for (i=0; ; ++i)
 	}
     s = end;
     }
+}
+
+static char *splitString(char *string, char *splitter, int ix, struct lm *lm)
+/* Return the ix'th part of string as split apart by splitter */
+{
+int splitterSize = strlen(splitter);
+if (splitterSize != 1)
+    errAbort("Separator parameter to split must be a single character, not %s", splitter);
+int count = chopByChar(string, splitter[0], NULL, 0);
+if (ix >= count)
+    errAbort("There aren't %d fields separated by %s in %s", ix+1, splitter, string);
+char **row;
+lmAllocArray(lm, row, count);
+char *scratch = lmCloneString(lm, string);
+chopByChar(scratch, splitter[0], row, count);
+return row[ix];
 }
 
 static struct strexEval strexEvalCallBuiltIn(struct strexParse *p, 
@@ -786,6 +852,30 @@ switch (builtIn->func)
         struct strexEval a = strexLocalEval(p->children, record, lookup, lm);
         struct strexEval b = strexLocalEval(p->children->next, record, lookup, lm);
 	res.val.s = wordInString(a.val.s, b.val.i, lm);
+	break;
+	}
+    case strexBuiltInNow:
+        {
+	time_t now = time(NULL);
+	res.val.s = lmCloneString(lm, ctime(&now));
+	eraseTrailingSpaces(res.val.s);
+	break;
+	}
+    case strexBuiltInMd5:
+        {
+        struct strexEval a = strexLocalEval(p->children, record, lookup, lm);
+	char *md5 = hmacMd5("", a.val.s);
+	res.val.s = lmCloneString(lm, md5);
+	freez(&md5);
+	break;
+	}
+    case strexBuiltInSplit:
+        {
+        struct strexEval a = strexLocalEval(p->children, record, lookup, lm);
+        struct strexEval b = strexLocalEval(p->children->next, record, lookup, lm);
+        struct strexEval c = strexLocalEval(p->children->next->next, record, lookup, lm);
+	res.val.s = splitString(a.val.s, b.val.s, c.val.i, lm);
+	break;
 	}
     }
 return res;
