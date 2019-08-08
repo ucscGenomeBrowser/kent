@@ -10,7 +10,7 @@
 #include "ra.h"
 #include "csv.h"
 #include "fieldedTable.h"
-#include "hmac.h"
+#include "strex.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -35,7 +35,7 @@ errAbort(
 "or an @ followed by a table name, in which case it refers to the key of that table.\n"
 "If the source column is in comma-separated-values format then the sourceField can include a\n"
 "constant array index to pick out an item from the csv list.\n"
-"If sourceField begins with a #, a md5 hash of the value is used instead\n"
+"You can also use strex expressions for more complicated situations.  See strex.doc\n"
 );
 }
 
@@ -58,7 +58,7 @@ return TRUE;
 enum fieldValType
 /* A type */
     {
-    fvVar, fvArray, fvLink, fvConst, 
+    fvVar, fvLink, fvExp,
     };
 
 struct newFieldInfo
@@ -67,11 +67,12 @@ struct newFieldInfo
     struct newFieldInfo *next;	/* Might want to hang these on a list. */
     char *name;			/* Name of field in new table */
     enum fieldValType type;	/* Constant, link, or variable */
-    boolean justHash;		/* Just do hash of field */
     int oldIx;			/* For variable and link ones where field is in old table */
+    int newIx;			/* Where field is in new table. */
     char *val;			/* For constant ones the string value */
     int arrayIx;		/* If it's an array then the value */
     struct newFieldInfo *link;	/* If it's fvLink then pointer to the linked field */
+    struct strexParse *exp;	/* A parsed out string expression */
     };
 
 struct newFieldInfo *findField(struct newFieldInfo *list, char *name)
@@ -104,6 +105,20 @@ for (el = list; el != NULL; el = el->next)
 return NULL;
 }
 
+boolean isTotallySimple(char *s)
+/* We are only alphanumerical and dotty things, we even begin with a alnum or _*/
+{
+char c = *s++;
+if (!isalpha(c) && (c != '_'))
+    return FALSE;
+while ((c = *s++) != 0)
+    {
+    if (!(isalnum(c) || (c == '_') || (c == '.')))
+	return FALSE;
+    }
+return TRUE;
+}
+
 struct newFieldInfo *parseFieldVal(char *name, char *input)
 /* return a newFieldInfo based on the contents of input, which are not destroyed */
 {
@@ -121,23 +136,8 @@ if (isEmpty(s))
     }
 else
     {
-    /* Set flag if we start with a hash */
     char c = s[0];
-    if (c == '#')
-        {
-	fv->justHash = TRUE;
-	s = skipLeadingSpaces(s+1);
-	c = s[0];
-	}
-
-    if (c == '"' || c == '\'')
-	{
-	char *val = fv->val = cloneString(s);
-	if (!parseQuotedString(val, val, NULL))
-	    errAbort("in %s", input);
-	fv->type = fvConst;
-	}
-    else if (c == '@')
+    if (c == '@')
 	{
 	char *val = fv->val = cloneString(skipLeadingSpaces(s+1));
 	trimSpaces(val);
@@ -147,30 +147,43 @@ else
 	}
     else 
         {
-	char *val = fv->val = cloneString(s);
-	trimSpaces(val);
-	char *arrayStart = strchr(val, '[');
-	if (arrayStart != NULL)
+	if (isTotallySimple(s))
 	    {
-	    *arrayStart++ = 0;  // Erase '[' and skip over
-	    if (lastChar(arrayStart) != ']')
-		errAbort("Missing ']' in %s", s);
-	    trimLastChar(arrayStart);
-	    arrayStart = trimSpaces(arrayStart);
-	    fv->arrayIx = sqlUnsigned(arrayStart);
-	    fv->type = fvArray;
+	    fv->val = cloneString(skipLeadingSpaces(s));
+	    eraseTrailingSpaces(fv->val);
+	    fv->type = fvVar;
 	    }
 	else
-	    {  /* Default case, a normal field name */
-	    fv->type = fvVar;
+	    {
+	    fv->val = cloneString(s);
+	    fv->exp = strexParseString(fv->val);
+	    fv->type = fvExp;
 	    }
 	}
     }
 return fv;
 }
 
-void selectUniqueIntoTable(struct fieldedTable *inTable, struct newFieldInfo *fieldList,
-    int keyFieldIx, struct fieldedTable *outTable)
+struct symRec
+/* Something we pass as a record to symLookup */
+    {
+    struct hash *hash;	    /* The hash with symbol to row index */
+    char **row;		    /* The row we are working on */
+    };
+
+static char *symLookup(void *record, char *key)
+/* Lookup symbol in hash */
+{
+struct symRec *rec = record;
+struct hash *hash = rec->hash;
+char **row = rec->row;
+int rowIx = hashIntVal(hash, key);
+return row[rowIx];
+}
+
+
+void selectUniqueIntoTable(struct fieldedTable *inTable,  struct hash *inFieldHash,
+    struct newFieldInfo *fieldList, int keyFieldIx, struct fieldedTable *outTable)
 /* Populate out table with selected rows from newTable */
 {
 struct hash *uniqHash = hashNew(0);
@@ -186,7 +199,6 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
     {
     /* Create new row from a scan through old table */
     char **inRow = fr->row;
-    char *key = inRow[keyFieldIx];
     int i;
     struct newFieldInfo *unlinkedFv;
     for (i=0, unlinkedFv=fieldList; i<outFieldCount && unlinkedFv != NULL; 
@@ -197,35 +209,17 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 	while (fv->type == fvLink)
 	    fv = fv->link;
 	
-	if (fv->type == fvConst)
-	    outRow[i] = fv->val;
-	else if (fv->type == fvVar)
+	if (fv->type == fvVar)
 	    outRow[i] = inRow[fv->oldIx];
-	else if (fv->type == fvArray)
+	else if (fv->type == fvExp)
 	    {
-	    char *csv = inRow[fv->oldIx];
-	    int j;
-	    for (j=0; ; ++j)
-	        {
-		char *el = csvParseNext(&csv, csvScratch);
-		if (el == NULL)
-		    {
-		    outRow[i] = "out of range";
-		    break;
-		    }
-		if (j >= fv->arrayIx)
-		    {
-		    outRow[i] = cloneString(el);
-		    break;
-		    }
-		}
-	    }
-	if (fv->justHash)
-	    {
-	    outRow[i] = hmacMd5("", outRow[i]);
+	    struct symRec symRec = {inFieldHash, inRow};
+	    outRow[i] = strexEvalAsString(fv->exp, &symRec, symLookup);
+	    verbose(2, "evaluated %s to %s\n", fv->val, outRow[i]);
 	    }
 	}
 
+    char *key = outRow[keyFieldIx];
     struct fieldedRow *uniqFr = hashFindVal(uniqHash, key);
     if (uniqFr == NULL)
         {
@@ -236,11 +230,24 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
         {
 	if (!allStringsSame(outRow, uniqFr->row, outFieldCount))
 	    errAbort("Duplicate id %s but different data in key field %s of %s.",
-		key, inTable->fields[keyFieldIx], outTable->name);
+		key, outTable->fields[keyFieldIx], outTable->name);
 	}
     }
 dyStringFree(&csvScratch);
 }
+
+
+
+struct hash *hashFieldIx(char **fields, int fieldCount)
+/* Create a hash filled with fields with integer valued indexes */
+{
+int i;
+struct hash *hash = hashNew(0);
+for (i=0; i<fieldCount; ++i)
+   hashAdd(hash, fields[i], intToPt(i));
+return hash;
+}
+
 
 void tabToTabDir(char *inTabFile, char *specFile, char *outDir)
 /* tabToTabDir - Convert a large tab-separated table to a directory full of such tables 
@@ -282,7 +289,8 @@ while ((specStanza = raNextStanzAsPairs(lf)) != NULL)
         {
 	char *newName = field->name;
 	struct newFieldInfo *fv = parseFieldVal(newName, field->val);
-	if (fv->type == fvVar || fv->type == fvArray)
+	fv->newIx = i;
+	if (fv->type == fvVar)
 	    fv->oldIx = fieldedTableMustFindFieldIx(inTable, fv->val);
 	fieldNames[i] = newName;
 	slAddHead(&fvList, fv);
@@ -322,12 +330,15 @@ for (newTable = newTableList; newTable != NULL; newTable = newTable->next)
       }
     }
 
+struct hash *inFieldHash = hashFieldIx(inTable->fields, inTable->fieldCount);
+
 /* Output tables */
 for (newTable = newTableList; newTable != NULL; newTable = newTable->next)
     {
     /* Populate table */
     struct fieldedTable *outTable = newTable->table;
-    selectUniqueIntoTable(inTable, newTable->fieldList, newTable->keyField->oldIx, outTable);
+    selectUniqueIntoTable(inTable, inFieldHash,
+	newTable->fieldList, newTable->keyField->newIx, outTable);
 
     /* Create output file name and save file. */
     char outTabName[FILENAME_LEN];
