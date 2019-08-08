@@ -7801,7 +7801,6 @@ if (hideAll || defaultTracks)
     changeTrackVis(groupList, NULL, vis);
     }
 
-trackList = onlyVisible(trackList);
 makeGlobalTrackHash(trackList);
 
 // Subtrack settings must be removed when composite/view settings are updated
@@ -7809,6 +7808,7 @@ parentChildCartCleanup(trackList,cart,oldVars);
 if (measureTiming)
     measureTime("parentChildCartCleanup");
 
+trackList = onlyVisible(trackList);
 if(!psOutput && !cartUsualBoolean(cart, "hgt.imageV1", FALSE))
     {
 
