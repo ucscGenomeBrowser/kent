@@ -83,14 +83,50 @@ for (aspectIx = 0; aspectIx < ArraySize(aspects); ++aspectIx)
 	{
 	char *goID = row[0];
 	char *goTermName = row[1];
-	if (!hasFirst)
+  /*	if (!hasFirst)
 	    {
-	    hPrintf("<B>%s:</B><BR>", aspectNames[aspectIx]);
-	    hasFirst = TRUE;
+	    hPrintf("<B>good, %s:</B><BR>", aspectNames[aspectIx]);
+	    hasFirst = TRUE; 
 	    }
-        hPrintf("<A HREF = \"");
-	hPrintf("http://amigo1.geneontology.org/cgi-bin/amigo/go.cgi?view=details&search_constraint=terms&depth=0&query=%s", goID);
-	hPrintf("\" TARGET=_blank>%s</A> %s<BR>\n", goID, goTermName);
+		if ( strcmp(aspectNames[aspectIx], "Molecular Function") == 0)
+        		{
+			hPrintf("<A HREF = \"");
+			hPrintf("http://amigo.geneontology.org/amigo/search/ontology?q=%s", goID);
+			hPrintf("\" TARGET=_blank>%s</A> %s<BR>\n", goID, goTermName);
+        		}
+		else if ( strcmp(aspectNames[aspectIx], "Biological Process") == 0)
+                        {
+                        hPrintf("<A HREF = \"");
+                        hPrintf("http://amigo.geneontology.org/amigo/search/bioentity?q=%s", goID);
+                        hPrintf("\" TARGET=_blank>%s</A> %s<BR>\n", goID, goTermName);
+                        }
+		else if ( strcmp(aspectNames[aspectIx], "Cellular Component") == 0)
+                        {
+                        hPrintf("<A HREF = \"");
+                        hPrintf("http://amigo.geneontology.org/amigo/search/annotation?q=%s", goID);
+                        hPrintf("\" TARGET=_blank>%s</A> %s<BR>\n", goID, goTermName);
+                        } */
+        if (!hasFirst)
+            {
+            hPrintf("<B>good, %s:</B><BR>", aspectNames[aspectIx]);
+            hasFirst = TRUE; 
+            }
+		hPrintf("<A HREF = \"");
+                if ( strcmp(aspectNames[aspectIx], "Molecular Function") == 0)
+                        {
+                        hPrintf("http://amigo.geneontology.org/amigo/search/ontology?q=%s", goID);
+                        }
+                else if ( strcmp(aspectNames[aspectIx], "Biological Process") == 0)
+                        {
+                        hPrintf("http://amigo.geneontology.org/amigo/search/bioentity?q=%s", goID);
+                        }
+                else if ( strcmp(aspectNames[aspectIx], "Cellular Component") == 0)
+                        {
+                        hPrintf("http://amigo.geneontology.org/amigo/search/annotation?q=%s", goID);
+                        }
+		
+                hPrintf("\" TARGET=_blank>%s</A> %s<BR>\n", goID, goTermName);
+ 
 	}
     if (hasFirst)
         hPrintf("<BR>");
