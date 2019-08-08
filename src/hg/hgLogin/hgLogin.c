@@ -642,8 +642,8 @@ safef(activateURL, sizeof(activateURL),
     cgiEncode(encToken));
 safef(subject, sizeof(subject),"%s account e-mail address confirmation", brwName);
 safef(msg, sizeof(msg),
-    "  Someone (probably you, from IP address %s) has requested an account %s with this e-mail address on the %s.\nTo confirm that this account really does belong to you on the %s, open this link in your browser:\n\n%s\n\nIf this is *not* you, do not follow the link. This confirmation code will expire in 7 days.\n\n%s\n%s", 
-     remoteAddr, username, brwName, brwName, activateURL, signature, returnAddr);
+    "Someone (probably you, from IP address %s) has requested an account %s with this e-mail address on the %s.\nTo confirm that this account really does belong to you on the %s, open this link in your browser:\n\n%s\n\nIf this is *not* you, do not follow the link. This confirmation code will expire in 7 days.\n\nIf this *is* you, after clicking the activation link, your new account gives you access to sessions you can create and name. Sessions allow you to save your Genome Browser screen configuration and share it with others with a link like https://genome.ucsc.edu/s/%s/YourSessionName\n\nFor more information on sessions, see our help page on the topic: https://genome.ucsc.edu/goldenPath/help/hgSessionHelp.html#Introduction\n\nAdditional resources:\nSubscribe to the Genome Browser Mailing List: https://groups.google.com/a/soe.ucsc.edu/group/genome-announce?hl=en\nGenome Browser User Guide: https://genome.ucsc.edu/goldenPath/help/hgTracksHelp.html\nTraining and Tutorials: https://genome.ucsc.edu/training/index.html\n\n%s\n%s",
+     remoteAddr, username, brwName, brwName, activateURL, username, signature, returnAddr);
 sendActMailOut(email, subject, msg);
 }
 

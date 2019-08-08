@@ -47,6 +47,7 @@ my $stepper = new HgStepManager(
       { name => 'gapOverlap',   func => \&doGapOverlap },
       { name => 'tandemDups',   func => \&doTandemDups },
       { name => 'cpgIslands',   func => \&doCpgIslands },
+      { name => 'ncbiGene',   func => \&doNcbiGene },
       { name => 'augustus',   func => \&doAugustus },
       { name => 'trackDb',   func => \&doTrackDb },
       { name => 'cleanup', func => \&doCleanup },
@@ -289,14 +290,17 @@ sub unlocalizedAgp($$$$) {
       my $ucscAcc = $acc;
       $ucscAcc =~ s/\./v/;
       $accToChr{$ucscAcc} = $accToChr{$acc};
-      $accToChr{$acc} = undef;
+      delete $accToChr{$acc};
     }
   }
 
   open (AGP, "|gzip -c >$agpOutput") or die "can not write to $agpOutput";
   open (NAMES, "|sort -u >$agpNames") or die "can not write to $agpNames";
+  my %chrNDone;	# key is chrom name, value is 1 when done
   foreach my $acc (keys %accToChr) {
     my $chrN = $accToChr{$acc};
+    next if (exists($chrNDone{$chrN}));
+    $chrNDone{$chrN} = 1;
     my $agpFile =  "$agpSource/chr$chrN.unlocalized.scaf.agp.gz";
     open (FH, "zcat $agpFile|") or die "can not read $agpFile";
     while (my $line = <FH>) {
@@ -596,6 +600,15 @@ fi
 zcat *.agp.gz | gzip > ../\$asmId.agp.gz
 faToTwoBit *.fa.gz ../\$asmId.2bit
 faToTwoBit -noMask *.fa.gz ../\$asmId.unmasked.2bit
+twoBitDup -keyList=stdout ../\$asmId.unmasked.2bit > \$asmId.dupCheck.txt
+(grep "are identical" \$asmId.dupCheck.txt || true) > \$asmId.dups.txt
+if [ -s "\$asmId.dups.txt" ]; then
+  printf "ERROR: duplicate sequences found in ../\$asmId.unmasked.2bit\n" 1>&2
+  grep "are identical" \$asmId.dupCheck.txt 1>&2
+  exit 255
+else
+  rm -f \$asmId.dups.txt
+fi
 touch -r ../download/\$asmId.2bit ../\$asmId.2bit
 touch -r ../download/\$asmId.2bit ../\$asmId.unmasked.2bit
 touch -r ../download/\$asmId.2bit ../\$asmId.agp.gz
@@ -616,6 +629,8 @@ if [ "\$checkAgp" != "All AGP and FASTA entries agree - both files are valid" ];
   printf "# ERROR: checkAgpAndFa \$asmId.agp.gz \$asmId.2bit failing\n" 1>&2
   exit 255
 fi
+join -t\$'\\t' <(sort ../\$asmId.chrom.sizes) <(sort \${asmId}*.names) | awk '{printf "0\\t%s\\t%d\\t%s\\t%d\\n", \$3,\$2,\$1,\$2}' > \$asmId.ncbiToUcsc.lift
+join -t\$'\\t' <(sort ../\$asmId.chrom.sizes) <(sort \${asmId}*.names) | awk '{printf "0\\t%s\\t%d\\t%s\\t%d\\n", \$1,\$2,\$3,\$2}' > \$asmId.ucscToNcbi.lift
 
 twoBitToFa ../\$asmId.2bit stdout | faCount stdin | gzip -c > \$asmId.faCount.txt.gz
 touch -r ../\$asmId.2bit \$asmId.faCount.txt.gz
@@ -688,10 +703,10 @@ sub doGatewayPage {
   my $photoJpg = "noPhoto";
   my $photoCredit = "noPhoto";
   my $photoLink = "";
-  if ( -s "$runDir/photo/$species.jpg" ) {
+  if ( -s "$runDir/../photo/$species.jpg" ) {
      $photoJpg = "../photo/\${species}.jpg";
      $photoCredit = "../photo/photoCredits.txt";
-     $photoLink = "ln -s ../photo/\${species}.jpg ."
+     $photoLink = "rm -f \${species}.jpg; ln -s ../photo/\${species}.jpg ."
   } else {
      printf STDERR "# gatewayPage: warning: no photograph available\n";
   }
@@ -700,19 +715,14 @@ sub doGatewayPage {
 export asmId=$asmId
 export species=$species
 
-if [ ../download/\${asmId}_assembly_report.txt -nt \$asmId.description.html ]; then
-  \$HOME/kent/src/hg/utils/automation/asmHubGatewayPage.pl \\
+\$HOME/kent/src/hg/utils/automation/asmHubGatewayPage.pl \\
      ../download/\${asmId}_assembly_report.txt ../\${asmId}.chrom.sizes \\
         $photoJpg $photoCredit \\
            > \$asmId.description.html 2> \$asmId.names.tab
-  \$HOME/kent/src/hg/utils/automation/genbank/buildStats.pl \\
+\$HOME/kent/src/hg/utils/automation/genbank/buildStats.pl \\
        ../\$asmId.chrom.sizes 2> \$asmId.build.stats.txt
-  touch -r ../download/\${asmId}_assembly_report.txt \$asmId.description.html
-  $photoLink
-else
-  printf "# gatewayPage step previously completed\\n" 1>&2
-  exit 0
-fi
+touch -r ../download/\${asmId}_assembly_report.txt \$asmId.description.html
+$photoLink
 _EOF_
   );
   $bossScript->execute();
@@ -805,7 +815,9 @@ doRepeatMasker.pl -continue=cleanup -buildDir=`pwd` -unmaskedSeq=$buildDir/\$asm
   -bigClusterHub=$bigClusterHub -workhorse=$workhorse -species="\$species" \$asmId
 
 \$HOME/kent/src/hg/utils/automation/asmHubRepeatMasker.sh \$asmId `pwd`/\$asmId.sorted.fa.out.gz `pwd`
-
+else
+  printf "# repeatMasker step previously completed\\n" 1>&2
+  exit 0
 fi
 _EOF_
   );
@@ -1162,6 +1174,77 @@ _EOF_
 } # sub doCpgIslands
 
 #########################################################################
+# * step: ncbiGene [workhorse]
+sub doNcbiGene {
+  my $gffFile = "$sourceDir/${asmId}_genomic.gff.gz";
+  if ( ! -s "${gffFile}" ) {
+    printf STDERR "# step ncbiGene: no gff file found at:\n#  %s\n", $gffFile;
+    return;
+  }
+  if ( ! -s "$buildDir/sequence/$asmId.ncbiToUcsc.lift" ) {
+    printf STDERR "# ERROR: ncbiGene: can not find ../../sequence/$asmId.ncbiToUcsc.lift\n";
+    exit 255;
+  }
+  my $runDir = "$buildDir/trackData/ncbiGene";
+
+  &HgAutomate::mustMkdir($runDir);
+
+  my $whatItDoes = "translate NCBI GFF3 gene definitions into a track";
+  my $bossScript = newBash HgRemoteScript("$runDir/doNcbiGene.bash",
+                    $workhorse, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+export asmId=$asmId
+export gffFile=$gffFile
+
+function cleanUp() {
+  rm -f \$asmId.ncbiGene.genePred.gz \$asmId.ncbiGene.genePred
+  rm -f \$asmId.geneAttrs.ncbi.txt
+}
+
+if [ \$gffFile -nt \$asmId.ncbiGene.bb ]; then
+  (gff3ToGenePred -warnAndContinue -useName \\
+    -attrsOut=\$asmId.geneAttrs.ncbi.txt \$gffFile stdout \\
+      2>> \$asmId.ncbiGene.log.txt || true) | genePredFilter stdin stdout \\
+        | gzip -c > \$asmId.ncbiGene.genePred.gz
+  genePredCheck \$asmId.ncbiGene.genePred.gz
+  export howMany=`genePredCheck \$asmId.ncbiGene.genePred.gz 2>&1 | grep "^checked" | awk '{print \$2}'`
+  if [ "\${howMany}" -eq 0 ]; then
+     printf "# ncbiGene: no gene definitions found in \$gffFile\n";
+     cleanUp
+     exit 0
+  fi
+  liftUp -extGenePred -type=.gp stdout \\
+      ../../sequence/\$asmId.ncbiToUcsc.lift error \\
+       \$asmId.ncbiGene.genePred.gz | gzip -c \\
+          > \$asmId.ncbiGene.ucsc.genePred.gz
+  ~/kent/src/hg/utils/automation/gpToIx.pl \$asmId.ncbiGene.ucsc.genePred.gz \\
+    | sort -u > \$asmId.ncbiGene.ix.txt
+  ixIxx \$asmId.ncbiGene.ix.txt \$asmId.ncbiGene.ix \$asmId.ncbiGene.ixx
+  rm -f \$asmId.ncbiGene.ix.txt
+  genePredToBigGenePred \$asmId.ncbiGene.ucsc.genePred.gz stdout \\
+      | sort -k1,1 -k2,2n > \$asmId.ncbiGene.bed
+  (bedToBigBed -type=bed12+8 -tab -as=\$HOME/kent/src/hg/lib/bigGenePred.as \\
+      -extraIndex=name \$asmId.ncbiGene.bed \\
+        ../../\$asmId.chrom.sizes \$asmId.ncbiGene.bb || true)
+  if [ ! -s "\$asmId.ncbiGene.bb" ]; then
+    printf "# ncbiGene: failing bedToBigBed\\n" 1>&2
+    exit 255
+  fi
+  touch -r\$gffFile \$asmId.ncbiGene.bb
+  bigBedInfo \$asmId.ncbiGene.bb | egrep "^itemCount:|^basesCovered:" \\
+    | sed -e 's/,//g' > \$asmId.ncbiGene.stats.txt
+  LC_NUMERIC=en_US /usr/bin/printf "# ncbiGene %s %'d %s %'d\\n" `cat \$asmId.ncbiGene.stats.txt` | xargs echo
+else
+  printf "# ncbiGene previously completed\\n" 1>&2
+fi
+_EOF_
+  );
+  $bossScript->execute();
+} # doNcbiGene
+
+
+#########################################################################
 # * step: augustus [workhorse]
 sub doAugustus {
   my $runDir = "$buildDir/trackData/augustus";
@@ -1188,7 +1271,7 @@ fi
 _EOF_
   );
   $bossScript->execute();
-} # windowMasker
+} # doAugustus
 
 #########################################################################
 # * step: trackDb [workhorse]

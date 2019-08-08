@@ -7,6 +7,8 @@ use lib "$Bin";
 use AsmHub;
 use File::Basename;
 
+my $sourceServer = "hgdownload.soe.ucsc.edu";
+
 my @months = qw( 0 Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
 
 sub usage() {
@@ -154,12 +156,15 @@ chomp $thisDir;
 printf STDERR "# thisDir $thisDir\n";
 my $ftpName = dirname($thisDir);
 my $asmId = basename($ftpName);;
+my ($gcXPrefix, $accession, $rest) = split('_', $asmId, 3);
+my $newStyleUrl = sprintf("%s/%s/%s/%s/%s", $gcXPrefix, substr($accession,0,3),
+   substr($accession,3,3), substr($accession,6,3), $asmId);
 $ftpName =~ s#/hive/data/outside/ncbi/##;
 $ftpName =~ s#/hive/data/inside/ncbi/##;
 $ftpName =~ s#/hive/data/genomes/asmHubs/##;
 printf STDERR "# ftpName $ftpName\n";
-my $urlDirectory = `basename $ftpName`;
-chomp $urlDirectory;
+# my $urlDirectory = `basename $ftpName`;
+# chomp $urlDirectory;
 my $speciesSubgroup = $ftpName;
 my $asmType = "genbank";
 $asmType = "refseq" if ( $speciesSubgroup =~ m#refseq/#);
@@ -221,6 +226,7 @@ while (my $line = <FH>) {
   if ($line =~ m/organism\s+name:\s+/i) {
      next if ($orgName !~ m#\(n/a#);
      $line =~ s/.*organism\s+name:\s+//i;
+     $line =~ s/\s+$//;
      $orgName = $line;
   }
   if ($line =~ m/submitter:\s+/i) {
@@ -253,6 +259,7 @@ if ($commonName =~ m/\(/) {
 if ($orgName =~ m/\(/) {
    $orgName =~ s/\(.*//;
 }
+$orgName =~ s/\s+$//;
 
 printf STDERR "#taxId\tcommonName\tsubmitter\tasmName\torgName\tbioSample\tasmType\tasmLevel\tasmDate\tasmAccession\n";
 printf STDERR "%s\t", $taxId;
@@ -273,7 +280,7 @@ printf "<!-- Display image in righthand corner -->
 <table align=right border=0 width=%d height=%d>
   <tr><td align=RIGHT><a href=\"https://www.ncbi.nlm.nih.gov/assembly/%s\"
     target=_blank>
-    <img src=\"../hubs/ncbiAssemblies/%s/html/%s\" width=%d height=%d alt=\"%s\"></a>
+    <img src=\"https://%s/hubs/VGP/genomes/%s/html/%s\" width=%d height=%d alt=\"%s\"></a>
   </td></tr>
   <tr><td align=right>
     <font size=-1> <em>%s</em><BR>
@@ -283,21 +290,26 @@ printf "<!-- Display image in righthand corner -->
     </font>
   </td></tr>
 </table>
-\n", $imageWidth+$imageWidthBorder, $imageHeight, $asmAccession, $ftpName, $imageName, $imageWidth, $imageHeight, $commonName, $orgName, $photoCreditURL, $photoCreditName;
+\n", $imageWidth+$imageWidthBorder, $imageHeight, $asmAccession, $sourceServer, $asmId, $imageName, $imageWidth, $imageHeight, $commonName, $orgName, $photoCreditURL, $photoCreditName;
 }
 
+my $sciNameUnderscore = $orgName;
+$sciNameUnderscore =~ s/ /_/g;
+$sciNameUnderscore = "Strigops_habroptilus" if ($orgName =~ m/Strigops habroptila/);
+
 printf "<p>
-<b>Common name: %s</b><br>
-<b>Taxonomic name: %s, taxonomy ID:</b> <a href=\"https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=%s\" target=_\"_blank\"> %s</a><br>
+<b>Common name:</b>&nbsp;%s<br>
+<b>Taxonomic name: %s, taxonomy ID:</b> <a href='https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=%s' target='_blank'> %s</a><br>
 <b>Sequencing/Assembly provider ID:</b> %s<br>
+<b>Vertebrate Genomes Project information:</b> <a href='https://vgp.github.io/genomeark/%s/' target=_blank>%s</a><br>
 <b>Assembly date:</b> %s<br>
 <b>Assembly type:</b> %s<br>
 <b>Assembly level:</b> %s<br>
 <b>Biosample:</b> <a href=\"https://www.ncbi.nlm.nih.gov/biosample/?term=%s\" target=\"_blank\">%s</a><br>
 <b>Assembly accession ID:</b> <a href=\"https://www.ncbi.nlm.nih.gov/assembly/%s\" target=\"_blank\">%s</a><br>
 <b>Assembly FTP location:</b> <a href=\"ftp://ftp.ncbi.nlm.nih.gov/genomes/all/%s\" target=\"_blank\">%s</a><br>
-\n", $commonName, $orgName, $taxId, $taxId, $submitter, $asmDate, $descrAsmType,
-  $asmLevel, $bioSample, $bioSample, $asmAccession, $asmAccession, $urlDirectory, $urlDirectory;
+\n", $commonName, $orgName, $taxId, $taxId, $submitter, $sciNameUnderscore, $orgName, $asmDate, $descrAsmType,
+  $asmLevel, $bioSample, $bioSample, $asmAccession, $asmAccession, $newStyleUrl, $newStyleUrl;
 
 chromSizes($chromSizes);
 
@@ -306,16 +318,22 @@ printf "</p>\n<hr>
 <b>Download files for this assembly hub:</b><br>
 To use the data from this assembly for a local hub instance at your
 institution, download these data as indicated by these instructions.<br>
-See also: <a href=\"/goldenPath/help/hgTrackHubHelp.html\" target=_blank>track hub help</a> documentation.<br>
+See also: <a href='/goldenPath/help/hgTrackHubHelp.html' target=_blank>track hub help</a> documentation.<br>
 <br>
-To download these data, issue this <em>wget</em> command:
+To download this assembly data, use this <em>rsync</em> command:
 <pre>
-wget --timestamping -m -nH -x --cut-dirs=5 -e robots=off -np -k \\
-   --reject \"index.html*\" -P \"$asmId\" \\
-       http://genome-test.soe.ucsc.edu/hubs/ncbiAssemblies/$asmId/
+  rsync -a -P rsync://$sourceServer/hubs/VGP/genomes/$asmId/ ./$asmId/
+
+  which creates the local directory: ./$asmId/
 </pre>
-to download the files for this assembly,<br>
-creating the local directory: \"$asmId\"<br>
+or this <em>wget</em> command:
+<pre>
+  wget --timestamping -m -nH -x --cut-dirs=4 -e robots=off -np -k \\
+    --reject \"index.html*\" -P \"$asmId\" \\
+       https://$sourceServer/hubs/VGP/genomes/$asmId/
+
+  which creates a local directory: ./$asmId/
+</pre>
 <br>
 There is an included $asmId.genomes.txt file in that download
 data to use for your local track hub instance.<br>
@@ -324,7 +342,7 @@ Something like:
 <pre>
 hub myLocalHub
 shortLabel myLocalHub
-longLabel genomes from RefSeq assemblies
+longLabel genomes from Vertebrate Genomes Project assemblies
 genomesFile $asmId.genomes.txt
 email yourEmail\@yourdomain.edu
 descriptionUrl html/$asmId.description.html

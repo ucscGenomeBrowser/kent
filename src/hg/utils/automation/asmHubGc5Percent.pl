@@ -45,7 +45,7 @@ The GC percent track shows the percentage of G (guanine) and C (cytosine) bases
 in 5-base windows on
 the $assemblyDate $em${organism}$noEm/$asmId/$ncbiAssemblyId genome assembly.
 High GC content is typically associated with gene-rich areas.  The average
-overall GC percent for the entire assembly is % $averageGC;
+overall GC percent for the entire assembly is % $averageGC.
 </p>
 
 <p>

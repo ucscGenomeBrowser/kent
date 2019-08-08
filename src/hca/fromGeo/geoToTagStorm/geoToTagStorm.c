@@ -290,6 +290,73 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     }
 }
 
+char *accFromEnd(char *url, char endChar, char *accPrefix, char *type)
+/* Parse out something like
+ *     https://long/url/etc.etc<endChar><accession>
+ * into just <accession>  Make sure accession starts with given prefix.
+ * Type is just for error reporting */
+{
+char *s = strrchr(url, endChar);
+if (s == NULL || !startsWith(accPrefix, s+1))
+    errAbort("Malformed %s URL\n\t%s", type, url);
+s += 1;
+if (!isSymbolString(s))
+    errAbort("accFromEnd got something that doesn't look like accession: %s", s);
+return s;
+}
+
+void fixAccessions(struct tagStorm *storm, struct tagStanza *stanza, void *context)
+/* Convert various URLs containing accessions to just accessions */
+{
+/* Lets deal with the SRR/SRX issue as well */
+struct dyString *srrDy = dyStringNew(0);
+
+struct slPair *pair;
+for (pair = stanza->tagList; pair != NULL; pair = pair->next)
+    {
+    char *name = pair->name;
+    char *newName = NULL;
+    char *newVal = NULL;
+    if (sameString("series.relation_BioProject", name))
+        {
+	/* Convert something like https://www.ncbi.nlm.nih.gov/bioproject/PRJNA189204
+	 * to PRJNA189204 */
+	newName = "series.ncbi_bioproject";
+	newVal = accFromEnd(pair->val, '/', "PRJNA", "BioProject");
+	}
+    else if (sameString("series.relation_SRA", name))
+        {
+	/* Convert something like https://www.ncbi.nlm.nih.gov/sra?term=SRP018525
+	 * to SRP018525 */
+	newName = "series.sra_project";
+	newVal = accFromEnd(pair->val, '=', "SRP", "SRA");
+	}
+    else if (sameString("sample.relation_SRA", name))
+        {
+	/* Convert something like https://www.ncbi.nlm.nih.gov/sra?term=SRX229786
+	 * to SRX229786 */
+	newName = "sample.sra_experiment";
+	newVal = accFromEnd(pair->val, '=', "SRX", "SRA");
+	}
+    else if (sameString("sample.relation_BioSample", name))
+        {
+	/* Convert something like https://www.ncbi.nlm.nih.gov/biosample/SAMN01915417
+	 * to SAMN01915417 */
+	newName = "sample.ncbi_biosample";
+	newVal = accFromEnd(pair->val, '/', "SAMN", "biosample");
+	}
+    if (newName != NULL)
+	tagStanzaAdd(storm, stanza, newName, newVal);
+    }
+
+if (srrDy->stringSize > 0)
+    {
+    tagStanzaAppend(storm, stanza, "assay.seq.sra_run", srrDy->string);
+    }
+dyStringFree(&srrDy);
+}
+
+
 void geoToTagStorm(char *inSoft, char *outTags)
 /* geoToTagStorm - Convert from GEO soft format to tagStorm.. */
 {
@@ -340,6 +407,9 @@ if (clExpandArrays)
     rAddArrayIndexesToMultis(seriesTags, seriesTags->forest);
 else
     rCollapseMultis(seriesTags, seriesTags->forest);
+
+/* Extract accessions from ugly URLS */
+tagStormTraverse(seriesTags, seriesTags->forest, NULL, fixAccessions);
 
 /* Write result */
 tagStormWrite(seriesTags, outTags, 0);

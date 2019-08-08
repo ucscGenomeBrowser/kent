@@ -189,7 +189,7 @@ if (spID != NULL)
     	eventID   = row2[0];
     	eventDesc = row2[1];
 	hPrintf(
-	"<A href=\"http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&ID=%s\" TARGET=_blank>%s</A> %s<BR>\n",
+	"<A href=\"http://www.reactome.org/content/detail/%s\" TARGET=_blank>%s</A> %s<BR>\n",
 	eventID, eventID, eventDesc);
     	row2 = sqlNextRow(sr2);
     	}

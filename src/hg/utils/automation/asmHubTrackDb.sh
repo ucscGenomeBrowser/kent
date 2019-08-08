@@ -47,7 +47,7 @@ searchIndex name%s
 url https://www.ncbi.nlm.nih.gov/nuccore/\$\$
 urlLabel NCBI Nucleotide database
 group map\n\n" "${asmId}" "${asmId}" "${searchTrix}"
-$scriptDir/asmHubAssembly.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/$asmId.agp.gz ../hubs/ncbiAssemblies/$genbankRefseq/$asmId > $buildDir/html/$asmId.assembly.html
+$scriptDir/asmHubAssembly.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/$asmId.agp.gz https://hgdownload.soe.ucsc.edu/hubs/VGP/genomes/$asmId > $buildDir/html/$asmId.assembly.html
 fi
 
 if [ -s ${buildDir}/trackData/assemblyGap/${asmId}.gap.bb ]; then
@@ -62,7 +62,7 @@ bigDataUrl bbi/%s.gap.bb
 type bigBed 4
 group map
 html html/%s.gap\n\n" "${asmId}" "${asmId}"
-$scriptDir/asmHubGap.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/$asmId.agp.gz ../hubs/ncbiAssemblies/$genbankRefseq/$asmId > $buildDir/html/$asmId.gap.html
+$scriptDir/asmHubGap.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/$asmId.agp.gz https://hgdownload.soe.ucsc.edu/hubs/VGP/genomes/$asmId > $buildDir/html/$asmId.gap.html
 fi
 
 if [ -s ${buildDir}/trackData/cytoBand/${asmId}.cytoBand.bb ]; then
@@ -144,7 +144,8 @@ html html/%s.tanDups\n\n" "${asmId}"
     parent tanDups on
     shortLabel Gap Overlaps
     longLabel Paired exactly identical sequence on each side of a gap
-    bigDataUrl bbi/%s.gapOverlap.bb\n\n" "${asmId}"
+    bigDataUrl bbi/%s.gapOverlap.bb
+    type bigBed 12\n\n" "${asmId}"
   fi
 
   if [ "${tanDupCount}" -gt 0 ]; then
@@ -152,7 +153,8 @@ html html/%s.tanDups\n\n" "${asmId}"
     parent tanDups on
     shortLabel Tandem Dups
     longLabel Paired exactly identical sequence survey over entire genome assembly
-    bigDataUrl bbi/%s.tandemDups.bb\n\n" "${asmId}"
+    bigDataUrl bbi/%s.tandemDups.bb
+    type bigBed 12\n\n" "${asmId}"
   fi
 
   $scriptDir/asmHubTanDups.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/trackData > $buildDir/html/$asmId.tanDups.html
@@ -330,34 +332,39 @@ fi
 # may or may not have a searchTrix for ncbiGene, assume none
 searchTrix=""
 # check to see if there is a index for ncbiGene
-if [ -s ${buildDir}/trackData/geneTrack/ucsc.NZO_HlLtJ.ix ]; then
+if [ -s ${buildDir}/trackData/ncbiGene/$asmId.ncbiGene.ix ]; then
   searchTrix="
-searchTrix ixIxx/$asmId.geneTrack.ix"
+searchTrix ixIxx/$asmId.ncbiGene.ix"
 fi
 
-if [ -s ${buildDir}/trackData/geneTrack/ucsc.NZO_HlLtJ.bb ]; then
-rm -f $buildDir/bbi/${asmId}.geneTrack.bb
-rm -f $buildDir/ixIxx/${asmId}.geneTrack.ix
-rm -f $buildDir/ixIxx/${asmId}.geneTrack.ixx
-ln -s $buildDir/trackData/geneTrack/ucsc.NZO_HlLtJ.bb $buildDir/bbi/${asmId}.geneTrack.bb
-ln -s $buildDir/trackData/geneTrack/ucsc.NZO_HlLtJ.ix $buildDir/ixIxx/${asmId}.geneTrack.ix
-ln -s $buildDir/trackData/geneTrack/ucsc.NZO_HlLtJ.ixx $buildDir/ixIxx/${asmId}.geneTrack.ixx
-  printf "track geneTrack
-longLabel geneTrack - gene predictions
-shortLabel geneTrack
+export haveNcbiGene="no"
+
+if [ -s ${buildDir}/trackData/ncbiGene/$asmId.ncbiGene.bb ]; then
+rm -f $buildDir/bbi/${asmId}.ncbiGene.bb
+rm -f $buildDir/ixIxx/${asmId}.ncbiGene.ix
+rm -f $buildDir/ixIxx/${asmId}.ncbiGene.ixx
+ln -s $buildDir/trackData/ncbiGene/$asmId.ncbiGene.bb $buildDir/bbi/${asmId}.ncbiGene.bb
+ln -s $buildDir/trackData/ncbiGene/$asmId.ncbiGene.ix $buildDir/ixIxx/${asmId}.ncbiGene.ix
+ln -s $buildDir/trackData/ncbiGene/$asmId.ncbiGene.ixx $buildDir/ixIxx/${asmId}.ncbiGene.ixx
+  printf "track ncbiGene
+longLabel NCBI gene predictions
+shortLabel NCBI Genes
 visibility pack
 color 0,80,150
 altColor 150,80,0
 colorByStrand 0,80,150 150,80,0
-bigDataUrl bbi/%s.geneTrack.bb
+bigDataUrl bbi/%s.ncbiGene.bb
 type bigGenePred
-html html/%s.geneTrack
+html html/%s.ncbiGene
 searchIndex name%s
+url https://www.ncbi.nlm.nih.gov/gene/?term=\$\$
+urlLabel Entrez gene
 group genes\n\n" "${asmId}" "${asmId}" "${searchTrix}"
-fi
 
-# url https://www.ncbi.nlm.nih.gov/nuccore/\$\$
-# urlLabel NCBI Nucleotide database
+  $scriptDir/asmHubNcbiGene.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/trackData > $buildDir/html/$asmId.ncbiGene.html
+
+haveNcbiGene="yes"
+fi
 
 ###################################################################
 # CpG Islands composite
@@ -432,7 +439,7 @@ visibility dense
 type bigBed 3
 bigDataUrl bbi/%s.allGaps.bb
 html html/%s.allGaps\n\n" "${asmId}" "${asmId}"
-$scriptDir/asmHubAllGaps.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/$asmId.agp.gz ../hubs/ncbiAssemblies/$genbankRefseq/$asmId $buildDir/bbi/$asmId > $buildDir/html/$asmId.allGaps.html
+$scriptDir/asmHubAllGaps.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/$asmId.agp.gz https://hgdownload.soe.ucsc.edu/hubs/VGP/genomes/$asmId $buildDir/bbi/$asmId > $buildDir/html/$asmId.allGaps.html
 fi
 
 ###################################################################
@@ -441,36 +448,41 @@ if [ -s ${buildDir}/trackData/augustus/${asmId}.augustus.bb ]; then
 rm -f ${buildDir}/bbi/${asmId}.augustus.bb
 ln -s ${buildDir}/trackData/augustus/${asmId}.augustus.bb ${buildDir}/bbi/${asmId}.augustus.bb
 
+export augustusVis="dense"
+
+if [ "${haveNcbiGene}" = "no" ]; then
+   augustusVis="pack"
+fi
 printf "track augustus
 shortLabel Augustus
 longLabel Augustus Gene Predictions
 group genes
-visibility dense
+visibility %s
 color 180,0,0
 type bigGenePred
 bigDataUrl bbi/%s.augustus.bb
-html html/%s.augustus\n\n" "${asmId}" "${asmId}"
+html html/%s.augustus\n\n" "${augustusVis}" "${asmId}" "${asmId}"
 $scriptDir/asmHubAugustusGene.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/bbi/$asmId > $buildDir/html/$asmId.augustus.html
 fi
 
 ###################################################################
 # gapOverlap
-if [ -s ${buildDir}/trackData/gapOverlap/${asmId}.gapOverlap.bb ]; then
-rm -f ${buildDir}/bbi/${asmId}.gapOverlap.bb
-ln -s ${buildDir}/trackData/gapOverlap/${asmId}.gapOverlap.bb ${buildDir}/bbi/${asmId}.gapOverlap.bb
+# if [ -s ${buildDir}/trackData/gapOverlap/${asmId}.gapOverlap.bb ]; then
+# rm -f ${buildDir}/bbi/${asmId}.gapOverlap.bb
+# ln -s ${buildDir}/trackData/gapOverlap/${asmId}.gapOverlap.bb ${buildDir}/bbi/${asmId}.gapOverlap.bb
 
-printf "track gapOverlap
-shortLabel Gap Overlaps
-longLabel Exactly identical sequence on each side of a gap
-group map
-visibility hide
-type bigBed 12 .
-bigDataUrl bbi/%s.gapOverlap.bb
-html html/%s.gapOverlap\n\n" "${asmId}" "${asmId}"
+# printf "track gapOverlap
+# shortLabel Gap Overlaps
+# longLabel Exactly identical sequence on each side of a gap
+# group map
+# visibility hide
+# type bigBed 12 .
+# bigDataUrl bbi/%s.gapOverlap.bb
+# html html/%s.gapOverlap\n\n" "${asmId}" "${asmId}"
 
-$scriptDir/asmHubGapOverlap.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/bbi/$asmId > $buildDir/html/$asmId.gapOverlap.html
+# $scriptDir/asmHubGapOverlap.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/bbi/$asmId > $buildDir/html/$asmId.gapOverlap.html
 
-fi
+# fi
 ###################################################################
 
 printf "# Plink: ${buildDir}/trackData/ensGene/process/bbi/${asmId}.ensGene.bb ${buildDir}/bbi/${asmId}.ensGene.bb\n" 1>&2
