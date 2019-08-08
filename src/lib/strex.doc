@@ -1,0 +1,24 @@
+The strex language is a small string expression evaluation language.  
+This document describes its built in functions and operators:
+
++  - returns the concatenation of the surrounding strings.  Will convert a number to a string
+
+[] - selects an element from a comma-separated value list.
+
+between(prefix, string, suffix) - returns the part of string found between prefix and suffix
+   example:   between("abc", "01234abcHelloxyz56789", "xyz")  fetches just "Hello"
+   If there are multiple places the prefix occurs, it will choose the first one, and the
+   then the first place the suffix matches after that.  The biologist might think of it as
+   a text oriented PCR, though the primer prefix and suffixes are not included in the output.
+   The prefix "" corresponds to beginning of string and the suffix "" corresponds to end.
+
+split(string, index)  - white space separated word from string of given 0 based index
+
+separate(string, splitter, index) - separates string with splitter character. Returns 0 based index.
+
+trim(string) - returns copy of string with leading and trailing spaces removed
+
+md5(string) - returns an MD5 sum digest/hash of string. Useful for creating IDs
+
+now() - returns current time and date in a really aweful unix ctime(2) format.  We will improve it.
+

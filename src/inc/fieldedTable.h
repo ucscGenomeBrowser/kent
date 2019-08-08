@@ -36,6 +36,9 @@ void fieldedTableFree(struct fieldedTable **pTable);
 struct fieldedRow *fieldedTableAdd(struct fieldedTable *table,  char **row, int rowSize, int id);
 /* Create a new row and add it to table.  Return row. */
 
+struct fieldedRow *fieldedTableAddHead(struct fieldedTable *table, char **row, int rowSize, int id);
+/* Create a new row and add it to start of table.  Return row. */
+
 struct fieldedTable *fieldedTableFromTabFile(char *fileName, char *url, char *requiredFields[], int requiredCount);
 /* Read table from tab-separated file with a #header line that defines the fields.  Ensures
  * all requiredFields (if any) are present.  The url is just used for error reporting and 

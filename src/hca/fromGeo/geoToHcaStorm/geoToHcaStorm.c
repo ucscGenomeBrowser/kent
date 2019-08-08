@@ -70,75 +70,6 @@ safef(hcaBuf, hcaBufSize, "%s-%02d-%s", year, monthIx+1, day);
 return hcaBuf;
 }
 
-char *accFromEnd(char *url, char endChar, char *accPrefix, char *type)
-/* Parse out something like
- *     https://long/url/etc.etc<endChar><accession>
- * into just <accession>  Make sure accession starts with given prefix.
- * Type is just for error reporting */
-{
-char *s = strrchr(url, endChar);
-if (s == NULL || !startsWith(accPrefix, s+1))
-    errAbort("Malformed %s URL\n\t%s", type, url);
-s += 1;
-if (!isSymbolString(s))
-    errAbort("accFromEnd got something that doesn't look like accession: %s", s);
-return s;
-}
-
-void fixAccessions(struct tagStorm *storm, struct tagStanza *stanza, void *context)
-/* Convert various URLs containing accessions to just accessions */
-{
-/* Lets deal with the SRR/SRX issue as well */
-struct dyString *srrDy = dyStringNew(0);
-
-struct slPair *pair;
-for (pair = stanza->tagList; pair != NULL; pair = pair->next)
-    {
-    char *name = pair->name;
-    if (sameString("series.relation_BioProject", name))
-        {
-	/* Convert something like https://www.ncbi.nlm.nih.gov/bioproject/PRJNA189204
-	 * to PRJNA189204 */
-	pair->name = "series.ncbi_bioproject";
-	pair->val = accFromEnd(pair->val, '/', "PRJNA", "BioProject");
-	}
-    else if (sameString("series.relation_SRA", name))
-        {
-	/* Convert something like https://www.ncbi.nlm.nih.gov/sra?term=SRP018525
-	 * to SRP018525 */
-	pair->name = "series.sra_project";
-	pair->val = accFromEnd(pair->val, '=', "SRP", "SRA");
-	}
-    else if (sameString("sample.relation_SRA", name))
-        {
-	/* Convert something like https://www.ncbi.nlm.nih.gov/sra?term=SRX229786
-	 * to SRX229786 */
-	pair->name = "sample.sra_experiment";
-	char *srx = accFromEnd(pair->val, '=', "SRX", "SRA");
-	pair->val = srx;
-	}
-    else if (sameString("sample.relation_BioSample", name))
-        {
-	/* Convert something like https://www.ncbi.nlm.nih.gov/biosample/SAMN01915417
-	 * to SAMN01915417 */
-	pair->name = "sample.ncbi_biosample";
-	pair->val = accFromEnd(pair->val, '/', "SAMN", "biosample");
-	}
-    }
-
-if (srrDy->stringSize > 0)
-    {
-    tagStanzaAppend(storm, stanza, "assay.seq.sra_run", srrDy->string);
-    }
-dyStringFree(&srrDy);
-
-}
-
-void rFixAccessions(struct tagStorm *storm, struct tagStanza *list)
-/* Go through and fix accessions in all stanzas */
-{
-tagStormTraverse(storm, list, NULL, fixAccessions);
-}
 
 void fixDates(struct tagStorm *storm, struct tagStanza *stanza, void *context)
 /* Convert various URLs containing accessions to just accessions */
@@ -214,20 +145,11 @@ void geoToHcaStorm(char *inTags, char *inTable, char *seqType, char *output)
 /* Read in input. */
 struct tagStorm *storm = tagStormFromFile(inTags);
 
-/* Fix up all stanzas with various functions */
-tagStormTraverse(storm, storm->forest, NULL, fixAccessions);
-tagStormTraverse(storm, storm->forest, NULL, fixDates);
-tagStormTraverse(storm, storm->forest, NULL, mergeAddresses);
-
 /* Do simple subsitutions. */
 tagStormSubArray(storm, substitutions, ArraySize(substitutions));
 
 /* Read in SRA table and make up array of "sra." field names. */
-char *requiredFields[] = {"Experiment_s", "Run_s"};
-struct fieldedTable *table = fieldedTableFromTabFile(inTable, inTable, 
-	requiredFields, ArraySize(requiredFields));
-int joinIx = fieldedTableMustFindFieldIx(table, "Experiment_s");
-int runIx = fieldedTableMustFindFieldIx(table, "Run_s");
+struct fieldedTable *table = fieldedTableFromTabFile(inTable, inTable, NULL, 0);
 char *sraFields[table->fieldCount];
 int i;
 for (i=0; i<table->fieldCount; ++i)
@@ -239,6 +161,8 @@ for (i=0; i<table->fieldCount; ++i)
         chopSuffixAt(buf, '_');
     sraFields[i] = cloneString(buf);
     }
+int joinIx = fieldedTableMustFindFieldIx(table, "Experiment");
+int runIx = fieldedTableMustFindFieldIx(table, "Run");
 
 /* Join based on sra_experiment/Experiment_s which contains an SRX123456 type id */
 struct hash *joinHash = tagStormIndexExtended(storm, "sample.sra_experiment", FALSE, FALSE);
@@ -293,6 +217,10 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
 	    }
 	}
     }
+
+/* Fix up all stanzas with various functions */
+tagStormTraverse(storm, storm->forest, NULL, fixDates);
+tagStormTraverse(storm, storm->forest, NULL, mergeAddresses);
 
 /* Save results */
 tagStormWrite(storm, output, 0);
