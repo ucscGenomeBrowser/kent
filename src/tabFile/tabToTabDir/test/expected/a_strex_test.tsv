@@ -1,0 +1,2 @@
+#id	array0	array1	array2	mm	dd	yyyy	usaDate	company	md5.sum	organ	untrimmed_organ
+constant ID	We used single cell RNA sequencing on 466 cells to capture the cellular complexity of the adult and fetal human brain at a whole transcriptome level. Healthy adult temporal lobe tissue was obtained from epileptic patients during temporal lobectomy for medically refractory seizures. We were able to classify individual cells into all of the major neuronal	glial	and vascular cell types in the brain.	04	14	2015	04/14/2015	Fluidigm	4633136f3bf181ef5399f81ec5cb004a	brain	' brain '

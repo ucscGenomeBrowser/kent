@@ -259,58 +259,78 @@ verbose(1, "Read %d columns, %d rows from %s\n", inTable->fieldCount, inTable->r
 struct lineFile *lf = lineFileOpen(specFile, TRUE);
 makeDirsOnPath(outDir);
 
-/* Read in file as ra file stanzas that we convert into tableInfos. */
+/* Read in spec file as ra file stanzas that we convert into tableInfos. */
 struct newTableInfo *newTableList = NULL, *newTable;
-struct slPair *specStanza = NULL;
-while ((specStanza = raNextStanzAsPairs(lf)) != NULL)
+while (raSkipLeadingEmptyLines(lf, NULL))
     {
-    /* Parse out table name and key field name. */
-    verbose(2, "Processing spec stanza of %d lines\n",  slCount(specStanza));
-    struct slPair *tableSl = specStanza;
-    if (!sameString(tableSl->name, "table"))
+    /* Read first tag, which we know is there because it's right after raSkipLeadingEmptyLines.
+     * Make sure the tag is table, and that there is a following table name and key field name. */
+    char *tableString, *tableSpec;
+    raNextTagVal(lf, &tableString, &tableSpec, NULL);
+    verbose(2, "Processing table %s '%s' line %d of %s\n",  tableString, tableSpec, 
+	lf->lineIx, lf->fileName);
+    if (!sameString(tableString, "table"))
         errAbort("stanza that doesn't start with 'table' ending line %d of %s",
 	    lf->lineIx, lf->fileName);
-    char *tableSpec = tableSl->val;
     char *tableName = nextWord(&tableSpec);
-    char *keyFieldName = nextWord(&tableSpec);
+    char *keyFieldName = cloneString(nextWord(&tableSpec));
     if (isEmpty(keyFieldName))
-       errAbort("No key field for table %s.", tableName);
+       errAbort("No key field for table %s line %d of %s", tableName, lf->lineIx, lf->fileName);
 
-    /* Have dealt with first line of stanza, which is about table,  rest of lines are fields */
-    struct slPair *fieldList = specStanza->next;
-    int fieldCount = slCount(fieldList);
+    /* Start filling out newTable with these fields */
+    AllocVar(newTable);
+    newTable->name = cloneString(tableName);
 
-    /* Create empty output table and track which fields of input go to output. */
-    char *fieldNames[fieldCount];
-    int i;
-    struct slPair *field;
+    /* Make up field list out of rest of the stanza */
     struct newFieldInfo *fvList = NULL;
-    for (i=0, field=fieldList; i<fieldCount; ++i, field=field->next)
+    char *fieldName, *fieldSpec;
+    int fieldCount = 0;
+    while (raNextTagVal(lf, &fieldName, &fieldSpec, NULL))
         {
-	char *newName = field->name;
-	struct newFieldInfo *fv = parseFieldVal(newName, field->val, lf->fileName, lf->lineIx);
-	fv->newIx = i;
+	verbose(2, "  fieldName %s fieldSpec ((%s))\n", fieldName, fieldSpec);
+	struct newFieldInfo *fv = parseFieldVal(fieldName, fieldSpec, lf->fileName, lf->lineIx);
 	if (fv->type == fvVar)
-	    fv->oldIx = fieldedTableMustFindFieldIx(inTable, fv->val);
-	fieldNames[i] = newName;
+	    {
+	    char *oldName = fieldSpec;
+	    if (isEmpty(oldName))
+	       oldName = fieldName;
+	    int oldIx = stringArrayIx(oldName, inTable->fields, inTable->fieldCount);
+	    if (oldIx < 0)
+	       errAbort("%s doesn't exist in the %d fields of %s line %d of %s", 
+		oldName, inTable->fieldCount, inTable->name,
+		    lf->lineIx, lf->fileName);
+	    fv->oldIx = oldIx;
+	    }
+	fv->newIx = fieldCount++;
 	slAddHead(&fvList, fv);
 	}
     slReverse(&fvList);
+
+    /* Create array of field names for output. */
+    char *fieldNames[fieldCount];
+    int i;
+    struct newFieldInfo *fv = NULL;
+    for (i=0, fv=fvList; i<fieldCount; ++i, fv=fv->next)
+	fieldNames[i] = fv->name;
+
+    /* Create empty output table and track which fields of input go to output. */
     struct fieldedTable *outTable = fieldedTableNew(tableName, fieldNames, fieldCount);
     outTable->startsSharp = inTable->startsSharp;
 
     /* Make sure that key field is actually in field list */
     struct newFieldInfo *keyField = findField(fvList, keyFieldName);
     if (keyField == NULL)
-       errAbort("key field %s is not found in field list for %s\n", tableName, keyFieldName);
+       errAbort("key field %s is not found in field list for %s in %s\n", 
+	tableName, keyFieldName, lf->fileName);
 
     /* Allocate structure to save results of this pass in and so so. */
-    AllocVar(newTable);
-    newTable->name = tableName;
     newTable->keyField = keyField;
     newTable->fieldList = fvList;
     newTable->table = outTable;
     slAddHead(&newTableList, newTable);
+
+    /* Clean up */
+    freez(&keyFieldName);
     }
 slReverse(&newTableList);
 
