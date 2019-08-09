@@ -5744,6 +5744,16 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
         continue;
     track = trackFromTrackDb(tdb);
     track->hasUi = TRUE;
+        if (slCount(tdb->subtracks) != 0)
+            {
+       //     tdbSortPrioritiesFromCart(cart, &(tdb->subtracks));
+            tdbSortPrioritiesFromCart(cart, &(tdb->subtracks));
+            finishTrack(track);
+            if (trackDbLocalSetting(tdb, "compositeTrack"))
+                makeCompositeTrack(track, tdb);
+            else if (trackDbLocalSetting(tdb, "container"))
+                makeContainerTrack(track, tdb);
+            }
     if (cgiVarExists("hgGenomeClick"))
 	makeHgGenomeTrackVisible(track);
     slAddHead(pTrackList, track);
@@ -7505,17 +7515,20 @@ for(track = trackList; track; track = next)
         (tdbVisLimitedByAncestors(cart,track->tdb,TRUE,TRUE) != tvHide))
         {
         slAddHead(&newList, track);
-        finishTrack(track);
         
         struct trackDb *tdb = track->tdb;
         if (slCount(tdb->subtracks) != 0)
             {
+            /*
             tdbSortPrioritiesFromCart(cart, &(tdb->subtracks));
             if (trackDbLocalSetting(tdb, "compositeTrack"))
                 makeCompositeTrack(track, tdb);
             else if (trackDbLocalSetting(tdb, "container"))
                 makeContainerTrack(track, tdb);
+                */
             }
+        else
+            finishTrack(track);
 
         struct track *subtrack, *nextSub;
         struct track *newSubtracks = NULL;

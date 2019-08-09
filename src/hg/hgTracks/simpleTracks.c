@@ -14548,7 +14548,7 @@ char *exonArrows;
 char *nextItem;
 struct trackDb *tdb = track->tdb;
 
-if ( track->customPt )
+if (( track->customPt ) || sameString(track->track, "oligoMatch"))
     return;
 track->lineHeight = tl.fontHeight+1;
 track->heightPer = track->lineHeight - 1;
