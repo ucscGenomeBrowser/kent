@@ -159,10 +159,11 @@ for (i=0; i<ArraySize(builtins); ++i)
 return hash;
 }
 
-static struct strexIn *strexInNew(char *expression)
+static struct strexIn *strexInNew(char *expression, char *fileName, int fileLineNumber)
 /* Return a new strexIn structure wrapped around expression */
 {
-struct lineFile *lf = lineFileOnString(expression, TRUE, cloneString(expression));
+struct lineFile *lf = lineFileOnString(fileName, TRUE, expression);
+lf->lineIx = fileLineNumber;
 struct tokenizer *tkz = tokenizerOnLineFile(lf);
 tkz->leaveQuotes = TRUE;
 struct strexIn *si;
@@ -691,10 +692,10 @@ if (leftover != NULL)
 	tkz->lf->fileName);
 }
 
-struct strexParse *strexParseString(char *s)
+struct strexParse *strexParseString(char *s, char *fileName, int fileLineNumber)
 /* Parse out string expression in s and return root of tree. */
 {
-struct strexIn *si = strexInNew(s);
+struct strexIn *si = strexInNew(s, fileName, fileLineNumber);
 struct strexParse *parseTree = strexParseExpression(si);
 ensureAtEnd(si);
 strexInFree(&si);
