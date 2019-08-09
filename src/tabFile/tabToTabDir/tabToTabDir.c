@@ -35,7 +35,7 @@ errAbort(
 "or an @ followed by a table name, in which case it refers to the key of that table.\n"
 "If the source column is in comma-separated-values format then the sourceField can include a\n"
 "constant array index to pick out an item from the csv list.\n"
-"You can also use strex expressions for more complicated situations.  See strex.doc\n"
+"You can also use strex expressions for more complicated situations.  See src/lib/strex.doc\n"
 );
 }
 
