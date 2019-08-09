@@ -28,7 +28,6 @@ my $stepper = new HgStepManager(
       { name => 'blatRun', func => \&doBlatRun },
       { name => 'filterPsl', func => \&doFilterPsl },
       { name => 'makeGp', func => \&doMakeGp },
-      { name => 'makeBigGp', func => \&doMakeBigGp },
       { name => 'cleanup', func => \&doCleanup },
     ]
 				);
@@ -78,8 +77,8 @@ Automates construction of a xeno RefSeq gene track from RefSeq mRNAs.  Steps:
     splitTarget split the masked target sequence into individual fasta sequences
     blatRun:    Run blat with the xenoRefSeq mRNAs query to target sequence
     filterPsl:  Run pslCDnaFilter on the blat psl results
-    makeGp:     Transform the filtered PSL into a genePred file
-    makeBigGp:  Construct the bigGenePred from the genePred file
+    makeGp:     Transform the filtered PSL into a genePred file and create
+                bigGenePred from the genePred file
     cleanup:    Removes hard-masked fastas and output from gsBig.
 All operations are performed in the build directory which is
 $HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/augustus unless -buildDir is given.
@@ -252,88 +251,45 @@ sub doMakeGp {
   &HgAutomate::mustMkdir($runDir);
 
   # First, make sure we're starting clean.
-  if (! -e "$runDir/run.augustus/run.time") {
-    die "doMakeGp: the previous step augustus did not complete \n" .
-      "successfully ($buildDir/run.augustus/run.time does not exist).\nPlease " .
-      "complete the previous step: -continue=augustus\n";
-  } elsif (-e "$runDir/$db.augustus.bb" ) {
+  if (! -e "$runDir/$db.xenoRefGene.psl") {
+    die "doMakeGp: the previous step filterPsl did not complete \n" .
+      "successfully ($buildDir/$db.xenoRefGene.psl does not exist).\nPlease " .
+      "complete the previous step: -continue=filterPsl\n";
+  } elsif (-e "$runDir/$db.xenoRefGene.bb" ) {
     die "doMakeGp: looks like this was run successfully already\n" .
-      "($db.augustus.bb exists).  Either run with -continue load or cleanup\n" .
-	"or move aside/remove $runDir/$db.augustus.bb\nand run again.\n";
+      "($db.xenoRefGene.bb exists).  Either run with -continue cleanup\n" .
+	"or move aside/remove $runDir/$db.xenoRefGene.bb\nand run again.\n";
   }
 
-  my $whatItDoes = "Makes genePred file from augustus gff output.";
+  my $whatItDoes = "Makes bigGenePred.bb file from filterPsl output.";
   my $bossScript = newBash HgRemoteScript("$runDir/makeGp.bash", $workhorse,
 				      $runDir, $whatItDoes);
 
-  my $dbCheck = "-db=$db";
-  $dbCheck = "" if (0 == $noDbGenePredCheck);
-
   $bossScript->add(<<_EOF_
 export db=$db
-find ./run.augustus/gtf -type f | grep ".gtf.gz\$" \\
-  | sed -e 's#/# _D_ #g; s#\\.# _dot_ #g;' \\
-    | sort -k11,11 -k13,13n \\
-     | sed -e 's# _dot_ #.#g; s# _D_ #/#g' | xargs zcat \\
-       | $augustusDir/scripts/join_aug_pred.pl \\
-          | grep -P "\\t(CDS|exon|stop_codon|start_codon|tts|tss)\\t" \\
-            > \$db.augustus.gtf
-gtfToGenePred -genePredExt -infoOut=\$db.info \$db.augustus.gtf \$db.augustus.gp
-genePredCheck $dbCheck \$db.augustus.gp
-genePredToBigGenePred \$db.augustus.gp stdout | sort -k1,1 -k2,2n > \$db.augustus.bgp
-bedToBigBed -type=bed12+8 -tab -as=$ENV{'HOME'}/kent/src/hg/lib/bigGenePred.as \$db.augustus.bgp partition/\$db.chrom.sizes \$db.augustus.bb
-getRnaPred -genePredExt -keepMasking -genomeSeqs=$maskedSeq \$db \$db.augustus.gp all \$db.augustusGene.rna.fa
-getRnaPred -genePredExt -peptides -genomeSeqs=$maskedSeq \$db \$db.augustus.gp all \$db.augustusGene.faa
+grep NR_ \$db.xenoRefGene.psl > NR.psl
+grep NM_ \$db.xenoRefGene.psl > NM.psl
+mrnaToGene -cdsDb=hgFixed NM.psl NM.gp
+mrnaToGene -noCds NR.psl NR.gp
+cat NM.gp NR.gp | genePredSingleCover stdin \$db.xenoRefGene.gp
+genePredCheck -db=\$db -chromSizes=\$db.chrom.sizes \$db.xenoRefGene.gp
+genePredToBigGenePred -geneNames=$mrnas/geneOrgXref.txt \$db.xenoRefGene.gp \\
+   stdout | sort -k1,1 -k2,2n > \$db.bgpInput
+bedToBigBed -type=bed12+8 -tab -as=\$HOME/kent/src/hg/lib/bigGenePred.as \\
+   \$db.bgpInput \$db.chrom.sizes \$db.xenoRefGene.bb
 _EOF_
   );
   $bossScript->execute();
 } # doMakeGp
 
 #########################################################################
-# * step: load [dbHost]
-sub doLoadAugustus {
-  my $runDir = $buildDir;
-  &HgAutomate::mustMkdir($runDir);
-  my $tableName = "augustusGene";
-
-  if (! -e "$runDir/$db.augustus.gp") {
-    die "doLoadAugustus: the previous step makeGp did not complete \n" .
-      "successfully ($db.augustus.gp does not exists).\nPlease " .
-      "complete the previous step: -continue=-makeGp\n";
-  } elsif (-e "$runDir/fb.$db.$tableName.txt" ) {
-    die "doLoadAugustus: looks like this was run successfully already\n" .
-      "(fb.$db.$tableName.txt exists).  Either run with -continue cleanup\n" .
-	"or move aside/remove\n$runDir/fb.$db.$tableName.txt and run again.\n";
-  }
-  my $whatItDoes = "Loads $db.augustus.gp.";
-  my $bossScript = newBash HgRemoteScript("$runDir/loadAugustus.bash", $dbHost,
-				      $runDir, $whatItDoes);
-
-  my $dbCheck = "-db=$db";
-  $dbCheck = "" if (0 == $noDbGenePredCheck);
-
-  $bossScript->add(<<_EOF_
-export db="$db"
-export table="$tableName"
-genePredCheck $dbCheck \$db.augustus.gp
-hgLoadGenePred \$db -genePredExt \$table \$db.augustus.gp
-genePredCheck $dbCheck \$table
-featureBits \$db \$table > fb.\$db.\$table.txt 2>&1
-checkTableCoords -verboseBlocks -table=\$table \$db
-cat fb.\$db.\$table.txt
-_EOF_
-  );
-  $bossScript->execute();
-} # doLoad
-
-#########################################################################
 # * step: cleanup [workhorse]
 sub doCleanup {
   my $runDir = $buildDir;
 
-  if (-e "$runDir/augustus.gtf.gz" ) {
+  if (-e "$runDir/$db.xenoRefGene.gp.gz" ) {
     die "doCleanup: looks like this was run successfully already\n" .
-      "(augustus.gtf.gz exists).  Investigate the run directory:\n" .
+      "($db.xenoRefGene.gp.gz exists).  Investigate the run directory:\n" .
 	" $runDir/\n";
   }
   my $whatItDoes = "It cleans up or compresses intermediate files.";
@@ -341,15 +297,19 @@ sub doCleanup {
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
 export db="$db"
-rm -fr $buildDir/fasta
-rm -fr $buildDir/run.augustus/err/
-rm -f $buildDir/run.augustus/batch.bak
-rm -fr $buildDir/run.augustus/augErr
-rm -f $buildDir/\$db.augustus.bgp
-gzip $buildDir/\$db.augustus.gtf
-gzip $buildDir/\$db.augustus.gp
-gzip $buildDir/\$db.augustusGene.rna.fa
-gzip $buildDir/\$db.augustusGene.faa
+rm -fr $buildDir/target/
+rm -fr $buildDir/blatRun/err/
+rm -fr $buildDir/blatRun/result/
+rm -f $buildDir/blatRun/batch.bak
+rm -f $buildDir/NM.gp
+rm -f $buildDir/NR.gp
+rm -f $buildDir/NM.psl
+rm -f $buildDir/NR.psl
+rm -f $buildDir/\$db.bgpInput
+gzip $buildDir/\$db.all.psl &
+gzip $buildDir/\$db.xenoRefGene.psl &
+gzip $buildDir/\$db.xenoRefGene.gp
+wait
 _EOF_
   );
   $bossScript->execute();
