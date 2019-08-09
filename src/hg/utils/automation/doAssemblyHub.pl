@@ -1304,6 +1304,9 @@ if [ $buildDir/\$asmId.2bit -nt \$asmId.xenoRefGene.bb ]; then
   time (~/kent/src/hg/utils/automation/doXenoRefGene.pl -buildDir=`pwd` -dbHost=$dbHost \\
     -bigClusterHub=$bigClusterHub -mrnas=$xenoRefSeq -workhorse=$workhorse \\
     -maskedSeq=$buildDir/trackData/addMask/\$asmId.masked.2bit \$asmId) > do.log 2>&1
+  bigBedInfo \$asmId.xenoRefGene.bb | egrep "^itemCount:|^basesCovered:" \\
+    | sed -e 's/,//g' > \$asmId.xenoRefGene.stats.txt
+  LC_NUMERIC=en_US /usr/bin/printf "# xenoRefGene %s %'d %s %'d\\n" `cat \$asmId.xenoRefGene.stats.txt` | xargs echo
 else
   printf "# xenoRefGene previously completed\\n" 1>&2
 fi
