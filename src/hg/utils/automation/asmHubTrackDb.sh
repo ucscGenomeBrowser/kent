@@ -359,7 +359,7 @@ html html/%s.ncbiGene
 searchIndex name%s
 url https://www.ncbi.nlm.nih.gov/gene/?term=\$\$
 urlLabel Entrez gene
-labelFields=geneName,geneName2,name
+labelFields geneName,geneName2,name
 group genes\n\n" "${asmId}" "${asmId}" "${searchTrix}"
 
   $scriptDir/asmHubNcbiGene.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/trackData > $buildDir/html/$asmId.ncbiGene.html
@@ -485,7 +485,8 @@ visibility pack
 color 180,0,0
 type bigGenePred
 bigDataUrl bbi/%s.xenoRefGene.bb
-labelFields=geneName,geneName2,name
+labelFields geneName,geneName2,name
+searchIndex name,geneName
 html html/%s.xenoRefGene\n\n" "${asmId}" "${asmId}"
 $scriptDir/asmHubXenoRefGene.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/trackData > $buildDir/html/$asmId.xenoRefGene.html
 fi
