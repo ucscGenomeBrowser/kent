@@ -119,7 +119,7 @@ while ((c = *s++) != 0)
 return TRUE;
 }
 
-struct newFieldInfo *parseFieldVal(char *name, char *input)
+struct newFieldInfo *parseFieldVal(char *name, char *input, char *fileName, int fileLineNumber)
 /* return a newFieldInfo based on the contents of input, which are not destroyed */
 {
 /* Make up return structure. */
@@ -156,7 +156,7 @@ else
 	else
 	    {
 	    fv->val = cloneString(s);
-	    fv->exp = strexParseString(fv->val);
+	    fv->exp = strexParseString(fv->val, fileName, fileLineNumber);
 	    fv->type = fvExp;
 	    }
 	}
@@ -288,7 +288,7 @@ while ((specStanza = raNextStanzAsPairs(lf)) != NULL)
     for (i=0, field=fieldList; i<fieldCount; ++i, field=field->next)
         {
 	char *newName = field->name;
-	struct newFieldInfo *fv = parseFieldVal(newName, field->val);
+	struct newFieldInfo *fv = parseFieldVal(newName, field->val, lf->fileName, lf->lineIx);
 	fv->newIx = i;
 	if (fv->type == fvVar)
 	    fv->oldIx = fieldedTableMustFindFieldIx(inTable, fv->val);
