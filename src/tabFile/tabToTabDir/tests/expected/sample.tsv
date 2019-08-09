@@ -1,0 +1,467 @@
+#fluidics_chip	specimen	donor	id	biosample_cell_type	lab_quake_cell
+1772078217	AB_S8 temporal lobe cortex	AB_S8	SAMN03486326	oligodendrocytes	1772078217.C03
+1772078217	AB_S8 temporal lobe cortex	AB_S8	SAMN03486327	hybrid	1772078217.C04
+1772078217	AB_S8 temporal lobe cortex	AB_S8	SAMN03486328	oligodendrocytes	1772078217.C06
+1772078217	AB_S8 temporal lobe cortex	AB_S8	SAMN03486329	hybrid	1772078217.C07
+1772078217	AB_S8 temporal lobe cortex	AB_S8	SAMN03486330	hybrid	1772078217.C08
+1772078217	AB_S8 temporal lobe cortex	AB_S8	SAMN03486331	oligodendrocytes	1772078217.C09
+1772078217	AB_S8 temporal lobe cortex	AB_S8	SAMN03486332	oligodendrocytes	1772078217.C14
+1772078217	AB_S8 temporal lobe cortex	AB_S8	SAMN03486333	hybrid	1772078217.C16
+1772078217	AB_S8 temporal lobe cortex	AB_S8	SAMN03486334	hybrid	1772078217.C17
+1772078217	AB_S8 temporal lobe cortex	AB_S8	SAMN03486335	hybrid	1772078217.C18
+1772078217	AB_S8 temporal lobe cortex	AB_S8	SAMN03486336	oligodendrocytes	1772078217.C20
+1772078217	AB_S8 temporal lobe cortex	AB_S8	SAMN03486337	hybrid	1772078217.C23
+1772078217	AB_S8 temporal lobe cortex	AB_S8	SAMN03486338	hybrid	1772078217.C28
+1772078217	AB_S8 temporal lobe cortex	AB_S8	SAMN03486339	hybrid	1772078217.C29
+1772078217	AB_S8 temporal lobe cortex	AB_S8	SAMN03486340	astrocytes	1772078217.C32
+1772078217	AB_S8 temporal lobe cortex	AB_S8	SAMN03486341	hybrid	1772078217.C33
+1772078217	AB_S8 temporal lobe cortex	AB_S8	SAMN03486342	hybrid	1772078217.C39
+1772078217	AB_S8 temporal lobe cortex	AB_S8	SAMN03486343	hybrid	1772078217.C40
+1772078217	AB_S8 temporal lobe cortex	AB_S8	SAMN03486344	oligodendrocytes	1772078217.C47
+1772078217	AB_S8 temporal lobe cortex	AB_S8	SAMN03486358	oligodendrocytes	1772078217.C52
+1772078217	AB_S8 temporal lobe cortex	AB_S8	SAMN03486355	oligodendrocytes	1772078217.C56
+1772078217	AB_S8 temporal lobe cortex	AB_S8	SAMN03486356	oligodendrocytes	1772078217.C58
+1772078217	AB_S8 temporal lobe cortex	AB_S8	SAMN03486357	OPC	1772078217.C59
+1772078217	AB_S8 temporal lobe cortex	AB_S8	SAMN03486345	oligodendrocytes	1772078217.C60
+1772078217	AB_S8 temporal lobe cortex	AB_S8	SAMN03486346	hybrid	1772078217.C61
+1772078217	AB_S8 temporal lobe cortex	AB_S8	SAMN03486347	hybrid	1772078217.C66
+1772078217	AB_S8 temporal lobe cortex	AB_S8	SAMN03486348	hybrid	1772078217.C72
+1772078217	AB_S8 temporal lobe cortex	AB_S8	SAMN03486349	oligodendrocytes	1772078217.C80
+1772078217	AB_S8 temporal lobe cortex	AB_S8	SAMN03486350	oligodendrocytes	1772078217.C87
+1772078217	AB_S8 temporal lobe cortex	AB_S8	SAMN03486351	oligodendrocytes	1772078217.C89
+1772078217	AB_S8 temporal lobe cortex	AB_S8	SAMN03486352	oligodendrocytes	1772078217.C91
+1772078217	AB_S8 temporal lobe cortex	AB_S8	SAMN03486353	oligodendrocytes	1772078217.C94
+1772078217	AB_S8 temporal lobe cortex	AB_S8	SAMN03486296	OPC	1772078217.C96
+1772078218	AB_S8 hippocampus - healthy	AB_S8	SAMN03486297	OPC	1772078218.C05
+1772078218	AB_S8 hippocampus - healthy	AB_S8	SAMN03486298	hybrid	1772078218.C08
+1772078218	AB_S8 hippocampus - healthy	AB_S8	SAMN03486299	OPC	1772078218.C09
+1772078218	AB_S8 hippocampus - healthy	AB_S8	SAMN03486300	OPC	1772078218.C13
+1772078218	AB_S8 hippocampus - healthy	AB_S8	SAMN03486301	OPC	1772078218.C18
+1772078218	AB_S8 hippocampus - healthy	AB_S8	SAMN03486302	OPC	1772078218.C23
+1772078218	AB_S8 hippocampus - healthy	AB_S8	SAMN03486303	microglia	1772078218.C27
+1772078218	AB_S8 hippocampus - healthy	AB_S8	SAMN03486304	OPC	1772078218.C29
+1772078218	AB_S8 hippocampus - healthy	AB_S8	SAMN03486305	hybrid	1772078218.C32
+1772078218	AB_S8 hippocampus - healthy	AB_S8	SAMN03486306	OPC	1772078218.C34
+1772078218	AB_S8 hippocampus - healthy	AB_S8	SAMN03486307	OPC	1772078218.C43
+1772078218	AB_S8 hippocampus - healthy	AB_S8	SAMN03486308	OPC	1772078218.C44
+1772078218	AB_S8 hippocampus - healthy	AB_S8	SAMN03486309	OPC	1772078218.C47
+1772078218	AB_S8 hippocampus - healthy	AB_S8	SAMN03486310	OPC	1772078218.C48
+1772078218	AB_S8 hippocampus - healthy	AB_S8	SAMN03486311	microglia	1772078218.C53
+1772078218	AB_S8 hippocampus - healthy	AB_S8	SAMN03486312	microglia	1772078218.C55
+1772078218	AB_S8 hippocampus - healthy	AB_S8	SAMN03486313	OPC	1772078218.C56
+1772078218	AB_S8 hippocampus - healthy	AB_S8	SAMN03486314	OPC	1772078218.C58
+1772078218	AB_S8 hippocampus - healthy	AB_S8	SAMN03486315	OPC	1772078218.C61
+1772078218	AB_S8 hippocampus - healthy	AB_S8	SAMN03486316	microglia	1772078218.C71
+1772078218	AB_S8 hippocampus - healthy	AB_S8	SAMN03486317	OPC	1772078218.C85
+1772078218	AB_S8 hippocampus - healthy	AB_S8	SAMN03486318	microglia	1772078218.C88
+1772078218	AB_S8 hippocampus - healthy	AB_S8	SAMN03486319	microglia	1772078218.C89
+1772078218	AB_S8 hippocampus - healthy	AB_S8	SAMN03486320	microglia	1772078218.C93
+1772078218	AB_S8 hippocampus - healthy	AB_S8	SAMN03486321	OPC	1772078218.C95
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486322	hybrid	1772078236.C11
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486323	neuron	1772078236.C12
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486324	neuron	1772078236.C16
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486325	astrocytes	1772078236.C17
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486359	neuron	1772078236.C19
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486354	microglia	1772078236.C25
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486266	neuron	1772078236.C26
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486267	hybrid	1772078236.C27
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486268	neuron	1772078236.C28
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486269	astrocytes	1772078236.C30
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486270	neuron	1772078236.C31
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486271	neuron	1772078236.C32
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486272	neuron	1772078236.C33
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486273	neuron	1772078236.C34
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486274	neuron	1772078236.C36
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486275	oligodendrocytes	1772078236.C38
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486276	neuron	1772078236.C40
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486277	neuron	1772078236.C41
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486278	hybrid	1772078236.C45
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486279	neuron	1772078236.C46
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486280	neuron	1772078236.C47
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486281	neuron	1772078236.C49
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486282	neuron	1772078236.C54
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486283	neuron	1772078236.C56
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486284	neuron	1772078236.C57
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486285	neuron	1772078236.C61
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486286	neuron	1772078236.C65
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486287	neuron	1772078236.C66
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486288	neuron	1772078236.C70
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486289	neuron	1772078236.C74
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486290	neuron	1772078236.C77
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486291	neuron	1772078236.C89
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486292	neuron	1772078236.C90
+1772078236	AB_S11 temporal lobe cortex	AB_S11	SAMN03486293	neuron	1772078236.C93
+1772078237	AB_S11 temporal lobe cortex	AB_S11	SAMN03486294	neuron	1772078237.C06
+1772078237	AB_S11 temporal lobe cortex	AB_S11	SAMN03486295	neuron	1772078237.C08
+1772078237	AB_S11 temporal lobe cortex	AB_S11	SAMN03486236	astrocytes	1772078237.C11
+1772078237	AB_S11 temporal lobe cortex	AB_S11	SAMN03486237	neuron	1772078237.C13
+1772078237	AB_S11 temporal lobe cortex	AB_S11	SAMN03486238	neuron	1772078237.C14
+1772078237	AB_S11 temporal lobe cortex	AB_S11	SAMN03486239	neuron	1772078237.C15
+1772078237	AB_S11 temporal lobe cortex	AB_S11	SAMN03486240	astrocytes	1772078237.C19
+1772078237	AB_S11 temporal lobe cortex	AB_S11	SAMN03486241	neuron	1772078237.C21
+1772078237	AB_S11 temporal lobe cortex	AB_S11	SAMN03486242	neuron	1772078237.C26
+1772078237	AB_S11 temporal lobe cortex	AB_S11	SAMN03486243	endothelial	1772078237.C28
+1772078237	AB_S11 temporal lobe cortex	AB_S11	SAMN03486244	neuron	1772078237.C29
+1772078237	AB_S11 temporal lobe cortex	AB_S11	SAMN03486245	neuron	1772078237.C31
+1772078237	AB_S11 temporal lobe cortex	AB_S11	SAMN03486246	astrocytes	1772078237.C40
+1772078237	AB_S11 temporal lobe cortex	AB_S11	SAMN03486247	neuron	1772078237.C42
+1772078237	AB_S11 temporal lobe cortex	AB_S11	SAMN03486248	neuron	1772078237.C44
+1772078237	AB_S11 temporal lobe cortex	AB_S11	SAMN03486249	neuron	1772078237.C47
+1772078237	AB_S11 temporal lobe cortex	AB_S11	SAMN03486250	astrocytes	1772078237.C49
+1772078237	AB_S11 temporal lobe cortex	AB_S11	SAMN03486251	neuron	1772078237.C52
+1772078237	AB_S11 temporal lobe cortex	AB_S11	SAMN03486252	astrocytes	1772078237.C55
+1772078237	AB_S11 temporal lobe cortex	AB_S11	SAMN03486253	neuron	1772078237.C56
+1772078237	AB_S11 temporal lobe cortex	AB_S11	SAMN03486254	neuron	1772078237.C58
+1772078237	AB_S11 temporal lobe cortex	AB_S11	SAMN03486255	neuron	1772078237.C60
+1772078237	AB_S11 temporal lobe cortex	AB_S11	SAMN03486256	neuron	1772078237.C61
+1772078237	AB_S11 temporal lobe cortex	AB_S11	SAMN03486257	neuron	1772078237.C62
+1772078237	AB_S11 temporal lobe cortex	AB_S11	SAMN03486258	neuron	1772078237.C74
+1772078237	AB_S11 temporal lobe cortex	AB_S11	SAMN03486259	neuron	1772078237.C79
+1772078237	AB_S11 temporal lobe cortex	AB_S11	SAMN03486260	neuron	1772078237.C83
+1772078237	AB_S11 temporal lobe cortex	AB_S11	SAMN03486261	neuron	1772078237.C84
+1772078237	AB_S11 temporal lobe cortex	AB_S11	SAMN03486262	neuron	1772078237.C92
+nochipID12	AB_S1 temporal lobe cortex	AB_S1	SAMN03486263	astrocytes	nochipID12.C05
+nochipID12	AB_S1 temporal lobe cortex	AB_S1	SAMN03486264	endothelial	nochipID12.C23
+nochipID12	AB_S1 temporal lobe cortex	AB_S1	SAMN03486265	microglia	nochipID12.C73
+nochipID12	AB_S1 temporal lobe cortex	AB_S1	SAMN03486206	endothelial	nochipID12.C84
+nochipID12	AB_S1 temporal lobe cortex	AB_S1	SAMN03486207	microglia	nochipID12.C87
+nochipID14	AB_S2 temporal lobe cortex	AB_S2	SAMN03486208	microglia	nochipID14.C08
+nochipID14	AB_S2 temporal lobe cortex	AB_S2	SAMN03486209	astrocytes	nochipID14.C13
+nochipID14	AB_S2 temporal lobe cortex	AB_S2	SAMN03486210	microglia	nochipID14.C29
+nochipID14	AB_S2 temporal lobe cortex	AB_S2	SAMN03486211	astrocytes	nochipID14.C45
+nochipID14	AB_S2 temporal lobe cortex	AB_S2	SAMN03486212	neuron	nochipID14.C89
+nochipID15	AB_S3 temporal lobe cortex	AB_S3	SAMN03486213	neuron	nochipID15.C20
+nochipID15	AB_S3 temporal lobe cortex	AB_S3	SAMN03486214	nonreplicating fetal neuron	nochipID15.C54
+nochipID15	AB_S3 temporal lobe cortex	AB_S3	SAMN03486215	endothelial	nochipID15.C69
+nochipID15	AB_S3 temporal lobe cortex	AB_S3	SAMN03486216	neuron	nochipID15.C86
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486217	astrocytes	nochipID2.C01
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486218	astrocytes	nochipID2.C02
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486219	hybrid	nochipID2.C03
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486220	neuron	nochipID2.C07
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486221	astrocytes	nochipID2.C08
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486222	hybrid	nochipID2.C09
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486223	neuron	nochipID2.C10
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486224	hybrid	nochipID2.C11
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486225	neuron	nochipID2.C12
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486226	hybrid	nochipID2.C13
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486227	astrocytes	nochipID2.C14
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486228	astrocytes	nochipID2.C15
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486229	oligodendrocytes	nochipID2.C16
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486230	hybrid	nochipID2.C17
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486231	astrocytes	nochipID2.C18
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486232	astrocytes	nochipID2.C19
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486233	hybrid	nochipID2.C21
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486234	hybrid	nochipID2.C22
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486235	hybrid	nochipID2.C24
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486176	neuron	nochipID2.C26
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486177	astrocytes	nochipID2.C27
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486178	astrocytes	nochipID2.C28
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486179	hybrid	nochipID2.C29
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486180	astrocytes	nochipID2.C30
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486181	hybrid	nochipID2.C31
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486182	astrocytes	nochipID2.C32
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486183	neuron	nochipID2.C33
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486184	neuron	nochipID2.C34
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486185	neuron	nochipID2.C36
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486186	neuron	nochipID2.C38
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486187	hybrid	nochipID2.C39
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486188	neuron	nochipID2.C40
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486189	neuron	nochipID2.C41
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486190	neuron	nochipID2.C42
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486191	neuron	nochipID2.C43
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486192	neuron	nochipID2.C44
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486193	neuron	nochipID2.C45
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486194	astrocytes	nochipID2.C46
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486195	hybrid	nochipID2.C47
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486196	astrocytes	nochipID2.C48
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486197	neuron	nochipID2.C49
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486198	hybrid	nochipID2.C50
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486199	astrocytes	nochipID2.C51
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486200	astrocytes	nochipID2.C52
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486201	astrocytes	nochipID2.C56
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486202	astrocytes	nochipID2.C57
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486203	neuron	nochipID2.C58
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486204	astrocytes	nochipID2.C59
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486205	astrocytes	nochipID2.C60
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486146	astrocytes	nochipID2.C61
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486147	astrocytes	nochipID2.C62
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486148	hybrid	nochipID2.C63
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486149	neuron	nochipID2.C64
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486150	astrocytes	nochipID2.C65
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486151	astrocytes	nochipID2.C66
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486152	astrocytes	nochipID2.C67
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486153	astrocytes	nochipID2.C68
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486154	neuron	nochipID2.C69
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486155	astrocytes	nochipID2.C71
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486156	astrocytes	nochipID2.C73
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486157	astrocytes	nochipID2.C75
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486158	astrocytes	nochipID2.C76
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486159	astrocytes	nochipID2.C77
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486160	astrocytes	nochipID2.C78
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486161	hybrid	nochipID2.C79
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486162	astrocytes	nochipID2.C80
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486163	astrocytes	nochipID2.C81
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486164	astrocytes	nochipID2.C82
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486165	hybrid	nochipID2.C83
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486168	hybrid	nochipID2.C84
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486169	hybrid	nochipID2.C85
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486170	hybrid	nochipID2.C86
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486171	astrocytes	nochipID2.C87
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486172	astrocytes	nochipID2.C89
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486173	neuron	nochipID2.C90
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486166	astrocytes	nochipID2.C92
+nochipID2	AB_S4 temporal lobe cortex	AB_S4	SAMN03486167	astrocytes	nochipID2.C93
+nochipID3	AB_S5 temporal lobe cortex	AB_S5	SAMN03486174	endothelial	nochipID3.C01
+nochipID3	AB_S5 temporal lobe cortex	AB_S5	SAMN03486175	neuron	nochipID3.C05
+nochipID3	AB_S5 temporal lobe cortex	AB_S5	SAMN03486116	endothelial	nochipID3.C06
+nochipID3	AB_S5 temporal lobe cortex	AB_S5	SAMN03486117	endothelial	nochipID3.C07
+nochipID3	AB_S5 temporal lobe cortex	AB_S5	SAMN03486118	neuron	nochipID3.C09
+nochipID3	AB_S5 temporal lobe cortex	AB_S5	SAMN03486119	oligodendrocytes	nochipID3.C11
+nochipID3	AB_S5 temporal lobe cortex	AB_S5	SAMN03486120	endothelial	nochipID3.C12
+nochipID3	AB_S5 temporal lobe cortex	AB_S5	SAMN03486121	neuron	nochipID3.C14
+nochipID3	AB_S5 temporal lobe cortex	AB_S5	SAMN03486122	neuron	nochipID3.C23
+nochipID3	AB_S5 temporal lobe cortex	AB_S5	SAMN03486123	endothelial	nochipID3.C25
+nochipID3	AB_S5 temporal lobe cortex	AB_S5	SAMN03486124	oligodendrocytes	nochipID3.C32
+nochipID3	AB_S5 temporal lobe cortex	AB_S5	SAMN03486125	endothelial	nochipID3.C37
+nochipID3	AB_S5 temporal lobe cortex	AB_S5	SAMN03486126	neuron	nochipID3.C38
+nochipID3	AB_S5 temporal lobe cortex	AB_S5	SAMN03486127	endothelial	nochipID3.C51
+nochipID3	AB_S5 temporal lobe cortex	AB_S5	SAMN03486128	oligodendrocytes	nochipID3.C52
+nochipID3	AB_S5 temporal lobe cortex	AB_S5	SAMN03486129	endothelial	nochipID3.C53
+nochipID3	AB_S5 temporal lobe cortex	AB_S5	SAMN03486130	endothelial	nochipID3.C54
+nochipID3	AB_S5 temporal lobe cortex	AB_S5	SAMN03486131	endothelial	nochipID3.C56
+nochipID3	AB_S5 temporal lobe cortex	AB_S5	SAMN03486132	neuron	nochipID3.C61
+nochipID3	AB_S5 temporal lobe cortex	AB_S5	SAMN03486133	endothelial	nochipID3.C62
+nochipID3	AB_S5 temporal lobe cortex	AB_S5	SAMN03486134	neuron	nochipID3.C65
+nochipID3	AB_S5 temporal lobe cortex	AB_S5	SAMN03486135	neuron	nochipID3.C69
+nochipID3	AB_S5 temporal lobe cortex	AB_S5	SAMN03486136	neuron	nochipID3.C71
+nochipID3	AB_S5 temporal lobe cortex	AB_S5	SAMN03486137	neuron	nochipID3.C72
+nochipID3	AB_S5 temporal lobe cortex	AB_S5	SAMN03486138	neuron	nochipID3.C74
+nochipID3	AB_S5 temporal lobe cortex	AB_S5	SAMN03486139	neuron	nochipID3.C75
+nochipID3	AB_S5 temporal lobe cortex	AB_S5	SAMN03486140	endothelial	nochipID3.C76
+nochipID3	AB_S5 temporal lobe cortex	AB_S5	SAMN03486141	neuron	nochipID3.C80
+nochipID3	AB_S5 temporal lobe cortex	AB_S5	SAMN03486142	neuron	nochipID3.C81
+nochipID3	AB_S5 temporal lobe cortex	AB_S5	SAMN03486143	endothelial	nochipID3.C84
+nochipID3	AB_S5 temporal lobe cortex	AB_S5	SAMN03486144	neuron	nochipID3.C85
+nochipID3	AB_S5 temporal lobe cortex	AB_S5	SAMN03486145	neuron	nochipID3.C86
+nochipID3	AB_S5 temporal lobe cortex	AB_S5	SAMN03486086	neuron	nochipID3.C91
+nochipID5	AB_S5 hippocampus - healthy	AB_S5	SAMN03486087	microglia	nochipID5.C04
+nochipID5	AB_S5 hippocampus - healthy	AB_S5	SAMN03486088	endothelial	nochipID5.C05
+nochipID5	AB_S5 hippocampus - healthy	AB_S5	SAMN03486089	oligodendrocytes	nochipID5.C18
+nochipID5	AB_S5 hippocampus - healthy	AB_S5	SAMN03486090	oligodendrocytes	nochipID5.C19
+nochipID5	AB_S5 hippocampus - healthy	AB_S5	SAMN03486091	oligodendrocytes	nochipID5.C42
+nochipID5	AB_S5 hippocampus - healthy	AB_S5	SAMN03486092	neuron	nochipID5.C44
+nochipID5	AB_S5 hippocampus - healthy	AB_S5	SAMN03486093	endothelial	nochipID5.C45
+nochipID5	AB_S5 hippocampus - healthy	AB_S5	SAMN03486094	oligodendrocytes	nochipID5.C54
+nochipID5	AB_S5 hippocampus - healthy	AB_S5	SAMN03486095	oligodendrocytes	nochipID5.C65
+nochipID5	AB_S5 hippocampus - healthy	AB_S5	SAMN03486096	oligodendrocytes	nochipID5.C72
+nochipID5	AB_S5 hippocampus - healthy	AB_S5	SAMN03486097	endothelial	nochipID5.C91
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486098	neuron	nochipID8.C01
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486099	neuron	nochipID8.C02
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486100	neuron	nochipID8.C05
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486101	oligodendrocytes	nochipID8.C06
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486102	neuron	nochipID8.C08
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486103	hybrid	nochipID8.C11
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486104	oligodendrocytes	nochipID8.C12
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486105	neuron	nochipID8.C13
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486106	neuron	nochipID8.C14
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486107	neuron	nochipID8.C17
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486108	neuron	nochipID8.C19
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486109	neuron	nochipID8.C20
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486110	neuron	nochipID8.C22
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486111	oligodendrocytes	nochipID8.C23
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486112	neuron	nochipID8.C25
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486113	astrocytes	nochipID8.C28
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486114	neuron	nochipID8.C29
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486115	hybrid	nochipID8.C30
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486056	neuron	nochipID8.C32
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486057	neuron	nochipID8.C36
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486058	neuron	nochipID8.C37
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486059	neuron	nochipID8.C39
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486060	neuron	nochipID8.C40
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486061	neuron	nochipID8.C41
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486062	neuron	nochipID8.C42
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486063	neuron	nochipID8.C43
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486064	neuron	nochipID8.C45
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486065	hybrid	nochipID8.C48
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486066	oligodendrocytes	nochipID8.C49
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486067	neuron	nochipID8.C50
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486068	oligodendrocytes	nochipID8.C52
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486069	neuron	nochipID8.C53
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486070	oligodendrocytes	nochipID8.C54
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486071	neuron	nochipID8.C55
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486072	hybrid	nochipID8.C56
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486073	oligodendrocytes	nochipID8.C57
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486074	neuron	nochipID8.C60
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486075	oligodendrocytes	nochipID8.C61
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486076	hybrid	nochipID8.C64
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486077	neuron	nochipID8.C65
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486078	oligodendrocytes	nochipID8.C66
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486085	astrocytes	nochipID8.C67
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486026	neuron	nochipID8.C70
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486027	neuron	nochipID8.C75
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486079	neuron	nochipID8.C77
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486080	neuron	nochipID8.C78
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486081	oligodendrocytes	nochipID8.C79
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486082	astrocytes	nochipID8.C81
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486083	neuron	nochipID8.C82
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486084	neuron	nochipID8.C84
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486028	neuron	nochipID8.C85
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486029	hybrid	nochipID8.C87
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486030	oligodendrocytes	nochipID8.C88
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486031	oligodendrocytes	nochipID8.C90
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486032	neuron	nochipID8.C92
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486033	neuron	nochipID8.C95
+nochipID8	AB_S7 temporal lobe cortex	AB_S7	SAMN03486034	hybrid	nochipID8.C96
+nochipID9	AB_S1 temporal lobe cortex	AB_S1	SAMN03486035	astrocytes	nochipID9.C01
+nochipID9	AB_S1 temporal lobe cortex	AB_S1	SAMN03486036	astrocytes	nochipID9.C02
+nochipID9	AB_S1 temporal lobe cortex	AB_S1	SAMN03486037	astrocytes	nochipID9.C04
+nochipID9	AB_S1 temporal lobe cortex	AB_S1	SAMN03486038	astrocytes	nochipID9.C09
+nochipID9	AB_S1 temporal lobe cortex	AB_S1	SAMN03486039	microglia	nochipID9.C14
+nochipID9	AB_S1 temporal lobe cortex	AB_S1	SAMN03486040	microglia	nochipID9.C18
+nochipID9	AB_S1 temporal lobe cortex	AB_S1	SAMN03486041	astrocytes	nochipID9.C26
+nochipID9	AB_S1 temporal lobe cortex	AB_S1	SAMN03486042	astrocytes	nochipID9.C37
+nochipID9	AB_S1 temporal lobe cortex	AB_S1	SAMN03486043	neuron	nochipID9.C42
+nochipID9	AB_S1 temporal lobe cortex	AB_S1	SAMN03486045	astrocytes	nochipID9.C57
+nochipID9	AB_S1 temporal lobe cortex	AB_S1	SAMN03486046	neuron	nochipID9.C59
+nochipID9	AB_S1 temporal lobe cortex	AB_S1	SAMN03486047	neuron	nochipID9.C62
+nochipID9	AB_S1 temporal lobe cortex	AB_S1	SAMN03486048	microglia	nochipID9.C65
+nochipID9	AB_S1 temporal lobe cortex	AB_S1	SAMN03486049	neuron	nochipID9.C74
+nochipID9	AB_S1 temporal lobe cortex	AB_S1	SAMN03486050	neuron	nochipID9.C75
+nochipID9	AB_S1 temporal lobe cortex	AB_S1	SAMN03486051	astrocytes	nochipID9.C84
+nochipID9	AB_S1 temporal lobe cortex	AB_S1	SAMN03486052	neuron	nochipID9.C85
+nochipID9	AB_S1 temporal lobe cortex	AB_S1	SAMN03486044	astrocytes	nochipID9.C87
+nochipID9	AB_S1 temporal lobe cortex	AB_S1	SAMN03486053	astrocytes	nochipID9.C92
+nochipID10	FB_S1 fetal brain cortex	FB_S1	SAMN03486054	replicating fetal neuron	nochipID10.C02
+nochipID10	FB_S1 fetal brain cortex	FB_S1	SAMN03486055	replicating fetal neuron	nochipID10.C03
+nochipID10	FB_S1 fetal brain cortex	FB_S1	SAMN03485996	replicating fetal neuron	nochipID10.C05
+nochipID10	FB_S1 fetal brain cortex	FB_S1	SAMN03485997	replicating fetal neuron	nochipID10.C07
+nochipID10	FB_S1 fetal brain cortex	FB_S1	SAMN03485998	replicating fetal neuron	nochipID10.C11
+nochipID10	FB_S1 fetal brain cortex	FB_S1	SAMN03485999	replicating fetal neuron	nochipID10.C16
+nochipID10	FB_S1 fetal brain cortex	FB_S1	SAMN03486000	replicating fetal neuron	nochipID10.C17
+nochipID10	FB_S1 fetal brain cortex	FB_S1	SAMN03486001	replicating fetal neuron	nochipID10.C19
+nochipID10	FB_S1 fetal brain cortex	FB_S1	SAMN03486002	replicating fetal neuron	nochipID10.C25
+nochipID10	FB_S1 fetal brain cortex	FB_S1	SAMN03486003	replicating fetal neuron	nochipID10.C26
+nochipID10	FB_S1 fetal brain cortex	FB_S1	SAMN03486004	replicating fetal neuron	nochipID10.C37
+nochipID10	FB_S1 fetal brain cortex	FB_S1	SAMN03486005	replicating fetal neuron	nochipID10.C39
+nochipID10	FB_S1 fetal brain cortex	FB_S1	SAMN03486006	replicating fetal neuron	nochipID10.C42
+nochipID10	FB_S1 fetal brain cortex	FB_S1	SAMN03486007	replicating fetal neuron	nochipID10.C44
+nochipID10	FB_S1 fetal brain cortex	FB_S1	SAMN03486008	replicating fetal neuron	nochipID10.C47
+nochipID10	FB_S1 fetal brain cortex	FB_S1	SAMN03486009	replicating fetal neuron	nochipID10.C49
+nochipID10	FB_S1 fetal brain cortex	FB_S1	SAMN03486010	replicating fetal neuron	nochipID10.C50
+nochipID10	FB_S1 fetal brain cortex	FB_S1	SAMN03486011	replicating fetal neuron	nochipID10.C53
+nochipID10	FB_S1 fetal brain cortex	FB_S1	SAMN03486012	nonreplicating fetal neuron	nochipID10.C58
+nochipID10	FB_S1 fetal brain cortex	FB_S1	SAMN03486013	replicating fetal neuron	nochipID10.C65
+nochipID10	FB_S1 fetal brain cortex	FB_S1	SAMN03486014	nonreplicating fetal neuron	nochipID10.C74
+nochipID10	FB_S1 fetal brain cortex	FB_S1	SAMN03486015	replicating fetal neuron	nochipID10.C75
+nochipID10	FB_S1 fetal brain cortex	FB_S1	SAMN03486016	nonreplicating fetal neuron	nochipID10.C85
+nochipID10	FB_S1 fetal brain cortex	FB_S1	SAMN03486017	nonreplicating fetal neuron	nochipID10.C88
+nochipID10	FB_S1 fetal brain cortex	FB_S1	SAMN03486018	nonreplicating fetal neuron	nochipID10.C93
+nochipID10	FB_S1 fetal brain cortex	FB_S1	SAMN03486019	replicating fetal neuron	nochipID10.C94
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485967	nonreplicating fetal neuron	nochipID11.C02
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485968	nonreplicating fetal neuron	nochipID11.C03
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03486020	nonreplicating fetal neuron	nochipID11.C06
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03486021	nonreplicating fetal neuron	nochipID11.C07
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03486022	nonreplicating fetal neuron	nochipID11.C08
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03486023	nonreplicating fetal neuron	nochipID11.C10
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03486024	nonreplicating fetal neuron	nochipID11.C15
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03486025	nonreplicating fetal neuron	nochipID11.C17
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485966	nonreplicating fetal neuron	nochipID11.C19
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485969	nonreplicating fetal neuron	nochipID11.C20
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485970	nonreplicating fetal neuron	nochipID11.C21
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485971	nonreplicating fetal neuron	nochipID11.C22
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485972	nonreplicating fetal neuron	nochipID11.C23
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485973	replicating fetal neuron	nochipID11.C25
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485974	nonreplicating fetal neuron	nochipID11.C30
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485975	nonreplicating fetal neuron	nochipID11.C37
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485976	nonreplicating fetal neuron	nochipID11.C48
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485977	nonreplicating fetal neuron	nochipID11.C49
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485978	nonreplicating fetal neuron	nochipID11.C50
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485979	nonreplicating fetal neuron	nochipID11.C53
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485980	nonreplicating fetal neuron	nochipID11.C54
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485981	nonreplicating fetal neuron	nochipID11.C55
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485982	nonreplicating fetal neuron	nochipID11.C56
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485983	nonreplicating fetal neuron	nochipID11.C57
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485984	nonreplicating fetal neuron	nochipID11.C58
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485985	nonreplicating fetal neuron	nochipID11.C59
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485986	nonreplicating fetal neuron	nochipID11.C60
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485987	nonreplicating fetal neuron	nochipID11.C61
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485988	nonreplicating fetal neuron	nochipID11.C62
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485989	nonreplicating fetal neuron	nochipID11.C63
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485990	nonreplicating fetal neuron	nochipID11.C64
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485991	nonreplicating fetal neuron	nochipID11.C66
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485992	nonreplicating fetal neuron	nochipID11.C68
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485993	nonreplicating fetal neuron	nochipID11.C69
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485994	nonreplicating fetal neuron	nochipID11.C75
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485995	nonreplicating fetal neuron	nochipID11.C76
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485936	nonreplicating fetal neuron	nochipID11.C77
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485937	nonreplicating fetal neuron	nochipID11.C78
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485938	nonreplicating fetal neuron	nochipID11.C79
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485939	nonreplicating fetal neuron	nochipID11.C81
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485940	nonreplicating fetal neuron	nochipID11.C82
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485941	nonreplicating fetal neuron	nochipID11.C83
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485942	nonreplicating fetal neuron	nochipID11.C84
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485943	nonreplicating fetal neuron	nochipID11.C86
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485944	nonreplicating fetal neuron	nochipID11.C91
+nochipID11	FB_S2 fetal brain cortex	FB_S2	SAMN03485945	replicating fetal neuron	nochipID11.C93
+nochipID13	FB_S3 fetal brain cortex	FB_S3	SAMN03485946	nonreplicating fetal neuron	nochipID13.C07
+nochipID13	FB_S3 fetal brain cortex	FB_S3	SAMN03485947	nonreplicating fetal neuron	nochipID13.C11
+nochipID13	FB_S3 fetal brain cortex	FB_S3	SAMN03485948	nonreplicating fetal neuron	nochipID13.C12
+nochipID13	FB_S3 fetal brain cortex	FB_S3	SAMN03485949	nonreplicating fetal neuron	nochipID13.C14
+nochipID13	FB_S3 fetal brain cortex	FB_S3	SAMN03485950	nonreplicating fetal neuron	nochipID13.C15
+nochipID13	FB_S3 fetal brain cortex	FB_S3	SAMN03485951	nonreplicating fetal neuron	nochipID13.C17
+nochipID13	FB_S3 fetal brain cortex	FB_S3	SAMN03485952	nonreplicating fetal neuron	nochipID13.C21
+nochipID13	FB_S3 fetal brain cortex	FB_S3	SAMN03485953	nonreplicating fetal neuron	nochipID13.C25
+nochipID13	FB_S3 fetal brain cortex	FB_S3	SAMN03485954	nonreplicating fetal neuron	nochipID13.C28
+nochipID13	FB_S3 fetal brain cortex	FB_S3	SAMN03485955	nonreplicating fetal neuron	nochipID13.C32
+nochipID13	FB_S3 fetal brain cortex	FB_S3	SAMN03485956	nonreplicating fetal neuron	nochipID13.C36
+nochipID13	FB_S3 fetal brain cortex	FB_S3	SAMN03485957	nonreplicating fetal neuron	nochipID13.C45
+nochipID13	FB_S3 fetal brain cortex	FB_S3	SAMN03485958	nonreplicating fetal neuron	nochipID13.C46
+nochipID13	FB_S3 fetal brain cortex	FB_S3	SAMN03485959	nonreplicating fetal neuron	nochipID13.C48
+nochipID13	FB_S3 fetal brain cortex	FB_S3	SAMN03485960	nonreplicating fetal neuron	nochipID13.C50
+nochipID13	FB_S3 fetal brain cortex	FB_S3	SAMN03485961	nonreplicating fetal neuron	nochipID13.C55
+nochipID13	FB_S3 fetal brain cortex	FB_S3	SAMN03485962	nonreplicating fetal neuron	nochipID13.C57
+nochipID13	FB_S3 fetal brain cortex	FB_S3	SAMN03485963	nonreplicating fetal neuron	nochipID13.C58
+nochipID13	FB_S3 fetal brain cortex	FB_S3	SAMN03485964	nonreplicating fetal neuron	nochipID13.C59
+nochipID13	FB_S3 fetal brain cortex	FB_S3	SAMN03485965	nonreplicating fetal neuron	nochipID13.C61
+nochipID13	FB_S3 fetal brain cortex	FB_S3	SAMN03485906	nonreplicating fetal neuron	nochipID13.C63
+nochipID13	FB_S3 fetal brain cortex	FB_S3	SAMN03485907	nonreplicating fetal neuron	nochipID13.C64
+nochipID13	FB_S3 fetal brain cortex	FB_S3	SAMN03485908	nonreplicating fetal neuron	nochipID13.C66
+nochipID13	FB_S3 fetal brain cortex	FB_S3	SAMN03485909	nonreplicating fetal neuron	nochipID13.C67
+nochipID13	FB_S3 fetal brain cortex	FB_S3	SAMN03485910	nonreplicating fetal neuron	nochipID13.C68
+nochipID13	FB_S3 fetal brain cortex	FB_S3	SAMN03485911	nonreplicating fetal neuron	nochipID13.C72
+nochipID13	FB_S3 fetal brain cortex	FB_S3	SAMN03485912	nonreplicating fetal neuron	nochipID13.C73
+nochipID13	FB_S3 fetal brain cortex	FB_S3	SAMN03485913	nonreplicating fetal neuron	nochipID13.C74
+nochipID13	FB_S3 fetal brain cortex	FB_S3	SAMN03485914	nonreplicating fetal neuron	nochipID13.C75
+nochipID13	FB_S3 fetal brain cortex	FB_S3	SAMN03485915	nonreplicating fetal neuron	nochipID13.C80
+nochipID13	FB_S3 fetal brain cortex	FB_S3	SAMN03485916	nonreplicating fetal neuron	nochipID13.C84
+nochipID13	FB_S3 fetal brain cortex	FB_S3	SAMN03485917	nonreplicating fetal neuron	nochipID13.C87
+nochipID13	FB_S3 fetal brain cortex	FB_S3	SAMN03485918	nonreplicating fetal neuron	nochipID13.C93
+nochipID4	FB_S6 fetal brain cortex	FB_S6	SAMN03485919	nonreplicating fetal neuron	nochipID4.C03
+nochipID4	FB_S6 fetal brain cortex	FB_S6	SAMN03485920	nonreplicating fetal neuron	nochipID4.C04
+nochipID4	FB_S6 fetal brain cortex	FB_S6	SAMN03485921	nonreplicating fetal neuron	nochipID4.C10
+nochipID4	FB_S6 fetal brain cortex	FB_S6	SAMN03485922	nonreplicating fetal neuron	nochipID4.C14
+nochipID4	FB_S6 fetal brain cortex	FB_S6	SAMN03485923	nonreplicating fetal neuron	nochipID4.C18
+nochipID4	FB_S6 fetal brain cortex	FB_S6	SAMN03485924	nonreplicating fetal neuron	nochipID4.C19
+nochipID4	FB_S6 fetal brain cortex	FB_S6	SAMN03485925	nonreplicating fetal neuron	nochipID4.C20
+nochipID4	FB_S6 fetal brain cortex	FB_S6	SAMN03485929	nonreplicating fetal neuron	nochipID4.C21
+nochipID4	FB_S6 fetal brain cortex	FB_S6	SAMN03485930	nonreplicating fetal neuron	nochipID4.C33
+nochipID4	FB_S6 fetal brain cortex	FB_S6	SAMN03485931	replicating fetal neuron	nochipID4.C34
+nochipID4	FB_S6 fetal brain cortex	FB_S6	SAMN03485932	nonreplicating fetal neuron	nochipID4.C38
+nochipID4	FB_S6 fetal brain cortex	FB_S6	SAMN03485933	nonreplicating fetal neuron	nochipID4.C39
+nochipID4	FB_S6 fetal brain cortex	FB_S6	SAMN03485934	nonreplicating fetal neuron	nochipID4.C41
+nochipID4	FB_S6 fetal brain cortex	FB_S6	SAMN03485926	nonreplicating fetal neuron	nochipID4.C42
+nochipID4	FB_S6 fetal brain cortex	FB_S6	SAMN03485927	nonreplicating fetal neuron	nochipID4.C44
+nochipID4	FB_S6 fetal brain cortex	FB_S6	SAMN03485928	nonreplicating fetal neuron	nochipID4.C49
+nochipID4	FB_S6 fetal brain cortex	FB_S6	SAMN03485935	nonreplicating fetal neuron	nochipID4.C52
+nochipID4	FB_S6 fetal brain cortex	FB_S6	SAMN03485894	replicating fetal neuron	nochipID4.C53
+nochipID4	FB_S6 fetal brain cortex	FB_S6	SAMN03485895	nonreplicating fetal neuron	nochipID4.C59
+nochipID4	FB_S6 fetal brain cortex	FB_S6	SAMN03485896	nonreplicating fetal neuron	nochipID4.C62
+nochipID4	FB_S6 fetal brain cortex	FB_S6	SAMN03485897	nonreplicating fetal neuron	nochipID4.C63
+nochipID4	FB_S6 fetal brain cortex	FB_S6	SAMN03485898	nonreplicating fetal neuron	nochipID4.C66
+nochipID4	FB_S6 fetal brain cortex	FB_S6	SAMN03485899	nonreplicating fetal neuron	nochipID4.C74
+nochipID4	FB_S6 fetal brain cortex	FB_S6	SAMN03485900	nonreplicating fetal neuron	nochipID4.C77
+nochipID4	FB_S6 fetal brain cortex	FB_S6	SAMN03485901	nonreplicating fetal neuron	nochipID4.C78
+nochipID4	FB_S6 fetal brain cortex	FB_S6	SAMN03485902	nonreplicating fetal neuron	nochipID4.C84
+nochipID4	FB_S6 fetal brain cortex	FB_S6	SAMN03485903	nonreplicating fetal neuron	nochipID4.C89
+nochipID4	FB_S6 fetal brain cortex	FB_S6	SAMN03485904	nonreplicating fetal neuron	nochipID4.C95
+nochipID4	FB_S6 fetal brain cortex	FB_S6	SAMN03485905	nonreplicating fetal neuron	nochipID4.C96

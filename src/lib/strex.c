@@ -35,7 +35,7 @@
 
 
 enum strexType
-/* A type */
+/* A type within parse tree or built in function specification. */
     {
     strexTypeBoolean = 1,
     strexTypeString = 2,
@@ -44,7 +44,9 @@ enum strexType
     };
 
 enum strexBuiltInFunc
-/* One of these for each builtIn.  We'll just do a switch to implement */
+/* One of these for each builtIn.  We'll just do a switch to implement 
+ * Each built in function needs a value here, to keep it simple there's
+ * aa correspondence between these names and the built in function name */
     {
     strexBuiltInTrim,
     strexBuiltInBetween,
@@ -55,14 +57,13 @@ enum strexBuiltInFunc
     };
 
 struct strexBuiltIn
-/* A built in function */
+/* Information to describe a built in function */
     {
-    char *name;
-    enum strexBuiltInFunc func;
-    int paramCount;
-    enum strexType *paramTypes;
+    char *name;		/* Name in strex language:  trim, split, etc */
+    enum strexBuiltInFunc func;  /* enum version: strexBuiltInTrim strexBuiltInSplit etc. */
+    int paramCount;	/* Number of parameters, not flexible in this language! */
+    enum strexType *paramTypes;  /* Array of types, one for each parameter */
     };
-
 
 union strexVal
 /* Some value of arbirary type that can be of any type corresponding to strexType */
@@ -91,13 +92,14 @@ enum strexOp
     strexOpBuiltInCall,	/* Call a built in function */
     strexOpArrayIx,	/* An array with an index. */
 
+    /* Unary minus for numbers */
     strexOpUnaryMinusInt,
     strexOpUnaryMinusDouble,
 
     /* Binary operations. */
     strexOpAdd,
 
-    /* Type conversions */
+    /* Type conversions - possibly a few more than we actually need at the moment. */
     strexOpStringToBoolean,
     strexOpIntToBoolean,
     strexOpDoubleToBoolean,
@@ -112,9 +114,8 @@ enum strexOp
     strexOpDoubleToString,
     };
 
-
 struct strexParse
-/* A strex parse-tree. */
+/* A strex parse-tree node.  The tree itself is just the root node. */
     {
     struct strexParse *next;	/* Points to younger sibling if any. */
     struct strexParse *children;	/* Points to oldest child if any. */
@@ -124,18 +125,21 @@ struct strexParse
     };
 
 struct strexIn
-/* Input to the strex parser */
+/* Input to the strex parser - tokenizer and a hash full of built in functions. */
     {
     struct tokenizer *tkz;  /* Get next text input from here */
     struct hash *builtInHash;  /* Hash of built in functions */
     };
 
+/* Some predefined lists of parameter types */
 static enum strexType oneString[] = {strexTypeString};
 // static enum strexType twoStrings[] = {strexTypeString, strexTypeString};
 static enum strexType threeStrings[] = {strexTypeString, strexTypeString, strexTypeString};
 static enum strexType stringInt[] = {strexTypeString, strexTypeInt};
 static enum strexType stringStringInt[] = {strexTypeString, strexTypeString, strexTypeInt};
 
+/* There's one element here for each built in function.  There's also a few switches you'll need to
+ * fill in if you add a new built in function. */
 static struct strexBuiltIn builtins[] = {
     { "trim", strexBuiltInTrim, 1, oneString, },
     { "between", strexBuiltInBetween, 3, threeStrings, },
@@ -144,8 +148,6 @@ static struct strexBuiltIn builtins[] = {
     { "md5", strexBuiltInMd5, 1, oneString },
     { "separate", strexBuiltInSeparate, 3, stringStringInt },
 };
-
-
 
 static struct hash *hashBuiltIns()
 /* Build a hash of builtins keyed by name */
@@ -157,10 +159,11 @@ for (i=0; i<ArraySize(builtins); ++i)
 return hash;
 }
 
-static struct strexIn *strexInNew(char *expression)
+static struct strexIn *strexInNew(char *expression, char *fileName, int fileLineNumber)
 /* Return a new strexIn structure wrapped around expression */
 {
-struct lineFile *lf = lineFileOnString(expression, TRUE, cloneString(expression));
+struct lineFile *lf = lineFileOnString(fileName, TRUE, expression);
+lf->lineIx = fileLineNumber;
 struct tokenizer *tkz = tokenizerOnLineFile(lf);
 tkz->leaveQuotes = TRUE;
 struct strexIn *si;
@@ -312,7 +315,7 @@ static struct strexParse *strexParseExpression(struct strexIn *in);
 /* Parse out an expression with a single value */
 
 static struct strexParse *strexParseAtom(struct strexIn *in)
-/* Return low level (symbol or literal) */
+/* Return low level (symbol or literal) or a parenthesis enclosed expression. */
 {
 struct tokenizer *tkz = in->tkz;
 char *tok = tokenizerMustHaveNext(tkz);
@@ -689,10 +692,10 @@ if (leftover != NULL)
 	tkz->lf->fileName);
 }
 
-struct strexParse *strexParseString(char *s)
+struct strexParse *strexParseString(char *s, char *fileName, int fileLineNumber)
 /* Parse out string expression in s and return root of tree. */
 {
-struct strexIn *si = strexInNew(s);
+struct strexIn *si = strexInNew(s, fileName, fileLineNumber);
 struct strexParse *parseTree = strexParseExpression(si);
 ensureAtEnd(si);
 strexInFree(&si);

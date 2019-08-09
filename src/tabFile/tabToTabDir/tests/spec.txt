@@ -1,0 +1,50 @@
+table a_strex_test id
+id "constant ID"
+array0 GEO_Series_summary[0]
+array1 GEO_Series_summary[1]
+array2 GEO_Series_summary[2]
+mm	separate(submission_date, '-', 1)
+dd	separate(submission_date, '-', 2)
+yyyy	separate(submission_date, '-', 0)
+usaDate separate(submission_date, '-', 1) + '/' + separate(submission_date, '-', 2) + '/' + separate(submission_date, '-', 0)
+company split(fluidics_chip, 0)
+md5.sum md5(GEO_Series_summary)
+organ trim(between('human', title, 'transcriptome'))
+untrimmed_organ "'" + between('human', title, 'transcriptome') + "'"
+
+table project id
+id data_set_id
+title	
+lab	lab
+submitter
+
+table donor biosample_source_id
+biosample_source_id
+species
+biosample_source_gender 
+biosample_source_age biosample_source_age_value
+biosample_source_age_unit
+# GEO_Sample_age looks like:  prenatal 16-18 W
+geo_age split(GEO_Sample_age, 1)
+geo_age_unit split(GEO_Sample_age, 2)
+geo_life_stage split(GEO_Sample_age, 0)
+project	@project
+
+table specimen id
+id 	biosample_source_id + ' ' + split(sample_label, 0) + ' ' + split(sample_label, 1) + ' ' + split(sample_label, 2)
+donor	@donor
+organ	"brain"
+tissue 	split(sample_label, 0) + ' ' + split(sample_label, 1) + ' ' + split(sample_label, 2)
+
+table fluidics_chip id
+id lab_quake_fluidics_chip
+specimen @specimen
+
+table sample id
+fluidics_chip @fluidics_chip
+specimen @specimen
+donor @donor
+id ncbi_bio_sample
+biosample_cell_type
+lab_quake_cell
+
