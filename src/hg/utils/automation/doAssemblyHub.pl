@@ -27,6 +27,7 @@ use vars qw/
     $opt_buildDir
     $opt_sourceDir
     $opt_augustusSpecies
+    $opt_xenoRefSeq
     $opt_ucscNames
     /;
 
@@ -48,6 +49,7 @@ my $stepper = new HgStepManager(
       { name => 'tandemDups',   func => \&doTandemDups },
       { name => 'cpgIslands',   func => \&doCpgIslands },
       { name => 'ncbiGene',   func => \&doNcbiGene },
+      { name => 'xenoRefGene',   func => \&doXenoRefGene },
       { name => 'augustus',   func => \&doAugustus },
       { name => 'trackDb',   func => \&doTrackDb },
       { name => 'cleanup', func => \&doCleanup },
@@ -58,6 +60,7 @@ my $stepper = new HgStepManager(
 my $dbHost = 'hgwdev';
 my $sourceDir = "/hive/data/outside/ncbi/genomes";
 my $augustusSpecies = "human";
+my $xenoRefSeq = "/hive/data/genomes/asmHubs/VGP/xenoRefSeq";
 my $ucscNames = 0;  # default 'FALSE' (== 0)
 my $workhorse = "hgwdev";  # default workhorse when none chosen
 my $fileServer = "hgwdev";  # default when none chosen
@@ -93,6 +96,9 @@ options:
     -ucscNames        Translate NCBI/INSDC/RefSeq names to UCSC names
                       default is to use the given NCBI/INSDC/RefSeq names
     -augustusSpecies <human|chicken|zebrafish> default 'human'
+    -xenoRefSeq </path/to/xenoRefSeqMrna> - location of xenoRefMrna.fa.gz
+                expanded directory of mrnas/ and xenoRefMrna.sizes, default
+                $xenoRefSeq
 _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
@@ -122,11 +128,18 @@ Automates build of assembly hub.  Steps:
                   and compute intersection with repeatMasker results
     addMask: combine the higher masking of (windowMasker or repeatMasker) with
                   trf simpleRepeats into one 2bit file
+    gapOverlap: find duplicated sequence on each side of a gap
+    tandemDups: annotate all pairs of duplicated sequence with some gap between
     cpgIslands: run CpG islands cluster runs for both masked and unmasked
                 sequences and create bigBed files for this composite track
+    ncbiGene: on RefSeq assemblies, construct a gene track from the
+              NCBI gff3 predictions
+    xenoRefSeq: map RefSeq mRNAs to the assembly to construct a 'xeno'
+                gene prediction track
+    augustus: run the augustus gene prediction on the assembly
     trackDb: create trackDb.txt file for assembly hub to include all constructed
              bigBed and bigWig tracks
-    cleanup: Removes or compresses intermediate files.
+    cleanup: Removes or compresses intermediate files. (NOOP at this time !)
 All operations are performed in the build directory which is
 $HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/template.\$date unless -buildDir is given.
 ";
@@ -158,6 +171,7 @@ sub checkOptions {
 		      'buildDir=s',
 		      'sourceDir=s',
 		      'augustusSpecies=s',
+		      'xenoRefSeq=s',
 		      'ucscNames',
 		      @HgAutomate::commonOptionSpec,
 		      );
@@ -1243,7 +1257,6 @@ _EOF_
   $bossScript->execute();
 } # doNcbiGene
 
-
 #########################################################################
 # * step: augustus [workhorse]
 sub doAugustus {
@@ -1272,6 +1285,35 @@ _EOF_
   );
   $bossScript->execute();
 } # doAugustus
+
+#########################################################################
+# * step: xenoRefGene [bigClusterHub]
+sub doXenoRefGene {
+  my $runDir = "$buildDir/trackData/xenoRefGene";
+
+  &HgAutomate::mustMkdir($runDir);
+
+  my $whatItDoes = "run xeno RefSeq gene mapping procedures";
+  my $bossScript = newBash HgRemoteScript("$runDir/doXenoRefGene.bash",
+                    $workhorse, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+export asmId=$asmId
+
+if [ $buildDir/\$asmId.2bit -nt \$asmId.xenoRefGene.bb ]; then
+  time (~/kent/src/hg/utils/automation/doXenoRefGene.pl -buildDir=`pwd` -dbHost=$dbHost \\
+    -bigClusterHub=$bigClusterHub -mrnas=$xenoRefSeq -workhorse=$workhorse \\
+    -maskedSeq=$buildDir/trackData/addMask/\$asmId.masked.2bit \$asmId) > do.log 2>&1
+  bigBedInfo \$asmId.xenoRefGene.bb | egrep "^itemCount:|^basesCovered:" \\
+    | sed -e 's/,//g' > \$asmId.xenoRefGene.stats.txt
+  LC_NUMERIC=en_US /usr/bin/printf "# xenoRefGene %s %'d %s %'d\\n" `cat \$asmId.xenoRefGene.stats.txt` | xargs echo
+else
+  printf "# xenoRefGene previously completed\\n" 1>&2
+fi
+_EOF_
+  );
+  $bossScript->execute();
+} # doXenoRefGene
 
 #########################################################################
 # * step: trackDb [workhorse]
@@ -1333,6 +1375,7 @@ $buildDir = $opt_buildDir ? $opt_buildDir :
 
 $sourceDir = $opt_sourceDir ? $opt_sourceDir : $sourceDir;
 $augustusSpecies = $opt_augustusSpecies ? $opt_augustusSpecies : $augustusSpecies;
+$xenoRefSeq = $opt_xenoRefSeq ? $opt_xenoRefSeq : $xenoRefSeq;
 $ucscNames = $opt_ucscNames ? 1 : $ucscNames;   # '1' == 'TRUE'
 $workhorse = $opt_workhorse ? $opt_workhorse : $workhorse;
 $bigClusterHub = $opt_bigClusterHub ? $opt_bigClusterHub : $bigClusterHub;
@@ -1345,6 +1388,7 @@ die "can not find assembly source directory\n$assemblySource" if ( ! -d $assembl
 printf STDERR "# buildDir: %s\n", $buildDir;
 printf STDERR "# sourceDir %s\n", $sourceDir;
 printf STDERR "# augustusSpecies %s\n", $augustusSpecies;
+printf STDERR "# xenoRefSeq %s\n", $xenoRefSeq;
 printf STDERR "# assemblySource: %s\n", $assemblySource;
 
 # Do everything.
