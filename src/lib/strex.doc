@@ -3,7 +3,7 @@ This document describes its built in functions and operators:
 
 +  - returns the concatenation of the surrounding strings.  Will convert a number to a string
 
-[] - selects an element from a comma-separated value list.
+[ix] - selects a character from string given an integer zero based index.
 
 between(prefix, string, suffix) - returns the part of string found between prefix and suffix
    example:   between("abc", "01234abcHelloxyz56789", "xyz")  fetches just "Hello"
@@ -15,6 +15,10 @@ between(prefix, string, suffix) - returns the part of string found between prefi
 split(string, index)  - white space separated word from string of given 0 based index
 
 separate(string, splitter, index) - separates string with splitter character. Returns 0 based index.
+
+untsv(string, index) - separate by tab. Synonym for separate(string, '\t', index)
+
+uncsv(string, index) - do comma separated value extraction of string. Includes quote escaping.
 
 trim(string) - returns copy of string with leading and trailing spaces removed
 
