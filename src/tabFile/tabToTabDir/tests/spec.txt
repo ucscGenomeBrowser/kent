@@ -1,8 +1,11 @@
 table a_strex_test id
 id "constant ID"
-array0 uncsv(GEO_Series_summary,0)
-array1 uncsv(GEO_Series_summary,1)
-array2 uncsv(GEO_Series_summary,2)
+#assay long-RNA-seq
+long assay[:4]
+q assay[-1]
+RNA assay[5:8]
+seq assay[-3:]
+se assay[-3:-2]
 mm	separate(submission_date, '-', 1)
 dd	separate(submission_date, '-', 2)
 yyyy	separate(submission_date, '-', 0)
@@ -14,6 +17,14 @@ untrimmed_organ "'" + between('human', title, 'transcriptome') + "'"
 alphabet3 "abcdefg"[3]
 decade submission_date[2]
 crasho 1[1]
+abc "abcdefg"
+def "abcdefg"[3:6]
+abcd "abcdefg"[:4]
+efg "abcdefg"[4:]
+atoG "abcdefg"[:]
+fg "abcdefg"[-2:]
+array1 uncsv(GEO_Series_summary,1)
+
 
 table project id
 id data_set_id
