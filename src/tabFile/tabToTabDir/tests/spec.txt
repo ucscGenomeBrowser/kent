@@ -1,8 +1,8 @@
 table a_strex_test id
 id "constant ID"
-array0 GEO_Series_summary[0]
-array1 GEO_Series_summary[1]
-array2 GEO_Series_summary[2]
+array0 uncsv(GEO_Series_summary,0)
+array1 uncsv(GEO_Series_summary,1)
+array2 uncsv(GEO_Series_summary,2)
 mm	separate(submission_date, '-', 1)
 dd	separate(submission_date, '-', 2)
 yyyy	separate(submission_date, '-', 0)
