@@ -637,7 +637,7 @@ else if (tok[0] == '[')
 	    }
 	else
 	    {
-	    tokenizerReuse(tkz);    // Range is just whole array, do nothing really
+	    tokenizerReuse(tkz);    
 	    struct strexParse *firstIndex = strexParseNew(strexOpLiteral, strexTypeInt);
 	    struct strexParse *secondIndex = strexParseCoerce(strexParseExpression(in), strexTypeInt);
 	    p = arrayRangeTree(array, firstIndex, secondIndex);
@@ -655,8 +655,8 @@ else if (tok[0] == '[')
 	    if (tok[0] == ']')  // Case where second half of rang is empty
 		{
 	        tokenizerReuse(tkz);
-		secondIndex = strexParseNew(strexOpLiteral, strexTypeInt);
-		secondIndex->val.i = -1;
+		secondIndex = strexParseNew(strexOpStrlen, strexTypeInt);
+		secondIndex->children = array;
 		}
 	    else
 	        {
@@ -669,11 +669,8 @@ else if (tok[0] == '[')
 	    {
 	    // Simple no range case
 	    tokenizerReuse(tkz);
-	    AllocVar(p);
-	    p->op = strexOpArrayIx;
-	    p->type = strexTypeString;
+	    p = strexParseNew(strexOpArrayIx, strexTypeString);
 	    p->children = array;
-	    p->val.s = cloneString("");
 	    array->next = firstIndex;
 	    }
 	}
@@ -902,7 +899,7 @@ int len = strlen(arraySource);
 if (start < 0)
     start = strlen(arraySource) + start;
 if (end < 0)
-    end = strlen(arraySource) + end + 1;
+    end = strlen(arraySource) + end;
 if (start < 0)
    start = 0;
 if (end > len)
@@ -1149,6 +1146,11 @@ switch (p->op)
        break;
     case strexOpArrayRange:
        res = strexEvalArrayRange(p, record, lookup, lm);
+       break;
+    case strexOpStrlen:
+       res = strexLocalEval(p->children, record, lookup, lm);
+       res.type = strexTypeInt;
+       res.val.i = strlen(res.val.s);
        break;
 
     case strexOpBuiltInCall:
