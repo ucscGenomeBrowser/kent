@@ -11,6 +11,9 @@ company split(fluidics_chip, 0)
 md5.sum md5(GEO_Series_summary)
 organ trim(between('human', title, 'transcriptome'))
 untrimmed_organ "'" + between('human', title, 'transcriptome') + "'"
+alphabet3 "abcdefg"[3]
+decade submission_date[2]
+crasho 1[1]
 
 table project id
 id data_set_id

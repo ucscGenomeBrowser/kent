@@ -54,6 +54,8 @@ enum strexBuiltInFunc
     strexBuiltInNow,
     strexBuiltInMd5,
     strexBuiltInSeparate,
+    strexBuiltInUncsv,
+    strexBuiltInUntsv,
     };
 
 struct strexBuiltIn
@@ -147,6 +149,8 @@ static struct strexBuiltIn builtins[] = {
     { "now", strexBuiltInNow, 0, NULL },
     { "md5", strexBuiltInMd5, 1, oneString },
     { "separate", strexBuiltInSeparate, 3, stringStringInt },
+    { "uncsv", strexBuiltInUncsv, 2, stringInt },
+    { "untsv", strexBuiltInUntsv, 2, stringInt },
 };
 
 static struct hash *hashBuiltIns()
@@ -596,6 +600,7 @@ else if (tok[0] == '[')
     struct strexParse *index = strexParseExpression(in);
     // struct strexParse *index = strexParseFunction(in);
     index = strexParseCoerce(index, strexTypeInt);
+    collection = strexParseCoerce(collection, strexTypeString);
     skipOverRequired(in, "]");
     AllocVar(p);
     p->op = strexOpArrayIx;
@@ -801,9 +806,7 @@ struct strexParse *index = array->next;
 struct strexEval arrayVal = strexLocalEval(array, record, lookup, lm);
 struct strexEval indexVal = strexLocalEval(index, record, lookup, lm);
 struct strexEval res;
-struct dyString *scratch = dyStringNew(0);
-char *val = emptyForNull(csvParseOneOut(arrayVal.val.s, indexVal.val.i, scratch));
-res.val.s = cloneString(val);
+res.val.s = lmCloneStringZ(lm, arrayVal.val.s + indexVal.val.i, 1);
 res.type = strexTypeString;
 return res;
 }
@@ -830,6 +833,16 @@ for (i=0; ; ++i)
     }
 }
 
+static char *uncsvString(char *csvIn,  int ix,  struct lm *lm)
+/* Return the comma separated value of index ix. Memory for result is lm */
+{
+struct dyString *scratch = dyStringNew(0);
+char *one = csvParseOneOut(csvIn, ix, scratch); 
+char *res = lmCloneString(lm, one);	// Save in more permanent memory
+dyStringFree(&scratch);
+return res;
+}
+
 static char *separateString(char *string, char *splitter, int ix, struct lm *lm)
 /* Return the ix'th part of string as split apart by splitter */
 {
@@ -844,6 +857,12 @@ lmAllocArray(lm, row, count);
 char *scratch = lmCloneString(lm, string);
 chopByChar(scratch, splitter[0], row, count);
 return row[ix];
+}
+
+static char *untsvString(char *tsvIn, int ix, struct lm *lm)
+/* Return the tab separated value at given index living somewhere in lm. */
+{
+return separateString(tsvIn, "\t", ix, lm);
 }
 
 static struct strexEval strexEvalCallBuiltIn(struct strexParse *p, 
@@ -899,6 +918,20 @@ switch (builtIn->func)
         struct strexEval b = strexLocalEval(p->children->next, record, lookup, lm);
         struct strexEval c = strexLocalEval(p->children->next->next, record, lookup, lm);
 	res.val.s = separateString(a.val.s, b.val.s, c.val.i, lm);
+	break;
+	}
+    case strexBuiltInUncsv:
+        {
+        struct strexEval a = strexLocalEval(p->children, record, lookup, lm);
+        struct strexEval b = strexLocalEval(p->children->next, record, lookup, lm);
+	res.val.s = uncsvString(a.val.s, b.val.i, lm);
+	break;
+	}
+    case strexBuiltInUntsv:
+        {
+        struct strexEval a = strexLocalEval(p->children, record, lookup, lm);
+        struct strexEval b = strexLocalEval(p->children->next, record, lookup, lm);
+	res.val.s = untsvString(a.val.s, b.val.i, lm);
 	break;
 	}
     }
