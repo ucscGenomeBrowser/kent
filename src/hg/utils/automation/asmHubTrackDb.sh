@@ -359,7 +359,7 @@ html html/%s.ncbiGene
 searchIndex name%s
 url https://www.ncbi.nlm.nih.gov/gene/?term=\$\$
 urlLabel Entrez gene
-labelFields geneName,geneName2,name
+labelFields geneName,geneName2
 group genes\n\n" "${asmId}" "${asmId}" "${searchTrix}"
 
   $scriptDir/asmHubNcbiGene.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/trackData > $buildDir/html/$asmId.ncbiGene.html
@@ -478,14 +478,14 @@ rm -f ${buildDir}/bbi/${asmId}.xenoRefGene.bb
 ln -s ${buildDir}/trackData/xenoRefGene/${asmId}.xenoRefGene.bb ${buildDir}/bbi/${asmId}.xenoRefGene.bb
 
 printf "track xenoRefGene
-shortLabel GenBank mRNAs
-longLabel GenBank mRNAs mapped to this assembly with blat procedure
+shortLabel RefSeq mRNAs
+longLabel RefSeq mRNAs mapped to this assembly
 group rna
 visibility pack
 color 180,0,0
 type bigGenePred
 bigDataUrl bbi/%s.xenoRefGene.bb
-labelFields geneName,geneName2,name
+labelFields geneName,geneName2
 searchIndex name,geneName
 html html/%s.xenoRefGene\n\n" "${asmId}" "${asmId}"
 $scriptDir/asmHubXenoRefGene.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/trackData > $buildDir/html/$asmId.xenoRefGene.html

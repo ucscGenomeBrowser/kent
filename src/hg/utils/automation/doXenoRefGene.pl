@@ -275,7 +275,9 @@ cat NM.gp NR.gp | genePredSingleCover stdin \$db.xenoRefGene.gp
 genePredCheck -db=\$db -chromSizes=\$db.chrom.sizes \$db.xenoRefGene.gp
 genePredToBigGenePred -geneNames=$mrnas/geneOrgXref.txt \$db.xenoRefGene.gp \\
    stdout | sort -k1,1 -k2,2n > \$db.bgpInput
-bedToBigBed -extraIndex=name,geneName -type=bed12+8 -tab -as=\$HOME/kent/src/hg/lib/bigGenePred.as \\
+sed -e 's#Alternative/human readable gene name#species of origin of the mRNA#' \\
+  \$HOME/kent/src/hg/lib/bigGenePred.as > xenoRefGene.as
+bedToBigBed -extraIndex=name,geneName -type=bed12+8 -tab -as=xenoRefGene.as \\
    \$db.bgpInput \$db.chrom.sizes \$db.xenoRefGene.bb
 _EOF_
   );
