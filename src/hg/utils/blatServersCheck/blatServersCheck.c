@@ -52,7 +52,6 @@ static struct optionSpec options[] = {
    {"purgeTable", OPTION_STRING},
    {"dryRun", OPTION_STRING},
 */
-   {"showVersion", OPTION_BOOLEAN},
    {"-help", OPTION_BOOLEAN},
    {NULL, 0},
 };
