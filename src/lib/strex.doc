@@ -3,8 +3,10 @@ This document describes its built in functions and operators:
 
 +  - returns the concatenation of the surrounding strings.  Will convert a number to a string
 
-[ix] - selects a character from string given an integer zero based index.
-
+[ix] - selects a character from string given an integer zero based index. As in Python
+       if ix is negative it selects characters from the end of the string.  -1
+       corresponds to the last character of string, as 0 corresponds to first.
+      
 between(prefix, string, suffix) - returns the part of string found between prefix and suffix
    example:   between("abc", "01234abcHelloxyz56789", "xyz")  fetches just "Hello"
    If there are multiple places the prefix occurs, it will choose the first one, and the
@@ -15,6 +17,22 @@ between(prefix, string, suffix) - returns the part of string found between prefi
 split(string, index)  - white space separated word from string of given 0 based index
 
 separate(string, splitter, index) - separates string with splitter character. Returns 0 based index.
+
+[start:end] - Use a colon in an array index to select a range of a string.  This follows 
+              Python conventions, where start is zero based and end is one past the end of 
+	      this string (or equivalently one based).  If start is left out the start of 
+	      the string is implied.  If end is left out the end of the string is emplied.  
+	      This leads to some curious but useful constructs such as these shown with an 
+	      example applied to the string "abcdefghij"
+	           [:3] = "abc"       - first three characters of string
+		   [3:] = "efghij"    - everything past the first three characters
+		   [3] = "d"          - the fourth character  (the fun of zero based indexes
+		   [3:5] = "de"       - two characters starting with the fourth character up to the fifth
+		   [-3] = "h"         - the third character from the end
+		   [3:-3] = "efg"     - starts at fourth character ends three from the end
+		   [-3:] = "hij"      - last three characters of string
+	      Python actually goes further than this and allows a third, step, specification that
+	      strex has not implemented at least not yet.
 
 untsv(string, index) - separate by tab. Synonym for separate(string, '\t', index)
 
