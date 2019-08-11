@@ -940,7 +940,7 @@ static char *uncsvString(char *csvIn,  int ix,  struct lm *lm)
 {
 struct dyString *scratch = dyStringNew(0);
 char *one = csvParseOneOut(csvIn, ix, scratch); 
-char *res = lmCloneString(lm, one);	// Save in more permanent memory
+char *res = emptyForNull(lmCloneString(lm, one));	// Save in more permanent memory
 dyStringFree(&scratch);
 return res;
 }
