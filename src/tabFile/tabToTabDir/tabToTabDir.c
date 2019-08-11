@@ -266,7 +266,6 @@ struct fieldedTable *inTable = fieldedTableFromTabFile(inTabFile, inTabFile, NUL
 verbose(1, "Read %d columns, %d rows from %s\n", inTable->fieldCount, inTable->rowCount,
     inTabFile);
 struct lineFile *lf = lineFileOpen(specFile, TRUE);
-makeDirsOnPath(outDir);
 
 /* Read in spec file as ra file stanzas that we convert into tableInfos. */
 struct newTableInfo *newTableList = NULL, *newTable;
@@ -361,6 +360,7 @@ for (newTable = newTableList; newTable != NULL; newTable = newTable->next)
     }
 
 struct hash *inFieldHash = hashFieldIx(inTable->fields, inTable->fieldCount);
+makeDirsOnPath(outDir);
 
 /* Output tables */
 for (newTable = newTableList; newTable != NULL; newTable = newTable->next)
