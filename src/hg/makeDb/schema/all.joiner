@@ -7411,222 +7411,6 @@ dependency $pbDb.pbAaDistW $pbDb.knownGenePep
 dependency $pbDb.pbAaDistY $pbDb.knownGenePep
 
 
-# Table types - only needed when the table does not have the same name .as file record.
-type genePred
-    $hg.acembly
-    $gbd.ECgene
-    $gbd.geneid
-    $gbd.genscan
-    $gbd.sgpGene
-    $gbd.softberryGene
-    $gbd.twinscan
-    $gbd.ensGene
-    $gbd.vegaGene
-    $gbd.refGene
-    $gbd.xenoRefGene
-    $gbd.jgiFilteredModels
-    $gbd.geneMapper
-
-type pepPred
-    $hg.acemblyPep
-    $gbd.ECgenePep
-    $gbd.geneidPep
-    $gbd.genscanPep
-    $gbd.sgpPep
-    $gbd.softberryPep
-    $gbd.twinscanPep
-    $gbd.ensPep
-    $gbd.vegaPep
-    $gbd.knownGenePep
-    $ce.sangerPep
-    dm1.bdgpGenePep
-    $dm.flyBasePep
-
-type psl
-    $hg.affyU95
-    $hg.affyU133
-    $hg.affyU133Plus2
-    $hg.HInvGeneMrna
-    $mm.affyU74
-    $danRer.affyZebrafish
-    $gbd.all_bacends
-    $gbd.all_fosends
-    $gbd.all_est
-    $gbd.est
-    $gbd.intronEst
-    $gbd.xenoEst
-    $gbd.xenoMrna
-    $gbd.all_mrna
-    $gbd.refSeqAli
-    $gbd.all_sts_primer
-    $gbd.all_sts_seq
-
-type estOrientInfo
-    $gbd.estOrientInfo
-    $gbd.mrnaOrientInfo
-
-type expRecord
-    hgFixed.nci60Exps
-    hgFixed.rosettaExps
-    hgFixed.affyExps.id
-    hgFixed.gnfHumanU95AllExps
-    hgFixed.gnfHumanU95MedianExps
-    hgFixed.gnfMouseU74aAllExps
-    hgFixed.gnfMouseU74aMedianExps
-    hgFixed.gnfMouseU74bAllExps
-    hgFixed.gnfMouseU74bMedianExps
-    hgFixed.gnfMouseU74cAllExps
-    hgFixed.gnfMouseU74cMedianExps
-    hgFixed.arbFlyLifeAllExps
-    hgFixed.arbFlyLifeMedianExps
-    hgFixed.kimWormLifeAllExps
-    hgFixed.kimWormLifeMedianExps
-    hgFixed.yeastChoCellCycleExps
-    hgFixed.gladHumESExps
-
-type expData
-    hgFixed.kimWormLifeAllRatio
-    hgFixed.kimWormLifeMedianRatio
-    hgFixed.gnfHumanU95All
-    hgFixed.gnfHumanU95AllRatio
-    hgFixed.gnfHumanU95Median
-    hgFixed.gnfHumanU95MedianRatio
-    hgFixed.gnfMouseU74aAll
-    hgFixed.gnfMouseU74aAllRatio
-    hgFixed.gnfMouseU74aMedian
-    hgFixed.gnfMouseU74aMedianRatio
-    hgFixed.gnfMouseU74bAll
-    hgFixed.gnfMouseU74bAllRatio
-    hgFixed.gnfMouseU74bMedian
-    hgFixed.gnfMouseU74bMedianRatio
-    hgFixed.gnfMouseU74cAll
-    hgFixed.gnfMouseU74cAllRatio
-    hgFixed.gnfMouseU74cMedian
-    hgFixed.gnfMouseU74cMedianRatio
-    hgFixed.arbFlyLifeAll
-    hgFixed.arbFlyLifeAllRatio
-    hgFixed.arbFlyLifeMedian
-    hgFixed.arbFlyLifeMedianRatio
-    hgFixed.kimWormLifeAllRatio
-    hgFixed.kimWormLifeMedianRatio
-    hgFixed.yeastChoCellCycle
-    hgFixed.yeastChoCellCycleRatio
-    hgFixed.gladHumES
-    hgFixed.gladHumESRatio
-
-type exprBed
-    $hg.affyRatio
-    $mm.affyGnfU74A
-    $mm.affyGnfU74B
-    $mm.affyGnfU74C
-    $hg.nci60
-    $rn.gnfAtlas2
-    # hgFixed.rosChr22Dat
-
-type expDistance
-    $hg.gnfAtlas2Distance
-    $hg.gnfU95Distance
-    $mm.affyGnfU74ADistance
-    $mm.affyGnfU74BDistance
-    $mm.affyGnfU74CDistance
-    $mm.mouseLandscapeDistance
-    $hg.knownGnfDistance
-    $ce.kimExpDistance
-    $dm.arbExpDistance
-    $sacCer.choExpDistance
-    $hg.gladHumESDistance
-
-type chain
-    $gbd.chr%_chain%
-    $gbd.chr%_chainSelf
-
-type agpFrag
-    $gbd.chr%_gold
-
-type agpGap
-    $gbd.chr%_gap
-
-type gl
-    $gbd.chr%_gl
-
-type knownTo
-    $gbd.knownToCdsSnp
-    $gbd.knownToEnsembl
-    $gbd.knownToLocusLink
-    $gbd.knownToPfam
-    $gbd.knownToRefSeq
-    $gbd.knownToAllenBrain
-    $hg.knownToU95
-    $hg.knownToU133
-    $hg.knownToU133Plus2
-    $hg.knownToHInv
-    $mm.knownToU74
-    $mm.knownToXM
-    $ce.sangerToKim
-    $ce.sangerToPfam
-    $ce.sangerToRefSeq
-    dm1.bdgpToLocusLink
-    dm1.bdgpToPfam
-    dm1.bdgpToRefSeq
-    $sacCer.sgdToSwissProt
-    $sacCer.sgdToSgd
-    $sacCer.sgdToName
-
-type idName
-    hgFixed.source
-    hgFixed.organism
-    hgFixed.library
-    hgFixed.mrnaClone
-    hgFixed.sex
-    hgFixed.tissue
-    hgFixed.development
-    hgFixed.cell
-    hgFixed.cds
-    hgFixed.description
-    hgFixed.author
-    hgFixed.geneName
-    hgFixed.productName
-    hgFixed.keyword
-
-type blastTab
-    $gbd.ceBlastTab
-    $gbd.hgBlastTab
-    $gbd.dmBlastTab
-    $gbd.drBlastTab
-    $gbd.mmBlastTab
-    $gbd.rnBlastTab
-    $gbd.scBlastTab
-    $gbd.knownBlastTab
-    $ce.sangerBlastTab
-    dm1.bdgpBlastTab
-    sacCer1.sgdBlastTab
-    sacCer2.knownBlastTab
-
-type knownCanonical
-    $gbd.knownCanonical
-    $ce.sangerCanonical
-    dm1.bdgpCanonical
-    $sacCer.sgdCanonical
-
-type knownIsoforms
-    $gbd.knownIsoforms
-    $ce.sangerIsoforms
-    dm1.bdgpIsoforms
-    $sacCer.sgdIsoforms
-
-type rnaFold
-    $gbd.foldUtr3
-    $gbd.foldUtr5
-
-type bed
-    $gbd.vegaPseudoGene
-    $sacCer.sgdOther
-
-type geneAndProt
-    $kgDb.knownGene
-    $ce.sangerGene
-    dm1.bdgpGene
-    $sacCer.sgdGene
 
 # Ignored tables - no linkage here that we check at least.
 
@@ -8526,3 +8310,223 @@ tablesIgnored hg18
 
 tablesIgnored $tRNAsDbs
     tRNAs
+
+# Table types - only used in joinerGraph which is not part of the standard build and probably
+#    doesn't work anymore.  Probably not worth updating, but someone may want to resurrect 
+#    joinerGraph so here they are.
+type genePred
+    $hg.acembly
+    $gbd.ECgene
+    $gbd.geneid
+    $gbd.genscan
+    $gbd.sgpGene
+    $gbd.softberryGene
+    $gbd.twinscan
+    $gbd.ensGene
+    $gbd.vegaGene
+    $gbd.refGene
+    $gbd.xenoRefGene
+    $gbd.jgiFilteredModels
+    $gbd.geneMapper
+
+type pepPred
+    $hg.acemblyPep
+    $gbd.ECgenePep
+    $gbd.geneidPep
+    $gbd.genscanPep
+    $gbd.sgpPep
+    $gbd.softberryPep
+    $gbd.twinscanPep
+    $gbd.ensPep
+    $gbd.vegaPep
+    $gbd.knownGenePep
+    $ce.sangerPep
+    dm1.bdgpGenePep
+    $dm.flyBasePep
+
+type psl
+    $hg.affyU95
+    $hg.affyU133
+    $hg.affyU133Plus2
+    $hg.HInvGeneMrna
+    $mm.affyU74
+    $danRer.affyZebrafish
+    $gbd.all_bacends
+    $gbd.all_fosends
+    $gbd.all_est
+    $gbd.est
+    $gbd.intronEst
+    $gbd.xenoEst
+    $gbd.xenoMrna
+    $gbd.all_mrna
+    $gbd.refSeqAli
+    $gbd.all_sts_primer
+    $gbd.all_sts_seq
+
+type estOrientInfo
+    $gbd.estOrientInfo
+    $gbd.mrnaOrientInfo
+
+type expRecord
+    hgFixed.nci60Exps
+    hgFixed.rosettaExps
+    hgFixed.affyExps.id
+    hgFixed.gnfHumanU95AllExps
+    hgFixed.gnfHumanU95MedianExps
+    hgFixed.gnfMouseU74aAllExps
+    hgFixed.gnfMouseU74aMedianExps
+    hgFixed.gnfMouseU74bAllExps
+    hgFixed.gnfMouseU74bMedianExps
+    hgFixed.gnfMouseU74cAllExps
+    hgFixed.gnfMouseU74cMedianExps
+    hgFixed.arbFlyLifeAllExps
+    hgFixed.arbFlyLifeMedianExps
+    hgFixed.kimWormLifeAllExps
+    hgFixed.kimWormLifeMedianExps
+    hgFixed.yeastChoCellCycleExps
+    hgFixed.gladHumESExps
+
+type expData
+    hgFixed.kimWormLifeAllRatio
+    hgFixed.kimWormLifeMedianRatio
+    hgFixed.gnfHumanU95All
+    hgFixed.gnfHumanU95AllRatio
+    hgFixed.gnfHumanU95Median
+    hgFixed.gnfHumanU95MedianRatio
+    hgFixed.gnfMouseU74aAll
+    hgFixed.gnfMouseU74aAllRatio
+    hgFixed.gnfMouseU74aMedian
+    hgFixed.gnfMouseU74aMedianRatio
+    hgFixed.gnfMouseU74bAll
+    hgFixed.gnfMouseU74bAllRatio
+    hgFixed.gnfMouseU74bMedian
+    hgFixed.gnfMouseU74bMedianRatio
+    hgFixed.gnfMouseU74cAll
+    hgFixed.gnfMouseU74cAllRatio
+    hgFixed.gnfMouseU74cMedian
+    hgFixed.gnfMouseU74cMedianRatio
+    hgFixed.arbFlyLifeAll
+    hgFixed.arbFlyLifeAllRatio
+    hgFixed.arbFlyLifeMedian
+    hgFixed.arbFlyLifeMedianRatio
+    hgFixed.kimWormLifeAllRatio
+    hgFixed.kimWormLifeMedianRatio
+    hgFixed.yeastChoCellCycle
+    hgFixed.yeastChoCellCycleRatio
+    hgFixed.gladHumES
+    hgFixed.gladHumESRatio
+
+type exprBed
+    $hg.affyRatio
+    $mm.affyGnfU74A
+    $mm.affyGnfU74B
+    $mm.affyGnfU74C
+    $hg.nci60
+    $rn.gnfAtlas2
+    # hgFixed.rosChr22Dat
+
+type expDistance
+    $hg.gnfAtlas2Distance
+    $hg.gnfU95Distance
+    $mm.affyGnfU74ADistance
+    $mm.affyGnfU74BDistance
+    $mm.affyGnfU74CDistance
+    $mm.mouseLandscapeDistance
+    $hg.knownGnfDistance
+    $ce.kimExpDistance
+    $dm.arbExpDistance
+    $sacCer.choExpDistance
+    $hg.gladHumESDistance
+
+type chain
+    $gbd.chr%_chain%
+    $gbd.chr%_chainSelf
+
+type agpFrag
+    $gbd.chr%_gold
+
+type agpGap
+    $gbd.chr%_gap
+
+type gl
+    $gbd.chr%_gl
+
+type knownTo
+    $gbd.knownToCdsSnp
+    $gbd.knownToEnsembl
+    $gbd.knownToLocusLink
+    $gbd.knownToPfam
+    $gbd.knownToRefSeq
+    $gbd.knownToAllenBrain
+    $hg.knownToU95
+    $hg.knownToU133
+    $hg.knownToU133Plus2
+    $hg.knownToHInv
+    $mm.knownToU74
+    $mm.knownToXM
+    $ce.sangerToKim
+    $ce.sangerToPfam
+    $ce.sangerToRefSeq
+    dm1.bdgpToLocusLink
+    dm1.bdgpToPfam
+    dm1.bdgpToRefSeq
+    $sacCer.sgdToSwissProt
+    $sacCer.sgdToSgd
+    $sacCer.sgdToName
+
+type idName
+    hgFixed.source
+    hgFixed.organism
+    hgFixed.library
+    hgFixed.mrnaClone
+    hgFixed.sex
+    hgFixed.tissue
+    hgFixed.development
+    hgFixed.cell
+    hgFixed.cds
+    hgFixed.description
+    hgFixed.author
+    hgFixed.geneName
+    hgFixed.productName
+    hgFixed.keyword
+
+type blastTab
+    $gbd.ceBlastTab
+    $gbd.hgBlastTab
+    $gbd.dmBlastTab
+    $gbd.drBlastTab
+    $gbd.mmBlastTab
+    $gbd.rnBlastTab
+    $gbd.scBlastTab
+    $gbd.knownBlastTab
+    $ce.sangerBlastTab
+    dm1.bdgpBlastTab
+    sacCer1.sgdBlastTab
+    sacCer2.knownBlastTab
+
+type knownCanonical
+    $gbd.knownCanonical
+    $ce.sangerCanonical
+    dm1.bdgpCanonical
+    $sacCer.sgdCanonical
+
+type knownIsoforms
+    $gbd.knownIsoforms
+    $ce.sangerIsoforms
+    dm1.bdgpIsoforms
+    $sacCer.sgdIsoforms
+
+type rnaFold
+    $gbd.foldUtr3
+    $gbd.foldUtr5
+
+type bed
+    $gbd.vegaPseudoGene
+    $sacCer.sgdOther
+
+type geneAndProt
+    $kgDb.knownGene
+    $ce.sangerGene
+    dm1.bdgpGene
+    $sacCer.sgdGene
+    }
