@@ -45,14 +45,14 @@ static struct optionSpec options[] = {
 };
 
 
-boolean allStringsSame(char **aa, char **bb, int count)
+static int firstDifferentIx(char **aa, char **bb, int count)
 /* Return true if first count of strings between aa and bb are the same */
 {
 int i;
 for (i=0; i<count; ++i)
     if (!sameString(aa[i], bb[i]))
-        return FALSE;
-return TRUE;
+        return i;
+return -1;
 }
 
 enum fieldValType
@@ -177,12 +177,16 @@ static char *symLookup(void *record, char *key)
 struct symRec *rec = record;
 struct hash *hash = rec->hash;
 char **row = rec->row;
-int rowIx = hashIntVal(hash, key);
-return row[rowIx];
+int rowIx = hashIntValDefault(hash, key, -1);
+if (rowIx < 0)
+    return NULL;
+else
+    return row[rowIx];
 }
 
 
 void selectUniqueIntoTable(struct fieldedTable *inTable,  struct hash *inFieldHash,
+    char *specFile,  // Just for error reporting
     struct newFieldInfo *fieldList, int keyFieldIx, struct fieldedTable *outTable)
 /* Populate out table with selected rows from newTable */
 {
@@ -228,9 +232,14 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 	}
     else    /* Do error checking for true uniqueness of key */
         {
-	if (!allStringsSame(outRow, uniqFr->row, outFieldCount))
-	    errAbort("Duplicate id %s but different data in key field %s of %s.",
-		key, outTable->fields[keyFieldIx], outTable->name);
+	int differentIx = firstDifferentIx(outRow, uniqFr->row, outFieldCount);
+	if (differentIx >= 0)
+	    {
+	    warn("There is a problem with the key to table %s in %s", outTable->name, specFile);
+	    warn("%s %s", uniqFr->row[keyFieldIx], uniqFr->row[differentIx]);
+	    warn("%s %s", outRow[keyFieldIx], outRow[differentIx]);
+	    errAbort("both exist, so they key is not unique to all values");
+	    }
 	}
     }
 dyStringFree(&csvScratch);
@@ -280,6 +289,7 @@ while (raSkipLeadingEmptyLines(lf, NULL))
     /* Start filling out newTable with these fields */
     AllocVar(newTable);
     newTable->name = cloneString(tableName);
+    tableName = newTable->name;  /* Keep this handy variable. */
 
     /* Make up field list out of rest of the stanza */
     struct newFieldInfo *fvList = NULL;
@@ -357,7 +367,7 @@ for (newTable = newTableList; newTable != NULL; newTable = newTable->next)
     {
     /* Populate table */
     struct fieldedTable *outTable = newTable->table;
-    selectUniqueIntoTable(inTable, inFieldHash,
+    selectUniqueIntoTable(inTable, inFieldHash, specFile,
 	newTable->fieldList, newTable->keyField->newIx, outTable);
 
     /* Create output file name and save file. */
