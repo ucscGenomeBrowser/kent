@@ -13,10 +13,13 @@ between(prefix, string, suffix) - returns the part of string found between prefi
    then the first place the suffix matches after that.  The biologist might think of it as
    a text oriented PCR, though the primer prefix and suffixes are not included in the output.
    The prefix "" corresponds to beginning of string and the suffix "" corresponds to end.
+   Returns empty string if nothing found.
 
-split(string, index)  - white space separated word from string of given 0 based index
+split(string, index)  - white space separated word from string of given 0 based index.
+   Returns empty string if index is too large.
 
-separate(string, splitter, index) - separates string with splitter character. Returns 0 based index.
+separate(string, splitter, index) - separates string with splitter character. Returns string of given index.
+   Returns empty string if index is too large.
 
 [start:end] - Use a colon in an array index to select a range of a string.  This follows 
               Python conventions, where start is zero based and end is one past the end of 
@@ -39,6 +42,8 @@ untsv(string, index) - separate by tab. Synonym for separate(string, '\t', index
 uncsv(string, index) - do comma separated value extraction of string. Includes quote escaping.
 
 trim(string) - returns copy of string with leading and trailing spaces removed
+
+replace(string, old, new) - returns string with all instances of old replaced by new
 
 md5(string) - returns an MD5 sum digest/hash of string. Useful for creating IDs
 
