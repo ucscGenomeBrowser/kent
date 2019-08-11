@@ -1,6 +1,7 @@
 table a_strex_test id
 id "constant ID"
 #assay long-RNA-seq
+dashed assay[4:-3]
 long assay[:4]
 q assay[-1]
 RNA assay[5:8]
@@ -24,6 +25,8 @@ efg "abcdefg"[4:]
 atoG "abcdefg"[:]
 fg "abcdefg"[-2:]
 array1 uncsv(GEO_Series_summary,1)
+cutMid replace("abcdefg", "cde", "")
+subSub replace("abcdefg", "abcdefg", "subSub")
 
 
 table project id
