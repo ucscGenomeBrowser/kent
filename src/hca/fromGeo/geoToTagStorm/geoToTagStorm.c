@@ -28,6 +28,20 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
+void skipToTableEnd(struct lineFile *lf, char *prefix)
+/* Skip through lf until EOF (an error) or line that matches endLine */
+{
+char target[256];
+safef(target, sizeof(target), "%s%s", prefix, "table_end");
+tolowers(target);
+char *line;
+while (lineFileNext(lf, &line, NULL))
+    {
+    if (sameString(line, target))
+        return;
+    }
+errAbort("endLine %s not found in %s\n", target, lf->fileName);
+}
 
 struct hash *geoSoftToTagHash(char *fileName)
 /* Read in file in GEO soft format and return it as a hash of tagStorm files,
@@ -75,7 +89,7 @@ while (lineFileNext(lf, &line, NULL))
 	/* Do basic error checking of first word, and then skip over the repetitive prefix part */
 	if (tags == NULL)
 	    errAbort("No ^ line before ! line - is this really a soft file?");
-	if (!startsWith(linePrefix, line))
+	if (!startsWithNoCase(linePrefix, line))
 	    errAbort("Expecting line beginning with %s line %d of %s but got:\n%s", 
 		linePrefix, lf->lineIx, lf->fileName, line);
 	line += linePrefixSize;
@@ -107,41 +121,52 @@ while (lineFileNext(lf, &line, NULL))
 	    }
 
 
-	/* Parse out the value, which happens after '=' */
-	char *equ = nextWord(&line);
-	if (!sameString("=", equ))
-	    errAbort("Expecting = but got %s line %d of %s", equ, lf->lineIx, lf->fileName);
-	char *val = skipLeadingSpaces(line);
-	if (isEmpty(val))
+	if (sameString("table_begin", tag)) // We just skip tables
 	    {
-	    verbose(2, "Nothing after = line %d of %s", lf->lineIx, lf->fileName);
-	    continue;
-	    }
-	char outputTag[256];
-
-	/* Write out the tag name, simple for most tags, but data_processing and 
-	 * characteristics need special handling */
-	if (sameString("characteristics", tag) || sameString("relation", tag))
-	    {
-	    /* These tags hava a subtag between the = and a : */
-	    char *colonPos = strchr(val, ':');
-	    if (colonPos == NULL)
-		errAbort("No colon after %s line %d of %s", tag, lf->lineIx, lf->fileName);
-	    *colonPos++ = 0;
-	    char *subTag = trimSpaces(val);
-	    subChar(subTag, ' ', '_');
-	    subChar(subTag, '-', '_');
-	    val = skipLeadingSpaces(colonPos);
-	    safef(outputTag, sizeof(outputTag), "%s.%s_%s", lcSection, tag, subTag);
+	    skipToTableEnd(lf, linePrefix);
 	    }
 	else
 	    {
-	    safef(outputTag, sizeof(outputTag), "%s.%s", lcSection, tag);
-	    }
+	    /* Parse out the value, which happens after '=' */
+	    char *equ = nextWord(&line);
+	    if (!sameString("=", equ))
+		errAbort("Expecting = but got %s line %d of %s", equ, lf->lineIx, lf->fileName);
+	    char *val = skipLeadingSpaces(line);
+	    if (isEmpty(val))
+		{
+		verbose(2, "Nothing after = line %d of %s", lf->lineIx, lf->fileName);
+		continue;
+		}
+	    char outputTag[256];
 
-	/* Write out value */
-	char *escapedVal = csvEscapeToDyString(escaperDy, val);
-	tagStanzaAppend(tags, stanza, outputTag, escapedVal);
+	    /* Write out the tag name, simple for most tags, but data_processing and 
+	     * characteristics need special handling */
+	    if (sameString("characteristics", tag) || sameString("relation", tag))
+		{
+		/* These tags hava a subtag between the = and a : */
+		char *colonPos = strchr(val, ':');
+		if (colonPos == NULL)
+		    errAbort("No colon after %s line %d of %s", tag, lf->lineIx, lf->fileName);
+		*colonPos++ = 0;
+		char *subTag = trimSpaces(val);
+		subChar(subTag, ' ', '_');
+		subChar(subTag, '-', '_');
+		val = skipLeadingSpaces(colonPos);
+		safef(outputTag, sizeof(outputTag), "%s.%s_%s", lcSection, tag, subTag);
+		}
+	    else
+		{
+		safef(outputTag, sizeof(outputTag), "%s.%s", lcSection, tag);
+		}
+
+	    /* Write out value */
+	    char *escapedVal = csvEscapeToDyString(escaperDy, val);
+	    tagStanzaAppend(tags, stanza, outputTag, escapedVal);
+	    }
+	}
+    else if (typeChar == '#')
+        {
+	// Table header line.  For now we skip though.
 	}
     else
         errAbort("Unrecognized line %d of %s:\n%s", lf->lineIx, lf->fileName, line);
@@ -408,7 +433,7 @@ if (clExpandArrays)
 else
     rCollapseMultis(seriesTags, seriesTags->forest);
 
-/* Extract accessions from ugly URLS */
+/* Extract accessions from big URLS */
 tagStormTraverse(seriesTags, seriesTags->forest, NULL, fixAccessions);
 
 /* Write result */
