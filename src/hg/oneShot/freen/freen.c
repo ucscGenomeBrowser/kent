@@ -29,43 +29,11 @@ errAbort("freen - test some hairbrained thing.\n"
          "usage:  freen input\n");
 }
 
-/*  strex -String Expression - stuff to implement a relatively simple string
- *  processing expression parser. */
-
-struct hash *hashFromFile(char *fileName)
-/* Given a two column file (key, value) return a hash. */
-{
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-struct hash *hash = hashNew(16);
-char *line;
-while (lineFileNextReal(lf, &line))
-    {
-    char *word = nextWord(&line);
-    line = trimSpaces(line);
-    hashAdd(hash, word, lmCloneString(hash->lm, line));
-    }
-lineFileClose(&lf);
-return hash;
-}
-
-static char *symLookup(void *record, char *key)
-/* Lookup symbol in hash */
-{
-struct hash *hash = record;
-return hashFindVal(hash, key);
-}
-
-
-void freen(char *symbols, char *expression)
+void freen(char *s, char *oldVal, char *newVal)
 /* Test something */
 {
-struct hash *symHash = hashFromFile(symbols);
-verbose(1, "Got %d symbols from %s\n", symHash->elCount, symbols);
-uglyf("Parsing...\n");
-struct strexParse *parseTree = strexParseString(expression);
-strexParseDump(parseTree, 0, uglyOut);
-uglyf("Evaluating...\n");
-uglyf("%s\n", strexEvalAsString(parseTree, symHash, symLookup));
+char *sub = replaceChars(s, oldVal, newVal);
+printf("%s\n", sub);
 }
 
 
@@ -73,9 +41,9 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 4)
     usage();
-freen(argv[1], argv[2]);
+freen(argv[1], argv[2], argv[3]);
 return 0;
 }
 
