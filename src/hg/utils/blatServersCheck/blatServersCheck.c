@@ -177,7 +177,8 @@ if (netGetString(sd, buf) != NULL)
 	char *fileName = netRecieveString(sd, buf);
 	//printf("%s\n", fileName);
 	verbose(2, "%s\n", fileName);
-	if (!endsWith(fileName,".nib"))
+	// if .nib or Kg genes for isPcr, cannot confirm the name.
+	if (!endsWith(fileName,".nib") && !strstr(db, "Kg"))  
 	    {
 	    if (!sameString(fileName, twoBitName))
 		{
