@@ -275,10 +275,12 @@ cat NM.gp NR.gp | genePredSingleCover stdin \$db.xenoRefGene.gp
 genePredCheck -db=\$db -chromSizes=\$db.chrom.sizes \$db.xenoRefGene.gp
 genePredToBigGenePred -geneNames=$mrnas/geneOrgXref.txt \$db.xenoRefGene.gp \\
    stdout | sort -k1,1 -k2,2n > \$db.bgpInput
-sed -e 's#Alternative/human readable gene name#species of origin of the mRNA#' \\
+sed -e 's#Alternative/human readable gene name#species of origin of the mRNA#; s#Name or ID of item, ideally both human readable and unique#RefSeq accession id#; s#Primary identifier for gene#gene name#;' \\
   \$HOME/kent/src/hg/lib/bigGenePred.as > xenoRefGene.as
 bedToBigBed -extraIndex=name,geneName -type=bed12+8 -tab -as=xenoRefGene.as \\
    \$db.bgpInput \$db.chrom.sizes \$db.xenoRefGene.bb
+\$HOME/kent/src/hg/utils/automation/xenoRefGeneIx.pl \$db.bgpInput | sort -u > \$db.ix.txt
+ixIxx \$db.ix.txt \$db.xenoRefGene.ix \$db.xenoRefGene.ixx
 _EOF_
   );
   $bossScript->execute();
@@ -307,7 +309,8 @@ rm -f $buildDir/NM.gp
 rm -f $buildDir/NR.gp
 rm -f $buildDir/NM.psl
 rm -f $buildDir/NR.psl
-rm -f $buildDir/\$db.bgpInput
+gzip $buildDir/\$db.bgpInput &
+gzip $buildDir/\$db.ix.txt &
 gzip $buildDir/\$db.all.psl &
 gzip $buildDir/\$db.xenoRefGene.psl &
 gzip $buildDir/\$db.xenoRefGene.gp
