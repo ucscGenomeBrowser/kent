@@ -57,6 +57,7 @@ enum strexBuiltInFunc
     strexBuiltInUncsv,
     strexBuiltInUntsv,
     strexBuiltInReplace,
+    strexBuiltInStrip,
     };
 
 struct strexBuiltIn
@@ -140,7 +141,7 @@ struct strexIn
 
 /* Some predefined lists of parameter types */
 static enum strexType oneString[] = {strexTypeString};
-// static enum strexType twoStrings[] = {strexTypeString, strexTypeString};
+static enum strexType twoStrings[] = {strexTypeString, strexTypeString};
 static enum strexType threeStrings[] = {strexTypeString, strexTypeString, strexTypeString};
 static enum strexType stringInt[] = {strexTypeString, strexTypeInt};
 static enum strexType stringStringInt[] = {strexTypeString, strexTypeString, strexTypeInt};
@@ -157,6 +158,7 @@ static struct strexBuiltIn builtins[] = {
     { "uncsv", strexBuiltInUncsv, 2, stringInt },
     { "untsv", strexBuiltInUntsv, 2, stringInt },
     { "replace", strexBuiltInReplace, 3, threeStrings },
+    { "strip", strexBuiltInStrip, 2, twoStrings },
 };
 
 static struct hash *hashBuiltIns()
@@ -970,11 +972,32 @@ return separateString(tsvIn, "\t", ix, lm);
 static char *replaceString(char *in, char *oldVal, char *newVal, struct lm *lm)
 /* Replace every occurrence of oldVal with newVal in string */
 {
-char *s = replaceChars(in, oldVal, newVal);
-char *result = lmCloneString(lm, s);  // Move to local memory
-freeMem(s);
+if (sameString(in, oldVal) )
+    return lmCloneString(lm, newVal);  // Simple case that also handles empty oldVal match empty in
+else
+    {
+    if (isEmpty(oldVal))
+        return lmCloneString(lm, in);
+    else
+	{
+	char *s = replaceChars(in, oldVal, newVal);
+	char *result = lmCloneString(lm, s);  // Move to local memory
+	freeMem(s);
+	return result;
+	}
+    }
+}
+
+static char *stripAll(char *in, char *toRemove, struct lm *lm)
+/* Remove every occurrence of any of the chars in toRemove from in. */
+{
+char *result = lmCloneString(lm, in);  // Move to local memory
+char c, *s = toRemove;
+while ((c = *s++) != 0)
+    stripChar(result, c);
 return result;
 }
+
 
 static struct strexEval strexEvalCallBuiltIn(struct strexParse *p, 
     void *record, StrexEvalLookup lookup, struct lm *lm)
@@ -1051,6 +1074,13 @@ switch (builtIn->func)
         struct strexEval b = strexLocalEval(p->children->next, record, lookup, lm);
         struct strexEval c = strexLocalEval(p->children->next->next, record, lookup, lm);
 	res.val.s = replaceString(a.val.s, b.val.s, c.val.s, lm);
+	break;
+	}
+    case strexBuiltInStrip:
+        {
+        struct strexEval a = strexLocalEval(p->children, record, lookup, lm);
+        struct strexEval b = strexLocalEval(p->children->next, record, lookup, lm);
+	res.val.s = stripAll(a.val.s, b.val.s, lm);
 	break;
 	}
     }
