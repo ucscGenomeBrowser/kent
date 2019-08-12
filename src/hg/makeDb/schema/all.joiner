@@ -8529,4 +8529,3 @@ type geneAndProt
     $ce.sangerGene
     dm1.bdgpGene
     $sacCer.sgdGene
-    }
