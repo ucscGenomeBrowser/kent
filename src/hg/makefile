@@ -19,7 +19,7 @@ ifdef LOWELAB
     BROWSER_BINS += $(HOME)/lowelab/src/browser/tooltip $(HOME)/lowelab/src/browser/chooseorg
 endif
 
-BROWSER_LOADERS = makeDb/hgLoadBed makeDb/hgLoadWiggle makeDb/hgLoadMaf utils/pslToBigPsl
+BROWSER_LOADERS = makeDb/hgLoadBed makeDb/hgLoadWiggle makeDb/hgLoadMaf utils/pslToBigPsl utils/hubCheck
 
 ifneq ($(findstring $(shell hostname),hgwdev hgwbeta),)
     ENCODE_FILES = encode3/encodeDataWarehouse
