@@ -1666,7 +1666,7 @@ checkAllowedBigDataUrlProtocols(bigDataUrl);
 if (doExtraChecking)
     {
     struct hicMeta *meta;
-    char *hicErrMsg = hicLoadHeader(bigDataUrl, &meta);
+    char *hicErrMsg = hicLoadHeader(bigDataUrl, &meta, track->genomeDb);
     if (hicErrMsg != NULL)
         {
         track->networkErrMsg = cloneString(hicErrMsg);
