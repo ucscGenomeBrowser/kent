@@ -997,7 +997,7 @@ switch (builtIn->func)
         struct strexEval b = strexLocalEval(p->children->next, record, lookup, lm);
         struct strexEval c = strexLocalEval(p->children->next->next, record, lookup, lm);
 	char *between = stringBetween(a.val.s, c.val.s, b.val.s);
-	res.val.s = lmCloneString(lm, between);
+	res.val.s = emptyForNull(lmCloneString(lm, between));
 	freeMem(between);
         break;
 	}
