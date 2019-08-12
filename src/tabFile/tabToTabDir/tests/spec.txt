@@ -1,5 +1,8 @@
 table a_strex_test id
 id "constant ID"
+stripped strip("constant ID", " aeiou")
+replaceSomething replace("something", "", "default value")
+replaceNothing replace("", "", "default value")
 #assay long-RNA-seq
 dashed assay[4:-3]
 long assay[:4]
