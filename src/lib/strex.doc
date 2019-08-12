@@ -26,16 +26,17 @@ separate(string, splitter, index) - separates string with splitter character. Re
 	      this string (or equivalently one based).  If start is left out the start of 
 	      the string is implied.  If end is left out the end of the string is emplied.  
 	      This leads to some curious but useful constructs such as these shown with an 
-	      example applied to the string "abcdefghij"
-	           [:3] = "abc"       - first three characters of string
-		   [3:] = "efghij"    - everything past the first three characters
-		   [3] = "d"          - the fourth character  (the fun of zero based indexes
-		   [3:5] = "de"       - two characters starting with the fourth character up to the fifth
-		   [-3] = "h"         - the third character from the end
-		   [3:-3] = "efg"     - starts at fourth character ends three from the end
-		   [-3:] = "hij"      - last three characters of string
+	      example applied to the string "0123456789"
+	           [:3] = "012"       - first three characters of string
+		   [3:] = "3456789"    - everything past the first three characters
+		   [3:5] = "34"       - two characters from the fourth up through the fifth
+		   [5:3] = ""         - you get an empty string if the start is bigger than the end
+		   [3] = "3"          - the fourth character  (the fun of zero based indexes
+		   [-3] = "7"         - the third character from the end
+		   [-3:] = "789"      - last three characters of string
+		   [:-3] = "0123456"  - everything up to the last three
 	      Python actually goes further than this and allows a third, step, specification that
-	      strex has not implemented at least not yet.
+	      strex has not implemented.  
 
 untsv(string, index) - separate by tab. Synonym for separate(string, '\t', index)
 
