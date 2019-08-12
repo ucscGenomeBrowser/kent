@@ -69,10 +69,11 @@ return value;
 
 int statusServer(char *hostName, char *portName, boolean isTrans, struct hash *versionHash)
 /* Send status message to server arnd report result.
- * Returns -1 for error reading string.
- * Returns -2 for type mismatch.
- * Returns -3 for host mismatch.
- * Returns -4 for port mismatch.
+ * Returns -1 for connection error.
+ * Returns -2 for error reading string.
+ * Returns -3 for type mismatch.
+ * Returns -4 for host mismatch.
+ * Returns -5 for port mismatch.
  */
 {
 char buf[256];
@@ -80,7 +81,13 @@ int sd = 0;
 int ret = 0;
 
 /* Put together command. */
-sd = netMustConnectTo(hostName, portName);
+sd = gfMayConnect(hostName, portName);
+if (sd == -1)
+    {
+    warn("Error connecting to %s:%s",  hostName, portName);
+    return -1;
+    }
+
 sprintf(buf, "%sstatus", gfSignature());
 mustWriteFd(sd, buf, strlen(buf));
 
@@ -89,7 +96,7 @@ for (;;)
     if (netGetString(sd, buf) == NULL)
         {
         warn("Error reading status information from %s:%s",  hostName, portName);
-        ret = -1;
+        ret = -2;  // error reading response
         break;
         }
     if (sameString(buf, "end"))
@@ -109,13 +116,13 @@ for (;;)
 	    if (sameString(buf, "type translated") && !isTrans)
 		{
 		warn("type mismatch: gfServer says type translated but db says isTrans==0");
-		ret = -2;  // type mismatch
+		ret = -3;  // type mismatch
 		break;
 		}
 	    if (sameString(buf, "type nucleotide") && isTrans)
 		{
 		warn("type mismatch: gfServer says type nucleotide but db says isTrans==1");
-		ret = -2;  // type mismatch
+		ret = -3;  // type mismatch
 		break;
 		}
 	    }
@@ -124,7 +131,7 @@ for (;;)
 	    if (!sameString(buf+strlen("host "), hostName))
 		{
 		warn("host mismatch: gfServer says %s but db says db=%s", buf, hostName);
-		ret = -3;  // host mismatch
+		ret = -4;  // host mismatch
 		break;
 		}
 	    }
@@ -133,7 +140,7 @@ for (;;)
 	    if (!sameString(buf+strlen("port "), portName))
 		{
 		warn("port mismatch: gfServer says %s but db says port=%s", buf, portName);
-		ret = -4;  // port mismatch  // probably never happens.
+		ret = -5;  // port mismatch  // probably never happens.
 		break;
 		}
 	    }
@@ -234,7 +241,11 @@ while ((row = sqlNextRow(sr)) != NULL)
     boolean isTrans = (trans == 1);
 
     int res = statusServer(host, portStr, isTrans, versionHash);
-    int res2 = getFileList(host, portStr, db);
+    int res2 = 0;
+    if (res != -1)  // if not a connection error, proceed.
+	{
+	res2 = getFileList(host, portStr, db);
+	}
     safef(hashKey, sizeof hashKey, "%s:%s", host, portStr);
     struct hashEl *hel = hashLookup(hash, hashKey);
     if (hel == NULL)
