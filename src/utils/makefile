@@ -89,6 +89,7 @@ UTILS_APPLIST = \
 	spacedToTab \
 	splitFile \
 	splitFileByColumn \
+	strexCalc \
 	stringify \
 	subChar \
 	subColumn \
