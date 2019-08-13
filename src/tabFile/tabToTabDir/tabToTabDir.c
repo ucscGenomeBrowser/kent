@@ -26,7 +26,7 @@ errAbort(
 "   outDir is a directory that will be populated with tab-separated files\n"
 "The spec.txt file contains one blank line separated stanza per output table.\n"
 "Each stanza should look like:\n"
-"        tableName    key-column\n"
+"        table tableName    key-column\n"
 "        columnName1	sourceField1\n"
 "        columnName2	sourceField2\n"
 "              ...\n"
@@ -156,7 +156,7 @@ else
 	else
 	    {
 	    fv->val = cloneString(s);
-	    fv->exp = strexParseString(fv->val, fileName, fileLineNumber);
+	    fv->exp = strexParseString(fv->val, fileName, fileLineNumber-1);
 	    fv->type = fvExp;
 	    }
 	}
@@ -224,21 +224,25 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 	}
 
     char *key = outRow[keyFieldIx];
-    struct fieldedRow *uniqFr = hashFindVal(uniqHash, key);
-    if (uniqFr == NULL)
-        {
-	uniqFr = fieldedTableAdd(outTable, outRow, outFieldCount, 0);
-	hashAdd(uniqHash, key, uniqFr);
-	}
-    else    /* Do error checking for true uniqueness of key */
-        {
-	int differentIx = firstDifferentIx(outRow, uniqFr->row, outFieldCount);
-	if (differentIx >= 0)
+    if (!isEmpty(key))
+	{
+	struct fieldedRow *uniqFr = hashFindVal(uniqHash, key);
+	if (uniqFr == NULL)
 	    {
-	    warn("There is a problem with the key to table %s in %s", outTable->name, specFile);
-	    warn("%s %s", uniqFr->row[keyFieldIx], uniqFr->row[differentIx]);
-	    warn("%s %s", outRow[keyFieldIx], outRow[differentIx]);
-	    errAbort("both exist, so they key is not unique to all values");
+	    uniqFr = fieldedTableAdd(outTable, outRow, outFieldCount, 0);
+	    hashAdd(uniqHash, key, uniqFr);
+	    }
+	else    /* Do error checking for true uniqueness of key */
+	    {
+	    int differentIx = firstDifferentIx(outRow, uniqFr->row, outFieldCount);
+	    if (differentIx >= 0)
+		{
+		warn("There is a problem with the key to table %s in %s", outTable->name, specFile);
+		warn("%s %s", uniqFr->row[keyFieldIx], uniqFr->row[differentIx]);
+		warn("%s %s", outRow[keyFieldIx], outRow[differentIx]);
+		errAbort("both exist, so key is not unique for all values of %s", 
+		    outTable->fields[differentIx]);
+		}
 	    }
 	}
     }
@@ -330,7 +334,7 @@ while (raSkipLeadingEmptyLines(lf, NULL))
     struct newFieldInfo *keyField = findField(fvList, keyFieldName);
     if (keyField == NULL)
        errAbort("key field %s is not found in field list for %s in %s\n", 
-	tableName, keyFieldName, lf->fileName);
+	keyFieldName, tableName, lf->fileName);
 
     /* Allocate structure to save results of this pass in and so so. */
     newTable->keyField = keyField;
