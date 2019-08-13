@@ -12,6 +12,8 @@
 <ul>
 <li><a href="#blat1">BLAT vs. BLAST</a></li>
 <li><a href="#blat1b">Blat cannot find a sequence at all or not all expected matches</a></li>
+<li><a href="#blat1c">Blat or In-Silico PCR finds multiple matches even though only one is 
+expected</a></li>
 <li><a href="#blat2">BLAT use restrictions</a></li>
 <li><a href="#blat3">Downloading Blat source and documentation</a></li>
 <li><a href="#blat5">Replicating web-based Blat parameters in command-line version</a></li>
@@ -102,6 +104,25 @@ To find all matches for repetitive sequences with the online version of Blat, yo
 query. If this is not possible, the only alternative is to download the executables of Blat and the 
 .2bit file of a genome to your own machine and use BLAT on the command line. See 
 <a href="#blat3">Downloading BLAT source and documentation</a> for more information.</p>
+
+<a name="blat1c"></a>
+<h2>Blat or In-Silico PCR finds multiple matches even though only one is expected</h2>
+<h6>I am seeing two or more matches in the genome although there should only be one. What are these 
+extra matches?</h6>
+<p>
+This usually occurs on the newer genome assmeblies, such as hg38, when you search a sequence that 
+has an &quot;alternate&quot; or &quot;fix&quot; sequence. To improve the quality of the these 
+assemblies, curators have added multiple versions of some important loci, e.g. the MHC regions. 
+They also add fix sequences to resolve errors without changing the reference. See our <a 
+target="_blank" href="http://genome.ucsc.edu/blog/patches/">patches blog post</a> for more 
+information.</p>
+<p>
+When you BLAT or isPCR a sequence which matches a chromosome location that also has a fix or alt 
+sequence, you will see a match on the reference chromosome (e.g. &quot;chr1&quot;) and another 
+match on the patch sequence (e.g. chr1_KN196472v1_fix). In most cases it is safe to ignore the 
+patch hit, as a human genome will not contain both the reference and alternate sequence at the 
+same time. For more information on the specific kinds of patch sequences see our <a target="_blank" 
+href="FAQdownloads#downloadAlt">FAQ entry</a> on the topic.</p>
 
 <a name="blat2"></a>
 <h2>BLAT usage restrictions</h2>
