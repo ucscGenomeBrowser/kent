@@ -151,6 +151,7 @@ while (lineFileNext(lf, &line, NULL))
 		char *subTag = trimSpaces(val);
 		subChar(subTag, ' ', '_');
 		subChar(subTag, '-', '_');
+		subChar(subTag, '/', '_');
 		val = skipLeadingSpaces(colonPos);
 		safef(outputTag, sizeof(outputTag), "%s.%s_%s", lcSection, tag, subTag);
 		}
