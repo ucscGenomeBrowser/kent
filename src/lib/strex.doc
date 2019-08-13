@@ -1,7 +1,31 @@
 The strex language is a small string expression evaluation language.  
 This document describes its built in functions and operators:
 
-+  - returns the concatenation of the surrounding strings.  Will convert a number to a string
++  - returns the concatenation of the surrounding strings or the addition of surrounding
+     numbers.  Will convert a number to a string in mixed expressions
+
+or  - logical or operation extended to strings and numbers.  
+     for logic - if any or-separated-values are true, return true, else false
+     for numbers - if any or-separated non-zero numbers exist, return first one else 0
+     for strings - if any or-separated non-empty strings exists, return first one else ""
+   In mixed operations result is converted to strings if strings are involved or
+   the values "" and "true" if no strings are involved.  
+   For the pure string case this can be useful for setting defaults as well.  For
+   instance presuming you might or might not have filled in values for the city or country
+   variables in the given expression that would return a location of some sort
+	   city or country or "somewhere in the universe"
+     
+
+and - logical and operation extended to strings and numbers
+     for logic - if all and-separated-values are tru, return true, else false
+     for numbers - if all numbers are non-zero return true else false
+     for strings - if all and-separated strings are nonempty, return true, else ""
+   In mixed operations result is converted to strings if strings are involved or
+   the values "" and "true" if no strings are involved.
+
+returns first nonempty string or non-zero number on either side of | or "" if all empty
+&  - returns first empty string or zero on either side of & or right side if all non-empty
+
 
 [index] - selects a character from string given an integer zero based index. As in Python
        if index is negative it selects characters from the end of the string.  -1
