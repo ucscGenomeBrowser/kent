@@ -107,6 +107,7 @@ enum strexOp
 
     /* Binary operations. */
     strexOpAdd,
+    strexOpOr,
 
     /* Type conversions - possibly a few more than we actually need at the moment. */
     strexOpStringToBoolean,
@@ -295,6 +296,8 @@ switch (op)
 
     case strexOpAdd:
 	return "strexOpAdd";
+    case strexOpOr:
+	return "strexOpOr";
 
     case strexOpBuiltInCall:
         return "strexOpBuiltInCall";
@@ -754,10 +757,45 @@ for (;;)
 }
 
 
+static struct strexParse *strexParseOr(struct strexIn *in)
+/* Parse out plus or minus. */
+{
+struct tokenizer *tkz = in->tkz;
+struct strexParse *p = strexParseSum(in);
+for (;;)
+    {
+    char *tok = tokenizerNext(tkz);
+    if (tok == NULL || differentString(tok, "or"))
+	{
+	tokenizerReuse(tkz);
+	return p;
+	}
+
+    /* What we've parsed so far becomes left side of binary op, next term ends up on right. */
+    struct strexParse *l = p;
+    struct strexParse *r = strexParseSum(in);
+
+    /* Make left and right side into a common type */
+    enum strexType childType = commonTypeForBop(l->type, r->type);
+    l = strexParseCoerce(l, childType);
+    r = strexParseCoerce(r, childType);
+
+    /* Create the binary operation */
+    AllocVar(p);
+    p->op = strexOpOr;
+    p->type = childType;
+
+    /* Now hang children onto node. */
+    p->children = l;
+    l->next = r;
+    }
+}
+
+
 static struct strexParse *strexParseExpression(struct strexIn *in)
 /* Parse out an expression. Leaves input at next expression. */
 {
-return strexParseSum(in);
+return strexParseOr(in);
 }
 
 static void ensureAtEnd(struct strexIn *in)
@@ -824,6 +862,7 @@ struct strexParse *rp = lp->next;
 struct strexEval lv = strexLocalEval(lp, record, lookup, lm);
 struct strexEval rv = strexLocalEval(rp, record, lookup, lm);
 struct strexEval res;
+assert(lv.type == rv.type);   // Is our type automatic casting working?
 switch (lv.type)
     {
     case strexTypeInt:
@@ -847,6 +886,39 @@ switch (lv.type)
 	res.val.s = s;
 	break;
 	}
+    default:
+	internalErr();
+	res.val.b = FALSE;
+	break;
+    }
+res.type = lv.type;
+return res;
+}
+
+static struct strexEval strexEvalOr(struct strexParse *p, void *record, StrexEvalLookup lookup,
+	struct lm *lm)
+/* Return a or b. */
+{
+struct strexParse *lp = p->children;
+struct strexParse *rp = lp->next;
+struct strexEval lv = strexLocalEval(lp, record, lookup, lm);
+struct strexEval rv = strexLocalEval(rp, record, lookup, lm);
+struct strexEval res;
+assert(lv.type == rv.type);   // Is our type automatic casting working?
+switch (lv.type)
+    {
+    case strexTypeBoolean:
+        res.val.b = (lv.val.b || rv.val.b);
+	break;
+    case strexTypeInt:
+	res.val.i = (lv.val.i ? lv.val.i : rv.val.i);
+	break;
+    case strexTypeDouble:
+	res.val.x = (lv.val.x != 0.0 ? lv.val.x : rv.val.x);
+	break;
+    case strexTypeString:
+	res.val.s = (lv.val.s[0] ? lv.val.s : rv.val.s);
+	break;
     default:
 	internalErr();
 	res.val.b = FALSE;
@@ -1237,6 +1309,11 @@ switch (p->op)
     /* Mathematical ops, simple binary type */
     case strexOpAdd:
        res = strexEvalAdd(p, record, lookup, lm);
+       break;
+
+    /* Logical ops, simple binary type */
+    case strexOpOr:
+       res = strexEvalOr(p, record, lookup, lm);
        break;
 
     default:
