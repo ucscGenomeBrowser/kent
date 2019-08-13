@@ -108,6 +108,7 @@ enum strexOp
     /* Binary operations. */
     strexOpAdd,
     strexOpOr,
+    strexOpAnd,
 
     /* Type conversions - possibly a few more than we actually need at the moment. */
     strexOpStringToBoolean,
@@ -298,6 +299,8 @@ switch (op)
 	return "strexOpAdd";
     case strexOpOr:
 	return "strexOpOr";
+    case strexOpAnd:
+	return "strexOpAnd";
 
     case strexOpBuiltInCall:
         return "strexOpBuiltInCall";
@@ -412,8 +415,8 @@ else
 return p;
 }
 
-static enum strexType commonTypeForBop(enum strexType left, enum strexType right)
-/* Return type that will work for a binary operation. */
+static enum strexType commonTypeForMathBop(enum strexType left, enum strexType right)
+/* Return type that will work for a math binary operation. */
 {
 if (left == right)
     return left;
@@ -432,6 +435,14 @@ else
     }
 }
 
+static enum strexType commonTypeForLogicBop(enum strexType left, enum strexType right)
+/* Return type that will work for a boolean binary operation. */
+{
+if (left == right)
+    return left;
+else
+    return strexTypeBoolean;
+}
 
 static enum strexOp booleanCastOp(enum strexType oldType)
 /* Return op to convert oldType to boolean. */
@@ -741,7 +752,7 @@ for (;;)
     struct strexParse *r = strexParseUnaryMinus(in);
 
     /* Make left and right side into a common type */
-    enum strexType childType = commonTypeForBop(l->type, r->type);
+    enum strexType childType = commonTypeForMathBop(l->type, r->type);
     l = strexParseCoerce(l, childType);
     r = strexParseCoerce(r, childType);
 
@@ -756,12 +767,45 @@ for (;;)
     }
 }
 
+static struct strexParse *strexParseAnd(struct strexIn *in)
+/* Parse out plus or minus. */
+{
+struct tokenizer *tkz = in->tkz;
+struct strexParse *p = strexParseSum(in);
+for (;;)
+    {
+    char *tok = tokenizerNext(tkz);
+    if (tok == NULL || differentString(tok, "and"))
+	{
+	tokenizerReuse(tkz);
+	return p;
+	}
+
+    /* What we've parsed so far becomes left side of binary op, next term ends up on right. */
+    struct strexParse *l = p;
+    struct strexParse *r = strexParseSum(in);
+
+    /* Make left and right side into a common type */
+    enum strexType childType = commonTypeForLogicBop(l->type, r->type);
+    l = strexParseCoerce(l, childType);
+    r = strexParseCoerce(r, childType);
+
+    /* Create the binary operation */
+    AllocVar(p);
+    p->op = strexOpAnd;
+    p->type = childType;
+
+    /* Now hang children onto node. */
+    p->children = l;
+    l->next = r;
+    }
+}
 
 static struct strexParse *strexParseOr(struct strexIn *in)
 /* Parse out plus or minus. */
 {
 struct tokenizer *tkz = in->tkz;
-struct strexParse *p = strexParseSum(in);
+struct strexParse *p = strexParseAnd(in);
 for (;;)
     {
     char *tok = tokenizerNext(tkz);
@@ -773,10 +817,10 @@ for (;;)
 
     /* What we've parsed so far becomes left side of binary op, next term ends up on right. */
     struct strexParse *l = p;
-    struct strexParse *r = strexParseSum(in);
+    struct strexParse *r = strexParseAnd(in);
 
     /* Make left and right side into a common type */
-    enum strexType childType = commonTypeForBop(l->type, r->type);
+    enum strexType childType = commonTypeForLogicBop(l->type, r->type);
     l = strexParseCoerce(l, childType);
     r = strexParseCoerce(r, childType);
 
@@ -918,6 +962,39 @@ switch (lv.type)
 	break;
     case strexTypeString:
 	res.val.s = (lv.val.s[0] ? lv.val.s : rv.val.s);
+	break;
+    default:
+	internalErr();
+	res.val.b = FALSE;
+	break;
+    }
+res.type = lv.type;
+return res;
+}
+
+static struct strexEval strexEvalAnd(struct strexParse *p, void *record, StrexEvalLookup lookup,
+	struct lm *lm)
+/* Return a and b. */
+{
+struct strexParse *lp = p->children;
+struct strexParse *rp = lp->next;
+struct strexEval lv = strexLocalEval(lp, record, lookup, lm);
+struct strexEval rv = strexLocalEval(rp, record, lookup, lm);
+struct strexEval res;
+assert(lv.type == rv.type);   // Is our type automatic casting working?
+switch (lv.type)
+    {
+    case strexTypeBoolean:
+        res.val.b = (lv.val.b && rv.val.b);
+	break;
+    case strexTypeInt:
+	res.val.i = (lv.val.i ? rv.val.i : lv.val.i);
+	break;
+    case strexTypeDouble:
+	res.val.x = (lv.val.x != 0.0 ? rv.val.x : lv.val.x);
+	break;
+    case strexTypeString:
+	res.val.s = (lv.val.s[0] ? rv.val.s : lv.val.s);
 	break;
     default:
 	internalErr();
@@ -1315,6 +1392,10 @@ switch (p->op)
     case strexOpOr:
        res = strexEvalOr(p, record, lookup, lm);
        break;
+    case strexOpAnd:
+       res = strexEvalAnd(p, record, lookup, lm);
+       break;
+
 
     default:
         errAbort("Unknown op %s\n", strexOpToString(p->op));
