@@ -3,9 +3,10 @@ This document describes its built in functions and operators:
 
 +  - returns the concatenation of the surrounding strings.  Will convert a number to a string
 
-[ix] - selects a character from string given an integer zero based index. As in Python
-       if ix is negative it selects characters from the end of the string.  -1
+[index] - selects a character from string given an integer zero based index. As in Python
+       if index is negative it selects characters from the end of the string.  -1
        corresponds to the last character of string, as 0 corresponds to first.
+       Returns empty string if index out of range.
       
 between(prefix, string, suffix) - returns the part of string found between prefix and suffix
    example:   between("abc", "01234abcHelloxyz56789", "xyz")  fetches just "Hello"
@@ -17,9 +18,12 @@ between(prefix, string, suffix) - returns the part of string found between prefi
 
 split(string, index)  - white space separated word from string of given 0 based index.
    Returns empty string if index is too large.
+   A negative input will work much like an array index does,  with -1 selecting the
+   last word in the string.  Returns empty string if index out of range.
 
-separate(string, splitter, index) - separates string with splitter character. Returns string of given index.
-   Returns empty string if index is too large.
+separate(string, splitter, index) - separates string with splitter character. Returns 
+   string of given index.  Index can be negative as in split to pick off of end rather than start.
+   Returns empty string if index is too out of rnge.
 
 [start:end] - Use a colon in an array index to select a range of a string.  This follows 
               Python conventions, where start is zero based and end is one past the end of 
@@ -44,9 +48,28 @@ uncsv(string, index) - do comma separated value extraction of string. Includes q
 
 trim(string) - returns copy of string with leading and trailing spaces removed
 
-replace(string, old, new) - returns string with all instances of old replaced by new
+strip(string, toRemove) - remove all occurrences of any character in toRemove from string
 
-md5(string) - returns an MD5 sum digest/hash of string. Useful for creating IDs
+replace(string, oldPart, newPart) - returns string with all instances of old replaced by new.
+	    The cases where either old or new are empty string are useful special cases.
+	    If new is "", then all instances of the old string will be deleted.
+            If old is "", then empty strings will be replaced by new strings, useful in setting
+	    a default value for a field.  
+               
+fix(string, target, newString) - similar to replace but works at the whole string level.
+            Returns string unchanged except for the case where string matches target exactly.
+	    In that case it returns newString instead.  The name "fix" comes from it
+	    being used generally to replace one constant, fixed, string with another.
+	    Also, a lot of the time when you do this it is to fix a small inconsistency
+	    in the metadata.  In general fix is faster to execute and quicker to type than
+	    replace and the effects are more specific.
+    example to help clean up minor variations in vocabulary
+            fix(fix(fix(fix( sex, "M","male"),  "F","female"),  "Male","male")  "Female","female")
+    example to give something a value if non is present
+	    fix(requiredField, "", "reasonable default value")
+
+md5(string) - returns an MD5 sum digest/hash of string. Useful for creating IDs out of large or
+            merged fields. 
 
 now() - returns current time and date in a really aweful unix ctime(2) format.  We will improve it.
 

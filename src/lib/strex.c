@@ -57,6 +57,7 @@ enum strexBuiltInFunc
     strexBuiltInUncsv,
     strexBuiltInUntsv,
     strexBuiltInReplace,
+    strexBuiltInFix,
     strexBuiltInStrip,
     };
 
@@ -158,6 +159,7 @@ static struct strexBuiltIn builtins[] = {
     { "uncsv", strexBuiltInUncsv, 2, stringInt },
     { "untsv", strexBuiltInUntsv, 2, stringInt },
     { "replace", strexBuiltInReplace, 3, threeStrings },
+    { "fix", strexBuiltInFix, 3, threeStrings },
     { "strip", strexBuiltInStrip, 2, twoStrings },
 };
 
@@ -918,16 +920,23 @@ return res;
 static char *splitString(char *words,  int ix,  struct lm *lm)
 /* Return the space-delimited word of index ix as clone into lm */
 {
+if (ix < 0)	// Negative index.  We got to count, dang
+    {
+    int wordCount = chopByWhite(words, NULL, 0);   
+    ix = wordCount + ix;
+    if (ix < 0)
+        return "";
+    }
 char *s = words;
 int i;
 for (i=0; ; ++i)
     {
     s = skipLeadingSpaces(s);
     if (isEmpty(s))
-        errAbort("There aren't %d words in %s", ix+1, words);
+	return "";
     char *end = skipToSpaces(s);
     if (i == ix)
-        {
+	{
 	if (end == NULL)
 	    return lmCloneString(lm, s);
 	else
@@ -954,8 +963,14 @@ int splitterSize = strlen(splitter);
 if (splitterSize != 1)
     errAbort("Separator parameter to split must be a single character, not %s", splitter);
 int count = chopByChar(string, splitter[0], NULL, 0);
+if (ix < 0)	// Negative index.  No problem, count from the end
+    {
+    ix = count + ix;
+    if (ix < 0)
+        return "";	// Still out of range, oh well
+    }
 if (ix >= count)
-    errAbort("There aren't %d fields separated by %s in %s", ix+1, splitter, string);
+    return "";
 char **row;
 lmAllocArray(lm, row, count);
 char *scratch = lmCloneString(lm, string);
@@ -1074,6 +1089,19 @@ switch (builtIn->func)
         struct strexEval b = strexLocalEval(p->children->next, record, lookup, lm);
         struct strexEval c = strexLocalEval(p->children->next->next, record, lookup, lm);
 	res.val.s = replaceString(a.val.s, b.val.s, c.val.s, lm);
+	break;
+	}
+    case strexBuiltInFix:
+        {
+        struct strexEval string = strexLocalEval(p->children, record, lookup, lm);
+        struct strexEval oldVal = strexLocalEval(p->children->next, record, lookup, lm);
+        struct strexEval newVal = strexLocalEval(p->children->next->next, record, lookup, lm);
+	if (sameString(string.val.s, oldVal.val.s))
+	    {
+	    res.val.s = newVal.val.s;
+	    }
+	else
+	    res.val.s = string.val.s;
 	break;
 	}
     case strexBuiltInStrip:
