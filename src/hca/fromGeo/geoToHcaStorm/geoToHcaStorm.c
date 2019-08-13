@@ -14,15 +14,12 @@ void usage()
 errAbort(
   "geoToHcaStorm - Convert geo tag storm to hca tag storm.  Both are intermediate representations.\n"
   "usage:\n"
-  "   geoToHcaStorm geoIn.tags sraTable.tsv seqType hcaOut.tags\n"
+  "   geoToHcaStorm geoIn.tags sraTable.tsv hcaOut.tags\n"
   "where:\n"
   "   geoIn.tags is the output of geoToTagStorm\n"
   "   sraTable.tsv contains the fields Experiment_s, Run_s, and possibly more.\n"
   "      normally it is gotten off the NCBI web site\n"
-  "   seqType is one of single, paired, or 10x\n"
   "   hcaOut.tags is the output tagStorm\n"
-  "options:\n"
-  "   -xxx=XXX\n"
   );
 }
 
@@ -90,21 +87,50 @@ for (pair = stanza->tagList; pair != NULL; pair = pair->next)
     }
 }
 
+char *noNullsOrOuterQuotes(char *in, struct dyString *scratch)
+/* Return in massaged a bit to turn NULL into "" and anything
+ * with outer quotes to have those stripped off. */
+{
+if (in == NULL)
+    return "";
+char c = in[0];
+if (c == '"' || c == '\'')
+    {
+    int len = strlen(in);
+    if (len > 1 && in[len-1] == c)  // Matching outer quote
+        {
+	dyStringClear(scratch);
+	dyStringAppendN(scratch, in+1, len-2);
+	return scratch->string;
+	}
+    }
+return in;
+}
+
 boolean mergeAddress(struct tagStanza *stanza, struct dyString *dy, char **tags, int tagCount)
 /* Look up all of tags in stanza and concatenate together with space separation */
 {
-char *address = emptyForNull(tagFindLocalVal(stanza, tags[0]));
-char *city = emptyForNull(tagFindLocalVal(stanza, tags[1]));
-char *state = emptyForNull(tagFindLocalVal(stanza, tags[2]));
-char *zip = emptyForNull(tagFindLocalVal(stanza, tags[3]));
-char *country = emptyForNull(tagFindLocalVal(stanza, tags[4]));
+char *address = cloneString(noNullsOrOuterQuotes(tagFindLocalVal(stanza, tags[0]), dy));
+char *city = cloneString(noNullsOrOuterQuotes(tagFindLocalVal(stanza, tags[1]), dy));
+char *state = cloneString(noNullsOrOuterQuotes(tagFindLocalVal(stanza, tags[2]), dy));
+char *zip = cloneString(noNullsOrOuterQuotes(tagFindLocalVal(stanza, tags[3]), dy));
+char *country = cloneString(noNullsOrOuterQuotes(tagFindLocalVal(stanza, tags[4]), dy));
+boolean ret = FALSE;
+
+dyStringClear(dy); // Clear out any cruft in output
 if (address[0] || city[0] || state[0] || zip[0] || country[0])
     {
     dyStringPrintf(dy, "\"%s; %s, %s %s %s\"", address, city, state, zip, country);
-    return TRUE;
+    ret = TRUE;
     }
-else
-    return FALSE;
+
+/* Clean up and go home. */
+freeMem(address);
+freeMem(city);
+freeMem(state);
+freeMem(zip);
+freeMem(country);
+return ret;
 }
 
 void mergeAddresses(struct tagStorm *storm, struct tagStanza *stanza, void *context)
@@ -127,7 +153,6 @@ if (mergeAddress(stanza, dy, seriesComponents, ArraySize(seriesComponents)))
     tagStanzaAppend(storm, stanza, "series.contact_full_address", dy->string);
 
 /* Take care of sample address */
-dyStringClear(dy);
 char *sampleComponents[] = 
     {
     "sample.contact_address", "sample.contact_city", "sample.contact_state", 
@@ -138,7 +163,7 @@ if (mergeAddress(stanza, dy, sampleComponents, ArraySize(sampleComponents)))
 dyStringFree(&dy);
 }
 
-void geoToHcaStorm(char *inTags, char *inTable, char *seqType, char *output)
+void geoToHcaStorm(char *inTags, char *inTable, char *output)
 /* geoToHcaStorm - Convert output of geoToTagStorm to something closer to what the Human Cell 
  *  Atlas wants.. */
 {
@@ -163,6 +188,7 @@ for (i=0; i<table->fieldCount; ++i)
     }
 int joinIx = fieldedTableMustFindFieldIx(table, "Experiment");
 int runIx = fieldedTableMustFindFieldIx(table, "Run");
+int pairingIx = fieldedTableMustFindFieldIx(table, "LibraryLayout");
 
 /* Join based on sra_experiment/Experiment_s which contains an SRX123456 type id */
 struct hash *joinHash = tagStormIndexExtended(storm, "sample.sra_experiment", FALSE, FALSE);
@@ -188,22 +214,23 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
 	slReverse(&hcaStanza->tagList);
 
 	/* Figure out stuff related to pairing.  One file or two? */
+	char *seqType = row[pairingIx];
 	int fileCount = 2;
 	char *pairedEnd = "yes";
-	if (sameString("single", seqType))
+	if (sameString("SINGLE", seqType))
 	    {
 	    fileCount = 1;
 	    pairedEnd = "no";
 	    }
-	else if (sameString("paired", seqType))
+	else if (sameString("PAIRED", seqType))
 	    ;
 	else
-	    errAbort("Unrecognized seqType %s", seqType);
+	    errAbort("Unrecognized sra.LibraryLayout %s", seqType);
 
 	/* Add in file info */
 	char *runName = row[runIx];
 	int fileIx;
-	for (fileIx = 0; fileIx < fileCount; ++fileIx)
+	for (fileIx = fileCount-1; fileIx >= 0; --fileIx)  // Generate backwards
 	    {
 	    struct tagStanza *fileStanza = tagStanzaNew(storm, hcaStanza);
 	    char fileName[FILENAME_LEN];
@@ -231,8 +258,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 5)
+if (argc != 4)
     usage();
-geoToHcaStorm(argv[1], argv[2], argv[3], argv[4]);
+geoToHcaStorm(argv[1], argv[2], argv[3]);
 return 0;
 }

@@ -26,7 +26,7 @@ errAbort(
 "   outDir is a directory that will be populated with tab-separated files\n"
 "The spec.txt file contains one blank line separated stanza per output table.\n"
 "Each stanza should look like:\n"
-"        tableName    key-column\n"
+"        table tableName    key-column\n"
 "        columnName1	sourceField1\n"
 "        columnName2	sourceField2\n"
 "              ...\n"
@@ -45,14 +45,14 @@ static struct optionSpec options[] = {
 };
 
 
-boolean allStringsSame(char **aa, char **bb, int count)
+static int firstDifferentIx(char **aa, char **bb, int count)
 /* Return true if first count of strings between aa and bb are the same */
 {
 int i;
 for (i=0; i<count; ++i)
     if (!sameString(aa[i], bb[i]))
-        return FALSE;
-return TRUE;
+        return i;
+return -1;
 }
 
 enum fieldValType
@@ -156,7 +156,7 @@ else
 	else
 	    {
 	    fv->val = cloneString(s);
-	    fv->exp = strexParseString(fv->val, fileName, fileLineNumber);
+	    fv->exp = strexParseString(fv->val, fileName, fileLineNumber-1);
 	    fv->type = fvExp;
 	    }
 	}
@@ -177,12 +177,16 @@ static char *symLookup(void *record, char *key)
 struct symRec *rec = record;
 struct hash *hash = rec->hash;
 char **row = rec->row;
-int rowIx = hashIntVal(hash, key);
-return row[rowIx];
+int rowIx = hashIntValDefault(hash, key, -1);
+if (rowIx < 0)
+    return NULL;
+else
+    return row[rowIx];
 }
 
 
 void selectUniqueIntoTable(struct fieldedTable *inTable,  struct hash *inFieldHash,
+    char *specFile,  // Just for error reporting
     struct newFieldInfo *fieldList, int keyFieldIx, struct fieldedTable *outTable)
 /* Populate out table with selected rows from newTable */
 {
@@ -220,17 +224,26 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 	}
 
     char *key = outRow[keyFieldIx];
-    struct fieldedRow *uniqFr = hashFindVal(uniqHash, key);
-    if (uniqFr == NULL)
-        {
-	uniqFr = fieldedTableAdd(outTable, outRow, outFieldCount, 0);
-	hashAdd(uniqHash, key, uniqFr);
-	}
-    else    /* Do error checking for true uniqueness of key */
-        {
-	if (!allStringsSame(outRow, uniqFr->row, outFieldCount))
-	    errAbort("Duplicate id %s but different data in key field %s of %s.",
-		key, outTable->fields[keyFieldIx], outTable->name);
+    if (!isEmpty(key))
+	{
+	struct fieldedRow *uniqFr = hashFindVal(uniqHash, key);
+	if (uniqFr == NULL)
+	    {
+	    uniqFr = fieldedTableAdd(outTable, outRow, outFieldCount, 0);
+	    hashAdd(uniqHash, key, uniqFr);
+	    }
+	else    /* Do error checking for true uniqueness of key */
+	    {
+	    int differentIx = firstDifferentIx(outRow, uniqFr->row, outFieldCount);
+	    if (differentIx >= 0)
+		{
+		warn("There is a problem with the key to table %s in %s", outTable->name, specFile);
+		warn("%s %s", uniqFr->row[keyFieldIx], uniqFr->row[differentIx]);
+		warn("%s %s", outRow[keyFieldIx], outRow[differentIx]);
+		errAbort("both exist, so key is not unique for all values of %s", 
+		    outTable->fields[differentIx]);
+		}
+	    }
 	}
     }
 dyStringFree(&csvScratch);
@@ -257,7 +270,6 @@ struct fieldedTable *inTable = fieldedTableFromTabFile(inTabFile, inTabFile, NUL
 verbose(1, "Read %d columns, %d rows from %s\n", inTable->fieldCount, inTable->rowCount,
     inTabFile);
 struct lineFile *lf = lineFileOpen(specFile, TRUE);
-makeDirsOnPath(outDir);
 
 /* Read in spec file as ra file stanzas that we convert into tableInfos. */
 struct newTableInfo *newTableList = NULL, *newTable;
@@ -280,6 +292,7 @@ while (raSkipLeadingEmptyLines(lf, NULL))
     /* Start filling out newTable with these fields */
     AllocVar(newTable);
     newTable->name = cloneString(tableName);
+    tableName = newTable->name;  /* Keep this handy variable. */
 
     /* Make up field list out of rest of the stanza */
     struct newFieldInfo *fvList = NULL;
@@ -321,7 +334,7 @@ while (raSkipLeadingEmptyLines(lf, NULL))
     struct newFieldInfo *keyField = findField(fvList, keyFieldName);
     if (keyField == NULL)
        errAbort("key field %s is not found in field list for %s in %s\n", 
-	tableName, keyFieldName, lf->fileName);
+	keyFieldName, tableName, lf->fileName);
 
     /* Allocate structure to save results of this pass in and so so. */
     newTable->keyField = keyField;
@@ -351,13 +364,14 @@ for (newTable = newTableList; newTable != NULL; newTable = newTable->next)
     }
 
 struct hash *inFieldHash = hashFieldIx(inTable->fields, inTable->fieldCount);
+makeDirsOnPath(outDir);
 
 /* Output tables */
 for (newTable = newTableList; newTable != NULL; newTable = newTable->next)
     {
     /* Populate table */
     struct fieldedTable *outTable = newTable->table;
-    selectUniqueIntoTable(inTable, inFieldHash,
+    selectUniqueIntoTable(inTable, inFieldHash, specFile,
 	newTable->fieldList, newTable->keyField->newIx, outTable);
 
     /* Create output file name and save file. */

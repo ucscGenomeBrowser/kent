@@ -1,8 +1,19 @@
 table a_strex_test id
 id "constant ID"
-array0 GEO_Series_summary[0]
-array1 GEO_Series_summary[1]
-array2 GEO_Series_summary[2]
+stripped strip("constant ID", " aeiou")
+sub_day_of_month	separate(submission_date, '-', 2)
+neg_day_of_month  separate(submission_date, '-', -1)
+last_word split("constant ID", -1)
+penultimate_word split("constant ID", -2)
+replaceSomething replace("something", "", "default value")
+replaceNothing replace("", "", "default value")
+#assay long-RNA-seq
+dashed assay[4:-3]
+long assay[:4]
+q assay[-1]
+RNA assay[5:8]
+seq assay[-3:]
+se assay[-3:-2]
 mm	separate(submission_date, '-', 1)
 dd	separate(submission_date, '-', 2)
 yyyy	separate(submission_date, '-', 0)
@@ -11,6 +22,19 @@ company split(fluidics_chip, 0)
 md5.sum md5(GEO_Series_summary)
 organ trim(between('human', title, 'transcriptome'))
 untrimmed_organ "'" + between('human', title, 'transcriptome') + "'"
+alphabet3 "abcdefg"[3]
+decade submission_date[2]
+crasho 1[1]
+abc "abcdefg"
+def "abcdefg"[3:6]
+abcd "abcdefg"[:4]
+efg "abcdefg"[4:]
+atoG "abcdefg"[:]
+fg "abcdefg"[-2:]
+array1 uncsv(GEO_Series_summary,1)
+cutMid replace("abcdefg", "cde", "")
+subSub replace("abcdefg", "abcdefg", "subSub")
+
 
 table project id
 id data_set_id

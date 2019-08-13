@@ -54,6 +54,11 @@ enum strexBuiltInFunc
     strexBuiltInNow,
     strexBuiltInMd5,
     strexBuiltInSeparate,
+    strexBuiltInUncsv,
+    strexBuiltInUntsv,
+    strexBuiltInReplace,
+    strexBuiltInFix,
+    strexBuiltInStrip,
     };
 
 struct strexBuiltIn
@@ -90,7 +95,11 @@ enum strexOp
     strexOpSymbol,	/* A symbol name. */
 
     strexOpBuiltInCall,	/* Call a built in function */
+
     strexOpArrayIx,	/* An array with an index. */
+    strexOpArrayRange,	/* An array with a range. */
+
+    strexOpStrlen,	/* Length of a string */
 
     /* Unary minus for numbers */
     strexOpUnaryMinusInt,
@@ -133,7 +142,7 @@ struct strexIn
 
 /* Some predefined lists of parameter types */
 static enum strexType oneString[] = {strexTypeString};
-// static enum strexType twoStrings[] = {strexTypeString, strexTypeString};
+static enum strexType twoStrings[] = {strexTypeString, strexTypeString};
 static enum strexType threeStrings[] = {strexTypeString, strexTypeString, strexTypeString};
 static enum strexType stringInt[] = {strexTypeString, strexTypeInt};
 static enum strexType stringStringInt[] = {strexTypeString, strexTypeString, strexTypeInt};
@@ -142,11 +151,16 @@ static enum strexType stringStringInt[] = {strexTypeString, strexTypeString, str
  * fill in if you add a new built in function. */
 static struct strexBuiltIn builtins[] = {
     { "trim", strexBuiltInTrim, 1, oneString, },
-    { "between", strexBuiltInBetween, 3, threeStrings, },
+    { "between", strexBuiltInBetween, 3, threeStrings },
     { "split", strexBuiltInSplit, 2, stringInt },
     { "now", strexBuiltInNow, 0, NULL },
     { "md5", strexBuiltInMd5, 1, oneString },
     { "separate", strexBuiltInSeparate, 3, stringStringInt },
+    { "uncsv", strexBuiltInUncsv, 2, stringInt },
+    { "untsv", strexBuiltInUntsv, 2, stringInt },
+    { "replace", strexBuiltInReplace, 3, threeStrings },
+    { "fix", strexBuiltInFix, 3, threeStrings },
+    { "strip", strexBuiltInStrip, 2, twoStrings },
 };
 
 static struct hash *hashBuiltIns()
@@ -183,6 +197,16 @@ if (si != NULL)
     tokenizerFree(&si->tkz);
     freez(pSi);
     }
+}
+
+struct strexParse *strexParseNew(enum strexOp op, enum strexType type)
+/* Return a fresh strexParse of the given op and type with the val set to 0/NULL */
+{
+struct strexParse *p;
+AllocVar(p);
+p->op = op;
+p->type = type;
+return p;
 }
 
 static void strexValDump(union strexVal val, enum strexType type, FILE *f)
@@ -277,7 +301,11 @@ switch (op)
 
     case strexOpArrayIx:
         return "strexOpArrayIx";
+    case strexOpArrayRange:
+        return "strexOpArrayRange";
 
+    case strexOpStrlen:
+        return "strexOpStrlen";
     default:
 	return "strexOpUnknown";
     }
@@ -579,6 +607,17 @@ else
 return function;
 }
 
+struct strexParse *arrayRangeTree(struct strexParse *array, 
+    struct strexParse *firstIndex, struct strexParse *secondIndex)
+/* Creat an array range parse tree */
+{
+struct strexParse *p = strexParseNew(strexOpArrayRange, strexTypeString);
+p->children = array;
+array->next = firstIndex;
+firstIndex->next = secondIndex;
+return p;
+}
+
 static struct strexParse *strexParseIndex(struct strexIn *in)
 /* Handle the [] in this[6].  Convert it into tree:
 *         strexOpArrayIx
@@ -586,23 +625,62 @@ static struct strexParse *strexParseIndex(struct strexIn *in)
 *            strexParseFunction */
 {
 struct tokenizer *tkz = in->tkz;
-struct strexParse *collection = strexParseFunction(in);
-struct strexParse *p = collection;
+struct strexParse *array = strexParseFunction(in);
+struct strexParse *p = array;
 char *tok = tokenizerNext(tkz);
 if (tok == NULL)
     tokenizerReuse(tkz);
 else if (tok[0] == '[')
     {
-    struct strexParse *index = strexParseExpression(in);
-    // struct strexParse *index = strexParseFunction(in);
-    index = strexParseCoerce(index, strexTypeInt);
+    array = strexParseCoerce(array, strexTypeString);
+    tok = tokenizerMustHaveNext(tkz);
+    if (tok[0] == ':')  // Case where is a range with empty beginning.  We can even compute index.
+        {
+	tok = tokenizerMustHaveNext(tkz);
+	if (tok[0] == ']')
+	    {
+	    tokenizerReuse(tkz);    // Range is just whole array, do nothing really
+	    }
+	else
+	    {
+	    tokenizerReuse(tkz);    
+	    struct strexParse *firstIndex = strexParseNew(strexOpLiteral, strexTypeInt);
+	    struct strexParse *secondIndex = strexParseCoerce(strexParseExpression(in), strexTypeInt);
+	    p = arrayRangeTree(array, firstIndex, secondIndex);
+	    }
+        }
+    else
+	{
+	tokenizerReuse(tkz);
+	struct strexParse *firstIndex = strexParseCoerce(strexParseExpression(in), strexTypeInt);
+	tok = tokenizerMustHaveNext(tkz);
+	if (tok[0] == ':')
+	    {
+	    struct strexParse *secondIndex;
+	    tok = tokenizerMustHaveNext(tkz);
+	    if (tok[0] == ']')  // Case where second half of rang is empty
+		{
+	        tokenizerReuse(tkz);
+		secondIndex = strexParseNew(strexOpStrlen, strexTypeInt);
+		secondIndex->children = array;
+		}
+	    else
+	        {
+	        tokenizerReuse(tkz);
+		secondIndex = strexParseCoerce(strexParseExpression(in), strexTypeInt);
+		}
+	    p = arrayRangeTree(array, firstIndex, secondIndex);
+	    }
+	else
+	    {
+	    // Simple no range case
+	    tokenizerReuse(tkz);
+	    p = strexParseNew(strexOpArrayIx, strexTypeString);
+	    p->children = array;
+	    array->next = firstIndex;
+	    }
+	}
     skipOverRequired(in, "]");
-    AllocVar(p);
-    p->op = strexOpArrayIx;
-    p->type = strexTypeString;
-    p->children = collection;
-    p->val.s = cloneString("");
-    collection->next = index;
     }
 else
     tokenizerReuse(tkz);
@@ -792,18 +870,49 @@ for (i=0; i<ix; ++i)
 return csvParseNext(&pos, scratch);
 }
 
-static struct strexEval strexEvalArrayIx(struct strexParse *p, void *record, StrexEvalLookup lookup,
-	struct lm *lm)
+static struct strexEval strexEvalArrayIx(struct strexParse *p, 
+	void *record, StrexEvalLookup lookup, struct lm *lm)
 /* Handle parse tree generated by an indexed array. */
 {
 struct strexParse *array = p->children;
 struct strexParse *index = array->next;
 struct strexEval arrayVal = strexLocalEval(array, record, lookup, lm);
 struct strexEval indexVal = strexLocalEval(index, record, lookup, lm);
+int ix = indexVal.val.i;
+if (ix  < 0)
+    ix = strlen(arrayVal.val.s) + ix;
 struct strexEval res;
-struct dyString *scratch = dyStringNew(0);
-char *val = emptyForNull(csvParseOneOut(arrayVal.val.s, indexVal.val.i, scratch));
-res.val.s = cloneString(val);
+res.val.s = lmCloneStringZ(lm, arrayVal.val.s + ix, 1);
+res.type = strexTypeString;
+return res;
+}
+
+static struct strexEval strexEvalArrayRange(struct strexParse *p, 
+    void *record, StrexEvalLookup lookup, struct lm *lm)
+/* Handle parse tree generated by array range expression, which by now
+ * has just been turned into two integer values. */
+{
+struct strexParse *array = p->children;
+struct strexParse *index1 = array->next;
+struct strexParse *index2 = index1->next;
+struct strexEval arrayVal = strexLocalEval(array, record, lookup, lm);
+struct strexEval rangeStart = strexLocalEval(index1, record, lookup, lm);
+struct strexEval rangeEnd = strexLocalEval(index2, record, lookup, lm);
+char *arraySource = arrayVal.val.s;
+int start = rangeStart.val.i;
+int end = rangeEnd.val.i;
+int len = strlen(arraySource); 
+if (start < 0)
+    start = strlen(arraySource) + start;
+if (end < 0)
+    end = strlen(arraySource) + end;
+if (start < 0)
+   start = 0;
+if (end > len)
+    end = len;
+if (end < start) end = start;   // errors apparently just get truncated in this language.  hmm
+struct strexEval res;
+res.val.s = lmCloneStringZ(lm, arrayVal.val.s + start, end-start);
 res.type = strexTypeString;
 return res;
 }
@@ -811,16 +920,23 @@ return res;
 static char *splitString(char *words,  int ix,  struct lm *lm)
 /* Return the space-delimited word of index ix as clone into lm */
 {
+if (ix < 0)	// Negative index.  We got to count, dang
+    {
+    int wordCount = chopByWhite(words, NULL, 0);   
+    ix = wordCount + ix;
+    if (ix < 0)
+        return "";
+    }
 char *s = words;
 int i;
 for (i=0; ; ++i)
     {
     s = skipLeadingSpaces(s);
     if (isEmpty(s))
-        errAbort("There aren't %d words in %s", ix+1, words);
+	return "";
     char *end = skipToSpaces(s);
     if (i == ix)
-        {
+	{
 	if (end == NULL)
 	    return lmCloneString(lm, s);
 	else
@@ -830,6 +946,16 @@ for (i=0; ; ++i)
     }
 }
 
+static char *uncsvString(char *csvIn,  int ix,  struct lm *lm)
+/* Return the comma separated value of index ix. Memory for result is lm */
+{
+struct dyString *scratch = dyStringNew(0);
+char *one = csvParseOneOut(csvIn, ix, scratch); 
+char *res = emptyForNull(lmCloneString(lm, one));	// Save in more permanent memory
+dyStringFree(&scratch);
+return res;
+}
+
 static char *separateString(char *string, char *splitter, int ix, struct lm *lm)
 /* Return the ix'th part of string as split apart by splitter */
 {
@@ -837,14 +963,56 @@ int splitterSize = strlen(splitter);
 if (splitterSize != 1)
     errAbort("Separator parameter to split must be a single character, not %s", splitter);
 int count = chopByChar(string, splitter[0], NULL, 0);
+if (ix < 0)	// Negative index.  No problem, count from the end
+    {
+    ix = count + ix;
+    if (ix < 0)
+        return "";	// Still out of range, oh well
+    }
 if (ix >= count)
-    errAbort("There aren't %d fields separated by %s in %s", ix+1, splitter, string);
+    return "";
 char **row;
 lmAllocArray(lm, row, count);
 char *scratch = lmCloneString(lm, string);
 chopByChar(scratch, splitter[0], row, count);
 return row[ix];
 }
+
+static char *untsvString(char *tsvIn, int ix, struct lm *lm)
+/* Return the tab separated value at given index living somewhere in lm. */
+{
+return separateString(tsvIn, "\t", ix, lm);
+}
+
+static char *replaceString(char *in, char *oldVal, char *newVal, struct lm *lm)
+/* Replace every occurrence of oldVal with newVal in string */
+{
+if (sameString(in, oldVal) )
+    return lmCloneString(lm, newVal);  // Simple case that also handles empty oldVal match empty in
+else
+    {
+    if (isEmpty(oldVal))
+        return lmCloneString(lm, in);
+    else
+	{
+	char *s = replaceChars(in, oldVal, newVal);
+	char *result = lmCloneString(lm, s);  // Move to local memory
+	freeMem(s);
+	return result;
+	}
+    }
+}
+
+static char *stripAll(char *in, char *toRemove, struct lm *lm)
+/* Remove every occurrence of any of the chars in toRemove from in. */
+{
+char *result = lmCloneString(lm, in);  // Move to local memory
+char c, *s = toRemove;
+while ((c = *s++) != 0)
+    stripChar(result, c);
+return result;
+}
+
 
 static struct strexEval strexEvalCallBuiltIn(struct strexParse *p, 
     void *record, StrexEvalLookup lookup, struct lm *lm)
@@ -867,7 +1035,7 @@ switch (builtIn->func)
         struct strexEval b = strexLocalEval(p->children->next, record, lookup, lm);
         struct strexEval c = strexLocalEval(p->children->next->next, record, lookup, lm);
 	char *between = stringBetween(a.val.s, c.val.s, b.val.s);
-	res.val.s = lmCloneString(lm, between);
+	res.val.s = emptyForNull(lmCloneString(lm, between));
 	freeMem(between);
         break;
 	}
@@ -899,6 +1067,48 @@ switch (builtIn->func)
         struct strexEval b = strexLocalEval(p->children->next, record, lookup, lm);
         struct strexEval c = strexLocalEval(p->children->next->next, record, lookup, lm);
 	res.val.s = separateString(a.val.s, b.val.s, c.val.i, lm);
+	break;
+	}
+    case strexBuiltInUncsv:
+        {
+        struct strexEval a = strexLocalEval(p->children, record, lookup, lm);
+        struct strexEval b = strexLocalEval(p->children->next, record, lookup, lm);
+	res.val.s = uncsvString(a.val.s, b.val.i, lm);
+	break;
+	}
+    case strexBuiltInUntsv:
+        {
+        struct strexEval a = strexLocalEval(p->children, record, lookup, lm);
+        struct strexEval b = strexLocalEval(p->children->next, record, lookup, lm);
+	res.val.s = untsvString(a.val.s, b.val.i, lm);
+	break;
+	}
+    case strexBuiltInReplace:
+        {
+        struct strexEval a = strexLocalEval(p->children, record, lookup, lm);
+        struct strexEval b = strexLocalEval(p->children->next, record, lookup, lm);
+        struct strexEval c = strexLocalEval(p->children->next->next, record, lookup, lm);
+	res.val.s = replaceString(a.val.s, b.val.s, c.val.s, lm);
+	break;
+	}
+    case strexBuiltInFix:
+        {
+        struct strexEval string = strexLocalEval(p->children, record, lookup, lm);
+        struct strexEval oldVal = strexLocalEval(p->children->next, record, lookup, lm);
+        struct strexEval newVal = strexLocalEval(p->children->next->next, record, lookup, lm);
+	if (sameString(string.val.s, oldVal.val.s))
+	    {
+	    res.val.s = newVal.val.s;
+	    }
+	else
+	    res.val.s = string.val.s;
+	break;
+	}
+    case strexBuiltInStrip:
+        {
+        struct strexEval a = strexLocalEval(p->children, record, lookup, lm);
+        struct strexEval b = strexLocalEval(p->children->next, record, lookup, lm);
+	res.val.s = stripAll(a.val.s, b.val.s, lm);
 	break;
 	}
     }
@@ -1010,6 +1220,14 @@ switch (p->op)
 
     case strexOpArrayIx:
        res = strexEvalArrayIx(p, record, lookup, lm);
+       break;
+    case strexOpArrayRange:
+       res = strexEvalArrayRange(p, record, lookup, lm);
+       break;
+    case strexOpStrlen:
+       res = strexLocalEval(p->children, record, lookup, lm);
+       res.type = strexTypeInt;
+       res.val.i = strlen(res.val.s);
        break;
 
     case strexOpBuiltInCall:
