@@ -359,7 +359,7 @@ html html/%s.ncbiGene
 searchIndex name%s
 url https://www.ncbi.nlm.nih.gov/gene/?term=\$\$
 urlLabel Entrez gene
-labelFields geneName,geneName2,name
+labelFields geneName,geneName2
 group genes\n\n" "${asmId}" "${asmId}" "${searchTrix}"
 
   $scriptDir/asmHubNcbiGene.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/trackData > $buildDir/html/$asmId.ncbiGene.html
@@ -369,10 +369,10 @@ fi
 
 ###################################################################
 # CpG Islands composite
-export cpgVis="hide"
+export cpgVis="off"
 # if there is no unmasked track, then set cpgVis to pack
 if [ ! -s ${buildDir}/trackData/cpgIslands/unmasked/${asmId}.cpgIslandExtUnmasked.bb ]; then
-  cpgVis="pack"
+  cpgVis="on"
 fi
 if [ -s ${buildDir}/trackData/cpgIslands/unmasked/${asmId}.cpgIslandExtUnmasked.bb -o -s ${buildDir}/trackData/cpgIslands/masked/${asmId}.cpgIslandExt.bb ]; then
 rm -f ${buildDir}/bbi/${asmId}.cpgIslandExtUnmasked.bb ${buildDir}/bbi/${asmId}.cpgIslandExt.bb
@@ -402,7 +402,7 @@ fi
 if [ -s ${buildDir}/trackData/cpgIslands/unmasked/${asmId}.cpgIslandExtUnmasked.bb ]; then
 ln -s ${buildDir}/trackData/cpgIslands/unmasked/${asmId}.cpgIslandExtUnmasked.bb ${buildDir}/bbi/${asmId}.cpgIslandExtUnmasked.bb
 printf "    track cpgIslandExtUnmasked
-    parent cpgIslands pack
+    parent cpgIslands on
     shortLabel Unmasked CpG
     longLabel CpG Islands on All Sequence (Islands < 300 Bases are Light Green)
     priority 2
@@ -474,20 +474,25 @@ fi
 ###################################################################
 # xenoRefGene genes
 if [ -s ${buildDir}/trackData/xenoRefGene/${asmId}.xenoRefGene.bb ]; then
+rm -f $buildDir/ixIxx/${asmId}.xenoRefGene.ix
+rm -f $buildDir/ixIxx/${asmId}.xenoRefGene.ixx
 rm -f ${buildDir}/bbi/${asmId}.xenoRefGene.bb
 ln -s ${buildDir}/trackData/xenoRefGene/${asmId}.xenoRefGene.bb ${buildDir}/bbi/${asmId}.xenoRefGene.bb
+ln -s $buildDir/trackData/xenoRefGene/$asmId.xenoRefGene.ix $buildDir/ixIxx/${asmId}.xenoRefGene.ix
+ln -s $buildDir/trackData/xenoRefGene/$asmId.xenoRefGene.ixx $buildDir/ixIxx/${asmId}.xenoRefGene.ixx
 
 printf "track xenoRefGene
-shortLabel GenBank mRNAs
-longLabel GenBank mRNAs mapped to this assembly with blat procedure
+shortLabel RefSeq mRNAs
+longLabel RefSeq mRNAs mapped to this assembly
 group rna
 visibility pack
 color 180,0,0
 type bigGenePred
 bigDataUrl bbi/%s.xenoRefGene.bb
-labelFields geneName,geneName2,name
-searchIndex name,geneName
-html html/%s.xenoRefGene\n\n" "${asmId}" "${asmId}"
+labelFields name,geneName,geneName2
+searchIndex name
+searchTrix ixIxx/%s.xenoRefGene.ix
+html html/%s.xenoRefGene\n\n" "${asmId}" "${asmId}" "${asmId}"
 $scriptDir/asmHubXenoRefGene.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/trackData > $buildDir/html/$asmId.xenoRefGene.html
 fi
 

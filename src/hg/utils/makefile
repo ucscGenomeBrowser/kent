@@ -70,6 +70,7 @@ APP_SCRIPTS = ${SCRIPT_FILES}
 # List of directories to build of interest only at UCSC
 DIRS = ${buildRefresh} \
 	automation \
+	blatServersCheck \
 	buildReleaseLog \
 	checkUrlsInTable \
 	geoMirrorNode \
