@@ -1,6 +1,10 @@
 table a_strex_test id
 id "constant ID"
 stripped strip("constant ID", " aeiou")
+sub_day_of_month	separate(submission_date, '-', 2)
+neg_day_of_month  separate(submission_date, '-', -1)
+last_word split("constant ID", -1)
+penultimate_word split("constant ID", -2)
 replaceSomething replace("something", "", "default value")
 replaceNothing replace("", "", "default value")
 #assay long-RNA-seq
