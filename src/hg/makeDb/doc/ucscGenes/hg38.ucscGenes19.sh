@@ -1013,3 +1013,28 @@ cd $dir
 makeBigKnown hg38
 rm -f /gbdb/hg38/knownGene29.bb
 ln -s `pwd`/hg38.knownGene.bb /gbdb/hg38/knownGene29.bb
+
+# Build knownToMupit
+
+mkdir mupit
+cd mupit
+
+# mupit-pdbids.txt was emailed from Kyle Moad (kmoad@insilico.us.com)
+# wc -l mupit-pdbids.txt
+for db in "hg38" "hg19" "hg18"; do \
+    # get knownGene IDs and associated PDB IDS
+    # the extDb{Ref} parts come from hg/hgGene/domains.c:domainsPrint()
+    hgsql -Ne "select kgID, extAcc1 from $db.kgXref x \
+        inner join sp180404.extDbRef sp on x.spID = sp.acc \
+        inner join sp180404.extDb e on sp.extDb=e.id \
+        where x.spID != '' and e.val='PDB' order by kgID" \
+        > $db.knownToPdb.txt;
+    # filter out pdbIds not found in mupit
+    cat mupit-pdbids.txt | tr '[a-z]' '[A-Z]' | \
+        grep -Fwf - $db.knownToPdb.txt >  $db.knownToMupit.txt;
+    # check that it filtered correctly:
+    # cut -f2 $db.knownToMuipit.txt | sort -u | wc -l;
+    # load new table for hgGene/hgc
+    hgLoadSqlTab $db knownToMupit ~/kent/src/hg/lib/knownTo.sql $db.knownToMupit.txt
+done
+
