@@ -59,6 +59,7 @@ enum strexBuiltInFunc
     strexBuiltInReplace,
     strexBuiltInFix,
     strexBuiltInStrip,
+    strexBuiltInLen,
     };
 
 struct strexBuiltIn
@@ -66,6 +67,7 @@ struct strexBuiltIn
     {
     char *name;		/* Name in strex language:  trim, split, etc */
     enum strexBuiltInFunc func;  /* enum version: strexBuiltInTrim strexBuiltInSplit etc. */
+    enum strexType returnType;	 /* Type of return value */
     int paramCount;	/* Number of parameters, not flexible in this language! */
     enum strexType *paramTypes;  /* Array of types, one for each parameter */
     };
@@ -95,6 +97,7 @@ enum strexOp
     strexOpSymbol,	/* A symbol name. */
 
     strexOpBuiltInCall,	/* Call a built in function */
+    strexOpPick,	/* Similar to built in but pick deserves it's own op. */
 
     strexOpArrayIx,	/* An array with an index. */
     strexOpArrayRange,	/* An array with a range. */
@@ -152,17 +155,18 @@ static enum strexType stringStringInt[] = {strexTypeString, strexTypeString, str
 /* There's one element here for each built in function.  There's also a few switches you'll need to
  * fill in if you add a new built in function. */
 static struct strexBuiltIn builtins[] = {
-    { "trim", strexBuiltInTrim, 1, oneString, },
-    { "between", strexBuiltInBetween, 3, threeStrings },
-    { "split", strexBuiltInSplit, 2, stringInt },
-    { "now", strexBuiltInNow, 0, NULL },
-    { "md5", strexBuiltInMd5, 1, oneString },
-    { "separate", strexBuiltInSeparate, 3, stringStringInt },
-    { "uncsv", strexBuiltInUncsv, 2, stringInt },
-    { "untsv", strexBuiltInUntsv, 2, stringInt },
-    { "replace", strexBuiltInReplace, 3, threeStrings },
-    { "fix", strexBuiltInFix, 3, threeStrings },
-    { "strip", strexBuiltInStrip, 2, twoStrings },
+    { "trim", strexBuiltInTrim, strexTypeString, 1, oneString, },
+    { "between", strexBuiltInBetween, strexTypeString, 3, threeStrings },
+    { "split", strexBuiltInSplit, strexTypeString, 2, stringInt },
+    { "now", strexBuiltInNow, strexTypeString, 0, NULL },
+    { "md5", strexBuiltInMd5, strexTypeString, 1, oneString },
+    { "separate", strexBuiltInSeparate, strexTypeString, 3, stringStringInt },
+    { "uncsv", strexBuiltInUncsv, strexTypeString, 2, stringInt },
+    { "untsv", strexBuiltInUntsv, strexTypeString, 2, stringInt },
+    { "replace", strexBuiltInReplace, strexTypeString, 3, threeStrings },
+    { "fix", strexBuiltInFix, strexTypeString, 3, threeStrings },
+    { "strip", strexBuiltInStrip, strexTypeString, 2, twoStrings },
+    { "len", strexBuiltInLen, strexTypeInt, 1, oneString},
 };
 
 static struct hash *hashBuiltIns()
@@ -211,10 +215,20 @@ p->type = type;
 return p;
 }
 
-static void strexValDump(union strexVal val, enum strexType type, FILE *f)
+static void strexParseValDump(struct strexParse *p, FILE *f)
 /* Dump out value to file. */
 {
-switch (type)
+union strexVal val = p->val;
+switch (p->op)
+    {
+    case strexOpBuiltInCall:
+        fprintf(f, "%s", val.builtIn->name);
+	return;
+    default:
+        break;
+    }
+
+switch (p->type)
     {
     case strexTypeBoolean:
         fprintf(f, "%s", (val.b ? "true" : "false") );
@@ -249,6 +263,7 @@ switch (type)
 	return "floating point";
 	break;
     default:
+	uglyf("Weird, type is %d\n", (int)type);
         internalErr();
 	return NULL;
     }
@@ -304,6 +319,8 @@ switch (op)
 
     case strexOpBuiltInCall:
         return "strexOpBuiltInCall";
+    case strexOpPick:
+        return "strexOpPick";
 
     case strexOpArrayIx:
         return "strexOpArrayIx";
@@ -322,7 +339,7 @@ void strexParseDump(struct strexParse *p, int depth, FILE *f)
 {
 spaceOut(f, 3*depth);
 fprintf(f, "%s ", strexOpToString(p->op));
-strexValDump(p->val, p->type,  f);
+strexParseValDump(p,  f);
 fprintf(f, "\n");
 struct strexParse *child;
 for (child = p->children; child != NULL; child= child->next)
@@ -554,7 +571,7 @@ static struct strexParse *strexParseFunction(struct strexIn *in)
 *            strexParse(b)
 *            strexParse(c)
 * or something like that.  With no parameters 
-*            strexParseFunction */
+*        strexOpBuiltInCall */
 {
 struct tokenizer *tkz = in->tkz;
 struct strexParse *function = strexParseAtom(in);
@@ -569,50 +586,99 @@ else if (tok[0] == '(')
 
     /* Look up function to call and complain if it doesn't exist */
     char *functionName = function->val.s;
-    struct strexBuiltIn *builtIn = hashFindVal(in->builtInHash, functionName);
-    if (builtIn == NULL)
-        errAbort("No built in function %s exists line %d of %s", functionName, tkz->lf->lineIx,
-	    tkz->lf->fileName);
 
-    /* We're going to reuse this current op */
-    function->op = strexOpBuiltInCall;
-    function->type = strexTypeString;
-    function->val.builtIn = builtIn;
-
-    tok = tokenizerMustHaveNext(tkz);
-    if (tok[0] != ')')
+    /* Deal with special named ops like pick */
+    if (sameString(functionName, "pick"))
         {
-	tokenizerReuse(tkz);
+	/* Yay, the pick operation.  It looks like
+	 *    pick( keyExp,  key1, val1, key2, val2, ..., keyN, valN)
+	 * the logic is to evaluate keyExp, and then pick one of the valN's to return,
+	 * the one where the keyN is the same as keyExp */
+	struct strexParse *keyExp = strexParseExpression(in);
+	slAddHead(&function->children, keyExp);
+	skipOverRequired(in, ",");
+
+	struct strexParse *firstVal = NULL;
 	for (;;)
 	    {
-	    struct strexParse *param = strexParseExpression(in);
-	    slAddHead(&function->children, param);
+	    struct strexParse *key = strexParseCoerce(strexParseExpression(in), keyExp->type);
+	    slAddHead(&function->children, key);
+	    skipOverRequired(in, ":");
+	    struct strexParse *val = strexParseExpression(in);
+	    if (firstVal == NULL)
+	        firstVal = val;
+	    else
+		{
+		if (firstVal->type != val->type)
+		    {
+		    errAbort("Mixed value types %s and %s in pick() expression line %d of %s",
+		        strexTypeToString(firstVal->type), strexTypeToString(val->type),
+			tkz->lf->lineIx, tkz->lf->fileName);
+		    }
+	        val = strexParseCoerce(val, firstVal->type);
+		}
+	    slAddHead(&function->children, val);
 	    tok = tokenizerMustHaveNext(tkz);
 	    if (tok[0] == ')')
-	        break;
+		break;
 	    else if (tok[0] != ',')
-	        errAbort("Error in parameter list for %s line %d of %s", function->val.s, 
+		errAbort("Error in pick parameter list line %d of %s", 
 		    tkz->lf->lineIx, tkz->lf->fileName);
 	    }
 	slReverse(&function->children);
-	}
 
-    /* Check function parameter count */
-    int childCount = slCount(function->children);
-    if (childCount != builtIn->paramCount)
-        errAbort("Function %s has %d parameters but needs %d line %d of %s",
-	    builtIn->name, childCount, builtIn->paramCount, tkz->lf->lineIx, tkz->lf->fileName);
-	    
-    /* Check function parameter types */
-    int i;
-    struct strexParse *p;
-    for (i=0, p=function->children; i<childCount; ++i, p = p->next)
-        {
-	if (p->type != builtIn->paramTypes[i])
+	/* Going to reuse current op, turn it into pick */
+	function->op = strexOpPick;
+	function->type = firstVal->type;
+	}
+    else
+	{
+	/* It's a builtin function as opposed to a special op.  Figure out which one.*/
+	struct strexBuiltIn *builtIn = hashFindVal(in->builtInHash, functionName);
+	if (builtIn == NULL)
+	    errAbort("No built in function %s exists line %d of %s", functionName, tkz->lf->lineIx,
+		tkz->lf->fileName);
+
+	/* We're going to reuse this current op */
+	function->op = strexOpBuiltInCall;
+	function->type = builtIn->returnType;
+	function->val.builtIn = builtIn;
+
+	tok = tokenizerMustHaveNext(tkz);
+	if (tok[0] != ')')
 	    {
-	    errAbort("Parameter #%d to %s needs to be type %s not %s line %d of %s",
-		i, builtIn->name,  strexTypeToString(builtIn->paramTypes[i]), 
-		strexTypeToString(p->type), tkz->lf->lineIx, tkz->lf->fileName);
+	    tokenizerReuse(tkz);
+	    for (;;)
+		{
+		struct strexParse *param = strexParseExpression(in);
+		slAddHead(&function->children, param);
+		tok = tokenizerMustHaveNext(tkz);
+		if (tok[0] == ')')
+		    break;
+		else if (tok[0] != ',')
+		    errAbort("Error in parameter list for %s line %d of %s", function->val.s, 
+			tkz->lf->lineIx, tkz->lf->fileName);
+		}
+	    slReverse(&function->children);
+	    }
+
+	/* Check function parameter count */
+	int childCount = slCount(function->children);
+	if (childCount != builtIn->paramCount)
+	    errAbort("Function %s has %d parameters but needs %d line %d of %s",
+		builtIn->name, childCount, builtIn->paramCount, tkz->lf->lineIx, tkz->lf->fileName);
+		
+	/* Check function parameter types */
+	int i;
+	struct strexParse *p;
+	for (i=0, p=function->children; i<childCount; ++i, p = p->next)
+	    {
+	    if (p->type != builtIn->paramTypes[i])
+		{
+		errAbort("Parameter #%d to %s needs to be type %s not %s line %d of %s",
+		    i, builtIn->name,  strexTypeToString(builtIn->paramTypes[i]), 
+		    strexTypeToString(p->type), tkz->lf->lineIx, tkz->lf->fileName);
+		}
 	    }
 	}
     }
@@ -672,7 +738,7 @@ else if (tok[0] == '[')
 	    {
 	    struct strexParse *secondIndex;
 	    tok = tokenizerMustHaveNext(tkz);
-	    if (tok[0] == ']')  // Case where second half of rang is empty
+	    if (tok[0] == ']')  // Case where second half of range is empty
 		{
 	        tokenizerReuse(tkz);
 		secondIndex = strexParseNew(strexOpStrlen, strexTypeInt);
@@ -878,6 +944,7 @@ switch (r.type)
     {
     case strexTypeBoolean:
         r.val.s = (r.val.b ? "true" : "false");
+	break;
     case strexTypeString:
 	break;	/* It's already done. */
     case strexTypeInt:
@@ -889,6 +956,7 @@ switch (r.type)
 	r.val.s = buf;
 	break;
     default:
+	uglyf("Weird, r.type is %s\n", strexTypeToString(r.type));
 	internalErr();
 	r.val.s = NULL;
 	break;
@@ -1165,11 +1233,12 @@ return result;
 
 static struct strexEval strexEvalCallBuiltIn(struct strexParse *p, 
     void *record, StrexEvalLookup lookup, struct lm *lm)
-/* Handle parse tree generated by an indexed array. */
+/* Handle parse tree generated by call to a built in function. */
 {
 struct strexBuiltIn *builtIn = p->val.builtIn;
 struct strexEval res;
-res.type = strexTypeString;
+res.type = builtIn->returnType;
+
 switch (builtIn->func)
     {
     case strexBuiltInTrim:
@@ -1260,9 +1329,82 @@ switch (builtIn->func)
 	res.val.s = stripAll(a.val.s, b.val.s, lm);
 	break;
 	}
+    case strexBuiltInLen:
+        {
+	uglyf("builtInLen\n");
+        struct strexEval a = strexLocalEval(p->children, record, lookup, lm);
+	uglyf(" of %s\n", a.val.s);
+	res.val.i = strlen(a.val.s);
+	uglyf(" = %lld\n", res.val.i);
+	break;
+	}
     }
 return res;
 }
+
+static struct strexEval nullValForType(enum strexType type)
+/* Return 0, "", 0.0 depending */
+{
+struct strexEval res = {.type=type};
+switch (type)
+    {
+     case strexTypeInt:
+	  res.val.i = 0;
+	  break;
+     case strexTypeDouble:
+	  res.val.x = 0.0;
+	  break;
+     case strexTypeBoolean:
+	  res.val.b = FALSE;
+	  break;
+     case strexTypeString:
+	  res.val.s = "";
+	  break;
+    }
+return res;
+}
+
+static struct strexEval strexEvalPick(struct strexParse *pick, void *record, StrexEvalLookup lookup,
+    struct lm *lm)
+/* Evaluate a pick operator. */
+{
+/* Evaluate the keyValue */
+struct strexParse *p = pick->children;
+struct strexEval keyVal = strexLocalEval(p, record, lookup, lm);
+p = p->next;
+
+struct strexEval res;
+boolean gotMatch = FALSE;
+while (p != NULL)
+    {
+    struct strexEval key = strexLocalEval(p, record, lookup, lm);
+    p = p->next;  // Parser guarantees this non-null
+    struct strexParse *valExp = p;
+    p = p->next;
+    switch (key.type)
+         {
+	 case strexTypeInt:
+	      gotMatch = (keyVal.val.i == key.val.i);
+	      break;
+	 case strexTypeDouble:
+	      gotMatch = (keyVal.val.x == key.val.x);
+	      break;
+	 case strexTypeBoolean:
+	      gotMatch = (keyVal.val.b = key.val.b);
+	      break;
+	 case strexTypeString:
+	      gotMatch = sameString(keyVal.val.s, key.val.s);
+	      break;
+	 }
+    if (gotMatch)
+	 {
+         return strexLocalEval(valExp, record, lookup, lm);
+	 }
+    }
+res = nullValForType(pick->type);
+return res;
+}
+
 
 
 static struct strexEval strexLocalEval(struct strexParse *p, void *record, StrexEvalLookup lookup, 
@@ -1379,9 +1521,14 @@ switch (p->op)
        res.val.i = strlen(res.val.s);
        break;
 
+    /* More complicated ops. */
     case strexOpBuiltInCall:
        res = strexEvalCallBuiltIn(p, record, lookup, lm);
        break;
+    case strexOpPick:
+       res = strexEvalPick(p, record, lookup, lm);
+       break;
+
 
     /* Mathematical ops, simple binary type */
     case strexOpAdd:
@@ -1395,7 +1542,6 @@ switch (p->op)
     case strexOpAnd:
        res = strexEvalAnd(p, record, lookup, lm);
        break;
-
 
     default:
         errAbort("Unknown op %s\n", strexOpToString(p->op));

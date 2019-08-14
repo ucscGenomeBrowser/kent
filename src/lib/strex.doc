@@ -92,6 +92,13 @@ fix(string, target, newString) - similar to replace but works at the whole strin
     example to give something a value if non is present
 	    fix(requiredField, "", "reasonable default value")
 
+pick(query, key1:val1, key2:val2, ... keyN:valN)
+    Looks through keys for one that matches query, and returns associated value if
+    it finds it.  Otherwise returns empty string.
+    Can be used to apply different expressions to parsing in different conditions:
+         pick(species, "human" : ethnicity,  "mouse"  : strain )
+        
+
 md5(string) - returns an MD5 sum digest/hash of string. Useful for creating IDs out of large or
             merged fields. 
 
