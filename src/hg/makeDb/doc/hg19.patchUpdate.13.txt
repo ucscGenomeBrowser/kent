@@ -225,7 +225,7 @@
     cut -f 1 chrom.sizes.p13 \
     | grep -E '_(alt|fix|hap.*)$' \
     | sed -re 's/^/hg19.2bit:/;' \
-      > hg19.altsAndFixes
+      > hg19.altsAndFixes.p13
 
 
 #############################################################################

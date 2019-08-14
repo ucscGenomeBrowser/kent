@@ -182,7 +182,7 @@
     cut -f 1 chrom.sizes.p12 \
     | grep -E '_(alt|fix)$' \
     | sed -re 's/^/hg38.2bit:/;' \
-      > hg38.altsAndFixes
+      > hg38.altsAndFixes.p12
 
 
 #########################################################################
