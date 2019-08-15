@@ -27,10 +27,10 @@ return optionVal(key, NULL);
 void strexCalc(char *expression)
 /* strexCalc - String expression calculator, mostly to test strex expression evaluator.. */
 {
-struct strexParse *parsed = strexParseString(expression, expression, 0);
+struct strexParse *parsed = strexParseString(expression, expression, 0, "options", symLookup);
 if (verboseLevel() > 1)
     strexParseDump(parsed, 0, stderr);
-char *result = strexEvalAsString(parsed, NULL, symLookup);
+char *result = strexEvalAsString(parsed, "options", symLookup);
 printf("%s\n", result);
 }
 
