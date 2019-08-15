@@ -63,6 +63,10 @@ enum strexBuiltInFunc
     strexBuiltInSymbol,
     strexBuiltInLower,
     strexBuiltInUpper,
+    strexBuiltInIn, 
+    strexBuiltInStarts,
+    strexBuiltInEnds,
+    strexBuiltInSame,
     };
 
 struct strexBuiltIn
@@ -101,6 +105,7 @@ enum strexOp
 
     strexOpBuiltInCall,	/* Call a built in function */
     strexOpPick,	/* Similar to built in but pick deserves it's own op. */
+    strexOpConditional,	/* Conditional trinary operation */
 
     strexOpArrayIx,	/* An array with an index. */
     strexOpArrayRange,	/* An array with a range. */
@@ -175,6 +180,10 @@ static struct strexBuiltIn builtins[] = {
     { "symbol", strexBuiltInSymbol, strexTypeString, 2, twoStrings },
     { "upper", strexBuiltInUpper, strexTypeString, 1, oneString },
     { "lower", strexBuiltInLower, strexTypeString, 1, oneString },
+    { "in", strexBuiltInIn, strexTypeBoolean, 2, twoStrings },
+    { "starts", strexBuiltInStarts, strexTypeBoolean, 2, twoStrings}, 
+    { "ends", strexBuiltInEnds, strexTypeBoolean, 2, twoStrings}, 
+    { "same", strexBuiltInSame, strexTypeBoolean, 2, twoStrings}, 
 };
 
 static struct hash *hashBuiltIns()
@@ -274,7 +283,6 @@ switch (type)
 	return "floating point";
 	break;
     default:
-	uglyf("Weird, type is %d\n", (int)type);
         internalErr();
 	return NULL;
     }
@@ -332,6 +340,8 @@ switch (op)
         return "strexOpBuiltInCall";
     case strexOpPick:
         return "strexOpPick";
+    case strexOpConditional:
+        return "strexOpConditional";
 
     case strexOpArrayIx:
         return "strexOpArrayIx";
@@ -616,7 +626,7 @@ else if (tok[0] == '(')
 	 * the one where the keyN is the same as keyExp */
 	struct strexParse *keyExp = strexParseExpression(in);
 	slAddHead(&function->children, keyExp);
-	skipOverRequired(in, ",");
+	skipOverRequired(in, "?");
 
 	struct strexParse *firstVal = NULL;
 	for (;;)
@@ -921,11 +931,47 @@ for (;;)
     }
 }
 
+static struct strexParse *strexParseConditional(struct strexIn *in)
+/* Handle the ternary operator ?:  usually written as ( boolean ? trueExp : falseExp)
+ * because of it's ridiculously low precedence.  Makes this parse tree:
+ *         strexOpConditional
+ *            boolean exp  (always boolean type)
+ *            true exp     (same type as false exp)
+ *            false exp    (same type as true exp)      */
+{
+struct tokenizer *tkz = in->tkz;
+struct strexParse *p = strexParseOr(in);
+char *tok = tokenizerNext(tkz);
+if (tok == NULL)
+    tokenizerReuse(tkz);
+else if (tok[0] == '?')
+    {
+    struct strexParse *booleanExp = strexParseCoerce(p, strexTypeBoolean);
+    struct strexParse *trueExp = strexParseExpression(in);
+    skipOverRequired(in, ":");
+    struct strexParse *falseExp = strexParseExpression(in);
+    if (trueExp->type != falseExp->type)
+	errAbort("Mixed value types %s and %s in conditional expression (?:) line %d of %s",
+	    strexTypeToString(trueExp->type), strexTypeToString(falseExp->type),
+	    tkz->lf->lineIx, tkz->lf->fileName);
+
+    /* Make conditional expression and hook up it's three children. */
+    struct strexParse *conditional = strexParseNew(strexOpConditional, trueExp->type);
+    conditional->children = booleanExp;
+    booleanExp->next = trueExp;
+    trueExp->next = falseExp;
+    p = conditional;
+    }
+else
+    tokenizerReuse(tkz);
+return p;
+}
+
 
 static struct strexParse *strexParseExpression(struct strexIn *in)
 /* Parse out an expression. Leaves input at next expression. */
 {
-return strexParseOr(in);
+return strexParseConditional(in);
 }
 
 static void ensureAtEnd(struct strexIn *in)
@@ -977,7 +1023,6 @@ switch (r.type)
 	r.val.s = buf;
 	break;
     default:
-	uglyf("Weird, r.type is %s\n", strexTypeToString(r.type));
 	internalErr();
 	r.val.s = NULL;
 	break;
@@ -1404,6 +1449,34 @@ switch (builtIn->func)
 	touppers(res.val.s);
 	break;
 	}
+    case strexBuiltInIn: 
+        {
+        struct strexEval string = strexLocalEval(p->children, record, lookup, lm);
+        struct strexEval query = strexLocalEval(p->children->next, record, lookup, lm);
+	res.val.b = (strstr(string.val.s, query.val.s) != NULL);
+	break;
+	}
+    case strexBuiltInStarts:
+        {
+        struct strexEval starts = strexLocalEval(p->children, record, lookup, lm);
+        struct strexEval string = strexLocalEval(p->children->next, record, lookup, lm);
+	res.val.b = startsWith(starts.val.s, string.val.s);
+	break;
+	}
+    case strexBuiltInEnds:
+        {
+        struct strexEval string = strexLocalEval(p->children, record, lookup, lm);
+        struct strexEval end = strexLocalEval(p->children->next, record, lookup, lm);
+	res.val.b = endsWith(string.val.s, end.val.s);
+	break;
+	}
+    case strexBuiltInSame:
+        {
+        struct strexEval a = strexLocalEval(p->children, record, lookup, lm);
+        struct strexEval b = strexLocalEval(p->children->next, record, lookup, lm);
+	res.val.b = (strcmp(a.val.s, b.val.s) == 0);
+	break;
+	}
     }
 return res;
 }
@@ -1468,6 +1541,20 @@ while (p != NULL)
 	 }
     }
 res = nullValForType(pick->type);
+return res;
+}
+
+static struct strexEval strexEvalConditional(struct strexParse *conditional, 
+    void *record, StrexLookup lookup, struct lm *lm)
+/* Evaluate a conditional trinary ? :  operator. */
+{
+struct strexParse *child = conditional->children;
+struct strexEval b = strexLocalEval(child, record, lookup, lm);
+struct strexEval res;
+if (b.val.b)
+    res = strexLocalEval(child->next, record, lookup, lm); 
+else
+    res = strexLocalEval(child->next->next, record, lookup, lm); 
 return res;
 }
 
@@ -1593,6 +1680,9 @@ switch (p->op)
        break;
     case strexOpPick:
        res = strexEvalPick(p, record, lookup, lm);
+       break;
+    case strexOpConditional:
+       res = strexEvalConditional(p, record, lookup, lm);
        break;
 
 
