@@ -82,11 +82,12 @@ fix(string, target, newString) - similar to replace but works at the whole strin
     example to give something a value if non is present
 	    fix(requiredField, "", "reasonable default value")
 
-pick(query ? key1:val1, key2:val2, ... keyN:valN)
+pick(query ? key1:val1, key2:val2, ... keyN:valN, default:defaultVal)
     Looks through keys for one that matches query, and returns associated value if
-    it finds it.  Otherwise returns empty string.
+    it finds it.  Otherwise it returns the empty string unless a default is specified.
+    The default key can appear in any position, but traditionally is last or first.
     Can be used to apply different expressions to parsing in different conditions:
-         pick(species, "human" : ethnicity,  "mouse"  : strain )
+         pick(species, "human" : ethnicity,  "mouse"  : strain,  default:"unknown")
         
 (boolean ?  trueVal : falseVal)
     This is the trinary conditional expression found in C, Python and many other languages.

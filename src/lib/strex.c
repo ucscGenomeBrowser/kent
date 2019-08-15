@@ -597,6 +597,37 @@ else
     }
 }
 
+static union strexVal strexValEmptyForType(enum strexType type)
+/* Create default empty/zero value - from empty string to 0.0 */
+{
+union strexVal ret;
+switch (type)
+    {
+    case strexTypeBoolean:
+	ret.b = FALSE;
+	break;
+    case strexTypeString:
+        ret.s = "";
+	break;
+    case strexTypeInt:
+        ret.i = 0;
+	break;
+    case strexTypeDouble:
+        ret.x = 0;
+	break;
+    }
+return ret;
+}
+
+#ifdef OLD
+static struct strexEval nullValForType(enum strexType type)
+/* Return 0, "", 0.0 depending */
+{
+struct strexEval res = {.type=type, .val=strexValEmptyForType(type)};
+return res;
+}
+#endif /* OLD */
+
 static struct strexParse *strexParseFunction(struct strexIn *in)
 /* Handle the (a,b,c) in funcCall(a,b,c).  Convert it into tree:
 *         strexOpBuiltInCall
@@ -628,29 +659,56 @@ else if (tok[0] == '(')
 	 * the logic is to evaluate keyExp, and then pick one of the valN's to return,
 	 * the one where the keyN is the same as keyExp */
 	struct strexParse *keyExp = strexParseOr(in);
-	slAddHead(&function->children, keyExp);
 	skipOverRequired(in, "?");
 
+	/* Loop through parsing key/val pairs.  We'll save away the first value
+	 * and the default value if we see one. */
 	struct strexParse *firstVal = NULL;
+	struct strexParse *defaultVal = NULL;
 	for (;;)
 	    {
-	    struct strexParse *key = strexParseCoerce(strexParseExpression(in), keyExp->type);
-	    slAddHead(&function->children, key);
-	    skipOverRequired(in, ":");
-	    struct strexParse *val = strexParseExpression(in);
+	    /* Peek at next token to see if it is "default" */
+	    char *tok = tokenizerNext(tkz);
+	    boolean isDefault = FALSE;
+	    struct strexParse *val;
+	    if (sameString(tok, "default"))
+	        {
+		if (defaultVal != NULL)
+		    {
+		    errAbort("multiple defaults in pick, line %d of %s",
+		        tkz->lf->lineIx, tkz->lf->fileName);
+		    }
+		skipOverRequired(in, ":");
+		defaultVal = val = strexParseExpression(in);
+		isDefault = TRUE;
+		}
+	    else
+		{
+		/* Nope not default, back up input stream and evaluate key expression */
+		tokenizerReuse(tkz);
+		struct strexParse *key = strexParseCoerce(strexParseExpression(in), keyExp->type);
+		slAddHead(&function->children, key);
+		skipOverRequired(in, ":");
+		val = strexParseExpression(in);
+		}
+
+	    /* Keep track of overall expression type by storing the first value we see and
+	     * making sure subsequent types agree with first one. */
 	    if (firstVal == NULL)
-	        firstVal = val;
+		firstVal = val;
 	    else
 		{
 		if (firstVal->type != val->type)
 		    {
 		    errAbort("Mixed value types %s and %s in pick() expression line %d of %s",
-		        strexTypeToString(firstVal->type), strexTypeToString(val->type),
+			strexTypeToString(firstVal->type), strexTypeToString(val->type),
 			tkz->lf->lineIx, tkz->lf->fileName);
 		    }
-	        val = strexParseCoerce(val, firstVal->type);
+		val = strexParseCoerce(val, firstVal->type);
 		}
-	    slAddHead(&function->children, val);
+	    if (!isDefault)
+		slAddHead(&function->children, val);
+
 	    tok = tokenizerMustHaveNext(tkz);
 	    if (tok[0] == ')')
 		break;
@@ -659,6 +717,18 @@ else if (tok[0] == '(')
 		    tkz->lf->lineIx, tkz->lf->fileName);
 	    }
 	slReverse(&function->children);
+
+	/* Now deal with adding default value as first child */
+	if (defaultVal == NULL)
+	    {
+	    /* Need to make up empty default */
+	    defaultVal = strexParseNew(strexOpLiteral, firstVal->type);
+	    defaultVal->val = strexValEmptyForType(firstVal->type);
+	    }
+	slAddHead(&function->children, defaultVal);
+
+	/* Finally put the key expression at the very head */
+	slAddHead(&function->children, keyExp);
 
 	/* Going to reuse current op, turn it into pick */
 	function->op = strexOpPick;
@@ -1488,28 +1558,6 @@ switch (builtIn->func)
 return res;
 }
 
-static struct strexEval nullValForType(enum strexType type)
-/* Return 0, "", 0.0 depending */
-{
-struct strexEval res = {.type=type};
-switch (type)
-    {
-     case strexTypeInt:
-	  res.val.i = 0;
-	  break;
-     case strexTypeDouble:
-	  res.val.x = 0.0;
-	  break;
-     case strexTypeBoolean:
-	  res.val.b = FALSE;
-	  break;
-     case strexTypeString:
-	  res.val.s = "";
-	  break;
-    }
-return res;
-}
-
 static struct strexEval strexEvalPick(struct strexParse *pick, void *record, StrexLookup lookup,
     struct lm *lm)
 /* Evaluate a pick operator. */
@@ -1519,7 +1567,11 @@ struct strexParse *p = pick->children;
 struct strexEval keyVal = strexLocalEval(p, record, lookup, lm);
 p = p->next;
 
-struct strexEval res;
+/* Get pointer to default expression but don't evaluate it yet */
+struct strexParse *defaultExp = p;
+p = p->next;
+
+/* Loop through all the key/val pairs until find first that matches. */
 boolean gotMatch = FALSE;
 while (p != NULL)
     {
@@ -1547,8 +1599,7 @@ while (p != NULL)
          return strexLocalEval(valExp, record, lookup, lm);
 	 }
     }
-res = nullValForType(pick->type);
-return res;
+return strexLocalEval(defaultExp, record, lookup, lm);
 }
 
 static struct strexEval strexEvalConditional(struct strexParse *conditional, 
