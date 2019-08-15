@@ -35,23 +35,11 @@ errAbort(
   "options:\n"
   " -verbose=2  can show details for each server.\n"
   "\n"
-// TODO copied from another progrma, not sure it still works here.
-//  "Use the HGDB_CONF environment variable to specify which configuration to use, for example\n"
-//  "HGDB_CONF=/usr/local/apache/cgi-bin/hg.conf\n"
   );
 }
 
 
 static struct optionSpec options[] = {
-/*
-   {"chunkSize", OPTION_INT},
-   {"chunkWait", OPTION_INT},
-   {"squealSize", OPTION_INT},
-   {"purgeStart", OPTION_INT},
-   {"purgeEnd", OPTION_INT},
-   {"purgeTable", OPTION_STRING},
-   {"dryRun", OPTION_STRING},
-*/
    {"-help", OPTION_BOOLEAN},
    {NULL, 0},
 };
@@ -181,7 +169,7 @@ if (netGetString(sd, buf) != NULL)
 	char *fileName = netRecieveString(sd, buf);
 	//printf("%s\n", fileName);
 	verbose(2, "%s\n", fileName);
-	// if .nib or Kg genes for isPcr, cannot confirm the name.
+	// if .nib, cannot confirm the name.
 	if (endsWith(fileName,".nib"))
             {
 	    // DO NOTHING FOR NIBS
@@ -341,11 +329,6 @@ for (el = list; el != NULL; el = el->next)
    }
 hashElFreeList(&list);
 
-for (el = list; el != NULL; el = el->next)
-   {
-   verbose(1, "%s %d\n", el->name, ptToInt(el->val));
-   }
-hashElFreeList(&list);
 verbose(1, "\n");
 
 if (errCount > 0)
@@ -360,10 +343,6 @@ optionInit(&argc, argv, options);
 
 if ((argc != 2) || optionExists("-help"))
     usage();
-
-//char *hgdbConf = getenv("HGDB_CONF");
-//if (hgdbConf)
-//    printf("\nHGDB_CONF = %s\n\n", hgdbConf);
 
 blatServersCheck(argv[1]);
 
