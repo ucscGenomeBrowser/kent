@@ -10059,17 +10059,21 @@ if (newHighlight)
     }
 }
 
+extern boolean issueBotWarning;
+
 void doMiddle(struct cart *theCart)
 /* Print the body of an html file.   */
 {
 cart = theCart;
 measureTiming = hPrintStatus() && isNotEmpty(cartOptionalString(cart, "measureTiming"));
 if (measureTiming)
-    measureTime("Startup");
+    measureTime("Startup (bottleneck %d ms) ", botDelayMillis);
 
-hgBotDelayFrac(0.25); /* Impose a quarter of the standard CGI penalty */
-if (measureTiming)
-    measureTime("Bottleneck delay");
+if (issueBotWarning)
+    {
+    char *ip = getenv("REMOTE_ADDR");
+    botDelayMessage(ip, botDelayMillis);
+    }
 
 char *debugTmp = NULL;
 /* Uncomment this to see parameters for debugging. */

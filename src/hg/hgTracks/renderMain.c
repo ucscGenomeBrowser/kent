@@ -17,6 +17,7 @@
 #include "net.h"
 #include "hgTracks.h"
 #include "imageV2.h"
+#include "botDelay.h"
 
 static void usage()
 /* Print out usage and exit - just temporary. */
@@ -107,11 +108,14 @@ makeActiveImage(trackList, NULL);
 verboseTime(2,"After makeActiveImage");
 }
 
+boolean issueBotWarning;
+
 int main(int argc, char *argv[])
 {
 if(argc == 1)
     {
     long enteredMainTime = clock1000();
+    issueBotWarning = earlyBotCheck(enteredMainTime, "hgRenderTracks", delayFraction, warnMs, exitMs);
     // CGI call
 
     // htmlPushEarlyHandlers(); XXXX do I need to do this?

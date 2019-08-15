@@ -25,12 +25,16 @@
 #include "search.h"
 #include "imageV2.h"
 #include "extTools.h"
+#include "botDelay.h"
+#include "hgConfig.h"
 
+boolean issueBotWarning;
 
 int main(int argc, char *argv[])
 {
 long enteredMainTime = clock1000();
 measureTime(NULL);
+issueBotWarning = earlyBotCheck(enteredMainTime, "hgTracks", delayFraction, warnMs, exitMs);
 browserName = hBrowserName();
 organization = "UCSC";
 
