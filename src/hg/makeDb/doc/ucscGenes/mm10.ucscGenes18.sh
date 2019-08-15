@@ -695,6 +695,7 @@ hgsql $db -N -e 'select kgId,geneSymbol from kgXref' \
     | perl -wpe 's/^(\S+)\t(\S+)/$1\t${1}__$2/ || die;' \
       | sort -u > idSub.txt 
 # 2. Get a file of per-transcript fasta sequences that contain the sequences of each UCSC Genes transcript, with this new ID in the place of the UCSC Genes accession.   Convert that file to TwoBit format and soft-link it into /gbdb/hg38/targetDb/ 
+### NEXT TIME  use same name in blatServers table as file name!!!
 awk '{if (!found[$4]) print; found[$4]=1 }' ucscGenes.bed > nodups.bed
 subColumn 4 nodups.bed idSub.txt ucscGenesIdSubbed.bed 
 sequenceForBed -keepName -db=$db -bedIn=ucscGenesIdSubbed.bed -fastaOut=stdout  | faToTwoBit stdin kgTargetSeq${curVer}.2bit 
@@ -858,9 +859,11 @@ ln -s $dir/index/knownGene.ix  /gbdb/$db/knownGene.ix
 ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
 
 
+### NEXT TIME  use same name in blatServers table as file name!!!
 # 3. Ask cluster-admin to start an untranslated, -stepSize=5 gfServer on       
 # /gbdb/$db/targetDb/kgTargetSeq${curVer}.2bit
 
+### NEXT TIME  use same name in blatServers table as file name!!!
 # 4. On hgwdev, insert new records into blatServers and targetDb, using the 
 # host (field 2) and port (field 3) specified by cluster-admin.  Identify the
 # blatServer by the keyword "$db"Kg with the version number appended

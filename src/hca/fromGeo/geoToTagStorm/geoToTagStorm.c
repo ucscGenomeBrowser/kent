@@ -43,6 +43,22 @@ while (lineFileNext(lf, &line, NULL))
 errAbort("endLine %s not found in %s\n", target, lf->fileName);
 }
 
+void stripUnprintables(char *s)
+/* Remove all occurences of non-basic chars from s. */
+{
+char *in = s, *out = s;
+char c;
+
+for (;;)
+    {
+    c = *out = *in++;
+    if (c == 0)
+       break;
+    if (c >= 0x20 && c <= 0x7f)
+       ++out;
+    }
+}
+
 struct hash *geoSoftToTagHash(char *fileName)
 /* Read in file in GEO soft format and return it as a hash of tagStorm files,
  * keyed by the lower case section name, things like 'database' or 'series' */
@@ -152,6 +168,11 @@ while (lineFileNext(lf, &line, NULL))
 		subChar(subTag, ' ', '_');
 		subChar(subTag, '-', '_');
 		subChar(subTag, '/', '_');
+		subChar(subTag, '|', '_');
+		stripUnprintables(subTag);
+		// stripChar(subTag, '(');
+		// stripChar(subTag, ')');
+		// stripChar(subTag, '?');
 		val = skipLeadingSpaces(colonPos);
 		safef(outputTag, sizeof(outputTag), "%s.%s_%s", lcSection, tag, subTag);
 		}

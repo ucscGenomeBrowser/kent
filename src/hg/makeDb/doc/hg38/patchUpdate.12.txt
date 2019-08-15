@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # This file describes how hg38 was extended with patch sequences and annotations from grcH38P12,
-# after having been extended with grcH38P11 (see patchUpdate.11.txt).
+# after having been extended with grcH38P1 (see patchUpdate.11.txt).
 
 ##############################################################################
 # Extend main database 2bit, chrom.sizes, chromInfo (DONE - 2018-08-10 - Angie)
@@ -171,6 +171,18 @@
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/bigZips/latest/hg38.chrom.sizes
     ln -sf /hive/data/genomes/hg38/chrom.sizes.p12 \
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/bigZips/p12/hg38.p12.chrom.sizes
+
+
+#############################################################################
+# Build perSeqMax file for gfServer (hgBlat) (DONE 19-08-14 angie)
+    # When the blat server is restarted with the updated hg38.2bit file,
+    # hg38.altsAndFixes needs to be copied over along with the new hg38.2bit file,
+    # and gfServer needs to be restarted with -perSeqMax=hg38.altsAndFixes.
+    cd /hive/data/genomes/hg38
+    cut -f 1 chrom.sizes.p12 \
+    | grep -E '_(alt|fix)$' \
+    | sed -re 's/^/hg38.2bit:/;' \
+      > hg38.altsAndFixes.p12
 
 
 #########################################################################

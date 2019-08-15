@@ -119,7 +119,8 @@ while ((c = *s++) != 0)
 return TRUE;
 }
 
-struct newFieldInfo *parseFieldVal(char *name, char *input, char *fileName, int fileLineNumber)
+struct newFieldInfo *parseFieldVal(char *name, struct hash *inFieldHash,
+    char *input, char *fileName, int fileLineNumber, void *symbols, StrexLookup lookup)
 /* return a newFieldInfo based on the contents of input, which are not destroyed */
 {
 /* Make up return structure. */
@@ -156,7 +157,7 @@ else
 	else
 	    {
 	    fv->val = cloneString(s);
-	    fv->exp = strexParseString(fv->val, fileName, fileLineNumber-1);
+	    fv->exp = strexParseString(fv->val, fileName, fileLineNumber-1, symbols, lookup);
 	    fv->type = fvExp;
 	    }
 	}
@@ -240,7 +241,7 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 		warn("There is a problem with the key to table %s in %s", outTable->name, specFile);
 		warn("%s %s", uniqFr->row[keyFieldIx], uniqFr->row[differentIx]);
 		warn("%s %s", outRow[keyFieldIx], outRow[differentIx]);
-		errAbort("both exist, so key is not unique for all values of %s", 
+		errAbort("both exist, so key doesn't specify a unique %s field", 
 		    outTable->fields[differentIx]);
 		}
 	    }
@@ -266,12 +267,17 @@ void tabToTabDir(char *inTabFile, char *specFile, char *outDir)
 /* tabToTabDir - Convert a large tab-separated table to a directory full of such tables 
  * according to a specification.. */
 {
+/* Read input table */
 struct fieldedTable *inTable = fieldedTableFromTabFile(inTabFile, inTabFile, NULL, 0);
 verbose(1, "Read %d columns, %d rows from %s\n", inTable->fieldCount, inTable->rowCount,
     inTabFile);
-struct lineFile *lf = lineFileOpen(specFile, TRUE);
+
+/* Compute info on the fields */
+struct hash *inFieldHash = hashFieldIx(inTable->fields, inTable->fieldCount);
+struct symRec symbols = {inFieldHash, inTable->fields}; // Sym lookup just returns symbol name during parsing
 
 /* Read in spec file as ra file stanzas that we convert into tableInfos. */
+struct lineFile *lf = lineFileOpen(specFile, TRUE);
 struct newTableInfo *newTableList = NULL, *newTable;
 while (raSkipLeadingEmptyLines(lf, NULL))
     {
@@ -301,7 +307,8 @@ while (raSkipLeadingEmptyLines(lf, NULL))
     while (raNextTagVal(lf, &fieldName, &fieldSpec, NULL))
         {
 	verbose(2, "  fieldName %s fieldSpec ((%s))\n", fieldName, fieldSpec);
-	struct newFieldInfo *fv = parseFieldVal(fieldName, fieldSpec, lf->fileName, lf->lineIx);
+	struct newFieldInfo *fv = parseFieldVal(fieldName, inFieldHash,
+	    fieldSpec, lf->fileName, lf->lineIx, &symbols, symLookup);
 	if (fv->type == fvVar)
 	    {
 	    char *oldName = fieldSpec;
@@ -363,7 +370,6 @@ for (newTable = newTableList; newTable != NULL; newTable = newTable->next)
       }
     }
 
-struct hash *inFieldHash = hashFieldIx(inTable->fields, inTable->fieldCount);
 makeDirsOnPath(outDir);
 
 /* Output tables */
@@ -377,7 +383,7 @@ for (newTable = newTableList; newTable != NULL; newTable = newTable->next)
     /* Create output file name and save file. */
     char outTabName[FILENAME_LEN];
     safef(outTabName, sizeof(outTabName), "%s/%s.tsv", outDir, newTable->name);
-    verbose(1, "Writing %s of %d fields %d rows\n",  
+    verbose(1, "Writing %s of %d columns %d rows\n",  
 	outTabName, outTable->fieldCount, outTable->rowCount);
     fieldedTableToTabFile(outTable, outTabName);
     }
