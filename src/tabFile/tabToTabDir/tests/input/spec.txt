@@ -1,5 +1,10 @@
 table a_strex_test id
 id "constant ID"
+symboled symbol("ID_", "constant ID")
+pickedNum pick( 0, 0:"zero", 1:"one")
+pickedString pick("a", "b": "beta", "a": "alpha")
+lowered lower("NotMixedCase")
+uppered upper("NotMixedCase")
 stripped strip("constant ID", " aeiou")
 sub_day_of_month	separate(submission_date, '-', 2)
 neg_day_of_month  separate(submission_date, '-', -1)
