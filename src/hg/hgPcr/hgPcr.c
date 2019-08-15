@@ -579,6 +579,9 @@ printf("The temperature calculations are done assuming 50 mM salt and 50 nM anne
        "oligo concentration.  The code to calculate the melting temp comes from "
        "<A HREF=\"http://frodo.wi.mit.edu/primer3/input.htm\" target=_blank>"
        "Primer3</A>.");
+webNewSection("Help");
+printf("<a href='../FAQ/FAQblat.html#blat1c'>What is chr_alt & chr_fix?</a><BR>");
+printf("<a href='../FAQ/FAQblat.html#blat5'>Replicating in-Silico PCR results on local machine</a>");
 return ok;
 }
 

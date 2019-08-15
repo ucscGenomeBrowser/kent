@@ -151,8 +151,12 @@ return(ret);
 }
 
 
-int getFileList(char *hostName, char *portName, char *db)
-/* Get and display input file list. */
+int getFileList(char *hostName, char *portName, char *db, struct hash *targetDbHash)
+/* Get and display input file list. 
+ * Returns -1 for 2bit name mismatch
+ * Returns -2 for name mot found in targetDb, probably obsolete
+ * Returns -3 for targetDb.seqFile does not match fileName on gfServer
+ */
 {
 char buf[256];
 int sd = 0;
@@ -178,7 +182,31 @@ if (netGetString(sd, buf) != NULL)
 	//printf("%s\n", fileName);
 	verbose(2, "%s\n", fileName);
 	// if .nib or Kg genes for isPcr, cannot confirm the name.
-	if (!endsWith(fileName,".nib") && !strstr(db, "Kg"))  
+	if (endsWith(fileName,".nib"))
+            {
+	    // DO NOTHING FOR NIBS
+	    }
+        else if (strstr(db, "Kg"))
+	    {
+	    struct hashEl *hel = hashLookup(targetDbHash, db);
+	    if (hel == NULL)
+		{
+		warn("db %s not found in targetDb.name, probably obsolete", db);
+		ret = -2;  // name mot found in targetDb, probably obsolete
+		break;
+		}
+	    else
+		{
+		char *seqFile = hel->val;
+		if (!endsWith(seqFile, fileName))
+		    {
+		    warn("targetDb.seqFile %s does not match fileName=%s on gfServer", seqFile, twoBitName);
+		    ret = -3;  // targetSeq fileName mistmatch
+		    break;
+		    }
+		}
+	    }
+        else
 	    {
 	    if (!sameString(fileName, twoBitName))
 		{
@@ -193,6 +221,32 @@ close(sd);
 return ret;
 }
 
+void getTargetDb(struct sqlConnection *conn, struct hash *targetDbHash)
+/* read targetDb table into hash */
+{
+struct sqlResult *sr;
+char **row;
+char query[256];
+
+sqlSafef(query,sizeof(query), "select name, seqFile from targetDb");
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *name    = row[0];
+    char *seqFile = row[1];
+    struct hashEl *hel = hashLookup(targetDbHash, name);
+    if (hel == NULL)
+	{
+	hashAdd(targetDbHash, name, cloneString(seqFile));
+	}
+    else
+	{
+	warn("duplicate targetDb.name found %s", name);
+	}
+    }
+
+sqlFreeResult(&sr);
+} 
 
 void blatServersCheck(char *config)
 /* Check blatServers table against running gfServers */
@@ -200,6 +254,7 @@ void blatServersCheck(char *config)
 
 struct hash *hash = hashNew(12);
 struct hash *versionHash = hashNew(6);
+struct hash *targetDbHash = hashNew(6);
 
 char hashKey[256];
 
@@ -210,6 +265,8 @@ user     = getCfgOption(config, "user"    );
 password = getCfgOption(config, "password");
 
 conn = sqlConnectRemote(host, user, password, database);
+
+getTargetDb(conn, targetDbHash);
 
 struct sqlResult *sr;
 char **row;
@@ -245,7 +302,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     int res2 = 0;
     if (res != -1)  // if not a connection error, proceed.
 	{
-	res2 = getFileList(host, portStr, db);
+	res2 = getFileList(host, portStr, db, targetDbHash);
 	}
     safef(hashKey, sizeof hashKey, "%s:%s", host, portStr);
     struct hashEl *hel = hashLookup(hash, hashKey);
