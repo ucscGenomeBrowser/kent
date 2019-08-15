@@ -4,7 +4,7 @@ This document describes its built in functions and operators:
 +  - returns the concatenation of the surrounding strings or the addition of surrounding
      numbers.  Will convert a number to a string in mixed expressions
 
-or  - logical or operation extended to strings and numbers.  
+or - logical or operation extended to strings and numbers.  
      for logic - if any or-separated-values are true, return true, else false
      for numbers - if any or-separated non-zero numbers exist, return first one else 0
      for strings - if any or-separated non-empty strings exists, return first one else ""
@@ -13,8 +13,9 @@ or  - logical or operation extended to strings and numbers.
    For the pure string case this can be useful for setting defaults as well.  For
    instance presuming you might or might not have filled in values for the city or country
    variables in the given expression that would return a location of some sort
-	   city or country or "somewhere in the universe"
-     
+	   (city or country or "somewhere in the universe")
+   Note the parenthesis around the ors is good to have because of the very low
+   precedence of the logical operators.
 
 and - logical and operation extended to strings and numbers
      for logic - if all and-separated-values are tru, return true, else false
@@ -73,6 +74,13 @@ uncsv(string, index) - do comma separated value extraction of string. Includes q
 trim(string) - returns copy of string with leading and trailing spaces removed
 
 strip(string, toRemove) - remove all occurrences of any character in toRemove from string
+
+symbol(prefix, string) - turn string into a computer usable symbol that starts with the given
+            prefix.  To create the rest of the symbol,  the string is mangled.  First the 
+	    spaces, tabs, and newlines are all turned into _ chars,  then any remaining 
+	    characters that aren't ascii letters or numerical digits are removed.  If the result
+	    is 32 characters or less it's used, but if it's longer it's converted into an MD5
+	    sum.
 
 replace(string, oldPart, newPart) - returns string with all instances of old replaced by new.
 	    The cases where either old or new are empty string are useful special cases.
