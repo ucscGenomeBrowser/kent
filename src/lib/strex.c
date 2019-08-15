@@ -386,6 +386,9 @@ if (!sameWord(in->tkz->string, expecting))
 static struct strexParse *strexParseExpression(struct strexIn *in);
 /* Parse out an expression with a single value */
 
+static struct strexParse *strexParseOr(struct strexIn *in);
+/* Parse out logical/string or binary operator. Lowest level logical op, before conditional */
+
 static struct strexParse *strexParseAtom(struct strexIn *in)
 /* Return low level (symbol or literal) or a parenthesis enclosed expression. */
 {
@@ -624,7 +627,7 @@ else if (tok[0] == '(')
 	 *    pick( keyExp,  key1, val1, key2, val2, ..., keyN, valN)
 	 * the logic is to evaluate keyExp, and then pick one of the valN's to return,
 	 * the one where the keyN is the same as keyExp */
-	struct strexParse *keyExp = strexParseExpression(in);
+	struct strexParse *keyExp = strexParseOr(in);
 	slAddHead(&function->children, keyExp);
 	skipOverRequired(in, "?");
 
@@ -898,7 +901,7 @@ for (;;)
 }
 
 static struct strexParse *strexParseOr(struct strexIn *in)
-/* Parse out plus or minus. */
+/* Parse out logical/string or binary operator. */
 {
 struct tokenizer *tkz = in->tkz;
 struct strexParse *p = strexParseAnd(in);
@@ -1359,8 +1362,12 @@ switch (builtIn->func)
 	}
     case strexBuiltInNow:
         {
-	time_t now = time(NULL);
-	res.val.s = lmCloneString(lm, ctime(&now));
+	time_t now;
+	time(&now);
+	char buf[64];
+	// strftime(buf, sizeof buf, "%FT%TZ", gmtime(&now));
+	strftime(buf, sizeof buf, "%FT%T%z", localtime(&now));
+	res.val.s = lmCloneString(lm, buf);
 	eraseTrailingSpaces(res.val.s);
 	break;
 	}
