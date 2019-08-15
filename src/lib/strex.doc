@@ -127,3 +127,7 @@ now() - returns current time and date in ISO 1806 format using the variant that 
         time and timezone,   for instance 2019-08-14T23:35:22-0700 for 11:35 pm in California
 	during daylight savings time.
 
+import("file.strex") - act as if the contents of file.strex, which should be a valid 
+        strex expression but one that can span multiple lines, were here instead of this
+	import expression.  This is useful for debugging and reusing complex expressions.
+	(You'll get line numbers from the file in the error message, which helps localize it.)

@@ -153,6 +153,7 @@ struct strexIn
     struct hash *builtInHash;  /* Hash of built in functions */
     void *symbols;	    /* NULL or pointer to a symbol table to check */
     StrexLookup lookup; /* lookup something in symbol table if we have it */
+    struct hash *importHash;   /* Hash of importex expressions keyed by file name */
     };
 
 /* Some predefined lists of parameter types */
@@ -196,18 +197,17 @@ for (i=0; i<ArraySize(builtins); ++i)
 return hash;
 }
 
-static struct strexIn *strexInNew(char *expression, char *fileName, int fileLineNumber,
+static struct strexIn *strexInNew(struct lineFile *lf,
     void *symbols, StrexLookup lookup)
-/* Return a new strexIn structure wrapped around expression */
+/* Return a new strexIn structure wrapped around lineFile */
 {
-struct lineFile *lf = lineFileOnString(fileName, TRUE, expression);
-lf->lineIx = fileLineNumber;
 struct tokenizer *tkz = tokenizerOnLineFile(lf);
 tkz->leaveQuotes = TRUE;
 struct strexIn *si;
 AllocVar(si);
 si->tkz = tkz;
 si->builtInHash = hashBuiltIns();
+si->importHash = hashNew(4);
 si->symbols = symbols;
 si->lookup = lookup;
 return si;
@@ -220,6 +220,7 @@ struct strexIn *si = *pSi;
 if (si != NULL)
     {
     hashFree(&si->builtInHash);
+    hashFree(&si->importHash);
     tokenizerFree(&si->tkz);
     freez(pSi);
     }
@@ -372,6 +373,18 @@ static void expectingGot(struct strexIn *in, char *expecting, char *got)
 {
 errAbort("Expecting %s, got %s, line %d of %s", expecting, got, in->tkz->lf->lineIx,
 	in->tkz->lf->fileName);
+}
+
+static void strexParseFree(struct strexParse **pParse)
+/* Free up memory resources associeated with a strexParse */
+{
+struct strexParse *p = *pParse;
+if (p != NULL)
+    {
+    if (p->type == strexTypeString)
+	freeMem(p->val.s);
+    freez(pParse);
+    }
 }
 
 static void skipOverRequired(struct strexIn *in, char *expecting)
@@ -734,6 +747,34 @@ else if (tok[0] == '(')
 	function->op = strexOpPick;
 	function->type = firstVal->type;
 	}
+    else if sameString(functionName, "import")
+        {
+	/* We save away the current op for now.  The function variable is where we'll
+	 * return the expression we import. */
+	struct strexParse *importer = function;
+	function = NULL;
+
+	/* Parse out the file name.  We'll insist it's a constant string */
+	struct strexParse *fileExp = strexParseAtom(in);
+	if (fileExp->op != strexOpLiteral || fileExp->type != strexTypeString)
+	   errAbort("Paramater to import needs to be a quoted file name line %d of %s",
+	       tkz->lf->lineIx,  tkz->lf->fileName);
+	char *fileName = fileExp->val.s;
+	
+	/* Look up imported parse tree in hash,  reading it from file if need be. */
+	function = hashFindVal(in->importHash, fileName);
+	if (function == NULL)
+	    {
+	    function = strexParseFile(fileName, in->symbols, in->lookup);
+	    hashAdd(in->importHash, fileName, function);
+	    }
+
+	skipOverRequired(in, ")");
+
+	/* Clean up */
+	strexParseFree(&fileExp);
+	strexParseFree(&importer);
+	}
     else
 	{
 	/* It's a builtin function as opposed to a special op.  Figure out which one.*/
@@ -1059,9 +1100,24 @@ if (leftover != NULL)
 
 struct strexParse *strexParseString(char *s, char *fileName, int fileLineNumber,
     void *symbols, StrexLookup lookup)
-/* Parse out string expression in s and return root of tree. */
+/* Parse out string expression in s and return root of tree.  The fileName and
+ * fileLineNumber should be filled in with where string came from.  */
 {
-struct strexIn *si = strexInNew(s, fileName, fileLineNumber, symbols, lookup);
+struct lineFile *lf = lineFileOnString(fileName, TRUE, s);
+lf->lineIx = fileLineNumber;
+struct strexIn *si = strexInNew(lf, symbols, lookup);
+struct strexParse *parseTree = strexParseExpression(si);
+ensureAtEnd(si);
+strexInFree(&si);
+return parseTree;
+}
+
+struct strexParse *strexParseFile(char *fileName, void *symbols, StrexLookup lookup)
+/* Parse string expression out of a file */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct strexIn *si = strexInNew(lf, symbols, lookup);
+si->tkz->uncommentShell = TRUE;   // Yay to comments.
 struct strexParse *parseTree = strexParseExpression(si);
 ensureAtEnd(si);
 strexInFree(&si);

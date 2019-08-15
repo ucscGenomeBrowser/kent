@@ -19,6 +19,9 @@ struct strexParse *strexParseString(char *s, char *fileName, int fileLineNumber,
  *    about missing variables rather than just generating empty strings when 
  *    they are referenced. */
 
+struct strexParse *strexParseFile(char *fileName, void *symbols, StrexLookup lookup);
+/* Similar to strexParseString, but get input from a file rather than a string */
+
 void strexParseDump(struct strexParse *p, int depth, FILE *f);
 /* Dump out strexParse tree and children for debugging.  Usual depth is 0. */
 
