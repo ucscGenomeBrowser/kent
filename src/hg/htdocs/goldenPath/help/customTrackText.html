@@ -8,7 +8,8 @@ custom annotation tracks are viewable only on the machine from which they were u
 automatically discarded 48 hours after the last time they are accessed, unless they are saved in a 
 <a href="/goldenPath/help/hgSessionHelp.html#CTs">Session</a>. Optionally, users can make custom 
 annotations viewable by others as well. For a more stable option for custom annotations, we suggest
-using <a href="hgTrackHubHelp.html" target="_blank">track hubs</a>. A third, more technical, option is to operate a mirror. Custom tracks work well for quickly displaying data, while track hubs are 
+using <a href="hgTrackHubHelp.html" target="_blank">track hubs</a>. A third, more technical, option
+is to operate a mirror. Custom tracks work well for quickly displaying data, while track hubs are 
 more configurable and permanent.</p>
 <p>
 Custom tracks are a wonderful tool for research scientists using the Genome Browser. Because space 
@@ -672,7 +673,13 @@ The URL must contain 3 pieces of information specific to your annotation data:</
   <em>db</em> parameter, <code>db=database_name</code>, where <em>database_name</em> is the UCSC 
   code for the genome assembly. For a list of these codes, see the Genome Browser 
   <a href="/FAQ/FAQreleases.html#release1" target="_blank">FAQ</a>. Examples of this include: 
-  db=hg16 (Human July 2003 assembly), db=mm6 (Mouse Mar. 2005 assembly).</li> 
+  db=hg16 (Human July 2003 assembly), db=mm6 (Mouse Mar. 2005 assembly).</li>
+  <li>Additionally, a particular genome assembly, including assembly hubs, can be specified using
+  the <em>genome</em> parameter, <code>genome=database_name</code>, which acts in the same manner as
+  the <em>db</em> parameter. Here is an example using the house mouse (<i>Mus musculus</i>, 129S1_SvImJ)
+  assembly hub:
+  <a href="http://genome.ucsc.edu/cgi-bin/hgTracks?genome=129S1_SvImJ&hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt"
+  target="_blank">http://genome.ucsc.edu/cgi-bin/hgTracks?genome=129S1_SvImJ&hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt</a></li>
   <li>
   The genome position to which the Genome Browser should initially open. This information is of the 
   form <code>position=chr_position</code>, where <em>chr_position</em> is a chromosome number, with 
