@@ -241,7 +241,7 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 		warn("There is a problem with the key to table %s in %s", outTable->name, specFile);
 		warn("%s %s", uniqFr->row[keyFieldIx], uniqFr->row[differentIx]);
 		warn("%s %s", outRow[keyFieldIx], outRow[differentIx]);
-		errAbort("both exist, so key is not unique for all values of %s", 
+		errAbort("both exist, so key doesn't specify a unique %s field", 
 		    outTable->fields[differentIx]);
 		}
 	    }
