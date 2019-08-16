@@ -35,6 +35,8 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
+long enteredMainTime = 0;
+
 struct trackDb *hTrackDbForTrackAndAncestors(char *db, char *track);
 /* Load trackDb object for a track. If need be grab its ancestors too. 
  * This does not load children. hTrackDbForTrack will handle children, and
@@ -114,7 +116,7 @@ int main(int argc, char *argv[])
 {
 if(argc == 1)
     {
-    long enteredMainTime = clock1000();
+    enteredMainTime = clock1000();
     issueBotWarning = earlyBotCheck(enteredMainTime, "hgRenderTracks", delayFraction, warnMs, exitMs);
     // CGI call
 
