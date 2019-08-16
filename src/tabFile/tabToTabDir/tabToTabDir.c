@@ -368,7 +368,6 @@ if (startsWithWord("define",  defLine))  // Whee, we got vars!
 	verbose(1, "var %s (%s)\n", varName, varSpec);
 	struct strexParse *exp = strexParseString(varSpec, lf->fileName, lf->lineIx-1, 
 	    symbols, symLookup);
-	strexParseDump(exp, 1, uglyOut);
 	struct varVal *v = varValNew(varName, exp);
 	hashAdd(varHash, varName, v);
 	slAddHead(&symbols->varList, v);
