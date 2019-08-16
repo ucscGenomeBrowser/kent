@@ -1,4 +1,8 @@
 table a_strex_test id
+untidy "big messy string with messy parts"
+tidyStart tidy("messy ", "big messy string with messy parts", "")
+tidyEnd tidy("", "big messy string with messy parts", " messy")
+tidyBoth tidy("messy ", "big messy string with messy parts", " messy")
 yes ( same("a", "a") ? "yes" : "no")
 no ( same("a", "b") ? "yes" : "no")
 cond ( ends("abc", "d") ? "D is cond" : ends("abc", "b") ? "B is cond" : ends("abc", "c") ? "C is cond" : "unmatched")
