@@ -155,7 +155,7 @@ while (lineFileNext(lf, &line, NULL))
 		}
 	    char outputTag[256];
 
-	    /* Write out the tag name, simple for most tags, but data_processing and 
+	    /* Figure out the tag name, simple for most tags, but data_processing and 
 	     * characteristics need special handling */
 	    if (sameString("characteristics", tag) || sameString("relation", tag))
 		{
