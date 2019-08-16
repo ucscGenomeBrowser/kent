@@ -306,7 +306,7 @@ while (raSkipLeadingEmptyLines(lf, NULL))
     int fieldCount = 0;
     while (raNextTagVal(lf, &fieldName, &fieldSpec, NULL))
         {
-	verbose(2, "  fieldName %s fieldSpec ((%s))\n", fieldName, fieldSpec);
+	verbose(2, "  fieldName %s fieldSpec (%s)\n", fieldName, fieldSpec);
 	struct newFieldInfo *fv = parseFieldVal(fieldName, inFieldHash,
 	    fieldSpec, lf->fileName, lf->lineIx, &symbols, symLookup);
 	if (fv->type == fvVar)
