@@ -1107,6 +1107,8 @@ struct lineFile *lf = lineFileOnString(fileName, TRUE, s);
 lf->lineIx = fileLineNumber;
 struct strexIn *si = strexInNew(lf, symbols, lookup);
 struct strexParse *parseTree = strexParseExpression(si);
+if (verboseLevel() >= 2)
+   strexParseDump(parseTree, 1, stderr);
 ensureAtEnd(si);
 strexInFree(&si);
 return parseTree;
@@ -1352,7 +1354,7 @@ for (i=0; ; ++i)
 	if (end == NULL)
 	    return lmCloneString(lm, s);
 	else
-	    return lmCloneMem(lm, s, end - s);
+	    return lmCloneStringZ(lm, s, end - s);
 	}
     s = end;
     }
@@ -1429,16 +1431,18 @@ static char *symbolify(char *prefix, char *original, struct lm *lm)
 /* Convert original to something could use as a C language symbol with dots maybe. */
 {
 int prefixSize = strlen(prefix);
-char *result = lmAlloc(lm, strlen(original) + prefixSize + 1);  // Move to local memory
-memcpy(result, prefix, prefixSize);
+int originalSize = strlen(original);
+int allocSize = prefixSize + originalSize + 1;
+char *result = lmAlloc(lm, allocSize);  // Move to local memory
+strcpy(result, prefix);
 char *in = skipLeadingSpaces(original); 
 char *out = result + prefixSize;
 char c;
 while ((c = *in++) != 0)
      {
-     if (isspace(c))
+     if (isspace(c) || c == '-' || c == '.')
 	 *out++ = '_';
-     else if (isalnum(c) || c == '.' || c == '_')
+     else if (isalnum(c) || c == '_')
          *out++ = c;
      }
 *out++ = 0;
