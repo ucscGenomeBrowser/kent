@@ -6352,6 +6352,13 @@ char *pos = NULL;
 struct slName *bl = NULL;
 
 ctList = customTracksParseCart(database, cart, &browserLines, &ctFileName);
+if (slCount(ctList) > 0) {
+  int trackCount = slCount(ctList);
+  /* add penalty in relation to number of tracks created, and adjust
+   * exitMs accordingly so that it will not hogExit at this time
+   */
+  (void) earlyBotCheck(enteredMainTime, "hgTracks", (double)(trackCount + 1) * delayFraction, warnMs, (trackCount + 1)*exitMs);
+}
 
 for (bl = browserLines; bl != NULL; bl = bl->next)
     {

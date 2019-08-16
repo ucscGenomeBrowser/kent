@@ -29,10 +29,11 @@
 #include "hgConfig.h"
 
 boolean issueBotWarning;
+long enteredMainTime = 0;
 
 int main(int argc, char *argv[])
 {
-long enteredMainTime = clock1000();
+enteredMainTime = clock1000();
 measureTime(NULL);
 issueBotWarning = earlyBotCheck(enteredMainTime, "hgTracks", delayFraction, warnMs, exitMs);
 browserName = hBrowserName();

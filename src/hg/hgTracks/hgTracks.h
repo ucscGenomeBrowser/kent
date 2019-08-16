@@ -63,6 +63,7 @@
 #define warnMs 10000
 #define exitMs 20000
 #define delayFraction   0.25
+extern long enteredMainTime;
 
 #include "lolly.h"
 
