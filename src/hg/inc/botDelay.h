@@ -34,4 +34,11 @@ int hgBotDelayTime();
 int hgBotDelayTimeFrac(double fraction);
 /* Get suggested delay time from cgi using the specified fraction of the standard penalty. */
 
+extern int botDelayMillis;
 
+boolean earlyBotCheck(long enteredMainTime, char *cgiName, double delayFrac, int warningMs, int hogExitMs);
+/* similar to botDelayCgi but for use before the CGI has started any
+ * output or setup the cart of done any MySQL operations.  The boolean
+ * return is used later in the CGI after it has done all its setups and
+ * started output so it can issue the warning.
+ */
