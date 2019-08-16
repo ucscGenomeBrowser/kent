@@ -51,6 +51,22 @@ trim(string) - returns copy of string with leading and trailing spaces removed
 
 strip(string, toRemove) - remove all occurrences of any character in toRemove from string
 
+tidy(prefix, string, suffix) - helps trim unwanted ends off of a string.  If prefix is present 
+             in the string, the prefix and everything before it will be cut off.  Blank prefixes 
+	     have no effect.  Similarly if the suffix is present in what is left of the string 
+	     after the prefix is trimmed, then the parts of the string from where the suffix 
+	     starts will be cut off. BLank suffixes have no effect.
+   example:   tidy("", "myreads.fastq.gz", ".gz")  
+   	      returns "myreads.fastq"
+   example:   tidy("", "myreads.fastq", ".gz")  
+   	      returns "myreads.fastq"
+   example:   tidy("my/", "deep/path/to/my/reads.fastq.gz", ".gz")  
+              returns "reads.fastq"
+   example:   tidy("my/", "deep/path/to/my/reads.fastq.gz", ".fastq")  
+              returns "reads"
+   example:   tidy("my/", "deep/path/to/your/reads.fastq.gz", ".fastq")  
+	      returns "deep/path/to/your/reads"
+
 upper(string) - returns all upper case version of string
 
 lower(string) - returns all lower case version of string

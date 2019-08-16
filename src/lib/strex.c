@@ -67,6 +67,7 @@ enum strexBuiltInFunc
     strexBuiltInStarts,
     strexBuiltInEnds,
     strexBuiltInSame,
+    strexBuiltInTidy,
     };
 
 struct strexBuiltIn
@@ -185,6 +186,7 @@ static struct strexBuiltIn builtins[] = {
     { "starts", strexBuiltInStarts, strexTypeBoolean, 2, twoStrings}, 
     { "ends", strexBuiltInEnds, strexTypeBoolean, 2, twoStrings}, 
     { "same", strexBuiltInSame, strexTypeBoolean, 2, twoStrings}, 
+    { "tidy", strexBuiltInTidy, strexTypeString, 3, threeStrings },
 };
 
 static struct hash *hashBuiltIns()
@@ -1432,18 +1434,25 @@ static char *symbolify(char *prefix, char *original, struct lm *lm)
 {
 int prefixSize = strlen(prefix);
 int originalSize = strlen(original);
-int allocSize = prefixSize + originalSize + 1;
+int allocSize = prefixSize + 2*originalSize + 1;    // worse case all hexed
 char *result = lmAlloc(lm, allocSize);  // Move to local memory
 strcpy(result, prefix);
 char *in = skipLeadingSpaces(original); 
 char *out = result + prefixSize;
-char c;
+unsigned char c;
 while ((c = *in++) != 0)
      {
      if (isspace(c) || c == '-' || c == '.')
 	 *out++ = '_';
      else if (isalnum(c) || c == '_')
          *out++ = c;
+     else
+         {
+	 char hexBuf[8];
+	 safef(hexBuf, sizeof(hexBuf), "%02X", c);
+	 strcpy(out, hexBuf);
+	 out += strlen(hexBuf);
+	 }
      }
 *out++ = 0;
 int len = strlen(result) - prefixSize;
@@ -1613,6 +1622,42 @@ switch (builtIn->func)
         struct strexEval b = strexLocalEval(p->children->next, record, lookup, lm);
 	res.val.b = (strcmp(a.val.s, b.val.s) == 0);
 	break;
+	}
+    case strexBuiltInTidy:
+	{
+	/* Get parameters */
+        struct strexEval a = strexLocalEval(p->children, record, lookup, lm);
+        struct strexEval b = strexLocalEval(p->children->next, record, lookup, lm);
+        struct strexEval c = strexLocalEval(p->children->next->next, record, lookup, lm);
+	char *before = a.val.s;
+	char *orig = b.val.s;
+	char *after = c.val.s;
+
+	/* Figure out start position - start of string if before string is empty or doesn't match 
+	 * otherwise right after the place where before matches. */
+	char *ourStart = NULL;
+	if (!isEmpty(before))
+	    {
+	    ourStart = strstr(orig, before);
+	    if (ourStart != NULL) 
+		ourStart += strlen(before);
+	    }
+	if (ourStart == NULL)
+	    ourStart = orig;
+
+	/* Figure out end position */
+	char *defaultEnd = ourStart + strlen(ourStart);
+	char *ourEnd = NULL;
+	if (!isEmpty(after))
+	    {
+	    ourEnd = strstr(ourStart, after);
+	    }
+	if (ourEnd == NULL)
+	    ourEnd = defaultEnd;
+
+	int size = ourEnd - ourStart;
+	assert(size >= 0);
+	res.val.s = lmCloneStringZ(lm, ourStart, size);
 	}
     }
 return res;
