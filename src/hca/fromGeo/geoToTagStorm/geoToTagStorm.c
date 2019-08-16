@@ -153,6 +153,7 @@ while (lineFileNext(lf, &line, NULL))
 		verbose(2, "Nothing after = line %d of %s", lf->lineIx, lf->fileName);
 		continue;
 		}
+	    char *escapedVal = csvEscapeToDyString(escaperDy, val);
 	    char outputTag[256];
 
 	    /* Figure out the tag name, simple for most tags, but data_processing and 
@@ -175,6 +176,18 @@ while (lineFileNext(lf, &line, NULL))
 		// stripChar(subTag, '?');
 		val = skipLeadingSpaces(colonPos);
 		safef(outputTag, sizeof(outputTag), "%s.%s_%s", lcSection, tag, subTag);
+		// check for sample characteristics and make them easier to acccess
+		if (sameString("characteristics", tag) && sameString("sample", lcSection))  
+		    {
+		    // We'll save separate copy compressing prefix to just 'lab'
+		    // This'll save a lot of typeing over sample.characteristics_
+		    // For now we keep both representations
+		    char *labPrefix = "lab.";
+		    int labLabelSize = strlen(subTag) + strlen(labPrefix) + 1;
+		    char labLabel[labLabelSize];
+		    safef(labLabel, sizeof(labLabel), "%s%s", labPrefix, subTag);
+		    tagStanzaAppend(tags, stanza, labLabel, escapedVal);
+		    }
 		}
 	    else
 		{
@@ -182,7 +195,6 @@ while (lineFileNext(lf, &line, NULL))
 		}
 
 	    /* Write out value */
-	    char *escapedVal = csvEscapeToDyString(escaperDy, val);
 	    tagStanzaAppend(tags, stanza, outputTag, escapedVal);
 	    }
 	}
