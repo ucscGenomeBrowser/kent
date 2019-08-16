@@ -35,7 +35,13 @@ errAbort(
 "or an @ followed by a table name, in which case it refers to the key of that table.\n"
 "If the source column is in comma-separated-values format then the sourceField can include a\n"
 "constant array index to pick out an item from the csv list.\n"
-"You can also use strex expressions for more complicated situations.  See src/lib/strex.doc\n"
+"You can also use strex expressions for more complicated situations.\n"
+"            See src/lib/strex.doc\n"
+"In addition to the table stanza there can be a 'define' stanza that defines variables\n"
+"that can be used in sourceFields for tables.  This looks like:\n"
+"         define\n"
+"         variable1 sourceField1\n"
+"         variable2 sourceField2\n"
 );
 }
 
@@ -119,7 +125,7 @@ while ((c = *s++) != 0)
 return TRUE;
 }
 
-struct newFieldInfo *parseFieldVal(char *name, struct hash *inFieldHash,
+struct newFieldInfo *parseFieldVal(char *name, 
     char *input, char *fileName, int fileLineNumber, void *symbols, StrexLookup lookup)
 /* return a newFieldInfo based on the contents of input, which are not destroyed */
 {
@@ -148,7 +154,7 @@ else
 	}
     else 
         {
-	if (isTotallySimple(s))
+	if (isTotallySimple(s) && lookup(symbols, s) == NULL)
 	    {
 	    fv->val = cloneString(skipLeadingSpaces(s));
 	    eraseTrailingSpaces(fv->val);
@@ -165,28 +171,91 @@ else
 return fv;
 }
 
+struct varVal
+/* A variable, what we need to compute it, and it's value */
+     {
+     struct varVal *next;   /* Next in list */
+     char *name;	    /* Variable name */
+     struct strexParse *exp;  /* Parsed out expression. */
+     char *val;		    /* Computed value - not owned by us. */
+     };
+
+struct varVal *varValNew(char *name, struct strexParse *exp)
+/* Allocate new varVal structure */
+{
+struct varVal *v;
+AllocVar(v);
+v->name = cloneString(name);
+v->exp = exp;
+return v;
+}
+
+
 struct symRec
 /* Something we pass as a record to symLookup */
     {
-    struct hash *hash;	    /* The hash with symbol to row index */
-    char **row;		    /* The row we are working on */
+    struct hash *rowHash;	    /* The hash with symbol to row index */
+    char **tableRow;		    /* The input row we are working on. You own.*/
+    char **varRow;		    /* A slot for each computed variables results. We own */
+    struct hash *varHash;	    /* Variables with varVal values */
+    struct varVal *varList;	    /* List of all variables, same info as in hash above. */
+    struct lm *lm;		    /* Local memory to use during eval phase */
     };
+
+struct symRec *symRecNew(struct hash *rowHash, struct hash *varHash)
+/* Return a new symRec. The rowHash is required and contains a hash with
+ * values that are indexes into the table row.  The varHash is optional,
+ * and if present should have variable names keying parseExp values. */
+{
+struct symRec *rec;
+AllocVar(rec);
+rec->rowHash = rowHash;
+if (varHash != NULL)
+    {
+    rec->varHash = varHash;
+    }
+return rec;
+}
+
+static void symRecSetupPrecomputes(struct symRec *symbols)
+/* Clear out any precomputed variable values - should be
+ * executed on each new line of table. */
+{
+/* Clear up any old precomputes - sort of sad these can't currently
+ * be shared between output tables. Probably not enough of a time
+ * bottleneck to be worth fixing though. */
+struct varVal *v;
+for (v = symbols->varList; v != NULL; v = v->next)
+    {
+    freez(&v->val);
+    }
+}
 
 static char *symLookup(void *record, char *key)
 /* Lookup symbol in hash */
 {
 struct symRec *rec = record;
-struct hash *hash = rec->hash;
-char **row = rec->row;
-int rowIx = hashIntValDefault(hash, key, -1);
-if (rowIx < 0)
-    return NULL;
+char *value = NULL;
+struct varVal *v = hashFindVal(rec->varHash, key);
+if (v != NULL)
+    {
+    if (v->val == NULL)
+       {
+       v->val = strexEvalAsString(v->exp, record, symLookup);
+       }
+    value = v->val;
+    }
 else
-    return row[rowIx];
+    {
+    int rowIx = hashIntValDefault(rec->rowHash, key, -1);
+    if (rowIx >= 0)
+	value = rec->tableRow[rowIx];
+    }
+return value;
 }
 
 
-void selectUniqueIntoTable(struct fieldedTable *inTable,  struct hash *inFieldHash,
+void selectUniqueIntoTable(struct fieldedTable *inTable,  struct symRec *symbols,
     char *specFile,  // Just for error reporting
     struct newFieldInfo *fieldList, int keyFieldIx, struct fieldedTable *outTable)
 /* Populate out table with selected rows from newTable */
@@ -206,6 +275,8 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
     char **inRow = fr->row;
     int i;
     struct newFieldInfo *unlinkedFv;
+    boolean firstSymInRow = TRUE;  // Avoid updating symbol table until we have to
+
     for (i=0, unlinkedFv=fieldList; i<outFieldCount && unlinkedFv != NULL; 
 	++i, unlinkedFv = unlinkedFv->next)
 	{
@@ -218,8 +289,13 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 	    outRow[i] = inRow[fv->oldIx];
 	else if (fv->type == fvExp)
 	    {
-	    struct symRec symRec = {inFieldHash, inRow};
-	    outRow[i] = strexEvalAsString(fv->exp, &symRec, symLookup);
+	    if (firstSymInRow)
+	        {
+		symbols->tableRow = inRow;
+		symRecSetupPrecomputes(symbols);
+		firstSymInRow = FALSE;
+		}
+	    outRow[i] = strexEvalAsString(fv->exp, symbols, symLookup);
 	    verbose(2, "evaluated %s to %s\n", fv->val, outRow[i]);
 	    }
 	}
@@ -272,12 +348,38 @@ struct fieldedTable *inTable = fieldedTableFromTabFile(inTabFile, inTabFile, NUL
 verbose(1, "Read %d columns, %d rows from %s\n", inTable->fieldCount, inTable->rowCount,
     inTabFile);
 
-/* Compute info on the fields */
+/* Create what we need for managing strex's symbol table. */
 struct hash *inFieldHash = hashFieldIx(inTable->fields, inTable->fieldCount);
-struct symRec symbols = {inFieldHash, inTable->fields}; // Sym lookup just returns symbol name during parsing
+struct hash *varHash = hashNew(5);
+struct symRec *symbols = symRecNew(inFieldHash, varHash); 
+symbols->tableRow = inTable->fields;   // During parse pass fields will act as proxy for tableRow
+/* Open spec file, check first real line, and maybe start defining variables. */
 
-/* Read in spec file as ra file stanzas that we convert into tableInfos. */
+/* Snoop for a define stanza first that'll hold our variables. */
 struct lineFile *lf = lineFileOpen(specFile, TRUE);
+char *defLine;
+if (!lineFileNextReal(lf, &defLine))
+     errAbort("%s is empty", specFile);
+if (startsWithWord("define",  defLine))  // Whee, we got vars! 
+    {
+    char *varName, *varSpec;
+    while (raNextTagVal(lf, &varName, &varSpec, NULL))
+        {
+	verbose(1, "var %s (%s)\n", varName, varSpec);
+	struct strexParse *exp = strexParseString(varSpec, lf->fileName, lf->lineIx-1, 
+	    symbols, symLookup);
+	strexParseDump(exp, 1, uglyOut);
+	struct varVal *v = varValNew(varName, exp);
+	hashAdd(varHash, varName, v);
+	slAddHead(&symbols->varList, v);
+	}
+    slReverse(&symbols->varList);
+    }
+else
+    lineFileReuse(lf);
+
+
+/* Read in rest of spec file as ra stanzas full of tables more or less */
 struct newTableInfo *newTableList = NULL, *newTable;
 while (raSkipLeadingEmptyLines(lf, NULL))
     {
@@ -307,8 +409,8 @@ while (raSkipLeadingEmptyLines(lf, NULL))
     while (raNextTagVal(lf, &fieldName, &fieldSpec, NULL))
         {
 	verbose(2, "  fieldName %s fieldSpec (%s)\n", fieldName, fieldSpec);
-	struct newFieldInfo *fv = parseFieldVal(fieldName, inFieldHash,
-	    fieldSpec, lf->fileName, lf->lineIx, &symbols, symLookup);
+	struct newFieldInfo *fv = parseFieldVal(fieldName, 
+	    fieldSpec, lf->fileName, lf->lineIx, symbols, symLookup);
 	if (fv->type == fvVar)
 	    {
 	    char *oldName = fieldSpec;
@@ -373,11 +475,12 @@ for (newTable = newTableList; newTable != NULL; newTable = newTable->next)
 makeDirsOnPath(outDir);
 
 /* Output tables */
+verbose(1, "Outputting %d tables to %s\n", slCount(newTableList), outDir);
 for (newTable = newTableList; newTable != NULL; newTable = newTable->next)
     {
     /* Populate table */
     struct fieldedTable *outTable = newTable->table;
-    selectUniqueIntoTable(inTable, inFieldHash, specFile,
+    selectUniqueIntoTable(inTable, symbols, specFile,
 	newTable->fieldList, newTable->keyField->newIx, outTable);
 
     /* Create output file name and save file. */

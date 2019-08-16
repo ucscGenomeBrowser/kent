@@ -1,3 +1,15 @@
+define
+messy	"big messy string messy very messy with many messy parts"
+tidy    "tidy string"
+complex	split(messy,4)
+
+table var_test id
+x	complex + " complex"
+id	tidy
+less_messy tidy("messy ", messy, " very")
+mangled_date	symbol("DATE_", submission_date)
+messy	messy
+
 table a_strex_test id
 untidy "big messy string with messy parts"
 tidyStart tidy("messy ", "big messy string with messy parts", "")
