@@ -1,4 +1,5 @@
 /* geoToTagStorm - Convert from GEO soft format to tagStorm.. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -153,7 +154,6 @@ while (lineFileNext(lf, &line, NULL))
 		verbose(2, "Nothing after = line %d of %s", lf->lineIx, lf->fileName);
 		continue;
 		}
-	    char *escapedVal = csvEscapeToDyString(escaperDy, val);
 	    char outputTag[256];
 
 	    /* Figure out the tag name, simple for most tags, but data_processing and 
@@ -186,16 +186,23 @@ while (lineFileNext(lf, &line, NULL))
 		    int labLabelSize = strlen(subTag) + strlen(labPrefix) + 1;
 		    char labLabel[labLabelSize];
 		    safef(labLabel, sizeof(labLabel), "%s%s", labPrefix, subTag);
+		    char *escapedVal = csvEscapeToDyString(escaperDy, val);
 		    tagStanzaAppend(tags, stanza, labLabel, escapedVal);
+		    tagStanzaAppend(tags, stanza, outputTag, escapedVal);
+		    }
+		else
+		    {
+		    char *escapedVal = csvEscapeToDyString(escaperDy, val);
+		    tagStanzaAppend(tags, stanza, outputTag, escapedVal);
 		    }
 		}
 	    else
 		{
 		safef(outputTag, sizeof(outputTag), "%s.%s", lcSection, tag);
+		char *escapedVal = csvEscapeToDyString(escaperDy, val);
+		tagStanzaAppend(tags, stanza, outputTag, escapedVal);
 		}
 
-	    /* Write out value */
-	    tagStanzaAppend(tags, stanza, outputTag, escapedVal);
 	    }
 	}
     else if (typeChar == '#')
