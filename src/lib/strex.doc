@@ -147,3 +147,12 @@ import("file.strex") - act as if the contents of file.strex, which should be a v
         strex expression but one that can span multiple lines, were here instead of this
 	import expression.  This is useful for debugging and reusing complex expressions.
 	(You'll get line numbers from the file in the error message, which helps localize it.)
+
+warn("message")  - returns the input message with a scary warning prefix added.  Also will
+        send a warning message you see when running the strex program.  Usually this is
+	used as the default of a pick or something to put at the end of a long chain of
+	ors or conditionals when you don't want to do a hard error.
+
+error("message") - causes strex to stop processing with the given error message.
+        It will cause whatever program strex is embedded in to stop processing too
+	unless it is fancy enough to catch an exception.
