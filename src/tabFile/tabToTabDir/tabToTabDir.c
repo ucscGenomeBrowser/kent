@@ -241,7 +241,7 @@ if (v != NULL)
     {
     if (v->val == NULL)
        {
-       v->val = strexEvalAsString(v->exp, record, symLookup);
+       v->val = strexEvalAsString(v->exp, record, symLookup, NULL, NULL);
        }
     value = v->val;
     }
@@ -295,7 +295,7 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 		symRecSetupPrecomputes(symbols);
 		firstSymInRow = FALSE;
 		}
-	    outRow[i] = strexEvalAsString(fv->exp, symbols, symLookup);
+	    outRow[i] = strexEvalAsString(fv->exp, symbols, symLookup, NULL, NULL);
 	    verbose(2, "evaluated %s to %s\n", fv->val, outRow[i]);
 	    }
 	}

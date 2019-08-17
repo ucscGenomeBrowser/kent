@@ -24,13 +24,25 @@ char *symLookup(void *symbols, char *key)
 return optionVal(key, NULL);
 }
 
+void warnHandler(char *warning)
+/* Print warning message */
+{
+fprintf(stderr, "%s\n", warning);
+}
+
+void abortHandler()
+/* Abort */
+{
+errAbort("Aborting");
+}
+
 void strexCalc(char *expression)
 /* strexCalc - String expression calculator, mostly to test strex expression evaluator.. */
 {
 struct strexParse *parsed = strexParseString(expression, expression, 0, "options", symLookup);
 if (verboseLevel() > 1)
     strexParseDump(parsed, 0, stderr);
-char *result = strexEvalAsString(parsed, "options", symLookup);
+char *result = strexEvalAsString(parsed, "options", symLookup, warnHandler, abortHandler);
 printf("%s\n", result);
 }
 

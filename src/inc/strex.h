@@ -26,9 +26,13 @@ void strexParseDump(struct strexParse *p, int depth, FILE *f);
 /* Dump out strexParse tree and children for debugging.  Usual depth is 0. */
 
 /* Evaluating a parsed out strex expression */
-char *strexEvalAsString(struct strexParse *p, void *symbols, StrexLookup lookup);
+
+char *strexEvalAsString(struct strexParse *p, void *symbols, StrexLookup lookup,
+    void (*warnHandler)(char *warning), void (*abortHandler)() );
 /* Evaluating a strex expression on a symbol table with a lookup function for variables and
- * return result as a string value. */
+ * return result as a string value.  The warnHandler and abortHandler are optional,
+ * and can be used to wrap your own warnings and abort processing onto what strex
+ * provides.  For default behavior just pass in NULL. */
 
 #endif /* STREX_H */
 
