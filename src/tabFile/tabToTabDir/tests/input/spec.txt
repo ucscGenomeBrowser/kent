@@ -11,6 +11,7 @@ mangled_date	symbol("DATE_", submission_date)
 messy	messy
 
 table a_strex_test id
+tooLoud warn("this is a test of the warning system")
 untidy "big messy string with messy parts"
 tidyStart tidy("messy ", "big messy string with messy parts", "")
 tidyEnd tidy("", "big messy string with messy parts", " messy")
