@@ -317,8 +317,9 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 		warn("There is a problem with the key to table %s in %s", outTable->name, specFile);
 		warn("%s %s", uniqFr->row[keyFieldIx], uniqFr->row[differentIx]);
 		warn("%s %s", outRow[keyFieldIx], outRow[differentIx]);
-		errAbort("both exist, so key doesn't specify a unique %s field", 
+		warn("both exist, so key doesn't specify a unique %s field", 
 		    outTable->fields[differentIx]);
+		errAbort("line %d of %s", fr->id, inTable->name);
 		}
 	    }
 	}
@@ -365,7 +366,10 @@ if (startsWithWord("define",  defLine))  // Whee, we got vars!
     char *varName, *varSpec;
     while (raNextTagVal(lf, &varName, &varSpec, NULL))
         {
-	verbose(1, "var %s (%s)\n", varName, varSpec);
+	if (varSpec == NULL)
+	    errAbort("Expecting expression for variable %s line %d of %s", varName,
+		lf->lineIx, lf->fileName);
+	verbose(2, "var %s (%s)\n", varName, varSpec);
 	struct strexParse *exp = strexParseString(varSpec, lf->fileName, lf->lineIx-1, 
 	    symbols, symLookup);
 	struct varVal *v = varValNew(varName, exp);
