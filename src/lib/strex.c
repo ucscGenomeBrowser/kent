@@ -69,6 +69,7 @@ enum strexBuiltInFunc
     strexBuiltInEnds,
     strexBuiltInSame,
     strexBuiltInTidy,
+    strexBuiltInWarn,
     };
 
 struct strexBuiltIn
@@ -188,6 +189,7 @@ static struct strexBuiltIn builtins[] = {
     { "ends", strexBuiltInEnds, strexTypeBoolean, 2, twoStrings}, 
     { "same", strexBuiltInSame, strexTypeBoolean, 2, twoStrings}, 
     { "tidy", strexBuiltInTidy, strexTypeString, 3, threeStrings },
+    { "warn", strexBuiltInWarn, strexTypeString, 1, oneString},
 };
 
 static struct hash *hashBuiltIns()
@@ -1141,12 +1143,6 @@ struct strexRun
     void (*abortHandler)();	    /* Call this guy to abort */
     };
 
-static void strexDefaultWarn(char *warning)
-/* Default warning handler */
-{
-warn("%s", warning);
-}
-
 static void strexDefaultAbort()
 /* Default abort handler */
 {
@@ -1162,7 +1158,7 @@ AllocVar(run);
 run->lm = lmInit(0);
 run->symbols = symbols;
 run->lookup = lookup;
-run->warnHandler = (warnHandler != NULL ? warnHandler : strexDefaultWarn);
+run->warnHandler = warnHandler;
 run->abortHandler = (abortHandler != NULL ? abortHandler : strexDefaultAbort);
 return run;
 }
@@ -1700,6 +1696,18 @@ switch (builtIn->func)
 	int size = ourEnd - ourStart;
 	assert(size >= 0);
 	res.val.s = lmCloneStringZ(lm, ourStart, size);
+	break;
+	}
+    case strexBuiltInWarn:
+        {
+	/* Figure out the message we want to convey, send it to warning handler
+	 * before returning it. */
+        struct strexEval a = strexLocalEval(p->children, run);
+	char *message = a.val.s;
+	char *output = lmJoinStrings(run->lm, "WARNING: ", message);
+	if (run->warnHandler != NULL) run->warnHandler(output);
+	res.val.s = output;
+	break;
 	}
     }
 return res;
