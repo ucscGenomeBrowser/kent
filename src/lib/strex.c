@@ -70,6 +70,7 @@ enum strexBuiltInFunc
     strexBuiltInSame,
     strexBuiltInTidy,
     strexBuiltInWarn,
+    strexBuiltInError,
     };
 
 struct strexBuiltIn
@@ -190,6 +191,7 @@ static struct strexBuiltIn builtins[] = {
     { "same", strexBuiltInSame, strexTypeBoolean, 2, twoStrings}, 
     { "tidy", strexBuiltInTidy, strexTypeString, 3, threeStrings },
     { "warn", strexBuiltInWarn, strexTypeString, 1, oneString},
+    { "error", strexBuiltInError, strexTypeString, 1, oneString},
 };
 
 static struct hash *hashBuiltIns()
@@ -1707,6 +1709,21 @@ switch (builtIn->func)
 	char *output = lmJoinStrings(run->lm, "WARNING: ", message);
 	if (run->warnHandler != NULL) run->warnHandler(output);
 	res.val.s = output;
+	break;
+	}
+    case strexBuiltInError:
+        {
+	/* Figure out the message we want to convey, send it to warning handler
+	 * before returning it. */
+        struct strexEval a = strexLocalEval(p->children, run);
+	char *message = a.val.s;
+	char *output = lmJoinStrings(run->lm, "ERROR: ", message);
+	if (run->warnHandler != NULL) 
+	    run->warnHandler(output);
+	if (run->abortHandler != NULL) 
+	    run->abortHandler();
+	errAbort("%s", output);
+	res.val.s = output;   // some sort of OCD makes me fill this in in spite of errAbort above
 	break;
 	}
     }
