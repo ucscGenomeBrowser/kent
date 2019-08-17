@@ -231,6 +231,19 @@ for (v = symbols->varList; v != NULL; v = v->next)
     }
 }
 
+static void warnHandler(char *message)
+/* Our warn handler keeps a little hash to keep from repeating
+ * messages for every row of the input sometimes. */
+{
+static struct hash *uniq = NULL;
+if (uniq == NULL) uniq = hashNew(0);
+if (hashLookup(uniq, message) == NULL)
+    {
+    hashAdd(uniq, message, NULL);
+    warn("%s", message);
+    }
+}
+
 static char *symLookup(void *record, char *key)
 /* Lookup symbol in hash */
 {
@@ -241,7 +254,7 @@ if (v != NULL)
     {
     if (v->val == NULL)
        {
-       v->val = strexEvalAsString(v->exp, record, symLookup, NULL, NULL);
+       v->val = strexEvalAsString(v->exp, record, symLookup, warnHandler, NULL);
        }
     value = v->val;
     }
@@ -295,7 +308,7 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 		symRecSetupPrecomputes(symbols);
 		firstSymInRow = FALSE;
 		}
-	    outRow[i] = strexEvalAsString(fv->exp, symbols, symLookup, NULL, NULL);
+	    outRow[i] = strexEvalAsString(fv->exp, symbols, symLookup, warnHandler, NULL);
 	    verbose(2, "evaluated %s to %s\n", fv->val, outRow[i]);
 	    }
 	}
