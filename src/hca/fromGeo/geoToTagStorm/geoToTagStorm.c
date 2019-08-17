@@ -144,6 +144,7 @@ while (lineFileNext(lf, &line, NULL))
 	    }
 	else
 	    {
+
 	    /* Parse out the value, which happens after '=' */
 	    char *equ = nextWord(&line);
 	    if (!sameString("=", equ))
@@ -154,10 +155,11 @@ while (lineFileNext(lf, &line, NULL))
 		verbose(2, "Nothing after = line %d of %s", lf->lineIx, lf->fileName);
 		continue;
 		}
-	    char outputTag[256];
+
 
 	    /* Figure out the tag name, simple for most tags, but data_processing and 
-	     * characteristics need special handling */
+	     * characteristics need special handling and may update the val as well */
+	    char outputTag[256];
 	    if (sameString("characteristics", tag) || sameString("relation", tag))
 		{
 		/* These tags hava a subtag between the = and a : */
@@ -179,30 +181,18 @@ while (lineFileNext(lf, &line, NULL))
 		// check for sample characteristics and make them easier to acccess
 		if (sameString("characteristics", tag) && sameString("sample", lcSection))  
 		    {
-		    // We'll save separate copy compressing prefix to just 'lab'
-		    // This'll save a lot of typeing over sample.characteristics_
-		    // For now we keep both representations
+		    // We'll convert sample.characteristics_* tags to lab.* tags
+		    // This saves a bunch of typing and clarifies where these come from
 		    char *labPrefix = "lab.";
-		    int labLabelSize = strlen(subTag) + strlen(labPrefix) + 1;
-		    char labLabel[labLabelSize];
-		    safef(labLabel, sizeof(labLabel), "%s%s", labPrefix, subTag);
-		    char *escapedVal = csvEscapeToDyString(escaperDy, val);
-		    tagStanzaAppend(tags, stanza, labLabel, escapedVal);
-		    tagStanzaAppend(tags, stanza, outputTag, escapedVal);
-		    }
-		else
-		    {
-		    char *escapedVal = csvEscapeToDyString(escaperDy, val);
-		    tagStanzaAppend(tags, stanza, outputTag, escapedVal);
+		    safef(outputTag, sizeof(outputTag), "%s%s", labPrefix, subTag);
 		    }
 		}
 	    else
 		{
 		safef(outputTag, sizeof(outputTag), "%s.%s", lcSection, tag);
-		char *escapedVal = csvEscapeToDyString(escaperDy, val);
-		tagStanzaAppend(tags, stanza, outputTag, escapedVal);
 		}
-
+	    char *escapedVal = csvEscapeToDyString(escaperDy, val);
+	    tagStanzaAppend(tags, stanza, outputTag, escapedVal);
 	    }
 	}
     else if (typeChar == '#')
