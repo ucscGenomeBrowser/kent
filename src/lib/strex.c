@@ -1255,31 +1255,28 @@ static struct strexEval strexEvalOr(struct strexParse *p, struct strexRun *run)
 {
 struct strexParse *lp = p->children;
 struct strexParse *rp = lp->next;
-struct strexEval lv = strexLocalEval(lp, run);
-struct strexEval rv = strexLocalEval(rp, run);
-struct strexEval res;
-assert(lv.type == rv.type);   // Is our type automatic casting working?
-switch (lv.type)
+struct strexEval res = strexLocalEval(lp, run);
+boolean gotIt = TRUE;
+switch (res.type)
     {
     case strexTypeBoolean:
-        res.val.b = (lv.val.b || rv.val.b);
+	gotIt = res.val.b != 0;
 	break;
     case strexTypeInt:
-	res.val.i = (lv.val.i ? lv.val.i : rv.val.i);
+	gotIt = (res.val.i != 0);
 	break;
     case strexTypeDouble:
-	res.val.x = (lv.val.x != 0.0 ? lv.val.x : rv.val.x);
+	gotIt = (res.val.x != 0);
 	break;
     case strexTypeString:
-	res.val.s = (lv.val.s[0] ? lv.val.s : rv.val.s);
-	break;
-    default:
-	internalErr();
-	res.val.b = FALSE;
+	gotIt = (res.val.s[0] != 0);
 	break;
     }
-res.type = lv.type;
-return res;
+if (gotIt)
+   return res;
+
+// We didn't get it, so have evaluate the other side */
+return strexLocalEval(rp, run);
 }
 
 static struct strexEval strexEvalAnd(struct strexParse *p, struct strexRun *run)
