@@ -30,7 +30,17 @@ touch var/build.lock
 # download and process
 cd $gbRoot
 nice gbDownloadStep
+# remove the genbank dailies because they're crufty AF.
+lastDaily=`ls -rdt data/download/g*/daily-nc | tail -1`
+rm -rf $lastDaily
 nice gbProcessStep -mkOrganismList
+
+# should delete directories in data/*/ if there are more than three
+# versions of refseq.* or genbank.*
+for i in `ls -td data/download/genbank* | tail -n +4`; do  echo rm -rf $i; done
+for i in `ls -td data/download/refseq* | tail -n +4`; do  echo rm -rf $i; done
+for i in `ls -td data/processed/genbank* | tail -n +4`; do  echo rm -rf $i; done
+for i in `ls -td data/processed/refseq* | tail -n +4`; do  echo rm -rf $i; done
 
 # copy new fasta to hgwdev
 rsync --delete -a /data/genbank/data/processed /hive/data/outside/genbank/data/
@@ -40,6 +50,8 @@ rsync -a /data/genbank/data/organism.lst /hive/data/outside/genbank/data/
 # time we ran, and if so, re-do all the alignments.
 
 nice etc/align-genbank
+
+rsync -av /data/genbank/data/ /hive/data/outside/genbank/data/archive
 
 # if you want to ignore errors
 # date +%s > var/build/build.time
@@ -53,21 +65,20 @@ hgsql "" -Ne "show databases" | sort > $SOMEDIR/haveDbs.txt
 join -v 1 $SOMEDIR/wantDbs.txt $SOMEDIR/haveDbs.txt > $SOMEDIR/needDbs.txt
 
 (cd $SOMEDIR; for i in `join -v 1 wantDbs.txt haveDbs.txt`; do HGDB_CONF=/data/genbank/etc/.hg.conf.hgwdev hgsql $i -Ne "select * from chromInfo" > $i.chromInfo; hgsql "" -Ne "create database $i"; hgsql $i < ~/kent/src/hg/lib/chromInfo.sql; hgsql $i -Ne "load data local infile '$i.chromInfo' into table chromInfo"; hgsql $i < ~/kent/src/hg/lib/gbLoaded.sql; done)
-rm -rf $SOMEDIR
+# rm -rf $SOMEDIR
 
 # load the databases
 etc/genbank-dbload -inclEsts
 
 # newly made dbs need to be copied without validation
-# TODO
+cd etc
+for i in `cat ../some/needDbs.txt`; do echo ./copyDbDev.sh $i  gbTmp .hg.conf.hgwdev  gbPerAssemblyTables.txt yes; done
+cd .
 
 # check for gbExtFile for need to run gbExtUpdate
 f=`hgsql hg38 -Ne "select path from gbExtFile" | sed 's?/gbdb/genbank/./data/processed/??' | sed 's?/.*??' | uniq | wc -l`
 if test $f -gt 2; then bin/x86_64/extFileUpdate hg38 ; fi
 # we should re-build orfeome in this case too!
-
-# should delete directories in data/*/ if there are more than three
-# versions of refseq.* or genbank.*
 
 # copy over hg38 metadata tables to hgFixed
 cp etc/gbMetadataTables.txt /var/tmp/genbanktables
@@ -91,12 +102,15 @@ etc/copyAssemblies.sh
 
 # to fix errors --
 # cd etc
-# ./deleteLocks.sh ochPri3 gbTmp .hg.conf.hgwdev 
-# ./validateDb.sh .hg.conf.hgwdev  ochPri3 gbTmp  gbPerAssemblyTables.txt  yes 
-# ./copyDbDev.sh ochPri3  gbTmp .hg.conf.hgwdev  gbPerAssemblyTables.txt  yes 
+db=chiLan1
+# ./deleteLocks.sh $db gbTmp .hg.conf.hgwdev 
+# ./validateDb.sh .hg.conf.hgwdev  $db gbTmp  gbPerAssemblyTables.txt  yes 
+# ./copyDbDev.sh $db  gbTmp .hg.conf.hgwdev  gbPerAssemblyTables.txt  yes 
 # cd ..
 # etc/copyAssemblies.sh
 
+
+# make the downloads and copy them to hgdownload (somehow sync with cluster-admin push of tables
 rm var/build.lock
 
 echo "genbank build completed on $(hostname)"

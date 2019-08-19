@@ -132,7 +132,7 @@ if (filtNumRecords > 0)
 else
     tg->graphUpperLimit = 0.0;
 if (countsCopy != NULL)
-    free(countsCopy);
+    freeMem(countsCopy);
 tg->items = hicItems;
 }
 
