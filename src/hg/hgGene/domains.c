@@ -167,6 +167,7 @@ if (list != NULL)
 	, swissProtAcc);
     sr = sqlGetResult(spConn, query);
     hPrintf("<TABLE><TR>\n");
+    hPrintf("<A href=\"../goldenPath/help/chimera.html\" TARGET=_blank>Chimera help</A>\n");
     while ((row = sqlNextRow(sr)) != NULL)
         {
 	if (++column > maxColumn)
@@ -185,16 +186,15 @@ if (list != NULL)
 	if (rowCount < 1)
 	    hPrintf("<IMG SRC=\"http://www.rcsb.org/pdb/images/%s_asym_r_250.jpg\"><BR>", row[0]);
         hPrintf("%s</A> - %s ", row[0], row[1]);
-        // include links LS-SNP and to launch viewer in PDB chimera
+        // include links to MuPIT (formerly LS-SNP) and launch viewer in PDB chimera
         struct tempName chimerax;
         lsSnpPdbChimeraSnpAnn(conn, row[0], NULL, &chimerax);
         hPrintf(" <A HREF=\"%s\">Chimera</A>", chimerax.forHtml);
         if (lsSnpPdbHasPdb(conn2, row[0]))
-            hPrintf(" <A HREF=\"%s\" TARGET=_blank>LS-SNP</A>", lsSnpPdbGetUrlPdbSnp(row[0], NULL));
+            hPrintf(" <A HREF=\"%s\" TARGET=_blank>MuPIT</A>", lsSnpPdbGetUrlPdbSnp(row[0], NULL));
 	hPrintf("</TD>\n");
 	}
     hPrintf("</TR></TABLE>\n");
-    hPrintf("<A href=\"../goldenPath/help/chimera.html\" TARGET=_blank>Chimera help</A>\n");
     hPrintf("<BR><BR>\n");
     slFreeList(&list);
     sqlDisconnect(&conn2);
