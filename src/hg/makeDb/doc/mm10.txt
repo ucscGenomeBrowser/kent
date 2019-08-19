@@ -7268,6 +7268,7 @@ do
     find ./wigFix/${D} -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
 	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
         | gzip -c > downloads/${D}.phastCons60way.glire.wigFix.gz
+XXX - copy and paste error, should have been phyloP60way and not phastCons
 done
 
     time (zcat downloads/chr*.wigFix.gz  \
@@ -7371,6 +7372,7 @@ do
     find ./wigFix/${D} -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
 	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
         | gzip -c > downloads/${D}.phastCons60way.euarchontoglires.wigFix.gz
+XXX - copy and paste error, should have been phyloP60way and not phastCons
 done
 
     time (zcat downloads/chr*.wigFix.gz  \
@@ -7478,6 +7480,7 @@ do
     find ./wigFix/${D} -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
 	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
         | gzip -c > downloads/${D}.phastCons60way.primate.wigFix.gz
+XXX - copy and paste error, should have been phyloP60way and not phastCons
 done
 
     time (zcat downloads/chr*.wigFix.gz \
@@ -7583,6 +7586,7 @@ do
     find ./wigFix/${D} -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
 	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
         | gzip -c > downloads/${D}.phastCons60way.placental.wigFix.gz
+XXX - copy and paste error, should have been phyloP60way and not phastCons
 done
     time (zcat downloads/chr*.wigFix.gz \
 	| wigEncode stdin phyloP60wayPlacental.wig phyloP60wayPlacental.wib \
@@ -7688,6 +7692,7 @@ do
     find ./wigFix/${D} -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
 	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
         | gzip -c > downloads/${D}.phastCons60way.vertebrate.wigFix.gz
+XXX - copy and paste error, should have been phyloP60way and not phastCons
 done
 
     time (zcat downloads/chr*.wigFix.gz \
