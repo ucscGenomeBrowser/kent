@@ -1469,6 +1469,8 @@ return result;
 static char *symbolify(char *prefix, char *original, struct lm *lm)
 /* Convert original to something could use as a C language symbol with dots maybe. */
 {
+if (isEmpty(original))
+    return original;
 int prefixSize = strlen(prefix);
 int originalSize = strlen(original);
 int allocSize = prefixSize + 2*originalSize + 1;    // worse case all hexed
