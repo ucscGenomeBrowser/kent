@@ -27,7 +27,7 @@ if ( $#argv < 2 || $#argv > 3 ) then
   echo " . hgwdev"
   echo " . hgwbeta"
   echo
-  echo " . hgw6"
+  echo " . hgw2"
   echo " . genome-euro"
   echo " . genome-asia"
   echo
@@ -70,7 +70,7 @@ foreach table ($tables)
   echo "============="
   set i=1
   foreach machine ( hgwdev hgwbeta hgw6 genome-euro genome-asia )
-    if ( "hgw6" == $machine ) then
+    if ( "hgw2" == $machine ) then
       echo  # space out results
     endif
     set update=`getTableStatus.csh $db $machine | sed '1,2d' \

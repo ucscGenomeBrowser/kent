@@ -6352,6 +6352,19 @@ char *pos = NULL;
 struct slName *bl = NULL;
 
 ctList = customTracksParseCart(database, cart, &browserLines, &ctFileName);
+#ifdef NOT
+/* this is the incorrect location for this to be done.  This is actually
+ * counting all custom tracks whether they are new or not.  Every view of
+ * the tracks adds to the penalty.
+ */
+if (slCount(ctList) > 0) {
+  int trackCount = slCount(ctList);
+  /* add penalty in relation to number of tracks created, and adjust
+   * exitMs accordingly so that it will not hogExit at this time
+   */
+  (void) earlyBotCheck(enteredMainTime, "hgTracks", (double)(trackCount + 1) * delayFraction, warnMs, (trackCount + 1)*exitMs);
+}
+#endif
 
 for (bl = browserLines; bl != NULL; bl = bl->next)
     {
@@ -10015,7 +10028,7 @@ hPrintf("<tr><td> zoom in 1.5x</td><td class=\"hotkey\">ctrl+i</td> <td> configu
 hPrintf("<tr><td> zoom in 3x</td><td class=\"hotkey\">i</td>        <td> reverse</td><td class=\"hotkey\">r then v</td>                    </tr>\n");
 hPrintf("<tr><td> zoom in 10x</td><td class=\"hotkey\">I</td>       <td> resize</td><td class=\"hotkey\">r then s</td>                     </tr>\n");
 hPrintf("<tr><td> zoom in base level</td><td class=\"hotkey\">b</td><td> refresh</td><td class=\"hotkey\">r then f</td>                    </tr>\n");
-hPrintf("<tr><td> zoom out 1.5x</td><td class=\"hotkey\">ctrl+k</td><td>view chrom names</td><td class=\"hotkey\">v then s</td><td></td><td class='hotkey'></td>              </tr>\n");
+hPrintf("<tr><td> zoom out 1.5x</td><td class=\"hotkey\">ctrl+k</td><td> view chrom names</td><td class=\"hotkey\">v then s</td><td class='hotkey'></td>              </tr>\n");
 hPrintf("<tr><td> zoom out 3x</td><td class=\"hotkey\">k</td>");
 if (gotExtTools)
     hPrintf("<td>send to external tool</td><td class=\"hotkey\">s then t</td>");
@@ -10059,17 +10072,21 @@ if (newHighlight)
     }
 }
 
+extern boolean issueBotWarning;
+
 void doMiddle(struct cart *theCart)
 /* Print the body of an html file.   */
 {
 cart = theCart;
 measureTiming = hPrintStatus() && isNotEmpty(cartOptionalString(cart, "measureTiming"));
 if (measureTiming)
-    measureTime("Startup");
+    measureTime("Startup (bottleneck %d ms) ", botDelayMillis);
 
-hgBotDelayFrac(0.25); /* Impose a quarter of the standard CGI penalty */
-if (measureTiming)
-    measureTime("Bottleneck delay");
+if (issueBotWarning)
+    {
+    char *ip = getenv("REMOTE_ADDR");
+    botDelayMessage(ip, botDelayMillis);
+    }
 
 char *debugTmp = NULL;
 /* Uncomment this to see parameters for debugging. */

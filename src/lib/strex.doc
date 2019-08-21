@@ -1,7 +1,8 @@
 The strex language is a small string expression evaluation language.  
 This document describes its built in functions and operators:
 
-+  - returns the concatenation of the surrounding strings.  Will convert a number to a string
++  - returns the concatenation of the surrounding strings or the addition of surrounding
+     numbers.  Will convert a number to a string in mixed expressions
 
 [index] - selects a character from string given an integer zero based index. As in Python
        if index is negative it selects characters from the end of the string.  -1
@@ -50,6 +51,19 @@ trim(string) - returns copy of string with leading and trailing spaces removed
 
 strip(string, toRemove) - remove all occurrences of any character in toRemove from string
 
+upper(string) - returns all upper case version of string
+
+lower(string) - returns all lower case version of string
+
+md5(string) - returns an MD5 sum digest/hash of string. 
+
+symbol(prefix, string) - turn string into a computer usable symbol that starts with the given
+            prefix.  To create the rest of the symbol,  the string is mangled.  First the 
+	    spaces, tabs, and newlines are all turned into _ chars,  then any remaining 
+	    characters that aren't ascii letters or numerical digits are removed.  If the result
+	    is 32 characters or less it's used, but if it's longer it's converted into an MD5
+	    sum.
+
 replace(string, oldPart, newPart) - returns string with all instances of old replaced by new.
 	    The cases where either old or new are empty string are useful special cases.
 	    If new is "", then all instances of the old string will be deleted.
@@ -68,8 +82,47 @@ fix(string, target, newString) - similar to replace but works at the whole strin
     example to give something a value if non is present
 	    fix(requiredField, "", "reasonable default value")
 
-md5(string) - returns an MD5 sum digest/hash of string. Useful for creating IDs out of large or
-            merged fields. 
+pick(query ? key1:val1, key2:val2, ... keyN:valN)
+    Looks through keys for one that matches query, and returns associated value if
+    it finds it.  Otherwise returns empty string.
+    Can be used to apply different expressions to parsing in different conditions:
+         pick(species, "human" : ethnicity,  "mouse"  : strain )
+        
+(boolean ?  trueVal : falseVal)
+    This is the trinary conditional expression found in C, Python and many other languages.
+    If the boolean before the question mark is true, then the result is the trueVal before the
+    colon, otherwise it's the falseVal after the colon.  Empty strings and zeros as booleans are
+    considered false, other strings and numbers true.
 
-now() - returns current time and date in a really aweful unix ctime(2) format.  We will improve it.
+in(string, query) - returns true if query is a substring of string, false otherwise
+
+same(a, b) - returns true if the two arguments are the same, false otherwise
+
+starts(prefix, string) - returns true if string starts with prefix
+
+ends(string, suffix) - returns true if string ends with suffix
+
+or - logical or operation extended to strings and numbers.  
+     for logic - if any or-separated-values are true, return true, else false
+     for numbers - if any or-separated non-zero numbers exist, return first one else 0
+     for strings - if any or-separated non-empty strings exists, return first one else ""
+   In mixed operations result is converted to strings if strings are involved or
+   the values "" and "true" if no strings are involved.  
+   For the pure string case this can be useful for setting defaults as well.  For
+   instance presuming you might or might not have filled in values for the city or country
+   variables in the given expression that would return a location of some sort
+	   (city or country or "somewhere in the universe")
+   Note the parenthesis around the ors is good to have because of the very low
+   precedence of the logical operators.
+
+and - logical and operation extended to strings and numbers
+     for logic - if all and-separated-values are tru, return true, else false
+     for numbers - if all numbers are non-zero return true else false
+     for strings - if all and-separated strings are nonempty, return true, else ""
+   In mixed operations result is converted to strings if strings are involved or
+   the values "" and "true" if no strings are involved.
+
+now() - returns current time and date in ISO 1806 format using the variant that has the local
+        time and timezone,   for instance 2019-08-14T23:35:22-0700 for 11:35 pm in California
+	during daylight savings time.
 

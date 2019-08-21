@@ -59,6 +59,14 @@ enum strexBuiltInFunc
     strexBuiltInReplace,
     strexBuiltInFix,
     strexBuiltInStrip,
+    strexBuiltInLen,
+    strexBuiltInSymbol,
+    strexBuiltInLower,
+    strexBuiltInUpper,
+    strexBuiltInIn, 
+    strexBuiltInStarts,
+    strexBuiltInEnds,
+    strexBuiltInSame,
     };
 
 struct strexBuiltIn
@@ -66,6 +74,7 @@ struct strexBuiltIn
     {
     char *name;		/* Name in strex language:  trim, split, etc */
     enum strexBuiltInFunc func;  /* enum version: strexBuiltInTrim strexBuiltInSplit etc. */
+    enum strexType returnType;	 /* Type of return value */
     int paramCount;	/* Number of parameters, not flexible in this language! */
     enum strexType *paramTypes;  /* Array of types, one for each parameter */
     };
@@ -95,6 +104,8 @@ enum strexOp
     strexOpSymbol,	/* A symbol name. */
 
     strexOpBuiltInCall,	/* Call a built in function */
+    strexOpPick,	/* Similar to built in but pick deserves it's own op. */
+    strexOpConditional,	/* Conditional trinary operation */
 
     strexOpArrayIx,	/* An array with an index. */
     strexOpArrayRange,	/* An array with a range. */
@@ -107,6 +118,8 @@ enum strexOp
 
     /* Binary operations. */
     strexOpAdd,
+    strexOpOr,
+    strexOpAnd,
 
     /* Type conversions - possibly a few more than we actually need at the moment. */
     strexOpStringToBoolean,
@@ -138,6 +151,8 @@ struct strexIn
     {
     struct tokenizer *tkz;  /* Get next text input from here */
     struct hash *builtInHash;  /* Hash of built in functions */
+    void *symbols;	    /* NULL or pointer to a symbol table to check */
+    StrexLookup lookup; /* lookup something in symbol table if we have it */
     };
 
 /* Some predefined lists of parameter types */
@@ -150,17 +165,25 @@ static enum strexType stringStringInt[] = {strexTypeString, strexTypeString, str
 /* There's one element here for each built in function.  There's also a few switches you'll need to
  * fill in if you add a new built in function. */
 static struct strexBuiltIn builtins[] = {
-    { "trim", strexBuiltInTrim, 1, oneString, },
-    { "between", strexBuiltInBetween, 3, threeStrings },
-    { "split", strexBuiltInSplit, 2, stringInt },
-    { "now", strexBuiltInNow, 0, NULL },
-    { "md5", strexBuiltInMd5, 1, oneString },
-    { "separate", strexBuiltInSeparate, 3, stringStringInt },
-    { "uncsv", strexBuiltInUncsv, 2, stringInt },
-    { "untsv", strexBuiltInUntsv, 2, stringInt },
-    { "replace", strexBuiltInReplace, 3, threeStrings },
-    { "fix", strexBuiltInFix, 3, threeStrings },
-    { "strip", strexBuiltInStrip, 2, twoStrings },
+    { "trim", strexBuiltInTrim, strexTypeString, 1, oneString, },
+    { "between", strexBuiltInBetween, strexTypeString, 3, threeStrings },
+    { "split", strexBuiltInSplit, strexTypeString, 2, stringInt },
+    { "now", strexBuiltInNow, strexTypeString, 0, NULL },
+    { "md5", strexBuiltInMd5, strexTypeString, 1, oneString },
+    { "separate", strexBuiltInSeparate, strexTypeString, 3, stringStringInt },
+    { "uncsv", strexBuiltInUncsv, strexTypeString, 2, stringInt },
+    { "untsv", strexBuiltInUntsv, strexTypeString, 2, stringInt },
+    { "replace", strexBuiltInReplace, strexTypeString, 3, threeStrings },
+    { "fix", strexBuiltInFix, strexTypeString, 3, threeStrings },
+    { "strip", strexBuiltInStrip, strexTypeString, 2, twoStrings },
+    { "len", strexBuiltInLen, strexTypeInt, 1, oneString},
+    { "symbol", strexBuiltInSymbol, strexTypeString, 2, twoStrings },
+    { "upper", strexBuiltInUpper, strexTypeString, 1, oneString },
+    { "lower", strexBuiltInLower, strexTypeString, 1, oneString },
+    { "in", strexBuiltInIn, strexTypeBoolean, 2, twoStrings },
+    { "starts", strexBuiltInStarts, strexTypeBoolean, 2, twoStrings}, 
+    { "ends", strexBuiltInEnds, strexTypeBoolean, 2, twoStrings}, 
+    { "same", strexBuiltInSame, strexTypeBoolean, 2, twoStrings}, 
 };
 
 static struct hash *hashBuiltIns()
@@ -173,7 +196,8 @@ for (i=0; i<ArraySize(builtins); ++i)
 return hash;
 }
 
-static struct strexIn *strexInNew(char *expression, char *fileName, int fileLineNumber)
+static struct strexIn *strexInNew(char *expression, char *fileName, int fileLineNumber,
+    void *symbols, StrexLookup lookup)
 /* Return a new strexIn structure wrapped around expression */
 {
 struct lineFile *lf = lineFileOnString(fileName, TRUE, expression);
@@ -184,6 +208,8 @@ struct strexIn *si;
 AllocVar(si);
 si->tkz = tkz;
 si->builtInHash = hashBuiltIns();
+si->symbols = symbols;
+si->lookup = lookup;
 return si;
 }
 
@@ -209,10 +235,20 @@ p->type = type;
 return p;
 }
 
-static void strexValDump(union strexVal val, enum strexType type, FILE *f)
+static void strexParseValDump(struct strexParse *p, FILE *f)
 /* Dump out value to file. */
 {
-switch (type)
+union strexVal val = p->val;
+switch (p->op)
+    {
+    case strexOpBuiltInCall:
+        fprintf(f, "%s", val.builtIn->name);
+	return;
+    default:
+        break;
+    }
+
+switch (p->type)
     {
     case strexTypeBoolean:
         fprintf(f, "%s", (val.b ? "true" : "false") );
@@ -295,9 +331,17 @@ switch (op)
 
     case strexOpAdd:
 	return "strexOpAdd";
+    case strexOpOr:
+	return "strexOpOr";
+    case strexOpAnd:
+	return "strexOpAnd";
 
     case strexOpBuiltInCall:
         return "strexOpBuiltInCall";
+    case strexOpPick:
+        return "strexOpPick";
+    case strexOpConditional:
+        return "strexOpConditional";
 
     case strexOpArrayIx:
         return "strexOpArrayIx";
@@ -316,7 +360,7 @@ void strexParseDump(struct strexParse *p, int depth, FILE *f)
 {
 spaceOut(f, 3*depth);
 fprintf(f, "%s ", strexOpToString(p->op));
-strexValDump(p->val, p->type,  f);
+strexParseValDump(p,  f);
 fprintf(f, "\n");
 struct strexParse *child;
 for (child = p->children; child != NULL; child= child->next)
@@ -341,6 +385,9 @@ if (!sameWord(in->tkz->string, expecting))
 
 static struct strexParse *strexParseExpression(struct strexIn *in);
 /* Parse out an expression with a single value */
+
+static struct strexParse *strexParseOr(struct strexIn *in);
+/* Parse out logical/string or binary operator. Lowest level logical op, before conditional */
 
 static struct strexParse *strexParseAtom(struct strexIn *in)
 /* Return low level (symbol or literal) or a parenthesis enclosed expression. */
@@ -377,6 +424,15 @@ else if (isalpha(c) || c == '_')
 	    break;
 	}
     p->val.s = dyStringCannibalize(&dy);
+    // We look ahead a little to see if it's a function - hmm
+    tok = tokenizerNext(tkz);
+    boolean isFunct = (tok != NULL && tok[0] == '(');
+    tokenizerReuse(tkz);
+    if (!isFunct && in->symbols != NULL && in->lookup(in->symbols, p->val.s) == NULL )
+	{
+	errAbort("No field %s exists line %d of %s", p->val.s, 
+	    in->tkz->lf->lineIx, in->tkz->lf->fileName);
+	}
     }
 else if (isdigit(c))
     {
@@ -409,8 +465,8 @@ else
 return p;
 }
 
-static enum strexType commonTypeForBop(enum strexType left, enum strexType right)
-/* Return type that will work for a binary operation. */
+static enum strexType commonTypeForMathBop(enum strexType left, enum strexType right)
+/* Return type that will work for a math binary operation. */
 {
 if (left == right)
     return left;
@@ -429,6 +485,14 @@ else
     }
 }
 
+static enum strexType commonTypeForLogicBop(enum strexType left, enum strexType right)
+/* Return type that will work for a boolean binary operation. */
+{
+if (left == right)
+    return left;
+else
+    return strexTypeBoolean;
+}
 
 static enum strexOp booleanCastOp(enum strexType oldType)
 /* Return op to convert oldType to boolean. */
@@ -540,7 +604,7 @@ static struct strexParse *strexParseFunction(struct strexIn *in)
 *            strexParse(b)
 *            strexParse(c)
 * or something like that.  With no parameters 
-*            strexParseFunction */
+*        strexOpBuiltInCall */
 {
 struct tokenizer *tkz = in->tkz;
 struct strexParse *function = strexParseAtom(in);
@@ -555,50 +619,99 @@ else if (tok[0] == '(')
 
     /* Look up function to call and complain if it doesn't exist */
     char *functionName = function->val.s;
-    struct strexBuiltIn *builtIn = hashFindVal(in->builtInHash, functionName);
-    if (builtIn == NULL)
-        errAbort("No built in function %s exists line %d of %s", functionName, tkz->lf->lineIx,
-	    tkz->lf->fileName);
 
-    /* We're going to reuse this current op */
-    function->op = strexOpBuiltInCall;
-    function->type = strexTypeString;
-    function->val.builtIn = builtIn;
-
-    tok = tokenizerMustHaveNext(tkz);
-    if (tok[0] != ')')
+    /* Deal with special named ops like pick */
+    if (sameString(functionName, "pick"))
         {
-	tokenizerReuse(tkz);
+	/* Yay, the pick operation.  It looks like
+	 *    pick( keyExp,  key1, val1, key2, val2, ..., keyN, valN)
+	 * the logic is to evaluate keyExp, and then pick one of the valN's to return,
+	 * the one where the keyN is the same as keyExp */
+	struct strexParse *keyExp = strexParseOr(in);
+	slAddHead(&function->children, keyExp);
+	skipOverRequired(in, "?");
+
+	struct strexParse *firstVal = NULL;
 	for (;;)
 	    {
-	    struct strexParse *param = strexParseExpression(in);
-	    slAddHead(&function->children, param);
+	    struct strexParse *key = strexParseCoerce(strexParseExpression(in), keyExp->type);
+	    slAddHead(&function->children, key);
+	    skipOverRequired(in, ":");
+	    struct strexParse *val = strexParseExpression(in);
+	    if (firstVal == NULL)
+	        firstVal = val;
+	    else
+		{
+		if (firstVal->type != val->type)
+		    {
+		    errAbort("Mixed value types %s and %s in pick() expression line %d of %s",
+		        strexTypeToString(firstVal->type), strexTypeToString(val->type),
+			tkz->lf->lineIx, tkz->lf->fileName);
+		    }
+	        val = strexParseCoerce(val, firstVal->type);
+		}
+	    slAddHead(&function->children, val);
 	    tok = tokenizerMustHaveNext(tkz);
 	    if (tok[0] == ')')
-	        break;
+		break;
 	    else if (tok[0] != ',')
-	        errAbort("Error in parameter list for %s line %d of %s", function->val.s, 
+		errAbort("Error in pick parameter list line %d of %s", 
 		    tkz->lf->lineIx, tkz->lf->fileName);
 	    }
 	slReverse(&function->children);
-	}
 
-    /* Check function parameter count */
-    int childCount = slCount(function->children);
-    if (childCount != builtIn->paramCount)
-        errAbort("Function %s has %d parameters but needs %d line %d of %s",
-	    builtIn->name, childCount, builtIn->paramCount, tkz->lf->lineIx, tkz->lf->fileName);
-	    
-    /* Check function parameter types */
-    int i;
-    struct strexParse *p;
-    for (i=0, p=function->children; i<childCount; ++i, p = p->next)
-        {
-	if (p->type != builtIn->paramTypes[i])
+	/* Going to reuse current op, turn it into pick */
+	function->op = strexOpPick;
+	function->type = firstVal->type;
+	}
+    else
+	{
+	/* It's a builtin function as opposed to a special op.  Figure out which one.*/
+	struct strexBuiltIn *builtIn = hashFindVal(in->builtInHash, functionName);
+	if (builtIn == NULL)
+	    errAbort("No built in function %s exists line %d of %s", functionName, tkz->lf->lineIx,
+		tkz->lf->fileName);
+
+	/* We're going to reuse this current op */
+	function->op = strexOpBuiltInCall;
+	function->type = builtIn->returnType;
+	function->val.builtIn = builtIn;
+
+	tok = tokenizerMustHaveNext(tkz);
+	if (tok[0] != ')')
 	    {
-	    errAbort("Parameter #%d to %s needs to be type %s not %s line %d of %s",
-		i, builtIn->name,  strexTypeToString(builtIn->paramTypes[i]), 
-		strexTypeToString(p->type), tkz->lf->lineIx, tkz->lf->fileName);
+	    tokenizerReuse(tkz);
+	    for (;;)
+		{
+		struct strexParse *param = strexParseExpression(in);
+		slAddHead(&function->children, param);
+		tok = tokenizerMustHaveNext(tkz);
+		if (tok[0] == ')')
+		    break;
+		else if (tok[0] != ',')
+		    errAbort("Error in parameter list for %s line %d of %s", function->val.s, 
+			tkz->lf->lineIx, tkz->lf->fileName);
+		}
+	    slReverse(&function->children);
+	    }
+
+	/* Check function parameter count */
+	int childCount = slCount(function->children);
+	if (childCount != builtIn->paramCount)
+	    errAbort("Function %s has %d parameters but needs %d line %d of %s",
+		builtIn->name, childCount, builtIn->paramCount, tkz->lf->lineIx, tkz->lf->fileName);
+		
+	/* Check function parameter types */
+	int i;
+	struct strexParse *p;
+	for (i=0, p=function->children; i<childCount; ++i, p = p->next)
+	    {
+	    if (p->type != builtIn->paramTypes[i])
+		{
+		errAbort("Parameter #%d to %s needs to be type %s not %s line %d of %s",
+		    i, builtIn->name,  strexTypeToString(builtIn->paramTypes[i]), 
+		    strexTypeToString(p->type), tkz->lf->lineIx, tkz->lf->fileName);
+		}
 	    }
 	}
     }
@@ -658,7 +771,7 @@ else if (tok[0] == '[')
 	    {
 	    struct strexParse *secondIndex;
 	    tok = tokenizerMustHaveNext(tkz);
-	    if (tok[0] == ']')  // Case where second half of rang is empty
+	    if (tok[0] == ']')  // Case where second half of range is empty
 		{
 	        tokenizerReuse(tkz);
 		secondIndex = strexParseNew(strexOpStrlen, strexTypeInt);
@@ -738,7 +851,7 @@ for (;;)
     struct strexParse *r = strexParseUnaryMinus(in);
 
     /* Make left and right side into a common type */
-    enum strexType childType = commonTypeForBop(l->type, r->type);
+    enum strexType childType = commonTypeForMathBop(l->type, r->type);
     l = strexParseCoerce(l, childType);
     r = strexParseCoerce(r, childType);
 
@@ -753,11 +866,115 @@ for (;;)
     }
 }
 
+static struct strexParse *strexParseAnd(struct strexIn *in)
+/* Parse out plus or minus. */
+{
+struct tokenizer *tkz = in->tkz;
+struct strexParse *p = strexParseSum(in);
+for (;;)
+    {
+    char *tok = tokenizerNext(tkz);
+    if (tok == NULL || differentString(tok, "and"))
+	{
+	tokenizerReuse(tkz);
+	return p;
+	}
+
+    /* What we've parsed so far becomes left side of binary op, next term ends up on right. */
+    struct strexParse *l = p;
+    struct strexParse *r = strexParseSum(in);
+
+    /* Make left and right side into a common type */
+    enum strexType childType = commonTypeForLogicBop(l->type, r->type);
+    l = strexParseCoerce(l, childType);
+    r = strexParseCoerce(r, childType);
+
+    /* Create the binary operation */
+    AllocVar(p);
+    p->op = strexOpAnd;
+    p->type = childType;
+
+    /* Now hang children onto node. */
+    p->children = l;
+    l->next = r;
+    }
+}
+
+static struct strexParse *strexParseOr(struct strexIn *in)
+/* Parse out logical/string or binary operator. */
+{
+struct tokenizer *tkz = in->tkz;
+struct strexParse *p = strexParseAnd(in);
+for (;;)
+    {
+    char *tok = tokenizerNext(tkz);
+    if (tok == NULL || differentString(tok, "or"))
+	{
+	tokenizerReuse(tkz);
+	return p;
+	}
+
+    /* What we've parsed so far becomes left side of binary op, next term ends up on right. */
+    struct strexParse *l = p;
+    struct strexParse *r = strexParseAnd(in);
+
+    /* Make left and right side into a common type */
+    enum strexType childType = commonTypeForLogicBop(l->type, r->type);
+    l = strexParseCoerce(l, childType);
+    r = strexParseCoerce(r, childType);
+
+    /* Create the binary operation */
+    AllocVar(p);
+    p->op = strexOpOr;
+    p->type = childType;
+
+    /* Now hang children onto node. */
+    p->children = l;
+    l->next = r;
+    }
+}
+
+static struct strexParse *strexParseConditional(struct strexIn *in)
+/* Handle the ternary operator ?:  usually written as ( boolean ? trueExp : falseExp)
+ * because of it's ridiculously low precedence.  Makes this parse tree:
+ *         strexOpConditional
+ *            boolean exp  (always boolean type)
+ *            true exp     (same type as false exp)
+ *            false exp    (same type as true exp)      */
+{
+struct tokenizer *tkz = in->tkz;
+struct strexParse *p = strexParseOr(in);
+char *tok = tokenizerNext(tkz);
+if (tok == NULL)
+    tokenizerReuse(tkz);
+else if (tok[0] == '?')
+    {
+    struct strexParse *booleanExp = strexParseCoerce(p, strexTypeBoolean);
+    struct strexParse *trueExp = strexParseExpression(in);
+    skipOverRequired(in, ":");
+    struct strexParse *falseExp = strexParseExpression(in);
+    if (trueExp->type != falseExp->type)
+	errAbort("Mixed value types %s and %s in conditional expression (?:) line %d of %s",
+	    strexTypeToString(trueExp->type), strexTypeToString(falseExp->type),
+	    tkz->lf->lineIx, tkz->lf->fileName);
+
+    /* Make conditional expression and hook up it's three children. */
+    struct strexParse *conditional = strexParseNew(strexOpConditional, trueExp->type);
+    conditional->children = booleanExp;
+    booleanExp->next = trueExp;
+    trueExp->next = falseExp;
+    p = conditional;
+    }
+else
+    tokenizerReuse(tkz);
+return p;
+}
+
 
 static struct strexParse *strexParseExpression(struct strexIn *in)
 /* Parse out an expression. Leaves input at next expression. */
 {
-return strexParseSum(in);
+return strexParseConditional(in);
 }
 
 static void ensureAtEnd(struct strexIn *in)
@@ -770,19 +987,20 @@ if (leftover != NULL)
 	tkz->lf->fileName);
 }
 
-struct strexParse *strexParseString(char *s, char *fileName, int fileLineNumber)
+struct strexParse *strexParseString(char *s, char *fileName, int fileLineNumber,
+    void *symbols, StrexLookup lookup)
 /* Parse out string expression in s and return root of tree. */
 {
-struct strexIn *si = strexInNew(s, fileName, fileLineNumber);
+struct strexIn *si = strexInNew(s, fileName, fileLineNumber, symbols, lookup);
 struct strexParse *parseTree = strexParseExpression(si);
 ensureAtEnd(si);
 strexInFree(&si);
 return parseTree;
 }
 
-/* The parsing section is done, now for the evaluation section. */
+/************ The parsing section is done, now for the evaluation section. **************/
 
-static struct strexEval strexLocalEval(struct strexParse *p, void *record, StrexEvalLookup lookup, 
+static struct strexEval strexLocalEval(struct strexParse *p, void *record, StrexLookup lookup, 
 	struct lm *lm);
 /* Evaluate self on parse tree, allocating memory if needed from lm. */
 
@@ -796,6 +1014,7 @@ switch (r.type)
     {
     case strexTypeBoolean:
         r.val.s = (r.val.b ? "true" : "false");
+	break;
     case strexTypeString:
 	break;	/* It's already done. */
     case strexTypeInt:
@@ -815,7 +1034,7 @@ r.type = strexTypeString;
 return r;
 }
 
-static struct strexEval strexEvalAdd(struct strexParse *p, void *record, StrexEvalLookup lookup,
+static struct strexEval strexEvalAdd(struct strexParse *p, void *record, StrexLookup lookup,
 	struct lm *lm)
 /* Return a + b. */
 {
@@ -824,6 +1043,7 @@ struct strexParse *rp = lp->next;
 struct strexEval lv = strexLocalEval(lp, record, lookup, lm);
 struct strexEval rv = strexLocalEval(rp, record, lookup, lm);
 struct strexEval res;
+assert(lv.type == rv.type);   // Is our type automatic casting working?
 switch (lv.type)
     {
     case strexTypeInt:
@@ -856,6 +1076,72 @@ res.type = lv.type;
 return res;
 }
 
+static struct strexEval strexEvalOr(struct strexParse *p, void *record, StrexLookup lookup,
+	struct lm *lm)
+/* Return a or b. */
+{
+struct strexParse *lp = p->children;
+struct strexParse *rp = lp->next;
+struct strexEval lv = strexLocalEval(lp, record, lookup, lm);
+struct strexEval rv = strexLocalEval(rp, record, lookup, lm);
+struct strexEval res;
+assert(lv.type == rv.type);   // Is our type automatic casting working?
+switch (lv.type)
+    {
+    case strexTypeBoolean:
+        res.val.b = (lv.val.b || rv.val.b);
+	break;
+    case strexTypeInt:
+	res.val.i = (lv.val.i ? lv.val.i : rv.val.i);
+	break;
+    case strexTypeDouble:
+	res.val.x = (lv.val.x != 0.0 ? lv.val.x : rv.val.x);
+	break;
+    case strexTypeString:
+	res.val.s = (lv.val.s[0] ? lv.val.s : rv.val.s);
+	break;
+    default:
+	internalErr();
+	res.val.b = FALSE;
+	break;
+    }
+res.type = lv.type;
+return res;
+}
+
+static struct strexEval strexEvalAnd(struct strexParse *p, void *record, StrexLookup lookup,
+	struct lm *lm)
+/* Return a and b. */
+{
+struct strexParse *lp = p->children;
+struct strexParse *rp = lp->next;
+struct strexEval lv = strexLocalEval(lp, record, lookup, lm);
+struct strexEval rv = strexLocalEval(rp, record, lookup, lm);
+struct strexEval res;
+assert(lv.type == rv.type);   // Is our type automatic casting working?
+switch (lv.type)
+    {
+    case strexTypeBoolean:
+        res.val.b = (lv.val.b && rv.val.b);
+	break;
+    case strexTypeInt:
+	res.val.i = (lv.val.i ? rv.val.i : lv.val.i);
+	break;
+    case strexTypeDouble:
+	res.val.x = (lv.val.x != 0.0 ? rv.val.x : lv.val.x);
+	break;
+    case strexTypeString:
+	res.val.s = (lv.val.s[0] ? rv.val.s : lv.val.s);
+	break;
+    default:
+	internalErr();
+	res.val.b = FALSE;
+	break;
+    }
+res.type = lv.type;
+return res;
+}
+
 
 static char *csvParseOneOut(char *csvIn, int ix, struct dyString *scratch)
 /* Return csv value of given index or NULL if at end */
@@ -871,7 +1157,7 @@ return csvParseNext(&pos, scratch);
 }
 
 static struct strexEval strexEvalArrayIx(struct strexParse *p, 
-	void *record, StrexEvalLookup lookup, struct lm *lm)
+	void *record, StrexLookup lookup, struct lm *lm)
 /* Handle parse tree generated by an indexed array. */
 {
 struct strexParse *array = p->children;
@@ -888,7 +1174,7 @@ return res;
 }
 
 static struct strexEval strexEvalArrayRange(struct strexParse *p, 
-    void *record, StrexEvalLookup lookup, struct lm *lm)
+    void *record, StrexLookup lookup, struct lm *lm)
 /* Handle parse tree generated by array range expression, which by now
  * has just been turned into two integer values. */
 {
@@ -1013,14 +1299,42 @@ while ((c = *s++) != 0)
 return result;
 }
 
+static char *symbolify(char *prefix, char *original, struct lm *lm)
+/* Convert original to something could use as a C language symbol with dots maybe. */
+{
+int prefixSize = strlen(prefix);
+char *result = lmAlloc(lm, strlen(original) + prefixSize + 1);  // Move to local memory
+memcpy(result, prefix, prefixSize);
+char *in = skipLeadingSpaces(original); 
+char *out = result + prefixSize;
+char c;
+while ((c = *in++) != 0)
+     {
+     if (isspace(c))
+	 *out++ = '_';
+     else if (isalnum(c) || c == '.' || c == '_')
+         *out++ = c;
+     }
+*out++ = 0;
+int len = strlen(result) - prefixSize;
+if (len > 32)
+    {
+    char *md5 = hmacMd5("", original);
+    strcpy(result + prefixSize, md5);
+    freeMem(md5);
+    }
+
+return result;
+}
 
 static struct strexEval strexEvalCallBuiltIn(struct strexParse *p, 
-    void *record, StrexEvalLookup lookup, struct lm *lm)
-/* Handle parse tree generated by an indexed array. */
+    void *record, StrexLookup lookup, struct lm *lm)
+/* Handle parse tree generated by call to a built in function. */
 {
 struct strexBuiltIn *builtIn = p->val.builtIn;
 struct strexEval res;
-res.type = strexTypeString;
+res.type = builtIn->returnType;
+
 switch (builtIn->func)
     {
     case strexBuiltInTrim:
@@ -1048,8 +1362,12 @@ switch (builtIn->func)
 	}
     case strexBuiltInNow:
         {
-	time_t now = time(NULL);
-	res.val.s = lmCloneString(lm, ctime(&now));
+	time_t now;
+	time(&now);
+	char buf[64];
+	// strftime(buf, sizeof buf, "%FT%TZ", gmtime(&now));
+	strftime(buf, sizeof buf, "%FT%T%z", localtime(&now));
+	res.val.s = lmCloneString(lm, buf);
 	eraseTrailingSpaces(res.val.s);
 	break;
 	}
@@ -1111,12 +1429,145 @@ switch (builtIn->func)
 	res.val.s = stripAll(a.val.s, b.val.s, lm);
 	break;
 	}
+    case strexBuiltInLen:
+        {
+        struct strexEval a = strexLocalEval(p->children, record, lookup, lm);
+	res.val.i = strlen(a.val.s);
+	break;
+	}
+    case strexBuiltInSymbol:  // Convert string to something could use as a C language symbol
+        {
+        struct strexEval a = strexLocalEval(p->children, record, lookup, lm);
+        struct strexEval b = strexLocalEval(p->children->next, record, lookup, lm);
+	res.val.s = symbolify(a.val.s, b.val.s, lm);
+	break;
+	}
+    case strexBuiltInLower:
+        {
+        struct strexEval a = strexLocalEval(p->children, record, lookup, lm);
+	res.val.s = lmCloneString(lm, a.val.s);
+	tolowers(res.val.s);
+	break;
+	}
+    case strexBuiltInUpper:
+        {
+        struct strexEval a = strexLocalEval(p->children, record, lookup, lm);
+	res.val.s = lmCloneString(lm, a.val.s);
+	touppers(res.val.s);
+	break;
+	}
+    case strexBuiltInIn: 
+        {
+        struct strexEval string = strexLocalEval(p->children, record, lookup, lm);
+        struct strexEval query = strexLocalEval(p->children->next, record, lookup, lm);
+	res.val.b = (strstr(string.val.s, query.val.s) != NULL);
+	break;
+	}
+    case strexBuiltInStarts:
+        {
+        struct strexEval starts = strexLocalEval(p->children, record, lookup, lm);
+        struct strexEval string = strexLocalEval(p->children->next, record, lookup, lm);
+	res.val.b = startsWith(starts.val.s, string.val.s);
+	break;
+	}
+    case strexBuiltInEnds:
+        {
+        struct strexEval string = strexLocalEval(p->children, record, lookup, lm);
+        struct strexEval end = strexLocalEval(p->children->next, record, lookup, lm);
+	res.val.b = endsWith(string.val.s, end.val.s);
+	break;
+	}
+    case strexBuiltInSame:
+        {
+        struct strexEval a = strexLocalEval(p->children, record, lookup, lm);
+        struct strexEval b = strexLocalEval(p->children->next, record, lookup, lm);
+	res.val.b = (strcmp(a.val.s, b.val.s) == 0);
+	break;
+	}
     }
 return res;
 }
 
+static struct strexEval nullValForType(enum strexType type)
+/* Return 0, "", 0.0 depending */
+{
+struct strexEval res = {.type=type};
+switch (type)
+    {
+     case strexTypeInt:
+	  res.val.i = 0;
+	  break;
+     case strexTypeDouble:
+	  res.val.x = 0.0;
+	  break;
+     case strexTypeBoolean:
+	  res.val.b = FALSE;
+	  break;
+     case strexTypeString:
+	  res.val.s = "";
+	  break;
+    }
+return res;
+}
 
-static struct strexEval strexLocalEval(struct strexParse *p, void *record, StrexEvalLookup lookup, 
+static struct strexEval strexEvalPick(struct strexParse *pick, void *record, StrexLookup lookup,
+    struct lm *lm)
+/* Evaluate a pick operator. */
+{
+/* Evaluate the keyValue */
+struct strexParse *p = pick->children;
+struct strexEval keyVal = strexLocalEval(p, record, lookup, lm);
+p = p->next;
+
+struct strexEval res;
+boolean gotMatch = FALSE;
+while (p != NULL)
+    {
+    struct strexEval key = strexLocalEval(p, record, lookup, lm);
+    p = p->next;  // Parser guarantees this non-null
+    struct strexParse *valExp = p;
+    p = p->next;
+    switch (key.type)
+         {
+	 case strexTypeInt:
+	      gotMatch = (keyVal.val.i == key.val.i);
+	      break;
+	 case strexTypeDouble:
+	      gotMatch = (keyVal.val.x == key.val.x);
+	      break;
+	 case strexTypeBoolean:
+	      gotMatch = (keyVal.val.b = key.val.b);
+	      break;
+	 case strexTypeString:
+	      gotMatch = sameString(keyVal.val.s, key.val.s);
+	      break;
+	 }
+    if (gotMatch)
+	 {
+         return strexLocalEval(valExp, record, lookup, lm);
+	 }
+    }
+res = nullValForType(pick->type);
+return res;
+}
+
+static struct strexEval strexEvalConditional(struct strexParse *conditional, 
+    void *record, StrexLookup lookup, struct lm *lm)
+/* Evaluate a conditional trinary ? :  operator. */
+{
+struct strexParse *child = conditional->children;
+struct strexEval b = strexLocalEval(child, record, lookup, lm);
+struct strexEval res;
+if (b.val.b)
+    res = strexLocalEval(child->next, record, lookup, lm); 
+else
+    res = strexLocalEval(child->next->next, record, lookup, lm); 
+return res;
+}
+
+
+
+static struct strexEval strexLocalEval(struct strexParse *p, void *record, StrexLookup lookup, 
 	struct lm *lm)
 /* Evaluate self on parse tree, allocating memory if needed from lm. */
 {
@@ -1230,13 +1681,29 @@ switch (p->op)
        res.val.i = strlen(res.val.s);
        break;
 
+    /* More complicated ops. */
     case strexOpBuiltInCall:
        res = strexEvalCallBuiltIn(p, record, lookup, lm);
        break;
+    case strexOpPick:
+       res = strexEvalPick(p, record, lookup, lm);
+       break;
+    case strexOpConditional:
+       res = strexEvalConditional(p, record, lookup, lm);
+       break;
+
 
     /* Mathematical ops, simple binary type */
     case strexOpAdd:
        res = strexEvalAdd(p, record, lookup, lm);
+       break;
+
+    /* Logical ops, simple binary type */
+    case strexOpOr:
+       res = strexEvalOr(p, record, lookup, lm);
+       break;
+    case strexOpAnd:
+       res = strexEvalAnd(p, record, lookup, lm);
        break;
 
     default:
@@ -1248,7 +1715,7 @@ switch (p->op)
 return res;
 }
 
-char *strexEvalAsString(struct strexParse *p, void *record, StrexEvalLookup lookup)
+char *strexEvalAsString(struct strexParse *p, void *record, StrexLookup lookup)
 /* Evaluating a strex expression on a symbol table with a lookup function for variables and
  * return result as a string value. */
 {

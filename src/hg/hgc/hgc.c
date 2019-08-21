@@ -18511,67 +18511,6 @@ if (sqlTableExists(conn, gcTable))
     }
 }
 
-static void printLsSnpPdb(struct sqlConnection *conn, char *pdbId, char *snpId)
-/* generate LS-SNP and chimera links for a PDB id */
-{
-char *lsSnpUrl = lsSnpPdbGetUrlPdbSnp(pdbId, snpId);
-struct tempName chimerax;
-lsSnpPdbChimeraSnpAnn(conn, pdbId, snpId, &chimerax);
-printf("<TD>%s<TD>%s<TD><A HREF=\"%s\" target=_blank>LS-SNP</A><td class=\"hgcLsSnpSep\"><A HREF=\"%s\">Chimera</A>\n",
-       pdbId, lsSnpPdbChimeraGetStructType(conn, pdbId),
-       lsSnpUrl, chimerax.forHtml);
-freeMem(lsSnpUrl);
-}
-
-static void printLsSnpMappings(struct sqlConnection *conn, struct slName *pdbIds,
-			       char *snpTrack, char *snpId)
-/* Print lsSnp mappings. */
-{
-jsBeginCollapsibleSection(cart, snpTrack, "lsSnp", "Mappings to PDB protein structures", FALSE);
-printf("<TABLE class=\"hgcLsSnp\">\n");
-printf("<TBODY>\n");
-int numPdbs = slCount(pdbIds);
-// limit column groups if just one row
-int numCols = (numPdbs < 3) ? numPdbs : 3;
-int iCol = 0;
-struct slName *pdbId;
-for (pdbId = pdbIds; pdbId != NULL; pdbId = pdbId->next)
-    {
-    if (iCol == 0)
-        printf("<TR>\n");
-    printLsSnpPdb(conn, pdbId->name, snpId);
-    iCol++;
-    if (iCol == numCols)
-        {
-        printf("</TR>\n");
-        iCol = 0;
-        }
-    }
-if (iCol != 0)
-    {
-    // fill in last row
-    for (; iCol < numCols; iCol++)
-        printf("<TD colspan=4 class=\"hgcLsSnpSep\">\n");
-    printf("</TR>\n");
-    }
-printf("</TBODY>\n");
-printf("</TABLE>\n");
-printf("<A href=\"../goldenPath/help/chimera.html\" TARGET=_blank>Chimera help</A>\n");
-jsEndCollapsibleSection();
-}
-
-static void checkForLsSnpMappings(struct sqlConnection *conn, char *snpTrack, char *snpId)
-/* check if this SNP is mapped to any protein by LS-SNP, and if so print
-* the information. */
-{
-struct slName *pdbIds = lsSnpPdbChimeraGetSnpPdbs(conn, snpId);
-if (pdbIds != NULL)
-    {
-    printLsSnpMappings(conn, pdbIds, snpTrack, snpId);
-    slFreeList(&pdbIds);
-    }
-}
-
 void printOtherSnpMappings(char *table, char *name, int start,
 			   struct sqlConnection *conn, int rowOffset)
 /* If this SNP (from any bed4+ table) is not uniquely mapped, print the other mappings. */
@@ -18639,7 +18578,6 @@ puts("<TABLE>");
 checkForGwasCatalog(conn, tdb, itemName);
 checkForHgdpGeo(conn, tdb, itemName, start);
 checkForHapmap(conn, tdb, itemName);
-checkForLsSnpMappings(conn, tdb->track, itemName);
 printSnpAlignment(tdb, snpAlign, version);
 puts("</TABLE>");
 printTrackHtml(tdb);
