@@ -40,7 +40,7 @@ beta:
 # permissions may be modified.  However, problems happen when a directory
 # is not owned by the current users.  These options attemp to work around it.
 # use care in changing
-rsyncOpts = --perms --times --recursive --omit-dir-times --relative --cvs-exclude --exclude='makefile' --exclude='cpAndLinkToResourceFiles.pl' --exclude='style/*'
+rsyncOpts = --times --recursive --omit-dir-times --relative --cvs-exclude --exclude='makefile' --exclude='cpAndLinkToResourceFiles.pl' --exclude='style/*'
 doInstall:
 	umask 002; rsync ${rsyncOpts} ${excl} ${incl} `$(FIND)` ${destDir}
 
