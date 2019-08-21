@@ -59,6 +59,11 @@ void hButtonWithOnClick(char *name, char *label, char *msg, char *onClick);
 void hOnClickButton(char *id, char *command, char *label);
 /* Write out push button if not suppressed. */
 
+void hButtonMaybePressed(char *name, char *label, char *msg, char *onClick, boolean pressed);
+/* If not suppresed, write out button optionally with onclick javascript, message and 
+   styled to indicate modal state (button pressed)
+ */
+
 void hTextVar(char *varName, char *initialVal, int charSize);
 /* Write out text entry field if not suppressed. */
 

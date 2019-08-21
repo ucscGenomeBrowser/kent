@@ -799,3 +799,12 @@ table.sessionTable tbody tr:hover{
 a:link img.sessionThumbnail {
   padding: 5px;
 }
+
+input[type="submit"].pressed {
+    background: #d0dcff; 
+    webkit-box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    moz-box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
+    border-radius: 4px;
+}
