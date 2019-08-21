@@ -196,13 +196,14 @@ struct symRec
     {
     struct hash *rowHash;	    /* The hash with symbol to row index */
     char **tableRow;		    /* The input row we are working on. You own.*/
-    char **varRow;		    /* A slot for each computed variables results. We own */
     struct hash *varHash;	    /* Variables with varVal values */
     struct varVal *varList;	    /* List of all variables, same info as in hash above. */
     struct lm *lm;		    /* Local memory to use during eval phase */
+    char *fileName;		    /* File name of big input tab file */
+    int lineIx;			    /* Line number of big input tab file */
     };
 
-struct symRec *symRecNew(struct hash *rowHash, struct hash *varHash)
+struct symRec *symRecNew(struct hash *rowHash, struct hash *varHash, char *fileName, int lineIx)
 /* Return a new symRec. The rowHash is required and contains a hash with
  * values that are indexes into the table row.  The varHash is optional,
  * and if present should have variable names keying parseExp values. */
@@ -213,6 +214,8 @@ rec->rowHash = rowHash;
 if (varHash != NULL)
     {
     rec->varHash = varHash;
+    rec->fileName = fileName;
+    rec->lineIx = lineIx;
     }
 return rec;
 }
@@ -231,16 +234,17 @@ for (v = symbols->varList; v != NULL; v = v->next)
     }
 }
 
-static void warnHandler(char *message)
+static void warnHandler(void *record, char *message)
 /* Our warn handler keeps a little hash to keep from repeating
  * messages for every row of the input sometimes. */
 {
+struct symRec *rec = record;
 static struct hash *uniq = NULL;
 if (uniq == NULL) uniq = hashNew(0);
 if (hashLookup(uniq, message) == NULL)
     {
     hashAdd(uniq, message, NULL);
-    warn("%s", message);
+    warn("%s line %d of %s", message, rec->lineIx, rec->fileName);
     }
 }
 
@@ -267,6 +271,26 @@ else
 return value;
 }
 
+static char *symExists(void *record, char *key)
+/* Lookup symbol in hash to see if a variable is there but not to 
+ * calculate it's values. */
+{
+struct symRec *rec = record;
+struct varVal *v = hashFindVal(rec->varHash, key);
+if (v != NULL)
+    {
+    return v->name;
+    }
+else
+    {
+    int rowIx = hashIntValDefault(rec->rowHash, key, -1);
+    if (rowIx < 0)
+        return NULL;
+    return rec->tableRow[rowIx];
+    }
+}
+
+
 
 void selectUniqueIntoTable(struct fieldedTable *inTable,  struct symRec *symbols,
     char *specFile,  // Just for error reporting
@@ -284,6 +308,7 @@ if (slCount(fieldList) != outFieldCount)	// A little cheap defensive programming
 struct dyString *csvScratch = dyStringNew(0);
 for (fr = inTable->rowList; fr != NULL; fr = fr->next)
     {
+    symbols->lineIx = fr->id;
     /* Create new row from a scan through old table */
     char **inRow = fr->row;
     int i;
@@ -365,7 +390,7 @@ verbose(1, "Read %d columns, %d rows from %s\n", inTable->fieldCount, inTable->r
 /* Create what we need for managing strex's symbol table. */
 struct hash *inFieldHash = hashFieldIx(inTable->fields, inTable->fieldCount);
 struct hash *varHash = hashNew(5);
-struct symRec *symbols = symRecNew(inFieldHash, varHash); 
+struct symRec *symbols = symRecNew(inFieldHash, varHash, inTabFile, 0); 
 symbols->tableRow = inTable->fields;   // During parse pass fields will act as proxy for tableRow
 /* Open spec file, check first real line, and maybe start defining variables. */
 
@@ -384,7 +409,7 @@ if (startsWithWord("define",  defLine))  // Whee, we got vars!
 		lf->lineIx, lf->fileName);
 	verbose(2, "var %s (%s)\n", varName, varSpec);
 	struct strexParse *exp = strexParseString(varSpec, lf->fileName, lf->lineIx-1, 
-	    symbols, symLookup);
+	    symbols, symExists);
 	struct varVal *v = varValNew(varName, exp);
 	hashAdd(varHash, varName, v);
 	slAddHead(&symbols->varList, v);
@@ -426,7 +451,7 @@ while (raSkipLeadingEmptyLines(lf, NULL))
         {
 	verbose(2, "  fieldName %s fieldSpec (%s)\n", fieldName, fieldSpec);
 	struct newFieldInfo *fv = parseFieldVal(fieldName, 
-	    fieldSpec, lf->fileName, lf->lineIx, symbols, symLookup);
+	    fieldSpec, lf->fileName, lf->lineIx, symbols, symExists);
 	if (fv->type == fvVar)
 	    {
 	    char *oldName = fieldSpec;
