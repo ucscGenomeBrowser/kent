@@ -180,7 +180,7 @@ int maxOut = bigFileMaxOutput();
 
 char *fileName = hicFileName(table, conn);
 struct hicMeta *fileInfo;
-char *errMsg = hicLoadHeader(fileName, &fileInfo);
+char *errMsg = hicLoadHeader(fileName, &fileInfo, database);
 if (errMsg != NULL)
     errAbort("%s", errMsg);
 
@@ -227,7 +227,7 @@ static void addFilteredBedsOnRegion(char *fileName, struct region *region,
 /* Add relevant beds in reverse order to pBedList */
 {
 struct hicMeta *fileInfo = NULL;
-char *errMsg = hicLoadHeader(fileName, &fileInfo);
+char *errMsg = hicLoadHeader(fileName, &fileInfo, database);
 
 if (errMsg != NULL)
     {
@@ -345,7 +345,7 @@ for (col = as->columnList; col != NULL; col = col->next)
 hPrintf("</TR>\n");
 
 struct hicMeta *fileInfo = NULL;
-char *errMsg = hicLoadHeader(fileName, &fileInfo);
+char *errMsg = hicLoadHeader(fileName, &fileInfo, database);
 
 if (errMsg != NULL)
     {

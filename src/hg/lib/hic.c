@@ -12,7 +12,7 @@
 #include "chromAlias.h"
 #include "interact.h"
 
-char *hicLoadHeader(char *filename, struct hicMeta **header)
+char *hicLoadHeader(char *filename, struct hicMeta **header, char *ucscAssembly)
 /* Create a hicMeta structure for the supplied Hi-C file.  If
  * the return value is non-NULL, it points to a string containing
  * an error message that explains why the retrieval failed. */
@@ -27,12 +27,13 @@ if (errMsg != NULL)
 
 struct hicMeta *newMeta = NULL;
 AllocVar(newMeta);
-newMeta->assembly = genome;
+newMeta->fileAssembly = genome;
 newMeta->nRes = nBpRes;
 newMeta->resolutions = bpResolutions;
 newMeta->nChroms = nChroms;
 newMeta->chromNames = chromosomes;
 newMeta->ucscToAlias = NULL;
+newMeta->ucscAssembly = cloneString(ucscAssembly);
 newMeta->filename = cloneString(filename);
 
 *header = newMeta;
@@ -40,7 +41,7 @@ if (trackHubDatabase(genome))
     return NULL;
 
 // add alias hash in case file uses 1 vs chr1, etc.
-struct hash *aliasToUcsc = chromAliasMakeLookupTable(newMeta->assembly);
+struct hash *aliasToUcsc = chromAliasMakeLookupTable(newMeta->ucscAssembly);
 if (aliasToUcsc != NULL)
     {
     struct hash *ucscToAlias = newHash(0);

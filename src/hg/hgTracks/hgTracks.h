@@ -59,6 +59,12 @@
 
 #define BIGBEDMAXIMUMITEMS 100000
 
+/* for botDelay call, 10 second for warning, 20 second for immediate exit */
+#define warnMs 10000
+#define exitMs 20000
+#define delayFraction   0.25
+extern long enteredMainTime;
+
 #include "lolly.h"
 
 struct track

@@ -22,7 +22,6 @@
 <li><a href="#release9">Missing annotation tracks</a></li>
 <li><a href="#release10">What next with the human genome?</a></li>
 <li><a href="#release11">Mouse strain used for mouse genome sequence</a></li>
-<li><a href="#release13">UniProt (Swiss-Prot/TrEMBL) display changes</a></li>
 </ul>
 <hr>
 <p>
@@ -118,7 +117,8 @@ two-letter names in a similar gs# format and human assemblies are named hg# for 
   <tr><td>Guinea pig</td><td>cavPor3</td><td>Feb. 2008</td><td>Broad Institute cavPor3</td><td>Available</td></tr>
   <tr><td>Hedgehog</td><td>eriEur2</td><td>May 2012</td><td>Broad Institute EriEur2.0</td><td>Available</td></tr>
   <tr><td></td><td>eriEur1</td><td>Jun. 2006</td><td>Broad Institute Draft_v1</td><td>Available</td></tr>
-  <tr><td>Horse</td><td>equCab2</td><td>Sep. 2007</td><td>Broad Institute EquCab2</td><td>Available</td></tr>
+  <tr><td>Horse</td><td>equCab3</td><td>Jan. 2018</td><td>University of Louisville</td><td>Available</td></tr>
+  <tr><td></td><td>equCab2</td><td>Sep. 2007</td><td>Broad Institute EquCab2</td><td>Available</td></tr>
   <tr><td></td><td>equCab1</td><td>Jan. 2007</td><td>Broad Institute EquCab1</td><td>Available</td></tr>
   <tr><td>Kangaroo rat</td><td>dipOrd1</td><td>Jul. 2008</td><td>Baylor/Broad Institute DipOrd1.0</td><td>Available</td></tr>
   <tr><td>Malayan flying lemur</td><td>galVar1</td><td>Jul. 2014</td><td>WashU G_variegatus-3.0.2</td><td>Available</td></tr>
@@ -326,8 +326,17 @@ assembly, see the <a href="../goldenPath/credits.html">Credits</a> page.</p>
 <h6>How do the human assemblies displayed in the UCSC Genome Browser differ from the NCBI human 
 assemblies?</h6>
 <p> 
-Recent human assemblies displayed in the Genome Browser (hg10 and higher) are identical to the 
-NCBI assemblies.</p>
+Human assemblies displayed in the Genome Browser (hg10 and higher) are near identical to the 
+NCBI assemblies when it comes to primary sequence. Minor differences may be present, however.
+Sources include:</p>
+<ul>
+  <li>NCBI genomes are repeat masked with RepeatMasker, however, UCSC genomes are independently 
+      masked with both RepeatMasker (with different flags) and WindowMasker, ultimately using 
+      the program output with the highest percentage masked for the base sequence</li>
+  <li>In genome download files, UCSC uses the 'chr1' nomenclature for sequence identifiers, 
+      whereas the primary NCBI sequence identifiers are RefSeq accessions</li>
+  <li>The mitochondrion for hg19 differs from the one in NCBI (GRCh37)</li>
+</ul>
 
 <a name="release12"></a>
 <h2>Differences between UCSC and NCBI mouse assemblies</h2>
@@ -351,25 +360,11 @@ data for older assemblies of the browser through our
 <h2>Frequency of GenBank data updates</h2>
 <h6>How frequently does UCSC update its databases with new data from GenBank?</h6>
 <p>
-Daily and weekly incremental updates of mRNA, RefSeq, and EST data are in place for several of the 
-more recent Genome Browser assemblies. Assemblies that are not on an incremental update schedule 
+GenBank updates for mRNA, RefSeq, and EST data occur on a semi-quarterly basis, following major 
+NCBI releases. These updates are in place for most Genome Browser assemblies. Assemblies that 
+are not on an incremental update schedule 
 are updated whenever we load a new assembly or make a major revision to a table.</p> 
 <p> 
-Data are updated on the following schedule:</p>
-<ul>
-  <li>
-  Native and xeno mRNA and refSeq tracks: updated daily for human and mouse assemblies; updated 
-  approximately weekly for all other organisms</li>
-  <li>
-  EST data: updated weekly on Saturday morning</li>
-  <li>
-  Downloadable data files: updated weekly on Saturday morning</li>
-  <li>
-  Outdated sequences - removed once per quarter</li>
-</ul>
-<p>
-Mirror sites are not required to use an incremental update process, and should not experience 
-problems as a result of these updates.</p>
 
 <a name="release7"></a>
 <h2>Coordinate changes between assemblies </h2>
@@ -434,85 +429,5 @@ display the new releases on their sites as they become available.</p>
 <h6>What strain of mouse was used for the Mus musculus genome?</h6>
 <p> 
 C57BL/6J.</p>
-
-<a name="release13"></a>
-<h2>UniProt (Swiss-Prot/TrEMBL) display changes</h2>
-<h6>What has UCSC done to accommodate the changes to display IDs recently introduced by UniProt 
-(aka Swiss-Prot/TrEMBL)?</h6>
-<p> 
-Here is a detailed description of the database changes we have made to accommodate the UniProt 
-changes. If you are using the <em>proteinID</em> field in our knownGene table or the 
-Swiss-Prot/TrEMBL display ID for indexing or cross-referencing other data, we strongly suggest you 
-transition to the UniProt accession number. These changes will also affect anyone who is mirroring 
-our site.</p>
-<ol>
-  <li>
-  The latest UniProt Knowledgebase (Release 46.0, Feb. 1st, 2005) was parsed and the results were 
-  stored in a newly created database <em>sp050201</em>.</li>
-  <li>
-  A corresponding database, <em>proteins050201</em>, was constructed based on data in 
-  <em>sp050201</em> and other protein data sources.</li>
-  <li>
-  Two new symbolic database pointers, <em>uniProt</em> and <em>proteome</em>, have been created to 
-  point to the two new databases mentioned above. Some parts of our programs use the data in these 
-  two DBs.
-  <pre><code>uniProt  ---> sp050201
-proteome ---> proteins050201</code></pre></li>
-  <li>
-  The existing protein symbolic database pointers, <em>swissProt</em> and <em>proteins</em> remain 
-  unchanged. Some parts of our programs still use these two pointers and the data in their 
-  associated protein databases.
-  <pre><code>swissProt ---> sp041115
-proteins  ---> proteins041115</code></pre></li>
-  <li>
-  Two new tables, <em>spOldNew</em> and <em>uniProtAlias</em>, have been added to the proteome 
-  database.<br><br>
-  The <em>spOldNew</em> table contains three columns:
-  <ul>
-    <li><em>acc</em>  -- primary accession number</li>
-    <li><em>oldDisplayId</em> -- old display ID</li>
-    <li><em>newDisplayId</em> -- new display ID</li>
-  </ul>
-  <br>
-  The uniProtAlias table contains four columns:
-  <ul>
-    <li><em>acc</em> -- UniProt accession number</li>
-    <li><em>alias</em> -- alias (could be acc, old and new display IDs, etc.)</li>
-    <li><em>aliasSrc</em> -- source of the alias type</li>
-    <li><em>aliasSrcDate</em> -- date of the source data</li>
-  </ul>
-  <p> 
-  The aliases include primary accessions, secondary accessions new display IDs, old display IDs, 
-  and old display IDs corresponding to new secondary accessions.</p>
-  <li>
-  Three new functions have been added to <em>kent/src/hg/spDb.c</em>: 
-  <pre><code>char *oldSpDisplayId(char *newSpDisplayId);
-/* Convert from new Swiss-Prot display ID to old display ID */
-      
-char *newSpDisplayId(char *oldSpDisplayId); 
-/* Convert from old Swiss-Prot display ID to new display ID */
-
-char *uniProtFindPrimAcc(char *id);
-/* Return primary accession given an alias. */</code></pre> 
-  The <em>uniProtFindPrimAcc()</em> function is enabled by the new <em>uniProtAlias</em>
-  table.</li>
-</ol>
-<p>
-We anticipate additional changes down the road and may eventually merge the two sets of protein DB 
-pointers into one set.</p> 
-<p>
-Currently, the <em>proteinID</em> field of the knownGene table for existing genome releases (hg15, 
-hg16, hg17, mm3, mm4, mm5, rn2, and rn3) uses old Swiss-Prot/TrEMBL display IDs (pre-1 Feb. '05). 
-In the future, we may change this field to show the UniProt accession number. Should we choose not 
-to change the content of the <em>proteinID</em> field, we may consider adding a new field, 
-<em>uniProtAcc</em>.</p> 
-<p>
-If you have any questions about these changes and their impact on your work, please email us at 
-<a href="mailto:genome@soe.ucsc.edu">genome@soe.ucsc.edu</a>. Mirror sites may send questions to 
-<a href="mailto:genome-mirror@soe.ucsc.edu">genome-mirror@soe.ucsc.edu</a>. 
-<strong><em><span class="gbsWarnText">Messages sent to these addresses will be posted to the 
-moderated mailing lists, which are archived on a SEARCHABLE, PUBLIC 
-<a HREF="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome-mirror">Google Groups 
-forum</a></span></em></strong>.</p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

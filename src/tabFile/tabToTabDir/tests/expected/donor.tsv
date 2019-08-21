@@ -1,0 +1,13 @@
+#biosample_source_id	species	biosample_source_gender	biosample_source_age	biosample_source_age_unit	geo_age	geo_age_unit	geo_life_stage	project
+AB_S8	Homo sapiens	female	54	year	54	years	postnatal	quakeBrainGeo1
+AB_S11	Homo sapiens	female	37	year	37	years	postnatal	quakeBrainGeo1
+AB_S1	Homo sapiens	male	47	year	47	years	postnatal	quakeBrainGeo1
+AB_S2	Homo sapiens	male	63	year	63	years	postnatal	quakeBrainGeo1
+AB_S3	Homo sapiens	male	22	year	22	years	postnatal	quakeBrainGeo1
+AB_S4	Homo sapiens	male	50	year	50	years	postnatal	quakeBrainGeo1
+AB_S5	Homo sapiens	male	63	year	63	years	postnatal	quakeBrainGeo1
+AB_S7	Homo sapiens	female	21	year	21	years	postnatal	quakeBrainGeo1
+FB_S1	Homo sapiens		17	week	16-18	W	prenatal	quakeBrainGeo1
+FB_S2	Homo sapiens		17	week	16-18	W	prenatal	quakeBrainGeo1
+FB_S3	Homo sapiens		17	week	16-18	W	prenatal	quakeBrainGeo1
+FB_S6	Homo sapiens		17	week	16-18	W	prenatal	quakeBrainGeo1

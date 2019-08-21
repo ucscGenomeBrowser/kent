@@ -22,7 +22,7 @@
 /* Brought errno in to get more useful error messages */
 extern int errno;
 
-static int netStreamSocket6(struct addrinfo *address)
+static int netStreamSocketFromAddrInfo(struct addrinfo *address)
 /* Create a socket from addrinfo structure.  
  * Complain and return something negative if can't. */
 {
@@ -96,38 +96,20 @@ a.tv_sec -= b.tv_sec;
 return a;
 }
 
-static int netConnectWithTimeout(char *hostName, int port, long msTimeout)
-/* In order to avoid a very long default timeout (several minutes) for hosts that will
- * not answer the port, we are forced to connect non-blocking.
- * After the connection has been established, we return to blocking mode.
- * Also closes sd if error. */
+int netConnectWithTimeoutOneAddr(int sd, struct addrinfo *address, long msTimeout, char *hostName, int port, struct dyString *dy)
+/* Try to connect one address with timeout or return success == 0, failure == -1 */
 {
-int sd;
-struct addrinfo *address=NULL;
-int res;
-fd_set mySet;
-char portStr[8];
-safef(portStr, sizeof portStr, "%d", port);
-
-if (hostName == NULL)
-    {
-    warn("NULL hostName in netConnect");
-    return -1;
-    }
-if (!internetGetAddrInfo6n4(hostName, portStr, &address))
-    return -1;
-if ((sd = netStreamSocket6(address)) < 0)
-    return sd;
-
 // Set socket to nonblocking so we can manage our own timeout time.
 if (setSocketNonBlocking(sd, TRUE) < 0)
     {
-    close(sd);
     return -1;
     }
 
 // Trying to connect with timeout
+int res;
 res = connect(sd, address->ai_addr, address->ai_addrlen);
+char ipStr[NI_MAXHOST];
+getAddrAsString6n4((struct sockaddr_storage *)address->ai_addr, ipStr, sizeof ipStr);
 if (res < 0)
     {
     if (errno == EINPROGRESS)
@@ -139,6 +121,7 @@ if (res < 0)
 	remainingTime.tv_usec = (long) (((msTimeout/1000)-remainingTime.tv_sec)*1000000);
 	while (1) 
 	    {
+	    fd_set mySet;
 	    FD_ZERO(&mySet);
 	    FD_SET(sd, &mySet);
 	    // use tempTime (instead of using remainingTime directly) because on some platforms select() may modify the time val.
@@ -148,10 +131,10 @@ if (res < 0)
 		{
 		if (errno == EINTR)  // Ignore the interrupt 
 		    {
-                    // Subtract the elapsed time from remaining time since some platforms need this.
+		    // Subtract the elapsed time from remaining time since some platforms need this.
 		    struct timeval newTime;
 		    gettimeofday(&newTime, NULL);
-                    struct timeval elapsedTime = tvMinus(newTime, startTime);
+		    struct timeval elapsedTime = tvMinus(newTime, startTime);
 		    remainingTime = tvMinus(remainingTime, elapsedTime);
 		    if (remainingTime.tv_sec < 0)  // means our timeout has more than expired
 			{
@@ -162,8 +145,7 @@ if (res < 0)
 		    }
 		else
 		    {
-		    warn("Error in select() during TCP non-blocking connect %d - %s", errno, strerror(errno));
-		    close(sd);
+		    dyStringPrintf(dy, "Error in select() during TCP non-blocking connect %d - %s\n", errno, strerror(errno));
 		    return -1;
 		    }
 		}
@@ -172,38 +154,81 @@ if (res < 0)
 		// Socket selected for write when it is ready
 		int valOpt;
 		socklen_t lon;
-                // But check the socket for any errors
-                lon = sizeof(valOpt);
-                if (getsockopt(sd, SOL_SOCKET, SO_ERROR, (void*) (&valOpt), &lon) < 0)
-                    {
-                    warn("Error in getsockopt() %d - %s", errno, strerror(errno));
-                    close(sd);
-                    return -1;
-                    }
-                // Check the value returned...
-                if (valOpt)
-                    {
-                    warn("Error in TCP non-blocking connect() %d - %s. Host %s port %d.", valOpt, strerror(valOpt), hostName, port);
-                    close(sd);
-                    return -1;
-                    }
-		break;
+		// But check the socket for any errors
+		lon = sizeof(valOpt);
+		if (getsockopt(sd, SOL_SOCKET, SO_ERROR, (void*) (&valOpt), &lon) < 0)
+		    {
+		    warn("Error in getsockopt() %d - %s", errno, strerror(errno));
+		    return -1;
+		    }
+		// Check the value returned...
+		if (valOpt)
+		    {
+		    dyStringPrintf(dy, "Error in TCP non-blocking connect() %d - %s. Host %s IP %s port %d.\n", valOpt, strerror(valOpt), hostName, ipStr, port);
+		    return -1;
+		    }
+		break;  // OK
 		}
 	    else
 		{
-		warn("TCP non-blocking connect() to %s timed-out in select() after %ld milliseconds - Cancelling!", hostName, msTimeout);
-		close(sd);
+		dyStringPrintf(dy, "TCP non-blocking connect() to %s IP %s timed-out in select() after %ld milliseconds - Cancelling!", hostName, ipStr, msTimeout);
 		return -1;
 		}
 	    }
 	}
     else
 	{
-	warn("TCP non-blocking connect() error %d - %s", errno, strerror(errno));
-	close(sd);
+	dyStringPrintf(dy, "TCP non-blocking connect() error %d - %s", errno, strerror(errno));
 	return -1;
 	}
     }
+return 0; // OK
+}
+
+
+static int netConnectWithTimeout(char *hostName, int port, long msTimeout)
+/* In order to avoid a very long default timeout (several minutes) for hosts that will
+* not answer the port, we are forced to connect non-blocking.
+* After the connection has been established, we return to blocking mode.
+* Also closes sd if error. */
+{
+int sd;
+struct addrinfo *addressList=NULL, *address;
+char portStr[8];
+safef(portStr, sizeof portStr, "%d", port);
+
+if (hostName == NULL)
+    {
+    warn("NULL hostName in netConnect");
+    return -1;
+    }
+if (!internetGetAddrInfo6n4(hostName, portStr, &addressList))
+    return -1;
+
+struct dyString *errMsg = newDyString(256);
+for (address = addressList; address; address = address->ai_next)
+    {
+    if ((sd = netStreamSocketFromAddrInfo(address)) < 0)
+	continue;
+
+    if (netConnectWithTimeoutOneAddr(sd, address, msTimeout, hostName, port, errMsg) == 0)
+	break;
+
+    close(sd);
+    }
+boolean connected = (address != NULL); // one of the addresses connected successfully
+freeaddrinfo(addressList);
+
+if (!connected) 
+    {
+    if (!sameString(errMsg->string, ""))
+	{
+	warn("%s", errMsg->string);
+	}
+    }
+dyStringFree(&errMsg);
+if (!connected)
+    return -1;
 
 // Set to blocking mode again
 if (setSocketNonBlocking(sd, FALSE) < 0)
@@ -218,7 +243,6 @@ if (setReadWriteTimeouts(sd, DEFAULTREADWRITETTIMEOUTSEC) < 0)
     return -1;
     }
 
-freeaddrinfo(address);
 return sd;
 
 }

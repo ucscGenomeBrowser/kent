@@ -273,7 +273,7 @@ char *filename = trackDbSetting(tdb, "bigDataUrl");
 if (filename == NULL)
     errAbort("Error: no bigDataUrl provided in trackDb for hic track %s", tdb->track);
 struct hicMeta *trackMeta;
-char *errMsg = hicLoadHeader(filename, &trackMeta);
+char *errMsg = hicLoadHeader(filename, &trackMeta, database);
 if (errMsg != NULL)
     errAbort("Error retrieving file info: %s", errMsg);
 

@@ -1,4 +1,4 @@
-/* botDelay.c - contact bottleneck server and sleep 
+/* botDelay.c - contact bottleneck server and sleep
  * for a little bit if IP address looks like it is
  * being just too demanding. */
 
@@ -49,7 +49,7 @@ warn("There is a very high volume of traffic coming from your "
        "please read <a href='http://genome.ucsc.edu/FAQ/FAQdownloads.html#download36'>our FAQ</a> on this topic. "
        "For further help on how to access our data from a command line, "
        "or if "
-       "you think this delay is being imposed unfairly, please contact genome-www@soe.ucsc.edu.", 
+       "you think this delay is being imposed unfairly, please contact genome-www@soe.ucsc.edu.",
 	    ip, asctime(localtime(&now)), .001*millis);
 }
 
@@ -83,7 +83,7 @@ if (centralCookie)
 return user;
 }
 
-static char *getBotCheckString(char *ip, double fraction)
+char *getBotCheckString(char *ip, double fraction)
 /* compose "user.ip fraction" string for bot check */
 {
 char *user = getCookieUser();
@@ -104,7 +104,7 @@ int millis;
 char *ip = getenv("REMOTE_ADDR");
 if (ip != NULL)
     {
-    char *botCheckString = getBotCheckString(ip, fraction);    
+    char *botCheckString = getBotCheckString(ip, fraction);
     millis = botDelayTime(host, port, botCheckString);
     freeMem(botCheckString);
     if (millis > 0)
@@ -168,13 +168,13 @@ if (host != NULL && port != NULL)
 }
 
 void hgBotDelay()
-/* High level bot delay call - for use with regular webpage output */ 
+/* High level bot delay call - for use with regular webpage output */
 {
 hgBotDelayExt(FALSE, 1.0);
 }
 
 void hgBotDelayFrac(double fraction)
-/* Like hgBotDelay, but imposes a fraction of the standard access penalty */ 
+/* Like hgBotDelay, but imposes a fraction of the standard access penalty */
 {
 hgBotDelayExt(FALSE, fraction);
 }
@@ -213,3 +213,68 @@ if (host != NULL && port != NULL && ip != NULL)
 return delay;
 }
 
+#define err429  429
+#define err429Msg       "Too Many Requests"
+int botDelayMillis = 0;
+
+static void hogExit(char *cgiName, long enteredMainTime)
+/* earlyBotCheck requests exit before CGI has done any output or
+ * setups of any kind.  HTML output has not yet started.
+ */
+{
+char *hogHost = getenv("REMOTE_ADDR");
+char cgiExitName[1024];
+safef(cgiExitName, ArraySize(cgiExitName), "%s hogExit", cgiName);
+
+puts("Content-Type:text/html");
+printf("Status: %d %s\n", err429, err429Msg);
+puts("Retry-After: 30");
+puts("\n");
+
+puts("<!DOCTYPE HTML 4.01 Transitional>\n");
+puts("<html lang='en'>");
+puts("<head>");
+puts("<meta charset=\"utf-8\">");
+printf("<title>Status %d: %s</title></head>\n", err429, err429Msg);
+
+printf("<body><h1>Status %d: %s</h1><p>\n", err429, err429Msg);
+time_t now = time(NULL);
+printf("There is an exceedingly high volume of traffic coming from your "
+       "site (IP address %s) as of %s (California time).  It looks like "
+       "a web robot is launching queries quickly, and not even waiting for "
+       "the results of one query to finish before launching another query. "
+       "/* We cannot service requests from your IP address under */ these "
+       "conditions.  (code %d) "
+       "To use the genome browser functionality from a Unix command line, "
+       "please read <a href='http://genome.ucsc.edu/FAQ/FAQdownloads.html#download36'>our FAQ</a> on this topic. "
+       "For further help on how to access our data from a command line, "
+       "or if "
+       "you think this delay is being imposed unfairly, please contact genome-www@soe.ucsc.edu."
+       ,hogHost, asctime(localtime(&now)), botDelayMillis);
+puts("</body></html>");
+cgiExitTime(cgiExitName, enteredMainTime);
+exit(0);
+}       /*      static void hogExit()   */
+
+boolean earlyBotCheck(long enteredMainTime, char *cgiName, double delayFrac, int warnMs, int exitMs)
+/* similar to botDelayCgi but for use before the CGI has started any
+ * output or setup the cart of done any MySQL operations.  The boolean
+ * return is used later in the CGI after it has done all its setups and
+ * started output so it can issue the warning.
+ */
+{
+boolean issueWarning = FALSE;
+botDelayMillis = hgBotDelayTimeFrac(delayFrac);
+if (botDelayMillis > 0)
+    {
+    sleep1000(botDelayMillis);
+    if (botDelayMillis > warnMs)
+	{
+	if (botDelayMillis > exitMs)
+	    hogExit(cgiName, enteredMainTime);
+	else
+	    issueWarning = TRUE;
+	}
+    }
+return issueWarning;
+}	/*	boolean earlyBotCheck()	*/

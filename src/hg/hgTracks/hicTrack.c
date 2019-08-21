@@ -56,7 +56,7 @@ if (filename == NULL)
     warn("Missing bigDataUrl setting for track %s", tg->track);
     return NULL;
     }
-char *errMsg = hicLoadHeader(filename, &metaResult);
+char *errMsg = hicLoadHeader(filename, &metaResult, database);
 if (errMsg != NULL)
     {
     tg->networkErrMsg = errMsg;
@@ -97,7 +97,8 @@ tg->networkErrMsg = hicLoadData(hicFileInfo, binSize, normalization, chromName, 
 int numRecords = slCount(hicItems), filtNumRecords = 0;
 tg->maxRange = 0.0; // the max height of an interaction in this window
 double *countsCopy = NULL;
-AllocArray(countsCopy, numRecords);
+if (numRecords > 0)
+    AllocArray(countsCopy, numRecords);
 
 struct interact *thisHic = hicItems;
 while (thisHic != NULL)
@@ -126,8 +127,12 @@ while (thisHic != NULL)
 
 // Heuristic for auto-scaling the color gradient based on the scores in view - draw the max color value
 // at or above 2*median score.
-tg->graphUpperLimit = 2.0*doubleMedian(filtNumRecords, countsCopy);
-free(countsCopy);
+if (filtNumRecords > 0)
+    tg->graphUpperLimit = 2.0*doubleMedian(filtNumRecords, countsCopy);
+else
+    tg->graphUpperLimit = 0.0;
+if (countsCopy != NULL)
+    freeMem(countsCopy);
 tg->items = hicItems;
 }
 

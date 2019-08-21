@@ -300,13 +300,16 @@ static void outputTrackDbVars(struct jsonWrite *jw, struct trackDb *tdb,
 if (NULL == tdb)	/* might not be any trackDb */
     return;
 
+boolean isContainer = tdbIsComposite(tdb) || tdbIsCompositeView(tdb);
+
 boolean protectedData = FALSE;
 if (trackDbSetting(tdb, "tableBrowser"))
     protectedData = TRUE;
 jsonWriteString(jw, "shortLabel", tdb->shortLabel);
 jsonWriteString(jw, "type", tdb->type);
 jsonWriteString(jw, "longLabel", tdb->longLabel);
-jsonWriteNumber(jw, "itemCount", itemCount);
+if (! isContainer)	/* containers do not have items to count */
+    jsonWriteNumber(jw, "itemCount", itemCount);
 if (tdb->parent)
     {
     jsonWriteString(jw, "parent", tdb->parent->track);
@@ -639,7 +642,7 @@ else
 	}
     }
 return itemCount;
-}
+}	/*	static long long dataItemCount(char *db, struct trackDb *tdb) */
 
 static void recursiveTrackList(struct jsonWrite *jw, struct trackDb *tdb,
     char *db)
@@ -653,8 +656,8 @@ boolean isContainer = tdbIsComposite(tdb) || tdbIsCompositeView(tdb);
 if (! (trackLeavesOnly && isContainer) )
     {
     long long itemCount = 0;
-    /* do not show counts for protected data */
-    if (! trackDbSetting(tdb, "tableBrowser"))
+    /* do not show counts for protected data or continers (== no items)*/
+    if (! (isContainer || trackDbSetting(tdb, "tableBrowser")))
 	itemCount = dataItemCount(db, tdb);
     jsonWriteObjectStart(jw, tdb->track);
     if (tdbIsComposite(tdb))

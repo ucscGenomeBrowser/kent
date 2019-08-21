@@ -153,7 +153,10 @@ long readHeader(istream& fin, string chr1, string chr2, int &c1pos1, int &c1pos2
     }
   }
   if (!found1 || !found2) {
-    throw strawException("One of the chromosomes wasn't found in the file. Check that the chromosome name matches the genome.");
+    if (chr1==chr2)
+        throw strawException("Chromosome " + chr1 + " wasn't found in the file. Check that the chromosome name matches the genome.");
+    else
+        throw strawException("Chromosomes " + chr1 + " and/or " + chr2 + " weren't found in the file. Check that the chromosome names match the genome.");
   }
   return master;
 }

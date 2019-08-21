@@ -62,6 +62,15 @@ The score of the variants is the number of "stars" in ClinVar. On the track conf
 target="_blank">ClinVar documentation</a>.
 </p>
 
+<p>On the human assembly hg19, no variants on the mitochondrial genome are
+shown, as the mitochondrial genome was not part of the human genome when it was
+released. The version of "chrM" that was selected from Genbank by UCSC when 
+the hg19 assembly was packaged is different than the version added by NCBI when
+they added an "MT" sequence later. Since the mitochondrial sequence differs,
+the variant positions cannot be converted reliably.
+</p>
+
+
 <h2>Data updates</h2>
 <p>ClinVar publishes a new release on the 
 <a href="https://www.ncbi.nlm.nih.gov/feed/rss.cgi?ChanKey=ClinVarNews">first Thursday every month</a> 

@@ -43,6 +43,34 @@ r.type = rqlTypeBoolean;
 return r;
 }
 
+struct rqlEval rqlEvalCoerceToString(struct rqlEval r, char *buf, int bufSize)
+/* Return a version of r with .val.s filled in with something reasonable even
+ * if r input is not a string */
+{
+assert(bufSize >= 32);
+switch (r.type)
+    {
+    case rqlTypeBoolean:
+        r.val.s = (r.val.b ? "true" : "false");
+    case rqlTypeString:
+	break;	/* It's already done. */
+    case rqlTypeInt:
+	safef(buf, bufSize, "%lld", r.val.i);
+	r.val.s = buf;
+	break;
+    case rqlTypeDouble:
+	safef(buf, bufSize, "%g", r.val.x);
+	r.val.s = buf;
+	break;
+    default:
+	internalErr();
+	r.val.s = NULL;
+	break;
+    }
+r.type = rqlTypeString;
+return r;
+}
+
 static struct rqlEval rqlEvalEq(struct rqlParse *p, 
 	void *record, RqlEvalLookup lookup, struct lm *lm)
 /* Return true if two children are equal regardless of children type
@@ -158,6 +186,21 @@ switch (lv.type)
     case rqlTypeDouble:
 	res.val.x = (lv.val.x + rv.val.x);
 	break;
+    case rqlTypeString:
+	{
+	char numBuf[32];
+	if (rv.type != rqlTypeString)  // Perhaps later could coerce to string
+	    {
+	    rv = rqlEvalCoerceToString(rv, numBuf, sizeof(numBuf));
+	    }
+	int lLen = strlen(lv.val.s);
+	int rLen = strlen(rv.val.s);
+	char *s = lmAlloc(lm, lLen + rLen + 1);
+	memcpy(s, lv.val.s, lLen);
+	memcpy(s+lLen, rv.val.s, rLen);
+	res.val.s = s;
+	break;
+	}
     default:
 	internalErr();
 	res.val.b = FALSE;

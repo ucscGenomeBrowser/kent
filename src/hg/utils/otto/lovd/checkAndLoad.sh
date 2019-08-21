@@ -19,7 +19,7 @@ cd $today
 
 # count columns and make sure new files have 6 columns
 new19Cc=`cat lovd.hg19.bed | $TAWK '(NF!=6)' | wc -l`
-new18Cc=`cat lovd.hg19.bed | $TAWK '(NF!=6)' | wc -l`
+new18Cc=`cat lovd.hg18.bed | $TAWK '(NF!=6)' | wc -l`
 if [ "$new19Cc" -ne "0" ]; then
         echo LVOD hg19 $today: found rows with not six columns, quitting
         exit 255

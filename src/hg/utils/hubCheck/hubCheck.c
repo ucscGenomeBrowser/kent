@@ -475,7 +475,7 @@ char *makeChildObjectString(char *id, char *title, char *shortLabel, char *longL
 /* Construct a single child item for one of the jstree arrays */
 {
 struct dyString *item = dyStringNew(0);
-dyStringPrintf(item, "{icon: 'fa fa-plus', id:'%s', li_attr:{title: '%s', "
+dyStringPrintf(item, "{icon: 'fa fa-plus', id:'%s', li_attr:{class: 'hubError', title: '%s', "
         "shortLabel: '%s', longLabel: '%s', color: '%s', name:'%s'}, "
         "text:\"%s\", parent: '%s', state: {opened: true}}",
         id, title, shortLabel, longLabel, color, name, text, parent);
@@ -540,7 +540,7 @@ if (!doHtml)
 else
     {
     char *strippedMessage = NULL;
-    char *parentOrTrackString = trackHubSkipHubName(tdb->track);
+    char parentOrTrackString[512];
     char id[512];
     static int count = 0; // forces unique ID's which the jstree object needs
 
@@ -549,6 +549,7 @@ else
 
     stripChar(strippedMessage, '\n');
     safef(id, sizeof(id), "%s%d", trackHubSkipHubName(tdb->track), count);
+    safef(parentOrTrackString, sizeof(parentOrTrackString), "%s_%s", trackHubSkipHubName(genome->name), trackHubSkipHubName(tdb->track));
     dyStringPrintf(errors, "%s,",
             makeChildObjectString(id, "TrackDb Error", tdb->shortLabel, tdb->longLabel,
             "#550073", trackHubSkipHubName(tdb->track), strippedMessage, parentOrTrackString));
@@ -730,7 +731,8 @@ if (options->printMeta)
     }
 
 struct trackDb *tempTdb = NULL;
-char *idName, *textName, *parentName = NULL;
+char *textName = NULL;
+char idName[512];
 struct errCatch *errCatch = errCatchNew();
 boolean trackIsContainer = (tdbIsComposite(tdb) || tdbIsCompositeView(tdb) || tdbIsContainer(tdb));
 
@@ -741,9 +743,12 @@ if (tdb->subtracks != NULL)
         retVal |= hubCheckTrack(hub, genome, tempTdb, options, errors);
     }
 
+// for when assembly hubs have tracks with the same name, prepend assembly name to id
+safef(idName, sizeof(idName), "%s_%s", trackHubSkipHubName(genome->name), trackHubSkipHubName(tdb->track));
+
 if (options->htmlOut)
     {
-    dyStringPrintf(errors, "trackData['%s'] = [", trackHubSkipHubName(tdb->track));
+    dyStringPrintf(errors, "trackData['%s'] = [", idName);
     }
 
 if (errCatchStart(errCatch))
@@ -774,16 +779,15 @@ if (options->htmlOut)
         {
         for (tempTdb = tdb->subtracks; tempTdb != NULL; tempTdb = tempTdb->next)
             {
-            idName = trackHubSkipHubName(tempTdb->track);
+            char subtrackName[512];
+            safef(subtrackName, sizeof(subtrackName), "%s_%s", trackHubSkipHubName(genome->name), trackHubSkipHubName(tempTdb->track));
             textName = trackHubSkipHubName(tempTdb->longLabel);
-            parentName = trackHubSkipHubName(tdb->track);
-            dyStringPrintf(errors, "%s,", makeFolderObjectString(idName, textName, parentName, "TRACK", TRUE, retVal));
+            dyStringPrintf(errors, "%s,", makeFolderObjectString(subtrackName, textName, idName, "TRACK", TRUE, retVal));
             }
         }
     else if (!retVal)
         {
         // add "Error" to the trackname to force uniqueness for the jstree
-        idName = trackHubSkipHubName(tdb->track);
         dyStringPrintf(errors, "{icon: 'fa fa-plus', "
             "id:'%sError', text:'No trackDb configuration errors', parent:'%s'}", idName, idName);
         }
@@ -860,7 +864,9 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     genomeErrorCount += tdbCheckVal;
     if (options->htmlOut)
         {
-        char *name = trackHubSkipHubName(tdb->track);
+        // when assembly hubs have tracks with the same name, prepend assembly name to id
+        char name[512];
+        safef(name, sizeof(name), "%s_%s", trackHubSkipHubName(genome->name), trackHubSkipHubName(tdb->track));
         dyStringPrintf(errors, "%s", makeFolderObjectString(name, tdb->longLabel, genomeName, "TRACK", TRUE, tdbCheckVal ? TRUE : FALSE));
         if (tdb->next != NULL)
             dyStringPrintf(errors, ",");
@@ -870,6 +876,7 @@ if (options->htmlOut)
     dyStringPrintf(errors, "];\n");
 
 dyStringPrintf(errors, "%s", tdbDyString->string);
+dyStringClear(tdbDyString);
 
 return genomeErrorCount;
 }
@@ -928,7 +935,7 @@ for (genome = hub->genomeList; genome != NULL; genome = genome->next)
             "%s (%d configuration error%s)", genomeName, numGenomeErrors,
             numGenomeErrors == 1 ? "" : "s");
         dyStringPrintf(errors, "%s,", makeFolderObjectString(genomeName, genomeTitleString, "#",
-            "Click to open node", TRUE, TRUE));
+            "Click to open node", TRUE, numGenomeErrors > 0 ? TRUE : FALSE));
         }
     retVal |= numGenomeErrors;
     }

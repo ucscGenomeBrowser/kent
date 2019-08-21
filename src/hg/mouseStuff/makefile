@@ -34,6 +34,7 @@ UTILS_APPLIST = \
 	mafCoverage \
 	mafFetch \
 	mafRanges \
+	mafNoAlign \
 	mafToAxt \
 	mafToPsl \
 	netChainSubset \
