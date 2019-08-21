@@ -8504,8 +8504,7 @@ if (!hideControls)
 
     hButtonMaybePressed("hgTracksConfigMultiRegionPage", "multi-region", 
                         "Configure multi-region display options", 
-                        "popUpHgt.hgTracks('multi-region config'); return false;", 
-                        virtMode);
+                        "popUpHgt.hgTracks('multi-region config'); return false;", virtMode);
     hPrintf(" ");
 
     if (!hIsGsidServer())
@@ -8513,7 +8512,7 @@ if (!hideControls)
         hButtonMaybePressed("hgt.toggleRevCmplDisp", "reverse",
                                revCmplDisp ? "Show forward strand at this location"
                                            : "Show reverse strand at this location",
-                               NULL, revCmplDisp ? TRUE : FALSE);
+                               NULL, revCmplDisp);
         hPrintf(" ");
         }
 
