@@ -1141,8 +1141,8 @@ struct strexRun
     void *symbols;	/* Pointer to symbol table */
     StrexLookup lookup; /* Something that can look up things in symbol table */
     struct lm *lm;	/* Local memory for evaluation */
-    void (*warnHandler)(char *warning);  /* Send warning messages here */
-    void (*abortHandler)();	    /* Call this guy to abort */
+    void (*warnHandler)(void *symbols, char *warning);  /* Send warning messages here */
+    void (*abortHandler)(void *symbols);	    /* Call this guy to abort */
     };
 
 static void strexDefaultAbort()
@@ -1152,7 +1152,7 @@ noWarnAbort();
 }
 
 static struct strexRun *strexRunNew(void *symbols, StrexLookup lookup, 
-    void (*warnHandler)(char *warning), void (*abortHandler)() )
+    void (*warnHandler)(void *symbols, char *warning), void (*abortHandler)(void *symbols) )
 /* Return new strexRun structure */
 {
 struct strexRun *run;
@@ -1706,7 +1706,7 @@ switch (builtIn->func)
         struct strexEval a = strexLocalEval(p->children, run);
 	char *message = a.val.s;
 	char *output = lmJoinStrings(run->lm, "WARNING: ", message);
-	if (run->warnHandler != NULL) run->warnHandler(output);
+	if (run->warnHandler != NULL) run->warnHandler(run->symbols, output);
 	res.val.s = output;
 	break;
 	}
@@ -1718,9 +1718,9 @@ switch (builtIn->func)
 	char *message = a.val.s;
 	char *output = lmJoinStrings(run->lm, "ERROR: ", message);
 	if (run->warnHandler != NULL) 
-	    run->warnHandler(output);
+	    run->warnHandler(run->symbols, output);
 	if (run->abortHandler != NULL) 
-	    run->abortHandler();
+	    run->abortHandler(run->symbols);
 	errAbort("%s", output);
 	res.val.s = output;   // some sort of OCD makes me fill this in in spite of errAbort above
 	break;
@@ -1936,7 +1936,7 @@ return res;
 /* ---- And the one public evaluation function ---- */
 
 char *strexEvalAsString(struct strexParse *p, void *symbols, StrexLookup lookup,
-    void (*warnHandler)(char *warning), void (*abortHandler)() )
+    void (*warnHandler)(void *symbols, char *warning), void (*abortHandler)(void *symbols) )
 /* Return result as a string value.  The warnHandler and abortHandler are optional,
  * and can be used to wrap your own warnings and abort processing onto what strex
  * provides.  For default behavior just pass in NULL. */
