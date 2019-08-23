@@ -32,6 +32,13 @@ $(document).ready(function() {
                  $('input[name="hubAddButton"]').focus().click(); // clicks AddHub button
         }
     });
+    $('#validateHubUrl').bind('keypress', function(e) {  // binds listener to url field
+        if (e.which === 13) {  // listens for return key
+             e.preventDefault();   // prevents return from also submitting whole form
+             if (validateUrl($('#validateHubUrl').val()))
+                 $('input[name="hubValidateButton"]').focus().click(); // clicks Validate Url button
+        }
+    });
     $('#hubSearchTerms').bind('keypress', function(e) {  // binds listener to text field
         if (e.which === 13) {  // listens for return key
             e.preventDefault();   // prevents return from also submitting whole form

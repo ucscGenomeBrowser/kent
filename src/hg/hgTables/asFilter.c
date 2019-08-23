@@ -115,6 +115,39 @@ if (!isEmpty(dd) && !isEmpty(pat))
 return filter;
 }
 
+static struct asStringFilter *asSymbolicFilterFromCart(struct cart *cart, char *fieldPrefix,
+                                                       struct asColumn *col)
+/* Get filter settings for enum out of cart -- like string filter, but with a restricted
+ * set of possible values. */
+{
+struct asStringFilter *filter = NULL;
+char varName[256];
+safef(varName, sizeof(varName), "%s%s", fieldPrefix, filterDdVar);
+char *dd = cartOptionalString(cart, varName);
+safef(varName, sizeof(varName), "%s%s", fieldPrefix, filterPatternVar);
+struct slName *patList = cartOptionalSlNameList(cart, varName);
+// In case user selected some choices but left '*' checked, remove from list:
+slRemoveEl(&patList, slNameFind(patList, "*"));
+if (!isEmpty(dd) && patList != NULL)
+    {
+    // Make space-separated list string for cgiToStringFilter
+    char *pat = slNameListToString(patList, ' ');
+    AllocVar(filter);
+    cgiToStringFilter(dd, pat, &filter->op, &filter->matches, &filter->invert);
+    if (filter->op == sftIgnore)	// Filter out nop
+	asStringFilterFree(&filter);
+    }
+if (filter == NULL)
+    return NULL;
+int i;
+for (i = 0;  filter->matches[i] != NULL;  i++)
+    {
+    if (!slNameInList(col->values, filter->matches[i]))
+        errAbort("asSymbolicFilterFromCart: unrecognized value '%s'", filter->matches[i]);
+    }
+return filter;
+}
+
 static boolean asFilterString(struct asStringFilter *filter, char *x)
 /* Return TRUE if x passes filter. */
 {
@@ -139,6 +172,25 @@ static boolean asFilterChar(struct asCharFilter *filter, char x)
 return bedFilterChar(x, filter->op, filter->matches, filter->invert);
 }
 
+static boolean asFilterSet(struct asStringFilter *filter, char *x)
+/* Return TRUE if any of the list of symbolic values in x passes filter. */
+{
+if (filter == NULL)
+    return TRUE;
+boolean matches = FALSE;
+struct slName *sln, *list = slNameListFromComma(x);
+for (sln = list;  sln != NULL;  sln = sln->next)
+    {
+    if (bedFilterString(sln->name, filter->op, filter->matches, FALSE))
+        {
+        matches = TRUE;
+        break;
+        }
+    }
+slNameFreeList(&list);
+return filter->invert ^ matches;
+}
+
 static boolean asFilterOneCol(struct asFilterColumn *filtCol, char *s)
 /* Return TRUE if s passes filter. */
 {
@@ -152,6 +204,8 @@ switch (filtCol->dataType)
         return asFilterDouble(filtCol->filter.d, atof(s));
     case afdtChar:
         return asFilterChar(filtCol->filter.c, s[0]);
+    case afdtSet:
+        return asFilterSet(filtCol->filter.s, s);
     default:
         internalErr();
 	return FALSE;
@@ -218,10 +272,16 @@ for (col = as->columnList; col != NULL; col = col->next, ++colIx)
 	    lowFilter.s = asStringFilterFromCart(cart, fieldPrefix);
 	    dataType = afdtString;
 	    break;
+	case t_enum:
+            lowFilter.s = asSymbolicFilterFromCart(cart, fieldPrefix, col);
+            dataType = afdtString;
+	    break;
+	case t_set:
+            lowFilter.s = asSymbolicFilterFromCart(cart, fieldPrefix, col);
+            dataType = afdtSet;
+	    break;
 	case t_object:
 	case t_simple:
-	case t_enum:
-	case t_set:
 	default:
 	    internalErr();
 	    break;

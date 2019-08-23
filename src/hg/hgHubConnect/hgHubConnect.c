@@ -381,124 +381,29 @@ printf("</tbody></TABLE>\n");
 printf("</div>");
 }
 
-int doCheckTrackDb(struct dyString *errors, struct trackHub *hub,
-                    struct trackHubGenome *genome)
-/* Attempt to open a trackDb from a hub and report errors back.
- * Eventually will check every stanza and not die if there's an error with the first one*/
-{
-int errorCount = 0;
-struct trackDb *tdb = NULL, *tdbList = NULL;
-struct errCatch *errCatch = errCatchNew();
-if (errCatchStart(errCatch))
-    {
-    tdbList = trackHubTracksForGenome(hub, genome);
-    tdbList = trackDbLinkUpGenerations(tdbList);
-    tdbList = trackDbPolishAfterLinkup(tdbList, genome->name);
-    trackHubPolishTrackNames(genome->trackHub, tdbList);
-    for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
-        {
-        struct errCatch *trackFileCatch = errCatchNew();
-        if (errCatchStart(trackFileCatch))
-            hubCheckBigDataUrl(hub, genome, tdb);
-        errCatchEnd(trackFileCatch);
-        if (trackFileCatch->gotError)
-            {
-            errorCount += 1;
-            dyStringPrintf(errors, "<ul>\n<li>track name: %s\n", tdb->track);
-            dyStringPrintf(errors, "<ul>\n<li><span class=\"hubError\"><b>bigDataUrl error</b>: %s</span></li></ul></ul>\n", trackFileCatch->message->string);
-            }
-        errCatchFree(&trackFileCatch);
-        }
-    if (tdbList != NULL && errorCount == 0)
-        {
-        dyStringPrintf(errors, "<ul>\n<li>No errors found</li>\n</ul></ul>");
-        }
-    }
-errCatchEnd(errCatch);
-if (errCatch->gotError)
-    {
-    errorCount += 1;
-    dyStringPrintf(errors, "<ul><li><span class=\"hubError\">Error: %s</span></li></ul>\n",
-        errCatch->message->string);
-    }
-errCatchFree(&errCatch);
-return errorCount;
-}
-
-int doCheckGenomesFile(struct dyString *errors, struct trackHub *hub)
-/* Mostly just calls doCheckTrackDb() but applies correct styling to error messages */
-{
-struct trackHubGenome *genome = NULL;
-int errorCount = 0;
-int trackDbErrorCount = 0;
-struct dyString *trackDbErrorString = dyStringNew(0);
-for (genome = hub->genomeList; genome != NULL; genome = genome->next)
-    {
-    trackDbErrorCount = 0;
-    dyStringPrintf(errors, "<ul>\n<li>genome %s", genome->name);
-    // check each track for this genome
-    trackDbErrorCount = doCheckTrackDb(trackDbErrorString, hub, genome);
-    errorCount += trackDbErrorCount;
-    if (trackDbErrorCount > 0)
-        {
-        if (trackDbErrorCount == 1)
-            dyStringPrintf(errors, " (%d error)\n%s</ul>\n",  trackDbErrorCount, trackDbErrorString->string);
-        else
-            dyStringPrintf(errors, " (%d errors)\n%s</ul>\n",  trackDbErrorCount, trackDbErrorString->string);
-        }
-    else
-        dyStringPrintf(errors, "<ul><li>No trackDb errors</ul></ul>");
-    dyStringClear(trackDbErrorString);
-    }
-dyStringFree(&trackDbErrorString);
-return errorCount;
-}
-
-struct trackHub *trackHubCheckHubFile(struct dyString *errors, char *hubUrl)
-/* Wrap trackHubOpen in an errCatch, HTML style the error message */
-{
-struct trackHub *hub = NULL;
-struct errCatch *errCatch = errCatchNew();
-if (errCatchStart(errCatch))
-    hub = trackHubOpen(hubUrl, "");
-errCatchEnd(errCatch);
-if (errCatch->gotError)
-    dyStringPrintf(errors, "<span class=\"hubError\">Error: %s", errCatch->message->string);
-errCatchFree(&errCatch);
-return hub;
-}
-
 void doValidateNewHub(char *hubUrl)
-/* Open up a track hub and report errors to user. */
+/* Run hubCheck on a hub. */
 {
-struct trackHub *hub = NULL;
-struct dyString *errors = dyStringNew(0); // string with HTML of all the errors
+struct dyString *cmd = dyStringNew(0);
 udcSetCacheTimeout(1);
+dyStringPrintf(cmd, "loader/hubCheck -htmlOut -noTracks %s", hubUrl);
 printf("<tr><td>");
-hub = trackHubCheckHubFile(errors, hubUrl);
-if (hub)
+printf("running command: '%s'\n", cmd->string);
+printf("</td></tr></table>");
+printf("<div id=\"tracks\" class=\"hubTdbTree\" style=\"overflow: auto\"></div>");
+FILE *f = popen(cmd->string, "r");
+if (f == NULL)
+    errAbort("popen: error running command: \"%s\"", cmd->string);
+char buf[1024];
+jsInline("trackData = [];");
+while (fgets(buf, sizeof(buf), f))
     {
-    // go through each genome and check each trackDb stanza, building up errors string
-    int errorCount = doCheckGenomesFile(errors, hub);
-    if (errorCount > 0)
-        {
-        printf("<div style=\"text-align: left\" class=\"hubTdbTree\">");
-        if (errorCount == 1)
-            printf("<ul>\n<li>Found %d error in %s<ul><li>hub name: \"%s\"\n", errorCount, hub->url, hub->shortLabel);
-        else
-            printf("<ul>\n<li>Found %d errors in %s<ul><li>hub name: \"%s\"\n", errorCount, hub->url, hub->shortLabel);
-        printf("%s", errors->string);
-        printf("</ul>\n");
-        }
-    else
-        printf("<div>No configuration errors for hub: %s</div>", hub->shortLabel);
+    jsInlineF("%s", buf);
     }
-else
-    {
-    printf("<div>%s</div>", errors->string);
-    }
-dyStringFree(&errors);
-printf("</div></td></tr>");
+if (pclose(f) == -1)
+    errAbort("pclose: error for command \"%s\"", cmd->string);
+jsInline("hgCollection.init();");
+dyStringFree(&cmd);
 }
 
 void hgHubConnectValidateNewHub()
@@ -1589,6 +1494,8 @@ jsIncludeFile("ajax.js", NULL);
 jsIncludeFile("hgHubConnect.js", NULL);
 webIncludeResourceFile("hgHubConnect.css");
 jsIncludeFile("jquery.cookie.js", NULL);
+jsIncludeFile("hgCollection.js", NULL);
+jsIncludeFile("spectrum.min.js", NULL);
 
 printf("<div id=\"hgHubConnectUI\"> <div id=\"description\"> \n");
 printf(

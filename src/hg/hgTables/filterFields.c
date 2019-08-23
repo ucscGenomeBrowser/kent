@@ -730,7 +730,15 @@ else if (startsWith("set(", type))
 else
     errAbort("makeEnumValMenu: expecting a SQL type description that begins "
 	     "with \"enum(\" or \"set(\", but got \"%s\".", type);
-stripChar(dup, '\'');
+if (dup[0] == '"')
+    {
+    // bigBed uses asColumnToSqlType, which gives double-quoted, comma-and-space-separated string.
+    strSwapStrs(dup, strlen(dup)+1, "\", \"", ",");
+    stripChar(dup, '"');
+    }
+else if (dup[0] == '\'')
+    // "desc table" in mysql gives single-quoted, no-space comma-sep string.
+    stripChar(dup, '\'');
 wordCount = chopCommas(dup, words);
 len = strlen(words[wordCount-1]);
 if (words[wordCount-1][len-1] == ')')

@@ -119,7 +119,8 @@ newTdb->html = lmCloneString(lm, tdb->html);
 newTdb->grp = lmCloneString(lm, tdb->grp);
 newTdb->parentName = lmCloneString(lm, tdb->parentName);
 
-newTdb->viewHash =  NULL;
+if (tdb->viewHash)
+    newTdb->viewHash =  lmCloneHash(lm, tdb->viewHash);
 newTdb->children = NULL;
 newTdb->overrides = NULL;
 newTdb->tdbExtras = NULL;

@@ -21,6 +21,7 @@
 #include "trans3.h"
 #include "log.h"
 #include "internet.h"
+#include "hash.h"
 
 
 static struct optionSpec optionSpecs[] = {
@@ -42,6 +43,7 @@ static struct optionSpec optionSpecs[] = {
     {"tileSize", OPTION_INT},
     {"trans", OPTION_BOOLEAN},
     {"syslog", OPTION_BOOLEAN},
+    {"perSeqMax", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -116,6 +118,10 @@ errAbort(
   "                   Default is %d.\n"
   "   -maxAaSize=N    Maximum size of protein or translated DNA queries.\n"
   "                   Default is %d.\n"
+  "   -perSeqMax=file File contains one seq filename (possibly with ':seq' suffix) per line.\n"
+  "                   -maxDnaHits will be applied to each filename[:seq] separately: each may\n"
+  "                   have at most maxDnaHits/2 hits.\n"
+  "                   Useful for assemblies with many alternate/patch sequences.\n"
   "   -canStop        If set, a quit message will actually take down the server.\n"
   ,	gfVersion, repMatch, maxDnaHits, maxTransHits, maxNtSize, maxAaSize
   );
@@ -232,7 +238,7 @@ int missCount = 0;
 int trimCount = 0;
 
 void dnaQuery(struct genoFind *gf, struct dnaSeq *seq, 
-	int connectionHandle, char buf[256])	
+              int connectionHandle, char buf[256], struct hash *perSeqMaxHash)
 /* Handle a query for DNA/DNA match. */
 {
 struct gfClump *clumpList = NULL, *clump;
@@ -253,7 +259,15 @@ for (clump = clumpList; clump != NULL; clump = clump->next)
 	clump->tStart-ss->start, clump->tEnd-ss->start, clump->hitCount);
     netSendString(connectionHandle, buf);
     ++clumpCount;
-    if (--limit < 0)
+    int perSeqCount = -1;
+    if (perSeqMaxHash &&
+        ((perSeqCount = hashIntValDefault(perSeqMaxHash, ss->fileName, -1)) >= 0))
+        {
+        if (perSeqCount >= (maxDnaHits / 2))
+            break;
+        hashIncInt(perSeqMaxHash, ss->fileName);
+        }
+    else if (--limit < 0)
 	break;
     }
 gfClumpFreeList(&clumpList);
@@ -441,7 +455,7 @@ netSendString(connectionHandle, message);
 
 static void errorSafeQuery(boolean doTrans, boolean queryIsProt, 
 	struct dnaSeq *seq, struct genoFind *gf, struct genoFind *transGf[2][3], 
-	int connectionHandle, char *buf)
+	int connectionHandle, char *buf, struct hash *perSeqMaxHash)
 /* Wrap error handling code around index query. */
 {
 int status;
@@ -458,7 +472,7 @@ if (status == 0)    /* Always true except after long jump. */
 		connectionHandle, buf);
        }
     else
-	dnaQuery(gf, seq, connectionHandle, buf);
+	dnaQuery(gf, seq, connectionHandle, buf, perSeqMaxHash);
     errorSafeCleanup();
     }
 else    /* They long jumped here because of an error. */
@@ -499,6 +513,45 @@ while ((c = *s++) != 0)
 return FALSE;
 }
 
+static struct hash *maybePerSeqMax(int fileCount, char *seqFiles[])
+/* If options include -perSeqMax=file, then read the sequences named in the file into a hash
+ * for testing membership in the set of sequences to exclude from -maxDnaHits accounting. */
+{
+struct hash *perSeqMaxHash = NULL;
+char *fileName = optionVal("perSeqMax", NULL);
+if (isNotEmpty(fileName))
+    {
+    perSeqMaxHash = hashNew(0);
+    struct lineFile *lf = lineFileOpen(fileName, TRUE);
+    char *line;
+    while (lineFileNextReal(lf, &line))
+        {
+        // Make sure line contains a valid seq filename (before optional ':seq')
+        char *seqFile = trimSpaces(line);
+        char copy[strlen(seqFile)+1];
+        safecpy(copy, sizeof copy, seqFile);
+        char *colon = strrchr(copy, ':');
+        if (colon)
+            *colon = '\0';
+        if (stringArrayIx(copy, seqFiles, fileCount) < 0)
+            lineFileAbort(lf, "'%s' does not appear to be a sequence file from the "
+                          "command line", copy);
+        hashAddInt(perSeqMaxHash, seqFile, 0);
+        }
+    lineFileClose(&lf);
+    }
+return perSeqMaxHash;
+}
+
+static void hashZeroVals(struct hash *hash)
+/* Set the value of every element of hash to NULL (0 for ints). */
+{
+struct hashEl *hel;
+struct hashCookie cookie = hashFirst(hash);
+while ((hel = hashNext(&cookie)) != NULL)
+    hel->val = 0;
+}
+
 void startServer(char *hostName, char *portName, int fileCount, 
 	char *seqFiles[])
 /* Load up index and hang out in RAM. */
@@ -524,6 +577,7 @@ strftime (timestr, sizeof(timestr), "%Y-%m-%d %H:%M", loctime); /* formate datet
 								
 logInfo("gfServer version %s on host %s, port %s  (%s)", gfVersion, 
 	hostName, portName, timestr);
+struct hash *perSeqMaxHash = maybePerSeqMax(fileCount, seqFiles);
 if (doTrans)
     {
     uglyf("starting translated server...\n");
@@ -715,7 +769,9 @@ for (;;)
 				fflush(lf);
 				}
 			    errorSafeQuery(doTrans, queryIsProt, &seq, gf, 
-				    transGf, connectionHandle, buf);
+                                           transGf, connectionHandle, buf, perSeqMaxHash);
+                            if (perSeqMaxHash)
+                                hashZeroVals(perSeqMaxHash);
 			    }
 			freez(&seq.dna);
 			}

@@ -650,7 +650,8 @@ else  // hyperlink
 	    psl->tEnd - psl->tStart);
 	}
     printf("</PRE>\n");
-    puts("<P style=\"text-align:right\"><SMALL><A HREF=\"../FAQ/FAQblat.html#blat1b\">Missing a match?</A></SMALL></P>\n");
+    webNewSection("Help");
+    puts("<P style=\"text-align:left\"><SMALL><A HREF=\"../FAQ/FAQblat.html#blat1b\">Missing a match?</A><br><A HREF=\"../FAQ/FAQblat.html#blat1c\">What is chr_alt & chr_fix?</A></SMALL></P>\n");
     puts("</DIV>\n");
     }
 pslFreeList(&pslList);

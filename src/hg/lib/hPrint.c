@@ -93,32 +93,37 @@ if (!suppressHtml)
     fputs(string, stdout);
 }
 
+void hButtonMaybePressed(char *name, char *label, char *msg, char *onClick, boolean pressed)
+/* If not suppresed, write out button optionally with onclick javascript, message and 
+   styled to indicate modal state (button pressed)
+ */
+{
+if (!suppressHtml)
+    cgiMakeSubmitButtonMaybePressed(name, label, msg, onClick, pressed);
+}
+
 void hButton(char *name, char *label)
 /* Write out button if not suppressed. */
 {
-if (!suppressHtml)
-    cgiMakeButton(name, label);
+hButtonMaybePressed(name, label, NULL, NULL, FALSE);
 }
 
 void hButtonWithMsg(char *name, char *label, char *msg)
 /* Write out button with msg if not suppressed. */
 {
-if (!suppressHtml)
-    cgiMakeButtonWithMsg(name, label, msg);
+hButtonMaybePressed(name, label, msg, NULL, FALSE);
 }
 
 void hButtonWithOnClick(char *name, char *label, char *msg, char *onClick)
 /* Write out button with onclick javascript if not suppressed. */
 {
-if (!suppressHtml)
-    cgiMakeButtonWithOnClick(name, label, msg, onClick);
+hButtonMaybePressed(name, label, msg, onClick, FALSE);
 }
 
 void hOnClickButton(char *id, char *command, char *label)
-/* Write out push button if not suppressed. */
+/* Write out button with onclick command */
 {
-if (!suppressHtml)
-    cgiMakeOnClickButton(id, command, label);
+hButtonMaybePressed(id, label, NULL, command, FALSE);
 }
 
 void hTextVar(char *varName, char *initialVal, int charSize)
