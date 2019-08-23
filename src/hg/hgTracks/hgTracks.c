@@ -8502,15 +8502,17 @@ if (!hideControls)
     hButtonWithMsg("hgTracksConfigPage", "configure","Configure image and track selection");
     hPrintf(" ");
 
-    hButtonWithOnClick("hgTracksConfigMultiRegionPage",
-	"multi-region", "Configure multi-region display options", "popUpHgt.hgTracks('multi-region config'); return false;");
+    hButtonMaybePressed("hgTracksConfigMultiRegionPage", "multi-region", 
+                        "Configure multi-region display options", 
+                        "popUpHgt.hgTracks('multi-region config'); return false;", virtMode);
     hPrintf(" ");
 
     if (!hIsGsidServer())
         {
-        hButtonWithMsg("hgt.toggleRevCmplDisp", "reverse",
-                       revCmplDisp ? "Show forward strand at this location"
-                                   : "Show reverse strand at this location");
+        hButtonMaybePressed("hgt.toggleRevCmplDisp", "reverse",
+                               revCmplDisp ? "Show forward strand at this location"
+                                           : "Show reverse strand at this location",
+                               NULL, revCmplDisp);
         hPrintf(" ");
         }
 
@@ -10028,7 +10030,7 @@ hPrintf("<tr><td> zoom in 1.5x</td><td class=\"hotkey\">ctrl+i</td> <td> configu
 hPrintf("<tr><td> zoom in 3x</td><td class=\"hotkey\">i</td>        <td> reverse</td><td class=\"hotkey\">r then v</td>                    </tr>\n");
 hPrintf("<tr><td> zoom in 10x</td><td class=\"hotkey\">I</td>       <td> resize</td><td class=\"hotkey\">r then s</td>                     </tr>\n");
 hPrintf("<tr><td> zoom in base level</td><td class=\"hotkey\">b</td><td> refresh</td><td class=\"hotkey\">r then f</td>                    </tr>\n");
-hPrintf("<tr><td> zoom out 1.5x</td><td class=\"hotkey\">ctrl+k</td><td>view chrom names</td><td class=\"hotkey\">v then s</td><td></td><td class='hotkey'></td>              </tr>\n");
+hPrintf("<tr><td> zoom out 1.5x</td><td class=\"hotkey\">ctrl+k</td><td> view chrom names</td><td class=\"hotkey\">v then s</td><td class='hotkey'></td>              </tr>\n");
 hPrintf("<tr><td> zoom out 3x</td><td class=\"hotkey\">k</td>");
 if (gotExtTools)
     hPrintf("<td>send to external tool</td><td class=\"hotkey\">s then t</td>");

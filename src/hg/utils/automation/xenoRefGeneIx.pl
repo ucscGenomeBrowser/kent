@@ -100,7 +100,7 @@ while (my $line = <FH>) {
   my ($chrom, $chromStart, $chromEnd, $name, $score, $strand, $thickStart, $thickEnd, $reserved, $blockCount, $blockSizes, $chromStarts, $name2, $cdsStartStat, $cdsEndStat, $exonFrames, $type, $geneName, $geneName2, $geneType) = split('\t', $line);
   my %allNames;	# key is name, value is count of times seen
   processOne(\%allNames, $name) if (length($name));
-  processOne(\%allNames, $name2) if (length($name));
+  processOne(\%allNames, $name2) if (length($name2));
   processOne(\%allNames, $geneName) if (length($geneName));
   processOne(\%allNames, $geneName2) if (length($geneName2));
   my $howMany = 0;
