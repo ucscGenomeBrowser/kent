@@ -217,6 +217,18 @@
 
 
 #############################################################################
+# Build perSeqMax file for gfServer (hgBlat) (DONE 19-08-14 angie)
+    # When the blat server is restarted with the updated hg19.2bit file,
+    # hg19.altsAndFixes needs to be copied over along with the new hg19.2bit file,
+    # and gfServer needs to be restarted with -perSeqMax=hg19.altsAndFixes.
+    cd /hive/data/genomes/hg19
+    cut -f 1 chrom.sizes.p13 \
+    | grep -E '_(alt|fix|hap.*)$' \
+    | sed -re 's/^/hg19.2bit:/;' \
+      > hg19.altsAndFixes.p13
+
+
+#############################################################################
 # Extend cytoBandIdeo (DONE 2018-09-28 angie)
 # UNDONE 2018-09-28 (see ROLL IT ALL BACK below)
 # REDONE 2018-09-28

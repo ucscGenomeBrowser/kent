@@ -1,0 +1,15 @@
+#id	donor	organ	tissue
+AB_S8 temporal lobe cortex	AB_S8	brain	temporal lobe cortex
+AB_S8 hippocampus - healthy	AB_S8	brain	hippocampus - healthy
+AB_S11 temporal lobe cortex	AB_S11	brain	temporal lobe cortex
+AB_S1 temporal lobe cortex	AB_S1	brain	temporal lobe cortex
+AB_S2 temporal lobe cortex	AB_S2	brain	temporal lobe cortex
+AB_S3 temporal lobe cortex	AB_S3	brain	temporal lobe cortex
+AB_S4 temporal lobe cortex	AB_S4	brain	temporal lobe cortex
+AB_S5 temporal lobe cortex	AB_S5	brain	temporal lobe cortex
+AB_S5 hippocampus - healthy	AB_S5	brain	hippocampus - healthy
+AB_S7 temporal lobe cortex	AB_S7	brain	temporal lobe cortex
+FB_S1 fetal brain cortex	FB_S1	brain	fetal brain cortex
+FB_S2 fetal brain cortex	FB_S2	brain	fetal brain cortex
+FB_S3 fetal brain cortex	FB_S3	brain	fetal brain cortex
+FB_S6 fetal brain cortex	FB_S6	brain	fetal brain cortex

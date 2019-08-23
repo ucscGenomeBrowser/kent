@@ -1,6 +1,6 @@
 hub VGP
 shortLabel VGP
-longLabel Vertebrate Genome Project assemblies
+longLabel Vertebrate Genomes Project assemblies
 genomesFile genomes.txt
-email hclawson@ucsc.edu
+email genome-www@soe.ucsc.edu
 descriptionUrl hubIndex.html

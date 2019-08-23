@@ -253,3 +253,43 @@ zcat goa_uniprot_all.gaf.gz |hgGoAssociation go180426 goaPart stdin
 # Passed 378374005 of 508539120 of 508539120, 74.40%
 
 # Ask sys-admin to switch the database pointer go to point to go140213
+##########################################################################
+### UPDATE GO DATABASE (DONE 2019-08-14 braney)
+
+# UPDATE GO DATABASE
+# Download the terms and make the database.
+ssh hgwdev
+mkdir /hive/data/outside/geneOntology/20190809
+cd  /hive/data/outside/geneOntology/20190809
+
+#wget "http://archive.geneontology.org/full/2015-01-01/go_201501-assocdb-tables.tar.gz"
+wget "http://archive.geneontology.org/full/2017-01-01/go_monthly-assocdb-tables.tar.gz"
+
+hgsql -e 'create database go190809'
+tar xvfz go_monthly-assocdb-tables.tar.gz
+
+cd go_monthly-assocdb-tables
+for i in *.txt
+do
+    if test -s $i
+    then
+	cat `basename  $i .txt`.sql
+    fi
+done | hgsql go190809
+
+for i in *.txt
+do 
+    if test -s $i
+    then
+	echo $i
+	echo "load data local infile '$i' into table `basename $i .txt`" | hgsql go190809
+    fi
+done
+
+wget --timestamping \
+ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/goa_uniprot_all.gaf.gz
+
+zcat goa_uniprot_all.gaf.gz |hgGoAssociation go190809 goaPart stdin
+#Passed 527292541 of 697908155 of 697908155, 75.55%
+
+# Ask sys-admin to switch the database pointer go to point to go190809

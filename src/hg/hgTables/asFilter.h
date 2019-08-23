@@ -17,6 +17,7 @@ enum asFilterDataType
    afdtLong = 2,
    afdtDouble = 3,
    afdtChar = 4,
+   afdtSet = 5,
    };
 
 struct asLongFilter
