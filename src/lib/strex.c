@@ -51,10 +51,10 @@ enum strexBuiltInFunc
     {
     strexBuiltInTrim,
     strexBuiltInBetween,
-    strexBuiltInSplit,
+    strexBuiltInWord,
     strexBuiltInNow,
     strexBuiltInMd5,
-    strexBuiltInSeparate,
+    strexBuiltInChop,
     strexBuiltInUncsv,
     strexBuiltInUntsv,
     strexBuiltInReplace,
@@ -77,7 +77,7 @@ struct strexBuiltIn
 /* Information to describe a built in function */
     {
     char *name;		/* Name in strex language:  trim, split, etc */
-    enum strexBuiltInFunc func;  /* enum version: strexBuiltInTrim strexBuiltInSplit etc. */
+    enum strexBuiltInFunc func;  /* enum version: strexBuiltInTrim strexBuiltInChop etc. */
     enum strexType returnType;	 /* Type of return value */
     int paramCount;	/* Number of parameters, not flexible in this language! */
     enum strexType *paramTypes;  /* Array of types, one for each parameter */
@@ -116,9 +116,10 @@ enum strexOp
 
     strexOpStrlen,	/* Length of a string */
 
-    /* Unary minus for numbers */
+    /* Unary minus for numbers, logical not */
     strexOpUnaryMinusInt,
     strexOpUnaryMinusDouble,
+    strexOpNot,
 
     /* Binary operations. */
     strexOpAdd,
@@ -172,10 +173,10 @@ static enum strexType stringStringInt[] = {strexTypeString, strexTypeString, str
 static struct strexBuiltIn builtins[] = {
     { "trim", strexBuiltInTrim, strexTypeString, 1, oneString, },
     { "between", strexBuiltInBetween, strexTypeString, 3, threeStrings },
-    { "split", strexBuiltInSplit, strexTypeString, 2, stringInt },
+    { "word", strexBuiltInWord, strexTypeString, 2, stringInt },
     { "now", strexBuiltInNow, strexTypeString, 0, NULL },
     { "md5", strexBuiltInMd5, strexTypeString, 1, oneString },
-    { "separate", strexBuiltInSeparate, strexTypeString, 3, stringStringInt },
+    { "chop", strexBuiltInChop, strexTypeString, 3, stringStringInt },
     { "uncsv", strexBuiltInUncsv, strexTypeString, 2, stringInt },
     { "untsv", strexBuiltInUntsv, strexTypeString, 2, stringInt },
     { "replace", strexBuiltInReplace, strexTypeString, 3, threeStrings },
@@ -186,8 +187,8 @@ static struct strexBuiltIn builtins[] = {
     { "upper", strexBuiltInUpper, strexTypeString, 1, oneString },
     { "lower", strexBuiltInLower, strexTypeString, 1, oneString },
     { "in", strexBuiltInIn, strexTypeBoolean, 2, twoStrings },
-    { "starts", strexBuiltInStarts, strexTypeBoolean, 2, twoStrings}, 
-    { "ends", strexBuiltInEnds, strexTypeBoolean, 2, twoStrings}, 
+    { "starts_with", strexBuiltInStarts, strexTypeBoolean, 2, twoStrings}, 
+    { "ends_with", strexBuiltInEnds, strexTypeBoolean, 2, twoStrings}, 
     { "same", strexBuiltInSame, strexTypeBoolean, 2, twoStrings}, 
     { "tidy", strexBuiltInTidy, strexTypeString, 3, threeStrings },
     { "warn", strexBuiltInWarn, strexTypeString, 1, oneString},
@@ -919,8 +920,8 @@ return p;
 }
 
 
-static struct strexParse *strexParseUnaryMinus(struct strexIn *in)
-/* Return unary minus sort of parse tree if there's a leading '-' */
+static struct strexParse *strexParseUnaryNeg(struct strexIn *in)
+/* Return parse tree for unary minus or logical not */
 {
 struct tokenizer *tkz = in->tkz;
 char *tok = tokenizerMustHaveNext(tkz);
@@ -943,6 +944,24 @@ if (tok[0] == '-')
     p->children = c;
     return p;
     }
+else if (sameString(tok, "not"))
+    {
+    struct strexParse *c = strexParseIndex(in);
+    struct strexParse *p;
+    AllocVar(p);
+    if (c->type == strexTypeBoolean)
+        {
+	p->op = strexOpNot;
+	}
+    else
+	{
+	c = strexParseCoerce(c, strexTypeBoolean);
+	p->op = strexOpNot;
+	}
+    p->type = strexTypeBoolean;
+    p->children = c;
+    return p;
+    }
 else
     {
     tokenizerReuse(tkz);
@@ -954,7 +973,7 @@ static struct strexParse *strexParseSum(struct strexIn *in)
 /* Parse out plus or minus. */
 {
 struct tokenizer *tkz = in->tkz;
-struct strexParse *p = strexParseUnaryMinus(in);
+struct strexParse *p = strexParseUnaryNeg(in);
 for (;;)
     {
     char *tok = tokenizerNext(tkz);
@@ -966,7 +985,7 @@ for (;;)
 
     /* What we've parsed so far becomes left side of binary op, next term ends up on right. */
     struct strexParse *l = p;
-    struct strexParse *r = strexParseUnaryMinus(in);
+    struct strexParse *r = strexParseUnaryNeg(in);
 
     /* Make left and right side into a common type */
     enum strexType childType = commonTypeForMathBop(l->type, r->type);
@@ -1531,7 +1550,7 @@ switch (builtIn->func)
 	freeMem(between);
         break;
 	}
-    case strexBuiltInSplit:
+    case strexBuiltInWord:
         {
         struct strexEval a = strexLocalEval(p->children, run);
         struct strexEval b = strexLocalEval(p->children->next, run);
@@ -1557,7 +1576,7 @@ switch (builtIn->func)
 	freez(&md5);
 	break;
 	}
-    case strexBuiltInSeparate:
+    case strexBuiltInChop:
         {
         struct strexEval a = strexLocalEval(p->children, run);
         struct strexEval b = strexLocalEval(p->children->next, run);
@@ -1916,13 +1935,17 @@ switch (p->op)
        res = strexEvalAdd(p, run);
        break;
 
-    /* Logical ops, simple binary type */
+    /* Logical ops, simple binary type and not*/
     case strexOpOr:
-       res = strexEvalOr(p, run);
-       break;
+        res = strexEvalOr(p, run);
+        break;
     case strexOpAnd:
-       res = strexEvalAnd(p, run);
-       break;
+        res = strexEvalAnd(p, run);
+        break;
+    case strexOpNot:
+        res = strexLocalEval(p->children, run);
+	res.val.b = !res.val.b;
+	break;
 
     default:
         errAbort("Unknown op %s\n", strexOpToString(p->op));
