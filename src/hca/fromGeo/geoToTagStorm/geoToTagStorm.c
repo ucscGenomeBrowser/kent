@@ -56,7 +56,10 @@ for (;;)
     if (c == 0)
        break;
     if (c >= 0x20 && c <= 0x7f)
-       ++out;
+       {
+       if (isalnum(c) || c == '_' || c == '.')
+	   ++out;
+       }
     }
 }
 
