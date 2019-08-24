@@ -4,6 +4,10 @@ tidy    "tidy string"
 complex	word(messy,4)
 
 table var_test id
+mess3 word_range(messy,0,3)
+mess2end word_range(messy,-2,99999)
+mess_mid word_range(messy, 3, -3)
+letMes letter_range(messy, 4, 7)
 x	complex + " complex"
 id	tidy
 less_messy tidy("messy ", messy, " very")
