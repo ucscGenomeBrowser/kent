@@ -4,6 +4,10 @@ tidy    "tidy string"
 complex	word(messy,4)
 
 table var_test id
+notmess not messy
+not0 not 0
+not1 not 1
+notEmpty not ""
 mess3 word_range(messy,0,3)
 mess3a chop_range(messy,' ',0,3)
 mess2end word_range(messy,-2,99999)
