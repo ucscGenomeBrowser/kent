@@ -111,66 +111,6 @@ for (el = list; el != NULL; el = el->next)
 return NULL;
 }
 
-boolean isTotallySimple(char *s)
-/* We are only alphanumerical and dotty things, we even begin with a alnum or _*/
-{
-char c = *s++;
-if (!isalpha(c) && (c != '_'))
-    return FALSE;
-while ((c = *s++) != 0)
-    {
-    if (!(isalnum(c) || (c == '_') || (c == '.')))
-	return FALSE;
-    }
-return TRUE;
-}
-
-struct newFieldInfo *parseFieldVal(char *name, 
-    char *input, char *fileName, int fileLineNumber, void *symbols, StrexLookup lookup)
-/* return a newFieldInfo based on the contents of input, which are not destroyed */
-{
-/* Make up return structure. */
-
-struct newFieldInfo *fv;
-AllocVar(fv);
-fv->name = cloneString(name);
-
-char *s = skipLeadingSpaces(input);
-if (isEmpty(s))
-    {
-    fv->type = fvVar;
-    fv->val = cloneString(name);
-    }
-else
-    {
-    char c = s[0];
-    if (c == '@')
-	{
-	char *val = fv->val = cloneString(skipLeadingSpaces(s+1));
-	trimSpaces(val);
-	if (isEmpty(val))
-	    errAbort("Nothing following %c", c);
-	fv->type = fvLink;
-	}
-    else 
-        {
-	if (isTotallySimple(s) && lookup(symbols, s) == NULL)
-	    {
-	    fv->val = cloneString(skipLeadingSpaces(s));
-	    eraseTrailingSpaces(fv->val);
-	    fv->type = fvVar;
-	    }
-	else
-	    {
-	    fv->val = cloneString(s);
-	    fv->exp = strexParseString(fv->val, fileName, fileLineNumber-1, symbols, lookup);
-	    fv->type = fvExp;
-	    }
-	}
-    }
-return fv;
-}
-
 struct varVal
 /* A variable, what we need to compute it, and it's value */
      {
@@ -220,6 +160,66 @@ if (varHash != NULL)
 return rec;
 }
 
+boolean isTotallySimple(char *s)
+/* We are only alphanumerical and dotty things, we even begin with a alnum or _*/
+{
+char c = *s++;
+if (!isalpha(c) && (c != '_'))
+    return FALSE;
+while ((c = *s++) != 0)
+    {
+    if (!(isalnum(c) || (c == '_') || (c == '.')))
+	return FALSE;
+    }
+return TRUE;
+}
+
+int gTotalFields = 0, gStrexFields = 0, gLinkFields = 0;
+
+struct newFieldInfo *parseFieldVal(char *name, 
+    char *input, char *fileName, int fileLineNumber, struct symRec  *symbols, StrexLookup lookup)
+/* return a newFieldInfo based on the contents of input, which are not destroyed */
+{
+/* Make up return structure. */
+
+struct newFieldInfo *fv;
+AllocVar(fv);
+fv->name = cloneString(name);
+
+char *s = trimSpaces(input);
+if (isEmpty(s))
+    {
+    fv->type = fvVar;
+    s = fv->val = cloneString(name);
+    }
+char c = s[0];
+if (c == '@')
+    {
+    char *val = fv->val = cloneString(skipLeadingSpaces(s+1));
+    if (isEmpty(val))
+	errAbort("Nothing following %c", c);
+    fv->type = fvLink;
+    ++gLinkFields;
+    }
+else 
+    {
+    if (isTotallySimple(s) && hashLookup(symbols->varHash, s) == NULL)
+	{
+	fv->val = cloneString(skipLeadingSpaces(s));
+	eraseTrailingSpaces(fv->val);
+	fv->type = fvVar;
+	}
+    else
+	{
+	fv->val = cloneString(s);
+	fv->exp = strexParseString(fv->val, fileName, fileLineNumber-1, symbols, lookup);
+	fv->type = fvExp;
+	gStrexFields += 1;
+	}
+    }
+gTotalFields += 1;
+return fv;
+}
 static void symRecSetupPrecomputes(struct symRec *symbols)
 /* Clear out any precomputed variable values - should be
  * executed on each new line of table. */
@@ -531,6 +531,9 @@ for (newTable = newTableList; newTable != NULL; newTable = newTable->next)
 	outTabName, outTable->fieldCount, outTable->rowCount);
     fieldedTableToTabFile(outTable, outTabName);
     }
+verbose(1, "%d fields, %d (%g%%) evaluated with strex, %d (%.2f) links\n", 
+    gTotalFields,  gStrexFields, 100.0 * gStrexFields / gTotalFields,
+    gLinkFields, 100.0 * gLinkFields/gTotalFields);
 }
 
 int main(int argc, char *argv[])
