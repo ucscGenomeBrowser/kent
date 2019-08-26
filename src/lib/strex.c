@@ -1861,6 +1861,7 @@ switch (builtIn->func)
         struct strexEval start = strexLocalEval(p->children->next, run);
         struct strexEval end = strexLocalEval(p->children->next->next, run);
 	res.val.s = strexEvalWordRange(string.val.s, start.val.i, end.val.i, run);
+	break;
 	}
     case strexBuiltInChopRange:
         {
@@ -1869,6 +1870,7 @@ switch (builtIn->func)
         struct strexEval start = strexLocalEval(p->children->next->next, run);
         struct strexEval end = strexLocalEval(p->children->next->next->next, run);
 	res.val.s = strexEvalChopRange(string.val.s, splitter.val.s, start.val.i, end.val.i, run);
+	break;
 	}
     }
 return res;
