@@ -369,7 +369,12 @@ void interactLoadItems(struct track *tg)
     tInfo->drawUp = trackDbSettingClosestToHomeOn(tg->tdb, INTERACT_UP);
     tInfo->clusterMode = interactUiClusterMode(cart, tg->track, tg->tdb);
 
+#define MR_FORCE_PACK 1
+#ifdef MR_FORCE_PACK
+    if (!tInfo->clusterMode && !isLinkedFeaturesMode(tg) && sameString(virtModeType, "default"))
+#else
     if (!tInfo->clusterMode && !isLinkedFeaturesMode(tg))
+#endif
         {
         // draw curve display
         tg->mapsSelf = TRUE;
@@ -620,13 +625,12 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
     // Pick colors
 
     #define MG_LIGHT_MAGENTA    0xffffbbff
-    #define MG_LIGHT_GRAY         0xff909090
+    #define MG_LIGHT_GRAY       0xff909090
     color = interactItemColor(tg, inter, hvg, scoreMin, scoreMax);
     if (vis == tvDense && otherChrom && color == MG_BLACK)
         // use highlight color for other chrom items in dense mode
         color = MG_LIGHT_MAGENTA;
     int peakColor = (color == MG_BLACK || tg->colorShades) ? MG_LIGHT_MAGENTA : MG_LIGHT_GRAY;
-
     
     if (otherChrom)
         {
@@ -890,7 +894,11 @@ void interactDrawItems(struct track *tg, int seqStart, int seqEnd,
 /* Draw a list of interact structures. */
 {
 struct interactTrackInfo *tInfo = (struct interactTrackInfo *)tg->customPt;
+#ifdef MR_FORCE_PACK
+if (tInfo->clusterMode || isLinkedFeaturesMode(tg) || differentString(virtModeType, "default"))
+#else
 if (tInfo->clusterMode || isLinkedFeaturesMode(tg))
+#endif
     {
     tg->drawItemAt = interactLinkedFeaturesDrawAt;
     linkedFeaturesDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
