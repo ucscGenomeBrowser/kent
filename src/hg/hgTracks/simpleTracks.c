@@ -540,6 +540,7 @@ for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
     char *chrom = w->chromName;
     // int winOffset = w->insideX - fullInsideX;  // no longer needed
     double scale = (double)w->insideWidth/(w->winEnd - w->winStart);
+    boolean useTypeItemNameAsKey = isTypeUseItemNameAsKey(tg);
     for (item = tg->items; item != NULL; item = item->next)
 	{
 	// TODO match items from different windows by using item start end and name in hash?
@@ -552,7 +553,7 @@ for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
 	    char key[1024];
 	    // TODO see key caveats above
 	    // For now, this should be good enough to illustrate the basic behavior we want to see.
-	    if (isTypeUseItemNameAsKey(tg))
+	    if (useTypeItemNameAsKey)
 		safef(key, sizeof key, "%s",  tg->itemName(tg, item));
 	    else
 		safef(key, sizeof key, "%s:%d-%d %s", chrom, baseStart, baseEnd, mapItemName);
