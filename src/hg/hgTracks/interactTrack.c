@@ -257,6 +257,25 @@ struct interactTrackInfo {
     int otherHeight;    // vertical space for other chromosome interactions
 } interactTrackInfo;
 
+boolean interactIsClusterMode(struct track *tg)
+/* Determine if track is interact and is in cluster view */
+{
+char *typeLine = tg->tdb->type, *words[8], *type;
+int wordCount;
+if (typeLine == NULL)
+    return FALSE;
+wordCount = chopLine(cloneString(typeLine), words);
+if (wordCount <= 0)
+    return FALSE;
+type = words[0];
+if (sameString(type, "interact") || sameString(type, "bigInteract"))
+    {
+    struct interactTrackInfo *tInfo = tg->customPt;
+    return tInfo->clusterMode == NULL ? FALSE : TRUE;
+    }
+return FALSE;
+}
+
 static void interactGetLayoutInfo(struct track *tg, int seqStart, struct hvGfx *hvg,                                                       int xOff, MgFont *font, double scale)
     /* Get layout info from interact items in window */
 {
@@ -302,6 +321,7 @@ static void interactGetLayoutInfo(struct track *tg, int seqStart, struct hvGfx *
     tInfo->otherHeight = (tInfo->otherCount) ? 3 * tInfo->fontHeight : 0;
     tInfo->sameHeight = (tInfo->sameCount) ? tg->height - tInfo->otherHeight : 0;
 }
+
 
 static int interactRightPixels(struct track *tg, void *item)
     /* Return number of pixels we need to the right, in linked features mode. */

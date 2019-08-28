@@ -4566,6 +4566,8 @@ if (sameWord(type, "expRatio"))
     // track is like expRatio, needs one row per item
     return TRUE;
     }
+if (sameWord(type, "interact") || sameWord(type, "bigInteract"))
+    return interactIsClusterMode(track);
 return FALSE;
 }
 

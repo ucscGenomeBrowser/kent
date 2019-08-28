@@ -1694,5 +1694,8 @@ void linkedFeaturesMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 				char *itemName, char *mapItemName, int start, int end,
 				int x, int y, int width, int height);
 
+boolean interactIsClusterMode(struct track *tg);
+/* Determine if track is interact and is in cluster view */
+
 #endif /* HGTRACKS_H */
 
