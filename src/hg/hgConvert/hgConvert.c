@@ -133,6 +133,8 @@ if (sameOk(toOrg,chainToOrg))
 if (sameOk(toDb,chain->toDb))
     score += 100000;
 
+if (toRank == 0)  // chains to db's that are not active shouldn't be considered
+    return 0;
 score += 10*(maxRank-fromRank);
 score += (maxRank - toRank);
 
