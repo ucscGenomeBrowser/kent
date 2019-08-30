@@ -4,7 +4,7 @@
 from __future__ import unicode_literals
 
 from django.contrib import admin
-from .models import Grant,Project,Lab,Contributor,Funder,ProjectState,Consent,Species,Organ,OrganPart,Disease,SampleType
+from .models import Grant,Project,Lab,Contributor,Funder,ProjectState,Consent,Species,Organ,OrganPart,Disease,SampleType,AssayType,AssayTech,Publication
 
 class ContributorAdmin(admin.ModelAdmin):
     list_filter = ['project_role']
@@ -28,13 +28,14 @@ admin.site.register(ProjectState, ProjectStateAdmin)
 
 class ProjectAdmin(admin.ModelAdmin):
     search_fields = ['short_name', 'title', 'contributors', 'labs', 'organ_part', 'organ', 'disease', 'species']
-    autocomplete_fields = ["contributors", "labs", "organ", "organ_part", "disease", "species", "sample_type"]
-    list_display = ['short_name', 'priority', 'state', 'wrangler1', 'title',]
-    list_filter = ['species', 'organ', 'state','priority', 'consent']
+    autocomplete_fields = ["contributors", "labs", "organ", "organ_part", "disease", "species", "sample_type", "assay_type", "assay_tech", "publications"]
+    list_display = ['short_name', 'score', 'state', 'wrangler1', 'title',]
+    list_filter = ['species', 'organ', 'state', 'assay_tech']
     fieldsets = (
-        ('overall', { 'fields': ('short_name', 'title', 'description',)}),
-        ('wrangling',  { 'fields': ('state', 'consent', 'priority', 'wrangler1', 'wrangler2')}),
+        ('overall', { 'fields': ('short_name', 'title', 'description','publications')}),
+        ('wrangling',  { 'fields': ('state', 'consent', 'score', 'wrangler1', 'wrangler2', 'contributors')}),
         ('biosample',  { 'fields': ('species', 'sample_type', 'organ', 'organ_part', 'disease')}),
+        ('assay', { 'fields': ('assay_type', 'assay_tech', 'cells_expected')}),
     )
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
        if db_field.name == "wrangler1" or db_field.name == "wrangler2":
@@ -89,4 +90,22 @@ class SampleTypeAdmin(admin.ModelAdmin):
     list_display = ["short_name", "description"]
 
 admin.site.register(SampleType, SampleTypeAdmin)
+
+class AssayTypeAdmin(admin.ModelAdmin):
+    search_fields = ["short_name"]
+    list_display = ["short_name", "description"]
+
+admin.site.register(AssayType, AssayTypeAdmin)
+
+class AssayTechAdmin(admin.ModelAdmin):
+    search_fields = ["short_name"]
+    list_display = ["short_name", "description"]
+
+admin.site.register(AssayTech, AssayTechAdmin)
+
+class PublicationAdmin(admin.ModelAdmin):
+    search_fields = ["short_name"]
+    list_display = ["short_name", "title"]
+
+admin.site.register(Publication, PublicationAdmin)
 
