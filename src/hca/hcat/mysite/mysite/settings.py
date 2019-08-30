@@ -85,7 +85,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
-            'read_default_file': '/cluster/home/kent/kent/src/hca/hcat/mysite/my.cfg',
+            'read_default_file': '/hive/groups/hca/hcat/kent/src/hca/hcat/mysite/my.cfg',
         },
     }
 }
@@ -129,3 +129,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Where wranglers can upload things, whoohoo!
+
+MEDIA_ROOT = '/hive/groups/hca/hcat/media'
+MEDIA_URL = '/media/'
