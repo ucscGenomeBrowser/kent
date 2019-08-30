@@ -24,13 +24,13 @@ char *symLookup(void *symbols, char *key)
 return optionVal(key, NULL);
 }
 
-void warnHandler(char *warning)
+void warnHandler(void *symbols, char *warning)
 /* Print warning message */
 {
 fprintf(stderr, "%s\n", warning);
 }
 
-void abortHandler()
+void abortHandler(void *symbols)
 /* Abort */
 {
 errAbort("Aborting");
