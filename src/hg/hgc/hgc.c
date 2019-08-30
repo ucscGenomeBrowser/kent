@@ -18511,6 +18511,26 @@ if (sqlTableExists(conn, gcTable))
     }
 }
 
+static void checkForMupit(struct sqlConnection *conn, struct trackDb *tdb, int start)
+/* Print a link to MuPIT if the item is in the mupitRanges table */
+{
+if (sqlTableExists(conn, "mupitRanges"))
+    {
+    struct sqlResult *sr = hRangeQuery(conn, "mupitRanges", seqName, start, start+1, NULL, NULL);
+    char **row = NULL;
+    if ((row = sqlNextRow(sr)) != NULL)
+        {
+        int mupitPosition = start + 1; // mupit uses 1-based coords
+        printf("<TR><TD colspan=2><B>");
+        if (sameString(database, "hg19"))
+            printf("<A HREF=\"http://hg19.cravat.us/MuPIT_Interactive/?gm=%s:%d\">", seqName, mupitPosition);
+        else if (sameString(database, "hg38"))
+            printf("<A HREF=\"http://mupit.icm.jhu.edu/MuPIT_Interactive/?gm=%s:%d\">", seqName, mupitPosition);
+        printf("MuPIT Structure</A></B></TD></TR>\n");
+        }
+    }
+}
+
 void printOtherSnpMappings(char *table, char *name, int start,
 			   struct sqlConnection *conn, int rowOffset)
 /* If this SNP (from any bed4+ table) is not uniquely mapped, print the other mappings. */
@@ -18578,6 +18598,7 @@ puts("<TABLE>");
 checkForGwasCatalog(conn, tdb, itemName);
 checkForHgdpGeo(conn, tdb, itemName, start);
 checkForHapmap(conn, tdb, itemName);
+checkForMupit(conn, tdb, start);
 printSnpAlignment(tdb, snpAlign, version);
 puts("</TABLE>");
 printTrackHtml(tdb);

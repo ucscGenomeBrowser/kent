@@ -1,0 +1,75 @@
+# This file describes how to build the knownToMupit table and mupitRanges table.
+# knownToMupit is a link between knownGene IDS and PDB Ids supported by Mupit, used
+#   by hgGene for links to 3D protein structures.
+# mupitRanges is used on hgc pages for dbSnp to decide whether to show if the
+#   SNP position is supported by MuPIT.
+cd /hive/data/outside/
+mkdir mupit
+cd mupit
+
+# mupit-pdbids.txt was emailed from Kyle Moad (kmoad@insilico.us.com)
+
+# wc -l mupit-pdbids.txt
+for db in "hg38" "hg19" "hg18"; do \
+    # get knownGene IDs and associated PDB IDS
+    # the extDb{Ref} parts come from hg/hgGene/domains.c:domainsPrint()
+    hgsql -Ne "select kgID, extAcc1 from $db.kgXref x \
+        inner join sp180404.extDbRef sp on x.spID = sp.acc \
+        inner join sp180404.extDb e on sp.extDb=e.id \
+        where x.spID != '' and e.val='PDB' order by kgID" \
+        > $db.knownToPdb.txt;
+    # filter out pdbIds not found in mupit
+    cat mupit-pdbids.txt | tr '[a-z]' '[A-Z]' | \
+        grep -Fwf - $db.knownToPdb.txt >  $db.knownToMupit.txt;
+    # check that it filtered correctly:
+    # cut -f2 $db.knownToMuipit.txt | sort -u | wc -l;
+    # load new table for hgGene/hgc
+    hgLoadSqlTab $db knownToMupit ~/kent/src/hg/lib/knownTo.sql $db.knownToMupit.txt
+done
+
+# mupit.sqlite came from Rick Kim: rkim@insilico.us.com
+# Get all the entries from the database:
+sqlite3 mupit.sqlite ".databases"
+# seq  name             file                                                      
+# ---  ---------------  ----------------------------------------------------------
+# 0    main             /hive/data/outside/mupit/mupit.sqlite                     
+sqlite3 mupit.sqlite ".tables"
+# mupit
+# The -separator is a literal tab inserted with by pressing "ctrl-v tab"
+sqlite3 -separator '	' mupit.sqlite "select * from mupit;" | \
+    tawk '{print $1,$2-1,$3}' | sort -k1,1 -k2,2n > hg38.mupitPositions.bed
+
+# mupit_hg19_chrompos.txt also came from Rick Kim
+# this file is only two  columns, make it into a range table:
+tawk '{print $1,$2-1,$2}' mupit_hg19_chrompos.txt | sort -k1,1 -k2,2n | \
+    uniq > hg19.mupitPositionsZeroBased.txt
+bedtools merge -i hg19.mupitPositionsZeroBased.txt > hg19.mupitPositions.bed
+
+for db in hg19 hg38; do hgLoadBed -tab $db mupitRanges $db.mupitPositions.bed; done
+# Reading hg19.mupitPositions.bed
+# Read 171024 elements of size 3 from hg19.mupitPositions.bed
+# Sorted
+# Creating table definition for mupitRanges, bedSize: 3
+# Saving bed.tab
+# Loading hg19
+# Reading hg38.mupitPositions.bed
+# ERROR: line 10547:'chr1 248858130       248857859'
+# chromStart after chromEnd (248858130 > 248857859)
+
+# Redo hg38 and throw out positions where chromStart > chromEnd
+sqlite3 -separator '	' mupit.sqlite "select * from mupit;" | tawk '{if ($2 <= $3) print $1, $2-1, $3}' | sort -k1,1 -k2,2n > hg38.mupitPositions.bed
+# now reload is clean:
+for db in hg19 hg38; do hgLoadBed -tab $db mupitRanges $db.mupitPositions.bed; done
+# Reading hg19.mupitPositions.bed
+# Read 171024 elements of size 3 from hg19.mupitPositions.bed
+# Sorted
+# Creating table definition for mupitRanges, bedSize: 3
+# Saving bed.tab
+# Loading hg19
+# Reading hg38.mupitPositions.bed
+# Read 116709 elements of size 3 from hg38.mupitPositions.bed
+# Sorted
+# Creating table definition for mupitRanges, bedSize: 3
+# Saving bed.tab
+# Loading hg38
+

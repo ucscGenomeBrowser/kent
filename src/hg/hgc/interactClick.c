@@ -156,7 +156,7 @@ for (ipr = iprs; ipr; ipr = next)
 return filtered;
 }
 
-static char *makeInteractRegionFile(struct interact *inter)
+static char *makeInteractRegionFile(char *name, struct interact *inters)
 /* Create bed file in trash directory with end coordinates for multi-region mode */
 {
 struct tempName mrTn;
@@ -165,46 +165,52 @@ FILE *f = fopen(mrTn.forCgi, "w");
 if (f == NULL)
     errAbort("can't create temp file %s", mrTn.forCgi);
 char regionInfo[1024];
-// TODO: check chrom bounds
-int padding = 5;
+int padding = 200;
 safef(regionInfo, sizeof regionInfo, "#padding %d\n", padding);
 mustWrite(f, regionInfo, strlen(regionInfo));
 //warn("%s", regionInfo);
 
-safef(regionInfo, sizeof regionInfo, "#shortDesc %s\n", inter->name);
+safef(regionInfo, sizeof regionInfo, "#shortDesc %s\n", name);
 mustWrite(f, regionInfo, strlen(regionInfo));
 //warn("%s", regionInfo);
-char *region1Chrom = inter->sourceChrom, *region2Chrom = inter->targetChrom;
-int region1Start = inter->sourceStart, region1End = inter->sourceEnd;
-int region2Start = inter->targetStart, region2End = inter->targetEnd;
-if (sameString(inter->sourceChrom, inter->targetChrom))
+
+struct interact *inter = NULL;
+struct bed *region, *regions = NULL;
+struct hash *uniqRegions = hashNew(0);
+for (inter = inters; inter != NULL; inter = inter->next)
     {
-    if (inter->sourceStart > inter->targetStart)
+    char buf[256];
+    //safef(buf, sizeof buf, "%s:%d-%d", region1->chrom, region1->chromStart, region1->chromEnd);
+    safef(buf, sizeof buf, "%s:%d-%d", inter->sourceChrom, inter->sourceStart, inter->sourceEnd);
+    if (!hashLookup(uniqRegions, buf))
         {
-        region1Start = inter->targetStart;
-        region1End = inter->targetEnd;
-        region2Start = inter->sourceStart;
-        region2End = inter->sourceEnd;
+        hashAdd(uniqRegions, cloneString(buf), NULL);
+        AllocVar(region);
+        region->chrom = inter->sourceChrom;
+        region->chromStart = inter->sourceStart;
+        region->chromEnd = inter->sourceEnd;
+        slAddHead(&regions, region);
+        }
+    //safef(buf, sizeof buf, "%s:%d-%d", region2->chrom, region2->chromStart, region2->chromEnd);
+    safef(buf, sizeof buf, "%s:%d-%d", inter->targetChrom, inter->targetStart, inter->targetEnd);
+    if (!hashLookup(uniqRegions, buf))
+        {
+        hashAdd(uniqRegions, cloneString(buf), NULL);
+        AllocVar(region);
+        region->chrom = inter->chrom;
+        region->chromStart = inter->targetStart;
+        region->chromEnd = inter->targetEnd;
+        slAddHead(&regions, region);
         }
     }
-else
+slSort(&regions, bedCmp);
+for (region = regions; region != NULL; region = region->next)
     {
-    if (sameString(inter->chrom, inter->targetChrom))
-        {
-        region1Chrom = inter->targetChrom;
-        region1Start = inter->targetStart;
-        region1End = inter->targetEnd;
-        region2Chrom = inter->sourceChrom;
-        region2Start = inter->sourceStart;
-        region2End = inter->sourceEnd;
-        }
+    safef(regionInfo, sizeof regionInfo, "%s\t%d\t%d\n",
+                    region->chrom, region->chromStart, region->chromEnd);
+    mustWrite(f, regionInfo, strlen(regionInfo));
+    //warn("%s", regionInfo);
     }
-safef(regionInfo, sizeof regionInfo, "%s\t%d\t%d\n"
-           "%s\t%d\t%d\n",
-                region1Chrom, region1Start, region1End,
-                region2Chrom, region2Start, region2End);
-mustWrite(f, regionInfo, strlen(regionInfo));
-//warn("%s", regionInfo);
 fclose(f);
 
 // create SHA1 file; used to see if file has changed
@@ -220,9 +226,51 @@ carefulClose(&f);
 return cloneString(mrTn.forCgi);
 }
 
+static void multiRegionLink(char *name, struct interact *inters)
+// Print link to multi-region view of ends if appropriate 
+// (or provide a link to remove if already in this mode) 
+{
+if (inters->next == NULL && interactEndsOverlap(inters))
+    return;
+char *virtShortDesc = cartOptionalString(cart, "virtShortDesc");
+boolean isVirtMode = cartUsualBoolean(cart, "virtMode", FALSE);
+//warn("virtShortDesc: %s, name: %s", virtShortDesc, name);
+if (isVirtMode && virtShortDesc && sameString(virtShortDesc, name))
+    {
+    printf("<br>Show interaction%s in "
+                "<a href='hgTracks?"
+                    "virtMode=0&"
+                    "virtModeType=default'>"
+                " normal browser view</a> (exit multi-region view)",
+                        inters->next != NULL ? "s" : "");
+    }
+else
+    {
+    char *regionFile = makeInteractRegionFile(name, inters);
+    //warn("regionFile: %s", regionFile);
+    printf("<br>Show interaction ends in "
+            "<a href='hgTracks?"
+                "virtMode=1&"
+                "virtModeType=customUrl&"
+                "virtWinFull=on&"
+                "virtShortDesc=%s&"
+                "multiRegionsBedUrl=%s'>"
+            " multi-region browser view </a>(custom region mode)",
+                    name, cgiEncode(regionFile));
+    if (isVirtMode)
+        printf(" or "
+                "<a href='hgTracks?"
+                    "virtMode=0&"
+                    "virtModeType=default'>"
+                " normal browser view</a>");
+    }
+printf("&nbsp;&nbsp;&nbsp;");
+printf("<a href=\"../goldenPath/help/multiRegionHelp.html\" target=_blank>(Help)</a>\n");
+}
+
 void doInteractRegionDetails(struct trackDb *tdb, struct interact *inter)
 {
-/* print info for both regions */
+    /* print info for both regions */
 /* Use different labels:
         1) directional (source/target)
         2) non-directional same chrom (lower/upper)
@@ -299,48 +347,10 @@ if (distance > 0)
     sprintLongWithCommas(sizeBuf, distance);
     printf("<b>Distance between midpoints:</b> %s bp<br>\n", sizeBuf); 
     }
-
-// print link to multi-region view of ends if appropriate 
-// (or provide a link to remove if already in this mode) 
-
-if (trackDbSettingOn(tdb, "interactMultiRegion") && !interactEndsOverlap(inter))
-    {
-    char *virtShortDesc = cartOptionalString(cart, "virtShortDesc");
-    //warn("virtShortDesc: %s", virtShortDesc);
-    if (virtShortDesc && sameString(virtShortDesc, inter->name))
-        {
-        printf("<br><a target='_blank' "
-                    "href='hgTracks?"
-                        "virtMode=0&"
-                        "virtModeType=default'>"
-                    "Show interaction in normal browser view (exit multi-region view)</a>");
-        }
-    else
-        {
-        char *regionFile = makeInteractRegionFile(inter);
-        //warn("regionFile: %s", regionFile);
-        printf("<br><a target='_blank' "
-                "href='hgTracks?"
-                    "virtMode=1&"
-                    "virtModeType=customUrl&"
-                    "virtWinFull=on&"
-                    "virtShortDesc=%s&"
-                    "multiRegionsBedUrl=%s'>"
-                "Show both ends of interaction in multi-region browser view (custom region mode)</a>",
-                        inter->name, cgiEncode(regionFile));
-        }
-    printf("&nbsp;&nbsp;&nbsp;");
-    printf("<a href=\"../goldenPath/help/multiRegionHelp.html\" target=_blank>(Help)</a>\n");
-    }
-
-#ifdef TODO /* TODO: get count and score stats of all interactions in window ?*/
-double *scores;
-AllocArray(scores, count);
-#endif
 }
 
 void doInteractItemDetails(struct trackDb *tdb, struct interactPlusRow *ipr, char *item, 
-                                boolean isMultiple)
+                                boolean isMultiple, boolean doMultiRegion)
 /* Details of interaction item */
 {
 struct interact *inter = ipr->interact;
@@ -354,7 +364,21 @@ if (!isEmptyTextField(inter->exp))
     printf("<b>Experiment:</b> %s<br>\n", inter->exp);
 puts("<p>");
 if (!isMultiple)
+    {
     doInteractRegionDetails(tdb, inter);
+    if (doMultiRegion)
+        multiRegionLink(inter->name, inter);
+    }
+}
+
+static struct interact *iprsToInters(struct interactPlusRow *iprs)
+/* Create list of interacts from interactPlusRows */
+{
+struct interactPlusRow *ipr;
+struct interact *inters = NULL;
+for (ipr = iprs; ipr != NULL; ipr = ipr->next)
+    slAddHead(&inters, ipr->interact);
+return inters;
 }
 
 void doInteractDetails(struct trackDb *tdb, char *item)
@@ -364,6 +388,7 @@ char *chrom = cartString(cart, "c");
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 char *foot = cgiOptionalString("foot");
+boolean doMultiRegion = trackDbSettingOn(tdb, "interactMultiRegion");
 int minStart, maxEnd;
 struct interactPlusRow *iprs = getInteractions(tdb, chrom, start, end, item, foot, &minStart, &maxEnd);
 start = minStart;
@@ -375,6 +400,7 @@ char *clusterMode = interactUiClusterMode(cart, tdb->track, tdb);
 if (count > 1 || clusterMode)
     {
     printf("<b>Interactions:</b> %d<p>", count);
+    struct interact *inters = iprsToInters(iprs);
     if (clusterMode || foot)
         {
         char startBuf[1024], endBuf[1024], sizeBuf[1024];
@@ -388,20 +414,30 @@ if (count > 1 || clusterMode)
         }
     else
         {
-        doInteractRegionDetails(tdb, iprs->interact);
+        // overlapping items, same start/end/name
+        doInteractRegionDetails(tdb, inters);
         }
+    if (doMultiRegion)
+        multiRegionLink(item, inters);
     printf("</p>");
     }
 
-genericHeader(tdb, item);
+//genericHeader(tdb, item);
 static struct interactPlusRow *ipr = NULL;
 for (ipr = iprs; ipr != NULL; ipr = ipr->next)
     {
     if (count > 1)
         printf("<hr>\n");
-    doInteractItemDetails(tdb, ipr, item, count > 1);
+    doInteractItemDetails(tdb, ipr, item, count > 1, doMultiRegion);
     if (foot || (clusterMode && count > 1))
-        doInteractRegionDetails(tdb, ipr->interact);
+        {
+        struct interact *inter = ipr->interact;
+        // just one interact (we have these in list for handling clusters earlier)
+        inter->next = NULL;
+        doInteractRegionDetails(tdb, inter);
+        if (doMultiRegion)
+            multiRegionLink(inter->name, inter);
+        }
     if (count > 1 && !isEmptyTextField(ipr->interact->name) && sameString(ipr->interact->name, item))
         printf("<hr>\n");
     }
