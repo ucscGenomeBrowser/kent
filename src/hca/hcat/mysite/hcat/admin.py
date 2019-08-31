@@ -4,7 +4,7 @@
 from __future__ import unicode_literals
 
 from django.contrib import admin
-from .models import Grant,Project,Lab,Contributor,VocabFunder,VocabProjectState,VocabConsent,Species,VocabOrgan,VocabOrganPart,VocabDisease,VocabSampleType,VocabAssayTech,VocabAssayType,VocabPublication,VocabComment,VocabCommentType,VocabProjectOrigin
+from .models import *
 
 class ContributorAdmin(admin.ModelAdmin):
     list_filter = ['project_role']
@@ -22,28 +22,49 @@ class LabAdmin(admin.ModelAdmin):
 
 admin.site.register(Lab, LabAdmin)
 
-class VocabProjectStateAdmin(admin.ModelAdmin):
+class ProjectStateAdmin(admin.ModelAdmin):
     list_display = ['state', 'description']
     autocomplete_fields = ['comments']
     
-admin.site.register(VocabProjectState, VocabProjectStateAdmin)
+admin.site.register(ProjectState, ProjectStateAdmin)
 
-class VocabProjectOriginAdmin(admin.ModelAdmin):
+class ProjectOriginAdmin(admin.ModelAdmin):
     list_display = ['short_name', 'description']
     autocomplete_fields = ['comments']
     
-admin.site.register(VocabProjectOrigin, VocabProjectOriginAdmin)
+admin.site.register(ProjectOrigin, ProjectOriginAdmin)
+
+#    contacts = models.ManyToManyField(Contributor, blank=True, related_name="contacts")
+#    responders = models.ManyToManyField(Contributor, blank=True, related_name="responders")
+#    questionnaire = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
+#    tAndC = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
+#    sheet_template = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
+#    sheet_from_lab = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
+#    sheet_curated = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
+#    sheet_validated = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
+#    metadataExcel = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
+#    staging_area = models.URLField(blank=True, null=True)
 
 class ProjectAdmin(admin.ModelAdmin):
-    search_fields = ['short_name', 'title', 'contributors', 'labs', 'organ_part', 'organ', 'disease', 'species']
-    autocomplete_fields = ["contributors", "labs", "organ", "organ_part", "disease", "species", "sample_type", "assay_type", "assay_tech", "publications", "comments", "grants"]
+    search_fields = ['short_name', 'title', 'contributors', 'labs', 'organ_part', 'organ', 'disease', 'species', 'grants']
+    autocomplete_fields = ["contributors", "labs", "organ", "organ_part", "disease", 
+    	"species", "sample_type", "assay_type", "assay_tech", "publications", "comments", 
+	"grants", "files", "urls", "contacts", "responders"]
     list_display = ['short_name', 'stars', 'state', 'wrangler1', 'title',]
     list_filter = ['species', 'origin', 'state', 'assay_tech']
     fieldsets = (
-        ('overall', { 'fields': ('short_name', 'title', 'description','publications', )}),
-        ('wrangling',  { 'fields': ('state', 'consent', 'stars', 'wrangler1', 'wrangler2', 'contributors', 'labs', 'grants', 'comments', 'origin')}),
-        ('biosample',  { 'fields': ('species', 'sample_type', 'organ', 'organ_part', 'disease')}),
+        ('overall', { 'fields': (('short_name', 'state', ), ('title', 'stars'), ('labs', 'consent'))}),
+        ('wrangling',  { 'fields': (('wrangler1', 'wrangler2'), 'comments',
+		('origin', 'origin_name',),
+		'contacts', 'responders',
+		('questionnaire', 'tAndC'),
+		('sheet_template', 'sheet_from_lab'),
+		('sheet_curated', 'sheet_validated'),
+		'staging_area', 
+		)}),
+        ('biosample',  { 'fields': (('species', 'sample_type'), ('organ', 'organ_part'), 'disease')}),
         ('assay', { 'fields': ('assay_type', 'assay_tech', 'cells_expected')}),
+	('pubs, people, and pay', { 'fields': ('description', 'publications', 'contributors', 'grants')}),
     )
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
        if db_field.name == "wrangler1" or db_field.name == "wrangler2":
@@ -60,86 +81,101 @@ class GrantAdmin(admin.ModelAdmin):
 
 admin.site.register(Grant, GrantAdmin)
 
-class VocabFunderAdmin(admin.ModelAdmin):
+class FunderAdmin(admin.ModelAdmin):
     list_display = ['short_name', 'description',]
     autocomplete_fields = ['comments']
 
-admin.site.register(VocabFunder, VocabFunderAdmin)
+admin.site.register(Funder, FunderAdmin)
 
 
 class SpeciesAdmin(admin.ModelAdmin):
-    search_fields = ["common_name"]
+    search_fields = ["common_name", "scientific_name", "ncbi_taxon"]
     list_display = ['common_name', 'scientific_name', 'ncbi_taxon',]
 
 admin.site.register(Species, SpeciesAdmin)
 
-class VocabConsentAdmin(admin.ModelAdmin):
-    search_fields = ["short_name"]
+class ConsentAdmin(admin.ModelAdmin):
+    search_fields = ["short_name", "description"]
     list_display = ["short_name", "description"]
     autocomplete_fields = ['comments']
 
-admin.site.register(VocabConsent, VocabConsentAdmin)
+admin.site.register(Consent, ConsentAdmin)
 
-class VocabDiseaseAdmin(admin.ModelAdmin):
-    search_fields = ["short_name"]
+class DiseaseAdmin(admin.ModelAdmin):
+    search_fields = ["short_name", "description"]
+    list_display = ["short_name", "description"]
+    autocomplete_fields = ['comments', 'projects']
+
+admin.site.register(Disease, DiseaseAdmin)
+
+class OrganAdmin(admin.ModelAdmin):
+    search_fields = ["short_name", "description"]
+    list_display = ["short_name", "description"]
+    autocomplete_fields = ['comments', 'projects']
+
+admin.site.register(Organ, OrganAdmin)
+
+class OrganPartAdmin(admin.ModelAdmin):
+    search_fields = ["short_name", "description"]
+    list_display = ["short_name", "description"]
+    autocomplete_fields = ['comments', 'projects']
+
+
+admin.site.register(OrganPart, OrganPartAdmin)
+
+class SampleTypeAdmin(admin.ModelAdmin):
+    search_fields = ["short_name", "description"]
     list_display = ["short_name", "description"]
     autocomplete_fields = ['comments']
 
-admin.site.register(VocabDisease, VocabDiseaseAdmin)
+admin.site.register(SampleType, SampleTypeAdmin)
 
-class VocabOrganAdmin(admin.ModelAdmin):
-    search_fields = ["short_name"]
+class AssayTechAdmin(admin.ModelAdmin):
+    search_fields = ["short_name", "description"]
     list_display = ["short_name", "description"]
-    autocomplete_fields = ['comments']
+    autocomplete_fields = ['comments', 'projects']
 
-admin.site.register(VocabOrgan, VocabOrganAdmin)
+admin.site.register(AssayTech, AssayTechAdmin)
 
-class VocabOrganPartAdmin(admin.ModelAdmin):
-    search_fields = ["short_name"]
+class AssayTypeAdmin(admin.ModelAdmin):
+    search_fields = ["short_name", "description"]
     list_display = ["short_name", "description"]
-    autocomplete_fields = ['comments']
+    autocomplete_fields = ['comments', 'projects']
 
+admin.site.register(AssayType, AssayTypeAdmin)
 
-admin.site.register(VocabOrganPart, VocabOrganPartAdmin)
-
-class VocabSampleTypeAdmin(admin.ModelAdmin):
-    search_fields = ["short_name"]
-    list_display = ["short_name", "description"]
-    autocomplete_fields = ['comments']
-
-admin.site.register(VocabSampleType, VocabSampleTypeAdmin)
-
-class VocabAssayTechAdmin(admin.ModelAdmin):
-    search_fields = ["short_name"]
-    list_display = ["short_name", "description"]
-    autocomplete_fields = ['comments']
-
-admin.site.register(VocabAssayTech, VocabAssayTechAdmin)
-
-class VocabAssayTypeAdmin(admin.ModelAdmin):
-    search_fields = ["short_name"]
-    list_display = ["short_name", "description"]
-    autocomplete_fields = ['comments']
-
-admin.site.register(VocabAssayType, VocabAssayTypeAdmin)
-
-class VocabPublicationAdmin(admin.ModelAdmin):
-    search_fields = ["short_name"]
+class PublicationAdmin(admin.ModelAdmin):
+    search_fields = ["short_name", "title"]
     list_display = ["short_name", "title"]
     autocomplete_fields = ['comments']
 
-admin.site.register(VocabPublication, VocabPublicationAdmin)
+admin.site.register(Publication, PublicationAdmin)
 
-class VocabCommentTypeAdmin(admin.ModelAdmin):
-    search_fields = ["short_name"]
+class CommentTypeAdmin(admin.ModelAdmin):
+    search_fields = ["short_name", "description"]
     list_display = ["short_name", "description"]
     short_description = "emotion"
 
-admin.site.register(VocabCommentType, VocabCommentTypeAdmin)
+admin.site.register(CommentType, CommentTypeAdmin)
 
-class VocabCommentAdmin(admin.ModelAdmin):
+class CommentAdmin(admin.ModelAdmin):
     search_fields = ["type", "text"]
     list_display = ["type", "text"]
+    autocomplete_fields = ['projects', 'labs', 'contributors', 'grants', 'consents', 'organs', 'organ_parts', 'urls', 'files']
+    list_filter = ['type']
 
-admin.site.register(VocabComment, VocabCommentAdmin)
+admin.site.register(Comment, CommentAdmin)
 
+class UrlAdmin(admin.ModelAdmin):
+    search_fields = ["short_name", "path"]
+    list_display = ["short_name", "path"]
+    autocomplete_fields = ['comments']
+
+admin.site.register(Url, UrlAdmin)
+
+class FileAdmin(admin.ModelAdmin):
+    search_fields = ["short_name", "file"]
+    list_display = ["short_name", "file"]
+    autocomplete_fields = ['comments']
+
+admin.site.register(File, FileAdmin)
