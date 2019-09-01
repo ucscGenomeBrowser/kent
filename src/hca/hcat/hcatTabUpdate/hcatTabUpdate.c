@@ -51,6 +51,45 @@ if (fieldIx > 0)
     }
 }
 
+struct slName *uniqVals(struct fieldedTable *table, char *field)
+/* Return list of all unique values in the field */
+{
+struct dyString *scratch = dyStringNew(0);
+int fieldIx = fieldedTableFindFieldIx(table, field);
+if (fieldIx < 0)
+    return NULL;
+struct hash *uniqHash = hashNew(0);
+struct slName *valList = NULL;
+struct fieldedRow *fr;
+for (fr = table->rowList; fr != NULL; fr = fr->next)
+    {
+    char *inTsv = fr->row[fieldIx];
+    char *val;
+    while ((val = csvParseNext(&inTsv, scratch)) != NULL)
+	{
+	if (hashLookup(uniqHash, val) == NULL)
+	    {
+	    hashAdd(uniqHash, val, NULL);
+	    slNameAddHead(&valList, val);
+	    }
+	}
+    }
+slReverse(&valList);
+hashFree(&uniqHash);
+dyStringFree(&scratch);
+return valList;
+}
+
+char *slNameToCsv(struct slName *list)
+/* Convert slNames to a long string */
+{
+struct dyString *dy = dyStringNew(0);
+struct slName *el;
+for (el = list; el != NULL; el = el->next)
+    csvEscapeAndAppend(dy, el->name);
+return dyStringCannibalize(&dy);
+}
+
 
 struct fieldedTable *makeContributors(struct fieldedTable *inProject)
 /* Make a fielded table from project contact info and contributors list */
@@ -159,7 +198,23 @@ while ((taxon = csvParseNext(&s, scratch)) != NULL)
 return dyStringCannibalize(&result);
 }
 
-struct fieldedTable *makeProject(struct fieldedTable *inProject)
+void addListFieldIfNonempty(char *field, struct slName *list,
+    char *newFields[], char *newVals[], int maxNewCount,int *pCurCount)
+/* Add field to newFields if list is non-empty, taking care not to go past end. */
+{
+if (list != NULL)
+    {
+    int curCount = *pCurCount;
+    if (curCount >= maxNewCount)
+       errAbort("Too many fields in addListFieldIfNonempty on %s, %d max", field, curCount);
+    newFields[curCount] = field;
+    newVals[curCount] = slNameToCsv(list);
+    *pCurCount = curCount+1;
+    }
+}
+
+
+struct fieldedTable *makeProject(struct fieldedTable *inProject, struct fieldedTable *inSample)
 /* Make output project table.  This is the big one - 35 fields now
  * probably twice that by the time HCA is done.  Fortunately we only need
  * to deal with some of the fields and it only has one row. */
@@ -167,11 +222,12 @@ struct fieldedTable *makeProject(struct fieldedTable *inProject)
 char **inFields = inProject->fields;
 char **inRow = inProject->rowList->row;
 int inFieldCount = inProject->fieldCount;
-int outFieldMax = inFieldCount + 16;  // Mostly we remove fields but we do add a few
+struct dyString *scratch = dyStringNew(0);
+
+int outFieldMax = inFieldCount + 16;  // Mostly we remove fields but we do add a few.  Gets checked
 char *outFields[outFieldMax];  
 char *outRow[outFieldMax];
 int outFieldCount = 0;
-struct dyString *scratch = dyStringNew(0);
 
 /* First we make up the basics of the outProject table.  Mostly this is just
  * passing through from the inProject, but there's exceptions like contacts. */
@@ -197,6 +253,17 @@ for (inIx=0; inIx<inFieldCount; ++inIx)
 	++outFieldCount;
 	}
     }
+
+/* Add the fields we scan and merge from sample at end */
+struct slName *organList = uniqVals(inSample, "organ");
+struct slName *organPartList = uniqVals(inSample, "organ_part");
+struct slName *assayTypeList = uniqVals(inSample, "assay_type");
+struct slName *diseaseList = uniqVals(inSample, "disease");
+addListFieldIfNonempty("organ", organList, outFields, outRow, outFieldMax, &outFieldCount);
+addListFieldIfNonempty("organ_part", organPartList, outFields, outRow, outFieldMax, &outFieldCount);
+addListFieldIfNonempty("assay_type", assayTypeList, outFields, outRow, outFieldMax, &outFieldCount);
+addListFieldIfNonempty("disease", diseaseList, outFields, outRow, outFieldMax, &outFieldCount);
+
 struct fieldedTable *outTable = fieldedTableNew("project", outFields, outFieldCount);
 outTable->startsSharp = inProject->startsSharp;
 fieldedTableAdd(outTable, outRow, outFieldCount, 1);
@@ -270,7 +337,7 @@ if (inProject->rowCount != 1)
     errAbort("Expected one row in %s, got %d\n", projectFile, inProject->rowCount);
 
 struct fieldedTable *outContributor = makeContributors(inProject);
-struct fieldedTable *outProject = makeProject(inProject);
+struct fieldedTable *outProject = makeProject(inProject, inSample);
 struct fieldedTable *outLab = makeLab(inProject);
 
 /* Write output */
