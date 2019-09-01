@@ -12,15 +12,22 @@
 #include "fieldedTable.h"
 #include "strex.h"
 
+char *clId = NULL;  // Flag set from command line to add an id column
+int clStartId = 1;  // What number id column should start with
+
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
 "tabToTabDir - Convert a large tab-separated table to a directory full of such tables according\n"
 "to a specification.\n"
-"usage:\n"
+"command line:\n"
 "   tabToTabDir in.tsv spec.txt outDir\n"
-"where:\n"
+"options:\n"
+"   -id=fieldName - Add a numeric id field of given name that starts at 1 and autoincrements \n"
+"                   for each table\n"
+"   -startId=fieldName - sets starting ID to be something other than 1\n"
+"usage:\n"
 "   in.tsv is a tab-separated input file.  The first line is the label names and may start with #\n"
 "   spec.txt is a file that says what columns to put into the output, described in more detail below\n"
 "   outDir is a directory that will be populated with tab-separated files\n"
@@ -47,6 +54,8 @@ errAbort(
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"id", OPTION_STRING},
+   {"startId", OPTION_INT},
    {NULL, 0},
 };
 
@@ -529,7 +538,7 @@ for (newTable = newTableList; newTable != NULL; newTable = newTable->next)
     safef(outTabName, sizeof(outTabName), "%s/%s.tsv", outDir, newTable->name);
     verbose(1, "Writing %s of %d columns %d rows\n",  
 	outTabName, outTable->fieldCount, outTable->rowCount);
-    fieldedTableToTabFile(outTable, outTabName);
+    fieldedTableToTabFileWithId(outTable, outTabName, clId, clStartId);
     }
 verbose(1, "%d fields, %d (%g%%) evaluated with strex, %d (%.2f) links\n", 
     gTotalFields,  gStrexFields, 100.0 * gStrexFields / gTotalFields,
@@ -540,6 +549,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
+clId = optionVal("id", clId);
+clStartId = optionInt("startId", clStartId);
 if (argc != 4)
     usage();
 tabToTabDir(argv[1], argv[2], argv[3]);

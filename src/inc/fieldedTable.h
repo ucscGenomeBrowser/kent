@@ -48,6 +48,11 @@ struct fieldedTable *fieldedTableFromTabFile(char *fileName, char *url, char *re
 void fieldedTableToTabFile(struct fieldedTable *table, char *fileName);
 /* Write out a fielded table back to file */
 
+void fieldedTableToTabFileWithId(struct fieldedTable *table, char *fileName, 
+    char *idField, int startId);
+/* Write out a fielded table back to file.  If idField is non-NULL it will be added
+ * to the start of each output line as a steadily incrementing integer starting with startId. */
+
 boolean fieldedTableColumnIsNumeric(struct fieldedTable *table, int fieldIx);
 /* Return TRUE if field has numeric values wherever non-null */
 
