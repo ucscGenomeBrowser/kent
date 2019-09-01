@@ -109,7 +109,7 @@ class OrganPart(models.Model):
 class Organ(models.Model):
     short_name = models.CharField(max_length=50, unique=True)
     description = models.CharField(max_length=250)
-    projects = models.ManyToManyField("Project", blank=True, through="project_organ", related_name='projects_organ_relationship')
+    #projects = models.ManyToManyField("Project", blank=True, through="project_organ", related_name='projects_organ_relationship')
     comments = models.ManyToManyField(Comment, blank=True);
     def __str__(self):
         return self.short_name
@@ -175,31 +175,47 @@ class Publication(models.Model):
     class Meta:
        verbose_name = 'Wrangler publication'
 
-class ProjectOrigin(models.Model):
+class EffortType(models.Model):
     short_name = models.CharField(max_length=50, unique=True)
     description = models.CharField(max_length=255)
     comments = models.ManyToManyField(Comment, blank=True);
     def __str__(self):
         return self.short_name
     class Meta:
-       verbose_name = 'Wrangler project origin'
+       verbose_name = 'Wrangler effort type'
 
 class Project(models.Model):
     short_name = models.CharField(max_length=80)
-    state = models.ForeignKey(ProjectState, blank=True, null=True, default=None, on_delete=models.SET_NULL)
+    cur_state = models.ForeignKey(ProjectState, blank=True, null=True, default=None, on_delete=models.SET_NULL, related_name="cur_state")
+    state_reached = models.ForeignKey(ProjectState, blank=True, null=True, default=None, on_delete=models.SET_NULL, related_name="state_reached")
     stars = models.IntegerField(blank=True,validators=[MinValueValidator(1),MaxValueValidator(5)], default=3)
     wrangler1 = models.ForeignKey(Contributor, blank=True, null=True, default=None, on_delete=models.SET_NULL, related_name="wrangler1")
     wrangler2 = models.ForeignKey(Contributor, blank=True, null=True, default=None, on_delete=models.SET_NULL, related_name="wrangler2")
     contacts = models.ManyToManyField(Contributor, blank=True, related_name="projcontacts")
+    first_contact_date = models.DateField(blank=True, null=True, default=None)
+    last_contact_date = models.DateField(blank=True, null=True, default=None)
     responders = models.ManyToManyField(Contributor, blank=True, related_name="projresponders")
+    first_response_date = models.DateField(blank=True, null=True, default=None)
+    last_response_date = models.DateField(blank=True, null=True, default=None)
     questionnaire = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
+    questionnaire_date = models.DateField(blank=True, null=True, default=None)
     tAndC = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
+    tAndC_date = models.DateField(blank=True, null=True, default=None)
     sheet_template = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
+    sheet_template_date = models.DateField(blank=True, null=True, default=None)
     sheet_from_lab = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
+    sheet_from_lab_date = models.DateField(blank=True, null=True, default=None)
     sheet_curated = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
+    sheet_curated_date = models.DateField(blank=True, null=True, default=None)
     sheet_validated = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
-    metadataExcel = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
+    sheet_validated_date = models.DateField(blank=True, null=True, default=None)
     staging_area = models.URLField(blank=True, null=True)
+    staging_area_date = models.DateField(blank=True, null=True, default=None)
+    submit_date = models.DateField(blank=True, null=True, default=None)
+    submit_comments = models.ManyToManyField(Comment, blank=True, related_name="submit_comments");
+    cloud_date = models.DateField(blank=True, null=True, default=None)
+    pipeline_date = models.DateField(blank=True, null=True, default=None)
+    orange_date = models.DateField(blank=True, null=True, default=None)
     title = models.CharField(max_length=120)
     description = models.TextField()
     labs = models.ManyToManyField(Lab, blank=True)
@@ -208,7 +224,7 @@ class Project(models.Model):
     disease = models.ManyToManyField(Disease, blank=True)
     sample_type = models.ManyToManyField(SampleType, blank=True)
     consent = models.ForeignKey(Consent, blank=True, null=True, default=None, on_delete=models.SET_NULL)
-    origin = models.ForeignKey(ProjectOrigin, blank=True, null=True, default=None, on_delete=models.SET_NULL)
+    effort = models.ForeignKey(EffortType, blank=True, null=True, default=None, on_delete=models.SET_NULL)
     origin_name = models.CharField(max_length=200, blank=True)
     assay_type = models.ManyToManyField(AssayType, blank=True)
     assay_tech = models.ManyToManyField(AssayTech, blank=True)

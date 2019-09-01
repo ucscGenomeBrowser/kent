@@ -85,7 +85,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
-            'read_default_file': '/hive/groups/hca/hcat/kent/src/hca/hcat/mysite/my.cfg',
+            #'read_default_file': '/hive/groups/hca/hcat/kent/src/hca/hcat/mysite/my.cfg',
+            'read_default_file': '/cluster/home/kent/src/hca/hcat/mysite/my.cfg',
         },
     }
 }

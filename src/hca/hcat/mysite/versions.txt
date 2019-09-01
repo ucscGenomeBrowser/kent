@@ -15,3 +15,12 @@
       additions.  Changing 'vocab' to 'wrangler' as a prefix for the
       tables most people should ignore, and figured out how to do 
       this without changing the table names.
+0.4 - Adding a bunch of date fields in project, and a specific comment
+      field for the submission.  Refining state names and adding more so can 
+      show project as it goes through analysis a bit.  Breaking now huge
+      wrangling section into three:  wrangling, submission steps, post-submission.
+          tech note:
+      Django migration gets easily confused around multi-to-multi tables 
+      that are reflected so as to appear on both tables being related.  
+      I've had to do pretty painful patches two or three times now.  :-(   
+      I'll probably figure out the pattern though.  

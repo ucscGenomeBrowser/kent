@@ -28,11 +28,11 @@ class ProjectStateAdmin(admin.ModelAdmin):
     
 admin.site.register(ProjectState, ProjectStateAdmin)
 
-class ProjectOriginAdmin(admin.ModelAdmin):
+class EffortTypeAdmin(admin.ModelAdmin):
     list_display = ['short_name', 'description']
     autocomplete_fields = ['comments']
     
-admin.site.register(ProjectOrigin, ProjectOriginAdmin)
+admin.site.register(EffortType, EffortTypeAdmin)
 
 #    contacts = models.ManyToManyField(Contributor, blank=True, related_name="contacts")
 #    responders = models.ManyToManyField(Contributor, blank=True, related_name="responders")
@@ -46,21 +46,38 @@ admin.site.register(ProjectOrigin, ProjectOriginAdmin)
 #    staging_area = models.URLField(blank=True, null=True)
 
 class ProjectAdmin(admin.ModelAdmin):
-    search_fields = ['short_name', 'title', 'contributors', 'labs', 'organ_part', 'organ', 'disease', 'species', 'grants']
-    autocomplete_fields = ["contributors", "labs", "organ", "organ_part", "disease", 
+    search_fields = ['short_name', 'title', 'contributors', 'labs', 'organ_part', 
+    #'organ', 
+    'disease', 'species', 'grants']
+    autocomplete_fields = ["contributors", "labs", 
+    	"organ", "organ_part", "disease", "files",
     	"species", "sample_type", "assay_type", "assay_tech", "publications", "comments", 
-	"grants", "files", "urls", "contacts", "responders"]
-    list_display = ['short_name', 'stars', 'state', 'wrangler1', 'title',]
-    list_filter = ['species', 'origin', 'state', 'assay_tech']
+	"grants", "files", "urls", "contacts", "responders", "submit_comments"]
+    list_display = ['short_name', 'stars', 'state_reached', 'wrangler1', 'title',]
+    list_filter = ['species', 'effort', 'state_reached', 'assay_tech']
     fieldsets = (
-        ('overall', { 'fields': (('short_name', 'state', ), ('title', 'stars'), ('labs', 'consent'))}),
-        ('wrangling',  { 'fields': (('wrangler1', 'wrangler2'), 'comments',
-		('origin', 'origin_name',),
-		'contacts', 'responders',
-		('questionnaire', 'tAndC'),
-		('sheet_template', 'sheet_from_lab'),
-		('sheet_curated', 'sheet_validated'),
-		'staging_area', 
+        ('overall', { 'fields': (('short_name', 'state_reached', ), ('title', 'stars'), ('labs', 'consent'))}), 
+	('wrangling',  { 'fields': (
+		('wrangler1', 'wrangler2'), 
+		('cur_state', 'comments'),
+		('effort', 'origin_name',),
+		('contacts', 'files'),
+		('first_contact_date', 'last_contact_date'),
+		'responders',
+		('first_response_date', 'last_response_date'),
+		)}),
+	('ingest steps',  { 'fields': (
+		('questionnaire', 'questionnaire_date'),
+		('tAndC', 'tAndC_date'),
+		('sheet_template', 'sheet_template_date'),
+		('sheet_from_lab', 'sheet_from_lab_date'),
+		('sheet_curated', 'sheet_curated_date'),
+		('sheet_validated', 'sheet_validated_date'),
+		('staging_area', 'staging_area_date'),
+		('submit_comments', 'submit_date'),
+		)}),
+	('post-ingest',  { 'fields': (
+		('cloud_date', 'pipeline_date', 'orange_date'),
 		)}),
         ('biosample',  { 'fields': (('species', 'sample_type'), ('organ', 'organ_part'), 'disease')}),
         ('assay', { 'fields': ('assay_type', 'assay_tech', 'cells_expected')}),
@@ -111,7 +128,8 @@ admin.site.register(Disease, DiseaseAdmin)
 class OrganAdmin(admin.ModelAdmin):
     search_fields = ["short_name", "description"]
     list_display = ["short_name", "description"]
-    autocomplete_fields = ['comments', 'projects']
+    #autocomplete_fields = ['comments', 'projects']
+    autocomplete_fields = ['comments', ]
 
 admin.site.register(Organ, OrganAdmin)
 
