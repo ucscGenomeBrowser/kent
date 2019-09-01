@@ -29,6 +29,15 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
+char *fieldedTableLookupNamedFieldInRow(struct fieldedTable *table, char *field, char **row)
+/* Look up field by name,  not as effient as by index but what the heck. */
+{
+int ix = fieldedTableFindFieldIx(table, field);
+if (ix < 0)
+    return NULL;
+return row[ix];
+}
+
 void addIfReal(int fieldIx, char *oldFieldNames[], 
     char *newFields[], int newIxs[], int maxNewCount,int *pCurCount)
 /* If fieldIx is positive we consider it real anc add it to the newFields */
@@ -97,7 +106,6 @@ struct fieldedTable *makeContributors(struct fieldedTable *inProject)
 char **projectRow = inProject->rowList->row;
 
 /* Make the contributors list in two pieces first off of the contact */
-int contact_name = fieldedTableFindFieldIx(inProject, "contact_name");
 int contact_email = fieldedTableFindFieldIx(inProject, "contact_email");
 int contact_phone = fieldedTableFindFieldIx(inProject, "contact_phone");
 int contact_department = fieldedTableFindFieldIx(inProject, "contact_department");
@@ -112,9 +120,15 @@ int contact_zip_postal_code = fieldedTableFindFieldIx(inProject, "contact_zip_po
 const int maxContacts = 32;
 char *contactFields[maxContacts+1];  // An extra for the project_role
 int contactIx[maxContacts];
-int realFieldCount = 0;
 char **oldFields = inProject->fields;
-addIfReal(contact_name, oldFields, contactFields, contactIx, maxContacts, &realFieldCount);
+
+// Add contact name field separately from the rest.  We know it's there since it's a 
+// required field, and also we need to decorate it's name
+contactFields[0] = "?name";
+contactIx[0] = fieldedTableMustFindFieldIx(inProject, "contact_name");
+int realFieldCount = 1;
+
+// The rest of the contact pieces are added just conditionally
 addIfReal(contact_email, oldFields, contactFields, contactIx, maxContacts, &realFieldCount);
 addIfReal(contact_phone, oldFields, contactFields, contactIx, maxContacts, &realFieldCount);
 addIfReal(contact_department, oldFields, contactFields, contactIx, maxContacts, &realFieldCount);
@@ -153,7 +167,7 @@ fieldedTableAdd(contributors, outVals, realFieldCount, 1);
 for (outIx=0; outIx<realFieldCount; ++outIx)
     outVals[outIx] = "";	// Empty out all rows.
 int inContribIx = fieldedTableMustFindFieldIx(inProject, "contributors");
-int outContribIx = fieldedTableMustFindFieldIx(contributors, "name");
+int outContribIx = fieldedTableMustFindFieldIx(contributors, "?name");
 char *inTsv = projectRow[inContribIx];
 char *oneVal;
 while ((oneVal = csvParseNext(&inTsv, scratch)) != NULL)
@@ -207,7 +221,11 @@ if (list != NULL)
     int curCount = *pCurCount;
     if (curCount >= maxNewCount)
        errAbort("Too many fields in addListFieldIfNonempty on %s, %d max", field, curCount);
-    newFields[curCount] = field;
+    char fieldName[256];
+    safef(fieldName, sizeof(fieldName), 
+	"@@%s@hcat_project_%s@project_id@%s_id@hcat_%s.short_name@id", 
+	field, field, field, field);
+    newFields[curCount] = cloneString(fieldName);
     newVals[curCount] = slNameToCsv(list);
     *pCurCount = curCount+1;
     }
@@ -241,11 +259,25 @@ for (inIx=0; inIx<inFieldCount; ++inIx)
     /* Go through list of input fields we tweak slightly */
     if (sameString("taxons", inName))
         {
-	inName = "species";
+	// its many-to-many, whoot!
+	inName = "@@species@hcat_project_species@project_id@species_id@hcat_species@common_name@id";  
 	inVal = taxonsToSpecies(inVal, scratch);
 	}
 
-    /* Output all the ones we haven't dealt with already */
+    /* We might modify names of some fields */
+    char nameBuf[128];
+    if (sameString("state_reached", inName) || sameString("cur_state", inName))
+        {
+	safef(nameBuf, sizeof(nameBuf), "@%s_id@hcat_project_state.state@id", inName);
+	inName = cloneString(nameBuf);
+	}
+    else if (sameString("consent", inName) || sameString("effort", inName))
+        {
+	safef(nameBuf, sizeof(nameBuf), "@%s_id@hcat_%s.short_name@id", inName, inName);
+	inName = cloneString(nameBuf);
+	}
+
+    /* Output all the ones we haven't dealt with already or will deal with later */
     if (!startsWith("contact_", inName) && !sameString("contributors", inName))
         {
 	outFields[outFieldCount] = inName;
@@ -253,6 +285,10 @@ for (inIx=0; inIx<inFieldCount; ++inIx)
 	++outFieldCount;
 	}
     }
+
+/* Add in contributors as a multi to multi field */
+outFields[outFieldCount] = "@@contributors@hcat_project_contributors@project_id@contributor_id@hcat_contributor.name@id";
+outRow[outFieldCount] = fieldedTableLookupNamedFieldInRow(inProject, "contributors", inRow);
 
 /* Add the fields we scan and merge from sample at end */
 struct slName *organList = uniqVals(inSample, "organ");
@@ -271,15 +307,6 @@ dyStringFree(&scratch);
 return outTable;
 }
 
-char *fieldedTableLookupNamedFieldInRow(struct fieldedTable *table, char *field, char **row)
-/* Look up field by name,  not as effient as by index but what the heck. */
-{
-int ix = fieldedTableFindFieldIx(table, field);
-if (ix < 0)
-    return NULL;
-return row[ix];
-}
-
 struct fieldedTable *makeLab(struct fieldedTable *inProject)
 /* If there's a lab field we make a lab table and seed it with the contacts. */
 {
@@ -289,6 +316,7 @@ if (labIx >= 0)
     char **inRow = inProject->rowList->row;
     char *short_name = inRow[labIx];
     char *contact = fieldedTableLookupNamedFieldInRow(inProject, "contact_name", inRow);
+    char *contributors = fieldedTableLookupNamedFieldInRow(inProject, "contributors", inRow);
     char *institute = emptyForNull(fieldedTableLookupNamedFieldInRow(inProject, "contact_institute", inRow));
     char labName[256];
     if (strlen(short_name) < 20)  // Unlikely to be unique, may cause trouble
@@ -297,9 +325,10 @@ if (labIx >= 0)
         safef(labName, sizeof(labName), "%s", short_name);
     labName[50] = 0;  // not too long
 
-    char *outFields[3] = {"short_name", "institute", "contact"};
+    char *outFields[4] = {"?short_name", "institute", "@contact@hcat_contributor.name@id", 
+	"@@contributors@hcat_lab_contributors@lab_id@contributor_id@hcat_contributor.name@id"};
     struct fieldedTable *labTable = fieldedTableNew("lab", outFields, ArraySize(outFields));
-    char *outRow[3] = {labName, institute, contact};
+    char *outRow[4] = {labName, institute, contact, contributors};
     fieldedTableAdd(labTable, outRow, ArraySize(outRow), 1);
     return labTable;
     }
@@ -316,7 +345,7 @@ void hcatTabUpdate(char *inDir, char *outDir)
 char *projectFile = "hcat_project.tsv";
 char inPath[PATH_LEN];
 safef(inPath, sizeof(inPath), "%s/%s", inDir, projectFile);
-char *projectRequired[] = {"short_name", "contact_name"};
+char *projectRequired[] = {"short_name", "contact_name", "contributors"};
 struct fieldedTable *inProject = fieldedTableFromTabFile(inPath, inPath, 
     projectRequired, ArraySize(projectRequired));
 uglyf("Got %d rows, %d columns from %s\n", 
@@ -340,18 +369,20 @@ struct fieldedTable *outContributor = makeContributors(inProject);
 struct fieldedTable *outProject = makeProject(inProject, inSample);
 struct fieldedTable *outLab = makeLab(inProject);
 
-/* Write output */
+/* Write output from lowest level to highest level tables. */
 makeDirsOnPath(outDir);
 char outPath[PATH_LEN];
 safef(outPath, sizeof(outPath), "%s/%s", outDir, "contributors.tsv");
 fieldedTableToTabFile(outContributor, outPath);
-safef(outPath, sizeof(outPath), "%s/%s", outDir, "project.tsv");
-fieldedTableToTabFile(outProject, outPath);
+
 if (outLab != NULL)
     {
     safef(outPath, sizeof(outPath), "%s/%s", outDir, "lab.tsv");
     fieldedTableToTabFile(outLab, outPath);
     }
+
+safef(outPath, sizeof(outPath), "%s/%s", outDir, "project.tsv");
+fieldedTableToTabFile(outProject, outPath);
 }
 
 int main(int argc, char *argv[])
