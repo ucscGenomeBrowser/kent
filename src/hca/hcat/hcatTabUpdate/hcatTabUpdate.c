@@ -144,7 +144,7 @@ realFieldCount += 1;
 /* Make contributor output table.  The first row of it will be seeded with the contact.
  * We can fill out names, but not other info on the other contributors, who will make
  * up the rest of the rows. */
-struct fieldedTable *contributors = fieldedTableNew("contributors", contactFields, 
+struct fieldedTable *contributors = fieldedTableNew("contributor", contactFields, 
     realFieldCount);
 contributors->startsSharp = inProject->startsSharp;
 
@@ -367,16 +367,16 @@ struct fieldedTable *outLab = makeLab(inProject);
 /* Write output from lowest level to highest level tables. */
 makeDirsOnPath(outDir);
 char outPath[PATH_LEN];
-safef(outPath, sizeof(outPath), "%s/%s", outDir, "contributors.tsv");
+safef(outPath, sizeof(outPath), "%s/hcat_%s", outDir, "contributors.tsv");
 fieldedTableToTabFile(outContributor, outPath);
 
 if (outLab != NULL)
     {
-    safef(outPath, sizeof(outPath), "%s/%s", outDir, "lab.tsv");
+    safef(outPath, sizeof(outPath), "%s/hcat_%s", outDir, "lab.tsv");
     fieldedTableToTabFile(outLab, outPath);
     }
 
-safef(outPath, sizeof(outPath), "%s/%s", outDir, "project.tsv");
+safef(outPath, sizeof(outPath), "%s/hcat_%s", outDir, "project.tsv");
 fieldedTableToTabFile(outProject, outPath);
 }
 
