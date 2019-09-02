@@ -227,8 +227,8 @@ if (list != NULL)
     char *strippedField = cloneString(field);
     stripChar(strippedField, '_');
     safef(fieldName, sizeof(fieldName), 
-	"@@%s@id@hcat_project_%s@project_id@%s_id@hcat_%s.short_name@id", 
-	field, strippedField, field, strippedField);
+	"@@%s@id@hcat_project_%s@project_id@%s_id@hcat_%s@short_name@id", 
+	field, field, field, strippedField);
     newFields[curCount] = cloneString(fieldName);
     newVals[curCount] = slNameToCsv(list);
     *pCurCount = curCount+1;
@@ -273,14 +273,20 @@ for (inIx=0; inIx<inFieldCount; ++inIx)
     char nameBuf[128];
     if (sameString("state_reached", inName) || sameString("cur_state", inName))
         {
-	safef(nameBuf, sizeof(nameBuf), "@%s_id@hcat_project_state.state@id", inName);
+	safef(nameBuf, sizeof(nameBuf), "@%s_id@hcat_projectstate@state@id", inName);
 	inName = cloneString(nameBuf);
 	}
-    else if (sameString("consent", inName) || sameString("effort", inName))
+    else if (sameString("consent", inName))
         {
-	safef(nameBuf, sizeof(nameBuf), "@%s_id@hcat_%s.short_name@id", inName, inName);
+	safef(nameBuf, sizeof(nameBuf), "@%s_id@hcat_%s@short_name@id", inName, inName);
 	inName = cloneString(nameBuf);
 	}
+    else if (sameString("effort", inName))
+        {
+	safef(nameBuf, sizeof(nameBuf), "@%s_id@hcat_efforttype@short_name@id", inName);
+	inName = cloneString(nameBuf);
+	}
+    else if (sameString("effort", inName))
 
     /* Output all the ones we haven't dealt with already or will deal with later */
     if (!startsWith("contact_", inName) && !sameString("contributors", inName))
