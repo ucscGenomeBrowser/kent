@@ -55,6 +55,40 @@ struct multiRef
     int nativeFieldIx;		    // Field index in native table
     };
 
+void addMultiRelation(struct sqlConnection *conn, struct multiRef *mRef, struct fieldedRow *fr,
+    int nativeId, char *tabFile, struct dyString *csvScratch)
+/* inCsv is a comma separated list of names that we should be able to locate in the foreign
+ * table via mRef->foreignFindName.  We make up relationships for them in the relationalTable. */
+{
+char *inCsv = fr->row[mRef->nativeFieldIx];
+char *nativeVal;
+char *parsePos = inCsv;
+struct dyString *sql = dyStringNew(0);
+while ((nativeVal = csvParseNext(&parsePos, csvScratch)) != NULL)
+    {
+    char *escaped = sqlEscapeString(nativeVal);
+    dyStringClear(sql);
+    sqlDyStringPrintf(sql, "select %s from %s where %s=\"%s\"",
+	    mRef->foreignKeyName, mRef->foreignTable, 
+	    mRef->foreignFindName, escaped);
+    char *foreignKey = sqlQuickString(conn, sql->string);
+    verbose(2, "foreignKey for %s is %s\n", nativeVal, foreignKey);
+    if (isEmpty(foreignKey))
+	errAbort("No %s in table %s referenced line %d of %s",  nativeVal, mRef->foreignTable,
+	    fr->id,  tabFile);
+    
+    // Alright, we got our native and foreign keys, let's insert a row in relationship table
+    dyStringClear(sql);
+    sqlDyStringPrintf(sql, "insert into %s (%s,%s) values (%d,%s)", mRef->relationalTable,
+	mRef->relationalNativeField, mRef->relationalForeignField,
+	nativeId, foreignKey);
+    verbose(2, "relationship sql: %s\n", sql->string);
+    sqlUpdate(conn, sql->string);
+    freez(&escaped);
+    }
+dyStringFree(&sql);
+}
+
 void sqlUpdateViaTabFile(struct sqlConnection *conn, char *tabFile, char *tableName)
 /* Interpret one tab-separated file */
 {
@@ -63,12 +97,13 @@ struct fieldedTable *inTable = fieldedTableFromTabFile(tabFile, tabFile, NULL, 0
 verbose(2, "%d fields and %d rows in %s\n",  inTable->fieldCount, inTable->rowCount, tabFile);
 char **inFields = inTable->fields;
 
-// Loop through the fields looking for special ones
+// Loop through the fields creating field set for output table and parsing
+// foreign and multi-multi fields into structures 
 char *conditionalField = NULL;  // We might have one of these
 int conditionalIx = -1;
 struct foreignRef *foreignRefList = NULL;
 struct multiRef *multiRefList = NULL;
-struct hash *foreignHash = hashNew(0), *multiHash = hashNew(0);
+struct hash *multiHash = hashNew(0);
 int fieldIx;
 for (fieldIx=0; fieldIx<inTable->fieldCount; ++fieldIx)
     {
@@ -138,14 +173,13 @@ for (fieldIx=0; fieldIx<inTable->fieldCount; ++fieldIx)
 	    if (!sqlTableExists(conn, fRef->foreignTable))
 	        errAbort("Table %s from %s doesn't exist", fRef->foreignTable, field);
 	    slAddTail(&foreignRefList, fRef);
-	    hashAdd(foreignHash, field, fRef);
 	    }
 	}
     }
 verbose(2, "Got %s conditional, %d foreignRefs, %d multiRefs\n", 
 	naForNull(conditionalField), slCount(foreignRefList), slCount(multiRefList));
 
-/* Now we loop through the input table */
+/* Now we loop through the input table and make the appropriate sql queries and inserts */
 struct fieldedRow *fr;
 struct dyString *sql = dyStringNew(0);
 struct dyString *csvScratch = dyStringNew(0);
@@ -153,7 +187,8 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
     {
     char **row = fr->row;
 
-    /* Deal with conditional field */
+    /* Deal with conditional field.  If we have one and the value we are trying to insert
+     * already exists then just continue to next row. */
     if (conditionalField != NULL && sameString(conditionalField, inFields[conditionalIx]))
 	{
 	dyStringClear(sql);
@@ -162,7 +197,7 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 	// Before we do more we see if the record already exists
 	sqlDyStringPrintf(sql, "select count(*) from %s where %s='%s'",
 	    tableName, conditionalField+1, uncsvVal);
-	verbose(1, "%s\n", sql->string);
+	verbose(2, "%s\n", sql->string);
 	if (sqlQuickNum(conn, sql->string) > 0)
 	    continue;
 	}
@@ -179,7 +214,7 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 	sqlDyStringPrintf(sql, "select %s from %s where %s=\"%s\"",
 	    fRef->foreignKeyName, fRef->foreignTable, 
 	    fRef->foreignFindName, escaped);
-	verbose(1, "query for foreignKey: %s\n", sql->string);
+	verbose(2, "query for foreignKey: %s\n", sql->string);
 	fRef->foreignKey = sqlQuickString(conn, sql->string);
 	if (isEmpty(fRef->foreignKey))
 	    errAbort("No %s in table %s referenced line %d of %s",  val, fRef->foreignTable,
@@ -201,7 +236,8 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 	    if (field[1] == '@')  // multi field
 		{
 		// Actually multi field variables don't get written, all lives in
-		// the relationship table
+		// the relationship table which we handle after the insert into main 
+		// table.
 		continue;
 		}
 	    else
@@ -237,7 +273,9 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 	if (firstChar == '@')
 	    {
 	    if (field[1] == '@')  // multi field
-		continue;
+		{
+		continue;	// multi field output doesn't go into this table, just relationship
+		}
 	    else
 	        field += 1;	// We val with the foreign key here, just skip over '@'
 	    }
@@ -254,8 +292,16 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 	freez(&escaped);
 	}
     dyStringAppendC(sql, ')');
-    verbose(1, "update sql: %s\n", sql->string);
+    verbose(2, "update sql: %s\n", sql->string);
     sqlUpdate(conn, sql->string);
+    int mainTableId = sqlLastAutoId(conn);
+
+    /* Handle multi-multi stuff */
+    struct multiRef *mRef;
+    for (mRef = multiRefList; mRef != NULL; mRef = mRef->next)
+        {
+	addMultiRelation(conn, mRef, fr, mainTableId, tabFile, csvScratch);
+	}
 
     /* Clean up strings allocated for field references */
     for (fRef = foreignRefList; fRef != NULL; fRef = fRef->next)
@@ -263,6 +309,7 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
     }
 dyStringFree(&sql);
 dyStringFree(&csvScratch);
+fieldedTableFree(&inTable);
 }
 
 void sqlUpdateRelated(char *database, char **inFiles, int inCount)
@@ -278,7 +325,6 @@ for (fileIx = 0; fileIx < inCount; ++fileIx)
     char *tableName = cloneString(inFile);
     chopSuffix(tableName);
     verbose(1, "Processing %s into %s table \n", inFile, tableName);
-
     sqlUpdateViaTabFile(conn, inFile, tableName);
     }
 sqlDisconnect(&conn);
