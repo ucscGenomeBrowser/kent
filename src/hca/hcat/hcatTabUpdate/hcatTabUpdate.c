@@ -367,7 +367,7 @@ struct fieldedTable *outLab = makeLab(inProject);
 /* Write output from lowest level to highest level tables. */
 makeDirsOnPath(outDir);
 char outPath[PATH_LEN];
-safef(outPath, sizeof(outPath), "%s/hcat_%s", outDir, "contributors.tsv");
+safef(outPath, sizeof(outPath), "%s/hcat_%s", outDir, "contributor.tsv");
 fieldedTableToTabFile(outContributor, outPath);
 
 if (outLab != NULL)
