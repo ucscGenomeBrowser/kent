@@ -172,9 +172,10 @@ char *inTsv = projectRow[inContribIx];
 char *oneVal;
 while ((oneVal = csvParseNext(&inTsv, scratch)) != NULL)
     {
-    if (differentString(oneVal, contactName))  // We already got the contact as a contributor
+    char *escaped = csvEscapeToDyString(csvScratch, oneVal);
+    if (differentString(escaped, contactName))  // We already got the contact as a contributor
 	{
-	outVals[outContribIx] = csvEscapeToDyString(csvScratch, oneVal);
+	outVals[outContribIx] = escaped;
 	outVals[realFieldCount-1] = "contributor";
 	fieldedTableAdd(contributors, outVals, realFieldCount, contributors->rowCount+1);
 	}
@@ -226,7 +227,7 @@ if (list != NULL)
     char *strippedField = cloneString(field);
     stripChar(strippedField, '_');
     safef(fieldName, sizeof(fieldName), 
-	"@@%s@hcat_project_%s@project_id@%s_id@hcat_%s.short_name@id", 
+	"@@%s@id@hcat_project_%s@project_id@%s_id@hcat_%s.short_name@id", 
 	field, strippedField, field, strippedField);
     newFields[curCount] = cloneString(fieldName);
     newVals[curCount] = slNameToCsv(list);
@@ -264,7 +265,7 @@ for (inIx=0; inIx<inFieldCount; ++inIx)
     if (sameString("taxons", inName))
         {
 	// its many-to-many, whoot!
-	inName = "@@species@hcat_project_species@project_id@species_id@hcat_species@common_name@id";  
+	inName = "@@species@id@hcat_project_species@project_id@species_id@hcat_species@common_name@id";  
 	inVal = taxonsToSpecies(inVal, scratch);
 	}
 
@@ -291,7 +292,7 @@ for (inIx=0; inIx<inFieldCount; ++inIx)
     }
 
 /* Add in contributors as a multi to multi field */
-outFields[outFieldCount] = "@@contributors@hcat_project_contributors@project_id@contributor_id@hcat_contributor.name@id";
+outFields[outFieldCount] = "@@contributors@hcat_project_contributors@id@project_id@contributor_id@hcat_contributor@name@id";
 outRow[outFieldCount] = fieldedTableLookupNamedFieldInRow(inProject, "contributors", inRow);
 
 /* Add the fields we scan and merge from sample at end */
@@ -329,8 +330,8 @@ if (labIx >= 0)
         safef(labName, sizeof(labName), "%s", short_name);
     labName[50] = 0;  // not too long
 
-    char *outFields[4] = {"?short_name", "institute", "@contact@hcat_contributor.name@id", 
-	"@@contributors@hcat_lab_contributors@lab_id@contributor_id@hcat_contributor.name@id"};
+    char *outFields[4] = {"?short_name", "institution", "@contact_id@hcat_contributor@name@id", 
+	"@@contributors@id@hcat_lab_contributors@lab_id@contributor_id@hcat_contributor@name@id"};
     struct fieldedTable *labTable = fieldedTableNew("lab", outFields, ArraySize(outFields));
     char *outRow[4] = {labName, institute, contact, contributors};
     fieldedTableAdd(labTable, outRow, ArraySize(outRow), 1);
