@@ -347,6 +347,38 @@ else
     return NULL;
 }
 
+struct fieldedTable *makeOrgan(struct fieldedTable *inProject)
+/* If there's and organ field we make an organ table. */
+{
+uglyf("Trying to make organs for %s\n", inProject->name);
+
+/* See if it's even in the inProject table, and return quickly with a NULL if not. */
+int organIx = fieldedTableFindFieldIx(inProject, "organ");
+uglyf("organsIx %d\n", organIx);
+if (organIx < 0)
+    return NULL;
+
+/* Make up our little generic table */
+char *outFields[] = {"?short_name", "description",};
+struct fieldedTable *organTable = fieldedTableNew("organ", outFields, ArraySize(outFields));
+
+/* Fetch the input value, which is a comma separated list.  Then go through
+ * the list and make a table entry for each item. */
+char **inRow = inProject->rowList->row;
+char *organTsv = inRow[organIx];
+struct dyString *csvScratch = dyStringNew(0);
+char *organName;
+while ((organName = csvParseNext(&organTsv, csvScratch)) != NULL)
+    {
+    char *outRow[2] = {organName, "NEEDS DESCRIPTION"};
+    fieldedTableAdd(organTable, outRow, ArraySize(outRow), 0);
+    }
+
+/* Clean up and go home. */
+dyStringFree(&csvScratch);
+return organTable;
+}
+
 void hcatTabUpdate(char *inDir, char *outDir)
 /* hcatTabUpdate - Update the hcat database given a tab seperated input and output dir. */
 {
@@ -375,12 +407,19 @@ if (inProject->rowCount != 1)
 struct fieldedTable *outContributor = makeContributors(inProject);
 struct fieldedTable *outProject = makeProject(inProject, inSample);
 struct fieldedTable *outLab = makeLab(inProject);
+struct fieldedTable *outOrgan = makeOrgan(inProject);
 
 /* Write output from lowest level to highest level tables. */
 makeDirsOnPath(outDir);
 char outPath[PATH_LEN];
 safef(outPath, sizeof(outPath), "%s/hcat_%s", outDir, "contributor.tsv");
 fieldedTableToTabFile(outContributor, outPath);
+
+if (outOrgan != NULL)
+    {
+    safef(outPath, sizeof(outPath), "%s/hcat_%s", outDir, "organ.tsv");
+    fieldedTableToTabFile(outOrgan, outPath);
+    }
 
 if (outLab != NULL)
     {
