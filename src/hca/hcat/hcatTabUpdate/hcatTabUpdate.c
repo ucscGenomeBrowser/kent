@@ -104,16 +104,17 @@ struct fieldedTable *makeContributors(struct fieldedTable *inProject)
 /* Make a fielded table from project contact info and contributors list */
 {
 char **projectRow = inProject->rowList->row;
+struct dyString *csvScratch = dyStringNew(0);
 
 /* Make the contributors list in two pieces first off of the contact */
 int contact_email = fieldedTableFindFieldIx(inProject, "contact_email");
 int contact_phone = fieldedTableFindFieldIx(inProject, "contact_phone");
-int contact_department = fieldedTableFindFieldIx(inProject, "contact_department");
-int contact_institute = fieldedTableFindFieldIx(inProject, "contact_institute");
-int contact_address = fieldedTableFindFieldIx(inProject, "contact_address");
-int contact_city = fieldedTableFindFieldIx(inProject, "contact_city");
-int contact_country = fieldedTableFindFieldIx(inProject, "contact_country");
-int contact_zip_postal_code = fieldedTableFindFieldIx(inProject, "contact_zip_postal_code");
+//int contact_department = fieldedTableFindFieldIx(inProject, "contact_department");
+//int contact_institute = fieldedTableFindFieldIx(inProject, "contact_institute");
+//int contact_address = fieldedTableFindFieldIx(inProject, "contact_address");
+//int contact_city = fieldedTableFindFieldIx(inProject, "contact_city");
+//int contact_country = fieldedTableFindFieldIx(inProject, "contact_country");
+//int contact_zip_postal_code = fieldedTableFindFieldIx(inProject, "contact_zip_postal_code");
 
 
 /* Figure out which contact data we actually have */
@@ -131,13 +132,13 @@ int realFieldCount = 1;
 // The rest of the contact pieces are added just conditionally
 addIfReal(contact_email, oldFields, contactFields, contactIx, maxContacts, &realFieldCount);
 addIfReal(contact_phone, oldFields, contactFields, contactIx, maxContacts, &realFieldCount);
-addIfReal(contact_department, oldFields, contactFields, contactIx, maxContacts, &realFieldCount);
-addIfReal(contact_institute, oldFields, contactFields, contactIx, maxContacts, &realFieldCount);
-addIfReal(contact_address, oldFields, contactFields, contactIx, maxContacts, &realFieldCount);
-addIfReal(contact_city, oldFields, contactFields, contactIx, maxContacts, &realFieldCount);
-addIfReal(contact_country, oldFields, contactFields, contactIx, maxContacts, &realFieldCount);
-addIfReal(contact_zip_postal_code, oldFields, 
-    contactFields, contactIx, maxContacts, &realFieldCount);
+//addIfReal(contact_department, oldFields, contactFields, contactIx, maxContacts, &realFieldCount);
+//#addIfReal(contact_institute, oldFields, contactFields, contactIx, maxContacts, &realFieldCount);
+//#addIfReal(contact_address, oldFields, contactFields, contactIx, maxContacts, &realFieldCount);
+//addIfReal(contact_city, oldFields, contactFields, contactIx, maxContacts, &realFieldCount);
+//addIfReal(contact_country, oldFields, contactFields, contactIx, maxContacts, &realFieldCount);
+//addIfReal(contact_zip_postal_code, oldFields, 
+//    contactFields, contactIx, maxContacts, &realFieldCount);
 contactFields[realFieldCount] = "project_role";
 realFieldCount += 1;
 
@@ -156,7 +157,7 @@ for (outIx=0; outIx<realFieldCount-1; ++outIx)
     {
     char *inTsv = projectRow[contactIx[outIx]];
     char *inVal = emptyForNull(cloneString(csvParseNext(&inTsv, scratch)));
-    outVals[outIx] = inVal;
+    outVals[outIx] = cloneString(csvEscapeToDyString(csvScratch, inVal));
     }
 outVals[outIx] = "lab contact";
 char *contactName = cloneString(outVals[0]);
@@ -173,11 +174,12 @@ while ((oneVal = csvParseNext(&inTsv, scratch)) != NULL)
     {
     if (differentString(oneVal, contactName))  // We already got the contact as a contributor
 	{
-	outVals[outContribIx] = cloneString(oneVal);
+	outVals[outContribIx] = csvEscapeToDyString(csvScratch, oneVal);
 	outVals[realFieldCount-1] = "contributor";
 	fieldedTableAdd(contributors, outVals, realFieldCount, contributors->rowCount+1);
 	}
     }
+dyStringFree(&csvScratch);
 return contributors;
 }
 
@@ -221,12 +223,15 @@ if (list != NULL)
     if (curCount >= maxNewCount)
        errAbort("Too many fields in addListFieldIfNonempty on %s, %d max", field, curCount);
     char fieldName[256];
+    char *strippedField = cloneString(field);
+    stripChar(strippedField, '_');
     safef(fieldName, sizeof(fieldName), 
 	"@@%s@hcat_project_%s@project_id@%s_id@hcat_%s.short_name@id", 
-	field, field, field, field);
+	field, strippedField, field, strippedField);
     newFields[curCount] = cloneString(fieldName);
     newVals[curCount] = slNameToCsv(list);
     *pCurCount = curCount+1;
+    freez(&strippedField);
     }
 }
 
