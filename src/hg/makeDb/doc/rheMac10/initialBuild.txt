@@ -460,7 +460,7 @@ done
         rheMac10.chromAlias.tab
 
 #########################################################################
-# fixup search rule for assembly track/gold table (TBD - 2019-07-01 - Hiram)
+# fixup search rule for assembly track/gold table (DONE - 2019-07-03 - Hiram)
     cd ~/kent/src/hg/makeDb/trackDb/rhesus/rheMac10
     # preview prefixes and suffixes:
     hgsql -N -e "select frag from gold;" rheMac10 \
@@ -500,8 +500,6 @@ shortCircuit 1
 termRegex [ANQ][CN][V0-9_][O0-9][0-9]+(\.[0-9]+)?
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
-
-XXX - TBD
 
     # verify searches work in the position box
 
@@ -616,11 +614,10 @@ XXX - TBD
     cd /hive/data/genomes/rheMac10/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku rheMac10) > do.log 2>&1
-XXX - running - Tue Jul  2 07:51:16 PDT 2019
-    # real    2m5.105s
+    # real    3m51.796s
 
     cat fb.rheMac10.cpgIslandExt.txt
-    # 16395346 bases of 1055588482 (1.553%) in intersection
+    # 21622534 bases of 2936892733 (0.736%) in intersection
 
 ##############################################################################
 # genscan - (DONE - 2019-07-02 - Hiram)
@@ -628,14 +625,13 @@ XXX - running - Tue Jul  2 07:51:16 PDT 2019
     cd /hive/data/genomes/rheMac10/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku rheMac10) > do.log 2>&1
-XXX - running - Tue Jul  2 07:51:42 PDT 2019
-    # real    88m34.900s
+    # real    134m51.892s
 
     cat fb.rheMac10.genscan.txt
-    # 23911678 bases of 1055588482 (2.265%) in intersection
+    # 53848328 bases of 2936892733 (1.834%) in intersection
 
     cat fb.rheMac10.genscanSubopt.txt
-    # 24521608 bases of 1055588482 (2.323%) in intersection
+    # 52550217 bases of 2936892733 (1.789%) in intersection
 
 #########################################################################
 # Create kluster run files (DONE - 2019-07-01 - Hiram)
@@ -677,73 +673,109 @@ XXX - running - Tue Jul  2 07:51:42 PDT 2019
     # 2979 jkStuff/rheMac10.nonBridged.lft
 
 ########################################################################
-# lastz/chain/net swap human/hg38 (TBD - 2018-10-12 - Hiram)
+# lastz/chain/net swap human/hg38 (DONE - 2019-07-03 - Hiram)
     # original alignment
-    cd /hive/data/genomes/hg38/bed/lastzRheMac10.2018-10-12
+    cd /hive/data/genomes/hg38/bed/lastzRheMac10.2019-07-03
 
     cat fb.hg38.chainRheMac10Link.txt
-    # 154079940 bases of 3095998939 (4.977%) in intersection
+    # 2596157811 bases of 3095998939 (83.855%) in intersection
     cat fb.hg38.chainSynRheMac10Link.txt
-    # 95877644 bases of 3095998939 (3.097%) in intersection
+    # 2564291936 bases of 3095998939 (82.826%) in intersection
     cat fb.hg38.chainRBest.RheMac10.txt
-    # 106665747 bases of 3095998939 (3.445%) in intersection
+    # 2422981614 bases of 3095998939 (78.262%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/rheMac10/bed/blastz.hg38.swap
     cd /hive/data/genomes/rheMac10/bed/blastz.hg38.swap
 
     time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/hg38/bed/lastzRheMac10.2018-10-12/DEF \
-        -swap -chainMinScore=5000 -chainLinearGap=loose \
+      /hive/data/genomes/hg38/bed/lastzRheMac10.2019-07-03/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    9m45.514s
+    #  real    61m39.505s
 
     cat fb.rheMac10.chainHg38Link.txt
-    # 120955955 bases of 1055588482 (11.459%) in intersection
-
+    # 2485840115 bases of 2936892733 (84.642%) in intersection
     cat fb.rheMac10.chainSynHg38Link.txt
-    # 92597630 bases of 1055588482 (8.772%) in intersection
+    # 2465210442 bases of 2936892733 (83.939%) in intersection
 
-    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` rheMac10 hg38) > rbest.log 2>&1 &
-    # real    139m24.408s
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` rheMac10 hg38) > rbest.log 2>&1
+    # real    126m29.919s
 
     cat fb.rheMac10.chainRBest.Hg38.txt
-    # 106294585 bases of 1055588482 (10.070%) in intersection
+    # 2424028492 bases of 2936892733 (82.537%) in intersection
 
 #########################################################################
-# lastz/chain/net swap mouse/mm10 (TBD - 2018-10-12 - Hiram)
+# lastz/chain/net swap mouse/mm10 (DONE - 2019-07-09 - Hiram)
 
     # original alignment
-    cd /hive/data/genomes/mm10/bed/lastzRheMac10.2018-10-12
-    cat fb.mm10.chainRheMac10Link.txt
-    # 101151132 bases of 2652783500 (3.813%) in intersection
-    cat fb.mm10.chainSynRheMac10Link.txt
-    # 70707720 bases of 2652783500 (2.665%) in intersection
-    cat fb.mm10.chainRBest.RheMac10.txt 
-    # 79649474 bases of 2652783500 (3.002%) in intersection
+    cd /hive/data/genomes/mm10/bed/lastzRheMac10.2019-07-03
 
-    # and for the swap:
+    cat fb.mm10.chainRheMac10Link.txt
+    #	923559693 bases of 2652783500 (34.815%) in intersection
+    cat fb.mm10.chainSynRheMac10Link.txt
+    #   878479553 bases of 2652783500 (33.115%) in intersection
+    cat fb.mm10.chainRBest.RheMac10.txt
+    # 879885863 bases of 2652783500 (33.168%) in intersection
+
     mkdir /hive/data/genomes/rheMac10/bed/blastz.mm10.swap
     cd /hive/data/genomes/rheMac10/bed/blastz.mm10.swap
-
     time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/mm10/bed/lastzRheMac10.2018-10-12/DEF \
-        -swap -chainMinScore=5000 -chainLinearGap=loose \
-          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-            -syntenicNet) > swap.log 2>&1
-    #  real    6m41.043s
+	/hive/data/genomes/mm10/bed/lastzRheMac10.2019-07-03/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    52m48.045s
 
     cat fb.rheMac10.chainMm10Link.txt
-    # 88539346 bases of 1055588482 (8.388%) in intersection
+    #	918551088 bases of 2936892733 (31.276%) in intersection
+    cat fb.rheMac10.chainSynMm10Link.txt
+    #   876230433 bases of 2936892733 (29.835%) in intersection
 
-    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` rheMac10 mm10) > rbest.log 2>&1 &
-    # real    94m11.007s
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` rheMac10 mm10) > rbest.log 2>&1
+    # real    303m40.303s
 
     cat fb.rheMac10.chainRBest.Mm10.txt
-    # 79474812 bases of 1055588482 (7.529%) in intersection
+    # 878542993 bases of 2936892733 (29.914%) in intersection
+
 
 #########################################################################
+# lastz/chain/net swap human/hg19 (DONE - 2019-07-09 - Hiram)
+
+    # original alignment
+    cd /hive/data/genomes/hg19/bed/lastzRheMac10.2019-07-09
+
+    cat fb.hg19.chainRheMac10Link.txt
+    # 2604364199 bases of 2991694177 (87.053%) in intersection
+    cat fb.hg19.chainSynRheMac10Link.txt
+    # 2570126144 bases of 2991694177 (85.909%) in intersection
+    cat fb.hg19.chainRBest.RheMac10.txt
+    # 2421810991 bases of 2991694177 (80.951%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/rheMac10/bed/blastz.hg19.swap
+    cd /hive/data/genomes/rheMac10/bed/blastz.hg19.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg19/bed/lastzRheMac10.2019-07-09/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    56m29.163s
+
+    cat fb.rheMac10.chainHg19Link.txt
+    # 2483311773 bases of 2936892733 (84.556%) in intersection
+    cat fb.rheMac10.chainSynHg19Link.txt
+    # 2461925388 bases of 2936892733 (83.828%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` rheMac10 hg19) > rbest.log 2>&1
+    # real    112m15.825s
+
+    cat fb.rheMac10.chainRBest.Hg19.txt
+    # 2423781773 bases of 2936892733 (82.529%) in intersection
+
+##############################################################################
 # GENBANK AUTO UPDATE (DONE - 2019-07-03 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
@@ -803,11 +835,10 @@ rheMac10.upstreamGeneTbl = refGene
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
         -species=human -dbHost=hgwdev \
            -workhorse=hgwdev rheMac10) > do.log 2>&1
-XXX - running - Tue Jul  2 07:53:20 PDT 2019
-    # real    48m48.597s
+    # real    129m48.296s
 
     cat fb.rheMac10.augustusGene.txt
-    # 25827925 bases of 1055588482 (2.447%) in intersection
+    # 50002729 bases of 2936892733 (1.703%) in intersection
 
 #########################################################################
 # ncbiRefSeq (DONE - 2019-07-02 - Hiram)
@@ -839,29 +870,19 @@ XXX - running - Tue Jul  2 07:53:20 PDT 2019
     cat fb.ncbiRefSeq.rheMac10.txt
     #  92462016 bases of 2936892733 (3.148%) in intersection
 
-XXX TBD
-    # need to add: include ../../refSeqComposite.ra alpha
+    # add: include ../../refSeqComposite.ra alpha
     # to the rhesus/rheMac10/trackDb.ra to turn on the track in the browser
 
-    # there was one gene that claimed to have a protein, but the
-    # protein sequence was not included in the protein.faa file
-    # discovered from joinerCheck
-    # manual fix to blank out this one protein, to see the entry
-    hgsql -e 'select * from ncbiRefSeqLink where protAcc="NP_989875.1";' rheMac10
-    hgsql -e 'update ncbiRefSeqLink set protAcc="" where protAcc="NP_989875.1";' rheMac10
-    # this makes the 'protein' link disappear from the gene details page
-    # curious that this gene is marked as a non-coding gene anyway ?
-    # gene: FET1 at chr4:63,102,774-63,105,516-
-
     featureBits -enrichment rheMac10 refGene ncbiRefSeq 
- # refGene 1.374%, ncbiRefSeq 8.397%, both 1.370%, cover 99.73%, enrich 11.88x
+ # refGene 0.402%, ncbiRefSeq 3.148%, both 0.402%, cover 99.90%, enrich 31.73x
     featureBits -enrichment rheMac10 ncbiRefSeq refGene
- # ncbiRefSeq 8.397%, refGene 1.374%, both 1.370%, cover 16.32%, enrich 11.88x
+ # ncbiRefSeq 3.148%, refGene 0.402%, both 0.402%, cover 12.76%, enrich 31.73x
 
     featureBits -enrichment rheMac10 ncbiRefSeqCurated refGene
- # ncbiRefSeqCurated 1.368%, refGene 1.374%, both 1.364%, cover 99.71%, enrich 72.59x
+ # ncbiRefSeqCurated 0.401%, refGene 0.402%, both 0.400%, cover 99.66%, enrich 247.79x
+
     featureBits -enrichment rheMac10 refGene ncbiRefSeqCurated
- # refGene 1.374%, ncbiRefSeqCurated 1.368%, both 1.364%, cover 99.32%, enrich 72.59x
+ # refGene 0.402%, ncbiRefSeqCurated 0.401%, both 0.400%, cover 99.33%, enrich 247.79x
 
 #########################################################################
 # LIFTOVER TO rheMac8 (DONE - 2019-07-02 - Hiram)
@@ -876,30 +897,29 @@ XXX TBD
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -ooc=/hive/data/genomes/rheMac10/jkStuff/rheMac10.11.ooc \
          rheMac10 rheMac8) > doLiftOverToRheMac8.log 2>&1
-XXX - running - Tue Jul  2 08:11:05 PDT 2019
-    # real    156m30.215s
+    # real    268m29.927s
 
-    # see if the liftOver menus function in the browser from rheMac10 to galGal5
+    # see if the liftOver menus function in the browser from rheMac10 to rheMac8
 
 #########################################################################
-#  BLATSERVERS ENTRY (TBD - 2018-10-12 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2019-07-09 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("rheMac10", "blat1a", "17892", "1", "0"); \
+	VALUES ("rheMac10", "blat1a", "17898", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("rheMac10", "blat1a", "17893", "0", "1");' \
+	VALUES ("rheMac10", "blat1a", "17899", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
 ############################################################################
-## reset default position to MEPE gene (egg shell protein)
-##  (TBD - 2018-10-12 - Hiram)
+## reset default position to same as rheMac8
+##  (DONE - 2019-07-09 - Hiram)
 
     # as found from the galGal5 to rheMac10 liftOver
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="chr4:45667017-45672928"
+    hgsql -e 'update dbDb set defaultPos="chr3:70672926-70708108"
 	where name="rheMac10";' hgcentraltest
 
 #########################################################################
@@ -942,7 +962,7 @@ XXX - running - Tue Jul  2 08:11:05 PDT 2019
     # real    307m41.143s
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (TBD - 2018-10-17 - Hiram)
+# all.joiner update, downloads and in pushQ - (DONE - 2019-07-03,08-30 - Hiram)
 xyz
     cd $HOME/kent/src/hg/makeDb/schema
     # verify all the business is done for release
@@ -954,36 +974,26 @@ xyz
     joinerCheck -database=rheMac10 -keys all.joiner
 
     # when clean, check in:
-    git commit -m 'adding rules for rheMac10 refs #22113' all.joiner
+    git commit -m 'adding rules for rheMac10 and regenRn0 refs #23771 #21578' all.joiner
     git push
     # run up a 'make alpha' in hg/hgTables to get this all.joiner file
     # into the hgwdev/genome-test system
 
     cd /hive/data/genomes/rheMac10
     time (makeDownloads.pl rheMac10) > downloads.log 2>&1
-    #  real    10m7.605s
+    #  real    17m47.024s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/rheMac10/pushQ
     cd /hive/data/genomes/rheMac10/pushQ
-  time (makePushQSql.pl -redmineList rheMac10) > rheMac10.pushQ.sql 2> stderr.out
-    # real    9m58.779s
+ time ($HOME/kent/src/hg/utils/automation/makePushQSql.pl -redmineList rheMac10) > rheMac10.pushQ.sql 2> stderr.out
+    # real    15m52.548s
 
-    # remove the extra chainNet files from the listings:
-    sed -i -e "/etNig1/d" redmine.rheMac10.file.list
-    sed -i -e "/asAcu1/d" redmine.rheMac10.file.list
-    sed -i -e "/etNig1/d" redmine.rheMac10.table.list
-    sed -i -e "/onAlb1/d" redmine.rheMac10.table.list
-    sed -i -e "/asAcu1/d" redmine.rheMac10.table.list
-    sed -i -e "/Stickleback/d" redmine.rheMac10.releaseLog.txt
-    sed -i -e "/Tetraodon/d" redmine.rheMac10.releaseLog.txt
-    sed -i -e "/sparrow/d" redmine.rheMac10.releaseLog.txt
     # remove the tandemDups and gapOverlap from the file list:
     sed -i -e "/tandemDups/d" redmine.rheMac10.table.list
     sed -i -e "/Tandem Dups/d" redmine.rheMac10.releaseLog.txt
     sed -i -e "/gapOverlap/d" redmine.rheMac10.table.list
     sed -i -e "/Gap Overlaps/d" redmine.rheMac10.releaseLog.txt
-    #  real    7m21.629s
 
     #   check for errors in stderr.out, some are OK, e.g.:
     # WARNING: hgwdev does not have /gbdb/rheMac10/wib/gc5Base.wib
@@ -991,6 +1001,24 @@ xyz
     # WARNING: hgwdev does not have /gbdb/rheMac10/bbi/quality.bw
     # WARNING: rheMac10 does not have seq
     # WARNING: rheMac10 does not have extFile
+
+
+    # verify the file list does correctly match to files
+    cat redmine.rheMac10.file.list | while read L
+do
+  eval ls $L > /dev/null
+done
+    # should be silent, missing files will show as errors
+
+    # verify database tables, how many to expect:
+    wc -l redmine.rheMac10.table.list
+    # 63 redmine.rheMac10.table.list
+
+    # how many actual:
+    awk -F'.' '{printf "hgsql -N %s -e '"'"'show table status like \"%s\";'"'"'\n", $1, $2}' redmine.rheMac10.table.list | sh | wc -l
+    # 63
+
+    # would be a smaller number actual if some were missing
 
     # add the path names to the listing files in the redmine issue
     # in the three appropriate entry boxes:

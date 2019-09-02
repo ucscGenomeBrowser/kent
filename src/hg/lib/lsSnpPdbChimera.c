@@ -142,7 +142,7 @@ else
 }
 
 boolean lsSnpPdbHasPdb(struct sqlConnection *conn, char *pdbId)
-/* determine if the specified PDB has any entries in LS-SNP */
+/* determine if the specified PDB has any entries in MuPIT (formerly LS-SNP) */
 {
 if (!sqlTableExists(conn, "knownToMupit"))
     return FALSE;
@@ -152,7 +152,7 @@ return (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL);
 }
 
 char *lsSnpPdbGetUrlPdbSnp(char *pdbId, char *snpId)
-/* get LS-SNP/PDB URL for a particular PDB and/or SNP.  One or the two
+/* get MuPIT (formerly LS-SNP) URL for a particular PDB and/or SNP.  One or the two
  * ids maybe null */
 {
 char url[256];

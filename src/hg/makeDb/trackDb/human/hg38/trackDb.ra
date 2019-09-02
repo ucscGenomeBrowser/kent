@@ -7,8 +7,7 @@ include hoffMap.ra
 
 include cancerExpr.ra
 
-include mane.ra beta,public
-include mane.alpha.ra  alpha
+include mane.ra
 
 include gdcCancer.ra
 
