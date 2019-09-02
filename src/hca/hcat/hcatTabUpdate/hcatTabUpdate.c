@@ -140,7 +140,6 @@ addIfReal(contact_zip_postal_code, oldFields,
     contactFields, contactIx, maxContacts, &realFieldCount);
 contactFields[realFieldCount] = "project_role";
 realFieldCount += 1;
-uglyf("Got %d real contact fields\n", realFieldCount);
 
 /* Make contributor output table.  The first row of it will be seeded with the contact.
  * We can fill out names, but not other info on the other contributors, who will make
@@ -348,8 +347,6 @@ safef(inPath, sizeof(inPath), "%s/%s", inDir, projectFile);
 char *projectRequired[] = {"short_name", "contact_name", "contributors"};
 struct fieldedTable *inProject = fieldedTableFromTabFile(inPath, inPath, 
     projectRequired, ArraySize(projectRequired));
-uglyf("Got %d rows, %d columns from %s\n", 
-    inProject->rowCount, inProject->fieldCount, inProject->name);
 
 /* Load up samples table */
 char *sampleFile = "hcat_sample.tsv";
@@ -357,8 +354,6 @@ safef(inPath, sizeof(inPath), "%s/%s", inDir, sampleFile);
 char *sampleRequired[] = {"short_name",};
 struct fieldedTable *inSample = fieldedTableFromTabFile(inPath, inPath, 
     sampleRequired, ArraySize(sampleRequired));
-uglyf("Got %d rows, %d columns from %s\n", 
-    inSample->rowCount, inSample->fieldCount, inSample->name);
 
 
 /* Make sure inProject table makes sense by having exactly one row */
