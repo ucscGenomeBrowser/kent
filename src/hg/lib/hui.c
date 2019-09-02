@@ -1667,6 +1667,13 @@ cgiMakeDropList(var, wiggleYLineMarkOptions, ArraySize(wiggleYLineMarkOptions),
 
 /****** Options for the wiggle track AutoScale *******/
 
+static char *wiggleScaleOptionsParent[] = 
+    {
+    "use vertical viewing range setting",
+    "auto-scale to data view",
+    "cumulatively auto-scale to data view"
+    };
+
 static char *wiggleScaleOptions[] = 
     {
     "use vertical viewing range setting",
@@ -1676,7 +1683,7 @@ static char *wiggleScaleOptions[] =
 enum wiggleScaleOptEnum wiggleScaleStringToEnum(char *string)
 /* Convert from string to enum representation. */
 {
-int x = stringIx(string, wiggleScaleOptions);
+int x = stringIx(string, wiggleScaleOptionsParent);
 if (x < 0)
     errAbort("hui::wiggleScaleStringToEnum() - Unknown option %s", string);
 return x;
@@ -1685,7 +1692,14 @@ return x;
 char *wiggleScaleEnumToString(enum wiggleScaleOptEnum x)
 /* Convert from enum to string representation. */
 {
-return wiggleScaleOptions[x];
+return wiggleScaleOptionsParent[x];
+}
+
+void wiggleScaleDropDownParent(char *var, char *curVal)
+/* Make drop down of options. */
+{
+cgiMakeDropList(var, wiggleScaleOptionsParent, ArraySize(wiggleScaleOptionsParent),
+    curVal);
 }
 
 void wiggleScaleDropDown(char *var, char *curVal)
@@ -5216,7 +5230,7 @@ struct dyString *dy = dyStringNew(1024);
 dyStringPrintf(dy, "  $(\"[name='%s.autoScale']\").change(function()\n", name);
 dyStringPrintf(dy, "  {\n");
 dyStringPrintf(dy, "  val= $(this).find(':selected').val(); \n");
-dyStringPrintf(dy, "  if (val==\"auto-scale to data view\")\n");
+dyStringPrintf(dy, "  if (val!=\"use vertical viewing range setting\")\n");
 dyStringPrintf(dy, "     {\n");
 dyStringPrintf(dy, "     $(\"[name='%s.minY']\")[0].disabled=true;\n", name);
 dyStringPrintf(dy, "     $(\"[name='%s.maxY']\")[0].disabled=true;\n", name);
@@ -5361,7 +5375,10 @@ puts("</TD></TR>");
 
 printf("<TR valign=center><th align=right>Data view scaling:</th><td align=left colspan=3>");
 safef(option, sizeof(option), "%s.%s", name, AUTOSCALE );
-wiggleScaleDropDown(option, autoScale);
+if (parentLevel && !tdbIsMultiTrack(tdb->parent))
+    wiggleScaleDropDownParent(option, autoScale);
+else
+    wiggleScaleDropDown(option, autoScale);
 wiggleScaleDropDownJavascript(name);
 safef(option, sizeof(option), "%s.%s", name, ALWAYSZERO);
 printf("Always include zero:&nbsp");
