@@ -534,6 +534,7 @@ void wiggleYLineMarkDropDown(char *var, char *curVal);
 enum wiggleScaleOptEnum {
    wiggleScaleManual = 0,
    wiggleScaleAuto = 1,
+   wiggleScaleCumulative = 2,
 };
 
 enum wiggleScaleOptEnum wiggleScaleStringToEnum(char *string);
