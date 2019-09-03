@@ -566,6 +566,23 @@ body.oldStaticPage .sectionContent {
 	padding: 0 14px;
 }
 
+input[type="submit" i] {
+        background-color: #FEFEFE;
+        height: 23px;
+        border-radius: 3px;
+}
+
+input[type="input"] {
+        background-color: #FEFEFE;
+        height: 23px;
+        border-radius: 3px;
+}
+
+input#hgt.jump {
+        height: 28px;
+        width: 50px
+}
+
 #hgFindResults {
         padding: 1em;
 }
