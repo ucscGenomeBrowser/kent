@@ -33,8 +33,8 @@ char *substitutions[][2] =
 /* Tags we'll rename.  In this case do some pretty optional cleanup on the sample characteristics, which are going to
  * have to be curated into real tags anyway. */
 {
-    {"sample.characteristics_Sex", "sample.characteristics_sex"},
-    {"sample.characteristics_Age", "sample.characteristics_age"},
+    {"lab.Sex", "lab.sex"},
+    {"lab.Age", "lab.age"},
 };
 
 char *mon[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};

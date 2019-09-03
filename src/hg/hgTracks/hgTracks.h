@@ -1585,20 +1585,6 @@ void filterItems(struct track *tg, boolean (*filter)(struct track *tg, void *ite
                 char *filterType);
 /* Filter out items from track->itemList. */
 
-//#define REMOTE_TRACK_AJAX_CALLBACK
-#ifdef REMOTE_TRACK_AJAX_CALLBACK
-#define REMOTE_TRACK_HEIGHT (tl.fontHeight*2)
-
-boolean trackShouldUseAjaxRetrieval(struct track *track);
-/* Tracks with remote data sources should berendered via an ajax callback */
-
-#else//ifndef
-
-#define REMOTE_TRACK_HEIGHT 0
-#define trackShouldUseAjaxRetrieval(track)  FALSE
-
-#endif//ndef REMOTE_TRACK_AJAX_CALLBACK
-
 int gCmpPriority(const void *va, const void *vb);
 /* Compare groups based on priority. */
 

@@ -147,14 +147,23 @@ sub getInfrastructureEntry {
 
   # Look for the usual set of files on $dbHost:
   my $SameSpecies = ucfirst($db);  $SameSpecies =~ s/\d+$//;
+  my $sameSpecies = $db;  $sameSpecies =~ s/\d+$//;
+  my $Db = ucfirst($db);
   # 2017-03-02 - remove gc5Base.wib quality.wib quality.bw
   #              rarely, if ever, used any more
   my @gbdbFiles = map {"$HgAutomate::gbdb/$db/$_"}
     ("$db.2bit", 'html/description.html', "bbi/gc5BaseBw/gc5Base.bw", "ncbiRefSeq/ncbiRefSeqVersion.txt", "ncbiRefSeq/ncbiRefSeqOther.bb", "ncbiRefSeq/ncbiRefSeqOther.ix", "ncbiRefSeq/ncbiRefSeqOther.ixx", "ncbiRefSeq/seqNcbiRefSeq.rna.fa", "liftOver/${db}To$SameSpecies*");
 
+  my @otherGbdbFiles = map {"$HgAutomate::gbdb/${sameSpecies}*/$_"}
+    ("liftOver/${sameSpecies}*To$Db.over.chain.gz");
+
   my @goldenPathFiles = map {"$HgAutomate::goldenPath/$db/$_"}
     (qw( bigZips/* database/* chromosomes/* ),
      "liftOver/${db}To$SameSpecies*");
+
+  my @otherGoldenPathFiles = map {"$HgAutomate::goldenPath/${sameSpecies}*/$_"}
+    ("liftOver/${sameSpecies}*To$Db.over.chain.gz");
+
   my $sciUnderscore = &HgAutomate::getSpecies($dbHost, $db);
   $sciUnderscore =~ s/ /_/g;
   my $gatewayPhoto = "$HgAutomate::images/$sciUnderscore.jpg";
@@ -162,7 +171,7 @@ sub getInfrastructureEntry {
      $gatewayPhoto = "$HgAutomate::images/$sciUnderscore.gif";
   }
   my @files = ();
-  foreach my $f (@gbdbFiles, @goldenPathFiles, $gatewayPhoto) {
+  foreach my $f (@gbdbFiles, @otherGbdbFiles, @goldenPathFiles, @otherGoldenPathFiles, $gatewayPhoto) {
     if (&HgAutomate::machineHasFile($dbHost, $f)) {
       push @files, $f;
     } else {
@@ -175,8 +184,8 @@ sub getInfrastructureEntry {
   $entry{'redmineFiles'} = join("\n", @files);
 
   # Look for infrastructure tables in allTables hash:
-  foreach my $t qw( chromAlias chromInfo grp seq extFile hgFindSpec trackDb history
-		    tableDescriptions ) {
+  foreach my $t (qw( chromAlias chromInfo grp seq extFile hgFindSpec trackDb history
+		    tableDescriptions )) {
     if (defined $allTables->{$t}) {
       $entry{'tables'} .= "$t ";
       $entry{'redmineTables'} .= "$db.$t ";
@@ -691,7 +700,8 @@ sub makePushQSql {
   my ($entries, $stragglers) = &getEntries();
   &printHeader;
   &printAllEntries($entries);
-  &printMainPushQEntry();
+# Obsolete pushQ database on hgwbeta July 2019
+#   &printMainPushQEntry();
   &reportStragglers($stragglers);
 } # makePushQSql
 

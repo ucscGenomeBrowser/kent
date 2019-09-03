@@ -420,41 +420,6 @@ freeMem(encodedMapName);
 return(cloneString(buf));
 }
 
-#ifdef REMOTE_TRACK_AJAX_CALLBACK
-static boolean trackUsesRemoteData(struct track *track)
-/* returns TRUE is this track has a remote datasource */
-{
-if (!IS_KNOWN(track->remoteDataSource))
-    {
-    SET_TO_NO(track->remoteDataSource);
-    //if (track->bbiFile != NULL)   // FIXME: Chicken or the egg. bigWig/bigBed "bbiFile" filled
-    //                              //        in by loadItems, but we don't want to load items.
-    //    {
-    //    if (!startsWith("/gbdb/",track->bbiFile->fileName))
-    //        SET_TO_YES(track->remoteDataSource);
-    //    }
-    if (startsWithWord("bigWig",track->tdb->type) || startsWithWord("bigBed",track->tdb->type) ||
-	startsWithWord("halSnake",track->tdb->type) ||
-	startsWithWord("pslSnake",track->tdb->type) ||
-	startsWithWord("bigPsl",track->tdb->type) ||
-	startsWithWord("bigGenePred",track->tdb->type) ||
-	startsWithWord("bigChain",track->tdb->type) ||
-	startsWithWord("bigMaf",track->tdb->type) ||
-	startsWithWord("bam",track->tdb->type) || startsWithWord("vcfTabix", track->tdb->type))
-        {
-        SET_TO_YES(track->remoteDataSource);
-        }
-    }
-return IS_YES(track->remoteDataSource);
-}
-
-boolean trackShouldUseAjaxRetrieval(struct track *track)
-/* Tracks with remote data sources should berendered via an ajax callback */
-{
-return (theImgBox && !trackImgOnly && trackUsesRemoteData(track));
-}
-#endif///def REMOTE_TRACK_AJAX_CALLBACK
-
 static boolean isCompositeInAggregate(struct track *track)
 // Check to see if this is a custom composite in aggregate mode.
 {
@@ -496,9 +461,6 @@ static int trackPlusLabelHeight(struct track *track, int fontHeight)
 /* Return the sum of heights of items in this track (or subtrack as it may be)
  * and the center label(s) above the items (if any). */
 {
-if (trackShouldUseAjaxRetrieval(track))
-    return REMOTE_TRACK_HEIGHT;
-
 enum trackVisibility vis = limitVisibility(track);
 int y = track->totalHeight(track, vis);
 if (isCenterLabelIncluded(track))
@@ -5016,8 +4978,6 @@ if (theImgBox)
             int order = flatTrack->order;
             curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,
                                                isCenterLabelIncluded(track),order);
-            if (trackShouldUseAjaxRetrieval(track))
-                imgTrackMarkForAjaxRetrieval(curImgTrack,TRUE);
             }
         }
     }
@@ -5203,36 +5163,32 @@ if (withLeftLabels)
                                                    sliceOffsetX[stSide],sliceOffsetY);
             (void) sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
             }
-        if (trackShouldUseAjaxRetrieval(track))
-            y += REMOTE_TRACK_HEIGHT;
-        else
-            {
-            boolean doWiggle = cartOrTdbBoolean(cart, track->tdb, "doWiggle" , FALSE);
-            if (doWiggle)
-                track->drawLeftLabels = wigLeftLabels;
-        #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
-            if (theImgBox && track->limitedVis != tvDense)
-                y += sliceHeight;
-            else
-        #endif ///def IMAGEv2_NO_LEFTLABEL_ON_FULL
-		{
-		setGlobalsFromWindow(windows); // use GLOBALS from first window
-		int ynew = 0;
-		/* rmskJoined tracks are non-standard in FULL mode
-		   they are just their track height, not per-item height
-                 */
-		if (startsWith("rmskJoined", track->track))
-		    ynew = flatTrack->maxHeight + y;
-		else
-		    ynew = doLeftLabels(track, hvgSide, font, y);
 
-		y += flatTrack->maxHeight;
-		if ((ynew - y) > flatTrack->maxHeight)
-		    { // TODO should be errAbort?
-		    warn("doLeftLabels(y=%d) returned new y value %d that is too high - should be %d at most.",
-			y, ynew, flatTrack->maxHeight);
-		    }
-		}
+        boolean doWiggle = cartOrTdbBoolean(cart, track->tdb, "doWiggle" , FALSE);
+        if (doWiggle)
+            track->drawLeftLabels = wigLeftLabels;
+    #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
+        if (theImgBox && track->limitedVis != tvDense)
+            y += sliceHeight;
+        else
+    #endif ///def IMAGEv2_NO_LEFTLABEL_ON_FULL
+            {
+            setGlobalsFromWindow(windows); // use GLOBALS from first window
+            int ynew = 0;
+            /* rmskJoined tracks are non-standard in FULL mode
+               they are just their track height, not per-item height
+             */
+            if (startsWith("rmskJoined", track->track))
+                ynew = flatTrack->maxHeight + y;
+            else
+                ynew = doLeftLabels(track, hvgSide, font, y);
+
+            y += flatTrack->maxHeight;
+            if ((ynew - y) > flatTrack->maxHeight)
+                { // TODO should be errAbort?
+                warn("doLeftLabels(y=%d) returned new y value %d that is too high - should be %d at most.",
+                    y, ynew, flatTrack->maxHeight);
+                }
             }
         }
     }
@@ -5400,16 +5356,10 @@ if (withCenterLabels)
                                                                             clNowSeen : clNotSeen);
 		}
             }
-        if (trackShouldUseAjaxRetrieval(track))
-	    {
-            y += REMOTE_TRACK_HEIGHT;
-	    }
-        else
-	    {
-	    int savey = y; // GALT
-            y = doCenterLabels(track, track, hvg, font, y, fullInsideWidth); // calls track height
-	    y = savey + flatTrack->maxHeight;
-	    }
+
+        int savey = y; // GALT
+        y = doCenterLabels(track, track, hvg, font, y, fullInsideWidth); // calls track height
+        y = savey + flatTrack->maxHeight;
         }
     hvGfxUnclip(hvg);
 
@@ -5426,20 +5376,56 @@ if (withCenterLabels)
     y = yAfterRuler;
     if (measureTiming)
         lastTime = clock1000();
+
+    // first do predraw
     for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
         {
         track = flatTrack->track;
 
-	// parallelize more this?:
-	
-        //ORIG if (track->limitedVis == tvHide)
+	if (isLimitedVisHiddenForAllWindows(track))
+            continue;
+
+        struct track *winTrack;
+
+        // do preDraw
+        if (track->preDrawItems)
+            {
+            for (window=windows, winTrack=track; window; window=window->next, winTrack=winTrack->nextWindow)
+                {
+                setGlobalsFromWindow(window);
+                if (winTrack->limitedVis == tvHide)
+                    {
+                    warn("Draw tracks skipping %s because winTrack->limitedVis=hide", winTrack->track);
+                    continue;
+                    }
+                if (insideWidth >= 1)  // do not try to draw if width < 1.
+                    {
+                    doPreDrawItems(winTrack, hvg, font, y, &lastTime);
+                    }
+                }
+            }
+
+        setGlobalsFromWindow(windows); // first window
+        // do preDrawMultiRegion across all windows, e.g. wig autoScale
+        if (track->preDrawMultiRegion)
+            {
+            track->preDrawMultiRegion(track);
+            }
+        }
+
+    // now do the actual draw
+    for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
+        {
+        int savey = y;
+        struct track *winTrack;
+        track = flatTrack->track;
 	if (isLimitedVisHiddenForAllWindows(track))
             continue;
 
         int centerLabelHeight = (isCenterLabelIncluded(track) ? fontHeight : 0);
         int yStart = y + centerLabelHeight;
-        // ORIG int yEnd   = y + trackPlusLabelHeight(track, fontHeight);
 	int yEnd   = y + flatTrack->maxHeight;
+
         if (theImgBox)
             {
             // data slice of tracks
@@ -5454,57 +5440,24 @@ if (withCenterLabels)
                 (void) sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
                 }
             }
-        if (trackShouldUseAjaxRetrieval(track))
-            y += REMOTE_TRACK_HEIGHT;
-        else
-	    {
-	    int savey = y;
-	    struct track *winTrack;
-
-	    // do preDraw
-	    if (track->preDrawItems)
-		{
-		for (window=windows, winTrack=track; window; window=window->next, winTrack=winTrack->nextWindow)
-		    {
-		    setGlobalsFromWindow(window);
-		    if (winTrack->limitedVis == tvHide)
-			{
-			warn("Draw tracks skipping %s because winTrack->limitedVis=hide", winTrack->track);
-			continue;
-			}
-		    if (insideWidth >= 1)  // do not try to draw if width < 1.
-			{
-			doPreDrawItems(winTrack, hvg, font, y, &lastTime);
-			}
-		    }
-		}
-
-	    setGlobalsFromWindow(windows); // first window
-	    // do preDrawMultiRegion across all windows, e.g. wig autoScale
-	    if (track->preDrawMultiRegion)
-		{
-		track->preDrawMultiRegion(track);
-		}
-
-	    // doDrawItems
-	    for (window=windows, winTrack=track; window; window=window->next, winTrack=winTrack->nextWindow)
-		{
-		setGlobalsFromWindow(window);
-		if (winTrack->limitedVis == tvHide)
-		    {
-		    warn("Draw tracks skipping %s because winTrack->limitedVis=hide", winTrack->track);
-		    continue;
-		    }
-		if (insideWidth >= 1)  // do not try to draw if width < 1.
-		    {
-		    int ynew = doDrawItems(winTrack, hvg, font, y, &lastTime);
-		    if ((ynew-y) > flatTrack->maxHeight)  // so compiler does not complain ynew is not used.
-			errAbort("oops track too high!");
-		    }
-		}
-	    setGlobalsFromWindow(windows); // first window
-	    y = savey + flatTrack->maxHeight;
-	    }
+        // doDrawItems
+        for (window=windows, winTrack=track; window; window=window->next, winTrack=winTrack->nextWindow)
+            {
+            setGlobalsFromWindow(window);
+            if (winTrack->limitedVis == tvHide)
+                {
+                warn("Draw tracks skipping %s because winTrack->limitedVis=hide", winTrack->track);
+                continue;
+                }
+            if (insideWidth >= 1)  // do not try to draw if width < 1.
+                {
+                int ynew = doDrawItems(winTrack, hvg, font, y, &lastTime);
+                if ((ynew-y) > flatTrack->maxHeight)  // so compiler does not complain ynew is not used.
+                    errAbort("oops track too high!");
+                }
+            }
+        setGlobalsFromWindow(windows); // first window
+        y = savey + flatTrack->maxHeight;
 
         if (theImgBox && tdbIsCompositeChild(track->tdb) &&
                 (track->limitedVis == tvDense ||
@@ -5546,9 +5499,7 @@ if (withLeftLabels)
             (void) sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
             }
 
-        if (trackShouldUseAjaxRetrieval(track))
-            y += REMOTE_TRACK_HEIGHT;
-        else if (track->drawLeftLabels != NULL)
+        if (track->drawLeftLabels != NULL)
 	    {
 	    setGlobalsFromWindow(windows);
             y = doOwnLeftLabels(track, hvgSide, font, y);
@@ -6155,8 +6106,6 @@ else if (sameString(type, "bigWig"))
     tg = trackFromTrackDb(tdb);
     tg->bbiFile = ct->bbiFile;
     tg->nextItemButtonable = FALSE;
-    if (trackShouldUseAjaxRetrieval(tg))
-        tg->loadItems = dontLoadItems;
     }
 else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") ||
         sameString(type, "bigNarrowPeak") || sameString(type, "bigPsl") ||
@@ -6193,8 +6142,6 @@ else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") ||
     tg = trackFromTrackDb(tdb);
     tg->bbiFile = bbi;
     tg->nextItemButtonable = TRUE;
-    if (trackShouldUseAjaxRetrieval(tg))
-        tg->loadItems = dontLoadItems;
     }
 else if (sameString(type, "bedGraph"))
     {
@@ -6274,8 +6221,6 @@ else if (sameString(type, "bam"))
     tg = trackFromTrackDb(tdb);
     tg->customPt = ct;
     bamMethods(tg);
-    if (trackShouldUseAjaxRetrieval(tg))
-        tg->loadItems = dontLoadItems;
     tg->mapItemName = ctMapItemName;
     }
 else if (sameString(type, "vcfTabix"))
@@ -6283,8 +6228,6 @@ else if (sameString(type, "vcfTabix"))
     tg = trackFromTrackDb(tdb);
     tg->customPt = ct;
     vcfTabixMethods(tg);
-    if (trackShouldUseAjaxRetrieval(tg))
-        tg->loadItems = dontLoadItems;
     tg->mapItemName = ctMapItemName;
     }
 else if (sameString(type, "vcf"))

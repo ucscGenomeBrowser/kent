@@ -31,7 +31,7 @@ void tagStormToTab(char *input, char *output, boolean mid, char *nullVal, boolea
 /* tagStormToTab - Convert tagStorm to tab-separated-value file.. */
 {
 struct tagStorm *tagStorm = tagStormFromFile(input);
-verbose(1, "%d trees in %s\n", slCount(tagStorm->forest), tagStorm->fileName);
+verbose(2, "%d trees in %s\n", slCount(tagStorm->forest), tagStorm->fileName);
 tagStormWriteAsFlatTab(tagStorm, output, NULL, FALSE, 0, !mid, nullVal, !noSharp);
 }
 

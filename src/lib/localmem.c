@@ -279,3 +279,15 @@ lmAllocVar(lm, ref);
 ref->val = val;
 slAddHead(pRefList, ref);
 }
+
+char *lmJoinStrings(struct lm *lm, char *a, char *b)
+/* Return concatenation of a and b allocated in lm */
+{
+int aSize = strlen(a);
+int resSize = aSize + strlen(b) + 1;
+char *output = lmAlloc(lm, resSize);
+strcpy(output, a);
+strcpy(output + aSize, b);
+return output;
+}
+
