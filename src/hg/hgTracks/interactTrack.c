@@ -369,6 +369,7 @@ void interactLoadItems(struct track *tg)
     tInfo->drawUp = trackDbSettingClosestToHomeOn(tg->tdb, INTERACT_UP);
     tInfo->clusterMode = interactUiClusterMode(cart, tg->track, tg->tdb);
 
+// conditional for now -- pending QA/JK weigh in
 #define MR_FORCE_PACK 1
 #ifdef MR_FORCE_PACK
     if (!tInfo->clusterMode && !isLinkedFeaturesMode(tg) && sameString(virtModeType, "default"))
