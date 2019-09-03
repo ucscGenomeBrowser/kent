@@ -1,6 +1,5 @@
-/* hcatTabUpdate - take the tabToTabDir result of the geo/sra import
- * and unpack a few fields that are just too hard in strex. 
- * Put results in an output dir. */
+/* hcatTabUpdate - take the tabToTabDir result of the geo/sra import.
+ * Put results in an output dir in a format sqlUpdateRelated understands. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -13,14 +12,11 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "hcatTabUpdate - Update the hcat database given a tab seperated input and output dir.\n"
   "hcatTabUpdate - take the tabToTabDir result of the geo/sra import\n"
-  "and unpack a few fields that are just too hard in strex. \n"
-  "Put results in an output dir.\n" 
+  "and turn it into food for sqlUpdateRelated, which is what actually\n"
+  "updates the database.\n"
   "usage:\n"
   "   hcatTabUpdate inDir outDir\n"
-  "options:\n"
-  "   -xxx=XXX\n"
   );
 }
 
@@ -109,12 +105,12 @@ struct dyString *csvScratch = dyStringNew(0);
 /* Make the contributors list in two pieces first off of the contact */
 int contact_email = fieldedTableFindFieldIx(inProject, "contact_email");
 int contact_phone = fieldedTableFindFieldIx(inProject, "contact_phone");
-//int contact_department = fieldedTableFindFieldIx(inProject, "contact_department");
-//int contact_institute = fieldedTableFindFieldIx(inProject, "contact_institute");
-//int contact_address = fieldedTableFindFieldIx(inProject, "contact_address");
-//int contact_city = fieldedTableFindFieldIx(inProject, "contact_city");
-//int contact_country = fieldedTableFindFieldIx(inProject, "contact_country");
-//int contact_zip_postal_code = fieldedTableFindFieldIx(inProject, "contact_zip_postal_code");
+int contact_department = fieldedTableFindFieldIx(inProject, "contact_department");
+int contact_institute = fieldedTableFindFieldIx(inProject, "contact_institute");
+int contact_address = fieldedTableFindFieldIx(inProject, "contact_address");
+int contact_city = fieldedTableFindFieldIx(inProject, "contact_city");
+int contact_country = fieldedTableFindFieldIx(inProject, "contact_country");
+int contact_zip_postal_code = fieldedTableFindFieldIx(inProject, "contact_zip_postal_code");
 
 
 /* Figure out which contact data we actually have */
@@ -132,13 +128,13 @@ int realFieldCount = 1;
 // The rest of the contact pieces are added just conditionally
 addIfReal(contact_email, oldFields, contactFields, contactIx, maxContacts, &realFieldCount);
 addIfReal(contact_phone, oldFields, contactFields, contactIx, maxContacts, &realFieldCount);
-//addIfReal(contact_department, oldFields, contactFields, contactIx, maxContacts, &realFieldCount);
-//#addIfReal(contact_institute, oldFields, contactFields, contactIx, maxContacts, &realFieldCount);
-//#addIfReal(contact_address, oldFields, contactFields, contactIx, maxContacts, &realFieldCount);
-//addIfReal(contact_city, oldFields, contactFields, contactIx, maxContacts, &realFieldCount);
-//addIfReal(contact_country, oldFields, contactFields, contactIx, maxContacts, &realFieldCount);
-//addIfReal(contact_zip_postal_code, oldFields, 
-//    contactFields, contactIx, maxContacts, &realFieldCount);
+addIfReal(contact_department, oldFields, contactFields, contactIx, maxContacts, &realFieldCount);
+addIfReal(contact_institute, oldFields, contactFields, contactIx, maxContacts, &realFieldCount);
+addIfReal(contact_address, oldFields, contactFields, contactIx, maxContacts, &realFieldCount);
+addIfReal(contact_city, oldFields, contactFields, contactIx, maxContacts, &realFieldCount);
+addIfReal(contact_country, oldFields, contactFields, contactIx, maxContacts, &realFieldCount);
+addIfReal(contact_zip_postal_code, oldFields, 
+    contactFields, contactIx, maxContacts, &realFieldCount);
 contactFields[realFieldCount] = "project_role";
 realFieldCount += 1;
 
@@ -215,7 +211,7 @@ return dyStringCannibalize(&result);
 }
 
 void addListFieldIfNonempty(char *field, struct slName *list,
-    char *newFields[], char *newVals[], int maxNewCount,int *pCurCount)
+    char **newFields, char **newVals, int maxNewCount,int *pCurCount)
 /* Add field to newFields if list is non-empty, taking care not to go past end. */
 {
 if (list != NULL)
@@ -228,7 +224,7 @@ if (list != NULL)
     stripChar(strippedField, '_');
     safef(fieldName, sizeof(fieldName), 
 	"@@%s@id@hcat_project_%s@project_id@%s_id@hcat_%s@short_name@id", 
-	field, field, field, strippedField);
+	field, field, strippedField, strippedField);
     newFields[curCount] = cloneString(fieldName);
     newVals[curCount] = slNameToCsv(list);
     *pCurCount = curCount+1;
@@ -236,11 +232,63 @@ if (list != NULL)
     }
 }
 
+struct fieldedTable *makeVocabTable(struct fieldedTable *inProject, struct slName *valList,
+    char *projectFieldName, char *tableName)
+/* Make a generic short_name/description table. */
+{
+/* Make up our little generic table */
+char *outFields[] = {"?short_name", "description",};
+struct fieldedTable *vocabTable = fieldedTableNew(tableName, outFields, ArraySize(outFields));
 
-struct fieldedTable *makeProject(struct fieldedTable *inProject, struct fieldedTable *inSample)
+/* Fetch the input value, which is a comma separated list.  Then go through
+ * the list and make a table entry for each item. */
+struct dyString *csvScratch = dyStringNew(0);
+struct slName *val;
+for (val = valList; val != NULL; val = val->next)
+    {
+    char *outRow[2] = {val->name, "NEEDS DESCRIPTION"};
+    fieldedTableAdd(vocabTable, outRow, ArraySize(outRow), 0);
+    }
+
+/* Clean up and go home. */
+dyStringFree(&csvScratch);
+return vocabTable;
+}
+
+void projectVocabField(struct fieldedTable *inProject, struct fieldedTable *inSample,
+   char *underbarred, char *outDir, char **outFields,
+   char **outRow, int outFieldMax, int *pOutFieldCount)
+/* Cope with a list field in project we get from scanning samples.  Kind of a 
+ * technical routine, with 7 parameters, but since it gets called like 5 times
+ * best to encapsulate it. */
+{
+/* Get list of the different values from the inSample table */
+struct slName *valList = uniqVals(inSample, underbarred);
+
+/* Django has this weird thing about underbars - sometimes it strips them and we have to
+ * match it's behavior */
+char strippedName[strlen(underbarred) + 1];
+strcpy(strippedName, underbarred);
+stripChar(strippedName, '_');
+
+/* Ok, try and make the table.  If we succeed write it out. */
+struct fieldedTable *outTable = makeVocabTable(inProject,valList,underbarred,strippedName);
+if (outTable != NULL)
+    {
+    addListFieldIfNonempty(underbarred, valList, outFields, outRow, outFieldMax, pOutFieldCount);
+    char outPath[PATH_LEN];
+    safef(outPath, sizeof(outPath), "%s/hcat_%s.tsv", outDir, strippedName);
+    fieldedTableToTabFile(outTable, outPath);
+    }
+}
+
+struct fieldedTable *makeProject(struct fieldedTable *inProject, 
+    struct fieldedTable *inSample, char *outDir)
 /* Make output project table.  This is the big one - 35 fields now
  * probably twice that by the time HCA is done.  Fortunately we only need
- * to deal with some of the fields and it only has one row. */
+ * to deal with some of the fields and it only has one row. 
+ *    In a move to save code this will also as a side effect write out
+ *    any vocab tables implicitly mentioned.*/
 {
 char **inFields = inProject->fields;
 char **inRow = inProject->rowList->row;
@@ -286,7 +334,18 @@ for (inIx=0; inIx<inFieldCount; ++inIx)
 	safef(nameBuf, sizeof(nameBuf), "@%s_id@hcat_efforttype@short_name@id", inName);
 	inName = cloneString(nameBuf);
 	}
-    else if (sameString("effort", inName))
+    else if (sameString("lab", inName))
+        {
+	safef(nameBuf, sizeof(nameBuf), "%s",
+	    "@@lab@id@hcat_project_labs@project_id@lab_id@hcat_lab@short_name@id");
+	inName = cloneString(nameBuf);
+	}
+    else if (sameString("publications", inName))
+        {
+	safef(nameBuf, sizeof(nameBuf), "%s",
+	    "@@publications@id@hcat_project_publications@project_id@publication_id@hcat_publication@short_name@id");
+	inName = cloneString(nameBuf);
+	}
 
     /* Output all the ones we haven't dealt with already or will deal with later */
     if (!startsWith("contact_", inName) && !sameString("contributors", inName))
@@ -298,24 +357,58 @@ for (inIx=0; inIx<inFieldCount; ++inIx)
     }
 
 /* Add in contributors as a multi to multi field */
-outFields[outFieldCount] = "@@contributors@hcat_project_contributors@id@project_id@contributor_id@hcat_contributor@name@id";
+outFields[outFieldCount] = "@@contributors@id@hcat_project_contributors@project_id@contributor_id@hcat_contributor@name@id";
 outRow[outFieldCount] = fieldedTableLookupNamedFieldInRow(inProject, "contributors", inRow);
+outFieldCount += 1;
 
 /* Add the fields we scan and merge from sample at end */
-struct slName *organList = uniqVals(inSample, "organ");
-struct slName *organPartList = uniqVals(inSample, "organ_part");
-struct slName *assayTypeList = uniqVals(inSample, "assay_type");
-struct slName *diseaseList = uniqVals(inSample, "disease");
-addListFieldIfNonempty("organ", organList, outFields, outRow, outFieldMax, &outFieldCount);
-addListFieldIfNonempty("organ_part", organPartList, outFields, outRow, outFieldMax, &outFieldCount);
-addListFieldIfNonempty("assay_type", assayTypeList, outFields, outRow, outFieldMax, &outFieldCount);
-addListFieldIfNonempty("disease", diseaseList, outFields, outRow, outFieldMax, &outFieldCount);
+projectVocabField(inProject, inSample, "organ", outDir, 
+    outFields, outRow, outFieldMax, &outFieldCount);
+projectVocabField(inProject, inSample, "organ_part", outDir, 
+    outFields, outRow, outFieldMax, &outFieldCount);
+projectVocabField(inProject, inSample, "assay_type", outDir, 
+    outFields, outRow, outFieldMax, &outFieldCount);
+projectVocabField(inProject, inSample, "disease", outDir, 
+    outFields, outRow, outFieldMax, &outFieldCount);
 
+uglyf("making project table with %d fields\n", outFieldCount);
 struct fieldedTable *outTable = fieldedTableNew("project", outFields, outFieldCount);
 outTable->startsSharp = inProject->startsSharp;
-fieldedTableAdd(outTable, outRow, outFieldCount, 1);
+fieldedTableAdd(outTable, outRow, outFieldCount, 2);
 dyStringFree(&scratch);
 return outTable;
+}
+
+
+struct fieldedTable *makePublication(struct fieldedTable *inProject)
+/* If there's a publication field we make a publication table and seed it with the pmid 
+ * and stuff. */
+{
+int pubIx = fieldedTableFindFieldIx(inProject, "publications");
+if (pubIx >= 0)
+    {
+    struct dyString *newPubNames = dyStringNew(0);
+    char **inRow = inProject->rowList->row;
+    char *nameCsv = inRow[pubIx];
+    struct dyString *csvScratch = dyStringNew(0);
+    char *pmid;
+    char *outFields[2] = {"?short_name", "pmid"};
+    struct fieldedTable *pubTable = fieldedTableNew("publications", 
+	outFields, ArraySize(outFields));
+    while ((pmid = csvParseNext(&nameCsv, csvScratch)) != NULL)
+        {
+	char name[64];
+	safef(name, sizeof(name), "pmid: %s", pmid);
+	char *outRow[2] = {name, pmid};
+	fieldedTableAdd(pubTable, outRow, ArraySize(outRow), 0);
+	csvEscapeAndAppend(newPubNames, name);
+	}
+    inRow[pubIx] = dyStringCannibalize(&newPubNames);  // Other people need to use new value too
+    dyStringFree(&csvScratch);
+    return pubTable;
+    }
+else
+    return NULL;
 }
 
 struct fieldedTable *makeLab(struct fieldedTable *inProject)
@@ -328,13 +421,14 @@ if (labIx >= 0)
     char *short_name = inRow[labIx];
     char *contact = fieldedTableLookupNamedFieldInRow(inProject, "contact_name", inRow);
     char *contributors = fieldedTableLookupNamedFieldInRow(inProject, "contributors", inRow);
-    char *institute = emptyForNull(fieldedTableLookupNamedFieldInRow(inProject, "contact_institute", inRow));
+    char *institute = fieldedTableLookupNamedFieldInRow(inProject, "contact_institute", inRow);
     char labName[256];
     if (strlen(short_name) < 20)  // Unlikely to be unique, may cause trouble
-	safef(labName, sizeof(labName), "%s %s", short_name, institute);
+	safef(labName, sizeof(labName), "%s %s", short_name, emptyForNull(institute));
     else
         safef(labName, sizeof(labName), "%s", short_name);
     labName[50] = 0;  // not too long
+    inRow[labIx] = cloneString(labName);  /* Other people need to know about this too. */
 
     char *outFields[4] = {"?short_name", "institution", "@contact_id@hcat_contributor@name@id", 
 	"@@contributors@id@hcat_lab_contributors@lab_id@contributor_id@hcat_contributor@name@id"};
@@ -347,40 +441,9 @@ else
     return NULL;
 }
 
-struct fieldedTable *makeOrgan(struct fieldedTable *inProject)
-/* If there's and organ field we make an organ table. */
-{
-uglyf("Trying to make organs for %s\n", inProject->name);
-
-/* See if it's even in the inProject table, and return quickly with a NULL if not. */
-int organIx = fieldedTableFindFieldIx(inProject, "organ");
-uglyf("organsIx %d\n", organIx);
-if (organIx < 0)
-    return NULL;
-
-/* Make up our little generic table */
-char *outFields[] = {"?short_name", "description",};
-struct fieldedTable *organTable = fieldedTableNew("organ", outFields, ArraySize(outFields));
-
-/* Fetch the input value, which is a comma separated list.  Then go through
- * the list and make a table entry for each item. */
-char **inRow = inProject->rowList->row;
-char *organTsv = inRow[organIx];
-struct dyString *csvScratch = dyStringNew(0);
-char *organName;
-while ((organName = csvParseNext(&organTsv, csvScratch)) != NULL)
-    {
-    char *outRow[2] = {organName, "NEEDS DESCRIPTION"};
-    fieldedTableAdd(organTable, outRow, ArraySize(outRow), 0);
-    }
-
-/* Clean up and go home. */
-dyStringFree(&csvScratch);
-return organTable;
-}
-
 void hcatTabUpdate(char *inDir, char *outDir)
-/* hcatTabUpdate - Update the hcat database given a tab seperated input and output dir. */
+/* hcatTabUpdate - take the tabToTabDir result of the geo/sra import.
+ * Put results in an output dir in a format sqlUpdateRelated understands. */
 {
 // We are actually just looking for specific files in inDir. */
 
@@ -404,29 +467,34 @@ struct fieldedTable *inSample = fieldedTableFromTabFile(inPath, inPath,
 if (inProject->rowCount != 1)
     errAbort("Expected one row in %s, got %d\n", projectFile, inProject->rowCount);
 
-struct fieldedTable *outContributor = makeContributors(inProject);
-struct fieldedTable *outProject = makeProject(inProject, inSample);
-struct fieldedTable *outLab = makeLab(inProject);
-struct fieldedTable *outOrgan = makeOrgan(inProject);
-
 /* Write output from lowest level to highest level tables. */
 makeDirsOnPath(outDir);
+
+
+/* Contributors table - it's always there */
+struct fieldedTable *outContributor = makeContributors(inProject);
 char outPath[PATH_LEN];
 safef(outPath, sizeof(outPath), "%s/hcat_%s", outDir, "contributor.tsv");
 fieldedTableToTabFile(outContributor, outPath);
 
-if (outOrgan != NULL)
-    {
-    safef(outPath, sizeof(outPath), "%s/hcat_%s", outDir, "organ.tsv");
-    fieldedTableToTabFile(outOrgan, outPath);
-    }
-
+/* Make lab table if there is a lab field */
+struct fieldedTable *outLab = makeLab(inProject);
 if (outLab != NULL)
     {
     safef(outPath, sizeof(outPath), "%s/hcat_%s", outDir, "lab.tsv");
     fieldedTableToTabFile(outLab, outPath);
     }
 
+/* Make pubs table if there are pubs fields */
+struct fieldedTable *outPub = makePublication(inProject);
+if (outPub != NULL)
+    {
+    safef(outPath, sizeof(outPath), "%s/hcat_%s", outDir, "publication.tsv");
+    fieldedTableToTabFile(outPub, outPath);
+    }
+
+
+struct fieldedTable *outProject = makeProject(inProject, inSample, outDir);
 safef(outPath, sizeof(outPath), "%s/hcat_%s", outDir, "project.tsv");
 fieldedTableToTabFile(outProject, outPath);
 }
