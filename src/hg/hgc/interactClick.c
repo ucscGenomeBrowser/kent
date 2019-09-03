@@ -165,7 +165,7 @@ FILE *f = fopen(mrTn.forCgi, "w");
 if (f == NULL)
     errAbort("can't create temp file %s", mrTn.forCgi);
 char regionInfo[1024];
-int padding = 200;
+int padd
 safef(regionInfo, sizeof regionInfo, "#padding %d\n", padding);
 mustWrite(f, regionInfo, strlen(regionInfo));
 //warn("%s", regionInfo);
@@ -196,7 +196,7 @@ for (inter = inters; inter != NULL; inter = inter->next)
         {
         hashAdd(uniqRegions, cloneString(buf), NULL);
         AllocVar(region);
-        region->chrom = inter->chrom;
+        region->chrom = inter->targetChrom;
         region->chromStart = inter->targetStart;
         region->chromEnd = inter->targetEnd;
         slAddHead(&regions, region);
@@ -207,7 +207,8 @@ struct bed *prevRegion = NULL;
 for (region = regions; region != NULL; region = region->next)
     {
     // filter out nested regions
-    if (prevRegion == NULL || region->chromStart >=  prevRegion->chromEnd)
+    if (prevRegion == NULL || differentString(region->chrom, prevRegion->chrom) ||
+                region->chromStart >=  prevRegion->chromEnd)
         {
         safef(regionInfo, sizeof regionInfo, "%s\t%d\t%d\n",
                     region->chrom, region->chromStart, region->chromEnd);
