@@ -1,5 +1,15 @@
+kentSrc = ../../../..
+include ${kentSrc}/inc/common.mk
 
 progs = bin/gencodeGxfToAttrs
+
+all::
+
+test::
+	cd tests && ${MAKE} test
+
+clean::
+	cd tests && ${MAKE} clean
 
 lint:
 

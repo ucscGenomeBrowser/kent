@@ -1,4 +1,7 @@
-diff = true
+kentSrc = ../../../../..
+include ${kentSrc}/inc/common.mk
+
+diff = diff -u
 
 gencodeGxfToAttrs = ../bin/gencodeGxfToAttrs
 
