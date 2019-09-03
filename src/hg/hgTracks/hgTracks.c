@@ -4551,7 +4551,7 @@ return FALSE;
 }
 
 boolean isTypeUseItemNameAsKey(struct track *track)
-/* Check if track type is like expRatio and key is just item name. */
+/* Check if track type is like expRatio and key is just item name, to link across multi regions */
 {
 char *typeLine = track->tdb->type, *words[8], *type;
 int wordCount;
@@ -4566,8 +4566,22 @@ if (sameWord(type, "expRatio"))
     // track is like expRatio, needs one row per item
     return TRUE;
     }
+return FALSE;
+}
+
+boolean isTypeUseMapItemNameAsKey(struct track *track)
+/* Check if track type is like interact and uses map item name to link across multi regions */
+{
+char *typeLine = track->tdb->type, *words[8], *type;
+int wordCount;
+if (typeLine == NULL)
+    return FALSE;
+wordCount = chopLine(cloneString(typeLine), words);
+if (wordCount <= 0)
+    return FALSE;
+type = words[0];
 if (sameWord(type, "interact") || sameWord(type, "bigInteract"))
-    return interactIsClusterMode(track);
+        return TRUE;
 return FALSE;
 }
 

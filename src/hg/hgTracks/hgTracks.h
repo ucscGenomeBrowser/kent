@@ -1617,6 +1617,9 @@ boolean isTypeBedLike(struct track *track);
 boolean isTypeUseItemNameAsKey(struct track *track);
 /* Check if track type is like expRatio and key is just item name. */
 
+boolean isTypeUseMapItemNameAsKey(struct track *track);
+/* Check if track type is like interact and uses map item name to link across multi regions */
+
 void setEMGeneTrack();
 /* Find the track for the gene table to use for exonMostly and geneMostly. */
 
@@ -1693,9 +1696,6 @@ Color blackItemNameColor(struct track *tg, void *item, struct hvGfx *hvg);
 void linkedFeaturesMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 				char *itemName, char *mapItemName, int start, int end,
 				int x, int y, int width, int height);
-
-boolean interactIsClusterMode(struct track *tg);
-/* Determine if track is interact and is in cluster view */
 
 #endif /* HGTRACKS_H */
 
