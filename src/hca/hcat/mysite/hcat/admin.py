@@ -34,17 +34,6 @@ class EffortTypeAdmin(admin.ModelAdmin):
     
 admin.site.register(EffortType, EffortTypeAdmin)
 
-#    contacts = models.ManyToManyField(Contributor, blank=True, related_name="contacts")
-#    responders = models.ManyToManyField(Contributor, blank=True, related_name="responders")
-#    questionnaire = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
-#    tAndC = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
-#    sheet_template = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
-#    sheet_from_lab = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
-#    sheet_curated = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
-#    sheet_validated = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
-#    metadataExcel = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
-#    staging_area = models.URLField(blank=True, null=True)
-
 class ProjectAdmin(admin.ModelAdmin):
     search_fields = ['short_name', 'title', 'contributors', 'labs', 'organ_part', 
     #'organ', 
@@ -66,7 +55,7 @@ class ProjectAdmin(admin.ModelAdmin):
 		'responders',
 		('first_response_date', 'last_response_date'),
 		)}),
-	('ingest steps',  { 'fields': (
+	('submission steps',  { 'fields': (
 		('questionnaire', 'questionnaire_date'),
 		('tAndC', 'tAndC_date'),
 		('sheet_template', 'sheet_template_date'),
@@ -76,7 +65,7 @@ class ProjectAdmin(admin.ModelAdmin):
 		('staging_area', 'staging_area_date'),
 		('submit_comments', 'submit_date'),
 		)}),
-	('post-ingest',  { 'fields': (
+	('post-submit',  { 'fields': (
 		('cloud_date', 'pipeline_date', 'orange_date'),
 		)}),
         ('biosample',  { 'fields': (('species', 'sample_type'), ('organ', 'organ_part'), 'disease')}),
