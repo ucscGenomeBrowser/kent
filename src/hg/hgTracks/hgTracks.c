@@ -8281,7 +8281,15 @@ if (!hideControls)
 	    safef(buf, sizeof buf, "%s:%ld-%ld", virtChromName, virtWinStart+1, virtWinEnd);
 	
 	position = cloneString(buf);
-	hPrintf("<span class='positionDisplay' id='positionDisplay' title='click to copy position to input box'>%s</span>", addCommasToPos(database, position));
+        char *pressedClass = "", *showVirtRegions = "";
+        if (differentString(virtModeType, "default"))
+            {
+            pressedClass = "pressed";
+            showVirtRegions = "show multi-region position ranges and ";
+            }
+	hPrintf("<span class='positionDisplay %s' id='positionDisplay' "
+                "title='click to %s copy position to input box'>%s</span>", 
+                        pressedClass, showVirtRegions, addCommasToPos(database, position));
 	hPrintf("<input type='hidden' name='position' id='position' value='%s'>\n", buf);
 	sprintLongWithCommas(buf, virtWinEnd - virtWinStart);
 	hPrintf(" <span id='size'>%s</span> bp. ", buf);
