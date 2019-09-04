@@ -10,7 +10,6 @@ project_idFilterType multipleListOr
 genderFilterValues male,female
 genderFilterType multipleListOr
 maxItems 500000
-pennantIcon New red ../goldenPath/newsarch.html#062019 "Released Jun. 20, 2019"
 
 track allCancer
 parent gdcCancer on

@@ -11,7 +11,7 @@ getFunctions: test6 test7 test8 test9 test10 test11 test12 test13 test14 \
 	test15 test16 test19 test21 test26 test27 test28 \
 	test29 test39 test40
 
-listSchema: schema01 schema02 schema03 schema04 schema05
+listSchema: schema01 schema02 schema03 schema04 schema05 schema06 schema07
 
 getSequence: getSeq01 getSeq02 getSeq03
 
@@ -296,6 +296,18 @@ schema04: setOutput
 schema05: setOutput
 	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/list/schema?track=chromAlias;genome=hg38'\n"
 	@./jsonConsumer.pl -endpoint="/list/schema" -genome="hg38" -track=chromAlias | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# list schema for bigBed file via table fileName reference
+schema06: setOutput
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/list/schema?track=crispr10KTargets;genome=hg38'\n"
+	@./jsonConsumer.pl -endpoint="/list/schema" -genome="hg38" -track=crispr10KTargets | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# list schema for bigWig file with table and bigWig file
+schema07: setOutput
+	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/list/schema?track=gc5BaseBw;genome=ce11'\n"
+	@./jsonConsumer.pl -endpoint="/list/schema" -genome="ce11" -track=gc5BaseBw | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 ###############################################################################
