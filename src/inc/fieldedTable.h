@@ -65,6 +65,9 @@ void fieldedTableSortOnField(struct fieldedTable *table, char *field, boolean do
 int fieldedTableMustFindFieldIx(struct fieldedTable *table, char *field);
 /* Find index of field in table's row.  Abort if field not found. */
 
+int fieldedTableFindFieldIx(struct fieldedTable *table, char *field);
+/* Return index of field in a table's row or -1 if not found */
+
 struct hash *fieldedTableIndex(struct fieldedTable *table, char *field);
 /* Return hash of fieldedRows keyed by values of given field */
 

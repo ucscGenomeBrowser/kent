@@ -304,10 +304,16 @@ void fieldedTableToTabFile(struct fieldedTable *table, char *fileName)
 fieldedTableToTabFileWithId(table, fileName, NULL, 0);
 }
 
+int fieldedTableFindFieldIx(struct fieldedTable *table, char *field)
+/* Return index of field in a table's row or -1 if not found */
+{
+return stringArrayIx(field, table->fields, table->fieldCount);
+}
+
 int fieldedTableMustFindFieldIx(struct fieldedTable *table, char *field)
 /* Find index of field in table's row.  Abort if field not found. */
 {
-int ix = stringArrayIx(field, table->fields, table->fieldCount);
+int ix = fieldedTableFindFieldIx(table, field);
 if (ix < 0)
     errAbort("Field %s not found in table %s", field, table->name);
 return ix;
