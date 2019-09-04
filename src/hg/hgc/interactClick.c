@@ -191,25 +191,30 @@ for (inter = inters; inter != NULL; inter = inter->next)
         region->chromEnd = inter->sourceEnd;
         slAddHead(&regions, region);
         }
-    //safef(buf, sizeof buf, "%s:%d-%d", region2->chrom, region2->chromStart, region2->chromEnd);
     safef(buf, sizeof buf, "%s:%d-%d", inter->targetChrom, inter->targetStart, inter->targetEnd);
     if (!hashLookup(uniqRegions, buf))
         {
         hashAdd(uniqRegions, cloneString(buf), NULL);
         AllocVar(region);
-        region->chrom = inter->chrom;
+        region->chrom = inter->targetChrom;
         region->chromStart = inter->targetStart;
         region->chromEnd = inter->targetEnd;
         slAddHead(&regions, region);
         }
     }
 slSort(&regions, bedCmp);
+struct bed *prevRegion = NULL;
 for (region = regions; region != NULL; region = region->next)
     {
-    safef(regionInfo, sizeof regionInfo, "%s\t%d\t%d\n",
+    // filter out nested regions
+    if (prevRegion == NULL || differentString(region->chrom, prevRegion->chrom) ||
+                region->chromStart >=  prevRegion->chromEnd)
+        {
+        safef(regionInfo, sizeof regionInfo, "%s\t%d\t%d\n",
                     region->chrom, region->chromStart, region->chromEnd);
-    mustWrite(f, regionInfo, strlen(regionInfo));
-    //warn("%s", regionInfo);
+        mustWrite(f, regionInfo, strlen(regionInfo));
+        }
+    prevRegion = region;
     }
 fclose(f);
 
