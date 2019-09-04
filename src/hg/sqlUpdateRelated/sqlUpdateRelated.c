@@ -1,5 +1,6 @@
 /* sqlUpdateRelated - Update a bunch of tables in a kind of careful way based out of tab separated 
  * files.  Handles foreign key and many-to-many relationships with a multitude of @ signs. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -89,6 +90,23 @@ while ((nativeVal = csvParseNext(&parsePos, csvScratch)) != NULL)
 dyStringFree(&sql);
 }
 
+void checkFieldExists(struct sqlConnection *conn, char *table, char *field, char *attyField)
+/* Make sure field exists in table in database or print error message that includes
+ * attyField */
+{
+if (sqlFieldIndex(conn, table, field) < 0)
+    errAbort("No field %s in table %s used in %s", 
+	field, table, attyField);
+}
+
+void checkTableExists(struct sqlConnection *conn, char *table, char *attyField)
+/* Make sure table exists in database or print error message that includes
+ * attyField */
+{
+if (!sqlTableExists(conn, table))
+    errAbort("Table %s from %s doesn't exist", table, attyField);
+}
+
 void sqlUpdateViaTabFile(struct sqlConnection *conn, char *tabFile, char *tableName)
 /* Interpret one tab-separated file */
 {
@@ -103,7 +121,6 @@ char *conditionalField = NULL;  // We might have one of these
 int conditionalIx = -1;
 struct foreignRef *foreignRefList = NULL;
 struct multiRef *multiRefList = NULL;
-struct hash *multiHash = hashNew(0);
 int fieldIx;
 for (fieldIx=0; fieldIx<inTable->fieldCount; ++fieldIx)
     {
@@ -116,6 +133,7 @@ for (fieldIx=0; fieldIx<inTable->fieldCount; ++fieldIx)
 		"but both %s and %s exist\n", conditionalField, field+1);
 	conditionalField = field;
 	conditionalIx = fieldIx;
+	checkFieldExists(conn, tableName, field + 1, field);
 	verbose(2, "conditionalField = %s, ix = %d\n", field, conditionalIx);
 	}
     else if (firstChar == '@')  // Foreign keys are involved.  Will it get worse?
@@ -133,6 +151,7 @@ for (fieldIx=0; fieldIx<inTable->fieldCount; ++fieldIx)
 		errAbort("Expecting %d @ separated fields in %s, got %d\n",
 		    expectedCount, field, partCount);
 		}
+	    /* Makup up multiRef struct */
 	    struct multiRef *mRef;
 	    AllocVar(mRef);
 	    mRef->nativeFieldName = parts[0];	    
@@ -144,17 +163,23 @@ for (fieldIx=0; fieldIx<inTable->fieldCount; ++fieldIx)
 	    mRef->foreignFindName = parts[6];	    
 	    mRef->foreignKeyName = parts[7];	    
 	    mRef->nativeFieldIx = fieldIx;
-	    if (!sqlTableExists(conn, mRef->relationalTable))
-	        errAbort("Table %s from %s doesn't exist", mRef->relationalTable, field);
-	    if (!sqlTableExists(conn, mRef->foreignTable))
-	        errAbort("Table %s from %s doesn't exist", mRef->foreignTable, field);
+
+	    /* Check fields and tables exist */
+	    checkFieldExists(conn, tableName, mRef->nativeKeyName, field);
+	    checkTableExists(conn, mRef->relationalTable, field);
+	    checkFieldExists(conn, mRef->relationalTable, mRef->relationalNativeField, field);
+	    checkFieldExists(conn, mRef->relationalTable, mRef->relationalForeignField, field);
+	    checkTableExists(conn, mRef->foreignTable, field);
+	    checkFieldExists(conn, mRef->foreignTable, mRef->foreignFindName, field);
+	    checkFieldExists(conn, mRef->foreignTable, mRef->foreignKeyName, field);
+
+	    /* Everything checks out, add it to list */
 	    slAddTail(&multiRefList, mRef);
-	    hashAdd(multiHash, field, mRef);
 	    }
 	else
 	    {
 	    verbose(2, "foreignRef field = %s\n", field);
-	    char *pos = chopTemp + 2;  // Set up to be past @@
+	    char *pos = chopTemp + 1;  // Set up to be past @
 	    int expectedCount = 4;
 	    char *parts[expectedCount+1];	// More than we need
 	    int partCount = chopByChar(pos, '@', parts, ArraySize(parts));
@@ -163,6 +188,7 @@ for (fieldIx=0; fieldIx<inTable->fieldCount; ++fieldIx)
 		errAbort("Expecting %d @ separated fields in %s, got %d\n",
 		    expectedCount, field, partCount);
 		}
+	    /* Make up a foreignRef */
 	    struct foreignRef *fRef;
 	    AllocVar(fRef);
 	    fRef->nativeFieldName = parts[0];
@@ -170,10 +196,19 @@ for (fieldIx=0; fieldIx<inTable->fieldCount; ++fieldIx)
 	    fRef->foreignFindName = parts[2];
 	    fRef->foreignKeyName = parts[3];
 	    fRef->nativeFieldIx = fieldIx;
-	    if (!sqlTableExists(conn, fRef->foreignTable))
-	        errAbort("Table %s from %s doesn't exist", fRef->foreignTable, field);
+
+	    /* Make sure all tables and fields exist */
+	    checkFieldExists(conn, tableName, fRef->nativeFieldName, field);
+	    checkTableExists(conn, fRef->foreignTable, field);
+	    checkFieldExists(conn, fRef->foreignTable, fRef->foreignFindName, field);
+	    checkFieldExists(conn, fRef->foreignTable, fRef->foreignKeyName, field);
+
 	    slAddTail(&foreignRefList, fRef);
 	    }
+	}
+    else
+        {
+	checkFieldExists(conn, tableName, field, field);
 	}
     }
 verbose(2, "Got %s conditional, %d foreignRefs, %d multiRefs\n", 
