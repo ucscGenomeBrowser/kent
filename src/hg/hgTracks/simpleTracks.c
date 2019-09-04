@@ -477,6 +477,8 @@ for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
     struct spaceSaver *ssOld = tg->ss;
     tg->ss = spaceSaverNew(0, fullInsideWidth, maxCount);  // actual params do not matter, just using ss->nodeList.
     tg->ss->next = ssOld;
+    boolean useItemNameAsKey = isTypeUseItemNameAsKey(tg);
+    boolean useMapItemNameAsKey = isTypeUseMapItemNameAsKey(tg);
     char *chrom = w->chromName;
     for (item = tg->items; item != NULL; item = item->next)
 	{
@@ -495,9 +497,11 @@ for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
 	    // and then use that to prove uniqueness, or as near as can be had.
 	    //
 	    // For now, this should be good enough to illustrate the basic behavior we want to see.
-	    if (isTypeUseItemNameAsKey(tg))
+	    if (useItemNameAsKey)
 		safef(key, sizeof key, "%s",  tg->itemName(tg, item));
-	    else
+	    else if (useMapItemNameAsKey)
+		safef(key, sizeof key, "%s", mapItemName);
+            else
 		safef(key, sizeof key, "%s:%d-%d %s", chrom, baseStart, baseEnd, mapItemName);
 	    struct hashEl *hel = hashLookup(sameItem, key);
 	    struct sameItemNode *sin;
@@ -540,6 +544,8 @@ for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
     char *chrom = w->chromName;
     // int winOffset = w->insideX - fullInsideX;  // no longer needed
     double scale = (double)w->insideWidth/(w->winEnd - w->winStart);
+    boolean useItemNameAsKey = isTypeUseItemNameAsKey(tg);
+    boolean useMapItemNameAsKey = isTypeUseMapItemNameAsKey(tg);
     for (item = tg->items; item != NULL; item = item->next)
 	{
 	// TODO match items from different windows by using item start end and name in hash?
@@ -552,8 +558,10 @@ for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
 	    char key[1024];
 	    // TODO see key caveats above
 	    // For now, this should be good enough to illustrate the basic behavior we want to see.
-	    if (isTypeUseItemNameAsKey(tg))
+	    if (useItemNameAsKey)
 		safef(key, sizeof key, "%s",  tg->itemName(tg, item));
+	    else if (useMapItemNameAsKey)
+		safef(key, sizeof key, "%s",  mapItemName);
 	    else
 		safef(key, sizeof key, "%s:%d-%d %s", chrom, baseStart, baseEnd, mapItemName);
 	    struct hashEl *hel = hashLookup(sameItem, key);

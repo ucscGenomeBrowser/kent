@@ -29,11 +29,10 @@ errAbort("freen - test some hairbrained thing.\n"
          "usage:  freen input\n");
 }
 
-void freen(char *s, char *oldVal, char *newVal)
+void freen(char *s)
 /* Test something */
 {
-char *sub = replaceChars(s, oldVal, newVal);
-printf("%s\n", sub);
+uglyf("%s: %s\n", s, sqlEscapeString(s));
 }
 
 
@@ -41,9 +40,12 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 4)
+if (argc != 2)
     usage();
-freen(argv[1], argv[2], argv[3]);
+freen("\"This is, comma in quoted\"");
+freen("This is a \" quote in the middle");
+freen("0");
+freen("Now, and, then");
 return 0;
 }
 
