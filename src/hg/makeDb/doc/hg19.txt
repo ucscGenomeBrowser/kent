@@ -33535,4 +33535,78 @@ EOF
     # commit all
 
 ##############################################################################
-    
+# LASTZ human/hg19 Tree chimp/rheMac10 - (DONE - 2019-07-09 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzRheMac10.2019-07-09
+    cd /hive/data/genomes/hg19/bed/lastzRheMac10.2019-07-09
+
+    printf '# human vs macaca mulatta
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/hive/data/staging/data/blastz/human_chimp.v2.q
+BLASTZ_O=600
+BLASTZ_E=150
+# other parameters from panTro2 vs hg18 lastz on advice from Webb
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Human Hg19
+SEQ1_DIR=/hive/data/genomes/hg19/hg19.2bit
+SEQ1_LEN=/hive/data/genomes/hg19/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Macaca Mulatta RheMac10
+SEQ2_DIR=/hive/data/genomes/rheMac10/rheMac10.2bit
+SEQ2_LEN=/hive/data/genomes/rheMac10/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=600
+SEQ2_LAP=0
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzRheMac10.2019-07-09
+TMPDIR=/dev/shm
+' > DEF
+    # << happy emacs
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -syntenicNet -fileServer=hgwdev \
+        -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku) > do.log 2>&1
+    # real    85m20.849s
+
+    cat fb.hg19.chainRheMac10Link.txt
+    # 2604364199 bases of 2991694177 (87.053%) in intersection
+    cat fb.hg19.chainSynRheMac10Link.txt
+    # 2570126144 bases of 2991694177 (85.909%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` hg19 rheMac10) > rbest.log 2>&1 &
+    # real    112m12.228s
+
+    cat fb.hg19.chainRBest.RheMac10.txt
+    # 2421810991 bases of 2991694177 (80.951%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/rheMac10/bed/blastz.hg19.swap
+    cd /hive/data/genomes/rheMac10/bed/blastz.hg19.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg19/bed/lastzRheMac10.2019-07-09/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    56m29.163s
+
+    cat fb.rheMac10.chainHg19Link.txt
+    # 2483311773 bases of 2936892733 (84.556%) in intersection
+    cat fb.rheMac10.chainSynHg19Link.txt
+    # 2461925388 bases of 2936892733 (83.828%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` rheMac10 hg19) > rbest.log 2>&1
+    # real    112m15.825s
+
+    cat fb.rheMac10.chainRBest.Hg19.txt
+    # 2423781773 bases of 2936892733 (82.529%) in intersection
+
+#########################################################################
