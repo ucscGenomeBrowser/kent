@@ -304,14 +304,14 @@ else
 void selectUniqueIntoTable(struct fieldedTable *inTable,  struct symRec *symbols,
     char *specFile,  // Just for error reporting
     struct newFieldInfo *fieldList, int keyFieldIx, struct fieldedTable *outTable)
-/* Populate out table with selected rows from newTable */
+/* Populate out table with selected unique rows from newTable */
 {
 struct hash *uniqHash = hashNew(0);
 struct fieldedRow *fr;
 int outFieldCount = outTable->fieldCount;
 char *outRow[outFieldCount];
 
-if (slCount(fieldList) != outFieldCount)	// A little cheap defensive programming on inputs
+if (slCount(fieldList) != outFieldCount)  // A little cheap defensive programming on inputs
     internalErr();
 
 struct dyString *csvScratch = dyStringNew(0);
@@ -401,7 +401,6 @@ struct hash *inFieldHash = hashFieldIx(inTable->fields, inTable->fieldCount);
 struct hash *varHash = hashNew(5);
 struct symRec *symbols = symRecNew(inFieldHash, varHash, inTabFile, 0); 
 symbols->tableRow = inTable->fields;   // During parse pass fields will act as proxy for tableRow
-/* Open spec file, check first real line, and maybe start defining variables. */
 
 /* Snoop for a define stanza first that'll hold our variables. */
 struct lineFile *lf = lineFileOpen(specFile, TRUE);
