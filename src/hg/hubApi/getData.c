@@ -786,7 +786,11 @@ if (chromSeqFileExists(db, chrom))
 	if ( (sqlSigned(end) - sqlSigned(start)) > MAX_DNA_LENGTH)
 	    apiErrAbort(err400, err400Msg, "DNA sequence request %d too large, limit: %u for endpoint '/getData/sequence?genome=%s;chrom=%s;start=%s;end=%s'", sqlSigned(end) - sqlSigned(start), MAX_DNA_LENGTH, db, chrom, start, end);
 	else
+	    {
+	    if (sqlSigned(end) > chromSize)
+		apiErrAbort(err400, err400Msg, "DNA sequence request end coordinate %d past end of chromosome size %d for endpoint '/getData/sequence?genome=%s;chrom=%s;start=%s;end=%s'", sqlSigned(end), chromSize, db, chrom, start, end);
 	    seq = hChromSeqMixed(db, chrom, sqlSigned(start), sqlSigned(end));
+	    }
 
     long endTime = clock1000();
     long long et = endTime - timeStart;
