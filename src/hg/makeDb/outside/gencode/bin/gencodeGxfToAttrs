@@ -14,7 +14,7 @@ from pycbio.sys import fileOps
 
 def parseArgs():
     desc = """Extract attributes from a GENCODE GTF or GFF3 into a tab-separate file for loading into
-the gencodeAttrs and gencodeTranscriptSupport (TSL) tables.
+the gencodeAttrs, gencodeTranscriptSupport (TSL), and gencodeTag tables.
 """
     parser = argparse.ArgumentParser(description=desc)
     parser.add_argument("gencodeGxf",
@@ -23,6 +23,8 @@ the gencodeAttrs and gencodeTranscriptSupport (TSL) tables.
                         help="""write attributes to this file""")
     parser.add_argument("tslTab",
                         help="""write TSLs to this file""")
+    parser.add_argument("tagTab",
+                        help="""write tags to this file""")
     return parser.parse_args()
 
 def emptyIfNone(v):
@@ -51,6 +53,10 @@ class Transcript:
 
     def writeTsl(self, fh):
         fileOps.prRowv(fh, self.transcriptId, self.transcriptSupportLevel)
+
+    def writeTags(self, fh):
+        for tag in sorted(self.tags):
+            fileOps.prRowv(fh, self.transcriptId, tag)
 
 
 class GencodeGxfToAttrs(object):
@@ -118,6 +124,10 @@ class GencodeGxfToAttrs(object):
         for transId in sorted(self.transcripts.keys()):
             self.transcripts[transId].writeTsl(fh)
 
+    def writeTags(self, fh):
+        for transId in sorted(self.transcripts.keys()):
+            self.transcripts[transId].writeTags(fh)
+
 
 def gencodeGxfToAttrs(opts):
     parser = GencodeGxfToAttrs(gencodeGxfParserFactory(opts.gencodeGxf, ignoreUnknownAttrs=True))
@@ -126,6 +136,8 @@ def gencodeGxfToAttrs(opts):
         parser.writeAttrs(fh)
     with open(opts.tslTab, "w") as fh:
         parser.writeTsls(fh)
+    with open(opts.tagTab, "w") as fh:
+        parser.writeTags(fh)
 
 
 gencodeGxfToAttrs(parseArgs())
