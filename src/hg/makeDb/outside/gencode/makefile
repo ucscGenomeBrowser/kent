@@ -1,7 +1,9 @@
 kentSrc = ../../../..
 include ${kentSrc}/inc/common.mk
 
-progs = bin/gencodeGxfToAttrs
+progs = bin/gencodeGxfToAttrs \
+	bin/ensToUcscMkLift \
+	bin/gencodeGenerateTrackDbs
 
 all::
 
