@@ -860,6 +860,8 @@ if (isEmpty(hubGenome->twoBitPath))
 
 /* this MaybeChromInfo will open the twoBit file, if not already done */
 struct chromInfo *ci = trackHubMaybeChromInfo(hubGenome->name, chrom);
+unsigned chromSize = ci->size;
+
 if (NULL == ci)
     apiErrAbort(err400, err400Msg, "can not find sequence for chrom=%s for endpoint '/getData/sequence?genome=%s;chrom=%s' given hubUrl='%s'", chrom, genome, chrom, hubUrl);
 
@@ -875,6 +877,8 @@ if (isNotEmpty(start) && isNotEmpty(end))
     fragEnd = sqlSigned(end);
     if ((fragEnd - fragStart) > MAX_DNA_LENGTH)
 	apiErrAbort(err400, err400Msg, "DNA sequence request %d too large, limit: %u for endpoint '/getData/sequence?genome=%s;chrom=%s;start=%d;end=%d' given hubUrl='%s'", fragEnd-fragEnd, MAX_DNA_LENGTH, genome, chrom, fragStart, fragEnd, hubUrl);
+    if (fragEnd > chromSize)
+	apiErrAbort(err400, err400Msg, "DNA sequence request end coordinate %d past end of chromosome size %d for endpoint '/getData/sequence?genome=%s;chrom=%s;start=%d;end=%d' given hubUrl='%s'", fragEnd, chromSize, genome, chrom, fragStart, fragEnd, hubUrl);
     jsonWriteNumber(jw, "start", (long long)fragStart);
     jsonWriteNumber(jw, "end", (long long)fragEnd);
     }
