@@ -1,0 +1,58 @@
+#!/usr/bin/env python3
+
+import sys
+import os
+myBinDir = os.path.normpath(os.path.dirname(sys.argv[0]))
+sys.path.append(os.path.join(myBinDir, "../lib"))
+sys.path.append(os.path.expanduser("~markd/compbio/code/pycbio/lib"))
+import argparse
+import pipettor
+from gencode.gencodeProcess import GencodeLiftOver, getEditIdCmd
+
+def parseArgs():
+    desc = """Convert GENCODE GTF or GFF3 to an genePred and replace ENSTR or
+_PAR id hacks used for dealing with PAR transcripts.  Uses liftOver to
+convert Ensembl chromosome name to UCSC chromosome and to convert between
+versions of chrM in GRCh37/hg19.
+
+The chains can be generated with
+  ensToUcscMkLift hg19 ensemblToUcscChain
+"""
+    parser = argparse.ArgumentParser(description=desc)
+    parser.add_argument("--verbose", dest="verbose", action="store_true", default=False,
+                        help="verbose output for debugging")
+    parser.add_argument("--unmapped", dest="unmappedGenePred", action="store", default=None,
+                        help="output genepred of annotations that couldn't be mapped to UCSC chromosomes to this file")
+    parser.add_argument("inGxf",
+                        help="input GENCODE GTF or GFF3 ")
+    parser.add_argument("ensemblToUcscChain",
+                        help="chain file to lift over to UCSC chromosome names")
+    parser.add_argument("outGenePred",
+                        help="output GenePred file")
+    return parser.parse_args()
+
+
+def convert(inGxf, liftFile, outGenePred, unmappedGenePred, verbose):
+    # Need to ignore GTF groups formed with only gene records
+    # Need to update transcript id if it's for of the PAR hacked ids
+    if inGxf.find(".gff3") > 0:
+        toGenePredCmd = ["gff3ToGenePred", "-geneNameAttr=gene_name", "-rnaNameAttr=transcript_id", inGxf, "stdout"]
+    else:
+        toGenePredCmd = ["gtfToGenePred", "-genePredExt", "-geneNameAsName2", "-ignoreGroupsWithoutExons", inGxf, "stdout"]
+
+    liftOver = GencodeLiftOver("genePred", liftFile, unmappedGenePred)
+    cnvPipe = pipettor.Pipeline([toGenePredCmd, getEditIdCmd(0), liftOver.getLiftoverCmd(stdout=outGenePred)])
+    if verbose:
+        print(str(cnvPipe), file=sys.stderr)
+    cnvPipe.wait()
+    unmappedInfo = liftOver.getLiftOverUnmappedInfo()
+    liftOver.removeTmp()
+    unmappedInfo.report()
+
+
+def gencodeGxfToGenePred(opts):
+    convert(opts.inGxf, opts.ensemblToUcscChain, opts.outGenePred, opts.unmappedGenePred,
+            opts.verbose)
+
+
+gencodeGxfToGenePred(parseArgs())

@@ -4,7 +4,6 @@ import sys
 import os
 import re
 myBinDir = os.path.normpath(os.path.dirname(sys.argv[0]))
-sys.path.extend((myBinDir + "/../../lib", myBinDir + "/../../../lib/py"))
 sys.path.append(os.path.expanduser("~markd/compbio/code/pycbio/lib"))
 import argparse
 from pycbio.db import mysqlOps
@@ -23,8 +22,6 @@ ucscDbToRefAsm = {
     "mm39": "GRCm39",
 }
 
-verbose = 0
-
 
 def parseArgs():
     desc = """Generate liftOver chains of GENCODE chromosome names to UCSC chromosomes.
@@ -36,16 +33,11 @@ It also create mappings for the chr* names used by GENCODE and ENCODE,
 with the exclusion of chrM on GRCh37.
 """
     parser = argparse.ArgumentParser(description=desc)
-    parser.add_argument("--verbose", dest="verbose", type=int, default=0,
-                        help="verbose output for debugging")
     parser.add_argument("ucscDbName", choices=ucscDbToRefAsm.keys(),
                         help="UCSC daatbase name for reference assembly name")
     parser.add_argument("ensToUcscLift",
                         help="GENCODE/Ensembl to UCSC to liftOver chains")
-    args = parser.parse_args()
-    global verbose
-    verbose = args.verbose
-    return args
+    return parser.parse_args()
 
 
 # template for 1-to-1 chain

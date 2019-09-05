@@ -1,5 +1,8 @@
 kentSrc = ../../../../..
 include ${kentSrc}/inc/common.mk
+host=$(shell hostname)
+ppid=$(shell echo $$PPID)
+tmpExt = ${host}.${ppid}.tmp
 
 ## Notes:
 # set1 includes PAR gene with renaming on chrY ENSG00000182484 -> ENSGR0000182484
@@ -9,6 +12,7 @@ diff = diff -u
 
 gencodeGxfToAttrs = ../bin/gencodeGxfToAttrs
 ensToUcscMkLift = ../bin/ensToUcscMkLift
+gencodeGxfToGenePred = ../bin/gencodeGxfToGenePred
 
 ucscGenomeDbHs37 = hg19
 ucscGenomeDbHs38 = hg38
@@ -17,7 +21,7 @@ ucscGenomeDbMm38 = mm10
 ensToUcscMappingChainHg37 = output/ensToUcscMappingHg37.chain
 ensToUcscMappingChainHg38 = output/ensToUcscMappingHg38.chain
 
-test::  attrsTests ensToUcscMkLiftTests
+test::  attrsTests ensToUcscMkLiftTests genePredTest
 
 ##
 # attributes tests
@@ -81,6 +85,28 @@ ensToUcscMkLiftMm38Test: mkdirs
 	${ensToUcscMkLift} ${ensemblCDnaDbMm38} ${grcRefAssemblyMm38} ${ucscGenomeDbMm38} output/$@.chain
 	chainStats output/$@.chain >/dev/null
 	${diff} expected/$@.chain output/$@.chain
+
+###
+# Creating genePred track
+###
+genePredTests: set1AnnotTest ummappingWarnHs38Test specialCases1Test
+
+set1AnnotTest: ${set1Gp} mkdirs
+	${gencodeGxfToGenePred} input/set1.gtf ${ensToUcscMappingChainHg38} output/$@.gp
+	${diff} expected/$@.gp output/$@.gp
+
+ummappingWarnHs38Test: ${ensToUcscMappingChainHg38}
+	${gencodeGxfToGenePred} input/mappingErrorsHs38.gtf ${ensToUcscMappingChainHg38} output/$@.gp --unmapped=output/$@.unmapped.gp >output/$@.out 2>&1
+	${diff} expected/$@.out output/$@.out
+	${diff} expected/$@.gp output/$@.gp
+	${diff} expected/$@.unmapped.gp output/$@.unmapped.gp
+
+# chrM, PAR, mapped and unmapped haplotypes and patches
+specialCases1Test: ${ensToUcscMappingChainHg37} mkdirs
+	${gencodeGxfToGenePred} --unmapped=output/$@.unmapped.gp input/specialCases1.gtf ${ensToUcscMappingChainHg37} output/$@.gp
+	${diff} expected/$@.gp output/$@.gp
+	${diff} expected/$@.unmapped.gp output/$@.unmapped.gp
+
 
 
 ##

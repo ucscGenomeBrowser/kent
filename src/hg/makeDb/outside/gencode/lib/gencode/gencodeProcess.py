@@ -34,7 +34,7 @@ class LiftOverUnmapped(object):
         "warning on skip sequences, error on other problems"
         gotErrs = False
         if len(self.droppedSeqs) > 0:
-            sys.stderr.write("Warning: annotations not mapped for these chromosomes, use --skipSeq if these are new patches/alt sequence not in UCSC: " + " ".join(sorted(self.droppedSeqs)) + "\n")
+            sys.stderr.write("Warning: annotations not mapped for these chromosomes, the maybe new patches/alt sequence not in UCSC: " + " ".join(sorted(self.droppedSeqs)) + "\n")
         if len(self.otherProblems) > 0:
             for probInfo in self.otherProblems:
                 sys.stderr.write("Error: " + probInfo[0] + "\n")
@@ -68,3 +68,8 @@ class GencodeLiftOver(object):
         "if a tmp file was created, drop it"
         if (self.unmappedOutFileTmp is not None) and os.path.exists(self.unmappedOutFileTmp):
             os.unlink(self.unmappedOutFileTmp)
+
+def getEditIdCmd(column0):
+    """return awk command to edit ids in GTF file"""
+    return ('awk', '-v', 'FS=\\t', '-v', 'OFS=\\t', '-v', 'column={}'.format(column0+1),
+            '{sub("^ENSTR", "ENST0", $column); sub("^ENSGR", "ENSG0", $column); sub("_PAR_Y", "", $column); print $0}')
