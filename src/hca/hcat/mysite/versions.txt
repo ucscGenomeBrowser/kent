@@ -36,9 +36,9 @@
 	 - Added a new submission step - assigned to curator
 	 - The contributor role is now a key into a vocab table.  There's roles defined
 	   for program officer (Jonah), pipeliner (Tim), analyst (Jing Zhu and Max),
-	   lab contact (not enough), PI (too many).
-      In anticipation of working with curators I made a Curator object similar to the 
-      Wrangler one.  I also added SoftwareDeveloper when I was in there.
+	   lab contact (not enough), PI (too many), intern (just enough)
+      In anticipation of working with interns I made an Intern object similar to the 
+      Wrangler one.  I also added SoftwareDeveloper while I was in there.
           I made a new group, pipeliners, and a new user, Tim Tickle.  The pipeliners
       in general get access to almost all the hcat tables except Curators and SoftwareDevelopers.
       Tim as an individual in addition to his pipeliner privileges can do creates and updates
