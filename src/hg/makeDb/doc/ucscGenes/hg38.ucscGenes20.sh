@@ -1,15 +1,15 @@
 
-export dir=/cluster/data/hg38/bed/ucsc.19.1
-export GENCODE_VERSION=V29
-export oldGeneDir=/cluster/data/hg38/bed/ucsc.17.1
+export dir=/cluster/data/hg38/bed/ucsc.20.1
+export GENCODE_VERSION=V32
+export oldGeneDir=/cluster/data/hg38/bed/ucsc.19.1
 export oldGeneBed=$oldGeneDir/ucscGenes.bed
 export db=hg38
 export spDb=sp180404
 export taxon=9606
-export tempDb=tmpFoo87
+export tempDb=tmpFoo20
 export kent=$HOME/kent
-export lastVer=10
-export curVer=11
+export lastVer=11
+export curVer=12
 export Db=Hg38
 export xdb=mm10
 export Xdb=Mm10
@@ -17,18 +17,18 @@ export ydb=canFam3
 export zdb=rheMac8
 export ratDb=rn6
 export RatDb=Rn6
-export fishDb=danRer10
+export fishDb=danRer11
 export flyDb=dm6
 export wormDb=ce11
 export yeastDb=sacCer3
 export tempFa=$dir/ucscGenes.faa
 export genomes=/hive/data/genomes
-export xdbFa=$genomes/$xdb/bed/ucsc.16.1/ucscGenes.faa
-export ratFa=$genomes/$ratDb/bed/ensGene.86/ensembl.faa
+export xdbFa=$genomes/$xdb/bed/ucsc.18.1/ucscGenes.faa
+export ratFa=$genomes/$ratDb/bed/ensGene.95/ensembl.faa
 #export ratFa=$genomes/$ratDb/bed/blastpRgdGene2/rgdGene2Pep.faa
-export fishFa=$genomes/$fishDb/bed/ensGene.86/ensembl.faa
+export fishFa=$genomes/$fishDb/bed/ensGene.95/ensembl.faa
 #export fishFa=$genomes/$fishDb/bed/blastp/ensembl.faa
-export flyFa=$genomes/$flyDb/bed/ensGene.86/ensembl.faa
+export flyFa=$genomes/$flyDb/bed/ensGene.95/ensembl.faa
 #export flyFa=$genomes/$flyDb/bed/hgNearBlastp/100806/$flyDb.flyBasePep.faa
 export wormFa=$genomes/$wormDb/bed/ws245Genes/ws245Pep.faa
 #export wormFa=$genomes/$wormDb/bed/blastp/wormPep190.faa
@@ -46,19 +46,21 @@ mkdir -p $dir
 cd $dir
 
 # first get list of tables from push request in $lastVer.table.lst
+# here's the redmine http://redmine.soe.ucsc.edu/issues/21644
 wc -l $lastVer.table.lst
-# 61
+# 62
 
 (
 cat $lastVer.table.lst | grep -v "ToKg$lastVer" | grep -v "XrefOld" | grep -v "knownGeneOld" | grep -v "knownToGencode" 
-echo kg${lastVer}ToKg${curVer} >>  $curVer.table.lst
-echo knownGeneOld$lastVer >>  $curVer.table.lst
-echo kgXrefOld$lastVer >>  $curVer.table.lst
+echo kg${lastVer}ToKg${curVer}
+echo knownGeneOld$lastVer
+echo kgXrefOld$lastVer
 ) | sort >  $curVer.table.lst 
 
+# check to see which are new (none should be now ;-)
 for i in `cat $curVer.table.lst`; do d=`hgsql hg38 -Ne "SELECT create_time FROM INFORMATION_SCHEMA.TABLES
   WHERE table_schema = 'hg38'
-    AND table_name = '$i'"` ; echo $i $d;   done | sort -nk2
+    AND table_name = '$i'"` ; echo $i $d;   done | sort -nk2 
 
 echo "create database $tempDb" | hgsql ""
 
@@ -69,57 +71,45 @@ echo "insert into kgXrefOld$lastVer select * from   $db.kgXref" | hgsql $tempDb
 
 hgsql -e "select * from wgEncodeGencodeComp$GENCODE_VERSION" --skip-column-names $db | cut -f 2-16 |  genePredToBed stdin tmp
 hgsql -e "select * from wgEncodeGencodePseudoGene$GENCODE_VERSION" --skip-column-names $db | cut -f 2-16 |  genePredToBed stdin tmp2
-sort -k1,1 -k2,2n | gzip -c > gencode${GENCODE_VERSION}.bed.gz
-#hgsql -e "select * from wgEncodeGencodeComp$GENCODE_VERSION" --skip-column-names hg38 | cut -f 2-16 |  genePredToBed stdin stdout |  tawk '{$4=$4 "." $1; print}' |  gzip -c > gencode${GENCODE_VERSION}Comp.bed.gz
+sort -k1,1 -k2,2n tmp tmp2 | gzip -c > gencode${GENCODE_VERSION}.bed.gz
 
+# get current list of ids
+zcat gencode${GENCODE_VERSION}.bed.gz |  awk '{print $4}' | sort > newGencodeName.txt
 
-#TODO:  figure out better wayto deal with txLastId
-#cp ~kent/src/hg/txGene/txGeneAccession/txLastId startId
+# grab ENST to UC map from the previous set
+hgsql $db -Ne "select name,alignId from knownGene" | sort > EnstToUC.txt
 
-#txGeneAccession -test $oldGeneBed ~kent/src/hg/txGene/txGeneAccession/txLastId gencode${GENCODE_VERSION}Comp.bed.gz txToAcc.tab oldToNew.tab
+# grab startId from the last run
+cat /cluster/data/hg38/bed/ucsc.19.1/startId startId
+# 5048446
 
-echo 5013138 > startId
-txGeneAccession -test $oldGeneBed startId gencode${GENCODE_VERSION}.bed.gz txToAcc.tab oldToNew.tab
-cat 
-# 5008279
+kgAllocId EnstToUC.txt newGencodeName.txt 5048446 stdout | sort -u >  txToAcc.tab
+# lastId 5070122
 
-tawk '{print $4}' oldToNew.tab | sort | uniq -c
-# 4101 compatible
-# 187402 exact
-# 6279 lost
-# 35308 new
+# make null file
+touch oldToNew.tab
 
 # check to make sure we don't have any dups.  These two numbers should
 # be the same.   
 awk '{print $2}' txToAcc.tab | sed 's/\..*//' | sort -u | wc -l
-# 226811
+# 247381
 awk '{print $2}' txToAcc.tab | sed 's/\..*//' | sort  | wc -l
-# 226811
+# 247381
 
 # this should be the current db instead of olDdb if not the first release
-echo "select * from knownGene" | hgsql $db | sort > $db.knownGene.gp
-#echo "create table knownGeneOld${lastVer} select * from hg38.knownGene" | hgsql $tempDb
-grep lost oldToNew.tab | tawk '{print $2}' | sort > lost.txt
-join -t $'\t' lost.txt $db.knownGene.gp > $db.lost.gp
+hgsql -Ne "select * from knownGene" $db | sort > $db.knownGene.gp
+#grep lost oldToNew.tab | tawk '{print $2}' | sort > lost.txt
+#join -t $'\t' lost.txt $db.knownGene.gp > $db.lost.gp
 
-awk '{if ($7 == $6) print}' $db.lost.gp | wc -l
-# non-coding 277
-awk '{if ($7 != $6) print}' $db.lost.gp | wc -l
-# coding 297
+#awk '{if ($7 == $6) print}' $db.lost.gp | wc -l
+# non-coding 341
+#awk '{if ($7 != $6) print}' $db.lost.gp | wc -l
+# coding 806
 
-#ifdef NOTNOW
-# Assign permanent accessions to each transcript, and make up a number
-# of our files with this accession in place of the temporary IDs we've been
-# using.  Takes 4 seconds
+# Assign permanent accessions to each transcript
+#txGeneAccession $oldGeneBed startId gencode${GENCODE_VERSION}.bed.gz txToAcc.tab oldToNew.tab
 
-cd $dir
-cp ~kent/src/hg/txGene/txGeneAccession/txLastId saveLastId
-txGeneAccession $oldGeneBed startId gencode${GENCODE_VERSION}.bed.gz txToAcc.tab oldToNew.tab
-#endif
-
-#subColumn 4 gencode${GENCODE_VERSION}Comp.bed.gz txToAcc.tab ucscGenes.bed
 zcat gencode${GENCODE_VERSION}.bed.gz > ucscGenes.bed
-#subColumn 4 gencode${GENCODE_VERSION}txToAcc.tab ucscGenes.bed
 twoBitToFa -noMask /cluster/data/$db/$db.2bit -bed=ucscGenes.bed stdout | faFilter -uniq stdin  ucscGenes.fa
 hgPepPred $tempDb generic knownGeneMrna ucscGenes.fa
 bedToPsl /cluster/data/$db/chrom.sizes ucscGenes.bed ucscGenes.psl
@@ -134,13 +124,11 @@ hgLoadPsl $tempDb kgTargetAli.psl
 txBedToGraph ucscGenes.bed ucscGenes ucscGenes.txg
 txgAnalyze ucscGenes.txg $genomes/$db/$db.2bit stdout | sort | uniq | bedClip stdin /cluster/data/hg38/chrom.sizes  ucscSplice.bed
 hgLoadBed $tempDb knownAlt ucscSplice.bed
-# edited one row that started in negative coordinates to start at 0
 
 #hgsql -N $spDb -e "select p.acc, p.val from protein p, accToTaxon x where x.taxon=$taxon and p.acc=x.acc" | awk '{print ">" $1;print $2}' >uniProt.fa
 #faSize uniProt.fa
 
 #needs two passes.  First make knownGene, then supporting tables
-#awk '{print $4,$4}' ucscGenes.bed | sort | uniq > txToAcc.tab
 makeGencodeKnownGene -justKnown $db $tempDb $GENCODE_VERSION txToAcc.tab
 
 hgLoadSqlTab -notOnServer $tempDb knownGene $kent/src/hg/lib/knownGene.sql knownGene.gp
@@ -157,16 +145,16 @@ hgMapToGene -type=psl -tempDb=$tempDb $db all_mrna knownGene knownToMrnaSingle
 
 makeGencodeKnownGene $db $tempDb $GENCODE_VERSION txToAcc.tab
 
-hgsql $tempDb -Ne "select k.name, g.geneId, g.geneStatus, g.geneType,g.transcriptName,g.transcriptType,g.transcriptStatus, g.havanaGeneId,  g.ccdsId, g.level, g.transcriptClass from knownGene k, $db.wgEncodeGencodeAttrs$GENCODE_VERSION g where k.alignID=g.transcriptId" > knownAttrs.tab
+hgsql $tempDb -Ne "select k.name, g.geneId, g.geneStatus, g.geneType,g.transcriptName,g.transcriptType,g.transcriptStatus, g.havanaGeneId,  g.ccdsId, g.level, g.transcriptClass from knownGene k, $db.wgEncodeGencodeAttrs$GENCODE_VERSION g where k.alignID=g.transcriptId" | sort | uniq > knownAttrs.tab
 hgLoadSqlTab -notOnServer $tempDb knownAttrs $kent/src/hg/lib/knownAttrs.sql knownAttrs.tab
 
-tawk '$4=="new" {print $3}' oldToNew.tab | sort > new.txt
-sort knownGene.gp | join -t $'\t' new.txt /dev/stdin > new.gp
-sort knownGene.gp | join -t $'\t' lost.txt /dev/stdin | wc
+#tawk '$4=="new" {print $3}' oldToNew.tab | sort > new.txt
+#sort knownGene.gp | join -t $'\t' new.txt /dev/stdin > new.gp
+#sort knownGene.gp | join -t $'\t' lost.txt /dev/stdin | wc
 # should be zero
 # tawk '{print $12}' hg38.lost.gp | while read name; do grep $name /tmp/2; done | wc
 
-hgLoadSqlTab -notOnServer $tempDb kgColor $kent/src/hg/lib/kgColor.sql kgColor.tab
+sort kgColor.tab | uniq | hgLoadSqlTab -notOnServer $tempDb kgColor $kent/src/hg/lib/kgColor.sql stdin
  
 hgLoadSqlTab -notOnServer $tempDb knownIsoforms $kent/src/hg/lib/knownIsoforms.sql knownIsoforms.tab
 
@@ -179,7 +167,7 @@ hgsql $tempDb  -e "select * from knownToMrnaSingle" | tail -n +2 | sort > tmp2
 join  tmp2 tmp1 > knownGene.ev
 
 txGeneAlias $db $spDb kgXref.tab knownGene.ev oldToNew.tab foo.alias foo.protAlias
-awk '{split($2,a,"."); for(ii = 1; ii <= a[2]; ii++) print $1,a[1] "." ii }' txToAcc.tab >> foo.alias
+tawk '{split($2,a,"."); for(ii = 1; ii <= a[2]; ii++) print $1,a[1] "." ii }' txToAcc.tab >> foo.alias
 sort foo.alias | uniq > ucscGenes.alias
 sort foo.protAlias | uniq > ucscGenes.protAlias
 rm foo.alias foo.protAlias
@@ -200,12 +188,12 @@ txGeneExplainUpdate2 $oldGeneBed ucscGenes.bed kgOldToNew.tab
 hgLoadSqlTab -notOnServer $tempDb kg${lastVer}ToKg${curVer} $kent/src/hg/lib/kg1ToKg2.sql kgOldToNew.tab
 # TODO add kg${lastVer}ToKg${curVer} to all.joiner !!!!
 
-sort txToAcc.tab > tmp1
+#sort txToAcc.tab > tmp1
 #hgsql -e "select * from wgEncodeGencodeComp$GENCODE_VERSION" --skip-column-names hg38 | cut -f 2-16 |  tawk '{print $1 "." $2,$13,$14,$8,$15}' | sort | join /dev/stdin tmp1 | awk 'BEGIN {OFS="\t"} {print $6, $2, $3, $4, $5}' | sort > knownCds.tab
-hgsql -e "select * from wgEncodeGencodeComp$GENCODE_VERSION" --skip-column-names $db | cut -f 2-16 |  tawk '{print $1,$13,$14,$8,$15}' | sort > knownCds.tab
+hgsql -e "select * from wgEncodeGencodeComp$GENCODE_VERSION" --skip-column-names $db | cut -f 2-16 |  tawk '{print $1,$13,$14,$8,$15}' | sort | uniq > knownCds.tab
 hgLoadSqlTab -notOnServer $tempDb knownCds $kent/src/hg/lib/knownCds.sql knownCds.tab
 
-hgsql -e "select * from wgEncodeGencodeTag$GENCODE_VERSION" --skip-column-names $db |  sort > knownToTag.tab
+hgsql -e "select * from wgEncodeGencodeTag$GENCODE_VERSION" --skip-column-names $db |  sort | uniq  > knownToTag.tab
 hgLoadSqlTab -notOnServer $tempDb knownToTag $kent/src/hg/lib/knownTo.sql knownToTag.tab
 
 
@@ -214,10 +202,11 @@ hgKgGetText $tempDb tempSearch.txt
 sort tempSearch.txt > tempSearch2.txt
 tawk '{split($2,a,"."); printf "%s\t", $1;for(ii = 1; ii <= a[2]; ii++) printf "%s ",a[1] "." ii; printf "\n" }' txToAcc.tab | sort > tempSearch3.txt
 join tempSearch2.txt tempSearch3.txt | sort > knownGene.txt
-ixIxx knownGene.text knownGene.ix knownGene.ixx
+ixIxx knownGene.txt knownGene.ix knownGene.ixx
  rm -rf /gbdb/$tempDb/knownGene.ix /gbdb/$tempDb/knownGene.ixx
 ln -s $dir/knownGene.ix  /gbdb/$tempDb/knownGene.ix
 ln -s $dir/knownGene.ixx /gbdb/$tempDb/knownGene.ixx  
+
 
 hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from hgFixed.refLink" $db > refToLl.txt
 hgMapToGene -tempDb=$tempDb $db refGene knownGene knownToLocusLink -lookup=refToLl.txt
@@ -281,6 +270,14 @@ endif
 # Run nice Perl script to make all protein blast runs for
 # Gene Sorter and Known Genes details page.  Takes about
 # 45 minutes to run.
+# check to make sure we have all the fasta
+for i in  $tempFa $xdbFa $ratFa $fishFa $flyFa $wormFa $yeastFa
+do
+if test ! -f $i
+then echo $i not found
+fi
+done
+
 rm -rf   $dir/hgNearBlastp
 mkdir  $dir/hgNearBlastp
 cd $dir/hgNearBlastp
@@ -313,7 +310,7 @@ doHgNearBlastp.pl -noLoad -clusterHub=ku -distrHost=hgwdev -dbHost=hgwdev -workh
 # Load self
 cd $dir/hgNearBlastp/run.$tempDb.$tempDb
 # builds knownBlastTab
-./loapPairwise.csh
+./loadPairwise.csh
 
 # Load mouse and rat
 cd $dir/hgNearBlastp/run.$tempDb.$xdb
@@ -333,29 +330,27 @@ ln -s $genomes/$db/bed/liftOver/${db}To${Xdb}.over.chain.gz \
 # delete non-syntenic genes from rat and mouse blastp tables
 cd $dir/hgNearBlastp
 synBlastp.csh $tempDb $xdb
-#old number of unique query values: 98928
-#old number of unique target values 24289
-#new number of unique query values: 81280
-#new number of unique target values 20980
+#old number of unique query values: 100823
+#old number of unique target values 27503
+#new number of unique query values: 93781
+#new number of unique target values 26806
 
 export oldDb=hg38
 hgsql -e "select  count(*) from mmBlastTab\G" $oldDb | tail -n +2
-# count(*): 83149
+# count(*): 110864
 hgsql -e "select  count(*) from mmBlastTab\G" $tempDb | tail -n +2
-# count(*): 83198
+# count(*): 93781
 
 synBlastp.csh $tempDb $ratDb knownGene ensGene
-# old number of unique query values: 98488
-# old number of unique target values 19851
-# new number of unique query values: 88508
-# new number of unique target values 18829
-
-
+# old number of unique query values: 99755
+# old number of unique target values 19904
+# new number of unique query values: 90425
+# new number of unique target values 19032
 
 hgsql -e "select  count(*) from rnBlastTab\G" $oldDb | tail -n +2
-# count(*): 80851
+# count(*): 88508
 hgsql -e "select  count(*) from rnBlastTab\G" $tempDb | tail -n +2
-# count(*): 81904
+# count(*): 90425
 
 # Make reciprocal best subset for the blastp pairs that are too
 # Far for synteny to help
@@ -370,9 +365,9 @@ blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.t
 hgLoadBlastTab $tempDb drBlastTab $aToB/recipBest.tab
 
 hgsql -e "select  count(*) from drBlastTab\G" $oldDb | tail -n +2
-# count(*): 13355
+# count(*): 13313
 hgsql -e "select  count(*) from drBlastTab\G" $tempDb | tail -n +2
-# count(*): 13419
+# count(*): 13507
 
 # Us vs. fly
 cd $dir/hgNearBlastp
@@ -384,9 +379,9 @@ blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.t
 hgLoadBlastTab $tempDb dmBlastTab $aToB/recipBest.tab
 
 hgsql -e "select  count(*) from dmBlastTab\G" $oldDb | tail -n +2
-# count(*): 6033
+# count(*): 6031
 hgsql -e "select  count(*) from dmBlastTab\G" $tempDb | tail -n +2
-# count(*): 6043
+# count(*): 6034
 
 # Us vs. worm
 cd $dir/hgNearBlastp
@@ -398,9 +393,9 @@ blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.t
 hgLoadBlastTab $tempDb ceBlastTab $aToB/recipBest.tab
 
 hgsql -e "select  count(*) from ceBlastTab\G" $oldDb | tail -n +2
-# count(*): 4397
+# count(*): 4381
 hgsql -e "select  count(*) from ceBlastTab\G" $tempDb | tail -n +2
-# count(*): 4400
+# count(*): 4386
 
 # Us vs. yeast
 cd $dir/hgNearBlastp
@@ -412,22 +407,20 @@ blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.t
 hgLoadBlastTab $tempDb scBlastTab $aToB/recipBest.tab
 
 hgsql -e "select  count(*) from scBlastTab\G" $oldDb | tail -n +2
-# count(*): 2379
+# count(*): 2361
 hgsql -e "select  count(*) from scBlastTab\G" $tempDb | tail -n +2
-# count(*): 2375
+# count(*): 2361
 
 # Clean up
 cd $dir/hgNearBlastp
 cat run.$tempDb.$tempDb/out/*.tab | gzip -c > run.$tempDb.$tempDb/all.tab.gz
 gzip run.*/all.tab
 
-# Didn't do
 # load malacards table
 hgsql -e "select geneSymbol,kgId from kgXref" --skip-column-names hg38 | awk '{if (NF == 2) print}' | sort > geneSymbolToKgId.txt
 hgsql -e "select geneSymbol from malacards" --skip-column-names hg38 | sort > malacardExists.txt
 join malacardExists.txt  geneSymbolToKgId.txt | awk 'BEGIN {OFS="\t"} {print $2, $1}' > knownToMalacard.txt
 hgLoadSqlTab -notOnServer $tempDb  knownToMalacards $kent/src/hg/lib/knownTo.sql  knownToMalacard.txt
-#end didn't do
 
 # make knownToLynx
 mkdir -p $dir/lynx
@@ -440,9 +433,9 @@ join lynxExists.txt geneSymbolToKgId.txt | awk 'BEGIN {OFS="\t"} {print $2,$1}' 
 hgLoadSqlTab -notOnServer $tempDb  knownToLynx $kent/src/hg/lib/knownTo.sql  knownToLynx.tab
 
 hgsql -e "select  count(*) from knownToLynx\G" $oldDb | tail -n +2
-# count(*): 168468
+# count(*): 174798
 hgsql -e "select  count(*) from knownToLynx\G" $tempDb | tail -n +2
-# count(*): 160816
+# count(*): 205303
 
 
 # make knownToNextProt
@@ -456,12 +449,13 @@ join displayIdToKgId.txt displayIdToNextProt.txt | awk 'BEGIN {OFS="\t"} {print 
 hgLoadSqlTab -notOnServer $tempDb  knownToNextProt $kent/src/hg/lib/knownTo.sql  knownToNextProt.tab
 
 hgsql -e "select  count(*) from knownToNextProt\G" $oldDb | tail -n +2
-# count(*): 43590
+# count(*): 45890
 hgsql -e "select  count(*) from knownToNextProt\G" $tempDb | tail -n +2
-# count(*): 43895
+# count(*): 45773
 
 
 # make knownToWikipedia
+#STOPPED HERE
 mkdir $dir/wikipedia
 cd $dir/wikipedia
 hgsql $tempDb -e "select geneSymbol,name from knownGene g, kgXref x where g.name=x.kgId " | sort > $tempDb.symbolToId.txt
@@ -501,6 +495,8 @@ gensub2 in.lst single template jobList
 ssh $cpuFarm "cd $dir/rnaStruct/utr3; para make jobList"
 ssh $cpuFarm "cd $dir/rnaStruct/utr5; para make jobList"
 
+ssh $cpuFarm "cd $dir/rnaStruct/utr3; para time"
+ssh $cpuFarm "cd $dir/rnaStruct/utr5; para time"
 
 # Load database
     cd $dir/rnaStruct/utr5
@@ -548,13 +544,12 @@ ssh $cpuFarm "cd $dir/pfam; para make jobList"
 ssh $cpuFarm "cd $dir/pfam; para time > run.time"
 cat run.time
 
-#Completed: 9425 of 9425 jobs
-#CPU time in finished jobs:    2242573s   37376.22m   622.94h   25.96d  0.071 y
-#IO & Wait Time:                490885s    8181.41m   136.36h    5.68d  0.016 y
-#Average job time:                 290s       4.83m     0.08h    0.00d
-#Longest finished job:             380s       6.33m     0.11h    0.00d
-#Submission to last job:         40826s     680.43m    11.34h    0.47d
-
+# Completed: 9427 of 9427 jobs
+# CPU time in finished jobs:    2274331s   37905.52m   631.76h   26.32d  0.072 y
+# IO & Wait Time:                480321s    8005.35m   133.42h    5.56d  0.015 y
+# Average job time:                 292s       4.87m     0.08h    0.00d
+# Longest finished job:             370s       6.17m     0.10h    0.00d
+# Submission to last job:          2927s      48.78m     0.81h    0.03d
 
 # Make up pfamDesc.tab by converting pfam to a ra file first
 cat << '_EOF_' > makePfamRa.awk
@@ -641,6 +636,7 @@ hgLoadSqlTab $tempDb ucscScop $kent/src/hg/lib/ucscScop.sql ucscScop.tab
 # Regenerate ccdsKgMap table
 $kent/src/hg/makeDb/genbank/bin/x86_64/mkCcdsGeneMap  -db=$tempDb -loadDb $db.ccdsGene knownGene ccdsKgMap
 
+# DIDN'T DO
 mkdir -p retroTmp
 hgsql -Ne "select kgName from ucscRetroInfo9" hg38 | sort -u > retroTmp/0
 tawk '{print $1,$1}' retroTmp/0 |  sed 's/\.[0-9]*//' | sort -u > retroTmp/1
@@ -657,7 +653,14 @@ hgsql hg38 -Ne "rename table ucscRetroInfo9 to oldUcscRetroInfo9"
 hgsql hg38 -Ne "rename table newUcscRetroInfo9 to ucscRetroInfo9"
 
 # Do BioCyc Pathways build
-export bioCycDir=/hive/data/outside/bioCyc/160824/download/1.7.1/data
+mkdir /hive/data/outside/bioCyc/190905
+cd /hive/data/outside/bioCyc/190905
+mkdir download
+cd download  
+wget --timestamping --no-directories --recursive --user=biocyc-flatfiles --password=data-20541 "http://brg-files.ai.sri.com/public/dist/humancyc.tar.gz"
+tar xvzf humancyc.tar.gz
+export bioCycDir=/hive/data/outside/bioCyc/190905/download/humancyc/21.0/data
+
 mkdir $dir/bioCyc
 cd $dir/bioCyc
 
@@ -673,7 +676,7 @@ hgLoadSqlTab $tempDb bioCycMapDesc ~/kent/src/hg/lib/bioCycMapDesc.sql ./bioCycM
     cd $dir/kegg
 
     # Make the keggMapDesc table, which maps KEGG pathway IDs to descriptive names
-    cp /cluster/data/hg19/bed/ucsc.13/kegg/map_title.tab .
+    cp /cluster/data/hg19/bed/ucsc.14.3/kegg/map_title.tab .
     # wget --timestamping ftp://ftp.genome.jp/pub/kegg/pathway/map_title.tab
     cat map_title.tab | sed -e 's/\t/\thsa\t/' > j.tmp
     cut -f 2 j.tmp >j.hsa
@@ -737,21 +740,21 @@ hgsql $db -N -e 'select kgId,geneSymbol from kgXref' \
 # 2. Get a file of per-transcript fasta sequences that contain the sequences of each UCSC Genes transcript, with this new ID in the place of the UCSC Genes accession.   Convert that file to TwoBit format and soft-link it into /gbdb/hg38/targetDb/ 
 awk '{if (!found[$4]) print; found[$4]=1 }' ucscGenes.bed > nodups.bed
 subColumn 4 nodups.bed idSub.txt ucscGenesIdSubbed.bed 
-sequenceForBed -keepName -db=$db -bedIn=ucscGenesIdSubbed.bed -fastaOut=stdout  | faToTwoBit stdin kgTargetSeq${curVer}.2bit 
+sequenceForBed -keepName -db=$db -bedIn=ucscGenesIdSubbed.bed -fastaOut=stdout  | faToTwoBit stdin ${db}KgSeq${curVer}.2bit
 mkdir -p /gbdb/$db/targetDb/ 
-rm -f /gbdb/$db/targetDb/kgTargetSeq${curVer}.2bit 
-ln -s $dir/kgTargetSeq${curVer}.2bit /gbdb/$db/targetDb/
+rm -f /gbdb/$db/targetDb/${db}KgSeq${curVer}.2bit
+ln -s $dir/${db}KgSeq${curVer}.2bit /gbdb/$db/targetDb/
 # Load the table kgTargetAli, which shows where in the genome these targets are.
-#cut -f 1-10 knownGene.gp | genePredToFakePsl $tempDb stdin kgTargetAli.psl /dev/null
-#hgLoadPsl $tempDb kgTargetAli.psl
+cut -f 1-10 knownGene.gp | genePredToFakePsl $tempDb stdin kgTargetAli.psl /dev/null
+hgLoadPsl $tempDb kgTargetAli.psl
 
 #
 # At this point we should save a list of the tables in tempDb!!!
+cd $dir
 echo "show tables" | hgsql $tempDb > tablesInKnownGene.lst
 
-cd $dir
-cp ../ucsc.17.1/hg38.knownGene.tables.txt .
-cp ../ucsc.17.1/hg38.all.knownGene.tables.txt .
+cp ../ucsc.19.1/hg38.knownGene.tables.txt .
+#cp ../ucsc.17.1/hg38.all.knownGene.tables.txt .
 hgsql $tempDb -e "show tables like 'knownTo%'" | tail -n +2 | sort > $tempDb.knownTo.txt
 join -v 2 $tempDb.knownTo.txt  hg38.knownGene.tables.txt  | grep knownTo
 #nothing
@@ -799,30 +802,27 @@ TBD 'tmpFoo67.scBlastTab'
 #knownToWikipedia
 
 # Create backup database
-hgsqladmin create ${db}Backup3
+hgsqladmin create ${db}Backup4
 
 # Swap in new tables, moving old tables to backup database.
-for i in  `cat hg38.knownGene.tables.txt`
+for i in  `cat $lastVer.table.lst`
 do
-echo "rename table $db.$i to ${db}Backup3.$i;" | hgsql $db;
-done
-ERROR 1146 (42S02) at line 1: Table 'hg38.kg7ToKg8' doesn't exist
-ERROR 1146 (42S02) at line 1: Table 'hg38.kgProtMap2' doesn't exist
-ERROR 1146 (42S02) at line 1: Table 'hg38.kgTxInfo' doesn't exist
-ERROR 1146 (42S02) at line 1: Table 'hg38.knownGeneTxMrna' doesn't exist
-ERROR 1146 (42S02) at line 1: Table 'hg38.knownGeneTxPep' doesn't exist
+echo "rename table $db.$i to ${db}Backup4.$i;"
+done > /tmp/1
 
+cat /tmp/1 | hgsql hg38
 
 # Drop tempDb history table and chromInfo, we don't want to swap them in!
 hgsql -e "drop table history" $tempDb
 hgsql -e "drop table chromInfo" $tempDb
 
-echo "show tables" | hgsql $tempDb > tablesInKnownGene.lst
+echo "show tables" | hgsql -N $tempDb > tablesInKnownGene.lst
 
 for i in  `cat tablesInKnownGene.lst`
 do
-echo "rename table $tempDb.$i to ${db}.$i;"  | hgsql $db
-dkone
+echo "rename table $tempDb.$i to ${db}.$i;" 
+done > /tmp/1
+cat /tmp/1 | hgsql hg38
 
 ERROR 1146 (42S02) at line 1: Table 'tmpFoo87.Tables_in_tmpFoo87' doesn't exist
 ERROR 1050 (42S01) at line 1: Table 'gnfAtlas2Distance' already exists
@@ -904,14 +904,13 @@ ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
 # 4. On hgwdev, insert new records into blatServers and targetDb, using the 
 # host (field 2) and port (field 3) specified by cluster-admin.  Identify the
 # blatServer by the keyword "$db"Kg with the version number appended
-# untrans gfServer for hg38KgSeq10 on host blat1c, port 17873
-# Starting untrans gfServer for kgTargetSeq11 on host blat1a, port 17891
+# untrans gfServer for hg38KgSeq12 on host blat1b, port 17897
 hgsql hgcentraltest -e \
-      'INSERT into blatServers values ("hg38KgSeq11", "blat1a", 17891, 0, 1);'
-hgsql hgcentraltest -e \                                                    
-      'INSERT into targetDb values("hg38KgSeq11", "UCSC Genes", \
+      'INSERT into blatServers values ("hg38KgSeq12", "blat1b", 17897, 0, 1);'
+hgsql hgcentraltest -e \
+      'INSERT into targetDb values("hg38KgSeq12", "UCSC Genes", \
          "hg38", "kgTargetAli", "", "", \
-         "/gbdb/hg38/targetDb/kgTargetSeq11.2bit", 1, now(), "");'
+         "/gbdb/hg38/targetDb/hg38KgSeq12.2bit", 1, now(), "");'
 
 #
 ##
@@ -1011,8 +1010,8 @@ $hgLoadSqlTab $tempDb knownToTreefam $kent/src/hg/lib/knownTo.sql knownToTreefam
 # make bigKnownGene.bb
 cd $dir
 makeBigKnown hg38
-rm -f /gbdb/hg38/knownGene29.bb
-ln -s `pwd`/hg38.knownGene.bb /gbdb/hg38/knownGene29.bb
+rm -f /gbdb/hg38/knownGene32.bb
+ln -s `pwd`/hg38.knownGene.bb /gbdb/hg38/knownGene32.bb
 
 # Build knownToMupit
 
@@ -1020,21 +1019,169 @@ mkdir mupit
 cd mupit
 
 # mupit-pdbids.txt was emailed from Kyle Moad (kmoad@insilico.us.com)
-# wc -l mupit-pdbids.txt
-for db in "hg38" "hg19" "hg18"; do \
-    # get knownGene IDs and associated PDB IDS
-    # the extDb{Ref} parts come from hg/hgGene/domains.c:domainsPrint()
-    hgsql -Ne "select kgID, extAcc1 from $db.kgXref x \
-        inner join sp180404.extDbRef sp on x.spID = sp.acc \
-        inner join sp180404.extDb e on sp.extDb=e.id \
-        where x.spID != '' and e.val='PDB' order by kgID" \
-        > $db.knownToPdb.txt;
-    # filter out pdbIds not found in mupit
-    cat mupit-pdbids.txt | tr '[a-z]' '[A-Z]' | \
-        grep -Fwf - $db.knownToPdb.txt >  $db.knownToMupit.txt;
-    # check that it filtered correctly:
-    # cut -f2 $db.knownToMuipit.txt | sort -u | wc -l;
-    # load new table for hgGene/hgc
-    hgLoadSqlTab $db knownToMupit ~/kent/src/hg/lib/knownTo.sql $db.knownToMupit.txt
-done
+# wc -l 
+cp /hive/data/outside/mupit/mupit-pdbids.txt .
+# get knownGene IDs and associated PDB IDS
+# the extDb{Ref} parts come from hg/hgGene/domains.c:domainsPrint()
+hgsql -Ne "select kgID, extAcc1 from $db.kgXref x \
+    inner join sp180404.extDbRef sp on x.spID = sp.acc \
+    inner join sp180404.extDb e on sp.extDb=e.id \
+    where x.spID != '' and e.val='PDB' order by kgID" \
+    > $db.knownToPdb.txt;
+# filter out pdbIds not found in mupit
+cat mupit-pdbids.txt | tr '[a-z]' '[A-Z]' | \
+    grep -Fwf - $db.knownToPdb.txt >  knownToMupit.txt;
+# check that it filtered correctly:
+# cut -f2 $db.knownToMuipit.txt | sort -u | wc -l;
+# load new table for hgGene/hgc
+hgLoadSqlTab $db knownToMupit ~/kent/src/hg/lib/knownTo.sql knownToMupit.txt
 
+#############################################################################
+# hgPal downloads 
+
+    mkdir $dir/pal
+    cd  $dir/pal
+    cat /hive/data/genomes/hg38/bed/multiz100way/species.list | tr '[ ]' '[\n]' > order.list
+
+    export mz=multiz100way
+    export gp=knownGene
+    export db=hg38
+    export I=0
+    mkdir exonAA exonNuc
+    for C in `sort -nk2 /cluster/data/hg38/chrom.sizes | cut -f1`
+    do
+        I=`echo $I | awk '{print $1+1}'`
+	echo "mafGene -chrom=$C -exons -noTrans $db $mz $gp order.list stdout | gzip -c > exonNuc/$C.exonNuc.fa.gz &"
+	echo "mafGene -chrom=$C -exons $db $mz $gp order.list stdout | gzip -c > exonAA/$C.exonAA.fa.gz &"
+        if [ $I -gt 6 ]; then
+            echo "date"
+            echo "wait"
+            I=0
+        fi
+    done > $gp.jobs
+    echo "date" >> $gp.jobs
+    echo "wait" >> $gp.jobs
+
+    time sh -x ./$gp.jobs > $gp.jobs.log 2>&1 &
+    # real    208m39.304s
+
+    time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    #   real    5m34.850s
+    time zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    #   real    21m15.426s
+
+    export mz=multiz100way
+    export gp=knownGene
+    export db=hg38
+    export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    md5sum *.fa.gz > md5sum.txt
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+    ln -s `pwd`/md5sum.txt $pd/
+
+    rm -rf exonAA exonNuc
+
+    ### need other gene track alignments also
+    # running up refGene
+    cd /hive/data/genomes/hg38/bed/multiz100way/pal
+    export mz=multiz100way
+    export gp=ncbiRefSeq
+    export db=hg38
+    export I=0
+    mkdir exonAA exonNuc
+    for C in `sort -nk2 ../../../chrom.sizes | cut -f1`
+    do
+        I=`echo $I | awk '{print $1+1}'`
+	echo "mafGene -chrom=$C -exons -noTrans $db $mz $gp order.list stdout | gzip -c > exonNuc/$C.exonNuc.fa.gz &"
+	echo "mafGene -chrom=$C -exons $db $mz $gp order.list stdout | gzip -c > exonAA/$C.exonAA.fa.gz &"
+        if [ $I -gt 6 ]; then
+            echo "date"
+            echo "wait"
+            I=0
+        fi
+    done > $gp.jobs
+    echo "date" >> $gp.jobs
+    echo "wait" >> $gp.jobs
+
+    time sh -x $gp.jobs > $gp.jobs.log 2>&1
+    # real    126m0.688s
+
+    export mz=multiz100way
+    export gp=ncbiRefSeq
+    export db=hg38
+    time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    #   real    3m14.449s
+    time zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    #   real    13m27.577s
+
+    du -hsc exonAA exonNuc $gp*.fa.gz
+# 3.1G    exonAA
+# 4.9G    exonNuc
+# 3.1G    ncbiRefSeq.multiz100way.exonAA.fa.gz
+# 4.9G    ncbiRefSeq.multiz100way.exonNuc.fa.gz
+
+    rm -rf exonAA exonNuc
+
+    # we're only distributing exons at the moment
+    export mz=multiz100way
+    export gp=ncbiRefSeq
+    export db=hg38
+    export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    md5sum $gp.*.fa.gz >> md5sum.txt
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+    ln -s `pwd`/md5sum.txt $pd/
+
+    ### And knownCanonical
+    cd /hive/data/genomes/hg38/bed/multiz100way/pal
+    export mz=multiz100way
+    export gp=knownCanonical
+    export db=hg38
+    mkdir exonAA exonNuc knownCanonical
+
+    time cut -f1 ../../../chrom.sizes | while read C
+    do
+        echo $C 1>&2
+	hgsql hg38 -N -e "select chrom, chromStart, chromEnd, transcript from knownCanonical where chrom='$C'" > knownCanonical/$C.known.bed
+    done
+    #   real    0m15.897s
+
+    ls knownCanonical/*.known.bed | while read F
+    do
+      if [ -s $F ]; then
+         echo $F | sed -e 's#knownCanonical/##; s/.known.bed//'
+      fi
+    done | while read C
+    do
+	echo "date"
+	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -exons -noTrans $db $mz knownGene order.list stdout | \
+	    gzip -c > exonNuc/$C.exonNuc.fa.gz"
+	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -exons $db $mz knownGene order.list stdout | \
+	    gzip -c > exonAA/$C.exonAA.fa.gz"
+    done > $gp.$mz.jobs
+
+    time sh -x $gp.$mz.jobs > $gp.$mz.job.log 2>&1 
+    # 267m58.813s
+
+    rm *.known.bed
+    export mz=multiz100way
+    export gp=knownCanonical
+    export db=hg38
+    zcat exonAA/c*.gz | gzip -c > $gp.$mz.exonAA.fa.gz &
+    zcat exonNuc/c*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz &
+    # about 6 minutes
+
+    rm -rf exonAA exonNuc
+
+    export mz=multiz100way
+    export gp=knownCanonical
+    export db=hg38
+    export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+    cd  $pd
+    md5sum *.fa.gz > md5sum.txt
+   
