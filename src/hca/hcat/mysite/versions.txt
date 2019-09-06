@@ -37,6 +37,8 @@
 	 - The contributor role is now a key into a vocab table.  There's roles defined
 	   for program officer (Jonah), pipeliner (Tim), analyst (Jing Zhu and Max),
 	   lab contact (not enough), PI (too many), intern (just enough)
+	 - The submission steps section is changed to be date first, and a few have been
+	   renamed, notably curation.
       In anticipation of working with interns I made an Intern object similar to the 
       Wrangler one.  I also added SoftwareDeveloper while I was in there.
           I made a new group, pipeliners, and a new user, Tim Tickle.  The pipeliners
