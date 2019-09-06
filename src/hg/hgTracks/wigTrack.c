@@ -687,7 +687,7 @@ double preDrawAutoScale(struct preDrawElement *preDraw, int preDrawZero,
     double maxY, double minY, enum wiggleAlwaysZeroEnum alwaysZero)
 /*	if autoScaling, scan preDraw array and determine limits */
 {
-if (autoScale == wiggleScaleAuto)
+if ((autoScale == wiggleScaleAuto) || (autoScale == wiggleScaleCumulative))
     {
     double overallUpperLimit = wigEncodeStartingUpperLimit;
     double overallLowerLimit = wigEncodeStartingLowerLimit;
@@ -1241,6 +1241,36 @@ void AllocPixelBins(struct wigGraphOutput *wgo, int width);
     }
 }
 
+static void setMinMax(struct track *tg, double graphLowerLimit, double graphUpperLimit)
+// We need to check to see if this track changes our min/max for all tracks with this parent.
+// We use tdb entry to store this because it may be per view, which has been smashed out in track list
+{
+struct trackDb *parent = tg->tdb->parent;
+struct tdbExtras *extras = parent->tdbExtras;
+
+if (extras == NULL)
+    {
+    AllocVar(extras);
+    parent->tdbExtras = extras;
+    }
+
+struct minMax *minMax = extras->minMax;
+if (minMax == NULL)
+    {
+    AllocVar(minMax);
+    extras->minMax = minMax;
+    minMax->min = graphLowerLimit;
+    minMax->max = graphUpperLimit;
+    }
+else
+    {
+    if (minMax->min > graphLowerLimit)
+        minMax->min = graphLowerLimit;
+    if (minMax->max < graphUpperLimit)
+        minMax->max = graphUpperLimit;
+    }
+}
+
 void wigPreDrawPredraw(struct track *tg, int seqStart, int seqEnd,
                     struct hvGfx *hvg, int xOff, int yOff, int width,
                     MgFont *font, Color color, enum trackVisibility vis,
@@ -1282,6 +1312,9 @@ if (retGraphUpperLimit != NULL)
     *retGraphUpperLimit = graphUpperLimit;
 if (retGraphLowerLimit != NULL)
     *retGraphLowerLimit = graphLowerLimit;
+
+if (wigCart->autoScale == wiggleScaleCumulative)
+    setMinMax(tg, graphLowerLimit, graphUpperLimit);
 }
 
 void wigDrawPredraw(struct track *tg, int seqStart, int seqEnd,
@@ -1294,6 +1327,14 @@ void wigDrawPredraw(struct track *tg, int seqStart, int seqEnd,
 {
 struct wigCartOptions *wigCart = (struct wigCartOptions *) tg->wigCartData;
 double graphRange;   /*	scaling choice will set this */
+
+// if we want the cumulative autoscale, grab it from our parent
+if (wigCart->autoScale == wiggleScaleCumulative)
+    {
+    tg->graphLowerLimit = graphLowerLimit = tg->tdb->parent->tdbExtras->minMax->min;
+    tg->graphUpperLimit = graphUpperLimit = tg->tdb->parent->tdbExtras->minMax->max;
+    }
+
 /* if we're autoscaling and the range is 0 this implies that all values 
  * in the given range are the same.  We create a bottom of the scale  
  * by subtracting one from the only value.

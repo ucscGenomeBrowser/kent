@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<!--#set var="TITLE" value="CIRM Stem Cell Hub at UCSC Homepage" -->
+
+<!--#include virtual="setRoot.html" -->
+
+<!--#include virtual="${ROOT}inc/header.html" -->
+
+<!-- Tiny amount of custom styling for these pages. -->
+<style>
+ul {
+    list-style-type: none;
+}
+</style>
+<!--
+
+This is an example dataset summary page that implements the template
+from datasetSummaryTemple.html
+
+Link formats (e.g. <!--#echo var='ROOT'-->LINK) will not work on normal summary pages. You will
+need to use ../../etc. to make links relative and not hard coded to a specific machine.
+-->
+
+
+
+<div class="cirm-page-body">
+  <div class="cirm-page-title back-dark-pink">
+    <h5 class="cirm-page-title-text">
+    Single-Cell RNA-Seq Analysis of Infiltrating Neoplastic Cells at the Migrating Front of Human Glioblastoma
+    </h5>
+  </div>
+  <div class="row justify-content-start" style="padding: 15px 30px">
+    <div class="col-7">
+      <div class="row">
+        <div class="col-md-4">
+          <h6><i class="fas fa-file-download fa-lg text-light-blue"></i>
+          <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?browseFiles_facet_op=resetAll&browseFiles_facet_fieldName=&browseFiles_facet_fieldVal=&cdwCommand=browseFiles&cdwFile_filter=data_set_id%3D%27quakeGlioblastomaGeo1%27%20"
+          target="_blank">View project files</a></h6>
+        </div>
+        <div class="col-md-3">
+          <h6><i class="fas fa-table fa-lg text-light-blue"></i>
+          <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?cdwCommand=dataSetMetaTree&cdwDataSet=quakeGlioblastomaGeo1"
+          target="_blank">View project metadata</a></h6>
+        </div>
+      </div>
+    </div>
+  </div>
+  <a name="summary"></a>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="cirm-page-title back-dark-blue">
+        <h5 class="cirm-page-title-text">Summary</h5>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12" style="padding: 15px 30px">
+      <p class="col-9 nopadding">
+      This data set looked at the effects of the tumor on antigen-presenting
+      cells within its main mass and proximal to it, as well as the molecular
+      characteristics of infiltrating cells. Characterization of the effects of
+      GBM (glioblastoma) on cells of the normal brain, and identifying the
+      molecular characteristics of infiltrating GBM cells into the brain
+      parenchyma. GBM samples came from four patients, with tissue from the
+      tumor core and proximal tissue which was tumor-free, but within the
+      vicinity of the tumor mass. The cells were dissociated, sorted, SMARTer
+      cDNA synthesis in 96-well plates, then sequenced by Illumina with 75bp
+      paired-end reads.
+      </p>
+      <hr>
+
+      <h6>Experimetal Flowchart</h6>
+      <p>
+      <img src="https://ars.els-cdn.com/content/image/1-s2.0-S2211124717314626-fx1.jpg">
+      </p>
+      <hr>
+
+      <h6>Publications</h6>
+      <p>
+      The following publications are associated with this data:
+      <!--
+      Paper links should follow the format:
+      First Author Lastname, et al. Year. Paper Title. Shortened Journal Name.
+
+      Example:
+      Darmanis S et al. 2017. Single-Cell RNA-Seq Analysis of Infiltrating Neoplastic
+      Cells at the Migrating Front of Human Glioblastoma. Cell Rep.
+      -->
+      <ul>
+        <li><i class="fas fa-file-alt fa-lg text-light-blue"></i>
+          <a href="https://www.ncbi.nlm.nih.gov/pubmed/29091775/" target="_blank"
+          >Darmanis S et al. 2017. Single-Cell RNA-Seq Analysis of Infiltrating Neoplastic
+          Cells at the Migrating Front of Human Glioblastoma. Cell Rep.</a>
+        </li>
+      </ul>
+      </p>
+
+    </div>
+  </div>
+  <a name="downloads"></a>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="cirm-page-title back-dark-blue">
+        <h5 class="cirm-page-title-text">Downloads: files, metadata, and more</h5>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12" style="padding: 15px 30px">
+      <!-- 
+      NOTE:
+      Not all datasets have all of these different file types available.
+      You will have to remove the links for those file types your dataset doesn't have.
+      To remove a file type, remove the two lines between the <li>/</li> tags and then
+      the tags themselves.
+
+      For example, to remove the 'HTML Tag Storm' entry, remove
+      the following lines:
+          <li>
+            <i class="fas fa-file-alt fa-lg text-light-blue"></i>
+            <a href="">HTML Tag Storm</a>
+          </li>
+      -->
+      <h6>Files</h6>
+      <p>
+      View all files or subsets of files available for this dataset below:
+      <ul>
+        <li>
+          <i class="fas fa-file-download fa-lg text-light-blue"></i>
+          <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?browseFiles_facet_op=resetAll&browseFiles_facet_fieldName=&browseFiles_facet_fieldVal=&cdwCommand=browseFiles&cdwFile_filter=data_set_id%3D%27quakeGlioblastomaGeo1%27%20"
+          target="_blank">All files</a>
+        </li>
+        <li>
+          <i class="fas fa-align-justify fa-lg text-light-blue"></i>
+          <a href=""
+          target="_blank">Fastq (read) files</a>
+        </li>
+        <li>
+          <i class="fas fa-th fa-lg text-light-blue"></i>
+          <a href=""
+          target="_blank">Expression matrix files</a>
+        </li>
+        <li>
+          <i class="fas fa-table fa-lg text-light-blue"></i>
+          <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?cdwCommand=analysisQuery&cdwQueryFields=accession%2Csubmit_file_name&cdwQueryWhere=lab%3D%22quake%22+and+data_set_id%3D%22quakeGlioblastomaGeo1%22&cdwQueryLimit=10000&cdwQueryFormat=tsv&View=View"
+          target="_blank">File accession to submitted filename correspondence</a>
+        </li>
+      </ul>
+      <hr>
+
+      <h6>Metadata</h6>
+      <p>
+      The metadata for this dataset is available in the following formats:
+      <ul>
+        <li>
+          <i class="fas fa-file-alt fa-lg text-light-blue"></i>
+          <a href="<!--#echo var='ROOT'-->cgi-bin/cdwWebBrowse?cdwCommand=dataSetMetaTree&cdwDataSet=quakeGlioblastomaGeo1"
+          target="_blank">HTML Tag Storm</a>
+        </li>
+        <li>
+          <i class="fas fa-file-alt fa-lg text-light-blue"></i>
+          <a href="<!--#echo var='ROOT'-->cgi-bin/cdwServeTagStorm?format=text&cdwDataSet=quakeGlioblastomaGeo1"
+          target="_blank">Text Tag Storm</a>
+        </li>
+        <li>
+          <i class="fas fa-file-alt fa-lg text-light-blue"></i>
+          <a href="<!--#echo var='ROOT'-->cgi-bin/cdwServeTagStorm?format=tsv&cdwDataSet=quakeGlioblastomaGeo1"
+          target="_blank">TSV</a>
+        </li>
+        <li>
+          <i class="fas fa-file-alt fa-lg text-light-blue"></i>
+          <a href="<!--#echo var='ROOT'-->cgi-bin/cdwServeTagStorm?format=csv&cdwDataSet=quakeGlioblastomaGeo1"
+          target="_blank">CSV</a>
+        </li>
+      </ul>
+      <hr>
+
+      <h6>Files in External Repositories</h6>
+      <p>
+      This data can also be found in the following data repositories:
+      <ul>
+        <li>
+          <i class="fas fa-database fa-lg text-light-blue"></i>
+          <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE84465"
+          target="_blank">View GSE84465 on GEO</a>
+        </li>
+      </ul>
+      <hr>
+
+      <h6>Analysis in external sites</h6>
+      <ul>
+        <li>
+          <a href="https://cells.ucsc.edu/?ds=quake-gbm" target="_blank">UCSC Cell Browser</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!--#include virtual="${ROOT}inc/footer.html" -->

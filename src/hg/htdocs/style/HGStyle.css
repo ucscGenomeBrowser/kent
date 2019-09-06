@@ -409,10 +409,25 @@ input.disabled  { opacity: 0.5; filters.alpha.opacity:50;  }
 span.disabled   { opacity: 0.5; filters.alpha.opacity:50;  }
 
 .positionDisplay {
-		display: inline-block;
-        padding: 5px; 
-        border: lightgray 1px solid;
+    display: inline-block;
+    padding: 5px;
+    border: lightgray 1px solid;
 }
+
+.positionDisplay:hover {
+    cursor: default;
+}
+
+.positionDisplay.pressed {
+    background: #ebf0ff;
+    webkit-box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    moz-box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
+    border-radius: 4px;
+}
+
+
 
 .positionInput {
         padding: 7px; -moz-border-radius: 3px; border-radius: 3px;
@@ -799,3 +814,13 @@ table.sessionTable tbody tr:hover{
 a:link img.sessionThumbnail {
   padding: 5px;
 }
+
+input[type="submit"].pressed {
+    background: #d0dcff; 
+    webkit-box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    moz-box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
+    border-radius: 4px;
+}
+

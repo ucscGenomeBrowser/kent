@@ -29,6 +29,12 @@ struct trackDb;         // forward definition for use in cart.h
 // Forward definitions
 struct tdbExtras;
 
+// A structure to keep track of our min and max values if we're a wig 
+struct minMax 
+{
+    double min, max;
+};
+
 struct trackDb
 /* This describes an annotation track. */
     {
@@ -592,6 +598,9 @@ struct tdbExtras
 
     // Developer: please add your useful data that is costly to calculate/retrieve more than once
     struct hash *membersHash;
+
+    // keep track of our children's min and max if we're scaling over all of them
+    struct minMax *minMax;
     };
 
 void tdbExtrasFree(struct tdbExtras **pTdbExtras);

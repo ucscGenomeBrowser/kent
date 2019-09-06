@@ -1,0 +1,26 @@
+0.1 - Got Django 2.1 admin running on hgwdev and proof of concept that
+      the multiple selects on many-to-many fields work there.  Made
+      basic Contributor, Lab, Project, Grant tables and a few of the
+      biologically relevant tables in first draft.  Showed to Clay.
+0.2 - Went through Clay's wish list and got through about 3/4 of the
+      stuff we have control over.  There's lots of tables for things
+      like organs, assays, and project state.  The controlled vocabs
+      are managed by a separate table for the vocab in question that
+      the wranglers can extend.  People can put comments on most things.
+0.3 - Figured out how to set up file uploads so that people can download
+      a file after it's uploaded.  Used this for holding the excel
+      spreadsheets and other key files for wranglers.  Got through
+      the other 1/4 of Clay's wish list.  Polished up the project
+      details page a bit to condense it again with all the recent
+      additions.  Changing 'vocab' to 'wrangler' as a prefix for the
+      tables most people should ignore, and figured out how to do 
+      this without changing the table names.
+0.4 - Adding a bunch of date fields in project, and a specific comment
+      field for the submission.  Refining state names and adding more so can 
+      show project as it goes through analysis a bit.  Breaking now huge
+      wrangling section into three:  wrangling, submission steps, post-submission.
+          tech note:
+      Django migration gets easily confused around multi-to-multi tables 
+      that are reflected so as to appear on both tables being related.  
+      I've had to do pretty painful patches two or three times now.  :-(   
+      I'll probably figure out the pattern though.  
