@@ -13,6 +13,7 @@ diff = diff -u
 gencodeGxfToAttrs = ../bin/gencodeGxfToAttrs
 ensToUcscMkLift = ../bin/ensToUcscMkLift
 gencodeGxfToGenePred = ../bin/gencodeGxfToGenePred
+gencodeExonSupportToTable = ../bin/gencodeExonSupportToTable
 
 ucscGenomeDbHs37 = hg19
 ucscGenomeDbHs38 = hg38
@@ -23,7 +24,7 @@ ensToUcscMappingChainHg38 = output/ensToUcscMappingHg38.chain
 
 all::
 
-test::  attrsTests ensToUcscMkLiftTests genePredTests
+test::  attrsTests ensToUcscMkLiftTests genePredTests exonSupportTests
 
 ##
 # attributes tests
@@ -127,7 +128,14 @@ specialCases1Test: ${ensToUcscMappingChainHg37} mkdirs
 	${diff} expected/$@.gp output/$@.gp
 	${diff} expected/$@.unmapped.gp output/$@.unmapped.gp
 
+##
+# exon support
+##
+exonSupportTests: exonSupport1Test
 
+exonSupport1Test:
+	${gencodeExonSupportToTable} input/examples1.Exon_supporting_feature ${ensToUcscMappingChainHg37} output/$@.exons
+	${diff} expected/$@.exons output/$@.exons
 
 ##
 # mapping chains for tests
