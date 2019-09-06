@@ -19,12 +19,13 @@ errAbort(
   "usage:\n"
   "   sqlUpdateRelated database tableFiles\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -missOk - if set, tableFiles mentioned that don't exist are skipped rather than erroring\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"missOk", TRUE},
    {NULL, 0},
 };
 
@@ -354,9 +355,12 @@ void sqlUpdateRelated(char *database, char **inFiles, int inCount)
 {
 struct sqlConnection *conn = sqlConnect(database);
 int fileIx;
+boolean missOk = optionExists("missOk");
 for (fileIx = 0; fileIx < inCount; ++fileIx)
     {
     char *inFile = inFiles[fileIx];
+    if (missOk && !fileExists(inFile))
+        continue;
     char *tableName = cloneString(inFile);
     chopSuffix(tableName);
     verbose(1, "Processing %s into %s table \n", inFile, tableName);
