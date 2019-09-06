@@ -28,11 +28,11 @@ class SoftwareDeveloperAdmin(admin.ModelAdmin):
 
 admin.site.register(SoftwareDeveloper, SoftwareDeveloperAdmin)
 
-class CuratorAdmin(admin.ModelAdmin):
+class InternAdmin(admin.ModelAdmin):
     autocomplete_fields = ['who']
     list_display = ['who', 'advisor', 'interests']
 
-admin.site.register(Curator, CuratorAdmin)
+admin.site.register(Intern, InternAdmin)
 
 class WranglerAdmin(admin.ModelAdmin):
     autocomplete_fields = ['who']
@@ -78,16 +78,15 @@ class ProjectAdmin(admin.ModelAdmin):
 		('first_response_date', 'last_response_date'),
 		)}),
 	('submission steps',  { 'fields': (
-		('questionnaire_comments', 'questionnaire_date'),
-		('tAndC', 'tAndC_date'),
-		('sheet_template', 'sheet_template_date'),
-		('sheet_from_lab', 'sheet_from_lab_date'),
-		('curator_assigned', 'curator_assigned_date'),
-		('sheet_curated', 'sheet_curated_date'),
-                ('review_comments', 'review_accepted_date'),
-		('sheet_validated', 'sheet_validated_date'),
-		('staging_area', 'staging_area_date'),
-		('submit_comments', 'submit_date'),
+		('questionnaire_date', 'questionnaire_comments'),
+		('tAndC_date', 'tAndC_comments'),
+		('sheet_template_date', 'sheet_template', ),
+		('sheet_from_lab_date', 'sheet_from_lab', ),
+		('back_to_lab_date', 'back_to_lab', ),
+                ('lab_review_date', 'lab_review_comments', ),
+		('sheet_validated_date', 'sheet_that_validated', ),
+		('staging_area_date', 'staging_area', ),
+		('submit_date', 'submit_comments', ),
 		)}),
 	('post-submit',  { 'fields': (
 		('cloud_date', 'pipeline_date', 'orange_date'),
@@ -133,8 +132,8 @@ class DiseaseAdmin(admin.ModelAdmin):
 admin.site.register(Disease, DiseaseAdmin)
 
 class OrganAdmin(admin.ModelAdmin):
-    search_fields = ["short_name", "description"]
-    list_display = ["short_name", "description"]
+    search_fields = ["short_name", "description", "ontology_id"]
+    list_display = ["short_name", "ontology_id", "description"]
 
 admin.site.register(Organ, OrganAdmin)
 

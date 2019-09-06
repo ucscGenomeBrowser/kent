@@ -8,7 +8,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 class ContributorType(models.Model):
     short_name = models.CharField(max_length=50, unique=True)
-    description = models.CharField(max_length=250)
+    description = models.CharField(max_length=255)
     comments = models.CharField(max_length=255, blank=True)
     def __str__(self):
         return self.short_name
@@ -35,7 +35,7 @@ class Contributor(models.Model):
 
 class Lab(models.Model):
     short_name =  models.CharField(max_length=50, unique=True)
-    institution = models.CharField(max_length=250, null=True, blank=True)
+    institution = models.CharField(max_length=255, null=True, blank=True)
     #contacts = models.ManyToManyField(Contributor, related_name="contacts")
     pi = models.ForeignKey(Contributor, blank=True, null=True, default=None, on_delete=models.SET_NULL, related_name="pi")
     contributors = models.ManyToManyField(Contributor, blank=True, related_name="contributors")
@@ -84,7 +84,9 @@ class ProjectState(models.Model):
 
 class OrganPart(models.Model):
     short_name = models.CharField(max_length=50, unique=True)
-    description = models.CharField(max_length=250)
+    ontology_id = models.CharField(max_length=32, blank=True, null=True)
+    ontology_label = models.CharField(max_length=255, blank=True, null=True)
+    description = models.CharField(max_length=255, blank=True)
     projects = models.ManyToManyField("Project", blank=True, through="project_organ_part")
     comments = models.CharField(max_length=255, blank=True)
     def __str__(self):
@@ -94,7 +96,9 @@ class OrganPart(models.Model):
 
 class Organ(models.Model):
     short_name = models.CharField(max_length=50, unique=True)
-    description = models.CharField(max_length=250)
+    ontology_id = models.CharField(max_length=32, blank=True, null=True)
+    ontology_label = models.CharField(max_length=255, blank=True, null=True)
+    description = models.CharField(max_length=255)
     comments = models.CharField(max_length=255, blank=True)
     def __str__(self):
         return self.short_name
@@ -103,7 +107,7 @@ class Organ(models.Model):
     
 class Disease(models.Model):
     short_name = models.CharField(max_length=50, unique=True)
-    description = models.CharField(max_length=250)
+    description = models.CharField(max_length=255)
     projects = models.ManyToManyField("Project", blank=True, through="project_disease", related_name='projects_diseases_relationship')
     comments = models.CharField(max_length=255, blank=True)
     def __str__(self):
@@ -113,7 +117,7 @@ class Disease(models.Model):
 
 class Consent(models.Model):
     short_name = models.CharField(max_length=50, unique=True)
-    description = models.CharField(max_length=250)
+    description = models.CharField(max_length=255)
     comments = models.CharField(max_length=255, blank=True)
     def __str__(self):
         return self.short_name
@@ -122,7 +126,7 @@ class Consent(models.Model):
 
 class SampleType(models.Model):
     short_name = models.CharField(max_length=50, unique=True)
-    description = models.CharField(max_length=250)
+    description = models.CharField(max_length=255)
     comments = models.CharField(max_length=255, blank=True)
     def __str__(self):
         return self.short_name
@@ -131,7 +135,7 @@ class SampleType(models.Model):
 
 class AssayTech(models.Model):
     short_name = models.CharField(max_length=50, unique=True)
-    description = models.CharField(max_length=250)
+    description = models.CharField(max_length=255)
     comments = models.CharField(max_length=255, blank=True)
     projects = models.ManyToManyField("Project", blank=True, through="project_assay_tech", related_name='projects_assay_tech_relationship')
     def __str__(self):
@@ -141,7 +145,7 @@ class AssayTech(models.Model):
 
 class AssayType(models.Model):
     short_name = models.CharField(max_length=50, unique=True)
-    description = models.CharField(max_length=250)
+    description = models.CharField(max_length=255)
     comments = models.CharField(max_length=255, blank=True)
     projects = models.ManyToManyField("Project", blank=True, through="project_assay_type", related_name='projects_assay_type_relationship')
     def __str__(self):
@@ -151,7 +155,7 @@ class AssayType(models.Model):
 
 class Publication(models.Model):
     short_name = models.CharField(max_length=50, unique=True)
-    title = models.CharField(max_length=250, blank=True)
+    title = models.CharField(max_length=255, blank=True)
     pmid = models.CharField(max_length=16)
     comments = models.CharField(max_length=255, blank=True)
     doi = models.CharField(max_length=32)
@@ -178,13 +182,15 @@ class SoftwareDeveloper(models.Model):
     class Meta:
        verbose_name = 'Wrangler software developer'
 
-class Curator(models.Model):
+class Intern(models.Model):
     who = models.ForeignKey(Contributor, on_delete=models.PROTECT)
     advisor = models.ForeignKey(Contributor, null=True, on_delete=models.SET_NULL, related_name='advisor')
     interests = models.CharField(max_length=128, blank=True)
     comments = models.CharField(max_length=255, blank=True)
     def __str__(self):
         return self.who.__str__()
+    class Meta:
+       verbose_name = 'Wrangler intern'
 
 class Wrangler(models.Model):
     who = models.ForeignKey(Contributor, on_delete=models.PROTECT)
@@ -210,19 +216,17 @@ class Project(models.Model):
     last_response_date = models.DateField(blank=True, null=True, default=None)
     questionnaire_comments = models.CharField(max_length=255, blank=True)
     questionnaire_date = models.DateField(blank=True, null=True, default=None)
-    tAndC = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
+    tAndC_comments = models.CharField(max_length=255, blank=True)
     tAndC_date = models.DateField(blank=True, null=True, default=None)
     sheet_template = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
     sheet_template_date = models.DateField(blank=True, null=True, default=None)
     sheet_from_lab = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
     sheet_from_lab_date = models.DateField(blank=True, null=True, default=None)
-    curator_assigned = models.ForeignKey(Curator, blank=True, null=True, default=None, on_delete=models.SET_NULL)
-    curator_assigned_date = models.DateField(blank=True, null=True, default=None)
-    sheet_curated = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
-    sheet_curated_date = models.DateField(blank=True, null=True, default=None)
-    review_comments = models.CharField(max_length=255, blank=True)
-    review_accepted_date = models.DateField(blank=True, null=True, default=None)
-    sheet_validated = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
+    back_to_lab = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
+    back_to_lab_date = models.DateField(blank=True, null=True, default=None)
+    lab_review_comments = models.CharField(max_length=255, blank=True)
+    lab_review_date = models.DateField(blank=True, null=True, default=None)
+    sheet_that_validated = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
     sheet_validated_date = models.DateField(blank=True, null=True, default=None)
     staging_area = models.URLField(blank=True, null=True)
     staging_area_date = models.DateField(blank=True, null=True, default=None)
