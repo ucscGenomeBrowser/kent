@@ -42,6 +42,11 @@ errAbort(
 "or an @ followed by a table name, in which case it refers to the key of that table.\n"
 "If the source column is in comma-separated-values format then the sourceField can include a\n"
 "constant array index to pick out an item from the csv list.\n"
+"\n"
+"If there is a '?' in front of the column name it is taken to mean an optional field.\n"
+"if the corresponding source field does not exist then there's no error (and no output)\n"
+"for that column\n"
+"\n"
 "You can also use strex expressions for more complicated situations.\n"
 "            See src/lib/strex.doc\n"
 "In addition to the table stanza there can be a 'define' stanza that defines variables\n"
@@ -88,6 +93,7 @@ struct newFieldInfo
     int arrayIx;		/* If it's an array then the value */
     struct newFieldInfo *link;	/* If it's fvLink then pointer to the linked field */
     struct strexParse *exp;	/* A parsed out string expression */
+    boolean optional;		/* If true, then skip rather than stop if old field doesn't exist */
     };
 
 struct newFieldInfo *findField(struct newFieldInfo *list, char *name)
@@ -193,6 +199,16 @@ struct newFieldInfo *parseFieldVal(char *name,
 
 struct newFieldInfo *fv;
 AllocVar(fv);
+char c = name[0];
+if (c == '?')
+    {
+    fv->optional = TRUE;
+    name += 1;
+    }
+else if (!isalpha(c) && (c != '_'))
+    {
+    errAbort("Strange character %c starting line %d of %s", c, fileLineNumber, fileName);
+    }
 fv->name = cloneString(name);
 
 char *s = trimSpaces(input);
@@ -201,7 +217,7 @@ if (isEmpty(s))
     fv->type = fvVar;
     s = fv->val = cloneString(name);
     }
-char c = s[0];
+c = s[0];
 if (c == '@')
     {
     char *val = fv->val = cloneString(skipLeadingSpaces(s+1));
@@ -229,6 +245,7 @@ else
 gTotalFields += 1;
 return fv;
 }
+
 static void symRecSetupPrecomputes(struct symRec *symbols)
 /* Clear out any precomputed variable values - should be
  * executed on each new line of table. */
@@ -467,9 +484,13 @@ while (raSkipLeadingEmptyLines(lf, NULL))
 	       oldName = fieldName;
 	    int oldIx = stringArrayIx(oldName, inTable->fields, inTable->fieldCount);
 	    if (oldIx < 0)
+	       {
+	       if (fv->optional)
+	           continue;	    // Just skip optional ones we don't have
 	       errAbort("%s doesn't exist in the %d fields of %s line %d of %s", 
 		oldName, inTable->fieldCount, inTable->name,
 		    lf->lineIx, lf->fileName);
+	       }
 	    fv->oldIx = oldIx;
 	    }
 	fv->newIx = fieldCount++;
