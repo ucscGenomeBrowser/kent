@@ -33,50 +33,58 @@ attrsTests: attrsSet1GtfTest attrsV21GtfTest attrsV21Gff3Test attrsV27ParGtfTest
 	attrsV19GtfTest attrsTagGtfTests attrsTagGff3Tests
 
 attrsSet1GtfTest: mkdirs
-	${gencodeGxfToAttrs} input/set1.gtf output/$@.attrs output/$@.tsl output/$@.tags
+	${gencodeGxfToAttrs} input/set1.gtf output/$@.tsv output/$@.attrs output/$@.tsl output/$@.tags
+	${diff} expected/$@.tsv output/$@.tsv
 	${diff} expected/$@.attrs output/$@.attrs
 	${diff} expected/$@.tsl output/$@.tsl
 	${diff} expected/$@.tags output/$@.tags
 
 attrsV21GtfTest: mkdirs
-	${gencodeGxfToAttrs} input/v21.gtf output/$@.attrs output/$@.tsl output/$@.tags
+	${gencodeGxfToAttrs} input/v21.gtf output/$@.tsv output/$@.attrs output/$@.tsl output/$@.tags
+	${diff} expected/$@.tsv output/$@.tsv
 	${diff} expected/$@.attrs output/$@.attrs
 	${diff} expected/$@.tsl output/$@.tsl
 	${diff} expected/$@.tags output/$@.tags
 
 attrsV21Gff3Test: mkdirs
-	${gencodeGxfToAttrs} input/v21.gff3 output/$@.attrs output/$@.tsl output/$@.tags
+	${gencodeGxfToAttrs} input/v21.gff3 output/$@.tsv output/$@.attrs output/$@.tsl output/$@.tags
+	${diff} expected/$@.tsv output/$@.tsv
 	${diff} expected/$@.attrs output/$@.attrs
 	${diff} expected/$@.tsl output/$@.tsl
 	${diff} expected/$@.tags output/$@.tags
 
 attrsV27ParGtfTest: mkdirs
-	${gencodeGxfToAttrs} input/v27.par.gtf output/$@.attrs output/$@.tsl output/$@.tags
+	${gencodeGxfToAttrs} input/v27.par.gtf output/$@.tsv output/$@.attrs output/$@.tsl output/$@.tags
+	${diff} expected/$@.tsv output/$@.tsv
 	${diff} expected/$@.attrs output/$@.attrs
 	${diff} expected/$@.tsl output/$@.tsl
 	${diff} expected/$@.tags output/$@.tags
 
 attrsV27ParGff3Test:mkdirs
-	${gencodeGxfToAttrs} input/v27.par.gff3 output/$@.attrs output/$@.tsl output/$@.tags
+	${gencodeGxfToAttrs} input/v27.par.gff3 output/$@.tsv output/$@.attrs output/$@.tsl output/$@.tags
+	${diff} expected/$@.tsv output/$@.tsv
 	${diff} expected/$@.attrs output/$@.attrs
 	${diff} expected/$@.tsl output/$@.tsl
 	${diff} expected/$@.tags output/$@.tags
 
 # compatiblity with V19 for reloading
 attrsV19GtfTest: mkdirs
-	${gencodeGxfToAttrs} input/v19.gtf output/$@.attrs output/$@.tsl output/$@.tags
+	${gencodeGxfToAttrs} input/v19.gtf output/$@.tsv output/$@.attrs output/$@.tsl output/$@.tags
+	${diff} expected/$@.tsv output/$@.tsv
 	${diff} expected/$@.attrs output/$@.attrs
 	${diff} expected/$@.tsl output/$@.tsl
 	${diff} expected/$@.tags output/$@.tags
 
 attrsTagGtfTests: mkdirs
-	${gencodeGxfToAttrs} input/tags.gtf output/$@.attrs output/$@.tsl output/$@.tags
+	${gencodeGxfToAttrs} input/tags.gtf output/$@.tsv output/$@.attrs output/$@.tsl output/$@.tags
+	${diff} expected/$@.tsv output/$@.tsv
 	${diff} expected/$@.attrs output/$@.attrs
 	${diff} expected/$@.tsl output/$@.tsl
 	${diff} expected/$@.tags output/$@.tags
 
 attrsTagGff3Tests: mkdirs
-	${gencodeGxfToAttrs} input/tags.gff3 output/$@.attrs output/$@.tsl output/$@.tags
+	${gencodeGxfToAttrs} input/tags.gff3 output/$@.tsv output/$@.attrs output/$@.tsl output/$@.tags
+	${diff} expected/$@.tsv output/$@.tsv
 	${diff} expected/$@.attrs output/$@.attrs
 	${diff} expected/$@.tsl output/$@.tsl
 	${diff} expected/$@.tags output/$@.tags
@@ -133,7 +141,7 @@ specialCases1Test: ${ensToUcscMappingChainHg37} mkdirs
 ##
 exonSupportTests: exonSupport1Test
 
-exonSupport1Test:
+exonSupport1Test: ${ensToUcscMappingChainHg37}
 	${gencodeExonSupportToTable} input/examples1.Exon_supporting_feature ${ensToUcscMappingChainHg37} output/$@.exons
 	${diff} expected/$@.exons output/$@.exons
 

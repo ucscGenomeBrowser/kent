@@ -1,3 +1,4 @@
+geneId	geneName	geneType	transcriptId	transcriptName	transcriptType	ccdsId	level	proteinId	transcriptClass
 ENSG00000273547.1	OR4F16	protein_coding	ENST00000332831.3	OR4F16-001	protein_coding	CCDS41221.1	2	ENSP00000329982.2	coding
 ENSG00000186092.4	OR4F5	protein_coding	ENST00000335137.3	OR4F5-001	protein_coding	CCDS30547.1	2	ENSP00000334393.3	coding
 ENSG00000228463.6	AP006222.2	lincRNA	ENST00000335577.4	AP006222.2-004	lincRNA		2		nonCoding

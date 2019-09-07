@@ -1,3 +1,4 @@
+geneId	geneName	geneType	transcriptId	transcriptName	transcriptType	ccdsId	level	proteinId	transcriptClass
 ENSG00000142149.4	HUNK	protein_coding	ENST00000270112.2	HUNK-001	protein_coding	CCDS13610.1	2		coding
 ENSG00000182484.9	WASH6P	protein_coding	ENST00000285718.7	WASH6P-201	protein_coding		3		coding
 ENSG00000177693.3	OR4F4	protein_coding	ENST00000326183.3	OR4F4-001	protein_coding	CCDS32343.1	2		coding
