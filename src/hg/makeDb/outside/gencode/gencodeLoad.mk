@@ -35,8 +35,8 @@ mach = $(shell uname -m)
 # - ensemblPrevVersion is use to get chrom name mappings for pre-release,
 #   as this doesn't change between release.
 ##
-db = hg38
-#db = hg19
+#db = hg38
+db = hg19
 #db = mm10
 #preRelease = no
 preRelease = yes
@@ -254,9 +254,9 @@ ${ensemblToUcscChain}:
 # other tab files, just copy to name following convention to make load rules
 # work
 ifeq (${isBackmap}, yes)
-   metaFilterCmd = ${gencodeBackMapMetadataIds} ${gencodeTsv} ${targetGencodeTsv}
+   metaFilterCmd = ${gencodeBackMapMetadataIds} ${gencodeAttrsTsv} ${targetGencodeTsv}
    metaFilterCmdGz = ${metaFilterCmd}
-   metaFilterDepend = ${gencodeTsv} ${targetGencodeTsv}
+   metaFilterDepend = ${gencodeAttrsTsv} ${targetGencodeTsv}
 else
    metaFilterCmd = cat
    metaFilterCmdGz = zcat
@@ -320,7 +320,7 @@ ${gencodeAttrsTsv}: ${annotationGff}
 
 ${targetGencodeTsv}:
 	@mkdir -p $(dir $@)
-	hgsql ${db}  -e 'select * from ${tableAttrs}' > $@.${tmpExt}
+	hgsql ${db}  -e 'select * from wgEncodeGencodeAttrsV${backmapTargetVer}' > $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
 
