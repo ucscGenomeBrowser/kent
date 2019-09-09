@@ -270,7 +270,7 @@ if (botException())	/* don't do this if caller is on the exception list */
     return issueWarning;
 
 if (delayFrac < 0.000001) /* passed in zero, use default 1.0 */
-    delayFrac = 1.0
+    delayFrac = 1.0;
 
 botDelayMillis = hgBotDelayTimeFrac(delayFrac);
 if (botDelayMillis > 0)
