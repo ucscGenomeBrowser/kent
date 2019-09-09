@@ -365,7 +365,7 @@ def printContentType(contType="text/html", status=None, fname=None):
     if doWarnBot:
         print ("<div style='background-color:yellow; border:2px solid black'>")
         print ("We have a suspicion that you are an automated web bot software, not a real user. ")
-        print ("To keep our site fast for other users, we have slowed down this page by %d milliseconds. ")
+        print ("To keep our site fast for other users, we have slowed down this page. ")
         print ("The slowdown will gradually disappear. ")
         print ("If you think this is a mistake, please contact us at genome-www@soe.ucsc.edu. ")
         print ("Also note that all data for hgGeneGraph can be obtained through our public MySQL server and")
