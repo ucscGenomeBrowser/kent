@@ -260,10 +260,18 @@ boolean earlyBotCheck(long enteredMainTime, char *cgiName, double delayFrac, int
 /* similar to botDelayCgi but for use before the CGI has started any
  * output or setup the cart of done any MySQL operations.  The boolean
  * return is used later in the CGI after it has done all its setups and
- * started output so it can issue the warning.
+ * started output so it can issue the warning.  Pass in delayFrac 0.0
+ * to use the default 1.0
  */
 {
 boolean issueWarning = FALSE;
+
+if (botException())	/* don't do this if caller is on the exception list */
+    return issueWarning;
+
+if (delayFrac < 0.000001) /* passed in zero, use default 1.0 */
+    delayFrac = 1.0
+
 botDelayMillis = hgBotDelayTimeFrac(delayFrac);
 if (botDelayMillis > 0)
     {
