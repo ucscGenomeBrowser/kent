@@ -32,7 +32,6 @@ group regulation
         metadata tissue=facial age=E11
 
         track encode3RenAtacPeakFacialE12
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakFacialE12.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC facial E12
@@ -41,7 +40,6 @@ group regulation
         metadata tissue=facial age=E12
 
         track encode3RenAtacPeakFacialE13
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakFacialE13.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC facial E13
@@ -50,7 +48,6 @@ group regulation
         metadata tissue=facial age=E13
 
         track encode3RenAtacPeakFacialE14
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakFacialE14.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC facial E14
@@ -59,7 +56,6 @@ group regulation
         metadata tissue=facial age=E14
 
         track encode3RenAtacPeakFacialE15
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakFacialE15.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC facial E15
@@ -68,7 +64,6 @@ group regulation
         metadata tissue=facial age=E15
 
         track encode3RenAtacPeakForebrainE11
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakForebrainE11.bb
         parent encode3RenAtacPeaks on
         shortLabel ATAC forebrain E11
@@ -77,7 +72,6 @@ group regulation
         metadata tissue=forebrain age=E11
 
         track encode3RenAtacPeakForebrainE12
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakForebrainE12.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC forebrain E12
@@ -86,7 +80,6 @@ group regulation
         metadata tissue=forebrain age=E12
 
         track encode3RenAtacPeakForebrainE13
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakForebrainE13.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC forebrain E13
@@ -95,7 +88,6 @@ group regulation
         metadata tissue=forebrain age=E13
 
         track encode3RenAtacPeakForebrainE14
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakForebrainE14.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC forebrain E14
@@ -104,7 +96,6 @@ group regulation
         metadata tissue=forebrain age=E14
 
         track encode3RenAtacPeakForebrainE15
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakForebrainE15.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC forebrain E15
@@ -113,7 +104,6 @@ group regulation
         metadata tissue=forebrain age=E15
 
         track encode3RenAtacPeakForebrainE16
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakForebrainE16.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC forebrain E16
@@ -122,7 +112,6 @@ group regulation
         metadata tissue=forebrain age=E16
 
         track encode3RenAtacPeakForebrainP0
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakForebrainP0.bb
         parent encode3RenAtacPeaks on
         shortLabel ATAC forebrain P0
@@ -131,7 +120,6 @@ group regulation
         metadata tissue=forebrain age=P0
 
         track encode3RenAtacPeakHeartE11
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakHeartE11.bb
         parent encode3RenAtacPeaks on
         shortLabel ATAC heart E11
@@ -140,7 +128,6 @@ group regulation
         metadata tissue=heart age=E11
 
         track encode3RenAtacPeakHeartE12
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakHeartE12.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC heart E12
@@ -149,7 +136,6 @@ group regulation
         metadata tissue=heart age=E12
 
         track encode3RenAtacPeakHeartE13
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakHeartE13.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC heart E13
@@ -158,7 +144,6 @@ group regulation
         metadata tissue=heart age=E13
 
         track encode3RenAtacPeakHeartE14
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakHeartE14.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC heart E14
@@ -167,7 +152,6 @@ group regulation
         metadata tissue=heart age=E14
 
         track encode3RenAtacPeakHeartE15
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakHeartE15.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC heart E15
@@ -176,7 +160,6 @@ group regulation
         metadata tissue=heart age=E15
 
         track encode3RenAtacPeakHeartE16
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakHeartE16.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC heart E16
@@ -185,7 +168,6 @@ group regulation
         metadata tissue=heart age=E16
 
         track encode3RenAtacPeakHeartP0
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakHeartP0.bb
         parent encode3RenAtacPeaks on
         shortLabel ATAC heart P0
@@ -194,7 +176,6 @@ group regulation
         metadata tissue=heart age=P0
 
         track encode3RenAtacPeakHindbrainE11
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakHindbrainE11.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC hindbrain E11
@@ -203,7 +184,6 @@ group regulation
         metadata tissue=hindbrain age=E11
 
         track encode3RenAtacPeakHindbrainE12
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakHindbrainE12.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC hindbrain E12
@@ -212,7 +192,6 @@ group regulation
         metadata tissue=hindbrain age=E12
 
         track encode3RenAtacPeakHindbrainE13
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakHindbrainE13.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC hindbrain E13
@@ -221,7 +200,6 @@ group regulation
         metadata tissue=hindbrain age=E13
 
         track encode3RenAtacPeakHindbrainE14
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakHindbrainE14.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC hindbrain E14
@@ -230,7 +208,6 @@ group regulation
         metadata tissue=hindbrain age=E14
 
         track encode3RenAtacPeakHindbrainE15
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakHindbrainE15.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC hindbrain E15
@@ -239,7 +216,6 @@ group regulation
         metadata tissue=hindbrain age=E15
 
         track encode3RenAtacPeakHindbrainE16
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakHindbrainE16.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC hindbrain E16
@@ -248,7 +224,6 @@ group regulation
         metadata tissue=hindbrain age=E16
 
         track encode3RenAtacPeakHindbrainP0
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakHindbrainP0.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC hindbrain P0
@@ -257,7 +232,6 @@ group regulation
         metadata tissue=hindbrain age=P0
 
         track encode3RenAtacPeakIntestineE14
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakIntestineE14.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC intestine E14
@@ -266,7 +240,6 @@ group regulation
         metadata tissue=intestine age=E14
 
         track encode3RenAtacPeakIntestineE15
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakIntestineE15.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC intestine E15
@@ -275,7 +248,6 @@ group regulation
         metadata tissue=intestine age=E15
 
         track encode3RenAtacPeakIntestineE16
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakIntestineE16.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC intestine E16
@@ -284,7 +256,6 @@ group regulation
         metadata tissue=intestine age=E16
 
         track encode3RenAtacPeakIntestineP0
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakIntestineP0.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC intestine P0
@@ -293,7 +264,6 @@ group regulation
         metadata tissue=intestine age=P0
 
         track encode3RenAtacPeakKidneyE14
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakKidneyE14.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC kidney E14
@@ -302,7 +272,6 @@ group regulation
         metadata tissue=kidney age=E14
 
         track encode3RenAtacPeakKidneyE15
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakKidneyE15.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC kidney E15
@@ -311,7 +280,6 @@ group regulation
         metadata tissue=kidney age=E15
 
         track encode3RenAtacPeakKidneyE16
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakKidneyE16.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC kidney E16
@@ -320,7 +288,6 @@ group regulation
         metadata tissue=kidney age=E16
 
         track encode3RenAtacPeakKidneyP0
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakKidneyP0.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC kidney P0
@@ -329,7 +296,6 @@ group regulation
         metadata tissue=kidney age=P0
 
         track encode3RenAtacPeakLimbE11
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLimbE11.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC limb E11
@@ -338,7 +304,6 @@ group regulation
         metadata tissue=limb age=E11
 
         track encode3RenAtacPeakLimbE12
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLimbE12.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC limb E12
@@ -347,7 +312,6 @@ group regulation
         metadata tissue=limb age=E12
 
         track encode3RenAtacPeakLimbE13
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLimbE13.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC limb E13
@@ -356,7 +320,6 @@ group regulation
         metadata tissue=limb age=E13
 
         track encode3RenAtacPeakLimbE14
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLimbE14.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC limb E14
@@ -365,7 +328,6 @@ group regulation
         metadata tissue=limb age=E14
 
         track encode3RenAtacPeakLimbE15
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLimbE15.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC limb E15
@@ -374,7 +336,6 @@ group regulation
         metadata tissue=limb age=E15
 
         track encode3RenAtacPeakLiverE11
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLiverE11.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC liver E11
@@ -383,7 +344,6 @@ group regulation
         metadata tissue=liver age=E11
 
         track encode3RenAtacPeakLiverE12
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLiverE12.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC liver E12
@@ -392,7 +352,6 @@ group regulation
         metadata tissue=liver age=E12
 
         track encode3RenAtacPeakLiverE13
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLiverE13.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC liver E13
@@ -401,7 +360,6 @@ group regulation
         metadata tissue=liver age=E13
 
         track encode3RenAtacPeakLiverE14
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLiverE14.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC liver E14
@@ -410,7 +368,6 @@ group regulation
         metadata tissue=liver age=E14
 
         track encode3RenAtacPeakLiverE15
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLiverE15.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC liver E15
@@ -419,7 +376,6 @@ group regulation
         metadata tissue=liver age=E15
 
         track encode3RenAtacPeakLiverE16
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLiverE16.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC liver E16
@@ -428,7 +384,6 @@ group regulation
         metadata tissue=liver age=E16
 
         track encode3RenAtacPeakLiverP0
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLiverP0.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC liver P0
@@ -437,7 +392,6 @@ group regulation
         metadata tissue=liver age=P0
 
         track encode3RenAtacPeakLungE14
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLungE14.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC lung E14
@@ -446,7 +400,6 @@ group regulation
         metadata tissue=lung age=E14
 
         track encode3RenAtacPeakLungE15
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLungE15.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC lung E15
@@ -455,7 +408,6 @@ group regulation
         metadata tissue=lung age=E15
 
         track encode3RenAtacPeakLungE16
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLungE16.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC lung E16
@@ -464,7 +416,6 @@ group regulation
         metadata tissue=lung age=E16
 
         track encode3RenAtacPeakLungP0
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLungP0.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC lung P0
@@ -473,7 +424,6 @@ group regulation
         metadata tissue=lung age=P0
 
         track encode3RenAtacPeakMidbrainE11
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakMidbrainE11.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC midbrain E11
@@ -482,7 +432,6 @@ group regulation
         metadata tissue=midbrain age=E11
 
         track encode3RenAtacPeakMidbrainE12
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakMidbrainE12.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC midbrain E12
@@ -491,7 +440,6 @@ group regulation
         metadata tissue=midbrain age=E12
 
         track encode3RenAtacPeakMidbrainE13
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakMidbrainE13.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC midbrain E13
@@ -500,7 +448,6 @@ group regulation
         metadata tissue=midbrain age=E13
 
         track encode3RenAtacPeakMidbrainE14
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakMidbrainE14.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC midbrain E14
@@ -509,7 +456,6 @@ group regulation
         metadata tissue=midbrain age=E14
 
         track encode3RenAtacPeakMidbrainE15
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakMidbrainE15.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC midbrain E15
@@ -518,7 +464,6 @@ group regulation
         metadata tissue=midbrain age=E15
 
         track encode3RenAtacPeakMidbrainE16
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakMidbrainE16.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC midbrain E16
@@ -527,7 +472,6 @@ group regulation
         metadata tissue=midbrain age=E16
 
         track encode3RenAtacPeakMidbrainP0
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakMidbrainP0.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC midbrain P0
@@ -536,7 +480,6 @@ group regulation
         metadata tissue=midbrain age=P0
 
         track encode3RenAtacPeakNeuralE11
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakNeuralE11.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC neural E11
@@ -545,7 +488,6 @@ group regulation
         metadata tissue=neural age=E11
 
         track encode3RenAtacPeakNeuralE12
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakNeuralE12.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC neural E12
@@ -554,7 +496,6 @@ group regulation
         metadata tissue=neural age=E12
 
         track encode3RenAtacPeakNeuralE13
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakNeuralE13.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC neural E13
@@ -563,7 +504,6 @@ group regulation
         metadata tissue=neural age=E13
 
         track encode3RenAtacPeakNeuralE14
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakNeuralE14.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC neural E14
@@ -572,7 +512,6 @@ group regulation
         metadata tissue=neural age=E14
 
         track encode3RenAtacPeakNeuralE15
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakNeuralE15.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC neural E15
@@ -581,7 +520,6 @@ group regulation
         metadata tissue=neural age=E15
 
         track encode3RenAtacPeakStomachE14
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakStomachE14.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC stomach E14
@@ -590,7 +528,6 @@ group regulation
         metadata tissue=stomach age=E14
 
         track encode3RenAtacPeakStomachE15
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakStomachE15.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC stomach E15
@@ -599,7 +536,6 @@ group regulation
         metadata tissue=stomach age=E15
 
         track encode3RenAtacPeakStomachE16
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakStomachE16.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC stomach E16
@@ -608,7 +544,6 @@ group regulation
         metadata tissue=stomach age=E16
 
         track encode3RenAtacPeakStomachP0
-        type bigBed 5
 	bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakStomachP0.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC stomach P0
