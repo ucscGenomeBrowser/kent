@@ -1,4 +1,4 @@
-table gencodePdb
+table gencodeToPdb
 "GENCODE transcript to Protein Data Bank (PDB) protein structure mapping
    (
     string transcriptId; "GENCODE transcript identifier"

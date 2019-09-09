@@ -1,4 +1,4 @@
-table gencodeUniProt
+table gencodeToUniProt
 "GENCODE transcript to UniProt peptide mapping"
    (
     string transcriptId; "GENCODE transcript identifier"

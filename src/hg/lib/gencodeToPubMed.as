@@ -1,4 +1,4 @@
-table gencodePubMed
+table gencodeToPubMed
 "Gencode metadata table of PubMed identifier of published experimental data associated with Gencode Genes"
    (
     string transcriptId; "GENCODE transcript identifier"

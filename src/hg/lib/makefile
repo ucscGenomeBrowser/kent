@@ -118,11 +118,11 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     oregannoUi.o gvUi.o gv.o omicia.o protVar.o pgSnp.o \
     alignInfo.o cddInfo.o loweutils.o cddDesc.o arCOGs.o arcogdesc.o geneTree.o \
     megablastInfo.o pgPhenoAssoc.o pgSiftPred.o pgPolyphenPred.o userRegions.o variome.o \
-    gencodeAnnotationRemark.o gencodeAttrs.o gencodeEntrezGene.o \
-    gencodeExonSupport.o gencodeGeneSource.o gencodeGeneSymbol.o gencodePdb.o \
-    gencodePubMed.o gencodeRefSeq.o gencodeTag.o \
+    gencodeAnnotationRemark.o gencodeAttrs.o gencodeToEntrezGene.o \
+    gencodeExonSupport.o gencodeGeneSource.o gencodeToGeneSymbol.o gencodeToPdb.o \
+    gencodeToPubMed.o gencodeToRefSeq.o gencodeTag.o \
     gencodeTranscriptionSupportLevel.o gencodeTranscriptSource.o \
-    gencodeTranscriptSupport.o gencodeUniProt.o
+    gencodeTranscriptSupport.o gencodeToUniProt.o
 
 
 ifeq (${GBROWSE}, 1)

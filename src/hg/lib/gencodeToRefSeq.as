@@ -1,4 +1,4 @@
-table gencodeRefSeq
+table gencodeToRefSeq
 "GENCODE transcript to RefSeq mRNA or non-coding RNA and peptide accession mapping"
    (
     string transcriptId; "GENCODE transcript identifier"

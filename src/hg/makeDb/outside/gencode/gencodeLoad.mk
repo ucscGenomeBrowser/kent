@@ -9,6 +9,8 @@
 #   checkSanity - do some checks on the tables
 #   cmpRelease - compare with previous release
 #   joinerCheck - run joinerCheck on gencode tabkes
+#   clean - remove all than release directory
+#   dropTables - drop the tables
 #
 # can use -j n to run multiple jobs in parallel.
 ####
@@ -36,8 +38,8 @@ mach = $(shell uname -m)
 #   as this doesn't change between release.
 ##
 #db = hg38
-db = hg19
-#db = mm10
+#db = hg19
+db = mm10
 #preRelease = no
 preRelease = yes
 ifeq (${db},mm10)
@@ -145,54 +147,53 @@ tableExonSupport = ${tablePre}ExonSupport${rel}
 tableExonSupportTab = ${tableDir}/${tableExonSupport}.tab
 
 ifeq (${gencodeOrg}, Gencode_human)
-   tableGeneSymbolMeta = ${relDir}/gencode.v${ver}.metadata.HGNC.gz
+   tableToGeneSymbolMeta = ${relDir}/gencode.v${ver}.metadata.HGNC.gz
 else
-   tableGeneSymbolMeta = ${relDir}/gencode.v${ver}.metadata.MGI.gz
+   tableToGeneSymbolMeta = ${relDir}/gencode.v${ver}.metadata.MGI.gz
 endif
-tableGeneSymbol = ${tablePre}GeneSymbol${rel}
-tableGeneSymbolTab = ${tableDir}/${tableGeneSymbol}.tab
+tableToGeneSymbol = ${tablePre}ToGeneSymbol${rel}
+tableToGeneSymbolTab = ${tableDir}/${tableToGeneSymbol}.tab
 
-tablePdbMeta = ${relDir}/gencode.v${ver}.metadata.PDB.gz
-tablePdb = ${tablePre}Pdb${rel}
-tablePdbTab = ${tableDir}/${tablePdb}.tab
+tableToPdbMeta = ${relDir}/gencode.v${ver}.metadata.PDB.gz
+tableToPdb = ${tablePre}ToPdb${rel}
+tableToPdbTab = ${tableDir}/${tableToPdb}.tab
 
-tablePubMedMeta = ${relDir}/gencode.v${ver}.metadata.Pubmed_id.gz
-tablePubMed = ${tablePre}PubMed${rel}
-tablePubMedTab = ${tableDir}/${tablePubMed}.tab
+tableToPubMedMeta = ${relDir}/gencode.v${ver}.metadata.Pubmed_id.gz
+tableToPubMed = ${tablePre}ToPubMed${rel}
+tableToPubMedTab = ${tableDir}/${tableToPubMed}.tab
 
-tableRefSeqMeta = ${relDir}/gencode.v${ver}.metadata.RefSeq.gz
-tableRefSeq = ${tablePre}RefSeq${rel}
-tableRefSeqTab = ${tableDir}/${tableRefSeq}.tab
+tableToRefSeqMeta = ${relDir}/gencode.v${ver}.metadata.RefSeq.gz
+tableToRefSeq = ${tablePre}ToRefSeq${rel}
+tableToRefSeqTab = ${tableDir}/${tableToRefSeq}.tab
 
 tableSwissProtMeta = ${relDir}/gencode.v${ver}.metadata.SwissProt.gz
 tableTrEMBLMeta = ${relDir}/gencode.v${ver}.metadata.TrEMBL.gz
-tableUniProt = ${tablePre}UniProt${rel}
-tableUniProtTab = ${tableDir}/${tableUniProt}.tab
+tableToUniProt = ${tablePre}ToUniProt${rel}
+tableToUniProtTab = ${tableDir}/${tableToUniProt}.tab
 
 tableAnnotationRemarkMeta = ${relDir}/gencode.v${ver}.metadata.Annotation_remark.gz
 tableAnnotationRemark = ${tablePre}AnnotationRemark${rel}
 tableAnnotationRemarkTab = ${tableDir}/${tableAnnotationRemark}.tab
 
-tableEntrezGeneMeta = ${relDir}/gencode.v${ver}.metadata.EntrezGene.gz
-tableEntrezGene = ${tablePre}EntrezGene${rel}
-tableEntrezGeneTab = ${tableDir}/${tableEntrezGene}.tab
+tableToEntrezGeneMeta = ${relDir}/gencode.v${ver}.metadata.EntrezGene.gz
+tableToEntrezGene = ${tablePre}ToEntrezGene${rel}
+tableToEntrezGeneTab = ${tableDir}/${tableToEntrezGene}.tab
 
 tableTranscriptionSupportLevel  = ${tablePre}TranscriptionSupportLevel${rel}
 tableTranscriptionSupportLevelTab = ${tableDir}/${tableTranscriptionSupportLevel}.tab
 
 genePredExtTables = ${tableAnnot}
-genePredTables =
 tabTables = ${tableAttrs} ${tableTag} ${tableGeneSource} \
 	    ${tableTranscriptSource} ${tableTranscriptSupport} \
-	    ${tableGeneSymbol} ${tablePdb} ${tablePubMed} ${tableRefSeq} ${tableUniProt} \
-	    ${tableAnnotationRemark} ${tableEntrezGene}  ${tableTranscriptionSupportLevel}
+	    ${tableToGeneSymbol} ${tableToPdb} ${tableToPubMed} ${tableToRefSeq} ${tableToUniProt} \
+	    ${tableAnnotationRemark} ${tableToEntrezGene}  ${tableTranscriptionSupportLevel}
 ifeq (${isBackmap}, yes)
     targetGencodeTsv = ${dataDir}/target-gencode.tsv
 else
     # these are not included in backmap releases
     tabTables += ${tableExonSupport}
 endif
-allTables = ${genePredExtTables} ${genePredTables} ${tabTables}
+allTables = ${genePredExtTables} ${tabTables}
 
 # directory for flags indicating tables were loaded
 loadedDir = loaded
@@ -221,19 +222,19 @@ ${tableGeneSourceMeta}: ${fetchDone}
 ${tableTranscriptSourceMeta}: ${fetchDone}
 ${tableTranscriptSupportMeta}: ${fetchDone}
 ${tableExonSupportMeta}: ${fetchDone}
-${tableGeneSymbolMeta}: ${fetchDone}
-${tablePdbMeta}: ${fetchDone}
-${tablePubMedMeta}: ${fetchDone}
-${tableRefSeqMeta}: ${fetchDone}
+${tableToGeneSymbolMeta}: ${fetchDone}
+${tableToPdbMeta}: ${fetchDone}
+${tableToPubMedMeta}: ${fetchDone}
+${tableToRefSeqMeta}: ${fetchDone}
 ${tableSwissProtMeta}: ${fetchDone}
 ${tableTrEMBLMeta}: ${fetchDone}
 ${tableAnnotationRemarkMeta}: ${fetchDone}
-${tableEntrezGeneMeta}: ${fetchDone}
+${tableToEntrezGeneMeta}: ${fetchDone}
 
 ##
 # primary table files
 ##
-mkTables: ${genePredExtTables:%=${tableDir}/%.gp} ${genePredTables:%=${tableDir}/%.gp} \
+mkTables: ${genePredExtTables:%=${tableDir}/%.gp} \
 	  ${tabTables:%=${tableDir}/%.tab}
 
 ${tableAnnotGp}: ${annotationGff} ${ensemblToUcscChain}
@@ -241,7 +242,7 @@ ${tableAnnotGp}: ${annotationGff} ${ensemblToUcscChain}
 	${gencodeGxfToGenePred} ${annotationGff} ${ensemblToUcscChain} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
-${tableUniProtTab}: ${tableSwissProtMeta} ${tableTrEMBLMeta} ${gencodeTsv}
+${tableToUniProtTab}: ${tableSwissProtMeta} ${tableTrEMBLMeta} ${gencodeAttrsTsv}
 	@mkdir -p $(dir $@)
 	((${metaFilterCmdGz} ${tableSwissProtMeta} | tawk '{print $$0,"SwissProt"}') && (${metaFilterCmdGz}  ${tableTrEMBLMeta} | tawk '{print $$0,"TrEMBL"}')) | sort -k 1,1 > $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
@@ -283,13 +284,13 @@ ${tableExonSupportTab}: ${tableExonSupportMeta} ${ensemblToUcscChain} ${metaFilt
 	@mkdir -p $(dir $@)
 	${gencodeExonSupportToTable} ${tableExonSupportMeta} ${ensemblToUcscChain} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
-${tableGeneSymbolTab}: ${tableGeneSymbolMeta} ${metaFilterDepend}
+${tableToGeneSymbolTab}: ${tableToGeneSymbolMeta} ${metaFilterDepend}
 	${copyMetadataTabGz}
-${tablePdbTab}: ${tablePdbMeta} ${metaFilterDepend}
+${tableToPdbTab}: ${tableToPdbMeta} ${metaFilterDepend}
 	${copyMetadataTabGz}
-${tablePubMedTab}: ${tablePubMedMeta} ${metaFilterDepend}
+${tableToPubMedTab}: ${tableToPubMedMeta} ${metaFilterDepend}
 	${copyMetadataTabGz}
-${tableRefSeqTab}: ${tableRefSeqMeta} ${metaFilterDepend}
+${tableToRefSeqTab}: ${tableToRefSeqMeta} ${metaFilterDepend}
 	${copyMetadataTabGz}
 
 # convert to zero-based, 1/2 open
@@ -299,7 +300,7 @@ ${tableAnnotationRemarkTab}: ${tableAnnotationRemarkMeta} ${metaFilterDepend}
 	mv -f $@.${tmpExt} $@
 # drop ENSTR entries that are a hack to support PAR sequences in GTF
 # FIXME: not needed???
-${tableEntrezGeneTab}: ${tableEntrezGeneMeta} ${metaFilterDepend}
+${tableToEntrezGeneTab}: ${tableToEntrezGeneMeta} ${metaFilterDepend}
 	@mkdir -p $(dir $@)
 	zcat $< | tawk '$$1!~/^ENSTR/' | sort -k 1,1 | ${metaFilterCmd} /dev/stdin > $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
@@ -335,17 +336,11 @@ checkAttrs: ${annotationGff}
 loadLock = flock load.lock
 
 loadTables: ${genePredExtTables:%=${loadedDir}/%.genePredExt.loaded} \
-	    ${genePredTables:%=${loadedDir}/%.genePred.loaded} \
 	    ${tabTables:%=${loadedDir}/%.tab.loaded}
 
 ${loadedDir}/%.genePredExt.loaded: ${tableDir}/%.gp
 	@mkdir -p $(dir $@)
 	${loadLock} hgLoadGenePred -genePredExt ${db} $* $<
-	touch $@
-
-${loadedDir}/%.genePred.loaded: ${tableDir}/%.gp
-	@mkdir -p $(dir $@)
-	${loadLock} hgLoadGenePred ${db} $* $<
 	touch $@
 
 # generic tables
@@ -418,3 +413,8 @@ joinerCheck: loadTables
 
 clean:
 	rm -rf ${dataDir} ${tableDir} ${loadedDir} ${checkDir}
+
+dropTables:  ${allTables:%=%.drop}
+%.drop:
+	hgsql ${db} -e 'drop table if exists $*'
+

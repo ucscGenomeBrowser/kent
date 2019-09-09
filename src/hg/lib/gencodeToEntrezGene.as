@@ -1,4 +1,4 @@
-table gencodeEntrezGene
+table gencodeToEntrezGene
 "The NCBI Entrez gene id associated with GENCODE transcript annotation"
    (
     string transcriptId; "GENCODE transcript identifier"
