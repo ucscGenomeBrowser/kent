@@ -18516,13 +18516,9 @@ static void checkForMupit(struct sqlConnection *conn, struct trackDb *tdb, int s
 {
 if (sqlTableExists(conn, "mupitRanges"))
     {
-    char *doLink = NULL;
-    char query[512];
-    sqlSafef(query, sizeof(query),
-        "select * from mupitRanges where chrom='%s' and chromStart <= %d and chromEnd >= %d",
-        seqName, start, start);
-    doLink = sqlQuickString(conn, query);
-    if (doLink != NULL)
+    struct sqlResult *sr = hRangeQuery(conn, "mupitRanges", seqName, start, start+1, NULL, NULL);
+    char **row = NULL;
+    if ((row = sqlNextRow(sr)) != NULL)
         {
         int mupitPosition = start + 1; // mupit uses 1-based coords
         printf("<TR><TD colspan=2><B>");

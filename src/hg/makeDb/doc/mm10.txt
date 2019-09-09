@@ -18086,3 +18086,37 @@ TMPDIR=/dev/shm
     # 878542993 bases of 2936892733 (29.914%) in intersection
 
 ##############################################################################
+2019-08-30: import of UCSC GENCODE group processing of GENCODE VM23 (markd)
+    # PRE-RELEASE
+
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM23
+    pushd /hive/data/genomes/mm10/bed/gencodeVM23
+
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs mm10 M23 98 'Sept 2019'
+
+    # If being pushed public, update 'Release Notes' in
+    # human/mm10/wgEncodeGencodeSuper.html
+
+    # edit human/mm10/trackDb.gencode.ra to add new .ra file include
+    make DBS=mm10
+
+    ## only if being pushed to RR:
+    # edit all.joiner to add ~/tmp/gencodeVM23.joiner
+    # verify with:
+    pushd /hive/data/genomes/mm10/bed/gencodeVM23
+    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # commit all
+    # if pushing public: add ticket and MARK QA READY
+
+#########################################################################

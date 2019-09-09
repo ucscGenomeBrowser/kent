@@ -86,4 +86,7 @@ char **lmCloneRowExt(struct lm *lm, char **row, int rowOutSize, int rowInSize);
 void lmRefAdd(struct lm *lm, struct slRef **pRefList, void *val);
 /* Add reference to list. */
 
+char *lmJoinStrings(struct lm *lm, char *a, char *b);
+/* Return concatenation of a and b allocated in lm */
+
 #endif//ndef LOCALMEM_H

@@ -477,6 +477,8 @@ for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
     struct spaceSaver *ssOld = tg->ss;
     tg->ss = spaceSaverNew(0, fullInsideWidth, maxCount);  // actual params do not matter, just using ss->nodeList.
     tg->ss->next = ssOld;
+    boolean useItemNameAsKey = isTypeUseItemNameAsKey(tg);
+    boolean useMapItemNameAsKey = isTypeUseMapItemNameAsKey(tg);
     char *chrom = w->chromName;
     for (item = tg->items; item != NULL; item = item->next)
 	{
@@ -495,9 +497,11 @@ for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
 	    // and then use that to prove uniqueness, or as near as can be had.
 	    //
 	    // For now, this should be good enough to illustrate the basic behavior we want to see.
-	    if (isTypeUseItemNameAsKey(tg))
+	    if (useItemNameAsKey)
 		safef(key, sizeof key, "%s",  tg->itemName(tg, item));
-	    else
+	    else if (useMapItemNameAsKey)
+		safef(key, sizeof key, "%s", mapItemName);
+            else
 		safef(key, sizeof key, "%s:%d-%d %s", chrom, baseStart, baseEnd, mapItemName);
 	    struct hashEl *hel = hashLookup(sameItem, key);
 	    struct sameItemNode *sin;
@@ -540,6 +544,8 @@ for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
     char *chrom = w->chromName;
     // int winOffset = w->insideX - fullInsideX;  // no longer needed
     double scale = (double)w->insideWidth/(w->winEnd - w->winStart);
+    boolean useItemNameAsKey = isTypeUseItemNameAsKey(tg);
+    boolean useMapItemNameAsKey = isTypeUseMapItemNameAsKey(tg);
     for (item = tg->items; item != NULL; item = item->next)
 	{
 	// TODO match items from different windows by using item start end and name in hash?
@@ -552,8 +558,10 @@ for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
 	    char key[1024];
 	    // TODO see key caveats above
 	    // For now, this should be good enough to illustrate the basic behavior we want to see.
-	    if (isTypeUseItemNameAsKey(tg))
+	    if (useItemNameAsKey)
 		safef(key, sizeof key, "%s",  tg->itemName(tg, item));
+	    else if (useMapItemNameAsKey)
+		safef(key, sizeof key, "%s",  mapItemName);
 	    else
 		safef(key, sizeof key, "%s:%d-%d %s", chrom, baseStart, baseEnd, mapItemName);
 	    struct hashEl *hel = hashLookup(sameItem, key);
@@ -10915,51 +10923,43 @@ if (!tg->limitedVisSet)
 
     // optional setting to draw labels onto the feature boxes, not next to them
     tg->drawLabelInBox = cartOrTdbBoolean(cart, tg->tdb, "labelOnFeature" , FALSE);
-    if (trackShouldUseAjaxRetrieval(tg))
-        {
-        tg->limitedVis = tg->visibility;
-        tg->height = REMOTE_TRACK_HEIGHT;
-        }
-    else
-        {
-        enum trackVisibility vis = tg->visibility;
-        int h;
-        int maxHeight = maximumTrackHeight(tg);
+    enum trackVisibility vis = tg->visibility;
+    int h;
+    int maxHeight = maximumTrackHeight(tg);
 
-        if (vis == tvHide)
-            {
-            tg->height = 0;
-            tg->limitedVis = tvHide;
-            return tvHide;
-            }
-        if (tg->subtracks != NULL)
-            {
-            struct track *subtrack;
-            int subCnt = subtrackCount(tg->subtracks);
-            maxHeight = maxHeight * max(subCnt,1);
-            //if (subCnt > 4)
-            //    maxHeight *= 2; // NOTE: Large composites should suffer an additional restriction.
-            if (!tg->syncChildVisToSelf)
-		{
-		for (subtrack = tg->subtracks;  subtrack != NULL; subtrack = subtrack->next)
-                    limitVisibility(subtrack);
-                }
-            }
-        while ((h = tg->totalHeight(tg, vis)) > maxHeight && vis != tvDense)
-            {
-            if (vis == tvFull && tg->canPack)
-                vis = tvPack;
-            else if (vis == tvPack)
-                vis = tvSquish;
-            else
-                vis = tvDense;
-            }
-        tg->height = h;
-        if (tg->limitedVis == tvHide)
-            tg->limitedVis = vis;
-        else
-            tg->limitedVis = tvMin(vis,tg->limitedVis);
+    if (vis == tvHide)
+        {
+        tg->height = 0;
+        tg->limitedVis = tvHide;
+        return tvHide;
         }
+    if (tg->subtracks != NULL)
+        {
+        struct track *subtrack;
+        int subCnt = subtrackCount(tg->subtracks);
+        maxHeight = maxHeight * max(subCnt,1);
+        //if (subCnt > 4)
+        //    maxHeight *= 2; // NOTE: Large composites should suffer an additional restriction.
+        if (!tg->syncChildVisToSelf)
+            {
+            for (subtrack = tg->subtracks;  subtrack != NULL; subtrack = subtrack->next)
+                limitVisibility(subtrack);
+            }
+        }
+    while ((h = tg->totalHeight(tg, vis)) > maxHeight && vis != tvDense)
+        {
+        if (vis == tvFull && tg->canPack)
+            vis = tvPack;
+        else if (vis == tvPack)
+            vis = tvSquish;
+        else
+            vis = tvDense;
+        }
+    tg->height = h;
+    if (tg->limitedVis == tvHide)
+        tg->limitedVis = vis;
+    else
+        tg->limitedVis = tvMin(vis,tg->limitedVis);
 
     if (tg->syncChildVisToSelf)
         {
@@ -13942,8 +13942,6 @@ else if (sameWord(type, "bedTabix"))
     knetUdcInstall();
     tdb->canPack = TRUE;
     complexBedMethods(track, tdb, FALSE, wordCount, words);
-    if (trackShouldUseAjaxRetrieval(tg))
-        track->loadItems = dontLoadItems;
     }
 else if (sameWord(type, "longTabix"))
     {
@@ -13953,20 +13951,14 @@ else if (sameWord(type, "longTabix"))
     knetUdcInstall();
     complexBedMethods(track, tdb, FALSE, 2, words);
     longRangeMethods(track, tdb);
-    if (trackShouldUseAjaxRetrieval(tg))
-        track->loadItems = dontLoadItems;
     }
 else if (sameWord(type, "mathWig"))
     {
     mathWigMethods(track, tdb, wordCount, words);
-    if (trackShouldUseAjaxRetrieval(track))
-        track->loadItems = dontLoadItems;
     }
 else if (sameWord(type, "bigBed"))
     {
     bigBedMethods(track, tdb, wordCount, words);
-    if (trackShouldUseAjaxRetrieval(track))
-        track->loadItems = dontLoadItems;
     if (startsWith("gtexEqtlTissue", track->track))
         gtexEqtlTissueMethods(track);
     }
@@ -13977,8 +13969,6 @@ else if (sameWord(type, "bigMaf"))
     words[1] = "3";
     wigMafMethods(track, tdb, wordCount, words);
     track->isBigBed = TRUE;
-    if (trackShouldUseAjaxRetrieval(track))
-        track->loadItems = dontLoadItems;
     }
 else if (sameWord(type, "bigBarChart"))
     {
@@ -14004,8 +13994,6 @@ else if (sameWord(type, "bigNarrowPeak"))
     track->isBigBed = TRUE;
     encodePeakMethods(track);
     track->loadItems = bigNarrowPeakLoadItems;
-    if (trackShouldUseAjaxRetrieval(track))
-        track->loadItems = dontLoadItems;
     }
 else if (sameWord(type, "bigPsl"))
     {
@@ -14013,8 +14001,6 @@ else if (sameWord(type, "bigPsl"))
     wordCount++;
     words[1] = "12";
     bigBedMethods(track, tdb, wordCount, words);
-    if (trackShouldUseAjaxRetrieval(track))
-        track->loadItems = dontLoadItems;
     }
 else if (sameWord(type, "bigChain"))
     {
@@ -14023,8 +14009,6 @@ else if (sameWord(type, "bigChain"))
     words[1] = "11";
     track->isBigBed = TRUE;
     chainMethods(track, tdb, wordCount, words);
-    if (trackShouldUseAjaxRetrieval(track))
-        track->loadItems = dontLoadItems;
     }
 else if (sameWord(type, "bigGenePred"))
     {
@@ -14032,8 +14016,6 @@ else if (sameWord(type, "bigGenePred"))
     wordCount++;
     words[1] = "12";
     bigBedMethods(track, tdb, wordCount, words);
-    if (trackShouldUseAjaxRetrieval(track))
-        track->loadItems = dontLoadItems;
     }
 else if (sameWord(type, "bedGraph"))
     {
@@ -14042,8 +14024,6 @@ else if (sameWord(type, "bedGraph"))
 else if (sameWord(type, "bigWig"))
     {
     bigWigMethods(track, tdb, wordCount, words);
-    if (trackShouldUseAjaxRetrieval(track))
-        track->loadItems = dontLoadItems;  // TODO: Dummy drawItems as well?
     }
 else
 #endif /* GBROWSE */
@@ -14109,8 +14089,6 @@ else if (sameWord(type, "maf"))
 else if (sameWord(type, "bam"))
     {
     bamMethods(track);
-    if (trackShouldUseAjaxRetrieval(track))
-        track->loadItems = dontLoadItems;
     }
 else if (sameWord(type, "hic"))
     {
@@ -14120,27 +14098,19 @@ else if (sameWord(type, "hic"))
 else if (sameWord(type, "pslSnake"))
     {
     halSnakeMethods(track, tdb, wordCount, words);
-    if (trackShouldUseAjaxRetrieval(track))
-        track->loadItems = dontLoadItems;
     }
 else if (sameWord(type, "halSnake"))
     {
     halSnakeMethods(track, tdb, wordCount, words);
-    if (trackShouldUseAjaxRetrieval(track))
-        track->loadItems = dontLoadItems;
     }
 #endif
 else if (sameWord(type, "vcfTabix"))
     {
     vcfTabixMethods(track);
-    if (trackShouldUseAjaxRetrieval(track))
-        track->loadItems = dontLoadItems;
     }
 else if (sameWord(type, "vcf"))
     {
     vcfMethods(track);
-    if (trackShouldUseAjaxRetrieval(track))
-        track->loadItems = dontLoadItems;
     }
 else if (startsWith(type, "bedDetail"))
     {

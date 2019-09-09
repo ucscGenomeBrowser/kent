@@ -110,9 +110,10 @@ def lastMonth(d,x=1):
 
 def compareWithLastMonth(fname, maxDiff):
     " go back one month from current date, make sure that linecount diff is at most maxDiff "
+    todayStr = date.today().isoformat()
     previousDate = lastMonth(date.today())
-    previousDate = previousDate.date().isoformat()
-    previousFname = fname.replace(today, previousDate)
+    previousDateStr = previousDate.date().isoformat()
+    previousFname = fname.replace(todayStr, previousDateStr)
     if not isfile(previousFname):
         print("Cannot find %s, cannot compare new data with previous month" % previousFname)
         return

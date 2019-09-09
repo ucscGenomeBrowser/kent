@@ -17,12 +17,12 @@ between(prefix, string, suffix) - returns the part of string found between prefi
    The prefix "" corresponds to beginning of string and the suffix "" corresponds to end.
    Returns empty string if nothing found.
 
-split(string, index)  - white space separated word from string of given 0 based index.
+word(string, index)  - white space separated word from string of given 0 based index.
    Returns empty string if index is too large.
    A negative input will work much like an array index does,  with -1 selecting the
    last word in the string.  Returns empty string if index out of range.
 
-separate(string, splitter, index) - separates string with splitter character. Returns 
+chop(string, splitter, index) - chops apart string with splitter character. Returns 
    string of given index.  Index can be negative as in split to pick off of end rather than start.
    Returns empty string if index is too out of rnge.
 
@@ -43,6 +43,28 @@ separate(string, splitter, index) - separates string with splitter character. Re
 	      Python actually goes further than this and allows a third, step, specification that
 	      strex has not implemented.  
 
+letter_range(string, start, end) - synonym for string[start:end]
+
+word_range(string, start, end) - returns subset of a space separated string corresponding to
+              the range defined by start/end.   As with letter_range and the array ranges, 
+              start is zero based and end is one past the end (or equivalently one based).
+	      Here are some examples:
+	          word_range("zero one   two three", 0, 1)  = "zero"
+		  word_range("zero one   two three", 0, 3)  = "zero one two three"
+	      Any ends larger than the number of words in the string return words to string end.
+	      To select until the end of the string by convention use the value 99999 for
+	      the end value.  
+	          word_range("zero one   two three", 2, 99999) = "two three"
+	      As with array ranges, start and end can have negative values with similar 
+	      results:
+	          word_range("zero one   two three", -2, 4) = "two three"
+		  word_range("zero one   two three", 0, -1) = "zero one two"
+	      Note that extra spacing between words one and two is not preserved in the output
+	      Use chop_range with ' ' as a splitter if this is not desirable.
+
+chop_range(string, splitter, start, end) - returns subset of a string delineated by splitter,
+              which should just be a single character
+
 untsv(string, index) - separate by tab. Synonym for separate(string, '\t', index)
 
 uncsv(string, index) - do comma separated value extraction of string. Includes quote escaping.
@@ -50,6 +72,22 @@ uncsv(string, index) - do comma separated value extraction of string. Includes q
 trim(string) - returns copy of string with leading and trailing spaces removed
 
 strip(string, toRemove) - remove all occurrences of any character in toRemove from string
+
+tidy(prefix, string, suffix) - helps trim unwanted ends off of a string.  If prefix is present 
+             in the string, the prefix and everything before it will be cut off.  Blank prefixes 
+	     have no effect.  Similarly if the suffix is present in what is left of the string 
+	     after the prefix is trimmed, then the parts of the string from where the suffix 
+	     starts will be cut off. BLank suffixes have no effect.
+   example:   tidy("", "myreads.fastq.gz", ".gz")  
+   	      returns "myreads.fastq"
+   example:   tidy("", "myreads.fastq", ".gz")  
+   	      returns "myreads.fastq"
+   example:   tidy("my/", "deep/path/to/my/reads.fastq.gz", ".gz")  
+              returns "reads.fastq"
+   example:   tidy("my/", "deep/path/to/my/reads.fastq.gz", ".fastq")  
+              returns "reads"
+   example:   tidy("my/", "deep/path/to/your/reads.fastq.gz", ".fastq")  
+	      returns "deep/path/to/your/reads"
 
 upper(string) - returns all upper case version of string
 
@@ -82,11 +120,12 @@ fix(string, target, newString) - similar to replace but works at the whole strin
     example to give something a value if non is present
 	    fix(requiredField, "", "reasonable default value")
 
-pick(query ? key1:val1, key2:val2, ... keyN:valN)
+pick(query ? key1:val1, key2:val2, ... keyN:valN, default:defaultVal)
     Looks through keys for one that matches query, and returns associated value if
-    it finds it.  Otherwise returns empty string.
+    it finds it.  Otherwise it returns the empty string unless a default is specified.
+    The default key can appear in any position, but traditionally is last or first.
     Can be used to apply different expressions to parsing in different conditions:
-         pick(species, "human" : ethnicity,  "mouse"  : strain )
+         pick(species, "human" : ethnicity,  "mouse"  : strain,  default:"unknown")
         
 (boolean ?  trueVal : falseVal)
     This is the trinary conditional expression found in C, Python and many other languages.
@@ -98,9 +137,9 @@ in(string, query) - returns true if query is a substring of string, false otherw
 
 same(a, b) - returns true if the two arguments are the same, false otherwise
 
-starts(prefix, string) - returns true if string starts with prefix
+starts_with(prefix, string) - returns true if string starts with prefix
 
-ends(string, suffix) - returns true if string ends with suffix
+ends_with(string, suffix) - returns true if string ends with suffix
 
 or - logical or operation extended to strings and numbers.  
      for logic - if any or-separated-values are true, return true, else false
@@ -122,7 +161,23 @@ and - logical and operation extended to strings and numbers
    In mixed operations result is converted to strings if strings are involved or
    the values "" and "true" if no strings are involved.
 
+not - logical not.  Converts false, zero, and the empty string to true,  everything else to false
+
 now() - returns current time and date in ISO 1806 format using the variant that has the local
         time and timezone,   for instance 2019-08-14T23:35:22-0700 for 11:35 pm in California
 	during daylight savings time.
+
+import("file.strex") - act as if the contents of file.strex, which should be a valid 
+        strex expression but one that can span multiple lines, were here instead of this
+	import expression.  This is useful for debugging and reusing complex expressions.
+	(You'll get line numbers from the file in the error message, which helps localize it.)
+
+warn("message")  - returns the input message with a scary warning prefix added.  Also will
+        send a warning message you see when running the strex program.  Usually this is
+	used as the default of a pick or something to put at the end of a long chain of
+	ors or conditionals when you don't want to do a hard error.
+
+error("message") - causes strex to stop processing with the given error message.
+        It will cause whatever program strex is embedded in to stop processing too
+	unless it is fancy enough to catch an exception.
 

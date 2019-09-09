@@ -46,7 +46,7 @@ cgiArgs = None
 # like in the kent tree, we keep track of whether we have already output the content-type line
 contentLineDone = False
 
-# the effective total delay that was added before showing the page
+# show the bot delay warning message before other printing is done?
 doWarnBot = False
 
 # two global variables: the first is the botDelay limit after which the page is slowed down and a warning is shown
@@ -59,9 +59,9 @@ jksqlTrace = False
 def warn(format, *args):
     print (format % args)
 
-def errAbort(msg):
+def errAbort(msg, status=None):
     " show msg and abort. Like errAbort.c "
-    printContentType()
+    printContentType(status=status)
     print msg
     exit(0)
 
@@ -339,21 +339,33 @@ def runCmd(cmd, mustRun=True):
         errAbort("Could not run command %s" % cmd)
     return ret
 
-def printContentType(contType="text/html", fname=None):
-    " print the HTTP Content-type header line with an optional file name. Also print bot delay note. "
+def printContentType(contType="text/html", status=None, fname=None):
+    """
+    print the HTTP Content-type header line with an optional file name for downloads.
+    Also optionally prints the bot delay note. The argument 'status' must be an int.
+    """
     global contentLineDone
     if not contentLineDone:
         contentLineDone = True
         print("Content-type: %s; charset=utf-8" % contType)
 
+        if status:
+            if status==400:
+                print("Status: 400 Bad Request")
+            elif status==429:
+                print("Status: 429 Too Many Requests")
+            else:
+                raise Exception("Unknown status code, please update hgLib.py")
+
         if fname is not None:
             print("Content-Disposition: attachment; filename=%s" % fname)
-        print
+
+        print  # this newline is essential, it means: end of header lines
 
     if doWarnBot:
         print ("<div style='background-color:yellow; border:2px solid black'>")
         print ("We have a suspicion that you are an automated web bot software, not a real user. ")
-        print ("To keep our site fast for other users, we have slowed down this page. ")
+        print ("To keep our site fast for other users, we have slowed down this page by %d milliseconds. ")
         print ("The slowdown will gradually disappear. ")
         print ("If you think this is a mistake, please contact us at genome-www@soe.ucsc.edu. ")
         print ("Also note that all data for hgGeneGraph can be obtained through our public MySQL server and")
@@ -404,15 +416,15 @@ def hgBotDelay():
     debug(1, "Bottleneck delay: %d msecs" % delay)
 
     if delay>botDelayBlock:
-        errAbort("Too many HTTP requests. Your IP has been blocked to keep this website responsive for other users. "
+        errAbort("Too many HTTP requests and not enough delay between them. "
+        "Your IP has been blocked to keep this website responsive for other users. "
         "Please contact genome-www@soe.ucsc.edu to unblock your IP address. We can also help you obtain the data you need without "
-        "web crawling. ")
+        "web crawling. ", status=429)
         sys.exit(0)
 
     if delay>botDelayWarn:
         time.sleep(delay/1000.0)
         doWarnBot = True # = show warning message later in printContentType()
-
 
 def parseRa(text):
     " Parse ra-style string and return as dict name -> value "

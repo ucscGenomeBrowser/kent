@@ -10,7 +10,7 @@ void csvEscapeAndAppend(struct dyString *dy, char *string)
 {
 if (dy->stringSize != 0)
     dyStringAppendC(dy, ',');
-if (strchr(string, ',') == NULL)
+if (strchr(string, ',') == NULL && strchr(string, '"') == NULL)
     dyStringAppend(dy, string);
 else
     {
@@ -30,7 +30,6 @@ char *csvEscapeToDyString(struct dyString *dy, char *string)
 /* Wrap string in quotes if it has any commas.  Put result into dy, and return it as a 
  * string.   Anything already in quotes get double-quoted */
 {
-/* If there are no commas just output it */
 dyStringClear(dy);
 csvEscapeAndAppend(dy, string);
 return dy->string;

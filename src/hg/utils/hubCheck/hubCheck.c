@@ -648,14 +648,24 @@ int hubCheckCompositeSettings(struct trackHubGenome *genome, struct trackDb *tdb
  * composite stanza rather than errAbort on the first error */
 {
 int retVal = 0;
-if (!tdbIsComposite(tdb))
+
+// for now all the combination style stanzas can get checked here, but
+// in the future they might need their own routines
+if (! (tdbIsComposite(tdb) || tdbIsCompositeView(tdb) || tdbIsContainer(tdb)) )
     return retVal;
 
-// check that subgroup lines are syntactically correct: "subGroup name Title tag1=value1 ..."
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
+    // check that subgroup lines are syntactically correct:
+    // "subGroup name Title tag1=value1 ..."
     (void)membersForAllSubGroupsGet(tdb, NULL);
+
+    // check that multiWigs have > 1 track
+    if (tdbIsContainer(tdb) && slCount(tdb->subtracks) < 2)
+        {
+        errAbort("container multiWig %s has only one subtrack. multiWigs must have more than subtrack", tdb->track);
+        }
     }
 errCatchEnd(errCatch);
 

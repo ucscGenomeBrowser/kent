@@ -1,4 +1,5 @@
 /* geoToTagStorm - Convert from GEO soft format to tagStorm.. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -55,8 +56,24 @@ for (;;)
     if (c == 0)
        break;
     if (c >= 0x20 && c <= 0x7f)
-       ++out;
+       {
+       if (isalnum(c) || c == '_' || c == '.')
+	   ++out;
+       }
     }
+}
+
+char *symbolify(char *name)
+/* Turn spaces and other things that computer languages don't tolerate in symbols well
+ * into underbars. This will alter the input. */
+{
+char *symbol = trimSpaces(name);
+subChar(symbol, ' ', '_');
+subChar(symbol, '-', '_');
+subChar(symbol, '/', '_');
+subChar(symbol, '|', '_');
+stripUnprintables(symbol);
+return symbol;
 }
 
 struct hash *geoSoftToTagHash(char *fileName)
@@ -111,7 +128,7 @@ while (lineFileNext(lf, &line, NULL))
 	line += linePrefixSize;
 
 	/* Parse out tag. */
-	char *tag = nextWord(&line);
+	char *tag = symbolify(nextWord(&line));
 	int tagLen = strlen(tag);
 
 	/* Remove _1, _2, _30 suffixes.  These will be turned into arrays later */
@@ -143,6 +160,7 @@ while (lineFileNext(lf, &line, NULL))
 	    }
 	else
 	    {
+
 	    /* Parse out the value, which happens after '=' */
 	    char *equ = nextWord(&line);
 	    if (!sameString("=", equ))
@@ -153,10 +171,11 @@ while (lineFileNext(lf, &line, NULL))
 		verbose(2, "Nothing after = line %d of %s", lf->lineIx, lf->fileName);
 		continue;
 		}
-	    char outputTag[256];
 
-	    /* Write out the tag name, simple for most tags, but data_processing and 
-	     * characteristics need special handling */
+
+	    /* Figure out the tag name, simple for most tags, but data_processing and 
+	     * characteristics need special handling and may update the val as well */
+	    char outputTag[256];
 	    if (sameString("characteristics", tag) || sameString("relation", tag))
 		{
 		/* These tags hava a subtag between the = and a : */
@@ -164,24 +183,22 @@ while (lineFileNext(lf, &line, NULL))
 		if (colonPos == NULL)
 		    errAbort("No colon after %s line %d of %s", tag, lf->lineIx, lf->fileName);
 		*colonPos++ = 0;
-		char *subTag = trimSpaces(val);
-		subChar(subTag, ' ', '_');
-		subChar(subTag, '-', '_');
-		subChar(subTag, '/', '_');
-		subChar(subTag, '|', '_');
-		stripUnprintables(subTag);
-		// stripChar(subTag, '(');
-		// stripChar(subTag, ')');
-		// stripChar(subTag, '?');
+		char *subTag = symbolify(val);
 		val = skipLeadingSpaces(colonPos);
 		safef(outputTag, sizeof(outputTag), "%s.%s_%s", lcSection, tag, subTag);
+		// check for sample characteristics and make them easier to acccess
+		if (sameString("characteristics", tag) && sameString("sample", lcSection))  
+		    {
+		    // We'll convert sample.characteristics_* tags to lab.* tags
+		    // This saves a bunch of typing and clarifies where these come from
+		    char *labPrefix = "lab.";
+		    safef(outputTag, sizeof(outputTag), "%s%s", labPrefix, subTag);
+		    }
 		}
 	    else
 		{
 		safef(outputTag, sizeof(outputTag), "%s.%s", lcSection, tag);
 		}
-
-	    /* Write out value */
 	    char *escapedVal = csvEscapeToDyString(escaperDy, val);
 	    tagStanzaAppend(tags, stanza, outputTag, escapedVal);
 	    }
