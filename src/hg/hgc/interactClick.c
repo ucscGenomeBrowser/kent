@@ -8,6 +8,7 @@
 #include "hdb.h"
 #include "jksql.h"
 #include "hgc.h"
+#include "customTrack.h"
 #include "trashDir.h"
 #include "hex.h"
 #include <openssl/sha.h>
@@ -156,31 +157,34 @@ for (ipr = iprs; ipr; ipr = next)
 return filtered;
 }
 
-static char *makeInteractRegionFile(char *name, struct interact *inters)
-/* Create bed file in trash directory with end coordinates for multi-region mode */
+static char *makeInteractRegionFile(char *name, struct interact *inters, char **retCustomText)
+/* Create bed file in trash directory with end coordinates for multi-region mode,
+ * and a custom track for display showing regions */
 {
 struct tempName mrTn;
 trashDirFile(&mrTn, "hgt", "custRgn_interact", ".bed");
 FILE *f = fopen(mrTn.forCgi, "w");
 if (f == NULL)
     errAbort("can't create temp file %s", mrTn.forCgi);
+
 char regionInfo[1024];
 int padding = 200;
 safef(regionInfo, sizeof regionInfo, "#padding %d\n", padding);
 mustWrite(f, regionInfo, strlen(regionInfo));
-//warn("%s", regionInfo);
 
 safef(regionInfo, sizeof regionInfo, "#shortDesc %s\n", name);
 mustWrite(f, regionInfo, strlen(regionInfo));
-//warn("%s", regionInfo);
 
 struct interact *inter = NULL;
 struct bed *region, *regions = NULL;
 struct hash *uniqRegions = hashNew(0);
+
+struct dyString *ds = dyStringNew(0);
+dyStringPrintf(ds, "track name='Multi Regions' description='Interact regions for %s' "
+                        "itemRgb=On labelOnFeature=on\n", name);
 for (inter = inters; inter != NULL; inter = inter->next)
     {
     char buf[256];
-    //safef(buf, sizeof buf, "%s:%d-%d", region1->chrom, region1->chromStart, region1->chromEnd);
     safef(buf, sizeof buf, "%s:%d-%d", inter->sourceChrom, inter->sourceStart, inter->sourceEnd);
     if (!hashLookup(uniqRegions, buf))
         {
@@ -191,25 +195,47 @@ for (inter = inters; inter != NULL; inter = inter->next)
         region->chromEnd = inter->sourceEnd;
         slAddHead(&regions, region);
         }
-    //safef(buf, sizeof buf, "%s:%d-%d", region2->chrom, region2->chromStart, region2->chromEnd);
     safef(buf, sizeof buf, "%s:%d-%d", inter->targetChrom, inter->targetStart, inter->targetEnd);
     if (!hashLookup(uniqRegions, buf))
         {
         hashAdd(uniqRegions, cloneString(buf), NULL);
         AllocVar(region);
-        region->chrom = inter->chrom;
+        region->chrom = inter->targetChrom;
         region->chromStart = inter->targetStart;
         region->chromEnd = inter->targetEnd;
         slAddHead(&regions, region);
         }
     }
 slSort(&regions, bedCmp);
+struct bed *prevRegion = NULL;
+
+// alternate item colors
+char *colorLight = "184,201,255";
+char *colorDark = "0,0,0";
+boolean doLightColor = TRUE;
+
+// print regions to BED file and custom track
 for (region = regions; region != NULL; region = region->next)
     {
-    safef(regionInfo, sizeof regionInfo, "%s\t%d\t%d\n",
+    // filter out nested regions
+    if (prevRegion == NULL || differentString(region->chrom, prevRegion->chrom) ||
+                region->chromStart >=  prevRegion->chromEnd)
+        {
+        safef(regionInfo, sizeof regionInfo, "%s\t%d\t%d\n",
                     region->chrom, region->chromStart, region->chromEnd);
-    mustWrite(f, regionInfo, strlen(regionInfo));
-    //warn("%s", regionInfo);
+        mustWrite(f, regionInfo, strlen(regionInfo));
+        int start = max(region->chromStart - padding, 0);
+        int end = min(region->chromEnd + padding, hChromSize(database, region->chrom));
+        char *color = doLightColor ? colorLight : colorDark;
+        doLightColor = !doLightColor;
+        dyStringPrintf(ds, "%s\t%d\t%d\t"
+                                "%s:%d+%d_bp\t"
+                                "0\t.\t%d\t%d\t%s\n",
+                            region->chrom, start, end,
+                                region->chrom, start+1, end-start,
+                                start, end, color);
+        }
+    prevRegion = region;
     }
 fclose(f);
 
@@ -223,6 +249,12 @@ safef(sha1File, sizeof sha1File, "%s.sha1", mrTn.forCgi);
 f = mustOpen(sha1File, "w");
 mustWrite(f, newSha1, strlen(newSha1));
 carefulClose(&f);
+
+// post custom track
+if (retCustomText != NULL)
+    *retCustomText = dyStringCannibalize(&ds);
+
+// return BED filename
 return cloneString(mrTn.forCgi);
 }
 
@@ -234,7 +266,6 @@ if (inters->next == NULL && interactEndsOverlap(inters))
     return;
 char *virtShortDesc = cartOptionalString(cart, "virtShortDesc");
 boolean isVirtMode = cartUsualBoolean(cart, "virtMode", FALSE);
-//warn("virtShortDesc: %s, name: %s", virtShortDesc, name);
 if (isVirtMode && virtShortDesc && sameString(virtShortDesc, name))
     {
     printf("<br>Show interaction%s in "
@@ -246,17 +277,19 @@ if (isVirtMode && virtShortDesc && sameString(virtShortDesc, name))
     }
 else
     {
-    char *regionFile = makeInteractRegionFile(name, inters);
-    //warn("regionFile: %s", regionFile);
+    char *customText = NULL;
+    char *regionFile = makeInteractRegionFile(name, inters, &customText);
     printf("<br>Show interaction ends in "
             "<a href='hgTracks?"
                 "virtMode=1&"
                 "virtModeType=customUrl&"
                 "virtWinFull=on&"
                 "virtShortDesc=%s&"
-                "multiRegionsBedUrl=%s'>"
+                "multiRegionsBedUrl=%s&"
+                "%s=%s'>"
             " multi-region browser view </a>(custom region mode)",
-                    name, cgiEncode(regionFile));
+                    name, cgiEncode(regionFile),
+                    CT_CUSTOM_TEXT_VAR, cgiEncode(customText));
     if (isVirtMode)
         printf(" or "
                 "<a href='hgTracks?"

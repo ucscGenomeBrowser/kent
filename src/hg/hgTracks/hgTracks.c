@@ -4513,7 +4513,7 @@ return FALSE;
 }
 
 boolean isTypeUseItemNameAsKey(struct track *track)
-/* Check if track type is like expRatio and key is just item name. */
+/* Check if track type is like expRatio and key is just item name, to link across multi regions */
 {
 char *typeLine = track->tdb->type, *words[8], *type;
 int wordCount;
@@ -4528,6 +4528,22 @@ if (sameWord(type, "expRatio"))
     // track is like expRatio, needs one row per item
     return TRUE;
     }
+return FALSE;
+}
+
+boolean isTypeUseMapItemNameAsKey(struct track *track)
+/* Check if track type is like interact and uses map item name to link across multi regions */
+{
+char *typeLine = track->tdb->type, *words[8], *type;
+int wordCount;
+if (typeLine == NULL)
+    return FALSE;
+wordCount = chopLine(cloneString(typeLine), words);
+if (wordCount <= 0)
+    return FALSE;
+type = words[0];
+if (sameWord(type, "interact") || sameWord(type, "bigInteract"))
+        return TRUE;
 return FALSE;
 }
 
@@ -8265,7 +8281,15 @@ if (!hideControls)
 	    safef(buf, sizeof buf, "%s:%ld-%ld", virtChromName, virtWinStart+1, virtWinEnd);
 	
 	position = cloneString(buf);
-	hPrintf("<span class='positionDisplay' id='positionDisplay' title='click to copy position to input box'>%s</span>", addCommasToPos(database, position));
+        char *pressedClass = "", *showVirtRegions = "";
+        if (differentString(virtModeType, "default"))
+            {
+            pressedClass = "pressed";
+            showVirtRegions = "show multi-region position ranges and ";
+            }
+	hPrintf("<span class='positionDisplay %s' id='positionDisplay' "
+                "title='click to %s copy position to input box'>%s</span>", 
+                        pressedClass, showVirtRegions, addCommasToPos(database, position));
 	hPrintf("<input type='hidden' name='position' id='position' value='%s'>\n", buf);
 	sprintLongWithCommas(buf, virtWinEnd - virtWinStart);
 	hPrintf(" <span id='size'>%s</span> bp. ", buf);

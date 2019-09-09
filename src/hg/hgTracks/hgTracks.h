@@ -1603,6 +1603,9 @@ boolean isTypeBedLike(struct track *track);
 boolean isTypeUseItemNameAsKey(struct track *track);
 /* Check if track type is like expRatio and key is just item name. */
 
+boolean isTypeUseMapItemNameAsKey(struct track *track);
+/* Check if track type is like interact and uses map item name to link across multi regions */
+
 void setEMGeneTrack();
 /* Find the track for the gene table to use for exonMostly and geneMostly. */
 

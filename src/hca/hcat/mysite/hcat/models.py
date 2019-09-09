@@ -38,6 +38,12 @@ class Contributor(models.Model):
     name = models.CharField(max_length=250, unique=True)
     email = models.EmailField(max_length=254, blank=True)
     phone = models.CharField(max_length=25, blank=True)
+    address = models.CharField(max_length=254, blank=True)
+    department = models.CharField(max_length=150, blank=True)
+    institute = models.CharField(max_length=150, blank=True)
+    city = models.CharField(max_length=100, blank=True)
+    zip_postal_code = models.CharField(max_length=20, blank=True)
+    country = models.CharField(max_length = 100, blank=True)
     project_role = models.CharField(max_length=100, default="contributor")
     projects = models.ManyToManyField("Project", blank=True, through="project_contributors")
     labs = models.ManyToManyField("Lab", blank=True, through="lab_contributors")
@@ -48,10 +54,10 @@ class Contributor(models.Model):
 
 class Lab(models.Model):
     short_name =  models.CharField(max_length=50, unique=True)
-    institution = models.CharField(max_length=250, blank="")
+    institution = models.CharField(max_length=250, null=True, blank=True)
     contact = models.ForeignKey(Contributor, null=True, default=None, on_delete=models.SET_NULL, related_name="contact")
-    pi = models.ForeignKey(Contributor, null=True, default=None, on_delete=models.SET_NULL, related_name="pi")
-    contributors = models.ManyToManyField(Contributor)
+    pi = models.ForeignKey(Contributor, blank=True, null=True, default=None, on_delete=models.SET_NULL, related_name="pi")
+    contributors = models.ManyToManyField(Contributor, blank=True)
     projects = models.ManyToManyField("Project", blank=True, through="project_labs")
     grants = models.ManyToManyField("Grant", blank=True, through="grant_funded_labs")
     comments = models.ManyToManyField(Comment, blank=True);

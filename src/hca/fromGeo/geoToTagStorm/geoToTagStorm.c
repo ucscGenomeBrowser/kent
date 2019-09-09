@@ -63,6 +63,19 @@ for (;;)
     }
 }
 
+char *symbolify(char *name)
+/* Turn spaces and other things that computer languages don't tolerate in symbols well
+ * into underbars. This will alter the input. */
+{
+char *symbol = trimSpaces(name);
+subChar(symbol, ' ', '_');
+subChar(symbol, '-', '_');
+subChar(symbol, '/', '_');
+subChar(symbol, '|', '_');
+stripUnprintables(symbol);
+return symbol;
+}
+
 struct hash *geoSoftToTagHash(char *fileName)
 /* Read in file in GEO soft format and return it as a hash of tagStorm files,
  * keyed by the lower case section name, things like 'database' or 'series' */
@@ -115,7 +128,7 @@ while (lineFileNext(lf, &line, NULL))
 	line += linePrefixSize;
 
 	/* Parse out tag. */
-	char *tag = nextWord(&line);
+	char *tag = symbolify(nextWord(&line));
 	int tagLen = strlen(tag);
 
 	/* Remove _1, _2, _30 suffixes.  These will be turned into arrays later */
@@ -170,15 +183,7 @@ while (lineFileNext(lf, &line, NULL))
 		if (colonPos == NULL)
 		    errAbort("No colon after %s line %d of %s", tag, lf->lineIx, lf->fileName);
 		*colonPos++ = 0;
-		char *subTag = trimSpaces(val);
-		subChar(subTag, ' ', '_');
-		subChar(subTag, '-', '_');
-		subChar(subTag, '/', '_');
-		subChar(subTag, '|', '_');
-		stripUnprintables(subTag);
-		// stripChar(subTag, '(');
-		// stripChar(subTag, ')');
-		// stripChar(subTag, '?');
+		char *subTag = symbolify(val);
 		val = skipLeadingSpaces(colonPos);
 		safef(outputTag, sizeof(outputTag), "%s.%s_%s", lcSection, tag, subTag);
 		// check for sample characteristics and make them easier to acccess

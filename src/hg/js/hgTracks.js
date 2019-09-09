@@ -577,7 +577,8 @@ var genomePos = {
                 str += "<ul style='list-style-type:none; max-height:200px; padding:0; width:80%; overflow:hidden; overflow-y:scroll;'>\n";
                 for (i=0,len=hgTracks.windows.length; i < len; ++i) {
                     var w = hgTracks.windows[i];
-                    str += "<li>" + w.chromName + ":" + (w.winStart+1) + "-" + w.winEnd + "</li>\n";
+                    str += "<li>" + w.chromName + ":" + (w.winStart+1) + "-" + w.winEnd +
+                                "&nbsp;&nbsp;&nbsp;" + (w.winEnd - w.winStart) + " bp" + "</li>\n";
                 }
                 str += "</ul>\n";
             }

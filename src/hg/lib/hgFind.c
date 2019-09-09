@@ -511,7 +511,9 @@ static struct hgPosTable *addKnownGeneTable(char *db, struct hgPositions *hgp)
 {
 struct hgPosTable *table;
 AllocVar(table);
-if (hTableExists(db, "kgProtMap2"))
+if (hTableExists(db, "knownAttrs"))
+    table->description = cloneString("Gencode Genes");
+else if (hTableExists(db, "kgProtMap2"))
     table->description = cloneString("UCSC Genes");
 else
     table->description = cloneString("Known Genes");

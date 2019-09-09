@@ -407,6 +407,11 @@ if (NULL == thisTrack)	/* OK to work with tables without trackDb definitions */
 if (trackHasNoData(thisTrack))
     apiErrAbort(err400, err400Msg, "container track '%s' does not contain data, use the children of this container for data access", track);
 
+/* might be a table that points to a big* file
+ * or is just a bigDataUrl without any table
+ */
+char *bigDataUrl = trackDbSetting(thisTrack, "bigDataUrl");
+
 char *sqlTableName = cloneString(track);
 /* the trackDb might have a specific table defined instead */
 char *tableName = trackDbSetting(thisTrack, "table");
@@ -436,13 +441,25 @@ else
     splitTableName = sqlTableName;
     }
 
-char **columnNames = NULL;
-char **columnTypes = NULL;
-int *jsonTypes = NULL;
-int columnCount = tableColumns(conn, splitTableName, &columnNames, &columnTypes, &jsonTypes);
-struct asObject *as = asForTable(conn, splitTableName, thisTrack);
-struct asColumn *columnEl = as->columnList;
-int asColumnCount = slCount(columnEl);
+struct bbiFile *bbi = NULL;
+if (thisTrack && startsWith("big", thisTrack->type))
+    {
+    if (bigDataUrl)
+	bbi = bigFileOpen(thisTrack->type, bigDataUrl);
+    else
+	{
+	char query[4096];
+	char quickReturn[2048];
+	sqlSafef(query, sizeof(query), "select fileName from %s", splitTableName);
+	if (sqlQuickQuery(conn, query, quickReturn, sizeof(quickReturn)))
+	    {
+	    bigDataUrl = hReplaceGbdb(cloneString(quickReturn));
+	    bbi = bigFileOpen(thisTrack->type, bigDataUrl);
+	    }
+	}
+    if (NULL == bbi)
+	apiErrAbort(err400, err400Msg, "failed to find bigDataUrl=%s for track=%s in database=%s for endpoint '/getData/schema'", bigDataUrl, track, db);
+    }
 
 char *dataTime = sqlTableUpdate(conn, splitTableName);
 
@@ -455,28 +472,64 @@ jsonWriteString(jw, "dataTime", dataTime);
 jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
 freeMem(dataTime);
 
+char **columnNames = NULL;
+char **columnTypes = NULL;
+int *jsonTypes = NULL;
+int columnCount = 0;
+struct asObject *as = NULL;
+struct asColumn *columnEl = NULL;
+int asColumnCount = 0;
 long long itemCount = 0;
-/* do not show counts for protected data */
-if (! trackDbSetting(thisTrack, "tableBrowser"))
+
+if (bbi)
     {
-    char query[2048];
-    sqlSafef(query, sizeof(query), "select count(*) from %s", splitTableName);
-    if (hti && hti->isSplit)	/* punting on split table item count */
-	itemCount = 0;
+    /* do not show itemCount for protected data */
+    if (! trackDbSetting(thisTrack, "tableBrowser"))
+	{
+	char *indexFileOrUrl = hReplaceGbdb(trackDbSetting(thisTrack, "bigDataIndex"));
+	itemCount = bbiItemCount(bigDataUrl, thisTrack->type, indexFileOrUrl);
+	}
+    if (startsWith("bigWig", thisTrack->type))
+	{
+	wigColumnTypes(jw);
+	}
     else
 	{
-	itemCount = sqlQuickNum(conn, query);
+	as = bigBedAsOrDefault(bbi);
+	struct sqlFieldType *fiList = sqlFieldTypesFromAs(as);
+	bigColumnTypes(jw, fiList, as);
 	}
     }
+else
+    {
+    columnCount = tableColumns(conn, splitTableName, &columnNames, &columnTypes, &jsonTypes);
+    as = asForTable(conn, splitTableName, thisTrack);
+    columnEl = as->columnList;
+    asColumnCount = slCount(columnEl);
+
+    /* do not show counts for protected data */
+    if (! trackDbSetting(thisTrack, "tableBrowser"))
+	{
+	char query[2048];
+	sqlSafef(query, sizeof(query), "select count(*) from %s", splitTableName);
+	if (hti && hti->isSplit)	/* punting on split table item count */
+	    itemCount = 0;
+	else
+	    {
+	    itemCount = sqlQuickNum(conn, query);
+	    }
+	}
 hFreeConn(&conn);
 
-outputTrackDbVars(jw, thisTrack, itemCount);
 
 if (hti && (hti->isSplit || debug))
     jsonWriteBoolean(jw, "splitTable", hti->isSplit);
 
 outputSchema(thisTrack, jw, columnNames, columnTypes, jsonTypes, hti,
   columnCount, asColumnCount, columnEl);
+    }
+
+outputTrackDbVars(jw, thisTrack, itemCount);
 
 apiFinishOutput(0, NULL, jw);
 
