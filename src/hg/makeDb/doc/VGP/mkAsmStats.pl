@@ -51,7 +51,7 @@ Vertebrate Genomes Project.</a>
 </p>
 
 <p>
-<h3>See also: <a href='hubIndex.html' target=_blank>hub access</a></h3>
+<h3>See also: <a href='index.html' target=_blank>hub access</a></h3>
 </p>
 
 <h3>Data resource links</h3>
