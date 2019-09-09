@@ -323,3 +323,52 @@ pteVam1.perChromTables = no
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+# add chromAlias table (DONE - 2016-10-15 - Hiram)
+
+    mkdir /hive/data/genomes/pteVam1/bed/chromAlias
+    cd /hive/data/genomes/pteVam1/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name from ucscToRefSeq;' pteVam1 \
+        | sort -k1,1 > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name from ucscToINSDC;' pteVam1 \
+        | sort -k1,1 > ucsc.genbank.tab
+
+    ### Adding Ensembl alias with v95 release, after idKeys made: 2019-01-16
+    join -t$'\t' ../idKeys/pteVam1.idKeys.txt \
+        ../../ens95/ensPteVam1.idKeys.txt | cut -f2- \
+          | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+               | sort -k1,1 -k2,2n > ucscToEns.bed
+    cut -f1,4 ucscToEns.bed | sort > ucsc.ensembl.tab
+    # and chrM name for genbank is: AJ421455.1
+    wc -l *.tab
+#    6835 ucsc.ensembl.tab
+#    6835 ucsc.genbank.tab
+#    6835 ucsc.refseq.tab
+
+    grep chrM *.tab
+# ucsc.ensembl.tab:chrM   MT
+# ucsc.genbank.tab:chrM   AJ421455.1
+# ucsc.refseq.tab:chrM    NC_004299.1
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl ucsc.*.tab \
+	> pteVam1.chromAlias.tab
+
+for t in refseq genbank ensembl
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t pteVam1.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking refseq: 6835 =? 6835 OK
+# checking genbank: 6835 =? 6835 OK
+# checking ensembl: 6835 =? 6835 OK
+
+    hgLoadSqlTab pteVam1 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        pteVam1.chromAlias.tab
+
+#########################################################################
