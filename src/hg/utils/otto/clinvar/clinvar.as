@@ -33,4 +33,5 @@ table clinVarBed
     string lastEval;         "Last evaluation"
     string guidelines;         "Guidelines"
     lstring otherIds;         "Other identifiers e.g. OMIM IDs, etc."
+    lstring _mouseOver;        "Mouse over text"
     )
