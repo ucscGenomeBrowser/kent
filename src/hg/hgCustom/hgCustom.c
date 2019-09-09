@@ -1398,7 +1398,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 long enteredMainTime = clock1000();
-issueBotWarning = earlyBotCheck(enteredMainTime, "hgTracks", delayFraction, warnMs, exitMs);
+issueBotWarning = earlyBotCheck(enteredMainTime, "hgCustom", delayFraction, warnMs, exitMs);
 htmlPushEarlyHandlers();
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
