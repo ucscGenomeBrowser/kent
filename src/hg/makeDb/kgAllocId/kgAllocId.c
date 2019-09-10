@@ -12,8 +12,6 @@ errAbort(
   "kgAllocId - Assign new knownGene ids to Gencode IDs\n"
   "usage:\n"
   "   kgAllocId oldMap newIds startIdx newMap\n"
-  "options:\n"
-  "   -xxx=XXX\n"
   );
 }
 
@@ -24,11 +22,13 @@ static struct optionSpec options[] = {
 
 struct version
 {
-unsigned number;
+unsigned number; // version number
 char *id;
 };
 
 struct hash *readMapNoVersion(char *name)
+/* Read in a mapping between ENST ids and  UC id's.  
+ * Strip off version number of ENST id before adding to hash. */ 
 {
 struct hash *hash = newHash(10);
 struct lineFile *lf = lineFileOpen(name, TRUE);
@@ -52,6 +52,7 @@ return hash;
 }
 
 struct hash *readMap(char *name)
+/* Read in a mapping between ENST ids and  UC id's. */
 {
 struct hash *hash = newHash(10);
 struct lineFile *lf = lineFileOpen(name, TRUE);
@@ -65,8 +66,10 @@ lineFileClose(&lf);
 return hash;
 }
 
-unsigned txId;
+static unsigned txId;  // the next UC id to allocate
+
 char *newId()
+// Allocate a new UC ID. */
 {
 char *newAcc = needMem(100);
 txGeneAccFromId(++txId, newAcc);
@@ -75,9 +78,8 @@ return newAcc;
 }
 
 char *addOne(char *id)
+// Add one to the version number of this id. 
 {
-if (startsWith("uc064bas", id))
-    printf("big\n");
 char *copyId = cloneString(id);
 char *ptr = strrchr(copyId, '.');
 *ptr++ = 0;
@@ -102,6 +104,7 @@ char *row[1];
 while (lineFileRow(lf, row))
     {
     char *thisId = cloneString(row[0]);
+
     // first look to see if this id already in map
     char *val = hashFindVal(oldMapHash, row[0]);
     if (val)
@@ -117,9 +120,12 @@ while (lineFileRow(lf, row))
 
     if (hel)
         {
+        // we found the id with a different version number
         struct hashEl *iter = hel;
         char *id = NULL;
         unsigned max = 0;
+
+        // make sure we find the id with the highest version number
         for(; iter; iter = iter->next)
             {
             if (differentString(iter->name, row[0]))
@@ -137,6 +143,7 @@ while (lineFileRow(lf, row))
         continue;
         }
 
+    // didn't find it, so allocate a new id
     fprintf(out, "%s\t%s\n", thisId, newId());
 
     }

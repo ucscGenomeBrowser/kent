@@ -243,7 +243,7 @@ printf("There is an exceedingly high volume of traffic coming from your "
        "site (IP address %s) as of %s (California time).  It looks like "
        "a web robot is launching queries quickly, and not even waiting for "
        "the results of one query to finish before launching another query. "
-       "/* We cannot service requests from your IP address under */ these "
+       "<b>We cannot service requests from your IP address under</b> these "
        "conditions.  (code %d) "
        "To use the genome browser functionality from a Unix command line, "
        "please read <a href='http://genome.ucsc.edu/FAQ/FAQdownloads.html#download36'>our FAQ</a> on this topic. "
@@ -260,10 +260,18 @@ boolean earlyBotCheck(long enteredMainTime, char *cgiName, double delayFrac, int
 /* similar to botDelayCgi but for use before the CGI has started any
  * output or setup the cart of done any MySQL operations.  The boolean
  * return is used later in the CGI after it has done all its setups and
- * started output so it can issue the warning.
+ * started output so it can issue the warning.  Pass in delayFrac 0.0
+ * to use the default 1.0
  */
 {
 boolean issueWarning = FALSE;
+
+if (botException())	/* don't do this if caller is on the exception list */
+    return issueWarning;
+
+if (delayFrac < 0.000001) /* passed in zero, use default 1.0 */
+    delayFrac = 1.0;
+
 botDelayMillis = hgBotDelayTimeFrac(delayFrac);
 if (botDelayMillis > 0)
     {
