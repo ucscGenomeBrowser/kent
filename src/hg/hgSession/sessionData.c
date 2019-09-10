@@ -294,16 +294,19 @@ if (sessionDir)
             struct dyString *dy = sqlDyStringCreate("select %s from %s limit 1",
                                                     columnName, tableName);
             char *trashPath = sqlQuickString(conn, dy->string);
-            // For some reason, customTrash tables' filename paths can begin with "./../trash"
-            char *actualTrashPath = trashPath;
-            if (startsWith("./", trashPath) && isTrashPath(trashPath+2))
-                actualTrashPath = trashPath+2;
-            if (isTrashPath(actualTrashPath))
+            if (trashPath)
                 {
-                char *newPath = saveTrashFile(actualTrashPath, sessionDir);
-                if (newPath)
-                    replaceColumnValue(conn, tableName, columnName, newPath);
-                freeMem(newPath);
+                // For some reason, customTrash tables' filename paths can begin with "./../trash"
+                char *actualTrashPath = trashPath;
+                if (startsWith("./", trashPath) && isTrashPath(trashPath+2))
+                    actualTrashPath = trashPath+2;
+                if (isTrashPath(actualTrashPath))
+                    {
+                    char *newPath = saveTrashFile(actualTrashPath, sessionDir);
+                    if (newPath)
+                        replaceColumnValue(conn, tableName, columnName, newPath);
+                    freeMem(newPath);
+                    }
                 }
             dyStringFree(&dy);
             freeMem(trashPath);
