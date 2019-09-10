@@ -48,6 +48,8 @@ contentLineDone = False
 
 # show the bot delay warning message before other printing is done?
 doWarnBot = False
+# current bot delay in milliseconds
+botDelayMsecs = 0
 
 # two global variables: the first is the botDelay limit after which the page is slowed down and a warning is shown
 # the second is the limit after which the page is not shown anymore
@@ -59,9 +61,9 @@ jksqlTrace = False
 def warn(format, *args):
     print (format % args)
 
-def errAbort(msg, status=None):
+def errAbort(msg, status=None, headers = None):
     " show msg and abort. Like errAbort.c "
-    printContentType(status=status)
+    printContentType(status=status, headers=headers)
     print msg
     exit(0)
 
@@ -339,7 +341,7 @@ def runCmd(cmd, mustRun=True):
         errAbort("Could not run command %s" % cmd)
     return ret
 
-def printContentType(contType="text/html", status=None, fname=None):
+def printContentType(contType="text/html", status=None, fname=None, headers=None):
     """
     print the HTTP Content-type header line with an optional file name for downloads.
     Also optionally prints the bot delay note. The argument 'status' must be an int.
@@ -359,6 +361,10 @@ def printContentType(contType="text/html", status=None, fname=None):
 
         if fname is not None:
             print("Content-Disposition: attachment; filename=%s" % fname)
+
+        if headers:
+            for key, val in headers.items():
+                print("%s: %s" % (key, val))
 
         print  # this newline is essential, it means: end of header lines
 
@@ -408,18 +414,20 @@ def hgBotDelay():
         return
     global hgConf
     global doWarnBot
+    global botDelayMsecs
     hgConf = parseHgConf()
     if "bottleneck.host" not in hgConf:
         return
     ip = os.environ["REMOTE_ADDR"]
     delay = queryBottleneck(hgConf["bottleneck.host"], hgConf["bottleneck.port"], ip)
     debug(1, "Bottleneck delay: %d msecs" % delay)
+    botDelayMsecs = delay
 
     if delay>botDelayBlock:
         errAbort("Too many HTTP requests and not enough delay between them. "
         "Your IP has been blocked to keep this website responsive for other users. "
         "Please contact genome-www@soe.ucsc.edu to unblock your IP address. We can also help you obtain the data you need without "
-        "web crawling. ", status=429)
+        "web crawling. ", status=429, headers = {"Retry-after" : str(botDelayMsecs / 1000)})
         sys.exit(0)
 
     if delay>botDelayWarn:
