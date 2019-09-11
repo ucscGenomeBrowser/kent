@@ -14,7 +14,7 @@ maxItems 500000
 track allCancer
 parent gdcCancer on
 shortLabel All Cancers
-longLabel All GDC Cancer mutations: 33 TCGA Cancer Projects Summary (Pan-Can 33)
+longLabel All TCGA Pan-Cancer mutations: 33 TCGA Cancer Projects Summary (Pan-Can 33)
 group phenDis
 type bigLolly 12 + 
 lollyField 13

@@ -4381,3 +4381,64 @@ time (/hive/data/outside/crisprTrack/crispor/tools/crisprAddGenome ucscLocal \
         -continue=load -stop=load -workhorse=hgwdev rn6 ensGene
 
 ############################################################################
+# LIFTOVER TO regenRn0 (DONE - 2019-06-29 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/rn6/bed/blat.regenRn0.2019-06-29
+    cd /hive/data/genomes/rn6/bed/blat.regenRn0.2019-06-29
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/rn6/jkStuff/rn6.11.ooc \
+         rn6 regenRn0
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/rn6/jkStuff/rn6.11.ooc \
+         rn6 regenRn0) > doLiftOverToRegenRn0.log 2>&1
+    # real    249m30.284s
+
+    # see if the liftOver menus function in the browser from regenRn0 to galGal5
+
+    # would like to see this as a track:
+    chainToPsl rn6ToRegenRn0.over.chain.gz ../../chrom.sizes \
+   /hive/data/genomes/regenRn0/chrom.sizes ../../rn6.2bit \
+   /hive/data/genomes/regenRn0/regenRn0.2bit rn6ToRegenRn0.psl
+
+#########################################################################
+# LIFTOVER TO regenRn1 (DONE - 2019-09-09 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/rn6/bed/blat.regenRn1.2019-09-09
+    cd /hive/data/genomes/rn6/bed/blat.regenRn1.2019-09-09
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/rn6/jkStuff/rn6.11.ooc \
+         rn6 regenRn1
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/rn6/jkStuff/rn6.11.ooc \
+         rn6 regenRn1) > doLiftOverToRegenRn1.log 2>&1
+    # real    252m38.421s
+
+    # see if the liftOver menus function in the browser from rn6 to regenRn1
+
+    # would like to see this as a track:
+    hgLoadChain rn6 chainRegenRn1 rn6ToRegenRn1.over.chain.gz
+    # Loading 237485 chains into rn6.chainRegenRn1
+
+    chainSort rn6ToRegenRn1.over.chain.gz stdout \
+      | chainPreNet stdin \
+        /hive/data/genomes/rn6/chrom.sizes \
+        /hive/data/genomes/regenRn1/chrom.sizes stdout \
+      | chainNet stdin -minSpace=1 /hive/data/genomes/rn6/chrom.sizes \
+        /hive/data/genomes/regenRn1/chrom.sizes stdout /dev/null \
+      | netSyntenic stdin noClass.net
+
+   netClass -verbose=0 -noAr noClass.net rn6 regenRn1 rn6.regenRn1.net
+
+    netFilter -minGap=10 rn6.regenRn1.net \
+      | hgLoadNet -verbose=0 rn6 netRegenRn1 stdin
+
+featureBits rn6 chainRegenRn1Link > fb.rn6.chainRegenRn1Link.txt 2>&1
+
+    cat fb.rn6.chainRegenRn1Link.txt
+    # 2265178557 bases of 2729860805 (82.978%) in intersection
+
+#########################################################################

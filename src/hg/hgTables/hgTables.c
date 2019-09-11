@@ -69,6 +69,8 @@ struct joiner *allJoiner;	/* Info on how to join tables. */
 
 static struct pipeline *compressPipeline = (struct pipeline *)NULL;
 
+static boolean issueBotWarning = FALSE;
+
 char *gsTemp = NULL;
 int saveStdout = -1;
 
@@ -180,7 +182,7 @@ va_list args;
 va_start(args, format);
 vaHtmlOpen(format, args);
 va_end(args);
-hgBotDelay();
+// hgBotDelay(); function is now in earlyBotCheck() at the start of main()
 }
 
 void htmlClose()
@@ -234,7 +236,10 @@ void textOpen()
  *	at main() exit.
  */
 {
-hgBotDelayNoWarn();  // delay but suppress warning at 10-20 sec delay level because this is not html output.
+
+// hgBotDelay function is now in earlyBotCheck() at the start of main(), and in
+// this case, the issueBotWarning flag is ignored to avoid any output here
+// hgBotDelayNoWarn();  // delay but suppress warning at 10-20 sec delay level because this is not html output.
 char *fileName = textOutSanitizeHttpFileName(cartUsualString(cart, hgtaOutFileName, ""));
 char *compressType = cartUsualString(cart, hgtaCompressType,
 				     textOutCompressNone);
@@ -1773,6 +1778,7 @@ int main(int argc, char *argv[])
 {
 
 long enteredMainTime = clock1000();
+issueBotWarning = earlyBotCheck(enteredMainTime, "hgTables", 0.0, 0, 0);
 
 pushCarefulMemHandler(LIMIT_2or6GB);
 htmlPushEarlyHandlers(); /* Make errors legible during initialization. */

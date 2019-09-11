@@ -797,15 +797,15 @@ if ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 
+saveSessionData(cart, encUserName, encSessionName,
+                cgiOptionalString(hgsSessionDataDbSuffix));
+
 /* Remove pre-existing session (if any) before updating. */
 dyStringClear(dy);
 sqlDyStringPrintf(dy, "DELETE FROM %s WHERE userName = '%s' AND "
                   "sessionName = '%s';",
                   namedSessionTable, encUserName, encSessionName);
 sqlUpdate(conn, dy->string);
-
-saveSessionData(cart, encUserName, encSessionName,
-                cgiOptionalString(hgsSessionDataDbSuffix));
 
 dyStringClear(dy);
 sqlDyStringPrintf(dy, "INSERT INTO %s ", namedSessionTable);

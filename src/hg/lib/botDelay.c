@@ -14,6 +14,9 @@
 #include "hCommon.h"
 #include "botDelay.h"
 
+#define defaultDelayFrac 1.0   /* standard penalty for most CGIs */
+#define defaultWarnMs 10000    /* warning at 10 to 20 second delay */
+#define defaultExitMs 20000    /* error 429 Too Many Requests after 20+ second delay */
 
 int botDelayTime(char *host, int port, char *botCheckString)
 /* Figure out suggested delay time for ip address in
@@ -170,7 +173,7 @@ if (host != NULL && port != NULL)
 void hgBotDelay()
 /* High level bot delay call - for use with regular webpage output */
 {
-hgBotDelayExt(FALSE, 1.0);
+hgBotDelayExt(FALSE, defaultDelayFrac);
 }
 
 void hgBotDelayFrac(double fraction)
@@ -182,7 +185,7 @@ hgBotDelayExt(FALSE, fraction);
 void hgBotDelayNoWarn()
 /* High level bot delay call without warning - for use with non-webpage outputs */
 {
-hgBotDelayExt(TRUE, 1.0);
+hgBotDelayExt(TRUE, defaultDelayFrac);
 }
 
 void hgBotDelayNoWarnFrac(double fraction)
@@ -193,7 +196,7 @@ hgBotDelayExt(TRUE, fraction);
 
 int hgBotDelayTime()
 {
-return hgBotDelayTimeFrac(1.0);
+return hgBotDelayTimeFrac(defaultDelayFrac);
 }
 
 int hgBotDelayTimeFrac(double fraction)
@@ -243,7 +246,7 @@ printf("There is an exceedingly high volume of traffic coming from your "
        "site (IP address %s) as of %s (California time).  It looks like "
        "a web robot is launching queries quickly, and not even waiting for "
        "the results of one query to finish before launching another query. "
-       "/* We cannot service requests from your IP address under */ these "
+       "<b>We cannot service requests from your IP address under</b> these "
        "conditions.  (code %d) "
        "To use the genome browser functionality from a Unix command line, "
        "please read <a href='http://genome.ucsc.edu/FAQ/FAQdownloads.html#download36'>our FAQ</a> on this topic. "
@@ -256,14 +259,27 @@ cgiExitTime(cgiExitName, enteredMainTime);
 exit(0);
 }       /*      static void hogExit()   */
 
+
 boolean earlyBotCheck(long enteredMainTime, char *cgiName, double delayFrac, int warnMs, int exitMs)
 /* similar to botDelayCgi but for use before the CGI has started any
  * output or setup the cart of done any MySQL operations.  The boolean
  * return is used later in the CGI after it has done all its setups and
- * started output so it can issue the warning.
+ * started output so it can issue the warning.  Pass in delayFrac 0.0
+ * to use the default 1.0
  */
 {
 boolean issueWarning = FALSE;
+
+if (botException())	/* don't do this if caller is on the exception list */
+    return issueWarning;
+
+if (delayFrac < 0.000001) /* passed in zero, use default */
+    delayFrac = defaultDelayFrac;
+if (warnMs < 1)	/* passed in zero, use default */
+    warnMs = defaultWarnMs;
+if (exitMs < 1)	/* passed in zero, use default */
+    exitMs = defaultExitMs;
+
 botDelayMillis = hgBotDelayTimeFrac(delayFrac);
 if (botDelayMillis > 0)
     {
