@@ -397,5 +397,5 @@ bigDataUrl /gbdb/$D/uniprot/unipMut.bb
 # regulation tracks
 
 include trackDb.encode3.ra
-include trackDb.enhancerGeneInteract.ra
+include encode3RenEnhancerGene.ra
 
