@@ -50,6 +50,7 @@
 #include "customComposite.h"
 #include "interactUi.h"
 #include "bedTabix.h"
+#include "hic.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
@@ -843,6 +844,7 @@ else
                   startsWithWord("bigLolly", type) ||
                   startsWithWord("bigBarChart", type) ||
                   startsWithWord("bigInteract", type) ||
+                  startsWithWord("hic", type) ||
                   startsWithWord("bam", type)))
                     {
                     errAbort("Unsupported type '%s' in hub %s genome %s track %s", type,
@@ -1252,6 +1254,13 @@ if (relativeUrl != NULL)
             errAbort("HAL close error: %s", errString);
         }
 #endif
+    else if (startsWithWord("hic", type))
+        {
+        struct hicMeta *header;
+        char *errString = hicLoadHeader(bigDataUrl, &header, NULL);
+        if (errString != NULL)
+            errAbort("hic file error: %s", errString);
+        }
     else
         errAbort("unrecognized type %s in genome %s track %s", type, genome->name, tdb->track);
     freez(&bigDataUrl);
