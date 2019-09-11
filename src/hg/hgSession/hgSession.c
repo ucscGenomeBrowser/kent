@@ -1452,7 +1452,7 @@ if ((row = sqlNextRow(sr)) != NULL)
 else
     errAbort("doSessionChange: got no results from query:<BR>\n%s\n", query);
 
-char *newName = cartOptionalString(cart, hgsNewSessionName);
+char *newName = trimSpaces(cartOptionalString(cart, hgsNewSessionName));
 if (isNotEmpty(newName) && !sameString(sessionName, newName))
     {
     char *encNewName = cgiEncodeFull(newName);
