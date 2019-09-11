@@ -1582,7 +1582,7 @@ char *doReSaveSession(char *userName, char *actionVar)
 if (userName == NULL)
     return "Unable to re-save session -- please log in and try again.";
 struct sqlConnection *conn = hConnectCentral();
-char *sessionName = cloneString(trimSpaces(cartString(cart, hgsNewSessionName)));
+char *sessionName = cloneString(cartString(cart, hgsNewSessionName));
 char *encUserName = cgiEncodeFull(userName);
 char *encSessionName = cgiEncodeFull(sessionName);
 int sharingLevel = getSharingLevel(conn, encUserName, encSessionName);
