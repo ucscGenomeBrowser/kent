@@ -1,5 +1,5 @@
 track encode3Reg
-superTrack on show
+superTrack on
 shortLabel ENCODE Regulation
 longLabel Integrated Regulation from ENCODE
 wgEncode 1
