@@ -765,9 +765,14 @@ expandOneUrl(tdb->settingsHash, genome->trackDbFile, "barChartMatrixUrl");
 
 struct trackHubGenome *trackHubFindGenome(struct trackHub *hub, char *genomeName)
 /* Return trackHubGenome of given name associated with hub.  Return NULL if no
- * such genome. */
+ * such genome.  Check genomeName without hub prefix to see if this hub
+ * is attached to an assembly hub.*/
 {
-return hashFindVal(hub->genomeHash, genomeName);
+struct trackHubGenome *ret = hashFindVal(hub->genomeHash, genomeName);
+
+if (ret == NULL)
+    ret = hashFindVal(hub->genomeHash, hubConnectSkipHubPrefix(genomeName));
+return ret;
 }
 
 static void requireBarChartBars(struct trackHub *hub, struct trackHubGenome *genome, struct trackDb *tdb)

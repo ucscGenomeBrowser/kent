@@ -224,16 +224,16 @@ and <code>bedToBigBed</code>. If you would like to convert a GFF file to bigGene
   Convert the genePred extended file to a pre-bigGenePred text file.
   <pre><code>genePredToBigGenePred example4.genePred bigGenePredEx4.txt</code></pre></li>
   <li>
-  Obtain helper files for the conversion to binary bigGenePred. If you are not using hg38, 
-  you can find the chrom.sizes file for your organism in the
-  <a href="http://hgdownload.soe.ucsc.edu">downloads directory</a> under "Full data set".
-  <pre><code>wget http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes
-wget http://genome.ucsc.edu/goldenPath/help/examples/bigGenePred.as</code></pre></li>
+  Download a helper file that specifies column names.
+  <pre><code>wget https://genome.ucsc.edu/goldenPath/help/examples/bigGenePred.as</code></pre>
+  </li>
   <li>
-  Convert your text bigGenePred to a binary indexed format.
-  <pre><code>bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as bigGenePredEx4.txt hg38.chrom.sizes bigGenePredEx4.bb</code></pre></li>
+  Convert your text bigGenePred to a binary indexed format. If you are not using hg38,
+  you will need to replace the hg38.chrom.sizes file path with your organism's file path from the
+  <a href="http://hgdownload.soe.ucsc.edu">downloads directory</a> under "Genome Sequence Files".
+  <pre><code>bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as bigGenePredEx4.txt http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes bigGenePredEx4.bb</code></pre></li>
   <li> 
-  Put your binary indexed file in a web-accessible location. See the 
+  Put your binary indexed file, bigGenePredEx4.bb, in a web-accessible location. See the 
   <a href="https://genome.ucsc.edu/goldenpath/help/hgTrackHubHelp.html#Hosting">hosting section</a> for more information.</li>
   <li>
   To view this example, you can click this into this Browser link. To view your own data, paste the
