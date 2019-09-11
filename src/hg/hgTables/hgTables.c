@@ -70,8 +70,6 @@ struct joiner *allJoiner;	/* Info on how to join tables. */
 static struct pipeline *compressPipeline = (struct pipeline *)NULL;
 
 static boolean issueBotWarning = FALSE;
-#define warnMs 10000    /* warning at 10 to 20 second delay */
-#define exitMs 20000    /* error 429 Too Many Requests after 20+ second delay */
 
 char *gsTemp = NULL;
 int saveStdout = -1;
@@ -1780,7 +1778,7 @@ int main(int argc, char *argv[])
 {
 
 long enteredMainTime = clock1000();
-issueBotWarning = earlyBotCheck(enteredMainTime, "hgTables", 1.5, warnMs, exitMs);
+issueBotWarning = earlyBotCheck(enteredMainTime, "hgTables", 0.0, 0, 0);
 
 pushCarefulMemHandler(LIMIT_2or6GB);
 htmlPushEarlyHandlers(); /* Make errors legible during initialization. */
