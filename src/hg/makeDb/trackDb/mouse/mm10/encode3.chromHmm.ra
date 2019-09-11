@@ -1,3 +1,5 @@
+# ChromHMM from Ren lab, based on ENCODE 3 data
+
 track encode3RenChromHmm
 parent encode3Reg
 compositeTrack on
@@ -10,11 +12,11 @@ subGroup1 tissue Tissue forebrain=forebrain midbrain=midbrain hindbrain=hindbrai
 subGroup2 age Age E10=E10 E11=E11 E12=E12 E13=E13 E14=E14 E15=E15 E16=E16 P0=P0
 sortOrder tissue=+ age=+
 dragAndDrop subTracks
+group regulation
 visibility dense
 
     track encode3RenChromHmmForebrainP0
     bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmForebrainP0.bb
-#bigDataUrl http://enhancer.sdsc.edu/enhancer_export/browser/tracks/ENCODE/chromHMM/replicated/forebrain_e11.5_replicated_chromHMM.bed.gz.bb
     parent encode3RenChromHmm on
     shortLabel cHMM forebrain P0
     longLabel Chromatin state of day P0 forebrain from ENCODE 3 (UCSD/Ren)
@@ -71,7 +73,7 @@ visibility dense
 
     track encode3RenChromHmmStomachP0
     bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmStomachP0.bb
-    parent encode3RenChromHmm off
+    parent encode3RenChromHmm on
     shortLabel cHMM stomach P0
     longLabel Chromatin state of day P0 stomach from ENCODE 3 (UCSD/Ren)
     subGroups tissue=stomach age=P0
@@ -134,7 +136,7 @@ visibility dense
 
     track encode3RenChromHmmFacialE12
     bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmFacialE12.bb
-    parent encode3RenChromHmm off
+    parent encode3RenChromHmm on
     shortLabel cHMM facial E12
     longLabel Chromatin state of embryonic day E12 facial from ENCODE 3 (UCSD/Ren)
     subGroups tissue=facial age=E12
@@ -323,14 +325,14 @@ visibility dense
 
     track encode3RenChromHmmStomachE14
     bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmStomachE14.bb
-    parent encode3RenChromHmm off
+    parent encode3RenChromHmm on
     shortLabel cHMM stomach E14
     longLabel Chromatin state of embryonic day E14 stomach from ENCODE 3 (UCSD/Ren)
     subGroups tissue=stomach age=E14
 
     track encode3RenChromHmmFacialE15
     bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmFacialE15.bb
-    parent encode3RenChromHmm off
+    parent encode3RenChromHmm on
     shortLabel cHMM facial E15
     longLabel Chromatin state of embryonic day E15 facial from ENCODE 3 (UCSD/Ren)
     subGroups tissue=facial age=E15

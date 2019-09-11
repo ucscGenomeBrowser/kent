@@ -1,8 +1,10 @@
+# ENCODE 3 Histone ChIP-seq from Ren lab
+
 track encode3RenHistone
 parent encode3Reg
 compositeTrack on
 type bed 3 
-longLabel Histone modifications in embryonic tissue (8 marks, 12 tissues, 8 ages) from ENCODE 3 (UCSD/Ren)
+longLabel Histone modifications in embryonic tissue (8 marks, 12 tissues, 8 ages) from ChIP-seq by ENCODE 3 (UCSD/Ren)
 shortLabel Histone Modifications
 subGroup1 tissue Tissue forebrain=forebrain midbrain=midbrain hindbrain=hindbrain neural_tube=neural_tube facial_prominence=facial_prominence limb=limb heart=heart kidney=kidney lung=lung liver=liver stomach=stomach intestine=intestine
 subGroup2 mark Mark H3K27ac=H3K27ac H3K27me3=H3K27me3 H3K36me3=H3K36me3 H3K4me1=H3K4me1 H3K4me2=H3K4me2 H3K4me3=H3K4me3 H3K9ac=H3K9ac H3K9me3=H3K9me3
@@ -15,7 +17,7 @@ sortOrder view=+ subtrackColor=+ tissue=+ mark=+ age=+
 showSubtrackColorOnUi on
 priority 6
 dragAndDrop subTracks
-visibility dense
+visibility full
 
     track encode3RenHistonePeaks
     parent encode3RenHistone
@@ -224,7 +226,7 @@ visibility dense
         subGroups view=Peaks tissue=hindbrain mark=H3K27ac age=E15
         metadata tissue=hindbrain mark=H3K27ac age=E15
 
-        track encode3Ren_stomach_H3K4me2.P0
+        track encode3Ren_stomach_H3K4me2_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF139SVN.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K4me2 stomach P0
@@ -304,9 +306,9 @@ visibility dense
         subGroups view=Peaks tissue=heart mark=H3K9me3 age=E15
         metadata tissue=heart mark=H3K9me3 age=E15
 
-        track encode3Ren_heart_H3K27me3.P0
+        track encode3Ren_heart_H3K27me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF697VMW.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel K27me3 heart P0
         longLabel ChIP-seq peaks of heart H3K27me3 on day P0 from ENCODE 3 (UCSD/Ren)
         type bigBed 6 +
@@ -414,7 +416,7 @@ visibility dense
         subGroups view=Peaks tissue=heart mark=H3K27me3 age=E13
         metadata tissue=heart mark=H3K27me3 age=E13
 
-        track encode3Ren_forebrain_H3K4me2.P0
+        track encode3Ren_forebrain_H3K4me2_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF184WOD.bigBed
         parent encode3RenHistonePeaks on
         shortLabel K4me2 forebrn P0
@@ -424,7 +426,7 @@ visibility dense
         subGroups view=Peaks tissue=forebrain mark=H3K4me2 age=P0
         metadata tissue=forebrain mark=H3K4me2 age=P0
 
-        track encode3Ren_hindbrain_H3K9me3.P0
+        track encode3Ren_hindbrain_H3K9me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF198WAI.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K9me3 hindbrn P0
@@ -586,7 +588,7 @@ visibility dense
 
         track encode3Ren_forebrain_H3K4me2_E11
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF486VPU.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel K4me2 forebrn 11
         longLabel ChIP-seq peaks of embryonic forebrain H3K4me2 on day E11 from ENCODE 3 (UCSD/Ren)
         type bigBed 6 +
@@ -746,7 +748,7 @@ visibility dense
 
         track encode3Ren_heart_H3K27ac_E11
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF165PEC.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel K27ac heart 11
         longLabel ChIP-seq peaks of embryonic heart H3K27ac on day E11 from ENCODE 3 (UCSD/Ren)
         type bigBed 6 +
@@ -794,7 +796,7 @@ visibility dense
         subGroups view=Peaks tissue=stomach mark=H3K27ac age=E16
         metadata tissue=stomach mark=H3K27ac age=E16
 
-        track encode3Ren_intestine_H3K27ac.P0
+        track encode3Ren_intestine_H3K27ac_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF676ZOY.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K27ac intestn P0
@@ -984,7 +986,7 @@ visibility dense
         subGroups view=Peaks tissue=liver mark=H3K36me3 age=E16
         metadata tissue=liver mark=H3K36me3 age=E16
 
-        track encode3Ren_kidney_H3K36me3.P0
+        track encode3Ren_kidney_H3K36me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF440ZDN.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K36me3 kidney P0
@@ -1014,7 +1016,7 @@ visibility dense
         subGroups view=Peaks tissue=hindbrain mark=H3K9ac age=E11
         metadata tissue=hindbrain mark=H3K9ac age=E11
 
-        track encode3Ren_liver_H3K36me3.P0
+        track encode3Ren_liver_H3K36me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF361EKE.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K36me3 liver P0
@@ -1024,7 +1026,7 @@ visibility dense
         subGroups view=Peaks tissue=liver mark=H3K36me3 age=P0
         metadata tissue=liver mark=H3K36me3 age=P0
 
-        track encode3Ren_kidney_H3K9ac.P0
+        track encode3Ren_kidney_H3K9ac_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF365TKQ.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K9ac kidney P0
@@ -1224,7 +1226,7 @@ visibility dense
         subGroups view=Peaks tissue=neural_tube mark=H3K4me3 age=E14
         metadata tissue=neural_tube mark=H3K4me3 age=E14
 
-        track encode3Ren_liver_H3K27ac.P0
+        track encode3Ren_liver_H3K27ac_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF535FJV.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K27ac liver P0
@@ -1236,7 +1238,7 @@ visibility dense
 
         track encode3Ren_heart_H3K27me3_E11
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF596FPG.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel K27me3 heart 11
         longLabel ChIP-seq peaks of embryonic heart H3K27me3 on day E11 from ENCODE 3 (UCSD/Ren)
         type bigBed 6 +
@@ -1264,7 +1266,7 @@ visibility dense
         subGroups view=Peaks tissue=intestine mark=H3K36me3 age=E16
         metadata tissue=intestine mark=H3K36me3 age=E16
 
-        track encode3Ren_forebrain_H3K9ac.P0
+        track encode3Ren_forebrain_H3K9ac_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF673EKK.bigBed
         parent encode3RenHistonePeaks on
         shortLabel K9ac forebrn P0
@@ -1274,7 +1276,7 @@ visibility dense
         subGroups view=Peaks tissue=forebrain mark=H3K9ac age=P0
         metadata tissue=forebrain mark=H3K9ac age=P0
 
-        track encode3Ren_liver_H3K4me1.P0
+        track encode3Ren_liver_H3K4me1_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF969HOM.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K4me1 liver P0
@@ -1284,7 +1286,7 @@ visibility dense
         subGroups view=Peaks tissue=liver mark=H3K4me1 age=P0
         metadata tissue=liver mark=H3K4me1 age=P0
 
-        track encode3Ren_forebrain_H3K4me1.P0
+        track encode3Ren_forebrain_H3K4me1_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF172LKQ.bigBed
         parent encode3RenHistonePeaks on
         shortLabel K4me1 forebrn P0
@@ -1354,7 +1356,7 @@ visibility dense
         subGroups view=Peaks tissue=facial_prominence mark=H3K9ac age=E11
         metadata tissue=facial_prominence mark=H3K9ac age=E11
 
-        track encode3Ren_liver_H3K9ac.P0
+        track encode3Ren_liver_H3K9ac_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF331CRG.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K9ac liver P0
@@ -1364,9 +1366,9 @@ visibility dense
         subGroups view=Peaks tissue=liver mark=H3K9ac age=P0
         metadata tissue=liver mark=H3K9ac age=P0
 
-        track encode3Ren_heart_H3K9me3.P0
+        track encode3Ren_heart_H3K9me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF317TPK.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel K9me3 heart P0
         longLabel ChIP-seq peaks of heart H3K9me3 on day P0 from ENCODE 3 (UCSD/Ren)
         type bigBed 6 +
@@ -1374,7 +1376,7 @@ visibility dense
         subGroups view=Peaks tissue=heart mark=H3K9me3 age=P0
         metadata tissue=heart mark=H3K9me3 age=P0
 
-        track encode3Ren_liver_H3K27me3.P0
+        track encode3Ren_liver_H3K27me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF321SJE.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K27me3 liver P0
@@ -1384,7 +1386,7 @@ visibility dense
         subGroups view=Peaks tissue=liver mark=H3K27me3 age=P0
         metadata tissue=liver mark=H3K27me3 age=P0
 
-        track encode3Ren_intestine_H3K4me2.P0
+        track encode3Ren_intestine_H3K4me2_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF362FWV.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K4me2 intestn P0
@@ -1394,7 +1396,7 @@ visibility dense
         subGroups view=Peaks tissue=intestine mark=H3K4me2 age=P0
         metadata tissue=intestine mark=H3K4me2 age=P0
 
-        track encode3Ren_forebrain_H3K36me3.P0
+        track encode3Ren_forebrain_H3K36me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF460OVN.bigBed
         parent encode3RenHistonePeaks on
         shortLabel K36me3 forebrn P0
@@ -1404,9 +1406,9 @@ visibility dense
         subGroups view=Peaks tissue=forebrain mark=H3K36me3 age=P0
         metadata tissue=forebrain mark=H3K36me3 age=P0
 
-        track encode3Ren_heart_H3K36me3.P0
+        track encode3Ren_heart_H3K36me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF215HIC.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel K36me3 heart P0
         longLabel ChIP-seq peaks of heart H3K36me3 on day P0 from ENCODE 3 (UCSD/Ren)
         type bigBed 6 +
@@ -1424,7 +1426,7 @@ visibility dense
         subGroups view=Peaks tissue=kidney mark=H3K4me3 age=E16
         metadata tissue=kidney mark=H3K4me3 age=E16
 
-        track encode3Ren_intestine_H3K36me3.P0
+        track encode3Ren_intestine_H3K36me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF217KAZ.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K36me3 intestn P0
@@ -1464,7 +1466,7 @@ visibility dense
         subGroups view=Peaks tissue=kidney mark=H3K27ac age=E15
         metadata tissue=kidney mark=H3K27ac age=E15
 
-        track encode3Ren_intestine_H3K9me3.P0
+        track encode3Ren_intestine_H3K9me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF082UNF.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K9me3 intestn P0
@@ -1484,7 +1486,7 @@ visibility dense
         subGroups view=Peaks tissue=limb mark=H3K36me3 age=E14
         metadata tissue=limb mark=H3K36me3 age=E14
 
-        track encode3Ren_kidney_H3K27ac.P0
+        track encode3Ren_kidney_H3K27ac_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF675ZUL.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K27ac kidney P0
@@ -1544,7 +1546,7 @@ visibility dense
         subGroups view=Peaks tissue=hindbrain mark=H3K36me3 age=E10
         metadata tissue=hindbrain mark=H3K36me3 age=E10
 
-        track encode3Ren_stomach_H3K4me1.P0
+        track encode3Ren_stomach_H3K4me1_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF339NSL.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K4me1 stomach P0
@@ -1554,7 +1556,7 @@ visibility dense
         subGroups view=Peaks tissue=stomach mark=H3K4me1 age=P0
         metadata tissue=stomach mark=H3K4me1 age=P0
 
-        track encode3Ren_kidney_H3K4me2.P0
+        track encode3Ren_kidney_H3K4me2_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF288XVI.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K4me2 kidney P0
@@ -1606,7 +1608,7 @@ visibility dense
 
         track encode3Ren_forebrain_H3K4me3_E11
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF929JFM.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel K4me3 forebrn 11
         longLabel ChIP-seq peaks of embryonic forebrain H3K4me3 on day E11 from ENCODE 3 (UCSD/Ren)
         type bigBed 6 +
@@ -1634,9 +1636,9 @@ visibility dense
         subGroups view=Peaks tissue=hindbrain mark=H3K27ac age=E13
         metadata tissue=hindbrain mark=H3K27ac age=E13
 
-        track encode3Ren_heart_H3K4me1.P0
+        track encode3Ren_heart_H3K4me1_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF952QAZ.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel K4me1 heart P0
         longLabel ChIP-seq peaks of heart H3K4me1 on day P0 from ENCODE 3 (UCSD/Ren)
         type bigBed 6 +
@@ -1674,7 +1676,7 @@ visibility dense
         subGroups view=Peaks tissue=forebrain mark=H3K36me3 age=E12
         metadata tissue=forebrain mark=H3K36me3 age=E12
 
-        track encode3Ren_intestine_H3K27me3.P0
+        track encode3Ren_intestine_H3K27me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF130PXZ.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K27me3 intestn P0
@@ -1706,7 +1708,7 @@ visibility dense
 
         track encode3Ren_heart_H3K9me3_E11
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF265GCY.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel K9me3 heart 11
         longLabel ChIP-seq peaks of embryonic heart H3K9me3 on day E11 from ENCODE 3 (UCSD/Ren)
         type bigBed 6 +
@@ -1754,9 +1756,9 @@ visibility dense
         subGroups view=Peaks tissue=limb mark=H3K27me3 age=E15
         metadata tissue=limb mark=H3K27me3 age=E15
 
-        track encode3Ren_heart_H3K4me2.P0
+        track encode3Ren_heart_H3K4me2_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF593OWP.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel K4me2 heart P0
         longLabel ChIP-seq peaks of heart H3K4me2 on day P0 from ENCODE 3 (UCSD/Ren)
         type bigBed 6 +
@@ -1784,7 +1786,7 @@ visibility dense
         subGroups view=Peaks tissue=hindbrain mark=H3K4me1 age=E16
         metadata tissue=hindbrain mark=H3K4me1 age=E16
 
-        track encode3Ren_midbrain_H3K9ac.P0
+        track encode3Ren_midbrain_H3K9ac_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF290FXQ.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K9ac midbrn P0
@@ -1804,9 +1806,9 @@ visibility dense
         subGroups view=Peaks tissue=liver mark=H3K27ac age=E14
         metadata tissue=liver mark=H3K27ac age=E14
 
-        track encode3Ren_heart_H3K9ac.P0
+        track encode3Ren_heart_H3K9ac_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF692YJD.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel K9ac heart P0
         longLabel ChIP-seq peaks of heart H3K9ac on day P0 from ENCODE 3 (UCSD/Ren)
         type bigBed 6 +
@@ -1834,7 +1836,7 @@ visibility dense
         subGroups view=Peaks tissue=heart mark=H3K36me3 age=E16
         metadata tissue=heart mark=H3K36me3 age=E16
 
-        track encode3Ren_liver_H3K9me3.P0
+        track encode3Ren_liver_H3K9me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF166MIE.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K9me3 liver P0
@@ -1844,7 +1846,7 @@ visibility dense
         subGroups view=Peaks tissue=liver mark=H3K9me3 age=P0
         metadata tissue=liver mark=H3K9me3 age=P0
 
-        track encode3Ren_midbrain_H3K27me3.P0
+        track encode3Ren_midbrain_H3K27me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF526IYN.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K27me3 midbrn P0
@@ -1924,7 +1926,7 @@ visibility dense
         subGroups view=Peaks tissue=limb mark=H3K27ac age=E15
         metadata tissue=limb mark=H3K27ac age=E15
 
-        track encode3Ren_forebrain_H3K27me3.P0
+        track encode3Ren_forebrain_H3K27me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF915VHI.bigBed
         parent encode3RenHistonePeaks on
         shortLabel K27me3 forebrn P0
@@ -2034,7 +2036,7 @@ visibility dense
         subGroups view=Peaks tissue=midbrain mark=H3K9ac age=E15
         metadata tissue=midbrain mark=H3K9ac age=E15
 
-        track encode3Ren_lung_H3K27me3.P0
+        track encode3Ren_lung_H3K27me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF346BUY.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K27me3 lung P0
@@ -2074,7 +2076,7 @@ visibility dense
         subGroups view=Peaks tissue=limb mark=H3K4me3 age=E15
         metadata tissue=limb mark=H3K4me3 age=E15
 
-        track encode3Ren_hindbrain_H3K4me1.P0
+        track encode3Ren_hindbrain_H3K4me1_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF738TSR.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K4me1 hindbrn P0
@@ -2134,7 +2136,7 @@ visibility dense
         subGroups view=Peaks tissue=neural_tube mark=H3K4me1 age=E11
         metadata tissue=neural_tube mark=H3K4me1 age=E11
 
-        track encode3Ren_stomach_H3K27ac.P0
+        track encode3Ren_stomach_H3K27ac_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF824TON.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K27ac stomach P0
@@ -2174,7 +2176,7 @@ visibility dense
         subGroups view=Peaks tissue=liver mark=H3K9ac age=E11
         metadata tissue=liver mark=H3K9ac age=E11
 
-        track encode3Ren_stomach_H3K27me3.P0
+        track encode3Ren_stomach_H3K27me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF027QVR.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K27me3 stomach P0
@@ -2304,7 +2306,7 @@ visibility dense
         subGroups view=Peaks tissue=heart mark=H3K4me1 age=E12
         metadata tissue=heart mark=H3K4me1 age=E12
 
-        track encode3Ren_kidney_H3K4me1.P0
+        track encode3Ren_kidney_H3K4me1_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF014LXI.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K4me1 kidney P0
@@ -2484,7 +2486,7 @@ visibility dense
         subGroups view=Peaks tissue=forebrain mark=H3K9me3 age=E16
         metadata tissue=forebrain mark=H3K9me3 age=E16
 
-        track encode3Ren_forebrain_H3K27ac.P0
+        track encode3Ren_forebrain_H3K27ac_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF348JQQ.bigBed
         parent encode3RenHistonePeaks on
         shortLabel K27ac forebrn P0
@@ -2554,7 +2556,7 @@ visibility dense
         subGroups view=Peaks tissue=limb mark=H3K4me2 age=E14
         metadata tissue=limb mark=H3K4me2 age=E14
 
-        track encode3Ren_intestine_H3K4me1.P0
+        track encode3Ren_intestine_H3K4me1_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF865KQB.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K4me1 intestn P0
@@ -2584,7 +2586,7 @@ visibility dense
         subGroups view=Peaks tissue=lung mark=H3K27ac age=E16
         metadata tissue=lung mark=H3K27ac age=E16
 
-        track encode3Ren_midbrain_H3K9me3.P0
+        track encode3Ren_midbrain_H3K9me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF287BSQ.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K9me3 midbrn P0
@@ -2774,7 +2776,7 @@ visibility dense
         subGroups view=Peaks tissue=forebrain mark=H3K4me3 age=E15
         metadata tissue=forebrain mark=H3K4me3 age=E15
 
-        track encode3Ren_stomach_H3K36me3.P0
+        track encode3Ren_stomach_H3K36me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF311RYB.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K36me3 stomach P0
@@ -2806,7 +2808,7 @@ visibility dense
 
         track encode3Ren_heart_H3K4me2_E11
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF530CTQ.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel K4me2 heart 11
         longLabel ChIP-seq peaks of embryonic heart H3K4me2 on day E11 from ENCODE 3 (UCSD/Ren)
         type bigBed 6 +
@@ -2836,7 +2838,7 @@ visibility dense
 
         track encode3Ren_forebrain_H3K9ac_E11
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF850AEZ.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel K9ac forebrn 11
         longLabel ChIP-seq peaks of embryonic forebrain H3K9ac on day E11 from ENCODE 3 (UCSD/Ren)
         type bigBed 6 +
@@ -2854,7 +2856,7 @@ visibility dense
         subGroups view=Peaks tissue=facial_prominence mark=H3K4me3 age=E13
         metadata tissue=facial_prominence mark=H3K4me3 age=E13
 
-        track encode3Ren_lung_H3K4me2.P0
+        track encode3Ren_lung_H3K4me2_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF139FPW.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K4me2 lung P0
@@ -2894,7 +2896,7 @@ visibility dense
         subGroups view=Peaks tissue=limb mark=H3K4me3 age=E12
         metadata tissue=limb mark=H3K4me3 age=E12
 
-        track encode3Ren_hindbrain_H3K4me3.P0
+        track encode3Ren_hindbrain_H3K4me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF169RNW.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K4me3 hindbrn P0
@@ -2944,9 +2946,9 @@ visibility dense
         subGroups view=Peaks tissue=facial_prominence mark=H3K4me3 age=E14
         metadata tissue=facial_prominence mark=H3K4me3 age=E14
 
-        track encode3Ren_heart_H3K27ac.P0
+        track encode3Ren_heart_H3K27ac_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF639DPG.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel K27ac heart P0
         longLabel ChIP-seq peaks of heart H3K27ac on day P0 from ENCODE 3 (UCSD/Ren)
         type bigBed 6 +
@@ -3004,7 +3006,7 @@ visibility dense
         subGroups view=Peaks tissue=liver mark=H3K36me3 age=E12
         metadata tissue=liver mark=H3K36me3 age=E12
 
-        track encode3Ren_intestine_H3K4me3.P0
+        track encode3Ren_intestine_H3K4me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF557NDJ.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K4me3 intestn P0
@@ -3094,7 +3096,7 @@ visibility dense
         subGroups view=Peaks tissue=heart mark=H3K4me1 age=E15
         metadata tissue=heart mark=H3K4me1 age=E15
 
-        track encode3Ren_hindbrain_H3K36me3.P0
+        track encode3Ren_hindbrain_H3K36me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF381FKU.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K36me3 hindbrn P0
@@ -3104,7 +3106,7 @@ visibility dense
         subGroups view=Peaks tissue=hindbrain mark=H3K36me3 age=P0
         metadata tissue=hindbrain mark=H3K36me3 age=P0
 
-        track encode3Ren_forebrain_H3K4me3.P0
+        track encode3Ren_forebrain_H3K4me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF022PPU.bigBed
         parent encode3RenHistonePeaks on
         shortLabel K4me3 forebrn P0
@@ -3144,7 +3146,7 @@ visibility dense
         subGroups view=Peaks tissue=midbrain mark=H3K9me3 age=E11
         metadata tissue=midbrain mark=H3K9me3 age=E11
 
-        track encode3Ren_midbrain_H3K27ac.P0
+        track encode3Ren_midbrain_H3K27ac_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF364PCN.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K27ac midbrn P0
@@ -3154,7 +3156,7 @@ visibility dense
         subGroups view=Peaks tissue=midbrain mark=H3K27ac age=P0
         metadata tissue=midbrain mark=H3K27ac age=P0
 
-        track encode3Ren_kidney_H3K9me3.P0
+        track encode3Ren_kidney_H3K9me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF536IRW.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K9me3 kidney P0
@@ -3164,7 +3166,7 @@ visibility dense
         subGroups view=Peaks tissue=kidney mark=H3K9me3 age=P0
         metadata tissue=kidney mark=H3K9me3 age=P0
 
-        track encode3Ren_stomach_H3K4me3.P0
+        track encode3Ren_stomach_H3K4me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF004HND.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K4me3 stomach P0
@@ -3176,7 +3178,7 @@ visibility dense
 
         track encode3Ren_heart_H3K4me3_E11
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF903YYZ.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel K4me3 heart 11
         longLabel ChIP-seq peaks of embryonic heart H3K4me3 on day E11 from ENCODE 3 (UCSD/Ren)
         type bigBed 6 +
@@ -3236,7 +3238,7 @@ visibility dense
 
         track encode3Ren_forebrain_H3K4me1_E11
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF356FNX.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel K4me1 forebrn 11
         longLabel ChIP-seq peaks of embryonic forebrain H3K4me1 on day E11 from ENCODE 3 (UCSD/Ren)
         type bigBed 6 +
@@ -3514,7 +3516,7 @@ visibility dense
         subGroups view=Peaks tissue=liver mark=H3K9me3 age=E11
         metadata tissue=liver mark=H3K9me3 age=E11
 
-        track encode3Ren_midbrain_H3K4me2.P0
+        track encode3Ren_midbrain_H3K4me2_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF129SDK.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K4me2 midbrn P0
@@ -3574,7 +3576,7 @@ visibility dense
         subGroups view=Peaks tissue=liver mark=H3K9me3 age=E13
         metadata tissue=liver mark=H3K9me3 age=E13
 
-        track encode3Ren_midbrain_H3K36me3.P0
+        track encode3Ren_midbrain_H3K36me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF292KQK.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K36me3 midbrn P0
@@ -3734,7 +3736,7 @@ visibility dense
         subGroups view=Peaks tissue=kidney mark=H3K4me1 age=E16
         metadata tissue=kidney mark=H3K4me1 age=E16
 
-        track encode3Ren_hindbrain_H3K27ac.P0
+        track encode3Ren_hindbrain_H3K27ac_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF469QLC.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K27ac hindbrn P0
@@ -3874,7 +3876,7 @@ visibility dense
         subGroups view=Peaks tissue=stomach mark=H3K9me3 age=E14
         metadata tissue=stomach mark=H3K9me3 age=E14
 
-        track encode3Ren_stomach_H3K9ac.P0
+        track encode3Ren_stomach_H3K9ac_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF046ESP.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K9ac stomach P0
@@ -3884,7 +3886,7 @@ visibility dense
         subGroups view=Peaks tissue=stomach mark=H3K9ac age=P0
         metadata tissue=stomach mark=H3K9ac age=P0
 
-        track encode3Ren_forebrain_H3K9me3.P0
+        track encode3Ren_forebrain_H3K9me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF279LXD.bigBed
         parent encode3RenHistonePeaks on
         shortLabel K9me3 forebrn P0
@@ -3904,7 +3906,7 @@ visibility dense
         subGroups view=Peaks tissue=hindbrain mark=H3K27me3 age=E11
         metadata tissue=hindbrain mark=H3K27me3 age=E11
 
-        track encode3Ren_stomach_H3K9me3.P0
+        track encode3Ren_stomach_H3K9me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF070NSD.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K9me3 stomach P0
@@ -4006,7 +4008,7 @@ visibility dense
 
         track encode3Ren_forebrain_H3K27ac_E11
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF171IEJ.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel K27ac forebrn 11
         longLabel ChIP-seq peaks of embryonic forebrain H3K27ac on day E11 from ENCODE 3 (UCSD/Ren)
         type bigBed 6 +
@@ -4116,7 +4118,7 @@ visibility dense
 
         track encode3Ren_forebrain_H3K27me3_E11
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF309QKW.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel K27me3 forebrn 11
         longLabel ChIP-seq peaks of embryonic forebrain H3K27me3 on day E11 from ENCODE 3 (UCSD/Ren)
         type bigBed 6 +
@@ -4224,7 +4226,7 @@ visibility dense
         subGroups view=Peaks tissue=facial_prominence mark=H3K9me3 age=E11
         metadata tissue=facial_prominence mark=H3K9me3 age=E11
 
-        track encode3Ren_liver_H3K4me2.P0
+        track encode3Ren_liver_H3K4me2_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF123DZJ.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K4me2 liver P0
@@ -4354,7 +4356,7 @@ visibility dense
         subGroups view=Peaks tissue=facial_prominence mark=H3K4me2 age=E11
         metadata tissue=facial_prominence mark=H3K4me2 age=E11
 
-        track encode3Ren_liver_H3K4me3.P0
+        track encode3Ren_liver_H3K4me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF612SAB.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K4me3 liver P0
@@ -4446,7 +4448,7 @@ visibility dense
 
         track encode3Ren_forebrain_H3K9me3_E11
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF056IUW.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel K9me3 forebrn 11
         longLabel ChIP-seq peaks of embryonic forebrain H3K9me3 on day E11 from ENCODE 3 (UCSD/Ren)
         type bigBed 6 +
@@ -4464,7 +4466,7 @@ visibility dense
         subGroups view=Peaks tissue=forebrain mark=H3K4me2 age=E13
         metadata tissue=forebrain mark=H3K4me2 age=E13
 
-        track encode3Ren_hindbrain_H3K4me2.P0
+        track encode3Ren_hindbrain_H3K4me2_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF009ZLI.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K4me2 hindbrn P0
@@ -4474,7 +4476,7 @@ visibility dense
         subGroups view=Peaks tissue=hindbrain mark=H3K4me2 age=P0
         metadata tissue=hindbrain mark=H3K4me2 age=P0
 
-        track encode3Ren_midbrain_H3K4me1.P0
+        track encode3Ren_midbrain_H3K4me1_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF746QCV.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K4me1 midbrn P0
@@ -4684,7 +4686,7 @@ visibility dense
         subGroups view=Peaks tissue=stomach mark=H3K9me3 age=E16
         metadata tissue=stomach mark=H3K9me3 age=E16
 
-        track encode3Ren_hindbrain_H3K27me3.P0
+        track encode3Ren_hindbrain_H3K27me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF634TDI.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K27me3 hindbrn P0
@@ -4694,7 +4696,7 @@ visibility dense
         subGroups view=Peaks tissue=hindbrain mark=H3K27me3 age=P0
         metadata tissue=hindbrain mark=H3K27me3 age=P0
 
-        track encode3Ren_hindbrain_H3K9ac.P0
+        track encode3Ren_hindbrain_H3K9ac_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF857PUK.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K9ac hindbrn P0
@@ -4704,7 +4706,7 @@ visibility dense
         subGroups view=Peaks tissue=hindbrain mark=H3K9ac age=P0
         metadata tissue=hindbrain mark=H3K9ac age=P0
 
-        track encode3Ren_midbrain_H3K4me3.P0
+        track encode3Ren_midbrain_H3K4me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF970BWX.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K4me3 midbrn P0
@@ -4766,7 +4768,7 @@ visibility dense
 
         track encode3Ren_heart_H3K36me3_E11
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF654JHH.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel K36me3 heart 11
         longLabel ChIP-seq peaks of embryonic heart H3K36me3 on day E11 from ENCODE 3 (UCSD/Ren)
         type bigBed 6 +
@@ -4944,7 +4946,7 @@ visibility dense
         subGroups view=Peaks tissue=midbrain mark=H3K4me2 age=E12
         metadata tissue=midbrain mark=H3K4me2 age=E12
 
-        track encode3Ren_lung_H3K4me3.P0
+        track encode3Ren_lung_H3K4me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF897JSM.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K4me3 lung P0
@@ -4984,7 +4986,7 @@ visibility dense
         subGroups view=Peaks tissue=lung mark=H3K9ac age=E15
         metadata tissue=lung mark=H3K9ac age=E15
 
-        track encode3Ren_kidney_H3K4me3.P0
+        track encode3Ren_kidney_H3K4me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF330UDC.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K4me3 kidney P0
@@ -5064,7 +5066,7 @@ visibility dense
         subGroups view=Peaks tissue=hindbrain mark=H3K9me3 age=E16
         metadata tissue=hindbrain mark=H3K9me3 age=E16
 
-        track encode3Ren_intestine_H3K9ac.P0
+        track encode3Ren_intestine_H3K9ac_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF392SVX.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K9ac intestn P0
@@ -5084,7 +5086,7 @@ visibility dense
         subGroups view=Peaks tissue=forebrain mark=H3K4me2 age=E14
         metadata tissue=forebrain mark=H3K4me2 age=E14
 
-        track encode3Ren_lung_H3K9me3.P0
+        track encode3Ren_lung_H3K9me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF868JZJ.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K9me3 lung P0
@@ -5174,7 +5176,7 @@ visibility dense
         subGroups view=Peaks tissue=neural_tube mark=H3K4me3 age=E12
         metadata tissue=neural_tube mark=H3K4me3 age=E12
 
-        track encode3Ren_lung_H3K27ac.P0
+        track encode3Ren_lung_H3K27ac_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF779CNP.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K27ac lung P0
@@ -5204,7 +5206,7 @@ visibility dense
         subGroups view=Peaks tissue=midbrain mark=H3K36me3 age=E16
         metadata tissue=midbrain mark=H3K36me3 age=E16
 
-        track encode3Ren_lung_H3K9ac.P0
+        track encode3Ren_lung_H3K9ac_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF800FRZ.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K9ac lung P0
@@ -5256,7 +5258,7 @@ visibility dense
 
         track encode3Ren_forebrain_H3K36me3_E11
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF054NLT.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel K36me3 forebrn 11
         longLabel ChIP-seq peaks of embryonic forebrain H3K36me3 on day E11 from ENCODE 3 (UCSD/Ren)
         type bigBed 6 +
@@ -5266,7 +5268,7 @@ visibility dense
 
         track encode3Ren_heart_H3K9ac_E11
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF578RST.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel K9ac heart 11
         longLabel ChIP-seq peaks of embryonic heart H3K9ac on day E11 from ENCODE 3 (UCSD/Ren)
         type bigBed 6 +
@@ -5294,9 +5296,9 @@ visibility dense
         subGroups view=Peaks tissue=liver mark=H3K9me3 age=E14
         metadata tissue=liver mark=H3K9me3 age=E14
 
-        track encode3Ren_heart_H3K4me3.P0
+        track encode3Ren_heart_H3K4me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF796IWR.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel K4me3 heart P0
         longLabel ChIP-seq peaks of heart H3K4me3 on day P0 from ENCODE 3 (UCSD/Ren)
         type bigBed 6 +
@@ -5344,7 +5346,7 @@ visibility dense
         subGroups view=Peaks tissue=forebrain mark=H3K4me1 age=E16
         metadata tissue=forebrain mark=H3K4me1 age=E16
 
-        track encode3Ren_kidney_H3K27me3.P0
+        track encode3Ren_kidney_H3K27me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF964GXC.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K27me3 kidney P0
@@ -5366,7 +5368,7 @@ visibility dense
 
         track encode3Ren_heart_H3K4me1_E11
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF497OUN.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel K4me1 heart 11
         longLabel ChIP-seq peaks of embryonic heart H3K4me1 on day E11 from ENCODE 3 (UCSD/Ren)
         type bigBed 6 +
@@ -5404,7 +5406,7 @@ visibility dense
         subGroups view=Peaks tissue=midbrain mark=H3K4me3 age=E14
         metadata tissue=midbrain mark=H3K4me3 age=E14
 
-        track encode3Ren_lung_H3K4me1.P0
+        track encode3Ren_lung_H3K4me1_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF646BDF.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K4me1 lung P0
@@ -5554,7 +5556,7 @@ visibility dense
         subGroups view=Peaks tissue=stomach mark=H3K4me1 age=E14
         metadata tissue=stomach mark=H3K4me1 age=E14
 
-        track encode3Ren_lung_H3K36me3.P0
+        track encode3Ren_lung_H3K36me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF760OEW.bigBed
         parent encode3RenHistonePeaks off
         shortLabel K36me3 lung P0
@@ -5659,7 +5661,7 @@ visibility dense
     parent encode3RenHistone
     shortLabel Histone Modification Signal
     view Signal
-    visibility dense
+    visibility full
     type bigWig
     autoScale on 
     maxHeightPixels 64:32:16
@@ -5724,7 +5726,7 @@ visibility dense
         subGroups view=Signal tissue=facial_prominence mark=H3K27ac age=E15
         metadata tissue=facial_prominence mark=H3K27ac age=E15
 
-        track encode3Ren_hindbrain_H3K4me1.P0_Signal
+        track encode3Ren_hindbrain_H3K4me1_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF925YTU.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K4me1 hindbrn P0
@@ -5734,7 +5736,7 @@ visibility dense
         subGroups view=Signal tissue=hindbrain mark=H3K4me1 age=P0
         metadata tissue=hindbrain mark=H3K4me1 age=P0
 
-        track encode3Ren_forebrain_H3K4me3.P0_Signal
+        track encode3Ren_forebrain_H3K4me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF330NUS.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K4me3 forebrn P0
@@ -6054,7 +6056,7 @@ visibility dense
         subGroups view=Signal tissue=heart mark=H3K27me3 age=E13
         metadata tissue=heart mark=H3K27me3 age=E13
 
-        track encode3Ren_forebrain_H3K4me2.P0_Signal
+        track encode3Ren_forebrain_H3K4me2_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF924CKT.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K4me2 forebrn P0
@@ -6064,7 +6066,7 @@ visibility dense
         subGroups view=Signal tissue=forebrain mark=H3K4me2 age=P0
         metadata tissue=forebrain mark=H3K4me2 age=P0
 
-        track encode3Ren_hindbrain_H3K9me3.P0_Signal
+        track encode3Ren_hindbrain_H3K9me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF919CSS.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K9me3 hindbrn P0
@@ -6194,7 +6196,7 @@ visibility dense
         subGroups view=Signal tissue=lung mark=H3K4me1 age=E16
         metadata tissue=lung mark=H3K4me1 age=E16
 
-        track encode3Ren_midbrain_H3K9me3.P0_Signal
+        track encode3Ren_midbrain_H3K9me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF887HCS.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K9me3 midbrn P0
@@ -6214,7 +6216,7 @@ visibility dense
         subGroups view=Signal tissue=intestine mark=H3K9me3 age=E14
         metadata tissue=intestine mark=H3K9me3 age=E14
 
-        track encode3Ren_hindbrain_H3K36me3.P0_Signal
+        track encode3Ren_hindbrain_H3K36me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF562BME.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K36me3 hindbrn P0
@@ -6244,7 +6246,7 @@ visibility dense
         subGroups view=Signal tissue=liver mark=H3K4me3 age=E11
         metadata tissue=liver mark=H3K4me3 age=E11
 
-        track encode3Ren_kidney_H3K4me3.P0_Signal
+        track encode3Ren_kidney_H3K4me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF376RQB.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K4me3 kidney P0
@@ -6264,7 +6266,7 @@ visibility dense
         subGroups view=Signal tissue=neural_tube mark=H3K9me3 age=E11
         metadata tissue=neural_tube mark=H3K9me3 age=E11
 
-        track encode3Ren_heart_H3K4me1.P0_Signal
+        track encode3Ren_heart_H3K4me1_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF577SJR.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K4me1 heart P0
@@ -6554,7 +6556,7 @@ visibility dense
         subGroups view=Signal tissue=lung mark=H3K9me3 age=E16
         metadata tissue=lung mark=H3K9me3 age=E16
 
-        track encode3Ren_kidney_H3K36me3.P0_Signal
+        track encode3Ren_kidney_H3K36me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF363RRH.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K36me3 kidney P0
@@ -6564,7 +6566,7 @@ visibility dense
         subGroups view=Signal tissue=kidney mark=H3K36me3 age=P0
         metadata tissue=kidney mark=H3K36me3 age=P0
 
-        track encode3Ren_forebrain_H3K27ac.P0_Signal
+        track encode3Ren_forebrain_H3K27ac_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF835DLZ.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K27ac forebrn P0
@@ -6574,7 +6576,7 @@ visibility dense
         subGroups view=Signal tissue=forebrain mark=H3K27ac age=P0
         metadata tissue=forebrain mark=H3K27ac age=P0
 
-        track encode3Ren_intestine_H3K9me3.P0_Signal
+        track encode3Ren_intestine_H3K9me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF363IUI.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K9me3 intestn P0
@@ -6584,7 +6586,7 @@ visibility dense
         subGroups view=Signal tissue=intestine mark=H3K9me3 age=P0
         metadata tissue=intestine mark=H3K9me3 age=P0
 
-        track encode3Ren_intestine_H3K36me3.P0_Signal
+        track encode3Ren_intestine_H3K36me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF085HHF.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K36me3 intestn P0
@@ -6684,7 +6686,7 @@ visibility dense
         subGroups view=Signal tissue=facial_prominence mark=H3K9me3 age=E14
         metadata tissue=facial_prominence mark=H3K9me3 age=E14
 
-        track encode3Ren_stomach_H3K4me1.P0_Signal
+        track encode3Ren_stomach_H3K4me1_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF629BDF.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K4me1 stomach P0
@@ -6914,7 +6916,7 @@ visibility dense
         subGroups view=Signal tissue=midbrain mark=H3K27me3 age=E11
         metadata tissue=midbrain mark=H3K27me3 age=E11
 
-        track encode3Ren_heart_H3K27me3.P0_Signal
+        track encode3Ren_heart_H3K27me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF845OXU.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K27me3 heart P0
@@ -6984,7 +6986,7 @@ visibility dense
         subGroups view=Signal tissue=facial_prominence mark=H3K9ac age=E11
         metadata tissue=facial_prominence mark=H3K9ac age=E11
 
-        track encode3Ren_liver_H3K9ac.P0_Signal
+        track encode3Ren_liver_H3K9ac_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF483COK.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K9ac liver P0
@@ -6994,7 +6996,7 @@ visibility dense
         subGroups view=Signal tissue=liver mark=H3K9ac age=P0
         metadata tissue=liver mark=H3K9ac age=P0
 
-        track encode3Ren_heart_H3K9me3.P0_Signal
+        track encode3Ren_heart_H3K9me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF046SEF.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K9me3 heart P0
@@ -7004,7 +7006,7 @@ visibility dense
         subGroups view=Signal tissue=heart mark=H3K9me3 age=P0
         metadata tissue=heart mark=H3K9me3 age=P0
 
-        track encode3Ren_liver_H3K27me3.P0_Signal
+        track encode3Ren_liver_H3K27me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF633GEF.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K27me3 liver P0
@@ -7014,7 +7016,7 @@ visibility dense
         subGroups view=Signal tissue=liver mark=H3K27me3 age=P0
         metadata tissue=liver mark=H3K27me3 age=P0
 
-        track encode3Ren_intestine_H3K4me2.P0_Signal
+        track encode3Ren_intestine_H3K4me2_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF877BSP.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K4me2 intestn P0
@@ -7024,7 +7026,7 @@ visibility dense
         subGroups view=Signal tissue=intestine mark=H3K4me2 age=P0
         metadata tissue=intestine mark=H3K4me2 age=P0
 
-        track encode3Ren_forebrain_H3K36me3.P0_Signal
+        track encode3Ren_forebrain_H3K36me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF606CKV.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K36me3 forebrn P0
@@ -7034,7 +7036,7 @@ visibility dense
         subGroups view=Signal tissue=forebrain mark=H3K36me3 age=P0
         metadata tissue=forebrain mark=H3K36me3 age=P0
 
-        track encode3Ren_heart_H3K36me3.P0_Signal
+        track encode3Ren_heart_H3K36me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF690EIB.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K36me3 heart P0
@@ -7074,7 +7076,7 @@ visibility dense
         subGroups view=Signal tissue=neural_tube mark=H3K9me3 age=E13
         metadata tissue=neural_tube mark=H3K9me3 age=E13
 
-        track encode3Ren_hindbrain_H3K4me2.P0_Signal
+        track encode3Ren_hindbrain_H3K4me2_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF035FHN.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K4me2 hindbrn P0
@@ -7124,7 +7126,7 @@ visibility dense
         subGroups view=Signal tissue=facial_prominence mark=H3K27me3 age=E13
         metadata tissue=facial_prominence mark=H3K27me3 age=E13
 
-        track encode3Ren_midbrain_H3K4me1.P0_Signal
+        track encode3Ren_midbrain_H3K4me1_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF143LAV.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K4me1 midbrn P0
@@ -7274,7 +7276,7 @@ visibility dense
         subGroups view=Signal tissue=lung mark=H3K27ac age=E14
         metadata tissue=lung mark=H3K27ac age=E14
 
-        track encode3Ren_hindbrain_H3K9ac.P0_Signal
+        track encode3Ren_hindbrain_H3K9ac_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF638WTR.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K9ac hindbrn P0
@@ -7284,7 +7286,7 @@ visibility dense
         subGroups view=Signal tissue=hindbrain mark=H3K9ac age=P0
         metadata tissue=hindbrain mark=H3K9ac age=P0
 
-        track encode3Ren_intestine_H3K27me3.P0_Signal
+        track encode3Ren_intestine_H3K27me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF133XFD.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K27me3 intestn P0
@@ -7354,7 +7356,7 @@ visibility dense
         subGroups view=Signal tissue=stomach mark=H3K4me3 age=E16
         metadata tissue=stomach mark=H3K4me3 age=E16
 
-        track encode3Ren_hindbrain_H3K27ac.P0_Signal
+        track encode3Ren_hindbrain_H3K27ac_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF665WCP.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K27ac hindbrn P0
@@ -7364,7 +7366,7 @@ visibility dense
         subGroups view=Signal tissue=hindbrain mark=H3K27ac age=P0
         metadata tissue=hindbrain mark=H3K27ac age=P0
 
-        track encode3Ren_liver_H3K27ac.P0_Signal
+        track encode3Ren_liver_H3K27ac_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF588AKC.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K27ac liver P0
@@ -7374,7 +7376,7 @@ visibility dense
         subGroups view=Signal tissue=liver mark=H3K27ac age=P0
         metadata tissue=liver mark=H3K27ac age=P0
 
-        track encode3Ren_midbrain_H3K9ac.P0_Signal
+        track encode3Ren_midbrain_H3K9ac_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF379BOF.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K9ac midbrn P0
@@ -7454,7 +7456,7 @@ visibility dense
         subGroups view=Signal tissue=heart mark=H3K36me3 age=E16
         metadata tissue=heart mark=H3K36me3 age=E16
 
-        track encode3Ren_liver_H3K9me3.P0_Signal
+        track encode3Ren_liver_H3K9me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF040LFN.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K9me3 liver P0
@@ -7464,7 +7466,7 @@ visibility dense
         subGroups view=Signal tissue=liver mark=H3K9me3 age=P0
         metadata tissue=liver mark=H3K9me3 age=P0
 
-        track encode3Ren_midbrain_H3K27me3.P0_Signal
+        track encode3Ren_midbrain_H3K27me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF149AGA.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K27me3 midbrn P0
@@ -7714,7 +7716,7 @@ visibility dense
         subGroups view=Signal tissue=neural_tube mark=H3K27ac age=E15
         metadata tissue=neural_tube mark=H3K27ac age=E15
 
-        track encode3Ren_kidney_H3K9ac.P0_Signal
+        track encode3Ren_kidney_H3K9ac_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF495TXX.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K9ac kidney P0
@@ -7744,7 +7746,7 @@ visibility dense
         subGroups view=Signal tissue=facial_prominence mark=H3K4me1 age=E13
         metadata tissue=facial_prominence mark=H3K4me1 age=E13
 
-        track encode3Ren_intestine_H3K9ac.P0_Signal
+        track encode3Ren_intestine_H3K9ac_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF224IHW.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K9ac intestn P0
@@ -7764,7 +7766,7 @@ visibility dense
         subGroups view=Signal tissue=heart mark=H3K27me3 age=E16
         metadata tissue=heart mark=H3K27me3 age=E16
 
-        track encode3Ren_midbrain_H3K4me3.P0_Signal
+        track encode3Ren_midbrain_H3K4me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF339HOE.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K4me3 midbrn P0
@@ -7784,7 +7786,7 @@ visibility dense
         subGroups view=Signal tissue=stomach mark=H3K4me3 age=E14
         metadata tissue=stomach mark=H3K4me3 age=E14
 
-        track encode3Ren_hindbrain_H3K27me3.P0_Signal
+        track encode3Ren_hindbrain_H3K27me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF156SIF.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K27me3 hindbrn P0
@@ -7794,7 +7796,7 @@ visibility dense
         subGroups view=Signal tissue=hindbrain mark=H3K27me3 age=P0
         metadata tissue=hindbrain mark=H3K27me3 age=P0
 
-        track encode3Ren_stomach_H3K27ac.P0_Signal
+        track encode3Ren_stomach_H3K27ac_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF224LDB.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K27ac stomach P0
@@ -8044,7 +8046,7 @@ visibility dense
         subGroups view=Signal tissue=hindbrain mark=H3K36me3 age=E15
         metadata tissue=hindbrain mark=H3K36me3 age=E15
 
-        track encode3Ren_liver_H3K36me3.P0_Signal
+        track encode3Ren_liver_H3K36me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF555EBK.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K36me3 liver P0
@@ -8374,7 +8376,7 @@ visibility dense
         subGroups view=Signal tissue=heart mark=H3K4me2 age=E14
         metadata tissue=heart mark=H3K4me2 age=E14
 
-        track encode3Ren_liver_H3K4me1.P0_Signal
+        track encode3Ren_liver_H3K4me1_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF323FCP.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K4me1 liver P0
@@ -8464,7 +8466,7 @@ visibility dense
         subGroups view=Signal tissue=facial_prominence mark=H3K4me3 age=E13
         metadata tissue=facial_prominence mark=H3K4me3 age=E13
 
-        track encode3Ren_lung_H3K4me2.P0_Signal
+        track encode3Ren_lung_H3K4me2_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF382IWW.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K4me2 lung P0
@@ -8504,7 +8506,7 @@ visibility dense
         subGroups view=Signal tissue=limb mark=H3K4me3 age=E12
         metadata tissue=limb mark=H3K4me3 age=E12
 
-        track encode3Ren_hindbrain_H3K4me3.P0_Signal
+        track encode3Ren_hindbrain_H3K4me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF669USU.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K4me3 hindbrn P0
@@ -8594,7 +8596,7 @@ visibility dense
         subGroups view=Signal tissue=midbrain mark=H3K4me1 age=E11
         metadata tissue=midbrain mark=H3K4me1 age=E11
 
-        track encode3Ren_heart_H3K27ac.P0_Signal
+        track encode3Ren_heart_H3K27ac_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF804EYG.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K27ac heart P0
@@ -8804,7 +8806,7 @@ visibility dense
         subGroups view=Signal tissue=hindbrain mark=H3K36me3 age=E16
         metadata tissue=hindbrain mark=H3K36me3 age=E16
 
-        track encode3Ren_stomach_H3K4me3.P0_Signal
+        track encode3Ren_stomach_H3K4me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF703KOJ.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K4me3 stomach P0
@@ -9094,7 +9096,7 @@ visibility dense
         subGroups view=Signal tissue=hindbrain mark=H3K9ac age=E11
         metadata tissue=hindbrain mark=H3K9ac age=E11
 
-        track encode3Ren_midbrain_H3K4me2.P0_Signal
+        track encode3Ren_midbrain_H3K4me2_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF952PTF.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K4me2 midbrn P0
@@ -9104,7 +9106,7 @@ visibility dense
         subGroups view=Signal tissue=midbrain mark=H3K4me2 age=P0
         metadata tissue=midbrain mark=H3K4me2 age=P0
 
-        track encode3Ren_forebrain_H3K27me3.P0_Signal
+        track encode3Ren_forebrain_H3K27me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF183CXT.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K27me3 forebrn P0
@@ -9164,7 +9166,7 @@ visibility dense
         subGroups view=Signal tissue=forebrain mark=H3K36me3 age=E13
         metadata tissue=forebrain mark=H3K36me3 age=E13
 
-        track encode3Ren_midbrain_H3K36me3.P0_Signal
+        track encode3Ren_midbrain_H3K36me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF446FGV.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K36me3 midbrn P0
@@ -9214,7 +9216,7 @@ visibility dense
         subGroups view=Signal tissue=forebrain mark=H3K27me3 age=E11
         metadata tissue=forebrain mark=H3K27me3 age=E11
 
-        track encode3Ren_kidney_H3K9me3.P0_Signal
+        track encode3Ren_kidney_H3K9me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF517QXW.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K9me3 kidney P0
@@ -9324,7 +9326,7 @@ visibility dense
         subGroups view=Signal tissue=forebrain mark=H3K27ac age=E12
         metadata tissue=forebrain mark=H3K27ac age=E12
 
-        track encode3Ren_forebrain_H3K4me1.P0_Signal
+        track encode3Ren_forebrain_H3K4me1_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF695KNJ.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K4me1 forebrn P0
@@ -9364,7 +9366,7 @@ visibility dense
         subGroups view=Signal tissue=liver mark=H3K27me3 age=E11
         metadata tissue=liver mark=H3K27me3 age=E11
 
-        track encode3Ren_stomach_H3K36me3.P0_Signal
+        track encode3Ren_stomach_H3K36me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF307IYH.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K36me3 stomach P0
@@ -9374,7 +9376,7 @@ visibility dense
         subGroups view=Signal tissue=stomach mark=H3K36me3 age=P0
         metadata tissue=stomach mark=H3K36me3 age=P0
 
-        track encode3Ren_kidney_H3K4me1.P0_Signal
+        track encode3Ren_kidney_H3K4me1_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF317OTS.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K4me1 kidney P0
@@ -9484,7 +9486,7 @@ visibility dense
         subGroups view=Signal tissue=stomach mark=H3K9me3 age=E14
         metadata tissue=stomach mark=H3K9me3 age=E14
 
-        track encode3Ren_stomach_H3K9ac.P0_Signal
+        track encode3Ren_stomach_H3K9ac_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF563JNZ.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K9ac stomach P0
@@ -9494,7 +9496,7 @@ visibility dense
         subGroups view=Signal tissue=stomach mark=H3K9ac age=P0
         metadata tissue=stomach mark=H3K9ac age=P0
 
-        track encode3Ren_forebrain_H3K9me3.P0_Signal
+        track encode3Ren_forebrain_H3K9me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF114FKU.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K9me3 forebrn P0
@@ -9524,7 +9526,7 @@ visibility dense
         subGroups view=Signal tissue=neural_tube mark=H3K4me2 age=E13
         metadata tissue=neural_tube mark=H3K4me2 age=E13
 
-        track encode3Ren_intestine_H3K4me3.P0_Signal
+        track encode3Ren_intestine_H3K4me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF115TVW.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K4me3 intestn P0
@@ -9684,7 +9686,7 @@ visibility dense
         subGroups view=Signal tissue=lung mark=H3K9ac age=E16
         metadata tissue=lung mark=H3K9ac age=E16
 
-        track encode3Ren_intestine_H3K4me1.P0_Signal
+        track encode3Ren_intestine_H3K4me1_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF028YVD.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K4me1 intestn P0
@@ -9714,7 +9716,7 @@ visibility dense
         subGroups view=Signal tissue=intestine mark=H3K4me2 age=E14
         metadata tissue=intestine mark=H3K4me2 age=E14
 
-        track encode3Ren_midbrain_H3K27ac.P0_Signal
+        track encode3Ren_midbrain_H3K27ac_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF961KLD.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K27ac midbrn P0
@@ -9884,7 +9886,7 @@ visibility dense
         subGroups view=Signal tissue=heart mark=H3K36me3 age=E11
         metadata tissue=heart mark=H3K36me3 age=E11
 
-        track encode3Ren_heart_H3K9ac.P0_Signal
+        track encode3Ren_heart_H3K9ac_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF042PHG.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K9ac heart P0
@@ -9894,7 +9896,7 @@ visibility dense
         subGroups view=Signal tissue=heart mark=H3K9ac age=P0
         metadata tissue=heart mark=H3K9ac age=P0
 
-        track encode3Ren_heart_H3K4me2.P0_Signal
+        track encode3Ren_heart_H3K4me2_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF099OBO.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K4me2 heart P0
@@ -9904,7 +9906,7 @@ visibility dense
         subGroups view=Signal tissue=heart mark=H3K4me2 age=P0
         metadata tissue=heart mark=H3K4me2 age=P0
 
-        track encode3Ren_stomach_H3K9me3.P0_Signal
+        track encode3Ren_stomach_H3K9me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF591NXE.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K9me3 stomach P0
@@ -9954,7 +9956,7 @@ visibility dense
         subGroups view=Signal tissue=facial_prominence mark=H3K4me2 age=E11
         metadata tissue=facial_prominence mark=H3K4me2 age=E11
 
-        track encode3Ren_liver_H3K4me3.P0_Signal
+        track encode3Ren_liver_H3K4me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF615IVU.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K4me3 liver P0
@@ -10054,7 +10056,7 @@ visibility dense
         subGroups view=Signal tissue=forebrain mark=H3K9ac age=E16
         metadata tissue=forebrain mark=H3K9ac age=E16
 
-        track encode3Ren_lung_H3K4me3.P0_Signal
+        track encode3Ren_lung_H3K4me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF377ZXP.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K4me3 lung P0
@@ -10084,7 +10086,7 @@ visibility dense
         subGroups view=Signal tissue=midbrain mark=H3K27me3 age=E16
         metadata tissue=midbrain mark=H3K27me3 age=E16
 
-        track encode3Ren_kidney_H3K27ac.P0_Signal
+        track encode3Ren_kidney_H3K27ac_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF873EBR.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K27ac kidney P0
@@ -10094,7 +10096,7 @@ visibility dense
         subGroups view=Signal tissue=kidney mark=H3K27ac age=P0
         metadata tissue=kidney mark=H3K27ac age=P0
 
-        track encode3Ren_kidney_H3K4me2.P0_Signal
+        track encode3Ren_kidney_H3K4me2_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF235MDM.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K4me2 kidney P0
@@ -10224,7 +10226,7 @@ visibility dense
         subGroups view=Signal tissue=facial_prominence mark=H3K27ac age=E11
         metadata tissue=facial_prominence mark=H3K27ac age=E11
 
-        track encode3Ren_stomach_H3K27me3.P0_Signal
+        track encode3Ren_stomach_H3K27me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF587CHP.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K27me3 stomach P0
@@ -10294,7 +10296,7 @@ visibility dense
         subGroups view=Signal tissue=hindbrain mark=H3K27ac age=E13
         metadata tissue=hindbrain mark=H3K27ac age=E13
 
-        track encode3Ren_intestine_H3K27ac.P0_Signal
+        track encode3Ren_intestine_H3K27ac_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF512TCI.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K27ac intestn P0
@@ -10334,7 +10336,7 @@ visibility dense
         subGroups view=Signal tissue=forebrain mark=H3K9ac age=E15
         metadata tissue=forebrain mark=H3K9ac age=E15
 
-        track encode3Ren_forebrain_H3K9ac.P0_Signal
+        track encode3Ren_forebrain_H3K9ac_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF841NIU.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K9ac forebrn P0
@@ -10384,7 +10386,7 @@ visibility dense
         subGroups view=Signal tissue=liver mark=H3K27ac age=E14
         metadata tissue=liver mark=H3K27ac age=E14
 
-        track encode3Ren_liver_H3K4me2.P0_Signal
+        track encode3Ren_liver_H3K4me2_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF817VNI.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K4me2 liver P0
@@ -10574,7 +10576,7 @@ visibility dense
         subGroups view=Signal tissue=midbrain mark=H3K4me3 age=E13
         metadata tissue=midbrain mark=H3K4me3 age=E13
 
-        track encode3Ren_lung_H3K27me3.P0_Signal
+        track encode3Ren_lung_H3K27me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF210YRR.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K27me3 lung P0
@@ -10704,7 +10706,7 @@ visibility dense
         subGroups view=Signal tissue=neural_tube mark=H3K4me3 age=E14
         metadata tissue=neural_tube mark=H3K4me3 age=E14
 
-        track encode3Ren_lung_H3K9me3.P0_Signal
+        track encode3Ren_lung_H3K9me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF399KQJ.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K9me3 lung P0
@@ -10724,7 +10726,7 @@ visibility dense
         subGroups view=Signal tissue=limb mark=H3K9ac age=E13
         metadata tissue=limb mark=H3K9ac age=E13
 
-        track encode3Ren_stomach_H3K4me2.P0_Signal
+        track encode3Ren_stomach_H3K4me2_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF761AXJ.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K4me2 stomach P0
@@ -10754,7 +10756,7 @@ visibility dense
         subGroups view=Signal tissue=midbrain mark=H3K36me3 age=E16
         metadata tissue=midbrain mark=H3K36me3 age=E16
 
-        track encode3Ren_lung_H3K27ac.P0_Signal
+        track encode3Ren_lung_H3K27ac_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF924XGB.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K27ac lung P0
@@ -10764,7 +10766,7 @@ visibility dense
         subGroups view=Signal tissue=lung mark=H3K27ac age=P0
         metadata tissue=lung mark=H3K27ac age=P0
 
-        track encode3Ren_lung_H3K9ac.P0_Signal
+        track encode3Ren_lung_H3K9ac_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF820UTZ.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K9ac lung P0
@@ -10864,7 +10866,7 @@ visibility dense
         subGroups view=Signal tissue=liver mark=H3K9me3 age=E14
         metadata tissue=liver mark=H3K9me3 age=E14
 
-        track encode3Ren_heart_H3K4me3.P0_Signal
+        track encode3Ren_heart_H3K4me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF104GKL.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K4me3 heart P0
@@ -10964,7 +10966,7 @@ visibility dense
         subGroups view=Signal tissue=kidney mark=H3K4me2 age=E15
         metadata tissue=kidney mark=H3K4me2 age=E15
 
-        track encode3Ren_lung_H3K4me1.P0_Signal
+        track encode3Ren_lung_H3K4me1_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF970OZN.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K4me1 lung P0
@@ -11134,7 +11136,7 @@ visibility dense
         subGroups view=Signal tissue=forebrain mark=H3K4me1 age=E16
         metadata tissue=forebrain mark=H3K4me1 age=E16
 
-        track encode3Ren_kidney_H3K27me3.P0_Signal
+        track encode3Ren_kidney_H3K27me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF460ZYC.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K27me3 kidney P0
@@ -11184,7 +11186,7 @@ visibility dense
         subGroups view=Signal tissue=stomach mark=H3K4me1 age=E14
         metadata tissue=stomach mark=H3K4me1 age=E14
 
-        track encode3Ren_lung_H3K36me3.P0_Signal
+        track encode3Ren_lung_H3K36me3_P0_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF165DVJ.bigWig
         parent encode3RenHistoneSignal off
         shortLabel K36me3 lung P0
