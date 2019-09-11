@@ -115,7 +115,7 @@ group regulation
         bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakForebrainP0.bb
         parent encode3RenAtacPeaks on
         shortLabel ATAC forebrain P0
-        longLabel Open chromatin ATAC-seq peaks from embryonic day P0 forebrain from ENCODE 3 (UCSD/LICR)
+        longLabel Open chromatin ATAC-seq peaks from day P0 forebrain from ENCODE 3 (UCSD/LICR)
         subGroups view=peaks tissue=forebrain age=P0
         metadata tissue=forebrain age=P0
 
@@ -171,7 +171,7 @@ group regulation
         bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakHeartP0.bb
         parent encode3RenAtacPeaks on
         shortLabel ATAC heart P0
-        longLabel Open chromatin ATAC-seq peaks from embryonic day P0 heart from ENCODE 3 (UCSD/LICR)
+        longLabel Open chromatin ATAC-seq peaks from day P0 heart from ENCODE 3 (UCSD/LICR)
         subGroups view=peaks tissue=heart age=P0
         metadata tissue=heart age=P0
 
@@ -227,7 +227,7 @@ group regulation
         bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakHindbrainP0.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC hindbrain P0
-        longLabel Open chromatin ATAC-seq peaks from embryonic day P0 hindbrain from ENCODE 3 (UCSD/LICR)
+        longLabel Open chromatin ATAC-seq peaks from day P0 hindbrain from ENCODE 3 (UCSD/LICR)
         subGroups view=peaks tissue=hindbrain age=P0
         metadata tissue=hindbrain age=P0
 
@@ -259,7 +259,7 @@ group regulation
         bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakIntestineP0.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC intestine P0
-        longLabel Open chromatin ATAC-seq peaks from embryonic day P0 intestine from ENCODE 3 (UCSD/LICR)
+        longLabel Open chromatin ATAC-seq peaks from day P0 intestine from ENCODE 3 (UCSD/LICR)
         subGroups view=peaks tissue=intestine age=P0
         metadata tissue=intestine age=P0
 
@@ -291,7 +291,7 @@ group regulation
         bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakKidneyP0.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC kidney P0
-        longLabel Open chromatin ATAC-seq peaks from embryonic day P0 kidney from ENCODE 3 (UCSD/LICR)
+        longLabel Open chromatin ATAC-seq peaks from day P0 kidney from ENCODE 3 (UCSD/LICR)
         subGroups view=peaks tissue=kidney age=P0
         metadata tissue=kidney age=P0
 
@@ -387,7 +387,7 @@ group regulation
         bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLiverP0.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC liver P0
-        longLabel Open chromatin ATAC-seq peaks from embryonic day P0 liver from ENCODE 3 (UCSD/LICR)
+        longLabel Open chromatin ATAC-seq peaks from day P0 liver from ENCODE 3 (UCSD/LICR)
         subGroups view=peaks tissue=liver age=P0
         metadata tissue=liver age=P0
 
@@ -419,7 +419,7 @@ group regulation
         bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLungP0.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC lung P0
-        longLabel Open chromatin ATAC-seq peaks from embryonic day P0 lung from ENCODE 3 (UCSD/LICR)
+        longLabel Open chromatin ATAC-seq peaks from day P0 lung from ENCODE 3 (UCSD/LICR)
         subGroups view=peaks tissue=lung age=P0
         metadata tissue=lung age=P0
 
@@ -475,7 +475,7 @@ group regulation
         bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakMidbrainP0.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC midbrain P0
-        longLabel Open chromatin ATAC-seq peaks from embryonic day P0 midbrain from ENCODE 3 (UCSD/LICR)
+        longLabel Open chromatin ATAC-seq peaks from day P0 midbrain from ENCODE 3 (UCSD/LICR)
         subGroups view=peaks tissue=midbrain age=P0
         metadata tissue=midbrain age=P0
 
@@ -547,7 +547,7 @@ group regulation
         bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakStomachP0.bb
         parent encode3RenAtacPeaks off
         shortLabel ATAC stomach P0
-        longLabel Open chromatin ATAC-seq peaks from embryonic day P0 stomach from ENCODE 3 (UCSD/LICR)
+        longLabel Open chromatin ATAC-seq peaks from day P0 stomach from ENCODE 3 (UCSD/LICR)
         subGroups view=peaks tissue=stomach age=P0
         metadata tissue=stomach age=P0
 
@@ -652,7 +652,7 @@ group regulation
         bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalForebrainP0.bw
         parent encode3RenAtacSignal on
         shortLabel ATAC forebrain P0
-        longLabel Open chromatin ATAC-seq signal from embryonic day P0 forebrain from ENCODE 3 (UCSD/LICR)
+        longLabel Open chromatin ATAC-seq signal from day P0 forebrain from ENCODE 3 (UCSD/LICR)
         subGroups view=signal tissue=forebrain age=P0
         metadata tissue=forebrain age=P0
 
@@ -708,7 +708,7 @@ group regulation
         bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalHeartP0.bw
         parent encode3RenAtacSignal on
         shortLabel ATAC heart P0
-        longLabel Open chromatin ATAC-seq signal from embryonic day P0 heart from ENCODE 3 (UCSD/LICR)
+        longLabel Open chromatin ATAC-seq signal from day P0 heart from ENCODE 3 (UCSD/LICR)
         subGroups view=signal tissue=heart age=P0
         metadata tissue=heart age=P0
 
@@ -764,7 +764,7 @@ group regulation
         bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalHindbrainP0.bw
         parent encode3RenAtacSignal off
         shortLabel ATAC hindbrain P0
-        longLabel Open chromatin ATAC-seq signal from embryonic day P0 hindbrain from ENCODE 3 (UCSD/LICR)
+        longLabel Open chromatin ATAC-seq signal from day P0 hindbrain from ENCODE 3 (UCSD/LICR)
         subGroups view=signal tissue=hindbrain age=P0
         metadata tissue=hindbrain age=P0
 
@@ -796,7 +796,7 @@ group regulation
         bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalIntestineP0.bw
         parent encode3RenAtacSignal off
         shortLabel ATAC intestine P0
-        longLabel Open chromatin ATAC-seq signal from embryonic day P0 intestine from ENCODE 3 (UCSD/LICR)
+        longLabel Open chromatin ATAC-seq signal from day P0 intestine from ENCODE 3 (UCSD/LICR)
         subGroups view=signal tissue=intestine age=P0
         metadata tissue=intestine age=P0
 
@@ -828,7 +828,7 @@ group regulation
         bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalKidneyP0.bw
         parent encode3RenAtacSignal off
         shortLabel ATAC kidney P0
-        longLabel Open chromatin ATAC-seq signal from embryonic day P0 kidney from ENCODE 3 (UCSD/LICR)
+        longLabel Open chromatin ATAC-seq signal from day P0 kidney from ENCODE 3 (UCSD/LICR)
         subGroups view=signal tissue=kidney age=P0
         metadata tissue=kidney age=P0
 
@@ -924,7 +924,7 @@ group regulation
         bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalLiverP0.bw
         parent encode3RenAtacSignal off
         shortLabel ATAC liver P0
-        longLabel Open chromatin ATAC-seq signal from embryonic day P0 liver from ENCODE 3 (UCSD/LICR)
+        longLabel Open chromatin ATAC-seq signal from day P0 liver from ENCODE 3 (UCSD/LICR)
         subGroups view=signal tissue=liver age=P0
         metadata tissue=liver age=P0
 
@@ -956,7 +956,7 @@ group regulation
         bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalLungP0.bw
         parent encode3RenAtacSignal off
         shortLabel ATAC lung P0
-        longLabel Open chromatin ATAC-seq signal from embryonic day P0 lung from ENCODE 3 (UCSD/LICR)
+        longLabel Open chromatin ATAC-seq signal from day P0 lung from ENCODE 3 (UCSD/LICR)
         subGroups view=signal tissue=lung age=P0
         metadata tissue=lung age=P0
 
@@ -1012,7 +1012,7 @@ group regulation
         bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalMidbrainP0.bw
         parent encode3RenAtacSignal off
         shortLabel ATAC midbrain P0
-        longLabel Open chromatin ATAC-seq signal from embryonic day P0 midbrain from ENCODE 3 (UCSD/LICR)
+        longLabel Open chromatin ATAC-seq signal from day P0 midbrain from ENCODE 3 (UCSD/LICR)
         subGroups view=signal tissue=midbrain age=P0
         metadata tissue=midbrain age=P0
 
@@ -1084,7 +1084,7 @@ group regulation
         bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalStomachP0.bw
         parent encode3RenAtacSignal off
         shortLabel ATAC stomach P0
-        longLabel Open chromatin ATAC-seq signal from embryonic day P0 stomach from ENCODE 3 (UCSD/LICR)
+        longLabel Open chromatin ATAC-seq signal from day P0 stomach from ENCODE 3 (UCSD/LICR)
         subGroups view=signal tissue=stomach age=P0
         metadata tissue=stomach age=P0
 
