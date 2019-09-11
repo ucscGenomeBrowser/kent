@@ -86,7 +86,7 @@ visibility dense
     track encode3RenChromHmmForebrainE11
     bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmForebrainE11.bb
     parent encode3RenChromHmm on
-    shortLabel cHMM forebrain E11
+    shortLabel cHMM forebrn E11
     longLabel Chromatin state of embryonic day E11 forebrain from ENCODE 3 (UCSD/Ren)
     subGroups tissue=forebrain age=E11
 
@@ -100,7 +100,7 @@ visibility dense
     track encode3RenChromHmmHindbrainE11
     bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmHindbrainE11.bb
     parent encode3RenChromHmm off
-    shortLabel cHMM hindbrain E11
+    shortLabel cHMM hindbrn E11
     longLabel Chromatin state of embryonic day E11 hindbrain from ENCODE 3 (UCSD/Ren)
     subGroups tissue=hindbrain age=E11
 
@@ -142,7 +142,7 @@ visibility dense
     track encode3RenChromHmmForebrainE12
     bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmForebrainE12.bb
     parent encode3RenChromHmm off
-    shortLabel cHMM forebrain E12
+    shortLabel cHMM forebrn E12
     longLabel Chromatin state of embryonic day E12 forebrain from ENCODE 3 (UCSD/Ren)
     subGroups tissue=forebrain age=E12
 
@@ -156,7 +156,7 @@ visibility dense
     track encode3RenChromHmmHindbrainE12
     bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmHindbrainE12.bb
     parent encode3RenChromHmm off
-    shortLabel cHMM hindbrain E12
+    shortLabel cHMM hindbrn E12
     longLabel Chromatin state of embryonic day E12 hindbrain from ENCODE 3 (UCSD/Ren)
     subGroups tissue=hindbrain age=E12
 
@@ -198,7 +198,7 @@ visibility dense
     track encode3RenChromHmmForebrainE13
     bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmForebrainE13.bb
     parent encode3RenChromHmm on
-    shortLabel cHMM forebrain E13
+    shortLabel cHMM forebrn E13
     longLabel Chromatin state of embryonic day E13 forebrain from ENCODE 3 (UCSD/Ren)
     subGroups tissue=forebrain age=E13
 
@@ -212,7 +212,7 @@ visibility dense
     track encode3RenChromHmmHindbrainE13
     bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmHindbrainE13.bb
     parent encode3RenChromHmm off
-    shortLabel cHMM hindbrain E13
+    shortLabel cHMM hindbrn E13
     longLabel Chromatin state of embryonic day E13 hindbrain from ENCODE 3 (UCSD/Ren)
     subGroups tissue=hindbrain age=E13
 
@@ -254,7 +254,7 @@ visibility dense
     track encode3RenChromHmmForebrainE14
     bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmForebrainE14.bb
     parent encode3RenChromHmm off
-    shortLabel cHMM forebrain E14
+    shortLabel cHMM forebrn E14
     longLabel Chromatin state of embryonic day E14 forebrain from ENCODE 3 (UCSD/Ren)
     subGroups tissue=forebrain age=E14
 
@@ -268,14 +268,14 @@ visibility dense
     track encode3RenChromHmmHindbrainE14
     bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmHindbrainE14.bb
     parent encode3RenChromHmm off
-    shortLabel cHMM hindbrain E14
+    shortLabel cHMM hindbrn E14
     longLabel Chromatin state of embryonic day E14 hindbrain from ENCODE 3 (UCSD/Ren)
     subGroups tissue=hindbrain age=E14
 
     track encode3RenChromHmmIntestineE14
     bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmIntestineE14.bb
     parent encode3RenChromHmm off
-    shortLabel cHMM intestine E14
+    shortLabel cHMM intestn E14
     longLabel Chromatin state of embryonic day E14 intestine from ENCODE 3 (UCSD/Ren)
     subGroups tissue=intestine age=E14
 
@@ -338,7 +338,7 @@ visibility dense
     track encode3RenChromHmmForebrainE15
     bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmForebrainE15.bb
     parent encode3RenChromHmm on
-    shortLabel cHMM forebrain E15
+    shortLabel cHMM forebrn E15
     longLabel Chromatin state of embryonic day E15 forebrain from ENCODE 3 (UCSD/Ren)
     subGroups tissue=forebrain age=E15
 
@@ -352,14 +352,14 @@ visibility dense
     track encode3RenChromHmmHindbrainE15
     bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmHindbrainE15.bb
     parent encode3RenChromHmm off
-    shortLabel cHMM hindbrain E15
+    shortLabel cHMM hindbrn E15
     longLabel Chromatin state of embryonic day E15 hindbrain from ENCODE 3 (UCSD/Ren)
     subGroups tissue=hindbrain age=E15
 
     track encode3RenChromHmmIntestineE15
     bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmIntestineE15.bb
     parent encode3RenChromHmm off
-    shortLabel cHMM intestine E15
+    shortLabel cHMM intestn E15
     longLabel Chromatin state of embryonic day E15 intestine from ENCODE 3 (UCSD/Ren)
     subGroups tissue=intestine age=E15
 
@@ -415,7 +415,7 @@ visibility dense
     track encode3RenChromHmmForebrainE16
     bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmForebrainE16.bb
     parent encode3RenChromHmm off
-    shortLabel cHMM forebrain E16
+    shortLabel cHMM forebrn E16
     longLabel Chromatin state of embryonic day E16 forebrain from ENCODE 3 (UCSD/Ren)
     subGroups tissue=forebrain age=E16
 
@@ -429,14 +429,14 @@ visibility dense
     track encode3RenChromHmmHindbrainE16
     bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmHindbrainE16.bb
     parent encode3RenChromHmm off
-    shortLabel cHMM hindbrain E16
+    shortLabel cHMM hindbrn E16
     longLabel Chromatin state of embryonic day E16 hindbrain from ENCODE 3 (UCSD/Ren)
     subGroups tissue=hindbrain age=E16
 
     track encode3RenChromHmmIntestineE16
     bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmIntestineE16.bb
     parent encode3RenChromHmm off
-    shortLabel cHMM intestine E16
+    shortLabel cHMM intestn E16
     longLabel Chromatin state of embryonic day E16 intestine from ENCODE 3 (UCSD/Ren)
     subGroups tissue=intestine age=E16
 
