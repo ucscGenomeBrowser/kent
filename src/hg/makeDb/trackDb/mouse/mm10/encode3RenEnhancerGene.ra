@@ -1,9 +1,10 @@
-# Regulation group: Enhancer/Gene interactions
+# Regulation group: Enhancer/Gene map from ENCODE 3 (Ren Lab) with EPDNew promoters
 
-track enhancerGeneInteract
+track encode3RenEnhancerEpdNewPromoter
+html enocde3RenEnhancerGene.html
 compositeTrack on
-shortLabel Enhancer-Gene
-longLabel Enhancer/gene interactions from ENCODE 3 (UCSD/LICR) with promoters from EPDNew
+shortLabel ENC+EPD Enhc/Gene
+longLabel Enhancer/gene map from ENCODE 3 (UCSD/Ren) with promoters from EPDNew
 subGroup1 view View a_enhancer=Enhancers b_promoter=Promoter c_interaction=Interaction d_cluster=Cluster
 subGroup2 set Set a_REP=Replicated b_ALL=All
 sortOrder set=+ view=+
@@ -20,18 +21,18 @@ wgEncode 1
     view b_promoters
     itemRgb on
     visibility pack
-    parent enhancerGeneInteract
+    parent encode3RenEnhancerEpdNewPromoter
 
         track egPromoterRep
         shortLabel EPD Promoters (Rep)
-        longLabel EPD promoters in replicated ENCODE 3 enhancer/gene interactions
+        longLabel EPD promoters in replicated enhancer/gene associations from ENCODE 3 (UCSD/Ren)
         bigDataUrl /gbdb/mm10/bbi/epdPromoterRep.bb
         parent egPromoterView
         subGroups set=a_REP view=b_promoter
 
         track egPromoterAll
         shortLabel EPD Promoters (All)
-        longLabel EPD promoters in all ENCODE 3 enhancer/gene interactions
+        longLabel EPD promoters in all enhancer/gene associations from ENCODE 3 (UCSD/Ren)
         bigDataUrl /gbdb/mm10/bbi/epdPromoterAll.bb
         parent egPromoterView off
         subGroups set=b_ALL view=b_promoter
@@ -41,7 +42,7 @@ wgEncode 1
     shortLabel Enhancer
     view a_enhancer
     visibility pack
-    parent enhancerGeneInteract
+    parent encode3RenEnhancerEpdNewPromoter
 
         track egEnhancerRep
         shortLabel Enhancers (Rep)
@@ -58,7 +59,7 @@ wgEncode 1
         subGroups set=b_ALL view=a_enhancer
 
     track egInteractionView
-    shortLabel Interactions
+    shortLabel Associations
     type bigInteract
     interactDirectional offsetTarget
     interactMultiRegion on
@@ -66,43 +67,43 @@ wgEncode 1
     view c_interaction
     viewUi on
     visibility full
-    parent enhancerGeneInteract
+    parent encode3RenEnhancerEpdNewPromoter
     itemRgb on
 
         track egInteractionRep
-        shortLabel Interactions (Rep)
-        longLabel Replicated interactions between enhancers and gene promoters
-        bigDataUrl /gbdb/mm10/bbi/encode3EnhancerPromoterInteractRep.bb
+        shortLabel Associations (Rep)
+        longLabel Replicated associations between enhancers and gene promoters
+        bigDataUrl /gbdb/mm10/bbi/encode3EnhancerPromoterRep.bb
         parent egInteractionView
         subGroups set=a_REP view=c_interaction
 
         track egInteractionAll
-        shortLabel Interactions (All)
-        longLabel All interactions between enhancers and gene promoters
-        bigDataUrl /gbdb/mm10/bbi/encode3EnhancerPromoterInteractAll.bb
+        shortLabel Associations (All)
+        longLabel All associations between enhancers and gene promoters
+        bigDataUrl /gbdb/mm10/bbi/encode3EnhancerPromoterAll.bb
         parent egInteractionView off
         subGroups set=b_ALL view=c_interaction
 
     track egClusteredInteractionView
-    shortLabel Clustered Interactions
+    shortLabel Clustered Associations
     type bigInteract
     interactDirectional clusterTarget
     interactMultiRegion on
     view d_cluster
     visibility pack
-    parent enhancerGeneInteract
+    parent encode3RenEnhancerEpdNewPromoter
 
         track egClusteredInteractionRep
         shortLabel Interaction Clusters (Rep)
-        longLabel Clustered replicated interactions of enhancers and gene promoters
-        bigDataUrl /gbdb/mm10/bbi/encode3EnhancerPromoterInteractRep.bb
+        longLabel Clustered replicated associations of enhancers and gene promoters
+        bigDataUrl /gbdb/mm10/bbi/encode3EnhancerPromoterRep.bb
         parent egClusteredInteractionView
         subGroups set=a_REP view=d_cluster
 
         track egClusteredInteractionAll
         shortLabel Interaction Clusters (All)
-        longLabel Clustered all interactions of enhancers and gene promoters
-        bigDataUrl /gbdb/mm10/bbi/encode3EnhancerPromoterInteractAll.bb
+        longLabel Clustered all associations of enhancers and gene promoters
+        bigDataUrl /gbdb/mm10/bbi/encode3EnhancerPromoterAll.bb
         parent egClusteredInteractionView off
         subGroups set=b_ALL view=d_cluster
 
@@ -113,7 +114,7 @@ wgEncode 1
     #itemRgb on
     #searchIndex name
     #visibility dense
-    #parent enhancerGeneInteract
+    #parent encode3RenEnhancerEpdNewPromoter
 
         #track egEnhancer
         #shortLabel Enhancers

@@ -7,7 +7,7 @@ group regulation
 priority 2
 pennantIcon New red
 
-include trackDb.histones.ra
-include trackDb.chromHmm.ra
-include trackDb.atac.ra
+include encode3.histone.ra
+include encode3.chromHmm.ra
+include encode3.atac.ra
 
