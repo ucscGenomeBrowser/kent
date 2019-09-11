@@ -14,6 +14,9 @@
 #include "hCommon.h"
 #include "botDelay.h"
 
+#define defaultDelayFrac 1.0   /* standard penalty for most CGIs */
+#define defaultWarnMs 10000    /* warning at 10 to 20 second delay */
+#define defaultExitMs 20000    /* error 429 Too Many Requests after 20+ second delay */
 
 int botDelayTime(char *host, int port, char *botCheckString)
 /* Figure out suggested delay time for ip address in
@@ -170,7 +173,7 @@ if (host != NULL && port != NULL)
 void hgBotDelay()
 /* High level bot delay call - for use with regular webpage output */
 {
-hgBotDelayExt(FALSE, 1.0);
+hgBotDelayExt(FALSE, defaultDelayFrac);
 }
 
 void hgBotDelayFrac(double fraction)
@@ -182,7 +185,7 @@ hgBotDelayExt(FALSE, fraction);
 void hgBotDelayNoWarn()
 /* High level bot delay call without warning - for use with non-webpage outputs */
 {
-hgBotDelayExt(TRUE, 1.0);
+hgBotDelayExt(TRUE, defaultDelayFrac);
 }
 
 void hgBotDelayNoWarnFrac(double fraction)
@@ -193,7 +196,7 @@ hgBotDelayExt(TRUE, fraction);
 
 int hgBotDelayTime()
 {
-return hgBotDelayTimeFrac(1.0);
+return hgBotDelayTimeFrac(defaultDelayFrac);
 }
 
 int hgBotDelayTimeFrac(double fraction)
@@ -256,6 +259,7 @@ cgiExitTime(cgiExitName, enteredMainTime);
 exit(0);
 }       /*      static void hogExit()   */
 
+
 boolean earlyBotCheck(long enteredMainTime, char *cgiName, double delayFrac, int warnMs, int exitMs)
 /* similar to botDelayCgi but for use before the CGI has started any
  * output or setup the cart of done any MySQL operations.  The boolean
@@ -269,8 +273,12 @@ boolean issueWarning = FALSE;
 if (botException())	/* don't do this if caller is on the exception list */
     return issueWarning;
 
-if (delayFrac < 0.000001) /* passed in zero, use default 1.0 */
-    delayFrac = 1.0;
+if (delayFrac < 0.000001) /* passed in zero, use default */
+    delayFrac = defaultDelayFrac;
+if (warnMs < 1)	/* passed in zero, use default */
+    warnMs = defaultWarnMs;
+if (exitMs < 1)	/* passed in zero, use default */
+    exitMs = defaultExitMs;
 
 botDelayMillis = hgBotDelayTimeFrac(delayFrac);
 if (botDelayMillis > 0)
