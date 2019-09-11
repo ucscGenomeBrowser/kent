@@ -262,6 +262,45 @@ TABLE.hgcLsSnp TR, TABLE.hgcLsSnp TD {
     padding-right: 5px;
 }
 
+
+/* hgTrackUi page formatting */
+label.trackUiHicLabel
+{
+    font-style: italic;
+    font-size: 0.9em;
+}
+
+label.trackUiHicLabelExpand
+{
+    font-style: italic;
+    font-size: 0.9em;
+}
+
+img.trackUiHicLabelArrow
+{
+    transform: rotate(0deg);
+    max-width: 9px;
+}
+
+img.trackUiHicLabelArrow.open
+{
+    transform: rotate(90deg);
+}
+
+div.trackUiHicHiddenAttributes
+{
+    font-size: 0.9em;
+    display: none;
+    max-height: 10em;
+    max-width: 60em;
+    overflow: scroll;
+    background-color: white;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    border: solid;
+    border-width: thin;
+}
+
 /* hgTracks config page groups list */
 TABLE.groupLists { background-color: #FFFEE8; width: 50em; }
 TABLE.groupLists TR:not(.blueToggleBar):not(.noData) TD { border: 1px solid; }
