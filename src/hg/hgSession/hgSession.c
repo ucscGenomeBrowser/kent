@@ -53,7 +53,6 @@ errAbort(
 /* Global variables. */
 struct cart *cart;
 char *excludeVars[] = {"Submit", "submit", hgsSessionDataDbSuffix, NULL};
-struct slName *existingSessionNames = NULL;
 
 /* Javascript to confirm that the user truly wants to delete a session. */
 #define confirmDeleteFormat "return confirm('Are you sure you want to delete ' + decodeURIComponent('%s') + '?');"
@@ -278,10 +277,11 @@ hashFree(&settingsHash);
 return val;
 }
 
-void showExistingSessions(char *userName)
+static struct slName *showExistingSessions(char *userName)
 /* Print out a table with buttons for sharing/unsharing/loading/deleting
- * previously saved sessions. */
+ * previously saved sessions.  Return a list of session names. */
 {
+struct slName *existingSessionNames = NULL;
 struct sqlConnection *conn = hConnectCentral();
 struct sqlResult *sr = NULL;
 char **row = NULL;
@@ -415,6 +415,7 @@ printf("</div>\n");
 printf("<P></P>\n");
 sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
+return existingSessionNames;
 }
 
 void showOtherUserOptions()
@@ -469,7 +470,38 @@ printf("</TABLE>\n");
 printf("<P></P>\n");
 }
 
-void showSavingOptions(char *userName)
+static struct dyString *dyPrintCheckExistingSessionJs(struct slName *existingSessionNames,
+                                                      char *exceptName)
+/* Write JS that will pop up a confirm dialog if the user's new session name is the same
+ * (case-insensitive) as any existing session name, i.e. they would be overwriting it.
+ * If exceptName is given, then it's OK for the new session name to match that. */
+{
+struct dyString *js = dyStringNew(1024);
+struct slName *sn;
+// MySQL does case-insensitive comparison because our DEFAULT CHARSET=latin1;
+// use case-insensitive comparison here to avoid clobbering (#15051).
+dyStringAppend(js, "var su, si = document.getElementsByName('" hgsNewSessionName "'); ");
+dyStringAppend(js, "if (si[0]) { su = si[0].value.trim().toUpperCase(); ");
+if (isNotEmpty(exceptName))
+    dyStringPrintf(js, "if (su !== '%s'.toUpperCase()) { ", exceptName);
+dyStringAppend(js, "if ( ");
+for (sn = existingSessionNames;  sn != NULL;  sn = sn->next)
+    {
+    char nameUpper[PATH_LEN];
+    safecpy(nameUpper, sizeof(nameUpper), sn->name);
+    touppers(nameUpper);
+    dyStringPrintf(js, "su === ");
+    dyStringQuoteString(js, '\'', nameUpper);
+    dyStringPrintf(js, "%s", (sn->next ? " || " : " )"));
+    }
+dyStringAppend(js, " { return confirm('This will overwrite the contents of the existing "
+               "session ' + si[0].value.trim() + '.  Proceed?'); } }");
+if (isNotEmpty(exceptName))
+    dyStringAppend(js, " }");
+return js;
+}
+
+void showSavingOptions(char *userName, struct slName *existingSessionNames)
 /* Show options for saving a new named session in our db or to a file. */
 {
 printf("<H3>Save Settings</H3>\n");
@@ -491,23 +523,7 @@ if (isNotEmpty(userName))
     printf("&nbsp;");
     if (existingSessionNames)
 	{
-	struct dyString *js = dyStringNew(1024);
-	struct slName *sn;
-        // MySQL does case-insensitive comparison because our DEFAULT CHARSET=latin1;
-        // use case-insensitive comparison here to avoid clobbering (#15051).
-        dyStringAppend(js, "var su, si = document.getElementsByName('" hgsNewSessionName "'); ");
-        dyStringAppend(js, "if (si[0]) { su = si[0].value.toUpperCase(); if ( ");
-	for (sn = existingSessionNames;  sn != NULL;  sn = sn->next)
-	    {
-            char nameUpper[PATH_LEN];
-            safecpy(nameUpper, sizeof(nameUpper), sn->name);
-            touppers(nameUpper);
-            dyStringPrintf(js, "su === ");
-            dyStringQuoteString(js, '\'', nameUpper);
-            dyStringPrintf(js, "%s", (sn->next ? " || " : " ) { "));
-	    }
-	dyStringAppend(js, "return confirm('This will overwrite the contents of the existing "
-                       "session ' + si[0].value + '.  Proceed?'); } }");
+        struct dyString *js = dyPrintCheckExistingSessionJs(existingSessionNames, NULL);
 	cgiMakeOnClickSubmitButton(js->string, hgsDoNewSession, "submit");
 	dyStringFree(&js);
 	}
@@ -582,13 +598,14 @@ printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=%s "
        hgSessionName(), formMethod);
 cartSaveSession(cart);
 
+struct slName *existingSessionNames = NULL;
 if (isNotEmpty(userName))
-    showExistingSessions(userName);
+    existingSessionNames = showExistingSessions(userName);
 else if (savedSessionsSupported)
      printf("<P>If you <A HREF=\"%s\">sign in</A>, "
          "you will also have the option to save named sessions.\n",
          wikiLinkUserLoginUrl(cartSessionId(cart)));
-showSavingOptions(userName);
+showSavingOptions(userName, existingSessionNames);
 showLoadingOptions(userName, savedSessionsSupported);
 printf("</FORM>\n");
 }
@@ -952,6 +969,27 @@ if (filePath != NULL)
     unlink(filePath);
 }
 
+static struct slName *getUserSessionNames(char *encUserName)
+/* Return a list of unencoded session names belonging to user. */
+{
+struct slName *existingSessionNames = NULL;
+struct sqlConnection *conn = hConnectCentral();
+char query[1024];
+sqlSafef(query, sizeof(query), "select sessionName from %s where userName = '%s';",
+        namedSessionTable, encUserName);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *encSessionName = row[0];
+    char *sessionName = cgiDecodeClone(encSessionName);
+    slNameAddHead(&existingSessionNames, sessionName);
+    }
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
+return existingSessionNames;
+}
+
 char *doSessionDetail(char *userName, char *sessionName)
 /* Show details about a particular session. */
 {
@@ -1011,7 +1049,7 @@ if ((row = sqlNextRow(sr)) != NULL)
 		   cartSessionVarName(cart), cartSessionId(cart), hgsOldSessionName, sessionName,
 		   hgsNewSessionName, hgsNewSessionName, 32, sessionName);
     jsOnEventById("change"  , hgsNewSessionName, highlightAccChanges);
-    jsOnEventById("keypress", hgsNewSessionName, highlightAccChanges);
+    jsOnEventById("keydown", hgsNewSessionName, highlightAccChanges);
 
     dyStringPrintf(dyMessage,
 		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT NAME=\"%s%s\" VALUE=\"use\">"
@@ -1023,6 +1061,10 @@ if ((row = sqlNextRow(sr)) != NULL)
 		   hgsDeletePrefix, encSessionName, hgsDeletePrefix, encSessionName,
 		   hgsDoSessionChange, hgsDoSessionChange, 
 		   hgsCancel);
+    struct slName *existingSessionNames = getUserSessionNames(encUserName);
+    struct dyString *js = dyPrintCheckExistingSessionJs( existingSessionNames, sessionName);
+    jsOnEventById("click", hgsDoSessionChange, js->string);
+    dyStringFree(&js);
 
     char id[256];
     safef(id, sizeof id, "%s%s", hgsDeletePrefix, encSessionName);
@@ -1456,10 +1498,15 @@ char *newName = trimSpaces(cartOptionalString(cart, hgsNewSessionName));
 if (isNotEmpty(newName) && !sameString(sessionName, newName))
     {
     char *encNewName = cgiEncodeFull(newName);
+    // In case the user has clicked to confirm that they want to overwrite an existing session,
+    // delete the existing row before updating the row that will overwrite it.
+    sqlSafef(query, sizeof(query), "delete from %s where userName = '%s' and sessionName = '%s';",
+             namedSessionTable, encUserName, encNewName);
+    sqlUpdate(conn, query);
     sqlSafef(query, sizeof(query),
 	  "UPDATE %s set sessionName = '%s' WHERE userName = '%s' AND sessionName = '%s';",
 	  namedSessionTable, encNewName, encUserName, encSessionName);
-	sqlUpdate(conn, query);
+    sqlUpdate(conn, query);
     dyStringPrintf(dyMessage, "Changed session name from %s to <B>%s</B>.\n",
 		   sessionName, newName);
     sessionName = newName;
