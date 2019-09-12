@@ -28,10 +28,13 @@
 #include "suggest.h"
 #include "trackHub.h"
 #include "web.h"
+#include "botDelay.h"
 
 /* Global Variables */
 struct cart *cart = NULL;             /* CGI and other variables */
 struct hash *oldVars = NULL;          /* Old contents of cart before it was updated by CGI */
+
+static boolean issueBotWarning = FALSE;
 
 #define SEARCH_TERM "hggw_term"
 
@@ -876,12 +879,19 @@ int main(int argc, char *argv[])
  * permanently. */
 char *excludeVars[] = {SEARCH_TERM, CARTJSON_COMMAND, NULL,};
 cgiSpoof(&argc, argv);
+long enteredMainTime = clock1000();
 if (cgiOptionalString(SEARCH_TERM))
+    {
+    /* less bottleneck penalty for this operation, same as hgTracks */
+#define delayFraction   0.25
+    issueBotWarning = earlyBotCheck(enteredMainTime, "hgGateway", delayFraction, 0, 0, "json");
     // Skip the cart for speedy searches
     lookupTerm();
+    }
 else
     {
-    long enteredMainTime = clock1000();
+    /* standard default bottleneck penalty for this operation */
+    issueBotWarning = earlyBotCheck(enteredMainTime, "hgGateway", 0.0, 0, 0, "html");
     oldVars = hashNew(10);
     cartEmptyShellNoContent(doMiddle, hUserCookie(), excludeVars, oldVars);
     cgiExitTime("hgGateway", enteredMainTime);

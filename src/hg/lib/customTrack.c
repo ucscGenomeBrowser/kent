@@ -952,10 +952,12 @@ if (numAdded)
      * the delayFraction here is 0.25 as it is in hgTracks
      * the enteredMainTime is 0 since this is not important here
      * the warnMs and exitMs are set at 1,000,000 since we do *not* want
-     * any exit here, and the return code issueBotWarning is ignored
-     * this is merely to accumulate penalty time.
+     * any exit or warning here, and the return code issueBotWarning is ignored
+     * this is merely to accumulate penalty time.  The name "hgTracks" here
+     * is unimportant, it is not going to be used.  Other CGIs besides hgTracks
+     * will be calling here.
      */
-    (void) earlyBotCheck(0, "hgTracks", (double)(numAdded + 1) * 0.25, 1000000, 1000000);
+    (void) earlyBotCheck(0, "hgTracks", (double)(numAdded + 1) * 0.25, 1000000, 1000000, "html");
     }
 
 ctList = customTrackAddToList(ctList, newCts, &replacedCts, FALSE);

@@ -6311,19 +6311,6 @@ char *pos = NULL;
 struct slName *bl = NULL;
 
 ctList = customTracksParseCart(database, cart, &browserLines, &ctFileName);
-#ifdef NOT
-/* this is the incorrect location for this to be done.  This is actually
- * counting all custom tracks whether they are new or not.  Every view of
- * the tracks adds to the penalty.
- */
-if (slCount(ctList) > 0) {
-  int trackCount = slCount(ctList);
-  /* add penalty in relation to number of tracks created, and adjust
-   * exitMs accordingly so that it will not hogExit at this time
-   */
-  (void) earlyBotCheck(enteredMainTime, "hgTracks", (double)(trackCount + 1) * delayFraction, warnMs, (trackCount + 1)*exitMs);
-}
-#endif
 
 for (bl = browserLines; bl != NULL; bl = bl->next)
     {
