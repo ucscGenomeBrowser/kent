@@ -36,9 +36,12 @@ int hgBotDelayTimeFrac(double fraction);
 
 extern int botDelayMillis;
 
-boolean earlyBotCheck(long enteredMainTime, char *cgiName, double delayFrac, int warningMs, int hogExitMs);
+boolean earlyBotCheck(long enteredMainTime, char *cgiName, double delayFrac, int warnMs, int exitMs, char *exitType);
 /* similar to botDelayCgi but for use before the CGI has started any
  * output or setup the cart of done any MySQL operations.  The boolean
  * return is used later in the CGI after it has done all its setups and
- * started output so it can issue the warning.
+ * started output so it can issue the warning.  Pass in delayFrac 0.0
+ * to use the default 1.0, pass in 0 for warnMs and exitMs to use defaults,
+ * and exitType is either 'html' or 'json' to do that type of exit output in
+ * the case of hogExit();
  */
