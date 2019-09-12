@@ -271,6 +271,7 @@ struct track
     struct bbiSummaryElement *summary;  /* for bigBed */
     struct bbiSummaryElement *sumAll;   /* for bigBed */
     boolean drawLabelInBox;     /* draw labels into the features instead of next to them */
+    boolean drawLabelInBoxNotDense;    /* don't draw labels in dense mode, (needed only when drawLabelInBox set */
     
     struct track *nextWindow;   /* Same track in next window's track list. */
     struct track *prevWindow;   /* Same track in prev window's track list. */

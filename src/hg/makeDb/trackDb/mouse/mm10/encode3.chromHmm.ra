@@ -13,7 +13,10 @@ subGroup2 age Age E10=E10 E11=E11 E12=E12 E13=E13 E14=E14 E15=E15 E16=E16 P0=P0
 sortOrder tissue=+ age=+
 dragAndDrop subTracks
 group regulation
-visibility dense
+labelOnFeature noDense
+bedPackDense on
+centerLabelsPack off
+visibility pack
 
     track encode3RenChromHmmForebrainP0
     bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmForebrainP0.bb
