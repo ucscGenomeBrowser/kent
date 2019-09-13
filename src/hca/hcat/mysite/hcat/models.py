@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 import datetime
+import uuid
 from django.db import models
 from django.utils import timezone
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -254,6 +255,7 @@ class Project(models.Model):
     grants = models.ManyToManyField("Grant", blank=True, through="grant_funded_projects")
     files = models.ManyToManyField(File, blank=True)
     urls = models.ManyToManyField(Url, blank=True)
+    uuid = models.CharField(max_length=40, blank=True)
     def __str__(self):
        return self.short_name
 

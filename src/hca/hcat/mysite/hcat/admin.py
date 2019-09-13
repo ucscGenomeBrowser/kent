@@ -89,7 +89,8 @@ class ProjectAdmin(admin.ModelAdmin):
 		('submit_date', 'submit_comments', ),
 		)}),
 	('post-submit',  { 'fields': (
-		('cloud_date', 'pipeline_date', 'orange_date'),
+		'uuid', 
+                ('cloud_date', 'pipeline_date', 'orange_date'),
 		)}),
         ('biosample',  { 'fields': (('species', 'sample_type'), ('organ', 'organ_part'), 'disease')}),
         ('assay', { 'fields': ('assay_type', 'assay_tech', 'cells_expected')}),
