@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
 if(argc == 1)
     {
     enteredMainTime = clock1000();
-    issueBotWarning = earlyBotCheck(enteredMainTime, "hgRenderTracks", delayFraction, warnMs, exitMs);
+    issueBotWarning = earlyBotCheck(enteredMainTime, "hgRenderTracks", delayFraction, 0, 0, "html");
     // CGI call
 
     // htmlPushEarlyHandlers(); XXXX do I need to do this?

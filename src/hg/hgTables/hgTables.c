@@ -1778,7 +1778,7 @@ int main(int argc, char *argv[])
 {
 
 long enteredMainTime = clock1000();
-issueBotWarning = earlyBotCheck(enteredMainTime, "hgTables", 0.0, 0, 0);
+issueBotWarning = earlyBotCheck(enteredMainTime, "hgTables", 0.0, 0, 0, "html");
 
 pushCarefulMemHandler(LIMIT_2or6GB);
 htmlPushEarlyHandlers(); /* Make errors legible during initialization. */
