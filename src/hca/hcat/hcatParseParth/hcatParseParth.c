@@ -65,7 +65,7 @@ char *lookupAssayType(char *ingestSym)
 if (sameWord(ingestSym, "10x v2 sequencing")
     || sameWord(ingestSym, "10x 3' v2 sequencing")
     || sameWord(ingestSym, "10x 5' v2 sequencing"))	// this one Paris's typo most likely
-	return "10x Chromium V2";
+	return "10X Chromium V2";
 if (sameWord(ingestSym, "smart-seq2")
     || sameWord(ingestSym, "smart-seq")
     || sameWord(ingestSym, "full length single cell rna sequencing") // Quake lab set I seen before
@@ -76,8 +76,8 @@ if (sameWord(ingestSym, "indrop")) return "inDrop";
 if (sameWord(ingestSym, "mars-seq")) return "mars-seq";
 if (sameWord(ingestSym, "drop-seq")) return "drop-seq";
 if (sameWord(ingestSym, "dronc-seq")) return "dronc-seq";
-if (sameWord(ingestSym, "10x 3' v1 sequencing")) return "10x Chromium V1";
-if (sameWord(ingestSym, "10x 3' v3 sequencing")) return "10x Chromium V3";
+if (sameWord(ingestSym, "10x 3' v1 sequencing")) return "10X Chromium V1";
+if (sameWord(ingestSym, "10x 3' v3 sequencing")) return "10X Chromium V3";
 // if (sameWord(ingestSym, "xyz")) return "xyz";
 errAbort("Unknown ingest-info.library_construction_method %s", ingestSym);
 return NULL;
@@ -146,7 +146,8 @@ despaceAfterComma(start);
 return start;
 }
 
-void outputContributors(FILE *f, char *semiList, char *type)
+void outputContributors(FILE *f, char *semiList, char *type, struct dyString *csvOut, 
+    struct dyString *scratch)
 /* Parse throughs semicolon separated list of contributors of given
  * type and output to tab sep file */
 {
@@ -156,7 +157,10 @@ char *contrib;
 while ((contrib = nextContrib(&p)) != NULL)
      {
      if (!sameWord("n/a", contrib))
-	 fprintf(f, "%s\t%s\n", type, contrib);
+	 {
+	 fprintf(f, "%s\t%s\n", type, csvEscapeToDyString(scratch, contrib));
+	 csvEscapeAndAppend(csvOut, contrib);
+	 }
      }
 freeMem(dupe);
 }
@@ -169,6 +173,7 @@ void hcatParseParth(char *inFile, char *outDir)
 // do you expect from the C code base?  It was built to be fast more than easy.
 struct lm *lm = lmInit(0);
 struct dyString *scratch = dyStringNew(0);
+struct dyString *contribCsv = dyStringNew(0);
 
 // Here's stuff just to read in the input file in a big string and then parsed
 // out into jsonElements
@@ -192,6 +197,10 @@ FILE *fContrib = mustOpen(contribPath, "w");
 char projectPath[PATH_LEN];
 safef(projectPath, sizeof(projectPath), "%s/hcat_project.tsv",  outDir);
 FILE *fProject = mustOpen(projectPath, "w");
+
+/* Write out file headers */
+fprintf(fContrib, "#@type_id@hcat_contributortype@short_name@id	?name\n");
+fprintf(fProject, "#uuid\t?short_name\ttitle\t@@species@id@hcat_project_species@project_id@species_id@hcat_species@common_name@id\t@@assay_tech@id@hcat_project_assay_tech@project_id@assaytech_id@hcat_assaytech@short_name@id\t@@contributors@id@hcat_project_contributors@project_id@contributor_id@hcat_contributor@name@id\n");
 
 /* Main loop - once through for each project (or in some cases project fragment */
 struct slRef *projectRef;
@@ -218,7 +227,7 @@ for (projectRef = rootEl->val.jeList; projectRef != NULL; projectRef = projectRe
     char *shortName = jsonStringField(ingestEl, "project_short_name");
     if (hashLookup(uniqShortNameHash, shortName))
         {
-	verbose(1, "Skipping duplicate project named '%s'\n", shortName);
+	verbose(2, "Skipping duplicate project named '%s'\n", shortName);
 	continue;
 	}
     hashAdd(uniqShortNameHash, shortName, NULL);
@@ -243,24 +252,13 @@ for (projectRef = rootEl->val.jeList; projectRef != NULL; projectRef = projectRe
     hashAddUnique(uniqHash, projectUuid, NULL);
     hashAddUnique(uniqTitleHash, title, NULL);
 
-    uglyf("%s\t%s\t%s\t%s\t%s\t%s\t", shortName, primaryState, title, projectUuid, wrangler, contributors);
-    uglyf("%s\t", species);
-    uglyf("%s\n", techs);
-
     /* Update contributors table */
-    outputContributors(fContrib, contributors, "contributor");
-    outputContributors(fContrib, wrangler, "wrangler");
+    dyStringClear(contribCsv);
+    outputContributors(fContrib, contributors, "contributor", contribCsv, scratch);
+    outputContributors(fContrib, wrangler, "wrangler", contribCsv, scratch);
 
-    /* Parse out wrangler1/wrangler2 */
-    char *wrangler1 = nextContrib(&wrangler);
-    if (wrangler1 == NULL)
-	 {
-	 wrangler1 = "";
-         warn("No wrangler 1 for %s", shortName);
-	 }
-    char *wrangler2 = emptyForNull(nextContrib(&wrangler));
-    fprintf(fProject, "%s\t%s\t%s\t",  projectUuid, shortName, title);
-    fprintf(fProject, "%s\t%s\t%s\t%s\n", species, techs, wrangler1, wrangler2);
+    fprintf(fProject, "%s\t%s\t%s\t", projectUuid, shortName, title);
+    fprintf(fProject, "%s\t%s\t%s\n", species, techs, contribCsv->string);
     }
 }
 
