@@ -15,9 +15,7 @@ admin.site.register(ContributorType, ContributorTypeAdmin)
 class ContributorAdmin(admin.ModelAdmin):
     list_filter = ['type']
     autocomplete_fields = ['projects', 'labs', 'grants', 'type']
-    search_fields = ['name', 'type', 'email','city']
-    search_fields = ['name', 'email']
-    list_display = ['name', 'type', 'email','city']
+    search_fields = ['name', 'email','city']
     list_display = ['name', 'email', 'type', 'city']
 
 admin.site.register(Contributor, ContributorAdmin)
@@ -42,7 +40,7 @@ admin.site.register(Wrangler, WranglerAdmin)
 
 class LabAdmin(admin.ModelAdmin):
     autocomplete_fields = ['contributors', 'pi', 'grants', 'projects']
-    search_fields = ['short_name', 'pi', ]
+    search_fields = ['short_name', 'institution', ]
     list_display = ['short_name', 'pi', 'institution',]
 
 admin.site.register(Lab, LabAdmin)
@@ -58,8 +56,7 @@ class EffortTypeAdmin(admin.ModelAdmin):
 admin.site.register(EffortType, EffortTypeAdmin)
 
 class ProjectAdmin(admin.ModelAdmin):
-    search_fields = ['short_name', 'title', 'contributors', 'labs', 'organ_part', 
-    'disease', 'species', 'grants']
+    search_fields = ['short_name', 'title']
     autocomplete_fields = ["contributors", "labs", 
     	"organ", "organ_part", "disease", "files",
     	"species", "sample_type", "assay_type", "assay_tech", "publications", 
@@ -101,7 +98,7 @@ admin.site.register(Project, ProjectAdmin)
 
 class GrantAdmin(admin.ModelAdmin):
     autocomplete_fields = ["funded_contributors", "funded_projects", "funded_labs", ]
-    search_fields = ["funded_contributors", "funded_projects", "funded_labs"]
+    search_fields = ['grant_id','grant_title']
     list_display = ['grant_id', 'funder', 'grant_title',]
     list_filter = ['funder']
 
