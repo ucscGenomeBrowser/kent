@@ -1052,25 +1052,15 @@ if ((row = sqlNextRow(sr)) != NULL)
     jsOnEventById("keydown", hgsNewSessionName, highlightAccChanges);
 
     dyStringPrintf(dyMessage,
-		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT NAME=\"%s%s\" id='%s%s' VALUE=\"use\">"
-		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT NAME=\"%s%s\" id='%s%s' VALUE=\"delete\">"
 		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT ID=\"%s\" NAME=\"%s\" VALUE=\"accept changes\">"
 		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"cancel\"> "
 		   "<BR>\n",
-		   hgsLoadPrefix, encSessionName, hgsLoadPrefix, encSessionName,
-		   hgsDeletePrefix, encSessionName, hgsDeletePrefix, encSessionName,
 		   hgsDoSessionChange, hgsDoSessionChange, 
 		   hgsCancel);
     struct slName *existingSessionNames = getUserSessionNames(encUserName);
     struct dyString *js = dyPrintCheckExistingSessionJs( existingSessionNames, sessionName);
-    char id[512];
-    safef(id, sizeof id, "%s%s", hgsLoadPrefix, encSessionName);
-    jsOnEventById("click", id, js->string);
     jsOnEventById("click", hgsDoSessionChange, js->string);
     dyStringFree(&js);
-
-    safef(id, sizeof id, "%s%s", hgsDeletePrefix, encSessionName);
-    jsOnEventByIdF("click", id, confirmDeleteFormat, encSessionName);
 
     dyStringPrintf(dyMessage,
 		   "Share with others? <INPUT TYPE=CHECKBOX NAME=\"%s%s\"%s VALUE=on "
