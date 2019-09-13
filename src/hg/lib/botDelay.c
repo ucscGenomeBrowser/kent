@@ -31,30 +31,43 @@ close(sd);
 return atoi(buf);
 }
 
+char *botDelayWarningMsg(char *ip, int millis)
+/* return the string for the default botDelay message
+ * not all users of botDelay want the message to go to stderr
+ * return it for their own use case
+ */
+{
+time_t now = time(NULL);
+char *delayMsg = needMem(2048);
+safef(delayMsg, 2048,
+    "There is a very high volume of traffic coming from your "
+    "site (IP address %s) as of %s (California time).  So that other "
+    "users get a fair share "
+    "of our bandwidth, we are putting in a delay of %3.1f seconds "
+    "before we service your request.  This delay will slowly "
+    "decrease over a half hour as activity returns to normal.  This "
+    "high volume of traffic is likely due to program-driven rather than "
+    "interactive access, or the submission of queries on a large "
+    "number of sequences.  If you are making large batch queries, "
+    "please write to our genome@soe.ucsc.edu public mailing list "
+    "and inquire about more efficient ways to access our data.  "
+    "If you are sharing an IP address with someone who is submitting "
+    "large batch queries, we apologize for the "
+    "inconvenience. "
+    "To use the genome browser functionality from a Unix command line, "
+    "please read <a href='http://genome.ucsc.edu/FAQ/FAQdownloads.html#download36'>our FAQ</a> on this topic. "
+    "For further help on how to access our data from a command line, "
+    "or if "
+    "you think this delay is being imposed unfairly, please contact genome-www@soe.ucsc.edu.",
+    ip, asctime(localtime(&now)), 0.001*millis);
+
+return delayMsg;
+}	/*	char *botDelayWarningMsg(char *ip, int millis)	*/
+
 void botDelayMessage(char *ip, int millis)
 /* Print out message saying why you are stalled. */
 {
-time_t now = time(NULL);
-warn("There is a very high volume of traffic coming from your "
-       "site (IP address %s) as of %s (California time).  So that other "
-       "users get a fair share "
-       "of our bandwidth, we are putting in a delay of %3.1f seconds "
-       "before we service your request.  This delay will slowly "
-       "decrease over a half hour as activity returns to normal.  This "
-       "high volume of traffic is likely due to program-driven rather than "
-       "interactive access, or the submission of queries on a large "
-       "number of sequences.  If you are making large batch queries, "
-       "please write to our genome@soe.ucsc.edu public mailing list "
-       "and inquire about more efficient ways to access our data.  "
-       "If you are sharing an IP address with someone who is submitting "
-       "large batch queries, we apologize for the "
-       "inconvenience. "
-       "To use the genome browser functionality from a Unix command line, "
-       "please read <a href='http://genome.ucsc.edu/FAQ/FAQdownloads.html#download36'>our FAQ</a> on this topic. "
-       "For further help on how to access our data from a command line, "
-       "or if "
-       "you think this delay is being imposed unfairly, please contact genome-www@soe.ucsc.edu.",
-	    ip, asctime(localtime(&now)), .001*millis);
+warn("%s", botDelayWarningMsg(ip, millis));
 }
 
 void botTerminateMessage(char *ip, int millis)

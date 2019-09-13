@@ -35,6 +35,8 @@ struct cart *cart = NULL;             /* CGI and other variables */
 struct hash *oldVars = NULL;          /* Old contents of cart before it was updated by CGI */
 
 static boolean issueBotWarning = FALSE;
+static int measureTiming = 0;
+static long enteredMainTime = 0;
 
 #define SEARCH_TERM "hggw_term"
 
@@ -287,6 +289,17 @@ webStartJWest(cart, db, "Genome Browser Gateway");
 if (cgiIsOnWeb())
     checkForGeoMirrorRedirect(cart);
 
+#define HOG_WARNING_BOX_START "<div id='hogWarningRow' class='jwRow'>" \
+         "<div id='hogWarningBox' class='jwWarningBox'>"
+#define HOG_WARNING_BOX_END "</div></div>"
+
+if (issueBotWarning)
+    {
+    char *hogHost = getenv("REMOTE_ADDR");
+    char *delayMsg = botDelayWarningMsg(hogHost, botDelayMillis);
+    printf("%s%s%s\n", HOG_WARNING_BOX_START, delayMsg, HOG_WARNING_BOX_END);
+    }
+
 #define WARNING_BOX_START "<div id=\"previewWarningRow\" class=\"jwRow\">" \
          "<div id=\"previewWarningBox\" class=\"jwWarningBox\">"
 
@@ -379,6 +392,15 @@ if (isNotEmpty(dbDbTree))
 // Main JS for hgGateway:
 jsIncludeFile("hgGateway.js", NULL);
 
+#define TIMING_WARNING_BOX_START "<div id='hogWarningRow' class='jwRow'>" \
+         "<div id='hogWarningBox' class='jwWarningBox'>"
+#define TIMING_WARNING_BOX_END "</div></div>"
+if (measureTiming)
+    {
+    printf("%selapsed time %ld ms (%d ms bottleneck)%s\n",
+	TIMING_WARNING_BOX_START, clock1000() - enteredMainTime,
+	botDelayMillis, TIMING_WARNING_BOX_END);
+    }
 webIncludeFile("inc/jWestFooter.html");
 
 cartFlushHubWarnings();
@@ -879,7 +901,8 @@ int main(int argc, char *argv[])
  * permanently. */
 char *excludeVars[] = {SEARCH_TERM, CARTJSON_COMMAND, NULL,};
 cgiSpoof(&argc, argv);
-long enteredMainTime = clock1000();
+measureTiming = cgiOptionalInt("measureTiming", 0);
+enteredMainTime = clock1000();
 if (cgiOptionalString(SEARCH_TERM))
     {
     /* less bottleneck penalty for this operation, same as hgTracks */
