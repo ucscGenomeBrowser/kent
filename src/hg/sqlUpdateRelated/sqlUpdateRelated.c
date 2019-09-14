@@ -120,6 +120,7 @@ char **inFields = inTable->fields;
 // foreign and multi-multi fields into structures 
 char *conditionalField = NULL;  // We might have one of these
 int conditionalIx = -1;
+boolean updateCondition = FALSE;    
 struct foreignRef *foreignRefList = NULL;
 struct multiRef *multiRefList = NULL;
 int fieldIx;
@@ -127,13 +128,14 @@ for (fieldIx=0; fieldIx<inTable->fieldCount; ++fieldIx)
     {
     char *field = inFields[fieldIx];
     char firstChar = field[0];
-    if (firstChar == '?')
+    if (firstChar == '?' || firstChar == '!')
         {
 	if (conditionalField != NULL)
-	    errAbort("Multiple fields starting with a '?', There can only be one\n"
+	    errAbort("Multiple fields starting with a '?' or '!', There can only be one\n"
 		"but both %s and %s exist\n", conditionalField, field+1);
 	conditionalField = field;
 	conditionalIx = fieldIx;
+	updateCondition = (firstChar == '!');
 	checkFieldExists(conn, tableName, field + 1, field);
 	verbose(2, "conditionalField = %s, ix = %d\n", field, conditionalIx);
 	}
@@ -215,6 +217,14 @@ for (fieldIx=0; fieldIx<inTable->fieldCount; ++fieldIx)
 verbose(2, "Got %s conditional, %d foreignRefs, %d multiRefs\n", 
 	naForNull(conditionalField), slCount(foreignRefList), slCount(multiRefList));
 
+if (updateCondition)  // In update mode we can't handle fancy stuff
+    {
+    if (foreignRefList != NULL || multiRefList != NULL)
+        errAbort("Can't handle foreign keys or multi-multi relations when doing ! updates");
+    if (inTable->fieldCount < 2)
+        errAbort("Need at least two fields in update mode");
+    }
+
 /* Now we loop through the input table and make the appropriate sql queries and inserts */
 struct fieldedRow *fr;
 struct dyString *sql = dyStringNew(0);
@@ -222,6 +232,48 @@ struct dyString *csvScratch = dyStringNew(0);
 for (fr = inTable->rowList; fr != NULL; fr = fr->next)
     {
     char **row = fr->row;
+
+    /* The case of the update (!) condition is special.  */
+    if (updateCondition)
+        {
+	/* Make sure that the record we are updating exists for better
+	 * error reporting.  There's a race condition that'll make a SQL error happen
+	 * instead once in a million years. */
+	dyStringClear(sql);
+	char *rawVal = row[conditionalIx];
+	char *uncsvVal = csvParseNext(&rawVal, csvScratch);
+	char *conditionalEscaped = sqlEscapeString(uncsvVal);
+	sqlDyStringPrintf(sql, "select count(*) from %s where %s='%s'",
+	    tableName, conditionalField+1, conditionalEscaped);
+	verbose(2, "%s\n", sql->string);
+	if (sqlQuickNum(conn, sql->string) == 0)
+	    errAbort("Trying to update %s in %s.%s, but it doesn't exist",
+		uncsvVal, tableName, conditionalField+1);
+
+	dyStringClear(sql);
+	sqlDyStringPrintf(sql, "update %s set", tableName);
+	boolean firstTime = TRUE;
+	for (fieldIx=0; fieldIx < inTable->fieldCount; ++fieldIx)
+	    {
+	    if (fieldIx != conditionalIx)
+		{
+		char *rawVal = row[fieldIx];
+		char *uncsvVal = csvParseNext(&rawVal, csvScratch);
+		char *escaped = sqlEscapeString(uncsvVal);
+		if (firstTime)
+		    firstTime = FALSE;
+		else
+		    sqlDyStringPrintf(sql, ",");
+		sqlDyStringPrintf(sql, " %s='%s'", inFields[fieldIx], escaped);
+		freez(&escaped);
+		}
+	    }
+	sqlDyStringPrintf(sql, " where %s='%s'", conditionalField+1, conditionalEscaped);
+	verbose(2, "%s\n", sql->string);
+	sqlUpdate(conn, sql->string);
+
+	continue;	// We are done,  the rest of the loop is for inserts not updates
+	}
 
     /* Deal with conditional field.  If we have one and the value we are trying to insert
      * already exists then just continue to next row. */
