@@ -165,6 +165,55 @@ while ((contrib = nextContrib(&p)) != NULL)
 freeMem(dupe);
 }
 
+void outputTracker(FILE *f, char *projectName, char *submissionId, char *uuid,
+    struct hash *projectHash, int subBunCount, struct dyString *scratch)
+/* Look for interesting state info from parth's tracker outside of ingest and output it */
+{
+/* Grab the dss-info and lots of pieces of it. It sees both primary and analysis,
+ * not sure about matrix */
+struct jsonElement *dssEl = hashMustFindVal(projectHash, "dss-info");
+struct jsonElement *awsPrimary = jsonMustFindNamedField(dssEl,
+						"dss-info", "aws_primary_bundle_count");
+int awsPrimaryCount = jsonDoubleVal(awsPrimary, "aws_primary_bundle_count");
+struct jsonElement *gcpPrimary = jsonMustFindNamedField(dssEl,
+						"dss-info", "gcp_primary_bundle_count");
+int gcpPrimaryCount = jsonDoubleVal(gcpPrimary, "gcp_primary_bundle_count");
+struct jsonElement *awsAnalysis = jsonMustFindNamedField(dssEl,
+						"dss-info", "aws_analysis_bundle_count");
+int awsAnalysisCount = jsonDoubleVal(awsAnalysis, "aws_analysis_bundle_count");
+struct jsonElement *gcpAnalysis = jsonMustFindNamedField(dssEl,
+						"dss-info", "gcp_analysis_bundle_count");
+int gcpAnalysisCount = jsonDoubleVal(gcpAnalysis, "gcp_analysis_bundle_count");
+
+/* Grab just a little bit from azul-info */
+struct jsonElement *azulEl = hashMustFindVal(projectHash, "azul-info");
+struct jsonElement *azulBundle = jsonMustFindNamedField(azulEl,
+						"azul-info", "analysis_bundle_count");
+int azulBundleCount = jsonDoubleVal(azulBundle, "azul-info.analysis_bundle_count");
+
+/* Grab a little bit from analysis-info */
+struct jsonElement *analysisEl = hashMustFindVal(projectHash, "analysis-info");
+struct jsonElement *succeededEl = jsonFindNamedField(analysisEl, 
+						"analysis-info", "succeeded_workflows");
+int succeededWorkflows = 0;
+if (succeededEl != NULL)
+    succeededWorkflows = jsonDoubleVal(succeededEl, "succeeded_workflows");
+
+/* And get the matrix stuff! */
+struct jsonElement *matrixEl = hashMustFindVal(projectHash, "matrix-info");
+struct jsonElement *matBundle = jsonMustFindNamedField(matrixEl, 
+						"matrix-info", "analysis_bundle_count");
+int matrixBundleCount = jsonDoubleVal(matBundle, "matrix-info.analysis_bundle_count");
+struct jsonElement *cellCountEl = jsonMustFindNamedField(matrixEl,
+						"matrix-info", "cell_count");
+int cellCount = jsonDoubleVal(cellCountEl, "cell_count");
+
+fprintf(f, "%s\t%s\t%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", 
+    projectName, uuid, submissionId, 
+    subBunCount, awsPrimaryCount, gcpPrimaryCount, awsAnalysisCount, gcpAnalysisCount,
+    azulBundleCount, succeededWorkflows, matrixBundleCount, cellCount);
+}
+
 void hcatParseParth(char *inFile, char *outDir)
 /* hcatParseParth - Parse through Parth Shah's Project Tracker json and turn it into fodder 
  * for sqlUpdateRelated.. */
@@ -197,10 +246,14 @@ FILE *fContrib = mustOpen(contribPath, "w");
 char projectPath[PATH_LEN];
 safef(projectPath, sizeof(projectPath), "%s/hcat_project.tsv",  outDir);
 FILE *fProject = mustOpen(projectPath, "w");
+char postPath[PATH_LEN];
+safef(postPath, sizeof(postPath), "%s/hcat_tracker.tsv",  outDir);
+FILE *fTracker = mustOpen(postPath, "w");
 
 /* Write out file headers */
 fprintf(fContrib, "#@type_id@hcat_contributortype@short_name@id	?name\n");
-fprintf(fProject, "#uuid\t?short_name\ttitle\t@@species@id@hcat_project_species@project_id@species_id@hcat_species@common_name@id\t@@assay_tech@id@hcat_project_assay_tech@project_id@assaytech_id@hcat_assaytech@short_name@id\t@@contributors@id@hcat_project_contributors@project_id@contributor_id@hcat_contributor@name@id\n");
+fprintf(fProject, "#?short_name\ttitle\t@@species@id@hcat_project_species@project_id@species_id@hcat_species@common_name@id\t@@assay_tech@id@hcat_project_assay_tech@project_id@assaytech_id@hcat_assaytech@short_name@id\t@@contributors@id@hcat_project_contributors@project_id@contributor_id@hcat_contributor@name@id\tsubmit_date\n");
+fprintf(fTracker, "#@project_id@hcat_project@short_name@id\t?uuid\tsubmission_id\tsubmission_bundles_exported_count\taws_primary_bundle_count\tgcp_primary_bundle_count\taws_analysis_bundle_count\tgcp_analysis_bundle_count\tazul_analysis_bundle_count\tsucceeded_workflows\tmatrix_bundle_count\tmatrix_cell_count\n");
 
 /* Main loop - once through for each project (or in some cases project fragment */
 struct slRef *projectRef;
@@ -225,6 +278,13 @@ for (projectRef = rootEl->val.jeList; projectRef != NULL; projectRef = projectRe
      * the first (complete) one and warn about the rest.  Some of the dupes have the
      * same uuid, some different.  Yes, it's a little messy this input . */
     char *shortName = jsonStringField(ingestEl, "project_short_name");
+    // Abbreviate what is really and truly not a short name!
+    if (startsWith("Single cell RNAseq characterization of cell types produced over time in an in ",
+	 shortName))
+	{
+        shortName = "Single cell RNAseq characterization of cell types produced over time";
+	verbose(2, "Abbreviated shortName to %s\n", shortName);
+	}
     if (hashLookup(uniqShortNameHash, shortName))
         {
 	verbose(2, "Skipping duplicate project named '%s'\n", shortName);
@@ -232,15 +292,26 @@ for (projectRef = rootEl->val.jeList; projectRef != NULL; projectRef = projectRe
 	}
     hashAdd(uniqShortNameHash, shortName, NULL);
 
-    /* grab more string fields we like from ingest-info. */
+    /* Grab more string fields we like from ingest-info. */
+    char *submissionId = jsonStringField(ingestEl, "submission_id");
     char *title = jsonStringField(ingestEl, "project_title");
     char *wrangler = jsonStringField(ingestEl, "data_curator");
     char *contributors = jsonStringField(ingestEl, "primary_investigator");
+    char *submissionDateTime = jsonStringField(ingestEl, "submission_date");
+
+    /* Turn dateTime into just date */
+    char *tStart = strchr(submissionDateTime, 'T');
+    if (tStart == NULL)
+        errAbort("No T separator in submission_date %s", submissionDateTime);
+    char *submissionDate = cloneStringZ(submissionDateTime, tStart - submissionDateTime);
 
     /* Get species list, maybe.... */
     struct jsonElement *speciesEl = jsonMustFindNamedField(ingestEl, "ingest-info", "species");
     struct slRef *speciesRefList = jsonListVal(speciesEl, "species");
     char *species = sciNameRefsToSpecies(speciesRefList, scratch);
+    struct jsonElement *subBunCountEl = jsonMustFindNamedField(ingestEl, 
+				    "ingest-info", "submission_bundles_exported_count");
+    int subBunCount = jsonDoubleVal(subBunCountEl, "submission_bundles_exported_count");
 
     /* Get assay techs maybe */
     struct jsonElement *constructEl = jsonMustFindNamedField(ingestEl, "ingest-info", 
@@ -257,8 +328,16 @@ for (projectRef = rootEl->val.jeList; projectRef != NULL; projectRef = projectRe
     outputContributors(fContrib, contributors, "contributor", contribCsv, scratch);
     outputContributors(fContrib, wrangler, "wrangler", contribCsv, scratch);
 
-    fprintf(fProject, "%s\t%s\t%s\t", projectUuid, shortName, title);
-    fprintf(fProject, "%s\t%s\t%s\n", species, techs, contribCsv->string);
+    /* Update project table */
+    fprintf(fProject, "%s\t%s\t", shortName, title);
+    fprintf(fProject, "%s\t%s\t%s\t", species, techs, contribCsv->string);
+    fprintf(fProject, "%s\n", submissionDate);
+
+    /* We processed the heck out of the ingest-info, and this routine is so long,
+     * pass along what we parsed out that goes into the tracker table, and have it
+     * deal with the azul-info, matrix-info, etc,  which are read-only to wranglers. */
+    outputTracker(fTracker, shortName, submissionId, projectUuid, projectHash, 
+	subBunCount, scratch);
     }
 }
 
