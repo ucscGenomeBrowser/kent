@@ -570,34 +570,26 @@ hDisconnectCentral(&conn);
 }
 
 static char  *checkForNew( struct cart *cart)
-/* see if the user just typed in a new hub url, or we have a hubUrl on the 
- * command line.  Return the new database if there is one. */
+/* see if the user just typed in a new hub url, or we have one or more hubUrl 
+ * on the command line.  Return the new database if there is one. */
 {
 char *newDatabase = NULL;
 boolean doClear = FALSE;
 char *assemblyDb = cartOptionalString(cart, hgHubGenome);
 char *wantFirstDb = cartOptionalString(cart, hgHubDoFirstDb);
 
-char *urls = cloneString(cartOptionalString(cart, hgHubDataClearText));
+struct slName *urls = cartOptionalSlNameList(cart, hgHubDataClearText);
 if (urls)
     doClear = TRUE;
 else
-    urls = cloneString(cartOptionalString(cart, hgHubDataText));
-
-cartRemove(cart, hgHubDataClearText);
-cartRemove(cart, hgHubDataText);
+    urls  = cartOptionalSlNameList(cart, hgHubDataText);
 
 if (urls == NULL)
     return NULL;
 
-char *words[128];
-int count = chopString(urls, ",", words, sizeof words/sizeof(char *));
-
-int ii;
-for(ii = 0; ii < count; ii++)
+for(; urls; urls = urls->next)
     {
-    char *url = words[ii];
-
+    char *url = cloneString(urls->name);
     if (doClear)
         disconnectHubsSamePrefix(cart, url);
 
@@ -633,6 +625,8 @@ for(ii = 0; ii < count; ii++)
         }
     }
 
+cartRemove(cart, hgHubDataClearText);
+cartRemove(cart, hgHubDataText);
 cartRemove(cart, hgHubDoFirstDb);
 cartRemove(cart, hgHubGenome);
 return newDatabase;
