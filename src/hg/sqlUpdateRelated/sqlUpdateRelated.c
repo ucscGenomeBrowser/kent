@@ -20,6 +20,16 @@ errAbort(
   "   sqlUpdateRelated database tableFiles\n"
   "options:\n"
   "   -missOk - if set, tableFiles mentioned that don't exist are skipped rather than erroring\n"
+  "The tableFiles are in a interesting and peculiar format.  The first line with the field name\n"
+  "ends up controlling this program.  If a field starts with just a regular letter all is as\n"
+  "you may expect,  the field just contains data to load.  However if the field starts with\n"
+  "a special char, special things happen.  In particular\n"
+  "   ? - indicates field is a conditional key field.  Record is only inserted if the value\n"
+  "       for this field is not already present in table\n"
+  "   ! - indicates this is update key field.  Record must already exist,  values in other fields\n"
+  "       are updated.\n"
+  "   @ - indicates a foreign key relationship - see source code until docs are in shape\n"
+  "   @@ - indicates a many-to-many relationship - see source code until docs are in shape"
   );
 }
 
