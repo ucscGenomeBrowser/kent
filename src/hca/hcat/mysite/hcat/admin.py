@@ -55,6 +55,32 @@ class EffortTypeAdmin(admin.ModelAdmin):
     
 admin.site.register(EffortType, EffortTypeAdmin)
 
+class TrackerAdmin(admin.ModelAdmin):
+    readonly_fields = ['project','uuid','submission_id', 'submission_bundles_exported_count',
+        'aws_primary_bundle_count', 'gcp_primary_bundle_count',
+        'aws_analysis_bundle_count', 'gcp_analysis_bundle_count',
+        'azul_analysis_bundle_count', 'succeeded_workflows', 
+        'matrix_bundle_count', 'matrix_cell_count']
+    list_display = ['project', 'submission_bundles_exported_count', 
+        'aws_primary_bundle_count', 'gcp_primary_bundle_count', 
+        'aws_analysis_bundle_count', 'gcp_analysis_bundle_count', 
+        'azul_analysis_bundle_count', 'succeeded_workflows',
+        'matrix_bundle_count', 'matrix_cell_count']
+
+admin.site.register(Tracker, TrackerAdmin)
+
+
+class TrackerInline(admin.TabularInline):
+    model = Tracker
+    verbose_name_plural = 'Post-submission tracking - bundles and cells'
+    fields = ['submission_bundles_exported_count', 'aws_primary_bundle_count', 
+        'aws_analysis_bundle_count', 'azul_analysis_bundle_count', 
+        'succeeded_workflows', 'matrix_bundle_count', 'matrix_cell_count']
+    readonly_fields = ['submission_bundles_exported_count', 'aws_primary_bundle_count', 
+        'aws_analysis_bundle_count', 'azul_analysis_bundle_count', 
+        'succeeded_workflows', 'matrix_bundle_count', 'matrix_cell_count']
+    can_delete = False
+
 class ProjectAdmin(admin.ModelAdmin):
     search_fields = ['short_name', 'title']
     autocomplete_fields = ["contributors", "labs", 
@@ -63,6 +89,7 @@ class ProjectAdmin(admin.ModelAdmin):
 	"grants", "files", "urls", "contacts", "responders"]
     list_display = ['short_name', 'stars', 'state_reached', 'wrangler1', 'title',]
     list_filter = ['species', 'effort', 'wrangler1', 'state_reached', 'assay_tech']
+    inlines = [TrackerInline,]
     fieldsets = (
         ('overall', { 'fields': (('short_name', 'state_reached', ), ('title', 'stars'), ('labs', 'consent'), ('chat_url'))}), 
 	('wrangling',  { 'fields': (
@@ -84,10 +111,6 @@ class ProjectAdmin(admin.ModelAdmin):
 		('sheet_validated_date', 'sheet_that_validated', ),
 		('staging_area_date', 'staging_area', ),
 		('submit_date', 'submit_comments', ),
-		)}),
-	('post-submit',  { 'fields': (
-		'uuid', 
-                ('cloud_date', 'pipeline_date', 'orange_date'),
 		)}),
         ('biosample',  { 'fields': (('species', 'sample_type'), ('organ', 'organ_part'), 'disease')}),
         ('assay', { 'fields': ('assay_type', 'assay_tech', 'cells_expected')}),

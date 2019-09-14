@@ -53,7 +53,7 @@ class Species(models.Model):
      def __str__(self):
        return self.common_name
      class Meta:
-       verbose_name_plural = "species"
+       verbose_name_plural = "wrangler species"
 
 class Url(models.Model):
     short_name = models.CharField(unique=True, max_length=50)
@@ -233,9 +233,6 @@ class Project(models.Model):
     staging_area_date = models.DateField(blank=True, null=True, default=None)
     submit_date = models.DateField(blank=True, null=True, default=None)
     submit_comments = models.CharField(max_length=255, blank=True)
-    cloud_date = models.DateField(blank=True, null=True, default=None)
-    pipeline_date = models.DateField(blank=True, null=True, default=None)
-    orange_date = models.DateField(blank=True, null=True, default=None)
     title = models.CharField(max_length=120)
     description = models.TextField()
     labs = models.ManyToManyField(Lab, blank=True)
@@ -255,9 +252,26 @@ class Project(models.Model):
     grants = models.ManyToManyField("Grant", blank=True, through="grant_funded_projects")
     files = models.ManyToManyField(File, blank=True)
     urls = models.ManyToManyField(Url, blank=True)
-    uuid = models.CharField(max_length=40, blank=True)
     def __str__(self):
        return self.short_name
+
+class Tracker(models.Model):
+    project = models.OneToOneField(Project, on_delete=models.CASCADE, primary_key=True)
+    uuid = models.CharField(max_length=37, unique=True)
+    submission_id = models.CharField(max_length=33, unique=True)
+    submission_bundles_exported_count = models.IntegerField("ingest", blank=True, default=0)
+    aws_primary_bundle_count = models.IntegerField("aws 1", blank=True, default=0)
+    gcp_primary_bundle_count = models.IntegerField("gcp 1", blank=True, default=0)
+    aws_analysis_bundle_count = models.IntegerField("asw 2", blank=True, default=0)
+    gcp_analysis_bundle_count = models.IntegerField("gcp 2", blank=True, default=0)
+    azul_analysis_bundle_count = models.IntegerField("azul", blank=True, default=0)
+    succeeded_workflows = models.IntegerField("workflow", blank=True, default=0)
+    matrix_bundle_count = models.IntegerField("matrix", blank=True, default=0)
+    matrix_cell_count = models.IntegerField("cells", blank=True, default=0)
+    def __str__(self):
+       return self.uuid
+    class Meta:
+       verbose_name_plural = 'Tracking after submission'
 
 class Funder(models.Model):
     short_name = models.CharField(max_length=50)
