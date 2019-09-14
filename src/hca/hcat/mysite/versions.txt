@@ -42,4 +42,18 @@
 	   renamed, notably curation.
       In anticipation of working with interns I made an Intern object similar to the 
       Wrangler one.  I also added SoftwareDeveloper while I was in there.
-0.6 - Adding uuid field to the project table.  
+0.6 - Changes largely done to integrate in existing datasets and info from Parth's 
+      project tracker, a nice tool at https://tracker.data.humancellatlas.org,
+      that tracks bundles and matrix cell counts.   Table is hcat_tracker. Visible changes include
+         - 22 new projects (we only had 2 of the already submitted ones before)
+	 - New "Tracking after submission" object in the admin.  This has most of
+	   the nonredundant fields from Parth's tracker that weren't already in the
+	   "Projects" part.  The list display shows mostly bundle counts and if it
+	   has a matrix computed an actual number of cells!
+	 - The "post-submit" section of the project details page is gone, and replaced
+	   with a section now at the bottom called "post-submission tracking - bundles and cells"
+	   which is just an inline non-editable view of the tracker info.
+	 - Note that the import of both project descriptions and validated spreadsheets
+	   was done manually and is incomplete.  I think I'd like wrangler help to
+	   do about 15 of these from when the ingest ui site seems to have lost track of
+	   the spreadsheets.
