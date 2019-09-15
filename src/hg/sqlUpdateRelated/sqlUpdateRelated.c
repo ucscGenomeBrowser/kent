@@ -20,6 +20,8 @@ errAbort(
   "   sqlUpdateRelated database tableFiles\n"
   "options:\n"
   "   -missOk - if set, tableFiles mentioned that don't exist are skipped rather than erroring\n"
+  "   -uncsv - if set, run uncsv and just take first value for each field, needed sometimes\n"
+  "            to deal with extra quotes from tagstorms and other sources\n"
   "The tableFiles are in a interesting and peculiar format.  The first line with the field name\n"
   "ends up controlling this program.  If a field starts with just a regular letter all is as\n"
   "you may expect,  the field just contains data to load.  However if the field starts with\n"
@@ -35,7 +37,8 @@ errAbort(
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
-   {"missOk", TRUE},
+   {"missOk", OPTION_BOOLEAN},
+   {"uncsv", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -118,7 +121,7 @@ if (!sqlTableExists(conn, table))
     errAbort("Table %s from %s doesn't exist", table, attyField);
 }
 
-void sqlUpdateViaTabFile(struct sqlConnection *conn, char *tabFile, char *tableName)
+void sqlUpdateViaTabFile(struct sqlConnection *conn, char *tabFile, char *tableName, boolean uncsv)
 /* Interpret one tab-separated file */
 {
 // Load the tabFile 
@@ -251,7 +254,9 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 	 * instead once in a million years. */
 	dyStringClear(sql);
 	char *rawVal = row[conditionalIx];
-	char *uncsvVal = csvParseNext(&rawVal, csvScratch);
+	char *uncsvVal = rawVal;
+	if (uncsv)
+	    uncsvVal = csvParseNext(&rawVal, csvScratch);
 	char *conditionalEscaped = sqlEscapeString(uncsvVal);
 	sqlDyStringPrintf(sql, "select count(*) from %s where %s='%s'",
 	    tableName, conditionalField+1, conditionalEscaped);
@@ -268,7 +273,9 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 	    if (fieldIx != conditionalIx)
 		{
 		char *rawVal = row[fieldIx];
-		char *uncsvVal = csvParseNext(&rawVal, csvScratch);
+		char *uncsvVal = rawVal;
+		if (uncsv)
+		    uncsvVal = csvParseNext(&rawVal, csvScratch);
 		char *escaped = sqlEscapeString(uncsvVal);
 		if (firstTime)
 		    firstTime = FALSE;
@@ -291,7 +298,9 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 	{
 	dyStringClear(sql);
 	char *rawVal = row[conditionalIx];
-	char *uncsvVal = csvParseNext(&rawVal, csvScratch);
+	char *uncsvVal = rawVal;
+	if (uncsv)
+	    uncsvVal = csvParseNext(&rawVal, csvScratch);
 	// Before we do more we see if the record already exists
 	sqlDyStringPrintf(sql, "select count(*) from %s where %s='%s'",
 	    tableName, conditionalField+1, uncsvVal);
@@ -304,8 +313,11 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
     struct foreignRef *fRef;
     for (fRef = foreignRefList; fRef != NULL; fRef = fRef->next)
         {
-	char *origVal = row[fRef->nativeFieldIx];
-	char *val = emptyForNull(csvParseNext(&origVal, csvScratch));
+	char *rawVal = row[fRef->nativeFieldIx];
+	char *uncsvVal = rawVal;
+	if (uncsv)
+	    uncsvVal = csvParseNext(&rawVal, csvScratch);
+	char *val = emptyForNull(uncsvVal);
 	char *escaped = sqlEscapeString(val);
 	dyStringPrintf(sql, "\"%s\"",  escaped);
 	dyStringClear(sql);
@@ -383,8 +395,11 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 	    firstTime = !firstTime;
 	else
 	    dyStringAppendC(sql, ',');
-	char *origVal = row[fieldIx];
-	char *val = emptyForNull(csvParseNext(&origVal, csvScratch));
+	char *rawVal = row[fieldIx];
+	char *uncsvVal = rawVal;
+	if (uncsv)
+	    uncsvVal = csvParseNext(&rawVal, csvScratch);
+	char *val = emptyForNull(uncsvVal);
 	char *escaped = sqlEscapeString(val);
 	dyStringPrintf(sql, "\"%s\"",  escaped);
 	freez(&escaped);
@@ -418,6 +433,7 @@ void sqlUpdateRelated(char *database, char **inFiles, int inCount)
 struct sqlConnection *conn = sqlConnect(database);
 int fileIx;
 boolean missOk = optionExists("missOk");
+boolean  uncsv = optionExists("uncsv");
 for (fileIx = 0; fileIx < inCount; ++fileIx)
     {
     char *inFile = inFiles[fileIx];
@@ -426,7 +442,7 @@ for (fileIx = 0; fileIx < inCount; ++fileIx)
     char *tableName = cloneString(inFile);
     chopSuffix(tableName);
     verbose(1, "Processing %s into %s table \n", inFile, tableName);
-    sqlUpdateViaTabFile(conn, inFile, tableName);
+    sqlUpdateViaTabFile(conn, inFile, tableName, uncsv);
     }
 sqlDisconnect(&conn);
 }
