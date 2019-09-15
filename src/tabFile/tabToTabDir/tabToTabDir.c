@@ -11,6 +11,7 @@
 #include "csv.h"
 #include "fieldedTable.h"
 #include "strex.h"
+#include "localmem.h"
 
 char *clId = NULL;  // Flag set from command line to add an id column
 int clStartId = 1;  // What number id column should start with
@@ -114,6 +115,7 @@ struct newTableInfo
     struct newFieldInfo *keyField;	/* Key field within table */
     struct newFieldInfo *fieldList; /* List of fields */
     struct fieldedTable *table;	    /* Table to fill in. */
+    boolean unroll;		    /* If true it's a table we unroll from arrays */
     };
 
 struct newTableInfo *findTable(struct newTableInfo *list, char *name)
@@ -403,6 +405,59 @@ for (i=0; i<fieldCount; ++i)
 return hash;
 }
 
+struct fieldedTable *unrollTable(struct fieldedTable *input)
+/* Unroll input table,  which has to be filled with lockstepped CSV fields */
+{
+/* Make output table with fields matching input */
+int fieldCount = input->fieldCount;
+struct fieldedTable *output = fieldedTableNew(input->name, input->fields, fieldCount);
+output->startsSharp = input->startsSharp;
+
+/* We are going to be lots of splicing and dicing, so have some scratch space,
+ * including some we'll store with the output tables local memory pool. */
+struct lm *lm = output->lm;
+struct dyString *scratch = dyStringNew(0);
+
+struct fieldedRow *inRow;
+for (inRow = input->rowList; inRow != NULL; inRow = inRow->next)
+    {
+    /* We are going to parse a bunch of csv's in parallel */
+    char *inPos[fieldCount];
+    int i;
+    for (i=0; i<fieldCount; ++i)
+	inPos[i] = inRow->row[i];
+
+    /* With this loop we parse out the next csv from all fields, and make sure that
+     * they all actually do have the same number of values */
+    int unrollCount = 0;
+    for (;;)
+       {
+       char *uncsvRow[fieldCount];
+       boolean anyNull = FALSE, allNull = TRUE;
+       for (i=0; i<fieldCount; ++i)
+           {
+	   char *oneVal = csvParseNext(&inPos[i], scratch);
+	   if (oneVal == NULL)
+	       anyNull = TRUE;
+	   else
+	       allNull = FALSE;
+	   uncsvRow[i] = lmCloneString(lm, oneVal);
+	   }
+       if (anyNull)
+           {
+	   if (allNull)
+	        break;	    // All is good!
+	   else
+	        errAbort("Can't unroll %s since not all fields have the same numbers of values.\n"
+		         "In row %d some have %d values, some more", 
+			 input->name, inRow->id, unrollCount);
+	   }
+       ++unrollCount;
+       fieldedTableAdd(output, uncsvRow, fieldCount, unrollCount);
+       }
+    }
+return output;
+}
 
 void tabToTabDir(char *inTabFile, char *specFile, char *outDir)
 /* tabToTabDir - Convert a large tab-separated table to a directory full of such tables 
@@ -452,11 +507,14 @@ while (raSkipLeadingEmptyLines(lf, NULL))
     /* Read first tag, which we know is there because it's right after raSkipLeadingEmptyLines.
      * Make sure the tag is table, and that there is a following table name and key field name. */
     char *tableString, *tableSpec;
+    boolean unroll = FALSE;
     raNextTagVal(lf, &tableString, &tableSpec, NULL);
     verbose(2, "Processing table %s '%s' line %d of %s\n",  tableString, tableSpec, 
 	lf->lineIx, lf->fileName);
-    if (!sameString(tableString, "table"))
-        errAbort("stanza that doesn't start with 'table' ending line %d of %s",
+    if (sameString(tableString, "unroll"))
+        unroll = TRUE;
+    else if (!sameString(tableString, "table"))
+        errAbort("stanza that doesn't start with 'table' or 'unroll' ending line %d of %s",
 	    lf->lineIx, lf->fileName);
     char *tableName = nextWord(&tableSpec);
     char *keyFieldName = cloneString(nextWord(&tableSpec));
@@ -465,6 +523,7 @@ while (raSkipLeadingEmptyLines(lf, NULL))
 
     /* Start filling out newTable with these fields */
     AllocVar(newTable);
+    newTable->unroll = unroll;
     newTable->name = cloneString(tableName);
     tableName = newTable->name;  /* Keep this handy variable. */
 
@@ -513,7 +572,7 @@ while (raSkipLeadingEmptyLines(lf, NULL))
     struct newFieldInfo *keyField = findField(fvList, keyFieldName);
     if (keyField == NULL)
        errAbort("key field %s is not found in field list for %s in %s\n", 
-	keyFieldName, tableName, lf->fileName);
+	    keyFieldName, tableName, lf->fileName);
 
     /* Allocate structure to save results of this pass in and so so. */
     newTable->keyField = keyField;
@@ -552,6 +611,12 @@ for (newTable = newTableList; newTable != NULL; newTable = newTable->next)
     struct fieldedTable *outTable = newTable->table;
     selectUniqueIntoTable(inTable, symbols, specFile,
 	newTable->fieldList, newTable->keyField->newIx, outTable);
+
+    /* If need be unroll table */
+    if (newTable->unroll)
+        {
+	outTable = unrollTable(outTable);
+	}
 
     /* Create output file name and save file. */
     char outTabName[FILENAME_LEN];
