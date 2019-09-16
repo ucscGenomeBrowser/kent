@@ -265,7 +265,7 @@ char *setting = trackDbSetting(tdb, "interactMultiRegion");
 if (!setting || sameString(setting, "off"))
     return;
 int padding = 200;
-if (differentString(setting, "on"))
+if (differentString(setting, "on") && differentString(setting, "true"))
     padding = (int)strtol(setting, NULL, 10);
     
 if (inters->next == NULL && interactEndsOverlap(inters))
