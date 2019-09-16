@@ -87,7 +87,7 @@ class ProjectAdmin(admin.ModelAdmin):
     	"organ", "organ_part", "disease", "files",
     	"species", "sample_type", "assay_type", "assay_tech", "publications", 
 	"grants", "files", "urls", "contacts", "responders"]
-    list_display = ['short_name', 'stars', 'state_reached', 'wrangler1', 'title',]
+    list_display = ['short_name', 'stars', 'state_reached', 'wrangler1', 'submit_date',]
     list_filter = ['species', 'effort', 'wrangler1', 'state_reached', 'assay_tech']
     inlines = [TrackerInline,]
     fieldsets = (
