@@ -7,13 +7,13 @@ all:: test0 listFunctions getFunctions listSchema getSequence wigData \
 listFunctions: list01 list02 list03 list04 list05 list06 list07 list08 list09 \
 	list10 list11 list12 list13 list14 list15
 
-getFunctions: test6 test7 test8 test9 test10 test11 test12 test13 test14 \
+getFunctions: test8 test9 test10 test11 test12 test13 test14 \
 	test15 test16 test19 test21 test26 test27 test28 \
 	test29 test39 test40
 
 listSchema: schema01 schema02 schema03 schema04 schema05 schema06 schema07
 
-getSequence: getSeq01 getSeq02 getSeq03
+getSequence: getSeq01 getSeq02 getSeq03 getSeq04 getSeq05
 
 wigData: wig01 wig02 wig03 wig04 wig05 wig06 wig07 wig08 wig09 wig10 \
 	wig11 wig12 wig13 wig14 wig15 wig16 wig17 wig18 wig19 wig20 \
@@ -30,7 +30,7 @@ errorTests: err01 err02 err03 err04 err05 err06 err07 err08 err09 err10 \
 notSupported: notSup01 notSup02 notSup03 notSup04 notSup05 notSup06 \
 	notSup07 notSup08 notSup09 notSup10
 
-bugReports: redmine23733
+bugReports: redmine23733 redmine24089a redmine24089b
 
 setOutput:
 	@if [ ! -d testOutput ]; then mkdir testOutput; fi
@@ -143,16 +143,6 @@ list15: setOutput
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 ##########################   getData functions  #############################
-# testing /getData/sequence?genome=ce11&chrom=chrM
-test6: setOutput
-	@./jsonConsumer.pl -endpoint="/getData/sequence" -genome="ce11" -chrom="chrM" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
-	@zdiff expected/$@.gz testOutput/$@.gz
-
-# testing /getData/sequence?genome=ce11&chrom=chrM&start=1&end=128
-test7: setOutput
-	@./jsonConsumer.pl -endpoint="/getData/sequence" -genome="ce11" -chrom="chrM" -start=1 -end=128 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
-	@zdiff expected/$@.gz testOutput/$@.gz
-
 # testing /getData/track?genome=ce11&track=gold
 test8: setOutput
 	@./jsonConsumer.pl -maxItemsOutput=123 -endpoint="/getData/track" -genome="ce11" -track="gold" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
@@ -265,6 +255,16 @@ getSeq02: setOutput
 getSeq03: setOutput
 	@printf "### $@ "
 	@./jsonConsumer.pl -endpoint="/getData/sequence" -genome="monDom5" -chrom="chr1" -start=748055061 -end=748055161 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /getData/sequence?genome=ce11&chrom=chrM
+getSeq04: setOutput
+	@./jsonConsumer.pl -endpoint="/getData/sequence" -genome="ce11" -chrom="chrM" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /getData/sequence?genome=ce11&chrom=chrM&start=1&end=128
+getSeq05: setOutput
+	@./jsonConsumer.pl -endpoint="/getData/sequence" -genome="ce11" -chrom="chrM" -start=1 -end=128 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 ###############################################################################
@@ -878,6 +878,18 @@ notSup10: setOutput
 redmine23733: setOutput
 	@printf "### $@ 'https://api-test.gi.ucsc.edu/getData/track?track=knownGene;genome=hg38;chrom=chr1;end=48000;start=47000'\n"
 	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg38 -track=knownGene -chrom=chr1 -start=47000 -end=48000 2>&1 | sed -e 's/, /,\n/g;' | egrep -v "${excludeLines}" | tail -5 | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# end coordinate for get sequence past end of chromosome, database genome
+redmine24089a: setOutput
+	@printf "### $@ 'https://api-test.gi.ucsc.edu/getData/sequence?genome=hg19;chrom=chrM;start=16560;end=16572'\n"
+	@./jsonConsumer.pl -endpoint="/getData/sequence" -genome=hg19 -chrom=chrM -start=16560 -end=16572 2>&1 | sed -e 's/, /,\n/g;' | egrep -v "${excludeLines}" | tail -5 | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# end coordinate for get sequence past end of chromosome, asmHub genome
+redmine24089b: setOutput
+	@printf "### $@ 'https://api-test.gi.ucsc.edu/getData/sequence?genome=araTha1;chrom=chrCp;start=154470;end=154479;hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt'\n"
+	@./jsonConsumer.pl -endpoint="/getData/sequence" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" -genome="araTha1" -chrom="chrCp" -start=154470 -end=154479 2>&1 | sed -e 's/, /,\n/g;' | egrep -v "${excludeLines}" | tail -5 | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # track types found in hg19 and hg38 trackDb 'type' column:

@@ -568,3 +568,21 @@ rheMac8.upstreamGeneTbl = refGene
     #   sizes will set properly
 
 #########################################################################
+# LIFTOVER TO rheMac10 (DONE - 2019-07-02 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/rheMac8/bed/blat.rheMac10.2019-07-02
+    cd /hive/data/genomes/rheMac8/bed/blat.rheMac10.2019-07-02
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/rheMac8/jkStuff/rheMac8.11.ooc \
+         rheMac8 rheMac10
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/rheMac8/jkStuff/rheMac8.11.ooc \
+         rheMac8 rheMac10) > doLiftOverToRheMac10.log 2>&1
+XXX - running - Tue Jul  2 08:12:49 PDT 2019
+    # real    1015m0.435s
+
+    # see if the liftOver menus function in the browser from rheMac8 to rheMac10
+
+#########################################################################

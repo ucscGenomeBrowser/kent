@@ -37,39 +37,43 @@ void hicCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char *trac
                         char *title, boolean boxed);
 /* Draw the list of track configuration options for Hi-C tracks */
 
-char *hicUiFetchResolution(struct cart *cart, char *track, struct hicMeta *meta);
+void hicCfgUiComposite(struct cart *cart, struct trackDb *tdb, char *track,
+                        char *title, boolean boxed);
+/* Draw the (empty) list of track configuration options for a composite of Hi-C tracks */
+
+char *hicUiFetchResolution(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta);
 /* Return the current resolution selection, or the default if none
  * has been selected. */
 
-int hicUiFetchResolutionAsInt(struct cart *cart, char *track, struct hicMeta *meta, int windowSize);
+int hicUiFetchResolutionAsInt(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta, int windowSize);
 /* Return the current resolution selection as an integer.  If there is no selection, or if "Auto"
  * has been selected, return the largest available value that still partitions the window into at
  * least 5000 bins. */
 
-char *hicUiFetchNormalization(struct cart *cart, char *track, struct hicMeta *meta);
+char *hicUiFetchNormalization(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta);
 /* Return the current normalization selection, or the default if none
  * has been selected.  Right now this is a hard-coded set specifically for
  * .hic files, but in the future this list might be dynamically determined by
  * the contents and format of the Hi-C file. */
 
-char *hicUiFetchDrawMode(struct cart *cart, char *track);
+char *hicUiFetchDrawMode(struct cart *cart, struct trackDb *tdb);
 /* Return the current draw mode selection, or the default if none
  * has been selected. */
 
-char *hicUiFetchDrawColor(struct cart *cart, char *track);
+char *hicUiFetchDrawColor(struct cart *cart, struct trackDb *tdb);
 /* Retrieve the HTML hex code for the color to draw the
  * track values in (e.g., #00ffa1) */
 
-char *hicUiFetchBgColor(struct cart *cart, char *track);
+char *hicUiFetchBgColor(struct cart *cart, struct trackDb *tdb);
 /* Retrieve the HTML hex code of the background color for the 
  * track.  This is the color associated with scores at or close to 0. */
 
-boolean hicUiFetchAutoScale(struct cart *cart, char *track);
+boolean hicUiFetchAutoScale(struct cart *cart, struct trackDb *tdb);
 /* Returns whether the track is configured to automatically scale its color range
  * depending on the scores present in the window (true), or if it should stick to a
  * gradient based on the user's selected maximum value (false). */
 
-double  hicUiFetchMaxValue(struct cart *cart, char *track);
+double  hicUiFetchMaxValue(struct cart *cart, struct trackDb *tdb);
 /* Retrieve the score value at which the draw color reaches its
  * its maximum intensity.  Any scores above this value will
  * share that same draw color. */

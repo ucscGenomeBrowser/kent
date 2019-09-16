@@ -23,9 +23,11 @@
 #include "jsHelper.h"
 #include <signal.h>
 #include "trackHub.h"
+#include "botDelay.h"
 
 static long loadTime = 0;
-
+static boolean issueBotWarning = FALSE;
+#define delayFraction   0.25	/* same as hgTracks */
 
 void usage()
 /* Explain usage and exit. */
@@ -939,6 +941,19 @@ cartWebEnd(cart);
 }
 #endif
 
+static void webBotWarning()
+/* display the overuse warning message in the javaScript warning text box
+ * html output has already started at this point, just need to add the
+ * warning handler and setup the warning javaScript box, warnings after
+ * this will go to that text box
+ */
+{
+pushWarnHandler(webVaWarn);
+htmlWarnBoxSetup(stdout);
+char *ip = getenv("REMOTE_ADDR");
+botDelayMessage(ip, botDelayMillis);
+}
+
 void doAddCustom(char *err)
 /* display form for adding custom tracks.
  * Include error message, if any */
@@ -946,6 +961,8 @@ void doAddCustom(char *err)
 cartWebStart(cart, database, "Add Custom Tracks");
 addCustomForm(NULL, err);
 helpCustom();
+if (issueBotWarning)
+    webBotWarning();
 cartWebEnd(cart);
 }
 
@@ -972,6 +989,8 @@ jsIncludeFile("jquery.js", NULL);
 manageCustomForm(warnMsg);
 webNewSection("Managing Custom Tracks");
 webIncludeHelpFile("customTrackManage", FALSE);
+if (issueBotWarning)
+    webBotWarning();
 cartWebEnd(cart);
 }
 
@@ -1309,6 +1328,7 @@ else
                 }
             }
         }
+
     addWarning(dsWarn, replacedTracksMsg(replacedCts));
     doBrowserLines(browserLines, &warnMsg);
     addWarning(dsWarn, warnMsg);
@@ -1376,6 +1396,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 long enteredMainTime = clock1000();
+issueBotWarning = earlyBotCheck(enteredMainTime, "hgCustom", delayFraction, 0, 0, "html");
 htmlPushEarlyHandlers();
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);

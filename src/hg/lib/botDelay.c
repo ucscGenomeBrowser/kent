@@ -13,7 +13,11 @@
 #include "hui.h"
 #include "hCommon.h"
 #include "botDelay.h"
+#include "jsonWrite.h"
 
+#define defaultDelayFrac 1.0   /* standard penalty for most CGIs */
+#define defaultWarnMs 10000    /* warning at 10 to 20 second delay */
+#define defaultExitMs 20000    /* error 429 Too Many Requests after 20+ second delay */
 
 int botDelayTime(char *host, int port, char *botCheckString)
 /* Figure out suggested delay time for ip address in
@@ -27,30 +31,43 @@ close(sd);
 return atoi(buf);
 }
 
+char *botDelayWarningMsg(char *ip, int millis)
+/* return the string for the default botDelay message
+ * not all users of botDelay want the message to go to stderr
+ * return it for their own use case
+ */
+{
+time_t now = time(NULL);
+char *delayMsg = needMem(2048);
+safef(delayMsg, 2048,
+    "There is a very high volume of traffic coming from your "
+    "site (IP address %s) as of %s (California time).  So that other "
+    "users get a fair share "
+    "of our bandwidth, we are putting in a delay of %3.1f seconds "
+    "before we service your request.  This delay will slowly "
+    "decrease over a half hour as activity returns to normal.  This "
+    "high volume of traffic is likely due to program-driven rather than "
+    "interactive access, or the submission of queries on a large "
+    "number of sequences.  If you are making large batch queries, "
+    "please write to our genome@soe.ucsc.edu public mailing list "
+    "and inquire about more efficient ways to access our data.  "
+    "If you are sharing an IP address with someone who is submitting "
+    "large batch queries, we apologize for the "
+    "inconvenience. "
+    "To use the genome browser functionality from a Unix command line, "
+    "please read <a href='http://genome.ucsc.edu/FAQ/FAQdownloads.html#download36'>our FAQ</a> on this topic. "
+    "For further help on how to access our data from a command line, "
+    "or if "
+    "you think this delay is being imposed unfairly, please contact genome-www@soe.ucsc.edu.",
+    ip, asctime(localtime(&now)), 0.001*millis);
+
+return delayMsg;
+}	/*	char *botDelayWarningMsg(char *ip, int millis)	*/
+
 void botDelayMessage(char *ip, int millis)
 /* Print out message saying why you are stalled. */
 {
-time_t now = time(NULL);
-warn("There is a very high volume of traffic coming from your "
-       "site (IP address %s) as of %s (California time).  So that other "
-       "users get a fair share "
-       "of our bandwidth, we are putting in a delay of %3.1f seconds "
-       "before we service your request.  This delay will slowly "
-       "decrease over a half hour as activity returns to normal.  This "
-       "high volume of traffic is likely due to program-driven rather than "
-       "interactive access, or the submission of queries on a large "
-       "number of sequences.  If you are making large batch queries, "
-       "please write to our genome@soe.ucsc.edu public mailing list "
-       "and inquire about more efficient ways to access our data.  "
-       "If you are sharing an IP address with someone who is submitting "
-       "large batch queries, we apologize for the "
-       "inconvenience. "
-       "To use the genome browser functionality from a Unix command line, "
-       "please read <a href='http://genome.ucsc.edu/FAQ/FAQdownloads.html#download36'>our FAQ</a> on this topic. "
-       "For further help on how to access our data from a command line, "
-       "or if "
-       "you think this delay is being imposed unfairly, please contact genome-www@soe.ucsc.edu.",
-	    ip, asctime(localtime(&now)), .001*millis);
+warn("%s", botDelayWarningMsg(ip, millis));
 }
 
 void botTerminateMessage(char *ip, int millis)
@@ -170,7 +187,7 @@ if (host != NULL && port != NULL)
 void hgBotDelay()
 /* High level bot delay call - for use with regular webpage output */
 {
-hgBotDelayExt(FALSE, 1.0);
+hgBotDelayExt(FALSE, defaultDelayFrac);
 }
 
 void hgBotDelayFrac(double fraction)
@@ -182,7 +199,7 @@ hgBotDelayExt(FALSE, fraction);
 void hgBotDelayNoWarn()
 /* High level bot delay call without warning - for use with non-webpage outputs */
 {
-hgBotDelayExt(TRUE, 1.0);
+hgBotDelayExt(TRUE, defaultDelayFrac);
 }
 
 void hgBotDelayNoWarnFrac(double fraction)
@@ -193,7 +210,7 @@ hgBotDelayExt(TRUE, fraction);
 
 int hgBotDelayTime()
 {
-return hgBotDelayTimeFrac(1.0);
+return hgBotDelayTimeFrac(defaultDelayFrac);
 }
 
 int hgBotDelayTimeFrac(double fraction)
@@ -217,7 +234,41 @@ return delay;
 #define err429Msg       "Too Many Requests"
 int botDelayMillis = 0;
 
-static void hogExit(char *cgiName, long enteredMainTime)
+static void jsonHogExit(char *cgiExitName, long enteredMainTime, char *hogHost,
+    int retryAfterSeconds)
+/* err429 Too Many Requests to be returned as JSON data */
+{
+puts("Content-Type:application/json");
+printf("Status: %d %s\n", err429, err429Msg);
+if (retryAfterSeconds > 0)
+    printf("Retry-After: %d", retryAfterSeconds);
+puts("\n");	/* blank line between header and body */
+
+struct jsonWrite *jw = jsonWriteNew();
+jsonWriteObjectStart(jw, NULL);
+jsonWriteString(jw, "error", err429Msg);
+jsonWriteNumber(jw, "statusCode", err429);
+
+char msg[1024];
+
+safef(msg, sizeof(msg), "Your host, %s, has been sending too many requests "
+       "lately and is unfairly loading our site, impacting performance for "
+       "other users.  Please contact genome@soe.ucsc.edu to ask that your site "
+       "be reenabled.  Also, please consider downloading sequence and/or "
+       "annotations in bulk -- see http://genome.ucsc.edu/downloads.html.",
+       hogHost);
+
+jsonWriteString(jw, "statusMessage", msg);
+if (retryAfterSeconds > 0)
+    jsonWriteNumber(jw, "retryAfterSeconds", retryAfterSeconds);
+
+jsonWriteObjectEnd(jw);
+
+puts(jw->dy->string);
+}
+
+static void hogExit(char *cgiName, long enteredMainTime, char *exitType,
+    int retryAfterSeconds)
 /* earlyBotCheck requests exit before CGI has done any output or
  * setups of any kind.  HTML output has not yet started.
  */
@@ -226,55 +277,80 @@ char *hogHost = getenv("REMOTE_ADDR");
 char cgiExitName[1024];
 safef(cgiExitName, ArraySize(cgiExitName), "%s hogExit", cgiName);
 
-puts("Content-Type:text/html");
-printf("Status: %d %s\n", err429, err429Msg);
-puts("Retry-After: 30");
-puts("\n");
+if (sameOk("json", exitType))
+   jsonHogExit(cgiExitName, enteredMainTime, hogHost, retryAfterSeconds);
+else
+    {
 
-puts("<!DOCTYPE HTML 4.01 Transitional>\n");
-puts("<html lang='en'>");
-puts("<head>");
-puts("<meta charset=\"utf-8\">");
-printf("<title>Status %d: %s</title></head>\n", err429, err429Msg);
+    puts("Content-Type:text/html");
+    printf("Status: %d %s\n", err429, err429Msg);
+    if (retryAfterSeconds > 0)
+        printf("Retry-After: %d", retryAfterSeconds);
+    puts("\n");	/* blank line between header and body */
 
-printf("<body><h1>Status %d: %s</h1><p>\n", err429, err429Msg);
-time_t now = time(NULL);
-printf("There is an exceedingly high volume of traffic coming from your "
-       "site (IP address %s) as of %s (California time).  It looks like "
-       "a web robot is launching queries quickly, and not even waiting for "
-       "the results of one query to finish before launching another query. "
-       "/* We cannot service requests from your IP address under */ these "
-       "conditions.  (code %d) "
-       "To use the genome browser functionality from a Unix command line, "
-       "please read <a href='http://genome.ucsc.edu/FAQ/FAQdownloads.html#download36'>our FAQ</a> on this topic. "
-       "For further help on how to access our data from a command line, "
-       "or if "
-       "you think this delay is being imposed unfairly, please contact genome-www@soe.ucsc.edu."
-       ,hogHost, asctime(localtime(&now)), botDelayMillis);
-puts("</body></html>");
+    puts("<!DOCTYPE HTML 4.01 Transitional>\n");
+    puts("<html lang='en'>");
+    puts("<head>");
+    puts("<meta charset=\"utf-8\">");
+    printf("<title>Status %d: %s</title></head>\n", err429, err429Msg);
+
+    printf("<body><h1>Status %d: %s</h1><p>\n", err429, err429Msg);
+    time_t now = time(NULL);
+    printf("There is an exceedingly high volume of traffic coming from your "
+           "site (IP address %s) as of %s (California time).  It looks like "
+           "a web robot is launching queries quickly, and not even waiting for "
+           "the results of one query to finish before launching another query. "
+           "<b>We cannot service requests from your IP address under</b> these "
+           "conditions.  (code %d) "
+           "To use the genome browser functionality from a Unix command line, "
+           "please read <a href='http://genome.ucsc.edu/FAQ/FAQdownloads.html#download36'>our FAQ</a> on this topic. "
+           "For further help on how to access our data from a command line, "
+           "or if "
+           "you think this delay is being imposed unfairly, please contact genome-www@soe.ucsc.edu."
+           ,hogHost, asctime(localtime(&now)), botDelayMillis);
+    puts("</body></html>");
+    }
 cgiExitTime(cgiExitName, enteredMainTime);
 exit(0);
 }       /*      static void hogExit()   */
 
-boolean earlyBotCheck(long enteredMainTime, char *cgiName, double delayFrac, int warnMs, int exitMs)
+boolean earlyBotCheck(long enteredMainTime, char *cgiName, double delayFrac, int warnMs, int exitMs, char *exitType)
 /* similar to botDelayCgi but for use before the CGI has started any
  * output or setup the cart of done any MySQL operations.  The boolean
  * return is used later in the CGI after it has done all its setups and
- * started output so it can issue the warning.
+ * started output so it can issue the warning.  Pass in delayFrac 0.0
+ * to use the default 1.0, pass in 0 for warnMs and exitMs to use defaults,
+ * and exitType is either 'html' or 'json' to do that type of exit output in
+ * the case of hogExit();
  */
 {
 boolean issueWarning = FALSE;
+
+if (botException())	/* don't do this if caller is on the exception list */
+    return issueWarning;
+
+if (delayFrac < 0.000001) /* passed in zero, use default */
+    delayFrac = defaultDelayFrac;
+if (warnMs < 1)	/* passed in zero, use default */
+    warnMs = defaultWarnMs;
+if (exitMs < 1)	/* passed in zero, use default */
+    exitMs = defaultExitMs;
+
 botDelayMillis = hgBotDelayTimeFrac(delayFrac);
 if (botDelayMillis > 0)
     {
-    sleep1000(botDelayMillis);
+    int msAboveWarning = botDelayMillis - warnMs;
+    int retryAfterSeconds = 0;
+    if (msAboveWarning > 0)
+       retryAfterSeconds = 1 + (msAboveWarning / 10);
     if (botDelayMillis > warnMs)
 	{
-	if (botDelayMillis > exitMs)
-	    hogExit(cgiName, enteredMainTime);
+	if (botDelayMillis > exitMs) /* returning immediately */
+	    hogExit(cgiName, enteredMainTime, exitType, retryAfterSeconds);
 	else
 	    issueWarning = TRUE;
 	}
+    sleep1000(botDelayMillis); /* sleeping while still < exitMs */
     }
-return issueWarning;
+return issueWarning;	/* caller can decide on their type of warning */
 }	/*	boolean earlyBotCheck()	*/

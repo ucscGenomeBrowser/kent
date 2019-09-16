@@ -50,6 +50,7 @@
 #include "genbank.h"
 #include "botDelay.h"
 #include "customComposite.h"
+#include "hicUi.h"
     
 #ifdef USE_HAL 
 #include "halBlockViz.h"
@@ -3013,6 +3014,8 @@ else if (sameString(track, "lrg"))
     lrgCfgUi(cart, tdb, tdb->track, NULL, boxed);
 else if (sameString(track, "lrgTranscriptAli"))
     lrgTranscriptAliCfgUi(cart, tdb, tdb->track, NULL, boxed);
+else if (startsWithWord("hic", tdb->type) && tdbIsComposite(tdb))
+    hicCfgUiComposite(cart, tdb, tdb->track, NULL, boxed); // Some hic options aren't available at this level
 else if (tdb->type != NULL)
     {   // NOTE for developers: please avoid special cases and use cfgTypeFromTdb//cfgByCfgType()
         //  When you do, then multi-view cfg and subtrack cfg will work.
