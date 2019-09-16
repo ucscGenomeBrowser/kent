@@ -305,6 +305,7 @@ else
     }
 printf("&nbsp;&nbsp;&nbsp;");
 printf("<a href=\"../goldenPath/help/multiRegionHelp.html\" target=_blank>(Help)</a>\n");
+printf("<br>&nbsp;&nbsp;&nbsp;&nbsp;<i>Note: interactions display will switch to &quot;pack&quot; mode</i>\n");
 }
 
 void doInteractRegionDetails(struct trackDb *tdb, struct interact *inter)
