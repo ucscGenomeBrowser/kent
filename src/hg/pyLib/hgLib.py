@@ -19,16 +19,19 @@
 try:
     import MySQLdb
 except:
-    print "Installation error - could not load MySQLdb for Python. Please tell your system administrator to run " \
-        "one of these commands as root: 'yum install MySQL-python', 'apt-get install python-mysqldb' or 'pip install MySQL-python'."
+    print("Installation error - could not load MySQLdb for Python. Please tell your system administrator to run " \
+        "one of these commands as root: 'yum install MySQL-python', 'apt-get install python-mysqldb' or 'pip install MySQL-python'.")
     exit(0)
 
 # Imports from the Python 2.7 standard library
 # Please minimize global imports. Each library import can take up to 20msecs.
-import os, cgi, sys, logging
+import os, cgi, sys, logging, time
 
 from os.path import join, isfile, normpath, abspath, dirname, isdir, splitext
 from collections import namedtuple
+
+# start to support both python2 and python3 
+from six.moves import http_cookies, urllib
 
 # activate debugging output output only on dev
 import platform
@@ -64,7 +67,7 @@ def warn(format, *args):
 def errAbort(msg, status=None, headers = None):
     " show msg and abort. Like errAbort.c "
     printContentType(status=status, headers=headers)
-    print msg
+    print(msg)
     exit(0)
 
 def debug(level, msg):
@@ -116,6 +119,11 @@ def parseHgConf():
 
 def cfgOption(name, default=None):
     " return hg.conf option or default "
+    global hgConf
+
+    if not hgConf:
+        parseHgConf()
+
     return hgConf.get(name, default)
 
 def cfgOptionBoolean(name, default=False):
@@ -192,7 +200,7 @@ def sqlQuery(conn, query, args=None):
             timeDiff = _timeDeltaSeconds(datetime.now(), startTime)
             sys.stderr.write("SQL_TIME 0 %s %s %.3f\n" % (conn.host, conn.db, timeDiff))
 
-    except MySQLdb.Error, errObj:
+    except MySQLdb.Error as errObj:
         # on table not found, try the secondary mysql connection, "slow-db" in hg.conf
         errCode, errDesc = errObj
         if errCode!=1146: # "table not found" error
@@ -228,8 +236,8 @@ def sqlQuery(conn, query, args=None):
 
 def htmlPageEnd(oldJquery=False):
     " close html body/page "
-    print "</body>"
-    print "</html>"
+    print("</body>")
+    print("</html>")
 
 def printMenuBar(oldJquery=False):
     baseDir = "../"
@@ -380,17 +388,17 @@ def printContentType(contType="text/html", status=None, fname=None, headers=None
         print ("</div>")
 
 
-def queryBottleneck(host, port, ip):
-    " contact UCSC-style bottleneck server to get current delay time. From hg/lib/botDelay.c "
+def botDelayTime(host, port, botString):
+    " contact UCSC-style bottleneck server to get current delay time. From hg/lib/botDelay.c:botDelayTime()"
     # send ip address
     import socket
     s =  socket.socket()
     s.connect((host, int(port)))
-    msg = ip
+    msg = botString
     d = chr(len(msg))+msg
     s.send(d)
 
-    # read delay time
+    # read delay time as ASCII chars
     expLen = ord(s.recv(1))
     totalLen = 0
     buf = list()
@@ -402,36 +410,80 @@ def queryBottleneck(host, port, ip):
             break
     return int("".join(buf))
 
-def hgBotDelay():
+# global variable, only used by findCookieData, local use without explicit 'global' will trigger a Python error
+cookies = None
+
+def findCookieData(cookieName):
+    " return value of cookie or None is not set, port of lib/cheapcgi.c:findCookieData "
+    global cookies
+    if not cookies:
+        if "HTTP_COOKIE" in os.environ:
+            cookies = http_cookies.SimpleCookie(os.environ["HTTP_COOKIE"])
+        else:
+            cookies = {}
+
+    # unlike cheapcgi, Python does not even allow duplicate cookies, so no need to handle this case
+    cookie = cookies.get(cookieName)
+    if cookie:
+        return cookie.value
+
+    return None
+
+def getCookieUser():
+    " port of lib/botDelay.c:getCookieUser: get hguid cookie value  "
+    user = None
+    centralCookie = cfgOption("central.cookie", default="hguid")
+
+    if centralCookie:
+        user = findCookieData(centralCookie)
+
+    return user
+
+def getBotCheckString(ip, fraction):
+    " port of lib/botDelay.c:getBotCheckString: compose user.ip fraction for bot check  "
+    user = getCookieUser()
+    if user:
+        botCheckString = "%s.%s %f" % (user, ip, fraction)
+    else:
+        botCheckString = "%s %f" % (ip, fraction)
+    return botCheckString
+
+def hgBotDelay(fraction=1.0):
     """
     Implement bottleneck delay, get bottleneck server from hg.conf.
     This behaves similar to the function src/hg/lib/botDelay.c:hgBotDelay
     It does not use the hgsid, currently it always uses the IP address.
     Using the hgsid makes little sense. It is more lenient than the C version.
     """
-    import time
-    if "DOCUMENT_ROOT" not in os.environ: # skip if not called from Apache
-        return
     global hgConf
     global doWarnBot
     global botDelayMsecs
-    hgConf = parseHgConf()
-    if "bottleneck.host" not in hgConf:
-        return
-    ip = os.environ["REMOTE_ADDR"]
-    delay = queryBottleneck(hgConf["bottleneck.host"], hgConf["bottleneck.port"], ip)
-    debug(1, "Bottleneck delay: %d msecs" % delay)
-    botDelayMsecs = delay
 
-    if delay>botDelayBlock:
+    ip = os.environ.get("REMOTE_ADDR")
+    if not ip: # skip if not called from Apache
+        return
+
+    host = cfgOption("bottleneck.host")
+    port = cfgOption("bottleneck.port")
+
+    if not "bottleneck.host" or not "bottleneck.port" or not ip:
+        return
+
+    botCheckString = getBotCheckString(ip, fraction)
+    millis = botDelayTime(host, port, botCheckString)
+    debug(1, "Bottleneck delay: %d msecs" % millis)
+    botDelayMsecs = millis
+
+    if millis>botDelayBlock:
+        # retry-after time factor 10 is based on the example in the bottleneck help message
         errAbort("Too many HTTP requests and not enough delay between them. "
         "Your IP has been blocked to keep this website responsive for other users. "
         "Please contact genome-www@soe.ucsc.edu to unblock your IP address. We can also help you obtain the data you need without "
-        "web crawling. ", status=429, headers = {"Retry-after" : str(botDelayMsecs / 1000)})
+        "web crawling. ", status=429, headers = {"Retry-after" : str(millis / 10)})
         sys.exit(0)
 
-    if delay>botDelayWarn:
-        time.sleep(delay/1000.0)
+    if millis>botDelayWarn:
+        time.sleep(millis/1000.0)
         doWarnBot = True # = show warning message later in printContentType()
 
 def parseRa(text):
@@ -474,7 +526,7 @@ def lineFileNextRow(inFile):
         fields = string.split(line, "\t", maxsplit=len(headers)-1)
         try:
             rec = Record(*fields)
-        except Exception, msg:
+        except Exception as msg:
             logging.error("Exception occured while parsing line, %s" % msg)
             logging.error("Filename %s" % fh.name)
             logging.error("Line was: %s" % line)
@@ -534,11 +586,11 @@ def hGbdbReplace(fname):
 
 def netUrlOpen(url):
     " net.c: open a URL and return a file object "
-    import urllib2, time, errno
+    import errno
     from socket import error as SocketError
 
     # let our webservers know that we are not a Firefox
-    opener = urllib2.build_opener()
+    opener = urllib.request.build_opener()
     opener.addheaders = [('User-Agent', 'Genome Browser pyLib/hgLib.py:netUrlOpen()')]
 
     resp = None
@@ -750,9 +802,9 @@ def jsInlineFinish():
     global jsInlineFinishCalled
     global jsInlineLines
     if jsInlineFinishCalled:
-	# jsInlineFinish can be called multiple times when generating framesets or genomeSpace.
-	warn("jsInlineFinish() called already.")
-    print "<script type='text/javascript' nonce='%s'>\n%s</script>\n" % (getNonce(), jsInlineLines)
+        # jsInlineFinish can be called multiple times when generating framesets or genomeSpace.
+        warn("jsInlineFinish() called already.")
+    print("<script type='text/javascript' nonce='%s'>\n%s</script>\n" % (getNonce(), jsInlineLines))
     jsInlineLines = ""
     jsInlineFinishCalled = True
 
@@ -855,11 +907,11 @@ def findJsEvent(event):
     global jsEventDic
     # init event dic
     if jsEventDic == None:
-	jsEventDic = {}
-	for w in jsEvents:
-	    jsEventDic[w] = True
+        jsEventDic = {}
+    for w in jsEvents:
+        jsEventDic[w] = True
     if jsEventDic[event]:
-	return True
+        return True
     return False
 
 def checkValidEvent(event):
@@ -867,10 +919,10 @@ def checkValidEvent(event):
     # TODO GALT
     temp = event.lower()
     if temp != event:
-	warn("jsInline: javascript event %s should be given in lower-case", event)
+        warn("jsInline: javascript event %s should be given in lower-case", event)
     event = temp; 
     if not findJsEvent(event):
-	warn("jsInline: unknown javascript event %s", event)
+        warn("jsInline: unknown javascript event %s", event)
 
 def jsOnEventById(eventName, idText, jsText):
     " Add js mapping for inline event "
@@ -888,8 +940,6 @@ def jsOnEventByIdF(eventName, idText, format, *args):
 
 def cartDbLoadFromId(conn, table, cartId, oldCart):
     " Like src/hg/lib/cart.c, opens cart table and parses cart contents given a cartId of the format 123123_csctac "
-    import urlparse
-
     if cartId==None:
         return {}
     cartFields = cartId.split("_")
@@ -903,10 +953,10 @@ def cartDbLoadFromId(conn, table, cartId, oldCart):
         # silently ignore invalid cart IDs for now. Future code may want to generate a new cart.
         return {}
 
-    cartList = urlparse.parse_qs(rows[0][0])
+    cartList = urllib.parse.parse_qs(rows[0][0])
 
     # by default, python returns a dict with key -> list of vals. We need only the first one
-    for key, vals in cartList.iteritems():
+    for key, vals in cartList.items():
         oldCart[key] =vals[0]
     return oldCart
 
@@ -954,19 +1004,9 @@ def cartAndCookieSimple():
         It also does not run cart.c:cartJustify, so track priorities are not applied.
         Also, if there is no hgsid parameter or no cookie, we do not create a new cart.
     """
-    import Cookie
-
     # no cgiApoptosis yet - maybe needed in the future. see cart.c / cartNew
 
-    if "HTTP_COOKIE" in os.environ:
-        cookies = Cookie.SimpleCookie(os.environ["HTTP_COOKIE"])
-        cookieName = cfgOption("central.cookie", "hguid")
-        hguid = cookies.get(cookieName)
-        if hguid is not None:
-            hguid = hguid.value # cookies have values and other attributes. We only need the value
-    else:
-        hguid = None
-
+    hguid = getCookieUser()
     hgsid = cgiString("hgsid")
 
     conn = hConnectCentral()

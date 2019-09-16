@@ -157,7 +157,7 @@ for (ipr = iprs; ipr; ipr = next)
 return filtered;
 }
 
-static char *makeInteractRegionFile(char *name, struct interact *inters, char **retCustomText)
+static char *makeInteractRegionFile(char *name, struct interact *inters, int padding, char **retCustomText)
 /* Create bed file in trash directory with end coordinates for multi-region mode,
  * and a custom track for display showing regions */
 {
@@ -168,7 +168,6 @@ if (f == NULL)
     errAbort("can't create temp file %s", mrTn.forCgi);
 
 char regionInfo[1024];
-int padding = 200;
 safef(regionInfo, sizeof regionInfo, "#padding %d\n", padding);
 mustWrite(f, regionInfo, strlen(regionInfo));
 
@@ -258,10 +257,17 @@ if (retCustomText != NULL)
 return cloneString(mrTn.forCgi);
 }
 
-static void multiRegionLink(char *name, struct interact *inters)
+static void multiRegionLink(struct trackDb *tdb, char *name, struct interact *inters)
 // Print link to multi-region view of ends if appropriate 
 // (or provide a link to remove if already in this mode) 
 {
+char *setting = trackDbSetting(tdb, "interactMultiRegion");
+if (!setting || sameString(setting, "off"))
+    return;
+int padding = 200;
+if (differentString(setting, "on") && differentString(setting, "true"))
+    padding = (int)strtol(setting, NULL, 10);
+    
 if (inters->next == NULL && interactEndsOverlap(inters))
     return;
 char *virtShortDesc = cartOptionalString(cart, "virtShortDesc");
@@ -278,7 +284,7 @@ if (isVirtMode && virtShortDesc && sameString(virtShortDesc, name))
 else
     {
     char *customText = NULL;
-    char *regionFile = makeInteractRegionFile(name, inters, &customText);
+    char *regionFile = makeInteractRegionFile(name, inters, padding, &customText);
     printf("<br>Show interaction ends in "
             "<a href='hgTracks?"
                 "virtMode=1&"
@@ -299,6 +305,7 @@ else
     }
 printf("&nbsp;&nbsp;&nbsp;");
 printf("<a href=\"../goldenPath/help/multiRegionHelp.html\" target=_blank>(Help)</a>\n");
+printf("<br>&nbsp;&nbsp;&nbsp;&nbsp;<i>Note: interactions display will switch to &quot;pack&quot; mode</i>\n");
 }
 
 void doInteractRegionDetails(struct trackDb *tdb, struct interact *inter)
@@ -382,8 +389,7 @@ if (distance > 0)
     }
 }
 
-void doInteractItemDetails(struct trackDb *tdb, struct interactPlusRow *ipr, char *item, 
-                                boolean isMultiple, boolean doMultiRegion)
+void doInteractItemDetails(struct trackDb *tdb, struct interactPlusRow *ipr, char *item, boolean isMultiple)
 /* Details of interaction item */
 {
 struct interact *inter = ipr->interact;
@@ -399,8 +405,7 @@ puts("<p>");
 if (!isMultiple)
     {
     doInteractRegionDetails(tdb, inter);
-    if (doMultiRegion)
-        multiRegionLink(inter->name, inter);
+    multiRegionLink(tdb, inter->name, inter);
     }
 }
 
@@ -421,7 +426,7 @@ char *chrom = cartString(cart, "c");
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 char *foot = cgiOptionalString("foot");
-boolean doMultiRegion = trackDbSettingOn(tdb, "interactMultiRegion");
+
 int minStart, maxEnd;
 struct interactPlusRow *iprs = getInteractions(tdb, chrom, start, end, item, foot, &minStart, &maxEnd);
 start = minStart;
@@ -450,8 +455,7 @@ if (count > 1 || clusterMode)
         // overlapping items, same start/end/name
         doInteractRegionDetails(tdb, inters);
         }
-    if (doMultiRegion)
-        multiRegionLink(item, inters);
+    multiRegionLink(tdb, item, inters);
     printf("</p>");
     }
 
@@ -461,15 +465,14 @@ for (ipr = iprs; ipr != NULL; ipr = ipr->next)
     {
     if (count > 1)
         printf("<hr>\n");
-    doInteractItemDetails(tdb, ipr, item, count > 1, doMultiRegion);
+    doInteractItemDetails(tdb, ipr, item, count > 1);
     if (foot || (clusterMode && count > 1))
         {
         struct interact *inter = ipr->interact;
         // just one interact (we have these in list for handling clusters earlier)
         inter->next = NULL;
         doInteractRegionDetails(tdb, inter);
-        if (doMultiRegion)
-            multiRegionLink(inter->name, inter);
+        multiRegionLink(tdb, inter->name, inter);
         }
     if (count > 1 && !isEmptyTextField(ipr->interact->name) && sameString(ipr->interact->name, item))
         printf("<hr>\n");

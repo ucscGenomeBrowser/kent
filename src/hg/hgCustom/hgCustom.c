@@ -28,8 +28,6 @@
 static long loadTime = 0;
 static boolean issueBotWarning = FALSE;
 #define delayFraction   0.25	/* same as hgTracks */
-#define warnMs 10000	/* warning at 10 to 20 second delay */
-#define exitMs 20000	/* error 429 Too Many Requests after 20+ second delay */
 
 void usage()
 /* Explain usage and exit. */
@@ -1398,7 +1396,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 long enteredMainTime = clock1000();
-issueBotWarning = earlyBotCheck(enteredMainTime, "hgCustom", delayFraction, warnMs, exitMs);
+issueBotWarning = earlyBotCheck(enteredMainTime, "hgCustom", delayFraction, 0, 0, "html");
 htmlPushEarlyHandlers();
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);

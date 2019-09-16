@@ -3895,7 +3895,8 @@ for (sf = components; sf != NULL; sf = sf->next)
 		}
 	    else
 		{
-		if (tg->drawLabelInBox)
+		if (tg->drawLabelInBox && 
+                        !(tg->drawLabelInBoxNotDense && vis == tvDense))
                     {
 		    drawScaledBoxLabel(hvg, s, e, scale, xOff, y, heightPer,
                                 color, font, lf->name );
@@ -10922,7 +10923,17 @@ if (!tg->limitedVisSet)
     tg->limitedVisSet = TRUE;  // Prevents recursive loop!
 
     // optional setting to draw labels onto the feature boxes, not next to them
-    tg->drawLabelInBox = cartOrTdbBoolean(cart, tg->tdb, "labelOnFeature" , FALSE);
+    char *setting = cartOrTdbString(cart, tg->tdb, "labelOnFeature", NULL);
+    if (setting)
+        {
+        if (sameString(setting, "on") || sameString(setting, "true"))
+            tg->drawLabelInBox = TRUE;
+        else if (sameString(setting, "noDense"))
+            {
+            tg->drawLabelInBox = TRUE;
+            tg->drawLabelInBoxNotDense = TRUE;
+            }
+        }
     enum trackVisibility vis = tg->visibility;
     int h;
     int maxHeight = maximumTrackHeight(tg);

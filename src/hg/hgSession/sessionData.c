@@ -102,7 +102,12 @@ if (fileExists(trashPath))
         {
         newPath = sessionDataPathFromTrash(trashPath, sessionDir);
         if (fileExists(newPath))
-            errAbort("saveTrashFile: new path '%s' already exists", newPath);
+            {
+            if (unlink(newPath) != 0)
+                errnoAbort("saveTrashFile: newPath='%s' already existed but unlink failed",
+                           newPath);
+            fprintf(stderr, "saveTrashFile: new path '%s' already exists; overwriting", newPath);
+            }
         makeDirsForFile(newPath);
         moveAndLink(trashPath, newPath);
         }
@@ -289,16 +294,19 @@ if (sessionDir)
             struct dyString *dy = sqlDyStringCreate("select %s from %s limit 1",
                                                     columnName, tableName);
             char *trashPath = sqlQuickString(conn, dy->string);
-            // For some reason, customTrash tables' filename paths can begin with "./../trash"
-            char *actualTrashPath = trashPath;
-            if (startsWith("./", trashPath) && isTrashPath(trashPath+2))
-                actualTrashPath = trashPath+2;
-            if (isTrashPath(actualTrashPath))
+            if (trashPath)
                 {
-                char *newPath = saveTrashFile(actualTrashPath, sessionDir);
-                if (newPath)
-                    replaceColumnValue(conn, tableName, columnName, newPath);
-                freeMem(newPath);
+                // For some reason, customTrash tables' filename paths can begin with "./../trash"
+                char *actualTrashPath = trashPath;
+                if (startsWith("./", trashPath) && isTrashPath(trashPath+2))
+                    actualTrashPath = trashPath+2;
+                if (isTrashPath(actualTrashPath))
+                    {
+                    char *newPath = saveTrashFile(actualTrashPath, sessionDir);
+                    if (newPath)
+                        replaceColumnValue(conn, tableName, columnName, newPath);
+                    freeMem(newPath);
+                    }
                 }
             dyStringFree(&dy);
             freeMem(trashPath);
@@ -378,7 +386,7 @@ if (fileExists(oldFile))
         else
             newFile = newCtTrashFile();
         if (fileExists(newFile))
-            errAbort("saveTrackFile: new file '%s' already exists", newFile);
+            fprintf(stderr, "saveTrackFile: new file '%s' already exists", newFile);
         makeDirsForFile(newFile);
         FILE *newF = mustOpen(newFile, "w");
         char *line;

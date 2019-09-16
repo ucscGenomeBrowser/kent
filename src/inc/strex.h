@@ -13,7 +13,7 @@ typedef char* (*StrexLookup)(void *symbols, char *key);
 struct strexParse *strexParseString(char *s, char *fileName, int fileLineNumber,
     void *symbols, StrexLookup lookup);
 /* Parse out string expression in s and return root of tree. The fileName and 
- * fileLineNumber are just used in the error message.  Ideally they should help 
+ * fileLineNumber are just used in the error messages.  Ideally they should help 
  * the user navigate to where the problem was. 
  *    If symbols is non-null then it and lookup will be used together to complain
  *    about missing variables rather than just generating empty strings when 

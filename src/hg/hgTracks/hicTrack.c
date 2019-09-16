@@ -75,10 +75,19 @@ if (tg->customPt == NULL)
     return;
 struct hicMeta *hicFileInfo = (struct hicMeta*)tg->customPt;
 
-int binSize = hicUiFetchResolutionAsInt(cart, tg->track, hicFileInfo, winEnd-winStart);
-char *normalization = hicUiFetchNormalization(cart, tg->track, hicFileInfo);
+int binSize = hicUiFetchResolutionAsInt(cart, tg->tdb, hicFileInfo, winEnd-winStart);
+char *normalization = hicUiFetchNormalization(cart, tg->tdb, hicFileInfo);
 
-// Later, we should validate that this file is for the current assembly (see the hicMeta structure)
+char abbrevBinSize[1024];
+sprintWithMetricBaseUnit(abbrevBinSize, sizeof(abbrevBinSize), binSize);
+int newStringLen = strlen(tg->longLabel) + strlen(abbrevBinSize) + strlen(normalization) + 10;
+char *newLabel = needMem(newStringLen);
+safef(newLabel, newStringLen, "%s (%s, %s)", tg->longLabel, abbrevBinSize, normalization);
+tg->longLabel = newLabel;  // leaks old cloneString() memory chunk
+
+// Later, it would be nice to validate that this file is for the current assembly (see the hicMeta
+// structure).  It would be hard - the assembly name in the file's "genome" field can't be relied on.
+// Maybe by comparing chromosome names and sizes?
 
 // Note: This is giving it a 0-based, full-closed window. Straw seems to use 1-based coordinates
 // by default, but accepts 0 as the start of a window without complaint.
@@ -101,15 +110,18 @@ if (numRecords > 0)
     AllocArray(countsCopy, numRecords);
 
 struct interact *thisHic = hicItems;
+char *drawMode = hicUiFetchDrawMode(cart, tg->tdb);
 while (thisHic != NULL)
     {
-    char *drawMode = hicUiFetchDrawMode(cart, tg->track);
     if (sameString(drawMode, HIC_DRAW_MODE_ARC))
         {
         // we omit self-interactions in arc mode (they'd just be weird vertical lines)
         if (sameString(thisHic->sourceChrom, thisHic->targetChrom) &&
                 (thisHic->sourceStart == thisHic->targetStart))
+            {
+            thisHic = thisHic->next;
             continue;
+            }
         }
     countsCopy[filtNumRecords++] = thisHic->value;
 
@@ -153,7 +165,7 @@ Color *colorSetForHic(struct hvGfx *hvg, struct track *tg, int bucketCount)
 /* Create the gradient color array for drawing a Hi-C heatmap */
 {
 struct rgbColor rgbLow;
-char *lowColorText = hicUiFetchBgColor(cart, tg->track); // This is an HTML color like #ffed02
+char *lowColorText = hicUiFetchBgColor(cart, tg->tdb); // This is an HTML color like #ffed02
 unsigned lowRgbVal = 0;
 if (!htmlColorForCode(lowColorText, &lowRgbVal))
 {
@@ -168,7 +180,7 @@ rgbLow.g=(unsigned char)g;
 rgbLow.b=(unsigned char)b;
 
 struct rgbColor rgbHigh;
-char *highColorText = hicUiFetchDrawColor(cart, tg->track); // This is an HTML color like #ffed02
+char *highColorText = hicUiFetchDrawColor(cart, tg->tdb); // This is an HTML color like #ffed02
 unsigned highRgbVal = 0;
 if (!htmlColorForCode(highColorText, &highRgbVal))
 {
@@ -189,10 +201,10 @@ return colorIxs;
 double getHicMaxScore(struct track *tg)
 /* Return the score at which we should reach the maximum intensity color. */
 {
-if (hicUiFetchAutoScale(cart, tg->track))
+if (hicUiFetchAutoScale(cart, tg->tdb))
     return tg->graphUpperLimit;
 else
-    return hicUiFetchMaxValue(cart, tg->track);
+    return hicUiFetchMaxValue(cart, tg->tdb);
 }
 
 void calcItemLeftRightBoundaries(int *leftStart, int *leftEnd, int *rightStart, int *rightEnd,
@@ -223,7 +235,7 @@ double yScale = xScale;
 int maxHeight = tg->height;
 struct interact *hicItem = NULL;
 struct hicMeta *hicFileInfo = (struct hicMeta*)tg->customPt;
-int binSize = hicUiFetchResolutionAsInt(cart, tg->track, hicFileInfo, winEnd-winStart);
+int binSize = hicUiFetchResolutionAsInt(cart, tg->tdb, hicFileInfo, winEnd-winStart);
 
 if (vis == tvDense)
     {
@@ -284,7 +296,7 @@ double yScale = xScale;
 int maxHeight = tg->height;
 struct interact *hicItem = NULL;
 struct hicMeta *hicFileInfo = (struct hicMeta*)tg->customPt;
-int binSize = hicUiFetchResolutionAsInt(cart, tg->track, hicFileInfo, winEnd-winStart);
+int binSize = hicUiFetchResolutionAsInt(cart, tg->tdb, hicFileInfo, winEnd-winStart);
 if (binSize == 0)
     return;
 
@@ -346,7 +358,7 @@ double yScale = xScale;
 int maxHeight = tg->height;
 struct interact *hicItem = NULL;
 struct hicMeta *hicFileInfo = (struct hicMeta*)tg->customPt;
-int binSize = hicUiFetchResolutionAsInt(cart, tg->track, hicFileInfo, winEnd-winStart);
+int binSize = hicUiFetchResolutionAsInt(cart, tg->tdb, hicFileInfo, winEnd-winStart);
 if (binSize == 0)
     return;
 
@@ -393,7 +405,7 @@ void hicDrawItems(struct track *tg, int seqStart, int seqEnd,
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a set of Hi-C interactions with the current user settings. */
 {
-char *drawMode = hicUiFetchDrawMode(cart, tg->track);
+char *drawMode = hicUiFetchDrawMode(cart, tg->tdb);
 if (sameString(drawMode,HIC_DRAW_MODE_SQUARE))
     drawHicSquare(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
 else if (sameString(drawMode,HIC_DRAW_MODE_TRIANGLE))
