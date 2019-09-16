@@ -4342,6 +4342,12 @@ For the complete bigInteract format definitions please see the
     </P>
 </DIV>
 
+<DIV class="interactMultiRegion"><span class="types bigInteract"></span>
+<div class="format"><code>interactMultiRegion &lt;true|padding&gt;</code></div>
+    <P>This setting causes a link to appear on the details page that appears when an interaction is clicked on. This link will generate a &quot;multi-region&quot; Genome Browser view of the interaction (or interaction cluster) endpoints. Use padding to specify non-default padding at the edges of each region.  The default value is 200 base pairs.
+    </P>
+</DIV>
+
 <DIV class="interact_example"><span class="types bigInteract"></span>
 <div class="format"><B>Example of an interact/bigInteract track</B></div>
     <pre>
