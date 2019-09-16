@@ -7,7 +7,7 @@
  * using a hash as a symbol table is available.
  *
  * The language handles variables, string constants, numerical constants, and
- * a very limited set of built in predefined functions.   The numerical constants are only used for
+ * a set of built in predefined functions.   The numerical constants are only used for
  * array indexes and some of the built in functions.  All functions return string values, and
  * all variables have string values.
  *
@@ -17,9 +17,6 @@
  * You can parse apart strings with the built in functions and with the subscript [] operator.
  * The built in functions are described in a separate doc,  which will hopefully still be
  * available in the same directory as this file as strex.doc when you read this.
- *
- * The subscript operator treats the string it is applied to as a comma separated value array.
- * It really is not very efficient alas.
  */
 
 #include "common.h"
@@ -45,7 +42,7 @@ enum strexType
     };
 
 enum strexBuiltInFunc
-/* One of these for each builtIn.  We'll just do a switch to implement 
+/* One of these for each builtIn.  We'll just do a switch to implement.
  * Each built in function needs a value here, to keep it simple there's
  * aa correspondence between these names and the built in function name */
     {

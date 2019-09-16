@@ -135,7 +135,7 @@ addIfReal(contact_city, oldFields, contactFields, contactIx, maxContacts, &realF
 addIfReal(contact_country, oldFields, contactFields, contactIx, maxContacts, &realFieldCount);
 addIfReal(contact_zip_postal_code, oldFields, 
     contactFields, contactIx, maxContacts, &realFieldCount);
-contactFields[realFieldCount] = "project_role";
+contactFields[realFieldCount] = "@type_id@hcat_contributortype@short_name@id";
 realFieldCount += 1;
 
 /* Make contributor output table.  The first row of it will be seeded with the contact.
@@ -361,12 +361,19 @@ outFields[outFieldCount] = "@@contributors@id@hcat_project_contributors@project_
 outRow[outFieldCount] = fieldedTableLookupNamedFieldInRow(inProject, "contributors", inRow);
 outFieldCount += 1;
 
+/* Add in contacts as a multi to multi field too */
+outFields[outFieldCount] = "@@contacts@id@hcat_project_contacts@project_id@contributor_id@hcat_contributor@name@id";
+outRow[outFieldCount] = fieldedTableLookupNamedFieldInRow(inProject, "contact_name", inRow);
+outFieldCount += 1;
+
 /* Add the fields we scan and merge from sample at end */
 projectVocabField(inProject, inSample, "organ", outDir, 
     outFields, outRow, outFieldMax, &outFieldCount);
 projectVocabField(inProject, inSample, "organ_part", outDir, 
     outFields, outRow, outFieldMax, &outFieldCount);
 projectVocabField(inProject, inSample, "assay_type", outDir, 
+    outFields, outRow, outFieldMax, &outFieldCount);
+projectVocabField(inProject, inSample, "assay_tech", outDir, 
     outFields, outRow, outFieldMax, &outFieldCount);
 projectVocabField(inProject, inSample, "disease", outDir, 
     outFields, outRow, outFieldMax, &outFieldCount);
@@ -419,7 +426,6 @@ if (labIx >= 0)
     {
     char **inRow = inProject->rowList->row;
     char *short_name = inRow[labIx];
-    char *contact = fieldedTableLookupNamedFieldInRow(inProject, "contact_name", inRow);
     char *contributors = fieldedTableLookupNamedFieldInRow(inProject, "contributors", inRow);
     char *institute = fieldedTableLookupNamedFieldInRow(inProject, "contact_institute", inRow);
     char labName[256];
@@ -430,10 +436,10 @@ if (labIx >= 0)
     labName[50] = 0;  // not too long
     inRow[labIx] = cloneString(labName);  /* Other people need to know about this too. */
 
-    char *outFields[4] = {"?short_name", "institution", "@contact_id@hcat_contributor@name@id", 
+    char *outFields[3] = {"?short_name", "institution", 
 	"@@contributors@id@hcat_lab_contributors@lab_id@contributor_id@hcat_contributor@name@id"};
     struct fieldedTable *labTable = fieldedTableNew("lab", outFields, ArraySize(outFields));
-    char *outRow[4] = {labName, institute, contact, contributors};
+    char *outRow[3] = {labName, institute, contributors};
     fieldedTableAdd(labTable, outRow, ArraySize(outRow), 1);
     return labTable;
     }

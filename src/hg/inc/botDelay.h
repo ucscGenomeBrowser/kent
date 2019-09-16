@@ -13,6 +13,12 @@ void botDelayCgi(char *host, int port, boolean noWarn, double fraction);
 /* Connect with bottleneck server and sleep the
  * amount it suggests for IP address calling CGI script. */
 
+char *botDelayWarningMsg(char *ip, int millis);
+/* return the string for the default botDelay message
+ * not all users of botDelay want the message to go to stderr
+ * return it for their own use case
+ */
+
 void botDelayMessage(char *ip, int millis);
 /* Print out message saying why you are stalled. */
 
