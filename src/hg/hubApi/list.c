@@ -398,6 +398,20 @@ apiFinishOutput(0, NULL, jw);
 }	/* static void hubSchemaJsonOutput(FILE *f, char *hubUrl,
 	 *	char *genome, char *track) */
 
+static char *bigDataUrlFromTable(struct sqlConnection *conn, char *table)
+/* perhaps there is a bigDataUrl in a database table */
+{
+char *bigDataUrl = NULL;
+char query[4096];
+char quickReturn[2048];
+
+sqlSafef(query, sizeof(query), "select fileName from %s", table);
+if (sqlQuickQuery(conn, query, quickReturn, sizeof(quickReturn)))
+    bigDataUrl = hReplaceGbdb(cloneString(quickReturn));
+
+return bigDataUrl;
+}
+
 static void schemaJsonOutput(FILE *f, char *db, char *track)
 /* for given db and track, output the schema for the associated table */
 {
@@ -453,19 +467,10 @@ else
 struct bbiFile *bbi = NULL;
 if (thisTrack && startsWith("big", thisTrack->type))
     {
+    if (isEmpty(bigDataUrl))
+        bigDataUrl = bigDataUrlFromTable(conn, splitTableName);
     if (bigDataUrl)
 	bbi = bigFileOpen(thisTrack->type, bigDataUrl);
-    else
-	{
-	char query[4096];
-	char quickReturn[2048];
-	sqlSafef(query, sizeof(query), "select fileName from %s", splitTableName);
-	if (sqlQuickQuery(conn, query, quickReturn, sizeof(quickReturn)))
-	    {
-	    bigDataUrl = hReplaceGbdb(cloneString(quickReturn));
-	    bbi = bigFileOpen(thisTrack->type, bigDataUrl);
-	    }
-	}
     if (NULL == bbi)
 	apiErrAbort(err400, err400Msg, "failed to find bigDataUrl=%s for track=%s in database=%s for endpoint '/getData/schema'", bigDataUrl, track, db);
     }
@@ -570,6 +575,8 @@ if (table && ! chromName)
     thisTrack = findTrackDb(table,tdb);
     /* might have a bigDataUrl */
     bigDataUrl = trackDbSetting(thisTrack, "bigDataUrl");
+    if (isEmpty(bigDataUrl))
+        bigDataUrl = bigDataUrlFromTable(conn, table);
     }
 
 /* in trackDb language: track == table */

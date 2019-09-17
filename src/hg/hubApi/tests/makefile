@@ -150,6 +150,13 @@ list16: setOutput
 	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="equCab3" -track="transMapEnsemblV5" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
+# ./hubApi track=gc5BaseBw genome=rheMac10
+
+list17: setOutput
+	@printf "### $@ 'https://api-test.gi.ucsc.edu/list/chromosomes?track=gc5BaseBw;genome=rheMac10'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="rheMac10" -track="gc5BaseBw" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
 ##########################   getData functions  #############################
 # testing /getData/track?genome=ce11&track=gold
 test8: setOutput
