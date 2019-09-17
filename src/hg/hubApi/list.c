@@ -405,9 +405,12 @@ char *bigDataUrl = NULL;
 char query[4096];
 char quickReturn[2048];
 
-sqlSafef(query, sizeof(query), "select fileName from %s", table);
-if (sqlQuickQuery(conn, query, quickReturn, sizeof(quickReturn)))
-    bigDataUrl = hReplaceGbdb(cloneString(quickReturn));
+if (sqlColumnExists(conn, table, "fileName"))
+    {
+    sqlSafef(query, sizeof(query), "select fileName from %s", table);
+    if (sqlQuickQuery(conn, query, quickReturn, sizeof(quickReturn)))
+	bigDataUrl = hReplaceGbdb(cloneString(quickReturn));
+    }
 
 return bigDataUrl;
 }
