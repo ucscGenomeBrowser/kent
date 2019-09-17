@@ -1671,7 +1671,7 @@ static char *wiggleScaleOptionsParent[] =
     {
     "use vertical viewing range setting",
     "auto-scale to data view",
-    "cumulatively auto-scale to data view"
+    "group auto-scale"
     };
 
 static char *wiggleScaleOptions[] = 

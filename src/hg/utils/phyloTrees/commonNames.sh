@@ -24,7 +24,7 @@ angJap1 -> Japanese_eel ;
 anoCar2 -> Lizard ;
 aotNan1 -> Nancy_Ma_s_night_monkey ;
 apaSpi1 -> Spiny_softshell_turtle ;
-apaVit1 -> Rock_pigeon ;
+apaVit1 -> Bar_tailed_trogon ;
 aptFor1 -> Emperor_penguin ;
 aquChr1 -> Golden_eagle ;
 aquChr2 -> Golden_eagle ;

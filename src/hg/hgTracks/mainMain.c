@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
 {
 enteredMainTime = clock1000();
 measureTime(NULL);
-issueBotWarning = earlyBotCheck(enteredMainTime, "hgTracks", delayFraction, warnMs, exitMs);
+issueBotWarning = earlyBotCheck(enteredMainTime, "hgTracks", delayFraction, 0, 0, "html");
 browserName = hBrowserName();
 organization = "UCSC";
 

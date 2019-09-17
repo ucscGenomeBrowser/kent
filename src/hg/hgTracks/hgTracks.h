@@ -60,8 +60,6 @@
 #define BIGBEDMAXIMUMITEMS 100000
 
 /* for botDelay call, 10 second for warning, 20 second for immediate exit */
-#define warnMs 10000
-#define exitMs 20000
 #define delayFraction   0.25
 extern long enteredMainTime;
 
@@ -271,6 +269,7 @@ struct track
     struct bbiSummaryElement *summary;  /* for bigBed */
     struct bbiSummaryElement *sumAll;   /* for bigBed */
     boolean drawLabelInBox;     /* draw labels into the features instead of next to them */
+    boolean drawLabelInBoxNotDense;    /* don't draw labels in dense mode, (needed only when drawLabelInBox set */
     
     struct track *nextWindow;   /* Same track in next window's track list. */
     struct track *prevWindow;   /* Same track in prev window's track list. */

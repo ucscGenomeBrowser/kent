@@ -163,6 +163,73 @@ if (mergeAddress(stanza, dy, sampleComponents, ArraySize(sampleComponents)))
 dyStringFree(&dy);
 }
 
+void addContributorsToContacts(struct tagStorm *storm)
+/* We got names of contributors, and additional info on the contact.
+ * The HCA systems does not distinguish between these two and has
+ * instead an array of contributors with full info.   What we
+ * do here is turn the contact fields into comma separated value
+ * lists. */
+{
+/* Get two key tags that better be there or we abort. */
+struct tagStanza *stanza = storm->forest;
+char *contributorCsv = tagMustFindVal(stanza, "series.contributor");
+char *contactNameCsv = tagMustFindVal(stanza, "series.contact_name");
+
+/* Remove quotes from contactName */
+struct dyString *csvScratch = dyStringNew(0);
+char *pos = contactNameCsv;
+char *contactName = cloneString(csvParseNext(&pos, csvScratch));
+
+/* Parse the contributors CSV (of CSVs) into an slName list that
+ * is lacking the contact */
+pos = contributorCsv;
+struct slName *contributorList = NULL;
+int contributorCount = 0;
+char *oneName;
+while ((oneName = csvParseNext(&pos, csvScratch)) != NULL)
+    {
+    if (!sameString(oneName, contactName))
+	{
+	slNameAddTail(&contributorList, oneName);
+	++contributorCount;
+	}
+    }
+uglyf("Got %d contributors other than %s\n", slCount(contributorList), contactName);
+
+/* Go through all tags, looking for ones that start with 'contact'.  Just add commas
+ * to most of them but contact_name get's real stuff */
+struct dyString *newCsv = dyStringNew(0);
+if (contributorCount > 0)
+    {
+    struct slPair *tag;
+    for (tag = stanza->tagList; tag != NULL; tag = tag->next)
+        {
+	if (startsWith("series.contact_", tag->name))
+	    {
+	    dyStringClear(newCsv);
+	    pos = tag->val;
+	    char *oneVal = csvParseNext(&pos, csvScratch);
+	    csvEscapeAndAppend(newCsv, oneVal);
+	    if (sameString("series.contact_name", tag->name))
+	        {
+		struct slName *contrib;
+		for (contrib = contributorList; contrib != NULL; contrib = contrib->next)
+		    {
+		    csvEscapeAndAppend(newCsv, contrib->name);
+		    }
+		}
+	    else
+	        {
+		int i;
+		for (i=0; i<contributorCount; ++i)
+		    dyStringAppend(newCsv, ",\"\"");
+		}
+	    tag->val = cloneString(newCsv->string);
+	    }
+	}
+    }
+}
+
 void geoToHcaStorm(char *inTags, char *inTable, char *output)
 /* geoToHcaStorm - Convert output of geoToTagStorm to something closer to what the Human Cell 
  *  Atlas wants.. */
@@ -248,6 +315,8 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
 /* Fix up all stanzas with various functions */
 tagStormTraverse(storm, storm->forest, NULL, fixDates);
 tagStormTraverse(storm, storm->forest, NULL, mergeAddresses);
+
+addContributorsToContacts(storm);
 
 /* Save results */
 tagStormWrite(storm, output, 0);

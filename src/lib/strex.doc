@@ -77,7 +77,7 @@ tidy(prefix, string, suffix) - helps trim unwanted ends off of a string.  If pre
              in the string, the prefix and everything before it will be cut off.  Blank prefixes 
 	     have no effect.  Similarly if the suffix is present in what is left of the string 
 	     after the prefix is trimmed, then the parts of the string from where the suffix 
-	     starts will be cut off. BLank suffixes have no effect.
+	     starts will be cut off. Blank suffixes have no effect.
    example:   tidy("", "myreads.fastq.gz", ".gz")  
    	      returns "myreads.fastq"
    example:   tidy("", "myreads.fastq", ".gz")  
@@ -155,7 +155,7 @@ or - logical or operation extended to strings and numbers.
    precedence of the logical operators.
 
 and - logical and operation extended to strings and numbers
-     for logic - if all and-separated-values are tru, return true, else false
+     for logic - if all and-separated-values are true, return true, else false
      for numbers - if all numbers are non-zero return true else false
      for strings - if all and-separated strings are nonempty, return true, else ""
    In mixed operations result is converted to strings if strings are involved or

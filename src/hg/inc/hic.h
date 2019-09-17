@@ -10,10 +10,13 @@ struct hicMeta
 {
 char *filename;
 char *fileAssembly;
-char **chromNames;
 int nChroms;
-char **resolutions;
+char **chromNames;
+int *chromSizes;
 int nRes;
+char **resolutions;
+int nAttributes;
+char **attributes;
 char *ucscAssembly;
 struct hash *ucscToAlias; // Takes UCSC chrom names to names the underlying file recognizes
 };
